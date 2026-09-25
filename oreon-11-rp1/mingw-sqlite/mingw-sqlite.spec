@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d18fa15aec74d8c17e1463f861095adc01b5ad190256acb4f91d22f0368d232b
 
 %{?mingw_package_header}
 
@@ -11,7 +11,7 @@
 %global tclversion 8.6
 
 Name:           mingw-%{name1}
-Version:        3.51.2
+Version:        3.53.4
 Release:        1%{?dist}
 Summary:        MinGW Windows port of sqlite embeddable SQL database engine
 
@@ -204,5 +204,4 @@ rm -rf %{buildroot}%{mingw64_mandir}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.51.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

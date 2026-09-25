@@ -1,7 +1,7 @@
-%global source0_hash c268cfcd230cc7ed5447fb34ed21bf4977315c7104356a39388b6ba784ad11b0
+%global source0_hash d0e42faf307e39e7b531d632745a56e4eb558a6545f557280099c622562355ee
 
 Name:           fastfetch
-Version:        2.68.1
+Version:        2.69.0
 Release:        1%{?dist}
 Summary:        Fast neofetch-like system information tool
 

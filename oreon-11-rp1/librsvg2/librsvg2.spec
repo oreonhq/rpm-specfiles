@@ -1,4 +1,4 @@
-%global source0_hash c0c1367e381e1ae4842a78f1b57c656ff19b25637e3a6527cb44ae5a1cc68d65
+%global source0_hash 852b18e1a00b8605528825a27dc7748bff2a5dd254028f59dc22a34ea57e81b6
 
 %bcond check 1
 
@@ -14,7 +14,7 @@
 
 Name:           librsvg2
 Summary:        An SVG library based on cairo
-Version:        2.63.0
+Version:        2.63.2
 Release:        %autorelease
 
 # librsvg itself is LGPL-2.1-or-later
@@ -50,7 +50,7 @@ License:        %{shrink:
     (Unlicense OR MIT)
     }
 URL:            https://wiki.gnome.org/Projects/LibRsvg
-Source0:        https://download.gnome.org/sources/librsvg/2.62/librsvg-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/librsvg/%{lua:print((macros.version:gsub("^(%d+%.%d+).*","%1")))}/librsvg-%{version}.tar.xz
 # upstream dropped vendoring since 2.55.0 (GNOME/librsvg#718), to create:
 #   tar xf librsvg-%%{version}.tar.xz ; pushd librsvg-%%{version} ; \
 #   cargo vendor --versioned-dirs && tar Jcvf ../librsvg-%%{version}-vendor.tar.xz vendor/ ; popd
@@ -180,5 +180,4 @@ sed -i 's/, "--locked"//g' meson/cargo_wrapper.py
 %{_mandir}/man1/rsvg-convert.1*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.62.2-1
-- Import
+%autochangelog

@@ -1,9 +1,9 @@
-%global source0_hash a75230ed063a49f2cab97463f0f312f143ff83b56c986b521392094ee3574d48
+%global source0_hash efc5445e9f2713920b76359295fcc34538ebe73e2b5fd5906c06068b32d89bbb
 
 %bcond_without bootstrap
 
 Name:           maven-bundle-plugin
-Version:        6.1.2
+Version:        6.2.0
 Release:        %autorelease
 Summary:        Maven Bundle Plugin
 License:        Apache-2.0
@@ -59,8 +59,6 @@ rm -f src/main/java/org/apache/felix/bundleplugin/baseline/BaselineReport.java
 %pom_remove_dep :doxia-site-renderer
 %pom_remove_dep :maven-reporting-api
 
-%pom_remove_dep :org.osgi.core
-%pom_remove_dep :jdom
 
 %pom_remove_plugin :maven-invoker-plugin
 
@@ -76,5 +74,4 @@ rm -f src/main/java/org/apache/felix/bundleplugin/baseline/BaselineReport.java
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.9-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

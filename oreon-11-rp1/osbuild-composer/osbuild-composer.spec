@@ -1,4 +1,4 @@
-%global source0_hash cf09e18db18e93c60e5d5fa4827fb0de04d7515a8614929cb9f4232403f65b8a
+%global source0_hash b586be94ff329a5ab0c2d79de93d2b22e8c3efd191f7245aac31884ec7f1d17e
 
 # Do not build with tests by default
 # Pass --with tests to rpmbuild to override
@@ -14,7 +14,7 @@
 
 %global goipath         github.com/osbuild/osbuild-composer
 
-Version:        165
+Version:        181
 
 %gometa
 
@@ -36,7 +36,7 @@ ExcludeArch:    i686 armv7hl
 # Upstream license specification: Apache-2.0
 License:        Apache-2.0
 URL:            %{gourl}
-Source0:        https://github.com/osbuild/osbuild-composer/archive/refs/tags/v165.tar.gz#/osbuild-composer-165.tar.gz
+Source0:        https://github.com/osbuild/osbuild-composer/archive/refs/tags/v%{version}.tar.gz#/osbuild-composer-181.tar.gz
 
 
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
@@ -669,5 +669,4 @@ Integration tests to be run on a pristine-dedicated system to test the osbuild-c
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 165-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,16 +1,16 @@
---- Makefile.config.orig	2024-07-15 12:56:27.229698314 +0200
-+++ Makefile.config	2024-07-15 12:56:34.219772641 +0200
-@@ -1167,7 +1167,6 @@
- 	ASM_MIPS_WAIT \
- 	ASM_NOP \
- 	ASM_NOTHING \
+--- Makefile.config
++++ Makefile.config
+@@ -1288,7 +1288,6 @@
+ 	ASM_OPENRISC_MSYNC \
+ 	ASM_OPENRISC_NOP \
+ 	ASM_OPENRISC_PSYNC \
 -	ASM_PPC64_DARN \
  	ASM_PPC64_DCBST \
  	ASM_PPC64_DCBT \
  	ASM_PPC64_DCBTST \
-@@ -1346,9 +1345,6 @@
- ASM_MIPS_WAIT:
- 	$(call check,test-asm-mips-wait,HAVE_ASM_MIPS_WAIT,MIPS wait instruction)
+@@ -1519,9 +1518,6 @@
+ ASM_OPENRISC_PSYNC:
+ 	$(call check,test-asm-openrisc-psync,HAVE_ASM_OPENRISC_PSYNC,openrisc l.psync instruction)
  
 -ASM_PPC64_DARN:
 -	$(call check,test-asm-ppc64-darn,HAVE_ASM_PPC64_DARN,ppc64 darn instruction)

@@ -1,4 +1,4 @@
-%global source0_hash 7efaccde8c5a6b2968bad6ce0fe60e19b6e10701a12fce948c2bf79bac8a11e9
+%global source0_hash c46400618b4f1f2b43507f24fb22f3ae830c3416cf23b776e16e1d413aa892f0
 
 # Do we add appdata-files?
 # consider conditional on whether %%_metainfodir is defined or not instead -- rex
@@ -73,11 +73,11 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 4
-%global minor_version 2
+%global minor_version 4
 %global patch_version 3
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
-%global baserelease 2
+%global baserelease 1
 
 # Set to RC version if building RC, else comment out.
 #%%global rcsuf rc3
@@ -108,7 +108,7 @@ Summary:        Cross-platform make system
 # exception granting redistribution under terms of your choice
 License:        BSD-3-Clause AND MIT-open-group AND Zlib%{?with_bundled_cppdap: AND Apache-2.0}
 URL:            http://www.cmake.org
-Source0:        https://www.cmake.org/files/v4.2/cmake-4.2.3.tar.gz
+Source0:        https://www.cmake.org/files/v%{major_version}.%{minor_version}/cmake-%{tar_version}.tar.gz
 Source1:        %{name}-init.el
 Source2:        macros.%{name}.in
 Source3:        macros.aaa-%{name}-srpm
@@ -127,7 +127,6 @@ Source6:        %{name}.req
 # TODO: Find better wat to handle this
 Patch100:       %{name}-findruby.patch
 # apply upstream fix for FindLua.cmake which is ... not getting pulled into their tarballs?!?
-Patch101:	https://github.com/Kitware/CMake/commit/261b7b933c6604095687d473503e24bae6ec0d6f.patch
 
 # TODO: Remove this patch
 # Patch for renaming on EPEL

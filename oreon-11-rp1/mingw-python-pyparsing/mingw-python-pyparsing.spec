@@ -1,4 +1,4 @@
-%global source0_hash 47fad0f17ac1e2cad3de3b458570fbc9b03560aa029ed5e16ee5554da9a2251c
+%global source0_hash 928ae7e20211f3b6f3915a72f06a0cfd29ab9d24279dd6346b6b1a7146397d36
 
 # This package is required by python-build to build wheels.
 # To bootstrap, we copy the files to appropriate locations manually and create a minimal dist-info metadata.
@@ -11,7 +11,7 @@
 
 Name:           mingw-python-%{pypi_name}
 Summary:        MinGW Python %{pypi_name}
-Version:        3.3.2
+Version:        3.3.3
 Release:        1%{?dist}
 BuildArch:      noarch
 
@@ -60,7 +60,7 @@ mkdir %{distinfo}
 cat > %{distinfo}/METADATA << EOF
 Metadata-Version: 2.2
 Name: %{pypi_name}
-Version: 3.3.2
+Version: 3.3.3
 EOF
 %else
 %global distinfo %{pypi_name}-%{version}.dist-info

@@ -1,4 +1,4 @@
-%global source0_hash 40a8cefd45f0d2a06827e6658efb830d484868c449ad80f7efb33516af44f3da
+%global source0_hash 39675dfa06fb0e99be8da5d4a1784acbaab58ae0870231d956ff7870cb99eec1
 %global source1_hash 082967d6bf793499d3d655cea2149e07c0da97287f1877a6eab88d17cb703d0d
 
 %define tcpslice_dir tcpslice-1.8
@@ -6,8 +6,8 @@
 Summary: A network traffic monitoring tool
 Name: tcpdump
 Epoch: 14
-Version: 4.99.6
-Release: 3%{?dist}
+Version: 4.99.7
+Release: 1%{?dist}
 License: BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND BSD-4-Clause-UC AND ISC AND NTP
 URL: http://www.tcpdump.org
 BuildRequires: make
@@ -91,5 +91,4 @@ sed -i 's/\(\.TH[a-zA-Z ]*\)[1-9]\(.*\)/\18\2/' \
 %{_mandir}/man8/tcpdump.8*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.99.6-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -19,19 +19,17 @@ Signed-off-by: Todd Zullinger <tmz@pobox.com>
  t/t9113-git-svn-dcommit-new-file.sh |  1 -
  2 files changed, 30 insertions(+), 5 deletions(-)
 
-diff --git a/t/lib-git-svn.sh b/t/lib-git-svn.sh
-index ea28971e8e..04e660e2ba 100644
 --- a/t/lib-git-svn.sh
 +++ b/t/lib-git-svn.sh
-@@ -17,6 +17,7 @@ fi
+@@ -13,6 +13,7 @@
  GIT_DIR=$PWD/.git
  GIT_SVN_DIR=$GIT_DIR/svn/refs/remotes/git-svn
  SVN_TREE=$GIT_SVN_DIR/svn-tree
 +SVNSERVE_PIDFILE="$PWD"/daemon.pid
  test_set_port SVNSERVE_PORT
  
- svn >/dev/null 2>&1
-@@ -119,10 +120,35 @@ require_svnserve () {
+ if ! svn help >/dev/null 2>&1
+@@ -114,10 +115,35 @@
  }
  
  start_svnserve () {
@@ -71,11 +69,9 @@ index ea28971e8e..04e660e2ba 100644
  }
  
  prepare_utf8_locale () {
-diff --git a/t/t9113-git-svn-dcommit-new-file.sh b/t/t9113-git-svn-dcommit-new-file.sh
-index e8479cec7a..5925891f5d 100755
 --- a/t/t9113-git-svn-dcommit-new-file.sh
 +++ b/t/t9113-git-svn-dcommit-new-file.sh
-@@ -28,7 +28,6 @@ test_expect_success 'create files in new directory with dcommit' "
+@@ -28,7 +28,6 @@
  	echo hello > git-new-dir/world &&
  	git update-index --add git-new-dir/world &&
  	git commit -m hello &&

@@ -1,11 +1,11 @@
-%global source0_hash 445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb
+%global source0_hash 1c767308174337a74694da0f3ec069c271452163a1ef4540964c50c301f157d4
 
 %define pixman_version 0.36.0
 %define freetype_version 9.7.3
 %define fontconfig_version 2.2.95
 
 Name:           cairo
-Version:        1.18.4
+Version:        1.18.6
 Release:        %autorelease
 Summary:        A 2D graphics library
 
@@ -159,5 +159,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/cairo/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.18.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

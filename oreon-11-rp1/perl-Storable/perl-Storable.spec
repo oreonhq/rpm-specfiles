@@ -1,19 +1,17 @@
-%global source0_hash e1e96b24a076792fde52154789fe4b76034b9ad39c8a1a819ead77d50d5f1817
+%global source0_hash d95613e62dac79dc77df23a4a91990f4d44e0aba0d1d31f81cb966f776af8510
 
-%global base_version 3.25
+%global base_version %{version}
 Name:           perl-Storable
 Epoch:          1
-Version:        3.37
-Release:        522%{?dist}
+Version:        3.41
+Release:        1%{?dist}
 Summary:        Persistence for Perl data structures
 # Storable.pm:  GPL+ or Artistic
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Storable
-Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/Storable-3.25.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Storable-%{version}.tar.gz
 # Unbundled from perl 5.37.12
-Patch0:         Storable-3.25-Upgrade-to-3.32.patch
 # Unbundled from perl 5.42.0
-Patch1:         Storable-3.32-Upgrade-to-3.37.patch
 BuildRequires:  coreutils
 BuildRequires:  gcc
 BuildRequires:  make
@@ -148,5 +146,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.37-522
-- Prepare for Oreon 11 (RP1)
+%autochangelog

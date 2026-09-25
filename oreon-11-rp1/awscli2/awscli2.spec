@@ -1,9 +1,9 @@
-%global source0_hash 8bebe606ad8a903b895811e80130fefe1595b3adc6649fefc805203fd488f93b
+%global source0_hash 91dd50eb35375412c636ef72949c9ac8bbafe7cc402f53e9b782516de311dfa2
 
 %global pkgname aws-cli
 
 Name:               awscli2
-Version:            2.36.48
+Version:            2.37.3
 Release:            %autorelease
 
 Summary:            Universal Command Line Environment for AWS, version 2
@@ -139,5 +139,4 @@ export OPENSSL_ENABLE_SHA1_SIGNATURES=yes
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.33.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

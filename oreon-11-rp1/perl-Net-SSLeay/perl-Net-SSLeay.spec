@@ -1,4 +1,4 @@
-%global source0_hash 9d7be8a56d1bedda05c425306cc504ba134307e0c09bda4a788c98744ebcd95d
+%global source0_hash ab213691685fb2a576c669cbc8d9266f8165a31563ad15b7c4030b94adfc0753
 
 %if ! (0%{?rhel})
 %{bcond_without perl_Net_SSLeay_enables_optional_test}
@@ -13,16 +13,15 @@
 %endif
 
 Name:		perl-Net-SSLeay
-Version:	1.94
-Release:	12%{?dist}
+Version:	1.96
+Release:	1%{?dist}
 Summary:	Perl extension for using OpenSSL
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Net-SSLeay
-Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-SSLeay-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-%{version}.tar.gz
 
 
 
-Patch0:		https://patch-diff.githubusercontent.com/raw/radiator-software/p5-net-ssleay/pull/514.patch
 Patch10:	Net-SSLeay-1.90-pkgconfig.patch
 # =========== Module Build ===========================
 BuildRequires:	coreutils
@@ -98,7 +97,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n Net-SSLeay-%{version}
 
 # Fix for test suite compatibility with OpenSSL 3.4
-%patch -P 0 -p 1
 
 # Get libraries to link against from pkg-config
 # https://github.com/radiator-software/p5-net-ssleay/pull/127
@@ -144,5 +142,4 @@ make test
 %{_mandir}/man3/Net::SSLeay::Handle.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.94-12
-- Prepare for Oreon 11 (RP1)
+%autochangelog

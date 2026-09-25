@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c1575341fa7bd40f5274ea465b34390f4dc64cdd0770af327005caaeb9f6b7ed
 %global source3_hash ae14f24c14727e0b2ded1c5553031666099bd1054db3ef44bfa6e2bd6d554a56
 %global source12_hash 8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a
 
@@ -51,8 +51,8 @@
 
 Summary: PostgreSQL client programs
 Name: %{majorname}%{majorversion}
-Version: %{majorversion}.13
-Release: 2%{?dist}
+Version: %{majorversion}.15
+Release: 1%{?dist}
 
 # The PostgreSQL license is very similar to other MIT licenses, but the OSI
 # recognizes it as an independent license, so we do as well.
@@ -1353,5 +1353,4 @@ make -C postgresql-setup-%{setup_version} check
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.13-2
-- Import
+%autochangelog

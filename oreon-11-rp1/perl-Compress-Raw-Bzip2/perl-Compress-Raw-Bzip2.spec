@@ -1,4 +1,4 @@
-%global source0_hash aa80f52473b8ca3368e8f83496fac1b2a25d27723506b94c4ea6c861fce961f8
+%global source0_hash cbf70590538b8e9d1e6e8356b50d0a4456cd9b32f9d58ee0a6e42e0ac2204944
 
 # Run optional test
 %if ! (0%{?rhel}) || (0%{?oreon} >= 11)
@@ -9,14 +9,14 @@
 
 Name:           perl-Compress-Raw-Bzip2
 Summary:        Low-level interface to bzip2 compression library
-Version:        2.217
+Version:        2.224
 Release:        1%{?dist}
 # Other files:  GPL-1.0-or-later OR Artistic-1.0-Perl
 ## unbundled
 # bzip2-src:    BSD
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Compress-Raw-Bzip2
-Source0:        https://cpan.metacpan.org/modules/by-module/Compress/Compress-Raw-Bzip2-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-%{version}.tar.gz
 
 
 
@@ -164,5 +164,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.217-1
-- Import
+%autochangelog

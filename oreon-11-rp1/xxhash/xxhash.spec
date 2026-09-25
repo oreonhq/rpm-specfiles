@@ -1,8 +1,8 @@
-%global source0_hash aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80
+%global source0_hash 5738270935e7c3d38a79b3adf7c9692566ce7895a25f67de43ad52ab504acd32
 
 Name:		xxhash
-Version:	0.8.3
-Release:	4%{?dist}
+Version:	0.8.4
+Release:	1%{?dist}
 Summary:	Extremely fast hash algorithm
 
 #		The source for the library (xxhash.c and xxhash.h) is BSD-2-Clause
@@ -110,5 +110,4 @@ make test-xxhsum-c
 %doc doxygen/html
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.3-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

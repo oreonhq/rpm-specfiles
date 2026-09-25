@@ -1,7 +1,7 @@
-%global source0_hash e452890b987235406bf4e7ffb45eeb2a6465b8bf883ac6e7f6396f8547a0e60a
+%global source0_hash 8ca0c52746174603500f0adb6f2a215d69c9ca2aab2acb3caa06fb791d8d01bf
 
 %global sover           3
-%global aom_version     v3.13.3
+%global aom_version     v%{version}
 
 %if 0%{?fedora} || 0%{?rhel} >= 9
 %ifarch x86_64
@@ -15,13 +15,13 @@
 %endif
 
 Name:       aom
-Version:    3.15.0
+Version:    3.15.1
 Release:        1%{?dist}
 Summary:    Royalty-free next-generation video format
 
 License:    BSD-3-Clause
 URL:        http://aomedia.org/
-Source:        https://aomedia.googlesource.com/%{name}/+archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source:        https://storage.googleapis.com/aom-releases/lib%{name}-%{version}.tar.gz
 # Building static library breaks .cmake files if we don't ship it, so drop it
 Patch:      aom-nostatic.patch
 
@@ -87,9 +87,9 @@ video format.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -c %{name}-%{version}
+%autosetup -p1 -n lib%{name}-%{version}
 # Set GIT revision in version
-sed -i 's@set(aom_version "")@set(aom_version "%{aom_version}")@' build/cmake/version.cmake
+sed -i 's@set(aom_version "")@set(aom_version "%{aom_version}")@' cmake/version.cmake
 # Disable PDF generation which is buggy
 sed -i "s@GENERATE_LATEX         = YES@GENERATE_LATEX         = NO@" libs.doxy_template
 

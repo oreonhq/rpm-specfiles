@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 0a9ebc8d4e2f3e8a22848c5258033035bec17a3012ac3fea16dbaa764489eb71
 
 Name:           python-trove-classifiers
-Version:        2026.6.1.19
+Version:        2026.9.21.13
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Canonical source for classifiers on PyPI _pypi.org_.
@@ -56,5 +56,4 @@ Summary:        %{summary}
 %{_bindir}/trove-classifiers
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.1.14.14-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

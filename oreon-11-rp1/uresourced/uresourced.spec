@@ -1,13 +1,13 @@
-%global source0_hash 4c3b586bcd51f4221c80790c23c6560a3c48ff7b11fe0f2a5c98f33b9da615a3
+%global source0_hash bd73130559c09c46e317a52267685ac6d6af1b05c4eb082140c779d912c9592e
 
 Name:           uresourced
-Version:        0.5.4
+Version:        0.5.5
 Release:        %autorelease
 Summary:        Dynamically allocate resources to the active user
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.freedesktop.org/benzea/uresourced
-Source0:        https://gitlab.freedesktop.org/benzea/uresourced/-/archive/v0.5.4/uresourced-v0.5.4.tar.bz2
+Source0:        https://gitlab.freedesktop.org/benzea/uresourced/-/archive/v%{version}/uresourced-v%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -58,5 +58,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_userunitdir}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

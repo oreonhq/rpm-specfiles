@@ -1,5 +1,5 @@
-%global source0_hash ac24583f271a82ac324f7c6fad7327f65b591ad3492e1dccfee988e2c1c81dd1
-%global source1_hash e337974a8714e557593eae1ed970d6a32ad950fa0bbb4a1fa3624968a8a2dc91
+%global source0_hash 2e2cb7296833b35b8f7a7fb76045e0c57adc0c2cd03264b37df5d58e40f28437
+%global source1_hash 2ba1caddf58bb093a7da81886c5e16f9585719200661adb2244485174f0d024c
 
 %global source2_key_fpr 81F5E2832BD2545A1897B713AA99442FB680B620
 
@@ -144,7 +144,7 @@
 %bcond varlink 0
 %endif
 
-%global samba_version 4.24.7
+%global samba_version 4.25.0
 
 # The release field is extended:
 # <pkgrel>[.<extraver>][.<snapinfo>]%%{?dist}[.<minorbump>]
@@ -189,9 +189,9 @@
 %global libsmbclient_so_version 0
 %global libwbclient_so_version 0
 
-%global talloc_version 2.4.4
+%global talloc_version 2.5.0
 %global tdb_version 1.4.15
-%global tevent_version 0.17.1
+%global tevent_version 0.17.2
 
 %global required_mit_krb5 1.20.1
 
@@ -295,7 +295,7 @@ BuildRequires: flex
 BuildRequires: gawk
 BuildRequires: gnupg2
 BuildRequires: gpgverify
-BuildRequires: gnutls-devel >= 3.4.7
+BuildRequires: gnutls-devel >= 3.7.2
 BuildRequires: gpgme-devel
 BuildRequires: jansson-devel
 BuildRequires: krb5-devel >= %{required_mit_krb5}
@@ -4207,5 +4207,4 @@ fi
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:4.24.2-1
-- Import
+%autochangelog

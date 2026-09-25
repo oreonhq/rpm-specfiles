@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4f1915b2a55a789a15f2f9ada7cc44bca81418e648f76fd88a7f4dd028b2149f
 
 %if (0%{?fedora} && 0%{?fedora} < 40) || (0%{?rhel} && 0%{?rhel} < 11)
 %bcond as_wget 0
@@ -9,8 +9,8 @@
 %global somajor 4
 
 Name:           wget2
-Version:        2.2.1
-Release:        2%{?dist}
+Version:        2.3.0
+Release:        1%{?dist}
 Summary:        An advanced file and recursive website downloader
 
 # Documentation is GFDL
@@ -182,5 +182,4 @@ echo ".so man1/%{name}.1" > %{buildroot}%{_mandir}/man1/wget.1
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash e69c299f0e9cdedb839d5ec6d58d31b08fa6895cfc5dfd59c8cb016377aab26f
 
 Name:           python-urwid
-Version:        4.1.4
+Version:        4.1.7
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A full-featured console _xterm et al._ user interface library
@@ -59,5 +59,4 @@ Summary:        %{summary}
 %files -n python3-urwid -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

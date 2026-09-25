@@ -1,13 +1,9 @@
 diff --git a/share/org.videolan.vlc.appdata.xml.in.in b/share/org.videolan.vlc.appdata.xml.in.in
-index cc9c39a..3c55620 100644
 --- a/share/org.videolan.vlc.appdata.xml.in.in
 +++ b/share/org.videolan.vlc.appdata.xml.in.in
-@@ -18,8 +18,9 @@
-     <url type="bugtracker">https://trac.videolan.org/vlc/</url>
-     <url type="donation">https://www.videolan.org/contribute.html</url>
+@@ -20,6 +20,7 @@
      <releases>
--        <release version="@VERSION@" />
-+        <release version="@VERSION@" date="@DATE@" />
+         <release version="@VERSION@" date="@VERSION_DATE@" />
      </releases>
 +    <replaces><id>org.videolan.VLC</id></replaces>
      <provides>

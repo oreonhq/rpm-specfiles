@@ -1,5 +1,5 @@
-%global source0_hash none
-%global source1_hash 6db98637a40c9e675f10b02086f2243436cc99712a5bcf197a19b71975a5f45a
+%global source0_hash e09caa006ee6ff1e0b32dea934e6cb5d96412cd31163d82bd7ccdc1ac06304d5
+%global source1_hash 4056ea5a3c174b59f61377e001a660f4ce051db51120890aa5601adc8799a605
 
 #
 # Copyright (C) 2011-2017 Red Hat, Inc
@@ -12,14 +12,14 @@
 
 Summary: Device-mapper Persistent Data Tools
 Name: device-mapper-persistent-data
-Version: 1.3.3
+Version: 1.3.4
 Release: 1%{?dist}%{?release_suffix}
 License: GPL-3.0-only AND (0BSD OR MIT OR Apache-2.0) AND Apache-2.0 AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND BSD-3-Clause AND MIT AND (MIT OR Apache-2.0) AND (MIT OR Zlib OR Apache-2.0) AND (Unlicense OR MIT) AND (Zlib OR Apache-2.0 OR MIT)
 
 #ExcludeArch: %%{ix86}
 URL: https://github.com/jthornber/thin-provisioning-tools
 #Source0: https://github.com/jthornber/thin-provisioning-tools/archive/thin-provisioning-tools-%%{version}.tar.gz
-Source0:        https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz#/device-mapper-persistent-data-1.3.2.tar.gz
+Source0:        https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz#/device-mapper-persistent-data-%{version}.tar.gz
 Source1:        thin-provisioning-tools-%{version}-vendor.tar.xz
 %if %{defined rhel} || (0%{?oreon} >= 11)
 BuildRequires: rust-toolset
@@ -136,5 +136,4 @@ echo %{version}-%{release} > VERSION
 #% {_sbindir}/thin_show_duplicates
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.2-1
-- Import
+%autochangelog

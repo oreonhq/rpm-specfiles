@@ -1,8 +1,8 @@
-%global source0_hash 3c457b65d98e5ff40bdb9cf814b0d5983eb0c53fb8696bda3ba035ad2acd6802
+%global source0_hash 4f6f8eb0c4efbc9398a0f1ef0c97fb7704eee4ccd90af1a31dda32854aa81164
 
 Name:           perl-Config-IniFiles
-Version:        3.000003
-Release:        18%{?dist}
+Version:        3.003000
+Release:        1%{?dist}
 Summary:        A module for reading .ini-style configuration files
 # LICENSE:                              GPL+ or Artistic
 # lib/Config/IniFiles.pm:               GPL+ or Artistic
@@ -84,5 +84,4 @@ perl Build.PL installdirs=vendor
 %{_mandir}/man3/*.3pm*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.000003-18
-- Prepare for Oreon 11 (RP1)
+%autochangelog

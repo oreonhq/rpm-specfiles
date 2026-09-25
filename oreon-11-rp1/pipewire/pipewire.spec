@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash dbc3624cf71215c26a22fc98f6f71f7b8599f5f6b415eab4a5c90ca96c170c7c
 
 %global majorversion 1
 %global minorversion 6
-%global microversion 2
+%global microversion 9
 
 %global apiversion   0.3
 %global spaversion   0.2
@@ -86,7 +86,6 @@ Source0:        https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/%{ver
 Source1:        pipewire.sysusers
 
 ## upstream patches
-Patch0001:	0001-acp-fix-Werror-discarded-qualifiers-error.patch
 
 ## upstreamable patches
 
@@ -937,5 +936,4 @@ systemctl --no-reload preset --global pipewire.socket >/dev/null 2>&1 || :
 %{_datadir}/pipewire/pipewire.conf.d/50-raop.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{majorversion}.%{minorversion}.%{microversion}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

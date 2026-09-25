@@ -1,8 +1,8 @@
-%global source0_hash 05ba5c43f88dd4e08137db872d16a01f6be5efd1fb470b3f2069da88410fea46
+%global source0_hash 4c0786667e8a1de05f41fcdb535927d4a95f9bd361ab907cddb64d0705517dfe
 
 Name:           perl-Text-VCardFast
-Version:        0.11
-Release:        32%{?dist}
+Version:        0.12
+Release:        1%{?dist}
 Summary:        Perl extension for very fast parsing of VCards
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-VCardFast
@@ -92,5 +92,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11-32
-- Prepare for Oreon 11 (RP1)
+%autochangelog

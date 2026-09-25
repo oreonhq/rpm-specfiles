@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fa30b7388468e28349f1f3fc6c48061f935859c13d3d6e6ee866dfe22d9f6747
 
 ################################################################################
 Name:           jss
@@ -9,8 +9,8 @@ Name:           jss
 
 # Upstream version number:
 %global         major_version 5
-%global         minor_version 9
-%global         update_version 0
+%global         minor_version 10
+%global         update_version 1
 
 # Downstream release number:
 # - development/stabilization (unsupported): 0.<n> where n >= 1
@@ -399,5 +399,4 @@ cp base/target/jss-tests.jar %{buildroot}%{_datadir}/jss/tests/lib
 
 ################################################################################
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{major_version}.%{minor_version}.%{update_version}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

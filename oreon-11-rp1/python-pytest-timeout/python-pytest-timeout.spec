@@ -1,16 +1,16 @@
-%global source0_hash 7e68e90b01f9eff71332b25001f85c75495fc4e3a836701876183c4bcfd0540a
+%global source0_hash 68c9d82dfe95fa65712e107010c9344e7d8b4afe8c975a7be0d273d939583a93
 
 %global pypi_name pytest_timeout
 
 Name:           python-pytest-timeout
-Version:        2.4.0
-Release:        6%{?dist}
+Version:        2.5.0
+Release:        1%{?dist}
 Summary:        py.test plugin to abort hanging tests
 
 # SPDX
 License:        MIT
 URL:            https://github.com/pytest-dev/pytest-timeout
-Source0:        https://files.pythonhosted.org/packages/source/p/pytest_timeout/pytest_timeout-2.4.0.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_timeout/pytest_timeout-2.5.0.tar.gz
 
 BuildArch:      noarch
 
@@ -53,5 +53,4 @@ sed -i -e '/\s*ipdb$/d' tox.ini
 %doc README.rst
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.0-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

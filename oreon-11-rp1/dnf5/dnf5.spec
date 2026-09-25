@@ -1,24 +1,19 @@
-%global source0_hash 9e8ed27088daaaaf9e76120a06cb320e2d6b5c50e75762facf2e5227d946e063
+%global source0_hash 242f0e775bc8e1017a5bfec841c776beafa7ea6b5bd2e4d7bc0ff9d7c57998f3
 
 %global project_version_prime 5
 %global project_version_major 4
-%global project_version_minor 0
+%global project_version_minor 6
 %global project_version_micro 0
 
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
 
 Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
-Source0:        https://github.com/rpm-software-management/dnf5/archive/refs/tags/5.4.0.0.tar.gz#/dnf5-5.4.0.0.tar.gz
-Patch1:         0001-Honor-localpkg_gpgcheck-in-RPM-transaction-per-eleme.patch
-Patch2:         0002-Fix-segmentation-fault-in-cmd_requires_privileges.patch
-Patch3:         0003-dnf5daemon-server-Fix-daemon-crash-for-invalid-local.patch
-Patch4:         0004-libdnf5-cli-handle-C-or-POSIX-locale-gracefully-in-p.patch
-Patch5:         0005-tests-Fix-a-type-mismatch-in-libdnf5-cli-test_progre.patch
+Source0:        https://github.com/rpm-software-management/dnf5/archive/refs/tags/5.4.6.0.tar.gz#/dnf5-5.4.6.0.tar.gz
 
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
@@ -1100,6 +1095,4 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets
 
 %changelog
-* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.4.0.0-3
-- Prepare for Oreon 11 (RP1)
-- fix parsing issue
+%autochangelog

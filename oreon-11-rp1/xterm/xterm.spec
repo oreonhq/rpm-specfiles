@@ -1,10 +1,10 @@
-%global source0_hash 066eb2d66430897fe1dadd271554ccdae33d77c512126a758fc4de37b1148799
+%global source0_hash 969be283670deadd66934865c4de6c5ab045e3a3facc2b228decf91a20d8c36c
 
 %bcond_with trace
 
 Summary: Terminal emulator for the X Window System
 Name: xterm
-Version: 410
+Version: 411
 Release: %autorelease
 URL: https://invisible-island.net/xterm
 License: MIT AND X11 AND HPND AND CC-BY-4.0
@@ -103,5 +103,4 @@ install -m644 -p xterm.appdata.xml $RPM_BUILD_ROOT%{_datadir}/appdata
 %{_mandir}/man1/resize.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 406-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

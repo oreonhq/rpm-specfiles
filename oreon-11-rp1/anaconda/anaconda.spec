@@ -1,8 +1,8 @@
-%global source0_hash 75ce3f4b6254b9376bc01f75d654a49b399f8d721b19e2963def16cdf4352e03
+%global source0_hash 9df3849f74323ae0b88a9c8cf82915977452b8767bef0bd0fedae38946f4a7a1
 
 Summary: Graphical system installer
 Name:    anaconda
-Version: 45.25
+Version: 45.27
 Release: 1%{?dist}
 ExcludeArch: %{ix86}
 License: GPL-2.0-or-later
@@ -540,8 +540,4 @@ rm -rf \
 %{_prefix}/libexec/anaconda/dd_*
 
 %changelog
-* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 44.25-4
-- Drop anaconda-webui requirement from live subpackage
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 44.25-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

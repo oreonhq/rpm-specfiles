@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 40b15e90ad0c0c631b76da3c467ea9847fa5c24f37413ac5b492804860a28cd8
 
 #### options:
 # Use the following --with/--without <option> switches to control how the
@@ -62,7 +62,7 @@ app - gimp:ui
 Summary:        GNU Image Manipulation Program
 Name:           gimp
 Epoch:          2
-Version:        3.2.0
+Version:        3.2.6
 Release:        %autorelease
 # https://bugzilla.redhat.com/show_bug.cgi?id=2318369
 ExcludeArch:    s390x
@@ -350,7 +350,8 @@ The %{name}-devel-tools package contains gimptool, a helper program to
 build GNU Image Manipulation Program (GIMP) plug-ins and extensions.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }cat << EOF
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+cat << EOF
 --- 8< --- Build options ---------------------------------------------------
 is default version: %{with is_default_version}
 label overlay:      %{with label_overlay}
@@ -688,5 +689,4 @@ done
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

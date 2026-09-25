@@ -1,7 +1,7 @@
-%global source0_hash bdd1ea69338cf3017f628a886218b8c185ca24e8257f03207a3cf1bbb51e3d32
+%global source0_hash 8660ad79c0d60fed77f29b36e1742841466af5405de702c81a121e6eeb625ebb
 
 Name:           mpvqt
-Version:        1.1.1
+Version:        1.2.0
 Release:        %autorelease
 Summary:        QML wrapper for libmpv
 License:        LGPL-2.1-only OR LGPL-3.0-only

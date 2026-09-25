@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bab458278f4bee2b5b59b7df5cff51a52ad71bb74b551151c9587f63d86d01b8
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
@@ -7,8 +7,8 @@
 
 Name:    pesign
 Summary: Signing utility for UEFI binaries
-Version: 116
-Release: 8%{?dist}
+Version: 117
+Release: 1%{?dist}
 License: GPL-2.0-only
 URL:     https://github.com/rhboot/pesign
 
@@ -48,11 +48,7 @@ Source0:        https://github.com/rhboot/pesign/archive/refs/tags/%{version}.ta
 Source1:        certs.tar.xz
 Source2:        pesign.py
 
-Patch0001:        0001-cms_common-Fixed-Segmentation-fault.patch
-Patch0002:        0002-Fix-reversed-calloc-arguments.patch
 Patch0003:        0003-Work-around-OpenSC-changing-token-names-on-fedora-bu.patch
-Patch0004:        0004-cms_common-skip-authentication-on-the-Friendly-slot.patch
-Patch0005:        0005-pesum-fix-strrchr-const.patch
 
 %description
 This package contains the pesign utility for signing UEFI binaries as
@@ -168,5 +164,4 @@ certutil -d %{_sysconfdir}/pki/pesign/ -X -L > /dev/null
 %{_sysusersdir}/pesign.conf
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 116-8
-- Import
+%autochangelog

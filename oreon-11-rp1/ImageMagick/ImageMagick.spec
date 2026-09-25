@@ -1,4 +1,4 @@
-%global source0_hash 005b177dd25f46c2458b543164f296d66ce97e6a7be1084529d25df527984813
+%global source0_hash 894e3dfc3312151bba15ed1838e8066302940972d100a1727dfac5d16dd769e1
 
 %bcond_without tests
 
@@ -15,7 +15,7 @@
 
 Name:           ImageMagick
 Epoch:          1
-Version:        7.1.2.27
+Version:        7.1.2.31
 Release:        1%{?dist}
 Summary:        An X application for displaying and manipulating images
 

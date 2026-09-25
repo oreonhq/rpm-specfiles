@@ -1,9 +1,9 @@
-%global source0_hash 5d36fd90b83a06fd3ed0ff951ab1101f22eb310fde3492f9d0455a68569abe5b
+%global source0_hash 3e3cc7582ea34f3cf8353152fae724dea00dc893f021080263f475dcaeb40520
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:           environment-modules
-Version:        5.6.2
+Version:        5.7.0
 Release:        1%{?dist}
 Summary:        Provides dynamic modification of a user's environment
 
@@ -207,5 +207,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.6.1-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

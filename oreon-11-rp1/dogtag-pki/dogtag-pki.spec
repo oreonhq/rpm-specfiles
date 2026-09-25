@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash dfd7bbabda5313b13f6c38cbdfce650ccbb053b5b1b03e1f5bda7d23ed01986c
 
 ################################################################################
 Name:             dogtag-pki
@@ -12,13 +12,13 @@ Name:             dogtag-pki
 
 # Upstream version number:
 %global           major_version 11
-%global           minor_version 9
+%global           minor_version 10
 %global           update_version 1
 
 # Downstream release number:
 # - development/stabilization (unsupported): 0.<n> where n >= 1
 # - GA/update (supported): <n> where n >= 1
-%global           release_number 2
+%global           release_number 1
 
 # Development phase:
 # - development (unsupported): alpha<n> where n >= 1
@@ -2090,5 +2090,4 @@ fi
 
 ################################################################################
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{major_version}.%{minor_version}.%{update_version}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

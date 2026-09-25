@@ -1,19 +1,15 @@
-diff --git a/modules/meson.build b/modules/meson.build
-index 20cebdbb..eaa4fdda 100644
 --- a/modules/meson.build
 +++ b/modules/meson.build
-@@ -49,3 +49,5 @@ subdir('pam_usertype')
+@@ -43,3 +43,5 @@
  subdir('pam_warn')
  subdir('pam_wheel')
  subdir('pam_xauth')
 +subdir('pam_chroot')
 +subdir('pam_postgresok')
-diff --git a/modules/module-meson.build b/modules/module-meson.build
-index acb70875..d974902d 100644
 --- a/modules/module-meson.build
 +++ b/modules/module-meson.build
-@@ -452,6 +452,13 @@ if module == 'pam_unix'
-     dependencies: [libpam_internal_dep, libpam_dep, libcrypt],
+@@ -489,6 +489,13 @@
+     env: ['MESON_BUILD_SUBDIR=' + meson.current_build_dir()],
    )
  endif
 +if module == 'pam_chroot'
@@ -25,4 +21,4 @@ index acb70875..d974902d 100644
 +endif
  
  
- # tests
+ if module == 'pam_timestamp' and cdata.get('WITH_OPENSSL', 0) != 1

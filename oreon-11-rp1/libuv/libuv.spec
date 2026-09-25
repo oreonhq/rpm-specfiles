@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash cb0d6dd2128d5a95bd242c6cc982a24fe608fa93da57b6b4ec763b0018c53e64
 
 %global source2_key_fpr 612F0EAD9401622379DF4402F28C3C8DA33C03BE
 
@@ -13,7 +13,7 @@
 
 Name:           libuv
 Epoch:          1
-Version:        1.52.1
+Version:        1.53.0
 Release:        %autorelease
 Summary:        Platform layer for node.js
 
@@ -128,5 +128,4 @@ env UV_TEST_TIMEOUT_MULTIPLIER=10 ./%{__cmake_builddir}/uv_run_tests_a
 %{_libdir}/pkgconfig/%{name}-static.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.52.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

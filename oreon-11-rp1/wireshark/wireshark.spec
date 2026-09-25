@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d062d416a1ab3a49975aafe3a671c882dde0562ccd71b078808ceb59d465fc0f
 
 %undefine __cmake_in_source_build
 %global with_lua 1
@@ -10,7 +10,7 @@
 
 Summary:	Network traffic analyzer
 Name:		wireshark
-Version:	4.6.8
+Version:	4.6.9
 Release:	1%{?dist}
 Epoch:		1
 License:	BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-or-later AND LGPL-2.0-or-later AND Zlib AND ISC AND (BSD-3-Clause OR GPL-2.0-only) AND (GPL-2.0-or-later AND Zlib)
@@ -307,5 +307,4 @@ fi
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:4.6.4-2
-- Import
+%autochangelog

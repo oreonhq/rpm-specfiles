@@ -1,20 +1,19 @@
-%global source0_hash 9655507e4583fa20d2b6909ce4bf7fee71a9976ea94c734dd857fa9ae7c9c7dd
+%global source0_hash 0e3668def86f65e1e85fa8a898920e6e45b2d213daf5410f0552b82352a17f37
 
 Summary:        Python package with an object-oriented approach to text processing
 Name:           pyparsing
-Version:        3.3.2
+Version:        3.3.3
 Release:        %autorelease
 
 # SPDX
 License:        MIT
 URL:            https://github.com/pyparsing/pyparsing
-Source0:        https://github.com/%{name}/%{name}/archive/refs/tags/%{name}_%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Python 3.14: Remove return from a finally block
 # Fixes https://bugzilla.redhat.com/2373915
 # From https://github.com/pyparsing/pyparsing/commit/28ef77eb03
 # Unrelated changes removed
-Patch:          28ef77eb03.patch
 
 BuildArch:      noarch
 BuildRequires:  dos2unix
@@ -75,7 +74,7 @@ The package contains documentation for pyparsing.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{name}_%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 dos2unix -k examples/*
 
@@ -120,5 +119,4 @@ popd
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

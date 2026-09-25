@@ -1,10 +1,10 @@
-%global source0_hash 445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb
+%global source0_hash 1c767308174337a74694da0f3ec069c271452163a1ef4540964c50c301f157d4
 
 %{?mingw_package_header}
 
 Name:           mingw-cairo
-Version:        1.18.4
-Release:        3%{?dist}
+Version:        1.18.6
+Release:        1%{?dist}
 Summary:        MinGW Windows Cairo library
 
 License:        LGPL-2.1-only OR MPL-1.1
@@ -160,5 +160,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.18.4-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

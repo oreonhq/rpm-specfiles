@@ -1,22 +1,21 @@
-%global source0_hash 36a2f13859f3e2a9c74d1d4064f8d406689b0201e25968aba952010ed73bfec2
+%global source0_hash b8bbc30cfb7865603fff1dd0fb516cce90437d8ddb267e331cd89d6121960538
 
 #Enable gpg signature verification
 %bcond gpgcheck 1
 
 Name:          pkcs11-provider
-Version:       1.2.0
+Version:       1.3.0
 Release:       %autorelease
 Summary:       A PKCS#11 provider for OpenSSL 3.0+
 License:       Apache-2.0
 URL:           https://github.com/latchset/pkcs11-provider
-Source0:        https://github.com/latchset/pkcs11-provider/releases/download/v1.2.0/pkcs11-provider-1.2.0.tar.xz
+Source0:        https://github.com/latchset/pkcs11-provider/releases/download/v%{version}/pkcs11-provider-%{version}.tar.xz
 %if %{with gpgcheck}
-Source1:        https://github.com/latchset/pkcs11-provider/releases/download/v1.2.0/pkcs11-provider-1.2.0.tar.xz.asc
+Source1:        https://github.com/latchset/pkcs11-provider/releases/download/v%{version}/pkcs11-provider-%{version}.tar.xz.asc
 Source2:       simo_redhat.asc
 %endif
 Source3:       pkcs11-provider.conf
 # https://github.com/latchset/pkcs11-provider/pull/689
-Patch1:        0001-Fix-i686-build-failures-in-cipher.c.patch
 
 
 BuildRequires: openssl-devel >= 3.0.7
@@ -82,5 +81,4 @@ install -m644 '%{SOURCE3}' \
 %config(noreplace) %{_sysconfdir}/pki/tls/openssl.d/pkcs11-provider.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

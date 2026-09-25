@@ -4,7 +4,7 @@
 %global shell_version %%(cut -d "~" -f 1 <<<%{version})
 
 Name:           gnome-shell-extension-background-logo
-Version:        50~beta
+Version:        50.0
 Release:        %autorelease
 Summary:        Background logo extension for GNOME Shell
 
@@ -40,5 +40,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/gnome-shell/extensions/background-logo@fedorahosted.org/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50~beta-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

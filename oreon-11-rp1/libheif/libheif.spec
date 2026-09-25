@@ -1,4 +1,4 @@
-%global source0_hash 79996de959d28ca82ef070c382304683f5cdaf04cbe2953a74587160a3710a36
+%global source0_hash 3be49950c75d3fd9318ba775e8253248dd9e08c61ea955fca81b6b89c02d6b2b
 
 %global somajor 1
 # this is used for breaking a self-dependency on build:
@@ -15,14 +15,13 @@
 %bcond bootstrap 0
 
 Name:           libheif
-Version:        1.23.4
+Version:        1.23.5
 Release:        %autorelease
 Summary:        HEIF and AVIF file format decoder and encoder
 
 License:        LGPL-3.0-or-later and MIT
 URL:            https://github.com/strukturag/libheif
-Source0:        https://github.com/strukturag/libheif/archive/refs/tags/v1.21.2.tar.gz#/libheif-1.21.2.tar.gz
-Patch0:         libheif-no-hevc-tests.patch
+Source0:        https://github.com/strukturag/libheif/archive/refs/tags/v%{version}.tar.gz#/libheif-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -89,7 +88,6 @@ developing applications that use %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch 0 -p1
 rm -rf third-party/
 
 
@@ -163,5 +161,4 @@ ctest %{?_smp_mflags} --output-on-failure -E '^region$'
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.21.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

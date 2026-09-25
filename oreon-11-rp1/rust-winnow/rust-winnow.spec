@@ -1,4 +1,4 @@
-%global source0_hash 0592e1c9d151f854e6fd382574c3a0855250e1d9b2f99d9281c6e6391af352f1
+%global source0_hash 23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81
 
 %bcond check 0
 %global debug_package %{nil}
@@ -6,7 +6,7 @@
 %global crate winnow
 
 Name:           rust-winnow
-Version:        1.0.3
+Version:        1.0.4
 Release:        %autorelease
 Summary:        Byte-oriented, zero-copy, parser combinators library
 

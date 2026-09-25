@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 50c951611c92bca05c51411aef45f1cbc50f2821c4802758c5c6d34696533ab5
 
-%global	mainver		1.19.1
+%global	mainver		1.19.4
 #%%global	prever		.rc4
 
 %global	baserelease		1
@@ -25,9 +25,9 @@ License:	MIT AND Apache-2.0
 Provides:	bundled(gumbo-parser) = 0.10.1
 
 URL:		https://nokogiri.org
-Source0:        https://rubygems.org/gems/nokogiri-1.19.1%{?prever}.gem
+Source0:        https://rubygems.org/gems/nokogiri-1.19.4%{?prever}.gem
 # %%{SOURCE2} %%{name} %%{version}
-Source1:        https://github.com/sparklemotion/nokogiri/archive/refs/tags/v1.19.1%{?prever}%{?prever}.tar.gz#/rubygem-nokogiri-1.19.1%{?prever}%{?prever}-full.tar.gz
+Source1:        https://github.com/sparklemotion/nokogiri/archive/refs/tags/v%{mainver}%{?prever}%{?prever}.tar.gz#/rubygem-nokogiri-1.19.4%{?prever}%{?prever}-full.tar.gz
 # Shut down libxml2 version unmatching warning
 Patch0:	%{name}-1.11.0.rc4-shutdown-libxml2-warning.patch
 BuildRequires:	ruby(release)
@@ -278,5 +278,4 @@ popd
 %doc	%{gem_dir}/doc/%{gem_name}-%{mainver}%{?prever}/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{mainver}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

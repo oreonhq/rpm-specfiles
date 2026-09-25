@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 9e2ddadc609084b5f60affb8b87e77304fed64e271e2b2b7558186cf65d81e5a
 
 Name:           python-awscrt
-Version:        0.36.4
+Version:        0.37.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A common runtime for AWS Python projects
@@ -63,5 +63,4 @@ Summary:        %{summary}
 %files -n python3-awscrt -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.31.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

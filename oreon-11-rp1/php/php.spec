@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d9be75c08e8c316f4c8f4194d8fbe1750a15f6a6d9d4e3fe72082abeeb800360
 
 %global source20_key_fpr 1198C0117593497A5EC5C199286AF1F9897469DC
 
@@ -79,7 +79,7 @@
 %bcond_with          liburiparser
 %endif
 
-%global upver        8.5.4
+%global upver        8.5.11
 #global rcver        RC1
 
 Summary: PHP scripting language for creating dynamic web sites
@@ -100,7 +100,7 @@ Release: 1%{?dist}
 License: PHP-3.01 AND Zend-2.0 AND BSD-2-Clause AND MIT AND Apache-1.0 AND NCSA AND BSL-1.0
 URL: http://www.php.net/
 
-Source0:        https://www.php.net/distributions/php-8.5.4%{?rcver}.tar.xz
+Source0:        https://www.php.net/distributions/php-8.5.11%{?rcver}.tar.xz
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
@@ -115,7 +115,7 @@ Source14: nginx-php.conf
 Source15: php.tmpfiles
 # See https://secure.php.net/gpg-keys.php
 Source20:        https://www.php.net/distributions/php-keyring.gpg
-Source21:        https://www.php.net/distributions/php-8.5.4%{?rcver}.tar.xz.asc
+Source21:        https://www.php.net/distributions/php-8.5.11%{?rcver}.tar.xz.asc
 # Configuration files for some extensions
 Source50: 10-opcache.ini
 Source51: opcache-default.blacklist
@@ -1655,5 +1655,4 @@ systemctl try-restart php-fpm.service >/dev/null 2>&1 || :
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{upver}%{?rcver:~%{rcver}}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

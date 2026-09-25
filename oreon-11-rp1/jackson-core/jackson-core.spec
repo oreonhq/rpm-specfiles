@@ -1,13 +1,13 @@
-%global source0_hash 84e7a56680cd0f1866f98e89bb9ae8d05bd9f87892e6e50dafc63415dbee3122
+%global source0_hash 8e97eb3e2fa690a6c75206b42426858518275d7ce9ce0cccf042754f19e52a22
 
 Name:           jackson-core
-Version:        2.22.2
+Version:        2.22.3
 Release:        1%{?dist}
 Summary:        Core part of Jackson
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-core
-Source0:        https://github.com/FasterXML/jackson-core/archive/refs/tags/jackson-core-2.18.2.tar.gz#/jackson-core-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-core/archive/refs/tags/jackson-core-%{version}.tar.gz#/jackson-core-%{version}.tar.gz
 Patch1:         0001-Remove-ch.randelshofer.fastdoubleparser.patch
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
@@ -39,8 +39,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin "org.apache.maven.plugins:maven-shade-plugin"
 %pom_remove_plugin "org.jacoco:jacoco-maven-plugin"
 %pom_remove_plugin "org.moditect:moditect-maven-plugin"
-%pom_remove_plugin "de.jjohannes:gradle-module-metadata-maven-plugin"
-%pom_remove_plugin "io.github.floverfelt:find-and-replace-maven-plugin"
 %pom_remove_dep "ch.randelshofer:fastdoubleparser"
 
 %pom_add_plugin "org.apache.felix:maven-bundle-plugin" . "<extensions>true</extensions>"
@@ -61,5 +59,4 @@ sed -i 's/\r//' LICENSE jackson-core-NOTICE
 %license LICENSE jackson-core-NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.18.2-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

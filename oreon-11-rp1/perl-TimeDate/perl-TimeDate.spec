@@ -1,7 +1,7 @@
-%global source0_hash 4571da8fad4393e7051be0098bd3ad028b3c60c2d75adf88b1f81b912154d6d2
+%global source0_hash baddd0306ae2e86e9ec28d3de5439e514643e80b3735e43bd0fbb426d73304de
 
 Name:           perl-TimeDate
-Version:        2.34
+Version:        2.35
 Epoch:          1
 Release:        1%{?dist}
 Summary:        A Perl module for time and date manipulation
@@ -98,5 +98,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.34-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

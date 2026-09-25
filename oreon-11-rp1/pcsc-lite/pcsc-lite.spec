@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 60a08942d8c00a1d86a3bf4c64eddbf7a5569c7c54f6904e3f07801bb5316acd
 
 %global source2_key_fpr F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E
 
@@ -10,7 +10,7 @@
 %endif
 
 Name:           pcsc-lite
-Version:        2.5.1
+Version:        2.5.2
 Release:        1%{?dist}
 Summary:        PC/SC Lite smart card framework and applications
 
@@ -183,5 +183,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

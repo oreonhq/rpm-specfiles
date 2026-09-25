@@ -1,4 +1,4 @@
-%global source0_hash a90bff48cacc03f44e8e62f27d4db7385c5f9c7374f3b97b0b5cb5c2061790b8
+%global source0_hash 13e5bbfdd36da8af198913a94ab067312947239020906577b6bf938219b2d06b
 
 # Run optional tests
 %if ! (0%{?rhel})
@@ -12,8 +12,8 @@
 %{bcond_without perl_File_MimeInfo_enables_usage}
 
 Name:           perl-File-MimeInfo
-Version:        0.36
-Release:        2%{?dist}
+Version:        0.37
+Release:        1%{?dist}
 Summary:        Determine file type and open application
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-MimeInfo
@@ -141,5 +141,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.36-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

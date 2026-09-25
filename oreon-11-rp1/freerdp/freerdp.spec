@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0453420dc3d9c3c03952e4e3f52e5b213ce0eae37346cd9a08bbd30c30a23c21
 
 # Can be rebuilt with FFmpeg support enabled by passing
 # "--with=ffmpeg" to mock/rpmbuild; or by globally
@@ -26,7 +26,7 @@
 
 Name:           freerdp
 Epoch:          2
-Version:        3.31.1
+Version:        3.32.0
 Release:        1%{?dist}
 Summary:        Free implementation of the Remote Desktop Protocol (RDP)
 
@@ -43,7 +43,6 @@ URL:            http://www.freerdp.com/
 Source0:        https://github.com/FreeRDP/FreeRDP/archive/%{version}/FreeRDP-%{version}.tar.gz#/freerdp-3.26.0.tar.gz
 
 # Fix TestNTLM with OpenSSL without legacy provider
-Patch0:         https://github.com/FreeRDP/FreeRDP/commit/e9b95a5a3cf6a182837773b92c825f48df953821.patch#/FreeRDP-e9b95a5.patch
 
 BuildRequires:  curl
 BuildRequires:  gcc
@@ -376,5 +375,4 @@ find %{buildroot} -name "*.a" -delete
 %{_libdir}/pkgconfig/winpr-tools3.pc
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:3.26.0-4
-- Import
+%autochangelog

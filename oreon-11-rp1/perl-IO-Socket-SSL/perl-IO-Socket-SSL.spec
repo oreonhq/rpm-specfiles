@@ -1,4 +1,4 @@
-%global source0_hash b38473be20256b1a06447dd6769ad162bfad6a258234ed2c7e2e1819c16c4df7
+%global source0_hash a0be800ff4852b1567ee5500e772417ad7a360abff80c01b5b875c15d44be832
 
 %if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %bcond_with perl_IO_Socket_SSL_test_unused_idn
@@ -9,12 +9,12 @@
 %endif
 
 Name:		perl-IO-Socket-SSL
-Version:	2.098
-Release:	2%{?dist}
+Version:	2.099
+Release:	1%{?dist}
 Summary:	Perl library for transparent SSL
 License:	(GPL-1.0-or-later OR Artistic-1.0-Perl) AND MPL-2.0
 URL:		https://metacpan.org/release/IO-Socket-SSL
-Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Socket-SSL-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-%{version}.tar.gz
 
 
 
@@ -135,5 +135,4 @@ make test
 %{_mandir}/man3/IO::Socket::SSL::PublicSuffix.3*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.098-2
-- Import
+%autochangelog

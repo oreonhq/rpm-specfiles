@@ -1,4 +1,4 @@
-%global source0_hash d466e9454f08e4a911e14806c24e16fba1b4c121d1ea474396f396069cf949d9
+%global source0_hash cc4e190f5d26ca7051642629da2c52fc03bde85a03197c99408dcd291734c855
 
 %bcond check 0
 %global debug_package %{nil}
@@ -6,7 +6,7 @@
 %global crate indexmap
 
 Name:           rust-indexmap
-Version:        2.14.0
+Version:        2.14.2
 Release:        %autorelease
 Summary:        Hash table with consistent order and fast iteration
 

@@ -1,4 +1,4 @@
-%global source0_hash e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0
+%global source0_hash e7cab503d1d7d5849b89d2cf0e1ee60d0ef6d012407791b644b9cfc0cc225fdf
 
 # codecs which cannot be shipped in Fedora proper
 %bcond freeworld 0
@@ -41,7 +41,7 @@
 
 Name:		vlc
 Epoch:		1
-Version:	3.0.23
+Version:	3.0.24
 Release:	%autorelease
 Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause
@@ -50,8 +50,6 @@ Source0:        https://get.videolan.org/vlc/%{version}/vlc-%{version}.tar.xz
 Source1:        macros.vlc
 
 ## upstream patches
-# spatialaudio: fix compilation with libspatialaudio 4.0
-Patch:          8921.patch
 
 ## backported patches from master
 # freerdp: update to freerdp 2.0 api (#2278)
@@ -64,8 +62,6 @@ Patch:		freerdp2.patch
 Patch:		0001-Use-SYSTEM-wide-ciphers-for-gnutls.patch
 # Fix building with fdk-aac-2.0; backport for 3.0 from flathub
 Patch:		fdk-aac2.patch
-# port from intel-mediasdk to oneVPL
-Patch:		oneVPL.patch
 # fix appstreamcli validate to show in Software (rhbz#2258611)
 Patch:		appdata.patch
 # port from libidn to libidn2
@@ -74,8 +70,6 @@ Patch:		libidn2.patch
 Patch:		lua-math.patch
 # avoid "stale plugin cache" warnings in flatpaks
 Patch:		flatpak-cache.patch
-# fix build with gstreamer-1.28
-Patch:		gstreamer128.patch
 # fix build with libupnp-1.18
 Patch:		libupnp118.patch
 
@@ -1301,5 +1295,4 @@ make check
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.0.23-1
-- Import
+%autochangelog

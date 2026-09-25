@@ -1,7 +1,7 @@
-%global source0_hash bf641aa654861be10570bfc137d1441283822418e9757dc71ebb69a6cf84ea6b
+%global source0_hash ef5569220749529d778013aae1178391d972570a2b4f7288dda22effa875b07c
 
 Name:		libsrtp
-Version:	2.8.0
+Version:	2.8.1
 Release:	1%{?dist}
 Summary:	An implementation of the Secure Real-time Transport Protocol (SRTP)
 License:	BSD-3-Clause
@@ -55,5 +55,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.0-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,13 +1,13 @@
-%global source0_hash 37aa5341f2b51ffee245db3456d9bc25f718ca12beb7b990dc16d686890115e3
+%global source0_hash 0a6ecdbd2081079f16d0f43be08765edbaeab660febb2da2ce336b9f881a469b
 
 Summary: Automated Testing Framework
 Name:    atf
-Version: 0.25
+Version: 0.26
 Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://github.com/freebsd/atf
-Source0:        https://github.com/freebsd/atf/archive/refs/tags/atf-0.23.tar.gz#/atf-0.23.tar.gz
+Source0:        https://github.com/freebsd/atf/archive/refs/tags/atf-%{version}.tar.gz#/atf-%{version}.tar.gz
 Source1: README.Fedora
 
 %global _testsdir %{_libexecdir}/atf/tests
@@ -193,5 +193,4 @@ rm %{buildroot}%{_libdir}/libatf*.la
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.23-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

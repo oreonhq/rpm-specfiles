@@ -1,4 +1,4 @@
-%global source0_hash 1f3c2401af7b388a13ffed7e6f72b5e70f1bed7c82c34c218379d0ee45595616
+%global source0_hash 1af1117a228f1b5bc7fa91a0dabc37848a99e7d25188e9be8043332ce721dfd3
 
 #global prerelease  -rc
 
@@ -27,8 +27,8 @@
 
 Summary:    End-user tools for the Clam Antivirus scanner
 Name:       clamav
-Version:    1.4.4
-Release:    2%{?dist}
+Version:    1.5.4
+Release:    1%{?dist}
 License:    %{?with_unrar:proprietary}%{!?with_unrar:GPL-2.0-only}
 URL:        https://www.clamav.net/
 Source0:    https://www.clamav.net/downloads/production/%{name}-%{version}%{?prerelease}.tar.gz
@@ -64,9 +64,6 @@ Patch5:     clamav-clamonacc-service.patch
 Patch6:     clamav-freshclam.service.patch
 # Debian big-endian pe.c fix, refreshed for 1.4.4 (salsa unstable dropped the old one)
 Patch7:     libclamav-pe-Use-endian-wrapper-in-more-places.patch
-# - Update the image crate dependency to 0.25, the current release,
-#   https://github.com/Cisco-Talos/clamav/pull/1366/commits/24d1341e8e34aa325ac03718121e33a3b4e5b75e,
-#   allowing 0.24 for backwards-compatibility with vendored dependencies in EPEL8
 # - Allow version 1.0 of the hex-literal crate dependency; not suitable for
 #   upstream yet due to MSRV
 Patch8:     clamav-rust-dependency-versions.patch
@@ -623,7 +620,7 @@ done
 
 %files freshclam
 %{_bindir}/freshclam
-%{_libdir}/libfreshclam.so.3*
+%{_libdir}/libfreshclam.so.4*
 %{_mandir}/*/freshclam*
 %{_unitdir}/clamav-freshclam.service
 %{_unitdir}/clamav-freshclam-once.service

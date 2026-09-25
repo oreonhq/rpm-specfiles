@@ -1,10 +1,10 @@
-%global source0_hash 533d9f32336f4d03822e87fcee32277fd4a52e3f1278549bf42c8b28e3b0f798
+%global source0_hash 9a5f4ca7214c0353837ad9f9f7ac48df4da212aa0333b1adf5a515f1bae1e171
 %global crate dolby_vision
 
 %bcond check 1
 
 Name:           libdovi
-Version:        3.3.2
+Version:        3.4.0
 Release:        %autorelease
 Summary:        Dolby Vision metadata parsing and writing
 
@@ -13,7 +13,6 @@ URL:            https://github.com/quietvoid/dovi_tool
 Source0:        https://static.crates.io/crates/dolby_vision/dolby_vision-%{version}.crate#/dolby_vision-%{version}.crate
 
 Patch0:         dolby_vision-fix-metadata.diff
-Patch1:         dolby_vision-a8e639d.patch
 
 BuildRequires:  cargo-c
 BuildRequires:  cargo-rpm-macros >= 24

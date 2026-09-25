@@ -9,7 +9,7 @@ Refreshed for clamav 1.4.4.
 
 --- a/libclamav/pe.c
 +++ b/libclamav/pe.c
-@@ -2424,22 +2424,22 @@
+@@ -2401,22 +2401,22 @@
  
      /* If the PE doesn't have an import table then skip it. This is an
       * uncommon case but can happen. */
@@ -36,16 +36,16 @@ Refreshed for clamav 1.4.4.
      if (impdes == NULL) {
          cli_dbgmsg("scan_pe: failed to acquire fmap buffer\n");
          status = CL_EREAD;
-@@ -2449,7 +2449,7 @@
+@@ -2426,7 +2426,7 @@
  
      /* Safety: We can trust peinfo->dirs[1].Size only because `fmap_need_off()` (above)
       * would have failed if the size exceeds the end of the fmap. */
 -    left = peinfo->dirs[1].Size;
 +    left = EC32(peinfo->dirs[1].Size);
  
-     if (genhash[CLI_HASH_MD5]) {
-         hashctx[CLI_HASH_MD5] = cl_hash_init("md5");
-@@ -2556,7 +2556,7 @@
+     for (type = CLI_HASH_MD5; type < CLI_HASH_AVAIL_TYPES; type++) {
+         if (genhash[type]) {
+@@ -2522,7 +2522,7 @@
  
  done:
      if (needed_impoff) {
@@ -54,7 +54,7 @@ Refreshed for clamav 1.4.4.
      }
  
      for (type = CLI_HASH_MD5; type < CLI_HASH_AVAIL_TYPES; type++) {
-@@ -3241,7 +3241,7 @@
+@@ -3204,7 +3204,7 @@
  
      /* Trojan.Swizzor.Gen */
      if (SCAN_HEURISTICS && (DCONF & PE_CONF_SWIZZOR) && peinfo->nsections > 1 && fsize > 64 * 1024 && fsize < 4 * 1024 * 1024) {
@@ -63,7 +63,7 @@ Refreshed for clamav 1.4.4.
              struct swizz_stats *stats = calloc(1, sizeof(*stats));
              unsigned int m            = 1000;
              ret                       = CL_CLEAN;
-@@ -5250,13 +5250,13 @@
+@@ -5209,13 +5209,13 @@
          cli_dbgmsg("EntryPoint offset: 0x%x (%d)\n", peinfo->ep, peinfo->ep);
      }
  

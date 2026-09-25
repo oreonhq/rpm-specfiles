@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 440bdd9fbf88d57809b68839fb690f19e4db65fa5539e60cc803ebd7b9e5e8fc
 
 Name:           python-boto3
-Version:        1.43.97
+Version:        1.43.102
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The AWS SDK for Python _Boto3_
@@ -59,5 +59,4 @@ Summary:        %{summary}
 %files -n python3-boto3 -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.42.70-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

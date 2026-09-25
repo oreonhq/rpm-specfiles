@@ -1,13 +1,13 @@
-%global source0_hash 8f3746c4b4968d22afbb97d36e1a0e5b66e6c0f297290f2e95f05b9b8bf18690
+%global source0_hash cf87d3627dfb4412437fdd5b13eae402607722998d21567993aedbc59b23c15e
 
 Name:           python-discovery
-Version:        1.4.2
+Version:        1.6.1
 Release:        %autorelease
 Summary:        Python discovery helper library
 
 License:        MIT
 URL:            https://pypi.org/project/python-discovery/
-Source:         https://files.pythonhosted.org/packages/0b/1a/cbbaf13b730abb0a16b964d984e19f2fe520c21a4dc664051359a3f5a9e7/python_discovery-%{version}.tar.gz
+Source:         https://files.pythonhosted.org/packages/source/p/python_discovery/python_discovery-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

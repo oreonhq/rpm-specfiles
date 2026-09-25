@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash b7132e148358a45185c9feafd049dbaf243649d3c44414b3534d9c95d18592b9
 
 %{?mingw_package_header}
 
 Name:           mingw-harfbuzz
-Version:        14.4.0
+Version:        14.5.0
 Release:        1%{?dist}
 Summary:        MinGW Windows Harfbuzz library
 
@@ -177,5 +177,4 @@ export MINGW_BUILDDIR_SUFFIX=shared
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13.0.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

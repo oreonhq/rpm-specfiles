@@ -1,11 +1,11 @@
-%global source0_hash 192c2fae048d4e7f514ba451627f9c4e612765099f819c19191f9fde3e609673
+%global source0_hash b618c5fb44c2f5f048843db90f7d1b24f78f47b07913c8c7ba8c942d3eb24b00
 
-%define byaccdate 20241231
+%define byaccdate 20260126
 
 Summary: Berkeley Yacc, a parser generator
 Name: byacc
 Version: 2.0.%{byaccdate}
-Release: 3%{?dist}
+Release: 1%{?dist}
 
 # An SPDX license string check done against byacc-20230521 using fossology
 # found strings corresponding to the licenses noted below across the byacc
@@ -62,5 +62,4 @@ echo ====================TESTING END=====================
 %{_mandir}/man1/byacc.1*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.20241231-3
-- Import
+%autochangelog

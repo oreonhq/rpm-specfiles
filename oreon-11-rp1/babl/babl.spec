@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e676507b421d414d49db8627415dc1eadbd787536baa7d6fe94a1f1971cbe73e
 
 # skip tests known to be problematic in a specific version
 %global skip_checks_version 0.1.58
@@ -20,7 +20,7 @@
 
 Summary:    A dynamic, any to any, pixel format conversion library
 Name:       babl
-Version:    0.1.124
+Version:    0.1.128
 Release:    %autorelease
 
 # Compute some version related macros
@@ -150,5 +150,4 @@ popd
 %doc %{develdocdir}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.124-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

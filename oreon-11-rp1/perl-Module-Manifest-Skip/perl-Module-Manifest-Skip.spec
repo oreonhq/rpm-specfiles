@@ -1,15 +1,14 @@
-%global source0_hash 2c5fc7860c44f7d3a049b624b248112b146761775d92e5e431eaa60e880513be
+%global source0_hash 6bac0e659f71e239d3dd09b2d370f9dbea301fc6e76f3b64552da5c3978ede4f
 
 Name:           perl-Module-Manifest-Skip
-Version:        0.23
-Release:        35%{?dist}
+Version:        0.24
+Release:        1%{?dist}
 Summary:        MANIFEST.SKIP Manangement for Modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Manifest-Skip
 Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Manifest-Skip-%{version}.tar.gz
 # Adapt to changes in Moo-2.004000, bug #1826148,
 # <https://github.com/ingydotnet/module-manifest-skip-pm/issues/7>
-Patch0:         Module-Manifest-Skip-0.23-Adapt-to-changes-in-Moo-2.004000.patch
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -64,7 +63,6 @@ with "%{_libexecdir}/%{name}/test".
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Module-Manifest-Skip-%{version}
-%patch -P0 -p1
 # Help generators to recognize Perl scripts
 for F in $(find t/ -name '*.t'); do
     perl -i -MConfig -ple 'print $Config{startperl} if $. == 1 && !s{\A#!\s*perl}{$Config{startperl}}' "$F"
@@ -112,5 +110,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.23-35
-- Prepare for Oreon 11 (RP1)
+%autochangelog

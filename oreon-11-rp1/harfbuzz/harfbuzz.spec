@@ -1,7 +1,7 @@
-%global source0_hash e7f3b8bac3fdcc529985be8e84fbd65c675ac47ee58512b15a5dd620c79ffe2a
+%global source0_hash b7132e148358a45185c9feafd049dbaf243649d3c44414b3534d9c95d18592b9
 
 Name:           harfbuzz
-Version:        14.4.0
+Version:        14.5.0
 Release:        1%{?dist}
 Summary:        Text shaping library
 
@@ -149,5 +149,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libharfbuzz-vector.so.*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13.1.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

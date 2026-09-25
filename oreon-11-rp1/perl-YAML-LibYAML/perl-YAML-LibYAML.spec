@@ -1,4 +1,4 @@
-%global source0_hash b656b0b11a4219c125679e8cbf7436a3f636e833fd63cf322d171dcb7c3eaf3e
+%global source0_hash 04310e9840b918383a5b9ae9ca4b3bde1b2771ec786c758bd2fffd79d409332b
 
 # Run optional test
 %if ! 0%{?rhel}
@@ -9,8 +9,8 @@
 
 Name:           perl-YAML-LibYAML
 Epoch:          1
-Version:        0.904.0
-Release:        5%{?dist}
+Version:        0.910.0
+Release:        1%{?dist}
 Summary:        Perl YAML Serialization using XS and libyaml
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/YAML-LibYAML
@@ -165,5 +165,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.904.0-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash fcf3cbb33bb23bad75d2150157c21804618745731e9931ab27e61879a9f6123b
 
 Name:           python-sqlalchemy
-Version:        2.0.54
+Version:        2.1.1
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Database Abstraction Library
@@ -59,5 +59,4 @@ Summary:        %{summary}
 %files -n python3-sqlalchemy -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.48-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

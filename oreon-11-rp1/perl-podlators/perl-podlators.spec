@@ -1,9 +1,9 @@
-%global source0_hash 2992125eab7d2b1c5a2b15a26ad7955f7d989eba6c831abdcaf2000e86a91337
+%global source0_hash 709a7dc4a2259683eb2f89e085ec70cf743710d950510e489ec6ddca3eb80c68
 
 Name:           perl-podlators
 Epoch:          1
-Version:        6.0.2
-Release:        521%{?dist}
+Version:        6.1.1
+Release:        1%{?dist}
 Summary:        Format POD source into various output formats
 # pod/perlpodstyle.pod:     FSFAP
 # other files:              GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -155,5 +155,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.0.2-521
-- Prepare for Oreon 11 (RP1)
+%autochangelog

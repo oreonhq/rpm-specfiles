@@ -1,12 +1,12 @@
-%global source0_hash 7c2bcbaf988d50ba8902a0d0cdf3c66b22aa7e968f5b67d1339a8995aff25dbd
+%global source0_hash 3918f4a72f44317b43488d7f68644931111ed69b5067e13a32a5e96ac158b0a5
 
 Name:           perl-CPAN-Meta
 Summary:        Distribution metadata for a CPAN dist
-Version:        2.150013
+Version:        2.150015
 Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN-Meta
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/CPAN-Meta-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/CPAN-Meta-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -104,5 +104,4 @@ make test
 %{_mandir}/man3/Parse::CPAN::Meta.3*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.150013-1
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2ca6407a001a474d4d4d35f3a61550156050c48016d949f0da0529c0aa052422
 %global source1_hash f5991ee1ab5402ba6fa70bed7a292ea3e4507a0cc78f575d9eff72d561597cb8
 
 # Something in the debuginfo process is stripping the custom 64_ symbols out of lapack64_ and blas64_
@@ -15,8 +15,8 @@
 
 Summary: Numerical linear algebra package libraries
 Name: lapack
-Version: %{mediumver}.0
-Release: 11%{?dist}
+Version: %{mediumver}.1
+Release: 1%{?dist}
 License: BSD-3-Clause-Open-MPI
 URL: http://www.netlib.org/lapack/
 Source0:        https://github.com/Reference-LAPACK/lapack/archive/refs/tags/v%{version}.tar.gz#/lapack-%{mediumver}.0.tar.gz
@@ -24,7 +24,6 @@ Source1: https://www.netlib.org/lapack/manpages.tgz
 Source4: https://www.netlib.org/lapack/lapackqref.ps
 Source5: https://www.netlib.org/blas/blasqr.ps
 # https://github.com/Reference-LAPACK/lapack/pull/959
-Patch0: lapack-3.12.0-fix-dmd-issues.patch
 BuildRequires: gcc-gfortran, gawk
 BuildRequires: make, cmake
 # There isn't any c++ code here, but cmake checks for a working c++ compiler?
@@ -128,7 +127,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
 %setup -q -n %{name}-%{version} -D -T -a1
-%patch -P0 -p1
 
 mkdir manpages
 mv man/ manpages/
@@ -398,5 +396,4 @@ cp -f manpages/man/man3/* ${RPM_BUILD_ROOT}%{_mandir}/man3
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{mediumver}.0-11
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,12 +1,12 @@
-%global source0_hash 57203094a5d8574b6a00951e8f2399b666f4e74f9511d9c9fb5b453d5d11f578
+%global source0_hash 4bb44697ef82105bd8d6204e550796a1eea89ce7108a98e0b7bf3ae4700d1c34
 
 Name:           perl-Clone-PP
-Version:        1.08
-Release:        15%{?dist}
+Version:        1.09
+Release:        1%{?dist}
 Summary:        Recursively copy Perl data-types
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Clone-PP
-Source0:        https://cpan.metacpan.org/modules/by-module/Clone/Clone-PP-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEILB/Clone-PP-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

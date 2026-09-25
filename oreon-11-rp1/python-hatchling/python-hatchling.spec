@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash c4468f73144c054d2aab4ef0f0378c43b9878bf07f8ffd6b79690e970d375f07
 
 Name:           python-hatchling
-Version:        1.32.3
+Version:        1.32.4
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Modern, extensible Python build backend
@@ -55,5 +55,4 @@ Summary:        %{summary}
 %{_bindir}/hatchling
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.29.0-1
-- Import
+%autochangelog

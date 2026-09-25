@@ -1,14 +1,14 @@
-%global source0_hash none
+%global source0_hash 37e00e30611375938a9437477de793e355e55d486c25ab3dfd7a1a11ab0f8f07
 
 %global __python %{__python3}
 Name:           vulkan-headers
-Version:        1.4.362
+Version:        1.4.364
 Release:        %autorelease
 Summary:        Vulkan Header files and API registry
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/Vulkan-Headers
-Source0:        https://github.com/KhronosGroup/Vulkan-Headers/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-Headers-sdk-1.4.341.0.tar.gz
+Source0:        https://github.com/KhronosGroup/Vulkan-Headers/archive/v%{version}.tar.gz#/Vulkan-Headers-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build
@@ -21,7 +21,7 @@ Vulkan Header files and API registry
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n Vulkan-Headers-vulkan-sdk-%{version}
+%autosetup -n Vulkan-Headers-%{version}
 
 
 %build
@@ -45,5 +45,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.341.0-1
-- Import
+%autochangelog

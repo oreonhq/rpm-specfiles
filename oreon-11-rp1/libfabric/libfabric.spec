@@ -1,4 +1,4 @@
-%global source0_hash 2e939f17ce4d30a999d0445f741d3055b19dfd894eff70450e23470fe774f35a
+%global source0_hash 366000427e194d4ce22e272519b608afbebb1fc9915bcf5da924157a8a47fe10
 
 %global __remake_config 0
 
@@ -11,7 +11,7 @@
 %endif
 
 Name:           libfabric
-Version:        2.6.0
+Version:        2.7.0
 Release:        %autorelease
 Summary:        Open Fabric Interfaces
 
@@ -103,5 +103,4 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

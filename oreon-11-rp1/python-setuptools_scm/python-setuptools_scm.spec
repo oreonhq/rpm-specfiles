@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash a69f28bfc245608781205e912faae437c2b2165773afa4e7b979d77447a69dd2
 
 Name:           python-setuptools-scm
-Version:        10.2.3
+Version:        10.3.4
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        the blessed package to manage your versions by scm tags
@@ -60,5 +60,4 @@ Summary:        %{summary}
 %{_bindir}/setuptools-scm
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

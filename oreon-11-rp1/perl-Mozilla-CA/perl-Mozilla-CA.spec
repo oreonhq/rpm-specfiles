@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 81f0bd9665eacbb6feef13b0fa16fbb30162c09292542b1206434e569196dd9b
 
 Name:           perl-Mozilla-CA
 # You do not need to back-port a new version for updating a list of the
 # certificates. They are taken from ca-certificates package instead
 # per bug #738383.
-Version:        20250602
-Release:        3%{?dist}
+Version:        20260813
+Release:        1%{?dist}
 Summary:        Mozilla's CA certificate bundle in PEM format
 # README:                       MPL-2.0
 ## Unbundled
@@ -85,5 +85,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250602-3
-- Import
+%autochangelog

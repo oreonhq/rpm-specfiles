@@ -1,8 +1,8 @@
-%global source0_hash 28cf9a5d27aceff5c1f906244a4fe7ae208e41d20a6d8fc7e091c633a40b6e97
+%global source0_hash bde13d1c49be6f2467326a6e0b3919247471455d16eefc3c6be26c7d4baca36a
 
 Name:          libdwarf
 Epoch:         1
-Version:       2.3.2
+Version:       2.3.3
 Release:       %autorelease
 Summary:       Library to access the DWARF Debugging file format 
 
@@ -95,5 +95,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

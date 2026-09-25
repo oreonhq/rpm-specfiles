@@ -16,18 +16,18 @@ Subject: [PATCH] Remove ch.randelshofer.fastdoubleparser
  delete mode 100644 src/test/java/com/fasterxml/jackson/core/io/doubleparser/ReaderTest.java
 
 diff --git a/src/main/java/com/fasterxml/jackson/core/io/BigDecimalParser.java b/src/main/java/com/fasterxml/jackson/core/io/BigDecimalParser.java
-index 2be42744..21845596 100644
 --- a/src/main/java/com/fasterxml/jackson/core/io/BigDecimalParser.java
 +++ b/src/main/java/com/fasterxml/jackson/core/io/BigDecimalParser.java
-@@ -1,7 +1,5 @@
- package com.fasterxml.jackson.core.io;
+@@ -2,8 +2,6 @@
+ 
+ import java.math.BigDecimal;
  
 -import ch.randelshofer.fastdoubleparser.JavaBigDecimalParser;
 -
- import java.math.BigDecimal;
- 
  /**
-@@ -42,13 +40,7 @@ public final class BigDecimalParser
+  * Internal Jackson Helper class used to implement more optimized parsing of {@link BigDecimal} for REALLY
+  * big values (over 500 characters).
+@@ -42,13 +40,7 @@
       */
      public static BigDecimal parse(String valueStr) {
          try {
@@ -42,7 +42,7 @@ index 2be42744..21845596 100644
          } catch (ArithmeticException | NumberFormatException e) {
              throw _parseFailure(e, valueStr);
          }
-@@ -66,13 +58,7 @@ public final class BigDecimalParser
+@@ -66,13 +58,7 @@
       */
      public static BigDecimal parse(final char[] chars, final int off, final int len) {
          try {
@@ -57,7 +57,7 @@ index 2be42744..21845596 100644
          } catch (ArithmeticException | NumberFormatException e) {
              throw _parseFailure(e, chars, off, len);
          }
-@@ -93,43 +79,6 @@ public final class BigDecimalParser
+@@ -93,43 +79,6 @@
          return parse(chars, 0, chars.length);
      }
  
@@ -102,16 +102,14 @@ index 2be42744..21845596 100644
          String desc = e.getMessage();
          // 05-Feb-2021, tatu: Alas, JDK mostly has null message so:
 diff --git a/src/main/java/com/fasterxml/jackson/core/io/BigIntegerParser.java b/src/main/java/com/fasterxml/jackson/core/io/BigIntegerParser.java
-deleted file mode 100644
-index 777c3f45..00000000
 --- a/src/main/java/com/fasterxml/jackson/core/io/BigIntegerParser.java
 +++ /dev/null
 @@ -1,41 +0,0 @@
 -package com.fasterxml.jackson.core.io;
 -
--import ch.randelshofer.fastdoubleparser.JavaBigIntegerParser;
--
 -import java.math.BigInteger;
+-
+-import ch.randelshofer.fastdoubleparser.JavaBigIntegerParser;
 -
 -import static com.fasterxml.jackson.core.io.BigDecimalParser.MAX_CHARS_TO_REPORT;
 -
@@ -149,19 +147,19 @@ index 777c3f45..00000000
 -    }
 -}
 diff --git a/src/main/java/com/fasterxml/jackson/core/io/NumberInput.java b/src/main/java/com/fasterxml/jackson/core/io/NumberInput.java
-index 5cef8dbb..4db891ea 100644
 --- a/src/main/java/com/fasterxml/jackson/core/io/NumberInput.java
 +++ b/src/main/java/com/fasterxml/jackson/core/io/NumberInput.java
-@@ -1,8 +1,5 @@
- package com.fasterxml.jackson.core.io;
+@@ -3,9 +3,6 @@
+ import java.math.BigDecimal;
+ import java.math.BigInteger;
  
 -import ch.randelshofer.fastdoubleparser.JavaDoubleParser;
 -import ch.randelshofer.fastdoubleparser.JavaFloatParser;
 -
- import java.math.BigDecimal;
- import java.math.BigInteger;
- import java.util.regex.Pattern;
-@@ -407,7 +404,7 @@ public final class NumberInput
+ /**
+  * Helper class for efficient parsing of various JSON numbers.
+  *<p>
+@@ -387,7 +384,7 @@
       * @since v2.14
       */
      public static double parseDouble(final String s, final boolean useFastParser) throws NumberFormatException {
@@ -170,7 +168,7 @@ index 5cef8dbb..4db891ea 100644
      }
  
      /**
-@@ -432,8 +429,7 @@ public final class NumberInput
+@@ -412,8 +409,7 @@
       */
      public static double parseDouble(final char[] array, final int offset,
                                       final int len, final boolean useFastParser) throws NumberFormatException {
@@ -180,7 +178,7 @@ index 5cef8dbb..4db891ea 100644
      }
  
      /**
-@@ -458,9 +454,6 @@ public final class NumberInput
+@@ -438,9 +434,6 @@
       * @since v2.14
       */
      public static float parseFloat(final String s, final boolean useFastParser) throws NumberFormatException {
@@ -190,7 +188,7 @@ index 5cef8dbb..4db891ea 100644
          return Float.parseFloat(s);
      }
  
-@@ -486,8 +479,7 @@ public final class NumberInput
+@@ -466,8 +459,7 @@
       */
      public static float parseFloat(final char[] array, final int offset,
                                     final int len, final boolean useFastParser) throws NumberFormatException {
@@ -200,7 +198,7 @@ index 5cef8dbb..4db891ea 100644
      }
  
      /**
-@@ -510,9 +502,6 @@ public final class NumberInput
+@@ -490,9 +482,6 @@
       * @since v2.15
       */
      public static BigDecimal parseBigDecimal(final String s, final boolean useFastParser) throws NumberFormatException {
@@ -210,7 +208,7 @@ index 5cef8dbb..4db891ea 100644
          return BigDecimalParser.parse(s);
      }
  
-@@ -543,9 +532,6 @@ public final class NumberInput
+@@ -523,9 +512,6 @@
                                               final boolean useFastParser)
              throws NumberFormatException
      {
@@ -220,7 +218,7 @@ index 5cef8dbb..4db891ea 100644
          return BigDecimalParser.parse(ch, off, len);
      }
  
-@@ -569,9 +555,6 @@ public final class NumberInput
+@@ -549,9 +535,6 @@
       * @since v2.15
       */
      public static BigDecimal parseBigDecimal(final char[] ch, final boolean useFastParser) throws NumberFormatException {
@@ -230,7 +228,7 @@ index 5cef8dbb..4db891ea 100644
          return BigDecimalParser.parse(ch);
      }
  
-@@ -596,9 +579,6 @@ public final class NumberInput
+@@ -576,9 +559,6 @@
       * @since v2.15
       */
      public static BigInteger parseBigInteger(final String s, final boolean useFastParser) throws NumberFormatException {
@@ -240,7 +238,7 @@ index 5cef8dbb..4db891ea 100644
          return new BigInteger(s);
      }
  
-@@ -612,9 +592,6 @@ public final class NumberInput
+@@ -592,9 +572,6 @@
       */
      public static BigInteger parseBigIntegerWithRadix(final String s, final int radix,
              final boolean useFastParser) throws NumberFormatException {
@@ -251,10 +249,9 @@ index 5cef8dbb..4db891ea 100644
      }
  
 diff --git a/src/test/java/com/fasterxml/jackson/core/io/BigDecimalParserTest.java b/src/test/java/com/fasterxml/jackson/core/io/BigDecimalParserTest.java
-index 9ec4cc6c..6698ff44 100644
 --- a/src/test/java/com/fasterxml/jackson/core/io/BigDecimalParserTest.java
 +++ b/src/test/java/com/fasterxml/jackson/core/io/BigDecimalParserTest.java
-@@ -2,7 +2,6 @@ package com.fasterxml.jackson.core.io;
+@@ -2,7 +2,6 @@
  
  import java.math.BigDecimal;
  
@@ -262,7 +259,7 @@ index 9ec4cc6c..6698ff44 100644
  import org.junit.jupiter.api.Test;
  
  import static org.junit.jupiter.api.Assertions.*;
-@@ -23,7 +22,7 @@ class BigDecimalParserTest extends com.fasterxml.jackson.core.JUnit5TestBase
+@@ -23,7 +22,7 @@
      @Test
      void longInvalidStringFastParse() {
          try {
@@ -271,7 +268,7 @@ index 9ec4cc6c..6698ff44 100644
              fail("expected NumberFormatException");
          } catch (NumberFormatException nfe) {
              assertTrue(nfe.getMessage().startsWith("Value \"AAAAA"), "exception message starts as expected?");
-@@ -48,8 +47,8 @@ class BigDecimalParserTest extends com.fasterxml.jackson.core.JUnit5TestBase
+@@ -48,8 +47,8 @@
          final BigDecimal EXP = new BigDecimal(num);
  
          // Parse from String first, then char[]
@@ -283,8 +280,6 @@ index 9ec4cc6c..6698ff44 100644
  
      @Test
 diff --git a/src/test/java/com/fasterxml/jackson/core/io/BigIntegerParserTest.java b/src/test/java/com/fasterxml/jackson/core/io/BigIntegerParserTest.java
-deleted file mode 100644
-index a515f656..00000000
 --- a/src/test/java/com/fasterxml/jackson/core/io/BigIntegerParserTest.java
 +++ /dev/null
 @@ -1,54 +0,0 @@
@@ -343,18 +338,16 @@ index a515f656..00000000
 -    }
 -}
 diff --git a/src/test/java/com/fasterxml/jackson/core/io/doubleparser/ReaderTest.java b/src/test/java/com/fasterxml/jackson/core/io/doubleparser/ReaderTest.java
-deleted file mode 100644
-index 2c105c4b..00000000
 --- a/src/test/java/com/fasterxml/jackson/core/io/doubleparser/ReaderTest.java
 +++ /dev/null
 @@ -1,42 +0,0 @@
 -package com.fasterxml.jackson.core.io.doubleparser;
 -
+-import java.util.Random;
+-
 -import ch.randelshofer.fastdoubleparser.JavaDoubleParser;
 -import ch.randelshofer.fastdoubleparser.JavaFloatParser;
 -import org.junit.jupiter.api.Test;
--
--import java.util.Random;
 -
 -import static org.junit.jupiter.api.Assertions.assertEquals;
 -
@@ -391,6 +384,3 @@ index 2c105c4b..00000000
 -
 -}
 \ No newline at end of file
--- 
-2.45.2
-

@@ -1,4 +1,4 @@
-%global source0_hash 7349f6fd942418bc7009ebe743eb7c9d055f02921ec56fa436ec25007c47fd38
+%global source0_hash 3ca2d8afaa7f1cf7f6ed10e511ebc368bfacd6dcaa3dbfa690b89e502e8963dc
 
 %bcond_with mingw
 %bcond_with tests
@@ -15,8 +15,8 @@ Speex, WavPack, TrueAudio files, as well as APE Tags.}
 
 Name:       taglib
 Summary:    Audio Meta-Data Library
-Version:    2.3
-Release:    2%{?dist}
+Version:    2.3.2
+Release:    1%{?dist}
 License:    (LGPL-2.1-only OR MPL-1.1) AND BSD-2-Clause AND LGPL-2.1-only
 URL:        https://taglib.github.io/
 Source0:    https://taglib.github.io/releases/taglib-%{version}%{?beta}.tar.gz
@@ -114,5 +114,4 @@ test "$(pkg-config --modversion taglib_c)" = "%{version}"
 %endif
 
 %changelog
-* Wed Jun 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3-2
-- bump to 2.3 for libtag.so.2
+%autochangelog

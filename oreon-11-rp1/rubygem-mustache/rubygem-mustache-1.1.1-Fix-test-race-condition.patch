@@ -19,12 +19,10 @@ than the remaining test cases, because they are defining
  test/autoloading_test.rb | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/test/autoloading_test.rb b/test/autoloading_test.rb
-index 0a7ad762..77eb3557 100644
 --- a/test/autoloading_test.rb
 +++ b/test/autoloading_test.rb
-@@ -7,6 +7,10 @@ def setup
-     Mustache.view_path = File.dirname(__FILE__) + '/fixtures'
+@@ -12,6 +12,10 @@
+     Mustache.view_namespace = Object
    end
  
 +  def teardown

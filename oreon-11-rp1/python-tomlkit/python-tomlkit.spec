@@ -1,4 +1,4 @@
-%global source0_hash fff5fe59a87295b278abd31bec92c15d9bc4a06885ab12bcea52c71119392e79
+%global source0_hash e25bbf38843005246210a12982776f27f99cb9be67160e14434d0c0d21ee1e97
 
 %global pypi_name tomlkit
 
@@ -15,7 +15,7 @@ Part of the implementation has been adapted, improved and fixed from Molten.}
 
 Name:           python-%{pypi_name}
 Summary:        Style preserving TOML library
-Version:        0.13.2
+Version:        0.15.1
 Release:        %autorelease
 License:        MIT
 

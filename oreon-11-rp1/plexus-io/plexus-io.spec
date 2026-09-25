@@ -1,9 +1,9 @@
-%global source0_hash f4e41de4397a05bbda69ff0d027edecc456e9f7dbc3d3bc7cd378f2ac0d6976d
+%global source0_hash ce70ac28427a7ace63390d912058852e63a7927d02dfc154f203e6bda880b9ba
 
 %bcond_with bootstrap
 
 Name:           plexus-io
-Version:        3.7.0
+Version:        3.8.0
 Release:        %autorelease
 Summary:        Plexus IO Components
 License:        Apache-2.0
@@ -40,8 +40,7 @@ in I/O operations.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n plexus-io-plexus-io-3.5.0
-%autosetup -p1 -n plexus-io-plexus-io-3.5.0
+%autosetup -p1 -n plexus-io-plexus-io-%{version}
 cp %{SOURCE1} .
 
 # Test fails in mock
@@ -59,5 +58,4 @@ sed -i /class/i@org.junit.jupiter.api.Disabled src/test/java/org/codehaus/plexus
 %license NOTICE.txt LICENSE-2.0.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.0-1
-- Import
+%autochangelog

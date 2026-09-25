@@ -1,9 +1,9 @@
-%global source0_hash c9e5291211bee8852831bb464f430ad5ba1541e31db5718a6fa2f2d3329fc2d9
+%global source0_hash 380d5780c73b4d9623ed558daebf77f2497931783ed7403bab08682d6f25da86
 
 %bcond tests 1
 
 Name:           yaksa
-Version:        0.3
+Version:        0.4
 Release:        %autorelease
 Summary:        High-performance library for noncontiguous data
 

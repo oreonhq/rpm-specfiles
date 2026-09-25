@@ -1,7 +1,7 @@
-%global source0_hash 0b06d1434a750b5e4981be9696a9f65bfd7b38fe2d8d24199d92f11394bb8459
+%global source0_hash 50811e9e94fc798eb5dcbaff20f81067c942ec47f329f91bbe4caeb35a61ff05
 
 Name:           libtsm
-Version:        4.7.1
+Version:        4.8.0
 Release:        1%{?dist}
 Summary:        DEC-VT terminal emulator state machine
 License:        MIT AND LGPL-2.1-or-later
@@ -50,3 +50,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/libtsm.h
 %{_libdir}/libtsm.so
 %{_libdir}/pkgconfig/*.pc
+
+%changelog
+%autochangelog

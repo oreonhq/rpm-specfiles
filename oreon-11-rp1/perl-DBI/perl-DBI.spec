@@ -1,4 +1,4 @@
-%global source0_hash 0df16af8e5b3225a68b7b592ab531004ddb35a9682b50300ce50174ad867d9aa
+%global source0_hash da853ff382ae8000e967767ad4ed90c5dc73004858f6dec48fc6f4340c306922
 
 # According to documentation, module using Coro is just:
 # A PROOF-OF-CONCEPT IMPLEMENTATION FOR EXPERIMENTATION.
@@ -32,8 +32,8 @@
 %endif
 
 Name:           perl-DBI
-Version:        1.647
-Release:        6%{?dist}
+Version:        1.654
+Release:        1%{?dist}
 Summary:        A database access API for perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://dbi.perl.org/
@@ -275,5 +275,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.647-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

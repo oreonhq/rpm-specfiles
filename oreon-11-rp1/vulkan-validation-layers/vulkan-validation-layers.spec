@@ -1,13 +1,13 @@
-%global source0_hash 7f521490495e43561f70fe8b6317fd5cc13d4083413f1abf891f50cbabe12238
+%global source0_hash d544c04bae853de3118a73eb6718228628ed0341559e5cb9facdaedf547b85bb
 
 Name:           vulkan-validation-layers
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan validation layers
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/Vulkan-ValidationLayers
-Source0:        https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-ValidationLayers-sdk-1.4.341.0.tar.gz
+Source0:        https://github.com/KhronosGroup/Vulkan-ValidationLayers/archive/v%{version}.tar.gz#/Vulkan-ValidationLayers-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -33,7 +33,7 @@ Vulkan validation layers
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n Vulkan-ValidationLayers-vulkan-sdk-%{version}
+%autosetup -p1 -n Vulkan-ValidationLayers-%{version}
 
 
 %build
@@ -68,5 +68,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libVkLayer_*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.341.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

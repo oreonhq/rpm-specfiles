@@ -1,4 +1,4 @@
-%global source0_hash eeb29ca7e56cfaa8e8a79538dcf834e3b18e501c31bef5145e959ea437cc4216
+%global source0_hash 1628058a8d2c0615975de5a15ab7bbb9638c50000b5bed9456ff423ea034a81f
 
 %ifnarch s390x
 %global with_hardware 1
@@ -82,7 +82,7 @@
 
 Name:           mesa
 Summary:        Mesa graphics libraries
-Version:        26.2.2
+Version:        26.2.3
 Release:        1%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
@@ -750,11 +750,4 @@ ln -s %{_libdir}/libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %endif
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.0.2-3
-- dri-drivers Require llvm-libs or llvm22-libs plus spirv-tools-libs
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.0.2-2
-- dri-drivers Require llvm-libs and spirv-tools-libs
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.0.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,18 +1,18 @@
-%global source0_hash 707959742ecdfadaa4cc52a13bd234ffefe0bea2e6106743274ae3d9cbc4cf98
+%global source0_hash 4d98e0e799c53340069f6793c58bbee75c1cd321c19ffca35e5b18ea592682f4
 
 %bcond_without check
 
 %global crate bootupd
 
 Name:           rust-%{crate}
-Version:        0.2.32
+Version:        0.3.2
 Release:        %autorelease
 Summary:        Bootloader updater
 
 License:        Apache-2.0
 URL:            https://github.com/coreos/bootupd
-Source0:        https://crates.io/api/v1/crates/bootupd/0.2.32/download#/bootupd-0.2.32.crate
-Source1:        https://github.com/coreos/bootupd/releases/download/v0.2.32/bootupd-0.2.32-vendor.tar.zstd
+Source0:        https://crates.io/api/v1/crates/bootupd/0.3.2/download#/bootupd-0.3.2.crate
+Source1:        https://github.com/coreos/bootupd/releases/download/v%{version}/bootupd-0.3.2-vendor.tar.zstd
 ExcludeArch:    %{ix86}
 
 # For now, see upstream
@@ -72,5 +72,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{__make} install-systemd-unit DESTDIR=%{?buildroot} INSTALL="%{__install} -p"
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.32-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

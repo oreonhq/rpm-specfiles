@@ -1,11 +1,11 @@
-%global source0_hash 6d30efeb119838ca22ae882b4183fe7fade42fb1ed99d6d1c84ce1625d86c9bd
+%global source0_hash d79179255ccb0c87b029db2eecaea56828e581255c48445d5fc0e79fa4e9245b
 
 # Perform optional tests
 %bcond_without perl_DBD_Pg_enables_optional_test
 
 Name:           perl-DBD-Pg
 Summary:        A PostgreSQL interface for Perl
-Version:        3.19.0
+Version:        3.21.2
 Release:        1%{?dist}
 # Pg.pm, README:    Points to directory which contains GPL-2.0-or-later and Artistic-1.0-Perl
 # other files:      Same as Perl (GPL-1.0-or-later OR Artistic-1.0-Perl)
@@ -160,5 +160,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.19.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

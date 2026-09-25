@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 173aea3d6f79609164c04528e1c8e4c9b60fcd59391c3c9dad4667297d727fb6
 
 %global commit 9a55c402aa803fb10e39ab4fd18a709d0cd06fd4
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
@@ -10,8 +10,8 @@
 
 Summary:   Xwayland
 Name:      xorg-x11-server-Xwayland
-Version:   24.1.9
-Release:   2%{?gitdate:.%{gitdate}git%{shortcommit}}%{?dist}
+Version:   24.1.13
+Release:   1%{?gitdate:.%{gitdate}git%{shortcommit}}%{?dist}
 
 URL:       http://www.x.org
 %if 0%{?gitdate}
@@ -136,5 +136,4 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_libdir}/pkgconfig/xwayland.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 24.1.9-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

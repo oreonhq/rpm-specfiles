@@ -1,10 +1,10 @@
-%global source0_hash 69f48fd490c4fd21a0077657ea5462a8b7c41acaa75fc897b91cbed5bb855a00
+%global source0_hash a2efd7ae0eabfa43c3da2a8f2b34bbc53f6d7b067c697ada569cf1fa21f36346
 
 %global extension   no-overview
 %global uuid        %{extension}@fthx
 
 Name:           gnome-shell-extension-%{extension}
-Version:        49
+Version:        51
 Release:        %autorelease
 Summary:        GNOME Shell extension for no overview at start-up
 License:        GPL-3.0-only
@@ -14,7 +14,6 @@ Source0:        https://github.com/fthx/no-overview/archive/refs/tags/v%{version
 Source1:        no-overview-LICENSE
 Source2:        no-overview-README.md
 #Patch0:         %%{name}-HEAD.patch
-Patch0:         %{name}-HEAD.patch
 BuildArch:      noarch
 # rhbz#2001561 Delete to require gnome-shell-extension-common
 #Requires:       gnome-shell-extension-common
@@ -46,5 +45,4 @@ cp -rp *.js metadata.json \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 49-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 44fa63e4d2efdc890ad59a3883077ad1f064e5d2fa72dd0d10ab0df2298d6d7c
 
 %bcond_without check
 %bcond_with tests
@@ -43,8 +43,8 @@ Summary:        Bootable container system
 # Unlicense OR MIT
 License:        Apache-2.0 AND BSD-3-Clause AND MIT AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
 URL:            https://github.com/bootc-dev/bootc
-Source0:        https://github.com/bootc-dev/bootc/releases/download/v1.15.2/bootc-1.15.2.tar.zstd
-Source1:        https://github.com/bootc-dev/bootc/releases/download/v1.15.2/bootc-1.15.2-vendor.tar.zstd
+Source0:        https://github.com/bootc-dev/bootc/releases/download/v%{version}/bootc-%{version}.tar.zstd
+Source1:        https://github.com/bootc-dev/bootc/releases/download/v%{version}/bootc-%{version}-vendor.tar.zstd
 
 # 
 ExcludeArch:    %{ix86}
@@ -221,5 +221,4 @@ fi
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.15.2-1
-- Import
+%autochangelog

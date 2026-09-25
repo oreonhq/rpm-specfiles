@@ -1,15 +1,15 @@
-%global source0_hash 4438cd451b51b5cd13de924bd9d5015c35a06a69e4423452edf79bad646f0469
+%global source0_hash 972d7e5b2cc9b7b8f9b43fe637b4260a2035bef5bb59bbb7fbf02434610c2b3f
 
 %global debug_package %{nil}
 
 Name:           vulkan-utility-libraries
-Version:        1.4.362
+Version:        1.4.364
 Release:        %autorelease
 Summary:        Vulkan utility libraries
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/Vulkan-Utility-Libraries
-Source0:        https://github.com/KhronosGroup/Vulkan-Utility-Libraries/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-Utility-Libraries-sdk-1.4.341.0.tar.gz
+Source0:        https://github.com/KhronosGroup/Vulkan-Utility-Libraries/archive/v%{version}.tar.gz#/Vulkan-Utility-Libraries-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -32,7 +32,7 @@ Provides:       vulkan-validation-layers-devel%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n Vulkan-Utility-Libraries-vulkan-sdk-%{version}
+%autosetup -p1 -n Vulkan-Utility-Libraries-%{version}
 
 %build
 %cmake -DCMAKE_BUILD_TYPE=Release \
@@ -54,5 +54,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libVulkanSafeStruct.a
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.341.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

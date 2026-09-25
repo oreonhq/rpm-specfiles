@@ -1,4 +1,4 @@
-%global source0_hash 7528faff5b97f0298e5f6bf09c925893a2de5b0e38cd3f96b0fa4e51bda6ec9b
+%global source0_hash 2360c2019dd88c03e8cdfc4ed5a1f2476be7ff585186753c9911fcf81b376350
 
 %global extdir      %{_datadir}/gnome-shell/extensions/dash-to-dock@micxgx.gmail.com
 %global gschemadir  %{_datadir}/glib-2.0/schemas
@@ -9,7 +9,7 @@
 #%%global commit_date 20240320
 
 Name:           gnome-shell-extension-dash-to-dock
-Version:        106
+Version:        109
 Release:        %autorelease
 #Release:        %%autorelease -e %%{commit_date}git%%{commit_short}
 Summary:        Dock for the Gnome Shell by micxgx@gmail.com
@@ -19,7 +19,7 @@ URL:            https://micheleg.github.io/dash-to-dock
 %if 0%{?commit:1}
 Source0:        https://github.com/micheleg/dash-to-dock/archive/refs/tags/%{commit}.tar.gz#/gnome-shell-extension-dash-to-dock-103.tar.gz
 %else
-Source0:        https://github.com/micheleg/dash-to-dock/archive/extensions.gnome.org-v103.tar.gz#/gnome-shell-extension-dash-to-dock-103.tar.gz
+Source0:        https://github.com/micheleg/dash-to-dock/archive/extensions.gnome.org-v%{version}.tar.gz#/gnome-shell-extension-dash-to-dock-%{version}.tar.gz
 %endif
 Source1:        stylesheet.css
 
@@ -95,5 +95,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 103-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

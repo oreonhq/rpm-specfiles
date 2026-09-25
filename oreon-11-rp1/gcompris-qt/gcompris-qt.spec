@@ -1,7 +1,7 @@
-%global source0_hash c389b863b29f012ccc1b3eef740982ff6c7654c13a2e343397ee466124f31339
+%global source0_hash f876239f39397f554006f4218a3c229627e2af4317a8765ecf9462f0058dfcb4
 
 Name:           gcompris-qt
-Version:        26.1
+Version:        26.2
 Release:        1%{?dist}
 Summary:        Educational software suite for children aged 2 to 10
 
@@ -117,5 +117,4 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.gc
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.1-1
-- Import
+%autochangelog

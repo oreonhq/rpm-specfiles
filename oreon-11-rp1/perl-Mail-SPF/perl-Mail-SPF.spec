@@ -1,8 +1,8 @@
-%global source0_hash 9ac60d00b957e849bafe90a8defdeee2e5ffab1c87ac5a4abc452875e9904863
+%global source0_hash e0715c109280ec39a39833d021b738c7a7c8d263519c48b4aeb4e88098546421
 
 Name:           perl-Mail-SPF
-Version:        3.20250505
-Release:        3%{?dist}
+Version:        3.20260331
+Release:        1%{?dist}
 Summary:        Object-oriented implementation of Sender Policy Framework
 License:        BSD-3-Clause
 URL:            https://metacpan.org/release/Mail-SPF
@@ -119,5 +119,4 @@ fi
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.20250505-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

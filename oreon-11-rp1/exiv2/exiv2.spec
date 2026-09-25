@@ -1,7 +1,7 @@
-%global source0_hash 9d481117b97afa5324bf3ea0ad79f5c2939ae94ba0d0f5f8eb23aee16d9ec58d
+%global source0_hash 700b76b97695b2fab4ef8c79619c68ae57d09e0c130724791cafbd39e0eb4aef
 
 Name:           exiv2
-Version:        0.28.6
+Version:        0.28.9
 Release:        %autorelease
 Summary:        Exif, IPTC and XMP metadata manipulation library
 
@@ -25,7 +25,6 @@ Source:         %{vcs}/archive/v%{version}/%{name}-%{version}.tar.gz
 # Make methods non-virtual
 # https://github.com/Exiv2/exiv2/pull/3378
 # Will be fixed in 0.28.7.
-Patch0:         3378.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -150,5 +149,4 @@ test -x %{buildroot}%{_libdir}/libexiv2.so
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.28.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

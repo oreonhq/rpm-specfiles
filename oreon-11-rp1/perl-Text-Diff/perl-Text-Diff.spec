@@ -1,8 +1,8 @@
-%global source0_hash e8baa07b1b3f53e00af3636898bbf73aec9a0ff38f94536ede1dbe96ef086f04
+%global source0_hash 3fc983e3140fa2580250bbcf2b52e2acbdbc5abda4374c3be78235905d8ca8eb
 
 Name:           perl-Text-Diff
-Version:        1.45
-Release:        25%{?dist}
+Version:        1.46
+Release:        1%{?dist}
 Summary:        Perform diffs on files and record sets
 # lib/Text/Diff.pm - GPL-2.0-or-later OR Artistic-1.0-Perl
 # lib/Text/Diff/Config.pm - MIT
@@ -65,5 +65,4 @@ make test
 %{_mandir}/man3/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.45-25
-- Prepare for Oreon 11 (RP1)
+%autochangelog

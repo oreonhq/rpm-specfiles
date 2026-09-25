@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 5856f6ff3ad465f8ea5dc7b7dc4f8b3d436d826f2751f91896d204b638fdc0d9
 
 %global srcname level-zero
-%global lib_version 1.28
-%global patch_version 6
+%global lib_version 1.34
+%global patch_version 0
 %global _lto_cflags %nil
 
 Name:           oneapi-%{srcname}
@@ -100,5 +100,4 @@ done
 %{_libdir}/pkgconfig/%{srcname}.pc
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.6-1
-- Import
+%autochangelog

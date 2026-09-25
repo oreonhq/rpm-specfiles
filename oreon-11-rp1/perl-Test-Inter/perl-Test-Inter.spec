@@ -1,8 +1,8 @@
-%global source0_hash f2b1987ecef9f6c9223e8fba2e8e48854333896650aabea81bdc30e0c9656b63
+%global source0_hash f51f0a8ba140d8722851416206677f2f3e87c207abc8c1193e691e2eeb2eb0ea
 
 Name:           perl-Test-Inter
-Version:        1.12
-Release:        4%{?dist}
+Version:        1.13
+Release:        1%{?dist}
 Summary:        Framework for more readable interactive test scripts
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Inter
@@ -89,5 +89,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

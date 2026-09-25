@@ -1,12 +1,12 @@
-%global source0_hash b15309fc85623893289cb9b2b88dfa9ed1e69156b75f29938553a45be6d730af
+%global source0_hash d597af221628571cbecf35b44520148c44798dfc8a9867774e60453f79d25ff7
 
 Name:           perl-IO-Tty
-Version:        1.20
-Release:        9%{?dist}
+Version:        1.31
+Release:        1%{?dist}
 Summary:        Perl interface to pseudo tty's
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND BSD-2-Clause
 URL:            https://metacpan.org/release/IO-Tty
-Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Tty-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/IO-Tty-%{version}.tar.gz
 
 
 
@@ -69,5 +69,4 @@ make test
 %{_mandir}/man3/IO::Tty::Constant.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.20-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 2a4385e2e34eb35d6b3efe798b9eb88096925d87726c0798709bf56d9ed84af3
+%global source0_hash 330a5ed07fa54e4702c9d6c4174f74427fc0ef6e214bbd677ae50a5099946470
 
 %bcond check 0
 %global debug_package %{nil}
@@ -6,7 +6,7 @@
 %global crate anyhow
 
 Name:           rust-anyhow
-Version:        1.0.103
+Version:        1.0.104
 Release:        %autorelease
 Summary:        Flexible concrete Error type built on std::error::Error
 

@@ -1,4 +1,4 @@
-%global source0_hash 24929305fe4983626ce06ea1c9e3370048c7010c37de67670a0719835130d3f6
+%global source0_hash ce1ee0a983108078ea09d3deec509b41ea6d01cc1d1ceac991741cd32dd0c710
 
 # Copyright 2011, Red Hat
 %global oname configshell-fb
@@ -7,10 +7,10 @@ Name:           python-configshell
 License:        Apache-2.0
 Summary:        A framework to implement simple but nice CLIs
 Epoch:          1
-Version:        2.0.2
-Release:        5%{?dist}
+Version:        2.0.3
+Release:        1%{?dist}
 URL:            https://github.com/open-iscsi/configshell-fb
-Source:        https://github.com/open-iscsi/configshell-fb/archive/refs/tags/v2.0.2.tar.gz#/configshell-fb-2.0.2.tar.gz
+Source:        https://github.com/open-iscsi/configshell-fb/archive/refs/tags/v%{version}.tar.gz#/configshell-fb-2.0.3.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -49,5 +49,4 @@ export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %doc COPYING README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.2-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,15 +1,15 @@
-%global source0_hash 1771ada2f5a5bd52c11a65cbf8c306359cb8b941e2fec8d831939e07c9dea0cd
+%global source0_hash 4233cf1d8e7067c8a946f22dae0f7cd90689adff9265783aa543b3d084ad9ea4
 
 %bcond_without  jp_minimal
 
 Name:           jackson-jaxrs-providers
-Version:        2.22.2
+Version:        2.22.3
 Release:        1%{?dist}
 Summary:        Jackson JAX-RS providers
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-jaxrs-providers
-Source0:        https://github.com/FasterXML/jackson-jaxrs-providers/archive/refs/tags/jackson-jaxrs-providers-2.18.2.tar.gz#/jackson-jaxrs-providers-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-jaxrs-providers/archive/refs/tags/jackson-jaxrs-providers-%{version}.tar.gz#/jackson-jaxrs-providers-%{version}.tar.gz
 
 BuildArch:      noarch
 %if 0%{?fedora} || 0%{?rhel} >= 10
@@ -117,7 +117,6 @@ cp -p xml/src/main/resources/META-INF/NOTICE .
 sed -i 's/\r//' LICENSE NOTICE
 
 %pom_remove_plugin -r :moditect-maven-plugin
-%pom_remove_plugin "de.jjohannes:gradle-module-metadata-maven-plugin"
 
 # Disable jar with no-meta-inf-services classifier, breaks build
 %pom_remove_plugin :maven-jar-plugin cbor
@@ -181,5 +180,4 @@ rm json/src/test/java/com/fasterxml/jackson/jaxrs/json/resteasy/RestEasyProvider
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.18.2-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

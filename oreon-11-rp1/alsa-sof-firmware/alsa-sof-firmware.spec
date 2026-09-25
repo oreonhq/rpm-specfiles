@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 42ce40ec98f366365eab8e046d779b416d80b6ff2513b8f6be2a61a88e679b73
 %global source3_hash none
 
 # This is a firmware package, so binaries (which are not run on the host)
@@ -7,7 +7,7 @@
 %global _firmwarepath  /usr/lib/firmware
 %global _xz_opts -9 --check=crc32
 
-%global sof_ver 2026.09
+%global sof_ver 2026.09.1
 #global sof_ver_pre rc1
 %global sof_ver_rel %{?sof_ver_pre:.%{sof_ver_pre}}
 %global sof_ver_pkg0 %{sof_ver}%{?sof_ver_pre:-%{sof_ver_pre}}
@@ -25,7 +25,7 @@ Release:        1%{?sof_ver_rel}%{?dist}
 # See later in the spec for a breakdown of licensing
 License:        BSD-3-Clause AND Apache-2.0
 URL:            https://github.com/thesofproject/sof-bin
-Source:        https://github.com/thesofproject/sof-bin/releases/download/v2025.12.2%{?sof_ver_pre:-%{sof_ver_pre}}/sof-bin-2025.12.2%{?sof_ver_pre:-%{sof_ver_pre}}.tar.gz
+Source:        https://github.com/thesofproject/sof-bin/releases/download/v%{version}%{?sof_ver_pre:-%{sof_ver_pre}}/sof-bin-%{version}%{?sof_ver_pre:-%{sof_ver_pre}}.tar.gz
 %if 0%{?with_sof_addon}
 Source3:        https://github.com/thesofproject/sof-bin/releases/download/v0/sof-tplg-v0.tar.gz
 %endif
@@ -167,5 +167,4 @@ if st and st.type == "directory" then
 end
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{sof_ver}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

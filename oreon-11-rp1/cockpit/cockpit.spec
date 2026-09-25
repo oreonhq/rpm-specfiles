@@ -1,5 +1,5 @@
-%global source0_hash 8cfb30784d196e9fed885736bb560d82e49a7f96122c9c28ad768572a8078fe8
-%global source1_hash 03a33b50e468271dd1d7a525b8eed2a369e5d86da5135375633d06698638176a
+%global source0_hash 404f97ce3db0804b7704a387db88cdf3d3e2bf623f89f7c3b1ddb19b99c3eace
+%global source1_hash ae5fc2d53f34ec8b71cd01281624680ee1caa5d9122eb77e2814f87fa8fd29c0
 
 #
 # Copyright (C) 2014-2020 Red Hat, Inc.
@@ -58,8 +58,8 @@ Summary:        Web Console for Linux servers
 License:        LGPL-2.1-or-later AND GPL-3.0-or-later AND MIT AND CC-BY-SA-3.0 AND BSD-3-Clause
 URL:            https://cockpit-project.org/
 
-Version:        357
-Release:        2%{?dist}
+Version:        368
+Release:        1%{?dist}
 Source0:        https://github.com/cockpit-project/cockpit/releases/download/%{version}/cockpit-%{version}.tar.xz
 Source1:        https://github.com/cockpit-project/cockpit/releases/download/%{version}/cockpit-node-%{version}.tar.xz
 
@@ -670,8 +670,4 @@ via PackageKit.
 
 # The changelog is automatically generated and merged
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 357-2
-- Reword comment so source prep does not treat centos macro text as a missing source
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 357-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,9 +1,9 @@
-%global source0_hash 59d0f1e17b18efaa60ea3ccf89a9cad3217f8d3b23c18d2fe34b25c8969d60ae
+%global source0_hash 7dbc05eb8b32828b322872b759a62cb3979cb4118f344dd8616813d1390e84e0
 
 Summary: NFS utilities and supporting clients and daemons for the kernel NFS server
 Name: nfs-utils
 URL: http://linux-nfs.org/
-Version: 2.9.2
+Version: 3.1.1
 Release: 1%{?dist}
 Epoch: 1
 
@@ -477,5 +477,4 @@ rm -f %{_sysconfdir}/nfsmount.conf.d/10-nfsv4.conf
 %{_mandir}/*/rpcctl.8.gz
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.7-0
-- Prepare for Oreon 11 (RP1)
+%autochangelog

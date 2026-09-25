@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash aaaac8177a0536d60cc3f8f1932957ffdbadae38da09e4d8f6834f6b787f96ad
 
 ################################################################################
 Name:             ldapjdk
@@ -9,7 +9,7 @@ Name:             ldapjdk
 
 # Upstream version number:
 %global           major_version 5
-%global           minor_version 6
+%global           minor_version 7
 %global           update_version 0
 
 # Downstream release number:
@@ -165,5 +165,4 @@ ln -sf %{name}/ldaptools.pom %{buildroot}%{_mavenpomdir}/JPP-ldaptools.pom
 
 ################################################################################
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{major_version}.%{minor_version}.%{update_version}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

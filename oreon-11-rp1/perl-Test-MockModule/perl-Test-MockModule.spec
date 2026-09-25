@@ -1,4 +1,4 @@
-%global source0_hash 390e60361d2c1c404463a46d496681b05458d50d811ee99282992b9b61ed6cf6
+%global source0_hash 92e6de1caf40c38d5557ad2192e1a34f7a518a9101bc6af953b23bcfcffc52d3
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -8,12 +8,12 @@
 %endif
 
 Name:           perl-Test-MockModule
-Version:        0.180.0
-Release:        3%{?dist}
+Version:        0.185.3
+Release:        1%{?dist}
 Summary:        Override subroutines in a module for unit testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MockModule
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-MockModule-v%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GF/GFRANKS/Test-MockModule-v%{version}.tar.gz
 
 
 
@@ -74,5 +74,4 @@ perl Build.PL --installdirs=vendor
 %{_mandir}/man3/Test::MockModule.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.180.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

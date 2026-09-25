@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357
 
 # Pass --without docs to rpmbuild if you don't want the documentation
 %bcond_without docs
@@ -80,7 +80,7 @@
 %global _package_note_file  %{_builddir}/%{name}-%{real_version}/.package_note-%{name}-%{version}-%{release}.%{_arch}.ld
 
 Name:           git
-Version:        2.53.0
+Version:        2.55.0
 Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
@@ -134,12 +134,6 @@ Patch3:         0003-t-lib-git-svn-try-harder-to-find-a-port.patch
 # Prevents t5540 failures on i686, s390x and ppc64le
 Patch5:         git-test-apache-davlockdbtype-config.patch
 
-# Adds the option to sanitize sideband channel messages
-# CVE-2024-52005 wasn't fixed by upstream. This patch adds the option to harden Git against it.
-# The default behaviour of Git remains unchanged.
-#
-# https://github.com/gitgitgadget/git/pull/1853
-Patch6:         git-2.52-sanitize-sideband-channel-messages.patch
 
 %if %{with docs}
 # pod2man is needed to build Git.3pm
@@ -1043,5 +1037,4 @@ rmdir --ignore-fail-on-non-empty "$testdir"
 %{?with_docs:%{_pkgdocdir}/git-svn.html}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.53.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

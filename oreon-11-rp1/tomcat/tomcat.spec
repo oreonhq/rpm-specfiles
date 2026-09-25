@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e0da0cc9e2bb5f205712f0a19407ae1391e8d2ef6197fd599e4be848a3d8ee76
 
 # Copyright (c) 2000-2008, JPackage Project
 # All rights reserved.
@@ -33,7 +33,7 @@
 %global jspspec 3.1
 %global major_version 10
 %global minor_version 1
-%global micro_version 55
+%global micro_version 60
 %global packdname apache-tomcat-%{version}-src
 %global servletspec 6.0
 %global elspec 5.0
@@ -526,5 +526,4 @@ install -m0644 -D tomcat.sysusers.conf %{buildroot}%{_sysusersdir}/tomcat.conf
 %{appdir}/ROOT
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:10.1.55-1
-- Import
+%autochangelog

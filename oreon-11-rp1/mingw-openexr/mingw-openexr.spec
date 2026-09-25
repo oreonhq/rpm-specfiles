@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 0dc41a9dd84c868ad89c892382f75f6835a73decbefab9366d6f168bf9322954
 
 %{?mingw_package_header}
 
 %global pkgname openexr
 
 Name:          mingw-%{pkgname}
-Version:       3.4.15
+Version:       3.5.0
 Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname} library
 
@@ -80,17 +80,17 @@ rm -rf %{buildroot}%{mingw64_docdir}/OpenEXR
 
 %files -n mingw32-%{pkgname}
 %license LICENSE.md
-%{mingw32_bindir}/libIex-3_4.dll
-%{mingw32_bindir}/libIlmThread-3_4.dll
-%{mingw32_bindir}/libOpenEXR-3_4.dll
-%{mingw32_bindir}/libOpenEXRCore-3_4.dll
-%{mingw32_bindir}/libOpenEXRUtil-3_4.dll
+%{mingw32_bindir}/libIex-3_5.dll
+%{mingw32_bindir}/libIlmThread-3_5.dll
+%{mingw32_bindir}/libOpenEXR-3_5.dll
+%{mingw32_bindir}/libOpenEXRCore-3_5.dll
+%{mingw32_bindir}/libOpenEXRUtil-3_5.dll
 %{mingw32_includedir}/OpenEXR/
-%{mingw32_libdir}/libIex-3_4.dll.a
-%{mingw32_libdir}/libIlmThread-3_4.dll.a
-%{mingw32_libdir}/libOpenEXR-3_4.dll.a
-%{mingw32_libdir}/libOpenEXRCore-3_4.dll.a
-%{mingw32_libdir}/libOpenEXRUtil-3_4.dll.a
+%{mingw32_libdir}/libIex-3_5.dll.a
+%{mingw32_libdir}/libIlmThread-3_5.dll.a
+%{mingw32_libdir}/libOpenEXR-3_5.dll.a
+%{mingw32_libdir}/libOpenEXRCore-3_5.dll.a
+%{mingw32_libdir}/libOpenEXRUtil-3_5.dll.a
 %{mingw32_libdir}/cmake/OpenEXR/
 %{mingw32_libdir}/pkgconfig/OpenEXR.pc
 
@@ -109,17 +109,17 @@ rm -rf %{buildroot}%{mingw64_docdir}/OpenEXR
 
 %files -n mingw64-%{pkgname}
 %license LICENSE.md
-%{mingw64_bindir}/libIex-3_4.dll
-%{mingw64_bindir}/libIlmThread-3_4.dll
-%{mingw64_bindir}/libOpenEXR-3_4.dll
-%{mingw64_bindir}/libOpenEXRCore-3_4.dll
-%{mingw64_bindir}/libOpenEXRUtil-3_4.dll
+%{mingw64_bindir}/libIex-3_5.dll
+%{mingw64_bindir}/libIlmThread-3_5.dll
+%{mingw64_bindir}/libOpenEXR-3_5.dll
+%{mingw64_bindir}/libOpenEXRCore-3_5.dll
+%{mingw64_bindir}/libOpenEXRUtil-3_5.dll
 %{mingw64_includedir}/OpenEXR/
-%{mingw64_libdir}/libIex-3_4.dll.a
-%{mingw64_libdir}/libIlmThread-3_4.dll.a
-%{mingw64_libdir}/libOpenEXR-3_4.dll.a
-%{mingw64_libdir}/libOpenEXRCore-3_4.dll.a
-%{mingw64_libdir}/libOpenEXRUtil-3_4.dll.a
+%{mingw64_libdir}/libIex-3_5.dll.a
+%{mingw64_libdir}/libIlmThread-3_5.dll.a
+%{mingw64_libdir}/libOpenEXR-3_5.dll.a
+%{mingw64_libdir}/libOpenEXRCore-3_5.dll.a
+%{mingw64_libdir}/libOpenEXRUtil-3_5.dll.a
 %{mingw64_libdir}/cmake/OpenEXR/
 %{mingw64_libdir}/pkgconfig/OpenEXR.pc
 

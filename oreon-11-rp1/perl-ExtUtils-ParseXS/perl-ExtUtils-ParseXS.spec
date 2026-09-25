@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 014b7d1bac86616e0ad7c8476e0a6b6c21d98615ec10cb5bc400ba06ebc288ac
 
-%global cpan_version 3.61
+%global cpan_version 3.64
 Name:           perl-ExtUtils-ParseXS
 # Epoch to compete with perl.spec
 Epoch:          1
-Version:        3.61
-Release:        2%{?dist}
+Version:        3.64
+Release:        1%{?dist}
 Summary:        Module and a script for converting Perl XS code into C code
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-ParseXS
@@ -119,5 +119,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.61-2
-- Import
+%autochangelog

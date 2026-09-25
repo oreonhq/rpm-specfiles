@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 6985eefdc2298693e4ce1fe124645524cb967428eb6384e0ce5b49767e7ea8ba
 
 Name:           python-platformdirs
-Version:        4.11.9
+Version:        4.11.13
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A small Python package for determining appropriate platform-specific dirs, e.g. a _user data dir_.

@@ -1,7 +1,7 @@
-%global source0_hash a8fbdfa1833bd8e926295030adc05390b45ca5392cb54933d4a733d83f277ae7
+%global source0_hash 143bc39bc2796920871d2b224bdede8cd720f2a8539784a4b256c1495128a72d
 
 Name:           python-utils
-Version:        3.9.1
+Version:        4.0.1
 Release:        %autorelease
 Summary:        Python Utils is a module with some convenient utilities
 
@@ -18,6 +18,9 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
 BuildRequires:  python3-pytest-asyncio
 BuildRequires:  python3-sphinx
+# docs/conf.py (4.x) uses the myst_parser extension and the furo theme
+BuildRequires:  python3-myst-parser
+BuildRequires:  python3-furo
 
 
 %description
@@ -48,7 +51,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n %{name}-%{version}
 
 # Stop linting code in %%check and measuring coverage, this is upstream's business
-sed -Ei '/--(cov|mypy)/d' pytest.ini
+sed -Ei "/'--cov/d" pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires -r

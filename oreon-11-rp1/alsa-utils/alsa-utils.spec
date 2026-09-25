@@ -1,7 +1,6 @@
-%global source0_hash none
+%global source0_hash 092399d5e8749a1d5e188e393157521cec4b75693b60ebb79bbce728cff2232c
 
-%define   baseversion     1.2.15
-%define   fixversion      .2
+%define   baseversion     1.2.16
 %global   _hardened_build 1
 
 %global   utils_patch     0
@@ -9,7 +8,7 @@
 Summary: Advanced Linux Sound Architecture (ALSA) utilities
 Name:    alsa-utils
 Version: %{baseversion}%{?fixversion}
-Release: 3%{?dist}
+Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://www.alsa-project.org/
 # HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
@@ -215,5 +214,4 @@ fi
 %systemd_postun_with_restart alsa-state.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{baseversion}%{?fixversion}-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

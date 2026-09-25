@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash b11c5f9791d7bf51c2b39a81ed669f6b2dbbd669df2942f6c60167e9e3d1abe4
 
 Name:           python-pyjwt
-Version:        2.14.0
+Version:        2.15.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        JSON Web Token implementation in Python
@@ -59,5 +59,4 @@ Summary:        %{summary}
 %files -n python3-pyjwt -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.10.1-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

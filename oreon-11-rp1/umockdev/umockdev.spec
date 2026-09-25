@@ -1,7 +1,7 @@
-%global source0_hash e90820d2e2a95abf01c5b9813a98b74241391862254906017641bee30cc4ad08
+%global source0_hash 666e050f76eb61921e6d79e309c5833cef639de3ec1f9c35c74ebce1681f7c34
 
 Name:             umockdev
-Version:          0.19.8
+Version:          0.19.9
 Release:          1%{?dist}
 Summary:          Mock hardware devices
 
@@ -78,5 +78,4 @@ rm -rf $RPM_BUILD_ROOT/%{_datadir}/doc/umockdev
 %{_datadir}/vala/vapi/umockdev-1.0.vapi
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

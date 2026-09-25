@@ -1,4 +1,4 @@
-%global source0_hash e39ce5d284747d83505feb13c64b5aa92e477049c863880cec6540b86c8ff22d
+%global source0_hash 98e79fdb7302c794b01a22296c0e8a0e2c1f2fecf02615927e3e58e942abdd40
 
 # Run optional test
 %if ! (0%{?rhel})
@@ -8,8 +8,8 @@
 %endif
 
 Name:           perl-Net-CardDAVTalk
-Version:        0.09
-Release:        24%{?dist}
+Version:        0.12
+Release:        1%{?dist}
 Summary:        CardDAV client
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-CardDAVTalk
@@ -110,5 +110,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.09-24
-- Prepare for Oreon 11 (RP1)
+%autochangelog

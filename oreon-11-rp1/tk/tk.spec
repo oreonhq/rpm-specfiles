@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash d7a146d2917eb8b5cc95276dbf0e3d03c7464d2b19c1675357857c989301dbb4
 
 %global major 9
 %global majorver %{major}.0
-%global vers %{majorver}.2
+%global vers %{majorver}.4
 
 Summary: The graphical toolkit for the Tcl scripting language
 Name: tk
@@ -11,7 +11,7 @@ Release: 1%{?dist}
 Epoch:   1
 License: TCL AND HPND-Pbmplus AND CC-BY-SA-3.0 AND MIT-open-group AND MIT
 URL: http://tcl.sourceforge.net
-Source0:        http://download.sourceforge.net/sourceforge/tcl/%{name}%{version}-src.tar.gz
+Source0:        https://downloads.sourceforge.net/project/tcl/Tcl/%{version}/%{name}%{version}-src.tar.gz
 Requires: tcl = %{epoch}:%{vers}
 BuildRequires: make
 BuildRequires: gcc
@@ -22,7 +22,6 @@ BuildRequires: libXft-devel
 Conflicts: itcl <= 3.2
 Obsoletes: tile <= 0.8.2
 Provides: tile = 0.8.2
-Patch: tk-8.6.12-make.patch
 Patch: tk-8.6.15-conf.patch
 
 %description
@@ -112,5 +111,4 @@ ln -s %{_bindir}/wish %{_bindir}/wish%{majorver} %{buildroot}%{_usr}/bin/
 %{_mandir}/man3/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{vers}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

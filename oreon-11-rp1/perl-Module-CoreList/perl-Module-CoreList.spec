@@ -1,9 +1,9 @@
-%global source0_hash df85be58cdf25dfe375820a9b3038972d75a12af75dc478003bd1442d5fac88a
+%global source0_hash 79a8ccd3682b639cd589e3c05f8339e07cc82ddd9ef2a0db778a10ad467d5f6c
 
 Name:           perl-Module-CoreList
 # Epoch to compete with perl.spec
 Epoch:          1
-Version:        5.20260308
+Version:        5.20260924
 Release:        1%{?dist}
 Summary:        What modules are shipped with versions of perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -109,5 +109,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.20260308-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

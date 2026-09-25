@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash bd2e4c5731380922a8a6a45cc6dce0477bab000c917086f802d983d65441599a
 
 # Shared object version of libkcapi.
 %global vmajor            1
 %global vminor            5
-%global vpatch            0
+%global vpatch            1
 
 # Do we build the replacements packages?
 %bcond_with replace_coreutils
@@ -546,5 +546,4 @@ popd
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{vmajor}.%{vminor}.%{vpatch}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

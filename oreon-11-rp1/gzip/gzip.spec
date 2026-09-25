@@ -1,9 +1,9 @@
-%global source0_hash 01a7b881bd220bfdf615f97b8718f80bdfd3f6add385b993dcf6efd14e8c0ac6
+%global source0_hash 9aa0cc780dec156b8282844833b342ab7cb08c25d2cd9a1869cdd0df31deff48
 
 Summary: GNU data compression program
 Name: gzip
-Version: 1.14
-Release: 3%{?dist}
+Version: 1.15
+Release: 1%{?dist}
 # info pages are under GFDL license
 License: GPL-3.0-or-later AND GFDL-1.3-only
 Source0:        https://mirrors.kernel.org/gnu/gzip/gzip-%{version}.tar.xz
@@ -13,7 +13,6 @@ Source1:        https://www.gnu.org/licenses/fdl-1.3.txt
 Source100: colorzgrep.csh
 Source101: colorzgrep.sh
 
-Patch1: s390_errno.patch
 
 # Fixed in upstream code.
 # http://thread.gmane.org/gmane.comp.gnu.gzip.bugs/378
@@ -42,7 +41,6 @@ very commonly used data compression program.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch 1 -p1
 
 cp %{SOURCE1} .
 autoreconf
@@ -94,8 +92,4 @@ install -p -m 644 %{SOURCE101} %{buildroot}%{profiledir}
 %{profiledir}/*
 
 %changelog
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14-3
-- Ship GNU FDL 1.3 text in-tree for %%prep (avoids spectool or network for Source1)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

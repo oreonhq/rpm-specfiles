@@ -1,4 +1,4 @@
-%global source0_hash 1c1285d911027d276f235b32a888ee7425c9ab356ee62cd126c4b3ee3ea659b3
+%global source0_hash 750868d3820113a0e27e786531a08fa57a34abcd252f3133c0f8b5efc38b485c
 %global source1_hash 114543d9f19a6bfeb5bca43686aea173d38755a3db1f2eec112647ae92c6f544
 
 # Run optional test
@@ -8,7 +8,7 @@
 %global tzversion 2026b
 
 Name:           perl-DateTime-TimeZone
-Version:        2.68
+Version:        2.70
 Release:        1%{?dist}
 Summary:        Time zone object base class and factory
 # tzdata%%{tzversion}.tar.gz archive:   LicenseRef-Public-Domain
@@ -186,5 +186,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.68-1
-- Import
+%autochangelog

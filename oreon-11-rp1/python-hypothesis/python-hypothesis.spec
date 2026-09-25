@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash fd8acb5c67f260dfbdcc1b2dc95ff48b2b3f90708ae595c76f591bbf3f6f8eeb
 
 Name:           python-hypothesis
-Version:        6.168.0
+Version:        6.168.1
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The property-based testing library for Python
@@ -20,7 +20,6 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'hypothesis' generated automatically by pyp2spec.}
 
-Patch:          hypothesis-attrs-py314.diff
 
 %description %_description
 
@@ -62,5 +61,4 @@ Summary:        %{summary}
 %{_bindir}/hypothesis
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.123.0-1
-- Import
+%autochangelog

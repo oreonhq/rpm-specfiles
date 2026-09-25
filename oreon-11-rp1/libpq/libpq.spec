@@ -1,13 +1,13 @@
-%global source0_hash none
+%global source0_hash 555610c24d53e4316da5b7d3fc25c279d96856d5e0e23ee308c328c5fa881d9f
 
 %global majorversion 18
 %global obsoletes_version %( echo $(( %majorversion + 1 )) )
-%global betaversion %{majorversion}.0
+%global betaversion %{version}
 
 Summary: PostgreSQL client library
 Name: libpq
-Version: %{majorversion}.0
-Release: 4%{?dist}
+Version: %{majorversion}.6
+Release: 1%{?dist}
 
 License: PostgreSQL
 Url: http://www.postgresql.org/
@@ -65,7 +65,8 @@ package or any clients that need to connect to a PostgreSQL server.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }( cd "$(dirname "%SOURCE1")" ; sha256sum -c "%SOURCE1" )
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+( cd "$(dirname "%SOURCE1")" ; sha256sum -c "%SOURCE1" )
 %autosetup -n postgresql-%{betaversion} -p1
 
 # remove .gitignore files to ensure none get into the RPMs (bug #642210)
@@ -147,5 +148,4 @@ find_lang_bins %name-devel.lst  pg_config
 %_libdir/pkgconfig/libpq.pc
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18.0-4
-- Import
+%autochangelog

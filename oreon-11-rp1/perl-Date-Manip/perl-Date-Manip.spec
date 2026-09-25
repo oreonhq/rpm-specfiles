@@ -1,7 +1,7 @@
-%global source0_hash 3239e5f671e1af74d4a91b8278f3ae64f214184f7fc27ed4f80409ec2e6c4f54
+%global source0_hash 37133eeb09d36da6d461546cc216b8f6a2297a43331c680a6848f3fff925975c
 
 Name:           perl-Date-Manip
-Version:        6.99
+Version:        7.00
 Release:        1%{?dist}
 Summary:        Date manipulation routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -127,5 +127,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.99-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

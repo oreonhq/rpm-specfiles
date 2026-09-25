@@ -1,13 +1,13 @@
-%global source0_hash 9b6bfdaea317c0cb26949e2b81c7c5f5d616ef77b47f327673c2ac7283507340
+%global source0_hash c8ec7e5b3686ccc902c5268c35592ee0036f51a2d32cda814db1c5f42768e818
 
 Name:           jackson-bom
-Version:        2.22.2
+Version:        2.22.3
 Release:        1%{?dist}
 Summary:        Bill of materials POM for Jackson projects
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-bom
-Source0:        https://github.com/FasterXML/jackson-bom/archive/refs/tags/jackson-bom-2.18.2.tar.gz#/jackson-bom-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-bom/archive/refs/tags/jackson-bom-%{version}.tar.gz#/jackson-bom-%{version}.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local
@@ -32,7 +32,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 # Disable plugins not needed during RPM builds
 %pom_remove_plugin ":maven-enforcer-plugin" base
-%pom_remove_plugin ":nexus-staging-maven-plugin" base
 
 # New EE coords
 %pom_change_dep "javax.activation:javax.activation-api" "jakarta.activation:jakarta.activation-api" base
@@ -51,5 +50,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.18.2-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

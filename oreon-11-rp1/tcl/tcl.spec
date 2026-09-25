@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 5d265f3499b588681825d8093177830707b7035ad866b17189a3a6ab6dade0ff
 
 %global xver 9
 %global yver 0
-%global zver 2
+%global zver 4
 
 %global majorver %{xver}.%{yver}
 %global vers %{majorver}.%{zver}
@@ -163,5 +163,4 @@ ln -s %{_bindir}/tclsh %{_bindir}/tclsh%{majorver} %{buildroot}%{_usr}/bin/
 %{_libdir}/pkgconfig/tcl.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{vers}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

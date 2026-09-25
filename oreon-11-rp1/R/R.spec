@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4da6e61d2c0aac5f14a2e7e432cb5fcc269efe83da4293050ba7f03dff4e2cf4
 
 # We need +x on these files
 %global __brp_mangle_shebangs_exclude_from %{_libdir}/R/bin/
@@ -36,7 +36,7 @@
 
 %global major_version 4
 %global minor_version 6
-%global patch_version 0
+%global patch_version 1
 
 Name:           R
 Version:        %{major_version}.%{minor_version}.%{patch_version}
@@ -974,6 +974,4 @@ TZ="Europe/Paris" make check
 %{_libdir}/libRmath.a
 
 %changelog
-* Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.6.0-1
-- Import R for Oreon 11 RP1
-
+%autochangelog

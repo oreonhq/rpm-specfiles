@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5c1d40cb8e19adbf740a4ec2da35b3e58f3f5804b1dce44deb53df72193cbc6c
 
 # Support for documentation installation As the %%doc macro erases the
 # target directory ($RPM_BUILD_ROOT%%{_docdir}/%%{name}), manually
@@ -41,8 +41,8 @@
 Name: boost
 %global real_name boost
 Summary: The free peer-reviewed portable C++ source libraries
-Version: 1.90.0
-Release: 7%{?dist}
+Version: 1.92.0
+Release: 1%{?dist}
 License: BSL-1.0 AND MIT AND Python-2.0.1
 
 # Replace each . with _ in %%{version}
@@ -152,10 +152,8 @@ Patch5:        boost-1.76.0-fix-narrowing-conversions-for-ppc.patch
 
 # Install boost_system for the CMake configuration
 # https://github.com/boostorg/system/issues/132
-Patch6:        boost-1.90-system.patch
 
 # https://github.com/boostorg/range/pull/157
-Patch7:        boost-1.90.0-range.patch
 
 %bcond_with tests
 %bcond_with docs_generated
@@ -1363,5 +1361,4 @@ fi
 %{_mandir}/man1/b2.1*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.90.0-7
-- Import
+%autochangelog

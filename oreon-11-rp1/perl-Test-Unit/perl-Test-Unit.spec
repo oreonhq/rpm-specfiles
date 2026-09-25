@@ -1,8 +1,8 @@
-%global source0_hash 02f86e62206e5f8eb5665ca2627e2a2480c92f34adee7ed3f5193e69f068891a
+%global source0_hash 984b6ed071918ae921c4bd45eb4a9b9b833a9c7e99f90b6ccd25a46cc19f987d
 
 Name:           perl-Test-Unit
-Version:        0.29
-Release:        2%{?dist}
+Version:        0.30
+Release:        1%{?dist}
 Summary:        The PerlUnit testing framework
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -79,5 +79,4 @@ make test
 %{_mandir}/man3/Test::Unit*.3*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.29-2
-- Import
+%autochangelog

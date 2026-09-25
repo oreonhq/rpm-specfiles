@@ -1,8 +1,8 @@
-%global source0_hash 9f7853249c9ea3b4df92fb6b790c03a60680fc029f44c8bf9894dccf019516bd
+%global source0_hash 457bfb1b2369e44c0e2ef3e7b61580831107cbeebf0f5d8c4b9b02368550b91e
 
 Name:           perl-Variable-Magic
-Version:        0.64
-Release:        7%{?dist}
+Version:        0.65
+Release:        1%{?dist}
 Summary:        Associate user-defined magic to variables from Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
@@ -81,5 +81,4 @@ make test
 %{_mandir}/man3/Variable::Magic.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.64-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

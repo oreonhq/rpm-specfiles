@@ -1,7 +1,7 @@
-%global source0_hash 8ee295b26b608450bc0c47ba199b34cf92f7f9ec4c81a62363e6450da76b6739
+%global source0_hash 5ad3efcc0f50d147adc9583df1a2c1790eddfe29a9c6e6f0b82d71a5c3490739
 
 %global forgeurl https://github.com/oracle/ktls-utils
-%global baseversion 1.4.0
+%global baseversion 1.5.0
 
 Name:           ktls-utils
 Version:        %{baseversion}
@@ -14,7 +14,7 @@ License:        GPL-2.0-only AND (GPL-2.0-only OR BSD-3-Clause)
 URL:            %{forgeurl}
 
 # FIXME: is this a bug in the tagging scheme or forgesource macro?
-Source0:        https://github.com/oracle/ktls-utils/releases/download/ktls-utils-1.3.0/ktls-utils-1.3.0.tar.gz
+Source0:        https://github.com/oracle/ktls-utils/releases/download/ktls-utils-%{version}/ktls-utils-%{version}.tar.gz
 
 BuildRequires:  bash systemd-rpm-macros
 BuildRequires:  gcc make coreutils
@@ -68,5 +68,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %systemd_postun_with_restart tlshd.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{baseversion}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

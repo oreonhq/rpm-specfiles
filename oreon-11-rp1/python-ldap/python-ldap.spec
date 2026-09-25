@@ -1,4 +1,4 @@
-%global source0_hash b2f6ef1c37fe2c6a5a85212efe71311ee21847766a7d45fcb711f3b270a5f79a
+%global source0_hash 18dc7460470c6ff64ed5c04ee21c56dbfee7ab433a53213ba91e407eea44c34c
 
 ### Abstract ###
 %bcond servers %{undefined rhel}
@@ -8,12 +8,12 @@
 %global openldap_version 2.4.45-4
 
 Name: python-ldap
-Version: 3.4.5
+Version: 3.4.8
 Release: %autorelease
 License: python-ldap
 Summary: An object-oriented API to access LDAP directory servers
 URL: https://python-ldap.org/
-Source0:        https://files.pythonhosted.org/packages/source/p/python_ldap/python_ldap-3.4.5.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/p/python_ldap/python_ldap-3.4.8.tar.gz
 
 # Conditionally applied paches, numbereed > 100
 Patch101: 0101-Disable-openldap-servers-tests.patch
@@ -82,5 +82,4 @@ PYTHONPATH=%{buildroot}%{python3_sitearch} %{__python3} -m unittest discover -v 
 %doc CHANGES README TODO Demo
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

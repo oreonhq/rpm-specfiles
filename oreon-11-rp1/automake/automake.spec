@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash e3e2c2e3abf37898138db5b6c1d1dc35c9160c5978be7947d2c741705251d445
 
-%global api_version 1.18
+%global api_version 1.19
 
 # redhat-rpm-config sets CFLAGS, CXXFLAGS and LDFLAGS, but not
 # OBJCFLAGS. This means that Obj-C tests will be compiled without hardening
@@ -21,8 +21,8 @@
 Summary:    A GNU tool for automatically creating Makefiles
 Name:       automake
 # Any bump here requires libtool rebuild, rhbz#1813010
-Version:    %{api_version}.1
-Release:    4%{?dist}
+Version:    %{api_version}
+Release:    1%{?dist}
 
 # To help future rebase, the following licenses were seen in the following files/folders:
 # usr/bin/* - GPL-2.0-or-later
@@ -162,5 +162,4 @@ make -k %{?_smp_mflags} check %{?TESTS_FLAGS: TESTS="%{TESTS_FLAGS}"} \
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.18.1-4
-- Import
+%autochangelog

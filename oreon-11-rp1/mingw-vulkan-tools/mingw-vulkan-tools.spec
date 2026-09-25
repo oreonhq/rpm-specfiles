@@ -1,4 +1,4 @@
-%global source0_hash 8d6a4092d5de62d0c6290394cf81cf7a99e36875934b1b75d595e76d08fcadd1
+%global source0_hash 4d5669d4e06e9901eff2fdefdf638d267c9ed7f50caf964f69a218754cf8abd7
 
 %{?mingw_package_header}
 
@@ -8,7 +8,7 @@
 %define baseversion %(echo %{version} | awk -F'.' '{print $1"."$2"."$3}')
 
 Name:          mingw-%{pkgname}
-Version:       1.4.362
+Version:       1.4.363
 Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname}
 

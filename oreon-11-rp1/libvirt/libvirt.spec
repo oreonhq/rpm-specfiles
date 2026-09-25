@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7ec1a04e7e4f4069353d4daac117bbe869287f5b202695de61fe1b079efb6cb6
 
 # -*- rpm-spec -*-
 
@@ -296,8 +296,8 @@
 
 Summary: Library providing a simple virtualization API
 Name: libvirt
-Version: 12.0.0
-Release: 3%{?dist}
+Version: 12.7.0
+Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND OFL-1.1
 URL: https://libvirt.org/
 
@@ -308,7 +308,6 @@ Source:        https://download.libvirt.org/%{?mainturl}libvirt-%{version}.tar.x
 
 # Fix IPv6 connections to ESXi
 # Upstream in > 12.0.0
-Patch:        0001-esx-Allow-connecting-to-IPv6-server.patch
 
 Requires: libvirt-daemon = %{version}-%{release}
 Requires: libvirt-daemon-config-network = %{version}-%{release}
@@ -1174,7 +1173,7 @@ MinGW Windows libvirt virtualization library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am -n libvirt-12.0.0
+%autosetup -S git_am -n libvirt-12.7.0
 
 %build
 %if 0%{?fedora} >= %{min_fedora} || 0%{?rhel} >= %{min_rhel} || (0%{?oreon} >= 11)
@@ -2698,5 +2697,4 @@ exit 0
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.0.0-3
-- Import
+%autochangelog

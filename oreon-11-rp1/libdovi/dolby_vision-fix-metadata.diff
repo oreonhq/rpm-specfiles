@@ -1,6 +1,6 @@
---- dolby_vision-3.3.2/Cargo.toml	1970-01-01T00:00:01+00:00
-+++ dolby_vision-3.3.2/Cargo.toml	2026-05-23T09:43:33.119417+00:00
-@@ -56,11 +56,7 @@
+--- dolby_vision-3.4.0/Cargo.toml
++++ dolby_vision-3.4.0/Cargo.toml
+@@ -59,11 +59,7 @@
  name = "dolby_vision"
  path = "src/lib.rs"
  doctest = false
@@ -12,22 +12,13 @@
 +crate-type = ["lib", "cdylib"]
  
  [dependencies.anyhow]
- version = "1.0.98"
-@@ -81,7 +77,7 @@
- optional = true
- 
- [dependencies.roxmltree]
--version = "0.20.0"
-+version = ">=0.20.0, <0.22.0"
- optional = true
- 
- [dependencies.serde]
-@@ -98,9 +94,6 @@
- version = "1.9.0"
+ version = "1.0.102"
+@@ -101,9 +97,6 @@
+ version = "1.11.0"
  features = ["rustc_1_55"]
  
 -[dev-dependencies.criterion]
--version = "0.6.0"
+-version = "0.8.2"
 -
  [lints.rust.unexpected_cfgs]
  level = "warn"

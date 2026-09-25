@@ -1,8 +1,7 @@
 diff --git a/awscli/customizations/cloudformation/yamlhelper.py b/awscli/customizations/cloudformation/yamlhelper.py
-index 8e3b291..a926d53 100644
 --- a/awscli/customizations/cloudformation/yamlhelper.py
 +++ b/awscli/customizations/cloudformation/yamlhelper.py
-@@ -91,8 +91,14 @@ def yaml_dump(dict_to_dump):
+@@ -91,8 +91,14 @@
      yaml.Representer = FlattenAliasRepresenter
      _add_yaml_1_1_boolean_resolvers(yaml.Resolver)
      yaml.Representer.add_representer(OrderedDict, _dict_representer)
@@ -19,10 +18,9 @@ index 8e3b291..a926d53 100644
  
  def _dict_constructor(loader, node):
 diff --git a/awscli/customizations/eks/kubeconfig.py b/awscli/customizations/eks/kubeconfig.py
-index 2d302d8..d00c4a8 100644
 --- a/awscli/customizations/eks/kubeconfig.py
 +++ b/awscli/customizations/eks/kubeconfig.py
-@@ -45,7 +45,7 @@ def _get_new_kubeconfig_content():
+@@ -45,7 +45,7 @@
              ("contexts", []),
              ("current-context", ""),
              ("kind", "Config"),
@@ -31,7 +29,7 @@ index 2d302d8..d00c4a8 100644
              ("users", []),
          ]
      )
-@@ -135,7 +135,7 @@ class KubeconfigValidator(object):
+@@ -135,7 +135,7 @@
          for key, value in self._validation_content.items():
              if key in config.content and type(config.content[key]) == list:
                  for element in config.content[key]:
@@ -41,15 +39,11 @@ index 2d302d8..d00c4a8 100644
                              f"Entry in {key} not a {dict}. "
                          )
 diff --git a/awscli/customizations/eks/ordered_yaml.py b/awscli/customizations/eks/ordered_yaml.py
-index f9b1a11..0cce12e 100644
 --- a/awscli/customizations/eks/ordered_yaml.py
 +++ b/awscli/customizations/eks/ordered_yaml.py
-@@ -50,10 +50,18 @@ def ordered_yaml_dump(to_dump, stream=None):
-     :type stream: file
-     """
-     yaml = ruamel.yaml.YAML(typ="safe", pure=True)
-+    yaml.width = 99999
+@@ -53,8 +53,15 @@
      yaml.default_flow_style = False
+     yaml.width = float('inf')
      yaml.Representer.add_representer(OrderedDict, _ordered_representer)
 +    yaml.Representer.add_representer(dict, _ordered_representer)
  
@@ -66,10 +60,9 @@ index f9b1a11..0cce12e 100644
 +
 +    return result
 diff --git a/tests/unit/customizations/cloudformation/test_yamlhelper.py b/tests/unit/customizations/cloudformation/test_yamlhelper.py
-index e7ac758..b9632e9 100644
 --- a/tests/unit/customizations/cloudformation/test_yamlhelper.py
 +++ b/tests/unit/customizations/cloudformation/test_yamlhelper.py
-@@ -130,28 +130,10 @@ class TestYaml(BaseYAMLTest):
+@@ -130,28 +130,10 @@
              '    Name: name1\n'
          )
          output_dict = yaml_parse(input_template)
@@ -102,7 +95,7 @@ index e7ac758..b9632e9 100644
          self.assertEqual(expected_dict, output_dict)
  
          output_template = yaml_dump(output_dict)
-@@ -165,7 +147,7 @@ class TestYaml(BaseYAMLTest):
+@@ -165,7 +147,7 @@
              <<: *base
          """
          output = yaml_parse(test_yaml)

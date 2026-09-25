@@ -1,10 +1,10 @@
-%global source0_hash 44eec2da147ba0511090871b0ca82f69794376bc31e8c76d1040961ba57f59b8
+%global source0_hash 361c7c1eee8cf66812958f975f26ef2e2272a0c6221d2043477cb9c22b8d1c23
 
 # Perform tests that need the Internet
 %bcond_with perl_LWP_Protocol_https_enables_internet_test
 
 Name:           perl-LWP-Protocol-https
-Version:        6.15
+Version:        6.17
 Release:        1%{?dist}
 Summary:        Provide HTTPS support for LWP::UserAgent
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -69,7 +69,7 @@ with "%{_libexecdir}/%{name}/test".
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n LWP-Protocol-https-%{version}
 %if !%{with perl_LWP_Protocol_https_enables_internet_test}
-rm t/example.t
+rm -f t/example.t
 perl -i -ne 'print $_ unless m{^t/example.t}' MANIFEST
 %endif
 # Help generators to recognize Perl scripts
@@ -108,5 +108,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.15-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

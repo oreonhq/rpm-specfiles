@@ -1,13 +1,13 @@
-%global source0_hash none
+%global source0_hash b0fb72e9d00739b566a5a14f804d5f6961ca011bf08933c5e59f3715f711259b
 
 Name:           jackson-databind
-Version:        2.22.2
+Version:        2.22.3
 Release:        1%{?dist}
 Summary:        General data-binding package for Jackson (2.x)
 License:        Apache-2.0 and LGPL-2.0-or-later
 
 URL:            https://github.com/FasterXML/jackson-databind
-Source0:        https://github.com/FasterXML/jackson-databind/archive/refs/tags/jackson-databind-2.18.2.tar.gz#/jackson-databind-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-databind/archive/refs/tags/jackson-databind-%{version}.tar.gz#/jackson-databind-%{version}.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || (0%{?oreon} >= 11)
 BuildRequires:  maven-local
@@ -41,7 +41,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin ":maven-enforcer-plugin"
 %pom_remove_plugin "org.jacoco:jacoco-maven-plugin"
 %pom_remove_plugin "org.moditect:moditect-maven-plugin"
-%pom_remove_plugin "de.jjohannes:gradle-module-metadata-maven-plugin"
 %pom_xpath_set "//pom:javac.src.version" "11"
 %pom_xpath_set "//pom:javac.target.version" "11"
 %pom_xpath_inject "//pom:properties" " <maven.compiler.source>11</maven.compiler.source>"
@@ -72,5 +71,4 @@ rm src/test/java/com/fasterxml/jackson/databind/introspect/NoClassDefFoundWorkar
 %license LICENSE NOTICE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.18.2-6
-- Import
+%autochangelog

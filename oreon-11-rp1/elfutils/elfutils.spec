@@ -1,12 +1,12 @@
-%global source0_hash 09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e
+%global source0_hash fd5cc6b77ad6773cac93cb3f415f9318ac3b3455eecf801f6b4a742c4f6c7209
 
 # Rebuild --with static to enable static subpackages
 # This is *not* supported by elfutils maintainers
 %bcond_with static
 
 Name: elfutils
-Version: 0.194
-%global baserelease 5
+Version: 0.196
+%global baserelease 1
 Release: %{baserelease}%{?dist}
 URL: http://elfutils.org/
 %global source_url https://sourceware.org/pub/elfutils/%{version}/
@@ -100,17 +100,13 @@ BuildRequires: gettext-devel
 Patch1: elfutils-0.186-fdo-swap.patch
 
 # Prevent assert failure in readelf for some -ggdb3 binaries.
-Patch2: elfutils-0.194-alloc-jobs.patch
 
 # Fix const warning from newer GCC.
-Patch3: elfutils-0.194-fix-const.patch
 
 # Work around ET_REL files with sh_addr fields set to non-zero
-Patch4: elfutils-0.194-sh_addr-non-zero.patch
 
 # Recognize SHT_AARCH64_ATTRIBUTES.
 # https://sourceware.org/bugzilla/show_bug.cgi?id=33923
-Patch5: elfutils-0.194-aarch64-Recognize-SHT_AARCH64_ATTRIBUTES.patch
 
 %description
 Elfutils is a collection of utilities, including stack (to show
@@ -535,8 +531,4 @@ exit 0
 %systemd_postun_with_restart debuginfod.service
 
 %changelog
-* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.194-5
-- Use HTTPS for sourceware tarball instead
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.194-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

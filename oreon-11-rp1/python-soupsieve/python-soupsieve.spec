@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 49e9380d7d2905463583bafe285e818c7366a9ed7b3aee221c1ac79c905d8bc0
 
 Name:           python-soupsieve
-Version:        2.9.2
+Version:        2.10
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A modern CSS selector implementation for Beautiful Soup.
@@ -54,5 +54,4 @@ Summary:        %{summary}
 %files -n python3-soupsieve -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

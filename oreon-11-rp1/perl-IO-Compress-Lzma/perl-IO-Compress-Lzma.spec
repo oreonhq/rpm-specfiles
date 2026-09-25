@@ -1,4 +1,4 @@
-%global source0_hash 3462ecd1e67e85d5e4fa911bc6d8e38a884ba1d6e90a03535f0d28fe2ad0aacf
+%global source0_hash b6f13b2e405dc413503d88ffaa92f280402fe3992f45a3e6b1a59aed7a60d834
 
 # Perform optional tests
 %if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
@@ -8,12 +8,12 @@
 %endif
 
 Name:		perl-IO-Compress-Lzma
-Version:	2.217
+Version:	2.224
 Release:	1%{?dist}
 Summary:	Read and write lzma compressed data
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/IO-Compress-Lzma
-Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Compress-Lzma-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PM/PMQS/IO-Compress-Lzma-%{version}.tar.gz
 
 
 
@@ -108,5 +108,4 @@ make test COMPRESS_ZLIB_RUN_MOST=1
 %{_mandir}/man3/IO::Uncompress::UnXz.3*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.217-1
-- Import
+%autochangelog

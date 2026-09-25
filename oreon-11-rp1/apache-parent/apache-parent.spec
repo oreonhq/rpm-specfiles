@@ -1,9 +1,9 @@
-%global source0_hash 60b2fc5dea92375de13b8cbe08d5fa0553a6585bcd136bb4b1efa5872ca4ea88
+%global source0_hash 182ad0954e4a60bc73cafcaab595d39d65b8156f7085f0b87505907eb03fe608
 
 %bcond_without bootstrap
 
 Name:           apache-parent
-Version:        39
+Version:        40
 Release:        %autorelease
 Summary:        Parent POM file for Apache projects
 License:        Apache-2.0
@@ -47,11 +47,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE NOTICE
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 35-3
-- bump release (retry failed build)
-
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 35-2
-- %%autosetup -n apache-%%{version} for Maven apache-VERSION-source-release.zip layout
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 35-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

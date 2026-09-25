@@ -1,12 +1,12 @@
-%global source0_hash none
+%global source0_hash d326ec69fc004be3a5fc048f7ecf2c8eb828b7d8b682f1e7a2ba01a5e72993e1
 
-%global url_ver %(echo %{version}|cut -d. -f1,2)
+%define url_ver %(echo %{version}|cut -d. -f1)
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 %global __provides_exclude_from ^%{_libdir}/%{name}/.*\\.so.*$
 
 Name:           sushi
-Version:        51.0
+Version:        51.1
 Release:        %autorelease
 Summary:        A quick previewer for Nautilus
 
@@ -69,5 +69,4 @@ if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Er
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.0-1
-- Import
+%autochangelog

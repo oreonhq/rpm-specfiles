@@ -1,17 +1,17 @@
-%global source0_hash 90f74bc1fbf78a6c56b3c4a082a05103b3a56bb17bca1a27e052ea11723292dc
+%global source0_hash 893f708a0bf4b5529d555ffcee390e940e932fcf90261f682604475a76cd0247
 
 # Drop google-benchmark, gtest on RHEL
 %bcond gbench %[ !0%{?rhel} ]
 %bcond gtest %[ !0%{?rhel} ]
 
 Name:           snappy
-Version:        1.3.0
+Version:        1.3.1
 Release:        1%{?dist}
 Summary:        Fast compression and decompression library
 
 License:        BSD-3-Clause
 URL:            https://github.com/google/snappy
-Source0:        https://github.com/google/snappy/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/google/snappy/archive/%{version}/%{name}-%{version}.tar.gz
 
 # Remove dependency on bundled gtest and google-benchmark.
 Patch0:         %{name}-thirdparty.patch
@@ -96,8 +96,4 @@ rm -rf %{buildroot}%{_datadir}/doc/snappy-devel/
 
 
 %changelog
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.2-6
-- Fix Source0 URL (GitHub tag archive)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.2-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

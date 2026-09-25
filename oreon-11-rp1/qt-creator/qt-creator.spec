@@ -1,14 +1,13 @@
-%global source0_hash none
+%global source0_hash f0505278792454d8fa1af029d05878b112773dc9d67503c8f9671cb67b07bfea
 
-%define prerelease beta1
 
 # We need avoid oython byte compiler to not crash over template .py file which
 # is not a valid python file, only for the IDE
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           qt-creator
-Version:        20.0.0
-Release:        0.3%{?prerelease:.%prerelease}%{?dist}
+Version:        20.0.2
+Release:        1%{?dist}
 Summary:        Cross-platform IDE for Qt
 
 # 
@@ -351,5 +350,4 @@ diff -u %{SOURCE1} $outfile
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20.0.0-0.3
-- Import
+%autochangelog

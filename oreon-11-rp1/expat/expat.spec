@@ -1,11 +1,11 @@
-%global source0_hash 461ecc8aa98ab1a68c2db788175665d1a4db640dc05bf0e289b6ea17122144ec
+%global source0_hash 920dde485e15eda0cce8d2310b41d492c534e5e3d89ad407a0b4176dd2ff88fe
 
 Summary: An XML parser library
 Name: expat
-Version: 2.8.4
+Version: 2.8.5
 Release: %autorelease
-Source0:        https://github.com/libexpat/libexpat/releases/download/R_2_8_1/expat-%{version}.tar.gz
-Source1:        https://github.com/libexpat/libexpat/releases/download/R_2_8_1/expat-%{version}.tar.gz.asc
+Source0:        https://github.com/libexpat/libexpat/releases/download/R_%(echo %{version} | tr . _)/expat-%{version}.tar.gz
+Source1:        https://github.com/libexpat/libexpat/releases/download/R_%(echo %{version} | tr . _)/expat-%{version}.tar.gz.asc
 # Sebastian Pipping's PGP public key
 Source2: https://keys.openpgp.org/vks/v1/by-fingerprint/3176EF7DB2367F1FCA4F306B1F9B0E909AF37285
 
@@ -85,5 +85,4 @@ make check
 %{_libdir}/libexpat.a
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.7.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

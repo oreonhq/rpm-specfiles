@@ -1,4 +1,4 @@
-%global source0_hash b072aed6871998cce9b36e7774033105ca29e33632be5b6347f3206898e0756a
+%global source0_hash 8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e
 
 %global source2_key_fpr FCF986EA15E6E293A5644F10B4322F04D67658D8
 
@@ -96,18 +96,18 @@
 # FIXME: GCC says there's incompatible pointer casts going on in libavdevice...
 %global build_type_safety_c 2
 
-%global av_codec_soversion 62
-%global av_device_soversion 62
-%global av_filter_soversion 11
-%global av_format_soversion 62
-%global av_util_soversion 60
-%global swresample_soversion 6
-%global swscale_soversion 9
+%global av_codec_soversion 63
+%global av_device_soversion 63
+%global av_filter_soversion 12
+%global av_format_soversion 63
+%global av_util_soversion 61
+%global swresample_soversion 7
+%global swscale_soversion 10
 
 Name:           ffmpeg
 %global pkg_name %{name}%{?pkg_suffix}
 
-Version:        9.0.1
+Version:        9.0.2
 Release:        1%{?dist}
 Summary:        A complete solution to record, convert and stream audio and video
 License:        GPL-3.0-or-later
@@ -1010,23 +1010,4 @@ rm -rf %{buildroot}%{_bindir}
 rm -rf %{buildroot}%{_datadir}
 %endif
 %changelog
-* Sun Aug 16 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-6
-- Restore FFmpeg 8.1 ABI and Chromium first DTS API
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.2-5
-- Rebuild
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.2-4
-- On %%{?oreon}, disable optional libavformat demuxers missing from ISO repos
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.2-3
-- Replace local spec with Fedora 43 ffmpeg 7.1.2-2 SRPM layout
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-3
-- Package extra man1 pages, man3 API pages in devel, ffmpeg-doc for data dir and examples
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-2
-- Disable RPM LTO (%%global _lto_cflags %%{nil}) fix shared lib link libavcodec/libswscale
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-1
-- Add FFmpeg 8.1 (GPLv3+, libs, devel, common free codecs, GnuTLS)
+%autochangelog

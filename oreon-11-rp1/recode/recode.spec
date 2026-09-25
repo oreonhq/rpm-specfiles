@@ -1,8 +1,8 @@
-%global source0_hash f590407fc51badb351973fc1333ee33111f05ec83a8f954fd8cf0c5e30439806
+%global source0_hash c3d407f54f74bae76360312096e2ed46622f01c86e50b09ef45b2d93c8fcff2d
 
 Name:       recode
-Version:    3.7.15
-Release:    3%{?dist}
+Version:    3.7.16
+Release:    1%{?dist}
 Summary:    Conversion between character sets and surfaces
 # COPYING:              GPLv3 text
 # COPYING-LIB:          LGPLv3 text
@@ -54,7 +54,7 @@ Summary:    Conversion between character sets and surfaces
 # tests/Recode.pyx:     GPLv3+
 License:    GPL-3.0-or-later AND LGPL-3.0-or-later AND BSD-2-Clause AND LicenseRef-OFSFDL
 URL:        https://github.com/rrthomas/recode
-Source:        https://github.com/rrthomas/recode/releases/download/v3.7.15/recode-3.7.15.tar.gz
+Source:        https://github.com/rrthomas/recode/releases/download/v%{version}/recode-%{version}.tar.gz
 Patch:      recode-3.7.13-Rename-coliding-hash-functions.patch
 
 
@@ -134,5 +134,4 @@ rm $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_includedir}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.7.15-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

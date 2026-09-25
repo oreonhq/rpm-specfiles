@@ -1,15 +1,15 @@
-%global source0_hash df54a6f37ccd3b3f0df7f557ad8d7bdd412152b568beccd8d71cd73d4a9343e6
+%global source0_hash 5edc0433c00146139fd2c1fc20b42315cd39348d96d25d7f7437281c4e19d09c
 
 %global srcname into-dbus-python
 
 Name:           python-%{srcname}
-Version:        0.8.2
+Version:        0.8.4
 Release:        %autorelease
 Summary:        Transformer to dbus-python types
 
 License:        Apache-2.0
 URL:            https://github.com/stratis-storage/into-dbus-python
-Source0:        https://github.com/stratis-storage/into-dbus-python/archive/refs/tags/v0.8.2.tar.gz#/into-dbus-python-0.8.2.tar.gz
+Source0:        https://github.com/stratis-storage/into-dbus-python/archive/refs/tags/v%{version}.tar.gz#/into-dbus-python-0.8.4.tar.gz
 
 BuildArch:      noarch
 
@@ -50,5 +50,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc README.rst
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

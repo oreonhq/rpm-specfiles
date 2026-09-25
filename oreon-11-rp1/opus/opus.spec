@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6ffcb593207be92584df15b32466ed64bbec99109f007c82205f0194572411a1
 
 #global candidate rc2
 
@@ -12,7 +12,7 @@
 %endif
 
 Name:     opus
-Version:  1.6
+Version:  1.6.1
 Release:  %autorelease
 Summary:  An audio codec for use in low-delay speech and audio communication
 License:  BSD-3-Clause AND BSD-2-Clause
@@ -155,5 +155,4 @@ make -C build_native check %{?_smp_mflags} V=1
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

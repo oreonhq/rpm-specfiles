@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 5823209b0d43af322ce698c689380d7c15ca31fa8e6e3be8459f27031bef0af5
 
 Name:           python-wcwidth
-Version:        0.8.4
+Version:        0.9.1
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Measures the displayed width of unicode strings in a terminal
@@ -54,5 +54,4 @@ Summary:        %{summary}
 %files -n python3-wcwidth -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

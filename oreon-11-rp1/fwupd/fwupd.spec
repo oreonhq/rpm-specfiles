@@ -1,4 +1,4 @@
-%global source0_hash 9609b75b0706265f589b9b15e9c1f986832b523b94f994d00f5284d3ff15f503
+%global source0_hash 8724305a52621ab6586de3290f6a78edb8393a4aa4bcb6c63f9228ae5e00acf8
 
 %global glib2_version 2.68.0
 %global libxmlb_version 0.3.24
@@ -43,7 +43,7 @@
 
 Summary:   Firmware update daemon
 Name:      fwupd
-Version:   2.1.7
+Version:   2.1.8
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/fwupd/fwupd
@@ -359,5 +359,4 @@ systemctl --no-reload preset fwupd-refresh.timer &>/dev/null || :
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.3-1
-- Import
+%autochangelog

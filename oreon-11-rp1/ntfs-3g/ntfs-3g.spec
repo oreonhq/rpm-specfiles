@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bcf3cf301a79e42d330128ffb52d4cf615bd1d30c10a92d9d8d14f2bb4fcd9bf
 
 # Pass --with externalfuse to compile against system fuse lib
 # Default is internal fuse-lite.
@@ -9,21 +9,14 @@
 
 Name:           ntfs-3g
 Epoch:          2
-Version:        2026.7.7
+Version:        2026.9.18
 Release:        1%{?dist}
 Summary:        Linux NTFS userspace driver
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://github.com/tuxera/ntfs-3g
-Source0:        http://tuxera.com/opensource/%{name}_ntfsprogs-%{version}%{?subver}.tgz
+Source0:        https://tuxera.com/opensource/%{name}_ntfsprogs-%{version}%{?subver}.tgz
 Patch0:         ntfs-3g_ntfsprogs-2011.10.9-RC-ntfsck-unsupported-return-0.patch
-# Upstream seems mostly gone, but there are some patches merged after 2026.7.7
-Patch1:		https://github.com/tuxera/ntfs-3g/commit/e73d481a76a5814076ff78a1c3a70e9b7da7c0e9.patch
-Patch2:		https://github.com/tuxera/ntfs-3g/commit/01b9bddc0c2165baa46abe7562550ef4e8c2752b.patch
-Patch3:		https://github.com/tuxera/ntfs-3g/commit/241ddb38605b6b298174e6f1019e8e2502a45558.patch
-Patch4:		https://github.com/tuxera/ntfs-3g/commit/1565b01e215c74e5c5f83f3ecde1ed682637dc5a.patch
-Patch5:		https://github.com/tuxera/ntfs-3g/commit/233658e5a1599e40bbd8211e64bb98a12751b1ea.patch
-Patch6:		https://github.com/tuxera/ntfs-3g/commit/75dcdc2cf37478fad6c0e3427403d198b554951d.patch
 
 BuildRequires:  make
 # ntfs-3g BuildRequires
@@ -93,7 +86,7 @@ included utilities see man 8 ntfsprogs after installation).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}_ntfsprogs-%{version}%{?subver} -p1
+%autosetup -n %{name}-%{version}%{?subver} -p1
 
 
 %build
@@ -203,6 +196,4 @@ rm -rf %{buildroot}%{_defaultdocdir}/%{name}/README
 %exclude %{_mandir}/man8/ntfs-3g*
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:2022.10.3-1
-- Import Fedora rawhide ntfs-3g (2022.10.3-12), HTTPS Source0 on download.tuxera.com, local Patch0
-
+%autochangelog

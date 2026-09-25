@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 3239f3c8611f0fbfb1a3fda77fb70e18f87bec102edf38f67e40902c56639c10
 
 Name:           python-botocore
-Version:        1.43.97
+Version:        1.43.102
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Low-level, data-driven core of boto 3.
@@ -59,5 +59,4 @@ Summary:        %{summary}
 %files -n python3-botocore -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.42.70-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

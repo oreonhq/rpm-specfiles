@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 1c4b4068d67061f2a2231ad2b5422e77acea1487ea9890f6320af614f4373dce
 %global source2_hash 4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae
-%global source3_hash 5e47bbfad7db2965d69580e918ee64edeb8d8d32de404b8dae9ce5c6d76a1472
+%global source3_hash da07b543872dc0bb2ff12aabd0c248578d78df3eb6b67efdc537a46d455c7f31
 
 %global major_version 5.5
 # Normally, this is the same as version, but... not always.
-%global test_version 5.5.0
+%global test_version 5.5.1
 # If you are incrementing major_version, enable bootstrapping and adjust accordingly.
 # Version should be the latest prior build. If you don't do this, RPM will break and
 # everything will grind to a halt.
@@ -17,7 +17,7 @@
 
 
 Name:           lua
-Version:        %{major_version}.0
+Version:        %{major_version}.1
 Release:        1%{?dist}
 Summary:        Powerful light-weight programming language
 License:        MIT
@@ -28,7 +28,7 @@ Source1:        mit.txt
 %if 0%{?bootstrap}
 Source2:        https://www.lua.org/ftp/lua-5.4.8.tar.gz
 %endif
-Source3:        https://www.lua.org/tests/lua-5.5.0-tests.tar.gz
+Source3:        https://www.lua.org/tests/lua-5.5.1-tests.tar.gz
 # multilib
 Source4:        luaconf.h
 Patch0:         %{name}-5.5.0-autotoolize.patch
@@ -44,8 +44,6 @@ Patch8:		%{name}-5.4.8-bug2.patch
 Patch9:		%{name}-5.4.8-bug3.patch
 %endif
 # https://www.lua.org/bugs.html
-Patch10:	lua-5.5.0-bug1.patch
-Patch11:	lua-5.5.0-bug2.patch
 
 BuildRequires:  automake autoconf libtool readline-devel ncurses-devel
 BuildRequires:  make
@@ -112,8 +110,6 @@ mv src/luaconf.h src/luaconf.h.template.in
 %patch -P3 -p1 -z .configure-linux
 
 # Bug patches here
-%patch -P10 -p1 -b .bug1
-%patch -P11 -p1 -b .bug2
 
 # Put proper version in configure.ac, patch0 hardcodes 5.5.0
 sed -i 's|5.5.0|%{version}|g' configure.ac
@@ -237,5 +233,4 @@ popd
 %{_libdir}/*.a
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{major_version}.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

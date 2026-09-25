@@ -1,11 +1,11 @@
-%global source0_hash b1e85a30405786ed8378b68dd57159315ad7ddc0a55e432aa9eeca6166ca53fe
+%global source0_hash d6a326a8b1ffb19495dea4ff5a09ef138bf3562ab1b069d3fb7efbc77b9f6aca
 
 # Perform optional tests
 %bcond perl_IPC_Run_enables_optional_test %{undefined rhel}
 
 Name:           perl-IPC-Run
-Version:        20250809.0
-Release:        2%{?dist}
+Version:        20260402.0
+Release:        1%{?dist}
 Summary:        Perl module for interacting with child processes
 # the rest:                     GPL+ or Artistic
 # The Win32* modules are not part of the binary RPM package
@@ -14,7 +14,7 @@ Summary:        Perl module for interacting with child processes
 # lib/IPC/Run/Win32IO.pm:       GPLv2 or Artistic
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IPC-Run
-Source0:        https://cpan.metacpan.org/modules/by-module/IPC/IPC-Run-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/IPC-Run-%{version}.tar.gz
 
 
 
@@ -113,5 +113,4 @@ make test
 %{_mandir}/man3/IPC::Run::Timer.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250809.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

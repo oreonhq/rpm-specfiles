@@ -1,12 +1,12 @@
-%global source0_hash 7645e29a83df27a46defa1dc1e7e84f6adf91645e03cdd06b4384079bc89aef1
+%global source0_hash ff3f941f82aa00f6e8326e9ae5d2adaf265cd227e3890d2051c3514b124467cb
 
 %global srcname simpleline
 
 Name: python-%{srcname}
 Summary: A Python library for creating text UI
 Url: https://github.com/rhinstaller/python-%{srcname}
-Version: 1.9.0
-Release: 18%{?dist}
+Version: 1.9.2
+Release: 1%{?dist}
 # This tarball was created from upstream git:
 #   git clone https://github.com/rhinstaller/python-simpleline
 #   cd python-simpleline && make archive
@@ -63,5 +63,4 @@ make test
 %{python3_sitelib}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.0-18
-- Prepare for Oreon 11 (RP1)
+%autochangelog

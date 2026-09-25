@@ -1,9 +1,9 @@
-%global source0_hash f5833dd2e1cd7739ec9182804a1a29c4f0cc7c2f26b633d3a2188b7766a88ecb
+%global source0_hash 952c03c33a6b337f12dae7a9b0f9dee86f867550d35c994d6bdaaddd37dc8454
 
 %{?mingw_package_header}
 
 Name:           mingw-expat
-Version:        2.8.4
+Version:        2.8.5
 Release:        1%{?dist}
 Summary:        MinGW Windows port of expat XML parser library
 
@@ -128,5 +128,4 @@ rm -r %{buildroot}%{mingw64_mandir}
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.1-1
-- Import
+%autochangelog

@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash bae119297191a948fa50cfa6d32c8b89cf477ba5177d871185d41e14cf676dbf
 
 %global debug_package %{nil}
 
 Name:    kf6
 # This version MUST remain in sync with KF6 versions!
-Version: 6.27.0
+Version: 6.30.0
 Release: 1%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
@@ -106,41 +106,4 @@ sed -i \
 %{_rpmconfigdir}/macros.d/macros.zz-kf6
 
 %changelog
-* Wed Jun 24 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.27.0-1
-- 6.27.0
-
-* Sun Apr 05 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-16
-- %%cmake_install_kf6: require files under .doc before install_html_docs (avoid empty-dir false positive)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-15
-- %%cmake_install_kf6: only run install_html_docs when Makefile or build.ninja defines that target
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-14
-- %%cmake_install_kf6: gate install_html_docs on %%_kf6_html_docs + populated .doc; add %%kf6_cmake_prepare_docs
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-13
-- %%cmake_install_kf6: plain cmake --install (avoid qt6 %%cmake_install install_html_docs)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-12
-- docs: note framework specs inline cmake --build alongside macros.zz-kf6
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-11
-- rpm-macros: install as macros.zz-kf6 so definitions load after qt6 (fix prepare_docs override)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10
-- macros: %%cmake_build_kf6 avoids qt6 %%cmake_build extra prepare_docs pass (qdoc SIGSEGV)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
-- macros: drop -DQDOC_BIN=/bin/true so real qdoc runs with patched qt6-qttools (QTBUG-142742)
-
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-8
-- macros: use -DQDOC_BIN=/bin/true instead of ECM patch (works with any unpatched ECM)
-
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-6
-- rpm-macros: restore qdoc deps, require clang-devel, set LLVM_INSTALL_DIR and QT_QPA_PLATFORM for mock
-
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-5
-- rpm-macros: stop requiring qt6-doc-devel and qdoc stack (ECM skips qdoc targets without it)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

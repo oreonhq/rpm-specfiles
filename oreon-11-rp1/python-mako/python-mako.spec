@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 233bb6599ff404f4fab751433f6c192a301b9fb1ecdc3403f6bcd81f2fde48b4
 
 Name:    python-mako
-Version: 1.4.1
+Version: 1.4.3
 Release: 1%{?dist}
 Summary: Mako template library for Python
 
@@ -9,7 +9,7 @@ Summary: Mako template library for Python
 # examples/bench/basic.py is BSD-3-Clause
 License: MIT AND Python-2.0.1 AND BSD-3-Clause
 URL:     https://www.makotemplates.org/
-Source0:        https://github.com/sqlalchemy/mako/archive/rel_%(echo 1.4.1 | sed "s/\./_/g").tar.gz
+Source0:        https://github.com/sqlalchemy/mako/archive/rel_%(echo 1.4.3 | sed "s/\./_/g").tar.gz
 
 BuildArch:     noarch
 BuildRequires: python3-devel
@@ -82,5 +82,4 @@ pytest-3
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.3-14
-- Prepare for Oreon 11 (RP1)
+%autochangelog

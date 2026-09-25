@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 73237f37f03306d68bfae133a9a50d5e9341384e198d5ab37eeca9ab534deed8
 
 %global major 6
 %global minor 0
-%global patchlevel 4
+%global patchlevel 5
 
 %global x11_app_defaults_dir %{_datadir}/X11/app-defaults
 
@@ -32,7 +32,6 @@ Patch1: gnuplot-4.2.0-fonts.patch
 # https://sourceforge.net/p/gnuplot/gnuplot-main/merge-requests/32/
 Patch2: gnuplot-make.patch
 # Fix for lua 5.5 - https://sourceforge.net/p/gnuplot/bugs/2859/
-Patch3: https://sourceforge.net/p/gnuplot/bugs/_discuss/thread/c76f097014/7d60/attachment/possible_lua_fix.patch
 Patch5: gnuplot-5.0.0-lua_checkint.patch
 Patch7: gnuplot-5.2.2-doc.patch
 
@@ -145,7 +144,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 %patch -P1 -p1 -b .font
 %patch -P2 -p1 -b .make
-%patch -P3 -p1 -b .lua5.5
 %patch -P5 -p1 -b .checkint
 %patch -P7 -p1 -b .doc
 sed -i -e 's:"/usr/lib/X11/app-defaults":"%{x11_app_defaults_dir}":' src/gplt_x11.c
@@ -316,5 +314,4 @@ fi
 %{_texmf_vendor}/tex/latex/gnuplot/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{major}.%{minor}.%{patchlevel}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

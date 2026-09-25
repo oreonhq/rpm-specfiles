@@ -1,8 +1,8 @@
-%global source0_hash abfed50b6d4da51345713661370290f4f4747263ee73dc90356299dfc7990c78
+%global source0_hash f564011d38b2888d583d510b08e69ffa15aa117155db1b9b49ef1dfe1fa25111
 
 Summary: Library for processing UTF-8 encoded Unicode strings
 Name:    utf8proc
-Version: 2.11.3
+Version: 2.12.0
 Release: %autorelease
 License: MIT AND Unicode-DFS-2015
 URL:     http://julialang.org/utf8proc/
@@ -65,5 +65,4 @@ rm %{buildroot}%{_libdir}/libutf8proc.a
 %{_libdir}/pkgconfig/libutf8proc.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,10 +1,10 @@
-%global source0_hash 82b79ce680251045c244ee059626fecbf98270bed1467f0175ff5ea91071437e
+%global source0_hash 699f3350dbb7bd8fdc9f3b013b0c91b7c059783708443e39bc395fa33352f006
 
 %bcond perl_HTTP_Message_enables_IO_Compress_Brotli %{undefined rhel}
 
 Name:           perl-HTTP-Message
-Version:        7.01
-Release:        2%{?dist}
+Version:        7.04
+Release:        1%{?dist}
 Summary:        HTTP style message
 # CONTRIBUTING.md:  CC0-1.0
 # other files:      GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -144,5 +144,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.01-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

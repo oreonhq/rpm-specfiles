@@ -1,4 +1,4 @@
-%global source0_hash 5b337c9e0e6f037c16c3ba01c0b758600647a83de4a5e78e41a5cc26ee68a1ee
+%global source0_hash ea6e8ce94ab51c1088071d7b0427c7f08eb1e2002ac9c69c6275aab958e7cf90
 
 # Don not run gnupg1 tests by default, they need network access
 # (Socket::inet_aton('pool.sks-keyservers.net')).
@@ -11,8 +11,8 @@
 %endif
 
 Name:           perl-CPAN
-Version:        2.38
-Release:        522%{?dist}
+Version:        2.41
+Release:        1%{?dist}
 Summary:        Query, download and build perl modules from CPAN sites
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN
@@ -340,5 +340,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.38-522
-- Prepare for Oreon 11 (RP1)
+%autochangelog

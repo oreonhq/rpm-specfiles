@@ -1,7 +1,7 @@
-%global source0_hash aace1ac913e3c9f259181d50e14ed8b8b50d84fc7afdb47ef6cda2d0806f64f3
+%global source0_hash b9621a52478e551c33ccb2f2a471d844ac6949cfa9156dc2e32cbd5d3bb81fa3
 
 Name:           perl-Sys-Virt
-Version:        12.0.0
+Version:        12.7.0
 Release:        1%{?dist}
 Summary:        Represent and manage a libvirt hypervisor connection
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
@@ -100,5 +100,4 @@ export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print
 %{_libexecdir}/%{name}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.0.0-1
-- Import
+%autochangelog

@@ -1,6 +1,6 @@
-%global source0_hash d0a623d2b313f9fa8290bbd2b19c2e4c803d05716aa35a623b281e0851c07176
+%global source0_hash 82f6b9e3a40632555e92e506e2ca8a5b1deed5d57f61362e803d0e2a9c509c8b
 
-%global upstream_version 3.2
+%global upstream_version 3.4
 
 Name:           ongres-scram
 Version:        %(echo %{upstream_version} | sed 's/-/~/g')
@@ -8,7 +8,7 @@ Release:        %autorelease
 Summary:        Salted Challenge Response Authentication Mechanism (SCRAM) - Java Implementation
 License:        BSD-2-Clause
 URL:            https://github.com/ongres/scram
-Source0:        https://github.com/ongres/scram/archive/refs/tags/3.2.tar.gz#/scram-3.2.tar.gz
+Source0:        https://github.com/ongres/scram/archive/refs/tags/%{upstream_version}.tar.gz#/scram-%{upstream_version}.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
@@ -69,5 +69,4 @@ find \( -name '*.jar' -o -name '*.class' \) -delete
 %license LICENSE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2-1
-- Import
+%autochangelog

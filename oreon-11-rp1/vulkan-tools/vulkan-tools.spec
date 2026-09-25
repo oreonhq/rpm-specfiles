@@ -1,13 +1,13 @@
-%global source0_hash dc65f1ea97dd0b2155c2281a79e87d27183c0737fb96377744091a3c8460ae1e
+%global source0_hash a41172b681c2b9d40e154b0e3acd56b10e12eb910c4dbe60a1d90db0b73e01b2
 
 Name:           vulkan-tools
-Version:        1.4.362
+Version:        1.4.363
 Release:        %autorelease
 Summary:        Vulkan tools
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/Vulkan-Tools
-Source0:        https://github.com/KhronosGroup/Vulkan-Tools/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-Tools-sdk-1.4.341.0.tar.gz
+Source0:        https://github.com/KhronosGroup/Vulkan-Tools/archive/v%{version}.tar.gz#/Vulkan-Tools-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -35,7 +35,7 @@ Vulkan tools
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n Vulkan-Tools-vulkan-sdk-%{version} -p1
+%autosetup -n Vulkan-Tools-%{version} -p1
 
 
 %build
@@ -52,5 +52,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_bindir}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.341.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

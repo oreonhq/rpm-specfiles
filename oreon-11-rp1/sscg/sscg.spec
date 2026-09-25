@@ -1,4 +1,4 @@
-%global source0_hash 277e994b50dea28bfec64b43ba689a4fb5c31bb777c7aedacbdb1f491dd48c60
+%global source0_hash e14004354d5654d48ca04957ea54037d372b9f54916135da988a9c8baa68d026
 
 %global provider        github
 %global provider_tld    com
@@ -11,13 +11,13 @@
 %{!?meson_test: %global meson_test %{__meson} test -C %{_vpath_builddir} --num-processes %{_smp_build_ncpus} --print-errorlogs}
 
 Name:           sscg
-Version:        4.0.3
+Version:        4.0.4
 Release:        %autorelease
 Summary:        Simple Signed Certificate Generator
 
 License:        GPL-3.0-or-later WITH cryptsetup-OpenSSL-exception
 URL:            https://%{provider_prefix}
-Source0:        https://github.com/sgallagher/sscg/archive/refs/tags/sscg-4.0.3.tar.gz#/sscg-4.0.3.tar.gz
+Source0:        https://github.com/sgallagher/sscg/archive/refs/tags/sscg-4.0.4.tar.gz#/sscg-4.0.4.tar.gz
 BuildRequires:  gcc
 BuildRequires:  libtalloc-devel
 BuildRequires:  openssl
@@ -29,7 +29,6 @@ BuildRequires:  help2man
 
 # Upstream patch to avoid segfaults when receiving bad CLI arguments
 # https://github.com/sgallagher/sscg/commit/0c37e7ace585cfb550a0ffd9d5c331d059fd687f
-Patch: 0001-Avoid-segfault-on-receiving-bad-CLI-arguments.patch
 
 
 %description
@@ -62,5 +61,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man8/%{name}.8*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

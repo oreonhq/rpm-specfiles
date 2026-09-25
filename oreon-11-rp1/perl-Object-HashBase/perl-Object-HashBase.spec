@@ -1,8 +1,8 @@
-%global source0_hash 18f70c6eddf44b19f36c190b6747b35b43198c394b0a36c6dd63946ff1a11d0a
+%global source0_hash ab4f6ba451f717c96122f44030cd0228d25293aaa7fb232985fe4aedb450e024
 
 Name:           perl-Object-HashBase
-Version:        0.015
-Release:        4%{?dist}
+Version:        0.018
+Release:        1%{?dist}
 Summary:        Build hash-based classes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Object-HashBase
@@ -105,5 +105,4 @@ make test
 %{perl_vendorlib}/Object/HashBase
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.015-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

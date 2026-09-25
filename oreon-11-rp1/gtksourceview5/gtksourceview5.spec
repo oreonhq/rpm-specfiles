@@ -1,14 +1,14 @@
-%global source0_hash none
+%global source0_hash 3ebce33c781e65590a450ecd3ffade480d8e3135b52ee996f1620d6c7dffbbff
 
 %global glib_version 2.72
 %global gtk_version 4.17
 
 %global api_ver 5
 
-%global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
+%define major_minor_version %(echo %{version} | cut -d. -f1-2)
 
 Name:           gtksourceview5
-Version:        5.21.0
+Version:        5.22.0
 Release:        %autorelease
 Summary:        Source code editing widget
 
@@ -103,5 +103,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/installed-tests
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.20.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

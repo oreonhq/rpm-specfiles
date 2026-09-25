@@ -1,18 +1,17 @@
-%global source0_hash none
+%global source0_hash ab0a6ca09f8ef70c564c8241fb5a23957886a0b53fb58412b5e07eaf07dba743
 
 %global libname mesonbuild
 
 %bcond check 1
 
 Name:           meson
-Version:        1.12.0
+Version:        1.12.1
 Release:        %autorelease
 Summary:        High productivity build system
 
 License:        Apache-2.0
 URL:            https://mesonbuild.com/
 Source:        https://github.com/mesonbuild/meson/releases/download/%{version_no_tilde .}/meson-%{version_no_tilde %{quote:}}.tar.gz
-Patch0:         skip-aarch64-bindgen-cross-test-on-aarch64.patch
 
 BuildArch:      noarch
 
@@ -144,8 +143,4 @@ export MESON_PRINT_TEST_OUTPUT=1
 %{_datadir}/zsh/site-functions/_meson
 
 %changelog
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.2-2
-- skip bindgen cross unittest on native aarch64 (meson 1.11.1 backport)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

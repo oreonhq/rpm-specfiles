@@ -1,4 +1,4 @@
-%global source0_hash 953ef4c2547b1611f90102f531f362bcfd6c76751eba2ae8c0f23b38947ef48d
+%global source0_hash 972d7e5b2cc9b7b8f9b43fe637b4260a2035bef5bb59bbb7fbf02434610c2b3f
 
 %{?mingw_package_header}
 
@@ -8,14 +8,14 @@
 %define baseversion %(echo %{version} | awk -F'.' '{print $1"."$2"."$3}')
 
 Name:          mingw-%{pkgname}
-Version:       1.4.362
+Version:       1.4.364
 Release:       1%{?dist}
 Summary:       MinGW Windows %{pkgname}
 
 License:       Apache-2.0
 BuildArch:     noarch
 URL:           https://github.com/KhronosGroup/%{srcname}
-Source0:       https://github.com/KhronosGroup/%{srcname}/archive/vulkan-sdk-%{version}/%{srcname}-%{version}.tar.gz
+Source0:       https://github.com/KhronosGroup/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
 
 BuildRequires: cmake
 BuildRequires: ninja-build
@@ -46,7 +46,7 @@ MinGW Windows %{pkgname}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n %{srcname}-vulkan-sdk-%{version}
+%autosetup -p1 -n %{srcname}-%{version}
 
 %build
 %mingw_cmake -G Ninja

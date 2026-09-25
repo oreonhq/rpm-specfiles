@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d26340cf625316cc9127e05b392214a24a10889f4f1d9940c2ea64bab710a855
 
 %global _hardened_build 1
 # These are rpm macros and are 0 or 1
@@ -32,7 +32,7 @@
 Name: libreswan
 Summary: Internet Key Exchange (IKEv1 and IKEv2) implementation for IPsec
 # version is generated in the release script
-Version: 5.3
+Version: 5.4
 Release: %autorelease
 # The code in lib/libswan/nss_copies.c is under MPL-2.0, while the
 # rest is under GPL-2.0-or-later
@@ -48,7 +48,6 @@ Source5: https://download.libreswan.org/cavs/ikev2.fax.bz2
 %endif
 
 Patch1: libreswan-4.15-ipsec_import.patch
-Patch2: libreswan-5.3-unused-but-set-variable.patch
 
 BuildRequires: audit-libs-devel
 BuildRequires: bison
@@ -248,5 +247,4 @@ certutil -N -d sql:$tmpdir --empty-password
 %{_libexecdir}/ipsec
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

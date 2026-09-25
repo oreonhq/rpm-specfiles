@@ -1,16 +1,15 @@
-%global source0_hash 88b8e4ded6ea1f3f2223cc3e37072e2db1e123b90d36c309816341ae9d966723
+%global source0_hash 0fe55b672cbeaa4dc047b7658f0a5d6aae0d94a5ee25727d25df43f148fc8709
 
 %global debug_package   %{nil}
 
 Name:           PEGTL
-Version:        4.0.1
+Version:        4.0.2
 Release:        1%{?dist}
 Summary:        Parsing Expression Grammar Template Library
 License:        MIT
 URL:            https://github.com/taocpp/%{name}
-Source:        https://github.com/taocpp/PEGTL/archive/refs/tags/4.0.1.tar.gz#/PEGTL-2.8.3.tar.gz
+Source:        https://github.com/taocpp/PEGTL/archive/refs/tags/4.0.2.tar.gz#/PEGTL-2.8.3.tar.gz
 
-Patch:          PEGTL-compiler-warning.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -64,5 +63,4 @@ rm -rv %{buildroot}%{_pkgdocdir}
 %{_datadir}/cmake/pegtl/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.3-15
-- Prepare for Oreon 11 (RP1)
+%autochangelog

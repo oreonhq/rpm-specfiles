@@ -1,4 +1,4 @@
-%global source0_hash 40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946
+%global source0_hash f7ef3ae8a22e521f289803fe93543eb64c329b58aa73a9e224dfd915a2a5f4f7
 
 # OpenSSL ENGINE support
 # This is deprecated by OpenSSL since OpenSSL 3.0 and by Fedora since Fedora 41
@@ -13,8 +13,8 @@
 
 Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
-Version: 8.18.0
-Release: 6%{?dist}
+Version: 8.22.0
+Release: 1%{?dist}
 License: curl
 Source0:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz
 Source1:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
@@ -22,27 +22,6 @@ Source1:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
 # to Daniel's address page https://daniel.haxx.se/address.html for the GPG Key,
 # which points to the GPG key as of April 7th 2016 of https://daniel.haxx.se/mykey.asc
 Source2:        mykey.asc
-
-# update timer unconditionally in multi_remove_handle
-# rubygem-ethon: FTBFS in Fedora Rawhide
-# https://bugzilla.redhat.com/show_bug.cgi?id=2405328
-Patch001: 0001-curl-8.18.0-multi-update-timer-unconditionally-in-multi_remove_h.patch
-
-# Fix `Could not find digest algorithm UNDEF (NID 0)`
-# https://bugzilla.redhat.com/show_bug.cgi?id=2438170
-Patch002: 0002-curl-8.18.0-openssl-channel_binding-lookup-digest-algorithm-with.patch
-
-# Fix bad reuse of HTTP Negotiate connection (CVE-2026-1965)
-Patch003: 0003-curl-8.18.0-CVE-2026-1965.patch
-
-# Fix token leak with redirect and netrc (CVE-2026-3783)
-Patch004: 0004-curl-8.18.0-CVE-2026-3783.patch
-
-# Fix wrong proxy connection reuse with credentials (CVE-2026-3784)
-Patch005: 0005-curl-8.18.0-CVE-2026-3784.patch
-
-# Fix use after free in SMB connection reuse (CVE-2026-3805)
-Patch006: 0006-curl-8.18.0-CVE-2026-3805.patch
 
 # patch making libcurl multilib ready
 Patch101: 0101-curl-7.32.0-multilib.patch
@@ -272,9 +251,6 @@ sed -e 's|NUM_THREADS 1000$|NUM_THREADS 256|' \
     -i tests/libtest/lib3026.c
 %endif
 
-# adapt test 323 for updated OpenSSL
-sed -e 's|^35$|35,52|' -i tests/data/test323
-
 # use localhost6 instead of ip6-localhost in the curl test-suite
 (
     # avoid glob expansion in the trace output of `bash -x`
@@ -466,5 +442,4 @@ rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/wcurl.1*
 %{_libdir}/libcurl.so.4.[0-9].[0-9].minimal
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.18.0-6
-- Import
+%autochangelog

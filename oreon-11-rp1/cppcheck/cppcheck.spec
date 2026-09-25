@@ -1,4 +1,4 @@
-%global source0_hash 7be7992439339017edb551d8e7d2315f9bb57c402da50c2cee9cd0e2724600a1
+%global source0_hash d74945deb2d50393430e07596b766f8a779512c7f60dac2a30ea64e059ece57b
 
 %if 0%{?fedora} >= 44 || 0%{?rhel} >= 10
 %global with_rules 0
@@ -7,7 +7,7 @@
 %endif
 
 Name:           cppcheck
-Version:        2.21.1
+Version:        2.22.0
 Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPL-3.0-or-later
@@ -140,5 +140,4 @@ grep -l "#\!/usr/bin/env python3" %{buildroot}%{_datadir}/Cppcheck/addons/*.py |
 %{_bindir}/cppcheck-htmlreport
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

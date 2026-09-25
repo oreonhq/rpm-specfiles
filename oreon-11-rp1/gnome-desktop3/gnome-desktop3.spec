@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 9ebeb9f1769d3c310caeadd921ab34c8f264b92937740518b3bc859a579a6912
 
 %global gdk_pixbuf2_version               2.36.5
 %global gtk3_version                      3.3.6
-%global gtk4_version                      4.4.0
+%global gtk4_version                      4.12.0
 %global glib2_version                     2.53.0
 %global gsettings_desktop_schemas_version 3.27.0
 %global po_package                        gnome-desktop-3.0
@@ -10,18 +10,19 @@
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:    gnome-desktop3
-Version: 44.5
+Version: 51.0
 Release: %autorelease
 Summary: Library with common API for various GNOME modules
 
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND GFDL-1.1-or-later
 URL:     https://gitlab.gnome.org/GNOME/gnome-desktop
-Source: https://download.gnome.org/sources/gnome-desktop/44/gnome-desktop-%{tarball_version}.tar.xz
+Source: https://download.gnome.org/sources/gnome-desktop/%{lua:print((macros.version:gsub("[~.].*","")))}/gnome-desktop-%{tarball_version}.tar.xz
 BuildRequires: gcc
 BuildRequires: gettext
 BuildRequires: gtk-doc
 BuildRequires: itstool
 BuildRequires: meson
+BuildRequires: pkgconfig(fontconfig)
 BuildRequires: pkgconfig(gdk-pixbuf-2.0) >= %{gdk_pixbuf2_version}
 BuildRequires: pkgconfig(gio-2.0) >= %{glib2_version}
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}
@@ -32,7 +33,9 @@ BuildRequires: pkgconfig(gtk4) >= %{gtk4_version}
 BuildRequires: pkgconfig(iso-codes)
 BuildRequires: pkgconfig(libseccomp)
 BuildRequires: pkgconfig(libudev)
+BuildRequires: pkgconfig(libsystemd)
 BuildRequires: pkgconfig(xkeyboard-config)
+BuildRequires: pkgconfig(xkbregistry)
 BuildRequires: python3
 BuildRequires: python3dist(langtable)
 
@@ -68,7 +71,9 @@ developing applications that use %{name}.
 
 %package -n gnome-desktop4
 Summary: Library with common API for various GNOME modules
-License: GPL-2.0-or-later AND LGPL-2.0-or-later
+# qrcodegen (bundled, statically linked into libgnome-qr-4) is MIT
+License: GPL-2.0-or-later AND LGPL-2.0-or-later AND MIT
+Provides: bundled(qrcodegen)
 # Depend on base package for translations, help, and version.
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
@@ -114,7 +119,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc AUTHORS NEWS README.md
 %license COPYING COPYING.LIB
 # LGPL
-%{_libdir}/libgnome-desktop-3.so.20{,.*}
+%{_libdir}/libgnome-desktop-3.so.21{,.*}
 %{_libdir}/girepository-1.0/GnomeDesktop-3.0.typelib
 %{_libexecdir}/gnome-desktop-debug/
 
@@ -134,6 +139,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libgnome-bg-4.so.2{,.*}
 %{_libdir}/libgnome-desktop-4.so.2{,.*}
 %{_libdir}/libgnome-rr-4.so.2{,.*}
+%{_libdir}/libgnome-qr-4.so.0{,.*}
+%{_libdir}/libgnome-qr-gtk-4.so.0{,.*}
 %{_libdir}/girepository-1.0/Gnome*-4.0.typelib
 
 %files -n gnome-desktop4-devel
@@ -147,5 +154,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/installed-tests
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 44.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

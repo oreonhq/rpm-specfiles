@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3c078d7b88faee3d0f68adcee1392b1bed84731b91a337ec894cc88aa8a8b813
 
 # Minimum GNOME Shell version supported
 %global min_gs_version %%(cut -d "." -f 1 <<<%{version})
@@ -14,7 +14,7 @@
 %endif
 
 Name:           gnome-shell-extensions
-Version:        50.0
+Version:        51.0
 Release:        %autorelease
 Summary:        Modify and extend GNOME Shell functionality and behavior
 
@@ -339,5 +339,4 @@ rm -rf %{buildroot}/%{_datadir}/xsessions
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

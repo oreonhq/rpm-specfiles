@@ -1,8 +1,8 @@
-%global source0_hash 97e1c4d1661961ac50e64eb313d63b8f70f21a2ce03c155076920226097078d2
+%global source0_hash 5ebbb252bb296e6a2ce4cf544ee378919252c4b7e4ffecd9afd67a5735b57749
 
 Name:           perl-Locale-Codes
-Version:        3.86
-Release:        2%{?dist}
+Version:        3.91
+Release:        1%{?dist}
 Summary:        Distribution of modules to handle locale codes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Locale-Codes
@@ -93,5 +93,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.86-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

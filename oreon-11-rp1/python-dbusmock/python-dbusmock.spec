@@ -1,9 +1,9 @@
-%global source0_hash ac25017dc67df1eb9b954c733484552f1bde0c13d456d380d14c277caee2cf2e
+%global source0_hash 221b65e1c2e48de9fd11bf7e8c165adaf91648f49a11f390d086a498386f2984
 
 %global modname dbusmock
 
 Name:             python-%{modname}
-Version:          0.38.0
+Version:          0.38.1
 Release:          1%{?dist}
 Summary:          Mock D-Bus objects
 
@@ -56,5 +56,4 @@ rm -rf python-%{modname}.egg-info
 %doc README.md COPYING
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.38.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

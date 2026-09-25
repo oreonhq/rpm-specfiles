@@ -1,8 +1,8 @@
-%global source0_hash 81e6518f2c4656fdeaf18a018f135e96a96e7f66dbe1c1f05860dd94772176cc
-%global sover 31
+%global source0_hash 0dc41a9dd84c868ad89c892382f75f6835a73decbefab9366d6f168bf9322954
+%global sover 34
 
 Name:           openexr
-Version:        3.4.15
+Version:        3.5.0
 Release:        1%{?dist}
 Summary:        Tools and libraries for ILM's OpenEXR high dynamic-range image format
 License:        BSD-3-Clause
@@ -56,32 +56,28 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_bindir}/*
 
 %files libs
-%{_libdir}/libIex-3_2.so.%{sover}{,.*}
-%{_libdir}/libIlmThread-3_2.so.%{sover}{,.*}
-%{_libdir}/libOpenEXR-3_2.so.%{sover}{,.*}
-%{_libdir}/libOpenEXRCore-3_2.so.%{sover}{,.*}
-%{_libdir}/libOpenEXRUtil-3_2.so.%{sover}{,.*}
+%{_libdir}/libIex-3_5.so.%{sover}{,.*}
+%{_libdir}/libIlmThread-3_5.so.%{sover}{,.*}
+%{_libdir}/libOpenEXR-3_5.so.%{sover}{,.*}
+%{_libdir}/libOpenEXRCore-3_5.so.%{sover}{,.*}
+%{_libdir}/libOpenEXRUtil-3_5.so.%{sover}{,.*}
 
 %files devel
 %{_includedir}/OpenEXR
 %{_libdir}/libIex.so
-%{_libdir}/libIex-3_2.so
+%{_libdir}/libIex-3_5.so
 %{_libdir}/libIlmThread.so
-%{_libdir}/libIlmThread-3_2.so
+%{_libdir}/libIlmThread-3_5.so
 %{_libdir}/libOpenEXR.so
-%{_libdir}/libOpenEXR-3_2.so
+%{_libdir}/libOpenEXR-3_5.so
 %{_libdir}/libOpenEXRCore.so
-%{_libdir}/libOpenEXRCore-3_2.so
+%{_libdir}/libOpenEXRCore-3_5.so
 %{_libdir}/libOpenEXRUtil.so
-%{_libdir}/libOpenEXRUtil-3_2.so
+%{_libdir}/libOpenEXRUtil-3_5.so
 %{_libdir}/cmake/OpenEXR
 %{_libdir}/pkgconfig/OpenEXR.pc
 %{_docdir}/OpenEXR/examples
 
 
 %changelog
-* Wed Jun 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-7
-- downgrade to 3.2.4
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.3-2
-- Add OpenEXR 3 for HDR imaging
+%autochangelog

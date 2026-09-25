@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash fbd62a100ab7bb8746ba0661255c3c48185b1e9021507c624da01fbc696330ec
 
 ### Header
 Summary: Collection of basic system utilities
 Name: util-linux
-Version: 2.42.3
+Version: 2.42.4
 # -p -e rc1
-Release: %autorelease -b7
+Release: %autorelease
 License: GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause-UC AND LicenseRef-Fedora-Public-Domain
 URL: https://en.wikipedia.org/wiki/Util-linux
 
@@ -114,8 +114,6 @@ Patch1: 0001-login-add-run-motd.d-to-the-hardcoded-MOTD_FILE.patch
 Patch2: 0002-libmount-disable-EROFS-backing-file-support.patch
 
 # Upstream backports
-Patch3: 0003-build-sys-gcc-ignore-Wunused-but-set-variable-for-bi.patch
-Patch4: 0004-blkid-Drop-const-from-blkid_partitions_get_name.patch
 
 
 %description
@@ -1052,11 +1050,4 @@ fi
 %{compldir}/scriptreplay
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.3-3
-- Fix upstream_major for spectool (cut -f1-2 so URL uses v2.41 not v2.41.3)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.3-2
-- Source0 from kernel.org mirror (mirrors.edge.kernel.org 404 for this point release)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

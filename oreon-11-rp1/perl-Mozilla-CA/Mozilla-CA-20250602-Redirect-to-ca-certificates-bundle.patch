@@ -15,8 +15,6 @@ details.
 
 Signed-off-by: Petr Písař <ppisar@redhat.com>
 
-diff --git a/MANIFEST b/MANIFEST
-index a88847b..6577ede 100644
 --- a/MANIFEST
 +++ b/MANIFEST
 @@ -1,7 +1,6 @@
@@ -27,8 +25,6 @@ index a88847b..6577ede 100644
  maint/cacert-diff
  maint/get-tarball-name
  maint/make-tarball
-diff --git a/Makefile.PL b/Makefile.PL
-index 9faf720..a491813 100644
 --- a/Makefile.PL
 +++ b/Makefile.PL
 @@ -90,3 +90,11 @@
@@ -43,12 +39,10 @@ index 9faf720..a491813 100644
 +    if ($name =~ /cacert.pem\z/) { $name = '' };
 +    return $name;
 +}
-diff --git a/lib/Mozilla/CA.pm b/lib/Mozilla/CA.pm
-index e4a6c56..fdb3c75 100644
 --- a/lib/Mozilla/CA.pm
 +++ b/lib/Mozilla/CA.pm
 @@ -5,11 +5,9 @@
- our $VERSION = '20250602';
+ our $VERSION = '20260813';
  
  use File::Spec ();
 -use File::Basename qw(dirname);
@@ -60,6 +54,3 @@ index e4a6c56..fdb3c75 100644
  }
  
  1;
--- 
-2.25.4
-

@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 0084b926fff9a960ddbf175654db39054ed60afbb830d2039d8a60686ca06a7f
 
 Summary:   Portable Hardware Locality - portable abstraction of hierarchical architectures
 Name:      hwloc
-Version:   2.12.0
+Version:   2.15.0
 Release:   %autorelease
 License:   BSD-2-Clause
 URL:       http://www.open-mpi.org/projects/hwloc/
@@ -175,5 +175,4 @@ LD_LIBRARY_PATH=$PWD/hwloc/.libs make check
 %{_libdir}/%{name}/hwloc*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.0-1
-- Import
+%autochangelog

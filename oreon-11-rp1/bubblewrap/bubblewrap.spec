@@ -1,7 +1,7 @@
-%global source0_hash 988fd6b232dafa04b8b8198723efeaccdb3c6aa9c1c7936219d5791a8b7a8646
+%global source0_hash 4734237473c0e5d695e4e9034a34e43b2dbf5164655bd13fa59ae376b2b7a765
 
 Name:    bubblewrap
-Version: 0.12.0
+Version: 0.13.0
 Release: 1%{?dist}
 Summary: Core execution tool for unprivileged containers
 
@@ -50,5 +50,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man1/bwrap.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.0-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog
