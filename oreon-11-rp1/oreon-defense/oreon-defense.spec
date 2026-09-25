@@ -1,5 +1,5 @@
 Name:           oreon-defense
-Version:        1.0.2
+Version:        1.0.3
 Release:        1%{?dist}
 Summary:        Oreon security system with real-time protection
 License:        GPL-3.0-or-later
@@ -37,6 +37,7 @@ Straightforward protection and visibility with real-time alerts.
 %install
 %cmake_install
 install -D -m 0755 scripts/trigger-scan.sh %{buildroot}%{_libexecdir}/oreon-defense/trigger-scan.sh
+install -D -m 0755 scripts/test_installed_detection.sh %{buildroot}%{_libexecdir}/oreon-defense/test_installed_detection.sh
 install -D -m 0644 config/config.json.example %{buildroot}%{_sysconfdir}/oreon-defense/config.json
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/autostart
 cat > %{buildroot}%{_sysconfdir}/xdg/autostart/oreon-defense-autostart.desktop <<'EOF'
@@ -84,6 +85,7 @@ fi
 %{_bindir}/oreon-defense
 %{_bindir}/oreon-defense-daemon
 %{_libexecdir}/oreon-defense/trigger-scan.sh
+%{_libexecdir}/oreon-defense/test_installed_detection.sh
 %{_datadir}/applications/oreon-defense.desktop
 %{_sysconfdir}/xdg/autostart/oreon-defense-autostart.desktop
 %{_datadir}/oreon-defense/
