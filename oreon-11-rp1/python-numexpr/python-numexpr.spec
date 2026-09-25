@@ -1,4 +1,4 @@
-%global source0_hash 7cb4c2d5d686f366e1121c287f48c3964ae3ec2ecc559d64a12bb315beebbf9a
+%global source0_hash d85f1c1b41dd26585f452ed446b11a3d6d52ffe735ca0fd56b5d5e02df910ae1
 
 Summary:        Fast numerical array expression evaluator for Python and NumPy
 Name:           python-numexpr
