@@ -54,7 +54,9 @@ BuildRequires: make
 BuildRequires: ostree-devel
 BuildRequires: openssl-devel
 BuildRequires: go-md2man
-%if 0%{?rhel} || (0%{?oreon} >= 11)
+%if 0%{?oreon} >= 11
+BuildRequires: cargo-rpm-macros >= 25
+%elif 0%{?rhel}
 BuildRequires: rust-toolset
 %else
 BuildRequires: cargo-rpm-macros >= 25

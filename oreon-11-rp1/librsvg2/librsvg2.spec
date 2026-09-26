@@ -77,7 +77,9 @@ BuildRequires:  pkgconfig(pangocairo)
 BuildRequires:  pkgconfig(pangoft2)
 BuildRequires:  vala
 BuildRequires:  /usr/bin/rst2man
-%if 0%{?bundled_rust_deps}
+%if 0%{?oreon} >= 11
+BuildRequires:  cargo-rpm-macros
+%elif 0%{?bundled_rust_deps}
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  cargo-rpm-macros

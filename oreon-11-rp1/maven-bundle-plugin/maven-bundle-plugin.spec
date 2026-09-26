@@ -34,6 +34,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
+BuildRequires:  mvn(org.apache.felix:org.apache.felix.metatype)
 # TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 6.1.2-20
 

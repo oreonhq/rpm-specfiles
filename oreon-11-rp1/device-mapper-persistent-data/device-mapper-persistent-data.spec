@@ -21,7 +21,11 @@ URL: https://github.com/jthornber/thin-provisioning-tools
 #Source0: https://github.com/jthornber/thin-provisioning-tools/archive/thin-provisioning-tools-%%{version}.tar.gz
 Source0:        https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz#/device-mapper-persistent-data-%{version}.tar.gz
 Source1:        thin-provisioning-tools-%{version}-vendor.tar.xz
-%if %{defined rhel} || (0%{?oreon} >= 11)
+%if 0%{?oreon} >= 11
+BuildRequires: cargo-rpm-macros >= 24
+BuildRequires: rust >= 1.35
+BuildRequires: cargo
+%elif %{defined rhel}
 BuildRequires: rust-toolset
 %else
 BuildRequires: rust-packaging

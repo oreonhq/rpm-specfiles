@@ -29,7 +29,7 @@ BuildRequires:  gettext
 BuildRequires:  make
 BuildRequires:  %{_bindir}/glib-compile-schemas
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires:  sassc
 %endif
 

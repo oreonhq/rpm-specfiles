@@ -147,3 +147,4 @@ oreon-11-rp1/**/*.crate
 !oreon-11-rp1/xhtml2fo-style-xsl/sample-xsl-xhtml2fo.zip
 !oreon-11-rp1/qt5-doc/qt-doc-opensource-src-5.15.16.tar.xz.part-00
 !oreon-11-rp1/qt5-doc/qt-doc-opensource-src-5.15.16.tar.xz.part-01
+!oreon-11-rp1/device-mapper-persistent-data/thin-provisioning-tools-1.3.4-vendor.tar.xz

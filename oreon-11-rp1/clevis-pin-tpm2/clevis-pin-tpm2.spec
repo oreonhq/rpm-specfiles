@@ -34,14 +34,16 @@ Source:        https://github.com/fedora-iot/clevis-pin-tpm2//archive/refs/tags/
 #   cargo vendor && tar Jcvf ../%%{name}-%%{version}-vendor.tar.xz vendor/ ; popd
 Source1:        https://github.com/fedora-iot/clevis-pin-tpm2/archive/refs/tags/v%{version}.tar.gz#/clevis-pin-tpm2-0.5.5.tar.gz
 
-%if 0%{?rhel} || (0%{?oreon} >= 11)
+%if 0%{?oreon} >= 11
+BuildRequires:  cargo-rpm-macros >= 26
+%elif 0%{?rhel}
 BuildRequires:  rust-toolset
-BuildRequires:  clang-devel
-BuildRequires:  openssl-devel
-BuildRequires:  tpm2-tss-devel
 %else
 BuildRequires:  cargo-rpm-macros >= 26
 %endif
+BuildRequires:  clang-devel
+BuildRequires:  openssl-devel
+BuildRequires:  tpm2-tss-devel
 
 Requires:       clevis
 

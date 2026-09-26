@@ -74,18 +74,6 @@ use the "const_new" feature of the "%{crate}" crate.
 %files       -n %{name}+const_new-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+debugger_visualizer-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+debugger_visualizer-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "debugger_visualizer" feature of the "%{crate}" crate.
-
-%files       -n %{name}+debugger_visualizer-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+drain_filter-devel
 Summary:        %{summary}
 BuildArch:      noarch
