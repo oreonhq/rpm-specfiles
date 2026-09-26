@@ -12,6 +12,8 @@ Source0:        https://cpan.metacpan.org/authors/id/B/BB/BBB/Net-Server-%{versi
 
 # Only initialize existing Net::SSLeay methods (RT#154333)
 
+Patch0:         Net-Server-2.018-ipv6-test-probes.patch
+
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

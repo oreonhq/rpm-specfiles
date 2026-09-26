@@ -556,6 +556,12 @@ fi
 %{_unitdir}/fstrim.*
 
 %{_bindir}/bits
+%{_bindir}/copyfilerange
+%{_bindir}/getino
+%{_mandir}/man1/copyfilerange.1*
+%{_mandir}/man1/getino.1*
+%{_datadir}/bash-completion/completions/copyfilerange
+%{_datadir}/bash-completion/completions/getino
 %{_bindir}/cal
 %{_bindir}/chmem
 %{_bindir}/choom
@@ -989,6 +995,8 @@ fi
 %{_libdir}/pkgconfig/lastlog2.pc
 %{_mandir}/man3/lastlog2.3.*
 %{_mandir}/man3/ll2_import_lastlog.3*
+%{_mandir}/man3/ll2_new_context.3*
+%{_mandir}/man3/ll2_unref_context.3*
 %{_mandir}/man3/ll2_read_all.3*
 %{_mandir}/man3/ll2_read_entry.3*
 %{_mandir}/man3/ll2_remove_entry.3*

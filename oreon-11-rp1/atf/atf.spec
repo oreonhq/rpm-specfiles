@@ -153,7 +153,7 @@ rm %{buildroot}%{_libdir}/libatf*.la
 %{_libdir}/libatf-c.so.1
 %{_libdir}/libatf-c.so.1.0.0
 %{_datadir}/man/man1/atf-test-program.1.gz
-%{_datadir}/man/man4/atf-test-case.4.gz
+%{_mandir}/man7/atf-test-case.7*
 %{_mandir}/man3/atf-c.3.gz
 
 %files -n libatf-c-devel

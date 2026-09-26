@@ -10,6 +10,7 @@ URL:            https://github.com/python/python-docs-theme/
 Source:         %{url}archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 
+BuildRequires:  python3dist(babel)
 BuildRequires:  python3-devel
 
 %global _description Python Docs Sphinx Theme is the theme for the Python documentation.

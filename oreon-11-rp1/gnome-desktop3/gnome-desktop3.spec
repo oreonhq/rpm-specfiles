@@ -138,7 +138,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # LGPL
 %{_libdir}/libgnome-bg-4.so.2{,.*}
 %{_libdir}/libgnome-desktop-4.so.2{,.*}
-%{_libdir}/libgnome-rr-4.so.2{,.*}
 %{_libdir}/libgnome-qr-4.so.0{,.*}
 %{_libdir}/libgnome-qr-gtk-4.so.0{,.*}
 %{_libdir}/girepository-1.0/Gnome*-4.0.typelib

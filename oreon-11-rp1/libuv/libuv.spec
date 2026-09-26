@@ -37,6 +37,7 @@ Source1:        https://dist.libuv.org/dist/v%{version}/%{name}-v%{version}.tar.
 Source2:        keysuv.gpg
 Source3:        libuv.abignore
 
+BuildRequires:  python3dist(sphinx-copybutton)
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gnupg2

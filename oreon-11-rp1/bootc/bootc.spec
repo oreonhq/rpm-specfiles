@@ -49,6 +49,7 @@ Source1:        https://github.com/bootc-dev/bootc/releases/download/v%{version}
 # 
 ExcludeArch:    %{ix86}
 
+BuildRequires:  clang-libs
 BuildRequires: libzstd-devel
 BuildRequires: make
 BuildRequires: ostree-devel

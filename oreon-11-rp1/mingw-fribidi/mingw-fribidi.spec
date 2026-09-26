@@ -72,6 +72,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files -n mingw32-%{pkgname}
 %license COPYING
 %{mingw32_bindir}/fribidi.exe
+%{mingw32_prefix}/share/man/man1/fribidi.1*
 %{mingw32_bindir}/libfribidi-0.dll
 %{mingw32_includedir}/fribidi
 %{mingw32_libdir}/libfribidi.dll.a
@@ -83,6 +84,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files -n mingw64-%{pkgname}
 %license COPYING
 %{mingw64_bindir}/fribidi.exe
+%{mingw64_prefix}/share/man/man1/fribidi.1*
 %{mingw64_bindir}/libfribidi-0.dll
 %{mingw64_includedir}/fribidi
 %{mingw64_libdir}/libfribidi.dll.a

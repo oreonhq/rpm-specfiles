@@ -109,6 +109,7 @@ Summary: PostgreSQL client programs
 %global pkgname %{majorname}%{majorversion}
 %endif
 
+BuildRequires:  perl-interpreter
 BuildRequires: make
 BuildRequires: lz4-devel
 BuildRequires: libzstd-devel
@@ -577,7 +578,7 @@ EOF
 
 cd postgresql-setup-%{setup_version}
 
-%configure \
+%configure pgsetup_cv_os_family=redhat \
     pgdocdir=%{_pkgdocdir} \
     PGVERSION=%{version} \
     PGMAJORVERSION=%{majorversion} \

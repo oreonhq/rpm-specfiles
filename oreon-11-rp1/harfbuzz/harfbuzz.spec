@@ -9,6 +9,7 @@ License:        MIT-Modern-Variant
 URL:            https://github.com/harfbuzz/harfbuzz/
 Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/%{version}/harfbuzz-%{version}.tar.xz
 
+BuildRequires:  pkgconfig(glew)
 BuildRequires:  cairo-devel
 BuildRequires:  freetype-devel
 BuildRequires:  glib2-devel

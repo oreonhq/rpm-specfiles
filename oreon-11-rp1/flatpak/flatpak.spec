@@ -282,7 +282,7 @@ fi
 
 %files selinux
 %{_datadir}/selinux/packages/flatpak.pp.bz2
-%{_datadir}/selinux/devel/include/contrib/flatpak.if
+%{_datadir}/selinux/devel/include/distributed/flatpak.if
 
 %files session-helper
 %license COPYING

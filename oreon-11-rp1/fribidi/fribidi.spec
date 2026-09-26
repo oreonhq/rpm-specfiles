@@ -82,6 +82,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %doc README AUTHORS ChangeLog THANKS NEWS TODO
 %license COPYING
 %{_bindir}/fribidi
+%{_mandir}/man1/fribidi.1*
 %{_libdir}/libfribidi.so.0*
 
 %files devel

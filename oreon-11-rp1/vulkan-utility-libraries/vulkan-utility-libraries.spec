@@ -36,6 +36,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake -DCMAKE_BUILD_TYPE=Release \
+       -DBUILD_SHARED_LIBS:BOOL=OFF \
        -DCMAKE_INSTALL_LIBDIR=%{_libdir} \
        -DBUILD_TESTS:BOOL=OFF \
        -DVUL_WERROR:BOOL=OFF \

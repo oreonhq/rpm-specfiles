@@ -6,7 +6,7 @@ Name:           PEGTL
 Version:        4.0.2
 Release:        1%{?dist}
 Summary:        Parsing Expression Grammar Template Library
-License:        MIT
+License:        BSL-1.0
 URL:            https://github.com/taocpp/%{name}
 Source:        https://github.com/taocpp/PEGTL/archive/refs/tags/4.0.2.tar.gz#/PEGTL-2.8.3.tar.gz
 
@@ -57,7 +57,7 @@ rm -rv %{buildroot}%{_pkgdocdir}
 
 %files devel
 %doc README.md doc/
-%license LICENSE
+%license LICENSE_1_0.txt
 %{_includedir}/tao/pegtl.hpp
 %{_includedir}/tao/pegtl/
 %{_datadir}/cmake/pegtl/

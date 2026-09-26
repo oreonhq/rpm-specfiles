@@ -44,6 +44,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %cmake -DCMAKE_BUILD_TYPE=Release \
+       -DUPDATE_DEPS:BOOL=OFF \
        -DBUILD_WERROR=OFF \
        -DGLSLANG_INSTALL_DIR=%{_prefix} \
        -DBUILD_LAYER_SUPPORT_FILES:BOOL=ON \

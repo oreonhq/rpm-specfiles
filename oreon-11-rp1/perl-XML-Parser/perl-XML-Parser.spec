@@ -10,6 +10,7 @@ Url:            https://metacpan.org/release/XML-Parser
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-%{version}.tar.gz
 
 # Build
+BuildRequires:  perl(File::ShareDir::Install)
 BuildRequires:  coreutils
 BuildRequires:  expat-devel
 BuildRequires:  findutils

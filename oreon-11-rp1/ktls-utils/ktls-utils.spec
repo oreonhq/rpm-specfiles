@@ -51,6 +51,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %config(noreplace) %{_sysconfdir}/tlshd/config
 %{_sbindir}/tlshd
+%{_bindir}/nfstlskey
+%{_mandir}/man8/nfstlskey.8*
+%{_mandir}/man7/tls-session-tags.7*
 %{_mandir}/man5/tlshd.conf.5.gz
 %{_mandir}/man8/tlshd.8.gz
 %{_unitdir}/tlshd.service

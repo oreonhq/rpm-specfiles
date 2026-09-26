@@ -160,8 +160,8 @@ fi
 
 
 %files
-%license COPYING.GPLv2
-%doc ChangeLog.gz README NEWS.txt MIGRATING.txt INSTALL.txt CONTRIBUTING.txt changes.txt
+%license COPYING
+%doc ChangeLog.gz README.md NEWS.rst MIGRATING.rst INSTALL.rst CONTRIBUTING.rst
 %{_sysconfdir}/modulefiles
 %dir %{_datadir}/fish/vendor_conf.d
 %ghost %{_sysconfdir}/profile.d/modules.csh

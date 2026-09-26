@@ -8,6 +8,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Date
 Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Date-%{version}.tar.gz
 BuildArch:      noarch
+BuildRequires:  perl(Time::Zone)
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter

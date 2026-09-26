@@ -15,6 +15,7 @@ License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-CardDAVTalk
 Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-CardDAVTalk-%{version}.tar.gz
 BuildArch:      noarch
+BuildRequires:  perl(Text::JSContact)
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter

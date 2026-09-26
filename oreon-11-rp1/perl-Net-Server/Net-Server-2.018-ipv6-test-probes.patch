@@ -1,0 +1,92 @@
+--- a/t/20_IPv6_bogus.t
++++ b/t/20_IPv6_bogus.t
+@@ -6,7 +6,8 @@
+ use warnings;
+ use FindBin qw($Bin);
+ use lib $Bin;
+-use NetServerTest qw(prepare_test ok use_ok note);
++use NetServerTest qw(prepare_test ok use_ok note skip_without_ipv6);
++skip_without_ipv6;
+ exit 0+!print "1..0 # SKIP IPv6 is not supported\n" if !grep {-r "$_/IO/Socket/IP.pm" or -r "$_/IO/Socket/INET6.pm"} @INC;
+ my $pkg = "BoGuS::IP::PcKg"; # Net::Server::IP
+ my $IPv6 = "::1"; # Should connect to IPv6
+--- a/t/21_IPv6_socketip.t
++++ b/t/21_IPv6_socketip.t
+@@ -6,7 +6,8 @@
+ use warnings;
+ use FindBin qw($Bin);
+ use lib $Bin;
+-use NetServerTest qw(prepare_test ok use_ok note);
++use NetServerTest qw(prepare_test ok use_ok note skip_without_ipv6);
++skip_without_ipv6;
+ exit 0+!print "1..0 # SKIP No IO::Socket::IP found\n" if !grep {-r "$_/IO/Socket/IP.pm"} @INC;
+ my $pkg = "FakeWrapper1"; # IO::Socket::IP
+ my $IPv6 = "::1"; # Should connect to IPv6
+--- a/t/23_IPv6_recurse.t
++++ b/t/23_IPv6_recurse.t
+@@ -6,7 +6,8 @@
+ use warnings;
+ use FindBin qw($Bin);
+ use lib $Bin;
+-use NetServerTest qw(prepare_test ok use_ok note);
++use NetServerTest qw(prepare_test ok use_ok note skip_without_ipv6);
++skip_without_ipv6;
+ exit 0+!print "1..0 # SKIP IPv6 is not supported\n" if !grep {-r "$_/IO/Socket/IP.pm" or -r "$_/IO/Socket/INET6.pm"} @INC;
+ my $pkg = "FakeWrapper3"; # Net::Server::IP
+ my $IPv6 = "::1"; # Should connect to IPv6
+--- a/t/24_IPvA_socketip.t
++++ b/t/24_IPvA_socketip.t
+@@ -6,7 +6,8 @@
+ use warnings;
+ use FindBin qw($Bin);
+ use lib $Bin;
+-use NetServerTest qw(prepare_test ok use_ok note);
++use NetServerTest qw(prepare_test ok use_ok note skip_without_ipv6);
++skip_without_ipv6;
+ exit 0+!print "1..0 # SKIP No IO::Socket::IP found\n" if !grep {-r "$_/IO/Socket/IP.pm"} @INC;
+ my $pkg = "FakeWrapper1"; # IO::Socket::IP
+ my $IPv6 = "::1"; # Should connect to IPv6
+--- a/t/26_IPv6_socketip_Only.t
++++ b/t/26_IPv6_socketip_Only.t
+@@ -9,7 +9,8 @@
+ use lib "$Bin/BorkINET6"; # Pretend like there is no IO::Socket::INET6 installed.
+ use lib "$Bin/BorkSOCK6"; # Pretend like there is no Socket6 installed.
+ 
+-use NetServerTest qw(prepare_test ok use_ok note);
++use NetServerTest qw(prepare_test ok use_ok note skip_without_ipv6);
++skip_without_ipv6;
+ exit 0+!print "1..0 # SKIP No IO::Socket::IP found\n" if !grep {-r "$_/IO/Socket/IP.pm"} @INC;
+ my $IPv6 = "::1"; # Should connect to IPv6
+ $ENV{NET_SERVER_TEST_HOSTNAME} ||= "127.0.0.1"; # Fake IPv4 to prevent prepare_test from pre-loading ipv6_package
+--- a/t/28_IPvA_socketip_Only.t
++++ b/t/28_IPvA_socketip_Only.t
+@@ -9,7 +9,8 @@
+ use lib "$Bin/BorkINET6"; # Pretend like there is no IO::Socket::INET6 installed.
+ use lib "$Bin/BorkSOCK6"; # Pretend like there is no Socket6 installed.
+ 
+-use NetServerTest qw(prepare_test ok use_ok note);
++use NetServerTest qw(prepare_test ok use_ok note skip_without_ipv6);
++skip_without_ipv6;
+ exit 0+!print "1..0 # SKIP No IO::Socket::IP found\n" if !grep {-r "$_/IO/Socket/IP.pm"} @INC;
+ my $IPv6 = "::1"; # Should connect to IPv6
+ $ENV{NET_SERVER_TEST_HOSTNAME} ||= "127.0.0.1"; # Fake IPv4 to prevent prepare_test from pre-loading ipv6_package
+--- a/t/NetServerTest.pm
++++ b/t/NetServerTest.pm
+@@ -20,7 +20,7 @@
+ }
+ 
+ sub skip_without_ipv6 {
+-    if (!eval { require Net::Server::IP; Net::Server::IP->new(LocalAddr=>"::",Listen=>1) or die ($@ || "IP CRASH $!")  }) {
++    if (!eval { require Socket; socket(my $sock, Socket::AF_INET6(), Socket::SOCK_STREAM(), 0) or die "socket: $!"; bind($sock, Socket::pack_sockaddr_in6(0, Socket::inet_pton(Socket::AF_INET6(), "::1"))) or die "bind: $!"; 1  }) {
+         my $reason = shift || "IPv6 is not supported";
+         $reason = "SKIP $reason\n$@";
+         $reason =~ s/\s*$/\n/;
+@@ -32,7 +32,7 @@
+ 
+ sub client_connect {
+     shift if $_[0] && $_[0] eq __PACKAGE__;
+-    my $pkg = eval { require Net::Server::IP; "Net::Server::IP" } || "IO::Socket::INET";
++    my $pkg = !$ENV{NO_IPV6} && eval { require Net::Server::IP; "Net::Server::IP" } || "IO::Socket::INET";
+     warn "IPv6 FAILURE! $@" if $@;
+     my $client = $pkg->new(@_);
+     note("connect FAILURE! $@") if $@;

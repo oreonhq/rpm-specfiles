@@ -90,7 +90,7 @@ find %{buildroot} -name "*.la" -delete
 %doc AUTHORS
 %license COPYING.LESSER
 %{_libdir}/lib%{name}.so.0
-%{_libdir}/lib%{name}.so.0.9.5
+%{_libdir}/lib%{name}.so.0.*
 
 %files static
 %doc AUTHORS

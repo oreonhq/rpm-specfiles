@@ -8,6 +8,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/WWW-RobotRules
 Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/WWW-RobotRules-%{version}.tar.gz
 BuildArch:      noarch
+BuildRequires:  perl(Test::More)
 BuildRequires:  coreutils
 BuildRequires:  make
 BuildRequires:  perl-generators

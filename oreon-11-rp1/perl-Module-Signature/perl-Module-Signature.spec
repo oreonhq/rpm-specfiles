@@ -83,7 +83,7 @@ make test TEST_SIGNATURE=0
 rm -rf %{buildroot} %{gnupghome}
 
 %files
-%doc AUTHORS Changes SECURITY.md *.pub
+%doc AUTHORS Changes *.pub
 %{_bindir}/cpansign
 %{perl_vendorlib}/Module/
 %{_mandir}/man1/cpansign.1*

@@ -14,6 +14,7 @@ Source0:        https://github.com/rockowitz/ddcutil/archive/refs/tags/v%{versio
 # Excluding arch s390/s390x due to i2c-tools does so
 ExcludeArch:    s390 s390x
 
+BuildRequires:  libacl-devel
 BuildRequires:      automake
 BuildRequires:      autoconf
 BuildRequires:      libtool

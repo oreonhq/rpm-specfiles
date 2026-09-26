@@ -23,6 +23,7 @@ License:        LGPL-3.0-or-later and MIT
 URL:            https://github.com/strukturag/libheif
 Source0:        https://github.com/strukturag/libheif/archive/refs/tags/v%{version}.tar.gz#/libheif-%{version}.tar.gz
 
+BuildRequires:  openjpeg2-tools
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build

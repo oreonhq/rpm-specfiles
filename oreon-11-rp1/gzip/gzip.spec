@@ -10,6 +10,8 @@ Source0:        https://mirrors.kernel.org/gnu/gzip/gzip-%{version}.tar.xz
 Source1:        https://www.gnu.org/licenses/fdl-1.3.txt
 
 # downstream solution for coloured z*grep (#1034839)
+Patch0: gzip-1.15-hash-head.patch
+
 Source100: colorzgrep.csh
 Source101: colorzgrep.sh
 
@@ -41,6 +43,7 @@ very commonly used data compression program.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
+%patch 0 -p1
 
 cp %{SOURCE1} .
 autoreconf

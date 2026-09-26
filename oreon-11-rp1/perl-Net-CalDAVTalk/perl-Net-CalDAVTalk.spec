@@ -17,6 +17,7 @@ Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-CalDAVTalk-%
 # Fix using Data::Dumper, CPAN RT#123646
 Patch0:         Net-CalDAVTalk-0.12-Load-Data-Dumper.patch
 BuildArch:      noarch
+BuildRequires:  perl(Text::JSCalendar)
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter

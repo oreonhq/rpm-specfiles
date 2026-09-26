@@ -18,11 +18,11 @@ Summary: A collection of utilities and DSOs to handle ELF files and DWARF data
 # Needed for isa specific Provides and Requires.
 %global depsuffix %{?_isa}%{!?_isa:-%{_arch}}
 
-# eu-stacktrace currently only supports x86_64
-%ifarch x86_64
-%global enable_stacktrace 1
+# eu-stackprof supports x86 and ARM platforms.
+%ifarch %{ix86} x86_64 %{arm} aarch64
+%global enable_stackprof 1
 %else
-%global enable_stacktrace 0
+%global enable_stackprof 0
 %endif
 
 Requires: elfutils-libelf%{depsuffix} = %{version}-%{release}
@@ -71,7 +71,8 @@ BuildRequires: openssl-devel
 BuildRequires: rpm-sign
 
 # For eu-stacktrace
-%if %{enable_stacktrace}
+%if %{enable_stackprof}
+BuildRequires: json-c-devel
 BuildRequires: sysprof-capture-devel
 %endif
 
@@ -339,8 +340,8 @@ trap 'cat config.log' EXIT
 	--enable-debuginfod \
 	--enable-debuginfod-urls="%{dist_debuginfod_url}" \
 %endif
-%if %{enable_stacktrace}
-	--enable-stacktrace \
+%if %{enable_stackprof}
+	--enable-stackprof \
 %endif
 	--enable-debuginfod-ima-verification \
 	--enable-debuginfod-ima-cert-path=%{_sysconfdir}/keys/ima
@@ -419,8 +420,8 @@ fi
 %{_bindir}/eu-size
 %{_bindir}/eu-srcfiles
 %{_bindir}/eu-stack
-%if %{enable_stacktrace}
-%{_bindir}/eu-stacktrace
+%if %{enable_stackprof}
+%{_bindir}/eu-stackprof
 %endif
 %{_bindir}/eu-strings
 %{_bindir}/eu-strip
@@ -470,6 +471,7 @@ fi
 %{_mandir}/man3/elf32_*.3*
 %{_mandir}/man3/elf64_*.3*
 %{_mandir}/man3/gelf_*.3*
+%{_mandir}/man3/gelf.3*
 %{_mandir}/man3/libelf.3*
 
 %if %{with static}
@@ -489,10 +491,8 @@ fi
 %{_mandir}/man1/debuginfod-find.1*
 %{_mandir}/man7/debuginfod*.7*
 %config(noreplace) %{_sysconfdir}/profile.d/*
-%if "%{?dist_debuginfod_url}"
 %config(noreplace) %{_sysconfdir}/debuginfod/*
-%config(noreplace) %{_datadir}/fish/vendor_conf.d/*
-%endif
+%{_datadir}/fish/vendor_conf.d/debuginfod.fish
 
 %files debuginfod-client-devel
 %{_libdir}/pkgconfig/libdebuginfod.pc

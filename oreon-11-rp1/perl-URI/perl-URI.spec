@@ -21,6 +21,7 @@ Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/URI-%{version}
 
 BuildArch:      noarch
 # Module Build
+BuildRequires:  perl(Unicode::Normalize)
 BuildRequires:  coreutils
 BuildRequires:  make
 BuildRequires:  perl-generators

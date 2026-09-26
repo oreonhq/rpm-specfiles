@@ -61,7 +61,7 @@ find %{buildroot} -type f -name '*.bs' -empty -delete
 make test
 
 %files
-%doc ChangeLog README
+%doc ChangeLog README.md
 %{perl_vendorarch}/auto/IO/
 %{perl_vendorarch}/IO/
 %{_mandir}/man3/IO::Pty.3*

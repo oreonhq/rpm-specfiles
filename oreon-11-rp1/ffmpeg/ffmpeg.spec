@@ -245,6 +245,7 @@ BuildRequires:  pkgconfig(rav1e)
 BuildRequires:  pkgconfig(rubberband)
 BuildRequires:  pkgconfig(sdl2)
 BuildRequires:  pkgconfig(shaderc) >= 2019.1
+BuildRequires:  glslc
 %if 0%{?with_ffmpeg_iso_extras}
 BuildRequires:  pkgconfig(smbclient)
 %endif
@@ -846,7 +847,7 @@ cp -a doc/examples/{*.c,Makefile,README} _doc/examples/
     --enable-librtmp \
 %endif
     --enable-librubberband \
-    --enable-libshaderc \
+    --glslc=%{_bindir}/glslc \
     --disable-libshine \
 %if 0%{?with_ffmpeg_iso_extras}
     --enable-libsmbclient \

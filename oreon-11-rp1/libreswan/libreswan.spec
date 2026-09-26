@@ -15,6 +15,7 @@
     INITSYSTEM=systemd \\\
     SBINDIR=%{_sbindir} \\\
     SHELL_BINARY=%{_bindir}/sh \\\
+    DEFAULT_DNSSEC_ROOTKEY_FILE=%{_sharedstatedir}/unbound/root.key \\\
     USE_DNSSEC=true \\\
     USE_LABELED_IPSEC=true \\\
     USE_LDAP=true \\\
