@@ -87,7 +87,7 @@ chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 make test
 
 %files
-%doc Changes README
+%doc Changes
 %{perl_vendorlib}/*
 %{_mandir}/man3/*
 

@@ -61,6 +61,7 @@ rm -rv %{buildroot}%{_pkgdocdir}
 %{_includedir}/tao/pegtl.hpp
 %{_includedir}/tao/pegtl/
 %{_datadir}/cmake/pegtl/
+%{_datadir}/pkgconfig/pegtl.pc
 
 %changelog
 %autochangelog

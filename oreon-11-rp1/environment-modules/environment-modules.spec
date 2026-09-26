@@ -204,7 +204,7 @@ fi
 %{_emacs_sitestartdir}/%{name}-init.el
 %dir %{_datadir}/Modules/nagelfar
 %{_datadir}/Modules/nagelfar/*
-
+%{_mandir}/man1/modulecmd.1.gz
 
 %changelog
 %autochangelog

@@ -59,3 +59,14 @@
          }
          for (n = 0; n < WSIZE; n++) {
              m = prev[n];
+--- a/unlzh.c
++++ b/unlzh.c
+@@ -61,7 +61,7 @@
+ /* static ush left[2 * NC - 1]; */
+ /* static ush right[2 * NC - 1]; */
+ #define left  prev
+-#define right head
++#define right gzip_hash_head
+ #if NC > (1<<(BITS-2))
+     error cannot overlay left+right and prev
+ #endif

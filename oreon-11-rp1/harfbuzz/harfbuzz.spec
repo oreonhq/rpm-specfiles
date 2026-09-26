@@ -1,5 +1,6 @@
 %global source0_hash b7132e148358a45185c9feafd049dbaf243649d3c44414b3534d9c95d18592b9
 
+BuildRequires:  pkgconfig(glfw3)
 Name:           harfbuzz
 Version:        14.5.0
 Release:        1%{?dist}

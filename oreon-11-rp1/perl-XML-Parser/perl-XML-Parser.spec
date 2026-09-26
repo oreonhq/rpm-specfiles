@@ -1,5 +1,6 @@
 %global source0_hash a358fd7c49f5e27717a644a9102bd21dc7fc25a415983279c59b1580e2b62a58
 
+BuildRequires:  perl(File::ShareDir)
 Name:           perl-XML-Parser
 Version:        2.59
 Release:        1%{?dist}

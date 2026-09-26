@@ -1,5 +1,6 @@
 %global source0_hash 47b5efdd813f2ca8df2dd2f2317cdc73c8a1e31d2b361f407ecaf5010711a450
 
+BuildRequires:  perl(LWP::UserAgent)
 Name:           perl-Text-JSCalendar
 Version:        0.06
 Release:        1%{?dist}
