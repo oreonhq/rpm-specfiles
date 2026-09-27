@@ -1,12 +1,12 @@
-%global source0_hash b5b7eba62453eb8c6f6a5fbf7155b71cde693bafe9cd5f03b79ed8c714816afe
+%global source0_hash a9bb9c48713245eacf97cc539b6f1d45405a92d8813f8b82e635f0a085ee9898
 
-%global commit ad9184e76a66b1001c29db9b0a3e87f646c64de0
+%global commit 496543121ce6419f23d6fa5d7194ba66c36212d2
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 
 Name:           spirv-headers
 Version:        1.5.5
-Release:        2%{?dist}
+Release:        3.20260926git%{shortcommit}%{?dist}
 Summary:        Header files from the SPIR-V registry
 
 License:        MIT
@@ -31,6 +31,7 @@ This includes:
 * The XML registry file
 
 %package        devel
+Provides:       spirv-headers-commit(%{commit})
 Summary:        Development files for %{name}
 
 %description    devel

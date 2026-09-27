@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 91dba1187e4c35fd37380a56ac228bbd54c6c649b2351829f3bf033718277537
 
 %bcond_with developer_tools
 
@@ -22,8 +22,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'sphinx-tabs' generated automatically by pyp2spec.}
 
-Patch0:         https://patch-diff.githubusercontent.com/raw/executablebooks/sphinx-tabs/pull/200.patch
-Patch1:         https://github.com/executablebooks/sphinx-tabs/pull/207.patch
 
 %description %_description
 

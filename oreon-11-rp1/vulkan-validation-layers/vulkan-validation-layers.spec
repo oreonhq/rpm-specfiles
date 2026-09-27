@@ -1,6 +1,7 @@
 %global source0_hash d544c04bae853de3118a73eb6718228628ed0341559e5cb9facdaedf547b85bb
 
 Patch1: 1790459257.patch
+BuildRequires:  spirv-headers-commit(496543121ce6419f23d6fa5d7194ba66c36212d2)
 Name:           vulkan-validation-layers
 Version:        1.4.363
 Release:        %autorelease
@@ -17,7 +18,7 @@ BuildRequires:  glslang-devel
 BuildRequires:  ninja-build
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  spirv-tools-devel
-BuildRequires:  spirv-headers-devel
+BuildRequires:  spirv-headers-devel >= 1.5.5-3.20260926git4965431
 BuildRequires:  vulkan-headers
 BuildRequires:  vulkan-loader-devel
 BuildRequires:  vulkan-utility-libraries-devel

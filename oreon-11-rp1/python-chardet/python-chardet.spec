@@ -1,5 +1,6 @@
 %global source0_hash none
 
+BuildArch:      noarch
 Name:           python-chardet
 Version:        7.6.0
 Release:        %autorelease

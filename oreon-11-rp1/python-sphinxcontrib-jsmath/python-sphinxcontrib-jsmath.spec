@@ -1,5 +1,7 @@
 %global source0_hash a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8
 
+BuildRequires:  python3dist(docutils)
+BuildRequires:  python3dist(sphinx)
 Name:           python-sphinxcontrib-jsmath
 Version:        1.0.1
 Release:        1%{?dist}
@@ -14,6 +16,8 @@ BuildRequires:  python3-devel
 Sphinx extension for jsMath output.
 
 %package -n python3-sphinxcontrib-jsmath
+Requires:       python3dist(sphinx)
+Requires:       python3dist(docutils)
 Summary:        %{summary}
 
 %description -n python3-sphinxcontrib-jsmath

@@ -18,11 +18,11 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/1.0.0.%{prerel}/sphinx-basic-ng-1.0.0.%{prerel}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
+BuildRequires:  python3-devel
 %if %{without bootstrap}
-BuildOption(generate_buildrequires): -x docs
+%global orbs_pyproject_requires_options -x docs
 %endif
-BuildOption(install): -l sphinx_basic_ng
+%global orbs_pyproject_files_options -l sphinx_basic_ng
 
 %if %{without bootstrap}
 BuildRequires:  python-sphinx-doc
@@ -80,18 +80,25 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n sphinx-basic-ng-1.0.0.%{prerel}
 
-%conf
 # Use local objects.inv for intersphinx
 sed -e 's|\("https://docs\.python\.org/3", \)None|\1"%{_docdir}/python3-docs/html/objects.inv"|' \
     -e 's|\("https://www\.sphinx-doc\.org/en/master", \)None|\1"%{_docdir}/python-sphinx-doc/html/objects.inv"|' \
     -i docs/conf.py
 
-%build -a
+%build
+%pyproject_wheel
 %if %{without bootstrap}
 # Build documentation
 PYTHONPATH=$PWD/src sphinx-build -b html docs html
 rm -rf html/{.buildinfo,.doctrees}
 %endif
+
+%generate_buildrequires
+%pyproject_buildrequires %{?orbs_pyproject_requires_options}
+
+%install
+%pyproject_install
+%pyproject_save_files %{?orbs_pyproject_files_options}
 
 %check
 # The nox tests require network access, so we do not run them

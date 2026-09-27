@@ -90,3 +90,16 @@
      warn "IPv6 FAILURE! $@" if $@;
      my $client = $pkg->new(@_);
      note("connect FAILURE! $@") if $@;
+--- a/lib/Net/Server/IP.pm
++++ b/lib/Net/Server/IP.pm
+@@ -52,8 +52,8 @@
+         for (@try) { last if $pkg; eval{local $^W=0;require $pm->($_);die "Circular ISA" if $_->isa(__PACKAGE__);$pkg=$_} or $err .= $@=~/^(.*)/ && "\n[$_] ($!) $1"; }
+         if ($pkg) {
+             my $args = { Listen=>1 };
+-            if (not $pkg->new(LocalAddr=>"[::]", Listen=>1) or not $pkg->new(LocalAddr=>"127.0.0.1", Listen=>1)) { # Simple ephemeral sanity pre-check didn't even work
+-                if ($pkg->new(LocalAddr=>"[::]", Listen=>1, GetAddrInfoFlags => 0) or $pkg->new(LocalAddr=>"127.0.0.1", Listen=>1, GetAddrInfoFlags => 0)) { # Yet DOES work without doing that getaddrinfo AI_ADDRCONFIG AF_NETLINK SOCK_RAW sendto RTM_GETADDR recvmsg interferfaces pre-check boogie dance?
++            if (not $pkg->new(LocalAddr=>"[::]", Family=>AF_INET6, Listen=>1) or not $pkg->new(LocalAddr=>"127.0.0.1", Family=>AF_INET, Listen=>1)) { # Simple ephemeral sanity pre-check didn't even work
++                if ($pkg->new(LocalAddr=>"[::]", Family=>AF_INET6, Listen=>1, GetAddrInfoFlags => 0) or $pkg->new(LocalAddr=>"127.0.0.1", Family=>AF_INET, Listen=>1, GetAddrInfoFlags => 0)) { # Yet DOES work without doing that getaddrinfo AI_ADDRCONFIG AF_NETLINK SOCK_RAW sendto RTM_GETADDR recvmsg interferfaces pre-check boogie dance?
+                     $fake_danger = 1; $@ = ""; # Flag to remember this special network configuration. Pretend like there is no error.
+                 } else {
+                     $@ = "bind: $pkg failed: $! $@"; $pkg = undef; # This $pkg is of no use. Set error $@ with good excuse.

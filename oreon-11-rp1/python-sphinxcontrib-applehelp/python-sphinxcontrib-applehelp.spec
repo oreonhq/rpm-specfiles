@@ -1,5 +1,6 @@
 %global source0_hash 2f29ef331735ce958efa4734873f084941970894c6090408b079c61b2e1c06d1
 
+BuildRequires:  python3dist(sphinx)
 Name:           python-sphinxcontrib-applehelp
 Version:        2.0.0
 Release:        1%{?dist}
@@ -14,6 +15,7 @@ BuildRequires:  python3-devel
 Sphinx extension for Apple Help output.
 
 %package -n python3-sphinxcontrib-applehelp
+Requires:       python3dist(sphinx)
 Summary:        %{summary}
 
 %description -n python3-sphinxcontrib-applehelp

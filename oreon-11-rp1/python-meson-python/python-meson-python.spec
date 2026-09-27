@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 78b3345dcbc0fed7b939e7e37a9faab35bddaae07bf62e7542c8ad479c395af5
 
 Name:           python-meson-python
 Version:        0.21.1
@@ -35,7 +35,7 @@ Summary:        %{summary}
 
 
 %generate_buildrequires
-%pyproject_buildrequires
+%pyproject_buildrequires -p
 
 
 %build

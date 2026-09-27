@@ -1,4 +1,4 @@
-%global source0_hash c038d34200234d071fae9345bc455e4a8f2f544ab60150765d7704e08f3dac01
+%global source0_hash 5234f4f29473e9a06bc7847d8371858dd135d38466eeeaa652fdc9f8f9ff0c20
 
 Name:           glfw
 Version:        3.5.1
@@ -9,11 +9,10 @@ Summary(fr):    Une bibliothèque multimédia multi-plateforme
 License:        Zlib
 URL:            http://www.glfw.org/index.html
 Source0:        https://github.com/glfw/glfw/archive/%{version}/%{name}-%{version}.tar.gz
-Patch0:         %{name}-doxygen.patch
 
 BuildRequires:  gcc
 BuildRequires:  cmake
-BuildRequires:  doxygen
+BuildRequires:  doxygen >= 1.9.8
 BuildRequires:  pkgconfig(dri)
 BuildRequires:  pkgconfig(glu)
 BuildRequires:  pkgconfig(x11)

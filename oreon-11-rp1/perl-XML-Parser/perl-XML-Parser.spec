@@ -131,7 +131,7 @@ export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print
 make test
 
 %files
-%doc README Changes samples/
+%doc README.md Changes samples/
 %license LICENSE
 %{perl_vendorarch}/XML/
 %{perl_vendorarch}/auto/XML/
