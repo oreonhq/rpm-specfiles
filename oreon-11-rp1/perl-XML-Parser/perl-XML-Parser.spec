@@ -84,6 +84,8 @@ perl -MConfig -pi -e 's|^#!/usr/local/bin/perl\b|$Config{startperl}|' samples/{c
 
 # Remove bundled library
 rm -r inc
+# These tests inspect the bundled module removed above.
+rm -f t/checklib_findcc.t t/checklib_tmpdir.t
 perl -i -ne 'print $_ unless m{^inc/}' MANIFEST
 
 # Help generators to recognize Perl scripts

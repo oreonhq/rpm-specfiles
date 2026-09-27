@@ -27,6 +27,7 @@
     %global new_cargo_macros 0
 %endif
 
+BuildRequires:  clang
 Name:           bootc
 # Ensure this local build overrides anything else.
 Version:        1.16.13

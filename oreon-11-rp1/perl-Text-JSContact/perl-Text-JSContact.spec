@@ -1,6 +1,7 @@
 %global source0_hash a87d471f26d7134794b8e780dee66b277ecd4fd09b9cbd1f0246574d92b2efff
 
 BuildRequires:  perl(JSON::XS)
+BuildRequires:  perl(LWP::UserAgent)
 Name:           perl-Text-JSContact
 Version:        0.02
 Release:        1%{?dist}

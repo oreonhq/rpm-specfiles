@@ -1,5 +1,6 @@
 %global source0_hash 4d6bd1adb0de600d6b44b9a8629b943fe86700b055186791ea397b7cf3a456b3
 
+Patch1: 1790459391.patch
 Name:           perl-Net-Server
 Version:        2.018
 Release:        1%{?dist}
@@ -12,7 +13,7 @@ Source0:        https://cpan.metacpan.org/authors/id/B/BB/BBB/Net-Server-%{versi
 
 # Only initialize existing Net::SSLeay methods (RT#154333)
 
-Patch0:         Net-Server-2.018-ipv6-test-probes.patch
+Patch0:         1790443724.patch
 
 BuildArch:      noarch
 BuildRequires:  coreutils

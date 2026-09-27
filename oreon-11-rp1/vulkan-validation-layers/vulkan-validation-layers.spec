@@ -1,5 +1,6 @@
 %global source0_hash d544c04bae853de3118a73eb6718228628ed0341559e5cb9facdaedf547b85bb
 
+Patch1: 1790459257.patch
 Name:           vulkan-validation-layers
 Version:        1.4.363
 Release:        %autorelease

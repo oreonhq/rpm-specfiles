@@ -30,6 +30,7 @@
 
 #global prever dr1
 
+Patch2: 1790459257.patch
 Name: libreswan
 Summary: Internet Key Exchange (IKEv1 and IKEv2) implementation for IPsec
 # version is generated in the release script

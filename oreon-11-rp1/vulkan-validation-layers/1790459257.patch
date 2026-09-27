@@ -1,0 +1,10 @@
+--- a/layers/error_message/error_location.cpp
++++ b/layers/error_message/error_location.cpp
+@@ -15,6 +15,7 @@
+  * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
++#include <algorithm>
+ #include "error_location.h"
+ #include "generated/error_location_helper.h"
+ 

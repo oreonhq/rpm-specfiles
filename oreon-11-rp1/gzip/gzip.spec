@@ -10,7 +10,7 @@ Source0:        https://mirrors.kernel.org/gnu/gzip/gzip-%{version}.tar.xz
 Source1:        https://www.gnu.org/licenses/fdl-1.3.txt
 
 # downstream solution for coloured z*grep (#1034839)
-Patch0: gzip-1.15-hash-head.patch
+Patch0: 1790453516.patch
 
 Source100: colorzgrep.csh
 Source101: colorzgrep.sh

@@ -1,0 +1,11 @@
+--- a/lib/libswan/datatot.c
++++ b/lib/libswan/datatot.c
+@@ -110,7 +110,7 @@
+ 	needed = nreal;                 /* for starters */
+ 	if (dstlen <= nreal) {          /* prefix won't fit */
+ 		/* fill_and_terminate */
+-		strncpy(dst, prefix, dstlen-1);
++		memcpy(dst, prefix, dstlen-1);
+ 		dst[dstlen-1] = '\0';
+ 		dst += dstlen - 1;
+ 	} else {
