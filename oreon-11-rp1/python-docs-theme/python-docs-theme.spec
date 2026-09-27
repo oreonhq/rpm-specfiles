@@ -1,5 +1,6 @@
 %global source0_hash ade77cc5731fbb45e47fd68c8ef83e048bc53990b37ba74445d16ba1731c313f
 
+BuildRequires:  /usr/bin/pybabel
 Name:           python-docs-theme
 Version:        2026.9
 Release:        %autorelease

@@ -1,8 +1,8 @@
-%global source0_hash bf80ee4a77a731c5a2351b4dd74f524a18806a70099ba66a8058d91aac1150b5
+%global source0_hash 8a70b6dc85261e6e6e57769bd81ac1e09c0a4c96bbd5e358ffbc2dee51e8e50a
 
 Name:           AMF
 Epoch:          1
-Version:        1.5.0
+Version:        1.5.2
 Release:        %autorelease
 Summary:        Advanced Media Framework (AMF) SDK
 License:        MIT

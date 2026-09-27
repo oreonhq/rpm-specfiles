@@ -39,4 +39,4 @@ test "$(sha256sum %{SOURCE0} | cut -d ' ' -f 1)" = "%{source0_hash}"
 %pyproject_check_import
 
 %files -n python3-sphinxcontrib-applehelp -f %{pyproject_files}
-%license LICENSE
+%license LICENCE.rst

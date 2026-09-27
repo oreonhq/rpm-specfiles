@@ -136,6 +136,28 @@ make test
 %{perl_vendorarch}/XML/
 %{perl_vendorarch}/auto/XML/
 %{_mandir}/man3/XML::Parser*.3*
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/big5.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/euc-kr.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/ibm866.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-15.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-2.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-3.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-4.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-5.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-7.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-8.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-9.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/koi8-r.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/windows-1250.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/windows-1251.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/windows-1252.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/windows-1255.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-euc-jp-jisx0221.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-euc-jp-unicode.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-sjis-cp932.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-sjis-jdk117.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-sjis-jisx0221.enc
+%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-sjis-unicode.enc
 
 %files tests
 %{_libexecdir}/%{name}

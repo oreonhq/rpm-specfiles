@@ -19,9 +19,9 @@ Source:         %{giturl}/archive/%{version}/diagnostic-%{version}.tar.gz
 Patch:          %{name}-test.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): tests/requirements.txt
-BuildOption(install): -l diagnostic
+BuildRequires:  python3-devel
+%global orbs_pyproject_requires_options tests/requirements.txt
+%global orbs_pyproject_files_options -l diagnostic
 
 %description
 The diagnostic package makes it easier to build command line tools with great
@@ -41,6 +41,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 # Do not run coverage tools in an RPM build
 sed -i '/pytest-cov/d' tests/requirements.txt
+
+%generate_buildrequires
+%pyproject_buildrequires %{?orbs_pyproject_requires_options}
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files %{?orbs_pyproject_files_options}
 
 %check
 %pytest -v

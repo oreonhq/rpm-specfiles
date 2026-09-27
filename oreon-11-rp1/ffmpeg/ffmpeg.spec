@@ -104,6 +104,7 @@
 %global swresample_soversion 7
 %global swscale_soversion 10
 
+BuildRequires:  AMF-devel >= 1:1.5.2
 Name:           ffmpeg
 %global pkg_name %{name}%{?pkg_suffix}
 

@@ -13,9 +13,9 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/v%{version}/accessible-pygments-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x tests
-BuildOption(install): -l a11y_pygments
+BuildRequires:  python3-devel
+%global orbs_pyproject_requires_options -x tests
+%global orbs_pyproject_files_options -l a11y_pygments
 
 %description
 This package includes a collection of accessible themes for pygments based on
@@ -35,11 +35,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n accessible-pygments-%{version}
 
-%generate_buildrequires -p
+%generate_buildrequires
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
+%pyproject_buildrequires %{?orbs_pyproject_requires_options}
 
-%build -p
+%build
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files %{?orbs_pyproject_files_options}
 
 %check
 %pytest -v

@@ -42,3 +42,4 @@ test "$(sha256sum %{SOURCE0} | cut -d ' ' -f 1)" = "%{source0_hash}"
 
 %files -n python3-sphinxcontrib-jsmath -f %{pyproject_files}
 %license LICENSE
+%{_prefix}/lib/python3.14/site-packages/sphinxcontrib_jsmath-1.0.1-py3.14-nspkg.pth

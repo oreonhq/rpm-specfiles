@@ -3,6 +3,7 @@
 %bcond_with developer_tools
 
 BuildRequires:  cmake
+BuildRequires:  /usr/bin/g++
 Name:           python-awscrt
 Version:        0.37.0
 Release:        %autorelease
