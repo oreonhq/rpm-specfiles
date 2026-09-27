@@ -5,7 +5,7 @@
 # Some of the BuildRequires are used in tests only when installed.
 # To speedup bootstrap of the next Python version in Fedora
 # we allow disabling them.
-%bcond optional_test_deps %{undefined rhel}
+%bcond optional_test_deps 0
 
 Name:           python-%{srcname}
 Version:        2.1.2
@@ -35,6 +35,8 @@ minimal and fast API targetting the following uses:
 %package -n python3-%{srcname}
 Summary:        Elastic Python Deployment
 BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
+BuildRequires:  python3-pytest-timeout
 %if %{with optional_test_deps}
 #BuildRequires: python3-eventlet -- retired in Fedora 41+
 BuildRequires:  python3-gevent
@@ -55,7 +57,7 @@ find . -type f -a \( -name '*.py' -o -name 'py.*' \) \
 
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires
 
 
 %build

@@ -33,6 +33,8 @@ Summary:        %{summary}
 
 %description -n python3-sphinx %_description
 
+%pyproject_extras_subpkg -n python3-sphinx test
+
 
 %prep
 %autosetup -p1 -n sphinx-9.1.0rc2

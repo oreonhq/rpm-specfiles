@@ -1,5 +1,7 @@
 %global source0_hash 9e2ddadc609084b5f60affb8b87e77304fed64e271e2b2b7558186cf65d81e5a
 
+%bcond_with developer_tools
+
 Name:           python-awscrt
 Version:        0.37.0
 Release:        %autorelease
@@ -33,7 +35,9 @@ Summary:        %{summary}
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%if %{with developer_tools}
 %pyproject_extras_subpkg -n python3-awscrt dev
+%endif
 
 
 %prep
@@ -42,7 +46,11 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
+%if %{with developer_tools}
 %pyproject_buildrequires -x dev
+%else
+%pyproject_buildrequires
+%endif
 
 
 %build

@@ -20,8 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'beautifulsoup4' generated automatically by pyp2spec.}
 
-Patch0:         0001-Skip-the-lxml-tree-builder-s-test_surrogate_in_chara.patch
-Patch1:         0001-Change-the-html.parser-tree-builder-s-code-for-handl.patch
 Patch11:        beautifulsoup4-4.14-disable-soupsieve.patch
 
 %description %_description
@@ -33,7 +31,7 @@ Summary:        %{summary}
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-beautifulsoup4 cchardet,chardet,charset-normalizer,html5lib,lxml
+%pyproject_extras_subpkg -n python3-beautifulsoup4 chardet,charset-normalizer,html5lib,lxml
 
 
 %prep
@@ -42,7 +40,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x cchardet,chardet,charset-normalizer,html5lib,lxml
+%pyproject_buildrequires -x chardet,charset-normalizer,html5lib,lxml
 
 
 %build

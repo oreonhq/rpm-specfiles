@@ -5,7 +5,7 @@
 # cli extra, needed for the application usage, has got a long chain of
 # dependencies leading ultimately to python-django which can be built much
 # later in the bootstrap process, hence the bcond to build just the "core" parts.
-%bcond bootstrap 0
+%bcond bootstrap 1
 
 %global giturl  https://github.com/pradyunsg/sphinx-theme-builder
 

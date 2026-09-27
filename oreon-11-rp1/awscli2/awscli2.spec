@@ -66,7 +66,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find awscli/examples/ -type f -name '*.rst' -executable -exec chmod -x '{}' +
 
 # remove version caps on dependencies
-sed -i 's/,<=\?[^"]*"/"/' pyproject.toml
+sed -i 's/,\?<=\?[^"]*"/"/' pyproject.toml
 
 # loosen awscrt version requirement
 sed -i 's/awscrt==/awscrt>=/' pyproject.toml

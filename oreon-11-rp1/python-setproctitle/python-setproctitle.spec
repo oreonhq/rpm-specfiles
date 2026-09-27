@@ -20,8 +20,6 @@ Patch:          158.patch
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(tox)
-BuildRequires:	python3dist(tox-current-env) >= 0.0.16
 # Tests
 BuildRequires:  procps-ng
 
@@ -57,7 +55,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -p1 0
 
 %generate_buildrequires
-%pyproject_buildrequires -t
+%pyproject_buildrequires -x test
 
 
 %build
@@ -70,7 +68,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %check
-%tox
+%pytest
 
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

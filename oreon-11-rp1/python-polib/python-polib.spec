@@ -1,62 +1,41 @@
 %global source0_hash f3ef94aefed6e183e342a8a269ae1fc4742ba193186ad76f175938621dbfc26b
 
-%global srcname polib
-
-Name:           python-%{srcname}
+Name:           python-polib
 Version:        1.2.0
-Release:        14%{?dist}
-Summary:        A library to parse and manage gettext catalogs
-
+Release:        1%{?dist}
+Summary:        Library for manipulating gettext catalogs
 License:        MIT
-URL:            https://github.com/izimobil/polib
-Source0:        %pypi_source
-
+URL:            https://polib.readthedocs.io/
+Source0:        https://files.pythonhosted.org/packages/10/9a/79b1067d27e38ddf84fe7da6ec516f1743f31f752c6122193e7bce38bdbf/polib-1.2.0.tar.gz
 BuildArch:      noarch
+BuildRequires:  python3-devel
 
 %description
-polib allows you to manipulate, create, modify gettext files (pot, po and
-mo files). You can load existing files, iterate through it's entries, add,
-modify entries, comments or metadata, etc... or create new po files from
-scratch.
+Python library for reading and writing gettext PO and MO catalogs.
 
-polib provides a simple and pythonic API, exporting only three convenience
-functions 'pofile', 'mofile' and 'detect_encoding', and the 4 core classes:
-POFile, MOFile, POEntry and MOEntry for creating new files/entries.
+%package -n python3-polib
+Summary:        %{summary}
 
-%package -n python3-%{srcname}
-Summary:        A library to parse and manage gettext catalogs
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-%{?python_provide:%python_provide python3-%{srcname}}
-
-%description -n python3-%{srcname}
-polib allows you to manipulate, create, modify gettext files (pot, po and
-mo files). You can load existing files, iterate through it's entries, add,
-modify entries, comments or metadata, etc... or create new po files from
-scratch.
-
-polib provides a simple and pythonic API, exporting only three convenience
-functions 'pofile', 'mofile' and 'detect_encoding', and the 4 core classes:
-POFile, MOFile, POEntry and MOEntry for creating new files/entries.
+%description -n python3-polib
+Python library for reading and writing gettext PO and MO catalogs.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "$(sha256sum %{SOURCE0} | cut -d ' ' -f 1)" = "%{source0_hash}"
+%autosetup -n polib-%{version}
 
-%autosetup -n %{srcname}-%{version}
+%generate_buildrequires
+%pyproject_buildrequires
 
 %build
-%py3_build
+%pyproject_wheel
 
 %install
-%py3_install
+%pyproject_install
+%pyproject_save_files polib
 
 %check
-%{__python3} tests/tests.py
+%pyproject_check_import
 
-%files -n python3-%{srcname}
-%doc README.rst
+%files -n python3-polib -f %{pyproject_files}
 %license LICENSE
-%{python3_sitelib}/*
-
-%changelog
-%autochangelog
+%doc README.rst

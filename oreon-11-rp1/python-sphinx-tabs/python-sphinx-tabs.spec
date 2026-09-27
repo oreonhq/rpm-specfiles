@@ -1,5 +1,7 @@
 %global source0_hash none
 
+%bcond_with developer_tools
+
 Name:           python-sphinx-tabs
 Version:        3.5.0
 Release:        %autorelease
@@ -32,7 +34,9 @@ Summary:        %{summary}
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
+%if %{with developer_tools}
 %pyproject_extras_subpkg -n python3-sphinx-tabs code-style,testing
+%endif
 
 
 %prep
@@ -41,7 +45,11 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
+%if %{with developer_tools}
 %pyproject_buildrequires -x code-style,testing
+%else
+%pyproject_buildrequires
+%endif
 
 
 %build

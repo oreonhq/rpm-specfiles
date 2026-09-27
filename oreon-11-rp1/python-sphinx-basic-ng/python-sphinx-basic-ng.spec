@@ -2,7 +2,7 @@
 
 # The documentation and tests need furo.  But to build furo at all, we need
 # this package.
-%bcond bootstrap 0
+%bcond bootstrap 1
 
 %global prerel  beta2
 %global giturl  https://github.com/pradyunsg/sphinx-basic-ng
@@ -15,7 +15,7 @@ Summary:        Modernized skeleton for Sphinx themes
 License:        MIT
 URL:            https://sphinx-basic-ng.readthedocs.io/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/%{version}.%{prerel}/sphinx-basic-ng-%{version}.%{prerel}.tar.gz
+Source:         %{giturl}/archive/1.0.0.%{prerel}/sphinx-basic-ng-1.0.0.%{prerel}.tar.gz
 
 BuildArch:      noarch
 BuildSystem:    pyproject
@@ -78,7 +78,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n sphinx-basic-ng-%{version}.%{prerel}
+%autosetup -n sphinx-basic-ng-1.0.0.%{prerel}
 
 %conf
 # Use local objects.inv for intersphinx

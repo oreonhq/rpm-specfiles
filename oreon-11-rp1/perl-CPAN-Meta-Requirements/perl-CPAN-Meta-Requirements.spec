@@ -1,7 +1,7 @@
 %global source0_hash 1557093e3ff0d650262a8340a1dafc5d033af986f98ee3e8a889d04b53e18019
 
-# Run optional tests
-%bcond_without perl_CPAN_Meta_Requirements_enables_optional_test
+# Author tests require modules which depend on this package.
+%bcond_with perl_CPAN_Meta_Requirements_enables_optional_test
 
 Name:           perl-CPAN-Meta-Requirements
 Version:        2.145
