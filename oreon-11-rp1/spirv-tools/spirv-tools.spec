@@ -1,21 +1,19 @@
-%global source0_hash 15bfb678138cdf9cd1480dfb952547bbb66b763a735b6d5582578572f5c2e6f9
+%global source0_hash 82c62146083fd558735a3171cf97cfc47903ca7d368482e87f94bd44883c0f00
 
 %undefine __cmake_in_source_build
 
-%global sdkver 1.4.341.0
+%global commit ef96ed763b43b59b33b31b362f09a02b729fa1c9
 
 Name:           spirv-tools
-Version:        2026.1
-Release:        %autorelease
+Version:        2026.4
+Release:        1.20260927git%{lua:print(string.sub(rpm.expand("%{commit}"), 1, 7))}%{?dist}
 Summary:        API and commands for processing SPIR-V modules
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/SPIRV-Tools
-Source0:        https://github.com/KhronosGroup/SPIRV-Tools/archive/vulkan-sdk-1.4.341.0.tar.gz#/SPIRV-Tools-sdk-1.4.341.0.tar.gz
+Source0:        https://github.com/KhronosGroup/SPIRV-Tools/archive/%{commit}.tar.gz#/SPIRV-Tools-%{commit}.tar.gz
 
 Patch0: fix-gcc12-build.patch
-Patch1: 0001-opt-Fix-build-issue-with-gcc-16.patch
-
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
@@ -26,6 +24,7 @@ BuildRequires:  python3-devel
 %endif
 BuildRequires:  python3-rpm-macros
 BuildRequires:  spirv-headers-devel
+BuildRequires:  spirv-headers-commit(496543121ce6419f23d6fa5d7194ba66c36212d2)
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 
 %description
@@ -33,6 +32,13 @@ The package includes an assembler, binary module parser,
 disassembler, and validator for SPIR-V..
 
 %package        libs
+%if 0%{?__isa_bits} == 64
+Provides:       libSPIRV-Tools.so()(64bit)
+Provides:       libSPIRV-Tools-opt.so()(64bit)
+%else
+Provides:       libSPIRV-Tools.so()
+Provides:       libSPIRV-Tools-opt.so()
+%endif
 Summary:        Library files for %{name}
 Provides:       %{name}-libs%{?_isa} = %{version}
 
@@ -40,6 +46,7 @@ Provides:       %{name}-libs%{?_isa} = %{version}
 library files for %{name}
 
 %package        devel
+Provides:       spirv-tools-commit(%{commit})
 Summary:        Development files for %{name}
 Requires:       %{name} = %{version}-%{release}
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
@@ -49,7 +56,7 @@ Development files for %{name}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n SPIRV-Tools-vulkan-sdk-%{sdkver}
+%autosetup -p1 -n SPIRV-Tools-%{commit}
 
 %build
 %cmake -DCMAKE_BUILD_TYPE=Release \

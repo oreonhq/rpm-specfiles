@@ -2,6 +2,7 @@
 
 Patch1: 1790459257.patch
 BuildRequires:  spirv-headers-commit(496543121ce6419f23d6fa5d7194ba66c36212d2)
+BuildRequires:  spirv-tools-commit(ef96ed763b43b59b33b31b362f09a02b729fa1c9)
 Name:           vulkan-validation-layers
 Version:        1.4.363
 Release:        %autorelease

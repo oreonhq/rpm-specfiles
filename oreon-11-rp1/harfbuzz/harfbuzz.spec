@@ -110,6 +110,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libharfbuzz-subset.so.0*
 %dir %{_libdir}/girepository-1.0
 %{_libdir}/girepository-1.0/HarfBuzz-0.0.typelib
+%{_libdir}/libharfbuzz-gpu.so.0
+%{_libdir}/libharfbuzz-gpu.so.0.61450.0
 
 %files devel
 %doc %{_datadir}/gtk-doc
@@ -137,6 +139,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/cmake/harfbuzz/
 %dir %{_datadir}/gir-1.0
 %{_datadir}/gir-1.0/HarfBuzz-0.0.gir
+%{_libdir}/pkgconfig/harfbuzz-gpu.pc
+%{_bindir}/hb-gpu
+%{_libdir}/libharfbuzz-gpu.so
 
 %files icu
 %{_libdir}/libharfbuzz-icu.so.*

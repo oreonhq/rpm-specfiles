@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash 5593611ca0cd92017ba660e76fb29076c1d7092fe9990c7a7e8509905928638a
 Name:           python-sphinx
 Version:        9.1.0~rc2
 Release:        %autorelease
@@ -20,9 +19,7 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'sphinx' generated automatically by pyp2spec.}
 
-Patch:        https://github.com/sphinx-doc/sphinx/pull/13883.patch
 Patch:      https://github.com/sphinx-doc/sphinx/commit/8962398b761c3d85a.patch
-Patch:      https://github.com/sphinx-doc/sphinx/commit/e01e42f5fc738815b.patch
 Patch:      https://github.com/sphinx-doc/sphinx/pull/13527.patch
 Patch:      https://github.com/sphinx-doc/sphinx/pull/13610.patch
 

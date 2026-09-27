@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash 66b07ef7315a31bfe1089cd3d71a7de781c9dca986762d0b4fe7c0ef17465d10
 %bcond_with extras
 
 Name:           python-pandas
@@ -23,10 +22,8 @@ This is package 'pandas' generated automatically by pyp2spec.}
 
 Patch:          0001-TST-Ensure-Matplotlib-is-always-cleaned-up.patch
 Patch:          0003-TST-Fix-IntervalIndex-constructor-tests-on-big-endia.patch
-Patch:          0004-TST-Fix-test_str_encode-on-big-endian-machines.patch
 Patch:          0005-Use-zoneinfo-instead-of-pytz.patch
 Patch:          0006-Adjust-test-to-accomodate-changes-in-Python.patch
-Patch:          0007-Replace-deprecated-xarray.cftime_range.patch
 Patch:          0008-Fix-Cython-3.2-build.patch
 Patch:          0009-TST-numexpr-2.13-bool-arith-warning.patch
 Patch:          0010-FIX-mpl-3.10-pandas-userwarnings.patch

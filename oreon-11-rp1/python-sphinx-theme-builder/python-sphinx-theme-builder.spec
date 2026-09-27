@@ -22,9 +22,9 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/%{version}/sphinx-theme-builder-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
+BuildRequires:  python3-devel
 %{!?with_bootstrap:BuildOption(generate_buildrequires): -x cli tests/requirements.txt}
-BuildOption(install): -l sphinx_theme_builder
+%global orbs_pyproject_files_options -l sphinx_theme_builder
 
 BuildRequires:  help2man
 
@@ -56,6 +56,9 @@ sed -e 's|\("https://docs\.python\.org/3", \)None|\1"%{_docdir}/python3-docs/htm
 # Skip test packages not available in Fedora
 sed -i '/pytest-/d' tests/requirements.txt
 
+%build
+%pyproject_wheel
+
 %install -a
 %if %{without bootstrap}
 # Install a man page
@@ -67,6 +70,13 @@ mkdir -p %{buildroot}%{_mandir}/man1
 # without cli there's no use of the binary file
 rm %{buildroot}%{_bindir}/stb
 %endif
+
+%generate_buildrequires
+%pyproject_buildrequires %{?orbs_pyproject_requires_options}
+
+%install
+%pyproject_install
+%pyproject_save_files %{?orbs_pyproject_files_options}
 
 %check
 %if %{without bootstrap}
