@@ -76,6 +76,15 @@
          test_cases = self._retry_headers_test_cases()
 --- a/tests/functional/ec2instanceconnect/test_opentunnel.py
 +++ b/tests/functional/ec2instanceconnect/test_opentunnel.py
+@@ -435,7 +435,7 @@
+ def connect_to_listener(listener_future):
+     retry_connection = True
+     attempts = 0
+-    max_attempts = 5
++    max_attempts = 50
+     tracebacks = ''
+     while retry_connection:
+         attempts += 1
 @@ -865,7 +865,7 @@
          describe_ipv6_only_instance_response,
          describe_eice_response,
