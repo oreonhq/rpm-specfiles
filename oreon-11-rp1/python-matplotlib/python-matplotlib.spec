@@ -16,7 +16,7 @@ BuildRequires:  python3-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(freetype2)
-BuildRequires:  pkgconfig(raqm)
+BuildRequires:  pkgconfig(raqm) >= 0.10.4
 BuildRequires:  qhull-devel
 
 
