@@ -21,10 +21,6 @@ BuildRequires:  gcc
 This is package 'matplotlib' generated automatically by pyp2spec.}
 
 Patch1001:      0001-matplotlibrc-path-search-fix.patch
-Patch1002:      0002-Set-FreeType-version-to-%{ftver}-and-update-tolerances.patch
-Patch1003:      0003-Unpin-meson-python-build-requirement.patch
-Patch0001:      0004-Use-old-stride_windows-implementation-on-32-bit-x86.patch
-Patch0002:      0005-Partially-revert-TST-Fix-minor-issues-in-interactive.patch
 
 %description %_description
 

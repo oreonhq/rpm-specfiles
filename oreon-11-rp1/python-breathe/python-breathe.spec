@@ -22,6 +22,7 @@ BuildArch:      noarch
 
 BuildRequires:  doxygen >= 1.8.4
 BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python3-pytest
 
 # NOTE: git is only needed because part of the build process checks if it's in
 # a git repo
@@ -53,7 +54,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires
-%pyproject_buildrequires -x test%{?with_doc:,docs}
+%if %{with doc}
+%pyproject_buildrequires -p -x docs
+%else
+%pyproject_buildrequires -p
+%endif
 
 %build
 %pyproject_wheel

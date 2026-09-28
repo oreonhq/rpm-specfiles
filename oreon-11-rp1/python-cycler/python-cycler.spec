@@ -26,18 +26,12 @@ Summary:        %{summary}
 
 %description -n python3-cycler %_description
 
-# For official Fedora packages, review which extras should be actually packaged
-# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-cycler docs,tests
-
-
 %prep
 %autosetup -p1 -n cycler-%{version}
 
 
 %generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x docs,tests
+%pyproject_buildrequires -p
 
 
 %build

@@ -14,6 +14,7 @@ Source:         %{pypi_source contourpy}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
+BuildRequires:  gcc-c++
 
 
 # Fill in the actual package description to submit package to Fedora
@@ -27,18 +28,12 @@ Summary:        %{summary}
 
 %description -n python3-contourpy %_description
 
-# For official Fedora packages, review which extras should be actually packaged
-# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-contourpy bokeh,docs,mypy,test,test-no-images
-
-
 %prep
 %autosetup -p1 -n contourpy-%{version}
 
 
 %generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x bokeh,docs,mypy,test,test-no-images
+%pyproject_buildrequires -p
 
 
 %build
