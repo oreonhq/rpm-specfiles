@@ -20,14 +20,6 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'pandas' generated automatically by pyp2spec.}
 
-Patch:          0001-TST-Ensure-Matplotlib-is-always-cleaned-up.patch
-Patch:          0003-TST-Fix-IntervalIndex-constructor-tests-on-big-endia.patch
-Patch:          0005-Use-zoneinfo-instead-of-pytz.patch
-Patch:          0006-Adjust-test-to-accomodate-changes-in-Python.patch
-Patch:          0008-Fix-Cython-3.2-build.patch
-Patch:          0009-TST-numexpr-2.13-bool-arith-warning.patch
-Patch:          0010-FIX-mpl-3.10-pandas-userwarnings.patch
-
 %description %_description
 
 %package -n     python3-pandas

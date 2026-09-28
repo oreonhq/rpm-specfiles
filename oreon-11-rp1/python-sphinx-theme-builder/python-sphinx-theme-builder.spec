@@ -59,7 +59,9 @@ sed -i '/pytest-/d' tests/requirements.txt
 %build
 %pyproject_wheel
 
-%install -a
+%install
+%pyproject_install
+%pyproject_save_files %{?orbs_pyproject_files_options}
 %if %{without bootstrap}
 # Install a man page
 mkdir -p %{buildroot}%{_mandir}/man1
@@ -73,10 +75,6 @@ rm %{buildroot}%{_bindir}/stb
 
 %generate_buildrequires
 %pyproject_buildrequires %{?orbs_pyproject_requires_options}
-
-%install
-%pyproject_install
-%pyproject_save_files %{?orbs_pyproject_files_options}
 
 %check
 %if %{without bootstrap}

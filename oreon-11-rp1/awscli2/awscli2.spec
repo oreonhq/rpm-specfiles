@@ -31,6 +31,8 @@ Patch4:             urllib3-v2.patch
 Patch5:             python314.patch
 # https://github.com/aws/aws-cli/pull/9684#issuecomment-3804078566
 Patch6:             prompt-toolkit-3.0.52.patch
+# Keep datetime mocking and JSON serialization compatible with Python 3.14.
+Patch7:             python314-tests.patch
 
 BuildArch:          noarch
 

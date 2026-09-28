@@ -19,10 +19,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'sphinx' generated automatically by pyp2spec.}
 
-Patch:      https://github.com/sphinx-doc/sphinx/commit/8962398b761c3d85a.patch
-Patch:      https://github.com/sphinx-doc/sphinx/pull/13527.patch
-Patch:      https://github.com/sphinx-doc/sphinx/pull/13610.patch
-
 %description %_description
 
 %package -n     python3-sphinx

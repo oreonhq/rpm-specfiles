@@ -1,0 +1,44 @@
+--- a/awscli/utils.py
++++ b/awscli/utils.py
+@@ -14,6 +14,7 @@
+ import contextlib
+ import csv
+ import datetime
++from datetime import datetime as _datetime_type
+ import logging
+ import os
+ import re
+@@ -376,7 +377,7 @@
+ def json_encoder(obj):
+     """JSON encoder that formats datetimes as ISO8601 format
+     and encodes bytes to UTF-8 Base64 string."""
+-    if isinstance(obj, datetime.datetime):
++    if isinstance(obj, _datetime_type):
+         return obj.isoformat()
+     elif isinstance(obj, bytes):
+         return base64.b64encode(obj).decode("utf-8")
+--- a/tests/functional/botocore/test_retry.py
++++ b/tests/functional/botocore/test_retry.py
+@@ -263,7 +263,10 @@
+             mock.Mock(wraps=datetime.datetime),
+         )
+         mocked_datetime = datetime_patcher.start()
+-        mocked_datetime.utcnow.side_effect = utcnow_side_effects
++        mocked_datetime.now.side_effect = [
++            value.replace(tzinfo=datetime.timezone.utc)
++            for value in utcnow_side_effects
++        ]
+ 
+         client = self.session.create_client(
+             'dynamodb', self.region, config=client_config
+--- a/tests/functional/ec2instanceconnect/test_opentunnel.py
++++ b/tests/functional/ec2instanceconnect/test_opentunnel.py
+@@ -865,7 +865,7 @@
+         describe_ipv6_only_instance_response,
+         describe_eice_response,
+         dns_name,
+-        datetime_utcnow_patch,
++        datetime_now_patch,
+     ):
+         cli_runner.env["AWS_USE_FIPS_ENDPOINT"] = "false"
+         cmdline = [
