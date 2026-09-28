@@ -37,7 +37,7 @@ Summary:        %{summary}
 %description -n python3-sphinx-inline-tabs  %_description
 
 %prep
-%autosetup -p1
+%autosetup -n sphinx-inline-tabs-%{version} -p1
 sed -i '/pytest-cov/d' pyproject.toml
 
 %generate_buildrequires
