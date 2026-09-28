@@ -16,6 +16,7 @@ BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-numpy
 BuildRequires:  python3-pandas
 BuildRequires:  python3-pillow
+BuildRequires:  python3-matplotlib
 %endif
 
 %global _description %{expand:
