@@ -15,6 +15,9 @@ Source:         %{pypi_source matplotlib}
 BuildRequires:  python3-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+BuildRequires:  pkgconfig(freetype2)
+BuildRequires:  pkgconfig(raqm)
+BuildRequires:  qhull-devel
 
 
 # Fill in the actual package description to submit package to Fedora
@@ -40,7 +43,7 @@ Summary:        %{summary}
 
 
 %build
-%pyproject_wheel
+%pyproject_wheel -Csetup-args=-Dsystem-freetype=true -Csetup-args=-Dsystem-libraqm=true -Csetup-args=-Dsystem-qhull=true
 
 
 %install
