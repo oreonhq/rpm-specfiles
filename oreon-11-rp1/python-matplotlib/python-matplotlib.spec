@@ -14,6 +14,7 @@ Source:         %{pypi_source matplotlib}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
+BuildRequires:  gcc-c++
 
 
 # Fill in the actual package description to submit package to Fedora
