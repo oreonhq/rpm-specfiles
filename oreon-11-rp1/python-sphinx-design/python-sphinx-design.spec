@@ -16,9 +16,9 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/v%{version}/sphinx-design-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x testing
-BuildOption(install): -l sphinx_design
+BuildRequires:  python3-devel
+%global orbs_pyproject_requires_options -x testing
+%global orbs_pyproject_files_options -l sphinx_design
 
 # The Fedora package does not contain JSON glyphs
 Provides:       bundled(material-icons-fonts) = 4.0.0.116.ge9da21
@@ -77,10 +77,18 @@ sed -i "/myst-parser>=/s/>=4,<6//" pyproject.toml
 # Do not run code coverage tools
 sed -i "/pytest-cov/d" pyproject.toml
 
-%build -a
+%build
+%pyproject_wheel
 # Build documentation
 PYTHONPATH=$PWD sphinx-build -b html docs html
 rm -rf html/{.buildinfo,.doctrees}
+
+%generate_buildrequires
+%pyproject_buildrequires %{?orbs_pyproject_requires_options}
+
+%install
+%pyproject_install
+%pyproject_save_files %{?orbs_pyproject_files_options}
 
 %check
 %pytest -v

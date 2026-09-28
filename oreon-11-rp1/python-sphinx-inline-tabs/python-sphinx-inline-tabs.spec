@@ -14,9 +14,9 @@ Patch:          https://github.com/pradyunsg/sphinx-inline-tabs/pull/53.patch
 
 BuildArch:      noarch
 
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install): -l sphinx_inline_tabs
+BuildRequires:  python3-devel
+%global orbs_pyproject_requires_options -x test
+%global orbs_pyproject_files_options -l sphinx_inline_tabs
 
 %global _description %{expand:
 Add inline tabbed content to your Sphinx documentation.
@@ -39,6 +39,16 @@ Summary:        %{summary}
 
 %prep -a
 sed -i '/pytest-cov/d' pyproject.toml
+
+%generate_buildrequires
+%pyproject_buildrequires %{?orbs_pyproject_requires_options}
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files %{?orbs_pyproject_files_options}
 
 %check -a
 # As of 2025.12.21.14, the deselected tests assert docutils 0.21.2 specifcic output.
