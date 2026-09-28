@@ -23,6 +23,8 @@ BuildArch:      noarch
 BuildRequires:  doxygen >= 1.8.4
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python3-pytest
+BuildRequires:  python3dist(setuptools)
+BuildRequires:  python3dist(jinja2)
 
 # NOTE: git is only needed because part of the build process checks if it's in
 # a git repo
@@ -61,6 +63,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %build
+%make_build parser
 %pyproject_wheel
 %if %{with doc}
 # Build the documentation
