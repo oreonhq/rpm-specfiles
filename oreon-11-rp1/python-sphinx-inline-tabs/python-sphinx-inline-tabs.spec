@@ -9,7 +9,6 @@ License:        MIT
 URL:            https://github.com/pradyunsg/sphinx-inline-tabs
 Source:         %{url}/archive/%{version}/sphinx-inline-tabs-%{version}.tar.gz
 
-# Make tests runnable in %%check, merged upstream
 Patch:          https://github.com/pradyunsg/sphinx-inline-tabs/pull/53.patch
 
 BuildArch:      noarch
@@ -37,7 +36,8 @@ Summary:        %{summary}
 
 %description -n python3-sphinx-inline-tabs  %_description
 
-%prep -a
+%prep
+%autosetup -p1
 sed -i '/pytest-cov/d' pyproject.toml
 
 %generate_buildrequires
@@ -50,8 +50,7 @@ sed -i '/pytest-cov/d' pyproject.toml
 %pyproject_install
 %pyproject_save_files %{?orbs_pyproject_files_options}
 
-%check -a
-# As of 2025.12.21.14, the deselected tests assert docutils 0.21.2 specifcic output.
+%check
 %pytest -k "not xml"
 
 %files -n python3-sphinx-inline-tabs -f %{pyproject_files}
