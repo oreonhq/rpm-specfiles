@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash cec596316640f2b394b8f0daa0ea61a8eae82d017b620b9f202befb972a59ea4
 
 Name:           python-matplotlib
 Version:        3.11.2
@@ -35,7 +35,7 @@ Summary:        %{summary}
 
 
 %generate_buildrequires
-%pyproject_buildrequires
+%pyproject_buildrequires -p
 
 
 %build
