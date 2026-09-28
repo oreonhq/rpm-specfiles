@@ -26,9 +26,6 @@ Summary:        %{summary}
 
 %description -n python3-sphinx %_description
 
-%pyproject_extras_subpkg -n python3-sphinx test
-
-
 %prep
 %autosetup -p1 -n sphinx-9.1.0rc2
 
@@ -53,11 +50,6 @@ Summary:        %{summary}
 
 
 %files -n python3-sphinx -f %{pyproject_files}
-%{_bindir}/sphinx-apidoc
-%{_bindir}/sphinx-autogen
-%{_bindir}/sphinx-build
-%{_bindir}/sphinx-quickstart
-
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:8.2.3-1
 - Import

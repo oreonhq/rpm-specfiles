@@ -19,18 +19,61 @@
          return base64.b64encode(obj).decode("utf-8")
 --- a/tests/functional/botocore/test_retry.py
 +++ b/tests/functional/botocore/test_retry.py
-@@ -263,7 +263,10 @@
+@@ -257,29 +257,35 @@
+     def _test_amz_sdk_request_header_with_test_case(
+         self, responses, utcnow_side_effects, expected_headers, client_config
+     ):
+-        datetime_patcher = mock.patch.object(
++        with mock.patch.object(
+             botocore.endpoint.datetime,
+             'datetime',
              mock.Mock(wraps=datetime.datetime),
-         )
-         mocked_datetime = datetime_patcher.start()
+-        )
+-        mocked_datetime = datetime_patcher.start()
 -        mocked_datetime.utcnow.side_effect = utcnow_side_effects
-+        mocked_datetime.now.side_effect = [
-+            value.replace(tzinfo=datetime.timezone.utc)
-+            for value in utcnow_side_effects
-+        ]
+-
+-        client = self.session.create_client(
+-            'dynamodb', self.region, config=client_config
+-        )
+-        with ClientHTTPStubber(client) as http_stubber:
+-            for response in responses:
+-                http_stubber.add_response(
+-                    headers=response[1], status=response[0], body=b'{}'
+-                )
+-            client.list_tables()
+-            amz_sdk_request_headers = [
+-                request.headers['amz-sdk-request']
+-                for request in http_stubber.requests
++        ) as mocked_datetime:
++            # Signing uses now(), while the endpoint TTL calculation still
++            # uses utcnow(). Keep their values independent and deterministic.
++            mocked_datetime.now.side_effect = [
++                utcnow_side_effects[index].replace(tzinfo=datetime.timezone.utc)
++                for index in (0, 3, 6)
++            ]
++            mocked_datetime.utcnow.side_effect = [
++                utcnow_side_effects[index] for index in (1, 2, 4, 5)
+             ]
+-            self.assertListEqual(amz_sdk_request_headers, expected_headers)
+-        datetime_patcher.stop()
++
++            client = self.session.create_client(
++                'dynamodb', self.region, config=client_config
++            )
++            with ClientHTTPStubber(client) as http_stubber:
++                for response in responses:
++                    http_stubber.add_response(
++                        headers=response[1], status=response[0], body=b'{}'
++                    )
++                client.list_tables()
++                amz_sdk_request_headers = [
++                    request.headers['amz-sdk-request']
++                    for request in http_stubber.requests
++                ]
++                self.assertListEqual(amz_sdk_request_headers, expected_headers)
  
-         client = self.session.create_client(
-             'dynamodb', self.region, config=client_config
+     def test_amz_sdk_request_header(self):
+         test_cases = self._retry_headers_test_cases()
 --- a/tests/functional/ec2instanceconnect/test_opentunnel.py
 +++ b/tests/functional/ec2instanceconnect/test_opentunnel.py
 @@ -865,7 +865,7 @@

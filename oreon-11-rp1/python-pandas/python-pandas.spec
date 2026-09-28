@@ -41,9 +41,9 @@ Summary:        %{summary}
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
 %if %{with extras}
-%pyproject_buildrequires -x all,aws,clipboard,compression,computation,excel,feather,fss,gcp,hdf5,html,iceberg,mysql,output-formatting,parquet,performance,plot,postgresql,pyarrow,spss,sql-other,test,timezone,xml
+%pyproject_buildrequires -p -x all,aws,clipboard,compression,computation,excel,feather,fss,gcp,hdf5,html,iceberg,mysql,output-formatting,parquet,performance,plot,postgresql,pyarrow,spss,sql-other,test,timezone,xml
 %else
-%pyproject_buildrequires
+%pyproject_buildrequires -p
 %endif
 
 
