@@ -1,18 +1,8 @@
-diff -Naur bacula-15.0.2.old/src/lib/lib.h bacula-15.0.2/src/lib/lib.h
---- bacula-15.0.2.old/src/lib/lib.h	2024-06-02 10:15:17.077968297 +0200
-+++ bacula-15.0.2/src/lib/lib.h	2024-06-02 10:15:17.318968453 +0200
-@@ -57,7 +57,6 @@
- #include "fnmatch.h"
- #endif
- #include "md5.h"
--#include "sha1.h"
- #include "tree.h"
- #include "watchdog.h"
- #include "btimers.h"
-diff -Naur bacula-15.0.2.old/src/lib/Makefile.in bacula-15.0.2/src/lib/Makefile.in
---- bacula-15.0.2.old/src/lib/Makefile.in	2024-06-02 10:15:17.081968300 +0200
-+++ bacula-15.0.2/src/lib/Makefile.in	2024-06-02 10:15:17.318968453 +0200
-@@ -40,7 +40,7 @@
+diff --git a/src/lib/Makefile.in b/src/lib/Makefile.in
+index 2719b2a..99340b9 100644
+--- a/src/lib/Makefile.in
++++ b/src/lib/Makefile.in
+@@ -43,7 +43,7 @@ INCLUDE_FILES = ../baconfig.h ../bacula.h ../bc_types.h \
        flist.h fnmatch.h guid_to_name.h htable.h lex.h \
        lib.h lz4.h md5.h mem_pool.h message.h \
        openssl.h plugins.h protos.h queue.h rblist.h \
@@ -21,7 +11,7 @@ diff -Naur bacula-15.0.2.old/src/lib/Makefile.in bacula-15.0.2/src/lib/Makefile.
        smartall.h status.h tls.h tree.h var.h \
        waitq.h watchdog.h workq.h \
        parse_conf.h ini.h \
-@@ -57,7 +57,7 @@
+@@ -60,7 +60,7 @@ LIBBAC_SRCS = attr.c base64.c base32.c berrno.c bsys.c binflate.c bget_msg.c \
        guid_to_name.c hmac.c jcr.c lex.c lz4.c alist.c dlist.c \
        md5.c message.c mem_pool.c openssl.c \
        plugins.c priv.c queue.c bregex.c bsockcore.c \
@@ -30,7 +20,7 @@ diff -Naur bacula-15.0.2.old/src/lib/Makefile.in bacula-15.0.2/src/lib/Makefile.
        signal.c smartall.c rblist.c tls.c tree.c \
        util.c var.c watchdog.c workq.c btimers.c \
        worker.c flist.c bcollector.c collect.c \
-@@ -312,22 +312,6 @@
+@@ -315,22 +315,6 @@ md5sum: Makefile libbac.la md5.c
  	$(RMF) md5.o
  	$(CXX) $(DEFS) $(DEBUG) -c $(CPPFLAGS) -I$(srcdir) -I$(basedir) $(DINCLUDE) $(CFLAGS) md5.c
  
@@ -53,7 +43,7 @@ diff -Naur bacula-15.0.2.old/src/lib/Makefile.in bacula-15.0.2/src/lib/Makefile.
  bsnprintf_test: Makefile libbac.la bsnprintf.c unittests.o
  	$(RMF) bsnprintf.o
  	$(CXX) -DTEST_PROGRAM $(DEFS) $(DEBUG) -c $(CPPFLAGS) -I$(srcdir) -I$(basedir) $(DINCLUDE)  $(CFLAGS) -Wno-format-truncation bsnprintf.c
-@@ -424,7 +408,7 @@
+@@ -427,7 +411,7 @@ libtool-clean:
  
  clean:	libtool-clean
  	@$(RMF) core a.out *.o *.bak *.tex *.pdf *~ *.intpro *.extpro 1 2 3
@@ -62,9 +52,23 @@ diff -Naur bacula-15.0.2.old/src/lib/Makefile.in bacula-15.0.2/src/lib/Makefile.
  
  realclean: clean
  	@$(RMF) tags
-diff -Naur bacula-15.0.2.old/src/lib/sha1.c bacula-15.0.2/src/lib/sha1.c
---- bacula-15.0.2.old/src/lib/sha1.c	2024-06-02 10:15:17.082968300 +0200
-+++ bacula-15.0.2/src/lib/sha1.c	1970-01-01 01:00:00.000000000 +0100
+diff --git a/src/lib/lib.h b/src/lib/lib.h
+index 3fcc0aa..b2e9482 100644
+--- a/src/lib/lib.h
++++ b/src/lib/lib.h
+@@ -57,7 +57,6 @@
+ #include "fnmatch.h"
+ #endif
+ #include "md5.h"
+-#include "sha1.h"
+ #include "tree.h"
+ #include "watchdog.h"
+ #include "btimers.h"
+diff --git a/src/lib/sha1.c b/src/lib/sha1.c
+deleted file mode 100644
+index 99d459a..0000000
+--- a/src/lib/sha1.c
++++ /dev/null
 @@ -1,517 +0,0 @@
 -/*
 - *  sha1.c
@@ -583,9 +587,11 @@ diff -Naur bacula-15.0.2.old/src/lib/sha1.c bacula-15.0.2/src/lib/sha1.c
 -   fclose(fd);
 -}
 -#endif   /* SHA1_SUM */
-diff -Naur bacula-15.0.2.old/src/lib/sha1.h bacula-15.0.2/src/lib/sha1.h
---- bacula-15.0.2.old/src/lib/sha1.h	2024-06-02 10:15:17.072968294 +0200
-+++ bacula-15.0.2/src/lib/sha1.h	1970-01-01 01:00:00.000000000 +0100
+diff --git a/src/lib/sha1.h b/src/lib/sha1.h
+deleted file mode 100644
+index 4bcf470..0000000
+--- a/src/lib/sha1.h
++++ /dev/null
 @@ -1,107 +0,0 @@
 -/*
 - *  sha1.h
@@ -674,7 +680,7 @@ diff -Naur bacula-15.0.2.old/src/lib/sha1.h bacula-15.0.2/src/lib/sha1.h
 -    uint32_t Length_Low;            /* Message length in bits      */
 -    uint32_t Length_High;           /* Message length in bits      */
 -
--			       /* Index into message block array   */
+-                               /* Index into message block array   */
 -    int32_t Message_Block_Index;
 -    uint8_t Message_Block[64];      /* 512-bit message blocks      */
 -
@@ -688,9 +694,9 @@ diff -Naur bacula-15.0.2.old/src/lib/sha1.h bacula-15.0.2/src/lib/sha1.h
 -
 -int SHA1Init(SHA1Context *);
 -int SHA1Update(SHA1Context *,
--	       const uint8_t *,
--	       unsigned int);
+-               const uint8_t *,
+-               unsigned int);
 -int SHA1Final(SHA1Context *,
--	       uint8_t Message_Digest[SHA1HashSize]);
+-               uint8_t Message_Digest[SHA1HashSize]);
 -
 -#endif

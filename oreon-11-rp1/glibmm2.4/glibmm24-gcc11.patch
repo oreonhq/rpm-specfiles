@@ -1,8 +1,6 @@
-diff --git a/untracked/gio/giomm/dbusconnection.cc b/untracked/gio/giomm/dbusconnection.cc
-index 9ddeeb4..9701106 100644
 --- a/untracked/gio/giomm/dbusconnection.cc
 +++ b/untracked/gio/giomm/dbusconnection.cc
-@@ -494,7 +494,7 @@ Connection::send_message_with_reply(const Glib::RefPtr<Message>& message, int ti
+@@ -501,7 +501,7 @@
    const SlotAsyncReady& slot, const Glib::RefPtr<Cancellable>& cancellable)
  {
    auto slot_copy = new SlotAsyncReady(slot);
@@ -10,8 +8,8 @@ index 9ddeeb4..9701106 100644
 +  guint32 out_serial = 0;
    g_dbus_connection_send_message_with_reply(gobj(), Glib::unwrap(message),
      static_cast<GDBusSendMessageFlags>(message->get_flags()), timeout_msec, &out_serial,
-     Glib::unwrap(cancellable), &SignalProxy_async_callback, slot_copy);
-@@ -506,7 +506,7 @@ Connection::send_message_with_reply(
+     Glib::unwrap(cancellable), &giomm_SignalProxy_async_callback, slot_copy);
+@@ -513,7 +513,7 @@
    const Glib::RefPtr<Message>& message, int timeout_msec, const SlotAsyncReady& slot)
  {
    auto slot_copy = new SlotAsyncReady(slot);
@@ -19,8 +17,8 @@ index 9ddeeb4..9701106 100644
 +  guint32 out_serial = 0;
    g_dbus_connection_send_message_with_reply(gobj(), Glib::unwrap(message),
      static_cast<GDBusSendMessageFlags>(message->get_flags()), timeout_msec, &out_serial, nullptr,
-     &SignalProxy_async_callback, slot_copy);
-@@ -517,7 +517,7 @@ Glib::RefPtr<Message>
+     &giomm_SignalProxy_async_callback, slot_copy);
+@@ -524,7 +524,7 @@
  Connection::send_message_with_reply_sync(const Glib::RefPtr<Message>& message,
    const Glib::RefPtr<Cancellable>& cancellable, gint timeout_msec)
  {
@@ -29,7 +27,7 @@ index 9ddeeb4..9701106 100644
    GError* gerror = nullptr;
  
    GDBusMessage* result = g_dbus_connection_send_message_with_reply_sync(gobj(),
-@@ -533,7 +533,7 @@ Connection::send_message_with_reply_sync(const Glib::RefPtr<Message>& message,
+@@ -540,7 +540,7 @@
  Glib::RefPtr<Message>
  Connection::send_message_with_reply_sync(const Glib::RefPtr<Message>& message, gint timeout_msec)
  {
@@ -38,11 +36,9 @@ index 9ddeeb4..9701106 100644
    GError* gerror = nullptr;
  
    GDBusMessage* result = g_dbus_connection_send_message_with_reply_sync(gobj(),
-diff --git a/gio/src/dbusconnection.ccg b/gio/src/dbusconnection.ccg
-index e28e7b4..3d9860a 100644
 --- a/gio/src/dbusconnection.ccg
 +++ b/gio/src/dbusconnection.ccg
-@@ -477,7 +477,7 @@ Connection::send_message_with_reply(const Glib::RefPtr<Message>& message, int ti
+@@ -484,7 +484,7 @@
    const SlotAsyncReady& slot, const Glib::RefPtr<Cancellable>& cancellable)
  {
    auto slot_copy = new SlotAsyncReady(slot);
@@ -50,8 +46,8 @@ index e28e7b4..3d9860a 100644
 +  guint32 out_serial = 0;
    g_dbus_connection_send_message_with_reply(gobj(), Glib::unwrap(message),
      static_cast<GDBusSendMessageFlags>(message->get_flags()), timeout_msec, &out_serial,
-     Glib::unwrap(cancellable), &SignalProxy_async_callback, slot_copy);
-@@ -489,7 +489,7 @@ Connection::send_message_with_reply(
+     Glib::unwrap(cancellable), &giomm_SignalProxy_async_callback, slot_copy);
+@@ -496,7 +496,7 @@
    const Glib::RefPtr<Message>& message, int timeout_msec, const SlotAsyncReady& slot)
  {
    auto slot_copy = new SlotAsyncReady(slot);
@@ -59,8 +55,8 @@ index e28e7b4..3d9860a 100644
 +  guint32 out_serial = 0;
    g_dbus_connection_send_message_with_reply(gobj(), Glib::unwrap(message),
      static_cast<GDBusSendMessageFlags>(message->get_flags()), timeout_msec, &out_serial, nullptr,
-     &SignalProxy_async_callback, slot_copy);
-@@ -500,7 +500,7 @@ Glib::RefPtr<Message>
+     &giomm_SignalProxy_async_callback, slot_copy);
+@@ -507,7 +507,7 @@
  Connection::send_message_with_reply_sync(const Glib::RefPtr<Message>& message,
    const Glib::RefPtr<Cancellable>& cancellable, gint timeout_msec)
  {
@@ -69,7 +65,7 @@ index e28e7b4..3d9860a 100644
    GError* gerror = nullptr;
  
    GDBusMessage* result = g_dbus_connection_send_message_with_reply_sync(gobj(),
-@@ -516,7 +516,7 @@ Connection::send_message_with_reply_sync(const Glib::RefPtr<Message>& message,
+@@ -523,7 +523,7 @@
  Glib::RefPtr<Message>
  Connection::send_message_with_reply_sync(const Glib::RefPtr<Message>& message, gint timeout_msec)
  {

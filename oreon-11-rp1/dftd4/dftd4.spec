@@ -1,12 +1,13 @@
-%global source0_hash f00b244759eff2c4f54b80a40673440ce951b6ddfa5eee1f46124297e056f69c
+%global source0_hash f904df226785644ce174f65c7235d0d5a7ead5861880f7b174dd92566522a14c
 
 Name:           dftd4
-Version:        4.2.0
+Version:        4.3.0
 Release:        1%{?dist}
 Summary:        Generally Applicable Atomic-Charge Dependent London Dispersion Correction
 License:        LGPL-3.0-or-later
 URL:            https://dftd4.readthedocs.io/
 Source0:        https://github.com/dftd4/dftd4/archive/v%{version}/%{name}-%{version}.tar.gz
+
 
 BuildRequires:  meson
 BuildRequires:  gcc-gfortran

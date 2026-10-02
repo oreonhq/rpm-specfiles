@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 55ca7c70a75689be937aa27f8ff4b018f06ff4838fc73045560bf0f5a1291060
 
 Name:           python-werkzeug
-Version:        3.1.8
+Version:        3.1.9
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The comprehensive WSGI web application library.
@@ -61,5 +61,4 @@ Summary:        %{summary}
 %files -n python3-werkzeug -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

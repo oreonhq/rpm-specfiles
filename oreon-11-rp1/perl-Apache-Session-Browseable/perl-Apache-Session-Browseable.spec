@@ -6,7 +6,7 @@ Release:	3%{?dist}
 Summary:	Add index and search methods to Apache::Session
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Apache-Session-Browseable
-Source0:	https://cpan.metacpan.org/modules/by-module/Apache/Apache-Session-Browseable-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/G/GU/GUIMARD/Apache-Session-Browseable-%{version}.tar.gz
 Patch0:		Apache-Session-Browseable-1.3.6-synopsis-cafile.patch
 BuildArch:	noarch
 # Module Build

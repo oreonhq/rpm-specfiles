@@ -1,4 +1,4 @@
-%global source0_hash 757afe093dc84ba591cc04dc63a07a3b24399938e2f0b17979eedb730e41f9d6
+%global source0_hash c97faf3326cb3eb00f562e5b32c4031c1acc4d70e09971c6a153fbd973fb10ff
 
 %bcond check 0
 
@@ -6,7 +6,7 @@
 %global debug_package %{nil}
 
 %global goipath         github.com/go-cmd/cmd
-Version:                1.4.0
+Version:                1.4.3
 
 %gometa
 

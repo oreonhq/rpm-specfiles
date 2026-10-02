@@ -1,4 +1,4 @@
-%global source0_hash 94d734b9303b3b68df61e4255f2eddeee346b66ec4b6e134f19e1a3cc3ff4a09
+%global source0_hash f3dfdcf97d5a9e3a5bc0ebe66afd184721b606276eee3ba0ada8c92a5e71d44c
 
 %global srcnm Qalculate
 %global libversion 23

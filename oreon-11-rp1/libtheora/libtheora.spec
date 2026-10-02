@@ -1,4 +1,4 @@
-%global source0_hash f36da409947aa2b3dcc6af0a8c2e3144bc19db2ed547d64e9171c59c66561c61
+%global source0_hash ebdf77a8f5c0a8f7a9e42323844fa09502b34eb1d1fece7b5f54da41fe2122ec
 
 # enable bootstrap mode (e.g. disables doc generation)
 %bcond bootstrap 0
@@ -13,10 +13,7 @@ Summary:        Theora Video Compression Codec
 License:        BSD-3-Clause
 URL:            http://www.theora.org
 Source0:        http://downloads.xiph.org/releases/theora/%{name}-%{version}.tar.xz
-Patch0:         libtheora-1.1.1-fix-pp_sharp_mod-calc.patch
 # https://bugs.archlinux.org/task/35985
-Patch1:         libtheora-1.1.1-libpng16.patch
-Patch2:         libtheora-1.1.1-libm.patch
 
 BuildRequires: make
 BuildRequires:  autoconf automake libtool
@@ -70,9 +67,6 @@ with theora bitstreams.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch -P0 -p1
-%patch -P1 -p0 -b .libpng16
-%patch -P2 -p1
 
 # Update config.guess/sub to fix builds on new architectures (aarch64/ppc64le)
 cp /usr/lib/rpm/redhat/config.* .
@@ -128,5 +122,4 @@ install -m 755 examples/.libs/png2theora $RPM_BUILD_ROOT/%{_bindir}/png2theora
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.1-41
-- Prepare for Oreon 11 (RP1)
+%autochangelog

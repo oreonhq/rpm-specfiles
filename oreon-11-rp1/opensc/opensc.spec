@@ -1,4 +1,4 @@
-%global source0_hash f16291a031d86e570394762e9f35eaf2fcbc2337a49910f3feae42d54e1688cb
+%global source0_hash 976f4a23eaf3397a1a2c3a7aac80bf971a8c3d829c9a79f06145bfaeeae5eca7
 
 Name:           opensc
 Version:        0.27.1
@@ -13,13 +13,9 @@ Patch1:         opensc-0.19.0-pinpad.patch
 # File caching by default (#2000626)
 Patch8:         %{name}-0.22.0-file-cache.patch
 # https://github.com/OpenSC/OpenSC/pull/3316
-Patch9:         %{name}-0.26.1-compiler.patch
 # https://github.com/OpenSC/OpenSC/pull/3458
-Patch10:        %{name}-0.26.1-bash-completion.patch
 # https://github.com/OpenSC/OpenSC/pull/3411
 # https://github.com/OpenSC/OpenSC/pull/3549
-Patch11:        %{name}-0.26.1-function-list.patch
-Patch12:        %{name}-0.26.1-softhsm-2.7.0.patch
 
 BuildRequires:  make
 BuildRequires:  pcsc-lite-devel
@@ -72,10 +68,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 %patch 1 -p1 -b .pinpad
 %patch 8 -p1 -b .file-cache
-%patch 9 -p1 -b .compiler
-%patch 10 -p1 -b .bash-completion
-%patch 11 -p1 -b .function-list
-%patch 12 -p1 -b .softhsm-2.7.0
 
 XFAIL_TESTS="test-pkcs11-tool-test-threads.sh test-pkcs11-tool-test.sh"
 
@@ -248,5 +240,4 @@ rm %{buildroot}%{_mandir}/man1/opensc-notify.1*
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.26.1-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

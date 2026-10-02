@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 4e6da68e1ccfd5a2fcaf038a6438bef7b671446b05a3e739787b63689016d592
 
 Name:    knotes

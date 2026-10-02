@@ -1,4 +1,4 @@
-%global source0_hash 95a7f0dd333fd1dce3e4f92691ca8be38227b27887599b21cd3c4f6d6a7abb10
+%global source0_hash a8c1516e741562cf95aa4479c64916c3d4d2623e24fdc35e414e2320e7300aae
 
 Name:		libcbor
 Version:	0.14.0
@@ -7,7 +7,7 @@ Summary:	A CBOR parsing library
 
 License:	MIT
 URL:		http://libcbor.org
-Source0:        https://github.com/PJK/%{name}/archive/v%{version}.tar.gz#/libcbor-0.13.0.tar.gz
+Source0:        https://github.com/PJK/%{name}/archive/v%{version}.tar.gz#/libcbor-%{version}.tar.gz
 
 BuildRequires:	cmake
 BuildRequires:	doxygen
@@ -65,5 +65,4 @@ cp doc/build/man/libcbor.3 %{buildroot}%{_mandir}/man3/
 %{_mandir}/man3/libcbor.3{,.*}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.13.0-2
-- Import
+%autochangelog

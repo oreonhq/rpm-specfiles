@@ -1,4 +1,4 @@
-%global source0_hash 67c97feee86e6709b9cdec303c3650059b298f1c2b886b6053a56aced1616b3f
+%global source0_hash 742cd353a7b6f64285c444cf33242176c70c4d711b877bec15e1f4ed3e064f1a
 
 Name: libqmi
 Version: 1.38.0
@@ -98,5 +98,4 @@ cp -a src/qmicli/qmicli %{buildroot}%{_datadir}/bash-completion/completions/
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.36.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

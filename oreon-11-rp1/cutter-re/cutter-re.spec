@@ -1,8 +1,8 @@
-%global source0_hash edc266a5f7a1f1c7f71cf5c6c9727e05008b728eae3bb42beb7d0b24ce07c5c3
+%global source0_hash b524208f2b09fa5edb6720db007f2f8013089d64bebd87aabd147f79bf5f40b9
 
 Name:           cutter-re
-Version:        2.3.4
-Release:        10%{?dist}
+Version:        2.5.0
+Release:        1%{?dist}
 Summary:        GUI for Rizin reverse engineering framework
 
 # CC-BY-SA: src/img/icons/

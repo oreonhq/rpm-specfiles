@@ -1,16 +1,33 @@
---- lame-3.100/include/libmp3lame.sym	2017-09-06 14:33:35.000000000 -0500
-+++ lame-3.100/include/libmp3lame.sym	2017-10-22 16:18:44.708436200 -0500
-@@ -1,5 +1,4 @@
- lame_init
--lame_init_old
- lame_set_num_samples
- lame_get_num_samples
- lame_set_in_samplerate
-@@ -188,6 +187,7 @@ hip_decode_exit
+------------------------------------------------------------------------
+r6564 | aleidinger | 2026-07-12 09:27:09 -0400 (Sun, 12 Jul 2026) | 15 lines
+
+Export the decoder analysis hooks from the shared library
+
+The MP3 decoder's per-frame analysis hooks hip_set_pinfo and
+hip_finish_pinfo belong to the documented decoder API and are used by the
+bundled frontends, but they were missing from the shared library's export
+list. Linking a frontend against the shared library - as
+--enable-dynamic-frontends does - therefore failed with undefined-symbol
+errors. Add both so dynamic-frontend builds link.
+
+hip_set_pinfo is the symbol named in the report; hip_finish_pinfo is a
+second omission of the same kind, reached by the core file reader once the
+first is resolved.
+
+SF bug #515
+
+
+diff --git a/include/libmp3lame.sym b/include/libmp3lame.sym
+index 6490b5c0..471e532d 100644
+--- a/include/libmp3lame.sym
++++ b/include/libmp3lame.sym
+@@ -188,6 +188,8 @@ hip_decode_exit
  hip_set_errorf
  hip_set_debugf
  hip_set_msgf
 +hip_set_pinfo
++hip_finish_pinfo
  hip_decode
  hip_decode_headers
  hip_decode1
+------------------------------------------------------------------------

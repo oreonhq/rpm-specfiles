@@ -1,4 +1,4 @@
-%global source0_hash c3fcf411aea9cb9643590cbc9df99fa5fe30adcac695024442973d76fa5f87bc
+%global source0_hash 74a2b6e8cb4a0304e95b995496ea3ac644c29371649b892b856e22f12a0bdeed
 
 # SPEC file for libmtp, primary target is the Fedora
 # RPM repository.
@@ -24,11 +24,6 @@ BuildRequires:  doxygen
 BuildRequires:  libgcrypt-devel
 %endif
 BuildRequires:  chrpath
-
-# https://github.com/libmtp/libmtp/pull/356
-Patch0:         0001-doc-Don-t-document-internal-endian-macros.patch
-# https://github.com/libmtp/libmtp/issues/346
-Patch1:         0001-disabled-foxconn-487-e111-id.-https-github.com-libmt.patch
 
 %description
 This package provides a software library for communicating with MTP
@@ -128,11 +123,4 @@ chrpath --delete $RPM_BUILD_ROOT{%{_bindir},/usr/lib/udev}/mtp*
 %{_libdir}/pkgconfig/libmtp.pc
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.22-5
-- Rebuild
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.22-4
-- Rebuild for ISO kio-extras dep
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.22-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

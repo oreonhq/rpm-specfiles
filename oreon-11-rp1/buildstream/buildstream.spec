@@ -1,4 +1,4 @@
-%global source0_hash 1527a3ace1233caa42a42c2d40f03de401e6815978428ed560156acdbca072d8
+%global source0_hash 43c458f14a4c9993876f4e1898b41f9deb90a63994ae5800e11186908b1e1deb
 
 Name:          buildstream
 Summary:       Build/integrate software stacks
@@ -7,9 +7,10 @@ URL:           https://buildstream.build/
 
 ExcludeArch:   %{ix86}
 
-Version:       2.8.0
+Version:       2.8.1
 Release:       %autorelease
 Source0:       https://github.com/apache/buildstream/archive/%{version}/buildstream-%{version}.tar.gz
+
 Patch:         0001-requirements-requirements.in-Do-not-limit-protobuf-v.patch
 
 BuildRequires: gcc

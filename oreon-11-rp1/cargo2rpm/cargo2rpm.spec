@@ -1,4 +1,4 @@
-%global source0_hash 06abe2d73597523694542dc609f0c69780d99112070439fed99b5c261b7cba37
+%global source0_hash 98c8e1a8a124577c9bf2785533cb058f135534761a48de9acd499ef50f3c4353
 
 %bcond_without check
 
@@ -9,8 +9,6 @@ Summary:        Translation layer between cargo and RPM
 License:        MIT
 URL:            https://codeberg.org/rust2rpm/cargo2rpm
 Source0:        https://codeberg.org/rust2rpm/cargo2rpm/archive/v%{version}.tar.gz
-Patch0:         cargo2rpm-0.3.3-host-target-deps.patch
-Patch1:         cargo2rpm-0.3.3-prune-orphan-features.patch
 
 BuildArch:      noarch
 

@@ -1,4 +1,4 @@
-%global source0_hash 6bc60fe53c9e9c828a6d7f3675da11ad7fb54491863584e01c1051740fe2a286
+%global source0_hash 9645481a2b16476b59220aa2d6bc5bc41043f291326c9b37581018fbd16dd53a
 
 Summary: Tools to support ATM networking under Linux
 Name: linux-atm
@@ -7,7 +7,7 @@ Release: 1%{?dist}
 # The licensing here is a mess. This is as close to accurate as possible.
 License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL: http://linux-atm.sourceforge.net/
-Source0: http://downloads.sf.net/%{name}/%{name}-%{version}.tgz
+Source0: https://sourceforge.net/projects/linux-atm/files/linux-atm/%{version}/%{name}-%{version}.tar.gz/download#/%{name}-%{version}.tar.gz
 
 BuildRequires: automake
 BuildRequires: byacc

@@ -1,10 +1,10 @@
-%global source0_hash e8a9136a134dc52c76b75ae4b89e71cee6fbe2061dd318d0f818f088f8253411
+%global source0_hash 3f692824e54c2192d984a24e1685722d1c88787e24dba662aecabe0b7f9e2bbc
 
 %global forgeurl https://github.com/ubuntu/gnome-shell-extension-appindicator
 %global uuid appindicatorsupport@rgcjonas.gmail.com
 
 Name: gnome-shell-extension-appindicator
-Version: 65
+Version: 66
 %forgemeta
 Release: %autorelease
 Summary: AppIndicator/KStatusNotifierItem support for GNOME Shell

@@ -1,13 +1,14 @@
-%global source0_hash b8fea0b09714bbadf202b9b3434cce6b59c282e7869268d0c08b85880fdbb446
+%global source0_hash 1e0593116e1a229242255cf890f210cbe120e6f05e9d877faf8d85da675ade1a
 
 Name:           dateutils
-Version:        0.4.11
+Version:        0.4.12
 Release:        %autorelease
 Summary:        Command-line date and time calculation, conversion, and comparison
 
 License:        BSD-3-Clause
 URL:            http://www.fresse.org/dateutils/
 Source0:        https://github.com/hroptatyr/dateutils/releases/download/v%{version}/%{name}-%{version}.tar.xz
+
 
 BuildRequires:  gcc
 BuildRequires: make

@@ -1,7 +1,7 @@
-%global source0_hash cc1b5c8ef9efa20d44fe90b59515fddf8b4e884d782a0b33b26a70ab48ec04c1
+%global source0_hash 5e74e333f47fd4f311599b57c7c846b3a9f4f6b00411cbe7103791ad7e484c23
 
 Name:		fio
-Version:	3.42
+Version:	3.43
 Release:	1%{?dist}
 Summary:	Multithreaded IO generation tool
 
@@ -292,5 +292,4 @@ make install prefix=%{_prefix} mandir=%{_mandir} libdir=%{_libdir}/fio DESTDIR=$
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.40-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash ca64d9f1f384f151b9511bec01126072acd2f313439f8ed015a22d8790aab6fa
 
 Name:           python-coverage
-Version:        7.16.1
+Version:        7.16.2
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Code coverage measurement for Python
@@ -62,5 +62,4 @@ Summary:        %{summary}
 %{_bindir}/coverage3
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.13.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,6 +1,6 @@
-%global source0_hash c4f6bbe6b5a45c2eb610ca9d231158e313086d5b1a40c9922cb42b597419b14e
+%global source0_hash 822aa850c6ce77346ae96a8a1d351d52e77e85929f35363849a0a4e638e0a2a1
 
-%global         soversion 3.3
+%global         soversion 3.4
 %global         patchversion 0
 
 Summary:        Easy to integrate Vulkan memory allocation library

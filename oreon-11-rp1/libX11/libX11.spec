@@ -1,4 +1,4 @@
-%global source0_hash fa026f9bb0124f4d6c808f9aef4057aad65e7b35d8ff43951cef0abe06bb9a9a
+%global source0_hash 69606f485c2c07c14ef64f75b7bb326d48587af33795d9ab3e607c0b5f94f11c
 
 %global tarball libX11
 #global gitdate 20130524
@@ -126,5 +126,4 @@ make %{?_smp_mflags} check
 %{_mandir}/man5/*.5*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.12-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

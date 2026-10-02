@@ -1,4 +1,4 @@
-%global source0_hash 8727e53bb8b7528f850327a2a149158422c02183bc120d1d733cc65b1e2c349d
+%global source0_hash 8e7438ccd6b3a2ab05182d0846e112a56a7f557ecdee40de07bf67820008bef7
 
 # Do not generate provides for private libraries
 %global __provides_exclude_from ^%{_libdir}/stunnel/.*$
@@ -157,5 +157,4 @@ fi
 %systemd_postun_with_restart %{name}.service
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.78-1
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3226049ac40969093c5756f9892e76dbda1efeb105cda32f39fd52f6547ed5b3
 
 %define basever %(echo %{version} | sed "s/\.[0-9]*$//")
 
@@ -9,8 +9,8 @@
 %bcond plparser %[!(0%{?rhel} >= 10)]
 
 Name:      brasero
-Version:   3.12.3
-Release:   17%{?dist}
+Version:   3.12.4
+Release:   1%{?dist}
 Summary:   Gnome CD/DVD burning application
 
 
@@ -22,7 +22,6 @@ License:   GPL-3.0-or-later AND LGPL-2.0-or-later AND GPL-2.0-only AND CC-BY-SA-
 URL:       https://wiki.gnome.org/Apps/Brasero
 Source0:        https://download.gnome.org/sources/%{name}/%{basever}/%{name}-%{version}.tar.xz
 # https://gitlab.gnome.org/GNOME/brasero/-/merge_requests/30
-Patch0:    0001-Fix-gcc-14.x-build-failure.patch
 
 BuildRequires:  pkgconfig(gstreamer-plugins-base-1.0) >= 0.11.92
 BuildRequires:  pkgconfig(gtk+-3.0) >= 2.99.0
@@ -180,5 +179,4 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.3-17
-- Prepare for Oreon 11 (RP1)
+%autochangelog

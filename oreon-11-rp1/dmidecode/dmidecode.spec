@@ -1,4 +1,4 @@
-%global source0_hash e40c65f3ec3dafe31ad8349a4ef1a97122d38f65004ed66575e1a8d575dd8bae
+%global source0_hash 2c3aed12c85a1e6a9410d406d5e417c455466dc1bc7c89278bb32cf7cad91e8a
 
 Summary:        Tool to analyse BIOS DMI data
 Name:           dmidecode
@@ -55,5 +55,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{bash_completions_dir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

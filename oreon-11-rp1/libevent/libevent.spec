@@ -1,4 +1,4 @@
-%global source0_hash 92e6de1be9ec176428fd2367677e61ceffc2ee1cb119035037a27d346b0403bb
+%global source0_hash f7e9383b8c0baa81b687e5b5eecc01beefaf1b19b64151d95ed61647fe7a315c
 
 %global develdocdir %{_docdir}/%{name}-devel
 
@@ -148,5 +148,4 @@ mkdir -p $RPM_BUILD_ROOT/%{develdocdir}/sample
 %doc %{develdocdir}/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.12-17
-- Prepare for Oreon 11 (RP1)
+%autochangelog

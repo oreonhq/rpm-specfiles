@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e2efa45643f16b9fea2d6299f2f403d672eaeacddf0ff7f8094e1af9b0f5980b
 
 %global apiver 2.4
 # first two digits of version
@@ -8,7 +8,7 @@
 %global libsigc_version 2.9.1
 
 Name:           glibmm2.4
-Version:        2.66.10
+Version:        2.90.0
 Release:        1%{?dist}
 Summary:        C++ interface for the GLib library
 
@@ -112,5 +112,4 @@ chmod +x $RPM_BUILD_ROOT%{_libdir}/glibmm-%{apiver}/proc/gmmproc
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.66.8-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

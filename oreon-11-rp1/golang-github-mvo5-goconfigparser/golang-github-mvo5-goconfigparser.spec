@@ -7,7 +7,7 @@
 
 # https://github.com/mvo5/goconfigparser
 %global goipath         github.com/mvo5/goconfigparser
-Version:                0.2.2
+Version:                0.3
 %global tag             0.2.2
 
 %gometa

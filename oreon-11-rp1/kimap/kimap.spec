@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 96303168f2bf97905e68bfbc93f7efba9a93a9331eca53294557d3ef3f56678a
 
 Name:    kimap

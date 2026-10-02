@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 788783b56fc3d03283b3aa29302d0b958aeca88835e10b1ec61f19e0efc7e8a4
 
 %global glib2_version 2.44
 %global gtk3_version 3.20
@@ -6,7 +6,7 @@
 %global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:           gspell
-Version:        1.14.4
+Version:        1.14.5
 Release:        %autorelease
 Summary:        Spell-checking library for GTK+
 
@@ -101,5 +101,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

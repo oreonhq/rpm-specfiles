@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ae14d9bcf1bb3c300a3ab2e6a53f50284e5c6c966a4ac4cc5aedcb1bc74e4d02
 
 %global qt_module qtwayland
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Wayland platform support and QtCompositor module
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -198,5 +198,4 @@ popd
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

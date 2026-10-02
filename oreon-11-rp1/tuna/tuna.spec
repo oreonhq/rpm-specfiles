@@ -1,4 +1,4 @@
-%global source0_hash c41acab31a716783273c55aa4fe82bf21e586ad570ee6e7fbf5b3e34bce4a506
+%global source0_hash d184f08f11b3c8dbe3d95343c1b695dc17df0fa2f162b20b34715b83df505ee0
 
 %bcond oscilloscope %{undefined rhel}
 
@@ -107,5 +107,4 @@ done
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

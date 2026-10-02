@@ -1,4 +1,4 @@
-%global source0_hash a6c0a28a4055d5cde35ac9249ad0596ee6aa10f0a29bd88a6e197d29adee0a3c
+%global source0_hash 16274a4102426871cad84ad07db41f82aa8f4d43d95e5947a62e199c2df775c6
 
 %if 0%{?rhel}
 %bcond_with tests
@@ -171,5 +171,4 @@ cp -p tools/21-cloudinit.conf $RPM_BUILD_ROOT/%{_sysconfdir}/rsyslog.d/21-cloudi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

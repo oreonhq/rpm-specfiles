@@ -6,7 +6,7 @@ Release:        14%{?dist}
 Summary:        Gumbo parser library
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/Alien-LibGumbo
-Source0:        https://cpan.metacpan.org/authors/id/R/RU/RUZ/Alien-LibGumbo-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BP/BPS/Alien-LibGumbo-%{version}.tar.gz
 
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter >= 0:5.010

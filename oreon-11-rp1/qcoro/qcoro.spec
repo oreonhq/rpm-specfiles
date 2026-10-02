@@ -1,4 +1,4 @@
-%global source0_hash 809afafab61593f994c005ca6e242300e1e3e7f4db8b5d41f8c642aab9450fbc
+%global source0_hash 4bff7513c5c8e301b66308df05795043b1792ed16381a484e5c990171b8ff19e
 
 %global use_qt5 %[!(0%{?rhel} >= 11)]
 %global use_qt6 1
@@ -22,7 +22,7 @@ Release: 1%{?dist}
 License: MIT
 Summary: C++ Coroutines for Qt
 URL: https://github.com/danvratil/%{name}
-Source0:        https://github.com/danvratil/qcoro/archive/refs/tags/v0.12.0.tar.gz#/qcoro-0.12.0.tar.gz
+Source0:        https://github.com/danvratil/qcoro/archive/refs/tags/v%{version}.tar.gz#/qcoro-%{version}.tar.gz
 
 %if 0%{?use_qt5}
 BuildRequires: cmake(Qt5Concurrent)
@@ -184,108 +184,4 @@ popd
 %endif
 
 %changelog
-* Thu Apr 16 2026 Jan Grulich <jgrulich@redhat.com> - 0.12.0-5
-- Rebuild (qt6)
-
-* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.12.0-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
-
-* Tue Sep 30 2025 Jan Grulich <jgrulich@redhat.com> - 0.12.0-3
-- Rebuild (qt6)
-
-* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.12.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
-
-* Sat Apr 05 2025 Marie Loise Nolden <loise@kde.org> - 0.12.0-1
-- 0.12.0
-
-* Tue Mar 25 2025 Jan Grulich <jgrulich@redhat.com> - 0.11.0-2
-- Rebuild (qt6)
-
-* Thu Feb 06 2025 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 0.11.0-1
-- 0.11.0
-
-* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.10.0-8
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
-
-* Mon Oct 14 2024 Jan Grulich <jgrulich@redhat.com> - 0.10.0-7
-- Rebuild (qt6)
-
-* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.10.0-6
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
-
-* Thu Apr 04 2024 Jan Grulich <jgrulich@redhat.com> - 0.10.0-5
-- Rebuild (qt6)
-
-* Fri Feb 16 2024 Jan Grulich <jgrulich@redhat.com> - 0.10.0-4
-- Rebuild (qt6)
-
-* Fri Jan 26 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.10.0-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Mon Jan 22 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.10.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Wed Dec 06 2023 Yaakov Selkowitz <yselkowi@redhat.com> - 0.10.0-1
-- 0.10.0
-
-* Wed Nov 29 2023 Jan Grulich <jgrulich@redhat.com> - 0.9.0-8
-- Rebuild (qt6)
-
-* Fri Oct 13 2023 Jan Grulich <jgrulich@redhat.com> - 0.9.0-7
-- Rebuild (qt6)
-
-* Thu Oct 05 2023 Justin Zobel <justin.zobel@gmail.com> - 0.9.0-6
-- Rebuild for Qt Private API
-
-* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.9.0-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
-
-* Wed Jul 12 2023 Jan Grulich <jgrulich@redhat.com> - 0.9.0-4
-- Rebuild for qtbase private API version change
-
-* Wed Jul 12 2023 Jan Grulich <jgrulich@redhat.com> - 0.9.0-3
-- Rebuild for qtbase private API version change
-
-* Mon May 29 2023 Jan Grulich <jgrulich@redhat.com> - 0.9.0-2
-- Rebuild (qt6)
-
-* Fri May 05 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 0.9.0-1
-- Update to version 0.9.0
-
-* Wed Feb 01 2023 Vitaly Zaitsev <vitaly@easycoding.org> - 0.8.0-1
-- Updated to version 0.8.0.
-
-* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.7.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
-
-* Mon Nov 21 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 0.7.0-1
-- Updated to version 0.7.0.
-
-* Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
-
-* Sat Jul 09 2022 Marc Deop <marcdeop@fedoraproject.org> - 0.6.0-1
-- 0.6.0
-
-* Sat May 07 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 0.5.1-1
-- Updated to version 0.5.1.
-
-* Wed Mar 16 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 0.4.0-4
-- Enabled s390x build.
-
-* Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
-
-* Sun Jan 09 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 0.4.0-2
-- Fixed summary in subpackages.
-
-* Sun Jan 09 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 0.4.0-1
-- Updated to version 0.4.0.
-- Separated Qt 5 and Qt 6 versions into a different subpackages.
-
-* Mon Oct 25 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 0.3.0-1
-- Updated to version 0.3.0.
-
-* Sat Oct 02 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 0.2.0-1
-- Initial SPEC release.
+%autochangelog

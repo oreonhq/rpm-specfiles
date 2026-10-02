@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash a4ce42235f47bd5a90c87c9fb51c43de40bd325c7ba046634a36499bbd16dff3
 
 %undefine __cmake_in_source_build

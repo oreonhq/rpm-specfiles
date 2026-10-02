@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3143f53b64257ba2a0685c940f5dce476c75871ff86b516de45cfd54ea93a62d
 
 %global qt_module qtmultimedia
 
@@ -22,8 +22,8 @@
 
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -236,5 +236,4 @@ rm -r %{buildroot}%{_qt6_archdatadir}/mkspecs/features/ios/add_ios_ffmpeg_librar
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 4fe5256cea046d77546d36042d090e384184bc24041ecda5d03c03d35d1eabbb
+%global source0_hash e3d60c83405268c422f95feec740455a1cc4b911d00bd8424d5d1272bc509b1a
 %global source5_hash 0acb39e92d947e30175de0969a5b2e479e2983bc3e3d69c835ee5174610e9636
 
 %define rsyslog_statedir %{_sharedstatedir}/rsyslog
@@ -774,5 +774,4 @@ done
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.2602.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

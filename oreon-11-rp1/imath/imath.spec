@@ -1,4 +1,4 @@
-%global source0_hash 8a1bc258f3149b5729c2f4f8ffd337c0e57f09096e4ba9784329f40c4a9035da
+%global source0_hash e10c12b3f21f45bf08e09d4215d9c7691368d747beebd840de0b6fefed2df9f8
 
 %global srcname Imath
 %global sover 29
@@ -101,5 +101,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.12-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

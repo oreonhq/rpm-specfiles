@@ -1,10 +1,10 @@
-%global source0_hash a504a50d662c3d1167e25aba9be2f528a2f907c832a4dd452e7e915a3ebc5f39
+%global source0_hash 8be90851eaa3e294fec988214ed45f49ba60877db92c14a982c703c274a686ac
 
 %global gap_pkgname json
 %global giturl      https://github.com/gap-packages/json
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.4.0
+Version:        3.0.0
 Release:        %autorelease
 Summary:        JSON reading and writing for GAP
 

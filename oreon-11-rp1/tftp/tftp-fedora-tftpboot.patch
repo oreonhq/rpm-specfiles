@@ -1,0 +1,57 @@
+diff --git a/README.security b/README.security
+index 8ff9e85..df2fa38 100644
+--- a/README.security
++++ b/README.security
+@@ -23,10 +23,10 @@ probably the following:
+ 
+ 1. Create a separate "tftpd" user and group only used for tftpd;
+ 2. Have all your boot files in a single directory tree (usually called
+-   /tftpboot).
+-3. Specify "-p -u tftpd -s /tftpboot" on the tftpd command line; if
++   /var/lib/tftpboot).
++3. Specify "-p -u tftpd -s /var/lib/tftpboot" on the tftpd command line; if
+    you want clients to be able to create files use
+-   "-p -c -U 002 -u tftpd -s /tftpboot" (replace 002 with whatever
++   "-p -c -U 002 -u tftpd -s /var/lib/tftpboot" (replace 002 with whatever
+    umask is appropriate for your setup.)
+ 
+ When the -s (chroot) option is used, tftpd needs to be started as
+@@ -51,12 +51,12 @@ directly.  Thus, if your /etc/inetd.conf looks like this (all on one
+ line):
+ 
+ tftp	dgram	udp	wait	root	/usr/sbin/tcpd
+-/usr/sbin/in.tftpd -s /tftpboot -r blksize
++/usr/sbin/in.tftpd -s /var/lib/tftpboot -r blksize
+ 
+ ... it's better to change to ...
+ 
+ tftp	dgram	udp	wait	root	/usr/sbin/in.tftpd
+-in.tftpd -s /tftpboot -r blksize
++in.tftpd -s /var/lib/tftpboot -r blksize
+ 
+ You should make sure that you are using "wait" option in tftpd; you
+ also need to have tftpd spawned as root in order for chroot (-s) to
+diff --git a/tftp-xinetd b/tftp-xinetd
+index 982fe09..d04b48a 100644
+--- a/tftp-xinetd
++++ b/tftp-xinetd
+@@ -10,7 +10,7 @@ service tftp
+ 	wait			= yes
+ 	user			= root
+ 	server			= /usr/sbin/in.tftpd
+-	server_args		= -s /tftpboot
++	server_args		= -s /var/lib/tftpboot
+ 	disable			= yes
+ 	per_source		= 11
+ 	cps			= 100 2
+diff --git a/tftpd/sample.rules b/tftpd/sample.rules
+index 55b56be..1741a4c 100644
+--- a/tftpd/sample.rules
++++ b/tftpd/sample.rules
+@@ -29,5 +29,5 @@ rg	\\		/		# Convert backslashes to slashes
+ rg	\#		@		# Convert hash marks to @ signs
+ rg	/../		/..no../	# Convert /../ to /..no../
+ e	^ok/				# These are always ok
+-r	^[^/]		/tftpboot/\0	# Convert non-absolute files
++r	^[^/]		/var/lib/tftpboot/\0	# Convert non-absolute files
+ a	\.pvt$				# Reject requests for private files

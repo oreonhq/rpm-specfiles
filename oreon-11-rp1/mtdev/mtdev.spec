@@ -1,4 +1,4 @@
-%global source0_hash 15d7b28da8ac71d8bc8c9287c2045fd174267bc740bec10cfda332dc1204e0e0
+%global source0_hash a107adad2101fecac54ac7f9f0e0a0dd155d954193da55c2340c97f2ff1d814e
 
 %global tarball mtdev
 #global gitdate 20110105
@@ -69,5 +69,4 @@ rm -f %{buildroot}%{_libdir}/*.la
 %{_bindir}/mtdev-test
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.6-12
-- Prepare for Oreon 11 (RP1)
+%autochangelog

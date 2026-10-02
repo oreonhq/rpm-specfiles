@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8b8458d93356b88b85d2321f729da18537363462787df531a57502f895bd42b1
 
 Name:           rpm-mpi-hooks
 Version:        8
@@ -25,7 +25,8 @@ a Requires to the their -devel packages.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }cp -a %SOURCE4 .
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+cp -a %SOURCE4 .
 
 
 %build
@@ -48,5 +49,4 @@ install -Dpm 0755 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/mpi.req
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8-13
-- Prepare for Oreon 11 (RP1)
+%autochangelog

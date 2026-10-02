@@ -6,7 +6,7 @@ Release:        3%{?dist}
 Summary:        Class for representing nodes in a tree
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tree-DAG_Node
-Source0:        https://cpan.metacpan.org/modules/by-module/Tree/Tree-DAG_Node-%{version}.tgz
+Source0:        https://cpan.metacpan.org/authors/id/R/RS/RSAVAGE/Tree-DAG_Node-%{version}.tgz
 BuildArch:      noarch
 # Module Build ---------------------------------------------------------------
 BuildRequires:  coreutils

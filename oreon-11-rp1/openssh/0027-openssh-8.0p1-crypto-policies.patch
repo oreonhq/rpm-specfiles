@@ -1,18 +1,18 @@
-From 0914766aed901780fb744b4ba06e500ad03cf428 Mon Sep 17 00:00:00 2001
+From 7a5ff8f728cfb98c90dcbe648723fb4d4ed02300 Mon Sep 17 00:00:00 2001
 From: Dmitry Belyavskiy <beldmit@gmail.com>
 Date: Thu, 15 May 2025 13:43:28 +0200
-Subject: [PATCH 27/54] openssh-8.0p1-crypto-policies
+Subject: [PATCH 27/53] openssh-8.0p1-crypto-policies
 
 ---
- ssh_config.5  | 168 +++++++++++++++++++--------------------------
- sshd_config.5 | 186 ++++++++++++++++++--------------------------------
- 2 files changed, 140 insertions(+), 214 deletions(-)
+ ssh_config.5  | 172 +++++++++++++++++++-------------------------
+ sshd_config.5 | 193 ++++++++++++++++++--------------------------------
+ 2 files changed, 139 insertions(+), 226 deletions(-)
 
 diff --git a/ssh_config.5 b/ssh_config.5
-index 9e5163774..306fa1d8a 100644
+index 04797a1e9..c4c72f587 100644
 --- a/ssh_config.5
 +++ b/ssh_config.5
-@@ -438,17 +438,13 @@ A single argument of
+@@ -468,18 +468,13 @@ A single argument of
  causes no CNAMEs to be considered for canonicalization.
  This is the default behaviour.
  .It Cm CASignatureAlgorithms
@@ -29,13 +29,14 @@ index 9e5163774..306fa1d8a 100644
 -ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
 -sk-ssh-ed25519@openssh.com,
 -sk-ecdsa-sha2-nistp256@openssh.com,
--rsa-sha2-512,rsa-sha2-256
+-rsa-sha2-512,rsa-sha2-256,
+-ssh-mldsa44-ed25519@openssh.com
 -.Ed
 -.Pp
  If the specified list begins with a
  .Sq +
  character, then the specified algorithms will be appended to the default set
-@@ -587,20 +583,25 @@ If the option is set to
+@@ -618,20 +613,25 @@ If the option is set to
  (the default),
  the check will not be executed.
  .It Cm Ciphers
@@ -65,7 +66,7 @@ index 9e5163774..306fa1d8a 100644
  .Pp
  The supported ciphers are:
  .Bd -literal -offset indent
-@@ -616,13 +617,6 @@ aes256-gcm@openssh.com
+@@ -647,13 +647,6 @@ aes256-gcm@openssh.com
  chacha20-poly1305@openssh.com
  .Ed
  .Pp
@@ -79,7 +80,7 @@ index 9e5163774..306fa1d8a 100644
  The list of available ciphers may also be obtained using
  .Qq ssh -Q cipher .
  .It Cm ClearAllForwardings
-@@ -1022,6 +1016,11 @@ command line will be passed untouched to the GSSAPI library.
+@@ -1060,6 +1053,11 @@ command line will be passed untouched to the GSSAPI library.
  The default is
  .Dq no .
  .It Cm GSSAPIKexAlgorithms
@@ -91,7 +92,7 @@ index 9e5163774..306fa1d8a 100644
  The list of key exchange algorithms that are offered for GSSAPI
  key exchange. Possible values are
  .Bd -literal -offset 3n
-@@ -1034,10 +1033,8 @@ gss-nistp256-sha256-,
+@@ -1072,9 +1070,6 @@ gss-nistp256-sha256-,
  gss-curve25519-sha256-
  .Ed
  .Pp
@@ -99,11 +100,9 @@ index 9e5163774..306fa1d8a 100644
 -.Dq gss-group14-sha256-,gss-group16-sha512-,gss-nistp256-sha256-,
 -gss-curve25519-sha256-,gss-group14-sha1-,gss-gex-sha1- .
  This option only applies to connections using GSSAPI.
-+.Pp
- .It Cm HashKnownHosts
- Indicates that
- .Xr ssh 1
-@@ -1056,38 +1053,25 @@ will not be converted automatically,
+ .Pp
+ The list of supported key exchange algorithms may also be obtained using
+@@ -1097,40 +1092,25 @@ will not be converted automatically,
  but may be manually hashed using
  .Xr ssh-keygen 1 .
  .It Cm HostbasedAcceptedAlgorithms
@@ -139,18 +138,20 @@ index 9e5163774..306fa1d8a 100644
 -webauthn-sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,
 -rsa-sha2-512-cert-v01@openssh.com,
 -rsa-sha2-256-cert-v01@openssh.com,
+-ssh-mldsa44-ed25519-cert-v01@openssh.com,
 -ssh-ed25519,
 -ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
 -sk-ssh-ed25519@openssh.com,
 -sk-ecdsa-sha2-nistp256@openssh.com,
 -webauthn-sk-ecdsa-sha2-nistp256@openssh.com,
--rsa-sha2-512,rsa-sha2-256
+-rsa-sha2-512,rsa-sha2-256,
+-ssh-mldsa44-ed25519@openssh.com
 -.Ed
 +at the head of the built-in openssh default set.
  .Pp
  The
  .Fl Q
-@@ -1142,6 +1126,17 @@ to prefer their algorithms.
+@@ -1187,6 +1167,17 @@ to prefer their algorithms.
  .Pp
  The list of available signature algorithms may also be obtained using
  .Qq ssh -Q HostKeyAlgorithms .
@@ -168,7 +169,7 @@ index 9e5163774..306fa1d8a 100644
  .It Cm HostKeyAlias
  Specifies an alias that should be used instead of the
  real host name when looking up or saving the host key
-@@ -1364,6 +1359,11 @@ it may be zero or more of:
+@@ -1385,6 +1376,11 @@ it may be zero or more of:
  and
  .Cm pam .
  .It Cm KexAlgorithms
@@ -180,7 +181,7 @@ index 9e5163774..306fa1d8a 100644
  Specifies the permitted KEX (Key Exchange) algorithms that will be used and
  their preference order.
  The selected algorithm will be the first algorithm in this list that
-@@ -1372,29 +1372,17 @@ Multiple algorithms must be comma-separated.
+@@ -1393,28 +1389,16 @@ Multiple algorithms must be comma-separated.
  .Pp
  If the specified list begins with a
  .Sq +
@@ -209,12 +210,11 @@ index 9e5163774..306fa1d8a 100644
 -diffie-hellman-group18-sha512,
 -diffie-hellman-group14-sha256
 -.Ed
- .Pp
 +built-in openssh default set.
+ .Pp
  The list of supported key exchange algorithms may also be obtained using
  .Qq ssh -Q kex .
- .It Cm KnownHostsCommand
-@@ -1510,37 +1498,33 @@ function, and all code in the
+@@ -1531,37 +1515,33 @@ function, and all code in the
  file.
  This option is intended for debugging and no overrides are enabled by default.
  .It Cm MACs
@@ -261,7 +261,7 @@ index 9e5163774..306fa1d8a 100644
  The list of available MAC algorithms may also be obtained using
  .Qq ssh -Q mac .
  .It Cm NoHostAuthenticationForLocalhost
-@@ -1729,41 +1713,31 @@ instead of continuing to execute and pass data.
+@@ -1750,43 +1730,31 @@ instead of continuing to execute and pass data.
  The default is
  .Cm no .
  .It Cm PubkeyAcceptedAlgorithms
@@ -298,12 +298,14 @@ index 9e5163774..306fa1d8a 100644
 -webauthn-sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,
 -rsa-sha2-512-cert-v01@openssh.com,
 -rsa-sha2-256-cert-v01@openssh.com,
+-ssh-mldsa44-ed25519-cert-v01@openssh.com,
 -ssh-ed25519,
 -ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
 -sk-ssh-ed25519@openssh.com,
 -sk-ecdsa-sha2-nistp256@openssh.com,
 -webauthn-sk-ecdsa-sha2-nistp256@openssh.com,
--rsa-sha2-512,rsa-sha2-256
+-rsa-sha2-512,rsa-sha2-256,
+-ssh-mldsa44-ed25519@openssh.com
 -.Ed
 +built-in openssh default set.
  .Pp
@@ -311,11 +313,11 @@ index 9e5163774..306fa1d8a 100644
  .Qq ssh -Q PubkeyAcceptedAlgorithms .
 +.Pp
 +This option affects also
-+.Cm HostKeyAlgorithms
++.Cm HostKeyAlgorithms .
  .It Cm PubkeyAuthentication
  Specifies whether to try public key authentication.
  The argument to this keyword must be
-@@ -2517,7 +2491,9 @@ for those users who do not have a configuration file.
+@@ -2540,7 +2508,9 @@ for those users who do not have a configuration file.
  This file must be world-readable.
  .El
  .Sh SEE ALSO
@@ -327,10 +329,10 @@ index 9e5163774..306fa1d8a 100644
  .An -nosplit
  OpenSSH is a derivative of the original and free
 diff --git a/sshd_config.5 b/sshd_config.5
-index 1762874c4..1d16dabaf 100644
+index 0077ee096..b72757895 100644
 --- a/sshd_config.5
 +++ b/sshd_config.5
-@@ -383,17 +383,13 @@ If the argument is
+@@ -383,18 +383,13 @@ If the argument is
  then no banner is displayed.
  By default, no banner is displayed.
  .It Cm CASignatureAlgorithms
@@ -347,13 +349,14 @@ index 1762874c4..1d16dabaf 100644
 -ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
 -sk-ssh-ed25519@openssh.com,
 -sk-ecdsa-sha2-nistp256@openssh.com,
--rsa-sha2-512,rsa-sha2-256
+-rsa-sha2-512,rsa-sha2-256,
+-ssh-mldsa44-ed25519@openssh.com
 -.Ed
 -.Pp
  If the specified list begins with a
  .Sq +
  character, then the specified algorithms will be appended to the default set
-@@ -537,20 +533,25 @@ The default is
+@@ -538,20 +533,25 @@ The default is
  indicating not to
  .Xr chroot 2 .
  .It Cm Ciphers
@@ -383,7 +386,7 @@ index 1762874c4..1d16dabaf 100644
  .Pp
  The supported ciphers are:
  .Pp
-@@ -577,13 +578,6 @@ aes256-gcm@openssh.com
+@@ -578,13 +578,6 @@ aes256-gcm@openssh.com
  chacha20-poly1305@openssh.com
  .El
  .Pp
@@ -397,7 +400,7 @@ index 1762874c4..1d16dabaf 100644
  The list of available ciphers may also be obtained using
  .Qq ssh -Q cipher .
  .It Cm ClientAliveCountMax
-@@ -789,55 +783,43 @@ For this to work
+@@ -798,60 +791,46 @@ For this to work
  .Cm GSSAPIKeyExchange
  needs to be enabled in the server and also used by the client.
  .It Cm GSSAPIKexAlgorithms
@@ -428,6 +431,9 @@ index 1762874c4..1d16dabaf 100644
 -.Dq gss-group14-sha256-,gss-group16-sha512-,gss-nistp256-sha256-,
 -gss-curve25519-sha256-,gss-group14-sha1-,gss-gex-sha1- .
  This option only applies to connections using GSSAPI.
+ .Pp
+ The list of supported key exchange algorithms may also be obtained using
+ .Qq ssh -Q GSSAPIKexAlgorithms .
  .It Cm HostbasedAcceptedAlgorithms
 +The default is handled system-wide by
 +.Xr crypto-policies 7 .
@@ -461,18 +467,20 @@ index 1762874c4..1d16dabaf 100644
 -webauthn-sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,
 -rsa-sha2-512-cert-v01@openssh.com,
 -rsa-sha2-256-cert-v01@openssh.com,
+-ssh-mldsa44-ed25519-cert-v01@openssh.com,
 -ssh-ed25519,
 -ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
 -sk-ssh-ed25519@openssh.com,
 -sk-ecdsa-sha2-nistp256@openssh.com,
 -webauthn-sk-ecdsa-sha2-nistp256@openssh.com,
--rsa-sha2-512,rsa-sha2-256
+-rsa-sha2-512,rsa-sha2-256,
+-ssh-mldsa44-ed25519@openssh.com
 -.Ed
 +the head of the built-in openssh default set.
  .Pp
  The list of available signature algorithms may also be obtained using
  .Qq ssh -Q HostbasedAcceptedAlgorithms .
-@@ -904,27 +886,13 @@ is specified, the location of the socket will be read from the
+@@ -919,29 +898,13 @@ is specified, the location of the socket will be read from the
  .Ev SSH_AUTH_SOCK
  environment variable.
  .It Cm HostKeyAlgorithms
@@ -494,18 +502,20 @@ index 1762874c4..1d16dabaf 100644
 -webauthn-sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,
 -rsa-sha2-512-cert-v01@openssh.com,
 -rsa-sha2-256-cert-v01@openssh.com,
+-ssh-mldsa44-ed25519-cert-v01@openssh.com,
 -ssh-ed25519,
 -ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
 -sk-ssh-ed25519@openssh.com,
 -sk-ecdsa-sha2-nistp256@openssh.com,
 -webauthn-sk-ecdsa-sha2-nistp256@openssh.com,
--rsa-sha2-512,rsa-sha2-256
+-rsa-sha2-512,rsa-sha2-256,
+-ssh-mldsa44-ed25519@openssh.com
 -.Ed
 -.Pp
  The list of available signature algorithms may also be obtained using
  .Qq ssh -Q HostKeyAlgorithms .
  .It Cm IgnoreRhosts
-@@ -1070,6 +1038,11 @@ Specifies whether to look at .k5login file for user's aliases.
+@@ -1087,6 +1050,11 @@ Specifies whether to look at .k5login file for user's aliases.
  The default is
  .Cm yes .
  .It Cm KexAlgorithms
@@ -517,7 +527,7 @@ index 1762874c4..1d16dabaf 100644
  Specifies the permitted KEX (Key Exchange) algorithms that the server will
  offer to clients.
  The ordering of this list is not important, as the client specifies the
-@@ -1078,16 +1051,16 @@ Multiple algorithms must be comma-separated.
+@@ -1095,16 +1063,16 @@ Multiple algorithms must be comma-separated.
  .Pp
  If the specified list begins with a
  .Sq +
@@ -538,7 +548,7 @@ index 1762874c4..1d16dabaf 100644
  .Pp
  The supported algorithms are:
  .Pp
-@@ -1124,14 +1097,6 @@ sntrup761x25519-sha512
+@@ -1143,14 +1111,6 @@ sntrup761x25519-sha512
  sntrup761x25519-sha512@openssh.com
  .El
  .Pp
@@ -553,7 +563,7 @@ index 1762874c4..1d16dabaf 100644
  The list of supported key exchange algorithms may also be obtained using
  .Qq ssh -Q KexAlgorithms .
  .It Cm ListenAddress
-@@ -1218,21 +1183,26 @@ function, and all code in the
+@@ -1237,21 +1197,26 @@ function, and all code in the
  file.
  This option is intended for debugging and no overrides are enabled by default.
  .It Cm MACs
@@ -584,7 +594,7 @@ index 1762874c4..1d16dabaf 100644
  .Pp
  The algorithms that contain
  .Qq -etm
-@@ -1275,15 +1245,6 @@ umac-64-etm@openssh.com
+@@ -1294,15 +1259,6 @@ umac-64-etm@openssh.com
  umac-128-etm@openssh.com
  .El
  .Pp
@@ -600,7 +610,7 @@ index 1762874c4..1d16dabaf 100644
  The list of available MAC algorithms may also be obtained using
  .Qq ssh -Q mac .
  .It Cm Match
-@@ -1773,38 +1734,25 @@ or equivalent.)
+@@ -1792,40 +1748,25 @@ or equivalent.)
  The default is
  .Cm yes .
  .It Cm PubkeyAcceptedAlgorithms
@@ -637,18 +647,20 @@ index 1762874c4..1d16dabaf 100644
 -webauthn-sk-ecdsa-sha2-nistp256-cert-v01@openssh.com,
 -rsa-sha2-512-cert-v01@openssh.com,
 -rsa-sha2-256-cert-v01@openssh.com,
+-ssh-mldsa44-ed25519-cert-v01@openssh.com,
 -ssh-ed25519,
 -ecdsa-sha2-nistp256,ecdsa-sha2-nistp384,ecdsa-sha2-nistp521,
 -sk-ssh-ed25519@openssh.com,
 -sk-ecdsa-sha2-nistp256@openssh.com,
 -webauthn-sk-ecdsa-sha2-nistp256@openssh.com,
--rsa-sha2-512,rsa-sha2-256
+-rsa-sha2-512,rsa-sha2-256,
+-ssh-mldsa44-ed25519@openssh.com
 -.Ed
 +built-in openssh default set.
  .Pp
  The list of available signature algorithms may also be obtained using
  .Qq ssh -Q PubkeyAcceptedAlgorithms .
-@@ -2317,7 +2265,9 @@ This file should be writable by root only, but it is recommended
+@@ -2338,7 +2279,9 @@ This file should be writable by root only, but it is recommended
  .El
  .Sh SEE ALSO
  .Xr sftp-server 8 ,
@@ -660,5 +672,5 @@ index 1762874c4..1d16dabaf 100644
  .An -nosplit
  OpenSSH is a derivative of the original and free
 -- 
-2.53.0
+2.55.0
 

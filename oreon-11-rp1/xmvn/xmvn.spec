@@ -1,4 +1,4 @@
-%global source0_hash a0aed0f5bcdba5d03f086f8aaeef269a74832bd646d361068c09d1bc25c6da83
+%global source0_hash e69b27ad976f22e3a40cefb4c75af322a8693ea1bbeccab6101667c2a3a93d13
 
 %bcond_without bootstrap
 
@@ -11,7 +11,7 @@ URL:            https://fedora-java.github.io/xmvn/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/fedora-java/xmvn/releases/download/%{version}/xmvn-%{version}.tar.xz
+Source0:        https://github.com/fedora-java/xmvn/archive/refs/tags/%{version}.tar.gz
 Source25:       toolchains-openjdk25.xml
 
 %if %{with bootstrap}
@@ -250,5 +250,4 @@ install -p -m 644 %{SOURCE25} %{buildroot}%{_datadir}/%{name}/conf/toolchains-op
 %{_bindir}/%{name}-subst
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.3.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

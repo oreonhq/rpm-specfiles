@@ -7,7 +7,7 @@
 
 # https://github.com/jessevdk/go-flags
 %global goipath         github.com/jessevdk/go-flags
-Version:                1.4.0
+Version:                1.6.1
 %global commit          c17162fe8fd74f119ff938c5c67af63e3bac5ded
 
 %gometa

@@ -3,8 +3,8 @@
 %bcond_with     jp_minimal
 
 Name:           jackson-modules-base
-Version:        2.22.2
-Release:        1%{?dist}
+Version:        2.22.3
+Release:        %autorelease
 Summary:        Jackson modules: Base
 License:        Apache-2.0
 
@@ -117,5 +117,4 @@ rm osgi/src/test/java/com/fasterxml/jackson/module/osgi/InjectOsgiServiceTest.ja
 %license LICENSE NOTICE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.18.2-6
-- Import
+%autochangelog

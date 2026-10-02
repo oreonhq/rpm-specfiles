@@ -1,4 +1,4 @@
-%global source0_hash 26ec5c6126781eb167089a123919f87baa2740da2cca9098be8b3a6b91cc5fbc
+%global source0_hash 4fbd26b4af24c9787d84cf5448e34eb8dca064b732479aaecd03109520eebd5f
 
 Name: pycairo
 Version: 1.29.1
@@ -60,5 +60,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/pkgconfig/py3cairo.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

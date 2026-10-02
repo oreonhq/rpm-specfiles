@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash dc5e0599455c78729248a1bb95824fe6a3420e860b8cabc5ac0c7a93c2062bfb
 
 %global qt_module qtcharts
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Charts component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -104,5 +104,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

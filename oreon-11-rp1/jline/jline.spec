@@ -1,16 +1,16 @@
-%global source0_hash 7f764fe6d67fdab5e3a0db32a94a61b8404260b5fbebe3c15c18da7d3d6aa81e
+%global source0_hash b999d69cde60dc151d98f5fdb7dc58502456f982ec9f1441306237dde3160cf8
 
 %bcond bootstrap 0
 
 Name:           jline
-Version:        4.4.5
+Version:        4.4.6
 Release:        %autorelease
 Summary:        Java library for handling console input
 License:        BSD-3-Clause AND Apache-2.0
 URL:            https://github.com/jline/jline3
 ExclusiveArch:  %{java_arches}
 
-Source0:        https://github.com/jline/jline3/archive/refs/tags/jline-3.30.4.tar.gz#/jline-3.30.4.tar.gz
+Source0:        https://github.com/jline/jline3/archive/refs/tags/%{version}.tar.gz#/jline-%{version}.tar.gz
 
 # Fedora/RHEL specific: JNI shared objects MUST be placed in %%{_prefix}/lib/%%{name}
 Patch:          0001-Load-native-library-form-usr-lib-jline.patch
@@ -53,8 +53,8 @@ familiar.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-# GitHub archive of tag jline-%%{version} unpacks as jline3-jline-%%{version}, not jline-%%{version}.
-%autosetup -p1 -n jline3-jline-%{version}
+# GitHub archive of tag %%{version} unpacks as jline3-%%{version}.
+%autosetup -p1 -n jline3-%{version}
 cp -p console-ui/LICENSE.txt LICENSE-APACHE.txt
 
 # Remove local Maven extensions not needed for RPM build
@@ -77,12 +77,9 @@ rm builtins/src/test/java/org/jline/builtins/SyntaxHighlighterTest.java
 rm builtins/src/test/java/org/jline/builtins/SyntaxHighlighterJimFsTest.java
 
 # Disable unwanted modules
-%pom_disable_module terminal-jna
-%pom_disable_module terminal-jansi
 %pom_disable_module groovy
 %pom_disable_module remote-ssh
 %pom_disable_module remote-telnet
-%pom_disable_module curses
 %pom_disable_module demo
 %pom_disable_module graal
 
@@ -115,5 +112,4 @@ install -p -m 755 libjlinenative.so %{buildroot}%{_prefix}/lib/%{name}/
 %license LICENSE.txt LICENSE-APACHE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.30.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,12 +1,12 @@
-%global source0_hash 5482a77ef027ca1f9f39e1f48c558356e954936fc8fbbdee6c811c512701b249
+%global source0_hash e2f8c0708ff8de8b1bb7be1faa3cdb240fdd9774bc741627350577ea7e0e76a1
 
 Name:           perl-Exception-Class
-Version:        1.45
+Version:        1.46
 Release:        14%{?dist}
 Summary:        Module that allows you to declare real exception classes in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Exception-Class
-Source0:        https://cpan.metacpan.org/modules/by-module/Exception/Exception-Class-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Exception-Class-%{version}.tar.gz
 
 
 
@@ -64,5 +64,4 @@ make test
 %{_mandir}/man3/Exception::Class::Base.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.45-14
-- Prepare for Oreon 11 (RP1)
+%autochangelog

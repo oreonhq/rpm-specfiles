@@ -1,4 +1,4 @@
-%global source0_hash 02d186e71967646803b9316b17ce7ac5a858a4690f4afe9e4af2a2f9e73b2bb3
+%global source0_hash e8623c04c9a018ba8026f7ba55c86902315c501c5ec7b8fa27f66fdd54575021
 
 %bcond_without bootstrap
 
@@ -11,7 +11,7 @@ URL:            https://github.com/moditect/moditect
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/moditect/moditect/archive/refs/tags/1.3.0.Final.tar.gz#/moditect-1.1.0.tar.gz
+Source0:        https://github.com/moditect/moditect/archive/refs/tags/%{version}.tar.gz#/moditect-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -76,5 +76,4 @@ rm core/src/test/java/org/moditect/internal/parser/JavaVersionHelperTest.java
 %doc README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

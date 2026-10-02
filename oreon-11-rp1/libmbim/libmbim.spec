@@ -1,4 +1,4 @@
-%global source0_hash 47228f0c07dfb2fbf51e35eb60f12c22113ef6923a0e23fcae3b2a4efee5ed29
+%global source0_hash 2671244f03325bf6633a69ae8931be223c32e08beac6b2e147b4b768fe5e4684
 
 Name: libmbim
 Version: 1.34.0
@@ -95,5 +95,4 @@ cp -a src/mbimcli/mbimcli %{buildroot}%{_datadir}/bash-completion/completions/
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.32.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

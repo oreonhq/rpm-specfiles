@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 498744228f225176624fafbab283815b6872351f6d15bb935e2d02c1a644dd43
 
 Name:    kdepim-runtime

@@ -1,4 +1,4 @@
-%global source0_hash b93ff5561244916a6e1e7e3ecccf2e26e6932c4edb5961268401cea7d4ab9c16
+%global source0_hash f103df876040a4f904f01d2464f7868b4feb659d8cd3f46a5f1f61aa440be415
 
 # Notes on soname versioning
 # There's absolutely no guarantee of ABI stability, so a soname bump is
@@ -24,7 +24,7 @@ Release: 1%{?dist}
 
 # see licenses-3.6.9.txt for license breakdown
 License: BSD-3-Clause and Apache-2.0 and BSD-2-Clause and (WTFPL or MIT) and GPL-3.0-or-later and ISC and MIT
-Source: https://dicom.offis.de/download/dcmtk/dcmtk369/dcmtk-%{version}.tar.gz
+Source: https://dicom.offis.de/download/dcmtk/dcmtk370/dcmtk-%{version}.tar.gz
 URL: http://dicom.offis.de/dcmtk.php.en
 
 # Downstream fixes

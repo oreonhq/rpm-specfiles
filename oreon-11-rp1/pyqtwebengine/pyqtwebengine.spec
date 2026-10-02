@@ -1,4 +1,4 @@
-%global source0_hash ae241ef2a61c782939c58b52c2aea53ad99b30f3934c8358d5e0a6ebb3fd0721
+%global source0_hash f121ac6e4a2f96ac289619bcfc37f64e68362f24a346553f5d6c42efa4228a4d
 
 Summary: Python bindings for QtWebEngine
 Name:    pyqtwebengine

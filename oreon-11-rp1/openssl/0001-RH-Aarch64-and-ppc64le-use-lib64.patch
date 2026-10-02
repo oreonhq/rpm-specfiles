@@ -1,7 +1,7 @@
-From ad6ba90718f814f1db71e86a4156098eb2bbeef5 Mon Sep 17 00:00:00 2001
+From bd9adecce03305f20c55247a029f6f16041ad250 Mon Sep 17 00:00:00 2001
 From: rpm-build <rpm-build>
 Date: Wed, 6 Mar 2024 19:17:14 +0100
-Subject: [PATCH 01/57] RH: Aarch64 and ppc64le use lib64
+Subject: [PATCH 01/16] RH: Aarch64 and ppc64le use lib64
 
 Patch-name: 0001-Aarch64-and-ppc64le-use-lib64.patch
 Patch-id: 1
@@ -14,7 +14,7 @@ From-dist-git-commit: 4334bc837fbc64d14890fdc51679a80770d498ce
  1 file changed, 2 insertions(+)
 
 diff --git a/Configurations/10-main.conf b/Configurations/10-main.conf
-index cba57b4127..3e327017ef 100644
+index 90b88eea68..cbd6bf39b5 100644
 --- a/Configurations/10-main.conf
 +++ b/Configurations/10-main.conf
 @@ -726,6 +726,7 @@ my %targets = (
@@ -34,5 +34,5 @@ index cba57b4127..3e327017ef 100644
      "linux-arm64ilp32" => {  # https://wiki.linaro.org/Platform/arm64-ilp32
          inherit_from     => [ "linux-generic32" ],
 -- 
-2.52.0
+2.55.0
 

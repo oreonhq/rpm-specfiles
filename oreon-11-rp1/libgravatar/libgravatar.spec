@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 3a7388ad15f0da3556e36be0b9ae604b3e5b1a6bb1424220122767bc0d3c88a6
 
 Name:    libgravatar

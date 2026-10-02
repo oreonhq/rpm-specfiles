@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 552119e37360c06c5fb0b54e91bbfdf8da5a80d2cb1441ef93e966eb3b7a426d
 
 %global qt_module qtlanguageserver
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - LanguageServer component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 2%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt.io
@@ -83,11 +83,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- bump release (retry failed build)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

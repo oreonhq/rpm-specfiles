@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bf149d01a2b9fcc0e4589b8ae8697d3d5c557ea48ed95a3fa55dd3b1187e6039
 
 %bcond_with bootstrap
 
@@ -6,8 +6,8 @@
 
 Summary: Utility for secure communication and data storage
 Name:    gnupg2
-Version: 2.4.9
-Release: 5%{?dist}
+Version: 2.5.24
+Release: %autorelease
 
 License: CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND (BSD-3-Clause OR LGPL-3.0-or-later OR GPL-2.0-or-later) AND CC-BY-4.0 AND MIT
 Source0:        https://gnupg.org/ftp/gcrypt/%{?pre:alpha/}gnupg/gnupg-%{version}%{?pre}.tar.bz2
@@ -22,9 +22,6 @@ Patch2:  gnupg-2.4.7-file-is-digest.patch
 # Disable brainpool tests as they are not built into our libgcrypt
 # Disable MD160 in FIPS mode (#879047)
 Patch3:  gnupg-2.4.7-fips-algo.patch
-# CVE-2026-24882: Stack-based buffer overflow in tpm2daemon allows arbitrary code execution
-# https://dev.gnupg.org/T8045
-Patch4:  gnupg-2.4.9-tpm2daemon.patch
 
 # Patches from FreePG:
 # https://gitlab.com/freepg/gnupg/-/tree/main/STABLE-BRANCH-2-4-freepg
@@ -34,7 +31,6 @@ Patch22: 0004-tests-add-test-cases-for-import-without-uid.patch
 Patch23: 0005-gpg-drop-import-clean-from-default-keyserver-import-.patch
 Patch24: 0006-Do-not-use-OCB-mode-even-if-AEAD-OCB-key-preference-.patch
 Patch25: 0007-Revert-the-introduction-of-the-RFC4880bis-draft-into.patch
-Patch26: 0008-avoid-systemd-deprecation-warning.patch
 Patch27: 0009-Add-systemd-support-for-keyboxd.patch
 Patch28: 0010-Ship-sample-systemd-unit-files.patch
 Patch29: 0011-el-gamal-default-to-3072-bits.patch
@@ -223,7 +219,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch 1 -p1 -b .secmem
 %patch 2 -p1 -b .file-is-digest
 %patch 3 -p1 -b .fips
-%patch 4 -p1 -b .tpm2d
 
 %patch 20 -p1 -b .good_revoc
 %patch 21 -p1 -b .prev_known_key
@@ -231,7 +226,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch 23 -p1 -b .import-clean
 %patch 24 -p1 -b .do-not-use-OCB
 %patch 25 -p1 -b .revert-rfc4880bis
-%patch 26 -p1 -b .systemd-deprecation
 %patch 27 -p1 -b .systemd-keybox
 %patch 28 -p1 -b .systemd-units
 %patch 29 -p1 -b .elgamal-3k

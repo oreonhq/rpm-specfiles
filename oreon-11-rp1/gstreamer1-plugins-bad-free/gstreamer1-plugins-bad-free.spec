@@ -1,4 +1,4 @@
-%global source0_hash 4213f43ddb875bb141e5040e97735579d74665bec3d17b51052aade395b83f00
+%global source0_hash dc525383c18b2c265bbe6a43d498656cd918aaa130aa4e3abeabcdaa741c3ffe
 
 %global         majorminor 1.0
 %global         _gobject_introspection  1.31.1
@@ -38,7 +38,7 @@
 
 Name:           gstreamer1-plugins-bad-free
 Version:        1.28.7
-Release:        1%{?dist}
+Release:        %autorelease
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -962,11 +962,4 @@ EOF
 
 
 %changelog
-* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
-- Update to 1.28.3
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
-- Remove commented git snapshot lines that expanded macros in comments
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

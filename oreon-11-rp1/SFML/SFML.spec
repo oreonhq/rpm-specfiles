@@ -1,4 +1,4 @@
-%global source0_hash 19d6dbd9c901c74441d9888c13cb1399f614fe8993d59062a72cfbceb00fed04
+%global source0_hash 4a76170c75daabf9a05807ea838e63f93fbb34efa7b5f60bfc2b508f8cb06b6e
 
 Name:           SFML
 Version:        3.1.0
@@ -54,17 +54,20 @@ BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(flac)
 BuildRequires:  pkgconfig(freetype2)
-BuildRequires:  pkgconfig(glew)
-BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libsystemd)
-BuildRequires:  pkgconfig(openal)
-BuildRequires:  pkgconfig(sndfile)
 BuildRequires:  pkgconfig(vorbis)
 BuildRequires:  pkgconfig(xcb-image)
 BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  pkgconfig(xrandr)
-BuildRequires:  stb_image-devel >= 2.30^20251025gitf1c79c0-2
-BuildRequires:  stb_image_write-devel
+BuildRequires:  pkgconfig(xi)
+BuildRequires:  pkgconfig(libudev)
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(egl)
+Provides:       bundled(miniaudio)
+Provides:       bundled(dr_mp3)
+Provides:       bundled(stb_image)
+Provides:       bundled(qoi)
+Provides:       bundled(glad)
 # BuildRequires:  vulkan-headers
 
 %description
@@ -90,14 +93,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # fixup non needed executable permission on regular files
 find -type f -print0 | xargs -0 chmod -x
 
-# use system-wide extlibs; so, delete everything except glad, minimp3 and vulkan header files
-pushd extlibs
-shopt -s extglob
-rm -r !(headers)
-cd headers/
-rm -r !(glad|minimp3|vulkan)
-shopt -u extglob
-popd
+# drop Windows-only bundled headers
+rm -r extlibs/headers/mingw extlibs/headers/wepoll
 
 
 %build
@@ -111,7 +108,7 @@ popd
 %files
 %doc %{_datadir}/doc/%{name}/readme.md
 %license %{_datadir}/doc/%{name}/license.md
-%{_libdir}/libsfml-*.so.2*
+%{_libdir}/libsfml-*.so.3*
 
 %files devel
 %doc %{_datadir}/doc/%{name}/html/*
@@ -123,5 +120,4 @@ popd
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

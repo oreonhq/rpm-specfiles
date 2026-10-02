@@ -1,4 +1,4 @@
-%global source0_hash 301f655a687bc7cbc0c43b69fef807aba00e6c3bea4a4f7512c957faa379a33c
+%global source0_hash 9a8e6d731e06edb10a35e2221aeea7f539b3ff4d5b90538bf119726e72644ff4
 
 %bcond_without bootstrap
 
@@ -74,8 +74,4 @@ rm src/test/java/org/apache/commons/io/file/PathUtilsContentEqualsTest.java
 %doc RELEASE-NOTES.txt
 
 %changelog
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.0-2
-- %%autosetup -n commons-io-%%{version}-src for upstream source tarball layout
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

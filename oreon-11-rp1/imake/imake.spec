@@ -1,4 +1,4 @@
-%global source0_hash 75decbcea8d7b354cf36adc9675e53c4790ee3de56a14bd87b42c8e8aad2ecf5
+%global source0_hash 55955527eaebe94633e4083d4fe5f2160a65fe4c6dafdee48b89fea5f1ca8a78
 %global source1_hash bfb26f8025189b2a01286ce6daacc2af8fe647440b40bb741dd5c397572cba5b
 %global source2_hash b275dcf1f7323ed89e8b36f8fbd5da665d8700005f1779fa5b90a1688bbf2ee4
 %global source3_hash 7408955defcfab0f44d1bedd4ec0c20db61914917ad17bfc1f1c9bf56acc17b9
@@ -117,5 +117,4 @@ popd
 %{_mandir}/man1/xmkmf.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.10-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

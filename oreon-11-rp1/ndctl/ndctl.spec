@@ -1,4 +1,4 @@
-%global source0_hash a0f93995ceeb121196b9a25e9318bbb80c0b9c24072893f443538fe51165cdec
+%global source0_hash 69039ee12c75c44f67b5fa3f1abb61d1c38ff9303021e50cec0b45801cc93b2e
 
 Name:		ndctl
 Version:	85
@@ -243,5 +243,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 84-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

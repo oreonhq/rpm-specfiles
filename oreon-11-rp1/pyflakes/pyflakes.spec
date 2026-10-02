@@ -1,4 +1,4 @@
-%global source0_hash 926142efed6834d8dec696b57eec42fbc2aa1c293222e2e97894ca2738fc3bd9
+%global source0_hash b987f60fa44ae1a2374d162ba22b496ace1fd7af49d95df46335eeff6a99bf84
 
 %global desc %{expand: \
 Pyflakes is similar to PyChecker in scope, but differs in that it does\
@@ -18,7 +18,6 @@ URL:            https://github.com/PyCQA/pyflakes
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        http://cdn.debian.net/debian/pool/main/p/pyflakes/pyflakes_2.5.0-1.debian.tar.xz
 # Support Python 3.14
-Patch:          https://github.com/PyCQA/pyflakes/pull/842.patch
 
 BuildArch:      noarch
 

@@ -1,4 +1,4 @@
-%global source0_hash 0e422d1564a6dbf22a9af598535425271e583514c0f7ba7d9091676420de34ac
+%global source0_hash 350b10d24a76d7e8c8ae98b74c2d432a2c8ddec08935d09856d20b695a35e600
 
 %global apiversion 0.1
 
@@ -25,8 +25,6 @@ BuildRequires: pkgconfig(librevenge-stream-0.0)
 BuildRequires: pkgconfig(lcms2)
 BuildRequires: pkgconfig(zlib)
 BuildRequires: make
-
-Patch0: 0001-Add-missing-semicolon-to-fix-build-with-icu-65.1.patch
 
 %description
 libfreehand is library providing ability to interpret and import
@@ -112,5 +110,4 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PA
 %{_mandir}/man1/fh2text.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

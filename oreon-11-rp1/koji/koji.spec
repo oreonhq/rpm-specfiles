@@ -1,4 +1,4 @@
-%global source0_hash eb5c2f6bfd8ac0f173ba9170272b00201c73b4082734350430d6edf68fb15f22
+%global source0_hash ec41dfa317964b266c40f26db9a5439b765aee95109ba4d16924a5a1c795a35c
 
 # This package depends on selective manual byte compilation
 # https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_2
@@ -10,18 +10,16 @@
 %{?!python3_pkgversion:%global python3_pkgversion 3}
 
 Name: koji
-Version: 1.36.0
+Version: 1.36.1
 Release: 1%{?dist}
 # the included arch lib from yum's rpmUtils is GPLv2+
 License: LGPL-2.1-only AND GPL-2.0-or-later
 Summary: Build system tools
 URL: https://pagure.io/koji/
-Source0: https://releases.pagure.org/koji/koji-%{version}.tar.bz2
+Source0: https://forge.fedoraproject.org/koji/koji/releases/download/koji-%{version}/koji-%{version}.tar.bz2
 
 # https://pagure.io/koji/pull-request/4342
 # download-build: allow fallback to unsigned with --key
-Patch0: 0001-download-build-allow-fallback-to-unsigned-with-key.patch
-Patch1: 0002-Fix-flake8-and-unit-test.patch
 
 # Not upstreamable
 Patch100: fedora-config.patch

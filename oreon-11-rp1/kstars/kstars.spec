@@ -1,4 +1,4 @@
-%global source0_hash 9e907499a6087406601c1559a90f6551ef557ef4642371355929c6ed12188dee
+%global source0_hash e58ca61c9d7963892ef9aef8d0b82f88b7e9e9be7a35b137ee1aa2d82030eabd
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 # kstars FTB on i686
@@ -180,5 +180,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.8.0-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

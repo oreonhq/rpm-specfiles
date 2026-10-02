@@ -1,4 +1,4 @@
-%global source0_hash 713d3e76b6c3073b122a9f5b6c025bc301a0436582f132caf782814363acf60f
+%global source0_hash f09a18fefba81d4fc2530d90858789e0c596f1b634e5777e6ccaf492966e9845
 
 %global __cmake_in_source_build 1
 
@@ -8,7 +8,7 @@ Release: 1%{?dist}
 Summary: Intel Processor Trace Decoder Library
 License: BSD-3-Clause
 URL: https://github.com/intel/libipt
-Source0:        https://github.com/intel/libipt/archive/v%{version}.tar.gz#/libipt-2.1.2.tar.gz
+Source0:        https://github.com/intel/libipt/archive/v%{version}.tar.gz#/libipt-%{version}.tar.gz
 Patch1:        libipt-cmake40-compat.patch
 BuildRequires: gcc-c++ cmake pandoc
 BuildRequires: make
@@ -63,5 +63,4 @@ ctest -V %{?_smp_mflags}
 %{_mandir}/*/*.gz
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.2-4
-- Import
+%autochangelog

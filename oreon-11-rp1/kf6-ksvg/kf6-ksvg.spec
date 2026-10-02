@@ -1,9 +1,11 @@
-%global source0_hash 1c9cf9e9d286c1682cecba41d2a44898009da3d01d54c3403c40c4868d8c19dc
+%global source1_hash c44a64430b31affd617589c693722c1f4433f45ed39f8c9cfe83a7e44f5733b4
+
+%global source0_hash 7b7aba4e9baa88bfb303977e139e8a105b5cd243443029ee773954307b51eb91
 
 %global framework ksvg
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.29
+%global majmin_ver_kf6 6.30
 
 %ifarch aarch64
 # Smaller aarch64 VMs OOM (cc1plus Killed, bogus assembler errors) with flto + high -j
@@ -13,13 +15,15 @@
 
 Name:    kf6-ksvg
 Summary: Components for handling SVGs
-Version: 6.29.0
+Version: 6.30.0
 Release:        1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+
 
 # upstream patches
 
@@ -74,24 +78,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
-- aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+%autochangelog

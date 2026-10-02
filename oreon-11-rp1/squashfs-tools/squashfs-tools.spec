@@ -1,4 +1,4 @@
-%global source0_hash 91c49f9a1ed972ad00688a38222119e2baf49ba74cf5fda05729a79d7d59d335
+%global source0_hash 547b7b7f4d2e44bf91b6fc554664850c69563701deab9fd9cd7e21f694c88ea6
 
 Name: squashfs-tools
 Version: 4.7.5
@@ -55,5 +55,4 @@ make INSTALL_PREFIX=%{buildroot}/usr INSTALL_DIR=%{buildroot}%{_sbindir} INSTALL
 %{_sbindir}/sqfscat
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.7.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

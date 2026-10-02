@@ -1,4 +1,4 @@
-%global source0_hash f8da11cadfed27e26d26c5f58a7b8f2d14d684e691927348906b5891f525c684
+%global source0_hash f61cf6f1e9bbcb4cefb30b70cafaf1c4df54c6961e65cfa63830e8ad0e220134
 
 %bcond_without gnutls
 
@@ -15,7 +15,6 @@ License:        BSD-3-Clause
 Url:            https://github.com/stefanberger/swtpm
 Source0:        https://github.com/stefanberger/swtpm/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # tests: Retry NVWrite command after 0x922 return code and inc lockout counter
-Patch0:        4da66c66f92438443e66b67555673c9cb898b0ae.patch
 
 BuildRequires: make
 BuildRequires:  git-core
@@ -206,5 +205,4 @@ fi
 %{_libexecdir}/installed-tests/swtpm/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.10.1-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

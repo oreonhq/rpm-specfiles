@@ -1,4 +1,4 @@
-%global source0_hash 0414e31583836aeb7878da25f67c515f7e8879917ecc37c92e26b83e8d8fc3e3
+%global source0_hash aca1caa8478aebcdbb1d67897fb3511eb7601debae6810e16a15b6fa25f31ac8
 
 %global apiver 2.91
 
@@ -212,5 +212,4 @@ rm %{buildroot}/%{_datadir}/applications/org.gnome.Vte.App.Gtk4.desktop
 %{_sysconfdir}/profile.d/vte.sh
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.84.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,12 +1,12 @@
-%global source0_hash none
+%global source0_hash 51d1a66e21727626aa4450a3bd464515254f9a3d1aea37d61616ead3bd77a8da
 
 # SPDX-License-Identifier: MIT
 %global forgeurl    https://github.com/CatharsisFonts/Cormorant
 %global commit      3f27825ce7aa990dc65761a7b323b92aecc84446
 %forgemeta
 
-Version: 3.604
-Release: 16%{?dist}
+Version: 4.002
+Release: 1%{?dist}
 URL:     https://www.behance.net/gallery/28579883/Cormorant-an-open-source-display-font-family
 
 %global foundry           Catharsis Fonts

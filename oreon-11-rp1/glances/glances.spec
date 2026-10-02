@@ -1,4 +1,4 @@
-%global source0_hash aba3cf2e8a16cac37119d687b1a8d8689b60d5ae815e9ef336a66352d811562e
+%global source0_hash 3d344cd3b4ac14b08116aeb691d32c30366b4e555d87d45b693030f41404d26e
 
 %global desc %{expand: \
 Glances is a cross-platform monitoring tool which aims to present a large
@@ -14,13 +14,14 @@ system. It is based on an open architecture where developers can add new
 plugins or exports modules.}
 
 Name:		glances	
-Version:	4.5.6
+Version:	4.5.7
 Release:	%autorelease
 Summary:	A cross-platform system monitoring tool
 
 License:	LGPL-3.0-only AND MIT
 URL:		https://nicolargo.github.io/glances/
 Source0:	https://github.com/nicolargo/glances/archive/v%{version}/%{name}-%{version}.tar.gz
+
 Source1:	%{name}.service
 
 Patch0:		disable-update-check.patch

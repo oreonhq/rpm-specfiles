@@ -1,15 +1,15 @@
-%global source0_hash f405cb90179dbe582a1c71a36af8016072c0defeb969aeee7861d5aab10499d8
+%global source0_hash 73f643ea080ece55f48fc04b7d708e391fbfb0ba88c562ab21c398ca3692b99b
 
 %global dracut_modname 97walinuxagent
 
 Name:           WALinuxAgent
-Version:        2.15.0.1
+Version:        2.16.0.2
 Release:        %autorelease
 Summary:        The Microsoft Azure Linux Agent
 
 License:        Apache-2.0
 URL:            https://github.com/Azure/%{name}
-Source0:        https://github.com/Azure/%{name}/archive/v%{version}.tar.gz#/WALinuxAgent-2.15.0.1.tar.gz
+Source0:        https://github.com/Azure/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        module-setup.sh
 
 Patch1:         0001-waagent.service-set-ConditionVirtualization-microsof.patch
@@ -127,5 +127,4 @@ sed -i 's,ResourceDisk.Format=y,ResourceDisk.Format=n,' %{buildroot}%{_sysconfdi
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.15.0.1-1
-- Import
+%autochangelog

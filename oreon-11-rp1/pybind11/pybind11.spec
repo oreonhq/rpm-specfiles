@@ -1,4 +1,4 @@
-%global source0_hash 74b6a2c2b4573a400cafb6ecbf60c98df300cd3d0041296b913d02b2cbbb2676
+%global source0_hash ef712655692a2e9bf7bb7874c022564a45f91d847ddee987e720cd9e28849665
 
 # While the headers are architecture independent, the package must be
 # built separately on all architectures so that the tests are run
@@ -118,5 +118,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.4-1
-- Import
+%autochangelog

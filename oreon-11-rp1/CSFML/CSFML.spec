@@ -1,4 +1,4 @@
-%global source0_hash f3f3980f6b5cad85b40e3130c10a2ffaaa9e36de5f756afd4aacaed98a7a9b7b
+%global source0_hash 903cd4a782fb0b233f732dc5b37861b552998e93ae8f268c40bd4ce50b2e88ca
 
 Name:           CSFML
 Summary:        C Interface for the Simple and Fast Multimedia Library

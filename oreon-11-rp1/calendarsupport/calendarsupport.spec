@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 455785712a32f0dba7947a314eb99065d902ac6c432947e9e699a44ca18c70a1
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval

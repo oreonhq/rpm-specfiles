@@ -1,0 +1,10 @@
+--- ceph-20.3.0/src/os/memstore/CMakeLists.txt.orig	2026-03-17 11:19:40.790594587 -0400
++++ ceph-20.3.0/src/os/memstore/CMakeLists.txt	2026-03-17 11:19:49.669445856 -0400
+@@ -1,6 +1,6 @@
+ include(CheckCXXCompilerFlag)
+ 
+-add_library(memstore
++add_library(memstore STATIC
+   MemStore.cc)
+ target_link_libraries(memstore PRIVATE os)
+ check_cxx_compiler_flag("-Wno-maybe-uninitialized"

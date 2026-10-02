@@ -8,7 +8,6 @@ Subject: [PATCH 1/3] Adapt mvn script
  1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/apache-maven/src/bin/mvn b/apache-maven/src/bin/mvn
-index a3004f917..9b118717e 100755
 --- a/apache-maven/src/bin/mvn
 +++ b/apache-maven/src/bin/mvn
 @@ -22,7 +22,7 @@
@@ -44,10 +43,10 @@ index a3004f917..9b118717e 100755
  
 +export JAVA_HOME
 +
- # OS specific support. $var _must_ be set to either true or false.
- cygwin=false;
- mingw=false;
-@@ -68,7 +70,8 @@ done
+ # Note on echo vs printf: several POSIX shells (dash and the other Almquist
+ # derivatives commonly installed as /bin/sh) expand backslash escapes in echo.
+ # Windows paths are full of backslashes, so C:\tmp\build would be printed with a
+@@ -91,7 +93,8 @@
  
  saveddir=`pwd`
  
@@ -58,5 +57,4 @@ index a3004f917..9b118717e 100755
  # make it fully qualified
  MAVEN_HOME=`cd "$MAVEN_HOME" && pwd`
 -- 
-2.39.2
-
+2.0

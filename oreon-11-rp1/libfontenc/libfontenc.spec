@@ -1,4 +1,4 @@
-%global source0_hash 7b02c3d405236e0d86806b1de9d6868fe60c313628b38350b032914aa4fd14c6
+%global source0_hash 9d8392705cb10803d5fe1d27d236cbab3f664e26841ce01916bbbe430cf273e2
 
 # Must be kept in sync with xorg-x11-fonts !
 %define _x11fontdir		%{_datadir}/X11/fonts
@@ -59,5 +59,4 @@ find $RPM_BUILD_ROOT -type f -name '*.la' | xargs rm -f -- || :
 %{_libdir}/pkgconfig/fontenc.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.8-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

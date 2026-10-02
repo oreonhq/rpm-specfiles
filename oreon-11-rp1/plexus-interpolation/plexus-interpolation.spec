@@ -1,4 +1,4 @@
-%global source0_hash 7a5769edbad9a70758dfe68aa4970243088942b136b5f54835f7ccabbd53c5df
+%global source0_hash d244d9c4f14e00f362d851064c9b7a89b612a8f98caa1f3cc864d22d8698389b
 
 %bcond_with bootstrap
 
@@ -36,8 +36,7 @@ related projects.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n plexus-interpolation-plexus-interpolation-1.27
-%autosetup -p1 -n plexus-interpolation-plexus-interpolation-1.27
+%autosetup -p1 -n plexus-interpolation-plexus-interpolation-%{version}
 %pom_add_dep junit:junit:4.13.1:test
 %pom_remove_plugin :maven-release-plugin
 %pom_remove_plugin :maven-scm-publish-plugin
@@ -52,5 +51,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files -f .mfiles
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.27-1
-- Import
+%autochangelog

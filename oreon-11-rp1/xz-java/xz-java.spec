@@ -1,4 +1,4 @@
-%global source0_hash b1d9a603f4fa75f0702ef84af5bcc11d03e721b6317daec1b1f81c31904bed00
+%global source0_hash d563ba12babaf977f02207c7e474ad41f8ca701efd35ff82abe26c54d66ab68d
 
 %bcond_with bootstrap
 
@@ -54,5 +54,4 @@ mkdir -p extdoc && touch extdoc/package-list
 %license COPYING
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9-1
-- Import
+%autochangelog

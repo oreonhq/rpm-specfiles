@@ -1,4 +1,4 @@
-%global source0_hash 10cbf095c76cd2cfbf8fd2599dce7bbe5cadfa6eebc139144289380ffe8c8146
+%global source0_hash c30cb40b8177112c821753a95134ba82e64dfd8230f5c371a1c89a4b0d066309
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -16,7 +16,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-files
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Libcosmic file manager
 
@@ -25,6 +25,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-files
 
 Source0:        https://github.com/pop-os/cosmic-files/archive/epoch-%{version}/cosmic-files-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-files at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

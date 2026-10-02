@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c7d84f436e1aaef39fdcadebf2bd71bdf24dc69497e13f2e0198873cbbfea2ab
 
 %global qt_module qtshadertools
 
@@ -9,8 +9,8 @@
 
 Summary: Qt6 - Qt Shader Tools module builds on the SPIR-V Open Source Ecosystem
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 2%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -125,8 +125,4 @@ popd
 %{_qt6_libdir}/pkgconfig/Qt6ShaderTools.pc
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

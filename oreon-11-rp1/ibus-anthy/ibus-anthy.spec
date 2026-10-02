@@ -92,7 +92,8 @@ the functionality of the installed %{name} package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }SAVED_SUM=$(grep sha512sum %SOURCE1 | awk '{print $2}')
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+SAVED_SUM=$(grep sha512sum %SOURCE1 | awk '{print $2}')
 MY_SUM=$(sha512sum %SOURCE0 | awk '{print $1}')
 if test x"$SAVED_SUM" != x"$MY_SUM" ; then
     abort
@@ -166,5 +167,4 @@ make -C data check
 %{_datadir}/installed-tests/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.18-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

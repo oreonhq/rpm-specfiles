@@ -1,4 +1,4 @@
-%global source0_hash f94fb0ad8216f97127bedef163a45886b43c62deac5e5b0f5e628e234220c8db
+%global source0_hash bbca92882e96c55bd1527670866d6bc7529ccb12786da55a2398b60a063378da
 
 %global apiversion 0.0
 
@@ -102,5 +102,4 @@ install -m 0644 sd2*.1 sd?2*.1 %{buildroot}/%{_mandir}/man1
 %{_mandir}/man1/sdc2csv.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.7-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

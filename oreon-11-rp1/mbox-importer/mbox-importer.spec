@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 628238e028aeaa2a6395a78449abfe4344d69fcff7c7f4b70994a98fc194be95
 
 Name:    mbox-importer

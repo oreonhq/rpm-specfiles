@@ -1,13 +1,13 @@
-%global source0_hash ec5943b4d7efdc18c506ea0db543acdcd5313452615c66d72a1d5ff8d428296a
+%global source0_hash 6de811e559c20dc1086c0cf2c34bb98712dbe4d45f960c62c3c3f887332c95f8
 
 %global framework kirigami
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.29
+%global majmin_ver_kf6 6.30
 
 
 Name:           kf6-%{framework}
-Version:        6.29.0
+Version:        6.30.0
 Release:        1%{?dist}
 Summary:        QtQuick plugins to build user interfaces based on the KDE UX guidelines
 License:        BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
@@ -124,24 +124,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
-- bump release (retry failed build)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-8
-- sort changelog so newer dates are above older (Sat Apr 04 before Fri Apr 03)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
-- inline cmake --build (no qt6 prepare_docs pass)
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
-- BR cmake(Qt6LinguistTools) for ecm_install_po_files_as_qm (fixes x86_64 configure)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+%autochangelog

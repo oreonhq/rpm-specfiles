@@ -1,4 +1,4 @@
-%global source0_hash d7022980f023d30a8025f9530e1f176a2c5f7239847b9c0cc8a3bca5ce53fb81
+%global source0_hash 587b12eae125a916b9cef2217694def2a42715339f2f239bd8c00d2783a1da82
 
 %bcond_with bootstrap
 
@@ -12,7 +12,7 @@ URL:            https://github.com/google/gson
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/google/gson/archive/gson-parent-%{version}.tar.gz#/google-gson-2.12.1.tar.gz
+Source0:        https://github.com/google/gson/archive/gson-parent-%{version}.tar.gz#/google-gson-%{version}.tar.gz
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -32,8 +32,7 @@ pre-existing objects that you do not have source-code of.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n gson-gson-parent-2.12.1
-%autosetup -p1 -n gson-gson-parent-2.12.1
+%autosetup -p1 -n gson-gson-parent-%{version}
 
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :spotless-maven-plugin
@@ -57,7 +56,6 @@ rm ./gson/src/test/java/com/google/gson/internal/bind/DefaultDateTypeAdapterTest
 # POM doesn't specify parent.
 #%%pom_remove_parent
 
-%pom_remove_plugin :copy-rename-maven-plugin gson
 %pom_remove_plugin :proguard-maven-plugin gson
 
 %pom_remove_plugin  :moditect-maven-plugin gson
@@ -87,5 +85,4 @@ sed 's/${project.version}/%{version}/' gson/src/main/java-templates/com/google/g
 %doc README.md CHANGELOG.md UserGuide.md
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.1-1
-- Import
+%autochangelog

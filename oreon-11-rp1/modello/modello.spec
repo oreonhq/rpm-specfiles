@@ -1,4 +1,4 @@
-%global source0_hash 665bfe6e1a5494d304bbb10949d6d740cb7dc2ba8a24c6d5641f88a5e537e942
+%global source0_hash a1c546949847eb2cb24b55f4083b51e2fd08e66cea7d9d56170700e719dc80ad
 
 %bcond_without bootstrap
 
@@ -17,7 +17,6 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://repo1.maven.org/maven2/org/codehaus/%{name}/%{name}/%{version}/%{name}-%{version}-source-release.zip
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
-Patch:          0001-Revert-Switch-to-codehaus-plexus-build-api-1.2.0-345.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -37,7 +36,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.jsoup:jsoup)
-BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
+BuildRequires:  mvn(org.codehaus.plexus:plexus-build-api)
 %endif
 # TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.8.1-23
@@ -60,7 +59,6 @@ cp -p %{SOURCE1} LICENSE
 %pom_remove_plugin :maven-enforcer-plugin
 
 %pom_remove_dep :plexus-xml modello-core
-%pom_remove_dep :sisu-guice modello-core
 %pom_add_dep com.google.inject:guice modello-core
 
 %pom_remove_dep :jackson-bom
@@ -81,12 +79,11 @@ cp -p %{SOURCE1} LICENSE
 %install
 %mvn_install
 
-%jpackage_script org.codehaus.modello.ModelloCli "" "" modello:sisu/org.eclipse.sisu.plexus:sisu/org.eclipse.sisu.inject:google-guice:aopalliance:atinject:plexus-containers/plexus-component-annotations:plexus/classworlds:plexus/utils:plexus/plexus-build-api0:guava:velocity/velocity-engine-core %{name} true
+%jpackage_script org.codehaus.modello.ModelloCli "" "" modello:sisu/org.eclipse.sisu.plexus:sisu/org.eclipse.sisu.inject:google-guice:aopalliance:atinject:plexus-containers/plexus-component-annotations:plexus/classworlds:plexus/utils:plexus/plexus-build-api:guava:velocity/velocity-engine-core %{name} true
 
 %files -f .mfiles
 %license LICENSE
 %{_bindir}/modello
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

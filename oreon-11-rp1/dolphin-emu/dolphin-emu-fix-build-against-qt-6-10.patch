@@ -1,17 +1,16 @@
 diff --git a/Source/Core/DolphinQt/CMakeLists.txt b/Source/Core/DolphinQt/CMakeLists.txt
-index 38d481c..fb31190 100644
 --- a/Source/Core/DolphinQt/CMakeLists.txt
 +++ b/Source/Core/DolphinQt/CMakeLists.txt
-@@ -14,7 +14,7 @@ endif()
+@@ -9,7 +9,7 @@
  set(CMAKE_AUTOMOC ON)
  set(CMAKE_AUTORCC ON)
  
 -find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Svg)
 +find_package(Qt6 REQUIRED COMPONENTS Core GuiPrivate Widgets Svg)
- message(STATUS "Found Qt version ${Qt6_VERSION}")
  
- set_property(TARGET Qt6::Core PROPERTY INTERFACE_COMPILE_FEATURES "")
-@@ -426,6 +426,7 @@ PRIVATE
+ if (Qt6_VERSION VERSION_GREATER_EQUAL 6.10.0)
+   # GuiPrivate is needed to #include qplatformnativeinterface.h in MainWindow.cpp with Qt 6.10+.
+@@ -454,6 +454,7 @@
  target_link_libraries(dolphin-emu
  PRIVATE
    core
@@ -20,10 +19,9 @@ index 38d481c..fb31190 100644
    uicommon
    imgui
 diff --git a/Source/Core/DolphinQt/MainWindow.cpp b/Source/Core/DolphinQt/MainWindow.cpp
-index 93ad16a..78ae7c9 100644
 --- a/Source/Core/DolphinQt/MainWindow.cpp
 +++ b/Source/Core/DolphinQt/MainWindow.cpp
-@@ -31,7 +31,7 @@
+@@ -32,7 +32,7 @@
  #endif
  
  #ifndef _WIN32
@@ -31,4 +29,4 @@ index 93ad16a..78ae7c9 100644
 +#include <QtGui/qpa/qplatformnativeinterface.h>
  #endif
  
- #include "Common/ScopeGuard.h"
+ #include "Common/Config/Config.h"

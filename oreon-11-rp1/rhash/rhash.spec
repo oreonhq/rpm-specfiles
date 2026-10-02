@@ -1,4 +1,4 @@
-%global source0_hash 6db837e7bbaa7c72c5fd43ca5af04b1d370c5ce32367b9f6a1f7b49b2338c09a
+%global source0_hash 9f6019cfeeae8ace7067ad22da4e4f857bb2cfa6c2deaa2258f55b2227ec937a
 
 Name:           rhash
 Version:        1.4.6
@@ -86,5 +86,4 @@ make test-shared
 
 
 %changelog
-* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.5-4
-- Import for Oreon 11
+%autochangelog

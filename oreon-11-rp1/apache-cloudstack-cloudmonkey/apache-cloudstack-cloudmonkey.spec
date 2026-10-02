@@ -5,7 +5,7 @@
 
 # https://github.com/apache/cloudstack-cloudmonkey
 %global goipath         github.com/apache/cloudstack-cloudmonkey
-Version:                6.2.0
+Version:                6.6.0
 %global tag             6.2.0
 
 %gometa
@@ -21,7 +21,7 @@ which simplifies Apache CloudStack configuration and management.}
 %global godocs          README.md CHANGES.md
 
 Name:           apache-cloudstack-cloudmonkey
-Release:        19%{?dist}
+Release:        1%{?dist}
 Summary:        Apache Cloudstack Cloudmonkey
 
 # Upstream license specification: Apache-2.0

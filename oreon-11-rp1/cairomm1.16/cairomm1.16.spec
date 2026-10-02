@@ -1,4 +1,4 @@
-%global source0_hash b81255394e3ea8e8aa887276d22afa8985fc8daef60692eb2407d23049f03cfb
+%global source0_hash e0e996a979ee52c840dca3ee74f5d005e3259b94ddce58f255d3b6f47c8cb41d
 
 %global so_version 1
 %global apiver 1.16
@@ -50,21 +50,6 @@ Source0:        %{src_base}/cairomm-%{version}.tar.xz
 # https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/290.
 Source1:        %{src_base}/cairomm-%{version}.tar.xz.asc
 Source2:        https://gitlab.freedesktop.org/freedesktop/freedesktop/uploads/0ac64e9582659f70a719d59fb02cd037/gpg_key.pub
-
-# Fix outdated FSF mailing address in COPYING
-# https://gitlab.freedesktop.org/cairo/cairomm/-/merge_requests/29
-# (Merged upstream, so we are comfortable patching the license file.)
-Patch:          https://gitlab.freedesktop.org/cairo/cairomm/-/merge_requests/29.patch
-# Change license info to mention Lesser GPL 2.1 instead of Library GPL 2
-#
-# The GNU Library General Public License has been superseded by
-# the GNU Lesser General Public License.
-# https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html
-#
-# Remove obsolete FSF (Free Software Foundation) address.
-# Committed to master branch:
-# https://gitlab.freedesktop.org/cairo/cairomm/-/commit/43580ed75bde0b7d6ad442c90a22f80b50ce844d
-Patch:          https://gitlab.freedesktop.org/cairo/cairomm/-/commit/43580ed75bde0b7d6ad442c90a22f80b50ce844d.patch
 
 # For %%{gpgverify} macro
 BuildRequires:  gpgverify
@@ -203,5 +188,4 @@ cp -rp examples %{buildroot}%{_docdir}/cairomm-%{apiver}/
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.18.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -7,7 +7,7 @@ ExcludeArch: %{ix86}
 %global tag 1.3.1
 #global commit 09b475bb3dd2b29c6bd904cc455d4c25c6641649
 #global date   20251118
-Version:       1.3.1
+Version:       1.3.3
 %forgemeta
 
 # Build the documentation on Fedora only.
@@ -24,7 +24,7 @@ Version:       1.3.1
 %endif
 
 Name:           coccinelle
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Semantic patching for Linux (spatch)
 
 License:        GPL-2.0-only

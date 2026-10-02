@@ -1,9 +1,9 @@
-%global source0_hash 59c9040e9258a5d0652b04acd0e276a3c662ab43e5718cf8e0cf600df64dc369
+%global source0_hash 7828ab25937d4dc5364f815d0fff3df29e731a74e3f2a2eaf32a016a53e1e381
 
 %global repo dde-application-manager
 
 Name:           deepin-application-manager
-Version:        1.2.61
+Version:        1.2.62
 Release:        %autorelease
 Summary:        App manager of Deepin Desktop Environment
 License:        LGPL-3.0-or-later

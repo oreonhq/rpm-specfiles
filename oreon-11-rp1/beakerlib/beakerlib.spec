@@ -1,4 +1,4 @@
-%global source0_hash e13f4df8ad055c05bcca2226d92e298156eb9ea6de81415c844e567e4e7ab117
+%global source0_hash 87a054194ddd2e073d50c15b0c4f7cf1373b1a5a82e78d9a8f16f13ade7ee00e
 
 Name:       beakerlib
 Summary:    A shell-level integration testing library
@@ -140,5 +140,4 @@ Files for syntax highlighting BeakerLib tests in VIM editor
 %{_datadir}/vim/vimfiles/after/syntax/beakerlib.vim
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.33.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

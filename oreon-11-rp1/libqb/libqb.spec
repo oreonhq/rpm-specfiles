@@ -1,4 +1,4 @@
-%global source0_hash 61a83753199c86a47a69f615778e81b56ac0a58d07751230444e76500b6b210b
+%global source0_hash 326a69fb5b2ee4479f0db4f98d10d670ad0798b5ded8c4cfd585b765fd8941e8
 
 %bcond_with check
 
@@ -88,5 +88,4 @@ This package contains a program to create nicely-formatted man pages from Doxyge
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.9-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

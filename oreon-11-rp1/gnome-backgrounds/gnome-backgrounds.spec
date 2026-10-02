@@ -1,15 +1,16 @@
-%global source0_hash none
+%global source0_hash ec50534d7749be0e1503c5504f826c61d1460d2b41cb84518fa6b2f5547d1e1e
 
 %global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           gnome-backgrounds
-Version:        51.0
+Version:        51.0.1
+%global version_major %(echo %{version} | cut -d. -f1)
 Release:        %autorelease
 Summary:        Desktop backgrounds packaged with the GNOME desktop
 
 License:        CC-BY-SA-3.0
 URL:            https://gitlab.gnome.org/GNOME/gnome-backgrounds
-Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%{version_major}/%{name}-%{tarball_version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  gettext
@@ -50,5 +51,4 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/locale
 %{_datadir}/gnome-background-properties/*.xml
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50~rc-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

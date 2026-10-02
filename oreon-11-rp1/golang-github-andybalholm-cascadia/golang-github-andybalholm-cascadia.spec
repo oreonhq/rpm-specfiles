@@ -1,8 +1,8 @@
-%global source0_hash 5f2cee3689470b1adc7af495402ccf7e047c7216d865b4b2bf55e910638e31e2
+%global source0_hash dc70adcf38b85fba3233ce1ffa025274c57c23f8f470693fbf7fe2ed164781f4
 
 # https://github.com/andybalholm/cascadia
 %global goipath         github.com/andybalholm/cascadia
-Version:                1.2.0
+Version:                1.3.5
 %global debug_package %{nil}
 
 %gometa

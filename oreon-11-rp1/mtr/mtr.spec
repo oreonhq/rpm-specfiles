@@ -1,4 +1,4 @@
-%global source0_hash 12490fb660ba5fb34df8c06a0f62b4f9cbd11a584fc3f6eceda0a99124e8596f
+%global source0_hash 73e6aef3fb6c8b482acb5b5e2b8fa7794045c4f2420276f035ce76c5beae632d
 
 %global _hardened_build 1
 
@@ -12,9 +12,7 @@ URL: https://www.bitwizard.nl/mtr/
 Source0:        https://github.com/traviscross/mtr/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1: net-x%{name}.desktop
 # https://github.com/traviscross/mtr/issues/469
-Patch0: https://github.com/traviscross/mtr/commit/5908af4c19188cb17b62f23368b6ef462831a0cb.patch#/mtr-0.95-snprintf-sizes.patch
 # https://github.com/traviscross/mtr/issues/232, https://github.com/traviscross/mtr/pull/484
-Patch1: https://github.com/traviscross/mtr/commit/74d312d7e67d002e184b37c7f278597ab06bf8e7.patch#/mtr-0.95-socket-binding.patch
 
 BuildRequires: gcc make ncurses-devel libcap-devel jansson-devel
 BuildRequires: autoconf automake libtool git
@@ -54,8 +52,6 @@ about each machine.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch -P0 -p1 -b .snprintf-sizes
-%patch -P1 -p1 -b .socket-binding
 
 %build
 ./bootstrap.sh
@@ -87,5 +83,4 @@ desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
 %{_datadir}/applications/net-x%{name}.desktop
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.95-14
-- Prepare for Oreon 11 (RP1)
+%autochangelog

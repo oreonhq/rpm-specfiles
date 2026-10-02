@@ -1,8 +1,10 @@
-%global source0_hash ac15ffb8430502fbaccdec66c5a82ee0eab0b0f36220df56710feadfeb13d0a0
+%global source2_hash f28314aa33159c5c82cfae3eb4f6012be2775ebf1a4fb8e5c6c10233339c0e17
+%global source1_hash b6b3f40991ec85500b4294cabe58b971ff5b37b6adbe153cbd382e914b664065
+%global source0_hash fc0f1eb6b6766470326f2c014693809190e67dba84274a6fbae9d4912d066706
 
 Name:           libmd
-Version:        1.2.0
-Release:        2%{?dist}
+Version:        1.3.0
+Release:        1%{?dist}
 Summary:        Library that provides message digest functions from BSD systems
 License:        BSD-2-Clause AND BSD-3-Clause AND ISC AND Beerware AND LicenseRef-Fedora-Public-Domain
 URL:            https://www.hadrons.org/software/libmd/

@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 571930928b11e43db690073ad8228162eca8a3f8fd3a87acdeae07df7dd57068
 
 Name:           python-virtualenv
-Version:        21.7.11
+Version:        21.14.2
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Virtual Python Environment builder
@@ -21,7 +21,6 @@ BuildRequires:  python3-devel
 This is package 'virtualenv' generated automatically by pyp2spec.}
 
 Patch:          rpm-wheels.patch
-Patch:          python3.6.patch
 
 %description %_description
 
@@ -58,5 +57,4 @@ Summary:        %{summary}
 %{_bindir}/virtualenv
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20.35.4-1
-- Import
+%autochangelog

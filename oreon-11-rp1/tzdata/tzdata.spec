@@ -1,5 +1,5 @@
-%global source0_hash 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957
-%global source1_hash 697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740
+%global source0_hash e4a178a4477f3d0ea77cc31828ff72aa38feff8d61aa13e7e99e142e9d902be4
+%global source1_hash b1cffc3ace4c4c7cd0efba2f7add86ec3d0b79da48bcf03582671fd3c8feace8
 %global source3_hash 4809b438f61e404dec1c857d56c8d60724312c19bd8b8cf720a1fbedf4f0766f
 
 Summary: Timezone data
@@ -154,9 +154,4 @@ echo ============END TESTING===========
 %{_datadir}/javazi-1.8
 
 %changelog
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2025c-3
-- Use HTTPS for IANA tzdata and tzcode tarballs (spectool has no FTP)
-- Fetch javazic tarball from Fedora lookaside so spectool and CI can download it
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2025c-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

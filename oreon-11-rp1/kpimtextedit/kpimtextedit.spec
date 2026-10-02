@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 100f5dd703adea988f63f2975034a0eff3d4e7d55d088009b02031dc0e47b9c5
 
 Name:    kpimtextedit

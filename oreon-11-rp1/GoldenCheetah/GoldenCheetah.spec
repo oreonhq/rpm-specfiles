@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 169b1dff508287ae03fbbb16155663cefffdc640b718ca21ace4cb57553d60c4
 
 #For git snapshots, set to 0 to use release instead:
 %global usesnapshot 0
@@ -12,7 +12,7 @@
 
 Name:           GoldenCheetah
 %if 0%{?usesnapshot}
-Version:        3.7-SP1
+Version:        3.8
 # Release:        0.19.%%{commitdate}git%%{shortcommit0}%%{?dist}
 Release:        1.36.RC4%%{?dist}
 %else
@@ -27,7 +27,7 @@ URL:            http://www.goldencheetah.org/
 Source0:        https://github.com/GoldenCheetah/GoldenCheetah/archive/refs/tags/v3.6%{?gc_rc}.tar.gz#/%{name}-%{version}%{?gc_rc}.tar.gz
 %else
 # Source0:        https://github.com/GoldenCheetah/GoldenCheetah/archive/refs/tags/v%%{version}.tar.gz#/%%{name}-%%{version}.tar.gz
-Source0:        https://github.com/GoldenCheetah/GoldenCheetah/archive/refs/tags/v3.7-SP1.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/GoldenCheetah/GoldenCheetah/archive/refs/tags/v3.8.tar.gz#/%{name}-%{version}.tar.gz
 %endif
 Source1:        %{name}.desktop
 # https://github.com/GoldenCheetah/GoldenCheetah/issues/2690

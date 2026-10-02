@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 4399db39573e59218ca8bc03b0adf7d1ebdddb7cf87f6e6f55390ab4fa0edaad
 
 Name:    kidentitymanagement

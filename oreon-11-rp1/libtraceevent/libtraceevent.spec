@@ -1,4 +1,4 @@
-%global source0_hash dc456d4d2bf4b4cd4d0c737d3374a8093f9e5ca18c1d7fc2279a4bf41e613121
+%global source0_hash e6d82cb2392d04866203387fa092692e4282ccc36c8235dc129afd1ceba12684
 
 # git tag
 #%%global commit 5dd505f3aba255c5fbc2a6dbed57fcba51b400f6
@@ -66,5 +66,4 @@ rm -rf %{buildroot}/%{_libdir}/libtraceevent.a
 %{_libdir}/pkgconfig/libtraceevent.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.4-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

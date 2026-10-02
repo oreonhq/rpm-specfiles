@@ -1,13 +1,14 @@
 %global source0_hash b941aec9011864978dd7fdeb052b1943535824169d2aa2b0e7eae9ab807584ac
 
 Name:             gengetopt
-Version:          2.23
-Release:          17%{dist}
+Version:          2.23.1
+Release:          1%{dist}
 Summary:          Tool to write command line option parsing code for C programs
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:          GPL-3.0-or-later
 URL:              http://www.gnu.org/software/gengetopt/
 Source0:          ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
+
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc

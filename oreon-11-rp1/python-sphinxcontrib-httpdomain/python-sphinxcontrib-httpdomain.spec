@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 449700c12406370cc80df8c54eba930bf098d38b414cf756c594d2ce313647c2
 
 Name:           python-sphinxcontrib-httpdomain
-Version:        2.0.0
+Version:        2.0.0a4
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Sphinx extension that provides a domain for documenting HTTP APIs.
@@ -56,5 +56,4 @@ Summary:        %{summary}
 %files -n python3-sphinxcontrib-httpdomain -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

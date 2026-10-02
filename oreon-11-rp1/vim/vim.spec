@@ -1,4 +1,4 @@
-%global source0_hash a30c7c49be62fe59dd746c8bca3853ac5996327cd641b038334be7e926929c2c
+%global source0_hash a841d9490f573cf2696e157aade3568d327fc59374b7627f374dae3a600a5e0a
 
 %bcond_with hunspell
 
@@ -41,7 +41,7 @@
 %define baseversion 9.2
 # get bug url from /etc/os-release
 %define bugurl %(source /etc/os-release; echo ${BUG_REPORT_URL})
-%define patchlevel 1129
+%define patchlevel 1162
 %define vimdir vim92
 # Git tags use zero-padded patch (v9.2.0148), archive dir vim-9.2.0148 (same tree as vim.org unix tarball)
 %define vim_github_tag v%{baseversion}.%(LANG=C printf '%%04d' %{patchlevel})

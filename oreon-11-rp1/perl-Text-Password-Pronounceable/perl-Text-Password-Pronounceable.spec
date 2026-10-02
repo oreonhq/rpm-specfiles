@@ -5,7 +5,7 @@ Version:    0.30
 Release:    40%{?dist}
 License:    Artistic-1.0-Perl 
 Summary:    Generate pronounceable passwords 
-Source0:    https://cpan.metacpan.org/authors/id/T/TS/TSIBLEY/Text-Password-Pronounceable-%{version}.tar.gz
+Source0:    https://cpan.metacpan.org/authors/id/B/BP/BPS/Text-Password-Pronounceable-%{version}.tar.gz
 Url:        https://metacpan.org/release/Text-Password-Pronounceable
 BuildArch:  noarch
 BuildRequires: coreutils

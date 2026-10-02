@@ -1,4 +1,4 @@
-%global source0_hash 2c6483baeba65f939734473fafa31c4f727e8e139dd884563121412b6aba681b
+%global source0_hash e30ce4b071ad4b48e7eb0c34c66324a32c2548cfc067900941a90f017dc174e3
 
 Summary: High-performance and highly configurable free RADIUS server
 Name: freeradius
@@ -934,5 +934,4 @@ fi
 %attr(640,root,radiusd) %config(noreplace) /etc/raddb/mods-config/kafka/messages-json.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.8-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

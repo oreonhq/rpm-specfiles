@@ -1,7 +1,7 @@
-%global source0_hash 440bdd9fbf88d57809b68839fb690f19e4db65fa5539e60cc803ebd7b9e5e8fc
+%global source0_hash c11ad4c429a983493ba10014c7af9831a455c2c0eea91c1cefff74530e480277
 
 Name:           python-boto3
-Version:        1.43.102
+Version:        1.43.106
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The AWS SDK for Python _Boto3_

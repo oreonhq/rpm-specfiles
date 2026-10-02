@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f27a5c4177c605a1abaf25b517171ae0a31477c7d38bd81a186ff78a8480d29b
 
 # SPDX-License-Identifier: MIT
 # Copyright (C) Fedora Project Authors
@@ -29,6 +29,7 @@ URL:            https://ansible.com
 
 Source0:        https://github.com/ansible/ansible/archive/refs/tags/v%{uversion}.tar.gz#/%{name}-%{uversion}.tar.gz
 Source1:        https://github.com/ansible/ansible-documentation/archive/refs/tags/v%{uversion}.tar.gz#/ansible-documentation-%{uversion}.tar.gz
+Patch0:         ansible-core-bcrypt5.patch
 
 BuildArch:      noarch
 
@@ -256,5 +257,4 @@ install -Dpm 0644 licenses/* -t %{buildroot}%{_pkglicensedir}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

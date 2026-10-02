@@ -1,4 +1,4 @@
-%global source0_hash 992853451a58d229068c0ed10c3e007b2032c0fb654f27d656bfa3c120a2f132
+%global source0_hash 99d7468c22f6cafd8c72aa53173a632f2ca29cb19aec913e8ed45b6102af322d
 
 Summary: A firewall daemon with D-Bus interface providing a dynamic firewall
 Name: firewalld
@@ -363,5 +363,4 @@ fi
 %{_mandir}/man1/firewall-config*.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

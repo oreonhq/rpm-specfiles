@@ -1,14 +1,15 @@
-%global source0_hash 11ddfa39afe28c28539fe65fc4f1592d410c1e9b6dd7d8a91ca25d85e9ec65b8
+%global source0_hash 66ec82a577395fe9d471504267e6dd04615c76517c61af7c6b9c19e5e34e73c8
 
 %define double_profiling_build 1
 
 Name:      hunspell
 Summary:   A spell checker and morphological analyzer library
-Version:   1.7.3
-Release:   1%{?dist}
-Source:        https://github.com/hunspell/hunspell/releases/download/v%{version}/hunspell-%{version}.tar.gz
+Version:   1.7.4
+Release:   %autorelease
+Source:    https://github.com/hunspell/hunspell/releases/download/v%{version}/hunspell-%{version}.tar.gz
 URL:       https://github.com/hunspell/hunspell
 License:   LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-1.1
+
 BuildRequires:  gcc-c++
 BuildRequires: autoconf, automake, libtool, ncurses-devel, gettext-devel
 BuildRequires: perl-generators
@@ -22,7 +23,6 @@ BuildRequires: make
 Requires:  hunspell-en-US
 Requires:  hunspell-filesystem = %{version}-%{release}
 
-Patch0: 0001-Resolves-rhbz-2158548-allow-longer-words-for-hunspel.patch
 
 %description
 Hunspell is a spell checker and morphological analyzer library and program
@@ -46,8 +46,7 @@ packages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
-%patch -P0 -p1 -b .rhbz2158548
+%autosetup -p1
 
 %build
 autoreconf -vfi
@@ -98,7 +97,6 @@ mkdir $RPM_BUILD_ROOT/%{_datadir}/hunspell
 mkdir $RPM_BUILD_ROOT/%{_datadir}/myspell
 %find_lang %{name}
 
-%ldconfig_scriptlets
 
 %files -f %{name}.lang
 %doc README COPYING COPYING.LESSER COPYING.MPL AUTHORS license.hunspell license.myspell THANKS
@@ -132,5 +130,4 @@ mkdir $RPM_BUILD_ROOT/%{_datadir}/myspell
 %{_datadir}/myspell
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.2-11
-- Prepare for Oreon 11 (RP1)
+%autochangelog

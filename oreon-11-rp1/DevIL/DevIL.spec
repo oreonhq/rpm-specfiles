@@ -1,21 +1,21 @@
-%global source0_hash 682ffa3fc894686156337b8ce473c954bf3f4fb0f3ecac159c73db632d28a8fd
+%global source0_hash 0075973ee7dd89f0507873e2580ac78336452d29d34a07134b208f44e2feb709
 
 Name:           DevIL
 Version:        1.8.0
-Release:        1%{?dist}
+Release:        %autorelease
 Summary:        A cross-platform image library
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2
 URL:            http://openil.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/openil/%{name}-%{version}.tar.gz
-Patch0:         DevIL-1.7.5-allegropicfix.patch
-Patch1:         DevIL-1.7.5-il_endian_h.patch
-Patch2:         DevIL-1.7.8-CVE-2009-3994.patch
-Patch3:         DevIL-1.7.8-libpng15.patch
-Patch4:         DevIL-1.7.8-gcc5.patch
-Patch5:         devil-1.7.8-jasper2.patch
+# Add solib version numbers to the CMake build (https://github.com/DentonW/DevIL/pull/50)
+Patch0:         DevIL-1.8.0-soversion.patch
+# Jasper >= 2.0.20 callback API (upstream 42a62648e727e9a0217280474546de3ac69cbff1)
+Patch1:         DevIL-1.8.0-jasper.patch
 BuildRequires:  gcc-c++
 BuildRequires:  gcc
+BuildRequires:  cmake
+BuildRequires:  lcms2-devel
 BuildRequires:  allegro-devel
 BuildRequires:  libGLU-devel
 BuildRequires:  libICE-devel
@@ -66,32 +66,25 @@ Development files for the libILUT component of DevIL
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n devil-%{version}
+%autosetup -p1 -n DevIL
+cd DevIL
 iconv -f iso8859-1 CREDITS -t utf8 > CREDITS.conv
 touch -r CREDITS CREDITS.conv
 mv CREDITS.conv CREDITS
-chmod -x src-IL/src/il_*.c
-sed -i 's|png12|png16|g' configure
+# install into the multilib-correct libdir instead of a hardcoded "lib"
+sed -i 's|DESTINATION lib/pkgconfig|DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig|; s|DESTINATION lib$|DESTINATION ${CMAKE_INSTALL_LIBDIR}|' \
+    src-IL/CMakeLists.txt src-ILU/CMakeLists.txt src-ILUT/CMakeLists.txt
 
 
 %build
-%ifarch x86_64
-DISABLE_SSE="--disable-sse3"
-%endif
-%ifarch %{ix86}
-DISABLE_SSE="--disable-sse --disable-sse2 --disable-sse3"
-%endif
-%configure --enable-ILU --enable-ILUT --disable-static --disable-allegrotest \
-           $DISABLE_SSE
-sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i 's|LD_RUN_PATH|DIE_RPATH_DIE|g' libtool
-make %{?_smp_mflags}
+cd DevIL
+%cmake
+%cmake_build
 
 
 %install
-make install DESTDIR=%{buildroot}
-rm %{buildroot}%{_libdir}/*.la
-rm %{buildroot}%{_infodir}/dir
+cd DevIL
+%cmake_install
 
 
 %ldconfig_scriptlets
@@ -99,11 +92,10 @@ rm %{buildroot}%{_infodir}/dir
 
 
 %files
-%{_bindir}/ilur
-%{_libdir}/libIL.so.*
-%{_libdir}/libILU.so.*
-%license COPYING
-%doc AUTHORS ChangeLog CREDITS README TODO
+%{_libdir}/libIL.so.1
+%{_libdir}/libILU.so.1
+%license DevIL/COPYING
+%doc DevIL/AUTHORS DevIL/ChangeLog DevIL/CREDITS DevIL/README.md DevIL/TODO
 
 %files devel
 %{_libdir}/libIL.so
@@ -113,16 +105,13 @@ rm %{buildroot}%{_infodir}/dir
 %dir %{_includedir}/IL
 %{_includedir}/IL/il.h
 %{_includedir}/IL/ilu.h
-%{_includedir}/IL/ilu_region.h
-%{_infodir}/DevIL_manual.info.*
 
 %files ILUT
-%{_libdir}/libILUT.so.*
+%{_libdir}/libILUT.so.1
 
 %files ILUT-devel
 %{_libdir}/libILUT.so
 %{_libdir}/pkgconfig/ILUT.pc
-%{_includedir}/IL/devil_cpp_wrapper.hpp
 %{_includedir}/IL/ilut.h
 
 

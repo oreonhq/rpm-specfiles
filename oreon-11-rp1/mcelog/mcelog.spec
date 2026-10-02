@@ -1,9 +1,9 @@
-%global source0_hash none
+%global source0_hash c98ede2d06f02c12d272dbb69da63d1f7160751d551664e190a8bb6a9138a206
 
 Summary:	Tool to translate x86-64 CPU Machine Check Exception data
 Name:		mcelog
-Version:	175
-Release:	14%{?dist}
+Version:	212
+Release:	%autorelease
 Epoch:		3
 License:	GPL-2.0-only
 URL:		https://github.com/andikleen/mcelog
@@ -24,7 +24,7 @@ on x86-32 and x86-64 systems.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n mcelog-175
+%autosetup -n mcelog-%{version}
 
 %build
 %make_build CFLAGS="$RPM_OPT_FLAGS -fpie -pie"
@@ -63,5 +63,4 @@ install -p -m644 mcelog*.5 $RPM_BUILD_ROOT/%{_mandir}/man5/
 %{_mandir}/*/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3:175-14
-- Import
+%autochangelog

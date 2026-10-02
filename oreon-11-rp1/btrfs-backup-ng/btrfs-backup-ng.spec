@@ -1,7 +1,7 @@
-%global source0_hash 98287acdd541ccc5d388fae49858a8ee2c4d7abd2d8528a16817039d928eed19
+%global source0_hash 6b102492d7d328c75c9354bf0e81de8495e54fa25264aba5173b47d04650b422
 
 Name:           btrfs-backup-ng
-Version:        0.9.6
+Version:        0.9.12
 Release:        %autorelease
 Summary:        Intelligent, feature-rich backups for btrfs
 

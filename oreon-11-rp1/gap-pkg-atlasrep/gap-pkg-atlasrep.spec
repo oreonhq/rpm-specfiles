@@ -1,4 +1,6 @@
-%global source0_hash 9923d84def0c29c18dd6752f9824d73f00f044ff5f7bfd83c13a95d96590a9cb
+%global source1_hash 9f82d01bb682f24406f07a701dc2cae40dcba672c6ca91e77613b9096d6b49eb
+
+%global source0_hash 0f9cd6cffacd23d0131f7df31b0d3b330b9af310b77dc953a17a635b655db1ec
 
 # When bootstrapping a new architecture, there is no gap-pkg-ctbllib package
 # yet.  We need it to generate documentation and run tests, but it needs this
@@ -13,7 +15,7 @@
 %global gap_makedoc makedocrel.g
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.1.9
+Version:        2.1.12
 Release:        %autorelease
 Summary:        GAP interface to the Atlas of Group Representations
 

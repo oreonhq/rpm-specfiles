@@ -1,4 +1,4 @@
-%global source0_hash de801ee349ed3c255a9af3c01b1a401fab5b3fc1c35eb2fd7dfb35d4b8194d7f
+%global source0_hash abb9e452a1c372133bd3eb8f0bb30d07b2d0a8fb02001c4155cf287555db4040
 
 %bcond qt5 %[%{undefined rhel} || 0%{?rhel} < 10]
 
@@ -11,9 +11,6 @@ Summary:        Flatpak portal library
 License:        LGPL-3.0-only AND LGPL-2.1-or-later
 Url:            https://github.com/flatpak/libportal
 Source:        https://github.com/flatpak/libportal/releases/download/%{version}/%{name}-%{version}.tar.xz
-
-# https://github.com/flatpak/libportal/pull/200
-Patch0:         libportal-fix-build-with-qt-6_9.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -223,5 +220,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/doc/libportal-1
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.1-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

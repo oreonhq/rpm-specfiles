@@ -1,7 +1,11 @@
 import re, sys, os, collections
 
 buildroot = sys.argv[1]
-no_bootloader = '--no-bootloader' in sys.argv
+
+potentially_empty_outputs = [
+    'standalone-report',
+    *(['boot'] if '--no-bootloader' in sys.argv else []),
+]
 
 known_files = '''
 %ghost %config(noreplace) /etc/crypttab
@@ -26,8 +30,8 @@ known_files = '''
 %ghost %dir /var/lib/private/systemd
 %ghost %dir /var/lib/private/systemd/journal-upload
 %ghost /var/lib/private/systemd/journal-upload/state
-%ghost %dir /var/lib/systemd/timesync
-%ghost /var/lib/systemd/timesync/clock
+%ghost %dir %verify(not user group) /var/lib/systemd/timesync
+%ghost %verify(not user group) /var/lib/systemd/timesync/clock
 %ghost %dir /var/lib/systemd/backlight
 %ghost /var/lib/systemd/catalog/database
 %ghost %dir /var/lib/systemd/coredump
@@ -59,6 +63,7 @@ outputs = {suffix: open(f'.file-list-{suffix}', 'w')
                    'shared',
                    'libs',
                    'udev',
+                   'imds',
                    'ukify',
                    'boot',
                    'pam',
@@ -66,6 +71,7 @@ outputs = {suffix: open(f'.file-list-{suffix}', 'w')
                    'sysusers',
                    'devel',
                    'container',
+                   'import-keys',
                    'networkd',
                    'networkd-defaults',
                    'oomd-defaults',
@@ -73,6 +79,7 @@ outputs = {suffix: open(f'.file-list-{suffix}', 'w')
                    'resolve',
                    'tests',
                    'standalone-repart',
+                   'standalone-report',
                    'standalone-tmpfiles',
                    'standalone-sysusers',
                    'standalone-shutdown',
@@ -94,10 +101,11 @@ for file in files(buildroot):
                     /usr/lib.*/(security|pkgconfig)$|
                     /usr/lib/rpm(/macros.d|)$|
                     /usr/lib/firewalld(/services|)$|
-                    /usr/share/(locale|licenses|doc)|             # no $
+                    /usr/share/(locale|licenses)|             # no $
+                    LICENSE|
                     /etc(/pam\.d|/xdg|/X11|/X11/xinit|/X11.*\.d|)$|
                     /etc/(dnf|dnf/protected.d)$|
-                    /usr/(src|lib/debug)|                         # no $
+                    /usr/(src|lib/debug)|                     # no $
                     /run$|
                     /var(/cache|/log|/lib|/run|)$
     ''', n, re.X):
@@ -106,6 +114,8 @@ for file in files(buildroot):
     if n.endswith('.standalone'):
         if 'repart' in n:
             o = outputs['standalone-repart']
+        elif 'report' in n:
+            o = outputs['standalone-report']
         elif 'tmpfiles' in n:
             o = outputs['standalone-tmpfiles']
         elif 'sysusers' in n:
@@ -113,7 +123,7 @@ for file in files(buildroot):
         elif 'shutdown' in n:
             o = outputs['standalone-shutdown']
         else:
-            assert False, 'Found .standalone not belonging to known packages'
+            assert False, f'Found {n} not belonging to known standalone packages'
 
     elif '/security/pam_' in n or '/man8/pam_' in n:
         o = outputs['pam']
@@ -146,16 +156,19 @@ for file in files(buildroot):
     ''', n, re.X):
         o = outputs['sysusers']
 
+    elif re.search(r'import-pubring', n):
+        o = outputs['import-keys']
+
     elif re.search(r'''mymachines|
                        machinectl|
                        mount.ddi|
                        importctl|
                        portablectl|
+                       portabled|portable1|
                        systemd-nspawn|
                        systemd\.nspawn|
                        systemd-vmspawn|
                        systemd-dissect|
-                       import-pubring|
                        systemd-machined|
                        systemd-import|
                        systemd-export|
@@ -198,6 +211,9 @@ for file in files(buildroot):
     elif re.search(r'10-oomd-.*defaults.conf|lib/systemd/oomd.conf.d', n, re.X):
         o = outputs['oomd-defaults']
 
+    elif 'imds' in n:
+        o = outputs['imds']
+
     elif re.search(r'''udev(?!\.pc)|
                        hwdb|
                        ac-power|
@@ -235,7 +251,10 @@ for file in files(buildroot):
                        remount-fs|
                        tpm2|
                        /initrd|
+                       systemd-sysinstall|
                        systemd[.-]pcr|
+                       systemd-imdsd|
+                       systemd-loop|
                        /pcrlock\.d|
                        systemd-measure|
                        /boot$|
@@ -245,13 +264,11 @@ for file in files(buildroot):
                        binfmt|
                        sysctl|
                        coredump|
+                       homectl|
                        homed|home1|
-                       sysupdate|updatctl|
-                       oomd|
-                       portabled|portable1
-    ''', n, re.X):     # coredumpctl, homectl, portablectl are included in the main package because
-                       # they can be used to interact with remote daemons. Also, the user could be
-                       # confused if those user-facing binaries are not available.
+                       sysupdate|updatectl|
+                       oomd
+    ''', n, re.X):
         o = outputs['udev']
 
     elif re.search(r'''/boot/efi|
@@ -274,7 +291,8 @@ for file in files(buildroot):
         prefix = known_files[n].split()[:-1]
     elif file.is_dir(follow_symlinks=False):
         prefix = ['%dir']
-    elif 'README' in n:
+    # Allow .conf files to be linked as config. They must not be %doc.
+    elif ('README' in n or '/doc/' in n) and not n.endswith('.conf'):
         prefix = ['%doc']
     elif n.startswith('/etc'):
         prefix = ['%config(noreplace)']
@@ -291,9 +309,10 @@ for file in files(buildroot):
     for file in o:
         print(f'{prefix}{n}{suffix}', file=file)
 
-if [print(f'ERROR: no file names were written to {o.name}')
-    for name, o in outputs.items()
-    if (o.tell() == 0 and
-        not (no_bootloader and name == 'boot'))
-    ]:
+
+if [
+        print(f'ERROR: no file names were written to {o.name}')
+        for name, o in outputs.items()
+        if o.tell() == 0 and name not in potentially_empty_outputs
+]:
     sys.exit(1)

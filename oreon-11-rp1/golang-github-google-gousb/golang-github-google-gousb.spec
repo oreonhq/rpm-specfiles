@@ -1,4 +1,4 @@
-%global source0_hash a22a228064dd530589b98130b9a2b5a6c0e34079b050d462189ab84e70097658
+%global source0_hash c78e442e374ea6fa9f169af42f5e41aae7f26b815f0bed144f3ec39506038fff
 
 # Run tests in check section
 # Requires a usb device
@@ -7,7 +7,7 @@
 
 # https://github.com/google/gousb
 %global goipath         github.com/google/gousb
-Version:                1.1.1
+Version:                2.1.0
 
 %global common_description %{expand:
 The gousb package is an attempt at wrapping the libusb library into a 

@@ -1,4 +1,4 @@
-%global source0_hash ddf0e32dd5fafe5283198d37e4bf9decf7ba1770b6e7e006c33e6df79e6a6157
+%global source0_hash be30d910e67f58d82e753231f1357f326a1a088acf126b21ff77e60aab19b90b
 
 # The testsuite does not pass on all targets.
 #
@@ -153,5 +153,4 @@ echo ====================TESTING END=====================
 %{_libexecdir}/libunwind
 
 %changelog
-* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-3
-- Import from Fedora dist-git f43 for Oreon 11
+%autochangelog

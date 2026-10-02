@@ -4,8 +4,8 @@
 %global pkgname Rinari
 
 Name:             emacs-rinari
-Version:          2.1  
-Release:          35.20100815git%{?dist}
+Version:          2.11  
+Release:          1.20100815git%{?dist}
 Summary:          Ruby on rails minor mode for Emacs
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
@@ -22,6 +22,7 @@ URL:              http://rinari.rubyforge.org/
 # tar cvjf rinari-20100805.tar.bz2 rinari/
 
 Source0:          http://sagarun.fedorapeople.org/misc/rinari-20100815.tar.bz2
+
 Source1:          emacs-rinari-init.el
 
 BuildRequires:    emacs texinfo

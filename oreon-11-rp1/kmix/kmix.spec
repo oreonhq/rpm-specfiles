@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash e310b9abda691a23767579b35cf468b63dccb7a03ed47cdd63e2ccbb5818fc10
 
 Name:    kmix

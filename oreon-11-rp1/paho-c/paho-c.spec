@@ -1,4 +1,4 @@
-%global source0_hash 60ce2cfdc146fcb81c621cb8b45874d2eb1d4693105d048f60e31b8f3468be90
+%global source0_hash 8b960f51edc7e03507637d987882bc486d8f4be6e79431bf99e2763344fd14c5
 
 Name:           paho-c
 Version:        1.3.16

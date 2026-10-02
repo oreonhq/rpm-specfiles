@@ -9,18 +9,17 @@ Forwarded: not-needed
  1 file changed, 12 deletions(-)
 
 diff --git a/builtins/src/main/java/org/jline/builtins/Nano.java b/builtins/src/main/java/org/jline/builtins/Nano.java
-index 491d0bc3..be5748c1 100644
 --- a/builtins/src/main/java/org/jline/builtins/Nano.java
 +++ b/builtins/src/main/java/org/jline/builtins/Nano.java
-@@ -51,7 +51,6 @@ import org.jline.terminal.impl.MouseSupport;
- import org.jline.utils.*;
- import org.jline.utils.InfoCmp.Capability;
+@@ -53,7 +53,6 @@
+ import org.jline.utils.RegexTimeoutException;
+ import org.jline.utils.SafeRegex;
  import org.jline.utils.Status;
 -import org.mozilla.universalchardet.UniversalDetector;
  
  import static org.jline.builtins.SyntaxHighlighter.*;
  import static org.jline.keymap.KeyMap.KEYMAP_LENGTH;
-@@ -380,17 +379,6 @@ public class Nano implements Editor {
+@@ -382,17 +381,6 @@
              }
              byte[] bytes = bos.toByteArray();
  
@@ -38,6 +37,3 @@ index 491d0bc3..be5748c1 100644
              // TODO: detect format, do not eat last newline
              try (BufferedReader reader =
                      new BufferedReader(new InputStreamReader(new ByteArrayInputStream(bytes), charset))) {
--- 
-2.50.1
-

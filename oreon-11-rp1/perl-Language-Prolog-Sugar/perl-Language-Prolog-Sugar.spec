@@ -7,7 +7,7 @@ Summary:        Syntactic sugar for Prolog term constructors
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Language-Prolog-Sugar
-Source0:        https://cpan.metacpan.org/authors/id/S/SA/SALVA/Language-Prolog-Sugar-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/Z/ZM/ZMUGHAL/Language-Prolog-Sugar-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-generators

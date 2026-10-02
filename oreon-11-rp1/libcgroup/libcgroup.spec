@@ -1,9 +1,7 @@
-%global source0_hash 64378ec85eb4b46d1536a26120ad6cf9012a3a66d33ec9dec2fba88055c6001a
-%global source1_hash 20cb815c855bf97fb79b50b93464e397e267a6d077bacda338f752b28390da6e
+%global source0_hash 4035c6660914116b5488b3d007f78ef9a6218080e2633e0af7c963b3b99c5512
 
 %bcond_with tests
 
-%global tests_commit 7c998caddcd8236fe4191841e361b401697fb777
 
 Summary: Library to control and monitor control groups
 Name: libcgroup
@@ -13,7 +11,6 @@ Release: 1%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL: http://libcg.sourceforge.net/
 Source0:        https://github.com/%{name}/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-v%{version}.tar.gz
-Source1:        https://github.com/%{name}/%{name}-tests/archive/refs/tags/%{tests_commit}.tar.gz#/libcgroup-3.0.tar.gz
 
 Source2: cgconfig.service
 
@@ -70,7 +67,6 @@ provide scripts to manage that configuration.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup  -q  -n %{name}-%{version}
 %patch -P0 -p1 -b .config-patch
 %patch -P1 -p1 -b .chmod
@@ -78,8 +74,6 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %patch -P3 -p1 -b .fread
 %patch -P4 -p1 -b .templates-fix
 
-%setup -D -T -a 1
-mv -T %{name}-tests-%{tests_commit} tests
 %patch -P100 -p1 -b .tests-unbundle-gtest
 
 %build
@@ -182,5 +176,4 @@ make -C tests/gunit check
 %{_libdir}/pkgconfig/libcgroup.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

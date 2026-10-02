@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bcac1a1b8da6909994a2957238a57b8140dab7c5c5c69a43669654fe87a33c1d
 
 Name:           python-cachetools
 Version:        7.2.0

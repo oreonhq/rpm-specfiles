@@ -1,4 +1,4 @@
-%global source0_hash be8d8554d40e981d1b93b5ff82497c9ad2259f59f675b38f1b5e84624c07fade
+%global source0_hash 360193cecc93f906d8383a8fb5c1f3a7eed35e6ced0e118a64ee56ae13c88cac
 
 Name:       setxkbmap
 Version:    1.3.5
@@ -38,5 +38,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man1/setxkbmap.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.4-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

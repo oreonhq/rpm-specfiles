@@ -1,4 +1,4 @@
-%global source0_hash bb4b955e2f52a832f221d3fb7182cebf920653a0ad1e3201abd29f134d4c33f3
+%global source0_hash 5ebedc3dcf508e85f2f7bbddffa2cca6805650ffe1dce350c4a1dfc5d2f07c50
 
 %global stable_kf6 stable
 
@@ -7,8 +7,8 @@
 ExcludeArch: %{ix86}
 
 Name:    xdg-desktop-portal-kde
-Version:        6.7.90
-Release: 1%{?dist}
+Version:        6.7.5
+Release: %autorelease
 Summary: KDE backend implementation for xdg-desktop-portal
 
 License: GPL-2.0-or-later
@@ -89,5 +89,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_datadir}/qlogging-categories6/xdp-kde.categories
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
-- Add xdg-desktop-portal-kde package for Plasma portal backend
+%autochangelog

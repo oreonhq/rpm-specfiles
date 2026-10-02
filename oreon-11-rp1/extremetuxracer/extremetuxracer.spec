@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 829b520afe5313865824ced69fb86d50c8b7388e7e643e38d15ecd86c4c4f8a6
 
 %global patched_tarball 1
 
@@ -18,7 +18,7 @@ URL: http://extremetuxracer.sourceforge.net
 # http://downloads.sourceforge.net/extremetuxracer/etr-%%{version}.tar.xz, but
 # with a badly licensed font file removed. Use etr-clean-tarball.sh to
 # regenerate from the upstream tarball.
-Source0: etr-%{version}%{patch_ext}.tar.xz
+Source0: https://src.fedoraproject.org/repo/pkgs/extremetuxracer/etr-%{version}%{patch_ext}.tar.xz/sha512/bbf6c308ee3ab2b22626c0125c2757289785b4a71822ee736852b286469d476f469ee9634c5f9be88a928052589cf11a2505f81fc2dd0c0f34ae71daef9328b7/etr-%{version}%{patch_ext}.tar.xz
 Source1: etr-clean-tarball.sh
 Source2: etr.appdata.xml
 Source3: %{name}.metainfo.xml
@@ -34,7 +34,7 @@ Source7: etr.de.6
 BuildRequires:  gcc-c++
 BuildRequires: libGL-devel
 BuildRequires: libGLU-devel
-BuildRequires: SFML-devel
+BuildRequires: SFML2-devel
 BuildRequires: freetype-devel
 BuildRequires: libtool
 BuildRequires: pkgconfig
@@ -93,6 +93,10 @@ Racer.
 autoreconf -ivf
 
 %build
+# SFML 2.x API: use the SFML2 compat package
+export PKG_CONFIG_PATH=%{_libdir}/SFML2/pkgconfig
+export CXXFLAGS="%{optflags} -I%{_includedir}/SFML2"
+export LDFLAGS="%{?build_ldflags} -L%{_libdir}/SFML2"
 %configure
 make %{?_smp_mflags}
 

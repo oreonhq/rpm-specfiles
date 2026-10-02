@@ -1,4 +1,4 @@
-%global source0_hash e2d01f58fa0f96a7452715f052fe452212044da4bad50bf7cc1d5d0db514a9a9
+%global source0_hash 425ddc9358151c52775a00b14e9dbd4044fc1f3aa931beef2aa3633707ba1eb8
 
 # The package does not currently build with -msse4.1 enabled,
 # which is implicit on ELN when building with -march=x86-64-v3
@@ -10,7 +10,7 @@
 %endif
 
 Name:           frei0r-plugins
-Version:        3.5.0
+Version:        3.6.0
 Release:        %autorelease
 Summary:        Frei0r - a minimalist plugin API for video effects
 
@@ -87,5 +87,4 @@ rm -rf %{buildroot}%{_docdir}/%{name}
 %{_libdir}/pkgconfig/frei0r.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

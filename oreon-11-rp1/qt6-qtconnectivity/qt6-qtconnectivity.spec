@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ed51f7f02c1f437fcf8a42940c7a84f6c0908c0ec7a4f5a5304fe68f47521954
 
 %global qt_module qtconnectivity
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Connectivity components
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 # See LICENSE.GPL3, respectively, for exception details
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -130,8 +130,4 @@ popd
 %endif
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

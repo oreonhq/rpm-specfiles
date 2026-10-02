@@ -1,4 +1,4 @@
-%global source0_hash f0b16859bb4955c1b93778ab8ddd8c8061023960d9a0171a8d82494bf6544d7d
+%global source0_hash a818e9f96715a09360a083685e5eb8eab9af5fc7e58fa92c839fa801912fe32f
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-greeter
-Version: 1.0.9
+Version: 1.9.1
 Release:        %autorelease
 # Release:        %%autorelease
 Summary:        Login and display manager for the COSMIC Desktop Environment
@@ -23,6 +23,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-greeter
 
 Source0:        https://github.com/pop-os/cosmic-greeter/archive/epoch-%{version}/cosmic-greeter-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-greeter at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

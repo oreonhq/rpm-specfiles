@@ -1,4 +1,4 @@
-%global source0_hash f2affe7d40ab63db8e7b9ecc3f6bdc9c2fc7e3134c84ff2d795f482fe926a382
+%global source0_hash 5ad7cbbfcc0de61b403d6797c9ef60455bfbebd8e162aec33b5b0b097adfb9d5
 
 %global api_ver 0.56
 %global priority 90
@@ -208,5 +208,4 @@ export -n VALAFLAGS
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.56.18-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

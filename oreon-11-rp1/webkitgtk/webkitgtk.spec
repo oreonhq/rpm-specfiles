@@ -1,4 +1,4 @@
-%global source0_hash bc0f4dd7c105b0b78420eb15e581a6c87086a19c7133e9058970086e5cb0eb31
+%global source0_hash 846fd19ccedbae1dbfe904f26dbf2d68a800a33a50caf2ad5222c8dcb3f25682
 
 ## NOTE: Lots of files in various subdirectories have the same name (such as
 ## "LICENSE") so this short macro allows us to distinguish them by using their

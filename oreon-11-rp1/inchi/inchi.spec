@@ -1,3 +1,7 @@
+%global source2_hash 3c870ef97c8ebc86f64946db395582b87d79732000fa73d173f46c05ca19c1ff
+
+%global source1_hash eef4fe1c7a25427761c38fd02be9e0618ec04fe4365a90b0eb09dd141350cdcf
+
 %global source0_hash 4874e310c0f2f81b881e90dd0c534752e1b9421d7d92ccfb037710022c7e7efd
 
 %define inchi_so_ver 1.06.00
@@ -5,8 +9,8 @@
 
 Summary: The IUPAC International Chemical Identifier library
 Name: inchi
-Version: 1.0.6
-Release: 14%{?dist}
+Version: 1.07.5
+Release: 1%{?dist}
 URL: https://www.inchi-trust.org/about-the-inchi-standard/
 Source0: https://www.inchi-trust.org/download/%{url_ver}/INCHI-1-SRC.zip
 Source1: https://www.inchi-trust.org/download/%{url_ver}/INCHI-1-DOC.zip

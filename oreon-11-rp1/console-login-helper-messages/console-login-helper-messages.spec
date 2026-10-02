@@ -1,4 +1,4 @@
-%global source0_hash 6ff5fd8c061f000bcf89b7afb74050a3d99d9cc02bf44de24a12c9dbed89667a
+%global source0_hash 6edbeed6681a8c4a3a8b1909173be762449ba178544ac961eb98068c05df84ee
 
 %global github_owner    coreos
 %global github_project  console-login-helper-messages
@@ -9,7 +9,7 @@ Release:        1%{?dist}
 Summary:        Combines motd, issue, profile features to show system information to the user before/on login
 License:        BSD-3-Clause
 URL:            https://github.com/%{github_owner}/%{github_project}
-Source0:        https://github.com/%{github_owner}/%{github_project}/archive/refs/tags/v%{version}.tar.gz#/console-login-helper-messages-0.21.3.tar.gz
+Source0:        https://github.com/%{github_owner}/%{github_project}/archive/refs/tags/v%{version}.tar.gz#/console-login-helper-messages-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  systemd make
@@ -142,5 +142,4 @@ rm %{buildroot}/%{_tmpfilesdir}/%{name}-motdgen.conf
 %ghost %{_sysconfdir}/profile.d/%{name}-profile.sh
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.21.3-13
-- Prepare for Oreon 11 (RP1)
+%autochangelog

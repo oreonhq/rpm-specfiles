@@ -8,7 +8,7 @@ Summary:        Share Perl variables between processes
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://metacpan.org/release/IPC-Shareable
-Source0:        https://cpan.metacpan.org/authors/id/M/MS/MSOUTH/IPC-Shareable-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/ST/STEVEB/IPC-Shareable-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

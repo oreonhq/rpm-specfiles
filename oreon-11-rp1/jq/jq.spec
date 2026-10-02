@@ -1,4 +1,4 @@
-%global source0_hash 2be64e7129cecb11d5906290eba10af694fb9e3e7f9fc208a311dc33ca837eb0
+%global source0_hash 71b8d6e8f5fe81f6c6d0d110e3892251f6ce76ed095abd315e26e6e1193af3af
 
 %bcond check 1
 
@@ -98,8 +98,4 @@ make check
 %{_libdir}/pkgconfig/libjq.pc
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Broaden -fno-builtin / -ffp-contract=off to avoid GLIBC_2.44 libm deps on older compose glibc
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 52e670f670b0304f534b24f98c47ceb8a41bb710464414ebc9527ec71cc86aa4
+%global source0_hash 311f3a2603e1973bb59baef9dfa740a376de713157d4782ee043681e889c9260
 
 %global qt_module qtdeclarative
 
@@ -16,8 +16,8 @@
 
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
-Version: 6.11.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -34,8 +34,6 @@ Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submod
 Source5:        qv4global_p-multilib.h
 
 ## upstream patches
-Patch0:        qtdeclarative-dialogs-use-generic-qtquickcontrols-import-in-base-fallback-dialogs.patch
-Patch1:        qtdeclarative-qmltableinstancemodel-refactor-qmodelindex-calculation-out-of-qquicktableview.patch
 
 ## upstreamable patches
 
@@ -755,5 +753,4 @@ make check -k -C tests ||:
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-2
-- Import
+%autochangelog

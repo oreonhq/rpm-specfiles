@@ -1,4 +1,4 @@
-%global source0_hash b000386a0f0270cf49d5207b60215de7a09423d8afe3a45fe3e315791667fbb5
+%global source0_hash dccd8e103ebf39b354537cd19a7601a996fd7591238be2ba68683e52aca96b66
 
 Name:           xwayland-run
 Version:        0.0.6
@@ -37,7 +37,7 @@ Xwayland and various Wayland compositor headless.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am
+%autosetup -S git_am -n xwayland-run-%{version}-9cc35f59659dca42192c3c6f47a89b5f1bd1bb55
 
 
 %build
@@ -63,5 +63,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

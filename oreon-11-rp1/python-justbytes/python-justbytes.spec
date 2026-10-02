@@ -1,9 +1,9 @@
-%global source0_hash c4cbeefc383014508933f03a47100dd22f4b01ac83f4fa204e13144a80c1cbcc
+%global source0_hash 815dba096750c0e0158bbc872ee1b7e2bde4551b5792e9b256e85213c690de58
 
 %global srcname justbytes
 
 Name:           python-%{srcname}
-Version:        0.15.2
+Version:        0.15.3
 Release:        %autorelease
 Summary:        Library for handling computation with address ranges in bytes
 
@@ -48,5 +48,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc README.rst
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.15.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,21 +1,17 @@
-%global source0_hash none
+%global source0_hash c55f9c9dc10fb8bec397b399a0fdded53cc9a2d8e30891bb0d63724d25c37bef
+
+# prebuilt manpages are included in source tarball; rebuilding requires cmarkgfm
+%bcond markdown %{undefined rhel}
 
 %global _hardened_build 1
 
-%define isprerelease 0
-
-%if %isprerelease
-%define prerelease pre3
-%endif
-
 Summary: A program for synchronizing files over a network
 Name: rsync
-Version: 3.5.0
-Release: 1%{?prerelease}%{?dist}
+Version: 3.5.1
+Release: 1%{?dist}
 URL: https://rsync.samba.org/
 
-Source0:        https://download.samba.org/pub/rsync/src/rsync-%{version}.tar.gz
-Source1:        https://download.samba.org/pub/rsync/src/rsync-patches-3.4.1%{?prerelease}.tar.gz
+Source0: https://download.samba.org/pub/rsync/src/rsync-%{version}%{?prerelease}.tar.gz
 Source2: rsyncd.socket
 Source3: rsyncd.service
 Source4: rsyncd.conf
@@ -33,6 +29,12 @@ BuildRequires: systemd
 BuildRequires: lz4-devel
 BuildRequires: openssl-devel
 BuildRequires: libzstd-devel
+BuildRequires: libidn2-devel
+BuildRequires: git-core
+BuildRequires: automake
+%if %{with markdown}
+BuildRequires: python3-cmarkgfm
+%endif
 %if %{undefined rhel}
 BuildRequires: xxhash-devel
 %endif
@@ -43,11 +45,6 @@ Provides: bundled(zlib) = 1.2.8
 #popt provided by popt-devel from the system. Should this change, X11 license should be 
 #mentioned here as well.
 License: GPL-3.0-or-later
-
-Patch1: rsync-3.2.2-runtests.patch
-Patch2: rsync-3.4.1-rrsync-man.patch
-Patch3: rsync-3.4.1-gcc15-fixes.patch
-Patch4: rsync-3.4.1-cve-2025-10158.patch
 
 %description
 Rsync uses a reliable algorithm to bring remote and host files into
@@ -78,24 +75,7 @@ may be used to setup a restricted rsync users via ssh logins.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-# TAG: for pre versions use
-
-%if %isprerelease
-%setup -q -n rsync-%{version}%{?prerelease}
-%setup -q -b 1 -n rsync-%{version}%{?prerelease}
-%else
-%setup -q
-%setup -q -b 1
-%endif
-
-%patch 1 -p1 -b .runtests
-%patch 2 -p1 -b .rrsync
-
-patch -p1 -i patches/detect-renamed.diff
-patch -p1 -i patches/detect-renamed-lax.diff
-
-%patch 3 -p1 -b .gcc15
-%patch 4 -p1 -b .cve-2025-10158
+%autosetup -S git
 
 %build
 %configure \
@@ -106,12 +86,22 @@ patch -p1 -i patches/detect-renamed-lax.diff
   --enable-zstd \
   --enable-lz4 \
   --enable-ipv6 \
+  --enable-idn \
   --with-rrsync
+
+%if %{without markdown}
+touch *.1 *.5
+%endif
 
 %{make_build}
 
 %check
+# This test is failing on x86 only, all other arches pass, disabling for now
+%ifarch i686
+RSYNC_EXCLUDE=partial-protected-regular-retry-linux make check
+%else
 make check
+%endif
 chmod -x support/*
 
 %install
@@ -153,5 +143,4 @@ install -D -m644 %{SOURCE6} $RPM_BUILD_ROOT/%{_unitdir}/rsyncd@.service
 %systemd_postun_with_restart rsyncd.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.1-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

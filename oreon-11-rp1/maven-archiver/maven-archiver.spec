@@ -1,4 +1,4 @@
-%global source0_hash 7afcbc38b650dda4cd07168e792f8d5137ae630fc10ea31135735e0da04aee47
+%global source0_hash eb8ada39f6253881b1a68d789e14014da2b3ae4a7772faa3c285a6893a3b4cf3
 
 %bcond_without bootstrap
 
@@ -37,7 +37,6 @@ to handle packaging
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
-%pom_remove_dep :junit-bom
 
 %build
 %mvn_build -j
@@ -50,5 +49,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

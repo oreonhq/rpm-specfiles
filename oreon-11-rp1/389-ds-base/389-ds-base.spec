@@ -1,4 +1,4 @@
-%global source0_hash a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559
+%global source0_hash 0a410a3231683e064e6a8d4f087881994970da36b8a0f3657e576012f53c98c4
 %global source3_hash 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
 %global source5_hash 13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22
 
@@ -557,8 +557,12 @@ cd src/lib389
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%if %{with bundle_jemalloc}
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+%endif
+%if %{with bundle_libdb}
 test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
+%endif
 %autosetup -S git -p1 -n %{name}-%{version}
 
 %if %{with bundle_jemalloc}
@@ -1008,10 +1012,4 @@ exit 0
 %endif
 
 %changelog
-* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org>
-- drop patches for 3.2.1 (41 upstreamed, 24 stale)
-- Update 389-ds-base to 3.2.1
-
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

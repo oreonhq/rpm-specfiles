@@ -1,4 +1,4 @@
-%global source0_hash 93ed4c4e546a49fc75884c3a8b807d5af4a91e39d191fbbc60a07380b12a35d1
+%global source0_hash 81e560e1f74546df139edb765b3f5bc865866da23062312ffe8fd821063c8397
 
 %global amd_version_major 3
 %global btf_version_major 2
@@ -81,7 +81,7 @@ Summary:        A collection of sparse matrix libraries
 
 License:        BSD-3-Clause AND LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            http://faculty.cse.tamu.edu/davis/suitesparse.html
-Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v%{version}/%{name}-%{version}.tar.gz#/suitesparse-7.11.0.tar.gz
+Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v%{version}/%{name}-%{version}.tar.gz
 #Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/%%{commit}/%%{name}-%%{commit}.tar.gz
 
 BuildRequires:  cmake
@@ -472,5 +472,4 @@ done
 %doc Doc/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.11.0-2
-- Import
+%autochangelog

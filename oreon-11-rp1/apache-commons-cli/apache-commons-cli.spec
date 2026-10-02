@@ -1,4 +1,4 @@
-%global source0_hash f9ef48589f042e18ca04a04e71d65960ded6b3984f7067ea869f6c9b9cfc570c
+%global source0_hash b2bb70c9e1103590e4371319bd404e96f74f5b14bd8c4b023498326608d2e96e
 
 %bcond_without bootstrap
 
@@ -53,11 +53,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc README.md RELEASE-NOTES.txt
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.0-3
-- bump release (retry failed build)
-
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.0-2
-- %%autosetup -n commons-cli-%%{version}-src for upstream source tarball layout
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

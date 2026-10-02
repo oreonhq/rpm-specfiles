@@ -1,16 +1,17 @@
-%global source0_hash e9edd31ac2698b8d9a5be1d11c60d43450a889f8769cca0bef3395a11a5d5fd1
+%global source0_hash 2ef9a1cd246d8ccc9ccd27fa435f972a81def9cf3eccc4c880cbb8929ffb8821
 
 %global tarball_version %%(echo %{version} | tr '~' '.')
 %define major_version %(c=%{version}; echo $c | cut -d. -f1 | cut -d~ -f1)
 
 Name:           gnome-mahjongg
-Version:        49.1.1
+Version:        51.1
 Release:        %autorelease
 Summary:        GNOME Mahjongg game
 
 License:        GPL-2.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://wiki.gnome.org/Apps/Mahjongg
 Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
+
 
 BuildRequires:  gcc
 BuildRequires:  desktop-file-utils

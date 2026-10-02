@@ -1,11 +1,11 @@
-%global source0_hash 4413eb49f520a8318151811ccb05a8d542973aada20aa503ad32f9ffc98a39bf
+%global source0_hash 60a33da3b49fab7994e8a39e649b664c3e9383da29434e9ea256782c2ea1ef80
 
 Name:           perl-Mail-Sender
-Version:        0.903
+Version:        0.900003
 # I really wish CPAN maintainers would stop fscking around with versions.
 # we went from 0.900003 to 0.901
 Epoch:          1
-Release:        28%{?dist}
+Release:        1%{?dist}
 Summary:        Module for sending mails with attachments through an SMTP server
 
 # There is also a clause which says that it may not be used for SPAM.
@@ -82,5 +82,4 @@ make test
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.903-28
-- Prepare for Oreon 11 (RP1)
+%autochangelog

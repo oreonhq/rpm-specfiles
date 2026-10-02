@@ -1,6 +1,5 @@
-diff -urNp a/userguide/avstopam.html b/userguide/avstopam.html
---- a/userguide/avstopam.html	2025-02-04 10:47:27.823451565 +0100
-+++ b/userguide/avstopam.html	2025-02-04 17:49:34.981978989 +0100
+--- a/userguide/avstopam.html
++++ b/userguide/avstopam.html
 @@ -2,9 +2,9 @@
  <html><head><title>Avstopam User Manual</title></head>
  <body>
@@ -14,7 +13,7 @@ diff -urNp a/userguide/avstopam.html b/userguide/avstopam.html
  <h2>NAME</h2>
  
  <p>avstopam - convert an AVS X image to a Netpbm image
-@@ -16,40 +16,40 @@ Updated: 07 February 2010
+@@ -16,40 +16,40 @@
  
  <h2 id="description">DESCRIPTION</h2>
  
@@ -66,9 +65,8 @@ diff -urNp a/userguide/avstopam.html b/userguide/avstopam.html
  </ul>
  </body>
  </html>
-diff -urNp a/userguide/faxformat.html b/userguide/faxformat.html
---- a/userguide/faxformat.html	2025-02-04 10:47:27.824451560 +0100
-+++ b/userguide/faxformat.html	2025-02-04 17:50:41.300631089 +0100
+--- a/userguide/faxformat.html
++++ b/userguide/faxformat.html
 @@ -5,10 +5,11 @@
  Updated: 03 December 2008
  <br>
@@ -82,10 +80,9 @@ diff -urNp a/userguide/faxformat.html b/userguide/faxformat.html
  <p>The ITU (formerly CCITT) publishes standards for operation of fax machines
  (the idea is to provide a way to be sure that a fax machine is able to receive
  a fax sent by another).  These standards incidentally specify graphics file
-diff -urNp a/userguide/libnetpbm_ug.html b/userguide/libnetpbm_ug.html
---- a/userguide/libnetpbm_ug.html	2025-02-04 10:47:27.824451560 +0100
-+++ b/userguide/libnetpbm_ug.html	2025-02-04 17:52:02.045207328 +0100
-@@ -374,7 +374,7 @@ plain format.
+--- a/userguide/libnetpbm_ug.html
++++ b/userguide/libnetpbm_ug.html
+@@ -374,7 +374,7 @@
  <h2 id="reference">Reference</h2>
  
  <p>The <a href="libnetpbm_image.html">Libnetpbm Netpbm Image
@@ -94,10 +91,9 @@ diff -urNp a/userguide/libnetpbm_ug.html b/userguide/libnetpbm_ug.html
  processing image data.
  
  <p>The <a href="libpm.html">Libnetpbm Utility Manual</a>
-diff -urNp a/userguide/pamfunc.html b/userguide/pamfunc.html
---- a/userguide/pamfunc.html	2025-02-04 10:47:27.823451565 +0100
-+++ b/userguide/pamfunc.html	2025-02-04 17:52:19.661114878 +0100
-@@ -60,7 +60,7 @@ output image.
+--- a/userguide/pamfunc.html
++++ b/userguide/pamfunc.html
+@@ -60,7 +60,7 @@
  and bit string (such as and with 01001000).  For the arithmetic functions, the
  function arguments and results are the fraction that a sample is of the
  maxval, i.e. normal interpretation of PAM tuples.  But for the bit string
@@ -106,10 +102,9 @@ diff -urNp a/userguide/pamfunc.html b/userguide/pamfunc.html
  the sample value, and the maxval indicates the width of the bit string.
  
  <h4>Arithmetic functions</h4>
-diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
---- a/userguide/pammixmulti.html	2025-02-04 10:47:27.820451577 +0100
-+++ b/userguide/pammixmulti.html	2025-02-04 17:56:58.538651212 +0100
-@@ -7,8 +7,8 @@ Updated: 18 December 2024
+--- a/userguide/pammixmulti.html
++++ b/userguide/pammixmulti.html
+@@ -7,8 +7,8 @@
  <a href="#index">Table Of Contents</a>
    
  
@@ -120,7 +115,7 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  
  
  <h2 id="synopsis">SYNOPSIS</h2>
-@@ -17,19 +17,19 @@ Updated: 18 December 2024
+@@ -17,19 +17,19 @@
    [<b>-maskfile</b>=<i>filename</i>]
    [<b>-stdev</b>=<i>number</i>]
    [<b>-randomseed</b> <i>integer</i>]
@@ -144,7 +139,7 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  
  
  <h2 id="options">OPTIONS</h2>
-@@ -37,7 +37,7 @@ program provides multiple ways to interp
+@@ -37,7 +37,7 @@
  <p>In addition to the options common to all programs based on libnetpbm
  (most notably <b>-quiet</b>, see <a href="index.html#commonoptions">
  Common Options</a>), <b>pammixmulti</b> recognizes the following
@@ -153,7 +148,7 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  
  <dl compact>
  <dt><b>-blend</b>=average|alpha-weighted|random|mask</dt>
-@@ -55,8 +55,8 @@ of the input images, chosen at random on
+@@ -55,8 +55,8 @@
  With <b>-blend</b>=<code>mask</code>, each pixel in the output is
  produced by a weighted average of the corresponding pixels from all
  the input images based on the grayscale level of an additional mask
@@ -164,7 +159,7 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  </dd>
  
  <dt><b>-maskfile</b>=<i>filename</i></dt>
-@@ -66,7 +66,7 @@ grayscale mask file to control the blend
+@@ -66,7 +66,7 @@
  not grayscale, the first channel is treated as gray).  Where the mask file is
  black, the first image is selected. Where the mask file is white, the last
  image is selected.  Intermediate levels of gray select intermediate
@@ -173,7 +168,7 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  </dd>
  
  <dt><b>-stdev</b>=<i>number</i></dt>
-@@ -83,7 +83,7 @@ that includes roughly equal amounts of t
+@@ -83,7 +83,7 @@
  and 2 but less of the corresponding pixel from image 3.  As <i>number</i>
  tends towards the number of input images (going beyond that has diminishing
  impact), the output tends to look more
@@ -182,7 +177,7 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  </dd>
  
  <dt><b>-randomseed</b> <i>integer</i>
-@@ -91,45 +91,45 @@ like <b>-blend</b>=average. <i>number</i
+@@ -91,45 +91,45 @@
  <dd>This is the seed for the random number generator used with
  <b>-blend=random</b>
  
@@ -235,7 +230,7 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  
  <pre><code>
      pammixmulti -blend=mask -maskfile=mask.pgm -stdev=1.0 &gt;output.pam \
-@@ -139,12 +139,12 @@ pixel-by-pixel basis:
+@@ -139,12 +139,12 @@
  
  <h2 id="history">HISTORY</h2>
  
@@ -250,7 +245,7 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  
  <h2 id="seealso">SEE ALSO</h2>
  
-@@ -152,20 +152,20 @@ pixel-by-pixel basis:
+@@ -152,20 +152,20 @@
  <a href="ppmmix.html">ppmmix</a>,
  <a href="pamarith.html">pamarith</a>,
  <a href="pnm.html">pnm</a>,
@@ -280,10 +275,9 @@ diff -urNp a/userguide/pammixmulti.html b/userguide/pammixmulti.html
  </ul>
  
  </body>
-diff -urNp a/userguide/pampaintspill.html b/userguide/pampaintspill.html
---- a/userguide/pampaintspill.html	2025-02-04 10:47:27.823451565 +0100
-+++ b/userguide/pampaintspill.html	2025-02-04 18:01:50.746117598 +0100
-@@ -7,7 +7,7 @@ Updated: 02 November 2021
+--- a/userguide/pampaintspill.html
++++ b/userguide/pampaintspill.html
+@@ -7,7 +7,7 @@
  <a href="#index">Table Of Contents</a>
  
  <h2>NAME</h2>
@@ -292,7 +286,7 @@ diff -urNp a/userguide/pampaintspill.html b/userguide/pampaintspill.html
  
  <h2 id="synopsis">SYNOPSIS</h2>
  
-@@ -19,48 +19,48 @@ pampaintspill - smoothly spill colors in
+@@ -19,48 +19,48 @@
  [<b>--downsample</b>=<i>number</i>]
  [<b>--near</b>=<i>number</i>]
  [<b>--power</b>=<i>number</i>] [<i>filename</i>]
@@ -350,7 +344,7 @@ diff -urNp a/userguide/pampaintspill.html b/userguide/pampaintspill.html
  
  <dl>
    <dt><b>--bgcolor</b>=<i>color</i></dt>
-@@ -117,45 +117,45 @@ command line options:
+@@ -117,45 +117,45 @@
        gradients away from them.</dd>
  
    <dt><b>-randomseed=</b><i>integer</i>
@@ -414,9 +408,8 @@ diff -urNp a/userguide/pampaintspill.html b/userguide/pampaintspill.html
  </ul>
  
  </body>
-diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
---- a/userguide/pamrecolor.html	2025-02-04 10:47:27.823451565 +0100
-+++ b/userguide/pamrecolor.html	2025-02-04 18:10:00.968545076 +0100
+--- a/userguide/pamrecolor.html
++++ b/userguide/pamrecolor.html
 @@ -2,9 +2,9 @@
  <html><head><title>Pamrecolor User Manual</title></head>
  <body>
@@ -429,7 +422,7 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  
  <h2>NAME</h2>
  pamrecolor - alter colors without affecting luminance
-@@ -22,15 +22,15 @@ pamrecolor - alter colors without affect
+@@ -22,15 +22,15 @@
  [<b>-randomseed=</b><i>integer</i>]
  
  [<i>infile</i>]
@@ -448,28 +441,7 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  
  <p><b>pamrecolor</b> changes an image's colors to be as close as
  possible to given target colors but with the constraint that the
-@@ -39,17 +39,17 @@ image will look identical if both are co
- (e.g. with
- <a href="ppmtopgm.html">ppmtopgm</a>).  You can have <b>pamrecolor</b> select
- target colors randomly, specify a single hue for the entire image, or take the
--target colors from a target image.
-+target colors from a target image.</p>
- 
- <p>In addition to real Netpbm images, <b>pamrecolor</b> works on pseudo-Netpbm
- images based on arbitrary color spaces.  You can define the color space
--explicitly or choose one of many that <b>pamrecolor</b> knows by name.
-+explicitly or choose one of many that <b>pamrecolor</b> knows by name.</p>
- 
- <p>The output is a PAM image on standard output.  Options control the
- exact format of the PAM.  If you want a PNM (PBM, PGM, or PPM) image,
- use <a href="pamtopnm.html">pamtopnm</a> on the output.  There is no
- need to convert if you will use the image as input to a current Netpbm
--program, but many other programs don't know what a PAM is.
-+program, but many other programs don't know what a PAM is.</p>
- 
- 
- <h2 id="options">OPTIONS</h2>
-@@ -57,7 +57,7 @@ program, but many other programs don't k
+@@ -61,7 +61,7 @@
  <p>In addition to the options common to all programs based on libnetpbm
  (most notably <b>-quiet</b>, see <a href="index.html#commonoptions">
  Common Options</a>), <b>pamrecolor</b> recognizes the following
@@ -478,7 +450,7 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  
  <dl>
  
-@@ -67,7 +67,7 @@ to luminance of each of the red, green,
+@@ -71,7 +71,7 @@
  example, in the SMPTE-C color space an RGB color is converted to
  grayscale by multiplying the red channel by 0.2124132, the green
  channel by 0.7010437, and the blue channel by 0.0865432 and summing
@@ -487,7 +459,7 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  
  <p>When you use this option, the input and output images are not true Netpbm
  images, because the Netpbm image format specifies a particular color space.
-@@ -76,9 +76,9 @@ the raster have different meaning.  Many
+@@ -80,9 +80,9 @@
  images actually use a variation with a different color space.  For example,
  <a href="http://www.gimp.org/">GIMP</a> uses sRGB internally and if you
  have GIMP generate a Netpbm image file, it really generates a variation of
@@ -499,7 +471,7 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  
    <dl>
    <dt>adobe</dt>
-@@ -109,12 +109,12 @@ the format that uses sRGB.
+@@ -113,12 +113,12 @@
  <p>The default is "ntsc" because this is the color space that the Netpbm
  formats and many graphics utilities use.  As a counterexample,
  <a href="http://www.gimp.org/">GIMP</a> uses sRGB as its native color
@@ -514,7 +486,7 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  
  <dt><b>--rmult</b>=<i>fraction</i></dt>
  <dt><b>--gmult</b>=<i>fraction</i></dt>
-@@ -133,15 +133,13 @@ image.  <b>pamrecolor</b> will make each
+@@ -137,15 +137,13 @@
  to <i>color</i> subject to the constraint that the luminance must stay the
  same as in the original image.  Specify <i>color</i> as in
  the <a href="libnetpbm_image.html#colorname">argument of the <b>pnm_parsecolor()</b>
@@ -533,58 +505,7 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  
  <dt><b>--colorfile</b>=<i>file</i></dt>
  <dd>Take per-pixel target colors from Netpbm file <i>file</i> instead
-@@ -150,40 +148,38 @@ of using a single target color for the e
- If the image in the file wider or taller than the input image,
- <b>pamrecolor</b> uses only the left and top part of it.
- If the image is narrower or shorter, <b>pamrecolor</b> considers the
--image to be repeated in a tile pattern.
-+image to be repeated in a tile pattern.</dd>
- 
- <p>If you specify neither <b>--targetcolor</b> nor
- <b>--colorfile</b>, <b>pamrecolor</b> will randomly select a target color for
--each pixel of the input image.
-+each pixel of the input image.</p>
- 
--<p>You may not specify both <b>-targetcolor</b> and <b>-colorfile</b>.
-+<p>You may not specify both <b>-targetcolor</b> and <b>-colorfile</b>.</p>
- 
--<dt><b>-randomseed=</b><i>integer</i>
-+<dt><b>-randomseed=</b><i>integer</i></dt>
- 
- <dd>This is the seed for the random number generator that generates the
--pixels.
-+pixels.</dd>
- 
--<p>Use this to ensure you get the same image on separate invocations.
-+<p>Use this to ensure you get the same image on separate invocations.</p>
- 
- <p>By default, <b>pamrecolor</b> uses a seed derived from the time of day
- and process ID, which gives you fairly uncorrelated results in multiple
--invocations.
--
--<p>This option was new in Netpbm 10.61 (December 2012).
-+invocations.</p>
- 
--</dl>
-+<p>This option was new in Netpbm 10.61 (December 2012).</p>
- 
- 
- <h2 id="examples">EXAMPLES</h2>
- 
--<p>This command tints an image yellow:
-+<p>This command tints an image yellow:</p>
- 
- <pre>
-     pamrecolor --targetcolor=yellow colorpic.pam &gt; yellowpic.pam
- </pre>
- 
- <p>This command takes the colors from <b>colorpicture.ppm</b> and applies
--them to <b>graypicture.pgm</b>:
-+them to <b>graypicture.pgm</b>:</p>
- 
- <pre>
-     pamrecolor --colorfile=colorpic.ppm graypic.pgm &gt; colorizedpic.pam
-@@ -192,52 +188,52 @@ them to <b>graypicture.pgm</b>:
+@@ -199,52 +197,52 @@
  <p>The grayscale version of <b>colorizedpic.pam</b> will look just like
  graypic.pgm.  Note that if you use a non-Netpbm tool to do the conversion to
  grayscale, you may additionally need to specify an
@@ -648,7 +569,7 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  </ul>
  
  
-@@ -246,14 +242,14 @@ Pakin, <a href="mailto:scott+pbm@pakin.o
+@@ -253,14 +251,14 @@
  <h2 id="index">Table Of Contents</h2>
  
  <ul>
@@ -671,10 +592,9 @@ diff -urNp a/userguide/pamrecolor.html b/userguide/pamrecolor.html
  </ul>
  
  </body>
-diff -urNp a/userguide/pbmtog3.html b/userguide/pbmtog3.html
---- a/userguide/pbmtog3.html	2025-02-04 10:47:27.827451549 +0100
-+++ b/userguide/pbmtog3.html	2025-02-04 18:10:55.328259786 +0100
-@@ -80,7 +80,7 @@ You cannot specify both.
+--- a/userguide/pbmtog3.html
++++ b/userguide/pbmtog3.html
+@@ -80,7 +80,7 @@
  <h2 id="history">HISTORY</h2>
  
  <p>Before Netpbm 10.79 (June 2017), there was a different program by the same
@@ -683,9 +603,8 @@ diff -urNp a/userguide/pbmtog3.html b/userguide/pbmtog3.html
  &lt;<a href="mailto:paul@manray.sgi.com">paul@manray.sgi.com</a>&gt; in 1989
  and then modified extensively by others.
  
-diff -urNp a/userguide/ppmtogif.html b/userguide/ppmtogif.html
---- a/userguide/ppmtogif.html	2025-02-04 10:47:27.828451545 +0100
-+++ b/userguide/ppmtogif.html	2025-02-04 18:12:39.950710820 +0100
+--- a/userguide/ppmtogif.html
++++ b/userguide/ppmtogif.html
 @@ -5,17 +5,17 @@
  
  <h2>NAME</h2>

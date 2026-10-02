@@ -1,4 +1,4 @@
-%global source0_hash 375b1b13c28753a14f7c6360fd6dc5790f63ec34a37355694618530268ec2c2a
+%global source0_hash c4eefbe575f9d8ae6402749d45c3a534c7cc3a5c4c7bf4d76dbcd78ed19891f4
 
 %global qt_module qtopcua
 
@@ -12,8 +12,8 @@
 
 Summary: Qt6 - OPC UA component
 Name:    qt6-%{qt_module}
-Version: 6.11.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io

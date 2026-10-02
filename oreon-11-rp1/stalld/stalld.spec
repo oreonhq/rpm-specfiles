@@ -1,4 +1,4 @@
-%global source0_hash 6aaedfa18f150e7898a633fbde60ec3a9bd583111f6791d7e0adda018f47957b
+%global source0_hash b2d2c4f610e1a66d1a2df964f98840215ca1e23f933ec890611aea597b596fe2
 
 Name:		stalld
 Version:	1.28.1
@@ -37,8 +37,7 @@ allow 10 microseconds of runtime for 1 second of clock time.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n stalld-v1.27.1-3845d849e41f1f5dbd7df492604383418aeac3ec
-%autosetup -p1 -n stalld-v1.27.1-3845d849e41f1f5dbd7df492604383418aeac3ec
+%autosetup -p1 -n stalld-v%{version}-3639a0579c3edfc6626559c902d0bf31daf33f8b
 
 %build
 %make_build CFLAGS="%{optflags} %{build_cflags} -DVERSION="\\\"%{version}\\\"""  LDFLAGS="%{build_ldflags}"
@@ -66,5 +65,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %systemd_postun_with_restart %{name}.service
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.27.1-2
-- Import
+%autochangelog

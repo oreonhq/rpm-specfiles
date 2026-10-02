@@ -1,4 +1,4 @@
-%global source0_hash e10382ab75518bad8319eb922ad04f907cb20cccb451a3aa980c9d005e661acc
+%global source0_hash 387ba027946d7c64e9aa19cc53b2edcd714f8f9dca9fa8e3aaef17e0e8e3d736
 
 Name:           uthash
 Version:        2.4.0
@@ -107,5 +107,4 @@ rm -f %{buildroot}%{_pkgdocdir}/html/google*.html
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.0-11
-- Prepare for Oreon 11 (RP1)
+%autochangelog

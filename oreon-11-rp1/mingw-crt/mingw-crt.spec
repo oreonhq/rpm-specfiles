@@ -1,4 +1,4 @@
-%global source0_hash 5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf
+%global source0_hash 6eaf921d9eb987d3820b364ea9775bc19b965ec81490b6fdd716526c28e1995c
 
 %global mingw_build_ucrt64 1
 
@@ -141,5 +141,4 @@ rm -rf %{buildroot}%{ucrt64_includedir}/*.c
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13.0.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash afb0cd16dce07c45ff3fb4388f9b3f32704e665f2fdbad2f18a8b29fdd46fd43
+%global source0_hash 1f1fa9656cc46c438268d35145ef72446e817998623b96616ba66dc38e577961
 
 %bcond_with bootstrap
 
@@ -14,7 +14,7 @@ URL:            https://jakarta.ee/specifications/servlet/5.0/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/servlet/archive/%{version}-RELEASE/servlet-api-%{version}.tar.gz#/jakarta-servlet-5.0.0.tar.gz
+Source0:        https://github.com/jakartaee/servlet/archive/%{version}-RELEASE/servlet-api-%{version}.tar.gz#/jakarta-servlet-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -33,8 +33,7 @@ and responses.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n servlet-5.0.0-RELEASE
-%autosetup -p1 -n servlet-5.0.0-RELEASE
+%autosetup -p1 -n servlet-%{version}-RELEASE
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent . api
@@ -78,5 +77,4 @@ sed -i -e 's/jakarta\./javax./g' $(find api/src/main/java/javax -name *.java)
 %doc README.md
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.0-1
-- Import
+%autochangelog

@@ -11,7 +11,7 @@ Summary:        Apache Clownfish symbiotic object system
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Clownfish
-Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWELLNHOF/Clownfish-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/K/KA/KARMAN/Clownfish-%{version}.tar.gz
 # There is charmonizer.c which is becoming a separate project
 # <git://git.apache.org/lucy-charmonizer.git>. However, lucy-charmonizer has
 # not yet been released <http://lucy.apache.org/download.html>.

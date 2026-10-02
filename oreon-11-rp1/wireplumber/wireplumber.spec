@@ -1,7 +1,7 @@
-%global source0_hash 056033cd4fa551b947eebd697bbf78fa9e6baf8f7f12cb5395656aa619de4946
+%global source0_hash 0c2ea30a7b3bb4ecad456bb27e2c283defda59bb53d97df6917a495f12887e33
 
 Name:       wireplumber
-Version:    0.5.17
+Version:    0.5.18
 Release:    1%{?dist}
 Summary:    A modular session/policy manager for PipeWire
 
@@ -136,5 +136,4 @@ fi
 %{_datadir}/doc/wireplumber/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.13-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

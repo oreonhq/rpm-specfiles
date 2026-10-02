@@ -179,7 +179,7 @@ BuildRequires:  pkgconfig(zlib)
 
 %if %{with freeworld}
 # Available in Freeworld repo
-BuildRequires:  ffmpeg-devel
+BuildRequires:  ffmpeg-free-devel
 # Since F36 ffmpeg-free available in official repos
 %else
 %if 0%{?fedora} >= 37

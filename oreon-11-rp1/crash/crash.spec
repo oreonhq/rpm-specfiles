@@ -1,4 +1,4 @@
-%global source0_hash 73dcdc633ec75ea2fc5329a1c3760407cceb9171428f4d0b885874f943a16797
+%global source0_hash 3c861fc762e045c8a02a1b8af265ecc63ec2d945f14b9ceaecfe0a342d97c3d9
 %global source1_hash bdc1da4a033280ac752e7d34b0418efaa45bed093235cb88e62ea961752a37f8
 
 #
@@ -22,29 +22,6 @@ Provides: bundled(libiberty)
 Provides: bundled(gdb) = 16.2
 Patch0: lzo_snappy_zstd.patch
 Patch1: crash-9.0.1_build.patch
-Patch2: 0001-Fix-timer-r-option-on-Linux-6.18-and-later-kernels.patch
-Patch3: 0002-Fix-typo-uncompess-uncompress.patch
-Patch4: 0003-arm64-Fix-vtop-command-to-display-swap-information-o.patch
-Patch5: 0004-arm64-Fix-vtop-command-to-display-swap-information-o.patch
-Patch6: 0005-make-the-MAX_MALLOC_BUFS-customizable.patch
-Patch7: 0006-Doc-add-manual-and-help-entry-for-max-malloc-bufs-op.patch
-Patch8: 0007-Add-a-command-line-option-to-retrieve-build-id.patch
-Patch9: 0008-Loongarch-update-the-NR_CPUS-to-2048.patch
-Patch10: 0009-Resolve-BLK_MQ_F_TAG_HCTX_SHARED-at-runtime.patch
-Patch11: 0010-bpf-improve-for-loop-when-searching-for-used_maps.patch
-Patch12: 0011-RISCV64-fix-wrong-information-of-PUD-PMD-and-PTE-SA4.patch
-Patch13: 0012-RISCV64-fix-wrong-information-of-P4D-PUD-PMD-and-PTE.patch
-Patch14: 0013-Fix-for-mod-S-causes-symbols-to-be-incorrect.patch
-Patch15: 0014-maple_tree-add-support-for-maple_tree.c-output-to-re.patch
-Patch16: 0015-sys-Display-livepatch-transition-status-in-KERNEL-li.patch
-Patch17: 0016-Ensure-all-child-processes-are-properly-cleaned-up-i.patch
-Patch18: 0017-Fix-prompt-output-interfering-with-piped-commands-in.patch
-Patch19: 0018-Fix-external-command-output-not-redirected-to-pipe.patch
-Patch20: 0019-memory-Handle-crash-failure-in-linux-next-caused-by-.patch
-Patch21: 0020-Fix-pipe-parsing-to-correctly-handle-quotes.patch
-Patch22: 0021-Fix-file-redirection-not-working-for-external-comman.patch
-Patch23: 0022-Reapply-vmcoreinfo-read-vmcoreinfo-using-vmcoreinfo_.patch
-Patch24: 0023-Fix-for-help-r-D-to-display-register-values-and-note.patch
 
 %description
 The core analysis suite is a self-contained tool that can be used to
@@ -68,29 +45,6 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %setup -n %{name}-%{version} -q
 %patch 0 -p1 -b lzo_snappy_zstd.patch
 %patch 1 -p1
-%patch 2 -p1
-%patch 3 -p1
-%patch 4 -p1
-%patch 5 -p1
-%patch 6 -p1
-%patch 7 -p1
-%patch 8 -p1
-%patch 9 -p1
-%patch 10 -p1
-%patch 11 -p1
-%patch 12 -p1
-%patch 13 -p1
-%patch 14 -p1
-%patch 15 -p1
-%patch 16 -p1
-%patch 17 -p1
-%patch 18 -p1
-%patch 19 -p1
-%patch 20 -p1
-%patch 21 -p1
-%patch 22 -p1
-%patch 23 -p1
-%patch 24 -p1
 
 %build
 
@@ -116,5 +70,4 @@ cp -p defs.h %{buildroot}%{_includedir}/crash
 %{_includedir}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.0.1-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

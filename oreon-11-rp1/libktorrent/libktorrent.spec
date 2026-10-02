@@ -1,13 +1,15 @@
-%global source0_hash d059d3f82a4fca9292cd97d1138e30c22b5875d0a9a593a4211d2f02552e8361
+%global stable_kf6 stable
+%global source0_hash 0a55d129024f39b474ceb108bfa536caca15fea6cb0fb3aa7bb0b87acc476845
 
 Name:           libktorrent
 Summary:        Torrent downloading library for KDE 6 applications
-Version:        26.04.3
+Version:        26.08.1
 Release:        1%{?dist}
 # CC0 is only for CI tooling, BSD3 for cmake macros, MIT for win32 support code
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/network/%{name}
 Source:         https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gettext

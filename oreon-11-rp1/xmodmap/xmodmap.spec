@@ -1,4 +1,4 @@
-%global source0_hash 9a2f8168f7b0bc382828847403902cb6bf175e17658b36189eac87edda877e81
+%global source0_hash fc54b9b5bbf2ae58ba8f9d42bd051c41c7438377400c42c17d7496d19e1bb3ce
 
 Name:       xmodmap
 Version:    1.0.12
@@ -39,5 +39,4 @@ autoreconf -v --install
 %{_mandir}/man1/%{name}.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.11-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

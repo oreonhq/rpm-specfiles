@@ -1,4 +1,4 @@
-%global source0_hash 883e0139fcbc692070287e47de5368c78eb91c8bdbb52fb6f8398183f6aace8f
+%global source0_hash 09ad50570b26aada0408bb9ccfaabf629c56ec89a9972c8b0e155ab780f577cf
 
 %global framework knotifications
 
@@ -79,7 +79,4 @@ mkdir -p %{buildroot}/%{_kf6_datadir}/knotifications6
 
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
 %autochangelog

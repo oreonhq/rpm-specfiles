@@ -1,7 +1,7 @@
-%global source0_hash 87296d60478e14204fd9406e79831400fef76693bae2895deec236c98e87a8aa
+%global source0_hash da5915714a70b55d167fdc7e251ad91302b0a36816fb574dfafae8f4f2c9bb21
 
 Name:           python-filelock
-Version:        4.0.3
+Version:        4.0.7
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        A platform independent file lock.

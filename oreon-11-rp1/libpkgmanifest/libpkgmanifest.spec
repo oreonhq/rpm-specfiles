@@ -1,4 +1,4 @@
-%global source0_hash 7b268f9c12f06137493def0d18bb7d8f59f2af0d26c1f9c0d531dabb80ae2854
+%global source0_hash b0b89c59931dcff0e619f71f94a366b32c613d937f4053e8f7cc6d8e706bdf9c
 
 %bcond python 0
 %bcond test 0
@@ -10,7 +10,6 @@ Summary:        Library for working with RPM manifests
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/libpkgmanifest
 Source0:        https://github.com/rpm-software-management/libpkgmanifest/archive/v%{version}/%{name}-%{version}.tar.gz
-Patch0:         0001-build-Turn-compiler-warnings-into-errors-only-for-ou.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -69,3 +68,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/libpkgmanifest/
 %{_libdir}/libpkgmanifest.so
 %{_libdir}/pkgconfig/libpkgmanifest.pc
+
+%changelog
+%autochangelog

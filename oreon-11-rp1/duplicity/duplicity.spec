@@ -1,9 +1,9 @@
-%global source0_hash 51fac65031792abad97e1ac20695f7732c72aafc3fa4b22e2767af233e2e6da0
+%global source0_hash dc08db0b568a3c72114a0004b6348628071e5ef077884c1a93138ba19de753d3
 
 %bcond check 0
 
 Name:           duplicity
-Version:        3.2.0.2
+Version:        3.2.1
 Release:        %autorelease
 Summary:        Encrypted bandwidth-efficient backup using rsync algorithm
 
@@ -24,6 +24,7 @@ License:        GPL-2.0-or-later AND MIT AND GPL-3.0-or-later
 URL:            https://duplicity.gitlab.io/
 #Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Source0:        https://gitlab.com/duplicity/duplicity/-/archive/rel.%{version}/duplicity-rel.%{version}.tar.bz2
+
 # chg:test: Add test case for issue #683.
 # https://gitlab.com/duplicity/duplicity/-/commit/e6671cdf4ed8b21b4a8bd1973bd458f62792cd29
 Patch0:         e6671cdf4ed8b21b4a8bd1973bd458f62792cd29.patch

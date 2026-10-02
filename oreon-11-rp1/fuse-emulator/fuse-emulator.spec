@@ -1,8 +1,8 @@
 %global source0_hash 847f93e2bf4104d54803e3c197066ff3c073c029a017ee68df8eece190b12454
 
 Name:           fuse-emulator
-Version:        1.6.0
-Release:        14%{?dist}
+Version:        1.10.0
+Release:        1%{?dist}
 Summary:        The Free UNIX Spectrum Emulator
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

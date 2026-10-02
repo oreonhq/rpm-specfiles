@@ -1,8 +1,8 @@
-%global source0_hash 90bea83283760339da194fb90112a532854c13cd1eabdabc7ef7a4dede1dbc9d
+%global source0_hash ba5d13b9b508ec693613b3b61518163aced38f8e885f7e28dc047348a4e61365
 
 Name:           gumbo-parser
 Epoch:          1
-Version:        0.14.0
+Version:        0.14.1
 Release:        1%{?dist}
 Summary:        A HTML5 parser
 
@@ -101,3 +101,6 @@ install -m 644 doc/*.md ${RPM_BUILD_ROOT}%{_pkgdocdir}
 %{_mandir}/man3/*.3*
 
 %files python -f %{pyproject_files}
+
+%changelog
+%autochangelog

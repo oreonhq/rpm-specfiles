@@ -1,4 +1,4 @@
-%global source0_hash e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c
+%global source0_hash 4687a9cc96c32d7406e5072c4da150fca696c563e5cde62b024f82fa53d32332
 
 %global apiversion 0.0
 
@@ -106,5 +106,4 @@ make %{?_smp_mflags} check
 %{_mandir}/man1/qxp2text.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

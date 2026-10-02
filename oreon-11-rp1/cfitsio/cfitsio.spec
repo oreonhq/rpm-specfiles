@@ -1,4 +1,4 @@
-%global source0_hash fad44fff274fdda5ffcc0c0fff3bc3c596362722b9292fc8944db91187813600
+%global source0_hash ce573bbea8e75b429f8c3d3e86498741ba3dc9628a1530d2f65268397ad059e8
 
 Name: cfitsio
 Version: 4.7.0
@@ -111,5 +111,4 @@ rm %{buildroot}/%{_bindir}/speed
 %{_bindir}/imcopy
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.6.3-2
-- Import from Fedora 43 SRPM cfitsio-4.6.3-1.fc43, no rpmautospec
+%autochangelog

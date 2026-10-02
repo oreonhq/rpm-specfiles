@@ -1,17 +1,24 @@
-%global source0_hash 7e2cc9a124724c8d5a6e8954179ade39d1d856d030d9549b681ac2bafd92629f
+%global source2_hash 4d5a9c73f97235eebe8c69f728aa2efcc8e1ee02282f972efdbbbd3a430be454
+
+%global source1_hash fbbda49685e97adbe9aca27bd43661505c140380b11ec6014c8b8aff096ef7de
+
+%global source0_hash b78a213b9160cded7ab93e7c47c003c618ebd49c6eca549d09a068e27a30a59d
 
 %global gem_name facter
 
 Name:           facter
-Version:        4.9.0
+Version:        4.10.0
 Release:        %autorelease
 Summary:        Command and ruby library for gathering system information
 
 License:        Apache-2.0
 URL:            https://github.com/puppetlabs/facter
 Source0:        https://downloads.puppetlabs.com/%{name}/%{name}-%{version}.gem
+
 Source1:        https://downloads.puppetlabs.com/%{name}/%{name}-%{version}.gem.asc
+
 Source2:        https://downloads.puppetlabs.com/puppet-gpg-signing-key-20250406.pub
+
 
 BuildRequires:  gnupg2
 BuildRequires:  rubygems-devel

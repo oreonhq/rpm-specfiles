@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 26a206663d7bc68e0bfc8489adf5d4e36ab0a3f94491b2d4eeb04904b9032609
 
 Name:           ansible-srpm-macros
-Version:        2.21.4
-Release:        1.1%{?dist}
+Version:        1
+Release:        20.1%{?dist}
 Summary:        SRPM stage RPM packaging macros for Ansible collections
 
 License:        GPL-3.0-or-later

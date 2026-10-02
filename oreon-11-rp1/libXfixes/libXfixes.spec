@@ -1,4 +1,4 @@
-%global source0_hash b695f93cd2499421ab02d22744458e650ccc88c1d4c8130d60200213abc02d58
+%global source0_hash 39f115d72d9c5f8111e4684164d3d68cc1fd21f9b27ff2401b08fddfc0f409ba
 
 %global tarball libXfixes
 #global gitdate 20130524
@@ -70,5 +70,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_mandir}/man3/Xfixes.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.0.1-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

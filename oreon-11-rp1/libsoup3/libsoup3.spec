@@ -1,4 +1,4 @@
-%global source0_hash 51ed0ae06f9d5a40f401ff459e2e5f652f9a510b7730e1359ee66d14d4872740
+%global source0_hash bbf08fa3e03a88c31a3d27a0d87cb422e9490f2d08e149211103df6d638a2238
 
 %global glib2_version 2.70.0
 
@@ -9,13 +9,14 @@
 %endif
 
 Name:    libsoup3
-Version: 3.7.3
+Version: 3.8.0
+%global source_series %(echo %{version} | cut -d. -f1-2)
 Release: %autorelease
 Summary: Soup, an HTTP library implementation
 
 License: LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:     https://wiki.gnome.org/Projects/libsoup
-Source0:        https://download.gnome.org/sources/libsoup/3.6/libsoup-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libsoup/%{source_series}/libsoup-%{version}.tar.xz
 
 # Downstream patch, needed due to glib2 gnutls-hmac.patch
 Patch:   no-ntlm-in-fips-mode.patch
@@ -207,5 +208,4 @@ install -m 644 -D tests/libsoup.supp %{buildroot}%{_datadir}/libsoup-3.0/libsoup
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash d488089a64ee4060bce7dbba0291fcca358e7f7ac5230e2ee5b344e7485729c4
+%global source0_hash ed8dc6679f1e06f7b113592b04cde2a7e00f1b1e681294c8ca2204058990cec6
 %global source3_hash 1217a0212aaa143e44831849d1845b198f248923d7e96634219d3369a6ec8714
 
 %{!?javabuild:%global javabuild 0}
@@ -206,7 +206,9 @@ The client package provides shp2pgsql, raster2pgsql and pgsql2shp for PostGIS.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%if %upgrade_prev
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+%endif
 %if %upgrade_prev
 %setup -q -n postgis-%{version} -a 3
 %else
@@ -509,5 +511,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

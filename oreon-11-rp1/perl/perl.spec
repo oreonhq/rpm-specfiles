@@ -1,4 +1,4 @@
-%global source0_hash 0a585eeb9e363c0f80482ddb3571625250c2c86aeb408853e8ea50805cfb14bb
+%global source0_hash 505cf43912e9480495c344c70260452e32aa2a73c546a026b3f100053b23ce91
 
 %global perl_version    5.44.0
 %global perl_epoch      4
@@ -7450,5 +7450,4 @@ ln -s /app/bin/perl %{buildroot}/usr/bin/perl
 
 # Old changelog entries are preserved in CVS.
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{perl_version}-523
-- Prepare for Oreon 11 (RP1)
+%autochangelog

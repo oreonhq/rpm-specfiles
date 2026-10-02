@@ -1,6 +1,6 @@
-%global source0_hash 5593611ca0cd92017ba660e76fb29076c1d7092fe9990c7a7e8509905928638a
+%global source0_hash 7741722357dd75f8190766926071fed3bdc211c74dd2d7d4df5404da95930ddb
 Name:           python-sphinx
-Version:        9.1.0~rc2
+Version:        9.1.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Python documentation generator
@@ -9,7 +9,7 @@ Summary:        Python documentation generator
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://www.sphinx-doc.org/
-Source:         %{pypi_source sphinx 9.1.0rc2}
+Source:         %{pypi_source sphinx 9.1.0}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -27,7 +27,7 @@ Summary:        %{summary}
 %description -n python3-sphinx %_description
 
 %prep
-%autosetup -p1 -n sphinx-9.1.0rc2
+%autosetup -p1 -n sphinx-9.1.0
 
 
 %generate_buildrequires
@@ -51,5 +51,4 @@ Summary:        %{summary}
 
 %files -n python3-sphinx -f %{pyproject_files}
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:8.2.3-1
-- Import
+%autochangelog

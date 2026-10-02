@@ -1,9 +1,9 @@
-%global source0_hash 6eef96011f3674fc1720fa61c6d1d5b276e96bb8902f33b5e28df0ee7b6ea47e
+%global source0_hash 6cc249df513c6751b13274470023294b4f5a3e330d39ba6e314d06a6a1d455a7
 
 %bcond_without bootstrap
 
 Name:           maven-parent
-Version:        43
+Version:        50
 Release:        %autorelease
 Summary:        Apache Maven parent POM
 License:        Apache-2.0
@@ -50,5 +50,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 43-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

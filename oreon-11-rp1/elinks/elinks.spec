@@ -1,4 +1,4 @@
-%global source0_hash a993a4870cadce60abbc724cf6a5c2a80f6be9020243b9e5ce075c16c6665c04
+%global source0_hash 75af7ba88af99ff5069ec7b4b7a3241d5920f4089764c7297cff3c8484a9e33f
 
 %bcond_with gpm
 
@@ -61,7 +61,7 @@ quickly and swiftly displays Web pages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n elinks-0.19.0
+%autosetup -p1 -n elinks-%{version}
 
 # remove bogus serial numbers
 sed -e 's/^# *serial [AM0-9]*$//' -i config/m4/*.m4
@@ -135,5 +135,4 @@ exit 0
 %{_mandir}/man5/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-2
-- Import
+%autochangelog

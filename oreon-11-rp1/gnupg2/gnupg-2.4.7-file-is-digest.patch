@@ -9,10 +9,11 @@ Subject: [PATCH gnupg] add --file-is-digest option needed for copr
  g10/sign.c    | 93 ++++++++++++++++++++++++++++++++++++++++++++-------
  3 files changed, 85 insertions(+), 13 deletions(-)
 
-diff -up gnupg-2.4.7/g10/gpg.c.file-is-digest gnupg-2.4.7/g10/gpg.c
---- gnupg-2.4.7/g10/gpg.c.file-is-digest	2025-01-23 18:11:50.417790048 +0100
-+++ gnupg-2.4.7/g10/gpg.c	2025-01-23 18:11:50.419790035 +0100
-@@ -400,6 +400,7 @@ enum cmd_and_opt_values
+diff --git a/g10/gpg.c b/g10/gpg.c
+index 9efd59a..ceafef4 100644
+--- a/g10/gpg.c
++++ b/g10/gpg.c
+@@ -414,6 +414,7 @@ enum cmd_and_opt_values
      oTTYtype,
      oLCctype,
      oLCmessages,
@@ -20,7 +21,7 @@ diff -up gnupg-2.4.7/g10/gpg.c.file-is-digest gnupg-2.4.7/g10/gpg.c
      oXauthority,
      oGroup,
      oUnGroup,
-@@ -666,6 +667,7 @@ static gpgrt_opt_t opts[] = {
+@@ -688,6 +689,7 @@ static gpgrt_opt_t opts[] = {
    ARGPARSE_s_s (oTempDir,  "temp-directory", "@"),
    ARGPARSE_s_s (oExecPath, "exec-path", "@"),
    ARGPARSE_s_n (oExpert,      "expert", "@"),
@@ -28,7 +29,7 @@ diff -up gnupg-2.4.7/g10/gpg.c.file-is-digest gnupg-2.4.7/g10/gpg.c
    ARGPARSE_s_n (oNoExpert, "no-expert", "@"),
    ARGPARSE_s_n (oNoSecmemWarn, "no-secmem-warning", "@"),
    ARGPARSE_s_n (oRequireSecmem, "require-secmem", "@"),
-@@ -2507,6 +2509,7 @@ main (int argc, char **argv)
+@@ -2574,6 +2576,7 @@ main (int argc, char **argv)
      opt.keyid_format = KF_NONE;
      opt.def_sig_expire = "0";
      opt.def_cert_expire = "0";
@@ -36,18 +37,19 @@ diff -up gnupg-2.4.7/g10/gpg.c.file-is-digest gnupg-2.4.7/g10/gpg.c
      opt.passphrase_repeat = 1;
      opt.emit_version = 0;
      opt.weak_digests = NULL;
-@@ -3146,6 +3149,7 @@ main (int argc, char **argv)
- 	  case oPhotoViewer: opt.photo_viewer = pargs.r.ret_str; break;
- 
- 	  case oForceAEAD: opt.force_aead = 1; break;
+@@ -3213,6 +3216,7 @@ main (int argc, char **argv)
+ 	  case oNoThrowKeyids: opt.throw_keyids = 0; break;
+ 	  case oShowPhotos:
+ 	    deprecated_warning(configname,pargs.lineno,"--show-photos",
 +	  case oFileIsDigest: opt.file_is_digest = 1; break;
- 
-           case oDisableSignerUID: opt.flags.disable_signer_uid = 1; break;
-           case oIncludeKeyBlock:  opt.flags.include_key_block = 1; break;
-diff -up gnupg-2.4.7/g10/options.h.file-is-digest gnupg-2.4.7/g10/options.h
---- gnupg-2.4.7/g10/options.h.file-is-digest	2024-09-20 12:07:25.000000000 +0200
-+++ gnupg-2.4.7/g10/options.h	2025-01-23 18:11:50.419790035 +0100
-@@ -243,6 +243,7 @@ struct
+ 			       "--list-options ","show-photos");
+ 	    deprecated_warning(configname,pargs.lineno,"--show-photos",
+ 			       "--verify-options ","show-photos");
+diff --git a/g10/options.h b/g10/options.h
+index 9c81d08..e15fc7c 100644
+--- a/g10/options.h
++++ b/g10/options.h
+@@ -247,6 +247,7 @@ struct
    int no_auto_check_trustdb;
    int preserve_permissions;
    int no_homedir_creation;
@@ -55,9 +57,10 @@ diff -up gnupg-2.4.7/g10/options.h.file-is-digest gnupg-2.4.7/g10/options.h
    struct groupitem *grouplist;
    int mangle_dos_filenames;
    int enable_progress_filter;
-diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
---- gnupg-2.4.7/g10/sign.c.file-is-digest	2024-05-15 12:33:38.000000000 +0200
-+++ gnupg-2.4.7/g10/sign.c	2025-01-23 18:11:50.420790029 +0100
+diff --git a/g10/sign.c b/g10/sign.c
+index 608cdf3..586753a 100644
+--- a/g10/sign.c
++++ b/g10/sign.c
 @@ -40,6 +40,7 @@
  #include "pkglue.h"
  #include "../common/sysutils.h"
@@ -66,7 +69,7 @@ diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
  #include "../common/mbox-util.h"
  #include "../common/compliance.h"
  
-@@ -946,6 +947,8 @@ write_signature_packets (ctrl_t ctrl,
+@@ -991,6 +992,8 @@ write_signature_packets (ctrl_t ctrl,
  
        if (pk->version >= 5)
          sig->version = 5;  /* Required for v5 keys.  */
@@ -75,29 +78,51 @@ diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
        else
          sig->version = 4;  /* Required.  */
  
-@@ -963,14 +966,22 @@ write_signature_packets (ctrl_t ctrl,
+@@ -1008,26 +1011,33 @@ write_signature_packets (ctrl_t ctrl,
        if (gcry_md_copy (&md, hash))
          BUG ();
  
 -      build_sig_subpkt_from_sig (sig, pk, 0);
--      mk_notation_policy_etc (ctrl, sig, NULL, pk);
+-
+-      if (opt.compliance == CO_DE_VS
+-          && gnupg_rng_is_compliant (CO_DE_VS))
+-        with_manu = 23;  /* FIXME: Also check that the algos are compliant?*/
+-      else if (opt.compliance == CO_FIPS
+-          && gnupg_rng_is_compliant (CO_FIPS))
+-        with_manu = 140;
+-      else if (!(opt.compat_flags & COMPAT_NO_MANU))
+-        with_manu = 1;
+-      else
+-        with_manu = 0;
++      if (!opt.file_is_digest)
++        {
++        build_sig_subpkt_from_sig (sig, pk, 0);
++
++        if (opt.compliance == CO_DE_VS
++            && gnupg_rng_is_compliant (CO_DE_VS))
++          with_manu = 23;  /* FIXME: Also check that the algos are compliant?*/
++        else if (opt.compliance == CO_FIPS
++            && gnupg_rng_is_compliant (CO_FIPS))
++          with_manu = 140;
++        else if (!(opt.compat_flags & COMPAT_NO_MANU))
++          with_manu = 1;
++        else
++          with_manu = 0;
+ 
+-      mk_notation_policy_etc (ctrl, sig, NULL, pk, with_manu);
 -      if (opt.flags.include_key_block && IS_SIG (sig))
 -        err = mk_sig_subpkt_key_block (ctrl, sig, pk);
 -      else
 -        err = 0;
 -      hash_sigversion_to_magic (md, sig, extrahash);
 -      gcry_md_final (md);
-+      if (!opt.file_is_digest)
-+        {
-+          build_sig_subpkt_from_sig (sig, pk, 0);
-+          mk_notation_policy_etc (ctrl, sig, NULL, pk);
-+          if (opt.flags.include_key_block && IS_SIG (sig))
-+            err = mk_sig_subpkt_key_block (ctrl, sig, pk);
-+          else
-+            err = 0;
-+
-+          hash_sigversion_to_magic (md, sig, extrahash);
-+          gcry_md_final (md);
++        mk_notation_policy_etc (ctrl, sig, NULL, pk, with_manu);
++        if (opt.flags.include_key_block && IS_SIG (sig))
++          err = mk_sig_subpkt_key_block (ctrl, sig, pk);
++        else
++          err = 0;
++        hash_sigversion_to_magic (md, sig, extrahash);
++        gcry_md_final (md);
 +        }
 +      else if (sig->version >= 4)
 +        {
@@ -106,7 +131,7 @@ diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
  
        if (!err)
          err = do_sign (ctrl, pk, sig, md, hash_for (pk), cache_nonce, 0);
-@@ -1035,6 +1046,8 @@ sign_file (ctrl_t ctrl, strlist_t filena
+@@ -1094,6 +1104,8 @@ sign_file (ctrl_t ctrl, strlist_t filenames, int detached, strlist_t locusr,
    SK_LIST sk_rover = NULL;
    int multifile = 0;
    u32 duration=0;
@@ -115,7 +140,7 @@ diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
    pt_extra_hash_data_t extrahash = NULL;
  
    pfx = new_progress_context ();
-@@ -1054,7 +1067,16 @@ sign_file (ctrl_t ctrl, strlist_t filena
+@@ -1113,7 +1125,16 @@ sign_file (ctrl_t ctrl, strlist_t filenames, int detached, strlist_t locusr,
      fname = NULL;
  
    if (fname && filenames->next && (!detached || encryptflag))
@@ -133,7 +158,7 @@ diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
  
    if (encryptflag == 2
        && (rc = setup_symkey (&efx.symkey_s2k, &efx.symkey_dek)))
-@@ -1075,7 +1097,7 @@ sign_file (ctrl_t ctrl, strlist_t filena
+@@ -1134,7 +1155,7 @@ sign_file (ctrl_t ctrl, strlist_t filenames, int detached, strlist_t locusr,
      goto leave;
  
    /* Prepare iobufs. */
@@ -142,25 +167,25 @@ diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
      inp = NULL;     /* we do it later */
    else
      {
-@@ -1230,7 +1252,7 @@ sign_file (ctrl_t ctrl, strlist_t filena
+@@ -1289,7 +1310,7 @@ sign_file (ctrl_t ctrl, strlist_t filenames, int detached, strlist_t locusr,
    for (sk_rover = sk_list; sk_rover; sk_rover = sk_rover->next)
-     gcry_md_enable (mfx.md, hash_for (sk_rover->pk));
+     gcry_md_enable (md, hash_for (sk_rover->pk));
  
 -  if (!multifile)
 +  if (!multifile && !opt.file_is_digest)
-     iobuf_push_filter (inp, md_filter, &mfx);
+     {
+       if (encryptflag && (opt.compat_flags & COMPAT_PARALLELIZED))
+         {
+@@ -1366,6 +1387,8 @@ sign_file (ctrl_t ctrl, strlist_t filenames, int detached, strlist_t locusr,
  
-   if (detached && !encryptflag)
-@@ -1296,6 +1318,8 @@ sign_file (ctrl_t ctrl, strlist_t filena
- 
-   write_status_begin_signing (mfx.md);
+   write_status_begin_signing (md);
  
 +  sigclass = opt.textmode && !outfile? 0x01 : 0x00;
 +
    /* Setup the inner packet. */
    if (detached)
      {
-@@ -1343,6 +1367,49 @@ sign_file (ctrl_t ctrl, strlist_t filena
+@@ -1422,6 +1445,49 @@ sign_file (ctrl_t ctrl, strlist_t filenames, int detached, strlist_t locusr,
            if (opt.verbose)
              log_printf ("\n");
  	}
@@ -210,10 +235,10 @@ diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
        else
          {
            /* Read, so that the filter can calculate the digest. */
-@@ -1364,8 +1431,8 @@ sign_file (ctrl_t ctrl, strlist_t filena
+@@ -1443,8 +1509,8 @@ sign_file (ctrl_t ctrl, strlist_t filenames, int detached, strlist_t locusr,
  
    /* Write the signatures. */
-   rc = write_signature_packets (ctrl, sk_list, out, mfx.md, extrahash,
+   rc = write_signature_packets (ctrl, sk_list, out, md, extrahash,
 -                                opt.textmode && !outfile? 0x01 : 0x00,
 -                                0, duration, detached ? 'D':'S', NULL);
 +                                sigclass,
@@ -221,3 +246,5 @@ diff -up gnupg-2.4.7/g10/sign.c.file-is-digest gnupg-2.4.7/g10/sign.c
    if (rc)
      goto leave;
  
+-- 
+2.0

@@ -1,18 +1,16 @@
-%global source0_hash fcfa6a47a52d4c94dc960bdb747f17e077609235517b0bb5ce8097d6b747695a
+%global source0_hash 70c00e90811950b2c3d973ecfd46010680b946f7952306ffa2785c0368fe2db0
 
 %global debug_package %{nil}
 
 Name:           earcut-hpp
 Summary:        Fast, header-only polygon triangulation
-Version:        3.2.3
+Version:        3.2.4
 Release:        1%{?dist}
 License:        ISC
 SourceLicense:  %{license} AND SGI-B-2.0
 URL:            https://github.com/mapbox/earcut.hpp
 Source0:        https://github.com/mapbox/earcut.hpp/archive/v%{version}/earcut.hpp-%{version}.tar.gz
 
-Patch0:         0001-Include-cstdint-for-uint32_t.patch
-Patch1:         0001-Use-a-range-for-CMake-minimum-versions-3.2.3.12-supp.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -57,3 +55,6 @@ install -D --preserve-timestamps --mode=0644 \
 %doc CHANGELOG.md README.md
 %dir %{_includedir}/mapbox
 %{_includedir}/mapbox/earcut.hpp
+
+%changelog
+%autochangelog

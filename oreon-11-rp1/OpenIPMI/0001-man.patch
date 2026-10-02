@@ -20,11 +20,9 @@ Signed-off-by: Boris Ranto <branto@redhat.com>
  ui/basic_ui.c           | 25 +++++++++++++++++++++++++
  13 files changed, 96 insertions(+), 43 deletions(-)
 
-diff --git a/lanserv/ipmilan.8 b/lanserv/ipmilan.8
-index ff43d5c..9360507 100644
 --- a/lanserv/ipmilan.8
 +++ b/lanserv/ipmilan.8
-@@ -29,18 +29,25 @@ address they came in.
+@@ -29,18 +29,25 @@
  
  .SH OPTIONS
  .TP
@@ -53,11 +51,9 @@ index ff43d5c..9360507 100644
  
  
  .SH CONFIGURATION
-diff --git a/man/ipmi_cmdlang.7 b/man/ipmi_cmdlang.7
-index 4d18e76..a6d73b9 100644
 --- a/man/ipmi_cmdlang.7
 +++ b/man/ipmi_cmdlang.7
-@@ -246,7 +246,7 @@ instance, the command to create a domain is
+@@ -246,7 +246,7 @@
  The command to list all sensors in a domain named domain1 is
  .B sensor list domain1.
  
@@ -66,7 +62,7 @@ index 4d18e76..a6d73b9 100644
  listed after the command description.  In those responses, anything
  that begins with a
  .B %
-@@ -316,7 +316,7 @@ BMC.  For that, notice that the LAN connection has an options extra IP
+@@ -316,7 +316,7 @@
  and port for the second IP address.  OpenIPMI supports these IP
  addresses and connection, detecting failures, switching between
  addresses, and other fault-tolerant things.  It does this
@@ -75,7 +71,7 @@ index 4d18e76..a6d73b9 100644
  OEM support, read the documentation about your specific system if you
  need this.
  
-@@ -336,7 +336,7 @@ or
+@@ -336,7 +336,7 @@
  \fI<name>\fP and \fI<password>\fP are the user name and password of
  the IPMI user to use for the connection.
  The <smi num> is the driver number, generally 0.
@@ -84,7 +80,7 @@ index 4d18e76..a6d73b9 100644
  .PD 0
  .HP
  .B -[no]all
-@@ -356,7 +356,7 @@ is false by default.
+@@ -356,7 +356,7 @@
  is false by default.
  .HP
  .B -[no]ipmbscan
@@ -93,7 +89,7 @@ index 4d18e76..a6d73b9 100644
  This is false by default.
  .HP
  .B -[no]oeminit
-@@ -461,7 +461,7 @@ available hacks are:
+@@ -461,7 +461,7 @@
  The -M option sets the maximum outstanding messages.  The default is
  2, ranges 1-63.
  
@@ -102,7 +98,7 @@ index 4d18e76..a6d73b9 100644
  .PD 0
  .HP
  .B -[no]all
-@@ -519,7 +519,7 @@ Domain Created: <domain>
+@@ -519,7 +519,7 @@
  .RE
  
  .B fru <domain> <is_logical> <device_address> <device_id> <lun> <private_bus> <channel>
@@ -111,7 +107,7 @@ index 4d18e76..a6d73b9 100644
  .TP
  Response:
  .RS
-@@ -533,7 +533,7 @@ Domain
+@@ -533,7 +533,7 @@
  
  .B msg <domain> <channel> <ipmb> <LUN> <NetFN> <Cmd> [data...]
  - Send a command to the given IPMB address on the given channel and
@@ -120,7 +116,7 @@ index 4d18e76..a6d73b9 100644
  of an MC in OpenIPMI.
  .TP
  Response:
-@@ -571,7 +571,7 @@ SEL Rescan done: <domain>
+@@ -571,7 +571,7 @@
  .RE
  
  .B presence <domain>
@@ -129,7 +125,7 @@ index 4d18e76..a6d73b9 100644
  starts the process; it will run in the background.
  .TP
  Response is:
-@@ -689,7 +689,7 @@ FRU deleted: <fru>
+@@ -689,7 +689,7 @@
  - Set the value of a FRU element.  The
  name is the record name, or multi-record.  The number is required
  for fields that need it (custom and multi-record).  The value is
@@ -138,7 +134,7 @@ index 4d18e76..a6d73b9 100644
  type (either binary, ascii, or unicode) and the info.  Binary and
  unicode data is specified as numbers.  ascii data is specified in
  a string.  Note that setting a ascii value with no string will
-@@ -770,7 +770,7 @@ Domain
+@@ -770,7 +770,7 @@
  .B info <entity>
  - Dump information about an entity.
  .TP
@@ -147,7 +143,7 @@ index 4d18e76..a6d73b9 100644
  .RS
  .nf
  Entity
-@@ -784,7 +784,7 @@ Entity
+@@ -784,7 +784,7 @@
  .B fru <entity>
  - Dump the FRU information about the given entity.
  .TP
@@ -156,7 +152,7 @@ index 4d18e76..a6d73b9 100644
  .RS
  .nf
  Entity
-@@ -813,7 +813,7 @@ Entity
+@@ -813,7 +813,7 @@
  .B set_act_time <entity>
  - Set the hot-swap auto-activate time.
  .TP
@@ -165,7 +161,7 @@ index 4d18e76..a6d73b9 100644
  .RS
  .nf
  Set act time: <entity>
-@@ -981,7 +981,7 @@ Response:
+@@ -981,7 +981,7 @@
  .nf
  Sensor
    Name: <sensor>
@@ -174,7 +170,7 @@ index 4d18e76..a6d73b9 100644
    Negative Hysteresis: <integer>
  .fi
  .RE
-@@ -1101,7 +1101,7 @@ Set done: <control>
+@@ -1101,7 +1101,7 @@
  .RE
  
  .B get <control>
@@ -183,7 +179,7 @@ index 4d18e76..a6d73b9 100644
  on the control type.
  .TP
  Response:
-@@ -1128,7 +1128,7 @@ multiple lights.  The options values (marked with
+@@ -1128,7 +1128,7 @@
  ) will not be
  present if local control is set to true.  Local control means that
  the LED takes whatever default function it does on the device
@@ -192,7 +188,7 @@ index 4d18e76..a6d73b9 100644
  Response for id control:
  .RS
  .nf
-@@ -1325,7 +1325,7 @@ Channel Access
+@@ -1325,7 +1325,7 @@
  - Set information about the MC's channel access.  There are two different
  places where this is stored, the present in-use values (volatile) and the
  non-volatile storage that is loaded at startup.  Note if you specify
@@ -201,7 +197,7 @@ index 4d18e76..a6d73b9 100644
  are:
  .RS
  .nf
-@@ -1547,7 +1547,7 @@ PET destroyed: <pet>
+@@ -1547,7 +1547,7 @@
  .SS pef
  commands dealing with platform even filters.  These are basically
  connections to the PEF configuration parameters in an MC.  You use a
@@ -210,7 +206,7 @@ index 4d18e76..a6d73b9 100644
  the MC.  Note that when you get a pef config, you claim a lock on the
  MC that must be unlocked.
  
-@@ -1780,7 +1780,7 @@ operational and finished all it SDR, FRU, and bus scans:
+@@ -1780,7 +1780,7 @@
  .fi
  .RE
  
@@ -219,8 +215,6 @@ index 4d18e76..a6d73b9 100644
  .RS
  .nf
    EVENT
-diff --git a/man/ipmi_ui.1 b/man/ipmi_ui.1
-index 9c5d9b6..011255f 100644
 --- a/man/ipmi_ui.1
 +++ b/man/ipmi_ui.1
 @@ -4,7 +4,7 @@
@@ -232,7 +226,7 @@ index 9c5d9b6..011255f 100644
  .RB [\| \-dmsg \|]
  .RB [\| \-dmem \|]
  .RB [\| \-c \|]
-@@ -34,7 +34,7 @@ Normally,
+@@ -34,7 +34,7 @@
  starts up in a full-screen format.  The left window shows the output
  of commands, the right window shows the logs from OpenIPMI.  Both
  windows are scrollable with page up and page down keys, press the "\fBF1\fP"
@@ -241,7 +235,7 @@ index 9c5d9b6..011255f 100644
  the right window to scroll.
  
  Note that you must set your environment \fBTERM\fP variable properly for
-@@ -48,7 +48,7 @@ the connections are to the same IPMI domain through different
+@@ -48,7 +48,7 @@
  management controllers.  Also, each LAN connection may have two IP
  addresses.  These are two different addresses to the same management
  controller.  So you may have a total of 4 IP addresses to an IPMI
@@ -250,7 +244,7 @@ index 9c5d9b6..011255f 100644
  management controller.
  
  .SH OPTIONS
-@@ -174,12 +174,12 @@ turns events on or off from the sensor (\fB0\fP or \fB1\fP).
+@@ -174,12 +174,12 @@
  turns scanning on or off for the sensor (\fB0\fP or \fB1\fP).
  .I "assertion-bitmask"
  specifies the bitmask of thresholds or states
@@ -265,8 +259,6 @@ index 9c5d9b6..011255f 100644
  deasserted.
  
  .SH CONTROLS
-diff --git a/man/openipmi_conparms.7 b/man/openipmi_conparms.7
-index 587da2a..9dc6404 100644
 --- a/man/openipmi_conparms.7
 +++ b/man/openipmi_conparms.7
 @@ -1,7 +1,7 @@
@@ -278,7 +270,7 @@ index 587da2a..9dc6404 100644
  
  .SH SYNOPSIS
  
-@@ -97,7 +97,7 @@ use.
+@@ -97,7 +97,7 @@
  .TP
  .BI \-Rc\  confidentiality\ algorithm
  The \fIRMCP+ confidentiality (encryption) algorithm\fP to use.  This keeps
@@ -287,11 +279,9 @@ index 587da2a..9dc6404 100644
  \fBaes_cbc_128\fP, \fBxrc4_128\fP, and \fBxrc_40\fP.  The \fBbmcpick\fP option is used by
  default, which means the BMC picks the algorithm it wants to use.
  
-diff --git a/man/openipmicmd.1 b/man/openipmicmd.1
-index 6bd2401..5d206d1 100644
 --- a/man/openipmicmd.1
 +++ b/man/openipmicmd.1
-@@ -22,7 +22,7 @@ interfaces.
+@@ -22,7 +22,7 @@
  Execute a single command an exit.
  
  .TP
@@ -300,7 +290,7 @@ index 6bd2401..5d206d1 100644
  The parameters for the connection depend on the connection type.
  These are all described in openipmi_conparms (7)
  
-@@ -32,7 +32,7 @@ Once up, you can execute commands in the user interface.  Note that
+@@ -32,7 +32,7 @@
  commands and responses are asynchronous, you issue a command and the
  interface returns immediately.  When the response comes back, it will
  be dumped on your console.  That's a little strange looking, but IPMI
@@ -309,7 +299,7 @@ index 6bd2401..5d206d1 100644
  it will wait for the response or a timeout before returning.
  
  .TP
-@@ -82,7 +82,7 @@ Remove a command registration.
+@@ -82,7 +82,7 @@
  .BR openipmi_conparms (7)
  
  .SH "KNOWN PROBLEMS"
@@ -318,11 +308,9 @@ index 6bd2401..5d206d1 100644
  
  .SH AUTHOR
  .PP
-diff --git a/man/openipmigui.1 b/man/openipmigui.1
-index 04f880b..0c8c10f 100644
 --- a/man/openipmigui.1
 +++ b/man/openipmigui.1
-@@ -38,7 +38,7 @@ Turn on message debugging, this will dump all messages to debug log output.
+@@ -38,7 +38,7 @@
  .TP
  .B \-\-drawmsg
  Turn on raw message debugging, this will dump all low-level messages to
@@ -331,7 +319,7 @@ index 04f880b..0c8c10f 100644
  protocol messages are also dumped, not just IPMI messages.
  .TP
  .B \-\-dmem
-@@ -81,7 +81,7 @@ tree.
+@@ -81,7 +81,7 @@
  
  The tree window has a top-level list of all the domains for which
  OpenIPMI has connections (or pending connection).  Each domain
@@ -340,7 +328,7 @@ index 04f880b..0c8c10f 100644
  Management Controllers (MCs) for that domain.
  
  Right click drives most of the operations in the tree window.  Many
-@@ -92,7 +92,7 @@ Color is used in the GUI to denote error status, and shading is used
+@@ -92,7 +92,7 @@
  to denote availability.  If a sensor has an error, the tree entry for
  that sensor will change colors.  Black means no error, yellow means
  warning, red means critical, and blue means non-recoverable.  These
@@ -349,7 +337,7 @@ index 04f880b..0c8c10f 100644
  same color as the most critical error for the sensors underneath it.
  The same goes for domain, it will be the same color as the most
  critical error for the entities underneath it.  This way, if you watch
-@@ -146,7 +146,7 @@ that sensor.
+@@ -146,7 +146,7 @@
  
  .SH CONTROLS
  
@@ -358,7 +346,7 @@ index 04f880b..0c8c10f 100644
  information is beyond the scope of this document, as IPMI controls are
  very complex.  See the IPMI document from OpenIPMI for information
  about controls.
-@@ -214,7 +214,7 @@ channel listing.  Note that some user setting (the name and password)
+@@ -214,7 +214,7 @@
  are global to all channels on the MC.
  
  Due to the IPMI spec and some unfortunate implementation bugs, some
@@ -367,7 +355,7 @@ index 04f880b..0c8c10f 100644
  value that tells whether the user is enabled or not.  When initially
  displayed, this field shows as a "?" because this field is not
  readable. It will displayed as the actual value when it is modified,
-@@ -247,7 +247,7 @@ changed.
+@@ -247,7 +247,7 @@
  .SH SOLPARMS
  
  In the channel display on a 8023_LAN channel, a LANPARM configuration
@@ -376,11 +364,9 @@ index 04f880b..0c8c10f 100644
  pulls up all the parameters for the LAN and allows them to be set.
  Right-clicking on an item allows it to be changed.
  
-diff --git a/man/openipmish.1 b/man/openipmish.1
-index 36b1e43..2c902e4 100644
 --- a/man/openipmish.1
 +++ b/man/openipmish.1
-@@ -26,7 +26,7 @@ Turn on message debugging, this will dump all messages to debug log output.
+@@ -26,7 +26,7 @@
  .TP
  .B \-\-drawmsg
  Turn on raw message debugging, this will dump all low-level messages to
@@ -389,7 +375,7 @@ index 36b1e43..2c902e4 100644
  protocol messages are also dumped, not just IPMI messages.
  .TP
  .B \-\-dmem
-@@ -34,11 +34,21 @@ Turn on memory debugging, this will cause memory allocation and
+@@ -34,11 +34,21 @@
  deallocations to be checked.  When the program terminates, it will
  dump all memory that was not properly freed (leaked).
  .TP
@@ -411,11 +397,9 @@ index 36b1e43..2c902e4 100644
  .B \-\-snmp
  Enable the SNMP trap handler.
  .B openipmish
-diff --git a/man/rmcp_ping.1 b/man/rmcp_ping.1
-index d60019a..ce5cab0 100644
 --- a/man/rmcp_ping.1
 +++ b/man/rmcp_ping.1
-@@ -38,7 +38,7 @@ starttag.  This is zero by default
+@@ -38,7 +38,7 @@
  Turns on debugging to standard output.
  .TP
  .I destination
@@ -424,11 +408,9 @@ index d60019a..ce5cab0 100644
  
  .SH AUTHOR
  .PP
-diff --git a/man/solterm.1 b/man/solterm.1
-index 1479a1b..ada15d8 100644
 --- a/man/solterm.1
 +++ b/man/solterm.1
-@@ -37,9 +37,9 @@ These are all described in openipmi_conparms (7)
+@@ -37,9 +37,9 @@
  .TP
  .BI \-e\  escape_char
  The character to use to escape, or exit, the program.  Entering this
@@ -440,7 +422,7 @@ index 1479a1b..ada15d8 100644
  commands are:
  .RS
  .IP ~.
-@@ -98,7 +98,7 @@ the SoL session. This is the default.
+@@ -98,7 +98,7 @@
  .TP
  .BI \-holdoff
  Specifies that CTS, DTR, and DSR are to be deasserted at the start of
@@ -449,11 +431,9 @@ index 1479a1b..ada15d8 100644
  handshake is released.
  
  .TP
-diff --git a/sample/ipmicmd.c b/sample/ipmicmd.c
-index 6cbcdc5..5f5c1ec 100644
 --- a/sample/ipmicmd.c
 +++ b/sample/ipmicmd.c
-@@ -124,6 +124,7 @@ void usage(void)
+@@ -105,6 +105,7 @@
      printf("%s [-k <command>] [-v] <con_parms>\n", progname);
      printf("Where <con_parms> is one of:");
      ipmi_parse_args_iter_help(con_usage, NULL);
@@ -461,11 +441,9 @@ index 6cbcdc5..5f5c1ec 100644
  }
  
  char *
-diff --git a/sample/rmcp_ping.c b/sample/rmcp_ping.c
-index 7814792..5778fea 100644
 --- a/sample/rmcp_ping.c
 +++ b/sample/rmcp_ping.c
-@@ -156,6 +156,11 @@ main(int argc, char *argv[])
+@@ -153,6 +153,11 @@
  	if (strcmp(argv[i], "--") == 0) {
  	    i++;
  	    break;
@@ -477,11 +455,9 @@ index 7814792..5778fea 100644
  	} else if (strcmp(argv[i], "-p") == 0) {
  	    i++;
  	    if (i >= argc) {
-diff --git a/sample/solterm.c b/sample/solterm.c
-index 38a3f9d..a3e52de 100644
 --- a/sample/solterm.c
 +++ b/sample/solterm.c
-@@ -743,7 +743,12 @@ int main(int argc, char *argv[])
+@@ -762,7 +762,12 @@
  
  	/* Now we make sure "lan" is the first argument so we get the
  	   right connection type... */
@@ -495,13 +471,11 @@ index 38a3f9d..a3e52de 100644
  		fprintf(stderr, "main: %s only supports lan connections\n",
  			progname);
  		exit(1);
-diff --git a/ui/basic_ui.c b/ui/basic_ui.c
-index 6993eb2..84889cb 100644
 --- a/ui/basic_ui.c
 +++ b/ui/basic_ui.c
-@@ -306,6 +306,26 @@ snmp_init(os_handler_t *os_hnd)
+@@ -273,6 +273,26 @@
  static void snmp_setup_fds(os_handler_t *os_hnd) { }
- #endif /* HAVE_UCDSNMP */
+ #endif /* HAVE_NETSNMP */
      
 +void help(void)
 +{
@@ -526,7 +500,7 @@ index 6993eb2..84889cb 100644
  int
  main(int argc, char *argv[])
  {
-@@ -327,6 +347,11 @@ main(int argc, char *argv[])
+@@ -294,6 +314,11 @@
  	curr_arg++;
  	if (strcmp(arg, "--") == 0) {
  	    break;
@@ -538,6 +512,3 @@ index 6993eb2..84889cb 100644
  	} else if (strcmp(arg, "-c") == 0) {
  	    full_screen = 0;
  	} else if (strcmp(arg, "-dlock") == 0) {
--- 
-2.7.4
-

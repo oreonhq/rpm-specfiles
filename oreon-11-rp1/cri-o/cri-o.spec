@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3e97e2bb7be3fa658cf68394a0f9c56a3f39b9c2e14b01efddb1c028e5376423
 
 # https://github.com/cri-o/cri-o
 %global goipath         github.com/cri-o/cri-o
@@ -9,7 +9,7 @@
 %global git_tree_state  clean
 %global criocli_path    ""
 
-Version:        1.32.0
+Version:        1.37.1
 
 %if 0%{?rhel} && 0%{?rhel} <= 9
 %define gobuild(o:) %{expand:
@@ -32,7 +32,7 @@ Version:        1.32.0
 
 Name:           cri-o
 Epoch:          0
-Release:        8%{?dist}
+Release:        1%{?dist}
 Summary:        Open Container Initiative-based implementation of Kubernetes Container Runtime Interface
 
 # Upstream license specification: Apache-2.0

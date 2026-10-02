@@ -1,11 +1,11 @@
-%global source0_hash 57cdd4695aa2271d94161f59bbce380ecbed46cb16eb7c28e8a78271f976e875
+%global source0_hash 40c34c0ac14eead0f9626518e0783fd9f365af84aa05761e39795c07086f3fef
 
 %global forgeurl https://github.com/TheTumultuousUnicornOfDarkness/CPU-X
 %global tag v%{version}
 %global appid io.github.thetumultuousunicornofdarkness.%{name}
 
 Name:           cpu-x
-Version:        5.4.0
+Version:        5.4.1
 %forgemeta
 Release:        %autorelease
 Summary:        Free software that gathers information on CPU, motherboard and more
@@ -18,7 +18,6 @@ Source0:        %{forgesource}
 # https://github.com/TheTumultuousUnicornOfDarkness/CPU-X/issues/362
 Patch0:         %{name}_policy.patch
 # https://github.com/TheTumultuousUnicornOfDarkness/CPU-X/pull/402
-Patch1:         0001-use-default-cpu-instead-of-ia64.patch
 
 BuildRequires:  cmake >= 3.12
 BuildRequires:  desktop-file-utils

@@ -1,4 +1,4 @@
-%global source0_hash ea72ac7b2a67578e9994dcb0619602ead3097a46fb9336661da200e63927ebe6
+%global source0_hash b96194c68ef67ac3127cf353f026b5b69d35c7d5e204bd89d1155c74f2fe073a
 
 Name:           xwaylandvideobridge
 Version:        0.5.3
@@ -77,69 +77,4 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 
 
 %changelog
-* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-12
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
-
-* Tue Sep 30 2025 Jan Grulich <jgrulich@redhat.com> - 0.4.0-11
-- Rebuild (qt6)
-
-* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-10
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
-
-* Tue Mar 25 2025 Jan Grulich <jgrulich@redhat.com> - 0.4.0-9
-- Rebuild (qt6)
-
-* Sun Jan 19 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-8
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
-
-* Mon Oct 14 2024 Jan Grulich <jgrulich@redhat.com> - 0.4.0-7
-- Rebuild (qt6)
-
-* Sat Jul 20 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-6
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
-
-* Thu Apr 04 2024 Jan Grulich <jgrulich@redhat.com> - 0.4.0-5
-- Rebuild (qt6)
-
-* Wed Mar 13 2024 Marie Loise Nolden <loise@kde.org> - 0.4.0-4
-- build with QT_MAJOR_VERSION=6
-- precisely require kpipewire >= 6.0.0
-
-* Fri Feb 16 2024 Jan Grulich <jgrulich@redhat.com> - 0.4.0-3
-- Rebuild (qt6)
-
-* Sat Jan 27 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Mon Dec 18 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 0.4.0-1
-- 0.4.0
-
-* Mon Dec 04 2023 Alessandro Astone <ales.astone@gmail.com> - 0.3.0-4
-- Do not start in an X11 session
-- Opt out of session managment
-- Skip the task switcher
-
-* Wed Nov 29 2023 Jan Grulich <jgrulich@redhat.com> - 0.3.0-3
-- Rebuild (qt6)
-
-* Sat Nov 18 2023 Alessandro Astone <ales.astone@gmail.com> - 0.3.0-2
-- Build against Qt6/KF6
-
-* Thu Nov 09 2023 Alessandro Astone <ales.astone@gmail.com> - 0.3.0-1
-- Update to 0.3
-- Autostart on login
-
-* Fri Oct 27 2023 Alessandro Astone <ales.astone@gmail.com> - 0.2-1
-- Update to tagged release 0.2
-
-* Mon Sep 18 2023 Neal Gompa <ngompa@fedoraproject.org> - 0~git20230917.9b27c3f-1
-- Bump to new git snapshot
-
-* Sat Jul 22 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0~git20230504.3445aff-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
-
-* Mon May 15 2023 Neal Gompa <ngompa@fedoraproject.org> - 0~git20230504.3445aff-2
-- Add dependency on hicolor-icon-theme
-
-* Wed May 10 2023 Neal Gompa <ngompa@fedoraproject.org> - 0~git20230504.3445aff-1
-- Initial package
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 1814914a78ad597173253bf007b384488c65fbaefc8639ffd8a32dcc6eb1f293
+%global source0_hash 8edadb7d86a897d5468e51aa498df8cad8a237e51b80b7dd8542d6d7c88393a9
 
 Summary:        Enhanced TeX modes for Emacs
 Name:           emacs-auctex
@@ -12,7 +12,7 @@ Release:        %autorelease
 License:        GPL-3.0-or-later AND FSFAP AND GFDL-1.3-no-invariants-or-later AND Knuth-CTAN
 URL:            https://www.gnu.org/software/auctex/
 VCS:            git:https://git.savannah.gnu.org/cgit/auctex.git
-Source:        https://github.com/emacsmirror/auctex/archive/auctex-%{version}.tar.gz#/emacs-auctex-14.1.2.tar.gz
+Source:        https://github.com/emacsmirror/auctex/archive/auctex-%{version}.tar.gz#/emacs-auctex-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  emacs-nw
@@ -134,5 +134,4 @@ make -C tests
 %{_texmf_main}/doc/latex/preview/
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 14.1.2-1
-- Import
+%autochangelog

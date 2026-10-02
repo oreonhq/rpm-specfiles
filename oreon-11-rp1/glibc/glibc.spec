@@ -1,7 +1,7 @@
 %global source0_hash d9c86c6b5dbddb43a3e08270c5844fc5177d19442cf5b8df4be7c07cd5fa3831
 
 %global glibcsrcdir glibc-2.43
-%global glibcversion 2.43
+%global glibcversion 2.44
 # Pre-release tarballs are pulled in from git using a command that is
 # effectively:
 #
@@ -2403,11 +2403,4 @@ update_gconv_modules_cache ()
 %endif
 
 %changelog
-* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.43.9000-8
-- Bump baserelease to 8 so published glibc satisfies automatic Requires from builds done with 2.43.9000-8+ (e.g. qt6-qtdeclarative)
-
-* Wed Apr 1 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{glibcversion}-1
-- Snapshot Source0 GitHub archive URL (spectool-friendly), glibcsrcdir = glibc-%%{glibc_git_full} to match archive prefix
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{glibcversion}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 89105178608351340325177b9d54922cf38db2c0bbf5e13e9b0dc88e9e49f397
+%global source0_hash a3b97a36f11abe256a7ea1668a0a468aac9b738e94bea6b468f0ae31ad537a46
 
 %global         pkgname        OpenXR-SDK-Source
 %global         libmajor 1
@@ -87,3 +87,6 @@ rm -f %{buildroot}%{_docdir}/%{name}/LICENSE
 %{_libdir}/cmake/%{name}
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*.pc
+
+%changelog
+%autochangelog

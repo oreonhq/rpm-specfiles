@@ -10,19 +10,19 @@ Subject: Support large RSA keygen in non-batch mode
  3 files changed, 19 insertions(+), 7 deletions(-)
 
 diff --git a/doc/gpg.texi b/doc/gpg.texi
-index 9ccb74996..a11857235 100644
+index cfc7560..ada64f4 100644
 --- a/doc/gpg.texi
 +++ b/doc/gpg.texi
-@@ -1543,12 +1543,11 @@ the opposite meaning. The options are:
+@@ -1589,12 +1589,11 @@ the opposite meaning. The options are:
  @itemx --disable-large-rsa
  @opindex enable-large-rsa
  @opindex disable-large-rsa
--With --generate-key and --batch, enable the creation of RSA secret keys as
--large as 8192 bit.  Note: 8192 bit is more than is generally
--recommended.  These large keys don't significantly improve security,
--but they are more expensive to use, and their signatures and
--certifications are larger.  This option is only available if the
--binary was build with large-secmem support.
+-With @option{--generate-key} and @option{--batch}, enable the creation
+-of RSA secret keys as large as 8192 bit.  Note: 8192 bit is more than
+-is generally recommended.  These large keys don't significantly
+-improve security, but they are more expensive to use, and their
+-signatures and certifications are larger.  This option is only
+-available if the binary was build with large-secmem support.
 +Enable the creation of RSA secret keys as large as 8192 bit.
 +Note: 8192 bit is more than is generally recommended.  These large
 +keys don't significantly improve security, but they are more expensive
@@ -32,10 +32,10 @@ index 9ccb74996..a11857235 100644
  @item --enable-dsa2
  @itemx --disable-dsa2
 diff --git a/g10/keygen.c b/g10/keygen.c
-index 5d936feab..dec517121 100644
+index f0e5283..f237caf 100644
 --- a/g10/keygen.c
 +++ b/g10/keygen.c
-@@ -3022,7 +3022,7 @@ get_keysize_range (int algo, unsigned int *min, unsigned int *max)
+@@ -3169,7 +3169,7 @@ get_keysize_range (int algo, unsigned int *min, unsigned int *max)
  
      default:
        *min = opt.compliance == CO_DE_VS ? 2048: 1024;
@@ -45,7 +45,7 @@ index 5d936feab..dec517121 100644
        break;
      }
 diff --git a/tests/openpgp/quick-key-manipulation.scm b/tests/openpgp/quick-key-manipulation.scm
-index 71d222a22..37ac708fc 100755
+index c6c9810..ce7b932 100755
 --- a/tests/openpgp/quick-key-manipulation.scm
 +++ b/tests/openpgp/quick-key-manipulation.scm
 @@ -31,6 +31,14 @@
@@ -63,7 +63,7 @@ index 71d222a22..37ac708fc 100755
  (define alpha "Alpha <alpha@invalid.example.net>")
  (define bravo "Bravo <bravo@invalid.example.net>")
  (define bravohash "F75B1420CC5881F4005333379355CFF5873094DE")
-@@ -54,6 +62,11 @@
+@@ -70,6 +78,11 @@
  (assert (= 1 (count-uids-of-secret-key alpha)))
  (assert (not (equal? "" (:expire (assoc "pub" keyinfo)))))
  
@@ -76,5 +76,4 @@ index 71d222a22..37ac708fc 100755
  
  ;; Make sure the key capabilities don't change when we add a user id.
 -- 
-2.39.5
-
+2.0

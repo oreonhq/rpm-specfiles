@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 7b46165bb56eb4704e2eaaf86f3c940d19154535d9b0ca7d6d590b04060e00d5
 
 Name:           python-cryptography
-Version:        50.0.1
+Version:        50.0.2
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        cryptography is a package which provides cryptographic recipes and primitives to Python developers.
@@ -59,5 +59,4 @@ Summary:        %{summary}
 %files -n python3-cryptography -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 46.0.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

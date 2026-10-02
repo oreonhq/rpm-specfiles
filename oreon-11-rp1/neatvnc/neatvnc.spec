@@ -1,9 +1,9 @@
-%global source0_hash 54144651ec4e902be8c852ebf619b10207e9dbbef5336f8afe371f4bbd3d7617
+%global source0_hash 06bd3aefb58d66aef14e42143e8f75c84e3b54fc800acb2d2a2de0f507359d50
 
 # -*-Mode: rpm-spec -*-
 
 Name:     neatvnc
-Version:  1.0.1
+Version:  1.0.2
 Release:  1%{?dist}
 Summary:  Liberally licensed VNC server library
 # main source is ISC
@@ -15,7 +15,6 @@ Source:   %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 # Backport to fix i686 builds
 # From: https://github.com/any1/neatvnc/commit/e0e0ce5c579cafc763992f1c1bb964eb95999fb7
-Patch:    0001-server-Use-correct-type-for-length-in-compress.patch
 
 BuildRequires: gcc
 BuildRequires: git-core

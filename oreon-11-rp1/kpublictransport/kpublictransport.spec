@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash aeac3ec0fa39a26cf9bacd87a30f5d8cf2968116ca99902873499b6cd45f9b17
 
 Name:           kpublictransport

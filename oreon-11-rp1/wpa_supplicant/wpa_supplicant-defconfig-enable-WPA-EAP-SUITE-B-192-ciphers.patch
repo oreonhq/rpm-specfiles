@@ -11,12 +11,16 @@ FIXME: It needs to be either upstreamed or dropped.
  wpa_supplicant/defconfig | 3 +++
  1 file changed, 3 insertions(+)
 
+diff --git a/wpa_supplicant/defconfig b/wpa_supplicant/defconfig
+index 3e25eb6..05ca1e1 100644
 --- a/wpa_supplicant/defconfig
 +++ b/wpa_supplicant/defconfig
-@@ -687,3 +687,6 @@ CONFIG_WEP=y
- 
- # Wi-Fi Aware unsynchronized service discovery (NAN USD)
- #CONFIG_NAN_USD=y
+@@ -707,3 +707,6 @@ CONFIG_WEP=y
+ # affecting deployments that run wpa_supplicant as a non-root user with shared
+ # libraries in a custom directory owned by that user.
+ #CONFIG_TLS_ENGINE_TRUSTED_PATH=y
 +#
 +CONFIG_SUITEB192=y
 +
+-- 
+2.0

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f044d2a9336f45cd4586d68ef468c0d9539f9f1b30ceb4db85bd9b6fdb012776
 
 %undefine __cmake_in_source_build
 
@@ -25,7 +25,7 @@ URL:        https://vxl.github.io/
 # rm -rf vxl-%%{version}/contrib/prip/vdtop/tests/lena.org.pgm
 # tar cfz vxl-%%{version}-clean.tar.gz vxl-%%{version}/
 #Source0:  https://github.com/vxl/vxl/archive/v%%{version}/%%{name}-%%{version}.tar.gz
-Source0:    %{name}-%{version}-clean.tar.gz
+Source0:    https://github.com/vxl/vxl/archive/refs/tags/v%{version}.tar.gz
 
 # Patches generated from tree here:
 # https://github.com/sanjayankur31/vxl/tree/fedora-3.5.0
@@ -130,6 +130,7 @@ develop code based on VXL.
 
 %prep
 %autosetup -S git
+rm -f contrib/prip/vdtop/tests/lena.org.pgm
 
 # remove bundled bits
 # triangle removed in patch (bad license: https://github.com/vxl/vxl/issues/752#issuecomment-655526696)

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5b2e00eccaf5a4d8c14134ffa0ea8dfd0a35ae1ffc7f8d87fa4305a1ed23cf22
 
 %{?mingw_package_header}
 
@@ -22,7 +22,7 @@
 %define qt_version %(echo %{version} | cut -d~ -f1)
 
 Name:           mingw-qt6-qtbase
-Version:        6.10.2
+Version:        6.11.2
 Release:        1%{?dist}
 Summary:        Qt6 for Windows - QtBase component
 # Can't make package noarch as it could lead to -DQT_HOST_PATH_CMAKE_DIR=%%{_libdir}/cmake ponting to the wrong libdir

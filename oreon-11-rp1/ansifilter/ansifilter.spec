@@ -1,4 +1,6 @@
-%global source0_hash ccff41ca740b813bf9103868b5000f4243d32a75304ea929a214c49b943ecc93
+%global source2_hash b659eb71eb06a45b6047b4e7678d38a5643fe1282fe8a9bee5a4ba31c582bf04
+
+%global source0_hash e1f2ae665e49631c30f483e9048d4f6c7fc6f4854d945fbe3c68995c6bf5ec65
 
 %global debug_package %{nil}
 %bcond_without  gui
@@ -13,17 +15,19 @@
 %endif
 
 Name:           ansifilter
-Version:        2.23
+Version:        2.24
 Release:        %autorelease
 Summary:        ANSI terminal escape code converter
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            http://www.andre-simon.de/doku/ansifilter/ansifilter.php
 Source0:        http://www.andre-simon.de/zip/%{name}-%{version}.tar.bz2
+
 BuildRequires:  gcc-c++
 %if %{with gui}
 Source1:        ansifilter.desktop
 Source2:        http://www.andre-simon.de/img/af_icon.png
+
 %endif
 
 %description

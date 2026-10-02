@@ -1,13 +1,15 @@
-%global source0_hash b039608f79f445a6ccc383ce57bd240699e334613814374006c8a01dc6bc1250
+%global source1_hash a55e8cf3842560ba5deb3224e7d5a9fcbc437cd0ada92462bfb732cf2b572145
+
+%global source0_hash 96ad9c429ca53b830359c45614ca4c32ed6b759f3023f1b3db1650ba1c19bd58
 
 %global framework kcompletion
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.29
+%global majmin_ver_kf6 6.30
 
 
 Name:           kf6-%{framework}
-Version:        6.29.0
+Version:        6.30.0
 Release:        1%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 addon with auto completion widgets and classes
 # BSD-3-Clause is in the LICENSES folder but goes unused.
@@ -15,7 +17,9 @@ License:        CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/frameworks/%{framework}
 
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
@@ -65,21 +69,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+%autochangelog

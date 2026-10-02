@@ -1,4 +1,4 @@
-%global source0_hash 0eec3d4358385fb67b369f02dbd82217c912ba0edc3533f27377ba33f90084c1
+%global source0_hash aa701e2e31e3d5d8433222caedac1c7e6ecd30ffd4e926ce64cc9df775ac4c98
 
 %bcond_with audacious
 %bcond_without curl
@@ -24,13 +24,14 @@
 %bcond_without xinerama
 
 Name:           conky
-Version:        1.24.2
+Version:        1.25.1
 Release:        1%{?dist}
 Summary:        A system monitor for X
 
 License:        GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT-open-group AND BSD-3-Clause
 URL:            https://github.com/brndnmtthws/conky
 Source0:        https://github.com/brndnmtthws/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

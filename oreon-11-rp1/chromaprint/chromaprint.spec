@@ -1,4 +1,4 @@
-%global source0_hash 9d33482e56a1389a37a0d6742c376139fa43e3b8a63d29003222b93db2cb40da
+%global source0_hash 3368805af0ee47b9df74df10b5001a44569e01df2844dab520031720dde9ad23
 
 # The presence of this macro ensures the disttag changes
 # when set in side tags
@@ -120,5 +120,4 @@ rm  -f %{buildroot}%{_libdir}/lib*.la
 %endif
 
 %changelog
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.0-2
-- Import from Fedora 43 dist-git for Oreon 11 RP1
+%autochangelog

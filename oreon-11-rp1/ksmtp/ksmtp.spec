@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash a4a76de3a2471d8828c086ea04633a3de2d9ba135b80c5c0ede7eb285ac45a9e
 
 Name:    ksmtp

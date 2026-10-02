@@ -1,4 +1,4 @@
-%global source0_hash 71746e5e057ffe9b00b44ac40453bf47091930cba96bbea8dc48717dedc49fb7
+%global source0_hash ad1106c203cbb56185ca3bad8c6ccafca3b4064696194da879f81c8d7bdfeeda
 
 Summary:    Non-interactive SSH authentication utility
 Name:       sshpass
@@ -33,5 +33,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc AUTHORS COPYING ChangeLog NEWS
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.09-12
-- Prepare for Oreon 11 (RP1)
+%autochangelog

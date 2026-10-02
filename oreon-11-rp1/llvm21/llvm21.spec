@@ -238,6 +238,7 @@ end
 # try to make Clang 19 perform LTO involving LLVM 20 bitcode.
 # oreon does not have clang 21 yet, bootstrap with llvm20
 %if 0%{?oreon} >= 11
+%global compat_maj_ver 20
 %global host_clang_maj_ver %{compat_maj_ver}
 %else
 %if %{with compat_build}
@@ -1604,7 +1605,7 @@ CLANG_LDFLAGS=$(strip_specs "$LDFLAGS $CLANG_LDFLAGS_EXTRA")
 # Configure sphinx:
 # Build man-pages but no HTML docs using sphinx
 %global cmake_config_args %{cmake_config_args} \\\
-	-DSPHINX_EXECUTABLE=/usr/bin/sphinx-build-3 \\\
+	-DSPHINX_EXECUTABLE=/usr/bin/sphinx-build \\\
 	-DSPHINX_OUTPUT_HTML:BOOL=OFF \\\
 	-DSPHINX_OUTPUT_MAN:BOOL=ON \\\
 	-DSPHINX_WARNINGS_AS_ERRORS=OFF

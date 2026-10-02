@@ -39,7 +39,7 @@ BuildRequires: intltool
 BuildRequires: jansson-devel
 
 %if 0%{?rhel} == 8
-BuildRequires: ffmpeg-devel
+BuildRequires: ffmpeg-free-devel
 %endif
 
 %if 0%{?fedora} || 0%{?rhel} > 8

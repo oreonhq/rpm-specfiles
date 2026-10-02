@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash ddcb77d5832070ab5f07bbfc15f404b030e67e06f60d1bb3be8ce8af5f413fdd
 
 Name:           khealthcertificate

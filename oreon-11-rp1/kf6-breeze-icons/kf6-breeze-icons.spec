@@ -1,4 +1,6 @@
-%global source0_hash 2948a313ffe35895b846dde5a93302a1fcd587ad8dfb860b8757629209586fe4
+%global source1_hash 2a33a2e84cc54b4584330426c20debe6fd237f4cafbc675fb5f091b4fe9d5381
+
+%global source0_hash 93866c19791838fc9757b305e010e23bb38cb5f201e4ecc96cc8ef5f1173ebe6
 
 # If KF7 still provides these icons, then their installation should then
 # be disabled in KF6 builds.
@@ -9,13 +11,13 @@
 %global framework breeze-icons
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.29
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
 Summary: Breeze icon theme library
-Version: 6.29.0
-Release:        2%{?dist}
+Version: 6.30.0
+Release:        1%{?dist}
 
 # skladnik.svg is CC-BY-SA-4.0
 # folder-edit-sign-encrypt.svg is LGPL-2.1-or-later
@@ -24,7 +26,9 @@ Release:        2%{?dist}
 License: LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND CC-BY-SA-4.0
 URL:     https://develop.kde.org/frameworks/breeze-icons/
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+
 
 ## upstream patches
 

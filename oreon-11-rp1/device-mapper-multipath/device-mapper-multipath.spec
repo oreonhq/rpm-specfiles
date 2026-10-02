@@ -1,4 +1,4 @@
-%global source0_hash 81f3659fa7755c45ea574c2ccf54c37a74165f6d978c18fcbcca1a807c888959
+%global source0_hash 99e4a4b8c245479dd5c5d473a031acb67d752b94dcd76be172279cd445845421
 
 Name:    device-mapper-multipath
 Version: 0.15.1
@@ -114,7 +114,7 @@ device-mapper-multipath's libdmmp C API library
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n multipath-tools-0.13.1 -p1
+%autosetup -n multipath-tools-%{version} -p1
 cp %{SOURCE1} .
 
 %build
@@ -237,5 +237,4 @@ fi
 %{_pkgconfdir}/libdmmp.pc
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.13.1-1
-- Import
+%autochangelog

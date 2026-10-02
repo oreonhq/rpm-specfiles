@@ -1,12 +1,12 @@
-%global source0_hash 83fbada3ba50f16993142dce679938bb41b4364d234538dbd08b1c1f1c89118e
-%global source1_hash e2265fd047ee728d2fd96c8dfe57dbd486753973ba49c3d462bb6657d19eef45
+%global source0_hash 03a847ff162cba0a457893054d89f066e630db19a43d6cf74b2c7b66766c3583
+%global source1_hash c3728e486179ca0e95ae26498808237963940acd9e4c016fd3eaaa8d5a4c6362
 
 %global         pkgname d3-flame-graph
 %global         github https://github.com/spiermar/d3-flame-graph
 
 Name:           js-d3-flame-graph
 Version:        5.0.0
-Release:        1%{?dist}
+Release:        %autorelease
 Summary:        A D3.js plugin that produces flame graphs
 
 BuildArch:      noarch
@@ -14,14 +14,13 @@ BuildArch:      noarch
 License:        Apache-2.0
 URL:            %{github}
 
-Source0:        https://github.com/spiermar/d3-flame-graph/archive/5.0.0/d3-flame-graph-4.0.7.tar.gz#/js-d3-flame-graph-4.0.7.tar.gz
+Source0:        https://github.com/spiermar/d3-flame-graph/archive/%{version}/d3-flame-graph-%{version}.tar.gz#/js-d3-flame-graph-%{version}.tar.gz
 # Note: In case there were no changes to this tarball, the NVR of this tarball
 # lags behind the NVR of this package.
 Source1:        js-d3-flame-graph-vendor-%{version}-1.tar.xz
 Source2:        Makefile
 Source3:        list_bundled_nodejs_packages.py
 
-Patch1:         001-remove-unused-frontend-crypto-and-patch-md4.patch
 
 BuildRequires:  web-assets-devel
 BuildRequires:  nodejs, /usr/bin/node
@@ -31,34 +30,23 @@ Requires:       web-assets-filesystem
 %endif
 
 # Bundled npm packages
-Provides: bundled(npm(babel-preset-env)) = 1.7.0
-Provides: bundled(npm(clean-webpack-plugin)) = 3.0.0
-Provides: bundled(npm(copy-webpack-plugin)) = 5.1.1
-Provides: bundled(npm(css-loader)) = 3.5.2
-Provides: bundled(npm(d3-array)) = 2.4.0
-Provides: bundled(npm(d3-dispatch)) = 1.0.6
-Provides: bundled(npm(d3-ease)) = 1.0.6
-Provides: bundled(npm(d3-format)) = 1.4.4
-Provides: bundled(npm(d3-hierarchy)) = 1.1.9
-Provides: bundled(npm(d3-scale)) = 3.2.1
-Provides: bundled(npm(d3-selection)) = 1.4.1
-Provides: bundled(npm(d3-transition)) = 1.3.2
-Provides: bundled(npm(eslint)) = 6.8.0
-Provides: bundled(npm(eslint-config-standard)) = 14.1.1
-Provides: bundled(npm(eslint-loader)) = 4.0.0
-Provides: bundled(npm(eslint-plugin-import)) = 2.20.2
-Provides: bundled(npm(eslint-plugin-node)) = 11.1.0
-Provides: bundled(npm(eslint-plugin-promise)) = 4.2.1
-Provides: bundled(npm(eslint-plugin-standard)) = 4.0.1
-Provides: bundled(npm(html-webpack-plugin)) = 4.2.0
-Provides: bundled(npm(jest)) = 25.4.0
-Provides: bundled(npm(prettier)) = 2.0.4
-Provides: bundled(npm(script-ext-html-webpack-plugin)) = 2.1.4
-Provides: bundled(npm(style-loader)) = 1.1.4
-Provides: bundled(npm(terser-webpack-plugin)) = 1.4.3
-Provides: bundled(npm(webpack)) = 4.42.1
-Provides: bundled(npm(webpack-cli)) = 3.3.11
-Provides: bundled(npm(webpack-dev-server)) = 3.10.3
+Provides: bundled(npm(ajv)) = 8.18.0
+Provides: bundled(npm(d3-array)) = 3.1.1
+Provides: bundled(npm(d3-dispatch)) = 3.0.1
+Provides: bundled(npm(d3-ease)) = 3.0.1
+Provides: bundled(npm(d3-format)) = 3.0.1
+Provides: bundled(npm(d3-hierarchy)) = 3.0.1
+Provides: bundled(npm(d3-scale)) = 4.0.2
+Provides: bundled(npm(d3-selection)) = 3.0.0
+Provides: bundled(npm(d3-transition)) = 3.0.1
+Provides: bundled(npm(eslint)) = 9.39.3
+Provides: bundled(npm(eslint-plugin-n)) = 17.24.0
+Provides: bundled(npm(eslint-plugin-promise)) = 7.2.1
+Provides: bundled(npm(jsdom)) = 28.1.0
+Provides: bundled(npm(prettier)) = 3.8.1
+Provides: bundled(npm(vite)) = 7.3.1
+Provides: bundled(npm(vite-plugin-lib-inject-css)) = 2.2.2
+Provides: bundled(npm(vitest)) = 4.0.18
 
 %description
 A D3.js plugin that produces flame graphs from hierarchical data.
@@ -77,38 +65,32 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %setup -q -T -D -b 0 -n %{pkgname}-%{version}
 %setup -q -T -D -b 1 -n %{pkgname}-%{version}
 
-%patch -P1 -p1
 
 
 %build
-./node_modules/.bin/webpack --mode production
+./node_modules/.bin/vite build --config vite.config.mjs
+./node_modules/.bin/vite build --config vite.config.min.mjs
 
 
 %install
-install -d -m 755 %{buildroot}/%{_datadir}/%{pkgname}
-mv dist/templates/* %{buildroot}/%{_datadir}/%{pkgname}
-rmdir dist/templates
-
 install -d -m 755 %{buildroot}/%{_jsdir}/%{pkgname}
 cp -a dist/* %{buildroot}/%{_jsdir}/%{pkgname}
 
 
 %check
-./node_modules/.bin/jest
+./node_modules/.bin/vitest run
 
 
 %files
 %{_jsdir}/%{pkgname}
-%{_datadir}/%{pkgname}
 
 %license LICENSE
 %doc README.md
 
 
 %files doc
-%doc README.md examples
+%doc README.md docs
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.7-12
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 46932b1aea6ee980aee484e96e4e9eedc0d2a7b192b9ed42b16a9903556fe96c
+%global source0_hash 92605d9a075cc6d2cf38a65464b39aba5079018c54bd7d9d25b935d5f009d4e9
 
 Name:           maven-doxia
 Epoch:          0
@@ -205,7 +205,6 @@ done
 %pom_remove_plugin org.apache.maven.plugins:maven-scm-publish-plugin
 %pom_remove_plugin org.apache.maven.plugins:maven-site-plugin
 %pom_remove_plugin org.apache.rat:apache-rat-plugin
-%pom_remove_plugin org.codehaus.mojo:clirr-maven-plugin
 %pom_remove_plugin :maven-install-plugin doxia-modules/doxia-module-markdown
 
 # Needed for the tests
@@ -240,5 +239,4 @@ rm doxia-core/src/test/java/org/apache/maven/doxia/util/XmlValidatorTest.java
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.0-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

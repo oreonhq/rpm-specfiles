@@ -1,4 +1,4 @@
-%global source0_hash c065f040afdff3177680600f249727e41a1afc22fccf27222f15f5306faa1f03
+%global source0_hash 64176eaa46e4969903e286f8e5ef8331affc17fdf03ac9b58381d2b23162b7a3
 
 Name:           wayland
 Version:        1.26.0
@@ -122,8 +122,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libwayland-server.so.0*
 
 %changelog
-* Sun Jul 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.25.0-1
-- 1.25.0
-
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.24.0-3
-- Import
+%autochangelog

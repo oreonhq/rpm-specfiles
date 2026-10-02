@@ -1,4 +1,4 @@
-%global source0_hash fcd009ea7654fde5a83600eb80757bd3a76998e47d13c66b54c8db849f8f2edc
+%global source0_hash ee5e457d4cfebe566f94b99e5e3d3cc7f5c79ddb741c2ac2ba2e456f00329644
 
 Name:           djvulibre
 Version:        3.5.30
@@ -73,5 +73,4 @@ find %{buildroot} -name '*.la' -delete
 
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.28-2
-- Add DjVu stack for document viewers
+%autochangelog

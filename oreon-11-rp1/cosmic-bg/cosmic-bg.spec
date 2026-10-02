@@ -1,4 +1,4 @@
-%global source0_hash b9ab4973e9fc35681757bcc957e8e186e55ce66d8d9d2b9b982ec435ba302d67
+%global source0_hash 848594cabc13d78fef20a907bc79aa2b132986e40bb042b9423779bfc081dcca
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-bg
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Background manager for the COSMIC Desktop Environment
 
@@ -22,6 +22,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-bg
 
 Source0:        https://github.com/pop-os/cosmic-bg/archive/epoch-%{version}/cosmic-bg-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-bg at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

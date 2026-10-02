@@ -1,4 +1,4 @@
-%global source0_hash ec7edde55f60d12d9e7bc1cc560837cdbaa14cf00020cebb4a1d7fe4afeddb4a
+%global source0_hash 5617bc42ae4572158988efd466954d08f25cbb78f1714164280064784c484f4d
 
 # Prevent stripping
 %global __spec_install_post /usr/lib/rpm/brp-compress
@@ -22,7 +22,6 @@ Source0:        https://github.com/memtest86plus/memtest86plus/archive/refs/tags
 Source1:       memtest86+.kernel-install-plugin
 
 # https://github.com/memtest86plus/memtest86plus/pull/572
-Patch1000:     memtest86+.support-nx-booting.patch
 
 BuildRequires: gcc, make, xorriso, dosfstools, mtools
 Requires(pre): systemd-udev >= 252
@@ -84,5 +83,4 @@ exit 0
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.00-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

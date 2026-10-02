@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash d58fe7dceaceaa18206816558f6b640667073966f237fba14abd177bbdcd9dcd
 
 # Opt out of https://fedoraproject.org/wiki/Changes/fno-omit-frame-pointer

@@ -1,4 +1,4 @@
-%global source0_hash bebdf14615f292972c9c939a003f2ad79eef32ddf9ff8d67f611a5da5a2a4598
+%global source0_hash f0a7f8d84b529db000e2ba23fdd30980d0ef50c26b8ef780b36bfdf18cd67ba5
 
 # the package can work with devices from network, so use hardened build
 %global _hardened_build 1
@@ -17,9 +17,7 @@ Source1: lprint.conf
 # UPSTREAM PATCHES
 # fix putting state file into correct place
 # https://github.com/michaelrsweet/lprint/commit/648bc20171
-Patch001: 0001-Update-state-filename-to-current-PAPPL-standard-rena.patch
 # https://github.com/michaelrsweet/lprint/pull/151
-Patch002: 0001-lprint.c-Enable-TLS-support-in-Web-UI.patch
 
 # uses CUPS API for arrays, options, rastering, HTTP, IPP support
 BuildRequires: pkgconfig(cups) >= 2.4.0
@@ -139,5 +137,4 @@ fi
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.1-12
-- Import
+%autochangelog

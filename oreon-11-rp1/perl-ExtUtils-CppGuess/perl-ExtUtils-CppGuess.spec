@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Guess C++ compiler and flags
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-CppGuess
-Source:         https://cpan.metacpan.org/modules/by-module/ExtUtils/ExtUtils-CppGuess-%{version}.tar.gz
+Source:         https://cpan.metacpan.org/authors/id/E/ET/ETJ/ExtUtils-CppGuess-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

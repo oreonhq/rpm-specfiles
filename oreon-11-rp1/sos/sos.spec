@@ -1,10 +1,10 @@
-%global source0_hash f50e55e42dadcd89d502947c92a0e2ae0e787e9d4cc6f96680e9ae0f663c5558
+%global source0_hash 3bc1a378aeca1ccc96ed8da0bd27d0ca38ebfe38489766daa0e74d78ca678fe0
 
 Summary: A set of tools to gather troubleshooting information from a system
 Name: sos
 Version: 4.12.0
 Release: %autorelease
-Source0:        https://github.com/sosreport/sos/archive/refs/tags/%{version}.tar.gz#/sos-4.11.0.tar.gz
+Source0:        https://github.com/sosreport/sos/archive/refs/tags/%{version}.tar.gz#/sos-%{version}.tar.gz
 
 License: GPL-2.0-only
 BuildArch: noarch
@@ -106,5 +106,4 @@ rm -rf %{buildroot}/usr/config/
 %config(noreplace) %{_sysconfdir}/sos/sos.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.11.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

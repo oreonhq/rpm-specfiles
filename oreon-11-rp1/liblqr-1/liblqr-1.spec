@@ -7,7 +7,7 @@ Summary:        LiquidRescale library
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only
 URL:            http://liquidrescale.wikidot.com/
-Source0:        http://liblqr.wikidot.com/local--files/en:download-page/%{name}-%{version}.tar.bz2
+Source0:        https://liblqr.wdfiles.com/local--files/en:download-page/%{name}-%{version}.tar.bz2
 BuildRequires:  gcc
 BuildRequires:  glib2-devel
 BuildRequires:  make

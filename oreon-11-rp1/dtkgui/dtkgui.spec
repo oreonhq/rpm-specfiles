@@ -1,7 +1,7 @@
-%global source0_hash 559682e5440212113af6effa724cd960a87b14f295e949dde80f15dde0f72a2a
+%global source0_hash 7c253db6823d8283a5a4fccdea4d0575cce9264a19b94d1e66e4c1d412c30fa8
 
 Name:           dtkgui
-Version:        6.7.49
+Version:        6.7.50
 Release:        %autorelease
 Summary:        Deepin dtkgui
 License:        LGPL-3.0-or-later

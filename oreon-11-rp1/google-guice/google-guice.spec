@@ -1,4 +1,4 @@
-%global source0_hash 56c5cbaa160fc9e754b8d2d93b8d8584c8468726e6b16075a6d8a0f6c61fad25
+%global source0_hash 1f7b91a7c27ac7d21b1169c3802ef8f482c2aa39122655ddc4772454d55b46d5
 
 %bcond_with bootstrap
 
@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./create-tarball.sh %%{version}
-Source0:        https://github.com/google/guice/archive/refs/tags/6.0.0.tar.gz#/google-guice-5.1.0.tar.gz
+Source0:        https://github.com/google/guice/archive/refs/tags/6.0.0.tar.gz#/google-guice-%{version}.tar.gz
 Source1:        https://raw.githubusercontent.com/google/guice/HEAD/create-tarball.sh
 
 BuildRequires:  jurand
@@ -121,7 +121,7 @@ and above. This package provides Bill of Materials module for Guice.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n guice-5.1.0
+%autosetup -p1 -n guice-%{version}
 
 %java_remove_annotations core/src/ \
   -p ^com.google.common.annotations. \
@@ -212,5 +212,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files -n guice-bom -f .mfiles-guice-bom
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.0-1
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 51da4fa5dfd16508e216e0f0fea2648b0841f2c7e78df1faae3ea4917f743456
+%global source0_hash 6c082cba6b80c5d89b02aec7ed315c9de8452cd413f5181ece43d7fdb3011481
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-randr
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Display configuration command line tool
 
@@ -22,6 +22,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-randr
 
 Source0:        https://github.com/pop-os/cosmic-randr/archive/epoch-%{version}/cosmic-randr-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-randr at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

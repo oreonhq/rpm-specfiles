@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 47e9f22b1d4aca841c6c492b449b6de32ff680972183e26fe7b98a45c5c3fee1
 
 %global glib2_version 2.68.0
 %global gobject_introspection_version 1.72.0
@@ -19,7 +19,7 @@ Summary:        Javascript Bindings for GNOME
 # modules/script/tweener/equations.js is BSD-3-Clause
 License:        MIT AND BSD-3-Clause AND (MIT OR LGPL-2.0-or-later) AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later)
 URL:            https://wiki.gnome.org/Projects/Gjs
-Source0:        https://download.gnome.org/sources/%{name}/1.88/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/1.90/%{name}-%{version}.tar.xz
 BuildRequires:  gcc-c++
 BuildRequires:  meson
 BuildRequires:  gettext
@@ -103,5 +103,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/installed-tests/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.88.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

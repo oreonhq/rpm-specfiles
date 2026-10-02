@@ -8,7 +8,7 @@ Release:        9%{?dist}
 Summary:        Log4j implementation for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Log-Log4perl
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETJ/Log-Log4perl-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MS/MSCHILLI/Log-Log4perl-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

@@ -1,9 +1,9 @@
-%global source0_hash 19bce47d3ed0631379a606d9ef86b4224689db49ba863621a8395f351904988f
+%global source0_hash d268bdf736d6d45ef381ce05c5715824324877e5f0bf56d9f4e34700ac978d04
 
 %bcond_with bootstrap
 
 Name:           guava
-Version:        33.7.1
+Version:        33.7.2
 Release:        %autorelease
 Summary:        Google Core Libraries for Java
 # Most of the code is under Apache-2.0
@@ -112,5 +112,4 @@ sed -i /Xplugin:ErrorProne/d pom.xml
 %files testlib -f .mfiles-guava-testlib
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 33.5.0-1
-- Import
+%autochangelog

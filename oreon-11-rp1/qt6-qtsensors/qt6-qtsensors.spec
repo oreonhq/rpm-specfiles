@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 861df58be8808cef777a1b531d7bec804d25733ec34e8ebbdafbe27040319090
 
 %global qt_module qtsensors
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Sensors component
 Name:    qt6-%{qt_module}
-Version: 6.11.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -132,5 +132,4 @@ popd
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

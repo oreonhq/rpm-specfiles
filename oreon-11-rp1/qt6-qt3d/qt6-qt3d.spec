@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d16f7489945c6c9e971cedd4362202a2681f3c10393461e1f5e74425f7fef59a
 
 %global qt_module qt3d
 
@@ -9,8 +9,8 @@
 
 Summary: Qt6 - Qt3D QML bindings and C++ APIs
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 %global examples 1
 
@@ -247,8 +247,4 @@ popd
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,10 +1,10 @@
-%global source0_hash b59998e0e7f2b683d04999d968ef29f9b9933cdb2c85ffc83cf1505bc3efccf1
+%global source0_hash 10c824694cd9c9954ba7a826d245458d8fa1006d49937fe480dc9f36b57b1efc
 
 %global goipath github.com/snapcore/snapd
 
 Summary:        Tools to interact with snaps and the snap store
 Name:           snapd
-Version:        2.75.2
+Version:        2.77.1
 Release:        1%{?dist}
 License:        GPL-3.0-only
 URL:            https://snapcraft.io/

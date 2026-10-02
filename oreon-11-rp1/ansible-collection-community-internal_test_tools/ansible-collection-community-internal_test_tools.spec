@@ -1,10 +1,10 @@
-%global source0_hash a8f4ea07f1baad5013f6952628a6fd9686d01f430ecef911e2087501156cda00
+%global source0_hash 2af4e38b33ecf129d0d32e5c7c77f5d162caaca29367ccab101c7c24142eb4cb
 
 %global forgeurl https://github.com/ansible-collections/community.internal_test_tools
 %bcond tests 1
 
 Name:           ansible-collection-community-internal_test_tools
-Version:        0.18.0
+Version:        0.19.0
 %global tag     %{version}
 %forgemeta
 Release:        %autorelease

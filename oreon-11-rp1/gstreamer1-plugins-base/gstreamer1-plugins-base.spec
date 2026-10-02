@@ -1,4 +1,4 @@
-%global source0_hash 27880f3d87efa3bb5aa5f99f7ef6e4be7c95229f44eee928c1633d32e87d0099
+%global source0_hash ed6e5410f496d171818763af2265e7977154bc7f9b827e98acf8c5bed21dd5a7
 
 %bcond cdparanoia %{undefined rhel}
 %bcond libvisual %{undefined rhel}
@@ -6,8 +6,8 @@
 %global         majorminor      1.0
 
 Name:           gstreamer1-plugins-base
-Version:        1.29.2
-Release:        1%{?dist}
+Version:        1.28.7
+Release:        %autorelease
 Summary:        GStreamer streaming media framework base plugins
 
 License:        LGPL-2.1-or-later
@@ -512,11 +512,4 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/gst-play-1.0
 %endif
 
 %changelog
-* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
-- Update to 1.28.3
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
-- Remove commented git snapshot lines that expanded macros in comments
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

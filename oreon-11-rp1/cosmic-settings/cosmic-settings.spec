@@ -1,4 +1,4 @@
-%global source0_hash c439efdea014fa62e26f9a0a6682160b790169b268bd3db5f17250df7b28cd4f
+%global source0_hash 1e33fec9dc70408a85eca4055dca16afa82baadc2edb957e1400294b09f2ff27
 
 # FIXME: Debug artifacts get in the way
 %define debug_package %{nil}
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-settings
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Settings app for the COSMIC Desktop Environment
 
@@ -24,6 +24,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-settings
 
 Source0:        https://github.com/pop-os/cosmic-settings/archive/epoch-%{version}/cosmic-settings-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-settings at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

@@ -1,4 +1,4 @@
-%global source0_hash 5e65385e51f4a7c4b42aa09566396c20e7e1a0a30c272d569ed029a81656e56b
+%global source0_hash 24c345b5c077c1b2b2fcbc1a364f1da051650fb6743ad5213096adc04c862ed4
 %global source1_hash d17123e101ada18cce7022d9794fb97344d3151028c4f51f652fcf992e8d0da2
 
 %global with_python3 %{?_without_python3: 0} %{?!_without_python3: 1}
@@ -34,9 +34,7 @@ Patch3: rrdtool-1.6.0-ruby-2-fix.patch
 # enable php bindings on ppc
 Patch4: rrdtool-1.4.8-php-ppc-fix.patch
 # fix compatibility with tcl 9.0
-Patch5: rrdtool-1.9.0-tcl90.patch
 # https://github.com/oetiker/rrdtool-1.x/commit/4218ec7127ba6c7ea1c20d7c8ea6e2b3f83df73a
-Patch6: rrdtool-1.9.0-safety-checks.patch
 
 BuildRequires: make
 BuildRequires: gcc-c++
@@ -187,8 +185,6 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %patch -P3 -p1 -b .ruby-2-fix
 %endif
 %patch -P4 -p1 -b .php-ppc-fix
-%patch -P5 -p1 -b .tcl90
-%patch -P6 -p1 -b .safety-checks
 
 # Fix to find correct python dir on lib64
 perl -pi -e 's|get_python_lib\(0,0,prefix|get_python_lib\(1,0,prefix|g' \
@@ -405,5 +401,4 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.0-11
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 59a32d385cc1e7ae26e43798c6f12d07ff6198abd041ec0620b3a08cfc021ccc
+%global source0_hash 262864cfd198123d3e5dbe91937441b97ee9059d6d712e1a5bfbb1c54668d14d
 
 Name:    NetworkManager
 Summary: Network connection manager and user applications
@@ -174,8 +174,6 @@ Source7: 70-nm-connectivity.conf
 Source8: readme-ifcfg-rh.txt
 Source9: readme-ifcfg-rh-migrated.txt
 
-Patch1: 0001-polkit-noauth-group.patch
-Patch2: 0002-secret-permission-fixes.patch
 
 Requires(post): systemd
 Requires(post): systemd-udev
@@ -1074,5 +1072,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.56.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

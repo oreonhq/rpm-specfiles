@@ -9,7 +9,7 @@
 
 Name:           perl-version
 Epoch:          9
-Version:        0.99.34
+Version:        0.9934
 %global module_version 0.9934
 Release:        1%{?dist}
 Summary:        Perl extension for Version Objects

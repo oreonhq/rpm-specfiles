@@ -1,4 +1,4 @@
-%global source0_hash 11a8351211fbe5757040f5784c6f77dadf0fd85a4333eb41d9bbd79cbd12353a
+%global source0_hash 034d241f4935e675f1ea56a2d264e4f94b17049d22eabea7f18237f21e29681a
 
 # SPDX-License-Identifier: GPL-2.0-only
 # Copyright (C) 2019 Mellanox Technologies. All Rights Reserved.
@@ -12,7 +12,7 @@ Summary: User-space driver for Mellanox BlueField SoC
 # fwpkg_unpack.py: MIT
 License: (GPL-2.0-only OR BSD-3-Clause) AND MIT
 URL: https://github.com/mellanox/rshim-user-space
-Source0:        https://github.com/Mellanox/rshim-user-space/archive/refs/tags/%{name}-%{version}.tar.gz#/rshim-2.6.6.tar.gz
+Source0:        https://github.com/Mellanox/rshim-user-space/archive/refs/tags/%{name}-%{version}.tar.gz#/rshim-%{version}.tar.gz
 
 BuildRequires: gcc, autoconf, automake, make
 BuildRequires: pkgconfig(libpci), pkgconfig(libusb-1.0), pkgconfig(fuse3)
@@ -78,5 +78,4 @@ mv %{buildroot}/etc/systemd/network/10-tmfifo-net.link \
 %{_prefix}/lib/systemd/network/10-tmfifo-net.link
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

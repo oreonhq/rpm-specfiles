@@ -5,7 +5,7 @@
 
 # https://github.com/BurntSushi/toml-test
 %global goipath         github.com/BurntSushi/toml-test
-Version:                0.2.0
+Version:                2.2.0
 %global commit          9767d201b51ac9c50630f181828bcd922bf3e9e5
 
 %gometa
@@ -27,7 +27,7 @@ format as the JSON that a TOML decoder should output.}
 %global godocs          README.md
 
 Name:           %{goname}
-Release:        25%{?dist}
+Release:        1%{?dist}
 Summary:        Language agnostic test suite for TOML parsers
 
 License:        MIT

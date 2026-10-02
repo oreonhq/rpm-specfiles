@@ -1,0 +1,11 @@
+--- a/src/_bcrypt/Cargo.toml
++++ b/src/_bcrypt/Cargo.toml
+@@ -8,7 +8,7 @@
+ publish = false
+ 
+ [dependencies]
+-pyo3 = { version = "0.26", features = ["abi3"] }
++pyo3 = { version = "0.29", features = ["abi3"] }
+ bcrypt = "0.17"
+ bcrypt-pbkdf = "0.10.0"
+ base64 = "0.22.1"

@@ -1,4 +1,4 @@
-From 8a3841bdf674fdb11887e70dddb6f25ee3f91502 Mon Sep 17 00:00:00 2001
+From 15dc9b9f980aa368e87113cc88e5005d80d24405 Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Thu, 16 Oct 2014 15:49:01 -0500
 Subject: [PATCH] RH: add mpathconf
@@ -13,44 +13,19 @@ a single command.
 Co-authored-by: Paul Donohue <git@PaulSD.com>
 Signed-off-by: Benjamin Marzinski <bmarzins@redhat.com>
 ---
- .github/actions/spelling/expect.txt |   3 +
- libmultipath/config.c               |   2 +
- multipath/Makefile                  |   4 +
- multipath/mpathconf                 | 658 ++++++++++++++++++++++++++++
- multipath/mpathconf.8               | 151 +++++++
- 5 files changed, 818 insertions(+)
+ libmultipath/config.c |   2 +
+ multipath/Makefile    |   4 +
+ multipath/mpathconf   | 658 ++++++++++++++++++++++++++++++++++++++++++
+ multipath/mpathconf.8 | 151 ++++++++++
+ 4 files changed, 815 insertions(+)
  create mode 100644 multipath/mpathconf
  create mode 100644 multipath/mpathconf.8
 
-diff --git a/.github/actions/spelling/expect.txt b/.github/actions/spelling/expect.txt
-index 154430db..cde289d8 100644
---- a/.github/actions/spelling/expect.txt
-+++ b/.github/actions/spelling/expect.txt
-@@ -136,9 +136,11 @@ Marzinski
- misdetection
- mpath
- mpathb
-+mpathconf
- mpathpersist
- mpathvalid
- msecs
-+multipathable
- multipathc
- multipathd
- multipathed
-@@ -159,6 +161,7 @@ ontap
- OOM
- opensvc
- OPTFLAGS
-+outfile
- paramp
- partx
- pathgroup
 diff --git a/libmultipath/config.c b/libmultipath/config.c
-index b8317f4d..0bbaa981 100644
+index e6c4995e..3ca9350e 100644
 --- a/libmultipath/config.c
 +++ b/libmultipath/config.c
-@@ -939,6 +939,8 @@ int init_config__ (const char *file, struct config *conf)
+@@ -942,6 +942,8 @@ int init_config__ (const char *file, struct config *conf)
  		validate_pctable(conf->overrides, 0, file);
  	} else {
  		condlog(0, "/etc/multipath.conf does not exist, blacklisting all devices.");

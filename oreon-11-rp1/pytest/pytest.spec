@@ -1,4 +1,4 @@
-%global source0_hash 86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01
+%global source0_hash 1088fbde8f2b49d95a549a195707afa7a76a3ce9bcadc26b6d71f0ffda5fe313
 
 Name:           pytest
 Version:        9.1.1
@@ -176,5 +176,4 @@ find %{buildroot}%{python3_sitelib} \
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.4.2-1
-- Import
+%autochangelog

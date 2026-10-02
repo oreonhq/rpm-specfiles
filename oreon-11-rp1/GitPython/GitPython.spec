@@ -1,9 +1,9 @@
-%global source0_hash 400124c7d0ef4ea03f7310ac2fbf7151e09ff97f2a3288d64a440c584a29c37f
+%global source0_hash fb92310af6844d96adc95ca066ed2e617c00e1dbd146a326626c81e72e18cc2e
 
 %global srcname GitPython
 
 Name:           %{srcname}
-Version:        3.1.62
+Version:        3.2.0
 Release:        1%{?dist}
 Summary:        Python Git Library
 

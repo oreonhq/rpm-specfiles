@@ -1,7 +1,7 @@
 Fedora specific configuration - we want to mount all controllers by default for libvirt.
 
 diff --git a/samples/config/cgconfig.conf b/samples/config/cgconfig.conf
-index de29594..2020d71 100644
+index 43851d0..2020d71 100644
 --- a/samples/config/cgconfig.conf
 +++ b/samples/config/cgconfig.conf
 @@ -4,39 +4,8 @@
@@ -41,8 +41,8 @@ index de29594..2020d71 100644
 -#}
 -#
 -#mount {
--#	cpu = /mnt/cgroups/cpu;
--#	cpuacct = /mnt/cgroups/cpuacct;
+-#	cpu = /sys/fs/cgroup/cpu;
+-#	cpuacct = /sys/fs/cgroup/cpuacct;
 -#}
 +# By default, we expect systemd mounts everything on boot,
 +# so there is not much to do.

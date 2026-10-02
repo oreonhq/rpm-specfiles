@@ -1,7 +1,7 @@
-%global source0_hash 14975a8c1ddcc163b1afecd2207c9fd2e05b88e8a00246701fabf9dffce52ee9
+%global source0_hash 6918c748c26e9c8cfe81783400be3732792a73e532d6235f40c4b332ca4fde0b
 
 Name:           kmscon
-Version:        10.0.3
+Version:        10.0.4
 Release:        1%{?dist}
 Summary:        Linux KMS/DRM based virtual Console Emulator
 License:        MIT
@@ -112,5 +112,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/kmscon/mod-gltex.so
 
 %changelog
-* Wed Jun 10 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.3.5-1
-- import for oreon 11 iso
+%autochangelog

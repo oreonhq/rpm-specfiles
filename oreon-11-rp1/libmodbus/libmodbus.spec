@@ -1,4 +1,4 @@
-%global source0_hash 2f4d4191cd196c1fba131daec03b621db75129d8255c832fc66b259d9fc46e7b
+%global source0_hash 72239f319b9b8483e3d393c5a60865d734fcff18a8abbb2486e389834a2f6ef1
 
 Name: libmodbus
 Version: 3.2.0

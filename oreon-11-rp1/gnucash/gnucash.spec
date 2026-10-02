@@ -1,4 +1,4 @@
-%global source0_hash 0c6fd20214da86a9a0443359f7b62d9a2bd4ed802fd680853da4b757a371ac91
+%global source0_hash 3d18a88f5b8230f01e04c2d2d73bf95e7dcd3bf8d8cee6ffa54bb24dee58b85f
 
 %if 0%{?rhel} >= 9
 %global _lto_cflags %nil
@@ -6,11 +6,12 @@
 
 Name: gnucash
 Summary: Finance management application
-Version: 5.16
+Version: 5.17
 URL: https://gnucash.org/
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Source: https://downloads.sourceforge.net/sourceforge/gnucash/gnucash-%{version}.tar.bz2
+
 
 ExcludeArch: %{ix86}
 

@@ -1,4 +1,4 @@
-%global source0_hash 2fc66eca83419053991484b7d6e778f46b03704ce778893473d7a9cb7dd915f9
+%global source0_hash 5913783d52fe02a18fd796acee2335eeca43cb17e913eca33e2f211e64f2fcdb
 
 %global _unitdir /usr/lib/systemd/system
 Summary: Analyzes and Reports on system logs
@@ -133,5 +133,4 @@ echo "# Configuration overrides for specific logfiles/services may be placed her
 %{_unitdir}/logwatch.timer
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.14-1
-- Import
+%autochangelog

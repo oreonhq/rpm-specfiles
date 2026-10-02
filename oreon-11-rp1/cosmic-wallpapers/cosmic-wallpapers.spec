@@ -10,7 +10,7 @@
 %global cosmic_minver 1.8.0
 
 Name:           cosmic-wallpapers
-Version: 1.8.0
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Default wallpapers for the COSMIC Desktop Environment
 

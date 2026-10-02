@@ -1,19 +1,19 @@
-%global source0_hash e53474b0a3de73ced570c3f2f605bedf88960c03773178ec763963d21cdb1bf6
+%global source0_hash 3a1d70bef371e42c1b8f779791ee0a3492070ba4ba7d48450167e075570d5f4e
 
 Name:			rasdaemon
-Version:		0.9.92
-Release:		1%{?dist}
+Version:		1.0.0
+Release:		%autorelease
 Summary:		Utility to receive RAS error tracings
 Group:			Applications/System
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:		GPL-2.0-only
 URL:			http://git.infradead.org/users/mchehab/rasdaemon.git
-Source0:        https://github.com/mchehab/rasdaemon/archive/refs/tags/v0.8.0.tar.gz#/rasdaemon-0.8.0.tar.bz2
+Source0:		https://github.com/mchehab/rasdaemon/archive/v%{version}/%{name}-%{version}.tar.gz
 
 ExcludeArch:		s390 s390x
 BuildRequires:		make
 BuildRequires:		gcc
-BuildRequires:		autoconf automake libtool
+BuildRequires:		meson
 BuildRequires:		gettext-devel
 BuildRequires:		perl-generators
 BuildRequires:		sqlite-devel
@@ -43,30 +43,22 @@ an utility for reporting current error counts from the EDAC sysfs files.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
-autoreconf -vfi
+%autosetup -p1
 
 %build
 %ifarch %{arm} aarch64
-%configure --enable-sqlite3 --enable-aer --enable-non-standard --enable-arm \
-	   --enable-mce --enable-extlog --enable-devlink --enable-diskerror \
-	   --enable-memory-failure --enable-abrt-report --enable-hisi-ns-decode \
-	   --enable-memory-ce-pfa --enable-amp-ns-decode --enable-cpu-fault-isolation \
-	   --with-sysconfdefdir=%{_sysconfdir}/sysconfig
+%meson -Dsqlite3=enabled -Daer=enabled -Dmce=enabled -Dextlog=enabled -Ddevlink=enabled -Ddiskerror=enabled -Dmemory-failure=enabled -Dabrt-report=enabled -Dcpu-fault-isolation=enabled -Darm=enabled -Dhisi-ns-decode=enabled -Dmemory-ce-pfa=enabled -Damp-ns-decode=enabled
 %else
-%configure --enable-sqlite3 --enable-aer \
-	   --enable-mce --enable-extlog --enable-devlink --enable-diskerror \
-	   --enable-memory-failure --enable-abrt-report --enable-cpu-fault-isolation \
-	   --with-sysconfdefdir=%{_sysconfdir}/sysconfig
+%meson -Dsqlite3=enabled -Daer=enabled -Dmce=enabled -Dextlog=enabled -Ddevlink=enabled -Ddiskerror=enabled -Dmemory-failure=enabled -Dabrt-report=enabled -Dcpu-fault-isolation=enabled
 %endif
-make %{?_smp_mflags}
+%meson_build
 
 %install
-make install DESTDIR=%{buildroot}
+%meson_install
 install -D -p -m 0644 misc/rasdaemon.service %{buildroot}%{_unitdir}/rasdaemon.service
 install -D -p -m 0644 misc/ras-mc-ctl.service %{buildroot}%{_unitdir}/ras-mc-ctl.service
 install -D -p -m 0655 misc/rasdaemon.env %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-rm INSTALL %{buildroot}/usr/include/*.h
+rm -f %{buildroot}/usr/include/*.h
 
 %files
 %doc AUTHORS ChangeLog COPYING README.md TODO
@@ -78,5 +70,4 @@ rm INSTALL %{buildroot}/usr/include/*.h
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.0-9
-- Import
+%autochangelog

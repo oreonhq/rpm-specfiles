@@ -1,4 +1,4 @@
-%global source0_hash 7243dd525200ff0335cdae96721369d222432b175a83a62f8370184102b18b4c
+%global source0_hash dfead7be16788159b5f44b0b6842627f23901b48ea8cd26eade2083926d78ba6
 
 %bcond_without bootstrap
 
@@ -123,5 +123,4 @@ done
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.24-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

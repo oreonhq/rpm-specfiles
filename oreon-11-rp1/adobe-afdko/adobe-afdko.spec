@@ -1,4 +1,4 @@
-%global source0_hash 5feed7c2468e25b25fce0479c04af07f4ed2680bc9251bb4c4aef9ec2fba5720
+%global source0_hash 083b504a1cd865e8bfbb42134a34318ce42ef5130daebfc5b0e2f2fb444326c5
 %global source1_hash 0ed13668906e86dbc0dcddf30fdee68c10203dea4e83852b4edb810821bee3c4
 
 # Upstream actually uses a post-release snapshot of commit
@@ -31,7 +31,7 @@ Summary:	Adobe Font Development Kit for OpenType
 #   binary RPMs
 License:	Apache-2.0
 URL:		https://github.com/adobe-type-tools/afdko
-Source0:        https://github.com/adobe-type-tools/afdko/releases/download/5.0.1/afdko-4.0.3.tar.gz
+Source0:        https://github.com/adobe-type-tools/afdko/releases/download/%{version}/afdko-%{version}.tar.gz
 Source1:        https://www.antlr.org/download/antlr4-cpp-runtime-4.13.2-source.zip
 BuildRequires:	gcc g++
 BuildRequires:	cmake
@@ -73,5 +73,4 @@ export XFLAGS="${CFLAGS} ${LDFLAGS}"
 %{_bindir}/type1
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.3-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

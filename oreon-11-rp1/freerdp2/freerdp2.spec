@@ -27,8 +27,8 @@
 %global build_type_safety_c 2
 
 Name:           freerdp2
-Version:        2.11.7
-Release:        11%{?dist}
+Version:        2.11.8
+Release:        1%{?dist}
 Summary:        Free implementation of the Remote Desktop Protocol (RDP)
 
 # The effective license is Apache-2.0 but:

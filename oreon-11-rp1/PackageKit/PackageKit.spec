@@ -1,4 +1,4 @@
-%global source0_hash 5d79d97a66fd9a50fcc82419ab530fe7b2102aa3afb1dec53df5d29efba2e687
+%global source0_hash 09164faec92ad38dcec248339f7fc83c7a74e484e0a4105ebce3a3a41b172364
 
 %global glib2_version 2.80
 %global libdnf_version 0.43.1
@@ -16,25 +16,16 @@ License:   GPL-2.0-or-later AND LGPL-2.1-or-later AND FSFAP
 URL:       http://www.freedesktop.org/software/PackageKit/
 Source0:        http://www.freedesktop.org/software/PackageKit/releases/%{name}-%{version}.tar.xz
 
-# Backports from upstream (1~500)
-## Fix turning off the Python backend
-Patch0001:    https://github.com/PackageKit/PackageKit/commit/11c5f1f34f48b58ee10acec839dd01a31728704b.patch
-
-# Patches proposed upstream (501~1000)
-## Alias "dnf" to "dnf5"
-## Pulled out from https://github.com/PackageKit/PackageKit/pull/938
-Patch0501:    PackageKit-alias-dnf-to-dnf5.patch
-
 # Downstream only patches (1001+)
 ## https://pagure.io/fedora-workstation/issue/233
 ## https://github.com/PackageKit/PackageKit/pull/404
 Patch1001:    package-inst+rem-sysupgrade-password-prompt.patch
 
 ## Fedora patches (2001~3000)
-Patch2001:    PackageKit-0.3.8-Fedora-Vendor.conf.patch
+Patch2001:    PackageKit-1.4.0-Fedora-Vendor.conf.patch
 
 ## RHEL patches (3001~4000)
-Patch3001:    PackageKit-0.3.8-RHEL-Vendor.conf.patch
+Patch3001:    PackageKit-1.4.0-RHEL-Vendor.conf.patch
 
 BuildRequires: docbook-utils
 BuildRequires: docbook5-schemas
@@ -241,10 +232,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autopatch -p1 -m 3001 -M 4000
 %endif
 
-# Revert dnf->dnf5 for <F43 and <EL11
-%if ! %{with dnf5_default}
-%patch -p1 -P 501 -R
-%endif
 
 
 %conf
@@ -389,5 +376,4 @@ systemctl disable packagekit-offline-update.service > /dev/null 2>&1 || :
 %{_datadir}/vala/vapi/packagekit-glib2.deps
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

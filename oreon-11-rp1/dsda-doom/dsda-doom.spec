@@ -1,4 +1,4 @@
-%global source0_hash f866db79381862080718668f582b0f358811a016db17680e507abb9250afbea5
+%global source0_hash 5ce3401f2975b330936c0739b62910ae3b193f0d8f323b7b246bb242e1987e19
 
 Name: dsda-doom
 Summary: Speedrun-oriented Doom source port
@@ -26,8 +26,8 @@ Summary: Speedrun-oriented Doom source port
 # Check the discussion at: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/310
 License: GPL-2.0-or-later AND BSD-3-Clause AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain AND Zlib
 
-Version: 0.29.4
-Release: 2%{?dist}
+Version: 0.30.0
+Release: 1%{?dist}
 
 URL: https://github.com/kraflab/dsda-doom
 Source0: %{URL}/archive/v%{version}/%{name}-v%{version}.tar.gz

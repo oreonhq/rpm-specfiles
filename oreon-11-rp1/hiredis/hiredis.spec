@@ -1,4 +1,4 @@
-%global source0_hash 82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c
+%global source0_hash ca3180359a8b1275838a45415851f8cd5c411e27bdbf18f4823012e45507d2e4
 
 Name:           hiredis
 Version:        1.4.1
@@ -7,7 +7,6 @@ Summary:        Minimalistic C client library for Redis
 License:        LicenseRef-Callaway-BSD
 URL:            https://github.com/redis/hiredis
 Source0:        https://github.com/redis/hiredis/archive/v%{version}/%{name}-%{version}.tar.gz
-Patch0:         hiredis-envvar.patch
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  openssl-devel
@@ -60,5 +59,4 @@ make check REDIS_SERVER=valkey-server
 %{_libdir}/pkgconfig/hiredis_ssl.pc
 
 %changelog
-* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-9
-- Import for Oreon 11
+%autochangelog

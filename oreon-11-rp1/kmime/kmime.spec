@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash a118b0d3b3ad2ebb35f73c675cffff575cd1b36ff5875d4f9fd4bce884bbae8a
 
 Name:    kmime

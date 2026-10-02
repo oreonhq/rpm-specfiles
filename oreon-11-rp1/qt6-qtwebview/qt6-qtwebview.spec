@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bee0642225614d7fc9486a2ca6db7d2c82a28c311404d1503185a360792c504e
 
 %global qt_module qtwebview
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - WebView component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -118,8 +118,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

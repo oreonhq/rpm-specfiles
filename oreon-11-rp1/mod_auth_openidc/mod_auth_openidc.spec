@@ -1,4 +1,4 @@
-%global source0_hash 499004f81763921cd8566c5120f9ad0363a704beacf89c6e566819841f2887b3
+%global source0_hash 338e1cc1ceb8e0bdb2cb113936966b89ef2f24557502c61fe14e535fae14f7cd
 
 %{!?_httpd_mmn: %{expand: %%global _httpd_mmn %%(cat %{_includedir}/httpd/.mmn 2>/dev/null || echo 0-0)}}
 %{!?_httpd_moddir: %{expand: %%global _httpd_moddir %%{_libdir}/httpd/modules}}
@@ -100,5 +100,4 @@ install -m 700 -d $RPM_BUILD_ROOT%{httpd_pkg_cache_dir}/cache
 %dir %attr(0700, apache, apache) %{httpd_pkg_cache_dir}/cache
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.19.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash dd77529a93ac3f9aefe571961e8f7ab14c416f3164a524c6588284bcc1ac817b
 
 # enable tests

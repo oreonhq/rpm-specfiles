@@ -1,4 +1,4 @@
-%global source0_hash 14996f5f74c9f68f5a543fdc45bca7800207f91f92aeea6c2e791822c7c6d876
+%global source0_hash 1c036c0d72e4b3d1fb5c94c88632add6f9d76f4d7c4d2ea793c12a9f19a3228c
 
 # rpmbuild parameters:
 # --with testsuite: Run the testsuite (biarch if possible).  Default is without.
@@ -51,8 +51,8 @@ Release: 1%{?dist}
 
 License: GPL-3.0-or-later AND BSD-3-Clause AND FSFAP AND LGPL-2.1-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain AND GFDL-1.3-or-later AND LGPL-2.0-or-later WITH GCC-exception-2.0 AND GPL-3.0-or-later WITH GCC-exception-3.1 AND GPL-2.0-or-later WITH GNU-compiler-exception AND MIT
 # Do not provide URL for snapshots as the file lasts there only for 2 days.
-# https://sourceware.org/pub/gdb/releases/FIXME{tarname}.tar.xz
-Source:        https://sourceware.org/pub/gdb/releases/%{tarname}.tar.xz
+# ftp://sourceware.org/pub/gdb/releases/FIXME{tarname}.tar.xz
+Source: ftp://sourceware.org/pub/gdb/releases/%{tarname}.tar.xz
 URL: https://gnu.org/software/gdb/
 
 # For our convenience
@@ -143,64 +143,8 @@ Source4: gdbinit
 
 # Include the auto-generated file containing the "Patch:" directives.
 # See README.local-patches for more details.
-# Check distro name is included in the version output.
-Patch001: gdb-test-show-version.patch
-
-# Update gdb-add-index.sh such that, when the GDB environment
-# variable is not set, the script is smarter than just looking for
-# 'gdb' in the $PATH.
-#
-# The actual search order is now: /usr/bin/gdb.minimal, gdb (in the
-# $PATH), then /usr/libexec/gdb.
-#
-# For the rationale of looking for gdb.minimal see:
-#
-#   https://fedoraproject.org/wiki/Changes/Minimal_GDB_in_buildroot
-#
-#=fedora
-Patch002: gdb-add-index.patch
-
-# Not a backport.  Add a new script which hooks into GDB and suggests
-# RPMs to install when GDB finds an objfile with no debug info.
-Patch003: gdb-rpm-suggestion-script.patch
-
-# Backport Guinevere Larsen's build warning fixes (RH BZ 2424325).
-Patch004: gdb-rhbz2424325-c23-const-build-warnings.patch
-
-# Backport Keith Seitz's C23 const-correctness fixes (pending upstream review).
-# Mailing list: https://sourceware.org/pipermail/binutils/2026-January/...
-# Posted 2026-01-07, not yet approved.
-Patch005: gdb-rhbz2424325-c23-more-const-fixes.patch
-
-# Backport Tom de Vries fix regarding implicit lambda captures
-# (RH BZ 2424325).
-Patch006: gdb-rhbz2424325-c++20-implicit-lambda-capture.patch
-
-# Backport of upstream commit 70b66cf338b14336 to address RHBZ
-# 2402580.  This backport can be dropped when rebasing to GDB 18.
-# There were some moderate merge conflicts which needed resolving
-# when backporting this fix.
-Patch007: gdb-rhbz2403580-misplaced-symtabs.patch
-
-# Backport of three upstream patches.  The first two relate to index
-# generation, while the third relates to symbol lookup, but is needed
-# so that the tests from the earlier two patches will pass.
-#
-# These backports will all drop out when rebasing onto GDB 18.
-Patch008: gdb-index-generation-fixes.patch
-
-# Backport of upstream commit f08ffbbf2691bad2d5df660ee644647687775f0c
-# Can be dropped on a rebase to gdb 17.2 or 18.1
-Patch009: gdb-rhbz2435950-skip-revert.patch
-
-# Backport of upstream commit c1da013915e from Kevin Buettner
-# (RHBZ 2413405).
-Patch010: gdb-rhbz2413405-gcore-unreadable-pages.patch
-
-# Backport of upstream commit d2cc16cd7fc from Jan Vrany fixing
-# FAILs in gdb.base/fileio.exp caused by macro expansion of path
-# components (e.g. "linux") in OUTDIR.
-Patch011: gdb-fileio-test-fixes.patch
+Source9998: _gdb.spec.Patch.include
+%include %{SOURCE9998}
 
 BuildRequires: readline-devel%{buildisa} >= 7.0
 BuildRequires: ncurses-devel%{buildisa} texinfo gettext flex bison
@@ -219,7 +163,6 @@ BuildRequires: texinfo-tex
 BuildRequires: texlive-collection-latexrecommended
 # Permit rebuilding *.[0-9] files even if they are distributed in gdb-*.tar:
 BuildRequires: /usr/bin/pod2man
-BuildRequires: libbabeltrace-devel%{buildisa}
 %if %{defined use_guile}
     %if 0%{!?rhel:1}
 BuildRequires: guile22-devel%{buildisa}
@@ -380,7 +323,7 @@ This package provides INFO, HTML and PDF user manual for GDB.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{gdb_src}
+%autosetup -p1 -n %{gdb_src}
 
 # Files have `# <number> <file>' statements breaking VPATH / find-debuginfo.sh .
 (cd gdb;rm -fv $(perl -pe 's/\\\n/ /' <Makefile.in|sed -n 's/^YYFILES = //p'))
@@ -388,22 +331,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # *.info* is needlessly split in the distro tar; also it would not get used as
 # we build in GDB_BUILD, just to be sure.
 find -name "*.info*"|xargs rm -f
-
-# Apply patches defined on _gdb.spec.Patch.include
-
-# Include the auto-generated patch directives.
-# See README.local-patches for more details.
-%patch -p1 -P001
-%patch -p1 -P002
-%patch -p1 -P003
-%patch -p1 -P004
-%patch -p1 -P005
-%patch -p1 -P006
-%patch -p1 -P007
-%patch -p1 -P008
-%patch -p1 -P009
-%patch -p1 -P010
-%patch -p1 -P011
 
 find -name "*.orig" | xargs rm -f
 ! find -name "*.rej" # Should not happen.
@@ -470,6 +397,10 @@ mv -f readline-doc readline/readline/doc
 rm -rf zlib texinfo
 
 %build
+
+# Generate TexLive format file needed for PDF documentation
+# This is necessary in F45+ because format files are no longer pre-generated
+fmtutil-user --byfmt pdfetex || true
 
 # A set of common GDB configure flags, which are used for both minimal
 # and non-minimal compilations.
@@ -582,7 +513,7 @@ export CXXFLAGS="$CFLAGS"
 # The configure flags we will use when building the full GDB.
 GDB_FULL_CONFIGURE_FLAGS="\
         --with-system-gdbinit=%{_sysconfdir}/gdbinit            \
-        --with-babeltrace                                       \
+        --without-babeltrace                                       \
         --with-expat                                            \
 $(: ppc64 host build crashes on ppc variant of libexpat.so )    \
         --without-libexpat-prefix                               \
@@ -700,7 +631,7 @@ echo ====================TESTING=========================
 cd gdb
 gcc -o ./orphanripper %{SOURCE2} -Wall -lutil -ggdb2
 # Need to use a single --ignore option, second use overrides first.
-# No `%%{?_smp_mflags}' here as it may race.
+# No `%{?_smp_mflags}' here as it may race.
 # WARNING: can't generate a core file - core tests suppressed - check ulimit
 # "readline-overflow.exp" - Testcase is broken, functionality is OK.
 (
@@ -1000,8 +931,4 @@ fi
 # endif scl
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.1-6
-- Use HTTPS for upstream tarball (spectool has no FTP)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.1-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

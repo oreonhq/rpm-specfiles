@@ -1,10 +1,10 @@
-%global source0_hash eb93759adad48251a472c5d20fbce3e08ee53fcec2909a22448d48c9fa100ea0
+%global source0_hash 1eb415c4756210e278675225ff1d6b2659e09f832b567aa35d807a94a311c3f4
 
 # RHEL does not include pyjwt, blinker needed for extras
 %bcond extras %{undefined rhel}
 
 Name:               python-oauthlib
-Version:            3.3.1
+Version:            4.0.0
 Release:            1%{?dist}
 Summary:            An implementation of the OAuth request-signing logic
 
@@ -78,5 +78,4 @@ echo 'import pytest; __getattr__ = lambda _: pytest.skip("this test needs jwt")'
 %doc README.rst
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

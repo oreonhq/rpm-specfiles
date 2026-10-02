@@ -1,4 +1,4 @@
-%global source0_hash 4f0b58727dc296b92cfa3c404d31d52597de8bab0530c697f01f0d4397d6120c
+%global source0_hash c9f829c363e12b886633dc4e3ecc03e5c06b14086972819bd8dc1e497f2e7d8b
 
 Name:           python3-mypy
 Version:        2.3.1

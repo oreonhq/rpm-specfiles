@@ -1,4 +1,4 @@
-%global source0_hash 73f215eccbd8233f414737ac06bca2687e67c44b97d2d7576091aa9718551110
+%global source0_hash 0caf824971108f15bb2ad356433bae198d7d3bf1e82d43f63626e069e060bfa6
 
 Name:           libevdev
 Version:        1.13.7
@@ -69,5 +69,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man1/mouse-dpi-tool.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.13.6-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

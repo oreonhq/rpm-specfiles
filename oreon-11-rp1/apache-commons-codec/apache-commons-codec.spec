@@ -1,4 +1,4 @@
-%global source0_hash ec8e16c8614550a076f3c06b52b6d4c8c9fce2c6da691376bdbd882f3db57449
+%global source0_hash eb16c29286ee8dde0f77777404b6e3c485af1c6212f4f472792c64ffbe00ad81
 
 %bcond_without bootstrap
 
@@ -54,11 +54,4 @@ sed -i 's/\r//' RELEASE-NOTES*.txt LICENSE.txt NOTICE.txt
 %doc RELEASE-NOTES*
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.19.0-3
-- bump release (retry failed build)
-
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.19.0-2
-- %%autosetup -n commons-codec-%%{version}-src for upstream source tarball layout
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.19.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

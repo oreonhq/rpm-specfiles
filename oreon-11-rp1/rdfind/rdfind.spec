@@ -1,4 +1,4 @@
-%global source0_hash 7a406e8ef1886a5869655604618dd98f672f12c6a6be4926d053be65070f3279
+%global source0_hash 0a2d0d32002cc2dc0134ee7b649bcc811ecfb2f8d9f672aa476a851152e7af35
 
 Name:		rdfind
 Version:	1.8.0

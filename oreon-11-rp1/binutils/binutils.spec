@@ -1,5 +1,5 @@
-%global source0_hash a389850c2d3919f2cc96fb8b5e7711eacfc819259aaffb11615c9fb9756eaeae
-%global source1_hash none
+%global source0_hash 154ab23b60070e8f27013c22977f1129425d67d1e8acd6e13010e617811e4cff
+%global source1_hash a8a8d7167744ab86d129135f60457e2e42772677ae197189d4ad8f874bd43069
 %global source2_hash none
 
 Summary: A GNU collection of binary utilities
@@ -158,13 +158,7 @@ URL: https://sourceware.org/binutils
 # Default: Use the libztsd-devel library.
 %bcond_without zstd
 
-# Note - in the future the gold linker may become deprecated.
-%ifnarch riscv64
-%bcond_without gold
-%else
-# RISC-V does not have ld.gold thus disable by default.
 %bcond_with gold
-%endif
 
 # Allow the user to override the compiler used to build the binutils.
 # The default build compiler is gcc if %%toolchain is not clang.
@@ -222,16 +216,16 @@ URL: https://sourceware.org/binutils
 #----------------------------------------------------------------------------
 
 %if "%{source}" == "official-release"
-Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-%{version}.tar.xz
 # Source0: https://ftp.gnu.org/gnu/binutils/binutils-%%{version}.tar.xz
 %elif "%{source}" == "even-pre-release"
-Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-%{version}.tar.xz
 %elif "%{source}" == "odd-pre-release"
-Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-%{version}.tar.xz
 %elif "%{source}" == "tarball"
-Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://mirrors.kernel.org/gnu/binutils/binutils-%{version}.tar.xz
 %endif
 
 Source1:        binutils-2.19.50.0.1-output-format.sed
@@ -633,11 +627,11 @@ mv ../%{gold_tarball}/elfcpp .
 %autopatch -p1 
 
 %elif "%{source}" == "snapshot"
-%autosetup -p1 -n binutils-with-gold-2.46-ba5838a98fb
+%autosetup -p1 -n binutils-with-gold-%{version}-ba5838a98fb
 %elif "%{source}" == "official-release"
-%autosetup -p1 -n binutils-with-gold-%{version}
+%autosetup -p1 -n binutils-%{version}
 %elif "%{source}" == "even-pre-release"
-%autosetup -p1 -n binutils-with-gold-%{version}
+%autosetup -p1 -n binutils-%{version}
 %elif "%{source}" == "odd-pre-release"
 %autosetup -p1 -n binutils-%{version}
 %else
@@ -1511,5 +1505,4 @@ exit 0
 
 #----------------------------------------------------------------------------
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.46-3
-- Import
+%autochangelog

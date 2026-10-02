@@ -1,4 +1,4 @@
-%global source0_hash b7aff67bd05794351d7c19b178c54b674afc3ea2b4632df892aaee98f12c1cdb
+%global source0_hash 8ddb23147e4677c759d36a65ae50f6b0d0d79fa8590ac89576b91f572918b481
 
 %global qt_module qtquick3dphysics
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Quick3D Physics Libraries and utilities
 Name:    qt6-%{qt_module}
-Version: 6.10.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io

@@ -1,4 +1,4 @@
-%global source0_hash 7fe7df10ea6d0f0b87442aafe2420a28250835e975a542b8c490a72a0e205b5c
+%global source0_hash 20d50ead929c88a2a32723f399850525af6ad2149f4048c9b4a338ddee2e319b
 
 %bcond_without bootstrap
 
@@ -79,5 +79,4 @@ rm -r src/test/java/com/lmax/disruptor/dsl/DisruptorTest.java
 %license LICENCE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

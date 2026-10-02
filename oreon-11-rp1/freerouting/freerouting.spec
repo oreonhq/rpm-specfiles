@@ -1,7 +1,7 @@
-%global source0_hash ab42a9f73e37ef3fc792b5817762ae2232c61d16732cc9b9d9633e5feefc1163
+%global source0_hash 81332ab624736a2f9f71ec14cf3b24610c98dceeeb816f5635d4479307f2ad1a
 
 Name:           freerouting
-Version:        1.3.2
+Version:        2.0.1
 Release:        1%{?dist}
 Summary:        Circuit Board Routing Tool
 
@@ -9,6 +9,7 @@ Summary:        Circuit Board Routing Tool
 License:        GPL-3.0-only
 URL:            http://www.freerouting.org/
 Source0:        https://freerouting.org/freerouting/changelog/freeRouting-%{version}.tar.gz
+
 Source1:        freerouting.xml
 Source2:        freerouting.desktop
 Source3:        freerouting.svg

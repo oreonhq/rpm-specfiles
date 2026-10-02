@@ -18,10 +18,10 @@ Signed-off-by: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
  1 file changed, 11 insertions(+), 34 deletions(-)
 
 diff --git a/g10/import.c b/g10/import.c
-index 2b470ee21..b5a9b43ae 100644
+index 63015e4..d7668f4 100644
 --- a/g10/import.c
 +++ b/g10/import.c
-@@ -1996,7 +1996,6 @@ import_one_real (ctrl_t ctrl,
+@@ -2009,7 +2009,6 @@ import_one_real (ctrl_t ctrl,
    int non_self_or_utk = 0;
    char pkstrbuf[PUBKEY_STRING_SIZE];
    int merge_keys_done = 0;
@@ -29,7 +29,7 @@ index 2b470ee21..b5a9b43ae 100644
    KEYDB_HANDLE hd = NULL;
  
    if (r_valid)
-@@ -2033,14 +2032,6 @@ import_one_real (ctrl_t ctrl,
+@@ -2046,15 +2045,6 @@ import_one_real (ctrl_t ctrl,
        log_printf ("\n");
      }
  
@@ -38,13 +38,14 @@ index 2b470ee21..b5a9b43ae 100644
 -    {
 -      if (!silent)
 -        log_error( _("key %s: no user ID\n"), keystr_from_pk(pk));
--      return 0;
+-      if (!(options & IMPORT_DEBUG_ACCEPT_NO_UID))
+-        return 0;
 -    }
 -
    if (screener && screener (keyblock, screener_arg))
      {
        log_error (_("key %s: %s\n"), keystr_from_pk (pk),
-@@ -2122,18 +2113,10 @@ import_one_real (ctrl_t ctrl,
+@@ -2148,19 +2138,10 @@ import_one_real (ctrl_t ctrl,
  	  }
      }
  
@@ -58,7 +59,8 @@ index 2b470ee21..b5a9b43ae 100644
 -            log_info(_("this may be caused by a missing self-signature\n"));
 -        }
 -      stats->no_user_id++;
--      return 0;
+-      if (!(options & IMPORT_DEBUG_ACCEPT_NO_UID))
+-        return 0;
 -    }
 +  /* Delete invalid parts, and note if we have any valid ones left.
 +   * We will later abort import if this key is new but contains
@@ -67,7 +69,7 @@ index 2b470ee21..b5a9b43ae 100644
  
    /* Get rid of deleted nodes.  */
    commit_kbnode (&keyblock);
-@@ -2143,24 +2126,11 @@ import_one_real (ctrl_t ctrl,
+@@ -2170,25 +2151,11 @@ import_one_real (ctrl_t ctrl,
      {
        apply_keep_uid_filter (ctrl, keyblock, import_filter.keep_uid);
        commit_kbnode (&keyblock);
@@ -88,11 +90,12 @@ index 2b470ee21..b5a9b43ae 100644
 -      if (!opt.quiet )
 -        log_info ( _("key %s: no valid user IDs\n"), keystr_from_pk (pk));
 -      stats->no_user_id++;
--      return 0;
+-      if (!(options & IMPORT_DEBUG_ACCEPT_NO_UID))
+-        return 0;
      }
  
    /* The keyblock is valid and ready for real import.  */
-@@ -2219,6 +2189,13 @@ import_one_real (ctrl_t ctrl,
+@@ -2250,6 +2217,13 @@ import_one_real (ctrl_t ctrl,
        err = 0;
        stats->skipped_new_keys++;
      }
@@ -107,4 +110,4 @@ index 2b470ee21..b5a9b43ae 100644
      {
        /* Note: ERR can only be NO_PUBKEY or UNUSABLE_PUBKEY.  */
 -- 
-2.43.0
+2.0

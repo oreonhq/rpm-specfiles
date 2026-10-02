@@ -1,4 +1,4 @@
-%global source0_hash 12fa2c1f9bcb3563547bb077a5e07c75ef3cd4942b23761ead395026c9f80ac3
+%global source0_hash 1a87ca58aac92c7d5967806ea8a742707fe75c0136ab1276d2be28ee2f63b385
 
 %bcond_with bootstrap
 %global upstream_version %(echo '%{version}' | tr '~' '-')
@@ -12,12 +12,10 @@ URL:            https://maven.apache.org/surefire/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/3.6.0/surefire-3.2.2-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/%{version}/surefire-%{version}-source-release.zip
 # Remove bundled binaries which cannot be easily verified for licensing
 Source1:        https://www.eclipse.org/legal/cpl-v10.html
 
-Patch0:        0001-Port-to-TestNG-7.4.0.patch
-Patch1:        0002-Disable-JUnit-4.8-test-grouping.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -42,8 +40,6 @@ BuildRequires:  mvn(org.eclipse.aether:aether-util)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
 BuildRequires:  mvn(org.junit.platform:junit-platform-launcher)
-BuildRequires:  mvn(org.testng:testng)
-BuildRequires:  mvn(org.testng:testng::jdk15:)
 %endif
 # PpidChecker relies on /usr/bin/ps to check process uptime
 Requires:       procps-ng
@@ -55,30 +51,16 @@ Surefire is a test framework project.
 
 %package plugin
 Summary:        Surefire plugin for maven
-Requires:       (%{name}-provider-junit = %{version}-%{release} if junit)
 Requires:       (%{name}-provider-junit5 = %{version}-%{release} if junit5)
-Requires:       (%{name}-provider-testng = %{version}-%{release} if testng)
 
 %description plugin
 Maven surefire plugin for running tests via the surefire framework.
-
-%package provider-junit
-Summary:        JUnit provider for Maven Surefire
-
-%description provider-junit
-JUnit provider for Maven Surefire.
 
 %package provider-junit5
 Summary:        JUnit 5 provider for Maven Surefire
 
 %description provider-junit5
 JUnit 5 provider for Maven Surefire.
-
-%package provider-testng
-Summary:        TestNG provider for Maven Surefire
-
-%description provider-testng
-TestNG provider for Maven Surefire.
 
 %package -n maven-failsafe-plugin
 Summary:        Maven plugin for running integration tests
@@ -114,12 +96,7 @@ sed -i /-Xdoclint:all/d pom.xml
 %pom_disable_module surefire-report-parser
 %pom_disable_module surefire-shadefire
 
-%pom_disable_module surefire-grouper
 %pom_remove_dep org.junit:junit-bom
-%pom_remove_dep :surefire-grouper surefire-providers/common-junit48
-%pom_remove_dep :surefire-grouper surefire-providers/surefire-testng-utils
-rm surefire-providers/common-junit48/src/main/java/org/apache/maven/surefire/common/junit48/{FilterFactory,GroupMatcherCategoryFilter}.java
-rm surefire-providers/surefire-testng-utils/src/main/java/org/apache/maven/surefire/testng/utils/GroupMatcherMethodSelector.java
 
 %pom_remove_dep -r org.apache.maven.surefire:surefire-shadefire
 
@@ -145,7 +122,7 @@ find -name *.java -exec sed -i -e s/org.apache.maven.surefire.shared.utils/org.a
 %build
 %mvn_package ":*{surefire-plugin}*" @1
 %mvn_package ":*junit-platform*" junit5
-%mvn_package ":*{junit,testng,failsafe-plugin}*"  @1
+%mvn_package ":*failsafe-plugin*" @1
 %mvn_package ":*tests*" __noinstall
 # tests turned off because they need jmock
 %mvn_build -j -f
@@ -159,11 +136,7 @@ find -name *.java -exec sed -i -e s/org.apache.maven.surefire.shared.utils/org.a
 
 %files plugin -f .mfiles-surefire-plugin
 
-%files provider-junit -f .mfiles-junit
-
 %files provider-junit5 -f .mfiles-junit5
-
-%files provider-testng -f .mfiles-testng
 
 %files -n maven-failsafe-plugin -f .mfiles-failsafe-plugin
 

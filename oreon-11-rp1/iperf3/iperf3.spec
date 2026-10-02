@@ -1,7 +1,7 @@
-%global source0_hash 84640ea0f43831850434e50134d0554b7a94f97fb02e2488ffbe252c9fb05a56
+%global source0_hash 4dc1bc31ef4a4018973a6f543a3229fab020b20b26229bc7a40ed6779e367699
 
 Name:           iperf3
-Version:        3.21
+Version:        3.22
 Release:        1%{?dist}
 Summary:        Measurement tool for TCP/UDP bandwidth performance
 
@@ -13,7 +13,7 @@ Summary:        Measurement tool for TCP/UDP bandwidth performance
 # src/portable_endian.h is LicenseRef-Fedora-Public-Domain
 License:        BSD-3-Clause-LBNL AND MIT AND dtoa AND BSD-3-Clause AND NCSA AND LicenseRef-Fedora-Public-Domain
 URL:            https://github.com/esnet/iperf
-Source0:        https://github.com/esnet/iperf/archive/refs/tags/3.21.tar.gz#/iperf-3.20.tar.gz
+Source0:        https://github.com/esnet/iperf/archive/refs/tags/3.22.tar.gz#/iperf-3.20.tar.gz
 BuildRequires:  libuuid-devel
 BuildRequires:  gcc
 BuildRequires:  lksctp-tools-devel
@@ -61,5 +61,4 @@ rm -f %{buildroot}%{_libdir}/libiperf.la
 %{_libdir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.20-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,11 +1,11 @@
-%global source0_hash 79b670b42cefa9574ba346ee636a6c1aad203182d669730a4154731ac9a5c58a
+%global source0_hash f17ab26a87af639876989ddcd31b0b0d73f812a5cbab920b5566571122389626
 
 %global gap_pkgname smallclassnr
 %global gap_upname  SmallClassNr
 %global giturl      https://github.com/stertooy/SmallClassNr
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.7.1
+Version:        1.7.2
 Release:        %autorelease
 Summary:        Library of finite groups with small class number
 

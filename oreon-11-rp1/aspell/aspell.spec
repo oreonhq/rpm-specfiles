@@ -1,4 +1,4 @@
-%global source0_hash d6da12b34d42d457fa604e435ad484a74b2effcd120ff40acd6bb3fb2887d21b
+%global source0_hash 57fe4863eae6048f72245a8575b44b718fb85ca14b9f8c0afc41b254dfd76919
 
 Summary: Spell checker
 Name: aspell
@@ -19,7 +19,6 @@ Patch0: aspell-0.60.7-fileconflict.patch
 Patch1: aspell-0.60.7-pspell_conf.patch
 Patch2: aspell-0.60.7-mp.patch
 # https://github.com/GNUAspell/aspell/commit/ee6cbb1.patch
-Patch3: aspell-0.60.8-gcc15.patch
 
 # IMPORTANT
 # This package has been deprecated since Fedora 39
@@ -61,7 +60,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P0 -p1 -b .fc
 %patch -P1 -p1 -b .mlib
 %patch -P2 -p1 -b .ai
-%patch -P3 -p1 -b .gcc15
 
 iconv -f iso-8859-2 -t utf-8 < manual/aspell.info > manual/aspell.info.aux
 mv manual/aspell.info.aux manual/aspell.info
@@ -129,5 +127,4 @@ rm -f ${RPM_BUILD_ROOT}%{_infodir}/dir
 %{_mandir}/man1/pspell-config.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.60.8.1-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,17 +1,17 @@
-%global source0_hash 603c08e816b22e200f7818544ffd016620a808945cfa757dd1aeb245e0b51c0e
+%global source0_hash 78141edf97e2de2ce79adbc0abec5a4ae9fbbaaaf09830cecea9e06ff2a263fd
 
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
 
 Name:           ocaml-curses
-Version:        1.0.11
-Release:        18%{?dist}
+Version:        1.0.12
+Release:        1%{?dist}
 Summary:        OCaml bindings for ncurses
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:            https://github.com/mbacarella/curses
 VCS:            git:%{url}.git
-Source0:        https://github.com/mbacarella/curses/archive/refs/tags/1.0.11.tar.gz#/curses-1.0.11.tar.gz
+Source0:        https://github.com/mbacarella/curses/archive/refs/tags/1.0.12.tar.gz#/curses-1.0.11.tar.gz
 
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-dune >= 2.7
@@ -61,5 +61,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.11-18
-- Prepare for Oreon 11 (RP1)
+%autochangelog

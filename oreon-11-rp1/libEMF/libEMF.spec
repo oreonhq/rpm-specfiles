@@ -1,4 +1,4 @@
-%global source0_hash 74d92c017e8beb41730a8be07c2c6e4ff6547660c84bf91f832d8f325dd0cf82
+%global source0_hash 05662a657c86ece56e21d7804f2c217c82f4dc535c5ad1d61c03b1fe43b0c188
 
 Summary:	A library for generating Enhanced Metafiles
 Summary(pl):	Biblioteka do generowania plików w formacie Enhanced Metafile
@@ -72,5 +72,4 @@ rm %{buildroot}%{_libdir}/libEMF.la
 %{_includedir}/libEMF
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.13-17
-- Prepare for Oreon 11 (RP1)
+%autochangelog

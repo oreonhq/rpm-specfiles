@@ -1,9 +1,9 @@
-%global source0_hash 4e32f26dc8fb98f24d97ef1850c0cc365e27ef77eb44db7fffa8ad5aa99d0273
+%global source0_hash 2a3665af8285354dd3315b0f4846d0854715736b3f791db0466c5bd758256720
 
 %global repo util-dfm
 
 Name:           deepin-util-dfm
-Version:        1.4.4
+Version:        1.4.5
 Release:        %autorelease
 Summary:        Utilities of deepin file manager
 # the library is mainly under GPL-3.0-or-later, except:

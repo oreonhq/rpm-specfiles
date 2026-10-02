@@ -8,7 +8,7 @@ Release:        13%{?dist}
 Summary:        Microsoft Azure Key Vault Secrets Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version} zip}
+Source0:        %{pypi_source azure_keyvault_secrets %{version}}
 
 BuildArch:      noarch
 

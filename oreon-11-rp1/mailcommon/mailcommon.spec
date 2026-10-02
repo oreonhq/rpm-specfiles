@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 9aa486a65f311c4e6b4013fa446780f08bc889658724e0c51c479bdf9d945a7b
 
 

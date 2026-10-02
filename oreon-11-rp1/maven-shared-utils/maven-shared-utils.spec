@@ -1,9 +1,9 @@
-%global source0_hash 0b72bbf60911e17398e9c0ce29866e4f13a26e8da4aa2e8304e73152ac4d4ef3
+%global source0_hash 37b232565be970fcfb94a10a4b7b57353db49bc8f004028ea70be2358e614463
 
 %bcond_without bootstrap
 
 Name:           maven-shared-utils
-Version:        3.4.2
+Version:        3.5.0
 Release:        %autorelease
 Summary:        Maven shared utility classes
 License:        Apache-2.0
@@ -45,7 +45,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find -name '*.java' -exec sed -i 's/\r//' {} +
 
 
-%pom_remove_dep org.apache.commons:commons-text
 rm src/test/java/org/apache/maven/shared/utils/CaseTest.java
 
 %build
@@ -58,5 +57,4 @@ rm src/test/java/org/apache/maven/shared/utils/CaseTest.java
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

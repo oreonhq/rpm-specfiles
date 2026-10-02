@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 3909cc6df5ebeeabe7c9086fc95b54dcd2a1cf5ee1683e0ad6ea799105b4eb08
 
 Name:           kjots

@@ -7,7 +7,7 @@ Summary:        HTML forms using Moose
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/HTML-FormHandler
-Source0:        https://cpan.metacpan.org/authors/id/G/GS/GSHANK/HTML-FormHandler-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AB/ABRAXXA/HTML-FormHandler-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires: make

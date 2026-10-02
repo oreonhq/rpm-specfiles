@@ -1,11 +1,11 @@
-%global source0_hash 13266611fde7dcc5bd63d147e6ae7300a3500cb3d2fa9f9d3c6dfbff73d26fa7
+%global source0_hash c468c1e8a3cfa1e80531cc519a890f85586986721d8e305f83465cc36bb82608
 
 # Generated from bson-1.3.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name bson
 
 Name: rubygem-%{gem_name}
-Version: 4.15.0
-Release: 14%{?dist}
+Version: 5.2.0
+Release: %autorelease
 Summary: Ruby implementation of the BSON specification
 License: Apache-2.0
 # Keep the URL, while different URL is used in the upstream gemspec file.
@@ -15,7 +15,6 @@ URL: http://bsonspec.org
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # https://github.com/mongodb/bson-ruby/blob/e560ee5c65f9f82d8f3430b5a72d8c9a3f1e0fdb/lib/bson/decimal128.rb#L16
 # https://github.com/mongodb/bson-ruby/pull/340
-Patch0:  bson-pr340-testsuite-explicit-require.patch
 Requires: rubygem(bigdecimal)
 # https://github.com/mongodb/bson-ruby/blob/e560ee5c65f9f82d8f3430b5a72d8c9a3f1e0fdb/lib/bson/ext_json.rb#L18
 Requires: rubygem(json)
@@ -52,7 +51,6 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version}
-%patch -P0 -p1
 
 %build
 # Create the gem as gem install only works on a gem file
@@ -96,5 +94,4 @@ popd
 %{gem_instdir}/spec
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.15.0-14
-- Prepare for Oreon 11 (RP1)
+%autochangelog

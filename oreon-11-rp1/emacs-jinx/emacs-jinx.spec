@@ -1,10 +1,10 @@
-%global source0_hash fd3dec54b946dc6cd3414b963d2bbfd482a53a8fb78ba5dad6c4d5b3f0c1ad50
+%global source0_hash b725b218062c03150d97ce01294e53a8d67e276b931690f334e6deeee2397e71
 
 %global pkg     jinx
 %global emacs_version_with_archsitelispdir 1:30.2-9
 
 Name:           emacs-%{pkg}
-Version:        2.10
+Version:        2.11
 Release:        %{autorelease}
 Summary:        Fast just-in-time spell-checker for Emacs
 License:        GPL-3.0-or-later

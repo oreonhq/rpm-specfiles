@@ -1,4 +1,4 @@
-%global source0_hash cd6aecc881ea3cc28d8d31f1db42d84dc124672dd2d98c0758fd879f5d77c982
+%global source0_hash 2ef485adc3421a6fca6a0b8c149e14e25afe44f78ec2416a75c9161d453f703c
 
 %bcond_without bootstrap
 
@@ -111,17 +111,14 @@ rm -r maven-plugin-tools-api/src/test/resources/javadoc
 
 %pom_remove_dep -r :maven-reporting-impl
 %pom_remove_dep -r :maven-reporting-api
-%pom_remove_dep -r :plexus-velocity
-%pom_remove_dep -r :velocity
+%pom_remove_dep -r :velocity-engine-core
 %pom_remove_dep -r :jtidy
 %pom_remove_plugin -r :spotless-maven-plugin
 %pom_remove_plugin -r :maven-enforcer-plugin
 
-%pom_remove_dep org.junit:junit-bom
 %pom_remove_dep :maven-plugin-tools-ant maven-plugin-plugin
 %pom_remove_dep :maven-plugin-tools-beanshell maven-plugin-plugin
 
-rm maven-plugin-tools-generators/src/main/java/org/apache/maven/tools/plugin/generator/PluginXdocGenerator.java
 
 %build
 %mvn_build -j -s -f
@@ -148,5 +145,4 @@ rm maven-plugin-tools-generators/src/main/java/org/apache/maven/tools/plugin/gen
 %files java -f .mfiles-maven-plugin-tools-java
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.9.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

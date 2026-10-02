@@ -1,4 +1,4 @@
-%global source0_hash 0ff48a5cd9e9cfe8e815a24e023734919e9a3b7ad2f039243ad121cf5aabf6c6
+%global source0_hash b22e0901227b820cd1c280abe681a15b773a5103a5e10dc442e94ebb34cbf58d
 
 %global         _firmwarepath    /usr/lib/firmware
 
@@ -65,5 +65,4 @@ rm -rf %{buildroot}/usr/lib/crda
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.02.04-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

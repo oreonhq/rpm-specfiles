@@ -1,4 +1,4 @@
-%global source0_hash 159f83eab58a45885c0c2cc6969c35dc5ebac7b7340e659abe5cc9b8b452bf4b
+%global source0_hash 839d21eb4bd27bb0ee40d74c9da46df088c2e1425fcd8c3ea62b7e3a3dd28a91
 
 %define dracutlibdir %{_prefix}/lib/dracut
 %bcond_without doc
@@ -184,7 +184,7 @@ usage.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-ng-%{version} -S git_am
+%autosetup -n dracut-%{version} -S git_am
 cp %{SOURCE1} .
 
 %build
@@ -479,5 +479,4 @@ echo 'dracut_rescue_image="yes"' > $RPM_BUILD_ROOT%{dracutlibdir}/dracut.conf.d/
 %{_prefix}/lib/kernel/install.d/51-dracut-rescue.install
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 109-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

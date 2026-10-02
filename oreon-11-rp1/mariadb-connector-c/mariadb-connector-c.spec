@@ -1,4 +1,4 @@
-%global source0_hash 156aed3b49f857d0ac74fb76f1982968bcbfd8382da3f5b6ae71f616729920d7
+%global source0_hash 521c0712e9291fa96558df9e2ff431376a3a79329f13751896b694cae12765b4
 
 # For deep debugging we need to build binaries with extra debug info
 %bcond_with     debug
@@ -8,7 +8,7 @@
 
 
 Name:           mariadb-connector-c
-Version:        3.4.10
+Version:        3.4.11
 Release:        1%{?with_debug:.debug}%{?dist}
 Summary:        The MariaDB Native Client library (C driver)
 License:        LGPL-2.1-or-later AND PHP-3.0 AND PHP-3.01
@@ -272,5 +272,4 @@ install -D -p -m 0644 %{name}.conf %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{nam
 #      Need to ensure, that the testsuite will also run properly on 'fedpkg local' buid, not damaging the host machine
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.8-3
-- Import
+%autochangelog

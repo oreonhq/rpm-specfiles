@@ -1,10 +1,10 @@
-%global source0_hash d544c04bae853de3118a73eb6718228628ed0341559e5cb9facdaedf547b85bb
+%global source0_hash fd82d8262634c244e03fcef5191008770055127ede1c81769821111938051ea2
 
 Patch1: 1790459257.patch
 BuildRequires:  spirv-headers-commit(496543121ce6419f23d6fa5d7194ba66c36212d2)
 BuildRequires:  spirv-tools-commit(ef96ed763b43b59b33b31b362f09a02b729fa1c9)
 Name:           vulkan-validation-layers
-Version:        1.4.363
+Version:        1.4.364
 Release:        %autorelease
 Summary:        Vulkan validation layers
 

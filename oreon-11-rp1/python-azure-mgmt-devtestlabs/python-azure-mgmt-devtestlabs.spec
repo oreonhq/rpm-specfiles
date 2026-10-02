@@ -15,7 +15,7 @@ Release:        %autorelease
 Summary:        Microsoft Azure DevTestLabs Management Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version} zip}
+Source0:        %{pypi_source azure_mgmt_devtestlabs %{version}}
 
 BuildArch:      noarch
 

@@ -1,8 +1,8 @@
-%global source0_hash d7a146d2917eb8b5cc95276dbf0e3d03c7464d2b19c1675357857c989301dbb4
+%global source0_hash bf344efadb618babb7933f69275620f72454d1c8220130da93e3f7feb0efbf9b
 
 %global major 9
 %global majorver %{major}.0
-%global vers %{majorver}.4
+%global vers %{majorver}.3
 
 Summary: The graphical toolkit for the Tcl scripting language
 Name: tk
@@ -11,7 +11,7 @@ Release: 1%{?dist}
 Epoch:   1
 License: TCL AND HPND-Pbmplus AND CC-BY-SA-3.0 AND MIT-open-group AND MIT
 URL: http://tcl.sourceforge.net
-Source0:        https://downloads.sourceforge.net/project/tcl/Tcl/%{version}/%{name}%{version}-src.tar.gz
+Source0: http://download.sourceforge.net/sourceforge/tcl/%{name}%{version}-src.tar.gz
 Requires: tcl = %{epoch}:%{vers}
 BuildRequires: make
 BuildRequires: gcc

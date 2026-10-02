@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 19cd0758ed752cb89f5bf02247663dfad0926d9351984a20e3c6cf7da62552ac
 
 %global apiver 1.6
 # first two digits of version
@@ -7,7 +7,7 @@
 %global glibmm24_version 2.46.2
 
 Name:           atkmm
-Version:        2.28.5
+Version:        2.36.4
 Release:        %autorelease
 Summary:        C++ interface for the ATK library
 
@@ -87,5 +87,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.28.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 5180d84e8eae326cae6c45772476c507ab1ccb119ad1b246f089fd8bfb070903
+%global source0_hash 7571a4d704f219051127259b1f7292f80cd422376ba463c2318214ddf639044c
 
 %bcond_without bootstrap
 
@@ -65,5 +65,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.7.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

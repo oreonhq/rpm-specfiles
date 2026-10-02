@@ -1,4 +1,4 @@
-%global source0_hash 21d974b3275cb5dcf5b8aa1d9a3fc80e7edca706935f6fbd004c79787138f8c7
+%global source0_hash 93918fcf5af529fda5b3d2d9fc3b77cd93df88064939b82f249f5577d8de1c02
 
 Name:          gupnp-av
 Version:       0.14.5
@@ -78,5 +78,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/doc/gupnp-av-1.0/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.14.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

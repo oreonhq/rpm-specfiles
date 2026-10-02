@@ -1,4 +1,4 @@
-%global source0_hash 88cc26fcb23a2045abb52e2466513713c5fdaf559b6bf1151a7aace9a972e118
+%global source0_hash 6b036076e162568b6d0230ab82916b30d06b4942cb5be6a39960e42b499cab9b
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-panel
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Panel for the COSMIC Desktop Environment
 
@@ -22,6 +22,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-panel
 
 Source0:        https://github.com/pop-os/cosmic-panel/archive/epoch-%{version}/cosmic-panel-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-panel at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

@@ -1,7 +1,7 @@
-%global source0_hash bd57069293354cb973b4a09b5f980f15382082680e1eb0bd90d32c555330a211
+%global source0_hash 5d276d42d3b78827f975cf33aefee13c70ce549c4a7479f191fc6899a5692642
 
 Name:           devscripts
-Version:        2.26.11
+Version:        2.26.12
 Release:        1%{?dist}
 Summary:        Scripts for Debian Package maintainers
 BuildArch:      noarch
@@ -9,6 +9,7 @@ BuildArch:      noarch
 License:        GPL-2.0-or-later
 URL:            https://tracker.debian.org/pkg/%{name}
 Source0:        http://ftp.debian.org/debian/pool/main/d/%{name}/%{name}_%{version}.tar.xz
+
 # Fixes path to xsl-stylesheet manpages docbook.xsl
 Patch0:         devscripts_docbook.patch
 # Removes the debian-only --install-layout python-setuptools option

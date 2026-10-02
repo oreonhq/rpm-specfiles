@@ -1,4 +1,4 @@
-%global source0_hash e59a7fc8179f0cd659875d94c396020a66f1c8c2b716c00ef9d39623b2926f97
+%global source0_hash 9dbcd4e71090416b5cf3d038faa2d8e830eaef34ee14a2bc6d5d69f56ab8856d
 
 %bcond_without bootstrap
 
@@ -13,11 +13,7 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugin-testing/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
-Patch:          0001-Port-to-plexus-utils-3.0.21.patch
-Patch:          0002-Port-to-current-maven-artifact.patch
-Patch:          0003-Port-to-maven-3.8.1.patch
 # From upstream commit 43b8eaaf
-Patch:          0004-Stabilize-project.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -52,12 +48,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 
-%pom_remove_plugin :maven-enforcer-plugin
-%pom_remove_plugin :maven-site-plugin
-%pom_remove_plugin :maven-source-plugin maven-plugin-testing-harness
 
-%pom_disable_module maven-plugin-testing-tools
-%pom_disable_module maven-test-tools
 
 %mvn_alias : org.apache.maven.shared:
 
@@ -73,5 +64,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files harness -f .mfiles-%{name}-harness
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

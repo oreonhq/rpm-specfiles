@@ -11,7 +11,7 @@ Release:        %autorelease
 Summary:        Microsoft Azure Red Hat Openshift Management Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version}}
+Source0:        %{pypi_source azure_mgmt_redhatopenshift %{version}}
 
 BuildArch:      noarch
 

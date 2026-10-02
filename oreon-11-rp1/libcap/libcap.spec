@@ -1,4 +1,4 @@
-%global source0_hash f07fcec6f01edc4bb18373067494fdcb718186aed720b97ec6c7a5d67b218f69
+%global source0_hash 2a2c705e382c413643a458b837575c0eb0989477ab6fb99c87adbe9a259612ad
 
 Name: libcap
 Version: 2.78
@@ -10,7 +10,6 @@ License: BSD-3-Clause OR GPL-2.0-only
 Source0:        https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/%{name}-%{version}.tar.gz
 Source1:        https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/%{name}-%{version}.tar.sign
 Source2: https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/29EE848AE2CCF3F4.asc
-Patch0: _makenames-build.patch
 
 BuildRequires: pam-devel gcc
 BuildRequires: make
@@ -67,7 +66,8 @@ the capability status of processes and threads.
 %endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }gzip -cd %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+gzip -cd %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %autosetup -p1
 
 
@@ -124,5 +124,4 @@ chmod +x %{buildroot}/%{_libdir}/*.so.*
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.77-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

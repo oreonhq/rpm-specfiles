@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 33a9e27b5a6eaa024bb117325392d1ccba7ca63f95d201230ad7c33d60f54c23
 
 # Allow conditionally building without the reflections library
 %if %{defined rhel} || (0%{?oreon} >= 11)
@@ -18,7 +18,7 @@ License:        Apache-2.0 OR LGPL-2.1-or-later
 
 URL:            https://github.com/java-native-access/jna/
 # ./generate-tarball.sh
-Source0:        https://github.com/java-native-access/jna/archive/refs/tags/5.19.1.tar.gz#/jna-5.17.0.tar.gz
+Source0:        https://github.com/java-native-access/jna/archive/refs/tags/%{version}.tar.gz#/jna-%{version}.tar.gz
 Source1:        package-list
 Patch0:        0001-Adapt-build.patch
 # This patch is Fedora-specific for now until we get the huge

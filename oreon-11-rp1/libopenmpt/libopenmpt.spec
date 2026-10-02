@@ -1,4 +1,4 @@
-%global source0_hash caa2fa959e389f4374d9e2df3af5c633452c12dd80442cba2e89cb7ff2b93c5b
+%global source0_hash d7ce84fd05d686c4bcf66af40eae857afa371442db60eeda3f874bd6cf6fc318
 
 Name: libopenmpt
 Version: 0.8.9
@@ -96,5 +96,4 @@ chrpath --delete ${RPM_BUILD_ROOT}%{_bindir}/openmpt123
 
 
 %changelog
-* Sun Apr 19 2026 Brandon Lester <blester@oreonhq.com> - 0.8.6-1
-- import
+%autochangelog

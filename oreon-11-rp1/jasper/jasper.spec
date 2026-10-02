@@ -1,4 +1,4 @@
-%global source0_hash 987e8c8b4afcff87553833b6f0fa255b5556a0ecc617b45ee1882e10c1b5ec14
+%global source0_hash b0e5af6b54c274b9670c7e32ddbf6c802d88c896062d760267695dd0aa7014ff
 
 # NOTE: packages that can use jasper:
 # ImageMagick
@@ -11,7 +11,7 @@ Release: 1%{?dist}
 
 License: JasPer-2.0
 URL:     http://www.ece.uvic.ca/~frodo/jasper/
-Source0:        https://github.com/jasper-software/%{name}/archive/refs/tags/version-%{version}.tar.gz#/jasper-4.2.8.tar.gz
+Source0:        https://github.com/jasper-software/%{name}/archive/refs/tags/version-%{version}.tar.gz#/jasper-%{version}.tar.gz
 
 # architecture related patches
 Patch100: jasper-2.0.2-test-ppc64-disable.patch
@@ -127,5 +127,4 @@ rm -f %{buildroot}%{_libdir}/lib*.la
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2.8-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -17,39 +17,39 @@ Signed-off-by: Yan Fu <yafu@redhat.com>
  3 files changed, 8 insertions(+), 14 deletions(-)
 
 diff --git a/Cargo.toml b/Cargo.toml
-index 9c57378..a1d0ece 100644
+index ebf97fd..8b1d61e 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -23,9 +23,6 @@ const_format = "0.2.35"
- env_logger = "0.11.8"
+@@ -32,9 +32,6 @@ config = "0.15.23"
+ const_format = "0.2.36"
  hex = "0.4.3"
- hmac = "0.12.1"
+ hmac = "0.13.0"
 -jwt-simple = { version = "0.12", default-features = false, features = [
 -    "pure-rust",
 -] }
- kbs-types = "0.14.0"
- log = "0.4.29"
- nix = "0.30"
+ kbs-types = "0.18.0"
+ nix = "0.31"
+ openssl = "0.10"
 diff --git a/attestation-agent/kbs_protocol/Cargo.toml b/attestation-agent/kbs_protocol/Cargo.toml
-index 8139718..281183a 100644
+index 6e38a09..9393ada 100644
 --- a/attestation-agent/kbs_protocol/Cargo.toml
 +++ b/attestation-agent/kbs_protocol/Cargo.toml
-@@ -15,7 +15,6 @@ canon-json = { version = "0.2.1", optional = true }
+@@ -15,7 +15,6 @@ base64.workspace = true
+ serde_json_canonicalizer = { version = "0.3", optional = true }
  clap = { workspace = true, features = ["derive"], optional = true }
  crypto = { path = "../deps/crypto", default-features = false }
- env_logger = { workspace = true, optional = true }
 -jwt-simple.workspace = true
  kbs-types.workspace = true
- log.workspace = true
- reqwest = { workspace = true, default-features = false, features = ["cookies", "json"] }
+ reqwest = { workspace = true, default-features = false, features = [
+     "cookies",
 diff --git a/attestation-agent/kbs_protocol/src/token_provider/mod.rs b/attestation-agent/kbs_protocol/src/token_provider/mod.rs
-index 6648e89..7a07ce9 100644
+index 741e83c..001decb 100644
 --- a/attestation-agent/kbs_protocol/src/token_provider/mod.rs
 +++ b/attestation-agent/kbs_protocol/src/token_provider/mod.rs
 @@ -14,11 +14,8 @@ pub use aa::*;
  use anyhow::*;
  use async_trait::async_trait;
- use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
+ use base64::{Engine, engine::general_purpose::URL_SAFE_NO_PAD};
 -use jwt_simple::{
 -    claims::JWTClaims,
 -    prelude::{Clock, UnixTimeStamp},
@@ -89,9 +89,8 @@ index 6648e89..7a07ce9 100644
 -        let now = Clock::now_since_epoch();
 +        let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)
 +            .unwrap().as_secs();
-         if let Some(exp) = self.exp {
-             if exp < now {
-                 bail!("token expired");
+         if let Some(exp) = self.exp
+             && exp < now
+         {
 -- 
-2.53.0
-
+2.0

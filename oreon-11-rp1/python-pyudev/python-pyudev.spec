@@ -1,4 +1,4 @@
-%global source0_hash e788bb983700b1a84efc2e88862b0a51af2a995d5b86bc9997546505cf7b36bc
+%global source0_hash 4e7faaec419b81a902d057568101819f448972c0cf448bb9c22203e4fc6a8eb9
 
 %global srcname pyudev
 %if 0%{?rhel} > 9
@@ -8,7 +8,7 @@
 %endif
 
 Name:             python-%{srcname}
-Version:          0.24.4
+Version:          0.24.5
 Release:          %autorelease
 Summary:          A libudev binding
 
@@ -93,5 +93,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.24.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

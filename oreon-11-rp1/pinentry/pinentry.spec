@@ -1,4 +1,4 @@
-%global source0_hash 8e986ed88561b4da6e9efe0c54fa4ca8923035c99264df0b0464497c5fb94e9e
+%global source0_hash c2970f16d6afb66ecddfca767d743936c86239bff936eed7fd7597a678414b63
 
 %if 0%{?fedora} && 0%{?fedora} < 39 || 0%{?rhel} && 0%{?rhel} < 10
 %bcond_without gtk2
@@ -189,5 +189,4 @@ install -d %{buildroot}%{_datadir}/pixmaps
 %{_bindir}/pinentry-tty
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.2-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

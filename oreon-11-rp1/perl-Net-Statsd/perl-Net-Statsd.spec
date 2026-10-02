@@ -7,7 +7,7 @@ Summary:        Sends statistics to the stats daemon over UDP
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-Statsd
-Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-Statsd-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CO/COSIMO/Net-Statsd-%{version}.tar.gz
 # bin/benchmark.pl is a bad name for installation into path
 Patch0:         Net-Statsd-0.12-Make-benchmark.pl-an-example.patch
 BuildArch:      noarch

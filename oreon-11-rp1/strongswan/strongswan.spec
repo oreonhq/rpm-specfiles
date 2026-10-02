@@ -1,4 +1,4 @@
-%global source0_hash e518e34e159514f4c6ba80d1f926cb151e0dd4e3a1d94213171234b8b9ae6f55
+%global source0_hash fe6c97481298767213cfc2e9a1da29fdd8018d481ff4cb9cf0283099654f20d4
 %global unitdir /usr/lib/systemd/system
 
 Summary:        Open source IPsec-based VPN solution

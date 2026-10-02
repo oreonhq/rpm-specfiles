@@ -1,4 +1,4 @@
-%global source0_hash d25dd9cff1b623e12d51b6d2c100e26063582d25c9a6f57c99d41f2da9567086
+%global source0_hash efdb523aef8613d447e6a2d38227d4b389866f4bcf4b503130acd7f759490847
 
 Version: 0.4.21
 Release: 1%{?dist}
@@ -121,5 +121,4 @@ make check %{?_smp_mflags} || if [ $? -ne 0 ]; then cat tests/*.log; exit 1; fi;
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.13-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

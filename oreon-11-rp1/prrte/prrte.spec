@@ -1,4 +1,4 @@
-%global source0_hash 83b6b37e21b315f069d69faa4686dcec3306225b48fdfe64588dec33e6063e72
+%global source0_hash 285ad62b670075708b9fcfe14c54baa599733bc274d10502a82e8eebba0b7c70
 
 Name:           prrte
 Version:        4.1.0
@@ -13,7 +13,6 @@ License:        BSD-3-Clause-Open-MPI AND BSD-2-Clause
 URL:            https://github.com/openpmix/%{name}
 Source0:        https://github.com/openpmix/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.bz2
 # Upstream fix for --stdfor for non-zeron ranks - fixes rhbz#2307533
-Patch0:         https://patch-diff.githubusercontent.com/raw/openpmix/prrte/pull/2038.patch
 
 BuildRequires:  flex
 BuildRequires:  gcc
@@ -125,5 +124,4 @@ find %{buildroot} -name '*.la' -delete
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

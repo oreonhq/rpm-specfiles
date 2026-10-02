@@ -5,7 +5,7 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           cppmyth
-Version:        3.2.1
+Version:        3.2.3
 Release:        1%{?dist}
 Summary:        Client interface for the MythTV backend
 

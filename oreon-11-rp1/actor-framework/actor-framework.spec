@@ -1,7 +1,7 @@
-%global source0_hash 9febd85d3a4f50dac760592043028a36bea62bba50c3ee2fc1eace954dd8ae27
+%global source0_hash 2e4c5e2f02e0a2cfda0b011b26cf61b436ef206bea0cce235f5ee55e3d6327fb
 
 %global forgeurl https://github.com/actor-framework/actor-framework
-Version:        1.1.0
+Version:        1.2.0
 %global tag %{version}
 %forgemeta
 

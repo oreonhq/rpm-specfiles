@@ -1,4 +1,4 @@
-%global source0_hash b65bad4dce0f82a2b27e1bb3b915f0bbc49ab6af6f96f9fb93d62c20f706e733
+%global source0_hash acdd250cc845879352b1707c25636145dbdc3f0b4d17724d9a031e789a0592f1
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-idle
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Idle notify manager for COSMIC
 
@@ -24,6 +24,7 @@ License:        ((Apache-2.0 OR MIT) AND BSD-3-Clause) AND (0BSD OR Apache-2.0 O
 URL:            https://github.com/pop-os/cosmic-idle
 
 Source0:        https://github.com/pop-os/cosmic-idle/archive/epoch-%{version}/cosmic-idle-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-idle at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

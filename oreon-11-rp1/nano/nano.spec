@@ -1,4 +1,4 @@
-%global source0_hash 76f0dcb248f2e2f1251d4ecd20fd30fb400a360a3a37c6c340e0a52c2d1cdedf
+%global source0_hash 05ecb99247b782e8a5b3a25ed4101dd034b0236902f7449bc9795b717642f7e9
 
 # build nano-default-editor by default only on fedora
 %if 0%{?fedora}
@@ -136,11 +136,4 @@ install -Dpm 0644 %{SOURCE13} %{buildroot}%{_datadir}/fish/vendor_conf.d/%{basen
 
 
 %changelog
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-3
-- Fix %%changelog weekday on prior entry
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-2
-- Point Source0 or Source1 at dist/v8 (latest/ is not a stable path and 404s)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

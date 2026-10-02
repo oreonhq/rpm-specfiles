@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d44d28a839ea9daf969cc69150fde59910b2b39361dad81a3bd6cbd19218db11
 
 # Do we want SELinux & Audit
 %if 0%{?!noselinux:1}
@@ -107,7 +107,6 @@ Patch0041: 0041-openssh-8.7p1-nohostsha1proof.patch
 Patch0042: 0042-openssh-9.9p1-separate-keysign.patch
 Patch0043: 0043-openssh-9.9p1-openssl-mlkem.patch
 Patch0044: 0044-openssh-9.9p2-error_processing.patch
-Patch0045: 0045-Provide-better-error-for-non-supported-private-keys.patch
 Patch0046: 0046-Ignore-bad-hostkeys-in-known_hosts-file.patch
 Patch0047: 0047-support-authentication-indicators-in-GSSAPI.patch
 Patch0048: 0048-NIST-curves-hybrid-KEX-implementation.patch
@@ -241,7 +240,8 @@ an X11 passphrase dialog for OpenSSH.
 This package contains a test SK driver used for OpenSSH test purposes
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }gpg --batch --dearmor --output %{_builddir}/openssh-release-keyring.gpg %{SOURCE3}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+gpg --batch --dearmor --output %{_builddir}/openssh-release-keyring.gpg %{SOURCE3}
 gpgv2 --quiet --keyring %{_builddir}/openssh-release-keyring.gpg %{SOURCE1} %{SOURCE0}
 %autosetup -T -b 0 -p1
 
@@ -517,6 +517,4 @@ test -f %{sysconfig_anaconda} && \
 %attr(0755,root,root) %{_libdir}/sshtest/sk-dummy.so
 
 %changelog
-* Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.3p1-1
-- Rebase to 10.3p1 with refreshed downstream patch stack
-- Use HTTPS for portable tarball and signature
+%autochangelog

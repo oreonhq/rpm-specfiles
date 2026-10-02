@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash ad756d2efd6ac85f464e2d071a0f0e9a213972f6a0a247b9bf44b064b39f67f5
 
 Name: modulemd-tools
-Version: 0.16-1-1
+Version: 0.16
 Release: 1%{?dist}
 Summary: Collection of tools for modular (in terms of Fedora Modularity origin) content creators
 License: MIT
@@ -109,5 +109,4 @@ cp man/*.1 %{buildroot}%{_mandir}/man1/
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.16-14
-- Import
+%autochangelog

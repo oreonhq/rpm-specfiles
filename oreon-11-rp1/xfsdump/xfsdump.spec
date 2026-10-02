@@ -1,4 +1,4 @@
-%global source0_hash 2914dbbe1ebc88c7d93ad88e220aa57dabc43d216e11f06221c01edf3cc10732
+%global source0_hash 9ca3e91055945f8a70bd4d465d5464f631630c65462896eda479d7371fd61db7
 
 Summary:	Backup and restore utilities for the XFS filesystem
 Name:		xfsdump
@@ -35,7 +35,8 @@ be layered on top of the full backup.  Single files and directory
 subtrees may be restored from full or partial backups.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %setup -q
 
 %build
@@ -65,5 +66,4 @@ mkdir -p $RPM_BUILD_ROOT/%{_sharedstatedir}/xfsdump/inventory
 %{_sharedstatedir}/xfsdump/inventory
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

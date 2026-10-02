@@ -1,10 +1,10 @@
-%global source0_hash 93134526d87ba18f527d9d6d29d0c5c8de1e691617ab604fc68ab37cc14fbd94
+%global source0_hash 51b56747df5c177ec2014b606a55a35676dfe7315278532281c8b005f87694d7
 
 %global gap_pkgname io
 %global giturl      https://github.com/gap-packages/io
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        4.10.0
+Version:        4.11.0
 Release:        %autorelease
 Summary:        Unix I/O functionality for GAP
 

@@ -10,7 +10,7 @@ Summary:        Mock database driver for testing
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DBD-Mock
-Source0:        https://cpan.metacpan.org/modules/by-module/DBD/DBD-Mock-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JL/JLCOOPER/DBD-Mock-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

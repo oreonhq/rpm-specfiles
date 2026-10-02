@@ -1,4 +1,4 @@
-%global source0_hash be23a52b85cf04cd9587612147a10b023d59ed9757fa1843cc99e615d6c0893c
+%global source0_hash 0957cae5821b17ce07f0833aaa52b5137643a8382203221f363a8303c109af34
 
 Name:           catch
 Version:        3.16.0
@@ -56,3 +56,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/Catch2/
 %{_datadir}/pkgconfig/catch2.pc
 %{_datadir}/pkgconfig/catch2-with-main.pc
+
+%changelog
+%autochangelog

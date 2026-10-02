@@ -1,4 +1,4 @@
-%global source0_hash 8124d0a057aebfaba30eb63a8c331b3c5e60dd15d24d8e6492316d1536e36305
+%global source0_hash 6045283b98e004a683b13a636409ba691401d2ae9e5122d244c151972e923341
 
 Name:           remind
 Version:        06.03.03

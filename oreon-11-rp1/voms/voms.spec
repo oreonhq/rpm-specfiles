@@ -1,15 +1,16 @@
-%global source0_hash 25748224202586f6eedbdd8f8fc8f7d7647367e50fdadb780839efc65b2cb8b4
+%global source0_hash 3b86a694f80fa21b04926174747e89b24987a31b5c02a2bc8fe8615751607b13
 
 %global _hardened_build 1
 
 Name:		voms
-Version:	2.1.4-rc1
+Version:	2.1.4~rc1
+%global upstream_version 2.1.4-rc1
 Release:	1%{?dist}
 Summary:	Virtual Organization Membership Service
 
 License:	Apache-2.0
 URL:		https://italiangrid.github.io/voms/
-Source0:	https://github.com/italiangrid/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:	https://github.com/italiangrid/%{name}/archive/v%{upstream_version}/%{name}-%{upstream_version}.tar.gz
 #		Post-install setup instructions:
 Source1:	%{name}.INSTALL
 #		System user creation config
@@ -107,7 +108,7 @@ This package provides the VOMS service.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q
+%setup -q -n %{name}-%{upstream_version}
 
 ./autogen.sh
 

@@ -1,4 +1,4 @@
-%global source0_hash 2e3e04a305c15c3963aa03ae1b9a83c1d239880003fcf3dde986d3943355d407
+%global source0_hash a0d47876548bec806774bbf8dbf20bb19ba139464383156b32eb8e59915b90a9
 
 %global abi 8
 
@@ -66,5 +66,4 @@ mv %{buildroot}%{_pkgdocdir}/ docdir/
 %{_libdir}/pkgconfig/dvdread.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

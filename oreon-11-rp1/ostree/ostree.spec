@@ -1,4 +1,4 @@
-%global source0_hash af8d080b9585e7fd1faba8f022967e1c268ae62e20ecf32ee7b364c1e307570b
+%global source0_hash b26c9016eb03bb4ee52cc00c642d56e00fc79ae7faac6bf4aa317d7451339ef7
 
 # We haven't tried to ship the tests on RHEL
 %if 0%{?rhel}
@@ -20,9 +20,6 @@ URL: https://ostreedev.github.io/ostree/
 %if 0%{?rhel} >= 10
 ExcludeArch:    %{ix86}
 %endif
-
-# Needed for https://src.fedoraproject.org/rpms/dracut/pull-request/90
-Patch0: 0001-boot-dracut-use-systemdsystemunitdir-instead-of-syst.patch
 
 BuildRequires: make
 BuildRequires: git
@@ -188,5 +185,4 @@ find %{buildroot} -name '*.la' -delete
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2025.7-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

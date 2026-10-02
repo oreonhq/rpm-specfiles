@@ -19,8 +19,8 @@ The LevelDB key-value database in the Go programming language.}
 %global godocs          AUTHORS CONTRIBUTORS README README.md
 
 Name:           %{goname}
-Version:        0
-Release:        0.24%{?dist}
+Version:        1.23
+Release:        1.24%{?dist}
 Summary:        LevelDB key-value database in the Go programming language
 
 # Upstream license specification: BSD-3-Clause

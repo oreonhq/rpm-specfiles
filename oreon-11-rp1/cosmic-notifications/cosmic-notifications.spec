@@ -1,4 +1,4 @@
-%global source0_hash 66c2f87a8f6f24ccc3229658dc29a5bdd8a0f22cc938155c4d17c211650746c5
+%global source0_hash 36fb0a639461432f77df30e8d065ecc536a64a8504e2eebe4b0dcd054cffad08
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-notifications
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Notifications daemon for the COSMIC Desktop Environment
 
@@ -22,6 +22,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-notifications
 
 Source0:        https://github.com/pop-os/cosmic-notifications/archive/epoch-%{version}/cosmic-notifications-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-notifications at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

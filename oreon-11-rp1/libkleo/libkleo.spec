@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 47772211be61a31947474f871e190f36344a87defec7bc97a468ed6a15b50c09
 
 Name:    libkleo

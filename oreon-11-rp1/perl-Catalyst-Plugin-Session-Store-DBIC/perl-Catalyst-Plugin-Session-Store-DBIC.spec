@@ -7,7 +7,7 @@ Summary:        Store your sessions via DBIx::Class
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Catalyst-Plugin-Session-Store-DBIC
-Source0:        https://cpan.metacpan.org/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Session-Store-DBIC-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AR/ARODLAND/Catalyst-Plugin-Session-Store-DBIC-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-generators

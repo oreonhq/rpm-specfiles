@@ -14,12 +14,11 @@ Last-Update: 2024-05-09
  2 files changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/g10/encrypt.c b/g10/encrypt.c
-index b335b9797..1ca89d946 100644
 --- a/g10/encrypt.c
 +++ b/g10/encrypt.c
-@@ -358,6 +358,12 @@ use_aead (pk_list_t pk_list, int algo)
+@@ -409,6 +409,12 @@
          }
-       return AEAD_ALGO_OCB;
+       return opt.compliance == CO_FIPS? AEAD_ALGO_GCM : AEAD_ALGO_OCB;
      }
 +  else
 +    {
@@ -31,7 +30,6 @@ index b335b9797..1ca89d946 100644
    /* AEAD does only work with 128 bit cipher blocklength.  */
    if (!can_use)
 diff --git a/tests/openpgp/encrypt.scm b/tests/openpgp/encrypt.scm
-index ef2f7b0bc..a44f5cad1 100755
 --- a/tests/openpgp/encrypt.scm
 +++ b/tests/openpgp/encrypt.scm
 @@ -88,7 +88,7 @@
@@ -44,6 +42,4 @@ index ef2f7b0bc..a44f5cad1 100755
                         -r ,"mahsa.amini"))
      (tr:call-with-content
 -- 
-2.43.0
-
-
+2.0

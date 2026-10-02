@@ -1,4 +1,4 @@
-%global source0_hash d5ac6e31ec7806cd09aa9655520b34d8bc4edc924d11b09e788e748a09422d20
+%global source0_hash 49907a9f2a1e12bebf9a8d56f511316a41f9aab79b763c8db0b19476fe0e4220
 
 %bcond_with bootstrap
 
@@ -78,8 +78,7 @@ pom.xml, but you can enforce a set of rules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n enforcer-3.5.0
-%autosetup -p1 -n enforcer-3.5.0
+%autosetup -p1 -n enforcer-%{version}
 find -name '*.java' -exec sed -i 's/\r//' {} +
 
 find -name EvaluateBeanshell.java -delete
@@ -106,5 +105,4 @@ find -name EvaluateBeanshell.java -delete
 %files extension -f .mfiles-maven-enforcer-extension
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.0-1
-- Import
+%autochangelog

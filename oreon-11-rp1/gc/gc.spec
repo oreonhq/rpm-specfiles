@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 42e5194ad06ab6ffb806c83eb99c03462b495d979cda782f3c72c08af833cd4e
 
 Summary: Garbage collector for C and C++
 Name:    gc
-Version: 8.2.8
+Version: 8.2.12
 Release: 1%{?dist}
 
 # Automatically converted from old format: BSD - review is highly recommended.
@@ -109,5 +109,4 @@ make check %{?arch_ignore}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.2.6-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

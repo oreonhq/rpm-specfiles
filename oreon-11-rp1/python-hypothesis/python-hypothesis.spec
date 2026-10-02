@@ -1,7 +1,7 @@
-%global source0_hash fd8acb5c67f260dfbdcc1b2dc95ff48b2b3f90708ae595c76f591bbf3f6f8eeb
+%global source0_hash a43388f9067678fef6e13bdff325b6cfa6961a590498bb37f7ff31589c83bc75
 
 Name:           python-hypothesis
-Version:        6.168.1
+Version:        6.168.3
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The property-based testing library for Python

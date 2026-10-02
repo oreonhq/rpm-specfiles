@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash c664e4f96419712df40cd85ae71a9eeb3b5dbfbb161c9a5b18ee9b38c432e643
 
 %global app_id  org.kde.kalm

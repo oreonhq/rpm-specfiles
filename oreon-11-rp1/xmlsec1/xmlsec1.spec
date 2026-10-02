@@ -1,4 +1,4 @@
-%global source0_hash a0aecfdf1f190c6b866a278e42746b6582729a493f6ac6a1556a4663ff3ce625
+%global source0_hash 24045199af12d93fe5fdbbbf7e386e823e4842071e9432e2b90ac108b889a923
 
 # widely used
 %bcond openssl 1
@@ -215,5 +215,4 @@ mv %{buildroot}%{_docdir}/xmlsec1/* __tmp_doc
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.41-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

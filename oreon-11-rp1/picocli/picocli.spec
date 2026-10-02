@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8e02dd2d4582103e7020e10e3cb1188d9e7f9b281806c0a76a7ef6d1fdf64c25
 
 %bcond_with bootstrap
 
@@ -99,6 +99,7 @@ applications.
 %endif
 
 %prep
+test "%{source0_hash}" = "$(sha256sum "%{SOURCE0}" | cut -d' ' -f1)" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }
 %autosetup -p1
 # note:
 # picocli is a gradle project, we need to transform it to maven.

@@ -1,4 +1,4 @@
-%global source0_hash 89f9294a8ac74fcef6f1b9ac408f43ebedf8d208e3efe0b99b4acc16dc6582c7
+%global source0_hash bb02464072f769dd9832fd999526734c90eb4d66fb56d5351540a750c88a77f6
 
 Summary: A utility which provides statistics based on the output of diff
 Name: diffstat
@@ -44,5 +44,4 @@ make check
 %{_mandir}/*/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.68-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

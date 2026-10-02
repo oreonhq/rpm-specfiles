@@ -7,7 +7,7 @@ Summary:        Fast promises in Perl
 # bundled easyxs is MIT
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND MIT
 URL:            https://metacpan.org/dist/Promise-XS
-Source0:        https://cpan.metacpan.org/authors/id/F/FE/FELIPE/Promise-XS-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AN/ANATOFUZ/Promise-XS-%{version}.tar.gz
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter

@@ -1,13 +1,15 @@
-%global source0_hash bcb204c0cca063b071e4bc986ef418b03b57e28cfc7fea45e368d1cb8b56b3f2
+%global source1_hash 0334ec4c02203a76c24db514d256c0d09d9e5342dbb640124f3a123de4a99ff6
+
+%global source0_hash 02bfbc33296fe86b364491f6d5cad9d83360bb4fdd2923386a325b309eac0b9b
 
 %global		framework kholidays
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.29
+%global majmin_ver_kf6 6.30
 
 
 Name:		kf6-%{framework}
-Version:	6.29.0
+Version:	6.30.0
 Release:        1%{?dist}
 Summary:	The KHolidays Library
 
@@ -15,7 +17,9 @@ License:	BSD-2-Clause AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.0-or-later WIT
 URL:		https://invent.kde.org/frameworks/%{framework}
 
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+
 
 BuildRequires:	extra-cmake-modules >= %{version}
 BuildRequires:	kf6-rpm-macros

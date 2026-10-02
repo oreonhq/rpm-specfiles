@@ -1,10 +1,10 @@
-%global source0_hash 214d959d39afaea22fc0a8c26149eb863a3b35b1024d9fc17b781f2c45022014
+%global source0_hash ab98c40b867d01272bdf9babc777c8db72fe504d1c87bea4eceb15e33cd12042
 
 %global repo dde-calendar
 %global __provides_exclude_from ^%{_libdir}/deepin-aiassistant/.*\\.so$
 
 Name:           deepin-calendar
-Version:        6.6.0
+Version:        6.6.3
 Release:        %autorelease
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPL-3.0-or-later

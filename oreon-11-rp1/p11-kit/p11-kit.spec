@@ -1,4 +1,4 @@
-%global source0_hash 09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828
+%global source0_hash f2cc09111e44bf3fea58f023180b33acea90aa82d042d6fbb623fbc5ba033bb7
 
 %global source2_key_fpr 5D46CB0F763405A7053556F47A75A648B3F9220C
 
@@ -274,8 +274,4 @@ fi
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.26.2-2
-- Stop .gitignore from excluding Source3 trust-extract-compat and Source4 p11-kit-client.service
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.26.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

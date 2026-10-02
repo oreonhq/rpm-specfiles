@@ -33,7 +33,8 @@ This package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }gpg --batch --dearmor --output %{_builddir}/gnupg-signature-keyring.gpg %{SOURCE2}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+gpg --batch --dearmor --output %{_builddir}/gnupg-signature-keyring.gpg %{SOURCE2}
 %{gpgverify} --keyring='%{_builddir}/gnupg-signature-keyring.gpg' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup
 
@@ -64,5 +65,4 @@ make check
 %{_datadir}/aclocal/%{name}.m4
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

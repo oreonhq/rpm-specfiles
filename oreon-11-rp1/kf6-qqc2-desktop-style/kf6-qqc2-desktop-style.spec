@@ -1,19 +1,23 @@
-%global source0_hash dfb815380b4297c28ef9e4bc8e3ab350b6fbf7b78e0677c3e2e3d4ca319ae336
+%global source1_hash 5e051fd9e66788b27b7834e8c095d50265d49bcecdb667266316b4beb4ef6252
+
+%global source0_hash 74c6402fa697a76254e1c68ebd86136be49e03fad86482e86a27e5478f662c41
 
 %global framework qqc2-desktop-style
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.29
+%global majmin_ver_kf6 6.30
 
 
 Name:    kf6-%{framework}
-Version: 6.29.0
+Version: 6.30.0
 Release:        1%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LicenseRef-KFQF-Accepted-GPL
 URL:     https://invent.kde.org/frameworks/%{framework}
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+
 
 BuildRequires: extra-cmake-modules >= %{version}
 BuildRequires: gcc-c++
@@ -63,18 +67,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_plugindir}/kirigami/platform/org.kde.desktop.so
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-5
-- BR cmake(Qt6LinguistTools) for ecm_install_po_files_as_qm
-- Source URLs https
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

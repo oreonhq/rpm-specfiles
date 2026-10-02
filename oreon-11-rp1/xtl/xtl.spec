@@ -1,4 +1,4 @@
-%global source0_hash e69a696068ccffd2b435539d583665981b6c6abed596a72832bffbe3e13e1f49
+%global source0_hash 8fb38d6a5856aab5740d2ccb3d791d289f648d4cc506b94a1338fe5fce100c11
 # Header-only library.
 %global debug_package %{nil}
 

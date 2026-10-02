@@ -1,4 +1,4 @@
-%global source0_hash 942b55da21586dde7b1467ce9970a435296ed78dfc193f785f1fe9450ca69ca6
+%global source0_hash 624863d764fac75432dcc44e9cc8e0887eecdc9ef600529e3ae83998c82801e9
 
 %global tftpboot_dir %{_sharedstatedir}/tftpboot/
 
@@ -10,7 +10,7 @@
 %bcond check 0
 
 Name:           cobbler
-Version:        4.0.0b6
+Version:        3.3.10
 Release:        %autorelease
 Summary:        Boot server configurator
 URL:            https://cobbler.github.io/
@@ -26,14 +26,12 @@ Source4:        %{name}.fc
 Patch0:         cobbler-nocov.patch
 # Python 3.13 support (backport of https://github.com/cobbler/cobbler/pull/3842)
 # https://bugzilla.redhat.com/show_bug.cgi?id=2335620
-Patch1:         cobbler-python3.13.patch
 # Upstream fix for reposync --tries
 # https://bugzilla.redhat.com/show_bug.cgi?id=2401605
 # Backport of https://github.com/cobbler/cobbler/pull/3378
 Patch2:         cobbler-reposync.patch
 # Use systemctl is-active to prevent some SELinux denials checking service status
 # https://bugzilla.redhat.com/show_bug.cgi?id=2353898
-Patch3:         https://github.com/cobbler/cobbler/pull/3945.patch
 BuildArch:      noarch
 
 BuildRequires: make
@@ -342,5 +340,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.7-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

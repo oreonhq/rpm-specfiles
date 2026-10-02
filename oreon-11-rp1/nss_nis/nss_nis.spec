@@ -1,4 +1,4 @@
-%global source0_hash 1c62306a379e8e6720fcb464b6c29883a93203df28657d9c8195e6160b95ec24
+%global source0_hash 510aa6fbe06e5c830064756bc2f554c79378a97f1fec5ed629d044f944c40a36
 
 Name:           nss_nis
 Version:        3.4
@@ -7,7 +7,7 @@ Summary:        Name Service Switch (NSS) module using NIS
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 Url:            https://github.com/thkukuk/libnss_nis
-Source:        https://github.com/thkukuk/libnss_nis/archive/refs/tags/v%{version}.tar.gz#/nss_nis-3.2.tar.gz
+Source:        https://github.com/thkukuk/libnss_nis/archive/refs/tags/v%{version}.tar.gz#/nss_nis-%{version}.tar.gz
 
 # https://github.com/systemd/systemd/issues/7074
 # https://bugzilla.redhat.com/show_bug.cgi?id=1829572
@@ -63,5 +63,4 @@ make check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -11,7 +11,7 @@ Release:        %autorelease
 Summary:        Microsoft Azure Traffic Manager Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version} zip}
+Source0:        %{pypi_source azure_mgmt_trafficmanager %{version}}
 
 BuildArch:      noarch
 

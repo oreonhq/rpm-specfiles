@@ -8,7 +8,7 @@ Summary:        Automated REST Method Dispatching
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/Catalyst-Action-REST
-Source0:        https://cpan.metacpan.org/authors/id/J/JJ/JJNAPIORK/Catalyst-Action-REST-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Catalyst-Action-REST-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires: make

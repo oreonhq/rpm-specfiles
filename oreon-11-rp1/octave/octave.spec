@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2b80f3149b2de6d1f4f2fcb4fe6515a17eb363b52111bf57b90f37bf6f5e12e1
 
 # From src/version.h:#define OCTAVE_API_VERSION
 %global octave_api api-v60
@@ -45,7 +45,7 @@ Summary:        A high-level language for numerical computations
 License:        GPL-3.0-or-later
 URL:            http://www.octave.org
 
-Source0:        https://ftp.gnu.org/gnu/octave/octave-%{version}.tar.lz
+Source0:        https://ftp.gnu.org/gnu/octave/octave-%{version}.tar.xz
 #Source0:        https://alpha.gnu.org/gnu/octave/octave-%{version}%{?rctag}.tar.lz
 # RPM macros for helping to build Octave packages
 Source1:        macros.octave

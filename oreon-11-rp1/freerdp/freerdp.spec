@@ -1,4 +1,4 @@
-%global source0_hash 0453420dc3d9c3c03952e4e3f52e5b213ce0eae37346cd9a08bbd30c30a23c21
+%global source0_hash 8803dd26ec9660550252f255cf2d672a785ddd8f544bb475834993e96807c87f
 
 # Can be rebuilt with FFmpeg support enabled by passing
 # "--with=ffmpeg" to mock/rpmbuild; or by globally
@@ -26,7 +26,7 @@
 
 Name:           freerdp
 Epoch:          2
-Version:        3.32.0
+Version:        3.32.1
 Release:        1%{?dist}
 Summary:        Free implementation of the Remote Desktop Protocol (RDP)
 
@@ -40,7 +40,7 @@ URL:            http://www.freerdp.com/
 
 # The license of the winpr/libwinpr/crt/unicode_builtin.c file is not allowed.
 # See: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/498
-Source0:        https://github.com/FreeRDP/FreeRDP/archive/%{version}/FreeRDP-%{version}.tar.gz#/freerdp-3.26.0.tar.gz
+Source0:        https://github.com/FreeRDP/FreeRDP/archive/%{version}/FreeRDP-%{version}.tar.gz#/freerdp-%{version}.tar.gz
 
 # Fix TestNTLM with OpenSSL without legacy provider
 

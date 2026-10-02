@@ -1,29 +1,17 @@
-%global source0_hash none
+%global source0_hash a2b7811f47b0ddb1f7b1d0aa456f7c1270da70708ce231c2fe054c7199eafa63
+%global source1_hash a7f2e9fb89bce75d6aab7f642734b8d742d75563aec404a96468a15de6c92816
 
 Summary: The GNU disk partition manipulation program
 Name:    parted
-Version: 3.7
+Version: 3.8
 Release: 1%{?dist}
 License: GPL-3.0-or-later
 URL:     http://www.gnu.org/software/parted
 
-Source0:        https://mirrors.kernel.org/gnu/%{name}/%{name}-%{version}.tar.xz
-Source1:        https://mirrors.kernel.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
+Source0: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
+Source1: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
 Source2: pubkey.phillip.susi
 Source3: pubkey.brian.lane
-
-Patch0001: 0001-parted-Print-the-Fixing.-message-to-stderr.patch
-Patch0002: 0002-doc-Document-IEC-unit-behavior-in-the-manpage.patch
-Patch0003: 0003-libparted-Fail-early-when-detecting-nilfs2.patch
-Patch0004: 0004-bug-74444-PATCH-parted-fix-do_version-declaration.patch
-Patch0005: 0005-libparted-Fix-sun-disklabel-unhandled-exception.patch
-Patch0006: 0006-tests-Add-test-for-SUN-disklabel-handling.patch
-Patch0007: 0007-libparted-Fix-dvh-disklabel-unhandled-exception.patch
-Patch0008: 0008-tests-Add-test-for-dvh-with-a-bad-checksum.patch
-Patch0009: 0009-tests-probing-ext4-without-journal-should-still-indi.patch
-Patch0010: 0010-libparted-Do-not-detect-ext4-without-journal-as-ext2.patch
-Patch0011: 0011-nilfs2-Fixed-possible-sigsegv-in-case-of-corrupted-s.patch
-Patch0012: 0012-doc-Fix-some-groff-mandoc-linting-complaints.patch
 
 BuildRequires: gcc
 BuildRequires: e2fsprogs-devel
@@ -74,12 +62,14 @@ Parted library, you need to install this package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -S git_am
+# Needed when .am files are modified by a patch
+autoreconf -v
 iconv -f ISO-8859-1 -t UTF8 AUTHORS > tmp; touch -r AUTHORS tmp; mv tmp AUTHORS
 
 %build
-autoreconf -fiv
 CFLAGS="$RPM_OPT_FLAGS -Wno-unused-but-set-variable"; export CFLAGS
 %configure --disable-static --disable-gcc-warnings
 # Don't use rpath!
@@ -120,7 +110,7 @@ make check
 %{_infodir}/parted.info*
 
 %files devel
-%doc TODO doc/API doc/FAT
+%doc TODO doc/API.md doc/FAT
 %{_includedir}/parted
 %{_libdir}/libparted.so
 %{_libdir}/libparted-fs-resize.so
@@ -129,5 +119,4 @@ make check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6-14
-- Prepare for Oreon 11 (RP1)
+%autochangelog

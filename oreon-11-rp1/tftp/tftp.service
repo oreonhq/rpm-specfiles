@@ -4,8 +4,7 @@ Requires=tftp.socket
 Documentation=man:in.tftpd
 
 [Service]
-ExecStart=/usr/sbin/in.tftpd -s /var/lib/tftpboot
-StandardInput=socket
+ExecStart=/usr/sbin/in.tftpd -v --user tftpd --systemd -s /var/lib/tftpboot --blocksize 1468 --windowsize 64 --map-file /etc/tftp/map-file
 
 [Install]
 Also=tftp.socket

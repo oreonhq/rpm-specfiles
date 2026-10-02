@@ -1,4 +1,4 @@
-%global source0_hash 47f78f500cbd900f758f9ba74288fda0e2ca5a7855096025641e121ffec40a5d
+%global source0_hash 87256969c82cf3bc8574301f3e7044a90de0ac500a5a27d8ba38c4dde894dd8b
 
 %global         majorminor      1.0
 
@@ -32,8 +32,8 @@
 %endif
 
 Name:           gstreamer1-plugins-good
-Version:        1.29.2
-Release:        1%{?dist}
+Version:        1.28.7
+Release:        %autorelease
 Summary:        GStreamer plugins with good code and licensing
 
 License:        CC0-1.0 AND GPL-2.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND xlock AND MIT AND BSD-3-Clause AND CC-BY-3.0 
@@ -376,14 +376,4 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -fv {} ';'
 
 
 %changelog
-* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
-- Update to 1.28.3
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.26.7-7
-- Rebuild id3 tag plugin against taglib 2 SONAME
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-3
-- Remove commented git snapshot lines that expanded macros in comments
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

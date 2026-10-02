@@ -1,4 +1,4 @@
-%global source0_hash 6213b986a5209fc0d4ca93734e349b8f66b36bfe9a3fae6eead14a15d82a68dc
+%global source0_hash 877b823198eb29aa1778b16a70cad05f7b54b164b3bf7ab656fc326c393f4c85
 
 # Reflects the values hard-coded in various Makefile.am's in the source tree.
 %define dictdir %{_datadir}/cracklib
@@ -18,8 +18,6 @@ Source2: cracklib.default.zh_CN.po
 # No upstream source; supplement for words missing from cracklib-words (from EL9 SRPM lineage)
 Source3: missing-words.gz
 
-Patch: cracklib-2.9.11-packlib-reentrant.patch
-Patch: cracklib-2.9.11-simplistic.patch
 
 BuildRequires: gcc
 BuildRequires: words, gettext
@@ -157,8 +155,4 @@ make test DESTDIR=%{buildroot}
 %{_sbindir}/mkdict
 
 %changelog
-* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.11-10
-- Add missing-words.gz for dict build, track in git
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.11-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

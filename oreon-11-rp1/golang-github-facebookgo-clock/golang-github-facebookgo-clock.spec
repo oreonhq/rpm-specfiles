@@ -18,7 +18,7 @@ Clock is a small library for mocking time in Go.}
 %global godocs          README.md
 
 Name:           %{goname}
-Version:        0
+Version:        1.90.0
 Release:        %autorelease -p
 Summary:        Clock is a small library for mocking time in Go
 

@@ -1,4 +1,4 @@
-%global source0_hash b84707edf20c3c0641661ca87f4a606cebb623ce5f2d70581142c9a6d2467c2c
+%global source0_hash 425611e6b031c7a81fc72f82187498de827af708bbc0c8e2d31e52ca566871c6
 
 Name: opencryptoki
 Summary: Implementation of the PKCS#11 (Cryptoki) specification v3.0 and partially v3.1
@@ -409,5 +409,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.26.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

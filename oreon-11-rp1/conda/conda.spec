@@ -1,9 +1,11 @@
-%global source0_hash none
+%global source1_hash 9e89219d7fc4c26931a4309be8f989a03bc708d4466fcdb812f755715b946848
+
+%global source0_hash 38d7e1a6f051f58d2e28220acb3b689fd34a585c01c671d812279461e01ff8bc
 
 %bcond_without tests
 
 Name:           conda
-Version:        26.7.2
+Version:        26.7.3
 Release:        %autorelease
 Summary:        Cross-platform, Python-agnostic binary package manager
 
@@ -13,8 +15,10 @@ License:        BSD-3-Clause AND Apache-2.0
 
 URL:            http://conda.pydata.org/docs/
 Source0:        https://github.com/conda/conda/archive/%{version}/%{name}-%{version}.tar.gz
+
 # bash completion script moved to a separate project
 Source1:        https://raw.githubusercontent.com/tartansandal/conda-bash-completion/1.7/conda
+
 Patch0:         0001-conda_sys_prefix.patch.patch
 # Use main entry point for conda and re-add conda-env entry point, no need to run conda init
 Patch1:         0002-Use-main-entry-point-for-conda-and-re-add-conda-env-.patch

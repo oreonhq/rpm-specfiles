@@ -17,10 +17,9 @@ Signed-off-by: Yan Fu <yafu@redhat.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/attestation-agent/kbs_protocol/Cargo.toml b/attestation-agent/kbs_protocol/Cargo.toml
-index 0a91ccd..f6b2b51 100644
 --- a/attestation-agent/kbs_protocol/Cargo.toml
 +++ b/attestation-agent/kbs_protocol/Cargo.toml
-@@ -45,7 +45,7 @@ name = "trustee-attester"
+@@ -55,7 +55,7 @@
  required-features = ["bin"]
  
  [features]
@@ -29,16 +28,16 @@ index 0a91ccd..f6b2b51 100644
  
  passport = []
  # Allow to connect Attestation-Agent with TTRPC to get evidence, token, etc.
-@@ -69,7 +69,7 @@ se-attester = ["attester/se-attester"]
- tpm-attester = ["attester/tpm-attester"]
+@@ -80,8 +80,8 @@
  nvidia-attester = ["attester/nvidia-attester"]
+ nvidia-dpu-attester = ["attester/nvidia-dpu-attester"]
  
--rust-crypto = ["reqwest/rustls-tls", "crypto/rust-crypto"]
+-rust-crypto = ["reqwest/rustls", "crypto/rust-crypto"]
 -openssl = ["reqwest/native-tls-vendored", "crypto/openssl"]
 +rust-crypto = []
 +openssl = ["reqwest/native-tls", "crypto/openssl"]
  
- bin = ["tokio/rt", "tokio/macros", "clap", "env_logger"]
+ # Experimental Post-Quantum KEM support (ML-KEM-768+A192KW per
+ # [draft-ietf-jose-pqc-kem-05](https://datatracker.ietf.org/doc/html/draft-ietf-jose-pqc-kem-05)). 
 -- 
-2.53.0
-
+2.0

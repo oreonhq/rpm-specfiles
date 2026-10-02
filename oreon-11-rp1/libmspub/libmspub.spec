@@ -1,4 +1,4 @@
-%global source0_hash ef36c1a1aabb2ba3b0bedaaafe717bf4480be2ba8de6f3894be5fd3702b013ba
+%global source0_hash 3671095f5a10bee8a755052a30576952c5b16d8b0f2ba9f2fb998338c18cb119
 
 %global apiversion 0.1
 
@@ -103,5 +103,4 @@ install -m 0644 pub2*.1 %{buildroot}/%{_mandir}/man1
 %{_mandir}/man1/pub2xhtml.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

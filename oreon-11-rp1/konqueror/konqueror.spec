@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 8f383beada857b522a59b9259ae1f1f83554c5d25d3c39a39fb6f172ec0f889d
 
 ## experimental ninja support

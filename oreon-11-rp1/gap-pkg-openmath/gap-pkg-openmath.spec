@@ -1,4 +1,4 @@
-%global source0_hash e282626bbb3e93883ba047e7751f67bcc67179318ab2031693d1f4d179c1823a
+%global source0_hash d7fa88855515769d8ece8f6715c407a61963336a1c682d9765c99bfc4367a187
 
 # When bootstrapping a new architecture, there is no gap-pkg-scscp package yet.
 # However, we only need that package to build documentation; it needs this
@@ -13,7 +13,7 @@
 %global giturl      https://github.com/gap-packages/openmath
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        11.5.5
+Version:        11.5.6
 Release:        %autorelease
 Summary:        Import and export of OpenMath objects for GAP
 

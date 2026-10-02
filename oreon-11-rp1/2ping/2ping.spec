@@ -1,4 +1,4 @@
-%global source0_hash b56beb1b7da1ab23faa6d28462bcab9785021011b3df004d5d3c8a97ed7d70d8
+%global source0_hash c8352b6653c3194af1f869107655df3f98ab18b560e8bce86eabac08d73c72eb
 
 Name:           2ping
 Version:        4.6.1

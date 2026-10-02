@@ -1,4 +1,4 @@
-%global source0_hash 9f12cef05c0477eace9c68ccabd19f9e3a04b875d4768c323714cbd3a5fa3c2b
+%global source0_hash c04e0e66ac29741faad763a56f3c50196421d4b968009fc237c53314769bf8ad
 
 # asio only ships headers, so no debuginfo package is needed
 %global debug_package %{nil}
@@ -74,5 +74,4 @@ autoreconf --install
 %doc doc/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.30.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 21690a365cd5fbfa8dea051473e98968df9f4eca0121fed7481d1215b7455a31
 
 %global qt_module qtwebsockets
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - WebSockets component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -118,5 +118,4 @@ popd
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash d0b5cff1ebafed63b7ffa4d5f3534eaa6c8415575a48b28a860d72a8f91f3576
+%global source0_hash c421c18a1dfef57ab72e0b1cc9c5d526523cca7e50332df5a71f2a51d0701fb8
 
 Name:           plexus-velocity
 Version:        2.4.0
@@ -10,7 +10,7 @@ URL:            https://codehaus-plexus.github.io/plexus-velocity/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/plexus-velocity-2.2.1.tar.gz
+Source0:        https://github.com/codehaus-plexus/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/plexus-velocity-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 BuildRequires:  maven-local-openjdk25
@@ -55,5 +55,4 @@ cp -p %{SOURCE1} LICENSE
 %license LICENSE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.1-4
-- Import
+%autochangelog

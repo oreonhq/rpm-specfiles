@@ -1,4 +1,4 @@
-%global source0_hash cff057e85c22038992f9ed12eb8d4e63c45adf53a5a51faaa3279f605809f6f2
+%global source0_hash 8cb7e97d96d86f37e29fc5b731afde2e9b26f6f407b74352ffea3ee2148be829
 
 %define htmldir %{_docdir}/liblognorm/html
 
@@ -19,9 +19,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	libtool
 
-Patch0: liblognorm-2.0.6-rhbz2105934-sphinx5.patch
 Patch1: liblognorm-configure-glitch.patch
-Patch2: liblognorm-2.0.6-rhbz2128320.patch
 
 %description
 Briefly described, liblognorm is a tool to normalize log data.
@@ -64,9 +62,7 @@ log files.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
-%patch -P 0 -p1 -b .sphinx5
 %patch -P 1 -p1 -b .configure-glitch
-%patch -P 2 -p1 -b .pcre2
 
 %build
 # Prevent rebuild of the configure script.
@@ -105,5 +101,4 @@ rm %{buildroot}%{htmldir}/{objects.inv,.buildinfo}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.6-17
-- Prepare for Oreon 11 (RP1)
+%autochangelog

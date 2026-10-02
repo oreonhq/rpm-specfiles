@@ -1,0 +1,96 @@
+From 6269fe0296a721be4f581707f139c6d633ccd725 Mon Sep 17 00:00:00 2001
+From: Jacek Migacz <jmigacz@redhat.com>
+Date: Wed, 24 Jun 2026 16:40:01 +0000
+Subject: [PATCH] Remove support for snappy
+
+---
+ .../org/codehaus/plexus/archiver/tar/TarArchiver.java    | 8 --------
+ .../org/codehaus/plexus/archiver/tar/TarUnArchiver.java  | 9 ---------
+ 2 files changed, 17 deletions(-)
+
+diff --git a/src/main/java/org/codehaus/plexus/archiver/tar/TarArchiver.java b/src/main/java/org/codehaus/plexus/archiver/tar/TarArchiver.java
+index 2091eaf..b6ad1da 100644
+--- a/src/main/java/org/codehaus/plexus/archiver/tar/TarArchiver.java
++++ b/src/main/java/org/codehaus/plexus/archiver/tar/TarArchiver.java
+@@ -27,9 +27,7 @@
+ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
+-import org.apache.commons.compress.compressors.snappy.FramedSnappyCompressorOutputStream;
+ import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
+-import org.apache.commons.compress.compressors.zstandard.ZstdCompressorOutputStream;
+ import org.codehaus.plexus.archiver.AbstractArchiver;
+ import org.codehaus.plexus.archiver.ArchiveEntry;
+ import org.codehaus.plexus.archiver.ArchiverException;
+@@ -413,9 +411,7 @@ public enum TarCompressionMethod {
+         none,
+         gzip,
+         bzip2,
+-        snappy,
+         xz,
+-        zstd
+     }
+ 
+     private OutputStream compress(TarCompressionMethod tarCompressionMethod, final OutputStream ostream)
+@@ -424,12 +420,8 @@ private OutputStream compress(TarCompressionMethod tarCompressionMethod, final O
+             return bufferedOutputStream(new GZIPOutputStream(ostream));
+         } else if (TarCompressionMethod.bzip2.equals(tarCompressionMethod)) {
+             return new BZip2CompressorOutputStream(bufferedOutputStream(ostream));
+-        } else if (TarCompressionMethod.snappy.equals(tarCompressionMethod)) {
+-            return new FramedSnappyCompressorOutputStream(bufferedOutputStream(ostream));
+         } else if (TarCompressionMethod.xz.equals(tarCompressionMethod)) {
+             return new XZCompressorOutputStream(bufferedOutputStream(ostream));
+-        } else if (TarCompressionMethod.zstd.equals(tarCompressionMethod)) {
+-            return new ZstdCompressorOutputStream(bufferedOutputStream(ostream));
+         }
+ 
+         return ostream;
+diff --git a/src/main/java/org/codehaus/plexus/archiver/tar/TarUnArchiver.java b/src/main/java/org/codehaus/plexus/archiver/tar/TarUnArchiver.java
+index de73c10..51a1e5b 100644
+--- a/src/main/java/org/codehaus/plexus/archiver/tar/TarUnArchiver.java
++++ b/src/main/java/org/codehaus/plexus/archiver/tar/TarUnArchiver.java
+@@ -26,9 +26,7 @@
+ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+ import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+-import org.apache.commons.compress.compressors.snappy.FramedSnappyCompressorInputStream;
+ import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
+-import org.apache.commons.compress.compressors.zstandard.ZstdCompressorInputStream;
+ import org.codehaus.plexus.archiver.AbstractUnArchiver;
+ import org.codehaus.plexus.archiver.ArchiverException;
+ import org.codehaus.plexus.archiver.util.Streams;
+@@ -62,7 +60,6 @@ public TarUnArchiver(File sourceFile) {
+      * <li>none - no compression</li>
+      * <li>gzip - Gzip compression</li>
+      * <li>bzip2 - Bzip2 compression</li>
+-     * <li>snappy - Snappy compression</li>
+      * <li>xz - Xz compression</li>
+      * </ul>
+      *
+@@ -136,12 +133,8 @@ private InputStream decompress(UntarCompressionMethod compression, final File fi
+             return Streams.bufferedInputStream(new GZIPInputStream(istream));
+         } else if (compression == UntarCompressionMethod.BZIP2) {
+             return new BZip2CompressorInputStream(istream);
+-        } else if (compression == UntarCompressionMethod.SNAPPY) {
+-            return new FramedSnappyCompressorInputStream(istream);
+         } else if (compression == UntarCompressionMethod.XZ) {
+             return new XZCompressorInputStream(istream);
+-        } else if (compression == UntarCompressionMethod.ZSTD) {
+-            return new ZstdCompressorInputStream(istream);
+         }
+         return istream;
+     }
+@@ -153,9 +146,7 @@ public enum UntarCompressionMethod {
+         NONE("none"),
+         GZIP("gzip"),
+         BZIP2("bzip2"),
+-        SNAPPY("snappy"),
+-        XZ("xz"),
+-        ZSTD("zstd");
++        XZ("xz");
+ 
+         final String value;
+ 
+-- 
+2.54.0
+

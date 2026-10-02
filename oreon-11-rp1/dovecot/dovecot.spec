@@ -1,4 +1,5 @@
-%global source0_hash none
+%global source0_hash 868c2686a61b5f8e00a3e4721789b1ab46e6528fd773a5fbed07a6ecba7731e6
+%global source8_hash ad7c478cb3aaa76c5f81f86727a3e6843645b0a1253f5684fb8a0beec0d22925
 
 %global __provides_exclude_from %{_docdir}
 %global __requires_exclude_from %{_docdir}
@@ -6,18 +7,18 @@
 Summary: Secure imap and pop3 server
 Name: dovecot
 Epoch: 1
-Version: 2.4.2
+Version: 2.4.5
 %global prever %{nil}
-Release: 6%{?dist}
+Release: 1%{?dist}
 #dovecot itself is MIT, a few sources are PD, pigeonhole is LGPLv2
 License: MIT AND LGPL-2.1-only
 
 URL: https://www.dovecot.org/
-Source:        https://www.dovecot.org/releases/2.4/%{name}-%{version}%{?prever}.tar.gz
+Source: https://www.dovecot.org/releases/2.4/%{name}-%{version}%{?prever}.tar.gz
 Source1: dovecot.init
 Source2: dovecot.pam
 %global pigeonholever %{version}%{?prever}
-Source8:        https://pigeonhole.dovecot.org/releases/2.4/dovecot-pigeonhole-2.4.2%{?prever}.tar.gz
+Source8: https://pigeonhole.dovecot.org/releases/2.4/dovecot-pigeonhole-%{pigeonholever}.tar.gz
 Source9: dovecot.sysconfig
 Source10: dovecot.tmpfilesd
 
@@ -48,15 +49,24 @@ Patch17: dovecot-2.3.15-fixvalcond.patch
 Patch18: dovecot-2.3.15-valbasherr.patch
 Patch19: dovecot-2.4.2-lua-5.5.patch
 
-# Fedora/RHEL specific, drop OTP which uses SHA1 so we dont use SHA1 for crypto purposes
-Patch23: dovecot-2.4.1-nolibotp.patch
+# Fedora/RHEL specific
 Patch24: dovecot-2.4.2-fixbuild.patch
 # temporary workaround for s390x build test failure
 # https://dovecot.org/mailman3/archives/list/dovecot@dovecot.org/thread/FZBVU55TK5332SMZSSDNWIVJCWGUAJQS/
 Patch25: dovecot-2.4.2-ftbfs-workaround.patch
+# ftbfs fix from upstream, https://patch-diff.githubusercontent.com/raw/dovecot/core/pull/314.diff
+# test-hash-method.c:483: Assert(#29) failed: memcmp(result, test_vectors[i].output, test_vectors[i].olen) == 0
+# hash method xxh64 (test vectors) ..................................... : FAILED
+Patch26: dovecot-2.4.5-pr314.patch
+# ftbfs fix
+# ostream multiplex stream (backpressure): sub-process ended properly .. : FAILED
+# Warning: test: Sub-process forcibly terminated with signal 9
+# ostream multiplex stream (backpressure) .............................. : FAILED
+Patch27: dovecot-2.4.5-test_w_small_pipe.patch
 
 BuildRequires: gcc, gcc-c++, openssl-devel, pam-devel, zlib-devel, bzip2-devel, libcap-devel
 BuildRequires: libtool, autoconf, automake, pkgconfig
+BuildRequires: python3
 BuildRequires: sqlite-devel
 BuildRequires: libpq-devel
 BuildRequires: mariadb-connector-c-devel
@@ -77,9 +87,7 @@ BuildRequires: libicu-devel
 BuildRequires: libstemmer-devel
 BuildRequires: xapian-core-devel
 %endif
-BuildRequires: multilib-rpm-config
-BuildRequires: flex, bison
-BuildRequires: perl-version
+BuildRequires: bison
 BuildRequires: systemd-devel
 BuildRequires: systemd-rpm-macros
 
@@ -102,9 +110,13 @@ Requires(postun): systemd-units
 BuildRequires: libcurl-devel expat-devel
 BuildRequires: make
 
-%if 0%{?fedora} > 39
 # as per https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
+
+%if 0%{?fedora} >= 45
+# fts_flatcurve is a good replacement for fts-xapian, which no longer seems to
+# have an upstream
+Obsoletes: dovecot-fts-xapian < 1.10
 %endif
 
 %global restart_flag /run/%{name}/%{name}-restart-after-rpm-install
@@ -144,6 +156,7 @@ This package provides the development files for dovecot.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}%{?prever} -a 8
 
 # standardize name, so we don't have to update patches and scripts
@@ -156,31 +169,18 @@ mv dovecot-pigeonhole-%{pigeonholever} dovecot-pigeonhole
 %patch -P 8 -p2 -b .initbysystemd
 %patch -P 9 -p1 -b .systemd_w_protectsystem
 %patch -P 15 -p1 -b .bigkey
-%patch -P 16 -p2 -b .opensslhmac3
+%patch -P 16 -p1 -b .opensslhmac3
 %patch -P 17 -p2 -b .fixvalcond
 %patch -P 18 -p1 -b .valbasherr
 %patch -P 19 -p1 -b .lua55
-%patch -P 23 -p2 -b .nolibotp
 %patch -P 24 -p1 -b .fixbuild
 %patch -P 25 -p1 -b .ftbfs-workaround
+%patch -P 26 -p1 -b .pr314
+%patch -P 27 -p1 -b .test_w_small_pipe
 cp run-test-valgrind.supp dovecot-pigeonhole/
 # valgrind would fail with shell wrapper
 echo "testsuite" >dovecot-pigeonhole/run-test-valgrind.exclude
 
-# drop OTP which uses SHA1 so we dont use SHA1 for crypto purposes
-#rm -rf src/lib-otp
-echo >src/auth/mech-otp-common.c
-echo >src/auth/mech-otp-common.h
-echo >src/auth/mech-otp.c
-echo >src/lib-auth/password-scheme-otp.c
-echo >src/lib-sasl/sasl-server-mech-otp.c
-echo >src/lib-sasl/dsasl-client-mech-otp.c
-pushd src/lib-otp
-for f in *.c *.h
-do
-  echo >$f
-done
-popd
 
 %build
 #required for fdpass.c line 125,190: dereferencing type-punned pointer will break strict-aliasing rules
@@ -198,6 +198,7 @@ else
 fi
 
 %configure                       \
+    --enable-experimental-mail-utf8 \
     INSTALL_DATA="install -c -p -m644" \
     --with-rundir=%{_rundir}/%{name}   \
     --with-systemd               \
@@ -260,9 +261,6 @@ rm -rf $RPM_BUILD_ROOT
 
 # move doc dir back to build dir so doc macro in files section can use it
 mv $RPM_BUILD_ROOT/%{_docdir}/%{name} %{_builddir}/%{name}-%{version}%{?prever}/docinstall
-
-# fix multilib issues
-%multilib_fix_c_header --file %{_includedir}/dovecot/config.h
 
 pushd dovecot-pigeonhole
 %make_install
@@ -365,7 +363,11 @@ fi
 %check
 %ifnarch aarch64
 # some aarch64 tests timeout, skip for now
-make check
+if ! make check
+then
+    find . -name test-suite.log | xargs cat ||:
+    exit 1
+fi
 cd dovecot-pigeonhole
 # FIXME: make check will fail as it requires doveconf to be already installed at /usr/bin/doveconf
 make check ||:
@@ -488,5 +490,4 @@ make check ||:
 %{_libdir}/%{name}/dict/libdriver_pgsql.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.2-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash f40957124b78a7dd954016bffa238c9ef2bb16a30a09e35f85cca35d3053547c
 
 Name:    poxml

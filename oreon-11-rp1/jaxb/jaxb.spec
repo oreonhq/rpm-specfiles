@@ -1,4 +1,4 @@
-%global source0_hash e94bdee43f224edb81ab631eea71c473509d05a1ab1297c619b0b7fae71a4318
+%global source0_hash d4638f0460cc85f2ec3ecf75f040e8fc8877d6eaa891925a718282b1ed58d88f
 
 %bcond_with bootstrap
 
@@ -112,7 +112,7 @@ JAXB schema generator. The tool to generate XML schema based on java classes.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n jaxb-ri-4.0.5-RI
+%autosetup -p1 -n jaxb-ri-%{version}-RI
 
 pushd jaxb-ri
 
@@ -186,5 +186,4 @@ popd
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.5-1
-- Import
+%autochangelog

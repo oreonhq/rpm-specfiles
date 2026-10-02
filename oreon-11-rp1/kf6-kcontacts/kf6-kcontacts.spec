@@ -1,13 +1,15 @@
-%global source0_hash 08f8bfe83c5d4516b5c76877ac51aba8e7001242cd56d1e2a987bc8410af53fd
+%global source1_hash 678365120333d2eb1c19b77e609e486a53d7d06868936184e15e1dc0cd9b0c12
+
+%global source0_hash 170b51a41ac132968ea03d5f1ce8c585777155bbdc57e819a0562b1f8d03b7a5
 
 %global stable_kf6 stable
-%global majmin_ver_kf6 6.29
+%global majmin_ver_kf6 6.30
 
 
 %global framework kcontacts
 
 Name:    kf6-%{framework}
-Version:	6.29.0
+Version:	6.30.0
 Release:        1%{?dist}
 Summary: The KContacts Library
 
@@ -16,7 +18,9 @@ License: CC0-1.0 AND LGPL-2.0-or-later
 URL:     https://projects.kde.org/%{framework}
 
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++

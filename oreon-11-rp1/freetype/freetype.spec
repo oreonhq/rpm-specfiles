@@ -1,6 +1,6 @@
-%global source0_hash 32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc
-%global source1_hash 719142a897aef4e5b47689ba4394934285045f45f6aade07c65160e1813839f2
-%global source2_hash 06aaf46e1cabca75856193e83f01f260a0d3dfc9954081db5b4ed1467b4385a0
+%global source0_hash 36bc4f1cc413335368ee656c42afca65c5a3987e8768cc28cf11ba775e785a5f
+%global source1_hash 66a988d8bbb58f83efafe555678ac172f70f0b060cf61424fe5460157470fd21
+%global source2_hash 1ac96a066c39108f2b0cc8aa805106ed2c38146c8913dc2396dc242e91e35686
 
 %{!?with_xfree86:%define with_xfree86 1}
 %bcond_with bootstrap
@@ -216,5 +216,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.{a,la}
 %{_mandir}/man1/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.14.1-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

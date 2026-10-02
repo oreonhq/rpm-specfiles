@@ -1,4 +1,4 @@
-%global source0_hash 4ea97b6e452836ac71994719f67aa058d695ca5202f0027941792fdc24b37c47
+%global source0_hash 47c8be99d7cb08b704d6065cff628b82417be44f386b9ae96c043cc6a51477fa
 
 # Firefox doesn't provide arch-independent web extension directory, although
 # GSConnect web extension is arch-independent
@@ -7,7 +7,7 @@
 %global app_id org.gnome.Shell.Extensions.GSConnect
 
 Name:           gnome-shell-extension-gsconnect
-Version:        72
+Version:        73
 Release:        1%{?dist}
 Summary:        KDE Connect implementation for GNOME Shell
 

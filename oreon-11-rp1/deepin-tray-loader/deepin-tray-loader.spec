@@ -1,7 +1,7 @@
-%global source0_hash e65da6dc51e5d7515df639c000db938292d6fcc6937507ad85e1f236a772c50f
+%global source0_hash d04f7fb35452da9b8fcdad1e0458c0d3ffe24af08b9bcfb4bc5ab43e196df049
 
 %global forgeurl https://github.com/linuxdeepin/dde-tray-loader
-Version:        2.0.40
+Version:        2.0.41
 %global tag %{version}
 %forgemeta
 

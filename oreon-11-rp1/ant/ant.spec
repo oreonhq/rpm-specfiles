@@ -1,4 +1,4 @@
-%global source0_hash 58f53e9212a80055bf14e92789c7f504206ab35b8bc3975fa3b728720d80efd7
+%global source0_hash 9c8b71ca430bc5135c4914d37c947ea6b8f044c81aae3adfffbe8fbac7b0e185
 
 # Copyright (c) 2000-2008, JPackage Project
 # All rights reserved.
@@ -331,8 +331,7 @@ Documentation pour %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n apache-ant-1.10.15
-%autosetup -p1 -n apache-ant-1.10.15
+%autosetup -p1 -n apache-ant-%{version}
 
 # clean jar files
 find . -name "*.jar" | xargs -t rm
@@ -649,5 +648,4 @@ install -p -m 644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 # -----------------------------------------------------------------------------
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.15-1
-- Import
+%autochangelog

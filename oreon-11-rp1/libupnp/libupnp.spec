@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b3edec34150d97a63dcd1d6b0032570f673e38f4b521dc72e865d2013d4a39ae
 
 Version: 1.18.5
 Summary: Universal Plug and Play (UPnP) SDK

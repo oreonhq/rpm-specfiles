@@ -1,4 +1,4 @@
-%global source0_hash 881a886e3afd0c5802b78bbe01b6697015cc13e5e82f47d2a276478eefbd0858
+%global source0_hash 999cec8e3a787d5d4a277587d5f5788913fe3e5450e90d06d8373ded71dde055
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1676717
 %undefine _ld_as_needed
@@ -17,7 +17,7 @@ Summary:        Multi-format image decoder library
 License:        GPL-2.0-only OR GPL-3.0-only OR MPL-1.0
 URL:            http://freeimage.sourceforge.net/
 %if 0%{?svn_rev:1}
-Source:        https://sourceforge.net/p/freeimage/svn/%{svn_rev}/tarball?path=/FreeImage/trunk#/freeimage-svn-r%{svn_rev}-FreeImage-trunk.zip
+Source:        https://src.fedoraproject.org/repo/pkgs/freeimage/freeimage-svn-r1909-FreeImage-trunk.zip/sha512/73c6fda90b8a878d3ec74db9d02f73b1424edae67de102398368fb89a1e0e3d22806e08e0dc16a776c8e0f3b89401120ed12655801d593ef3ff9a0f690021bcd/freeimage-svn-r1909-FreeImage-trunk.zip
 %else
 Source:        http://downloads.sourceforge.net/%{name}/FreeImage%(echo %{version} | sed 's|\.||g').zip
 %endif

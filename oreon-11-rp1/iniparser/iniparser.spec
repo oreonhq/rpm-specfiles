@@ -1,4 +1,4 @@
-%global source0_hash 67575ed032a544d5359610e5f697af786371bbc3eb01311218ef8adfd3e5e329
+%global source0_hash 7a339779ddb37fafbacbf73b176ce968ef9dc5146831b87aba80a18b68355ed4
 
 Name:          iniparser
 Version:       4.3.0
@@ -62,5 +62,4 @@ rm -rf %{buildroot}%{_docdir}/%{name}/examples
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2.6-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

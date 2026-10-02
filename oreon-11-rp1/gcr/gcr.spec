@@ -1,4 +1,4 @@
-%global source0_hash 0c3c341e49f9f4f2532a4884509804190a0c2663e6120360bb298c5d174a8098
+%global source0_hash c4442c15d4330f17a1f5194df08c576877af68412ab2521446a93bd5e24c931b
 
 %ifarch %{valgrind_arches}
 %global has_valgrind 1
@@ -135,5 +135,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc %{_datadir}/doc/gcr-4/
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.4.0.1-1
-- Import
+%autochangelog

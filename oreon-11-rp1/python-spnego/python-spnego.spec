@@ -1,4 +1,4 @@
-%global source0_hash 994388d308fb06e4498365ce78d222bf4f3570b6df4ec95738431f61510c971b
+%global source0_hash 448a491a9bf0e5fb957567fe46e6809fa836aa40dfcccebcc740bb64acb1be1c
 
 Name:           python-spnego
 Version:        0.12.2

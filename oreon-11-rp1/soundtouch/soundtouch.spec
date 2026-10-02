@@ -1,4 +1,4 @@
-%global source0_hash 3dda3c9ab1e287f15028c010a66ab7145fa855dfa62763538f341e70b4d10abd
+%global source0_hash 35d404e6e8c2ebd12fb4000da6fadd75c99e37eed2126a04721828c11c0377ec
 
 Name:           soundtouch
 Version:        2.4.1
@@ -72,5 +72,4 @@ ln -s soundtouch.pc %{buildroot}%{_libdir}/pkgconfig/soundtouch-1.0.pc
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

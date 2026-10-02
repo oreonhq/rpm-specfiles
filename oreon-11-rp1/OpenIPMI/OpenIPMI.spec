@@ -1,4 +1,4 @@
-%global source0_hash a0403148fa5f7bed930c958a4d1c558047e273763a408b3a0368edc137cc55d9
+%global source0_hash c62d38f5da7df4299ac3a652508e959537752440181e34c76b2aecebd7f301b9
 
 %global _hardened_build 1
 
@@ -231,5 +231,4 @@ echo ".so man1/openipmish.1" > %{buildroot}%{_mandir}/man1/ipmish.1
 %{_mandir}/man5/ipmi_sim_cmd.5*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.36-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

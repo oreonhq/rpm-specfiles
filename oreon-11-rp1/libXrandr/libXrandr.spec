@@ -1,4 +1,4 @@
-%global source0_hash 1ad5b065375f4a85915aa60611cc6407c060492a214d7f9daf214be752c3b4d3
+%global source0_hash 72b922c2e765434e9e9f0960148070bd4504b288263e2868a4ccce1b7cf2767a
 
 %global tarball libXrandr
 #global gitdate 20130524
@@ -71,8 +71,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_mandir}/man3/*.3*
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.4-8
-- Drop commented man3x line (rpmbuild expands macros in comments)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.4-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

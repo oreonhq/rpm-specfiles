@@ -1,4 +1,5 @@
-%global source0_hash 08018d9465fccaf9f56ee8178f2aa3419d6bcfef667308bb558e387516216e6d
+%global stable_kf6 stable
+%global source0_hash 22cac5b6432c4ad606aef72bf884983d9cb7d5245c43e75edd1c5a36f9058668
 
 %global kf6min 5.240.0
 %global qt6min 6.5.0

@@ -19,7 +19,7 @@ URL:            https://metacpan.org/release/Lucy
 # Provided charmonizer.c is used only at build time and upstream code is not
 # ready for external lucy-charmonizer (upstream treats it like a build-time
 # only copy library) I'm not going to unbudle the charmonizer.c now.
-Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWELLNHOF/Lucy-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/K/KA/KARMAN/Lucy-%{version}.tar.gz
 # Use system lemon instead of bundled one. See
 # <https://issues.apache.org/jira/browse/CLOWNFISH-60> for similar
 # perl-Clownfish-CFC issue and upstream reaction.

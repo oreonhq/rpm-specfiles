@@ -1,4 +1,4 @@
-%global source0_hash f135f1c78bd2c2e49bd0d40440f0d856b6ab7a13a2ad76e4b8f85283a5e3743e
+%global source0_hash 1ed316f6add1552a2d9e077bdddc9890ff8956f98ac4fb3fcfbf682accaf0ecd
 
 %undefine _hardened_build
 #Needed for bundled SFML

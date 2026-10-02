@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 02680578e4535441064aac21d33315daa009d742cab8098ac8b2749d86fffb6a
 
 Name:           gtk-sharp2
 Version:        2.12.45
@@ -110,4 +110,3 @@ find %{buildroot} -type f -name "*.a" -delete
 
 %changelog
 %autochangelog
-

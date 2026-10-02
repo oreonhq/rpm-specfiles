@@ -1,9 +1,9 @@
-%global source0_hash a322b08c5eaa68f780434300b1cdbe185435221044afd821859a4c169b52175c
+%global source0_hash 597373a08f21601b445319d09506b197b904c6090af0b211a78ba1c23b190bd6
 
 %bcond docs 1
 
 Name:     gmobile
-Version:  0.7.3
+Version:  0.7.4
 Release:  %autorelease
 Summary:  Functions useful in mobile related, glib based projects
 

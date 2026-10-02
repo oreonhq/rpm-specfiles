@@ -1,4 +1,4 @@
-%global source0_hash 1be2dea737cde25fe06621f84945e63eb71259e0c43e9f8f5da482dab1a7be92
+%global source0_hash e53b1ac288d017d66dde0471cd429a806168ecf07179d7f019572d7a7e05f0d6
 
 %global talloc_version 2.4.3
 
@@ -56,8 +56,8 @@ Requires: libtevent%{?_isa} = %{version}-%{release}
 Python 3 bindings for libtevent
 
 %prep
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }zcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+zcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %autosetup -n tevent-%{version} -p1
 
 %build
@@ -100,5 +100,4 @@ cp -a doc/man/man3 %{buildroot}%{_mandir}
 %ldconfig_scriptlets
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.17.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

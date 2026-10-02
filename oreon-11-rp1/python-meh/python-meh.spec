@@ -1,4 +1,4 @@
-%global source0_hash 7b66046b4693e7631aad299e5a55d0255962608cd03372f559745c575aa8c920
+%global source0_hash 84dddea4c8ad1c9e54dccd91bb20f1b7886f825e3fde985be849bea78c7dd427
 
 %global libreportver 2.0.18-1
 
@@ -13,7 +13,7 @@ Release: 1%{?dist}
 # This tarball was created from upstream git:
 #   git clone https://github.com/rhinstaller/python-meh
 #   cd python-meh && make archive
-Source0:        https://github.com/rhinstaller/python-meh/archive/%{name}-%{version}.tar.gz#/python-meh-0.52.tar.gz
+Source0:        https://github.com/rhinstaller/python-meh/archive/%{name}-%{version}.tar.gz#/python-meh-%{version}.tar.gz
 
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -94,11 +94,4 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/python-meh
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52-11
-- Drop %%find_lang when no catalogs are installed (find-lang.sh exits 1)
-
-* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52-10
-- Fix prep section directory name for GitHub archive
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash c95ebcdc3947c6b76a772194e8af18d4b4282d8162014b5dc8c264493c657ef6
+%global source0_hash 93d6ec4e2f3da5ae88d73c438fa07bdbbf14baba8d8b6501b11eeb972a21dfbf
 
 %bcond bootstrap 0
 
@@ -14,7 +14,6 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        %{url}/archive/%{name}-%{version}.tar.gz
 
 # From upstream commit 67d5988
-Patch:          0001-Add-BSD-2-license-file.patch
 
 %if %{without bootstrap}
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)

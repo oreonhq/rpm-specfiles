@@ -15,19 +15,14 @@ Signed-off-by: Thomas E. Dickey <dickey@invisible-island.net>
  src/xftfreetype.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/src/xftfreetype.c b/src/xftfreetype.c
-index b91f8f4..9fa91db 100644
 --- a/src/xftfreetype.c
 +++ b/src/xftfreetype.c
-@@ -849,7 +849,7 @@ XftFontOpenInfo (Display	*dpy,
-     if (!(face->face_flags & FT_FACE_FLAG_SCALABLE))
- 	antialias = FcFalse;
- 
+@@ -852,7 +852,7 @@
+ #ifdef FT_HAS_SVG
+     color = (FT_HAS_COLOR(face) && !FT_HAS_SVG(face)) ? FcTrue : FcFalse;
+ #else
 -    color = FT_HAS_COLOR(face) ? FcTrue : FcFalse;
 +    color = (FT_HAS_COLOR(face) && !FT_HAS_SVG(face)) ? FcTrue : FcFalse;
+ #endif
  
      /*
-      * Find the appropriate picture format
--- 
-GitLab
-

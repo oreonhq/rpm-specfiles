@@ -1,4 +1,4 @@
-%global source0_hash 2d056dbec3a3a16c48e3451532ff53afe8fc23ed1f56bed4191197fa99a4b202
+%global source0_hash 7eb71ae35bcfbea27c6f1ab094ce4fbd4093eb396d5eebe926c0d77280bc7791
 
 # header-only library
 %global debug_package %{nil}
@@ -14,7 +14,6 @@ License: MIT
 URL: https://gitlab.com/mdds/mdds
 Source0:        https://gitlab.com/mdds/mdds/-/archive/%{version}/mdds-%{version}.tar.bz2
 # https://gitlab.com/mdds/mdds/-/merge_requests/94
-Patch0:  include.patch
 
 BuildRequires: make
 BuildRequires: boost-devel
@@ -68,5 +67,4 @@ make check %{?_smp_mflags}
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

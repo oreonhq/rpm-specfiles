@@ -1,4 +1,4 @@
-%global source0_hash 81f5035a25c576af1a93f0061cf70bde6d00a0c7bd1274abf73f5b5389a6f82d
+%global source0_hash a24f93be94712a8c11752294410f2f8a2510ec7fdc931d207fc61cdf30e54f4d
 
 #
 # Red Hat BIND9 package .spec file
@@ -950,5 +950,4 @@ fi;
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.18.44-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

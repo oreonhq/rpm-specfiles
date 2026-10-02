@@ -1,4 +1,4 @@
-%global source0_hash 56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
+%global source0_hash 5630c24cdeb33b131612f7eb4b1a9934234754f9f388ff8617458d0be6f239a1
 
 %if %{defined rhel}
 %bcond_with mpich
@@ -550,5 +550,4 @@ done
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.10-17
-- Prepare for Oreon 11 (RP1)
+%autochangelog

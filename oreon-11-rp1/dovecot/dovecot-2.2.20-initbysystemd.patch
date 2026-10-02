@@ -37,9 +37,9 @@ diff -up dovecot-2.4.1-build/dovecot-2.4.1-4/Makefile.am.initbysystemd dovecot-2
  	dovecot.service.in \
 +	dovecot-init.service \
  	dovecot.socket \
- 	version \
+ 	version.txt \
  	build-aux/git-abi-version-gen \
-@@ -67,7 +68,8 @@ dovecot-config: dovecot-config.in Makefi
+@@ -68,7 +69,8 @@ dovecot-config: dovecot-config.in Makefi
  if WANT_SYSTEMD
  systemdsystemunit_DATA = \
          dovecot.socket \

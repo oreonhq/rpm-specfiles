@@ -1,4 +1,5 @@
-%global source0_hash a2deaffa191c81abbf830d4060eb84129f31b9b3b945b7791344e8875b595286
+%global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
+%global source0_hash 843a728aace3c454e08bb1574c470a06551256e6f0389ced7bc520740d9667e9
 
 %bcond_with bootstrap
 
@@ -32,7 +33,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 Name:           slf4j
-Version:        2.0.19
+Version:        2.0.20
 Release:        %autorelease
 Summary:        Simple Logging Facade for Java
 # the log4j-over-slf4j and jcl-over-slf4j submodules are ASL 2.0, rest is MIT
@@ -41,7 +42,7 @@ URL:            https://www.slf4j.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/qos-ch/slf4j/archive/v_%{version}.tar.gz#/slf4j-1.7.36.tar.gz
+Source0:        https://github.com/qos-ch/slf4j/archive/v_%{version}.tar.gz#/slf4j-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}
@@ -113,14 +114,13 @@ SLF4J Source JARs.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n slf4j-v_1.7.36
-%autosetup -p1 -n slf4j-v_1.7.36
+%autosetup -p1 -n slf4j-v_%{version}
+%mvn_compat_version : 2.0.17
 find -name '*.jar' -delete
 install -p -m 0644 %{SOURCE1} LICENSE-2.0.txt
 
 %pom_disable_module integration
 %pom_disable_module osgi-over-slf4j
-%pom_disable_module slf4j-android
 %pom_disable_module slf4j-ext
 %pom_disable_module slf4j-log4j12
 %pom_disable_module slf4j-reload4j
@@ -133,7 +133,6 @@ sed -i s/tasks/target/ slf4j-api/pom.xml
     <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>"
 
 # Fix javadoc links
-%pom_xpath_remove "pom:links"
 %pom_xpath_inject "pom:plugin[pom:artifactId[text()='maven-javadoc-plugin']]/pom:configuration" "
     <detectJavaApiLink>false</detectJavaApiLink>
     <isOffline>false</isOffline>
@@ -145,14 +144,7 @@ find -name '*.css' -o -name '*.js' -o -name '*.txt' -exec sed -i 's/\r//' {} +
 # Remove wagon-ssh build extension
 %pom_xpath_remove pom:extensions
 
-# The general pattern is that the API package exports API classes and does
-# not require impl classes. slf4j was breaking that causing "A cycle was
-# detected when generating the classpath slf4j.api, slf4j.nop, slf4j.api."
-# The API bundle requires impl package, so to avoid cyclic dependencies
-# during build time, it is necessary to mark the imported package as an
-# optional one.
-# Reported upstream: http://bugzilla.slf4j.org/show_bug.cgi?id=283
-sed -i '/Import-Package/s/\}$/};resolution:=optional/' slf4j-api/src/main/resources/META-INF/MANIFEST.MF
+# slf4j 2.x generates its OSGi manifest at build time; no static MANIFEST.MF to patch
 
 # Source JARs for are required by Maven 3.4.0
 %mvn_package :::sources: sources
@@ -191,5 +183,4 @@ sed -i '/Import-Package/s/\}$/};resolution:=optional/' slf4j-api/src/main/resour
 %license LICENSE.txt LICENSE-2.0.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.36-1
-- Import
+%autochangelog

@@ -1,14 +1,11 @@
-%global source0_hash none
-
-%global source2_key_fpr E3F42FCE156830A80358E6E94FD1AEC3365AF7BF
-
+%global source0_hash 95477cc412a5980ebaa3152d5561e35826f550d91cf303d3eb7ad3dad10cb46d
 %global libsolv_version 0.7.21
 %global libmodulemd_version 2.13.0
 %global librepo_version 1.18.0
 %global dnf_conflict 4.11.0
 %global swig_version 3.0.12
 %global libdnf_major_version 0
-%global libdnf_minor_version 75
+%global libdnf_minor_version 76
 %global libdnf_micro_version 0
 
 %define __cmake_in_source_build 1
@@ -60,14 +57,14 @@
 
 Name:           libdnf
 Version:        %{libdnf_major_version}.%{libdnf_minor_version}.%{libdnf_micro_version}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Library providing simplified C and Python API to libsolv
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/libdnf
-Source0:        https://github.com/rpm-software-management/libdnf/releases/download/0.75.0/libdnf-0.75.0.tar.gz
-Source1:        libdnf-0.75.0.tar.gz.asc
-# Key exported from Petr Pisar's keyring
-Source2:        gpgkey-E3F42FCE156830A80358E6E94FD1AEC3365AF7BF.gpg
+Source0:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source1:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
+# Maintainers keyring
+Source2:        rpm-software-management.gpg
 
 BuildRequires:  cmake >= 3.5.0
 BuildRequires:  gcc
@@ -197,7 +194,7 @@ Python 3 bindings for the hawkey library.
 %endif
 
 %prep
-%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 %if %{with python2}
@@ -321,5 +318,4 @@ popd
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{libdnf_major_version}.%{libdnf_minor_version}.%{libdnf_micro_version}-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

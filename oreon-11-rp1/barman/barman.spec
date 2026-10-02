@@ -1,7 +1,7 @@
-%global source0_hash 7ecf6730abf5abe06cb8229bc5230cfad1c91627d87a330d0f4119426b53eae0
+%global source0_hash 568418ccc5a1b6fdbddb1f916afa3590c78b836c966ab76b1afcf44d247a58e1
 
 Name:       barman
-Version:    3.20.0
+Version:    3.20.1
 Release:    %autorelease
 Summary:    Backup and Recovery Manager for PostgreSQL
 License:    GPL-3.0-only
@@ -9,6 +9,7 @@ URL:        http://www.pgbarman.org/
 BuildArch:  noarch
 
 Source0:    https://github.com/EnterpriseDB/barman/archive/release/%{version}/%{name}-release-%{version}.tar.gz
+
 Source1:    %{name}.cron
 Source2:    %{name}.logrotate
 

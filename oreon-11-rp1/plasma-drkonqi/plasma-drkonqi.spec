@@ -1,4 +1,4 @@
-%global source0_hash c7f9402b7a32e077b23d34d083926bc7a78f18b93184510def3fcc32532d6959
+%global source0_hash 9d02b9bd8534ac98dbb77a73248112654e2dee3ab1cf3cc59e69ba78027ab423
 
 %global stable_kf6 stable
 
@@ -130,8 +130,4 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/org.kde.{drkonqi.cor
 %{_kf6_datadir}/polkit-1/actions/org.kde.drkonqi.policy
 
 %changelog
-* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
-- Update to KDE Plasma 6.6.5
-
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.5-1
-- Import
+%autochangelog

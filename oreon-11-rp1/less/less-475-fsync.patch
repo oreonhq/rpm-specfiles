@@ -1,6 +1,6 @@
-diff -up less-678-build/less-678/configure.ac.fsync less-678-build/less-678/configure.ac
---- less-678-build/less-678/configure.ac.fsync	2025-05-01 22:42:03.000000000 +0200
-+++ less-678-build/less-678/configure.ac	2025-05-22 18:10:23.572796329 +0200
+diff -up configure.ac configure.ac
+--- configure.ac	2025-05-01 22:42:03.000000000 +0200
++++ configure.ac	2025-05-22 18:10:23.572796329 +0200
 @@ -210,6 +210,8 @@ AH_TEMPLATE([HAVE_TIME_T],
  	[Define HAVE_TIME_T if your system supports the "time_t" type.])
  AH_TEMPLATE([HAVE_STRERROR],

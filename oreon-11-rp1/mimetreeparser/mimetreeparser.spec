@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 88750429310e9dc60e1f962dc9d7e58e1936e878db54aa41cb7f5c4b4fc524dc
 
 Name:    mimetreeparser

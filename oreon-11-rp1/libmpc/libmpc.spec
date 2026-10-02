@@ -1,4 +1,4 @@
-%global source0_hash e90724fc79c53d4973421b88b324d0af97e4db17509aa2e555775ea15ec2718c
+%global source0_hash 7bc6d0b20e12b53badffbe0c1972618a08e5825fa5861ff848dcca07b5f5b23a
 %global source1_hash none
 
 # build compat-libmpc for bootstrapping purposes
@@ -130,5 +130,4 @@ make check
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.1-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

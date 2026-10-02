@@ -6,11 +6,12 @@
 Summary: German dictionaries for Aspell
 Name: aspell-%{lang}
 Epoch: 50
-Version: 20030222
-Release: 39%{?dist}
+Version: 20161207
+Release: 1%{?dist}
 License: GPL-2.0-only
 URL: http://aspell.net/
 Source: ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell%{aspellversion}-%{lang}-%{version}-%{langrelease}.tar.bz2
+
 
 # IMPORTANT
 # This package has been deprecated since Fedora 39

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f748f7c2d6fd375cc93d3fba7ef4a9e3a092421b8dbf34d8d4dc06be9492dfdd
 
 Name:           python-bcrypt
 Version:        5.0.0
@@ -20,7 +20,7 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'bcrypt' generated automatically by pyp2spec.}
 
-Patch:          python-bcrypt-4.3.0-pyo3.patch
+Patch:          python-bcrypt-5.0.0-pyo3.patch
 
 %description %_description
 
@@ -62,4 +62,3 @@ Summary:        %{summary}
 
 %changelog
 %autochangelog
-

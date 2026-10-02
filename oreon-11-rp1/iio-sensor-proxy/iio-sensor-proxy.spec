@@ -1,4 +1,4 @@
-%global source0_hash cdf9bdb6ef125d6189069d3f6dc9afb301ce5a17213971e65c5e20a57494593d
+%global source0_hash 9e0baa665c86e7afdc86b59627a50e6f4f1f87cfa31f1fc1e56fb7b1dbd678bf
 
 Name:           iio-sensor-proxy
 Version:        3.9
@@ -37,7 +37,7 @@ This package contains the documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am
+%autosetup -S git_am -n iio-sensor-proxy-%{version}-0085ddf8ecb173a1c5fcf2344aa40e561125354f
 
 %build
 %meson -Dgtk_doc=true -Dgtk-tests=false
@@ -71,5 +71,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/gtk-doc/html/%{name}/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.8-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

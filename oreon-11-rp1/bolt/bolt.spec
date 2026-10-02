@@ -1,4 +1,4 @@
-%global source0_hash 0e9646ff153f4445d85bfaac1b0d77d86df9c639f84888f15ee7b0f1fa892b58
+%global source0_hash 3e23e862bf798476379bd4749824ed763a97ea7ee20f750a3ad03669994b34c9
 
 Name:          bolt
 Version:       0.9.11
@@ -49,7 +49,7 @@ Test files for bolt
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n bolt-%{version}-9d1d66380353dab94c28466f34adb2ba6c7e4393
 
 %build
 sed -i "s/WatchdogSec=3min/#WatchdogSec=3min/g" data/bolt.service.in
@@ -91,5 +91,4 @@ sed -i "s/WatchdogSec=3min/#WatchdogSec=3min/g" data/bolt.service.in
 %{_libexecdir}/installed-tests/bolt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.10-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

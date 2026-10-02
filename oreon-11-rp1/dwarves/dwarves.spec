@@ -1,4 +1,4 @@
-%global source0_hash 1c89f47dc4f127c4b9d3fb46c8386a40be45c36ef82e8df472418de9423fc5bb
+%global source0_hash 319cbf319e9fc92065a5407ce47eb868d73566f3d4840a56832734e4579df947
 
 %define libname libdwarves
 %define libver 1
@@ -134,5 +134,4 @@ rm -Rf %{buildroot}
 %{_libdir}/%{libname}_reorganize.so
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.30-3
-- Import
+%autochangelog

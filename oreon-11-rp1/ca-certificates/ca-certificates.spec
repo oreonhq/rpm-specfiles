@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ba6014fa6c7eaefb22dd977fb8a8d297237ea867f3c18c6c4dd53fad5180a1f7
 
 %define pkidir %{_sysconfdir}/pki
 %define catrustdir %{_sysconfdir}/pki/ca-trust
@@ -90,7 +90,8 @@ This package contains the set of CA certificates chosen by the
 Mozilla Foundation for use with the Internet PKI.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }rm -rf %{name}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+rm -rf %{name}
 mkdir %{name}
 mkdir %{name}/certs
 mkdir %{name}/certs/legacy-default
@@ -421,5 +422,4 @@ fi
 %ghost %{catrustdir}/extracted/edk2/cacerts.bin
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2025.2.80_v9.0.304-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

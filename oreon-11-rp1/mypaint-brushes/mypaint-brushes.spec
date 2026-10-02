@@ -1,4 +1,4 @@
-%global source0_hash fef66ffc241b7c5cd29e9c518e933c739618cb51c4ed4d745bf648a1afc3fe70
+%global source0_hash 7984a74edef94571d872d0629b224abaa956a36f632f5c5516b33d22e49eb566
 
 %global mypaint_data_version 1.0
 
@@ -62,5 +62,4 @@ make %{?_smp_mflags}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

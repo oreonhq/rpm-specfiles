@@ -1,4 +1,4 @@
-%global source0_hash 2921cdc344f1acee04bcd6ea1e29565c1308263006e134a9ee38cf9c9d6fe75e
+%global source0_hash a01492a17a9b6c0ee3f92ee578850e305315b9f298da5f006a1cd4b51db01a5e
 
 Name:       mkfontscale
 Version:    1.2.4
@@ -48,5 +48,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man1/mkfontscale.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.3-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

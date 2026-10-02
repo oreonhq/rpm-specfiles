@@ -1,4 +1,4 @@
-%global source0_hash 01576fa58598ccdd3d366febfaef61e3d1de93eb60a93f9ac6ba5faf84144c6f
+%global source0_hash 06faf5ce883852258cc6a2a4da9fe5ce023e97d01e50625ff36f4a01ea703468
 
 %global catalogue /etc/X11/fontpath.d
 
@@ -120,5 +120,4 @@ desktop-file-install \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.5ga5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 40162a706c56f7592d08fd52ef5511cb7ac191f3593cf07306a0a554c6281fcf
+%global source0_hash 22ae0e887f8cca8031a325c67d005207653200b40e71edb3f88780e28e47d0ff
 
 # We can skip tests
 %bcond_without testsuite
@@ -401,5 +401,4 @@ _EOF
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.4.1-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

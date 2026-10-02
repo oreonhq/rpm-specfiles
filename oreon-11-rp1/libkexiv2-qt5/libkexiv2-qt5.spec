@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 0806898554b62a6f834d33bb481923d82bde91b1692ba7b146fec94b9a503d03
 
 Name:    libkexiv2-qt5

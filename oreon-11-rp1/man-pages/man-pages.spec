@@ -1,4 +1,4 @@
-%global source0_hash a2c8a0c2efe8a978ce51ce800461eb9e8931f12cc7ba4b7faa3082b69ba7f12c
+%global source0_hash 88a7c42ad2e03d8b96dc72d95e451f2d875ff0f43103a8eb8ac8242133bdcb05
 
 Summary: Linux kernel and C library user-space interface documentation
 Name: man-pages
@@ -136,5 +136,4 @@ fi
 %{_mandir}/man*/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.13-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

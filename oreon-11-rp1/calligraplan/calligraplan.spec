@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash none
 
 %bcond mpxj 0

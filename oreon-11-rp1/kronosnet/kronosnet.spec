@@ -1,4 +1,4 @@
-%global source0_hash 7c386a8aaaa3aece727eec3e1a51217a97f4af36cca28c8ea2fb2280b09edd6e
+%global source0_hash e980d57a75c9ae9ca4ba2826cd3b02bcbc6463a32aaac0d0ab8eb0b6b5df8d0a
 
 ###############################################################################
 ###############################################################################
@@ -439,5 +439,4 @@ Requires: libnozzle1%{_isa} = %{version}-%{release}
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.33-2
-- Import
+%autochangelog

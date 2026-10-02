@@ -1,4 +1,4 @@
-%global source0_hash 7face85e3d2d5eb5e7adbd181adee6759097f135b10d6fb30be8e070af7e7054
+%global source0_hash b5321d3ff848d361c129aeec4ec8431642582b7036cb8a2a403667d5909d4172
 
 #% define pre_release rc1
 %define pre_release %nil
@@ -6,7 +6,7 @@
 %global bash_completion_dir %(pkg-config --variable=completionsdir bash-completion || echo /etc/bash_completion.d)
 
 Name:            cifs-utils
-Version:         7.7
+Version:         7.8
 Release:         %autorelease
 Summary:         Utilities for mounting and managing CIFS mounts
 
@@ -132,5 +132,4 @@ about CIFS mount.
 %{_mandir}/man1/smbinfo.*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

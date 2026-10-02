@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Custom parsing attached to subroutines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-CallParser
-Source0:        https://cpan.metacpan.org/modules/by-module/Devel/Devel-CallParser-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LN/LNATION/Devel-CallParser-%{version}.tar.gz
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils

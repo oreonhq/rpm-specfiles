@@ -22,7 +22,7 @@ Beetbrainz.}
 %gometa
 
 Name:           %{goname}
-Version:        1.7.1
+Version:        1.8.1
 Release:        %autorelease
 Summary:        Playback Event Dispatcher for Beetbrainz
 License:        GPL-3.0-or-later

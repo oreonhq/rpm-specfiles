@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4603736f40648684196fb826c97704c93ca80b32ec17d066b3276a9ed1a30939
 
 %define		baseversion 1.2.14
 
@@ -7,7 +7,7 @@ Name:		python-alsa
 Version:	%{baseversion}
 Release:	7%{?dist}
 License:	LGPL-2.1-or-later
-Source0:	ftp://ftp.alsa-project.org/pub/pyalsa/pyalsa-%{version}.tar.bz2
+Source0:	https://www.alsa-project.org/files/pub/pyalsa/pyalsa-%{version}.tar.bz2
 URL:		http://www.alsa-project.org/
 BuildRequires:	alsa-lib-devel >= %{version}
 BuildRequires:	python3-devel
@@ -48,4 +48,3 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %changelog
 %autochangelog
-

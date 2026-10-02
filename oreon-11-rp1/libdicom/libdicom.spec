@@ -1,4 +1,4 @@
-%global source0_hash 3b8c05ceb6bf667fed997f23b476dd32c3dc6380eee1998185c211d86a7b4918
+%global source0_hash 75f1167f5153c659cdd58f2b432d2592bf0477abe0087e195bc621b5594ef10a
 
 Name:           libdicom
 Version:        1.3.0

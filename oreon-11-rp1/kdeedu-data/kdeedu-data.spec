@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash e7b7f90aa23ee5b2b5943003a376f96fa75591716cb7d99a22b5ef08020fa519
 
 Name:    kdeedu-data

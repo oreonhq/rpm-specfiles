@@ -1,4 +1,4 @@
-%global source0_hash 09702ddb078b637e85de9236cbedd3fb9d7af7c6e797026c538b45748ad4d631
+%global source0_hash 14bf695d37b65b9b1bf550fea5d0adaf9806c50e5419ef2a176a4b8e9aade3df
 %global source2_hash bf79d401b6f1b507713615ad49ecfdd372ac715d426b5fc0f42ce2dcef1f9960
 
 Name:           kea
@@ -41,9 +41,7 @@ Patch1:         kea-sd-daemon.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2430574
 # https://gitlab.isc.org/isc-projects/kea/-/issues/4266
 # Based on: https://gitlab.isc.org/isc-projects/kea/-/commit/c54dfd47714fea7e79c16d99c09b896d9c8d44df
-Patch2:         kea-replace-BOOST_STATIC_ASSERT.patch
 # Based on: https://gitlab.isc.org/isc-projects/kea/-/commit/9a86f27a94677ec9ee1988af892d65b7ab22027e
-Patch3:         kea-move-to-system-timer.patch
 
 BuildRequires: boost-devel
 # %%meson -D crypto=openssl

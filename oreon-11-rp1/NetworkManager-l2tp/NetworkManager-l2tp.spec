@@ -1,4 +1,4 @@
-%global source0_hash 7a951d81dfbcbe4044fb88114f7a4e91d4e8f3d55bde148c743d3ee4700df3d9
+%global source0_hash f63cc794029759aeee5bcef10f9821659e623ccc0f11b22a19e06ebb256340e0
 %global ppp_version %(pkg-config --modversion pppd 2>/dev/null || echo 2.5.1)
 
 Summary:   NetworkManager VPN plugin for L2TP and L2TP/IPsec

@@ -1,4 +1,4 @@
-%global source0_hash bba1007767f995ab652af49b94b50419a6b2e3595b0c7c9324d063c4f6c2e7da
+%global source0_hash 58f6a9388c15bc349e8fa0b5cca122592215a649a7dbf1a0408a949f19dd70fe
 
 # SPDX-License-Identifier: MIT
 
@@ -42,5 +42,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %fontfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.200-14
-- Prepare for Oreon 11 (RP1)
+%autochangelog

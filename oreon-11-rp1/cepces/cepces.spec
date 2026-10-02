@@ -1,4 +1,4 @@
-%global source0_hash 1d7bb521364f9574e71c12ab7a864a47c099dc41c89fb022fb44ea1bd3112d0f
+%global source0_hash f0b3d4eccd683c964ea7df2b929a71c991b3f37c18710431b685948aaef9fec2
 
 %bcond_without selinux
 %global selinux_variants targeted
@@ -196,5 +196,4 @@ fi
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.17-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

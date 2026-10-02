@@ -1,4 +1,4 @@
-%global source0_hash e59984416a72d58b46a52bfec1b1361aa7d84354628227ee2783626c7a6db6b6
+%global source0_hash b77041324f0109f77161ee43743fe04baa485866af8460d31e476ad3f7648fd5
 
 # INFO: Package contains data-only, no binaries, so no debuginfo is needed
 %global debug_package %{nil}
@@ -107,5 +107,4 @@ end
 %{_datadir}/pkgconfig/%{name}.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.47-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

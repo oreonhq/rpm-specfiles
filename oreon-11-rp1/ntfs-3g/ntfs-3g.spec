@@ -1,4 +1,4 @@
-%global source0_hash bcf3cf301a79e42d330128ffb52d4cf615bd1d30c10a92d9d8d14f2bb4fcd9bf
+%global source0_hash 350d9415c59f7c3fa74e23985ad2d56423c6a168337368f672e2e362d8f295c8
 
 # Pass --with externalfuse to compile against system fuse lib
 # Default is internal fuse-lite.
@@ -9,7 +9,7 @@
 
 Name:           ntfs-3g
 Epoch:          2
-Version:        2026.9.18
+Version:        2026.9.28
 Release:        1%{?dist}
 Summary:        Linux NTFS userspace driver
 # Automatically converted from old format: GPLv2+ - review is highly recommended.

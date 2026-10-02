@@ -1,4 +1,4 @@
-%global source0_hash 6e414deadb06de391909610178711fee5ab08990bafe7dd5b1b8bf4c4fc6f6b7
+%global source0_hash 9662d791a69bcdd1288f9256a4dd88da3718a5da8128af32afa76b94c24f6b7c
 
 Name:           pyodbc
 Version:        5.3.0
@@ -10,7 +10,6 @@ Source0:        https://github.com/mkleehammer/pyodbc/archive/%{version}.tar.gz#
 # Fix build with Python 3.13
 # https://github.com/mkleehammer/pyodbc/pull/1361
 # https://bugzilla.redhat.com/show_bug.cgi?id=2246290
-Patch:          0001-Adjust-for-_PyLong_AsByteArray-signature-change-in-P.patch
 BuildRequires:  gcc-c++
 BuildRequires:  unixODBC-devel
 BuildRequires:  python3-devel
@@ -58,5 +57,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{python3_sitearch}/%{name}.pyi
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.0-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

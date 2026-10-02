@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash e9fce911e96eac14d379b336e89c3e1853a6b350dade865d14c14b769704ffbd
 
 %global base_name    plymouth-kcm

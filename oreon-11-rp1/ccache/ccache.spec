@@ -1,4 +1,4 @@
-%global source0_hash d683d5964a395f00c1c812ea1d1d523179f1097cbff7e7e54e714fa3f99711b1
+%global source0_hash dfd2b9e446b2cf68e83e21b25317d8f868de6f1b246c7e99e04d07f4e1b0b97e
 
 %ifarch x86_64
 %global archs %{ix86} x86_64
@@ -14,7 +14,7 @@
 %global relccache %(%abs2rel %{_bindir}/ccache %{_libdir}/ccache)
 
 Name:           ccache
-Version:        4.14
+Version:        4.14.1
 Release:        1%{?dist}
 Summary:        C/C++ compiler cache
 
@@ -25,6 +25,7 @@ Summary:        C/C++ compiler cache
 License:        GPL-3.0-or-later AND Apache-2.0 AND BSL-1.0 AND MIT
 URL:            http://ccache.dev/
 Source0:        https://github.com/ccache/ccache/releases/download/v%{version}/%{name}-%{version}.tar.gz
+
 Source1:        %{name}.sh.in
 Source2:        %{name}.csh.in
 

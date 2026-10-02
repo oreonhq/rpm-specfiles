@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 8cdaf5b7f3f4f39557ae05ed8b0852136b43a04ab686db7d39255b206233677a
 
 Name:           python-astroid
-Version:        4.3.1
+Version:        4.3.2
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        An abstract syntax tree for Python with inference support.

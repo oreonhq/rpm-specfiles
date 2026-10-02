@@ -1,4 +1,4 @@
-%global source0_hash da853ff382ae8000e967767ad4ed90c5dc73004858f6dec48fc6f4340c306922
+%global source0_hash 735a42a82e5a866b57869f8b92bf218f58c7fb62f75d6707a6345142d152762f
 
 # According to documentation, module using Coro is just:
 # A PROOF-OF-CONCEPT IMPLEMENTATION FOR EXPERIMENTATION.
@@ -32,14 +32,12 @@
 %endif
 
 Name:           perl-DBI
-Version:        1.654
+Version:        1.655
 Release:        1%{?dist}
 Summary:        A database access API for perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://dbi.perl.org/
 Source0:        https://cpan.metacpan.org/authors/id/H/HM/HMBRAND/DBI-%{version}.tgz
-
-
 
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -77,7 +75,9 @@ BuildRequires:  perl(IO::Dir)
 BuildRequires:  perl(IO::File)
 BuildRequires:  perl(IO::Select)
 BuildRequires:  perl(IPC::Open3)
+BuildRequires:  perl(List::Util)
 BuildRequires:  perl(Math::BigInt)
+BuildRequires:  perl(Module::Load) >= 0.22
 BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(Storable)
 BuildRequires:  perl(Symbol)
@@ -107,10 +107,11 @@ BuildRequires:  perl(Benchmark)
 BuildRequires:  perl(Encode)
 BuildRequires:  perl(File::Copy)
 BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Temp)
 BuildRequires:  perl(lib)
 BuildRequires:  perl(overload)
 BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Test::Simple) >= 0.90
+BuildRequires:  perl(Test::Simple) >= 0.96
 %if %{with perl_DBI_enables_Clone}
 Suggests:       perl(Clone) >= 0.34
 %endif
@@ -133,11 +134,6 @@ Suggests:       perl(SQL::Statement) >= 1.402
 %global __requires_exclude %{__requires_exclude}|^perl\\(DBI::db\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(DBI::st\\)
 
-Provides:       perl(DBD::File)
-Provides:       perl(DBI)
-Provides:       perl(DBI::Const::GetInfoType)
-Provides:       perl(DBI::DBD)
-Provides:       perl(DBD::DBM)
 %description 
 DBI is a database access Application Programming Interface (API) for
 the Perl Language. The DBI API Specification defines a set of
@@ -156,6 +152,7 @@ the use of existing DBI frameworks like DBIx::Class.
 
 %package tests
 Summary:        Tests for %{name}
+BuildArch:      noarch
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
 # Optional run-time:
@@ -251,7 +248,7 @@ make test
 
 %files
 # Changes already packaged as DBI::Changes
-%doc README.md ex/perl_dbi_nulls_test.pl ex/profile.pl
+%doc CONTRIBUTING.md README.md SECURITY.md ex/perl_dbi_nulls_test.pl ex/profile.pl
 %{_bindir}/dbipro*
 %{_bindir}/dbilogstrip
 %{perl_vendorarch}/*.p*

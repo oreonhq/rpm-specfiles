@@ -1,4 +1,4 @@
-%global source0_hash 1492dfef8dd6c3036446ac3b340005d92ab92f7d48ee3271b5dac1d36945d3d9
+%global source0_hash 03e9be69a30be4011f559da75328b6d7cea8ad921fabfbd551ce10bf45cdc992
 
 Name:           jpegxl
 Version:        0.12.0
@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl
-Source0:        https://github.com/libjxl/libjxl/archive/v%{version}/%{name}-%{version}.tar.gz#/jpegxl-0.11.1.tar.gz
+Source0:        https://github.com/libjxl/libjxl/archive/v%{version}/%{name}-%{version}.tar.gz#/jpegxl-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -97,5 +97,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_bindir}/benchmark_xl
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.1-2
-- Add JPEG XL (libjxl) stack
+%autochangelog

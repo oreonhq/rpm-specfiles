@@ -1,4 +1,4 @@
-%global source0_hash 43d3436c0199496ee18aca4f875fe3926a40a0fae781bc280cdb96f7b5068ac0
+%global source0_hash 1e5b3b8373141caa37bf42fe74ae1950de3ff15c84966d8a415485d334ba5507
 
 # the package gets input from scanner devices from network
 # can be possibly dangerous if an attacker camouflages himself
@@ -101,5 +101,4 @@ rm -f %{buildroot}%{_libdir}/sane/libsane-airscan.so
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.99.36-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

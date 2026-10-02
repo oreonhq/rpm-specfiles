@@ -1,4 +1,4 @@
-%global source0_hash 0c04763200467b9b61a916b33646a6916a97cc9869d8b6dca57427b1f2734dee
+%global source0_hash 2b681170ddc22b6b283cafeed48f427c30a17056974a6a9ed137c354e0f7730c
 
 %global         majorminor 1.0
 
@@ -7,8 +7,8 @@
 #global shortcommit %%(c=%%{gitcommit}; echo ${c:0:5})
 
 Name:           gstreamer1-plugins-ugly-free
-Version:        1.29.2
-Release:        1%{?dist}
+Version:        1.28.7
+Release:        %autorelease
 Summary:        GStreamer streaming media framework "ugly" plugins
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND CC0-1.0
@@ -151,5 +151,4 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
-- Import
+%autochangelog

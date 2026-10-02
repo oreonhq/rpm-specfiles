@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 1e1f3b086c4701f70ef6d733ec575eb4db386c152582a54e7e6fb3aeb41aeba4
 
 Name:    grantlee-editor

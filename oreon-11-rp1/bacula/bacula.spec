@@ -1,4 +1,4 @@
-%global source0_hash 294afd3d2eb9d5b71c3d0e88fdf19eb513bfdb843b28d35c0552e4ae062827a1
+%global source0_hash 1148521f901b6623a7ee2bca51e3d742ba22b5644b83a10b936c27dc12a9d090
 
 # libs3
 %global commit 66885387c9f761253988321de9c4bbfc1660717d
@@ -648,5 +648,4 @@ fi
 %{_libdir}/nagios/plugins/check_bacula
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.0.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

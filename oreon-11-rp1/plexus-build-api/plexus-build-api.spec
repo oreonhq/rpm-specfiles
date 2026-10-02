@@ -1,4 +1,4 @@
-%global source0_hash 47aae8f94b6fffd3ea0816eca79094541a28fbf35a9d0ac1fd6459196b30ee1b
+%global source0_hash 4074022fa6101e97921106aecbbe28bdba154333684abe1206e520e73199a7f6
 
 %bcond_with bootstrap
 
@@ -34,8 +34,7 @@ Plexus Build API
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n plexus-build-api-plexus-build-api-1.2.0
-%autosetup -p1 -n plexus-build-api-plexus-build-api-1.2.0
+%autosetup -p1 -n plexus-build-api-plexus-build-api-%{version}
 cp -p %{SOURCE1} .
 
 %mvn_file : plexus/%{name}
@@ -53,5 +52,4 @@ cp -p %{SOURCE1} .
 %license LICENSE-2.0.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-1
-- Import
+%autochangelog

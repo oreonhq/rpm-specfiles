@@ -1,4 +1,4 @@
-%global source0_hash b43ee470cd18db6c8dc3acd3cb1e88e6a3e69e1110be44cb7f271e37e6716897
+%global source0_hash 5aeb9b50110405d479349e806cfb2deb0f8f1ee137883b9ea0e040a35d0961a3
 
 %bcond_without bootstrap
 
@@ -37,8 +37,7 @@ is like a J2EE application server, without all the baggage.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n plexus-resources-plexus-resources-1.3.0
-%autosetup -p1 -n plexus-resources-plexus-resources-1.3.0
+%autosetup -p1 -n plexus-resources-plexus-resources-%{version}
 
 %build
 %mvn_file  : plexus/resources
@@ -50,5 +49,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files -f .mfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

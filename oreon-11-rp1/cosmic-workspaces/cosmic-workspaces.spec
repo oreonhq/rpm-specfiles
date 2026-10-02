@@ -1,4 +1,4 @@
-%global source0_hash 18cc59ffbaf37efe01d4395e1858c107fa3ad64f70d18d29d57a4b53ce410916
+%global source0_hash cf9afff9ba023abe3bd996b82ceda7a295f63bcdbbd9ad784a9643a86c647f04
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-workspaces
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Workspaces overview for the COSMIC Desktop Environment
 
@@ -24,6 +24,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-workspaces-epoch
 
 Source0:        https://github.com/pop-os/cosmic-workspaces-epoch/archive/epoch-%{version}/cosmic-workspaces-epoch-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-workspaces-epoch at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

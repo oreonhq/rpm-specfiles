@@ -1,4 +1,4 @@
-%global source0_hash ed5ad317858e0a9badbbada70df40194002e16e8834ac24491307c88f96f9702
+%global source0_hash fd87e0aba7e43ae054837afd6cd4db03a3f2693deb3619085e6ed9d8d9604ad8
 
 Summary: A perfect hash function generator
 Name: gperf
@@ -39,5 +39,4 @@ rm -rf $RPM_BUILD_ROOT{%{_mandir}/{dvi,html},%{_datadir}/doc}
 %{_infodir}/gperf.info*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.1-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

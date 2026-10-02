@@ -1,4 +1,4 @@
-%global source0_hash 49bbc8a51b43a071af9e89944248929a6f3c038731e1a868701dc939aab4dc57
+%global source0_hash f9752920e48408a21588cf734a49cab6f4bdf7ab80c3262099a775bc9abb1895
 
 # Enable tests by default. To disable them use:
 #     rpmbuild -ba --without runtests pykickstart.spec
@@ -82,5 +82,4 @@ LC_ALL=C make PYTHON=%{__python3} test-no-coverage
 %{python3_sitelib}/pykickstart-%{version}.dist-info
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.69-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

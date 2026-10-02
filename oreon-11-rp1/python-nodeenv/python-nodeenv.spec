@@ -1,7 +1,7 @@
-%global source0_hash 5000579763a6e7f5e3d18ae8f69ae01b1b91ef2e4cb8b2d5d6a6f7f3e9a201b8
+%global source0_hash 5778cf62fe75dcfc32f096426b9554dadd590061c7fa47c2292fe23b8d35517e
 
 Name:           python-nodeenv
-Version:        1.10.0
+Version:        1.11.0
 Release:        %autorelease
 Summary:        Node.js virtual environment builder
 

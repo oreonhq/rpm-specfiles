@@ -1,4 +1,4 @@
-%global source0_hash 96c2f551c3d9a09cdbc2d6cc242e64b3a9c811df7f29410d5b85871ec2ad2799
+%global source0_hash d3bb39614e22fd1a8ddd74bcfb4c384cbffe25685ec01116f694e470816284a9
 
 Name:          marknote
 Version:       1.6.0
@@ -79,29 +79,4 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 %{_kf6_datadir}/qlogging-categories6/marknote.categories
 
 %changelog
-* Mon Feb 02 2026 Steve Cossette <farchord@gmail.com> - 1.4.1-2
-- Added missing runtime deps
-
-* Fri Jan 23 2026 Steve Cossette <farchord@gmail.com> - 1.4.1-1
-- 1.4.1
-
-* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.0-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
-
-* Thu Jul 24 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.0-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
-
-* Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
-
-* Mon Aug 26 2024 Yaakov Selkowitz <yselkowi@redhat.com> - 1.3.0-1
-- 1.3.0
-
-* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
-
-* Mon Apr 01 2024 Steve Cossette <farchord@gmail.com> - 1.1.1-1
-- 1.1.1
-
-* Sat Mar 30 2024 Steve Cossette <farchord@gmail.com> - 1.0.0-1
-- Initial Release
+%autochangelog

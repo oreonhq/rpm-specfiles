@@ -1,4 +1,4 @@
-%global source0_hash 31f5fcab231b38f255b00b066cf7ea3b496df712c9eb2d0d50c670b63e5033f4
+%global source0_hash c88f560243278c896ce4fc92ae5a45a2b505a316ffa427fe55b02e5d5914c4e4
 
 Name:       xrdb
 Version:    1.2.3
@@ -42,5 +42,4 @@ autoreconf -v --install
 %{_mandir}/man1/%{name}.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.2-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

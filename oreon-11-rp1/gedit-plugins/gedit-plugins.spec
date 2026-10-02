@@ -1,4 +1,4 @@
-%global source0_hash 7f73580bdbe47c20d1d1d5a47c77264ae1ef44f5af1231040c4ceec16f1ad318
+%global source0_hash ef9d0c2a50b6b7f90aa2342d64c9fed5fcea43388ffaf2e514d9ab0e6f88dc1d
 
 # Filter provides for plugin .so files
 %global __provides_exclude_from ^%{_libdir}/gedit/plugins/
@@ -107,5 +107,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_metainfodir}/gedit-wordcompletion.metainfo.xml
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 49.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -5,7 +5,7 @@
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
 Name:           OpenCL-ICD-Loader
-Version:        3.0.6
+Version:        2026.05.29
 Release:        %autorelease -s %{date}git%{shortcommit0}
 Summary:        Khronos official OpenCL ICD Loader
 License:        Apache-2.0

@@ -1,4 +1,4 @@
-%global source0_hash 082cbf5f429e0d80820f68dc2b507a94d4cc1b4e70817b119bbb8ec6a69584b8
+%global source0_hash 7322236cd12090c3eb40b9728be4d49c76f66ad17d04369584d4ecad5cf77c68
 
 # For the generated library symbol suffix
 %if 0%{?__isa_bits} == 32
@@ -205,5 +205,4 @@ install -p -m 644 %{SOURCE1} %{buildroot}%{_includedir}/SDL3/SDL_revision.h
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

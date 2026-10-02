@@ -10,7 +10,7 @@ Summary:        Microsoft Azure Consumption Client Library for Python
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Azure/azure-sdk-for-python
-Source:         %{pypi_source azure-mgmt-consumption %{version} zip}
+Source:         %{pypi_source azure_mgmt_consumption %{version}}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -29,7 +29,7 @@ Summary:        %{summary}
 
 
 %prep
-%autosetup -p1 -n azure-mgmt-consumption-%{version}
+%autosetup -p1 -n azure_mgmt_consumption-%{version}
 
 
 %generate_buildrequires

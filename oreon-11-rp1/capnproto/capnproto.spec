@@ -1,4 +1,4 @@
-%global source0_hash 098f824a495a1a837d56ae17e07b3f721ac86f8dbaf58896a389923458522108
+%global source0_hash 77dbc13ca82d9c87ddb4581dd49559d45b63096433d3dadea08b7f31b360a5ba
 
 # Force out of source build
 %undefine __cmake_in_source_build
@@ -90,5 +90,4 @@ find %{buildroot} -name '*.la' -delete
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

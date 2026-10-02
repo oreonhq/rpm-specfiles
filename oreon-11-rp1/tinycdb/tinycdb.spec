@@ -1,4 +1,4 @@
-%global source0_hash c321b905e902c2ca99a3ff8a8dddfd8823247fe1edec8a4bb85f83869c639fb8
+%global source0_hash 469de2d445bf54880f652f4b6dc95c7cdf6f5502c35524a45b2122d70d47ebc2
 
 Name:		tinycdb
 Summary:	Utility and library for manipulating constant databases
@@ -65,5 +65,4 @@ cp -p libcdb.pc %{buildroot}%{_libdir}/pkgconfig/libcdb.pc
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.80-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 83f5619b87788a134e151560b954ab312e44a9763d935c0e419bbe5b8aa79b11
+%global source0_hash 4ead2ace2f48cd82f2c1c5aeb7a8d9b643371ce3a009a8e77a4aeca45c9f344f
 
 %global pypi_name sip
 
@@ -55,5 +55,4 @@ export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %{python3_sitelib}/sipbuild/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.15.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

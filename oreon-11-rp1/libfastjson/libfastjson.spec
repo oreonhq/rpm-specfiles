@@ -1,4 +1,4 @@
-%global source0_hash ef30d1e57a18ec770f90056aaac77300270c6203bbe476f4181cc83a2d5dc80c
+%global source0_hash 7cd6f78c1c07f4140f6976a9a0e0048bcaa7292329c6ac2c0e070383d83d8edd
 
 Name:		libfastjson
 Version:	1.2609.0
@@ -62,5 +62,4 @@ make V=1 check
 %{_libdir}/pkgconfig/libfastjson.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2304.0-8
-- Prepare for Oreon 11 (RP1)
+%autochangelog

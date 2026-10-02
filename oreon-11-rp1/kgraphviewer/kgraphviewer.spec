@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 634d92f9bedb09e5e491e7c8ceb1c4a6607ccb8ef87f8c8b1c8a9f52e3f8c0c6
 
 Name:           kgraphviewer

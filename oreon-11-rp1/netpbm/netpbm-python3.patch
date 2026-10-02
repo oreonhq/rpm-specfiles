@@ -1,13 +1,3 @@
-diff --git a/buildtools/makeman b/buildtools/makeman
-index 196dbd0..d73ab76 100755
---- a/buildtools/makeman
-+++ b/buildtools/makeman
-@@ -1,4 +1,4 @@
--#!/usr/bin/python
-+#!/usr/bin/python3
- #
- # makeman -- compile netpbm's stereotyped HTML to troff markup
- #
 diff --git a/buildtools/manpage.mk b/buildtools/manpage.mk
 index ef1a103..c1badb8 100644
 --- a/buildtools/manpage.mk

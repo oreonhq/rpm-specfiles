@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c74a472bc905b2135a6524496d6e778f50ad1853fc49e2d1f394d14b6bf11b19
 
 %global commit 84664cda094efe6e49d9b1550e4f4f98c33eefa2
 %global commitdate 20211017
@@ -29,7 +29,7 @@ BuildRequires:  cmake
 BuildRequires:  dos2unix
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
-BuildRequires:  SFML-devel
+BuildRequires:  SFML2-devel
 BuildRequires:  pkgconfig(gl)
 BuildRequires:  pkgconfig(fribidi)
 BuildRequires:  pkgconfig(taglib)
@@ -71,9 +71,13 @@ This package contains audio, icons and XML files for %{name}.
 rm -fr data_src ext_libs_for_windows
 
 %build
+# SFML 2.x API: use the SFML2 compat package
+export PKG_CONFIG_PATH=%{_libdir}/SFML2/pkgconfig
+export CXXFLAGS="%{optflags} -I%{_includedir}/SFML2"
+export LDFLAGS="%{?build_ldflags} -L%{_libdir}/SFML2"
 # TODO: Please submit an issue to upstream (rhbz#2380893)
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
-%cmake -Dmars_DATA_DEST_DIR=%{_datadir}/%{name} -Dmars_EXE_DEST_DIR=%{_bindir} .
+%cmake -DSFML_DIR=%{_libdir}/cmake/SFML2 -DSFML_ROOT=%{_prefix} -Dmars_DATA_DEST_DIR=%{_datadir}/%{name} -Dmars_EXE_DEST_DIR=%{_bindir} .
 %cmake_build
 
 %install

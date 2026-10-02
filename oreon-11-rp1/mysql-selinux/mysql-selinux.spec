@@ -1,4 +1,4 @@
-%global source0_hash d75ac68dc11fc7efdc05be23095cbeb7ba39edf94c1fe0f6d975167e9e0ce9b5
+%global source0_hash 2f0cca17bc2a29749c3cc90e1415e4d70fb55b424790df2e61acbe1189e706d3
 
 # General maintainer notes:
 #   Fedora guideliens for packaging of SELinux rules:
@@ -73,5 +73,4 @@ fi
 #   since we do not have any interface to be shared (and even then it is optional)
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.14-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

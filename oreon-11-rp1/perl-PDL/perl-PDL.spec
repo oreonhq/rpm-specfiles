@@ -10,7 +10,7 @@ Release:        4%{?dist}
 Summary:        The Perl Data Language
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Url:            http://pdl.perl.org/
-Source0:        https://cpan.metacpan.org/modules/by-module/PDL/PDL-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETJ/PDL-%{cpan_version}.tar.gz
 # Fix numbering of line in test when shebang is added
 Patch1:         PDL-2.72.0-Fix-numbering-of-line-in-test.patch
 BuildRequires:  coreutils

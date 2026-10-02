@@ -1,4 +1,4 @@
-%global source0_hash 513051dff8417da1819d6ae89d6c21a03654c9a60891df60df6aba13df19d21b
+%global source0_hash 4ae9ef9cf1fc55fef59328d25a70b28572b6f6a787394c3d292f5ed378f19840
 
 %global framework kirigami-addons
 %global orig_name kirigami-addons
@@ -115,18 +115,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/kdevappwizard/templates/librarymanager6.tar.bz2
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-6
-- bump release (retry failed build)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-5
-- define %%orig_name for %%find_lang (broken %%install when empty)
-- aarch64: no LTO, -j2 to reduce OOM risk
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

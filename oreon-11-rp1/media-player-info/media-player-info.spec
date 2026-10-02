@@ -1,4 +1,4 @@
-%global source0_hash a9ab6de0b497f6e13efc2cbe45a4fe06982145d786674c24274c3ed909ecc8cb
+%global source0_hash e6cf46db0b503e9929407ec6aa3fcd2becc9e2ca945b4ff787c98c8db63a1134
 
 Name:           media-player-info
 Version:        24
@@ -49,5 +49,4 @@ make %{?_smp_mflags}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 23-20
-- Prepare for Oreon 11 (RP1)
+%autochangelog

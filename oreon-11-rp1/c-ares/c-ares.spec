@@ -1,4 +1,4 @@
-%global source0_hash 912dd7cc3b3e8a79c52fd7fb9c0f4ecf0aaa73e45efda880266a2d6e26b84ef5
+%global source0_hash c222b6d681096f9444d2c4863d2c1174019e27cacca0a4a5c114d36dd7d7bf78
 
 %global use_cmake 1
 
@@ -83,5 +83,4 @@ rm -f $RPM_BUILD_ROOT/%{_libdir}/libcares.la
 %{_mandir}/man3/ares_*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.34.6-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

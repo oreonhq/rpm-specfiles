@@ -1,4 +1,4 @@
-%global source0_hash 2b3facb632fd4f65e32f4bf82a76b4b72c501f995a4f62e330219fe7aed1747a
+%global source0_hash f43502561c28ba47ab77e18e1a973d07361c68cc8b14178e619bd5796b70eabd
 
 %global _hardened_build 1
 
@@ -199,5 +199,4 @@ fi
 %{_sysconfdir}/logwatch/scripts/services/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

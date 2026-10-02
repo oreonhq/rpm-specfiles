@@ -1,9 +1,11 @@
-%global source0_hash 45cd816c8213ae8b39feb7ab2241f27731b784bfb54fa02d3428e3202a129812
+%global source0_hash 7e2614a4fe1f463cc3b64907b18309b734971ca57a64036804aef77a7471e159
+%global source3_hash 718074bfcba3592e3283a1cbcff2eb0163dddd742e2ed22d54a78eafedadc062
+%global source4_hash 40b153c904cc535cc18cd8f679aad01d77b7278917fb70a163f573f5907d5e17
 
 %bcond_with bootstrap
 
 Name:           mockito
-Version:        5.23.0
+Version:        5.24.0
 Release:        %autorelease
 Summary:        Tasty mocking framework for unit tests in Java
 License:        MIT
@@ -12,7 +14,8 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://github.com/mockito/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/mockito/mockito/archive/v%{version}/%{name}-%{version}.tar.gz
+Source1:        generate-tarball.sh
 # A custom build script to allow building with maven instead of gradle
 Source2:        aggregator.pom
 # Maven central POMs for subprojects
@@ -37,7 +40,7 @@ BuildRequires:  mvn(org.objenesis:objenesis)
 BuildRequires:  mvn(org.opentest4j:opentest4j)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.23.0-16
+Obsoletes:      %{name}-javadoc < 5.8.0-16
 
 %description
 Mockito is a mocking framework that tastes really good. It lets you write
@@ -53,35 +56,37 @@ Requires:       %{name} = %{version}-%{release}
 Mockito JUnit 5 support.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1 -C
 
 cp %{SOURCE2} aggregator.pom
-cp %{SOURCE3} pom.xml
-cp %{SOURCE4} subprojects/junit-jupiter/pom.xml
+cp %{SOURCE3} mockito-core/pom.xml
+cp %{SOURCE4} mockito-extensions/mockito-junit-jupiter/pom.xml
 
 # Disable failing test
 # TODO check status: https://github.com/mockito/mockito/issues/2162
-sed -i '/add_listeners_concurrently_sanity_check/i @org.junit.Ignore' src/test/java/org/mockitousage/debugging/StubbingLookupListenerCallbackTest.java
+sed -i '/add_listeners_concurrently_sanity_check/i @org.junit.Ignore' mockito-core/src/test/java/org/mockitousage/debugging/StubbingLookupListenerCallbackTest.java
 
 # Compatibility alias
 %mvn_alias org.%{name}:%{name}-core org.%{name}:%{name}-all
 
-%pom_add_dep junit:junit
-%pom_add_dep net.bytebuddy:byte-buddy-dep
-%pom_remove_dep org.objenesis:objenesis
-%pom_add_dep org.objenesis:objenesis
-%pom_add_dep org.opentest4j:opentest4j
+%pom_add_dep junit:junit mockito-core
+%pom_add_dep net.bytebuddy:byte-buddy-dep mockito-core
+%pom_remove_dep org.objenesis:objenesis mockito-core
+%pom_add_dep org.objenesis:objenesis mockito-core
+%pom_add_dep org.opentest4j:opentest4j mockito-core
 
-%pom_remove_dep org.junit.jupiter:junit-jupiter-api subprojects/junit-jupiter
-%pom_add_dep org.junit.jupiter:junit-jupiter-api subprojects/junit-jupiter
+%pom_remove_dep org.junit.jupiter:junit-jupiter-api mockito-extensions/mockito-junit-jupiter
+%pom_add_dep org.junit.jupiter:junit-jupiter-api mockito-extensions/mockito-junit-jupiter
 
-mkdir -p src/main/resources/mockito-extensions
-echo 'member-accessor-module' > src/main/resources/mockito-extensions/org.mockito.plugins.MemberAccessor
-echo 'mock-maker-subclass' > src/main/resources/mockito-extensions/org.mockito.plugins.MockMaker
+mkdir -p mockito-core/src/main/resources/mockito-extensions
+echo 'member-accessor-module' > mockito-core/src/main/resources/mockito-extensions/org.mockito.plugins.MemberAccessor
+echo 'mock-maker-subclass' > mockito-core/src/main/resources/mockito-extensions/org.mockito.plugins.MockMaker
 
 # see gradle/mockito-core/inline-mock.gradle
-%pom_add_plugin org.apache.maven.plugins:maven-antrun-plugin '
+%pom_add_plugin org.apache.maven.plugins:maven-antrun-plugin mockito-core '
   <executions>
     <execution>
       <phase>process-classes</phase>
@@ -97,7 +102,7 @@ echo 'mock-maker-subclass' > src/main/resources/mockito-extensions/org.mockito.p
     </execution>
   </executions>
 '
-%pom_add_plugin org.apache.maven.plugins:maven-jar-plugin '
+%pom_add_plugin org.apache.maven.plugins:maven-jar-plugin mockito-core '
   <configuration>
     <excludes>
       <exclude>org/mockito/internal/creation/bytebuddy/inject/*.class</exclude>
@@ -122,5 +127,4 @@ echo 'mock-maker-subclass' > src/main/resources/mockito-extensions/org.mockito.p
 %files junit-jupiter -f .mfiles-junit-jupiter
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.8.0-1
-- Import
+%autochangelog

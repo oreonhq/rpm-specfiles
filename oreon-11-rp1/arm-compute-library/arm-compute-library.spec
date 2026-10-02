@@ -1,4 +1,4 @@
-%global source0_hash 49b8620f21cbbe49e825a131d9eacd548532646289b50e070b83860bd88087fe
+%global source0_hash 50c914c42406e1365169a37be475562baf28da47c45241a5f7c655c4c2640ada
 
 %global majorver 42
 %global releasever 42.0.0
@@ -10,7 +10,7 @@ The library provides superior performance to other open source alternatives
 and immediate support for new Arm technologies e.g. SVE2.}
 
 Name:		arm-compute-library
-Version:	24.09
+Version:	53.3.1
 Release:	%autorelease
 Summary:	ARM compute library
 

@@ -6,7 +6,7 @@ Release:	3%{?dist}
 Summary:	Dynamic prerequisites in meta files
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/CPAN-Requirements-Dynamic
-Source0:	https://cpan.metacpan.org/modules/by-module/CPAN/CPAN-Requirements-Dynamic-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEONT/CPAN-Requirements-Dynamic-%{version}.tar.gz
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e34cf5e8f25fc7e59b2ff5c56fed507cf1378d4eef2a4aa7957b3c7e80812d64
 
 %global realname rebar
 
@@ -6,7 +6,7 @@
 %global bootstrap 0
 
 Name:     erlang-%{realname}3
-Version:  3.27.0
+Version:  3.27.1
 Release:  %autorelease
 Summary:  Tool for working with Erlang projects
 License:  Apache-2.0 and MIT

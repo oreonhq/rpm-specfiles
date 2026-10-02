@@ -1,8 +1,8 @@
-%global source0_hash 5d265f3499b588681825d8093177830707b7035ad866b17189a3a6ab6dade0ff
+%global source0_hash 407a073ee8f718200c3a004bc2186deccc33356ee5112a71d8b01b55230f4ee4
 
 %global xver 9
 %global yver 0
-%global zver 4
+%global zver 3
 
 %global majorver %{xver}.%{yver}
 %global vers %{majorver}.%{zver}
@@ -15,7 +15,7 @@ Release: 1%{?dist}
 Epoch: 1
 License: TCL AND GPL-3.0-or-later WITH Bison-exception-2.2 AND BSD-3-Clause
 URL: http://tcl.sourceforge.net/
-Source0:        https://downloads.sourceforge.net/sourceforge/tcl/tcl-core%{version}-src.tar.gz
+Source0: http://downloads.sourceforge.net/sourceforge/tcl/tcl-core%{version}-src.tar.gz
 BuildRequires: make
 BuildRequires: autoconf
 BuildRequires: gcc

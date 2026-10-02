@@ -1,9 +1,9 @@
-%global source0_hash 71a2c5b1218f60c4c6d2f1954c7eb20132156cae90bdb90b566c24db002782a6
+%global source0_hash 2540302a1844ad2b2b501977abecfa850f265f97b78f065a712ab4074a89f5b5
 
 Summary:       A library of functions for manipulating PNG image format files
 Name:          libpng
 Epoch:         2
-Version:       1.6.58
+Version:       1.6.59
 Release:       1%{?dist}
 License:       zlib
 URL:           http://www.libpng.org/pub/png/
@@ -104,5 +104,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_bindir}/pngfix
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.55-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

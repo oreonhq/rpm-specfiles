@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 023c9bb69a98ddb897bc15dd0e526f98817f20acb6cf34068a8382d850003b64
 %global kf6_version 6.28.0
 

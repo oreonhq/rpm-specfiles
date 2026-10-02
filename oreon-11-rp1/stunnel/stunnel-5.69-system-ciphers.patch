@@ -17,22 +17,20 @@ From-dist-git-commit: 70b3076eb09912b3a11f371b8c523303114fffa3
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/options.c b/src/options.c
-index ae2d5c4..d616a85 100644
 --- a/src/options.c
 +++ b/src/options.c
-@@ -362,10 +362,10 @@ static const char *option_not_found=
-     "Specified option name is not valid here";
+@@ -396,10 +396,10 @@
+ NOEXPORT const char option_include[]="Include directory";
  
- static const char *stunnel_cipher_list=
+ NOEXPORT const char *stunnel_cipher_list=
 -    "HIGH:!aNULL:!SSLv2:!DH:!kDHEPSK";
 +    "PROFILE=SYSTEM";
  #ifdef USE_FIPS
- static const char *fips_cipher_list=
+ NOEXPORT const char *fips_cipher_list=
 -    "FIPS:!DH:!kDHEPSK";
 +    "PROFILE=SYSTEM";
  #endif /* USE_FIPS */
  
  #ifndef OPENSSL_NO_TLS1_3
 -- 
-2.53.0
-
+2.0

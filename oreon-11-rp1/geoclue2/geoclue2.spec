@@ -1,4 +1,4 @@
-%global source0_hash c07aeb35cccf959ec1dc2e8f9a71a9d8bdd643879ef0a8d37926499541da1685
+%global source0_hash d4d65933b704d4c8d4ca9747dc511b883e35099abe534c8560f2aab3017e4cd4
 
 Name:           geoclue2
 Version:        2.8.2
@@ -154,5 +154,4 @@ exit 0
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

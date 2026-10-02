@@ -1,4 +1,4 @@
-%global source0_hash 293c93858b2327c53d474a19feb3beb0652705eef060a4db63e10b51495dea2e
+%global source0_hash 7a1c4056af114ef7ed61f3665a614ce7085a442d5712a85a5bbebf84b217d29c
 
 %bcond_without httpclient
 %bcond_without oro
@@ -25,7 +25,6 @@ Source2:        https://archive.apache.org/dist/ant/KEYS
 # last resort, when no other setting files exist.
 Source3:         00-global-settings.patch
 # java.util.jar.Pack200 was removed in modern JDKs, do not compile against it
-Patch0:          ivy-FileUtil-Pack200-reflection.patch
 
 BuildRequires:  gnupg2
 BuildRequires:  ant
@@ -71,7 +70,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 # Upstream tarball uses CRLF so %%autosetup patch step cannot match hunks
 dos2unix src/java/org/apache/ivy/util/FileUtil.java
-%patch -P0 -p1
 dos2unix src/java/org/apache/ivy/ant/IvyAntSettings.java
 patch -p1 -l < %{SOURCE3}
 # Don't hardcode sysconfdir path
@@ -163,11 +161,4 @@ echo "apache-ivy/ivy" > %{buildroot}%{_sysconfdir}/ant.d/%{name}
 %{_sysconfdir}/ant.d/%{name}
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-5
-- dos2unix FileUtil.java before Pack200 patch (CRLF breaks %%autosetup patch)
-
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-4
-- call Pack200 via reflection so the tree compiles on JDK without java.util.jar.Pack200
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

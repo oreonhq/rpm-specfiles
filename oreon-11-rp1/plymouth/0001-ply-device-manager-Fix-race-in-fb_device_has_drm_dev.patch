@@ -1,4 +1,4 @@
-From 36f45f9d1164461b0d297be9e4795ed3ed3bd558 Mon Sep 17 00:00:00 2001
+From b47e50d8094d6b021b1ce75ec0645d2a92fd14a1 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <johannes.goede@oss.qualcomm.com>
 Date: Sun, 21 Dec 2025 15:51:43 +0100
 Subject: [PATCH] ply-device-manager: Fix race in fb_device_has_drm_device ()
@@ -34,10 +34,10 @@ Signed-off-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
  1 file changed, 2 insertions(+), 52 deletions(-)
 
 diff --git a/src/libply-splash-core/ply-device-manager.c b/src/libply-splash-core/ply-device-manager.c
-index da53f3ae..b220ea4d 100644
+index aacab4d3..b5f793d1 100644
 --- a/src/libply-splash-core/ply-device-manager.c
 +++ b/src/libply-splash-core/ply-device-manager.c
-@@ -213,63 +213,13 @@ free_devices_from_device_path (ply_device_manager_t *manager,
+@@ -281,63 +281,13 @@ remove_input_device_from_renderers (ply_device_manager_t *manager,
  }
  
  #ifdef HAVE_UDEV
@@ -102,7 +102,7 @@ index da53f3ae..b220ea4d 100644
 +        return ply_string_has_suffix (name, "drmfb");
  }
  
- static void
+ static bool
 -- 
-2.52.0
+2.54.0
 

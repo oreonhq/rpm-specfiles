@@ -1,0 +1,32 @@
+diff --git a/src/lib/test-ostream-multiplex.c b/src/lib/test-ostream-multiplex.c
+index 59dcf02ed1..35f141313f 100644
+--- a/src/lib/test-ostream-multiplex.c
++++ b/src/lib/test-ostream-multiplex.c
+@@ -1,5 +1,6 @@
+ /* Copyright (c) Dovecot authors, see top-level COPYING file */
+ 
++#define _GNU_SOURCE /* for F_SETPIPE_SZ */
+ #include "test-lib.h"
+ #include "ioloop.h"
+ #include "lib-signals.h"
+@@ -11,6 +11,7 @@
+ #include "iostream-multiplex-private.h"
+ #include "ostream.h"
+ #include <unistd.h>
++#include <fcntl.h>
+ 
+ #include "hex-binary.h"
+ 
+@@ -712,6 +713,12 @@ static int test_stream_backpressure_child(void *context ATTR_UNUSED)
+ 		i_fatal("pipe() failed: %m");
+ 	fd_set_nonblock(fd[0], TRUE);
+ 	fd_set_nonblock(fd[1], TRUE);
++#ifdef F_SETPIPE_SZ
++	/* Shrink the pipe so the test triggers on ppc64le which defaults 
++	   to a 1 MB pipe (vs 64 KB on x86_64)
++	   Called on a freshly created empty pipe so EBUSY cannot occur. */
++	(void)fcntl(fd[1], F_SETPIPE_SZ, 65536);
++#endif
+ 
+ 	/* Small parent buffer so avail reaches 0 quickly once the socket fills;
+ 	   this is the congested state where the backpressure fix matters. */

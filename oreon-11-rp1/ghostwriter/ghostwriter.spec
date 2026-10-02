@@ -1,13 +1,15 @@
-%global source0_hash b70127c420e1d8f72379cee4c70c809104b581f63c9da7c83ff344497934d796
+%global stable_kf6 stable
+%global source0_hash 59f0ca6d31e881d7e5aaa76f386ae2d42b3e4da9cf959224526b3d12addd4ef6
 
 Name: ghostwriter
-Version: 25.12.3
+Version: 26.08.1
 Release: 1%{?dist}
 
 License: GPL-3.0-or-later AND Apache-2.0 AND CC-BY-4.0 AND CC-BY-SA-4.0 AND MPL-1.1 AND BSD-2-Clause AND BSD-3-Clause AND LGPL-3.0-only AND MIT AND ISC
 Summary: Cross-platform, aesthetic, distraction-free Markdown editor
 URL: https://invent.kde.org/office/%{name}
 Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+
 
 BuildRequires: gcc-c++
 BuildRequires: cmake

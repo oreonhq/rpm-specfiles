@@ -29,6 +29,8 @@ multi-user application.}
 
 %package -n python3-passlib
 Summary:        %{summary}
+Provides:       python3dist(passlib) = %{version}
+Provides:       python3dist(libpass) = %{version}
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
 

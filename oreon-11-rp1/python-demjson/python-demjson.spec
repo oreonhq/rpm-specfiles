@@ -8,7 +8,7 @@ Release:        43%{?dist}
 Summary:        Python JSON module and lint checker
 License:        LGPL-3.0-or-later
 URL:            http://deron.meranda.us/python/%{srcname}/
-Source0:        http://deron.meranda.us/python/%{srcname}/dist/%{srcname}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/d/demjson/demjson-%{version}.tar.gz
 Patch0:         demjson_2.2.4_py39.patch
 Patch1:         demjson_2.2.4_2to3.patch
 BuildArch:      noarch

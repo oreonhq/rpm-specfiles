@@ -1,4 +1,4 @@
-%global source0_hash 4c5c6136540384e5455b250f768e7ca11b03fdba1a8efc2341ee0f1111e57612
+%global source0_hash 98780bbdf16c1bce89ef3a8c0f537ac6e4ea77087b609e7698857614488a2a62
 
 Name:     scdoc
 Version:  1.11.5

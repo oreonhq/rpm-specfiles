@@ -1,9 +1,9 @@
-%global source0_hash 18ea71fef1ecef690c9d86f4ffdfd83ee68a6ff41b6bc7e7b7a6be0b8f5ae000
+%global source0_hash 47316b3574af9c7413e4f75c72f78a8551a8a1a39f126377c6cfde1dcbfe9828
 
 %bcond_with bootstrap
 
 Name:           apache-commons-parent
-Version:        89
+Version:        105
 Release:        %autorelease
 Summary:        Apache Commons Parent Pom
 License:        Apache-2.0
@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/commons-parent-pom.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/apache/commons-parent/archive/rel/commons-parent-%{version}.tar.gz#/apache-commons-parent-89.tar.gz
+Source0:        https://github.com/apache/commons-parent/archive/rel/commons-parent-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -34,7 +34,7 @@ The Project Object Model files for the apache-commons packages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n commons-parent-rel-commons-parent-89
+%autosetup -p1 -n commons-parent-rel-commons-parent-%{version}
 
 # Plugin is not in fedora
 %pom_remove_plugin org.apache.commons:commons-build-plugin
@@ -44,7 +44,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 # Plugins useless in package builds
 %pom_remove_plugin :apache-rat-plugin
-%pom_remove_plugin :buildnumber-maven-plugin
 %pom_remove_plugin :maven-site-plugin
 %pom_remove_plugin :maven-source-plugin
 %pom_remove_plugin :versions-maven-plugin
@@ -69,5 +68,4 @@ done
 %license LICENSE.txt NOTICE.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 89-1
-- Import
+%autochangelog

@@ -1,9 +1,10 @@
-%global source0_hash fb2504cc93149d3dbe8ee9ddbf3136414a062c42bcfcf5fc65f12ccc1d16f589
+%global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
+%global source0_hash 4a3760863105581c05ddcb344afea06019eb4c10120330e0dbdc47e9ca445962
 
 %bcond_without bootstrap
 
 Name:           mojo-parent
-Version:        85
+Version:        97
 Release:        %autorelease
 Summary:        Codehaus MOJO parent project pom file
 License:        Apache-2.0
@@ -47,5 +48,4 @@ cp %SOURCE1 .
 %doc LICENSE-2.0.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 85-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

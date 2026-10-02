@@ -9,13 +9,11 @@ Original reference e2k code for supporting riscv64 arch
  include/libEMF/wine/winnt.h | 75 +++++++++++++++++++++++++++++++++++++++++++++
  1 file changed, 75 insertions(+)
 
-diff --git a/include/libEMF/wine/winnt.h b/include/libEMF/wine/winnt.h
-index 39e2f90..1609f38 100644
 --- a/include/libEMF/wine/winnt.h
 +++ b/include/libEMF/wine/winnt.h
-@@ -69,6 +69,10 @@
- # define  WORDS_BIGENDIAN
- # define  BITFIELDS_BIGENDIAN
+@@ -77,6 +77,10 @@
+ # undef  WORDS_BIGENDIAN
+ # undef  BITFIELDS_BIGENDIAN
  # undef  ALLOW_UNALIGNED_ACCESS
 +#elif defined(__riscv) && defined(__riscv_xlen) && __riscv_xlen == 64
 +# undef  WORDS_BIGENDIAN
@@ -24,9 +22,9 @@ index 39e2f90..1609f38 100644
  #elif !defined(RC_INVOKED)
  # error Unknown CPU architecture!
  #endif
-@@ -1582,6 +1586,77 @@ typedef struct _CONTEXT {
+@@ -1733,6 +1737,77 @@
+ #endif /* __riscv64__ */
  
- #endif /* __e2k__ */
  
 +#if defined(__riscv) && defined(__riscv_xlen) && __riscv_xlen==64
 +/*

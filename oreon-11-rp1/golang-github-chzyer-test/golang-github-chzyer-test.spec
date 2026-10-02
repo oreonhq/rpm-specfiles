@@ -18,7 +18,7 @@ Golang test utility.}
 %global godocs          README.md
 
 Name:           %{goname}
-Version:        0
+Version:        1.0.0
 Release:        %autorelease
 Summary:        Golang test utility
 

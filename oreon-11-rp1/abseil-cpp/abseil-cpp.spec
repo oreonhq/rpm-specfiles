@@ -1,4 +1,4 @@
-%global source0_hash 4314e2a7cbac89cac25a2f2322870f343d81579756ceff7f431803c2c9090195
+%global source0_hash f7e05179df39c45434cad433f5783840bb3788ef322976f9138bc6b72b3a107d
 
 # Installed library version
 %global lib_version 2601.0.0
@@ -237,5 +237,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/pkgconfig/absl_*.pc
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260107.1-3
-- Import for oreon-11-rp1
+%autochangelog

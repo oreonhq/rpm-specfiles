@@ -1,4 +1,4 @@
-%global source0_hash 460ced2b5644f458b7062fdcd12458c25405b98c5d78f812b4c2a6dfa368b9f9
+%global source0_hash d4879ddb3d65ff1a8f19187497e6f13dc5d267bcac404a5d501218be355753d3
 
 %bcond docs %{undefined rhel}
 
@@ -135,5 +135,4 @@ install -dm 755 %{buildroot}/%{_datadir}/xdg-desktop-portal/portals
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.21.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

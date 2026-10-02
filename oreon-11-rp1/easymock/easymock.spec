@@ -1,4 +1,4 @@
-%global source0_hash fd6ab5ea01df7730861cbcd998f952d64a88ae0087d10a3cfa5b7f5ea91765f5
+%global source0_hash 323603483db8574eeda542c19e8257562e185be31d7f3454b4770d0bd2fca8b6
 
 %bcond_with bootstrap
 
@@ -12,11 +12,9 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://github.com/easymock/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/easymock-5.6.0.tar.gz
+Source0:        https://github.com/easymock/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/easymock-%{version}.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
-Patch:          0001-Disable-android-support.patch
 # Forwarded: https://github.com/easymock/easymock/pull/807
-Patch:          0002-Migrate-from-deprecated-Hamcrest-is-to-isA.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -88,13 +86,10 @@ rm core/src/test/java/org/easymock/tests2/ClassExtensionHelperTest.java
 %pom_xpath_remove pom:extensions
 
 # Force Surefire to run tests with JUnit, not with TestNG
-%pom_xpath_inject "pom:plugin[pom:artifactId='maven-surefire-plugin']" \
-    "<configuration><testNGArtifactName>none:none</testNGArtifactName></configuration>" core
-
-# Workaround Java 17 compatibility issue that should be fixed in
-# easymock 4.4: https://github.com/easymock/easymock/issues/274
-%pom_xpath_inject "pom:plugin[pom:artifactId='maven-surefire-plugin']/pom:configuration" \
-    "<argLine>--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED</argLine>" core
+# (easymock 5.7 core/pom.xml no longer declares surefire, so add it with our config)
+%pom_add_plugin :maven-surefire-plugin core "<configuration>
+    <testNGArtifactName>none:none</testNGArtifactName>
+    <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED</argLine></configuration>"
 %pom_xpath_inject "pom:plugin[pom:artifactId='maven-surefire-plugin']/pom:configuration" \
     "<argLine>--add-opens=java.base/java.lang=ALL-UNNAMED</argLine>" test-testng
 %pom_add_plugin :maven-surefire-plugin test-java8 "<configuration>
@@ -112,5 +107,4 @@ rm core/src/test/java/org/easymock/tests2/ClassExtensionHelperTest.java
 %license core/LICENSE.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.6.0-1
-- Import
+%autochangelog

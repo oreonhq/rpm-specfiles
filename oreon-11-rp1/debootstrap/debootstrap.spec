@@ -1,4 +1,4 @@
-%global source0_hash c95eb2aeb952b3fd09f4a07859115d40c4d04a8d551b3071b0a10fcd0db7ebc4
+%global source0_hash 7cc8f9e386ed8dfd4b062a3b9527f0f45176dfa1b065e7db270f837956516b20
 
 # Read https://bugzilla.redhat.com/show_bug.cgi?id=1654765
 # mangling shebang in /usr/sbin/debootstrap from /bin/sh to /usr/bin/sh
@@ -7,13 +7,14 @@
 #global postfix nmu1
 
 Name:           debootstrap
-Version:        1.0.140
-Release:        6%{?dist}
+Version:        1.0.145
+Release:        1%{?dist}
 Summary:        Debian GNU/Linux bootstrapper
 
 License:        MIT
 URL:            https://wiki.debian.org/Debootstrap
 Source0:        https://ftp.debian.org/debian/pool/main/d/debootstrap/debootstrap_%{version}%{?postfix:+%{postfix}}.tar.gz
+
 Patch0:         sbin_move.patch
 
 BuildArch:      noarch

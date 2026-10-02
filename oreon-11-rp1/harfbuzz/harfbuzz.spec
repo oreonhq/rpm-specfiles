@@ -1,8 +1,8 @@
-%global source0_hash b7132e148358a45185c9feafd049dbaf243649d3c44414b3534d9c95d18592b9
+%global source0_hash 7e2fa4e8c7c98e8d8140671f5772542afaaa6acccfbd746506886b6d85f7f8d6
 
 BuildRequires:  pkgconfig(glfw3)
 Name:           harfbuzz
-Version:        14.5.0
+Version:        14.5.1
 Release:        1%{?dist}
 Summary:        Text shaping library
 

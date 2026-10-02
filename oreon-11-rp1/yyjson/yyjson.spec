@@ -1,4 +1,4 @@
-%global source0_hash b16246f617b2a136c78d73e5e2647c6f1de1313e46678062985bdcf1f40bb75d
+%global source0_hash 34e0f62a2bc11ab20d601e8ca1cc2b2079503aa45119a19133d89d19b94a0fae
 
 %global forgeurl https://github.com/ibireme/yyjson
 Version:        0.13.0

@@ -1,4 +1,4 @@
-%global source0_hash 30cd3fce310a8315db126485a5284770a6c39fa20a2e7eacdab776dc89286dde
+%global source0_hash 3da47a1ca309dde39198a5286efafe53ec995cbb038586a1ae3399b87b372645
 
 %bcond_with bootstrap
 
@@ -41,7 +41,7 @@ is like a J2EE application server, without all the baggage.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n plexus-utils-plexus-utils-%{version}
-%mvn_compat_version : 4.1.0 4.0.1
+%mvn_compat_version : 4.1.0 4.0.2 4.0.1
 
 %build
 %mvn_build -j -f

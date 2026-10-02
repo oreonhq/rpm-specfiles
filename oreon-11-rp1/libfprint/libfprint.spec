@@ -1,4 +1,4 @@
-%global source0_hash 8d5b202e836f69076c90ead0a654b0ee275788922359ebc9d7706bb5cde7ca54
+%global source0_hash edc90e02f330a7595ceaf37f2c6ec32ed43541347fe936d3273b0bb2524fd19c
 
 Name:           libfprint
 
@@ -90,5 +90,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/installed-tests/libfprint-2/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.94.10-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -11,7 +11,7 @@ Summary:    Flask extension for sending email
 # Automatically converted from old format: BSD - review is highly recommended.
 License:    LicenseRef-Callaway-BSD
 URL:        http://github.com/mattupstate/%{pkg_name}/
-Source0:    %{pypi_source %{mod_name}}
+Source0:    %{pypi_source flask_mail %{version}}
 BuildArch:  noarch
 
 %description

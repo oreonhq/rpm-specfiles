@@ -1,4 +1,4 @@
-%global source0_hash 338770d637788466aacfcbcec17a8d0046f92a13cc3b25fce8fceadb02a7339f
+%global source0_hash 0e2d6bb9c738d7016bb8af6780bef74dee263a02963e9c01a6b8331e7cafdf8d
 
 # Disable the growpart subpackage in EPEL, as RHEL ships it on its own
 %if 0%{?epel}
@@ -211,5 +211,4 @@ rm -f %{buildroot}%{_mandir}/man1/growpart.*
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.33-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

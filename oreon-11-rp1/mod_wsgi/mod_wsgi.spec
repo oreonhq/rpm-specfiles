@@ -1,4 +1,4 @@
-%global source0_hash 9a0fdb61405abc300ec6b100c440dd98cf31cb5f97aeef4207390937298cad20
+%global source0_hash 9ebb645c899ea6461edf27872c11a6a12c6e819edbcc3652e0b6195d990aa31c
 
 %{!?_httpd_mmn: %{expand: %%global _httpd_mmn %%(cat %{_includedir}/httpd/.mmn 2>/dev/null || echo 0-0)}}
 
@@ -11,12 +11,12 @@
 %endif
 
 Name:           mod_wsgi
-Version:        6.0.6
+Version:        6.1.0
 Release:        1%{?dist}
 Summary:        A WSGI interface for Python web applications in Apache
 License:        Apache-2.0 AND CC-BY-3.0
 URL:            https://modwsgi.readthedocs.io/
-Source0:        https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}.tar.gz#/mod_wsgi-%{version}.tar.gz
+Source0:        https://github.com/GrahamDumpleton/mod_wsgi/releases/download/mod_wsgi-%{version}/mod_wsgi-%{version}.tar.gz
 Source1:        wsgi.conf
 Source2:        wsgi-python3.conf
 Patch1:         mod_wsgi-4.5.20-exports.patch
@@ -156,5 +156,4 @@ ln -s %{_bindir}/mod_wsgi-express-2 $RPM_BUILD_ROOT%{_bindir}/mod_wsgi-express
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.2-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

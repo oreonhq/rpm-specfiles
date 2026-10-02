@@ -20,10 +20,9 @@ Fixes: https://bugs.openldap.org/show_bug.cgi?id=9952
  3 files changed, 23 insertions(+), 5 deletions(-)
 
 diff --git a/libraries/libldap/init.c b/libraries/libldap/init.c
-index 213276b4b5..aa017f4128 100644
 --- a/libraries/libldap/init.c
 +++ b/libraries/libldap/init.c
-@@ -545,7 +545,7 @@ ldap_int_destroy_global_options(void)
+@@ -562,7 +562,7 @@
  	}
  #endif
  #ifdef HAVE_TLS
@@ -33,10 +32,9 @@ index 213276b4b5..aa017f4128 100644
  }
  
 diff --git a/libraries/libldap/ldap-int.h b/libraries/libldap/ldap-int.h
-index 7e754775e8..b73097ccc7 100644
 --- a/libraries/libldap/ldap-int.h
 +++ b/libraries/libldap/ldap-int.h
-@@ -914,6 +914,7 @@ LDAP_F (int) ldap_int_tls_start LDAP_P(( LDAP *ld,
+@@ -926,6 +926,7 @@
  	LDAPConn *conn, LDAPURLDesc *srv ));
  
  LDAP_F (void) ldap_int_tls_destroy LDAP_P(( struct ldapoptions *lo ));
@@ -45,10 +43,9 @@ index 7e754775e8..b73097ccc7 100644
  /*
   *	in getvalues.c
 diff --git a/libraries/libldap/tls2.c b/libraries/libldap/tls2.c
-index 0841005a59..82f8573602 100644
 --- a/libraries/libldap/tls2.c
 +++ b/libraries/libldap/tls2.c
-@@ -97,10 +97,14 @@ tls_ctx_ref( tls_ctx *ctx )
+@@ -97,10 +97,14 @@
  static ldap_pvt_thread_mutex_t tls_def_ctx_mutex;
  #endif
  
@@ -67,7 +64,7 @@ index 0841005a59..82f8573602 100644
  		ldap_pvt_tls_ctx_free( lo->ldo_tls_ctx );
  		lo->ldo_tls_ctx = NULL;
  	}
-@@ -147,6 +151,19 @@ ldap_int_tls_destroy( struct ldapoptions *lo )
+@@ -174,6 +178,19 @@
  	BER_BVZERO( &lo->ldo_tls_pin );
  }
  
@@ -88,5 +85,4 @@ index 0841005a59..82f8573602 100644
   * Tear down the TLS subsystem. Should only be called once.
   */
 -- 
-2.47.0
-
+2.0

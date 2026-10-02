@@ -1,0 +1,9 @@
+[package]
+cargo-toml-patch-comments = [
+    "drop unstable versions of features for key-value-pair logging support",
+    """\
+    drop dependencies and features for stablized key-value-pair logging support \
+    to avoid packaging additional dependencies\
+    """,
+]
+

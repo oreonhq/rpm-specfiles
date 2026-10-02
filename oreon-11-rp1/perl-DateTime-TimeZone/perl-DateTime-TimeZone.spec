@@ -1,4 +1,4 @@
-%global source0_hash 750868d3820113a0e27e786531a08fa57a34abcd252f3133c0f8b5efc38b485c
+%global source0_hash c617009adefecbe14cf1c757bd6a964acb23943431fb3a047bdbd87c07c67174
 %global source1_hash 114543d9f19a6bfeb5bca43686aea173d38755a3db1f2eec112647ae92c6f544
 
 # Run optional test
@@ -8,7 +8,7 @@
 %global tzversion 2026b
 
 Name:           perl-DateTime-TimeZone
-Version:        2.70
+Version:        2.71
 Release:        1%{?dist}
 Summary:        Time zone object base class and factory
 # tzdata%%{tzversion}.tar.gz archive:   LicenseRef-Public-Domain

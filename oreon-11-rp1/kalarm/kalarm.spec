@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 2ba214f9216f57b97899162aeb9ea7b7223edb2f7dba7ba49e8c9b0b10f72762
 
 Name:    kalarm

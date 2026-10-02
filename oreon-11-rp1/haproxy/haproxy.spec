@@ -1,4 +1,5 @@
-%global source0_hash 58492710f8c82d81988e94f1188afc84eafd05d77393732241b252a8d14bd8a3
+%global source6_hash d90c1c9fb9d913648c79bb9c333d89305a872383d9a0d180a9e6f3add910c216
+%global source0_hash 791e1815f8af6e8b850a227a9a0a190f3d3478c9e8d38a0f51c98b7f4bfe368b
 
 %define haproxy_user    haproxy
 %define haproxy_group   %{haproxy_user}
@@ -9,7 +10,7 @@
 %global _hardened_build 1
 
 Name:           haproxy
-Version:        3.0.17
+Version:        3.4.6
 Release:        1%{?dist}
 Summary:        HAProxy reverse proxy for high availability environments
 
@@ -24,8 +25,6 @@ Source4:        %{name}.sysconfig
 Source5:        %{name}.sysusersd
 Source6:        https://salsa.debian.org/haproxy-team/haproxy/-/raw/c30a7411203b8c4234698e47325d2543359f9d66/debian/halog.1
 
-# https://github.com/haproxy/haproxy/commit/1c0f781994a89b5cbd7b4b893c23e6d2b75b1764
-Patch0:        https://github.com/haproxy/haproxy/commit/1c0f781994a89b5cbd7b4b893c23e6d2b75b1764.patch#/haproxy-3.0.17-lua-5.5.patch
 
 BuildRequires:  gcc
 BuildRequires:  libxcrypt-devel
@@ -57,7 +56,6 @@ availability environments. Indeed, it can:
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch -P0 -p1 -b .lua55
 
 %build
 
@@ -136,5 +134,4 @@ done
 %{_sysusersdir}/%{name}.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.17-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

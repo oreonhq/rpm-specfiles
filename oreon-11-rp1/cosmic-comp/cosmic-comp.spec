@@ -1,4 +1,4 @@
-%global source0_hash cbc201ecb1699e357872b85cd1b8265de55f0d71ccf428a8dac8662fd7d541fb
+%global source0_hash f0f3a2362861fe8976d7d45436aaa0a10de975522b6e8a53d77058a74ffc81e8
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-comp
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Compositor for the COSMIC Desktop Environment
 
@@ -22,6 +22,7 @@ License:        ((Apache-2.0 OR MIT) AND BSD-3-Clause) AND (0BSD OR Apache-2.0 O
 URL:            https://github.com/pop-os/cosmic-comp
 
 Source0:        https://github.com/pop-os/cosmic-comp/archive/epoch-%{version}/cosmic-comp-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-comp at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

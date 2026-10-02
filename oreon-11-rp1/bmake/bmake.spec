@@ -1,14 +1,19 @@
-%global source0_hash 0a81542c03f1a0e6c27bf5015d8fbbc52634e1190838ec7da7645847d9332fef
+%global source2_hash e272b0c7f128468f7c46bf8e6bbd480675b6469f22cedb4aa12fb3ee06d32f83
+
+%global source1_hash 0077954716ab488b2dbb301b3d411697b83a3c489ffc4e1eb3bb676d53718cf7
+
+%global source0_hash b6bd32964cbe451be2838822c9d200b7c7e76a2a5947c03feb71dc6bd72988bd
 
 Summary:       The NetBSD make(1) tool
 Name:          bmake
-Version:       20260824
+Version:       20260912
 Release:       %autorelease
 License:       BSD-3-Clause AND BSD-4-Clause-UC AND BSD-2-Clause
 URL:           https://ftp.netbsd.org/pub/NetBSD/misc/sjg/
 Source0:       %{url}/bmake-%{version}.tar.gz
 Source1:       %{url}/bmake-%{version}.tar.gz.asc
 Source2:       https://www.crufty.net/ftp/pub/sjg/Crufty.pub.asc
+
 Requires:      mk-files
 
 #Patch1:       

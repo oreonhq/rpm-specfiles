@@ -1,4 +1,4 @@
-%global source0_hash 39d5ddc55b90080d0f6e34714b08cb7279ee3fdeb96b0658a2f352f34d116db7
+%global source0_hash ce1a91277edf256e9fc6a90fbc486dabd951b329c81d1c9328b0fa3bf06474c8
 
 %global stable_kf6 stable
 
@@ -71,8 +71,4 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainf
 %{_datadir}/purpose/purpose_gdrive_config.qml
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
-- Latest upstream release
-
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
-- Import
+%autochangelog

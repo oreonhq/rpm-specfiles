@@ -1,4 +1,4 @@
-%global source0_hash e2e53a9812d06f95d0a311bbfafba78704835de6d7f0ea0fd9c0d94e8eae496a
+%global source0_hash 58e976e31795d7309cf2d9f37fdc93522daa4a322f5012d7879fed9ebfa40068
 
 Summary: The Reliable Event Logging Protocol library
 Name: librelp
@@ -56,5 +56,4 @@ rm $RPM_BUILD_ROOT/%{_libdir}/*.la
 %{_libdir}/pkgconfig/relp.pc
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-1
-- Import
+%autochangelog

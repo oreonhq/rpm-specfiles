@@ -1,13 +1,14 @@
-%global source0_hash none
+%global source0_hash 6b3c79fbfb837333b279614a97dc5fc70fe13fb163b0b7c3508789a30fef1536
 
 Name:    buildbox
-Version: 1.4.25
+Version: 1.4.27
 Release: %autorelease
 Summary: Building blocks to execute actions conforming to the Remote Execution API
 
 License: Apache-2.0
 URL:     https://buildgrid.gitlab.io/buildbox/buildbox-home/
 Source0: https://gitlab.com/BuildGrid/buildbox/buildbox/-/archive/%{version}/buildbox-%{version}.tar.bz2
+
 
 ExcludeArch: %{ix86}
 

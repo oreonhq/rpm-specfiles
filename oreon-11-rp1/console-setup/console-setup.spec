@@ -1,4 +1,4 @@
-%global source0_hash 933b7ffd86676a76ca934fe217739ef0dbf9f785d7b87b38f1f32752efb238ae
+%global source0_hash 2042e268b085ad900f2f9863715d67fadb95b8994554f10d407fc14f224b73ae
 
 Name:		console-setup
 Version:	1.249
@@ -48,7 +48,7 @@ not wasted but used for another symbol.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n console-setup
 %autopatch -p1
 
 cp -a --remove-destination debian/copyright COPYRIGHT
@@ -96,5 +96,4 @@ cp -a Fonts/fontsets Fonts/*.equivalents Fonts/*.set \
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.245-3
-- Import
+%autochangelog

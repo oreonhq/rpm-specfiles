@@ -1,4 +1,4 @@
-%global source0_hash c55504e725cf44b6ca67e1cd7504ad36dc98d7a0469a9e8d627fd0fb3848aa1d
+%global source0_hash 5df9e774eb4ab6087a193afff84dcafe9f666e3443fe29e73e6779f659ff7f28
 
 %bcond_with gp2ddb
 
@@ -163,5 +163,4 @@ rm -rf %{buildroot}%{_datadir}/libgphoto2_port/*/vcamera/
 %{_mandir}/man3/%{name}_port.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.33-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

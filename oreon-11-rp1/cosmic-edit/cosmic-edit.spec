@@ -1,4 +1,4 @@
-%global source0_hash 5a09d27d10e10d4083efec93bf4baf07568d102acf35e1e76472cc2371ceb884
+%global source0_hash 2748de5388e637c8390801961961b063e1c15778c33912cdc62448994194a789
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -16,7 +16,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-edit
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Libcosmic text editor
 
@@ -25,6 +25,7 @@ License:        ((Apache-2.0 OR MIT) AND BSD-3-Clause) AND (0BSD OR Apache-2.0 O
 URL:            https://github.com/pop-os/cosmic-edit
 
 Source0:        https://github.com/pop-os/cosmic-edit/archive/epoch-%{version}/cosmic-edit-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-edit at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

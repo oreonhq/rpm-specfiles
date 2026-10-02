@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 1bd4321cc63c06954953eae9eb8fb5d9075296b96c0e3ed34ccb91a0dcce31a5
 
 Name:           python-pymongo
-Version:        4.18.1
+Version:        4.18.2
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        PyMongo - the Official MongoDB Python driver
@@ -61,5 +61,4 @@ Summary:        %{summary}
 %files -n python3-pymongo -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.13.2-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

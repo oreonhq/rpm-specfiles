@@ -1,4 +1,4 @@
-%global source0_hash 96ebe697aafc83eb297a8f29596d57319278112467c46e6aaf3649b311cf8fba
+%global source0_hash 25b1b046822121204e6d53d877a532c88bf7fde14b94c9c72297cd5709b03478
 
 Name:           openscap
 Version:        1.4.4
@@ -322,5 +322,4 @@ pathfix.py -i %{__python3} -p -n %{buildroot}%{_bindir}/scap-as-rpm
 %{_mandir}/man8/oscap-podman.8*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.3-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

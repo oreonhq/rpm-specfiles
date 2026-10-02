@@ -11,10 +11,10 @@ This reverts commit 4583f4fe2 (gpg: Merge --rfc4880bis features into
  2 files changed, 50 insertions(+), 15 deletions(-)
 
 diff --git a/g10/gpg.c b/g10/gpg.c
-index 9fac3de54..25eb570ca 100644
+index 353d053..ab8a662 100644
 --- a/g10/gpg.c
 +++ b/g10/gpg.c
-@@ -251,6 +251,7 @@ enum cmd_and_opt_values
+@@ -257,6 +257,7 @@ enum cmd_and_opt_values
      oGnuPG,
      oRFC2440,
      oRFC4880,
@@ -22,7 +22,7 @@ index 9fac3de54..25eb570ca 100644
      oOpenPGP,
      oPGP7,
      oPGP8,
-@@ -643,6 +644,7 @@ static gpgrt_opt_t opts[] = {
+@@ -667,6 +668,7 @@ static gpgrt_opt_t opts[] = {
    ARGPARSE_s_n (oGnuPG, "no-pgp8", "@"),
    ARGPARSE_s_n (oRFC2440, "rfc2440", "@"),
    ARGPARSE_s_n (oRFC4880, "rfc4880", "@"),
@@ -30,7 +30,7 @@ index 9fac3de54..25eb570ca 100644
    ARGPARSE_s_n (oOpenPGP, "openpgp", N_("use strict OpenPGP behavior")),
    ARGPARSE_s_n (oPGP7, "pgp6", "@"),
    ARGPARSE_s_n (oPGP7, "pgp7", "@"),
-@@ -991,7 +993,6 @@ static gpgrt_opt_t opts[] = {
+@@ -1027,7 +1029,6 @@ static gpgrt_opt_t opts[] = {
    ARGPARSE_s_n (oNoop, "no-allow-multiple-messages", "@"),
    ARGPARSE_s_s (oNoop, "aead-algo", "@"),
    ARGPARSE_s_s (oNoop, "personal-aead-preferences","@"),
@@ -38,7 +38,7 @@ index 9fac3de54..25eb570ca 100644
    ARGPARSE_s_n (oNoop, "override-compliance-check", "@"),
  
  
-@@ -2245,7 +2246,7 @@ static struct gnupg_compliance_option compliance_options[] =
+@@ -2301,7 +2302,7 @@ static struct gnupg_compliance_option compliance_options[] =
    {
      { "gnupg",      oGnuPG },
      { "openpgp",    oOpenPGP },
@@ -47,7 +47,7 @@ index 9fac3de54..25eb570ca 100644
      { "rfc4880",    oRFC4880 },
      { "rfc2440",    oRFC2440 },
      { "pgp6",       oPGP7 },
-@@ -2261,8 +2262,28 @@ static struct gnupg_compliance_option compliance_options[] =
+@@ -2318,8 +2319,28 @@ static struct gnupg_compliance_option compliance_options[] =
  static void
  set_compliance_option (enum cmd_and_opt_values option)
  {
@@ -73,26 +73,26 @@ index 9fac3de54..25eb570ca 100644
 +      opt.s2k_digest_algo = DIGEST_ALGO_SHA256;
 +      opt.s2k_cipher_algo = CIPHER_ALGO_AES256;
 +      break;
-     case oOpenPGP:
-     case oRFC4880:
-       /* This is effectively the same as RFC2440, but with
-@@ -2306,6 +2327,7 @@ set_compliance_option (enum cmd_and_opt_values option)
-     case oPGP8:  opt.compliance = CO_PGP8;  break;
      case oGnuPG:
+       /* set up default options affected by policy compliance: */
        opt.compliance = CO_GNUPG;
+@@ -2363,6 +2384,7 @@ set_compliance_option (enum cmd_and_opt_values option)
+       opt.rfc2440_text = 1;
+       opt.allow_non_selfsigned_uid = 1;
+       opt.allow_freeform_uid = 1;
 +      opt.flags.rfc4880bis = 1;
-       break;
- 
-     case oDE_VS:
-@@ -2508,6 +2530,7 @@ main (int argc, char **argv)
-     opt.emit_version = 0;
-     opt.weak_digests = NULL;
-     opt.compliance = CO_GNUPG;
+       opt.escape_from = 0;
+       opt.s2k_digest_algo = DIGEST_ALGO_SHA1;
+       opt.s2k_cipher_algo = CIPHER_ALGO_3DES;
+@@ -2565,6 +2587,7 @@ main (int argc, char **argv)
+                           | LIST_SHOW_USAGE);
+ #ifdef NO_TRUST_MODELS
+     opt.trust_model = TM_ALWAYS;
 +    opt.flags.rfc4880bis = 1;
- 
-     /* Check special options given on the command line.  */
-     orig_argc = argc;
-@@ -3058,6 +3081,7 @@ main (int argc, char **argv)
+ #else
+     opt.trust_model = TM_AUTO;
+ #endif
+@@ -3143,6 +3166,7 @@ main (int argc, char **argv)
            case oOpenPGP:
            case oRFC2440:
            case oRFC4880:
@@ -100,7 +100,7 @@ index 9fac3de54..25eb570ca 100644
            case oPGP7:
            case oPGP8:
            case oGnuPG:
-@@ -3939,6 +3963,11 @@ main (int argc, char **argv)
+@@ -4065,6 +4089,11 @@ main (int argc, char **argv)
      if( may_coredump && !opt.quiet )
  	log_info(_("WARNING: program may create a core file!\n"));
  
@@ -112,7 +112,7 @@ index 9fac3de54..25eb570ca 100644
      if (eyes_only) {
        if (opt.set_filename)
  	  log_info(_("WARNING: %s overrides %s\n"),
-@@ -4155,7 +4184,7 @@ main (int argc, char **argv)
+@@ -4287,7 +4316,7 @@ main (int argc, char **argv)
      /* Check our chosen algorithms against the list of legal
         algorithms. */
  
@@ -122,19 +122,19 @@ index 9fac3de54..25eb570ca 100644
  	const char *badalg=NULL;
  	preftype_t badtype=PREFTYPE_NONE;
 diff --git a/g10/keygen.c b/g10/keygen.c
-index a1143182c..a085d7559 100644
+index 2314dd8..ac41667 100644
 --- a/g10/keygen.c
 +++ b/g10/keygen.c
-@@ -421,7 +421,7 @@ keygen_set_std_prefs (const char *string,int personal)
- 	      strcat(dummy_string,"S7 ");
- 	    strcat(dummy_string,"S2 "); /* 3DES */
+@@ -497,7 +497,7 @@ keygen_set_std_prefs (const char *string,int personal)
+ 	    if ( !openpgp_cipher_test_algo (CIPHER_ALGO_3DES) )
+               strcat(dummy_string,"S2 "); /* 3DES - RFC4880 default. */
  
 -            if (!openpgp_aead_test_algo (AEAD_ALGO_OCB))
 +            if (opt.flags.rfc4880bis && !openpgp_aead_test_algo (AEAD_ALGO_OCB))
  	      strcat(dummy_string,"A2 ");
  
              if (personal)
-@@ -906,7 +906,7 @@ keygen_upd_std_prefs (PKT_signature *sig, void *opaque)
+@@ -1004,7 +1004,7 @@ keygen_upd_std_prefs (PKT_signature *sig, void *opaque)
    /* Make sure that the MDC feature flag is set if needed.  */
    add_feature_mdc (sig,mdc_available);
    add_feature_aead (sig, aead_available);
@@ -143,7 +143,7 @@ index a1143182c..a085d7559 100644
    add_keyserver_modify (sig,ks_modify);
    keygen_add_keyserver_url(sig,NULL);
  
-@@ -3597,7 +3597,10 @@ parse_key_parameter_part (ctrl_t ctrl,
+@@ -4328,7 +4328,10 @@ parse_key_parameter_part (ctrl_t ctrl,
                  }
              }
            else if (!ascii_strcasecmp (s, "v5"))
@@ -155,7 +155,7 @@ index a1143182c..a085d7559 100644
            else if (!ascii_strcasecmp (s, "v4"))
              keyversion = 4;
            else
-@@ -3856,7 +3859,7 @@ parse_key_parameter_part (ctrl_t ctrl,
+@@ -4591,7 +4594,7 @@ parse_key_parameter_part (ctrl_t ctrl,
   *   ecdsa := Use algorithm ECDSA.
   *   eddsa := Use algorithm EdDSA.
   *   ecdh  := Use algorithm ECDH.
@@ -164,7 +164,7 @@ index a1143182c..a085d7559 100644
   *
   * There are several defaults and fallbacks depending on the
   * algorithm.  PART can be used to select which part of STRING is
-@@ -4825,9 +4828,9 @@ read_parameter_file (ctrl_t ctrl, const char *fname )
+@@ -5575,9 +5578,9 @@ read_parameter_file (ctrl_t ctrl, const char *fname )
  	    }
  	}
  
@@ -177,9 +177,9 @@ index a1143182c..a085d7559 100644
          else
            {
              r = xmalloc_clear( sizeof *r + strlen( value ) );
-@@ -4922,11 +4925,14 @@ quickgen_set_para (struct para_data_s *para, int for_subkey,
-       para = r;
-     }
+@@ -5672,11 +5675,14 @@ quickgen_set_para (struct para_data_s *para, int for_subkey,
+   r->next = para;
+   para = r;
  
 -  r = xmalloc_clear (sizeof *r + 20);
 -  r->key = for_subkey? pSUBVERSION : pVERSION;
@@ -198,4 +198,4 @@ index a1143182c..a085d7559 100644
    if (keytime)
      {
 -- 
-2.43.0
+2.0

@@ -1,4 +1,4 @@
-%global source0_hash 8d34b3860192f6d2ac017537884b099b13a492ed4884130c65da5173d5162590
+%global source0_hash c553fe596d4e5b44ce645a3d9a8b1d8609f2572d50953b10fe7103380462e084
 
 Summary:	Library for easy parsing of XMP metadata
 Name:		exempi
@@ -72,5 +72,4 @@ rm -rf %{buildroot}%{_libdir}/*.a
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.4-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,11 +1,11 @@
-%global source0_hash 31c0ad477dc4f22e3c4fa284b51a415faa2e807f91aa580798b07f90973b7271
+%global source0_hash 5ffc950f0f710a249d5e6659e55c62092568e3688b76c644b0f5afa77e32c4b8
 
 %global uuid pomodoro@arun.codito.in
 %global gittag %{version}
 
 Epoch:          1
 Name:           gnome-pomodoro
-Version:        1.1.4
+Version:        1.1.5
 Release:        1%{?dist}
 Summary:        A time management utility for GNOME
 
@@ -13,6 +13,7 @@ Summary:        A time management utility for GNOME
 License:        GPL-3.0-or-later
 URL:            https://gnomepomodoro.org/
 Source0:        https://github.com/gnome-pomodoro/gnome-pomodoro/archive/%{gittag}.tar.gz
+
 
 BuildRequires:  meson
 BuildRequires:  gcc

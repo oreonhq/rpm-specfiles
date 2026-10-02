@@ -1,8 +1,6 @@
-diff --git a/meson.build b/meson.build
-index 609dc47..06c9e1f 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -274,7 +274,7 @@ gst_dep = dependency('gstreamer-base-1.0', version: gst_req,
+@@ -297,7 +297,7 @@
  cdata.set('HAVE_GSTREAMER', gst_dep.found(), description: 'Build GStreamer plugin')
  
  # GUPnP IGD

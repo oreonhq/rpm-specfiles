@@ -1,4 +1,4 @@
-%global source0_hash 7680ea024fe00e10c96090e45fe4b7b4a1c3993bc5e87576eddd4e0eefd08ef3
+%global source0_hash a7309191e9a4787853cb3ac4136e4f8d7c044b40338dc42c7e422c37625b72e1
 
 %bcond_with build_with_qt6
 %if 0%{?fedora} > 39 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
@@ -34,7 +34,6 @@ Source0:        http://download.kde.org/stable/digikam/%{version}/digiKam-%{vers
 Source10: digikam-import.desktop
 
 ## upstream patches
-Patch0: https://invent.kde.org/graphics/digikam/-/commit/9dd5e992b71b6a855fc419114344d4bd181bc08f.patch
 
 ## upstreamable patches
 
@@ -338,5 +337,4 @@ update-desktop-database -q &> /dev/null
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.0.0-5
-- Import
+%autochangelog

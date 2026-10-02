@@ -1,6 +1,6 @@
-%global source0_hash 821ab0695c842eab51752a81980c92b0410c7eadd04103f791d5d2a526784966
+%global source0_hash 7160e80e84dafd00d956c84891c533bb7ab16a6a54fbe1574b2f3acf0496977b
 %global source2_hash 7d06690e613cf84f325ba8e9d03070b4426cbc2c0fa73033fda81a57efc5a8ed
-%global source4_hash none
+%global source4_hash 15645b2475cca6118eb2ed331b3a8d9442c9d4019c3846ba3f6d25321b4a61ad
 %global source5_hash d4796049c06708a26f3096f748ef095347e1a3c1e570561701fe952c3f565382
 %global source6_hash 07e1265648ff51da238c9af7a18b3f1dc7b0c66b4f21a72f27c74b396cd3336d
 
@@ -186,7 +186,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
 test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
-%autosetup -N -p1 -S gendiff -n gpgme-2.0.1
+%autosetup -N -p1 -S gendiff -n gpgme-%{version}
 # verify sources
 gpg2 --import --import-options import-export,import-minimal %{SOURCE3} > ./gpg-keyring.gpg
 gpgv2 --keyring ./gpg-keyring.gpg %{SOURCE1} %{SOURCE0}
@@ -420,5 +420,4 @@ popd
 %{python3_sitearch}/gpg/
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.1-4
-- Import
+%autochangelog

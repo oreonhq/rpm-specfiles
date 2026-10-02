@@ -1,4 +1,4 @@
-%global source0_hash 3f039b60791c21c7cb15c7986cac89650f076dc274798fa242231b910785eaf9
+%global source0_hash 0bb12d64aee5e467c31af61a53fb828ff7aa59c54a82ca85eeede4c5690bfa66
 
 %global source_name	usb-modeswitch-data
 
@@ -60,5 +60,4 @@ make install \
 %doc ChangeLog README REFERENCE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20191128-15
-- Import
+%autochangelog

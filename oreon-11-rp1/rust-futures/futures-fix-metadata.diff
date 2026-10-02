@@ -1,5 +1,5 @@
---- futures-0.3.32/Cargo.toml
-+++ futures-0.3.32/Cargo.toml
+--- a/Cargo.toml
++++ b/Cargo.toml
 @@ -46,8 +46,6 @@
  features = [
      "std",
@@ -47,10 +47,10 @@
 -path = "tests/compat.rs"
 -
 -[[test]]
- name = "eager_drop"
- path = "tests/eager_drop.rs"
+ name = "compat_miri"
+ path = "tests/compat_miri.rs"
  
-@@ -379,8 +361,8 @@
+@@ -383,8 +365,8 @@
  [dev-dependencies.static_assertions]
  version = "1"
  
@@ -61,8 +61,8 @@
  
  [lints.rust]
  missing_debug_implementations = "warn"
---- futures-0.3.32/src/lib.rs
-+++ futures-0.3.32/src/lib.rs
+--- a/src/lib.rs
++++ b/src/lib.rs
 @@ -197,24 +197,6 @@
      pub use futures_executor::{ThreadPool, ThreadPoolBuilder};
  }

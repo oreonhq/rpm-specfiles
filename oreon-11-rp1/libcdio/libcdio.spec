@@ -1,4 +1,4 @@
-%global source0_hash 53e83d284667535a767fd2d31edad1a6701591960459df373a10f1f21e80a7ed
+%global source0_hash 8e6a305f81e45a78b41ce696d34497cc208d97075469d7304c11a6d44bf006ac
 
 Name: libcdio
 Version: 2.4.0
@@ -125,5 +125,4 @@ make check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

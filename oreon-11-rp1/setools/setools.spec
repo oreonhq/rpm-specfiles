@@ -1,4 +1,4 @@
-%global source0_hash d143da7c0f155a67590983c7ff7f7c181c0ebaf350b37a28b34198c6b4b9a5d2
+%global source0_hash 13a39cdccae7fc8454c41e5bf619514d84d7113ffcdcd0cf6ea7ef867a74937e
 
 %global sepol_ver 3.9
 %global selinux_ver 3.9
@@ -10,15 +10,13 @@ Summary:        Policy analysis tools for SELinux
 
 License:        GPL-2.0-only AND LGPL-2.1-only
 URL:            https://github.com/SELinuxProject/setools/wiki
-Source0:        https://github.com/SELinuxProject/setools/archive/refs/tags/%{version}.tar.gz#/setools-4.6.0.tar.gz
+Source0:        https://github.com/SELinuxProject/setools/archive/refs/tags/%{version}.tar.gz#/setools-%{version}.tar.gz
 
 Source1:        setools.pam
 Source2:        apol.desktop
 
 # Remove redundant runtime requirement on setuptools
-Patch:          https://github.com/SELinuxProject/setools/pull/156.patch
 # Fix seinfo argument parsing when policy path follows query
-Patch:          https://github.com/SELinuxProject/setools/pull/157.patch
 
 Obsoletes:      setools < 4.0.0, setools-devel < 4.0.0
 BuildRequires:  flex,  bison
@@ -154,5 +152,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/ru/man1/apol*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.6.0-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 5d3c143e2b157a7b11b214fa95d67c4e2d3d366580a62f965c7f10b9f1523fc9
+%global source0_hash f1bde77b179217013f0baf1020a5202e0d8bedfc332587d9866df699cac7b9eb
 
 %global stable_kf6 stable
 
@@ -137,5 +137,4 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.ktorrent.
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
-- Import
+%autochangelog

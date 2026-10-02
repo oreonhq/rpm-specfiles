@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash ff39d6616f9d56a318cbb4e029bd42960f8a115579bdce7785e0af6f1fe5ee59
 
 Name:    kmbox

@@ -1,13 +1,14 @@
-%global source0_hash none
+%global source0_hash 89331121321b9bad72d37af5a6d13a0a636f0fbb0880f0ea1f2cf8b7ab9ae631
 
 Name:             gnumeric
 Epoch:            1
-Version:          1.12.61
+Version:          1.12.62
 Release:          1%{?dist}
 Summary:          Spreadsheet program for GNOME
 License:          GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-or-later
 URL:              http://www.gnumeric.org
 Source:           https://download.gnome.org/sources/%{name}/1.12/%{name}-%{version}.tar.xz
+
 BuildRequires:    bison
 BuildRequires:    desktop-file-utils
 BuildRequires:    docbook-dtds

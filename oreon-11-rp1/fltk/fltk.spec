@@ -1,4 +1,4 @@
-%global source0_hash 94b464cce634182c8407adac1be5fc49678986ca93285699b444352af89b4efe
+%global source0_hash eede1fb2b8e9c2e581e77082e15252145855c79aad30070ee3b24aabe2f926f1
 
 # Explicitly use Makefiles
 %global _cmake_generator "Unix Makefiles"
@@ -369,5 +369,4 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/fluid.desktop
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.4-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

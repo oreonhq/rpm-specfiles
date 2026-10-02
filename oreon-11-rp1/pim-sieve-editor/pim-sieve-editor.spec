@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash eae7f687f76950b8e490420747076087bf3fb04da15df6b04b663586b2550f81
 
 # uncomment to enable bootstrap mode

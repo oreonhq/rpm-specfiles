@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 9f02d36decaf46b176a1bef74349232508bcc2b4b06d1662bbd1fd426c57d559
 
 %global __provides_exclude_from ^%{_libdir}/calibre/calibre/plugins/.*\.so$
 
 %global _python_bytecompile_extra 0
 
 Name:           calibre
-Version:        9.14.0
+Version:        9.15.0
 Release:        %autorelease
 Summary:        E-book converter and library manager
 # see COPYRIGHT file for a listing
@@ -13,6 +13,7 @@ License:        GPL-3.0-only AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL
 URL:            https://calibre-ebook.com/
 
 Source0:        https://download.calibre-ebook.com/%{version}/%{name}-%{version}.tar.xz
+
 
 # Disable auto update from inside the app
 Patch:          calibre-no-update.patch

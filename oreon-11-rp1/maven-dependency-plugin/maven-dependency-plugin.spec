@@ -1,4 +1,4 @@
-%global source0_hash 77e50babee8e8e00fe35954e79f168ad9addf392eb669f8d0973e67d786522e4
+%global source0_hash 8a9190e7ed4e1af28da7759d1b0d17a8f0d1e92eb5dac8abafb31db7cf3d6c00
 
 %bcond_without bootstrap
 
@@ -13,8 +13,6 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
-Patch:          0001-Port-tests-to-maven-model-3.6.X.patch
-Patch:          0002-MDEP-952-Cut-another-dependency-on-commons-lang3-479.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -58,7 +56,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find src -name '*.java' -exec sed -i 's/\r//' {} +
 
 %pom_remove_dep :maven-reporting-impl
-%pom_remove_dep :commons-io
 
 %pom_remove_dep :jetty-server
 %pom_remove_dep :jetty-util
@@ -68,8 +65,6 @@ find src -name '*.java' -exec sed -i 's/\r//' {} +
 %pom_remove_dep org.apache.maven.reporting:maven-reporting-api
 %pom_remove_dep org.codehaus.plexus:plexus-i18n
 
-%pom_change_dep :commons-collections4 commons-collections:commons-collections
-sed -i '/import org.apache.commons.collections4/s/4//' src/main/java/org/apache/maven/plugins/dependency/analyze/AnalyzeDuplicateMojo.java
 
 # Tests which require eclipse
 rm src/test/java/org/apache/maven/plugins/dependency/TestGetMojo.java
@@ -78,7 +73,7 @@ rm -r src/test/java/org/apache/maven/plugins/dependency/fromConfiguration
 rm src/test/java/org/apache/maven/plugins/dependency/utils/translators/TestClassifierTypeTranslator.java
 
 # Requires org.apache.maven.reporting
-rm src/main/java/org/apache/maven/plugins/dependency/analyze/AnalyzeReport{Mojo,Renderer}.java
+rm src/main/java/org/apache/maven/plugins/dependency/analyze/AnalyzeReport{,Renderer}.java
 sed -i '/doSpecialTest( "analyze-report" );/d' src/test/java/org/apache/maven/plugins/dependency/TestSkip.java
 
 %build
@@ -91,5 +86,4 @@ sed -i '/doSpecialTest( "analyze-report" );/d' src/test/java/org/apache/maven/pl
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

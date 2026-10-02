@@ -1,4 +1,4 @@
-%global source0_hash 04acb4f177d57c147dcedc4bd70e23806af3db75a532f46f95461b2bc9a94959
+%global source0_hash 7c98de329cb5d6a99abbb03aaad2866cb041092ed9936a7246908e170005b058
 
 Name:          perl-Net-DNS
 Version:       1.57
@@ -191,5 +191,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.53-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

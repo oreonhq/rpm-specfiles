@@ -1,4 +1,4 @@
-%global source0_hash 884925fc6fa116f0cc4f1db80335daaf249ada5fbba30186536ed6329dc6032a
+%global source0_hash 55b2ac2938c6057aebd1df5366860d277ebda445f960111fba0998fedeced700
 
 %global qt_module qtmqtt
 
@@ -12,8 +12,8 @@
 
 Summary: Qt6 - Mqtt module
 Name:    qt6-%{qt_module}
-Version: 6.10.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io

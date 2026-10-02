@@ -1,4 +1,4 @@
-%global source0_hash 72c1325ddfc40871d6810f1e272cf2d45b361f26357eb38f170fd04d737bb9f2
+%global source0_hash 99f6db36d3fff6c99acd21d4c6096176d4ac8785eab319d0faf77ad995b8b7c5
 
 %global somajor 2
 # Old-style C + hand-written Makefile: LTO can fail linking; GCC 15 is stricter on conversions.
@@ -10,7 +10,7 @@ Release:        1%{?dist}
 Summary:        C implementation of Markdown
 License:        BSD-3-Clause
 URL:            https://github.com/Orc/discount
-Source0:        https://github.com/Orc/%{name}/archive/refs/tags/v%{version}.tar.gz#/discount-2.2.7.tar.gz
+Source0:        https://github.com/Orc/%{name}/archive/refs/tags/v%{version}.tar.gz#/discount-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -80,5 +80,4 @@ chmod 0755 %{buildroot}%{_libdir}/libmarkdown.so.*
 
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.7-2
-- Add discount and libmarkdown for KDE text stacks
+%autochangelog

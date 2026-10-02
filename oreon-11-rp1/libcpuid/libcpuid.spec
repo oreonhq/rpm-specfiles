@@ -1,4 +1,4 @@
-%global source0_hash 81f2f40da5d66b8220476e116cb40bca4e6a62c0d22bdeeb8e3856cf14607007
+%global source0_hash f23e212e22ca22942cca87b18decdbce8a76d2b004c344a0789d0d26d14930d6
 
 Name:           libcpuid
 Version:        0.8.2
@@ -104,5 +104,4 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} %pytest python/tests
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.1-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

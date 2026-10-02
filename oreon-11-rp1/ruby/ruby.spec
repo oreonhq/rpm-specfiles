@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 47ef59413f7a4587ba6a6b78b14036eb5e36eec2ec0b90964801e88d56a3d375
 
 %global major_version 4
 %global minor_version 0
-%global teeny_version 1
+%global teeny_version 7
 %global major_minor_version %{major_version}.%{minor_version}
 
 %global ruby_version %{major_minor_version}.%{teeny_version}
@@ -38,26 +38,25 @@
 ## BUNDLED_GEMS_VERSIONS
 
 # Bundled libraries versions
-%global rubygems_version 4.0.3
+%global rubygems_version 4.0.20
 %global rubygems_molinillo_version 0.8.0
 %global rubygems_net_http_version 0.7.0
 %global rubygems_net_protocol_version 0.2.2
 %global rubygems_optparse_version 0.8.0
-%global rubygems_resolv_version 0.6.2
+%global rubygems_resolv_version 0.7.0
 %global rubygems_securerandom_version 0.4.1
 %global rubygems_timeout_version 0.4.4
 %global rubygems_tsort_version 0.2.0
 %global rubygems_uri_version 1.1.1
 
 # Default gems.
-%global bundler_version 4.0.3
+%global bundler_version 4.0.20
 %global bundler_connection_pool_version 2.5.4
 %global bundler_fileutils_version 1.8.0
 %global bundler_net_http_persistent_version 4.0.6
 %global bundler_pub_grub_version 0.5.0
 %global bundler_securerandom_version 0.4.1
 %global bundler_thor_version 1.4.0
-%global bundler_tsort_version 0.2.0
 %global bundler_uri_version 1.1.1
 
 %global date_version 3.5.1
@@ -66,7 +65,7 @@
 %global digest_version 3.2.1
 %global english_version 0.8.1
 %global erb_version 6.0.1
-%global error_highlight_version 0.7.1
+%global error_highlight_version 0.7.2
 %global etc_version 1.4.6
 %global fcntl_version 1.3.0
 %global fileutils_version 1.8.0
@@ -81,20 +80,20 @@
 %global net_protocol_version 0.2.2
 %global open_uri_version 0.5.0
 %global open3_version 0.2.1
-%global openssl_version 4.0.0
+%global openssl_version 4.0.2
 %global optparse_version 0.8.1
 %global pp_version 0.6.3
 %global prettyprint_version 0.2.0
 %global prism_version 1.8.0
 %global psych_version 5.3.1
-%global resolv_version 0.7.0
+%global resolv_version 0.7.2
 %global ruby2_keywords_version 0.0.5
 %global securerandom_version 0.4.1
 %global shellwords_version 0.2.2
 %global singleton_version 0.3.0
 %global stringio_version 3.2.0
 %global strscan_version 3.1.6
-%global syntax_suggest_version 2.0.2
+%global syntax_suggest_version 2.0.3
 %global tempfile_version 0.3.1
 %global time_version 0.4.2
 %global timeout_version 0.6.0
@@ -123,7 +122,7 @@
 %global minitest_version 6.0.0
 %global mutex_m_version 0.3.0
 %global net_ftp_version 0.3.9
-%global net_imap_version 0.6.2
+%global net_imap_version 0.6.4.1
 %global net_pop_version 0.1.2
 %global net_smtp_version 0.5.1
 %global nkf_version 0.2.0
@@ -131,11 +130,11 @@
 %global ostruct_version 0.6.3
 %global power_assert_version 3.0.1
 %global prime_version 0.1.4
-%global pstore_version 0.2.0
+%global pstore_version 0.2.1
 %global racc_version 1.8.1
 %global rake_version 13.3.1
 %global rbs_version 3.10.0
-%global rdoc_version 7.0.3
+%global rdoc_version 7.0.4
 %global readline_version 0.0.4
 %global reline_version 0.6.3
 %global repl_type_completor_version 0.1.12
@@ -192,7 +191,7 @@
 Summary: An interpreter of object-oriented scripting language
 Name: ruby
 Version: %{ruby_version}%{?development_release}
-Release: 33%{?dist}
+Release: 1%{?dist}
 # Licenses, which are likely not included in binary RPMs:
 # Apache-2.0:
 #   benchmark/gc/redblack.rb
@@ -590,7 +589,6 @@ Summary:    Library and utilities to manage a Ruby application's gem dependencie
 Version:    %{bundler_version}
 # BSD-2-Clause OR Ruby:
 #   lib/bundler/vendor/fileutils
-#   lib/bundler/vendor/tsort
 #   lib/bundler/vendor/uri
 # MIT:
 #   lib/bundler/vendor/connection_pool
@@ -608,7 +606,6 @@ Provides:   bundled(rubygem-net-http-persistent) = %{bundler_net_http_persistent
 Provides:   bundled(rubygem-pub_grub) = %{bundler_pub_grub_version}
 Provides:   bundled(rubygem-securerandom) = %{bundler_securerandom_version}
 Provides:   bundled(rubygem-thor) = %{bundler_thor_version}
-Provides:   bundled(rubygem-tsort) = %{bundler_tsort_version}
 Provides:   bundled(rubygem-uri) = %{bundler_uri_version}
 BuildArch:  noarch
 
@@ -1154,15 +1151,6 @@ make -C %{_vpath_builddir} -s runruby TESTRUN_SCRIPT="-e \" \
   puts '%%{bundler_thor_version}: %{bundler_thor_version}'; \
   puts %Q[Bundler::Thor::VERSION: #{Bundler::Thor::VERSION}]; \
   exit 1 if Bundler::Thor::VERSION != '%{bundler_thor_version}'; \
-\""
-
-# TSort
-make -C %{_vpath_builddir} -s runruby TESTRUN_SCRIPT="-e \" \
-  module Bundler; end; \
-  require 'bundler/vendor/tsort/lib/tsort'; \
-  puts '%%{bundler_tsort_version}: %{bundler_tsort_version}'; \
-  puts %Q[Bundler::TSort::VERSION: #{Bundler::TSort::VERSION}]; \
-  exit 1 if Bundler::TSort::VERSION != '%{bundler_tsort_version}'; \
 \""
 
 # URI.
@@ -1963,5 +1951,4 @@ make -C %{_vpath_builddir} runruby TESTRUN_SCRIPT=" \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.1-33
-- Prepare for Oreon 11 (RP1)
+%autochangelog

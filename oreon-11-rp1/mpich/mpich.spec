@@ -1,8 +1,8 @@
-%global source0_hash 883f5bb3aeabf627cb8492ca02a03b191d09836bbe0f599d8508351179781d41
+%global source0_hash 928c2f18d350a91443fe8024ad01ce2c6009e9c551e0a73e797fc567f119137d
 
 Summary:        A high-performance implementation of MPI
 Name:           mpich
-Version:        5.0.1
+Version:        5.0.2
 Release:        %autorelease
 License:        mpich2
 URL:            https://www.mpich.org/
@@ -17,7 +17,6 @@ Patch:          0003-Drop-build-flags-e.g.-specs.-and-lto-from-mpi-wrappe.patch
 Patch:          0004-Make-mpich.module-useful.patch
 # TODO: submit ^ upstream
 
-Patch:          mpich-configure-max_align_t.patch
 Patch:          mpich-aclocal_cc-implicit-int.patch
 Patch:          mpich-json-configure-__thread.patch
 
@@ -29,7 +28,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  hwloc-devel >= 2.0
-%if ! (0%{?rhel} >= 10) || (0%{?oreon} >= 11)
+%if ! (0%{?rhel} >= 10)
 %ifarch x86_64
 # BuildRequires:  json-c-devel
 BuildRequires:  libpsm2-devel
@@ -42,7 +41,7 @@ BuildRequires:  numactl-devel
 %ifarch aarch64 ppc64le x86_64 riscv64
 BuildRequires:  ucx-devel
 %endif
-%if ! 0%{?rhel} || (0%{?oreon} >= 11)
+%if ! 0%{?rhel}
 BuildRequires:  yaksa-devel
 %else
 Provides:       bundled(yaksa) = 0.2
@@ -63,7 +62,7 @@ Requires:       environment(modules)
 # Make sure this package is rebuilt with correct Python version when updating
 # Otherwise mpi.req from rpm-mpi-hooks doesn't work
 # https://bugzilla.redhat.com/show_bug.cgi?id=1705296
-Requires:       python(abi)
+Requires:       (python(abi) = %{python3_version} if python3)
 
 %description
 MPICH is a high-performance and widely portable implementation of the Message
@@ -122,7 +121,7 @@ Contains documentations, examples and man-pages for mpich
 %package -n python3-mpich
 Summary:        mpich support for Python 3
 Requires:       %{name} = %{version}-%{release}
-Requires:       python(abi)
+Requires:       python(abi) = %{python3_version}
 
 %description -n python3-mpich
 mpich support for Python 3.
@@ -157,7 +156,7 @@ CONFIGURE_OPTS=(
 %ifarch aarch64 ppc64le x86_64 riscv64
         --with-ucx
 %endif
-%if ! 0%{?rhel} || (0%{?oreon} >= 11)
+%if ! 0%{?rhel}
         --with-yaksa
 %endif
 )
@@ -281,5 +280,4 @@ make check VERBOSE=1 \
 %{python3_sitearch}/%{name}.pth
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2.2-1
-- Import
+%autochangelog

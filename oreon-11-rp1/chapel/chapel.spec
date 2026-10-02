@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash c142e93ae7ecf42e55e5b6c1277ef9a6e7e6bd2aca0092bd5bc7999e171402aa
 
 Name:           chapel
-Version:        2.9.0
+Version:        2.10.0
 %global shortversion 2.9
 Release:        %{autorelease}
 Summary:        A Productive Parallel Programming Language
@@ -23,9 +23,9 @@ Summary:        A Productive Parallel Programming Language
 License:        Apache-2.0 AND (GPL-3.0-or-later WITH Bison-exception-2.2) AND (Apache-2.0 AND MIT)
 URL:            https://chapel-lang.org
 Source:         https://github.com/chapel-lang/chapel/archive/%{version}/chapel-%{version}.tar.gz
+
 # https://github.com/chapel-lang/chapel/pull/27877
 # Ensure code compiles as intended
-Patch:          strict-aliasing.patch
 # Unsupported architecture
 ExcludeArch:    %{ix86}
 

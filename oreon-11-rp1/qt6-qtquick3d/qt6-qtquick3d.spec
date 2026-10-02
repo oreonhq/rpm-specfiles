@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6ced6edbd25fb5a632fe770ae820b376bf50233e8d62002c79a69a505a2e429e
 
 %global qt_module qtquick3d
 
@@ -16,8 +16,8 @@
 
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 9%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -299,20 +299,4 @@ popd
 %endif
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-8
-- Drop qt6-qtquicklayouts-devel (not in Fedora 43); keep pkgconfig(Qt6QuickLayouts)
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-7
-- BR qt6-qtquicklayouts-devel, skip CMake PCH (aarch64 / disk)
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
-- Always list assimp6 patch in SRPM apply only for Fedora 43+ or %%{?oreon}
-
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- Oreon uses system assimp like Fedora, apply assimp6 wrap patch when %%{?oreon} is set
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

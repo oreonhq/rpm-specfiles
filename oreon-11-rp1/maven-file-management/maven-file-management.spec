@@ -1,4 +1,4 @@
-%global source0_hash 34f48b425e82581a192672e1335d937e6c27a76b53f40e07ae4f0f05e0cb2701
+%global source0_hash 4f0418dc1e32148664921f1470f59ad345477ca2dc9c81d2df9ae242be9b8d02
 
 %bcond_with bootstrap
 
@@ -34,8 +34,7 @@ Provides a component for plugins to easily resolve project dependencies.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n file-management-3.1.0
-%autosetup -p1 -n file-management-3.1.0
+%autosetup -p1 -n file-management-%{version}
 
 %build
 %mvn_build -j
@@ -47,5 +46,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE NOTICE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.1.0-1
-- Import
+%autochangelog

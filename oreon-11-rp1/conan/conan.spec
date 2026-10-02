@@ -1,9 +1,9 @@
-%global source0_hash ac0dac3cad194d837f2879bf942158cd1a0abfe1e6624514d30ff34e51e9038c
+%global source0_hash b1e60b13f10e1b6185763f52fe0df7fa65735e5f5c8b0dedc1a65067af46bdfb
 
 %bcond check 0
 
 Name: conan
-Version: 2.32.0
+Version: 2.33.0
 Release: %autorelease
 
 License: MIT

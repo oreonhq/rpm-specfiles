@@ -1,4 +1,4 @@
-%global source0_hash e097073c156eeff9e12655b054f446d57374cfba5c132dcdbe7fac64e728286a
+%global source0_hash d362c64e6d8d5287153501eabf7c85b4a761432fbf53f5d7b085d0bb1653c1dd
 %global source2_hash 4feb34eb8ce7f76b33211cb7fd666ef590bfccd705d4512aadb8f83f14ba4b2e
 
 %bcond_without sasl
@@ -174,5 +174,4 @@ fi
 %license ../%{selinuxmoduledir}/COPYING
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.41-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

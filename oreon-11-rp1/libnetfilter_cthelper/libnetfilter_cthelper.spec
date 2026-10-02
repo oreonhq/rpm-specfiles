@@ -1,4 +1,4 @@
-%global source0_hash 07618e71c4d9a6b6b3dc1986540486ee310a9838ba754926c7d14a17d8fccf3d
+%global source0_hash 14073d5487233897355d3ff04ddc1c8d03cc5ba8d2356236aa88161a9f2dc912
 
 Name:           libnetfilter_cthelper
 Version:        1.0.1
@@ -52,5 +52,4 @@ find $RPM_BUILD_ROOT -type f -name '*.la' -exec rm -f {} ';'
 %{_libdir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-32
-- Prepare for Oreon 11 (RP1)
+%autochangelog

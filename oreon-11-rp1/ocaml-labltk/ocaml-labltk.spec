@@ -1,4 +1,4 @@
-%global source0_hash fe0e11bacdb537ce9027aec072262405f01fe4017d19213d5a82ef053e50594d
+%global source0_hash f816031d6fa024a7ff8cf768205ff24c528ae2c69eca86ad7d7b5ddab4e16022
 
 # This breaks basic usage of the package:
 # ocamlfind ocamlopt -package labltk tktest.ml -linkpkg -o tktest
@@ -137,5 +137,4 @@ sed 's/8\.06\.6/%{version}/' support/META > \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.06.15-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

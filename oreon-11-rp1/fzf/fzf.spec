@@ -1,10 +1,10 @@
-%global source0_hash da72936dd23045346769dbf233a7a1fa6b4cfe4f0e856b279821598ce8f692af
+%global source0_hash 1046857c337f5bd05f6fa482446b5a42a011615105743efbe4efee0970b24bb7
 
 %bcond check 0
 
 # https://github.com/junegunn/fzf
 %global goipath         github.com/junegunn/fzf
-Version:                0.67.0
+Version:                0.74.4
 
 %gometa
 

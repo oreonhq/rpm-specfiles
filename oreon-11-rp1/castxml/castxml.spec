@@ -1,9 +1,9 @@
-%global source0_hash e70728229db5444384befcba9681a01497e9a19e35166ce1ffef3b5cbc8eeefe
+%global source0_hash 68e91af54851ef341fae72299f7576892c3317f7b40d00590ed79d00dc30a16c
 
 %undefine __cmake_in_source_build
 
 Name:		castxml
-Version:	0.7.0
+Version:	0.8.0
 Release:	1%{?dist}
 Summary:	C-family abstract syntax tree XML output tool
 

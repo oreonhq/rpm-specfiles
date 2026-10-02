@@ -1,14 +1,14 @@
-%global source0_hash 61300f603798ecf1d7786570789f0ff3f5a1acf075a6fb9f756837d166e37d14
+%global source0_hash d1008fb78dcae1323ddab664bcb352a61f022b1b131bd8018548e021d975ec7a
 %global source1_hash 05220b4b4f1c6c56d3b4acf6998d79768dccd22c379639a6cf3589fbbd54ba1d
 
 Summary: A text file browser similar to more, but better
 Name: less
-Version: 692
-Release: 3%{?dist}
+Version: 710
+Release: 1%{?dist}
 # less dual license GPL-3.0-only OR BSD-2-Clause
 # lesspipe GPL-2.0-or-later
 License: (GPL-3.0-only OR BSD-2-Clause) AND GPL-2.0-or-later
-Source0:        https://www.greenwoodsoftware.com/less/%{name}-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/less/%{name}-%{version}.tar.gz
 %global lesspipe_version 2.22
 Source1:        https://github.com/wofr06/lesspipe/archive/refs/tags/v2.22.tar.gz#/lesspipe-2.22.tar.gz
 Source2: less.sh
@@ -18,7 +18,6 @@ Patch5: less-475-fsync.patch
 Patch6: less-436-manpage-add-old-bot-option.patch
 Patch8: less-458-lessecho-usage.patch
 Patch9: less-458-less-filters-man.patch
-Patch10: less-458-lesskey-usage.patch
 Patch11: less-458-old-bot-in-help.patch
 Patch13: less-436-help.patch
 URL: https://www.greenwoodsoftware.com/less/
@@ -61,11 +60,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -a 1
 %patch -P 4 -p1 -b .time
-%patch -P 5 -p2 -b .fsync
+%patch -P 5 -p0 -b .fsync
 %patch -P 6 -p1 -b .manpage-add-old-bot-option
 %patch -P 8 -p1 -b .lessecho-usage
 %patch -P 9 -p1 -b .less-filters-man
-%patch -P 10 -p1 -b .lesskey-usage
 %patch -P 11 -p1 -b .old-bot
 %patch -P 13 -p1 -b .help
 
@@ -108,9 +106,9 @@ popd
 %{_bindir}/less
 %{_bindir}/lesscomplete
 %{_bindir}/lessecho
-%{_bindir}/lesskey
 %{_bindir}/lesspipe.sh
 %{_mandir}/man1/*
+%{_mandir}/man5/lesskey.5*
 
 %files color
 %{_bindir}/archive_color
@@ -118,5 +116,4 @@ popd
 %{_bindir}/vimcolor
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 692-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

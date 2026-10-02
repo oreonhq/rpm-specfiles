@@ -1,4 +1,4 @@
-%global source0_hash f297a4ae0075d0ff74b0cb5b2c3dc427ada12b18897023589e29935f33092d17
+%global source0_hash 2f809f4e1ed8ca218b9d39975cee290d168f231b48204a4d91d75ee63f30abcb
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-screenshot
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Screenshot utility for the COSMIC Desktop Environment
 
@@ -24,6 +24,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND (Apache-2.0 OR Apache-2.0 WITH L
 URL:            https://github.com/pop-os/cosmic-screenshot
 
 Source0:        https://github.com/pop-os/cosmic-screenshot/archive/epoch-%{version}/cosmic-screenshot-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-screenshot at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

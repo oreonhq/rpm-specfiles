@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 8d8f1343e1c61c14f4e4313a36772f080c32c136b75e175ba36fe75a1a1d88f1
 
 Name:             jtidy
-Version:          1.0.3
+Version:          1.0.5
 Release:          1.50.20100930svn1125%{?dist}
 Epoch:            2
 Summary:          HTML syntax checker and pretty printer
@@ -74,5 +74,4 @@ EOF
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:1.0-0.50.20100930svn1125
-- Import
+%autochangelog

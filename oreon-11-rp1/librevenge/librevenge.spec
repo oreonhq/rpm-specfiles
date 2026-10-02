@@ -1,4 +1,4 @@
-%global source0_hash 106d0c44bb6408b1348b9e0465666fa83b816177665a22cd017e886c1aaeeb34
+%global source0_hash 19eacf5ce55d7fe6a990a45142589cdf7da0c7b68701797f133482cb44f189fa
 
 %global apiversion 0.0
 
@@ -117,5 +117,4 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PA
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

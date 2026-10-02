@@ -1,4 +1,4 @@
-%global source0_hash 786dd16887fa97649eb6abed42c56aa45fd4592c8bd3a7aa4d4e7ca5d1b5f2fb
+%global source0_hash 7d46a381f607432bdb5201a08b889924b6a4883bf09e8efca82a86a7d122cc97
 
 Name:           bpftool
 Version:        7.7.0
@@ -49,5 +49,4 @@ mv %{buildroot}%{_prefix}/sbin %{buildroot}%{_bindir}
 %{_mandir}/man8/bpftool*.8*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.6.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

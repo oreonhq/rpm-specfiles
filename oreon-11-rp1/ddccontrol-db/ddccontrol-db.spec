@@ -1,8 +1,8 @@
-%global source0_hash 11fb5e47ec8d445871e2972ffd7afc213a9c1892f772e1e06830ce430178581e
+%global source0_hash 717fa4b45d6bbc4fd9c44d58c5c3992588f5c6224396483a0cc041a811d9055b
 
 Name:             ddccontrol-db
 URL:              https://github.com/ddccontrol/ddccontrol-db
-Version:          20260915
+Version:          20260928
 Release:          1%{?dist}
 # Agreed by usptream to be GPLv2+
 # http://sourceforge.net/mailarchive/message.php?msg_id=29762202
@@ -10,6 +10,7 @@ Release:          1%{?dist}
 License:          GPL-2.0-or-later
 Summary:          DDC/CI control database for ddccontrol
 Source0:          https://github.com/ddccontrol/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+
 # use autopoint instead of gettextize that is interactive tool
 BuildRequires:    gettext
 BuildRequires:    gettext-devel

@@ -1,4 +1,4 @@
-%global source0_hash b78b7f0cfab0f03b7902c60e51939e9105cb5a2cfbc34be89b6f533721d9e619
+%global source0_hash d2a13306348cdc3886f75c918f00e3722ec85509d0b7f286023f3929b7aa0600
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-player
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        COSMIC media player
 
@@ -24,6 +24,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-player
 
 Source0:        https://github.com/pop-os/cosmic-player/archive/epoch-%{version}/cosmic-player-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-player at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

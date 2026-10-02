@@ -1,4 +1,4 @@
-%global source0_hash 67bea6fbc3a42a535a0230c9e891e5ddfb4d9d39422d46565a2990d1ace15216
+%global source0_hash 9d2021f47a4501c667862c9942a92d1953694b21d11bcd1702e83eb594e3d67d
 
 # The testsuite is unsuitable for running on buildsystems
 %global tests_enabled 0
@@ -162,5 +162,4 @@ ln -s %{_bindir}/pidof %{buildroot}%{_sbindir}/pidof
 %files i18n -f %{name}.lang
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

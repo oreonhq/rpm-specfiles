@@ -1,8 +1,8 @@
-%global source0_hash 611cfa50d08899eb993a5f475f988b4512366cded82688c906cf913e5191b525
+%global source0_hash 84c18824ca227e7602d2408b663c3747f754ad306ed5c73ddab959d6589538a6
 
 %bcond_without tests
 Name:             fossil
-Version:          2.25
+Version:          2.28
 Release:          %autorelease
 Summary:          A distributed SCM with bug tracking and wiki
 

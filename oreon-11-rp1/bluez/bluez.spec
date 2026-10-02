@@ -1,4 +1,4 @@
-%global source0_hash 99f144540c6070591e4c53bcb977eb42664c62b7b36cb35a29cf72ded339621d
+%global source0_hash 26bdcf2cebd7310c6f598850606b037ef0c515fe6608ebc54d22c50c4c32b35f
 
 %if 0%{?fedora} || 0%{?rhel} <= 8
 %bcond_without deprecated
@@ -15,11 +15,8 @@ URL:     http://www.bluez.org/
 
 Source0:        https://www.kernel.org/pub/linux/bluetooth/%{name}-%{version}.tar.xz
 # https://patchwork.kernel.org/project/bluetooth/list/?series=1052631
-Patch1: big-endian-5.86.patch
 # https://patchwork.kernel.org/project/bluetooth/patch/ba0e71b91a24557f088b015a349c6ccee6260ec2.1771258477.git.pav@iki.fi/
-Patch2: 0001-a2dp-connect-source-profile-after-sink.patch
 # https://patchwork.kernel.org/project/bluetooth/list/?series=1058931
-Patch3: bluetoothctl-no-output.patch
 
 BuildRequires: dbus-devel >= 1.6
 BuildRequires: glib2-devel
@@ -344,5 +341,4 @@ install emulator/btvirt ${RPM_BUILD_ROOT}/%{_libexecdir}/bluetooth/
 %{_userunitdir}/obex.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.86-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

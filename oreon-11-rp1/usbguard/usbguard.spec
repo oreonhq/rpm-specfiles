@@ -1,4 +1,4 @@
-%global source0_hash 707dad2938923202697f636c2b4e0be80f192242039a2af3fc7ac35d03f78551
+%global source0_hash 7d76b75e779e3c9e6c2fc10e7389dfa34056864c9f0c6eaca722687b7e75893c
 %global source1_hash bd70162b31f65497b2f5254cd287dbc1290c2c036ba0c2c8fa92fa8caca9dc71
 
 %global selinuxtype targeted
@@ -42,13 +42,6 @@ BuildRequires: audit-libs-devel
 # For `pkg-config systemd` only
 BuildRequires: systemd
 
-Patch0: tmpfiles-v1.patch
-Patch1: tmpfiles-v2.patch
-Patch2: uninstall-ignore-error.patch
-Patch3: ipc-privileges.patch
-Patch4: protobuf-3.0.patch
-Patch5: catch2-support.patch
-Patch6: disable-catch.patch
 Patch7: selinux-bin-sbin.patch
 
 %description
@@ -113,13 +106,6 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 # selinux
 %setup -q -D -T -a 1
 
-%patch -P 0 -p1
-%patch -P 1 -p1
-%patch -P 2 -p1
-%patch -P 3 -p1
-%patch -P 4 -p1
-%patch -P 5 -p1
-%patch -P 6 -p1
 
 pushd %{name}-selinux-%{semodule_version}
 %patch -P 7 -p1
@@ -245,5 +231,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.3-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

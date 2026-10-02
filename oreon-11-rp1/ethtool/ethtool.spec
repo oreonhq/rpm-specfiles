@@ -1,4 +1,4 @@
-%global source0_hash 1c2114ab6e0c0d2aa67d699960eb11df4f341e2403139cdf28ae9da858a6025f
+%global source0_hash 4d78c26edc0255bc92f4b995b5fd66108d75ff966ed4694f6025a6d370bc2496
 
 %global appstream_id org.kernel.software.network.ethtool
 
@@ -26,7 +26,8 @@ port, auto-negotiation, PCI locations and checksum offload on many
 network devices, especially of Ethernet devices.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %autosetup
 
 %build
@@ -51,5 +52,4 @@ appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/%{appstream
 %{_metainfodir}/%{appstream_id}.metainfo.xml
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.19-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

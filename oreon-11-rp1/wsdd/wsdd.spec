@@ -1,4 +1,4 @@
-%global source0_hash 175b997518073ea82c95dadea50a0f01ffa4ff292cbb84b5e64f82e7e6c94fc9
+%global source0_hash 009efafb763686d9e265ca8f1dd17696bc80fc0ee619f48ea7878ec21471f61e
 
 Name:           wsdd
 Version:        0.9
@@ -64,5 +64,4 @@ install -m0644 -D wsdd.sysusers.conf %{buildroot}%{_sysusersdir}/wsdd.conf
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

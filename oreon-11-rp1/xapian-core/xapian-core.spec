@@ -1,4 +1,4 @@
-%global source0_hash 4edf9989499e8bc95085c9f7108ed41d69546c34c6eea81da0fa22d95043bf72
+%global source0_hash 8e1259586d342e3d12b5e1f772e9185a10f2ba16e541566b5c3c239f71b8aacc
 
 # Currently fails on s390x and ARMv7
 %if ! 0%{?_module_build}
@@ -106,5 +106,4 @@ make check %{?_smp_mflags}
 %{_mandir}/man1/xapian-config.1*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.30-2
-- Import
+%autochangelog

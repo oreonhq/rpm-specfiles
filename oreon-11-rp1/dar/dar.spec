@@ -9,13 +9,14 @@
 %define with_static %{?_with_static: 1} %{?!_with_static: 0}
 
 Name:           dar
-Version:        2.8.4
+Version:        2.8.6
 Release:        %autorelease
 Summary:        Software for making/restoring incremental CD/DVD backups
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://dar.linux.free.fr
 Source0:        ftp://ftp.dm3c.org/dar.linux.free.fr/Releases/Source_code/%{name}-%{version}.tar.gz
+
 Source1:        README.Fedora
 
 BuildRequires:  bzip2-devel

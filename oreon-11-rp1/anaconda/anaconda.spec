@@ -1,8 +1,8 @@
-%global source0_hash 9df3849f74323ae0b88a9c8cf82915977452b8767bef0bd0fedae38946f4a7a1
+%global source0_hash a5360cf49e09c85961651b9cb3bf1b3687ca28b71a80f89b2d0ec3c2eb9f0793
 
 Summary: Graphical system installer
 Name:    anaconda
-Version: 45.27
+Version: 45.28
 Release: 1%{?dist}
 ExcludeArch: %{ix86}
 License: GPL-2.0-or-later

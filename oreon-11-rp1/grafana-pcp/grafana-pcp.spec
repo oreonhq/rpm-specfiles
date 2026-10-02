@@ -1,6 +1,6 @@
-%global source0_hash 06e931554949c850a00601574d2c485007335818361e98d49bb8535eac99cee2
-%global source1_hash 172e926531a24c48da3b5cbe735571d9618b9b2ed97c8ea354c05d9c736b4aa3
-%global source2_hash 4417846b3d3d496956a40970452d24a798e758cda02cb306b30c04d26fd5d8fc
+%global source0_hash 183f0644880d42c2a17261f4203b6cb05cbbc300a7e7a84f6512190de2d926c2
+%global source1_hash 2c19d3c0ce58c7ef6314182933fd043a17a86f732c774e7ad4e47d006007a0e0
+%global source2_hash f4ec627d8bdf3c93496b81b3c9fa15acc3c8fc9b6963fe874cbc2bc436c093aa
 
 # Specify if the frontend will be compiled as part of the build or
 # is attached as a webpack tarball (in case of an unsuitable nodejs version on the build system)
@@ -25,7 +25,7 @@ Summary:        Performance Co-Pilot Grafana Plugin
 License:        Apache-2.0
 URL:            https://github.com/performancecopilot/grafana-pcp
 
-Source0:        https://github.com/performancecopilot/grafana-pcp/archive/v%{version}/%{name}-%{version}.tar.gz#/grafana-pcp-5.3.0.tar.gz
+Source0:        https://github.com/performancecopilot/grafana-pcp/archive/v%{version}/%{name}-%{version}.tar.gz#/grafana-pcp-%{version}.tar.gz
 Source1:        grafana-pcp-vendor-%{version}-1.tar.xz
 # Note: In case there were no changes to this tarball, the NVR of this tarball
 # lags behind the NVR of this package.
@@ -40,9 +40,7 @@ Source4:        build_frontend.sh
 Source5:        list_bundled_nodejs_packages.py
 Source6:        create_bundles_in_container.sh
 
-Patch1:         0001-remove-unused-frontend-crypto.patch
 Patch2:         0002-remove-faulty-metric-tables.patch
-Patch3:         0003-fix-create_bundles-issue.patch
 
 # Intersection of go_arches and nodejs_arches
 ExclusiveArch:  %{grafanapcp_arches}
@@ -143,9 +141,7 @@ test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "ore
 %setup -q -T -D -b 2
 %endif
 
-%patch -P 1 -p1
 %patch -P 2 -p1
-%patch -P 3 -p1
 
 
 %build
@@ -205,5 +201,4 @@ yarn test
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.3.0-6
-- Import
+%autochangelog

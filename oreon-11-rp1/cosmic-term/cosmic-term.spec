@@ -1,4 +1,4 @@
-%global source0_hash d78124b38fb12f5225e5fc4d185fbff80752bde99159a3cf6d59a061e41a4e24
+%global source0_hash 2e5ef9ff8428503024f84e9d0c9d8b0007dec0be42b398e5925d209ec91e2e19
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -16,7 +16,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-term
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Terminal emulator built with alacritty and Libcosmic
 
@@ -25,6 +25,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-term
 
 Source0:        https://github.com/pop-os/cosmic-term/archive/epoch-%{version}/cosmic-term-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-term at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

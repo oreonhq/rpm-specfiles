@@ -1,6 +1,5 @@
-%global source0_hash 6064caa87435040181e4493b82a19fef5aa918f0e25d28ad2c3344c38e0d5a26
-
-%global _hardened_build 1
+%global source0_hash 639cae38c95527b7a0f577beba5a6c4732e95d8d0ccec05f01cdf7868fab1f0e
+%global source1_hash 43631ac5481c5b4d4d370cd2d1d57d2b751f71eb08e134100900e1a1b634bd70
 
 Summary: The client for the Trivial File Transfer Protocol (TFTP)
 Name: tftp
@@ -8,29 +7,30 @@ Version: 6.1
 Release: 1%{?dist}
 License: BSD-4-Clause-UC
 URL: http://www.kernel.org/pub/software/network/tftp/
-Source0:        https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/snapshot/tftp-hpa-%{version}.tar.gz
-Source1: tftp.socket
-Source2: tftp.service
-Source3: tftp-server-tmpfiles.conf
+Source0: https://www.kernel.org/pub/software/network/tftp/tftp-hpa-%{version}.tar.gz
+Source1: https://www.kernel.org/pub/software/network/tftp/tftp-hpa-%{version}.tar.sign
+# gpg --keyserver pgp.mit.edu --recv-key 6D0107BC69EE5A274FD9B60C2DB3C3321B6DDF86
+# gpg --output hpa.gpg --armor --export hpa@zytor.com
+Source2: hpa.gpg
+Source3: tftp.socket
+Source4: tftp.service
+Source5: tftp-server-sysusers.conf
+Source6: tftp-server-tmpfiles.conf
 
-Patch0: tftp-0.40-remap.patch
-Patch2: tftp-hpa-0.39-tzfix.patch
-Patch3: tftp-0.42-tftpboot.patch
-Patch4: tftp-0.49-chk_retcodes.patch
-Patch5: tftp-hpa-0.49-fortify-strcpy-crash.patch
-Patch6: tftp-hpa-5.3-cmd_arg.patch
-Patch7: tftp-hpa-0.49-stats.patch
-Patch8: tftp-hpa-5.3-pktinfo.patch
-Patch9: tftp-doc.patch
-Patch10: tftp-enhanced-logging.patch
-Patch12: tftp-off-by-one.patch
-Patch14: tftp-hpa-5.2-osh.patch
-# https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/patch/?id=b9f2335e88dcb3939015843c7143f1533c755a46
-Patch15: tftp-hpa-5.3-setjmp.patch
-Patch16: tftp-hpa-5.3-tftp-exit-code-cmdmode.patch
+# Upstreamed patches
+# https://github.com/hpax/tftp-hpa/commit/ab93a245747ada8948f4594de54a4b2b30c4b462
+Patch: tftp-enhanced-logging.patch
+# https://github.com/hpax/tftp-hpa/commit/43a86cbcbfd38e992d6f5d5009eea60f436711e4
+Patch: tftp-hpa-5.2-osh.patch
+# https://github.com/hpax/tftp-hpa/commit/85b246c2bb3887ec19367841b342312f89090aaf
+Patch: tftp-hpa-5.3-tftp-exit-code-cmdmode.patch
 
-BuildRequires: autoconf
+# Downstream-only patches
+Patch: tftp-fedora-tftpboot.patch
+
+BuildRequires: bc
 BuildRequires: gcc
+BuildRequires: gpgverify
 BuildRequires: make
 BuildRequires: readline-devel
 BuildRequires: systemd-rpm-macros
@@ -58,40 +58,29 @@ systemd socket activation, and is disabled by default.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n tftp-hpa-%{version}
-%patch -P0 -p1 -b .zero
-%patch -P2 -p1 -b .tzfix
-%patch -P3 -p1 -b .tftpboot
-%patch -P4 -p1 -b .chk_retcodes
-%patch -P5 -p1 -b .fortify-strcpy-crash
-%patch -P6 -p1 -b .cmd_arg
-%patch -P7 -p1 -b .stats
-%patch -P8 -p1 -b .pktinfo
-%patch -P9 -p1 -b .doc
-%patch -P10 -p1 -b .logging
-%patch -P12 -p1 -b .off-by-one
-%patch -P14 -p1 -b .osh
-%patch -P15 -p1 -b .setjmp
-%patch -P16 -p1 -b .cmd_exit_code
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+gzip -cd '%{SOURCE0}' > 'tftp-hpa-%{version}.tar'
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='tftp-hpa-%{version}.tar'
+%autosetup -p1 -n tftp-hpa-%{version}
 
 %build
-autoreconf
 %configure
 %make_build
 
 %install
-mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
-mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man{1,8}
-mkdir -p ${RPM_BUILD_ROOT}%{_sbindir}
-mkdir -p ${RPM_BUILD_ROOT}%{_localstatedir}/lib/tftpboot
-mkdir -p ${RPM_BUILD_ROOT}%{_tmpfilesdir}
-mkdir -p ${RPM_BUILD_ROOT}%{_unitdir}
-
 %make_install INSTALLROOT=%{buildroot} SBINDIR=%{_sbindir} MANDIR=%{_mandir}
 
-install -p -m 644 %SOURCE1 ${RPM_BUILD_ROOT}%{_unitdir}
-install -p -m 644 %SOURCE2 ${RPM_BUILD_ROOT}%{_unitdir}
-install -p -m 644 %SOURCE3 ${RPM_BUILD_ROOT}%{_tmpfilesdir}/%{name}.conf
+mkdir -p %{buildroot}%{_localstatedir}/lib/tftpboot
+install -D -p -m 644 %SOURCE3 %{buildroot}%{_unitdir}/%{name}.socket
+install -D -p -m 644 %SOURCE4 %{buildroot}%{_unitdir}/%{name}.service
+install -D -p -m 644 %SOURCE5 %{buildroot}%{_sysusersdir}/%{name}.conf
+install -D -p -m 644 %SOURCE6 %{buildroot}%{_tmpfilesdir}/%{name}.conf
+
+mkdir -p %{buildroot}%{_sysconfdir}/tftp
+echo '# See tftpd(8) for the definition of remap rules' > %{buildroot}%{_sysconfdir}/%{name}/map-file
+
+%check
+tests/test-tftp.sh
 
 %post server
 %systemd_post tftp.socket
@@ -111,13 +100,15 @@ install -p -m 644 %SOURCE3 ${RPM_BUILD_ROOT}%{_tmpfilesdir}/%{name}.conf
 %files server
 %doc README README.security CHANGES
 %dir %{_localstatedir}/lib/tftpboot
+%dir %{_sysconfdir}/%{name}
+%config(noreplace) %{_sysconfdir}/%{name}/map-file
 %{_sbindir}/in.tftpd
 %{_mandir}/man8/in.tftpd.8*
 %{_mandir}/man8/tftpd.8*
+%{_sysusersdir}/%{name}.conf
 %{_tmpfilesdir}/%{name}.conf
 %{_unitdir}/tftp.service
 %{_unitdir}/tftp.socket
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.3-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

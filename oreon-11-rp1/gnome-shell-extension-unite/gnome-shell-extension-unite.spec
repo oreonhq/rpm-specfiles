@@ -1,4 +1,4 @@
-%global source0_hash d9e6abf0d97df22f85405a9ff7170a2580bd0b657d4f3d8ffd72297707381d05
+%global source0_hash 35de1c071a9acf7c933d2042d6795568a44750373f0d82b1a519b0db871c0dbc
 
 %global extuuid		unite@hardpixel.eu
 %global extdir		%{_datadir}/gnome-shell/extensions/%{extuuid}
@@ -7,8 +7,8 @@
 %global giturl		https://github.com/hardpixel/%{gitname}
 
 Name:		gnome-shell-extension-unite
-Version:	8
-Release:	21%{?dist}
+Version:	85
+Release:	1%{?dist}
 Summary:	GNOME Shell Extension Unite by hardpixel
 
 # Automatically converted from old format: GPLv3+ - review is highly recommended.

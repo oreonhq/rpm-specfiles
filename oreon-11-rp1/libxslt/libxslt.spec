@@ -1,4 +1,4 @@
-%global source0_hash 5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a
+%global source0_hash 9acfe68419c4d06a45c550321b3212762d92f41465062ca4ea19e632ee5d216e
 
 Name:           libxslt
 Summary:        Library providing the Gnome XSLT engine
@@ -134,5 +134,4 @@ rm -vrf %{buildroot}%{_docdir}
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.43-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

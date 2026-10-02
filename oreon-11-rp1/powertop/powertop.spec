@@ -1,4 +1,4 @@
-%global source0_hash e58ab3fd7b8ff5f4dd0d17f11848817e7d83c0a6918145ac81de03b5dccf8f49
+%global source0_hash cf37e565b958a64f1e3086daeab82d7959566a372d01d40d3904cbca95cdf3d2
 
 Name:             powertop
 Version:          2.16
@@ -7,11 +7,10 @@ Summary:          Power consumption monitor
 
 License:          gpl-2.0-only AND lgpl-2.1-only AND isc
 URL:              http://01.org/powertop/
-Source0:        http://github.com/fenrus75/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/powertop-2.15.tar.gz
+Source0:        http://github.com/fenrus75/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/powertop-%{version}.tar.gz
 Source1:          powertop.service
 
 # Sent upstream
-Patch0:           powertop-2.7-always-create-params.patch
 BuildRequires:    make
 BuildRequires:    gettext-devel
 BuildRequires:    ncurses-devel
@@ -82,5 +81,4 @@ touch %{_localstatedir}/cache/powertop/{saved_parameters.powertop,saved_results.
 %{_datadir}/bash-completion/completions/powertop
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.15-12
-- Import
+%autochangelog

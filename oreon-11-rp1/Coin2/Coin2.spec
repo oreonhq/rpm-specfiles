@@ -21,7 +21,7 @@ Release: 54%{?dist}
 License: GPL-2.0-only
 URL: http://www.coin3d.org
 
-Source0: ftp://ftp.coin3d.org/pub/coin/src/all/Coin-%{version}.tar.gz
+Source0: https://src.fedoraproject.org/repo/pkgs/Coin2/Coin-2.5.0.tar.gz/sha512/7e1609dd66b5a163503764f8d015e57f33cc66091000008222a87d9e767149f91971c232ae03600c49720080967790a8c845b49cc0e9f47722955a2fea93b029/Coin-2.5.0.tar.gz
 
 Patch0: Coin-2.4.6-simage-soname.diff
 Patch1: Coin-2.4.6-openal-soname.diff

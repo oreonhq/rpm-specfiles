@@ -1,4 +1,4 @@
-%global source0_hash 201ce33b514ea87cc1697c0dcf829692c2695c1812683a9cc622194b05e263a8
+%global source0_hash a1deed70a6785bbec95a2b2a9e419dc7f7b223a9d74a8644ae611c8e2dcdd354
 
 %if 0%{?fedora}
 %global xapian_core_support ON
@@ -29,6 +29,8 @@ Url: https://github.com/doxygen
 Source0:        https://www.doxygen.nl/files/%{name}-%{version}.src.tar.gz
 # this icon is part of kdesdk
 Source1: doxywizard.desktop
+# these icons are part of doxygen and converted from doxywizard.ico
+Source2: doxywizard-icons.tar.xz
 Source3: README.rpm-packaging
 Source4: doxygen-unbundler
 
@@ -116,9 +118,6 @@ BuildRequires: flex
 BuildRequires: bison
 BuildRequires: cmake
 BuildRequires: git
-%if "%{build_wizard}" == "ON"
-BuildRequires: ImageMagick
-%endif
 
 %if "%{?xapian_core_support}" == "ON"
 BuildRequires: xapian-core-devel
@@ -267,16 +266,9 @@ Requires: texlive-collection-fontsrecommended
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -a2
 
 cp %{SOURCE3} .
-%if "%{build_wizard}" == "ON"
-ICON=addons/doxywizard/doxywizard.ico
-convert "$ICON" -thumbnail 16x16 doxywizard-6.png
-convert "$ICON" -thumbnail 32x32 doxywizard-5.png
-convert "$ICON" -thumbnail 48x48 doxywizard-4.png
-convert "$ICON" -thumbnail 128x128 doxywizard-3.png
-%endif
 
 %build
 %cmake \
@@ -376,5 +368,4 @@ install -m755 -D --target-directory=%{buildroot}%{_rpmconfigdir}/redhat %{SOURCE
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.16.1-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

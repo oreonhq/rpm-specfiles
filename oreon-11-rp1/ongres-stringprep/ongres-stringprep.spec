@@ -1,4 +1,4 @@
-%global source0_hash ff4791d5d9d3b96f942b38b901b3053f20a141b3e51747430dd38762929b1798
+%global source0_hash e6a2e075b15ada78ba9c9b9901af55b83196c7c9ebd57a62b396da425d7584de
 
 Name:           ongres-stringprep
 Version:        2.4
@@ -52,5 +52,4 @@ rm -r codegen
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

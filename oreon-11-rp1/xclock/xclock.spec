@@ -1,4 +1,4 @@
-%global source0_hash df7ceabf8f07044a2fde4924d794554996811640a45de40cb12c2cf1f90f742c
+%global source0_hash e326cac20f7ad2af5412b9c4b70b1c3d392e08cd3cc6246e0a77b7c3935a4851
 
 Name:       xclock
 Version:    1.2.1

@@ -1,4 +1,4 @@
-%global source0_hash 9a884880b1b00dfb2ffc6959197b1554b200af731018174cd048115dc28ef239
+%global source0_hash 06602ffd591e98c75b3dc1d66f0f19136cc666b0b2d95caad987d6ab2cb28097
 
 %global _hardened_build 1
 
@@ -9,8 +9,6 @@ Release: %autorelease
 License: GPL-2.0-only
 Url:  http://www.dest-unreach.org/socat/
 Source:        http://www.dest-unreach.org/socat/download/%{name}-%{version}.tar.gz
-
-Patch1: socat-1.8.1.0-printtime.patch
 
 BuildRequires: make
 BuildRequires:  gcc
@@ -82,5 +80,4 @@ make test
 %doc %{_mandir}/man1/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

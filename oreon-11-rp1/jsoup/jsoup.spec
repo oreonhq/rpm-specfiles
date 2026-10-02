@@ -1,4 +1,4 @@
-%global source0_hash b82231e3d80513b6f4246231f1d6bbd6be9413cc549843aa3ef9c46f0fab8ec1
+%global source0_hash cd583e6facadcf5a945acaff86b3256db9683f315d7cbee3be51a51fbf568a01
 
 %bcond_with bootstrap
 
@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://github.com/jhy/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jsoup-1.21.1.tar.gz
+Source0:        https://github.com/jhy/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jsoup-%{version}.tar.gz
 # The sources contain non-free scraped web pages as test data
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -73,5 +73,4 @@ sed -i /org.jspecify/d src/main/java*/module-info.java
 %license LICENSE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.21.1-1
-- Import
+%autochangelog

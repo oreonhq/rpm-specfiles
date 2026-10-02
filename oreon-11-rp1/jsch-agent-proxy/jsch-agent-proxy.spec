@@ -1,4 +1,4 @@
-%global source0_hash 40ab650e7ab9a7c63b570e6bf0529c95835ec09d213f834dc17ea292d431498e
+%global source0_hash 98fc68c5299e78ccb5ddc6e5c29740d575fc7cf2dc3c86bfdb7d06b6a479380a
 
 Name:           jsch-agent-proxy
 Version:        0.0.8

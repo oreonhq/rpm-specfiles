@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b060d410fac7413b05a0e7938bbf3325f7ad08d7df14af3956270f0696e76763
 
 %global qt_module qtpositioning
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Positioning component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -151,5 +151,4 @@ popd
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

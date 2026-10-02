@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash e3ecdb75d17f5cceac19cad6dc5f462b536e2b6a64935960fa51222e2f612727
 
-%global gittag r1rv83
+%global gittag r1rv86
 %global classname org.bouncycastle.jce.provider.BouncyCastleProvider
 %global profilen 1.8
 %global profile %(echo %{profilen} | sed "s/\\.//g" )
@@ -27,7 +27,6 @@ Source7:          https://repo1.maven.org/maven2/org/bouncycastle/bcjmail-%{jdko
 # Script to fetch POMs from Maven Central
 Source8:          get-poms.sh
 
-Patch0: jmail.packages.patch
 
 BuildArch:        noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -109,9 +108,9 @@ Summary: Javadoc for %{name}
 API documentation for the Bouncy Castle Cryptography APIs.
 
 %prep
+test "%{source0_hash}" = "$(sha256sum "%{SOURCE0}" | cut -d' ' -f1)" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }
 %setup -q -n bc-java-%{gittag}
 
-%patch -P0 -p1
 
 #?!?!!?!??!?!!?
 for x in `find | grep  -e  x_pkcs7_signature.java  -e PKCS7ContentHandler.java -e multipart_signed.java` ; do 

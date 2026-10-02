@@ -1,15 +1,15 @@
-From fc166604790409eefd5f550c71c232be3c18d94d Mon Sep 17 00:00:00 2001
+From 162e99b9189796fad6327148d8c6817d5ee74c18 Mon Sep 17 00:00:00 2001
 From: Dmitry Belyavskiy <beldmit@gmail.com>
 Date: Thu, 15 May 2025 13:43:29 +0200
-Subject: [PATCH 40/54] openssh-9.0p1-evp-fips-kex
+Subject: [PATCH 40/53] openssh-9.0p1-evp-fips-kex
 
 ---
  dh.c      |  98 +++++++++++++++++++++++++++++++++-----
  kex.c     | 139 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
  kex.h     |   6 +++
  kexdh.c   |  52 ++++++++++++++++++--
- kexecdh.c | 129 ++++++++++++++++++++++++++++++++++++++++----------
- 5 files changed, 382 insertions(+), 42 deletions(-)
+ kexecdh.c | 127 ++++++++++++++++++++++++++++++++++++++-----------
+ 5 files changed, 378 insertions(+), 44 deletions(-)
 
 diff --git a/dh.c b/dh.c
 index 3efe0a69f..bf324309c 100644
@@ -140,10 +140,10 @@ index 3efe0a69f..bf324309c 100644
  
  DH *
 diff --git a/kex.c b/kex.c
-index e1059dec4..1eb3ca9d3 100644
+index 7e50f277f..62cfa86cd 100644
 --- a/kex.c
 +++ b/kex.c
-@@ -1619,3 +1619,142 @@ kex_exchange_identification(struct ssh *ssh, int timeout_ms,
+@@ -1622,3 +1622,142 @@ kex_exchange_identification(struct ssh *ssh, int timeout_ms,
  	return r;
  }
  
@@ -287,20 +287,20 @@ index e1059dec4..1eb3ca9d3 100644
 +}
 +#endif /* WITH_OPENSSL */
 diff --git a/kex.h b/kex.h
-index 0a0cb1562..ff41324e9 100644
+index 8f9934899..1fe4bb29b 100644
 --- a/kex.h
 +++ b/kex.h
-@@ -37,6 +37,9 @@
- # include <openssl/bn.h>
- # include <openssl/dh.h>
- # include <openssl/ecdsa.h>
-+# include <openssl/evp.h>
-+# include <openssl/core_names.h>
-+# include <openssl/param_build.h>
- # ifdef OPENSSL_HAS_ECC
- #  include <openssl/ec.h>
- # else /* OPENSSL_HAS_ECC */
-@@ -317,6 +320,9 @@ int	kexc25519_shared_key_ext(const u_char key[CURVE25519_SIZE],
+@@ -38,6 +38,9 @@
+ #include <openssl/dh.h>
+ #include <openssl/ec.h>
+ #include <openssl/ecdsa.h>
++#include <openssl/evp.h>
++#include <openssl/core_names.h>
++#include <openssl/param_build.h>
+ #else /* OPENSSL */
+ #define BIGNUM		void
+ #define DH		void
+@@ -322,6 +325,9 @@ int	kexc25519_shared_key_ext(const u_char key[CURVE25519_SIZE],
      const u_char pub[CURVE25519_SIZE], struct sshbuf *out, int)
  	__attribute__((__bounded__(__minbytes__, 1, CURVE25519_SIZE)))
  	__attribute__((__bounded__(__minbytes__, 2, CURVE25519_SIZE)));
@@ -404,10 +404,10 @@ index b63374b0e..74afa1184 100644
  }
  
 diff --git a/kexecdh.c b/kexecdh.c
-index 6a9058cdc..b661e0705 100644
+index a9dbf5c4b..38d827b4c 100644
 --- a/kexecdh.c
 +++ b/kexecdh.c
-@@ -35,16 +35,56 @@
+@@ -35,11 +35,51 @@
  
  #include <openssl/bn.h>
  #include <openssl/ecdh.h>
@@ -421,11 +421,7 @@ index 6a9058cdc..b661e0705 100644
  #include "sshbuf.h"
  #include "ssherr.h"
 +#include "log.h"
- 
- static int
- kex_ecdh_dec_key_group(struct kex *, const struct sshbuf *, EC_KEY *key,
-     const EC_GROUP *, struct sshbuf **);
- 
++
 +static EC_KEY *
 +generate_ec_keys(int ec_nid)
 +{
@@ -460,11 +456,10 @@ index 6a9058cdc..b661e0705 100644
 +	OSSL_PARAM_free(params);
 +	return client_key;
 +}
-+
+ 
  int
  kex_ecdh_keypair(struct kex *kex)
- {
-@@ -54,11 +94,7 @@ kex_ecdh_keypair(struct kex *kex)
+@@ -50,11 +90,7 @@ kex_ecdh_keypair(struct kex *kex)
  	struct sshbuf *buf = NULL;
  	int r;
  
@@ -477,7 +472,7 @@ index 6a9058cdc..b661e0705 100644
  		r = SSH_ERR_LIBCRYPTO_ERROR;
  		goto out;
  	}
-@@ -100,11 +136,7 @@ kex_ecdh_enc(struct kex *kex, const struct sshbuf *client_blob,
+@@ -96,11 +132,7 @@ kex_ecdh_enc(struct kex *kex, const struct sshbuf *client_blob,
  	*server_blobp = NULL;
  	*shared_secretp = NULL;
  
@@ -490,7 +485,7 @@ index 6a9058cdc..b661e0705 100644
  		r = SSH_ERR_LIBCRYPTO_ERROR;
  		goto out;
  	}
-@@ -139,11 +171,21 @@ kex_ecdh_dec_key_group(struct kex *kex, const struct sshbuf *ec_blob,
+@@ -135,11 +167,21 @@ kex_ecdh_dec_key_group(struct kex *kex, const struct sshbuf *ec_blob,
  {
  	struct sshbuf *buf = NULL;
  	BIGNUM *shared_secret = NULL;
@@ -515,7 +510,7 @@ index 6a9058cdc..b661e0705 100644
  	*shared_secretp = NULL;
  
  	if ((buf = sshbuf_new()) == NULL) {
-@@ -152,45 +194,82 @@ kex_ecdh_dec_key_group(struct kex *kex, const struct sshbuf *ec_blob,
+@@ -148,29 +190,58 @@ kex_ecdh_dec_key_group(struct kex *kex, const struct sshbuf *ec_blob,
  	}
  	if ((r = sshbuf_put_stringb(buf, ec_blob)) != 0)
  		goto out;
@@ -573,28 +568,32 @@ index 6a9058cdc..b661e0705 100644
  		goto out;
  	}
 -	klen = (EC_GROUP_get_degree(group) + 7) / 8;
--	if ((kbuf = malloc(klen)) == NULL ||
--	    (shared_secret = BN_new()) == NULL) {
-+	if ((kbuf = malloc(klen)) == NULL) {
+ 	if ((kbuf = malloc(klen)) == NULL) {
  		r = SSH_ERR_ALLOC_FAIL;
  		goto out;
  	}
--	if (ECDH_compute_key(kbuf, klen, dh_pub, key, NULL) != (int)klen ||
--	    BN_bin2bn(kbuf, klen, shared_secret) == NULL) {
+-	if (ECDH_compute_key(kbuf, klen, dh_pub, key, NULL) != (int)klen) {
 +	if (EVP_PKEY_derive(ctx, kbuf, &klen) != 1) {
  		r = SSH_ERR_LIBCRYPTO_ERROR;
  		goto out;
  	}
- #ifdef DEBUG_KEXECDH
- 	dump_digest("shared secret", kbuf, klen);
- #endif
-+	if ((shared_secret = BN_new()) == NULL ||
-+	    (BN_bin2bn(kbuf, klen, shared_secret) == NULL)) {
-+		r = SSH_ERR_ALLOC_FAIL;
-+		goto out;
-+	}
- 	if ((r = sshbuf_put_bignum2(buf, shared_secret)) != 0)
- 		goto out;
+@@ -181,23 +252,25 @@ kex_ecdh_dec_key_group(struct kex *kex, const struct sshbuf *ec_blob,
+ 		if ((r = sshbuf_put(buf, kbuf, klen)) != 0)
+ 			goto out;
+ 	} else {
+-		if ((shared_secret = BN_new()) == NULL) {
++		if ((shared_secret = BN_new()) == NULL ||
++		    (BN_bin2bn(kbuf, klen, shared_secret) == NULL)) {
+ 			r = SSH_ERR_ALLOC_FAIL;
+ 			goto out;
+ 		}
+-		if (BN_bin2bn(kbuf, klen, shared_secret) == NULL) {
+-			r = SSH_ERR_LIBCRYPTO_ERROR;
+-			goto out;
+-		}
+ 		if ((r = sshbuf_put_bignum2(buf, shared_secret)) != 0)
+ 			goto out;
+ 	}
  	*shared_secretp = buf;
  	buf = NULL;
   out:
@@ -611,5 +610,5 @@ index 6a9058cdc..b661e0705 100644
  	return r;
  }
 -- 
-2.53.0
+2.55.0
 

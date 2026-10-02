@@ -6,7 +6,7 @@ Release:        8%{?dist}
 Summary:        Perl extension for formatting numbers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Number-Format
-Source0:        https://cpan.metacpan.org/modules/by-module/Number/Number-Format-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Number-Format-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

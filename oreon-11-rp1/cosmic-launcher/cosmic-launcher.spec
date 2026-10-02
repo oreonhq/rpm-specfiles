@@ -1,4 +1,4 @@
-%global source0_hash 4efcb40d0935c0c46c5975874244f93366955c3b0b3b40c70db87c2cbc9b5ebc
+%global source0_hash 9ded0bbe14a08f4b83da8124d1243c965cf71751dc7d94539dd71ad5a4eff54a
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-launcher
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Pop launcher frontend for the COSMIC Desktop Environment
 
@@ -24,6 +24,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-launcher
 
 Source0:        https://github.com/pop-os/cosmic-launcher/archive/epoch-%{version}/cosmic-launcher-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-launcher at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

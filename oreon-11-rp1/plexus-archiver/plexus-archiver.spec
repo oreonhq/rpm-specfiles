@@ -1,4 +1,4 @@
-%global source0_hash 8b9611281dfb4e0fae306cbc46ef50a6eac104160d15e335eeec53e5a5567f3d
+%global source0_hash 4a23a3c33202961cafe6c6d7ad2b157dfcd16fcc0e239908f76812ea71e81a70
 
 %bcond_with bootstrap
 
@@ -13,8 +13,7 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/plexus-archiver/archive/refs/tags/plexus-archiver-%{version}.tar.gz#/plexus-archiver-%{version}.tar.gz
 
-Patch:          0001-Remove-support-for-snappy.patch
-Patch:          0002-Remove-support-for-zstd.patch
+Patch:          0001-Remove-support-for-snappy-and-zstd.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -50,16 +49,16 @@ is like a J2EE application server, without all the baggage.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n plexus-archiver-plexus-archiver-4.10.0
-%autosetup -p1 -n plexus-archiver-plexus-archiver-4.10.0
+%autosetup -p1 -n plexus-archiver-plexus-archiver-%{version}
 
 %mvn_file :%{name} plexus/archiver
 
-%pom_remove_dep io.airlift:aircompressor
 rm -r src/main/java/org/codehaus/plexus/archiver/snappy
 rm -r src/test/java/org/codehaus/plexus/archiver/snappy
 rm src/main/java/org/codehaus/plexus/archiver/tar/SnappyTarFile.java
 rm src/main/java/org/codehaus/plexus/archiver/tar/PlexusIoTarSnappyFileResourceCollection.java
+rm src/main/java/org/codehaus/plexus/archiver/tar/TarSnappyArchiver.java
+rm src/main/java/org/codehaus/plexus/archiver/tar/TarSnappyUnArchiver.java
 rm src/test/java/org/codehaus/plexus/archiver/tar/TarSnappyUnArchiverTest.java
 
 %pom_remove_dep com.github.luben:zstd-jni
@@ -68,6 +67,10 @@ rm -r src/test/java/org/codehaus/plexus/archiver/zstd
 rm src/main/java/org/codehaus/plexus/archiver/tar/ZstdTarFile.java
 rm src/main/java/org/codehaus/plexus/archiver/tar/PlexusIoTarZstdFileResourceCollection.java
 rm src/main/java/org/codehaus/plexus/archiver/tar/PlexusIoTZstdFileResourceCollection.java
+rm src/main/java/org/codehaus/plexus/archiver/tar/TarZstdArchiver.java
+rm src/main/java/org/codehaus/plexus/archiver/tar/TarZstdUnArchiver.java
+rm src/main/java/org/codehaus/plexus/archiver/tar/TZstdArchiver.java
+rm src/main/java/org/codehaus/plexus/archiver/tar/TZstdUnArchiver.java
 rm src/test/java/org/codehaus/plexus/archiver/tar/TarZstdUnArchiverTest.java
 
 # Fails due to previously removed compressors
@@ -83,5 +86,4 @@ rm src/test/java/org/codehaus/plexus/archiver/manager/ArchiverManagerTest.java
 %license LICENSE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.10.0-1
-- Import
+%autochangelog

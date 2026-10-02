@@ -1,4 +1,4 @@
-%global source0_hash ada7f0ba54787b33485d090d3d2680533520cd4426d2f7fb4782dd4a6a1480ed
+%global source0_hash 089db78d7ac982354bdbf39d973baf09581e6904ac4c92a98c5caadb3de44680
 
 Summary: RDF Parser Toolkit for Redland
 Name:    raptor2
@@ -10,15 +10,7 @@ License: GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2+ OR Apache-2.0
 Source:        http://download.librdf.org/source/raptor2-%{version}.tar.gz
 URL:     http://librdf.org/raptor/
 
-## upstream patches
-# https://github.com/dajobe/raptor/commit/590681e546cd9aa18d57dc2ea1858cb734a3863f
-Patch1: 0001-Calcualte-max-nspace-declarations-correctly-for-XML-.patch
-# https://bugs.librdf.org/mantis/view.php?id=650
-Patch2: 0001-CVE-2020-25713-raptor2-malformed-input-file-can-lead.patch
-
 ## upstreamable patches
-Patch3: raptor2-configure-c99.patch
-Patch4: raptor2-c99.patch
 Patch5: raptor2-libxml2.patch
 
 BuildRequires: make
@@ -107,5 +99,4 @@ make check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.15-50
-- Prepare for Oreon 11 (RP1)
+%autochangelog

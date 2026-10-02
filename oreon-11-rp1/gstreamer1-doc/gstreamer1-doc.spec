@@ -1,10 +1,10 @@
-%global source0_hash 2def433a2e37dbde812ef11b54f7f9356db295adcd0c3098adf7801134a6c36b
+%global source0_hash ea54e92b8cb06690617a5409577f287e6fb8a7bfc7d6bf390cf7fea4d418ef9e
 
 %global         majorminor      1.0
 
 Name:           gstreamer1-doc
-Version:        1.29.2
-Release:        1%{?dist}
+Version:        1.28.7
+Release:        %autorelease
 BuildArch:      noarch
 Summary:        GStreamer documentation
 

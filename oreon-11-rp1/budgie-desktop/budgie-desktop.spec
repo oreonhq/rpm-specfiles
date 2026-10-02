@@ -1,4 +1,8 @@
-%global source0_hash 2463773c7d3090052f54ade075998475f88b4615bddc0c0c9f22cc2e6decf248
+%global source2_hash 457b6bd60d99522ca3d202f55381f3d20e90a170f893591eecaf48e4b80dc501
+
+%global source1_hash 3bbc09437f0dc4e1a588aa36fbbcbae59722dd7586b7525aa9c3fbdc538583db
+
+%global source0_hash 5dae4e311bc95ad982b6256265537c2c6e2bcd19dd35efd19bdbb33633516b74
 
 %global glib2_version 2.64
 %global gnome_desktop_version 44.4
@@ -9,7 +13,7 @@
 %global vala_version 0.56.18
 
 Name:           budgie-desktop
-Version:        10.10.2
+Version:        10.10.3
 Release:        1%{?dist}
 Summary:        A feature-rich, modern desktop designed to keep out the way of the user
 
@@ -30,6 +34,7 @@ URL:            https://github.com/BuddiesOfBudgie/budgie-desktop
 Source0:        %{url}/releases/download/v%{version}/%{name}-v%{version}.tar.xz
 Source1:        %{url}/releases/download/v%{version}/%{name}-v%{version}.tar.xz.asc
 Source2:        https://forge.moderndesktop.dev/BuddiesOfBudgie/keyrings/raw/branch/main/JoshuaStrobl.gpg
+
 
 # See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}

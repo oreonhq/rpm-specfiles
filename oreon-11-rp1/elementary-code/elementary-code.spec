@@ -1,4 +1,4 @@
-%global source0_hash e82c9bb3d1a5450d38fbcc25400902e6442ba451f3510acb213d48d85793c577
+%global source0_hash b0b523547e2fe785651c37e9a0cd9338eedbbc34f4fa52c085ad172bd7245d6e
 
 %global srcname code
 %global appname io.elementary.code
@@ -7,7 +7,7 @@
 
 Name:           elementary-code
 Summary:        Code editor from elementary
-Version:        8.3.2
+Version:        8.4.0
 Release:        %autorelease
 License:        GPL-3.0-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND GPL-2.0-or-later
 

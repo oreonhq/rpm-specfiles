@@ -6,7 +6,7 @@ Release:        15%{?dist}
 Summary:        Format DateTime according to xsd:dateTime
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-XSD
-Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-Format-XSD-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/DateTime-Format-XSD-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

@@ -1,4 +1,4 @@
-%global source0_hash 2c2d767373f7fe00a45507ddc6db5cbfda1e11f4d9a900980e1b0b6be33d4590
+%global source0_hash 70b151f89c6e9d1d53930e9579e43c75f27bc5bddfda34311474f710253c3ef7
 
 Name:           maven-shade-plugin
 Version:        3.6.2
@@ -67,5 +67,4 @@ ln -s $(build-classpath plexus/utils) src/test/jars/plexus-utils-1.4.1.jar
 %license LICENSE NOTICE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.1-2
-- Import
+%autochangelog

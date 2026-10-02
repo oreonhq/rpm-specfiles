@@ -1,4 +1,4 @@
-%global source0_hash a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5
+%global source0_hash 96de1dd6f6a0476d2d2e7964926d8c1ddc3bb0e210e1b1812d3ba5a454a392e2
 
 %define aprver 1
 
@@ -51,12 +51,7 @@ URL: https://apr.apache.org/
 Source0:        https://www.apache.org/dist/apr/%{name}-%{version}.tar.bz2
 Patch1: apr-util-1.2.7-pkgconf.patch
 Patch2: apr-util-1.4.1-private.patch
-Patch3: apr-util-1.6.3-allow-ipv6.patch
-Patch4: apr-util-configure-c99.patch
 Patch5: apr-util-1.6.3-lmdb-support.patch
-Patch6: apr-util-1.6.3-r1908586.patch
-Patch7: apr-util-1.6.3-r1908584.patch
-Patch8: apr-util-1.6.3-r1908585.patch
 Patch9: apr-util-1.6.3-drop-engine-headers.patch
 Patch10: apr-util-1.6.3-r1928729.patch
 BuildRequires: gcc
@@ -287,5 +282,4 @@ export LD_LIBRARY_PATH=%{buildroot}/%{_libdir}/apr-util-%{apuver}
 %{_datadir}/aclocal/*.m4
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.3-27
-- Prepare for Oreon 11 (RP1)
+%autochangelog

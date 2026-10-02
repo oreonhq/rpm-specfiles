@@ -15,7 +15,7 @@ Release:        %autorelease
 Summary:        Microsoft Azure DNS Management Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version} zip}
+Source0:        %{pypi_source azure_mgmt_dns %{version}}
 
 BuildArch:      noarch
 

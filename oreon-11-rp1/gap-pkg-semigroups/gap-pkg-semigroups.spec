@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4a0d2ef30a01e5fa890fb877a58577dbcb1c7d9d977d6b91042eedfaf920008a
 
 %global gap_pkgname semigroups
 %global giturl      https://github.com/semigroups/Semigroups
@@ -11,7 +11,7 @@
 %bcond bigtest 0
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        5.6.3
+Version:        5.7.0
 Release:        %autorelease
 Summary:        GAP methods for semigroups
 

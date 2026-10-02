@@ -1,20 +1,19 @@
-%global source0_hash 8bc2f162bafc42645c489905ad72540f0d3c284b360c96299095183c30cc9789
+%global source0_hash 9c7bcb238183c4240db5548b1910ce8428e0464d05e413df5893998e67bf602c
 
 # Perform optional tests
 %bcond_without perl_JSON_PP_enables_optional_test
 
 Name:		perl-JSON-PP
 Epoch:		1
-Version:	4.16
+Version:	4.18
 Release:	523%{?dist}
 Summary:	JSON::XS compatible pure-Perl module
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/JSON-PP
-Source0:        https://cpan.metacpan.org/modules/by-module/JSON/JSON-PP-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-%{version}.tar.gz
 
 
 
-Patch0:		https://patch-diff.githubusercontent.com/raw/makamaka/JSON-PP/pull/93.patch
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -73,13 +72,6 @@ JSON::PP is a pure-Perl module and is compatible with JSON::XS.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n JSON-PP-%{version}
-
-# Silence Getopt::Long warning (fix already committed upstream)
-# https://bugzilla.redhat.com/show_bug.cgi?id=2417867
-# https://src.fedoraproject.org/rpms/perl-JSON-PP/pull-request/1
-# https://github.com/makamaka/JSON-PP/issues/88
-# https://github.com/makamaka/JSON-PP/pull/93
-%patch -P0 -p1
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1

@@ -1,4 +1,4 @@
-%global source0_hash 8137cb0be4da66cd1a6e2f51c4ea533befdc63027ef3faed1875863e5f995e10
+%global source0_hash 3020cc8df6d78a6f73217aa55241f1b51e46ba2d5a50835cc5bd48fdfc502ae4
 
 %bcond_with bootstrap
 
@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://github.com/codehaus-plexus/plexus-languages/archive/refs/tags/%{name}-%{version}.tar.gz#/plexus-languages-1.2.0.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-languages/archive/refs/tags/%{name}-%{version}.tar.gz#/plexus-languages-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 # Sources contain bundled jars that we cannot verify for licensing
 %if %{with bootstrap}
@@ -52,5 +52,4 @@ cp %{SOURCE1} .
 %license LICENSE-2.0.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-1
-- Import
+%autochangelog

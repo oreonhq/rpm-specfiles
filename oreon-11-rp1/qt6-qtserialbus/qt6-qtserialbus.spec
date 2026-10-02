@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1099cc24aff9d20c5ba7897c0b617c318098f009edf92f4e6ca97c815f5bdf38
 
 %global qt_module qtserialbus
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - SerialBus component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -107,5 +107,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

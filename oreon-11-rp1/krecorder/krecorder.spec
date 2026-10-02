@@ -1,4 +1,4 @@
-%global source0_hash af7a5e67773006e252616ca165405654d649089787bc646b493f91ad2580a260
+%global source0_hash bbf1e147e9f89d222404eda2be3ad146ca0ed7c7415a03f96183c84db28ea4b4
 
 # 
 ExcludeArch: %{ix86}
@@ -68,5 +68,4 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.%{name}.deskt
 %{_kf6_datadir}/icons/hicolor/scalable/apps/org.kde.%{name}.svg
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
-- Import
+%autochangelog

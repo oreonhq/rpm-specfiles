@@ -17,38 +17,61 @@ Signed-off-by: Yan Fu <yafu@redhat.com>
  1 file changed, 9 insertions(+), 25 deletions(-)
 
 diff --git a/attestation-agent/attester/Cargo.toml b/attestation-agent/attester/Cargo.toml
-index 5e1a0a5..28099a9 100644
+index 5827f79..92d1a7d 100644
 --- a/attestation-agent/attester/Cargo.toml
 +++ b/attestation-agent/attester/Cargo.toml
-@@ -23,9 +23,6 @@ hex.workspace = true
- iocuddle = { version = "0.1.1", optional = true }
+@@ -15,8 +15,6 @@ az-snp-vtpm = { version = "0.8.1", default-features = false, features = [
+ az-tdx-vtpm = { version = "0.8.1", default-features = false, features = [
+     "attester",
+ ], optional = true }
+-azure-guest-attestation-sdk = { git = "https://github.com/Azure/azure-guest-attestation-sdk", rev = "9c8344cbeeb2c7ab46c1311e983f254a69ab5eec", optional = true }
+-azure-tpm = { git = "https://github.com/Azure/azure-guest-attestation-sdk", rev = "9c8344cbeeb2c7ab46c1311e983f254a69ab5eec", optional = true }
+ base64.workspace = true
+ clap = { workspace = true, features = ["derive"], optional = true }
+ cfg-if.workspace = true
+@@ -24,9 +22,7 @@ crypto.path = "../deps/crypto"
+ hex.workspace = true
+ iocuddle = { version = "0.3.0", optional = true }
  kbs-types.workspace = true
- log.workspace = true
--nvml-wrapper = { git = "https://github.com/rust-nvml/nvml-wrapper", rev="7e0752f331" , optional = true, default-features = false, features = ["serde"]}
 -occlum_dcap = { git = "https://github.com/occlum/occlum", tag = "v0.29.7", optional = true }
--pv = { version = "0.10.0", package = "s390_pv", optional = true }
+ pem-rfc7468 = { version = "1", optional = true, features = ["alloc"] }
+-pv = { version = "0.12.0", package = "s390_pv", optional = true }
  scroll = { version = "0.13.0", default-features = false, features = [
      "derive",
      "std",
-@@ -36,15 +33,8 @@ serde_with.workspace = true
- sev = { version = "6.3.1", default-features = false, features = [
-     "snp",
+@@ -39,12 +35,7 @@ sev = { version = "6.3.1", default-features = false, features = [
  ], optional = true }
--sha2.workspace = true
+ sha2.workspace = true
  strum.workspace = true
--tdx-attest-rs = { git = "https://github.com/intel/confidential-computing.tee.dcap", tag = "DCAP_1.24", optional = true }
+-tdx-attest-rs = { git = "https://github.com/intel/confidential-computing.tee.dcap", tag = "DCAP_1.27.101", optional = true }
  thiserror.workspace = true
--# TODO: change it to "0.1", once released.
--csv-rs = { git = "https://github.com/openanolis/csv-rs.git", rev = "2243c67", optional = true }
+-csv-rs = { version = "0.1.0", optional = true }
 -codicon = { version = "3.0", optional = true }
 -hyper = { version = "0.14", features = ["full"], optional = true }
 -hyper-tls = { version = "0.5", optional = true }
  tokio = { workspace = true, features = ["rt", "macros", "fs", "io-util"] }
  tempfile = { workspace = true, optional = true }
- env_logger = "0.11"
-@@ -70,12 +60,6 @@ all-attesters = [
-     "az-snp-vtpm-attester",
-     "az-tdx-vtpm-attester",
+ tracing.workspace = true
+@@ -61,12 +52,6 @@ zerocopy = { version = "0.8.54", optional = true, features = ["derive"] }
+ tokio.workspace = true
+ rstest.workspace = true
+ 
+-[target.'cfg(target_arch = "x86_64")'.dependencies]
+-# When bumping this tag, check the crate's release notes on GitHub for its
+-# corresponding libnvat/libnvat-dev version, and update the `version` input
+-# default in .github/actions/install-nvat-sdk/action.yml to match.
+-nv-attestation-sdk = { git = "https://github.com/NVIDIA/attestation-sdk", tag = "2026.06.09", optional = true }
+-
+ [[bin]]
+ name = "evidence_getter"
+ required-features = ["bin"]
+@@ -76,16 +61,7 @@ default = ["all-attesters"]
+ 
+ all-attesters = [
+     "tdx-attester",
+-    "sgx-attester",
+-    "az-snp-vtpm-attester",
+-    "az-tdx-vtpm-attester",
      "snp-attester",
 -    "csv-attester",
 -    "hygon-dcu-attester",
@@ -56,22 +79,30 @@ index 5e1a0a5..28099a9 100644
 -    "se-attester",
 -    "tpm-attester",
 -    "nvidia-attester",
+     "nvidia-dpu-attester",
  ]
  
- # tsm-report enables a module that helps attesters to use Linux TSM_REPORTS for generating
-@@ -83,18 +67,18 @@ all-attesters = [
+@@ -94,24 +70,19 @@ all-attesters = [
  # generate TDX quotes with upstream kernels.
  tsm-report = ["tempfile"]
- tdx-attester = ["scroll", "tsm-report", "iocuddle"]
+ tdx-attester = ["scroll", "tsm-report", "iocuddle", "zerocopy"]
 -tdx-attest-dcap-ioctls = ["tdx-attest-rs"]
 -sgx-attester = ["occlum_dcap"]
--nvidia-attester = ["nvml-wrapper"]
+-nvidia-attester = ["nv-attestation-sdk"]
 +tdx-attest-dcap-ioctls = []
 +sgx-attester = []
 +nvidia-attester = []
- az-snp-vtpm-attester = ["az-snp-vtpm"]
- az-tdx-vtpm-attester = ["az-snp-vtpm-attester", "az-tdx-vtpm"]
- snp-attester = ["sev"]
+ nvidia-dpu-attester = ["p384"]
+-az-snp-vtpm-attester = ["az-snp-vtpm", "pem-rfc7468", "azure-tpm"]
+-az-tdx-vtpm-attester = [
+-    "az-snp-vtpm-attester",
+-    "az-tdx-vtpm",
+-    "azure-guest-attestation-sdk",
+-    "zerocopy",
+-]
++az-snp-vtpm-attester = []
++az-tdx-vtpm-attester = []
+ snp-attester = ["sev", "tsm-report"]
 -csv-attester = ["hygon", "codicon", "hyper", "hyper-tls"]
 -hygon-dcu-attester = ["hygon"]
 -hygon = ["csv-rs"]
@@ -86,7 +117,6 @@ index 5e1a0a5..28099a9 100644
 +tpm-attester = []
  
  
- bin = ["clap"]
+ bin = ["clap", "tracing-subscriber"]
 -- 
-2.53.0
-
+2.0

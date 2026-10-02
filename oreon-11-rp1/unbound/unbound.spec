@@ -1,4 +1,5 @@
-%global source0_hash none
+%global source0_hash 35a6dc0e425a9282c3426d9a3043144011bf0534aed4b73ab62c52aee0af1503
+%global source19_hash 9779ccb2c448bb8cc099c3ab7d0fc40e5cd72fcc9627a85853dd646cd360139b
 
 %{?!with_python2:     %global with_python2     0}
 %{?!with_python3:     %global with_python3     1}
@@ -19,6 +20,8 @@
 %global forgeurl0 https://github.com/NLnetLabs/unbound
 %global downloads https://nlnetlabs.nl/downloads
 %global _hardened_build 1
+%global upstream_sources 0 1
+%global pgp_signed_sources 1
 
 #global extra_version rc1
 
@@ -42,13 +45,14 @@
 
 Summary: Validating, recursive, and caching DNS(SEC) resolver
 Name: unbound
-Version: 1.24.2
+Version: 1.26.1
 Release: %autorelease %{?extra_version:-e %{extra_version}}
 License: BSD-3-Clause
 Url: https://nlnetlabs.nl/projects/unbound/
 VCS: git:%{forgeurl0}
-Source:        https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2%{?extra_version}.tar.gz
-Source1: unbound.service
+Source0: %{downloads}/%{name}/%{name}-%{version}%{?extra_version}.tar.gz
+Source1: %{downloads}/%{name}/%{name}-%{version}%{?extra_version}.tar.gz.asc
+Source2: unbound.service
 Source3: unbound.munin
 Source4: unbound_munin_
 Source5: mkroot.sh
@@ -62,31 +66,24 @@ Source14: unbound.sysconfig
 Source15: unbound-anchor.timer
 Source16: unbound-munin.README
 Source17: unbound-anchor.service
-Source18:        https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2%{?extra_version}.tar.gz.asc
 # https://nlnetlabs.nl/signing-keys/
-Source19:        nlnetlabs2026-g2.asc
+Source19: https://nlnetlabs.nl/downloads/keys/releases-g2.asc#/nlnetlabs2026-g2.asc
 Source20: unbound.sysusers
 Source21: remote-control.conf
-Source22: https://nlnetlabs.nl/downloads/keys/Yorgos.asc
 Source23: unbound-as112-networks.conf
 Source24: unbound-local-root.conf
 Source25: openssl-sha1.conf
 Source26: remote-control-include.conf
 Source27: fedora-defaults.conf
 Source28: module-setup.sh
-Source29: unbound-initrd.conf
-Source30: tmpfiles-unbound-libs.conf
+Source29: tmpfiles-unbound-libs.conf
 
 # Downstream configuration changes
 Patch1:   unbound-fedora-config.patch
-# https://github.com/NLnetLabs/unbound/pull/1331
-Patch2:   unbound-1.24-swig-function.patch
-# https://github.com/NLnetLabs/unbound/pull/1381
-Patch3:   unbound-1.24-quic-on-demand-only.patch
-# https://github.com/NLnetLabs/unbound/pull/1349
-Patch4:        https://github.com/NLnetLabs/unbound/pull/1349.patch#/unbound-1.25-tls-crypto-policy.patch
-# https://github.com/NLnetLabs/unbound/pull/1401
-Patch5:        https://github.com/NLnetLabs/unbound/pull/1401.patch#/unbound-1.25-tls-crypto-policy-default.patch
+# https://github.com/NLnetLabs/unbound/commit/8b33c5d7ffb82d442f3d19021588449cd6b02a17
+Patch6:   unbound-1.26.0-disabled-ipsecmod-fix.patch
+# https://github.com/NLnetLabs/unbound/commit/93a56205cfa6b9a6d34db7245aa71e5ca67d1fd7
+Patch7:   unbound-1.26.0-replace-python2-c-api-macros.patch
 
 BuildRequires: gcc
 BuildRequires: make
@@ -105,6 +102,7 @@ BuildRequires: bison
 BuildRequires: flex
 BuildRequires: byacc
 BuildRequires: dns-root-data >= 2026260100
+BuildRequires: gzip
 
 %if 0%{?fedora} || 0%{?rhel} >= 9
 BuildRequires: gnupg2
@@ -236,11 +234,10 @@ Unbound dracut module allowing use of Unbound for name resolution
 in initramfs.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source19_hash}" = "none" || { f="%{SOURCE19}"; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source19_hash}" || { echo "oreon: Source19 hash mismatch" >&2; exit 1; }; }
 %if 0%{?fedora} || 0%{?rhel} >= 9
-# TODO: Remove Yorgos.asc and extra verification once releases start to be signed by new g2 key
-%{gpgverify} --keyring='%{SOURCE22}' --signature='%{SOURCE18}' --data='%{SOURCE0}' || \
-%{gpgverify} --keyring='%{SOURCE19}' --signature='%{SOURCE18}' --data='%{SOURCE0}'
+%{gpgverify} --keyring='%{SOURCE19}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif
 %global pkgname %{name}-%{version}%{?extra_version}
 
@@ -337,6 +334,7 @@ pushd %{dir_secondary}
 popd
 %endif
 
+gzip --best -k doc/Changelog
 
 %install
 install -p -m 0644 %{SOURCE16} .
@@ -353,7 +351,7 @@ install -m 0755 streamtcp %{buildroot}%{_sbindir}/unbound-streamtcp
 install -p -m 0644 doc/example.conf %{buildroot}%{_sysconfdir}/unbound/unbound.conf
 
 install -d -m 0755 %{buildroot}%{_unitdir} %{buildroot}%{_sysconfdir}/sysconfig
-install -p -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/unbound.service
+install -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/unbound.service
 install -p -m 0644 %{SOURCE7} %{buildroot}%{_unitdir}/unbound-keygen.service
 install -p -m 0644 %{SOURCE15} %{buildroot}%{_unitdir}/unbound-anchor.timer
 install -p -m 0644 %{SOURCE17} %{buildroot}%{_unitdir}/unbound-anchor.service
@@ -378,7 +376,7 @@ install -p -D -m 0644 contrib/libunbound.pc %{buildroot}/%{_libdir}/pkgconfig/li
 # Install tmpfiles.d config
 install -d -m 0755 %{buildroot}%{_tmpfilesdir} %{buildroot}%{_sharedstatedir}/unbound
 install -p -m 0644 %{SOURCE8} %{buildroot}%{_tmpfilesdir}/unbound.conf
-install -p -m 0644 %{SOURCE30} %{buildroot}%{_tmpfilesdir}/unbound-libs.conf
+install -p -m 0644 %{SOURCE29} %{buildroot}%{_tmpfilesdir}/unbound-libs.conf
 
 # install root - we keep a copy of the root key in old location,
 # in case user has changed the configuration and we wouldn't update it there
@@ -420,10 +418,9 @@ install -p -m 0644 %{SOURCE27} %{buildroot}%{_datadir}/%{name}/
 echo ".so man8/unbound-control.8" > %{buildroot}/%{_mandir}/man8/unbound-control-setup.8
 
 # install dracut module
-mkdir -p %{buildroot}%{_prefix}/lib/dracut/modules.d/99unbound
+mkdir -p %{buildroot}%{_prefix}/lib/dracut/modules.d/70unbound
 
-install -p -m 0755 %{SOURCE28} %{buildroot}%{_prefix}/lib/dracut/modules.d/99unbound
-install -p -m 0644 %{SOURCE29} %{buildroot}%{_prefix}/lib/dracut/modules.d/99unbound
+install -p -m 0755 %{SOURCE28} %{buildroot}%{_prefix}/lib/dracut/modules.d/70unbound
 
 
 %post
@@ -472,6 +469,7 @@ popd
 
 %files
 %doc doc/CREDITS doc/FEATURES
+%doc doc/Changelog.*
 %{_unitdir}/%{name}.service
 %{_unitdir}/%{name}-keygen.service
 %attr(0775,unbound,root) %dir %{_rundir}/%{name}
@@ -556,8 +554,7 @@ popd
 %{_mandir}/man1/unbound-*
 
 %files dracut
-%{_prefix}/lib/dracut/modules.d/99unbound
+%{_prefix}/lib/dracut/modules.d/70unbound
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.24.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

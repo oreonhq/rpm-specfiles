@@ -1,4 +1,4 @@
-%global source0_hash 5c387f19f0df9d38d417f7bd0e7d10920d432a14f2414914854a9f2e781d3453
+%global source0_hash 7141a8b5bad9d7d965483ac0d75317ac0c21dcee1d13d373693c655f9e3fabe6
 
 # Add option to build as static libraries (--without shared)
 %bcond_without shared
@@ -209,5 +209,4 @@ find %{buildroot}%{_mandir}/ -type f -a ! -iname "*rte_*" -delete
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 24.11.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

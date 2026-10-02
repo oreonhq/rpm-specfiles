@@ -1,4 +1,4 @@
-%global source0_hash 7295491b4be5eeac5e7a3fb2067e236e2955ffdc6bbd45f546466edee321644b
+%global source0_hash 8e24dd99f5b7cafbecf0116d61b619ee89098e20263e6f47c793aaf4a98d6473
 
 %global pkgname libburn
 
@@ -13,7 +13,6 @@ Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{versio
 Source2:         https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
 Patch0:          libburn-0.6.16-multilib.patch
 Patch1:          libburn-1.5.4-rpath.patch
-Patch2:          https://dev.lovelyhq.com/libburnia/libburn/commit/d537f9dd35282df834a311ead5f113af67d223b3.patch#/libburn-1.5.6-c23.patch
 BuildRequires:   gnupg2
 BuildRequires:   gcc, make, intltool, gettext
 %if 0%{?rhel} && "%{name}" != "%{pkgname}"
@@ -135,5 +134,4 @@ fi
 %{_mandir}/man1/cdrskin%{?variant}.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.6-8
-- Prepare for Oreon 11 (RP1)
+%autochangelog

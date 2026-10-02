@@ -1,10 +1,10 @@
-%global source0_hash 298b4732a2670503328e022d68d6ebbb253c716dad0b6ba127a4065262dd2f2c
+%global source0_hash 7df664fd3ad3b1640c6a0ff77fa84f9fabe264111bf1fe8f5df3444d6d4caaca
 
 %bcond stemming %{undefined rhel}
 
 Summary: Utilities to generate, maintain and access the AppStream database
 Name:    appstream
-Version: 1.2.0
+Version: 1.2.1
 Release: 1%{?dist}
 
 # lib LGPLv2+, tools GPLv2+
@@ -203,5 +203,4 @@ mv %{buildroot}%{_datadir}/metainfo/*.xml \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

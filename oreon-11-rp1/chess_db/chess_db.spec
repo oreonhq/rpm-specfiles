@@ -7,8 +7,8 @@
 %forgemeta
 
 Name:           chess_db
-Version:        0.2
-Release:        14%{?dist}
+Version:        20170627
+Release:        1%{?dist}
 Summary:        Chess database opening tree indexer
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.

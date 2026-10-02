@@ -1,14 +1,14 @@
-%global source0_hash 74b95302e24dbebc56e97048e86ad0a4121fc82a43e58d381fbe1d380e8eba04
+%global source0_hash e9a23c436686a94698d2138e6bcbaf849121d63bfa0f50dc34fefbfd79566848
 %global api_ver 2.6
 
 Name:           libxml++
-Version:        2.42.4
+Version:        5.4.0
 Release:        1%{?dist}
 Summary:        C++ wrapper for the libxml2 XML parser library
 
 License:        LGPL-2.1-or-later
 URL:            https://libxmlplusplus.sourceforge.net/
-Source0:        https://download.gnome.org/sources/libxml++/2.42/libxml++-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libxml++/5.4/libxml++-%{version}.tar.xz
 
 BuildRequires:  docbook-style-xsl
 BuildRequires:  doxygen, graphviz

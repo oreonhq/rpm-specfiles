@@ -10,7 +10,7 @@ Summary:        TPM 2.0 TSS Bindings for Python
 
 License:        BSD-2-Clause
 URL:            https://github.com/tpm2-software/tpm2-pytss
-Source:         %{pypi_source %{pypi_name}}
+Source:         %{pypi_source tpm2_pytss %{version}}
 # https://github.com/tpm2-software/tpm2-pytss/pull/585
 Patch1:         %{name}-2.3.0-secp192.patch
 # https://github.com/tpm2-software/tpm2-pytss/pull/589

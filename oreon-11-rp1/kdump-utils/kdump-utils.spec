@@ -1,4 +1,4 @@
-%global source0_hash 6fc7db1c5c2eff73c98b37377515ebc2c3d0281f439bc9ffbc77166d881db047
+%global source0_hash 9d55e23ee279154b1023fa92095938a07155ea07db546881e9a1d91bae2e1b16
 
 # kdump-utils has no debug source
 %global debug_package %{nil}
@@ -124,5 +124,4 @@ fi
 %doc supported-kdump-targets.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.60-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

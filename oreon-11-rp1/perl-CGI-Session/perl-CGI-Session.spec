@@ -7,7 +7,7 @@ Summary:        Persistent session data in CGI applications
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CGI-Session
-Source0:        https://cpan.metacpan.org/modules/by-module/CGI/CGI-Session-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKSTOS/CGI-Session-%{version}.tar.gz
 BuildArch:      noarch
 Requires:       perl(CGI) >= 3.26
 Requires:       perl(File::Path)

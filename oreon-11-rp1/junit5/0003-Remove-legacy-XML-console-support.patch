@@ -4,15 +4,27 @@ Date: Thu, 20 Feb 2025 12:24:46 +0100
 Subject: [PATCH 3/4] Remove legacy XML console support
 
 ---
- .../org/junit/platform/console/tasks/ConsoleTestExecutor.java  | 3 +--
- .../src/module/org.junit.platform.console/module-info.java     | 1 -
+ .../junit/platform/console/command/ConsoleTestExecutor.java    | 3 +--
+ .../src/main/java/module-info.java     | 1 -
  2 files changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/junit-platform-console/src/main/java/org/junit/platform/console/tasks/ConsoleTestExecutor.java b/junit-platform-console/src/main/java/org/junit/platform/console/tasks/ConsoleTestExecutor.java
-index eb0f3874a..465980427 100644
---- a/junit-platform-console/src/main/java/org/junit/platform/console/tasks/ConsoleTestExecutor.java
-+++ b/junit-platform-console/src/main/java/org/junit/platform/console/tasks/ConsoleTestExecutor.java
-@@ -39,7 +39,6 @@ import org.junit.platform.launcher.core.LauncherDiscoveryRequestBuilder;
+diff --git a/junit-platform-console/src/main/java/module-info.java b/junit-platform-console/src/main/java/module-info.java
+index 39ea284..1e704a7 100644
+--- a/junit-platform-console/src/main/java/module-info.java
++++ b/junit-platform-console/src/main/java/module-info.java
+@@ -22,7 +22,6 @@ module org.junit.platform.console {
+ 	requires org.junit.platform.commons;
+ 	requires org.junit.platform.engine;
+ 	requires org.junit.platform.launcher;
+-	requires org.junit.platform.reporting;
+ 
+ 	exports org.junit.platform.console.output to org.junit.start;
+ 
+diff --git a/junit-platform-console/src/main/java/org/junit/platform/console/command/ConsoleTestExecutor.java b/junit-platform-console/src/main/java/org/junit/platform/console/command/ConsoleTestExecutor.java
+index b03fcb4..054b6e5 100644
+--- a/junit-platform-console/src/main/java/org/junit/platform/console/command/ConsoleTestExecutor.java
++++ b/junit-platform-console/src/main/java/org/junit/platform/console/command/ConsoleTestExecutor.java
+@@ -47,7 +47,6 @@ import org.junit.platform.launcher.TestPlan;
  import org.junit.platform.launcher.core.LauncherFactory;
  import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
  import org.junit.platform.launcher.listeners.TestExecutionSummary;
@@ -20,7 +32,7 @@ index eb0f3874a..465980427 100644
  
  /**
   * @since 1.0
-@@ -211,7 +210,7 @@ public class ConsoleTestExecutor {
+@@ -228,7 +227,7 @@ public class ConsoleTestExecutor {
  	}
  
  	private Optional<TestExecutionListener> createXmlWritingListener(PrintWriter out, Optional<Path> reportsDir) {
@@ -28,19 +40,6 @@ index eb0f3874a..465980427 100644
 +		return Optional.empty();
  	}
  
- 	private void printSummary(TestExecutionSummary summary, PrintWriter out) {
-diff --git a/junit-platform-console/src/module/org.junit.platform.console/module-info.java b/junit-platform-console/src/module/org.junit.platform.console/module-info.java
-index 166aff5ee..3e12448b4 100644
---- a/junit-platform-console/src/module/org.junit.platform.console/module-info.java
-+++ b/junit-platform-console/src/module/org.junit.platform.console/module-info.java
-@@ -19,7 +19,6 @@ module org.junit.platform.console {
- 	requires org.junit.platform.commons;
- 	requires org.junit.platform.engine;
- 	requires org.junit.platform.launcher;
--	requires org.junit.platform.reporting;
- 
- 	provides java.util.spi.ToolProvider with org.junit.platform.console.ConsoleLauncherToolProvider;
- }
+ 	private Optional<TestExecutionListener> createFailFastListener(@Nullable CancellationToken cancellationToken) {
 -- 
-2.50.1
-
+2.0

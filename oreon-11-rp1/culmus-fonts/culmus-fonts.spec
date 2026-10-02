@@ -1,4 +1,4 @@
-%global source0_hash c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
+%global source0_hash 6daed104481007752a76905000e71c0093c591c8ef3017d1b18222c277fc52e3
 
 BuildArch: noarch
 BuildRequires: /usr/bin/makeotfexe
@@ -306,5 +306,4 @@ fontforge ./modify-font-metadata.pe
 %fontfiles -a
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.133-16
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash cb0d1ebc1e96cd90dbd6733e875e1f66e6d99fad9c40cbd3c41c5c3b3e11b882
+%global source0_hash 0adf6e22300cee74d57e790b5db844f03a1366a4d6315edbaa49174b12bf1861
 
 %global framework kded
 
@@ -83,14 +83,4 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kded
 %{_kf6_datadir}/dbus-1/interfaces/*.xml
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

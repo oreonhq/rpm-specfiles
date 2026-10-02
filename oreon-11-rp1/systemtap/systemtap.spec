@@ -1,4 +1,4 @@
-%global source0_hash caf93273717775b025f7702bdc4819e41bbac66ecb3cbf8e057838c8cacd2b6e
+%global source0_hash 29c4a53481591faf2f30086a16a58cadd8a963d540c0b0f10ec464a99003d93c
 
 # work around flakey gcc warnings
 %{!?with_Werror: %global with_Werror 0}
@@ -170,7 +170,6 @@ Summary: Programmable system-wide instrumentation system
 License: GPL-2.0-or-later
 URL: https://sourceware.org/systemtap/
 Source:        https://sourceware.org/pub/systemtap/releases/systemtap-%{version}.tar.gz
-Patch0: systemtap-gcc16.patch
 
 # Build*
 BuildRequires: make
@@ -617,7 +616,6 @@ or within a container.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch 0 -p1
 
 %build
 
@@ -1368,5 +1366,4 @@ exit 0
 
 # PRERELEASE
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.4-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

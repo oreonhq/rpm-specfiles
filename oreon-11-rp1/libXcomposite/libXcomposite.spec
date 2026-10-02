@@ -1,4 +1,4 @@
-%global source0_hash fe40bcf0ae1a09070eba24088a5eb9810efe57453779ec1e20a55080c6dc2c87
+%global source0_hash 8bdf310967f484503fa51714cf97bff0723d9b673e0eecbf92b3f97c060c8ccb
 
 Summary: X Composite Extension library
 Name: libXcomposite
@@ -54,5 +54,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_mandir}/man3/X?omposite*.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.6-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

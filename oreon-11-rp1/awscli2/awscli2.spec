@@ -1,9 +1,9 @@
-%global source0_hash 91dd50eb35375412c636ef72949c9ac8bbafe7cc402f53e9b782516de311dfa2
+%global source0_hash 5be8488233bbb0f5cbc4f5ebe428400cc5cf3d6b5c613b216d95db1cc4153b6b
 
 %global pkgname aws-cli
 
 Name:               awscli2
-Version:            2.37.3
+Version:            2.37.7
 Release:            %autorelease
 
 Summary:            Universal Command Line Environment for AWS, version 2

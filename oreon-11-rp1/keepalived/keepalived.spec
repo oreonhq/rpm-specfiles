@@ -1,4 +1,4 @@
-%global source0_hash 85882eb62974f395d4c631be990a41a839594a7e62fbfebcb5649a937a7a1bb6
+%global source0_hash 6afd95ddb7d3e0d3b8b8e5b3a489144131b61a01b06d29e883d0c44acc8a36bf
 
 %bcond_without snmp
 %bcond_without vrrp
@@ -116,5 +116,4 @@ mkdir -p %{buildroot}%{_libexecdir}/keepalived
 %{_mandir}/man8/keepalived.8*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.8-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

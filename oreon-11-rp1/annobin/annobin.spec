@@ -1,8 +1,8 @@
-%global source0_hash 7c1fb9ca34d9101d787fcacf37fbd3b56f1d8e686a86a32ff30d7abd1188c6aa
+%global source0_hash 43c3b15eaed452ff13f8c3e312386088b039d930fea36bbed7082262f124fd47
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
-Version: 13.31
+Version: 13.32
 Release: 1%{?dist}
 License: GPL-3.0-or-later AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND GFDL-1.3-or-later
 URL: https://sourceware.org/annobin/
@@ -306,7 +306,8 @@ Installs an annobin plugin that can be used by Clang.
 #---------------------------------------------------------------------------------
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }if [ -z "%{gcc_vr}" ]; then
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+if [ -z "%{gcc_vr}" ]; then
     echo "*** Missing gcc_vr spec file macro, cannot continue." >&2
     exit 1
 fi
@@ -534,4 +535,5 @@ make check
 
 #---------------------------------------------------------------------------------
 
+%changelog
 %autochangelog

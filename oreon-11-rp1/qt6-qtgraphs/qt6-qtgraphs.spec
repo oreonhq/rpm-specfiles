@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 18c4e968785447051d94b01f8e3c975e31ddc46065c0777443cecc50753a4d8c
 
 %global qt_module qtgraphs
 
@@ -17,8 +17,8 @@
 
 Summary: Qt6 - Graphs (2D/3D visualization) module
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: BSD-3-Clause AND GFDL-1.3-no-invariants-only AND GPL-3.0-only
 Url:     https://doc.qt.io/qt-6/qtgraphs-index.html
@@ -120,5 +120,4 @@ rm -rf %{buildroot}%{_qt6_examplesdir}/graphs
 
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Add qt6-qtgraphs (PySide6 / gcompris-qt)
+%autochangelog

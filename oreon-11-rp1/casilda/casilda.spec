@@ -1,7 +1,7 @@
-%global source0_hash c9d916c61cc71e947061be1cd99b889720b3cb1d6c2ba53e7c23f58bb8ada9d5
+%global source0_hash 2dcc9b8b73f92ac6149a991d458dd22a5384bb0396d20af6feda6b66a39f9096
 
 Name:           casilda
-Version:        1.4.0
+Version:        1.6.0
 Release:        %autorelease
 Summary:        Wayland compositor for GTK4
 

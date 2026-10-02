@@ -1,4 +1,4 @@
-%global source0_hash f63f46b7ae68ced0a5c2e31df1b6dfc7656117d162a1bc7fed4bd4afd14ddc8f
+%global source0_hash cb65c6d2081e2700f44e03d808a0330344b483688934c87e53ba7b5728a3a04b
 
 %global goipath         github.com/caddyserver/caddy
 
@@ -9,7 +9,7 @@
 %endif
 
 Name:           caddy
-Version:        2.10.2
+Version:        2.11.6
 Release:        %autorelease
 Summary:        Web server with automatic HTTPS
 URL:            https://caddyserver.com
@@ -19,6 +19,8 @@ URL:            https://caddyserver.com
 License:        Apache-2.0 AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC0-1.0 AND ISC AND MIT AND MPL-2.0
 
 Source0:        https://%{goipath}/archive/v%{version}/caddy-%{version}.tar.gz
+
+
 Source1:        caddy-%{version}-vendor.tar.gz
 Source2:        create-vendor-tarball.sh
 

@@ -1,10 +1,10 @@
-%global source0_hash a24daf6b363a9a2bd7d37a75bf42fb9fbe831c44c17fa8dda587237d005cd6e1
+%global source0_hash 419bf8f7b06def23a93466d2499ce62efea3ce4aae3674089da8bb4452454182
 
 %global srcname fast_xml
 %global p1_utils_ver 1.0.28
 
 Name: erlang-%{srcname}
-Version: 1.1.60
+Version: 1.1.61
 Release: %autorelease
 License: Apache-2.0
 Summary: Fast Expat based Erlang XML parsing and manipulation library

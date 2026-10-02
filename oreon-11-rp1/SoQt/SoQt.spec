@@ -1,4 +1,4 @@
-%global source0_hash e15789928725f7c5963c06b6a2ed52a239ecf56887e0448fec909e3b8935f73e
+%global source0_hash c871f05bf83ad25e05c2da63c97b13744d7f9dbaacf9a8ce8d68748f187358bb
 
 %global cpack_hash 118ac5a21bcf57f0f90e2b0e681c9dcbf07074c2
 %global cpack_short %(c=%{cpack_hash}; echo ${c:0:10})
@@ -18,7 +18,7 @@ Summary:        High-level 3D visualization library
 License:        BSD-3-Clause
 
 URL:            http://www.coin3d.org
-Source0:        https://github.com/coin3d/soqt/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/coin3d/soqt/archive/refs/tags/v%{version}.tar.gz
 
 Source1:        https://github.com/coin3d/cpack.d/archive/%{cpack_hash}/coin3d-cpack-%{cpack_date}git%{cpack_short}.tar.gz
 Source2:        https://github.com/coin3d/soanydata/archive/%{soanydata_hash}/coin3d-soanydata-%{soanydata_date}git%{soanydata_short}.tar.gz
@@ -58,7 +58,7 @@ Development package for SoQt.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n soqt-%{name}-%{version}
+%autosetup -p1 -n soqt-%{version}
 
 mkdir cpack.d data src/Inventor/Qt/common
 tar --strip-components=1 -C cpack.d -xf %{SOURCE1}

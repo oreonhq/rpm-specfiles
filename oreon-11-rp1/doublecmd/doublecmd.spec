@@ -1,9 +1,9 @@
-%global source0_hash edefc76bace7c3446579f9a57fe6243f9ec9cdb09cd1f19bd4cb0abf8c4b5191
+%global source0_hash 05ea5d580e2ac3a52cd0994e2152a56009b587a371672fd1ff37060e6f418e26
 
 %global debug_package %{nil}
 
 Name:           doublecmd
-Version:        1.2.8
+Version:        1.2.9
 Release:        1%{?dist}
 Summary:        Cross platform open source file manager with two panels
 
@@ -11,6 +11,7 @@ Summary:        Cross platform open source file manager with two panels
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND MIT AND MPL-1.1 AND MPL-2.0 AND Apache-2.0 AND BSD-2-Clause AND Zlib
 URL:            http://doublecmd.sourceforge.net
 Source0:        https://sourceforge.net/projects/%{name}/files/Double%20Commander%20Source/%{name}-%{version}-src.tar.gz
+
 Source1:        %{name}-qt.desktop
 Source2:        licensecheck.txt
 Source3:        io.sourceforge.DoubleCmd.DoubleCmdGtk.metainfo.xml

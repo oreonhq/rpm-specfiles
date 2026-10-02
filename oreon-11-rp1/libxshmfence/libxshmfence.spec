@@ -1,4 +1,4 @@
-%global source0_hash 870df257bc40b126d91b5a8f1da6ca8a524555268c50b59c0acd1a27f361606f
+%global source0_hash d4a4df096aba96fea02c029ee3a44e11a47eb7f7213c1a729be83e85ec3fde10
 
 Name:           libxshmfence
 Version:        1.3.3
@@ -8,7 +8,6 @@ Summary:        X11 shared memory fences
 License:        HPND-sell-variant
 URL:            https://www.x.org/
 Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.xz
-Patch0:         0001-alloc-Allow-disabling-memfd-usage-at-runtime-with-XS.patch
 
 # upstream tarball has broken libtool because libtool is never not broken
 BuildRequires:  autoconf automake libtool xorg-x11-util-macros
@@ -55,5 +54,4 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 %{_libdir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.2-8
-- Prepare for Oreon 11 (RP1)
+%autochangelog

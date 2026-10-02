@@ -1,8 +1,8 @@
-%global source0_hash 1335240713781c7f88d3d0a179cd275d309fd010cbd9d9048518560a75d774ac
+%global source0_hash c4c14a9d7b06d3323a32f7835dde7a75070b7d5e62609223ee46b26545cf03ac
 
 Name:           gnome-online-accounts-gtk
-Version:        3.50.10
-Release:        2%{?dist}
+Version:        3.50.11
+Release:        1%{?dist}
 Summary:        GUI Utility for logging into online accounts
 License:        GPL-3.0-or-later
 URL:            https://github.com/xapp-project/%{name}

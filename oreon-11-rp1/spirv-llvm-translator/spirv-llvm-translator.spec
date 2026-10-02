@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash d42dfc31cc629360cc84cb05446649fcd1eddd1a2e9e49d532a8f43ee91c327a
 
-%global commit f676199fd00f2229fb35006d5124687c0785a01d
+%global commit b4c9189bcba7ed9a1189d6a2c27edc3d9a3d5277
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           spirv-llvm-translator
-Version:        23.1.1
+Version:        22.1.7
 Release:        %autorelease
 Summary:        LLVM to SPIRV Translator
 

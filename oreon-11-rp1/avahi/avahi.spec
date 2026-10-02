@@ -1,5 +1,3 @@
-%global source0_hash none
-
 %bcond_with bootstrap
 %bcond_without check
 
@@ -134,8 +132,10 @@ BuildRequires:    gcc-c++
 BuildRequires:    gettext-devel
 
 %if 0%{?rc:1}
-Source0:        https://github.com/avahi/avahi/releases/download/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
+%global source0_hash f64efed6a972cf92cb2dfb35abf6aa9173d62b843b15850c2f40af76a4238f8a
+Source0:        https://github.com/avahi/avahi/archive/refs/tags/v%{version_no_tilde}.tar.gz#/avahi-%{version_no_tilde}.tar.gz
 %else
+%global source0_hash none
 Source0:        https://github.com/avahi/avahi/releases/download/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
 %endif
 
@@ -852,5 +852,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9%{?rc:~%{rc}}-8
-- Prepare for Oreon 11 (RP1)
+%autochangelog

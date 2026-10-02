@@ -1,4 +1,4 @@
-%global source0_hash d4fc82893cfb00109578d0a1a2337fb8ca335b3ceccf97b97e5cc7f08e4353e1
+%global source0_hash b64790f94b926acd7e8f84c5d6000a86cb43967bd1e688b03089079799c9e889
 
 Name:           glew
 Version:        2.3.1
@@ -8,8 +8,6 @@ License:        BSD-3-Clause AND MIT AND MIT-Khronos-old
 URL:            https://github.com/nigels-com/glew
 
 Source0:        https://github.com/nigels-com/glew/releases/download/glew-%{version}/glew-%{version}.tgz
-Patch0:         glew-2.1.0-install.patch
-Patch1:         glew-2.2.0-gcc12-cplusplus.patch
 BuildRequires:  gcc
 BuildRequires:  libGLU-devel
 BuildRequires:  make
@@ -80,5 +78,4 @@ chmod 0755 $RPM_BUILD_ROOT%{_libdir}/*.so*
 %doc doc/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.0-12
-- Prepare for Oreon 11 (RP1)
+%autochangelog

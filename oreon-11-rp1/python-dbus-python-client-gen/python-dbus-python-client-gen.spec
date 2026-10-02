@@ -1,15 +1,15 @@
-%global source0_hash 3561d2f55afce58f08fefb37b1ecd81b309c5e0ff0d720c5b2fa0882a9b30ac9
+%global source0_hash e297a0f20694885bb8db35cb203b930ca512e2071f658d725967238a70a7ed31
 
 %global srcname dbus-python-client-gen
 
 Name:           python-%{srcname}
-Version:        0.8.4
+Version:        0.8.5
 Release:        %autorelease
 Summary:        Python Library for Generating dbus-python Client Code
 
 License:        MPL-2.0
 URL:            https://github.com/stratis-storage/dbus-python-client-gen
-Source0:        https://github.com/stratis-storage/dbus-python-client-gen/archive/refs/tags/v0.8.4.tar.gz#/dbus-python-client-gen-0.8.4.tar.gz
+Source0:        https://github.com/stratis-storage/dbus-python-client-gen/archive/refs/tags/v0.8.5.tar.gz#/dbus-python-client-gen-0.8.4.tar.gz
 
 BuildArch:      noarch
 
@@ -47,5 +47,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc README.rst
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

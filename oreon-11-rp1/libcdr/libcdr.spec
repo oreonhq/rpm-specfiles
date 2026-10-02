@@ -1,4 +1,4 @@
-%global source0_hash ced677c8300b29c91d3004bb1dddf0b99761bf5544991c26c2ee8f427e87193c
+%global source0_hash f7bb6abdd7f226820f288a93dd8d07759833c0250d9e202af90f9b312c4665a3
 
 %global apiversion 0.1
 
@@ -115,5 +115,4 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PA
 %{_mandir}/man1/cmx2xhtml.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.8-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 2fd928ec86538227711e2adf49cfd6a1ef74f6bb3555c5dad4e0425ccd978883
+%global source0_hash f06094db841a214f975e79d66e2a79ea8c2b39b0f762e9d384b2feffd4ae7447
 
 Name:           os-prober
 Version:        1.85
@@ -97,5 +97,4 @@ fi
 %{_var}/lib/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.81-11
-- Prepare for Oreon 11 (RP1)
+%autochangelog

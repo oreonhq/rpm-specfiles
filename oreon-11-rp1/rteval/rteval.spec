@@ -1,4 +1,4 @@
-%global source0_hash 4f48cdbc04516592e659c40145b500cd25a0638a3d148e1722864e02522669d5
+%global source0_hash 5781ddc9de0557b60434dc903042798906ecb64a24ea8572cc152164c8e113f1
 
 Name:		rteval
 Version:	3.13
@@ -84,5 +84,4 @@ install -m 0644 rteval.conf %{buildroot}%{_sysconfdir}/rteval.conf
 %{_bindir}/rteval
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10-5
-- Import
+%autochangelog

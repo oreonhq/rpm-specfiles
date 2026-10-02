@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 180224db6aed87ba9ce1f2781ebcd5826253de8ff637112090e24b84502bbf9f
 
 Name:           python-markdown
-Version:        3.10.3
+Version:        3.11
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Python implementation of John Gruber_s Markdown.
@@ -60,5 +60,4 @@ Summary:        %{summary}
 %{_bindir}/markdown_py
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

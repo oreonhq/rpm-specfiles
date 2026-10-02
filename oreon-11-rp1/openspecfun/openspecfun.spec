@@ -1,4 +1,4 @@
-%global source0_hash 1505c7a45f9f39ffe18be36f7a985cb427873948281dbcd376a11c2cd15e41e7
+%global source0_hash 6209413bc5291f4aad68903fc7851a18ddc94d3432ee0dd1b69e02dc370ece2a
 
 %bcond_with static_libs # don't build static libraries
 

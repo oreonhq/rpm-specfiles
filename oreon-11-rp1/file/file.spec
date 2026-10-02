@@ -1,4 +1,4 @@
-%global source0_hash 45672fec165cb4cc1358a2d76b5d57d22876dcb97ab169427ac385cbe1d5597a
+%global source0_hash ed14656883b23a364b4057c05595d93252da9bc473d30106519519d0da141283
 
 # python3 is not available on RHEL <= 7
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -49,9 +49,6 @@ Patch2: file-5.04-volume_key.patch
 Patch3: file-5.45-readelf-limit-revert.patch
 
 Patch4: file-5.46-fix-tests-rpm-magic.patch
-
-# Fix tabs->spaces in python/magic.py (upstream 5.48 used tabs; rhbz#2419719)
-Patch5: file-5.47-python-magic-close-fix-whitespace.patch
 
 URL: https://www.darwinsys.com/file/
 Requires: file-libs%{?_isa} = %{version}-%{release}
@@ -242,5 +239,4 @@ make -C tests check
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.47-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

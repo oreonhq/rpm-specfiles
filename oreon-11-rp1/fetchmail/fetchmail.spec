@@ -1,4 +1,4 @@
-%global source0_hash a5109295ec3319e0e45edd009d2d977042a8326ab52c6a817a82fa987103e4f3
+%global source0_hash da99f8c573c4d9e63f493c7e24447126aea25b53b4c076ec79266874e29b1975
 
 Summary: A remote mail retrieval and forwarding utility
 Name: fetchmail
@@ -51,5 +51,4 @@ rm -f $RPM_BUILD_ROOT%{python3_sitelib}/__pycache__/fetchmailconf*
 %{_mandir}/man1/fetchmail.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

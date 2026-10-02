@@ -1,4 +1,4 @@
-%global source0_hash 05e986a5c7327796dad742182b2d10805a8d4f511ad090da0490f146c1ff7a8c
+%global source0_hash 8cd1a95827dfd8270927894eb77f62b4087735cbede953884647f16c521c7e58
 
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 # disable -debuginfo subpackage
@@ -61,5 +61,4 @@ make check
 %{_libdir}/pkgconfig/libsparsehash.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.3-17
-- Prepare for Oreon 11 (RP1)
+%autochangelog

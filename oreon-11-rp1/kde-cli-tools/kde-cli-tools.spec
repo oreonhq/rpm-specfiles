@@ -1,4 +1,4 @@
-%global source0_hash 9b93730cbea9eecd2b17c84603c1496d18d08749d2861f87a7552f463d7aecb0
+%global source0_hash 18f3c421b305003caf73f9e9fbec09fbf30f472dbe81fec328046cca7883a31d
 
 %global stable_kf6 stable
 
@@ -119,5 +119,4 @@ ln -s %{_kf6_libexecdir}/kdesu %{buildroot}%{_bindir}/kdesu
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.5-1
-- Import
+%autochangelog

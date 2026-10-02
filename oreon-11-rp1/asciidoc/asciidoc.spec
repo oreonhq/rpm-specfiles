@@ -1,4 +1,4 @@
-%global source0_hash 684ea53c1f5b71d6d1ac6086bbc96906b1f709ecc7ab536615b0f0c9e1baa3cc
+%global source0_hash 8e1fb9691952cc4f13357e1ef58172e566c5f88e3c44222d4a8693585f884507
 
 Name:           asciidoc
 Version:        10.2.1
@@ -11,7 +11,6 @@ Source0:        https://github.com/asciidoc-py/asciidoc-py/archive/refs/tags/%{v
 
 BuildArch:      noarch
 
-Patch1:         asciidoc-table-separator.patch
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-pip
@@ -104,5 +103,4 @@ rm  %{buildroot}/share/doc/{BUGS.adoc,CHANGELOG.adoc,INSTALL.adoc,README.md,dbla
 %dir %{python3_sitelib}/asciidoc/resources/filters/latex
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2.0-19
-- Prepare for Oreon 11 (RP1)
+%autochangelog

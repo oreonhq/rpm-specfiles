@@ -1,4 +1,4 @@
-%global source0_hash f270e19de9127642d2a11589ef2ec97ef90a649a74f56cf9a96306b04817b51a
+%global source0_hash b064c7c3d426efb4786e60a8e6859b82ee2f2c5e49ffeea640cfe4fe33cbc376
 
 Name:           libnfnetlink
 Version:        1.0.2
@@ -57,5 +57,4 @@ find $RPM_BUILD_ROOT -type f -name "*.la" -exec rm -f {} ';'
 %{_includedir}/libnfnetlink/*.h
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.1-32
-- Prepare for Oreon 11 (RP1)
+%autochangelog

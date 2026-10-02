@@ -1,4 +1,4 @@
-%global source0_hash cb1bfd4f655289cd39bc04642d597be9de5427623f0861c1fc19c08d98467fa2
+%global source0_hash 4aeb97aea2b58224029dc2b23d7d064cfa990cb4fb8c4da440bcbe9c95bc5d2d
 
 Name:		orc
 Version:	0.4.44
@@ -90,5 +90,4 @@ rm -rf %{buildroot}/%{_libdir}/orc
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.41-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

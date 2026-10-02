@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 545980cd4889fced1889e53cf742ac8d538e3aaeb0d7e7bfcb8115b66e0d83a7
 
 Name:           kaichat

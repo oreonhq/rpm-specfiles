@@ -1,4 +1,4 @@
-%global source0_hash f2360feb5a32ace226c583df4faf6eff74145c81264aaea11e17a1af2f6f101a
+%global source0_hash 8531678502451c2cf04248cda45c8b4645e19fcfb63e6a7ec2549641c47bb392
 
 Name:           game-music-emu
 Version:        0.6.5
@@ -92,5 +92,4 @@ popd
 
 
 %changelog
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.4-3
-- Import from Fedora 43 dist-git for Oreon 11 RP1
+%autochangelog

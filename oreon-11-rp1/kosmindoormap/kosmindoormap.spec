@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 1da64c99c29fbd3f722732a14d44ab67417e66cec8de179fa5b2ec676aa6331b
 
 Name:    kosmindoormap

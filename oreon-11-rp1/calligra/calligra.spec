@@ -1,4 +1,4 @@
-%global source0_hash 4c7fff9af90d7a5a2d3c5683b1fdc936c627459cd2f2cdb4fc3837822c52b345
+%global source0_hash 9084f93eccd3b865d638ae8cb989bcb334edea6f550ba6874a282048284fcccc
 
 %bcond pstoedit 1
 # used only in RDF; Soprano has not been updated since Qt4
@@ -515,5 +515,4 @@ done
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
-- Import
+%autochangelog

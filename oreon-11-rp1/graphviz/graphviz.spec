@@ -1,4 +1,4 @@
-%global source0_hash 043877c0857d8d46067cd2f18809d54fc876c399f0ecd438f60ea7f4d8037451
+%global source0_hash 0f661718f3e5268dc3bad0fb53ab646605d26db70f4080799aff1dc2f61783c3
 
 %if 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 %bcond_with php
@@ -740,5 +740,4 @@ php --no-php-ini \
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 14.1.4-2
-- Import
+%autochangelog

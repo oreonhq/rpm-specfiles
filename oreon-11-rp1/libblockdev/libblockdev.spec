@@ -1,4 +1,4 @@
-%global source0_hash 65ef9a37babd44b85b8ff9b273f90f9f7d5f8ff7b0c76a8edb69240325fd83f4
+%global source0_hash bccd30e6b5d11504de60d9889ff6a2a25b07a4ec8f04070f2387e168301b3e3a
 
 %define with_python3 1
 %define with_gtk_doc 1
@@ -961,5 +961,4 @@ find %{buildroot} -type f -name "*.la" | xargs %{__rm}
 %files plugins-all
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

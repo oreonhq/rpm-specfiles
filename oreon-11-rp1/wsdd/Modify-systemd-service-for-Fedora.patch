@@ -11,20 +11,19 @@ backward compatibility.
  2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/etc/systemd/wsdd.defaults b/etc/systemd/wsdd.defaults
-index 3c8373e..518fe6f 100644
 --- a/etc/systemd/wsdd.defaults
 +++ b/etc/systemd/wsdd.defaults
-@@ -2,4 +2,4 @@
+@@ -2,5 +2,5 @@
  # Use, e.g., "-i eth0" to restrict operations to a specific interface
  # Refer to the wsdd(8) man page for details
  
 -WSDD_PARAMS=""
 +OPTIONS=""
+ WSDD_DISCOVERY_PARAMS=""
 diff --git a/etc/systemd/wsdd.service b/etc/systemd/wsdd.service
-index eea4670..a6d20c6 100644
 --- a/etc/systemd/wsdd.service
 +++ b/etc/systemd/wsdd.service
-@@ -7,15 +7,15 @@ Wants=network-online.target
+@@ -7,16 +7,16 @@
  ; It makes sense to have Samba running when wsdd starts, but is not required.
  ; Thus, the next to lines are disabled and use BindsTo only.
  ; One may also add any of these services to After for stronger binding.
@@ -34,7 +33,8 @@ index eea4670..a6d20c6 100644
  
  [Service]
  Type=simple
--EnvironmentFile=/etc/default/wsdd
+ ; Use /etc/default/wsdd for defaults, if it exists
+-EnvironmentFile=-/etc/default/wsdd
 +EnvironmentFile=-/etc/sysconfig/wsdd
  ; The service is put into an empty runtime directory chroot,
  ; i.e. the runtime directory which usually resides under /run
@@ -44,5 +44,4 @@ index eea4670..a6d20c6 100644
  User=wsdd
  Group=wsdd
 -- 
-2.44.0
-
+2.0

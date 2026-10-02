@@ -1,4 +1,4 @@
-%global source0_hash 621ff2b4faf214d7023143f6f9d496117c7c75131927837750b904140aff48a1
+%global source0_hash 22cf32e84e3eb508d97a9e991c2c3cc006b9dcf4afed201d96311c5c57d08fcf
 
 Summary: File system tree viewer
 Name: tree-pkg
@@ -66,5 +66,4 @@ sed -e 's/LINUX/__linux__/' -i tree.c
 %doc README
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

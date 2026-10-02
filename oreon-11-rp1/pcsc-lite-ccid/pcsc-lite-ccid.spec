@@ -1,13 +1,12 @@
-%global source0_hash none
-
-%global source2_key_fpr F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E
+%global source0_hash 4ff98151a7feb828a711e2f9d68c6b6065a97c597a81c2cbbd11d7f7edcfe743
+%global source1_hash 9dfe2db0b4736c3703cfabee37b16a30b118df37864b28fc66f95d32a3c9abfe
 
 %global dropdir %(pkg-config libpcsclite --variable usbdropdir 2>/dev/null)
 %global pcsc_lite_ver 1.8.9
 
 Name:           pcsc-lite-ccid
-Version:        1.8.3
-Release:        1%{?dist}
+Version:        1.8.4
+Release:        %{autorelease}
 Summary:        Generic USB CCID smart card reader driver
 
 License:        BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later
@@ -44,11 +43,10 @@ PC/SC Lite daemon.
 
 
 %prep
-%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
-%setup -q -n ccid-%{version}
-%patch 0 -p1 -b .omnikey
+%autosetup -n ccid-%{version} -p1
 
 %build
 %meson -Dserial=true
@@ -82,5 +80,4 @@ cp -p src/openct/LICENSE LICENSE.openct
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

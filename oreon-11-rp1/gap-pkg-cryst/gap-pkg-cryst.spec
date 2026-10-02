@@ -1,4 +1,4 @@
-%global source0_hash 90aae4bf7eabdb94bceebef0d984c8d6ea9e9c60d8268913498526565b693a7f
+%global source0_hash d563ee3bda1e8b4bdff2c5b03d8d6be9a127011490dbad298bf4d2a15d0afc0e
 
 # When bootstrapping a new architecture, there is no gap-pkg-crystcat yet.  That
 # package is only needed for testing this one, but it needs this package to
@@ -12,7 +12,7 @@
 %global gap_skip_check %{?with_bootstrap}
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        4.1.30
+Version:        4.1.32
 Release:        %autorelease
 Summary:        GAP support for crystallographic groups
 
@@ -20,6 +20,7 @@ License:        GPL-2.0-or-later
 URL:            https://www.math.uni-bielefeld.de/~gaehler/gap/packages.php
 VCS:            git:https://github.com/gap-packages/cryst.git
 Source:         https://www.math.uni-bielefeld.de/~gaehler/gap/Cryst/%{gap_upname}-%{version}.tar.gz
+
 
 BuildArch:      noarch
 BuildSystem:    gap

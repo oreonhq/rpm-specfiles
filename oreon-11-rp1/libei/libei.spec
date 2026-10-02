@@ -1,4 +1,4 @@
-%global source0_hash da1fba92daccd0667bc46c3ee952d4ae8cfc6bdb4c0bb4d34df26528fb240618
+%global source0_hash 5ed6078fa63afd554cc04b1001675615da0ed8fe23b80492ab63403140b5a830
 
 # Note to packagers:
 # libei-the-repo comes with three libraries, all independent of each other and
@@ -124,5 +124,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_bindir}/ei-debug-events
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

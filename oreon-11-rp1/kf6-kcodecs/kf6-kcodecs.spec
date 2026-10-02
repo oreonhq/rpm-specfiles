@@ -1,4 +1,4 @@
-%global source0_hash 0480fc5319346b0e24c6e363abce883a889735a7b71ad56d75eae2f7ae553d99
+%global source0_hash a42c79ff3237b73789d1c63cdfd848c0d59671ce5e93723a2efa128f00cb3450
 
 %global		framework kcodecs
 
@@ -61,23 +61,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/cmake/KF6Codecs/
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
-- Align qdoc install snippet with other kf6 specs (full %%{_qt6_docdir} find, %%{framework}-qt6doc.files)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-8
-- Drop separate -doc (*.qch) subpackage, merge optional QCH paths into -html list
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
-- Match Fedora spec
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

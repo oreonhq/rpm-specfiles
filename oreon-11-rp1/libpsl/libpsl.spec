@@ -1,4 +1,4 @@
-%global source0_hash 1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208
+%global source0_hash 93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be
 
 Name:           libpsl
 Version:        0.23.3
@@ -146,5 +146,4 @@ make check || cat tests/test-suite.log
 %{_mandir}/man1/psl-make-dafsa.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.21.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

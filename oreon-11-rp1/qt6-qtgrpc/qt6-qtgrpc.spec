@@ -1,4 +1,4 @@
-%global source0_hash 7386bfc9c10c7920e5ff22dcf067e95f379bb379e4d916269f4465ab295ed136
+%global source0_hash 771852c4e5fbeb3d7c3b2a9aacc13db9efe942a46e7d1454ec1f16092ec3ef9c
 
 %global qt_module qtgrpc
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Support for using gRPC and Protobuf
 Name:    qt6-%{qt_module}
-Version: 6.10.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io

@@ -6,7 +6,7 @@
 
 # https://github.com/docker/go-connections
 %global goipath         github.com/docker/go-connections
-Version:                0.4.0
+Version:                0.8.1
 %global commit          58542c764a1173ea3dac965d89146c931a2946f7
 
 %gometa

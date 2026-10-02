@@ -1,8 +1,8 @@
 %global source0_hash none
 
 Name:           gstreamer1-vaapi
-Version:        1.28.3
-Release:        1%{?dist}
+Version:        1.28.7
+Release:        %autorelease
 Summary:        GStreamer VA API plugins (provided by plugins-bad)
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://gstreamer.freedesktop.org/
@@ -38,5 +38,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files devel
 
 %changelog
-* Tue Sep 8 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
-- VA plugins moved into plugins-bad
+%autochangelog

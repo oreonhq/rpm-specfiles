@@ -1,4 +1,4 @@
-%global source0_hash b8484d46d5161232315a359d94b21e834d4f65ac95ac1c7bbf55f096719bd0e6
+%global source0_hash 7ccdb1b9b1b9dea0ee58cc07e0babf6088b3e01fe5a9307c20936f41e3aec61f
 
 # Exclude automatically generated requires on java interpreter which is not
 # owned by any package
@@ -31,7 +31,6 @@ Source200:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/h
 Source201:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-01
 Source202:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-02
 
-Patch:          0001-Switch-Dola-to-Lua-5.5.patch
 
 BuildRequires:  byaccj
 BuildRequires:  java-25-openjdk-devel
@@ -135,5 +134,4 @@ echo '
 %doc AUTHORS
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.27.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

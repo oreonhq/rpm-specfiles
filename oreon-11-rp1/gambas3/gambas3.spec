@@ -1,4 +1,4 @@
-%global source0_hash 284130fca5f7d2cd44c82352a6206c598bc4552a4bb70fc1e226e10438e01fdf
+%global source0_hash df42aa31d2aa3c14924518f52b736162867c5dc55dd04f18fd320f8b1dc28970
 
 # test
 %global enablejit 1
@@ -2048,5 +2048,4 @@ install -m 0644 -p main/mime/application-x-gambas3.xml %{buildroot}%{_datadir}/m
 %{_datadir}/%{name}/info/gb.xml.xslt.*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.21.6-1
-- Import
+%autochangelog

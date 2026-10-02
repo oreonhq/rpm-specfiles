@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 28f9333b8a7327c65c513afbd9d9a411b799ff5883b4c9aaafc22ace79d94702
 
 Name:    grantleetheme

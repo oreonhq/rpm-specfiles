@@ -1,4 +1,4 @@
-%global source0_hash 5841e503acd5baae310ac4c9c74921f606479442ec6d59ef2f9cbbfb94a8c980
+%global source0_hash 0d3712defa457f23cff6eb696797c4b38d9590ca9012cb01e39e4b5da63f1630
 
 %global libpqos_ver 6.0.1
 %global desc %{expand: \
@@ -16,9 +16,6 @@ License:	BSD-3-Clause
 URL: 		https://github.com/intel/intel-cmt-cat
 Source0:        https://github.com/intel/intel-cmt-cat/archive/refs/tags/v%{version}.tar.gz#/intel-cmt-cat-%{version}.tar.gz
 
-Patch0:        0001-alter-install-paths.patch
-Patch1:        0002-remove-build-and-install-of-examples.patch
-Patch2:        0003-allow-debian-flags-to-be-added.patch
 
 ExclusiveArch:	x86_64
 
@@ -69,5 +66,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libpqos.so
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.04-4
-- Import
+%autochangelog

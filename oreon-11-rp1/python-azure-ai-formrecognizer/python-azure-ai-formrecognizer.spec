@@ -12,7 +12,7 @@ Release:        %autorelease
 Summary:        Microsoft Azure Form Recognizer Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version} zip}
+Source0:        %{pypi_source azure-ai-formrecognizer %{version}}
 
 BuildArch:      noarch
 

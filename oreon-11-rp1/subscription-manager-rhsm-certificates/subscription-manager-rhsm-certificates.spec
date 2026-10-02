@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 550a70a07defc770daffce0b2f89f7b3baec7c2d8da5670b31e5ff22b17ad789
 
 Name: subscription-manager-rhsm-certificates
-Version: 20220623-1-1
+Version: 20220623
 Release: 1%{?dist}
 Summary: Certificates required to communicate with a Red Hat Unified Entitlement Platform
 URL: https://www.candlepinproject.org/
@@ -51,5 +51,4 @@ make check
 %{_sysconfdir}/rhsm/ca/*.pem
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20220623-8
-- Import
+%autochangelog

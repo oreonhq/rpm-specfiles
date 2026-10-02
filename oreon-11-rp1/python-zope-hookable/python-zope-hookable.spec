@@ -9,7 +9,7 @@ Summary:        Efficient creation of hookable objects
 
 License:        ZPL-2.1
 URL:            http://github.com/zopefoundation/zope.hookable
-Source0:        %{pypi_source %{pypi_name}}
+Source0:        %{pypi_source zope_hookable %{version}}
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel

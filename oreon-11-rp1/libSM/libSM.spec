@@ -1,4 +1,4 @@
-%global source0_hash 2af9e12da5ef670dc3a7bce1895c9c0f1bfb0cb9e64e8db40fcc33f883bd20bc
+%global source0_hash be7c0abdb15cbfd29ac62573c1c82e877f9d4047ad15321e7ea97d1e43d835be
 
 Summary: X.Org X11 SM runtime library
 Name: libSM
@@ -66,5 +66,4 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}
 %{_libdir}/pkgconfig/sm.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.5-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

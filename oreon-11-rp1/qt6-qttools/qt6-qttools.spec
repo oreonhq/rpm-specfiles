@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8dab8f3611496486a470ad5f115ceea584f36bc22a2b8b6f6ebdbafbb8160693
 
 %global qt_module qttools
 
@@ -13,8 +13,8 @@
 
 Summary: Qt6 - QtTool components
 Name:    qt6-qttools
-Version: 6.11.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -27,7 +27,6 @@ Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodule
 %endif
 
 # Support LLVM/Clang 22
-Patch1: qdoc-support-newer-clang.patch
 
 ## upstream patches
 
@@ -149,7 +148,6 @@ Requires: %{name}-common = %{version}-%{release}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}}
 
-%patch -P1 -p1 -b .llvm22
 
 %build
 %cmake_qt6 \
@@ -389,17 +387,4 @@ popd
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
-- Drop Patch4 qdoc @-file warning fix (already in upstream 6.10.3 qdoccommandlineparser.cpp)
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
-- Refresh qdoc-support-newer-clang.patch for 6.10.3 (QDocConfiguration.cmake header layout)
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
-- Backport upstream qdoc fix for invalid @-file handling to avoid core dump
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,7 +1,7 @@
-%global source0_hash c2572990ce91112eef8d1b8e4a3b58790da95b68501785c621f69121dfbd22d7
+%global source0_hash 308743bc9fe871b902d47dbe98d749daff3a05b27531684f02625ce7208d4598
 
 Name:      easy-rsa
-Version:   3.2.6
+Version:   3.2.7
 Release:   1%{?dist}
 
 Summary:   Simple shell based CA utility

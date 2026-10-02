@@ -1,4 +1,4 @@
-%global source0_hash 52eab1e9f71e0a92d542ee1cc655895ed4b999a9e394d468f4ef2c838f0c739b
+%global source0_hash 6590fefad29e37be7d51ed89e9dbaf67884ae0a3fed14f8d58ac1352c0c0503d
 
 %global stable_kf6 stable
 
@@ -84,5 +84,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.5-1
-- Import
+%autochangelog

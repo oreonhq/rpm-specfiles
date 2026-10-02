@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f0b3b8871d6f4e4edd7e47763b18144a32c215f735569be44c49a70e04893519
 
 # SPDX-License-Identifier: MIT
 # Copyright (C) Fedora Project Authors
@@ -34,7 +34,7 @@
 
 Name:           ansible
 Summary:        Curated set of Ansible collections included in addition to ansible-core
-Version:        13.4.0
+Version:        14.4.0
 %global uversion %{version_no_tilde %{quote:%nil}}
 Release:        1%{?dist}
 

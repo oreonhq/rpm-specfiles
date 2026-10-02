@@ -1,4 +1,4 @@
-%global source0_hash 0f03c5e50e04225013cc3bd9155a94f0036923060722ced3278c5c66c68cf8fb
+%global source0_hash 161907a8c132fcdf2ef47e612fee79dc70d232b88a4f4ba061966a4769906667
 
 %global appstream_version 1.0.0~
 %global bubblewrap_version 0.10.0
@@ -14,7 +14,7 @@
 %bcond malcontent %[!0%{?rhel}]
 
 Name:           flatpak
-Version:        1.18.3
+Version:        1.19.2
 Release:        %autorelease
 Summary:        Application deployment framework for desktop apps
 

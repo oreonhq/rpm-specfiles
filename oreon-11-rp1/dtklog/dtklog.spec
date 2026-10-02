@@ -1,7 +1,7 @@
-%global source0_hash d74027f809809a8dfa98baf7719db163416d352665011e1c2cf5e1cf6ad54466
+%global source0_hash d927b8c8e0d65c1ae2bb49217a3beaaed5ec9c4b3b576d6aa5c486a07f83a3c1
 
 Name:           dtklog
-Version:        6.7.49
+Version:        6.7.50
 Release:        %autorelease
 Summary:        Simple, convenient and thread safe logger for Qt-based C++ apps
 License:        LGPL-2.1-or-later

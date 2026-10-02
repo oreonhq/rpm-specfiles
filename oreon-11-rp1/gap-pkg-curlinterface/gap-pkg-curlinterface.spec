@@ -1,4 +1,4 @@
-%global source0_hash 973d4b518bb25295fa36e367c54fd257adb7af4723634f039f53dae507855756
+%global source0_hash 26a08a3dc652b4a01125a6e87134364bf07a812cd0b7472683dff81d00454c4d
 
 # TESTING NOTE: the tests, unsurprisingly, require network access.  Since the
 # koji builders have no network access, the tests always fail.  The maintainer
@@ -12,7 +12,7 @@
 %global giturl         https://github.com/gap-packages/curlInterface
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        2.4.4
+Version:        2.5.0
 Release:        %autorelease
 Summary:        Simple web access for GAP
 

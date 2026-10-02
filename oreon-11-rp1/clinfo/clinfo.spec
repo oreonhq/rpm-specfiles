@@ -1,8 +1,8 @@
-%global source0_hash 48b77dc33315e6f760791a2984f98ea4bff28504ff37d460d8291585f49fcd3a
+%global source0_hash e944132329c6613b686ba0fcd373b15ebb553c367a01a734af8519ddb095c01f
 
 Name:           clinfo
 Summary:        Enumerate OpenCL platforms and devices
-Version:        3.0.25.02.14
+Version:        3.1.26.09.26
 Release:        %autorelease
 # Automatically converted from old format: CC0 - review is highly recommended.
 License:        CC0-1.0

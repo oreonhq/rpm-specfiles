@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 78777b8468974e66031a49c163fe908405b67e0f0bace0307f91f0f4246fefde
 
 Name:    akonadi-notes

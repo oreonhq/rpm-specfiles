@@ -28,7 +28,8 @@ Conflicts: python2-pyserial < 3.4-6
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }export UNZIP="-aa"
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+export UNZIP="-aa"
 %setup -q
 
 # Python 3.13+ has removed unittest.findTestCases()
@@ -55,5 +56,4 @@ PYTHONPATH=%{buildroot}/%{python3_sitelib} %{python3} test/run_all_tests.py
 %{_bindir}/pyserial-ports
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5-16
-- Prepare for Oreon 11 (RP1)
+%autochangelog

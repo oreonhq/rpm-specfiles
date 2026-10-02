@@ -11,7 +11,7 @@ Source: http://www.identicalsoftware.com/ostrichriders/%{name}-%{version}.tgz
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: gcc-c++
-BuildRequires: SFML-devel
+BuildRequires: SFML2-devel
 BuildRequires: desktop-file-utils
 BuildRequires: fontconfig-devel
 BuildRequires: pkgconfig
@@ -31,6 +31,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 
 %build
+# SFML 2.x API: use the SFML2 compat package
+export PKG_CONFIG_PATH=%{_libdir}/SFML2/pkgconfig
+export CXXFLAGS="%{optflags} -I%{_includedir}/SFML2"
+export LDFLAGS="%{?build_ldflags} -L%{_libdir}/SFML2"
 %make_build
 
 %install

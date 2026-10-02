@@ -1,4 +1,4 @@
-%global source0_hash 5d1fd38ee713684b991d6551b4fc305b12ef51731e8498bf1b40668e4e24c0e6
+%global source0_hash b8007adbeebecd8915afa2cab05cd41ada00515b4c00e7e4deba3262959e5466
 
 %bcond_with bootstrap
 
@@ -62,5 +62,4 @@ export JAVA_HOME=%{java_home}
 %license LICENSE NOTICE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.1-1
-- Import
+%autochangelog

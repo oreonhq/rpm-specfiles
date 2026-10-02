@@ -1,4 +1,4 @@
-%global source0_hash 64352648c2c081c8a9fb1a12dc1965e01ead7c57f58b72d1b54f6ef1cef3c561
+%global source0_hash c20492bc8ebb96c87fa2e52a0926e1cda8cde95d66145e018ac713fed5da38cf
 
 #
 # Important notes regarding the package:
@@ -122,7 +122,6 @@ BuildRequires:    make
 # put pdf2dsc back for gv
 Patch001: 0001-Reinstate-pdf2dsc.patch
 # https://cgit.ghostscript.com/cgi-bin/cgit.cgi/ghostpdl.git/commit/?id=3c0be6e4fcffa6
-Patch002: 0001-Fix-32-bit-build.patch
 
 
 # Downstream patches -- these should be always included when doing rebase:
@@ -494,5 +493,4 @@ done
 # =============================================================================
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.06.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

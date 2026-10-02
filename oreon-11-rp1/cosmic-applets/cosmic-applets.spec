@@ -1,4 +1,4 @@
-%global source0_hash f369cbd058ea1d4a1d4228f8200f7e05798fb60aafc984498a3c4561ce145776
+%global source0_hash f113f74cd05b179ab0478dd5876b671880914600d5df56d518f8f80c08543037
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-applets
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Applets for the COSMIC Desktop Environment
 
@@ -22,6 +22,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-applets
 
 Source0:        https://github.com/pop-os/cosmic-applets/archive/epoch-%{version}/cosmic-applets-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-applets at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

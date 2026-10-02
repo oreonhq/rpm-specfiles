@@ -1,4 +1,4 @@
-%global source0_hash 66ff82661c3cc49ab2e447f8a070ec1a64ba71d64219906d80a49da284a5d43e
+%global source0_hash b296b0e5795ca143fb1ffa78f46fd294daddfccd720faf9909a842d2f70c564e
 
 Summary: A text-based modem control and terminal emulation program
 Name: minicom
@@ -15,10 +15,6 @@ License: GPL-2.0-or-later AND LGPL-2.0-or-later AND LicenseRef-Fedora-Public-Dom
 #ExcludeArch: s390 s390x
 
 Source0:        https://salsa.debian.org/minicom-team/minicom/-/archive/%{version}/%{name}-%{version}.tar.gz
-
-# src/sysdep.h: remove cfset{i,o}speed macros for glibc
-# https://salsa.debian.org/minicom-team/minicom/-/commit/964ae563cb5a78545ae1a4a3b6784c69ec73bc48
-Patch0: minicom-2.10-fix-baudrate-setting.patch
 
 BuildRequires: make
 BuildRequires: lockdev-devel ncurses-devel autoconf automake gettext-devel
@@ -74,5 +70,4 @@ mkdir -p %{buildroot}%{_sysconfdir}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.10-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

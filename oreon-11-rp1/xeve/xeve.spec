@@ -1,4 +1,4 @@
-%global source0_hash 238c95ddd1a63105913d9354045eb329ad9002903a407b5cf1ab16bad324c245
+%global source0_hash f60950d063f52adf11ed7196c0bbb0503fa107b0e43af06bdc81fecc24f2a62e
 
 Name:           xeve
 Version:        0.7.0
@@ -9,8 +9,6 @@ License:        BSD-3-Clause
 URL:            https://github.com/mpeg5/xeve
 Source0:        https://github.com/mpeg5/xeve/archive/v%{version}/xeve-%{version}.tar.gz
 
-Patch0:         xeve-fix-build-on-non-x86.patch
-Patch1:         xeve-link-libm.patch
 
 BuildRequires:  cmake >= 3.12
 BuildRequires:  gcc

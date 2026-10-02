@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 063f6ea38dc33c7296af7075cd800f81b5c490e2c54e1d7017fd45067c2dbbf5
 
 %global commit f0f617cdb948b8788ea8bfd2c141d6cb46bf1b0e

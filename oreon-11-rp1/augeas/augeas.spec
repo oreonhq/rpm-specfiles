@@ -2,7 +2,7 @@
 %global source1_hash 528538b14c4cc39741a533dee17ef0937fca611f917a9b4866dd0c33c6680f9c
 
 Name:           augeas
-Version:        1.14.2
+Version:        1.15.0
 Summary:        A library for changing configuration files
 License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND (GPL-3.0-or-later WITH Bison-exception-2.2) AND Kazlib AND GPL-2.0-or-later AND BSD-2-Clause AND LicenseRef-Public-Domain
 
@@ -17,7 +17,7 @@ License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND (G
 %global commit ada6219325d9a835b71b62a42c3e150427b91882
 %forgemeta
 
-Release:        0.11%{?dist}
+Release:        1.11%{?dist}
 URL:            %{forgeurl}
 Source0:        https://github.com/rwmjones/augeas/archive/%{commit}.tar.gz#/augeas-%{commit}.tar.gz
 
@@ -207,5 +207,4 @@ rm -f $RPM_BUILD_ROOT/usr/bin/dump
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14.2-0.11.gitada6219
-- Import
+%autochangelog

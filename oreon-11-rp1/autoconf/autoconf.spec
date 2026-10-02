@@ -1,4 +1,4 @@
-%global source0_hash ba885c1319578d6c94d46e9b0dceb4014caafe2490e437a0dbca3f270a223f5a
+%global source0_hash 9fd672b1c8425fac2fa67fa0477b990987268b90ff36d5f016dae57be0d6b52e
 
 # Run extended test
 %bcond_without autoconf_enables_optional_test
@@ -56,15 +56,11 @@ Source2:    autoconf-init.el
 URL:        https://www.gnu.org/software/autoconf/
 
 # From upstream 9ff9c567b1a7a7e66fa6523d4ceff142b86bddaa
-Patch:      0001-Keep-lmingwex-and-lmoldname-in-linker-flags-for-MinG.patch
 
 # From https://savannah.gnu.org/support/index.php?111272
-Patch:      0001-autoreconf-Invoke-autopoint-in-more-situations.patch
 # From https://savannah.gnu.org/support/index.php?111273
-Patch:      0001-autoreconf-Adapt-to-the-on-disk-situation-after-auto.patch
 
 # Temporary fix (to be replaced by upstream patches)
-Patch:      0001-Port-C11-test-to-C.patch
 
 %if "%{name}" != "autoconf"
 # Set this to the sub-package base name, for "autoconf-latest"
@@ -240,5 +236,4 @@ install -p -m 755 enable.scl ${RPM_BUILD_ROOT}/%{_prefix}/enable
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.72-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

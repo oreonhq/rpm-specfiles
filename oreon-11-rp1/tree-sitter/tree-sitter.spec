@@ -1,4 +1,4 @@
-%global source0_hash e6826b7533ec3a885aba598377a6d20b5a6321ff3db76968e960c2352d3a5077
+%global source0_hash d35c96e68736bd9569d2757c3cc71052485f33082c3825f1aed9d0e86013a159
 
 %global tree_sitter_so_version 0.27
 

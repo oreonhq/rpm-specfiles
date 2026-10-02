@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 17d47be1a724d21775daa873ac7a52c30fd5c4935ba377af48d9b37b39765ed8
 
 %global qt_module qtnetworkauth
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - NetworkAuth component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -111,8 +111,4 @@ popd
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

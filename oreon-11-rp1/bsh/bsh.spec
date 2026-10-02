@@ -1,4 +1,4 @@
-%global source0_hash 0b20c57708a7e98c70b400749c7bdf5c028d4e352e4ed0b0750004df793dfa90
+%global source0_hash 12dada19d9554e3133d51f809e67d604e400b4c81ac70149db502de873741ec3
 
 # Copyright (c) 2000-2007, JPackage Project
 # All rights reserved.
@@ -41,7 +41,7 @@ URL:            https://beanshell.github.io/
 License:        Apache-2.0 AND BSD-3-Clause AND LicenseRef-Public-Domain
 
 # ./generate-tarball.sh
-Source0:        https://github.com/beanshell/beanshell/archive/refs/tags/2.1.1.tar.gz#/bsh-2.1.0.tar.gz
+Source0:        https://github.com/beanshell/beanshell/archive/refs/tags/2.1.1.tar.gz#/bsh-2.1.1.tar.gz
 
 # Remove bundled jars which cannot be easily verified for licensing
 # Remove code marked as SUN PROPRIETARY/CONFIDENTAIL
@@ -49,7 +49,6 @@ Source0:        https://github.com/beanshell/beanshell/archive/refs/tags/2.1.1.t
 # - set javac / javadoc source and target values to 1.8
 Patch0:        0000-source-target-1.8.patch
 # - remove references to invisible symbols and methods
-Patch1:        0001-java-11-compatibility.patch
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -113,7 +112,6 @@ This package provides %{summary}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n beanshell-%{version}
 %patch 0 -p1
-%patch 1 -p1
 
 sed -i 's,org.apache.xalan.xslt.extensions.Redirect,http://xml.apache.org/xalan/redirect,' docs/manual/xsl/*.xsl
 
@@ -164,5 +162,4 @@ cat scripts/bshdoc.bsh >> %{buildroot}%{_bindir}/bshdoc
 %license LICENSE NOTICE
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0:2.1.0-19
-- Import
+%autochangelog

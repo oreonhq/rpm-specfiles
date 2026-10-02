@@ -1,4 +1,4 @@
-%global source0_hash 9c37a6964cd7800d240c74c14338097e5990336995b3c581a3160cbdc575439d
+%global source0_hash 22bfebcb8a2377b17264c03e4f23f686c3217166b83381f1136e49da6f785be7
 
 %global glib2_version 2.64
 %global gtk3_version 3.24
@@ -7,7 +7,7 @@
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
 
 Name:           budgie-desktop-view
-Version:        10.10.2
+Version:        10.10.3
 Release:        1%{?dist}
 Summary:        Official Budgie desktop icons application / implementation
 

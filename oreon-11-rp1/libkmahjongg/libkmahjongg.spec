@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash ac5feb1f49db0ee47ac9b1e607ac6ec4582316aed761d9f0b4625ebd25bd97ab
 
 Name:    libkmahjongg

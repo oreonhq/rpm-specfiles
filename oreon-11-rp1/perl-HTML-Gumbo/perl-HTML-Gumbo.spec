@@ -6,7 +6,7 @@ Release:        20%{?dist}
 Summary:        HTML5 parser based on gumbo C library
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/HTML-Gumbo
-Source0:        https://cpan.metacpan.org/authors/id/R/RU/RUZ/HTML-Gumbo-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BP/BPS/HTML-Gumbo-%{version}.tar.gz
 
 BuildRequires:  perl-interpreter
 BuildRequires:  perl-devel

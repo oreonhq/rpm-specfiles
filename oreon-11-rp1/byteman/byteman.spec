@@ -1,4 +1,4 @@
-%global source0_hash d022c4607faada4ab70ffe85b2d0d1465b1f090785aba1b3330f1db4a4d74bfb
+%global source0_hash 58eac30f1c58ca72ee868ff1f57ec9b66540ae770728b82d9fd1651fdd1466d4
 
 # Note to the interested reader:
 #   fedpkg mockbuild --without tests
@@ -24,7 +24,7 @@ Summary:          Java agent-based bytecode injection tool
 License:          LGPL-2.1-or-later AND BSD-3-Clause
 URL:              http://www.jboss.org/byteman
 # wget -O 4.0.16.tar.gz https://github.com/bytemanproject/byteman/archive/4.0.16.tar.gz
-Source0:        https://github.com/bytemanproject/byteman/archive/refs/tags/%{version}.tar.gz#/byteman-4.0.26.tar.gz
+Source0:        https://github.com/bytemanproject/byteman/archive/refs/tags/%{version}.tar.gz#/byteman-%{version}.tar.gz
 
 BuildArch:        noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -226,5 +226,4 @@ ln -s %{_javadir}/byteman/byteman.jar $RPM_BUILD_ROOT%{homedir}/lib/byteman.jar
 %{homedir}/lib/byteman-dtest.jar
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.26-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

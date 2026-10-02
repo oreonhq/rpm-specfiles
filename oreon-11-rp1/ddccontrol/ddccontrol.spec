@@ -1,4 +1,4 @@
-%global source0_hash 4f3a3d9a00e09b07423d2aed308b21dccfe57642f5d9bbf79802a0656dd11d1e
+%global source0_hash ca518f53920aef90e20c86d8497b9d66fdb24808c11131d3cda0b167b65c703e
 
 %ifarch x86_64 i686
 %bcond_without ddcpci
@@ -14,7 +14,7 @@
 
 Name:             ddccontrol
 URL:              https://github.com/ddccontrol/ddccontrol
-Version:          3.3.0
+Version:          3.4.0
 Release:          1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:          GPL-2.0-or-later
@@ -43,6 +43,7 @@ Requires:         /sbin/modprobe
 Requires(post):   /sbin/modprobe
 Summary:          Control your monitor by software using the DDC/CI protocol
 Source0:          https://github.com/ddccontrol/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+
 # no monitors on s390(x)
 ExcludeArch:      s390 s390x
 

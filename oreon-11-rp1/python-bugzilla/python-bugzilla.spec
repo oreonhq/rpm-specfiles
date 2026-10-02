@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ad649e2664edbae38a280c8610efc47e2a324b9e794f6efc92be9ec338c3f86e
 
 Name:           python-bugzilla
 Version:        3.3.0
@@ -81,4 +81,3 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %changelog
 %autochangelog
-

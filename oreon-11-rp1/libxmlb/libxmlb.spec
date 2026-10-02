@@ -1,6 +1,10 @@
-%global source0_hash none
+%global source0_hash 448294be33bfae62f00fa66e506f1cae80237ce71b7ab6530aefa75005eeb08a
 
-%bcond mingw %{defined fedora}
+%if 0%{?fedora} && ! 0%{?oreon}
+%bcond_without mingw
+%else
+%bcond_with mingw
+%endif
 %bcond stemmer %{defined fedora}
 
 %global glib2_version 2.45.8
@@ -160,5 +164,4 @@ rm -f $RPM_BUILD_ROOT/%{mingw64_mandir}/man1/xb-tool.1*
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.27-1
-- Import
+%autochangelog

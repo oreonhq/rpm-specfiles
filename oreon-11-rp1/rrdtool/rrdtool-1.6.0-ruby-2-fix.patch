@@ -1,8 +1,6 @@
-diff --git a/bindings/Makefile.am b/bindings/Makefile.am
-index 54f5c23..ee85c23 100644
 --- a/bindings/Makefile.am
 +++ b/bindings/Makefile.am
-@@ -35,8 +35,9 @@ install-data-local:
+@@ -35,8 +35,9 @@
                  && $(MAKE) install ) \
             || true
  	$(AM_V_GEN)test -f ${builddir}/ruby/Makefile \
@@ -12,9 +10,9 @@ index 54f5c23..ee85c23 100644
 +                && $(MAKE) EPREFIX=$(DESTDIR)$(exec_prefix) $(RUBY_MAKE_OPTIONS) \
 +                hdrdir="$(includedir)" rubyhdrdir="$(includedir)" includedir="$(includedir)" install ) \
             || true
- 	$(AM_V_GEN)test -d ${builddir}/python/build \
-            && ( cd ${builddir}/python \
-@@ -57,7 +58,8 @@ ruby:
+ 	$(AM_V_GEN)test -f ${builddir}/python/dist/*.whl \
+            && ( $(PYTHON) -m pip install --upgrade --no-index --no-deps \
+@@ -59,7 +60,8 @@
               EPREFIX=$(exec_prefix) \
               ABS_TOP_SRCDIR=${abs_top_srcdir} \
               ABS_TOP_BUILDDIR=${abs_top_builddir} \
@@ -22,5 +20,5 @@ index 54f5c23..ee85c23 100644
 +             $(RUBY_MAKE_OPTIONS) hdrdir="$(includedir)" \
 +             rubyhdrdir="$(includedir)" includedir="$(includedir)" RUBYARCHDIR= )
  
- # rules for building the python module
- python:
+ # Build the python module as a wheel in ${builddir}/python/dist/; it is
+ # installed from there (via pip) by install-data-local. The wheel.stamp

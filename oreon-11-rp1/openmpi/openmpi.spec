@@ -1,4 +1,4 @@
-%global source0_hash dfb72762531170847af3e4a0f21d77d7b23cf36f67ce7ce9033659273677d80b
+%global source0_hash e668a3c4acd50c41dc204c8a6dd98a611e0f26af89cf677577fa9be8a2698003
 
 # Optional name suffix to use...we leave it off when compiling with gcc, but
 # for other compiled versions to install side by side, it will need a
@@ -79,9 +79,7 @@ Source1:        openmpi.module.in
 Source3:        openmpi.pth.py3
 Source4:        macros.openmpi
 # Fix always inline failure - https://github.com/open-mpi/ompi/pull/13756
-Patch:          openmpi-inline.patch
 # Fix brace initialization - https://github.com/open-mpi/ompi/pull/13758
-Patch:          openmpi-braces.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
@@ -430,5 +428,4 @@ make check || ( cat test/*/test-suite.log && exit $fail )
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.9-1
-- Import
+%autochangelog

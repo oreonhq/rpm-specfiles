@@ -1,4 +1,4 @@
-%global source0_hash a77c3ba82804668bb289362b37d181cfa7cbe47922ce099bcec87d0cc4c546c6
+%global source0_hash 6f35dd479dd634a1ec50852fa9716c9da81a6c07af93bbf2990f7bbd829f0dfd
 
 Name:    libcamera
 Version: 0.7.2
@@ -203,5 +203,4 @@ install -D -m 644 %SOURCE3 %{buildroot}/%{_udevrulesdir}/
 %{python3_sitearch}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

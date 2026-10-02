@@ -1,4 +1,4 @@
-%global source0_hash b3f36f18a6dd2715713370166257de2fae01f9d38cfe878ced9b1e6ded5befd9
+%global source0_hash 1da5790d9580c81932b5bf700633114468da7b3412d69faa767daebf974f4586
 
 # This file is encoded in UTF-8.  -*- coding: utf-8 -*-
 
@@ -25,6 +25,7 @@ Source1:        https://mirrors.kernel.org/gnu/emacs/emacs-%{version}.tar.xz.sig
 Source100:     https://keys.openpgp.org/vks/v1/by-fingerprint/17E90D521672C04631B1183EE78DAE0F3115E06B
 Source101:     https://keys.openpgp.org/vks/v1/by-fingerprint/CEA1DE21AB108493CC9C65742E82323B8F4353EE
 Source102:     https://keys.openpgp.org/vks/v1/by-fingerprint/12BB9B400EE3F77282864D18272B5C54E015416A
+Source103:     https://keys.openpgp.org/vks/v1/by-fingerprint/9B917007AE030E36E4FC248B695B7AE4BF066240
 
 Source4:       dotemacs.el
 Source5:       site-start.el
@@ -44,7 +45,6 @@ Patch:         emacs-system-crypto-policies.patch
 
 # causes a dependency on pkgconfig(systemd)
 # => remove it if we stop using this patch
-Patch:         emacs-libdir-vs-systemd.patch
 
 # Hint what to do to avoid using the pure GTK build on X11, where it is
 # unsupported:
@@ -63,7 +63,6 @@ Patch:         0001-Don-t-specify-StartupWMClass-in-emacs.desktop.patch
 # Don't wait for Emacs 31 before updating to Tree-sitter 0.26.
 # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=63555
 # https://bugzilla.redhat.com/show_bug.cgi?id=2420305
-Patch:         0001-Support-Tree-sitter-version-0.26-and-later.patch
 
 BuildRequires: alsa-lib-devel
 BuildRequires: atk-devel
@@ -312,7 +311,7 @@ Development header files for Emacs.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-cat '%{SOURCE100}' '%{SOURCE101}' '%{SOURCE102}' > keyring
+cat '%{SOURCE100}' '%{SOURCE101}' '%{SOURCE102}' '%{SOURCE103}' > keyring
 %{gpgverify} --keyring=keyring --signature='%{SOURCE1}' --data='%{SOURCE0}'
 rm keyring
 
@@ -836,5 +835,4 @@ fi
 %{_includedir}/emacs-module.h
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 30.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4934ee15805723074988c37cc66e02482798742b61542336b8407d135921b5b0
 
 # NOTE: This specfile is generated from upstream at https://github.com/rhinstaller/lorax
 # NOTE: Please submit changes as a pull request
@@ -6,7 +6,7 @@
 %global forgeurl https://github.com/weldr/lorax
 
 Name:           lorax
-Version:        46.0-1
+Version:        46.1
 Release:        1%{?dist}
 Summary:        Tool for creating the anaconda install images
 License:        GPL-2.0-or-later
@@ -146,7 +146,7 @@ Lorax templates for creating the boot.iso and live isos are placed in
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n lorax-lorax-44.6-1
+%setup -q -n lorax-lorax-%{version}-1
 
 %build
 
@@ -190,5 +190,4 @@ make DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
 %{_datadir}/lorax/templates.d/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 44.6-1
-- Import
+%autochangelog

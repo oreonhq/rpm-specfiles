@@ -1,4 +1,4 @@
-%global source0_hash d925722864837ad5ae2a82070d4b2e0603dc72af44bd457c3962298258b8e82d
+%global source0_hash 28eb403f51f0f7405249132cecfe82ea5c0ef97f1b32c5a65828814ae0d34775
 
 %{?mingw_package_header}
 
@@ -135,5 +135,4 @@ rm -rf %{buildroot}%{mingw64_mandir}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.55-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

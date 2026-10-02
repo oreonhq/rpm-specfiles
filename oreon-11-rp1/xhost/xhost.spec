@@ -1,4 +1,4 @@
-%global source0_hash ea86b531462035b19a2e5e01ef3d9a35cca7d984086645e2fc844d8f0e346645
+%global source0_hash a8afd70059479c712948b895e41c35a4a8bfcede3ba2d5a4b855c88bbb725be1
 
 Name:       xhost
 Version:    1.0.10
@@ -9,7 +9,6 @@ License:    MIT AND ICU
 URL:        https://www.x.org
 Source0:        https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
 
-Patch01:    0001-Replace-inet_addr-inet_aton-with-a-call-to-inet_pton.patch
 
 BuildRequires:  automake libtool
 BuildRequires:  gcc make gettext
@@ -43,5 +42,4 @@ autoreconf -v --install
 %{_mandir}/man1/%{name}.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.9-11
-- Prepare for Oreon 11 (RP1)
+%autochangelog

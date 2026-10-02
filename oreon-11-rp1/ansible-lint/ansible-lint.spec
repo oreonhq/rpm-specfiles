@@ -1,11 +1,11 @@
-%global source0_hash 022cd8102d06b286147d5ce6e999349bbe6619f907d72ec71ae55dbc4a64b7b9
+%global source0_hash dd44678ac5cdcbb282b159c4025855f6569b3a6b432df68045a8abe614e14494
 
 %global archive_name ansible-lint
 %global lib_name ansiblelint
 
 Name:           %{archive_name}
 Epoch:          1
-Version:        26.8.0
+Version:        26.9.0
 Release:        1%{?dist}
 Summary:        Best practices checker for Ansible
 

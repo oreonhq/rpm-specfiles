@@ -1,4 +1,4 @@
-%global source0_hash 3c39e1e291fef7be8f2de734c086b05b14ce1e80bf1dfd7e24e86aa2fa94f559
+%global source0_hash e3384d98a69ee39b1bd417b495b79faee9f5624f65a46147cf1b3efeee337784
 
 Name:           apache-logging-parent
 Summary:        Parent pom for Apache Logging Services projects
@@ -7,7 +7,7 @@ Release:        1%{?dist}
 License:        Apache-2.0
 
 URL:            https://logging.apache.org/
-Source0:        https://repo1.maven.org/maven2/org/apache/logging/logging-parent/%{version}/logging-parent-%{version}-source-release.zip
+Source0:        https://dist.apache.org/repos/dist/release/logging/logging-parent/%{version}/apache-logging-parent-%{version}-src.zip
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -26,7 +26,8 @@ Parent pom for Apache Logging Services projects.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n logging-parent-%{version}
+%setup -q -c -T
+unzip -q %{SOURCE0}
 cp -p %SOURCE1 LICENSE
 
 %pom_remove_plugin com.diffplug.spotless:spotless-maven-plugin
@@ -44,5 +45,4 @@ cp -p %SOURCE1 LICENSE
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9-13
-- Prepare for Oreon 11 (RP1)
+%autochangelog

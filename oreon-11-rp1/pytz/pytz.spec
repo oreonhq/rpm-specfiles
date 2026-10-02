@@ -1,10 +1,9 @@
-%global source0_hash none
-
+%global source0_hash 464303645bafafd72418898368b2429458f709cf1eb6a15372fbcc396b64da63
 # Allow build without test
 %bcond_without tests
 
 Name:           pytz
-Version:        2026.3.post1
+Version:        2026.4
 Release:        1%{?dist}
 Summary:        World Timezone Definitions for Python
 
@@ -43,7 +42,7 @@ Requires:       tzdata
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 
@@ -72,5 +71,4 @@ rm -r %{buildroot}%{python3_sitelib}/pytz/zoneinfo
 %{python3_sitelib}/pytz-%{version}.dist-info
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash b9e6ad482fcdcb58c9b9553ae56956b6d7df875d5605b6ecb96adaff16b2b07a
+%global source0_hash bb9021c8e100a376f5070ecca727f83a29b5f652dfe381793b88daa79a3b98a2
 
 Name:           pmix
 Version:        6.1.0
@@ -120,5 +120,4 @@ find %{buildroot} -name '*.la' | xargs rm -f
 %{_bindir}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.7-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

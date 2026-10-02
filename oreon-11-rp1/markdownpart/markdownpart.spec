@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash d04cdc3c09c2be102a7199d73dd24c7f3cd709f95af7e51804f2668663422cfd
 
 %global app_id  org.kde.markdownpart

@@ -1,4 +1,4 @@
-%global source0_hash a9ef5ab67c4b8d2d3e9ed71f39cd008bda653142a720d8a395a36f1110d0c432
+%global source0_hash 7d135aa2550326a5acf20f53c518aea5a8900015ce50700044e40f818c31dd80
 
 %bcond curl     1
 %bcond deflate  %[ 0%{?fedora} >= 34 || 0%{?rhel} >=  8 ]
@@ -123,5 +123,4 @@ autoreconf -fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

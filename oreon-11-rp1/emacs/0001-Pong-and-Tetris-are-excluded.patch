@@ -48,22 +48,22 @@ index bcfa83cf8e4..1b0a0bce6a5 100644
 --- a/lisp/menu-bar.el
 +++ b/lisp/menu-bar.el
 @@ -1658,18 +1658,12 @@ menu-bar-games-menu
-     (bindings--define-key menu [zone]
+     (define-key menu [zone]
        '(menu-item "Zone Out" zone
                    :help "Play tricks with Emacs display when Emacs is idle"))
--    (bindings--define-key menu [tetris]
+-    (define-key menu [tetris]
 -      '(menu-item "Tetris" tetris
 -                  :help "Falling blocks game"))
-     (bindings--define-key menu [solitaire]
+     (define-key menu [solitaire]
        '(menu-item "Solitaire" solitaire
                    :help "Get rid of all the stones"))
-     (bindings--define-key menu [snake]
+     (define-key menu [snake]
        '(menu-item "Snake" snake
                    :help "Move snake around avoiding collisions"))
--    (bindings--define-key menu [pong]
+-    (define-key menu [pong]
 -      '(menu-item "Pong" pong
 -                  :help "Bounce the ball to your opponent"))
-     (bindings--define-key menu [mult]
+     (define-key menu [mult]
        '(menu-item "Multiplication Puzzle"  mpuz
                    :help "Exercise brain with multiplication"))
 diff --git a/test/src/doc-tests.el b/test/src/doc-tests.el

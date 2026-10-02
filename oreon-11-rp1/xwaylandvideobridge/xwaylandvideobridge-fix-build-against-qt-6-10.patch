@@ -1,13 +1,12 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9688f4b..22992fe 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -32,7 +32,7 @@ else()
- endif()
+@@ -33,7 +33,7 @@
+ set(CMAKE_CXX_STANDARD 20)
+ set(CMAKE_CXX_STANDARD_REQUIRED ON)
  
+-find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus Widgets)
++find_package(Qt6 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS GuiPrivate Quick DBus Widgets)
  
--find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Quick DBus)
-+find_package(Qt${QT_MAJOR_VERSION} ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS GuiPrivate Quick DBus)
- if (QT_MAJOR_VERSION STREQUAL "5")
-     find_package(Qt5X11Extras ${QT_MIN_VERSION} REQUIRED)
- endif()
+ find_package(KF6 ${KF_MIN_VERSION} REQUIRED COMPONENTS
+     CoreAddons

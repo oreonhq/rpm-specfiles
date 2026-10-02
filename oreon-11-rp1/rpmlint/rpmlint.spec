@@ -1,4 +1,4 @@
-%global source0_hash 69884a3b80438698e41dc4b39658fae611b45ad6cfb31e38db76279bfb4288b1
+%global source0_hash 76ca6130f55e65ac7b2e32d8e24266022e34f71b0b7c4385c0f418340a111690
 
 # pass --without tests to skip the test suite
 %bcond_without tests
@@ -99,5 +99,4 @@ cp -a %{SOURCE1} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{buildroot}%{_sysconfdir}/xdg
 %{_bindir}/rpmlint
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

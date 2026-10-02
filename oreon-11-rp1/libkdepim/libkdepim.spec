@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 089f1b24839a66b234e987f9eb71aca9efe20c2e9d8dd7387f24c14cbff37bf5
 
 Name:    libkdepim

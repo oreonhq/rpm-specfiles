@@ -1,4 +1,4 @@
-%global source0_hash f9e90c19c1922b51ff5bff5cc644a87a9c619b329b473a809e1d43a37a7fa1ce
+%global source0_hash 2a1f5db720a179c7d6c447d1aa871633f0d63158d19ee3b396eadd600952e588
 
 %bcond_with bootstrap
 
@@ -11,7 +11,7 @@ URL:            https://fusesource.github.io/jansi/
 ExclusiveArch:  %{java_arches}
 
 # ./generate-tarball.sh
-Source0:        https://github.com/fusesource/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jansi-2.4.2.tar.gz
+Source0:        https://github.com/fusesource/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jansi-%{version}.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
 # Change the location of the native artifact to where Fedora wants it
 Patch:          %{name}-jni.patch
@@ -47,7 +47,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # Plugins not needed for an RPM build
 %pom_remove_plugin :maven-gpg-plugin
 %pom_remove_plugin :maven-javadoc-plugin
-%pom_remove_plugin :nexus-staging-maven-plugin
 %pom_remove_plugin :spotless-maven-plugin
 
 # We don't want GraalVM support in Fedora
@@ -88,5 +87,4 @@ cp -p src/main/native/libjansi.so %{buildroot}%{_prefix}/lib/%{name}
 %{_prefix}/lib/%{name}/
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.2-1
-- Import
+%autochangelog

@@ -8,7 +8,7 @@ Summary:        Unbless Perl objects
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/Acme-Damn
-Source0:        https://cpan.metacpan.org/authors/id/I/IB/IBB/Acme-Damn-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRTASTIC/Acme-Damn-%{version}.tar.gz
 # DynaLoader doesn't export anything. This causes errors in
 # Perl versions 5.39.1 and higher. This patch removes the symbol import
 # https://github.com/denormal/perl-Acme-Damn/pull/1

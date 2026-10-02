@@ -1,4 +1,4 @@
-%global source0_hash 0f4510f1c7a679c3545990a31479f391ad45d84e039176309d42f80cf41743f5
+%global source0_hash c2f84393011827219ae117131dba8e7684c2bed0961eed11b0642c2acba440b5
 
 %bcond_with bootstrap
 
@@ -93,5 +93,4 @@ make check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.8-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

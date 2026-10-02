@@ -1,4 +1,4 @@
-%global source0_hash d3fd9e4170bfb5110b0bda577fe764a38fb606b3c25d2f0c3840234521ff1252
+%global source0_hash dd2a762697c463148a8f59867089a5ebf2dd1449d869f93764b76c12bcf8acc0
 
 %bcond mingw %[%{undefined rhel} && %{undefined flatpak}]
 
@@ -243,5 +243,4 @@ find %{buildroot} -name '*.la' -delete
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.15-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

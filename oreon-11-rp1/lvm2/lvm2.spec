@@ -1,4 +1,4 @@
-%global source0_hash 23bc9067e28fe0d37b3cc441f2865b9e022ce3c624babe22918b8dd90c031ee8
+%global source0_hash d87ec0dac9061f1fa58ebced5c6b1360c87d4c5cd7b455dc0ebe1d3f036920d7
 
 %global device_mapper_version 1.02.213
 
@@ -55,7 +55,7 @@ Name: lvm2
 %if 0%{?rhel}
 Epoch: %{rhel}
 %endif
-Version: 2.03.42
+Version: 2.03.43
 Release: %autorelease
 License: GPL-2.0-only
 URL: https://sourceware.org/lvm2
@@ -685,5 +685,4 @@ An extensive functional testsuite for LVM2.
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.03.39-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

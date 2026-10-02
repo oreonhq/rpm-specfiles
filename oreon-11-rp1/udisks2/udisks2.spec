@@ -1,4 +1,4 @@
-%global source0_hash e88c52bae02fa13414604bbef42c6bb91c2e24177ee0057ed55c6bd7451bcb6d
+%global source0_hash 18630a8aad806bea0bc626ce97e71e50ec82c742956ac1c834a4275f8f22207b
 
 %global glib2_version                   2.68
 %global gobject_introspection_version   1.30.0
@@ -347,8 +347,4 @@ fi
 %endif
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.1-2
-- When %%{?oreon}, cap %%{_smp_mflags} to reduce tmpfs pressure in mock
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

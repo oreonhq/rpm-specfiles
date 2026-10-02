@@ -1,4 +1,4 @@
-%global source0_hash abaf8d37253b31c3d40b448acb857ce6456b7bd92b31adfc236b27632c56ae79
+%global source0_hash f5c2cb8688cf03f8235e13e442b02477eae4458bf552cbadc9167477b765e33f
 
 %if 0%{?rhel} || (0%{?oreon} >= 11)
 
@@ -19,7 +19,7 @@
 %endif
 
 Name:       tracer
-Version:    1.6-1
+Version:    1.6
 Release:    1%{?dist}
 Summary:    Finds outdated running applications in your system
 
@@ -208,5 +208,4 @@ make DESTDIR=%{buildroot}%{_datadir} mo
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4-2
-- Import
+%autochangelog

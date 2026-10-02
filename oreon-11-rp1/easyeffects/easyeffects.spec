@@ -1,7 +1,7 @@
-%global source0_hash c42e0c84ca1447df9d905d4fbc94e7449198aefaa560aaff69a360c4583d9aa4
+%global source0_hash 16e2c984b563e4be457830b35375f8cd37d25f7168e5a60a7f0024d86875de6c
 
 Name:           easyeffects
-Version:        8.2.9
+Version:        8.3.0
 Release:        1%{?dist}
 Summary:        Audio effects for PipeWire applications
 

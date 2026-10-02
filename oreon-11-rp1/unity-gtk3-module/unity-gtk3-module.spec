@@ -41,7 +41,8 @@ Headers and pkg-config metadata for the Unity GTK3 menu parser library
 (libunity-gtk3-parser).
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }mkdir -p %{name}-%{version}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+mkdir -p %{name}-%{version}
 tar -xzf %{SOURCE0} -C %{name}-%{version}
 # tests/ is wired in configure.ac + Makefile.am; deleting it without editing breaks automake.
 cfg=$(find '%{name}-%{version}' -maxdepth 4 -name configure.ac -print -quit)
@@ -137,8 +138,4 @@ fi
 %{_libdir}/pkgconfig/unity-gtk3-parser.pc
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.0+18.04.20171202-2
-- Patch main.c via find so GCC 15 GMenuModel cast always applies
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.0+18.04.20171202-1
-- Add unity-gtk3-module package for GTK3 appmenu module support
+%autochangelog

@@ -1,12 +1,13 @@
-%global source0_hash c55ec5cddc952e2563586ac76014be072c9dedb5094c6675889afa90b8df23e2
+%global source0_hash 79db1b4d9fcfafe5cb6a30eb29174f912f1b2c04a644bd5fe5075bccad10eb97
 
 Name:           gerbera
-Version:        3.2.1
+Version:        3.3.0
 Release:        1%{?dist}
 Summary:        UPnP Media Server
 License:        GPL-2.0-only AND MIT AND OFL-1.1
 Url:            https://gerbera.io
 Source0:        https://github.com/gerbera/gerbera/archive/v%{version}/%{name}-%{version}.tar.gz
+
 Source1:        config.xml
 Source2:        gerbera-sysusers.conf
 

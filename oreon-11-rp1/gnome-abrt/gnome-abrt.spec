@@ -1,4 +1,4 @@
-%global source0_hash 38fe08b8e1a3e5c6e7f2265be0e655804e0741258d753653d31bd8d36199f8e1
+%global source0_hash dab926fd6a18f9dc7d915a272219c09ff6dce2ed848fefd7d8b1130859b50ff9
 
 # TODO: https://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering
 #       rpmlint warns about private-shared-object-provides
@@ -88,5 +88,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/icons/hicolor/*/apps/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.3-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,11 +1,11 @@
-%global source0_hash 60f67a1af4894366df3b5b0fc5dac9a943764421f4c95fc83f542bb7afa33d4a
+%global source0_hash 484c0206b7cef812b7c00bcba0d3ab4c969452190b10e2a90e9d33d4c7d938dd
 
 # Removable test dependency, not yet packaged:
 # https://pypi.org/project/check-jsonschema
 %bcond check_jsonschema 0
 
 Name:           bids-schema
-Version:        1.2.7
+Version:        2.0.0
 Release:        %autorelease
 Summary:        BIDS schema description
 

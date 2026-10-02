@@ -1,4 +1,4 @@
-%global source0_hash 5a9fd8d8316f90cb2e1a5a8f0d411eb9fcaf85957a8229ea3e803e81004a1ebd
+%global source0_hash 019186a996096ef4fc356e21577b5673f5baa3a29ac8e3d608b753371c18018d
 
 Name:          zenity
 Version:       4.2.2
@@ -61,5 +61,4 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Zenity.desk
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

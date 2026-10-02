@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash adc04875b383256bcd5a412f6f249d363495ea037913ca8c96d723442be38383
 
 %global qt_module qtscxml
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - ScXml component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -134,5 +134,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

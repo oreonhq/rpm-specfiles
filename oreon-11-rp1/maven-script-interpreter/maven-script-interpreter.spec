@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 004651c18aef50c9f7ebde3c399da168ec465b04f3515fe6c3ebe0a321678518
 
 %bcond_with     groovy
 Name:           maven-script-interpreter
-Version:        1.8
+Version:        1.9
 Release:        1%{?dist}
 Summary:        Maven Script Interpreter
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
@@ -52,7 +52,6 @@ rm src/test/java/org/apache/maven/shared/scriptinterpreter/ScriptRunnerTest.java
 sed -i /GroovyScriptInterpreter/d src/main/java/org/apache/maven/shared/scriptinterpreter/ScriptRunner.java
 %endif
 
-%pom_xpath_set "pom:project/pom:properties/pom:javaVersion" "8" pom.xml
 
 %build
 %mvn_build
@@ -68,5 +67,4 @@ sed -i /GroovyScriptInterpreter/d src/main/java/org/apache/maven/shared/scriptin
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-15
-- Import
+%autochangelog

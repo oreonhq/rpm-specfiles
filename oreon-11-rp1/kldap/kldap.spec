@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 496cabade483caaea19f77cfa63047c3c0a2ee4dfc9bfe2e810dcffcc08af155
 
 Name:    kldap

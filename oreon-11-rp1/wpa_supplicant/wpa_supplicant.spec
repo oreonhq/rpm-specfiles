@@ -1,4 +1,4 @@
-%global source0_hash 912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a
+%global source0_hash 08e23937e16d0155e55cab2b51f51fbe10d80a1aa91c4e15442645059b737ef6
 
 %global _hardened_build 1
 %if 0%{?fedora}
@@ -48,11 +48,8 @@ Patch10: wpa_supplicant-Revert-Mark-authorization-completed-on-driver-indica.pat
 # Move signal strength change messages to debug to drastically reduce logging spew
 # see https://bugzilla.redhat.com/2309148
 # From: https://w1.fi/cgit/hostap/commit/?id=c330b5820eefa8e703dbce7278c2a62d9c69166a
-Patch11: wpa_supplicant-Send-signal-change-as-debug-msg.patch
 # use pkcs11-provider instead of OpenSSL engine
-Patch12: wpa_supplicant-OpenSSL-Use-pkcs11-provider-when-OPENSSL_NO_ENGINE-i.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2439303
-Patch13: wpa_supplicant-OpenSSL-Support-PEM-encoded-chain-from-ca_cert-blob.patch
 
 URL: http://w1.fi/wpa_supplicant/
 
@@ -224,5 +221,4 @@ chmod -R 0644 wpa_supplicant/examples/*.py
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,5 @@
-%global source0_hash 1cb944a4b88847f5fb6551683bc799db59f04990f5d8be07aba2acbf38601089
+%global source1_hash eb030aa6dc372a5e30685ae18519f29c85b39c85827cd6ed959f757e82ce2230
+%global source0_hash 8059eadb6805340768f138c465b57f8164c92b4a0773c37ef031ea6c0d987b2e
 %global source3_hash 29e56e326f716fe1adfb2454aed6dce891d71186795f835543c560676a599889
 
 %global test_sha 03a4b9eb854a06a83c465e82de601796c458bbe9
@@ -19,7 +20,7 @@
 
 Summary: PDF rendering library
 Name:    poppler
-Version: 26.08.0
+Version: 26.09.0
 Release: %autorelease
 License: (GPL-2.0-only OR GPL-3.0-only) AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://poppler.freedesktop.org/
@@ -34,7 +35,6 @@ Patch1:  poppler-0.90.0-position-independent-code.patch
 
 Patch2:  poppler-21.01.0-glib-introspection.patch
 
-Patch3:  poppler-26.01.0-climits.patch
 
 BuildRequires: make
 BuildRequires: cmake
@@ -299,5 +299,4 @@ test "$(pkg-config --modversion poppler-qt6)" = "%{version}"
 %{_mandir}/man1/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-1
-- Import
+%autochangelog

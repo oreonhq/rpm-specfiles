@@ -1,4 +1,4 @@
-%global source0_hash 49b934001c8c6aedb37ba19daec5c634da27b318a7a3c654ae979d6ba1929b67
+%global source0_hash 708a5d52ec2945b50f8f53a181174aa1ef2c496edf81c05957fe956dabb363d5
 
 %global gem_name diff-lcs
 
@@ -7,15 +7,14 @@
 %{!?_with_bootstrap: %global bootstrap 0}
 
 Name: rubygem-%{gem_name}
-Version: 1.5.0
-Release: 10%{?dist}
+Version: 2.0.0
+Release: %autorelease
 Summary: Provide a list of changes between two sequenced collections
 License: MIT OR Artistic-2.0 OR GPL-2.0-or-later
 URL: https://github.com/halostatue/diff-lcs
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # https://github.com/halostatue/diff-lcs/pull/97
 # Remove unneeded ostruct dep
-Patch0:  diff-lcs-pr97-remove-ostruct-dep.patch
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby
@@ -41,7 +40,6 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version}
-%patch -P0 -p1
 
 %build
 # Create the gem as gem install only works on a gem file
@@ -96,5 +94,4 @@ popd
 %{gem_instdir}/spec
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

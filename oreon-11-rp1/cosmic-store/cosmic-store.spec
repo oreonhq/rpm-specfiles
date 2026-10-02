@@ -1,4 +1,4 @@
-%global source0_hash 626686e9728420519d36e8639390c88ce323ca342d085c264690923031ae5760
+%global source0_hash 4c736700bbca173ca7d06738fe6f2e74c053abbea676bf083303a72984469a09
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -13,7 +13,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-store
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        App store for the COSMIC Desktop Environment
 
@@ -22,6 +22,7 @@ License:        ((Apache-2.0 OR MIT) AND BSD-3-Clause) AND (0BSD OR Apache-2.0 O
 URL:            https://github.com/pop-os/cosmic-store
 
 Source0:        https://github.com/pop-os/cosmic-store/archive/epoch-%{version}/cosmic-store-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-store at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

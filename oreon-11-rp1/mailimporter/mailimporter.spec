@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash eb99de68d8f5febe3d9eef8e6a793f9bdf62f54ad016fabe78f564d90e7a2db4
 
 Name:    mailimporter

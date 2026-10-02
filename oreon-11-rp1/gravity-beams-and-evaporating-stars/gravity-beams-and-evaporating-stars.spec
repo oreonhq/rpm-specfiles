@@ -22,7 +22,7 @@ BuildRequires: desktop-file-utils
 BuildRequires: gcc-c++
 BuildRequires: libappstream-glib
 BuildRequires: make
-BuildRequires: SFML-devel
+BuildRequires: SFML2-devel
 
 Requires: hicolor-icon-theme
 
@@ -45,9 +45,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -e 's|__DATA_DIR__|"%{_datadir}/%{name}"|' -i src/main.cpp
 
 %build
+# SFML 2.x API: use the SFML2 compat package
+export PKG_CONFIG_PATH=%{_libdir}/SFML2/pkgconfig
+export CXXFLAGS="%{optflags} -I%{_includedir}/SFML2"
+export LDFLAGS="%{?build_ldflags} -L%{_libdir}/SFML2"
 # TODO: Please submit an issue to upstream (rhbz#2380630)
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
-%cmake
+%cmake -DSFML_DIR=%{_libdir}/cmake/SFML2 -DSFML_ROOT=%{_prefix}
 %cmake_build
 
 %install

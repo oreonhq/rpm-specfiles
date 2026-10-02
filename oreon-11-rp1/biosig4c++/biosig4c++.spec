@@ -1,4 +1,4 @@
-%global source0_hash 558ee17cd7b4aa1547e98e52bb85cccccb7f7a81600f9bef3a50cd5b34d0729e
+%global source0_hash 9d7298cb6e466eb3b9eb7f4c8bc501dc4c3a71dcdf2f4156bad0ca9797220422
 
 %global _description %{expand:
 BioSig is a software library for processing of biomedical signals (EEG, ECG,
@@ -8,7 +8,7 @@ supporting more than 30 different data formats is also provided.}
 %global pretty_name biosig
 
 Name:       biosig4c++
-Version:    3.9.7
+Version:    3.9.8
 Release:    %autorelease
 Summary:    A software library for processing of biomedical signals
 
@@ -16,6 +16,7 @@ Summary:    A software library for processing of biomedical signals
 License:    GPL-3.0-or-later
 URL:        https://sourceforge.net/projects/%{pretty_name}/
 Source:     https://downloads.sourceforge.net/project/%{pretty_name}/BioSig%20for%20C_C%2B%2B/src/%{pretty_name}-%{version}.src.tar.xz
+
 
 # Drop i686
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval

@@ -35,8 +35,13 @@
 %global spatialite "--with-spatialite"
 %endif
 
-%if 0%{?fedora} || (0%{?oreon} >= 11)
+%if 0%{?fedora} && ! 0%{?oreon}
 %bcond_without mingw
+%else
+%bcond_with mingw
+%endif
+
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without python3
 %ifarch %{java_arches}
 %bcond_without java

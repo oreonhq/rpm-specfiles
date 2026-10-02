@@ -1,4 +1,4 @@
-%global source0_hash 94337f64dfc2d461adf9d3a7c6db9d0e4174ae314a061108713b2e8e7f28fe0a
+%global source0_hash 0983e3e7593b87ccb65ef9470034b310d05fbc638386e7b82b0d97676c19e008
 
 %bcond_with bootstrap
 
@@ -79,5 +79,4 @@ cp -p ./src/main/java/*.dtd.html ./src/main/resources/.
 %license LICENSE.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.8.0-1
-- Import
+%autochangelog

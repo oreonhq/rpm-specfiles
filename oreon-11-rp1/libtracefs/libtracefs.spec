@@ -1,4 +1,4 @@
-%global source0_hash d295aa20d711c313a9e229dbd15ba14026f0c1a50d57ae8b0823cc561b23745f
+%global source0_hash a9cd9cbae81b7fff71b3f72d2b819e49cec0402529e5f252e1d9319a62a356cb
 
 Name: libtracefs
 Version: 1.8.3
@@ -54,5 +54,4 @@ rm -rf %{buildroot}/%{_libdir}/libtracefs.a
 %{_libdir}/%{name}.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

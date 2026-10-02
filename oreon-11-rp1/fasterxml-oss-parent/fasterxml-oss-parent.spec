@@ -1,15 +1,14 @@
-%global source0_hash 088dc709b8d6d1494044f743a7f0a5cd4e6bf71da06a8fea9769e236dc29b684
-
+%global source0_hash 12144af57225dd8214139ae08b71bf47d1f76634fdcaf4338fa3960105601b90
 %global srcname oss-parent
 
 Name:          fasterxml-oss-parent
-Version:       62
-Release:       6%{?dist}
+Version:       75
+Release:       1%{?dist}
 Summary:       FasterXML parent pom
 License:       Apache-2.0
 
 URL:           https://github.com/FasterXML/oss-parent
-Source0:        https://github.com/FasterXML/oss-parent/archive/refs/tags/oss-parent-62.tar.gz#/fasterxml-oss-parent-62.tar.gz
+Source0:       %{url}/archive/%{srcname}-%{version}.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires: maven-local
@@ -36,7 +35,7 @@ and extension.
 This package contains the parent pom file for FasterXML.com projects.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{srcname}-%{srcname}-%{version}
 
 # Stuff unnecessary for RPM builds
@@ -47,6 +46,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin :maven-scm-plugin
 %pom_remove_plugin :maven-site-plugin
 %pom_remove_plugin :jdepend-maven-plugin
+%pom_remove_plugin :central-publishing-maven-plugin
 %pom_xpath_remove "pom:build/pom:extensions"
 
 %build
@@ -60,5 +60,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 62-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

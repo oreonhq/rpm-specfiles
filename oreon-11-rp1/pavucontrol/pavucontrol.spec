@@ -1,4 +1,4 @@
-%global source0_hash 0dce61c1088eafa04c270e1fb79eb7aff47e98567f7d28c65a7bee6cd24e415d
+%global source0_hash e93a7836c7307dcbc989e95fc7ec0878322514c475fabd90e89ed52fd4f15d32
 
 Name:           pavucontrol
 Version:        6.2
@@ -54,5 +54,4 @@ appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/org.pulseau
 %{_metainfodir}/org.pulseaudio.pavucontrol.metainfo.xml
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

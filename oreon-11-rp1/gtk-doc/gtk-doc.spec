@@ -1,23 +1,16 @@
-%global source0_hash 611c9f24edd6d88a8ae9a79d73ab0dc63c89b81e90ecc31d6b9005c5f05b25e2
+%global source0_hash 2facfb530ddcd20c03ed4758ef934e832626c393e2cacd23fc1249b7ed0e4246
 
 %global debug_package %{nil}
 
 Name: gtk-doc
-Version: 1.36.1
+Version: 1.37.0
+%global source_series %(echo %{version} | cut -d. -f1-2)
 Release: 1%{?dist}
 Summary: API documentation generation tool for GTK+ and GNOME
 
 License: GPL-2.0-or-later AND GFDL-1.1-no-invariants-or-later
 URL: https://gitlab.gnome.org/GNOME/gtk-doc/
-Source0:        http://download.gnome.org/sources/%{name}/1.35/%{name}-%{version}.tar.xz
-
-# Resolve FTBFS, unclear if solution is 'proper'
-# https://gitlab.gnome.org/GNOME/gtk-doc/-/issues/150
-Patch: https://gitlab.gnome.org/GNOME/gtk-doc/-/merge_requests/74.patch
-
-# Update CMake minimum version from 3.2 to 3.12: support CMake 4.0
-# https://gitlab.gnome.org/GNOME/gtk-doc/-/merge_requests/101
-Patch: https://gitlab.gnome.org/GNOME/gtk-doc/-/merge_requests/101.patch
+Source0:        https://download.gnome.org/sources/%{name}/%{source_series}/%{name}-%{version}.tar.xz
 
 BuildRequires: dblatex
 BuildRequires: docbook-utils
@@ -80,5 +73,4 @@ mv doc/README doc/README.docs
 %{_libdir}/cmake/GtkDoc/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.35.1-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

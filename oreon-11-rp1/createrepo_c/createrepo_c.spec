@@ -1,4 +1,4 @@
-%global source0_hash 5252911bb5ab0732922e298348a94f0e348e0891935ff0876042ac1bd8c5eeed
+%global source0_hash 4c980c2b5938694d36ab3117eb286b9ffa7187c768ac66e7805662a3dd22edf1
 
 %global libmodulemd_version 2.3.0
 
@@ -47,13 +47,6 @@ Release:        1%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/createrepo_c
 Source0:        https://github.com/rpm-software-management/createrepo_c/archive/refs/tags/1.2.4.tar.gz#/createrepo_c-1.2.1.tar.gz
-Patch1:         0001-Fix-libname-of-Libs.private.patch
-Patch2:         0002-Use-IMPORTED_TARGET-for-3rd-party-dependencies.patch
-Patch3:         0003-Don-t-try-to-use-imported-targets-of-turned-off-depe.patch
-Patch4:         0004-spec-require-cmake-3.7.0.patch
-Patch5:         0005-Include-unistd.h-for-STDOUT_FILENO.patch
-Patch6:         0006-Use-RPMTAG_SHA1HEADER-instead-of-RPMTAG_HDRID.patch
-Patch7:         0007-spec-Consistently-use-CMake-RPM-macros.patch
 
 %global epoch_dep %{?epoch:%{epoch}:}
 
@@ -223,5 +216,4 @@ ln -sr %{buildroot}%{_bindir}/modifyrepo_c %{buildroot}%{_bindir}/modifyrepo
 %{python3_sitearch}/%{name}-*-py%{python3_version}.egg-info
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{package_version}-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

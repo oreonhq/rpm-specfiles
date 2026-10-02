@@ -1,4 +1,4 @@
-%global source0_hash a250227eba47c6ad5aa32b9a72281343762f5d274ff38c53c2f43df5c63af3ec
+%global source0_hash 85839e0f39e6cb893a88932aa36ef661759f3c5c5de4551ad26bd9df53cb71a2
 
 # build Rust binary and extensions for non-Enterprise Linux systems
 %if ! 0%{?rhel} || (0%{?oreon} >= 11)
@@ -282,5 +282,4 @@ rm -rf %{buildroot}%{python3_sitearch}/mercurial/locale
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.2-1
-- Import
+%autochangelog

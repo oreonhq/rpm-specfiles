@@ -1,4 +1,5 @@
-%global source0_hash 457fdb04dc8728e007d4688695e6912e6f680727920f2a40bf11eacc17505357
+%global source1_hash bee7d2f96844063557b07b43811d81e1fc54563e0da2c36a975dfd432b196a5c
+%global source0_hash 26c56c296b38c0695b26fa95f475f1d01704d2d38e73465ca30b0b2f5dc789d3
 
 # Pass --without docs to rpmbuild if you don't want the documentation
 %bcond_without docs
@@ -80,7 +81,7 @@
 %global _package_note_file  %{_builddir}/%{name}-%{real_version}/.package_note-%{name}-%{version}-%{release}.%{_arch}.ld
 
 Name:           git
-Version:        2.55.0
+Version:        2.56.0
 Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT

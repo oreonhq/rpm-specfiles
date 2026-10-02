@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6919153c841478c113f0ad20526f40e606590968334762ec6ccbc96002f8da19
 
 %global qt_module qtquicktimeline
 
@@ -9,8 +9,8 @@
 
 Summary: Qt6 - QuickTimeline plugin
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -93,8 +93,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_qt6_libdir}/pkgconfig/*.pc
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

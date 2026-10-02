@@ -1,4 +1,4 @@
-%global source0_hash fa15735edc4b3d27675d954b5703e36a158f19cfa4f265aa5388cd33aede1c70
+%global source0_hash 6e36c15dbb84ff859320297c900852f241b131a7b6ddaea669ac9a65bd75571c
 
 # from https://www.unicode.org/Public files (unicode-ucd pkg)
 %global unicodedir  /usr/share/unicode
@@ -50,8 +50,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -p1
 chmod a-x -v docs/*
-ln -s %{ucddir}/UnicodeData.txt
-ln -s %{ucddir}/SpecialCasing.txt
+ln -sf %{ucddir}/UnicodeData.txt
+ln -sf %{ucddir}/SpecialCasing.txt
 
 %build
 %make_build release prefix="%{_prefix}" libdir="%{_libdir}" CFLAGS="%{build_cflags} %{build_ldflags}"

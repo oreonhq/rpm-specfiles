@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 12ef075c6df73637948cdce7725bb8380ccd164b158157d495e6821804ce4a7f
 
 %global _lto_cflags %{nil}

@@ -1,4 +1,4 @@
-%global source0_hash aeb951964c2f7ecc08174cb5517962d157595e9e3f38fc4a130b91dc2f9fec18
+%global source0_hash acc4d5f7c3cbba5f9f8d08d8bdbeede84ecede46792f47929aa9321873385528
 
 %global tarball_name xkbcommon
 
@@ -9,7 +9,7 @@ Summary:        X.Org X11 XKB parsing library
 License:        MIT AND X11 AND MIT-CMU
 URL:            http://www.x.org
 
-Source0:        https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/%{tarball_name}-%{version}.tar.gz#/libxkbcommon-1.13.1.tar.gz
+Source0:        https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/%{tarball_name}-%{version}.tar.gz#/libxkbcommon-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  git meson
 BuildRequires:  byacc flex bison
@@ -134,5 +134,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man1/xkbcli-dump-keymap-x11.1.gz
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.13.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

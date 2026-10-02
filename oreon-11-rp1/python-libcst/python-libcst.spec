@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 087b58a9afe076bb08e2d726478e1f16cb928d67ffa9092817e033c335de522a
 
 Name:           python-libcst
 Version:        1.9.0

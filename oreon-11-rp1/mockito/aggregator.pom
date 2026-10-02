@@ -10,7 +10,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <modules>
-    <module>.</module>
-    <module>subprojects/junit-jupiter</module>
+    <module>mockito-core</module>
+    <module>mockito-extensions/mockito-junit-jupiter</module>
   </modules>
 </project>

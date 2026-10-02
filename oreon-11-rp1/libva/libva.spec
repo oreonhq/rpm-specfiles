@@ -1,4 +1,4 @@
-%global source0_hash b10aceb30e93ddf13b2030eb70079574ba437be9b3b76065caf28a72c07e23e7
+%global source0_hash 0b4a3649ee8d683b9cce2ef094df4fb039d276c0cef7e49337c43d3b297b9f42
 
 #global pre_release .pre1
 
@@ -91,5 +91,4 @@ mkdir -p %{buildroot}%{_libdir}/dri-{freeworld,nonfree}
 %{_libdir}/pkgconfig/libva*.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.23.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

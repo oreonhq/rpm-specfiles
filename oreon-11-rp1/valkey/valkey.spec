@@ -1,4 +1,4 @@
-%global source0_hash e220f4b0143292ee6ea6d705aa40d45a0c8a77759b3e94c201cb5c25dbdca42f
+%global source0_hash 19c23908e7d57e8d91ef85b41f5646307582f10f4f0fb999bbf89ed24ec9c983
 %global source50_hash c0b56c1d0b0e9b5d69b309d2afd404b090bc77ab174a55d5435aceea9e0dfbb1
 
 # Docs require pandoc, which is not included in RHEL
@@ -38,7 +38,6 @@ Patch0:            %{name}-conf.patch
 Patch1:            %{name}-loadmod.patch
 # Properly inherits linker flags for modules
 # See https://github.com/valkey-io/valkey/pull/3344
-Patch2:            %{name}-bindnow.patch
 
 BuildRequires:     make
 BuildRequires:     gcc
@@ -192,7 +191,6 @@ test "%{source50_hash}" = "none" || { f="%{SOURCE50}"; test -f "$f" || { echo "o
 %setup -n %{name}-%{version} -a50
 %patch -P0 -p1 -b .rpm
 %patch -P1 -p1 -b .loadmod
-%patch -P2 -p1 -b .bindnow
 
 mv deps/lua/COPYRIGHT             COPYRIGHT-lua
 mv deps/jemalloc/COPYING          COPYING-jemalloc
@@ -452,5 +450,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.0.3-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

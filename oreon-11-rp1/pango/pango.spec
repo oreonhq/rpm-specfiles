@@ -1,4 +1,4 @@
-%global source0_hash 890640c841dae77d3ae3d8fe8953784b930fa241b17423e6120c7bfdf8b891e7
+%global source0_hash f138f964a8390c8aecc6c79dc18756989cc2d4db624b12f94a01a92ec57111ff
 
 %global glib2_version 2.80
 %global fribidi_version 1.0.6
@@ -10,13 +10,13 @@
 %global freetype_version 2.1.5
 
 Name:    pango
-Version: 1.58.2
+Version: 1.90.0
 Release: %autorelease
 Summary: System for layout and rendering of internationalized text
 
 License: LGPL-2.0-or-later
 URL:     https://pango.gnome.org/
-Source0:        https://download.gnome.org/sources/%{name}/1.57/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/1.90/%{name}-%{version}.tar.xz
 
 BuildRequires: pkgconfig(cairo) >= %{cairo_version}
 BuildRequires: pkgconfig(cairo-gobject) >= %{cairo_version}
@@ -142,5 +142,4 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.57.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

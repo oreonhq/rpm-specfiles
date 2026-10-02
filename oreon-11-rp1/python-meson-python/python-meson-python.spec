@@ -1,7 +1,7 @@
-%global source0_hash 78b3345dcbc0fed7b939e7e37a9faab35bddaae07bf62e7542c8ad479c395af5
+%global source0_hash 9c819d0d4efa746edadfaae4663c0e9c75659186ef7e5bab12330bfe22964dfc
 
 Name:           python-meson-python
-Version:        0.21.1
+Version:        0.22.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The Python build backend for Meson projects
@@ -14,13 +14,12 @@ Source:         %{pypi_source meson_python}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  patchelf
 
 
 # Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
 This is package 'meson-python' generated automatically by pyp2spec.}
-
-Patch100:        meson-python-0.18.0-remove-patchelf.patch
 
 %description %_description
 

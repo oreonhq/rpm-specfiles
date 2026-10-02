@@ -1,4 +1,4 @@
-%global source0_hash 9781e59410ab7dea8e9f79bb10ff1488e63d10fcbb70503b94426ba27a8e2dec
+%global source0_hash 4c2fa124c2cf0afd7ca34d1eeacba6ba048a56f6374e2aab93dafbdbd4eea9c0
 
 Summary:            Advanced IP routing and network device configuration tools
 Name:               iproute
@@ -158,5 +158,4 @@ fi
 %{_includedir}/iproute2/bpf_elf.h
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.17.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

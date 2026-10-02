@@ -1,4 +1,4 @@
-%global source0_hash b660b34ea175443404fc109cf2a1d20f699f0d62358d44807079600962c413ed
+%global source0_hash 6cd92e2597c35801e4ad9e2b62713db42d8884ef0d9c75d522bca3fbd78b1821
 
 # systemd units for snapper
 %global snapper_svcs snapper-boot.service snapper-boot.timer snapper-cleanup.service snapper-cleanup.timer snapper-timeline.service snapper-timeline.timer snapperd.service
@@ -192,3 +192,6 @@ done
 %{_libdir}/security/pam_snapper.so
 %{_prefix}/lib/pam_snapper/
 %{_mandir}/man8/pam_snapper.8*
+
+%changelog
+%autochangelog

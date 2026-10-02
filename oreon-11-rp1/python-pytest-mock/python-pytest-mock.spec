@@ -1,17 +1,17 @@
-%global source0_hash 1849a238f6f396da19762269de72cb1814ab44416fa73a8686deac10b0d87a0f
+%global source0_hash 5a8395528b8f498205f3718f575228d0edaed7425fff638f87d1a6c3e0383636
 
 %global pypi_name pytest_mock
 %global package_name pytest-mock
 %global file_name pytest_mock
 
 Name:           python-%{package_name}
-Version:        3.15.1
-Release:        2%{?dist}
+Version:        3.16.0
+Release:        1%{?dist}
 Summary:        Thin-wrapper around the mock package for easier use with py.test
 
 License:        MIT
 URL:            https://github.com/pytest-dev/pytest-mock/
-Source0:        https://files.pythonhosted.org/packages/source/p/pytest_mock/pytest_mock-3.15.1.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_mock/pytest_mock-3.16.0.tar.gz
 
 BuildArch:      noarch
 
@@ -67,5 +67,4 @@ sed -i 's/\r$//' README.rst
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.15.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

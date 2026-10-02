@@ -11,7 +11,7 @@ Release:        %autorelease
 Summary:        Microsoft Azure Text Analytics Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version} zip}
+Source0:        %{pypi_source azure_ai_textanalytics %{version}}
 
 BuildArch:      noarch
 

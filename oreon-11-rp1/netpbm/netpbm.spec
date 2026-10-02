@@ -1,9 +1,9 @@
-%global source0_hash f1cfcfab1846e63d7d6dab8b60edabdb66b1a5f34cacb98c6b9771a7e34ef153
+%global source0_hash 4f7609286f9b0e1b80699e69cb031244a2009357e0ae83acf7d689f9f5012448
 
 Summary:         A library for handling different graphics file formats
 Name:            netpbm
-Version:         11.13.00
-Release:         2%{?dist}
+Version:         11.16.00
+Release:         1%{?dist}
 # See copyright_summary for details
 License:         BSD-3-Clause AND GPL-2.0-only AND LGPL-2.1-or-later AND GPL-3.0-or-later AND IJG AND MIT AND NTP AND PostgreSQL AND LicenseRef-MIT-CRL-Xim AND LicenseRef-Public-Domain
 URL: http://netpbm.sourceforge.net/
@@ -29,7 +29,6 @@ Patch13:        netpbm-pamtojpeg2k.patch
 Patch14:        netpbm-manfix.patch
 Patch15:        netpbm-jasper.patch
 Patch16:        netpbm-libdir-so.patch
-Patch17:        netpbm-c99.patch
 Patch18:        netpbm-shlib-ldflags.patch
 
 BuildRequires:   make
@@ -233,5 +232,4 @@ popd
 %doc userguide/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11.13.00-2
-- Import
+%autochangelog

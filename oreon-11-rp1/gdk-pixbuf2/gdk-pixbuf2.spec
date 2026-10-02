@@ -1,4 +1,4 @@
-%global source0_hash 69b93e09139b80c0ee661503d60deb5a5874a31772b5184b9cd5462a4100ab68
+%global source0_hash 919f529512961a12e81cd4b4b466a48c3933469e7f9a310c6513cd4fb252ba3c
 
 %global glib2_version 2.56.0
 %global glycin_version 2.0.1

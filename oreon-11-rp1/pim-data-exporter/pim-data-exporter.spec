@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash d1e7c7ffeb8c1339d2214e7b368a5abb3db6f836115fec4cedb8fc3c18193af4
 
 Name:    pim-data-exporter

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ba8886a54eee466e57c9fa1341255cc09c462c84baab3ee7b19d67cdbcbd71c3
 
 %global qt_module qtserialport
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - SerialPort component
 Name:    qt6-%{qt_module}
-Version: 6.11.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -111,5 +111,4 @@ popd
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-initial-setup
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Initial setup application for the COSMIC desktop environment
 

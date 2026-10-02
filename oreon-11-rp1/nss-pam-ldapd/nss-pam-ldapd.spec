@@ -1,4 +1,4 @@
-%global source0_hash 809d5692ed1e58ad31b04a41c091cab22a79b53c6f9a4c65ecfc5d6c32ab0ab3
+%global source0_hash e01784e17cb533bb66bd0601e205e785263445c3c2df7a6f90232ab4131c716d
 
 %global nssdir /%{_lib}
 %global pamdir /%{_lib}/security
@@ -114,5 +114,4 @@ install -m0644 -D nss-pam-ldapd.sysusers.conf %{buildroot}%{_sysusersdir}/nss-pa
 %systemd_postun_with_restart nslcd.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.10-22
-- Prepare for Oreon 11 (RP1)
+%autochangelog

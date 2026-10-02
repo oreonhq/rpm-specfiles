@@ -1,4 +1,4 @@
-%global source0_hash 82d0399bce74d162fba75b3568ad47bf48ed2c5e028b72026bdc2f678903de7d
+%global source0_hash 5507d69b42ac7211e5db57b42f427376b2cf3e3ab9a72b9239f4fc243566869d
 
 # main package is archful to run tests everywhere but produces noarch packages
 %global         debug_package %{nil}
@@ -67,5 +67,4 @@ popd
 %{_bindir}/pyreadelf-3
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.32-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

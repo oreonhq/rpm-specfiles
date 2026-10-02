@@ -1,4 +1,4 @@
-%global source0_hash b5cac76c4a6945bdcf25857f187168147fde3402b33a6b1a3b1c00361719982c
+%global source0_hash f189992a5387212db9fb25ee19ed449b9249b47bfad23fad038fe5782124f25e
 
 Name:           lucene
 Version:        10.5.1
@@ -308,5 +308,4 @@ popd
 %files suggest -f .mfiles-lucene-suggest
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.3.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

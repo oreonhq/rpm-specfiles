@@ -1,4 +1,4 @@
-%global source0_hash 494abfce781418259b1e9d8888c73af4de4b6f3be36cc75d9baa8baa0f2a7a39
+%global source0_hash b189ee636e839d12c00dabefae099fd488ab2358dec24d264761c011950b02a9
 
 Name:           mm-common
 Version:        1.0.8
@@ -56,5 +56,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_docdir}/%{name}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.7-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

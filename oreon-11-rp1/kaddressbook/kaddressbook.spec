@@ -1,4 +1,4 @@
-%global source0_hash 300e313205d6eb83ac9ba134f9d333741e96ed1518342cd63d06a0234ed3d9dc
+%global source0_hash fb37324db737ccdb3f8680ed7b1f03ac24418aeb6f1545e78486c2b9b05cdec9
 
 %global stable_kf6 stable
 
@@ -112,5 +112,4 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
-- Import
+%autochangelog

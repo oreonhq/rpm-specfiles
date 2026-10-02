@@ -1,4 +1,4 @@
-%global source0_hash b20ea65afc5a58ea1cea019bd51a5d84eb9042d25d3eb82c55010c8815732d84
+%global source0_hash 6253aee14e573f747ca77e5a83a0df4ef9c2f609604f56715070ed06b6f9ddd8
 
 %global with_debug 1
 
@@ -65,7 +65,7 @@ Epoch: 5
 # If that's what you're reading, Version must be 0, and will be updated by Packit for
 # copr and koji builds.
 # If you're reading this on dist-git, the version is automatically filled in by Packit.
-Version: 6.1.2
+Version: 6.1.3
 # The `AND` needs to be uppercase in the License for SPDX compatibility
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MIT AND MPL-2.0
 Release: %autorelease
@@ -397,5 +397,4 @@ ln -s ../qemu-kvm %{buildroot}%{_libexecdir}/%{name}/qemu-system-%{arch}
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5:5.8.2-1
-- Import
+%autochangelog

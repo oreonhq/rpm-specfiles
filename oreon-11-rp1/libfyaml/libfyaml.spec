@@ -1,4 +1,4 @@
-%global source0_hash 9f813cad43777803dc3618d31a2efe3a03fafacf2592fabb383fffa5e185f2ce
+%global source0_hash 2d016379a69f6cf6beaf06d12bcefe1ad1784bab28fbb41a6fa8d49d25f1bc0a
 
 Name:           libfyaml
 Version:        0.9.6
@@ -9,7 +9,6 @@ URL:            https://github.com/pantoniou/libfyaml
 Source0:        https://github.com/pantoniou/libfyaml/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        LICENSE-GPL-2.0
 Source2:        LICENSE-BSD-2-Clause
-Patch0:         obsolete-macros-update.patch
 
 BuildRequires: autoconf
 BuildRequires: automake
@@ -86,3 +85,6 @@ make check
 %{_includedir}/libfyaml.h
 %{_libdir}/libfyaml.so
 %{_libdir}/pkgconfig/libfyaml.pc
+
+%changelog
+%autochangelog

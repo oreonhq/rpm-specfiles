@@ -1,8 +1,9 @@
-%global source0_hash c7a9309394c3d533dc954e4e6e78590644da4eee5259becba692780ee392cc76
+%global source1_hash a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499
+%global source0_hash 7892327f038ec9e36880bd387618d8a10256948c76b47bbb9426fc90cbee1746
 
 Name:           jboss-parent
-Version:        20
-Release:        27%{?dist}
+Version:        54
+Release:        1%{?dist}
 Summary:        JBoss Parent POM
 License:        CC0-1.0
 URL:            http://www.jboss.org/
@@ -30,11 +31,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n %{name}-pom-%{name}-%{version}
 
 # NOT available plugins
-%pom_remove_plugin :maven-clover2-plugin
 %pom_remove_plugin :cobertura-maven-plugin
 %pom_remove_plugin :findbugs-maven-plugin
 %pom_remove_plugin :javancss-maven-plugin
-%pom_remove_plugin :jdepend-maven-plugin
 %pom_remove_plugin :license-maven-plugin
 %pom_remove_plugin :sonar-maven-plugin
 
@@ -55,5 +54,4 @@ sed -i 's/\r//' LICENSE
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20-27
-- Prepare for Oreon 11 (RP1)
+%autochangelog

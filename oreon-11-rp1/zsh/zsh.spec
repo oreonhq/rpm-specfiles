@@ -1,4 +1,4 @@
-%global source0_hash 9b8d1ecedd5b5e81fbf1918e876752a7dd948e05c1a0dba10ab863842d45acd5
+%global source0_hash 36fa734374b44783582cec09bcd67822e2f992c779ec1624ab5596df078d2f81
 
 Summary: Powerful interactive shell
 Name: zsh
@@ -16,25 +16,15 @@ Source6: dotzshrc
 Source7: dotzprofile
 
 # do not use egrep in tests to make them pass again
-Patch1: 0001-zsh-5.9-do-not-use-egrep-in-tests.patch
 # Upstream commit ab4d62eb975a4c4c51dd35822665050e2ddc6918
-Patch2: 0002-zsh-Use-int-main-in-test-c-codes.patch
 # upstream commit a84fdd7c8f77935ecce99ff2b0bdba738821ed79
-Patch3: 0003-zsh-fix-module-loading-problem-with-full-RELRO.patch
 # upstream commit 1b421e4978440234fb73117c8505dad1ccc68d46
-Patch4: 0004-zsh-enable-PCRE-locale-switching.patch
 # upstream commit b62e911341c8ec7446378b477c47da4256053dc0 and 10bdbd8b5b0b43445aff23dcd412f25cf6aa328a
-Patch5: 0005-zsh-port-to-pcre2.patch
 # upstream commit ecd3f9c9506c7720dc6c0833dc5d5eb00e4459c4
-Patch6: 0006-zsh-support-texinfo-7.0.patch
 # upstream commit 4c89849c98172c951a9def3690e8647dae76308f
-Patch7: 0007-zsh-configure-c99.patch
 # upstream commit d3edf318306e37d2d96c4e4ea442d10207722e94
-Patch8: 0008-zsh-deletefilelist-segfault.patch
 # upstream commit b70b241cc5ca88cc129ff9ba14f8af2e889b90e6
-Patch9: 0009-zsh-support-dnf5.patch
 # upstream commit 071e325c826a89b792056c3faf0c400b8c0c5738
-Patch10: 0010-zsh-fix-dnf5-completion-with-rpm-files.patch
 
 BuildRequires: autoconf
 BuildRequires: coreutils
@@ -181,5 +171,4 @@ fi
 %doc Doc/*.html
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.9-19
-- Prepare for Oreon 11 (RP1)
+%autochangelog

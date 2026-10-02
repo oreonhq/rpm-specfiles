@@ -1,11 +1,11 @@
-%global source0_hash 5dd241cf37a44818f407badce8b610e47ebd1d73c3d0847ca16a1d4ee78884ed
+%global source0_hash 6bbd5ee155f1958f0dab37a756b2175dc3debb2013c7d76115f4b062c431eb1f
 
 %global bouncycastleJdk 18
-%global bouncycastleVer 1.83
+%global bouncycastleVer 1.86
 
 Epoch:          1
 Name:           apache-sshd
-Version:        2.19.0
+Version:        2.20.0
 Release:        1%{?dist}
 Summary:        Apache SSHD
 
@@ -16,6 +16,7 @@ License:        Apache-2.0 AND ISC
 URL:            http://mina.apache.org/sshd-project
 
 Source0:        https://archive.apache.org/dist/mina/sshd/%{version}/apache-sshd-%{version}-src.tar.gz
+
 
 # Avoid optional dep on tomcat native APR library
 Patch0:         0001-Avoid-optional-dependency-on-native-tomcat-APR-libra.patch
@@ -29,7 +30,6 @@ BuildRequires:  mvn(org.apache.maven:maven-archiver)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-clean-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
-BuildRequires:  mvn(org.apache.maven.surefire:surefire-junit47)
 BuildRequires:  mvn(org.bouncycastle:bcpg-jdk%{bouncycastleJdk}on)
 BuildRequires:  mvn(org.bouncycastle:bcpkix-jdk%{bouncycastleJdk}on)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)

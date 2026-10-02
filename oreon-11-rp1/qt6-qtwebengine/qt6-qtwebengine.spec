@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 61257967afd9803a1db6403e86ea25c4efff8fad479bda365a9d81bfd709f621
 %global source20_hash 809668ffc296043779c984f53461c2b3987a45b7a25eb2f0a1d11d9f23ba4055
 
 %global qt_module qtwebengine
@@ -81,7 +81,7 @@
 
 # FIXME: we cannot use any ~rc or similar suffix as the build
 # would fail for having too long filename
-#global unstable 1
+%global unstable 1
 %if 0%{?unstable}
 %global prerelease rc
 %endif
@@ -90,8 +90,8 @@
 
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
-Version: 6.11.2
-Release:       1%{?dist}
+Version: 6.140.0
+Release:       %autorelease
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -102,7 +102,7 @@ URL:     http://www.qt.io
 %global  qt_version %(echo %{version} | cut -d~ -f1)
 
 %if 0%{?unstable}
-Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{qt_version}/submodules/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
+Source0: https://download.qt.io/development_releases/qtwebengine/%{qt_version}-%{prerelease}/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
 %else
 Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
@@ -472,7 +472,7 @@ Requires: qt6-qtsvg%{?_isa}
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source20_hash}" = "none" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source20_hash}" || { echo "oreon: Source20 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}}
+%setup -q -n %{qt_module}-everywhere-src-%{qt_version}
 mkdir -p pulse
 tar -xJf %{SOURCE20} pulseaudio-12.2/src/pulse
 mv pulseaudio-12.2/src/pulse pulse
@@ -856,5 +856,4 @@ done
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

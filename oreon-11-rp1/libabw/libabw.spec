@@ -1,4 +1,4 @@
-%global source0_hash e763a9dc21c3d2667402d66e202e3f8ef4db51b34b79ef41f56cacb86dcd6eed
+%global source0_hash fa2685a3440da6e03a66a778480d93cb95f6064e4541e58e37397680760fd6a0
 
 %global apiversion 0.1
 
@@ -102,5 +102,4 @@ install -m 0644 abw2*.1 %{buildroot}/%{_mandir}/man1
 %{_mandir}/man1/abw2html.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 0eebf8a6aee397b53ce1365ed6a27af5f7a348865c575ba7ac0f88787f7fa979
 
 # adblock requires rust and corrosion

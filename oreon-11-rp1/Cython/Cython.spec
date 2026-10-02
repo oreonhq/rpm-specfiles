@@ -1,4 +1,4 @@
-%global source0_hash 9631e586c49b9d3f72c3962c376119479a6a98e3c0e3c14d5218e199ef563b18
+%global source0_hash 405332595ffe256fb1d2e8311798de44d5e1a54883331d15484c2d6cc8446af2
 
 %if 0%{?oreon} || 0%{?rhel} || 0%{?fedora}
 %bcond_with tests
@@ -135,11 +135,4 @@ export CFLAGS="${CFLAGS} -g1"
 
 
 %changelog
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-3
-- default tests off on oreon (breaks numpy bootstrap cycle)
-
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-2
-- provide python3dist(Cython)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

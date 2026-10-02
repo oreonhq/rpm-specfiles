@@ -10,7 +10,7 @@ Summary:        Typing stubs for setuptools
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/python/typeshed
-Source:         %{pypi_source types-setuptools}
+Source:         %{pypi_source types_setuptools %{version}}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -29,7 +29,7 @@ Summary:        %{summary}
 
 
 %prep
-%autosetup -p1 -n types-setuptools-%{version}
+%autosetup -p1 -n types_setuptools-%{version}
 
 
 %generate_buildrequires

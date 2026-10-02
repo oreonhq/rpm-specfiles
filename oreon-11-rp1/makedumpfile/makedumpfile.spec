@@ -1,4 +1,4 @@
-%global source0_hash b54e88bef256c589eb4adce17bc856da898a762626fe54f76a77a7f22ad9a844
+%global source0_hash 755c454407f9bb0117bdc281c271a31dc89f80493d7edf2f7ff2432d278d0ac0
 
 %global eppic_ver 72da440362e20291d5ecbb04b6eb7c7b492f233c
 %global eppic_shortver %(c=%{eppic_ver}; echo ${c:0:7})
@@ -10,7 +10,7 @@ Release: 1%{?dist}
 License: GPL-2.0-only
 URL: https://github.com/makedumpfile/makedumpfile
 Source0:        https://github.com/makedumpfile/makedumpfile/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Source1:        https://github.com/lucchouina/eppic/archive/refs/tags/%{eppic_ver}.tar.gz#/eppic-%{eppic_shortver}.tar.gz
+Source1:        https://github.com/lucchouina/eppic/archive/%{eppic_ver}.tar.gz#/eppic-%{eppic_shortver}.tar.gz
 
 Conflicts: kexec-tools < 2.0.28-5
 BuildRequires: make
@@ -60,5 +60,4 @@ install -m 755 -D eppic_makedumpfile.so %{buildroot}/%{_libdir}/eppic_makedumpfi
 %license COPYING
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.8-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

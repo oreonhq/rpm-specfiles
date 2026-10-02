@@ -1,0 +1,8 @@
+--- a/test/units/requirements.txt
++++ b/test/units/requirements.txt
+@@ -1,4 +1,4 @@
+-bcrypt < 5 ; python_version >= '3.12'  # controller only, bcrypt 5+ not compatible with passlib
++bcrypt ; python_version >= '3.12'  # controller only
+ passlib ; python_version >= '3.12'  # controller only
+ pexpect ; python_version >= '3.12'  # controller only
+ pywinrm ; python_version >= '3.12'  # controller only

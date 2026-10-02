@@ -1,4 +1,4 @@
-%global source0_hash 84968cd669c02517d57dca998dc091a60998a52aef1793532508b7c22252cd9c
+%global source0_hash 61c6b1871b10cd7c2d768a58f3853cb78ae0be586824ef47a1db174f44a0c3e1
 
 %bcond_with bootstrap
 
@@ -34,14 +34,6 @@ A rich and intuitive set of strongly-typed assertions to use for unit testing
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n assertj-assertj-build-%{version}
 
-%pom_remove_plugin -r :maven-javadoc-plugin
-%pom_remove_plugin -r :maven-enforcer-plugin
-%pom_remove_plugin -r :jacoco-maven-plugin
-%pom_remove_plugin -r :spotless-maven-plugin
-%pom_remove_plugin -r :bnd-maven-plugin
-%pom_remove_plugin -r :bnd-resolver-maven-plugin
-%pom_remove_plugin -r :bnd-testing-maven-plugin
-%pom_remove_plugin -r :nexus-staging-maven-plugin
 %pom_remove_plugin -r :license-maven-plugin
 %pom_remove_plugin -r :flatten-maven-plugin
 %pom_remove_dep -r :mockito-bom
@@ -75,5 +67,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.26.3-1
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 36d6f53c2dd2caa5ce36858a89dd811966332177b01c50344ad7d9840880948b
+%global source0_hash 197da900aa08f60cb7c541241746771e90a1c1eb8e8e962241e3532d7fc334e5
 
 Name:           smc-tools
 Version:        1.8.8
@@ -69,5 +69,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.7-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

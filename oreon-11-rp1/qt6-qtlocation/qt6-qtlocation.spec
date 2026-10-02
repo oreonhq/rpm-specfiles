@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 218696d57c9eb95e8756e9fda62a8eabf94badc507db5f6e8ab9a640c4b0f50d
 
 %global qt_module qtlocation
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Location Libraries
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 2%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 # Rest of the licenses are for Qt code in src/location and src/plugins
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -127,11 +127,4 @@ popd
 %endif
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- bump release (retry failed build)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

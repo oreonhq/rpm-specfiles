@@ -1,4 +1,4 @@
-%global source0_hash 84754064c560fca6e1ab151dc64354fc235a5798f016b91b38c9617253a8cf11
+%global source0_hash 132575f3ef2712cd0fc8a7f0c9287ff5c4264d75921953220dd2089911272946
 
 %global glib2_version 2.45.8
 %global json_glib_version 1.1.2
@@ -129,5 +129,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man1/appstream-builder.1.gz
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

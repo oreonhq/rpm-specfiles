@@ -1,4 +1,4 @@
-%global source0_hash 9336f02ea99cfad359c78c50fdd9c3061aac7b31966abdc3223f56b3ed7cc377
+%global source0_hash 244cee0dcd93acfae18cb67bf08fd062a65a3fcf72c54e35e3848540d644bf82
 
 %global srcname esip
 
@@ -7,7 +7,7 @@
 %global stun_ver 1.2.14
 
 Name: erlang-%{srcname}
-Version: 1.0.60
+Version: 1.0.61
 Release: %autorelease
 License: Apache-2.0
 Summary: ProcessOne SIP server component in Erlang

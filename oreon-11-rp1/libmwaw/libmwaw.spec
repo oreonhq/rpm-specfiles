@@ -1,4 +1,4 @@
-%global source0_hash a1a39ffcea3ff2a7a7aae0c23877ddf4918b554bf82b0de5d7ce8e7f61ea8e32
+%global source0_hash ac3590f691a2904eb8c7dc8b757b8a29f125f592449e421459ae8fa928b399eb
 
 %global apiversion 0.3
 
@@ -110,5 +110,4 @@ install -m 0644 mwaw2*.1 %{buildroot}/%{_mandir}/man1
 %{_mandir}/man1/mwaw2text.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.22-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ede040264551d0930ea5f6c1a4c18a7a3dea59d635e71cd2e81f02567d7814a4
 
 %global qt_module qthttpserver
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - HTTP Server component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: BSD-3-Clause AND GFDL-1.3-no-invariants-only AND GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -112,5 +112,4 @@ popd
 
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Add qt6-qthttpserver (PySide6 / qt6-qtwebengine)
+%autochangelog

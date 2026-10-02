@@ -1,9 +1,9 @@
-%global source0_hash 643c6c350b58880a64bbbee16520378c564441f453223b0703eda1c210d6e096
+%global source0_hash d6564259fd52522de11149569bdceed7b0a14d39aeff3ea068840fb9686377ad
 
 %global gap_pkgname crystcat
 
 Name:           gap-pkg-%{gap_pkgname}
-Version:        1.1.11
+Version:        1.1.13
 Release:        %autorelease
 Summary:        Crystallographic groups catalog
 
@@ -11,6 +11,7 @@ License:        GPL-2.0-or-later
 URL:            https://www.math.uni-bielefeld.de/~gaehler/gap/packages.php
 VCS:            git:https://github.com/gap-packages/crystcat.git
 Source:         https://www.math.uni-bielefeld.de/~gaehler/gap/CrystCat/%{gap_upname}-%{version}.tar.gz
+
 
 BuildArch:      noarch
 BuildSystem:    gap

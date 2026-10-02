@@ -1,11 +1,12 @@
-%global source0_hash none
+%global source0_hash c1575341fa7bd40f5274ea465b34390f4dc64cdd0770af327005caaeb9f6b7ed
+%global source1_hash be680cd4ef78048fd846aeb5e13b5b2f19bd5a3505ed2f2994ae52e4090bfc53
 
 %global majorversion 16
 
 Summary: ECPG - Embedded SQL in C
 Name: libecpg
-Version: %majorversion.4
-Release: 4%{?dist}
+Version: %majorversion.15
+Release: 1%{?dist}
 
 License: PostgreSQL
 Url: http://www.postgresql.org/
@@ -29,7 +30,7 @@ BuildRequires: krb5-devel
 BuildRequires: openldap-devel
 BuildRequires: libpq-devel
 BuildRequires: gettext
-BuildRequires: multilib-rpm-config
+%{!?rhel:BuildRequires: multilib-rpm-config}
 BuildRequires: make
 BuildRequires: libicu-devel
 
@@ -64,7 +65,9 @@ types within C, i.e., without the help of the PostgreSQL server.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }( cd "$(dirname "%SOURCE1")" ; sha256sum -c "%SOURCE1" )
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+( cd "$(dirname "%SOURCE1")" ; sha256sum -c "%SOURCE1" )
 %autosetup -n postgresql-%version -p1
 
 # remove .gitignore files to ensure none get into the RPMs (bug #642210)
@@ -93,7 +96,9 @@ export CFLAGS="$CFLAGS -std=c17"
 # remove files not to be packaged
 find $RPM_BUILD_ROOT -name '*.a' -delete
 
+%if %{undefined rhel}
 %multilib_fix_c_header --file "%{_includedir}/ecpg_config.h"
+%endif
 
 # function from postgresql.spec
 find_lang_bins ()
@@ -135,5 +140,4 @@ find_lang_bins %name-devel.lst  ecpg
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.4-4
-- Import
+%autochangelog

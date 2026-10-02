@@ -1,4 +1,4 @@
-%global source0_hash 9f3174561fd26904b23f0db5e560971cbf9b3cbda0b280f04d5c379d03bf234c
+%global source0_hash 6775e47231a446fd086d660ecc18bcd076531cfedd912fbd66e576b118607001
 
 # The library consists of headers only
 %global debug_package %{nil}
@@ -10,7 +10,7 @@ Summary:        C++ mathematics library for graphics programming
 
 License:        MIT
 URL:            http://glm.g-truc.net/
-Source0:        https://github.com/g-truc/glm/archive/refs/tags/%{version}.tar.gz#/glm-1.0.1.tar.gz
+Source0:        https://github.com/g-truc/glm/archive/refs/tags/%{version}.tar.gz#/glm-%{version}.tar.gz
 
 Patch0:         glm-1.0.1-noarch.patch
 Patch1:         glm-1.0.1-without-werror.patch
@@ -124,5 +124,4 @@ rm -rf $RPM_BUILD_ROOT%{_includedir}/%{name}/{CMakeFiles,libglm_shared.so}
 %doc doc/api/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.1-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

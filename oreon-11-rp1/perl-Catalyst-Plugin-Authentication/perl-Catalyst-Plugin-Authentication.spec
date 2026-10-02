@@ -5,7 +5,7 @@ Summary:        Infrastructure plugin for the Catalyst authentication framework
 Version:        0.10024
 Release:        4%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
-Source0:        https://cpan.metacpan.org/authors/id/J/JJ/JJNAPIORK/Catalyst-Plugin-Authentication-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Catalyst-Plugin-Authentication-%{version}.tar.gz
 URL:            https://metacpan.org/release/Catalyst-Plugin-Authentication
 BuildArch:      noarch
 

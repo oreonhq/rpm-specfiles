@@ -1,4 +1,4 @@
-%global source0_hash 533946d57897bf62a2cf8f74e488258e11fa0c55028fad43ada24c5686f38a06
+%global source0_hash 6271c35f8ab8d2565962c0a6140aa191226430f7c99cb3355f4d499a8938f068
 
 Summary: Driver for QPDL/SPL2 printers (Samsung and several Xerox printers)
 Name: splix
@@ -10,10 +10,7 @@ Source0:        https://github.com/OpenPrinting/%{name}/releases/download/%{vers
 
 # sent upstream as https://github.com/OpenPrinting/splix/pull/2
 # IEEE 1284 Device IDs
-Patch0: splix-deviceID.patch
 # rules.mk misses LDFLAGS
-Patch1: splix-ldflags.patch
-Patch2: splix-use-pkg-conf.patch
 
 
 # postscriptdriver tags
@@ -52,9 +49,6 @@ pushd ppd
 make distclean
 popd
 
-%patch -P 0 -p1 -b .deviceID
-%patch -P 1 -p1 -b .ldflags
-%patch -P 2 -p1 -b .pkg-conf
 
 %build
 %set_build_flags
@@ -75,5 +69,4 @@ CXXFLAGS="%{optflags} -fno-strict-aliasing" \
 %{_datadir}/cups/drv/splix
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.1-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

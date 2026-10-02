@@ -1,4 +1,4 @@
-%global source0_hash 2af935fa71a47c3bcd43ae8fb49526ca2035ae027bfeb758d16fee2d8b010a60
+%global source0_hash d17c300a83dce3033ad6e75bed12f9f6397374e72422a4fa09e244ecd593640f
 
 Name:           apache-commons-collections4
 Summary:        Extension of the Java Collections Framework
@@ -54,5 +54,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.4-21
-- Prepare for Oreon 11 (RP1)
+%autochangelog

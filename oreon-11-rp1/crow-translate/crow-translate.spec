@@ -1,4 +1,5 @@
-%global source0_hash none
+%global stable_kf6 stable
+%global source0_hash 70cab22a089aa976627fb0f04ea2bf2e918a138c36ff0337d4a7709ea5462fa3
 
 %ifnarch s390x
 %bcond onnxruntime 1
@@ -7,7 +8,7 @@
 %global appid org.kde.CrowTranslate
 
 Name: crow-translate
-Version: 4.0.2
+Version: 4.1.0
 Release: %autorelease
 Summary: Application that allows you to translate and speak text
 
@@ -21,10 +22,9 @@ License: GPL-3.0-only AND GPL-3.0-or-later AND BSD-3-Clause AND MIT
 URL: https://apps.kde.org/crowtranslate/
 Source: https://download.kde.org/%{stable_kf6}/%{name}/%{version}/%{name}-%{version}.tar.gz
 
+
 # https://invent.kde.org/office/crow-translate/-/merge_requests/770
-Patch:  0001-Fix-Hebrew-on-Yandex-and-DuckDuckGo.patch
 # https://invent.kde.org/office/crow-translate/-/merge_requests/771
-Patch:  0002-cmake-fix-pkg-config-detection-of-onnxruntime.patch
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}

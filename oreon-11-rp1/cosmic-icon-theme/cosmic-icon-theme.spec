@@ -1,4 +1,4 @@
-%global source0_hash 7e09400f6caab8a9d9dae3a8fb6f052f3a9f131651d2c33d2f170e5196f86b6c
+%global source0_hash 1b15f26b5a6b876aaeb82fd51c1bf242b2c26bb5899105dd03168feba4896ae5
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 
@@ -10,7 +10,7 @@
 %global cosmic_minver 1.8.0
 
 Name:           cosmic-icon-theme
-Version: 1.8.0
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Icon theme for the COSMIC Desktop Environment
 
@@ -19,6 +19,7 @@ License:        CC-BY-SA-4.0
 URL:            https://github.com/pop-os/cosmic-icons
 
 Source0:        https://github.com/pop-os/cosmic-icons/archive/epoch-%{version}/cosmic-icons-%{version}.tar.gz
+
 
 BuildArch:      noarch
 

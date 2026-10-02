@@ -1,4 +1,4 @@
-%global source0_hash 9e9eff75112d4d92d92262ad7fc2599c21e26f8fc5ba54900efdc83c0501e472
+%global source0_hash 2a6efd40b6d9dbcb70fba3be53112366882ba97b57151df3698dfa478c8d8dd3
 
 %global apiversion 0.1
 
@@ -115,5 +115,4 @@ make check %{?_smp_mflags}
 %{_mandir}/man1/vss2xhtml.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.10-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

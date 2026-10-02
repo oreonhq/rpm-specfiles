@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ce0f0fade0536acbb6703d0213e82fbc190d057376ff1ea9f7cae6fcab655f75
 
 %global sum A scientific image viewer and toolkit
 %global _description %{expand:
@@ -18,7 +18,7 @@ panning and zooming windows, star catalog access, cuts, star pick/fwhm,
 thumbnails, etc.}
 
 Name:           ginga
-Version:        7.4.0
+Version:        7.5.0
 Release:        %autorelease
 Summary:        %{sum}
 # License breakdown

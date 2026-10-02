@@ -1,4 +1,4 @@
-%global source0_hash 0c6e51af878e63df7391e6dffbbe5f0ced429bc9f1e5a603020bfd2503065c39
+%global source0_hash feffdf4638125ebb12d2434754f80a1d7bbba85a3e6bee98c216f88fb99a5d96
 
 %global py_prefix python3
 %global py_binary %{py_prefix}
@@ -21,7 +21,6 @@ License: GPL-2.0-only AND LGPL-2.1-only AND MIT
 URL: http://criu.org/
 Source0:        https://github.com/checkpoint-restore/criu/archive/refs/tags/v%{version}.tar.gz#/criu-%{version}.tar.gz
 Patch0: 0001-rseq-use-kernel-rseq.h-when-glibc-detects-it.patch
-Patch1: 0001-tty-fix-compiler-error.patch
 
 # Add protobuf-c as a dependency.
 # We use this patch because the protobuf-c package name
@@ -120,7 +119,6 @@ This script can help to workaround the so called "PID mismatch" problem.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 %patch -P 0 -p1
-%patch -P 1 -p1
 %patch -P 99 -p1
 
 %build
@@ -209,5 +207,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libcriu.a
 %tmpfiles_create %{name}.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2-16
-- Prepare for Oreon 11 (RP1)
+%autochangelog

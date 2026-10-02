@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash ce659857e96be31dc56e0d46a99b15effd5a05f6324d0b30966decc3e4a1bd41
 
 %global commit0 3acc51828aceba310081c72a18f938f04d4487de
 %global shortcommit0 3acc518
 
 Name:           egl-wayland
-Version:        1.1.22
+Version:        1.1.23
 Release:        %autorelease
 Summary:        EGLStream-based Wayland external platform
 License:        MIT
@@ -72,5 +72,4 @@ find %{buildroot} -name '*.la' -delete
 %{_libdir}/pkgconfig/wayland-eglstream.pc
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.21-1
-- Import
+%autochangelog

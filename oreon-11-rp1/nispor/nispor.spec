@@ -1,5 +1,5 @@
-%global source0_hash 96ec8fa18a6db6e1d96f6ddce584fbc407eb8834767841cbeda5baae890bd35f
-%global source1_hash 15c47e1562a12ad5b373199a0651c0c3daf4afedb9892a6e149a8cc2cd519c96
+%global source0_hash 90cd53a691a99e75b3f32e1e02320a5f5d28f56d41a0232704fae2468f539ddf
+%global source1_hash 83061b99054657fce73c312fd524c48752c08d84563c7db719a8b0cb571ddeb5
 
 # The check need root privilege hence disabled by default
 %bcond_with check
@@ -164,5 +164,4 @@ popd
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.27-1
-- Import
+%autochangelog

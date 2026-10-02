@@ -1,4 +1,4 @@
-%global source0_hash edd8cd3d548c185adc70321c53c36df41abe64c1fe2c67bc6d93c3ecda82447a
+%global source0_hash b3d50e7a73fbf4642ceef30131c93414901d69eee41c2a5302db650b03e2c792
 
 Name:           xsimd
 Version:        14.3.0
@@ -36,7 +36,6 @@ Provides:       %{name} = %{version}-%{release}
 Provides:       %{name}-static = %{version}-%{release}
 BuildArch:      noarch
 
-Patch0: https://github.com/xtensor-stack/xsimd/pull/1091.patch
 
 %description devel %_description
 

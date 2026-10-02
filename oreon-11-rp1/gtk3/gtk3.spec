@@ -1,4 +1,4 @@
-%global source0_hash 0013877c6bd23c2dbe42ad7c70a053d0e449be66736574e37867c49c5f905a4f
+%global source0_hash 80931fa472a77b9a164f6740e3c0b444fac6770054632d35a7ff9d679e5e7b9f
 
 %if 0%{?fedora}
 %global with_broadway 1
@@ -33,8 +33,6 @@ Summary: GTK+ graphical user interface library
 License: LGPL-2.0-or-later
 URL:     https://gtk.org
 Source0:        https://download.gnome.org/sources/gtk/3.24/gtk-%{version}.tar.xz
-
-patch0: drop-down-menu-fix.patch
 
 BuildRequires: pkgconfig(atk) >= %{atk_version}
 BuildRequires: pkgconfig(atk-bridge-2.0)
@@ -328,12 +326,4 @@ gtk-query-immodules-3.0-%{__isa_bits} --update-cache &>/dev/null || :
 %{_datadir}/installed-tests/
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.24.51-3
-- Define with_broadway and with_cloudproviders on non-Fedora (fix %%if parse)
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.24.51-2
-- Non-Fedora disable tracker3 (no tinysparql in tree)
-- Require colord-libs and at-spi2-atk, cloudproviders when enabled
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.24.51-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

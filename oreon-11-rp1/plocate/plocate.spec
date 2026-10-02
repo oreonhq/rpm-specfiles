@@ -1,4 +1,4 @@
-%global source0_hash e55a757af1d7efb15ea674993224da4f0258479f8f720bd3dae0925d27dc04a2
+%global source0_hash 68c1d5fbb11864403ae39c1a5937f13afd80b03e68041368831ef58cb613578e
 
 Name:           plocate
 Version:        1.1.25
@@ -37,7 +37,7 @@ mlocate in nearly all aspects, and is fast on SSDs and non-SSDs alike.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -c
 
 %build
 %meson -Dsystemunitdir=%_unitdir -Dinstall_systemd=true
@@ -114,5 +114,4 @@ fi
 %ghost %attr(0640,-,plocate) %verify(not md5 mtime) %{_sharedstatedir}/plocate/plocate.db
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.24-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 5002309b9a701260658e8b3a61540fd5673887cef998338e1992524a33b23ae3
+%global source0_hash ccbb8cdd1db56ecd4ece5dbabae0118ab2c46b5b3439c94f3cec467798ce956d
 
 %global apiver 0.4
 
@@ -206,5 +206,4 @@ chrpath --delete %{buildroot}%{_libdir}/gegl-%{apiver}/*.so
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.68-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

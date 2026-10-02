@@ -1,8 +1,8 @@
 %global source0_hash a36b4e0a1fcc3a34d40c6323e2259057f3b2a9fc14d4c0bb8b3949389dda8424
 
 Name:           asc-music
-Version:        1.0
-Release:        34%{?dist}
+Version:        2.6.1
+Release:        1%{?dist}
 Summary:        Background music for the game asc
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later

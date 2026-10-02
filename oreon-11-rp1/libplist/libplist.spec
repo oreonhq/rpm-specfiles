@@ -1,17 +1,15 @@
-%global source0_hash 67be9ee3169366589c92dc7c22809b90f51911dd9de22520c39c9a64fb047c9c
+%global source0_hash b1f59f7634c58b2481325a23ff4e3bf51574a42d868cbe466d2b39b04550752a
 
 %global forgeurl https://github.com/libimobiledevice/libplist
 
 Name:     libplist
-Version:  2.7.0
+Version:  2.8.0
 Release:  %autorelease
 Summary:  Library for manipulating Apple Binary and XML Property Lists
 
 License:  LGPL-2.0-or-later
 URL:      https://www.libimobiledevice.org/
-Source:        https://github.com/libimobiledevice/libplist/releases/download/2.7.0/libplist-2.6.0.tar.bz2
-# cython: Fix build with cython 3.1+
-Patch:        https://github.com/libimobiledevice/libplist/commit/d7fe479707af57aeedf7e41c08e7fb698cd2e2a3.patch
+Source:        https://github.com/libimobiledevice/libplist/releases/download/%{version}/libplist-%{version}.tar.bz2
 
 BuildRequires: gcc-c++
 BuildRequires: python3-Cython
@@ -40,7 +38,7 @@ Requires: python3
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n libplist-2.6.0
+%autosetup -n libplist-%{version}
 
 %build
 export PYTHON_VERSION="%{python3_version}"
@@ -72,5 +70,4 @@ make check
 %{python3_sitearch}/plist.so
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.0-1
-- Import
+%autochangelog

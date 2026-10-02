@@ -1,4 +1,4 @@
-%global source0_hash 1b5c2d7258ff93eb5f9958ff0e4dfd7332dc75a071bb717dde2217a26602a644
+%global source0_hash e2e151fdd47a345b6ef72cae1d8ecf3099bb90420f276761f2793ec317809307
 
 %global apiversion 0.6
 
@@ -11,13 +11,8 @@ License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
 URL: https://github.com/tdf/libcmis
 Source:        https://github.com/tdf/libcmis/releases/download/v%{version}/%{name}-%{version}.tar.xz
 # https://github.com/tdf/libcmis/issues/51
-Patch:  libxmis-0.6.2-libxml2-2.12.0-includes.patch
 # https://github.com/tdf/libcmis/pull/68 and followups
 # Fixes build with boost 1.86+, followups address some issues
-Patch:  0001-Fix-boost-1.86-breakage.patch
-Patch:  0002-sha1-test-fails-with-older-boost.patch
-Patch:  0003-Fix-build-with-boost-1.66-and-simplify-a-bit.patch
-Patch:  0004-Fix-comment-and-sync-the-if-BOOST_VERSION.patch
 
 
 BuildRequires: boost-devel
@@ -96,5 +91,4 @@ export LD_LIBRARY_PATH=%{buildroot}/%{_libdir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_P
 %{_mandir}/man1/cmis-client.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.2-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

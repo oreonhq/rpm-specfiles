@@ -1,4 +1,4 @@
-%global source0_hash b92017489bdc1db3a4c97191aa4b75366673cb746de0dce5d7a749d5954681ba
+%global source0_hash 4996f0c4f93094719b1ca5c6279b20e588773ba8a247533e486416fb662ddb88
 
 %{?mingw_package_header}
 
@@ -143,5 +143,4 @@ find %{buildroot} -name "*.la" -delete
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.7.1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

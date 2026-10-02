@@ -1,13 +1,14 @@
-%global source0_hash f4444beef3a43f0d69cca5681119af65a1de9830a59b603a64aeab13b4e71992
+%global source0_hash 9eeb0a1845160a9b0b708d80dee109361f124e94a6201f6ad3d32d4b445a91da
 
 Name:          diffoscope
-Version:       312
+Version:       332
 Release:       %autorelease
 Summary:       In-depth comparison of files, archives, and directories
 License:       GPL-3.0-or-later
 URL:           https://diffoscope.org/
 #Source:        https://files.pythonhosted.org/packages/source/d/diffoscope/diffoscope-%%{version}.tar.gz
 Source:        https://salsa.debian.org/reproducible-builds/diffoscope/-/archive/%{version}/diffoscope-%{version}.tar.gz
+
 
 # The package is arched due to architecture-dependent BR’s and Recommends;
 # however, there is no compiled code, so no debug package will be generated.

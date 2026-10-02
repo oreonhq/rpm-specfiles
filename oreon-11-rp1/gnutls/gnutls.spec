@@ -1,7 +1,7 @@
-%global source0_hash a7b341421bfd459acf7a374ca4af3b9e06608dcd7bd792b2bf470bea012b8e51
+%global source0_hash ffed8ec1bf09c2426d4f14aae377de4753b53e537d685e604e99a8b16ca9c97e
 
-%global source2_hash a47ae67e65375cedf0e0af830db4f29b29365283c1c3661a47d3d67601b9eada
-%global source2_key_fpr 5D46CB0F763405A7053556F47A75A648B3F9220C
+%global source2_hash af4f006cf591a674aafd881ff492c0efe723393ea79446411311462b08b1746f
+%global source2_key_fpr E987AB7F7E89667776D05B3BB0E9DD20B29F1432
 
 Version: 3.8.13
 Release: 1%{?dist}
@@ -139,7 +139,7 @@ Source102:        gmp-6.2.1-c23.patch
 %if %{with leancrypto}
 Provides:	bundled(leancrypto) = 1.6.0
 # GitHub release has no upload asset, use archive URL that Content-Disposition names leancrypto-1.6.0.tar.gz
-Source300:	https://github.com/smuellerDD/leancrypto/archive/v1.6.0/leancrypto-1.6.0.tar.gz#/gnutls-3.8.12.tar.gz
+Source300:	https://github.com/smuellerDD/leancrypto/archive/v1.6.0/leancrypto-1.6.0.tar.gz#/leancrypto-1.6.0.tar.gz
 %endif
 
 # Wildcard bundling exception https://fedorahosted.org/fpc/ticket/174
@@ -265,7 +265,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%autosetup -p1 -S git -n gnutls-3.8.12
+%autosetup -p1 -S git -n gnutls-%{version}
 
 %if %{with bundled_gmp}
 mkdir -p bundled_gmp
@@ -599,9 +599,4 @@ popd
 %endif
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.8.12-2
-- Replace parse-time srpmhash Lua (cat on SOURCES) with version-release sha256 prefix
-- Use HTTPS for bundled gmp and leancrypto tarballs so spectool can fetch them
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.8.12-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 3a6dc7b1245ce9bccd197bab00691f1b190bd3694d3ccc301d21b83afc133199
+%global source0_hash 501dfa363cd8e19997a4a1a71f70ded88241b45e9db233e8875c23b80520cc83
 
 Summary:	Utilities for managing the XFS filesystem
 Name:		xfsprogs
@@ -161,5 +161,4 @@ rm -rf $RPM_BUILD_ROOT/%{_datadir}/doc/xfsprogs/
 %{_libdir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.18.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

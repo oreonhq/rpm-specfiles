@@ -1,4 +1,4 @@
-%global source0_hash f312bb9db25937f1fd7ca1d53a086a3cdde596086147a42a75af027058810b9e
+%global source0_hash aa4d8ff3b71b636e6826b91695062d909ea6949a27e3442dd2762d8459439df9
 
 %bcond_with bootstrap
 
@@ -8,7 +8,7 @@
 
 Name:           maven
 Epoch:          1
-Version:        3.9.16
+Version:        3.10.0
 Release:        %autorelease
 Summary:        Java project management and project comprehension tool
 # maven itself is Apache-2.0
@@ -68,7 +68,10 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
-BuildRequires:  mvn(org.fusesource.jansi:jansi)
+BuildRequires:  mvn(org.jline:jansi-core)
+BuildRequires:  mvn(org.jline:jline-terminal)
+BuildRequires:  mvn(org.jline:jline-terminal-jni)
+BuildRequires:  mvn(org.jline:jline-terminal-ffm)
 BuildRequires:  mvn(org.hamcrest:hamcrest)
 BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
@@ -79,7 +82,7 @@ BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 %endif
 
 # XXX
-#BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %%{bundled_slf4j_version}
+#BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %{bundled_slf4j_version}
 %if %{without bootstrap}
 BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
 %endif
@@ -94,7 +97,7 @@ Requires(postun): alternatives
 # TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1:3.9.9-13
 # TODO Remove in Fedora 47
-Obsoletes:      %{name}-openjdk21 < 1:3.9.16-11
+Obsoletes:      %{name}-openjdk21 < 1:3.9.11-12
 
 %description
 Maven is a software project management and comprehension tool. Based on the
@@ -113,18 +116,12 @@ OrderWithRequires: xmvn-minimal
 # maven-slf4j-provider.jar, together with Maven-specific additions.
 Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 
-# Remove in Fedora 45
-Obsoletes:      maven-openjdk8 < 1:3.9.9-2
-Obsoletes:      maven-openjdk11 < 1:3.9.9-2
-Obsoletes:      maven-openjdk17 < 1:3.9.9-2
-
 %description lib
 Core part of Apache Maven that can be used as a library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n apache-maven-3.9.11
-%autosetup -p1 -n apache-maven-3.9.11
+%autosetup -p1 -C
 
 find -name '*.java' -exec sed -i 's/\r//' {} +
 find -name 'pom.xml' -exec sed -i 's/\r//' {} +
@@ -162,7 +159,6 @@ sed -i "
 
 %pom_add_dep javax.annotation:javax.annotation-api::provided maven-core
 
-%pom_change_dep :jansi :::runtime maven-embedder
 %pom_remove_dep -r :logback-classic
 
 %mvn_alias :maven-resolver-provider :maven-aether-provider
@@ -190,8 +186,6 @@ cp -a $M2_HOME/{bin,lib,boot} %{buildroot}%{homedir}/
 xmvn-subst -s -R %{buildroot} %{buildroot}%{homedir}
 %endif
 
-# maven uses this hardcoded path in its launcher to locate jansi so we symlink it
-ln -s %{_prefix}/lib/jansi/libjansi.so %{buildroot}%{homedir}/lib/jansi-native/
 
 install -p -m 644 %{SOURCE2} %{buildroot}%{homedir}/bin/
 gzip -9 %{buildroot}%{homedir}/bin/mvn.1
@@ -261,5 +255,4 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.9.11-1
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash e076c851eec0972486ec842164fdc54547f9d17abd3d1449de8b120f5d299143
+%global source0_hash 4bde6246926890dcee824f6e6ac42a06752f47d77e5097d86e3c0d6d4b709fe5
 
 Summary: Tracks and displays system calls associated with a running process
 Name: strace
@@ -208,5 +208,4 @@ fi
 %{_mandir}/man1/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.19-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,6 +1,10 @@
 %global source0_hash 60b49acb493c1ab545116fb0b0d223ee115166874902ad8165eb39e9fd98eaa9
 
-%bcond mingw    %{defined fedora}
+%if 0%{?fedora} && ! 0%{?oreon}
+%bcond_without mingw
+%else
+%bcond_with mingw
+%endif
 
 Name:           librttopo
 Version:        1.1.0

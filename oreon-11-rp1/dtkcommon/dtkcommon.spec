@@ -1,10 +1,10 @@
-%global source0_hash 5d45d2306e420d8091451efc06f66ba3582cffea27d2923ef0e205638e7d30c7
+%global source0_hash e9355e021b82dacb260ac98218b53c9ea8010d83bc538f67b0b623890780b97e
 
 # This package contains files under %%_libdir but no binary files
 %global debug_package %{nil}
 
 Name:           dtkcommon
-Version:        6.7.49
+Version:        6.7.50
 Release:        %autorelease
 Summary:        A public project for building DTK Library
 License:        BSD-3-Clause

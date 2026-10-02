@@ -1,4 +1,4 @@
-%global source0_hash 6d77eace20e9ea106c1330e268ede70c9a4a89744ddc25715682754eca3368df
+%global source0_hash 93eb89fd4fc8f565806354e100e778b3ac9a24e5fc04c24e6a83fb1e9b6c9d59
 
 Name: libexttextcat
 Version: 3.4.8
@@ -65,5 +65,4 @@ make check
 %{_bindir}/createfp
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

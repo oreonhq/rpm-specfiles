@@ -1,4 +1,4 @@
-%global source0_hash 50f0f94e8de44a3ca457156943068d694ca88474a94dbf6d85fa369f7e8ec1ae
+%global source0_hash 1ab1bc4da1b6718844b7f515f87bcc80b6b6c67c3ec17fe13895b4d660162219
 
 Name:           exec-maven-plugin
 Version:        3.6.4
@@ -64,5 +64,4 @@ rm -rf src/test/
 %dir %{_javadir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

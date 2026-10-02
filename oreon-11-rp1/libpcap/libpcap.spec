@@ -1,4 +1,4 @@
-%global source0_hash ec97d1206bdd19cb6bdd043eaa9f0037aa732262ec68e070fd7c7b5f834d5dfc
+%global source0_hash 9237f5bae9dcf3a91823d9963ec43b7c0e2e3374ef2ad57d92c8cd39530f4723
 
 Name:     libpcap
 Epoch:    14
@@ -87,5 +87,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libpcap.a
 %{_mandir}/man5/pcap*.5*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.6-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

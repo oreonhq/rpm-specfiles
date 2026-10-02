@@ -1,4 +1,4 @@
-%global source0_hash 3686e1446dff59245432b0679c760d3bf3f40bfb64d8c8312d71feed7114d0a0
+%global source0_hash 9dd1e9ae1dc236ee8ad92754cb7666be9ad333335717d75a46a4b2f71155fdef
 
 Name:           apache-commons-net
 Version:        3.13.0
@@ -90,8 +90,4 @@ src/test/java/org/apache/commons/net/time/TimeUDPClientTest.java \
 %license LICENSE.txt NOTICE.txt
 
 %changelog
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.0-2
-- %%autosetup -n commons-net-%%{version}-src for upstream source tarball layout
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

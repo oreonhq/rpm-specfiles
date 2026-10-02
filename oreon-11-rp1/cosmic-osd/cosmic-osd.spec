@@ -1,4 +1,4 @@
-%global source0_hash 27402fa109d708d1b3cc53909be54fc649bc82310c9ebd7a8a921a0aab6aaf1a
+%global source0_hash 7f4e7e991f9201bacb0d0c3c47d160419de849710f16c9deb29a3aaeb82b0de3
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-osd
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        OSDs for the COSMIC Desktop Environment
 
@@ -24,6 +24,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-osd
 
 Source0:        https://github.com/pop-os/cosmic-osd/archive/epoch-%{version}/cosmic-osd-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-osd at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

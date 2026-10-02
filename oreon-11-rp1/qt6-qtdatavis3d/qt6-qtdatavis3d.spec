@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5f79b948eb1e81ff7f69e335b075c1b48953d88f5d97970b537e348dbbaa98dc
 
 %global qt_module qtdatavis3d
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Qt Data Visualization component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -104,5 +104,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

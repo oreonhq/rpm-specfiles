@@ -1,4 +1,4 @@
-%global source0_hash 85b9b104d256c985e6e244b4227d447897fac429071cc114e5cc819dae848852
+%global source0_hash fb6ef914b50f4312d7d921a600eabc12318bb3c55a0b8c0b90608fa4488ef2e4
 
 Name: Box2D
 Version:  3.1.1
@@ -53,5 +53,4 @@ rm -r extern
 %{_libdir}/cmake/box2d/*.cmake
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.2-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

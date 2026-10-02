@@ -11,7 +11,7 @@ Release:        %autorelease
 Summary:        Microsoft Azure Graph RBAC Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version} zip}
+Source0:        %{pypi_source azure_graphrbac %{version}}
 
 Epoch:          1
 

@@ -1,5 +1,5 @@
-%global source0_hash none
-%global source1_hash none
+%global source0_hash 12a72210ce5250f8a66df562a75e034e67b2bce74c4df2983dc86d1154894943
+%global source1_hash 8c22cf099c113821d6c22b7e3fc2f7033120e0e4cd7bba40d528e4ff5727cf80
 
 %global source_version %(echo "%version" | tr '~' '-')
 
@@ -59,9 +59,9 @@
 %global dbus_python_version 0.83.0
 
 Name:           ibus
-Version:        1.5.34~rc1
+Version:        1.5.34
 # https://github.com/fedora-infra/rpmautospec/issues/101
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        Intelligent Input Bus for Linux OS
 License:        LGPL-2.1-or-later
 URL:            https://github.com/ibus/%name/wiki
@@ -287,7 +287,8 @@ the functionality of the installed %{name} package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }SAVED_SUM=$(grep sha512sum %SOURCE1 | awk '{print $2}')
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+SAVED_SUM=$(grep sha512sum %SOURCE1 | awk '{print $2}')
 MY_SUM=$(sha512sum %SOURCE0 | awk '{print $1}')
 if test x"$SAVED_SUM" != x"$MY_SUM" ; then
     abort
@@ -587,8 +588,4 @@ dconf update || :
 %{_datadir}/installed-tests/ibus
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.34~rc1-3
-- ibus-libs depend on glib2 instead of missing gobject-introspection RPM
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.34~rc1-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

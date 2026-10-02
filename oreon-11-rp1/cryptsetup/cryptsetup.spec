@@ -1,4 +1,4 @@
-%global source0_hash 443e46f8964c9acc780f455afbb8e23aa0e8ed7ec504cfc59e04f406fa1e8a83
+%global source0_hash 3acfa685f2dd7fcc832e0b77bc7093aa7da554a51ce8dafbb4138eaa854eee35
 
 Summary: Utility for setting up encrypted disks
 Name: cryptsetup
@@ -120,5 +120,4 @@ rm -rf %{buildroot}%{_libdir}/%{name}/*.la
 %{_sbindir}/cryptsetup-ssh
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.4-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

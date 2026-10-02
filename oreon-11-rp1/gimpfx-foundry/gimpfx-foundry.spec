@@ -1,12 +1,13 @@
 %global source0_hash b61001aa0d65303982a97b21e5f9c8bf7df70ddc5f30d16e8ccd188ed1fb25fc
 
 Name:		gimpfx-foundry
-Version:	2.6.1
-Release:	25%{?dist}
+Version:	20071219
+Release:	1%{?dist}
 Summary:	Additional GIMP plugins
 License:	GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-Fedora-Public-Domain
 URL:		http://gimpfx-foundry.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-2.6-1.tar.gz
+
 Source1:	%{name}.metainfo.xml
 %if 0%{?fedora} >= 21  
 BuildRequires:	libappstream-glib

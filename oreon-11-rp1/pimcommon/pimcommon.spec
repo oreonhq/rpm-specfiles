@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 2a04a6e2514d98dea977ebb4c6f091ca6bb99404136cbee0011f19ffb711b2cf
 
 Name:    pimcommon

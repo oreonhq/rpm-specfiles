@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 8660ad79c0d60fed77f29b36e1742841466af5405de702c81a121e6eeb625ebb
 
 Name:           mpvqt

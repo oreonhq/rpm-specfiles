@@ -1,5 +1,5 @@
-%global source0_hash ff07e0a58f14f24c6abdae64b2afdd309b21cb17f60e486e9eadc6e32ed99e87
-%global source2_hash a8c5d334676ac281bf7c83e79041745cf183fea13b158684b00854767b814051
+%global source0_hash 5bed6667823030b5c18ab2f8b1e85f4e569ef5ec4d45c67716c0d1e12f27d444
+%global source2_hash 182bc85fd0a1cdc8e9ad7eac55f60bf11de3ccbe9d0d83881d061c19cbf95ee7
 
 %global     npm_name cjs-module-lexer
 %global     prebuilt_blobs lib/lexer.wasm
@@ -14,7 +14,7 @@ Release:    %autorelease
 License:    MIT
 URL:        https://www.npmjs.com/package/cjs-module-lexer
 # The npmjs.org archive does not contain sources, only built artifacts
-Source:        https://github.com/nodejs/%{npm_name}/archive/%{version}/%{npm_name}-%{version}.tar.gz#/nodejs-cjs-module-lexer-1.4.1.tar.gz
+Source:        https://github.com/nodejs/%{npm_name}/archive/%{version}/%{npm_name}-%{version}.tar.gz#/nodejs-cjs-module-lexer-%{version}.tar.gz
 # Production archive is not needed
 Source2:     %{npm_name}-%{version}-nm-dev.tgz
 Source3:     %{npm_name}-%{version}-bundled-licenses.txt
@@ -96,5 +96,4 @@ npm --offline run test
 %{nodejs_sitelib}/%{npm_name}/
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.1-1
-- Import
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 5d5ebc40843f7156d5ede30e50016798ac7336467f7ad347e716510516cc2130
+%global source0_hash 2703ff1a51a99c3163d4fd998ac22e982bbd5493d512a7c5bde716a8adba0394
 
 %bcond_without debug
 %bcond_without imap
@@ -33,7 +33,6 @@ Source1: mutt_ldap_query
 Patch1: mutt-1.10.0-muttrc.patch
 Patch2: mutt-1.8.0-cabundle.patch
 # https://dev.mutt.org/trac/ticket/3569
-Patch3: mutt-1.7.0-syncdebug.patch
 # FIXME make it to upstream
 Patch8: mutt-1.5.23-system_certs.patch
 Patch9: mutt-1.9.0-ssl_ciphers.patch
@@ -92,7 +91,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 autoreconf -fiv
 %patch -P1 -p1 -b .muttrc
 %patch -P2 -p1 -b .cabundle
-%patch -P3 -p1 -b .syncdebug
 %patch -P8 -p1 -b .system_certs
 %patch -P9 -p1 -b .ssl_ciphers
 %patch -P13 -p1 -b .optusegpgagent
@@ -220,5 +218,4 @@ ln -sf ./muttrc.5 %{buildroot}%{_mandir}/man5/muttrc.local.5
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

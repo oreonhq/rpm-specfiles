@@ -1,9 +1,9 @@
-%global source0_hash b743856643a808a9c626c248775d7be538d4a5c11232c476a216f31a09904f31
+%global source0_hash 3a081805979bfa54b7443cbbd03e42ce5a3770e12088c1d828185a343f9e0286
 
 %global _docdir_fmt %{name}
 
 Name:           ansible-collection-ansible-netcommon
-Version:        8.7.0
+Version:        8.7.1
 Release:        %autorelease
 Summary:        Ansible Network Collection for Common Code
 
@@ -26,6 +26,7 @@ Summary:        Ansible Network Collection for Common Code
 License:        GPL-3.0-or-later AND BSD-2-Clause
 URL:            %{ansible_collection_url ansible netcommon}
 Source:         https://github.com/ansible-collections/ansible.netcommon/archive/v%{version}/%{name}-%{version}.tar.gz
+
 
 BuildRequires:  ansible-packaging
 BuildRequires:  %{py3_dist pyyaml}

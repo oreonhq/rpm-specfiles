@@ -11,7 +11,7 @@ Release:        %autorelease
 Summary:        Microsoft Azure Image Builder Client Library for Python
 License:        MIT
 URL:            https://pypi.org/project/%{srcname}/
-Source0:        %{pypi_source %{srcname} %{version}}
+Source0:        %{pypi_source azure_mgmt_imagebuilder %{version}}
 
 BuildArch:      noarch
 

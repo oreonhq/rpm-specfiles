@@ -1,0 +1,11 @@
+diff --git a/test-requirements.txt b/test-requirements.txt
+--- a/test-requirements.txt
++++ b/test-requirements.txt
+@@ -1,5 +1,5 @@
+ # additional packages needed for testing
+ pytest
+-pylint<3.1
+-pycodestyle<2.12
++pylint
++pycodestyle
+ responses

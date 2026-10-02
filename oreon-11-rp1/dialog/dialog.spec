@@ -1,9 +1,9 @@
-%global source0_hash 68406329827b783d0a8959cc20a94c6e1791ac861a27f854e06e9020541816dd
+%global source0_hash 62bdf59057d4f760a1cc2217827f07887b4a3eebf694c25eacd4803d2171cdc6
 
 Summary: A utility for creating TTY dialog boxes
 Name: dialog
-%global dialogsubversion 20250116
-Version: 1.3-20260721-20260721
+%global dialogsubversion 20260721
+Version: 1.3
 Release: 1.%{dialogsubversion}%{?dist}
 License: LGPL-2.1-only
 URL: https://invisible-island.net/dialog/dialog.html
@@ -83,5 +83,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libdialog.{,l}a
 %{_mandir}/man3/dialog.*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-57.
-- Prepare for Oreon 11 (RP1)
+%autochangelog

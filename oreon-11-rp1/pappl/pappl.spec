@@ -1,4 +1,4 @@
-%global source0_hash 50fec863a28a3c39af639de29d58bf8cefdafa258b66e3c0dfbe2097801dc9db
+%global source0_hash 1684c4e06446e9f7d93a39729fa0ba56f07a4007560080fdad7d0e2076a3615f
 
 #
 # RPM spec file for the Printer Application Framework
@@ -114,5 +114,4 @@ make test
 %{_mandir}/man3/pappl-system.3.gz
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.9-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

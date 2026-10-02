@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3024c97c0bc8cbcd611c401d5f994528704108ceb31f31b28dea4783004d0820
 
 %bcond_with bootstrap
 

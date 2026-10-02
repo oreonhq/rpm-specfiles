@@ -1,4 +1,4 @@
-%global source0_hash e2ad56d132d0cd63f08f3122391a0472adcc8c5d046d7cd81bcadf48a55deea4
+%global source0_hash 629fa8cb0dfd9ad457c5bf47a42f0953b673e62c8ad6b1d03ddc4e2bd20008f1
 
 Name:           liblouis
 Version:        3.39.0
@@ -193,5 +193,4 @@ cd -
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.33.0-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

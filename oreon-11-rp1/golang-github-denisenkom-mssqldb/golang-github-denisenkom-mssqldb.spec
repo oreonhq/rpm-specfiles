@@ -11,7 +11,7 @@
 # https://github.com/denisenkom/go-mssqldb
 %global goipath         github.com/denisenkom/go-mssqldb
 %global commit          36b6ff1bbc103b7b9497bb3c0c6f2788015ea02f
-Version:                0.9.0
+Version:                0.12.3
 %global tag             0.9.0
 
 %gometa

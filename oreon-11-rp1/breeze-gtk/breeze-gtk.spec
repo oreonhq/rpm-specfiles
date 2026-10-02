@@ -1,7 +1,10 @@
-%global source0_hash 5ee332a31c5e86d6dd0a3bb7cd9a43e176adc2582f2e3b7d5e0c2fa9b90e9774
+%global source1_hash b689408c77bc7ac8819004f46fb2acab7b11a3fefe36ef9316a6bcf6f3f3f511
+
+%global stable_kf6 stable
+%global source0_hash 4e0e913b0515de75492155d028c086c4a522a3f68ebb6f4fab10f8bc646cd518
 
 Name:    breeze-gtk
-Version: 6.6.4
+Version: 6.7.5
 Release: 1%{?dist}
 Summary: Breeze widget theme for GTK
 
@@ -9,7 +12,9 @@ License: BSD-3-Clause AND CC0-1.0
 URL:     https://invent.kde.org/plasma/%{name}
 
 Source0: http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+
 Source1: http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+
 
 BuildArch:      noarch
 

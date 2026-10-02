@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash fa81c6c257c4015ad37d64fa6c084c8d46bf5dabbe0b6c7e286d6ade82ef1407
 
 Name:           astyle
-Version:        3.6.18
+Version:        3.6.19
 Release:        1%{?dist}
 Summary:        Source code formatter for C-like programming languages
 

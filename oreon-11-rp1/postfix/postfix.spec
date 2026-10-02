@@ -1,4 +1,4 @@
-%global source0_hash 6367dcc6b9d6b444c4a1d09e9fda3abf1479d88c9c434a31cd5cfe06f9c36627
+%global source0_hash a2f3242345753448072177fae83c322a403c9263696996406201145dab8e8625
 %global source53_hash 5ccba9ec765720c79b9d8ae0f02e4c39f042d54e742a238ebb20b51a61915167
 
 # plugins have unresolvable symbols in compile time
@@ -859,5 +859,4 @@ fi
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.11.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

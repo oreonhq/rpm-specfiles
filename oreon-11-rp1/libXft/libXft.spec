@@ -1,4 +1,4 @@
-%global source0_hash 5e8c3c4bc2d4c0a40aef6b4b38ed2fb74301640da29f6528154b5009b1c6dd49
+%global source0_hash 60a25b78945ed6932635b3bb1899a517d31df7456e69867ffba27f89ff3976f5
 
 Summary: X.Org X11 libXft runtime library
 Name: libXft
@@ -67,5 +67,4 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_mandir}/man3/Xft*.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.8-10
-- Prepare for Oreon 11 (RP1)
+%autochangelog

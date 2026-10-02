@@ -1,4 +1,4 @@
-%global source0_hash b078cd0b107ad0c5831b93ffa4b30ae7c65f1cc619fa7a6d35aebdb2a80f72e3
+%global source0_hash c26e9cdb8152921d16ac4d734d25a9d2fc347667a39db5d35c3b1b15661da1e0
 
 %bcond_with bootstrap
 
@@ -13,7 +13,7 @@ URL:            https://github.com/codehaus-plexus/plexus-compiler
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz#/plexus-compiler-2.15.0.tar.gz
+Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz#/plexus-compiler-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 Source2:        https://raw.githubusercontent.com/codehaus-plexus/plexus-compiler/HEAD/LICENSE.MIT
 
@@ -54,15 +54,13 @@ This package provides %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n plexus-compiler-plexus-compiler-2.15.0
-%autosetup -p1 -n plexus-compiler-plexus-compiler-2.15.0
+%autosetup -p1 -n plexus-compiler-plexus-compiler-%{version}
 
 find -name '.class' -delete
 
 cp %{SOURCE1} LICENSE
 cp %{SOURCE2} LICENSE.MIT
 
-%pom_remove_dep :junit-bom
 
 %pom_disable_module plexus-compiler-aspectj plexus-compilers
 # missing com.google.errorprone:error_prone_core
@@ -104,5 +102,4 @@ cp %{SOURCE2} LICENSE.MIT
 %files pom -f .mfiles-pom
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.15.0-1
-- Import
+%autochangelog

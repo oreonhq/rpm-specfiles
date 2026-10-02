@@ -1,11 +1,11 @@
-%global source0_hash ecea168ea974f2da73b5a0adc19d9c5ebca73ca4b9f733de7c37fc453ee7d1c2
+%global source0_hash c33e573c6a1d758fa358a878044227139c425b46bb214d49b2c773072cab5089
 
 %global _description %{expand:
 Core c99 package for AWS SDK for C. Includes cross-platform primitives,
 configuration, data structures, and error handling.}
 
 Name:           aws-c-common
-Version:        1.0.0
+Version:        1.0.2
 Release:        1%{?dist}
 Summary:        Core c99 package for AWS SDK for C
 

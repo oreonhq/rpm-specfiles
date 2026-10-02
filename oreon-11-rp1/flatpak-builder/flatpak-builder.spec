@@ -1,4 +1,4 @@
-%global source0_hash fd5bc36fe3b974395f782e6c920d8955cee168f513370c32cc800b69acd980d0
+%global source0_hash 8d5b791f7a8449d6a8ebcff0c8d6abd5335113f56703bf5777ee4c7db4bda378
 
 %global appstream_version 0.16.3
 %global debugedit_version 5.0
@@ -113,5 +113,4 @@ install -pm 644 NEWS README.md %{buildroot}/%{_pkgdocdir}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.7-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

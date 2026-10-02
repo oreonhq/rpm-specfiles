@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 313786289a31324b79bd94e94c2a59b51b325edd6f3f63d69c84709ca3addf66
 
 %global app_id  org.kde.kimagemapeditor

@@ -1,4 +1,4 @@
-%global source0_hash c0df0f68d5cf9d7da43c81c7f13f11158358368f98c22d47722f3bd04bd3ac1c
+%global source0_hash 60d517c1acabe54ae337f64451264fc76730696eaae26b5480fb37166689b5f3
 
 Name:		totem-pl-parser
 Version:	3.26.7
@@ -9,7 +9,6 @@ Summary:	Totem Playlist Parser library
 License:	LicenseRef-Callaway-LGPLv2+
 Url:		https://wiki.gnome.org/Apps/Videos
 Source0:        https://download.gnome.org/sources/%{name}/3.26/%{name}-%{version}.tar.xz
-Patch0: totem-pl-parser-c99.patch
 
 BuildRequires:	glib2-devel
 BuildRequires:	libxml2-devel
@@ -66,5 +65,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/gir-1.0/*.gir
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.26.6-14
-- Prepare for Oreon 11 (RP1)
+%autochangelog

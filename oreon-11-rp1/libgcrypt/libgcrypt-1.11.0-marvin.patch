@@ -20,10 +20,99 @@ Signed-off-by: Jakub Jelen <jjelen@redhat.com>
  2 files changed, 8 insertions(+)
 
 diff --git a/cipher/rsa-common.c b/cipher/rsa-common.c
-index 1920eedd..e45cb30d 100644
 --- a/cipher/rsa-common.c
 +++ b/cipher/rsa-common.c
-@@ -247,6 +247,8 @@ _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
+@@ -28,6 +28,7 @@
+ #include "cipher.h"
+ #include "pubkey-internal.h"
+ #include "const-time.h"
++#include "bufhelp.h"
+ 
+ 
+ /* Turn VALUE into an octet string and store it in an allocated buffer
+@@ -191,6 +192,45 @@
+ }
+ 
+ 
++static unsigned char *
++mpi_to_string(gcry_mpi_t value, size_t nframe)
++{
++  unsigned char *frame = NULL;
++  unsigned char *p;
++  size_t noff;
++  /* Allocate memory to fit the whole MPI limbs and allow moving it later to the right place */
++  size_t alloc_len = value->nlimbs * BYTES_PER_MPI_LIMB;
++
++  /* for too short input, we need to allocate at least modulus length (which might still be valid in case of OAEP) */
++  noff = (alloc_len < nframe) ? nframe - alloc_len : 0;
++  alloc_len = alloc_len + noff;
++
++  if ( !(frame = xtrymalloc_secure (alloc_len)))
++    return NULL;
++
++  if (noff)
++    memset (frame, 0, noff);
++  p = frame + noff;
++  /* shovel the MPI content to the buffer as it is */
++  for (int i = value->nlimbs - 1; i >= 0; i--)
++    {
++      mpi_limb_t *alimb = &value->d[i];
++#if BYTES_PER_MPI_LIMB == 4
++      buf_put_be32 (p, *alimb);
++      p += 4;
++#elif BYTES_PER_MPI_LIMB == 8
++      buf_put_be64 (p, *alimb);
++      p += 8;
++#else
++#     error please implement for this limb size.
++#endif
++    }
++  /* Move the MPI to the right place -- with the least significant bytes aligned to the modulus length
++   * -- this might keep some leading zeroes at the beginning of the buffer, but this might be valid for OAEP */
++  memmov_independently (frame, frame + (alloc_len - nframe), nframe, alloc_len);
++  return frame;
++}
++
+ /* Decode a plaintext in VALUE assuming pkcs#1 block type 2 padding.
+    NBITS is the size of the secret key.  On success the result is
+    stored as a newly allocated buffer at R_RESULT and its valid length at
+@@ -199,7 +239,6 @@
+ _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
+                                 unsigned int nbits, gcry_mpi_t value)
+ {
+-  gcry_error_t err;
+   unsigned char *frame = NULL;
+   size_t nframe = (nbits+7) / 8;
+   size_t n, n0;
+@@ -208,6 +247,17 @@
+ 
+   *r_result = NULL;
+ 
++  {
++#ifdef WITH_MARVIN_WORKAROUND
++  frame = mpi_to_string(value, nframe);
++  if (frame == NULL)
++    return gpg_err_code_from_syserror ();
++
++  n = 0;
++  failed |= ct_not_equal_byte (frame[n++], 0x00);
++#else
++  gcry_error_t err;
++
+   if ( !(frame = xtrymalloc_secure (nframe)))
+     return gpg_err_code_from_syserror ();
+ 
+@@ -235,6 +285,9 @@
+   n = 0;
+   if (!frame[0])
+     n++;
++#endif /* WITH_MARVIN_WORKAROUND */
++  }
++
+   failed |= ct_not_equal_byte (frame[n++], 0x02);
+ 
+   /* Find the terminating zero byte.  */
+@@ -247,6 +300,8 @@
  
    failed |= not_found;
    n0 += ct_is_zero (not_found); /* Skip the zero byte.  */
@@ -32,73 +121,295 @@ index 1920eedd..e45cb30d 100644
  
    /* To avoid an extra allocation we reuse the frame buffer.  The only
       caller of this function will anyway free the result soon.  */
+@@ -269,6 +324,187 @@
+ }
+ 
+ 
++#ifdef WITH_MARVIN_WORKAROUND
++#define SHA256_LEN 32
++static gcry_err_code_t
++rsa_prf(unsigned char *out, size_t out_len, const char *label, size_t label_len, unsigned char *kdk, size_t nbits)
++{
++  gcry_err_code_t rc = GPG_ERR_NO_ERROR;
++  size_t pos;
++  uint16_t iter = 0;
++  unsigned char be_iter[2];
++  unsigned char be_bitlen[2];
++  gcry_md_hd_t hd;
++  gcry_error_t err;
++
++  be_bitlen[0] = (nbits >> 8) & 0xff;
++  be_bitlen[1] = nbits & 0xff;
++
++  err = _gcry_md_open (&hd, GCRY_MD_SHA256, GCRY_MD_FLAG_HMAC);
++  if (err)
++    {
++      return GPG_ERR_INTERNAL;
++    }
++  err = _gcry_md_setkey (hd, kdk, SHA256_LEN);
++  if (err)
++    {
++      _gcry_md_close (hd);
++      return GPG_ERR_INTERNAL;
++    }
++  for (pos = 0; pos < out_len; pos += SHA256_LEN, iter++)
++    {
++      unsigned char *tmp;
++
++      _gcry_md_reset(hd);
++
++      be_iter[0] = (iter >> 8) & 0xff;
++      be_iter[1] = iter & 0xff;
++      _gcry_md_write (hd, be_iter, sizeof (be_iter));
++      _gcry_md_write (hd, label, label_len);
++      _gcry_md_write (hd, be_bitlen, sizeof (be_bitlen));
++
++      tmp = _gcry_md_read(hd, 0);
++      if (pos + SHA256_LEN > out_len)
++        {
++          memcpy(out + pos, tmp, out_len - pos);
++        }
++      else
++        {
++          memcpy(out + pos, tmp, SHA256_LEN);
++        }
++    }
++  _gcry_md_close (hd);
++  return rc;
++}
++
++
++/* Decode a plaintext in VALUE assuming pkcs#1 block type 2 padding.
++   NBITS is the size of the secret key.  On success the result is
++   stored as a newly allocated buffer at R_RESULT and its valid length at
++   R_RESULTLEN.  On error R_RESULT contains bogus value of random length.
++   For more information, see description of Implicit Rejection in Marvin paper
++   https://people.redhat.com/~hkario/marvin/marvin-attack-paper.pdf */
++#define MAX_LEN_GEN_TRIES 128
++gpg_err_code_t
++_gcry_rsa_pkcs1_decode_for_enc_implicit_rejection (unsigned char **r_result,
++                                                   size_t *r_resultlen,
++                                                   unsigned int nbits,
++                                                   gcry_mpi_t value,
++                                                   unsigned char *kdk)
++{
++  unsigned char *frame = NULL;
++  size_t nframe = (nbits+7) / 8;
++  size_t n, n0;
++  unsigned int failed = 0;
++  unsigned int not_found = 1;
++  int i, j;
++  uint16_t len_mask;
++  uint16_t max_sep_offset;
++  unsigned char *synthetic = NULL;
++  unsigned long synthethic_length;
++  uint16_t len_candidate;
++  unsigned char candidate_lengths[MAX_LEN_GEN_TRIES * sizeof(len_candidate)];
++  int synth_msg_index = 0, msg_index;
++
++  *r_result = NULL;
++
++  synthetic = xtrymalloc(nframe);
++  if (synthetic == NULL)
++    {
++      free (synthetic);
++      return gpg_err_code_from_syserror ();
++    }
++
++  if (rsa_prf(synthetic, nframe, "message", 7, kdk, nframe * 8) < 0)
++    {
++      xfree (synthetic);
++      return GPG_ERR_INTERNAL;
++    }
++
++  /* decide how long the random message should be */
++  if (rsa_prf(candidate_lengths, sizeof(candidate_lengths),
++              "length", 6, kdk, MAX_LEN_GEN_TRIES * sizeof(len_candidate) * 8) < 0)
++    {
++      xfree (synthetic);
++      return GPG_ERR_INTERNAL;
++    }
++
++  len_mask = max_sep_offset = nframe - 2 - 8;
++  len_mask |= len_mask >> 1;
++  len_mask |= len_mask >> 2;
++  len_mask |= len_mask >> 4;
++  len_mask |= len_mask >> 8;
++
++  synthethic_length = 0;
++  for (i = 0; i < MAX_LEN_GEN_TRIES * (int)sizeof(len_candidate);
++        i += sizeof(len_candidate))
++    {
++      len_candidate = (candidate_lengths[i] << 8) | candidate_lengths[i + 1];
++      len_candidate &= len_mask;
++
++      synthethic_length = ct_ulong_select(
++          len_candidate, synthethic_length,
++          ct_lt(len_candidate, max_sep_offset));
++    }
++
++  synth_msg_index = nframe - synthethic_length;
++
++  /* we have alternative message ready, check the real one */
++  /* mostly copy from _gcry_rsa_pkcs1_decode_for_enc */
++  frame = mpi_to_string(value, nframe);
++  if (frame == NULL)
++    {
++      xfree (synthetic);
++      return gpg_err_code_from_syserror ();
++    }
++
++  /* FRAME = 0x00 || 0x02 || PS || 0x00 || M */
++  n = 0;
++  failed |= ct_not_equal_byte (frame[n++], 0x00);
++  failed |= ct_not_equal_byte (frame[n++], 0x02);
++
++  /* Find the terminating zero byte.  */
++  n0 = n;
++  for (; n < nframe; n++)
++    {
++      not_found &= ct_not_equal_byte (frame[n], 0x00);
++      n0 += not_found;
++    }
++
++  failed |= not_found;
++  n0 += ct_is_zero (not_found); /* Skip the zero byte.  */
++  /* the valid padding is at least 8 bytes -- the plaintext needs to start at index 11 or later */
++  failed |= ct_lt_s (n0, 11);
++
++  msg_index = ct_ulong_select (synth_msg_index, n0, failed);
++
++  /* To avoid the need memmove (O(N*log(N))), we use separate buffer where we move either
++   * of the messages. We can now also use the msg_index safely as its timing is not
++   * possible to distinguish valid and invalid padding */
++  for (i = msg_index, j = 0; i < nframe && j < nframe; i++, j++)
++    {
++      frame[j] = ct_uchar_select (synthetic[i], frame[i], failed);
++    }
++
++  *r_resultlen = j;
++  *r_result = frame;
++
++  if (DBG_CIPHER)
++    {
++      if (!failed)
++        log_printhex ("value extracted from PKCS#1 block type 2 encoded data",
++                    frame, nframe - n0);
++      else
++        log_printhex ("Synthetic value from implicit rejection",
++                    synthetic, synthethic_length);
++    }
++
++  xfree (synthetic);
++  return 0;
++}
++#endif /* WITH_MARVIN_WORKAROUND */
++
++
+ /* Encode {VALUE,VALUELEN} for an NBITS keys and hash algorithm ALGO
+    using the pkcs#1 block type 1 padding.  On success the result is
+    stored as a new MPI at R_RESULT.  On error the value at R_RESULT is
+@@ -694,14 +930,23 @@
+      happen due to the leading zero in OAEP frames and due to the
+      following random octets (seed^mask) which may have leading zero
+      bytes.  This all is needed to cope with our leading zeroes
+-     suppressing MPI implementation.  The code implictly implements
++     suppressing MPI implementation.  The code implicitly implements
+      Step 1b (bail out if NFRAME != N).  */
++#ifdef WITH_MARVIN_WORKAROUND
++  frame = mpi_to_string(value, nkey);
++  if (frame == NULL)
++    {
++      xfree (lhash);
++      return gpg_err_code_from_syserror ();
++    }
++#else
+   rc = octet_string_from_mpi (&frame, NULL, value, nkey);
+   if (rc)
+     {
+       xfree (lhash);
+       return GPG_ERR_ENCODING_PROBLEM;
+     }
++#endif /* WITH_MARVIN_WORKAROUND */
+   nframe = nkey;
+ 
+   /* Step 1c: Check that the key is long enough.  */
+@@ -716,7 +961,7 @@
+      gcry_mpi_aprint above.  */
+ 
+   /* Allocate space for SEED and DB.  */
+-  seed = xtrymalloc_secure (nframe - 1);
++  seed = xtrymalloc_secure (nframe);
+   if (!seed)
+     {
+       rc = gpg_err_code_from_syserror ();
 diff --git a/src/const-time.h b/src/const-time.h
-index 46eb187d..245967eb 100644
 --- a/src/const-time.h
 +++ b/src/const-time.h
-@@ -34,6 +34,12 @@ extern volatile unsigned int _gcry_ct_vone;
+@@ -26,6 +26,7 @@
+ #define ct_not_memequal _gcry_ct_not_memequal
+ #define ct_memequal _gcry_ct_memequal
+ #define ct_memmov_cond _gcry_ct_memmov_cond
++#define ct_memcpy _gcry_ct_memcpy
+ 
+ 
+ #ifndef HAVE_GCC_ASM_VOLATILE_MEMORY
+@@ -33,6 +34,20 @@
+ extern volatile unsigned int _gcry_ct_vone;
  #endif
  
- 
++/*
++ * Return 1 if A < B and return 0 otherwise.
++ */
++static inline int
++ct_lt (unsigned int a, unsigned int b)
++{
++  return (a ^ ((a ^ b) | ((a - b) ^ b))) >> (sizeof(unsigned int) * 8 - 1);
++}
++
 +static inline size_t
 +ct_lt_s (size_t a, size_t b)
 +{
 +  return ((a ^ ((a ^ b) | ((a - b) ^ b))) >> (sizeof(size_t) * 8 - 1));
 +}
-+
+ 
  /*
   * Return 0 if A is 0 and return 1 otherwise.
+@@ -115,6 +130,7 @@
+ DEFINE_CT_TYPE_GEN_MASK(ulong, unsigned long)
+ DEFINE_CT_TYPE_GEN_MASK(int16, int16_t)
+ DEFINE_CT_TYPE_GEN_MASK(u64, u64)
++DEFINE_CT_TYPE_GEN_MASK(uchar, unsigned char)
+ 
+ /*
+  * Return all bits set if A is 0 and return 1 otherwise.
+@@ -141,6 +157,7 @@
+ DEFINE_CT_TYPE_GEN_INV_MASK(ulong, unsigned long)
+ DEFINE_CT_TYPE_GEN_INV_MASK(int16, int16_t)
+ DEFINE_CT_TYPE_GEN_INV_MASK(u64, u64)
++DEFINE_CT_TYPE_GEN_INV_MASK(uchar, unsigned char)
+ 
+ /*
+  *  Return A when OP_ENABLED=1
+@@ -158,6 +175,7 @@
+ DEFINE_CT_TYPE_SELECT_FUNC(ulong, unsigned long)
+ DEFINE_CT_TYPE_SELECT_FUNC(int16, int16_t)
+ DEFINE_CT_TYPE_SELECT_FUNC(u64, u64)
++DEFINE_CT_TYPE_SELECT_FUNC(uchar, unsigned char)
+ 
+ /*
+  *  Return NULL when OP_ENABLED=1
+@@ -177,5 +195,6 @@
   */
--- 
-2.46.0
-
-
-From aca5bd25e819b2596754fdc6ecb1844462a5b4f0 Mon Sep 17 00:00:00 2001
-From: Jakub Jelen <jjelen@redhat.com>
-Date: Wed, 10 Apr 2024 15:18:39 +0200
-Subject: [PATCH 2/7] rsa: Constant time blinding removal
-
-* cipher/rsa.c (secret_blinded): Use constant time mulm implementation
-* configure.ac: New configure option --enable-marvin-workaround
-* mpi/Makefile.am: Build constant time multiplication
-* mpi/mpi-internal.h: Add constant time function prototypes
-* mpi/mpi-mul-cs.c: New file with constant time multiplication and
-  modulo.
-* mpi/mpi-mul.c (_gcry_mpi_mul_sec): New function.
-  (_gcry_mpi_mod_sec): New function.
-  (_gcry_mpi_mod_sec): New function.
-  (_gcry_mpi_reverse_sec): New function.
-  (_gcry_mpi_mulm_sec): New function.
-* src/gcrypt-int.h: Add new functions.
-
---
-
-The current MPI code is not constant time, potentially leaking plaintext
-when the attacker can observe enough decipher operations using RSA
-PKCS#1.5. This is described as a Marvin Attack:
-
-https://eprint.iacr.org/2023/1442
-
-Note, that this code is tested to be constant time only with the -O3
-optimization level.
-
-Signed-off-by: Jakub Jelen <jjelen@redhat.com>
----
- cipher/rsa.c       |   4 +
- configure.ac       |  16 +++
- mpi/Makefile.am    |   4 +
- mpi/mpi-internal.h |   6 ++
- mpi/mpi-mul-cs.c   | 263 +++++++++++++++++++++++++++++++++++++++++++++
- mpi/mpi-mul.c      | 169 +++++++++++++++++++++++++++++
- src/gcrypt-int.h   |   6 ++
- 7 files changed, 468 insertions(+)
- create mode 100644 mpi/mpi-mul-cs.c
-
+ void _gcry_ct_memmov_cond (void *dst, const void *src, size_t len,
+ 			   unsigned long op_enable);
++void _gcry_ct_memcpy (void *dst, const void *src, size_t len, size_t buffer_len);
+ 
+ #endif /*GCRY_CONST_TIME_H*/
 diff --git a/cipher/rsa.c b/cipher/rsa.c
-index c7a809f4..2f735f9c 100644
 --- a/cipher/rsa.c
 +++ b/cipher/rsa.c
-@@ -1197,7 +1197,11 @@ secret_blinded (gcry_mpi_t output, gcry_mpi_t input,
+@@ -1214,7 +1214,11 @@
    /* Undo blinding.  Here we calculate: y = (x * r^-1) mod n, where x
     * is the blinded decrypted data, ri is the modular multiplicative
     * inverse of r and n is the RSA modulus.  */
@@ -110,11 +421,139 @@ index c7a809f4..2f735f9c 100644
  
    _gcry_mpi_release (r);
    _gcry_mpi_release (ri);
+@@ -1449,6 +1453,7 @@
+ }
+ 
+ 
++#define SHA256_LEN 32
+ static gcry_err_code_t
+ rsa_decrypt (gcry_sexp_t *r_plain, gcry_sexp_t s_data, gcry_sexp_t keyparms)
+ 
+@@ -1464,6 +1469,9 @@
+   unsigned int nbits = rsa_get_nbits (keyparms);
+   gcry_sexp_t result = NULL;
+   gcry_sexp_t dummy = NULL;
++#ifdef WITH_MARVIN_WORKAROUND
++  unsigned char kdk[SHA256_LEN];
++#endif /* WITH_MARVIN_WORKAROUND */
+ 
+   rc = rsa_check_keysize (nbits);
+   if (rc)
+@@ -1511,6 +1519,71 @@
+   mpi_normalize (data);
+   mpi_fdiv_r (data, data, sk.n);
+ 
++#ifdef WITH_MARVIN_WORKAROUND
++  /* Implicit rejection: Derive KDK */
++  if (ctx.encoding == PUBKEY_ENC_PKCS1)
++    {
++      unsigned char *buf, *tmp;
++      unsigned int nbytes = (mpi_get_nbits (sk.n)+7)/8;
++      unsigned char key[SHA256_LEN];
++      gcry_md_hd_t hd;
++
++      /* (a) Convert `d` to big endian representation, left padded to the length of `n` */
++      rc = _gcry_mpi_to_octet_string (&buf, NULL, sk.d, nbytes);
++      if (rc)
++        {
++          rc = GPG_ERR_INTERNAL;
++          goto leave;
++        }
++
++      /* (b) Hash it using SHA-256 */
++      rc = _gcry_md_open (&hd, GCRY_MD_SHA256, 0);
++      if (rc)
++        {
++          xfree (buf);
++          rc = GPG_ERR_INTERNAL;
++          goto leave;
++        }
++      _gcry_md_write (hd, buf, nbytes);
++      /* keep the buffer around -- it will be needed for the ciphertext */
++      tmp = _gcry_md_read (hd, GCRY_MD_SHA256);
++      memcpy(key, tmp, SHA256_LEN);
++      _gcry_md_close (hd);
++
++      /* (c) Use the hash as a SHA-256 HMAC key and ciphertext as a message */
++      rc = _gcry_md_open (&hd, GCRY_MD_SHA256, GCRY_MD_FLAG_HMAC);
++      if (rc)
++        {
++          xfree (buf);
++          rc = GPG_ERR_INTERNAL;
++          goto leave;
++        }
++      rc = _gcry_md_setkey (hd, key, sizeof (key));
++      if (rc)
++        {
++          xfree (buf);
++          _gcry_md_close (hd);
++          rc = GPG_ERR_INTERNAL;
++          goto leave;
++        }
++
++      /* We need to convert the ciphertext to string, padded to the length of modulus */
++      rc = _gcry_mpi_to_octet_string (NULL, buf, data, nbytes);
++      if (rc)
++        {
++          xfree (buf);
++          _gcry_md_close (hd);
++          rc = GPG_ERR_INTERNAL;
++          goto leave;
++        }
++      _gcry_md_write (hd, buf, nbytes);
++      xfree (buf);
++      buf = _gcry_md_read (hd, 0);
++      memcpy(kdk, buf, SHA256_LEN);
++      _gcry_md_close (hd);
++    }
++#endif /* WITH_MARVIN_WORKAROUND */
++
+   /* Allocate MPI for the plaintext.  */
+   plain = mpi_snew (nbits);
+ 
+@@ -1541,10 +1614,26 @@
+   switch (ctx.encoding)
+     {
+     case PUBKEY_ENC_PKCS1:
++#ifdef WITH_MARVIN_WORKAROUND
++      if (!(ctx.flags & PUBKEY_FLAG_NO_IMPLICIT_REJECTION))
++        {
++          rc = _gcry_rsa_pkcs1_decode_for_enc_implicit_rejection (&unpad, &unpadlen, nbits, plain, kdk);
++          mpi_free (plain);
++          plain = NULL;
++          rc_sexp = sexp_build (&result, NULL, "(value %c)", (int)unpadlen, unpad, (nbits + 7) / 8);
++          *r_plain = result;
++          rc = ct_ulong_select (rc_sexp, rc, ct_is_zero (rc) & ct_is_not_zero (rc_sexp));
++          break;
++        }
++#endif /* WITH_MARVIN_WORKAROUND */
+       rc = _gcry_rsa_pkcs1_decode_for_enc (&unpad, &unpadlen, nbits, plain);
+       mpi_free (plain);
+       plain = NULL;
++#ifdef WITH_MARVIN_WORKAROUND
++      rc_sexp = sexp_build (&result, NULL, "(value %c)", (int)unpadlen, unpad, (nbits + 7) / 8);
++#else
+       rc_sexp = sexp_build (&result, NULL, "(value %b)", (int)unpadlen, unpad);
++#endif /* WITH_MARVIN_WORKAROUND */
+       *r_plain = sexp_null_cond (result, ct_is_not_zero (rc));
+       dummy = sexp_null_cond (result, ct_is_zero (rc));
+       sexp_release (dummy);
+@@ -1558,7 +1647,11 @@
+                                   plain, ctx.label, ctx.labellen);
+       mpi_free (plain);
+       plain = NULL;
++#ifdef WITH_MARVIN_WORKAROUND
++      rc_sexp = sexp_build (&result, NULL, "(value %c)", (int)unpadlen, unpad, (nbits + 7) / 8);
++#else
+       rc_sexp = sexp_build (&result, NULL, "(value %b)", (int)unpadlen, unpad);
++#endif /* WITH_MARVIN_WORKAROUND */
+       *r_plain = sexp_null_cond (result, ct_is_not_zero (rc));
+       dummy = sexp_null_cond (result, ct_is_zero (rc));
+       sexp_release (dummy);
 diff --git a/configure.ac b/configure.ac
-index 4c45de22..3f63b88e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -603,6 +603,22 @@ AC_ARG_ENABLE(jent-support,
+@@ -604,6 +604,22 @@
  	      jentsupport=$enableval,jentsupport=yes)
  AC_MSG_RESULT($jentsupport)
  
@@ -138,10 +577,9 @@ index 4c45de22..3f63b88e 100644
  AC_MSG_CHECKING([whether padlock support is requested])
  AC_ARG_ENABLE(padlock-support,
 diff --git a/mpi/Makefile.am b/mpi/Makefile.am
-index 6fe63fce..85679e08 100644
 --- a/mpi/Makefile.am
 +++ b/mpi/Makefile.am
-@@ -181,3 +181,7 @@ EXTRA_libmpi_la_SOURCES = \
+@@ -181,3 +181,7 @@
                asm-common-aarch64.h \
                asm-common-amd64.h \
                asm-common-i386.h
@@ -150,10 +588,9 @@ index 6fe63fce..85679e08 100644
 +libmpi_la_SOURCES += mpi-mul-cs.c
 +endif
 diff --git a/mpi/mpi-internal.h b/mpi/mpi-internal.h
-index 935bf3e1..39de5161 100644
 --- a/mpi/mpi-internal.h
 +++ b/mpi/mpi-internal.h
-@@ -239,6 +239,12 @@ void _gcry_mpih_mul_karatsuba_case( mpi_ptr_t prodp,
+@@ -238,6 +238,12 @@
  				 mpi_ptr_t vp, mpi_size_t vsize,
  				 struct karatsuba_ctx *ctx );
  
@@ -167,8 +604,6 @@ index 935bf3e1..39de5161 100644
  /*-- mpih-mul_1.c (or xxx/cpu/ *.S) --*/
  mpi_limb_t _gcry_mpih_mul_1( mpi_ptr_t res_ptr, mpi_ptr_t s1_ptr,
 diff --git a/mpi/mpi-mul-cs.c b/mpi/mpi-mul-cs.c
-new file mode 100644
-index 00000000..3f77ac94
 --- /dev/null
 +++ b/mpi/mpi-mul-cs.c
 @@ -0,0 +1,263 @@
@@ -436,10 +871,9 @@ index 00000000..3f77ac94
 +  memcpy (ret, &atmp[anum], sizeof(limb_t)*modnum);
 +}
 diff --git a/mpi/mpi-mul.c b/mpi/mpi-mul.c
-index e8e57475..e318f7da 100644
 --- a/mpi/mpi-mul.c
 +++ b/mpi/mpi-mul.c
-@@ -203,6 +203,133 @@ _gcry_mpi_mul (gcry_mpi_t w, gcry_mpi_t u, gcry_mpi_t v)
+@@ -203,6 +203,133 @@
  	_gcry_mpi_free_limb_space (tmp_limb, tmp_limb_nlimbs);
  }
  
@@ -573,7 +1007,7 @@ index e8e57475..e318f7da 100644
  
  void
  _gcry_mpi_mulm (gcry_mpi_t w, gcry_mpi_t u, gcry_mpi_t v, gcry_mpi_t m)
-@@ -221,3 +348,45 @@ _gcry_mpi_mulm (gcry_mpi_t w, gcry_mpi_t u, gcry_mpi_t v, gcry_mpi_t m)
+@@ -221,3 +348,45 @@
    if (temp_m)
      mpi_free(temp_m);
  }
@@ -620,10 +1054,9 @@ index e8e57475..e318f7da 100644
 +}
 +#endif /* WITH_MARVIN_WORKAROUND */
 diff --git a/src/gcrypt-int.h b/src/gcrypt-int.h
-index 1b449281..7e9e9894 100644
 --- a/src/gcrypt-int.h
 +++ b/src/gcrypt-int.h
-@@ -453,6 +453,9 @@ void _gcry_mpi_subm (gcry_mpi_t w, gcry_mpi_t u, gcry_mpi_t v, gcry_mpi_t m);
+@@ -491,6 +491,9 @@
  void _gcry_mpi_mul (gcry_mpi_t w, gcry_mpi_t u, gcry_mpi_t v);
  void _gcry_mpi_mul_ui (gcry_mpi_t w, gcry_mpi_t u, unsigned long v );
  void _gcry_mpi_mulm (gcry_mpi_t w, gcry_mpi_t u, gcry_mpi_t v, gcry_mpi_t m);
@@ -633,7 +1066,7 @@ index 1b449281..7e9e9894 100644
  void _gcry_mpi_mul_2exp (gcry_mpi_t w, gcry_mpi_t u, unsigned long cnt);
  void _gcry_mpi_div (gcry_mpi_t q, gcry_mpi_t r,
                     gcry_mpi_t dividend, gcry_mpi_t divisor, int round);
-@@ -548,6 +551,9 @@ int _gcry_mpi_get_flag (gcry_mpi_t a, enum gcry_mpi_flag flag);
+@@ -587,6 +590,9 @@
  #define mpi_mul_2exp(w,u,v)    _gcry_mpi_mul_2exp ((w),(u),(v))
  #define mpi_mul(w,u,v)         _gcry_mpi_mul ((w),(u),(v))
  #define mpi_mulm(w,u,v,m)      _gcry_mpi_mulm ((w),(u),(v),(m))
@@ -643,56 +1076,10 @@ index 1b449281..7e9e9894 100644
  #define mpi_powm(w,b,e,m)      _gcry_mpi_powm ( (w), (b), (e), (m) )
  #define mpi_tdiv(q,r,a,m)      _gcry_mpi_div ( (q), (r), (a), (m), 0)
  #define mpi_fdiv(q,r,a,m)      _gcry_mpi_div ( (q), (r), (a), (m), -1)
--- 
-2.46.0
-
-
-From 1b7b995c5f4cd48a3b98915826431efb41a927ce Mon Sep 17 00:00:00 2001
-From: Jakub Jelen <jjelen@redhat.com>
-Date: Fri, 26 Apr 2024 16:39:18 +0200
-Subject: [PATCH 3/7] Constant time conversion of the message to the SEXP
-
-* cipher/rsa.c (rsa_decrypt): Use constant time conversion to SEXP after
-  decryption.
-* src/const-time.c (_gcry_ct_memcpy): Constant time memcpy. New.
-* src/const-time.h (ct_lt): New.
-  (ct_char_gen{,_inv}_mask): New.
-* src/sexp.c (do_vsexp_sscan): Introduce constant time version of %b
---
-
-The current conversion of the message back to the SEXP buffer leaks the
-length of the decrypted message. This introduces a constant-time variant
-that should run for the same time for any input length.
-
-Signed-off-by: Jakub Jelen <jjelen@redhat.com>
----
- cipher/rsa.c     |  4 ++++
- src/const-time.c | 28 ++++++++++++++++++++++++++--
- src/const-time.h | 12 ++++++++++++
- src/sexp.c       | 39 +++++++++++++++++++++++++++++++++------
- 4 files changed, 75 insertions(+), 8 deletions(-)
-
-diff --git a/cipher/rsa.c b/cipher/rsa.c
-index 2f735f9c..52f2aa89 100644
---- a/cipher/rsa.c
-+++ b/cipher/rsa.c
-@@ -1519,7 +1519,11 @@ rsa_decrypt (gcry_sexp_t *r_plain, gcry_sexp_t s_data, gcry_sexp_t keyparms)
-       rc = _gcry_rsa_pkcs1_decode_for_enc (&unpad, &unpadlen, nbits, plain);
-       mpi_free (plain);
-       plain = NULL;
-+#ifdef WITH_MARVIN_WORKAROUND
-+      rc_sexp = sexp_build (&result, NULL, "(value %c)", (int)unpadlen, unpad, (nbits + 7) / 8);
-+#else
-       rc_sexp = sexp_build (&result, NULL, "(value %b)", (int)unpadlen, unpad);
-+#endif /* WITH_MARVIN_WORKAROUND */
-       *r_plain = sexp_null_cond (result, ct_is_not_zero (rc));
-       dummy = sexp_null_cond (result, ct_is_zero (rc));
-       sexp_release (dummy);
 diff --git a/src/const-time.c b/src/const-time.c
-index 0fb53a07..cecb1937 100644
 --- a/src/const-time.c
 +++ b/src/const-time.c
-@@ -77,8 +77,8 @@ _gcry_ct_memmov_cond (void *dst, const void *src, size_t len,
+@@ -105,8 +105,8 @@
  		      unsigned long op_enable)
  {
    /* Note: dual mask with AND/OR used for EM leakage mitigation */
@@ -703,7 +1090,7 @@ index 0fb53a07..cecb1937 100644
    unsigned char *b_dst = dst;
    const unsigned char *b_src = src;
  
-@@ -86,3 +86,27 @@ _gcry_ct_memmov_cond (void *dst, const void *src, size_t len,
+@@ -130,3 +130,27 @@
        len--;
      }
  }
@@ -731,58 +1118,7 @@ index 0fb53a07..cecb1937 100644
 +      b_dst[i] = (b_src[i] & mask_a) | (b_dst[i] & mask_b);
 +    }
 +}
-diff --git a/src/const-time.h b/src/const-time.h
-index 245967eb..74055a4b 100644
---- a/src/const-time.h
-+++ b/src/const-time.h
-@@ -26,6 +26,7 @@
- #define ct_not_memequal _gcry_ct_not_memequal
- #define ct_memequal _gcry_ct_memequal
- #define ct_memmov_cond _gcry_ct_memmov_cond
-+#define ct_memcpy _gcry_ct_memcpy
- 
- 
- #ifndef HAVE_GCC_ASM_VOLATILE_MEMORY
-@@ -33,6 +34,14 @@ extern volatile unsigned int _gcry_ct_vzero;
- extern volatile unsigned int _gcry_ct_vone;
- #endif
- 
-+/*
-+ * Return 1 if A < B and return 0 otherwise.
-+ */
-+static inline int
-+ct_lt (unsigned int a, unsigned int b)
-+{
-+  return (a ^ ((a ^ b) | ((a - b) ^ b))) >> (sizeof(unsigned int)*8 - 1);
-+}
- 
- static inline size_t
- ct_lt_s (size_t a, size_t b)
-@@ -112,6 +121,7 @@ unsigned int _gcry_ct_memequal (const void *b1, const void *b2, size_t len);
- DEFINE_CT_TYPE_GEN_MASK(ulong, unsigned long)
- DEFINE_CT_TYPE_GEN_MASK(int16, int16_t)
- DEFINE_CT_TYPE_GEN_MASK(u64, u64)
-+DEFINE_CT_TYPE_GEN_MASK(uchar, unsigned char)
- 
- /*
-  * Return all bits set if A is 0 and return 1 otherwise.
-@@ -137,6 +147,7 @@ DEFINE_CT_TYPE_GEN_MASK(int16, int16_t)
- DEFINE_CT_TYPE_GEN_INV_MASK(ulong, unsigned long)
- DEFINE_CT_TYPE_GEN_INV_MASK(int16, int16_t)
- DEFINE_CT_TYPE_GEN_INV_MASK(u64, u64)
-+DEFINE_CT_TYPE_GEN_INV_MASK(uchar, unsigned char)
- 
- /*
-  *  Return A when OP_ENABLED=1
-@@ -172,5 +183,6 @@ sexp_null_cond (gcry_sexp_t w, unsigned long op_enable)
-  */
- void _gcry_ct_memmov_cond (void *dst, const void *src, size_t len,
- 			   unsigned long op_enable);
-+void _gcry_ct_memcpy (void *dst, const void *src, size_t len, size_t buffer_len);
- 
- #endif /*GCRY_CONST_TIME_H*/
 diff --git a/src/sexp.c b/src/sexp.c
-index c77d0212..8e6c847f 100644
 --- a/src/sexp.c
 +++ b/src/sexp.c
 @@ -31,6 +31,7 @@
@@ -793,7 +1129,7 @@ index c77d0212..8e6c847f 100644
  
  
  /* Notes on the internal memory layout.
-@@ -1079,6 +1080,10 @@ unquote_string (const char *string, size_t length, unsigned char *buf)
+@@ -1079,6 +1080,10 @@
   *	%d - integer stored as string (no autoswitch to secure allocation)
   *      %b - memory buffer; this takes _two_ arguments: an integer with the
   *           length of the buffer and a pointer to the buffer.
@@ -804,7 +1140,7 @@ index c77d0212..8e6c847f 100644
   *      %S - Copy an gcry_sexp_t here.  The S-expression needs to be a
   *           regular one, starting with a parenthesis.
   *           (no autoswitch to secure allocation)
-@@ -1204,7 +1209,7 @@ do_vsexp_sscan (gcry_sexp_t *retsexp, size_t *erroff,
+@@ -1210,7 +1215,7 @@
  	    {
  	      switch (*p)
  		{
@@ -813,7 +1149,7 @@ index c77d0212..8e6c847f 100644
  		case 'r': case '"': case '\'': case '\\':
  		  quoted_esc = 0;
  		  break;
-@@ -1538,14 +1543,27 @@ do_vsexp_sscan (gcry_sexp_t *retsexp, size_t *erroff,
+@@ -1592,14 +1597,27 @@
  	      memcpy (c.pos, astr, alen);
  	      c.pos += alen;
  	    }
@@ -841,9 +1177,9 @@ index c77d0212..8e6c847f 100644
 +	           alen = buflen;
 +	         }
  
-               if (alen < 0)
+               if (alen < 0 || alen > 65535)
                  {
-@@ -1578,9 +1596,18 @@ do_vsexp_sscan (gcry_sexp_t *retsexp, size_t *erroff,
+@@ -1632,9 +1650,18 @@
  		}
  
  	      *c.pos++ = ST_DATA;
@@ -865,309 +1201,10 @@ index c77d0212..8e6c847f 100644
  	    }
  	  else if (*p == 'd')
  	    {
--- 
-2.46.0
-
-
-From 14008d6f9f3985461ea50a6760391086c9bbe72b Mon Sep 17 00:00:00 2001
-From: Jakub Jelen <jjelen@redhat.com>
-Date: Thu, 30 May 2024 17:50:36 +0200
-Subject: [PATCH 5/7] rsa: Implement constant-time conversion of MPI to string
-
---
-* cipher/rsa-common.c (_gcry_rsa_pkcs1_decode_for_enc): Replace
-  _gcry_mpi_print() with constant time operation.
-
-The _gcry_mpi_print() does a lot of housekeeping on the provided MPI
-including skipping all the leading zeroes. If the ciphertext decrypted
-to many leading zeroes, the output from this function is much shorter
-(could be even all zeroes), which would immediately fail.
-
-This implements the dummy conversion of the MPI with the knowledge that
-the encrypted data will always have the fixed length, providing constant
-time operation.
-
-Signed-off-by: Jakub Jelen <jjelen@redhat.com>
----
- cipher/rsa-common.c | 35 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
-
-diff --git a/cipher/rsa-common.c b/cipher/rsa-common.c
-index e45cb30d..a61d82e3 100644
---- a/cipher/rsa-common.c
-+++ b/cipher/rsa-common.c
-@@ -28,6 +28,7 @@
- #include "cipher.h"
- #include "pubkey-internal.h"
- #include "const-time.h"
-+#include "bufhelp.h"
- 
- 
- /* Turn VALUE into an octet string and store it in an allocated buffer
-@@ -199,7 +200,6 @@ gpg_err_code_t
- _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
-                                 unsigned int nbits, gcry_mpi_t value)
- {
--  gcry_error_t err;
-   unsigned char *frame = NULL;
-   size_t nframe = (nbits+7) / 8;
-   size_t n, n0;
-@@ -208,6 +208,36 @@ _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
- 
-   *r_result = NULL;
- 
-+  {
-+#ifdef WITH_MARVIN_WORKAROUND
-+  /* Allocate more to fit the whole MPI and allow moving it later to the right place */
-+  size_t alloc_len = value->nlimbs * BYTES_PER_MPI_LIMB;
-+  if ( !(frame = xtrymalloc_secure (alloc_len)))
-+    return gpg_err_code_from_syserror ();
-+
-+  /* shovel the MPI content to the buffer as it is */
-+  unsigned char *p = frame;
-+  for (int i = value->nlimbs - 1; i >= 0; i--)
-+    {
-+      mpi_limb_t *alimb = &value->d[i];
-+#if BYTES_PER_MPI_LIMB == 4
-+      buf_put_be32 (p, *alimb);
-+      p += 4;
-+#elif BYTES_PER_MPI_LIMB == 8
-+      buf_put_be64 (p, *alimb);
-+      p += 8;
-+#else
-+#     error please implement for this limb size.
-+#endif
-+    }
-+  /* Remove leading zeroes, but not all! Keep the buffer to the nframe length!
-+   * -- valid PKCS#1.5 padding will never have different lengths, than modulus */
-+  memmov_independently (frame, frame + (alloc_len - nframe), nframe, alloc_len);
-+  n = 0;
-+  failed |= ct_not_equal_byte (frame[n++], 0x00);
-+#else
-+  gcry_error_t err;
-+
-   if ( !(frame = xtrymalloc_secure (nframe)))
-     return gpg_err_code_from_syserror ();
- 
-@@ -235,6 +265,9 @@ _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
-   n = 0;
-   if (!frame[0])
-     n++;
-+#endif
-+  }
-+
-   failed |= ct_not_equal_byte (frame[n++], 0x02);
- 
-   /* Find the terminating zero byte.  */
--- 
-2.46.0
-
-
-From 5c0b1707e48d21fa4d860b0bafdeaeb438885707 Mon Sep 17 00:00:00 2001
-From: Jakub Jelen <jjelen@redhat.com>
-Date: Fri, 31 May 2024 15:03:29 +0200
-Subject: [PATCH 6/7] cipher: Use the constant time conversion also for OAEP
-
---
-* cipher/rsa-common.c (mpi_to_string): New function
-  (_gcry_rsa_pkcs1_decode_for_enc): Use new function for MPI to string
-  conversion.
-  (_gcry_rsa_oaep_decode): Use the new function for MPI to string
-  conversion.
-* cipher/rsa.c (rsa_decrypt): Use constant time conversion to S-exp for
-  OAEP padding.
-
-Signed-off-by: Jakub Jelen <jjelen@redhat.com>
----
- cipher/rsa-common.c | 75 +++++++++++++++++++++++++++++++--------------
- cipher/rsa.c        |  4 +++
- 2 files changed, 56 insertions(+), 23 deletions(-)
-
-diff --git a/cipher/rsa-common.c b/cipher/rsa-common.c
-index a61d82e3..82a9e083 100644
---- a/cipher/rsa-common.c
-+++ b/cipher/rsa-common.c
-@@ -192,31 +192,26 @@ memmov_independently (void *dst, const void *src, size_t len, size_t buflen)
- }
- 
- 
--/* Decode a plaintext in VALUE assuming pkcs#1 block type 2 padding.
--   NBITS is the size of the secret key.  On success the result is
--   stored as a newly allocated buffer at R_RESULT and its valid length at
--   R_RESULTLEN.  On error NULL is stored at R_RESULT.  */
--gpg_err_code_t
--_gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
--                                unsigned int nbits, gcry_mpi_t value)
-+static unsigned char *
-+mpi_to_string(gcry_mpi_t value, size_t nframe)
- {
-   unsigned char *frame = NULL;
--  size_t nframe = (nbits+7) / 8;
--  size_t n, n0;
--  unsigned int failed = 0;
--  unsigned int not_found = 1;
-+  unsigned char *p;
-+  size_t noff;
-+  /* Allocate memory to fit the whole MPI limbs and allow moving it later to the right place */
-+  size_t alloc_len = value->nlimbs * BYTES_PER_MPI_LIMB;
- 
--  *r_result = NULL;
-+  /* for too short input, we need to allocate at least modulus length (which might still be valid in case of OAEP) */
-+  noff = (alloc_len < nframe) ? nframe - alloc_len : 0;
-+  alloc_len = alloc_len + noff;
- 
--  {
--#ifdef WITH_MARVIN_WORKAROUND
--  /* Allocate more to fit the whole MPI and allow moving it later to the right place */
--  size_t alloc_len = value->nlimbs * BYTES_PER_MPI_LIMB;
-   if ( !(frame = xtrymalloc_secure (alloc_len)))
--    return gpg_err_code_from_syserror ();
-+    return NULL;
- 
-+  if (noff)
-+    memset (frame, 0, noff);
-+  p = frame + noff;
-   /* shovel the MPI content to the buffer as it is */
--  unsigned char *p = frame;
-   for (int i = value->nlimbs - 1; i >= 0; i--)
-     {
-       mpi_limb_t *alimb = &value->d[i];
-@@ -230,9 +225,34 @@ _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
- #     error please implement for this limb size.
- #endif
-     }
--  /* Remove leading zeroes, but not all! Keep the buffer to the nframe length!
--   * -- valid PKCS#1.5 padding will never have different lengths, than modulus */
-+  /* Move the MPI to the right place -- with the least significant bytes aligned to the modulus length
-+   * -- this might keep some leading zeroes at the beginning of the buffer, but this might be valid for OAEP */
-   memmov_independently (frame, frame + (alloc_len - nframe), nframe, alloc_len);
-+  return frame;
-+}
-+
-+/* Decode a plaintext in VALUE assuming pkcs#1 block type 2 padding.
-+   NBITS is the size of the secret key.  On success the result is
-+   stored as a newly allocated buffer at R_RESULT and its valid length at
-+   R_RESULTLEN.  On error NULL is stored at R_RESULT.  */
-+gpg_err_code_t
-+_gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
-+                                unsigned int nbits, gcry_mpi_t value)
-+{
-+  unsigned char *frame = NULL;
-+  size_t nframe = (nbits+7) / 8;
-+  size_t n, n0;
-+  unsigned int failed = 0;
-+  unsigned int not_found = 1;
-+
-+  *r_result = NULL;
-+
-+  {
-+#ifdef WITH_MARVIN_WORKAROUND
-+  frame = mpi_to_string(value, nframe);
-+  if (frame == NULL)
-+    return gpg_err_code_from_syserror ();
-+
-   n = 0;
-   failed |= ct_not_equal_byte (frame[n++], 0x00);
- #else
-@@ -265,7 +285,7 @@ _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
-   n = 0;
-   if (!frame[0])
-     n++;
--#endif
-+#endif /* WITH_MARVIN_WORKAROUND */
-   }
- 
-   failed |= ct_not_equal_byte (frame[n++], 0x02);
-@@ -709,14 +729,23 @@ _gcry_rsa_oaep_decode (unsigned char **r_result, size_t *r_resultlen,
-      happen due to the leading zero in OAEP frames and due to the
-      following random octets (seed^mask) which may have leading zero
-      bytes.  This all is needed to cope with our leading zeroes
--     suppressing MPI implementation.  The code implictly implements
-+     suppressing MPI implementation.  The code implicitly implements
-      Step 1b (bail out if NFRAME != N).  */
-+#ifdef WITH_MARVIN_WORKAROUND
-+  frame = mpi_to_string(value, nkey);
-+  if (frame == NULL)
-+    {
-+      xfree (lhash);
-+      return gpg_err_code_from_syserror ();
-+    }
-+#else
-   rc = octet_string_from_mpi (&frame, NULL, value, nkey);
-   if (rc)
-     {
-       xfree (lhash);
-       return GPG_ERR_ENCODING_PROBLEM;
-     }
-+#endif /* WITH_MARVIN_WORKAROUND */
-   nframe = nkey;
- 
-   /* Step 1c: Check that the key is long enough.  */
-@@ -731,7 +760,7 @@ _gcry_rsa_oaep_decode (unsigned char **r_result, size_t *r_resultlen,
-      gcry_mpi_aprint above.  */
- 
-   /* Allocate space for SEED and DB.  */
--  seed = xtrymalloc_secure (nframe - 1);
-+  seed = xtrymalloc_secure (nframe);
-   if (!seed)
-     {
-       rc = gpg_err_code_from_syserror ();
-diff --git a/cipher/rsa.c b/cipher/rsa.c
-index 52f2aa89..c196724c 100644
---- a/cipher/rsa.c
-+++ b/cipher/rsa.c
-@@ -1537,7 +1537,11 @@ rsa_decrypt (gcry_sexp_t *r_plain, gcry_sexp_t s_data, gcry_sexp_t keyparms)
-                                   plain, ctx.label, ctx.labellen);
-       mpi_free (plain);
-       plain = NULL;
-+#ifdef WITH_MARVIN_WORKAROUND
-+      rc_sexp = sexp_build (&result, NULL, "(value %c)", (int)unpadlen, unpad, (nbits + 7) / 8);
-+#else
-       rc_sexp = sexp_build (&result, NULL, "(value %b)", (int)unpadlen, unpad);
-+#endif /* WITH_MARVIN_WORKAROUND */
-       *r_plain = sexp_null_cond (result, ct_is_not_zero (rc));
-       dummy = sexp_null_cond (result, ct_is_zero (rc));
-       sexp_release (dummy);
--- 
-2.46.0
-
-
-From 4dffeaeadf792931aee61e6f51f59cf911c0c1f5 Mon Sep 17 00:00:00 2001
-From: Jakub Jelen <jjelen@redhat.com>
-Date: Mon, 29 Apr 2024 19:06:17 +0200
-Subject: [PATCH 7/7] Implement implicit rejection for PKCS#1.5 decipher
-
---
-* cipher/pubkey-internal.h
-  (_gcry_rsa_pkcs1_decode_for_enc_implicit_rejection): New.
-* pubkey-util.c (_gcry_pk_util_parse_flaglist): Parse the new flag
-  no-implicit-rejection.
-* cipher/rsa-common.c (rsa_prf): New function.
-  (_gcry_rsa_pkcs1_decode_for_enc_implicit_rejection): New function.
-* cipher/rsa.c (rsa_decrypt): Handle implicit rejection.
-* src/cipher.h (pk_encoding): New flag.
-* tests/pkcs1v2.c (extract_cmp_data): Allow quiet test.
-  (check_v15crypt): Add support for implicit rejection.
-* tests/pkcs1v2-v15c.h: Add test vectors for implicit rejection.
-
-Signed-off-by: Jakub Jelen <jjelen@redhat.com>
----
- cipher/pubkey-internal.h |   8 ++
- cipher/pubkey-util.c     |   9 ++
- cipher/rsa-common.c      | 181 +++++++++++++++++++++++
- cipher/rsa.c             |  81 +++++++++++
- src/cipher.h             |  37 ++---
- src/const-time.c         |   2 +-
- src/const-time.h         |   3 +-
- tests/pkcs1v2-v15c.h     | 304 +++++++++++++++++++++++++++++++++++++++
- tests/pkcs1v2.c          | 124 +++++++++++-----
- 9 files changed, 692 insertions(+), 57 deletions(-)
-
 diff --git a/cipher/pubkey-internal.h b/cipher/pubkey-internal.h
-index acf45105..f66574fa 100644
 --- a/cipher/pubkey-internal.h
 +++ b/cipher/pubkey-internal.h
-@@ -55,6 +55,14 @@ _gcry_rsa_pkcs1_encode_for_enc (gcry_mpi_t *r_result, unsigned int nbits,
+@@ -55,6 +55,14 @@
  gpg_err_code_t
  _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
                                  unsigned int nbits, gcry_mpi_t value);
@@ -1183,10 +1220,9 @@ index acf45105..f66574fa 100644
  _gcry_rsa_pkcs1_encode_raw_for_sig (gcry_mpi_t *r_result, unsigned int nbits,
                                  const unsigned char *value, size_t valuelen);
 diff --git a/cipher/pubkey-util.c b/cipher/pubkey-util.c
-index 68defea6..e760dd4c 100644
 --- a/cipher/pubkey-util.c
 +++ b/cipher/pubkey-util.c
-@@ -193,6 +193,15 @@ _gcry_pk_util_parse_flaglist (gcry_sexp_t list,
+@@ -195,6 +195,15 @@
              rc = GPG_ERR_INV_FLAG;
            break;
  
@@ -1202,313 +1238,7 @@ index 68defea6..e760dd4c 100644
          default:
            if (!igninvflag)
              rc = GPG_ERR_INV_FLAG;
-diff --git a/cipher/rsa-common.c b/cipher/rsa-common.c
-index 82a9e083..e776a309 100644
---- a/cipher/rsa-common.c
-+++ b/cipher/rsa-common.c
-@@ -318,6 +318,187 @@ _gcry_rsa_pkcs1_decode_for_enc (unsigned char **r_result, size_t *r_resultlen,
- }
- 
- 
-+#ifdef WITH_MARVIN_WORKAROUND
-+#define SHA256_LEN 32
-+static gcry_err_code_t
-+rsa_prf(unsigned char *out, size_t out_len, const char *label, size_t label_len, unsigned char *kdk, size_t nbits)
-+{
-+  gcry_err_code_t rc = GPG_ERR_NO_ERROR;
-+  size_t pos;
-+  uint16_t iter = 0;
-+  unsigned char be_iter[2];
-+  unsigned char be_bitlen[2];
-+  gcry_md_hd_t hd;
-+  gcry_error_t err;
-+
-+  be_bitlen[0] = (nbits >> 8) & 0xff;
-+  be_bitlen[1] = nbits & 0xff;
-+
-+  err = _gcry_md_open (&hd, GCRY_MD_SHA256, GCRY_MD_FLAG_HMAC);
-+  if (err)
-+    {
-+      return GPG_ERR_INTERNAL;
-+    }
-+  err = _gcry_md_setkey (hd, kdk, SHA256_LEN);
-+  if (err)
-+    {
-+      _gcry_md_close (hd);
-+      return GPG_ERR_INTERNAL;
-+    }
-+  for (pos = 0; pos < out_len; pos += SHA256_LEN, iter++)
-+    {
-+      unsigned char *tmp;
-+
-+      _gcry_md_reset(hd);
-+
-+      be_iter[0] = (iter >> 8) & 0xff;
-+      be_iter[1] = iter & 0xff;
-+      _gcry_md_write (hd, be_iter, sizeof (be_iter));
-+      _gcry_md_write (hd, label, label_len);
-+      _gcry_md_write (hd, be_bitlen, sizeof (be_bitlen));
-+
-+      tmp = _gcry_md_read(hd, 0);
-+      if (pos + SHA256_LEN > out_len)
-+        {
-+          memcpy(out + pos, tmp, out_len - pos);
-+        }
-+      else
-+        {
-+          memcpy(out + pos, tmp, SHA256_LEN);
-+        }
-+    }
-+  _gcry_md_close (hd);
-+  return rc;
-+}
-+
-+
-+/* Decode a plaintext in VALUE assuming pkcs#1 block type 2 padding.
-+   NBITS is the size of the secret key.  On success the result is
-+   stored as a newly allocated buffer at R_RESULT and its valid length at
-+   R_RESULTLEN.  On error R_RESULT contains bogus value of random length.
-+   For more information, see description of Implicit Rejection in Marvin paper
-+   https://people.redhat.com/~hkario/marvin/marvin-attack-paper.pdf */
-+#define MAX_LEN_GEN_TRIES 128
-+gpg_err_code_t
-+_gcry_rsa_pkcs1_decode_for_enc_implicit_rejection (unsigned char **r_result,
-+                                                   size_t *r_resultlen,
-+                                                   unsigned int nbits,
-+                                                   gcry_mpi_t value,
-+                                                   unsigned char *kdk)
-+{
-+  unsigned char *frame = NULL;
-+  size_t nframe = (nbits+7) / 8;
-+  size_t n, n0;
-+  unsigned int failed = 0;
-+  unsigned int not_found = 1;
-+  int i, j;
-+  uint16_t len_mask;
-+  uint16_t max_sep_offset;
-+  unsigned char *synthetic = NULL;
-+  unsigned long synthethic_length;
-+  uint16_t len_candidate;
-+  unsigned char candidate_lengths[MAX_LEN_GEN_TRIES * sizeof(len_candidate)];
-+  int synth_msg_index = 0, msg_index;
-+
-+  *r_result = NULL;
-+
-+  synthetic = xtrymalloc(nframe);
-+  if (synthetic == NULL)
-+    {
-+      free (synthetic);
-+      return gpg_err_code_from_syserror ();
-+    }
-+
-+  if (rsa_prf(synthetic, nframe, "message", 7, kdk, nframe * 8) < 0)
-+    {
-+      xfree (synthetic);
-+      return GPG_ERR_INTERNAL;
-+    }
-+
-+  /* decide how long the random message should be */
-+  if (rsa_prf(candidate_lengths, sizeof(candidate_lengths),
-+              "length", 6, kdk, MAX_LEN_GEN_TRIES * sizeof(len_candidate) * 8) < 0)
-+    {
-+      xfree (synthetic);
-+      return GPG_ERR_INTERNAL;
-+    }
-+
-+  len_mask = max_sep_offset = nframe - 2 - 8;
-+  len_mask |= len_mask >> 1;
-+  len_mask |= len_mask >> 2;
-+  len_mask |= len_mask >> 4;
-+  len_mask |= len_mask >> 8;
-+
-+  synthethic_length = 0;
-+  for (i = 0; i < MAX_LEN_GEN_TRIES * (int)sizeof(len_candidate);
-+        i += sizeof(len_candidate))
-+    {
-+      len_candidate = (candidate_lengths[i] << 8) | candidate_lengths[i + 1];
-+      len_candidate &= len_mask;
-+
-+      synthethic_length = ct_ulong_select(
-+          len_candidate, synthethic_length,
-+          ct_lt(len_candidate, max_sep_offset));
-+    }
-+
-+  synth_msg_index = nframe - synthethic_length;
-+
-+  /* we have alternative message ready, check the real one */
-+  /* mostly copy from _gcry_rsa_pkcs1_decode_for_enc */
-+  frame = mpi_to_string(value, nframe);
-+  if (frame == NULL)
-+    {
-+      xfree (synthetic);
-+      return gpg_err_code_from_syserror ();
-+    }
-+
-+  /* FRAME = 0x00 || 0x02 || PS || 0x00 || M */
-+  n = 0;
-+  failed |= ct_not_equal_byte (frame[n++], 0x00);
-+  failed |= ct_not_equal_byte (frame[n++], 0x02);
-+
-+  /* Find the terminating zero byte.  */
-+  n0 = n;
-+  for (; n < nframe; n++)
-+    {
-+      not_found &= ct_not_equal_byte (frame[n], 0x00);
-+      n0 += not_found;
-+    }
-+
-+  failed |= not_found;
-+  n0 += ct_is_zero (not_found); /* Skip the zero byte.  */
-+  /* the valid padding is at least 8 bytes -- the plaintext needs to start at index 11 or later */
-+  failed |= ct_lt_s (n0, 11);
-+
-+  msg_index = ct_ulong_select (synth_msg_index, n0, failed);
-+
-+  /* To avoid the need memmove (O(N*log(N))), we use separate buffer where we move either
-+   * of the messages. We can now also use the msg_index safely as its timing is not
-+   * possible to distinguish valid and invalid padding */
-+  for (i = msg_index, j = 0; i < nframe && j < nframe; i++, j++)
-+    {
-+      frame[j] = ct_uchar_select (synthetic[i], frame[i], failed);
-+    }
-+
-+  *r_resultlen = j;
-+  *r_result = frame;
-+
-+  if (DBG_CIPHER)
-+    {
-+      if (!failed)
-+        log_printhex ("value extracted from PKCS#1 block type 2 encoded data",
-+                    frame, nframe - n0);
-+      else
-+        log_printhex ("Synthetic value from implicit rejection",
-+                    synthetic, synthethic_length);
-+    }
-+
-+  xfree (synthetic);
-+  return 0;
-+}
-+#endif /* WITH_MARVIN_WORKAROUND */
-+
-+
- /* Encode {VALUE,VALUELEN} for an NBITS keys and hash algorithm ALGO
-    using the pkcs#1 block type 1 padding.  On success the result is
-    stored as a new MPI at R_RESULT.  On error the value at R_RESULT is
-diff --git a/cipher/rsa.c b/cipher/rsa.c
-index c196724c..9c1ef1f7 100644
---- a/cipher/rsa.c
-+++ b/cipher/rsa.c
-@@ -1436,6 +1436,7 @@ rsa_encrypt (gcry_sexp_t *r_ciph, gcry_sexp_t s_data, gcry_sexp_t keyparms)
- }
- 
- 
-+#define SHA256_LEN 32
- static gcry_err_code_t
- rsa_decrypt (gcry_sexp_t *r_plain, gcry_sexp_t s_data, gcry_sexp_t keyparms)
- 
-@@ -1451,6 +1452,9 @@ rsa_decrypt (gcry_sexp_t *r_plain, gcry_sexp_t s_data, gcry_sexp_t keyparms)
-   unsigned int nbits = rsa_get_nbits (keyparms);
-   gcry_sexp_t result = NULL;
-   gcry_sexp_t dummy = NULL;
-+#ifdef WITH_MARVIN_WORKAROUND
-+  unsigned char kdk[SHA256_LEN];
-+#endif /* WITH_MARVIN_WORKAROUND */
- 
-   rc = rsa_check_keysize (nbits);
-   if (rc)
-@@ -1498,6 +1502,71 @@ rsa_decrypt (gcry_sexp_t *r_plain, gcry_sexp_t s_data, gcry_sexp_t keyparms)
-   mpi_normalize (data);
-   mpi_fdiv_r (data, data, sk.n);
- 
-+#ifdef WITH_MARVIN_WORKAROUND
-+  /* Implicit rejection: Derive KDK */
-+  if (ctx.encoding == PUBKEY_ENC_PKCS1)
-+    {
-+      unsigned char *buf, *tmp;
-+      unsigned int nbytes = (mpi_get_nbits (sk.n)+7)/8;
-+      unsigned char key[SHA256_LEN];
-+      gcry_md_hd_t hd;
-+
-+      /* (a) Convert `d` to big endian representation, left padded to the length of `n` */
-+      rc = _gcry_mpi_to_octet_string (&buf, NULL, sk.d, nbytes);
-+      if (rc)
-+        {
-+          rc = GPG_ERR_INTERNAL;
-+          goto leave;
-+        }
-+
-+      /* (b) Hash it using SHA-256 */
-+      rc = _gcry_md_open (&hd, GCRY_MD_SHA256, 0);
-+      if (rc)
-+        {
-+          xfree (buf);
-+          rc = GPG_ERR_INTERNAL;
-+          goto leave;
-+        }
-+      _gcry_md_write (hd, buf, nbytes);
-+      /* keep the buffer around -- it will be needed for the ciphertext */
-+      tmp = _gcry_md_read (hd, GCRY_MD_SHA256);
-+      memcpy(key, tmp, SHA256_LEN);
-+      _gcry_md_close (hd);
-+
-+      /* (c) Use the hash as a SHA-256 HMAC key and ciphertext as a message */
-+      rc = _gcry_md_open (&hd, GCRY_MD_SHA256, GCRY_MD_FLAG_HMAC);
-+      if (rc)
-+        {
-+          xfree (buf);
-+          rc = GPG_ERR_INTERNAL;
-+          goto leave;
-+        }
-+      rc = _gcry_md_setkey (hd, key, sizeof (key));
-+      if (rc)
-+        {
-+          xfree (buf);
-+          _gcry_md_close (hd);
-+          rc = GPG_ERR_INTERNAL;
-+          goto leave;
-+        }
-+
-+      /* We need to convert the ciphertext to string, padded to the length of modulus */
-+      rc = _gcry_mpi_to_octet_string (NULL, buf, data, nbytes);
-+      if (rc)
-+        {
-+          xfree (buf);
-+          _gcry_md_close (hd);
-+          rc = GPG_ERR_INTERNAL;
-+          goto leave;
-+        }
-+      _gcry_md_write (hd, buf, nbytes);
-+      xfree (buf);
-+      buf = _gcry_md_read (hd, 0);
-+      memcpy(kdk, buf, SHA256_LEN);
-+      _gcry_md_close (hd);
-+    }
-+#endif /* WITH_MARVIN_WORKAROUND */
-+
-   /* Allocate MPI for the plaintext.  */
-   plain = mpi_snew (nbits);
- 
-@@ -1516,6 +1585,18 @@ rsa_decrypt (gcry_sexp_t *r_plain, gcry_sexp_t s_data, gcry_sexp_t keyparms)
-   switch (ctx.encoding)
-     {
-     case PUBKEY_ENC_PKCS1:
-+#ifdef WITH_MARVIN_WORKAROUND
-+      if (!(ctx.flags & PUBKEY_FLAG_NO_IMPLICIT_REJECTION))
-+        {
-+          rc = _gcry_rsa_pkcs1_decode_for_enc_implicit_rejection (&unpad, &unpadlen, nbits, plain, kdk);
-+          mpi_free (plain);
-+          plain = NULL;
-+          rc_sexp = sexp_build (&result, NULL, "(value %c)", (int)unpadlen, unpad, (nbits + 7) / 8);
-+          *r_plain = result;
-+          rc = ct_ulong_select (rc_sexp, rc, ct_is_zero (rc) & ct_is_not_zero (rc_sexp));
-+          break;
-+        }
-+#endif /* WITH_MARVIN_WORKAROUND */
-       rc = _gcry_rsa_pkcs1_decode_for_enc (&unpad, &unpadlen, nbits, plain);
-       mpi_free (plain);
-       plain = NULL;
 diff --git a/src/cipher.h b/src/cipher.h
-index 0a2551fe..e522f39b 100644
 --- a/src/cipher.h
 +++ b/src/cipher.h
 @@ -26,26 +26,27 @@
@@ -1559,29 +1289,7 @@ index 0a2551fe..e522f39b 100644
  /*
   * The internal flag to select least leak implementation for ECC.
   * It needs to be a distinct value not covered by PUBKEY_* above.
-diff --git a/src/const-time.h b/src/const-time.h
-index 74055a4b..5e656e15 100644
---- a/src/const-time.h
-+++ b/src/const-time.h
-@@ -40,7 +40,7 @@ extern volatile unsigned int _gcry_ct_vone;
- static inline int
- ct_lt (unsigned int a, unsigned int b)
- {
--  return (a ^ ((a ^ b) | ((a - b) ^ b))) >> (sizeof(unsigned int)*8 - 1);
-+  return (a ^ ((a ^ b) | ((a - b) ^ b))) >> (sizeof(unsigned int) * 8 - 1);
- }
- 
- static inline size_t
-@@ -164,6 +164,7 @@ DEFINE_CT_TYPE_GEN_INV_MASK(uchar, unsigned char)
- DEFINE_CT_TYPE_SELECT_FUNC(ulong, unsigned long)
- DEFINE_CT_TYPE_SELECT_FUNC(int16, int16_t)
- DEFINE_CT_TYPE_SELECT_FUNC(u64, u64)
-+DEFINE_CT_TYPE_SELECT_FUNC(uchar, unsigned char)
- 
- /*
-  *  Return NULL when OP_ENABLED=1
 diff --git a/tests/pkcs1v2-v15c.h b/tests/pkcs1v2-v15c.h
-index 26c7b238..cb750d4f 100644
 --- a/tests/pkcs1v2-v15c.h
 +++ b/tests/pkcs1v2-v15c.h
 @@ -21,6 +21,7 @@
@@ -1902,10 +1610,9 @@ index 26c7b238..cb750d4f 100644
      }
    };
 diff --git a/tests/pkcs1v2.c b/tests/pkcs1v2.c
-index ab070a94..a2153728 100644
 --- a/tests/pkcs1v2.c
 +++ b/tests/pkcs1v2.c
-@@ -82,7 +82,7 @@ data_from_hex (const char *string, size_t *r_length)
+@@ -82,7 +82,7 @@
  
  static int
  extract_cmp_data (gcry_sexp_t sexp, const char *name, const char *expected,
@@ -1914,7 +1621,7 @@ index ab070a94..a2153728 100644
  {
    gcry_sexp_t l1;
    const void *a;
-@@ -96,13 +96,15 @@ extract_cmp_data (gcry_sexp_t sexp, const char *name, const char *expected,
+@@ -96,13 +96,15 @@
    b = data_from_hex (expected, &blen);
    if (!a)
      {
@@ -1933,7 +1640,7 @@ index ab070a94..a2153728 100644
        rc = 1;
      }
    gcry_free (b);
-@@ -192,7 +194,7 @@ check_oaep (void)
+@@ -192,7 +194,7 @@
            else
              {
                if (extract_cmp_data (ciph, "a", tbl[tno].m[mno].encr,
@@ -1942,7 +1649,7 @@ index ab070a94..a2153728 100644
                  {
                    show_sexp ("encrypt result:\n", ciph);
                    fail ("mismatch in gcry_pk_encrypt\n");
-@@ -223,7 +225,7 @@ check_oaep (void)
+@@ -223,7 +225,7 @@
            else
              {
                if (extract_cmp_data (plain, "value", tbl[tno].m[mno].mesg,
@@ -1951,7 +1658,7 @@ index ab070a94..a2153728 100644
                  {
                    show_sexp ("decrypt result:\n", plain);
                    fail ("mismatch in gcry_pk_decrypt\n");
-@@ -326,7 +328,7 @@ check_pss (void)
+@@ -326,7 +328,7 @@
            else
              {
                if (extract_cmp_data (sig, "s", tbl[tno].m[mno].sign,
@@ -1960,7 +1667,7 @@ index ab070a94..a2153728 100644
                  {
                    show_sexp ("sign result:\n", sig);
                    fail ("mismatch in gcry_pk_sign\n");
-@@ -429,44 +431,89 @@ check_v15crypt (void)
+@@ -429,44 +431,89 @@
            size_t mesg_len, seed_len, encr_len;
            gcry_sexp_t plain, ciph;
  
@@ -1971,7 +1678,6 @@ index ab070a94..a2153728 100644
              info ("running test: %s\n", tbl[tno].m[mno].desc);
  
 -          mesg = data_from_hex (tbl[tno].m[mno].mesg, &mesg_len);
--          seed = data_from_hex (tbl[tno].m[mno].seed, &seed_len);
 +          if (tbl[tno].m[mno].mesg)
 +            {
 +              mesg = data_from_hex (tbl[tno].m[mno].mesg, &mesg_len);
@@ -2007,16 +1713,16 @@ index ab070a94..a2153728 100644
 +              gcry_sexp_release (plain);
 +              plain = NULL;
 +            }
++
++          /* Now test the decryption.  */
++          encr = data_from_hex (tbl[tno].m[mno].encr, &encr_len);
+           seed = data_from_hex (tbl[tno].m[mno].seed, &seed_len);
  
 -          err = gcry_sexp_build (&plain, NULL,
 -                                 "(data (flags pkcs1)"
 -                                 "(value %b)(random-override %b))",
 -                                 (int)mesg_len, mesg,
 -                                 (int)seed_len, seed);
-+          /* Now test the decryption.  */
-+          encr = data_from_hex (tbl[tno].m[mno].encr, &encr_len);
-+          seed = data_from_hex (tbl[tno].m[mno].seed, &seed_len);
-+
 +#ifdef WITH_MARVIN_WORKAROUND
 +          /* First try without implicit rejection -- this should fail for invalid inputs */
 +          err = gcry_sexp_build (&ciph, NULL,
@@ -2074,7 +1780,7 @@ index ab070a94..a2153728 100644
  
            err = gcry_sexp_build (&ciph, NULL,
                                   "(enc-val (flags pkcs1)"
-@@ -484,15 +530,19 @@ check_v15crypt (void)
+@@ -484,15 +531,19 @@
              }
            else
              {
@@ -2099,7 +1805,7 @@ index ab070a94..a2153728 100644
            gcry_sexp_release (ciph);
            ciph = NULL;
          }
-@@ -584,7 +634,7 @@ check_v15sign (void)
+@@ -584,7 +635,7 @@
            else
              {
                if (extract_cmp_data (sig, "s", tbl[tno].m[mno].sign,
@@ -2109,5 +1815,4 @@ index ab070a94..a2153728 100644
                    show_sexp ("sign result:\n", sig);
                    fail ("mismatch in gcry_pk_sign\n");
 -- 
-2.46.0
-
+2.0

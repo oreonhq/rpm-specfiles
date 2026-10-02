@@ -1,4 +1,4 @@
-%global source0_hash 1451d01ee3a21100340aed867d0b799f46f0b1749680028d38c3f5d0128fb8a7
+%global source0_hash 39cd33c4810f10ec479d22b8ee6cf8e7acb77c356f3864e3270e2d45f7d23448
 
 # hardening breaks the set-interpreter-long test on i686, x86_64, ppc64le, s390x
 %undefine _hardened_build
@@ -16,7 +16,6 @@ Source0:        https://github.com/NixOS/%{name}/archive/%{version}/%{name}-%{ve
 # Allocate PHT & SHT at the end of the *.elf file
 # This is needed after a change in binutils, see https://bugzilla.redhat.com/2321588
 # Rebased form https://github.com/NixOS/patchelf/commit/43b75fbc9f
-Patch:          0001-Allocate-PHT-SHT-at-the-end-of-the-.elf-file.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

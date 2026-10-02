@@ -1,4 +1,4 @@
-%global source0_hash 426633cabd7c798236443516dfa8335b47e004b0ef37ff107e0c7ead3299fcc2
+%global source0_hash a1ada76ef35e5af9c2fbd063754dc9e37a8d989417c6eb1ecebb089b1383ae9e
 
 Name:          sbc
 Version:       2.2
@@ -68,5 +68,4 @@ find %{buildroot} -type f -name "*.la" -delete
 %{_libdir}/libsbc.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

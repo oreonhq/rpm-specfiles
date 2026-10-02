@@ -7,7 +7,7 @@
 
 # https://github.com/linuxdeepin/deepin-pw-check
 %global goipath         github.com/linuxdeepin/deepin-pw-check
-Version:                6.0.6
+Version:                6.0.12
 %global tag             6.0.6
 
 %gometa -L

@@ -1,4 +1,4 @@
-%global source0_hash b586be94ff329a5ab0c2d79de93d2b22e8c3efd191f7245aac31884ec7f1d17e
+%global source0_hash 482e9269092e5a49308fa2196ef1c60cae8de78ce7ca8fb8f75b2299645c2ce5
 
 # Do not build with tests by default
 # Pass --with tests to rpmbuild to override
@@ -14,7 +14,7 @@
 
 %global goipath         github.com/osbuild/osbuild-composer
 
-Version:        181
+Version:        182
 
 %gometa
 

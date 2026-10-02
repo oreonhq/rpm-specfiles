@@ -1,4 +1,4 @@
-%global source0_hash 533d62ce9923b8ada7f138ac4bf298e62806ce678cd61499a7c131505c1ba3ec
+%global source0_hash cf75d62fe882b3d6b3779bd47fd82b1842122650d65add83d9279b061cfaf961
 
 Name:           pungi
 Version:        4.13.0
@@ -7,10 +7,8 @@ Summary:        Distribution compose tool
 
 License:        GPL-2.0-only
 URL:            https://pagure.io/pungi
-Source0:        https://pagure.io/releases/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 Patch:          https://pagure.io/pungi/pull-request/1860.patch
-# https://pagure.io/pungi/pull-request/1885
-Patch:          0001-Drop-parameterized-dependency.patch
 
 BuildRequires:  make
 BuildRequires:  python3-pytest
@@ -93,9 +91,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %pyproject_wheel
 cd doc
-make epub     SPHINXBUILD=/usr/bin/sphinx-build-3
-make text     SPHINXBUILD=/usr/bin/sphinx-build-3
-make man      SPHINXBUILD=/usr/bin/sphinx-build-3
+make epub
+make text
+make man
 gzip _build/man/pungi.1
 
 %install

@@ -1,4 +1,4 @@
-%global source0_hash 787e88eeccae01ad2fe9e0854377b042b7e6556f2c660bba33158c2d9622a9c2
+%global source0_hash ff833d657f1e80d0c08d0ba4894397e2954d7ac296b343a8397ba2885d67b749
 
 %global qt_module qtcoap
 
@@ -12,8 +12,8 @@
 
 Summary: Qt6 - CoAP component
 Name:    qt6-%{qt_module}
-Version: 6.11.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io

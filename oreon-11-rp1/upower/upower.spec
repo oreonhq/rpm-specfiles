@@ -1,4 +1,4 @@
-%global source0_hash d568638d670a63a1886335b7b136f4888cb38a3b28f3f4bcdeaffcca0b0f6df8
+%global source0_hash de2cd848c927e267f37d1aa6b52631857055b0a1fc76c0e10e173723d83abeae
 
 Summary:        Power Management Service
 Name:           upower
@@ -142,5 +142,4 @@ mv $RPM_BUILD_ROOT%{_libexecdir}/upower $RPM_BUILD_ROOT%{_libexecdir}/installed-
 %{_datadir}/installed-tests/upower/upower-integration.test
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.91.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

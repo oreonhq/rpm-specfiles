@@ -1,6 +1,6 @@
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/auth/auth-token.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/auth/auth-token.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/auth/auth-token.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/auth/auth-token.c	2025-11-30 09:57:55.178213106 +0100
+diff -up dovecot-2.4.5/src/auth/auth-token.c.opensslhmac3 dovecot-2.4.5/src/auth/auth-token.c
+--- dovecot-2.4.5/src/auth/auth-token.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/auth/auth-token.c	2026-09-09 09:02:55.314689129 +0200
 @@ -162,17 +162,17 @@ void auth_token_deinit(void)
  const char *auth_token_get(const char *service, const char *session_pid,
  			   const char *username, const char *session_id)
@@ -26,10 +26,10 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/auth/auth-token.c.opensslhmac3 do
  
  	return binary_to_hex(result, sizeof(result));
  }
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/auth/Makefile.am.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/auth/Makefile.am
---- dovecot-2.4.2-build/dovecot-2.4.2/src/auth/Makefile.am.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/auth/Makefile.am	2025-11-30 09:57:55.178490134 +0100
-@@ -71,6 +71,7 @@ auth_LDFLAGS = -export-dynamic
+diff -up dovecot-2.4.5/src/auth/Makefile.am.opensslhmac3 dovecot-2.4.5/src/auth/Makefile.am
+--- dovecot-2.4.5/src/auth/Makefile.am.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/auth/Makefile.am	2026-09-09 09:02:55.314815695 +0200
+@@ -70,6 +70,7 @@ auth_LDFLAGS = -export-dynamic
  auth_libs = \
  	../lib-auth/libauth-crypt.la \
  	$(AUTH_LUA_LIBS) \
@@ -37,10 +37,22 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/auth/Makefile.am.opensslhmac3 dov
  	$(LIBDOVECOT_SQL)
  
  auth_CPPFLAGS = $(AM_CPPFLAGS) $(BINARY_CFLAGS)
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/imap/Makefile.am.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/imap/Makefile.am
---- dovecot-2.4.2-build/dovecot-2.4.2/src/imap/Makefile.am.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/imap/Makefile.am	2025-11-30 09:57:55.179136544 +0100
-@@ -21,11 +21,13 @@ AM_CPPFLAGS = \
+diff -up dovecot-2.4.5/src/auth/test-db-oauth2.c.opensslhmac3 dovecot-2.4.5/src/auth/test-db-oauth2.c
+--- dovecot-2.4.5/src/auth/test-db-oauth2.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/auth/test-db-oauth2.c	2026-09-09 09:35:15.441795842 +0200
+@@ -148,7 +148,7 @@ build_jwt(time_t exp, const char *email,
+ 			 str_data(body), str_len(body),
+ 			 tokenbuf);
+ 
+-	buffer_t *sig = t_hmac_buffer(&hash_method_sha256,
++	buffer_t *sig = openssl_t_hmac_buffer(&hash_method_sha256,
+ 				       test_hmac_key->data, test_hmac_key->used,
+ 				       tokenbuf);
+ 	if (bad_sig) {
+diff -up dovecot-2.4.5/src/imap/Makefile.am.opensslhmac3 dovecot-2.4.5/src/imap/Makefile.am
+--- dovecot-2.4.5/src/imap/Makefile.am.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/imap/Makefile.am	2026-09-09 09:02:55.315007664 +0200
+@@ -25,11 +25,13 @@ AM_CPPFLAGS = \
  	$(BINARY_CFLAGS)
  
  imap_LDFLAGS = -export-dynamic \
@@ -54,9 +66,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/imap/Makefile.am.opensslhmac3 dov
  	$(LIBDOVECOT_STORAGE) \
  	$(LIBDOVECOT)
  imap_DEPENDENCIES = \
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/imap-urlauth/Makefile.am.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/imap-urlauth/Makefile.am
---- dovecot-2.4.2-build/dovecot-2.4.2/src/imap-urlauth/Makefile.am.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/imap-urlauth/Makefile.am	2025-11-30 09:57:55.179268682 +0100
+diff -up dovecot-2.4.5/src/imap-urlauth/Makefile.am.opensslhmac3 dovecot-2.4.5/src/imap-urlauth/Makefile.am
+--- dovecot-2.4.5/src/imap-urlauth/Makefile.am.opensslhmac3	2026-08-24 08:36:22.000000000 +0200
++++ dovecot-2.4.5/src/imap-urlauth/Makefile.am	2026-09-09 09:02:55.315164607 +0200
 @@ -23,6 +23,7 @@ imap_urlauth_CPPFLAGS = \
  imap_urlauth_LDFLAGS = -export-dynamic
  
@@ -74,10 +86,10 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/imap-urlauth/Makefile.am.opensslh
  imap_urlauth_worker_DEPENDENCIES = $(urlauth_libs) $(LIBDOVECOT_STORAGE_DEPS) $(LIBDOVECOT_DEPS)
  
  imap_urlauth_worker_SOURCES = \
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-client.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-client.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-client.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-client.c	2025-11-30 09:57:55.179413002 +0100
-@@ -222,7 +222,7 @@ static string_t *auth_scram_get_client_f
+diff -up dovecot-2.4.5/src/lib-auth/auth-scram-client.c.opensslhmac3 dovecot-2.4.5/src/lib-auth/auth-scram-client.c
+--- dovecot-2.4.5/src/lib-auth/auth-scram-client.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-auth/auth-scram-client.c	2026-09-09 09:02:55.315334504 +0200
+@@ -226,7 +226,7 @@ static string_t *auth_scram_get_client_f
  	unsigned char client_signature[hmethod->digest_size];
  	unsigned char client_proof[hmethod->digest_size];
  	unsigned char server_key[hmethod->digest_size];
@@ -86,7 +98,7 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-client.c.open
  	const void *cbind_input;
  	size_t cbind_input_size;
  	string_t *auth_message, *str;
-@@ -281,9 +281,9 @@ static string_t *auth_scram_get_client_f
+@@ -282,9 +282,9 @@ static string_t *auth_scram_get_client_f
  		      client->iter, salted_password);
  
  	/* ClientKey       := HMAC(SaltedPassword, "Client Key") */
@@ -99,7 +111,7 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-client.c.open
  
  	/* StoredKey       := H(ClientKey) */
  	hash_method_get_digest(hmethod, client_key, sizeof(client_key),
-@@ -301,9 +301,9 @@ static string_t *auth_scram_get_client_f
+@@ -302,9 +302,9 @@ static string_t *auth_scram_get_client_f
  	str_append_str(auth_message, str);
  
  	/* ClientSignature := HMAC(StoredKey, AuthMessage) */
@@ -112,7 +124,7 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-client.c.open
  
  	/* ClientProof     := ClientKey XOR ClientSignature */
  	for (k = 0; k < hmethod->digest_size; k++)
-@@ -314,16 +314,16 @@ static string_t *auth_scram_get_client_f
+@@ -315,16 +315,16 @@ static string_t *auth_scram_get_client_f
  	safe_memset(client_signature, 0, sizeof(client_signature));
  
  	/* ServerKey       := HMAC(SaltedPassword, "Server Key") */
@@ -135,9 +147,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-client.c.open
  
  	safe_memset(salted_password, 0, sizeof(salted_password));
  
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram.c	2025-11-30 09:57:55.179729815 +0100
+diff -up dovecot-2.4.5/src/lib-auth/auth-scram.c.opensslhmac3 dovecot-2.4.5/src/lib-auth/auth-scram.c
+--- dovecot-2.4.5/src/lib-auth/auth-scram.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-auth/auth-scram.c	2026-09-09 09:02:55.315557350 +0200
 @@ -31,7 +31,7 @@ void auth_scram_hi(const struct hash_met
  		   const unsigned char *salt, size_t salt_size, unsigned int i,
  		   unsigned char *result)
@@ -207,19 +219,19 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram.c.opensslhmac
  
  	safe_memset(salted_password, 0, sizeof(salted_password));
  	safe_memset(client_key, 0, sizeof(client_key));
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-server.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-server.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-server.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-server.c	2025-11-30 09:57:55.179862473 +0100
-@@ -288,7 +288,7 @@ auth_scram_server_verify_credentials(str
- {
- 	const struct hash_method *hmethod = server->set.hash_method;
+diff -up dovecot-2.4.5/src/lib-auth/auth-scram-server.c.opensslhmac3 dovecot-2.4.5/src/lib-auth/auth-scram-server.c
+--- dovecot-2.4.5/src/lib-auth/auth-scram-server.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-auth/auth-scram-server.c	2026-09-09 09:02:55.315740813 +0200
+@@ -297,7 +297,7 @@ auth_scram_server_verify_credentials(str
+ 	i_assert(hmethod != NULL);
+ 
  	struct auth_scram_key_data *kdata = &server->key_data;
 -	struct hmac_context ctx;
 +	struct openssl_hmac_context ctx;
  	const char *auth_message;
  	unsigned char client_key[hmethod->digest_size];
  	unsigned char client_signature[hmethod->digest_size];
-@@ -309,9 +309,9 @@ auth_scram_server_verify_credentials(str
+@@ -318,9 +318,9 @@ auth_scram_server_verify_credentials(str
  			server->server_first_message, ",",
  			server->client_final_message_without_proof, NULL);
  
@@ -232,16 +244,16 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-server.c.open
  
  	/* ClientProof     := ClientKey XOR ClientSignature */
  	const unsigned char *proof_data = server->proof->data;
-@@ -440,7 +440,7 @@ auth_scram_get_server_final(struct auth_
- {
- 	const struct hash_method *hmethod = server->set.hash_method;
+@@ -461,7 +461,7 @@ auth_scram_get_server_final(struct auth_
+ 	i_assert(hmethod != NULL);
+ 
  	struct auth_scram_key_data *kdata = &server->key_data;
 -	struct hmac_context ctx;
 +	struct openssl_hmac_context ctx;
  	const char *auth_message;
  	unsigned char server_signature[hmethod->digest_size];
  	string_t *str;
-@@ -456,9 +456,9 @@ auth_scram_get_server_final(struct auth_
+@@ -477,9 +477,9 @@ auth_scram_get_server_final(struct auth_
  			server->server_first_message, ",",
  			server->client_final_message_without_proof, NULL);
  
@@ -254,10 +266,10 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/auth-scram-server.c.open
  
  	/* RFC 5802, Section 7:
  
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme.c	2025-11-30 09:57:55.180035106 +0100
-@@ -633,11 +633,11 @@ static void
+diff -up dovecot-2.4.5/src/lib-auth/password-scheme.c.opensslhmac3 dovecot-2.4.5/src/lib-auth/password-scheme.c
+--- dovecot-2.4.5/src/lib-auth/password-scheme.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-auth/password-scheme.c	2026-09-09 09:02:55.315983686 +0200
+@@ -632,11 +632,11 @@ static void
  cram_md5_generate(const char *plaintext, const struct password_generate_params *params ATTR_UNUSED,
  		  const unsigned char **raw_password_r, size_t *size_r)
  {
@@ -271,9 +283,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme.c.openss
  		  strlen(plaintext), &hash_method_md5);
  	hmac_md5_get_cram_context(&ctx, context_digest);
  
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme-scram.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme-scram.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme-scram.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme-scram.c	2025-11-30 09:57:55.180182392 +0100
+diff -up dovecot-2.4.5/src/lib-auth/password-scheme-scram.c.opensslhmac3 dovecot-2.4.5/src/lib-auth/password-scheme-scram.c
+--- dovecot-2.4.5/src/lib-auth/password-scheme-scram.c.opensslhmac3	2026-08-24 08:36:22.000000000 +0200
++++ dovecot-2.4.5/src/lib-auth/password-scheme-scram.c	2026-09-09 09:02:55.316205290 +0200
 @@ -23,7 +23,7 @@ int scram_verify(const struct hash_metho
  		 const char *plaintext, const unsigned char *raw_password,
  		 size_t size, const char **error_r)
@@ -296,9 +308,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-auth/password-scheme-scram.c.
  
  	/* Calculate StoredKey */
  	hash_method_get_digest(hmethod, client_key, sizeof(client_key),
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.c	2025-11-30 09:57:55.180318937 +0100
+diff -up dovecot-2.4.5/src/lib/hmac.c.opensslhmac3 dovecot-2.4.5/src/lib/hmac.c
+--- dovecot-2.4.5/src/lib/hmac.c.opensslhmac3	2026-03-09 12:04:52.000000000 +0100
++++ dovecot-2.4.5/src/lib/hmac.c	2026-09-09 09:02:55.316445118 +0200
 @@ -7,6 +7,10 @@
   * This software is released under the MIT license.
   */
@@ -572,9 +584,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.c.opensslhmac3 dovecot-2
 -	safe_memset(prk, 0, sizeof(prk));
 -	safe_memset(okm, 0, sizeof(okm));
  }
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.c	2025-11-30 09:57:55.180461985 +0100
+diff -up dovecot-2.4.5/src/lib/hmac-cram-md5.c.opensslhmac3 dovecot-2.4.5/src/lib/hmac-cram-md5.c
+--- dovecot-2.4.5/src/lib/hmac-cram-md5.c.opensslhmac3	2025-09-10 12:17:56.000000000 +0200
++++ dovecot-2.4.5/src/lib/hmac-cram-md5.c	2026-09-09 09:02:55.316676129 +0200
 @@ -9,10 +9,10 @@
  #include "md5.h"
  #include "hmac-cram-md5.h"
@@ -601,9 +613,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.c.opensslhmac3 
  	const unsigned char *cdp;
  
  	struct md5_context *ctx = (void*)hmac_ctx->ctx;
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.h.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.h
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.h.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.h	2025-11-30 09:57:55.180563796 +0100
+diff -up dovecot-2.4.5/src/lib/hmac-cram-md5.h.opensslhmac3 dovecot-2.4.5/src/lib/hmac-cram-md5.h
+--- dovecot-2.4.5/src/lib/hmac-cram-md5.h.opensslhmac3	2025-09-10 12:17:56.000000000 +0200
++++ dovecot-2.4.5/src/lib/hmac-cram-md5.h	2026-09-09 09:02:55.316842680 +0200
 @@ -5,9 +5,9 @@
  
  #define CRAM_MD5_CONTEXTLEN 32
@@ -616,9 +628,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac-cram-md5.h.opensslhmac3 
  		const unsigned char context_digest[CRAM_MD5_CONTEXTLEN]);
  
  
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.h.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.h
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.h.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.h	2025-11-30 09:57:55.180723505 +0100
+diff -up dovecot-2.4.5/src/lib/hmac.h.opensslhmac3 dovecot-2.4.5/src/lib/hmac.h
+--- dovecot-2.4.5/src/lib/hmac.h.opensslhmac3	2026-08-24 08:36:22.000000000 +0200
++++ dovecot-2.4.5/src/lib/hmac.h	2026-09-09 09:02:55.317053524 +0200
 @@ -4,60 +4,108 @@
  #include "hash-method.h"
  #include "sha1.h"
@@ -741,9 +753,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/hmac.h.opensslhmac3 dovecot-2
  		  okm_buffer, okm_len);
  	return okm_buffer;
  }
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-imap-urlauth/imap-urlauth.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-imap-urlauth/imap-urlauth.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-imap-urlauth/imap-urlauth.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-imap-urlauth/imap-urlauth.c	2025-11-30 09:57:55.180863807 +0100
+diff -up dovecot-2.4.5/src/lib-imap-urlauth/imap-urlauth.c.opensslhmac3 dovecot-2.4.5/src/lib-imap-urlauth/imap-urlauth.c
+--- dovecot-2.4.5/src/lib-imap-urlauth/imap-urlauth.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-imap-urlauth/imap-urlauth.c	2026-09-09 09:02:55.317224403 +0200
 @@ -87,15 +87,15 @@ imap_urlauth_internal_generate(
  	const unsigned char mailbox_key[IMAP_URLAUTH_KEY_LEN],
  	size_t *token_len_r)
@@ -764,23 +776,40 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-imap-urlauth/imap-urlauth.c.o
  
  	*token_len_r = SHA1_RESULTLEN + 1;
  	return token;
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/Makefile.am.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib/Makefile.am
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib/Makefile.am.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib/Makefile.am	2025-11-30 09:57:55.180990124 +0100
-@@ -414,6 +414,9 @@ headers = \
+diff -up dovecot-2.4.5/src/lib-imap-urlauth/Makefile.am.opensslhmac3 dovecot-2.4.5/src/lib-imap-urlauth/Makefile.am
+--- dovecot-2.4.5/src/lib-imap-urlauth/Makefile.am.opensslhmac3	2026-08-24 08:36:22.000000000 +0200
++++ dovecot-2.4.5/src/lib-imap-urlauth/Makefile.am	2026-09-09 09:02:55.317321715 +0200
+@@ -30,11 +30,13 @@ headers = \
+ 
+ test_programs = test-imap-urlauth
+ 
++test_imap_urlauth_CFLAGS = $(SSL_CFLAGS)
+ test_imap_urlauth_SOURCES = test-imap-urlauth.c
+ test_imap_urlauth_LDADD = \
+ 	imap-urlauth.lo \
+ 	../lib-dovecot/libdovecot.la \
+ 	../lib-test/libtest.la \
++	$(SSL_LIBS) \
+ 	$(LIBDOVECOT_TEST_LIBS)
+ 
+ pkginc_libdir=$(pkgincludedir)
+diff -up dovecot-2.4.5/src/lib/Makefile.am.opensslhmac3 dovecot-2.4.5/src/lib/Makefile.am
+--- dovecot-2.4.5/src/lib/Makefile.am.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib/Makefile.am	2026-09-09 09:02:55.317401424 +0200
+@@ -451,6 +451,9 @@ headers = \
  	wildcard-match.h \
  	write-full.h
  
 +liblib_la_LIBADD = $(SSL_LIBS)
 +liblib_la_CFLAGS = $(SSL_CFLAGS)
 +
- test_programs = test-lib
- noinst_PROGRAMS = $(test_programs)
+ test_programs = test-lib test-cpu-limit
  
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/oauth2-jwt.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/oauth2-jwt.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/oauth2-jwt.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/oauth2-jwt.c	2025-11-30 09:57:55.181135306 +0100
-@@ -210,14 +210,14 @@ oauth2_validate_hmac(const struct oauth2
+ test_lib_CPPFLAGS = \
+diff -up dovecot-2.4.5/src/lib-oauth2/oauth2-jwt.c.opensslhmac3 dovecot-2.4.5/src/lib-oauth2/oauth2-jwt.c
+--- dovecot-2.4.5/src/lib-oauth2/oauth2-jwt.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-oauth2/oauth2-jwt.c	2026-09-09 09:02:55.317511960 +0200
+@@ -218,14 +218,14 @@ oauth2_validate_hmac(const struct oauth2
  	if (oauth2_lookup_hmac_key(set, azp, alg, key_id, &key, error_r) < 0)
  		return -1;
  
@@ -801,9 +830,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/oauth2-jwt.c.opensslhm
  
  	buffer_t *their_digest =
  		t_base64url_decode_str(BASE64_DECODE_FLAG_NO_PADDING, blobs[2]);
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/test-oauth2-jwt.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/test-oauth2-jwt.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/test-oauth2-jwt.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/test-oauth2-jwt.c	2025-11-30 09:57:55.181290025 +0100
+diff -up dovecot-2.4.5/src/lib-oauth2/test-oauth2-jwt.c.opensslhmac3 dovecot-2.4.5/src/lib-oauth2/test-oauth2-jwt.c
+--- dovecot-2.4.5/src/lib-oauth2/test-oauth2-jwt.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-oauth2/test-oauth2-jwt.c	2026-09-09 09:02:55.317627436 +0200
 @@ -250,7 +250,7 @@ static void save_key_azp_to(const char *
  static void sign_jwt_token_hs256(buffer_t *tokenbuf, buffer_t *key)
  {
@@ -831,9 +860,9 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-oauth2/test-oauth2-jwt.c.open
  				      tokenbuf);
  	buffer_append(tokenbuf, ".", 1);
  	base64url_encode(BASE64_ENCODE_FLAG_NO_PADDING, SIZE_MAX,
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/pkcs5.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib/pkcs5.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib/pkcs5.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib/pkcs5.c	2025-11-30 09:57:55.181492013 +0100
+diff -up dovecot-2.4.5/src/lib/pkcs5.c.opensslhmac3 dovecot-2.4.5/src/lib/pkcs5.c
+--- dovecot-2.4.5/src/lib/pkcs5.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib/pkcs5.c	2026-09-09 09:02:55.317744414 +0200
 @@ -52,7 +52,7 @@ int pkcs5_pbkdf2(const struct hash_metho
  	size_t l = (length + hash->digest_size - 1)/hash->digest_size; /* same as ceil(length/hash->digest_size) */
  	unsigned char dk[l * hash->digest_size];
@@ -868,19 +897,40 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/pkcs5.c.opensslhmac3 dovecot-
  			for(i = 0; i < hash->digest_size; i++)
  				block[i] ^= U_c[i];
  		}
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/sasl-server-mech-cram-md5.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/sasl-server-mech-cram-md5.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/sasl-server-mech-cram-md5.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/sasl-server-mech-cram-md5.c	2025-11-30 10:00:28.967795725 +0100
+diff -up dovecot-2.4.5/src/lib-sasl/dsasl-client-mech-cram-md5.c.opensslhmac3 dovecot-2.4.5/src/lib-sasl/dsasl-client-mech-cram-md5.c
+--- dovecot-2.4.5/src/lib-sasl/dsasl-client-mech-cram-md5.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-sasl/dsasl-client-mech-cram-md5.c	2026-09-09 09:02:55.317843990 +0200
+@@ -81,13 +81,13 @@ mech_cram_md5_output(struct dsasl_client
+ 		return DSASL_CLIENT_RESULT_OK;
+ 	}
+ 
+-	struct hmac_context ctx;
++	struct openssl_hmac_context ctx;
+ 	unsigned char digest[MD5_RESULTLEN];
+ 
+-	hmac_init(&ctx, (const unsigned char *)client->password,
++	openssl_hmac_init(&ctx, (const unsigned char *)client->password,
+ 		  strlen(client->password), &hash_method_md5);
+-	hmac_update(&ctx, cclient->challenge, strlen(cclient->challenge));
+-	hmac_final(&ctx, digest);
++	openssl_hmac_update(&ctx, cclient->challenge, strlen(cclient->challenge));
++	openssl_hmac_final(&ctx, digest);
+ 
+ 	str = str_new(client->pool, 256);
+ 	str_append(str, client->set.authid);
+diff -up dovecot-2.4.5/src/lib-sasl/sasl-server-mech-cram-md5.c.opensslhmac3 dovecot-2.4.5/src/lib-sasl/sasl-server-mech-cram-md5.c
+--- dovecot-2.4.5/src/lib-sasl/sasl-server-mech-cram-md5.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib-sasl/sasl-server-mech-cram-md5.c	2026-09-09 09:02:55.317931293 +0200
 @@ -53,7 +53,7 @@ verify_credentials(struct sasl_server_me
  		container_of(auth_request, struct cram_auth_request,
  			     auth_request);
  	unsigned char digest[MD5_RESULTLEN];
 -        struct hmac_context ctx;
 +        struct orig_hmac_context ctx;
- 	const char *response_hex;
  
  	if (size != CRAM_MD5_CONTEXTLEN) {
-@@ -62,10 +62,10 @@ verify_credentials(struct sasl_server_me
+ 		e_error(auth_request->event, "invalid credentials length");
+@@ -61,10 +61,10 @@ verify_credentials(struct sasl_server_me
  		return;
  	}
  
@@ -892,11 +942,45 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/sasl-server-mech-cram-md
 +	orig_hmac_update(&ctx, request->challenge, strlen(request->challenge));
 +	orig_hmac_final(&ctx, digest);
  
- 	response_hex = binary_to_hex(digest, sizeof(digest));
+ 	if (!mem_equals_timing_safe(digest, request->response,
+ 				    sizeof(digest))) {
+diff -up dovecot-2.4.5/src/lib/strfuncs.c.opensslhmac3 dovecot-2.4.5/src/lib/strfuncs.c
+--- dovecot-2.4.5/src/lib/strfuncs.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib/strfuncs.c	2026-09-09 09:02:55.318025940 +0200
+@@ -662,7 +662,7 @@ bool str_equals_timing_almost_safe(const
  
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/test-hmac.c.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib/test-hmac.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib/test-hmac.c.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib/test-hmac.c	2025-11-30 09:57:55.181656401 +0100
+ bool str_equals_hash_timing_safe(const char *s1, const char *s2)
+ {
+-	struct hmac_context ctx;
++	struct openssl_hmac_context ctx;
+ 	unsigned char digest1[SHA256_RESULTLEN];
+ 	unsigned char digest2[SHA256_RESULTLEN];
+ 
+@@ -673,15 +673,15 @@ bool str_equals_hash_timing_safe(const c
+ 	   a deployment constant (for the secret) or already known to the
+ 	   attacker (for their own input), so neither leaks a useful signal.
+ 	   hash_iv keys the HMAC to prevent precomputation. */
+-	hmac_init(&ctx, (const unsigned char *)&hash_iv, sizeof(hash_iv),
++	openssl_hmac_init(&ctx, (const unsigned char *)&hash_iv, sizeof(hash_iv),
+ 		  &hash_method_sha256);
+-	hmac_update(&ctx, s1, strlen(s1));
+-	hmac_final(&ctx, digest1);
++	openssl_hmac_update(&ctx, s1, strlen(s1));
++	openssl_hmac_final(&ctx, digest1);
+ 
+-	hmac_init(&ctx, (const unsigned char *)&hash_iv, sizeof(hash_iv),
++	openssl_hmac_init(&ctx, (const unsigned char *)&hash_iv, sizeof(hash_iv),
+ 		  &hash_method_sha256);
+-	hmac_update(&ctx, s2, strlen(s2));
+-	hmac_final(&ctx, digest2);
++	openssl_hmac_update(&ctx, s2, strlen(s2));
++	openssl_hmac_final(&ctx, digest2);
+ 
+ 	return mem_equals_timing_safe(digest1, digest2, sizeof(digest1));
+ }
+diff -up dovecot-2.4.5/src/lib/test-hmac.c.opensslhmac3 dovecot-2.4.5/src/lib/test-hmac.c
+--- dovecot-2.4.5/src/lib/test-hmac.c.opensslhmac3	2026-08-26 12:00:29.000000000 +0200
++++ dovecot-2.4.5/src/lib/test-hmac.c	2026-09-09 09:02:55.318142397 +0200
 @@ -206,11 +206,11 @@ static void test_hmac_rfc(void)
  	test_begin("hmac sha256 rfc4231 vectors");
  	for(size_t i = 0; i < N_ELEMENTS(test_vectors); i++) {
@@ -972,28 +1056,19 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib/test-hmac.c.opensslhmac3 dove
  				    vec->ikm_len, vec->info, vec->info_len,
  				    vec->okm_len);
  	test_assert(tmp->used == vec->okm_len &&
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-var-expand-crypt/Makefile.am.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-var-expand-crypt/Makefile.am
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-var-expand-crypt/Makefile.am.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-var-expand-crypt/Makefile.am	2025-11-30 09:58:11.669117030 +0100
-@@ -34,13 +34,13 @@ test_libs = \
- 	$(DLLIB)
- 
- test_var_expand_crypt_SOURCES = test-var-expand-crypt.c
--test_var_expand_crypt_LDADD = $(test_libs)
-+test_var_expand_crypt_LDADD = $(test_libs) $(SSL_LIBS)
- test_var_expand_crypt_DEPENDENCIES = $(module_LTLIBRARIES)
- if HAVE_WHOLE_ARCHIVE
- test_var_expand_crypt_LDFLAGS = -export-dynamic -Wl,$(LD_WHOLE_ARCHIVE),../lib/.libs/liblib.a,../lib-json/.libs/libjson.a,../lib-ssl-iostream/.libs/libssl_iostream.a,$(LD_NO_WHOLE_ARCHIVE)
+diff -up dovecot-2.4.5/src/lib-var-expand-crypt/Makefile.am.opensslhmac3 dovecot-2.4.5/src/lib-var-expand-crypt/Makefile.am
+--- dovecot-2.4.5/src/lib-var-expand-crypt/Makefile.am.opensslhmac3	2026-08-24 08:36:22.000000000 +0200
++++ dovecot-2.4.5/src/lib-var-expand-crypt/Makefile.am	2026-09-09 09:02:55.318252763 +0200
+@@ -40,5 +40,5 @@ if HAVE_WHOLE_ARCHIVE
+ test_var_expand_crypt_LDFLAGS += -export-dynamic -Wl,$(LD_WHOLE_ARCHIVE),../lib/.libs/liblib.a,../lib-json/.libs/libjson.a,../lib-ssl-iostream/.libs/libssl_iostream.a,$(LD_NO_WHOLE_ARCHIVE)
  endif
  
 -test_var_expand_crypt_CFLAGS = $(AM_CFLAGS) \
 +test_var_expand_crypt_CFLAGS = $(AM_CFLAGS) $(SSL_CFLAGS) \
  	-DDCRYPT_BUILD_DIR=\"$(top_builddir)/src/lib-dcrypt\"
- 
- check-local:
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/submission/Makefile.am.opensslhmac3 dovecot-2.4.2-build/dovecot-2.4.2/src/submission/Makefile.am
---- dovecot-2.4.2-build/dovecot-2.4.2/src/submission/Makefile.am.opensslhmac3	2025-10-29 07:58:41.000000000 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/submission/Makefile.am	2025-11-30 09:57:55.182137562 +0100
+diff -up dovecot-2.4.5/src/submission/Makefile.am.opensslhmac3 dovecot-2.4.5/src/submission/Makefile.am
+--- dovecot-2.4.5/src/submission/Makefile.am.opensslhmac3	2026-03-09 12:04:52.000000000 +0100
++++ dovecot-2.4.5/src/submission/Makefile.am	2026-09-09 09:02:55.318334135 +0200
 @@ -29,6 +29,7 @@ submission_LDADD = \
  	$(urlauth_libs) \
  	$(LIBDOVECOT_STORAGE) \
@@ -1002,24 +1077,3 @@ diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/submission/Makefile.am.opensslhma
  	$(MODULE_LIBS)
  submission_DEPENDENCIES = \
  	$(urlauth_libs) \
-diff -up dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/dsasl-client-mech-cram-md5.c.fixbuild2 dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/dsasl-client-mech-cram-md5.c
---- dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/dsasl-client-mech-cram-md5.c.fixbuild2	2025-11-30 13:11:06.583413762 +0100
-+++ dovecot-2.4.2-build/dovecot-2.4.2/src/lib-sasl/dsasl-client-mech-cram-md5.c	2025-11-30 13:22:04.883307427 +0100
-@@ -81,13 +81,13 @@ mech_cram_md5_output(struct dsasl_client
- 		return DSASL_CLIENT_RESULT_OK;
- 	}
- 
--	struct hmac_context ctx;
-+	struct openssl_hmac_context ctx;
- 	unsigned char digest[MD5_RESULTLEN];
- 
--	hmac_init(&ctx, (const unsigned char *)client->password,
-+	openssl_hmac_init(&ctx, (const unsigned char *)client->password,
- 		  strlen(client->password), &hash_method_md5);
--	hmac_update(&ctx, cclient->challenge, strlen(cclient->challenge));
--	hmac_final(&ctx, digest);
-+	openssl_hmac_update(&ctx, cclient->challenge, strlen(cclient->challenge));
-+	openssl_hmac_final(&ctx, digest);
- 
- 	str = str_new(client->pool, 256);
- 	str_append(str, client->set.authid);

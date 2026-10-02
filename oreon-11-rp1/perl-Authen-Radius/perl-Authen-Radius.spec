@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Provide simple Radius client facilities
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Authen-Radius
-Source0:        https://cpan.metacpan.org/modules/by-module/Authen/Authen-Radius-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PO/PORTAONE/Authen-Radius-%{version}.tar.gz
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

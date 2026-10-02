@@ -1,4 +1,4 @@
-%global source0_hash 232658736984365ad71ac76adf94d125ee0df1f570a6c69ce3a34f892be14150
+%global source0_hash 5289b1264f82cd9a62d445848dc17d2fce1cdc0079b24594f52d87c12e1ac716
 
 Name:           lmfit
 Version:        11.0

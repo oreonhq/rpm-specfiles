@@ -28,7 +28,7 @@ BuildRequires:  python%{python3_pkgversion}-traitsui
 BuildRequires:  python%{python3_pkgversion}-numpy
 BuildRequires:  python%{python3_pkgversion}-vtk
 # For HTML docs
-BuildRequires:  /usr/bin/sphinx-build-3
+BuildRequires:  /usr/bin/sphinx-build
 Requires:       python%{python3_pkgversion}-mayavi
 BuildRequires:  desktop-file-utils 
 BuildRequires:  xwayland-run
@@ -113,7 +113,7 @@ find -name '*.pyx' -exec cython --verbose {} \;
 
 %py3_build
 # Need xwfb-run for html doc building
-SPHINXBUILD=/usr/bin/sphinx-build-3 xwfb-run -- %{__python3} setup.py build_docs
+SPHINXBUILD=/usr/bin/sphinx-build xwfb-run -- %{__python3} setup.py build_docs
 
 %install
 %py3_install

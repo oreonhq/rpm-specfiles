@@ -1,4 +1,4 @@
-%global source0_hash 848c0d7d50d802045dcd3cd4205b9a9984903da6b2589d550d66ed8f3d4667be
+%global source0_hash 0a02ce2bc8256632beae9564cd52c79a9e6da4cd69f389381294f4855b645fe5
 
 %bcond_with bootstrap
 %if !0%{?rhel} && %{without bootstrap} || (0%{?oreon} >= 11)
@@ -16,7 +16,7 @@ URL:            https://javaparser.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/javaparser/javaparser/archive/%{name}-parent-%{version}.tar.gz#/javaparser-3.27.1.tar.gz
+Source0:        https://github.com/javaparser/javaparser/archive/%{name}-parent-%{version}.tar.gz#/javaparser-%{version}.tar.gz
 
 Patch:          0001-Port-to-OpenJDK-21.patch
 
@@ -43,8 +43,7 @@ ones to modify the source code.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n javaparser-javaparser-parent-3.27.1
-%autosetup -p1 -n javaparser-javaparser-parent-3.27.1
+%autosetup -p1 -n javaparser-javaparser-parent-%{version}
 
 sed -i 's/\r//' readme.md
 
@@ -107,5 +106,4 @@ sed -i \
 %license LICENSE LICENSE.APACHE LICENSE.GPL LICENSE.LGPL
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.27.1-1
-- Import
+%autochangelog

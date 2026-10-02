@@ -1,16 +1,15 @@
-%global source0_hash none
-%global source30_hash 4172a1f7df3836d4af8153d88b53fb0f7176083372ad35695725f49e8c9fbd0a
+%global source0_hash d122bd039416254567f2dfe7f4c9b6ed4d202d8c6a3ed91332da0d514d0974c0
 
-%global nspr_version 4.38.2
-%global nss_version 3.123.1
+%global nspr_version 4.39.0
+%global nss_version 3.130.0
 # NOTE: To avoid NVR clashes of nspr* packages:
 # - reset %%{nspr_release} to 1, when updating %%{nspr_version}
 # - increment %%{nspr_version}, when updating the NSS part only
-%global baserelease 1
+%global baserelease 2
 %global nss_release %baserelease
 # use "%%global nspr_release %%[%%baserelease+n]" to handle offsets when
 # release number between nss and nspr are different.
-%global nspr_release %[%baserelease+10]
+%global nspr_release %[%baserelease+7]
 # only need to update this as we added new
 # algorithms under nss policy control
 %global crypto_policies_version 20240521
@@ -86,35 +85,34 @@ BuildRequires:    psmisc
 BuildRequires:    perl-interpreter
 BuildRequires:    gcc-c++
 
-Source0:        https://ftp.mozilla.org/pub/security/nss/releases/%{nss_release_tag}/src/%{nss_nspr_archive}.tar.gz
-Source1:        nss-util.pc.in
-Source2:        nss-util-config.in
-Source3:        nss-softokn.pc.in
-Source4:        nss-softokn-config.in
-Source6:        nss-softokn-dracut-module-setup.sh
-Source7:        nss-softokn-dracut.conf
-Source8:        nss.pc.in
-Source9:        nss-config.in
+Source0:          https://ftp.mozilla.org/pub/security/nss/releases/%{nss_release_tag}/src/%{nss_nspr_archive}.tar.gz
+Source1:          nss-util.pc.in
+Source2:          nss-util-config.in
+Source3:          nss-softokn.pc.in
+Source4:          nss-softokn-config.in
+Source6:          nss-softokn-dracut-module-setup.sh
+Source7:          nss-softokn-dracut.conf
+Source8:          nss.pc.in
+Source9:          nss-config.in
 %if %{with dbm}
 Source10:         blank-cert8.db
 Source11:         blank-key3.db
 Source12:         blank-secmod.db
 %endif
-Source13:        blank-cert9.db
-Source14:        blank-key4.db
-Source15:        system-pkcs11.txt
-Source16:        setup-nsssysinit.sh
-Source20:        nss-config.xml
-Source21:        setup-nsssysinit.xml
-Source22:        pkcs11.txt.xml
-Source24:        cert9.db.xml
-Source26:        key4.db.xml
+Source13:         blank-cert9.db
+Source14:         blank-key4.db
+Source15:         system-pkcs11.txt
+Source16:         setup-nsssysinit.sh
+Source20:         nss-config.xml
+Source21:         setup-nsssysinit.xml
+Source22:         pkcs11.txt.xml
+Source24:         cert9.db.xml
+Source26:         key4.db.xml
 %if %{with dbm}
-Source23:        cert8.db.xml
-Source25:        key3.db.xml
-Source27:        secmod.db.xml
+Source23:         cert8.db.xml
+Source25:         key3.db.xml
+Source27:         secmod.db.xml
 %endif
-Source30:        nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files.tar.xz
 
 Source101:        nspr-config.xml
 
@@ -129,29 +127,26 @@ Source101:        nspr-config.xml
 #
 # Once the buildroot has been bootstrapped the patch may be removed
 # but it doesn't hurt to keep it.
-Patch4:        iquote.patch
-Patch12:        nss-signtool-format.patch
-Patch13:        nss-dso-ldflags.patch
+Patch4:           iquote.patch
+Patch13:          nss-dso-ldflags.patch
 # fedora disabled dbm by default
-Patch40:        nss-no-dbm-man-page.patch
+Patch40:          nss-no-dbm-man-page.patch
 
 # https://issues.redhat.com/browse/FC-1613
-Patch50:        nss-3.110-dissable_test-ssl_policy_pkix_oscp.patch
+Patch50:          nss-3.110-dissable_test-ssl_policy_pkix_oscp.patch
 
-# ML-DSA support patches that haven't made it to the 3.118.1 release
-Patch60:        nss-3.118-ml-dsa-leancrypto.patch
-Patch61:        nss-3.118-ml-dsa-tls.patch
-#Patch62:          nss-3.118-prefer-all-hybrid.patch
+# Reseed the freebl DRBG in the child after fork(), so forked children do not
+# replay the parent's random stream (mozbz#2056509)
+Patch70:          nss-3.125-drbg-reseed-after-fork.patch
 
-Patch65:        nss-3.118-ml-dsa-test-for-sign-verify-pkcs12.patch
-Patch66:        nss-3.118-ml-dsa-tls-test.patch
-Patch67:        nss-3.118-ml-dsa-unittests.patch
-Patch68:        nss-3.123-fix-mldsa-import-regeneration.patch
+# Disable TlsConnectDatagram13.ClientCertCallbackBeforeServerFinished — the
+# SplitServerFinished test filter advances the DTLS sequence counter when
+# saving the Finished record, which causes subsequent server records to be
+# rejected as malformed by the client (upstream test infrastructure bug).
+Patch71:          nss-3.127-disable-dtls13-clientcert-test.patch
 
-Patch70:          nss-dbtests-sqlite-mangling.patch
-
-Patch100:        nspr-config-pc.patch
-Patch101:        nspr-gcc-atomics.patch
+Patch100:         nspr-config-pc.patch
+Patch101:         nspr-gcc-atomics.patch
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
@@ -306,7 +301,6 @@ Header files for doing development with the Netscape Portable Runtime.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source30_hash}" = "none" || { f="%{SOURCE30}"; test -f "$f" || { echo "oreon: missing Source30 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source30_hash}" || { echo "oreon: Source30 hash mismatch" >&2; exit 1; }; }
 %setup -q -T -b 0 -n %{name}-%{nss_archive_version}
 cp ./nspr/config/nspr-config.in ./nspr/config/nspr-config-pc.in
 
@@ -318,9 +312,6 @@ popd
 pushd nss
 %autopatch -p1 -M 99
 popd
-
-tar -xf %{SOURCE30}
-cp -r nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files/* nss/tests/tools/
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1247353
 find nss/lib/libpkix -perm /u+x -type f -exec chmod -x {} \;
@@ -370,7 +361,7 @@ popd
 # Build NSS
 #
 # This package fails its testsuite with LTO.  Disable LTO for now
-#%global _lto_cflags %%{nil}
+#%global _lto_cflags %{nil}
 
 #export FREEBL_NO_DEPEND=1
 
@@ -637,8 +628,8 @@ pushd nss/tests
 #  don't need to run all the tests when testing packaging
 #  nss_cycles: standard pkix upgradedb sharedb
 #  the full list from all.sh is:
-#  "cipher lowhash libpkix cert dbtests tools fips sdr crmf smime ssl ocsp merge pkits chains ec gtests ssl_gtests"
-%define nss_tests "libpkix cert dbtests tools fips sdr crmf smime ssl ocsp merge pkits chains ec gtests ssl_gtests"
+#  "cipher lowhash libpkix cert dbtests tools fips sdr smime ssl ocsp merge pkits chains ec gtests ssl_gtests"
+%define nss_tests "libpkix cert dbtests tools fips sdr smime ssl ocsp merge pkits chains ec gtests ssl_gtests"
 #  nss_ssl_tests: crl bypass_normal normal_bypass normal_fips fips_normal iopr policy
 #  nss_ssl_run: cov auth stapling stress
 #
@@ -706,7 +697,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_libdir}/pkgconfig
 mkdir -p $RPM_BUILD_ROOT/%{saved_files_dir}
 mkdir -p $RPM_BUILD_ROOT/%{dracut_modules_dir}
 mkdir -p $RPM_BUILD_ROOT/%{dracut_conf_dir}
-%if %{defined rhel} || (0%{?oreon} >= 11)
+%if %{defined rhel}
 # not needed for rhel and its derivatives only fedora
 %else
 # because of the pp.1 conflict with perl-PAR-Packer
@@ -739,7 +730,7 @@ install -p -m 644 %{SOURCE14} $RPM_BUILD_ROOT/%{_sysconfdir}/pki/nssdb/key4.db
 install -p -m 644 %{SOURCE15} $RPM_BUILD_ROOT/%{_sysconfdir}/pki/nssdb/pkcs11.txt
 
 # Copy the development libraries we want
-for file in libcrmf.a libnssb.a libnssckfw.a
+for file in libnssb.a libnssckfw.a
 do
   install -p -m 644 dist/${LOBJDIR}/lib/$file $RPM_BUILD_ROOT/%{_libdir}
 done
@@ -801,7 +792,7 @@ done
 for f in certutil cmsutil crlutil derdump modutil pk12util signtool signver ssltap vfychain vfyserv; do
   install -c -m 644 ./dist/docs/nroff/${f}.1 $RPM_BUILD_ROOT%{_mandir}/man1/${f}.1
 done
-%if %{defined rhel} || (0%{?oreon} >= 11)
+%if %{defined rhel}
 install -c -m 644 ./dist/docs/nroff/pp.1 $RPM_BUILD_ROOT%{_mandir}/man1/pp.1
 %else
 install -c -m 644 ./dist/docs/nroff/pp.1 $RPM_BUILD_ROOT%{_datadir}/doc/nss-tools/pp.1
@@ -896,7 +887,7 @@ fi
 # unsupported tools
 %doc %{_mandir}/man1/derdump.1*
 %doc %{_mandir}/man1/signtool.1*
-%if %{defined rhel} || (0%{?oreon} >= 11)
+%if %{defined rhel}
 %doc %{_mandir}/man1/pp.1*
 %else
 %dir %{_datadir}/doc/nss-tools
@@ -907,7 +898,6 @@ fi
 %doc %{_mandir}/man1/vfyserv.1*
 
 %files devel
-%{_libdir}/libcrmf.a
 %{_libdir}/pkgconfig/nss.pc
 %{_bindir}/nss-config
 %doc %{_mandir}/man1/nss-config.1*
@@ -916,13 +906,9 @@ fi
 %{_includedir}/nss3/cert.h
 %{_includedir}/nss3/certdb.h
 %{_includedir}/nss3/certt.h
-%{_includedir}/nss3/cmmf.h
-%{_includedir}/nss3/cmmft.h
 %{_includedir}/nss3/cms.h
 %{_includedir}/nss3/cmsreclist.h
 %{_includedir}/nss3/cmst.h
-%{_includedir}/nss3/crmf.h
-%{_includedir}/nss3/crmft.h
 %{_includedir}/nss3/cryptohi.h
 %{_includedir}/nss3/cryptoht.h
 %{_includedir}/nss3/sechash.h
@@ -1105,5 +1091,4 @@ fi
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.123.1-1
-- Import
+%autochangelog

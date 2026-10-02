@@ -1,4 +1,4 @@
-%global source0_hash a01276052c31e84e4a069ee4452eab3b65a7d101a3fd7a09803be59125616270
+%global source0_hash 13fe68831292e7e725e7db1c6909d2b4fe5802080474c229fcac14ddf6445188
 
 Name:           Coin4
 Version:        4.0.10

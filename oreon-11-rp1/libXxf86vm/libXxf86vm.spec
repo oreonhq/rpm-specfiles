@@ -1,4 +1,4 @@
-%global source0_hash 96af414c73ce1d5449ad04be7f9f27fa8330f844b6dda843ef22e3e1befb3ee3
+%global source0_hash ae50c0f669e0af5a67cc4cd0f54f21d64a64d2660af883e80e95d3fe51b945d8
 
 %global tarball libXxf86vm
 #global gitdate 20130524
@@ -66,5 +66,4 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 %{_includedir}/X11/extensions/xf86vmode.h
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.6-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

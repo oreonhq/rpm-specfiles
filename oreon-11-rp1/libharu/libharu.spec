@@ -1,4 +1,4 @@
-%global source0_hash 0ed3eacf3ceee18e40b6adffbc433f1afbe3c93500291cd95f1477bffe6f24fc
+%global source0_hash ec8f327520d1d354ce58b5d2af75b64f380cddc522437c169463b39760921348
 
 Name:           libharu
 Version:        2.4.6

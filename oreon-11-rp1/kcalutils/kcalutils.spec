@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 8d54dfef43b7929c9d9b52ba2b6234f94537923e4ff94984611bf7489502a234
 
 Name:    kcalutils

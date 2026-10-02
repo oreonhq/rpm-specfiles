@@ -1,14 +1,11 @@
-%global source0_hash 09ee1c671a87401a5201c06106650f62badeea5a3b3941e9b1e2e1e08317357f
+%global source0_hash 1a1ab8209b35586fbc1aa279ba76d102130b95badcb20ca329587219112d8c16
 
-# No more Java on i686
 %ifarch %{java_arches}
 %bcond_without java
 %else
 %bcond_with java
 %endif
 
-# Patch version?
-#global snaprel -beta
 
 Name: hdf5
 Version: 2.2.0
@@ -16,21 +13,18 @@ Release: %autorelease
 Summary: A general purpose library and file format for storing scientific data
 License: BSD-3-Clause
 URL: https://www.hdfgroup.org/solutions/hdf5/
-Source0: https://github.com/HDFGroup/hdf5/archive/hdf5_%{version}/hdf5-%{version}.tar.gz
+Source0: https://github.com/HDFGroup/hdf5/releases/download/%{version}/hdf5-%{version}.tar.gz
 
-%global so_version 310
+%global so_version 320
 %global plugin_dir %{_libdir}/hdf5/plugin
 
 Source1: h5comp
-# Fix java build
-Patch0: hdf5-build.patch
-# Get size of __float128
-# https://github.com/HDFGroup/hdf5/pull/4924
-Patch1: hdf5-float128.patch
-# Remove Fedora build flags from h5cc/h5c++/h5fc
-# https://bugzilla.redhat.com/show_bug.cgi?id=1794625
-Patch2: hdf5-wrappers.patch
+Source2: http://ftp.us.debian.org/debian/pool/main/h/hdf5/hdf5_2.2.0+repack-5.debian.tar.xz
+Patch: hdf5-wrappers.patch
+Patch: hdf5-jarname.patch
+Patch: hdf5-fmoddir.patch
 
+BuildRequires: cmake
 BuildRequires: gcc-gfortran
 %if %{with java}
 BuildRequires: java-devel
@@ -42,20 +36,18 @@ BuildRequires: slf4j
 Obsoletes:     java-hdf5 < %{version}-%{release}
 %endif
 BuildRequires: krb5-devel
+BuildRequires: perl-interpreter
 BuildRequires: openssl-devel
 BuildRequires: time
 BuildRequires: zlib-devel
+BuildRequires: zlib-static
 BuildRequires: hostname
-# For patches/rpath
-BuildRequires: automake
-BuildRequires: libtool
-# Needed for mpi tests
 BuildRequires: openssh-clients
 BuildRequires: libaec-devel
+BuildRequires: libaec-static
 BuildRequires: gcc, gcc-c++
 BuildRequires: git-core
 
-# Provide a more relaxed version that other packages depend on
 %global _hdf5_compat_version %(v=%{version}; echo ${v%.*})
 Provides: %{name} = %{_hdf5_compat_version}
 Provides: %{name}%{?_isa} = %{_hdf5_compat_version}
@@ -100,6 +92,7 @@ HDF5 development headers and libraries.
 %if %{with java}
 %package -n java-hdf5
 Summary: HDF5 java library
+Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires:  slf4j
 Obsoletes: jhdf5 < 3.3.2^
 
@@ -118,7 +111,6 @@ HDF5 static libraries.
 %package mpich
 Summary: HDF5 mpich libraries
 BuildRequires: mpich-devel
-# Provide a more relaxed version that other packages depend on
 Provides: %{name}-mpich = %{_hdf5_compat_version}
 Provides: %{name}-mpich%{?_isa} = %{_hdf5_compat_version}
 
@@ -150,7 +142,6 @@ HDF5 parallel mpich static libraries
 Summary: HDF5 openmpi libraries
 BuildRequires: openmpi-devel
 BuildRequires: make
-# Provide a more relaxed version that other packages depend on
 Provides: %{name}-openmpi = %{_hdf5_compat_version}
 Provides: %{name}-openmpi%{?_isa} = %{_hdf5_compat_version}
 
@@ -176,214 +167,198 @@ HDF5 parallel openmpi static libraries
 %endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{name}_%{version} -p1
+%autosetup -a 2 -n %{name}-%{version}%{?snaprel} -p1
 
-%build
 %if %{with java}
-# Replace jars with system versions
-# hamcrest-core is obsoleted in hamcrest-2.2
-# Junit tests are failing with junit-4.13.1
 %if 0%{?rhel} >= 9 || 0%{?fedora}
 find . ! -name junit.jar -name "*.jar" -delete
 ln -s $(build-classpath hamcrest) java/lib/hamcrest-core.jar
+ln -s $(build-classpath junit) java/lib/org.junit.jar
 %else
 find . -name "*.jar" -delete
 ln -s $(build-classpath hamcrest/core) java/lib/hamcrest-core.jar
-ln -s $(build-classpath junit) java/lib/junit.jar
-# Fix test output
+ln -s $(build-classpath junit) java/lib/org.junit.jar
 junit_ver=$(sed -n '/<version>/{s/^.*>\([0-9]\.[0-9.]*\)<.*/\1/;p;q}' /usr/share/maven-poms/junit.pom)
 sed -i -e "s/JUnit version .*/JUnit version $junit_ver/" java/test/testfiles/JUnit-*.txt
 %endif
-ln -s $(build-classpath slf4j/api) java/lib/slf4j-api-2.0.6.jar
-ln -s $(build-classpath slf4j/nop) java/lib/ext/slf4j-nop-2.0.6.jar
-ln -s $(build-classpath slf4j/simple) java/lib/ext/slf4j-simple-2.0.6.jar
+ln -s $(build-classpath slf4j/api) java/lib/slf4j-api-2.0.16.jar
+ln -s $(build-classpath slf4j/nop) java/lib/ext/slf4j-nop-2.0.16.jar
+ln -s $(build-classpath slf4j/simple) java/lib/ext/slf4j-simple-2.0.16.jar
+export JAVA_HOME=%{java_home}
 %endif
 
-# Force shared by default for compiler wrappers (bug #1266645)
 sed -i -e '/^STATIC_AVAILABLE=/s/=.*/=no/' */*/h5[cf]*.in
-sh ./autogen.sh
 
-# Modify low optimization level for gnu compilers
-sed -e 's|-O -finline-functions|-O3 -finline-functions|g' -i config/gnu-flags
 
-#Do out of tree builds
-%global _configure ../configure
-#Common configure options
-%global configure_opts \\\
-  --enable-silent-rules \\\
-  --enable-fortran \\\
-  --enable-hl \\\
-  --enable-shared \\\
-  --with-szlib \\\
+%conf
+%if %{with java}
+export JAVA_HOME=%{java_home}
+%endif
+%global cmake_opts \\\
+  -DH5_DEFAULT_PLUGINDIR=%{plugin_dir} \\\
+  -DHDF5_BUILD_FORTRAN:BOOL=ON \\\
+  -DHDF5_BUILD_HL_LIB:BOOL=ON \\\
+  -DHDF5_BUILD_TOOLS:BOOL=ON \\\
+  -DHDF5_ENABLE_SZIP_SUPPORT:BOOL=ON \\\
+  -DHDF5_ENABLE_ZLIB_SUPPORT:BOOL=ON \\\
+  -DBUILD_TESTING:BOOL=ON \\\
 %{nil}
-# --enable-cxx and --enable-parallel flags are incompatible
-# --with-mpe=DIR Use MPE instrumentation [default=no]
-# --enable-cxx/fortran/parallel and --enable-threadsafe flags are incompatible
 
-#Serial build
 export CC=gcc
 export CXX=g++
-export F9X=gfortran
-export LDFLAGS="%{__global_ldflags} -fPIC -Wl,-z,now -Wl,--as-needed"
-mkdir build
-pushd build
-ln -s ../configure .
-%configure \
-  %{configure_opts} \
-  --enable-cxx \
-%if %{with java}
-  --enable-java \
+export FC=gfortran
+mkdir build-serial
+pushd build-serial
+%cmake .. \
+  %{cmake_opts} \
+  ${libopt} \
+  -DHDF5_BUILD_CPP_LIB:BOOL=ON \
+%ifnarch %{ix86}
+  -DHDF5_BUILD_JAVA:BOOL=ON \
 %endif
-  --with-default-plugindir=%{plugin_dir} \
-  --with-fmoddir=%{_fmoddir}
-sed -i -e 's| -shared | -Wl,--as-needed\0|g' libtool
-sed -r -i 's|^prefix=/usr|prefix=%{buildroot}/usr|' java/test/junit.sh
-%make_build V=0 VERBOSE=0 LDFLAGS="%{__global_ldflags} -fPIC -Wl,-z,now -Wl,--as-needed"
+  -DHDF5_INSTALL_CMAKE_DIR=%{_lib}/cmake/%{name} \
+  -DHDF5_INSTALL_DATA_DIR=share/%{name} \
+  -DHDF5_INSTALL_JAR_DIR=%{_jnidir} \
+  -DHDF5_INSTALL_JNI_LIB_DIR=%{_lib}/%{name} \
+  -DHDF5_INSTALL_LIB_DIR=%{_lib} \
+  -DHDF5_INSTALL_MODULE_DIR=%{_fmoddir}
 popd
 
-#MPI builds
-export LDFLAGS="%{__global_ldflags} -fPIC -Wl,-z,now -Wl,--as-needed"
+export CC=mpicc
+export CXX=mpicxx
+export FC=mpif90
 for mpi in %{?mpi_list}
 do
   mkdir $mpi
   pushd $mpi
   module load mpi/$mpi-%{_arch}
-  ln -s ../configure .
-  %configure \
-    %{configure_opts} \
-    CC=mpicc CXX=mpicxx F9X=mpif90 \
-    FCFLAGS="$FCFLAGS -I$MPI_FORTRAN_MOD_DIR" \
-    --enable-parallel \
-    --exec-prefix=%{_libdir}/$mpi \
-    --libdir=%{_libdir}/$mpi/lib \
-    --bindir=%{_libdir}/$mpi/bin \
-    --sbindir=%{_libdir}/$mpi/sbin \
-    --includedir=%{_includedir}/$mpi-%{_arch} \
-    --datarootdir=%{_libdir}/$mpi/share \
-    --mandir=%{_libdir}/$mpi/share/man \
-    --with-default-plugindir=%{_libdir}/$mpi/hdf5/plugin \
-    --with-fmoddir=${MPI_FORTRAN_MOD_DIR}
-  sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool
-  %make_build V=0 VERBOSE=0 LDFLAGS="%{__global_ldflags} -fPIC -Wl,-z,now -Wl,--as-needed"
+  export FCFLAGS="%{build_fflags} -I$MPI_FORTRAN_MOD_DIR"
+  export FFLAGS="%{build_fflags} -I$MPI_FORTRAN_MOD_DIR"
+  %cmake .. \
+    %{cmake_opts} \
+    ${libopt} \
+    -DMPIEXEC_MAX_NUMPROCS=4 \
+    -DHDF5_ENABLE_PARALLEL:BOOL=ON \
+    -DHDF5_INSTALL_LIB_DIR=%{_lib}/$mpi/lib \
+    -DHDF5_INSTALL_BIN_DIR=%{_lib}/$mpi/bin \
+    -DHDF5_INSTALL_INCLUDE_DIR=include/$mpi-%{_arch} \
+    -DHDF5_INSTALL_DATA_DIR=%{_lib}/$mpi/share/%{name} \
+    -DHDF5_INSTALL_CMAKE_DIR=%{_lib}/$mpi/lib/cmake/%{name} \
+    -DHDF5_INSTALL_MAN_DIR=%{_lib}/$mpi/share/man \
+    -DHDF5_INSTALL_MODULE_DIR=%{_fmoddir}/$mpi
   module purge
   popd
 done
 
+
+%build
+%if %{with java}
+export JAVA_HOME=%{java_home}
+%endif
+
+pushd build-serial
+%cmake_build
+popd
+
+for mpi in %{?mpi_list}
+do
+  pushd $mpi
+  module load mpi/$mpi-%{_arch}
+  %cmake_build
+  module purge
+  popd
+done
+
+
 %install
-# Fortran modules
-mkdir -p %{buildroot}%{_fmoddir}
-%make_install -C build
-rm %{buildroot}%{_libdir}/*.la
-# Plugin directory
+cd build-serial
+%cmake_install
+cd -
 mkdir -p %{buildroot}%{plugin_dir}
 for mpi in %{?mpi_list}
 do
+  pushd $mpi
   module load mpi/$mpi-%{_arch}
-  # Fortran modules
-  mkdir -p %{buildroot}${MPI_FORTRAN_MOD_DIR}
-  %make_install -C $mpi
-  rm %{buildroot}/%{_libdir}/$mpi/lib/*.la
-  # Plugin directory
+  %cmake_install
   mkdir -p %{buildroot}%{_libdir}/$mpi/hdf5/plugin
   module purge
+  popd
 done
 
-#Fixup headers and scripts for multiarch
 %ifarch x86_64 ppc64 ia64 s390x sparc64 alpha
-sed -i -e s/H5pubconf.h/H5pubconf-64.h/ %{buildroot}%{_includedir}/H5public.h
-mv %{buildroot}%{_includedir}/H5pubconf.h \
-   %{buildroot}%{_includedir}/H5pubconf-64.h
+sed -i -e s/H5pubconf.h/H5pubconf-64.h/ ${RPM_BUILD_ROOT}%{_includedir}/H5public.h
+mv ${RPM_BUILD_ROOT}%{_includedir}/H5pubconf.h \
+   ${RPM_BUILD_ROOT}%{_includedir}/H5pubconf-64.h
 for x in h5c++ h5cc h5fc
 do
-  mv %{buildroot}%{_bindir}/${x} \
-     %{buildroot}%{_bindir}/${x}-64
-  install -m 0755 %SOURCE1 %{buildroot}%{_bindir}/${x}
+  mv ${RPM_BUILD_ROOT}%{_bindir}/${x} \
+     ${RPM_BUILD_ROOT}%{_bindir}/${x}-64
+  install -m 0755 %SOURCE1 ${RPM_BUILD_ROOT}%{_bindir}/${x}
 done
 %else
-sed -i -e s/H5pubconf.h/H5pubconf-32.h/ %{buildroot}%{_includedir}/H5public.h
-mv %{buildroot}%{_includedir}/H5pubconf.h \
-   %{buildroot}%{_includedir}/H5pubconf-32.h
+sed -i -e s/H5pubconf.h/H5pubconf-32.h/ ${RPM_BUILD_ROOT}%{_includedir}/H5public.h
+mv ${RPM_BUILD_ROOT}%{_includedir}/H5pubconf.h \
+   ${RPM_BUILD_ROOT}%{_includedir}/H5pubconf-32.h
 for x in h5c++ h5cc h5fc
 do
-  mv %{buildroot}%{_bindir}/${x} \
-     %{buildroot}%{_bindir}/${x}-32
-  install -m 0755 %SOURCE1 %{buildroot}%{_bindir}/${x}
+  mv ${RPM_BUILD_ROOT}%{_bindir}/${x} \
+     ${RPM_BUILD_ROOT}%{_bindir}/${x}-32
+  install -m 0755 %SOURCE1 ${RPM_BUILD_ROOT}%{_bindir}/${x}
 done
 %endif
-# rpm macro for version checking
 mkdir -p %{buildroot}%{_rpmmacrodir}
 cat >%{buildroot}%{_rpmmacrodir}/macros.hdf5 <<EOF
-# HDF5 compatble version is
 %%_hdf5_version %{_hdf5_compat_version}
 %%_hdf5_plugin_dir %{plugin_dir}
 EOF
 
+mkdir -p %{buildroot}%{_mandir}/man1
+rm -f debian/man/*gif* debian/man/h5redeploy.1
+cp -p debian/man/*.1 %{buildroot}%{_mandir}/man1/
+rm %{buildroot}%{_mandir}/man1/h5p[cf]c*.1
+for mpi in %{?mpi_list}
+do
+  mkdir -p %{buildroot}%{_libdir}/${mpi}/share/man/man1
+  cp -p debian/man/h5p[cf]c*.1 %{buildroot}%{_libdir}/${mpi}/share/man/man1/
+done
+
 %if %{with java}
-# Java
-mkdir -p %{buildroot}%{_libdir}/%{name}
-mv %{buildroot}%{_libdir}/libhdf5_java.so %{buildroot}%{_libdir}/%{name}/
+rm %{buildroot}%{_jnidir}/slf*.jar
 %endif
 
 %check
 %ifarch %{ix86} ppc64le
-# i686: t_bigio test segfaults - https://github.com/HDFGroup/hdf5/issues/2510
-# ppc64le - t_multi_dset is flaky on ppc64le
 fail=0
 %else
 fail=1
 %endif
-make -j1 -C build check > build-check.log 2>&1 || {
-  status=$?
-  cat build-check.log
-  test $fail -eq 0 || exit $status
-}
+cd build-serial
+ctest -V %{?_smp_mflags} || exit $fail
+cd -
 %ifarch %{ix86} ppc64le s390x
-# i686: t_bigio test segfaults - https://github.com/HDFGroup/hdf5/issues/2510
-# ppc64le - t_pmulti_dset is flaky on ppc64le
-# s390x t_mpi fails with mpich
 fail=0
 %else
 fail=1
 %endif
-# This will preserve generated .c files on errors if needed
-#export HDF5_Make_Ignore=yes
 export OMPI_MCA_rmaps_base_oversubscribe=1
-# openmpi 5+
 export PRTE_MCA_rmaps_default_mapping_policy=:oversubscribe
-# mpich test is taking longer
 export HDF5_ALARM_SECONDS=8000
 for mpi in %{?mpi_list}
 do
-  # t_pmulti_dset hangs sometimes with mpich-aarch64/ppc64le so do not test on those architectures
-  # https://github.com/HDFGroup/hdf5/issues/3768
-  if [ "$mpi-%{_arch}" != mpich-aarch64 -a "$mpi-%{_arch}" != mpich-ppc64le ]
+  if [ "$mpi-%{_arch}" != mpich-aarch64 -a "$mpi-%{_arch}" != mpich-ppc64le -a "$mpi-%{_arch}" != mpich-riscv64 ]
   then
     module load mpi/$mpi-%{_arch}
-    logfile="%{_tmppath}/hdf5-${mpi}-check.log"
-    make -j1 -C $mpi check-p > "$logfile" 2>&1 || {
-      status=$?
-      cat "$logfile"
-      test $fail -eq 0 || exit $status
-    }
+    cd build-serial
+    ctest -V %{?_smp_mflags} || exit $fail
+    cd -
     module purge
   fi
 done
 
-# I have no idea why those get installed. But it's easier to just
-# delete them, than to fight with the byzantine build system.
-# And yes, it's using /usr/lib not %_libdir.
-if [ %_libdir != /usr/lib ]; then
-   rm -vf \
-      %{buildroot}/usr/lib/*.jar \
-      %{buildroot}/usr/lib/*.la  \
-      %{buildroot}/usr/lib/*.lai \
-      %{buildroot}/usr/lib/libhdf5*
-fi
 
 %files
-%license COPYING
-%doc ACKNOWLEDGMENTS README.md release_docs/RELEASE.txt
+%license LICENSE
+%doc ACKNOWLEDGMENTS README.md
 %{_bindir}/h5clear
 %{_bindir}/h5copy
 %{_bindir}/h5debug
@@ -391,7 +366,6 @@ fi
 %{_bindir}/h5delete
 %{_bindir}/h5dump
 %{_bindir}/h5format_convert
-%{_bindir}/h5fuse
 %{_bindir}/h5import
 %{_bindir}/h5jam
 %{_bindir}/h5ls
@@ -402,40 +376,65 @@ fi
 %{_bindir}/h5stat
 %{_bindir}/h5unjam
 %{_bindir}/h5watch
+%{_datadir}/%{name}/
 %dir %{_libdir}/%{name}
 %{plugin_dir}/
 %{_libdir}/libhdf5.so.%{so_version}*
 %{_libdir}/libhdf5_cpp.so.%{so_version}*
 %{_libdir}/libhdf5_fortran.so.%{so_version}*
-%{_libdir}/libhdf5hl_fortran.so.%{so_version}*
+%{_libdir}/libhdf5_f90cstub.so.%{so_version}*
+%{_libdir}/libhdf5_hl_f90cstub.so.%{so_version}*
+%{_libdir}/libhdf5_hl_fortran.so.%{so_version}*
 %{_libdir}/libhdf5_hl.so.%{so_version}*
 %{_libdir}/libhdf5_hl_cpp.so.%{so_version}*
+%{_libdir}/libhdf5_tools.so.%{so_version}*
+%{_mandir}/man1/h5copy.1*
+%{_mandir}/man1/h5diff.1*
+%{_mandir}/man1/h5dump.1*
+%{_mandir}/man1/h5import.1*
+%{_mandir}/man1/h5jam.1*
+%{_mandir}/man1/h5ls.1*
+%{_mandir}/man1/h5mkgrp.1*
+%{_mandir}/man1/h5perf_serial.1*
+%{_mandir}/man1/h5repack.1*
+%{_mandir}/man1/h5repart.1*
+%{_mandir}/man1/h5stat.1*
+%{_mandir}/man1/h5unjam.1*
 
 %files devel
 %{_rpmmacrodir}/macros.hdf5
 %{_bindir}/h5c++*
 %{_bindir}/h5cc*
 %{_bindir}/h5fc*
-%{_bindir}/h5redeploy
 %{_includedir}/*.h
 %{_includedir}/*.inc
-%{_libdir}/*.so
-%{_libdir}/*.settings
+%{_libdir}/lib*.so
+%{_libdir}/lib*.settings
 %{_fmoddir}/*.mod
+%{_libdir}/cmake/%{name}/
+%exclude %{_libdir}/cmake/%{name}/*_java*.cmake
+%exclude %{_libdir}/cmake/%{name}/*_static*.cmake
+%{_libdir}/pkgconfig/*.pc
+%{_mandir}/man1/h5c++.1*
+%{_mandir}/man1/h5cc.1*
+%{_mandir}/man1/h5debug.1*
+%{_mandir}/man1/h5fc.1*
 
 %files static
 %{_libdir}/*.a
+%{_libdir}/cmake/%{name}/*_static*.cmake
 
 %if %{with java}
 %files -n java-hdf5
 %{_jnidir}/hdf5.jar
-%{_libdir}/%{name}/*
+%{_libdir}/cmake/%{name}/*_java*.cmake
+%{_libdir}/%{name}/lib%{name}_java.so
 %endif
 
 %if %{with_mpich}
 %files mpich
-%license COPYING
-%doc README.md release_docs/RELEASE.txt
+%license LICENSE
+%doc README.md
 %{_libdir}/mpich/bin/h5clear
 %{_libdir}/mpich/bin/h5copy
 %{_libdir}/mpich/bin/h5debug
@@ -443,15 +442,13 @@ fi
 %{_libdir}/mpich/bin/h5diff
 %{_libdir}/mpich/bin/h5dump
 %{_libdir}/mpich/bin/h5format_convert
-%{_libdir}/mpich/bin/h5fuse
 %{_libdir}/mpich/bin/h5import
 %{_libdir}/mpich/bin/h5jam
 %{_libdir}/mpich/bin/h5ls
 %{_libdir}/mpich/bin/h5mkgrp
-%{_libdir}/mpich/bin/h5redeploy
-%{_libdir}/mpich/bin/h5repack
 %{_libdir}/mpich/bin/h5perf
 %{_libdir}/mpich/bin/h5perf_serial
+%{_libdir}/mpich/bin/h5repack
 %{_libdir}/mpich/bin/h5repart
 %{_libdir}/mpich/bin/h5stat
 %{_libdir}/mpich/bin/h5unjam
@@ -459,23 +456,31 @@ fi
 %{_libdir}/mpich/bin/ph5diff
 %{_libdir}/mpich/%{name}/
 %{_libdir}/mpich/lib/*.so.%{so_version}*
+%{_libdir}/mpich/share/%{name}/
 
 %files mpich-devel
 %{_includedir}/mpich-%{_arch}
 %{_fmoddir}/mpich/*.mod
+%{_libdir}/mpich/bin/h5cc
+%{_libdir}/mpich/bin/h5fc
 %{_libdir}/mpich/bin/h5pcc
 %{_libdir}/mpich/bin/h5pfc
 %{_libdir}/mpich/lib/lib*.so
 %{_libdir}/mpich/lib/lib*.settings
+%{_libdir}/mpich/lib/cmake/%{name}/
+%exclude %{_libdir}/mpich/lib/cmake/%{name}/*_static*.cmake
+%{_libdir}/mpich/lib/pkgconfig/*.pc
+%{_libdir}/mpich/share/man/man1/h5p[cf]c*.1*
 
 %files mpich-static
 %{_libdir}/mpich/lib/*.a
+%{_libdir}/mpich/lib/cmake/%{name}/*_static*.cmake
 %endif
 
 %if %{with_openmpi}
 %files openmpi
-%license COPYING
-%doc README.md release_docs/RELEASE.txt
+%license LICENSE
+%doc README.md
 %{_libdir}/openmpi/bin/h5clear
 %{_libdir}/openmpi/bin/h5copy
 %{_libdir}/openmpi/bin/h5debug
@@ -483,14 +488,12 @@ fi
 %{_libdir}/openmpi/bin/h5diff
 %{_libdir}/openmpi/bin/h5dump
 %{_libdir}/openmpi/bin/h5format_convert
-%{_libdir}/openmpi/bin/h5fuse
 %{_libdir}/openmpi/bin/h5import
 %{_libdir}/openmpi/bin/h5jam
 %{_libdir}/openmpi/bin/h5ls
 %{_libdir}/openmpi/bin/h5mkgrp
 %{_libdir}/openmpi/bin/h5perf
 %{_libdir}/openmpi/bin/h5perf_serial
-%{_libdir}/openmpi/bin/h5redeploy
 %{_libdir}/openmpi/bin/h5repack
 %{_libdir}/openmpi/bin/h5repart
 %{_libdir}/openmpi/bin/h5stat
@@ -499,17 +502,25 @@ fi
 %{_libdir}/openmpi/bin/ph5diff
 %{_libdir}/openmpi/%{name}/
 %{_libdir}/openmpi/lib/*.so.%{so_version}*
+%{_libdir}/openmpi/share/%{name}/
 
 %files openmpi-devel
 %{_includedir}/openmpi-%{_arch}
 %{_fmoddir}/openmpi/*.mod
+%{_libdir}/openmpi/bin/h5cc
+%{_libdir}/openmpi/bin/h5fc
 %{_libdir}/openmpi/bin/h5pcc
 %{_libdir}/openmpi/bin/h5pfc
 %{_libdir}/openmpi/lib/lib*.so
 %{_libdir}/openmpi/lib/lib*.settings
+%{_libdir}/openmpi/lib/cmake/%{name}/
+%exclude %{_libdir}/openmpi/lib/cmake/%{name}/*_static*.cmake
+%{_libdir}/openmpi/lib/pkgconfig/*.pc
+%{_libdir}/openmpi/share/man/man1/h5p[cf]c*.1*
 
 %files openmpi-static
 %{_libdir}/openmpi/lib/*.a
+%{_libdir}/openmpi/lib/cmake/%{name}/*_static*.cmake
 %endif
 
 %changelog

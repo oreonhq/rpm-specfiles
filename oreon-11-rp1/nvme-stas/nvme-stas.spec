@@ -1,12 +1,12 @@
-%global source0_hash b5b06f1d71ba85fd9a61b8bbbb187d0d40ba55649c9db6153cef747fbaf9b09e
+%global source0_hash 0cf0633b1d4bdc890e4cf0f0f2cc4bd6a5caa31963f41d6dd75f2bf5e97dfd17
 
 Name:    nvme-stas
 Summary: NVMe STorage Appliance Services
-Version: 3.0
+Version: 3.1
 Release: 1%{?dist}
 License: Apache-2.0
 URL:     https://github.com/linux-nvme/nvme-stas
-Source0:        https://github.com/linux-nvme/nvme-stas/archive/refs/tags/v2.4.1.tar.gz#/nvme-stas-2.4.1.tar.gz
+Source0:        https://github.com/linux-nvme/nvme-stas/archive/refs/tags/v%{version}.tar.gz#/nvme-stas-%{version}.tar.gz
 
 BuildArch:     noarch
 
@@ -92,5 +92,4 @@ mv %{buildroot}/%{_sysconfdir}/stas/sys.conf.doc %{buildroot}/%{_sysconfdir}/sta
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.1-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

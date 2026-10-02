@@ -1,14 +1,27 @@
-%global source0_hash af190d326891c6c51f45af130bca00a4826c7de9f9cbec3c3f4ff90d7393739c
+%global source14_hash da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768
+
+%global source13_hash 207fe75c396c0ae197c57d42c727163428b6667d98cef3644e41c6f1afe1895f
+
+%global source12_hash 51f83b2b4e9ed2beebc9b8eed2ecad29314a58ed8c5184b22ad8f9df703d3ce5
+
+%global source11_hash 3c718661b01bcd4a9fdda1a49416caeaa955620adf0f2fe73ac6868429d70953
+
+%global source10_hash 1cb6f8c64fe5b24a90b2699e42fea2c778b3e64118d4c80249ac4e272cc8bd5d
+
+%global source0_hash 710d79d60c15c09f0aeb93e5d2f219e7f12ab93f62cab826e4280592a1ea155f
 
 Summary:        Modular SIP user-agent with audio and video support
 Name:           baresip
-Version:        4.11.0
+Version:        4.12.0
 Release:        1%{?dist}
 License:        BSD-3-Clause
 URL:            https://github.com/baresip/baresip
 Source0:        https://github.com/baresip/baresip/archive/v%{version}/%{name}-%{version}.tar.gz
+
 Source10:       https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/raw/1e1d692148e8ab958bfea4188f8575b673804e09/Adwaita/scalable/status/call-incoming-symbolic.svg
+
 Source11:       https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/raw/1e1d692148e8ab958bfea4188f8575b673804e09/Adwaita/scalable/status/call-outgoing-symbolic.svg
+
 Source12:       https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/raw/master/COPYING#/COPYING.adwaita-icon-theme
 Source13:       https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/raw/master/COPYING_CCBYSA3#/COPYING_CCBYSA3.adwaita-icon-theme
 Source14:       https://gitlab.gnome.org/GNOME/adwaita-icon-theme/-/raw/master/COPYING_LGPL#/COPYING_LGPL.adwaita-icon-theme

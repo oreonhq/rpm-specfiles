@@ -1,5 +1,5 @@
-%global source0_hash b7324cbe86e767b65f26f467ed8b12ad80e124e3ccb89076855c98e43a9eddd4
-%global source1_hash 47762f066c032306cd0723b438ffd9862aad2729225433cc9fcd5e21cf10f114
+%global source0_hash 87336eba53b4acfe917424ab5d500d2b0054d9f5148d35c2273ccf2cfb712f0d
+%global source1_hash 7632368f9eea30bfd438f970e3a534796aecc3783b7b9c9b7a705b93dab0714f
 
 %if 0%{?rhel} > 0
 # On RHEL we default to building WITHOUT documentation.
@@ -89,5 +89,4 @@ make -C test golden test diff
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.01-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

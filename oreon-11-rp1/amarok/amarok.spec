@@ -1,4 +1,5 @@
-%global source0_hash none
+%global stable_kf6 stable
+%global source0_hash 68e9e83d7d8c0cbdd470958e768815f573d61f3ce32be7bc1b87fb56d622436e
 
 # FTBFS with GCC 16 when LTO is enabled
 # https://bugzilla.redhat.com/show_bug.cgi?id=2432234
@@ -10,16 +11,18 @@
 
 Name:    amarok
 Summary: Media player
-Version: 3.3.2
-Release: 3%{?dist}
+Version: 3.3.3
+Release: 1%{?dist}
 
 # KDE e.V. may determine that future GPL versions are accepted
 License: GPL-2.0-only OR GPL-3.0-only
 Url:     https://amarok.kde.org/
 %if 0%{?commitdate}
 Source0: https://invent.kde.org/multimedia/amarok/-/archive/%{commit}/amarok-%{commit}.tar.bz2
+
 %else
 Source0: https://download.kde.org/%{stable_kf6}/amarok/%{version}/amarok-%{version}.tar.xz
+
 %endif
 
 # partially revert https://invent.kde.org/multimedia/amarok/-/commit/c095ebf8780b693605ab23efa4eae6f4dd18fc5e

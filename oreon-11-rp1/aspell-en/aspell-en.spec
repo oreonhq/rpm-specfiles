@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 77a5cb437c45d1115f3b593802c20651d8c93803ed1073278dc1a1240016f10d
 
 %define lang en
 %define langrelease 0
@@ -6,7 +6,7 @@
 Summary: English dictionaries for Aspell
 Name: aspell-%{lang}
 Epoch: 50
-Version: 2026.02.25-0
+Version: 2026.02.25
 Release: 1%{?dist}
 # Automatically converted from old format: MIT and BSD - review is highly recommended.
 License: LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD
@@ -52,5 +52,4 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_libdir}/aspell-0.60/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50:2020.12.07-16
-- Import
+%autochangelog

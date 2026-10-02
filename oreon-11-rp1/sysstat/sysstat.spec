@@ -1,4 +1,4 @@
-%global source0_hash e48fc69401135dc08d2cd4ff58dbdbfce9b7485f76fc9049d97848e313c08dda
+%global source0_hash 8aa2054c56c941ab30e1b14ad2e0076a7e6d6bf01f50e22d954885b8a7f9a679
 
 Summary: Collection of performance monitoring tools for Linux
 Name: sysstat
@@ -7,7 +7,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later
 
 URL: https://sysstat.github.io
-Source:        https://github.com/sysstat/sysstat/archive/refs/tags/v%{version}.tar.gz#/sysstat-12.7.9.tar.gz
+Source:        https://github.com/sysstat/sysstat/archive/refs/tags/v%{version}.tar.gz#/sysstat-%{version}.tar.gz
 
 Source1: sysstat-tmpfiles.conf
 
@@ -120,5 +120,4 @@ fi
 %{_tmpfilesdir}/%{name}.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.7.9-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

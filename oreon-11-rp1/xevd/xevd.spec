@@ -1,4 +1,4 @@
-%global source0_hash 8d55c7ec1a9ad4e70fe91fbe129a1d4dd288bce766f466cba07a29452b3cecd8
+%global source0_hash febfdb532819bbf36b1b04e74d3ef328ad0f0f2db6224ddb7640fce6bd0014f4
 
 Name:           xevd
 Version:        0.7.0
@@ -9,9 +9,6 @@ License:        BSD-3-Clause
 URL:            https://github.com/mpeg5/xevd
 Source0:        https://github.com/mpeg5/xevd/archive/v%{version}/xevd-%{version}.tar.gz
 
-Patch0:         xevd-fix-build-on-non-x86.patch
-Patch1:         xevd-fix-neon-header.patch
-Patch2:         xevd-link-libm.patch
 
 BuildRequires:  cmake >= 3.12
 BuildRequires:  gcc

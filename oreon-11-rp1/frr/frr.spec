@@ -1,4 +1,4 @@
-%global source0_hash a84b973e713349dca09e2009f33dc499564f2e9faba01c0d3cba9204802b0cd5
+%global source0_hash 5c56b27756854b8d0a62b3e152d3f9ea08091851b2d686e140fdfb95cd88f612
 
 %global frr_libdir %{_libexecdir}/frr
 
@@ -15,7 +15,7 @@ Release:        1%{?dist}
 Summary:        Routing daemon
 License:        GPL-2.0-or-later AND ISC AND LGPL-2.0-or-later AND BSD-2-Clause AND BSD-3-Clause AND (GPL-2.0-or-later  OR ISC) AND MIT
 URL:            http://www.frrouting.org
-Source0:        https://github.com/FRRouting/frr/archive/refs/tags/%{name}-%{version}.tar.gz#/frr-10.5.0.tar.gz
+Source0:        https://github.com/FRRouting/frr/archive/refs/tags/%{name}-%{version}.tar.gz#/frr-%{version}.tar.gz
 Source1:        %{name}-tmpfiles.conf
 Source2:        %{name}-sysusers.conf
 #Decentralized SELinux policy
@@ -29,7 +29,6 @@ Patch0000:      0000-remove-babeld-and-ldpd.patch
 Patch0002:      0002-enable-openssl.patch
 Patch0003:      0003-disable-eigrp-crypto.patch
 Patch0004:      0004-fips-mode.patch
-Patch0005:      0005-remove-grpc-test.patch
 
 # 
 %if %{undefined fc40} && %{undefined fc41}
@@ -136,8 +135,7 @@ SELinux policy modules for FRR package
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n frr-frr-10.5.0
-%autosetup -S git -n frr-frr-10.5.0
+%autosetup -S git -n frr-frr-%{version}
 #Selinux
 mkdir selinux
 cp -p %{SOURCE3} %{SOURCE4} %{SOURCE5} selinux
@@ -319,5 +317,4 @@ rm tests/lib/*grpc*
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.5.0-8
-- Import
+%autochangelog

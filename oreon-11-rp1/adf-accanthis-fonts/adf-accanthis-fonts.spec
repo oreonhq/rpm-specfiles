@@ -1,7 +1,9 @@
+%global source1_hash 0a049d7f14e4a49ea9d3fa7d2bda4a35c9f35f6f220a02ace4203b371895b09b
+
 %global source0_hash 49ba4bfe704187169c5782b0f309865d1fe63b1328090326e70f11ff3f25821d
 
 # SPDX-License-Identifier: MIT
-Version: 1.8
+Version: 20101124
 Release: %autorelease
 URL:     http://arkandis.tuxfamily.org/adffonts.html
 
@@ -54,7 +56,9 @@ original Italic and changes to k, p, z and numbers.}
 %global archivename Accanthis-Std-20101124
 
 Source0:   http://arkandis.tuxfamily.org/fonts/%{archivename}.zip
+
 Source1:   http://arkandis.tuxfamily.org/docs/Accanthis-Cat.pdf
+
 Source10:  60-%{fontpkgname}.xml
 Source12:  60-%{fontpkgname2}.xml
 Source13:  60-%{fontpkgname3}.xml

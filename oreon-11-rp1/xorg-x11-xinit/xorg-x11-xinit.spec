@@ -1,4 +1,4 @@
-%global source0_hash 86409f21a6a31148d2c1c17bf5f2d904eb5ef455f9dc67c49fbd0c10ab18fd5a
+%global source0_hash 40a47c7a164c7f981ce3787b4b37f7e411fb43231dcde543d70094075dacfef9
 
 %global pkgname xinit
 
@@ -122,5 +122,4 @@ install -p -m644 -D %{SOURCE18} $RPM_BUILD_ROOT%{_datadir}/xsessions/xinit-compa
 %{_datadir}/xsessions/xinit-compat.desktop
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.3-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

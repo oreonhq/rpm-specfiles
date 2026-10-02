@@ -1,7 +1,7 @@
-%global source0_hash 902badc747aee1eb1a3a5556ff3fd9d83d2aa987d24e058024064df8a4b6b71f
+%global source0_hash dfdc0f339437345d9d5d8c2cb4bd43294c05821ebc8d5f0c9abfa4eec8f6c905
 
 Name:           clifm
-Version:        1.28
+Version:        1.29
 Release:        1%{?dist}
 Summary:        Shell-like, command line terminal file manager
 

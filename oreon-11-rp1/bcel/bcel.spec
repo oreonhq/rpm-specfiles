@@ -1,4 +1,4 @@
-%global source0_hash 8ee16c601567363b484183f1816738d337ae93413cd2aa052e59f0003513151e
+%global source0_hash 95694033a5a130350ac9401cf85ceb02579fd63ba1a7edfca4c9ed933fe0a564
 
 Name:           bcel
 Version:        6.13.0
@@ -56,5 +56,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE.txt NOTICE.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.0-1
-- Import
+%autochangelog

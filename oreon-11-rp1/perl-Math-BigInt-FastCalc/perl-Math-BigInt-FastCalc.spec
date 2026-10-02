@@ -2,8 +2,8 @@
 
 Name:           perl-Math-BigInt-FastCalc
 %global cpan_version 0.5020
-Version:        0.502.000
-Release:        521%{?dist}
+Version:        0.5020
+Release:        1%{?dist}
 Summary:        Math::BigInt::Calc with some XS for more speed
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Math-BigInt-FastCalc
@@ -99,5 +99,4 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.502.000-521
-- Prepare for Oreon 11 (RP1)
+%autochangelog

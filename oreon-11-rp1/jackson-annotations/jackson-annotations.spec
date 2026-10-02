@@ -1,13 +1,13 @@
-%global source0_hash dcfe3d203c5ebfec618300c23ebe317450e579a3659012ce57c577ff9045432b
+%global source0_hash 046186a558bcca490e1e940490272d83b548418bf3dab166ac692f7aaee07612
 
 Name:           jackson-annotations
-Version:        2.19.4
-Release:        1%{?dist}
+Version:        2.22
+Release:        %autorelease
 Summary:        Core annotations for Jackson data processor
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-annotations
-Source0:        https://github.com/FasterXML/jackson-annotations/archive/refs/tags/jackson-annotations-2.18.2.tar.gz#/jackson-annotations-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-annotations/archive/refs/tags/jackson-annotations-%{version}.tar.gz#/jackson-annotations-%{version}.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local
@@ -39,13 +39,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n %{name}-%{name}-%{version}
 
 %pom_remove_plugin "org.moditect:moditect-maven-plugin"
-%pom_remove_plugin "org.sonatype.plugins:nexus-staging-maven-plugin"
-%pom_remove_plugin "de.jjohannes:gradle-module-metadata-maven-plugin"
 %pom_remove_plugin "org.codehaus.mojo:build-helper-maven-plugin"
-%pom_xpath_set "//pom:javac.src.version" "11"
-%pom_xpath_set "//pom:javac.target.version" "11"
-%pom_xpath_set "//pom:maven.compiler.source" "11"
-%pom_xpath_set "//pom:maven.compiler.target" "11"
 
 sed -i 's/\r//' LICENSE
 
@@ -65,5 +59,4 @@ sed -i 's/\r//' LICENSE
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.18.2-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

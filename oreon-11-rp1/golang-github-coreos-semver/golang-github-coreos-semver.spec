@@ -5,7 +5,7 @@
 
 # https://github.com/coreos/go-semver
 %global goipath         github.com/coreos/go-semver
-Version:                0.3.0
+Version:                0.3.1
 %global commit          167f5da54033088a1d6b3049504828fa2ff8b116
 
 %gometa

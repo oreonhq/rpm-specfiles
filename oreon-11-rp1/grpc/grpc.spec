@@ -1,4 +1,4 @@
-%global source0_hash 0c3faa83e39d4f1ab55fe1476362b9ac3b81632a46dce7fd4d50271bce816b53
+%global source0_hash 17a4d25717f4871eb71cfdf191f7491f66a59c8ebc782ab53d52fcbfc478959f
 
 # We need to use C++17 to link against the system abseil-cpp, since it was
 # compiled with C++17 (an intentional abseil-cpp design decision).
@@ -931,7 +931,7 @@ echo '===== Fixing hard-coded C++ standard =====' 2>&1
 # the main C++ build, we can use CMAKE_CXX_STANDARD. For extensions, examples,
 # etc., we must patch.
 sed -r -i 's/(std=c\+\+)14/\1%{cpp_std}/g' \
-    setup.py grpc.gyp Rakefile \
+    setup.py Rakefile \
     examples/cpp/*/Makefile \
     examples/cpp/*/CMakeLists.txt \
     tools/run_tests/artifacts/artifact_targets.py \
@@ -1826,4 +1826,3 @@ fi
 %files -n python3-grpcio-testing
 %{python3_sitelib}/grpc_testing/
 %{python3_sitelib}/grpcio_testing-%{pyversion}-py%{python3_version}.egg-info/
-

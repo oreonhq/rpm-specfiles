@@ -1,7 +1,7 @@
-%global source0_hash b3f307f06c3b969bd65151d39729b97a767af42fddd3d9bab971135c0e7cd873
+%global source0_hash e08d92550a0f10890e722cc7db1e6d6cbde7e9fb47e61a8c6cec51f54a0b63d8
 
 Name:           inxi
-Version:        3.3.41-1
+Version:        3.3.41
 Release:        1%{?dist}
 Summary:        A full featured system information script
 

@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 39de2a259fc954455c57274dc94c79d5842774e1247a016aff30bc0efed0f4ef
 
 Name:           python-charset-normalizer
-Version:        3.5.1
+Version:        3.5.2
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet.
@@ -60,5 +60,4 @@ Summary:        %{summary}
 %{_bindir}/normalizer
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

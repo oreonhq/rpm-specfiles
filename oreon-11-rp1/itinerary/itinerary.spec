@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 4ceb62714637f02c80dfdcc7995f205f68930bc38ed5e503ef2e29a20016f5aa
 
 Name:           itinerary

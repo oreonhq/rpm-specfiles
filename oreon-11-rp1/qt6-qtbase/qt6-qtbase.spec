@@ -1,4 +1,4 @@
-%global source0_hash d9594a31228aa23ad6b531719a29b45f0f3989fe6c136d45767ea179f233c1ac
+%global source0_hash a951bd163c7b80fc6b8c88d7668fb56abf91c152373e13c10666763238131307
 
 # See http://bugzilla.redhat.com/223663
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
@@ -49,8 +49,8 @@ BuildRequires: pkgconfig(libsystemd)
 
 Name:    qt6-qtbase
 Summary: Qt6 - QtBase components
-Version: 6.11.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -950,5 +950,4 @@ make check -k ||:
 %{_qt6_datadir}/wayland/protocols/
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

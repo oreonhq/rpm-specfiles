@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b74faa9e2670c1518d4a23b5c3759992387371e82973f123f892fa6140a1cc70
 %global source1_hash 6521d8b04b0b49f5a0d633874c9e5b3b5e2aa4abd94a9bae80f976c0932c7007
 %global source2_hash 8000d6197b1d43b9b3cd0711c34f120420f358d0425167d2fb7e616d65470ae5
 %global source3_hash 6772e5689f07e82077ffe3339bc672934d83d83a97a7d4f1349de1302cb71f75
@@ -21,9 +21,9 @@
 # testsuite missing deps: tasty-golden
 
 Name:           ghc-%{pkg_name}
-Version:        0.11.0.1
+Version:        0.11.1
 # can only be reset when all subpkgs bumped
-Release:        21%{?dist}
+Release:        1%{?dist}
 Summary:        Pandoc-style document templates
 
 License:        BSD-3-Clause
@@ -195,5 +195,4 @@ rm %{buildroot}%{_datadir}/%{doclayout}/README.md
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.0.1-21
-- Prepare for Oreon 11 (RP1)
+%autochangelog

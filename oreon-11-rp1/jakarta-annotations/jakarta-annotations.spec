@@ -1,4 +1,4 @@
-%global source0_hash fbb00059662432e2af31e63abe02cb52be35dbca7befbe32626ae5cd58f289ff
+%global source0_hash d076d0b1990fc63fc7ad09cdad7cde8cd0c3b0c217c029f322b9af7527c2e06b
 
 %bcond_with bootstrap
 
@@ -11,7 +11,7 @@ URL:            https://jakarta.ee/specifications/annotations/1.3/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/common-annotations-api/archive/%{version}/common-annotations-api-%{version}.tar.gz#/jakarta-annotations-1.3.5.tar.gz
+Source0:        https://github.com/jakartaee/common-annotations-api/archive/%{version}/common-annotations-api-%{version}.tar.gz#/jakarta-annotations-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,21 +31,17 @@ programming that applies across a variety of Java technologies.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n common-annotations-api-1.3.5
-%autosetup -p1 -n common-annotations-api-1.3.5
+%autosetup -p1 -n common-annotations-api-%{version}
 
 # remove unnecessary dependency on parent POM
 # org.eclipse.ee4j:project is not packaged and isn't needed
-%pom_remove_parent
+%pom_remove_parent api
 
-# disable spec submodule: it's not needed, and
-# it has missing dependencies (jruby, asciidoctor-maven-plugin, ...)
-%pom_disable_module spec
+# 3.x has no aggregator POM; only the api module is built
 
 # remove plugins not needed for RPM builds
 %pom_remove_plugin :maven-javadoc-plugin api
 %pom_remove_plugin :maven-source-plugin api
-%pom_remove_plugin :findbugs-maven-plugin api
 
 # Remove use of spec-version-maven-plugin
 %pom_remove_plugin :spec-version-maven-plugin api
@@ -61,15 +57,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
   javax.annotation:jsr250-api
 
 %build
+pushd api
 %mvn_build -j
+popd
 
 %install
+pushd api
 %mvn_install
+popd
 
-%files -f .mfiles
+%files -f api/.mfiles
 %license LICENSE.md NOTICE.md
 %doc README.md
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-1
-- Import
+%autochangelog

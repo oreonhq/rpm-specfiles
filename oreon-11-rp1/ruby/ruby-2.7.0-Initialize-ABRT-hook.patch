@@ -22,10 +22,7 @@ To keep the things simple for now, load the ABRT hook via C.
  4 files changed, 19 insertions(+)
  create mode 100644 abrt.c
 
-diff --git a/abrt.c b/abrt.c
-new file mode 100644
-index 0000000000..e99cb432e6
---- /dev/null
+--- a/abrt.c
 +++ b/abrt.c
 @@ -0,0 +1,12 @@
 +#include "internal.h"
@@ -40,11 +37,9 @@ index 0000000000..e99cb432e6
 +    "  end\n"
 +  );
 +}
-diff --git a/common.mk b/common.mk
-index 08fee9119a..dae7d9dc00 100644
 --- a/common.mk
 +++ b/common.mk
-@@ -116,6 +116,7 @@ PRISM_FILES = prism/api_node.$(OBJEXT) \
+@@ -116,6 +116,7 @@
  		prism_init.$(OBJEXT)
  
  COMMONOBJS    = \
@@ -52,12 +47,10 @@ index 08fee9119a..dae7d9dc00 100644
  		array.$(OBJEXT) \
  		ast.$(OBJEXT) \
  		bignum.$(OBJEXT) \
-diff --git a/ruby.c b/ruby.c
-index b00fc1502d..32b88f7496 100644
 --- a/ruby.c
 +++ b/ruby.c
-@@ -1773,10 +1773,14 @@ proc_options(long argc, char **argv, ruby_cmdline_options_t *opt, int envopt)
- 
+@@ -1793,10 +1793,14 @@
+ VALUE rb_define_gem_modules(VALUE, VALUE);
  void Init_builtin_features(void);
  
 +/* abrt.c */
@@ -71,8 +64,6 @@ index b00fc1502d..32b88f7496 100644
  }
  
  void rb_call_builtin_inits(void);
-diff --git a/spec/ruby/core/kernel/require_spec.rb b/spec/ruby/core/kernel/require_spec.rb
-index 60d17242fe..a8f93b0db4 100644
 --- a/spec/ruby/core/kernel/require_spec.rb
 +++ b/spec/ruby/core/kernel/require_spec.rb
 @@ -26,6 +26,8 @@

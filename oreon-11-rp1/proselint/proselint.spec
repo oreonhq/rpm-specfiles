@@ -1,4 +1,4 @@
-%global source0_hash 624964272bea14767e5df2561d87dd30767938c8cb52fb23585bc37580680e86
+%global source0_hash 2568db94db227ea3aa011f88ddb6f554707b99b2c7447666bf00d71c5d7167cb
 
 Name:           proselint
 Version:        0.16.0

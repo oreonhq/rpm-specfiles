@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 53c156e1ba416a20da8e65395daa132da0d80e76910424caca3fcdae7831d384
 
 # Add readline edditing in pcre2test tool
 %bcond_without pcre2_enables_readline
@@ -10,8 +10,8 @@
 # This is stable release:
 #%%global rcversion RC1
 Name:       pcre2
-Version:    10.48
-Release:    %{?rcversion:0.}1%{?rcversion:.%rcversion}%{?dist}.1
+Version:    10.49
+Release:    %{?rcversion:0.}1%{?rcversion:.%rcversion}%{?dist}
 %global     myversion %{version}%{?rcversion:-%rcversion}
 Summary:    Perl-compatible regular expression library
 # the library:                          BSD with exceptions
@@ -265,5 +265,4 @@ make %{?_smp_mflags} check VERBOSE=yes
 %{_mandir}/man1/pcre2test.*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.47-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

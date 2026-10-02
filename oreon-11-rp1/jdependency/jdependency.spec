@@ -1,4 +1,4 @@
-%global source0_hash 6e56760b2bbd3c461f065ac060a12436b0478f202704a3cfe59f65f16e27dc67
+%global source0_hash 6a33aff0ce727477903a51da04f864a5ae6bb8ea80f224b859dcb9e96e938be8
 
 Name:           jdependency
 Version:        2.16
@@ -10,7 +10,7 @@ URL:            http://github.com/tcurdt/%{name}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://github.com/tcurdt/%{name}/archive/%{name}-%{version}.tar.gz#/jdependency-2.12.tar.gz
+Source0:        http://github.com/tcurdt/%{name}/archive/%{name}-%{version}.tar.gz#/jdependency-%{version}.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-io:commons-io)
@@ -57,5 +57,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 0bf45d3c3cb17a033d4b6c177bad41bbccb77c4b057752a828e236a61394211c
+%global source0_hash 1b80cefcddd86eb423ed5a233a92c4d610b7c8e448f96c2850ae1ab35bee2975
 
 %bcond bootstrap 0
 
@@ -83,7 +83,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :japicmp-maven-plugin
 
-%mvn_compat_version : 2.0.23
+%mvn_compat_version : 2.0.23 2.0.9
 
 %build
 %mvn_build -j -f -j -- -Dmaven4Version=4.0.0-rc-4

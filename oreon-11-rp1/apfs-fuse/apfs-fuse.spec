@@ -1,4 +1,6 @@
-%global source0_hash cf85f373f09e9177c0b21dbfbb427efaedc02d035d2aade65eb58a3cbf9ad267
+%global source1_hash cf85f373f09e9177c0b21dbfbb427efaedc02d035d2aade65eb58a3cbf9ad267
+
+%global source0_hash d64a736f662b57e7af3da44a891b8d3ffdf256c30957252eb1fe4de48370a5a4
 
 # https://github.com/sgan81/apfs-fuse/issues/164
 %global _lto_cflags %nil
@@ -12,12 +14,14 @@
 
 Name:          apfs-fuse
 Summary:       A read-only FUSE driver for Apple's APFS
-Version:       20260917
+Version:       20260921
 Release:       1.%{date}git%{short_gittag}%{?dist}
 License:       GPL-2.0-or-later
 URL:           https://github.com/sgan81/apfs-fuse
 Source0:       https://github.com/sgan81/%{name}/archive/%{short_gittag}/%{name}-%{short_gittag}.tar.gz
+
 Source1:       https://github.com/lzfse/lzfse/archive/lzfse-1.0.tar.gz
+
 # Add missing header to fix the build
 Patch:         https://github.com/sgan81/apfs-fuse/pull/205.patch
 Provides:      bundled(lzfse) = 1.0

@@ -5,7 +5,7 @@
 %global fontname wqy-microhei
 %global archivename %{fontname}-%{version}-beta
 
-Version: 0.2.0-beta-beta
+Version: 0.2.0
 Release: 1.39.beta%{?dist}
 URL:     http://wenq.org/wqy2/index.cgi?MicroHei(en)
 
@@ -46,5 +46,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %fontfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.0-0.39.beta
-- Prepare for Oreon 11 (RP1)
+%autochangelog

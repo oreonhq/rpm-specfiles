@@ -1,4 +1,4 @@
-%global source0_hash 75137f33ed28a12f433d4ab6e92794b2d4cfdd4377d35fe4361bc8e9808ffff4
+%global source0_hash 2927a7e574f90d9f54a59390e63cffec0c3ec3d31e0959fab88591f7da0fcbc8
 
 %bcond mpich %{undefined flatpak}
 %if 0%{?fedora} >= 40 || (0%{?oreon} >= 11)
@@ -17,7 +17,7 @@
 
 Name:          scotch
 Summary:       Graph, mesh and hypergraph partitioning library
-Version:       7.0.15
+Version:       7.0.16
 Release:       1%{?dist}
 
 License:       CeCILL-C
@@ -456,5 +456,4 @@ rm -rf %{buildroot}%{_mandir}/*
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.10-2
-- Import
+%autochangelog

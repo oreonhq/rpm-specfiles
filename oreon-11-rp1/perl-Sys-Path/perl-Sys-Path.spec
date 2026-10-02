@@ -7,7 +7,7 @@ Summary:        Supply autoconf style installation directories
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sys-Path
-Source0:        https://cpan.metacpan.org/modules/by-module/Sys/Sys-Path-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JK/JKUTEJ/Sys-Path-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

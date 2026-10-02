@@ -1,9 +1,9 @@
-%global source0_hash 297f62c560ca8aefefeac161003a38dde0d5a1664dbf08a9abd8994cd3c1df57
+%global source0_hash fa013d1a23e95d248fdb86f19c3817bb3e5aa39c5255e3c5ce1cc70c8576aa67
 
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           apache-commons-lang3
-Version:        3.20.0
+Version:        3.21.0
 Release:        %autorelease
 Summary:        Provides a host of helper utilities for the java.lang API
 License:        Apache-2.0
@@ -50,7 +50,7 @@ package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n commons-lang3-%{version}-src
+%autosetup -p1 -C
 
 %pom_remove_plugin :maven-javadoc-plugin
 %pom_remove_dep org.openjdk.jmh:jmh-core
@@ -64,10 +64,10 @@ sed -i 's/\s*public void testParseSync().*/@org.junit.jupiter.api.Disabled\n&/' 
     src/test/java/org/apache/commons/lang3/time/FastDateFormatTest.java
 
 # non-deterministic tests fail randomly
-rm src/test/java/org/apache/commons/lang3/RandomStringUtilsTest.java
+rm -f src/test/java/org/apache/commons/lang3/RandomStringUtilsTest.java
 
 # Missing dependencies
-rm src/test/java/org/apache/commons/lang3/HashSetvBitSetTest.java
+rm -f src/test/java/org/apache/commons/lang3/HashSetvBitSetTest.java
 
 # Remove limits and Java 11 options
 sed -i '/<argLine>/d' pom.xml
@@ -84,8 +84,4 @@ sed -i '/<argLine>/d' pom.xml
 %doc RELEASE-NOTES.txt
 
 %changelog
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.19.0-2
-- %%autosetup -n commons-lang3-%%{version}-src for upstream source tarball layout
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.19.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

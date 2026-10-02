@@ -11,8 +11,8 @@
 
 Summary: Qt6 - Speech component
 Name:    qt6-%{qt_module}
-Version: 6.11.2
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 # Code can be either LicenseRef-Qt-Commercial OR LGPL-3.0-only OR GPL-2.0-only
 # See e.g. src/plugins/speechdispatcher or src/tts
@@ -161,131 +161,7 @@ popd
 %{_qt6_examplesdir}/
 %endif
 
-%global source0_hash none
+%global source0_hash 9a60ce5bee54a9343740feab2582bffb996812f43d6c5585aade26dbd04933db
 
 %changelog
-* Fri Aug 21 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.2-1
-- 6.11.2
-
-* Thu Jul 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 6.11.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_45_Mass_Rebuild
-
-* Tue May 12 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.1-1
-- Update to 6.11.1
-
-* Mon Apr 13 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.0-1
-- 6.11.0
-
-* Tue Mar 31 2026 Jan Grulich <jgrulich@redhat.com> - 6.10.3-1
-- 6.10.3
-
-* Mon Feb 09 2026 Jan Grulich <jgrulich@redhat.com> - 6.10.2-1
-- 6.10.2
-
-* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 6.10.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
-
-* Thu Nov 20 2025 Jan Grulich <jgrulich@redhat.com> - 6.10.1-1
-- 6.10.1
-
-* Tue Oct 07 2025 Jan Grulich <jgrulich@redhat.com> - 6.10.0-1
-- 6.10.0
-
-* Thu Sep 25 2025 Jan Grulich <jgrulich@redhat.com> - 6.10.0~rc-1
-- 6.10.0 RC
-
-* Thu Aug 28 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.2-1
-- 6.9.2
-
-* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 6.9.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
-
-* Mon Jun 02 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.1-1
-- 6.9.1
-
-* Wed Apr 02 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.0-1
-- 6.9.0
-
-* Wed Apr 02 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.0-1
-- 6.9.0
-
-* Wed Mar 26 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.0~rc-2
-- Make -devel to require -flite and -speechd plugins
-
-* Mon Mar 24 2025 Jan Grulich <jgrulich@redhat.com> - 6.9.0~rc-1
-- 6.9.0 RC
-
-* Fri Jan 31 2025 Jan Grulich <jgrulich@redhat.com> - 6.8.2-1
-- 6.8.2
-
-* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 6.8.1-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
-
-* Thu Dec 05 2024 Jan Grulich <jgrulich@redhat.com> - 6.8.1-2
-- Move Software Bill of Materials from -devel
-
-* Thu Nov 28 2024 Jan Grulich <jgrulich@redhat.com> - 6.8.1-1
-- 6.8.1
-
-* Fri Oct 11 2024 Jan Grulich <jgrulich@redhat.com> - 6.8.0-1
-- 6.8.0
-
-* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 6.7.2-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
-
-* Mon Jul 01 2024 Jan Grulich <jgrulich@redhat.com> - 6.7.2-1
-- 6.7.2
-
-* Tue May 21 2024 Jan Grulich <jgrulich@redhat.com> - 6.7.1-1
-- 6.7.1
-
-* Tue Apr 02 2024 Jan Grulich <jgrulich@redhat.com> - 6.7.0-1
-- 6.7.0
-
-* Mon Feb 19 2024 Jan Grulich <jgrulich@redhat.com> - 6.6.2-2
-- Examples: also install source files
-
-* Thu Feb 15 2024 Jan Grulich <jgrulich@redhat.com> - 6.6.2-1
-- 6.6.2
-
-* Fri Jan 26 2024 Fedora Release Engineering <releng@fedoraproject.org> - 6.6.1-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Mon Jan 22 2024 Fedora Release Engineering <releng@fedoraproject.org> - 6.6.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Mon Nov 27 2023 Jan Grulich <jgrulich@redhat.com> - 6.6.1-1
-- 6.6.1
-
-* Tue Oct 10 2023 Jan Grulich <jgrulich@redhat.com> - 6.6.0-1
-- 6.6.0
-
-* Sun Oct 01 2023 Justin Zobel <justin.zobel@gmail.com> - 6.5.3-1
-- new version
-
-* Wed Aug 09 2023 Yaakov Selkowitz <yselkowi@redhat.com> - 6.5.2-3
-- Separate flite and speechd subpackages
-
-* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 6.5.2-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
-
-* Fri Jul 21 2023 Jan Grulich <jgrulich@redhat.com> - 6.5.2-1
-- 6.5.2
-
-* Wed Jul 12 2023 Jan Grulich <jgrulich@redhat.com> - 6.5.1-3
-- Rebuild for qtbase private API version change
-
-* Wed Jul 12 2023 Jan Grulich <jgrulich@redhat.com> - 6.5.1-2
-- Rebuild for qtbase private API version change
-
-* Mon May 22 2023 Jan Grulich <jgrulich@redhat.com> - 6.5.1-1
-- 6.5.1
-
-* Tue Apr 04 2023 Jan Grulich <jgrulich@redhat.com> - 6.5.0-1
-- 6.5.0
-
-* Thu Mar 23 2023 Jan Grulich <jgrulich@redhat.com> - 6.4.3-1
-- 6.4.3
-
-* Mon Feb 27 2023 Jan Grulich <jgrulich@redhat.com> - 6.4.2-1
-- Initial package
+%autochangelog

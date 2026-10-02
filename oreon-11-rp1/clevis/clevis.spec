@@ -1,4 +1,4 @@
-%global source0_hash a0388a544c77139dc751cdbf66bdd38fc29c43f9e81a1cdfd119c84109ffca3f
+%global source0_hash 466e9e87fddeb2531259cacd8e19de23cef7c6992ee835a643dad585fc45018f
 
 Name:           clevis
 Version:        23
@@ -10,9 +10,6 @@ URL:            https://github.com/latchset/%{name}
 Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1:        clevis.sysusers
 
-Patch0001:      0001-PKCS-11-pin-fix-dracut-for-unconfigured-device.patch
-Patch0002:      0002-tpm2-use-first-pcr-algorithm-bank-supported-by.patch
-Patch0003:      0003-Include-tpm2_getcap-as-dracut-required-binary.patch
 
 BuildRequires:  git-core
 BuildRequires:  gcc
@@ -223,5 +220,4 @@ desktop-file-validate \
 systemctl preset %{name}-luks-askpass.path >/dev/null 2>&1 || :
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 21-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

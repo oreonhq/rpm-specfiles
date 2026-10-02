@@ -1,4 +1,4 @@
-%global source0_hash 200100ab77e9b5e11062e0185a6f3d898a9f1c817414df1c5d893243bafabe60
+%global source0_hash 48dfe9eb2393517e0821ddec3bc3564bc6a2592f93a5a476be73b91c71ea9208
 
 Name:		synce4l
 Version:	1.1.2
@@ -11,7 +11,6 @@ Source0:        https://github.com/intel/synce4l/archive/refs/tags/%{version}.ta
 Source1:	synce4l.service
 
 # Fix compiler warnings to avoid build failures with -Werror
-Patch1:		synce4l-ccwarns.patch
 
 BuildRequires:	gcc make systemd
 BuildRequires:	libnl3-devel
@@ -74,5 +73,4 @@ echo '.so man8/synce4l.8' > $RPM_BUILD_ROOT%{_mandir}/man5/synce4l.conf.5
 %{_mandir}/man8/*.8*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

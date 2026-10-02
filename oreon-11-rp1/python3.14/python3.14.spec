@@ -1,4 +1,4 @@
-%global source0_hash 3b48dac8fb59f62eaa67ac83c1eb12bda1b7a08406dd286e252c11a66be27f81
+%global source0_hash c2215904f02b175596dc49351585104f4bc20341e1c47378b26a2c274360ce73
 
 # ======================
 # Bootstrap conditionals
@@ -47,7 +47,7 @@ URL: https://www.python.org/
 
 #  WARNING  When rebasing to a new Python version,
 #           remember to update the python3-docs package as well
-%global general_version %{pybasever}.7
+%global general_version %{pybasever}.8
 #global prerel ...
 %global upstream_version %{general_version}%{?prerel}
 Version: %{general_version}%{?prerel:~%{prerel}}

@@ -1,4 +1,4 @@
-%global source0_hash 6405634f555849eb01cb028e2a63936e7b841151ea2a1571ac5b5b10431cfab9
+%global source0_hash 5515b2610361ef34580b6b976635119f6dedb4f0a79d54662fa5fe6186a45ed5
 
 Summary:	Decode camera RAW files
 Name:		libopenraw
@@ -108,5 +108,4 @@ find $RPM_BUILD_ROOT -type f -name "*.la" -delete
 %{_libdir}/gdk-pixbuf-2.0/*/loaders/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.3-21
-- Prepare for Oreon 11 (RP1)
+%autochangelog

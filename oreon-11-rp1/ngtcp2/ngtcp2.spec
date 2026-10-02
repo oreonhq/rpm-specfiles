@@ -1,4 +1,4 @@
-%global source0_hash 2d1c07e6aa509c017516c08307b0b707cd165a17275ab5f1caff9aaa0e3b6c7d
+%global source0_hash 2a34d2484ba17847a5d11965704e9dd0fac4c6d8efc75ffe1ec7de66d8c6b6fb
 
 %bcond CHECK 1
 %bcond_without gnutls
@@ -11,12 +11,12 @@ Summary:        Implementation of RFC 9000 QUIC protocol
 
 License:        MIT
 URL:            https://github.com/ngtcp2/ngtcp2
-Source0:        https://github.com/ngtcp2/ngtcp2/releases/download/v1.21.0/ngtcp2-1.21.0.tar.xz
-Source1:        https://github.com/ngtcp2/ngtcp2/releases/download/v1.21.0/ngtcp2-1.21.0.tar.xz.asc
+Source0:        https://github.com/ngtcp2/ngtcp2/releases/download/v%{version}/ngtcp2-%{version}.tar.xz
+Source1:        https://github.com/ngtcp2/ngtcp2/releases/download/v%{version}/ngtcp2-%{version}.tar.xz.asc
 Source2:        tatsuhiro-t.asc
-Source3:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/mkapiref.py
-Source4:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/source/index.rst
-Source5:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/source/programmers-guide.rst
+Source3:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v%{version}/doc/mkapiref.py
+Source4:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v%{version}/doc/source/index.rst
+Source5:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v%{version}/doc/source/programmers-guide.rst
 
 BuildRequires:  autoconf
 BuildRequires:  gcc

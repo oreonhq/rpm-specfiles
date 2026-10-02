@@ -1,4 +1,4 @@
-%global source0_hash 9358cf29e11127b1a3196621d07159d3b013a0b79ebc388a25488a51443b8b81
+%global source0_hash a99b7262525a454d1065cf76dd17240fd808dfc4ef15636990ff83a5d0d9e740
 
 %bcond tests 1
 %bcond pkcs11 %[0%{?fedora} < 43 && %{undefined rhel}]
@@ -15,7 +15,6 @@ License: LGPL-2.0-or-later
 URL: https://notroj.github.io/neon/
 Source0:        https://notroj.github.io/neon/neon-%{version}.tar.gz
 Patch0: neon-0.34.0-multilib.patch
-Patch1: neon-0.37.0-bigend.patch
 BuildRequires: expat-devel, openssl-devel, zlib-devel, krb5-devel
 BuildRequires: pkgconfig, make, gcc, xmlto, libntlm-devel
 %if %{with pkcs11}
@@ -110,5 +109,4 @@ fi
 %{_libdir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.37.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

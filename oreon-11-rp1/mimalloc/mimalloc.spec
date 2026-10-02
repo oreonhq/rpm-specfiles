@@ -1,9 +1,9 @@
-%global source0_hash ac5ba94172b60823215a22b87ae923c5b05ef0cdd9047df2a832c16da02a6447
+%global source0_hash 36e9b5bf1bb703567a0347491721ce2098000db8284dc55cd53d211452723cdb
 
 %undefine __cmake_in_source_build
 
 Name:           mimalloc
-Version:        3.5.3
+Version:        3.5.4
 Release:        1%{?dist}
 Summary:        A general purpose allocator with excellent performance
 

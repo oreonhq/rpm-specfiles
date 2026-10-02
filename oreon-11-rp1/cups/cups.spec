@@ -1,4 +1,4 @@
-%global source0_hash 0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d
+%global source0_hash 820984b12a67f98705785aae2dd1347fe0ac097828001d4583ff64574aed6389
 
 %global use_alternatives 1
 %global lspp 1 
@@ -73,10 +73,6 @@ Patch12: cups-dymo-deviceid.patch
 # to have these features implemented their way in the future
 Patch100: cups-lspp.patch
 %endif
-
-#### UPSTREAM PATCHES (starts with 1000) ####
-Patch1000: 0001-scheduler-Fix-possible-use_after_free-in-cupsdReadCl.patch
-Patch1001: 0001-tls-gnutls.c-Do-not-check-for-errno-after-I-O-operat.patch
 
 
 ##### Patches removed because IMHO they aren't no longer needed
@@ -306,8 +302,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 # UPSTREAM PATCHES
-%patch -P 1000 -p1 -b .osh-use-after-free
-%patch -P 1001 -p1 -b .osh-use-after-free
 
 
 # Log to the system journal by default (bug #1078781, bug #1519331).
@@ -795,8 +789,4 @@ rm -f %{cups_serverbin}/backend/smb
 %{_mandir}/man7/ippeveps.7.gz
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.16-8
-- cups-libs Require avahi-libs (libcups pulls libavahi)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.16-7
-- Prepare for Oreon 11 (RP1)
+%autochangelog

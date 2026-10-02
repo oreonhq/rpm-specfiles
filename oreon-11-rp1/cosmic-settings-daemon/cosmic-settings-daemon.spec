@@ -1,4 +1,4 @@
-%global source0_hash 9d486201b5ec77608070cab80bda6a98d590829326efb1736c0d0d300aa3d8db
+%global source0_hash 69e34f67c1ae727a75b9a75e7901738adf2779ca1024f53d280d474d1af9ff6c
 
 # Generated using the scripts at # Generated using the scripts at https://forge.fedoraproject.org/cosmic/cosmic-packaging/src/branch/main/scripts
 ExcludeArch: %{ix86}
@@ -15,7 +15,7 @@ ExcludeArch: %{ix86}
 %global cosmic_minver 1.0.9
 
 Name:           cosmic-settings-daemon
-Version: 1.0.9
+Version: 1.9.0
 Release:        %autorelease
 Summary:        Settings daemon for the COSMIC Desktop Environment
 
@@ -24,6 +24,7 @@ License:        (0BSD OR Apache-2.0 OR MIT) AND Apache-2.0 AND (Apache-2.0 OR Ap
 URL:            https://github.com/pop-os/cosmic-settings-daemon
 
 Source0:        https://github.com/pop-os/cosmic-settings-daemon/archive/epoch-%{version}/cosmic-settings-daemon-%{version}.tar.gz
+
 # To create the below sources:
 # * git clone https://github.com/pop-os/cosmic-settings-daemon at the specified commit
 # * cargo vendor > vendor-config-%%{version}.toml

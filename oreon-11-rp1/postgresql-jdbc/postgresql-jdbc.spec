@@ -1,4 +1,4 @@
-%global source0_hash 04737d6e1d87794d9d5da35fa9a0a9914455b17fc7d6f49c630d35d53d54dd36
+%global source0_hash 4537ba157c6eab9022d0a48bb6e6ca5a736ced8cc7121e1276322fb104dd3718
 
 # Copyright (c) 2000-2005, JPackage Project
 # All rights reserved.
@@ -164,5 +164,4 @@ install -m 755 -D -t %{buildroot}%{_libexecdir}/%{name}-tests %{SOURCE1}
 %{_libexecdir}/%{name}-tests
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 42.7.8-1
-- Import
+%autochangelog

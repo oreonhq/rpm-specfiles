@@ -1,4 +1,4 @@
-%global source0_hash 9f79c0c19597b832e7a7a3dcf4252f1808405dffde96b6ae34cf936df160c525
+%global source0_hash 8d18a22b7402bead4e2dd5d287010302b982689a6746af8a185f186342349f12
 
 %bcond_without bootstrap
 
@@ -58,5 +58,4 @@ rm src/main/java/org/codehaus/mojo/buildhelper/BeanshellPropertyMojo.java
 %doc README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

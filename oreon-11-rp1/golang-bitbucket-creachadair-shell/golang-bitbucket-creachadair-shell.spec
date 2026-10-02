@@ -7,7 +7,7 @@
 # https://bitbucket.org/creachadair/shell
 %global goipath         bitbucket.org/creachadair/shell
 %global forgeurl        https://bitbucket.org/creachadair/shell
-Version:                0.0.8
+Version:                0.0.9
 %global commit          e395e2d7c36a2a3a0e9d23cb294f07845b8d87f0
 %global distprefix      %{nil}
 

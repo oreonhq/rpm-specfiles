@@ -1,4 +1,4 @@
-%global source0_hash 97e7d88575b0918ed257c4e25be274d430e8573d3b92b38a1f4378bc19bbc085
+%global source0_hash 8454eea04a7f19865c4c7204335e7ac86796066581f3acb581a7d3837fd68193
 
 # Break a circular dependency:
 # maven-doxia-sitetools -> l10n-maven-plugin -> maven-reporting-impl
@@ -123,5 +123,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.0-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

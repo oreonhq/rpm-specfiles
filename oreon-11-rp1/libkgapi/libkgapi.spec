@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 3d8f6dd6e0d4274102cbf7c3dff67d8cef074e25fbf34bb8e505fd38273656b1
 
 # trim changelog included in binary rpms

@@ -1,4 +1,4 @@
-%global source0_hash 6f2df00009f5ac4ad654c1ae1d2f8ed18191de38d1f5a88a54ea99cc16936686
+%global source0_hash 435095b436b38b96dd85e8cda13878144813bf52066057f76368db178dd8fea2
 
 %bcond_without tests
 
@@ -11,7 +11,6 @@ License:        BSD-2-Clause-Views
 URL:            http://jim.tcl.tk
 Source:        https://github.com/msteveb/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # readline expects applications to include stdio.h, jimtcl was not
-Patch:          https://github.com/msteveb/jimtcl/commit/35e0e1f9b1f018666e5170a35366c5fc3b97309c.patch#/jimtcl-stdio-for-readline.diff
 
 BuildRequires:  gcc-c++
 BuildRequires:  asciidoc
@@ -107,5 +106,4 @@ make test
 %{_libdir}/pkgconfig/jimtcl.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.83-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

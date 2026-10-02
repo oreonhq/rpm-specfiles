@@ -1,4 +1,4 @@
-%global source0_hash 61f520e7c1664ae9301fa36a2b8e90cf4680887a71f456c290d5d8b879f1e2e6
+%global source0_hash af459827b80bfd31b83b08077f4b5843acb7d18ad9a33a2ef532d3090f291fbf
 
 Name:           wireguard-tools
 Version:        1.0.20260223
@@ -61,5 +61,4 @@ WITH_BASHCOMPLETION=yes WITH_WGQUICK=yes WITH_SYSTEMDUNITS=yes -C src
 %{_mandir}/man8/wg-quick.8*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.20250521-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

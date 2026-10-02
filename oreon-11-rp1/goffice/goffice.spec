@@ -1,12 +1,13 @@
-%global source0_hash 66bfd7e31d2f6756d5a62c3670383cbba02b3cb4c1042950192a801b72a3c9ab
+%global source0_hash 500eaff50628faa75adb3cd560236a4db498d9e7c52c036b78fa9a57f21805b3
 
 Name:           goffice         
-Version:        0.10.61
+Version:        0.10.62
 Release:        1%{?dist}
 Summary:        G Office support libraries
 License:        GPL-2.0-only AND GPL-3.0-only
 URL:            http://projects.gnome.org/gnumeric/index.shtml
 Source0:        https://download.gnome.org/sources/%{name}/0.10/%{name}-%{version}.tar.xz
+
 BuildRequires:  gcc
 BuildRequires:  intltool
 BuildRequires:  make

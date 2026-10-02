@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2aae3628f4648f86959d7853e7e1f50ee96a7f1bb5497afb62b7deff6c350170
 
 %global qt_module qtvirtualkeyboard
 
@@ -11,8 +11,8 @@
 
 Summary: Qt6 - VirtualKeyboard component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
-Release: 1%{?dist}
+Version: 6.12.0
+Release: %autorelease
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt.io
@@ -141,5 +141,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
-- Import
+%autochangelog

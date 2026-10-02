@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash f31a9008c62b380a615447669fd96b65aa25062ba4d314de42aadb267d1ec747
 
 Name:    ktnef

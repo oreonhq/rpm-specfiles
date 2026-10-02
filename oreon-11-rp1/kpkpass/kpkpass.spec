@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash f916bdc37c11740cc527ee76a1326d3457ed9bf153d609cdb5ea7bb581885df9
 
 Name:    kpkpass

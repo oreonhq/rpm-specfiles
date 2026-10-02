@@ -1,15 +1,17 @@
-%global source0_hash ecc7a2ebdda77ccb4395f802f6dba668b2baa75ba190d3ace778edcb46de21df
+%global stable_kf6 stable
+%global source0_hash cf558c7421bccc611628ba2e333a1ca3efb80922aeb99d407026ebbe0c384162
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:           audex
-Version:        25.12.3
+Version:        26.08.1
 Release:        1%{?dist}
 Summary:        Audio ripper
 License:        BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.0-or-later
 URL:            https://apps.kde.org/audex/
 Source:         https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  extra-cmake-modules

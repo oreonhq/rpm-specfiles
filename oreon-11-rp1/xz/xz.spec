@@ -1,4 +1,4 @@
-%global source0_hash ce09c50a5962786b83e5da389c90dd2c15ecd0980a258dd01f70f9e7ce58a8f1
+%global source0_hash 0014c7886930454fe8bd4228665b51af55eeae560ea135c9c4cd33f55b2591d9
 
 # Not needed for f21+ and probably RHEL8+
 %{!?_licensedir:%global license %%doc}
@@ -185,5 +185,4 @@ LD_LIBRARY_PATH=$PWD/src/liblzma/.libs make check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.8.2-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

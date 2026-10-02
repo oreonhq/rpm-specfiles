@@ -1,7 +1,7 @@
-%global source0_hash 2f9b0ccce912babb60e69bc2ebdbc6202296c6fdd9697f137933e22788b72cce
+%global source0_hash 8d1db4e2e1132b9eac630ab6d050c45115aa7fbe0eb38f4f91563657a6348871
 
 Name:           deepin-session-shell
-Version:        6.0.67
+Version:        6.0.68
 Release:        %autorelease
 Summary:        Deepin Desktop Environment - session-shell module
 License:        GPL-3.0-or-later

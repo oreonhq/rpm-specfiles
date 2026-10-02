@@ -1,4 +1,4 @@
-%global source0_hash 63fbef75d09dd4a05ee2624d41e574d658e33faff5c5b7d6bc67eab2af03dc71
+%global source0_hash 3c4facfef1bc1f96235808865665b94857e6e508ce346bfc36b53b775fd8423c
 
 # TESTING NOTE: The testsuite requires numerous packages, many of which are
 # built with dune.  Furthermore, the testsuite assumes it is running in a git
@@ -504,5 +504,4 @@ cd -
 %files -n ocaml-top-closure-devel -f .ofiles-top-closure-devel
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.23.1-1
-- Import
+%autochangelog

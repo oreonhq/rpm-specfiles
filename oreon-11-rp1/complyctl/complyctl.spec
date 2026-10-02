@@ -1,4 +1,4 @@
-%global source0_hash 82dc88dd612965f22ac882b05848a86c81eaaa33a9f57e8393549690e2557865
+%global source0_hash db8a633a770f76651766fe9472138a15b593885e6f61bc8c822993c68c0b56bf
 
 # SPDX-License-Identifier: Apache-2.0
 
@@ -9,7 +9,7 @@
 %global debug_package %{nil}
 
 Name:           complyctl
-Version:        0.1.2
+Version:        1.0.0
 Release:        %autorelease
 Summary:        Tool to perform compliance assessment activities, scaled by plugins
 License:        Apache-2.0

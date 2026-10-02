@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash a5758ad00f0e1bbd60dc5a579a50259bff2e267e8e925d485351bf2bc683a329
 
 Name:           python-pycdlib
-Version:        1.20.0
+Version:        1.21.0
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Pure python ISO manipulation library
@@ -54,5 +54,4 @@ Summary:        %{summary}
 %files -n python3-pycdlib -f %{pyproject_files}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.15.0-6
-- Prepare for Oreon 11 (RP1)
+%autochangelog

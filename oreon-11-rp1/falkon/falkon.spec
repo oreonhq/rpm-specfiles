@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 %global source0_hash 25f90957335058fff8536b511135e36d96e74c49fab45690be89b994015777b5
 
 # build Python plugins (disabled by default due to #2048781)

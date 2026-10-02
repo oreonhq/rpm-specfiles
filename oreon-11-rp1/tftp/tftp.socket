@@ -1,5 +1,6 @@
 [Unit]
 Description=Tftp Server Activation Socket
+PartOf=tftp.service
 
 [Socket]
 ListenDatagram=69

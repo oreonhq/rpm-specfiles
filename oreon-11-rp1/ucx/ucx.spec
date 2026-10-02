@@ -1,4 +1,4 @@
-%global source0_hash 9af07d55281059542f20c5b411db668643543174e51ac71f53f7ac839164f285
+%global source0_hash 258941cddd14ca60d38c0d31b9b09ec1052c901086841011a498da8b55a3cb24
 
 %{!?configure_options: %global configure_options %{nil}}
 %bcond_without cma
@@ -42,7 +42,6 @@ License: BSD-3-Clause AND MIT AND CC-PDDC AND (BSD-3-Clause OR Apache-2.0)
 
 URL: http://www.openucx.org
 Source:        https://github.com/openucx/%{name}/releases/download/v%{version}/ucx-%{version}.tar.gz
-Patch: Avoid-build-failure.patch
 
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Prefix: %{_prefix}
@@ -121,7 +120,6 @@ Provides header files and examples for developing with UCX.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch -P0 -p1
 # https://github.com/openucx/ucx/issues/10542
 # With ROCm 6.3+ libhsakmt is bundled with libhsa-runtime64
 # Remove this nonexistent library
@@ -415,5 +413,4 @@ Infiniband datagrams for out-of-band communications.
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.19.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

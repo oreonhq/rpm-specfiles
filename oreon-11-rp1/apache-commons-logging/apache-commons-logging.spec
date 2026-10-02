@@ -1,4 +1,4 @@
-%global source0_hash 52acdfbc1a1b916d7445bdb225e8d826fbdc99d381ccb43384fc7ae42cdaf3aa
+%global source0_hash 3596de02a6b4d4f11b4353f4db7964cb248fdc18252a4636eb1496149a5fcd9e
 
 %bcond_without bootstrap
 
@@ -81,11 +81,4 @@ rm -rf src/test/java/org/apache/commons/logging/log4j/log4j12
 %doc PROPOSAL.html RELEASE-NOTES.txt
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-3
-- bump release (retry failed build)
-
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-2
-- %%autosetup -n commons-logging-%%{version}-src for upstream source tarball layout
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

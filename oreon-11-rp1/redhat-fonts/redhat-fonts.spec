@@ -1,4 +1,4 @@
-%global source0_hash c620b2b84df0f7bf8c176f74881b7614a835ed18189d28bb1a9945c74488e5b5
+%global source0_hash 10ab96fdc90b20aaa70b66006f7c0b52c75c7c71d543486ef9acc2697a55d341
 
 %global fontname redhat
 %global fontconf 64-%{fontname}
@@ -197,5 +197,4 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainf
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.0-3
-- Prepare for Oreon 11 (RP1)
+%autochangelog

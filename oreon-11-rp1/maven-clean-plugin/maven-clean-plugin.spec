@@ -1,4 +1,4 @@
-%global source0_hash fbdbe1121da3397c6a50892346c3239c8b1c3c78df2fe3e57a4d1609782cbab6
+%global source0_hash d5ea0ea62d29ae3ecfff21ea02a4df51d4610511d78bf01e877945b0a0bd605f
 
 Name:           maven-clean-plugin
 Version:        3.5.0
@@ -53,5 +53,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %doc LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.2-9
-- Prepare for Oreon 11 (RP1)
+%autochangelog

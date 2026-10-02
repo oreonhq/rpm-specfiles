@@ -1,4 +1,4 @@
-%global source0_hash 87014461a9a8ae8f110864a9ccd3002080fe395b5ff164b11f0c6ed01f1c426b
+%global source0_hash f74ea9ede7877afb66f4d7dea567f074bf63d806a824c87a9d9067d05848a316
 
 %undefine __cmake_in_source_build
 %global framework kimageformats
@@ -82,23 +82,4 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/cmake/KF6ImageFormats/
 
 %changelog
-* Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.29.0-1
-- Latest upstream release
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10
-- Rebuild
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
-- Rebuild for OpenEXR 3.3 / LibRaw SONAMEs (ISO dep fix)
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-8
-- Rebuild for OpenEXR 3.3 and LibRaw 0.22 SONAMEs
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

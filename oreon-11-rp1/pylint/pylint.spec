@@ -1,13 +1,13 @@
-%global source0_hash 9493ebe07fff5e05f1efc954183f9d046600f3fba37e0f4397417a632965d393
+%global source0_hash ba0eecd67523e801eeb2f33dcc56e2ca3adadda0728fbee1957f2826a5f0a939
 
 # Remove -s from Python shebang - ensure that extensions installed with pip
 # to user locations are seen and properly loaded
 %undefine _py3_shebang_s
 
 %global forgeurl https://github.com/PyCQA/pylint
-%global basever 4.0.8
+%global basever 4.1.1
 #%%global prever b0
-Version:        4.0.8
+Version:        4.1.1
 %forgemeta
 
 Name:           pylint
@@ -16,8 +16,6 @@ Summary:        Analyzes Python code looking for bugs and signs of poor quality
 License:        GPL-2.0-or-later
 URL:            https://github.com/pylint-dev/pylint
 Source0:        %{forgeurl}/archive/v%{basever}/pylint-%{basever}.tar.gz
-#Patch0:         7829.patch apply when rebased then re-enable tests
-Patch1:         pep639.patch
 BuildArch:      noarch
 
 BuildRequires:  pyproject-rpm-macros
@@ -53,9 +51,7 @@ Summary:        %{summary}
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n %{name}-%{basever}
-# Relax version requirements
-sed -i -e 's/"setuptools>=[^"]*"/"setuptools"/' pyproject.toml
+%autosetup -n %{name}-%{basever}
 
 %generate_buildrequires
 %pyproject_buildrequires

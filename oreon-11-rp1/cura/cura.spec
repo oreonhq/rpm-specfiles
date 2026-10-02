@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 5911c63c465d23e8c27262b5702c2e708844b33fefb0f924855fa1a17158a089
 
-%global         major_minor_version 5.4
+%global         major_minor_version 5.13
 %global         patch_version 0
 
 Name:           cura
