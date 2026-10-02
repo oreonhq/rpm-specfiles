@@ -56,8 +56,8 @@ Source0:        https://github.com/FortAwesome/Font-Awesome/archive/refs/tags/%{
 # Script to generate Source2
 Source1:	trademarks.py
 Source2:	README-Trademarks.txt
-Source3:	60-%{fontpkgname1}.conf
-Source4:	60-%{fontpkgname2}.conf
+Source3:	60-fontawesome-7-free-fonts.conf
+Source4:	60-fontawesome-7-brands-fonts.conf
 
 %description
 %_desc

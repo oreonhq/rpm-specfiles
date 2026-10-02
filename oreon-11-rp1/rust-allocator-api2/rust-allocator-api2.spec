@@ -74,18 +74,6 @@ use the "fresh-rust" feature of the "%{crate}" crate.
 %files       -n %{name}+fresh-rust-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+nightly-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+nightly-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "nightly" feature of the "%{crate}" crate.
-
-%files       -n %{name}+nightly-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+serde-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -108,6 +96,18 @@ This package contains library source intended for building other packages which
 use the "std" feature of the "%{crate}" crate.
 
 %files       -n %{name}+std-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+serde_core-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+serde_core-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "serde_core" feature of the "%{crate}" crate.
+
+%files       -n %{name}+serde_core-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

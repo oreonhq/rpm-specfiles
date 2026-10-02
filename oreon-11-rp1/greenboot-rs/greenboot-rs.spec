@@ -1,11 +1,11 @@
-%global source0_hash ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
+%global source0_hash 58a9b55e053a108290a4da15c7bff3f40119f752d3fc324b5a6bd1651b49263b
 %global pkgname greenboot
 
 # Tests require privileged operations (grub edits, fs remount) and cannot run in mock.
 # Tests are executed in external CI instead.
 %bcond check 0
 
-%if 0%{?rhel} || (0%{?oreon} >= 11)
+%if 0%{?rhel}
 %bcond_without bundled_rust_deps
 %else
 %bcond_with bundled_rust_deps

@@ -101,7 +101,7 @@ test "%{source303_hash}" = "none" || { f="%{SOURCE303}"; test -f "$f" || { echo 
 test "%{source304_hash}" = "none" || { f="%{SOURCE304}"; test -f "$f" || { echo "oreon: missing Source304 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source304_hash}" || { echo "oreon: Source304 hash mismatch" >&2; exit 1; }; }
 test "%{source400_hash}" = "none" || { f="%{SOURCE400}"; test -f "$f" || { echo "oreon: missing Source400 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source400_hash}" || { echo "oreon: Source400 hash mismatch" >&2; exit 1; }; }
 test "%{source500_hash}" = "none" || { f="%{SOURCE500}"; test -f "$f" || { echo "oreon: missing Source500 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source500_hash}" || { echo "oreon: Source500 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -C
+%autosetup -p1 -n junit-framework-r%{version}
 find -name '*.jar' -delete
 
 cp -p %{SOURCE100} pom.xml

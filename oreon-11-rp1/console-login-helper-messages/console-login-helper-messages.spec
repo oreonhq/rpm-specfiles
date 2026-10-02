@@ -126,7 +126,6 @@ rm %{buildroot}/%{_tmpfilesdir}/%{name}-motdgen.conf
 %{_unitdir}/%{name}-gensnippet-ssh-keys.service
 %{_sysconfdir}/NetworkManager/dispatcher.d/90-%{name}-gensnippet_if
 %{_prefix}/lib/%{name}/issue.defs
-%{_tmpfilesdir}/%{name}-issuegen.conf
 %{_libexecdir}/%{name}/gensnippet_ssh_keys
 %{_libexecdir}/%{name}/gensnippet_if
 %{_libexecdir}/%{name}/gensnippet_if_udev

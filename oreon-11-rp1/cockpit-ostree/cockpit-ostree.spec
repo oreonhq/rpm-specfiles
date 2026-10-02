@@ -1,4 +1,4 @@
-%global source0_hash b6991bc77fe8fe7322a0dee7ff45ec6ed562fcee773e74e1f009f17e1766dc2f
+%global source0_hash 794d7c8d80f0cf88c3028c0f0eb374a2c2ad318364a96c563f01e2b537a8f824
 
 Name: cockpit-ostree
 Epoch: 1

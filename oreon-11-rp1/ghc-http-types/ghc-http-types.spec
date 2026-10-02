@@ -103,7 +103,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %files devel -f %{name}-devel.files
-%doc CHANGELOG README
+%doc CHANGELOG.md README.md
 
 
 %if %{with haddock}

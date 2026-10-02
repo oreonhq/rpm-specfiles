@@ -1,4 +1,4 @@
-%global source0_hash 07600d6745f5199ad210c7f39e934dcd9716b54615e44ccf1f830001a0da3597
+%global source0_hash beb7528f1e9adf3decf841f02510a3752820561a06842f9097d9f2565fe41f34
 
 Version:        3.0.5
 Release:        1%{?dist}
@@ -33,7 +33,7 @@ titling text.}
 
 This package provide monospace version of overpass fonts.}
 
-Source0:        https://github.com/RedHatBrand/Overpass/archive/refs/tags/%{version}.tar.gz#/overpass-fonts-3.0.4.tar.gz
+Source0:        https://github.com/RedHatBrand/Overpass/archive/refs/tags/v%{version}.tar.gz#/overpass-fonts-%{version}.tar.gz
 
 Source10: 60-%{fontpkgname0}.conf
 Source11: 60-%{fontpkgname1}.conf

@@ -79,7 +79,9 @@ rm -rf \
 popd
 
 %check
+# Exclude tests which require rubocop
 find spec -name \*_spec.rb -print0 | \
+	grep -v -z "no_building_alternation_pattern_in_regexp_spec" | \
 	sort --zero-terminated |  \
 	xargs --null ruby -Ilib:FAKE \
 	-r./spec/spec_helper \

@@ -108,6 +108,8 @@ rm %{buildroot}%{_mandir}/man1/mansect.1
 rm %{buildroot}%{_mandir}/man1/diffman-git.1
 rm %{buildroot}%{_mandir}/man1/pdfman.1
 rm %{buildroot}%{_mandir}/man1/sortman.1
+rm %{buildroot}%{_bindir}/grepc %{buildroot}%{_bindir}/grepc_c %{buildroot}%{_bindir}/grepc_mk %{buildroot}%{_bindir}/mansectf
+rm -f %{buildroot}%{_mandir}/man1/grepc.1 %{buildroot}%{_mandir}/man1/mansectf.1
 
 %pre
 # remove alternativized files if they are not symlinks

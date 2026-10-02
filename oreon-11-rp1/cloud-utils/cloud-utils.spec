@@ -142,7 +142,7 @@ install -pm 0755 bin/* %{buildroot}%{_bindir}/
 install -pm 0644 man/* %{buildroot}%{_mandir}/man1/
 
 # Exclude Ubuntu-specific tools
-rm %{buildroot}%{_bindir}/*ubuntu*
+rm -f %{buildroot}%{_bindir}/*ubuntu*
 
 # Exclude the cloud-run-instances manpage
 rm -f %{buildroot}%{_mandir}/man1/cloud-run-instances.*

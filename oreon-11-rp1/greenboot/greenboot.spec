@@ -1,4 +1,4 @@
-%global source0_hash ba8d385311282cbd8ce7375b726d058cb1f7d905550852255019ca71bef20735
+%global source0_hash 035b509604e138ab18b16962cc375d7bc827786343927403a0ca56834a115a3c
 
 %global debug_package %{nil}
 
@@ -13,7 +13,7 @@ License:            LGPL-2.1-or-later
 %global repo_tag    v%{version}
 
 URL:                https://github.com/%{repo_owner}/%{repo_name}
-Source0:        https://github.com/%{repo_owner}/%{repo_name}/archive/refs/tags/%{repo_tag}.tar.gz#/greenboot-0.15.8.tar.gz
+Source0:        https://github.com/%{repo_owner}/%{repo_name}/archive/refs/tags/%{repo_tag}.tar.gz#/greenboot-%{version}.tar.gz
 
 ExcludeArch: s390x {%ix86}
 BuildRequires:      systemd-rpm-macros

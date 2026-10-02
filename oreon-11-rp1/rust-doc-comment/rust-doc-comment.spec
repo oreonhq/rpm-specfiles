@@ -48,28 +48,16 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+no_core-devel
+%package     -n %{name}+debug-devel
 Summary:        %{summary}
 BuildArch:      noarch
 
-%description -n %{name}+no_core-devel %{_description}
+%description -n %{name}+debug-devel %{_description}
 
 This package contains library source intended for building other packages which
-use the "no_core" feature of the "%{crate}" crate.
+use the "debug" feature of the "%{crate}" crate.
 
-%files       -n %{name}+no_core-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+old_macros-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+old_macros-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "old_macros" feature of the "%{crate}" crate.
-
-%files       -n %{name}+old_macros-devel
+%files       -n %{name}+debug-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep
