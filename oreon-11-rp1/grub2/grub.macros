@@ -3,13 +3,11 @@
 %global evr %{epoch}:%{version}-%{release}
 %global _libdir %{_exec_prefix}/lib
 
-%if 0%{?oreon}
-%global os_id oreon
-%else
-%global os_id %(eval echo $(grep ^ID= /etc/os-release | sed -e 's/^ID=//' -e 's/rhel/redhat/'))
-%endif
 %global grub_evr_dir %{_libdir}/efi/grub2/%{evr}
-%global grub_efi_dir %{grub_evr_dir}/EFI/%{os_id}
+%if 0%{?oreon}
+%global efi_vendor oreon
+%endif
+%global grub_efi_dir %{grub_evr_dir}/EFI/%{efi_vendor}
 
 %global _binaries_in_noarch_packages_terminate_build 0
 #%%undefine _missing_build_ids_terminate_build
@@ -100,6 +98,7 @@
 
 %global with_efi_arch 0
 %global with_alt_efi_arch 0
+%global with_efi_cc 0
 %global with_legacy_arch 0
 %global with_emu_arch 1
 %global with_xen_arch 0
@@ -134,6 +133,7 @@
 
 %global efi_only aarch64 %{arm} riscv64
 %global efi_arch x86_64 ia64 %{efi_only}
+%global efi_cc aarch64 x86_64
 %ifarch %{efi_arch}
 %global with_efi_arch 1
 %else
@@ -144,10 +144,17 @@
 %else
 %global with_efi_only 0
 %endif
+%ifarch %{efi_cc}
+%global with_efi_cc 1
+%else
+%global with_efi_cc 0
+%endif
 %{!?with_efi_arch:%global without_efi_arch 0}
 %{?with_efi_arch:%global without_efi_arch 1}
 %{!?with_efi_only:%global without_efi_only 0}
 %{?with_efi_only:%global without_efi_only 1}
+%{!?with_efi_cc:%global without_efi_cc 0}
+%{?with_efi_cc:%global without_efi_cc 1}
 
 %ifarch %{efi_arch}
 %global efi_modules " efi_netfs efifwsetup efinet lsefi lsefimmap connectefi bli "
@@ -172,7 +179,7 @@
 %{?with_xen_pvh_arch:%global without_xen_pvh_arch 1}
 
 %ifarch x86_64 %{ix86}
-%global platform_modules " backtrace chain tpm usb usbserial_common usbserial_pl2303 usbserial_ftdi usbserial_usbdebug keylayouts at_keyboard "
+%global platform_modules " backtrace chain tpm usb usbserial_common usbserial_pl2303 usbserial_ftdi usbserial_usbdebug keylayouts at_keyboard play "
 %endif
 
 %ifarch ppc64le
@@ -407,11 +414,11 @@ This subpackage provides support for rebuilding your own grub-%{xen_pvh_grub_tar
 %global do_common_setup()					\
 %setup -q -n grub-%{tarversion}					\
 rm -fv docs/*.info						\
-cp %{SOURCE4} .gitignore					\
-cp %{SOURCE5} bootstrap						\
-cp %{SOURCE6} bootstrap.conf					\
-cp %{SOURCE7} ./grub-core/tests/strtoull_test.c			\
-cp %{SOURCE1} gnulib-%{gnulibversion}.tar.gz			\
+cp %{SOURCE6} .gitignore					\
+cp %{SOURCE7} bootstrap						\
+cp %{SOURCE8} bootstrap.conf					\
+cp %{SOURCE9} ./grub-core/tests/strtoull_test.c			\
+cp %{SOURCE2} gnulib-%{gnulibversion}.tar.gz			\
 tar -zxf gnulib-%{gnulibversion}.tar.gz				\
 mv gnulib-%{gnulibversion} gnulib				\
 git init							\
@@ -571,7 +578,7 @@ mksquashfs memdisk memdisk.squashfs -comp lzo			\
 
 %ifarch ppc64le
 # RHEL signs, Fedora + ELN + Oreon don't (ELN defines rhel)
-%if 0%{?fedora} || 0%{?eln} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?eln} || (0%{?oreon} >= 11)
 %define ieee1275_mkimage()					\
 mkdir -p memdisk/fonts						\
 cp %{5}/unicode.pf2 memdisk/fonts				\
@@ -713,6 +720,10 @@ find . '(' -iname gdb_grub					\\\
 	')'							\\\
 	-exec cp {} $RPM_BUILD_ROOT/usr/lib/grub/%{grubaltefiarch}/ \\\; \
 find $RPM_BUILD_ROOT -type f -iname "*.mod*" -exec chmod a-x {} '\;'	\
+install -d -m 0755 ${RPM_BUILD_ROOT}%{_libdir}/efi		\
+install -d -m 0755 ${RPM_BUILD_ROOT}%{_libdir}/efi/grub2	\
+install -d -m 0755 ${RPM_BUILD_ROOT}%{grub_evr_dir}		\
+install -d -m 0755 ${RPM_BUILD_ROOT}%{grub_evr_dir}/EFI		\
 install -d -m 0700 ${RPM_BUILD_ROOT}%{grub_efi_dir}/		\
 install -m 700 %{2} $RPM_BUILD_ROOT%{grub_efi_dir}/%{2} \
 install -m 700 %{3} $RPM_BUILD_ROOT%{grub_efi_dir}/%{3} \
@@ -732,13 +743,17 @@ fi								\
 find $RPM_BUILD_ROOT -iname "*.module" -exec chmod a-x {} '\;'	\
 ln -s ../boot/grub2/grub.cfg					\\\
 	$RPM_BUILD_ROOT%{_sysconfdir}/grub2-efi.cfg		\
+install -d -m 0755 ${RPM_BUILD_ROOT}%{_libdir}/efi		\
+install -d -m 0755 ${RPM_BUILD_ROOT}%{_libdir}/efi/grub2	\
+install -d -m 0755 ${RPM_BUILD_ROOT}%{grub_evr_dir}		\
+install -d -m 0755 ${RPM_BUILD_ROOT}%{grub_evr_dir}/EFI		\
 install -d -m 0700 ${RPM_BUILD_ROOT}%{grub_efi_dir}/		\
 install -m 700 %{2} $RPM_BUILD_ROOT%{grub_efi_dir}/%{2}	\
 install -m 700 %{3} $RPM_BUILD_ROOT%{grub_efi_dir}/%{3}	\
 %ifarch %{arm}							\
 install -D -m 700 %{2} $RPM_BUILD_ROOT%{efi_esp_boot}/BOOTARM.EFI \
 %endif								\
-install -D -m 700 %{SOURCE10}					\\\
+install -D -m 700 %{SOURCE13}					\\\
     ${RPM_BUILD_ROOT}/usr/bin/gen_grub_cfgstub		\
 install -D -m 700 unicode.pf2					\\\
 	${RPM_BUILD_ROOT}/boot/grub2/fonts/unicode.pf2		\
@@ -838,7 +853,6 @@ cp docs/grub-dev.info						\\\
 	$RPM_BUILD_ROOT%{_infodir}/grub2-dev.info		\
 install -d -m 0700 ${RPM_BUILD_ROOT}%{efi_esp_dir}/		\
 install -d -m 0700 ${RPM_BUILD_ROOT}/boot/grub2/		\
-install -d -m 0700 ${RPM_BUILD_ROOT}/boot/loader/entries	\
 install -d -m 0700 ${RPM_BUILD_ROOT}/boot/grub2/themes/system	\
 install -d -m 0700 ${RPM_BUILD_ROOT}%{_sysconfdir}/default	\
 install -d -m 0700 ${RPM_BUILD_ROOT}%{_sysconfdir}/sysconfig	\
@@ -856,7 +870,6 @@ ln -s ../boot/grub2/grub.cfg					\\\
 %defattr(-,root,root,-)						\
 %config(noreplace) %{_sysconfdir}/grub2.cfg			\
 %ghost %config(noreplace) %attr(0600,root,root)/boot/grub2/grub.cfg	\
-%dir %attr(0700,root,root)/boot/loader/entries			\
 %attr(0644,root,root) %config(noreplace) /etc/dnf/protected.d/grub2-%{1}.conf \
 %ifarch ppc64le							\
 %dir %{_libdir}/grub/%{2}/					\
@@ -885,6 +898,10 @@ ln -s ../boot/grub2/grub.cfg					\\\
 %config(noreplace) %{_sysconfdir}/grub2.cfg			\
 %config(noreplace) %{_sysconfdir}/grub2-efi.cfg		\
 %ghost %attr(0700,root,root) %{efi_esp_dir}/%{2} \
+%dir %attr(0755,root,root) %{_libdir}/efi			\
+%dir %attr(0755,root,root) %{_libdir}/efi/grub2			\
+%dir %attr(0755,root,root) %{grub_evr_dir}			\
+%dir %attr(0755,root,root) %{grub_evr_dir}/EFI			\
 %dir %attr(0700,root,root) %{grub_efi_dir}                      \
 %attr(0700,root,root) %{grub_efi_dir}/%{2} 	\
 %ifarch %{arm}							\
@@ -892,7 +909,6 @@ ln -s ../boot/grub2/grub.cfg					\\\
 %endif								\
 %attr(0700,root,root)/boot/grub2/fonts			\
 %attr(0700,root,root)/usr/bin/gen_grub_cfgstub			\
-%dir %attr(0700,root,root)/boot/loader/entries			\
 %ghost %config(noreplace) %attr(0600,root,root)/boot/grub2/grub.cfg	\
 %ghost %config(noreplace) %attr(0700,root,root)%{efi_esp_dir}/grub.cfg	\
 %ghost %config(noreplace) %attr(0600,root,root)%{grub_efi_dir}/grub.cfg	\

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source1_hash 51f4fa1cd73ce25de1ec729a224f0ca1831b34b250207bb93fdefbd3a99d32f0
 
 %global srcname sphinx_rtd_theme
 
@@ -13,7 +13,7 @@ Summary:        Sphinx theme for readthedocs.org
 # SPDX
 License:        MIT
 URL:            https://github.com/readthedocs/%{srcname}/
-Source:        https://docs.readthedocs.io/en/latest/objects.inv
+Source:         %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
 # The koji builders do not have network access, and this file is not included
 # in any Fedora package, so we retrieve it for offline use.
 Source:         https://docs.readthedocs.io/en/latest/objects.inv
@@ -64,11 +64,11 @@ readthedocs.org.
 %endif
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{srcname}-%{version}
 
 # Unpin docutils
-sed -i "s/docutils >0.18,<0\.22/docutils >0.18/" setup.cfg
+%pyproject_patch_dependency docutils:drop_upper
 
 # Use local objects.inv for intersphinx
 sed -e "s|\('https://docs\.readthedocs\.io/en/stable/', \)None|\1'%{SOURCE1}'|" \
@@ -192,5 +192,4 @@ grep 'format("woff2\?")' \
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash 132f5b71b53def9f468f10cc61a2e2ef487112cd086fe747c615c7cbcd70e400
+%global source0_hash ec7bb718cbe66fe2b247d8ca5e6ba26caed0976d76579d7cb2fadd8dae8b271e
 
 %global gem_name selenium-webdriver
 
@@ -6,7 +6,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 4.34.0
-Release: 3%{?dist}
+Release: %autorelease
 Summary: Selenium is a browser automation tool for automated testing of webapps and more
 License: Apache-2.0
 URL: https://selenium.dev
@@ -71,7 +71,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b1 -b2
 
 (
@@ -99,6 +98,7 @@ cp -a .%{gem_dir}/* \
 # Create folder for binaries and create symlink to the selenium-manager from repos
 mkdir -p %{buildroot}%{gem_instdir}/bin/linux/
 ln -sf %{_bindir}/selenium-manager %{buildroot}%{gem_instdir}/bin/linux/
+
 
 %check
 ( cd .%{gem_instdir}

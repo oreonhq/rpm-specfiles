@@ -4,14 +4,15 @@
 %global _smp_mflags -j1
 
 Name:           opendbx
-Version:        1.5.0
+Version:        1.4.6
 Release:        1%{?dist}
 Summary:        Lightweight but extensible database access library written in C
 
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 # (util/argmap.{cpp,hpp}) and lib/opendbx/api are LGPL-2.0-or-later
 URL:            http://www.linuxnetworks.de/doc/index.php/OpenDBX
-Source0:        http://linuxnetworks.de/opendbx/download/%{name}-%{version}.tar.gz
+# linuxnetworks.de no longer serves downloads (1.5.0 was only a 2009 development snapshot); 1.4.6 is the last stable release, from the Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/opendbx/%{name}-%{version}.tar.gz/3e89d7812ce4a28046bd60d5f969263d/%{name}-%{version}.tar.gz
 Patch0:         opendbx-1.4.6-freetds-fix.patch
 # Remove obsolete options from Doxyfile.in, fix INPUT file name to generate docs for C++ API.
 Patch1:         opendbx-1.4.6-doxygen-1.9.1.patch

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash aad8b69a0b9969edb62db0d1752354c0d50717b10e0cbb00e2a958381b9fc6b9
 
 Name:           python-argcomplete
 Version:        3.7.2

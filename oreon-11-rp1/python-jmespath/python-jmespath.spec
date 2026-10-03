@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 472c87d80f36026ae83c6ddd0f1d05d4e510134ed462851fd5f754c8c3cbb88d
 
 Name:           python-jmespath
 Version:        1.1.0

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e5de3dd4ec9496430b3e3c31e69830cc8e974f7a0d0e8bf4e3c1d5cf5834f8ed
 
 %global daemon_name intel_lpmd
 
@@ -35,7 +35,7 @@ all CPUs.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n intel-lpmd-0.0.9
+%autosetup -p1 -n intel-lpmd-%{version}
 
 # fedora path fix
 sed -i -e "s|etc|usr/share|" configure.ac

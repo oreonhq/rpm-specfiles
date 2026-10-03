@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a7db850025b95ded1eae8a46181a1a6c56c92c96f0e2b005d9ff8dc0210cab44
 
 Name:           python-idna
 Version:        3.20

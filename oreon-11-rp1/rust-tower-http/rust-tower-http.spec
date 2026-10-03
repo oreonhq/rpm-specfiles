@@ -301,42 +301,6 @@ use the "futures-util" feature of the "%{crate}" crate.
 %files       -n %{name}+futures-util-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+http-body-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+http-body-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "http-body" feature of the "%{crate}" crate.
-
-%files       -n %{name}+http-body-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+http-body-util-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+http-body-util-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "http-body-util" feature of the "%{crate}" crate.
-
-%files       -n %{name}+http-body-util-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+http-range-header-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+http-range-header-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "http-range-header" feature of the "%{crate}" crate.
-
-%files       -n %{name}+http-range-header-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+httpdate-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -599,18 +563,6 @@ This package contains library source intended for building other packages which
 use the "tracing" feature of the "%{crate}" crate.
 
 %files       -n %{name}+tracing-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+url-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+url-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "url" feature of the "%{crate}" crate.
-
-%files       -n %{name}+url-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+util-devel

@@ -1,4 +1,4 @@
-%global source0_hash dc9aa749973b10d3c2672d2839e61bac75cf32d5e5106463420b83653c9df3ff
+%global source0_hash 6a3f342a327ec7684198eb0e15114940b6101506db48d9a96590f5942cb3b335
 
 %global with_debug 1
 
@@ -54,7 +54,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Inspect container images and repositories on registries
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0:        https://github.com/containers/skopeo/archive/refs/tags/v1.22.0.tar.gz#/skopeo-1.22.0.tar.gz
+Source0:        https://github.com/containers/skopeo/archive/refs/tags/v1.24.1.tar.gz#/skopeo-1.24.1.tar.gz
 
 BuildRequires: %{_bindir}/go-md2man
 %if %{defined build_with_btrfs}

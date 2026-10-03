@@ -1,11 +1,11 @@
-%global source0_hash 724f1d6bc5be48aec3408d58573264e8b26812fda4a8699031138ba0b85c69be
+%global source0_hash 700e6413ad4bb954bb63547fa098dddf7b0ebe75b40cc6f93b8d54255b173844
 
 # Generated from useragent-0.16.11.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name useragent
 
 Name: rubygem-%{gem_name}
 Version: 0.16.11
-Release: 5%{?dist}
+Release: %autorelease
 Summary: HTTP User Agent parser
 License: MIT
 URL: https://github.com/gshutler/useragent
@@ -23,6 +23,7 @@ BuildArch: noarch
 %description
 HTTP User Agent parser.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -33,7 +34,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build
@@ -48,6 +48,8 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
+
 
 %check
 pushd .%{gem_instdir}

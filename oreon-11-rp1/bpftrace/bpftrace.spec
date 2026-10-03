@@ -1,4 +1,4 @@
-%global source0_hash e0514aa3e1a032b0b2de2cf3c281bfee9b9e80509498e70ed78786bbd64db373
+%global source0_hash 87bf01fc3269ada7109531b0d964ceb5527d1ef7b9c9a4269b3aabdf872f0e26
 
 %if 0%{?oreon} >= 11
 %global llvm_compat 21

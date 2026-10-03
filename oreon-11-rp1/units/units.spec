@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e1bbdb09672e7c08eee986749e7a1629eb84a6bdf41f5a2a79d6804444abbe10
 
 Summary: A utility for converting amounts from one unit to another
 Name: units

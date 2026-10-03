@@ -1,4 +1,4 @@
-%global source0_hash 08bbebd77914a6d1a43874ae5ec2f54fe6a77cba745f2532df28361b0f1ad1b3
+%global source0_hash 901752ec596cd63421ea45a6a06a9f34491cf5ae01cea412ece05f97a2690a96
 
 # Copyright (C) 2018  Dave love, University of Manchester
 # Licence as for the package source
@@ -27,7 +27,6 @@ Source0:	https://github.com/flame/blis/archive/%commit/%name-%shortcommit.tar.gz
 %else
 Source0:	https://github.com/flame/blis/archive/%version/%name-%version.tar.gz
 %endif
-Patch1:         0001-Update-Haswell-gemmsup-fix-for-gcc-16-and-later.-891.patch
 BuildRequires:	perl
 BuildRequires:	binutils gcc
 BuildRequires:	python3-devel gcc-gfortran chrpath
@@ -128,7 +127,6 @@ BLIS architecture macros.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q %{?commit: -n %name-%commit}
-%patch -P1 -p1 -b .gcc16
 
 %build
 case %_arch in

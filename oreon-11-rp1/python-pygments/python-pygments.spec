@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c
 
 Name:           python-pygments
 Version:        2.21.0
@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'pygments' generated automatically by pyp2spec.}
 
-Patch0:         0001-Fix-test_lexer_classes-search-path.patch
 
 %description %_description
 

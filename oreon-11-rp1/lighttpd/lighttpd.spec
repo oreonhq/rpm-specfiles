@@ -1,4 +1,7 @@
-%global source0_hash none
+%global source0_hash 18de51b393bac4a6827879e1a7ff377c169e414bae92cd245091d80fc2601d13
+%global source11_hash cda64e394a43e9f9e5a3775f31892c0f96b23787f0cf17d25f6d3747d991fe24
+%global source12_hash 2080e74437fe44333974c5268bccbfec96abaf19266cbbc96e896652d7a38183
+%global source13_hash 6cbac241e026381d710f9110d209ef6198f448ddb241b95556d4f700a2e177d1
 
 %define webroot /var/www/lighttpd
 
@@ -52,7 +55,7 @@
 Summary: Lightning fast webserver with light system requirements
 Name: lighttpd
 Version: 1.4.85
-Release: 1%{?dist}
+Release: %autorelease
 License: BSD-3-Clause
 URL: http://www.lighttpd.net/
 Source0: http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-%{version}.tar.xz
@@ -313,7 +316,9 @@ for the directories.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
+test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }
+test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; }
+test "%{source13_hash}" = "none" || { f="%{SOURCE13}"; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source13_hash}" || { echo "oreon: Source13 hash mismatch" >&2; exit 1; }; }
 %setup -q
 %patch -P 0 -p0 -b .defaultconf
 
@@ -593,4 +598,3 @@ install -m0644 -D lighttpd.sysusers.conf %{buildroot}%{_sysusersdir}/lighttpd.co
 
 %changelog
 %autochangelog
-

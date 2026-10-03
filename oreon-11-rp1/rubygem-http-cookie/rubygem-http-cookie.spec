@@ -1,11 +1,10 @@
-%global source0_hash 75812d41b4e8d7437a6e36a206528a00ccb5ce5b3193d20be0c0e173abd21d91
+%global source0_hash 38a5e60d1527eebc396831b8c4b9455440509881219273a6c99943d29eadbb19
 
 %global	gem_name	http-cookie
 
 Name:		rubygem-%{gem_name}
 Version:	1.1.0
-Release:	2%{?dist}
-
+Release:	%autorelease
 Summary:	Ruby library to handle HTTP Cookies based on RFC 6265
 License:	MIT
 URL:		https://github.com/sparklemotion/http-cookie

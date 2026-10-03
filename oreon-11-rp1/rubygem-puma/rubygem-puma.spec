@@ -1,4 +1,4 @@
-%global source0_hash c221d907e5f411f4616b2dda9b1e4d16af82487e85985a6b991692ae2f490054
+%global source0_hash 3eb41999d00733280be3faeb00d610331b6965a537a8cd3d905f316c38575b44
 
 # Generated from puma-3.6.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name puma
@@ -14,7 +14,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 6.4.2
-Release: 12%{?dist}
+Release: %autorelease
 Summary: A simple, fast, threaded, and highly concurrent HTTP 1.1 server
 # MIT: lib/puma/sd_notify.rb
 # https://github.com/puma/puma/issues/3311
@@ -95,6 +95,7 @@ production environments. It's great for highly parallel Ruby implementations
 such as Rubinius and JRuby as well as as providing process worker support to
 support CRuby well.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -105,7 +106,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n  %{gem_name}-%{version} -b 1 -b 3
 
 %patch 2 -p1
@@ -161,6 +161,7 @@ mkdir -p %{buildroot}%{_mandir}/man1
 help2man --no-discard-stderr -N -s1 -o %{buildroot}%{_mandir}/man1/%{gem_name}.1 \
     %{buildroot}/usr/share/gems/gems/%{gem_name}-%{version}/bin/%{gem_name}
 %endif
+
 
 # Run the test suite
 %check

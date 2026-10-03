@@ -1,5 +1,5 @@
-%global source0_hash 1d40ca017ea51c533cf9fd5cbde5b5fe7ae248291ddf2af99d4c17cf8e13017d
-%global source1_hash 1e0077a4fd2960a7d2f4c9e49d6ba7bb891cac2d1be36d7e8e47aa97a9d1039b
+%global source0_hash b0528f5a1d379d59d4701cb28c36e22214cc51cf64594e5b56f2d3e6c0233095
+%global source1_hash c58f6344170c39abf187c56f3843b59cab1fd3e89cf19ba2ce25dc061659b27f
 %global source2_hash 73eda44b867b898c3266db6b0c31c1641a7b6ca6e46914c43508e780a7d56d66
 %global source3_hash eeab592db2861a6c94d592a48456cf59945d31483ce94a6bc4d3a4e318049ba3
 %global face_landmark_commit 8afa57abc8229d611c4937165d20e2a2d9fc5a12
@@ -104,7 +104,6 @@ Patch0:        opencv-4.1.0-install_3rdparty_licenses.patch
 # Fix build with vtk 9.6 - https://github.com/opencv/opencv_contrib/pull/4085
 Patch1:        opencv-vtk.patch
 Patch3:        opencv.python.patch
-Patch4:        Fix-macro-definition-for-Power10-architecture.patch
 
 
 BuildRequires:  gcc-c++
@@ -421,7 +420,6 @@ popd &>/dev/null
 
 %patch -P 0 -p1 -b .install_3rdparty_licenses
 %patch -P 3 -p1 -b .python_install_binary
-%patch -P 4 -p1 -b .ppc_macro
 
 pushd %{name}_contrib-%{version}
 %patch -P 1 -p1 -b .vtk

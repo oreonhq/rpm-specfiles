@@ -1,10 +1,10 @@
-%global source0_hash fdf7938c0df4cd642382fcc17c46d8045bca185e9bb0629b73ad362abec7e293
+%global source0_hash 12ba45ce57cdcf6b1043cb6cdffa6381fd89ce10d369c28a7f6f04dc1b0cd8eb
 
 %global gem_name timecop
 
 Name: rubygem-%{gem_name}
 Version: 0.9.10
-Release: 4%{?dist}
+Release: %autorelease
 Summary: Provides a unified method to mock Time.now, Date.today in a single call
 License: MIT
 URL: https://github.com/travisjeffery/timecop
@@ -24,6 +24,7 @@ A gem providing "time travel" and "time freezing" capabilities, making it dead
 simple to test time-dependent code.  It provides a unified method to mock
 Time.now, Date.today, and DateTime.now in a single call.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -34,7 +35,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build

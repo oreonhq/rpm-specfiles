@@ -1,5 +1,5 @@
-%global source0_hash 99c0e94a42a2c1182fa6859b0be697953db07ba936ecc9817ae0d218ced20b15
-%global source1_hash 26846230517c4b953edb444a3f22756f2b283eab1f3ecfb712de00f20478adf2
+%global source0_hash 4210d1a80a62e986029208117991b6347ccaaaab37b67463a3ff31ee065dc487
+%global source1_hash 13387ed4f0754cd37a769a3df3d73e0695f9a482d4fe93708e27abf959f937dd
 
 %global pypi_name scons
 
@@ -17,7 +17,7 @@ Summary:   An Open Source software construction tool
 # MIT is main license
 License:   MIT AND DocBook-Stylesheet
 URL:       http://www.scons.org
-Source0:        https://files.pythonhosted.org/packages/source/s/scons/scons-4.10.1.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/s/scons/scons-%{version}.tar.gz
 Source1:        https://scons.org/doc/production/scons-doc-%{version}.tar.gz
 
 # Support python-setuptools < 79

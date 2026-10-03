@@ -31,7 +31,7 @@ Summary: Backends for the gio framework in GLib
 License: LGPL-2.0-or-later AND GPL-3.0-only AND MPL-2.0 AND BSD-3-Clause-Sun
 
 URL:     https://wiki.gnome.org/Projects/gvfs
-Source0: https://download.gnome.org/sources/gvfs/%{major_minor_version}/gvfs-%{version}.tar.xz
+Source0: https://download.gnome.org/sources/gvfs/%(echo %{version} | cut -d. -f1-2)/gvfs-%{version}.tar.xz
 BuildRequires: meson
 BuildRequires: gcc
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}

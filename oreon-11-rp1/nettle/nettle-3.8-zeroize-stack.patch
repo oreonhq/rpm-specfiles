@@ -1,4 +1,4 @@
-From 24a4cb910a51f35dff89842e8cce27f88e8e78c3 Mon Sep 17 00:00:00 2001
+From b075d64f83702b2ff3e745a6e842ae01a02ea6c0 Mon Sep 17 00:00:00 2001
 From: Daiki Ueno <dueno@redhat.com>
 Date: Wed, 24 Aug 2022 17:19:57 +0900
 Subject: [PATCH] Clear any intermediate data allocate on stack
@@ -15,12 +15,11 @@ Signed-off-by: Daiki Ueno <dueno@redhat.com>
  ed25519-sha512-sign.c |  2 ++
  ed448-shake256-sign.c |  2 ++
  gostdsa-sign.c        |  2 ++
- hmac.c                | 10 +++++++---
  nettle-internal.h     |  5 +++++
  pbkdf2.c              |  5 ++++-
  pss-mgf1.c            |  5 ++++-
  pss.c                 |  4 ++++
- 15 files changed, 59 insertions(+), 5 deletions(-)
+ 14 files changed, 52 insertions(+), 2 deletions(-)
 
 diff --git a/cbc.c b/cbc.c
 index 76b6492d..b9da3aa0 100644
@@ -87,10 +86,10 @@ index b9da3159..b1b01b9e 100644
 +  TMP_CLEAR(outbuf, block_size * 2);
  }
 diff --git a/ctr.c b/ctr.c
-index 8c6b4626..217d1abb 100644
+index 21316ecd..fc093bbd 100644
 --- a/ctr.c
 +++ b/ctr.c
-@@ -137,6 +137,8 @@ ctr_crypt(const void *ctx, nettle_cipher_func *f,
+@@ -130,6 +130,8 @@ ctr_crypt(const void *ctx, nettle_cipher_func *f,
  	  f(ctx, block_size, block, ctr);
  	  INCREMENT(block_size, ctr);
  	  memxor3(dst + filled, src + filled, block, length - filled);
@@ -99,7 +98,7 @@ index 8c6b4626..217d1abb 100644
  	}
      }
    else
-@@ -173,5 +175,7 @@ ctr_crypt(const void *ctx, nettle_cipher_func *f,
+@@ -166,5 +168,7 @@ ctr_crypt(const void *ctx, nettle_cipher_func *f,
  	  INCREMENT(block_size, ctr);
  	  memxor(dst, buffer, length);
  	}
@@ -108,7 +107,7 @@ index 8c6b4626..217d1abb 100644
      }
  }
 diff --git a/ctr16.c b/ctr16.c
-index d744d2a9..ec0abd72 100644
+index 341fac99..10204f3c 100644
 --- a/ctr16.c
 +++ b/ctr16.c
 @@ -102,5 +102,7 @@ _nettle_ctr_crypt16(const void *ctx, nettle_cipher_func *f,
@@ -181,7 +180,7 @@ index 389a157e..52a46ea5 100644
  #undef k2
  #undef scratch_out
 diff --git a/ed448-shake256-sign.c b/ed448-shake256-sign.c
-index c524593d..01abf457 100644
+index 5d3cdbd5..b7def5ec 100644
 --- a/ed448-shake256-sign.c
 +++ b/ed448-shake256-sign.c
 @@ -39,6 +39,7 @@
@@ -211,51 +210,11 @@ index 892c0742..a7e0c21d 100644
 +
 +  TMP_CLEAR (k, size + ECC_GOSTDSA_SIGN_ITCH (size));
  }
-diff --git a/hmac.c b/hmac.c
-index ea356970..6a55551b 100644
---- a/hmac.c
-+++ b/hmac.c
-@@ -53,6 +53,8 @@ hmac_set_key(void *outer, void *inner, void *state,
- {
-   TMP_DECL(pad, uint8_t, NETTLE_MAX_HASH_BLOCK_SIZE);
-   TMP_ALLOC(pad, hash->block_size);
-+  TMP_DECL(digest, uint8_t, NETTLE_MAX_HASH_DIGEST_SIZE);
-+  TMP_ALLOC(digest, hash->digest_size);
-   
-   hash->init(outer);
-   hash->init(inner);
-@@ -62,9 +64,6 @@ hmac_set_key(void *outer, void *inner, void *state,
-       /* Reduce key to the algorithm's hash size. Use the area pointed
-        * to by state for the temporary state. */
- 
--      TMP_DECL(digest, uint8_t, NETTLE_MAX_HASH_DIGEST_SIZE);
--      TMP_ALLOC(digest, hash->digest_size);
--
-       hash->init(state);
-       hash->update(state, key_length, key);
-       hash->digest(state, hash->digest_size, digest);
-@@ -86,6 +85,9 @@ hmac_set_key(void *outer, void *inner, void *state,
-   hash->update(inner, hash->block_size, pad);
- 
-   memcpy(state, inner, hash->context_size);
-+
-+  TMP_CLEAR(pad, hash->block_size);
-+  TMP_CLEAR(digest, hash->digest_size);
- }
- 
- void
-@@ -112,4 +114,6 @@ hmac_digest(const void *outer, const void *inner, void *state,
-   hash->digest(state, length, dst);
- 
-   memcpy(state, inner, hash->context_size);
-+
-+  TMP_CLEAR(digest, hash->digest_size);
- }
 diff --git a/nettle-internal.h b/nettle-internal.h
-index c41f3ee0..62b89e11 100644
+index 1aed1007..9a5758f2 100644
 --- a/nettle-internal.h
 +++ b/nettle-internal.h
-@@ -76,6 +76,11 @@
+@@ -71,6 +71,11 @@
    do { assert((size_t)(size) <= (sizeof(name))); } while (0)
  #endif 
  
@@ -268,7 +227,7 @@ index c41f3ee0..62b89e11 100644
  #define NETTLE_MAX_HASH_BLOCK_SIZE 144  /* For sha3_224*/
  #define NETTLE_MAX_HASH_DIGEST_SIZE 64
 diff --git a/pbkdf2.c b/pbkdf2.c
-index 291d138a..a8ecba5b 100644
+index 737b847e..c891d95d 100644
 --- a/pbkdf2.c
 +++ b/pbkdf2.c
 @@ -92,8 +92,11 @@ pbkdf2 (void *mac_ctx,
@@ -285,24 +244,24 @@ index 291d138a..a8ecba5b 100644
 +  TMP_CLEAR (T, digest_size);
  }
 diff --git a/pss-mgf1.c b/pss-mgf1.c
-index 3f5e204b..3644c642 100644
+index e6395736..5415f417 100644
 --- a/pss-mgf1.c
 +++ b/pss-mgf1.c
-@@ -66,8 +66,11 @@ pss_mgf1(const void *seed, const struct nettle_hash *hash,
-       if (length <= hash->digest_size)
+@@ -67,8 +67,11 @@ pss_mgf1(const void *seed, const struct nettle_hash *hash,
  	{
- 	  hash->digest(state, length, mask);
+ 	  hash->digest(state, h);
+ 	  memcpy(mask, h, length);
 -	  return;
 +	  break;
  	}
-       hash->digest(state, hash->digest_size, mask);
+       hash->digest(state, mask);
      }
 +
 +  TMP_CLEAR(h, hash->digest_size);
 +  TMP_CLEAR_ALIGN(state, hash->context_size);
  }
 diff --git a/pss.c b/pss.c
-index d28e7b13..8106ebf2 100644
+index 404ab6f0..a08bab8b 100644
 --- a/pss.c
 +++ b/pss.c
 @@ -77,6 +77,7 @@ pss_encode_mgf1(mpz_t m, size_t bits,
@@ -330,5 +289,5 @@ index d28e7b13..8106ebf2 100644
    return ret;
  }
 -- 
-2.41.0
+2.53.0
 

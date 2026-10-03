@@ -61,18 +61,6 @@ use the "borsh" feature of the "%{crate}" crate.
 %files       -n %{name}+borsh-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+borsh_std-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+borsh_std-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "borsh_std" feature of the "%{crate}" crate.
-
-%files       -n %{name}+borsh_std-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+miniserde-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -85,18 +73,6 @@ use the "miniserde" feature of the "%{crate}" crate.
 %files       -n %{name}+miniserde-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+nanoserde-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+nanoserde-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "nanoserde" feature of the "%{crate}" crate.
-
-%files       -n %{name}+nanoserde-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+serde-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -107,30 +83,6 @@ This package contains library source intended for building other packages which
 use the "serde" feature of the "%{crate}" crate.
 
 %files       -n %{name}+serde-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_no_std-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_no_std-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_no_std" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_no_std-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_std-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_std-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_std" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_std-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+std-devel

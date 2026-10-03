@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f740db7f488255944ffd4428416ee3390a96742856916433df468c281436480e
 %global source1_hash 9f79e813c08fc86cfa46dd75c4fcda1a4a51b482db2607e1fcfaafb92f588a31
 %global source2_hash 8bfa8306ca63e1d0cbe80be984660273b91bd5b7dd0800a6c5aa71dd8c8d775c
 

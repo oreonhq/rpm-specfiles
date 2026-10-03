@@ -1,4 +1,4 @@
-%global source0_hash af029b153d243a80afb6eabe40b0a07f8e35c9adc269c019f364ad747f826a6b
+%global source0_hash 52c4b7422442aba924d03ad4019852b08a92e64ea187b933135687bfe2747307
 
 # without means enabled
 %bcond_with doc
@@ -70,7 +70,7 @@ Release:    1%{?dist}
 # LicenseRef-Public-Domain -- scipy/odr/__odrpack.c
 License:    BSD-3-Clause AND BSD-2-Clause AND MIT AND BSL-1.0 AND Boehm-GC AND Qhull AND LicenseRef-Public-Domain
 Url:        https://scipy.org/
-Source0:        https://github.com/scipy/scipy/releases/download/v%{version}/scipy-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/s/scipy/scipy-%{version}.tar.gz
 
 BuildRequires: %{blaslib}-devel
 BuildRequires: gcc-gfortran, gcc-c++

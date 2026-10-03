@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 67cada96a2409c859f378e82fbe868b0e9c00a69e6b7b885d542c64ea2a1297d
 
 %global tarball_version %(echo %{version} | tr '~' '.')
 

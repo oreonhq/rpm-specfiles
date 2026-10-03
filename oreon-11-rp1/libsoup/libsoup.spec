@@ -6,8 +6,8 @@
 %{!?with_docs: %global with_docs 1}
 
 Name:    libsoup
-Version: 3.7.3
-Release: 1%{?dist}
+Version: 2.74.3
+Release: 10%{?dist}
 Summary: Soup, an HTTP library implementation
 
 License: LGPL-2.0-only

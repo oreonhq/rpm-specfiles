@@ -1,19 +1,19 @@
-%global source0_hash a0d869dd182b8e31cd67bd4425db48f66ada4f4163e57b9b796304f5a022abcd
-
 %define libmatchbox_devel_ver 1.9-2
 %define alphatag 20070628svn
 
+# https://src.fedoraproject.org/rpms/redhat-rpm-config/blob/master/f/buildflags.md#legacy-fcommon
 %define _legacy_common_support 1
 
 Summary:       Window manager for the Matchbox Desktop
 Name:          matchbox-window-manager
 Version:       1.2
-Release:       40.%{alphatag}%{?dist}
+Release:       41.%{alphatag}%{?dist}
 Url:           http://matchbox-project.org/
+# svn checkout http://svn.o-hand.com/repos/matchbox/trunk/matchbox-window-manager
 License:       GPL-2.0-or-later
-Source0:       https://deb.debian.org/debian/pool/main/m/matchbox-window-manager/matchbox-window-manager_1.2.2%2Bgit20200512.orig.tar.xz
+Source0:       %{name}-%{version}-%{alphatag}.tar.gz
 
-Patch1:        matchbox-window-manager-1.2-keysyms.patch
+Patch1: matchbox-window-manager-1.2-keysyms.patch
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -39,9 +39,7 @@ for which screen space, input mechanisms or system resources are limited.
 This package contains the window manager from Matchbox.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n matchbox-window-manager
-%patch 1 -p1
+%autosetup -p 2
 
 %build
 %configure
@@ -61,5 +59,4 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_datadir}/themes/*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2-40.20070628svn
-- Import
+%autochangelog

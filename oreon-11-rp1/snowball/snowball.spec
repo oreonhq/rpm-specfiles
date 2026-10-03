@@ -1,4 +1,4 @@
-%global source0_hash 80ac10ce40dc4fcfbfed8d085c457b5613da0e86a73611a3d5527d044a142d60
+%global source0_hash d8714aa91ed4333654708472a7a98b529c867a8f99b05c5e66febf4ca72c44c7
 %global source1_hash cc26b2fc76cfefe39d0f57061985e36184dd5b28e1245c42f3c71e789aaf6ebc
 
 # TODO: Algorithms are available for the following, not yet packaged:
@@ -21,9 +21,9 @@ Summary:        Snowball compiler and stemming algorithms
 License:        BSD-3-Clause
 URL:            https://snowballstem.org/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/snowballstem/snowball/archive/refs/tags/v3.0.1.tar.gz#/snowball-3.0.1.tar.gz
+Source0:        %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
 # Test data for the compiler (must match algorithms shipped in this snowball release)
-Source1:        https://github.com/snowballstem/snowball-data/archive/refs/tags/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz#/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz
+Source1:        https://github.com/snowballstem/snowball-data/archive/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz#/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz
 # Build a shared library instead of a static library
 Patch:          %{name}-sharedlib.patch
 

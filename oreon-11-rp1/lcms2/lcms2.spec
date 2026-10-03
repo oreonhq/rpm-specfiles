@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bfc54f7bab59fbc921012014a8032e4cba4abd46db47d46b76416a8c0b2815c8
 
 Name:           lcms2
 Version:        2.19.1

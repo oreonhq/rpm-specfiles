@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6c831288d5e4a5a7ece85d0ccde9877d512a3d0f02d7c06455d00d6d0ea379df
 
 Name:           python-rdflib
 Version:        7.6.0

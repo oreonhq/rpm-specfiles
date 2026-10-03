@@ -15,15 +15,17 @@ CMake 3.14 with this change.
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 46dc18059..1ae92e2b7 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1,5 +1,6 @@
--# 3.5 is actually available almost everywhere, but this a good minimum
--cmake_minimum_required(VERSION 3.4)
-+# 3.5 is actually available almost everywhere, but this a good minimum.
+@@ -1,6 +1,7 @@
+ # 3.5 is actually available almost everywhere.
+-# 3.30 as the upper policy limit avoids CMake deprecation warnings.
+-cmake_minimum_required(VERSION 3.5...3.30)
++# 3.30 as the upper policy limit avoids CMake deprecation warnings..
 +# 3.14 as the upper policy limit avoids CMake deprecation warnings.
-+cmake_minimum_required(VERSION 3.4...3.14)
++cmake_minimum_required(VERSION 3.5...3.30...3.14)
  
  # enable MSVC_RUNTIME_LIBRARY target property
  # see https://cmake.org/cmake/help/latest/policy/CMP0091.html
+-- 
+2.0

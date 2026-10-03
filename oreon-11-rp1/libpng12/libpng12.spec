@@ -1,9 +1,9 @@
-%global source0_hash 7f415186d38ca71c23058386d7cf5135c8beda821ee1beecdc2a7a26c0356615
+%global source0_hash 0f4620e11fa283fedafb474427c8e96bf149511a1804bdc47350963ae5cf54d8
 
 Summary: Old version of libpng, needed to run old binaries
 Name: libpng12
-Version: 1.6.58
-Release: 1%{?dist}
+Version: 1.2.57
+Release: 25%{?dist}
 License: zlib
 URL: http://www.libpng.org/pub/png/
 
@@ -11,7 +11,8 @@ URL: http://www.libpng.org/pub/png/
 Obsoletes: libpng-compat <= 2:1.5.10
 
 # SourceForge libpng12 paths often 404 after releases move. Tag archive is stable.
-Source0:        https://ftp-osl.osuosl.org/pub/libpng/src/libpng12/libpng-%{version}.tar.xz
+# no longer on the libpng mirrors; same tarball from the Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/libpng12/libpng-%{version}.tar.xz/sha512/51338d900690fc2d28ea1b5b364d311d73ce7ad498d000985e0c3926b5df0df97fcd7bb079fc954c6caa532fc6e6cbbc266e671d62fc67eca30e79a5f0e26f31/libpng-%{version}.tar.xz
 
 Patch0: libpng12-multilib.patch
 Patch1: libpng12-pngconf.patch

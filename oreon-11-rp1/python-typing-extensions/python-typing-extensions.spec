@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5
 
 Name:           python-typing-extensions
 Version:        4.16.0
@@ -20,9 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'typing-extensions' generated automatically by pyp2spec.}
 
-Patch:          https://github.com/python/typing_extensions/pull/683.patch
-Patch:          https://github.com/python/typing_extensions/commit/2638b86aad.patch
-Patch:          https://github.com/python/typing_extensions/pull/723.patch
 
 %description %_description
 

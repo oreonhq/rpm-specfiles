@@ -1,4 +1,4 @@
-%global source0_hash b941aec9011864978dd7fdeb052b1943535824169d2aa2b0e7eae9ab807584ac
+%global source0_hash 3b9def48422bd45f78af95936200b7f9287369a3db76c4907c42fe10f4922ab6
 
 Name:             gengetopt
 Version:          2.23.1

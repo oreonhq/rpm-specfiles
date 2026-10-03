@@ -1,4 +1,4 @@
-%global source0_hash 9edd49145a7e92981a5e1def0b8defe74b8144c88eb2ea4aab59a72b658c327f
+%global source0_hash 8a33499c8374bed4b100b471c9ddbc7e636d3b2ef08ccbc7cbf3dfa45244c2bf
 
 %global qt_module qtwebengine
 
@@ -61,7 +61,7 @@ URL:     http://www.qt.io
 # cleaned tarball with patent-encumbered codecs removed from the bundled FFmpeg
 # ./qtwebengine-release.sh
 # ./clean_qtwebengine.sh 5.15.1
-Source0: qtwebengine-everywhere-src-%{version}-clean.tar.xz
+Source0: https://src.fedoraproject.org/repo/pkgs/qt5-qtwebengine/qtwebengine-everywhere-src-5.15.19-clean.tar.xz/sha512/cfc6f7bab4e2731fdc07097228a254eb7f20ee195b7ee6f1571253688fb421942fb85c859e0a50f2ac8077a5c65bf60443bdeef80984eac938291cacf7eb2752/qtwebengine-everywhere-src-%{version}-clean.tar.xz
 # release script used above
 Source1: qtwebengine-release.sh
 # cleanup scripts used above

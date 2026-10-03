@@ -1,4 +1,4 @@
-%global source0_hash 97bd90c968104dbeec4cccbd63305a4512b5c295fc9885bd94ad2066a87f522e
+%global source0_hash 1946b830b6e627d315755b94aa69b93de82952d1fbb25010b6f363fc02a07f0c
 
 # SPDX-FileCopyrightText: (C) 2025 Siemens AG
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ca9a2c7e240919bc7ac12124593ae4529bb4eb5f7349d8857829b7e3f0b3b332
 
 %bcond_with multiuser
 %global _hardened_build 1
@@ -6,7 +6,7 @@
 Summary:        A screen manager that supports multiple logins on one terminal
 Name:           screen
 Version:        5.0.2
-Release:        1%{?dist}
+Release:        %autorelease
 License:        GPL-3.0-or-later
 URL:            http://www.gnu.org/software/screen
 BuildRequires: make
@@ -16,14 +16,11 @@ BuildRequires:  automake gcc
 # for %%_tmpfilesdir macro
 BuildRequires:  systemd
 
-Source0:        https://mirrors.kernel.org/gnu/screen/screen-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/screen/screen-%{version}.tar.gz
 Source1:        screen.pam
 
 Patch1:         screen-5.0.0-screenrc.patch
 Patch2:         screen-5.0.0-suppress_remap.patch
-Patch3:         screen-5.0.1-fix-unescaped-in-email-address.patch
-# https://cgit.git.savannah.gnu.org/cgit/screen.git/commit/?h=screen-v5&id=ccd0b27504707e4f3099f0b9fd7a89489c6973fb
-Patch4:        screen-5.0.1-big-endian.patch
 
 %description
 The screen utility allows you to have multiple logins on just one
@@ -66,7 +63,7 @@ done
 
 rm -f doc/screen.info*
 
-# fails with %%{?_smp_mflags}
+# fails with %{?_smp_mflags}
 make
 
 %install
@@ -120,5 +117,4 @@ install -m0644 -D screen.sysusers.conf %{buildroot}%{_sysusersdir}/screen.conf
 %{_sysusersdir}/screen.conf
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.1-6
-- Import
+%autochangelog

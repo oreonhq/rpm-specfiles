@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 741754f293f6b7668f941506da07cd7725629a793108bb31633fb6c3eae5315f
 
 Name: libmypaint
 Version: 1.6.1

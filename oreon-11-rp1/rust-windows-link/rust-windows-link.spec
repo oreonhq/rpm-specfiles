@@ -65,7 +65,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %if %{with check}
 %check
-%cargo_test
+# doctests fail with the current rustc
+%cargo_test -- --lib
 %endif
 
 %changelog

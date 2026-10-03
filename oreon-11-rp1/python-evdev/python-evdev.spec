@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 442fb3f4c8dfc9e61e901133c356220c02d663eca8f34722e0cecdd637eba504
 
 Name:           python-evdev
 Version:        2.0.0

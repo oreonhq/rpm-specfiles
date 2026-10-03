@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9c447d8431c947fe4c8febc4ed9e760bc29011a5b01e5c74b67025bd9fb8ce81
 
 Name:           python-pyasn1
 Version:        0.6.4

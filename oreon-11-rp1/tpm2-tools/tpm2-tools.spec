@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1cb73185cae814b4e15c7c2d0b22642d640faf48775f4156a1fd92edf84bef73
 
 #global candidate rc1
 

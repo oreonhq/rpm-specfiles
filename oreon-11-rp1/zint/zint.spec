@@ -1,4 +1,4 @@
-%global source0_hash bce37d9b86e6127cac63c8b6267ac421116d4ac086519d726eb724f5462d98c7
+%global source0_hash 37e767afada2403bb9ae49b93a19eb0a9e944a0c278d9f23522746b3d08a3c4b
 
 Name:      zint
 Version:   2.16.0

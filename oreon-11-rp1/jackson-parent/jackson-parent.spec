@@ -1,4 +1,4 @@
-%global source0_hash e8e152c555bf056cc7a21839a5de802887d4d7995ca13047bae77631d6bc5205
+%global source0_hash 5c7e387cd5df47b3aec3fc7719a8f78228a8a5183c61b557da67c2d52c93edf5
 
 Name:          jackson-parent
 Version:       2.22
@@ -7,7 +7,7 @@ Summary:       Parent pom for all Jackson components
 License:       Apache-2.0
 
 URL:           https://github.com/FasterXML/jackson-parent
-Source0:        https://github.com/FasterXML/jackson-parent/archive/refs/tags/jackson-parent-2.18.1.tar.gz#/jackson-parent-2.18.1.tar.gz
+Source0:        https://github.com/FasterXML/jackson-parent/archive/refs/tags/jackson-parent-%{version}.tar.gz#/jackson-parent-%{version}.tar.gz
 # jackson-parent package don't include the license file
 # reported @ https://github.com/FasterXML/jackson-parent/issues/1
 Source1:       https://www.apache.org/licenses/LICENSE-2.0.txt

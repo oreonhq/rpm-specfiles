@@ -1,10 +1,10 @@
-%global source0_hash 8e82faf7c8125f7c9ce99d8dfbede77369e84fdddd950c4beac8fa4e32b72c47
+%global source0_hash 42dba720578ea1ca65fd7a41d163dd368502c191804558f6e0f71b391054aeef
 
 %global gem_name capybara
 
 Name: rubygem-%{gem_name}
 Version: 3.40.0
-Release: 5%{?dist}
+Release: %autorelease
 Summary: Capybara aims to simplify the process of integration testing Rack applications
 License: MIT
 URL: https://github.com/teamcapybara/capybara
@@ -41,6 +41,7 @@ BuildArch: noarch
 Capybara is an integration testing tool for rack based web applications. It
 simulates how a user would interact with a website.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -51,7 +52,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %patch 0 -p1

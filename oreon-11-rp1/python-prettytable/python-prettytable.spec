@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 439217116152244369caf3d9f1caf2f9fe29b03bd79e88d2928c8e718c95d680
 
 Name:           python-prettytable
 Version:        3.18.0

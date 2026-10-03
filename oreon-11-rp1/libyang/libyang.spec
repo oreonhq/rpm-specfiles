@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6906b0f26c1d4494c5c2464313b16169ec92ccd07b45ecf3a1e9eb9cd7a55c0b
 
 %global run_valgrind_tests ON
 # valgrind finds invalid writes in libcmocka on arm and power

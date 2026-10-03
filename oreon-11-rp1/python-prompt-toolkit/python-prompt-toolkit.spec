@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9ec8a0ad96d5c56148b3f914aa79c1564c3fde5d2e6b876e7bc327e353cf8fa6
 
 Name:           python-prompt-toolkit
 Version:        3.0.53

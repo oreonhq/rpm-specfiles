@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 95611c6d2703f1772fc01ce74acf4ebcc4bcd4315cede35b343bb90dc43bfd8f
 
 Summary:       Simple portable interface to lowlevel networking routines
 Name:          libdnet

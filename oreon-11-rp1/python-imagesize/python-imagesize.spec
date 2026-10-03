@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b2ba6a4dea487a7ebcd53248d3476aca449d30db12a2dde5e0c5ca9624fd77e5
 
 Name:           python-imagesize
 Version:        2.0.1

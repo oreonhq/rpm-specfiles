@@ -1,4 +1,4 @@
-%global source0_hash 867a2c328d4928a5a9d6f052cd3bc78c7d60228a9b914ad32aa3db88e9de27b0
+%global source0_hash 10bf9938906e5d643bbc4a7eea104b6f57ba4898e5b76b20e60484ea1d5a7f8f
 
 %{!?postgresql_default:%global postgresql_default 1}
 
@@ -22,8 +22,6 @@ Source0:        https://github.com/%{sname}/%{sname}/archive/refs/tags/v%{versio
 
 # Upstream commits for compatiblity with PG18 present on master branch
 # not yet included in any tag or release
-Patch0:		78ed8f1.patch
-Patch1:		2c53c30.patch
 
 %if %?postgresql_default
 %global pkgname %{sname}

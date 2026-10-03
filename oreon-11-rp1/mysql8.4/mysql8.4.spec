@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash eb3051164d625dd346a8203f76e0d5d5d9aec51dbe9d51788e39ec6b3f1394c2
 
 ExcludeArch: %{ix86}
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed
 
 Name:           python-requests
 Version:        2.34.2

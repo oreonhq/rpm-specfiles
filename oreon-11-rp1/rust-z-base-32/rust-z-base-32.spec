@@ -37,18 +37,6 @@ use the "%{crate}" crate.
 %doc %{crate_instdir}/README.md
 %{crate_instdir}/
 
-%package     -n %{name}+clap-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+clap-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "clap" feature of the "%{crate}" crate.
-
-%files       -n %{name}+clap-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+cli-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -59,18 +47,6 @@ This package contains library source intended for building other packages which
 use the "cli" feature of the "%{crate}" crate.
 
 %files       -n %{name}+cli-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+pyo3-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+pyo3-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "pyo3" feature of the "%{crate}" crate.
-
-%files       -n %{name}+pyo3-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+python-devel

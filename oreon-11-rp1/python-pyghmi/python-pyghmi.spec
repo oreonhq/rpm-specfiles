@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 30a0b2e145a3e4329c8d86948635eee3b3479ec6a7ecbc4cc3507e6df3fe59c2
 
 Name:           python-pyghmi
 Version:        1.6.19
@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 This is package 'pyghmi' generated automatically by pyp2spec.}
 
 Patch1000:  nopbr.patch
-Patch1001:  setup.patch
 
 %description %_description
 

@@ -1,4 +1,4 @@
-%global source0_hash ec6f06d7495cdba37a732039f9b5e1578bcb296576fde0da40edb2f52220df3c
+%global source0_hash b8e34286278f4fef3e1bfe9685c395ccc0eb50c14d3a2fb4953dd00fbfd3af39
 
 %global _changelog_trimtime %(date +%s -d "1 year ago")
 
@@ -10,13 +10,10 @@ Summary:	Handles user special directories
 
 License:	GPL-2.0-or-later AND MIT
 URL:		https://freedesktop.org/wiki/Software/xdg-user-dirs
-Source0:        https://user-dirs.freedesktop.org/releases/%{name}-%{version}.tar.gz
+Source0:        https://user-dirs.freedesktop.org/releases/%{name}-%{version}.tar.xz
 
 # Backports from upstream
-Patch0001:	0001-Add-a-systemd-service-to-run-xdg-user-dirs-update.patch
-Patch0002:	0002-Install-systemd-service-file.patch
 # https://gitlab.freedesktop.org/xdg/xdg-user-dirs/-/merge_requests/16
-Patch0003:      0003-Fix-autopoint-invocation.patch
 
 BuildRequires:	autoconf
 BuildRequires:	automake

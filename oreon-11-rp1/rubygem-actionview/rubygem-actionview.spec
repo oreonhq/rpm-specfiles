@@ -1,4 +1,4 @@
-%global source0_hash 165207ed307b8ceb1e64332d905ff049b7c1fb36da08d35c416da781d500ef56
+%global source0_hash 5171946ff07d1e95bf3d805ad9425a89040a013dea11bb1f4cf604f108b1ce66
 
 %global gem_name actionview
 
@@ -7,7 +7,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 8.0.3
-Release: 3%{?dist}
+Release: %autorelease
 Summary: Rendering framework putting the V in MVC (part of Rails)
 License: MIT
 URL: https://rubyonrails.org

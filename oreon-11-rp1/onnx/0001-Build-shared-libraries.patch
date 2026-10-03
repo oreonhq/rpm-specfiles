@@ -1,0 +1,35 @@
+From db66f3612f159bdaf01b374493484e193e79d459 Mon Sep 17 00:00:00 2001
+From: Diego Herrera <dherrera@redhat.com>
+Date: Wed, 1 Jul 2026 00:01:44 -0400
+Subject: [PATCH 1/7] Build shared libraries
+
+This patch is part of the "Build shared libraries and fix install location" patch by Alejandro Alvarez Ayllon <a.alvarezayllon@gmail.com> - Sat, 24 Feb 2024 14:48:45 +0100
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 044996e1b..2d8ea3df0 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -414,14 +414,16 @@ if(ONNX_USE_LITE_PROTO)
+     set(LINKED_PROTOBUF_TARGET protobuf::libprotobuf-lite)
+   endif()
+ endif()
+-add_library(onnx_proto ${ONNX_PROTO_SRCS})
++add_library(onnx_proto SHARED ${ONNX_PROTO_SRCS})
+ add_onnx_global_defines(onnx_proto)
+-
+-add_library(onnx ${ONNX_SRCS} ${ONNX_PROTO_SRCS})
++set_target_properties(onnx_proto PROPERTIES VERSION ${ONNX_VERSION}
++                                            SOVERSION ${ONNX_VERSION})
++add_library(onnx SHARED ${ONNX_SRCS} ${ONNX_PROTO_SRCS})
+ add_dependencies(onnx onnx_proto)
+ set_source_files_properties(${ONNX_SRCS} PROPERTIES CXX_VISIBILITY_PRESET hidden)
+ add_onnx_global_defines(onnx)
+-
++set_target_properties(onnx PROPERTIES VERSION ${ONNX_VERSION}
++                                        SOVERSION ${ONNX_VERSION})
+ if(ONNX_BUILD_PYTHON)
+   # find system nanobind
+   if(NOT DEFINED nanobind_DIR OR "${nanobind_DIR}" STREQUAL "")
+-- 
+2.54.0
+

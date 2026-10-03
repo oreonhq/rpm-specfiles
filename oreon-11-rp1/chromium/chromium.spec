@@ -1,4 +1,4 @@
-%global source0_hash 15dacc4a625c90f790c199ebb06e3327baee2f4a2163e1ee13643b0d8c29ac37
+%global source0_hash 4baeef2ea3bc87843cebe67b7334cd9b04efb9764c0c5aefb5f40a14d97ee8d0
 
 # macro for el10 minor version
 %if 0%{?rhel} == 10
@@ -515,7 +515,7 @@ Patch511: 0001-fips-disable-options.patch
 # For Chromium Fedora use chromium-latest.py --stable --ffmpegclean --ffmpegarm
 # If you want to include the ffmpeg arm sources append the --ffmpegarm switch
 # https://commondatastorage.googleapis.com/chromium-browser-official/chromium-%%{version}.tar.xz
-Source0: chromium-%{version}-clean.tar.xz
+Source0: https://src.fedoraproject.org/repo/pkgs/chromium/chromium-%{version}-clean.tar.xz/sha512/339d5d48a6b1b607bdb0f7af0a0d3b01af064ba2239cb5dd6d92972f3a550769c9737bc62188317b05e517a4717bc3f74d759b1cfe8aba5cdfd58928294d4c1e/chromium-%{version}-clean.tar.xz
 Source1: README.fedora
 Source2: chromium.conf
 Source3: chromium-browser.sh

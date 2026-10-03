@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0b801c7db33a904024f6004d526dcc53bbb8a4a0f4e32bfd10beadf60adf1900
 
 Name:           python-jsonpointer
 Version:        3.1.1

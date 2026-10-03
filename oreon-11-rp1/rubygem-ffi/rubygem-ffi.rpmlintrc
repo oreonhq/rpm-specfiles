@@ -1,0 +1,3 @@
+# Ignore some spelling errors.
+addFilter(r'^.*: E: spelling-error \(\'programmatically\', \'%description -l en_US programmatically -> .*\'\)')
+addFilter(r'^.*: E: spelling-error \(\'github\', \'%description -l en_US github -> .*\'\)')

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 895722f136e21e728c52f2d99fd2dae95018b9ddad1bac1f29d61bcd6593721d
 
 %global pkgname xbitmaps
 

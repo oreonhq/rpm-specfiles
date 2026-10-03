@@ -1,4 +1,4 @@
-%global source0_hash 0a9ebe6dea7888a747e5aca1b891d53cd7d3a5f141a9645f77d9b6a12cee657c
+%global source0_hash 4f518afde3d7fd435346af7b368d2f73517f3d5f82647c962caf3f7bb8ff7078
 
 %global tarball libXvMC
 #global gitdate 20130524
@@ -12,11 +12,11 @@ License: MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/releases/individual/lib/libXvMC-1.0.13.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXvMC-1.0.15.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://www.x.org/releases/individual/lib/libXvMC-1.0.13.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXvMC-1.0.15.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

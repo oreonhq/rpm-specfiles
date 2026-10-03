@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 48e8f4d9e7e5878571ecf6f2b4e57634f93cd474cc8cfbd2376f2d11b396e30d
 
 Name:           python-more-itertools
 Version:        11.1.0

@@ -1,4 +1,4 @@
-%global source0_hash 83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc
+%global source0_hash 501f66c667225d53791b97e1d7cf85ab764c297d04881f60f38f451c4b0ee1be
 
 Name:           libseccomp
 Version:        2.6.1
@@ -6,14 +6,12 @@ Release:        1%{?dist}
 Summary:        Enhanced seccomp library
 License:        LGPL-2.1-only
 URL:            https://github.com/seccomp/libseccomp
-Source0:        https://github.com/seccomp/libseccomp/releases/download/v2.6.0/libseccomp-2.6.0.tar.gz
+Source0:        https://github.com/seccomp/libseccomp/releases/download/v%{version}/libseccomp-%{version}.tar.gz
 
 # Backports from upstream
 
 # From https://github.com/seccomp/libseccomp/pull/459
-Patch0101:      fix-murmur-hash-strict-aliasing-violation.patch
 # https://github.com/seccomp/libseccomp/pull/452
-Patch0102: remove-fuzzer-test-from-62-sim-arch_transactions.patch
 
 BuildRequires:  gcc
 BuildRequires:  gperf

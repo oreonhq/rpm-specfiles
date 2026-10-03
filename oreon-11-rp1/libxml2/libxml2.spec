@@ -1,4 +1,4 @@
-%global source0_hash c3d8c0c34aa39098f66576fe51969db12a5100b956233dc56506f7a8679be995
+%global source0_hash 98087fd181d9070724f3fbc65c7377db03038eb92bd882374daff44940138821
 %global source1_hash 96151685cec997e1f9f3387e3626d61e6284d4d6e66e0e440c209286c03e9cc7
 %global source2_hash 55e5c08db29946a91ea8e70e8f2418d3fd30d8b6777941dfba7f54726ffd9914
 %global source3_hash 09bdf9f81f381ebf9bc158a9472e498e896f7a02eb7461146e9abe1b9493ca17
@@ -13,7 +13,7 @@ Summary:        Library providing XML and HTML support
 # Source1, Source2 and Source3 is covered by W3C
 License:        MIT AND ISC-Veillard AND W3C
 URL:            https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home
-Source0:        https://download.gnome.org/sources/%{name}/2.12/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1-2)/%{name}-%{version}.tar.xz
 # https://www.w3.org/XML/Test/xmlconf-20080827.html
 Source1:        https://www.w3.org/XML/Test/xmlts20080827.tar.gz
 # https://www.w3.org/XML/2004/xml-schema-test-suite/index.html
@@ -22,7 +22,6 @@ Source3:        https://www.w3.org/XML/2004/xml-schema-test-suite/xmlschema2004-
 Patch0:         libxml2-multilib.patch
 # Patch from openSUSE.
 # See:  https://bugzilla.gnome.org/show_bug.cgi?id=789714
-Patch1:         libxml2-2.12.0-python3-unicode-errors.patch
 
 BuildRequires:  cmake-rpm-macros
 BuildRequires:  gcc

@@ -1,4 +1,4 @@
-%global source0_hash 3b633734fbcc02940fc3c16d1dc7a6e48f342d146e980012facf7583d4096d62
+%global source0_hash 62fb49ba0dd5e22b9c219501bb7f3ff6c002be10facc9b11edcdd7858f753658
 
 %bcond_with bootstrap
 
@@ -11,7 +11,7 @@ URL:            https://hc.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/httpcomponents/httpcomponents-parent/httpcomponents-parent-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-parent/%{version}/httpcomponents-parent-%{version}-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -28,8 +28,7 @@ use it as runtime requirement.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n httpcomponents-parent-13
-%autosetup -p1 -n httpcomponents-parent-13
+%autosetup -p1 -C
 
 %pom_remove_plugin :maven-site-plugin
 %pom_remove_plugin :animal-sniffer-maven-plugin
@@ -49,5 +48,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE.txt NOTICE.txt
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13-1
-- Import
+%autochangelog

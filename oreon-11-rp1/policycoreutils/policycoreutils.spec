@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6b6d47ab0f35fe1c09bda0c62821c8d97a0cbe7f6e9404b338df7bde0182c4f4
 
 %global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
@@ -20,7 +20,7 @@ License: GPL-2.0-or-later
 # https://github.com/SELinuxProject/selinux/wiki/Releases
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/selinux-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/selinux-%{version}.tar.gz.asc
-Source2:        https://github.com/perfinion.gpg
+Source2:        bachradsusi.gpg
 Source3: changelog
 URL:     https://github.com/SELinuxProject/selinux
 Source13: system-config-selinux.png

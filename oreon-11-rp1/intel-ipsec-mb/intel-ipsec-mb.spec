@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b0e22e113ebbaa4aa8fd2332897540bff87bfabf397daeb05301b603947dda83
 
 # Versions numbers
 %global major 2

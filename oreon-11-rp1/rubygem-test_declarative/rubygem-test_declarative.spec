@@ -1,4 +1,4 @@
-%global source0_hash a0b0c311fd50f8f0db331740a24eb66b5ee92a8549a7f651a8a5fd7802f1cf51
+%global source0_hash e059eabb5cbd4e6d68589adf2ad380520bee6a8d0c7309755b6450c8b44a0949
 
 # Generated from test_declarative-0.0.5.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name test_declarative

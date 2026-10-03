@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 47ab7c696f0745911479a41f90d7ad99d26536e186d66c4aad093bc72d20ff5f
 
 %global source2_key_fpr 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931
 
@@ -9,8 +9,8 @@ Release:        %autorelease
 URL:            https://github.com/aide/aide
 License:        GPL-2.0-or-later
 
-Source0:        https://github.com/aide/aide/releases/download/v0.19.2/aide-0.19.2.tar.gz
-Source1:        aide-0.19.2.tar.gz.asc
+Source0:        https://github.com/aide/aide/releases/download/v%{version}/aide-%{version}.tar.gz
+Source1:        aide-%{version}.tar.gz.asc
 # gpg2 --recv-keys 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931
 # gpg2 --export --export-options export-minimal 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931 >gpgkey-aide.gpg
 Source2:        gpgkey-aide.gpg

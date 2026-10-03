@@ -1,4 +1,4 @@
-%global source0_hash cd9e656be97618a0676d058134cd44e6dc7012c0e5cb36a9ce96a8c904adaf77
+%global source0_hash 8919be8c27f20a6f4423145028063f6637b42a03ce57665bb12015ee1f073529
 
 # Documentation is disabled by default
 # because of missing dependencies: sphinx-toml
@@ -27,7 +27,7 @@ Summary:        An enhanced interactive Python shell
 # which are MIT licensed
 License:        BSD-3-Clause AND MIT
 URL:            http://ipython.org/
-Source0:        https://files.pythonhosted.org/packages/source/i/ipython/ipython-9.10.0.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/i/ipython/ipython-9.17.1.tar.gz
 
 # Unset -s on python shebang - ensure that packages installed with pip
 # to user locations are seen and properly loaded.

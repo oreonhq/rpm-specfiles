@@ -1,0 +1,31 @@
+Prefer the library directories reported by PETSc's pkg-config metadata over
+system directories.  PATHS are searched after the system defaults, which can
+select serial HDF5 when PETSc was built against an MPI variant.
+
+Also ignore empty PETSC_DIR/PETSC_ARCH values: SUNDIALS defines both cache
+entries even when unset, and joining them would add / to CMAKE_PREFIX_PATH.
+
+--- a/cmake/tpl/FindPETSC.cmake
++++ b/cmake/tpl/FindPETSC.cmake
+@@ -18,9 +18,9 @@
+ find_package(PkgConfig REQUIRED)
+ 
+ set(_petsc_prefixes "")
+-if(DEFINED PETSC_DIR)
++if(PETSC_DIR)
+   list(APPEND _petsc_prefixes "${PETSC_DIR}")
+-  if(DEFINED PETSC_ARCH)
++  if(PETSC_ARCH)
+     list(APPEND _petsc_prefixes "${PETSC_DIR}/${PETSC_ARCH}")
+   endif()
+ endif()
+@@ -47,7 +47,7 @@
+   find_library(
+     _petsc_lib_${_next_lib}
+     NAMES ${_next_lib}
+-    PATHS ${PKG_PETSC_LIBRARY_DIRS})
++    HINTS ${PKG_PETSC_LIBRARY_DIRS})
+   if(_petsc_lib_${_next_lib})
+     list(APPEND _petsc_libs "${_petsc_lib_${_next_lib}}")
+     if(_petsc_lib_${_next_lib} MATCHES "\\.(a|lib)$")
+

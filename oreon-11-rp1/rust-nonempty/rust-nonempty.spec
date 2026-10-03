@@ -73,18 +73,6 @@ use the "bincode" feature of the "%{crate}" crate.
 %files       -n %{name}+bincode-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+serde-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+serialize-devel
 Summary:        %{summary}
 BuildArch:      noarch

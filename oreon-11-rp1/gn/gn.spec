@@ -1,4 +1,4 @@
-%global source0_hash 92f69aa78d697a21c911252d0df92c16bc87025dc6a24fe8579d4dbfe446335f
+%global source0_hash ed773f73dce4dbdc81cf46c0e52ab33a171791a9a90d14800e13e4b2356ff530
 
 # Build HTML docs from markdown using pandoc?
 %bcond html_docs 1

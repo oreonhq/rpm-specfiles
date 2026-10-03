@@ -1,6 +1,6 @@
 %global source0_hash a00cfc749c6afd0b77741730fb3e08958c6714fb06cb8dfb29489a4bd93d0aa7
 %global source1_hash 5202c52a364afc0b310a2fff71082d37351590f6339f1a42eacb8a974df7a200
-%global source2_hash none
+%global source2_hash dd3462a0da12b3f0241e78250519e22e99998883d8d4e0061e51249c5e0369ec
 %global source3_hash fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0
 
 %global DATE 20260808
@@ -185,6 +185,8 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # will update it, fill in some %%changelog details etc.
 Source0:        https://gcc.gnu.org/pub/gcc/snapshots/16-%{DATE}/gcc-16-%{DATE}.tar.xz
 Source1:        https://codeload.github.com/MentorEmbedded/nvptx-tools/tar.gz/%{nvptx_tools_gitrev}#/nvptx-tools-%{nvptx_tools_gitrev}.tar.gz
+# newlib-cygwin snapshot (same tarball as Fedora, from its lookaside cache); was fetched with git in %%prep, which needs network
+Source2:        https://src.fedoraproject.org/repo/pkgs/gcc/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz/sha512/ef9495745a96d1d76f9f425c4a48c807fface36a1aa92351c5d024103678d144d046e8de55d195103784472c14874e29e4b9284d5d6a2e7bb27fd98c8455a881/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz
 %global isl_version 0.24
 Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org
@@ -961,23 +963,13 @@ of the plugin is explicitly built by the same version of gcc that is installed
 so that there cannot be any synchronization problems.
 
 %prep
-_git_tarball() {
-  _repo=$1 _rev=$2 _out=$3 _prefix=$4
-  rm -rf _gitfetch && mkdir _gitfetch && cd _gitfetch
-  git init -q
-  git remote add o "$_repo"
-  git fetch --depth 1 o "$_rev"
-  git archive --prefix="$_prefix" --format=tar.gz --output="../$_out" FETCH_HEAD
-  cd .. && rm -rf _gitfetch
-}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
-_newlib="newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz"
-_git_tarball https://sourceware.org/git/newlib-cygwin.git %{newlib_cygwin_gitrev} "$_newlib" "newlib-cygwin-%{newlib_cygwin_gitrev}/"
 %setup -q -n %{gcc_tree}
 tar -xf %{SOURCE1}
-tar -xf "$_newlib"
+tar -xf %{SOURCE2}
 tar -xf %{SOURCE3}
 %autopatch -p0 -m 0 -M 4
 %if %{build_isl}

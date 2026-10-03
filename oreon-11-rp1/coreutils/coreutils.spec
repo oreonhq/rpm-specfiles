@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a480198559733e9b3da999e90543ac6f888a2caa544d8d664c5a1f17e528e210
 
 %global source2_key_fpr 6C37DC12121A5006BC1DB804DF6FD971306037D9
 
@@ -38,11 +38,9 @@ Patch104: coreutils-df-direct.patch
 
 # tests: fix "Hangup" termination of non-interactive runs
 # https://github.com/coreutils/coreutils/commit/8fab3c6d30d812cd681e51221bae27930f62615a
-Patch200: coreutils-9.10-fix-tests-hangup.patch
 
 # fold: fix output truncation with 0xFF bytes in input
 # https://github.com/coreutils/coreutils/commit/a85e9182b1d173c26205dada54133cd9e9174fc1
-Patch201: coreutils-9.10-fold-xFF-truncation.patch
 
 # (sb) lin18nux/lsb compliance - multibyte functionality patch
 Patch800: coreutils-i18n.patch

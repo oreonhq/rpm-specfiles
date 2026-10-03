@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fc73170ad7506f301bb3beabcaa259814bff4547b26f0531bd56c63965dbaac8
 
 Name:           python-sushy
 Version:        5.13.0

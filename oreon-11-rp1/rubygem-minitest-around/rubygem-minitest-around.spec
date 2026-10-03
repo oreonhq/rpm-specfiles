@@ -1,11 +1,10 @@
-%global source0_hash ac5619aa8cb46b7ccf1eae4e4bf26e1ab22123a895e8050a794406e127c9724c
+%global source0_hash b0348f1c6bfd8d64b0f9423af468f0f717fff4a4afd08cb279fd2b3b5453000d
 
 %global	gem_name	minitest-around
 
 Name:		rubygem-%{gem_name}
 Version:	0.6.0
-Release:	2%{?dist}
-
+Release:	%autorelease
 Summary:	Around block for minitest
 License:	MIT
 URL:		https://github.com/splattael/minitest-around
@@ -24,6 +23,7 @@ BuildArch:	noarch
 %description
 Alternative for setup/teardown dance.
 
+
 %package	doc
 Summary:	Documentation for %{name}
 Requires:	%{name} = %{version}-%{release}
@@ -34,7 +34,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n  %{gem_name}-%{version} -b 1
 
 %build

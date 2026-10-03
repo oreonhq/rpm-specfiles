@@ -1,4 +1,4 @@
-%global source0_hash 45968517603389ead067222d234bc8d8ed33e4b4f8ba16216bdd3e6aedcccea9
+%global source0_hash fdd1896c8de35a15eb14444d7880be81d635fcbbc4ad162d8bc3ccf5627aa8c7
 
 %global git0 https://github.com/containers/%{name}
 
@@ -12,7 +12,7 @@ License: GPL-3.0-or-later
 Summary: FUSE overlay+shiftfs implementation for rootless containers
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0:        https://github.com/containers/fuse-overlayfs/archive/refs/tags/v1.16.tar.gz#/fuse-overlayfs-1.16.tar.gz
+Source0:        https://github.com/containers/fuse-overlayfs/archive/refs/tags/v1.18.tar.gz#/fuse-overlayfs-1.18.tar.gz
 
 BuildRequires: autoconf
 BuildRequires: automake

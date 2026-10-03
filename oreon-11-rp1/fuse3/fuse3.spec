@@ -1,4 +1,6 @@
-%global source0_hash none
+%global source0_hash bcd19582c5e30f7fe45dd86a5540e998590aa01903afc7ebcbeea6c8ac5421ee
+%global source1_hash 713b85d079965c81010ca4facfb96a6f06c886708da5d75696f7b7d1ed9aba30
+%global source2_hash 68e9eab3bbb84a63cec0ca59eb82abb9cd1dee7059bce5bf92ca777f4186c7e0
 
 # Need to be specific for flatpak builds, otherwise it'll create rules
 # in other directory than /app/etc which will make builds fail.
@@ -12,7 +14,7 @@
 
 Name:		fuse3
 Version:	%{xyz_version}
-Release:	1%{?dist}
+Release:	%autorelease
 Summary:	File System in Userspace (FUSE) v3 utilities
 License:	GPL-1.0-or-later
 URL:		https://github.com/libfuse/libfuse/
@@ -35,7 +37,7 @@ Requires:	fuse-common
 # the generated library dependency, but unless we force the exact
 # version then we risk mixing different fuse3 & fuse3-libs versions
 # which is not likely to be a well-tested situation upstream.
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 
 %description
 With FUSE it is possible to implement a fully functional filesystem in a
@@ -52,7 +54,7 @@ userspace program. This package contains the FUSE v3 libraries.
 
 %package devel
 Summary:	File System in Userspace (FUSE) v3 devel files
-Requires:	%{name}-libs = %{version}-%{release}
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
 Requires:	pkgconfig
 License:	LGPL-2.1-or-later
 
@@ -70,8 +72,10 @@ Common files for FUSE v2 and FUSE v3.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %if %{undefined rhel}
-# Fuse is using signify rather than PGG since 3.15.1 For more details see:
+# Fuse is using signify rather than PGP since 3.15.1 For more details see:
 #	https://github.com/libfuse/libfuse/releases/tag/fuse-3.15.1
 signify -V -m  '%{SOURCE0}' -p '%{SOURCE2}'
 %endif
@@ -124,5 +128,4 @@ rm -f %{buildroot}%{_udevrulesdir}/99-fuse3.rules
 %config(noreplace) %{_sysconfdir}/fuse.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{xyz_version}-2
-- Prepare for Oreon 11 (RP1)
+%autochangelog

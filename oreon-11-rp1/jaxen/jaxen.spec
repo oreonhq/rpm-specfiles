@@ -1,4 +1,4 @@
-%global source0_hash ff2edcea3873a8e1bbe15a5494013c01b602b83a32272cc05c4e1e9ac82b0a17
+%global source0_hash 442c2b23c78d634cd3ae6578c53d938f0260b7429cabbf8b1a1189a59f854fea
 
 %bcond_without dom4j
 
@@ -11,7 +11,7 @@ Release:        1%{?dist}
 License:        LicenseRef-Callaway-BSD
 
 URL:            https://github.com/jaxen-xpath/jaxen
-Source0:        https://github.com/jaxen-xpath/jaxen/archive/refs/tags/v1.2.0.tar.gz#/jaxen-1.2.0.tar.gz
+Source0:        https://github.com/jaxen-xpath/jaxen/archive/refs/tags/v2.0.6.tar.gz#/jaxen-2.0.6.tar.gz
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -53,6 +53,9 @@ Summary:        Javadoc for %{name}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
+# integration tests need extra deps
+%pom_disable_module integration-tests
+
 # remove unnecessary maven plugins
 %pom_remove_plugin :maven-javadoc-plugin
 %pom_remove_plugin :maven-source-plugin
@@ -61,14 +64,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_xpath_remove 'pom:plugin[pom:artifactId="maven-compiler-plugin"]/pom:configuration'
 
 %if %{without dom4j}
-rm -rf src/java/main/org/jaxen/dom4j
-%pom_remove_dep dom4j:dom4j
+rm -rf core/src/java/main/org/jaxen/dom4j
+%pom_remove_dep dom4j:dom4j core
 %endif
 
-rm -rf src/java/main/org/jaxen/xom
-%pom_remove_dep xom:xom
+rm -rf core/src/java/main/org/jaxen/xom
+%pom_remove_dep xom:xom core
 
-%mvn_file : %{name}
+%mvn_file :jaxen %{name}
 
 
 %build

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 25c12d93d53988f3caf9965236ed379f167abde3ea4cc633b134ee6254d87ca1
 
 %if ! 0%{?rhel} || 0%{?rhel} > 8
 %bcond scons_quirk 0

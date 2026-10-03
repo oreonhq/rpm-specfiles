@@ -1,12 +1,25 @@
---- gix-tempfile-20.0.1/Cargo.toml	1970-01-01T00:00:01+00:00
-+++ gix-tempfile-20.0.1/Cargo.toml	2026-01-01T00:00:00+00:00
-@@ -75,9 +75,6 @@
+--- gix-tempfile-24.0.0/Cargo.toml
++++ gix-tempfile-24.0.0/Cargo.toml
+@@ -39,10 +39,7 @@
+ [features]
+ default = ["hp-hashmap"]
+ hp-hashmap = ["dep:dashmap"]
+-signals = [
+-    "dep:signal-hook",
+-    "dep:signal-hook-registry",
+-]
++signals = ["dep:signal-hook", "dep:signal-hook-registry"]
+ 
+ [lib]
+ name = "gix_tempfile"
+@@ -76,10 +73,6 @@
  [dependencies.tempfile]
- version = "3.24.0"
+ version = "3.26.0"
  
 -[target."cfg(not(windows))".dependencies.libc]
--version = "0.2.178"
+-version = "0.2.186"
 -default-features = false
- 
+-
  [lints.clippy]
  bool_to_int_with_if = "allow"
+ borrow_as_ptr = "allow"

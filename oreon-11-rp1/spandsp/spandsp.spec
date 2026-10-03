@@ -2,11 +2,12 @@
 
 Name:           spandsp
 Summary:        A DSP library for telephony
-Version:        3.0.0
+Version:        0.0.6
 Release:        1%{?dist}
 License:        LGPL-2.1-only AND GPL-2.0-only
 URL:            https://www.soft-switch.org
-Source0:        https://www.soft-switch.org/downloads/spandsp/spandsp-%{version}.tar.gz
+# www.soft-switch.org no longer serves the tarball; archived copy (pinned by source0_hash)
+Source0:        https://web.archive.org/web/2020id_/https://www.soft-switch.org/downloads/spandsp/spandsp-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires:  automake

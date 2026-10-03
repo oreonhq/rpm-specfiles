@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d5e5192a686d065eaed082de14dd26244c5c8e02bff16b2c6cce3265f648e00e
 
 # When distributed in RHEL, EPEL shouldn't be used. Mingw shouldn't be in RHEL,
 # so it shouldn't be used anywhere, but in fedora.
@@ -80,7 +80,7 @@ MinGW Windows GEOS library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n geos-3.14.1
+%autosetup -p1 -n geos-%{version}
 
 
 %build

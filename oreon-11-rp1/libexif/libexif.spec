@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0830ed253fceeb60444fb309598bc8a9491d3007dc054aad3a50a347c5597c57
 
 Summary:	Library for extracting extra information from image files
 Name:		libexif

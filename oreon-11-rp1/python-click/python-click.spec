@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34
 
 Name:           python-click
 Version:        8.5.0

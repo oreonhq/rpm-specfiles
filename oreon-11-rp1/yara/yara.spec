@@ -1,4 +1,4 @@
-%global source0_hash d38e30fd9c1e1c7921d1c4568262d94f5c2d6b5da139fe49572a43ffbc5c53f6
+%global source0_hash c322414975ff6f701149856613afdcd92a7e6939c284c798ae3c85618197efaa
 
 Name:           yara
 Version:        4.5.8
@@ -34,7 +34,7 @@ and a Boolean expression which determine its logic.}
 %if %{with release}
 Release:       %autorelease
 # Source0:     https://github.com/%%{gituser}/%%{gitname}/archive/v%%{upversion}.tar.gz#/%%{name}-%%{upversion}.tar.gz
-Source0:        https://github.com/%{gituser}/%{gitname}/archive/refs/tags/%{commit}.tar.gz#/%{name}-%{version}-git%{gitdate}-%{shortcommit}.tar.gz
+Source0:        https://github.com/%{gituser}/%{gitname}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %else
 # Build from git commit baseline
 Release:       %autorelease -s %{gitdate}git%{shortcommit}

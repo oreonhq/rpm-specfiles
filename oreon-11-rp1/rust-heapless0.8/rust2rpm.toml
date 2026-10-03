@@ -1,0 +1,12 @@
+[package]
+cargo-toml-patch-comments = [
+    "drop ufmt dev-dependency; not packaged, and we hid the feature",
+]
+
+[features]
+hide = [
+    # Not packaged: rust-defmt
+    "defmt-03",
+    # Not packaged: rust-ufmt
+    "ufmt",
+]

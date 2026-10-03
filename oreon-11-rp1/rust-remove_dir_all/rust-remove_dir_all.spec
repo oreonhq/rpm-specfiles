@@ -50,18 +50,6 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+clap-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+clap-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "clap" feature of the "%{crate}" crate.
-
-%files       -n %{name}+clap-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+cli-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -72,18 +60,6 @@ This package contains library source intended for building other packages which
 use the "cli" feature of the "%{crate}" crate.
 
 %files       -n %{name}+cli-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+env_logger-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+env_logger-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "env_logger" feature of the "%{crate}" crate.
-
-%files       -n %{name}+env_logger-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+log-devel
@@ -108,18 +84,6 @@ This package contains library source intended for building other packages which
 use the "parallel" feature of the "%{crate}" crate.
 
 %files       -n %{name}+parallel-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+rayon-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+rayon-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "rayon" feature of the "%{crate}" crate.
-
-%files       -n %{name}+rayon-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

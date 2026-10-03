@@ -1,11 +1,11 @@
-%global source0_hash 4b45d444094d263d8b664289245ac22f6d12a4713e13143841563662681b48b7
+%global source0_hash 808b0d39053aa69068df939e24671fe84fd5a9d3314486e1a1457d0934a4255d
 
 # Generated from sass-3.1.4.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name sass
 
 Name: rubygem-%{gem_name}
 Version: 3.7.4
-Release: 15%{?dist}
+Release: %autorelease
 Summary: A powerful but elegant CSS compiler that makes CSS fun again
 License: MIT
 URL: http://sass-lang.com/
@@ -40,6 +40,7 @@ nested rules, variables, mixins, selector inheritance, and more.
 It's translated to well-formatted, standard CSS using the
 command line tool or a web-framework plugin.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -50,7 +51,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -a 1
 
 %gemspec_remove_dep -g sass-listen -s ../%{gem_name}-%{version}.gemspec
@@ -68,6 +68,7 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
 
 mkdir -p %{buildroot}%{_bindir}
 cp -a .%{_bindir}/* \

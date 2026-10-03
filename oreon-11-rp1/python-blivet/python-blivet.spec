@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash db2cd996ed354d47fdc60740d912a102250a0fc469bfe17df6bced649c172e5b
 
 Name:           python-blivet
 Version:        3.14.2
@@ -21,7 +21,6 @@ BuildRequires:  python3-devel
 This is package 'blivet' generated automatically by pyp2spec.}
 
 Patch0:        0001-remove-btrfs-plugin.patch
-Patch1:        0002-Ignore-btrfs-mount-errors-during-storage-scan.patch
 
 %description %_description
 

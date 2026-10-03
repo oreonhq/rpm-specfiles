@@ -1,4 +1,4 @@
-%global source0_hash 9bb940467b016574115c8ca5a8935c99d783f597afd6b92784d7acab2fb29995
+%global source0_hash b0fda8574322d099d91196c74245ed07a257dbe61e4b6962ec1a71d0cee957e3
 
 # Generated from minitest-global_expectations-1.0.2.gem by gem2rpm -*- rpm-spec -*-
 %global	gem_name	minitest-global_expectations

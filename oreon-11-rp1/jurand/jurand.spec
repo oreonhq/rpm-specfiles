@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 48ecc1a45f3378e93eb55146605308a93e681e4eb2c7a17d44726ef08a5f7dd4
 
 Name:           jurand
 Version:        1.4.0
@@ -21,7 +21,7 @@ rather than applying simple regular expressions on the source code.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n jurand-1.3.5
+%autosetup -p1 -C
 
 %build
 %{make_build} test-compile manpages
@@ -29,7 +29,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 export buildroot=%{buildroot}
 export bindir=%{_bindir}
-export rpmmacrodir=%{_rpmmacrodir}
 export mandir=%{_mandir}
 
 ./install.sh
@@ -38,11 +37,8 @@ export mandir=%{_mandir}
 make test
 
 %files -f target/installed_files
-%dir %{_rpmconfigdir}
-%dir %{_rpmmacrodir}
 %license LICENSE NOTICE
 %doc README.adoc
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-1
-- Import
+%autochangelog

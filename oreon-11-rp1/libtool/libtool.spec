@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2ef1067c16c97db930fd740cc9bc3d3ba9a583804ae5ac42cc3e8719e49e191e
 
 # See the bug #429880
 %global gcc_major  16
@@ -69,7 +69,6 @@ Patch: libtool-2.4.6-disable_non-pic_arm.patch
 # https://lists.gnu.org/archive/html/bug-libtool/2025-01/msg00004.html
 # Patch was already sent in 2022:
 # https://lists.gnu.org/archive/html/libtool-patches/2022-02/msg00000.html
-Patch: libtool-2.4.6-keep-compiler-deps.patch
 
 # Patch sent upstream
 # https://lists.gnu.org/archive/html/libtool-patches/2024-02/msg00002.html

@@ -1,4 +1,4 @@
-%global source0_hash c9d5fb075e54594b3e36f6f3cc2d90155bda6ce1f34aa25310d9b748fcf24272
+%global source0_hash 623fd1c01db3fce83bbba055b3e801ea1414fb9eb06395dfb9164a984aa23742
 %global source1_hash 7466a53fe9416230e39c053b895a2e5277c1fdec3b3e4b4193d2df8b0d50850d
 
 %bcond_without check
@@ -13,11 +13,10 @@ Summary:        Daemon that manages block devices to create filesystems
 
 License:        (MIT OR Apache-2.0) AND Unicode-DFS-2016 AND Apache-2.0 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND MIT AND MPL-2.0 AND (Unlicense OR MIT)
 URL:            https://github.com/stratis-storage/stratisd
-Source0:        https://github.com/stratis-storage/stratisd/archive/refs/tags/stratisd-v3.8.6.tar.gz#/stratisd-3.8.6.tar.gz
+Source0:        https://github.com/stratis-storage/stratisd/archive/refs/tags/stratisd-v3.9.3.tar.gz#/stratisd-3.9.3.tar.gz
 Source1:        https://github.com/stratis-storage/stratisd/releases/download/stratisd-v3.8.6/stratisd-3.8.6-vendor.tar.gz
 
 # * Allow procfs 0.18: https://github.com/stratis-storage/stratisd/pull/3951
-Patch:          stratisd-fix-metadata.diff
 
 ExclusiveArch:  %{rust_arches}
 %if 0%{?rhel}

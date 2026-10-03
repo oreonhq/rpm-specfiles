@@ -75,18 +75,6 @@ use the "dynamic-keys" feature of the "%{crate}" crate.
 %files       -n %{name}+dynamic-keys-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+erased-serde-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+erased-serde-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "erased-serde" feature of the "%{crate}" crate.
-
-%files       -n %{name}+erased-serde-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+max_level_debug-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -265,18 +253,6 @@ This package contains library source intended for building other packages which
 use the "release_max_level_warn" feature of the "%{crate}" crate.
 
 %files       -n %{name}+release_max_level_warn-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_core-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_core-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_core" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_core-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+std-devel

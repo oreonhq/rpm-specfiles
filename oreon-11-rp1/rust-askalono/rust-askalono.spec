@@ -51,18 +51,6 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+flate2-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+flate2-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "flate2" feature of the "%{crate}" crate.
-
-%files       -n %{name}+flate2-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+gzip-devel
 Summary:        %{summary}
 BuildArch:      noarch

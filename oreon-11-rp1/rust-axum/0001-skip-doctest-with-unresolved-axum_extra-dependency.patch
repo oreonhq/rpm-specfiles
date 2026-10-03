@@ -1,0 +1,25 @@
+From 88482cbe1e87d6290fe560105a1617c11b2fb71a Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Fri, 26 Sep 2025 16:13:25 +0200
+Subject: [PATCH] skip doctest with unresolved axum_extra dependency
+
+---
+ src/docs/extract.md | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/docs/extract.md b/src/docs/extract.md
+index 4125217..6539d0c 100644
+--- a/src/docs/extract.md
++++ b/src/docs/extract.md
+@@ -246,7 +246,7 @@ does: For example for `TypedHeader` from axum-extra, you get `None` if the
+ header you're trying to extract is not part of the request, but if the header
+ is present and fails to parse, the request is rejected.
+ 
+-```rust,no_run
++```rust,ignore
+ use axum::{routing::post, Router};
+ use axum_extra::{headers::UserAgent, TypedHeader};
+ use serde_json::Value;
+-- 
+2.51.0
+

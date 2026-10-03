@@ -25,7 +25,7 @@ Summary:        Window management and application launching for GNOME
 
 License:        GPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-kiosk
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1)/%{name}-%{tarball_version}.tar.xz
 %if %{with x11}
 Provides:       firstboot(windowmanager) = %{name}
 %endif

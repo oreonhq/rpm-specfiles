@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8809a4df6fe08279b39a8890669506ed3158e0617855ac9aff098fcbe772ae4c
 
 Name:           python-pyproject-metadata
 Version:        0.12.1

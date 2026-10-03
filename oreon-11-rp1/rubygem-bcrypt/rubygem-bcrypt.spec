@@ -1,10 +1,10 @@
-%global source0_hash 8b01940eb6672a2ef62e717e87d3b385fa4dcdd547b6c8fa131f39bad7facebe
+%global source0_hash 8410f8c7b3ed54a3c00cd2456bf13917d695117f033218e2483b2e40b0784099
 
 %global gem_name bcrypt
 
 Name: rubygem-%{gem_name}
 Version: 3.1.20
-Release: 3%{?dist}
+Release: %autorelease
 Summary: Wrapper around bcrypt() password hashing algorithm
 # ext/mri/* - bcrypt-Solar-Designer
 # Non of theses are part of resulting package.
@@ -37,7 +37,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build

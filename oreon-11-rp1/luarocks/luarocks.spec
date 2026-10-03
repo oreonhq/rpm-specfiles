@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 245bf6ec560c042cb8948e3d661189292587c5949104677f1eecddc54dbe7e37
 
 Name:           luarocks
 Version:        3.13.0
-Release:        2%{?dist}
+Release:        %autorelease
 Summary:        A deployment and management system for Lua modules
 
 License:        MIT
@@ -50,7 +50,6 @@ repositories, and multiple local rocks trees.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1
 
 
@@ -88,4 +87,3 @@ install -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/luarocks/config-5.1.lua
 
 %changelog
 %autochangelog
-

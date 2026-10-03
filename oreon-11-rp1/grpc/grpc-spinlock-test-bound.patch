@@ -1,8 +1,8 @@
---- a/test/core/gpr/spinlock_test.cc
-+++ b/test/core/gpr/spinlock_test.cc
-@@ -99,7 +99,7 @@ static void test(const char* name, void (*body)(void* m), int timeout_s,
-   fprintf(stderr, "%s:", name);
-   fflush(stderr);
+--- a/test/core/util/spinlock_test.cc
++++ b/test/core/util/spinlock_test.cc
+@@ -96,7 +96,7 @@
+       start, gpr_time_from_micros(static_cast<int64_t>(timeout_s) * 1000000,
+                                   GPR_TIMESPAN));
    while (gpr_time_cmp(gpr_now(GPR_CLOCK_REALTIME), deadline) < 0) {
 -    if (iterations < INT64_MAX / 2) iterations <<= 1;
 +    if (iterations < 1024 * 1024) iterations <<= 1;

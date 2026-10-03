@@ -1,4 +1,4 @@
-%global source0_hash 7018e50a931559992e2187b67417b8a7a26842285e5d97a8910b3509227c2698
+%global source0_hash e81d64333514907f15b38e01ed34eac75b092599cb14b4985ad59133d55abf95
 
 %global modulename dnsconfd
 %global selinuxtype targeted

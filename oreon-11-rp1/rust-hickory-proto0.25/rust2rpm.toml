@@ -1,0 +1,50 @@
+[package]
+cargo-toml-patch-comments = [
+    """\
+    Remove tracing-subscriber deps. from hickory-proto, \
+    https://github.com/hickory-dns/hickory-dns/pull/3262\
+    """,
+]
+
+[[package.extra-patches]]
+number = 10
+file = "0001-Omit-tests-that-require-test_support-not-in-the-crat.patch"
+comments = [
+    """\
+    Downstream-only: omit tests that import from test_support, which is not \
+    included in the crate.\
+    """,
+]
+
+[scripts.prep]
+pre = [
+    "# Requires test_support, not published in the crate",
+    "rm src/quic/tests.rs",
+]
+
+[features]
+hide = [
+    # aws-lc-rs is not yet packaged
+    "dnssec-aws-lc-rs",
+    "h3-aws-lc-rs",
+    "https-aws-lc-rs",
+    "quic-aws-lc-rs",
+    "tls-aws-lc-rs",
+    # we would like to avoid unnecessary dependencies on ring in Fedora, hoping
+    # to migrate toward aws-lc-rs once it is available
+    "dnssec-ring",
+    "h3-ring",
+    "https-ring",
+    "quic-ring",
+    "tls-ring",
+    # for now, we provide neither the aws-lc-rs version nor the ring version of
+    # any of these:
+    "__dnssec",
+    "__h3",
+    "__https",
+    "__quic",
+    "__tls",
+    # WASM-specific
+    "wasm-bindgen",
+]
+

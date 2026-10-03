@@ -1,4 +1,4 @@
-%global source0_hash 01598a46c1162c27253a0de0236f520fd8ee8166e9ebb84a4243574f88e6e50a
+%global source0_hash 191288b52e1e6b17198000b64d77d194bb65e791be46ebc606e9b091781e2070
 
 # Python docs can no longer be built as of version 2022.1.0 due to requiring
 # sphinx_book_theme, which is not available in Fedora or RHEL
@@ -13,7 +13,7 @@ License: Apache-2.0 AND BSD-3-Clause
 URL:     https://uxlfoundation.github.io/oneTBB/
 VCS:     git:%{giturl}.git
 
-Source0:        https://github.com/uxlfoundation/oneTBB/archive/refs/tags/v2022.3.0.tar.gz#/tbb-2022.3.0.tar.gz
+Source0:        https://github.com/uxlfoundation/oneTBB/archive/refs/tags/v2023.1.0.tar.gz#/tbb-2023.1.0.tar.gz
 # These two are downstream sources.
 Source7: tbbmalloc.pc
 Source8: tbbmalloc_proxy.pc

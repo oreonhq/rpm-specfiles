@@ -1,4 +1,4 @@
-%global source0_hash 87936ae8372b971aeed2dbdaa4d25c70fe098517d2a506fa4a076dc38919738a
+%global source0_hash 9ce694467bd69ab2349768afd27c52ad721cdc6f642aeaa895717bfd7ada44b7
 
 %global gem_name Ascii85
 

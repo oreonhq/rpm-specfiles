@@ -1,4 +1,6 @@
-%global source0_hash none
+%global source0_hash 174b7f2866a60f3247ba75f5c7dbb10b124aede4a1359312de15f3bfebd2050f
+%global source1_hash 6c12f9bfeef6e7df055b27ea546c7adddaa9c53831b76e633ac771196671bb0f
+%global source2_hash eec7eccb51a27ae633784d1b1ef42eb775130c782ea51a6c47fa7a901484d6db
 
 #%%global devrel dev.12
 %global devrel %{nil}
@@ -7,11 +9,11 @@ Summary: A text-based Web browser
 Name: lynx
 Version: 2.9.3
 #Release: %%{devrel}.1%%{?dist}
-Release: 1%{?dist}
+Release: %autorelease
 License: GPL-2.0-only
 
-Source0:        https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2
-Source1:        https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2.asc
+Source0: https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2
+Source1: https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2.asc
 Source2: https://invisible-island.net/public/dickey@invisible-island.net-rsa3072.asc
 
 URL: https://lynx.invisible-island.net/
@@ -40,7 +42,6 @@ BuildRequires: libidn2-devel
 BuildRequires: make
 BuildRequires: ncurses-devel
 BuildRequires: openssl-devel
-BuildRequires: telnet
 BuildRequires: unzip
 BuildRequires: zip
 BuildRequires: zlib-devel
@@ -58,6 +59,8 @@ exits quickly and swiftly displays web pages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n lynx%{version}%{devrel}
 
@@ -148,5 +151,4 @@ EOF
 %config(noreplace,missingok) %{_sysconfdir}/lynx-site.cfg
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.2-5
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash fae6adfa799bb05cc138ba23339f29ff7f29dc3db133a013030f484e91a8194e
+%global source0_hash 1c46fdfa60ffa282bf29cccc0714071128826bef5740c4f2a88d375d206a9df4
 
 # Generated from actiontext-6.0.3.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name actiontext
@@ -10,7 +10,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 8.0.3
-Release: 2%{?dist}
+Release: %autorelease
 Summary: Rich text framework
 License: MIT
 URL: https://rubyonrails.org

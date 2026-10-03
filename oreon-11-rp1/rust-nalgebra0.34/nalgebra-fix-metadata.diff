@@ -1,0 +1,38 @@
+--- nalgebra-0.34.2/Cargo.toml	1970-01-01T00:00:01+00:00
++++ nalgebra-0.34.2/Cargo.toml	1970-01-01T00:00:01+00:00
+@@ -72,7 +72,6 @@
+ convert-glam018 = ["glam018"]
+ convert-glam019 = ["glam019"]
+ convert-glam020 = ["glam020"]
+-convert-glam021 = ["glam021"]
+ convert-glam022 = ["glam022"]
+ convert-glam023 = ["glam023"]
+ convert-glam024 = ["glam024"]
+@@ -105,7 +104,6 @@
+     "glam018?/libm",
+     "glam019?/libm",
+     "glam020?/libm",
+-    "glam021?/libm",
+     "glam022?/libm",
+     "glam023?/libm",
+     "glam024?/libm",
+@@ -162,7 +160,6 @@
+     "glam018?/std",
+     "glam019?/std",
+     "glam020?/std",
+-    "glam021?/std",
+     "glam022?/std",
+     "glam023?/std",
+     "glam024?/std",
+@@ -321,11 +318,6 @@
+ default-features = false
+ package = "glam"
+ 
+-[dependencies.glam021]
+-version = "0.21"
+-optional = true
+-default-features = false
+-package = "glam"
+ 
+ [dependencies.glam022]
+ version = "0.22"

@@ -63,18 +63,6 @@ use the "digest" feature of the "%{crate}" crate.
 %files       -n %{name}+digest-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+memmap2-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+memmap2-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "memmap2" feature of the "%{crate}" crate.
-
-%files       -n %{name}+memmap2-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+mmap-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -193,18 +181,6 @@ This package contains library source intended for building other packages which
 use the "rayon" feature of the "%{crate}" crate.
 
 %files       -n %{name}+rayon-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+rayon-core-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+rayon-core-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "rayon-core" feature of the "%{crate}" crate.
-
-%files       -n %{name}+rayon-core-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+serde-devel

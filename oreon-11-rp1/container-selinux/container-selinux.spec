@@ -1,4 +1,4 @@
-%global source0_hash 873ab158c8b32ab6574a4a73bfd9e4e378aa89878e3d8f993b413ac35d259618
+%global source0_hash 701271b9221eadec0f5f4c99a74a3ef4214123222b757d78d62ef73690f7d8e7
 
 %global debug_package %{nil}
 
@@ -42,7 +42,7 @@ Release: %autorelease
 License: GPL-2.0-only
 URL: https://github.com/containers/%{name}
 Summary: SELinux policies for container runtimes
-Source0:        https://github.com/containers/container-selinux/archive/refs/tags/v2.247.0.tar.gz#/container-selinux-2.247.0.tar.gz
+Source0:        https://github.com/containers/container-selinux/archive/refs/tags/v2.251.0.tar.gz#/container-selinux-2.251.0.tar.gz
 
 BuildArch: noarch
 BuildRequires: make

@@ -1,4 +1,4 @@
-%global source0_hash b55be1ebf02d64488be71b3f82c30fbd51a3d461e8f7c39dc2d466a049adbd1d
+%global source0_hash 88fc26a40083a51015faa2ba02cbdc3605cb59f183cf0868f4fb3ac02900148f
 
 # Generated from backports-2.5.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name backports

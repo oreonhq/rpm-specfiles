@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 68c74d4df38c26bed4dfbdb8f3baf1eb532f3872357becc1bba5d136f6b63c06
 
 %define contentdir %{_datadir}/httpd
 %define docroot /var/www
@@ -32,8 +32,8 @@ Name: httpd
 Version: 2.4.68
 Release: 1%{?dist}
 URL: https://httpd.apache.org/
-Source0:        https://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
-Source1:        https://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2.asc
+Source0:        https://archive.apache.org/dist/httpd/httpd-%{version}.tar.bz2
+Source1:        https://archive.apache.org/dist/httpd/httpd-%{version}.tar.bz2.asc
 # gpg key file downloaded and verified by luhliarik
 # https://httpd.apache.org/dev/verification.html
 Source2: https://dist.apache.org/repos/dist/release/httpd/KEYS
@@ -102,7 +102,6 @@ Patch30: httpd-2.4.64-separate-systemd-fns.patch
 # Bug fixes
 # https://bugzilla.redhat.com/show_bug.cgi?id=1397243
 Patch60: httpd-2.4.43-enable-sslv3.patch
-Patch61: httpd-2.4.65-hcheck-stuck.patch
 
 # Security fixes
 # Patch200: ...

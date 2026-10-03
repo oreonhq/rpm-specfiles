@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0b59da2f3204e1c80cb85d1f6d72285fc07b01a2f5678abf5dccfbbefd650325
 
 Name:           libnetfilter_cttimeout
 Version:        1.0.1

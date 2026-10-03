@@ -157,18 +157,6 @@ use the "deflate" feature of the "%{crate}" crate.
 %files       -n %{name}+deflate-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+futures-util-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+futures-util-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "futures-util" feature of the "%{crate}" crate.
-
-%files       -n %{name}+futures-util-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+gzip-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -239,18 +227,6 @@ This package contains library source intended for building other packages which
 use the "macos-system-configuration" feature of the "%{crate}" crate.
 
 %files       -n %{name}+macos-system-configuration-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+mime_guess-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+mime_guess-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "mime_guess" feature of the "%{crate}" crate.
-
-%files       -n %{name}+mime_guess-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+multipart-devel
@@ -395,18 +371,6 @@ This package contains library source intended for building other packages which
 use the "rustls-tls-webpki-roots-no-provider" feature of the "%{crate}" crate.
 
 %files       -n %{name}+rustls-tls-webpki-roots-no-provider-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_json-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_json-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_json" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_json-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+socks-devel

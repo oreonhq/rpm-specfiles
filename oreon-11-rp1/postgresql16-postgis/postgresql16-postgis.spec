@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ed8dc6679f1e06f7b113592b04cde2a7e00f1b1e681294c8ca2204058990cec6
 %global source3_hash none
 
 %{!?javabuild:%global javabuild 0}

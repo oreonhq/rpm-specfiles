@@ -7,13 +7,14 @@
 %endif
 
 Name:           libewf
-Version:        20240506
-Release:        1%{?dist}
+Version:        20140608
+Release:        33%{?dist}
 Summary:        Library for the Expert Witness Compression Format (EWF)
 
 License:        LGPL-3.0-or-later
 URL:            http://sourceforge.net/projects/libewf/
-Source0:        https://53efc0a7187d0baa489ee347026b8278fe4020f6.googledrive.com/host/0B3fBvzttpiiSMTdoaVExWWNsRjg/%{name}-%{version}.tar.gz
+# googledrive host is gone; tarball from the Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/libewf/%{name}-%{version}.tar.gz/fdf615f23937fad8e02b60b9e3e5fb35/%{name}-%{version}.tar.gz
 Patch0:         libewf-ewfoutput-openssl3.diff
 
 BuildRequires: make
@@ -70,7 +71,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if 0%{?_with_python2}
   --enable-python \
 %endif
-%if "%{version}" <= "20240506"
+%if "%{version}" <= "20140608"
   CFLAGS="${RPM_OPT_FLAGS} -std=gnu89"
 %endif
 

@@ -1,0 +1,33 @@
+From 4d514c8ad63974137fb401245b4875b7ce85593f Mon Sep 17 00:00:00 2001
+From: Karolina Surma <ksurma@redhat.com>
+Date: Thu, 18 Apr 2024 09:48:04 +0200
+Subject: [PATCH] Allow unsupported Python versions in RPM builds
+
+Downstream-only patch: always allow unsupported versions of Python.
+In Fedora, we constantly attempt to integrate alpha and beta releases of Python
+and rebuild all dependent packages in Copr. We need to be able to build the
+packages that use pyo3-ffi without patching each and every one of them,
+hence we explicitly allow to skip version check when building RPMs.
+---
+ build.rs | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/build.rs b/build.rs
+index c978ad0..289f20c 100644
+--- a/build.rs
++++ b/build.rs
+@@ -55,6 +55,11 @@ fn ensure_python_version(interpreter_config: &InterpreterConfig) -> Result<()> {
+         return Ok(());
+     }
+ 
++    // Skip version check when building RPMs - we want to build them with unsupported Python versions too
++    if std::env::var("RPM_BUILD_ROOT").as_deref().is_ok() {
++        return Ok(());
++    }
++
+     match interpreter_config.target_abi().implementation() {
+         PythonImplementation::CPython => {
+             let versions = SUPPORTED_VERSIONS_CPYTHON;
+-- 
+2.54.0
+

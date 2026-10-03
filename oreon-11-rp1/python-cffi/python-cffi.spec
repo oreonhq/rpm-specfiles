@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash dd31f52ea1086513bb9df30f8fcee9b8918323ae067a3d5b78bc826a000712be
 
 Name:           python-cffi
 Version:        2.1.1

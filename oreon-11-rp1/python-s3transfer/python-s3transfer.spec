@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ba0309fd86be3c27dbf78cdd813c13c5e1df16e5874b99d2535ebbdfb9892993
 
 Name:           python-s3transfer
 Version:        0.19.2

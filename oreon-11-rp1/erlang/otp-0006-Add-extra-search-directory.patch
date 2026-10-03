@@ -5,10 +5,9 @@ Subject: [PATCH] Add extra search directory
 Signed-off-by: Peter Lemenkov <lemenkov@gmail.com>
 
 diff --git a/lib/kernel/src/code_server.erl b/lib/kernel/src/code_server.erl
-index 7327636751..2e92e77598 100644
 --- a/lib/kernel/src/code_server.erl
 +++ b/lib/kernel/src/code_server.erl
-@@ -90,11 +90,17 @@ init(Ref, Parent, [Root,Mode]) ->
+@@ -104,11 +104,17 @@
      IPath =
  	case Mode of
  	    interactive ->
@@ -25,8 +24,8 @@ index 7327636751..2e92e77598 100644
 +		Paths = F(Root),
 +		SharedPaths = F("/usr/share/erlang"),
  		UserLibPaths = get_user_lib_dirs(),
--		["."] ++ UserLibPaths ++ Paths;
-+		["."] ++ UserLibPaths ++ Paths ++ SharedPaths;
+-		UserLibPaths ++ Paths ++ ["."];
++		UserLibPaths ++ Paths ++ ["."] ++ SharedPaths;
  	    _ ->
  		[]
  	end,

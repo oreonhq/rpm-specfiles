@@ -1,12 +1,12 @@
-%global source0_hash 1d1184ab0b578a91c586ea9ed0c50e4b42f9f038d5465eae15beb14751e88ba6
+%global source0_hash c01ce99d4b86a99ef83fb75ddc97ddd7669eb85996a2c35bc9ad9e83ecad47bc
 
 Name: realtime-tests
 Summary: Programs that test various rt-features
 Version: 2.11
-Release: 1%{?dist}
+Release: %autorelease
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-or-later
 URL: https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
-Source0:        https://www.kernel.org/pub/linux/utils/rt-tests/rt-tests-%{version}.tar.xz
+Source0: https://www.kernel.org/pub/linux/utils/rt-tests/rt-tests-%{version}.tar.xz
 
 ExcludeArch: %{arm}
 BuildRequires: make
@@ -17,9 +17,6 @@ Requires: bash
 Requires: bc
 
 #Patches
-Patch1:	rt-tests-hwlatdetect-Add-timestamp-delta.patch
-Patch2:	cyclictest-fix-growing-shm-stat-file.patch
-Patch3:	Makefile-Use-relative-symlinks-for-Python-scripts.patch
 
 %description
 realtime-tests is a set of programs that test and measure various components of
@@ -79,5 +76,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_mandir}/man8/determine_maximum_mpps.8.*
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.10-1
-- Import
+%autochangelog

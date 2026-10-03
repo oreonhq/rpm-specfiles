@@ -120,7 +120,7 @@
 
 Name:           grpc
 Version:        1.84.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        RPC library and framework
 
 %global srcversion %(echo '%{version}' | sed -r 's/~rc/-pre/')
@@ -353,7 +353,7 @@ Patch:          grpc-1.48.0-python-grpcio_tests-skip-compression-tests.patch
 # The upstream requirement to link gtest/gmock from grpc_cli is spurious.
 # Remove it. We still have to build the core tests and link a test library
 # (libgrpc++_test_config.so…)
-Patch:          grpc-1.37.0-grpc_cli-do-not-link-gtest-gmock.patch
+# (dropped for 1.84: grpc_cli no longer links gtest/gmock in 1.84) grpc-1.37.0-grpc_cli-do-not-link-gtest-gmock.patch
 # Fix confusion about path to python_wrapper.sh in httpcli/httpscli tests. I
 # suppose that the unpatched code must be correct for how upstream runs the
 # tests, somehow.
@@ -368,7 +368,7 @@ Patch:          grpc-1.45.0-python_wrapper-path.patch
 #
 # TODO: Attempt to reproduce this outside the RPM build environment and submit
 # a useful/actionable upstream bug report.
-Patch:          grpc-1.46.3-ChannelzServicerTest-python3.11-regressions.patch
+# (dropped for 1.84: Python 3.11 channelz tests fixed upstream) grpc-1.46.3-ChannelzServicerTest-python3.11-regressions.patch
 # Running Python “test_lite”, in grpcio_tests,
 # unit._dynamic_stubs_test.DynamicStubTest.test_grpc_tools_unimportable hangs.
 # This may be related to:
@@ -389,7 +389,7 @@ Patch:          grpc-1.48.0-python-grpcio_tests-DynamicStubTest-hang.patch
 #   thread/P2N35UMQVEXPILAF47RQB53MWRV2GM3J/
 #
 # https://github.com/grpc/grpc/pull/31671
-Patch:          %{forgeurl}/pull/31671.patch
+# (dropped: upstream PR 31671 is already in 1.84)
 # [Test] Use ssl.SSLContext.wrap_socket, not ssl.wrap_socket
 #
 # The latter emits a DeprecationWarning since Python 3.10 and is removed
@@ -398,12 +398,12 @@ Patch:          %{forgeurl}/pull/31671.patch
 # https://github.com/grpc/grpc/pull/33492
 #
 # Backported to 1.84.0.
-Patch:          grpc-1.48.4-wrap_socket.patch
+# (dropped for 1.84: test_server.py no longer uses ssl.wrap_socket in 1.84) grpc-1.48.4-wrap_socket.patch
 # [Test] Do not use importlib find_module API, removed in Python 3.12
 # https://github.com/grpc/grpc/pull/33506
 #
 # Backported to 1.84.0.
-Patch:          grpc-1.48.4-find_module.patch
+# (dropped for 1.84: tests no longer use importer.find_module in 1.84) grpc-1.48.4-find_module.patch
 # Backport several #include directives
 # These were included in https://github.com/grpc/grpc/pull/30952
 #
@@ -414,8 +414,7 @@ Patch:          grpc-1.48.4-find_module.patch
 # Downstream-only because the current release, 1.60.0, builds without changes.
 #
 # Together, these fix compatibility with abseil-cpp-20240116.rc1.
-Patch:          grpc-1.48.4-abseil-cpp-includes.patch
-
+# (dropped for 1.84: abseil includes fixed upstream long before 1.84) grpc-1.48.4-abseil-cpp-includes.patch
 # [http2] Dont drop connections on metadata limit exceeded (#32309)
 #
 # * [http] Dont drop connections on metadata limit exceeded
@@ -432,7 +431,7 @@ Patch:          grpc-1.48.4-abseil-cpp-includes.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2214470
 #
 # Backported to 1.84.0.
-Patch:          0001-http2-Dont-drop-connections-on-metadata-limit-exceed.patch
+# (dropped for 1.84: 1.48 backport; fix is upstream since 1.56) 0001-http2-Dont-drop-connections-on-metadata-limit-exceed.patch
 # [Python] Specify noexcept for cdef functions (#34242)
 #
 # This is needed to build grpc with Cython 3.
@@ -440,18 +439,17 @@ Patch:          0001-http2-Dont-drop-connections-on-metadata-limit-exceed.patch
 # https://github.com/grpc/grpc/issues/33918#issuecomment-1703386656
 # https://github.com/grpc/grpc/issues/33918#issuecomment-1788823585
 # https://github.com/grpc/grpc/pull/34242
-Patch:          0001-Specify-noexcept-for-cdef-functions.patch
+# (dropped for 1.84: Cython 3 noexcept fixes are upstream in 1.84) 0001-Specify-noexcept-for-cdef-functions.patch
 # [Python] Do not call PyEval_InitThreads
 # https://github.com/grpc/grpc/pull/34857
-Patch:          %{forgeurl}/pull/34857.patch
+# (dropped: upstream PR 34857 is already in 1.84)
 # Downstream-only: work around Distribution.tests_require removal
 #
 # This is not suitable for offering upstream because we are so far behind
 # upstream, and because it means test dependencies are no longer correctly
 # generated (but the alternative is for the package not to buiild with
 # setuptools 74+ at all).
-Patch:          0001-Downstream-only-work-around-Distribution.tests_requi.patch
-
+# (dropped for 1.84: TODO: rebase for 1.84 (commands.py changed) if python tests need it) 0001-Downstream-only-work-around-Distribution.tests_requi.patch
 # Downstream-only patch to remove usage of coverage, per the packaging
 # guidelines.  This reduces the build-time dependencies, which slightly speeds
 # up builds.  It also makes this package easier port to new EPEL branches.
@@ -466,7 +464,7 @@ Patch:          0001-Remove-usage-of-coverage.patch
 Patch:		grpc-1.48.4-core-tsi-ssl_transport_security.cc.patch
 
 # OpenSSL 4 build fixes
-Patch:          0001-Update-OpenSSL-API-usage-for-compatibility.patch
+# (dropped for 1.84: TODO: rebase for 1.84 if building against OpenSSL 4 (const X509_NAME APIs)) 0001-Update-OpenSSL-API-usage-for-compatibility.patch
 Patch:          grpc-python-parallel-absolute-paths.patch
 Patch:          grpc-1.48.4-fast-test-compilation.patch
 
@@ -795,7 +793,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -p1 -n grpc-%{srcversion}
 
-cp -p third_party/upb/third_party/utf8_range/LICENSE LICENSE-utf8_range
+cp -p third_party/utf8_range/LICENSE LICENSE-utf8_range
 
 echo '===== Patching grpcio_tools for system protobuf =====' 2>&1
 # Build python3-grpcio_tools against system protobuf packages instead of

@@ -1,4 +1,4 @@
-%global source0_hash ce60c9fd0f159c8dc8d42663b832f22af1cf67b4ae6d87f863c6d8564418fd35
+%global source0_hash 4f4eadeb5d128a35ed21d960eeece027225b36d54542512c8a36ad5316988c5e
 
 # Generated from activestorage-0.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name activestorage
@@ -15,7 +15,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 8.0.3
-Release: 3%{?dist}
+Release: %autorelease
 Summary: Local and cloud file storage framework
 License: MIT
 URL: https://rubyonrails.org

@@ -1,4 +1,4 @@
-%global source0_hash 06e4c1aaf958523f3fd1c57258c613c6c7ae56b8f1d678fa7943495d5ea6aeb5
+%global source2_hash a0e8cff364a4d739c5bf71722e072f09ba84a80ea1fee0e3a1334e640bcccea9
 
 %global forgeurl0 https://github.com/NetworkConfiguration/dhcpcd
 
@@ -10,13 +10,14 @@ License: BSD-2-Clause AND ISC AND MIT
 URL: http://roy.marples.name/projects/%{name}/
 # Moved to github
 VCS: git:%{forgeurl0}
-Source0:        https://github.com/NetworkConfiguration/dhcpcd/releases/download/v10.3.0/dhcpcd-10.3.0.tar.xz
-Source1:        https://github.com/NetworkConfiguration/dhcpcd/releases/download/v10.3.0/dhcpcd-10.3.0.tar.xz.asc
-Source2:        roy-marples.name.asc
+Source0: %{forgeurl0}/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source1: %{forgeurl0}/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
+Source2: https://github.com/rsmarples.gpg
 Source3: %{name}.service
 Source4: %{name}@.service
 Source5: systemd-sysusers.conf
 Source6: systemd-tmpfiles.conf
+Source7: 99-prefixlen
 
 BuildRequires: gcc
 BuildRequires: systemd-rpm-macros
@@ -37,7 +38,7 @@ that supports IPv4 and IPv6 configuration including configuration discovery
 through NDP, DHCPv4 and DHCPv6 protocols.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %if 0%{?fedora} || 0%{?rhel} > 8
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif
@@ -59,6 +60,7 @@ install -D -m 644 %{SOURCE3} %{buildroot}%{_unitdir}/%{name}.service
 install -D -m 644 %{SOURCE4} %{buildroot}%{_unitdir}/%{name}@.service
 install -D -m 644 %{SOURCE5} %{buildroot}%{_sysusersdir}/%{name}.conf
 install -D -m 644 %{SOURCE6} %{buildroot}%{_tmpfilesdir}/%{name}.conf
+install -D -m 444 %{SOURCE7} %{buildroot}%{_libexecdir}/%{name}-hooks/99-prefixlen
 install -d %{buildroot}%{_sharedstatedir}/%{_name}
 
 %post
@@ -94,5 +96,4 @@ install -d %{buildroot}%{_sharedstatedir}/%{_name}
 %{_sharedstatedir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.3.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

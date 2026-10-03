@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3b8182a766685eaa002637e28b4ec8d6b18819a0c71f579bf0dbaa5830297cce
 
 Name:           python-pillow
 Version:        12.3.0

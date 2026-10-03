@@ -1,4 +1,4 @@
-%global source0_hash 5cef12b47fcb76f250bd9e00e5e5fea2df3b1ffc6d3d7e9ba1dbe753acac8880
+%global source0_hash 05ea79e89f0be399983925b8874ac196d6dc5fd4416f83609557b9fc8ef798b5
 
 # SSSD SPEC file for Fedora 41+ and RHEL-10+
 
@@ -26,19 +26,15 @@ Release: 1%{?dist}
 Summary: System Security Services Daemon
 License: GPL-3.0-or-later
 URL: https://github.com/SSSD/sssd/
-Source0:        https://github.com/SSSD/sssd//releases/download/2.13.1/sssd-2.12.0.tar.gz
+Source0:        https://github.com/SSSD/sssd//releases/download/%{version}/sssd-%{version}.tar.gz
 Source1: sssd.sysusers
 %if %{verify_signature}
-Source2:        https://github.com/SSSD/sssd//releases/download/2.13.1/sssd-2.12.0.tar.gz.asc
+Source2:        https://github.com/SSSD/sssd//releases/download/%{version}/sssd-%{version}.tar.gz.asc
 Source3: pubkey.asc
 %endif
 
 ### Patches ###
 # Place your patches here:
-Patch0001: 0001-Fix-libini_config-related-includes.patch
-Patch0002: 0002-INI-get-rid-of-useless-macros.patch
-Patch0003: 0003-INI-use-proper-deallocators.patch
-Patch0004: 0004-Add-support-for-Plasma-Login-Manager-as-a-supported-PAM-service.patch
 
 ### Downstream only patches ###
 # Place your downstream only patches here:

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 658a28d2c622b6da5271544043a5b7b3e09881be8516a23efc11c43971b4b046
 
 Name:           nuspell
 Version:        5.1.9

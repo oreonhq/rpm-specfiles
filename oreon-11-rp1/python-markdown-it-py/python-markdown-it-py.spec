@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 04a21681d6fbb623de53f6f364d352309d4094dd4194040a10fd51833e418d49
 
 Name:           python-markdown-it-py
 Version:        4.2.0

@@ -1,4 +1,4 @@
-%global source0_hash 9a7446f3484b9b7538ac5ee30d2c1ce9e5b7fbbaf1440e02f6cca186a1fa745f
+%global source0_hash d2de8f5401d6c86a8992791654547eb8def585dfdc0c08cc16e24ef6aeeb69dc
 
 %global tarball libXres
 #global gitdate 20130524
@@ -12,11 +12,11 @@ License: X11
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/releases/individual/lib/libXres-1.2.2.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXres-1.2.3.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://www.x.org/releases/individual/lib/libXres-1.2.2.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXres-1.2.3.tar.xz
 %endif
 # Fixes a bug which causes metacity 3.38.0+ to crash on startup:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1888993

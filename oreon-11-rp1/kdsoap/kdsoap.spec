@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 43da83f0c6357c391bd3180ea4712e286f92a3af185d31871b21341cbbf59352
 
 Name:           kdsoap
 Version:        2.3.0
@@ -72,7 +72,7 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n kdsoap-2.2.0
+%autosetup -n KDSoap-kdsoap-%{version}
 
 %build
 %global _vpath_builddir %{_target_platform}-qt5

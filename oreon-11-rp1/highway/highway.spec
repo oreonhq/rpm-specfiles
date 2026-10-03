@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e72241ac9524bb653ae52ced768b508045d4438726a303f10181a38f764a453c
 
 %global common_description %{expand:
 Highway is a C++ library for SIMD (Single Instruction, Multiple Data), i.e.
@@ -13,14 +13,11 @@ Summary:        Efficient and performance-portable SIMD
 
 License:        Apache-2.0
 URL:            https://github.com/google/highway
-Source:        https://github.com/google/highway/archive/refs/tags/v1.3.0.tar.gz#/highway-1.3.0.tar.gz
+Source:        %url/archive/%{version}/%{name}-%{version}.tar.gz
 
 # https://github.com/google/highway/commit/4201022df1c66193863b7d58fea8ac899bd56c45
-Patch: 0001-Detect-clang-19-20-21-also-allow-user-override.patch
 # https://github.com/google/highway/commit/54fc0d7eb59874d0fb03fc24e06c9c5e021d0071
-Patch: 0002-Detect-not-yet-released-clang-22-for-users-building-.patch
 # https://github.com/google/highway/commit/0913de4cffcb4707a7b32aecd7376096148f0cd4
-Patch: 0003-SVE-still-broken-on-Clang-22-msan-fail-on-svcnt.patch
 
 BuildRequires:  cmake
 BuildRequires:  clang

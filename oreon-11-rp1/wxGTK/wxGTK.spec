@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6a129015bce2e914e4bf61ec4411854ad962801d47e92f2eb8340adb6a90af08
 
 %global srcname wxWidgets
 %global wxbasename wxBase

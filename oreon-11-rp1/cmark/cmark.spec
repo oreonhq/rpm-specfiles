@@ -1,4 +1,4 @@
-%global source0_hash 3da93db5469c30588cfeb283d9d62edfc6ded9eb0edc10a4f5bbfb7d722ea802
+%global source0_hash f9bc5ca38bcb0b727f0056100fac4d743e768872e3bacec7746de28f5700d697
 
 # pathological_tests_library failing
 %bcond tests 0

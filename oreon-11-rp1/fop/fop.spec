@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b98e9c5239b2b9e9df2b78c05afba0b186b9aa0f2b6e7bd1659eaa03f8367d93
 
 Name:           fop
 Summary:        XSL-driven print formatter

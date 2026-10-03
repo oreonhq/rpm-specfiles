@@ -86,18 +86,6 @@ use the "base64" feature of the "%{crate}" crate.
 %files       -n %{name}+base64-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+bs58-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+bs58-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "bs58" feature of the "%{crate}" crate.
-
-%files       -n %{name}+bs58-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+chrono-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -120,18 +108,6 @@ This package contains library source intended for building other packages which
 use the "chrono_0_4" feature of the "%{crate}" crate.
 
 %files       -n %{name}+chrono_0_4-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+document-features-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+document-features-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "document-features" feature of the "%{crate}" crate.
-
-%files       -n %{name}+document-features-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+guide-devel
@@ -300,30 +276,6 @@ This package contains library source intended for building other packages which
 use the "schemars_1" feature of the "%{crate}" crate.
 
 %files       -n %{name}+schemars_1-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_json-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_json-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_json" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_json-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_with_macros-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_with_macros-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_with_macros" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_with_macros-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+smallvec_1-devel

@@ -1,4 +1,4 @@
-%global source0_hash 2ff59892ac0ea557f0d22682f5402f8ab283f4cf2bcc599913e6f26e40ee1024
+%global source0_hash cf6e2842df8c55f5e4d1a4be015e603e19e9bc3a7178bae58949ccbb58558bac
 
 %global gem_name rack-protection
 
@@ -6,7 +6,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 4.2.1
-Release: 2%{?dist}
+Release: %autorelease
 Summary: Ruby gem that protects against typical web attacks
 License: MIT
 URL: https://sinatrarb.com/protection/
@@ -29,6 +29,7 @@ BuildArch: noarch
 Protect against typical web attacks, works with all Rack apps, including
 Rails.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -39,7 +40,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build

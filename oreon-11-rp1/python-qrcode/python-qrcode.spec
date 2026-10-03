@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 35c3f2a4172b33136ab9f6b3ef1c00260dd2f66f858f24d88418a015f446506c
 
 Name:           python-qrcode
 Version:        8.2

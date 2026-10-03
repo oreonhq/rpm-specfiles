@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 19e383c82d5dd89db275e00b82864e90414d4c3fb3d100b2f996bcc2338a4cc7
 
 %global apiver 3.0
 # first two digits of version

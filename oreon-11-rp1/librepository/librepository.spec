@@ -1,14 +1,12 @@
-%global source0_hash 8d33f9ad3f0fb47bc6e4b8d163e8c8d5d55031d523c3ec05e390dd837ed45625
-
 Name: librepository
 Version: 1.1.3
-Release: 48%{?dist}
+Release: %autorelease
 Summary: Hierarchical repository abstraction layer
 License: LGPL-2.1-only
-#Original source: https://downloads.sourceforge.net/jfreereport/%%name}-%%{version}.zip
+#Original source: http://downloads.sourceforge.net/jfreereport/%%name}-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source: https://downloads.sourceforge.net/jfreereport/%{name}-%{version}.zip
+Source: %{name}-%{version}-jarsdeleted.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase >= 1.1.3
 Requires: java-25-headless, jpackage-utils, libbase >= 1.1.3
@@ -32,7 +30,6 @@ Requires: jpackage-utils
 Javadoc for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 %patch -P0 -p1 -b .build
 %patch -P1 -p1 -b .java11
@@ -65,5 +62,4 @@ cp -rp bin/javadoc/docs/api $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 %{_javadocdir}/%{name}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.3-48
-- Import
+%autochangelog

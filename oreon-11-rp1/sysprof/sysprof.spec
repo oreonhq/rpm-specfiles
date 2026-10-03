@@ -12,7 +12,7 @@ Summary:        A system-wide Linux profiler
 
 License:        GPL-2.0-or-later AND GPL-3.0-or-later AND CC-BY-SA-4.0 AND CC0-1.0 AND BSD-2-Clause-Patent
 URL:            http://www.sysprof.com
-Source0: https://download.gnome.org/sources/sysprof/%{major_version}/sysprof-%{tarball_version}.tar.xz
+Source0: https://download.gnome.org/sources/sysprof/%(echo %{version} | cut -d. -f1)/sysprof-%{tarball_version}.tar.xz
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gettext

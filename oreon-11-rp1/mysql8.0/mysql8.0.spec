@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash dff4332ee7f8f37fc0516c66763600a22a81c8192c743c477b6484206e314f2f
 
 # Name of the package without any prefixes
 %global majorname mysql

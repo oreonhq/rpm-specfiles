@@ -1,4 +1,4 @@
-%global source0_hash 38240eee1b29e2bde47ebb5d61160207dc68668a54cac62c076bb5032013b1eb
+%global source0_hash cd7e129868320cc2d033afa920e31202dfe0b8066a5b66661900ccc0f197dfed
 
 %bcond_with system_lapack
 # Version of bundled lapack
@@ -22,7 +22,7 @@ Summary:        An optimized BLAS library based on GotoBLAS2
 
 License:        BSD-3-Clause
 URL:            https://github.com/OpenMathLib/OpenBLAS
-Source0:        https://github.com/OpenMathLib/OpenBLAS/archive/refs/tags/v0.3.29.tar.gz#/OpenBLAS-0.3.29.tar.gz
+Source0:        https://github.com/OpenMathLib/OpenBLAS/archive/refs/tags/v0.3.34.tar.gz#/OpenBLAS-0.3.34.tar.gz
 
 # Use system lapack
 Patch0:         openblas-0.2.15-system_lapack.patch

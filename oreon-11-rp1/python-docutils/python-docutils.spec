@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 746f5060322511280a1e50eb76846ed6bf2342984b2ac04dc42caa1a8d78799e
 
 Name:           python-docutils
 Version:        0.23

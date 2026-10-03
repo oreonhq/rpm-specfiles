@@ -1,4 +1,4 @@
-%global source0_hash 52418b8940f83dcc00dcd01d187e67c3399ff65f3fa558442e3a21b415cc46c0
+%global source0_hash 399040138e0ca62fa2bcabd63da9af4431a246ef7a654561a0ca3cb00010a539
 
 %global bpf_supported_arches aarch64 x86_64 ppc64le riscv64 s390x
 Summary: Alternate posix capabilities library
@@ -7,7 +7,7 @@ Version: 0.9.6
 Release: 1%{?dist}
 License: LGPL-2.0-or-later
 URL: https://github.com/stevegrubb/libcap-ng
-Source0:        https://github.com/stevegrubb/libcap-ng/archive/refs/tags/v0.9.1.tar.gz#/libcap-ng-0.9.1.tar.gz
+Source0:        https://github.com/stevegrubb/libcap-ng/archive/refs/tags/v0.9.6.tar.gz#/libcap-ng-0.9.6.tar.gz
 BuildRequires: gcc make
 BuildRequires: autoconf automake libtool
 BuildRequires: kernel-headers >= 2.6.11 

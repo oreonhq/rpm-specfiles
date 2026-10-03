@@ -80,7 +80,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rpm2cpio %{SOURCE0} | cpio -idmu
 test -f esc-1.1.2.tar.bz2 || { echo "esc: missing esc-1.1.2.tar.bz2 in Source0 src.rpm" >&2; exit 1; }
 tar xjf esc-1.1.2.tar.bz2
-cd esc-1.1.2
+%setup -q -T -D -n esc
 %autopatch -p1
 
 

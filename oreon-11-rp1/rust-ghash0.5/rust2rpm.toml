@@ -1,0 +1,3 @@
+[package]
+summary = "Universal hash over GF(2^128) useful for the AES-GCM cipher"
+

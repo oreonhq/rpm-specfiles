@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7afa53143d754c6bb2c85656c1325ebae518adcfcd1b59e13cc2abb88ddf758e
 
 Name:           python-berkeleydb
 Version:        18.1.15

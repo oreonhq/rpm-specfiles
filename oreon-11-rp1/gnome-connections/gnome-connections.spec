@@ -14,7 +14,7 @@ Summary:        A remote desktop client for the GNOME desktop environment
 
 License:        GPL-3.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://gitlab.gnome.org/gnome/connections/-/wikis/home
-Source0: https://download.gnome.org/sources/gnome-connections/%{major_version}/gnome-connections-%{tarball_version}.tar.xz
+Source0: https://download.gnome.org/sources/gnome-connections/%(echo %{version} | cut -d. -f1)/gnome-connections-%{tarball_version}.tar.xz
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  gettext

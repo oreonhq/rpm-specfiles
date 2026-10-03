@@ -1,4 +1,4 @@
-%global source0_hash 21555b279f68b5c0337b8b6c404ed081b5218b3f376045cb25cd93f8739dae40
+%global source0_hash 4f696fb57c90a827c20aadb2d4f9058bbff10f7f043bd0d4c3f58791143b1cd7
 
 # Generated from webmock-1.7.6.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name webmock
@@ -17,7 +17,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 3.26.1
-Release: 1%{?dist}
+Release: %autorelease
 Summary: Library for stubbing HTTP requests in Ruby
 License: MIT
 URL: https://github.com/bblimke/webmock
@@ -54,6 +54,7 @@ BuildArch: noarch
 WebMock allows stubbing HTTP requests and setting expectations on HTTP
 requests.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -64,7 +65,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 # JSON is required by lib/webmock/request_body_diff.rb

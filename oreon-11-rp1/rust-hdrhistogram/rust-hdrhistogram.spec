@@ -50,18 +50,6 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+base64-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+base64-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "base64" feature of the "%{crate}" crate.
-
-%files       -n %{name}+base64-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+bench_private-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -72,42 +60,6 @@ This package contains library source intended for building other packages which
 use the "bench_private" feature of the "%{crate}" crate.
 
 %files       -n %{name}+bench_private-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+crossbeam-channel-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+crossbeam-channel-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "crossbeam-channel" feature of the "%{crate}" crate.
-
-%files       -n %{name}+crossbeam-channel-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+flate2-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+flate2-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "flate2" feature of the "%{crate}" crate.
-
-%files       -n %{name}+flate2-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+nom-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+nom-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "nom" feature of the "%{crate}" crate.
-
-%files       -n %{name}+nom-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+serialization-devel

@@ -1,4 +1,4 @@
-%global source0_hash 240ebc834c51aae41ca9215d3190cc372fd132b9c5c8aa2d5f19ca0c325e28f9
+%global source0_hash 0619da31af08152600af95c481527ef6d756c0a8404fca7544a4fdf6dfc2c0f9
 
 Name:           capstone
 Version:        5.0.9

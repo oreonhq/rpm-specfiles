@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 72064e12356a7d6ef02165be2946b9abadbdf238536e07eb587e3dbaa33099cf
 
 Name:           python-fastjsonschema
 Version:        2.22.2

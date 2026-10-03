@@ -1,4 +1,4 @@
-%global source0_hash d373bb17e6544be880fbfd58ca77a0114ebaa2c8396ac394873dadaf0aafc9ba
+%global source0_hash f8cad39cebefaa1c9d4904f3e843022f22ee7a9201b59db703bf3ef7f2877493
 
 # Generated from actioncable-5.0.0.rc2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name actioncable
@@ -10,7 +10,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 8.0.3
-Release: 2%{?dist}
+Release: %autorelease
 Summary: WebSocket framework for Rails
 License: MIT
 URL: https://rubyonrails.org

@@ -1,4 +1,4 @@
-%global source0_hash bac862dee6e0fc10d92c70212441d9f8ad9b0222edc9a708c3ead4adb1b24a8e
+%global source0_hash 70dd1fb2f0aecc36791b71a1e1840e62173079eadaa081192d1c323a0eeea21b
 
 Name:           libmspack
 Version:        0.11

@@ -1,10 +1,10 @@
-%global source0_hash ac656d89396d8d9a7cde0b8938d5dde9f51068f3715a8236f50705e2028e7de6
+%global source0_hash 005a36692c306ac0b4a9350355ee080fd09ddef1148a5f8b2ac636c720f5c463
 
 %global gem_name rack-test
 
 Name: rubygem-%{gem_name}
 Version: 2.2.0
-Release: 4%{?dist}
+Release: %autorelease
 Summary: Simple testing API built on Rack
 License: MIT
 URL: https://github.com/rack/rack-test
@@ -25,6 +25,7 @@ Rack::Test is a small, simple testing API for Rack apps. It can be used on its
 own or as a reusable starting point for Web frameworks and testing libraries
 to build on.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -35,7 +36,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n  %{gem_name}-%{version} -b 1
 
 %build
@@ -50,6 +50,8 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
+
 
 %check
 ( cd .%{gem_instdir}

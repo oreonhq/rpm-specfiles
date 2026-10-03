@@ -1,5 +1,3 @@
-%global source0_hash none
-
 %bcond_with bootstrap
 
 Name:           qdox
@@ -12,8 +10,12 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://github.com/paul-hammant/qdox/archive/refs/tags/qdox-%{version}.tar.gz#/qdox-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 Source1:        qdox-MANIFEST.MF
+# Remove bundled binaries which are possibly proprietary
+Source2:        generate-tarball.sh
+
+Patch:          qdox-port-tests-to-java-21.patch
 
 BuildRequires:  byaccj
 %if %{with bootstrap}
@@ -26,7 +28,7 @@ BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
 BuildRequires:  mvn(org.mockito:mockito-core)
 %endif
 # TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.2.0-15
+Obsoletes:      %{name}-javadoc < 2.1.0-15
 
 %description
 QDox is a high speed, small footprint parser
@@ -36,14 +38,12 @@ It is designed to be used by active code
 generators or documentation tools.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n qdox-qdox-%{version}
+%autosetup -p1 -C
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent
 
 # We don't need these plugins
-%pom_remove_plugin :animal-sniffer-maven-plugin
 %pom_remove_plugin :maven-assembly-plugin
 %pom_remove_plugin :maven-failsafe-plugin
 %pom_remove_plugin :maven-invoker-plugin
@@ -68,7 +68,7 @@ jflex -d src/main/java/com/thoughtworks/qdox/parser/impl src/grammar/commentlexe
 )
 
 # Build artifact
-%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8 -DskipTests=true
+%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
 # Inject OSGi manifests
 %jar ufm target/%{name}-%{version}.jar %{SOURCE1}
@@ -81,5 +81,4 @@ jflex -d src/main/java/com/thoughtworks/qdox/parser/impl src/grammar/commentlexe
 %doc README.md
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.0-1
-- Import
+%autochangelog

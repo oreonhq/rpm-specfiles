@@ -1,4 +1,4 @@
-%global source0_hash cc227c44316abb65fb28f1c967706eb7254f91dbfab31e9ae6a48db6cf4ae562
+%global source0_hash df82f6b264f98d11eeb80d85bbb10c7935fcd69c7abae1d610ce49b9a0437faf
 
 Name:		openslide
 Version:	4.0.1
@@ -9,7 +9,6 @@ License:	LGPL-2.1-only
 URL:		https://openslide.org/
 Source0:	https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 # https://github.com/openslide/openslide/pull/706
-Patch0:		libtiff-partial-tile.patch
 
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(cairo)

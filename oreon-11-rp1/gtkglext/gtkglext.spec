@@ -9,7 +9,7 @@ Release:	52%{?dist}
 
 License:	GPL-2.0-or-later OR LGPL-2.0-or-later
 URL:		http://gtkglext.sourceforge.net/
-Source0:	ftp://ftp.gnome.org/pub/gnome/sources/gtkglext/1.2/gtkglext-%{version}.tar.bz2
+Source0:	https://download.gnome.org/sources/gtkglext/1.2/gtkglext-%{version}.tar.bz2
 # Upstream changes, addressing BZ 677457
 Patch0:		0001-gtkglext-1.2.0-bz677457.patch
 Patch1:		0002-GCC-8-fixes.patch

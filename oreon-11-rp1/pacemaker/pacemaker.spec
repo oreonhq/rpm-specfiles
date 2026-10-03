@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5dfee927ff64c88fd17cef1c6426a56dfc5d834aff07318741f7fa73f5246e92
 
 #
 # Copyright 2008-2023 the Pacemaker project contributors

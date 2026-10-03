@@ -13,7 +13,7 @@ index f01782f..ccc0846 100644
 --- a/lynx.cfg
 +++ b/lynx.cfg
 @@ -1,7 +1,9 @@
- # $LynxId: lynx.cfg,v 1.358 2024/05/31 22:09:16 tom Exp $
+ # $LynxId: lynx.cfg,v 1.394 2026/05/26 08:24:07 tom Exp $
  # lynx.cfg file.
 -# The default placement for this file is /usr/local/lib/lynx.cfg (Unix)
 -#                                     or Lynx_Dir:lynx.cfg (VMS)
@@ -22,9 +22,9 @@ index f01782f..ccc0846 100644
 +# Please don't edit this file directly (it is updated with every Red Hat
 +# Linux update, overwriting your changes). Instead, edit /etc/lynx-site.cfg.
  #
- # LYNX_VERSION "2.9.2"
- # LYNX_DATE    "31 May 2024"
-@@ -108,7 +110,7 @@
+ # LYNX_VERSION "2.9.3"
+ # LYNX_DATE    "26 May 2026"
+@@ -105,7 +107,7 @@
  #
  # Normally we expect you will connect to a remote site, e.g., the Lynx starting
  # site:
@@ -33,7 +33,7 @@ index f01782f..ccc0846 100644
  #
  # As an alternative, you may want to use a local URL.  A good choice for this is
  # the user's home directory:
-@@ -142,7 +144,7 @@ HELPFILE:https://lynx.invisible-island.net/lynx_help/lynx_help_main.html
+@@ -139,7 +141,7 @@ HELPFILE:https://lynx.invisible-island.net/lynx_help/lynx_help_main.html
  # An index to your CWIS can be placed here or a document containing
  # pointers to lots of interesting places on the web.
  #
@@ -42,7 +42,7 @@ index f01782f..ccc0846 100644
  
  .h1 Interaction
  
-@@ -454,7 +456,7 @@ DEFAULT_INDEX_FILE:http://scout.wisc.edu/
+@@ -451,7 +453,7 @@ DEFAULT_INDEX_FILE:http://scout.wisc.edu/
  # Find RFC 1345 at
  .url http://tools.ietf.org/html/rfc1345
  #
@@ -51,7 +51,7 @@ index f01782f..ccc0846 100644
  
  .h2 LOCALE_CHARSET
  # LOCALE_CHARSET overrides CHARACTER_SET if true, using the current locale to
-@@ -467,7 +469,7 @@ DEFAULT_INDEX_FILE:http://scout.wisc.edu/
+@@ -464,7 +466,7 @@ DEFAULT_INDEX_FILE:http://scout.wisc.edu/
  # values and their relationship to the locale value is not.  GNU libiconv
  # happens to give useful values, but other implementations are not guaranteed
  # to do this.
@@ -60,7 +60,7 @@ index f01782f..ccc0846 100644
  
  .h2 HTML5_CHARSETS
  # HTML5_CHARSETS is an alternative to ASSUME_CHARSET and ASSUME_LOCAL_CHARSET.
-@@ -1858,6 +1860,9 @@ DEFAULT_INDEX_FILE:http://scout.wisc.edu/
+@@ -1855,6 +1857,9 @@ DEFAULT_INDEX_FILE:http://scout.wisc.edu/
  .ex
  #DOWNLOADER:Save OS/390 binary file: iconv -f IBM-1047 -t ISO8859-1 %s >%s:FALSE
  

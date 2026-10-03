@@ -1,4 +1,4 @@
-%global source0_hash d74cda35bcaec3efac7f032944adb6cfac8a496f8f93c93315ad1ab586e1f74b
+%global source0_hash eb5a80eaea1dc46ef9d9b675a79219704edc9ae071056ce6d67bbfea975f951d
 %global source41_hash 9aa8ec276e253ab8fffe04b786e322a1c1fe988e5e2af06fb617a43a4413d139
 %global source42_hash cec83bf402dc6ac0e5a2030500ef7296ad4d5c77e756475252b99e89a4d5ebfa
 %global source100_hash 8ddc952a290821bde82a158dae0591aff2a0218e26f35d0b8decb9c672609a0f
@@ -67,7 +67,7 @@ BuildArch: noarch
 %endif
 
 # part after the last slash is recognized as filename in look-aside cache
-Source0:        https://github.com/ClusterLabs/pcs/archive/refs/tags/v0.12.2.tar.gz#/pcs-0.12.2.tar.gz
+Source0:        https://github.com/ClusterLabs/pcs/archive/refs/tags/v%{version_or_commit}.tar.gz#/%{pcs_source_name}.tar.gz
 
 Source41:        https://github.com/ondrejmular/pyagentx/archive/refs/tags/v0.4.pcs.2.tar.gz#/pyagentx-0.4.pcs.2.tar.gz
 Source42:        https://github.com/konradhalas/dacite/archive/refs/tags/v1.9.2.tar.gz#/dacite-1.9.2.tar.gz
@@ -79,8 +79,6 @@ Source101:        https://github.com/ClusterLabs/pcs-web-ui/releases/download/0.
 # pcs patches: <= 200
 # Patch1: name.patch
 Patch1: show-info-page-instead-of-webui.patch
-Patch2: drop-dependency-on-rubygem-cgi.patch
-Patch3: typing-fixes-for-python-3.15.patch
 
 # ui patches: >200
 # Patch201: name-web-ui.patch

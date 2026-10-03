@@ -1,0 +1,45 @@
+From b6ef4e25fe882a82c02c12ca716f19fb3c1b89f3 Mon Sep 17 00:00:00 2001
+From: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+Date: Thu, 20 Aug 2026 16:23:27 +0200
+Subject: [PATCH] tests: accept newer OpenSSL handshake error wording
+
+Newer Python/OpenSSL combinations may report TLS handshake failures as
+"TLS_ALERT_HANDSHAKE_FAILURE" / "tls alert handshake failure" instead
+of the older "sslv3 alert handshake failure" wording expected by the
+test suite.
+
+Relax the test regexes to accept both forms without changing the
+behavior being tested.
+
+Signed-off-by: Mikel Olasagasti Uranga <mikel@olasagasti.info>
+---
+ test/test_networking.py | 2 +-
+ test/test_websockets.py | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/test/test_networking.py b/test/test_networking.py
+index 9dbe263b6fcd..57a7a21bd14b 100644
+--- a/test/test_networking.py
++++ b/test/test_networking.py
+@@ -338,7 +338,7 @@ def test_ssl_error(self, handler):
+         https_server_thread.start()
+ 
+         with handler(verify=False) as rh:
+-            with pytest.raises(SSLError, match=r'(?i)ssl(?:v3|/tls).alert.handshake.failure') as exc_info:
++            with pytest.raises(SSLError, match=r'(?i)(?:TLS_ALERT_HANDSHAKE_FAILURE|(?:sslv3|ssl/tls|tls).alert.handshake.failure)') as exc_info:
+                 validate_and_send(rh, Request(f'https://127.0.0.1:{https_port}/headers'))
+             assert not issubclass(exc_info.type, CertificateVerifyError)
+ 
+diff --git a/test/test_websockets.py b/test/test_websockets.py
+index caa026f44f3a..3b3814018eeb 100644
+--- a/test/test_websockets.py
++++ b/test/test_websockets.py
+@@ -186,7 +186,7 @@ def test_verify_cert(self, handler):
+ 
+     def test_ssl_error(self, handler):
+         with handler(verify=False) as rh:
+-            with pytest.raises(SSLError, match=r'ssl(?:v3|/tls) alert handshake failure') as exc_info:
++            with pytest.raises(SSLError, match=r'(?:TLS_ALERT_HANDSHAKE_FAILURE|(?:sslv3|ssl/tls|tls) alert handshake failure)') as exc_info:
+                 ws_validate_and_send(rh, Request(self.bad_wss_host))
+             assert not issubclass(exc_info.type, CertificateVerifyError)
+ 

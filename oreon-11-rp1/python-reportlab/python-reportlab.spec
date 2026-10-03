@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ebd13154be1c8515e665de70bd2d303ae9ddc3ef47e44afd5116441ca0283a26
 
 Name:           python-reportlab
 Version:        5.0.1

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 45dd60aa69976de1918b5ced6b4e7b6a25abd2a919ecef5fd5826ecc76718889
 
 %if 0%{?fedora} || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global python3_dbus_dir %(%{__python3} -c "import dbus.mainloop; print(dbus.mainloop.__path__[0])" 2>/dev/null || echo "%{python3_sitearch}/dbus/mainloop")

@@ -1,5 +1,5 @@
---- qdox-2.1.0/src/test/java/com/thoughtworks/qdox/JavaProjectBuilderTest.java~	2024-07-04 11:31:50.910952394 +0200
-+++ qdox-2.1.0/src/test/java/com/thoughtworks/qdox/JavaProjectBuilderTest.java	2024-07-04 11:31:53.318965066 +0200
+--- qdox-2.2.0/src/test/java/com/thoughtworks/qdox/JavaProjectBuilderTest.java~	2024-07-04 11:31:50.910952394 +0200
++++ qdox-2.2.0/src/test/java/com/thoughtworks/qdox/JavaProjectBuilderTest.java	2024-07-04 11:31:53.318965066 +0200
 @@ -319,7 +319,7 @@
          JavaClass list = builder.getClassByName("java.util.List");
          Assertions.assertTrue(list.isInterface());

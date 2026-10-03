@@ -1,4 +1,4 @@
-%global source0_hash 87b2c17fe0c979d3ef38eeceff6362b35b28ac8589fbf1854b5be75c9ab6557c
+%global source0_hash 31d0e35a4ca567ec9b5ebda6c3062bb4435d6d3eacd6ef0d95cadd7854dc03ee
 
 %global out out123
 %global fmt fmt123
@@ -12,7 +12,7 @@ Summary: Real time MPEG 1.0/2.0/2.5 audio player/decoder for layers 1, 2 and 3
 License: GPL-2.0-or-later
 URL: https://mpg123.org
 
-Source0:        https://mpg123.org/download/mpg123-1.32.10.tar.bz2
+Source0:        https://mpg123.org/download/mpg123-1.33.7.tar.bz2
 
 BuildRequires: autoconf
 BuildRequires: automake

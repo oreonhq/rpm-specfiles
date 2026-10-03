@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5558c3328cd15c4ef32d1009ccda9aa43401e0436adf1177d1a34ecb0eb5f926
 
 %global uvcommit af4172ec713ee986ba1a989b9e33993a07c60c9e
 %global uvversion 1.48.0
@@ -59,8 +59,6 @@ Source9:        https://api.github.com/repos/intel/ittapi/tarball/%{ittapicommit
 Source10:       https://api.github.com/repos/JuliaLang/JuliaSyntaxHighlighting.jl/tarball/%{juliasyntaxhighlightingcommit}#/JuliaSyntaxHiglighting-%{juliasyntaxhighlightingcommit}.tar.gz
 # https://gmplib.org/repo/gmp/rev/8e7bb4ae7a18
 Patch0:         julia-gmp-6.3.0-c23.patch
-# https://github.com/JuliaLang/julia/pull/59998
-Patch1:         julia-avoid-hardcoding-paths-in-Profile.patch
 Provides:       bundled(libuv) = %{uvversion}
 Provides:       bundled(llvm) = %{llvmversion}
 Provides:       bundled(libblastrampoline) = %{blastrampolineversion}
@@ -180,9 +178,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %setup -q -n julia-%{version}
 
-# Need to reset time stamps set manually to their original values in the diff
-# to prevent make from regenerating docs, which involves downloading files
-patch -p1 -T < %PATCH1
 
 mkdir -p deps/srccache stdlib/srccache
 

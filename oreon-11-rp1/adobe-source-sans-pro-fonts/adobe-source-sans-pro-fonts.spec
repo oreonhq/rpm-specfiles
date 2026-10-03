@@ -18,7 +18,7 @@ URL:            https://github.com/adobe-fonts/source-sans
 user interface (UI) environments, as well as in text setting for screen and
 print.}
 
-Source0:        %{url}/archive/%{version}R/%{fontpkgname}-%{version}.tar.gz
+Source0:        %{url}/archive/%{version}/%{fontpkgname}-%{version}.tar.gz
 # Adjust as necessary. Keeping the filename in sync with the package name is a good idea.
 # See the fontconfig templates in fonts-rpm-templates for information on how to
 # write good fontconfig files and choose the correct priority [number].
@@ -29,7 +29,7 @@ Source10:       63-%{fontpkgname}.conf
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n source-sans-%{version}R
+%autosetup -n source-sans-%{version}
 
 %build
 %fontbuild

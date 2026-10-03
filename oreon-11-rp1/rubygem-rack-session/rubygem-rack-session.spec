@@ -1,11 +1,11 @@
-%global source0_hash af6e7186c483e101725703f32d28f77d31a0a770c9a81f6e41a880fd3dc25dec
+%global source0_hash 0b6dc07dea7e4b583f58a48e8b806d4c9f1c6c9214ebc202ec94562cbea2e4e9
 
 # Generated from rack-session-2.1.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name rack-session
 
 Name: rubygem-%{gem_name}
 Version: 2.1.1
-Release: 4%{?dist}
+Release: %autorelease
 Summary: A session implementation for Rack
 License: MIT
 URL: https://github.com/rack/rack-session
@@ -28,6 +28,7 @@ BuildArch: noarch
 %description
 A session implementation for Rack.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -38,7 +39,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 ( cd %{builddir}/test
 %patch -P0 -p2
@@ -56,6 +56,8 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
+
 
 %check
 ( cd .%{gem_instdir}

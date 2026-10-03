@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a1e1570da5c2e35dbcd375ec1d2891a24de8eb35ee2c1fe8e91978efb72cfe90
 
 Name:           python-jwcrypto
 Version:        1.6.1

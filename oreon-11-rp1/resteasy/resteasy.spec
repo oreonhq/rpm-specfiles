@@ -1,16 +1,16 @@
 %global source0_hash f811bbe3c04d4ebe697ce46b4a80ab1b2af7b5359d2d88dec4ff8f96fdb2efac
-%global source1_hash 8150e476031c4e51d0aa0c427eb26729b1cb7a3f91198c066b59cbff81003d64
+%global source1_hash eba80c042b856fc9de9e7ea373228abef4e0712e921e9d4badd69b0ead07834a
 
 %global namedreltag .Final
 %global namedversion %{version}%{namedreltag}
 
 Name:           resteasy
-Version:        7.0.4.Final
-Release:        1%{?dist}
+Version:        3.0.26
+Release:        41%{?dist}
 Summary:        Framework for RESTful Web services and Java applications
 License:        Apache-2.0
 URL:            http://resteasy.jboss.org/
-Source0:        https://github.com/resteasy/Resteasy/archive/%{namedversion}/%{name}-%{namedversion}.tar.gz#/resteasy-3.0.26.tar.gz
+Source0:        https://github.com/resteasy/Resteasy/archive/%{namedversion}/%{name}-%{namedversion}.tar.gz#/resteasy-%{version}.tar.gz
 Source1:        resteasy-jakarta.patch
 Patch1:        0001-RESTEASY-2559-Improper-validation-of-response-header.patch
 Patch2:        0001-Remove-Log4jLogger.patch
@@ -79,16 +79,16 @@ Requires:       pki-%{name}-jackson2-provider   = %{version}-%{release}
 Requires:       pki-%{name}-servlet-initializer = %{version}-%{release}
 
 # subpackages removed in fedora 32
-Obsoletes:      %{name}-fastinfoset-provider < 7.0.4.Final-1
-Obsoletes:      %{name}-jackson-provider < 7.0.4.Final-1
-Obsoletes:      %{name}-jettison-provider < 7.0.4.Final-1
-Obsoletes:      %{name}-json-p-provider < 7.0.4.Final-1
-Obsoletes:      %{name}-multipart-provider < 7.0.4.Final-1
-Obsoletes:      %{name}-netty3 < 7.0.4.Final-1
-Obsoletes:      %{name}-optional < 7.0.4.Final-1
-Obsoletes:      %{name}-test < 7.0.4.Final-1
-Obsoletes:      %{name}-validator-provider-11 < 7.0.4.Final-1
-Obsoletes:      %{name}-yaml-provider < 7.0.4.Final-1
+Obsoletes:      %{name}-fastinfoset-provider < 3.0.26-1
+Obsoletes:      %{name}-jackson-provider < 3.0.26-1
+Obsoletes:      %{name}-jettison-provider < 3.0.26-1
+Obsoletes:      %{name}-json-p-provider < 3.0.26-1
+Obsoletes:      %{name}-multipart-provider < 3.0.26-1
+Obsoletes:      %{name}-netty3 < 3.0.26-1
+Obsoletes:      %{name}-optional < 3.0.26-1
+Obsoletes:      %{name}-test < 3.0.26-1
+Obsoletes:      %{name}-validator-provider-11 < 3.0.26-1
+Obsoletes:      %{name}-yaml-provider < 3.0.26-1
 
 %description -n pki-%{name}
 %{desc}
@@ -133,7 +133,7 @@ Provides:       %{name}-servlet-initializer = %{version}-%{release}
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%setup -n Resteasy-%{namedversion}
+%setup -n resteasy-%{namedversion}
 %patch 1 -p 1
 %patch 2 -p 1
 %patch 3 -p 1

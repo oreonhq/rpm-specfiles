@@ -62,18 +62,6 @@ use the "__internal_happy_eyeballs_tests" feature of the "%{crate}" crate.
 %files       -n %{name}+__internal_happy_eyeballs_tests-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+base64-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+base64-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "base64" feature of the "%{crate}" crate.
-
-%files       -n %{name}+base64-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+client-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -146,30 +134,6 @@ use the "full" feature of the "%{crate}" crate.
 %files       -n %{name}+full-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+futures-channel-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+futures-channel-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "futures-channel" feature of the "%{crate}" crate.
-
-%files       -n %{name}+futures-channel-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+futures-util-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+futures-util-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "futures-util" feature of the "%{crate}" crate.
-
-%files       -n %{name}+futures-util-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+http1-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -192,42 +156,6 @@ This package contains library source intended for building other packages which
 use the "http2" feature of the "%{crate}" crate.
 
 %files       -n %{name}+http2-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+ipnet-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+ipnet-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "ipnet" feature of the "%{crate}" crate.
-
-%files       -n %{name}+ipnet-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+libc-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+libc-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "libc" feature of the "%{crate}" crate.
-
-%files       -n %{name}+libc-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+percent-encoding-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+percent-encoding-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "percent-encoding" feature of the "%{crate}" crate.
-
-%files       -n %{name}+percent-encoding-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+server-devel
@@ -278,18 +206,6 @@ use the "service" feature of the "%{crate}" crate.
 %files       -n %{name}+service-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+socket2-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+socket2-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "socket2" feature of the "%{crate}" crate.
-
-%files       -n %{name}+socket2-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+tokio-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -300,30 +216,6 @@ This package contains library source intended for building other packages which
 use the "tokio" feature of the "%{crate}" crate.
 
 %files       -n %{name}+tokio-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+tower-layer-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+tower-layer-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "tower-layer" feature of the "%{crate}" crate.
-
-%files       -n %{name}+tower-layer-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+tower-service-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+tower-service-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "tower-service" feature of the "%{crate}" crate.
-
-%files       -n %{name}+tower-service-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+tracing-devel

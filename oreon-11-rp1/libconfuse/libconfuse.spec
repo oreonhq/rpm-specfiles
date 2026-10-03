@@ -1,15 +1,13 @@
-%global source0_hash 3a59ded20bc652eaa8e6261ab46f7e483bc13dad79263c15af42ecbb329707b8
+%global source0_hash d98a793f4cafc1b3c18e2509ba54f6cb9ac6291b181bcda152dc987cb78f43ec
 
 Name:           libconfuse
 Version:        3.4
-Release:        1%{?dist}
+Release:        %autorelease
 Summary:        A configuration file parser library
 
 License:        ISC
 URL:            https://github.com/martinh/libconfuse
 Source0:	https://github.com/martinh/libconfuse/releases/download/v%{version}/confuse-%{version}.tar.gz
-
-Patch0:         d73777c2c3566fb2647727bb56d9a2295b81669b.patch
 
 BuildRequires:  gcc
 BuildRequires:  check-devel, pkgconfig
@@ -38,13 +36,11 @@ Requires:       pkgconfig
 %description devel
 Development files for %{name}.
 
+
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n confuse-%{version}
 perl -pi.orig -e 's|confuse.h|../src/confuse.h|g' tests/check_confuse.c
-
-%patch -P0 -p0
 
 %build
 %configure --enable-shared --disable-static
@@ -70,7 +66,9 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/doc/confuse
 
 %find_lang confuse
 
+
 %ldconfig_scriptlets
+
 
 %files -f confuse.lang
 %license LICENSE
@@ -84,6 +82,7 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/doc/confuse
 %{_includedir}/confuse.h
 %{_libdir}/libconfuse.so
 %{_libdir}/pkgconfig/libconfuse.pc
+
 
 %changelog
 %autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 616c2f61a4e05d8f07e4f95a26c1f031e66092cbf45354fe64c62becc9dcb751
 
 #
 # Copyright Fedora Project Authors.

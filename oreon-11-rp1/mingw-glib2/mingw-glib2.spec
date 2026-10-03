@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 17d15cac2af80a33271127408e0abc2748eb297c595c2a26409e81e14e7d1b8f
 
 %{?mingw_package_header}
 

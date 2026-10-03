@@ -1,4 +1,4 @@
-%global source0_hash 2213b56fdaff2220d0e38c8e420cbe1a83c87374190cba8c70af2156097ce30a
+%global source0_hash 393f5efb50536ec13ca4f4affb69cc9966d3c3f969e6c5e701faddf9f9785381
 
 Name:           SDL2_image
 Version:        2.8.12

@@ -1,4 +1,4 @@
-%global source0_hash 47d4b2a5cf4f17f52550aa65b34030fbd1a242e1a233f248a5871620e0ff4c11
+%global source0_hash a8407a5897a2e425ea1aa955ecf88485dd2fd417919de275b27c781a5d0637a5
 
 Name:           libaccounts-glib
 Version:        1.27
@@ -12,7 +12,7 @@ License:        LicenseRef-Callaway-LGPLv2
 %global ver_str VERSION_%{version}
 
 URL:            https://gitlab.com/accounts-sso/libaccounts-glib
-Source0:        https://gitlab.com/accounts-sso/libaccounts-glib/-/archive/VERSION_1.25/libaccounts-glib-VERSION_1.25.tar.gz
+Source0:        https://gitlab.com/accounts-sso/libaccounts-glib/-/archive/VERSION_1.27/libaccounts-glib-VERSION_1.27.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  meson >= 0.48.0

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash abdcfc74b8656173f762655a8d4d44f551342ac9574f1e7afa5cfc7bcd950e65
 
 Name:           python-virt-firmware
 Version:        26.9

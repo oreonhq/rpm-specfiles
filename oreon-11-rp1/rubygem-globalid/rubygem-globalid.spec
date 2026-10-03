@@ -1,4 +1,4 @@
-%global source0_hash 686ad5a0ecdfca67a3a09593a2507a7825258fbf1561238b4917f61d9e50ad91
+%global source0_hash 70bf76711871f843dbba72beb8613229a49429d1866828476f9c9d6ccc327ce9
 
 # Generated from globalid-0.3.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name globalid
@@ -7,7 +7,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 1.2.1
-Release: 6%{?dist}
+Release: %autorelease
 Summary: Refer to any model with a URI: gid://app/class/id
 License: MIT
 URL: http://www.rubyonrails.org
@@ -35,6 +35,7 @@ BuildArch: noarch
 %description
 URIs for your models makes it easy to pass references around.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -45,7 +46,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %patch 0 -p1
@@ -63,6 +63,7 @@ mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
 
+
 %if %{without bootstrap}
 %check
 pushd .%{gem_instdir}
@@ -77,6 +78,7 @@ sed -i "/bundler\/setup/ s/^/#/" ./test/helper.rb
 ruby -Ilib:test -raction_controller -e "Dir.glob './test/cases/*test.rb', &method(:require)"
 popd
 %endif
+
 
 %files
 %dir %{gem_instdir}

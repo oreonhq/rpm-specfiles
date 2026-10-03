@@ -1,4 +1,4 @@
-%global source0_hash 67ddb50543636292df8fde58117eefd54210d6cd7bf1eea5e91d2c4dccbc425e
+%global source0_hash 57226a8ec1bfbce06d68a42cde8cd980414a9457882e691fbce4a4f86c8d5f08
 
 %bcond defrag 0
 
@@ -9,7 +9,7 @@ Summary:        Userspace utilities for exFAT filesystems
 License:        GPL-2.0-only
 URL:            https://github.com/%{name}/%{name}
 
-Source0:        https://github.com/exfatprogs/exfatprogs/releases/download/1.4.3/exfatprogs-1.3.2.tar.xz
+Source0:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

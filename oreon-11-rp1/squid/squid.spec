@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e3bd613b91b1c498ec2992276063342a85cd6edddd5521294e04f44bc055da9b
 
 %define __perl_requires %{SOURCE98}
 %define version_underscore %(echo %{version} | tr '.' '_')

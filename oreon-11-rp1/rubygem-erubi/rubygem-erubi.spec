@@ -1,4 +1,4 @@
-%global source0_hash db3e3d4c9196091efcb19990c07f922b0d648902cead3fcf2bf55c9165cef489
+%global source0_hash 27bedb74dfb1e04ff60674975e182d8ca787f2224f2e8143268c7696f42e4723
 
 # Generated from erubi-1.6.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name erubi

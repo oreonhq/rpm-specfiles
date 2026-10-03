@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8e26add6e637b5b536876a293a84db8edce8563aef3c3755f26d66d323dee3df
 
 # SSG build system and tests count with build directory name `build`.
 # For more details see:

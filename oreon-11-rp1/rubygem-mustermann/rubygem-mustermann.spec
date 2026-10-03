@@ -1,4 +1,4 @@
-%global source0_hash 8db618bcb8fb47d370a0ace6fad1760f7dcddbaf617c16944357fa4634af8383
+%global source0_hash d1f8e9ba2ddaed47150ddf81f6a7ea046826b64c672fbc92d83bce6b70657e88
 
 # Generated from mustermann-1.0.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name mustermann
@@ -8,7 +8,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 3.0.3
-Release: 4%{?dist}
+Release: %autorelease
 Summary: Your personal string matching expert
 License: MIT
 URL: https://github.com/sinatra/mustermann
@@ -32,6 +32,7 @@ BuildArch: noarch
 %description
 A library implementing patterns that behave like regular expressions.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -42,7 +43,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1 -b 2
 
 # Drop ruby2_keywords dependency that is required by Ruby < 2.7.

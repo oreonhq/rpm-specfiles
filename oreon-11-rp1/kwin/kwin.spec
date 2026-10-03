@@ -1,4 +1,4 @@
-%global source0_hash db7a7dba71aaca1e5218733b80f90a998d84e2ab36e4d62d0e3ea00376c5802d
+%global source0_hash 6baa910b732d93c48c90f9c1cc685cc93d0b8de0cdf138c24192c045bc3a48e2
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
@@ -18,8 +18,8 @@ URL:     https://userbase.kde.org/KWin
 
 %global plasma_version %(echo %{version} | cut -d. -f1-3)
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/stable/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 ## upstream patches
 ## proposed patches

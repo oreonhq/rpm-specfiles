@@ -1,4 +1,4 @@
-%global source0_hash 928baf1fff69b17658fb7014a1cc3e220b3b69b52271ae9c0452f82d67b3ef86
+%global source0_hash a96edc1d8a782ca888068a9bc971452dc7fbed03b90e5e0d71bd733c5684e62d
 
 %global pkg_name boring
 %global pkgver %{pkg_name}-%{version}

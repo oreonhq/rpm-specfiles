@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63
 
 Name:           python-urllib3
 Version:        2.8.0

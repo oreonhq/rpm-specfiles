@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7c7e1a961a0b2f2472c1ac5b69affa0ae1132c39adcb67aba98568702b9cc23f
 
 Name:           python-tomli
 Version:        2.4.1

@@ -1,28 +1,7 @@
-diff --git a/python2/httplib2/certs.py b/python2/httplib2/certs.py
-index 59d1ffc..a2e7513 100644
---- a/python2/httplib2/certs.py
-+++ b/python2/httplib2/certs.py
-@@ -23,6 +23,7 @@ BUILTIN_CA_CERTS = os.path.join(
-     os.path.dirname(os.path.abspath(__file__)), "cacerts.txt"
- )
- 
-+FEDORA_CA_CERTS = "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
- 
- def where():
-     env = os.environ.get("HTTPLIB2_CA_CERTS")
-@@ -35,7 +36,7 @@ def where():
-         return custom_ca_locater_where()
-     if certifi_available:
-         return certifi_where()
--    return BUILTIN_CA_CERTS
-+    return FEDORA_CA_CERTS
- 
- 
- if __name__ == "__main__":
-diff --git a/python3/httplib2/certs.py b/python3/httplib2/certs.py
+diff --git a/httplib2/certs.py b/httplib2/certs.py
 index 59d1ffc..2708393 100644
---- a/python3/httplib2/certs.py
-+++ b/python3/httplib2/certs.py
+--- a/httplib2/certs.py
++++ b/httplib2/certs.py
 @@ -23,6 +23,8 @@ BUILTIN_CA_CERTS = os.path.join(
      os.path.dirname(os.path.abspath(__file__)), "cacerts.txt"
  )

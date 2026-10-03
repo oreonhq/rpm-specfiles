@@ -1,4 +1,4 @@
-%global source0_hash 1c7255e871504d3df00ebb73ffbd78455b085b4707c84a3fbdabdfd9f9d1daa6
+%global source0_hash 9ab32da7710e0c74307ac7559e4e9d002d21092d98c9f48e59daebbff485d935
 
 Name:           stratis-cli
 Version:        3.9.1
@@ -7,7 +7,7 @@ Summary:        Command-line tool for interacting with the Stratis daemon
 
 License:        Apache-2.0
 URL:            https://github.com/stratis-storage/stratis-cli
-Source0:        https://github.com/stratis-storage/stratis-cli/archive/refs/tags/v3.8.3.tar.gz#/stratis-cli-3.8.3.tar.gz
+Source0:        https://github.com/stratis-storage/stratis-cli/archive/refs/tags/v3.9.1.tar.gz#/stratis-cli-3.9.1.tar.gz
 
 BuildRequires:  python3-devel
 BuildRequires:  %{_bindir}/a2x

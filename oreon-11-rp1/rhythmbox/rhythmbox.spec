@@ -1,4 +1,4 @@
-%global source0_hash e42291a18df7a21ffe6b352bf73f05d7e298bb4e05bce5967f98ee8cee4408f1
+%global source0_hash 8ee7d1714481956023b464264ebe0bd50217d4b472b1c5b3a6254ff8da924093
 
 %global gtk3_version 3.20.0
 %global libdmapsharing_version 3.9.11
@@ -14,7 +14,7 @@ Summary: Music Management Application
 # Automatically converted from old format: GPLv2+ with exceptions - review is highly recommended.
 License: LicenseRef-Callaway-GPLv2+-with-exceptions AND GFDL-1.1-no-invariants-or-later
 URL:     https://wiki.gnome.org/Apps/Rhythmbox
-Source0:        https://download.gnome.org/sources/rhythmbox/3.4/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/rhythmbox/%(echo %{version} | cut -d. -f1-2)/%{name}-%{version}.tar.xz
 
 BuildRequires: pkgconfig(gobject-introspection-1.0) >= 0.10.0
 BuildRequires: pkgconfig(grilo-0.3) >= 0.3.1

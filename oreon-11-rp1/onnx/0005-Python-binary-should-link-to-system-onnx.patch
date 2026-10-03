@@ -1,0 +1,30 @@
+From d8a3356e3daf6d2514f84ff0cd6b240e8113931d Mon Sep 17 00:00:00 2001
+From: Diego Herrera <dherrera@redhat.com>
+Date: Wed, 1 Jul 2026 00:06:18 -0400
+Subject: [PATCH 5/7] Python binary should link to system onnx
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3a08d3289..895a61d84 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -460,8 +460,15 @@ if(ONNX_BUILD_PYTHON)
+   nanobind_add_module(
+     onnx_cpp2py_export
+     NB_STATIC NB_DOMAIN onnx STABLE_ABI FREE_THREADED LTO
+-    "${ONNX_ROOT}/onnx/cpp2py_export.cc" ${ONNX_SRCS} ${ONNX_PROTO_SRCS})
++    "${ONNX_ROOT}/onnx/cpp2py_export.cc")
+   add_dependencies(onnx_cpp2py_export onnx)
++  target_link_libraries(
++    onnx_cpp2py_export
++    PRIVATE
++    onnx
++    onnx_proto
++    protobuf
++  )
+ endif()
+ 
+ add_onnx_compile_options(onnx_proto)
+-- 
+2.54.0
+

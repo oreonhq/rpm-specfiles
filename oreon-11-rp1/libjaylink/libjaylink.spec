@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 235b12d161b29d813026704f335536a6a916646ea2058302e4ca45ca2cd81325
 
 Name:           libjaylink
 Version:        0.5.0

@@ -1,4 +1,4 @@
-%global source0_hash 5eb14bc7bc1407743478ebdbd83772bf3b927fd949136a2fbbde96fa6000b6e7
+%global source0_hash f2bf46d410ba567cc8d01507e94916994e48742722e690dc498fab59f5250132
 
 Name:           moreutils
 Version:        0.70
@@ -7,7 +7,8 @@ Summary:        Additional unix utilities
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            https://joeyh.name/code/moreutils/
-Source0:        https://git.kitenet.net/index.cgi/moreutils.git/snapshot/moreutils-%{version}.tar.gz
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/moreutils/moreutils-0.70.tar.gz/sha512/7e6623d4ecf50a79d1301f0c63b991f5eb32e4edccb46a99df5c39a7d5cb4d5965fb7d00214afd094f7ac4db311fe49b2a785e7429da99b4324214f0ace5c7d4/moreutils-0.70.tar.gz
 # fixes docbook XSL path
 Patch1:         0001-dont-overwrite-docbooxsl-path.patch
 BuildRequires:  make

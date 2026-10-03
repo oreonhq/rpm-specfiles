@@ -1,0 +1,63 @@
+--- whoami-2.1.2/Cargo.toml
++++ whoami-2.1.2/Cargo.toml
+@@ -49,21 +49,12 @@
+ repository = "https://github.com/ardaku/whoami"
+ 
+ [features]
+-default = [
+-    "std",
+-    "wasi-wasite",
+-    "wasm-web",
+-]
++default = ["std"]
+ force-stub = []
+ std = [
+     "dep:libc",
+-    "dep:libredox",
+-    "dep:objc2-system-configuration",
+     "libc?/std",
+-    "web-sys?/std",
+ ]
+-wasi-wasite = ["dep:wasite"]
+-wasm-web = ["dep:web-sys"]
+ 
+ [lib]
+ name = "whoami"
+@@ -75,37 +66,9 @@
+ optional = true
+ default-features = false
+ 
+-[target.'cfg(all(target_arch = "wasm32", not(target_os = "wasi"), not(daku)))'.dependencies.web-sys]
+-version = "0.3.85"
+-features = [
+-    "Navigator",
+-    "Document",
+-    "Window",
+-    "Location",
+-]
+-optional = true
+-default-features = false
+ 
+-[target.'cfg(all(target_arch = "wasm32", target_os = "wasi"))'.dependencies.wasite]
+-version = "1.0.2"
+-features = []
+-optional = true
+-default-features = false
+ 
+-[target.'cfg(all(target_os = "redox", not(target_arch = "wasm32")))'.dependencies.libredox]
+-version = "0.1.16"
+-features = ["call"]
+-optional = true
+-default-features = false
+ 
+-[target.'cfg(target_vendor = "apple")'.dependencies.objc2-system-configuration]
+-version = "0.3.2"
+-features = [
+-    "SCDynamicStore",
+-    "SCDynamicStoreCopySpecific",
+-]
+-optional = true
+-default-features = false
+ 
+ [lints.rust.unexpected_cfgs]
+ level = "allow"

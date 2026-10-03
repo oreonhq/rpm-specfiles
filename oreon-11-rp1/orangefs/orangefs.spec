@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a945e33b824220b6b97d3d036dabea7c56a1392155b86d741d75a55427814d42
 
 # Workaround for -fcommon issue
 # https://github.com/waltligon/orangefs/issues/80

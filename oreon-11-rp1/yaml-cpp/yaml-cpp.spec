@@ -1,4 +1,4 @@
-%global source0_hash fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16
+%global source0_hash 25cb043240f828a8c51beb830569634bc7ac603978e0f69d6b63558dadefd49a
 
 %global sover 0.9
 
@@ -9,9 +9,8 @@ Release:        1%{?dist}
 License:        MIT
 Summary:        A YAML parser and emitter for C++
 URL:            https://github.com/jbeder/yaml-cpp
-Source0:        https://github.com/jbeder/yaml-cpp/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/jbeder/yaml-cpp/archive/refs/tags/yaml-cpp-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
-Patch0:         yaml-cpp-include.patch
 
 # Allow CMake 4.0 build
 Patch1:         https://github.com/jbeder/yaml-cpp/pull/1211.patch
@@ -41,7 +40,7 @@ The %{name}-static package contains the static library for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n yaml-cpp-yaml-cpp-%{version}
 
 %build
 # Define separate build directories for static and shared

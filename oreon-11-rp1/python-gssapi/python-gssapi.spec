@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0b48f17296f869db89221c3bde463fdff35152a4cb99ae4aaa42b0b64333fc6c
 
 Name:           python-gssapi
 Version:        1.12.0
@@ -20,7 +20,6 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'gssapi' generated automatically by pyp2spec.}
 
-Patch0:         cython3.patch
 
 %description %_description
 

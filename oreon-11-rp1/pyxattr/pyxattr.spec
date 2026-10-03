@@ -1,4 +1,4 @@
-%global source0_hash 68477027e6d3310669f98aaef15393bfcd9b2823d7a7f00a6f1d91a3c971ae64
+%global source0_hash 48c578ecf8ea0bd4351b1752470e301a90a3761c7c21f00f953dcf6d6fa6ee5a
 
 Name:           pyxattr
 Summary:        Extended attributes library wrapper for Python
@@ -6,8 +6,8 @@ Version:        0.8.1
 Release:        1%{?dist}
 License:        LGPL-2.1-or-later
 URL:            https://pyxattr.k1024.org/
-Source0:        https://pyxattr.k1024.org//downloads/pyxattr-0.7.2.tar.gz
-Source1:        https://pyxattr.k1024.org//downloads/pyxattr-0.7.2.tar.gz.asc
+Source0:        https://pyxattr.k1024.org/downloads/pyxattr-%{version}.tar.gz
+Source1:        https://pyxattr.k1024.org/downloads/pyxattr-%{version}.tar.gz.asc
 Source2:        https://k1024.org/files/key.asc
 
 BuildRequires:  gcc

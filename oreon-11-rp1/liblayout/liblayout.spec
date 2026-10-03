@@ -2,10 +2,10 @@
 
 Name: liblayout
 Version: 0.2.10
-Release: 41%{?dist}
+Release: %autorelease
 Summary: CSS based layouting framework
 License: LGPL-2.1-or-later and Unicode-DFS-2016
-Source:        https://downloads.sourceforge.net/jfreereport/liblayout-%{version}.zip
+Source: http://downloads.sourceforge.net/jfreereport/liblayout-%{version}.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, flute, libloader
 BuildRequires: librepository, pentaho-libxml, libfonts, sac, libbase >= 1.1.3
@@ -63,5 +63,4 @@ cp -rp build/api $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 %{_javadocdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.10-41
-- Prepare for Oreon 11 (RP1)
+%autochangelog

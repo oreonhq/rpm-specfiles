@@ -1,4 +1,4 @@
-%global source0_hash 6166cf639cc3fd8368cc423b016e1ed347d0df4e3030a0f71cdb30329e65e365
+%global source0_hash 4888ef54f9b404853712945218b3168696569db9167d7e01ec76e44b6c05c71c
 
 # Disable LTO
 #ld: sha2.o (symbol from plugin): undefined reference to symbol 'SHA384_Final@@OPENSSL_1_1_0'
@@ -13,8 +13,6 @@ Summary:        The Sleuth Kit (TSK)
 License:        CPL-1.0 AND IPL-1.0 AND GPL-2.0-or-later
 URL:            https://www.sleuthkit.org
 Source0:        https://github.com/sleuthkit/sleuthkit/archive/sleuthkit-%{version}/sleuthkit-%{version}.tar.gz
-Patch0:         0001-Don-t-redefine-bool.-That-causes-collisions.patch
-Patch1:         0001-Avoid-defining-bool-datatype.patch
 
 BuildRequires: make
 BuildRequires:  libtool

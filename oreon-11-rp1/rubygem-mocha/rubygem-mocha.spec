@@ -1,10 +1,10 @@
-%global source0_hash 924f43113a64fecb53bec4a8aef797d2e33b16b36fb985138129fc182213b2a1
+%global source0_hash 195036135e28b0cb7aad555bfda4b53b3b2fa27064425369c8544597a93cc602
 
 %global gem_name mocha
 
 Name: rubygem-%{gem_name}
 Version: 2.6.1
-Release: 6%{?dist}
+Release: %autorelease
 Summary: Mocking and stubbing library
 License: Ruby OR BSD-2-Clause OR MIT
 URL: https://mocha.jamesmead.org
@@ -32,6 +32,7 @@ BuildArch: noarch
 Mocking and stubbing library with JMock/SchMock syntax, which allows mocking
 and stubbing of methods on real (non-mock) classes.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -42,7 +43,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %patch 1 -p1

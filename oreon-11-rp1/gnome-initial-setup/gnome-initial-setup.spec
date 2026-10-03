@@ -22,7 +22,7 @@ Summary:        Bootstrapping your OS
 
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Design/OS/InitialSetup
-Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1)/%{name}-%{tarball_version}.tar.xz
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  meson

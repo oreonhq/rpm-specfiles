@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0236b0567513356e7b1679d20f1eba704d18221347a355b4bfde6b1385f31b66
 
 Name:           python-justbases
 Version:        0.15.3

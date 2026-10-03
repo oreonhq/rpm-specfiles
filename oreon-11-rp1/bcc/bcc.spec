@@ -1,4 +1,4 @@
-%global source0_hash 7adf1716d2a3df6802c3bb17664d79b9d68d7316a6773eb08d6e691c5ff0b2fc
+%global source0_hash c89f63bafc688abb4749e901006321e329ab90941433d85f442f9c03bb3c7824
 
 # We don't want to bring luajit in RHEL
 %if 0%{?rhel} > 0
@@ -25,11 +25,9 @@ Release:        1%{?dist}
 Summary:        BPF Compiler Collection (BCC)
 License:        Apache-2.0
 URL:            https://github.com/iovisor/bcc
-Source0:        https://github.com/iovisor/bcc/archive/refs/tags/v0.35.0.tar.gz#/bcc-0.35.0.tar.gz
+Source0:        https://github.com/iovisor/bcc/archive/refs/tags/v0.37.0.tar.gz#/bcc-0.37.0.tar.gz
 # Fix build with clang 21
-Patch0:        https://github.com/iovisor/bcc/pull/5369.patch
 # Fix build with llvm 22
-Patch1:         https://github.com/iovisor/bcc/commit/4c7be1ec6ab74e973f8d18a9011fa349c3d9dd58.patch
 
 # Arches will be included as upstream support is added and dependencies are
 # satisfied in the respective arches

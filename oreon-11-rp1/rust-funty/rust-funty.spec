@@ -63,6 +63,8 @@ use the "std" feature of the "%{crate}" crate.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{version} -p1
+# 2.0.0 ships without README.md but Cargo.toml still references it
+sed -i '/^readme *=/d' Cargo.toml
 %cargo_prep
 
 %generate_buildrequires

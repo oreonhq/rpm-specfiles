@@ -6,7 +6,7 @@
 
 Summary: Gives a fake root environment
 Name: fakeroot
-Version: 2.1.4
+Version: 1.37.1.1
 Release: 1%{?dist}
 # setenv.c: LGPLv2+
 # contrib/Fakeroot-Stat-1.8.8: Perl (GPL+ or Artistic)

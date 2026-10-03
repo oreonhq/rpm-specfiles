@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 71cacf1879da2cd3e50cb239e21673cfe02d358af70ab6768817c960428868c3
 
 Name:           python-pyqt5-sip
 Version:        12.19.0

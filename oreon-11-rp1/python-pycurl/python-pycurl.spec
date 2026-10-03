@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b70961a76c412cd34f9cc2c9558e63f89fb37045c59eee396c585b52973be280
 
 Name:           python-pycurl
 Version:        7.48.0
@@ -21,7 +21,6 @@ BuildRequires:  gcc
 This is package 'pycurl' generated automatically by pyp2spec.}
 
 Patch1:         0001-python-pycurl-7.45.1-tls-backend.patch
-Patch2:         ea92e3ca230a3ff3d464cb6816102fa157177aca.patch
 
 %description %_description
 

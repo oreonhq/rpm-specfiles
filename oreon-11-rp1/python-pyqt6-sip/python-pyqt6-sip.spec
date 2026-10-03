@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a7ad45c1e3cec3a2473d37ea9870b6c3baeccc560298623c8eb59265714c06e2
 
 Name:           python-pyqt6-sip
 Version:        13.12.0

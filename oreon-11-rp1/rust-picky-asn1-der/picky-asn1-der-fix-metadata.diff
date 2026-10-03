@@ -1,6 +1,6 @@
---- picky-asn1-der-0.5.5/Cargo.toml	1970-01-01T00:00:01+00:00
-+++ picky-asn1-der-0.5.5/Cargo.toml	2026-03-05T14:50:26.993360+00:00
-@@ -63,21 +63,5 @@
+--- picky-asn1-der-0.5.6/Cargo.toml
++++ picky-asn1-der-0.5.6/Cargo.toml
+@@ -63,21 +63,6 @@
  [dependencies.serde_bytes]
  version = "0.11"
  
@@ -8,7 +8,7 @@
 -version = "0.22"
 -
 -[dev-dependencies.crypto-bigint]
--version = "0.7.0-rc.10"
+-version = "0.7"
 -features = ["alloc"]
 -default-features = false
 -
@@ -19,6 +19,6 @@
 -
  [dev-dependencies.pretty_assertions]
  version = "1.4"
--
+ 
 -[dev-dependencies.serde_bytes]
 -version = "0.11"

@@ -7,7 +7,8 @@ Summary:        Audio Library Tools REloaded
 # ALURE code is LGPLv2+; note -devel subpackage has its own license tag
 License:        LGPL-2.1-or-later
 URL:            http://kcat.strangesoft.net/alure.html
-Source0:        http://kcat.strangesoft.net/%{name}-releases/%{name}-%{version}.tar.bz2
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/alure/alure-1.2.tar.bz2/3088aba074ad02d95ea51e705053b9f5/alure-1.2.tar.bz2
 Patch0:         alure-gcc47.patch
 Patch1:         alure-1.2-fluidsynth-cflags-fix.patch
 Patch2:		alure-1.2-use-unique_ptr.patch

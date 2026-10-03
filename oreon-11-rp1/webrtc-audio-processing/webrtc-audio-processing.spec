@@ -1,4 +1,4 @@
-%global source0_hash ae9302824b2038d394f10213cab05312c564a038434269f11dbf68f511f9f9fe
+%global source0_hash f44ad4d72ff2919a6a48cf0887f69aef34c338bfdd8931153596e3766d75f654
 
 # Always prefer bundled Abseil so the shared library does not pick up distro
 # libabsl SONAME drift (pulseaudio links against the bundled copy).

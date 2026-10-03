@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash be1816e7f6c40abb90245ad6e024bed2a7e88d7dda4561e4d5470207df616b9f
 %global source10_hash d511de1f556521041b0811c6fb9c3e175d9a527bce5ade9ca31ab79b0941823c
 
 Name:           rust
@@ -144,13 +144,9 @@ Patch7:         0001-only-copy-rustlib-into-stage0-sysroot.patch
 
 # bootstrap: always propagate `CARGO_TARGET_{host}_LINKER`
 # https://github.com/rust-lang/rust/pull/152077
-Patch8:         0001-bootstrap-always-propagate-CARGO_TARGET_-host-_LINKE.patch
 
 # Fixes for LLVM 22 compatibility
 # https://github.com/rust-lang/rust/pull/151410
-Patch9:         0001-Update-amdgpu-data-layout.patch
-Patch10:        0002-Avoid-passing-addrspacecast-to-lifetime-intrinsics.patch
-Patch11:        0003-Don-t-use-evex512-with-LLVM-22.patch
 
 ### RHEL-specific patches below ###
 
@@ -722,10 +718,6 @@ rm -rf %{wasi_libc_dir}/dlmalloc/
 %patch -P6 -p1
 %endif
 %patch -P7 -p1
-%patch -P8 -p1
-%patch -P9 -p1
-%patch -P10 -p1
-%patch -P11 -p1
 
 %if %with disabled_libssh2
 %patch -P100 -p1

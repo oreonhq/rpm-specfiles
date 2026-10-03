@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7fa616e3046edfa7a28a32d5f9eacfd23f92900fe1f8ccd988c1662f30454562
 
 Name:           cjson
 Version:        1.7.19

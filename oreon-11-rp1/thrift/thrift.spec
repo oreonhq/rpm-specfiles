@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e0fa5839a4c5c1d631b0931cf2c554ebbfa4e2fee3a9fb3ffd4f82ce4396c6e4
 
 # thrift: FTBFS in Fedora 36: /usr/include/c++/12/bits/new_allocator.h:158:33:
 # error: 'operator delete' called on pointer '_605' with nonzero offset [1,
@@ -89,12 +89,11 @@ URL:     https://thrift.apache.org/
 Source0: https://archive.apache.org/dist/%{name}/%{version}/%{name}-%{version}.tar.gz
 
 Source1: https://repo1.maven.org/maven2/org/apache/thrift/lib%{name}/%{version}/lib%{name}-%{version}.pom
-Source2: https://raw.github.com/apache/%{name}/%{version}/bootstrap.sh
+Source2: https://raw.githubusercontent.com/apache/%{name}/v%{version}/bootstrap.sh
 
 # fix configure.ac insistence on using /usr/local/lib for JAVA_PREFIX
 Patch2: configure-java-prefix.patch
 # fix build with GCC 15: https://github.com/apache/thrift/pull/3078
-Patch3: gcc15.patch
 
 
 # BuildRequires for language-specific bindings are listed under these

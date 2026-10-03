@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 17db5ecd524104a120e173814c90367a96a98d07c45b2e10c2f3919fff91bf5a
 
 Name:           python-pathspec
 Version:        1.1.1

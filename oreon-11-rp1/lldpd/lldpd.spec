@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 06735ce2cd0870a9f2fe21b6089f8dbd4af9f96addcada339fa66cef51214b76
 
 Name:     lldpd
 Version:  1.0.22

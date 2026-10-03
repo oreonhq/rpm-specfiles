@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 75bf2696445e831d0d44e0d9f2909eeffc18c09757f222b2fb025f7e59fe130b
 
 Summary: Tool for generating C, C++, and go recognizers from regular expressions
 Name: re2c

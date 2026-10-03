@@ -14,10 +14,23 @@ Signed-off-by: Yan Fu <yafu@redhat.com>
  attestation-agent/kbs_protocol/src/client/rcar_client.rs | 3 ++-
  3 files changed, 2 insertions(+), 3 deletions(-)
 
+diff --git a/Cargo.toml b/Cargo.toml
+index a1d0ece..2d1cefe 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -40,7 +40,6 @@ serial_test = "3"
+ sha2 = "0.10.9"
+ strum = { version = "0.27", features = ["derive"] }
+ tempfile = "3.24"
+-testcontainers = "0.25"
+ thiserror = "2.0"
+ tokio = "1.47"
+ toml = "0.9.10"
 diff --git a/attestation-agent/kbs_protocol/Cargo.toml b/attestation-agent/kbs_protocol/Cargo.toml
+index 281183a..3cd22aa 100644
 --- a/attestation-agent/kbs_protocol/Cargo.toml
 +++ b/attestation-agent/kbs_protocol/Cargo.toml
-@@ -40,7 +40,6 @@
+@@ -31,7 +31,6 @@ zeroize.workspace = true
  rstest.workspace = true
  serial_test.workspace = true
  tempfile.workspace = true
@@ -26,9 +39,10 @@ diff --git a/attestation-agent/kbs_protocol/Cargo.toml b/attestation-agent/kbs_p
  
  [build-dependencies]
 diff --git a/attestation-agent/kbs_protocol/src/client/rcar_client.rs b/attestation-agent/kbs_protocol/src/client/rcar_client.rs
+index a8f9d57..28e2278 100644
 --- a/attestation-agent/kbs_protocol/src/client/rcar_client.rs
 +++ b/attestation-agent/kbs_protocol/src/client/rcar_client.rs
-@@ -407,7 +407,8 @@
+@@ -379,7 +379,8 @@ impl KbsClientCapabilities for KbsClient<Box<dyn EvidenceProvider>> {
      }
  }
  
@@ -39,4 +53,5 @@ diff --git a/attestation-agent/kbs_protocol/src/client/rcar_client.rs b/attestat
      use kbs_types::HashAlgorithm;
      use rstest::rstest;
 -- 
-2.0
+2.53.0
+

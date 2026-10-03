@@ -1,4 +1,4 @@
-%global source0_hash 24c31fcacd707892d4f745b5fd5a631753bee49bf6c048cd65c42a5791986b67
+%global source0_hash b48e701c75a2bd30dfe63fda5f886c8a7e0c3dd17b6aa0feb74cc93099254ca4
 
 %global with_debug 1
 
@@ -49,7 +49,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: A command line tool used for creating OCI Images
 URL: https://%{name}.io
 # Tarball fetched from upstream
-Source:        https://github.com/containers/buildah/archive/refs/tags/v1.43.0.tar.gz#/buildah-1.43.0.tar.gz
+Source:        https://github.com/containers/buildah/archive/refs/tags/v1.45.1.tar.gz#/buildah-1.45.1.tar.gz
 
 BuildRequires: device-mapper-devel
 BuildRequires: git-core

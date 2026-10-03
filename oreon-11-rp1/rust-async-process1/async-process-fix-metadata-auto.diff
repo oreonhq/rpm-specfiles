@@ -1,0 +1,16 @@
+--- async-process-1.8.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ async-process-1.8.1/Cargo.toml	2026-10-03T02:31:11.381524+00:00
+@@ -61,13 +61,3 @@
+ ]
+ default-features = false
+ 
+-[target."cfg(windows)".dependencies.blocking]
+-version = "1.0.0"
+-
+-[target."cfg(windows)".dependencies.windows-sys]
+-version = "0.48"
+-features = [
+-    "Win32_Foundation",
+-    "Win32_System_Threading",
+-]
+-default-features = false

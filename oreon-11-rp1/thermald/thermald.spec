@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 91f0eb6a471637cd16877be59947048c90912ea80495f78f8c2d4f465f12d6a0
 
 %global pkgname thermal_daemon
 
@@ -12,7 +12,7 @@ Summary:	Thermal Management daemon
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later
 URL:		https://github.com/intel/%{pkgname}
-Source0:        https://github.com/intel/thermal_daemon/archive/refs/tags/v2.5.9.tar.gz#/thermald-2.5.9.tar.gz
+Source0:        https://github.com/intel/thermal_daemon/archive/refs/tags/v%{version}.tar.gz#/thermald-%{version}.tar.gz
 
 # No cpuid.h on other arches.
 ExclusiveArch:	%{ix86} x86_64

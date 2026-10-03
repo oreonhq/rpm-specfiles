@@ -1,11 +1,11 @@
-%global source0_hash ff43786570d4c3c1bd938f07a1c30cd62afc89ba003df5f8b7d552004d206397
+%global source0_hash 1e76b9ab0bb08372ff73ad5b58d9116260e9058d1fce4b83fe1e213c3b9c947f
 
 # SPDX-License-Identifier: MIT
 %global forgeurl https://github.com/stipub/stixfonts/
-Version: 2.14
+Version: 2.13b171
 %forgemeta
 
-Release: 1%{?dist}
+Release: 10%{?dist}
 URL:     http://www.stixfonts.org/
 
 %global foundry           STIX
@@ -29,7 +29,7 @@ creation through final publication, both in electronic and print formats.
 }
 
 
-Source0:        https://github.com/stipub/stixfonts/archive/refs/tags/v%{version}.tar.gz#/stixfonts-%{version}.tar.gz
+Source0:        https://github.com/stipub/stixfonts/archive/refs/tags/v2.13b171.tar.gz#/stixfonts-2.13b171.tar.gz
 Source10: 65-%{fontpkgname0}.xml
 
 %fontpkg -a

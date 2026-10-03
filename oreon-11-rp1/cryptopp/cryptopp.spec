@@ -1,4 +1,4 @@
-%global source0_hash 887519c86d8b2fdd5172287aa0c063e58e4989752454b0fd50136ed4b8513e93
+%global source0_hash ace1c7b010a409eba5e86c4fd5a8845c43a6ac39bb6110e64ca5d7fea08583f4
 
 # Per upstream recommendations.
 # https://www.cryptopp.com/wiki/Link_Time_Optimization
@@ -15,8 +15,8 @@ URL:            https://www.cryptopp.com
 %define v_tag %(v=%{version}; echo ${v//./_})
 %define v_file %(v=%{version}; echo ${v//./})
 
-Source0:        %{url}/cryptopp%{v_file}.zip
-Source1:        %{url}/cryptopp%{v_file}.zip.sig
+Source0:        https://github.com/weidai11/cryptopp/releases/download/CRYPTOPP_%{v_tag}/cryptopp%{v_file}.zip
+Source1:        https://github.com/weidai11/cryptopp/releases/download/CRYPTOPP_%{v_tag}/cryptopp%{v_file}.zip.sig
 Source2:        %{url}/signing.html#/keyring.gpg
 Source10:       https://github.com/noloader/cryptopp-autotools/releases/download/CRYPTOPP_%{v_tag}/cryptopp-autotools%{v_file}.zip
 Source11:       https://github.com/noloader/cryptopp-autotools/releases/download/CRYPTOPP_%{v_tag}/cryptopp-autotools%{v_file}.zip.sig

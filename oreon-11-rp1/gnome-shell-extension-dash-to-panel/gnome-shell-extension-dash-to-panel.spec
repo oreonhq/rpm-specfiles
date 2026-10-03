@@ -1,4 +1,4 @@
-%global source0_hash 42fe9e4dfaee72cfb7f6b21393c15e598c0087dca05f0eca73fcea7e0928cd3a
+%global source0_hash 8df5e03b547aa380902fabf4c12134b4d5f2b1ed662be797347276d664ef21e2
 
 %global ename  dash-to-panel
 %global extdir %{_datadir}/gnome-shell/extensions/dash-to-panel@jderose9.github.com
@@ -9,7 +9,7 @@ Release:        1%{?dist}
 Summary:        Integrated icon taskbar and status panel for Gnome Shell
 License:        GPL-2.0-or-later
 URL:            https://github.com/home-sweet-gnome/dash-to-panel
-Source0:        https://github.com/home-sweet-gnome/dash-to-panel/archive/refs/tags/v72.tar.gz#/gnome-shell-extension-dash-to-panel-72.tar.gz
+Source0:        https://github.com/home-sweet-gnome/dash-to-panel/archive/refs/tags/v%{version}.tar.gz#/gnome-shell-extension-dash-to-panel-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  gettext
 BuildRequires:  make

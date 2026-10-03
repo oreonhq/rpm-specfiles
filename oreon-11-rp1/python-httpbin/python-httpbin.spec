@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6023a5a2e8fb8e91abdd6d34d1f1f455092f97d567c25600e1b48ee1178aa738
 
 Name:           python-httpbin
 Version:        0.10.4
@@ -20,9 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'httpbin' generated automatically by pyp2spec.}
 
-Patch:          0001-Make-flasgger-dep-optional-26.patch
-Patch:          0001-Replace-deprecated-JSONIFY_PRETTYPRINT_REGULAR-usage.patch
-Patch:          0001-Fix-bytes-endpoint-with-newer-werkzeug-versions.patch
 
 %description %_description
 

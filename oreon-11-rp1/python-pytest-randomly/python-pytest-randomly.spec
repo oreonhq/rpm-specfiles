@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e9c575a5873ef168ddbe340ed9e97ce9edb4492ccc821e4b2ac6bb1f0ed515d2
 
 Name:           python-pytest-randomly
 Version:        5.0.0

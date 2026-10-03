@@ -1,4 +1,4 @@
-%global source0_hash f939fe54b35326b77690707f00b3d875dda340b748bc595fc53aab77d0fbdfae
+%global source0_hash 837a2f023368a75a38ad9be227e9738ab9af7df3b3f35afd8fb5fc5f7a93f1d4
 
 # Generated from aruba-0.4.11.gem by gem2rpm -*- rpm-spec -*-
 %global     gem_name    aruba
@@ -6,8 +6,7 @@
 Summary:    CLI Steps for Cucumber, hand-crafted for you in Aruba
 Name:       rubygem-%{gem_name}
 Version:    2.3.3
-Release:    2%{?dist}
-
+Release:    %autorelease
 # SPDX confirmed
 # templates/, jquery.js existed on 0.14.14, no longer included in 2.0 and above
 License:        MIT

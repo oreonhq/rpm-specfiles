@@ -1,4 +1,4 @@
-%global source0_hash 0605f8d8a2f4668cb16e279ebcad8002cc83f44610633157e9c4b8fc183a479b
+%global source0_hash 7c311d55237f1fc6ac437caca194d170c9cae314235d60a9fbf11e980114e25e
 
 # Force out of source build
 %undefine __cmake_in_source_build
@@ -12,7 +12,7 @@ Summary:        Enhanced config file parser library
 
 License:        MIT
 URL:            https://github.com/openSUSE/libeconf
-Source0:        https://github.com/openSUSE/libeconf/archive/refs/tags/v0.7.9.tar.gz#/libeconf-0.7.9.tar.gz
+Source0:        https://github.com/openSUSE/libeconf/archive/refs/tags/v0.8.4.tar.gz#/libeconf-0.8.4.tar.gz
 
 ### Patches ###
 # This should be a temporary workaround. I don't have enough time to check what's happening, but since we aren't shipping the html documentation it's fine to stop installing it

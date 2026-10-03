@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e8fa0a3493dec60462a36082c9755c1f38ace89640dea816b0833d48d5df686b
 
 #%%global git_commit e1045f2d1d6fbcdd29a62b3540b846fa6b2a9153
 #%%global git_date %%(date +'%Y%m%d')

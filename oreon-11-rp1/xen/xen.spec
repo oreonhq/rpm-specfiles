@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 697036dcf8b88c511c54e66922e0d45cdb18dcce288839b2b0d4e049d6a1a4b2
 
 # Build ocaml bits unless rpmbuild was run with --without ocaml 
 # or ocamlopt is missing (the xen makefile doesn't build ocaml bits if it isn't there)
@@ -53,7 +53,7 @@
 Summary: Xen is a virtual machine monitor
 Name:    xen
 Version: 4.21.1
-Release: 7%{?dist}
+Release: %autorelease
 # Automatically converted from old format: GPLv2+ and LGPLv2+ and BSD - review is highly recommended.
 License: GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-BSD
 URL:     http://xen.org/
@@ -288,7 +288,6 @@ This package contains files used in testing the xen builds
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q
 %patch 1 -p1
 %patch 2 -p1
@@ -887,4 +886,3 @@ fi
 
 %changelog
 %autochangelog
-

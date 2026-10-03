@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 912afa237510ae542a7733998eb18a12bcda35ab6729c8e2ddb43e8d0ebab007
 
 %global source2_key_fpr 9147A339719518EE9011BCB54793916113084025
 

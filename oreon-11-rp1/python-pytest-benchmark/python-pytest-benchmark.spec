@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 358444d4e89be901ee2b6404fb043ac3d7684002ad7f3563cc153fca6339c965
 
 Name:           python-pytest-benchmark
 Version:        5.3.0

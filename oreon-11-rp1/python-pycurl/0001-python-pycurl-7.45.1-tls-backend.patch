@@ -8,14 +8,12 @@ This effectively reverts the following commit:
 
 Bug: https://bugzilla.redhat.com/1446850
 ---
- src/module.c | 69 ----------------------------------------------------
- 1 file changed, 69 deletions(-)
+ src/module.c | 76 ----------------------------------------------------
+ 1 file changed, 76 deletions(-)
 
-diff --git a/src/module.c b/src/module.c
-index a81391f..b87d1d5 100644
---- a/src/module.c
-+++ b/src/module.c
-@@ -336,15 +336,6 @@ initpycurl(void)
+--- pycurl-7.46.0.orig/src/module.c	2026-05-11 07:05:26.719444000 +0000
++++ pycurl-7.46.0/src/module.c	2026-05-11 07:05:55.360444013 +0000
+@@ -396,15 +396,6 @@
      PyObject *collections_module = NULL;
      PyObject *named_tuple = NULL;
      PyObject *arglist = NULL;
@@ -31,7 +29,7 @@ index a81391f..b87d1d5 100644
  
      assert(Curl_Type.tp_weaklistoffset > 0);
      assert(CurlMulti_Type.tp_weaklistoffset > 0);
-@@ -362,69 +353,6 @@ initpycurl(void)
+@@ -422,73 +413,6 @@
          goto error;
      }
  
@@ -46,12 +44,16 @@ index a81391f..b87d1d5 100644
 -                switch (ssllist[i]->id) {
 -                case CURLSSLBACKEND_OPENSSL:
 -                case CURLSSLBACKEND_GNUTLS:
+-PYCURL_IGNORE_DEPRECATED_BEGIN
 -                case CURLSSLBACKEND_NSS:
+-PYCURL_IGNORE_DEPRECATED_END
 -                case CURLSSLBACKEND_WOLFSSL:
 -                case CURLSSLBACKEND_SCHANNEL:
 -                case CURLSSLBACKEND_MBEDTLS:
 -#if LIBCURL_VERSION_NUM >= MAKE_LIBCURL_VERSION(7, 64, 1)
+-PYCURL_IGNORE_DEPRECATED_BEGIN
 -                case CURLSSLBACKEND_SECURETRANSPORT:
+-PYCURL_IGNORE_DEPRECATED_END
 -#else
 -                case CURLSSLBACKEND_DARWINSSL:
 -#endif

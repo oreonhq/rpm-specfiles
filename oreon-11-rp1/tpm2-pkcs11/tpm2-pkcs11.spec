@@ -1,12 +1,12 @@
-%global source0_hash none
+%global source0_hash ce24aa5ec2471545576e892b6f64fd873a424371bbf9be4ca3a0e689ea11c9b7
 
 %global source2_key_fpr 5B482B8E3E19DA7C978E1D016DE2E9078E1F50C1
 
 #global candidate RC0
 
 Name:		tpm2-pkcs11
-Version:	1.10.1
-Release:	1%{?candidate:.%{candidate}}%{?dist}
+Version:	1.9.1
+Release:	7%{?candidate:.%{candidate}}%{?dist}
 Summary:	PKCS#11 interface for TPM 2.0 hardware
 
 License:	BSD-2-Clause

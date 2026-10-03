@@ -1,0 +1,10 @@
+[package]
+cargo-toml-patch-comments = [
+    "omit unpackaged dev-deps. on kuznyechik, magma, only for test:gost",
+]
+
+[scripts.prep]
+post = [
+    "# Unpackaged dev-dependencies for gost tests: kuznyechik, magma",
+    "sed --regexp-extended --in-place 's@^mod gost;$@// &@' tests/mod.rs",
+]

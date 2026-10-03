@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e7bdbfdb5497da4c07dfd35530e1a902659db6ff241e39d9953cad06ebd0ae75
 
 Name:           python-rsa
 Version:        4.9.1

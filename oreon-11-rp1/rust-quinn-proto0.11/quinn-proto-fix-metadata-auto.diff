@@ -1,0 +1,27 @@
+--- quinn-proto-0.11.19/Cargo.toml	2006-07-24T01:21:28+00:00
++++ quinn-proto-0.11.19/Cargo.toml	2026-10-03T03:34:34.963072+00:00
+@@ -173,23 +173,8 @@
+ [dev-dependencies.wasm-bindgen-test]
+ version = "0.3.45"
+ 
+-[target.'cfg(all(target_family = "wasm", target_os = "unknown"))'.dependencies.getrandom]
+-version = "0.4"
+-features = ["wasm_js"]
+-default-features = false
+-
+-[target.'cfg(all(target_family = "wasm", target_os = "unknown"))'.dependencies.ring]
+-version = "0.17"
+-features = ["wasm32_unknown_unknown_js"]
+-
+-[target.'cfg(all(target_family = "wasm", target_os = "unknown"))'.dependencies.rustls-pki-types]
+-version = "1.7"
+-features = ["web"]
+-
+-[target.'cfg(all(target_family = "wasm", target_os = "unknown"))'.dependencies.web-time]
+-version = "1"
+-
+ [lints.rust.unexpected_cfgs]
+ level = "warn"
+ priority = 0
+ check-cfg = ["cfg(fuzzing)"]
++

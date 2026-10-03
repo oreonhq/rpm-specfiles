@@ -1,21 +1,19 @@
-%global source0_hash none
+%global source0_hash 41f20e6d6176b72590af63552b232d83f2fffdd77ecfaa5eaf32c5a4a86fad64
 
 %global libadwaita_version 1.6~beta
 %global gtk4_version 4.15.2
 
-%global tarball_version %(echo %{version} | tr '~' '.')
-
 Name:		gnome-bluetooth
 Epoch:		1
 Version:	47.2
-Release:	1%{?dist}
+Release:	%autorelease
 Summary:	Bluetooth graphical utilities
 
 License:	GPL-2.0-or-later
 URL:		https://wiki.gnome.org/Projects/GnomeBluetooth
-Source0: https://download.gnome.org/sources/gnome-bluetooth/47/gnome-bluetooth-%{tarball_version}.tar.xz
-# https://gitlab.gnome.org/GNOME/gnome-bluetooth/-/merge_requests/223
-Patch0:         0001-tests-Fix-meson-setup-with-pygobject.patch
+Source0:	https://download.gnome.org/sources/%{name}/%{gnome_major_version}/%{name}-%{gnome_tarball_version}.tar.xz
+
+%gnome_check_version
 
 %if 0%{?rhel}
 ExcludeArch:	s390 s390x
@@ -69,7 +67,7 @@ for writing applications that require a Bluetooth device selection widget.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{tarball_version}
+%autosetup -p1 -n %{name}-%{gnome_tarball_version}
 
 %build
 %meson -Dgtk_doc=true
@@ -106,5 +104,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/gtk-doc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 47.1-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

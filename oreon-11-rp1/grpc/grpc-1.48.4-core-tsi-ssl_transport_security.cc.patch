@@ -1,9 +1,11 @@
---- grpc-1.48.4/src/core/tsi/ssl_transport_security.cc.orig	2024-09-19 10:02:30.511044976 -0400
-+++ grpc-1.48.4/src/core/tsi/ssl_transport_security.cc	2024-09-19 10:03:28.363061372 -0400
-@@ -37,7 +37,9 @@
- 
+diff --git a/src/core/tsi/ssl_transport_security.cc b/src/core/tsi/ssl_transport_security.cc
+index 6c1f20e..86e9e8b 100644
+--- a/src/core/tsi/ssl_transport_security.cc
++++ b/src/core/tsi/ssl_transport_security.cc
+@@ -49,7 +49,9 @@
+ #include <grpc/support/thd_id.h>
  #include <openssl/bio.h>
- #include <openssl/crypto.h> /* For OPENSSL_free */
+ #include <openssl/crypto.h>  // For OPENSSL_free
 +#if !defined(OPENSSL_NO_ENGINE)
  #include <openssl/engine.h>
 +#endif

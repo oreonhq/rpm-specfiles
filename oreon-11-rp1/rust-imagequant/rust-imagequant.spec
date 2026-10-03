@@ -74,30 +74,6 @@ use the "large_palettes" feature of the "%{crate}" crate.
 %files       -n %{name}+large_palettes-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+rayon-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+rayon-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "rayon" feature of the "%{crate}" crate.
-
-%files       -n %{name}+rayon-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+thread_local-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+thread_local-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "thread_local" feature of the "%{crate}" crate.
-
-%files       -n %{name}+thread_local-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+threads-devel
 Summary:        %{summary}
 BuildArch:      noarch

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 499608bab3a65650a0ea52888c13a8deebe3f71408e319acd9ec52e02eb13959
 
 # Build with Emacs support
 %bcond_without libidn_enables_emacs
@@ -11,10 +11,10 @@
 Summary: Internationalized Domain Name support library
 Name: libidn
 Version: 1.44
-Release: 1%{?dist}
+Release: %autorelease
 URL: http://www.gnu.org/software/libidn/
 License: (LGPL-3.0-or-later OR GPL-2.0-or-later) AND GPL-3.0-or-later AND GFDL-1.3-or-later
-Source0:        https://mirrors.kernel.org/gnu/libidn/libidn-%{version}.tar.gz
+Source0: https://ftp.gnu.org/gnu/libidn/libidn-%{version}.tar.gz
 # Allow disabling Emacs support
 Patch0: libidn-emacsopt.patch
 
@@ -36,7 +36,7 @@ Provides: bundled(gnulib)
 # emacs-libidn merged with main package in 1.30-4
 Obsoletes: emacs-libidn < 1.30-4
 Provides: emacs-libidn < 1.30-4
-Requires: emacs-filesystem
+Requires: emacs-filesystem >= %{_emacs_version}
 %endif
 %if %{without libidn_enables_java}
 # Remove old java packages on arches removed from %%java_arches
@@ -199,5 +199,4 @@ rm -rf $RPM_BUILD_ROOT%{_javadir}/libidn*.jar
 %endif
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.43-4
-- Import
+%autochangelog

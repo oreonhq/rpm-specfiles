@@ -1,4 +1,4 @@
-%global source0_hash d9271bce09c127d9866e25c011582ddc75ab988958a04bc4d8553a3b8f30e370
+%global source0_hash 40090101a2a491f13e901d3d48e90414f26634628b9bfff35ff540363c227a7d
 
 Name:           dash
 Version:        0.5.13.5

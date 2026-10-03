@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 48a0ef30a42db65d8f3399045e1d09ab0ba66e3b9efc360d07f80ea55d286025
 
 Name:           python-httplib2
 Version:        0.32.0
@@ -20,7 +20,7 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'httplib2' generated automatically by pyp2spec.}
 
-Patch1:         python-%{srcname}.certfile.patch
+Patch1:         python-httplib2.certfile.patch
 
 %description %_description
 

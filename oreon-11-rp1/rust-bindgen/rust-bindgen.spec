@@ -84,18 +84,6 @@ use the "__testing_only_libclang_16" feature of the "%{crate}" crate.
 %files       -n %{name}+__testing_only_libclang_16-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+__testing_only_libclang_9-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+__testing_only_libclang_9-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "__testing_only_libclang_9" feature of the "%{crate}" crate.
-
-%files       -n %{name}+__testing_only_libclang_9-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+experimental-devel
 Summary:        %{summary}
 BuildArch:      noarch

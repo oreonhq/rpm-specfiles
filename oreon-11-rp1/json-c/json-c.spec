@@ -1,4 +1,4 @@
-%global source0_hash 3112c1f25d39eca661fe3fc663431e130cc6e2f900c081738317fba49d29e298
+%global source0_hash f17a6d7d265cf840dfd8f0f46a606d98c6b5b26dc7cfe27275d1546a213086c8
 
 %{!?_pkgdocdir:%global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
@@ -23,7 +23,7 @@
 %global so_ver 5
 
 # Releases are tagged with a date stamp.
-%global reldate 20240915
+%global reldate 20260627
 
 %bcond_without mingw
 
@@ -35,11 +35,10 @@ Summary:        JSON implementation in C
 
 License:        MIT
 URL:            https://github.com/%{name}/%{name}
-Source0:        https://github.com/json-c/json-c/archive/refs/tags/json-c-0.18-20240915.tar.gz#/json-c-0.18-20240915.tar.gz
+Source0:        https://github.com/json-c/json-c/archive/refs/tags/json-c-%{version}-%{reldate}.tar.gz#/json-c-%{version}-%{reldate}.tar.gz
 
 # Add libver to mingw dll
 Patch0:         json-c_mingw-libver.patch
-Patch1:         json-c-0.18-utf8-validation.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc

@@ -1,4 +1,4 @@
-%global source0_hash 5ed6bcd4ae3f3c05c912e62f216cd1a44123846147f729a49fb5668da51e030e
+%global source0_hash a96975b79ddd8fef6d9295c083fe3f1afa1a8898a57235d4069255ade44e5cf2
 
 %global girname LangTag
 %global girapiversion 0.6
@@ -12,7 +12,8 @@ Summary: An interface library to access tags for identifying languages
 
 License: LGPL-3.0-or-later OR MPL-2.0
 URL: https://bitbucket.org/tagoh/liblangtag/
-Source0:        https://bitbucket.org/tagoh/%{name}/downloads/%{name}-%{version}.tar.bz2
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/liblangtag/liblangtag-0.6.8.tar.bz2/sha512/3072527ff6b2030d632d406ff6af854bf136112619d463c189f08a7f56bd68ffceb47fdce54ccee54a0199a017c800e68a78f8d90cc110aa6a81f9ad0a2fa69d/liblangtag-0.6.8.tar.bz2
 Patch0: liblangtag-noparallel-gir.patch
 
 Requires: %{name}-data = %{version}-%{release}

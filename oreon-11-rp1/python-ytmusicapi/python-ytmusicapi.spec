@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash be81511af7494eec8e5970c56a10e51aada6253246649e4ea6714fd6aeb654ee
 
 Name:           python-ytmusicapi
 Version:        1.12.3

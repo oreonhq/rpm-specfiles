@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 813094498c17522ac42821a5ea1ea783d8326c0adf286cce86a949038bd09198
 
 # Without this the build time baloons from 1 hour to more than 46 on i686
 # https://bugzilla.redhat.com/show_bug.cgi?id=2390105
@@ -391,11 +391,14 @@ MinGW Windows Python3 GDAL bindings.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%{SOURCE5} %{version} "%{?pre}" %{_sourcedir}
+# run the cleaner inside the build dir (never write into %%{_sourcedir})
 cd %{builddir}
-tar -xf %{_sourcedir}/%{name}-%{version}%{?pre:%pre}-fedora.tar.xz
+rm -rf %{name}-%{version}%{?pre:%pre} %{name}-%{version}%{?pre:%pre}-fedora %{name}-%{version}%{?pre:%pre}-fedora.tar.xz
+cp -p %{SOURCE0} .
+%{SOURCE5} %{version} "%{?pre}" %{builddir}
+tar -xf %{name}-%{version}%{?pre:%pre}-fedora.tar.xz
+rm -f %{name}-%{version}%{?pre:%pre}-fedora.tar.xz %{name}-%{version}%{?pre:%pre}.tar.xz
 cd %{name}-%{version}%{?pre:%pre}-fedora
-%autopatch -p1
 
 # Delete bundled libraries
 # rm -rf frmts/zlib

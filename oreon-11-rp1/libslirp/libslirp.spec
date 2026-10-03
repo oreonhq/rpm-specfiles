@@ -1,14 +1,15 @@
-%global source0_hash 4811586e2963442d4a3b3517d9fd14a8247bd878b1dc54e63b49afc472377f43
+%global source0_hash bc37833d51ea2418ba32d4c8c019a7bf009c8cbcbe1007571d69936bdcde232c
 
 Name:           libslirp
-Version:        4.9.4
+Version:        4.9.5
 Release:        1%{?dist}
 Summary:        A general purpose TCP-IP emulator
 
 # check the SPDX tags in source files for details
 License:        BSD-3-Clause AND MIT
 URL:            https://gitlab.freedesktop.org/slirp/%{name}
-Source0:        https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v4.9.1/libslirp-4.9.1.tar.xz
+# %{url}/-/archive/v%{version}/%{name}-%{version}.tar.xz is behind an anti-bot challenge page; same tarball from the Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/libslirp/%{name}-%{version}.tar.xz/sha512/daede9dfe0c5f4e14258f66e46eef3475a79da61e88e5e19bf1a283002dfbc6a0ea72961e6aee1b6fa1ab39ea435a48d6c371f195138573e40854415b45941c9/%{name}-%{version}.tar.xz
 
 BuildRequires:  git-core
 BuildRequires:  meson

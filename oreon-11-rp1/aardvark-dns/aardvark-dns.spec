@@ -1,4 +1,4 @@
-%global source0_hash 42556bf547c435a8f0ccb586b4f5000da3106a58c26f82e22d9db81ee5bd7eb2
+%global source0_hash daf871488603e659b0501224cf0731ac317809b1d1701fc061cb4f6ae39a894f
 %global source1_hash dcfad0419e30124fcb33aa9583c27cd12f2e11b2c67f118fcc54b68d1bed4dde
 
 # trust-dns-{client,server} not available
@@ -37,7 +37,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Authoritative DNS server for A/AAAA container records
 URL: https://github.com/containers/%{name}
 # Tarballs fetched from upstream's release page
-Source0:        https://github.com/containers/aardvark-dns/archive/refs/tags/v1.17.0.tar.gz#/aardvark-dns-1.17.0.tar.gz
+Source0:        https://github.com/containers/aardvark-dns/archive/refs/tags/v2.1.0.tar.gz#/aardvark-dns-2.1.0.tar.gz
 
 Source1:        https://github.com/containers/aardvark-dns/releases/download/v1.17.0/aardvark-dns-v1.17.0-vendor.tar.gz
 BuildRequires: cargo

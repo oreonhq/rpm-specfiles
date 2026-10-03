@@ -1,23 +1,28 @@
-%global source0_hash 8d5e983c36037003615e5a02d36b18fc286541bf52de1a78f6cf9f32005a820e
+%global source0_hash 42ffedcd8c9b6363694300c6ffec1ada77f9620176465719acb27b13a4d6f2de
+
+%global so_version 1
 
 Name:       onnx
-Version:    1.22.0
-Release:    1%{?dist}
+Version:    1.21.0
+Release:    %autorelease
 Summary:    Open standard for machine learning interoperability
 License:    Apache-2.0
 
 URL:        https://github.com/onnx/onnx
 Source0:    https://github.com/onnx/onnx/archive/v%{version}/%{name}-%{version}.tar.gz
 # Build shared libraries and fix install location 
-Patch:     0000-Build-shared-libraries-and-fix-install-location.patch
-# Use system protobuf and require parameterized
-Patch:     0001-Use-system-protobuf-and-require-parameterized.patch
+Patch:     0001-Build-shared-libraries.patch
+Patch:     0002-Fix-install-location.patch
+# Latest nanobind uses different argument format
+Patch:     0003-Fix-nanobind-arguments.patch
 # Let pyproject_wheel use binaries from cmake_build
-Patch:     0002-Let-pyproject_wheel-use-binaries-from-cmake_build.patch
+Patch:     0004-Let-pyproject_wheel-use-binaries-from-cmake_build.patch
+# Fixes protobuf conflicts when using both python-onnx and python-onnxruntime
+Patch:     0005-Python-binary-should-link-to-system-onnx.patch
+# Remove obsoleted testing dependency
+Patch:     0006-Remove-python-parameterized-dependency.patch
 # Add fixes for use with onnxruntime
-Patch:     0003-Add-fixes-for-use-with-onnxruntime.patch
-# Add fixes for use with onnxruntime
-Patch:     0004-Remove-python-parameterized-dependency.patch
+Patch:     0007-Add-fixes-for-use-with-onnxruntime.patch
 
 %if %{undefined fc40} && %{undefined fc41}
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
@@ -34,7 +39,10 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-pip
 BuildRequires:  python3-pybind11
 BuildRequires:  python3-pytest
+BuildRequires:  python3-nanobind
+BuildRequires:  python3-ml-dtypes 
 BuildRequires:  protobuf-devel
+BuildRequires:  protobuf-static
 
 %global _description %{expand:
 %{name} provides an open source format for AI models, both deep learning and
@@ -50,7 +58,7 @@ Summary:    Libraries for %{name}
 
 %package devel
 Summary:    Development files for %{name}
-Requires:   %{name}-libs = %{version}-%{release} 
+Requires:   %{name}-libs = %{version}-%{release}
 
 %description devel %_description
 
@@ -62,32 +70,23 @@ Requires:   %{name}-libs = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1 -n onnx-%{version}
-
-# Use system protobuf
-sed -r -i 's/protobuf>=3.20.2/protobuf>=3.14.0/' pyproject.toml
-
-# Drop nbval options from pytest. Plugin is not available in Fedora.
-sed -r \
-    -e 's/--nbval //' \
-    -e 's/--nbval-current-env //' \
-    -i pyproject.toml
 
 %generate_buildrequires
 %pyproject_buildrequires requirements-reference.txt
 
 %build
+export VPATH_BUILDDIR=%{_vpath_builddir}
 %cmake \
     -DONNX_USE_LITE_PROTO=OFF \
-    -DONNX_USE_PROTOBUF_SHARED_LIBS=ON \
-    -DBUILD_ONNX_PYTHON=ON \
-    -DPYTHON_EXECUTABLE=%{python3} \
+    -DONNX_USE_PROTOBUF_SHARED_LIBS=OFF \
+    -DONNX_BUILD_PYTHON=ON \
+    -DPython_EXECUTABLE=python3.14 \
     -DPY_EXT_SUFFIX=%{python3_ext_suffix} \
     -DPY_SITEARCH=%{python3_sitearch} \
-    -DCMAKE_SKIP_RPATH:BOOL=ON
-# Generate protobuf header and source files
-%cmake_build -- gen_onnx_proto
+    -DCMAKE_SKIP_RPATH:BOOL=ON \
+    -DONNX_DISABLE_STATIC_REGISTRATION=OFF
+
 # Build 
 %cmake_build
 # Build python libs
@@ -119,8 +118,8 @@ export PYTEST_ADDOPTS="-k 'not test_make_tensor_raw'"
 %files libs
 %license LICENSE
 %doc README.md
-%{_libdir}/libonnx.so.%{version}
-%{_libdir}/libonnx_proto.so.%{version}
+%{_libdir}/libonnx.so.%{so_version}{,.*}
+%{_libdir}/libonnx_proto.so.%{so_version}{,.*}
 
 %files devel
 %{_libdir}/libonnx.so

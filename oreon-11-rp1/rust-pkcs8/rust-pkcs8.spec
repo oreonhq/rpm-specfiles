@@ -136,18 +136,6 @@ use the "pkcs5" feature of the "%{crate}" crate.
 %files       -n %{name}+pkcs5-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+rand_core-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+rand_core-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "rand_core" feature of the "%{crate}" crate.
-
-%files       -n %{name}+rand_core-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+sha1-insecure-devel
 Summary:        %{summary}
 BuildArch:      noarch

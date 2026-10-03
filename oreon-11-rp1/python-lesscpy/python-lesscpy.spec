@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4f6b7f34c22c5ce137e7ee280dcb1984ade0d500b6dab591d4a4d84252d18de9
 
 Name:           python-lesscpy
 Version:        0.15.2

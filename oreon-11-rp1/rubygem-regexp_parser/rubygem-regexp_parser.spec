@@ -1,11 +1,11 @@
-%global source0_hash b8949b9ec53bb24bafdb262c6863174cdb72ee5a69e3508cfeb3da8414591ceb
+%global source0_hash ca13f381a173b7a93450e53459075c9b76a10433caadcb2f1180f2c741fc55a4
 
 # Generated from regexp_parser-1.7.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name regexp_parser
 
 Name: rubygem-%{gem_name}
 Version: 2.11.3
-Release: 2%{?dist}
+Release: %autorelease
 Summary: Scanner, lexer, parser for ruby's regular expressions
 License: MIT
 URL: https://github.com/ammar/regexp_parser
@@ -23,6 +23,7 @@ BuildArch: noarch
 %description
 A library for tokenizing, lexing, and parsing Ruby regular expressions.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -33,7 +34,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build
@@ -44,6 +44,8 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
+
 
 %check
 ( cd .%{gem_instdir}

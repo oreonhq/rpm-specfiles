@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 73d419c6e20e874adaa4019372cbd097eecf4d276e13f27ec5e67d35c0bd203c
 
 %global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
@@ -13,7 +13,7 @@ License: LicenseRef-Fedora-Public-Domain
 # https://github.com/SELinuxProject/selinux/wiki/Releases
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libselinux-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libselinux-%{version}.tar.gz.asc
-Source2:        https://github.com/perfinion.gpg
+Source2:        bachradsusi.gpg
 Source3: selinuxconlist.8
 Source4: selinuxdefcon.8
 
@@ -24,10 +24,13 @@ Url: https://github.com/SELinuxProject/selinux/wiki
 # $ i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
 Patch0001: 0001-Use-SHA-2-instead-of-SHA-1.patch
+Patch0002: 0002-libselinux-Replace-PyString_FromString-with-PyUnicod.patch
+Patch0003: 0003-libselinux-restorecon_xattr-reset-dir_xattr_list-on-.patch
+Patch0004: 0004-Add-support-for-UTF-8-in-file-context-specifications.patch
 # Patch list end
 BuildRequires: gcc make
 BuildRequires: ruby-devel ruby libsepol-static >= %{libsepolver} swig pcre2-devel
-BuildRequires: python3 python3-devel python3-setuptools python3-pip
+BuildRequires: python3 python3-devel python3-setuptools python3-pip python3-build
 BuildRequires: (python3-wheel if python3-setuptools < 71)
 BuildRequires: systemd
 BuildRequires: gnupg2
@@ -226,5 +229,4 @@ rm -f %{buildroot}%{_mandir}/man8/togglesebool*
 %{ruby_vendorarchdir}/selinux.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b426a7a6d6d53189d318f2b6236ab5d6429eaf09259f1ca33eb716eed10d2905
 
 Name:           python-lark
 Version:        1.3.1
@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'lark' generated automatically by pyp2spec.}
 
-Patch:          https://github.com/lark-parser/lark/pull/1483.patch
 
 %description %_description
 

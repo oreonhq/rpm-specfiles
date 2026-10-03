@@ -1,4 +1,4 @@
-%global source0_hash 5094d1f0fcc1828cb1696d0d39d9e866ae32520c54d01f618f1a3c1e30c2085c
+%global source0_hash d00fc1599c303dc5cbc122b8068bdc7405d6fcb19060f4597fc51bd3a8be51d7
 
 %global tarball libXinerama
 #global gitdate 20130524
@@ -12,11 +12,11 @@ License: MIT AND MIT-open-group AND X11
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXinerama-1.1.5.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXinerama-1.1.6.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXinerama-1.1.5.tar.xz
+Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXinerama-1.1.6.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

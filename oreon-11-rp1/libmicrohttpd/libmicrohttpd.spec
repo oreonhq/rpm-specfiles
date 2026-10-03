@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 04bfe8ef75db7d629a33de767599765cecadc56274a39822d5d081030d577685
 
 Name:           libmicrohttpd
 Version:        1.0.10

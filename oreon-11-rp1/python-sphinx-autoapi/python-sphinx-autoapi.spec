@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 04643fc50485039294ace8b660d0d1b821a1686824a975725a5106e8cf1fb30b
 
 Name:           python-sphinx-autoapi
 Version:        3.8.1

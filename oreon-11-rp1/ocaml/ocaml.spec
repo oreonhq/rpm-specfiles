@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ae47728d0a876665ccc7b745e3a8d8c9ca5ba63c4f7a11d4db6cdbd1dbeef4bb
 
 # Don't add -Wl,-dT,<build dir>
 %undefine _package_note_flags
@@ -84,7 +84,6 @@ Patch:          0002-configure-Allow-user-defined-C-compiler-flags.patch
 # https://github.com/ocaml/ocaml/issues/14574
 # https://github.com/ocaml/ocaml/pull/14589
 # Upstream 6cda6d8a928ada5dd0f58de229d3cb193cfdff53
-Patch:          0003-Merge-pull-request-14589-from-xavierleroy-arm64-addi.patch
 
 BuildRequires:  make
 BuildRequires:  git-core

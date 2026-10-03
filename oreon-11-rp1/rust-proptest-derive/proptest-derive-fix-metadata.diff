@@ -1,16 +1,16 @@
---- proptest-derive-0.6.0/Cargo.toml	1970-01-01T00:00:01+00:00
-+++ proptest-derive-0.6.0/Cargo.toml	2025-09-25T10:53:15.794138+00:00
-@@ -49,10 +49,6 @@
- [[test]]
- name = "assoc"
+--- proptest-derive-0.8.0/Cargo.toml
++++ proptest-derive-0.8.0/Cargo.toml
+@@ -51,10 +51,6 @@
  path = "tests/assoc.rs"
--
--[[test]]
--name = "compiletest"
--path = "tests/compiletest.rs"
  
  [[test]]
+-name = "compiletest"
+-path = "tests/compiletest.rs"
+-
+-[[test]]
  name = "enum"
+ path = "tests/enum.rs"
+ 
 @@ -118,11 +114,6 @@
  name = "weight"
  path = "tests/weight.rs"
@@ -35,7 +35,7 @@
 -]
 -
 -[dev-dependencies.criterion]
--version = "0.5"
+-version = "0.8"
 -
  [dev-dependencies.proptest]
- version = "1.0.0"
+ version = "1.10.0"

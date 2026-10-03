@@ -9,34 +9,26 @@ Version: 1.49
 Release: 1%{?dist}
 License: GPL-2.0-or-later AND BSD-2-Clause
 URL:     https://sg.danny.cz/sg/sg3_utils.html
-Source0:        https://sg.danny.cz/sg/p/sg3_utils-%{version}.tar.xz
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/sg3_utils/sg3_utils-1.49.tar.xz/sha512/00c76d367e076feff460b619d05a043ab6404642043c000f7a5f93ba503e0bbcc53ebe408d405d252b155197bf456fcc3a8eb8519153825a9c616b2ed8ba9b10/sg3_utils-1.49.tar.xz
 Source1: scsi-rescan.8
 # https://github.com/doug-gilbert/sg3_utils/pull/43
 # scripts/rescan-scsi-bus.sh: fix multipath resize without update
-Patch0: 0001-rescan-scsi-bus.sh-fix-multipath-resize-without-upda.patch
 # https://github.com/doug-gilbert/sg3_utils/pull/44
 # scripts/rescan-scsi-bus.sh: remove /tmp/rescan-scsi-mpath-info.txt
-Patch1: 0002-rescan-scsi-bus.sh-remove-tmp-rescan-scsi-mpath-info.patch
 # https://github.com/doug-gilbert/sg3_utils/issues/46
 # scripts/rescan-scsi-bus.sh: -r flag unmounts active root disk
-Patch2: 0003-rescan-scsi-bus.sh-fix-for-github.com-doug-gilbert-s.patch
 # https://github.com/doug-gilbert/sg3_utils/pull/47
-Patch3: udev_rules-avoid_spurious_warning_for_non-SCSI_devices.patch
 # https://github.com/doug-gilbert/sg3_utils/pull/68
 # rescan-scsi-bus.sh Correctly read RMB bit on enquiry
-Patch4: 0004-rescan-scsi-bus.sh-Correctly-read-RMB-bit-on-enquiry.patch
 # https://github.com/doug-gilbert/sg3_utils/pull/68
 # rescan-scsi-bus.sh Replace 'which' with build in 'command -v'
-Patch5: 0005-rescan-scsi-bus.sh-Replace-which-with-build-in-comma.patch
 # https://github.com/doug-gilbert/sg3_utils/pull/69
 # Update sg_safte.c to update short option of version
-Patch6: 0006-Update-sg_safte.c-to-update-short-option-of-version.patch
 # https://github.com/doug-gilbert/sg3_utils/pull/56
 # Update sg_rdac.c to accept --help or -h without error
-Patch7: 0007-Update-sg_rdac.c-to-accept--help-or--h-without-erro.patch
 # https://github.com/doug-gilbert/sg3_utils/pull/49
 # sg_inq: fix missing output fields in --export format
-Patch8: 0008-sg_inq-fix-missing-output-fields-in--export-format.patch
 # https://github.com/doug-gilbert/sg3_utils/pull/49
 # sg_inq: re-add Unit serial number field
 #Patch9: 0009-sg_inq-re-add-Unit-serial-number-field.patch

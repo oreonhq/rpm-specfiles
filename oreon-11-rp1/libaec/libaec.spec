@@ -1,4 +1,4 @@
-%global source0_hash e50f323418eb451587891102b6014730e1aa936e763c47f2ae166a4745d1bed2
+%global source0_hash 26661a569a7def45a2e97fbbd09e0dc5bbb2f8ab1b41250c19e795559eec6fb2
 
 Name:           libaec
 Version:        1.1.7
@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Adaptive Entropy Coding library
 License:        LicenseRef-Callaway-BSD
 Url:            https://gitlab.dkrz.de/k202009/libaec
-Source0:        https://gitlab.dkrz.de/k202009/libaec/-/archive/v%{version}/libaec-v%{version}.tar.gz
+Source0:        https://github.com/MathisRosenhauer/libaec/archive/v%{version}/libaec-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  cmake >= 3.1
@@ -42,7 +42,7 @@ Static variant of libaec (Adaptive Entropy Coding library).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-v%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 %build
 %{cmake} -DBUILD_TESTING=ON -DBUILD_STATIC_LIBS=ON
@@ -70,5 +70,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/cmake/%{name}/*_static*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.6-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

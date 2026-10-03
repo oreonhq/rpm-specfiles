@@ -4,7 +4,7 @@
 %bcond_without jp_minimal
 
 Name:           log4j
-Version:        2.26.1
+Version:        2.20.0
 Release:        %autorelease
 Summary:        Java logging package
 BuildArch:      noarch

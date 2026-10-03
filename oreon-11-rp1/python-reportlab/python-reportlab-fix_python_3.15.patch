@@ -1,15 +1,8 @@
---- a/src/reportlab/lib/utils.orig.py	2025-12-25 09:47:51.097384010 +0100
-+++ a/src/reportlab/lib/utils.py	2025-12-25 09:51:30.360382737 +0100
-@@ -581,7 +581,7 @@
-         path = os.path.join(dir,name+ext)
-         if os.path.isfile(path):
-             spec = importlib_util.spec_from_file_location(name,path)
--            return spec.loader.load_module()
-+            return spec.loader.exec_module()
-     raise ImportError('no suitable file found')
- 
- def rl_get_module(name,dir):
-@@ -600,7 +600,7 @@
+diff --git a/src/reportlab/lib/utils.py b/src/reportlab/lib/utils.py
+index 29ca08a..1024634 100644
+--- a/src/reportlab/lib/utils.py
++++ b/src/reportlab/lib/utils.py
+@@ -604,7 +604,7 @@ def rl_get_module(name,dir):
                  dir = _startswith_rl(dir)
                  dir = (dir=='.' or not dir) and _archive or os.path.join(_archive,dir.replace('/',os.sep))
                  zi = zipimport.zipimporter(dir)

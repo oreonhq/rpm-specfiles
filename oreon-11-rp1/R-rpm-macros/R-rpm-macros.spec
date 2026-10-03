@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2a0a297d7295a9eebe2d94c4daa3639328ea51dc984525d35e2404ef98a2e439
 
 Name:           R-rpm-macros
 Version:        1.3.7

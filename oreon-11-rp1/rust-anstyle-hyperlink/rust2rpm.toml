@@ -1,0 +1,7 @@
+# The file src/hostname.rs contains code for determining the system hostname on
+# Unix-like systems that was copied from ripgrep (the grep-cli crate).
+# It appears that the intention in anstyle-hyperlink is to use this code under
+# the "Unlicense" license option, in which case, no attribution is required.
+# No "bundled(...)" Provides are added for the grep-cli crate since only ~40 LOC
+# out of the ~1000 LOC of the original grep-cli crate are included here. 
+

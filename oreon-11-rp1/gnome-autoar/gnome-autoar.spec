@@ -1,4 +1,4 @@
-%global source0_hash 838c5306fc38bfaa2f23abe24262f4bf15771e3303fb5dcb74f5b9c7a615dabe
+%global source0_hash 6c20bd16c87aba15869e56444424481f632ac302989a203e8ce4dcc73dea33a5
 
 Name:           gnome-autoar
 Version:        0.5.2
@@ -7,7 +7,7 @@ Summary:        Archive library
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-autoar
-Source0:        https://download.gnome.org/sources/%{name}/0.4/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1-2)/%{name}-%{version}.tar.xz
 
 
 BuildRequires:  gcc

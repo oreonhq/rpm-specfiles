@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash defda19b854fa0d3bd4f76ea4ddcba8abd7dcfcdd585a6690ade050744fc5f43
 
 Name:           python-pyproject-hooks
 Version:        1.3.3
@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'pyproject-hooks' generated automatically by pyp2spec.}
 
-Patch:          f230da76.patch
 
 %description %_description
 

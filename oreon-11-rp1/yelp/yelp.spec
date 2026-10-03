@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5afc8e77308451ee45ee919efee5a154ca3c153a90e2a1b58cebf7827ab88ad0
 
 %global libhandy_version 1.5.0
 

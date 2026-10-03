@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4dd4703d71737a456c1c9df5cd43a82934e5b10c87549caa02495f487d1ef0b1
 
 Name:           python-gevent
 Version:        26.9.0

@@ -61,30 +61,6 @@ use the "_tls-any" feature of the "%{crate}" crate.
 %files       -n %{name}+_tls-any-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+async-trait-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+async-trait-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "async-trait" feature of the "%{crate}" crate.
-
-%files       -n %{name}+async-trait-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+axum-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+axum-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "axum" feature of the "%{crate}" crate.
-
-%files       -n %{name}+axum-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+channel-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -121,18 +97,6 @@ use the "deflate" feature of the "%{crate}" crate.
 %files       -n %{name}+deflate-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+flate2-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+flate2-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "flate2" feature of the "%{crate}" crate.
-
-%files       -n %{name}+flate2-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+gzip-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -143,54 +107,6 @@ This package contains library source intended for building other packages which
 use the "gzip" feature of the "%{crate}" crate.
 
 %files       -n %{name}+gzip-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+h2-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+h2-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "h2" feature of the "%{crate}" crate.
-
-%files       -n %{name}+h2-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+hyper-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+hyper-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "hyper" feature of the "%{crate}" crate.
-
-%files       -n %{name}+hyper-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+hyper-timeout-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+hyper-timeout-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "hyper-timeout" feature of the "%{crate}" crate.
-
-%files       -n %{name}+hyper-timeout-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+hyper-util-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+hyper-util-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "hyper-util" feature of the "%{crate}" crate.
-
-%files       -n %{name}+hyper-util-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+router-devel
@@ -205,18 +121,6 @@ use the "router" feature of the "%{crate}" crate.
 %files       -n %{name}+router-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+rustls-native-certs-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+rustls-native-certs-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "rustls-native-certs" feature of the "%{crate}" crate.
-
-%files       -n %{name}+rustls-native-certs-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+server-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -227,18 +131,6 @@ This package contains library source intended for building other packages which
 use the "server" feature of the "%{crate}" crate.
 
 %files       -n %{name}+server-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+socket2-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+socket2-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "socket2" feature of the "%{crate}" crate.
-
-%files       -n %{name}+socket2-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+tls-aws-lc-devel
@@ -301,42 +193,6 @@ use the "tls-webpki-roots" feature of the "%{crate}" crate.
 %files       -n %{name}+tls-webpki-roots-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+tokio-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+tokio-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "tokio" feature of the "%{crate}" crate.
-
-%files       -n %{name}+tokio-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+tokio-rustls-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+tokio-rustls-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "tokio-rustls" feature of the "%{crate}" crate.
-
-%files       -n %{name}+tokio-rustls-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+tower-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+tower-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "tower" feature of the "%{crate}" crate.
-
-%files       -n %{name}+tower-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+transport-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -347,18 +203,6 @@ This package contains library source intended for building other packages which
 use the "transport" feature of the "%{crate}" crate.
 
 %files       -n %{name}+transport-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+webpki-roots-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+webpki-roots-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "webpki-roots" feature of the "%{crate}" crate.
-
-%files       -n %{name}+webpki-roots-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+zstd-devel

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 07f6f7342b7febe4313fc2c2542ad93d64fe20ad8717200109f105a826f5fd37
 
 #
 # Important notes regarding the package:
@@ -113,8 +113,6 @@ BuildRequires: make
 #Parts of the patch dealing with .info files, were removed, some parts of documentation might be broken
 
 #Patch008: gawk-api-version.patch
-Patch001: gawk-5.4.0-pma_performance.patch
-Patch002: gawk-5.4.0-back_references.patch
 
 
 # Downstream patches -- these should be always included when doing rebase:

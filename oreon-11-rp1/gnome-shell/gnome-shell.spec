@@ -16,13 +16,12 @@ Summary:        Window management and application launching for GNOME
 
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Projects/GnomeShell
-Source0:        https://download.gnome.org/sources/gnome-shell/%{major_version}/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/gnome-shell/%(echo %{version} | cut -d. -f1)/%{name}-%{tarball_version}.tar.xz
 # Replace Epiphany with Firefox in the default favourite apps list
 Patch: gnome-shell-favourite-apps-firefox.patch
 
 # Some users might have a broken PAM config, so we really need this
 # downstream patch to stop trying on configuration errors.
-Patch: 0001-gdm-Work-around-failing-fingerprint-auth.patch
 
 
 %define eds_version 3.45.1

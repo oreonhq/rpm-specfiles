@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2552a706695f4274022e5b4d9ee4338df78af0cd7ee535cb5bb38a6b33848745
 
 Name:           sanlock
 Version:        5.1.1

@@ -1,4 +1,4 @@
-%global source0_hash 6dd1b97fd9273d268b70c1be3c2592cbbe1488bca5e45c12c58f8c74362758d5
+%global source0_hash 61635e45abcf1c78e28fbe3534a4224a2251c39295bb70bb211f699ef5f6eb27
 
 Name:     signify
 Version:  33
@@ -14,8 +14,9 @@ Summary:  Sign and verify signatures on files
 #                                  and mod_{ed,ge}25519.c
 License:  ISC AND Beerware AND BSD-3-Clause AND MIT AND LicenseRef-Fedora-Public-Domain
 URL:      https://github.com/aperezdc/%{name}
-Source0:  %url/releases/download/v%{version}/%{name}-%{version}.tar.xz
-Source1:  %url/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source0:  https://src.fedoraproject.org/repo/pkgs/signify/signify-33.tar.xz/sha512/e58cc314c19553cd8d02a64c50ece38f3159bba7fb4e58c2d736593a475995a6e5f1c7da45a649e17e88b76246cb307377689caa16b5b186b674be3e57d04a76/signify-33.tar.xz
+Source1:  https://src.fedoraproject.org/repo/pkgs/signify/signify-33.tar.xz.asc/sha512/cbd39d36335917f6c450a60fd55952125ef32fb1a8ea7f66f2067c36a1f33a51f6a349ac4829c036f433feacca1b39f6aef7b1258d2f6d9fb7dcd2182dd0a17b/signify-33.tar.xz.asc
 Source2:  https://keys.openpgp.org/vks/v1/by-fingerprint/5AA3BC334FD7E3369E7C77B291C559DBE4C9123B
 
 BuildRequires:  gcc

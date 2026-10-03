@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 39d64ce1d7cc6964b698297bdf391bc12c3251b7f608e6e55d857cd7c5f800c6
 
 Name:           python-smartypants
 Version:        2.0.2
@@ -19,7 +19,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'smartypants' generated automatically by pyp2spec.}
 
-Patch:          0001-Fix-regexps-and-tests-for-python3.12.patch
 
 %description %_description
 

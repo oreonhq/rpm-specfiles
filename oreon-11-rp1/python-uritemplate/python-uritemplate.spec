@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 480c2ed180878955863323eea31b0ede668795de182617fef9c6ca09e6ec9d0e
 
 Name:           python-uritemplate
 Version:        4.2.0

@@ -5,7 +5,7 @@
 
 Name:           python-%{pypi_name}
 Version:        2.3.0
-Release:        10%{?dist}
+Release:        %autorelease
 Summary:        TPM 2.0 TSS Bindings for Python
 
 License:        BSD-2-Clause

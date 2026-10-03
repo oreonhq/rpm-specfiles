@@ -4,7 +4,7 @@
 
 Name: nmap
 Epoch: 4
-Version: 7.991
+Version: 7.92
 #global prerelease TEST5
 Release: %autorelease
 Summary: Network exploration tool and security scanner

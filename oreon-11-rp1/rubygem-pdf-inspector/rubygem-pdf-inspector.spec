@@ -1,11 +1,11 @@
-%global source0_hash 9577affdf227d7b410f126f1f5a651086e34f749e3fc2fe6129d61a5b63b32ca
+%global source0_hash fc107579d6f29b636e2da3d6743479b2624d9e390bf2d84beef8fd4ebe1a05bd
 
 # Generated from pdf-inspector-1.0.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name pdf-inspector
 
 Name: rubygem-%{gem_name}
 Version: 1.3.0
-Release: 18%{?dist}
+Release: %autorelease
 Summary: A tool for analyzing PDF output
 # Automatically converted from old format: GPLv2 or GPLv3 or Ruby - review is highly recommended.
 License: GPL-2.0-only OR GPL-3.0-only OR Ruby
@@ -40,7 +40,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -c -T -b 1
 %gem_install -n %{SOURCE0}
 
@@ -50,6 +49,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
+
 
 %check
 pushd .%{gem_instdir}

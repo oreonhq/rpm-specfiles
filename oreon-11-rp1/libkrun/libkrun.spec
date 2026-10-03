@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 832e76e93f1ea7a41e5c763a9710acf42d3d54f628015c1255f115a4b7ef2a06
 
 # libkrun tests require access to "/dev/kvm", which is usually not be available
 # on build sandboxes.
@@ -15,7 +15,7 @@
 %endif
 
 Name:           libkrun
-Version:        1.19.4
+Version:        1.19.0
 Release:        1%{?dist}
 Summary:        Dynamic library providing Virtualization-based process isolation capabilities
 

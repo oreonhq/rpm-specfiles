@@ -1,0 +1,12 @@
+--- quinn-0.11.12/Cargo.toml	2006-07-24T01:21:28+00:00
++++ quinn-0.11.12/Cargo.toml	2026-10-03T03:15:54.865175+00:00
+@@ -253,8 +253,6 @@
+ [build-dependencies.cfg_aliases]
+ version = "0.2"
+ 
+-[target.'cfg(all(target_family = "wasm", target_os = "unknown"))'.dependencies.web-time]
+-version = "1"
+-
+ [target.'cfg(not(all(target_family = "wasm", target_os = "unknown")))'.dependencies.socket2]
+ version = ">=0.5, <0.7"
++

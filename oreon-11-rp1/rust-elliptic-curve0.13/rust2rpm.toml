@@ -1,0 +1,8 @@
+[package]
+summary = "General purpose Elliptic Curve Cryptography"
+cargo-toml-patch-comments = [
+    """\
+    Allow hex-literal 1.0: \
+    https://github.com/RustCrypto/traits/commit/6bbf1a4a67a52c5863e3101b232e7f3f33bb47a5\
+    """,
+]

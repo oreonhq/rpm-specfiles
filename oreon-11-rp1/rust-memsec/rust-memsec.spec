@@ -112,6 +112,8 @@ use the "use_os" feature of the "%{crate}" crate.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{version} -p1
+# windows-sys is stripped from the metadata, drop it from the use_os feature too
+sed -i '/^use_os = \[/,/^\]/{/"windows-sys",/d}' Cargo.toml
 %cargo_prep
 
 %generate_buildrequires

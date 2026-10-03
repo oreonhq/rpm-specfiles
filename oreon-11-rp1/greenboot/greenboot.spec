@@ -80,7 +80,7 @@ install -DpZm 0644 usr/lib/tmpfiles.d/greenboot-status-motd.conf %{buildroot}%{_
 install -DpZm 0755 usr/lib/greenboot/check/required.d/* %{buildroot}%{_prefix}/lib/%{name}/check/required.d
 install -DpZm 0755 usr/lib/greenboot/check/wanted.d/* %{buildroot}%{_prefix}/lib/%{name}/check/wanted.d
 install -DpZm 0644 etc/greenboot/greenboot.conf %{buildroot}%{_sysconfdir}/%{name}/greenboot.conf
-install -DpZm 0644 etc/grub.d/greenboot.cfg %{buildroot}%{_sysconfdir}/grub.d/greenboot.cfg
+install -DpZm 0644 grub2/08_greenboot.cfg %{buildroot}%{_sysconfdir}/grub.d/greenboot.cfg
 
 %post
 %systemd_post greenboot-healthcheck.service

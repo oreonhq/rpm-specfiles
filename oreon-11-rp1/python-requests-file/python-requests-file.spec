@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f14243d7796c588f3521bd423c5dea2ee4cc730e54a3cac9574d78aca1272576
 
 Name:           python-requests-file
 Version:        3.0.1

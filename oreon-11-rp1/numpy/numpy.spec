@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash df2d5874ff183595a4ba404edd04f6bd9b5505c1d7708573f6a6c17489a67563
 
 #uncomment next line for a release candidate or a beta
 #%%global relc rc1

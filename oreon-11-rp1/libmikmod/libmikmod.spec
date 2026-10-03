@@ -1,4 +1,4 @@
-%global source0_hash 9fc1799f7ea6a95c7c5882de98be85fc7d20ba0a4a6fcacae11c8c6b382bb207
+%global source0_hash dffd82b8f254c3489c32098da831f33eac7136843d1e7ccb802f1254ad5b4219
 
 Summary:        A MOD music file player library
 Name:           libmikmod

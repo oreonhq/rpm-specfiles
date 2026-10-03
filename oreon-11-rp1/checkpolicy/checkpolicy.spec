@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9b81bfceef7fa9d02f9872e56a786f343dc58ef4b5713dce0d5c416e5b84cefa
 
 %global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
@@ -12,7 +12,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/checkpolicy-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/checkpolicy-%{version}.tar.gz.asc
-Source2:        https://github.com/perfinion.gpg
+Source2:        bachradsusi.gpg
 # $ git clone https://github.com/fedora-selinux/selinux.git
 # $ cd selinux
 # $ git format-patch -N 3.11 -- checkpolicy

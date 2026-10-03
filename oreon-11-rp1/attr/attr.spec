@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 6c8a2148a7b85043b68492bce43316b0e2e214fc4e628c7ede078e76e216330b
 
-%global source2_key_fpr B902B5271325F892AC251AD441633B9FE837F581
+%global source2_key_fpr 259B3792B3D6D319212CC4DCD5BF9FEB0313653A
 
 Summary: Utilities for managing filesystem extended attributes
 Name: attr
@@ -11,7 +11,7 @@ Source1:        https://download.savannah.nongnu.org/releases/attr/attr-%{versio
 # Retreived from https://savannah.nongnu.org/people/viewgpg.php?user_id=15000
 # Source2: agruen-key.gpg
 # Retrieved from https://savannah.nongnu.org/people/viewgpg.php?user_id=42032
-Source2: vapier-key.gpg
+Source2: agruen-key.gpg
 
 # xattr.conf: remove entries for NFSv4 ACLs namespaces (#1031423)
 # https://lists.nongnu.org/archive/html/acl-devel/2019-03/msg00000.html

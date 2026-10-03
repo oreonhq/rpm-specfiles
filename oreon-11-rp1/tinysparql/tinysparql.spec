@@ -19,7 +19,7 @@ Summary:        Desktop-neutral metadata database and search tool
 
 License:        GPL-2.0-or-later
 URL:            https://gnome.pages.gitlab.gnome.org/tinysparql/
-Source0: https://download.gnome.org/sources/tinysparql/3.10/tinysparql-%{tarball_version}.tar.xz
+Source0: https://download.gnome.org/sources/tinysparql/%(echo %{version} | cut -d. -f1-2)/tinysparql-%{tarball_version}.tar.xz
 BuildRequires:  asciidoc
 BuildRequires:  gcc
 BuildRequires:  gettext

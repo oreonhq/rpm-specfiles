@@ -1,11 +1,11 @@
-%global source0_hash dddcb536f0088bf47b6cdb475a64ec5105b0f4df060eeac8f4d737dac8980066
+%global source0_hash 813b3e37aca6df2a21a3b9f1d497f8cbab24a2b94cab325bffe65ee0f6cbebc6
 
 # Generated from concurrent-ruby-1.0.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name concurrent-ruby
 
 Name: rubygem-%{gem_name}
 Version: 1.3.5
-Release: 3%{?dist}
+Release: %autorelease
 Summary: Modern concurrency tools for Ruby
 License: MIT
 URL: http://www.concurrent-ruby.com
@@ -27,6 +27,7 @@ actors, supervisors, and more.
 Inspired by Erlang, Clojure, Go, JavaScript, actors, and classic concurrency
 patterns.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -37,7 +38,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 # Remove bundled .jar
@@ -55,6 +55,7 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
 
 %check
 ( cd .%{gem_instdir}

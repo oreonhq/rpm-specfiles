@@ -1,4 +1,4 @@
-%global source0_hash 4f7c4885225d71b21f6b547b94d92fc6da4a4fef9d382fdd19c8ea67f67be839
+%global source0_hash 6cbcb7959a5d90b59253ea6d8bdf0285e2cfbc3b301398704b41e3069293f4fb
 
 %global with_debug 1
 
@@ -42,7 +42,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Go replacement for libslirp and VPNKit
 URL: https://github.com/containers/%{name}
 # All SourceN files fetched from upstream
-Source0:        https://github.com/containers/gvisor-tap-vsock/archive/refs/tags/v0.8.8.tar.gz#/gvisor-tap-vsock-0.8.8.tar.gz
+Source0:        https://github.com/containers/gvisor-tap-vsock/archive/refs/tags/v0.8.9.tar.gz#/gvisor-tap-vsock-0.8.9.tar.gz
 BuildRequires: gcc
 BuildRequires: glib2-devel
 BuildRequires: glibc-devel

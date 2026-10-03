@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 882b97aa3ae5db682c3b2dc8edef4e29bcc7ecea51c70592e71bc1f34112ad00
 
 #global __cmake_in_source_build 1
 

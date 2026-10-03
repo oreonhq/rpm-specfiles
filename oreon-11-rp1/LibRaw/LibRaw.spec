@@ -1,4 +1,4 @@
-%global source0_hash a789dc4e2409e2901d93793a4e0b80c7b49d0d97cf6ad71c850eb7616acfd786
+%global source0_hash de86b035655accff8d4010f1a221fdf50d353cb7b1422ba26f14a0db92612cfa
 
 %global somajor 25
 
@@ -8,7 +8,7 @@ Version: 0.22.2
 Release: 1%{?dist}
 License: BSD-3-Clause and (CDDL-1.0 or LGPL-2.1-only)
 URL: https://www.libraw.org
-Source0:        https://www.libraw.org/data/LibRaw-0.22.1.tar.gz
+Source0:        https://www.libraw.org/data/LibRaw-0.22.2.tar.gz
 Patch0: LibRaw-pkgconfig.patch
 
 BuildRequires: gcc-c++

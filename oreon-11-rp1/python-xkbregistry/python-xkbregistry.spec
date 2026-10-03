@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3a116c73ea381d12d08bdc39a6204cbde86e138a2b2b614c54259f0e20e8043f
 
 Name:           python-xkbregistry
 Version:        1.5

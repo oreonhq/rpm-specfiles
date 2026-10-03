@@ -1,4 +1,4 @@
-%global source0_hash 416727ae1f1080ea6e3090cea36dd076826fc369151e36ab736557ba92196f9f
+%global source0_hash e89f24994f403cea90068d03f3c1ee49957303c7a092cc5b2ed2c603df9649a7
 
 %bcond abrt %{undefined rhel}
 
@@ -9,7 +9,7 @@ Summary:     The mdadm program controls Linux md devices (software RAID arrays)
 URL:         http://www.kernel.org/pub/linux/utils/raid/mdadm/
 License:     GPL-2.0-or-later
 
-Source:        https://www.kernel.org/pub/linux/utils/raid/mdadm/%{name}-%{version}.tar.xz
+Source:        https://git.kernel.org/pub/scm/utils/mdadm/mdadm.git/snapshot/%{name}-%{version}.tar.gz
 Source1:     raid-check
 Source2:     mdadm-raid-check-sysconfig
 Source3:     mdmonitor.service
@@ -18,8 +18,6 @@ Source5:     mdadm_event.conf
 Source6:     raid-check.timer
 Source7:     raid-check.service
 Source8:     mdcheck
-Source10:        https://www.kernel.org/pub/linux/utils/raid/mdadm/%{name}-%{version}.tar.sign
-Source11:    https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/6F9E3E9D4EDEBB11.asc
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=2325906
 # see: https://github.com/md-raid-utilities/mdadm/pull/165
@@ -27,8 +25,6 @@ Source11:    https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/6
 # https://github.com/md-raid-utilities/mdadm/pull/159
 # this is a reversion of the initial 'posix check' patch
 # that causes all the trouble
-Patch:       0001-Revert-mdadm-Follow-POSIX-Portable-Character-Set.patch
-Patch:       0002-dont-stop-in-assemble.patch
 
 # Fedora customization patches
 Patch:       mdadm-udev.patch
@@ -39,7 +35,6 @@ BuildRequires:    systemd-rpm-macros
 BuildRequires:    binutils-devel
 BuildRequires:    gcc
 BuildRequires:    systemd-devel
-BuildRequires:    gnupg2
 BuildRequires:    mandoc
 %if %{with abrt}
 Requires:         libreport-filesystem
@@ -58,10 +53,6 @@ file can be used to help with some common tasks.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-# because the tarball is what is signed, not the compressed tarball
-# keyring should be one from https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys
-# which will vary depending on who did the release
-%{_bindir}/xz -dcT0 %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE11}' --signature='%{SOURCE10}' --data=-
 %autosetup -p1
 
 

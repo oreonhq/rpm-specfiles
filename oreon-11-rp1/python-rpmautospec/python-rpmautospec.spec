@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e1f33e9f8810b3b2977f4495f1236509ad5d456711d351ac844915389c64b25e
 
 Name:           python-rpmautospec
 Version:        0.8.5

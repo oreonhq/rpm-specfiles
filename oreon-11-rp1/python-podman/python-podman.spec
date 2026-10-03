@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bc39b77f4a6a0598bbe860d199e0d54ef2ec551131ae7eab66f0557c43331fb3
 
 Name:           python-podman
 Version:        5.8.0

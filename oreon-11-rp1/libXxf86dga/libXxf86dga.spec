@@ -1,4 +1,4 @@
-%global source0_hash be44427579808fe3a217d59f51cae756a26913eb6e4c8738ccab65ff56d7980f
+%global source0_hash b3be5b444d324cb6e0f4b5019a4972c99ea336ccb8ab7968eccefecd917ffde6
 
 %global tarball libXxf86dga
 #global gitdate 20130524
@@ -12,11 +12,11 @@ License: MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/releases/individual/lib/libXxf86dga-1.1.6.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXxf86dga-1.1.7.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://www.x.org/releases/individual/lib/libXxf86dga-1.1.6.tar.xz
+Source0:        https://www.x.org/releases/individual/lib/libXxf86dga-1.1.7.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

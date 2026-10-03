@@ -1,4 +1,4 @@
-%global source0_hash 214c9d0d884fdd7375ec8da8dcb91a8d3169f263294c9a90c575bf1938b9f489
+%global source0_hash 3c55aa86c82e54a4e3109786f0463530d53b36b6d1cfd14616454f985dd2aa43
 
 Name:           libpciaccess
 Version:        0.19
@@ -11,7 +11,7 @@ URL:            https://www.x.org/
 # git snapshot.  To recreate, run
 # % ./make-libpciaccess-snapshot.sh %%{gitrev}
 #Source0:        libpciaccess-%%{gitdate}.tar.bz2
-Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.bz2
+Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.xz
 Source1:        make-libpciaccess-snapshot.sh
 
 Patch2:		libpciaccess-rom-size.patch

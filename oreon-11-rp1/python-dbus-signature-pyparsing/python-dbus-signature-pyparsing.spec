@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash cb9db46f199f204a78f9aa689837a9d3a4a10e621a800b6c457023a16dadbdf3
 
 Name:           python-dbus-signature-pyparsing
 Version:        0.4.3

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 60501dfdc8c0de385898dbd1eb8239d93ef962667ddb064ad796b887a41a1a46
 
 # git ls-remote https://github.com/roc-streaming/roc-toolkit.git
 #global git_commit 127cfc645d0a807a33506001367b6d9a9d46f23e

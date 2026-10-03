@@ -1,5 +1,5 @@
-%global source0_hash none
-%global source1_hash none
+%global source0_hash 086ad3d3d17533f4237643de0b5c42f04b66348c28bf6b9c2d3f4a3b01af1d47
+%global source1_hash 63ce11364a719db02df4295112948b4698c31c4af7a1e046d188ae3d7b89ade0
 
 %global	majorver	3.13.8
 #%%global	preminorver	.rc6

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a3fc6ebf73e7a26482a5c0f86e4011e4c1f1d8f5bd16ca9ae7c732a8e6965490
 
 # remirepo/fedora spec file for mongo-c-driver
 #

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b85697d713dfd1fcc1b0df3fee14289e345fbe0df576f695f8cf3ae1bfef2254
 
 # To both save infrastructure resources and workaround for i686 FTBFS
 ExcludeArch: %{ix86}
@@ -17,9 +17,6 @@ URL:            https://mariadb.com/docs/galera-cluster
 # Furthermore there is a lag (can be days, weeks) between when a new tag is done on GitHub and when MariaDB upstream releases the new version on their web with the new MariaDB server release.
 Source0:        https://archive.mariadb.org/mariadb-11.8/%{name}-%{version}/src/%{name}-%{version}.tar.gz
 
-Patch0:         cmake_paths.patch
-Patch1:         docs.patch
-Patch2:         network.patch
 
 BuildRequires:  boost-devel check-devel openssl-devel cmake systemd gcc-c++ asio-devel
 Requires:       nmap-ncat
@@ -38,9 +35,6 @@ description of Galera replication engine see https://www.galeracluster.com web.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch -P0 -p1
-%patch -P1 -p1
-%patch -P2 -p1
 
 # Create a sysusers.d config file
 cat >galera.sysusers.conf <<EOF

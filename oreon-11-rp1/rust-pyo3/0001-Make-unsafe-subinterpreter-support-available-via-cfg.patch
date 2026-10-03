@@ -1,0 +1,25 @@
+From 31baa20d3cdd1cabcbb42011369a36c7d99645b6 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Sat, 18 Apr 2026 15:04:32 +0200
+Subject: [PATCH] Make unsafe subinterpreter support available via cfg flag
+
+---
+ src/impl_/pymodule.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/impl_/pymodule.rs b/src/impl_/pymodule.rs
+index 66749e2..dac4e5b 100644
+--- a/src/impl_/pymodule.rs
++++ b/src/impl_/pymodule.rs
+@@ -117,7 +117,7 @@ impl ModuleDef {
+         //
+         // TODO: it should be possible to use the Py_mod_multiple_interpreters slot on sufficiently
+         // new Python versions to remove the need for this custom logic
+-        #[cfg(not(any(PyPy, GraalPy)))]
++        #[cfg(not(any(PyPy, GraalPy, pyo3_unsafe_allow_subinterpreters)))]
+         {
+             // PyInterpreterState_Get is only available on 3.9 and later, but is missing
+             // from python3.dll for Windows stable API on 3.9
+-- 
+2.53.0
+

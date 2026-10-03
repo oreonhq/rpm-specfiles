@@ -1,0 +1,10 @@
+[package]
+summary = "Pure Rust bigint implementation for use in cryptographic applications"
+cargo-toml-patch-comments = [
+    "drop optional rlp dependency (not packaged yet)",
+    "drop unused, benchmark-only criterion dev-dependency",
+    """\
+    Allow hex-literal 1.0: \
+    https://github.com/RustCrypto/crypto-bigint/commit/bd1728e313c8c1f29c0d392a349eae8f74ed4f1d\
+    """,
+]

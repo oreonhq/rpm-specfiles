@@ -1,4 +1,4 @@
-%global source0_hash f26d2cd2471dba491d3c41804cd612a10c23a7b1b1c278a2008addc489603eab
+%global source0_hash 16058bd4d31271e351719073c6758906538ec74ac6b25f8fe65d08182469a3bb
 
 Summary: Dictionary of English words for the /usr/share/dict directory
 Name: words
@@ -11,7 +11,7 @@ License: LicenseRef-Fedora-Public-Domain
 # Note that Moby Project officially does not exist any more. The most complete
 # information about the project is in Wikipedia.
 URL: https://en.wikipedia.org/wiki/Moby_Project
-Source: mwords.tar.Z
+Source: https://web.archive.org/web/20060527013227/http://www.dcs.shef.ac.uk/research/ilash/Moby/mwords.tar.Z
 
 BuildArch: noarch
 BuildRequires: dos2unix
@@ -78,5 +78,4 @@ ln -sf linux.words $RPM_BUILD_ROOT%{_datadir}/dict/words
 %{_datadir}/dict/words
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

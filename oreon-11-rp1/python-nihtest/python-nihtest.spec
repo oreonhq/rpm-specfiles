@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9307197235c107f24a569a2847ee02ebd771a395d8d081dac9aab0f7b9139a75
 
 Name:           python-nihtest
 Version:        1.11.1

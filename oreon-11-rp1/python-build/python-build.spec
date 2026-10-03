@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 51cc11666391ab6f092070437ac747002ff46f3e4113a3622177ee6b488bfc53
 
 Name:           python-build
 Version:        1.6.1

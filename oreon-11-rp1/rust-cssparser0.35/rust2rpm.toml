@@ -1,0 +1,7 @@
+[features]
+hide = ["malloc_size_of", "skip_long_tests"]
+
+[tests]
+run = ["doc"]
+comments = ["https://github.com/servo/rust-cssparser/issues/213"]
+

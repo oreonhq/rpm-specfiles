@@ -1,11 +1,11 @@
-%global source0_hash 18fd90b6eb76ed3fed1a415136ee969d3457a64a1ba06b134297ec91ddd7f0f8
+%global source0_hash 1fd04138b6e4a90017e8d1b804c039031399866ff3fbabb7822aea367c78615d
 
 # Generated from multi_json-1.0.3.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name multi_json
 
 Name: rubygem-%{gem_name}
 Version: 1.15.0
-Release: 13%{?dist}
+Release: %autorelease
 Summary: A common interface to multiple JSON libraries
 License: MIT
 URL: https://github.com/intridea/multi_json

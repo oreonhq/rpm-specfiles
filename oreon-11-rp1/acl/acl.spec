@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 73c853c3d44e1f693e5a96a986f1bd19d3d0dac2c7d453e796177774bc4e5f6a
 
-%global source2_key_fpr B902B5271325F892AC251AD441633B9FE837F581
+%global source2_key_fpr 259B3792B3D6D319212CC4DCD5BF9FEB0313653A
 
 Summary: Access control list utilities
 Name: acl
@@ -20,10 +20,8 @@ Source1:        https://download-mirror.savannah.gnu.org/releases/acl/acl-%{vers
 # Retreived from https://savannah.nongnu.org/people/viewgpg.php?user_id=15000
 # Source2: agruen-key.gpg
 # Retrieved from https://savannah.nongnu.org/people/viewgpg.php?user_id=42032
-Source2: vapier-key.gpg
+Source2: agruen-key.gpg
 
-# avoid permission denied problem with LD_PRELOAD in the test-suite
-Patch1: 0001-acl-2.2.53-test-runwrapper.patch
 
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://savannah.nongnu.org/projects/acl

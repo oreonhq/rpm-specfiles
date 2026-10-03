@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 565f9ad031c702dae404e27a099e3e09186a3ab1b9520f06d215502b651fd910
 
 Name:           python-webencodings
 Version:        0.6.1

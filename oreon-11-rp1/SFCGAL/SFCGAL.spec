@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6f57a0b5fd879bec5a570ffa13cbd64f34957c479992cf3e6bda35e5e5d988cd
 
 Summary: C++ wrapper library around CGAL for PostGIS
 Name: SFCGAL

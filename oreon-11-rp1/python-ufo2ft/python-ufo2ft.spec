@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2fea363d651a78fc00c7ef2f94ae5fb0c843bf53cc76c480f7b5227c7fbe3e2d
 
 Name:           python-ufo2ft
 Version:        3.9.0

@@ -1,4 +1,4 @@
-%global source0_hash 6bb421d0bb81594acb5dd902101a0609022d576fe373d956724fa60120bfd03d
+%global source0_hash 368fbfd4d3bc140078fdc46c68f75b6d1a4cc421f58447b401af45a7d41f4e58
 
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
@@ -19,7 +19,7 @@ Summary:        Unicode library for OCaml
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception AND ICU AND Unicode-3.0
 URL:            https://github.com/ocaml-community/Camomile
 VCS:            git:%{url}.git
-Source0:        https://github.com/ocaml-community/Camomile/archive/refs/tags/v2.0.0.tar.gz#/Camomile-2.0.0.tar.gz
+Source0:        https://github.com/ocaml-community/Camomile/archive/refs/tags/v2.1.0.tar.gz#/Camomile-2.1.0.tar.gz
 
 # Fix a licensing issue in EO Unicode files.  Submitted but not
 # accepted upstream: https://github.com/yoriyuki/Camomile/pull/84

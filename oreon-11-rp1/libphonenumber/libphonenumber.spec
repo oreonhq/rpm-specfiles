@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e30c2aea5b66f53821d1eb971f81b9be1350e4b04a4577c8283803a1c8c5210b
 
 Name: libphonenumber
 Version: 9.0.39

@@ -1,0 +1,21 @@
+--- ndarray-0.16.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ ndarray-0.16.1/Cargo.toml	2026-10-03T02:28:32.954055+00:00
+@@ -340,7 +340,7 @@
+     "rayon",
+ ]
+ matrixmultiply-threading = ["matrixmultiply/threading"]
+-portable-atomic-critical-section = ["portable-atomic/critical-section"]
++portable-atomic-critical-section = []
+ rayon = [
+     "dep:rayon",
+     "std",
+@@ -353,9 +353,3 @@
+ ]
+ test = []
+ 
+-[target.'cfg(not(target_has_atomic = "ptr"))'.dependencies.portable-atomic]
+-version = "1.6.0"
+-
+-[target.'cfg(not(target_has_atomic = "ptr"))'.dependencies.portable-atomic-util]
+-version = "0.2.0"
+-features = ["alloc"]

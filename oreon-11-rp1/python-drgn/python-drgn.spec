@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6940ccd06f435b44a0d27864359eda9c8c3e4c5ceaf8f43cf994280796f3296c
 
 Name:           python-drgn
 Version:        0.2.0

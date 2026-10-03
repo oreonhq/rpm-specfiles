@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3f33b22135219c39c3c695f7b7171c2567d3e2a17c798c0a90607320cbb268f2
 
 Name: ed
 Version: 1.22.6

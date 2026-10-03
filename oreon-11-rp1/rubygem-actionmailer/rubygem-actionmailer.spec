@@ -1,4 +1,4 @@
-%global source0_hash 300e8343f408547d6b17ac0b94653ca4b7c2ad3625335ddadf24e4fb3d07355e
+%global source0_hash 6dc0c3701065a96f845a05a28e9d7a60055222cfc324cc6c3a281cec148cc723
 
 # Generated from actionmailer-1.3.6.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name actionmailer
@@ -6,7 +6,7 @@
 Name: rubygem-%{gem_name}
 Epoch: 1
 Version: 8.0.3
-Release: 2%{?dist}
+Release: %autorelease
 Summary: Email composition and delivery framework (part of Rails)
 License: MIT
 URL: https://rubyonrails.org

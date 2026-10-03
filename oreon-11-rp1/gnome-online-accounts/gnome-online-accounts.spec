@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9ec1900cc51409c2067c07c828c10be06fe3bf68d2999bb72d7d5ed325ed9bbc
 
 %global gettext_version 0.22
 %global glib2_version 2.78.3

@@ -1,4 +1,4 @@
-%global source0_hash 739202ab2ff3c80787ed01525178d1fffd15be1f2a02d65b7ac9145b03c7ebcc
+%global source0_hash e0c1e9eef91ff6df04d73fa5eaff13f3a02b679fee1474e5ccae007224df6df6
 
 %bcond_without bootstrap
 
@@ -11,7 +11,7 @@ URL:            https://jflex.de/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://jflex.de/release/jflex-1.7.0.tar.gz
+Source0:        https://jflex.de/release/jflex-1.9.1.tar.gz
 Source4:        %{name}.1
 
 %if %{with bootstrap}
@@ -50,7 +50,7 @@ rm -rf src/main/java/java_cup examples
 %pom_remove_plugin :jflex-maven-plugin
 %pom_remove_plugin :cup-maven-plugin
 %pom_remove_plugin :maven-shade-plugin
-%pom_remove_dep :cup_runtime
+%pom_remove_dep :java-cup-runtime
 
 # Tests fail with 320k stacks (default on i686), so lets increase
 # stack to 16M to avoid stack overflows.  See rhbz#1119308
@@ -61,10 +61,7 @@ rm -rf src/main/java/java_cup examples
 %pom_xpath_remove "pom:plugin[pom:artifactId='cup-maven-plugin']" parent.xml
 %pom_xpath_remove "pom:plugin[pom:artifactId='maven-shade-plugin']" parent.xml
 
-%pom_xpath_remove "pom:dependency[pom:artifactId='plexus-compiler-javac-errorprone']" parent.xml
-%pom_xpath_remove "pom:dependency[pom:artifactId='error_prone_core']" parent.xml
-%pom_xpath_remove "pom:compilerId" parent.xml
-%pom_xpath_remove "pom:compilerArgs" parent.xml
+%pom_xpath_remove "pom:profile[pom:id='error-prone']" parent.xml
 
 sed -i /%%inputstreamctor/d src/main/jflex/LexScan.flex
 

@@ -1,8 +1,6 @@
-%global source0_hash none
-
 Name:		libnfs
 Version:	7.0.2
-Release:	1%{?dist}
+Release:	%autorelease
 Summary:	Client library for accessing NFS shares over a network
 # The library is licensed as LGPL-2.1-or-later
 # The protocol definition is BSD-2-Clause
@@ -10,11 +8,6 @@ Summary:	Client library for accessing NFS shares over a network
 License:	LGPL-2.1-or-later AND BSD-2-Clause AND GPL-3.0-or-later
 URL:		https://github.com/sahlberg/libnfs
 Source0:	%{url}/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
-
-# https://github.com/sahlberg/libnfs/pull/518
-Patch0:         libnfs-6.0.2-fix_gnutls_undefined_symbols.patch
-# https://github.com/sahlberg/libnfs/commit/2cdfedaba379cbb512d3c203a1b9eae795f4fb23
-Patch1:         libnfs-6.0.2-fix_missing_include.patch
 
 BuildRequires:	automake
 BuildRequires:	gcc
@@ -56,11 +49,7 @@ NFS servers using libnfs.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{name}-%{name}-%{version}
-%patch -P0 -p1
-%patch -P1 -p1
 autoreconf -vif
 
 %build
@@ -79,7 +68,7 @@ rm -f %{buildroot}%{_libdir}/*.la
 %ldconfig_scriptlets
 
 %files
-%{_libdir}/libnfs.so.16*
+%{_libdir}/libnfs.so.17*
 %doc README
 %license COPYING
 %license LICENCE-*.txt
@@ -96,4 +85,3 @@ rm -f %{buildroot}%{_libdir}/*.la
 
 %changelog
 %autochangelog
-

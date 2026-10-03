@@ -2,11 +2,11 @@
 
 Name: pentaho-reporting-flow-engine
 Version: 0.9.4
-Release: 40%{?dist}
+Release: %autorelease
 Summary: Pentaho Flow Reporting Engine
 License: LGPL-2.1-or-later
 Epoch: 1
-Source:        https://downloads.sourceforge.net/jfreereport/flow-engine-%{version}.zip
+Source: http://downloads.sourceforge.net/jfreereport/flow-engine-%{version}.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase, libserializer
 BuildRequires: libloader, libfonts, pentaho-libxml, xml-commons-apis
@@ -60,5 +60,4 @@ cp -rp build/api $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 %{_javadocdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.4-40
-- Prepare for Oreon 11 (RP1)
+%autochangelog

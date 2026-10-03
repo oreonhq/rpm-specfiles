@@ -1,4 +1,4 @@
-%global source0_hash 0a545e953cc049bf5bcf4ee467306a2f113a75110edf59e61248873101cd26c1
+%global source0_hash 2b645287340ba5a631d268b551dc2d72bd73ac33335962dd36dcdb6d8366921d
 %global source1_hash 7727b0498851e5b6a6fcd734eb667a8a231897e2c86a357aec51cc0664813060
 
 %global sover 16
@@ -11,9 +11,9 @@ Release:        1%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
-Source0:        https://github.com/AOMediaCodec/libavif/archive/refs/tags/v1.3.0.tar.gz#/libavif-1.3.0.tar.gz
-# Vendored libargparse tarball so we never use FetchContent/git in mock (see ext/libargparse.patch)
-Source1:        https://github.com/kmurray/libargparse/archive/refs/tags/ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz#/libargparse-ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz
+Source0:        https://github.com/AOMediaCodec/libavif/archive/v%{version}/%{name}-%{version}.tar.gz
+# Vendored libargparse tarball (commit pinned in cmake/Modules/LocalLibargparse.cmake) so we never use FetchContent/git in mock
+Source1:        https://github.com/kmurray/libargparse/archive/ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz#/libargparse-ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -53,7 +53,6 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 mkdir -p ext
 tar -xzf %{SOURCE1} -C ext
 mv "ext/libargparse-%{libargparse_commit}" ext/libargparse
-patch -p1 --fuzz=0 -d ext/libargparse < ext/libargparse.patch
 
 
 %build

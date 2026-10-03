@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 62e12b63ead8335b37f59fabb977c7167fe476dafb5e41785dfa8c9aff843bc6
 
 Name:           python-flit-core
 Version:        4.1.0

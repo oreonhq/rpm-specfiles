@@ -23,11 +23,10 @@ Summary:        GNOME Tour and Greeter
 # Unlicense OR MIT
 License:        (Apache-2.0 OR MIT) AND CC-BY-SA-3.0 AND GPL-3.0-or-later AND MIT AND (MIT OR Apache-2.0) AND Unicode-DFS-2016 AND (Unlicense OR MIT)
 URL:            https://gitlab.gnome.org/GNOME/gnome-tour
-Source0:        https://download.gnome.org/sources/%{name}/48/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1)/%{name}-%{tarball_version}.tar.xz
 # https://pagure.io/fedora-workstation/issue/175
 Source1:        welcome-fedora.svg
 
-Patch1:         gnome-tour-adapt-to-libadwaita-api-changes.patch
 
 BuildRequires:  meson
 BuildRequires:  pkgconfig(glib-2.0)

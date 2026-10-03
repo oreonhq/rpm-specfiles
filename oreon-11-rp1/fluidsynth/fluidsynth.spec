@@ -1,13 +1,14 @@
-%global source0_hash none
+%global source0_hash 6d17570ea2086dd6fbcac995465773a6f316e689089b7fb7ba0b34c2ec6f680d
+%global source1_hash 8e71a9f5b62956da6c409dda44b483f98c4a98ae72184f3aa4659ae5b3462e61
 
 
 Summary:      Real-time software synthesizer
 Name:         fluidsynth
 Version:      2.6.0
-Release:      1%{?dist}
+Release:      %autorelease
 URL:          http://www.fluidsynth.org/
 Source0:      https://github.com/Fluidsynth/fluidsynth/archive/v%{version}/fluidsynth-%{version}.tar.gz
-Source1:      https://github.com/kthohr/gcem/archive/refs/tags/gcem-1.18.0.tar.gz
+Source1:      https://github.com/kthohr/gcem/archive/refs/tags/v1.18.0.tar.gz#/gcem-1.18.0.tar.gz
 License:      LGPL-2.1-or-later
 Requires:     fluidsynth-libs%{?_isa} = %{version}-%{release}
 Recommends:   fluid-soundfont-gm
@@ -73,7 +74,7 @@ for building programs that link against fluidsynth.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 %setup -q -a 1
 cp -r gcem-1.18.0/include gcem/
@@ -133,4 +134,3 @@ install -Dm 644 %{__cmake_builddir}/fluidsynth.service %{buildroot}%{_userunitdi
 
 %changelog
 %autochangelog
-

@@ -32,7 +32,7 @@ is like a J2EE application server, without all the baggage.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n plexus-i18n-1.0-beta-10
+%autosetup -n plexus-i18n-plexus-i18n-1.0-beta-10
 # plexus maven plugin is deprecated
 # switched it to plexus-component-metadata
 %pom_xpath_set 'pom:plugin[pom:artifactId = "plexus-maven-plugin"]/pom:artifactId' plexus-component-metadata

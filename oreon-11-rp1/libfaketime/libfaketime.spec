@@ -1,4 +1,4 @@
-%global source0_hash 4fc32218697c052adcdc5ee395581f2554ca56d086ac817ced2be0d6f1f8a9fa
+%global source0_hash 8e56deeb805682b025107e095f1d94a6ea677472f05824cd475f5c5e6e1a5ddf
 
 %define _lto_cflags %{nil}
 
@@ -21,15 +21,13 @@ Summary:    Manipulate system time per process for testing purposes
 License:    GPL-3.0-only AND GPL-2.0-only AND BSD-1-Clause
 SourceLicense:  %{license} AND GPL-2.0-or-later AND BSD-2-Clause
 URL:        https://github.com/wolfcw/libfaketime
-Source:        https://github.com/wolfcw/libfaketime/archive/refs/tags/v0.9.12.tar.gz#/libfaketime-0.9.12.tar.gz
+Source:        https://github.com/wolfcw/libfaketime/archive/refs/tags/v0.9.13.tar.gz#/libfaketime-0.9.13.tar.gz
 # In upstream after 0.9.13, <https://github.com/wolfcw/libfaketime/pull/525>
-Patch0:     libfaketime-0.9.12-isoc23.patch
 # Make the libraries executable, needed for stripping them. Not suitable for
 # upstream, e.g. Debian does not like it.
 Patch1:     libfaketime-0.9.12-Dynamic-libraries-are-expected-to-be-executable-on-F.patch
 # Adapt to GCC 16, in upstream after 0.9.13,
 # <https://github.com/wolfcw/libfaketime/pull/528>
-Patch2:     libfaketime-0.9.12-tests-Silence-an-unused-but-set-variable-warning-wit.patch
 BuildRequires:  coreutils
 BuildRequires:  gcc
 BuildRequires:  make

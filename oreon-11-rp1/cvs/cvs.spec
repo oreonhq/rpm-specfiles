@@ -1,4 +1,5 @@
-%global source0_hash none
+%global source0_hash 400f51b59d85116e79b844f2d5dbbad4759442a789b401a94aa5052c3d7a4aa9
+%global source1_hash be259fe1f56d721ebf2c9a0a774110cdd2503777c69169abaa1e4477542f7de1
 
 # Package auxiliary scripts which require ancient Perl 4 modules
 %bcond_without cvs_enables_contrib
@@ -16,7 +17,7 @@
 
 Name:       cvs
 Version:    1.11.23
-Release:    77%{?dist}
+Release:    %autorelease
 Summary:    Concurrent Versions System
 URL:        https://cvs.nongnu.org/
 # contrib/check_cvs.in:     check-cvs
@@ -456,7 +457,7 @@ pages in PDF.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 %patch -p1 -P 0
@@ -624,4 +625,3 @@ exit 0
 
 %changelog
 %autochangelog
-

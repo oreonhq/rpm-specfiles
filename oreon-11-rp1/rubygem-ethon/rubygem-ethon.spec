@@ -1,11 +1,11 @@
-%global source0_hash 4d98dbe05fd53b7d4ce9fa4f5782b035124682ca0fffb52a836353903fc43051
+%global source0_hash 2a467db7620243af86aaf146aaa5b2cb7228a5646a013d8558cd240f7cf6e3b4
 
 # Generated from ethon-0.5.10.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name ethon
 
 Name: rubygem-%{gem_name}
 Version: 0.17.0
-Release: 1%{?dist}
+Release: %autorelease
 Summary: Libcurl wrapper
 License: MIT
 URL: https://github.com/typhoeus/ethon

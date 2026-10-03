@@ -49,18 +49,6 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+memchr-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+memchr-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "memchr" feature of the "%{crate}" crate.
-
-%files       -n %{name}+memchr-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+simd-devel
 Summary:        %{summary}
 BuildArch:      noarch

@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 9c22d98c2debc1e37163b8a703f05278ad5d9c03f1c6b373629d8a072092184a
 
 Name:          bcg729
 Version:       1.1.2
-Release:       1%{?dist}
+Release:       %autorelease
 Summary:       Opensource implementation of the G.729 codec
 
 License:       GPL-3.0-or-later
@@ -13,8 +13,6 @@ Source0:       https://github.com/BelledonneCommunications/bcg729/archive/%{vers
 
 # Fix cmake installation dir
 Patch0:        bcg729_cmakedir.patch
-# Increase minimum cmake version to 3.5
-Patch1:        bcg729_cmakever.patch
 
 BuildRequires: cmake
 BuildRequires: gcc
@@ -40,7 +38,6 @@ Development files for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1
 # unzip -qq -d test %%{SOURCE1}
 
@@ -68,9 +65,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_includedir}/%{name}/
 %{_libdir}/lib%{name}.so
 %{_libdir}/pkgconfig/lib%{name}.pc
-%{_libdir}/cmake/Bcg729/
+%{_libdir}/cmake/BCG729/
 
 
 %changelog
 %autochangelog
-

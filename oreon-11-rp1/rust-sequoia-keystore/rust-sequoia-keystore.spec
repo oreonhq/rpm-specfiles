@@ -72,54 +72,6 @@ use the "openpgp-card" feature of the "%{crate}" crate.
 %files       -n %{name}+openpgp-card-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+sequoia-keystore-gpg-agent-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+sequoia-keystore-gpg-agent-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "sequoia-keystore-gpg-agent" feature of the "%{crate}" crate.
-
-%files       -n %{name}+sequoia-keystore-gpg-agent-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+sequoia-keystore-openpgp-card-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+sequoia-keystore-openpgp-card-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "sequoia-keystore-openpgp-card" feature of the "%{crate}" crate.
-
-%files       -n %{name}+sequoia-keystore-openpgp-card-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+sequoia-keystore-softkeys-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+sequoia-keystore-softkeys-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "sequoia-keystore-softkeys" feature of the "%{crate}" crate.
-
-%files       -n %{name}+sequoia-keystore-softkeys-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+sequoia-keystore-tpm-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+sequoia-keystore-tpm-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "sequoia-keystore-tpm" feature of the "%{crate}" crate.
-
-%files       -n %{name}+sequoia-keystore-tpm-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+softkeys-devel
 Summary:        %{summary}
 BuildArch:      noarch

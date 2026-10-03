@@ -1,0 +1,23 @@
+--- config-0.10.1/Cargo.toml	2019-12-08T02:22:44+00:00
++++ config-0.10.1/Cargo.toml	2026-10-03T05:39:20.498160+00:00
+@@ -34,10 +34,6 @@
+ [dependencies.serde]
+ version = "1.0.8"
+ 
+-[dependencies.serde-hjson]
+-version = "0.9"
+-optional = true
+-
+ [dependencies.serde_json]
+ version = "1.0.2"
+ optional = true
+@@ -60,8 +56,7 @@
+ version = "1.0.8"
+ 
+ [features]
+-default = ["toml", "json", "yaml", "hjson", "ini"]
+-hjson = ["serde-hjson"]
++default = ["toml", "json", "yaml", "ini"]
+ ini = ["rust-ini"]
+ json = ["serde_json"]
+ yaml = ["yaml-rust"]

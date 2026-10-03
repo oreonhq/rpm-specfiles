@@ -1,4 +1,4 @@
-%global source0_hash 318b920ccffdc68cc32f82b7b98009332ddfe2d9e278472b1031a45fce806b0d
+%global source0_hash a711ce5e30660b23232f26a38699469f8d859d47aa1f722e183fda6d7cc17823
 
 %global gem_name activesupport
 
@@ -7,7 +7,7 @@
 Name: rubygem-%{gem_name}
 Epoch: 1
 Version: 8.0.3
-Release: 5%{?dist}
+Release: %autorelease
 Summary: A support libraries and Ruby core extensions extracted from the Rails framework
 License: MIT
 URL: https://rubyonrails.org

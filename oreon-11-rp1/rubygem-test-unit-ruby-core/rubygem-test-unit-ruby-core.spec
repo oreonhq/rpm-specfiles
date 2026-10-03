@@ -1,10 +1,10 @@
-%global source0_hash 679a0dacf4aaf8792016516d24c1a07f43230d99ae25d542cfca2e240ac76ac9
+%global source0_hash 2f8bd142ef69a1a29637bc56804163ef9a0a398fd349bf9d4a3c67c4dfa82557
 
 %global	gem_name test-unit-ruby-core
 
 Name:		rubygem-%{gem_name}
-Version:	1.0.14
-Release:	2%{?dist}
+Version:	1.0.16
+Release:	%autorelease
 
 Summary:	Additional test assertions for Ruby standard libraries
 # SPDX confirmed
@@ -33,7 +33,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build
@@ -68,6 +67,7 @@ exit 0
 
 %files doc
 %doc %{gem_docdir}
+
 
 %changelog
 %autochangelog

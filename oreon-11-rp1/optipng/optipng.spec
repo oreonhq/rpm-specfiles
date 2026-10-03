@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c2579be58c2c66dae9d63154edcb3d427fef64cb00ec0aff079c9d156ec46f29
 
 Name:           optipng
 Version:        7.9.1

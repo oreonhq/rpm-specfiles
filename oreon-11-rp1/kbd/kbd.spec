@@ -1,4 +1,4 @@
-%global source0_hash fb3197f17a99eb44d22a3a1a71f755f9622dd963e66acfdea1a45120951b02ed
+%global source0_hash 6e5ca4f8d76ee9e3a8db700b667f13e12aac9933828a64e1aaad93d26be9b479
 %global source1_hash 9eda617f2db0302cb2bcbd3ad40037f961a76f0606dc486d096248c89e1685e5
 
 # {_exec_prefix}/lib/kbd is correct even on x86_64.
@@ -13,7 +13,8 @@ Summary:        Tools for configuring the console (keyboard, virtual terminals, 
 License:        GPL-2.0-or-later
 URL:            http://www.kbd-project.org/
 
-Source0:        https://ftp.altlinux.org/pub/people/legion/kbd/kbd-%{version}.tar.xz
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/kbd/kbd-2.10.0.tar.xz/sha512/1b7f55f0a1b34d9b6b4237a1ff3e10eedf4bdebe50e906a7acdea48f85b3c455e72737127491a0c494388b999797aa65411b20b44c3f5612fdeee4d8289f937c/kbd-2.10.0.tar.xz
 # Same tarballs as Fedora kbd lookaside (public mirrors)
 Source1:        https://www.linuxfromscratch.org/~ken/console-fonts/other/kbd-latsun-fonts.tar.bz2
 # latarcyrheb-sun16/sun32.psfu are in upstream kbd 2.10.0 (no separate Source2, Koji copy 404s)

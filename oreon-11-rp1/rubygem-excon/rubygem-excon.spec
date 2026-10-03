@@ -1,4 +1,4 @@
-%global source0_hash af9bcc81527fd007bf88ff914e15c9f7d069886b98d8f0a4ee98d036c746f68d
+%global source0_hash 3b3917dbdf0c65b8d872039fe2b37bf423da2f245ef05b0af07423027c4cfde5
 
 %global gem_name excon
 
@@ -10,7 +10,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 1.2.7
-Release: 4%{?dist}
+Release: %autorelease
 Summary: Speed, persistence, http(s)
 License: MIT
 URL: https://github.com/excon/excon
@@ -41,6 +41,7 @@ BuildArch: noarch
 %description
 EXtended http(s) CONnections.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -51,7 +52,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 (
 cd %{_builddir}
@@ -94,6 +94,7 @@ sed -i "/it 'passes the dns_timeouts to Resolv::DNS::Config' do/a\
     skip 'DNS resolution is disabled in Mock'" spec/requests/dns_timeout_spec.rb
 sed -i "/it 'resolv_resolver config reaches Resolv::DNS::Config' do/a\
     skip 'DNS resolution is disabled in Mock'" spec/requests/resolv_resolver_spec.rb
+
 
 rspec spec
 

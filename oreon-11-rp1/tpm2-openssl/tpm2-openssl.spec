@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9a9aca55d4265ec501bcf9c56d21d6ca18dba902553f21c888fe725b42ea9964
 
 Name:tpm2-openssl
 Version: 1.3.0
@@ -14,8 +14,6 @@ Source2:        gpgkey-B7201FE8031B07AF11F5423C6329CFCB6BE6FD76.gpg
 Source3:        run-with-simulator
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=2301337
-Patch1: 0001-tests-rsa_pki-default-to-sha256.patch
-Patch2: 0002-tests-do-not-test-sha1-by-default.patch
 
 BuildRequires: gnupg2
 BuildRequires: gcc

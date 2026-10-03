@@ -1,0 +1,22 @@
+From d080c035f5e46bc659264ba1a50f2f9c7053eae7 Mon Sep 17 00:00:00 2001
+From: Diego Herrera <dherrera@redhat.com>
+Date: Wed, 1 Jul 2026 00:03:14 -0400
+Subject: [PATCH 3/7] Fix nanobind arguments
+
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 094078160..3a08d3289 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -428,7 +428,7 @@ if(ONNX_BUILD_PYTHON)
+   # find system nanobind
+   if(NOT DEFINED nanobind_DIR OR "${nanobind_DIR}" STREQUAL "")
+     execute_process(
+-      COMMAND ${Python_EXECUTABLE} -m nanobind --cmake-dir
++      COMMAND ${Python_EXECUTABLE} -m nanobind --cmake_dir
+       RESULT_VARIABLE NANOBIND_CMAKE_RESULT
+       OUTPUT_VARIABLE NANOBIND_CMAKE_DIR
+       OUTPUT_STRIP_TRAILING_WHITESPACE
+-- 
+2.54.0
+

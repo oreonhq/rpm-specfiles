@@ -1,4 +1,4 @@
-%global source0_hash f103df876040a4f904f01d2464f7868b4feb659d8cd3f46a5f1f61aa440be415
+%global source0_hash b93ff5561244916a6e1e7e3ecccf2e26e6932c4edb5961268401cea7d4ab9c16
 
 # Notes on soname versioning
 # There's absolutely no guarantee of ABI stability, so a soname bump is
@@ -14,17 +14,17 @@
 
 Name: dcmtk
 Summary: Offis DICOM Toolkit (DCMTK)
-Version: 3.7.0
+Version: 3.6.9
 
 # soname version is "abi_version.version"
 # https://github.com/DCMTK/dcmtk/blob/master/CMake/dcmtkPrepare.cmake#L78
 %global soname_version %{abi_version}.%{version}
 
-Release: 1%{?dist}
+Release: 5%{?dist}
 
 # see licenses-3.6.9.txt for license breakdown
 License: BSD-3-Clause and Apache-2.0 and BSD-2-Clause and (WTFPL or MIT) and GPL-3.0-or-later and ISC and MIT
-Source: https://dicom.offis.de/download/dcmtk/dcmtk370/dcmtk-%{version}.tar.gz
+Source: https://dicom.offis.de/download/dcmtk/dcmtk369/dcmtk-%{version}.tar.gz
 URL: http://dicom.offis.de/dcmtk.php.en
 
 # Downstream fixes
@@ -51,7 +51,7 @@ Patch:      0015-Update-colorTransformation-for-CharLS-2.patch
 Patch:      0016-Update-JpegLsEncode-for-CharLS-2.patch
 %endif
 
-# Upstream fixes, backported to 3.7.0:
+# Upstream fixes, backported to 3.6.9:
 # https://github.com/sanjayankur31/dcmtk/tree/fedora-3.6.9
 
 # Increase sleep in tests

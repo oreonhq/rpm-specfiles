@@ -61,18 +61,6 @@ use the "alloc" feature of the "%{crate}" crate.
 %files       -n %{name}+alloc-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+rand-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+rand-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "rand" feature of the "%{crate}" crate.
-
-%files       -n %{name}+rand-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+random-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -83,18 +71,6 @@ This package contains library source intended for building other packages which
 use the "random" feature of the "%{crate}" crate.
 
 %files       -n %{name}+random-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+serialize-devel

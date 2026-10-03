@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3b85c3929034b0a99da777130c34d99f006fcd3a9d56564159399a33fee0e504
 
 %bcond_without qt5
 %bcond_without qt6

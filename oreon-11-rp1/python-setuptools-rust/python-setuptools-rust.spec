@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f2afcf4baeee689910ce49cfa8aad4e08cce72f417449bcc32891b8664fdc726
 
 Name:           python-setuptools-rust
 Version:        1.13.0

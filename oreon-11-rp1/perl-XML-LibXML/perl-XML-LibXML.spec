@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2af21c5d61ac34ea26a5fabf15ba5a5841e648f7189db3e33b6f28b5489802ab
 
 # Do not invoke thread tests by default because the thread support is broken,
 # bug #1224731, CPAN RT#91800

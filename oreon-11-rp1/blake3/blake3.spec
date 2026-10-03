@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c6782a28842b1c0478524ac06a4f2ede784038ee298d6e2162c0b089c4306a3c
 
 # EL8 and EL9 require `gcc-toolset-14` as build dependency.
 # * On EL8, Binutils 2.30 do not support the `vmovdqu` AVX-512 instruction.

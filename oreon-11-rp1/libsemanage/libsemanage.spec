@@ -1,6 +1,6 @@
-%global source0_hash none
-
-%global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
+%global source0_hash e76160286bbfb0821602c6c0c3220ebcf366ad3246d3b9d0a0fbefcd35e86043
+%global source1_hash f8139467f07a089c8d8eeaf6d69bd7e19380820cd8277c747d5cc6f87e96810d
+%global source2_hash caf7cb1981e2f5fa5952c2f3a11f9247221d16df4d9111ce15164a64675fc452
 
 %define libsepolver 3.11-1
 %define libselinuxver 3.11-1
@@ -8,16 +8,19 @@
 Summary: SELinux binary policy manipulation library
 Name: libsemanage
 Version: 3.11
-Release: 1%{?dist}
+Release: %autorelease
 License: LGPL-2.1-or-later
-Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz
-Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz.asc
-Source2:        https://github.com/perfinion.gpg
+Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz
+Source1: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz.asc
+Source2: https://github.com/bachradsusi.gpg
 # git format-patch -N 3.11 -- libsemanage
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
+Patch0001: 0001-libsemanage-optionally-sort-file_contexts.local-by-s.patch
+Patch0002: 0002-libsemanage-genhomedircon-reject-users-with-a-relati.patch
 # Patch list end
 URL: https://github.com/SELinuxProject/selinux/wiki
+VCS: git:https://github.com/SELinuxProject/selinux.git
 Source3: semanage.conf
 
 BuildRequires: gcc make
@@ -82,7 +85,9 @@ The libsemanage-python3 package contains the python 3 bindings for developing
 SELinux management applications.
 
 %prep
-%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n libsemanage-%{version}
 
@@ -162,5 +167,4 @@ cp %{SOURCE3} ${RPM_BUILD_ROOT}%{_sysconfdir}/selinux/semanage.conf
 %{_libexecdir}/selinux/semanage_migrate_store
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

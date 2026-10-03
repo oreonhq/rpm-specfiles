@@ -1,4 +1,4 @@
-%global source0_hash d15ac0ebff651fa19a984835b9621e442a7febafcc0b67aafa6a3e80438d0ac9
+%global source0_hash 2356ab056c0e02dedf6f975bac0b6590a6363ce609811268b34d3bba51ce0d6b
 
 %global source2_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
 
@@ -57,7 +57,7 @@
 %global verify_tarball_signature 1
 
 # The source directory.
-%global source_directory 1.47-development
+%global source_directory 1.49-development
 
 Name:           nbdkit
 Version:        1.49.3

@@ -1,4 +1,4 @@
-%global source0_hash a00b5ea9f6d6bff503b7715f9814bdbeb2dea6d3843c6edbb07e1c2ac623c68d
+%global source0_hash 30f2cca8a3c62b5c067f73a1834479dbd85d71f1291d65ffac933dc90796674d
 
 # Generated from mini_mime-1.0.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name mini_mime

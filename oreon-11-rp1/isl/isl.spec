@@ -1,4 +1,4 @@
-%global source0_hash 45292f30b3cb8b9c03009804024df72a79e9b5ab89e41c94752d6ea58a1e4b02
+%global source0_hash 3dc31b8e1b18329e42d5dfbf84dd55e15c59b61569a2ab246f61497d9592f727
 %global source1_hash b1044f02819da0708fc7071fa2a558ce5d3c29d6676c8cb113caaedd5903ff03
 
 Summary: Integer point manipulation library

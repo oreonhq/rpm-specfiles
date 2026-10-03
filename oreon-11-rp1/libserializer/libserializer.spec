@@ -1,14 +1,12 @@
-%global source0_hash 836784a9b3518e6ff116d5ee7999d228324522996f097765b6783df5f8d8e8a8
-
 Name: libserializer
 Version: 1.1.2
-Release: 48%{?dist}
+Release: %autorelease
 Summary: JFreeReport General Serialization Framework
 License: LGPL-2.1-or-later
-#Original source: https://downloads.sourceforge.net/jfreereport/libserializer-%%{version}.zip
+#Original source: http://downloads.sourceforge.net/jfreereport/libserializer-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source: https://downloads.sourceforge.net/jfreereport/libserializer-%{version}.zip
+Source: libserializer-%{version}-jarsdeleted.zip
 URL: http://reporting.pentaho.org
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase >= 1.1.2
 Requires: java-25-headless, jpackage-utils, libbase >= 1.1.2
@@ -32,7 +30,6 @@ Requires: jpackage-utils
 Javadoc for %{name}.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 %patch -P0 -p1 -b .build
 %patch -P1 -p1 -b .java11
@@ -61,5 +58,4 @@ cp -rp bin/javadoc/docs/api $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 %{_javadocdir}/%{name}
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-48
-- Import
+%autochangelog

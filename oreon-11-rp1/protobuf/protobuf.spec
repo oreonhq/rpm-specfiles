@@ -26,9 +26,9 @@ Name:           protobuf
 # NOTE: perl-Alien-ProtoBuf has an exact-version dependency on the version of
 # protobuf with which it was built; it therefore needs to be rebuilt even for
 # “patch” updates of protobuf.
-Version:        5.36.2-objectivec
+Version:        3.19.6
 %global so_version 30
-Release:        1%{?dist}
+Release:        20%{?dist}
 
 # The entire source is BSD-3-Clause, except the following files, which belong
 # to the build system; are unpackaged maintainer utility scripts; or are used
@@ -72,7 +72,7 @@ Source2:        protobuf-init.el
 %global gtest_commit 5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081
 %global gtest_dir googletest-%{gtest_commit}
 # For tests (using exactly the same version as the release)
-Source3:        https://github.com/google/googletest/archive/refs/tags/5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz#/googletest-5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz
+Source3:        https://github.com/google/googletest/archive/5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz#/googletest-5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz
 
 # Man page hand-written for Fedora in groff_man(7) format based on “protoc
 # --help” output.
@@ -158,7 +158,7 @@ Requires:       protobuf = %{version}-%{release}
 Requires:       protobuf-compiler = %{version}-%{release}
 Requires:       zlib-devel
 
-Obsoletes:      protobuf-static < 5.36.2-objectivec-4
+Obsoletes:      protobuf-static < 3.19.6-4
 
 %description devel
 This package contains Protocol Buffers compiler for all languages and
@@ -179,7 +179,7 @@ Summary:        Protocol Buffers LITE_RUNTIME development libraries
 Requires:       protobuf-devel = %{version}-%{release}
 Requires:       protobuf-lite = %{version}-%{release}
 
-Obsoletes:      protobuf-lite-static < 5.36.2-objectivec-4
+Obsoletes:      protobuf-lite-static < 3.19.6-4
 
 %description lite-devel
 This package contains development libraries built with

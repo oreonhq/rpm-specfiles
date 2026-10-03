@@ -85,18 +85,6 @@ use the "borsh" feature of the "%{crate}" crate.
 %files       -n %{name}+borsh-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+borsh-derive-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+borsh-derive-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "borsh-derive" feature of the "%{crate}" crate.
-
-%files       -n %{name}+borsh-derive-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+bytemuck-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -143,18 +131,6 @@ This package contains library source intended for building other packages which
 use the "macro-diagnostics" feature of the "%{crate}" crate.
 
 %files       -n %{name}+macro-diagnostics-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+md-5-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+md-5-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "md-5" feature of the "%{crate}" crate.
-
-%files       -n %{name}+md-5-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+md5-devel
@@ -217,18 +193,6 @@ use the "serde" feature of the "%{crate}" crate.
 %files       -n %{name}+serde-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+serde_core-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_core-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_core" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_core-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+sha1-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -239,18 +203,6 @@ This package contains library source intended for building other packages which
 use the "sha1" feature of the "%{crate}" crate.
 
 %files       -n %{name}+sha1-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+sha1_smol-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+sha1_smol-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "sha1_smol" feature of the "%{crate}" crate.
-
-%files       -n %{name}+sha1_smol-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+slog-devel

@@ -97,18 +97,6 @@ use the "checked_fns" feature of the "%{crate}" crate.
 %files       -n %{name}+checked_fns-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+defmt-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+defmt-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "defmt" feature of the "%{crate}" crate.
-
-%files       -n %{name}+defmt-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+defmt-03-devel
 Summary:        %{summary}
 BuildArch:      noarch

@@ -1,4 +1,4 @@
-%global source0_hash 56e05531ee8994124eeb498d0e6a5e1c3b9d4fccbecdf555fe266631368fb55f
+%global source0_hash ef786edc203daec76475825640b3af247bd08e31fc52217e5ce8f76107b4bb05
 
 # .so library version
 %global abiver  3

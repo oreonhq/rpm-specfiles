@@ -9,16 +9,22 @@
 Name:           rust-axum
 Version:        0.8.9
 Release:        %autorelease
-Summary:        HTTP routing and request handling library that focuses on ergonomics...
+Summary:        HTTP routing and request handling library
 
 License:        MIT
 URL:            https://crates.io/crates/axum
 Source:         %{crates_source}
+# Manually created patch for downstream crate metadata changes
+# * remove documentation-specific feature
+Patch:          axum-fix-metadata.diff
+# * skip doctest with unresolved axum_extra dependency
+Patch10:        0001-skip-doctest-with-unresolved-axum_extra-dependency.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 
 %global _description %{expand:
-HTTP routing and request handling library that focuses on ergonomics and modularity}
+HTTP routing and request handling library that focuses on ergonomics and
+modularity.}
 
 %description %{_description}
 
@@ -61,42 +67,6 @@ use the "__private" feature of the "%{crate}" crate.
 %files       -n %{name}+__private-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+__private_docs-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+__private_docs-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "__private_docs" feature of the "%{crate}" crate.
-
-%files       -n %{name}+__private_docs-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+axum-macros-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+axum-macros-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "axum-macros" feature of the "%{crate}" crate.
-
-%files       -n %{name}+axum-macros-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+base64-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+base64-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "base64" feature of the "%{crate}" crate.
-
-%files       -n %{name}+base64-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+form-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -107,18 +77,6 @@ This package contains library source intended for building other packages which
 use the "form" feature of the "%{crate}" crate.
 
 %files       -n %{name}+form-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+form_urlencoded-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+form_urlencoded-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "form_urlencoded" feature of the "%{crate}" crate.
-
-%files       -n %{name}+form_urlencoded-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+http1-devel
@@ -143,30 +101,6 @@ This package contains library source intended for building other packages which
 use the "http2" feature of the "%{crate}" crate.
 
 %files       -n %{name}+http2-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+hyper-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+hyper-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "hyper" feature of the "%{crate}" crate.
-
-%files       -n %{name}+hyper-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+hyper-util-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+hyper-util-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "hyper-util" feature of the "%{crate}" crate.
-
-%files       -n %{name}+hyper-util-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+json-devel
@@ -205,18 +139,6 @@ use the "matched-path" feature of the "%{crate}" crate.
 %files       -n %{name}+matched-path-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+multer-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+multer-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "multer" feature of the "%{crate}" crate.
-
-%files       -n %{name}+multer-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+multipart-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -253,18 +175,6 @@ use the "query" feature of the "%{crate}" crate.
 %files       -n %{name}+query-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+reqwest-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+reqwest-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "reqwest" feature of the "%{crate}" crate.
-
-%files       -n %{name}+reqwest-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+serde-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -277,54 +187,6 @@ use the "serde" feature of the "%{crate}" crate.
 %files       -n %{name}+serde-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+serde_json-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_json-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_json" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_json-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_path_to_error-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_path_to_error-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_path_to_error" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_path_to_error-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+serde_urlencoded-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+serde_urlencoded-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "serde_urlencoded" feature of the "%{crate}" crate.
-
-%files       -n %{name}+serde_urlencoded-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+sha1-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+sha1-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "sha1" feature of the "%{crate}" crate.
-
-%files       -n %{name}+sha1-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+tokio-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -335,18 +197,6 @@ This package contains library source intended for building other packages which
 use the "tokio" feature of the "%{crate}" crate.
 
 %files       -n %{name}+tokio-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+tokio-tungstenite-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+tokio-tungstenite-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "tokio-tungstenite" feature of the "%{crate}" crate.
-
-%files       -n %{name}+tokio-tungstenite-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+tower-http-devel
@@ -403,17 +253,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cargo_prep
 
 %generate_buildrequires
-%cargo_generate_buildrequires
+%cargo_generate_buildrequires -a
 
 %build
-%cargo_build
+%cargo_build -a
 
 %install
-%cargo_install
+%cargo_install -a
 
 %if %{with check}
 %check
-%cargo_test
+%cargo_test -a
 %endif
 
 %changelog

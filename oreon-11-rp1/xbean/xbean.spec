@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 264438f2f39d718790646f5234028f2e027fecbed14b43841a7440f990b5e7c2
 
 %bcond_without bootstrap
 
@@ -14,7 +14,6 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://repo1.maven.org/maven2/org/apache/%{name}/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 Patch:        0001-Unbundle-ASM.patch
-Patch:        0002-Remove-dependency-on-log4j-and-commons-logging.patch
 
 # TODO Remove in Fedora 47
 Obsoletes:      %{name}-javadoc < 5.0.0-9
@@ -50,7 +49,6 @@ cp xbean-asm-util/src/main/java/org/apache/xbean/asm9/original/commons/AsmConsta
 %pom_remove_parent
 
 %pom_disable_module xbean-classloader
-%pom_disable_module xbean-classpath
 %pom_disable_module xbean-bundleutils
 %pom_disable_module xbean-asm9-shaded
 %pom_disable_module xbean-finder-shaded
@@ -61,7 +59,6 @@ cp xbean-asm-util/src/main/java/org/apache/xbean/asm9/original/commons/AsmConsta
 %pom_disable_module maven-xbean-plugin
 
 %pom_remove_dep :commons-logging-api xbean-reflect
-%pom_remove_dep :log4j xbean-reflect
 %pom_remove_dep :xbean-asm9-shaded xbean-reflect
 find -name CommonsLoggingConverter.java -delete
 find -name Log4jConverter.java -delete

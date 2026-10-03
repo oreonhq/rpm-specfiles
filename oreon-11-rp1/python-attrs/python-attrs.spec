@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32
 
 Name:           python-attrs
 Version:        26.1.0

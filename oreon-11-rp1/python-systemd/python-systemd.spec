@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fc2c2ff4f03bf1a110f6ba2cadb874f51a7c0ce4fa0261d2bbe3371548ddbc88
 
 Name:           python-systemd
 Version:        236
@@ -9,7 +9,6 @@ License:        LGPL-2.1-or-later
 URL:            https://github.com/systemd/python-systemd
 Source0:        https://github.com/systemd/python-systemd/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
-Patch:          https://github.com/systemd/python-systemd/pull/140.patch
 
 BuildRequires:  make
 BuildRequires:  gcc

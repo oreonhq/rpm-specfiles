@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 052c7fc3721d54c696e2dea019be67539d7b144e924f559f54beb3121831c364
 
 Name:           python-installer
 Version:        1.0.1
@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'installer' generated automatically by pyp2spec.}
 
-Patch:          Fix-removed-importlib.resources.read_binary-in-Pytho.patch
 
 %description %_description
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 25dab2698c4ae72be76161d0cafc053680288e334b8a907b8d1738acde27f815
 
 Name:          pdfbox
 Version:       3.0.8

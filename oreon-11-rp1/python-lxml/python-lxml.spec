@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 45222d94ddd511536f3b2f7d9deae3b2339b4ce0f075f1ca25703b07cad9dd21
 
 Name:           python-lxml
 Version:        6.1.3

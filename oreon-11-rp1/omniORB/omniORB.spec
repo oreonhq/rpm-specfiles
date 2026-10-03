@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 79720d415d23cd8da99287a4ef4da0aa1bd34d3e4c7b1530715600adc5ed3dc3
 
 %global nameserver omniNames
 
@@ -11,7 +11,7 @@
 
 Name:           omniORB
 Version:        4.3.4
-Release:        4%{?dist}
+Release:        %autorelease
 Summary:        A robust high performance CORBA ORB for C++ and Python
 
 License:        LGPL-2.0-or-later
@@ -21,6 +21,8 @@ Source1:        omniORB-nameserver.init
 Source2:        omniORB-nameserver.logrotate
 Source3:        omniORB.cfg
 Source4:        omniNames.service
+# Fix build against openssl-4.x
+Patch0:         omniORB_openssl4.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  make
@@ -90,7 +92,6 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1
 # Fix shebangs
 sed -i '1s=^#!/usr/bin/\(python\|env python\)[0-9.]*=#!%{__python3}=' \
@@ -245,4 +246,3 @@ fi
 
 %changelog
 %autochangelog
-

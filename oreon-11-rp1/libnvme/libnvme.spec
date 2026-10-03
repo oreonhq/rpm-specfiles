@@ -1,4 +1,4 @@
-%global source0_hash ce1d9d393feb84c4e82ca096db2bdb7dd4a5fd1997d711cc1904796944f2c579
+%global source0_hash 1d850d5a871559abf641d6e6b63bb86047e4cb26f3ad144597c2c64b3cff7231
 
 # RHEL 8 compatibility
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
@@ -9,7 +9,7 @@ Version: 1.16.2
 Release: 1%{?dist}
 License: LGPL-2.1-or-later
 URL:     https://github.com/linux-nvme/libnvme
-Source0:        https://github.com/linux-nvme/libnvme/archive/refs/tags/v1.16.1.tar.gz#/libnvme-1.16.1.tar.gz
+Source0:        https://github.com/linux-nvme/libnvme/archive/refs/tags/v1.16.2.tar.gz#/libnvme-1.16.2.tar.gz
 
 BuildRequires: gcc gcc-c++
 BuildRequires: swig

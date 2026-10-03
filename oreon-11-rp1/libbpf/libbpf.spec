@@ -2,9 +2,9 @@
 %global source1_hash 69467234c3c009952fea99dd057e5200160603c7e3e04ecb74458e29746e5b95
 
 %global githubname   libbpf
-%global githubver    1.7.0
+%global githubver    1.6.3
 %global githubfull   %{githubname}-%{githubver}
-%global libver       1.7.0
+%global libver       1.6.3
 
 %global usdtname     usdt
 %global usdtver      0.1.0
@@ -12,14 +12,14 @@
 
 Name:           %{githubname}
 Version:        %{githubver}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Libbpf library
 
 License:        LGPL-2.1-only OR BSD-2-Clause
 URL:            https://github.com/%{githubname}/%{githubname}
 Source0:        https://github.com/libbpf/libbpf/archive/refs/tags/v1.6.3.tar.gz#/libbpf-%{githubver}.tar.gz
 
-Source1:        https://github.com/libbpf/usdt/archive/refs/tags/f4ea2f524efa80d062f4d586d78daafb83dc7d24.tar.gz#/usdt-0.1.0.tar.gz
+Source1:        https://github.com/%{githubname}/usdt/archive/%{usdtref}/%{usdtname}-%{usdtver}.tar.gz
 
 BuildRequires:  gcc elfutils-libelf-devel elfutils-devel
 BuildRequires: make

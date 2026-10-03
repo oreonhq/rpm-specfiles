@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 36dff84d237f2b8f18b0b146d6e7c3f99a7bce2da98cc4103a14387f53319f95
 
 Name:           python-pygit2
 Version:        1.20.1

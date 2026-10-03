@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9218e62793116d42a9f6d14cd9348518b27f382096eea3d0f2d1a24616bb5884
 
 #global pre beta.4
 

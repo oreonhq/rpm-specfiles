@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 200776fac271093e7c2f21edd6d62657ecd2be578d9328633f2a86bfa6ef4f1d
 
 %global forgeurl https://github.com/jemalloc/jemalloc
 

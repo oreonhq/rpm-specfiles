@@ -1,0 +1,11 @@
+diff -Naur Makefile.orig Makefile
+--- Makefile.orig	2026-09-17 13:58:07.312254370 +0200
++++ Makefile	2026-09-17 13:58:27.802113626 +0200
+@@ -5,6 +5,7 @@
+ ENABLE_STACK_PROTECTOR ?= 1
+ CFLAGS ?= -fwrapv --param ssp-buffer-size=4 -fvisibility=hidden -fPIE -Wcast-align -Wmissing-field-initializers -Wshadow -Wswitch-enum
+ CFLAGS +=-Wp,-U_FORTIFY_SOURCE -Wextra -Wall -pedantic -fPIC -O0 -fwrapv -Wconversion -std=c11
++CFLAGS +=-D_DEFAULT_SOURCE
+ LDFLAGS +=-Wl,-z,relro,-z,now -lpthread
+ 
+ # Enable internal timer support

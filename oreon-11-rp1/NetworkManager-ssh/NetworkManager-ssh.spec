@@ -1,4 +1,4 @@
-%global source0_hash 764ea968c0b951db5564f4de5dc7d4b5f14e834b3f6a95da84852253ee4dd10e
+%global source0_hash 765523ad935cae2f85ff37bd73760854cea9ae799eb319964a8fa3ab8f83b3c2
 
 Summary:   NetworkManager VPN plugin for SSH tunnels
 Name:      NetworkManager-ssh

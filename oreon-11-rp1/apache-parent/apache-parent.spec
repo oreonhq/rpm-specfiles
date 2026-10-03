@@ -4,7 +4,7 @@
 
 Name:           apache-parent
 Version:        40
-Release:        %autorelease
+Release:        %autorelease -b 2
 Summary:        Parent POM file for Apache projects
 License:        Apache-2.0
 URL:            https://apache.org/

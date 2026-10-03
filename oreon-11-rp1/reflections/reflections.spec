@@ -1,4 +1,4 @@
-%global source0_hash 13a1ceef025d430b47ae76f3271d4a36bfa6304949331711fd36f9d9a95049ed
+%global source0_hash a348502aa47e9e5276223b5cec339d8156d9a9f78d3c077632842868f09fd318
 
 Name:          reflections
 Version:       0.10.2

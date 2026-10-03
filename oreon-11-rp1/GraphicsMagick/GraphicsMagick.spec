@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9218eb78179110f91371066ab75cb3b4dd034b9bb464b29ce9bab7a11979232b
 
 
 %global _with_quantum_depth --with-quantum-depth=16

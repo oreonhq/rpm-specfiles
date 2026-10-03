@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4924c6f530105bcd5b9e9e33c48a2ae1bfd889222c8480bc41601110efc864d0
 %global source10_hash 34a96eb96b319c64f3cc49e0b3a0ae5a1a0a041aab9adea027ab51875f2b2e83
 
 %global _hardened_build 1
@@ -29,9 +29,7 @@ Source10:        https://gitlab.com/chrony/clknetsim/-/archive/6ee99f50dec8/clkn
 # add distribution-specific bits to DHCP dispatcher
 Patch1:         chrony-nm-dispatcher-dhcp.patch
 # let systemd create /var/lib/chrony and /var/log/chrony
-Patch2:         chrony-servicedirs.patch
 # update seccomp filter for new glibc
-Patch3:         chrony-seccomp.patch
 
 BuildRequires:  libcap-devel libedit-devel nettle-devel pps-tools-devel
 BuildRequires:  gcc gcc-c++ make bison systemd gnupg2
@@ -65,8 +63,6 @@ test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "o
 %setup -q -n %{name}-%{version}%{?prerelease} -a 10
 %{?gitpatch:%patch -P 0 -p1}
 %patch -P 1 -p1 -b .nm-dispatcher-dhcp
-%patch -P 2 -p1 -b .servicedirs
-%patch -P 3 -p1 -b .seccomp
 
 %{?gitpatch: echo %{version}-%{gitpatch} > version.txt}
 
@@ -76,8 +72,8 @@ md5sum -c <<-EOF | (! grep -v 'OK$')
         3f2ddca6065c3e8f4565d7422739795a  examples/chrony.conf.example2
         6a3178c4670de7de393d9365e2793740  examples/chrony.logrotate
         c3992e2f985550739cd1cd95f98c9548  examples/chrony.nm-dispatcher.dhcp
-        4e85d36595727318535af3387411070c  examples/chrony.nm-dispatcher.onoffline
-        607c82f56639486f52c31105632909eb  examples/chronyd.service
+        af482fa0dbdd22ff46be41111f251987  examples/chrony.nm-dispatcher.onoffline
+        274a44cd51981d6d4d3a44dfc92c94ab  examples/chronyd.service
         5ddbb8a8055f587cb6b0b462ca73ea46  examples/chronyd-restricted.service
 EOF
 

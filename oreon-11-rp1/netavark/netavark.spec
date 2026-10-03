@@ -1,4 +1,4 @@
-%global source0_hash 284faa7cc525b869cbac4053e0a4127ac743ca7da1457c49fffb35558ea9c78d
+%global source0_hash 96677048168ddd1abe313e4c2e17f1cace72b60ee1bac8ca12a4bd7dfcadfbbb
 %global source1_hash afa8e99a9691ef6ea485d6cb6b1897684d9f8a26719deaa3cbf37b5f17198e6f
 
 # Building from fedora dependencies not possible
@@ -45,7 +45,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: OCI network stack
 URL: https://github.com/containers/%{name}
 # Tarballs fetched from upstream's release page
-Source0:        https://github.com/containers/netavark/archive/refs/tags/v1.17.2.tar.gz#/netavark-1.17.2.tar.gz
+Source0:        https://github.com/containers/netavark/archive/refs/tags/v2.1.0.tar.gz#/netavark-2.1.0.tar.gz
 
 Source1:        https://github.com/containers/netavark/releases/download/v1.17.2/netavark-v1.17.2-vendor.tar.gz
 BuildRequires: cargo

@@ -1,4 +1,4 @@
-%global source0_hash 6e2849f221e6ab970566a115d42f3c20f8848e4d40c2ed61ac20dc85f40fa54f
+%global source0_hash 6489a3411b874ecd81c87815d863603f518b264a976319725e0ed59935546774
 
 Name:           libimobiledevice-glue
 Version:        1.3.2
@@ -7,7 +7,7 @@ Summary:        Library with common code among libimobiledevice projects
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/libimobiledevice/libimobiledevice-glue
-Source:        https://github.com/libimobiledevice/libimobiledevice-glue/releases/download/1.3.2/libimobiledevice-glue-1.3.1.tar.bz2
+Source:        %{url}/releases/download/%{version}/libimobiledevice-glue-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  make

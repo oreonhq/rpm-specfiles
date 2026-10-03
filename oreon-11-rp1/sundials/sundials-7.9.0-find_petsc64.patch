@@ -1,0 +1,12 @@
+--- a/cmake/tpl/FindPETSC.cmake	2026-09-03 21:06:14.000000000 +0200
++++ b/cmake/tpl/FindPETSC.cmake	2026-09-11 13:25:10.809094660 +0200
+@@ -37,7 +37,7 @@
+     set(_pkg_version_spec ">=${PETSC_FIND_VERSION}")
+   endif()
+ endif()
+-pkg_check_modules(PKG_PETSC "PETSc${_pkg_version_spec}")
++pkg_check_modules(PKG_PETSC "PETSc64${_pkg_version_spec}")
+ unset(_pkg_version_spec)
+ 
+ # Find the PETSC libraries
+ 

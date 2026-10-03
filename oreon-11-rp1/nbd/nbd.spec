@@ -1,4 +1,4 @@
-%global source0_hash f5c8fd0fcb57b1c926594d0e57f356432ee08678bef1d40d088f0830f0cbdd0a
+%global source0_hash ef1fe160ac3ff602ae4029d413b0d530036e352a1e6a427402776c1a7aaf3716
 
 Name:           nbd
 Version:        3.27.1

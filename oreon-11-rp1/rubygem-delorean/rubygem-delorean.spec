@@ -1,10 +1,10 @@
-%global source0_hash 5f7e5af9084f0d043cc3e48bfd8e6727186954b47e6aa775550aeff9c7bebba5
+%global source0_hash c4f1de946951ad63ee0be0c2d5fee3bf25911324b4325b4073c4e5a4408f694c
 
 %global gem_name delorean
 
 Name: rubygem-%{gem_name}
 Version: 2.1.0
-Release: 23%{?dist}
+Release: %autorelease
 Summary: Delorean lets you travel in time with Ruby by mocking Time.now
 License: MIT
 URL: https://github.com/bebanjo/delorean
@@ -36,7 +36,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -c -T
 %gem_install -n %{SOURCE0}
 

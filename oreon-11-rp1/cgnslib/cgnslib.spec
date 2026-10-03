@@ -20,7 +20,6 @@ Patch1:         cgnslib_desktop.patch
 Patch2:         cgnslib-c99.patch
 Patch3:         cgnslib-i686.patch
 # Allow building with Ninja generator
-Patch4:         https://github.com/CGNS/CGNS/pull/845.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc

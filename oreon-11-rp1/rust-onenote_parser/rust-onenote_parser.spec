@@ -10,7 +10,7 @@
 %global crate onenote_parser
 
 Name:           rust-onenote_parser
-Version:        2.0.0
+Version:        0.3.1
 Release:        %autorelease
 Summary:        Parser for Microsoft OneNote files
 

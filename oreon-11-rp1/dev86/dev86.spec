@@ -7,7 +7,8 @@ Release: 33%{?dist}
 # Automatically converted from old format: GPL+ and GPLv2+ and LGPLv2+ - review is highly recommended.
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL: http://v3.sk/~lkundrak/dev86/
-Source: http://v3.sk/~lkundrak/dev86/archive/Dev86src-%{version}.tar.gz
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source: https://src.fedoraproject.org/repo/pkgs/dev86/Dev86src-0.16.21.tar.gz/6b96fe9d2d1c546842a4d1c7ef387e4c/Dev86src-0.16.21.tar.gz
 Patch0: dev86-noelks.patch
 Patch1: dev86-64bit.patch
 Patch2: dev86-nostrip.patch

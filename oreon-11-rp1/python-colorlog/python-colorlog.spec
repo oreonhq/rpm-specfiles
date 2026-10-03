@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2a7924c1dadf18b22a0eb8b06d1c7b01d5341707ec1641eb6fcc4fde0c3e8e5f
 
 Name:           python-colorlog
 Version:        6.12.0

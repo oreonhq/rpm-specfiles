@@ -1,0 +1,9 @@
+--- zip-5.1.1/Cargo.toml	1970-01-01T00:00:01+00:00
++++ zip-5.1.1/Cargo.toml	2026-10-03T06:32:56.684478+00:00
+@@ -256,6 +256,3 @@
+ [dev-dependencies.walkdir]
+ version = "2.5"
+ 
+-[target."cfg(fuzzing)".dependencies.arbitrary]
+-version = "1.4.1"
+-features = ["derive"]

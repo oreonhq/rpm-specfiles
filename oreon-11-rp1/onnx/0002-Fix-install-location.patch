@@ -1,0 +1,41 @@
+From aae958b4505f060dc58d15e41599d5eff1b9eee2 Mon Sep 17 00:00:00 2001
+From: Diego Herrera <dherrera@redhat.com>
+Date: Wed, 1 Jul 2026 00:02:39 -0400
+Subject: [PATCH 2/7] Fix install location
+
+This patch is part of the "Build shared libraries and fix install location" patch by Alejandro Alvarez Ayllon <a.alvarezayllon@gmail.com> - Sat, 24 Feb 2024 14:48:45 +0100
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 2d8ea3df0..094078160 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -493,6 +493,16 @@ if(ONNX_INSTALL)
+           DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+           FILES_MATCHING
+           PATTERN "*.h")
++  install(DIRECTORY ${ONNX_ROOT}/onnx
++          DESTINATION "${PY_SITEARCH}"
++          FILES_MATCHING
++          PATTERN "*.py"
++          PATTERN "test/*" EXCLUDE )
++  install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/onnx
++          DESTINATION  "${PY_SITEARCH}"
++          FILES_MATCHING
++          PATTERN "*.py"
++          PATTERN "test/*" EXCLUDE )
+ endif()
+ 
+ configure_file(
+@@ -546,6 +556,9 @@ if(ONNX_INSTALL)
+   install(TARGETS
+     onnx onnx_proto
+     EXPORT ONNXTargets DESTINATION ${CMAKE_INSTALL_LIBDIR})
++  install(TARGETS
++    onnx_cpp2py_export
++    DESTINATION "${PY_SITEARCH}/onnx")
+ 
+   install(EXPORT ONNXTargets
+     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/ONNX"
+-- 
+2.54.0
+

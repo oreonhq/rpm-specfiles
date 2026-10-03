@@ -366,7 +366,7 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %{_docdir}/
 %endif
 
-%global source0_hash none
+%global source0_hash cba47efbaad1bedd529725cbc14e21f156c7a19366f07b3edfbb076ffd7afdf8
 
 %changelog
 * Tue Aug 25 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.2-1

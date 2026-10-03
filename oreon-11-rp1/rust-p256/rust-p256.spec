@@ -160,18 +160,6 @@ use the "hash2curve" feature of the "%{crate}" crate.
 %files       -n %{name}+hash2curve-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+hex-literal-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+hex-literal-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "hex-literal" feature of the "%{crate}" crate.
-
-%files       -n %{name}+hex-literal-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+jwk-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -206,18 +194,6 @@ This package contains library source intended for building other packages which
 use the "pkcs8" feature of the "%{crate}" crate.
 
 %files       -n %{name}+pkcs8-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+primeorder-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+primeorder-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "primeorder" feature of the "%{crate}" crate.
-
-%files       -n %{name}+primeorder-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+serde-devel

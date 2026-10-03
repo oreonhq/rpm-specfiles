@@ -1,5 +1,3 @@
-%global source0_hash none
-
 # This specfile is licensed under:
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: Fedora Project Authors
@@ -17,7 +15,10 @@ License:        Unlicense
 URL:            https://github.com/yt-dlp/yt-dlp
 Source:         %{url}/archive/%{version}/yt-dlp-%{version}.tar.gz
 
-Patch:          0001-Fix-curl-beta-version-parsing.patch
+# https://github.com/yt-dlp/yt-dlp/pull/17491
+# Relax handshake error regexp
+Patch:          17491.patch
+
 # Needed for compatibility with Fedora <= 44
 Patch:          0002-Restore-compatibility-with-pytest-9.patch
 
@@ -32,7 +33,7 @@ BuildRequires:  %{py3_dist pytest}
 %endif
 
 # Needed for docs
-BuildRequires:  pandoc-cli
+BuildRequires:  pandoc
 BuildRequires:  make
 
 Requires:       yt-dlp+default = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -61,8 +62,6 @@ additional features and fixes.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -p1
 
 # TODO: Figure out https://bugzilla.redhat.com/show_bug.cgi?id=2405578
@@ -115,4 +114,3 @@ make yt-dlp.1 completion-bash completion-zsh completion-fish
 
 %changelog
 %autochangelog
-

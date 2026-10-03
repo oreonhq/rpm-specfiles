@@ -1,4 +1,4 @@
-%global source0_hash 859b723666eeac7df018209d66045c9853b50b4218cecadb794e2359619ebce7
+%global source0_hash 6698f72e2018eaebb810c8a47345fc8a40a3f945551380ce88a0da6c434a010a
 
 Summary: Run-time libraries and programs
 Name: motif
@@ -6,7 +6,8 @@ Version: 2.5.2
 Release: 1%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
-Source:        http://downloads.sf.net/motif/motif-%{version}.tar.gz
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source:        https://src.fedoraproject.org/repo/pkgs/motif/motif-2.5.2.tar.gz/sha512/76b3c5182b15ae6a6eec3732d5c69ff3d4013a438b855d8214779c655e9db2514f13917eeee2ee7a9270dca006db55b3f5dd8688cc20a21e8bb9f3de98686732/motif-2.5.2.tar.gz
 Source1: xmbind
 URL: http://www.motifzone.net/
 Obsoletes: openmotif < 2.3.4
@@ -22,36 +23,13 @@ BuildRequires: libXft-devel libXmu-devel libXp-devel libXt-devel libXext-devel
 BuildRequires: xorg-x11-xbitmaps
 BuildRequires: perl-interpreter
 
-Patch22: motif-2.3.4-no_demos.patch
-Patch23: openMotif-2.2.3-uil_lib.patch
-Patch43: openMotif-2.3.0-rgbtxt.patch
-Patch45: motif-2.3.4-mwmrc_dir.patch
-Patch46: motif-2.3.4-bindings.patch
-Patch47: openMotif-2.3.0-no_X11R6.patch
 # FTBFS #1448819
-Patch48: motif-2.3.4-Fix-issues-with-Werror-format-security.patch
-Patch49: motif-configure-c99.patch
-Patch50: motif-c99-void-sprintf.patch
-Patch51: motif-c99-string.patch
 # CVE-2023-43788
-Patch55: 0001-Fix-CVE-2023-43788-Out-of-bounds-read-in-XpmCreateXp.patch
 # CVE-2023-43789
-Patch56: 0001-Fix-CVE-2023-43789-Out-of-bounds-read-on-XPM-with-co.patch
 # https://sourceforge.net/p/motif/code/merge-requests/9/
-Patch58: 0001-build-Check-for-Xinerama-availability.patch
-Patch59: 0002-Xm-Display-Add-optional-Xinerama-support.patch
-Patch60: 0003-Xm-MenuShell-Use-Xinerama-to-place-menus.patch
-Patch61: 0004-Xm-DropDown-Use-Xinerama-for-placement.patch
-Patch62: 0005-Xm-RCMenu-Use-Xinerama-for-placement.patch
-Patch63: 0006-Xm-Tooltip-Use-Xinerama-for-placement.patch
-Patch64: 0007-Xm-ComboBox-Use-Xinerama-for-placement.patch
 # https://sourceforge.net/p/motif/code/merge-requests/10/
-Patch65: 0001-Xm-String-Fix-memory-leak.patch
 # https://sourceforge.net/p/motif/code/merge-requests/11/
-Patch66:  0001-Xm-Screen-Add-_NET_WORKAREA-support.patch
-Patch67:  0002-Xm-Screen-Add-_GTK_WORKAREAS-support-for-multi-monit.patch
 
-Patch68: includes.patch
 
 Conflicts: lesstif <= 0.92.32-6
 
@@ -85,30 +63,7 @@ This package contains the static Motif libraries.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
-%patch -P 22 -p1 -b .no_demos
-%patch -P 23 -p1 -b .uil_lib
-%patch -P 43 -p1 -b .rgbtxt
-%patch -P 45 -p1 -b .mwmrc_dir
-%patch -P 46 -p1 -b .bindings
-%patch -P 47 -p1 -b .no_X11R6
-%patch -P 48 -p1 -b .format-security
-%patch -P 49 -p1
-%patch -P 50 -p1
-%patch -P 51 -p1
-%patch -P 55 -p1
-%patch -P 56 -p1
-%patch -P 58 -p1 -b .xinerama
-%patch -P 59 -p1 -b .xinerama
-%patch -P 60 -p1 -b .xinerama
-%patch -P 61 -p1 -b .xinerama
-%patch -P 62 -p1 -b .xinerama
-%patch -P 63 -p1 -b .xinerama
-%patch -P 64 -p1 -b .xinerama
-%patch -P 65 -p1 -b .utf8-memleak
-%patch -P 66 -p1 -b .net-workarea
-%patch -P 67 -p1 -b .gtk-workareas
 
-%patch -P 68 -p1 -b .includes
 
 %build
 export CFLAGS="$CFLAGS -std=gnu17"

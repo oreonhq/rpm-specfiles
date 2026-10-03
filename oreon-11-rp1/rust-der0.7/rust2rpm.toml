@@ -1,0 +1,20 @@
+[package]
+# Upstream:
+#
+# Pure Rust embedded-friendly implementation of the Distinguished Encoding Rules
+# (DER) for Abstract Syntax Notation One (ASN.1) as described in ITU X.690 with
+# full support for heapless `no_std`/`no_alloc` targets
+summary = "Pure Rust embedded-friendly implementation of DER for ASN.1"
+cargo-toml-patch-comments = [
+    """\
+    Allow hex-literal 1.0: \
+    https://github.com/RustCrypto/formats/commit/ed08fc043e7abb38a86fca10f114d15a86f4cb25\
+    """,
+]
+doc-files.exclude = [
+    # This file is included as a documentation string in the library, so
+    # compilation fails if it is not present. It therefore must not be marked
+    # as documentation, because packages should be equally useful when their
+    # documentation is not installed.
+    "README.md",
+]

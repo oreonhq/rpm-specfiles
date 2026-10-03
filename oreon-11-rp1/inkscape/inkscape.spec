@@ -1,6 +1,6 @@
-%global source0_hash none
-
-%global source10_key_fpr 74E8DA1398055A8120B276EB5FCB204EF882B07A
+%global source0_hash bbce5753a1e08b871a5cf16c665eb060700aaab9a6a379dc63f4c4d9b3b8856e
+%global source1_hash 09f6eccc35df0e2a9c28cc40b15e1a280e253a5851ce6d610a40311ac04178de
+%global source10_hash b532dc469e6dfb996b4a9a223a88f69eeb854918af63f0961c53348aee558010
 
 # Reduce debuginfo verbosity
 %global optflags %(echo %{optflags} | sed 's/-g /-g1 /')
@@ -26,8 +26,8 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:10})
 
 Name:           inkscape
-Version:        1_4_4
-Release:        %autorelease
+Version:        1.4.4
+Release:        1%{?dist}
 Summary:        Vector-based drawing program using SVG
 
 License:        GPL-2.0-or-later AND CC-BY-3.0
@@ -38,7 +38,7 @@ Source0:        https://media.inkscape.org/dl/resources/file/inkscape-%{version}
 Source1:        https://media.inkscape.org/media/resources/sigs/inkscape-1.4.4_2026-05-05_dcaf3e7d9e.tar.xz.sig
 
 # Keyring(s)
-Source10:        MarcJeanmougin.gpg
+Source10:       https://inkscape.org/~MarcJeanmougin/gpg/#/MarcJeanmougin.gpg
 
 
 # Should we split this package and mark it as a Enhance,
@@ -46,14 +46,12 @@ Source10:        MarcJeanmougin.gpg
 # Fedora Color Palette, GIMP format, CC-BY 3.0
 Source100:      Fedora-Color-Palette.gpl
 
-Patch0:         7722.patch
-# Poppler 26.01.0
-Patch1:         3a528728ebe33e10bb44d152f47cfedfddbfe18a.patch
-
 # Don't drop i686 until at least texlive no longer needs it -GC, 2023-08-10
 #%%if 0%%{?fedora} >= 39
 #ExcludeArch:    %%{ix86}
 #%%endif
+
+Patch:          inkscape-1.4.4-poppler-26.08.0.patch
 
 Provides: bundled(libcroco) = 0.6.99~gitb9e4b47
 Provides: bundled(autotrace) = 0.40.0~git0de6201
@@ -184,10 +182,12 @@ graphics in W3C standard Scalable Vector Graphics (SVG) file format.
 
 
 %prep
-%(test -z "%{source10_key_fpr}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source10_key_fpr}" || { echo "oreon: Source10 key fingerprint mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE10}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%autosetup -n inkscape-1.4.3_2025-12-25_0d15f75042 -p1
+%autosetup -n inkscape-1.4.4_2026-05-05_dcaf3e7d9e -p1
 %py3_shebang_fix .
 
 # https://bugs.launchpad.net/inkscape/+bug/314381
@@ -303,5 +303,4 @@ end
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.3-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7dc2244a2f84a4bfb1d36c37bac80cd78e35cdc5c119206d87b018e1445f3a3f
 
 Name:           python-humanize
 Version:        4.16.0

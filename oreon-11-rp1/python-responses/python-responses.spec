@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b0c11ca8131b8b227b8d5108e6ed39772222bd5aab030ed430e8f99057c4c409
 
 Name:           python-responses
 Version:        0.26.3

@@ -62,18 +62,6 @@ use the "portable-atomic" feature of the "%{crate}" crate.
 %files       -n %{name}+portable-atomic-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+portable-atomic-util-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+portable-atomic-util-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "portable-atomic-util" feature of the "%{crate}" crate.
-
-%files       -n %{name}+portable-atomic-util-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+std-devel
 Summary:        %{summary}
 BuildArch:      noarch

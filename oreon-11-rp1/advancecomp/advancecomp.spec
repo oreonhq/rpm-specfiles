@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 799397b10d087d0147d6af117a5a473120f1369f0a3a3d68bf953abc0b749b75
 
 Name:           advancecomp
 Version:        2.6

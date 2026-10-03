@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e184cb625010fab7043a9d5e1e000fdeb3067a152bb3169ef53f64dfac37164c
 
 # Samples aren't supported on i686
 %ifarch i686

@@ -1,0 +1,14 @@
+[package]
+cargo-toml-patch-comments = [
+    "Omit streebog dev-dependency to avoid a compat package",
+]
+
+[[package.extra-patches]]
+number = 10
+file = "hmac-0.12.1-no-streebog.patch"
+comments = [
+    """\
+Downstream-only: skip compiling tests that would require a rust-streebog0.10 \
+compat package.\
+""",
+]

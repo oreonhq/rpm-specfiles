@@ -1,4 +1,4 @@
-%global source0_hash 5152fbcac11a52a20858780a87b4e9f759250cabf4c1b054a9379b001511c15c
+%global source0_hash 46c60960e283ead6f386c1fa6084914a5bc9624f37f16357e77dc74fb59844d4
 
 %global debug_package %{nil}
 %global srctag ippcp_2021.10.0
@@ -51,7 +51,7 @@ Static library.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n ipp-crypto-%{srctag}
+%autosetup -n cryptography-primitives-%{srctag}
 # library path fix
 sed -i 's/"lib\"/"lib64"/g' sources/ippcp/crypto_mb/src/CMakeLists.txt
 

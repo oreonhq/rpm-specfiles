@@ -1,4 +1,4 @@
-%global source0_hash 56a1fc2f1f813e49026a0f284b9209a6b2824620993e7598c85b01c444ff0f64
+%global source0_hash 104e3e5ee5c84524d5e50324d664c7859b1ac422ab97a3e7a248985a4b4f7f64
 
 Name:		perltidy
 Version:	20260826
@@ -6,7 +6,8 @@ Release:	1%{?dist}
 Summary:	Tool for indenting and re-formatting Perl scripts
 License:	GPL-2.0-or-later
 URL:		http://perltidy.sourceforge.net/
-Source0:        https://cpan.metacpan.org/modules/by-module/Perl/Perl-Tidy-%{version}.tar.gz
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/perltidy/Perl-Tidy-20260826.tar.gz/sha512/e7124c84dec11bfdd4fba49c5332af98a947b7107d6e852e0e4b2425bc1384fa4c17a903470cada1b5dde17f63f90cbc332f0d97a094926935535e7833d57b2d/Perl-Tidy-20260826.tar.gz
 
 
 

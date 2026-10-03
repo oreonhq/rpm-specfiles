@@ -1,4 +1,4 @@
-%global source0_hash 604e7c3346fedab7834edab16b4be60f411c949cc3f86e0c9894bafc5d4c788d
+%global source0_hash b7aeb9b11d046b552972ade834f1f9be98b185fa8444480688e3627625377080
 
 %global gem_name sinatra
 
@@ -7,7 +7,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 4.2.1
-Release: 5%{?dist}
+Release: %autorelease
 Summary: Ruby-based web application framework
 License: MIT
 URL: http://sinatrarb.com/
@@ -53,6 +53,7 @@ BuildArch: noarch
 Sinatra is a DSL for quickly creating web applications in Ruby with minimal
 effort.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{epoch}:%{version}-%{release}
@@ -63,7 +64,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 ( cd %{builddir}
@@ -83,6 +83,7 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
 
 # Fix shebangs, though those are examples.
 sed -i -e 's|^#!/usr/bin/env ruby|#!/usr/bin/ruby|' \

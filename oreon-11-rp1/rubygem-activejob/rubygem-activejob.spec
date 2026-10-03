@@ -1,11 +1,11 @@
-%global source0_hash d14aa5ca8903c86be596e20a58a92a8130357c5f257cc7fe7bc6d502c05c5d5b
+%global source0_hash 469eddb3822aff1c6a0df0bd3398f28bff8fcd1bd0e9d309e6b7ccbd0bdba1b6
 
 # Generated from activejob-4.2.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name activejob
 
 Name: rubygem-%{gem_name}
 Version: 8.0.3
-Release: 3%{?dist}
+Release: %autorelease
 Summary: Job framework with pluggable queues
 License: MIT
 URL: https://rubyonrails.org

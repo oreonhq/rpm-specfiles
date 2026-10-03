@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7700eced92847d34ad9846b138cf195a9c974b519be70de58797880ae9da649e
 
 Name:           litehtml
 Version:        0.10

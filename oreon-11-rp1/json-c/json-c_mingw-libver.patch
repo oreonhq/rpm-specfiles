@@ -1,9 +1,8 @@
-diff -rupN --no-dereference json-c-json-c-0.18-20240915/CMakeLists.txt json-c-json-c-0.18-20240915-new/CMakeLists.txt
---- json-c-json-c-0.18-20240915/CMakeLists.txt	2024-09-15 18:22:45.000000000 +0200
-+++ json-c-json-c-0.18-20240915-new/CMakeLists.txt	2025-07-13 10:44:18.631292323 +0200
-@@ -472,6 +472,10 @@ add_library(${PROJECT_NAME}
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -546,6 +546,10 @@
  set_target_properties(${PROJECT_NAME} PROPERTIES
-     VERSION 5.4.0
+     VERSION 5.5.0
      SOVERSION 5)
 +if(MINGW)
 +    set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX "-5${CMAKE_SHARED_LIBRARY_SUFFIX}")

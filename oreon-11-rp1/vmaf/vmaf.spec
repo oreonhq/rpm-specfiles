@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5df7386911bc15fd1ca783132528748d219768ae4fc5f8e0b61184f041648092
 
 Name:           vmaf
 Version:        3.2.1

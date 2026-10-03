@@ -193,18 +193,6 @@ use the "regex" feature of the "%{crate}" crate.
 %files       -n %{name}+regex-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+regex-automata-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+regex-automata-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "regex-automata" feature of the "%{crate}" crate.
-
-%files       -n %{name}+regex-automata-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+registry-devel
 Summary:        %{summary}
 BuildArch:      noarch

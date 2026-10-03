@@ -1,17 +1,17 @@
-%global source0_hash none
+%global source0_hash 1cb83e4f702e60b8211ab5ec4c2afbab1b1dec80209456a7d2faf7584ed225ea
 
 %global has_which2_alias 1
 
 Summary: Displays where a particular program in your path is located
 Name: which
 Version: 2.25
-Release: 1%{?dist}
+Release: %autorelease
 License: GPL-3.0-only
-Source0:        https://mirrors.kernel.org/gnu/which/%{name}-%{version}.tar.gz
+Url: https://savannah.gnu.org/projects/which/
+Source0: http://ftp.gnu.org/gnu/which/%{name}-%{version}.tar.gz
 Source1: which2.sh
 Source2: which2.csh
-Patch0: which-2.21-warning.patch
-Url: https://savannah.gnu.org/projects/which/
+Patch0: which-2.25-warning.patch
 Requires: coreutils
 BuildRequires: make
 BuildRequires: gcc gcc-c++
@@ -49,5 +49,4 @@ rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 %{_mandir}/man1/which.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.23-4
-- Prepare for Oreon 11 (RP1)
+%autochangelog

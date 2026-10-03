@@ -1,4 +1,4 @@
-%global source0_hash c35bf68f8e248434957bd5b234c389b02206a06ecd9303a7fb931ed7a5636b16
+%global source0_hash 5546f1aba1c3d1812c2b47d976312d00547d1044b84b6a461323c621f396efce
 
 %global forgeurl https://github.com/libimobiledevice/libusbmuxd
 
@@ -9,7 +9,7 @@ Summary:        Client library USB multiplex daemon for Apple's iOS devices
 
 License:        LGPL-2.0-or-later AND GPL-2.0-or-later
 URL:            https://www.libimobiledevice.org/
-Source:        https://github.com/libimobiledevice/libusbmuxd/releases/download/2.1.1/libusbmuxd-2.1.0.tar.bz2
+Source:        %{forgeurl}/releases/download/%{version}/%{name}-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  make

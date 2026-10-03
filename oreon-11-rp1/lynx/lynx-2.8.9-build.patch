@@ -12,16 +12,16 @@ diff --git a/makefile.in b/makefile.in
 index ad78441..0fd8b1e 100644
 --- a/makefile.in
 +++ b/makefile.in
-@@ -108,8 +108,6 @@ COMPRESS_EXT=@COMPRESS_EXT@
+@@ -109,8 +109,6 @@ COMPRESS_EXT=@COMPRESS_EXT@
  # Path of scripts directory
  scripts_dir=$(srcdir)/scripts
  
--MAKE_RECUR = $(MAKE) @cf_cv_makeflags@ DESTDIR="$(DESTDIR)" CC="$(CC)"
+-MAKE_RECUR = $(MAKE) DESTDIR="$(DESTDIR)" CC="$(CC)"
 -
  @LYNXCFG_MAKE@CFG2HTML = alphatoc.html body.html cattoc.html
  
  # !!!!!!!!!!! SUN resolv LIBRARY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-@@ -199,20 +197,20 @@ binary_PROG  = $(actual_PROG)$x
+@@ -200,20 +198,20 @@ binary_PROG  = $(actual_PROG)$x
  
  all lynx$x: cfg_defs.h LYHelp.h
  @MSG_DIR_MAKE@	$(SHELL) $(scripts_dir)/fixtext.sh $(srcdir)/LYMessages_en.h >LYMessages.c
@@ -52,8 +52,8 @@ index ad78441..0fd8b1e 100644
  
  etags:
  	$(ETAGS) *.[ch] */*.[ch] */*/*.[ch] */*/*/*.[ch]
-@@ -233,27 +231,27 @@ help:
- clean:
+@@ -234,27 +232,27 @@ help:
+ clean::
  	rm -f WWW/Library/*/*.[aoib]
  	rm -f WWW/Library/*/.created
 -	( cd $(WWW_DIR) && $(MAKE_RECUR) $@ )
@@ -85,11 +85,11 @@ index ad78441..0fd8b1e 100644
 +	-( $(MAKE) -C $(WWW_DIR) $@ )
 +	-( $(MAKE) -C $(SRC_DIR) $@ )
 +	-( $(MAKE) -C $(CHR_DIR) $@ )
-+@MSG_DIR_MAKE@	( $(MAKE) -C $(PO_DIR) $@ )
++@MSG_DIR_MAKE@	-( $(MAKE) -C $(PO_DIR) $@ )
  @MSG_DIR_MAKE@	-rmdir $(PO_DIR)
- 	-rm -f *~ *.bak *.sav tags TAGS
+ 	-rm -f *~ *.bak *.sav *.tmp tags TAGS
  	-rm -f $(WWW_DIR)/makefile $(SRC_DIR)/makefile $(CHR_DIR)/makefile
-@@ -299,7 +297,7 @@ install-full: install install-help install-doc
+@@ -300,7 +298,7 @@ install-full: install install-help install-doc
  	@echo "Full installation complete."
  
  install-bin: $(BINDIR) lynx$x
@@ -98,7 +98,7 @@ index ad78441..0fd8b1e 100644
  	@ECHO_CC@$(SHELL) -c "P=$(binary_PROG); \
  	if test -f $(BINDIR)/$$P ; then \
  	      mv -f $(BINDIR)/$$P $(BINDIR)/$$P.old; fi"; \
-@@ -350,7 +348,7 @@ LYNXHELP_URL='$(LYNX_URL)/lynx_help/'
+@@ -356,7 +354,7 @@ LYNXHELP_URL='$(LYNX_URL)/lynx_help/'
  @LYNXCFG_MAKE@@MAKE_PHONY@$(CFG2HTML): htmlized_cfg
  @LYNXCFG_MAKE@@MAKE_PHONY@htmlized_cfg:
  @LYNXCFG_MAKE@	@echo "Making htmlized lynx.cfg"
@@ -107,7 +107,7 @@ index ad78441..0fd8b1e 100644
  @LYNXCFG_MAKE@	@-rm -f $(CFG2HTML)
  @LYNXCFG_MAKE@	sed -n -e '/Config_Type  *Config_Table/,/{0, *0, *0}/ p' $(SRC_DIR)/LYReadCFG.i | \
  @LYNXCFG_MAKE@	sed  -e 's/ *{ *"\([^"]*\)".*/\1/' | \
-@@ -448,7 +446,7 @@ install-lss : $(SYSCONFDIR)
+@@ -454,7 +452,7 @@ install-lss : $(SYSCONFDIR)
  	@$(SHELL) $(scripts_dir)/install-lss.sh "$(INSTALL_DATA)" $(srcdir)/samples/lynx.lss $(SYSCONFDIR)/lynx.lss
  
  uninstall ::
@@ -116,7 +116,7 @@ index ad78441..0fd8b1e 100644
  	-rm -f $(BINDIR)/$(binary_PROG) ;\
  	rm -f $(MANDIR)/$(actual_PROG).1 ;\
  	rm -f $(SYSCONFDIR)/lynx.cfg ;\
-@@ -481,7 +479,7 @@ uninstall-doc ::
+@@ -487,7 +485,7 @@ uninstall-doc ::
  
  update-po:
  	rsync -Lrtvz  translationproject.org::tp/latest/lynx/  $(PO_SRCDIR) ;\
@@ -129,16 +129,16 @@ diff --git a/src/makefile.in b/src/makefile.in
 index 55611da..7cceaa8 100644
 --- a/src/makefile.in
 +++ b/src/makefile.in
-@@ -36,8 +36,6 @@ BUILD_EXEEXT	= @BUILD_EXEEXT@
+@@ -37,8 +37,6 @@ BUILD_EXEEXT	= @BUILD_EXEEXT@
  BUILD_LDFLAGS	= @BUILD_LDFLAGS@
  BUILD_LIBS	= @BUILD_LIBS@
  
--MAKE_RECUR	= $(MAKE) @cf_cv_makeflags@ DESTDIR="$(DESTDIR)" CC="$(CC)"
+-MAKE_RECUR	= $(MAKE) DESTDIR="$(DESTDIR)" CC="$(CC)"
 -
  YACC		= @YACC@
  WINDRES		= @WINDRES@
  
-@@ -117,7 +115,7 @@ message:
+@@ -114,7 +112,7 @@ message:
  	@echo "Compiling Lynx sources"
  
  do_chartrans_stuff:
@@ -147,7 +147,7 @@ index 55611da..7cceaa8 100644
  		SITE_DEFS="$(SITE_DEFS)" \
  		BUILD_CFLAGS="$(BUILD_CFLAGS)" \
  		BUILD_CPPFLAGS="$(BUILD_CPPFLAGS)" \
-@@ -130,7 +128,7 @@ lint:
+@@ -127,7 +125,7 @@
  
  clean:
  	rm -f lynx$x core *.core *.leaks *.i *$o *.bak tags TAGS test_*
@@ -156,7 +156,7 @@ index 55611da..7cceaa8 100644
  
  tags:
  	$(CTAGS) *.[ch]
-@@ -209,7 +207,7 @@ TABLES= \
+@@ -206,7 +204,7 @@ TABLES= \
   $(CHRTR)viscii_uni.h
  
  $(TABLES):
@@ -165,7 +165,7 @@ index 55611da..7cceaa8 100644
  
  UCdomap$o :	UCdomap.c \
  		chrtrans/UCkd.h \
-@@ -218,7 +216,7 @@ UCdomap$o :	UCdomap.c \
+@@ -215,7 +213,7 @@ UCdomap$o :	UCdomap.c \
  	UCdomap.h $(CMN)UCMap.h $(TABLES) $(top_srcdir)/userdefs.h
  
  chrtrans/makeuctb$(BUILD_EXEEXT):
@@ -174,6 +174,3 @@ index 55611da..7cceaa8 100644
  
  UCAux$o : UCAux.c $(CMN)UCAux.h $(CMN)UCDefs.h
  LYCookie$o : $(top_srcdir)/userdefs.h
--- 
-1.8.3.1
-

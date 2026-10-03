@@ -1,4 +1,4 @@
-%global source0_hash ef82a172d82e8300b91b4ec08df282292ac841f9233188e00554f56e97c2c089
+%global source0_hash 36954f0385a1cb9805a02cffbd0d99f2b3a0598a125edfa160b4cca65b417854
 
 Name:           openpace
 Version:        1.1.4

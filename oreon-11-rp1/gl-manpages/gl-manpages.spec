@@ -1,7 +1,6 @@
+%global source0_hash f9ebd05cd218b3c27d2763efd1b0bce7e6ccbade1396ce4e0f15a9f2bfb35aae
 %global source2_hash 70da7140035621330f1b5ab6926197c3c3af467f2207d55a41f6396d9ad96abd
-%global source0_hash none
 %global source3_hash 8b3e796574d63131fd3c90692c830ccf21a272433e3cc1b8c014979c84bd2ff4
-%global source4_hash 90ec9bcd8a518425513076f10fa14d90f19ca430940e01e497f0ce80fdd0fd03
 
 # FIXME:  Figure out what to do about the gles* manpages, maybe different conflicting packages...
 %global codate 20190306
@@ -10,7 +9,7 @@
 
 Name:           gl-manpages
 Version:        1.1
-Release:        35.%{codate}%{?dist}
+Release:        36.%{codate}%{?dist}
 Summary:        OpenGL manpages
 
 # This package uses SGI-B-1.1, we choose to use later variant of this license
@@ -18,15 +17,15 @@ Summary:        OpenGL manpages
 # that is allowed
 License:        Apache-2.0 AND HPND AND HPND-sell-variant AND MIT AND OpenPBS-2.3 AND SGI-B-2.0 AND W3C-19980720 AND X11
 URL:            https://github.com/KhronosGroup/OpenGL-Refpages
-Source0:        https://github.com/KhronosGroup/OpenGL-Refpages/archive/%{commit}/%{name}-%{shortcommit}.tar.gz#/gl-manpages-1.1.tar.gz
+Source0:        https://github.com/KhronosGroup/OpenGL-Refpages/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 # FIXME: Bundle mathml and the Oasis dbmathl until they are packaged
-Source2:        https://www.oasis-open.org/docbook/xml/mathml/1.1CR1/dbmathml.dtd
-Source3:        https://www.w3.org/Math/DTD/mathml2.tgz
+Source2:        http://www.oasis-open.org/docbook/xml/mathml/1.1CR1/dbmathml.dtd
+Source3:        http://www.w3.org/Math/DTD/mathml2.tgz
 # FIXME  These are the old gl-manpages source which 
 # still have some manpages that khronos doesn't. 
 # Ship until somebody in the know helps figuring whats what.
 # When matching install the khronos version.
-Source4:        https://gitlab.freedesktop.org/mesa/gl-manpages/-/archive/main/gl-manpages-main.tar.bz2#/gl-manpages-1.0.1.tar.bz2
+Source4:        gl-manpages-1.0.1.tar.bz2
 #Silence author/version/manual etc. warnings
 Source5:        metainfo.xsl
 
@@ -39,9 +38,9 @@ BuildRequires:  libxslt docbook-style-xsl docbook5-style-xsl python3
 OpenGL manpages
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
-test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 %setup -q -n OpenGL-Refpages-%{commit}
 tar xzf %{SOURCE3}
 cp -av %{SOURCE2} mathml2/
@@ -82,5 +81,4 @@ find $RPM_BUILD_ROOT%{_mandir}/man3/ -type f -size -100b | xargs sed -i -e 's/\.
 
 
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1-35.20190306
-- Import
+%autochangelog

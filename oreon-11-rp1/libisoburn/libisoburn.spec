@@ -1,4 +1,4 @@
-%global source0_hash 2b80a6f73dd633a5d243facbe97a15e5c9a07644a5e1a242c219b9375a45f71b
+%global source0_hash a977b03dc3686d9fdca600458b1578f9cac2b875609bd5ec21f5ada55f20ec50
 
 %global pkgname libisoburn
 
@@ -12,8 +12,8 @@ Version:         1.5.8.pl02
 Release:         1%{?dist}
 License:         GPL-2.0-or-later
 URL:             https://libburnia-project.org/
-Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz
-Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz.sig
+Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.tar.gz
+Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.tar.gz.sig
 Source2:         https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
 Source3:         xorriso_extract_iso_image.desktop
 Patch0:          libisoburn-1.0.8-multilib.patch
@@ -98,7 +98,7 @@ DVD-RAM, BD-R and BD-RE.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -p1 -n %{pkgname}-%{version}
+%autosetup -p1 -n %{pkgname}-%{lua:print((macros.version:gsub("%.pl%d+$","")))}
 
 # Use libisofs1 and libburn1 on EPEL
 %if 0%{?rhel} == 7 || (0%{?rhel} && "%{name}" != "%{pkgname}")

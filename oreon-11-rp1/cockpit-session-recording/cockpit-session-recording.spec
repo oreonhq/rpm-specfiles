@@ -1,4 +1,4 @@
-%global source0_hash b90e96aa904c0a7d00eb1988d5a34a85b69f0bfb3cc322891ef64207f1173b1f
+%global source0_hash bb7cd0002d2ff4a2a7b9c14028eb7d788c3d3711d7250196420f0ebd15daf34a
 
 Name: cockpit-session-recording
 Version: 21

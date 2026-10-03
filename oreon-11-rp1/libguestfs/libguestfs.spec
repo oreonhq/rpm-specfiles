@@ -27,7 +27,7 @@ ExcludeArch: %{ix86}
 %global verify_tarball_signature 1
 
 # The source directory.
-%global source_directory 1.59-development
+%global source_directory 1.61-development
 
 # Filter perl provides.
 %{?perl_default_filter}

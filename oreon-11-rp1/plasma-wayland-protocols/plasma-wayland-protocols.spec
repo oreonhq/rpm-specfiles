@@ -1,4 +1,4 @@
-%global source0_hash 698a7b28b711270314e396e248ae86087cfeaed01372009063995be6e1dc85ba
+%global source0_hash f628585c4c2d5e3a9f447a6274e2f59d7811272da557e75341e36948aa3f9d43
 
 %global wayland_min_version 1.4
 %global debug_package %{nil}

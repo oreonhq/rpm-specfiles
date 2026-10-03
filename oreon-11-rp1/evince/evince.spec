@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f296c5c662886635d4cd597e8ac0afcde7982be4486533c2b7f095b268be8668
 
 # texlive is buildroot only for Fedora flatpaks
 %bcond dvi %{undefined flatpak}

@@ -1,4 +1,4 @@
-%global source6_hash d90c1c9fb9d913648c79bb9c333d89305a872383d9a0d180a9e6f3add910c216
+%global source6_hash c2bb334d3b9320773a368e544c6f8c47e39b0f6e70be32aed38c39cf28adab11
 %global source0_hash 791e1815f8af6e8b850a227a9a0a190f3d3478c9e8d38a0f51c98b7f4bfe368b
 
 %define haproxy_user    haproxy

@@ -1,10 +1,10 @@
-%global source0_hash 51b8aba24230240cb6d78e01b9e9efee280d329f535f30f7f488b6467c7775d3
+%global source0_hash 4f368b2f12b57ec979872d4bf4bd1a67e8648e0c81ab89801431d2fc89f4e0bb
 
 %global gem_name pdf-core
 
 Name: rubygem-%{gem_name}
 Version: 0.9.0
-Release: 13%{?dist}
+Release: %autorelease
 Summary: PDF::Core is used by Prawn to render PDF documents
 # Automatically converted from old format: GPLv2 or GPLv3 or Ruby - review is highly recommended.
 License: GPL-2.0-only OR GPL-3.0-only OR Ruby 
@@ -25,6 +25,7 @@ BuildArch: noarch
 %description
 PDF::Core is used by Prawn to render PDF documents.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -35,7 +36,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b1
 
 %build
@@ -46,6 +46,7 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -pa .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
 
 %check
 pushd .%{gem_instdir}

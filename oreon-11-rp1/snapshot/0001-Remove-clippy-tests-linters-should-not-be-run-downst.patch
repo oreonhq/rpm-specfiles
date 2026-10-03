@@ -26,32 +26,27 @@ index f4cf80e..3fcd51d 100644
 @@ -75,7 +70,6 @@ else
  
    rust_target = 'release'
-   cargo_release_options = [ '--release' ]
+   cargo_release_options = ['--release']
 -  clippy_deny_warnings = []
  endif
  
  cargo_home = meson.project_build_root() / 'cargo-home'
-@@ -98,15 +92,6 @@ if is_devel
-   run_command('cp', '-f', 'hooks/pre-commit.hook', '.git/hooks/pre-commit', check: false)
+@@ -121,10 +115,6 @@ if is_devel
+   )
  endif
  
--clippy_options = []
--clippy_options += cargo_release_options
--clippy_options += [
--  '--all-targets',
--  '--all-features',
--  '--workspace',
+-clippy_options = [
+-  cargo_extra_options,
+-  clippy_deny_warnings,
 -]
--clippy_options += clippy_deny_warnings
--
+ cargo_test_options = cargo_extra_options
+ 
  subdir('data')
- subdir('po')
- subdir('src')
-@@ -126,17 +111,6 @@ test (
+@@ -142,17 +132,6 @@ test(
    timeout: 400,
  )
  
--test (
+-test(
 -  'cargo-clippy',
 -  cargo,
 -  args: [
@@ -59,7 +54,7 @@ index f4cf80e..3fcd51d 100644
 -    clippy_options,
 -  ],
 -  env: cargo_env,
--  timeout: 400, # cargo might take a bit of time sometimes
+-  timeout: 400,  # cargo might take a bit of time sometimes
 -)
 -
  gnome.post_install(
@@ -67,4 +62,3 @@ index f4cf80e..3fcd51d 100644
    glib_compile_schemas: true,
 -- 
 2.53.0
-

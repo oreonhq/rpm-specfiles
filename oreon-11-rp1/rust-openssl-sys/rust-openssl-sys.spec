@@ -61,30 +61,6 @@ use the "aws-lc-fips" feature of the "%{crate}" crate.
 %files       -n %{name}+aws-lc-fips-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+aws-lc-fips-sys-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+aws-lc-fips-sys-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "aws-lc-fips-sys" feature of the "%{crate}" crate.
-
-%files       -n %{name}+aws-lc-fips-sys-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+aws-lc-sys-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+aws-lc-sys-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "aws-lc-sys" feature of the "%{crate}" crate.
-
-%files       -n %{name}+aws-lc-sys-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+bssl-sys-devel
 Summary:        %{summary}
 BuildArch:      noarch

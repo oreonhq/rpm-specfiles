@@ -1,12 +1,11 @@
-%global source0_hash af9384f05917adbf6ac8e554eeb7e37a8d97a734abb01db988b304a3a11e1230
+%global source0_hash 8d052f2622dcb3678cbaee5ff582a87572672a6c0a56533cdda5b65cb636120a
 
 Name: liburing
 Version: 2.15
 Release: 1%{?dist}
 Summary: Linux-native io_uring I/O access library
 License: (GPL-2.0-only WITH Linux-syscall-note OR MIT) AND (LGPL-2.0-or-later OR MIT)
-Source0:        https://brick.kernel.dk/snaps/%{name}-%{version}.tar.gz
-Source1:        https://brick.kernel.dk/snaps/%{name}-%{version}.tar.gz.asc
+Source0:        https://github.com/axboe/liburing/archive/refs/tags/%{name}-%{version}.tar.gz
 URL: https://git.kernel.dk/cgit/liburing/
 BuildRequires: gcc
 BuildRequires: gcc-c++
@@ -27,7 +26,7 @@ for the Linux-native io_uring.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{name}-%{version}
 
 %build
 %set_build_flags

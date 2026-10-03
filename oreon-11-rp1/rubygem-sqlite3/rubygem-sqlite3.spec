@@ -1,10 +1,10 @@
-%global source0_hash 5c61aed445ac44d0c298247adc01ea7a2af932cf0f4590883a600de04a5e5f7c
+%global source0_hash 87fa0036e6369c3f3cfeca749865c2b2b63649d3b17b223d1939a8eed4841a6b
 
 %global gem_name sqlite3
 
 Name: rubygem-%{gem_name}
 Version: 2.5.0
-Release: 5%{?dist}
+Release: %autorelease
 Summary: Allows Ruby scripts to interface with a SQLite3 database
 License: BSD-3-Clause
 URL: https://github.com/sparklemotion/sqlite3-ruby
@@ -40,7 +40,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 1
 
 # Remove bundled SQLite right away.

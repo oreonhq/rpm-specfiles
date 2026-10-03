@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7c7091e9c86196148bd41177b4590dccb1510bfe6cea5bf7407ff194482eb049
 
 Name:		libftdi
 Version:	1.5

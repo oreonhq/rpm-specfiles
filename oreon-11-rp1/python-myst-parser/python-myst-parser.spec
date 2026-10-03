@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ab69322dc6719dcc7f296479dbb70181b66df6ed315064f92dbc85c0e1bf2f02
 
 Name:           python-myst-parser
 Version:        5.1.0
@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'myst-parser' generated automatically by pyp2spec.}
 
-Patch:          Adjust-test-output-to-docutils-0.22.patch
 
 %description %_description
 

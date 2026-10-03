@@ -1,4 +1,4 @@
-%global source0_hash ec103fa05cb0f251e375f6ea0b6112cfc9d0acd977dc5b69fdc54242ba38a16f
+%global source0_hash 23c8575c7d1ced07246cb9cf200c11325b72201fd4134a02414ca869fbdd8ed3
 
 %bcond optional_tests %{undefined rhel}
 
@@ -9,7 +9,7 @@ Summary:	The Apache Kafka C library
 
 License:	Apache-2.0
 URL:		https://github.com/edenhill/librdkafka
-Source0:        https://github.com/edenhill/librdkafka/archive/refs/tags/v2.12.1.tar.gz#/librdkafka-2.12.1.tar.gz
+Source0:        https://github.com/edenhill/librdkafka/archive/refs/tags/v2.15.1.tar.gz#/librdkafka-2.15.1.tar.gz
 
 BuildRequires:	gcc
 BuildRequires:	gcc-c++

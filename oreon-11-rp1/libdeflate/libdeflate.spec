@@ -1,4 +1,4 @@
-%global source0_hash d11473c1ad4c57d874695e8026865e38b47116bbcb872bfc622ec8f37a86017d
+%global source0_hash bba03fffc5538576213675ce6968fcff6ce2e67d82e4d5febea2d05f9f13cf85
 
 %bcond mingw 1
 
@@ -10,7 +10,7 @@ Summary:       Fast implementation of DEFLATE, gzip, and zlib
 # SPDX
 License:       MIT
 URL:           https://github.com/ebiggers/libdeflate
-Source:        https://github.com/ebiggers/libdeflate/archive/refs/tags/v1.25.tar.gz#/libdeflate-1.25.tar.gz
+Source:        https://github.com/ebiggers/libdeflate/archive/refs/tags/v1.26.tar.gz#/libdeflate-1.26.tar.gz
 
 # Add a library version to the mingw dll
 Patch:         libdeflate-mingw-libver.patch

@@ -1,19 +1,8 @@
-diff -Naur grpc-1.39.0-original/src/objective-c/tests/CronetTests/CronetUnitTests.mm grpc-1.39.0/src/objective-c/tests/CronetTests/CronetUnitTests.mm
---- grpc-1.39.0-original/src/objective-c/tests/CronetTests/CronetUnitTests.mm	2021-07-20 18:39:39.000000000 -0400
-+++ grpc-1.39.0/src/objective-c/tests/CronetTests/CronetUnitTests.mm	2021-07-23 14:42:11.649278304 -0400
-@@ -103,7 +103,7 @@
-   BIO_free(pem);
- 
-   // Select cipher suite
--  SSL_CTX_set_cipher_list(ctx, "ECDHE-RSA-AES128-GCM-SHA256");
-+  SSL_CTX_set_cipher_list(ctx, "PROFILE=SYSTEM");
- 
-   // Select ALPN protocol
-   SSL_CTX_set_alpn_select_cb(ctx, alpn_cb, NULL);
-diff -Naur grpc-1.39.0-original/test/core/handshake/client_ssl.cc grpc-1.39.0/test/core/handshake/client_ssl.cc
---- grpc-1.39.0-original/test/core/handshake/client_ssl.cc	2021-07-20 18:39:39.000000000 -0400
-+++ grpc-1.39.0/test/core/handshake/client_ssl.cc	2021-07-23 14:41:27.549570232 -0400
-@@ -220,9 +220,7 @@
+diff --git a/test/core/handshake/client_ssl.cc b/test/core/handshake/client_ssl.cc
+index 1952c60..1588e35 100644
+--- a/test/core/handshake/client_ssl.cc
++++ b/test/core/handshake/client_ssl.cc
+@@ -224,9 +224,7 @@ static void server_thread(void* arg) {
  
    // Set the cipher list to match the one expressed in
    // src/core/tsi/ssl_transport_security.cc.
@@ -23,11 +12,12 @@ diff -Naur grpc-1.39.0-original/test/core/handshake/client_ssl.cc grpc-1.39.0/te
 +  const char* cipher_list = "PROFILE=SYSTEM";
    if (!SSL_CTX_set_cipher_list(ctx, cipher_list)) {
      ERR_print_errors_fp(stderr);
-     gpr_log(GPR_ERROR, "Couldn't set server cipher list.");
-diff -Naur grpc-1.39.0-original/test/core/handshake/server_ssl_common.cc grpc-1.39.0/test/core/handshake/server_ssl_common.cc
---- grpc-1.39.0-original/test/core/handshake/server_ssl_common.cc	2021-07-20 18:39:39.000000000 -0400
-+++ grpc-1.39.0/test/core/handshake/server_ssl_common.cc	2021-07-23 14:41:14.369657480 -0400
-@@ -204,9 +204,7 @@
+     grpc_core::Crash("Couldn't set server cipher list.");
+diff --git a/test/core/handshake/server_ssl_common.cc b/test/core/handshake/server_ssl_common.cc
+index ece1b6f..6d7a9e1 100644
+--- a/test/core/handshake/server_ssl_common.cc
++++ b/test/core/handshake/server_ssl_common.cc
+@@ -207,9 +207,7 @@ bool server_ssl_test(const char* alpn_list[], unsigned int alpn_list_len,
  
    // Set the cipher list to match the one expressed in
    // src/core/tsi/ssl_transport_security.c.
@@ -37,4 +27,4 @@ diff -Naur grpc-1.39.0-original/test/core/handshake/server_ssl_common.cc grpc-1.
 +  const char* cipher_list = "PROFILE=SYSTEM";
    if (!SSL_CTX_set_cipher_list(ctx, cipher_list)) {
      ERR_print_errors_fp(stderr);
-     gpr_log(GPR_ERROR, "Couldn't set server cipher list.");
+     grpc_core::Crash("Couldn't set server cipher list.");

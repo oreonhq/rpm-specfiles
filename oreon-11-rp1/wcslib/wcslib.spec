@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 82ac09ce5091b0bf06cec8f5cdeec1dabe1d06ba5dfb7ff2bdb0c1680488807b
 
 Name: wcslib
 Version: 8.9

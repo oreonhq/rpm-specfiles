@@ -50,18 +50,6 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+futures-core-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+futures-core-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "futures-core" feature of the "%{crate}" crate.
-
-%files       -n %{name}+futures-core-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+futures-core-03-stream-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -72,18 +60,6 @@ This package contains library source intended for building other packages which
 use the "futures-core-03-stream" feature of the "%{crate}" crate.
 
 %files       -n %{name}+futures-core-03-stream-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+futures-util-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+futures-util-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "futures-util" feature of the "%{crate}" crate.
-
-%files       -n %{name}+futures-util-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+std-devel

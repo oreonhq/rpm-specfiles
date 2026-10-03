@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c2aace3ac1a9c8c9b9c57ba0ffc99a3d310737cc004db0491802e03536e27c69
 
 Name:    pulseaudio-qt
 Summary: Qt bindings for PulseAudio

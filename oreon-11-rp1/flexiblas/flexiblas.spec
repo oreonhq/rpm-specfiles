@@ -1,6 +1,6 @@
 %global _lto_cflags %{nil}
 %global _smp_mflags -j4
-%global source0_hash none
+%global source0_hash 175bd4ad7b44348c5dc0531c7a0169ad451cbc9a3d018dd17f01d4a0d0244680
 
 %bcond system_lapack 0
 %if 0%{?rhel} || 0%{?flatpak} || (0%{?oreon} >= 11)

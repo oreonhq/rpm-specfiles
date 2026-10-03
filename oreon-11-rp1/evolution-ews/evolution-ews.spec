@@ -14,7 +14,7 @@ Release: 1%{?dist}
 Summary: Evolution extension for Exchange Web Services
 License: LGPL-2.1-or-later
 URL: https://gitlab.gnome.org/GNOME/evolution/-/wikis/home
-Source:        http://download.gnome.org/sources/%{name}/3.60/%{name}-%{version}.tar.xz
+Source:        http://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1-2)/%{name}-%{version}.tar.xz
 
 %global eds_evo_version %{version}
 

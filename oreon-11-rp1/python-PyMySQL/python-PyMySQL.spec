@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d5b288529782e536ae171866df3ca9dc4f6cbfb3cc2f18e6f837fbb90dbc262b
 
 Name:           python-pymysql
 Version:        1.2.3

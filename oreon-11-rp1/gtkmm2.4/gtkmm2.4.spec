@@ -3,8 +3,8 @@
 %global api_ver 2.4
 
 Name:           gtkmm2.4
-Version:        4.24.0
-Release:        1%{?dist}
+Version:        2.24.5
+Release:        24%{?dist}
 
 Summary:        C++ interface for GTK2 (a GUI library for X)
 

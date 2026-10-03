@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 722695808f4b6457b320fdc131280796bdceb04ab50fe1795cd540799ebe1698
 
 Name:           python-markupsafe
 Version:        3.0.3

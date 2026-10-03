@@ -1,14 +1,13 @@
-%global source0_hash 7cbece26ad94bd375eb81fee2b540d0ef68bbeb0994358e57bd588173f96b8ec
-
 Name:           libcerf
+%global rname   cerf
 Version:        3.8
 %global         sover 3
-Release:        1%{?dist}
+Release:        %autorelease
 Summary:        A library that provides complex error functions
 
 License:        MIT
-URL:            https://jugit.fz-juelich.de/mlz/libcerf
-Source0:        https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+URL:            https://jugit.fz-juelich.de/mlz/lib/cerf
+Source0:        %{url}/-/archive/v%{version}/%{rname}-v%{version}.tar.gz
 
 %if (0%{?rhel} || (0%{?fedora} && 0%{?fedora} < 33))
 %undefine __cmake_in_source_build
@@ -36,9 +35,7 @@ developing applications that use %{name}.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%setup -q -n cerf-v%{version}-7e6b637031b5c6cbc89a5f7220bf4ef07518d035
+%setup -q -n %{rname}-v%{version}
 
 %build
 # avoid non-portable default build flags (-march=native -O3), by setting overwrite

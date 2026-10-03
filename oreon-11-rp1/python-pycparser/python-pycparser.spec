@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29
 
 Name:           python-pycparser
 Version:        3.0

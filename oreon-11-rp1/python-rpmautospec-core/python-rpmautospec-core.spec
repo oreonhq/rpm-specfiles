@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bb2f0e8c2cc9b9f8129399fca81abe361423111913b114b366286711a4787597
 
 Name:           python-rpmautospec-core
 Version:        0.2.0

@@ -1,4 +1,4 @@
-%global source0_hash 0a800e9e94dca2ab702d65d72777ae8cae078e3d74d0bcbed64ba0849e8029a1
+%global source0_hash bdb38cd930df73b7879125fba2a63c97d3c20d46c222707243445ddf5b8a0dd0
 
 Summary:        List SCSI devices (or hosts) and associated information
 Name:           lsscsi
@@ -6,7 +6,8 @@ Version:        0.33
 Release:        1%{?dist}
 License:        GPL-2.0-or-later
 # official git repository: https://github.com/doug-gilbert/lsscsi
-Source0:        http://sg.danny.cz/scsi/%{name}-%{version}.tgz
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source0:        https://src.fedoraproject.org/repo/pkgs/lsscsi/lsscsi-0.33.tar.gz/sha512/ddab3223418504d36e6b365652e6f5aea5a344cc0614db6295556c727949ad8e9bea59425153f5c42e293017357072a485eecd8f9a2ed262e6ed6e24bfed3547/lsscsi-0.33.tar.gz
 URL:            http://sg.danny.cz/scsi/lsscsi.html
 BuildRequires:  gcc
 BuildRequires:  make
@@ -24,7 +25,7 @@ Author:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-r%{version}
 
 %build
 %configure

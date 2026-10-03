@@ -1,4 +1,4 @@
-%global source0_hash 214c10aa3019807a1eb26b2c709592f63dbcc00b72985aa86a4fb7ac3cd8b901
+%global source0_hash 465e99d89d762608b7d0c0a103a58eec68c8c28ae6bbd196354c13433e40d20a
 
 Name:           mikmod
 Version:        3.2.10

@@ -1,4 +1,4 @@
-%global source0_hash 74cb9e852673f6f2b90126cb24abe6da4dbedea07f68d45eb1f47e6b1c975c55
+%global source0_hash e76f850e611128a87992bb13ba74807624a9b8ec748e2c2ea7139580f67ab22e
 
 %global gem_name tilt
 
@@ -7,7 +7,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 2.2.0
-Release: 8%{?dist}
+Release: %autorelease
 Summary: Generic interface to multiple Ruby template engines
 License: MIT
 URL: https://github.com/jeremyevans/tilt
@@ -54,6 +54,7 @@ BuildArch: noarch
 %description
 Generic interface to multiple Ruby template engines.
 
+
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
@@ -64,7 +65,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n %{gem_name}-%{version} -b 2
 
 %build
@@ -79,6 +79,7 @@ gem build ../%{gem_name}-%{version}.gemspec
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+
 
 mkdir -p %{buildroot}%{_bindir}
 cp -a .%{_bindir}/* \
@@ -118,6 +119,7 @@ popd
 
 %files doc
 %doc %{gem_docdir}
+
 
 %changelog
 %autochangelog

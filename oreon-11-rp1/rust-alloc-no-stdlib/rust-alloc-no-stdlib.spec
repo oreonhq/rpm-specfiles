@@ -51,6 +51,8 @@ use the "unsafe" feature of the "%{crate}" crate.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{version} -p1
+# sources are shipped executable; '#![...]' then looks like a shebang
+find . -type f -name '*.rs' -exec chmod -x {} +
 %cargo_prep
 
 %generate_buildrequires

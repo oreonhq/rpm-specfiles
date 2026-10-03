@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c6205afb214288cd8ef53f1ea1243ba9388c84b55c929f0b9e6cee7757c6efac
 
 Name:           jline2
 Version:        2.14.6

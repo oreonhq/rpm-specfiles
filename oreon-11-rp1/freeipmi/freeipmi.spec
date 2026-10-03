@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f95c2b73797c4a0341a42a7b3c43efb60954c4130d082ad348fd40da554b4e85
 
 Name:             freeipmi
 Version:          1.6.19
@@ -20,7 +20,6 @@ BuildRequires:    libtool
 
 # https://lists.gnu.org/archive/html/freeipmi-devel/2025-02/msg00000.html
 # https://github.com/chu11/freeipmi-mirror/commit/ececf09d6128cbff65e9048f19d191e87f111059
-Patch0:           c23.patch
 
 %description
 The FreeIPMI project provides "Remote-Console" (out-of-band) and

@@ -13,7 +13,7 @@ Summary:        Iterator over simple binary blob storage
 
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/blobby
-Source:         https://crates.io/crates/blobby
+Source:         %{crates_source}
 
 BuildRequires:  cargo-rpm-macros >= 24
 

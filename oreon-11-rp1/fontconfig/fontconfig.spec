@@ -1,4 +1,4 @@
-%global source0_hash 486c53e63c07cefd56ccd1234a665bc45fa2f37072c189ccb06373b97c7d73c2
+%global source0_hash 4f7b554a38cdf78c033f666c8871f3749e14a094f65a07f630c91ed0b43d35e3
 
 # ifdef'd in source code but runtime dep will be made for FT_Done_MM_Var symbol in freetype-2.9.1
 # so update the build deps as well to keep deps consistency between runtime and build time.
@@ -15,7 +15,8 @@ Release:	1%{?dist}
 # otherwise MIT
 License:	HPND AND LicenseRef-Fedora-Public-Domain AND Unicode-DFS-2016
 # Official release tarball on freedesktop.org is missing for some tags; GitLab tag archive matches upstream.
-Source:        http://fontconfig.org/release/%{name}-%{version}.tar.xz
+# upstream host unreachable; tarball from Fedora lookaside cache
+Source:        https://src.fedoraproject.org/repo/pkgs/fontconfig/fontconfig-2.18.3.tar.xz/sha512/c3e769f74dc21093ada48084bddaca1ab525b1c4f04c5c11f067b69346fab153cad95de8b8238b20b02e8b9679c314bf2e0e9c4218511d8fe0f1826e4c4c6a24/fontconfig-2.18.3.tar.xz
 URL:		http://fontconfig.org
 Source1:	25-no-bitmap-fedora.conf
 Source2:	fc-cache
@@ -23,9 +24,7 @@ Source2:	fc-cache
 # https://bugzilla.redhat.com/show_bug.cgi?id=140335
 Patch0:		%{name}-sleep-less.patch
 Patch4:		%{name}-drop-lang-from-pkgkit-format.patch
-Patch5:		%{name}-disable-network-required-test.patch
 Patch6:		%{name}-lower-nonlatin-conf.patch
-Patch7:		%{name}-fix-crash.patch
 
 BuildRequires:	libxml2-devel
 BuildRequires:	freetype-devel >= %{freetype_version}

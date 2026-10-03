@@ -1,4 +1,4 @@
-%global source0_hash 6eb10e336e4e17838eaaabe1f4a02657bc846649d738a2902ac4edc1b2c70556
+%global source0_hash 47da5ae967c93ed3aef4d5cc3ca173fe6d1ad6051148ad2f9ffc30833dbf78c6
 %global source1_hash none
 
 %{?nodejs_find_provides_and_requires}

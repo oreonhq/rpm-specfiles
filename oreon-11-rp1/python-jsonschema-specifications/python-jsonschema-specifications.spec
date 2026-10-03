@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b540987f239e745613c7a9176f3edb72b832a4ac465cf02712288397832b5e8d
 
 Name:           python-jsonschema-specifications
 Version:        2025.9.1

@@ -1,10 +1,10 @@
-%global source0_hash e0b3a627cd53d430525b69d57e06facd2fbeaa304b7e425582e39570f84ffb3d
+%global source0_hash 51630e43425078311c056ca75f961bb3bda1641ab36e44ad4c455e0b0e4a231c
 
 %global gem_name ffi
 
 Name: rubygem-%{gem_name}
 Version: 1.17.0
-Release: 7%{?dist}
+Release: %autorelease
 Summary: FFI Extensions for Ruby
 License: BSD-3-Clause
 URL: https://github.com/ffi/ffi/wiki
@@ -56,7 +56,6 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %setup -q -n  %{gem_name}-%{version} -a 1
 
 %patch 0 -p1
@@ -79,6 +78,7 @@ cp -a .%{gem_extdir_mri}/{gem.build_complete,*.so} %{buildroot}%{gem_extdir_mri}
 
 # Prevent dangling symlink in -debuginfo (rhbz#878863).
 rm -rf %{buildroot}%{gem_instdir}/ext/
+
 
 %check
 ln -s $(pwd)/spec .%{gem_instdir}/spec

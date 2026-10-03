@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash db10030528f3365c03755969619dd6789147d34fc588db8107364351085aebad
 
 Name: dwz
 Version: 0.17

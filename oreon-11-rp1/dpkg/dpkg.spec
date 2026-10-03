@@ -1,4 +1,4 @@
-%global source0_hash 2dd060e2ce856c721c4c7f5e017daaf2e52bc196cc45412db98bcaeaf98ef9ca
+%global source0_hash 4baf0632157bfac430b7dc1fe8800ea0787dac91f8bb272404ae19d98e569dd3
 
 # Remove bad dependencies added by perl-generators
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(at|extra|file\\)$

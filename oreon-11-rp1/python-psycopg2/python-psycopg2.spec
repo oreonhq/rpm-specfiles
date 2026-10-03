@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d36784fc2dae69523ba4b79c7d1d1b4d6e83e87836874f111262f4db940b16a6
 
 Name:           python-psycopg2
 Version:        2.9.13
@@ -19,7 +19,6 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'psycopg2' generated automatically by pyp2spec.}
 
-Patch0: test_types_extras-2.9.3-test_from_tables.patch
 
 %description %_description
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bfd19cb06cc71f3352d567e90284d8cdac02ac89774bbeadf0b533b0c11432fd
 
 %global source2_key_fpr 0CF4E8D871593224842832B888DD9E08C5DDACB9
 
@@ -32,7 +32,6 @@ Patch4:        findutils-4.6.0-test-lock.patch
 Patch5:        findutils-4.6.0-leaf-opt.patch
 
 # fix find not obeying -ignore_readdir_race in symlink_loop (#2232278)
-Patch6:        findutils-4.9.0-ignore_readdir_race-symlink_loop.patch
 
 Conflicts: filesystem < 3
 Provides: /bin/find
@@ -64,7 +63,7 @@ useful for finding things on your system.
 %prep
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -N -S git -n findutils-4.10.0
+%autosetup -N -S git -n findutils-%{version}
 
 # drop the source code of locate
 git rm -q -r locate

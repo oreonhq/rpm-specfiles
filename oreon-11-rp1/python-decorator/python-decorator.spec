@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4cbcdd55a6efadb9dbea26b858f4fb3264567b52d69ca0d25b721b553f60ea82
 
 Name:           python-decorator
 Version:        5.3.1

@@ -35,18 +35,6 @@ use the "%{crate}" crate.
 %doc %{crate_instdir}/README.md
 %{crate_instdir}/
 
-%package     -n %{name}+snapbox-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+snapbox-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "snapbox" feature of the "%{crate}" crate.
-
-%files       -n %{name}+snapbox-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+snapshot-devel
 Summary:        %{summary}
 BuildArch:      noarch

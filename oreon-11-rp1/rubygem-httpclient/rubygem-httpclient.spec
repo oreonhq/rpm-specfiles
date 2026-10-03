@@ -17,7 +17,7 @@ Release:        17%{?dist}
 # httpclient is licensed under Ruby license from 2003 or later.
 License:        Ruby
 URL:            https://github.com/nahi/httpclient
-Source0:        http://gems.rubyforge.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Requires:       ruby(release)
 BuildRequires:  rubygems-devel
 %if %{with tests}

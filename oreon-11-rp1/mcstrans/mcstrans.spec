@@ -1,19 +1,20 @@
-%global source0_hash none
-
-%global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
+%global source0_hash b7561929e50ec668b88b55377e64d0f71726a048236de2708a935f6c73962a7a
+%global source1_hash 2c52081e6753a2629c39962dfccad63dd8a1df4ebc88d246a5a63f56be3b74d6
+%global source2_hash caf7cb1981e2f5fa5952c2f3a11f9247221d16df4d9111ce15164a64675fc452
 
 %define libselinuxver 3.11-1
 
 Summary: SELinux Translation Daemon
 Name: mcstrans
 Version: 3.11
-Release: 1%{?dist}
+Release: %autorelease
 License: GPL-2.0-or-later
 Url: https://github.com/SELinuxProject/selinux/wiki
-Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz
-Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz.asc
-Source2:        https://github.com/perfinion.gpg
-Source3:        secolor.conf.8
+VCS: git:https://github.com/SELinuxProject/selinux.git
+Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz
+Source1: https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz.asc
+Source2: https://github.com/bachradsusi.gpg
+Source3: secolor.conf.8
 # fedora-selinux/selinux: git format-patch -N 3.11 -- mcstrans
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
@@ -45,7 +46,9 @@ mcstrans provides an translation daemon to translate SELinux categories
 from internal representations to user defined representation.
 
 %prep
-%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n mcstrans-%{version}
 
@@ -100,5 +103,4 @@ install -m644 %{SOURCE3} %{buildroot}%{_mandir}/man8/
 %{_usr}/share/mcstrans/util/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

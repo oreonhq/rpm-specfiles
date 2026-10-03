@@ -8,7 +8,7 @@
 %bcond_without tests
 
 Name:           debhelper
-Version:        14.5.git
+Version:        13.30
 Release:        %autorelease
 Summary:        Helper programs for debian/rules
 License:        GPL-2.0-or-later
@@ -18,7 +18,8 @@ BuildArch:      noarch
 # dpkg-gencontrol: warning: unknown CC system type ppc64le-redhat-linux, falling back to default (native compilation)
 ExcludeArch:    ppc64le
 
-Source0:        http://ftp.debian.org/debian/pool/main/d/%{name}/%{name}_%{version}.tar.xz
+# superseded versions leave the Debian pool; snapshot.debian.org keeps them
+Source0:        https://snapshot.debian.org/archive/debian/20260215T142834Z/pool/main/d/%{name}/%{name}_%{version}.tar.xz
 Patch0:         no_layout_deb.patch
 
 BuildRequires:  gcc

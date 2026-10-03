@@ -1,5 +1,5 @@
 %global source0_hash 03a847ff162cba0a457893054d89f066e630db19a43d6cf74b2c7b66766c3583
-%global source1_hash c3728e486179ca0e95ae26498808237963940acd9e4c016fd3eaaa8d5a4c6362
+%global source1_hash 77e32d2c3f77e2e9547c99ee780303bf6080fd3da1ecd2fd6e3882ecdb3b909e
 
 %global         pkgname d3-flame-graph
 %global         github https://github.com/spiermar/d3-flame-graph
@@ -17,7 +17,8 @@ URL:            %{github}
 Source0:        https://github.com/spiermar/d3-flame-graph/archive/%{version}/d3-flame-graph-%{version}.tar.gz#/js-d3-flame-graph-%{version}.tar.gz
 # Note: In case there were no changes to this tarball, the NVR of this tarball
 # lags behind the NVR of this package.
-Source1:        js-d3-flame-graph-vendor-%{version}-1.tar.xz
+# -3: adds @esbuild/linux-arm64 (vite on aarch64)
+Source1:        js-d3-flame-graph-vendor-%{version}-3.tar.xz
 Source2:        Makefile
 Source3:        list_bundled_nodejs_packages.py
 

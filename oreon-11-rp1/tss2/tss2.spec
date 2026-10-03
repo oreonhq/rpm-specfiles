@@ -1,4 +1,4 @@
-%global source0_hash 66d46728f104d3ddfa442dd006d166129ec8c39ab1a5174ed1ca9423a9099794
+%global source0_hash 3c065a1616972d04e8cc63d4b68dfa289e0977b521a11fed76e5973bc49ad75e
 
 #
 # Spec file for IBM's TSS for the TPM 2.0

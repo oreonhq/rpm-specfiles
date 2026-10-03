@@ -14,6 +14,9 @@ Summary:        Rust library for getting information about the current user and 
 License:        Apache-2.0 OR BSL-1.0 OR MIT
 URL:            https://crates.io/crates/whoami
 Source:         %{crates_source}
+# Manually created patch for downstream crate metadata changes
+# * drop wasm, redox and apple-only dependencies and features
+Patch:          whoami-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 
@@ -72,30 +75,6 @@ This package contains library source intended for building other packages which
 use the "std" feature of the "%{crate}" crate.
 
 %files       -n %{name}+std-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+wasi-wasite-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+wasi-wasite-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "wasi-wasite" feature of the "%{crate}" crate.
-
-%files       -n %{name}+wasi-wasite-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+wasm-web-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+wasm-web-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "wasm-web" feature of the "%{crate}" crate.
-
-%files       -n %{name}+wasm-web-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

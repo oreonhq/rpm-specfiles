@@ -1,4 +1,4 @@
-%global source0_hash c0537067bdff5f0b5d7a2fd1cca13c220f6dadc89183f23739a2cf9df49c68ca
+%global source0_hash 2853e41d9cdd61db28ec1e690912e1e5f596e047e3242841a07da1b30d89e2c1
 %global source12_hash bb010722c2cd5d919945a929f1ee9ade18658791d12db53f8010351d91eed32d
 
 %global _hardened_build 1
@@ -26,7 +26,7 @@ Summary: The Point-to-Point Protocol daemon
 License: bsd-3-clause AND zlib AND licenseref-fedora-public-domain AND bsd-attribution-hpnd-disclaimer AND bsd-4.3tahoe AND bsd-4-clause-uc AND apache-2.0 AND lgpl-2.0-or-later AND (gpl-2.0-or-later OR bsd-2-clause OR bsd-3-clause OR bsd-4-clause) AND gpl-2.0-or-later AND xlock AND gpl-1.0-or-later AND mackerras-3-clause-acknowledgment AND mackerras-3-clause AND hpnd-fenneberg-Livingston AND sun-ppp AND hpnd-inria-imag AND sun-ppp-2000
 URL:     http://www.samba.org/ppp
 
-Source0:        https://github.com/paulusmack/ppp/archive/refs/tags/ppp-%{version}.tar.gz#/ppp-2.5.1.tar.gz
+Source0:        https://github.com/paulusmack/ppp/archive/v%{version}/ppp-%{version}.tar.gz
 Source1:        ppp-pam.conf
 Source2:        ppp-logrotate.conf
 Source3:        ppp-tmpfiles.conf
@@ -39,11 +39,6 @@ Source9:        ipv6-up
 Source12:        ppp-watch.tar.xz
 Source13:        ipv6-up.initscripts
 Source14:        ipv6-down.initscripts
-
-# Fedora-specific
-Patch0: ppp-2.5.0-use-change-resolv-function.patch
-# Fix build with GCC 15
-Patch1: ppp-2.5.1-gcc15.patch
 
 BuildRequires: libtool
 BuildRequires: autoconf
@@ -89,7 +84,7 @@ This package contains the header files for building plugins for ppp.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}
 
 tar -xJf %{SOURCE12}
 

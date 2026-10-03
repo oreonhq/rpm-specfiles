@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash db505480647bc60386c5369402f4a57a506b7539c9e9ef5e270d45cbbe4939bf
 
 Name:           python-alembic
 Version:        1.20.0

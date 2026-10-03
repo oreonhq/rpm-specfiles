@@ -1,0 +1,14 @@
+--- glam-0.32.1/Cargo.toml	2006-07-24T01:21:28+00:00
++++ glam-0.32.1/Cargo.toml	2026-10-03T03:15:27.885211+00:00
+@@ -308,10 +308,8 @@
+ [target.'cfg(not(target_family = "wasm"))'.dev-dependencies.gungraun]
+ version = "0.17"
+ 
+-[target.'cfg(target_family = "wasm")'.dev-dependencies.wasm-bindgen-test]
+-version = "0.3.0"
+-
+ [lints.rust.unexpected_cfgs]
+ level = "warn"
+ priority = 0
+ check-cfg = ['cfg(target_arch, values("spirv"))']
++

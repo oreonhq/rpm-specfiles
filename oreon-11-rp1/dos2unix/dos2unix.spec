@@ -1,13 +1,13 @@
-%global source0_hash 28a4b0d9f9179da4e44c567b9c01f818b070a20827115fffd96f760dcfa0f3b2
+%global source0_hash 669ee27120ae71589f638fe3a167d6ea54f8633f5ab1b282551bd7a7c9510dfa
 
 Summary: Text file format converters
 Name: dos2unix
 Version: 7.5.7
 Release: 1%{?dist}
 License: BSD-3-Clause
-URL: https://waterlan.home.xs4all.nl/dos2unix.html
-Source:        https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.3.tar.gz
-Source:        https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.3.tar.gz.asc
+URL: https://waterlander.net/dos2unix.html
+Source:        https://waterlander.net/dos2unix/files/%{name}-%{version}.tar.gz
+Source:        https://waterlander.net/dos2unix/files/%{name}-%{version}.tar.gz.asc
 Source: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x38C1F572B12725BE#./38C1F572B12725BE.asc
 
 BuildRequires: gcc

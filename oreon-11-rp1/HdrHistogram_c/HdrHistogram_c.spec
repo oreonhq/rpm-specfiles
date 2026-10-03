@@ -1,4 +1,4 @@
-%global source0_hash bb95351a6a8b242dc9be1f28562761a84d4cf0a874ffc90a9b630770a6468e94
+%global source0_hash c3b06d077e680d112abf9f027d8a558f1176ee4a55a7c523577833391d8c2249
 
 Name: HdrHistogram_c
 Version: 0.11.10

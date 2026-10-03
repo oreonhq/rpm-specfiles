@@ -1,4 +1,4 @@
-%global source0_hash 6670af36d3bb4887e528f803babb689e42711e4ebbd29d8df6a178d3f17a11d3
+%global source0_hash e71ab7cd6aee6683aa94342eb26e61433bffdf2da69782eca6d1c299dcc3a76f
 
 %if 0%{?fedora} < 28 && 0%{?rhel} < 8
 %bcond_without libnm_glib

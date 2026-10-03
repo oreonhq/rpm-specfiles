@@ -1,4 +1,4 @@
-%global source0_hash 97e8584a3814f3a2694506a16c1e8f04e16d48dbb6b448faa832fb262711791c
+%global source0_hash 406907245a1c6c04cdf2187cc4590fdc081d7a07392123d322125677022ea67c
 
 %global gem_name activemodel
 
@@ -7,7 +7,7 @@
 
 Name: rubygem-%{gem_name}
 Version: 8.0.3
-Release: 2%{?dist}
+Release: %autorelease
 Summary: A toolkit for building modeling frameworks (part of Rails)
 License: MIT
 URL: https://rubyonrails.org

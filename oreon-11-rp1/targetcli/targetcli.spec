@@ -1,4 +1,4 @@
-%global source0_hash 711735915516975af34564b905bdf4a89be6344428932db724d78e8ff35f2c2e
+%global source0_hash 1918df902c221e2862b8576ea6e95adb4d2b621f849281862327806f970eca96
 
 %global oname targetcli-fb
 
@@ -8,7 +8,7 @@ Summary:        An administration shell for storage targets
 Version:        3.0.2
 Release:        1%{?dist}
 URL:            https://github.com/open-iscsi/%{oname}
-Source:        https://github.com/open-iscsi/targetcli-fb/archive/refs/tags/v3.0.1.tar.gz#/targetcli-fb-3.0.1.tar.gz
+Source:        https://github.com/open-iscsi/targetcli-fb/archive/refs/tags/v3.0.2.tar.gz#/targetcli-fb-3.0.2.tar.gz
 # Proposed upstream
 ## From: https://github.com/open-iscsi/targetcli-fb/pull/176
 BuildArch:      noarch

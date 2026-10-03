@@ -1,4 +1,4 @@
-%global source0_hash 72f846becfd2d321da3d2e7a15410f5f156d904257f4c4c608b546614113936b
+%global source0_hash ea85207d11f38d0da8980163eb7bbfd03ce4636c40a8d25112559bb1d381bbca
 
 %global sdl3_minver 3.4.0
 
@@ -16,7 +16,7 @@ SourceLicense:  Zlib and Apache-2.0 and MIT and BSD-3-Clause
 Summary:        SDL 2.0 runtime compatibility library using SDL 3.0
 License:        Zlib
 URL:            https://github.com/libsdl-org/sdl2-compat
-Source0:        https://github.com/libsdl-org/sdl2-compat/archive/refs/tags/release-2.32.68.tar.gz#/sdl2-compat-2.32.68.tar.gz
+Source0:        https://github.com/libsdl-org/sdl2-compat/archive/refs/tags/release-2.32.72.tar.gz#/sdl2-compat-2.32.72.tar.gz
 # Multilib aware-header stub
 Source1:        SDL2_config.h
 Source2:        SDL2_revision.h

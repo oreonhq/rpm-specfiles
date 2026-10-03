@@ -1,10 +1,10 @@
-%global source0_hash fdf44de7c1c3f0f062cd7bdd7c0ffa7360bd0d865cdc22d16caf791481b89e03
+%global source0_hash 2c5afa991512549409e1f41434d3b9d109578bf82c1e6801ccb44b852a799591
 
 Name: mythes-sl
 Summary: Slovenian thesaurus
 %global upstreamid 20130130
 Version: 0.%{upstreamid}
-Release: 29%{?dist}
+Release: %autorelease
 Source: http://88.200.20.8:85/download/thes_sl_SI_v2.zip
 URL: http://www.tezaver.si/
 License: LGPL-2.1-or-later
@@ -38,5 +38,4 @@ cp -p th_sl_SI_v2.* $RPM_BUILD_ROOT/%{_datadir}/mythes
 %{_datadir}/mythes/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-29
-- Prepare for Oreon 11 (RP1)
+%autochangelog

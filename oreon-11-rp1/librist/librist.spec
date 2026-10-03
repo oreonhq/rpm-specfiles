@@ -1,4 +1,4 @@
-%global source0_hash 7e2507fdef7b57c87b461d0f2515771b70699a02c8675b51785a73400b3c53a1
+%global source0_hash 9e40eeb87f014790531ad41326cc271b930a65962e4b15231b301fc59b29fe31
 
 %global somajor 4
 
@@ -13,11 +13,10 @@ Summary:        Library for Reliable Internet Stream Transport (RIST) protocol
 # Everything used is BSD-2-Clause except getopt-shim, which is ISC as well
 License:        BSD-2-Clause and ISC
 URL:            https://code.videolan.org/rist/librist
-Source0:        https://code.videolan.org/rist/librist/-/archive/v0.2.7/librist-v0.2.7.tar.gz
+Source0:        https://code.videolan.org/rist/librist/-/archive/v0.2.20/librist-v0.2.20.tar.gz
 
 # Backport from upstream
 ## From: https://code.videolan.org/rist/librist/-/commit/809390b3b75a259a704079d0fb4d8f1b5f7fa956
-Patch0001:      0001-meson.build-fix-reference-to-libcjson-pc-file.patch
 
 BuildRequires:  gcc
 BuildRequires:  meson

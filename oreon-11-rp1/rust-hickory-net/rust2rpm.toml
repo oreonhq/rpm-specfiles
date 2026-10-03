@@ -1,0 +1,30 @@
+[features]
+hide = [
+    # rustls-platform-verifier is packaged but outdated
+    "rustls-platform-verifier",
+    # aws-lc-rs is not yet packaged
+    "dnssec-aws-lc-rs",
+    "h3-aws-lc-rs",
+    "https-aws-lc-rs",
+    "quic-aws-lc-rs",
+    "tls-aws-lc-rs",
+    # we would like to avoid unnecessary dependencies on ring in Fedora, hoping
+    # to migrate toward aws-lc-rs once it is available
+    "dnssec-ring",
+    "h3-ring",
+    "https-ring",
+    "quic-ring",
+    "tls-ring",
+    # for now, we provide neither the aws-lc-rs version nor the ring version of
+    # any of these:
+    "__dnssec",
+    "__h3",
+    "__https",
+    "__quic",
+    "__tls",
+]
+
+[tests]
+run = false
+comments = ["tests can only be compiled and run in-tree"]
+

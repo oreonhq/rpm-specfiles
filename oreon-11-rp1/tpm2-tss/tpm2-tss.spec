@@ -1,4 +1,4 @@
-%global source0_hash 37f1580200ab78305d1fc872d89241aaee0c93cbe85bc559bf332737a60d3be8
+%global source0_hash b53f0c5c8c4ce17f05701a410ca9688f725ca380c9bc4640eacd0eadb1fea124
 
 %bcond_with rc
 %if %{with rc}
@@ -12,12 +12,11 @@ Summary:       TPM2.0 Software Stack
 
 License:       BSD-2-Clause
 URL:           https://github.com/tpm2-software/tpm2-tss
-Source0:        https://github.com/tpm2-software/tpm2-tss/releases/download/4.2.0/tpm2-tss-4.1.3.tar.gz
+Source0:        %{url}/releases/download/%{version}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz
 Source1:       tpm2-tss-systemd-sysusers.conf
 # doxygen crash
 Patch0:        tpm2-tss-3.0.0-doxygen.patch
 # Do not use <openssl/engine.h> (fixed upstream for 4.2)
-Patch1:        tpm2-tss-4.1.3-openssl-no-engine.patch
 
 %global udevrules_prefix 60-
 

@@ -1,4 +1,4 @@
-%global source0_hash 17d68845b753cb2925ebfb1979921fc67a87071d3d7465490b87cb1d5e5ab3de
+%global source0_hash 3f85dd0af5bf5edc28cabb5148e4c3c37f54be9b32c86835078af64585745965
 
 %bcond_with bootstrap
 
@@ -40,7 +40,7 @@ URL:            https://objenesis.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/easymock/%{name}/archive/%{version}.tar.gz#/objenesis-3.5.tar.gz
+Source0:        https://github.com/easymock/%{name}/archive/%{version}.tar.gz#/objenesis-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

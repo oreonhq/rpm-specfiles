@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3c9c16972a73bb792752f2e4f1cce7212d7638d5494b5f7e8e19f3819dbf3a19
 
 # This specfile is almost identical with Mlichvars
 # specfile for guile 2.2, in ideal world, we would

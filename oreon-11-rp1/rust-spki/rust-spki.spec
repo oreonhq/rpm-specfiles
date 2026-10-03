@@ -75,18 +75,6 @@ use the "base64" feature of the "%{crate}" crate.
 %files       -n %{name}+base64-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+base64ct-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+base64ct-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "base64ct" feature of the "%{crate}" crate.
-
-%files       -n %{name}+base64ct-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+fingerprint-devel
 Summary:        %{summary}
 BuildArch:      noarch

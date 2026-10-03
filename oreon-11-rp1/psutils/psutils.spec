@@ -1,4 +1,4 @@
-%global source0_hash 6f8339fd5322df5c782bfb355d9f89e513353220fca0700a5a28775404d7e98b
+%global source0_hash 3ff76cc9f9fb535ec553d1591de56d6dbaa0d9f4df86778f6a49731ebd764cdf
 
 # Unbundle gnulib
 %bcond psutils_enables_unbundling_gnulib %{undefined rhel}
@@ -49,7 +49,7 @@ Summary:    PostScript utilities
 # pre-inst-env.in:          GPLv2+
 License:    GPL-3.0-or-later
 URL:        https://github.com/rrthomas/%{name}
-Source:        https://github.com/rrthomas/psutils/releases/download/v2.10/psutils-2.10.tar.gz
+Source:        https://github.com/rrthomas/psutils/releases/download/v3.3.17/psutils-3.3.17.tar.gz
 BuildArch:      noarch
 BuildRequires:  autoconf
 BuildRequires:  automake >= 1.11

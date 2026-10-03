@@ -1,4 +1,4 @@
-%global source0_hash c14a93f287d3dbd6580d08af968294f8bcc61e1e1e3c34301549d00f3cf09365
+%global source0_hash 1eb813c7437b31a87496a1cd3ed79f00746720f5e7e29c79b42c02cb69f36c39
 %global source1_hash ed965f2b205e7f7df65b305edfd8c662d8b0ebe4dc3b58109e6ad03d0f5ee233
 
 # This package is rather exotic. The compiled library is a typical shared
@@ -36,7 +36,7 @@ Summary:        Port of http_parser to llparse
 # SPDX
 License:        MIT
 URL:            https://github.com/nodejs/llhttp
-Source0:        https://github.com/nodejs/llhttp/archive/refs/tags/release.tar.gz#/v9.3.1/llhttp-release-v9.3.1.tar.gz
+Source0:        %{url}/archive/refs/tags/release/v%{version}/llhttp-release-v%{version}.tar.gz
 # Contains the original TypeScript sources, which we must include in the source
 # RPM per packaging guidelines.
 Source1:        https://github.com/nodejs/llhttp/archive/refs/tags/v9.3.1.tar.gz#/llhttp-9.3.1.tar.gz

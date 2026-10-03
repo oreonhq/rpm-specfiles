@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b524fa21994b6e834200ceb8c27f1b84bda5982fe35706f058196c079db94d5d
 
 %global _hardened_build 1
 
@@ -42,10 +42,10 @@ Release: 1%{?dist}
 License: BSD-3-Clause
 Url: https://www.nlnetlabs.nl/%{name}/
 Vcs: git:%{forgeurl}
-Source0:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.0.tar.gz
-Source1:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.0.tar.gz.asc
+Source0:        https://www.nlnetlabs.nl/downloads/ldns/ldns-%{version}.tar.gz
+Source1:        https://www.nlnetlabs.nl/downloads/ldns/ldns-%{version}.tar.gz.asc
 # Willem Toorop, https://www.nlnetlabs.nl/people/
-Source2:        wtoorop.asc
+Source2:        nlnetlabs2026-g2.asc
 Patch1:        ldns-1.7.0-multilib.patch
 # https://github.com/NLnetLabs/ldns/pull/288
 Patch8:        ldns-1.9-std23-bool.patch

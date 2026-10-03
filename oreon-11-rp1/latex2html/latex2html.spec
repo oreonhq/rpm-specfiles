@@ -1,5 +1,5 @@
-%global source0_hash none
-%global source2_hash none
+%global source0_hash f91c0c9bc8dbcadbba883f912f9d1cd2382b563fd754456488a95c120f24331e
+%global source2_hash 37447da2f95edd6c1dfb9ee21a8843998883360e878bd86a8082076b52aa0628
 %global source3_hash none
 
 %define enable_japanese 0

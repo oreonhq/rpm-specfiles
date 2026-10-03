@@ -1,4 +1,4 @@
-%global source0_hash ff31778a438bf335ceed254ccc706d5cd0eee55f608fcf567d88699b15f4fa9e
+%global source0_hash c732ed02fcc395c0fb3867589d8253bddd98b69dd77e262465bb795686239540
 
 %global _hardened_build 1
 
@@ -14,16 +14,13 @@ Summary: Library for developing printing filters
 # https://lists.fedoraproject.org/archives/list/legal@lists.fedoraproject.org/message/A7GFSD6M3GYGSI32L2FC5KB22DUAEQI3/
 License: Apache-2.0 WITH LLVM-exception
 URL: https://github.com/OpenPrinting/libcupsfilters
-Source0:        https://github.com/OpenPrinting/libcupsfilters/releases/download/2.2.1/libcupsfilters-2.1.1.tar.gz
+Source0:        %{URL}/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 
 # Patches
 # https://github.com/OpenPrinting/libcupsfilters/pull/96
-Patch001: 0001-configure.ac-Make-CJK-fonts-name-configurable.patch
 # CVE-2025-57812
-Patch002: lcf-CVE-2025-57812.patch
 # CVE-2025-64503
-Patch003: 0001-Fix-out-of-bounds-write-in-cfFilterPDFToRaster.patch
 
 
 # for generating configure and Makefile scripts in autogen.h

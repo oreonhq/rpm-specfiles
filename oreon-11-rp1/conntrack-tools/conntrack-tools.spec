@@ -1,19 +1,15 @@
-%global source0_hash none
-
-%global source2_key_fpr 37D964ACC04981C75500FB9BD55D978A8A1420E4
+%global source0_hash c15afe488a8d408c9d6d61e97dbd19f3c591942f62c13df6453a961ca4231cae
+%global source1_hash e8fa3185f1c39aadf2e3d5c2bb4a644335c2a18356410c57c49dfa4961e53097
 
 Name:           conntrack-tools
 Version:        1.4.9
-Release:        1%{?dist}
+Release:        %autorelease
 Summary:        Manipulate netfilter connection tracking table and run High Availability
 License:        GPL-2.0-only
 URL:            http://conntrack-tools.netfilter.org/
 Source0:        https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-%{version}.tar.xz
 Source1:        https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-%{version}.tar.xz.sig
-# Note this openpgp key is expired and revoked, but is the one used for the 1.4.9 signature
-Source2:        NetfilterCoreTeam-OpenGPG-KEY.txt
-# Note this is the new key, presumbly will be used in the future (it signed the old key as well)
-#Source2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
+Source2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
 Source3:        conntrackd.service
 Source4:        conntrackd.conf
 
@@ -22,7 +18,7 @@ BuildRequires:  automake
 BuildRequires:  libtool
 BuildRequires:  gcc
 BuildRequires: gnupg2
-BuildRequires:  libnfnetlink-devel >= 1.0.1, libnetfilter_conntrack-devel >= 1.0.9
+BuildRequires:  libnfnetlink-devel >= 1.0.1, libnetfilter_conntrack-devel >= 1.1.1
 BuildRequires:  libnetfilter_cttimeout-devel >= 1.0.0, libnetfilter_cthelper-devel >= 1.0.0
 BuildRequires:  libmnl-devel >= 1.0.3, libnetfilter_queue-devel >= 1.0.2
 BuildRequires:  libtirpc-devel systemd-devel
@@ -55,7 +51,8 @@ In addition, you can also monitor connection tracking events, e.g.
 show an event message (one line) per newly established connection.
 
 %prep
-%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
@@ -98,5 +95,4 @@ install -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/conntrackd/
 %systemd_postun conntrackd.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.8-12
-- Prepare for Oreon 11 (RP1)
+%autochangelog

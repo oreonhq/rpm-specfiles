@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a4d7a05978ee37975c37743510c8991e2debce7ef83afb0a07c0c576fd4f16e8
 
 Name:           python-scikit-build-core
 Version:        1.0.3

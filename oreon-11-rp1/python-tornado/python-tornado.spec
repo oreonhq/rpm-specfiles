@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a6b1ccd08c04b4a06fb5aeb381be99de5ad1e5375c1785e31d78c880feb57687
 
 Name:           python-tornado
 Version:        6.5.10

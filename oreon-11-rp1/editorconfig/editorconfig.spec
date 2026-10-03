@@ -1,4 +1,4 @@
-%global source0_hash ab9f897a90fb36cfc34e5b67221e55ab0e3119b3512de8e31029d376c6bab870
+%global source0_hash 9d8b420b56a969ea3cf784861c72d26fa0e158fa1494d732df2c8a1480d36a5c
 
 # do not require a standalone uthash when built as part of RHEL
 %bcond system_uthash %[0%{?fedora} || 0%{?epel}]
@@ -34,13 +34,12 @@ Release:        1%{?dist}
 # license of the binary RPMs.
 License:        BSD-2-Clause AND BSD-3-Clause AND BSD-1-Clause
 URL:            https://github.com/editorconfig/editorconfig-core-c
-Source0:        https://github.com/editorconfig/editorconfig-core-c/archive/refs/tags/v0.12.10.tar.gz#/editorconfig-core-c-0.12.10.tar.gz
+Source0:        https://github.com/editorconfig/editorconfig-core-c/archive/refs/tags/v0.12.11.tar.gz#/editorconfig-core-c-0.12.11.tar.gz
 
 # Downstream-only: Do not compile with -Werror
 #
 # This makes sense upstream, but is too strict for downstream packaging
 # across various architectures, compiler versions, and so on.
-Patch0:         0001-Downstream-only-Do-not-compile-with-Werror.patch
 
 BuildRequires:  cmake
 BuildRequires:  doxygen

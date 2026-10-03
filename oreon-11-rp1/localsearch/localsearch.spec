@@ -1,4 +1,4 @@
-%global source0_hash 9ea995f7289aef5ecc521abf504cde98cdadd386a0391288fe7e0f373702f1fc
+%global source0_hash 4bf45440ce7a899f2eca4d20343d31fc620fa2a3fe53bb929de244305330e930
 
 # This needs to be changed accordingly to the application for what localsearch
 # is bundled. As of F43, this domain is hard-coded in the binary at build time
@@ -44,7 +44,7 @@ Summary:        Localsearch and metadata extractors
 # The indexer is a mix of GPLv2 and LGPLv2+ code
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://gnome.pages.gitlab.gnome.org/localsearch/
-Source0:        https://download.gnome.org/sources/%{name}/3.11/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1-2)/%{name}-%{tarball_version}.tar.xz
 
 BuildRequires:  asciidoc
 BuildRequires:  gcc
