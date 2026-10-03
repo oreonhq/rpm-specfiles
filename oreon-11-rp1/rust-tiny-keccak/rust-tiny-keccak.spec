@@ -177,14 +177,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cargo_generate_buildrequires
 
 %build
-%cargo_build
+%cargo_build -f cshake,fips202,k12,keccak,kmac,parallel_hash,sha3,shake,sp800,tuple_hash
 
 %install
 %cargo_install
 
 %if %{with check}
 %check
-%cargo_test
+%cargo_test -f cshake,fips202,k12,keccak,kmac,parallel_hash,sha3,shake,sp800,tuple_hash
 %endif
 
 %changelog

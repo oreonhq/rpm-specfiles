@@ -60,30 +60,6 @@ use the "alloc" feature of the "%{crate}" crate.
 %files       -n %{name}+alloc-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+anstream-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+anstream-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "anstream" feature of the "%{crate}" crate.
-
-%files       -n %{name}+anstream-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+anstyle-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+anstyle-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "anstyle" feature of the "%{crate}" crate.
-
-%files       -n %{name}+anstyle-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+debug-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -94,30 +70,6 @@ This package contains library source intended for building other packages which
 use the "debug" feature of the "%{crate}" crate.
 
 %files       -n %{name}+debug-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+is_terminal_polyfill-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+is_terminal_polyfill-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "is_terminal_polyfill" feature of the "%{crate}" crate.
-
-%files       -n %{name}+is_terminal_polyfill-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+memchr-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+memchr-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "memchr" feature of the "%{crate}" crate.
-
-%files       -n %{name}+memchr-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+simd-devel
@@ -142,18 +94,6 @@ This package contains library source intended for building other packages which
 use the "std" feature of the "%{crate}" crate.
 
 %files       -n %{name}+std-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+terminal_size-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+terminal_size-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "terminal_size" feature of the "%{crate}" crate.
-
-%files       -n %{name}+terminal_size-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+unstable-doc-devel

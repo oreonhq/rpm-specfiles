@@ -71,3 +71,6 @@ find . -type f -name '*.rs' -exec chmod -x {} +
 
 %changelog
 %autochangelog
+
+%files
+%{_bindir}/example

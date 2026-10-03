@@ -118,3 +118,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %changelog
 %autochangelog
+
+%files
+%{_bindir}/lzw

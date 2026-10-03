@@ -11,7 +11,7 @@ Version:        0.6.0
 Release:        %autorelease
 Summary:        Compares two equal-sized byte strings in constant time.
 
-License:        CC0-1.0
+License:        Apache-2.0 OR CC0-1.0 OR MIT-0
 URL:            https://crates.io/crates/constant_time_eq
 Source:         %{crates_source}
 
@@ -32,7 +32,9 @@ This package contains library source intended for building other packages which
 use the "%{crate}" crate.
 
 %files          devel
-%license %{crate_instdir}/LICENSE.txt
+%license %{crate_instdir}/LICENSE-APACHE
+%license %{crate_instdir}/LICENSE-CC0
+%license %{crate_instdir}/LICENSE-MIT0
 %doc %{crate_instdir}/README
 %{crate_instdir}/
 

@@ -14,7 +14,7 @@ Summary:        A low-level I/O ownership and borrowing library
 License:        Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
 URL:            https://crates.io/crates/io-lifetimes
 Source:         %{crates_source}
-Patch:          io-lifetimes-fix-metadata-auto.diff
+Patch:          io-lifetimes-drop-nonlinux-deps.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 

@@ -14,7 +14,7 @@ Summary:        Implementation of 'at' functions for various platforms
 License:        Apache-2.0
 URL:            https://crates.io/crates/fs_at
 Source:         %{crates_source}
-Patch:          fs_at-fix-metadata-auto.diff
+Patch:          fs_at-rm-windows-sys.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 
