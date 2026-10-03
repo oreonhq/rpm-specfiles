@@ -26,21 +26,19 @@ Patch0:         0001-Rename-cmark-entrypoint.patch
 
 %package -n     python3-commonmark
 Summary:        %{summary}
+%py_provides    python3-CommonMark
 
 %description -n python3-commonmark %_description
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-commonmark test
-
-
 %prep
 %autosetup -p1 -n commonmark-%{version}
 
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x test
+%pyproject_buildrequires
 
 
 %build
