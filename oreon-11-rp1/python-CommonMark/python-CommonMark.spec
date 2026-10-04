@@ -57,7 +57,7 @@ Summary:        %{summary}
 
 
 %files -n python3-commonmark -f %{pyproject_files}
-%{_bindir}/cmark
+%{_bindir}/commonmark
 
 %changelog
 %autochangelog

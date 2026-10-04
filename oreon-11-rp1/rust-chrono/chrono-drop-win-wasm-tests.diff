@@ -1,6 +1,21 @@
 --- chrono-0.4.45/Cargo.toml
 +++ chrono-0.4.45/Cargo.toml
-@@ -154,12 +154,6 @@
+@@ -109,14 +109,6 @@
+ name = "dateutils"
+ path = "tests/dateutils.rs"
+ 
+-[[test]]
+-name = "wasm"
+-path = "tests/wasm.rs"
+-
+-[[test]]
+-name = "win_bindings"
+-path = "tests/win_bindings.rs"
+-
+ [dependencies.arbitrary]
+ version = "1.0.0"
+ features = ["derive"]
+@@ -154,12 +146,6 @@
  [dev-dependencies.serde_json]
  version = "1"
  
@@ -13,7 +28,7 @@
  [target.'cfg(all(target_arch = "wasm32", not(any(target_os = "emscripten", target_os = "wasi"))))'.dependencies.js-sys]
  version = "0.3"
  optional = true
-@@ -168,9 +162,6 @@
+@@ -168,9 +154,6 @@
  version = "0.2"
  optional = true
  

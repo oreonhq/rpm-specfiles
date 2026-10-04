@@ -32,14 +32,8 @@ Requires:       xmvn5-minimal
 Requires:       xmvn5-mojo
 Requires:       xmvn5-tools
 
-BuildSystem:    maven
-BuildOption:    usesJavapackagesBootstrap
-BuildOption:    singletonPackaging
-BuildOption:    xmvnToolchain "openjdk25"
-BuildOption:    buildRequires {
-BuildOption:        version "org.apache.maven:" "4.0.0-rc-4"
-BuildOption:        version "org.fedoraproject.xmvn:" "5.1.0"
-BuildOption:    }
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
 
 %description
 Dola is a modern, declarative system for RPM packaging of Maven-based
@@ -70,7 +64,16 @@ Dola Generator is a dependency generator for RPM Package Manager
 written in Java and Lua, that uses LuJavRite library to call Java code
 from Lua.
 
-%install -a
+%prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%autosetup -p1
+%pom_remove_parent
+
+%build
+%mvn_build -j -- -Dmaven.compiler.release=21
+
+%install
+%mvn_install
 # BSX
 install -D -p -m 644 dola-bsx/src/main/lua/dola-bsx.lua %{buildroot}%{_rpmluadir}/dola-bsx.lua
 install -D -p -m 644 dola-bsx/src/main/rpm/macros.dola-bsx %{buildroot}%{_rpmmacrodir}/macros.dola-bsx

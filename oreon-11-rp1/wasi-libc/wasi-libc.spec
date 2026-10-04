@@ -50,7 +50,7 @@ BuildRequires:  make
 %global     wasi_datadir %{wasi_prefix}/share
 %global     wasi_includedir %{wasi_prefix}/include
 %global     wasi_libdir %{wasi_prefix}/lib
-%global     wasi_make_flags MALLOC_IMPL=emmalloc INSTALL_DIR='%{buildroot}%{wasi_prefix}' SYSROOT='%{_builddir}/sysroot'
+%global     wasi_make_flags TARGET_TRIPLE=wasm32-wasip1 MALLOC_IMPL=emmalloc INSTALL_DIR='%{buildroot}%{wasi_prefix}' SYSROOT='%{_builddir}/sysroot'
 
 %global _description %{expand:
 WASI Libc is a libc for WebAssembly programs built on top of WASI system calls.
