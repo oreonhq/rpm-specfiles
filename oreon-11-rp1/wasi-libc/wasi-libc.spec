@@ -15,6 +15,7 @@ Patch:      0001-make-don-t-rebuild-files-on-make-install.patch
 
 # Remove explicit linking to compiler-rt.builtins library
 Patch:      0002-Disable-linking-compiler-rt-builtins-library.patch
+Patch:      wasi-libc-clang-wasip1-expected.patch
 
 # Compatibility patches from upstream main
 

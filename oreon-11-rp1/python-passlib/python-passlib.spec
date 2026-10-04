@@ -9,6 +9,7 @@ Summary:        Comprehensive password hashing framework supporting over 20 sche
 License:        BSD-3-Clause AND Beerware AND UnixCrypt AND ISC
 URL:            https://github.com/notypecheck/passlib
 Source:         %pypi_source libpass
+Patch:          passlib-bcrypt5-truncate.patch
 
 BuildArch:      noarch
 

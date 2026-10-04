@@ -14,6 +14,8 @@ Summary:        Date and time library for Rust
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/chrono
 Source:         %{crates_source}
+Source1:        https://github.com/chronotope/chrono/raw/v0.4.45/tests/android/tzdata
+Source2:        https://github.com/chronotope/chrono/raw/v0.4.45/tests/ohos/tzdata
 Patch:          chrono-drop-win-wasm-tests.diff
 # Automatically generated patch to strip foreign dependencies
 Patch:          chrono-fix-metadata-auto.diff
@@ -246,6 +248,9 @@ use the "winapi" feature of the "%{crate}" crate.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{version} -p1
+mkdir -p tests/android tests/ohos
+cp -p %{SOURCE1} tests/android/tzdata
+cp -p %{SOURCE2} tests/ohos/tzdata
 rm tests/win_bindings.rs tests/wasm.rs
 %cargo_prep
 

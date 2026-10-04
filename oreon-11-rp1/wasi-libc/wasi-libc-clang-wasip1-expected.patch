@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Oreon Packaging <packaging@oreonhq.com>
+Date: Sun, 4 Oct 2026 13:20:00 -0700
+Subject: [PATCH] accept current clang wasip1 macros
+
+---
+--- a/expected/wasm32-wasip1/predefined-macros.txt	2026-10-04 13:17:37.302813216 -0700
++++ b/expected/wasm32-wasip1/predefined-macros.txt	2026-10-04 13:17:48.012262945 -0700
+@@ -3195,6 +3195,7 @@
+ #define __wasilibc___typedef_suseconds_t_h 
+ #define __wasilibc___typedef_time_t_h 
+ #define __wasilibc___typedef_uid_t_h 
++#define __wasip1__ 1
+ #define __wasm 1
+ #define __wasm32 1
+ #define __wasm32__ 1
+--- a/expected/wasm32-wasip1/undefined-symbols.txt	2026-10-04 13:17:37.539102379 -0700
++++ b/expected/wasm32-wasip1/undefined-symbols.txt	2026-10-04 13:17:48.012360529 -0700
+@@ -68,3 +68,4 @@
+ __trunctfsf2
+ __unordtf2
+ __wasm_call_ctors
++__wasm_first_page_end

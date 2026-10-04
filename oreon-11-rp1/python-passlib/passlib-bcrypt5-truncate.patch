@@ -1,0 +1,15 @@
+--- a/passlib/handlers/bcrypt.py
++++ b/passlib/handlers/bcrypt.py
+@@ -528,6 +528,12 @@
+         if _BNULL in secret:
+             raise uh.exc.NullPasswordError(cls)
+ 
++        if len(secret) > 72:
++            if require_valid_utf8_bytes:
++                secret = utf8_truncate(secret, 72)
++            else:
++                secret = secret[:72]
++
+         # TODO: figure out way to skip these tests when not needed...
+ 
+         # protect from wraparound bug by truncating secret before handing it to the backend.
