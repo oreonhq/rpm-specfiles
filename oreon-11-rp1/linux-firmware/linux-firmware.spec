@@ -668,6 +668,7 @@ end
 %dir %{_firmwarepath}/qcom
 %{_firmwarepath}/qcom/glymur/
 %{_firmwarepath}/qcom/kaanapali/
+%{_firmwarepath}/qcom/maili/
 %{_firmwarepath}/qcom/eliza/
 %{_firmwarepath}/qcom/hawi/
 %{_firmwarepath}/qcom/nord/
