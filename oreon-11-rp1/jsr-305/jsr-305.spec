@@ -1,6 +1,86 @@
 %global source0_hash 8af3a7cf71c365163eb0409491ac7f8c28b0db61da1e35935ad1c6d50afc6df5
 %global source1_hash 57d47e633507ce6e039dd52752720fdc96262093d58e1f43a117a995e312cf09
 
+%{lua:
+if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
+  local spec
+  local cmd = io.open("/proc/self/cmdline", "rb")
+  if cmd then
+    local data = cmd:read("*a") or ""
+    cmd:close()
+    local cur = ""
+    local function take(arg)
+      if string.sub(arg, -5) == ".spec" then spec = arg end
+    end
+    for i = 1, #data do
+      local c = string.sub(data, i, i)
+      if string.byte(c) == 0 then
+        take(cur)
+        cur = ""
+      else
+        cur = cur .. c
+      end
+    end
+    take(cur)
+  end
+  local function trim(s)
+    local a, b = 1, #s
+    while a <= b do
+      local c = string.sub(s, a, a)
+      if c ~= " " and string.byte(c) ~= 9 then break end
+      a = a + 1
+    end
+    while b >= a do
+      local c = string.sub(s, b, b)
+      if c ~= " " and string.byte(c) ~= 9 then break end
+      b = b - 1
+    end
+    return string.sub(s, a, b)
+  end
+  local function miss(dep)
+    local p = io.popen("dnf -q repoquery --latest-limit 1 --whatprovides '" .. dep .. "' 2>/dev/null")
+    if not p then return true end
+    local out = p:read("*a") or ""
+    p:close()
+    local i = 1
+    while i <= #out do
+      local b = string.byte(out, i)
+      if b ~= 32 and b ~= 9 and b ~= 10 and b ~= 13 then return false end
+      i = i + 1
+    end
+    return true
+  end
+  if spec then
+    local f = io.open(spec, "r")
+    if f then
+      local depth, in_else, armed = 0, false, false
+      for line in f:lines() do
+        local s = trim(line)
+        if not armed then
+          if string.sub(s, 1, 3) == "%%if" and string.find(s, "{with bootstrap}", 1, true) then
+            armed = true
+            depth = 1
+          end
+        elseif string.sub(s, 1, 3) == "%%if" then
+          depth = depth + 1
+        elseif string.sub(s, 1, 6) == "%%endif" then
+          depth = depth - 1
+          if depth == 0 then break end
+        elseif depth == 1 and string.sub(s, 1, 5) == "%%else" then
+          in_else = true
+        elseif in_else and depth == 1 and string.lower(string.sub(s, 1, 14)) == "buildrequires:" then
+          local dep = trim(string.sub(s, 15))
+          if dep ~= "" and string.sub(dep, 1, 1) ~= "%%" and miss(dep) then
+            rpm.define("_with_bootstrap 1")
+            break
+          end
+        end
+      end
+      f:close()
+    end
+  end
+end
+}
 %bcond_with bootstrap
 
 Name:           jsr-305
