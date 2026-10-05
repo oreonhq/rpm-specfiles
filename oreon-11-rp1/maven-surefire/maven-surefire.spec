@@ -177,6 +177,7 @@ sed -i /-Xdoclint:all/d pom.xml
 %pom_disable_module surefire-shadefire
 
 %pom_remove_dep org.junit:junit-bom
+%pom_remove_dep org.mockito:mockito-bom
 
 %pom_remove_dep -r org.apache.maven.surefire:surefire-shadefire
 
