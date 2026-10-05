@@ -86,20 +86,20 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
       for line in f:lines() do
         local s = trim(line)
         if not armed then
-          if string.sub(s, 1, 3) == "%%if" and string.find(s, "{with bootstrap}", 1, true) then
+          if string.byte(s, 1) == 37 and string.byte(s, 2) == 105 and string.byte(s, 3) == 102 and string.find(s, "{with bootstrap}", 1, true) then
             armed = true
             depth = 1
           end
-        elseif string.sub(s, 1, 3) == "%%if" then
+        elseif string.byte(s, 1) == 37 and string.byte(s, 2) == 105 and string.byte(s, 3) == 102 then
           depth = depth + 1
-        elseif string.sub(s, 1, 6) == "%%endif" then
+        elseif string.byte(s, 1) == 37 and string.byte(s, 2) == 101 and string.byte(s, 3) == 110 and string.byte(s, 4) == 100 and string.byte(s, 5) == 105 and string.byte(s, 6) == 102 then
           depth = depth - 1
           if depth == 0 then break end
-        elseif depth == 1 and string.sub(s, 1, 5) == "%%else" then
+        elseif depth == 1 and string.byte(s, 1) == 37 and string.byte(s, 2) == 101 and string.byte(s, 3) == 108 and string.byte(s, 4) == 115 and string.byte(s, 5) == 101 then
           in_else = true
         elseif in_else and depth == 1 and string.lower(string.sub(s, 1, 14)) == "buildrequires:" then
           local dep = trim(string.sub(s, 15))
-          if dep ~= "" and string.sub(dep, 1, 1) ~= "%%" and miss(dep) then
+          if dep ~= "" and string.byte(dep, 1) ~= 37 and miss(dep) then
             rpm.define("_with_bootstrap 1")
             break
           end
