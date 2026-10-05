@@ -13,3 +13,14 @@
          # TODO: figure out way to skip these tests when not needed...
  
          # protect from wraparound bug by truncating secret before handing it to the backend.
+--- a/tests/test_handlers_bcrypt.py
++++ b/tests/test_handlers_bcrypt.py
+@@ -218,6 +218,8 @@
+             elif hash.startswith(IDENT_2Y) and bcrypt.__version__ == "3.0.0":
+                 hash = IDENT_2B + hash[4:]
+             hash = to_bytes(hash)
++            if len(secret) > 72:
++                secret = secret[:72]
+             try:
+                 return bcrypt.hashpw(secret, hash) == hash
+             except ValueError:

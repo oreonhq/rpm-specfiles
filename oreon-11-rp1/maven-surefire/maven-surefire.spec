@@ -131,6 +131,7 @@ Surefire is a test framework project.
 
 %package plugin
 Summary:        Surefire plugin for maven
+Provides:       mvn(org.apache.maven.plugins:maven-surefire-plugin) = %{version}
 Requires:       (%{name}-provider-junit5 = %{version}-%{release} if junit5)
 
 %description plugin
@@ -144,6 +145,7 @@ JUnit 5 provider for Maven Surefire.
 
 %package -n maven-failsafe-plugin
 Summary:        Maven plugin for running integration tests
+Provides:       mvn(org.apache.maven.plugins:maven-failsafe-plugin) = %{version}
 
 %description -n maven-failsafe-plugin
 The Failsafe Plugin is designed to run integration tests while the

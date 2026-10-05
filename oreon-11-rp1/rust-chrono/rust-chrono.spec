@@ -14,8 +14,8 @@ Summary:        Date and time library for Rust
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/chrono
 Source:         %{crates_source}
-Source1:        https://github.com/chronotope/chrono/raw/v0.4.45/tests/android/tzdata
-Source2:        https://github.com/chronotope/chrono/raw/v0.4.45/tests/ohos/tzdata
+Source1:        https://github.com/chronotope/chrono/raw/v0.4.45/tests/android/tzdata#/android-tzdata
+Source2:        https://github.com/chronotope/chrono/raw/v0.4.45/tests/ohos/tzdata#/ohos-tzdata
 Patch:          chrono-drop-win-wasm-tests.diff
 # Automatically generated patch to strip foreign dependencies
 Patch:          chrono-fix-metadata-auto.diff
