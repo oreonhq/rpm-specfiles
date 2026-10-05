@@ -114,6 +114,7 @@ Requires:       xmvn5-tools
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
+BuildRequires:  lujavrite
 %else
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
@@ -154,6 +155,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_parent
 %if %{with bootstrap}
 %pom_xpath_inject pom:project "<groupId>io.kojan</groupId>"
+%mvn_package :dola-bsx dola-bsx
+%mvn_package :dola-bsx-api dola-bsx-api
+%mvn_package :dola-dbs dola-dbs
+%mvn_package :dola-parent dola-parent
+%mvn_package :dola-generator dola-generator
 %endif
 
 %build
