@@ -78,16 +78,16 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
     return string.sub(s, a, b)
   end
   local function miss(dep)
-    local p = io.popen("dnf -q repoquery --latest-limit 1 --whatprovides '" .. dep .. "' 2>/dev/null")
+    local p = io.popen("dnf -q install --assumeno '" .. dep .. "' 2>&1")
     if not p then return true end
     local out = p:read("*a") or ""
     p:close()
-    local i = 1
-    while i <= #out do
-      local b = string.byte(out, i)
-      if b ~= 32 and b ~= 9 and b ~= 10 and b ~= 13 then return false end
-      i = i + 1
-    end
+    if string.find(out, "nothing provides", 1, true) then return true end
+    if string.find(out, "No match", 1, true) then return true end
+    if string.find(out, "Failed to resolve", 1, true) then return true end
+    if string.find(out, "Nothing to do", 1, true) then return false end
+    if string.find(out, "Operation aborted", 1, true) then return false end
+    if string.find(out, "already installed", 1, true) then return false end
     return true
   end
   if spec then
