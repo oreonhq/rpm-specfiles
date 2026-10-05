@@ -17,9 +17,9 @@ ExclusiveArch:  %{rust_arches}
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.89.0 wants rustc: 1.88.0-2025-06-26
 # or nightly wants some beta-YYYY-MM-DD
-%global bootstrap_version 1.93.0
-%global bootstrap_channel 1.93.0
-%global bootstrap_date 2026-01-22
+%global bootstrap_version 1.97.1
+%global bootstrap_channel 1.97.1
+%global bootstrap_date 2026-07-16
 
 # Only the specified arches will use bootstrap binaries from static.rust-lang.org
 # (see the Source1k* lines from the lua block below). That avoids BuildRequires on
