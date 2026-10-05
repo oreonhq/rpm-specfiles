@@ -189,6 +189,7 @@ sed -i /-Xdoclint:all/d pom.xml
 %pom_remove_plugin -r :jacoco-maven-plugin
 # Not wanted
 %pom_remove_plugin -r :maven-shade-plugin
+%pom_remove_plugin org.eclipse.sisu:sisu-maven-plugin maven-surefire-common
 
 find -name *.java -exec sed -i -e s/org.apache.maven.surefire.shared.utils/org.apache.maven.shared.utils/ -e s/org.apache.maven.surefire.shared.io/org.apache.commons.io/ -e s/org.apache.maven.surefire.shared.lang3/org.apache.commons.lang3/ -e s/org.apache.maven.surefire.shared.compress/org.apache.commons.compress/ {} \;
 %pom_add_dep org.apache.maven.shared:maven-shared-utils
