@@ -30,6 +30,7 @@ Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/do
 Source200:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-00
 Source201:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-01
 Source202:        https://raw.githubusercontent.com/oreonhq/rpm-specfiles/refs/heads/main/fedora-rpms/oreon-11-rp1/javapackages-bootstrap/javapackages-bootstrap-vendor-archives.tar.zst.part-02
+Patch0:         javapackages-bootstrap-sisu-build-api0.patch
 
 
 BuildRequires:  byaccj

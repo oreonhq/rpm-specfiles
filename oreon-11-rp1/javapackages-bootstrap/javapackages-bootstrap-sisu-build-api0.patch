@@ -1,0 +1,11 @@
+--- a/project/sisu.xml	2026-10-04 17:50:38.869316850 -0700
++++ b/project/sisu.xml	2026-10-04 17:50:38.869350439 -0700
+@@ -53,7 +53,7 @@
+     <dependency>maven-artifact</dependency>
+     <dependency>maven-model</dependency>
+     <dependency>maven-common-artifact-filters</dependency>
+-    <dependency>plexus-build-api</dependency>
++    <dependency>plexus-build-api0</dependency>
+     <build>
+       <compiler>
+         <addSourceRoot>src/main/java</addSourceRoot>
