@@ -202,7 +202,7 @@ find -name *.java -exec sed -i -e s/org.apache.maven.surefire.shared.utils/org.a
 %build
 %mvn_package ":*{surefire-plugin}*" @1
 %mvn_package ":*junit-platform*" junit5
-%mvn_package ":*failsafe-plugin*" @1
+%mvn_package ":*{failsafe-plugin}*" @1
 %mvn_package ":*tests*" __noinstall
 # tests turned off because they need jmock
 %mvn_build -j -f
