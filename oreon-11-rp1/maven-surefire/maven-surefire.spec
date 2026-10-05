@@ -190,7 +190,9 @@ sed -i /-Xdoclint:all/d pom.xml
 # Not wanted
 %pom_remove_plugin -r :maven-shade-plugin
 
+%if %{without bootstrap}
 find -name *.java -exec sed -i -e s/org.apache.maven.surefire.shared.utils/org.apache.maven.shared.utils/ -e s/org.apache.maven.surefire.shared.io/org.apache.commons.io/ -e s/org.apache.maven.surefire.shared.lang3/org.apache.commons.lang3/ -e s/org.apache.maven.surefire.shared.compress/org.apache.commons.compress/ {} \;
+%endif
 
 # Not in Fedora
 %pom_remove_plugin -r :animal-sniffer-maven-plugin
