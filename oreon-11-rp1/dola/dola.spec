@@ -152,6 +152,9 @@ from Lua.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 %pom_remove_parent
+%if %{with bootstrap}
+%pom_xpath_inject pom:project "<groupId>io.kojan</groupId>"
+%endif
 
 %build
 %mvn_build -j -- -Dmaven.compiler.release=21
