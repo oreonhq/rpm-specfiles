@@ -101,7 +101,7 @@ ExclusiveArch:  %{rust_arches}
 %else
 # Build rustc with full debuginfo, CGU=1, ThinLTO, and PGO.
 %global enable_debuginfo --debuginfo-level=2
-%global enable_rust_opts --set rust.codegen-units=1 --set rust.lto=thin
+%global enable_rust_opts --set rust.codegen-units=1 --set rust.lto=thin-local
 %bcond_without rustc_pgo
 %endif
 
