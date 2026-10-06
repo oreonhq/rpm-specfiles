@@ -43,7 +43,7 @@
         %{?_cmake_shared_libs}
 
 %cmake_build \
-  %__cmake --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+  %__cmake --build "%{__cmake_builddir}" %{?_smp_mflags}
 
 %cmake_install \
   DESTDIR="%{buildroot}" %__cmake --install "%{__cmake_builddir}"

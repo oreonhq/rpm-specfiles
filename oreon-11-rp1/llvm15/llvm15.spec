@@ -106,6 +106,9 @@ Patch3:		0001-Install-clang-tblgen.patch
 # Missing cstdint includes
 Patch4:     cstdint.patch
 
+# clang 21+ rejects copy-init of cl::opt into an initializer_list of strings
+Patch5:     llvm15-sancov-explicit-string.patch
+
 BuildRequires:	gcc
 BuildRequires:	gcc-c++
 BuildRequires:	clang
@@ -316,8 +319,8 @@ export ASMFLAGS=$CFLAGS
 # Build libLLVM.so first.  This ensures that when libLLVM.so is linking, there
 # are no other compile jobs running.  This will help reduce OOM errors on the
 # builders without having to artificially limit the number of concurrent jobs.
-%cmake_build --target LLVM
-%cmake_build
+%__cmake --build "%{__cmake_builddir}" %{?_smp_mflags} --target LLVM
+%__cmake --build "%{__cmake_builddir}" %{?_smp_mflags}
 
 %install
 %cmake_install
