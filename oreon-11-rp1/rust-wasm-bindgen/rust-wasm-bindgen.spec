@@ -14,6 +14,7 @@ Summary:        Easy support for interacting between JS and Rust.
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/wasm-bindgen
 Source:         %{crates_source}
+Patch:          wasm-bindgen-macro-no-default-feature.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 

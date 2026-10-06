@@ -25,6 +25,7 @@ Definition of the `#[wasm_bindgen]` attribute, an internal dependency}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 
