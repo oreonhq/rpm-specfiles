@@ -247,6 +247,10 @@ mv %{cmake_srcdir} cmake
 # Copy CFLAGS into ASMFLAGS, so -fcf-protection is used when compiling assembly files.
 export ASMFLAGS=$CFLAGS
 
+# sphinx-build-3 is not installed under that name. run the real script with this python.
+printf '#!/bin/sh\nexec %{python3} %{_bindir}/sphinx-build "$@"\n' > %{_builddir}/sphinx-llvm
+chmod +x %{_builddir}/sphinx-llvm
+
 # force off shared libs as cmake macros turns it on.
 %cmake	-G Ninja \
 	-DBUILD_SHARED_LIBS:BOOL=OFF \
@@ -313,7 +317,7 @@ export ASMFLAGS=$CFLAGS
 	-DSPHINX_WARNINGS_AS_ERRORS=OFF \
 	-DCMAKE_INSTALL_PREFIX=%{install_prefix} \
 	-DLLVM_INSTALL_SPHINX_HTML_DIR=%{_pkgdocdir}/html \
-	-DSPHINX_EXECUTABLE=/usr/bin/sphinx-build-3 \
+	-DSPHINX_EXECUTABLE=%{_builddir}/sphinx-llvm \
 	-DLLVM_INCLUDE_BENCHMARKS=OFF \
 	-DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF
 
