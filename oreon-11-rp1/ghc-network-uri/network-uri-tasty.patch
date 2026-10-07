@@ -13,3 +13,12 @@
  
  -- Test supplied string for valid URI reference syntax
  --   isValidURIRef :: String -> Bool
+@@ -1330,7 +1330,7 @@
+   ]
+ 
+ -- Full test suite
+-allTests =
++allTests = TF.testGroup "all"
+   [ testURIRefSuite
+   , testComponentSuite
+   , testRelativeSuite
