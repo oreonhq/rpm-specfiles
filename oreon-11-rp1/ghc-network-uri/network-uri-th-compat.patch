@@ -1,0 +1,54 @@
+--- a/Network/URI/Static.hs
++++ b/Network/URI/Static.hs
+@@ -14,8 +14,7 @@
+     , staticRelativeReference
+     ) where
+ 
+-import Language.Haskell.TH (unType)
+-import Language.Haskell.TH.Lib (TExpQ)
++import Language.Haskell.TH.Syntax.Compat (SpliceQ, unTypeCode, toCode)
+ import Language.Haskell.TH.Quote (QuasiQuoter(..))
+ import Network.URI (URI(..), parseURI, parseRelativeReference)
+ 
+@@ -40,9 +39,9 @@
+ -- ... Invalid URI: http://www.google.com/##
+ -- ...
+ staticURI :: String    -- ^ String representation of a URI
+-          -> TExpQ URI -- ^ URI
++          -> SpliceQ URI -- ^ URI
+ staticURI (parseURI -> Just u) = [|| u ||]
+-staticURI s = fail $ "Invalid URI: " ++ s
++staticURI s = error $ "Invalid URI: " ++ s
+ 
+ -- | 'uri' is a quasi quoter for 'staticURI'.
+ --
+@@ -56,7 +55,7 @@
+ -- ...
+ uri :: QuasiQuoter
+ uri = QuasiQuoter {
+-    quoteExp = fmap unType . staticURI,
++    quoteExp = unTypeCode . toCode . staticURI,
+     quotePat = undefined,
+     quoteType = undefined,
+     quoteDec = undefined
+@@ -79,9 +78,9 @@
+ -- ... Invalid relative reference: http://www.google.com/
+ -- ...
+ staticRelativeReference :: String -- ^ String representation of a reference
+-                        -> TExpQ URI -- ^ Refererence
++                        -> SpliceQ URI -- ^ Refererence
+ staticRelativeReference (parseRelativeReference -> Just ref) = [|| ref ||]
+-staticRelativeReference ref = fail $ "Invalid relative reference: " ++ ref
++staticRelativeReference ref = error $ "Invalid relative reference: " ++ ref
+ 
+ -- | 'relativeReference' is a quasi quoter for 'staticRelativeReference'.
+ --
+@@ -95,7 +94,7 @@
+ -- ...
+ relativeReference :: QuasiQuoter
+ relativeReference = QuasiQuoter {
+-    quoteExp = fmap unType . staticRelativeReference,
++    quoteExp = unTypeCode . toCode . staticRelativeReference,
+     quotePat = undefined,
+     quoteType = undefined,
+     quoteDec = undefined

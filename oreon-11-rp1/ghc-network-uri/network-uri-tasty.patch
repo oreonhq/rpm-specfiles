@@ -1,0 +1,15 @@
+--- a/tests/uri001.hs
++++ b/tests/uri001.hs
+@@ -57,9 +57,9 @@
+ import Data.Maybe (fromJust)
+ import Data.List (intercalate)
+ import System.IO (openFile, IOMode(WriteMode), hClose)
+-import qualified Test.Framework as TF
+-import qualified Test.Framework.Providers.HUnit as TF
+-import qualified Test.Framework.Providers.QuickCheck2 as TF
++import qualified Test.Tasty as TF
++import qualified Test.Tasty.HUnit as TF
++import qualified Test.Tasty.QuickCheck as TF
+ 
+ -- Test supplied string for valid URI reference syntax
+ --   isValidURIRef :: String -> Bool
