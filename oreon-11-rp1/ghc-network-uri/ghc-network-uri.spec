@@ -23,6 +23,7 @@ Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#
 # End cabal-rpm sources
 Patch0:        network-uri-th-compat.patch
 Patch1:        network-uri-tasty.patch
+Patch2:        network-uri-showS.patch
 
 # Begin cabal-rpm deps:
 BuildRequires:  ghc-rpm-macros
