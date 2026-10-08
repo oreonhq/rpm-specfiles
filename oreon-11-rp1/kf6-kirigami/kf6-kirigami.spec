@@ -19,7 +19,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_k
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  extra-cmake-modules
+BuildRequires:  extra-cmake-modules >= 6.30.0
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  make
 BuildRequires:  cmake(Qt6LinguistTools)

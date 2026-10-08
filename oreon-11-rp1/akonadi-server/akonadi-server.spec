@@ -33,6 +33,7 @@ Source11:       akonadiserverrc.sqlite
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  python3-devel
+BuildRequires:  python3-shiboken6-devel
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  desktop-file-utils

@@ -10,6 +10,10 @@ License:        LGPL-2.1-or-later
 URL:            https://oath-toolkit.codeberg.page/
 Source0:        https://codeberg.org/oath-toolkit/oath-toolkit/releases/download/v%{toolkit_version}/oath-toolkit-%{toolkit_version}.tar.gz
 
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  gettext-devel
 BuildRequires:  gcc
 BuildRequires:  make
 

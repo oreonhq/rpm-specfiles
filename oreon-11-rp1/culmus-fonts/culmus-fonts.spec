@@ -277,22 +277,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 cp -p %{SOURCE17} .
 
 %build
-# As per fonts packaging guidelines we cannot install non-opentype fonts
-# hence lets use makeotf tool to convert them to otf type format
-makeotfexe -f AharoniCLM-BoldOblique.pfa -b
-makeotfexe -f AharoniCLM-Bold.pfa -b
-makeotfexe -f AharoniCLM-BookOblique.pfa
-makeotfexe -f AharoniCLM-Book.pfa
-makeotfexe -f CaladingsCLM.pfa
-makeotfexe -f DrugulinCLM-BoldItalic.pfa -bi
-makeotfexe -f DrugulinCLM-Bold.pfa -b
-makeotfexe -f ElliniaCLM-BoldItalic.pfa -bi
-makeotfexe -f ElliniaCLM-Bold.pfa -b
-makeotfexe -f ElliniaCLM-LightItalic.pfa -i
-makeotfexe -f ElliniaCLM-Light.pfa
-makeotfexe -f YehudaCLM-Bold.pfa -b
-makeotfexe -f YehudaCLM-Light.pfa
-
 fontforge ./modify-font-metadata.pe
 
 %fontbuild -a

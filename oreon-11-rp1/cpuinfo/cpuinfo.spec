@@ -96,6 +96,7 @@ sed -i -e 's@cpuinfo_VERSION 23.11.04@cpuinfo_VERSION %{version}@' CMakeLists.tx
 
 %build
 %cmake \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
 %if %{with check}
     -DCPUINFO_BUILD_UNIT_TESTS=ON \
 %else

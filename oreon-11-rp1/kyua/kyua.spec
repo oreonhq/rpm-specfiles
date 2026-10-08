@@ -18,8 +18,10 @@ Patch0:         kyua-pr238-add-more-info-for-failed-tests.patch
 
 BuildRequires:  make
 BuildRequires:  gcc-c++
+BuildRequires:  libatf-c-devel >= 0.17
 BuildRequires:  libatf-c++-devel >= 0.17
 BuildRequires:  libatf-sh-devel >= 0.15
+BuildRequires:  pkgconf
 BuildRequires:  pkgconfig(lutok) >= 0.4
 BuildRequires:  pkgconfig(sqlite3) >= 3.6.22
 

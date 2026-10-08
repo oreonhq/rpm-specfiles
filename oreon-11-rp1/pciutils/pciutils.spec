@@ -19,7 +19,7 @@ Patch2:		pciutils-dir-d.patch
 
 Requires:	hwdata
 Requires:	%{name}-libs = %{version}-%{release}
-BuildRequires:	gcc make sed kmod-devel
+BuildRequires:	gcc make sed kmod-devel binutils
 Provides:	/sbin/lspci /sbin/setpci
 Provides:	/bin/lspci
 

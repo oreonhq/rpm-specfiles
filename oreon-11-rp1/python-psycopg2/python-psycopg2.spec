@@ -11,6 +11,7 @@ License:        ...
 URL:            https://psycopg.org/
 Source:         %{pypi_source psycopg2}
 
+BuildRequires:  libpq-devel
 BuildRequires:  python3-devel
 BuildRequires:  gcc
 

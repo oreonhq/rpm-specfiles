@@ -30,6 +30,7 @@ BuildRequires: gcc
 BuildRequires: gettext
 BuildRequires: gnupg2
 BuildRequires: make
+BuildRequires: gtk-doc
 
 %description
 
@@ -55,7 +56,7 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 export CFLAGS="$CFLAGS -std=gnu17"
 %configure --enable-tests=yes \
 	--enable-asserts=yes \
-	--disable-gtk-doc
+	--enable-gtk-doc
 
 %make_build
 

@@ -12,6 +12,7 @@ License:        ISC
 URL:            https://github.com/pythongssapi/python-gssapi
 Source:         %{pypi_source gssapi}
 
+BuildRequires:  krb5-devel
 BuildRequires:  python3-devel
 BuildRequires:  gcc
 

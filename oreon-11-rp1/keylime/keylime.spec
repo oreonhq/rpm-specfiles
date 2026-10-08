@@ -26,6 +26,7 @@ License: Apache-2.0 AND MIT
 
 BuildArch: noarch
 
+BuildRequires:  python3-rpm
 BuildRequires: git-core
 BuildRequires: openssl
 BuildRequires: openssl-devel
@@ -302,7 +303,7 @@ export KEYLIME_CA_CONFIG="${CONF_TEMP_DIR}/ca.conf"
 export KEYLIME_LOGGING_CONFIG="${CONF_TEMP_DIR}/logging.conf"
 
 # Run the tests.
-%{python3} -m unittest
+PYTHONPATH="%{buildroot}%{python3_sitelib}:$(pwd)" %{python3} -m unittest
 
 # Cleanup.
 [ "${CONF_TEMP_DIR}" ] && rm -rf "${CONF_TEMP_DIR}"
@@ -313,7 +314,6 @@ for e in KEYLIME_VERIFIER_CONFIG \
          KEYLIME_LOGGING_CONFIG; do
     unset "${e}"
 done
-exit 0
 
 %pre base
 %sysusers_create_compat %{SOURCE2}

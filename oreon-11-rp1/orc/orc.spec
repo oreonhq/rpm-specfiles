@@ -12,6 +12,7 @@ Source0:        http://gstreamer.freedesktop.org/src/orc/%{name}-%{version}.tar.
 BuildRequires:	meson >= 0.47.0
 BuildRequires:  gcc
 BuildRequires:	gtk-doc
+BuildRequires:	python3-hotdoc
 
 %description
 Orc is a library and set of tools for compiling and executing
@@ -52,7 +53,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-%meson -D default_library=shared
+%meson -D default_library=shared -D hotdoc=enabled
 %meson_build
 
 %install
@@ -76,7 +77,8 @@ rm -rf %{buildroot}/%{_libdir}/orc
 %{_bindir}/orc-bugreport
 
 %files doc
-%doc %{_datadir}/gtk-doc/html/orc/
+%doc README
+%{_datadir}/doc/orc/
 
 %files devel
 %doc examples/*.c

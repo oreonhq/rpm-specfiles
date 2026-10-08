@@ -12,6 +12,10 @@ Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 BuildRequires: make
 BuildRequires: pkgconfig(xproto) pkgconfig(x11)
 BuildRequires: gcc
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+BuildRequires: xorg-x11-util-macros
 
 %description
 X.Org X11 libxkbfile runtime library
@@ -28,9 +32,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 
 %build
-# FIXME: We use -fno-strict-aliasing, to work around the following bug:
-# maprules.c:1373: warning: dereferencing type-punned pointer will break strict-aliasing rules)
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
+autoreconf -fi
 %configure --disable-static
 make %{?_smp_mflags}
 

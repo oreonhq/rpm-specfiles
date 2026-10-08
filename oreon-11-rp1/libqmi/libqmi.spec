@@ -13,6 +13,8 @@ BuildRequires: gcc
 BuildRequires: glib2-devel >= 2.56
 BuildRequires: gobject-introspection-devel
 BuildRequires: gtk-doc
+BuildRequires: gi-docgen
+BuildRequires: pkgconfig(gi-docgen)
 BuildRequires: pkgconfig(gudev-1.0) >= 147
 BuildRequires: libmbim-devel >= 1.18.0
 BuildRequires: libqrtr-glib-devel

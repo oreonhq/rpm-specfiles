@@ -1,4 +1,4 @@
-%global source0_hash 13b5e6def8d8a790e9d992b9a6922e1bb8dad944e76484e83489e72e3753419f
+%global source0_hash 02e7e3d4da1e56330a2bafd3af514209a8bb68dc3c53a0d1aa7e80569ca24e24
 
 %global git_commit 6067afde563c3946eebd94f146b3824ab7a97a9c
 %global git_date 20260213
@@ -10,7 +10,7 @@ Release:	%autorelease -p -s %{git_date}git%{sub %git_commit 0 7}
 License:	BSD-3-Clause
 Url:		https://chromium.googlesource.com/libyuv/libyuv
 VCS:		git:%{url}
-Source0:	%{url}/+archive/%{git_commit}.tar.gz
+Source0:	https://github.com/lemenkov/libyuv/archive/%{git_commit}.tar.gz
 # Fedora-specific. Upstream isn't interested in these patches.
 Patch:		libyuv-0001-Use-a-proper-so-version.patch
 Patch:		libyuv-0002-Link-against-shared-library.patch
@@ -41,7 +41,7 @@ Additional header files for development with %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -c %{name}-%{version}
+%autosetup -p1 -n libyuv-%{git_commit}
 
 cat > %{name}.pc << EOF
 prefix=%{_prefix}

@@ -650,6 +650,9 @@ sed -i -e '/pagesize/s/0x1000,/0x10000,/' gold/aarch64.cc
 perl -pi -e 's/i\[3-7\]86/i[34567]86/g' */conf*
 sed -i -e 's/%''{release}/%{release}/g' bfd/Makefile{.am,.in}
 sed -i -e '/^libopcodes_la_\(DEPENDENCIES\|LIBADD\)/s,$, ../bfd/libbfd.la,' opcodes/Makefile.{am,in}
+%if %{with zstd}
+sed -i -e '/^libbfd_la_LIBADD =/s/$/ -lzstd/' bfd/Makefile.am bfd/Makefile.in
+%endif
 
 # Build libbfd.so and libopcodes.so with -Bsymbolic-functions if possible.
 if gcc %{optflags} -v --help 2>&1 | grep -q -- -Bsymbolic-functions; then

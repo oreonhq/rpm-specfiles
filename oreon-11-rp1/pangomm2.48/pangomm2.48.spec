@@ -18,6 +18,7 @@ URL:            https://www.gtkmm.org/
 Source0:        https://download.gnome.org/sources/pangomm/%{release_version}/pangomm-%{version}.tar.xz
 BuildRequires:  pkgconfig(cairomm-1.16) >= %{cairomm_version}
 BuildRequires:  pkgconfig(glibmm-2.68) >= %{glibmm_version}
+BuildRequires:  pkgconfig(pango) >= %{pango_version}
 BuildRequires:  pkgconfig(pangocairo) >= %{pango_version}
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
@@ -66,7 +67,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%meson -Dbuild-documentation=true
+%meson --wrap-mode=nofallback -Dbuild-documentation=true
 %meson_build
 
 

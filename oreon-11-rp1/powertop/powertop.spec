@@ -11,6 +11,7 @@ Source0:        http://github.com/fenrus75/%{name}/archive/v%{version}/%{name}-%
 Source1:          powertop.service
 
 # Sent upstream
+BuildRequires:  pkgconfig(libtracefs)
 BuildRequires:    make
 BuildRequires:    gettext-devel
 BuildRequires:    ncurses-devel

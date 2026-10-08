@@ -12,6 +12,7 @@ License:        LGPL-2.1-only OR MIT
 URL:            https://pycurl.github.io/
 Source:         %{pypi_source pycurl}
 
+BuildRequires:  libcurl-devel
 BuildRequires:  python3-devel
 BuildRequires:  gcc
 

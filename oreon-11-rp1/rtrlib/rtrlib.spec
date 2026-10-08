@@ -75,7 +75,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -S git -n %{name}-%{version}
 
 %build
-%cmake -DCMAKE_BUILD_TYPE=Release .
+%cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
 %cmake_build %{?_smp_mflags}
 
 %install

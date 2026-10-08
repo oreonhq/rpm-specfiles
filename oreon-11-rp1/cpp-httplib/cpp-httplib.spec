@@ -1,6 +1,6 @@
-%global source0_hash a4b2528fe483b8ed572522231c313bd99adf85ee776e8d3955cb22c92b2be445
+%global source0_hash 31932ce8b33f2905472a987dc1984b9d8a7d338083a066021349587cc5f1cfea
 
-%global forgeurl0 https://github.com/yhirose/cpp-httplib
+%global forgeurl https://github.com/yhirose/cpp-httplib
 %undefine __cmake_in_source_build
 
 %bcond_without tests
@@ -16,13 +16,14 @@
 
 Name:           cpp-httplib
 Version:        0.58.0
+%global tag v%{version}
 %forgemeta
 Release:        %autorelease
 
 Summary:        A C++11 single-file header-only cross platform HTTP/HTTPS library
 License:        MIT
 URL:            https://github.com/yhirose/cpp-httplib
-VCS:            git:%{forgeurl0}
+VCS:            git:%{forgeurl}
 Source0:        %forgesource
 
 BuildRequires:  redhat-rpm-config

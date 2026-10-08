@@ -14,6 +14,7 @@ Source:         %{pypi_source soupsieve}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-beautifulsoup4
 
 
 # Fill in the actual package description to submit package to Fedora

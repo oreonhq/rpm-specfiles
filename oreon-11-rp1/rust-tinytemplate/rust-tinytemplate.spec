@@ -6,6 +6,7 @@
 %global debug_package %{nil}
 
 %global crate tinytemplate
+%global __brp_mangle_shebangs_exclude_from ^/usr/share/cargo/registry/
 
 Name:           rust-tinytemplate
 Version:        1.2.1

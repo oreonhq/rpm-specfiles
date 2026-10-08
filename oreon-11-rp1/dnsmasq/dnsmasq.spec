@@ -119,7 +119,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sqv --keyring=%{SOURCE4} --signature-file=%{SOURCE3} %{SOURCE0}
 %endif
 %if %{with sourcegit}
-%autosetup -n %{name}-%{version}%{?extraversion} -N -S git_am
+%autosetup -n %{name}-2.92 -N -S git_am
 # If preparing with sourcegit, drop again source directory
 # and clone git repository
 # FIXME: deleting just unpacked sources is dangerous
@@ -130,7 +130,7 @@ git clone -b %{gittag} %{forgeurl0} %{name}-%{version}%{?extraversion}
 cd %{name}-%{version}%{?extraversion}
 git checkout -b rpmbuild
 %else
-%autosetup -n %{name}-%{version}%{?extraversion} -N
+%autosetup -n %{name}-2.92 -N
 %endif
 # Apply patches on top
 %autopatch -p1

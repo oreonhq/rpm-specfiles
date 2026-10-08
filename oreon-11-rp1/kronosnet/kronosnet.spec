@@ -80,6 +80,7 @@ BuildRequires: libzstd-devel
 %endif
 %if %{with libnozzle}
 BuildRequires: libnl3-devel
+BuildRequires: wireshark-devel
 %endif
 %if %{with runautogen}
 BuildRequires: autoconf automake libtool

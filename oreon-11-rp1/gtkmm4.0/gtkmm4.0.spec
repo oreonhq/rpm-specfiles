@@ -73,7 +73,7 @@ cp -a demos/ _docs/
 
 
 %build
-%meson -Dbuild-documentation=true
+%meson --wrap-mode=nofallback -Dbuild-documentation=true
 %meson_build
 
 

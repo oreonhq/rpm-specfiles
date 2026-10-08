@@ -29,7 +29,7 @@ BuildRequires: gcc-c++
 BuildRequires: kf6-rpm-macros
 BuildRequires: libappstream-glib
 BuildRequires: desktop-file-utils
-BuildRequires: extra-cmake-modules
+BuildRequires: extra-cmake-modules >= 6.30.0
 
 BuildRequires: cmake(Qt6Qml)
 BuildRequires: cmake(Qt6Svg)

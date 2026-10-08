@@ -25,6 +25,8 @@ Patch100: libcgroup-tests-unbundle-gtest.patch
 BuildRequires: autoconf, automake, libtool
 BuildRequires: gcc, gcc-c++
 BuildRequires: byacc, coreutils, flex, pam-devel, systemd-units
+BuildRequires: systemd-devel
+BuildRequires: pkgconfig(libsystemd)
 BuildRequires: make
 %if %{with tests}
 BuildRequires: gtest-devel

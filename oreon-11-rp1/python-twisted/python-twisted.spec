@@ -33,7 +33,7 @@ Summary:        %{summary}
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-twisted all-non-platform,all-non-platform,conch,dev,dev-release,dev-release,gtk-platform,gtk-platform,http2,macos-platform,macos-platform,mypy,osx-platform,osx-platform,serial,test,tls,websocket,windows-platform,windows-platform
+%pyproject_extras_subpkg -n python3-twisted all-non-platform,conch,dev,dev-release,gtk-platform,http2,macos-platform,mypy,osx-platform,serial,test,tls,websocket,windows-platform
 
 
 %prep
@@ -42,7 +42,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x all-non-platform,all-non-platform,conch,dev,dev-release,dev-release,gtk-platform,gtk-platform,http2,macos-platform,macos-platform,mypy,osx-platform,osx-platform,serial,test,tls,websocket,windows-platform,windows-platform
+%pyproject_buildrequires -x all-non-platform,conch,dev,dev-release,gtk-platform,http2,macos-platform,mypy,osx-platform,serial,test,tls,websocket,windows-platform
 
 
 %build

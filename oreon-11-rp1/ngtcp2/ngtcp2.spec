@@ -119,6 +119,7 @@ install -p -m 644 %{SOURCE5} doc/source/
 
 %build
 autoreconf -fsi
+export CFLAGS="${CFLAGS:-%{build_cflags}} -Wno-error=stringop-overflow"
 %configure --with-gnutls --with-openssl --with-libev --disable-static --enable-werror
 %make_build
 %if %{with docs}

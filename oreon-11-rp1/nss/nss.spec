@@ -394,7 +394,7 @@ export XCFLAGS="$XCFLAGS -Wno-error=maybe-uninitialized"
 %endif
 
 # Similarly, but for gcc-11
-export XCFLAGS="$XCFLAGS -Wno-array-parameter"
+export XCFLAGS="$XCFLAGS -Wno-array-parameter -Wno-error=stringop-overflow"
 
 export LDFLAGS=$RPM_LD_FLAGS
 

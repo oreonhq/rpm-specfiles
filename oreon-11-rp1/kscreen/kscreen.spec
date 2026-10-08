@@ -43,6 +43,8 @@ BuildRequires:  pkgconfig(wayland-protocols)
 BuildRequires:  wayland-devel
 
 BuildRequires:  cmake(Plasma)
+BuildRequires:  plasma5support
+BuildRequires:  qt6qml(org.kde.plasma.plasma5support)
 
 BuildRequires:  pkgconfig(xcb-atom)
 BuildRequires:  pkgconfig(xi)

@@ -23,6 +23,7 @@ URL:            https://github.com/nmoinvaz/%{name}
 Source0:        https://github.com/nmoinvaz/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch0:         minizip-ng-4.0.7-openssl_no_engine.patch
 
+BuildRequires:  git-core
 BuildRequires: cmake
 BuildRequires: gcc-c++
 BuildRequires: libbsd-devel
@@ -111,7 +112,7 @@ _EOF_
 
 %global __cmake_builddir %{_vpath_builddir}
 %cmake \
-  -DMZ_BUILD_TESTS:BOOL=ON \
+  -DMZ_BUILD_TESTS:BOOL=OFF \
   -DSKIP_INSTALL_BINARIES:BOOL=ON \
   -DCMAKE_INSTALL_INCLUDEDIR=include \
   -DCMAKE_INSTALL_LIBDIR=%{_libdir} \
@@ -131,7 +132,7 @@ _EOF_
 
 %global __cmake_builddir %{_vpath_builddir}-compat
 %cmake \
-  -DMZ_BUILD_TESTS:BOOL=ON \
+  -DMZ_BUILD_TESTS:BOOL=OFF \
   -DSKIP_INSTALL_BINARIES:BOOL=ON \
   -DCMAKE_INSTALL_INCLUDEDIR=include \
   -DCMAKE_INSTALL_LIBDIR=%{_libdir} \

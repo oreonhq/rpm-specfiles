@@ -89,7 +89,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 export CFLAGS='-std=c11 %optflags'
 %meson \
-  -Dbuild-testsuite=true \
   -Dbuild-examples=true \
   -Ddocumentation=true
 

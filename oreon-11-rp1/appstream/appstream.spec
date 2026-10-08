@@ -19,6 +19,7 @@ Source0:        https://www.freedesktop.org/software/appstream/releases/AppStrea
 
 
 # needed for cmake auto-provides
+BuildRequires:  pkgconfig(libblake3)
 BuildRequires: cmake
 BuildRequires: meson >= 0.62
 BuildRequires: gettext

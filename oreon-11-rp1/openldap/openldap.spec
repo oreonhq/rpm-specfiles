@@ -178,6 +178,7 @@ pushd openldap-%{version}
 %patch -P6 -p1
 %patch -P7 -p1
 %patch -P9 -p1
+sed -i 's/#ifdef LDAP_CONNECTIONLESS/#if 1/' libraries/liblber/sockbuf.c libraries/liblber/lber.map
 
 # build smbk5pwd with other overlays
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays
@@ -206,6 +207,7 @@ popd
 %set_build_flags
 # enable experimental support for LDAP over UDP (LDAP_CONNECTIONLESS)
 export CFLAGS="${CFLAGS} ${LDFLAGS} -Wl,--as-needed -Wl,-z,now -DLDAP_CONNECTIONLESS"
+export CPPFLAGS="${CPPFLAGS:-} -DLDAP_CONNECTIONLESS"
 # disable legacy hash algorithm
 export CFLAGS="${CFLAGS} -DOPENSSL_NO_MD2"
 

@@ -1,6 +1,6 @@
 %global source0_hash e53b1ac288d017d66dde0471cd429a806168ecf07179d7f019572d7a7e05f0d6
 
-%global talloc_version 2.4.3
+%global talloc_version 2.5.0
 
 Name:           libtevent
 Version:        0.17.2

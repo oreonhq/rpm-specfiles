@@ -18,6 +18,7 @@ BuildRequires: gcc
 BuildRequires: gawk
 BuildRequires: libgpg-error-devel >= 1.8
 BuildRequires: make
+BuildRequires: hostname
 
 %description
 This is the IPC library used by GnuPG 2, GPGME and a few other
@@ -42,6 +43,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %patch 1 -p1 -b .multilib
 %patch 2 -p1 -b .coverity
+sed -i 's/^\([[:space:]]*\)fp =/\1FILE *fp =/' tests/fdpassing.c
 
 
 %build

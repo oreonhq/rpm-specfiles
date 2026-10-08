@@ -26,7 +26,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 
 # KDE Frameworks
-BuildRequires:  extra-cmake-modules
+BuildRequires:  extra-cmake-modules >= 6.30.0
 
 # Fedora
 Requires:       kf6-filesystem

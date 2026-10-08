@@ -20,6 +20,7 @@ Source0:        https://github.com/openSUSE/%{name}/archive/refs/tags/v%{version
 BuildArch:      noarch
 
 BuildRequires:  python3dist(pytest)
+BuildRequires:  python3-pyasn1
 
 Requires:       python%{python3_pkgversion}-%{name} = %{version}-%{release}
 %if %{with selinux}

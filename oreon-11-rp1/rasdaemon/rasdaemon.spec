@@ -11,6 +11,7 @@ URL:			http://git.infradead.org/users/mchehab/rasdaemon.git
 Source0:		https://github.com/mchehab/rasdaemon/archive/v%{version}/%{name}-%{version}.tar.gz
 
 ExcludeArch:		s390 s390x
+BuildRequires:  pkgconfig(libmariadb)
 BuildRequires:		make
 BuildRequires:		gcc
 BuildRequires:		meson

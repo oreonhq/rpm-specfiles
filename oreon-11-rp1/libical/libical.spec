@@ -70,12 +70,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %{cmake} \
-  -DUSE_INTEROPERABLE_VTIMEZONES:BOOL=true \
-  -DICAL_ALLOW_EMPTY_PROPERTIES:BOOL=true \
-  -DGOBJECT_INTROSPECTION:BOOL=true \
-  -DICAL_GLIB:BOOL=true \
-  -DICAL_GLIB_VAPI:BOOL=true \
-  -DSHARED_ONLY:BOOL=true
+  -DLIBICAL_GOBJECT_INTROSPECTION:BOOL=true \
+  -DLIBICAL_GLIB:BOOL=true \
+  -DLIBICAL_GLIB_VAPI:BOOL=true \
+  -DLIBICAL_CXX_BINDINGS:BOOL=true
 
 # avoid parallel-builds, gir generatation fails on slower archs
 %cmake_build -j1

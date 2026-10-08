@@ -24,6 +24,7 @@ Source0:        %{URL}/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 
 # for generating configure and Makefile scripts in autogen.h
+BuildRequires:  pkgconfig(libjxl)
 BuildRequires: autoconf
 # for generating configure and Makefile scripts in autogen.h
 BuildRequires: automake

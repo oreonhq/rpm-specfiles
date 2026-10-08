@@ -52,6 +52,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
+export CC=gcc
+export CXX=g++
+CFLAGS="${CFLAGS//-nostdinc/}"
+CXXFLAGS="${CXXFLAGS//-nostdinc/}"
+export CFLAGS CXXFLAGS
 %configure --disable-silent-rules --disable-static --disable-werror \
     DOCBOOK2MAN='xmlto man'
 sed -i \

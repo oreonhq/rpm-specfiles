@@ -10,6 +10,7 @@ Source0:        https://gitlab.freedesktop.org/bolt/bolt/-/archive/0.9.11/bolt-0
 Patch0:        0001-test-test-unix-skip-unix-domain-socket-test.patch
 
 BuildRequires: gcc
+BuildRequires: dbus
 BuildRequires: asciidoc
 BuildRequires: meson
 BuildRequires: libudev-devel

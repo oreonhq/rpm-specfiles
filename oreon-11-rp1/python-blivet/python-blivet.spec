@@ -14,6 +14,7 @@ Source:         %{pypi_source blivet}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-blockdev
 
 
 # Fill in the actual package description to submit package to Fedora

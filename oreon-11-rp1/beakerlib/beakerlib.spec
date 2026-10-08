@@ -105,6 +105,7 @@ make build
 %{!?_tmpfilesdir: %global _tmpfilesdir %{_prefix}/lib/tmpfiles.d/}
 rm -rf $RPM_BUILD_ROOT
 make PKGDOCDIR=%{buildroot}/%{_pkgdocdir} DESTDIR=%{buildroot}/usr install
+find %{buildroot} -type f -print0 | xargs -0 grep -l -x '#!/usr/bin/env python' | xargs -r sed -i '1s|#!/usr/bin/env python$|#!/usr/bin/python3|'
 mkdir -p %{buildroot}/%{_tmpfilesdir}
 install -m 0644 %{SOURCE1} %{buildroot}/%{_tmpfilesdir}/%{name}.conf
 

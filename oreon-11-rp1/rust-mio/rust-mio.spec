@@ -14,7 +14,6 @@ Summary:        Lightweight non-blocking I/O.
 License:        MIT
 URL:            https://crates.io/crates/mio
 Source:         %{crates_source}
-Patch:          mio-fix-metadata-auto.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 

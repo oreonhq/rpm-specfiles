@@ -107,6 +107,7 @@ BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
 BuildRequires:  java_cup
 BuildRequires:  jflex
+BuildRequires:  java_cup-runtime
 %endif
 # TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1:0.11b-57

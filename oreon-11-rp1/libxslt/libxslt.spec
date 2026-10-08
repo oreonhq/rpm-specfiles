@@ -16,7 +16,7 @@ BuildRequires:  automake
 BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  gcc
-BuildRequires:  pkgconfig(libxml-2.0) >= 2.6.27
+BuildRequires:  pkgconfig(libxml-2.0) >= 2.15.1
 BuildRequires:  python3-devel
 
 # Fedora specific patches

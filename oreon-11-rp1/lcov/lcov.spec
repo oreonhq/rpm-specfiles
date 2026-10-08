@@ -11,6 +11,7 @@ URL: https://github.com/linux-test-project/lcov/
 Source0: https://github.com/linux-test-project/lcov/releases/download/v%{version}/lcov-%{version}.tar.gz
 
 BuildArch: noarch
+BuildRequires:  python3-sphinx
 BuildRequires: perl-generators
 BuildRequires: git-core
 BuildRequires: make

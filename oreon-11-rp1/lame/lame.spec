@@ -10,6 +10,7 @@ Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar
 Patch1:         %{name}-noexecstack.patch
 Patch2:         libmp3lame-symbols.patch
 
+BuildRequires:  pkgconfig(libmpg123)
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  ncurses-devel

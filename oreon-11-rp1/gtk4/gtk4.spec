@@ -186,7 +186,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 export CFLAGS='-std=c11 -fno-strict-aliasing -DG_DISABLE_CAST_CHECKS -DG_DISABLE_ASSERT %optflags'
-%meson \
+%meson --wrap-mode=nofallback \
 %if 0%{?with_broadway}
         -Dbroadway-backend=true \
 %endif

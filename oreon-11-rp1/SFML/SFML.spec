@@ -49,6 +49,7 @@ URL:            http://www.sfml-dev.org/
 
 Source0:        https://www.sfml-dev.org/files/%{name}-%{version}-sources.zip
 
+BuildRequires:  pkgconfig(mbedtls)
 BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++

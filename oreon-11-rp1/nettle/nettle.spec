@@ -3,8 +3,8 @@
 %global source2_key_fpr 343C2FF0FBEE5EC2EDBEF399F3599FF828C67298
 
 # Recent so-version, so we do not bump accidentally.
-%global nettle_so_ver 8
-%global hogweed_so_ver 6
+%global nettle_so_ver 9
+%global hogweed_so_ver 7
 
 # Set to 1 when building a bootstrap for a bumped so-name.
 %global bootstrap 0

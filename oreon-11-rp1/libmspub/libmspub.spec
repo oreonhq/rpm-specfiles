@@ -58,6 +58,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
+export CXXFLAGS="%{optflags} -std=c++20"
 %configure --disable-static --disable-silent-rules
 sed -i \
     -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \

@@ -22,6 +22,7 @@ BuildRequires: libtool
 BuildRequires: check-devel
 BuildRequires: python3-Cython
 BuildRequires: python3-setuptools
+BuildRequires: python3-pip
 
 %description
 libdnet provides a simplified, portable interface to several
@@ -65,17 +66,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 autoreconf -i
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
-%configure --disable-static
+%configure --disable-static --with-python
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %make_build
 
 %install
 %make_install
-
-pushd python
-%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
-popd
 
 %ldconfig_scriptlets
 

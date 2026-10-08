@@ -37,7 +37,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-autoreconf -v --install
+autoreconf -fi
 %configure --disable-static
 %make_build
 

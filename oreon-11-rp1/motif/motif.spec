@@ -14,6 +14,11 @@ Obsoletes: openmotif < 2.3.4
 Provides: openmotif = %{version}-%{release}
 Requires: xorg-x11-xbitmaps
 
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xpm)
+BuildRequires:  pkgconfig(xt)
+BuildRequires:  pkgconfig(xmu)
+BuildRequires:  pkgconfig(xext)
 BuildRequires: make
 BuildRequires: automake, libtool, autoconf, flex
 BuildRequires: flex-static

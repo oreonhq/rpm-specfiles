@@ -33,9 +33,7 @@ BuildRequires:  shared-mime-info
 BuildRequires:  systemd-devel
 
 %if ! 0%{?bootstrap}
-## Drop/omit FAM/gamin support: it is no longer supported upstream,
-## e.g. https://bugzilla.gnome.org/show_bug.cgi?id=777997
-#BuildRequires:  gamin-devel
+BuildRequires:  gamin-devel
 %endif
 %if 0%{?tests}
 BuildRequires: dbus-x11

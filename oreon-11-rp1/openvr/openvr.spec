@@ -1,11 +1,7 @@
 %global source0_hash e184cb625010fab7043a9d5e1e000fdeb3067a152bb3169ef53f64dfac37164c
 
 # Samples aren't supported on i686
-%ifarch i686
 %bcond_with samples
-%else
-%bcond_without samples
-%endif
 
 %global common_description %{expand:
 OpenVR is an API and runtime that allows access to VR hardware from multiple

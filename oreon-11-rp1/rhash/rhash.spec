@@ -60,7 +60,11 @@ sed -i -e '/^INSTALL_SHARED/s/644/755/' librhash/Makefile
 
 %build
 INSTALL_INCDIR=%{_includedir} ./configure --sysconfdir=%{_sysconfdir} --exec-prefix=%{_prefix} --mandir=%{_mandir} --libdir=%{_libdir}
+%ifarch x86_64 %{ix86}
+%make_build OPTFLAGS="%{optflags} -msse4.1" OPTLDFLAGS="-g %{?__global_ldflags}" build
+%else
 %make_build OPTFLAGS="%{optflags}" OPTLDFLAGS="-g %{?__global_ldflags}" build
+%endif
 
 
 %install

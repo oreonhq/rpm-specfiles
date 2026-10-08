@@ -28,7 +28,7 @@ Requires:       kf6-filesystem
 BuildRequires:  kf6-rpm-macros
 
 # KDE Frameworks
-BuildRequires:  extra-cmake-modules
+BuildRequires:  extra-cmake-modules >= 6.30.0
 
 # Qt
 BuildRequires:  cmake(Qt6Core)

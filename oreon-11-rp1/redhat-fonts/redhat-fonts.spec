@@ -114,9 +114,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 install -m 0755 -d %{buildroot}%{_fontdir}
 install -m 0755 -d %{buildroot}%{_fontdir}-vf
 ## Mono
-install -m 0644 -p fonts/Mono/otf/*.otf %{buildroot}%{_fontdir}
+install -m 0644 -p fonts/Mono/RedHatMono/otf/*.otf %{buildroot}%{_fontdir}
 ## Mono VF
-install -m 0644 -p fonts/Mono/variable/*.ttf %{buildroot}%{_fontdir}-vf
+install -m 0644 -p fonts/Mono/RedHatMono/variable/*.ttf %{buildroot}%{_fontdir}-vf
 ## Display/Text
 install -m 0644 -p fonts/Proportional/*/otf/*.otf %{buildroot}%{_fontdir}
 ## Display/Text VF

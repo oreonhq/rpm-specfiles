@@ -47,27 +47,6 @@ BuildRequires:       selinux-policy-devel
 %description selinux
 Dnsconfd SELinux policy module.
 
-%package micro
-Summary:  Minimized native implementation of Dnsconfd
-Requires:  %{name} = %{version}-%{release}
-Requires:  (%{name}-selinux if selinux-policy-%{selinuxtype})
-Suggests:  %{name}-unbound = %{version}-%{release}
-BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: pkgconfig(gio-2.0)
-BuildRequires: pkgconfig(libcurl)
-BuildRequires: pkgconfig(check)
-BuildRequires: pkgconfig(libsystemd)
-BuildRequires: gcc
-BuildRequires: cmake
-Requires: glib2
-Requires: libcurl
-Requires: systemd-libs
-Requires: unbound-dracut
-
-%description micro
-Minimized native implementation of Dnsconfd. Able to configure
-Unbound according to NetworkManager global configuration.
-
 %package unbound
 Summary:             dnsconfd unbound module
 BuildArch:           noarch
@@ -80,7 +59,7 @@ Dnsconfd management of unbound server
 
 %package dracut
 Summary:            dnsconfd dracut module
-Requires:           %{name}-micro%{?_isa} = %{version}-%{release}
+Requires:           %{name}%{?_isa} = %{version}-%{release}
 Requires:           unbound
 Requires:           dracut
 Requires:           dracut-network
@@ -112,13 +91,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 make -f %{_datadir}/selinux/devel/Makefile %{modulename}.pp
 bzip2 -9 %{modulename}.pp
 
-### micro part
-
-pushd micro-dnsconfd
-%cmake
-%cmake_build
-popd
-
 %install
 %meson_install
 mkdir   -m 0755 -p %{buildroot}%{_datadir}/dbus-1/system.d/
@@ -138,9 +110,7 @@ mkdir   -m 0755 -p %{buildroot}%{_libexecdir}
 install -m 0644 -p distribution/com.redhat.dnsconfd.conf %{buildroot}%{_datadir}/dbus-1/system.d/com.redhat.dnsconfd.conf
 install -m 0644 -p distribution/com.redhat.dnsconfd.service %{buildroot}%{_datadir}/dbus-1/system-services/com.redhat.dnsconfd.service
 install -m 0644 -p distribution/dnsconfd.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/dnsconfd
-install -m 0644 -p distribution/micro-dnsconfd.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/micro-dnsconfd
 install -m 0644 -p distribution/dnsconfd.service %{buildroot}%{_unitdir}/dnsconfd.service
-install -m 0644 -p distribution/micro-dnsconfd.service %{buildroot}%{_unitdir}/micro-dnsconfd.service
 install -m 0644 -p distribution/dnsconfd-unbound-control.path %{buildroot}%{_unitdir}/dnsconfd-unbound-control.path
 install -m 0644 -p distribution/dnsconfd-unbound-control.service %{buildroot}%{_unitdir}/dnsconfd-unbound-control.service
 install -m 0644 -p distribution/dnsconfd.conf %{buildroot}%{_sysconfdir}/dnsconfd.conf
@@ -172,17 +142,8 @@ install -m 0644 -p distribution/dnsconfd.conf.5 %{buildroot}/%{_mandir}/man5/dns
 
 install -p -D -m 0644 distribution/dnsconfd.sysusers %{buildroot}%{_sysusersdir}/dnsconfd.conf
 
-### micro part
-
-pushd micro-dnsconfd
-%cmake_install
-popd
-
 %check
 %meson_test
-pushd micro-dnsconfd
-%ctest
-popd
 
 %pre selinux
 %selinux_relabel_pre -s %{selinuxtype}
@@ -240,11 +201,6 @@ fi
 %doc README.md docs/com.redhat.dnsconfd.md
 %dir %attr(755,dnsconfd,dnsconfd) %{_rundir}/dnsconfd
 %{_tmpfilesdir}/%{name}.conf
-
-%files micro
-%{_bindir}/micro-dnsconfd
-%{_unitdir}/micro-dnsconfd.service
-%config(noreplace) %{_sysconfdir}/sysconfig/micro-dnsconfd
 
 %files selinux
 %{_datadir}/selinux/packages/%{selinuxtype}/%{modulename}.pp.*

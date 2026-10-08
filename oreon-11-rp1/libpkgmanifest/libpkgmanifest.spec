@@ -12,6 +12,7 @@ URL:            https://github.com/rpm-software-management/libpkgmanifest
 Source0:        https://github.com/rpm-software-management/libpkgmanifest/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
+BuildRequires:  rpm-devel
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig

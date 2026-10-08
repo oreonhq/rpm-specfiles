@@ -19,6 +19,7 @@ Summary:        Library for storing and retrieving passwords and other secrets
 License:        LGPL-2.1-or-later AND Apache-2.0 AND (GPL-2.0-or-later OR TGPPL-1.0) AND LicenseRef-Fedora-Public-Domain AND GCR-docs
 URL:            https://wiki.gnome.org/Projects/Libsecret
 Source0: https://download.gnome.org/sources/libsecret/%{release_version}/libsecret-%{version}.tar.xz
+BuildRequires:  dbus
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext
 BuildRequires:  gi-docgen

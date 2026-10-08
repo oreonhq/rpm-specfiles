@@ -10,6 +10,9 @@ URL:            https://github.com/systemd/python-systemd
 Source0:        https://github.com/systemd/python-systemd/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 
+BuildRequires:  git-core
+BuildRequires:  meson
+BuildRequires:  jq
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  systemd-devel

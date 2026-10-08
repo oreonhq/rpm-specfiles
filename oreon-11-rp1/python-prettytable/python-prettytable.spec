@@ -14,6 +14,8 @@ Source:         %{pypi_source prettytable}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-trove-classifiers
+BuildRequires:  python3-packaging
 
 
 # Fill in the actual package description to submit package to Fedora

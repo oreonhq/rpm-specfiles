@@ -117,6 +117,7 @@ BuildRequires:  mvn(net.bytebuddy:byte-buddy-dep)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 BuildRequires:  mvn(org.objenesis:objenesis)
+BuildRequires:  mvn(org.jspecify:jspecify)
 BuildRequires:  mvn(org.opentest4j:opentest4j)
 %endif
 # TODO Remove in Fedora 46

@@ -14,6 +14,8 @@ Source:         %{pypi_source xkbregistry}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  gcc
+BuildRequires:  libxkbcommon-devel
 
 
 # Fill in the actual package description to submit package to Fedora

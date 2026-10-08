@@ -14,6 +14,9 @@ Source:         %{pypi_source hypothesis}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
+BuildRequires:  cargo
+BuildRequires:  rust
+BuildRequires:  cargo-rpm-macros
 
 
 # Fill in the actual package description to submit package to Fedora
@@ -35,6 +38,17 @@ Summary:        %{summary}
 
 %prep
 %autosetup -p1 -n hypothesis-%{version}
+cd rust
+cargo vendor --versioned-dirs
+mkdir -p .cargo
+cat > .cargo/config.toml << 'EOF'
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"
+EOF
+cd ..
 
 
 %generate_buildrequires

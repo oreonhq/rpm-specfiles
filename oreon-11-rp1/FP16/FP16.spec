@@ -64,6 +64,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 
 %cmake \
+       -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
        -DFP16_USE_SYSTEM_LIBS=ON \
 %if %{without check}
        -DFP16_BUILD_TESTS=OFF \

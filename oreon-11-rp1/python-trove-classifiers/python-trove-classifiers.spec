@@ -31,6 +31,7 @@ Summary:        %{summary}
 
 %prep
 %autosetup -p1 -n trove_classifiers-%{version}
+sed -i 's/@@VERSION@@/%{version}/' pyproject.toml
 
 
 %generate_buildrequires

@@ -1,7 +1,7 @@
 %global source0_hash e10c12b3f21f45bf08e09d4215d9c7691368d747beebd840de0b6fefed2df9f8
 
 %global srcname Imath
-%global sover 29
+%global sover 30
 %global pyver_under %(%{python3} -Esc "import sys; sys.stdout.write('{0.major}_{0.minor}'.format(sys.version_info))")
 
 Name:           imath

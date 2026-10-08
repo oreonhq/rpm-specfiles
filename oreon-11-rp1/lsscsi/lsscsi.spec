@@ -5,12 +5,13 @@ Name:           lsscsi
 Version:        0.33
 Release:        1%{?dist}
 License:        GPL-2.0-or-later
-# official git repository: https://github.com/doug-gilbert/lsscsi
-# upstream host unreachable; tarball from Fedora lookaside cache
-Source0:        https://src.fedoraproject.org/repo/pkgs/lsscsi/lsscsi-0.33.tar.gz/sha512/ddab3223418504d36e6b365652e6f5aea5a344cc0614db6295556c727949ad8e9bea59425153f5c42e293017357072a485eecd8f9a2ed262e6ed6e24bfed3547/lsscsi-0.33.tar.gz
+Source0:        https://github.com/doug-gilbert/lsscsi/archive/refs/tags/r%{version}.tar.gz
 URL:            http://sg.danny.cz/scsi/lsscsi.html
 BuildRequires:  gcc
 BuildRequires:  make
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
 
 %description
 Uses information provided by the sysfs pseudo file system in Linux kernel
@@ -28,6 +29,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n %{name}-r%{version}
 
 %build
+autoreconf -fi
 %configure
 %make_build
 

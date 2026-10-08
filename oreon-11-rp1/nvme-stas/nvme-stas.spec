@@ -51,7 +51,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %meson_install
-mv %{buildroot}/%{_sysconfdir}/stas/sys.conf.doc %{buildroot}/%{_sysconfdir}/stas/sys.conf
 
 %post
 %systemd_post stacd.service
@@ -68,10 +67,10 @@ mv %{buildroot}/%{_sysconfdir}/stas/sys.conf.doc %{buildroot}/%{_sysconfdir}/sta
 %files
 %license LICENSE
 %doc README.md
-%dir %{_sysconfdir}/stas
-%config(noreplace) %{_sysconfdir}/stas/stacd.conf
-%config(noreplace) %{_sysconfdir}/stas/stafd.conf
-%config(noreplace) %{_sysconfdir}/stas/sys.conf
+%dir %{_sysconfdir}/nvme
+%config(noreplace) %{_sysconfdir}/nvme/stacd.conf
+%config(noreplace) %{_sysconfdir}/nvme/stafd.conf
+%config(noreplace) %{_sysconfdir}/nvme/nvme-stas.conf
 %{_datadir}/dbus-1/system.d/org.nvmexpress.*.conf
 %{_bindir}/stacctl
 %{_bindir}/stafctl

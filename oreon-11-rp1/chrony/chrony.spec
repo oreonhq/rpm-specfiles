@@ -167,7 +167,9 @@ echo 'chronyd.service' > \
 # set random seed to get deterministic results
 export CLKNETSIM_RANDOM_SEED=24508
 %make_build -C test/simulation/clknetsim
-make quickcheck
+make -C test/unit check
+( cd test/simulation && ./run )
+( cd test/system && ./run )
 
 %pre
 %sysusers_create_compat %{SOURCE4}

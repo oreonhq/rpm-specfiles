@@ -4,7 +4,7 @@
 # first two digits of version
 %define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
 
-%global glibmm24_version 2.46.2
+%global glibmm_version 2.68.0
 
 Name:           atkmm
 Version:        2.36.4
@@ -17,13 +17,13 @@ Source0:        https://download.gnome.org/sources/atkmm/%{release_version}/atkm
 BuildRequires:  atk-devel
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig(glibmm-2.4) >= %{glibmm24_version}
+BuildRequires:  pkgconfig(glibmm-2.68) >= %{glibmm_version}
 BuildRequires:  libxslt
 BuildRequires:  m4
 BuildRequires:  meson
 BuildRequires:  mm-common
 
-Requires:       glibmm24%{?_isa} >= %{glibmm24_version}
+Requires:       glibmm2.68%{?_isa} >= %{glibmm_version}
 
 %description
 atkmm provides a C++ interface for the ATK library. Highlights
@@ -46,7 +46,7 @@ Summary:        Developer's documentation for the atkmm library
 BuildArch:      noarch
 License:        LGPL-2.1-or-later AND MIT AND GPL-2.0-or-later AND (MIT OR GPL-2.0-or-later)
 Requires:       %{name} = %{version}-%{release}
-Requires:       glibmm24-doc
+Requires:       glibmm2.68-doc
 
 %description    doc
 This package contains developer's documentation for the atkmm
@@ -62,7 +62,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%meson -Dbuild-documentation=true
+%meson --wrap-mode=nofallback -Dbuild-documentation=true
 %meson_build
 
 

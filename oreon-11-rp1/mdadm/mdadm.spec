@@ -58,7 +58,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 # CXFLAGS is NOT a typo, it's baked into the makefile, not to be confused with CXXFLAGS
-%make_build CXFLAGS="%{optflags} -std=gnu17 -Wno-error=unterminated-string-initialization -Wno-error=unused-but-set-variable" LDFLAGS="$RPM_LD_FLAGS" SYSCONFDIR="%{_sysconfdir}" mdadm mdmon raid6check raid6check.man
+%make_build CXFLAGS="%{optflags} -std=gnu17 -Wno-error=unterminated-string-initialization -Wno-error=unused-but-set-variable -Wno-error=format-truncation" LDFLAGS="$RPM_LD_FLAGS" SYSCONFDIR="%{_sysconfdir}" mdadm mdmon raid6check raid6check.man
 
 
 %install

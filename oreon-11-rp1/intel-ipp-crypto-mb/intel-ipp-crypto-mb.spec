@@ -59,7 +59,9 @@ sed -i 's/"lib\"/"lib64"/g' sources/ippcp/crypto_mb/src/CMakeLists.txt
 pushd sources/ippcp/crypto_mb
 %cmake \
 	-DARCH=intel64 \
-	-DMERGED_BLD:BOOL=off
+	-DMERGED_BLD:BOOL=off \
+	-DCMAKE_C_FLAGS="%{build_cflags} -Wno-error=unused-but-set-variable" \
+	-DCMAKE_CXX_FLAGS="%{build_cxxflags} -Wno-error=unused-but-set-variable"
 %cmake_build
 popd
 

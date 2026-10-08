@@ -121,6 +121,9 @@ BuildRequires: libzstd-devel
 BuildRequires: gcc
 BuildRequires: perl(ExtUtils::MakeMaker) glibc-devel bison flex gawk
 BuildRequires: perl(ExtUtils::Embed), perl-devel
+BuildRequires: perl
+BuildRequires: /usr/bin/perl
+BuildRequires: rpm-build
 BuildRequires: perl(Opcode)
 BuildRequires: perl-FindBin
 %if 0%{?fedora} || 0%{?rhel} > 7 || (0%{?oreon} >= 11)

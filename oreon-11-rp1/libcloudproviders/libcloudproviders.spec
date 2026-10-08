@@ -13,6 +13,8 @@ Source0:        https://ftp.gnome.org/pub/GNOME/sources/libcloudproviders/%{api_
 
 BuildRequires:  gcc
 BuildRequires:  gtk-doc
+BuildRequires:  gi-docgen
+BuildRequires:  pkgconfig(gi-docgen)
 BuildRequires:  meson
 BuildRequires:  vala
 
@@ -40,7 +42,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%meson -Denable-gtk-doc=true
+%meson -Denable-gtk-doc=true -Dwrap_mode=nofallback
 %meson_build
 
 

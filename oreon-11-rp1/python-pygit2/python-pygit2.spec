@@ -13,6 +13,7 @@ Source:         %{pypi_source pygit2}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
+BuildRequires:  libgit2-devel
 
 
 # Fill in the actual package description to submit package to Fedora

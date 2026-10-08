@@ -1,5 +1,5 @@
 %global source0_hash daf871488603e659b0501224cf0731ac317809b1d1701fc061cb4f6ae39a894f
-%global source1_hash dcfad0419e30124fcb33aa9583c27cd12f2e11b2c67f118fcc54b68d1bed4dde
+%global source1_hash 6e6366828d4cd2ccf3cfe07657d8aba083045605696b4f74967c2c8340f51500
 
 # trust-dns-{client,server} not available
 # using vendored deps
@@ -39,7 +39,7 @@ URL: https://github.com/containers/%{name}
 # Tarballs fetched from upstream's release page
 Source0:        https://github.com/containers/aardvark-dns/archive/refs/tags/v2.1.0.tar.gz#/aardvark-dns-2.1.0.tar.gz
 
-Source1:        https://github.com/containers/aardvark-dns/releases/download/v1.17.0/aardvark-dns-v1.17.0-vendor.tar.gz
+Source1:        https://github.com/containers/aardvark-dns/releases/download/v2.1.0/aardvark-dns-v2.1.0-vendor.tar.gz
 BuildRequires: cargo
 BuildRequires: git-core
 BuildRequires: make
@@ -83,7 +83,7 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 # dependencies directly from the network.
 %if !%{defined copr_username}
 tar fx %{SOURCE1}
-%if 0%{?fedora} || 0%{?rhel} >= 10
+%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %cargo_prep -v vendor
 %else
 %cargo_prep -V 1
@@ -92,7 +92,7 @@ tar fx %{SOURCE1}
 
 %build
 %{__make} CARGO="%{__cargo}" build
-%if (0%{?fedora} || 0%{?rhel} >= 10) && !%{defined copr_username}
+%if (0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon} >= 11) && !%{defined copr_username}
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
 %cargo_vendor_manifest
@@ -111,7 +111,7 @@ tar fx %{SOURCE1}
 
 %files
 %license LICENSE
-%if (0%{?fedora} || 0%{?rhel} >= 10) && !%{defined copr_username}
+%if (0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon} >= 11) && !%{defined copr_username}
 %license LICENSE.dependencies
 %license cargo-vendor.txt
 %endif

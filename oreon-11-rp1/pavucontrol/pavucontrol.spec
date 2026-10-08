@@ -9,6 +9,7 @@ License:        GPL-2.0-or-later
 URL:            https://www.freedesktop.org/software/pulseaudio/%{name}
 Source0:        https://www.freedesktop.org/software/pulseaudio/%{name}/%{name}-%{version}.tar.xz
 
+BuildRequires:  pkgconfig(libcanberra)
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
 BuildRequires:  gcc-c++

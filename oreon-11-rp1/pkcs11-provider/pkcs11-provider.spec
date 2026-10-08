@@ -18,6 +18,7 @@ Source3:       pkcs11-provider.conf
 # https://github.com/latchset/pkcs11-provider/pull/689
 
 
+BuildRequires:  vim-common
 BuildRequires: openssl-devel >= 3.0.7
 BuildRequires: gcc
 BuildRequires: meson

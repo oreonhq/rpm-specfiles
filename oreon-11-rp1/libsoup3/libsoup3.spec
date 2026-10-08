@@ -21,6 +21,7 @@ Source0:        https://download.gnome.org/sources/libsoup/%{source_series}/libs
 # Downstream patch, needed due to glib2 gnutls-hmac.patch
 Patch:   no-ntlm-in-fips-mode.patch
 
+BuildRequires:  pkgconfig(libzstd)
 BuildRequires: gcc
 BuildRequires: gettext
 BuildRequires: glib-networking >= %{glib2_version}

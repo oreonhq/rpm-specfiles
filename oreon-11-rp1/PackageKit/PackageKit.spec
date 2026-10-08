@@ -239,8 +239,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
         -Dgtk_doc=true \
         -Dpython_backend=false \
         -Dpackaging_backend=%{?with_dnf4:dnf,}dnf5 \
-        -Dlegacy_tools=true \
-        -Dlocal_checkout=false
+        -Dlegacy_tools=true
 
 %build
 %meson_build

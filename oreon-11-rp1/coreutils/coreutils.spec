@@ -76,6 +76,8 @@ BuildRequires: acl
 BuildRequires: gdb
 BuildRequires: perl-interpreter
 BuildRequires: perl(FileHandle)
+BuildRequires: perl(Thread::Queue)
+BuildRequires: diffutils
 BuildRequires: python3
 BuildRequires: tzdata
 %ifarch %valgrind_arches

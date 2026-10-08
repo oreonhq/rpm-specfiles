@@ -26,6 +26,7 @@ Summary:        %{summary}
 BuildRequires:  python3-devel
 BuildRequires:  %py3_dist setuptools
 BuildRequires:  %py3_dist pytest
+BuildRequires:  %py3_dist mock
 BuildRequires:  %py3_dist setuptools_scm
 %if %{undefined rhel}
 BuildRequires:  %py3_dist pytest-asyncio

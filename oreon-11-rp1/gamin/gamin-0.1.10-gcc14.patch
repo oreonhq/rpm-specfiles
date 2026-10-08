@@ -1,0 +1,61 @@
+--- a/server/gam_connection.c	2007-07-04 06:36:49.000000000 -0700
++++ b/server/gam_connection.c	2026-10-08 15:12:52.954027947 -0700
+@@ -10,6 +10,7 @@
+ #include "gam_protocol.h"
+ #include "gam_channel.h"
+ #include "gam_error.h"
++#include "gam_excludes.h"
+ #include "gam_pidname.h"
+ #include "gam_eq.h"
+ #ifdef GAMIN_DEBUG_API
+--- a/server/gam_eq.c	2007-07-04 06:36:49.000000000 -0700
++++ b/server/gam_eq.c	2026-10-08 15:13:05.806350190 -0700
+@@ -124,7 +124,7 @@
+ {
+ 	gboolean done_work = FALSE;
+ 	if (!eq)
+-		return;
++		return FALSE;
+ 
+ #ifdef GAM_EQ_VERBOSE
+ 	GAM_DEBUG(DEBUG_INFO, "gam_eq: Flushing event queue for %s\n", gam_connection_get_pidname (conn));
+--- a/server/gam_inotify.c	2008-11-12 12:45:28.000000000 -0800
++++ b/server/gam_inotify.c	2026-10-08 15:13:03.437290792 -0700
+@@ -30,6 +30,7 @@
+ #include "gam_server.h"
+ #include "gam_subscription.h"
+ #include "gam_inotify.h"
++#include "gam_poll_basic.h"
+ 
+ /* Transforms a inotify event to a gamin event. */
+ static GaminEventType
+--- a/server/gam_listener.c	2007-07-04 06:36:49.000000000 -0700
++++ b/server/gam_listener.c	2026-10-08 15:12:47.993903583 -0700
+@@ -24,6 +24,7 @@
+ #include "gam_subscription.h"
+ #include "gam_server.h"
+ #include "gam_error.h"
++#include "gam_excludes.h"
+ #include "gam_pidname.h"
+ #ifdef ENABLE_INOTIFY
+ #include "gam_inotify.h"
+--- a/server/gam_node.c	2007-07-04 06:36:49.000000000 -0700
++++ b/server/gam_node.c	2026-10-08 15:12:47.993903583 -0700
+@@ -22,6 +22,7 @@
+ #include <glib.h>
+ #include "gam_event.h"
+ #include "gam_node.h"
++#include "gam_server.h"
+ #include "gam_error.h"
+ 
+ /**
+--- a/server/gam_server.c	2007-07-04 06:36:49.000000000 -0700
++++ b/server/gam_server.c	2026-10-08 15:12:48.045904887 -0700
+@@ -33,6 +33,7 @@
+ #include "gam_channel.h"
+ #include "gam_subscription.h"
+ #include "gam_poll_generic.h"
++#include "gam_poll_basic.h"
+ #ifdef ENABLE_INOTIFY
+ #include "gam_inotify.h"
+ #endif

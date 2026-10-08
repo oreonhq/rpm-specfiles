@@ -98,7 +98,10 @@ MinGW Windows %{name} library.
 %autosetup -p1 -n libusb-%{version}
 chmod -x examples/*.c
 mkdir -p m4
-sed -i '/AM_LDFLAGS = -static/d' tests/Makefile.am
+sed -i \
+    -e '/AM_LDFLAGS = -static/d' \
+    -e 's/test_static_link_flag = -static/test_static_link_flag =/' \
+    tests/Makefile.am
 autoscan
 aclocal
 autoconf

@@ -64,7 +64,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %check
-%cmake_build --target check
+%ctest
 
 
 %files

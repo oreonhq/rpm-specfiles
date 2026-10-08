@@ -15,6 +15,7 @@ BuildRequires: libattr-devel
 %ifarch %{bpf_supported_arches}
 # These next ones are needed by cap-audit
 BuildRequires: clang
+BuildRequires: llvm
 BuildRequires: bpftool libbpf-devel
 BuildRequires: audit-libs-devel
 %endif

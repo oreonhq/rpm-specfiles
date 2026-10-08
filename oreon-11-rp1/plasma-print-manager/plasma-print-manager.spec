@@ -45,6 +45,7 @@ BuildRequires: cmake(KF6WidgetsAddons)
 BuildRequires: cmake(KF6WindowSystem)
 
 BuildRequires: qt6-qtbase-devel
+BuildRequires: qt6-qttools-devel
 
 BuildRequires: cmake(Qt6Core5Compat)
 BuildRequires: cmake(Qt6Qml)

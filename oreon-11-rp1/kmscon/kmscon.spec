@@ -65,7 +65,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %conf
-%meson -Dmulti_seat=disabled -Dvideo_fbdev=disabled
+%meson -Dvideo_fbdev=disabled
 
 %build
 %meson_build

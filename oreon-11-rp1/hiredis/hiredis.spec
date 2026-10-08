@@ -46,9 +46,9 @@ make check REDIS_SERVER=valkey-server
 %files
 %doc COPYING
 %{_libdir}/libhiredis.so.1
-%{_libdir}/libhiredis.so.1.1.0
+%{_libdir}/libhiredis.so.1.*
 %{_libdir}/libhiredis_ssl.so.1
-%{_libdir}/libhiredis_ssl.so.1.1.0
+%{_libdir}/libhiredis_ssl.so.1.*
 
 %files devel
 %doc CHANGELOG.md README.md

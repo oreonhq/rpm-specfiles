@@ -28,6 +28,7 @@ BuildRequires: cmake
 BuildRequires: ninja-build
 ## versioning recently dropped, but could do >= %%majmin if needed --rex
 BuildRequires: qt6-qtbase-devel
+BuildRequires: cmake(Qt6Core)
 # for lrelease
 BuildRequires: qt6-linguist
 BuildRequires: qt6-qttools-devel

@@ -35,6 +35,7 @@ BuildRequires:  make
 BuildRequires:  bash
 BuildRequires:  perl-interpreter
 BuildRequires:  perl(Time::HiRes)
+BuildRequires:  procps-ng
 Provides:   faketime = %{version}-%{release}
 
 %description

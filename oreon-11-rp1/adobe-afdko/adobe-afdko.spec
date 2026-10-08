@@ -33,6 +33,7 @@ License:	Apache-2.0
 URL:		https://github.com/adobe-type-tools/afdko
 Source0:        https://github.com/adobe-type-tools/afdko/releases/download/%{version}/afdko-%{version}.tar.gz
 Source1:        https://www.antlr.org/download/antlr4-cpp-runtime-4.13.2-source.zip
+BuildRequires:  python3-devel
 BuildRequires:	gcc g++
 BuildRequires:	cmake
 BuildRequires:	libuuid-devel

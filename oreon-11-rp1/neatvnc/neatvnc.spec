@@ -16,6 +16,7 @@ Source:   %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # Backport to fix i686 builds
 # From: https://github.com/any1/neatvnc/commit/e0e0ce5c579cafc763992f1c1bb964eb95999fb7
 
+BuildRequires:  pkgconfig(aml1)
 BuildRequires: gcc
 BuildRequires: git-core
 BuildRequires: meson

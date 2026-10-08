@@ -4559,6 +4559,9 @@ echo "RPM Build arch: %{_arch}"
         -Ud_endservent_r_proto -Ud_setservent_r_proto \
         -Dscriptdir='%{_bindir}' \
         -Dusesitecustomize \
+%ifarch %{multilib_64_archs}
+        -Duse64bitall \
+%endif
         -Duse64bitint
 
 # -Duseshrplib creates libperl.so, -Ubincompat5005 help create DSO -> libperl.so

@@ -40,7 +40,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -S git_am -n iio-sensor-proxy-%{version}-0085ddf8ecb173a1c5fcf2344aa40e561125354f
 
 %build
-%meson -Dgtk_doc=true -Dgtk-tests=false
+%meson -Dgtk_doc=true -Dgtk-tests=false -Dssc=disabled
 %meson_build
 
 %install

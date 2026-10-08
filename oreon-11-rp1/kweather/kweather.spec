@@ -43,6 +43,8 @@ BuildRequires:  cmake(KF6KirigamiAddons)
 BuildRequires:  cmake(KWeatherCore)
 BuildRequires:  cmake(Plasma)
 BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6Runner)
+BuildRequires:  kf6-krunner-devel
 
 Requires:       hicolor-icon-theme
 # QML module dependencies

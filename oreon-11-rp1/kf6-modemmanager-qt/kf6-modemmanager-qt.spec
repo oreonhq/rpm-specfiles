@@ -14,7 +14,7 @@ URL:     https://invent.kde.org/frameworks/%{framework}
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
 
-BuildRequires:  extra-cmake-modules
+BuildRequires:  extra-cmake-modules >= 6.30.0
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  gcc-c++
 BuildRequires:  ModemManager-devel >= 1.0.0

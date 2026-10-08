@@ -42,6 +42,7 @@ Patch0:         json-c_mingw-libver.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
+BuildRequires:  python3
 BuildRequires:  ninja-build
 %ifarch %{valgrind_arches}
 BuildRequires:  valgrind

@@ -44,7 +44,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%meson -Dudevrulesdir=%{_udevrulesdir} -Dsystemddir=%{_unitdir} -Dpdc-enabled=false -Ddocs=all -Ddocs-build=true -Dhtmldir=%{_pkgdocdir}
+%meson -Dudevrulesdir=%{_udevrulesdir} -Dsystemddir=%{_unitdir} -Ddocs=all -Ddocs-build=true -Dhtmldir=%{_pkgdocdir}
 %meson_build
 
 

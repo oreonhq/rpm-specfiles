@@ -94,7 +94,7 @@ install -pm 0644 README.md %{buildroot}%{_docdir}/%{name}
 
 %if %{with jsoncpp_enables_doc}
 mkdir -p %{buildroot}%{_docdir}/%{name}/html
-cp -a dist/doxygen/jsoncpp-api-html-/* %{buildroot}%{_docdir}/%{name}/html
+cp -a dist/doxygen/jsoncpp-api-html-*/* %{buildroot}%{_docdir}/%{name}/html
 find %{buildroot}%{_docdir} -type d -print0 | xargs -0 chmod -c 0755
 find %{buildroot}%{_docdir} -type f -print0 | xargs -0 chmod -c 0644
 hardlink -cfv %{buildroot}%{_docdir}/%{name}

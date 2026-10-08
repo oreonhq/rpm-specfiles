@@ -46,13 +46,7 @@ sed -i 's|//\(#define MBEDTLS_THREADING_C\)|\1|' include/mbedtls/mbedtls_config.
 sed -i 's|//\(#define MBEDTLS_THREADING_PTHREAD\)|\1|' include/mbedtls/mbedtls_config.h
 
 %build
-%if 0%{?fedora}
 export CFLAGS="%{optflags} -Wno-stringop-overflow -Wno-maybe-uninitialized -Wno-error=unterminated-string-initialization -fzero-init-padding-bits=unions"
-%endif
-
-%if 0%{?rhel} <= 10
-export CFLAGS="%{optflags} -Wno-stringop-overflow -Wno-maybe-uninitialized"
-%endif
 
 %cmake \
 	-DCMAKE_BUILD_TYPE=Release \

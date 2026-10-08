@@ -8,6 +8,7 @@ License:	LGPL-3.0-or-later
 URL:		http://libopenraw.freedesktop.org/wiki
 Source0:        http://libopenraw.freedesktop.org/download/%{name}-%{version}.tar.bz2
 
+BuildRequires:  cargo
 BuildRequires:  boost-devel
 BuildRequires:  gcc-c++
 BuildRequires:  libjpeg-devel

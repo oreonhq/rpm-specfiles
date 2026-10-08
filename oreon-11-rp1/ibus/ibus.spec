@@ -84,6 +84,7 @@ BuildRequires:  gtk2-devel
 BuildRequires:  gtk3-devel
 %if %{with gtk4}
 BuildRequires:  gtk4-devel
+BuildRequires:  pkgconfig(gtk4)
 %endif
 BuildRequires:  dbus-python-devel >= %{dbus_python_version}
 BuildRequires:  desktop-file-utils

@@ -14,6 +14,8 @@ Source:         %{pypi_source drgn}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
+BuildRequires:  elfutils-devel
+BuildRequires:  libzstd-devel
 
 
 # Fill in the actual package description to submit package to Fedora

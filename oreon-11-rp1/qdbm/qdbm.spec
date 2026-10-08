@@ -16,8 +16,7 @@ Release:	75%{?dist}
 License:	LGPL-2.1-or-later
 
 URL:		http://fallabs.com/qdbm/
-# upstream host unreachable; tarball from Fedora lookaside cache
-Source0:	https://src.fedoraproject.org/repo/pkgs/qdbm/qdbm-1.8.78.tar.gz/66b3bd69a651316b8d6adc2f21cf3225/qdbm-1.8.78.tar.gz
+Source0:	http://deb.debian.org/debian/pool/main/q/qdbm/qdbm_%{version}.orig.tar.gz
 # Copied from Debian package
 Patch0:		qdbm-ruby-1.9-compat.patch
 # Java 13 introduced yield keyword and the original yield()
@@ -36,6 +35,7 @@ BuildRequires:	lzo-devel
 %set_javaver	44	25
 %set_javaver	43	21
 %set_javaver	42	21
+BuildRequires:	java-25-openjdk-devel
 %endif
 # ruby-devel requires ruby-libs but not require ruby
 BuildRequires:	ruby

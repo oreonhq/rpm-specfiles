@@ -110,7 +110,6 @@ touch -m --reference=%{buildroot}%{_includedir}/libxml2/libxml/parser.h %{buildr
 find %{buildroot} -type f -name '*.la' -print -delete
 rm -vf %{buildroot}{%{python2_sitearch},%{python3_sitearch}}/*.a
 rm -vrf %{buildroot}%{_datadir}/doc/
-gzip -9 -c doc/libxml2-api.xml > doc/libxml2-api.xml.gz
 
 %check
 # Tests require the XML conformance suite.
@@ -140,7 +139,7 @@ popd
 
 %files devel
 %doc doc/*.html
-%doc doc/tutorial doc/libxml2-api.xml.gz
+%doc doc/tutorial
 %doc doc/examples
 %dir %{_datadir}/gtk-doc
 %dir %{_datadir}/gtk-doc/html

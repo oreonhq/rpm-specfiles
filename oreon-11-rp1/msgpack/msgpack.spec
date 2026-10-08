@@ -10,6 +10,7 @@ License:	BSL-1.0
 URL:		http://msgpack.org
 Source0:	https://github.com/msgpack/msgpack-c/archive/refs/tags/cpp-%{version}.tar.gz
 
+BuildRequires:  boost-devel
 BuildRequires: make
 BuildRequires: cmake
 BuildRequires: gcc-c++

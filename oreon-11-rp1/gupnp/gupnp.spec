@@ -53,7 +53,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-%meson \
+%meson --wrap-mode=nofallback \
   -Dcontext_manager=network-manager \
   -Dgtk_doc=true \
   -Dexamples=false \

@@ -15,6 +15,7 @@ Summary:        Macros for Actix system and runtime
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/actix-macros
 Source:         %{crates_source}
+Patch:          actix-macros-doctest-ignore.patch
 
 BuildRequires:  cargo-rpm-macros >= 24
 

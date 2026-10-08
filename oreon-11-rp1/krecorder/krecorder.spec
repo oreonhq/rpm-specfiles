@@ -33,6 +33,8 @@ BuildRequires:  cmake(KF6WindowSystem)
 BuildRequires:  cmake(KF6Kirigami2)
 BuildRequires:  cmake(KF6KirigamiAddons)
 BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  kf6-kio-devel
 
 Requires:       kf6-kirigami
 Requires:       gstreamer1-plugins-good

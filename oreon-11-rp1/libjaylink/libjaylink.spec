@@ -47,7 +47,7 @@ rm -rf $RPM_BUILD_ROOT
 %make_install
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 %__mkdir -p $RPM_BUILD_ROOT/usr/lib/udev/rules.d/
-%__sed -e 's/MODE="664", GROUP="plugdev"/TAG+="uaccess"/g' contrib/99-libjaylink.rules > $RPM_BUILD_ROOT/usr/lib/udev/rules.d/60-libjaylink.rules
+%__sed -e 's/MODE="660", GROUP="plugdev", //g' contrib/60-libjaylink.rules > $RPM_BUILD_ROOT/usr/lib/udev/rules.d/60-libjaylink.rules
 
 %ldconfig_scriptlets
 

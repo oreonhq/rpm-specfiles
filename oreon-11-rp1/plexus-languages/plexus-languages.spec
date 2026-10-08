@@ -99,6 +99,7 @@ Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 BuildRequires:  javapackages-bootstrap
 %else
 BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(com.github.javaparser:javaparser-core)
 BuildRequires:  mvn(com.thoughtworks.qdox:qdox)
 BuildRequires:  mvn(javax.inject:javax.inject)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-failsafe-plugin)

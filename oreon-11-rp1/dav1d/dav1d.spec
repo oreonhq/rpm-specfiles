@@ -1,4 +1,4 @@
-%global source0_hash 258c548481abbdd3a9a0efbe0b1229b8c5fd9a0802e010d1707b676eda375a32
+%global source0_hash 686616b7c69eb88d44459391ab25cac13b6647a3b288835c5784e71c1514a5c5
 
 Name:           dav1d
 Version:        1.5.4
@@ -9,7 +9,7 @@ Summary:        AV1 cross-platform Decoder
 # tools/compat/getopt.c is ISC
 License:        BSD-2-Clause AND ISC
 URL:            https://code.videolan.org/videolan/dav1d
-Source:        https://code.videolan.org/videolan/dav1d/-/archive/1.5.4/dav1d-1.5.3.tar.bz2
+Source0:       https://download.videolan.org/pub/videolan/dav1d/%{version}/dav1d-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  nasm >= 2.14
@@ -37,7 +37,7 @@ Development files for dav1d, the AV1 cross-platform Decoder.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n dav1d-%{version}-54706fc6bc0cdecab7e9593974a4039cc038fca7
+%autosetup -p1 -n dav1d-%{version}
 
 %build
 %meson

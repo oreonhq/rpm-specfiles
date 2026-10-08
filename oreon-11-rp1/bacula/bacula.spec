@@ -266,6 +266,7 @@ Provides check_bacula support for Nagios.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -a20 -p1
+perl -pi -e 's/cram_md5_respond\(([^,\)]+,[^,\)]+,[^,\)]+,[^,\)]+)\)/cram_md5_respond($1, false)/g' $(grep -rl cram_md5_respond src)
 
 cp %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} .
 

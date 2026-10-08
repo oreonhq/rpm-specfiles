@@ -17,6 +17,7 @@ ExcludeArch:    %{ix86}
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  binutils-devel
+BuildRequires:  libzstd-devel
 BuildRequires:  elfutils-libelf-devel
 BuildRequires:  libcap-devel
 BuildRequires:  llvm-devel
@@ -35,7 +36,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 # We need to use vmlinux.h from kernel-devel rather than the one from the running system
 %define kernel_version %(rpm -q --qf "%{VERSION}-%{RELEASE}.%{ARCH}" kernel-devel)
-%make_build -C src/ EXTRA_CFLAGS="%{build_cflags}" EXTRA_LDFLAGS="%{build_ldflags}" VMLINUX_H="/usr/src/kernels/%{kernel_version}/vmlinux.h"
+%make_build -C src/ EXTRA_CFLAGS="%{build_cflags}" EXTRA_LDFLAGS="%{build_ldflags} -lzstd" VMLINUX_H="/usr/src/kernels/%{kernel_version}/vmlinux.h"
 
 %install
 %make_install -C src/ prefix=%{_prefix} bash_compdir=%{bash_completions_dir} mandir=%{_mandir} doc-install
