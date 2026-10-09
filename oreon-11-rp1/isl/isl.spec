@@ -5,7 +5,7 @@ Summary: Integer point manipulation library
 Name: isl
 Version: 0.28
 License: MIT
-URL: https://libisl.sourceforge.io/
+URL: https://libisl.so.*
 
 %global libmajor 15
 %global libversion %{libmajor}.1.1
@@ -27,10 +27,10 @@ BuildRequires: pkgconfig
 BuildRequires: make
 Provides: isl = %{oldversion}
 
-Source0:        https://libisl.sourceforge.io/isl-%{version}.tar.xz
+Source0:        https://libisl.so.*
 
 # Current gcc requires exactly 0.14
-Source1:        https://libisl.sourceforge.io/isl-%{oldversion}.tar.xz
+Source1:        https://libisl.so.*
 
 %description
 isl is a library for manipulating sets and relations of integer points
@@ -98,17 +98,17 @@ cd isl-%{version}
 %ldconfig_scriptlets
 
 %files
-%{_libdir}/libisl.so.%{libmajor}
-%{_libdir}/libisl.so.%{libversion}
-%{_libdir}/libisl.so.%{oldlibmajor}
-%{_libdir}/libisl.so.%{oldlibversion}
+%{_libdir}/libisl.so.*
+%{_libdir}/libisl.so.*
+%{_libdir}/libisl.so.*
+%{_libdir}/libisl.so.*
 %{gdbprettydir}/*
 %license %{docdir}/LICENSE
 %doc %{docdir}/AUTHORS %{docdir}/ChangeLog %{docdir}/README
 
 %files devel
 %{_includedir}/*
-%{_libdir}/libisl.so
+%{_libdir}/libisl.so.*
 %{_libdir}/pkgconfig/isl.pc
 %doc %{docdir}/doc/manual.pdf
 

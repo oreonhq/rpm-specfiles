@@ -82,7 +82,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %license LICENSE.md
 %doc CHANGES.md CODE_OF_CONDUCT.md CONTRIBUTING.md CONTRIBUTORS.md README.md SECURITY.md
-%{_libdir}/libImath-3_1.so.%{sover}*
+%{_libdir}/libImath-3_1.so.*
 
 %files -n python3-%{name}
 %{_libdir}/libPyImath_Python%{pyver_under}-3_1.so.%{sover}*
@@ -96,7 +96,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/pkgconfig/PyImath.pc
 %{_libdir}/cmake/Imath/
 %{_libdir}/libImath.so
-%{_libdir}/libImath-3_1.so
+%{_libdir}/libImath-3_1.so.*
 %{_libdir}/libPyImath_Python%{pyver_under}-3_1.so
 
 

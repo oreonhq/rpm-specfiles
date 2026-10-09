@@ -69,10 +69,10 @@ chmod 0755 $RPM_BUILD_ROOT%{_libdir}/*.so*
 
 %files -n libGLEW
 %license LICENSE.txt
-%{_libdir}/libGLEW.so.2.2*
+%{_libdir}/libGLEW.so.*
 
 %files devel
-%{_libdir}/libGLEW.so
+%{_libdir}/libGLEW.so.*
 %{_libdir}/pkgconfig//glew.pc
 %{_includedir}/GL/*.h
 %doc doc/*

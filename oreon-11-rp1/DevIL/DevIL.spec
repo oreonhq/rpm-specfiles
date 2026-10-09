@@ -92,14 +92,14 @@ cd DevIL
 
 
 %files
-%{_libdir}/libIL.so.1
-%{_libdir}/libILU.so.1
+%{_libdir}/libIL.so.*
+%{_libdir}/libILU.so.*
 %license DevIL/COPYING
 %doc DevIL/AUTHORS DevIL/ChangeLog DevIL/CREDITS DevIL/README.md DevIL/TODO
 
 %files devel
-%{_libdir}/libIL.so
-%{_libdir}/libILU.so
+%{_libdir}/libIL.so.*
+%{_libdir}/libILU.so.*
 %{_libdir}/pkgconfig/IL.pc
 %{_libdir}/pkgconfig/ILU.pc
 %dir %{_includedir}/IL

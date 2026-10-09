@@ -65,10 +65,10 @@ rm %{buildroot}/%{_libdir}/libopenspecfun.a
 
 %files
 %doc LICENSE.md README.md
-%{_libdir}/libopenspecfun.so.1*
+%{_libdir}/libopenspecfun.so.*
 
 %files devel
-%{_libdir}/libopenspecfun.so
+%{_libdir}/libopenspecfun.so.*
 %{_includedir}/Faddeeva.h
 
 %if %{with static_libs}

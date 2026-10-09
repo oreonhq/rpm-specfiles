@@ -70,11 +70,11 @@ chmod 0755 %{buildroot}%{_libdir}/libmarkdown.so.*
 %{_mandir}/man7/*.7*
 
 %files -n libmarkdown
-%{_libdir}/libmarkdown.so.%{somajor}*
+%{_libdir}/libmarkdown.so.*
 
 %files -n libmarkdown-devel
 %{_includedir}/mkdio.h
-%{_libdir}/libmarkdown.so
+%{_libdir}/libmarkdown.so.*
 %{_libdir}/pkgconfig/libmarkdown.pc
 %{_mandir}/man3/*.3*
 

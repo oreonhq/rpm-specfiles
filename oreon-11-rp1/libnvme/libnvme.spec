@@ -78,14 +78,14 @@ rm -r %{buildroot}%{_pkgdocdir}/html/{.buildinfo,.doctrees/}
 
 %files
 %license COPYING ccan/licenses/*
-%{_libdir}/libnvme.so.1
-%{_libdir}/libnvme.so.1.16.1
-%{_libdir}/libnvme-mi.so.1
-%{_libdir}/libnvme-mi.so.1.16.1
+%{_libdir}/libnvme.so.*
+%{_libdir}/libnvme.so.*
+%{_libdir}/libnvme-mi.so.*
+%{_libdir}/libnvme-mi.so.*
 
 %files devel
-%{_libdir}/libnvme.so
-%{_libdir}/libnvme-mi.so
+%{_libdir}/libnvme.so.*
+%{_libdir}/libnvme-mi.so.*
 %{_includedir}/libnvme.h
 %{_includedir}/libnvme-mi.h
 %dir %{_includedir}/nvme

@@ -124,7 +124,7 @@ rm -f %{buildroot}%{mingw64_bindir}/geos-config
 %doc AUTHORS NEWS.md README.md
 %license COPYING
 %{_bindir}/geosop
-%{_libdir}/libgeos.so.3.14.1
+%{_libdir}/libgeos.so.*
 %{_libdir}/libgeos_c.so.1*
 
 %files devel
@@ -134,7 +134,7 @@ rm -f %{buildroot}%{mingw64_bindir}/geos-config
 %{_includedir}/geos_c.h
 %{_includedir}/geos.h
 %{_libdir}/libgeos_c.so
-%{_libdir}/libgeos.so
+%{_libdir}/libgeos.so.*
 %{_libdir}/cmake/GEOS/
 %{_libdir}/pkgconfig/%{name}.pc
 

@@ -88,7 +88,7 @@ rm -f %{buildroot}%{enginesdir}/*.la
 %if ! 0%{?fedora}
 ## Remove development files
 rm -f %{buildroot}%{_libdir}/libp11.so
-rm -f %{buildroot}%{_libdir}/libpkcs11.so
+rm -f %{buildroot}%{_libdir}/libpkcs11.so.*
 rm -f %{buildroot}%{_libdir}/pkgconfig/libp11.pc
 rm -f %{buildroot}%{_includedir}/*.h
 %endif
@@ -115,7 +115,7 @@ make check %{?_smp_mflags} || if [ $? -ne 0 ]; then cat tests/*.log; exit 1; fi;
 %files -n libp11-devel
 %doc examples/ doc/api.out/html/
 %{_libdir}/libp11.so
-%{_libdir}/libpkcs11.so
+%{_libdir}/libpkcs11.so.*
 %{_libdir}/pkgconfig/libp11.pc
 %{_includedir}/*.h
 %endif

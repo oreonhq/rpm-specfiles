@@ -1,6 +1,6 @@
 %global source0_hash be7468edd4d3d83f1e844959fd6e3fd28e77a481440a7118d430130ea31b07a9
 
-%if 0%{?fedora} >= 31
+%if 0%{?fedora} >= 31 || 0%{?oreon} >= 11
 %bcond_with python2
 %else
 %bcond_without python2 

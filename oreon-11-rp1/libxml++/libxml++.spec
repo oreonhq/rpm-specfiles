@@ -1,5 +1,5 @@
 %global source0_hash e9a23c436686a94698d2138e6bcbaf849121d63bfa0f50dc34fefbfd79566848
-%global api_ver 2.6
+%global api_ver 5.0
 
 Name:           libxml++
 Version:        5.4.0
@@ -59,7 +59,7 @@ sed -i s'#\r##' examples/dom_parser/example_with_namespace.xml
 %files
 %license COPYING
 %doc NEWS README.md
-%{_libdir}/%{name}-%{api_ver}.so.2*
+%{_libdir}/%{name}-%{api_ver}.so.*
 
 
 %files devel

@@ -1,6 +1,6 @@
 %global source0_hash e71ab7cd6aee6683aa94342eb26e61433bffdf2da69782eca6d1c299dcc3a76f
 
-%if 0%{?fedora} < 28 && 0%{?rhel} < 8
+%if (0%{?fedora} && 0%{?fedora} < 28) || (0%{?rhel} && 0%{?rhel} < 8)
 %bcond_without libnm_glib
 %else
 %bcond_with libnm_glib

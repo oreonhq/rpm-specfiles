@@ -1,6 +1,6 @@
 %global source0_hash d14030ce6122727935fbd676d0876808da1e112721f3cb108564a4d9bf73da71
 
-%if 0%{?fedora} > 31 || 0%{?rhel} > 7
+%if 0%{?fedora} > 31 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %global _without_python2 1
 %else
 %global _with_python2 1

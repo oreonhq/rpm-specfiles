@@ -91,8 +91,8 @@ cp -a doc/html %{buildroot}/%{_docdir}/libyang/html
 
 %files
 %license LICENSE
-%{_libdir}/libyang.so.3
-%{_libdir}/libyang.so.3.*
+%{_libdir}/libyang.so.*
+%{_libdir}/libyang.so.*
 %{_datadir}/yang/modules/libyang/*.yang
 %dir %{_datadir}/yang/
 %dir %{_datadir}/yang/modules/
@@ -105,7 +105,7 @@ cp -a doc/html %{buildroot}/%{_docdir}/libyang/html
 %{_datadir}/man/man1/yangre.1.gz
 
 %files devel
-%{_libdir}/libyang.so
+%{_libdir}/libyang.so.*
 %{_libdir}/pkgconfig/libyang.pc
 %{_includedir}/libyang/*.h
 %dir %{_includedir}/libyang/

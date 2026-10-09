@@ -135,8 +135,8 @@ install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/ffitarget.h
 %files
 %license LICENSE
 %doc README.md
-%{_libdir}/libffi.so.8
-%{_libdir}/libffi.so.8.2.0
+%{_libdir}/libffi.so.*
+%{_libdir}/libffi.so.*
 
 %files devel
 %{_libdir}/pkgconfig/*.pc

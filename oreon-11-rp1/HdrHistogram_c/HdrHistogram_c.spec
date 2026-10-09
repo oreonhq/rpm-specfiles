@@ -51,8 +51,8 @@ find $RPM_BUILD_ROOT
 %license LICENSE.txt
 %doc README.md
 %exclude %{_bindir}/*
-%{_libdir}/libhdr_histogram.so.6.1.3
-%{_libdir}/libhdr_histogram.so.6
+%{_libdir}/libhdr_histogram.so.*
+%{_libdir}/libhdr_histogram.so.*
 
 %files devel
 %dir %{_includedir}/hdr
@@ -63,7 +63,7 @@ find $RPM_BUILD_ROOT
 %{_includedir}/hdr/hdr_histogram_version.h
 %{_includedir}/hdr/hdr_histogram_log.h
 %{_includedir}/hdr/hdr_histogram.h
-%{_libdir}/libhdr_histogram.so
+%{_libdir}/libhdr_histogram.so.*
 %{_libdir}/cmake/hdr_histogram/*.cmake
 %{_libdir}/pkgconfig/hdr_histogram.pc
 

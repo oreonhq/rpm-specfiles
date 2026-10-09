@@ -240,11 +240,11 @@ test "$(pkg-config --modversion poppler-qt6)" = "%{version}"
 %files
 %doc README.md
 %license COPYING
-%{_libdir}/libpoppler.so.156*
+%{_libdir}/libpoppler.so.*
 
 %files devel
 %{_libdir}/pkgconfig/poppler.pc
-%{_libdir}/libpoppler.so
+%{_libdir}/libpoppler.so.*
 %dir %{_includedir}/poppler/
 # xpdf headers
 %{_includedir}/poppler/*.h

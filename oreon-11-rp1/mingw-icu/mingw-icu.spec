@@ -4,7 +4,7 @@
 
 %global underscore_version %(echo %{version} | sed 's/\\./_/g')
 %global dash_version %(echo %{version} | sed 's/\\./-/g')
-%global lib_version 77
+%global lib_version 78
 
 Name:           mingw-icu
 Version:        78.3

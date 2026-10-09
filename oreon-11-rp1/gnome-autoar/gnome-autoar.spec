@@ -62,7 +62,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/girepository-1.0/GnomeAutoar-0.1.typelib
 %{_libdir}/girepository-1.0/GnomeAutoarGtk-0.1.typelib
 %{_libdir}/libgnome-autoar-0.so.0*
-%{_libdir}/libgnome-autoar-gtk-0.so.0*
+%{_libdir}/libgnome-autoar-gtk-0.so.*
 
 %files devel
 %{_includedir}/gnome-autoar-0/

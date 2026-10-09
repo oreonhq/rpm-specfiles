@@ -97,11 +97,11 @@ sed -i 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5
 %endif
 
 %files
-%{_libdir}/libarmadillo.so.12*
+%{_libdir}/libarmadillo.so.*
 %license LICENSE.txt NOTICE.txt
 
 %files devel
-%{_libdir}/libarmadillo.so
+%{_libdir}/libarmadillo.so.*
 %{_libdir}/pkgconfig/%{name}.pc
 %{_includedir}/armadillo
 %{_includedir}/armadillo_bits/

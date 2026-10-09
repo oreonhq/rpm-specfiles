@@ -1,3 +1,4 @@
 qt6-qtbase
 qt6-qttools
 extra-cmake-modules
+libplasma

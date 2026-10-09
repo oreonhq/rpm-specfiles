@@ -1,14 +1,14 @@
 %global source0_hash ed14656883b23a364b4057c05595d93252da9bc473d30106519519d0da141283
 
 # python3 is not available on RHEL <= 7
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %bcond_without python3
 %else
 %bcond_with python3
 %endif
 
 # python2 is not available on RHEL > 7
-%if 0%{?fedora} > 31 || 0%{?rhel} > 7
+%if 0%{?fedora} > 31 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %bcond_with python2
 %else
 %bcond_without python2

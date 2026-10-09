@@ -90,7 +90,7 @@ install -m 644 doc/*.md ${RPM_BUILD_ROOT}%{_pkgdocdir}
 %{_pkgdocdir}
 %exclude %{_pkgdocdir}/html
 %exclude %{_pkgdocdir}/*.md
-%{_libdir}/*.so.3*
+%{_libdir}/*.so.*
 
 %files devel
 %doc %{_pkgdocdir}/html

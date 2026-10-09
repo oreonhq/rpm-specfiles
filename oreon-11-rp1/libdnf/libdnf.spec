@@ -30,7 +30,7 @@
 %bcond_without python3
 %endif
 
-%if 0%{?rhel} > 7 || 0%{?fedora} > 29
+%if 0%{?rhel} > 7 || 0%{?fedora} > 29 || 0%{?oreon} >= 11
 # Disable python2 build by default
 %bcond_with python2
 %else

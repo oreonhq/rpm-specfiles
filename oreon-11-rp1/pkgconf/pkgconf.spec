@@ -204,7 +204,7 @@ rm -rf %{buildroot}%{_datadir}/aclocal
 
 %files -n lib%{name}
 %license COPYING
-%{_libdir}/lib%{name}*.so.%{libsomajor}{,.*}
+%{_libdir}/lib%{name}*.so.%{libsomajor}*
 
 %files -n lib%{name}-devel
 %{_libdir}/lib%{name}*.so

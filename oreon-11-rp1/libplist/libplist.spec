@@ -55,15 +55,15 @@ make check
 %license COPYING.LESSER
 %doc AUTHORS README.md
 %{_bindir}/plistutil
-%{_libdir}/libplist-2.0.so.4*
-%{_libdir}/libplist++-2.0.so.4*
+%{_libdir}/libplist-2.0.so.*
+%{_libdir}/libplist++-2.0.so.*
 %{_mandir}/man1/plistutil.1*
 
 %files devel
 %{_libdir}/pkgconfig/libplist-2.0.pc
 %{_libdir}/pkgconfig/libplist++-2.0.pc
-%{_libdir}/libplist-2.0.so
-%{_libdir}/libplist++-2.0.so
+%{_libdir}/libplist-2.0.so.*
+%{_libdir}/libplist++-2.0.so.*
 %{_includedir}/plist
 
 %files -n python3-libplist

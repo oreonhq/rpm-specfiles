@@ -105,7 +105,7 @@ mkdir tmp
 cd tmp
 ar x ../libvpx_g.a
 cd ..
-gcc -fPIC -shared -pthread -lm -Wl,--no-undefined -Wl,-soname,libvpx.so.%{somajor} -Wl,--version-script,%{SOURCE2} -Wl,-z,noexecstack -o libvpx.so.%{soversion} tmp/*.o
+gcc -fPIC -shared -pthread -lm -Wl,--no-undefined -Wl,-soname,libvpx.so.* -Wl,--version-script,%{SOURCE2} -Wl,-z,noexecstack -o libvpx.so.* tmp/*.o
 rm -rf tmp
 %endif
 
@@ -133,11 +133,11 @@ fi
 
 # Again, we should never need to do this anymore.
 %if %{generic_target}
-install -p libvpx.so.%{soversion} %{buildroot}%{_libdir}
+install -p libvpx.so.* %{buildroot}%{_libdir}
 pushd %{buildroot}%{_libdir}
-ln -sf libvpx.so.%{soversion} libvpx.so
-ln -sf libvpx.so.%{soversion} libvpx.so.%{somajor}
-ln -sf libvpx.so.%{soversion} libvpx.so.%{somajor}.%{sominor}
+ln -sf libvpx.so.* libvpx.so.*
+ln -sf libvpx.so.* libvpx.so.*
+ln -sf libvpx.so.* libvpx.so.*
 popd
 %endif
 
@@ -188,7 +188,7 @@ rm -rf %{buildroot}%{_prefix}/src
 %files
 %license LICENSE
 %doc AUTHORS CHANGELOG README
-%{_libdir}/libvpx.so.%{somajor}*
+%{_libdir}/libvpx.so.*
 
 %files devel
 # These are SDK docs, not really useful to an end-user.
@@ -199,7 +199,7 @@ rm -rf %{buildroot}%{_prefix}/src
 %{_includedir}/vpx_ports/
 %{_includedir}/vpx_scale/
 %{_libdir}/pkgconfig/vpx.pc
-%{_libdir}/libvpx.so
+%{_libdir}/libvpx.so.*
 
 %files utils
 %{_bindir}/*
