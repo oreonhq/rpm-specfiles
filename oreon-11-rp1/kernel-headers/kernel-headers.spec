@@ -1,4 +1,4 @@
-%global source0_hash b4c5dfbe51a364a6c7f03869200f88c8e1f77403539005f14b7fc6bc91b8d8ba
+%global source0_hash 2feaa70453e91f541be6a5c9078d8168e081af45a3d9718054850538cff2ebf3
 
 # For a stable, released kernel, released_kernel should be 1. For rawhide
 # and/or a kernel built from an rc or git snapshot, released_kernel should
@@ -6,8 +6,8 @@
 %global released_kernel 1
 
 # define buildid .local
-%define specversion 7.2.9
-%define tarfile_release 7.2.9
+%define specversion 7.2.10
+%define tarfile_release 7.2.10
 # This is needed to do merge window version magic
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
