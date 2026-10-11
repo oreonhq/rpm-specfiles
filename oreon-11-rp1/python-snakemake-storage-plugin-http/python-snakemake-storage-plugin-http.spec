@@ -17,8 +17,6 @@ URL:            https://github.com/snakemake/snakemake-storage-plugin-http
 # the tests.
 Source:         %{url}/archive/v%{version}/snakemake-storage-plugin-http-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -L snakemake_storage_plugin_http
 
 BuildArch:      noarch
 
@@ -36,7 +34,16 @@ Summary:        %{summary}
 
 %description -n python3-snakemake-storage-plugin-http %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{without network_tests}
 # The following tests require network access:
 k="${k-}${k+ and }not (TestStorageNoSettings and test_storage)"

@@ -21,9 +21,6 @@ Source12:       pytest-bdd-migrate.1
 # https://github.com/pytest-dev/pytest-bdd/commit/8ce79eafa6ac40196bc6b613149f2a40b68a0a47
 Patch:          %{forgeurl}/commit/8ce79eafa6ac40196bc6b613149f2a40b68a0a47.patch
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -t
-BuildOption(install):   -L pytest_bdd
 
 BuildArch:      noarch
 
@@ -58,11 +55,18 @@ Obsoletes:      python-pytest-bdd-doc < 7.3.0-3
 
 %description -n python3-pytest-bdd %{common_description}
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D \
     '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 # test_step_outside_scenario_or_background_error fails with current
 # gherkin-official
 # https://github.com/pytest-dev/pytest-bdd/issues/779

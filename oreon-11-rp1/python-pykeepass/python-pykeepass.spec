@@ -15,9 +15,6 @@ URL:            https://github.com/libkeepass/pykeepass
 # The GitHub archive has tests; the PyPI sdist does not.
 Source:         %{url}/archive/v%{version}/pykeepass-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install):   -l pykeepass
 
 BuildArch:      noarch
  
@@ -41,7 +38,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # This is actually a documentation dependency:
 tomcli set pyproject.toml lists delitem project.optional-dependencies.test pdoc
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %{py3_test_envvars} %{python3} -m unittest discover -s tests -v
 
 %files -n python3-pykeepass -f %{pyproject_files}

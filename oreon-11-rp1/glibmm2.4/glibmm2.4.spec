@@ -86,6 +86,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %meson_install
+find %{buildroot}%{_includedir}/giomm-2.4 -name '*.h' -exec sed -i '/^using G.*Class = struct _/d' {} +
 
 chmod +x $RPM_BUILD_ROOT%{_libdir}/glibmm-%{apiver}/proc/generate_wrap_init.pl
 chmod +x $RPM_BUILD_ROOT%{_libdir}/glibmm-%{apiver}/proc/gmmproc

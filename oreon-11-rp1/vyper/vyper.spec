@@ -23,19 +23,22 @@ BuildRequires:	python3-eth-stdlib
 BuildRequires:	python3-hypothesis
 BuildRequires:	python3-pytest
 BuildRequires:	python3-rlp
-BuildSystem:	pyproject
-BuildOption(install): -l %{name}
 
 %description
 %{summary}.
 
-%prep -a
+%prep
+%autosetup -p1
 echo %{sub %git_commit 0 7} > ./vyper/vyper_git_commithash.txt
 
-%install -a
+%install
+%pyproject_install
 rm -f %{buildroot}/usr/vyper_git_commithash.txt
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 # FIXME requires https://github.com/ethereum/py-evm
 # FIXME requires https://github.com/paradigmxyz/pyrevm
 #%%pytest

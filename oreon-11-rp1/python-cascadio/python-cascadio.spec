@@ -14,18 +14,14 @@ URL:            https://github.com/mikedh/cascadio
 # The PyPI project does not have sdists, so we must use the GitHub archive.
 Source:         %{url}/archive/%{version}/cascadio-%{version}.tar.gz
 
-BuildSystem:            pyproject
 %if %{with tests}
-BuildOption(generate_buildrequires): -x tests
 %endif
 # https://scikit-build-core.readthedocs.io/en/latest/configuration/index.html
-BuildOption(build):     %{shrink:
                         -Ccmake.define.SYSTEM_OPENCASCADE=ON
                         -Clogging.level=INFO
                         -Cbuild.verbose=true
                         -Ccmake.build-type="RelWithDebInfo"
                         -Cinstall.strip=false}
-BuildOption(install):   -L cascadio
 
 # Tests for cascadio fail on s390x, wrong endianness
 # https://github.com/mikedh/trimesh/issues/2251
@@ -62,13 +58,20 @@ Summary:        %{summary}
 
 %description -n python3-cascadio %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # The CMake scripts shipped with the system VTK try to find HDF5 by compiling
 # and linking a C program; we need to enable the C language in the top-level
 # project in order for this to work.
 sed -r -i 's/\bCXX\b/C &/' CMakeLists.txt
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %pytest
 %endif

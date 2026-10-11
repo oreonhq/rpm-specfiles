@@ -14,8 +14,6 @@ Patch:         python-lru-dict-0001-Revert-Lock-a-known-good-setuptools-version-
 Patch:         python-lru-dict-0002-A-correct-version.patch
 BuildRequires: gcc
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(install): -l lru
 
 %description
 %{summary}.
@@ -26,7 +24,16 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

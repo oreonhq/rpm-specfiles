@@ -9,8 +9,6 @@ License:        BSD-3-Clause
 URL:            https://www.dbcli.com
 Source:         %{pypi_source pgspecial}
 
-BuildSystem:            pyproject
-BuildOption(install):   -L pgspecial
 
 BuildArch:      noarch
 
@@ -30,7 +28,16 @@ Summary:        %{summary}
 
 %description -n python3-pgspecial %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # Note that most tests will be skipped since there is not a postgres database
 # we can connect to.
 %pytest

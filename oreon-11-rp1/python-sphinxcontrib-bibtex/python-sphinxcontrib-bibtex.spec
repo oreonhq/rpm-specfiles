@@ -15,9 +15,6 @@ Source:         %{giturl}/archive/%{version}/sphinxcontrib-bibtex-%{version}.tar
 Patch:          https://github.com/mcmtroffaes/sphinxcontrib-bibtex/pull/377.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install): -l sphinxcontrib
 
 BuildRequires:  python3-docs
 BuildRequires:  python-sphinx-doc
@@ -79,7 +76,8 @@ sed -e 's|\("https://docs\.python\.org/3/", \)None|\1"%{_docdir}/python3-docs/ht
 # Do not use code coverage tools
 sed -i 's/, "pytest-cov"//' pyproject.toml
 
-%install -a
+%install
+%pyproject_install
 # The Sphinx documentation cannot be built with an uninstalled
 # sphinxcontrib.bibtex because python finds the installed sphinxcontrib
 # package, which doesn't contain bibtex.  We fake out python by copying the
@@ -101,6 +99,9 @@ rm -fr include lib lib64
 rm -fr html/{.buildinfo,.doctrees}
 unset PYTHONHOME
 rst2html --no-datestamp README.rst README.html
+
+%build
+%pyproject_wheel
 
 %check
 %pytest -v test

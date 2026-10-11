@@ -13,8 +13,6 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/v%{version}/sphinx-reredirects-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -l sphinx_reredirects
 
 BuildRequires:  %{py3_dist pytest}
 
@@ -42,6 +40,15 @@ Provides:       python3-sphinx-reredirects-doc = %{version}-%{release}
 
 %description -n python3-sphinx-reredirects
 %_description
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 # test_linkcheck attempts to access the network

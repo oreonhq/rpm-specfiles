@@ -12,8 +12,6 @@ URL:            https://github.com/firefly-cpp/NiaAML-GUI
 # tests and other auxiliary files.
 Source:         %{url}/archive/%{version}/NiaAML-GUI-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -L niaaml_gui
 
 BuildArch:      noarch
 
@@ -38,13 +36,15 @@ Python package.}
 
 %description %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Do not upper-bound the version of Python!
 # https://github.com/firefly-cpp/NiaAML-GUI/commit/d0084e6d2f05c6af848678db731c41a49c1a2a22#commitcomment-146060179
 sed -r -i 's/^(python[[:blank:]]*=[[:blank:]]*"[^"]+),[^"]+"/\1"/' \
     pyproject.toml
 
-%install -a
+%install
+%pyproject_install
 desktop-file-install --dir='%{buildroot}%{_datadir}/applications' \
     AppData/%{app_id}.desktop
 install -t '%{buildroot}%{_metainfodir}' -p -m 0644 -D \
@@ -52,7 +52,10 @@ install -t '%{buildroot}%{_metainfodir}' -p -m 0644 -D \
 install -t '%{buildroot}%{_datadir}/icons/hicolor/256x256/apps' -p -m 0644 -D \
     AppData/niaaml-gui.png
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 appstream-util validate-relax --nonet \
     '%{buildroot}%{_metainfodir}/%{app_id}.metainfo.xml'
 

@@ -34,9 +34,6 @@ Patch:          %{name}-mpmath.patch
 # So even though this package is noarch, it can only be built on x86_64
 ExclusiveArch:  %{x86_64} noarch
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x dev
-BuildOption(install): -l isympy sympy
 
 BuildRequires:  antlr4
 BuildRequires:  fdupes
@@ -189,14 +186,16 @@ sed -i s'/4\.11/4.13/g' sympy/parsing/autolev/_parse_autolev_antlr.py \
 # Regenerate the ANTLR files
 %{python3} setup.py antlr
 
-%build -a
+%build
+%pyproject_wheel
 # Build the documentation
 pushd doc
 make html SPHINXOPTS=%{?_smp_mflags} PYTHON=%{python3}
 make cheatsheet
 popd
 
-%install -a
+%install
+%pyproject_install
 ## Remove extra files
 rm -f %{buildroot}%{_bindir}/{,doc}test
 

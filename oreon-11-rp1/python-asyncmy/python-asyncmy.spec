@@ -23,8 +23,6 @@ Patch0:         python-asyncmy-0.2.11-text-files-in-sdist.patch
 # Old poetry needs the basic entries replicated in tools.poetry
 Patch1:         python-asyncmy-0.2.11-old-poetry.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -L asyncmy
 
 # Test failures and errors on 32-bit platforms
 # https://github.com/long2ice/asyncmy/issues/34
@@ -53,7 +51,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch 1 -p1 -b .old-poetry
 %endif
 
-%install -a
+%install
+%pyproject_install
 # Do not distribute Cython-generated C source files; these are not useful
 find '%{buildroot}%{python3_sitearch}/asyncmy' \
     -type f -name '*.c' -print -delete
@@ -61,6 +60,9 @@ sed -r -i '/\.c$/d' '%{pyproject_files}'
 
 # Tests require interacting with a temporary MySQL/mariadb database. Setting
 # this up has become impractical.
+
+%build
+%pyproject_wheel
 
 %files -n python3-asyncmy -f %{pyproject_files}
 %license LICENSE

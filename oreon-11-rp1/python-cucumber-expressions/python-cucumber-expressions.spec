@@ -14,8 +14,6 @@ Source:         %{url}/archive/v%{version}/cucumber-expressions-%{version}.tar.g
 # We must work with what is packaged; multiple compat versions are not planned.
 Patch:          0001-Downstream-only-remove-the-upper-bound-on-the-versio.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l cucumber_expressions
 
 BuildArch:      noarch
 
@@ -47,7 +45,10 @@ install -t '%{buildroot}%{_pkgdocdir}/general' -p -m 0644 -D \
     ARCHITECTURE.md CHANGELOG.md README.md
 install -t '%{buildroot}%{_pkgdocdir}' -p -m 0644 -D python/README.md
 
-%check -a
+%prep
+%autosetup -p1
+
+%check
 %pytest python/tests -v
 
 %files -n python3-cucumber-expressions -f %{pyproject_files}

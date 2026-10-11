@@ -13,11 +13,8 @@ License:        MIT
 URL:            https://github.com/samuelcolvin/dirty-equals
 Source:         %{pypi_source dirty_equals}
 
-BuildSystem:            pyproject
 %if %{without bootstrap}
-BuildOption(generate_buildrequires): -x pydantic
 %endif
-BuildOption(install):   -l dirty_equals
 
 BuildArch:      noarch
 
@@ -51,7 +48,8 @@ Summary:        %{summary}
 %pyproject_extras_subpkg -n python3-dirty-equals pydantic
 %endif
 
-%prep -a
+%prep
+%autosetup -p1
 # Erroring on DeprecationWarnings makes sense upstream, but is probably too
 # strict for distribution packaging.
 #
@@ -61,7 +59,13 @@ Summary:        %{summary}
 # https://github.com/samuelcolvin/dirty-equals/issues/71
 sed -r -i 's/^filterwarnings = "error"$/# &/' pyproject.toml
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # Tests in this module require pytest-examples; see %%prep for notes on this.
 ignore="${ignore-} --ignore=tests/test_docs.py"
 

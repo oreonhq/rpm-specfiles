@@ -45,10 +45,7 @@ Source15:       mrs_tools-reshape.1
 Source16:       mrs_tools-split.1
 Source17:       mrs_tools-vis.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l nifti_mrs mrs_tools
 # - nifti_mrs.vis requires (via the VIS extra), the nonfree fsl-mrs
-BuildOption(check):     -e nifti_mrs.vis
 
 # The base package is arched due to endian-dependent test failures, but the
 # binary packages are noarch and contain no compiled code.
@@ -139,19 +136,21 @@ find ../mrs_nifti_standard-%{std_version} -mindepth 1 -maxdepth 1 -type f \
 # We do also want to package a copy of the license text for the standard.
 ln ../mrs_nifti_standard-%{std_version}/LICENSE LICENSE-mrs_nifti_standard
 
-%build -a
+%build
+%pyproject_wheel
 %if %{with doc}
 PYTHONPATH="${PWD}/src" %make_build -C apidoc latex \
     SPHINXOPTS='-j%{?_smp_build_ncpus}'
 %make_build -C apidoc/_build/latex LATEXMKOPTS='-quiet'
 %endif
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}' '%{SOURCE13}' '%{SOURCE14}' \
     '%{SOURCE15}' '%{SOURCE16}' '%{SOURCE17}'
 
-%check -a
+%check
 %ifarch s390x
 # Tests fail when file endianness does not match host endianness
 # https://github.com/wtclarke/nifti_mrs_tools/issues/16

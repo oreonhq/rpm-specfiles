@@ -78,7 +78,7 @@ sed -i 's|DESTINATION lib/pkgconfig|DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfi
 
 %build
 cd DevIL
-%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_INSTALL_LIBDIR=%{_libdir}
 %cmake_build
 
 

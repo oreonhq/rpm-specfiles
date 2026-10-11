@@ -16,8 +16,6 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/%{version}/sphinx-math-dollar-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -l sphinx_math_dollar
 
 BuildRequires:  make
 BuildRequires:  %{py3_dist pytest-doctestplus}
@@ -62,12 +60,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n sphinx-math-dollar-%{version} -p1
 
-%build -a
+%build
+%pyproject_wheel
 # Build the documentation
 make -C docs html
 rst2html --no-datestamp CHANGELOG.rst CHANGELOG.html
 rst2html --no-datestamp README.rst README.html
 rm -f docs/_build/html/.{buildinfo,nojekyll}
+
+%install
+%pyproject_install
 
 %check
 %pytest -v

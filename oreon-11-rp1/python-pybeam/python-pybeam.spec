@@ -12,8 +12,6 @@ VCS:		git:%{url}.git
 Source0:	%{pypi_source %{pypi_name}}
 BuildArch:	noarch
 BuildRequires:	python3-pytest
-BuildSystem:	pyproject
-BuildOption(install):	-l %{pypi_name}
 
 %description
 %{summary}.
@@ -24,7 +22,16 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

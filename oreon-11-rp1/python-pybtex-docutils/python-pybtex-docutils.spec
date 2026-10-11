@@ -28,8 +28,6 @@ VCS:            git:https://github.com/mcmtroffaes/pybtex-docutils.git
 Source:         %pypi_source pybtex-docutils
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -l pybtex_docutils
 
 BuildRequires:  make
 BuildRequires:  python3-docs
@@ -64,9 +62,13 @@ sed -i "s/'default'/'classic'/" doc/conf.py
 # Use local objects.inv for intersphinx
 sed -i "s|\('http://docs\.python\.org/', \)None|\1'%{_docdir}/python3-docs/html/objects.inv'|" doc/conf.py
 
-%build -a
+%build
+%pyproject_wheel
 PYTHONPATH=$PWD/src make -C doc html
 rst2html --no-datestamp README.rst README.html
+
+%install
+%pyproject_install
 
 %check
 %pytest -v test

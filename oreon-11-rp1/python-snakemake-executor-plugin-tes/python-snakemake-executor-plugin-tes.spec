@@ -20,8 +20,6 @@ Source:         %{url}/archive/v%{version}/snakemake-executor-plugin-tes-%{versi
 # https://github.com/snakemake/snakemake-executor-plugin-tes/pull/16
 Patch:          %{url}/pull/16.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -L snakemake_executor_plugin_tes
 
 BuildArch:      noarch
 
@@ -42,7 +40,16 @@ Summary:        %{summary}
 
 %description -n python3-snakemake-executor-plugin-tes %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %pytest -v tests/tests.py
 %endif

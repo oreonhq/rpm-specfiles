@@ -19,8 +19,6 @@ BuildRequires:  python3-sphinx
 BuildRequires:  python3-sphinx_rtd_theme
 BuildRequires:  python3-twisted
 Requires:       python3-twisted
-BuildSystem:    pyproject
-BuildOption(install): -l %{pypi_name}
 
 %description  %{common_description}
 
@@ -29,19 +27,22 @@ Summary: %{summary}
 
 %description -n python3-%{pypi_name} %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Fedora-specific - to avoid picking up dependencies from these files
 chmod 644 example/acct.py example/auth.py example/client-coa.py example/coa.py example/server.py
 
-%build -a
+%build
+%pyproject_wheel
 sphinx-build -b html docs/source docs/_build/html/ -d docs/_build/doctrees/
 
-%install -a
+%install
+%pyproject_install
 rm -f docs/_build/html/.buildinfo
 rm -rf %{buildroot}%{python3_sitelib}/example/
 rm -rf %{buildroot}%{python3_sitelib}/docs/
 
-%check -a
+%check
 %python3 -m unittest -v
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

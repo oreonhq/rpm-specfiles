@@ -13,8 +13,6 @@ Source:         %{url}/archive/v%{version}/fastar-%{version}.tar.gz
 # https://bugzilla.redhat.com/show_bug.cgi?id=2435852
 Patch:          fastar-0.9.0-allow-pyo3-0.27.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l fastar
 
 BuildRequires:  tomcli
 BuildRequires:  cargo-rpm-macros >= 24
@@ -50,7 +48,8 @@ License:        %{shrink:
 
 %description -n python3-fastar %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 %cargo_prep
 
 %generate_buildrequires -a
@@ -60,7 +59,10 @@ License:        %{shrink:
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
 
-%check -a
+%install
+%pyproject_install
+
+%check
 # These tests assume there are no open file descriptors inherited from the
 # environment, which is not a good assumption. They fail because the process
 # has /usr/lib/sysimage/rpm/.rpm.lock open.

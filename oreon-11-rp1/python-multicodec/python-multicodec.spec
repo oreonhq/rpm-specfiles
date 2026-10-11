@@ -17,9 +17,6 @@ Patch1:        python-multicodec-0001-Fix-issues-with-py.test.patch
 # https://fedoraproject.org/wiki/Changes/DeprecatePythonPytestRunner
 Patch2:        0001-Downstream-only-remove-pytest-runner-dependency.patch
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(prep):    -n py-%{pypi_name}-%{version}
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -30,7 +27,16 @@ Summary: %{summary}.
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

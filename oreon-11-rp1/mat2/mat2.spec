@@ -25,8 +25,6 @@ Patch0:          %{name}-skip-broken-tests.patch
 Patch1:          %{name}-py315-fix.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -l %{modname}
 
 BuildRequires:  gdk-pixbuf2
 BuildRequires:  gnupg2
@@ -111,7 +109,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
-%install -a
+%install
+%pyproject_install
 # E: non-executable-script
 chmod 0755 %{buildroot}%{python3_sitelib}/%{modname}/__init__.py
 # Install Dolphin integration
@@ -120,6 +119,9 @@ install -D -p dolphin/%{name}.desktop -t \
 # Install Dolphin integration icon
 install -D -p -m 644 data/%{name}.svg -t \
     %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/
+
+%build
+%pyproject_wheel
 
 %check
 %{py3_test_envvars} %{python3} -m unittest discover

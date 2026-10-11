@@ -9,9 +9,7 @@ License:        MIT
 URL:            https://github.com/mike-oakley/openapi-pydantic
 Source:         %{url}/archive/v%{version}/openapi-pydantic-%{version}.tar.gz
 
-BuildSystem:    pyproject
 # No LICENSE in metadata.
-BuildOption(install):  -L openapi_pydantic
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -28,10 +26,19 @@ Summary:        %{summary}
 
 %description -n python3-openapi-pydantic %_description
 
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
 %files -n python3-openapi-pydantic -f %{pyproject_files}
 %license LICENSE
 
-%check -a
+%check
 %pyproject_check_import
 %pytest
 

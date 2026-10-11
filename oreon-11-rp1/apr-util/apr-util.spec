@@ -2,7 +2,7 @@
 
 %define aprver 1
 
-%if 0%{?fedora} < 39 && 0%{?rhel} <= 9
+%if 0%{?fedora} < 39 && 0%{?rhel} <= 9 && 0%{?oreon} < 11
 %global with_lmdb 0
 %else
 %global with_lmdb 1

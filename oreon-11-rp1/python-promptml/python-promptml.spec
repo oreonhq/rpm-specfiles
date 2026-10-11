@@ -10,8 +10,6 @@ URL:            https://github.com/narenaryan/promptml/
 Source:         %{pypi_source promptml}
 Patch1:         soften-requirements.patch
 
-BuildSystem:    pyproject
-BuildOption(install):  -l promptml
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -30,6 +28,15 @@ multiple sections and makes the information explicit.}
 Summary:        %{summary}
 
 %description -n python3-promptml %_description
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 %{py3_test_envvars} %{python3} -m unittest

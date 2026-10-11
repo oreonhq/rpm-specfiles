@@ -12,8 +12,6 @@ URL:            https://github.com/snakemake/snakemake-executor-plugin-cluster-g
 # the tests.
 Source:         %{url}/archive/v%{version}/snakemake-executor-plugin-cluster-generic-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -L snakemake_executor_plugin_cluster_generic
 
 BuildArch:      noarch
 
@@ -38,7 +36,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n snakemake-executor-plugin-cluster-generic-%{version}
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{without bootstrap}
 %pytest -v tests/tests.py
 %endif

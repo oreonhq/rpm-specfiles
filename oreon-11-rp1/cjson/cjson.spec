@@ -34,7 +34,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i '1i #pragma GCC diagnostic ignored "-Wstringop-overread"' tests/misc_tests.c
 
 %build
-%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_CJSON_TEST=ON -DENABLE_TARGET_EXPORT=ON
+%cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_CJSON_TEST=ON -DENABLE_TARGET_EXPORT=ON -DCMAKE_C_FLAGS="-Wno-error=stringop-overread"
 %cmake_build
 
 %install

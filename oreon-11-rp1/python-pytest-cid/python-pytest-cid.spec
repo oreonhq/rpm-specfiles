@@ -18,10 +18,6 @@ Source0:       %{pypi_source pytest_cid}
 Patch1:        python-pytest-cid-0001-Relax-dependencies.patch
 BuildRequires: python3-pytest
 BuildRequires: python3-pytest-cov
-BuildSystem:   pyproject
-BuildOption(prep): -n pytest_cid-%{version}
-BuildOption(generate_buildrequires): -t
-BuildOption(install): pytest_cid
 
 %description %{common_description}
 
@@ -30,7 +26,16 @@ Summary: %{summary}
 
 %description -n python3-%{pypi_name} %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

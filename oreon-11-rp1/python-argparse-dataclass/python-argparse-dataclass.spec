@@ -14,8 +14,6 @@ Source:         %{url}/archive/%{version}/argparse_dataclass-%{version}.tar.gz
 
 BuildArch:      noarch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l argparse_dataclass
 
 # The dev extra and the requirements_dev.txt file both have too many linters
 # and other unwanted dependencies; it makes more sense to BR what we need for
@@ -32,7 +30,16 @@ Summary:        %{summary}
 
 %description -n python3-argparse-dataclass %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest --doctest-modules -v
 
 %files -n python3-argparse-dataclass -f %{pyproject_files}

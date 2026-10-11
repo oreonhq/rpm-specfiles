@@ -14,9 +14,6 @@ URL:           https://github.com/mlodewijck/pyunormalize
 VCS:           git:%{url}.git
 Source0:       %{url}/archive/v%{version}/%{pypi_name}-%{version}.tar.gz
 BuildRequires: tox
-BuildSystem:   pyproject
-BuildOption(generate_buildrequires): -t
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -27,7 +24,16 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %tox
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

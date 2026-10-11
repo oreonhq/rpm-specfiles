@@ -23,9 +23,6 @@ Patch:          0001-Downstream-only-do-not-upper-bound-the-Python-interp.patch
 # to install.
 Patch:          0002-Downstream-only-do-not-upper-bound-the-version-of-ri.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l jrnl
-BuildOption(generate_buildrequires): -t
 
 BuildArch:      noarch
 
@@ -39,7 +36,8 @@ You can use it to easily create, search, and view journal entries. Journals are
 stored as human-readable plain text, and can also be encrypted using AES
 encryption.
 
-%prep -a
+%prep
+%autosetup -p1
 dos2unix --keepdate \
     SECURITY.md \
     docs/external-editors.md \
@@ -47,14 +45,18 @@ dos2unix --keepdate \
     docs/reference-command-line.md \
     docs/reference-config-file.md
 
-%install -a
+%install
+%pyproject_install
 # https://github.com/jrnl-org/jrnl/issues/74
 # https://github.com/jrnl-org/jrnl/issues/1274
 install -d '%{buildroot}%{_mandir}/man1'
 %{py3_test_envvars} help2man --no-info jrnl \
     --output='%{buildroot}%{_mandir}/man1/jrnl.1'
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 # https://github.com/jrnl-org/jrnl/issues/2060#issuecomment-3964203676
 k="${k-}${k+ and }not test_install_jrnl_with_custom_expanded_default_journal_path"
 k="${k-}${k+ and }not test_install_jrnl_with_custom_relative_default_journal_path"

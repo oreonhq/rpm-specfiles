@@ -9,8 +9,6 @@ License:        MIT
 URL:            https://github.com/Sonic0/cron-converter
 Source:         %{url}/archive/v%{version}/cron-converter-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l cron_converter
 
 BuildArch:      noarch
 
@@ -25,7 +23,16 @@ Summary:        %{summary}
 
 %description -n python3-cron-converter %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %{py3_test_envvars} %{python3} -m unittest discover -v tests/unit
 %{py3_test_envvars} %{python3} -m unittest discover -v tests/integration
 

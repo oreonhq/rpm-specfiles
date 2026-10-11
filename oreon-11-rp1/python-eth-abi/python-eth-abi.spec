@@ -13,9 +13,6 @@ VCS:           git:%{url}.git
 Source0:       %{pypi_source %pypi_name}
 BuildRequires: python3-hypothesis
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(prep):    -n %{pypi_name}-%{version}
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -26,7 +23,16 @@ Summary: %{summary}
 %description -n python3-eth-abi
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # FIXME test_get_abi_strategy_returns_certain_strategies_for_known_type_strings
 # fails because of PEP 515 enforcement in Hypothesis 6.108.7 or later.
 PYTHONPATH=$(pwd) %pytest -k 'not test_install_local_wheel and not test_get_abi_strategy_returns_certain_strategies_for_known_type_strings'

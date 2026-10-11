@@ -10,8 +10,6 @@ License:        MIT
 URL:            https://github.com/pytest-dev/pytest-freezer
 Source:         %{pypi_source pytest_freezer}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l pytest_freezer
 
 BuildArch:      noarch
 
@@ -27,7 +25,16 @@ Summary:        %{summary}
 
 %description -n python3-pytest-freezer %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest -v
 
 %files -n python3-pytest-freezer -f %{pyproject_files}

@@ -9,8 +9,6 @@ License:        MIT
 URL:            https://github.com/fastapi/annotated-doc
 Source:         %{url}/archive/%{version}/annotated-doc-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l annotated_doc
 
 BuildArch:      noarch
 
@@ -28,12 +26,19 @@ Summary:        %{summary}
 
 %description -n python3-annotated-doc %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Do not upper-bound (SemVer-bound) the version of uv_build; we must work with
 # what we have, and compatibility across SemVer boundaries is good in practice.
 sed -r -i 's/"(uv_build *>= *[^:]+), *<[^"]+"/"\1"/' pyproject.toml
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest -v
 
 %files -n python3-annotated-doc -f %{pyproject_files}

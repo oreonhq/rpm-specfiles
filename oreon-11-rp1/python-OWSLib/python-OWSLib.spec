@@ -25,8 +25,6 @@ URL:            https://geopython.github.io/OWSLib
 Source0:        OWSLib-%{version}-filtered.tar.zst
 Source1:        get_source
 
-BuildSystem:            pyproject
-BuildOption(install):   -l owslib
 
 BuildArch:      noarch
 
@@ -72,11 +70,18 @@ Obsoletes:      python-OWSLIB-doc < 0.32.0-1
 
 %description -n python3-OWSLib %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Don’t analyze/report test coverage
 sed -r -i 's/^([[:blank:]]*)(--cov\b)/\1# \2/' tox.ini
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # Otherwise, pytest finds the package twice in the Python path and complains.
 rm -rf owslib
 

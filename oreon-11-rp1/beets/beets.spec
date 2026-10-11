@@ -33,8 +33,6 @@ Requires:       python-packaging
 Provides:       beets-plugins = %{version}-%{release}
 Obsoletes:      beets-plugins < %{version}
 
-BuildSystem: pyproject
-BuildOption(install): -l beets
 
 %description
 The purpose of beets is to get your music collection right once and for all. It

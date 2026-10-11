@@ -17,9 +17,6 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/v%{version}/jupyter-cache-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x cli,testing%{?with_doc:,rtd}
-BuildOption(install): -L jupyter_cache
 
 BuildRequires:  help2man
 
@@ -76,14 +73,16 @@ sed -e 's|\("https://docs\.python\.org/[.[:digit:]]*", \)None|\1"%{_docdir}/pyth
 # Do not run coverage tools in RPM builds
 sed -i '/coverage/d;/pytest-cov/d' pyproject.toml
 
-%build -a
+%build
+%pyproject_wheel
 %if %{with doc}
 # Build the documentation
 PYTHONPATH=$PWD make -C docs html
 rm docs/_build/html/.buildinfo
 %endif
 
-%install -a
+%install
+%pyproject_install
 export PYTHONPATH=%{buildroot}%{python3_sitelib}
 mkdir -p %{buildroot}%{_mandir}/man1
 help2man -N --version-string=%{version} \

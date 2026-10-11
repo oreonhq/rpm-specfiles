@@ -14,11 +14,8 @@ Source0:        %{forgeurl}/archive/%{version}/nose2-%{version}.tar.gz
 # Man page written for Fedora in groff_man(7) format based on --help output
 Source1:        nose2.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l nose2
 # - We remove nose2.tests from the buildroot in %%install.
 # - The nose2.sphinxext module depends on docutils.
-BuildOption(check):     -e nose2.tests* -e nose2.sphinxext
 
 BuildArch:      noarch
 
@@ -46,7 +43,8 @@ Obsoletes:      python-nose2-coverage_plugin < 0.16.0-1
 
 %description -n python3-nose2 %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # We are not building documentation.
 tomcli set pyproject.toml lists delitem project.optional-dependencies.dev \
     'sphinx*'
@@ -57,7 +55,8 @@ find nose2/ -type f -name '*.py' \
     -exec gawk '/^#!/ { print FILENAME }; { nextfile }' '{}' '+' |
   xargs -r -t sed -r -i '1{/^#!/d}'
 
-%install -a
+%install
+%pyproject_install
 # Don’t install the tests; we are not sure how to fix this *successfully* in
 # pyproject.toml, even after reading
 # https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html#setuptools-specific-configuration,
@@ -68,7 +67,10 @@ sed -r -i '/\/nose2\/tests(\/|$)/d' %{pyproject_files}
 
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE1}'
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 # Corresponds to !mp env in tox.ini
 PYTHONPATH="${PWD}" %{py3_test_envvars} %{python3} -m nose2 \
     -v --pretty-assert

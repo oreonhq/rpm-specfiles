@@ -17,8 +17,6 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/%{version}/iplotx-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -L iplotx
 
 # Tests
 BuildRequires:  %{py3_dist biopython}
@@ -62,6 +60,12 @@ Summary:        Visualize networks and trees
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n iplotx-%{version}
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 # Some tests are sensitive to the version of matplotlib.  Skip those tests to

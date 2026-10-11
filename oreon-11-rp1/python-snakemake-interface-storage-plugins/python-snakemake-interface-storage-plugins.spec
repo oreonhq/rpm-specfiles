@@ -21,11 +21,8 @@ URL:            https://github.com/snakemake/snakemake-interface-storage-plugins
 # the tests.
 Source:         %{url}/archive/v%{version}/snakemake-interface-storage-plugins-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -L snakemake_interface_storage_plugins
 %if %{with bootstrap}
 # Some things can’t be imported because we don’t have snakemake.
-BuildOption(check):     -e '*.registry*' -e '*.storage_object' -e '*.tests'
 %endif
 
 BuildArch:      noarch
@@ -48,7 +45,16 @@ Summary:        %{summary}
 
 %description -n python3-snakemake-interface-storage-plugins %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{without bootstrap}
 %if %{without network_tests}
 # The following tests require network access:

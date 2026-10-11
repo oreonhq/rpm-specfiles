@@ -11,8 +11,6 @@ VCS:            git:https://github.com/mcmtroffaes/latexcodec.git
 Source:         %pypi_source latexcodec
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -l latexcodec
 
 BuildRequires:  make
 BuildRequires:  python3-devel
@@ -64,10 +62,14 @@ sed -i 's/default/classic/' doc/conf.py
 # Use local objects.inv for intersphinx
 sed -i "s|\('http://docs\.python\.org/', \)None|\1'%{_docdir}/python3-docs/html/objects.inv'|" doc/conf.py
 
-%build -a
+%build
+%pyproject_wheel
 PYTHONPATH=$PWD make -C doc html
 rm -f doc/_build/html/.buildinfo
 rst2html --no-datestamp LICENSE.rst LICENSE.html
+
+%install
+%pyproject_install
 
 %check
 %pytest -v

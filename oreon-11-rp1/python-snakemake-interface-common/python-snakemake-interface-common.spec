@@ -18,10 +18,7 @@ Source:         %{url}/archive/v%{version}/snakemake-interface-common-%{version}
 # Do not upper-bound the version of packaging
 Patch:          %{url}/pull/89.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l snakemake_interface_common
 %if %{without bootstrap}
-BuildOption(generate_buildrequires): -g dev
 %endif
 
 BuildArch:      noarch
@@ -39,7 +36,16 @@ Summary:        %{summary}
 
 %description -n python3-snakemake-interface-common %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with bootstrap}
 k="${k-}${k+ and }not test_snakemake_version"
 %endif

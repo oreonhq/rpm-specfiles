@@ -19,8 +19,6 @@ Source0:        %{url}/archive/v%{version}/editorconfig-core-py-%{version}.tar.g
 %global tests_url https://github.com/editorconfig/editorconfig-core-test
 Source1:        %{tests_url}/archive/%{tests_commit}/editorconfig-core-test-%{tests_commit}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l editorconfig
 
 BuildArch:      noarch
 
@@ -63,17 +61,19 @@ mv ../editorconfig-core-test-%{tests_commit}/ tests/
 tomcli set pyproject.toml lists replace build-system.requires \
     'setuptools>.*' 'setuptools'
 
-%build -a
+%build
+%pyproject_wheel
 # This prepares for testing.
 %cmake -DPYTHON_EXECUTABLE='%{python3}'
 
-%install -a
+%install
+%pyproject_install
 # The command-line tool would conflict with the one from the C version of
 # EditorConfig. It could be installed under a different name, if anyone ever
 # reports a need for it.
 rm '%{buildroot}%{_bindir}/editorconfig'
 
-%check -a
+%check
 export %{py3_test_envvars}
 %ctest
 

@@ -20,9 +20,7 @@ Source0:        https://github.com/mikedh/trimesh/archive/%{version}/trimesh-%{v
 # output and on the docstring of trimesh.__main__.main
 Source1:        trimesh.1
 
-BuildSystem:            pyproject
 # With v4, [all] = [easy,recommend,test,test_more,deprecated].
-BuildOption(generate_buildrequires): -x easy,recommend,test,test_more
 
 # The combination of an arched package with only noarch binary packages makes
 # it easier for us to detect arch-dependent test failures, since the tests will
@@ -154,7 +152,8 @@ Recommends:     /usr/bin/openscad
 #     discussion—and (because of the notebooks, if nothing else) the trimesh
 #     documentation is not well-suited to building as a PDF instead of HTML.
 
-%prep -a
+%prep
+%autosetup -p1
 # Stub out unavailable pyinstrument test dependency; we don’t really need to do
 # profiling anyway. Note that this does mean that API function
 # trimesh.viewer.windowed.SceneViewer(…) will not work with “profile=True”.
@@ -239,6 +238,9 @@ tomcli set pyproject.toml lists delitem \
 %pyproject_save_files -l trimesh
 
 install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D '%{SOURCE1}'
+
+%build
+%pyproject_wheel
 
 %check
 # Some dependencies are unavailable; see the prep section above.

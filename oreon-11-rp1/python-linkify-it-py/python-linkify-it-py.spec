@@ -18,9 +18,6 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/v%{version}/linkify-it-py-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install): -l linkify_it
 
 %global _description %{expand:This is a Python port of linkify-it [1], a link recognition library with FULL
 unicode support.  It is focused on high quality link pattern detection in
@@ -46,6 +43,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 # Do not run coverage tools in RPM builds
 sed -i 's/, "coverage", "pytest-cov"//' pyproject.toml
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 %pytest -v

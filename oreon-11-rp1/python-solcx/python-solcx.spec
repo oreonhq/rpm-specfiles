@@ -13,8 +13,6 @@ VCS:           git:%{url}.git
 Source0:       %{pypi_source py_solc_x}
 BuildRequires: python3-pytest
 BuildRequires: python3-pytest-cov
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -25,7 +23,16 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # FIXME unfortunately tests requires internet access which we currently do not
 # have in Koji.
 #%%pytest

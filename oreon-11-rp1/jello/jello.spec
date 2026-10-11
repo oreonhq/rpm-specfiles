@@ -13,17 +13,22 @@ Source:         %{url}/archive/v%{version}/jello-%{version}.tar.gz
 
 BuildArch:      noarch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l jello
 
 %description
 Query, filter, and transform JSON and JSON Lines at the command line with
 Python syntax.
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 man/*
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 %{py3_test_envvars} ./runtests.sh
 
 %files -f %{pyproject_files}

@@ -12,9 +12,6 @@ Source:         %{url}/archive/v%{version}/dpath-python-%{version}.tar.gz
 
 BuildArch:      noarch
 
-BuildSystem:    pyproject
-BuildOption(install):   -l dpath
-BuildOption(generate_buildrequires): -t
 
 %global common_description %{expand:
 A python library for accessing and searching dictionaries via /slashed/paths
@@ -32,7 +29,16 @@ Summary:        %{summary}
 
 %description -n python3-dpath %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %tox -- -- -v
 
 %files -n python3-dpath -f %{pyproject_files}

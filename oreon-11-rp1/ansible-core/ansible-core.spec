@@ -114,6 +114,7 @@ sed -i -s 's|/usr/bin/env python|%{python3}|' \
 sed -i -e '1{\@^#!.*@d}' lib/ansible/modules/hostname.py
 
 sed '/^mock$/d' test/lib/ansible_test/_data/requirements/units.txt > _requirements.txt
+sed -i '/^pywinrm/d' _requirements.txt test/units/requirements.txt
 
 
 %generate_buildrequires

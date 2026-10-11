@@ -70,10 +70,7 @@ Patch:          0004-Skip-HiGHS_CMDTest.test_relaxed_mip.patch
 # - XPRESS_CMD
 # - XPRESS_PY
 
-BuildSystem:            pyproject
-BuildOption(install):   -L pulp
 # Omitted extras for non-free solvers: copt, cplex, gurobi, mosek, xpress
-BuildOption(generate_buildrequires): %{shrink:
   -x highs
   -x scip
 }
@@ -134,7 +131,8 @@ Recommends:     python3-pulp+scip = %{version}-%{release}
 
 %pyproject_extras_subpkg -n python3-pulp -a highs scip
 
-%prep -a
+%prep
+%autosetup -p1
 # For architectures that may be covered by our noarch package, replace the
 # bundled cbc executables with symbolic links to the system one. Basically, we
 # are “faking” the PULP_CBC_CMD by making it equivalent to COIN_CMD.
@@ -163,7 +161,8 @@ find pulp/solverdir -type f \
 # Increase test verbosity
 sed -r -i 's/(runner.*TestRunner)\(\)/\1(verbosity=2)/' pulp/tests/run_tests.py
 
-%install -a
+%install
+%pyproject_install
 # Remove shebang from non-executable library file. Upstream may have intended
 # this to be run directly during development, but it is installed without the
 # execute permission bit set, so the shebang is useless.
@@ -187,7 +186,10 @@ find '%{buildroot}%{python3_sitelib}/pulp/solverdir/cbc/linux' \
     -exec ln -s -v -f '%{buildroot}%{_bindir}/Cbc' '{}' ';' \
     -exec symlinks -c '{}' ';'
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 %if %{with tests}
 # Work around dangling relative symlinks in the buildroot.
 ln -s '/usr/bin/Cbc' '%{buildroot}%{_bindir}/Cbc'

@@ -20,8 +20,6 @@ Source10:       fastapi-new.1
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 Patch:          0001-Downstream-only-patch-out-coverage-from-script-test.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -L fastapi_new
 
 BuildArch:      noarch
 
@@ -43,7 +41,8 @@ Create a new FastAPI project in one command. ✨}
 
 %description %{common_description}
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE10}'
 
 install -d \
@@ -59,7 +58,13 @@ export _TYPER_COMPLETE_TEST_DISABLE_SHELL_DETECTION=1
 '%{buildroot}%{_bindir}/fastapi-new' --show-completion fish \
     > '%{buildroot}%{fish_completions_dir}/fastapi-new.fish'
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 %if %{without network_tests}
 k="${k-}${k+ and }not test_creates_project_successfully"
 k="${k-}${k+ and }not test_creates_project_with_python_version"

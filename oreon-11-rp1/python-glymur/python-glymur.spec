@@ -17,8 +17,6 @@ Source1:        jp2dump.1
 Source2:        jpeg2jp2.1
 Source3:        tiff2jp2.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l glymur
 
 # Since the package has had endian-dependent test failures in the past, we give
 # up “noarch” in the base package in order to run tests on all supported
@@ -72,16 +70,21 @@ Recommends:     %{py3_dist gdal}
 
 %description -n python3-glymur %_description
 
-%prep -a
+%prep
+%autosetup -p1
 %if 0%{?no_pep_639_backend}
 tomcli set pyproject.toml del project.license
 %endif
 
-%install -a
+%install
+%pyproject_install
 install -m 0644 -p -D -t '%{buildroot}%{_mandir}/man1' \
     '%{SOURCE1}' '%{SOURCE2}' '%{SOURCE3}'
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 %pytest -n auto -rs -v
 
 %files -n python3-glymur -f %{pyproject_files}

@@ -12,11 +12,8 @@ Source0:        %{url}/archive/v%{version}/python-irodsclient-%{version}.tar.gz
 # Man page hand-written for Fedora in groff_man(7) format based on --help
 Source1:        prc_write_irodsA.py.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l irods
 # * The test runner module requires xmlrunner, which is no longer packaged.
 # * Merely importing ssl_test_client requires configured iRODS credentials.
-BuildOption(check): -e irods.test.runner -e irods.test.ssl_test_client
 # All tests require network access and a valid account on a running iRODS grid.
 # See irods/test/README.rst.
 
@@ -36,7 +33,8 @@ Summary:        %{summary}
 
 %description -n python3-irodsclient %{common_description}
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D '%{SOURCE1}'
 %py3_shebang_fix '%{buildroot}%{_bindir}/prc_write_irodsA.py'
 
@@ -49,6 +47,12 @@ install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D '%{SOURCE1}'
 find '%{buildroot}%{python3_sitelib}/irods' -type f -name '*.py' \
     -exec gawk '/^#!/ { print FILENAME }; { nextfile }' '{}' '+' |
   xargs -r sed -r -i '1{/^#!/d}'
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
 
 %files -n python3-irodsclient -f %{pyproject_files}
 %doc CHANGELOG.md

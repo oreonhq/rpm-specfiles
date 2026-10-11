@@ -13,9 +13,6 @@ License:        MIT
 URL:            https://github.com/asottile/covdefaults
 Source:         %{url}/archive/%{commit}/covdefaults-%{commit}.tar.gz
 
-BuildSystem:    pyproject
-BuildOption(prep): -n covdefaults-%{commit}
-BuildOption(install): -l covdefaults
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -31,7 +28,16 @@ Summary:        %{summary}
 
 %description -n python3-covdefaults %_description
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-covdefaults -f %{pyproject_files}

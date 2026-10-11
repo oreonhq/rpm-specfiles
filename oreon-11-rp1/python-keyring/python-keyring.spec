@@ -13,13 +13,9 @@ License:        MIT
 URL:            https://github.com/jaraco/keyring
 Source:         %{pypi_source keyring}
 
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): --extras %{?with_tests:test,}completion
-BuildOption(install): --assert-license keyring
 # - keyring.backends.macOS does not import on this platform
 # - keyring.devpi_client and keyring.testing are test hooks that require pluggy
 #   and/or pytest; we can import them only if the test dependencies are present
-BuildOption(check): %{shrink:
     --exclude 'keyring.backends.macOS*'
     %{?!with_tests:--exclude 'keyring.devpi_client'}
     %{?!with_tests:--exclude 'keyring.testing*'}
@@ -87,7 +83,8 @@ for a particular shell. For example, bash needs the bash-completion package to
 be installed.
 
 
-%prep -a
+%prep
+%autosetup -p1
 # This will be installed in site-packages without the executable bit set, so
 # the shebang should be removed.
 sed --regexp-extended --in-place '1{/^#!/d}' keyring/cli.py
@@ -101,7 +98,8 @@ sed --regexp-extended --in-place '1{/^#!/d}' keyring/cli.py
 %pyproject_patch_dependency coherent.licensed:ignore
 
 
-%install -a
+%install
+%pyproject_install
 # Generate both completions and man pages in %%install rather than in %%build
 # so we can use the actual generated entry point. For completions in
 # particular, this is very important; see RHBZ#2408842.
@@ -121,7 +119,10 @@ install --directory '%{buildroot}%{_mandir}/man1'
     --output='%{buildroot}%{_mandir}/man1/keyring.1' keyring
 
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 %if %{with tests}
 
 %if %{with desktop_tests}

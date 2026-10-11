@@ -14,8 +14,6 @@ Source:         %{giturl}/archive/janus-%{version}.tar.gz
 
 # See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-BuildSystem:    pyproject
-BuildOption(install): -l janus_swi
 
 BuildRequires:  gcc
 BuildRequires:  %{py3_dist pytest}
@@ -46,6 +44,9 @@ sed -i 's|-rpath={props\["PLLIBDIR"\]},||' setup.py
 %build -p
 # Do not pass -pthread to the compiler or linker
 export LDSHARED="gcc -shared"
+
+%install
+%pyproject_install
 
 %check
 %pytest -v

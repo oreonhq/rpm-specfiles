@@ -19,9 +19,6 @@ Source13:       userpath-verify.1
 
 BuildArch:      noarch
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): requirements-dev.filtered.txt
-BuildOption(install):   -l userpath
 
 %global common_description %{expand:
 Cross-platform tool for adding locations to the user PATH, no elevated
@@ -34,16 +31,21 @@ Summary:        %{summary}
 
 %description -n python3-userpath %common_description
 
-%prep -a
+%prep
+%autosetup -p1
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 sed -r '/^(coverage)$/d' requirements-dev.txt |
   tee requirements-dev.filtered.txt
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D \
     '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}' '%{SOURCE13}'
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 # We use pytest directly, since the only contribution of the tox configuration
 # is adding coverage analysis—which we do not want.
 %pytest

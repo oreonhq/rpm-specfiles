@@ -14,9 +14,6 @@ License:        MIT
 URL:            https://github.com/agronholm/typeguard
 Source:         %{url}/archive/%{version}/typeguard-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires):  -g test
-BuildOption(install):   -l typeguard
 
 BuildArch:      noarch
 
@@ -36,7 +33,8 @@ Obsoletes:      python-typeguard-doc < 4.2.1-2
 
 %description -n python3-typeguard %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Downstream-only: do not treat warnings in tests as errors
 #
 # This makes sense for upstream development and CI, but is too strict for
@@ -57,7 +55,10 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %if %{without mypy}
 k="${k-}${k+ and }not test_negative"
 k="${k-}${k+ and }not test_positive"

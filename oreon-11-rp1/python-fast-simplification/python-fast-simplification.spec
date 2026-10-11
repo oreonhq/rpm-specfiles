@@ -23,11 +23,8 @@ Source:         %{url}/archive/v%{version}/fast-simplification-%{version}.tar.gz
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/#_compiler_flags
 Patch:          0001-Downstream-only-do-not-override-system-compiler-flag.patch
 
-BuildSystem:            pyproject
 %if %{with tests}
-BuildOption(generate_buildrequires): requirements_test.txt
 %endif
-BuildOption(install):   -l fast_simplification
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -73,12 +70,19 @@ Provides:       bundled(Fast-Quadric-Mesh-Simplification) = 0^20201008git4aeffce
 
 %description -n python3-fast-simplification %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 %if %{without pyvista}
 sed -r -i 's/^pyvista\b/# &/' requirements_test.txt
 %endif
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %pytest -v -rs
 %endif

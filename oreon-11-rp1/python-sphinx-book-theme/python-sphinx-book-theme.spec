@@ -16,9 +16,6 @@ Source0:        %{giturl}/archive/v%{version}/sphinx-book-theme-%{version}.tar.g
 Source1:        sphinx-book-theme-%{version}-vendor.tar.xz
 Source2:        sphinx-book-theme-%{version}-vendor-licenses.txt
 
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install): -L sphinx_book_theme
 
 BuildRequires:  nodejs-devel
 BuildRequires:  /usr/bin/node
@@ -67,6 +64,9 @@ sed -i 's,^\(node-version = \)".*",\1"%{nodejs_version}",' pyproject.toml
 export YARN_CACHE_FOLDER="$PWD/.package-cache"
 yarn install --offline
 nodeenv --node=system --prebuilt --clean-src $PWD/.nodeenv
+
+%install
+%pyproject_install
 
 %check
 %pytest -v

@@ -20,8 +20,6 @@ Source:         %{url}/archive/%{commit}/jupyter-polymake-%{shortcommit}.tar.gz
 Patch:          %{name}-update.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -l jupyter_kernel_polymake
 
 BuildRequires:  %{py3_dist ipykernel}
 BuildRequires:  %{py3_dist ipython}
@@ -53,13 +51,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n jupyter-polymake-%{commit} -p1
 
-%install -a
+%install
+%pyproject_install
 # Move the jupyter kernel files to where we want them in Fedora
 mkdir -p %{buildroot}%{_datadir}/jupyter/kernels/polymake
 mv %{buildroot}%{python3_sitelib}/jupyter_kernel_polymake/resources/* \
    %{buildroot}%{_datadir}/jupyter/kernels/polymake
 rmdir %{buildroot}%{python3_sitelib}/jupyter_kernel_polymake/resources
 sed -i '/resources/d' %{pyproject_files}
+
+%build
+%pyproject_wheel
 
 %files -n python3-jupyter-polymake -f %{pyproject_files}
 %doc README.md

@@ -11,9 +11,6 @@ VCS:            git:%{url}.git
 Source:         %{url}/archive/v%{version}/uc.micro-py-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install): -l uc_micro
 
 %global _description %{expand:Micro subset of Unicode data files for linkify-it.py projects.  This is a
 Python port of uc.micro (https://github.com/markdown-it/uc.micro).}
@@ -34,6 +31,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 # Do not run coverage tools in RPM builds
 sed -i 's/, "coverage", "pytest-cov"//' pyproject.toml
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 %pytest -v

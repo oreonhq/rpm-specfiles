@@ -67,10 +67,7 @@ Source1620:     hatch-self-restore.1
 Source1630:     hatch-self-update.1
 Source1700:     hatch-test.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l hatch
 %if %{with tests}
-BuildOption(generate_buildrequires): _envs.hatch-test.extra-dependencies.txt
 %endif
 
 BuildArch:      noarch
@@ -121,7 +118,8 @@ Features:
 export SETUPTOOLS_SCM_PRETEND_VERSION='%(echo '%{version}' | cut -d '^' -f 1)'
 %endif
 
-%prep -a
+%prep
+%autosetup -p1
 # https://hatch.pypa.io/latest/config/environment/
 tomcli get hatch.toml -F newline-list envs.hatch-test.extra-dependencies |
   tee _envs.hatch-test.extra-dependencies.txt
@@ -131,7 +129,8 @@ tomcli get hatch.toml -F newline-list envs.hatch-test.extra-dependencies |
 export SETUPTOOLS_SCM_PRETEND_VERSION='%(echo '%{version}' | cut -d '^' -f 1)'
 %endif
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE100}' \
     '%{SOURCE200}' \
@@ -153,7 +152,7 @@ install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE1500}' '%{SOURCE1510}' '%{SOURCE1520}' '%{SOURCE1530}' \
       '%{SOURCE1540}' '%{SOURCE1550}'
 
-%check -a
+%check
 %if %{with tests}
 # These tests are actually for hatchling, and may fail due to small differences
 # between the state of hatchling in the hatch release tag and in the latest

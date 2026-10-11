@@ -24,8 +24,6 @@ Source10:       niaaml.1
 Source11:       niaaml-infer.1
 Source12:       niaaml-optimize.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l niaaml
 # There exists a docs/requirements.txt, but it seems to be inaccurate, with
 # many unnecessary dependencies, so we do not use it to generate BR’s.
 
@@ -89,13 +87,15 @@ dos2unix --keepdate paper/paper.bib
 # Since pdflatex cannot handle Unicode inputs in general:
 echo "latex_engine = 'xelatex'" >> docs/conf.py
 
-%build -a
+%build
+%pyproject_wheel
 %if %{with doc_pdf}
 %make_build -C docs latex SPHINXOPTS='%{?_smp_mflags}'
 %make_build -C docs/_build/latex LATEXMKOPTS='-quiet'
 %endif
 
-%install -a
+%install
+%pyproject_install
 install -d \
     '%{buildroot}%{bash_completions_dir}' \
     '%{buildroot}%{zsh_completions_dir}' \
@@ -112,7 +112,7 @@ export _TYPER_COMPLETE_TEST_DISABLE_SHELL_DETECTION=1
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}'
 
-%check -a
+%check
 %if %{with tests}
 %pytest
 %endif

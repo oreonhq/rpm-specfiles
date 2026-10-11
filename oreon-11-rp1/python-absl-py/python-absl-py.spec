@@ -9,8 +9,6 @@ License:        Apache-2.0
 URL:            https://github.com/abseil/abseil-py/
 Source:         %{url}/archive/v%{version}/abseil-py-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l absl
 
 BuildArch:      noarch
 
@@ -37,7 +35,16 @@ Summary:        %{summary}
 
 # Since we cannot run the full upstream test suite (see comments below), we
 # start with the implicit default import “smoke test.” Then:
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # Upstream provides some “smoke tests” that we can run, too. We cannot use the
 # wrapper smoke_tests/smoke_test.sh because it downloads things from the
 # Internet, but we can run the Python scripts manually.

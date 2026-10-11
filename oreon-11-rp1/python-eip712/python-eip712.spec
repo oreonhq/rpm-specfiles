@@ -18,8 +18,6 @@ BuildRequires: python3-hypothesis
 BuildRequires: python3-pydantic
 BuildRequires: python3-pytest
 BuildRequires: python3-pytest-xdist
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -30,7 +28,16 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

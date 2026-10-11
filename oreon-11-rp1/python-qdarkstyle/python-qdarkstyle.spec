@@ -36,9 +36,6 @@ Patch:          %{url}/pull/355.patch
 # https://github.com/ColinDuquesnoy/QDarkStyleSheet/pull/356
 Patch:          %{url}/pull/356.patch
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x develop,example
-BuildOption(install):   -l qdarkstyle
 
 BuildArch:      noarch
  
@@ -75,7 +72,8 @@ Recommends:     %{py3_dist helpdev}
 %{_bindir}/qdarkstyle.utils
 %{_mandir}/man1/qdarkstyle.utils.1*
 
-%prep -a
+%prep
+%autosetup -p1
 %if %{with recompile_assets}
 rm -vf qdarkstyle/*/*style.{qrc,qss} qdarkstyle/*/_variables.scss
 %endif
@@ -103,7 +101,8 @@ QT_QPA_PLATFORM=offscreen PYTHONPATH="${PWD}" %{python3} -m qdarkstyle.utils \
     --create 'pyqt5'
 %endif
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}'
 
@@ -111,7 +110,7 @@ install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
 # hardlinked to save space.
 hardlink -c -v '%{buildroot}%{python3_sitelib}/qdarkstyle/'
 
-%check -a
+%check
 %pytest
 
 %files -n python3-qdarkstyle -f %{pyproject_files}

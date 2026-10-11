@@ -110,14 +110,6 @@ sed -i 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5
 %doc index.html
 %doc docs.html
 %doc examples
-%doc armadillo_icon.png
-%doc mex_interface
-%doc armadillo_nicta_2010.pdf
-%doc armadillo_rcpp_2014.pdf
-%doc armadillo_joss_2016.pdf
-%doc armadillo_spcs_2017.pdf
-%doc armadillo_lncs_2018.pdf
-%doc armadillo_solver_2020.pdf
 
 %changelog
 %autochangelog

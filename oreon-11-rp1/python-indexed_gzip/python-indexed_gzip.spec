@@ -16,8 +16,6 @@ License:        Zlib
 URL:            https://github.com/pauldmccarthy/indexed_gzip
 Source:         %{pypi_source indexed_gzip}
 
-BuildSystem:    pyproject
-BuildOption(install):   -l indexed_gzip
 
 BuildRequires:  gcc
 BuildRequires:  zlib-devel
@@ -68,7 +66,8 @@ Obsoletes:      python3-indexed_gzip < 1.7.0-4
 
 %description -n python3-indexed-gzip %{desc}
 
-%prep -a
+%prep
+%autosetup -p1
 # Remove shebangs from non-script sources
 find indexed_gzip -type f -name '*.py' \
     -exec gawk '/^#!/ { print FILENAME }; { nextfile }' '{}' '+' |
@@ -77,7 +76,13 @@ find indexed_gzip -type f -name '*.py' \
 # be regenerated. Retain “hand-written” C sources.
 find indexed_gzip -type f -name '*.pyx' | sed -r 's/\.pyx$/.c/' | xargs -r rm -vf
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %pytest %{buildroot}%{python3_sitearch}/indexed_gzip -n auto -k "${k-}"
 %endif

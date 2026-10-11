@@ -17,9 +17,6 @@ BuildRequires: python3-factory-boy
 BuildRequires: python3-hypothesis
 BuildRequires: python3-pyasn1
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(prep):    -n %{pypi_name}-%{version}
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -30,7 +27,16 @@ Summary: %{summary}
 %description -n python3-eth-keys
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest -k 'not test_install_local_wheel'
 
 %files -n python3-eth-keys -f %{pyproject_files}

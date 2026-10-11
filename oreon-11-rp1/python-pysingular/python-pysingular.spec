@@ -12,8 +12,6 @@ Source:         %{url}/archive/v%{version}/PySingular-%{version}.tar.gz
 
 # See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-BuildSystem:    pyproject
-BuildOption(install): -l PySingular
 
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(Singular)
@@ -34,6 +32,12 @@ Summary:        Python 3 interface to Singular
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n PySingular-%{version}
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %files -n python3-pysingular -f %{pyproject_files}
 %doc README

@@ -13,8 +13,6 @@ URL:            https://pypa.github.io/pipx
 %global forgeurl https://github.com/pypa/pipx
 Source:         %{forgeurl}/archive/%{version}/pipx-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l pipx
 
 BuildArch:      noarch
 
@@ -38,7 +36,8 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%build -a
+%build
+%pyproject_wheel
 # Generate shell completions. “pipx completions” says:
 #
 # Add the appropriate command to your shell's config file
@@ -80,7 +79,8 @@ done
 # noxfile.py: build_man()
 PYTHONPATH="${PWD}/src" %{python3} scripts/generate_man.py
 
-%install -a
+%install
+%pyproject_install
 install -p -m 0644 -D -t '%{buildroot}%{_mandir}/man1' pipx.1
 
 install -p -m 0644 -D -t '%{buildroot}%{bash_completions_dir}' pipx.bash
@@ -93,7 +93,10 @@ install -p -m 0644 -D pipx.tcsh \
 # Install the same generated bash completion for zsh
 install -p -m 0644 -D pipx.bash '%{buildroot}%{zsh_completions_dir}/_pipx'
 
-%check -a
+%prep
+%autosetup -p1
+
+%check
 # It’s just not practical to run the tests. For most of them, we need either
 # (by default) a bundle of sample wheels from PyPI–which is arch-specific, as
 # some of them have compiled extensions—or network access. Previously, we tried

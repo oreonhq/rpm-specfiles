@@ -11,9 +11,6 @@ License:        BSD-3-Clause
 URL:            https://github.com/sysid/sse-starlette
 Source0:        %{url}/archive/v%{version}/sse-starlette-%{version}.tar.gz
 
-BuildSystem:    pyproject
-BuildOption(install):  -l sse_starlette
-BuildOption(generate_buildrequires): -x %{extras}
 
 BuildArch:      noarch
 BuildRequires:  tomcli
@@ -48,6 +45,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 tomcli set pyproject.toml arrays replace project.optional-dependencies.daphne "daphne>=([0-9]+\.[0-9]+\.[0-9]+)" "daphne>=4.1,<4.3"
 
 %pyproject_extras_subpkg -n python3-sse-starlette %{extras}
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %files -n python3-sse-starlette -f %{pyproject_files}
 %license LICENSE

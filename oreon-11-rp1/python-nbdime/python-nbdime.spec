@@ -33,9 +33,6 @@ Patch:          %{name}-rm-python-mock-usage.diff
 ExclusiveArch:  %{x86_64} %{arm64} noarch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x docs,test
-BuildOption(install): -l nbdime
 
 BuildRequires:  fdupes
 BuildRequires:  fontawesome-fonts-web
@@ -283,12 +280,14 @@ export CFLAGS='%{build_cflags} -I%{_includedir}/node'
 export CXXFLAGS='%{build_cxxflags} -I%{_includedir}/node'
 yarn install --offline
 
-%build -a
+%build
+%pyproject_wheel
 # Build the documentation
 PYTHONPATH=$PWD make -C docs html
 rm docs/build/html/.buildinfo
 
-%install -a
+%install
+%pyproject_install
 # Move the configuration files to the standard Jupyter directories
 mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}%{_sysconfdir}
 

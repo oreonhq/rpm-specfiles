@@ -13,9 +13,6 @@ Source0:       %{pypi_source %pypi_name}
 Patch:         python-eth-account-0001-Relax-dependencies-a-bit.patch
 BuildRequires: python3-hypothesis
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(prep):    -n %{pypi_name}-%{version}
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -26,7 +23,16 @@ Summary: %{summary}
 %description -n python3-eth-account
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # Ignored tests requires Node.js with a custom setup or Internet access
 PYTHONPATH=$(pwd) %pytest -k 'not test_install_local_wheel and not test_messages_where_all_3_sigs_match and not test_messages_where_eth_account_matches_ethers_but_not_metamask and not test_messages_where_eth_account_matches_metamask_but_not_ethers and not test_compatibility'
 

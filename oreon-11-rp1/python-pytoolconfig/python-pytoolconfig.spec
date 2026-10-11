@@ -13,9 +13,6 @@ URL:            https://github.com/bagel897/pytoolconfig
 # not worth it, and just do without the Sphinx documentation.
 Source:         %{pypi_source pytoolconfig}
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x validation,global,doc
-BuildOption(install):   -L pytoolconfig
 
 BuildArch:      noarch
 
@@ -40,7 +37,16 @@ Summary:        %{summary}
 # a corresponding metapackage, nor do we generate BR’s from it.
 %pyproject_extras_subpkg -n python3-pytoolconfig validation global doc
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest -v
 
 %files -n python3-pytoolconfig -f %{pyproject_files}

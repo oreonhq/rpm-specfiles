@@ -16,9 +16,6 @@ Patch:         python-eth_keyfile-0001-Fedora-use-cryptodome-explicitly.patch
 # Backported from upstream. PyPi tarball doesn't have a test-suite.
 Patch:         python-eth_keyfile-0002-Add-fixtures-back.patch
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(prep):    -n %{pypi_name}-%{version}
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -29,7 +26,16 @@ Summary: %{summary}
 %description -n python3-eth-keyfile
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 PYTHONPATH=$(pwd) %pytest -k 'not test_install_local_wheel'
 
 %files -n python3-eth-keyfile -f %{pyproject_files}

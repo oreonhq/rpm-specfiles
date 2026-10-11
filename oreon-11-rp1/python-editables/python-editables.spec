@@ -11,8 +11,6 @@ URL:            https://github.com/pfmoore/editables
 # PyPI source distributions lack tests; use the GitHub archive
 Source:         %{url}/archive/%{version}/editables-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l editables
 
 BuildArch:      noarch
 
@@ -40,7 +38,16 @@ Obsoletes:      python-editables-doc < 0.6-5
 
 %description -n python3-editables %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-editables -f %{pyproject_files}

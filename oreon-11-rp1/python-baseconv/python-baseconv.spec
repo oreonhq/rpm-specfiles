@@ -11,9 +11,6 @@ License:       PSF-2.0
 URL:           https://github.com/semente/%{name}
 VCS:           git:%{url}.git
 Source0:       %{pypi_source %{name}}
-BuildSystem:   pyproject
-BuildOption(prep):    -n %{name}-%{version}
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -23,6 +20,15 @@ Summary: %{summary}
 
 %description -n python3-%{pypi_name}
 %{summary}.
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}
 %doc README.rst

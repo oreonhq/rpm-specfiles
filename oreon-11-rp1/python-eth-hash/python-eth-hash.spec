@@ -21,9 +21,6 @@ Patch:         python-eth-hash-0001-Fedora-use-cryptodome-explicitly.patch
 Patch:         python-eth-hash-0002-Remove-pysha3.patch
 BuildRequires: python3-pycryptodomex
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(prep):    -n %{pypi_name}-%{version}
-BuildOption(install): -l %{pypi_name}
 
 %description  %{common_description}
 
@@ -34,7 +31,16 @@ Summary: %{summary}
 
 %pyproject_extras_subpkg -n python3-eth-hash pycryptodomex
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest ./tests/core/ ./tests/backends/pycryptodome
 
 %files -n python3-eth-hash -f %{pyproject_files}

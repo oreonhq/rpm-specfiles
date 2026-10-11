@@ -14,8 +14,6 @@ Source0:       %{pypi_source %pypi_name}
 Patch:         blst-0001-Support-64-bit-limbs-on-no-asm-platforms.patch
 BuildRequires: gcc
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 # https://github.com/supranational/blst
 Provides:      bundled(blst) = 0.3.16
 
@@ -28,7 +26,16 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 cd src
 make test
 

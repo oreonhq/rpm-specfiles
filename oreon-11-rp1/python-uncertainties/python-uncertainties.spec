@@ -12,10 +12,6 @@ Source:         %{url}/archive/%{version}/uncertainties-%{version}.tar.gz
 Patch0:         uncertainties-3.2.3-fix-tests.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(prep): -n uncertainties-%{version}
-BuildOption(generate_buildrequires): -x arrays,test
-BuildOption(install): -l uncertainties
 
 %global common_description %{expand:
 The uncertainties package allows calculations with values that have
@@ -39,7 +35,8 @@ BuildRequires:  make
 
 %description -n python3-uncertainties-doc %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 sed -i 's/"pytest_codspeed",//' pyproject.toml
 
 %generate_buildrequires -p
@@ -52,6 +49,9 @@ pushd doc
 make html
 rm _build/html/.buildinfo
 popd
+
+%install
+%pyproject_install
 
 %check
 %pytest

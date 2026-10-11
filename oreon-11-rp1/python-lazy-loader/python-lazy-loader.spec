@@ -11,8 +11,6 @@ License:        BSD-3-Clause
 URL:            https://github.com/scientific-python/lazy-loader
 Source:         %{pypi_source lazy_loader}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l lazy_loader
 
 BuildArch:      noarch
 
@@ -42,7 +40,16 @@ Summary:        %{summary}
 
 %description -n python3-lazy-loader %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %pytest
 %endif

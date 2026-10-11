@@ -235,6 +235,7 @@ install emulator/btvirt ${RPM_BUILD_ROOT}/%{_libexecdir}/bluetooth/
 %files
 %license COPYING
 %doc AUTHORS ChangeLog
+%{_mandir}/man7/btsnoop.7*
 # bluetooth.service expects configuration directory to be read only
 # https://github.com/bluez/bluez/issues/329#issuecomment-1102459104
 %attr(0555, root, root) %dir %{_sysconfdir}/bluetooth

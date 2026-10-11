@@ -22,9 +22,6 @@ Source17:       dav-rm.1
 Source18:       dav-run.1
 Source19:       dav-sync.1
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x all,fsspec,http2,tests
-BuildOption(install):   -l webdav4
 
 BuildArch:      noarch
 
@@ -45,7 +42,8 @@ Recommends:     %{py3_dist colorama}
 
 %pyproject_extras_subpkg -n python3-webdav4 fsspec http2
 
-%prep -a
+%prep
+%autosetup -p1
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 tomcli set pyproject.toml lists delitem \
     project.optional-dependencies.tests 'pytest-cov*'
@@ -53,12 +51,16 @@ tomcli set pyproject.toml str tool.pytest.ini_options.addopts -- "$(
   tomcli get pyproject.toml tool.pytest.ini_options.addopts |
   sed -r 's/--cov[^[:blank:]]*//g')"
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D \
     '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}' '%{SOURCE13}' '%{SOURCE14}' \
     '%{SOURCE15}' '%{SOURCE16}' '%{SOURCE17}' '%{SOURCE18}' '%{SOURCE19}'
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 %pytest ${ignore-} -rs -vv
 
 %files -n python3-webdav4 -f %{pyproject_files}

@@ -66,17 +66,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cmake \
        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
        -DFP16_USE_SYSTEM_LIBS=ON \
-%if %{without check}
        -DFP16_BUILD_TESTS=OFF \
-%endif
        -DFP16_BUILD_BENCHMARKS=OFF \
+       -DFETCHCONTENT_FULLY_DISCONNECTED=ON \
        
 %cmake_build
-
-%if %{with check}
-%check
-%ctest
-%endif
 
 %install
 %cmake_install

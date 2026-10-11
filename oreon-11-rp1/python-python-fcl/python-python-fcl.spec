@@ -48,8 +48,6 @@ Source1:        %{libccd_forgeurl}/archive/v%{libccd_version}/libccd-%{libccd_ve
 %global fcl_forgeurl https://github.com/flexible-collision-library/fcl
 Source2:        %{fcl_forgeurl}/archive/%{fcl_version}/fcl-%{fcl_version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l fcl
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -223,7 +221,8 @@ export PYTHON_FCL_OMIT_LIBRARIES='fcl'
 # For importing fcl.__version__
 #export PYTHONPATH="${PWD}/src"
 
-%install -a
+%install
+%pyproject_install
 # Do not install Cython-generated C++ sources that were used to compile the
 # extension. This is pretty hard to fix upstream in setup.cfg (see various
 # issues like https://github.com/pypa/setuptools/issues/2710), and no patch has
@@ -231,7 +230,7 @@ export PYTHON_FCL_OMIT_LIBRARIES='fcl'
 find '%{buildroot}%{python3_sitearch}' -type f -name '*.cpp' -print -delete
 sed -r -i '/\.cpp$/d' %{pyproject_files}
 
-%check -a
+%check
 %if %{without system_fcl}
 
 pushd ../libccd-%{libccd_version}/

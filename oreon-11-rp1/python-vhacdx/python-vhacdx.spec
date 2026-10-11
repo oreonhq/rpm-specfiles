@@ -16,9 +16,6 @@ License:        MIT AND BSD-3-Clause
 URL:            https://github.com/trimesh/vhacdx
 Source:         %{pypi_source vhacdx}
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install):   -l vhacdx
 
 BuildRequires:  gcc-c++
 
@@ -39,17 +36,22 @@ Summary:        %{summary}
 
 %description -n python3-vhacdx %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Remove the bundled copy of the V-HACD library (use the system one instead).
 rm -v src/vhacdx/VHACD.h
 
-%install -a
+%install
+%pyproject_install
 # We have no idea what to suggest upstream should change to keep pybind11 from
 # installing C++ source files, but it isn’t useful to package them.
 find '%{buildroot}%{python3_sitearch}' -type f -name '*.cpp' -print -delete
 sed -r -i '/\.cpp$/d' '%{pyproject_files}'
 
-%check -a
+%build
+%pyproject_wheel
+
+%check
 %pytest
 
 %files -n python3-vhacdx -f %{pyproject_files}

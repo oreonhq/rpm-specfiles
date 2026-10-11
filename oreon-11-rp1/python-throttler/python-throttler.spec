@@ -10,8 +10,6 @@ License:        MIT
 URL:            https://github.com/uburuntu/throttler
 Source:         %{url}/archive/v%{version}/throttler-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l throttler
 
 BuildArch:      noarch
 
@@ -34,7 +32,16 @@ Summary:        %{summary}
 
 %description -n python3-throttler %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest -n auto -v
 
 %files -n python3-throttler -f %{pyproject_files}

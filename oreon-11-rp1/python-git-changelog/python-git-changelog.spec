@@ -11,8 +11,6 @@ URL:            https://github.com/pawamoy/git-changelog
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(prep): -n git-changelog-%{version}
 %if %{with check}
 BuildRequires:  python3dist(pytest)
 # griffe not packaged
@@ -21,7 +19,6 @@ BuildRequires:  python3dist(griffe)
 BuildRequires:  python3dist(mkdocstrings)
 BuildRequires:  python3dist(pytest-gitconfig)
 %endif
-BuildOption(install): -l git_changelog
 BuildRequires:  git-core
 
 %global _description %{expand:
@@ -42,13 +39,19 @@ Summary:        %{summary}
 
 %description -n python3-git-changelog %_description
 
-%prep -a
+%prep
 %autosetup -n git-changelog-%{version} -S git
 sed -i 's/Jinja2>=[0-9]\+\.[0-9]\+/Jinja2/' pyproject.toml
 sed -i 's/platformdirs>=[0-9]\+\.[0-9]\+/platformdirs/' pyproject.toml
 git tag %{version}
 
 %if %{with check}
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
 %check
 %pytest
 %endif

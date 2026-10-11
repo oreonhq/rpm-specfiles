@@ -14,8 +14,6 @@ Patch:          %{name}-pari.patch
 
 # See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-BuildSystem:    pyproject
-BuildOption(install): -l PARIKernel
 
 BuildRequires:  gcc
 BuildRequires:  pari-devel
@@ -43,10 +41,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n pari-jupyter-%{version} -p1
 
-%build -a
+%build
+%pyproject_wheel
 rst2html --no-datestamp README.rst README.html
 
-%install -a
+%install
+%pyproject_install
 # Move the config file to the right place
 mkdir -p %{buildroot}%{_sysconfdir}/jupyter/nbconfig
 mv %{buildroot}%{_prefix}%{_sysconfdir}/jupyter/nbconfig/notebook.d \

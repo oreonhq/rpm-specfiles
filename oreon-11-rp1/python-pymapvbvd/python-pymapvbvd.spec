@@ -16,9 +16,6 @@ Source0:        %{pypi_source pymapvbvd}
 Source1:        pymapvbvd-test-data.tar.zst
 Source2:        get_test_data.sh
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x tests
-BuildOption(install):   -l mapvbvd
 
 BuildArch:      noarch
 # PyMapVBVD assumes the platform is little-endian
@@ -58,7 +55,10 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %pytest -v
 
 %files -n python3-pymapvbvd -f %{pyproject_files}

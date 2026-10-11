@@ -19,8 +19,6 @@ Patch:         python-trie-0001-Readd-tools.patch
 Patch:         python-trie-0002-Re-add-Trie-fixtures.patch
 BuildRequires: python3-hypothesis
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 
 %description %{common_description}
 
@@ -28,6 +26,15 @@ BuildOption(install): -l %{pypi_name}
 Summary: %{summary}
 
 %description -n python3-%{pypi_name} %{common_description}
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 PYTHONPATH=$(pwd) %pytest -k 'not test_install_local_wheel'

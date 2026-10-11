@@ -3,10 +3,10 @@
 %define VERSION %{version}
 
 %define bind_name bind
-%define bind_version 32:9.18.35-2
+%define bind_version 32:9.18.50
 
-%if 0%{?fedora} >= 31 || 0%{?rhel} > 8
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 31 || 0%{?rhel} > 8 || 0%{?oreon} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
     %global openssl_pkcs11_version 1.0
     %global openssl_pkcs11_name pkcs11-provider
     %global softhsm_version 2.6.1

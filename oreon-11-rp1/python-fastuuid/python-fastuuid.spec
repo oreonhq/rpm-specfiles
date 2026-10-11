@@ -45,8 +45,6 @@ License:        %{shrink:
 URL:            https://github.com/thedrow/fastuuid/
 Source:         %{pypi_source fastuuid}
 
-BuildSystem:    pyproject
-BuildOption(install):  -l fastuuid
 
 BuildRequires:  python3-devel
 BuildRequires:  cargo-rpm-macros
@@ -68,12 +66,17 @@ Summary:        %{summary}
 %generate_buildrequires -a
 %cargo_generate_buildrequires
 
-%prep -a
+%prep
+%autosetup -p1
 %cargo_prep
 
-%build -a
+%build
+%pyproject_wheel
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
+
+%install
+%pyproject_install
 
 %check
 %pyproject_check_import

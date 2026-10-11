@@ -15,13 +15,10 @@ BuildArch:          noarch
 # For %%py3_shebang_fix in %%prep, before generated BuildRequires are ready
 BuildRequires:      python3-devel
 
-BuildSystem:            pyproject
-BuildOption(install):   -l flask_migrate
 # Both flask_migrate/templates/aioflask/env.py and
 # flask_migrate/templates/flask/env.py are meant for execution via alembic;
 # importing them directly fails with:
 #   AttributeError: module 'alembic.context' has no attribute 'config'
-BuildOption(check):     -e flask_migrate.templates.*flask.env
 
 # We do not use %%pyproject_buildrequires -t and %%tox because tox.ini
 # explicitly runs “pip install.” We do not use %%pyproject_buildrequires -x dev
@@ -42,11 +39,18 @@ Obsoletes:          python-flask-migrate-doc < 4.1.0-3
 
 %description -n python3-flask-migrate %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Fix shebangs that use /bin/env and unversioned Python
 %py3_shebang_fix tests/app.py tests/app_multidb.py
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # See tox.ini:
 %pytest -p no:logging
 

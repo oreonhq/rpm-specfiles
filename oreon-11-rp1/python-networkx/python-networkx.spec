@@ -43,11 +43,8 @@ Source9:        https://www-personal.umich.edu/~mejn/netdata/football.zip
 # - osmnx requires osmnx
 # - plot_lines requires momepy
 BuildArch:      noarch
-BuildSystem:    pyproject
 %if %{with doctest}
-BuildOption(generate_buildrequires): -x doc,example,extra,test
 %endif
-BuildOption(install): -l networkx
 
 BuildRequires:  make
 
@@ -156,14 +153,16 @@ sed -i 's/Helvetica/sans-serif/' examples/drawing/plot_chess_masters.py
 sed -i '/pytest-cov/d' pyproject.toml requirements/test.txt
 sed -i '/intersphinx-registry/d' pyproject.toml requirements/doc.txt
 
-%build -a
+%build
+%pyproject_wheel
 %if %{with doctest}
 # Build the documentation
 PYTHONPATH=$PWD/build/lib make -C doc html
 rst2html --no-datestamp README.rst README.html
 %endif
 
-%install -a
+%install
+%pyproject_install
 %if %{with doctest}
 # Repack uncompressed zip archives
 for fil in $(find doc/build -name \*.zip); do

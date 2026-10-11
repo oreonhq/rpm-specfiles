@@ -11,6 +11,7 @@ Patch0:        0001-test-test-unix-skip-unix-domain-socket-test.patch
 
 BuildRequires: gcc
 BuildRequires: dbus
+BuildRequires: /usr/bin/dbus-daemon
 BuildRequires: asciidoc
 BuildRequires: meson
 BuildRequires: libudev-devel

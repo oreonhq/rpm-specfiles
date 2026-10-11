@@ -9,11 +9,7 @@ License:        BSD-3-Clause
 URL:            https://github.com/scipy/scipy_doctest
 Source:         %{pypi_source scipy_doctest}
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install):   -l scipy_doctest
 # We *can* smoke-test imports from the test suite, but we do not *want* to.
-BuildOption(check):     -e scipy_doctest.tests*
 
 BuildArch:      noarch
 
@@ -32,7 +28,16 @@ Summary:        %{summary}
 
 %description -n python3-scipy-doctest %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # The lowest-friction way to run tests is using the installed package:
 export PYTHONPATH='%{buildroot}%{python3_sitelib}'
 

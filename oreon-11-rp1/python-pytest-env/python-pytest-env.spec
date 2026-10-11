@@ -16,8 +16,6 @@ License:        MIT
 URL:            https://github.com/MobileDynasty/pytest-env
 Source:         %{url}/archive/%{commit}/pytest-env-%{commit}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l pytest_env
 
 BuildArch:      noarch
 
@@ -35,6 +33,15 @@ Summary:        %{summary}
 %description -n python3-pytest-env %{common_description}
 
 # Upstream has no tests.
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %files -n python3-pytest-env -f %{pyproject_files}
 %doc README.md

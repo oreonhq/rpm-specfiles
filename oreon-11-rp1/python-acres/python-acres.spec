@@ -9,8 +9,6 @@ License:        Apache-2.0
 URL:            https://github.com/nipreps/acres
 Source:         %{url}/archive/%{version}/acres-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -L acres
 
 BuildArch:      noarch
 
@@ -35,7 +33,13 @@ export PDM_BUILD_SCM_VERSION='%{version}'
 %build -p
 export PDM_BUILD_SCM_VERSION='%{version}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%install
+%pyproject_install
+
+%check
 %pytest -v
 
 %files -n python3-acres -f %{pyproject_files}

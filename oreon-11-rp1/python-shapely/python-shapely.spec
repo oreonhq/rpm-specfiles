@@ -22,9 +22,6 @@ Source:         %{pypi_source shapely}
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l shapely
-BuildOption(generate_buildrequires): -x test
 
 BuildRequires:  tomcli
 BuildRequires:  gcc
@@ -59,7 +56,8 @@ Provides:       bundled(klib-kvec) = 0.1.0
 
 %description -n python3-shapely %_description
 
-%prep -a
+%prep
+%autosetup -p1
 # Currently, the PyPI sdist does not ship with pre-generated Cython C sources.
 # We preventively check for them anyway, as they must be removed if they do
 # appear. Note that C sources in src/ are not generated.
@@ -74,6 +72,12 @@ tomcli set pyproject.toml lists delitem \
 tomcli set pyproject.toml lists delitem \
     project.optional-dependencies.test scipy-doctest
 %endif
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 # Ensure the “un-built” package is not imported. Otherwise compiled extensions

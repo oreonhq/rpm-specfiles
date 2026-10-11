@@ -9,8 +9,6 @@ License:        MPL-2.0
 URL:            https://bidict.readthedocs.io
 Source:         https://github.com/jab/bidict/archive/v%{version}/bidict-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l bidict
 
 BuildArch:      noarch
 
@@ -37,11 +35,18 @@ Summary:        %{summary}
 
 %description -n python3-bidict %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Since we have patched out pytest-benchmark, this would not be recognized.
 sed -r -i '/--benchmark/d' pytest.ini
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # This contains one doctest, which requires the sortedcollections dependency.
 # It’s not worth maintaining the dependency solely for that, especially as it
 # is otherwise not needed in Fedora at all.

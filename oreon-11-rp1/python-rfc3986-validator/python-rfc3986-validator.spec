@@ -10,9 +10,6 @@ License:        MIT
 URL:            https://github.com/naimetti/rfc3986-validator
 Source:         %{pypi_source rfc3986_validator}
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install):   -l rfc3986_validator
 
 BuildArch:      noarch
 
@@ -37,7 +34,16 @@ Summary: %summary
 
 %description -n python3-rfc3986-validator %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 PYTHONWARNINGS=ignore %pytest -vv tests
 
 %files -n python3-rfc3986-validator -f %{pyproject_files}

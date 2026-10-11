@@ -34,8 +34,6 @@ BuildRequires: gcc
 BuildRequires: libsecp256k1-devel >= 0.4.1
 BuildRequires: pkgconfig
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(install): %{pypi_name}
 Requires: python3-cffi
 
 %description
@@ -47,7 +45,8 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%prep -a
+%prep
+%autosetup -p1
 rm -rf docs/.scripts docs/.snippets docs/assets
 rm hatch_build.py
 sed -i '/^\[tool\.hatch\.build\.targets\.wheel\.hooks\.custom\]$/d' pyproject.toml
@@ -55,7 +54,10 @@ sed -i '/^\[tool\.hatch\.build\.targets\.wheel\.hooks\.custom\]$/d' pyproject.to
 %build -p
 export COINCURVE_VENDOR_CFFI=0
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

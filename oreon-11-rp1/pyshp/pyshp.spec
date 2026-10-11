@@ -38,11 +38,8 @@ Source24:       %{ne_url}/raw/%{ne_commit}/110m_cultural/ne_110m_admin_0_tiny_co
 %global data_commit 2583dba70d0892fc787e1a837df07c3ea8e69950
 Source25:       %{data_url}/raw/%{data_commit}/gis_osm_natural_a_free_1.zip
 
-BuildSystem:            pyproject
-BuildOption(install):   -l shapefile
 # We do not package the “stubs” extra because we do not need or wish to package
 # python-pyshp-stubs.
-BuildOption(generate_buildrequires): -x test
 
 BuildArch:      noarch
 
@@ -72,13 +69,20 @@ Summary:        %{summary}
 
 %description -n python3-pyshp %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 mkdir -p _testdata
 ln '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}' '%{SOURCE13}' '%{SOURCE14}' \
     '%{SOURCE20}' '%{SOURCE21}' '%{SOURCE22}' '%{SOURCE23}' '%{SOURCE24}' \
     '%{SOURCE25}' _testdata/
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # Serve the test data locally; see the “Network tests” section in README.md
 pushd _testdata
 %{python3} -m http.server 8000 &

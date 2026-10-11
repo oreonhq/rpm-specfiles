@@ -12,8 +12,6 @@ URL:            https://github.com/python-openapi/openapi-schema-validator
 # The GitHub tarball contains tests; the PyPI sdist does not.
 Source:         %{url}/archive/%{version}/openapi-schema-validator-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -L openapi_schema_validator
 
 BuildArch:      noarch
 
@@ -40,12 +38,19 @@ Summary:        %{summary}
 
 %description -n python3-openapi-schema-validator %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Patch coverage analysis out of [tool.pytest.ini_options]:
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 sed -r -i '/^--cov\b/d' pyproject.toml
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %pytest
 %endif

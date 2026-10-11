@@ -24,9 +24,6 @@ BuildRequires:  make
 %endif
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x testing%{?with_doc:,rtd}
-BuildOption(install): -L myst_nb
 
 %py_provides python3-%{name}
 %py_provides python3-MyST-NB
@@ -66,14 +63,16 @@ sed -e 's/9bc81205a14646a235d284d1b68223d17f30f7f1d3d8ed3e52cf47830b02e3bb/3b06a
        tests/test_execute/test_custom_convert_{auto,cache}.xml \
        tests/test_execute/test_custom_convert_multiple_extensions_{auto,cache}.xml
 
-%build -a
+%build
+%pyproject_wheel
 %if %{with doc}
 # Build the documentation
 PYTHONPATH=$PWD make -C docs html
 rm docs/_build/html/.buildinfo
 %endif
 
-%install -a
+%install
+%pyproject_install
 export PYTHONPATH=%{buildroot}%{python3_sitelib}
 mkdir -p %{buildroot}%{_mandir}/man1
 makeman() {

@@ -13,8 +13,6 @@ License:	GPL-2.0-or-later
 URL:		https://wiki.gnome.org/Projects/GnomeBluetooth
 Source0:	https://download.gnome.org/sources/%{name}/%{gnome_major_version}/%{name}-%{gnome_tarball_version}.tar.xz
 
-%gnome_check_version
-
 %if 0%{?rhel}
 ExcludeArch:	s390 s390x
 %endif

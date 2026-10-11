@@ -16,8 +16,6 @@ License:        Apache-2.0 OR MIT
 URL:            https://github.com/Donders-Institute/multiecho
 Source:         %{url}/archive/%{version}/multiecho-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l multiecho
 
 BuildArch:      noarch
 
@@ -39,7 +37,8 @@ Summary:        %{summary}
 
 %description -n python3-multiecho %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Remove the shebang from the multiecho.combination module; upstream seems to
 # have intended it to be directly executable as a script when working on the
 # source, but it will not be installed with the executable bit set, so the
@@ -47,7 +46,13 @@ Summary:        %{summary}
 # anyway.
 sed -r -i '1{/^#!/d}' multiecho/combination.py
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %pytest
 %endif

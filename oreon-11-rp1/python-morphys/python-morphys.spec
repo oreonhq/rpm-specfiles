@@ -14,9 +14,6 @@ License:       MPL-2.0
 URL:           https://github.com/mkalinski/%{pypi_name}
 VCS:           git:%{url}.git
 Source0:       %{url}/archive/%{git_commit}/morphys-1.0.tar.gz
-BuildSystem:   pyproject
-BuildOption(prep):    -n %{pypi_name}-%{git_commit}
-BuildOption(install): -l %{pypi_name}
 
 %description %{common_description}
 
@@ -25,7 +22,16 @@ Summary: %{summary}
 
 %description -n python3-%{pypi_name} %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %python3 ./tests.py
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

@@ -16,9 +16,6 @@ Source:         %pypi_source texext
 Patch:          %{name}-remove-six.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install): -l texext
 
 %description
 This package contains Sphinx extensions for working with LaTeX math.
@@ -34,8 +31,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n texext-%{version} -p1
 
-%build -a
+%build
+%pyproject_wheel
 rst2html --no-datestamp README.rst README.html
+
+%install
+%pyproject_install
 
 %check
 %pytest -v

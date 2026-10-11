@@ -161,11 +161,7 @@ Source2:        get_assets
 # the substring "modified-assets" in the patch name.
 Patch:          snakemake-9.1.1-modified-assets.patch
 
-BuildSystem:            pyproject
 # Generate BR’s for all supported extras to ensure they do not FTI
-BuildOption(generate_buildrequires): -x reports
-BuildOption(install):   -l snakemake
-BuildOption(check):     %{shrink:
                         -e '*.tests*'
                         %{?!with_gcs_tests:-e 'snakemake.executors.google_lifesciences_helper'}
                         }
@@ -446,7 +442,8 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%install -a
+%install
+%pyproject_install
 # Fix shebangs (no /usr/env shebangs)
 %py3_shebang_fix %{buildroot}%{python3_sitelib} %{buildroot}%{_bindir}
 
@@ -478,7 +475,7 @@ cp -vrp misc/vim/* '%{buildroot}%{_datadir}/vim/vimfiles'
 find '%{buildroot}%{_datadir}/vim/vimfiles' \
     -type f -name 'README.*' -print -delete
 
-%check -a
+%check
 %if %{with tests}
 %if %{without network_tests}
 # The following require network access (at least DNS) and pass if it is

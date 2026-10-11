@@ -27,8 +27,6 @@ Patch:          %{name}-license-files.patch
 # Polymake is not available on 32-bit platforms.
 # See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-BuildSystem:    pyproject
-BuildOption(install): -l JuPyMake
 
 BuildRequires:  gcc-c++
 BuildRequires:  polymake
@@ -50,6 +48,12 @@ Requires:       polymake%{?_isa}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n JuPyMake-%{commit} -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %files -n python3-jupymake -f %{pyproject_files}
 %doc README README.md example.py

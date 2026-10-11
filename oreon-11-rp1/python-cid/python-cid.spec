@@ -21,9 +21,6 @@ Patch1:        python-cid-0001-Relax-dependencies.patch
 Patch2:        python-cid-0002-Drop-pytest-runner.patch
 BuildRequires: python3-hypothesis
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(prep):    -n py-%{pypi_name}-%{version}
-BuildOption(install): -l %{pypi_name}
 
 %description %{common_description}
 
@@ -32,7 +29,16 @@ Summary: %{summary}
 
 %description -n python3-%{pypi_name} %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

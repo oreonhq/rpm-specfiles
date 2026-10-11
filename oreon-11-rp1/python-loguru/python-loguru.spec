@@ -22,8 +22,6 @@ Patch:          %{url}/commit/84023e2bd8339de95250470f422f096edcb8f7b7.patch
 
 BuildArch:      noarch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l loguru
 
 # The dev extra pins exact versions and includes unwanted coverage tools etc.
 # (https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters), 
@@ -53,7 +51,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n loguru-%{version} -p1
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 # Make sure we don’t run the detailed typing tests; see
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters

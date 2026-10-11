@@ -13,9 +13,6 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 Patch:          0001-Downstream-only-run-test_script-without-coverage.patch
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x standard,standard-no-fastapi-cloud-cli,new
-BuildOption(install):   -l fastapi_cli
 
 BuildArch:      noarch
 
@@ -54,6 +51,15 @@ Obsoletes: fastapi-cli-slim+standard < 0.0.21-1
 This is a metapackage bringing in standard extras requires for fastapi-cli.
 It makes sure the dependencies are installed.
 
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
 %files -n fastapi-cli+standard
 %ghost %dir %{python3_sitelib}/*.dist-info
 
@@ -82,7 +88,7 @@ It makes sure the dependencies are installed.
 %pyproject_extras_subpkg -n fastapi-cli standard standard-no-fastapi-cloud-cli new
 %endif
 
-%check -a
+%check
 %pytest -v
 
 %files -f %{pyproject_files}

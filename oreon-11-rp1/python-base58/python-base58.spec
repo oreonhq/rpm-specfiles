@@ -17,8 +17,6 @@ Source0:       %{pypi_source %{pypi_name}}
 BuildRequires: python3-hamcrest
 BuildRequires: python3-pytest
 BuildRequires: python3-pytest-benchmark
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 
 %description  %{common_description}
 
@@ -27,7 +25,16 @@ Summary: %{summary}
 
 %description -n python3-%{pypi_name} %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

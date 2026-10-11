@@ -12,9 +12,6 @@ URL:            https://github.com/leshchenko1979/reretry
 # Source:         %%{pypi_source reretry}
 Source:         %{url}/archive/%{version}/reretry-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): tests/test-requirements.txt
-BuildOption(install):   -l reretry
 
 BuildArch:      noarch
 
@@ -61,7 +58,16 @@ Recommends:     %{py3_dist decorator}
 
 %description -n python3-reretry %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-reretry -f %{pyproject_files}

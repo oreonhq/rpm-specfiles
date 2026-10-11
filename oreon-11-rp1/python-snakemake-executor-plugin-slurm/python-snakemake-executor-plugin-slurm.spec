@@ -16,8 +16,6 @@ Source0:        %{url}/archive/v%{version}/snakemake-executor-plugin-slurm-%{ver
 # Man page hand-written for Fedora in groff_man(7) format based on --help.
 Source1:        generate-slurm-partition-config.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -L snakemake_executor_plugin_slurm
 
 BuildArch:      noarch
 
@@ -48,10 +46,17 @@ Requires:       slurm
 
 %description -n python3-snakemake-executor-plugin-slurm %{common_description}
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE1}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 %if %{with tests}
 # These tests seem to want to talk to a real cluster controller:
 #

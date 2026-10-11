@@ -26,8 +26,6 @@ BuildRequires: python3-pytest-cov
 BuildRequires: python3-pytest-dependency
 BuildRequires: python3-pytest-localserver
 BuildRequires: python3-pytest-mock
-BuildSystem:   pyproject
-BuildOption(install): %{pypi_name}
 
 %description
 %{summary}.
@@ -38,7 +36,16 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # This test requires a working IPFS node which we don't have in Fedora. Even if
 # we have one it will require internet access to operate properly which is not
 # available while building.

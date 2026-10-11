@@ -15,8 +15,6 @@ Patch:         python-eth-utils-0001-Readd-fixtures-back.patch
 BuildRequires: python3-hypothesis
 BuildRequires: python3-mypy
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -27,11 +25,18 @@ Summary: %{summary}
 %description -n python3-eth-utils
 %{summary}.
 
-%prep -a
+%prep
+%autosetup -p1
 # Remove egg-info
 rm -rf %{pypi_name}.egg-info/
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest -k 'not test_install_local_wheel and not test_type_inference'
 
 %files -n python3-eth-utils -f %{pyproject_files}

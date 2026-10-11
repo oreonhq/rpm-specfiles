@@ -12,9 +12,6 @@ Source0:        %{url}/archive/v%{version}/compreffor-%{version}.tar.gz
 # command’s --help output
 Source1:        compreffor.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l compreffor
-BuildOption(generate_buildrequires): -t
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -33,7 +30,8 @@ Summary:        %{summary}
 
 %description -n python3-compreffor %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Drop the setuptools_git_ls_files dependency
 #
 # This dependency makes sense upstream, but we do not need it (and it is
@@ -60,10 +58,11 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D '%{SOURCE1}'
 
-%check -a
+%check
 %tox
 
 %files -n python3-compreffor -f %{pyproject_files}

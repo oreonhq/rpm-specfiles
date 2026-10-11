@@ -24,16 +24,12 @@ License:        GPL-3.0-or-later
 URL:            https://github.com/Donders-Institute/bidscoin
 Source:         %{url}/archive/%{version}/bidscoin-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l bidscoin
-BuildOption(generate_buildrequires): %{shrink:
                                      -x dcm2niix2bids
                                      -x spec2nii2bids
                                      %{?with_deface:-x deface}
                                      %{?with_deface:-x all}
                                      %{?with_extras:-x extras}
                                      }
-BuildOption(check):     %{shrink:
                         %{?!with_deface:-e 'bidscoin.bidsapps.*deface'}
                         }
 
@@ -80,7 +76,8 @@ flexibility, and readily handle a wide variety of source data types.
 %pyproject_extras_subpkg -n bidscoin extras
 %endif
 
-%prep -a
+%prep
+%autosetup -p1
 %if %{without drmaa}
 tomcli set pyproject.toml lists delitem project.dependencies drmaa
 %endif
@@ -92,7 +89,13 @@ find bidscoin/ -type f -name '*.py' \
     -exec gawk '/^#!/ { print FILENAME }; { nextfile }' '{}' '+' |
   xargs -r -t sed -r -i '1{/^#!/d}'
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # Requires network access:
 k="${k-}${k+ and }not test_check_version"
 # Tries to access the man page outside the buildroot:

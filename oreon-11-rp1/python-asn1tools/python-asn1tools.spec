@@ -14,8 +14,6 @@ Source0:       %{pypi_source %{pypi_name}}
 BuildRequires: python3-diskcache
 BuildRequires: python3-prompt-toolkit
 BuildRequires: python3-pytest
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 # No python-bitstruct module available
 ExcludeArch:   s390x
 
@@ -28,7 +26,16 @@ Summary: %{summary}
 %description -n python3-%{pypi_name}
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-%{pypi_name} -f %{pyproject_files}

@@ -12,8 +12,6 @@ License:       GPL-2.0-or-later
 URL:           https://gitlab.gnome.org/GNOME/%{name}
 Source0:       https://download.gnome.org/sources/%{name}/%{gnome_major_version}/%{name}-%{gnome_tarball_version}.tar.xz
 
-%gnome_check_version
-
 BuildRequires: gcc
 BuildRequires: gettext
 BuildRequires: meson

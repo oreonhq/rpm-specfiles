@@ -30,9 +30,6 @@ Source:         %{forgesource}
 # https://gitlab.com/dpizetta/helpdev/-/merge_requests/4
 Patch:          %{forgeurl}/-/merge_requests/4.patch
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x memory_info
-BuildOption(install):   -l helpdev
 
 BuildArch:      noarch
 
@@ -84,14 +81,16 @@ License:        %{license} AND %{images_license}
 %description doc
 This package includes documentation and examples for HelpDev.
 
-%build -a
+%build
+%pyproject_wheel
 %if %{with doc_pdf}
 PYTHONPATH="${PWD}" %make_build -C docs latex \
     SPHINXOPTS='-j%{?_smp_build_ncpus}'
 %make_build -C build/docs/latex LATEXMKOPTS='-quiet'
 %endif
 
-%install -a
+%install
+%pyproject_install
 # Generating the man page in %%install allows us to use the installed entry
 # point; horrible hacks would be required to do this in %%build.
 install -d '%{buildroot}%{_mandir}/man1'
@@ -99,7 +98,10 @@ PYTHONPATH='%{buildroot}%{python3_sitelib}' help2man \
     --no-info --output='%{buildroot}%{_mandir}/man1/helpdev.1' \
     '%{buildroot}%{_bindir}/helpdev'
 
-%check -a
+%prep
+%autosetup -p1
+
+%check
 %pytest -v
 
 %files -n python3-helpdev -f %{pyproject_files}

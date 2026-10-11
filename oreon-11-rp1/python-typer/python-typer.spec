@@ -21,8 +21,6 @@ Source11:       typer-utils.1
 #   PYTHONPATH="${PWD}" typer x utils docs --help.
 Source12:       typer-utils-docs.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l typer
 
 BuildArch:      noarch
 
@@ -67,7 +65,8 @@ Conflicts:      erlang-dialyzer < 26.2.5.13-2
 
 %description -n python3-typer %{common_description}
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}'
 
@@ -84,7 +83,13 @@ export _TYPER_COMPLETE_TEST_DISABLE_SHELL_DETECTION=1
 '%{buildroot}%{_bindir}/typer' --show-completion fish \
     > '%{buildroot}%{fish_completions_dir}/typer.fish'
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 # See scripts/test.sh. We do not run the linters (scripts/lint.sh, i.e.,
 # mypy/black/isort).
 export TERMINAL_WIDTH=3000

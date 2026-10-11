@@ -17,8 +17,6 @@ URL:            https://github.com/snakemake/snakemake-storage-plugin-ftp
 # the tests.
 Source:         %{url}/archive/v%{version}/snakemake-storage-plugin-ftp-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -L snakemake_storage_plugin_ftp
 
 BuildArch:      noarch
 
@@ -37,7 +35,16 @@ Summary:        %{summary}
 
 %description -n python3-snakemake-storage-plugin-ftp %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{without network_tests}
 # The following tests require network access:
 k="${k-}${k+ and }not (TestStorage and test_storage)"

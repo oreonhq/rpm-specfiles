@@ -14,13 +14,10 @@ Source0:        %{url}/archive/v%{version}/scooby-%{version}.tar.gz
 # Man page hand-written for Fedora in groff_man(7) format based on --help
 Source1:        scooby.1
 
-BuildSystem:            pyproject
 # We cannot package (nor generate BR’s from) the “cpu” extra because it
 # requires python3dist(mkl), which is proprietary software.
 %if %{with tests}
-BuildOption(generate_buildrequires): requirements_test.txt
 %endif
-BuildOption(install):   -l scooby
 
 BuildArch:      noarch
 
@@ -68,10 +65,11 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE1}'
 
-%check -a
+%check
 %if %{with tests}
 # These require the no_version package; see notes in %%prep.
 k="${k-}${k+ and }not test_get_version"

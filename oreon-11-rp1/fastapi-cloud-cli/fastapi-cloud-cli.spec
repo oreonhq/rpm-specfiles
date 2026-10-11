@@ -30,9 +30,6 @@ Source193:      fastapi-cloud-env-delete.1
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 Patch:          0001-Downstream-only-patch-out-coverage-from-script-test.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -L fastapi_cloud_cli
-BuildOption(generate_buildrequires): -x standard
 
 BuildArch:      noarch
 
@@ -69,14 +66,21 @@ Requires:       gh
 
 %pyproject_extras_subpkg -n fastapi-cloud-cli standard
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE100}' '%{SOURCE110}' '%{SOURCE120}' '%{SOURCE130}' \
     '%{SOURCE140}' '%{SOURCE150}' '%{SOURCE160}' '%{SOURCE170}' \
     '%{SOURCE180}' '%{SOURCE190}' '%{SOURCE191}' '%{SOURCE192}' \
     '%{SOURCE193}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 %pytest -v
 
 %files -f %{pyproject_files}

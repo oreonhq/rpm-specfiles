@@ -98,11 +98,9 @@ rm %{buildroot}/%{_bindir}/speed
 %{_libdir}/libcfitsio.a
 
 %files docs
-%doc docs/fitsio.pdf docs/cfitsio.pdf
 %license licenses/License.txt
 
 %files utils
-%doc docs/fpackguide.pdf
 %license licenses/License.txt
 %{_bindir}/fitsverify
 %{_bindir}/fitscopy

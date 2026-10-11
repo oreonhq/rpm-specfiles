@@ -16,8 +16,6 @@ Source0:        %{url}/archive/v%{version}/python-email-validator-%{version}.tar
 # https://github.com/JoshData/python-email-validator/issues/146
 Source1:        email_validator.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l email_validator
 
 BuildArch:      noarch
 
@@ -56,10 +54,17 @@ Summary:        %{summary}
 
 %description -n python3-email-validator %{_description}
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE1}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 %pytest -v tests -m 'not network'
 
 %files -n python3-email-validator -f %{pyproject_files}

@@ -19,8 +19,6 @@ Patch:          %{name}-signed.patch
 
 # See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-BuildSystem:    pyproject
-BuildOption(install): -l cvxopt
 
 BuildRequires:  DSDP-devel
 BuildRequires:  gcc
@@ -113,11 +111,15 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 export LDSHARED='gcc -shared %{build_ldflags}'
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%build -a
+%build
+%pyproject_wheel
 # Rebuild the documentation
 make -C doc clean
 make -C doc -B html
 rm -f doc/build/html/.buildinfo
+
+%install
+%pyproject_install
 
 %check
 export FLEXIBLAS=netlib

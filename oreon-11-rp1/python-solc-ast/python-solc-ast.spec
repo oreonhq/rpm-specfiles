@@ -12,8 +12,6 @@ URL:           https://github.com/iamdefinitelyahuman/%{pypi_name}
 VCS:           git:%{url}.git
 Source0:       %{pypi_source %{pypi_name}}
 Patch1:        python-solc-ast-0001-Remove-all-shebangs.patch
-BuildSystem:   pyproject
-BuildOption(install): -l solcast
 
 %description
 %{summary}.
@@ -24,7 +22,16 @@ Summary: %{summary}
 %description -n python3-solc-ast
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # FIXME Unfortunately tests requires 30+ mbytes data file
 #%%pytest
 

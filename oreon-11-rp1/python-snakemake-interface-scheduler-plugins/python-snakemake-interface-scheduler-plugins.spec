@@ -15,8 +15,6 @@ URL:            https://github.com/snakemake/snakemake-interface-scheduler-plugi
 # the tests.
 Source:         %{url}/archive/v%{version}/snakemake-interface-scheduler-plugins-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l snakemake_interface_scheduler_plugins
 
 BuildArch:      noarch
 
@@ -37,7 +35,16 @@ Summary:        %{summary}
 
 %description -n python3-snakemake-interface-scheduler-plugins %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{without bootstrap}
 %pytest -v tests/tests.py
 %endif

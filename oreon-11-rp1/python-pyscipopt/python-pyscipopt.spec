@@ -12,8 +12,6 @@ License:        MIT AND WTFNMFPL
 URL:            https://github.com/scipopt/PySCIPOpt
 Source:         %{url}/archive/v%{version}/PySCIPOpt-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l pyscipopt
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 # Furthermore, dependency libscip is ExcludeArch: %%{ix86}.
@@ -45,14 +43,18 @@ BuildArch:      noarch
 %description examples
 %{summary}.
 
-%prep -a
+%prep
+%autosetup -p1
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/#_beware_of_rpath
 sed -r -i 's/^([[:blank:]]*)(.*-Wl,-rpath)/\1# \2/' setup.py
 
 %build -p
 export CFLAGS="${CFLAGS} -I/usr/include/scip"
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %pytest -v
 
 %files -n python3-pyscipopt -f %{pyproject_files}

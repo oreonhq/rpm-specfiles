@@ -23,18 +23,14 @@ Patch:          0001-Downstream-only-patch-out-coverage-analysis.patch
 # https://github.com/pgjones/hypercorn/pull/343
 Patch:          %{url}/pull/343.patch
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): %{shrink:
     -x h3
     -x trio
     %{?with_uvloop:-x uvloop}
     -g dev
     }
-BuildOption(install):   -L hypercorn
 %if %{defined fc44}
 # python-pylsqpack: Fails to import in F44/Rawhide
 # https://bugzilla.redhat.com/show_bug.cgi?id=2413628
-BuildOption(check):     %{shrink:
     -e hypercorn.protocol.h3
     -e hypercorn.protocol.quic
     }
@@ -62,7 +58,8 @@ Summary:        %{summary}
 
 %pyproject_extras_subpkg -n python3-hypercorn h3 trio %{?with_uvloop:uvloop}
 
-%install -a
+%install
+%pyproject_install
 # We must wait until %%install to generate the man page so we can use the
 # generated entry point that was installed in the buildroot.
 install -d %{buildroot}%{_mandir}/man1
@@ -72,7 +69,13 @@ install -d %{buildroot}%{_mandir}/man1
     --output=%{buildroot}%{_mandir}/man1/hypercorn.1 \
     %{buildroot}%{_bindir}/hypercorn
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 %pytest -v
 
 %files -n python3-hypercorn -f %{pyproject_files}

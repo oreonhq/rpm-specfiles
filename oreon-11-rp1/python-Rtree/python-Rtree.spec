@@ -29,8 +29,6 @@ Source:         %{pypi_source rtree}
 # https://bugzilla.redhat.com/show_bug.cgi?id=2050010
 Patch:          0001-Treat-as-pure-Python-since-libspatialindex-is-not-bu.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l rtree
 
 BuildRequires:  spatialindex-devel
 
@@ -64,7 +62,16 @@ Requires:       spatialindex
 
 %description -n python3-rtree %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest --doctest-modules tests rtree
 
 %files -n python3-rtree -f %{pyproject_files}

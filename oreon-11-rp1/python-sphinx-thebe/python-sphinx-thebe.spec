@@ -11,9 +11,6 @@ URL:            https://sphinx-thebe.readthedocs.io/
 VCS:            git:https://github.com/executablebooks/sphinx-thebe.git
 Source:         %pypi_source sphinx_thebe
 
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x testing
-BuildOption(install): -l sphinx_thebe
 
 %description
 Integrate interactive code blocks into your documentation with Thebe and
@@ -25,6 +22,15 @@ Summary:        Integrate interactive code blocks into your documentation
 %description -n python3-sphinx-thebe
 Integrate interactive code blocks into your documentation with Thebe and
 Binder.
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 %pytest

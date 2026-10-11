@@ -17,9 +17,6 @@ Source:         %{url}/archive/v%{version}/python-socketio-%{version}.tar.gz
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 Patch:          0001-Downstream-only-patch-out-test-coverage-analysis.patch
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x client,asyncio_client -t
-BuildOption(install):   -l socketio
 
 BuildArch:      noarch
 
@@ -45,12 +42,19 @@ Obsoletes:      python-socketio-doc < 5.11.2-4
 
 %pyproject_extras_subpkg -n python3-socketio client asyncio_client
 
-%prep -a
+%prep
+%autosetup -p1
 %if %{without uvicorn}
 sed -r -i 's/^([[:blank:]]*)(uvicorn)\b/\1# \2/' tox.ini
 %endif
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{without uvicorn}
 ignore="${ignore-} --ignore=tests/async/test_admin.py"
 %endif

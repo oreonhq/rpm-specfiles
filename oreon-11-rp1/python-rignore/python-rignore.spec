@@ -9,9 +9,6 @@ License:        MIT
 URL:            https://github.com/patrick91/rignore
 Source:         %{url}/archive/v%{version}/rignore-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l rignore
-BuildOption(generate_buildrequires): -g dev
 
 BuildRequires:  tomcli
 BuildRequires:  cargo-rpm-macros >= 24
@@ -42,7 +39,8 @@ License:        %{shrink:
 
 %description -n python3-rignore %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 tomcli set pyproject.toml lists delitem dependency-groups.dev \
     '(pytest-cov|coverage)\b.*'
@@ -56,7 +54,10 @@ tomcli set pyproject.toml lists delitem dependency-groups.dev \
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-rignore -f %{pyproject_files}

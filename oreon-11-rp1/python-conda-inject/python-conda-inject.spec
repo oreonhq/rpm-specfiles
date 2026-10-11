@@ -12,8 +12,6 @@ URL:            https://github.com/koesterlab/conda-inject
 # also gives us the tests, but we are unable to run them.
 Source:         %{url}/archive/v%{version}/conda-inject-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -L conda_inject
 
 BuildArch:      noarch
 
@@ -34,6 +32,15 @@ Summary:        %{summary}
 # the tests is mamba, and this is the only one that is not currently packaged.
 # We therefore cannot even run the tests in a local mock build with
 # --enable-network unless we patch them to use a different package manager.
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %files -n python3-conda-inject -f %{pyproject_files}
 %license LICENSE

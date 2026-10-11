@@ -123,7 +123,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE
 %doc FAQ.md README.md UPGRADES.md
 %{_libdir}/libabsl_base.so.%{lib_version}
-%{_libdir}/libabsl_borrowed_fixup_buffer.so.%{lib_version}
 %{_libdir}/libabsl_city.so.%{lib_version}
 %{_libdir}/libabsl_civil_time.so.%{lib_version}
 %{_libdir}/libabsl_cord.so.%{lib_version}
@@ -134,7 +133,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libabsl_cordz_sample_token.so.%{lib_version}
 %{_libdir}/libabsl_crc32c.so.%{lib_version}
 %{_libdir}/libabsl_crc_cord_state.so.%{lib_version}
-%{_libdir}/libabsl_crc_cpu_detect.so.%{lib_version}
 %{_libdir}/libabsl_crc_internal.so.%{lib_version}
 %{_libdir}/libabsl_debugging_internal.so.%{lib_version}
 %{_libdir}/libabsl_decode_rust_punycode.so.%{lib_version}

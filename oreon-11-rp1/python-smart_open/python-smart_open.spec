@@ -15,8 +15,6 @@ License:        MIT
 URL:            https://github.com/piskvorky/smart_open
 Source:         %{url}/archive/v%{version}/smart_open-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): %{shrink:
                                      -x s3
                                      %{?with_gcs:-x gcs}
                                      -x azure
@@ -27,7 +25,6 @@ BuildOption(generate_buildrequires): %{shrink:
                                      %{?with_gcs:-x all}
                                      %{?with_tests:-x test}
                                      }
-BuildOption(install):   -l smart_open
 
 BuildArch:      noarch
 
@@ -77,7 +74,8 @@ Obsoletes:      python3-smart_open < 7.1.0-5
 %endif
 %pyproject_extras_subpkg -n python3-smart-open s3 azure http webhdfs ssh zst
 
-%prep -a
+%prep
+%autosetup -p1
 %if %{without moto}
 tomcli set pyproject.toml lists delitem project.optional-dependencies.test \
     '(smart_open\[all\]|moto\b).*'
@@ -96,7 +94,10 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %if %{without gcs}
 ignore="${ignore-} --ignore=tests/test_gcs.py"

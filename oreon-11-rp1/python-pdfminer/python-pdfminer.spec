@@ -62,10 +62,6 @@ Source1:        get_source.sh
 Source2:        dumppdf.1
 Source3:        pdf2txt.1
 
-BuildSystem:            pyproject
-BuildOption(prep):      -S git
-BuildOption(generate_buildrequires): -x image
-BuildOption(install):   -l pdfminer
 
 BuildArch:      noarch
 
@@ -142,7 +138,8 @@ Obsoletes:      python-pdfminer-doc < 20240706-4
 
 %pyproject_extras_subpkg -n python3-pdfminer image
 
-%prep -a
+%prep
+%autosetup -p1
 # Unbundle cmap data; it will be replaced in %%build.
 rm -vf cmaprsrc/* pdfminer/cmap/*
 
@@ -195,12 +192,13 @@ git add -A
 git commit -m 'Imitate upstream release %{version}'
 git tag '%{version}'
 
-# %%build -a
+# %%build
 # Debug dynamic versioning:
 # git status
 # %%{python3} -m setuptools_git_versioning --verbose
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE2}' '%{SOURCE3}'
 
@@ -212,7 +210,7 @@ do
   ln -sf "${script}.py" "%{buildroot}%{_bindir}/${script}"
 done
 
-%check -a
+%check
 # Skipped tests (and ignored files) are those that require the sample PDFs,
 # which are not included in our version of the source tarball.
 k="${k-}${k+ and }not TestColorSpace"

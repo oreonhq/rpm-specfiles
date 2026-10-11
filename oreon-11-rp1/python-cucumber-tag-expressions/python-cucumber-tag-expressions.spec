@@ -10,8 +10,6 @@ URL:            https://github.com/cucumber/tag-expressions
 # The GitHub archive has test data files; the PyPI sdist does not.
 Source:         %{url}/archive/v%{version}/tag-expressions-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l cucumber_tag_expressions
 
 BuildArch:      noarch
 
@@ -34,7 +32,8 @@ Summary:        %{summary}
 
 %description -n python3-cucumber-tag-expressions %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Python: Do not upper-bound (SemVer-bound) the version of uv_build; we must
 # work with what we have, and compatibility across SemVer boundaries is quite
 # good in practice.
@@ -53,7 +52,7 @@ install -t '%{buildroot}%{_pkgdocdir}/general' -p -m 0644 -D \
     ARCHITECTURE.md CHANGELOG.md README.md
 install -t '%{buildroot}%{_pkgdocdir}' -p -m 0644 -D python/README.md
 
-%check -a
+%check
 %pytest python/tests -v
 
 %files -n python3-cucumber-tag-expressions -f %{pyproject_files}

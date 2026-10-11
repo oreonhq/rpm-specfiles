@@ -13,8 +13,6 @@ URL:            https://github.com/pytest-dev/pytest-subtests
 # We *could* package from the PyPI sdist without losing anything, if we liked.
 Source:        https://github.com/pytest-dev/pytest-subtests/archive/v0.15.0/pytest-subtests-0.15.0.tar.gz#/python-pytest-subtests-0.15.0.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l pytest_subtests
 
 
 # Don’t depend on pytest-xdist on RHEL/ELN, since it’s unwanted there. Keep the
@@ -51,7 +49,10 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %if %{with check}
 python3 -m pytest -rs -v tests
 %endif

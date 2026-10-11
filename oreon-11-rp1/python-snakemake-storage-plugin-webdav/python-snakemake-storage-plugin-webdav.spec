@@ -16,8 +16,6 @@ Source:         %{url}/archive/v%{version}/snakemake-storage-plugin-webdav-%{ver
 # https://github.com/snakemake/snakemake-storage-plugin-webdav/pull/11
 Patch:          %{url}/pull/11.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -L snakemake_storage_plugin_webdav
 
 BuildArch:      noarch
 
@@ -35,7 +33,16 @@ Summary:        %{summary}
 
 %description -n python3-snakemake-storage-plugin-webdav %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # The following tests require network access and a webdav test server that
 # upstream CI sets up with docker, which will of course not be possible here:
 k="${k-}${k+ and }not (TestStorage and test_storage)"

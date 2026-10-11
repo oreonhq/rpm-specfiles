@@ -27,8 +27,6 @@ Patch:          %{url}/pull/56.patch
 #   2.1.18: pytest is failing in four units
 #   https://github.com/sjkingo/virtualenv-api/issues/55
 
-BuildSystem:            pyproject
-BuildOption(install):   -l virtualenvapi
 
 BuildArch:      noarch
 
@@ -60,10 +58,17 @@ Requires:       /usr/bin/pip
 
 %description -n python3-virtualenv-api %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 %py3_shebang_fix example.py
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %{py3_test_envvars} '%{python3}' -m unittest -v tests.py
 %endif

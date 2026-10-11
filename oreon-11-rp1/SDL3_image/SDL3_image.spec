@@ -1,4 +1,4 @@
-%global source0_hash 2ceb75eab4235c2c7e93dafc3ef3268ad368ca5de40892bf8cffdd510f29d9d8
+%global source0_hash d2e4637ae700f72e5196b8fbd749850ed2e5e1e09c5a5be8d06ff55aaccf3b01
 
 Name:           SDL3_image
 Version:        3.4.6

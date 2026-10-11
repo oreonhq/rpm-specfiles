@@ -20,8 +20,6 @@ Source:         %{url}/archive/v%{version}/NiaPy-%{version}.tar.gz
 # https://github.com/NiaOrg/NiaPy/pull/742
 Patch:          %{url}/pull/742.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -L niapy
 
 BuildArch:      noarch
 
@@ -60,7 +58,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 #   the upper bounds in Fedora.
 sed -r -i -e 's/^python ?=/# &/' -e 's/([^#]+ ?= ?")\^/\1>=/' pyproject.toml
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest -ra -k "${k-}"
 
 %files -n python3-niapy -f %{pyproject_files}

@@ -52,7 +52,6 @@ find $RPM_BUILD_ROOT
 %doc README.md
 %exclude %{_bindir}/*
 %{_libdir}/libhdr_histogram.so.*
-%{_libdir}/libhdr_histogram.so.*
 
 %files devel
 %dir %{_includedir}/hdr
@@ -63,12 +62,10 @@ find $RPM_BUILD_ROOT
 %{_includedir}/hdr/hdr_histogram_version.h
 %{_includedir}/hdr/hdr_histogram_log.h
 %{_includedir}/hdr/hdr_histogram.h
-%{_libdir}/libhdr_histogram.so.*
 %{_libdir}/cmake/hdr_histogram/*.cmake
 %{_libdir}/pkgconfig/hdr_histogram.pc
-
+%{_libdir}/libhdr_histogram.so
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.8-10
 - Prepare for Oreon 11 (RP1)
-%{_libdir}/libhdr_histogram.so

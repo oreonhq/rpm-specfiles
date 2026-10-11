@@ -9,9 +9,6 @@ License:        BSD-3-Clause
 URL:            https://github.com/lmfit/lmfit-py
 Source:         %{url}/archive/%{version}/lmfit-py-%{version}.tar.gz
 
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install): -l lmfit
 
 BuildArch:      noarch
 %ifnarch %{ix86}
@@ -40,7 +37,13 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%install
+%pyproject_install
+
+%check
 %pytest -rs
 
 %files -n python3-lmfit -f %{pyproject_files}

@@ -16,9 +16,6 @@ BuildRequires:  python3-devel
 BuildRequires:  gcc
 BuildRequires:  %{py3_dist pytest}
 
-BuildSystem:    pyproject
-BuildOption(prep): -n gsd-%{version}
-BuildOption(install): -l gsd
 
 %global _description %{expand:
 The GSD file format is the native file format for HOOMD-blue. GSD files store
@@ -35,6 +32,15 @@ of the simulation.}
 Summary:        %{summary}
 
 %description -n python3-gsd %_description
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 ln -s %{buildroot}%{python3_sitearch}/gsd/fl.abi3.so gsd/

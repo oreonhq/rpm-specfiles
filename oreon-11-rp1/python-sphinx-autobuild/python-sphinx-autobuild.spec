@@ -14,9 +14,6 @@ VCS:            git:%{giturl}.git
 Source:         %{giturl}/archive/%{version}/sphinx-autobuild-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x test
-BuildOption(install): -l sphinx_autobuild
 
 BuildRequires:  help2man
 
@@ -56,7 +53,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n sphinx-autobuild-%{version} -p1
 
-%build -a
+%build
+%pyproject_wheel
 rst2html --no-datestamp NEWS.rst NEWS.html
 rst2html --no-datestamp README.rst README.html
 
@@ -65,7 +63,8 @@ mkdir html
 sphinx-build -b html docs html
 rm -rf html/{.buildinfo,.doctrees}
 
-%install -a
+%install
+%pyproject_install
 # Install a man page
 mkdir -p %{buildroot}%{_mandir}/man1
 %{py3_test_envvars} help2man -N %{buildroot}%{_bindir}/sphinx-autobuild \

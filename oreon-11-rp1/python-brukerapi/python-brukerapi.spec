@@ -20,8 +20,6 @@ Source11:       bruker-filter.1
 Source12:       bruker-report.1
 Source13:       bruker-split.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l brukerapi
 
 BuildArch:      noarch
 
@@ -39,11 +37,18 @@ Obsoletes:      python-brukerapi-doc < 0.1.10-1
 
 %description -n python3-brukerapi %{common_description}
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 \
     '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}' '%{SOURCE13}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 # We avoid tests requiring data from zenodo,
 # https://doi.org/10.5281/zenodo.4522220. Not only do we not want to consider
 # the licenses of these data files, but they are also uncomfortably large, 2.2

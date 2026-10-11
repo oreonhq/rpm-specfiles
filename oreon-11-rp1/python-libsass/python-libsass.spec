@@ -10,8 +10,6 @@ License:        MIT
 URL:            https://github.com/dahlia/libsass-python
 Source:         %{url}/archive/%{version}/libsass-python-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l sass pysassc sasstests sassutils _sass
 
 # Selected test dependencies from requirements-dev.txt; most entries in that
 # file are for linters, code coverage, etc.
@@ -52,7 +50,8 @@ Obsoletes:      python-libsass-doc < 0.23.0-6
 
 %description -n python3-libsass %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # While upstream has the executable bit set, we will install this in
 # site-packages without executable permissions; therefore, the shebang becomes
 # useless, and we should remove it downstream.
@@ -67,7 +66,8 @@ export SYSTEM_SASS='1'
 %install -p
 export SYSTEM_SASS='1'
 
-%install -a
+%install
+%pyproject_install
 # We build the man page in %%install rather than %%build because we need to use
 # the entry point in %%{buildroot}/%%{_bindir}.
 install -d '%{buildroot}%{_mandir}/man1'
@@ -75,7 +75,7 @@ PYTHONPATH='%{buildroot}%{python3_sitearch}' \
     help2man --no-info --output='%{buildroot}%{_mandir}/man1/pysassc.1' \
     '%{buildroot}%{_bindir}/pysassc'
 
-%check -a
+%check
 %pytest -v sasstests.py
 
 %files -n python3-libsass -f %{pyproject_files}

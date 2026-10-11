@@ -27,8 +27,6 @@ Source2:        %{cgiturl}arthur.asc
 BuildRequires:  gpgverify
 BuildRequires:  %{py3_dist pytest pytest-timeout}
 
-BuildSystem:    pyproject
-BuildOption(install): -l pskc
 
 %description
 %{pkg_description}
@@ -47,6 +45,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 # Fedora does not run coverage tools during %check
 sed -i 's/--cov[^ ]*//g' setup.cfg
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %check
 %pytest \

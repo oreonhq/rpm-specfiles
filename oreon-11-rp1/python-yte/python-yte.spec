@@ -13,8 +13,6 @@ Source0:        %{url}/archive/v%{version}/yte-%{version}.tar.gz
 # Man page written for Fedora in groff_man(7) format based on --help output
 Source1:        yte.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l yte
 
 BuildArch:      noarch
 
@@ -44,10 +42,17 @@ Summary:        %{summary}
 
 %description -n python3-yte %{common_description}
 
-%install -a
+%install
+%pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -m 0644 -p -D '%{SOURCE1}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%check
 %pytest -v
 
 %files -n python3-yte -f %{pyproject_files}

@@ -10,8 +10,6 @@ License:        MIT
 URL:            https://github.com/zhouyl/ConnectionPool
 Source:         %{url}/archive/%{version}/connection_pool-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l connection_pool
 
 BuildArch:      noarch
 
@@ -42,6 +40,15 @@ Obsoletes:      python3-connection_pool < 0.0.3-18
 %description -n python3-connection-pool %{common_description}
 
 # Upstream provides no tests.
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %files -n python3-connection-pool -f %{pyproject_files}
 %doc README.rst

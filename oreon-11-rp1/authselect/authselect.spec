@@ -185,18 +185,6 @@ find $RPM_BUILD_ROOT -name "*.a" -exec %__rm -f {} \;
 %{_datadir}/authselect/default/winbind/switchable-auth
 %{_datadir}/authselect/default/winbind/system-auth
 %if %{with_nis_profile}
-%dir %{_datadir}/authselect/default/nis/
-%{_datadir}/authselect/default/nis/dconf-db
-%{_datadir}/authselect/default/nis/dconf-locks
-%{_datadir}/authselect/default/nis/fingerprint-auth
-%{_datadir}/authselect/default/nis/nsswitch.conf
-%{_datadir}/authselect/default/nis/password-auth
-%{_datadir}/authselect/default/nis/postlogin
-%{_datadir}/authselect/default/nis/README
-%{_datadir}/authselect/default/nis/REQUIREMENTS
-%{_datadir}/authselect/default/nis/smartcard-auth
-%{_datadir}/authselect/default/nis/switchable-auth
-%{_datadir}/authselect/default/nis/system-auth
 %endif
 %{_libdir}/libauthselect.so.*
 %{_mandir}/man5/authselect-profiles.5*

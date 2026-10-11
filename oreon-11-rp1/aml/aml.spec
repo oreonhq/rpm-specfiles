@@ -62,7 +62,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license COPYING
 
 %files devel
-%{_includedir}/%{name}.h
+%{_includedir}/aml1/
 %{_libdir}/lib%{name}.so
 %{_libdir}/pkgconfig/*
 

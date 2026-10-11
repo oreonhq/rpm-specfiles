@@ -10,9 +10,6 @@ License:        MIT
 URL:            https://github.com/miguelgrinberg/Flask-SocketIO/
 Source:         %{url}/archive/v%{version}/Flask-SocketIO-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -t
-BuildOption(install):   -l flask_socketio
 
 BuildArch:      noarch
 
@@ -34,14 +31,21 @@ Obsoletes:      python-flask-socketio-doc < 5.6.0-2
 
 %description -n python3-flask-socketio %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 sed -r -i \
     -e 's/--cov[^[:blank:]]*//g' \
     -e '/^[[:blank:]]*(pytest-cov)[[:blank:]]*$/d' \
     tox.ini
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 # Because of its name, flask_socketio.test_client is mistaken for a test; then,
 # pytest fails because of an import path mismatch, since that module is
 # available both here in the build directory and in the buildroot. Simply

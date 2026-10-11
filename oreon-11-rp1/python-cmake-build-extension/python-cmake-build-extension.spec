@@ -18,8 +18,6 @@ Source:         %{pypi_source cmake_build_extension}
 # https://github.com/diegoferigo/cmake-build-extension/pull/55
 Patch:          https://github.com/diegoferigo/cmake-build-extension/pull/55.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   -l cmake_build_extension
 
 BuildArch:      noarch
 
@@ -83,7 +81,8 @@ Requires:       python3-cmake-build-extension = %{version}-%{release}
 
 %description -n python3-cmake-build-extension-doc %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # We use the system cmake and ninja-build packages in lieu of the PyPI “cmake”
 # and “ninja” distributions, respectively.
 sed -r -i '/^[[:blank:]]*\b(cmake|ninja)\b[[:blank:]]*$/d' setup.cfg
@@ -106,7 +105,13 @@ cp -rp example test_example
 ) | grep -Ev 'cmake-build-extension'
 %endif
 
-%check -a
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with test_example}
 # Build the example project and run its tests (but do not install any compiled
 # extensions as part of our RPM!)

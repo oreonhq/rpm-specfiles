@@ -13,8 +13,6 @@ Source:         %{url}/archive/v%{version}/jupyter_kernel_singular-%{version}.ta
 Patch:          %{name}-imports.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -l jupyter_kernel_singular
 
 BuildRequires:  %{py3_dist ipykernel}
 BuildRequires:  %{py3_dist ipython}
@@ -41,9 +39,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -n jupyter_kernel_singular-%{version} -p1
 
-%install -a
+%install
+%pyproject_install
 # We want /etc, not /usr/etc
 mv %{buildroot}%{_prefix}%{_sysconfdir} %{buildroot}%{_sysconfdir}
+
+%build
+%pyproject_wheel
 
 %files -n python3-jupyter-kernel-singular -f %{pyproject_files}
 %doc README.md

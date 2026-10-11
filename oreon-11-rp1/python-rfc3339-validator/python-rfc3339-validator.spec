@@ -12,8 +12,6 @@ License:        MIT
 URL:            https://github.com/naimetti/rfc3339-validator
 Source:         %{pypi_source rfc3339_validator}
 
-BuildSystem:            pyproject
-BuildOption(install):   -l rfc3339_validator
 
 BuildArch:      noarch
 
@@ -54,7 +52,16 @@ Summary:        %{summary}
 
 %description -n python3-rfc3339-validator %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %if %{with tests}
 %pytest
 %endif

@@ -35,9 +35,6 @@ Source3:        pydata-gallery.tar.xz
 Patch:          %{name}-fontawesome.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -L pydata_sphinx_theme
-BuildOption(generate_buildrequires): -x test%{?with_docs:,doc}
 
 BuildRequires:  babel
 BuildRequires:  fontawesome-fonts-all
@@ -126,7 +123,8 @@ export YARN_CACHE_FOLDER="$PWD/.package-cache"
 yarn install --offline
 nodeenv --node=system --prebuilt --clean-src $PWD/.nodeenv
 
-%install -a
+%install
+%pyproject_install
 %define instdir %{buildroot}%{python3_sitelib}/pydata_sphinx_theme
 %define themedir %{instdir}/theme/pydata_sphinx_theme/static
 sed -i '/\.gitignore/d' %{pyproject_files}

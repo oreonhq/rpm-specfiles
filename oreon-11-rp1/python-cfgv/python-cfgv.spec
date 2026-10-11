@@ -10,8 +10,6 @@ License:        MIT
 URL:            https://github.com/asottile/cfgv
 Source:         %{url}/archive/v%{version}/cfgv-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l cfgv
 
 BuildArch:      noarch
 
@@ -29,7 +27,16 @@ Summary:        %{summary}
 
 %description -n python3-cfgv %{common_description}
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-cfgv -f %{pyproject_files}

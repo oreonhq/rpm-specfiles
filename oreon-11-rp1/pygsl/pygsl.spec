@@ -30,9 +30,6 @@ Patch:          %{name}-format-mismatch.patch
 
 # Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -p
-BuildOption(install): -L pygsl
 
 BuildRequires:  gcc
 BuildRequires:  gsl-devel
@@ -114,7 +111,8 @@ sed -e "s|\('http://www.gnu.org/software/gsl/doc/html/', \)None|\1'%{SOURCE1}'|"
 # Use flexiblas instead of gslcblas
 export GSL_CBLAS_LIB=-lflexiblas
 
-%install -a
+%install
+%pyproject_install
 # Fix permissions
 chmod 0755 %{buildroot}%{python3_sitearch}/pygsl/{_generic_solver,block,chebyshev,fit,gsl_function,integrate,interpolation,minimize,monte,multi{fit{,_nlin},minimize,roots},odeiv,qrng,roots,siman,spline,vector}.py
 

@@ -19,8 +19,6 @@ BuildRequires: python3-pydantic
 BuildRequires: python3-pytest
 BuildRequires: python3-pytest-xdist
 BuildRequires: python3-typing-extensions
-BuildSystem:   pyproject
-BuildOption(install): -l %{pypi_name}
 
 %description
 %{summary}.
@@ -31,7 +29,16 @@ Summary: %{summary}
 %description -n python3-eth-pydantic-types
 %{summary}.
 
-%check -a
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-eth-pydantic-types -f %{pyproject_files}

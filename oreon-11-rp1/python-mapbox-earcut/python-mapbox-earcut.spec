@@ -27,13 +27,10 @@ Source:         %{url}/archive/v%{version}/mapbox_earcut_python-%{version}.tar.g
 # to wait for the python-scikit-build-core package to be updated.
 Patch:          mapbox_earcut_python-2.0.0-scikit-build-core-0.11.5.patch
 
-BuildSystem:            pyproject
 # https://scikit-build-core.readthedocs.io/en/latest/configuration/index.html
-BuildOption(build):     %{shrink:
                         -Clogging.level=INFO
                         -Cbuild.verbose=true
                         -Ccmake.build-type="RelWithDebInfo"}
-BuildOption(install):   -L mapbox_earcut
 
 BuildRequires:  gcc-c++
 BuildRequires:  dos2unix
@@ -73,7 +70,8 @@ Summary:        %{summary}
 
 %description -n python3-mapbox-earcut %{common_description}
 
-%prep -a
+%prep
+%autosetup -p1
 # Remove bundled earcut.hpp library
 rm -rv include/mapbox
 
@@ -87,7 +85,10 @@ dos2unix --keepdate *.md
 export CFLAGS="${CFLAGS-} -ffp-contract=off"
 export CXXFLAGS="${CXXFLAGS-} -ffp-contract=off"
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %pytest -v
 
 %files -n python3-mapbox-earcut -f %{pyproject_files}

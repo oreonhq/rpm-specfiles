@@ -23,9 +23,6 @@ Source3:        prepare_vendor.sh
 ExclusiveArch:  %{x86_64} %{arm64} noarch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(generate_buildrequires): -x docs,test,test-functional,test-integration
-BuildOption(install): -l jupytext jupytext_config
 
 BuildRequires:  gcc-c++
 BuildRequires:  help2man
@@ -138,7 +135,8 @@ export npm_config_nodedir=%{_includedir}/node
 export CFLAGS='%{build_cflags} -I%{_includedir}/node'
 export CXXFLAGS='%{build_cxxflags} -I%{_includedir}/node'
 
-%build -a
+%build
+%pyproject_wheel
 # Build the documentation
 PYTHONPATH=$PWD %make_build -C docs html
 rm docs/_build/html/.buildinfo
@@ -146,7 +144,8 @@ rm docs/_build/html/.buildinfo
 %install -p
 export HATCH_BUILD_HOOKS_ENABLE=true
 
-%install -a
+%install
+%pyproject_install
 # Cleanup backup files
 find %{buildroot}%{_prefix} -name \*.orig -delete
 

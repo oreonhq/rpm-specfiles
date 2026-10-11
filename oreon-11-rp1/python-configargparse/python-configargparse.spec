@@ -10,9 +10,6 @@ License:        MIT
 URL:            https://github.com/bw2/ConfigArgParse
 Source:         %{url}/archive/v%{version}/ConfigArgParse-%{version}.tar.gz
 
-BuildSystem:            pyproject
-BuildOption(install):   -l configargparse
-BuildOption(generate_buildrequires): -x yaml
 
 BuildArch:      noarch
 
@@ -49,7 +46,13 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %build -p
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
-%check -a
+%prep
+%autosetup -p1
+
+%install
+%pyproject_install
+
+%check
 %pytest -v -rs
 
 %files -n python3-configargparse -f %{pyproject_files}

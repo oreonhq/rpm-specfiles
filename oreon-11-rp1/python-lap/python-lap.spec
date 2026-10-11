@@ -20,8 +20,6 @@ BuildRequires:  python3-devel
 BuildRequires:  %{py3_dist pytest}
 BuildRequires:  %{py3_dist pytest-timeout}
 
-BuildSystem:  pyproject
-BuildOption(install): -l lap
 
 %description %common_description
 
@@ -35,12 +33,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %autosetup -p1 -n lap-%{version}
 
-%install -a
-
+%install
+%pyproject_install
 # Remove test suite from installed files (not needed at runtime)
 rm -rvf '%{buildroot}%{python3_sitearch}/lap/tests'
 sed -r -i '/.*\/lap\/tests(\/|$)/d' %{pyproject_files}
 sed -r -i '/lap\.tests(\.|$)/d' %{_pyproject_modules}
+
+%build
+%pyproject_wheel
 
 %check
 mkdir _empty

@@ -31,11 +31,7 @@ Source:         %{forgeurl}/archive/v%{version}/NURBS-Python-%{version}.tar.gz
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -x test,vis
-BuildOption(install):   -l geomdl
 %if %{without vtk_dep} || %{without plotly}
-BuildOption(check):     %{shrink:
                         %{?!with_vtk_dep:-e geomdl.visualization.vtk_helpers}
                         %{?!with_vtk_dep:-e geomdl.visualization.VisVTK}
                         %{?!with_plotly:-e geomdl.visualization.VisPlotly}
@@ -91,7 +87,8 @@ Obsoletes:      python-geomdl-doc < 5.3.1-34
 
 %pyproject_extras_subpkg -n python3-geomdl vis
 
-%prep -a
+%prep
+%autosetup -p1
 %if %{without plotly}
 tomcli set pyproject.toml lists delitem project.optional-dependencies.vis \
     'plotly\b.*'
@@ -105,7 +102,10 @@ export SETUPTOOLS_USE_CYTHON=1
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 export SETUPTOOLS_USE_CYTHON=1
 
-%check -a
+%install
+%pyproject_install
+
+%check
 %pytest
 
 %files -n python3-geomdl -f %{pyproject_files}

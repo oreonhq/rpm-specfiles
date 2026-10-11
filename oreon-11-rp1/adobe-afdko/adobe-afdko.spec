@@ -54,7 +54,9 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %set_build_flags
 export XFLAGS="${CFLAGS} ${LDFLAGS}"
 %cmake \
-  -DANTLR4_ZIP_REPOSITORY:PATH=%{SOURCE1}
+  -DANTLR4_ZIP_REPOSITORY:PATH=%{SOURCE1} \
+  -DFETCHCONTENT_FULLY_DISCONNECTED=ON \
+  -DAFDKO_USE_SYSTEM_LIBXML2=ON
 %cmake_build
 
 %install

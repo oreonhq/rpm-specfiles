@@ -10,8 +10,6 @@ License:        GPL-3.0-or-later
 URL:            https://gitlab.ebrains.eu/ri/tech-hub/apps/tvb/tvb-data
 Source:         %{pypi_source tvb_data}
 
-BuildSystem:    pyproject
-BuildOption(install):   -l tvb_data
 # Upstream provides no tests
 
 BuildArch:      noarch
@@ -30,6 +28,15 @@ here.}
 Summary:        %{summary}
 
 %description -n python3-tvb-data %{desc}
+
+%prep
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
 
 %files -n python3-tvb-data -f %{pyproject_files}
 %doc README.rst
