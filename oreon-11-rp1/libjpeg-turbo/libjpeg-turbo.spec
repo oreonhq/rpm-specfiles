@@ -150,6 +150,15 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %doc README.md README.ijg ChangeLog.md
 %{_libdir}/libjpeg.so.62*
 
+/usr/share/doc/libjpeg-turbo/LICENSE.md
+/usr/share/doc/libjpeg-turbo/example.c
+/usr/share/doc/libjpeg-turbo/libjpeg.txt
+/usr/share/doc/libjpeg-turbo/structure.txt
+/usr/share/doc/libjpeg-turbo/tjcomp.c
+/usr/share/doc/libjpeg-turbo/tjdecomp.c
+/usr/share/doc/libjpeg-turbo/tjtran.c
+/usr/share/doc/libjpeg-turbo/usage.txt
+/usr/share/doc/libjpeg-turbo/wizard.txt
 %files devel
 %doc doc/coderules.txt src/jconfig.txt doc/libjpeg.txt doc/structure.txt
 %{_includedir}/jconfig*.h

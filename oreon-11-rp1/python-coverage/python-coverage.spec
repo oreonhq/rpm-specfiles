@@ -58,7 +58,6 @@ Summary:        %{summary}
 
 %files -n python3-coverage -f %{pyproject_files}
 %{_bindir}/coverage
-%{_bindir}/coverage-3.11
 %{_bindir}/coverage3
 
 %changelog

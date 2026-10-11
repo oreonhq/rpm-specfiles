@@ -357,7 +357,6 @@ fi
 %pycached %{_datadir}/firewalld/gtk3_chooserbutton.py
 %pycached %{_datadir}/firewalld/gtk3_niceexpander.py
 %{_datadir}/applications/firewall-config.desktop
-%{_datadir}/metainfo/firewall-config.appdata.xml
 %{_datadir}/icons/hicolor/*/apps/firewall-config*.*
 %{_datadir}/glib-2.0/schemas/org.fedoraproject.FirewallConfig.gschema.xml
 %{_mandir}/man1/firewall-config*.1*

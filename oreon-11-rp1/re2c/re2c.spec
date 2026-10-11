@@ -55,3 +55,19 @@ make tests
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1-6
 - Import
+%{_bindir}/re2d
+%{_bindir}/re2hs
+%{_bindir}/re2js
+%{_bindir}/re2ocaml
+%{_bindir}/re2py
+%{_bindir}/re2swift
+%{_bindir}/re2v
+%{_bindir}/re2zig
+%{_mandir}/man1/re2d.1.gz
+%{_mandir}/man1/re2hs.1.gz
+%{_mandir}/man1/re2js.1.gz
+%{_mandir}/man1/re2ocaml.1.gz
+%{_mandir}/man1/re2py.1.gz
+%{_mandir}/man1/re2swift.1.gz
+%{_mandir}/man1/re2v.1.gz
+%{_mandir}/man1/re2zig.1.gz

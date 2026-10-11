@@ -216,7 +216,6 @@ find $RPM_BUILD_ROOT -name "*.a" -exec %__rm -f {} \;
 %{_bindir}/authselect
 %{_mandir}/man8/authselect.8*
 %{_mandir}/man7/authselect-migration.7*
-%{_sysconfdir}/bash_completion.d/authselect-completion.sh
 
 %post libs
 %systemd_post authselect-apply-changes.service

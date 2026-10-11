@@ -105,7 +105,6 @@ popd
 /etc/profile.d/*
 %{_bindir}/less
 %{_bindir}/lesscomplete
-%{_bindir}/lessecho
 %{_bindir}/lesspipe.sh
 %{_mandir}/man1/*
 %{_mandir}/man5/lesskey.5*

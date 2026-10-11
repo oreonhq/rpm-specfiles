@@ -108,6 +108,7 @@ rm -Rf %{buildroot}
 %{_datadir}/dwarves/runtime/ctracer_relay.h
 %attr(0755,root,root) %{_datadir}/dwarves/runtime/python/ostra.py*
 
+%{_mandir}/man1/pfunct.1.gz
 %files -n %{libname}%{libver}
 %{_libdir}/%{libname}.so.*
 %{_libdir}/%{libname}_emit.so.*

@@ -1,7 +1,7 @@
 %global source0_hash f7e05179df39c45434cad433f5783840bb3788ef322976f9138bc6b72b3a107d
 
 # Installed library version
-%global lib_version 2601.0.0
+%global lib_version 2608.0.0
 
 Name:           abseil-cpp
 Version:        20260817.0

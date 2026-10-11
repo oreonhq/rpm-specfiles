@@ -117,7 +117,6 @@ install -m0644 paperconf.1.gz %{buildroot}%{_mandir}/man1/paperconf.1
 
 %files -n paper
 %{_bindir}/paper
-%{_bindir}/paperconf
 %{_libexecdir}/localepaper
 %{_mandir}/man1/paper.*
 %{_mandir}/man1/paperconf.*

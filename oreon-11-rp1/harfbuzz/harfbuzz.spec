@@ -143,6 +143,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_bindir}/hb-gpu
 %{_libdir}/libharfbuzz-gpu.so.*
 
+%{_libdir}/libharfbuzz-gpu.so
 %files icu
 %{_libdir}/libharfbuzz-icu.so.*
 

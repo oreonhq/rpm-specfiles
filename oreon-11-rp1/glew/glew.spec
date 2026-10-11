@@ -79,3 +79,4 @@ chmod 0755 $RPM_BUILD_ROOT%{_libdir}/*.so*
 
 %changelog
 %autochangelog
+%{_libdir}/libGLEW.so

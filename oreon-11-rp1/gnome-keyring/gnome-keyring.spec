@@ -121,7 +121,6 @@ if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Er
 %{_bindir}/gnome-keyring-3
 %{_datadir}/dbus-1/services/*.service
 %{_sysconfdir}/xdg/autostart/*
-%{_datadir}/GConf/gsettings/*.convert
 %{_datadir}/glib-2.0/schemas/*.gschema.xml
 %{_datadir}/p11-kit/modules/gnome-keyring.module
 %dir %{_datadir}/xdg-desktop-portal

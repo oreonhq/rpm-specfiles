@@ -78,6 +78,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libjxl_threads.so.*
 %{_libdir}/libjxl_cms.so.*
 
+%{_bindir}/jxltran
 %files -n libjxl-devel
 %{_includedir}/jxl
 %{_libdir}/libjxl.so

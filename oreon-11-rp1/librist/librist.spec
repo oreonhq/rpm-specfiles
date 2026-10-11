@@ -87,6 +87,8 @@ cp -av docs/* %{buildroot}%{_docdir}/%{name}
 %license COPYING
 %{_libdir}/*.so.%{somajor}{,.*}
 
+%{_bindir}/udp2udp
+/usr/share/doc/librist/RIST_vs_SRT.png
 %files devel
 %{_includedir}/%{name}/
 %{_libdir}/*.so

@@ -110,6 +110,7 @@ cp -a doc/html %{buildroot}/%{_docdir}/libyang/html
 %{_includedir}/libyang/*.h
 %dir %{_includedir}/libyang/
 
+%{_libdir}/libyang.so
 %files devel-doc
 %{_docdir}/libyang
 

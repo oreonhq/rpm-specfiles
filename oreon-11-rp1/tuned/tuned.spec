@@ -538,6 +538,7 @@ fi
 %ghost %{_sysconfdir}/modprobe.d/kvm.rt.tuned.conf
 %{_prefix}/lib/kernel/install.d/92-tuned.install
 
+/etc/systemd/system.conf.d/00-tuned.conf
 %files gtk
 %{_sbindir}/tuned-gui
 %if %{with python3}

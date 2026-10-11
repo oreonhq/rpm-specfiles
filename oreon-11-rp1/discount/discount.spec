@@ -81,3 +81,4 @@ chmod 0755 %{buildroot}%{_libdir}/libmarkdown.so.*
 
 %changelog
 %autochangelog
+%{_libdir}/libmarkdown.so

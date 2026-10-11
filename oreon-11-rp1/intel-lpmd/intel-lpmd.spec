@@ -80,3 +80,5 @@ install -D -p -m 644 src/%{daemon_name}_dbus_interface.xml %{buildroot}/%{_datad
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.9-1
 - Import
+/etc/intel_lpmd/intel_lpmd_config_F6_M204.xml
+/bin/sh:

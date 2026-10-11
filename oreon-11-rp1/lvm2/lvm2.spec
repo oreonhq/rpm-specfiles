@@ -417,6 +417,8 @@ Requires: pkgconfig
 This package contains files needed to develop applications that use
 the lvm2 libraries.
 
+%{_bindir}/dmvdostats
+%{_mandir}/man8/dmvdostats.8.gz
 %files devel
 %{_libdir}/liblvm2cmd.so
 %{_libdir}/libdevmapper-event-lvm2.so

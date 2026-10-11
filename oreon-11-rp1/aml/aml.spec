@@ -55,7 +55,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %meson_install
 
 %files
-%{_libdir}/lib%{name}.so.0*
+%{_libdir}/lib%{name}.so.*
 
 %doc README.md
 

@@ -94,3 +94,5 @@ popd
 %changelog
 %autochangelog
 
+%{_libdir}/libgeocoding.so
+%{_libdir}/libphonenumber.so

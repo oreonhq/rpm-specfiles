@@ -285,11 +285,8 @@ make TEST_PARALLEL=4 check
 %{_mandir}/man1/dpkg-trigger.1.gz
 %{_mandir}/man5/dpkg.cfg.5.gz
 %{_mandir}/man8/start-stop-daemon.8.gz
-%{_mandir}/*/man1/dpkg.1.gz
-%{_mandir}/*/man1/dpkg-deb.1.gz
 %{_mandir}/*/man1/dpkg-divert.1.gz
 %{_mandir}/*/man1/dpkg-maintscript-helper.1.gz
-%{_mandir}/*/man1/dpkg-query.1.gz
 %{_mandir}/*/man1/dpkg-realpath.1.gz
 %{_mandir}/*/man1/dpkg-split.1.gz
 %{_mandir}/*/man1/dpkg-statoverride.1.gz

@@ -120,6 +120,7 @@ make check
 %{_libdir}/libmpc.so
 %{_includedir}/mpc.h
 
+%{_libdir}/pkgconfig/mpc.pc
 %files doc
 %doc AUTHORS
 %{_infodir}/*.info*

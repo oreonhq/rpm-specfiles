@@ -201,6 +201,7 @@ rm -rf %{buildroot}%{_prefix}/src
 %{_libdir}/pkgconfig/vpx.pc
 %{_libdir}/libvpx.so.*
 
+%{_libdir}/libvpx.so
 %files utils
 %{_bindir}/*
 

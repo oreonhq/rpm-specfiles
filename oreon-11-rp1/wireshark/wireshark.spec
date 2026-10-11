@@ -224,6 +224,7 @@ fi
 %{_bindir}/wireshark
 %{_mandir}/man1/wireshark.*
 
+%{_mandir}/man1/sharkd.1.gz
 %files cli
 %license COPYING
 %doc AUTHORS INSTALL README*

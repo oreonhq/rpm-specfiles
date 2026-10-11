@@ -126,6 +126,8 @@ exit 0
 %{_sysusersdir}/geoclue-sysusers.conf
 %attr(755,geoclue,geoclue) %dir /var/lib/geoclue
 
+/usr/share/locale/ka/LC_MESSAGES/geoclue-2.0.mo
+/usr/share/locale/oc/LC_MESSAGES/geoclue-2.0.mo
 %files libs
 %license COPYING.LIB
 %dir %{_libdir}/girepository-1.0

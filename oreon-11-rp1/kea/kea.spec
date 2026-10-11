@@ -298,7 +298,6 @@ fi
 %dir %attr(0750,kea,kea) %{_localstatedir}/log/kea
 %{python3_sitelib}/kea
 %{_mandir}/man8/kea-admin.8*
-%{_mandir}/man8/kea-ctrl-agent.8*
 %{_mandir}/man8/kea-dhcp-ddns.8*
 %{_mandir}/man8/kea-dhcp4.8*
 %{_mandir}/man8/kea-dhcp6.8*

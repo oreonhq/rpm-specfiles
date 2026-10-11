@@ -108,6 +108,9 @@ find %{buildroot} -name '*.la' -delete
 %{_libdir}/openmpi/share/man/man1/*.1*
 %{_libdir}/openmpi/share/man/man5/*.5*
 
+%{_libdir}/openmpi/bin/prte-info
+%{_libdir}/openmpi/bin/prte-submit
+%{_libdir}/openmpi/bin/prte-term
 %files libs
 %license LICENSE
 %dir %{_sysconfdir}/prte

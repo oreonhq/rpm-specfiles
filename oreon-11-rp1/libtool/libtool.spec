@@ -184,6 +184,8 @@ rm -f %{buildroot}%{_libdir}/libltdl.{a,la}
 %{_datadir}/libtool/build-aux
 
 
+%{_bindir}/libtool-next-version
+%{_mandir}/man1/libtool-next-version.1.gz
 %files ltdl
 %license libltdl/COPYING.LIB
 %{_libdir}/libltdl.so.*

@@ -39,7 +39,6 @@ License:        MIT AND (Apache-2.0 OR MIT)
 %license LICENSE
 %license LICENSE.dependencies
 %doc README.md
-%{_bindir}/dotenvy
 
 %package        devel
 Summary:        %{summary}

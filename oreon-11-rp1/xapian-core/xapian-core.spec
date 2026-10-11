@@ -80,14 +80,12 @@ make check %{?_smp_mflags}
 %files
 %doc AUTHORS NEWS README
 %{_bindir}/xapian*
-%{_bindir}/quest
 %{_bindir}/copydatabase
 %{_bindir}/simpleindex
 %{_bindir}/simplesearch
 %{_bindir}/simpleexpand
 %{_datadir}/xapian-core/
 %{_mandir}/man1/xapian*
-%{_mandir}/man1/quest.1*
 %{_mandir}/man1/copydatabase.1*
 
 %files libs

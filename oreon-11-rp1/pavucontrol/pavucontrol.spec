@@ -56,3 +56,5 @@ appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/org.pulseau
 
 %changelog
 %autochangelog
+/usr/share/icons/hicolor/scalable/apps/org.pulseaudio.pavucontrol.svg
+/usr/share/icons/hicolor/symbolic/apps/org.pulseaudio.pavucontrol-symbolic.svg

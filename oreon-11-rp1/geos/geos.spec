@@ -139,6 +139,7 @@ rm -f %{buildroot}%{mingw64_bindir}/geos-config
 %{_libdir}/pkgconfig/%{name}.pc
 
 %if %{with mingw}
+%{_libdir}/libgeos.so
 %files -n mingw32-%{name}
 %license COPYING
 %{mingw32_bindir}/geosop.exe

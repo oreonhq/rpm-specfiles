@@ -116,6 +116,7 @@ mv $RPM_BUILD_ROOT%{_libexecdir}/upower $RPM_BUILD_ROOT%{_libexecdir}/installed-
 %{_datadir}/polkit-1/actions/org.freedesktop.upower.policy
 %{_datadir}/zsh/*
 
+/usr/share/polkit-1/rules.d/org.freedesktop.upower.rules
 %files libs
 %license COPYING
 %{_libdir}/libupower-glib.so.3{,.*}

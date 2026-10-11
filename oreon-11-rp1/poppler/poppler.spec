@@ -252,6 +252,7 @@ test "$(pkg-config --modversion poppler-qt6)" = "%{version}"
 %{_includedir}/poppler/goo/
 %{_includedir}/poppler/splash/
 
+%{_libdir}/libpoppler.so
 %files glib
 %{_libdir}/libpoppler-glib.so.8*
 %{_libdir}/girepository-1.0/Poppler-0.18.typelib

@@ -152,7 +152,6 @@ fi
 
 %files devel
 %license COPYING
-%{_mandir}/man3/*
 %{_libdir}/libnetlink.a
 %{_includedir}/libnetlink.h
 %{_includedir}/iproute2/bpf_elf.h

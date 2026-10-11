@@ -92,6 +92,8 @@ rm -r %{buildroot}%{_pkgdocdir}/html/{.buildinfo,.doctrees/}
 %{_includedir}/nvme/*.h
 %{_libdir}/pkgconfig/*.pc
 
+%{_libdir}/libnvme-mi.so
+%{_libdir}/libnvme.so
 %files doc
 %doc %{_pkgdocdir}
 %{_mandir}/man2/*.2*

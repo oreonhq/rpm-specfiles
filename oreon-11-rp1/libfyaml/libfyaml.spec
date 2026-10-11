@@ -65,6 +65,9 @@ make check
 %{_libdir}/libfyaml.so.0
 %{_libdir}/libfyaml.so.0.0.0
 
+%{_mandir}/man3/libfyaml-core.3.gz
+%{_mandir}/man3/libfyaml-misc.3.gz
+%{_mandir}/man3/libfyaml.3.gz
 %files -n fyaml-utils
 %{_bindir}/fy-compose
 %{_bindir}/fy-dump
@@ -88,3 +91,16 @@ make check
 
 %changelog
 %autochangelog
+%{_includedir}/libfyaml/libfyaml-align.h
+%{_includedir}/libfyaml/libfyaml-allocator.h
+%{_includedir}/libfyaml/libfyaml-atomics.h
+%{_includedir}/libfyaml/libfyaml-blake3.h
+%{_includedir}/libfyaml/libfyaml-composer.h
+%{_includedir}/libfyaml/libfyaml-core.h
+%{_includedir}/libfyaml/libfyaml-docbuild.h
+%{_includedir}/libfyaml/libfyaml-dociter.h
+%{_includedir}/libfyaml/libfyaml-endian.h
+%{_includedir}/libfyaml/libfyaml-path-exec.h
+%{_includedir}/libfyaml/libfyaml-thread.h
+%{_includedir}/libfyaml/libfyaml-util.h
+%{_includedir}/libfyaml/libfyaml-vlsize.h

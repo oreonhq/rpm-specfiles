@@ -124,3 +124,4 @@ exit 0
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.18-6
 - Import
+%{_includedir}/lldpctl.hpp

@@ -61,6 +61,8 @@ rm -rf %{buildroot}%{_docdir}/%{name}
 %doc README.md
 %{_libdir}/libjwt.so.14{,.*}
 
+/usr/share/doc/LibJWT/LICENSE
+/usr/share/doc/LibJWT/README.md
 %files devel
 %{_includedir}/jwt.h
 %{_includedir}/jwt_export.h

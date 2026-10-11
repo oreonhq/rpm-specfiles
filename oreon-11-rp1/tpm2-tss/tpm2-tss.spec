@@ -103,6 +103,9 @@ install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_sysusersdir}/tpm2-tss.conf
 %{_sysusersdir}/tpm2-tss.conf
 %{_udevrulesdir}/%{udevrules_prefix}tpm-udev.rules
 
+/usr/lib/udev/rules.d/60-ltt2go-udev.rules
+%{_libdir}/libtss2-tcti-null.so.0
+%{_libdir}/libtss2-tcti-null.so.0.0.0
 %files fapi
 %{_libdir}/libtss2-fapi.so.1*
 %{_tmpfilesdir}/tpm2-tss-fapi.conf
@@ -157,3 +160,5 @@ use tpm2-tss.
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.3-9
 - Prepare for Oreon 11 (RP1)
+%{_libdir}/libtss2-tcti-null.so
+%{_libdir}/pkgconfig/tss2-tcti-null.pc

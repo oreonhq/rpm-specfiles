@@ -47,3 +47,8 @@ autoreconf -fi
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.32-15
 - Prepare for Oreon 11 (RP1)
+%{_bindir}/ls_name_value
+%{_bindir}/ls_name_value_rd
+%{_mandir}/man8/ls_name_value.8.gz
+%{_mandir}/man8/ls_name_value_rd.8.gz
+%{_mandir}/man8/lsscsi_json.8.gz

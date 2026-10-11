@@ -59,6 +59,7 @@ make check
 %{_libdir}/libplist++-2.0.so.*
 %{_mandir}/man1/plistutil.1*
 
+%{_bindir}/plist2json
 %files devel
 %{_libdir}/pkgconfig/libplist-2.0.pc
 %{_libdir}/pkgconfig/libplist++-2.0.pc
@@ -66,6 +67,8 @@ make check
 %{_libdir}/libplist++-2.0.so.*
 %{_includedir}/plist
 
+%{_libdir}/libplist++-2.0.so
+%{_libdir}/libplist-2.0.so
 %files -n python3-libplist
 %{python3_sitearch}/plist.so
 

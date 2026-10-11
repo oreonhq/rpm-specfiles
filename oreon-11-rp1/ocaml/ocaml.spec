@@ -402,6 +402,14 @@ hardlink -t $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs
 %{_libdir}/ocaml/caml
 
 
+%{_bindir}/ocamlrun-a100
+%{_bindir}/ocamlrund-a100
+%{_bindir}/ocamlruni-a100
+%{_bindir}/x86_64-pc-linux-gnu-ocamlrun-a100
+%{_bindir}/x86_64-pc-linux-gnu-ocamlrund-a100
+%{_bindir}/x86_64-pc-linux-gnu-ocamlruni-a100
+%{_libdir}/ocaml/libasmrun-x86_64-pc-linux-gnu-a180.so
+%{_libdir}/ocaml/libcamlrun-x86_64-pc-linux-gnu-a100.so
 %files runtime
 %doc README.html Changes
 %license LICENSE

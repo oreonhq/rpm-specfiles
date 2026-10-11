@@ -328,7 +328,6 @@ rm -rf %{buildroot}%{_mandir}/*
 %if %{with mpich}
 %files -n ptscotch-mpich
 %license doc/CeCILL-C_V1-en.txt
-%{_libdir}/mpich/lib/adm2dgr
 %{_libdir}/mpich/lib/libesmumps.so.7*
 %{_libdir}/mpich/lib/libscotch.so.7*
 %{_libdir}/mpich/lib/libscotcherr.so.7*

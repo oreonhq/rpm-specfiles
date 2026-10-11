@@ -74,7 +74,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/dbus-1/system.d/org.nvmexpress.*.conf
 %{_bindir}/stacctl
 %{_bindir}/stafctl
-%{_bindir}/stasadm
 %{_sbindir}/stacd
 %{_sbindir}/stafd
 %{_unitdir}/stacd.service

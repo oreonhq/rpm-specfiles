@@ -273,7 +273,6 @@ install emulator/btvirt ${RPM_BUILD_ROOT}/%{_libexecdir}/bluetooth/
 %{_bindir}/gatttool
 %{_bindir}/hciattach
 %{_bindir}/hciconfig
-%{_bindir}/hcidump
 %{_bindir}/hcitool
 %{_bindir}/meshctl
 %{_bindir}/rfcomm
@@ -281,7 +280,6 @@ install emulator/btvirt ${RPM_BUILD_ROOT}/%{_libexecdir}/bluetooth/
 %{_mandir}/man1/ciptool.1.*
 %{_mandir}/man1/hciattach.1.*
 %{_mandir}/man1/hciconfig.1.*
-%{_mandir}/man1/hcidump.1.*
 %{_mandir}/man1/hcitool.1.*
 %{_mandir}/man1/rfcomm.1.*
 %{_mandir}/man1/sdptool.1.*

@@ -96,6 +96,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 %{_unitdir}/passim.service
 /usr/lib/sysusers.d/passim.conf
 
+%{_libexecdir}/installed-tests/passim/passim-self-test
+/usr/share/installed-tests/passim/passim-self-test.test
 %files libs
 %license LICENSE
 %{_libdir}/libpassim.so.1*

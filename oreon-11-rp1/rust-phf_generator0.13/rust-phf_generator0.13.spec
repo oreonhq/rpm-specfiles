@@ -46,6 +46,7 @@ BuildArch:      noarch
 This package contains library source intended for building other packages which
 use the "default" feature of the "%{crate}" crate.
 
+%{_bindir}/gen_hash_test
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 

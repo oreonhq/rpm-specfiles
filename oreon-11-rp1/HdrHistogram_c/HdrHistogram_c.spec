@@ -71,3 +71,4 @@ find $RPM_BUILD_ROOT
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.8-10
 - Prepare for Oreon 11 (RP1)
+%{_libdir}/libhdr_histogram.so

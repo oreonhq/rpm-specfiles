@@ -59,3 +59,30 @@ Summary:        %{summary}
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.45.7-2
 - Prepare for Oreon 11 (RP1)
+/usr/share/doc/pycurl/examples/__pycache__/async_multi.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/basicfirst.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/file_upload.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/multi-socket_action-select.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/opensocketexception.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/retriever-multi.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/retriever.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/sfquery.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/smtp.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/ssh_keyfunction.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/ws_callback.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/ws_echo.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/ws_fragmented.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/ws_multi.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__pycache__/xmlrpc_curl.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/file_upload_buffer.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/file_upload_real.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/file_upload_real_fancy.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/follow_redirect.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/form_post.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/get.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/put_buffer.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/put_file.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/response_headers.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/response_info.cpython-314.pyc
+/usr/share/doc/pycurl/examples/quickstart/__pycache__/write_file.cpython-314.pyc
+/usr/share/doc/pycurl/examples/__p

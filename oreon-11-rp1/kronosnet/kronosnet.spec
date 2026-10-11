@@ -229,6 +229,7 @@ License: LGPL-2.1-or-later
  Please refer to the not-yet-existing documentation for further
  information.
 
+%{_libdir}/wireshark/plugins/4.6/epan/kronosnet.so
 %files -n libknet1
 %license COPYING.* COPYRIGHT
 %{_libdir}/libknet.so.*

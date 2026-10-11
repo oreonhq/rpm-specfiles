@@ -151,6 +151,29 @@ LD_LIBRARY_PATH=$PWD/src/liblzma/.libs make check
 %{profiledir}/*
 
 
+%{_mandir}/ar/man1/lzcat.1.gz
+%{_mandir}/ar/man1/lzcmp.1.gz
+%{_mandir}/ar/man1/lzdiff.1.gz
+%{_mandir}/ar/man1/lzegrep.1.gz
+%{_mandir}/ar/man1/lzfgrep.1.gz
+%{_mandir}/ar/man1/lzgrep.1.gz
+%{_mandir}/ar/man1/lzless.1.gz
+%{_mandir}/ar/man1/lzma.1.gz
+%{_mandir}/ar/man1/lzmadec.1.gz
+%{_mandir}/ar/man1/lzmainfo.1.gz
+%{_mandir}/ar/man1/lzmore.1.gz
+%{_mandir}/ar/man1/unlzma.1.gz
+%{_mandir}/ar/man1/unxz.1.gz
+%{_mandir}/ar/man1/xz.1.gz
+%{_mandir}/ar/man1/xzcat.1.gz
+%{_mandir}/ar/man1/xzcmp.1.gz
+%{_mandir}/ar/man1/xzdec.1.gz
+%{_mandir}/ar/man1/xzdiff.1.gz
+%{_mandir}/ar/man1/xzegrep.1.gz
+%{_mandir}/ar/man1/xzfgrep.1.gz
+%{_mandir}/ar/man1/xzgrep.1.gz
+%{_mandir}/ar/man1/xzless.1.gz
+%{_mandir}/ar/man1/xzmore.1.gz
 %files libs
 %license COPYING
 %{_libdir}/lib*.so.5*

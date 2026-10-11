@@ -50,3 +50,5 @@ autoreconf -v --install --force
 
 %changelog
 %autochangelog
+/usr/share/X11/app-defaults/XClock-ampm
+/usr/share/X11/app-defaults/XClock-grandfather

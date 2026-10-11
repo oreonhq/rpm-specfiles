@@ -68,7 +68,6 @@ autoreconf --install
 %license LICENSE_1_0.txt
 %{_includedir}/asio/
 %{_includedir}/asio.hpp
-%{_libdir}/pkgconfig/asio.pc
 
 %files doc
 %doc doc/*

@@ -37,7 +37,7 @@ BuildRequires: qt5-qttools-devel
 # sphinx-build
 BuildRequires: python3-sphinx
 BuildRequires: python3-sphinxcontrib-qthelp
-%global sphinx_build -DSphinx_BUILD_EXECUTABLE:PATH=%{_bindir}/sphinx-build-3
+%global sphinx_build -DSphinx_BUILD_EXECUTABLE:PATH=%{_bindir}/sphinx-build
 
 # Qt5Core is needed for tests to run properly (As-of 5.246.1).
 BuildRequires: pkgconfig(Qt5Core)

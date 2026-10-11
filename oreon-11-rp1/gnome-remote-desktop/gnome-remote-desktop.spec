@@ -132,8 +132,6 @@ if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Er
 %doc README.md
 %{_bindir}/grdctl
 %{_libexecdir}/gnome-remote-desktop-daemon
-%{_libexecdir}/gnome-remote-desktop-enable-service
-%{_libexecdir}/gnome-remote-desktop-configuration-daemon
 %{_userunitdir}/%{systemd_unit_user}
 %{_userunitdir}/%{systemd_unit_headless}
 %{_userunitdir}/%{systemd_unit_handover}

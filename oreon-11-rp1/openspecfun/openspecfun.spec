@@ -72,6 +72,7 @@ rm %{buildroot}/%{_libdir}/libopenspecfun.a
 %{_includedir}/Faddeeva.h
 
 %if %{with static_libs}
+%{_libdir}/libopenspecfun.so
 %files static
 %{_libdir}/libopenspecfun.a
 %endif

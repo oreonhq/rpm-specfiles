@@ -156,7 +156,6 @@ rm %{buildroot}%{_mandir}/man1/opensc-notify.1*
 %files
 %doc COPYING NEWS README*
 
-%{_datadir}/bash-completion/*
 
 
 %{_bindir}/cardos-tool

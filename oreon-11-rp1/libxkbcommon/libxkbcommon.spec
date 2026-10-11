@@ -83,6 +83,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libxkbcommon.so.0*
 %{_libdir}/libxkbregistry.so.0*
 
+%{_libexecdir}/xkbcommon/xkbcli-info
+%{_mandir}/man1/xkbcli-info.1.gz
 %files devel
 %{_libdir}/libxkbcommon.so
 %{_libdir}/libxkbregistry.so
