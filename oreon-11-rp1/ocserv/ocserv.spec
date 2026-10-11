@@ -12,7 +12,7 @@ Release: %autorelease
 %define have_gpgv2 0
 %endif
 
-%if 0%{?fedora} >= 28 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 28 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %define use_libwrap 0
 %define use_geoip 0
 %else

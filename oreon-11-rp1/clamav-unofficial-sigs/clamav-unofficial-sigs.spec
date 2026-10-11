@@ -1,6 +1,6 @@
 %global source0_hash f42f9d68e111f892bfd71393e869e53c806f48966c768d219925de6652960c50
 
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %global with_systemd 1
 %global clamupdateuser clamupdate
 %global clamupdategrp  clamupdate
@@ -82,7 +82,7 @@ install -d -p %{buildroot}%{_sysconfdir}/logrotate.d
 install -d -p %{buildroot}%{_mandir}/man8
 install -p -m0755 clamav-unofficial-sigs.sh %{buildroot}%{_sbindir}/clamav-unofficial-sigs.sh
 # config/packaging/os.centos7.conf file is for epel and fedora
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 install -p -m0644 config/packaging/os.centos7.conf %{buildroot}%{_sysconfdir}/%{name}/os.conf
 %else
 install -p -m0644 config/packaging/os.centos6.conf %{buildroot}%{_sysconfdir}/%{name}/os.conf

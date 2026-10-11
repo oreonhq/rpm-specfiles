@@ -22,7 +22,7 @@ Requires:       php-geshi
 Requires:       php-pear(Archive_Tar)
 # Text_Diff is broken with PHP 8.
 # Use system diff instead where needed.
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 Requires:       diffutils
 %else
 Requires:       php-pear(Text_Diff)

@@ -19,10 +19,10 @@
 # comparing {_emacs_version} in macros does not work well
 # so we catch the major version bumps ;)
 # read "with emacs at least"
-%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %global with_emacs28 1
 %endif
-%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %global with_emacs29 1
 %endif
 

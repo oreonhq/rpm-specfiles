@@ -130,7 +130,7 @@ rm -rf js/src/octane/
 rm -rf js/src/ctypes/libffi/
 
 # icu >= 76 link fix
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 sed -i 's/icu-i18n/icu-uc &/' js/moz.configure
 %endif
 

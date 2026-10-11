@@ -25,7 +25,7 @@
 %{!?python3lang:%global python3lang 1}
 
 # PHP drop support for 32-bit builds since Fedora 41.
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %ifarch %{ix86}
 %global phplang 0
 %endif

@@ -40,7 +40,7 @@ BuildRequires:  phpunit10 >= 10.0.17
 BuildRequires:  phpunit11
 BuildRequires:  phpunit12 >= 12.0.9
 %endif
-%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 BuildRequires:  phpunit13
 %endif
 # TODO phpunit11 but requires php 8.2

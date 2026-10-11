@@ -8,7 +8,7 @@ License: GPL-2.0-or-later AND LGPL-2.1-or-later AND CC-BY-3.0
 URL:     https://pcp.io
 
 Source0:        https://github.com/performancecopilot/pcp/archive/refs/tags/%{version}.tar.gz#/pcp-%{version}.tar.gz
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 ExcludeArch: %{ix86}
 %endif
 
@@ -45,7 +45,7 @@ Patch5: pcp-avc-nvidia.patch
 %ifarch s390 s390x armv7hl
 %global disable_perfevent 1
 %else
-%if 0%{?fedora} >= 20 || 0%{?rhel} > 6
+%if 0%{?fedora} >= 20 || 0%{?rhel} > 6 || 0%{?oreon} >= 11
 %global disable_perfevent 0
 %else
 %global disable_perfevent 1
@@ -60,7 +60,7 @@ Patch5: pcp-avc-nvidia.patch
 %endif
 
 # libchan, libhdr_histogram and pmdastatsd
-%if 0%{?fedora} >= 29 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 29 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %global disable_statsd 0
 %else
 %global disable_statsd 1
@@ -77,21 +77,21 @@ Patch5: pcp-avc-nvidia.patch
 %if 0%{?rhel} == 0 || 0%{?rhel} > 7
 %global disable_python3 0
 # Do we wish to mandate python3 use in pcp?  (f22+ and el8+)
-%if 0%{?fedora} >= 22 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 22 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %global default_python 3
 %endif
 %else
 %global disable_python3 1
 %endif
 
-%if 0%{?fedora} >= 24 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 24 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %global perl_interpreter perl-interpreter
 %else
 %global perl_interpreter perl
 %endif
 
 # support for pmdabcc, check bcc.spec for supported architectures of bcc
-%if 0%{?fedora} >= 25 || 0%{?rhel} > 6
+%if 0%{?fedora} >= 25 || 0%{?rhel} > 6 || 0%{?oreon} >= 11
 %ifarch x86_64 %{power64} aarch64 s390x riscv64
 %global disable_bcc 0
 %else
@@ -102,7 +102,7 @@ Patch5: pcp-avc-nvidia.patch
 %endif
 
 # support for pmdabpf, check bcc.spec for supported architectures of libbpf-tools
-%if 0%{?fedora} >= 37 || 0%{?rhel} > 8
+%if 0%{?fedora} >= 37 || 0%{?rhel} > 8 || 0%{?oreon} >= 11
 %ifarch x86_64 %{power64} aarch64 s390x riscv64
 %global disable_bpf 0
 %else
@@ -113,7 +113,7 @@ Patch5: pcp-avc-nvidia.patch
 %endif
 
 # support for pmdabpftrace, check bpftrace.spec for supported architectures of bpftrace
-%if 0%{?fedora} >= 30 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 30 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %ifarch x86_64 %{power64} aarch64 s390x riscv64
 %global disable_bpftrace 0
 %else
@@ -170,14 +170,14 @@ Patch5: pcp-avc-nvidia.patch
 %endif
 
 # systemd services and pmdasystemd
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %global disable_systemd 0
 %else
 %global disable_systemd 1
 %endif
 
 # libuv async event library
-%if 0%{?fedora} >= 28 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 28 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %global disable_libuv 0
 %else
 %global disable_libuv 1
@@ -205,7 +205,7 @@ Patch5: pcp-avc-nvidia.patch
 %global disable_xlsx 1
 %endif
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global disable_amdgpu 0
 %else
 %global disable_amdgpu 1
@@ -301,7 +301,7 @@ Requires: pcp-libs = %{version}-%{release}
 
 %if !%{disable_selinux}
 # rpm boolean dependencies are supported since RHEL 8
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 # This ensures that the pcp-selinux package and all its dependencies are
 # not pulled into containers and other systems that do not use SELinux
 Requires: (pcp-selinux = %{version}-%{release} if selinux-policy-targeted)
@@ -322,11 +322,11 @@ Requires: pcp-selinux = %{version}-%{release}
 %global _with_multilib --enable-multilib=true
 %global _with_nondebug --with-non-debug=yes
 
-%if 0%{?fedora} >= 20 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 20 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %global _with_doc --with-docdir=%{_docdir}/%{name}
 %endif
 
-%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %global _with_dstat --with-dstat-symlink=yes
 %global disable_dstat 0
 %else
@@ -2698,7 +2698,7 @@ done
 %if !%{disable_selinux}
 %selinux_relabel_pre -s targeted
 %endif
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %elif 0%{?fedora} >= 32 || 0%{?rhel} >= 9
 echo u pcpqa - \"PCP Quality Assurance\" %{_testsdir} /bin/bash | \
   systemd-sysusers --replace=/usr/lib/sysusers.d/pcp-testsuite.conf -
@@ -2751,7 +2751,7 @@ fi
 %endif
 
 %pre
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %elif 0%{?fedora} >= 32 || 0%{?rhel} >= 9
 echo u pcp - \"Performance Co-Pilot\" %{_localstatedir}/lib/pcp | \
   systemd-sysusers --replace=/usr/lib/sysusers.d/pcp.conf -
@@ -3121,7 +3121,7 @@ PCP_LOG_DIR=%{_logsdir}
 %endif
 %{rebuild_pmns "$PCP_PMNS_DIR" .NeedRebuild}
 
-%if 0%{?fedora} >= 26 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 26 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %ldconfig_scriptlets libs
 %else
 %post libs -p /sbin/ldconfig

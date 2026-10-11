@@ -130,7 +130,7 @@ Patch12: gcc15-pr119006.patch
 Patch900: cross-gcc-intl-filename.patch
 Patch901: cross-gcc-format-config.patch
 
-%if 0%{?fedora} >= 29 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 29 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 BuildRequires: binutils >= 2.31
 %else
 BuildRequires: binutils >= 2.24

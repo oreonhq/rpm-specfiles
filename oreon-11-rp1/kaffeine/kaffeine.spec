@@ -38,7 +38,7 @@ BuildRequires: pkgconfig(xscrnsaver)
 BuildRequires: pkgconfig(libvlc)
 BuildRequires: pkgconfig(libdvbv5)
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 Requires:      kio-extras-kf5%{?_isa}
 %else
 Requires:      kio-extras%{?_isa}

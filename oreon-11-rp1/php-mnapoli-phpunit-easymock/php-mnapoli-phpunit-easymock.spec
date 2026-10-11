@@ -29,7 +29,7 @@
 %global with_tests 0%{!?_without_tests:1}
 
 # Rich dependencies supported?
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %global with_rich_dependencies 1
 %else
 %global with_rich_dependencies 0

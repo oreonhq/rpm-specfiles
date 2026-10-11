@@ -125,7 +125,7 @@ BuildRequires: libnghttp2-devel
 %if %{with redis}
 BuildRequires: hiredis-devel
 %endif
-%if 0%{?fedora} >= 30 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 30 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 BuildRequires: systemd-rpm-macros
 %else
 BuildRequires: systemd

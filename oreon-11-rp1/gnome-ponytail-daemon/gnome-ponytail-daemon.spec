@@ -22,7 +22,7 @@ BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  systemd-rpm-macros
 
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires:  pkgconfig(libei-1.0) >= 1.0.0
 %endif
 

@@ -116,7 +116,7 @@ cp %{SOURCE1} source/Makefile
 %else
 %global native NATIVE=
 %endif
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global aam -fallow-argument-mismatch
 %endif
 export FFLAGS="%build_fflags -O3 -ffast-math $(NATIVE) -Wno-unused-variable %{?aam}"

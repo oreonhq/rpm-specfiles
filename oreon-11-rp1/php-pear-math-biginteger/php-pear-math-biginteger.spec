@@ -33,7 +33,7 @@ Requires:       php-openssl
 
 Provides:       php-pear(%{pear_name}) = %{version}
 Provides:       php-composer(pear/math_biginteger) = %{version}
-%if 0%{?fedora} < 26 && 0%{?rhel} < 8
+%if 0%{?fedora} < 26 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 Conflicts:      php-phpseclib-math-biginteger < 2
 %else
 Obsoletes:      php-phpseclib-math-biginteger < 2

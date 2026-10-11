@@ -42,7 +42,7 @@ mkdir -p %{buildroot}%{_mandir}/man1
 install -pm 0644 *.1 %{buildroot}%{_mandir}/man1
 
 %files
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %license LICENSE
 %else  # 0%{?fedora} >= 21 || 0%{?rhel} >= 8
 %doc LICENSE

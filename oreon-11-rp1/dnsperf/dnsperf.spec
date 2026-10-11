@@ -50,7 +50,7 @@ BuildRequires: python3-dns
 BuildRequires: python3-pcapy
 %endif
 
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 # resperf-report requires it, but not dnsperf itself
 # do not force it always
 Recommends: gnuplot

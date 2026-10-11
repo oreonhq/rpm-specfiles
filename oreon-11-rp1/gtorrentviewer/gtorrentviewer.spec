@@ -25,7 +25,7 @@ BuildRequires:	intltool
 BuildRequires:	libcurl-devel
 
 # Scriptlets replaced by File Triggers from Fedora 26 onwards
-%if 0%{?fedora} < 26 && 0%{?rhel} < 8
+%if 0%{?fedora} < 26 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 Requires(post):	  desktop-file-utils
 Requires(postun): desktop-file-utils
 %endif
@@ -87,7 +87,7 @@ desktop-file-install \
 	%{buildroot}%{_datadir}/applications/gtorrentviewer.desktop
 
 # Scriptlets replaced by File Triggers from Fedora 26 onwards
-%if 0%{?fedora} < 26 && 0%{?rhel} < 8
+%if 0%{?fedora} < 26 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 %post
 /usr/bin/update-desktop-database &> /dev/null || :
 

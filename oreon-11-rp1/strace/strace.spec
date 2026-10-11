@@ -186,7 +186,7 @@ wait
 %check
 width=$(echo __LONG_WIDTH__ |%__cc -E -P -)
 skip_32bit=0
-%if 0%{?fedora} >= 35 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 35 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 skip_32bit=1
 %endif
 

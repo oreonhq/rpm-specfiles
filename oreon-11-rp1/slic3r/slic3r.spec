@@ -86,7 +86,7 @@ BuildRequires:  perl(Wx)
 BuildRequires:  admesh-devel >= 0.98.1
 Requires:       admesh-libs >= 0.98.1
 
-%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
 %endif
@@ -95,7 +95,7 @@ Provides:       bundled(admesh) = 0.98
 
 # Bundled admesh FTBFS with:
 # error "admesh works correctly on little endian machines only!"
-%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    ppc ppc64 s390 s390x %{ix86}
 %else

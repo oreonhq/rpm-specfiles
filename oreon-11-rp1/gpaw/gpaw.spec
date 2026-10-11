@@ -35,7 +35,7 @@ Source1:		gpaw
 
 # https://pagure.io/releng/issue/12359
 BuildRequires:		environment-modules
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 BuildRequires:		flexiblas-devel
 %else
 BuildRequires:		openblas-devel
@@ -144,7 +144,7 @@ sed -i 's/.*mpi =.*/mpi = False/' siteconfig.py
 # disable scalapack
 sed -i 's/.*scalapack =.*/scalapack = False/' siteconfig.py
 # enable flexiblas/openblas
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 echo "libraries += ['flexiblas']" >> siteconfig.py
 %else
 echo "libraries += ['openblas']" >> siteconfig.py

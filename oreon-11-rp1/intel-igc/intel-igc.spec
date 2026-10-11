@@ -6,7 +6,7 @@
 %global optflags %{optflags} -w
 
 # not compatible with newer clang versions
-%if 0%{?fedora} >= 38 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %global llvm_compat 15
 %endif
 %global igc_patch 8

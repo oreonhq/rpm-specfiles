@@ -13,7 +13,7 @@ BuildRequires:  make
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 ExcludeArch:    %{ix86}
 %endif
 

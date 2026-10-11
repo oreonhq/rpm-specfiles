@@ -35,6 +35,7 @@ BuildRequires:  libmad-devel
 BuildRequires:  lame-devel
 #requirements to rebuild autotools
 BuildRequires:  autoconf
+BuildRequires:  autoconf-archive
 %if %{with gconf}
 BuildRequires:  GConf2-devel
 %endif

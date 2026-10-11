@@ -13,7 +13,7 @@ BuildArch:      noarch
 BuildRequires:  libappstream-glib
 
 Requires:       cockpit
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Requires: osbuild-composer >= 28
 %else
 Requires: weldr

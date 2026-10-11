@@ -3,7 +3,7 @@
 
 # FTBFS with GCC 16 when LTO is enabled
 # https://bugzilla.redhat.com/show_bug.cgi?id=2432234
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %define _lto_cflags %{nil}
 %endif
 

@@ -35,7 +35,7 @@ BuildRequires:  lua-rpm-macros
 BuildRequires:  compat-lua >= %{lua_compat_version}
 BuildRequires:  compat-lua-devel >= %{lua_compat_version}
 %endif
-%if 0%{?fedora} < 33 && 0%{?rhel} < 9
+%if 0%{?fedora} < 33 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 Requires:       lua(abi) = %{lua_version}
 %endif
 
@@ -52,7 +52,7 @@ structure and file attributes.}
 %if %{with compat}
 %package -n lua%{lua_compat_version}-filesystem
 Summary:        File System Library for the Lua Programming Language %{lua_compat_version}
-%if 0%{?fedora} < 33 && 0%{?rhel} < 9
+%if 0%{?fedora} < 33 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 Requires:       lua(abi) = %{lua_compat_version}
 %endif
 Obsoletes:      lua-filesystem-compat < 1.8.0-3

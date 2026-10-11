@@ -16,7 +16,7 @@ URL:            https://%{goipath}
 Source0:        %{url}/archive/v%{version}/%{lname}-%{version}.tar.gz
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 ExcludeArch:    %{ix86}
 %endif
 

@@ -53,7 +53,7 @@ sed -e '1i #define unveil(path, permissions) 0' \
 sed -e 's/^\(LIBS ?= .*\)/\1 -ltls/' -i Makefile
 
 # https://fedoraproject.org/wiki/Changes/dropingOfCertPemFile
-%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 sed -e 's/\(^[[:space:]]*Rflag =\) tls_default_ca_cert_file();/\1 NULL;/' \
     -i netcat.c
 %endif

@@ -1,6 +1,6 @@
 %global source0_hash 007427a1907000e8dd4f1e69419672e1d414b4fd6fb692718d6438861dadb8f2
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell

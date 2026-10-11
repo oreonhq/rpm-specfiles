@@ -24,7 +24,7 @@ ExcludeArch: i686
 %global libdb_base_version db-%{libdb_version}.28
 %global libdb_full_version lib%{libdb_base_version}-59
 %global libdb_bundle_name libdb-%{libdb_version}-389ds.so
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 # RPM 4.20
 %global libdb_base_dir lib%{libdb_base_version}-build/%{libdb_base_version}
 %else
@@ -400,7 +400,7 @@ Requires:         perl-DB_File
 %endif
 %endif
 Requires:         perl-Archive-Tar
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 Requires:         perl-debugger
 Requires:         perl-sigtrap
 %endif
@@ -668,7 +668,7 @@ autoreconf -fiv
            --with-systemdgroupname=%{groupname} \
            --libexecdir=%{_libexecdir}/%{pkgname} \
            $ASAN_FLAGS $MSAN_FLAGS $TSAN_FLAGS $UBSAN_FLAGS $RUST_FLAGS $CLANG_FLAGS $COCKPIT_FLAGS \
-%if 0%{?fedora} >= 34 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 34 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
            --with-libldap-r=no \
 %endif
            --enable-cmocka

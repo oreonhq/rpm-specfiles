@@ -1,6 +1,6 @@
 %global source0_hash 23b32bb98260a0254c58e6e7b4f4582b78509ed08d83b366a85d77a946220d15
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %undefine _debugsource_packages
 %endif
 
@@ -61,7 +61,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # to force the re-generation of a new one
 test -f doc/cloog.info && rm doc/cloog.info
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 CLOOG_CFLAGS="-fPIE"
 %endif
 
@@ -90,7 +90,7 @@ mkdir -p %{buildroot}%{_docdir}/cloog-%{version}
 %{_libdir}/libcloog-isl.so
 %{_libdir}/pkgconfig/cloog-isl.pc
 %exclude %{_libdir}/libcloog-isl.a
-%if 0%{?fedora} < 36 && 0%{?rhel} < 10
+%if 0%{?fedora} < 36 && 0%{?rhel} < 10 && 0%{?oreon} < 11
 %exclude %{_libdir}/libcloog-isl.la
 %endif
 %{_docdir}/cloog-%{version}/cloog.pdf

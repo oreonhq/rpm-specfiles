@@ -41,7 +41,7 @@ BuildRequires:  php(language) >= 7.1
 BuildRequires:  php-reflection
 # From composer.json, "require-dev": {
 #        "yoast/yoastcs": "^2.3.0"
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires:  phpunit12
 BuildRequires:  phpunit11
 %endif

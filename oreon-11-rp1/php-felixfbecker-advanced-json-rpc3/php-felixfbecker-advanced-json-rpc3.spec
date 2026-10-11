@@ -39,7 +39,7 @@ BuildArch:      noarch
 BuildRequires:  php(language) >= 7.1
 BuildRequires:  php-reflection
 BuildRequires:  php-json
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 BuildRequires:  (php-composer(netresearch/jsonmapper)            >= 1.0    with php-composer(netresearch/jsonmapper)            <  5)
 BuildRequires:  (php-composer(phpdocumentor/reflection-docblock) >= 4.3.4  with php-composer(phpdocumentor/reflection-docblock) <  6)
 %else
@@ -58,7 +58,7 @@ BuildRequires:  php-composer(fedora/autoloader)
 #        "netresearch/jsonmapper": "^1.0 || ^2.0 || ^3.0 || ^4.0",
 #        "phpdocumentor/reflection-docblock": "^4.3.4 || ^5.0.0"
 Requires:       php(language) >= 7.1
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Requires:       (php-composer(netresearch/jsonmapper)            >= 1.0    with php-composer(netresearch/jsonmapper)            <  5)
 Requires:       (php-composer(phpdocumentor/reflection-docblock) >= 4.3.4  with php-composer(phpdocumentor/reflection-docblock) <  6)
 %else

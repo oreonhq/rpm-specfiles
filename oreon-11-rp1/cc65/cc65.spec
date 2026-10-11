@@ -63,7 +63,7 @@ BuildRequires:  make
 
 Requires:       %{name}-common = %{version}-%{release}
 
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Recommends:     %{name}-doc = %{version}-%{release}
 Recommends:     %{name}-utils%{?_isa} = %{version}-%{release}
 %endif
@@ -193,7 +193,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %files
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %license LICENSE
 %else
 %doc %{_pkgdocdir}/LICENSE
@@ -217,7 +217,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_bindir}/sp65
 
 %files devel
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %license %{_datadir}/licenses/%{name}*
 %else
 %doc %{_pkgdocdir}/LICENSE
@@ -230,7 +230,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_datadir}/%{name}
 
 %files doc
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %license %{_datadir}/licenses/%{name}*
 %endif
 %if 0%{doc_symlink}
@@ -242,7 +242,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %files utils
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %license %{_datadir}/licenses/%{name}*
 %else
 %doc %{_pkgdocdir}/LICENSE

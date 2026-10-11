@@ -59,7 +59,7 @@
 %endif
 %endif
 
-%if 0%{?fedora} >= 18 || 0%{?rhel} >= 6
+%if 0%{?fedora} >= 18 || 0%{?rhel} >= 6 || 0%{?oreon} >= 11
    %define initdir %{_initddir}
 %else
    # RHEL5 doesn't know _initddir
@@ -67,7 +67,7 @@
 %endif
 
 %if %{with_virtguest}
-   %if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
+   %if 0%{?fedora} >= 18 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
       %define udevrulesdir /usr/lib/udev/rules.d
    %else
       %if 0%{?rhel} >= 6
@@ -76,7 +76,7 @@
    %endif
 %endif
 
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
    %define dracutstap %{_prefix}/lib/dracut/modules.d/99stap
 %else
    %define dracutstap %{_prefix}/share/dracut/modules.d/99stap
@@ -207,7 +207,7 @@ BuildRequires: rpm-devel
 BuildRequires: elfutils-devel >= %{elfutils_version}
 %if %{with_docs}
 BuildRequires: /usr/bin/latex /usr/bin/dvips /usr/bin/ps2pdf
-%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 BuildRequires: tex(fullpage.sty) tex(fancybox.sty) tex(bchr7t.tfm) tex(graphicx.sty)
 %endif
 %if %{with_htmldocs}
@@ -455,7 +455,7 @@ Requires: strace
 # 'nmap-ncat'). So, we'll do a file-based require.
 Requires: /usr/bin/nc
 %ifnarch ia64 ppc64le aarch64
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 # no prelink
 %else
 Requires: prelink

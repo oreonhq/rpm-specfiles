@@ -7974,7 +7974,7 @@ tar xf %{SOURCE0}
 %if 0%{?fedora} || 0%{?rhel} >= 8
 %patch -P23 -p1 -b .poppler-0.84
 %endif
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %patch -P29 -p1 -b .poppler090
 %endif
 %endif
@@ -7988,7 +7988,7 @@ tar xf %{SOURCE0}
 %patch -P34 -p1 -b .poppler22
 %patch -P35 -p1 -b .poppler-crash-fix
 %endif
-%if 0%{?fedora} >= 37 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 37 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 %patch -P36 -p1 -b .poppler-22.08.0
 %endif
 %endif

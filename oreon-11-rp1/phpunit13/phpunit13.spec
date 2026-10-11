@@ -11,7 +11,7 @@
 
 %bcond_without       tests
 
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %bcond_without       defcmd
 %else
 %bcond_with          defcmd
@@ -141,7 +141,7 @@ Requires:       php-openssl
 Requires:       php-pcntl
 Requires:       php-phar
 
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 Provides:       php-composer(phpunit/phpunit) = %{version}
 %endif
 %if %{with defcmd}

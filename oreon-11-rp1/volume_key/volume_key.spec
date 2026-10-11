@@ -13,7 +13,7 @@
 %endif
 
 # Drop Python 2 in Fedora >= 30 and RHEL > 7 as default:
-%if 0%{?fedora} >= 30 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 30 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %global drop_python2 1
 %global configure_with_python2 no
 %else

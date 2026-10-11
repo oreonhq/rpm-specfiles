@@ -30,7 +30,7 @@ BuildRequires:	%{_bindir}/xvfb-run
 # See bug 904851 and below
 BuildRequires:	mesa-dri-drivers
 # F-29+: switch to clutter-gst3 (bug 1578064)
-%if 0%{?fedora} >= 29 || 0%{?rhel} > 8
+%if 0%{?fedora} >= 29 || 0%{?rhel} > 8 || 0%{?oreon} >= 11
 BuildRequires:	clutter-gst3
 Requires:	clutter-gst3
 %else

@@ -6,7 +6,7 @@
 %bcond  qt6     1
 %bcond  ninja   1
 
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %global llvm_compat 19
 %endif
 

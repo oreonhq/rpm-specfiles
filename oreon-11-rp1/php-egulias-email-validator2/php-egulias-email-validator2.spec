@@ -51,7 +51,7 @@ BuildArch:     noarch
 #    "dominicsayers/isemail": "^3.0.7",
 #    "phpunit/phpunit": "^4.8.36|^7.5.15",
 #    "satooshi/php-coveralls": "^1.0.1"
-%if 0%{?fedora} >= 31 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 31 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 BuildRequires: (php-composer(doctrine/lexer) >= %{doctrine_lexer_min_ver} with php-composer(doctrine/lexer) <  %{doctrine_lexer_max_ver})
 %global phpunit %{_bindir}/phpunit9
 %else

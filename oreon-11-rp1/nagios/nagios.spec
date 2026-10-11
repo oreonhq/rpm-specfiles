@@ -257,7 +257,7 @@ bzip2 -9 %{name}.pp
 
 # relocated to sbin (Fedora-specific)
 install -d -m 0755 %{buildroot}%{_bindir}
-%if 0%{?fedora} < 42 && 0%{?rhel} < 11
+%if 0%{?fedora} < 42 && 0%{?rhel} < 11 && 0%{?oreon} < 11
 mv %{buildroot}%{_sbindir}/nagiostats %{buildroot}%{_bindir}/nagiostats
 %endif
 
@@ -417,7 +417,7 @@ fi
 %{_datadir}/%{name}/html/[^cd]*
 %{_datadir}/%{name}/html/contexthelp/
 
-%if 0%{?fedora} < 42 && 0%{?rhel} < 11
+%if 0%{?fedora} < 42 && 0%{?rhel} < 11 && 0%{?oreon} < 11
 %{_sbindir}/*
 %endif
 

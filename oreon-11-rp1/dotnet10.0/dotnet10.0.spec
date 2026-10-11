@@ -622,7 +622,7 @@ CXXFLAGS=$(echo $CXXFLAGS | sed -e 's/ -mtune=z14//')
 CFLAGS="$CFLAGS -Wno-used-but-marked-unused"
 CXXFLAGS="$CXXFLAGS -Wno-used-but-marked-unused"
 
-%if 0%{?fedora} >= 43 || 0%{?rhel} > 10
+%if 0%{?fedora} >= 43 || 0%{?rhel} > 10 || 0%{?oreon} >= 11
 # -Wall includes Wjump-misses-init and other additional warnings in newer clang versions
 CFLAGS='-Wno-unknown-warning-option -Wno-jump-misses-init -Wno-implicit-void-ptr-cast -Wno-implicit-int-enum-cast'
 CXXFLAGS='-Wno-unknown-warning-option -Wno-jump-misses-init -Wno-implicit-void-ptr-cast -Wno-implicit-int-enum-cast'

@@ -3,7 +3,7 @@
 %global         gsspver 1.1.4
 %global         __cmake_in_source_build 1
 
-%if 0%{?fedora} < 42 && 0%{?rhel} < 10
+%if 0%{?fedora} < 42 && 0%{?rhel} < 10 && 0%{?oreon} < 11
 %global         kio4 1
 %endif
 

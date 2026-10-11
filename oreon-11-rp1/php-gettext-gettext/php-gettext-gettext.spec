@@ -17,7 +17,7 @@ Source0:    %{url}/archive/v%{version}.tar.gz
 Source1:    tests-v%{version}.tar.bz2
 
 BuildRequires: dos2unix
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 BuildRequires: (php-composer(gettext/languages) >= 2.3.0 with php-composer(gettext/languages) < 3)
 %else
 BuildRequires: php-gettext-languages >= 2.3.0
@@ -34,7 +34,7 @@ Requires:   php-simplexml
 Requires:   php-spl
 Requires:   php-tokenizer
 
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Requires:  (php-composer(gettext/languages) >= 2.3.0 with php-composer(gettext/languages) < 3)
 %else
 Requires:   php-gettext-languages >= 2.3.0

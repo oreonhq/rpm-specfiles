@@ -67,13 +67,10 @@ rm README.md.orig
 %build
 CXXFLAGS='%{build_cxxflags} -DCLI11_OPTIONAL -DCLI11_STD_OPTIONAL=1'
 %cmake \
-    -DCLI11_BUILD_DOCS:BOOL=TRUE \
+    -DCLI11_BUILD_DOCS:BOOL=FALSE \
     -DCLI11_BUILD_TESTS:BOOL=TRUE \
     -DCMAKE_CXX_STANDARD=20
 %cmake_build
-
-# Build the documentation
-%cmake_build --target docs
 
 %install
 %cmake_install
@@ -89,7 +86,6 @@ CXXFLAGS='%{build_cxxflags} -DCLI11_OPTIONAL -DCLI11_STD_OPTIONAL=1'
 %{_datadir}/pkgconfig/CLI11.pc
 
 %files docs
-%doc %{_vpath_builddir}/docs/html
 %doc docs/CLI11.svg docs/CLI11_100.png
 
 %changelog

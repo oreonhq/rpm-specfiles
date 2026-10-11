@@ -177,7 +177,7 @@ end
 %ifarch %{ix86}
 %bcond_with pgo
 %else
-%if 0%{?fedora} >= 43 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %bcond_without pgo
 %else
 %bcond_with pgo

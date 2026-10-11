@@ -2,7 +2,7 @@
 
 %global faxspool    /var/spool/hylafax
 %global _hardened_build 1
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %global lockdir    /var/lock/lockdev
 %else
 %global lockdir    /var/lock
@@ -34,7 +34,7 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: libxcrypt-devel
 BuildRequires: %{_sbindir}/sendmail, ghostscript
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 BuildRequires: jbigkit-devel
 %endif
 %if 0%{?fedora} || 0%{?rhel} >= 7
@@ -42,13 +42,13 @@ BuildRequires: lcms2-devel
 %else
 BuildRequires: lcms-devel
 %endif
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 BuildRequires: systemd-units
 %endif
-%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 BuildRequires: systemd
 %endif
-%if 0%{?fedora} >= 27 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 27 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 BuildRequires: urw-base35-fonts
 Requires: urw-base35-fonts
 %else
@@ -63,7 +63,7 @@ Obsoletes:   hylafax < 5.5.2-1
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
@@ -137,7 +137,7 @@ rm -rf $RPM_BUILD_ROOT
 # install: make some dirs...
 mkdir -p -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/{cron.daily,cron.hourly} 
 mkdir -p -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/{hylafax,sysconfig}
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 mkdir -p -m 755 $RPM_BUILD_ROOT%{_unitdir}
 %else
 mkdir -p -m 755 $RPM_BUILD_ROOT%{_initrddir}
@@ -167,7 +167,7 @@ make install -e \
         INSTALL_ROOT=$RPM_BUILD_ROOT
 
 # install: remaining files
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 install -p -m 644 %{SOURCE4} $RPM_BUILD_ROOT%{_unitdir}/hylafax-hfaxd.service
 install -p -m 644 %{SOURCE5} $RPM_BUILD_ROOT%{_unitdir}/hylafax-faxq.service
 install -p -m 644 %{SOURCE6} $RPM_BUILD_ROOT%{_unitdir}/hylafax-faxgetty@.service
@@ -186,7 +186,7 @@ rm -f $RPM_BUILD_ROOT%{faxspool}/etc/dpsprinter.ps
 
 rm -f $RPM_BUILD_ROOT%{faxspool}/COPYRIGHT
 
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %post
 if [ -e %{faxspool}/etc/setup.cache ] && [ ! -e %{_sysconfdir}/hylafax/setup.cache ]; then
     ln %{faxspool}/etc/setup.cache %{_sysconfdir}/hylafax/setup.cache
@@ -251,7 +251,7 @@ fi
 %endif
 
 %files
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %{_unitdir}/hylafax-faxgetty@.service
 %{_unitdir}/hylafax-hfaxd.service
 %{_unitdir}/hylafax-faxq.service

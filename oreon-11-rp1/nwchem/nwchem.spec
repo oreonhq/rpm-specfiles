@@ -25,7 +25,7 @@ need libxc version > 3
 %{?!git_hash: %global git_hash e2869a2c81445f2edfd25bbae652d099fabb9a92}
 %{?!ga_version: %global ga_version 5.8.2-1}
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global blaslib flexiblas
 %else
 %global blaslib openblas
@@ -67,7 +67,7 @@ BuildRequires: make
 BuildRequires:		patch
 BuildRequires:		time
 
-%if 0%{?fedora} >= 29 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 BuildRequires:		python3-devel
 %else
 BuildRequires:		python2-devel
@@ -81,7 +81,7 @@ BuildRequires:		environment-modules
 # Use openblas-serial instead of openblas-openmp, but it's unavailable on centos stream
 # due to https://bugzilla.redhat.com/show_bug.cgi?id=2182460, so use a workaround of export OMP_NUM_THREADS=1
 # See https://github.com/edoapra/fedpkg/issues/10#issuecomment-731855285
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 BuildRequires:		flexiblas-openblas-openmp
 Requires:		flexiblas-openblas-openmp
 %endif
@@ -219,7 +219,7 @@ echo export NWCHEM_TARGET=%{NWCHEM_TARGET} >> settings.sh
 echo export CC="'gcc'" >> settings.sh
 echo export FC=gfortran >> settings.sh
 # https://nwchemgit.github.io/Special_AWCforum/st/id1590/Nwchem-dev.revision26704-src.201....html
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 echo export USE_ARUR=TRUE >> settings.sh
 %endif
 %if 0%{?rhel} >= 7

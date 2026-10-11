@@ -54,7 +54,7 @@ BuildArch:      noarch
 %if %{with tests}
 # For tests
 BuildRequires:  php(language) >= 5.5
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global phpunit %{_bindir}/phpunit9
 %else
 %global phpunit %{_bindir}/phpunit8

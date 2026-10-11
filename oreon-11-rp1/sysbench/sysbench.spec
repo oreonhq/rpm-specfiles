@@ -29,7 +29,7 @@ BuildRequires: python3
 
 # luajit is needed but is not available for all arches.
 # Use the same arches as luajit.
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 ExcludeArch:    riscv64 ppc64 ppc64le
 %else
 ExcludeArch:    riscv64 ppc64 ppc64le s390x

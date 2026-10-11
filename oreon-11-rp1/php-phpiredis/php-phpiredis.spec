@@ -58,7 +58,7 @@ BuildRequires:  redis
 Requires:       php(zend-abi) = %{php_zend_api}
 Requires:       php(api) = %{php_core_api}
 
-%if 0%{?fedora} < 20 && 0%{?rhel} < 7
+%if 0%{?fedora} < 20 && 0%{?rhel} < 7 && 0%{?oreon} < 11
 # Filter private shared
 %{?filter_provides_in: %filter_provides_in %{_libdir}/.*\.so$}
 %{?filter_setup}

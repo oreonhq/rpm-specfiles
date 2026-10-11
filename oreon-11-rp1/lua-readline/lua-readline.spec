@@ -28,7 +28,7 @@ Requires:       lua-posix
 %if 0%{?el7}
 BuildRequires:  lua-rpm-macros
 %endif
-%if 0%{?fedora} < 33 && 0%{?rhel} < 9
+%if 0%{?fedora} < 33 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 Requires:       lua(abi) = %{lua_version}
 %endif
 

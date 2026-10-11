@@ -2,7 +2,7 @@
 
 %global debug_package %{nil}
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %bcond_without flexiblas
 %endif
 

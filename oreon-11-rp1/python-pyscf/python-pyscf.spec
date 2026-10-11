@@ -7,7 +7,7 @@
 # libxc, etc, we just have to filter out the internal libraries
 %global __requires_exclude ^(libao2mo\\.so|libcgto\\.so|libcvhf\\.so|libfci\\.so|libnp_helper\\.so|libpbc\\.so|libdft\\.so).*$
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global blaslib flexiblas
 %global cmake_blas_flags -DBLA_VENDOR=FlexiBLAS
 %else

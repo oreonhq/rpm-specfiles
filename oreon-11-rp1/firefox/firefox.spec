@@ -110,7 +110,7 @@ ExcludeArch: i686
 %global build_with_pgo    0
 %ifarch x86_64
 %if %{release_build}
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %global build_with_pgo    1
 %else
 %global build_with_pgo    1
@@ -572,7 +572,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P71 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
 %patch -P78 -p1 -b .firefox-i686
 %patch -P81 -p1 -b .firefox-gcc-15.0-s390
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %patch -P85 -p1 -b .wasm32-wasip1
 %endif
 

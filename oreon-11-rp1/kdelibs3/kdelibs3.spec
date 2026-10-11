@@ -186,7 +186,7 @@ Patch309: kde3-autoconf-2.72.patch
 Requires: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 Requires: hicolor-icon-theme
 Requires: kde-settings >= 3.5
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 Requires: kde3-filesystem
 %else
 Requires: kde-filesystem

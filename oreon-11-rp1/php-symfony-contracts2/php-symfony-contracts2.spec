@@ -49,7 +49,7 @@ BuildRequires:  php-zlib
 BuildRequires: (php-composer(psr/cache)            >= 1.0  with php-composer(psr/cache)            < 4)
 BuildRequires: (php-composer(psr/container)        >= 1.1  with php-composer(psr/container)        < 2)
 BuildRequires: (php-composer(psr/event-dispatcher) >= 1.0  with php-composer(psr/event-dispatcher) < 2)
-%if 0%{?fedora} >= 31 || 0%{?rhel} >=9
+%if 0%{?fedora} >= 31 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
 %global phpunit %{_bindir}/phpunit9
 %else
 %global phpunit %{_bindir}/phpunit8

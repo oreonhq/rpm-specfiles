@@ -41,7 +41,7 @@ BuildRequires:  pkgconf-pkg-config
 # devices, strings, words (bytes) and backend itself
 BuildRequires:  sane-backends-devel
 
-%if 0%{?fedora} >= 38 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 Recommends: ipp-usb
 %endif
 

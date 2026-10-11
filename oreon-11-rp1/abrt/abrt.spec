@@ -11,7 +11,7 @@
 %bcond_with python3
 %endif
 
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %bcond_with container_handler
 %else
 %bcond_without container_handler

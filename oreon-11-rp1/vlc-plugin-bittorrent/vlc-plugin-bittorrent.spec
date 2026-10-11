@@ -35,7 +35,7 @@ autoreconf -vif
 sed -i -e 's|/usr/bin/||' data/%{name}.desktop
 
 %build
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 # https://fedoraproject.org/wiki/Changes/OpensslDeprecateEngine
 CXXFLAGS="$CXXFLAGS -DOPENSSL_NO_ENGINE"
 %endif

@@ -467,7 +467,7 @@ s:.*\('%{_datadir}'/\)\([^/_]\+\)\(.*\.po$\):%lang(\2) \1\2\3:
 
 %pre client
 # remove alternatives workaround once C11S is released
-%if 0%{?fedora} >= 42 || 0%{?rhel} > 10
+%if 0%{?fedora} >= 42 || 0%{?rhel} > 10 || 0%{?oreon} >= 11
   %if %{use_alternatives}
   # only run on upgrade (not fresh install)
   if [ $1 -gt 1 ] ; then
@@ -494,7 +494,7 @@ s:.*\('%{_datadir}'/\)\([^/_]\+\)\(.*\.po$\):%lang(\2) \1\2\3:
 	  --follower %{_mandir}/man1/lpstat.1.gz print-lpstatman %{_mandir}/man1/lpstat-cups.1.gz || :
 
   # remove sbin symlink creation once C11S is released
-  %if 0%{?fedora} >= 42 || 0%{?rhel} > 10
+  %if 0%{?fedora} >= 42 || 0%{?rhel} > 10 || 0%{?oreon} >= 11
     %if "%{_sbindir}" == "%{_bindir}"
       # Make sure that the symlink in /usr/sbin/ is not missing, if /usr/sbin is a
       # directory. The symlink will only be created if there is no symlink

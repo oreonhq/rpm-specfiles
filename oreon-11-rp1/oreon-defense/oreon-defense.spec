@@ -1,5 +1,5 @@
 Name:           oreon-defense
-Version:        1.0.7
+Version:        1.0.8
 Release:        1%{?dist}
 Summary:        Oreon security system with real-time protection
 License:        GPL-3.0-or-later

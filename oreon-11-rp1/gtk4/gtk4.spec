@@ -21,7 +21,7 @@
 
 # FTBFS on i686 with GCC 14 -Werror=int-conversion
 # https://gitlab.gnome.org/GNOME/gtk/-/issues/6033
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %ifarch %{ix86}
 %global build_type_safety_c 1
 %endif

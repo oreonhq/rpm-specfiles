@@ -4,7 +4,7 @@
 
 # FTBFS on i686 with GCC 14 -Werror=incompatible-pointer-types
 # https://github.com/ofiwg/libfabric/issues/9763
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %ifarch %{ix86}
 %global build_type_safety_c 2
 %endif

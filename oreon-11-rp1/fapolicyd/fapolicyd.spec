@@ -200,7 +200,7 @@ fi
 %attr(644,root,root) %{_unitdir}/%{name}.service
 %attr(644,root,root) %{_tmpfilesdir}/%{name}.conf
 %attr(644,root,root) %{_sysusersdir}/%{name}.conf
-%attr(755,root,root) %{_bindir}/%{name}-rpm-loader
+%attr(755,root,root) %{_bindir}/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}
 %attr(755,root,root) %{_sbindir}/%{name}-cli
 %attr(755,root,root) %{_sbindir}/fagenrules

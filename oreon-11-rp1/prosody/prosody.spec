@@ -68,7 +68,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P0 -p1 -b .config
 
 # https://fedoraproject.org/wiki/Changes/dropingOfCertPemFile
-%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 sed -e '/^[[:space:]]*cafile = "/d' -i core/certmanager.lua
 %endif
 

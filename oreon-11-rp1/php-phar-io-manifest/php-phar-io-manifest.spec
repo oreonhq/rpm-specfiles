@@ -48,7 +48,7 @@ BuildRequires:  php-spl
 BuildRequires:  php-xmlwriter
 BuildRequires:  php-fedora-autoloader-devel >= 1.0.0
 %if %{with_tests}
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global phpunit %{_bindir}/phpunit9
 BuildRequires:  phpunit9
 %else

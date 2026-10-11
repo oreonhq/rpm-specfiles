@@ -22,7 +22,7 @@ BuildArch:	noarch
 # releases, we ensure that all databases are installed together; going
 # forward, only the IPv4 country database is installed by default and the user
 # can choose whether or not to install the databases from the extra package
-%if 0%{?fedora} < 22 && 0%{?rhel} < 8
+%if 0%{?fedora} < 22 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 Requires:	GeoIP-GeoLite-data-extra = %{version}-%{release}
 %endif
 # This data has previously been available in differently-named packages

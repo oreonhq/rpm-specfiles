@@ -22,7 +22,7 @@ BuildRequires:  perl(SQL::Abstract) >= 1.2
 # Test Suite
 BuildRequires:  perl(Data::Dumper)
 # DBD::AnyData 0.110 incompatible with DBI ≥ 1.623 (CPAN RT#83293)
-%if 0%{?fedora} < 18 && 0%{?rhel} < 7
+%if 0%{?fedora} < 18 && 0%{?rhel} < 7 && 0%{?oreon} < 11
 BuildRequires:  perl(DBD::AnyData)
 %endif
 BuildRequires:  perl(Exporter)

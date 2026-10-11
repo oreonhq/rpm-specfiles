@@ -16,6 +16,7 @@ BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  make
+BuildRequires:  pkgconfig(blkid)
 
 %description
 Utilities for formatting and repairing exFAT filesystems.

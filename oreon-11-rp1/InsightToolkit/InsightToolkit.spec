@@ -4,7 +4,7 @@
 # Disable LTO for now - fails to build
 %undefine _lto_cflags
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %bcond_without flexiblas
 %endif
 

@@ -121,7 +121,7 @@ Recommends: rygel
 Recommends: switcheroo-control
 # For the keyboard panel
 Requires: /usr/bin/tecla
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 # For the power panel
 Recommends: ppd-service
 %if 0%{?fedora} && 0%{?fedora} < 41

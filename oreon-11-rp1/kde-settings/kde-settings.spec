@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %bcond initialsetup_gui_backend 1
 %else
 %bcond initialsetup_gui_backend 0

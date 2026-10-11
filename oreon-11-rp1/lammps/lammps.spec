@@ -4,7 +4,7 @@
 %global commit cd8851c4e75c42744e221ae3c457c6e4645f0ad5
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global blaslib flexiblas
 %global cmake_blas_flags -DBLA_VENDOR=FlexiBLAS
 %else

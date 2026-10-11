@@ -43,7 +43,7 @@ BuildRequires: freerdp
 BuildRequires: pkgconfig(gtk+-3.0)
 BuildRequires: pkgconfig(json-glib-1.0)
 BuildRequires: pkgconfig(libsecret-1)
-%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires: pkgconfig(libsoup-3.0)
 %else
 BuildRequires: pkgconfig(libsoup-2.4)
@@ -56,7 +56,7 @@ BuildRequires: pkgconfig(spice-client-gtk-3.0)
 %endif
 BuildRequires: pkgconfig(vte-2.91)
 
-%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires: pkgconfig(webkit2gtk-4.1)
 %else
 BuildRequires: pkgconfig(webkit2gtk-4.0)

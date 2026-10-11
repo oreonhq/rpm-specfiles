@@ -74,7 +74,7 @@ mkdir -p %{buildroot}%{_datadir}/pkgconfig
 %files
 %doc VERSION README
 %{_libdir}/*.so.*
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %license LICENSE
 %else
 %doc LICENSE
@@ -85,7 +85,7 @@ mkdir -p %{buildroot}%{_datadir}/pkgconfig
 %{_includedir}/%{name}/*.h
 %{_datadir}/pkgconfig/%{name}.pc
 %{_libdir}/*.so
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %license LICENSE
 %else
 %doc LICENSE

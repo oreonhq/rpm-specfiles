@@ -27,7 +27,7 @@ Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit
 BuildArch:      noarch
 BuildRequires:  php(language) >= 7.1
 BuildRequires:  php-fedora-autoloader-devel
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 BuildRequires: (php-composer(psr/log) >= 1.0.0 with php-composer(psr/log) < 4)
 %else
 BuildRequires:  php-PsrLog
@@ -40,7 +40,7 @@ BuildRequires:  php-cli
 Requires:       php(language) >= 7.1
 Requires:       php-curl
 Requires:       php-dom
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Requires:      (php-composer(psr/log) >= 1.0.0 with php-composer(psr/log) < 4)
 %else
 Requires:       php-PsrLog

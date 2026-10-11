@@ -10,7 +10,7 @@ URL:        https://github.com/naelstrof/slop
 License:    GPL-3.0-only
 Source0:    https://github.com/naelstrof/slop/archive/v%{version}/%{name}-%{version}.tar.gz
 
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 BuildRequires: libXext-devel
 %endif
 BuildRequires: gcc-c++ >= 4.9

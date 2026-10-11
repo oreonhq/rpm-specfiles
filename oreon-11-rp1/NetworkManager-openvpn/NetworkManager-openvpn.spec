@@ -1,6 +1,6 @@
 %global source0_hash ce32e38b0500eddf2fc8072ca17679817fc2d35eb91f6ff7b9904209c14b5afd
 
-%if 0%{?fedora} < 36 && 0%{?rhel} < 9
+%if 0%{?fedora} < 36 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 %bcond_with gtk4
 %else
 %bcond_without gtk4

@@ -13,7 +13,7 @@ elk-5.2.14 requires libxc 3 or newer
 # missing on el6
 %{?!_fmoddir: %global _fmoddir %{_libdir}/gfortran/modules}
 
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global extra_gfortran_flags -fallow-argument-mismatch
 %else
 %global extra_gfortran_flags %{nil}
@@ -30,13 +30,13 @@ ExclusiveArch:          x86_64 %{ix86} aarch64 %{arm} %{power64}
 %endif
 %endif
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global BLASLAPACK flexiblas
 %else
 %global BLASLAPACK openblas
 %endif
 %global FFTW -L%{_libdir} -lfftw3 -lfftw3f
-%if 0%{?fedora} >= 25 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 25 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global LIBXC -L%{_libdir} -lxc -lxcf03
 %else
 %global LIBXC -L%{_libdir} -lxc
@@ -63,7 +63,7 @@ BuildRequires:		%{BLASLAPACK}-devel
 # Use openblas-serial instead of openblas-openmp, but it's unavailable on centos stream
 # due to https://bugzilla.redhat.com/show_bug.cgi?id=2182460, so use a workaround of export OMP_NUM_THREADS=1
 # https://github.com/edoapra/fedpkg/issues/10#issuecomment-731855285
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 BuildRequires:		flexiblas-openblas-openmp
 Requires:		flexiblas-openblas-openmp
 %endif

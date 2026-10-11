@@ -143,7 +143,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # Fedora doesn't ship kvm-spice but qemu-kvm
 find . -type f -name "*.xml" -exec sed -i 's|kvm-spice|qemu-kvm|g' {} ';'
 
-%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 # For https://fedoraproject.org/wiki/Changes/ImageMagick7
 sed -e 's/Image::Magick::Q16/Image::Magick::Q16HDRI/g' -i lib/Ravada.pm
 %endif

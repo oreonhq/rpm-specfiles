@@ -41,7 +41,7 @@ BuildRequires:  mariadb-connector-c-devel
 BuildRequires:  sqlite-devel
 BuildRequires:  zlib-devel
 BuildRequires:  bluez-libs-devel
-%if 0%{?fedora} >= 37 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 37 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 BuildRequires:  libusb-compat-0.1-devel
 %else
 BuildRequires:  libusb-devel

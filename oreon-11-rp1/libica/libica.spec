@@ -88,7 +88,7 @@ fi
 %{_bindir}/icainfo-cex
 %{_bindir}/icastats
 %if %{with_fips}
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 # openssl 3.0 is available since Fedora 36 and RHEL 9
 %exclude %{_sysconfdir}/libica/openssl3-fips.cnf
 %endif

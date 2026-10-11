@@ -11,20 +11,20 @@
 %if %{with_lmdb}
 %define dbdep lmdb-devel
 %else
-%if 0%{?fedora} < 18 && 0%{?rhel} < 7
+%if 0%{?fedora} < 18 && 0%{?rhel} < 7 && 0%{?oreon} < 11
 %define dbdep db4-devel
 %else
 %define dbdep libdb-devel
 %endif
 %endif
 
-%if 0%{?fedora} < 27 && 0%{?rhel} <= 7
+%if 0%{?fedora} < 27 && 0%{?rhel} <= 7 && 0%{?oreon} < 11
 %global with_nss 1
 %else
 %global with_nss 0
 %endif
 
-%if 0%{?fedora} < 36 && 0%{?rhel} <= 9
+%if 0%{?fedora} < 36 && 0%{?rhel} <= 9 && 0%{?oreon} < 11
 %global ldaplib ldap_r
 %else
 %global ldaplib ldap

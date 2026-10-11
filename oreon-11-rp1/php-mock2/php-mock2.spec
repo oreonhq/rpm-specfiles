@@ -39,7 +39,7 @@ BuildRequires: phpunit10
 BuildRequires: phpunit11
 BuildRequires: phpunit12
 %endif
-%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 BuildRequires: phpunit13
 %endif
 %endif

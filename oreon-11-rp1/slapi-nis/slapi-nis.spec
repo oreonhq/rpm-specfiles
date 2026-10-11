@@ -2,12 +2,12 @@
 
 %bcond_with nis
 
-%if 0%{?fedora} >= 14 || 0%{?rhel} >= 6
+%if 0%{?fedora} >= 14 || 0%{?rhel} >= 6 || 0%{?oreon} >= 11
 %define ldap_impl openldap
 %else
 %define ldap_impl mozldap
 %endif
-%if 0%{?fedora} >= 18 || 0%{?rhel} >= 6
+%if 0%{?fedora} >= 18 || 0%{?rhel} >= 6 || 0%{?oreon} >= 11
 %define betxn_opts --enable-be-txns-by-default
 %else
 %define betxn_opts --disable-be-txns-by-default

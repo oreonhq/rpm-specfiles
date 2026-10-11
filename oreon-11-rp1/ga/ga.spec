@@ -12,7 +12,7 @@ ExcludeArch: %{ix86}
 
 %define mpich_name mpich
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global blaslib flexiblas
 %else
 %global blaslib openblas

@@ -42,7 +42,7 @@ BuildRequires: valgrind
 BuildRequires: psmisc
 %endif
 
-%if 0%{?fedora} >= 28 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 28 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %global use_libwrap 0
 %else
 %global use_libwrap 1

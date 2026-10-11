@@ -1,13 +1,13 @@
 %global source0_hash 6dbc80f6a09ba0cf6104a31784959780414dd77165e2963acd6657c28c2544c2
 
-%if 0%{?fedora} < 28 && 0%{?rhel} < 8
+%if 0%{?fedora} < 28 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 %bcond_without libnm_glib
 %else
 # Disable the legacy version by default
 %bcond_with libnm_glib
 %endif
 
-%if 0%{?fedora} < 36 && 0%{?rhel} < 10
+%if 0%{?fedora} < 36 && 0%{?rhel} < 10 && 0%{?oreon} < 11
 %bcond_with gtk4
 %else
 # Use GTK4 for Fedora 36

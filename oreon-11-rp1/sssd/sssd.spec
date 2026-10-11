@@ -4,7 +4,7 @@
 
 %global verify_signature 1
 
-%if 0%{?fedora} >= 43 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %global build_idp 1
 %else
 %global build_idp 0

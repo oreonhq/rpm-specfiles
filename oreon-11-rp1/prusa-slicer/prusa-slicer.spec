@@ -69,7 +69,7 @@ Patch423:	prusa-slicer-boost-1.89.patch
 %endif
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 37 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 ExcludeArch:    %{ix86}
 %endif
 

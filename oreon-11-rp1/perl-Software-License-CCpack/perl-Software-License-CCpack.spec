@@ -58,7 +58,7 @@ BuildRequires:	perl(Test::Pod) >= 1.41
 BuildRequires:	perl(Test::Pod::Coverage) >= 1.08
 BuildRequires:	perl(Test::Portability::Files)
 BuildRequires:	perl(Test::Synopsis)
-%if 0%{?fedora} < 39 && 0%{?rhel} < 10
+%if 0%{?fedora} < 39 && 0%{?rhel} < 10 && 0%{?oreon} < 11
 BuildRequires:	perl(Test::Vars)
 %endif
 %endif

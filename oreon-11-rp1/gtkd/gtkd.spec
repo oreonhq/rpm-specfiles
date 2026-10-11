@@ -31,7 +31,7 @@ Requires:       gstreamer1-plugins-base%{?_isa}
 Requires:       gtk3%{?_isa}
 Requires:       gtksourceview4%{?_isa}
 Requires:       libcurl%{?_isa}
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 Requires:       libpeas1%{?_isa}
 Requires:       libpeas1-gtk%{?_isa}
 %else

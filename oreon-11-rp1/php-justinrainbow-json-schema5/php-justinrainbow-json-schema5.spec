@@ -9,7 +9,7 @@
 # Please, preserve the changelog entries
 #
 
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 # disable test suite until recent phpunit is supported
 %bcond_with          tests
 %else

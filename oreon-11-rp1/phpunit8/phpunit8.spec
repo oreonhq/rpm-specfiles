@@ -139,7 +139,7 @@ Requires:       php-openssl
 Requires:       php-pcntl
 Requires:       php-phar
 
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 Provides:       php-composer(phpunit/phpunit) = %{version}
 Provides:       phpunit                       = %{version}-%{release}
 %endif

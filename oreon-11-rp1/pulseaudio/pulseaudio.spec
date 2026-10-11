@@ -23,7 +23,7 @@
 %global systemd 1
 
 # gdm-hooks moved to gdm packaging f28+
-%if 0%{?fedora} < 28 && 0%{?rhel} < 8
+%if 0%{?fedora} < 28 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 %global gdm_hooks 1
 %endif
 

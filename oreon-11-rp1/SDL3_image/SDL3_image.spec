@@ -132,8 +132,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %license LICENSE.txt
 %doc CHANGES.txt README.md
-%{_libdir}/lib%{name}.so.0
-%{_libdir}/lib%{name}.so.0.4.0
+%{_libdir}/lib%{name}.so.*
 
 %files devel
 %{_libdir}/lib%{name}.so

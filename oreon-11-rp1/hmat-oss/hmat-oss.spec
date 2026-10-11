@@ -1,6 +1,6 @@
 %global source0_hash 111f5cf45eeb70ba5e377c970af118b914029d07088dc15f1c6e81afe470e26a
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %global optflags %(echo %{optflags} -Wno-error=template-id-cdtor)
 %endif
 

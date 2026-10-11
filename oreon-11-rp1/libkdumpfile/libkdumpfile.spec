@@ -1,6 +1,6 @@
 %global source0_hash 16415528e870791ac8d392422f0986b4c3f83e6cb4267b4daffe6982fc5f4a3a
 
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 # Python bindings removed post-0.5.5
 # see commit 40c9ff981f1f3bd968af37a50b50c3478d8267cd
 %bcond_with python

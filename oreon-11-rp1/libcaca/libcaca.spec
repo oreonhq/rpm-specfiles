@@ -10,7 +10,7 @@
 %bcond_without gl
 %endif
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 40 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 %bcond_with    ruby
 %else
 %bcond_without ruby

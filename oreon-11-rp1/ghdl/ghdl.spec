@@ -198,7 +198,7 @@ test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo 
 %endif
 %patch -P 8 -p0 -b .no-add-needed~
 %patch -P 9 -p0 -b .Wno-format-security~
-%if 0%{?fedora} >= 29 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 29 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %patch -P 10 -p0 -b .rh1574936~
 %endif
 %patch -P 12 -p0 -b .pr119006~

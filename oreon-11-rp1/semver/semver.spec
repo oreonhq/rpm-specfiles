@@ -16,7 +16,7 @@ BuildRequires: gcc-c++
 BuildRequires: ninja-build
 
 # semver currently support only catch v2
-%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires: catch2-devel
 %else
 BuildRequires: catch-devel

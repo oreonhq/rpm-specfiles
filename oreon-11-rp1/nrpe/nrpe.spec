@@ -46,7 +46,7 @@ BuildRequires: openssl, openssl-devel
 BuildRequires: openssl-devel-engine
 %endif
 
-%if 0%{?fedora} < 28 && 0%{?rhel} < 8
+%if 0%{?fedora} < 28 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 BuildRequires: tcp_wrappers-devel
 %endif
 

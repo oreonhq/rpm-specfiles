@@ -19,7 +19,7 @@ BuildRequires:	zlib-devel
 Requires:	GeoIP-data
 
 # For compatibility with original release of GeoIP in old distributions
-%if 0%{?fedora} < 22 && 0%{?rhel} < 8
+%if 0%{?fedora} < 22 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 Requires:	geoipupdate
 %endif
 

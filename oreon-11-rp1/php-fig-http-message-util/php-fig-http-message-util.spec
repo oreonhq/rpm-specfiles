@@ -27,7 +27,7 @@ Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit
 
 BuildArch:      noarch
 BuildRequires:  php-cli
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 BuildRequires: (php-composer(psr/http-message) >= 1.0 with php-composer(psr/http-message) < 2)
 %else
 BuildRequires:  php-composer(psr/http-message) <  2
@@ -40,7 +40,7 @@ BuildRequires:  php-composer(fedora/autoloader)
 Requires:       php(language) > 5.3
 # From composer.json, "suggest": {
 #        "psr/http-message": "^1.0"
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Recommends:     php-composer(psr/http-message)
 %endif
 # From phpcompatinfo: none

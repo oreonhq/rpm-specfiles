@@ -12,7 +12,7 @@ Source:        https://github.com/sysstat/sysstat/archive/refs/tags/v%{version}.
 Source1: sysstat-tmpfiles.conf
 
 # PCP is no longer available for %%{ix86} on F40
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %ifnarch %{ix86}
 BuildRequires: pcp-libs-devel
 %endif

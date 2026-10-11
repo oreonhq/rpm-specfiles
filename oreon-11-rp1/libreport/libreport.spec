@@ -39,7 +39,7 @@ BuildRequires: satyr-devel >= 0.38
 BuildRequires: glib2-devel >= %{glib_ver}
 BuildRequires: git-core
 
-%if 0%{?fedora} >= 24 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 24 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 # A test case uses zh_CN locale to verify XML event translations
 BuildRequires: glibc-all-langpacks
 %endif

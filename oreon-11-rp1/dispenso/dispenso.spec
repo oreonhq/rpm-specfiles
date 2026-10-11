@@ -22,7 +22,7 @@
 #       |            ^
 # /builddir/build/BUILD/dispenso-1.3.0/dispenso/../dispenso/graph.h:530:12: note: remove the ‘< >’
 # cc1plus: all warnings being treated as errors
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %global optflags %(echo %{optflags} -Wno-error=template-id-cdtor)
 %endif
 

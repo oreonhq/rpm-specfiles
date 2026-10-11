@@ -47,7 +47,7 @@ BuildRequires:  php-spl
 #        "symfony/phpunit-bridge": "^4.2 || ^5.0 || ^6.0",
 #        "phpstan/phpstan": "^1.0",
 #        "phpstan/phpstan-strict-rules": "^1.1"
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 BuildRequires: (php-composer(psr/log)       >= 1.0   with php-composer(psr/log)       < 4)
 BuildRequires: (php-composer(composer/pcre) >= 1.0   with php-composer(composer/pcre) < 2)
 %else
@@ -65,7 +65,7 @@ BuildRequires:  php-composer(fedora/autoloader)
 #        "psr/log": "^1 || ^2 || ^3"
 #        "composer/pcre": "^1"
 Requires:       php(language) >= 5.3.2
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Requires:      (php-composer(psr/log)       >= 1.0   with php-composer(psr/log)       < 4)
 Requires:      (php-composer(composer/pcre) >= 1.0   with php-composer(composer/pcre) < 2)
 %else

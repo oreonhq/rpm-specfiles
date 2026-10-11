@@ -5,7 +5,7 @@
 %else
 %bcond_with libnm_glib
 %endif
-%if 0%{?fedora} < 36 && 0%{?rhel} < 10
+%if 0%{?fedora} < 36 && 0%{?rhel} < 10 && 0%{?oreon} < 11
 %bcond_with gtk4
 %else
 %bcond_without gtk4

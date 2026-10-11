@@ -3,7 +3,7 @@
 %define ver 2.23
 %define patchlevel 08
 
-%if 0%{?fedora} < 18 && 0%{?rhel} < 7
+%if 0%{?fedora} < 18 && 0%{?rhel} < 7 && 0%{?oreon} < 11
 %global db_devel  db4-devel
 %else
 %global db_devel  libdb-devel

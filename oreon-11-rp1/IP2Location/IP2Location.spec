@@ -50,7 +50,7 @@ the included downloader.
 
 %package 	libs
 Summary:	C library for mapping IP address to geolocation information
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Recommends:	%{name}%{_isa} = %{version}-%{release}
 %endif
 

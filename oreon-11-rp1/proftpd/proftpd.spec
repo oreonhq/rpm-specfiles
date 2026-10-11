@@ -420,7 +420,7 @@ fi
 %{_libexecdir}/proftpd/mod_wrap2_file.so
 %{_libexecdir}/proftpd/mod_wrap2_sql.so
 %exclude %{_libexecdir}/proftpd/*.a
-%if 0%{?fedora} < 36 && 0%{?rhel} < 10
+%if 0%{?fedora} < 36 && 0%{?rhel} < 10 && 0%{?oreon} < 11
 %exclude %{_libexecdir}/proftpd/*.la
 %endif
 %attr(331, ftp, ftp) %dir %{_localstatedir}/ftp/uploads/

@@ -117,7 +117,7 @@ Release: 1%{?dist}
 %global dns_rc_manager_default symlink
 %endif
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %bcond_with default_ifcfg_rh
 %else
 %bcond_without default_ifcfg_rh
@@ -363,7 +363,7 @@ Summary: Wifi plugin for NetworkManager
 Group: System Environment/Base
 Requires: %{name}%{?_isa} = %{epoch}:%{version}-%{release}
 
-%if 0%{?fedora} >= 29 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 Requires: wireless-regdb
 %else
 Requires: crda

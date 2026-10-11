@@ -25,10 +25,10 @@ BuildArch:      noarch
 
 %if %{with tests}
 BuildRequires:  php-composer(fedora/autoloader)
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global phpunit %{_bindir}/phpunit9
 %else
-%if 0%{?fedora} >= 26 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 26 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %global phpunit %{_bindir}/phpunit6
 %else
 %global phpunit %{_bindir}/phpunit

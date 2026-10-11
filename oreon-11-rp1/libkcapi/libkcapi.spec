@@ -8,18 +8,18 @@
 # Do we build the replacements packages?
 %bcond_with replace_coreutils
 # Replace fipscheck by default in Fedora 33+:
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %bcond_without replace_fipscheck
 %else
 %bcond_with replace_fipscheck
 %endif
 # Replace hmaccalc by default in Fedora 28+:
-%if 0%{?fedora} >= 28 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 28 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %bcond_without replace_hmaccalc
 %else
 %bcond_with replace_hmaccalc
 %endif
-%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %bcond_without test_package
 %else
 %bcond_with test_package

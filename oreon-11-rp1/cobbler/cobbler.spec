@@ -38,7 +38,7 @@ BuildRequires: make
 BuildRequires: python%{python3_pkgversion}-devel
 # Cheetah switched names from Cheetah3 to CT3 in its metadata in version 3.3.0.
 # https://github.com/CheetahTemplate3/cheetah3/commit/673259b2d139b4ea970b1c2da12607b7ac39cbec
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires: %{py3_dist ct3}
 %else
 BuildRequires: %{py3_dist cheetah3}
@@ -135,7 +135,7 @@ cp -p %{SOURCE2} %{SOURCE3} %{SOURCE4} selinux/
 
 # Cheetah switched names from Cheetah3 to CT3 in its metadata in version 3.3.0.
 # https://github.com/CheetahTemplate3/cheetah3/commit/673259b2d139b4ea970b1c2da12607b7ac39cbec
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 sed -e 's/Cheetah3/CT3/' -i setup.py
 %endif
 

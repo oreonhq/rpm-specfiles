@@ -4,7 +4,7 @@
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
 
 %define GPG_CHECK 1
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 # use modern %pyproject_* macros on distros which support them
 %define PYPROJECT 1
 %else

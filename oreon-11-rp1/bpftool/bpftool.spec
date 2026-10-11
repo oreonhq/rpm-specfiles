@@ -34,20 +34,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1 -n %{sources}
 
 %build
-# We need to use vmlinux.h from kernel-devel rather than the one from the running system
-%define kernel_version %(rpm -q --qf "%{VERSION}-%{RELEASE}.%{ARCH}" kernel-devel)
-%make_build -C src/ EXTRA_CFLAGS="%{build_cflags}" EXTRA_LDFLAGS="%{build_ldflags} -lzstd" VMLINUX_H="/usr/src/kernels/%{kernel_version}/vmlinux.h"
+%make_build -C src/ bootstrap EXTRA_CFLAGS="%{build_cflags}" EXTRA_LDFLAGS="%{build_ldflags} -lzstd"
 
 %install
-%make_install -C src/ prefix=%{_prefix} bash_compdir=%{bash_completions_dir} mandir=%{_mandir} doc-install
-
-# bpftool Makefile hardcodes installation to %%{_prefix}/sbin
-mv %{buildroot}%{_prefix}/sbin %{buildroot}%{_bindir}
+install -D src/bootstrap/bpftool %{buildroot}%{_bindir}/bpftool
 
 %files
 %{_bindir}/bpftool
-%{bash_completions_dir}/bpftool
-%{_mandir}/man8/bpftool*.8*
 
 %changelog
 %autochangelog

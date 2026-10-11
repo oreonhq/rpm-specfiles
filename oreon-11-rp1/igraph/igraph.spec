@@ -1,6 +1,6 @@
 %global source0_hash 969f2d7d22f67e788d8638c9a8c96615f50d7819c08978b3ef4a787bb6daa96c
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global blaslib flexiblas
 %global cmake_blas_flags -DBLA_VENDOR=FlexiBLAS
 %else

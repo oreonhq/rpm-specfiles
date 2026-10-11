@@ -264,7 +264,7 @@ rm %{buildroot}%{_unitdir}/%{name}-makecache.service
 rm %{buildroot}%{_unitdir}/%{name}-makecache.timer
 %endif
 
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %py3_shebang_fix %{buildroot}%{_bindir}/dnf-3
 %if %{without dnf5_obsoletes_dnf}
 %py3_shebang_fix %{buildroot}%{_bindir}/dnf-automatic

@@ -85,13 +85,13 @@ BuildRequires: gettext-devel
 
 %global provide_yama_scope      0
 
-%if 0%{?fedora} >= 22 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 22 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %global provide_yama_scope      1
 %endif
 
 %global with_sysusers           0
 
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global with_sysusers           1
 %endif
 

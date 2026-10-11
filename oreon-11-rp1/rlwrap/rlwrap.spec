@@ -40,7 +40,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{!?conf:%build}
 autoreconf -fiv
 
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 # issues with rl_message function signature even though readline is not upgraded
 # https://gcc.gnu.org/gcc-15/porting_to.html
 # readline.c: In function ‘message_in_echo_area’:

@@ -2,7 +2,7 @@
 
 # qca-qt6 OBS package. Spec is inlined (no %%include) so SRPM gather always parses.
 # Bump: sync ../qca/qca.spec into qca-bundled.spec then replace body below this header from that file.
-%if 0%{?fedora} < 34 && 0%{?rhel} < 9
+%if 0%{?fedora} < 34 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 %global botan 1
 %endif
 

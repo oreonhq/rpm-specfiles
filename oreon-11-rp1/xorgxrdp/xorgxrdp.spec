@@ -20,7 +20,7 @@ BuildRequires:  libXfont-devel
 BuildRequires:  libXfont2-devel
 %endif
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 BuildRequires:  mesa-libgbm-devel
 BuildRequires:  libepoxy-devel
 BuildRequires:  libdrm-devel
@@ -34,11 +34,11 @@ Conflicts: %{name}-glamor
 Requires:       xrdp >= 1:%{version}
 Requires:       Xorg %(xserver-sdk-abi-requires videodrv 2>/dev/null)
 Requires:       Xorg %(xserver-sdk-abi-requires xinput 2>/dev/null)
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Requires:       xorg-x11-server-Xorg
 %endif
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %package glamor
 Summary:        Implementation of xrdp backend as Xorg modules with glamor
 RemovePathPostfixes: .glamor
@@ -55,7 +55,7 @@ xorgxrdp is a set of X11 modules that make Xorg act as a backend for
 xrdp. Xorg with xorgxrdp is the most advanced xrdp backend with support
 for screen resizing and multiple monitors.
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %description glamor
 xorgxrdp is a set of X11 modules that make Xorg act as a backend for
 xrdp. Xorg with xorgxrdp is the most advanced xrdp backend with support
@@ -70,7 +70,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 autoreconf -i
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 # Build/install with glamor support first
 CFLAGS="$RPM_OPT_FLAGS -I/usr/include/libdrm" \
 %configure --enable-glamor
@@ -92,7 +92,7 @@ CFLAGS="$RPM_OPT_FLAGS -I/usr/include/libdrm" \
 %install
 %make_install
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 # Install glamor files
 %{__install} -p xrdpdev_drv.so.glamor %{buildroot}%{_libdir}/xorg/modules/drivers
 %{__install} -p xrdpkeyb_drv.so.glamor %{buildroot}%{_libdir}/xorg/modules/input
@@ -119,7 +119,7 @@ CFLAGS="$RPM_OPT_FLAGS -I/usr/include/libdrm" \
 %exclude %{_libdir}/xorg/modules/drivers/*.a
 %exclude %{_libdir}/xorg/modules/drivers/*.la
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %files glamor
 %license COPYING
 %doc README.md

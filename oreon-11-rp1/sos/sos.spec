@@ -42,13 +42,13 @@ support technicians and developers.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version}
 
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %generate_buildrequires
 %pyproject_buildrequires
 %endif
 
 %build
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %pyproject_wheel
 %else
 %py3_build
@@ -58,7 +58,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # Nothing to check
 
 %install
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %pyproject_install
 %pyproject_save_files sos
 %else
@@ -86,7 +86,7 @@ rm -rf %{buildroot}/usr/config/
 # internationalization is currently broken. Uncomment this line once fixed.
 # %%files -f %%{name}.lang
 %files
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %{_bindir}/sos
 %else
 %{_sbindir}/sos

@@ -22,7 +22,7 @@
 %global _lto_cflags %nil
 %endif
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global blaslib flexiblas
 %global blasvar %{nil}
 %else

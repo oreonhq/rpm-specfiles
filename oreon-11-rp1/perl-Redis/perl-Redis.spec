@@ -51,7 +51,7 @@ BuildRequires:  perl(Test::Fatal)
 BuildRequires:  perl(Test::More) >= 0.98
 BuildRequires:  perl(Test::SharedFork)
 BuildRequires:  perl(Test::TCP) >= 1.19
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires:  valkey
 %else
 BuildRequires:  redis
@@ -84,7 +84,7 @@ perl Build.PL --installdirs=vendor
 
 %check
 unset AUTHOR_TESTING PERL_COMPILE_TEST_DEBUG REDIS_DEBUG REDIS_SERVER REDIS_SERVER_PATH
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 set REDIS_SERVER_PATH=/usr/bin/valkey-server
 %endif
 RELEASE_TESTING=1 ./Build test

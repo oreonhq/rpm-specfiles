@@ -33,7 +33,7 @@ BuildRequires:  xorg-x11-server-Xvfb
 Requires:       xdotool xsel hicolor-icon-theme
 Requires:       mono-winforms
 Recommends:     libargon2
-%if 0%{?fedora} >=24 || 0%{?rhel} >= 8
+%if 0%{?fedora} >=24 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Recommends:     libgcrypt
 %endif
 

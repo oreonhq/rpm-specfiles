@@ -133,7 +133,7 @@ rm -rf js/src/ctypes/libffi/
 chmod -x third_party/rust/bumpalo/src/lib.rs
 
 # icu >= 76 link fix
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 sed -i 's/icu-i18n/icu-uc &/' js/moz.configure
 %endif
 

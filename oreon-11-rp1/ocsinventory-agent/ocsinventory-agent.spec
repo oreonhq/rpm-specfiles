@@ -115,7 +115,7 @@ Requires: net-tools
 Requires: pciutils
 Requires: smartmontools
 Requires: which
-%if 0%{?fedora} >= 25 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 25 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Recommends: perl(Net::Cups)
 Recommends: perl(Net::Ping)
 Recommends: perl(Parse::EDID)

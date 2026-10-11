@@ -33,7 +33,7 @@ Requires:       php-pear(Auth_SASL)
 # From phpcompatinfo report for version 1.9.0
 Requires:       php-openssl
 # Optional
-%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Recommends:     php-krb5
 %endif
 

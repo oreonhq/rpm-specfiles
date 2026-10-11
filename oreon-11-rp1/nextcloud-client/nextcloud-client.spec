@@ -62,7 +62,7 @@ BuildRequires:  kf6-kbookmarks-devel
 BuildRequires:  systemd-rpm-macros
 
 # Dolphin integration
-%if 0%{?fedora} >= 24 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 24 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  kf6-karchive-devel
 BuildRequires:  kf6-kcoreaddons-devel
@@ -201,7 +201,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/com.nextc
 
 %ldconfig_scriptlets libs
 
-%if 0%{?fedora} >= 24 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 24 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %ldconfig_scriptlets dolphin
 %endif
 

@@ -41,7 +41,7 @@ BuildRequires:  perl-devel
 BuildRequires:  multilib-rpm-config
 
 # Rblas library is no longer necessary
-%if 0%{?fedora} >= 31 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 31 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Obsoletes:      %{name}-Rblas < %{version}-%{release}
 %endif
 

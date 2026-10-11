@@ -40,7 +40,7 @@
 %global _cmake_lib_suffix64 -DLIB_SUFFIX=64
 %endif
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global blaslib flexiblas
 %if %{with optimized_blas}
 %global blasflags -DBLA_VENDOR=FlexiBLAS
@@ -437,7 +437,7 @@ sed -i 's|L%{_libdir}|L${libdir}|' %{buildroot}%{_libdir}/mpich/lib/pkgconfig/sc
 sed -i 's|libdir=%{_libdir}|libdir=%{_libdir}/mpich/lib|' %{buildroot}%{_libdir}/mpich/lib/pkgconfig/scalapack.pc
 %endif
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 # The above conditional allows us to do this only for flexiblas. openblas doesn't have a pc.
 %if %{with optimized_blas}
 %if %{with openmpi}

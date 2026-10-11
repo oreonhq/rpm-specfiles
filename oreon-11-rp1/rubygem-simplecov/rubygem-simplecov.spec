@@ -10,7 +10,7 @@ Release:       20%{?dist}
 License:       MIT
 URL:           http://github.com/colszowka/simplecov
 Source0:       http://rubygems.org/gems/%{gem_name}-%{version}.gem
-%if 0%{?fedora} >= 19 || 0%{?rhel} > 6
+%if 0%{?fedora} >= 19 || 0%{?rhel} > 6 || 0%{?oreon} >= 11
 Requires:      ruby(release)
 %else
 Requires:      ruby(abi) >= %{rubyabi}

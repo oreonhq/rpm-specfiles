@@ -10,7 +10,7 @@
 %global python python3
 %endif
 
-%if 0%{?fedora} >= 30 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 30 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
 %global bundle_pgpdump 1
 %else
 %global bundle_pgpdump 0

@@ -59,7 +59,7 @@
 %endif
 
 # Include SELinux subpackage
-%if 0%{?fedora} >= 30 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 30 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
     %global with_selinux 1
     %global selinuxtype targeted
     %global modulename ipa
@@ -167,7 +167,7 @@
 %define krb5_base_version %(LC_ALL=C /usr/bin/pkgconf --modversion krb5 2>/dev/null | grep -Eo '^[^.]+\.[^.]+' || echo %krb5_version)
 %global kdcproxy_version 0.4-3
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 # systemd with resolved enabled
 # see https://pagure.io/freeipa/issue/8275
 %global systemd_version 246.6-3
@@ -299,7 +299,7 @@ BuildRequires:  libpwquality-devel
 BuildRequires:  libsss_idmap-devel
 BuildRequires:  libsss_certmap-devel
 BuildRequires:  libsss_nss_idmap-devel >= %{sssd_version}
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 # Do not use nodejs22 on fedora < 41, https://pagure.io/freeipa/issue/9643
 BuildRequires: nodejs(abi) == 127, /usr/bin/node, /usr/bin/npm
 %elif 0%{?fedora} >= 39
@@ -311,7 +311,7 @@ BuildRequires:  nodejs(abi) < 111
 # Copr explicitely says no weak refs, so this has to be included
 BuildRequires:  nodejs-npm
 # use old dependency on RHEL 8 for now
-%if 0%{?fedora} >= 31 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 31 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 BuildRequires:  python3-rjsmin
 %else
 BuildRequires:  uglify-js
@@ -491,7 +491,7 @@ Requires(pre): certmonger >= %{certmonger_version}
 Requires(pre): 389-ds-base >= %{ds_version}
 Requires: font(fontawesome)
 Requires: open-sans-fonts
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 # https://pagure.io/freeipa/issue/8632
 Requires: openssl > 1.1.1i
 %else
@@ -659,7 +659,7 @@ Requires: %{openssl_pkcs11_name} >= %{openssl_pkcs11_version}
 # See https://bugzilla.redhat.com/show_bug.cgi?id=1825812
 # RHEL 8.3+ and Fedora 32+ have 2.1
 Requires: opendnssec >= 2.1.6-5
-%if 0%{?fedora} >= 42 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 42 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 Recommends: %{name}-server-encrypted-dns
 %endif
 %{?systemd_requires}

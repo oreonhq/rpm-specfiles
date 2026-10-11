@@ -9,7 +9,7 @@
 ## Use when first building a package set to see what patches are needed
 %global bootstrap 0
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %bcond_with libdbi
 %else
 %bcond_without libdbi

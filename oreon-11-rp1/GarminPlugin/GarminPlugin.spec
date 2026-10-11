@@ -1,7 +1,7 @@
 %global source0_hash 7b907a4b5b201ce0d321b7d3e4190735bfde20f6e158bf4ab8ac4016b1436899
 
 # Are licenses packaged using %%license?
-%if 0%{?fedora} >= 22 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 22 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %global with_license 1
 %endif # 0%%{?fedora} >= 22 || 0%%{?rhel} >= 8
 

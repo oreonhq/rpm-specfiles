@@ -61,7 +61,7 @@ Patch0003:        gcc15.patch
 %ifarch %{buildarches}
 BuildRequires: perl-interpreter
 BuildRequires: perl-Getopt-Long
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 BuildRequires: perl-FindBin
 BuildRequires: perl-lib
 %endif

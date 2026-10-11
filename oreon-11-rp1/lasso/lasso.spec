@@ -12,11 +12,11 @@
 %global default_sign_algo "rsa-sha1"
 %global min_hash_algo "sha1"
 
-%if 0%{?fedora} >= 38 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global default_sign_algo "rsa-sha256"
 %endif
 
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global min_hash_algo "sha256"
 %endif
 

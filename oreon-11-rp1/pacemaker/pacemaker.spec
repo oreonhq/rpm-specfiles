@@ -127,7 +127,7 @@
 ## Distro-specific configuration choices
 
 ### Default resource-stickiness to 1 when distro prefers that
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global resource_stickiness --with-resource-stickiness-default=1
 %endif
 

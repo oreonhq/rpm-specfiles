@@ -157,7 +157,7 @@ Provides: /usr/sbin/smtp-sink
 %description
 Postfix is a Mail Transport Agent (MTA).
 
-%if 0%{?fedora} < 23 && 0%{?rhel} < 9
+%if 0%{?fedora} < 23 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 %package sysvinit
 Summary: SysV initscript for postfix
 BuildArch: noarch
@@ -418,7 +418,7 @@ make non-interactive-package \
        sample_directory=%{postfix_sample_dir} \
        readme_directory=%{postfix_readme_dir} || exit 1
 
-%if 0%{?fedora} < 23 && 0%{?rhel} < 9
+%if 0%{?fedora} < 23 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 # This installs into the /etc/rc.d/init.d directory
 mkdir -p $RPM_BUILD_ROOT%{_initrddir}
 install -c %{SOURCE1} $RPM_BUILD_ROOT%{_initrddir}/postfix
@@ -613,7 +613,7 @@ exit 0
 %postun
 %systemd_postun_with_restart %{name}.service
 
-%if 0%{?fedora} < 23 && 0%{?rhel} < 9
+%if 0%{?fedora} < 23 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 %post sysvinit
 /sbin/chkconfig --add postfix >/dev/null 2>&1 ||:
 
@@ -781,7 +781,7 @@ fi
 # systemd-sysusers
 %{_sysusersdir}/postfix.conf
 
-%if 0%{?fedora} < 23 && 0%{?rhel} < 9
+%if 0%{?fedora} < 23 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 %files sysvinit
 %{_initrddir}/postfix
 %endif

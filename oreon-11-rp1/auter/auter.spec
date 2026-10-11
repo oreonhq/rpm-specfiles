@@ -10,7 +10,7 @@ URL:            https://github.com/rackerlabs/%{name}
 Source0:        https://github.com/rackerlabs/%{name}/archive/%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  help2man
-%if 0%{?fedora} >= 15 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 15 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 BuildRequires:  systemd
 %endif
 Requires:       crontabs
@@ -33,7 +33,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 help2man --section=1 ./auter -N -o auter.man -n "Automatic Update Transaction Execution by Rackspace" --include=auter.help2man-sections
 
 %install
-%if 0%{?fedora} >= 15 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 15 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 mkdir -p %{buildroot}%{_tmpfilesdir}
 echo "d %{_rundir}/%{name} 0755 root root -" > %{buildroot}%{_tmpfilesdir}/%{name}.conf
 mkdir -p %{buildroot}%{_rundir}/%{name}

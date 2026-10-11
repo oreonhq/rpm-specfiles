@@ -1,6 +1,6 @@
 %global source0_hash d74945deb2d50393430e07596b766f8a779512c7f60dac2a30ea64e059ece57b
 
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 44 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %global with_rules 0
 %else
 %global with_rules 1

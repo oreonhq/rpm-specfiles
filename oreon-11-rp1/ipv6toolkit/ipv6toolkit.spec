@@ -45,7 +45,7 @@ export CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_LD_FLAGS"
 
 %install
 %make_install PREFIX=%{_prefix} MANPREFIX=%{_datadir} \
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
   SBINPATH=$RPM_BUILD_ROOT%{_sbindir}
 %endif
 

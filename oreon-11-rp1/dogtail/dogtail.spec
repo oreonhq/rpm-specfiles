@@ -1,4 +1,4 @@
-%global source0_hash 801a15b183916df5adadd50338e82f76426b5b598477d2dc5e2258b1ce47236b
+%global source0_hash cc46bd4c05aed0210ba594e7a1d356c7fa50455d249dc919ef9ec5cd48af823d
 
 Summary: GUI test tool and automation framework
 Name: dogtail
@@ -7,7 +7,7 @@ Release: 1%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 URL: https://gitlab.com/dogtail/dogtail/
-Source0: https://gitlab.com/dogtail/dogtail/raw/released/%{name}-%{version}.tar.gz
+Source0: https://files.pythonhosted.org/packages/source/d/dogtail/dogtail-%{version}.tar.gz
 BuildArch: noarch
 
 %global _description\

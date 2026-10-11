@@ -11,7 +11,7 @@
 %global install_sepolicy 0
 %global sepolicy %{_datadir}/%{name}/selinux/%{name}.pp
 
-%if 0%{?fedora} >= 28 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 28 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %global python_version python3
 %else
 %global python_version python2

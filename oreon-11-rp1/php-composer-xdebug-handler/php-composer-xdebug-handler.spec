@@ -43,7 +43,7 @@ BuildRequires:  php-spl
 # From composer.json,     "require-dev": {
 #        "symfony/phpunit-bridge": "^4.2 || ^5",
 #        "phpstan/phpstan": "^0.12.55"
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 BuildRequires: (php-composer(psr/log) >= 1.0   with php-composer(psr/log) < 2)
 BuildRequires:  phpunit8
 %global phpunit %{_bindir}/phpunit8
@@ -60,7 +60,7 @@ BuildRequires:  php-composer(fedora/autoloader)
 #        "php": "^5.3.2 || ^7.0 || ^8.0",
 #        "psr/log": "^1.0"
 Requires:       php(language) >= 5.3.2
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Requires:      (php-composer(psr/log) >= 1.0   with php-composer(psr/log) < 2)
 %else
 Requires:       php-PsrLog

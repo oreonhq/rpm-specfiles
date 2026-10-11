@@ -13,7 +13,7 @@ BuildRequires:  make
 BuildRequires:  premake >= 5
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 ExcludeArch:    %{ix86}
 %endif
 

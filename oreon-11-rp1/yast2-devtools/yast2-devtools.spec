@@ -25,7 +25,7 @@
 %{!?_pkgdocdir:%global	_pkgdocdir	%{_docdir}/%{name}-%{version}}
 
 # Are licenses packaged using %%license?
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %bcond_without		license_dir
 %else  # 0%%{?fedora} >= 21 || 0%%{?rhel} >= 8
 %bcond_with		license_dir

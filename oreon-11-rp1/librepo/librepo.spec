@@ -10,7 +10,7 @@
 %bcond_without zchunk
 %endif
 
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %bcond_with use_gpgme
 %bcond_with use_selinux
 %else

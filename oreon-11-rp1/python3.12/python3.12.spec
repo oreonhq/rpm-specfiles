@@ -67,7 +67,7 @@ License: Python-2.0.1
 # Whether to use RPM build wheels from the python-{pip,setuptools,wheel}-wheel packages
 # Uses upstream bundled prebuilt wheels otherwise
 # Only F39+ has a pip new enough to work with Python 3.12
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %bcond_without rpmwheels
 %else
 %bcond_with rpmwheels

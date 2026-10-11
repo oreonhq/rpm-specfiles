@@ -18,7 +18,7 @@
 %endif
 
 # Settings for Fedora >= 38 and EL >= 10
-%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %bcond_with                 perl_modcompat
 %else
 %bcond_without              perl_modcompat

@@ -43,7 +43,7 @@ BuildRequires:	perl(Time::Local)
 BuildRequires:	perl(vars)
 BuildRequires:	perl(warnings)
 # Dependencies
-%if 0%{?fedora} < 38 && 0%{?rhel} < 10
+%if 0%{?fedora} < 38 && 0%{?rhel} < 10 && 0%{?oreon} < 11
 Requires:	perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
 %endif
 # Need perl(IO::Socket::SSL) for LDAP over SSL (#122066, #207430)

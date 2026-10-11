@@ -63,7 +63,7 @@ Patch4:		npu-compiler-vpux-driver-compiler.patch
 ExclusiveArch:	x86_64
 
 BuildRequires:	cmake
-%if 0%{?fedora} >= 42 || 0%{?rhel} > 10
+%if 0%{?fedora} >= 42 || 0%{?rhel} > 10 || 0%{?oreon} >= 11
 BuildRequires:	gcc14
 BuildRequires:	gcc14-c++
 %else
@@ -298,7 +298,7 @@ export CXXFLAGS="${CXXFLAGS/-Werror=format-security/} -Wno-error=stringop-overfl
 %cmake \
 	-DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	-DCMAKE_POLICY_VERSION_MINIMUM="3.5.0" \
-%if 0%{?fedora} >= 42 || 0%{?rhel} > 10
+%if 0%{?fedora} >= 42 || 0%{?rhel} > 10 || 0%{?oreon} >= 11
 	-DCMAKE_C_COMPILER=gcc-14 \
 	-DCMAKE_CXX_COMPILER=g++-14 \
 %endif

@@ -99,7 +99,7 @@
 %endif
 %endif
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global noopenh264 1
 %endif
 
@@ -618,7 +618,7 @@ BuildRequires:	libgcrypt-devel
 BuildRequires:	libudev-devel
 BuildRequires:	libuuid-devel
 
-%if 0%{?fedora} >= 37 || 0%{?rhel} > 9
+%if 0%{?fedora} >= 37 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 BuildRequires:	libusb-compat-0.1-devel
 %else
 BuildRequires:	libusb-devel

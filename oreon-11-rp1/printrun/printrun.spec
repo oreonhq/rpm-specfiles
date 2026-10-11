@@ -17,7 +17,7 @@ URL:            https://github.com/kliment/Printrun
 Source0:        https://github.com/kliment/Printrun/archive/%{tag}.tar.gz
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 ExcludeArch:    %{ix86}
 %endif
 

@@ -30,7 +30,7 @@ ExcludeArch: %{ix86} %{arm}
 
 %ifarch x86_64
 %if %{release_build}
-%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %global build_with_pgo 1
 %global pgo_wayland    1
 %global launch_wayland_compositor 1

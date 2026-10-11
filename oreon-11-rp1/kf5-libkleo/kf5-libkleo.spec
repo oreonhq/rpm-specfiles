@@ -48,7 +48,7 @@ Obsoletes:      kdepim-libs < 7:16.04.0
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 
 # gpg support ui
-%if 0%{?fedora} < 26 && 0%{?rhel} < 8
+%if 0%{?fedora} < 26 && 0%{?rhel} < 8 && 0%{?oreon} < 11
 Requires:       pinentry-gui
 %else
 Recommends:     pinentry-gui

@@ -36,7 +36,7 @@ Source1:   makesrc.sh
 BuildArch: noarch
 # For tests
 BuildRequires:  php(language) >= 5.4
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 BuildRequires: (php-composer(psr/http-message) >= 1.0   with php-composer(psr/http-message) < 3)
 %else
 BuildRequires:  php-psr-http-message
@@ -48,7 +48,7 @@ BuildRequires:  php-fedora-autoloader-devel
 #        "php": ">=5.4",
 #        "psr/http-message": "^1.0 || ^2.0"
 Requires:  php(language) >= 5.4
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Requires: (php-composer(psr/http-message) >= 1.0   with php-composer(psr/http-message) < 3)
 %else
 Requires:  php-psr-http-message

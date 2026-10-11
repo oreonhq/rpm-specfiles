@@ -16,7 +16,7 @@ Source:         %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz#/%{name}-
 BuildArch:      noarch
 
 Requires:       distribution-gpg-keys
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 Requires:       dnf5
 %else
 Requires:       dnf

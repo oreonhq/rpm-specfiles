@@ -140,7 +140,7 @@ Patch0010:        0010-OvmfPkg-silence-EFI_D_VERBOSE-0x00400000-in-NvmExpre.patc
 Patch0011:        0011-OvmfPkg-QemuKernelLoaderFsDxe-suppress-error-on-no-k.patch
 Patch0012:        0012-SecurityPkg-Tcg2Dxe-suppress-error-on-no-swtpm-in-si.patch
 Patch0013:        0013-OvmfPkg-set-PcdVariableStoreSize-PcdMaxVolatileVaria.patch
-%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 38 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 Patch0014:        0014-silence-.-has-a-LOAD-segment-with-RWX-permissions-wa.patch
 %endif
 Patch0015:        0015-OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch

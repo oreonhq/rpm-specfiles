@@ -184,7 +184,7 @@ BuildRequires: gcc-c++
 BuildRequires: libtool
 BuildRequires: libtool-ltdl-devel
 BuildRequires: systemtap-sdt-devel
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires: systemtap-sdt-dtrace
 %endif
 %if %{with liburiparser}

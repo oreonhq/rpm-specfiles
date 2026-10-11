@@ -3,7 +3,7 @@
 %define po_package gnome-vfs-2.0
 
 # don't use HAL from F-16 on
-%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %bcond_with hal
 %else
 %bcond_without hal

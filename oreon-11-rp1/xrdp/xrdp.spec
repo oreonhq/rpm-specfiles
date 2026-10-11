@@ -7,7 +7,7 @@
 %global selinux_types %(%{__awk} '/^#[[:space:]]*SELINUXTYPE=/,/^[^#]/ { if ($3 == "-") printf "%s ", $2 }' /etc/selinux/config 2>/dev/null)
 %global selinux_variants %([ -z "%{selinux_types}" ] && echo mls targeted || echo %{selinux_types})
 
-%if 0%{?fedora} >= 31 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 31 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global _hardlink /usr/bin/hardlink
 %else
 %global _hardlink /usr/sbin/hardlink
@@ -46,7 +46,7 @@ Patch3:    xrdp-0.10.0-scripts-libexec.patch
 Patch4:    xrdp-0.9.6-script-interpreter.patch
 Patch5:    xrdp-0.9.16-arch.patch
 Patch6:    xrdp-0.9.18-vnc-uninit.patch
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Patch8:    xrdp-0.10.5-sesman-ini.patch
 %endif
 

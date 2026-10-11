@@ -9,7 +9,7 @@
 # SPEC builds or find a way to detect an RDO build and automagically negate this
 # UPDATE: F24 dropped the supporting modules we currently use
 # TODO: Refresh/refactor OpenStack support to use newer module and then update below
-%if 0%{?fedora} >= 24 || 0%{?rhel} >= 3
+%if 0%{?fedora} >= 24 || 0%{?rhel} >= 3 || 0%{?oreon} >= 11
 %define include_openstack 0
 %else
 %define include_openstack 1

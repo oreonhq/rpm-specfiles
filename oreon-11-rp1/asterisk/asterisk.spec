@@ -26,17 +26,17 @@
 %global           ldap       1
 %global           gmime      1
 %global           corosync   1
-%if 0%{?fedora} >= 34 || 0%{?rhel} >8
+%if 0%{?fedora} >= 34 || 0%{?rhel} >8 || 0%{?oreon} >= 11
 %global           imap       0
 %else
 %global           imap       1
 %endif
-%if 0%{?fedora} >= 21 || 0%{?rhel} >=7
+%if 0%{?fedora} >= 21 || 0%{?rhel} >=7 || 0%{?oreon} >= 11
 %global           jack       0
 %else
 %global           jack       1
 %endif
-%if 0%{?fedora} >= 28 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 28 || 0%{?rhel} >= 7 || 0%{?oreon} >= 11
 %global           phone      0
 %global           xmpp       0
 %global           ices       0

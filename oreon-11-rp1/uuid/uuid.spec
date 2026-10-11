@@ -1,6 +1,6 @@
 %global source0_hash 11a615225baa5f8bb686824423f50e4427acd3f70d394765bdff32801f0fd5b0
 
-%if 0%{?fedora} < 20 && 0%{?rhel} < 7
+%if 0%{?fedora} < 20 && 0%{?rhel} < 7 && 0%{?oreon} < 11
 # Private libraries are not be exposed globally by RPM
 %{?filter_provides_in: %filter_provides_in %{php_extdir}/.*\.so$}
 %{?filter_setup}

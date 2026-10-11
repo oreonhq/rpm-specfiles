@@ -13,7 +13,7 @@ Filesystem and RPM macros for KDE Frameworks 5
 
 %package filesystem
 Summary: Filesystem for KDE Frameworks 5
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 Requires: kde-filesystem >= 5
 %endif
 # noarch -> arch transition

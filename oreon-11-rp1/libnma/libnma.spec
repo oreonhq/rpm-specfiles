@@ -4,7 +4,7 @@
 %global mbp_version           0.20090602
 %global old_libnma_version    1.10.4
 
-%if 0%{?fedora} >= 34 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 34 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %bcond_without libnma_gtk4
 %else
 %bcond_with libnma_gtk4

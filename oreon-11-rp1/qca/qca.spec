@@ -1,6 +1,6 @@
 %global source0_hash d4a2b3aa0272d73ea0c4cd2140960177fa34ddc2030e59a48ecfb80c757572c3
 
-%if 0%{?fedora} < 34 && 0%{?rhel} < 9
+%if 0%{?fedora} < 34 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 %global botan 1
 %endif
 

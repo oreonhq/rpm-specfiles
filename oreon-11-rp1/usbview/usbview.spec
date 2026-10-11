@@ -14,7 +14,7 @@ BuildRequires:  gtk3-devel
 BuildRequires:  ImageMagick
 BuildRequires:  make
 BuildRequires:  libappstream-glib
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 Requires:       gdk-pixbuf2-modules-extra
 %endif
 Requires:       hicolor-icon-theme

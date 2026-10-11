@@ -125,7 +125,7 @@ dos2unix -k -n %{SOURCE1} %{pkg_name}.cabal
 
 
 %files devel -f %{name}-devel.files
-%doc README changelog examples
+%doc README examples
 
 
 %if %{with haddock}

@@ -65,7 +65,7 @@ Obsoletes:      kiwi-image-tbz-requires < %{version}-%{release}
 Provides:       kiwi-image:tbz
 # tools used by kiwi
 # For building Fedora, RHEL/CentOS, and Mageia based images
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 Requires:       dnf5
 Provides:       kiwi-packagemanager:dnf5
 %endif

@@ -9,12 +9,12 @@
 %endif
 
 # Versions of lua-devel where the macros were removed
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global lua_conflict 5.4.0-7
 %endif
 # TODO add new versions if this gets backported
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 # requires RPM >= 4.16
 %bcond_without requires_generator
 %else

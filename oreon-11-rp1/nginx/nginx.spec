@@ -40,7 +40,7 @@
 %endif
 
 # kTLS requires OpenSSL 3.0 (default in F36+ and EL9+, available in EPEL8)
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %global with_ktls 1
 %endif
 

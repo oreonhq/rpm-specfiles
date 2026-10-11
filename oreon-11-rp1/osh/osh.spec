@@ -110,7 +110,7 @@ Requires: python3-csdiff
 Requires: python3-jira
 
 # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=2255013
-%if 0%{?fedora} < 40 && 0%{?rhel} < 10
+%if 0%{?fedora} < 40 && 0%{?rhel} < 10 && 0%{?oreon} < 11
 Requires(post): postgresql < 16
 %else
 Requires(post): postgresql

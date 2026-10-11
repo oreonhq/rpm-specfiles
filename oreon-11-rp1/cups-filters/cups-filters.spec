@@ -133,7 +133,7 @@ queues.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git -N
 
-%if 0%{?fedora} >= 43 || 0%{?rhel} >=9
+%if 0%{?fedora} >= 43 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
 %autopatch
 %else
 %autopatch -M 3
@@ -163,7 +163,7 @@ install -p -m 0755 %{SOURCE2} %{buildroot}%{_cups_serverbin}/filter/lftocrlf
 install -p -m 0644 %{SOURCE1} %{buildroot}%{_datadir}/ppd/cupsfilters/lftocrlf.ppd
 
 # remove this once F43 is EOL
-%if 0%{?fedora} >= 43 || 0%{?rhel} >=9
+%if 0%{?fedora} >= 43 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
 
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 
@@ -251,25 +251,25 @@ then
   rm -f /var/cache/cups/ppds.dat || :
 fi
 
-%if 0%{?fedora} >= 43 || 0%{?rhel} >=9
+%if 0%{?fedora} >= 43 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
   %systemd_post foomaticrip-upgrade.service
 %endif
 
 
 %preun
-%if 0%{?fedora} >= 43 || 0%{?rhel} >=9
+%if 0%{?fedora} >= 43 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
   %systemd_preun foomaticrip-upgrade.service
 %endif
 
 
 %postun
-%if 0%{?fedora} >= 43 || 0%{?rhel} >=9
+%if 0%{?fedora} >= 43 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
   %systemd_postun foomaticrip-upgrade.service
 %endif
 
 
 %posttrans
-%if 0%{?fedora} >= 43 || 0%{?rhel} >=9
+%if 0%{?fedora} >= 43 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
   %systemd_posttrans_with_reload foomaticrip-upgrade.service
 %endif
 
@@ -283,7 +283,7 @@ then
     systemctl restart cups || :
   fi
 
-  %if 0%{?fedora} >= 43 || 0%{?rhel} >=9
+  %if 0%{?fedora} >= 43 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
     systemctl start foomaticrip-upgrade.service || :
   %endif
 fi
@@ -347,7 +347,7 @@ fi
 %{_mandir}/man1/foomatic-hash.1.gz
 %{_mandir}/man1/foomatic-rip.1.gz
 %config(noreplace) %{_sysconfdir}/foomatic
-%if 0%{?fedora} >= 43 || 0%{?rhel} >=9
+%if 0%{?fedora} >= 43 || 0%{?rhel} >=9 || 0%{?oreon} >= 11
 %dir %{_libexecdir}/%{name}
 %attr(0744,root,root) %{_libexecdir}/%{name}/posttrans.sh
 %ghost %attr(0644,root,root) %{_sysconfdir}/foomatic/hashes.d/hashes.new

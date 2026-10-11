@@ -38,7 +38,7 @@ BuildRequires:  php-mbstring
 # For tests, from composer.json "require-dev": {
 #        "phpunit/phpunit": ">=8.0 <12.0,"
 #        "opis/closure": "^3.0 || ^4.0"
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 BuildRequires:  phpunit11
 %global phpunit %{_bindir}/phpunit11
 %else

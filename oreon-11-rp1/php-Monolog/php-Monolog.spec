@@ -125,7 +125,7 @@ Obsoletes:     %{name}-raven  < %{version}-%{release}
 Provides:      %{name}-raven  = %{version}-%{release}
 
 # Weak dependencies
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 Suggests:      php-composer(aws/aws-sdk-php)
 Suggests:      php-composer(sentry/sentry)
 Suggests:      php-composer(swiftmailer/swiftmailer)

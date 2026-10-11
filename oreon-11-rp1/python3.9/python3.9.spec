@@ -110,7 +110,7 @@ License: Python
 # We now have a compatibility layer to workaround a problem,
 # but we also no longer use the legacy arch names in Fedora 34+.
 # This bcond controls the behavior. The defaults should be good for anybody.
-%if 0%{?fedora} >= 34 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 34 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %bcond_with legacy_archnames
 %else
 %bcond_without legacy_archnames
@@ -1388,7 +1388,7 @@ CheckPython() {
     -x test_ctypes \
     %endif
     %ifarch %{arm}
-    %if 0%{?fedora} < 34 && 0%{?rhel} < 9
+    %if 0%{?fedora} < 34 && 0%{?rhel} < 9 && 0%{?oreon} < 11
     -x test_gdb \
     %endif
     %endif
