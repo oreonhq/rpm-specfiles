@@ -2344,7 +2344,7 @@ InitBuildVars() {
     perl -p -i -e 's/^PATCHLEVEL.*/PATCHLEVEL = %{patchlevel}/' Makefile
 
     %{log_msg "InitBuildVars: Copy files"}
-    %{make} %{?_smp_mflags} mrproper
+    %{make} -j1 mrproper
     cp configs/$Config .config
 
     %if %{signkernel}%{signmodules}
