@@ -56,7 +56,7 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 export CFLAGS="$CFLAGS -std=gnu17"
 %configure --enable-tests=yes \
 	--enable-asserts=yes \
-	--enable-gtk-doc
+	--disable-gtk-doc
 
 %make_build
 
@@ -90,7 +90,6 @@ chmod -x $RPM_BUILD_ROOT%{_sysconfdir}/bash_completion.d/dbus-bash-completion.sh
 %{_libdir}/libdbus-glib-1.so
 %{_libdir}/pkgconfig/dbus-glib-1.pc
 %{_includedir}/dbus-1.0/dbus/*
-%{_datadir}/gtk-doc/html/dbus-glib
 %{_sysconfdir}/bash_completion.d/dbus-bash-completion.sh
 %{_libexecdir}/dbus-bash-completion-helper
 

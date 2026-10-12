@@ -120,7 +120,10 @@ install -m 0755 -p distribution/dracut_module/module-setup.sh %{buildroot}%{_pre
 install -m 0755 -p distribution/dnsconfd-prepare.sh %{buildroot}%{_libexecdir}/dnsconfd-prepare
 install -m 0755 -p distribution/dnsconfd-prepare.sh %{buildroot}%{_libexecdir}/dnsconfd-cleanup
 install -m 0755 -p distribution/dnsconfd-unbound-control.sh %{buildroot}%{_libexecdir}/dnsconfd-unbound-control.sh
-install -m 0644 -p distribution/dracut_module/*.conf %{buildroot}%{_prefix}/lib/dracut/modules.d/99dnsconfd
+for f in distribution/dracut_module/*.conf; do
+  test -f "$f" || continue
+  install -m 0644 -p "$f" %{buildroot}%{_prefix}/lib/dracut/modules.d/99dnsconfd
+done
 
 touch %{buildroot}%{_rundir}/dnsconfd/unbound.conf
 chmod 0644 %{buildroot}%{_rundir}/dnsconfd/unbound.conf

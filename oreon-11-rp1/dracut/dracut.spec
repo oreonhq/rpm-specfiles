@@ -260,7 +260,6 @@ echo 'dracut_rescue_image="yes"' > $RPM_BUILD_ROOT%{dracutlibdir}/dracut.conf.d/
 %dir %{dracutlibdir}
 %dir %{dracutlibdir}/modules.d
 %{dracutlibdir}/dracut-functions.sh
-%{dracutlibdir}/dracut-init.sh
 %{dracutlibdir}/dracut-functions
 %{dracutlibdir}/dracut-version.sh
 %{dracutlibdir}/dracut-logger.sh
@@ -303,14 +302,12 @@ echo 'dracut_rescue_image="yes"' > $RPM_BUILD_ROOT%{dracutlibdir}/dracut.conf.d/
 %{dracutlibdir}/modules.d/11systemd-battery-check
 %{dracutlibdir}/modules.d/11systemd-coredump
 %{dracutlibdir}/modules.d/11systemd-creds
-%{dracutlibdir}/modules.d/11systemd-cryptsetup
 %{dracutlibdir}/modules.d/11systemd-hostnamed
 %{dracutlibdir}/modules.d/11systemd-initrd
 %{dracutlibdir}/modules.d/11systemd-integritysetup
 %{dracutlibdir}/modules.d/11systemd-journald
 %{dracutlibdir}/modules.d/11systemd-ldconfig
 %{dracutlibdir}/modules.d/11systemd-modules-load
-%{dracutlibdir}/modules.d/11systemd-pcrphase
 %{dracutlibdir}/modules.d/11systemd-portabled
 %{dracutlibdir}/modules.d/11systemd-pstore
 %{dracutlibdir}/modules.d/11systemd-repart

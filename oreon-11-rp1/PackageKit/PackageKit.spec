@@ -366,7 +366,6 @@ systemctl disable packagekit-offline-update.service > /dev/null 2>&1 || :
 %files glib-devel
 %{_libdir}/libpackagekit-glib2.so
 %{_libdir}/pkgconfig/packagekit-glib2.pc
-%dir %{_includedir}/PackageKit
 %{_includedir}/packagekit-glib2/
 %{_datadir}/gir-1.0/PackageKitGlib-1.0.gir
 %{_datadir}/gtk-doc/html/PackageKit

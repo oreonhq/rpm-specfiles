@@ -13,7 +13,7 @@
 %endif
 
 %if 0%{?rhel} > 7
-%global urw_font_bundle 1
+%global urw_font_bundle 0
 %endif
 
 %global multilib_archs x86_64 %{ix86} ppc64 ppc64le ppc s390x s390 sparc64 sparcv9
@@ -29,8 +29,6 @@ License: MIT
 
 Source0: http://downloads.sourceforge.net/sourceforge/graphicsmagick/GraphicsMagick-%{version}.tar.xz
 # bundle urw-fonts if needed
-Source1: urw-fonts-1.0.7pre44.tar.bz2
-
 # workaround multilib conflicts with GraphicsMagick-config
 Patch100: GraphicsMagick-1.3.42-multilib.patch
 

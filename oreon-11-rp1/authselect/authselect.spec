@@ -202,6 +202,8 @@ find $RPM_BUILD_ROOT -name "*.a" -exec %__rm -f {} \;
 
 %files  -f %{name}.8.lang  -f %{name}-migration.7.lang
 %{_bindir}/authselect
+%{_unitdir}/authselect-first-boot.service
+%{_datadir}/bash-completion/completions/authselect.bash
 %{_mandir}/man8/authselect.8*
 %{_mandir}/man7/authselect-migration.7*
 

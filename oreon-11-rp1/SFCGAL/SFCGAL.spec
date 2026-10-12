@@ -39,6 +39,7 @@ Development headers and libraries for SFCGAL.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p0 -n SFCGAL-v%{version}
+sed -i 's/Polygon_mesh_processing::surface_intersection/Polygon_mesh_processing::intersection/' src/algorithm/Intersection3D.cpp
 
 %build
 %cmake -D LIB_INSTALL_DIR=%{_lib} -DBoost_NO_BOOST_CMAKE=BOOL:ON -DCMAKE_SKIP_RPATH:BOOL=YES -DSFCGAL_BUILD_DOC:BOOL=YES

@@ -71,6 +71,7 @@ autoreconf -v -f -i -I.
         --with-mp3-support \
         --with-lame
 
+find /usr/include/giomm-2.4 -name '*.h' -exec sed -i '/^using G.*Class = struct _/d' {} +
 %make_build
 
 

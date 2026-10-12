@@ -115,6 +115,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cmake_install
+rm -rf %{buildroot}/usr/lib/debug
 
 %check
 :

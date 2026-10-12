@@ -20,7 +20,7 @@ BuildRequires:  gettext
 BuildRequires:  libappstream-glib
 BuildRequires:  meson
 BuildRequires:  yelp-tools
-BuildRequires:  (pkgconfig(gedit) >= 50.0 and pkgconfig(gedit) < 50)
+BuildRequires:  pkgconfig(gedit) >= 50
 BuildRequires:  pkgconfig(libpeas-1.0)
 
 # this is a metapackage dragging in all the plugins

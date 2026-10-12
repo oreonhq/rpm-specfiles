@@ -74,11 +74,10 @@ chmod 0755 %{buildroot}%{_libdir}/libmarkdown.so.*
 
 %files -n libmarkdown-devel
 %{_includedir}/mkdio.h
-%{_libdir}/libmarkdown.so.*
+%{_libdir}/libmarkdown.so
 %{_libdir}/pkgconfig/libmarkdown.pc
 %{_mandir}/man3/*.3*
 
 
 %changelog
 %autochangelog
-%{_libdir}/libmarkdown.so
