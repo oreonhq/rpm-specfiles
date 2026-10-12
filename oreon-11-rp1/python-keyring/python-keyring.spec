@@ -13,14 +13,6 @@ License:        MIT
 URL:            https://github.com/jaraco/keyring
 Source:         %{pypi_source keyring}
 
-# - keyring.backends.macOS does not import on this platform
-# - keyring.devpi_client and keyring.testing are test hooks that require pluggy
-#   and/or pytest; we can import them only if the test dependencies are present
-    --exclude 'keyring.backends.macOS*'
-    %{?!with_tests:--exclude 'keyring.devpi_client'}
-    %{?!with_tests:--exclude 'keyring.testing*'}
-    }
-
 BuildArch:      noarch
 
 BuildRequires:  help2man

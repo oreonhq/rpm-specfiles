@@ -8,6 +8,7 @@ Release:        1%{?dist}
 Summary:        C library for generating PDF files
 License:        zlib-acknowledgement
 URL:            http://libharu.org
+Source0:        https://github.com/libharu/libharu/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  cmake

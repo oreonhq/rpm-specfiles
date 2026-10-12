@@ -9,7 +9,7 @@
 %global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
 
 Name:           rust-curl-sys
-Version:        0.4.90+curl-8.21.0+curl-8.21.0
+Version:        0.4.90+curl.8.21.0+curl.8.21.0
 Release:        %autorelease
 Summary:        Native bindings to the libcurl library
 
