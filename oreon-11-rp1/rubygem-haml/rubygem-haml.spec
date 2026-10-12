@@ -12,7 +12,7 @@ URL: http://haml.info/
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone --no-checkout https://github.com/haml/haml.git
 # git -C haml archive -v -o haml-5.2.2-tests.txz v5.2.2 test/
-Source1: %{gem_name}-%{version}-tests.txz
+Source1: https://github.com/haml/haml/archive/refs/tags/v5.2.2.tar.gz
 # Explicitly include ostruct due to json 2.7.2 change
 Patch0:  rubygem-haml-5.2.2-explicit-ostruct-dep.patch
 # Support ruby3.4 Hash#inspect format change
@@ -50,6 +50,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 (
 cd %{_builddir}
 %patch 0 -p1

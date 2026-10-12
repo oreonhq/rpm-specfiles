@@ -63,17 +63,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 %cmake_install
 
-%find_lang libktorrent6
 
 
-%files -f libktorrent6.lang
+%files
 %doc ChangeLog
 %license LICENSES/GPL*.txt
 %{_kf6_libdir}/libKTorrent6.so.6
 %{_kf6_libdir}/libKTorrent6.so.%{version}
 
 %files devel
-%{_kf6_includedir}/libktorrent/
 %{_kf6_libdir}/libKTorrent6.so
 %{_kf6_libdir}/cmake/KTorrent6/
 

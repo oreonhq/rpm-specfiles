@@ -11,7 +11,7 @@ URL: https://mocha.jamesmead.org
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/freerange/mocha.git && cd mocha
 # git archive -v -o mocha-2.6.1-test.tar.gz v2.6.1 test/
-Source1: %{gem_name}-%{version}-test.tar.gz
+Source1: https://github.com/freerange/mocha/archive/refs/tags/v2.6.1.tar.gz
 # Use single quote instead of backtick for Ruby 3.4 compatibility
 # https://github.com/freerange/mocha/pull/688
 Patch0: rubygem-mocha-2.6.1-Support-single-quote-instead-of-backtick-for-Ruby-3.4.patch
@@ -44,6 +44,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %patch 1 -p1
 pushd %{builddir}

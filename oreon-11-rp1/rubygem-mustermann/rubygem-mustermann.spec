@@ -16,9 +16,9 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # Support and mustermann-contrib routines required by test suite.
 # git clone https://github.com/sinatra/mustermann.git && cd mustermann
 # git checkout v3.0.3 && tar czvf mustermann-3.0.3-support.tgz support/
-Source1: %{gem_name}-%{version}-support.tgz
+Source1: https://github.com/sinatra/mustermann/archive/refs/tags/v3.0.3.tar.gz
 # tar czvf mustermann-3.0.3-mustermann-contrib.tgz mustermann-contrib/
-Source2: %{gem_name}-%{version}-mustermann-contrib.tgz
+Source2: https://github.com/sinatra/mustermann/archive/refs/tags/v3.0.3.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby >= 2.6.0
@@ -44,6 +44,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1 -b 2
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 # Drop ruby2_keywords dependency that is required by Ruby < 2.7.
 %gemspec_remove_dep -g ruby2_keywords

@@ -13,7 +13,7 @@ URL: http://pry.github.io
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/pry/pry.git && cd pry
 # git archive -v -o pry-0.15.2-spec.tar.gz v0.15.2 spec/
-Source1: %{gem_name}-%{version}-spec.tar.gz
+Source1: https://github.com/pry/pry/archive/refs/tags/v0.15.2.tar.gz
 # Fix compatibility with Ruby 4.0 `source_location` method.
 # https://github.com/pry/pry/pull/2357
 Patch0: rubygem-pry-0.15.2-Fix-source-location-usage-to-support-Ruby-4-0.patch
@@ -47,6 +47,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %patch 0 -p1
 

@@ -14,7 +14,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # You can check it like so:
 # git clone --no-checkout https://github.com/jaynetics/regexp_property_values.git
 # cd regexp_property_values && git archive -v -o regexp_property_values-1.0.0-spec.txz v1.0.0 spec
-Source1: %{gem_name}-%{version}-spec.txz
+Source1: https://github.com/jaynetics/regexp_property_values/archive/refs/tags/v1.0.0.tar.gz
 
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
@@ -41,6 +41,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
 gem build ../%{gem_name}-%{version}.gemspec

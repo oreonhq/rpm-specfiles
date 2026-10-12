@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'pytest-httpserver' generated automatically by pyp2spec.}
 
-Patch0:		pyproject.patch
 Patch1:		tomllib.patch
 
 %description %_description

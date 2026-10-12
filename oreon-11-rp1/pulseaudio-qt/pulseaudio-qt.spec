@@ -62,7 +62,6 @@ rm %{buildroot}%{_kf6_includedir}/pulseaudioqt_version.h
 %{_kf6_libdir}/libKF6PulseAudioQt.so
 %{_kf6_libdir}/cmake/KF6PulseAudioQt/
 %{_kf6_libdir}/pkgconfig/KF6PulseAudioQt.pc
-%{_qt6_docdir}/*.tags
 
 %files qt6-doc
 %{_qt6_docdir}/*.qch

@@ -92,7 +92,6 @@ make check
 
 
 %files
-%doc CHANGES COPYRIGHT INTRO.html README TODO
 %{_unitdir}/radvd.service
 %config(noreplace) %{_sysconfdir}/radvd.conf
 %config(noreplace) %{_sysconfdir}/sysconfig/radvd

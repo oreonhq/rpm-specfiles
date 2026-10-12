@@ -17,7 +17,7 @@ URL: https://github.com/excon/excon
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/excon/excon.git --no-checkout && cd excon
 # git archive -v -o excon-1.2.7-tests.tar.gz v1.2.7 tests/ spec/
-Source1: %{gem_name}-%{version}-tests.tar.gz
+Source1: https://github.com/excon/excon/archive/refs/tags/v1.2.7.tar.gz
 # https://github.com/excon/excon/commit/fbe4748d49ac87504ee8d3e7352da0de3485144c
 # https://github.com/excon/excon/issues/892
 # adjust ractor usage for Ruby 3.5+
@@ -53,6 +53,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 (
 cd %{_builddir}
 %patch -P0 -p1

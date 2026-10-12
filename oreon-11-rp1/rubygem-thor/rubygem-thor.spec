@@ -13,7 +13,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # The test suite is not shipped with the gem, you may check it out like so:
 # git clone https://github.com/rails/thor.git --no-checkout
 # cd thor && git archive -v -o thor-1.3.2-spec.tar.gz v1.3.2 spec/
-Source1: %{gem_name}-%{version}-spec.tar.gz
+Source1: https://github.com/rails/thor/archive/refs/tags/v1.3.2.tar.gz
 # Support Ruby 3.4 Hash#inspect change.
 # https://github.com/rails/thor/commit/9d7aef1db1666ecc382eeaa5549361a0aa956567
 Patch0: rubygem-thor-1.3.2-Support-Ruby-3-4-Hash-inspect-change.patch
@@ -44,6 +44,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 ( cd %{builddir}
 %patch 0 -p1

@@ -9,7 +9,7 @@ Version: 0.02
 Release: 38%{?dist}
 License: LGPL-2.1-only
 URL: http://aspell.net/
-Source: ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}.tar.bz2
+Source: https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}.tar.bz2
 Patch0: aspell6-sr-0.02-time.patch
 
 # IMPORTANT

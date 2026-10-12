@@ -13,7 +13,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/faye/websocket-extensions-ruby.git && \
 #   cd websocket-extensions-ruby \
 #   git archive -v -o websocket-extensions-0.1.5-specs.tar.gz 0.1.5 spec/
-Source1: %{gem_name}-%{version}-specs.tar.gz
+Source1: https://github.com/faye/websocket-extensions-ruby/archive/refs/tags/v0.1.5.tar.gz
 # Fix RSpec 3.10.3+ compatibility.
 # https://github.com/faye/websocket-extensions-ruby/commit/5891358639fcfa7a2e2004855275bd7da0c85c64
 Patch0: rubygem-websocket-extensions-0.1.5-Use-explicit-has-to-avoid-confusion-with-keyword-args.patch
@@ -38,6 +38,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 pushd %{_builddir}
 %patch -P0 -p1

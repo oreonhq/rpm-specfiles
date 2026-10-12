@@ -11,8 +11,8 @@ Epoch: 50
 Version: 0.99f7
 Release: 38%{?dist}
 License: ARL
-URL: ftp://ftp.gnu.org/gnu/aspell/dict/0index.html#0.60
-Source0: ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell%{aspellversion}-%{lang}-%{version}-%{langrelease}.tar.bz2
+URL: https://ftp.gnu.org/gnu/aspell/dict/0index.html#0.60
+Source0: https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell%{aspellversion}-%{lang}-%{version}-%{langrelease}.tar.bz2
 Source1: russian.alias
 
 # IMPORTANT

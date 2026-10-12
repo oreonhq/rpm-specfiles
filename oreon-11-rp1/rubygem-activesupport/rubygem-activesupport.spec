@@ -14,7 +14,7 @@ URL: https://rubyonrails.org
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}%{?prerelease}.gem
 # git clone http://github.com/rails/rails.git && cd rails/activesupport
 # git archive -v -o activesupport-8.0.3-tests.tar.gz v8.0.3 test/
-Source1: %{gem_name}-%{version}%{?prerelease}-tests.tar.gz
+Source1: https://github.com/rails/rails/archive/refs/tags/v8.0.3.tar.gz
 # This is needed due to `force_skip` alias.
 # https://github.com/rails/rails/blob/main/tools/test_common.rb
 Source2: https://raw.githubusercontent.com/rails/rails/e25d738430bdc6bdd04cd28be705484ea953e74e/tools/test_common.rb
@@ -78,6 +78,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version}%{?prerelease} -a 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %patch 1 -p2
 %patch 2 -p2

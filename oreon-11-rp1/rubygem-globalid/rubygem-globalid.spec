@@ -14,7 +14,7 @@ URL: http://www.rubyonrails.org
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/rails/globalid.git && cd globalid
 # git archive -v -o globalid-1.2.1-tests.tar.gz v1.2.1 test
-Source1: %{gem_name}-%{version}-tests.tar.gz
+Source1: https://github.com/rails/globalid/archive/refs/tags/v1.2.1.tar.gz
 # Fix Ruby 3.4 compatibility.
 # https://github.com/rails/globalid/pull/192
 Patch0: rubygem-globalid-1.2.1-Keep-using-URI-RFC2396-parser.patch
@@ -47,6 +47,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %patch 0 -p1
 

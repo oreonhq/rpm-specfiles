@@ -7,7 +7,7 @@ Summary:	Frontend and .dmod installer for GNU FreeDink
 
 License:	GPL-3.0-or-later
 URL:		http://www.gnu.org/software/freedink/
-Source0:	ftp://ftp.gnu.org/gnu/freedink/dfarc-%{version}.tar.gz
+Source0:	https://ftp.gnu.org/gnu/freedink/dfarc-%{version}.tar.gz
 ExcludeArch:    s390x
 
 BuildRequires:  gcc-c++

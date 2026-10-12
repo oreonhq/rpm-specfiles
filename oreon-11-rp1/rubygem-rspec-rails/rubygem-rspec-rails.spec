@@ -15,7 +15,7 @@ URL: https://github.com/rspec/rspec-rails
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/rspec/rspec-rails.git && cd rspec-rails
 # git archive -v -o rspec-rails-8.0.1-tests.tar.gz v8.0.1 features/ spec/
-Source1: %{gem_name}-%{version}-tests.tar.gz
+Source1: https://github.com/rspec/rspec-rails/archive/refs/tags/v8.0.1.tar.gz
 # Fix Ruby on Rails 7.2+ compatibility. This mainly avoids additional
 # dependency on chromedriver.
 # https://github.com/rspec/rspec-rails/pull/2856
@@ -53,6 +53,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 (
 cd %{builddir}

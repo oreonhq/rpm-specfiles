@@ -130,7 +130,6 @@ mkdir -p extdoc && touch extdoc/package-list
 %mvn_install
 
 %files -f .mfiles
-%doc README THANKS
 %license COPYING
 
 %changelog

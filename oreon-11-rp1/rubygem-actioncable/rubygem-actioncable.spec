@@ -17,11 +17,11 @@ URL: https://rubyonrails.org
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}%{?prerelease}.gem
 # git clone https://github.com/rails/rails.git && cd rails/actioncable
 # git archive -v -o actioncable-8.0.3-tests.tar.gz v8.0.3 test/
-Source1: %{gem_name}-%{version}%{?prerelease}-tests.tar.gz
+Source1: https://github.com/rails/rails/archive/refs/tags/v8.0.3.tar.gz
 # Source code of pregenerated JS files.
 # git clone https://github.com/rails/rails.git && cd rails/actioncable
 # git archive -v -o actioncable-8.0.3-js.tar.gz v8.0.3 app/javascript package.json rollup.config.js
-Source2: %{gem_name}-%{version}%{?prerelease}-js.tar.gz
+Source2: https://github.com/rails/rails/archive/refs/tags/v8.0.3.tar.gz
 
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
@@ -52,6 +52,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version}%{?prerelease} -b1 -b2
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
 %if %{with js_recompilation}

@@ -26,7 +26,7 @@ Release: %autorelease
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 Url: http://www.airs.com/ian/uucp.html
-Source0: ftp://ftp.gnu.org/pub/gnu/uucp/uucp-%{version}.tar.gz
+Source0: https://ftp.gnu.org/gnu/uucp/uucp-%{version}.tar.gz
 Source1: uucp.log
 Source2: uucp@.service
 Source3: uucp.socket

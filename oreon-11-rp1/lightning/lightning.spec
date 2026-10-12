@@ -6,7 +6,7 @@ Release:        6%{?dist}
 Summary:        Library for generating assembly code on run time
 License:        LGPL-3.0-or-later
 URL:            http://www.gnu.org/software/lightning/lightning.html
-Source0:        ftp://ftp.gnu.org/gnu/lightning/lightning-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/lightning/lightning-%{version}.tar.gz
 
 BuildRequires:  texinfo, gcc
 BuildRequires:  binutils-devel

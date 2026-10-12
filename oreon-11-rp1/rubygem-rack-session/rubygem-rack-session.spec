@@ -14,7 +14,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Patch0:  rack-session-2.1.1-minitest6.patch
 # git clone https://github.com/rack/rack-session.git && cd rack-session
 # git archive -v -o rack-session-2.1.1-tests.tar.gz v2.1.1 test/
-Source1: rack-session-%{version}-tests.tar.gz
+Source1: https://github.com/rack/rack-session/archive/refs/tags/v2.1.1.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby >= 2.5
@@ -40,6 +40,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 ( cd %{builddir}/test
 %patch -P0 -p2
 )

@@ -11,7 +11,7 @@ Summary:        GNU Aspell Marathi Dictionary Package
 
 License:        GPL-2.0-only
 URL:            http://aspell.net/
-Source0:        ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}-%{langrelease}.tar.bz2
+Source0:        https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}-%{langrelease}.tar.bz2
 Patch1:         marathi-specific-chars-426943.patch
 
 # This package has been deprecated since Fedora 39 due to aspell package deprecation

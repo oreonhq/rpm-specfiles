@@ -180,7 +180,6 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainf
 
 %global _fontdir %{_fontdir}-vf
 
-%_font_pkg -n display-vf -f %{fontconf}-display-vf.conf RedHatDisplay*.ttf
 %license LICENSE metainfo/LICENSE-METAINFO
 %doc README.md CHANGELOG.md *.png
 %{_datadir}/metainfo/%{asfontname}-display-vf.metainfo.xml

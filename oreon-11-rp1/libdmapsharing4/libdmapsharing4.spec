@@ -1,4 +1,4 @@
-%global source0_hash 3659f63f29e11d6d6ae78b53d7cc6be3f3adeff9c00c67cc50ad19c6af699f7a
+%global source0_hash 4ad60d9423434bca5f7aede10a0477668e852ea66091bb5c1fd2ef22afd01a40
 
 Name: libdmapsharing4
 Version: 3.9.14

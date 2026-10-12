@@ -107,7 +107,6 @@ mkdir -p %{buildroot}%{_datadir}/accounts/{applications,providers,services,servi
 %dir %{_datadir}/accounts/services/
 %dir %{_datadir}/accounts/service_types/
 
-%{python3_sitearch}/gi/overrides/Accounts.py
 %{python3_sitearch}/gi/overrides/__pycache__/*
 
 

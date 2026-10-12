@@ -14,7 +14,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # version=<version>
 # git checkout v${version?}
 # tar czvf ../../rubygem-chef-utils/rubygem-chef-utils-${version?}-specs.tgz spec/
-Source1: rubygem-%{gem_name}-%{version}-specs.tgz
+Source1: https://github.com/chef/chef/archive/refs/tags/v19.1.164.tar.gz
 
 BuildRequires: rubygems-devel
 BuildRequires: rubygem(rspec)
@@ -42,6 +42,7 @@ Documentation for %{name}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -T
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %gem_install -n %{SOURCE0}
 

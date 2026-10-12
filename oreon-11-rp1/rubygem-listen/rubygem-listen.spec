@@ -12,7 +12,7 @@ URL: https://github.com/guard/listen
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/guard/listen.git --no-checkout
 # cd listen && git archive -v -o rubygem-listen-3.7.1-spec.txz v3.7.1 spec
-Source1: rubygem-listen-%{version}-spec.txz
+Source1: https://github.com/guard/listen/archive/refs/tags/v3.7.1.tar.gz
 # Fix kwargs matching compatibility with RSpec 3.12+.
 # https://github.com/guard/listen/pull/564
 Patch0: rubygem-listen-3.7.1-Fix-kwargs-matching-with-rspec-mock-3.12-and-Ruby-3.patch
@@ -41,6 +41,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 pushd %{_builddir}
 %patch 0 -p1

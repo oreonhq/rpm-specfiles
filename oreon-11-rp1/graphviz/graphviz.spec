@@ -619,12 +619,12 @@ php --no-php-ini \
 
 %files libs
 %license COPYING
-%{_libdir}/libcdt.so.6{,.*}
-%{_libdir}/libcgraph.so.8{,.*}
-%{_libdir}/libgvc.so.7{,.*}
-%{_libdir}/libgvpr.so.2{,.*}
-%{_libdir}/libpathplan.so.4{,.*}
-%{_libdir}/libxdot.so.4{,.*}
+%{_libdir}/libcgraph.so.*
+%{_libdir}/libxdot.so.*
+%{_libdir}/libcdt.so.*
+%{_libdir}/libgvc.so.*
+%{_libdir}/libgvpr.so.*
+%{_libdir}/libpathplan.so.*
 
 %files devel
 %{_includedir}/graphviz

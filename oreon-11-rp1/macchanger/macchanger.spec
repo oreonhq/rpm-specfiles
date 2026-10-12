@@ -10,8 +10,8 @@ License:        GPL-3.0-or-later
 URL:            https://github.com/alobbs/macchanger
 #               http://www.alobbs.com/macchanger
 
-#Source0:        ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
-#Source1:        ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz.sig
+#Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
+#Source1:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz.sig
 
 Source0:        https://github.com/alobbs/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 

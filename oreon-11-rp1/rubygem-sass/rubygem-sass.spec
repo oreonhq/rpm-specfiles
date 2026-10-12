@@ -13,7 +13,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/sass/ruby-sass.git
 # cd ruby-sass && git checkout 3.7.4
 # tar czvf sass-3.7.4-tests.tgz test/ Rakefile
-Source1: %{gem_name}-%{version}-tests.tgz
+Source1: https://github.com/sass/ruby-sass/archive/refs/tags/v3.7.4.tar.gz
 
 # Use listen as a depencency instead of sass-listen.
 # sass-listen is a fork from original listen v3.0 branch to support Ruby <= 2.1.
@@ -52,6 +52,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -a 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %gemspec_remove_dep -g sass-listen -s ../%{gem_name}-%{version}.gemspec
 %gemspec_add_dep -g listen -s ../%{gem_name}-%{version}.gemspec

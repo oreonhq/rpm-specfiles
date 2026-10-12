@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'cmd2' generated automatically by pyp2spec.}
 
-Patch0:           python-cmd2-2.5.11-disable-cov-tests.patch
 Patch1:           Add-support-for-Python-3.14-and-remove-for-Python-3.8.patch
 
 %description %_description

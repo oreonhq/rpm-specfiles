@@ -12,7 +12,7 @@ URL: https://github.com/sferik/multi_xml
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/sferik/multi_xml.git && cd multi_xml/
 # git archive -v -o multi_xml-0.7.1-specs.tar.gz v0.7.1 spec/
-Source1: multi_xml-%{version}-specs.tar.gz
+Source1: https://github.com/sferik/multi_xml/archive/refs/tags/v0.7.1.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby
@@ -38,6 +38,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 # ref: https://github.com/sferik/multi_xml/issues/72
 # ruby4.0 bumps bigdecimal to 4.0

@@ -13,7 +13,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # Test suite is not included in packaged gem
 # git clone https://github.com/fxn/zeitwerk.git --no-checkout
 # cd zeitwerk && git archive -v -o zeitwerk-2.6.6-tests.txz v2.6.6 test
-Source2: %{gem_name}-%{version}-tests.txz
+Source2: https://github.com/fxn/zeitwerk/archive/refs/tags/v2.6.6.tar.gz
 # Fix compatibility with minitest 6
 Patch0:  zeitwerk-2.6.6-minitest6.patch
 
@@ -42,6 +42,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b2
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 (
 cd %{_builddir}
 %patch -P0 -p1

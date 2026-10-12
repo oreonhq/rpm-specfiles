@@ -1,4 +1,4 @@
-%global source0_hash 7f7da95a4c1e7160d42ca37a3ac80cf6f389b317e14816949e0fa5e2edf4cc64
+%global source0_hash e4ac4d1dd3559cf83189d29ab40fc5537b5a2beceb82916ef173dac7e50dbfa0
 
 Summary:        Library for controlling CEC-enabled devices over HDMI
 Name:           libcec

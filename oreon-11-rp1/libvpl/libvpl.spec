@@ -86,8 +86,7 @@ rm -fr %{buildroot}%{_datadir}/vpl/licensing
 %doc README.md CONTRIBUTING.md third-party-programs.txt
 %dir %{_sysconfdir}/vpl
 %{_sysconfdir}/vpl/vars.sh
-%{_libdir}/libvpl.so.%{mfx_major}
-%{_libdir}/libvpl.so.%{mfx_major}.%{mfx_minor}
+%{_libdir}/libvpl.so.*
 
 %files devel
 %{_includedir}/vpl

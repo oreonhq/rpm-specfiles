@@ -12,7 +12,7 @@ URL: https://github.com/fog/fog-core
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/fog/fog-core.git && cd fog-core
 # git archive -v -o fog-core-2.6.0-spec.tar.gz v2.6.0 spec/
-Source1: %{gem_name}-%{version}-spec.tar.gz
+Source1: https://github.com/fog/fog-core/archive/refs/tags/v2.6.0.tar.gz
 # Fix compatibility with minitest 6
 Patch0:  %{gem_name}-2.6.0-minitest6.patch
 BuildRequires: ruby(release)
@@ -41,6 +41,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 (
 cd %{_builddir}
 %patch -P0 -p1

@@ -13,7 +13,7 @@ Summary:        MinGW Windows port of the GNU Scientific Library
 # Automatically converted from old format: GPLv3 and GFDL and BSD - review is highly recommended.
 License:        GPL-3.0-only AND LicenseRef-Callaway-GFDL AND LicenseRef-Callaway-BSD
 URL:            http://www.gnu.org/software/gsl/
-Source0:        ftp://ftp.gnu.org/gnu/gsl/gsl-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/gsl/gsl-%{version}.tar.gz
 Patch0:         gsl-1.15-lib64.patch
 
 BuildArch: noarch

@@ -20,7 +20,6 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'black' generated automatically by pyp2spec.}
 
-Patch:          https://github.com/psf/black/commit/5977532781.patch
 Patch:          https://github.com/psf/black/commit/14e1de805a.patch
 Patch:          https://github.com/psf/black/commit/ed64d89faa.patch
 Patch:          https://github.com/psf/black/commit/b0f36f5b42.patch

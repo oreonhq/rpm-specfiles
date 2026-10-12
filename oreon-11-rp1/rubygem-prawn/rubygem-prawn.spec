@@ -15,7 +15,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # You may check out it like so:
 # git clone --no-checkout https://github.com/prawnpdf/prawn.git
 # cd prawn && git archive -v -o prawn-2.4.0-data.txz 2.4.0 data
-Source1: %{gem_name}-%{version}-data.txz
+Source1: https://github.com/prawnpdf/prawn/archive/refs/tags/v2.4.0.tar.gz
 BuildRequires: ruby
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel >= 1.3.6
@@ -64,6 +64,7 @@ Documentation for %{name}
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 # matrix is bundled gem since Ruby 3.1.
 # https://github.com/prawnpdf/prawn/commit/3658d5125c3b20eb11484c3b039ca6b89dc7d1b7

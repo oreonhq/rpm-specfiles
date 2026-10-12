@@ -9,7 +9,7 @@ Version: 0.50
 Release: 46%{?dist}
 License: GPL-2.0-or-later
 URL: http://aspell.net/
-Source: ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell-%{lang}-%{version}-%{langrelease}.tar.bz2
+Source: https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell-%{lang}-%{version}-%{langrelease}.tar.bz2
 
 # IMPORTANT
 # This package has been deprecated since Fedora 39

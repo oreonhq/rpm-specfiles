@@ -75,7 +75,6 @@ install -m 0644 rteval.conf %{buildroot}%{_sysconfdir}/rteval.conf
 
 %files -f %{pyproject_files}
 %defattr(-,root,root,-)
-%doc README doc/rteval.txt
 %license COPYING
 %dir %{_datadir}/%{name}
 %{_mandir}/man8/rteval.8.gz

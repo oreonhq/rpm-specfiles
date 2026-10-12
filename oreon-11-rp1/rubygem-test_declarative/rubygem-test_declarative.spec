@@ -12,7 +12,7 @@ URL: http://github.com/svenfuchs/test_declarative
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/svenfuchs/test_declarative.git && cd test_declarative
 # git archive -v -o test_declarative-0.0.6-test.tar.gz v0.0.6 test/
-Source1: %{gem_name}-%{version}-test.tar.gz
+Source1: https://github.com/svenfuchs/test_declarative/archive/refs/tags/v0.0.6.tar.gz
 # Fix Minitest 5.19+ compatibility.
 # https://github.com/svenfuchs/test_declarative/pull/24
 Patch0: rubygem-test_declarative-0.0.6-Use-Minitest-Test-as-a-test-runner.patch
@@ -38,6 +38,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 pushd %{_builddir}
 %patch 0 -p1

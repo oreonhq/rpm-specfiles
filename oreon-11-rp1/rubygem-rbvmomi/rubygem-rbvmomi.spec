@@ -11,7 +11,7 @@ URL: https://github.com/vmware/rbvmomi
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/vmware/rbvmomi.git && cd rbvmomi
 # git checkout v1.11.2 && tar czvf rbvmomi-1.11.2-tests.tgz test/
-Source1: %{gem_name}-%{version}-tests.tgz
+Source1: https://github.com/vmware/rbvmomi/archive/refs/tags/v3.0.0.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby >= 2.4.1
@@ -36,6 +36,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -T
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 %gem_install -n %{SOURCE0}
 
 %build

@@ -12,6 +12,7 @@ Source0: https://github.com/linux-test-project/lcov/releases/download/v%{version
 
 BuildArch: noarch
 BuildRequires:  python3-sphinx
+BuildRequires:  python3-sphinx_rtd_theme
 BuildRequires: perl-generators
 BuildRequires: git-core
 BuildRequires: make

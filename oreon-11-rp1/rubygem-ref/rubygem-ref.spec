@@ -12,7 +12,7 @@ URL: http://github.com/ruby-concurrency/ref
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/ruby-concurrency/ref.git && cd ref
 # git checkout v2.0.0 && tar czvf ref-2.0.0-tests.tgz ./spec/
-Source1: ref-%{version}-tests.tgz
+Source1: https://github.com/ruby-concurrency/ref/archive/refs/tags/v2.0.0.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby
@@ -39,6 +39,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -T
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 %gem_install -n %{SOURCE0}
 
 %build

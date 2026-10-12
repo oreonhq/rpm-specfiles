@@ -13,7 +13,7 @@ URL: https://github.com/fedora-ruby/gem2rpm
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/fedora-ruby/gem2rpm.git && cd gem2rpm
 # git checkout v2.0.0 && tar czvf gem2rpm-2.0.0-tests.tar.gz test/
-Source1: %{gem_name}-%{version}-tests.tar.gz
+Source1: https://github.com/fedora-ruby/gem2rpm/archive/refs/tags/v2.0.0.tar.gz
 Requires: %{_bindir}/rpmdev-packager
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
@@ -40,6 +40,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
 # Create the gem as gem install only works on a gem file

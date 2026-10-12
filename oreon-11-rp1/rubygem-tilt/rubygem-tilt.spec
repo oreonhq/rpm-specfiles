@@ -20,7 +20,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 
 # git clone https://github.com/jeremyevans/tilt.git && cd tilt
 # git archive -v -o tilt-2.2.0-test.tar.gz v2.2.0 test/
-Source2: %{gem_name}-%{version}-test.tar.gz
+Source2: https://github.com/jeremyevans/tilt/archive/refs/tags/v2.2.0.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby
@@ -66,6 +66,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 2
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
 # Create the gem as gem install only works on a gem file

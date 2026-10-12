@@ -13,7 +13,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/prawnpdf/prawn-templates.git && cd prawn-templates
 # git checkout 0.1.2
 # tar -czf rubygem-prawn-templates-0.1.2-spec-data.tgz spec/ data/
-Source1: %{name}-%{version}-spec-data.tgz
+Source1: https://github.com/prawnpdf/prawn-templates/archive/refs/tags/v0.1.2.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby
@@ -39,6 +39,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 mv %{_builddir}/{spec,data} .
 %gemspec_remove_dep -g pdf-reader "~> 2.0"
 %gemspec_add_dep -g pdf-reader ">= 2.0"

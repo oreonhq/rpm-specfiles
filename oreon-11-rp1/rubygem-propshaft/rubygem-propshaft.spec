@@ -12,7 +12,7 @@ URL: https://github.com/rails/propshaft
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone http://github.com/rails/propshaft.git && cd propshaft
 # git archive -v -o propshaft-1.3.1-tests.tar.gz v1.3.1 test/
-Source1: %{gem_name}-%{version}%{?prerelease}-tests.tar.gz
+Source1: https://github.com/rails/propshaft/archive/refs/tags/v1.3.1.tar.gz
 
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
@@ -42,6 +42,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
 # Create the gem as gem install only works on a gem file

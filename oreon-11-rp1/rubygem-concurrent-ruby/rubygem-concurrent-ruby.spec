@@ -12,7 +12,7 @@ URL: http://www.concurrent-ruby.com
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/ruby-concurrency/concurrent-ruby.git && cd concurrent-ruby
 # git archive -v -o concurrent-ruby-1.3.5-specs.tar.gz v1.3.5 spec/
-Source1: %{gem_name}-%{version}-specs.tar.gz
+Source1: https://github.com/ruby-concurrency/concurrent-ruby/archive/refs/tags/v1.3.5.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby >= 1.9.3
@@ -39,6 +39,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 # Remove bundled .jar
 %gemspec_remove_file 'lib/concurrent-ruby/concurrent/concurrent_ruby.jar'

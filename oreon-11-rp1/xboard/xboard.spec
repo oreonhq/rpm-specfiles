@@ -5,7 +5,7 @@ Name: xboard
 Version: 4.9.1
 Release: 24%{?dist}
 URL: https://www.gnu.org/software/xboard/
-Source0: ftp://ftp.gnu.org/pub/gnu/xboard/xboard-%{version}.tar.gz
+Source0: https://ftp.gnu.org/gnu/xboard/xboard-%{version}.tar.gz
 Source1: xboard.desktop
 Requires: chessprogram, xorg-x11-fonts-100dpi
 License: GPL-3.0-or-later

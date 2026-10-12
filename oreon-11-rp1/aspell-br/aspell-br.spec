@@ -9,7 +9,7 @@ Version: 0.50
 Release: 44%{?dist}
 License: GPL-2.0-only
 URL: http://aspell.net/
-Source: ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell-%{lang}-%{version}-%{langrelease}.tar.bz2
+Source: https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell-%{lang}-%{version}-%{langrelease}.tar.bz2
 Patch0: aspell-br-0.50-conf.patch
 
 # IMPORTANT

@@ -6,7 +6,7 @@ Name: jwhois
 Version: 4.0
 Release: 83%{?dist}
 URL: http://www.gnu.org/software/jwhois/
-Source0: ftp://ftp.gnu.org/gnu/jwhois/jwhois-%{version}.tar.gz
+Source0: https://ftp.gnu.org/gnu/jwhois/jwhois-%{version}.tar.gz
 Source1: https://raw.githubusercontent.com/robert-scheck/jwhois/2bd561e06ca37cf6c2ef9f0a2e957e09f58e6972/example/jwhois.conf
 Patch0: jwhois-4.0-connect.patch
 Patch1: jwhois-4.0-ipv6match.patch

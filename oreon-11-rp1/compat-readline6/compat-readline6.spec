@@ -6,7 +6,7 @@ Version: 6.3
 Release: 30%{?dist}
 License: GPLv3+
 URL: http://cnswww.cns.cwru.edu/php/chet/readline/rltop.html
-Source: ftp://ftp.gnu.org/gnu/readline/readline-%{version}.tar.gz
+Source: https://ftp.gnu.org/gnu/readline/readline-%{version}.tar.gz
 
 Patch5: readline6.3-upstream-patches1-6.patch
 # add workaround for problem in gdb

@@ -15,7 +15,7 @@ Release: 37%{?dist}
 # MPL-1.1               /doc/MPL-1.1.txt
 License: CC-SA-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MPL-1.1
 URL: http://aspell.net/
-Source: ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell%{aspellversion}-%{lang}-%{version}-%{langrelease}.tar.bz2
+Source: https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell%{aspellversion}-%{lang}-%{version}-%{langrelease}.tar.bz2
 
 # IMPORTANT
 # This package has been deprecated since Fedora 39

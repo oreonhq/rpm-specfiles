@@ -12,7 +12,7 @@ URL: https://github.com/minimagick/minimagick
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone http://github.com/minimagick/minimagick.git --no-checkout && cd minimagick
 # git archive -v -o mini_magick-5.3.1-tests.tar.gz v5.3.1 spec/
-Source1: %{gem_name}-%{version}-tests.tar.gz
+Source1: https://github.com/minimagick/minimagick/archive/refs/tags/v5.3.1.tar.gz
 
 Requires: ImageMagick
 BuildRequires: ruby(release)
@@ -41,6 +41,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
 gem build ../%{gem_name}-%{version}.gemspec

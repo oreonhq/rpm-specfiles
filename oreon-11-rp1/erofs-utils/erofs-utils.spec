@@ -102,6 +102,7 @@ autoreconf -fi
 
 
 %files
+%license LICENSES/GPL-2.0 LICENSES/MIT
 %{_bindir}/dump.erofs
 %{_bindir}/fsck.erofs
 %{_bindir}/mkfs.erofs
@@ -110,15 +111,12 @@ autoreconf -fi
 %{_mandir}/man1/fsck.erofs.1*
 %{_mandir}/man1/mkfs.erofs.1*
 %{_mandir}/man8/mount.erofs.8*
-%doc AUTHORS ChangeLog README docs/PERFORMANCE.md docs/compress-hints.example
-%license LICENSES/Apache-2.0 LICENSES/GPL-2.0 LICENSES/MIT
 
 %if %{with fuse}
 %files -n erofs-fuse
 %{_bindir}/erofsfuse
 %{_mandir}/man1/erofsfuse.1*
 %doc AUTHORS ChangeLog README
-%license LICENSES/Apache-2.0 LICENSES/GPL-2.0 LICENSES/MIT
 %endif
 
 

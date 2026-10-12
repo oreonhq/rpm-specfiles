@@ -1,4 +1,4 @@
-%global source0_hash 7486ce8c621729f3c34db15cbdf21ef8e82a84afba875436abcbd2939c671f68
+%global source0_hash 9cf5aab32853c8c31af572e4fecdc09c997e2b8be5a07daf2a389e270e85b213
 
 %global _docdir_fmt %{name}
 %global giturl  https://github.com/sphinx-doc/sphinx-autobuild
@@ -11,7 +11,7 @@ Summary:        Autobuild a Sphinx directory when a change is detected
 License:        MIT
 URL:            https://sphinx-autobuild.readthedocs.io/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/%{version}/sphinx-autobuild-%{version}.tar.gz
+Source:         https://files.pythonhosted.org/packages/source/s/sphinx-autobuild/sphinx_autobuild-%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -51,7 +51,7 @@ Documentation for sphinx-autobuild.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n sphinx-autobuild-%{version} -p1
+%autosetup -n sphinx_autobuild-%{version} -p1
 
 %build
 %pyproject_wheel

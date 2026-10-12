@@ -13,7 +13,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # To get the test suite:
 # git clone https://github.com/rails/importmap-rails.git --no-checkout
 # git -C importmap-rails archive -v -o importmap-rails-1.0.3-tests.txz v1.0.3 test/
-Source1: %{gem_name}-%{version}%{?prerelease}-tests.txz
+Source1: https://github.com/rails/importmap-rails/archive/refs/tags/v1.0.3.tar.gz
 
 BuildRequires: ruby
 BuildRequires: ruby(release)
@@ -45,6 +45,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
 gem build ../%{gem_name}-%{version}.gemspec

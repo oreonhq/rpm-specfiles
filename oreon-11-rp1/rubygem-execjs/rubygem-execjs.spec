@@ -12,7 +12,7 @@ URL: https://github.com/rails/execjs
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/rails/execjs.git && cd execjs
 # git checkout v2.8.1 && tar czf execjs-2.8.1-tests.tgz test/
-Source1: %{gem_name}-%{version}-tests.tgz
+Source1: https://github.com/rails/execjs/archive/refs/tags/v2.8.1.tar.gz
 # Revert f47c02c and 8b22842 fixing conflict to unbundle json2.js.
 Patch0: rubygem-execjs-2.7.0-delete-JScript-and-json2.js.patch
 BuildRequires: ruby(release)
@@ -40,6 +40,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 gem unpack %{SOURCE0}
 
 %setup -q -D -T -n  %{gem_name}-%{version}
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
 %patch 0 -p1

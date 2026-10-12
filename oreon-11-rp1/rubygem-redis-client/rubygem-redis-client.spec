@@ -14,7 +14,7 @@ URL: https://github.com/redis-rb/redis-client
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/redis-rb/redis-client.git && cd redis-client
 # git archive -v -o redis-client-0.22.2-tests.txz v0.22.2 test/
-Source1: %{gem_name}-%{version}-tests.txz
+Source1: https://github.com/redis-rb/redis-client/archive/refs/tags/v0.22.2.tar.gz
 # https://github.com/redis-rb/redis-client/commit/95c96666868fb60286b473abbef1daa18d827b52
 # ruby4_0 removes Ractor#take
 Patch0:  redis-client-GH95c9666-Ractor-ruby4_0.patch
@@ -50,6 +50,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 (
 cd %{_builddir}
 %patch -P0 -p1

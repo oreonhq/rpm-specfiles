@@ -13,7 +13,7 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # Specs are not shipped with the gem. You can get them like so:
 # git clone https://github.com/mikel/mail.git --no-checkout
 # cd mail && git archive -v -o mail-2.8.1-specs.txz 2.8.1 spec/
-Source1: %{gem_name}-%{version}-specs.txz
+Source1: https://github.com/mikel/mail/archive/refs/tags/v2.8.1.tar.gz
 BuildRequires: rubygem(net-smtp)
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
@@ -37,6 +37,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %gemspec_add_file 'lib/mail/yaml.rb'
 

@@ -13,7 +13,7 @@ URL: https://rubyonrails.org
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}%{?prerelease}.gem
 # git clone http://github.com/rails/rails.git && cd rails/activerecord
 # git archive -v -o activerecord-8.0.3-tests.tar.gz v8.0.3 test/
-Source1: activerecord-%{version}%{?prerelease}-tests.tar.gz
+Source1: https://github.com/rails/rails/archive/refs/tags/v8.0.3.tar.gz
 # Fix undefined `Rails` constant in sqlite3 dbconsole.
 # https://github.com/rails/rails/pull/54498
 Patch0: rubygem-activerecord-8.0.1-Fix-sqlite3-dbconsole-not-working-outside-Rails.patch
@@ -53,6 +53,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version}%{?prerelease} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %patch 0 -p2
 

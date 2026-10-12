@@ -9,7 +9,7 @@ Version: 20090702
 Release: 33%{?dist}
 License: LGPL-2.1-or-later
 URL: http://aspell.net/
-Source: ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}-%{langrelease}.tar.bz2
+Source: https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}-%{langrelease}.tar.bz2
 
 # IMPORTANT
 # This package has been deprecated since Fedora 39

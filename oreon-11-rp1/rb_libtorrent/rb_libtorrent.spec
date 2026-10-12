@@ -1,4 +1,4 @@
-%global source0_hash f0db58580f4f29ade6cc40fa4ba80e2c9a70c90265cd77332d3cdec37ecf1e6d
+%global source0_hash 0f163516ecef2e3331500266751de3098835a3c3ae0c2290448046c632bc0e93
 
 %global git_url https://github.com/arvidn/libtorrent
  

@@ -12,7 +12,7 @@ Source0:  https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/asciidoctor/asciidoctor-pdf.git && cd asciidoctor-pdf
 # git checkout v2.3.24
 # tar -czf rubygem-asciidoctor-pdf-2.3.24-specs-examples.tgz spec/ examples/ docs/
-Source1:  %{name}-%{version}-specs-examples.tgz
+Source1: https://github.com/asciidoctor/asciidoctor-pdf/archive/refs/tags/v2.3.24.tar.gz
 Patch0: prawn-svg-0_36.patch
 
 BuildRequires: ruby(release)
@@ -53,6 +53,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 mv %{_builddir}/{spec,examples} .
 mv %{_builddir}/docs/modules docs/
 %patch -P0 -p1

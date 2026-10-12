@@ -20,8 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'pymdown-extensions' generated automatically by pyp2spec.}
 
-Patch:          pymdown-extensions-markdown-3.5.patch
-
 %description %_description
 
 %package -n     python3-pymdown-extensions

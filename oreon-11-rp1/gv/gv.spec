@@ -13,7 +13,7 @@ Requires: ghostscript
 Requires: ghostscript-x11
 %endif
 URL: http://www.gnu.org/software/gv/
-Source0: ftp://ftp.gnu.org/gnu/gv/gv-%{version}.tar.gz
+Source0: https://ftp.gnu.org/gnu/gv/gv-%{version}.tar.gz
 #Source0: ftp://alpha.gnu.org/gnu/gv/gv-%{version}.tar.gz
 Source1: gv.png
 # Check for null pointers in resource requests

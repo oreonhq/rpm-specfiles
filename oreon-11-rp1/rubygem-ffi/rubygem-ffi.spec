@@ -11,7 +11,7 @@ URL: https://github.com/ffi/ffi/wiki
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/ffi/ffi.git --no-checkout
 # cd ffi && git archive -v -o ffi-1.17.0-spec.txz v1.17.0 spec/
-Source1: %{gem_name}-%{version}-spec.txz
+Source1: https://github.com/ffi/ffi/archive/refs/tags/v1.17.0.tar.gz
 # Fix test suite `Aborted (core dumped)` on ppc64le/s390x
 # https://bugzilla.redhat.com/show_bug.cgi?id=2313598
 # https://github.com/ffi/ffi/pull/1124
@@ -57,6 +57,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n  %{gem_name}-%{version} -a 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %patch 0 -p1
 %patch 1 -p1

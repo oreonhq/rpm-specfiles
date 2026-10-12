@@ -8,7 +8,7 @@ Summary:        3D interactive graphics puzzle
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            http://www.gnu.org/software/gnubik/
-Source0:        ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
 Source1:        %{name}.desktop
 # There aren't 24x24 logo icons provided
 Patch1:         iconfix.patch

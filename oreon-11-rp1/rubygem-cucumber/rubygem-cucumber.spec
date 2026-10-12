@@ -13,10 +13,10 @@ URL: https://cucumber.io/
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone --no-checkout https://github.com/cucumber/cucumber-ruby.git
 # git -C cucumber-ruby archive -v -o rubygem-cucumber-7.1.0-spec.txz v7.1.0 spec/ cucumber.yml
-Source1: %{name}-%{version}-spec.txz
+Source1: https://github.com/cucumber/cucumber-ruby/archive/refs/tags/v7.1.0.tar.gz
 # git clone --no-checkout https://github.com/cucumber/cucumber-ruby.git
 # git -C cucumber-ruby archive -v -o rubygem-cucumber-7.1.0-features.txz v7.1.0 features/
-Source2: %{name}-%{version}-features.txz
+Source2: https://github.com/cucumber/cucumber-ruby/archive/refs/tags/v7.1.0.tar.gz
 # Fix Ruby 3.4 compatibility due to `Hash.new` now accepting `:capacity`
 # keyword option.
 # https://github.com/cucumber/cucumber-ruby/pull/1757/commits/87a375822f0f1d76fa464423f9743e36c5036713
@@ -64,6 +64,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1 -b 2
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %patch 0 -p1
 %patch 1 -p1

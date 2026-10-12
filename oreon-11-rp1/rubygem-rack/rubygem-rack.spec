@@ -14,7 +14,7 @@ URL: https://github.com/rack/rack
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/rack/rack.git && cd rack/
 # git archive -v -o rack-3.2.3-tests.tar.gz v3.2.3 test/
-Source1: rack-%{version}-tests.tar.gz
+Source1: https://github.com/rack/rack/archive/refs/tags/v3.2.3.tar.gz
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby >= 2.4.0
@@ -42,6 +42,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
 # Create the gem as gem install only works on a gem file

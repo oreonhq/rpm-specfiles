@@ -52,11 +52,7 @@ autoreconf -vif
 %{_mandir}/man8/tune.exfat.*
 
 %if %{with defrag}
-%{_sbindir}/defrag.exfat
-%{_mandir}/man8/defrag.exfat.*
 %else
-%exclude %{_sbindir}/defrag.exfat
-%exclude %{_mandir}/man8/defrag.exfat.*
 %endif
 
 %changelog

@@ -61,19 +61,16 @@ mv %{buildroot}/etc/systemd/network/10-tmfifo-net.link \
 %license LICENSE
 %doc README.md
 %config(noreplace) %{_sysconfdir}/rshim.conf
-%{_sbindir}/bf-pldm-ver
 %{_sbindir}/bf-reg
-%{_sbindir}/bfb-install
-%{_sbindir}/bfb-tool
 %{_sbindir}/fwpkg_unpack.py
 %{_sbindir}/mlx-mkbfb
 %{_sbindir}/rshim
+%{_sbindir}/bfb-tool
+%{_sbindir}/bfb-install
+%{_sbindir}/bf-pldm-ver
 %{_unitdir}/rshim.service
 %{_mandir}/man1/mlx-mkbfb.1.gz
-%{_mandir}/man8/bf-pldm-ver.8.gz
 %{_mandir}/man8/bf-reg.8.gz
-%{_mandir}/man8/bfb-install.8.gz
-%{_mandir}/man8/bfb-tool.8.gz
 %{_mandir}/man8/rshim.8.gz
 %{_prefix}/lib/systemd/network/10-tmfifo-net.link
 

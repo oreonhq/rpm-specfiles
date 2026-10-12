@@ -11,7 +11,7 @@ URL: https://github.com/flavorjones/loofah
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/flavorjones/loofah.git && cd loofah
 # git archive -v -o loofah-2.22.0-test.tar.gz v2.22.0 test/
-Source1: %{gem_name}-%{version}-test.tar.gz
+Source1: https://github.com/flavorjones/loofah/archive/refs/tags/v2.22.0.tar.gz
 # Fix minitest6 compatibility
 Patch0:  %{gem_name}-2.22.0-minitest6.patch
 BuildRequires: ruby(release)
@@ -41,6 +41,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 (
 cd %{_builddir}
 %patch -P0 -p1

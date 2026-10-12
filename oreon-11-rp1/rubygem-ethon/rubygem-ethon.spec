@@ -12,7 +12,7 @@ URL: https://github.com/typhoeus/ethon
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/typhoeus/ethon.git && cd ethon
 # git archive -v -o ethon-0.17.0-spec.tar.gz v0.17.0 spec/
-Source1: %{gem_name}-%{version}-spec.tar.gz
+Source1: https://github.com/typhoeus/ethon/archive/refs/tags/v0.17.0.tar.gz
 # This prevents test errors in Typhoeus:
 # https://github.com/typhoeus/typhoeus/issues/710
 # https://github.com/felipedmesquita/ethon/pull/13
@@ -46,6 +46,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %patch 0 -p1
 

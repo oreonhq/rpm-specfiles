@@ -11,7 +11,7 @@ URL: https://github.com/sparklemotion/sqlite3-ruby
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/sparklemotion/sqlite3-ruby.git && cd sqlite3-ruby
 # git archive -v -o sqlite3-2.5.0-test.tar.gz v2.5.0 test/
-Source1: %{gem_name}-%{version}-test.tar.gz
+Source1: https://github.com/sparklemotion/sqlite3-ruby/archive/refs/tags/v2.5.0.tar.gz
 # Fix (s390x) big endian tees failure.
 # https://github.com/sparklemotion/sqlite3-ruby/pull/616
 Patch0: rubygem-sqlite3-2.5.0-fix-tests-pass-on-bigendian-architecture.patch
@@ -41,6 +41,7 @@ Documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 # Remove bundled SQLite right away.
 rm -rf ports

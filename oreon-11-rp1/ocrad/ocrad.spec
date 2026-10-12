@@ -5,7 +5,7 @@ Name: ocrad
 Version: 0.29
 Release: 6%{?dist}
 License: GPL-3.0-or-later
-Source: ftp://ftp.gnu.org/gnu/ocrad/%{name}-%{version}.tar.lz
+Source: https://ftp.gnu.org/gnu/ocrad/%{name}-%{version}.tar.lz
 Patch0: ocrad-0.25-nostatic.patch
 URL: http://www.gnu.org/software/ocrad/ocrad.html
 BuildRequires: make

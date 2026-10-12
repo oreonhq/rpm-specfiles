@@ -625,12 +625,12 @@ fi
 %{_libdir}/brltty/libbrlttysen.so
 
 %files -n brlapi
+%{_libdir}/libbrlapi.so.*
 %{_bindir}/vstp
 %{_bindir}/eutp
 %{_bindir}/xbrlapi
 %dir %{_libdir}/brltty
 %{_libdir}/brltty/libbrlttybba.so
-%{_libdir}/libbrlapi.so.*
 %ghost %verify(not group) %{_sysconfdir}/brlapi.key
 %doc Drivers/Braille/XWindow/README
 %doc Documents/Manual-BrlAPI/
@@ -638,7 +638,6 @@ fi
 %doc %{_mandir}/man1/vstp.*
 %doc %{_mandir}/man1/eutp.*
 %{_sysusersdir}/brltty.conf
-%{lua_libdir}/brlapi.so
 
 %files -n brlapi-devel
 %{_libdir}/libbrlapi.so
@@ -653,7 +652,6 @@ fi
 
 %if %{with python2}
 %files -n python2-brlapi
-%{python2_sitearch}/brlapi.so
 %{python2_sitearch}/Brlapi-%{api_version}-*.egg-info
 %endif
 

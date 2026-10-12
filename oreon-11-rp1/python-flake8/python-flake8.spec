@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'flake8' generated automatically by pyp2spec.}
 
-Patch:            Handle-escaped-braces-in-f-strings.patch
 Patch:            Support-Python-3.14.patch
 
 %description %_description

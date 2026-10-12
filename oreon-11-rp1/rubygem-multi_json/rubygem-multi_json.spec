@@ -12,7 +12,7 @@ URL: https://github.com/intridea/multi_json
 Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/intridea/multi_json.git && cd multi_json
 # git archive -v -o multi_json-1.15.0-spec.tar.gz v1.15.0 spec/
-Source1: %{gem_name}-%{version}-spec.tar.gz
+Source1: https://github.com/intridea/multi_json/archive/refs/tags/v1.15.0.tar.gz
 # Fix RSpec 3.11.0+ compatibility due to improved kwargs handling.
 # https://github.com/intridea/multi_json/pull/205
 Patch0: rubygem-mulit_json-1.15.0-RSpec-3.11.0-distinguishes-between-hashed-and-Ruby-3.patch
@@ -42,6 +42,7 @@ Documentation for %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
+find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 pushd %{_builddir}
 %patch 0 -p1

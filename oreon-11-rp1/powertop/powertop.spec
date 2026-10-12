@@ -48,7 +48,8 @@ echo '"v%{version}"' > version-short
 # workaround for rhbz#1826935
 autoreconf -fi || autoreconf -fi
 %configure
-make %{?_smp_mflags} CFLAGS="%{optflags}" V=1
+printf '#include <algorithm>\n#include <format>\n' > oreon-std.h
+make %{?_smp_mflags} CFLAGS="%{optflags}" CXXFLAGS="%{optflags} -include %_builddir/powertop-%{version}/oreon-std.h" V=1
 
 %install
 rm -rf %{buildroot}
