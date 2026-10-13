@@ -1,12 +1,12 @@
 %global stable_kf6 stable
-%global source0_hash f7dbc82de06a53dd2c3ff54ae542351485cd5b27e071fada5bb7fc87911054f3
+%global source0_hash 7e4305d4e28698024fcd797554ccad84bfd4ed4e5bdcb0f42b5da77fab244416
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:           aurorae
 Summary:        Aurorae is a themeable window decoration for KWin
-Version:        6.6.4
+Version:        6.7.5
 Release:        1%{?dist}
 License:        GPL-2.0-or-later AND MIT AND CC0-1.0
 URL:            https://invent.kde.org/plasma/%{name}

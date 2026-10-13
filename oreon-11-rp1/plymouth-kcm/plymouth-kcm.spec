@@ -1,5 +1,5 @@
 %global stable_kf6 stable
-%global source0_hash e9fce911e96eac14d379b336e89c3e1853a6b350dade865d14c14b769704ffbd
+%global source0_hash ce723d67e6b8cd71b6eb353e87c10f698a095ea7d455bee703d8ba59e793e57e
 
 %global base_name    plymouth-kcm
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    plymouth-kcm
 Summary: Plymouth configuration module for systemsettings
-Version: 6.6.4
+Version: 6.7.5
 Release: 1%{?dist}
 
 License: BSD-2-Clause AND CC0-1.0 AND GPL-2.0-or-later

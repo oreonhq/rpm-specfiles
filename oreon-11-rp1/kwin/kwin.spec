@@ -3,8 +3,7 @@
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 4
-
+%global bug_ver_kf6 5
 %global _lto_cflags %{nil}
 %undefine _include_minidebuginfo
 

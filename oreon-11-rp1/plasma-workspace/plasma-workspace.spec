@@ -4,9 +4,7 @@
 %global majmin_ver_kf6 6.7
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 4
-
-
+%global bug_ver_kf6 5
 %bcond kf6_pim 1
 
 Name:    plasma-workspace

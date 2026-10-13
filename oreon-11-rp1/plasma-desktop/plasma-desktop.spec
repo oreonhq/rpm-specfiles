@@ -3,9 +3,7 @@
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 4
-
-
+%global bug_ver_kf6 5
 %global scim 1
 %if 0%{?rhel} && 0%{?rhel} > 7
 %undefine scim

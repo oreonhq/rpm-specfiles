@@ -1,5 +1,5 @@
 %global stable_kf6 stable
-%global source0_hash a7d3df14e5e016399e30e06923c0478a2c40a3a915e06abf070bd97e9381f1a3
+%global source0_hash b45ad6608693034046b65bf68a3843f394f78def02c6f059bc69c5de07cace57
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
@@ -7,7 +7,7 @@ ExcludeArch: %{ix86}
 Name:    kgamma
 Summary: A monitor calibration tool
 Epoch:   1
-Version: 6.6.4
+Version: 6.7.5
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later
