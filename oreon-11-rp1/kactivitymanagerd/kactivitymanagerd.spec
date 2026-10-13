@@ -1,11 +1,11 @@
-%global source0_hash b2e9c2537ddcc243774d41355428335167c2bb8e9fc48143c4e467528536c87f
+%global source0_hash 6e549b0dacd28797153696e4ee27f8e19aee6f3711f94ee379b8fae8ecfd937a
 
 %global stable_kf6 stable
 
 
 Name:    kactivitymanagerd
 Summary: Plasma service to manage user's activities
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

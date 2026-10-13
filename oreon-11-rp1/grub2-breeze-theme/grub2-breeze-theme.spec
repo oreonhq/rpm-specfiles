@@ -1,4 +1,4 @@
-%global source0_hash a571d157d242b71560f46c30fc06e4b9de03065080caf0974da24b00e82d05a8
+%global source0_hash bd14716ae52d946e37833b3a02d259f5268683af8382c21230c1ce7d767f032a
 
 %global         base_name breeze-grub
 
@@ -6,7 +6,7 @@
 ExcludeArch: %{ix86}
 
 Name:           grub2-breeze-theme
-Version: 6.7.4
+Version: 6.7.5
 Release: 1%{?dist}
 Summary:        Breeze theme for GRUB
 

@@ -1,11 +1,11 @@
-%global source0_hash 2020a6a94bb7726ec68004c7946ad7f6ed450dcee8f4e8b710c3680755afb1ab
+%global source0_hash 20af39d9450d495468c56a50930810d82137f7ccd3a710592e02b6f620758f55
 
 %global stable_kf6 stable
 
 
 Name:    kpipewire
 Summary: Set of convenient classes to use PipeWire in Qt projects
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only

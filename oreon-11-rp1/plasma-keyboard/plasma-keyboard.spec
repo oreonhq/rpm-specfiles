@@ -1,14 +1,14 @@
-%global source0_hash 7bbcf6df3e4f3aa2f0c59e33fdc5cfc93377c04369283f1900be8f7b8fe194a1
+%global source0_hash 0dd91212308e6c6999db55b95b5b462cadc2766935272e9caf2f138b9a063788
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 4
+%global bug_ver_kf6 5
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 

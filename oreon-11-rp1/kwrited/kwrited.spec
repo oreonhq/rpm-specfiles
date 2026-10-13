@@ -1,10 +1,10 @@
-%global source0_hash e556bb6aa096ccc146c4cddf8c1ea3f99d76c283f99f1d61d49d4ec2b0e9eab6
+%global source0_hash f8aa905734d0ccde796884cfcb06b36084e441fb199ea5aab2bc92cfa4c0506d
 
 %global stable_kf6 stable
 
 
 Name:           kwrited
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary:        KDE daemon for wall and write messages
 License:        GPL-2.0-or-later

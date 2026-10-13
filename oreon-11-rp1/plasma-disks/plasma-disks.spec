@@ -1,11 +1,11 @@
-%global source0_hash 232d7f6343e5c8a5c5cfcff4e0f80fdfd0063e4aba79ebd8a431c66d9a58c13a
+%global source0_hash 34125cd31e559d4d0fef49bb33a6ffc1803112a17495ae1bfbcf5e8beda464c4
 
 %global stable_kf6 stable
 
 
 Name:    plasma-disks
 Summary: Hard disk health monitoring for KDE Plasma
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-only AND GPL-3.0-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

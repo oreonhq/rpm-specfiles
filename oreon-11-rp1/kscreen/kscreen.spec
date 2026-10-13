@@ -1,4 +1,4 @@
-%global source0_hash 8918c970ae363c7c1b8db76b21dc969162b5f41353fd88bde8667b46536eb8a6
+%global source0_hash a1742210a0cf4ea76959f708c55180b2573648e9cd35cb4e38f349fe5694c9df
 
 %global stable_kf6 stable
 
@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:    kscreen
 Epoch:   1
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: KDE Display Management software
 

@@ -1,11 +1,11 @@
-%global source0_hash f990e8871586c7bafe3545609b071b14c3021105cc90f603dacf45e2e0185c2a
+%global source0_hash d93f31b6f33733ad3803098f4f622e55e3ef52cb5cd97e621a7b803e6f0e3f7c
 
 %global stable_kf6 stable
 
 
 Name:    plasma-activities
 Summary: Core components for the KDE Activity concept
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT

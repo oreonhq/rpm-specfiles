@@ -1,4 +1,4 @@
-%global source0_hash f40bfbd83147a7c7ff387ffe5053cc2ea000bdb21555a0b3d06da3c59d7b4977
+%global source0_hash df317e03acfadfcbc68981b78131750103fadf4d5c5df6368c9e91e698677219
 
 %undefine __cmake_in_source_build
 
@@ -6,7 +6,7 @@
 %global plasma_ver 6.7.4
 
 Name:           libkscreen
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary:        KDE screen management library
 

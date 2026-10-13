@@ -1,4 +1,4 @@
-%global source0_hash 2fde45a96cfe1d730a4e99dcc891567197532d2184ec82c718d38892c739b6ac
+%global source0_hash 9cb05ef4fed5ac19bc35f5c4b18ec425e499fae47d52d344821fbf38474c44a0
 
 %global         base_name breeze-plymouth
 
@@ -6,7 +6,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plymouth-theme-breeze
-Version: 6.7.4
+Version: 6.7.5
 Release: 1%{?dist}
 Summary: Breeze theme for Plymouth
 

@@ -1,4 +1,4 @@
-%global source0_hash b1ceea196fc95adb141917e230fb2609920d420a9db2451eb8a69039b4c96623
+%global source0_hash 7e4305d4e28698024fcd797554ccad84bfd4ed4e5bdcb0f42b5da77fab244416
 
 %global stable_kf6 stable
 
@@ -9,7 +9,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-%{base_name}
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: Window decoration engine for KWin (Aurorae)
 

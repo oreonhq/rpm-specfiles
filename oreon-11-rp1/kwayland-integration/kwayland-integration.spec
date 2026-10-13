@@ -1,4 +1,4 @@
-%global source0_hash 81f0e65271648c612c6899a7d2d3a0d17b77896de096934e0e793b1337546282
+%global source0_hash 33b4862d9828e6928ef19e0615eae62954ec6f9a7c482cae8ed4fa84cb9cbe00
 
 %global stable_kf6 stable
 
@@ -7,7 +7,7 @@
 ExcludeArch: %{ix86}
 
 Name:    kwayland-integration
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: Provides integration plugins for various KDE Frameworks for Wayland
 

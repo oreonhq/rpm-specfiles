@@ -1,4 +1,4 @@
-%global source0_hash 7f26c2a3bfc935dde9936f1cc611dac4cf936d7d7d3cb3ea41f141064ebaac56
+%global source0_hash adbc6a62d272a3866461274bb78de49e0f83c9971225f619adb3042399be6997
 
 %global stable_kf6 stable
 
@@ -13,7 +13,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-firewall
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: Control Panel for your system firewall
 

@@ -1,10 +1,10 @@
-%global source0_hash 3ae0c98d3bdbe3d1909f866e731b4a0971f90b8c274353d67e581d231474ca98
+%global source0_hash 788f0698c904112cc33bf6f8fb446b2e4fd7231d38c0955cbc3baa50d375d1ee
 
 %global stable_kf6 stable
 
 
 Name:    qqc2-breeze-style
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: QtQuickControls2 breeze style
 

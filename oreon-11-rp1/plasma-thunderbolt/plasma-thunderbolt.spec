@@ -1,4 +1,4 @@
-%global source0_hash cc40625fc51d1d1576e02e7411f2426fef61f78ff6e7bc14db3f2818032a5309
+%global source0_hash d8179c353f89de0eee69619e300b9df9b7788fce4864cfb2ce1255f0bc691664
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-thunderbolt
 Summary: Plasma integration for controlling Thunderbolt devices
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)

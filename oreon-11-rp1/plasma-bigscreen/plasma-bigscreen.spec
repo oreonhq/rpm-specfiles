@@ -1,9 +1,9 @@
-%global source0_hash 5fb76e3777ce03bd4ded119fb169efeb308a38f43dec009197158abec134441c
+%global source0_hash fd00b8ffd6a1c0fd7058acd06098110b00b5ca1dc720167058fad65d2ab50bdc
 
 %global stable_kf6 stable
 
 Name:          plasma-bigscreen
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later and CC-BY-SA-4.0
 Summary:       A big launcher giving you access to any installed apps and skills

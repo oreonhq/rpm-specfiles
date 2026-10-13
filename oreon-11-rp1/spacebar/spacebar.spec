@@ -1,12 +1,12 @@
-%global source0_hash 04b70db86fc0028b33b646218525c3bf081480b10049c8cfb4a4f5236954e92e
+%global source0_hash 6a072e3ecd849a512148241f24492d0d810331deabe0afe00a7b526efaa64a31
 
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
-%global bug_ver_kf6 4
+%global bug_ver_kf6 5
 Name:           spacebar
 Epoch:          1
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 License:        GPLv2+ and GPLv3 and GPLv2
 Summary:        Messaging app for Plasma Mobile

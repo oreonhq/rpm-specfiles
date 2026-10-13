@@ -1,10 +1,10 @@
-%global source0_hash 3882fe735a00113d6fc754d5d425703bab42b6bbbff16788e95adb4ef11bb04c
+%global source0_hash 9069bcf3fe4e491ea774d0d70eb17f99b567299871045a38543fcabcdb56dfc4
 
 %global stable_kf6 stable
 
 Name:    libksysguard
 Summary: Library for managing processes running on the system
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)

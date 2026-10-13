@@ -1,4 +1,4 @@
-%global source0_hash 24430ef5bef8b7c06b8f6770058afaab8fbbc166392535408b4e1d9e99a1ca9c
+%global source0_hash d71f5945ef3086f56f52f531508c2ab363078fbbd5ae4084bd3647049e6ee94f
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@ ExcludeArch: %{ix86}
 
 Name:    pam-kwallet
 Summary: PAM module for KWallet
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 License: LGPL-2.0-or-later
 URL:     https://invent.kde.org/plasma/%{base_name}.git

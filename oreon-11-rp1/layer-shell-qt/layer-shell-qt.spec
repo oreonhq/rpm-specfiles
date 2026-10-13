@@ -1,10 +1,10 @@
-%global source0_hash 6a5b064619739c6f4a2de70c56abfbadfc334dcb626152a1e8188a807ca86567
+%global source0_hash ccdcfec7081ca956f7a52c9113a4df3a226575bfbe98b56a2a9a4d7d7e19e8f0
 
 %global stable_kf6 stable
 
 
 Name:    layer-shell-qt
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: Library to easily use clients based on wlr-layer-shell
 

@@ -1,11 +1,11 @@
-%global source0_hash 21ec3c002929eb65377a1ae0eb105b9ab6f608049dac5493e188f51bd50398d5
+%global source0_hash 94ab21e2243b7876f65c315f1e545081c6437f5bd0a041ca4fb6c2533ae874c9
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:    plasma-workspace-x11
 Summary: Xorg support for Plasma
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT

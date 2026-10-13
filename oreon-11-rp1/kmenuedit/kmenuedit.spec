@@ -1,11 +1,11 @@
-%global source0_hash bc8daed5c859904e580ca8415b88836fcde198957fa672b5b28de4017398b0c3
+%global source0_hash 2d9801b7f89988046472c2b32385d848a0a98095fb178d58d6e3b5090ced9b8b
 
 %global stable_kf6 stable
 
 
 Name:    kmenuedit
 Summary: KDE menu editor
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later

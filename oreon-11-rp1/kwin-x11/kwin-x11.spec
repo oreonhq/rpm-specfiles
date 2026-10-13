@@ -1,7 +1,7 @@
-%global source0_hash 2c471ec076532b657a101761a3505ae4521aca3d90c86d783c813f42622a1e2e
+%global source0_hash 995236b90e3e92626a4991dcea47c9fcfa9bf163fdf01f2abe00e467fc9f2291
 
 Name:    kwin-x11
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 Summary: KDE Window manager with X11 support
 

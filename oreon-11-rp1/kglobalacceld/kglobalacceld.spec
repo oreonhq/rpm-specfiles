@@ -1,8 +1,8 @@
-%global source0_hash 538f883e7b04397d0c5b1756e750117022fe6a03a43ba890f65d62e2cf45e783
+%global source0_hash 83e9a4e226e695fe1544cfa19a9659c5f1000be46c669fe3a9e299029c6c2abf
 
 Name:    kglobalacceld
 Summary: Daemon providing Global Keyboard Shortcut functionality
-Version: 6.7.4
+Version: 6.7.5
 Release: 1%{?dist}
 
 License: CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)

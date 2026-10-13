@@ -1,4 +1,4 @@
-%global source0_hash d9862440a16820ca00abb22363be57e9b156adc76db692d4d04cabd3e862ab3d
+%global source0_hash 894137f8653d3311fae50ba0c70bdc4c8036f8f15082a583d9b3bb4ef51b18ba
 
 %global stable_kf6 stable
 
@@ -6,7 +6,7 @@
 %global orgname org.kde.plasma-welcome
 
 Name:           plasma-welcome
-Version:        6.7.4
+Version:        6.7.5
 Release: 1%{?dist}
 License:        GPL-2.0-or-later and BSD-3-Clause
 Summary:        Plasma Welcome
