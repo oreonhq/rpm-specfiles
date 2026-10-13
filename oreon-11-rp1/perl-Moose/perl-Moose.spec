@@ -1,4 +1,5 @@
 %global source0_hash c4bdcbe4daaeb50dcf40ea17dfb1483db22cb8832287abd8762a44ab98fb561f
+%oreon_bootstrap
 
 # Tests with requirements that would need bootstrapping
 %if ! (0%{?rhel})

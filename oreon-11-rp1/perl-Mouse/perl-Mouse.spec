@@ -1,4 +1,5 @@
 %global source0_hash 3ab8b0f9f96cbe43ff23498d900f91add52455dc9a7d6613a0a8186142bdeecf
+%oreon_bootstrap
 
 Name:           perl-Mouse
 Summary:        Moose minus the antlers

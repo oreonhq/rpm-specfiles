@@ -1,4 +1,5 @@
 %global source0_hash f4ddfb4dd6ac5013df8341bfa734d9c9ee0f10e2e71215ec8fe5bf780b7c9127
+%oreon_bootstrap
 
 Summary:        Encrypt Data with Cipher Block Chaining Mode
 Name:           perl-Crypt-CBC

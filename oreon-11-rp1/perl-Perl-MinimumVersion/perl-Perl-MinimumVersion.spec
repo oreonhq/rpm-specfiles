@@ -1,4 +1,5 @@
 %global source0_hash ffa9c8a2f099660a81361eb8bac56a335793b3e160fa5b1d97078b83142ce8cb
+%oreon_bootstrap
 
 Name:           perl-Perl-MinimumVersion
 Version:        1.44

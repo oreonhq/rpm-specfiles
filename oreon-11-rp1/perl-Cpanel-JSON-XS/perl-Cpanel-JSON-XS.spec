@@ -1,4 +1,5 @@
 %global source0_hash e1ac2fab1e3a6d2d998d3440c600067365bdc7dbf0c8f2b2059cbce4b4c83173
+%oreon_bootstrap
 
 # Run extra test
 %if ! (0%{?rhel})

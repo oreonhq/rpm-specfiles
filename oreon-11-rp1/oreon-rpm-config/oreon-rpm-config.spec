@@ -9,7 +9,7 @@
 Summary: Oreon-specific rpm configuration files
 Name: oreon-rpm-config
 Version: 345
-Release: 4%{?dist}
+Release: 5%{?dist}
 # config.guess, config.sub are GPL-3.0-or-later WITH Autoconf-exception-generic
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
 URL: https://github.com/oreonhq/rpm-specfiles

@@ -1,4 +1,5 @@
 %global source0_hash 2a48fa779b5297e56156380e8b32637c6c58decb4f4a7f3c7350523e11275f8f
+%oreon_bootstrap
 
 # Class::Load::XS is an optional extra
 %if 0%{?rhel:1}
