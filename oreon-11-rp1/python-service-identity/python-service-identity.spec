@@ -20,9 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'service-identity' generated automatically by pyp2spec.}
 
-Patch:          0001-Remove-coverage-toml-test-dependency.patch
-Patch:          0002-Remove-hatch-fancy-pypi-readme-build-system-dependency.patch
-
 %description %_description
 
 %package -n     python3-service-identity
@@ -41,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x idna
+%pyproject_buildrequires
 
 
 %build

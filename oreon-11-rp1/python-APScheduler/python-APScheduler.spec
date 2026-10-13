@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x doc,etcd,gevent,mongodb,redis,rethinkdb,sqlalchemy,test,tornado,twisted,zookeeper
+%pyproject_buildrequires
 
 
 %build

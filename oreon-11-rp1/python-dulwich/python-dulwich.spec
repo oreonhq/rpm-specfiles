@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x aiohttp,colordiff,dev,fastimport,fuzzing,https,hypothesis,merge,paramiko,patiencediff,pgp,range-diff
+%pyproject_buildrequires
 
 
 %build

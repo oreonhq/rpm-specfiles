@@ -20,9 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'zarr' generated automatically by pyp2spec.}
 
-Patch:          0001-Adapt-storage-tests-for-changes-in-fsspec-1819-1679.patch
-Patch:          0002-Fix-compatibility-with-latest-numcodecs.patch
-
 %description %_description
 
 %package -n     python3-zarr
@@ -41,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x cast-value-rs,cli,gpu,optional,remote
+%pyproject_buildrequires
 
 
 %build

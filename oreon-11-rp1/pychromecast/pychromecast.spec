@@ -1,4 +1,4 @@
-%global source0_hash 75571ef1bdb9808a52227ba47ae46281332bbe67eaebc26aee947cdc1e3e5a67
+%global source0_hash ce9f966c4d555165a1b30e6c5879794760248535e31498a190ca20111d40a4d8
 
 Name:           pychromecast
 Version:        14.0.10

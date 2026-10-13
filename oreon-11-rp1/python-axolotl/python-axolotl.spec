@@ -40,7 +40,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x apollo,auto-gptq,deepspeed,fbgemm-gpu,flash-attn,galore,llmcompressor,mamba-ssm,mlflow,opentelemetry,optimizers,ray,ring-flash-attn,vllm
+%pyproject_buildrequires
 
 
 %build

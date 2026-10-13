@@ -41,7 +41,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x aiohttp,anthropic,arq,asyncio,asyncpg,beam,bottle,celery,celery-redbeat,chalice,clickhouse-driver,django,falcon,fastapi,flask,google-genai,grpcio,http2,httpx,huey,huggingface-hub,langchain,langgraph,launchdarkly,litellm,litestar,loguru,mcp,openai,openfeature,opentelemetry,opentelemetry-experimental,opentelemetry-otlp,pure-eval,pydantic-ai,pymongo,pyspark,quart,rq,sanic,sqlalchemy,starlette,starlite,statsig,tornado,unleash
+%pyproject_buildrequires
 
 
 %build

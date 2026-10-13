@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Basic Inter-Process Locks
 License:        ZPL-2.1
 URL:            https://pypi.io/project/zc.lockfile/
-Source0:        https://pypi.io/packages/source/z/zc.lockfile/zc.lockfile-%{version}.tar.gz
+Source0:        %{pypi_source zc_lockfile}
 
 BuildArch:      noarch
 

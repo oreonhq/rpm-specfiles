@@ -40,7 +40,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x ci,develop,docs,gmp,gmpy,gmpy2,tests
+%pyproject_buildrequires
 
 
 %build

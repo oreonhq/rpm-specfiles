@@ -39,7 +39,7 @@
 
 %global		main_version	1.4.1
 
-%global         bootstrap   0
+%{!?bootstrap:%global bootstrap 0}
 %global         build_doc   1
 
 %undefine        _changelog_trimtime

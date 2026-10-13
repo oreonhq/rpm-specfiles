@@ -41,7 +41,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x 3d-plot,adios2,calc,cherab,docs,tests
+%pyproject_buildrequires
 
 
 %build

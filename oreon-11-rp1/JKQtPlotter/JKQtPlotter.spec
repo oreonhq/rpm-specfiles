@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1a5cd3e84493f969bfaea5e761e28b128b978cb8a18df8c83240f39922e82825
 
 %global gitcommit d243218119b1632987df26baea0d4bc6ccdee533
 %global gitdate 20251013
@@ -7,7 +7,7 @@
 %bcond_without qt5
 
 Name:           JKQtPlotter
-Version:        5.0.0-beta2-beta2
+Version:        5.0.0~beta2
 Release:        %autorelease -p -s %{gitdate}git%{shortcommit}
 Summary:        An extensive Qt6 Plotter framework
 License:        LGPL-2.1-or-later AND OFL-1.1
@@ -71,6 +71,7 @@ BuildArch:      noarch
 Contains documentation files for the usage of %{name}.
 
 %prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -qc
 
 %if %{with qt5}

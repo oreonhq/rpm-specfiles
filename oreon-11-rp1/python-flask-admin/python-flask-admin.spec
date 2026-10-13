@@ -37,7 +37,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x all,azure-blob-storage,export,geoalchemy,images,mongoengine,peewee,pymongo,rediscli,s3,sqlalchemy,sqlalchemy-lite,sqlalchemy-with-utils,translation
+%pyproject_buildrequires
 
 
 %build

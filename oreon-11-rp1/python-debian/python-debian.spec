@@ -1,13 +1,13 @@
-%global source0_hash 0c473b1421bad4cd003e5140f6a466b9c5df81db943c32b01398c45db61b7714
+%global source0_hash fe4fc3dc798dbf1f0ef5865e2b1b4f7cc0352b6a511b25ab7594906c64a73629
 
 Name:           python-debian
-Version:        0.1.51
+Version:        1.1.1
 Release:        %autorelease
 Summary:        Modules for Debian-related data formats
 # debfile.py, arfile.py, debtags.py are release under GPL v3 or above
 # everything else is GPLv2+
 License:        GPL-2.0-or-later AND GPL-3.0-or-later
-Source0:        http://ftp.debian.org/debian/pool/main/p/python-debian/python-debian_%{version}.tar.xz
+Source0:        %{pypi_source python_debian}
 URL:            https://salsa.debian.org/python-debian-team/python-debian
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -60,7 +60,7 @@ related files. Currently handled are:
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n python-debian-%{version}
+%autosetup -p1 -n python_debian-%{version}
 
 %generate_buildrequires
 %pyproject_buildrequires
@@ -76,7 +76,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pyproject_check_import
 
 %files -n python3-debian -f %{pyproject_files}
-%doc README.rst HISTORY.deb822
+%doc README.rst
 
 %changelog
 %autochangelog

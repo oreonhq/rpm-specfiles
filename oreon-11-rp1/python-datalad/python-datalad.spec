@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x devel,devel-docs,devel-utils,downloaders-extra,duecredit,full,misc,tests
+%pyproject_buildrequires
 
 
 %build

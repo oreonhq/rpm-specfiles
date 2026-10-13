@@ -20,8 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'graphviz' generated automatically by pyp2spec.}
 
-Patch0:         python-graphviz-deps.patch
-
 %description %_description
 
 %package -n     python3-graphviz
@@ -40,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x dev,docs,test
+%pyproject_buildrequires
 
 
 %build

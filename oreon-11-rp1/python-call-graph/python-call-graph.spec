@@ -33,7 +33,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x ipython,memory-psutil
+%pyproject_buildrequires
+
 
 %build
 %pyproject_wheel

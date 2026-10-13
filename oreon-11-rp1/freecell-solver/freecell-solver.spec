@@ -63,7 +63,7 @@ BuildRequires: pkgconfig(cmocka)
 BuildRequires: pkgconfig(librinutils) >= 0.2.0
 BuildRequires: python3-devel
 BuildRequires: python3-cffi
-BuildRequires: python3-freecell_solver
+BuildRequires: python3-freecell-solver
 BuildRequires: python3-pysol-cards >= 0.24
 BuildRequires: python3-rpm-macros
 BuildRequires: python3dist(six)

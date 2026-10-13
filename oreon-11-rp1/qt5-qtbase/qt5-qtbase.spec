@@ -393,7 +393,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Summary: MySQL driver for Qt5's SQL classes
 %if 0%{?oreon} >= 11
 BuildRequires: mysql-devel
-%elseif 0%{?rhel} && 0%{?rhel} < 9
+%elif 0%{?rhel} && 0%{?rhel} < 9
 BuildRequires: mysql-devel
 %else
 BuildRequires: mariadb-connector-c-devel

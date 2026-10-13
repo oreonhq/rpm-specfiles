@@ -1,4 +1,4 @@
-%global source0_hash a15b4edf874f0912feae2b9101ffa2d244923d91052414c6d9866b70dca77f4c
+%global source0_hash 5f5ed7ac0ff3d75b38fc615e8d88885121e7346a498d2b48c4313b7997703723
 
 # Currently, ty is developed together with ruff in
 # https://github.com/astral-sh/ruff. The repository

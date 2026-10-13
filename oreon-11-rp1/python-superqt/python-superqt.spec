@@ -37,7 +37,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x cmap,font-fa5,font-fa6,font-mi6,font-mi7,iconify,pyqt5,pyqt6,pyside6,quantity
+%pyproject_buildrequires
 
 
 %build

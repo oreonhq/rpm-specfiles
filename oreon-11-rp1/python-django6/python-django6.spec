@@ -1,4 +1,4 @@
-%global source0_hash 3046a53b0e40d4b676c3b774c73411d7184ae2745fe8ce5e45c0f33d3ddb71a7
+%global source0_hash 7ab93536d8e677aa14554c56426290c69480bf2ee68d7513d4a22f57d6bfeb84
 
 # Main Django, i.e. whether this is the main Django version in the distribution
 # that owns /usr/bin/django-admin and other unique paths

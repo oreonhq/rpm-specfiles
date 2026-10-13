@@ -20,10 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'setuptools-git-versioning' generated automatically by pyp2spec.}
 
-Patch:      %{forgeurl}/pull/116.patch
-Patch:      %{forgeurl}/pull/117.patch
-Patch:      0001-Downstream-only-patch-out-coverage-analysis-machiner.patch
-
 %description %_description
 
 %package -n     python3-setuptools-git-versioning

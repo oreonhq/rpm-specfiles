@@ -20,8 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'ipykernel' generated automatically by pyp2spec.}
 
-Patch:          https://github.com/ipython/ipykernel/commit/a7d66a.patch
-Patch:          https://github.com/ipython/ipykernel/pull/1248.patch
 
 %description %_description
 
@@ -41,7 +39,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x cov,docs,pyqt5,pyside6,test
+%pyproject_buildrequires
 
 
 %build

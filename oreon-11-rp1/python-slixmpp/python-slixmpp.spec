@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x safer-xml-parsing,xep-0363,xep-0444-compliance,xep-0454
+%pyproject_buildrequires
 
 
 %build

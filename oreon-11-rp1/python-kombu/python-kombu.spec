@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x azureservicebus,azurestoragequeues,confluentkafka,consul,gcpubsub,librabbitmq,mongodb,msgpack,pyro,qpid,redis,slmq,sqlalchemy,sqs,yaml,zookeeper
+%pyproject_buildrequires
 
 
 %build

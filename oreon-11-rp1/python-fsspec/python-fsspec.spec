@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x abfs,adl,arrow,dask,dev,doc,dropbox,entrypoints,full,fuse,gcs,git,github,gs,gui,hdfs,http,libarchive,oci,s3,sftp,smb,ssh,test,test-downstream,test-full,tqdm
+%pyproject_buildrequires
 
 
 %build

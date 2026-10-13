@@ -21,8 +21,6 @@ BuildRequires:  gcc
 This is package 'hiredis' generated automatically by pyp2spec.}
 
 Patch0:         use-system-hiredis.patch
-Patch1:         do-not-use-load_module.patch
-
 %description %_description
 
 %package -n     python3-hiredis

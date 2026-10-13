@@ -20,8 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'websocket-client' generated automatically by pyp2spec.}
 
-Patch:              0001-Include-pytest-in-test-extra.patch
-
 %description %_description
 
 %package -n     python3-websocket-client
@@ -40,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x docs,optional,test
+%pyproject_buildrequires
 
 
 %build

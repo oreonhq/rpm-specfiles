@@ -11,7 +11,7 @@
 %endif
 
 Name:    kf5-%{framework}
-Version: 26.08.1
+Version: 23.08.5
 Release: 1%{?dist}
 Summary: The Akonadi Search library and indexing agent
 

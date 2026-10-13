@@ -1,4 +1,4 @@
-.TH protoc "1" "December 2022" protoc "User Commands"
+.TH protoc "1" "April 2024" protoc "User Commands"
 .SH NAME
 protoc \- Protobuf compiler
 .SH SYNOPSIS
@@ -101,11 +101,22 @@ that include information about the original location
 of each decl in the source file
 as well as surrounding comments.
 .TP
+.B \-\-retain_options
+When using
+.BR \-\-descriptor_set_out ,
+do not strip
+any options
+from the
+.BR FileDescriptorProto .
+This results in potentially larger descriptors
+that include information about options
+that were only meant to be useful during compilation.
+.TP
 .BI \-\-dependency_out= FILE
 Write a dependency output file in the format expected by
 .BR make (1).
 This writes the transitive set of input file paths to
-.I FILE
+.IR FILE .
 .TP
 .BI \-\-error_format= FORMAT
 Set the format in which to print errors.
@@ -123,14 +134,19 @@ in
 .BR gcc (1)).
 This flag will make
 .BR protoc (1)
- return with a non-zero exit code
+return with a non-zero exit code
 if any warnings are generated.
 .TP
 .B \-\-print_free_field_numbers
 Print the free field numbers of the messages
 defined in the given proto files.
-Groups share the same field number space with the parent message.
 Extension ranges are counted as occupied fields numbers.
+.TP
+.B \-\-enable_codegen_trace
+Enables tracing which parts of
+.BR protoc (1)
+are responsible for what codegen output.
+Not supported by all backends or on all platforms.
 .TP
 .BI \-\-plugin= EXECUTABLE
 Specifies a plugin executable to use.
@@ -157,9 +173,6 @@ Generate C# source file.
 .BI \-\-java_out= OUT_DIR
 Generate Java source file.
 .TP
-.BI \-\-js_out= OUT_DIR
-Generate JavaScript source.
-.TP
 .BI \-\-kotlin_out= OUT_DIR
 Generate Kotlin file.
 .TP
@@ -169,11 +182,19 @@ Generate Objective-C header and source.
 .BI \-\-php_out= OUT_DIR
 Generate PHP source file.
 .TP
+.BI \-\-pyi_out= OUT_DIR
+Generate Python
+.B pyi
+stub.
+.TP
 .BI \-\-python_out= OUT_DIR
 Generate Python source file.
 .TP
 .BI \-\-ruby_out= OUT_DIR
 Generate Ruby source file.
+.TP
+.BI \-\-rust_out= OUT_DIR
+Generate Rust sources.
 .TP
 .BI @ <filename>
 Read options and filenames from file.

@@ -18,7 +18,7 @@ Source:         %{crates_source}
 BuildRequires:  cargo-rpm-macros >= 24
 
 %global _description %{expand:
-Interact with git repositories just like git would}
+Interact with git repositories just like git would.}
 
 %description %{_description}
 
@@ -32,6 +32,8 @@ This package contains library source intended for building other packages which
 use the "%{crate}" crate.
 
 %files          devel
+%license %{crate_instdir}/LICENSE-APACHE
+%license %{crate_instdir}/LICENSE-MIT
 %{crate_instdir}/
 
 %package     -n %{name}+default-devel
@@ -94,6 +96,18 @@ use the "attributes" feature of the "%{crate}" crate.
 %files       -n %{name}+attributes-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+auto-chain-error-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+auto-chain-error-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "auto-chain-error" feature of the "%{crate}" crate.
+
+%files       -n %{name}+auto-chain-error-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+basic-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -140,6 +154,18 @@ This package contains library source intended for building other packages which
 use the "blocking-http-transport-curl" feature of the "%{crate}" crate.
 
 %files       -n %{name}+blocking-http-transport-curl-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+blocking-http-transport-curl-openssl-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+blocking-http-transport-curl-openssl-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "blocking-http-transport-curl-openssl" feature of the "%{crate}" crate.
+
+%files       -n %{name}+blocking-http-transport-curl-openssl-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+blocking-http-transport-curl-rustls-devel
@@ -442,6 +468,18 @@ use the "merge" feature of the "%{crate}" crate.
 %files       -n %{name}+merge-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+notes-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+notes-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "notes" feature of the "%{crate}" crate.
+
+%files       -n %{name}+notes-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+pack-cache-lru-dynamic-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -550,6 +588,30 @@ use the "serde" feature of the "%{crate}" crate.
 %files       -n %{name}+serde-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+sha1-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+sha1-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "sha1" feature of the "%{crate}" crate.
+
+%files       -n %{name}+sha1-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+sha256-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+sha256-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "sha256" feature of the "%{crate}" crate.
+
+%files       -n %{name}+sha256-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+status-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -584,6 +646,18 @@ This package contains library source intended for building other packages which
 use the "tracing-detail" feature of the "%{crate}" crate.
 
 %files       -n %{name}+tracing-detail-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+tree-error-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+tree-error-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "tree-error" feature of the "%{crate}" crate.
+
+%files       -n %{name}+tree-error-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+worktree-archive-devel
@@ -623,7 +697,6 @@ use the "worktree-stream" feature of the "%{crate}" crate.
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{version} -p1
 %cargo_prep
 

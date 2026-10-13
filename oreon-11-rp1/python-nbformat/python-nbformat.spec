@@ -19,8 +19,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'nbformat' generated automatically by pyp2spec.}
 
-Patch0:         nbformat-build-test.patch
-Patch1:         https://github.com/jupyter/nbformat/pull/408.patch
 
 %description %_description
 
@@ -40,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x docs,test
+%pyproject_buildrequires
 
 
 %build

@@ -20,8 +20,6 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'orjson' generated automatically by pyp2spec.}
 
-Patch:          orjson-3.11.7-pyo3-0.27.patch
-
 %description %_description
 
 %package -n     python3-orjson

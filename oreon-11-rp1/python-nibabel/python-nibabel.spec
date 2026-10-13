@@ -41,7 +41,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x all,dev,dicom,dicomfs,doc,doctest,indexed-gzip,minc2,spm,style,test,typing,viewers,zstd
+%pyproject_buildrequires
 
 
 %build

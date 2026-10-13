@@ -9,7 +9,7 @@
 Name:           rust-gix-attributes
 Version:        0.35.0
 Release:        %autorelease
-Summary:        A crate of the gitoxide project dealing .gitattributes files
+Summary:        Of the gitoxide project dealing .gitattributes files
 
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/gix-attributes
@@ -18,7 +18,7 @@ Source:         %{crates_source}
 BuildRequires:  cargo-rpm-macros >= 24
 
 %global _description %{expand:
-A crate of the gitoxide project dealing .gitattributes files}
+A crate of the gitoxide project dealing .gitattributes files.}
 
 %description %{_description}
 
@@ -34,8 +34,19 @@ use the "%{crate}" crate.
 %files          devel
 %license %{crate_instdir}/LICENSE-APACHE
 %license %{crate_instdir}/LICENSE-MIT
-
 %{crate_instdir}/
+
+%package     -n %{name}+default-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+default-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "default" feature of the "%{crate}" crate.
+
+%files       -n %{name}+default-devel
+%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+document-features-devel
 Summary:        %{summary}
@@ -47,6 +58,18 @@ This package contains library source intended for building other packages which
 use the "document-features" feature of the "%{crate}" crate.
 
 %files       -n %{name}+document-features-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+parallel-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+parallel-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "parallel" feature of the "%{crate}" crate.
+
+%files       -n %{name}+parallel-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+serde-devel

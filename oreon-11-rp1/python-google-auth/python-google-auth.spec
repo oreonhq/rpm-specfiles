@@ -37,7 +37,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x aiohttp,cryptography,enterprise-cert,grpc,pyjwt,pyopenssl,reauth,requests,rsa,testing,urllib3
+%pyproject_buildrequires
 
 
 %build

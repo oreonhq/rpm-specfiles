@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x arangodb,auth,azureblockblob,brotli,cassandra,consul,cosmosdbsql,couchbase,couchdb,django,dynamodb,elasticsearch,eventlet,gcs,gevent,librabbitmq,memcache,mongodb,msgpack,pydantic,pymemcache,pyro,pytest,redis,s3,slmq,solar,sqlalchemy,sqs,tblib,yaml,zookeeper,zstd
+%pyproject_buildrequires
 
 
 %build

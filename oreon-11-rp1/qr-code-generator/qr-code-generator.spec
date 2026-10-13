@@ -1,4 +1,4 @@
-%global source0_hash b576111a224aa34811c81a03d8c30a13d7a048f085276b0ae87509cbf52b5ace
+%global source0_hash 2ec0a4d33d6f521c942eeaf473d42d5fe139abcfa57d2beffe10c5cf7d34ae60
 
 %global richname QR-Code-generator
 %global cmakename qrcodegen-cmake

@@ -9,11 +9,12 @@
 Name:           rust-os_info
 Version:        3.15.0
 Release:        %autorelease
-Summary:        Detect the operating system type and version.
+Summary:        Detect the operating system type and version
 
 License:        MIT
 URL:            https://crates.io/crates/os_info
 Source:         %{crates_source}
+# Automatically generated patch to strip dependencies and normalize metadata
 Patch:          os_info-fix-metadata-auto.diff
 
 BuildRequires:  cargo-rpm-macros >= 24

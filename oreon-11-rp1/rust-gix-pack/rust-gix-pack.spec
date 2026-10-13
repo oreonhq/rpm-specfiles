@@ -18,7 +18,7 @@ Source:         %{crates_source}
 BuildRequires:  cargo-rpm-macros >= 24
 
 %global _description %{expand:
-Implements git packs and related data structures}
+Implements git packs and related data structures.}
 
 %description %{_description}
 
@@ -32,6 +32,8 @@ This package contains library source intended for building other packages which
 use the "%{crate}" crate.
 
 %files          devel
+%license %{crate_instdir}/LICENSE-APACHE
+%license %{crate_instdir}/LICENSE-MIT
 %{crate_instdir}/
 
 %package     -n %{name}+default-devel
@@ -106,6 +108,18 @@ use the "pack-cache-lru-static" feature of the "%{crate}" crate.
 %files       -n %{name}+pack-cache-lru-static-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+parallel-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+parallel-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "parallel" feature of the "%{crate}" crate.
+
+%files       -n %{name}+parallel-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+serde-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -118,6 +132,30 @@ use the "serde" feature of the "%{crate}" crate.
 %files       -n %{name}+serde-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+sha1-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+sha1-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "sha1" feature of the "%{crate}" crate.
+
+%files       -n %{name}+sha1-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+sha256-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+sha256-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "sha256" feature of the "%{crate}" crate.
+
+%files       -n %{name}+sha256-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+streaming-input-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -128,6 +166,18 @@ This package contains library source intended for building other packages which
 use the "streaming-input" feature of the "%{crate}" crate.
 
 %files       -n %{name}+streaming-input-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+testing-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+testing-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "testing" feature of the "%{crate}" crate.
+
+%files       -n %{name}+testing-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+wasm-devel
@@ -143,7 +193,6 @@ use the "wasm" feature of the "%{crate}" crate.
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{version} -p1
 %cargo_prep
 

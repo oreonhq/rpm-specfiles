@@ -14,11 +14,13 @@ Summary:        Ergonomic wrapper for SQLite
 License:        MIT
 URL:            https://crates.io/crates/rusqlite
 Source:         %{crates_source}
+# Automatically generated patch to strip dependencies and normalize metadata
+Patch:          rusqlite-fix-metadata-auto.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 
 %global _description %{expand:
-Ergonomic wrapper for SQLite}
+Ergonomic wrapper for SQLite.}
 
 %description %{_description}
 
@@ -34,6 +36,7 @@ use the "%{crate}" crate.
 %files          devel
 %license %{crate_instdir}/LICENSE
 %doc %{crate_instdir}/README.md
+%doc %{crate_instdir}/bindings.md
 %{crate_instdir}/
 
 %package     -n %{name}+default-devel

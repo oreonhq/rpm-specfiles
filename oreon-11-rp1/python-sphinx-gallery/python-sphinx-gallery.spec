@@ -37,7 +37,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x animations,dev,jupyterlite,parallel,recommender,show-api-usage,show-memory
+%pyproject_buildrequires
 
 
 %build

@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x bpython,color,gcs,httpx,images,ipython,ptpython,robotparser,s3,twisted-http2,uvloop
+%pyproject_buildrequires
 
 
 %build

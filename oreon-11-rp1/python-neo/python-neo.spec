@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x all,biocam,ced,dev,docs,edf,igorproio,iocache,kwikio,maxwell,med,neomatlabio,neuralynx,nixio,nwb,plexon2,test,tiffio
+%pyproject_buildrequires
 
 
 %build

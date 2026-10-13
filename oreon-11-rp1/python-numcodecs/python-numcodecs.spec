@@ -14,18 +14,14 @@ Source:         %{pypi_source numcodecs}
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
+BuildRequires:  pkgconfig(blosc)
+BuildRequires:  pkgconfig(libzstd)
+BuildRequires:  pkgconfig(liblz4)
 
 
 # Fill in the actual package description to submit package to Fedora
 %global _description %{expand:
 This is package 'numcodecs' generated automatically by pyp2spec.}
-
-Patch:          0001-Unbundle-blosc.patch
-Patch:          0002-Unbundle-zstd.patch
-Patch:          0003-Unbundle-lz4.patch
-Patch:          0004-Re-add-Snappy-to-tests.patch
-Patch:          0005-Fix-testing-setup-for-Fedora.patch
-Patch:          0006-Reduce-numpy-build-requirement.patch
 
 %description %_description
 
@@ -45,11 +41,11 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x crc32c,docs,google-crc32c,msgpack,pcodec,test,test-extras,zfpy
+%pyproject_buildrequires
 
 
 %build
-%pyproject_wheel
+%pyproject_wheel -Csetup-args=-Dsystem_blosc=enabled -Csetup-args=-Dsystem_zstd=enabled -Csetup-args=-Dsystem_lz4=enabled
 
 
 %install

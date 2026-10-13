@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x all-plugins,all-plugins-pypy,bsdf,dev,dicom,docs,feisem,ffmpeg,fits,freeimage,full,gdal,itk,linting,lytro,numpy,pillow,pillow-heif,pyav,rawpy,simpleitk,spe,swf,test,tifffile
+%pyproject_buildrequires
 
 
 %build

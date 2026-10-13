@@ -35,7 +35,7 @@ BuildRequires:  libX11-devel
 BuildRequires:  libXext-devel
 BuildRequires:  libXrandr-devel
 BuildRequires:  opencv-devel
-BuildRequires:  OpenEXR-devel
+BuildRequires:  openexr-devel
 BuildRequires:  zlib-devel
 BuildRequires:  make
 

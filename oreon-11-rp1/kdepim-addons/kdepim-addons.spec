@@ -1,11 +1,11 @@
 %global stable_kf6 stable
-%global source0_hash 0eebf8a6aee397b53ce1365ed6a27af5f7a348865c575ba7ac0f88787f7fa979
+%global source0_hash 09a604e46cbacde0cc99848e18f51ae64019382beb1da11e94319bc48cc8937d
 
 # adblock requires rust and corrosion
 %bcond adblock 1
 
 Name:    kdepim-addons
-Version: 25.12.3
+Version: 26.08.1
 Release: 1%{?dist}
 Summary: Additional plugins for KDE PIM applications
 # Cargo license summary:

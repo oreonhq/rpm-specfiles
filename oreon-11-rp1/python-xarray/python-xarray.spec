@@ -20,10 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'xarray' generated automatically by pyp2spec.}
 
-Patch:          0001-Drop-pydap-from-dependencies.patch
-Patch:          0002-Ensure-netcdf4-is-locked-while-closing.patch
-Patch:          0003-numpy-2.4-curvefit-concat-periods.patch
-
 %description %_description
 
 %package -n     python3-xarray
@@ -42,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x accel,complete,etc,io,parallel,types,viz
+%pyproject_buildrequires
 
 
 %build

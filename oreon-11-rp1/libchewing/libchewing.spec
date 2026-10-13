@@ -1,4 +1,4 @@
-%global source0_hash b2dc134f994db524d735c014c7ff41285ab439c3f7a437bb5f0e446a63b7220d
+%global source0_hash c897a5d0aadfdeb07784e1411ceac0efef2c97bea8143fb3b1dcde8274e14fc0
 
 %bcond check 0
 %global libchewing_python_dir %{python3_sitelib}
@@ -22,11 +22,13 @@ License:        LGPL-2.1-or-later AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND MI
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://chewing.im
-Source0:        https://github.com/chewing/%{name}/releases/download/v%{version}/libchewing-%{version}.tar.zst
-Source1:        https://github.com/chewing/%{name}/releases/download/v%{version}/libchewing-%{version}.tar.zst.asc
+Source0:        https://codeberg.org/chewing/%{name}/releases/download/v%{version}/libchewing-%{version}.tar.zst
+Source1:        https://codeberg.org/chewing/%{name}/releases/download/v%{version}/libchewing-%{version}.tar.zst.asc
 Source2:        https://chewing.im/.well-known/openpgpkey/hu/y84sdmnksfqswe7fxf5mzjg53tbdz8f5?l=release#/libchewing.pgp
 
 Patch0:         0001-delete-sqlite-bundled-feature.patch
+# clap_mangen 0.2 to 0.3
+Patch1:         libchewing-0.13.1-clap_mangen0.13.patch
 
 BuildRequires:  gcc cmake make pkgconf texinfo
 BuildRequires:  cargo-rpm-macros >= 24
@@ -87,8 +89,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %cmake --preset default
 %cmake_build
-%{cargo_license_summary}
-%{cargo_license} > LICENSE.dependencies
+%{cargo_license_summary -f sqlite}
+%{cargo_license -f sqlite} > LICENSE.dependencies
 
 %install
 %cmake_install

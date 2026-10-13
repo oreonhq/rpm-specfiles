@@ -44,7 +44,7 @@ Summary:        %{summary}
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
 %if %{with developer_tools}
-%pyproject_buildrequires -x code-style,testing
+%pyproject_buildrequires
 %else
 %pyproject_buildrequires
 %endif

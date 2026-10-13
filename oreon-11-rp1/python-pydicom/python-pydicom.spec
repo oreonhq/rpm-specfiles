@@ -42,7 +42,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x basic,dev,docs,gpl-license,pixeldata
+%pyproject_buildrequires
 
 
 %build

@@ -42,7 +42,7 @@ Patch0:        qtmultimedia-fix-build-on-x86-arch.patch
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
-%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
+%if 0%{?rhel} && 0%{?rhel} < 10
 BuildRequires: gcc-toolset-13
 %endif
 BuildRequires: ninja-build
@@ -115,7 +115,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %build
-%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
+%if 0%{?rhel} && 0%{?rhel} < 10
 . /opt/rh/gcc-toolset-13/enable
 %endif
 %cmake_qt6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \

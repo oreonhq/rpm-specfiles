@@ -1,4 +1,4 @@
-%global source0_hash a15b4edf874f0912feae2b9101ffa2d244923d91052414c6d9866b70dca77f4c
+%global source0_hash 42f2b5af083151646886e7eddcf10ebfdfa89d4ba1a8146b82422497688921d3
 
 %bcond check 1
 
@@ -206,8 +206,6 @@ Source300:      %{salsa_git}/archive/%{salsa_rev}/salsa-%{salsa_rev}.tar.gz
 # “Should uv.find_uv_bin() be able to find /usr/bin/uv?”
 #  https://github.com/astral-sh/uv/issues/4451
 Patch:          0001-Downstream-patch-always-find-the-system-wide-ruff-ex.patch
-# * drop unavailable compile-time diagnostics feature for UUIDs (non-upstreamable)
-Patch:          0002-drop-unavailable-features-from-uuid-dependency.patch
 # * ignore tests in vendored annotate-snippets that hang indefinitely:
 Patch:          0003-ignore-vendored-annotate-snippets-tests-that-hang-in.patch
 

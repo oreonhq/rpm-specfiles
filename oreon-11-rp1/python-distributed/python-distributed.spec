@@ -20,14 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'distributed' generated automatically by pyp2spec.}
 
-Patch:          0001-Increase-test-timeout-for-slower-architectures.patch
-Patch:          0002-Install-test-packages.patch
-Patch:          0003-Disable-warnings-as-errors-in-tests.patch
-Patch:          0004-Loosen-up-some-dependencies.patch
-Patch:          0005-Skip-doc-test-when-not-running-from-a-git-checkout.patch
-Patch:          0006-Update-make_tls_certs.py-work-with-openssl-3-8701.patch
-Patch:          0007-Avoid-using-sys.prefix-in-CLI-test.patch
-
 %description %_description
 
 %package -n     python3-distributed

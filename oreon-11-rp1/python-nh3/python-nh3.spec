@@ -20,8 +20,6 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'nh3' generated automatically by pyp2spec.}
 
-Patch:          generate-import-lib-dep.patch
-
 %description %_description
 
 %package -n     python3-nh3

@@ -1,7 +1,7 @@
-%global source0_hash none
+%global source0_hash 0f123655f44390a15ec62c9fa30b57f6dafe53014524d28b62cab1edbc303059
 
 Name:           python-types-setuptools
-Version:        73.0.0.20240822
+Version:        84.0.0.20261006
 Release:        %autorelease
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Typing stubs for setuptools

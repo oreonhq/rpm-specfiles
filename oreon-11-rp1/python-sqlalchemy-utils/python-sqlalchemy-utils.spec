@@ -42,7 +42,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x arrow,babel,color,encrypted,intervals,password,pendulum,phone,test,test-all,timezone,url
+%pyproject_buildrequires
 
 
 %build

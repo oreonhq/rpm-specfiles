@@ -151,7 +151,7 @@ ExclusiveArch: %{qt6_qtwebengine_arches}
 BuildRequires: cmake
 BuildRequires: ninja-build >= 1.7.2
 BuildRequires: make
-%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
+%if 0%{?rhel} && 0%{?rhel} < 10
 BuildRequires: gcc-toolset-13
 BuildRequires: gcc-toolset-13-libatomic-devel
 %else
@@ -556,7 +556,7 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 
 
 %build
-%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
+%if 0%{?rhel} && 0%{?rhel} < 10
 . /opt/rh/gcc-toolset-13/enable
 %endif
 export STRIP=strip
@@ -660,7 +660,7 @@ sed -i -e "s|%{version} \${_Qt6WebEngine|%{lesser_version} \${_Qt6WebEngine|" \
   %{buildroot}%{_qt6_libdir}/cmake/Qt6WebEngine*/Qt6WebEngine*Config.cmake
 
 
-%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
+%if 0%{?rhel} && 0%{?rhel} < 10
 %filetriggerin -- %{_datadir}/myspell
 %else
 %filetriggerin -- %{_datadir}/hunspell

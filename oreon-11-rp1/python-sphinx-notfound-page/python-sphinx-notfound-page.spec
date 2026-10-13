@@ -20,10 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'sphinx-notfound-page' generated automatically by pyp2spec.}
 
-Patch:         tox-no-dot-no-pdbpp.patch
-Patch:         https://patch-diff.githubusercontent.com/raw/readthedocs/sphinx-notfound-page/pull/245.patch
-Patch:         https://patch-diff.githubusercontent.com/raw/readthedocs/sphinx-notfound-page/pull/250.patch
-
 %description %_description
 
 %package -n     python3-sphinx-notfound-page
@@ -42,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x doc,test
+%pyproject_buildrequires
 
 
 %build

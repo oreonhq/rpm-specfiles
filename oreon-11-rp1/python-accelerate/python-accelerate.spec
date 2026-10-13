@@ -37,7 +37,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x deepspeed,dev,docs,quality,rich,sagemaker,test-dev,test-fp8,test-prod,test-trackers,testing
+%pyproject_buildrequires
 
 
 %build

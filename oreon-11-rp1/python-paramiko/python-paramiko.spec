@@ -20,10 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'paramiko' generated automatically by pyp2spec.}
 
-Patch3:        0003-remove-pytest-relaxed-dep.patch
-Patch4:        0004-remove-icecream-dep.patch
-Patch5:        0005-remove-invoke-dep.patch
-
 %description %_description
 
 %package -n     python3-paramiko

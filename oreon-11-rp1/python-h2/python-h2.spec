@@ -20,8 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'h2' generated automatically by pyp2spec.}
 
-Patch0:         0001-Fedora-tox-adjustments.patch
-
 %description %_description
 
 %package -n     python3-h2

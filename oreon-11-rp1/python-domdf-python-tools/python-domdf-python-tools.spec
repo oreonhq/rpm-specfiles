@@ -20,10 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'domdf-python-tools' generated automatically by pyp2spec.}
 
-Patch:          Don-t-remove-egg-info-directory-in-setup.py.patch
-Patch:          0001-tests-fix-pathlib.PurePosixPath-repr-on-py3.14.patch
-Patch:          0002-words-fix-alphabet_sort-exception-handling-for-py3.1.patch
-
 %description %_description
 
 %package -n     python3-domdf-python-tools
@@ -42,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x all,dates,testing
+%pyproject_buildrequires
 
 
 %build

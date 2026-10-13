@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x all,allpy3,dev,google-onetap,saml,shopify
+%pyproject_buildrequires
 
 
 %build

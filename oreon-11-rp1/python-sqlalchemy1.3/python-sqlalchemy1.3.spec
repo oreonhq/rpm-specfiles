@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x aiomysql,aioodbc,aiosqlite,asyncio,asyncmy,mariadb-connector,mssql,mssql-pymssql,mssql-pyodbc,mypy,mysql,mysql-connector,oracle,oracle-oracledb,postgresql,postgresql-asyncpg,postgresql-pg8000,postgresql-psycopg,postgresql-psycopg2binary,postgresql-psycopg2cffi,postgresql-psycopgbinary,pymysql,sqlcipher
+%pyproject_buildrequires
 
 
 %build

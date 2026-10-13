@@ -20,8 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'gcsfs' generated automatically by pyp2spec.}
 
-Patch0:         gcsfs-fsspec-pin.patch
-
 %description %_description
 
 %package -n     python3-gcsfs
@@ -40,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x crc,dev,gcsfuse
+%pyproject_buildrequires
 
 
 %build

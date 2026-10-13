@@ -53,7 +53,7 @@ cd ..
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x all,cli,codemods,crosshair,dateutil,django,dpcontracts,ghostwriter,lark,numpy,pandas,pytest,pytz,redis,watchdog,zoneinfo
+%pyproject_buildrequires
 
 
 %build

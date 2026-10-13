@@ -1,4 +1,4 @@
-%global source0_hash cdbab54e8f28321b8f8f0ea8d12de1669c3294f67c13332c7f5bf92cf0a8833a
+%global source0_hash c4a716d775d4cc1821fecd44278df79115a0e2bf140f823b7e4990c700b9e7ae
 
 Name:           pythran
 Version:        0.19.0

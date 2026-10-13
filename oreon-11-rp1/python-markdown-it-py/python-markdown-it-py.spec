@@ -38,7 +38,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x benchmarking,compare,linkify,plugins,profiling,rtd,testing
+%pyproject_buildrequires
 
 
 %build

@@ -40,7 +40,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x berkeleydb,graphdb,html,lxml,networkx,orjson,rdf4j
+%pyproject_buildrequires
 
 
 %build

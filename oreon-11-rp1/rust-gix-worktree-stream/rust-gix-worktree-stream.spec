@@ -9,7 +9,7 @@
 Name:           rust-gix-worktree-stream
 Version:        0.36.1
 Release:        %autorelease
-Summary:        generate a byte-stream from a git-tree
+Summary:        Generate a byte-stream from a git-tree
 
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/gix-worktree-stream
@@ -18,7 +18,7 @@ Source:         %{crates_source}
 BuildRequires:  cargo-rpm-macros >= 24
 
 %global _description %{expand:
-generate a byte-stream from a git-tree}
+Generate a byte-stream from a git-tree.}
 
 %description %{_description}
 
@@ -34,7 +34,6 @@ use the "%{crate}" crate.
 %files          devel
 %license %{crate_instdir}/LICENSE-APACHE
 %license %{crate_instdir}/LICENSE-MIT
-
 %{crate_instdir}/
 
 %package     -n %{name}+default-devel
@@ -49,8 +48,31 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+sha1-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+sha1-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "sha1" feature of the "%{crate}" crate.
+
+%files       -n %{name}+sha1-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+sha256-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+sha256-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "sha256" feature of the "%{crate}" crate.
+
+%files       -n %{name}+sha256-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{version} -p1
 %cargo_prep
 

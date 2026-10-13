@@ -9,7 +9,7 @@
 Name:           rust-gix-worktree
 Version:        0.56.0
 Release:        %autorelease
-Summary:        A crate of the gitoxide project for shared worktree related types and...
+Summary:        Of the gitoxide project for shared worktree related types and utilities
 
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/gix-worktree
@@ -18,7 +18,8 @@ Source:         %{crates_source}
 BuildRequires:  cargo-rpm-macros >= 24
 
 %global _description %{expand:
-A crate of the gitoxide project for shared worktree related types and utilities.}
+A crate of the gitoxide project for shared worktree related types and
+utilities.}
 
 %description %{_description}
 
@@ -34,7 +35,6 @@ use the "%{crate}" crate.
 %files          devel
 %license %{crate_instdir}/LICENSE-APACHE
 %license %{crate_instdir}/LICENSE-MIT
-
 %{crate_instdir}/
 
 %package     -n %{name}+default-devel
@@ -73,28 +73,28 @@ use the "document-features" feature of the "%{crate}" crate.
 %files       -n %{name}+document-features-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+gix-attributes-devel
+%package     -n %{name}+gix-features-devel
 Summary:        %{summary}
 BuildArch:      noarch
 
-%description -n %{name}+gix-attributes-devel %{_description}
+%description -n %{name}+gix-features-devel %{_description}
 
 This package contains library source intended for building other packages which
-use the "gix-attributes" feature of the "%{crate}" crate.
+use the "gix-features" feature of the "%{crate}" crate.
 
-%files       -n %{name}+gix-attributes-devel
+%files       -n %{name}+gix-features-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+gix-validate-devel
+%package     -n %{name}+parallel-devel
 Summary:        %{summary}
 BuildArch:      noarch
 
-%description -n %{name}+gix-validate-devel %{_description}
+%description -n %{name}+parallel-devel %{_description}
 
 This package contains library source intended for building other packages which
-use the "gix-validate" feature of the "%{crate}" crate.
+use the "parallel" feature of the "%{crate}" crate.
 
-%files       -n %{name}+gix-validate-devel
+%files       -n %{name}+parallel-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+serde-devel
@@ -107,6 +107,30 @@ This package contains library source intended for building other packages which
 use the "serde" feature of the "%{crate}" crate.
 
 %files       -n %{name}+serde-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+sha1-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+sha1-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "sha1" feature of the "%{crate}" crate.
+
+%files       -n %{name}+sha1-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+sha256-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+sha256-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "sha256" feature of the "%{crate}" crate.
+
+%files       -n %{name}+sha256-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

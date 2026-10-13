@@ -1,112 +1,132 @@
 %global source0_hash 7eb593d975b1590a184354ef68dbc3c26479d58eaea00de461d73695176f623c
-%global source1_hash e78c785ec4a8a22a48a91835c97601f5704b5076b154415353b0d2697dc0b4f7
+%global appname kImageAnnotator
+%global libname lib%{appname}
 
-%undefine __cmake_in_source_build
+Name: kimageannotator
+Version: 0.7.2
+Release: 9%{?dist}
 
-# Bundled here for %%build so mock does not need kcolorpicker-devel in the root yet.
-# Runtime still needs kcolorpicker-libs from the separate kcolorpicker SRPM.
-%global kcp_version 0.3.1
+License: LGPL-3.0-or-later
+Summary: Library and a tool for annotating images
+URL: https://github.com/ksnip/%{appname}
+Source0: %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
-Name:           kimageannotator
-Version:        0.7.2
-Release:        3%{?dist}
-Summary:        Image annotation widget library for Qt (ksnip)
-License:        LGPL-3.0-or-later
-URL:            https://github.com/ksnip/kImageAnnotator
+BuildRequires: cmake
+BuildRequires: gcc-c++
+BuildRequires: ninja-build
 
-Source0:        https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v0.7.2.tar.gz#/kImageAnnotator-0.7.2.tar.gz
-Source1:        https://github.com/ksnip/kColorPicker/archive/refs/tags/v0.3.1.tar.gz#/kColorPicker-0.3.1.tar.gz
-Patch1:         kimageannotator-qt6-output-name.patch
+BuildRequires: cmake(kColorPicker-Qt5)
+BuildRequires: cmake(Qt5Core)
+BuildRequires: cmake(Qt5Gui)
+BuildRequires: cmake(Qt5LinguistTools)
+BuildRequires: cmake(Qt5Svg)
+BuildRequires: cmake(Qt5X11Extras)
 
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  qt6-qtsvg-devel
-BuildRequires:  qt6-qttools-devel
-BuildRequires:  libX11-devel
+BuildRequires: cmake(kColorPicker-Qt6)
+BuildRequires: cmake(Qt6Core)
+BuildRequires: cmake(Qt6Gui)
+BuildRequires: cmake(Qt6LinguistTools)
+BuildRequires: cmake(Qt6Svg)
 
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 
 %description
-kImageAnnotator provides a Qt widget for drawing arrows, text, blur, and
-similar annotations on images. Used by Gwenview, ksnip, and other apps.
+Library and a tool for annotating images. Part of KSnip project.
 
-%package libs
-Summary:        Qt6 kImageAnnotator shared library
-Requires:       kcolorpicker-libs%{?_isa}
+%package qt5
+Summary: Library and a tool for annotating images. Part of KSnip project. (Qt5)
+Provides: kimageannotator = %{version}-%{release}
+Obsoletes: %{name} < %{version}-%{release}
+Requires: %{name}-common%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+%description qt5
+%{summary}.
 
-%description libs
-Shared library and translation files for kImageAnnotator.
 
-%package devel
-Summary:        Development files for kimageannotator
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-Requires:       cmake(Qt6Widgets)
-Requires:       cmake(Qt6Svg)
-Requires:       kcolorpicker-devel%{?_isa}
+%package qt5-devel
+Summary: Qt5 Development files for %{name}
+Provides: kimageannotator-devel = %{version}-%{release}
+Obsoletes: %{name}-devel < %{version}-%{release}
+Requires: %{name}-qt5%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires: qt5-qtbase-devel
+Requires: qt5-qtsvg-devel
+%description qt5-devel
+%{summary}.
 
-%description devel
-Headers and CMake package kImageAnnotator-Qt6 for downstream builds.
+%package qt6
+Summary: Library and a tool for annotating images. Part of KSnip project. (Qt6)
+Requires: %{name}-common%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+%description qt6
+%{summary}.
+	
+%package qt6-devel
+Summary: Qt6 Development files for %{name}
+Requires: %{name}-qt6%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires: qt6-qtbase-devel
+Requires: qt6-qtsvg-devel
+%description qt6-devel
+%{summary}.
+
+%package common
+Summary: Common language translations for Qt5 and Qt6 builds
+%description common
+%{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n kImageAnnotator-%{version}
-tar -xf %{SOURCE1} -C %{_builddir}
+%autosetup -n %{appname}-%{version} -p1
 
 %build
-kcp_src="%{_builddir}/kColorPicker-%{kcp_version}"
-kcp_stage="%{_builddir}/kcp-stage/usr"
-mkdir -p "$kcp_stage"
-
-pushd "$kcp_src"
-%cmake \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_INSTALL_PREFIX=/usr \
-  -DBUILD_WITH_QT6=ON \
-  -DBUILD_EXAMPLE=OFF \
-  -DBUILD_TESTS=OFF
-%cmake_build
-cmake --install "%{__cmake_builddir}" --prefix "$kcp_stage"
-popd
-
-pushd "%{_builddir}/kImageAnnotator-%{version}"
-%cmake \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DBUILD_WITH_QT6=ON \
-  -DBUILD_EXAMPLE=OFF \
-  -DBUILD_TESTS=OFF \
-  -DCMAKE_PREFIX_PATH="$kcp_stage"
+mkdir qt5
+pushd qt5
+%cmake -G Ninja \
+    -S'..' \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_TESTS:BOOL=OFF \
+    -DBUILD_EXAMPLE:BOOL=OFF
 %cmake_build
 popd
+mkdir qt6
+pushd qt6
+%cmake -G Ninja \
+    -S'..' \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_TESTS:BOOL=OFF \
+    -DBUILD_EXAMPLE:BOOL=OFF \
+    -DBUILD_WITH_QT6:BOOL=ON
+%cmake_build
+popd
+
 
 %install
-pushd "%{_builddir}/kImageAnnotator-%{version}"
+pushd qt5
+%cmake_install
+popd
+pushd qt6
 %cmake_install
 popd
 
-%ldconfig_scriptlets libs
+%find_lang %{appname} --with-qt
 
-%files
+%files qt5
+%doc CHANGELOG.md README.md
 %license LICENSE
-%doc README.md CHANGELOG.md
+%{_libdir}/%{libname}-Qt5.so.0*
 
-%files libs
-%{_libdir}/libkImageAnnotator-Qt6.so.0*
-%{_datadir}/kImageAnnotator/translations/*.qm
+%files qt5-devel
+%{_includedir}/%{appname}-Qt5/
+%{_libdir}/cmake/%{appname}-Qt5/
+%{_libdir}/%{libname}-Qt5.so
 
-%files devel
-%{_includedir}/kImageAnnotator-Qt6/
-%{_libdir}/libkImageAnnotator-Qt6.so
-%{_libdir}/cmake/kImageAnnotator-Qt6/
+%files qt6
+%doc README.md
+%license LICENSE
+%{_libdir}/%{libname}-Qt6.so.0*
+	
+%files qt6-devel
+%{_includedir}/%{appname}-Qt6/
+%{_libdir}/cmake/%{appname}-Qt6/
+%{_libdir}/%{libname}-Qt6.so
+
+%files common -f %{appname}.lang
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.2-3
-- Qt6 build installs libkImageAnnotator-Qt6.so (Gwenview DT_NEEDED)
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.2-2
-- Bundle kColorPicker %%build-only staging (find_package without kcolorpicker-devel in mock)
-- kimageannotator-libs Requires kcolorpicker-libs
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.2-1
-- Add kImageAnnotator Qt6 (cmake kImageAnnotator-Qt6 for Gwenview)
+%autochangelog

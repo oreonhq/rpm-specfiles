@@ -37,7 +37,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x audio,benchmarks,dev,docs,iceberg,jax,mesh,nibabel,pdfs,quality,streaming,tensorflow,tensorflow-gpu,tests,tests-numpy2,torch,vision
+%pyproject_buildrequires
 
 
 %build

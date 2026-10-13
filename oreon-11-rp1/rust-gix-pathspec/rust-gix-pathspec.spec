@@ -9,7 +9,7 @@
 Name:           rust-gix-pathspec
 Version:        0.20.0
 Release:        %autorelease
-Summary:        A crate of the gitoxide project dealing magical pathspecs
+Summary:        Of the gitoxide project dealing magical pathspecs
 
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/gix-pathspec
@@ -18,7 +18,7 @@ Source:         %{crates_source}
 BuildRequires:  cargo-rpm-macros >= 24
 
 %global _description %{expand:
-A crate of the gitoxide project dealing magical pathspecs}
+A crate of the gitoxide project dealing magical pathspecs.}
 
 %description %{_description}
 
@@ -47,6 +47,18 @@ This package contains library source intended for building other packages which
 use the "default" feature of the "%{crate}" crate.
 
 %files       -n %{name}+default-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+parallel-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+parallel-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "parallel" feature of the "%{crate}" crate.
+
+%files       -n %{name}+parallel-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

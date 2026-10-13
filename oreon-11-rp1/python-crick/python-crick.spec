@@ -1,4 +1,4 @@
-%global source0_hash 43f7c546d14666a80dc1aece86fc331d4427226d62cef2e9a0845c2087f2f7b6
+%global source0_hash f0966de5de3cf0d5c76204f0497dc2b7e92f3e359ce42578d4e9ddf664f5814f
 
 %global pypi_name crick
 

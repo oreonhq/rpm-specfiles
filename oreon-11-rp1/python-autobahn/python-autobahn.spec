@@ -41,7 +41,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x accelerate,all,asyncio,benchmark,build-tools,compress,dev,docs,encryption,nvx,scram,serialization,twisted
+%pyproject_buildrequires
 
 
 %build

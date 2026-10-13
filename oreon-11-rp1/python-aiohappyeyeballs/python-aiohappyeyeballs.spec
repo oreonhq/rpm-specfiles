@@ -21,8 +21,6 @@ BuildRequires:  python3-devel
 This is package 'aiohappyeyeballs' generated automatically by pyp2spec.}
 
 Patch:          0001-Downstream-only-remove-pytest-options-for-coverage-a.patch
-Patch:          0001-chore-deps-dev-bump-pytest-asyncio-from-0.26.0-to-1..patch
-
 %description %_description
 
 %package -n     python3-aiohappyeyeballs

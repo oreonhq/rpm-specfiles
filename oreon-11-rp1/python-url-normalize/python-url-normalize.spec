@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'url-normalize' generated automatically by pyp2spec.}
 
-Patch0:         https://github.com/niksite/url-normalize/pull/28.patch#/python-url-normalize-poetry-core.patch
 
 %description %_description
 
@@ -40,7 +39,7 @@ Summary:        %{summary}
 
 %generate_buildrequires
 # Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires -x dev
+%pyproject_buildrequires
 
 
 %build

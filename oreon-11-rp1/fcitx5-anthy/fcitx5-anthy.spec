@@ -19,7 +19,7 @@ BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
 BuildRequires:  cmake(Fcitx5Core)
-BuildRequires:  pkgconfig(anthy)
+BuildRequires:  pkgconfig(anthy-unicode)
 BuildRequires:  gettext
 BuildRequires:  /usr/bin/appstream-util
 Requires:       hicolor-icon-theme

@@ -30,7 +30,6 @@ Patch200: konsole-history_location_default.patch
 Source10: konsolerc
 
 BuildRequires:  pkgconfig(libssh)
-BuildRequires:  pkgconfig(libcups)
 BuildRequires: make
 BuildRequires: desktop-file-utils
 BuildRequires: gettext
