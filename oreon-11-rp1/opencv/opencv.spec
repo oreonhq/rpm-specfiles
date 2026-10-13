@@ -133,7 +133,7 @@ BuildRequires:  libtiff-devel
 BuildRequires:  libGL-devel
 BuildRequires:  libv4l-devel
 %{?with_openexr:
-BuildRequires:  OpenEXR-devel
+BuildRequires:  openexr-devel
 }
 %{?with_openni:
 BuildRequires:  openni-devel

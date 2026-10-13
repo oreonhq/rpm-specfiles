@@ -32,7 +32,7 @@ cp -p %{SOURCE1} ./COPYING
 
 %files
 %{_datadir}/coin/
-%{_datadir}/pkgconfig/*
+%{_datadir}/pkgconfig/coindatasample.pc
 %license COPYING
 
 %changelog
