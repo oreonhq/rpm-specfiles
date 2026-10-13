@@ -1,4 +1,4 @@
-%global source0_hash 2d2601a82d2d3b7e143a3c8d43ef616671391034bc46891a9816b79cf2d3e7a8
+%global source0_hash bcb516a43a962dac0cde3e1f9da634c1fd409915d499ff8f3ce6f738a4637d72
 
 # NOTE: upstream has not added any SOVERSION to the C++ libraries.
 # In order to avoid any possible ambiguity, this has been patched to

@@ -2,3 +2,4 @@ cmake
 kmime
 libkdepim
 libplasma
+akonadi-server

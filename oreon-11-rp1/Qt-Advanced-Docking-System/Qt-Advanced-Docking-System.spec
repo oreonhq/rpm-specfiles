@@ -1,4 +1,4 @@
-%global source0_hash 925717a6ad27cc0d5b74c4aa292479a48f797fcfcb459403cc1ccb63810322ca
+%global source0_hash 9ce947acbb1984946f9145c976e42e6984f99b98fb414dd7354a290af6d4ff04
 
 Name:           Qt-Advanced-Docking-System
 Summary:        Advanced Docking System for Qt
@@ -6,7 +6,7 @@ Version:        5.1.1
 Release:        1%{?dist}
 License:        LGPL-2.1-or-later AND BSL-1.0 AND Apache-2.0
 URL:            https://github.com/githubuser0xFFFF/%{name}
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

@@ -1,4 +1,4 @@
-%global source0_hash b7ff8b9b8c26a811103ea22cce542ec93d7a15f4c66afb4e244096d58f7f52d0
+%global source0_hash de04e8b5ce17a207c10f70111d482375d3b3f86b6ab88e2b39cc4fcb1ef91e2f
 
 Name: QXlsx
 Version:  1.5.1
