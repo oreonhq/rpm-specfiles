@@ -18,8 +18,6 @@ Requires:       tar
 Requires:       zstd
 Requires:       polkit
 Requires:       util-linux
-# dnf5 runs the pre/post snapshot hook through the libdnf5 actions plugin;
-# without it dnf5 transactions take no snapshots. dnf4 uses the python plugin.
 Requires:       (libdnf5-plugin-actions if dnf5)
 Recommends:     python3-dnf
 Recommends:      breeze
@@ -40,7 +38,6 @@ snapshots. Protect root without making it immutable.
 
 %install
 %cmake_install
-# %license owns LICENSE; drop any cmake copy under share/doc
 rm -f %{buildroot}%{_datadir}/doc/%{name}/LICENSE
 install -d %{buildroot}%{_sysconfdir}/root-protection
 install -d %{buildroot}%{_localstatedir}/lib/root-protection/snaps
@@ -48,13 +45,10 @@ install -d %{buildroot}%{_localstatedir}/lib/root-protection/backups
 install -d %{buildroot}%{_localstatedir}/log/root-protection
 install -d %{buildroot}%{_libexecdir}/root-protection
 install -d %{buildroot}/boot/root-protection/bls
-# dnf4 plugin path varies; also drop a copy under libexec for the hook
 install -D -m 0644 hooks/dnf/root_protection.conf %{buildroot}%{_sysconfdir}/dnf/plugins/root_protection.conf
 install -D -m 0644 hooks/dnf/root_protection.py %{buildroot}%{python3_sitelib}/dnf-plugins/root_protection.py
 install -D -m 0755 hooks/dnf5/dnf-hook %{buildroot}%{_libexecdir}/root-protection/dnf-hook
 install -D -m 0644 hooks/dnf5/rp-conf-get.awk %{buildroot}%{_libexecdir}/root-protection/rp-conf-get.awk
-# libdnf5 reads actions from <plugin_conf_dir>/actions.d: /etc/dnf/libdnf5-plugins
-# (every dnf5 version) and /usr/share/dnf5/libdnf.plugins.conf.d (newer 5.x only)
 install -D -m 0644 hooks/dnf5/root-protection.actions %{buildroot}%{_sysconfdir}/dnf/libdnf5-plugins/actions.d/root-protection.actions
 install -D -m 0755 grub/overlay-init %{buildroot}%{_libexecdir}/root-protection/overlay-init
 install -D -m 0755 scripts/fix-grub-layout %{buildroot}%{_libexecdir}/root-protection/fix-grub-layout
@@ -78,7 +72,6 @@ install -D -m 0644 systemd/orpd.service %{buildroot}%{_unitdir}/orpd.service
 getent group root-protection >/dev/null || groupadd -r root-protection 2>/dev/null || true
 
 %post
-# dirs + first-boot defaults so install = ready to protect
 mkdir -p /var/lib/root-protection/snaps /var/lib/root-protection/backups /var/log/root-protection /boot/root-protection/bls
 chmod 700 /var/lib/root-protection/snaps /var/lib/root-protection/backups 2>/dev/null || true
 if [ ! -f /etc/root-protection/config.toml ]; then
@@ -87,17 +80,12 @@ fi
 %systemd_post root-protection-snapshot.timer root-protection-weekly.timer root-protection-health.timer orpd.service root-protection-initramfs.service
 systemctl enable --now root-protection-snapshot.timer root-protection-weekly.timer root-protection-health.timer >/dev/null 2>&1 || true
 systemctl enable --now orpd.service >/dev/null 2>&1 || true
-# lazily regenerate existing initramfs so the snapshot-overlay dracut module is
-# present (new kernels pick it up automatically). dracut --regenerate-all is slow,
-# so run it via a stamp-guarded oneshot at boot rather than blocking this scriptlet.
 systemctl enable root-protection-initramfs.service >/dev/null 2>&1 || true
 systemctl start --no-block root-protection-initramfs.service >/dev/null 2>&1 || true
-# mark enabled and take baseline when possible
 if [ -x /usr/bin/root-protection ]; then
   /usr/bin/root-protection set general.enabled=true >/dev/null 2>&1 || true
   /usr/bin/root-protection enable >/dev/null 2>&1 || true
 fi
-# refresh grub submenu if tools present
 if [ -x /usr/libexec/root-protection/fix-grub-layout ]; then
   /usr/libexec/root-protection/fix-grub-layout >/dev/null 2>&1 || true
 fi
