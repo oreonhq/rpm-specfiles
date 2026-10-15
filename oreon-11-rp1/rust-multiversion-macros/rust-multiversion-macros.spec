@@ -7,7 +7,7 @@
 
 Name:           rust-multiversion-macros
 Version:        0.9.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Implementation crate for multiversion
 
 License:        MIT OR Apache-2.0

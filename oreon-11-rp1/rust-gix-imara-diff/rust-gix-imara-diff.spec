@@ -8,7 +8,7 @@
 
 Name:           rust-gix-imara-diff
 Version:        0.2.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A high performance library for computing diffs, maintained as a modif...
 
 License:        Apache-2.0

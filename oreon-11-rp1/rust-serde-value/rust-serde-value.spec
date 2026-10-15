@@ -8,7 +8,7 @@
 
 Name:           rust-serde-value
 Version:        0.7.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Serialization value trees
 
 License:        MIT

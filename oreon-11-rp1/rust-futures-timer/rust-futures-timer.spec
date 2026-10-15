@@ -8,7 +8,7 @@
 
 Name:           rust-futures-timer
 Version:        3.0.4
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Timeouts for futures
 
 # Upstream license specification: MIT/Apache-2.0

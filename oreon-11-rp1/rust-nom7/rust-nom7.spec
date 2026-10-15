@@ -8,7 +8,7 @@
 
 Name:           rust-nom7
 Version:        7.1.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Byte-oriented, zero-copy, parser combinators library
 
 License:        MIT

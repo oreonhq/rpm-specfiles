@@ -8,7 +8,7 @@
 
 Name:           rust-derive-new
 Version:        0.7.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Derive simple constructor functions for structs and enums
 
 License:        MIT

@@ -8,7 +8,7 @@
 
 Name:           rust-utf8_iter
 Version:        1.0.4
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Iterator by char over potentially-invalid UTF-8 in &[u8]
 
 License:        Apache-2.0 OR MIT

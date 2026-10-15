@@ -9,7 +9,7 @@
 
 Name:           rust-similar
 Version:        3.1.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A diff library for Rust
 
 License:        Apache-2.0

@@ -9,7 +9,7 @@
 
 Name:           rust-dirs-next
 Version:        2.0.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A tiny low-level library that provides platform-specific standard
 
 License:        MIT OR Apache-2.0

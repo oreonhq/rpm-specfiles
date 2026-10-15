@@ -8,7 +8,7 @@
 
 Name:           rust-unicode-bom
 Version:        2.0.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Unicode byte-order mark detection for files and byte arrays.
 
 License:        Apache-2.0

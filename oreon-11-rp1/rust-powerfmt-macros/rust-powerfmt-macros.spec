@@ -8,7 +8,7 @@
 
 Name:           rust-powerfmt-macros
 Version:        0.1.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Procedural macros for `powerfmt`.
 
 License:        MIT OR Apache-2.0

@@ -8,7 +8,7 @@
 
 Name:           rust-powerfmt
 Version:        0.2.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        `powerfmt` is a library that provides utilities for formatting values...
 
 License:        MIT OR Apache-2.0

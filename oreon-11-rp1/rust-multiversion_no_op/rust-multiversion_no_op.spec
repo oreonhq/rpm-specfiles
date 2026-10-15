@@ -7,7 +7,7 @@
 
 Name:           rust-multiversion_no_op
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Pass-through function attribute called multiversion for optimizing build times
 
 License:        Apache-2.0 OR MIT

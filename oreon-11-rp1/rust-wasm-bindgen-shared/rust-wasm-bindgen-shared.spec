@@ -8,7 +8,7 @@
 
 Name:           rust-wasm-bindgen-shared
 Version:        0.2.126
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Shared support between wasm-bindgen and wasm-bindgen cli, an internal
 
 License:        MIT OR Apache-2.0

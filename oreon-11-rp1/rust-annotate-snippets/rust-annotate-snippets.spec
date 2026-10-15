@@ -8,7 +8,7 @@
 
 Name:           rust-annotate-snippets
 Version:        0.12.16
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Format diagnostic reports, including highlighting snippets of text
 
 License:        MIT OR Apache-2.0

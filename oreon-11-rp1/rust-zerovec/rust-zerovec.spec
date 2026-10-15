@@ -8,7 +8,7 @@
 
 Name:           rust-zerovec
 Version:        0.11.8
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Zero-copy vector backed by a byte array
 
 License:        Unicode-3.0

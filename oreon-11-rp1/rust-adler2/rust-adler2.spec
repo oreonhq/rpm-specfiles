@@ -8,7 +8,7 @@
 
 Name:           rust-adler2
 Version:        2.0.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Simple clean-room implementation of the Adler-32 checksum
 
 License:        0BSD OR MIT OR Apache-2.0

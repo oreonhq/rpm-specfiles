@@ -8,7 +8,7 @@
 
 Name:           rust-typeid
 Version:        1.0.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Const TypeId and non-'static TypeId
 
 License:        MIT OR Apache-2.0

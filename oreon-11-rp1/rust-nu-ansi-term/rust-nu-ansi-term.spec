@@ -8,7 +8,7 @@
 
 Name:           rust-nu-ansi-term
 Version:        0.50.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Library for ANSI terminal colors and styles (bold, underline)
 
 License:        MIT

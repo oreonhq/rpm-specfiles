@@ -7,7 +7,7 @@
 
 Name:           rust-der0.7
 Version:        0.7.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Pure Rust embedded-friendly implementation of DER for ASN.1
 
 License:        Apache-2.0 OR MIT

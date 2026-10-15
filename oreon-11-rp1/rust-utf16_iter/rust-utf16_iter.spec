@@ -8,7 +8,7 @@
 
 Name:           rust-utf16_iter
 Version:        1.0.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Iterator by char over potentially-invalid UTF-16 in &[u16]
 
 License:        Apache-2.0 OR MIT

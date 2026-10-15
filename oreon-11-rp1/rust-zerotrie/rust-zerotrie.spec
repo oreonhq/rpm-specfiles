@@ -8,7 +8,7 @@
 
 Name:           rust-zerotrie
 Version:        0.2.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A data structure that efficiently maps strings to integers
 
 License:        Unicode-3.0

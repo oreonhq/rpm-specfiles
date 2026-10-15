@@ -8,7 +8,7 @@
 
 Name:           rust-form_urlencoded
 Version:        1.2.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Parser and serializer for the application/x-www-form-urlencoded synta...
 
 License:        MIT OR Apache-2.0

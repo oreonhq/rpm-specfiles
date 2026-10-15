@@ -8,7 +8,7 @@
 
 Name:           rust-nom8
 Version:        8.0.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A byte-oriented, zero-copy, parser combinators library
 
 License:        MIT

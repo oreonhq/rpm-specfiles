@@ -8,7 +8,7 @@
 
 Name:           rust-fiat-crypto
 Version:        0.3.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Fiat-crypto generated Rust
 
 License:        MIT OR Apache-2.0 OR BSD-1-Clause

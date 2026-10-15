@@ -8,7 +8,7 @@
 
 Name:           rust-icu_properties_data
 Version:        2.3.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Data for the icu_properties crate
 
 License:        Unicode-3.0

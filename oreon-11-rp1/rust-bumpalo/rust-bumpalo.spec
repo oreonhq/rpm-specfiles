@@ -8,7 +8,7 @@
 
 Name:           rust-bumpalo
 Version:        3.20.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A fast bump allocation arena for Rust.
 
 License:        MIT OR Apache-2.0

@@ -7,7 +7,7 @@
 
 Name:           rust-string_cache0.11
 Version:        0.11.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        String interning library for Rust, developed as part of the Servo project
 
 License:        MIT OR Apache-2.0

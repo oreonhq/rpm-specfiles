@@ -8,7 +8,7 @@
 
 Name:           rust-ordered-float5
 Version:        5.5.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Wrappers for total ordering on floats
 
 License:        MIT

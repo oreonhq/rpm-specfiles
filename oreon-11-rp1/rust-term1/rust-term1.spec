@@ -8,7 +8,7 @@
 
 Name:           rust-term1
 Version:        1.2.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A terminal formatting library
 
 License:        MIT OR Apache-2.0

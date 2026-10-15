@@ -8,7 +8,7 @@
 
 Name:           rust-cfg_aliases
 Version:        0.2.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A tiny utility to help save you a lot of effort with long winded `#[c...
 
 License:        MIT

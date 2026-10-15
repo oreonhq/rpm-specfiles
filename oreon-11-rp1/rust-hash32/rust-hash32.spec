@@ -8,7 +8,7 @@
 
 Name:           rust-hash32
 Version:        1.0.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        32-bit hashing algorithms
 
 License:        MIT OR Apache-2.0

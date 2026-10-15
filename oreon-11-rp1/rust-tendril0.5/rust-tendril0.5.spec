@@ -8,7 +8,7 @@
 
 Name:           rust-tendril0.5
 Version:        0.5.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Compact buffer/string type for zero-copy parsing
 
 License:        MIT OR Apache-2.0

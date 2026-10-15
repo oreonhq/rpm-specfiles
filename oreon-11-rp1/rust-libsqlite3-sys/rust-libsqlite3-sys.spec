@@ -8,7 +8,7 @@
 
 Name:           rust-libsqlite3-sys
 Version:        0.30.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Native bindings to the libsqlite3 library
 
 License:        MIT

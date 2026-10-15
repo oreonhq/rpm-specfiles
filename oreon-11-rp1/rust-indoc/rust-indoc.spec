@@ -9,7 +9,7 @@
 
 Name:           rust-indoc
 Version:        2.0.7
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Indented document literals
 
 License:        MIT OR Apache-2.0

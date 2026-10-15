@@ -7,7 +7,7 @@
 
 Name:           rust-gix-zlib0.1
 Version:        0.1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Zlib-rs streaming compression and decompression utilities used by gitoxide
 
 License:        MIT OR Apache-2.0

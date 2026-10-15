@@ -8,7 +8,7 @@
 
 Name:           rust-potential_utf
 Version:        0.1.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Unvalidated string and character types
 
 License:        Unicode-3.0

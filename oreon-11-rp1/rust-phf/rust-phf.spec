@@ -8,7 +8,7 @@
 
 Name:           rust-phf
 Version:        0.14.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Runtime support for perfect hash function data structures
 
 License:        MIT

@@ -8,7 +8,7 @@
 
 Name:           rust-thread_local
 Version:        1.1.10
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Per-object thread-local storage
 
 License:        MIT OR Apache-2.0

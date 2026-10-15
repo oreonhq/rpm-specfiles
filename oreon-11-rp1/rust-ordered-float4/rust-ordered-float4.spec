@@ -8,7 +8,7 @@
 
 Name:           rust-ordered-float4
 Version:        4.6.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Wrappers for total ordering on floats
 
 License:        MIT

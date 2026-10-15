@@ -8,7 +8,7 @@
 
 Name:           rust-jobserver
 Version:        0.1.35
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        An implementation of the GNU Make jobserver for Rust.
 
 License:        MIT OR Apache-2.0

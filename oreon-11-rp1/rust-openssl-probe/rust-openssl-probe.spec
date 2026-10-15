@@ -8,7 +8,7 @@
 
 Name:           rust-openssl-probe
 Version:        0.2.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Tool for helping to find SSL certificate locations on the system for...
 
 License:        MIT OR Apache-2.0

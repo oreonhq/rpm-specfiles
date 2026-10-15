@@ -8,7 +8,7 @@
 
 Name:           rust-gix-trace
 Version:        0.1.21
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A crate to provide minimal `tracing` support that can be turned off t...
 
 License:        MIT OR Apache-2.0

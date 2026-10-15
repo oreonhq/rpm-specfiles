@@ -11,7 +11,7 @@
 
 Name:           rust-snapbox0.6
 Version:        0.6.24
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Snapshot testing toolbox
 
 License:        MIT OR Apache-2.0

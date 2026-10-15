@@ -8,7 +8,7 @@
 
 Name:           rust-bytes
 Version:        1.12.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Types and traits for working with bytes
 
 License:        MIT

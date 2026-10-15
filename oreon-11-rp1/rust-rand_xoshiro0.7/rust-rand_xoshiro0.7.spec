@@ -8,7 +8,7 @@
 
 Name:           rust-rand_xoshiro0.7
 Version:        0.7.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Xoshiro, xoroshiro and splitmix64 random number generators
 
 License:        MIT OR Apache-2.0

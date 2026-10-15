@@ -8,7 +8,7 @@
 
 Name:           rust-rustc-stable-hash
 Version:        0.1.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A stable hashing algorithm used by rustc
 
 License:        Apache-2.0 OR MIT

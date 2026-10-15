@@ -9,7 +9,7 @@
 
 Name:           rust-scratch
 Version:        1.0.9
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Shared compile-time directory
 
 License:        MIT OR Apache-2.0

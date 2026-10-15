@@ -8,7 +8,7 @@
 
 Name:           rust-ct-codecs
 Version:        1.1.7
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Constant-time base64, base32, and hex codecs reimplemented in Rust
 
 License:        MIT

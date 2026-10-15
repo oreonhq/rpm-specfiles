@@ -7,7 +7,7 @@
 
 Name:           rust-camino
 Version:        1.2.4
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        UTF-8 paths
 
 License:        MIT OR Apache-2.0

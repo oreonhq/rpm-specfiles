@@ -8,7 +8,7 @@
 
 Name:           rust-windows-link
 Version:        0.2.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Linking for Windows
 
 License:        MIT OR Apache-2.0

@@ -8,7 +8,7 @@
 
 Name:           rust-unicode-bidi
 Version:        0.3.18
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Implementation of the Unicode Bidirectional Algorithm
 
 License:        MIT OR Apache-2.0

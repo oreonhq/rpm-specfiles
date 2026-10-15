@@ -8,7 +8,7 @@
 
 Name:           rust-hash320.2
 Version:        0.2.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        32-bit hashing machinery
 
 License:        MIT OR Apache-2.0

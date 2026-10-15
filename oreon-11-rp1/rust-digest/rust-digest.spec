@@ -8,7 +8,7 @@
 
 Name:           rust-digest
 Version:        0.11.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Traits for cryptographic hash functions and message authentication codes
 
 License:        MIT OR Apache-2.0

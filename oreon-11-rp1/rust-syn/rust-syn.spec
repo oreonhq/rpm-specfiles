@@ -9,7 +9,7 @@
 
 Name:           rust-syn
 Version:        3.0.6
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Parser for Rust source code
 
 License:        MIT OR Apache-2.0

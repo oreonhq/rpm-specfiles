@@ -8,7 +8,7 @@
 
 Name:           rust-psl-types
 Version:        2.0.11
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Common types for the public suffix implementation crates
 
 # Upstream license specification: MIT/Apache-2.0

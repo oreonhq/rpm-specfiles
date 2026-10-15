@@ -8,7 +8,7 @@
 
 Name:           rust-libloading
 Version:        0.9.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Bindings around the platform's dynamic library loading primitives wit...
 
 License:        ISC

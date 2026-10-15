@@ -8,7 +8,7 @@
 
 Name:           rust-env_logger
 Version:        0.11.11
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Logging implementation for log which is configured via an environment variable
 
 License:        MIT OR Apache-2.0

@@ -8,7 +8,7 @@
 
 Name:           rust-gix-error
 Version:        0.3.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A crate of the gitoxide project to provide common errors and error-ha...
 
 License:        MIT OR Apache-2.0

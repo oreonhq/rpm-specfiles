@@ -9,7 +9,7 @@
 
 Name:           rust-cxxbridge-macro
 Version:        1.0.202
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Implementation detail of the cxx crate
 
 License:        MIT OR Apache-2.0

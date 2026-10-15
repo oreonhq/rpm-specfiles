@@ -8,7 +8,7 @@
 
 Name:           rust-rayon-core
 Version:        1.13.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Core APIs for Rayon
 
 License:        MIT OR Apache-2.0

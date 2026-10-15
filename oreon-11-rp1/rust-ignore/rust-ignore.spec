@@ -8,7 +8,7 @@
 
 Name:           rust-ignore
 Version:        0.4.33
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Fast library for efficiently matching ignore files
 
 License:        Unlicense OR MIT

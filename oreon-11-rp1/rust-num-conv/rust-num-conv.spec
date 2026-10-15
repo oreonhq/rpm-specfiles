@@ -8,7 +8,7 @@
 
 Name:           rust-num-conv
 Version:        0.2.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        `num_conv` is a crate to convert between integer types without using...
 
 License:        MIT OR Apache-2.0

@@ -8,7 +8,7 @@
 
 Name:           rust-rustfix
 Version:        0.9.7
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Automatically apply the suggestions made by rustc
 
 License:        MIT OR Apache-2.0

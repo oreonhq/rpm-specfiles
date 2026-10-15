@@ -8,7 +8,7 @@
 
 Name:           rust-precomputed-hash
 Version:        0.1.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A library intending to be a base dependency to expose a precomputed hash
 
 License:        MIT

@@ -8,7 +8,7 @@
 
 Name:           rust-filetime
 Version:        0.2.29
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Platform-agnostic accessors of timestamps in File metadata
 
 License:        MIT OR Apache-2.0

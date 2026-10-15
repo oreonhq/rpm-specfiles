@@ -8,7 +8,7 @@
 
 Name:           rust-find-msvc-tools
 Version:        0.1.12
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Find windows-specific tools, read MSVC versions from the registry and from COM interfaces
 
 License:        MIT OR Apache-2.0

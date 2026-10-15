@@ -8,7 +8,7 @@
 
 Name:           rust-opener
 Version:        0.8.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Open a file or link using the system default program.
 
 License:        MIT OR Apache-2.0

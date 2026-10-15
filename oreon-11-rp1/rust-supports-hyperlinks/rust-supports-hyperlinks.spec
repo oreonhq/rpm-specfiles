@@ -8,7 +8,7 @@
 
 Name:           rust-supports-hyperlinks
 Version:        3.2.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Detects whether a terminal supports rendering hyperlinks.
 
 License:        Apache-2.0

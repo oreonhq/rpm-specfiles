@@ -8,7 +8,7 @@
 
 Name:           rust-rustc_version
 Version:        0.4.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A library for querying the version of a installed rustc compiler
 
 License:        MIT OR Apache-2.0

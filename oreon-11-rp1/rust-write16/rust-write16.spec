@@ -8,7 +8,7 @@
 
 Name:           rust-write16
 Version:        1.0.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A UTF-16 analog of the Write trait
 
 License:        Apache-2.0 OR MIT

@@ -9,7 +9,7 @@
 
 Name:           rust-jiff
 Version:        0.2.32
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Date-time library that encourages you to jump into the pit of success
 
 License:        Unlicense OR MIT

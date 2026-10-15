@@ -8,7 +8,7 @@
 
 Name:           rust-seahash
 Version:        4.1.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A blazingly fast, portable hash function with proven statistical guar...
 
 License:        MIT

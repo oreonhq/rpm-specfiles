@@ -8,7 +8,7 @@
 
 Name:           rust-fallible-iterator
 Version:        0.3.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Fallible iterator traits
 
 License:        MIT OR Apache-2.0

@@ -8,7 +8,7 @@
 
 Name:           rust-simdutf8
 Version:        0.1.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        SIMD-accelerated UTF-8 validation.
 
 License:        MIT OR Apache-2.0

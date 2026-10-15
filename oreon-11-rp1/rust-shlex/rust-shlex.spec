@@ -8,7 +8,7 @@
 
 Name:           rust-shlex
 Version:        2.0.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Split a string into shell words, like Python's shlex
 
 License:        MIT OR Apache-2.0

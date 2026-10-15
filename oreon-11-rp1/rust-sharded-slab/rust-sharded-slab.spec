@@ -8,7 +8,7 @@
 
 Name:           rust-sharded-slab
 Version:        0.1.7
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A lock-free concurrent slab.
 
 License:        MIT

@@ -9,7 +9,7 @@
 
 Name:           rust-itertools
 Version:        0.15.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Extra iterator adaptors, iterator methods, free functions, and macros
 
 License:        MIT OR Apache-2.0

@@ -8,7 +8,7 @@
 
 Name:           rust-tinystr
 Version:        0.8.4
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A small ASCII-only bounded length string representation.
 
 License:        Unicode-3.0

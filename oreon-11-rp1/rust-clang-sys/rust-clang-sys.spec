@@ -8,7 +8,7 @@
 
 Name:           rust-clang-sys
 Version:        1.9.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Rust bindings for libclang
 
 License:        Apache-2.0

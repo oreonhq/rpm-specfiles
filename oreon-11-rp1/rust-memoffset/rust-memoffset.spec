@@ -8,7 +8,7 @@
 
 Name:           rust-memoffset
 Version:        0.9.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        offset_of functionality for Rust structs.
 
 License:        MIT

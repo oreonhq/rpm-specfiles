@@ -8,7 +8,7 @@
 
 Name:           rust-socket2
 Version:        0.6.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Utilities for handling networking sockets with a maximal amount of co...
 
 License:        MIT OR Apache-2.0

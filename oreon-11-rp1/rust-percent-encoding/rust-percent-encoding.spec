@@ -8,7 +8,7 @@
 
 Name:           rust-percent-encoding
 Version:        2.3.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Percent encoding and decoding
 
 License:        MIT OR Apache-2.0

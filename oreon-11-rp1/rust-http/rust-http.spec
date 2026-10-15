@@ -8,7 +8,7 @@
 
 Name:           rust-http
 Version:        1.5.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A set of types for representing HTTP requests and responses.
 
 License:        MIT OR Apache-2.0

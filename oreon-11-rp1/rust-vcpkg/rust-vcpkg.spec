@@ -8,7 +8,7 @@
 
 Name:           rust-vcpkg
 Version:        0.2.15
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A library to find native dependencies in a vcpkg tree at build
 
 License:        MIT OR Apache-2.0

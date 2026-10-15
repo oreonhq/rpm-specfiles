@@ -9,7 +9,7 @@
 
 Name:           rust-dirs-sys-next
 Version:        0.1.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        system-level helper functions for the dirs and directories crates
 
 License:        MIT OR Apache-2.0

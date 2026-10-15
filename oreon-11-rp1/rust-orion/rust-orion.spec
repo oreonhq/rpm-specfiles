@@ -8,7 +8,7 @@
 
 Name:           rust-orion
 Version:        0.17.15
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Usable, easy and safe pure-Rust crypto
 
 License:        MIT

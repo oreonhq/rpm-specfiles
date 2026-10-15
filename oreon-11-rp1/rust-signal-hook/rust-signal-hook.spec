@@ -9,7 +9,7 @@
 
 Name:           rust-signal-hook
 Version:        0.4.4
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Unix signal handling
 
 License:        Apache-2.0 OR MIT

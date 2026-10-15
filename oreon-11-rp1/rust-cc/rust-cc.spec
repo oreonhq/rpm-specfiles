@@ -7,7 +7,7 @@
 
 Name:           rust-cc
 Version:        1.2.62
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Build-time dependency for Cargo build scripts to invoke the native C compiler
 
 License:        MIT OR Apache-2.0

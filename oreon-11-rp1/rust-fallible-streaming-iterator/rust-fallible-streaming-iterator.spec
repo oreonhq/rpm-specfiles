@@ -8,7 +8,7 @@
 
 Name:           rust-fallible-streaming-iterator
 Version:        0.1.9
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Fallible streaming iteration
 
 License:        MIT OR Apache-2.0

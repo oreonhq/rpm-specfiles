@@ -8,7 +8,7 @@
 
 Name:           rust-valuable
 Version:        0.1.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Object-safe value inspection, used to pass un-typed structured data a...
 
 License:        MIT

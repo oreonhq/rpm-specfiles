@@ -8,7 +8,7 @@
 
 Name:           rust-prettyplease
 Version:        0.2.37
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Minimal syn syntax tree pretty-printer
 
 License:        MIT OR Apache-2.0

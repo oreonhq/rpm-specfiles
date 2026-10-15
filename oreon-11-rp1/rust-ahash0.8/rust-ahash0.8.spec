@@ -8,7 +8,7 @@
 
 Name:           rust-ahash0.8
 Version:        0.8.12
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A non-cryptographic hash function using AES-NI for high performance
 
 License:        MIT OR Apache-2.0

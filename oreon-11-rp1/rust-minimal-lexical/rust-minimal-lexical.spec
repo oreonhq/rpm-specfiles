@@ -8,7 +8,7 @@
 
 Name:           rust-minimal-lexical
 Version:        0.2.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Fast float parsing conversion routines.
 
 License:        MIT OR Apache-2.0

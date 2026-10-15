@@ -8,7 +8,7 @@
 
 Name:           rust-arrayref
 Version:        0.3.9
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Macros to take array references of slices
 
 License:        BSD-2-Clause

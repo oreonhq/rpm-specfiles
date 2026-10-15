@@ -7,7 +7,7 @@
 
 Name:           rust-derive-new0.6
 Version:        0.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        #[derive(new)] implements simple constructor functions for structs and enums
 
 License:        MIT

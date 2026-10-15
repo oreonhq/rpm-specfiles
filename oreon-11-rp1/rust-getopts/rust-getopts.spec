@@ -8,7 +8,7 @@
 
 Name:           rust-getopts
 Version:        0.2.24
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Getopts-like option parsing
 
 License:        MIT OR Apache-2.0

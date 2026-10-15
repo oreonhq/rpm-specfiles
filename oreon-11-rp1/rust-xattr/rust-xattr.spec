@@ -8,7 +8,7 @@
 
 Name:           rust-xattr
 Version:        1.6.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        unix extended filesystem attributes
 
 License:        MIT OR Apache-2.0

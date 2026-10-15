@@ -8,7 +8,7 @@
 
 Name:           rust-tinyvec
 Version:        1.11.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Tinyvec provides 100% safe vec-like data structures
 
 License:        Zlib OR Apache-2.0 OR MIT

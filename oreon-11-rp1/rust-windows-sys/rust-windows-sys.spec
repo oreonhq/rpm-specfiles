@@ -8,7 +8,7 @@
 
 Name:           rust-windows-sys
 Version:        0.61.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Rust for Windows
 
 License:        MIT OR Apache-2.0

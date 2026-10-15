@@ -9,7 +9,7 @@
 
 Name:           rust-flatbuffers
 Version:        25.12.19
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Official FlatBuffers Rust runtime library
 
 License:        Apache-2.0

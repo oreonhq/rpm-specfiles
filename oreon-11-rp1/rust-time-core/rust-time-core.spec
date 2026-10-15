@@ -8,7 +8,7 @@
 
 Name:           rust-time-core
 Version:        0.1.9
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        This crate is an implementation detail and should not be relied upon...
 
 License:        MIT OR Apache-2.0

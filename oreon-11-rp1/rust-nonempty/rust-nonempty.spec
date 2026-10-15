@@ -8,7 +8,7 @@
 
 Name:           rust-nonempty
 Version:        0.12.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Correct by construction non-empty vector
 
 License:        MIT

@@ -8,7 +8,7 @@
 
 Name:           rust-constant_time_eq0.4
 Version:        0.4.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Compares two equal-sized byte strings in constant time.
 
 License:        CC0-1.0 OR MIT-0 OR Apache-2.0

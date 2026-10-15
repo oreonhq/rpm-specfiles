@@ -8,7 +8,7 @@
 
 Name:           rust-base64
 Version:        0.22.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        encodes and decodes base64 as bytes or utf8
 
 License:        MIT OR Apache-2.0

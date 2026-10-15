@@ -8,7 +8,7 @@
 
 Name:           rust-gix-validate
 Version:        0.11.4
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Validation functions for various kinds of names in git
 
 License:        MIT OR Apache-2.0

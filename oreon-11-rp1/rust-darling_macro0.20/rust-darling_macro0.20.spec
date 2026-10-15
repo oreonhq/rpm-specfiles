@@ -8,7 +8,7 @@
 
 Name:           rust-darling_macro0.20
 Version:        0.20.11
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Parse attributes into structs for custom derive implementations (internal support)
 
 License:        MIT

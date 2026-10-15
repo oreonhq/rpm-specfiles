@@ -8,7 +8,7 @@
 
 Name:           rust-typed-arena
 Version:        2.0.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Arena, a fast but limited type of allocator
 
 License:        MIT

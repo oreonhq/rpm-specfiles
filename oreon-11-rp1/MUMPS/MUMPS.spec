@@ -54,7 +54,7 @@
 
 Name: MUMPS
 Version: %{soname_version}.3
-Release: %autorelease
+Release: 2%{?dist}
 Summary: A MUltifrontal Massively Parallel sparse direct Solver
 License: CECILL-C
 URL: https://mumps-solver.org

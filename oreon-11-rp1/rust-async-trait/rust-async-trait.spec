@@ -8,7 +8,7 @@
 
 Name:           rust-async-trait
 Version:        0.1.91
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Type erasure for async trait methods
 
 License:        MIT OR Apache-2.0

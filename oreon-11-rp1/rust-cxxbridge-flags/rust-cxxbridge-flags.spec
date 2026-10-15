@@ -8,7 +8,7 @@
 
 Name:           rust-cxxbridge-flags
 Version:        1.0.202
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Compiler configuration of the cxx crate (implementation detail)
 
 License:        MIT OR Apache-2.0

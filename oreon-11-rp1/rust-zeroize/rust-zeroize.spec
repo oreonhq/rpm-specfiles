@@ -8,7 +8,7 @@
 
 Name:           rust-zeroize
 Version:        1.9.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Securely clear secrets from memory with a simple trait built on
 
 License:        Apache-2.0 OR MIT

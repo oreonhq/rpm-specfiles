@@ -8,7 +8,7 @@
 
 Name:           rust-pkg-config
 Version:        0.3.34
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Library to run the pkg-config system tool
 
 License:        MIT OR Apache-2.0

@@ -9,7 +9,7 @@
 
 Name:           rust-colored2
 Version:        2.2.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Most simple way to add colors in your terminal
 
 License:        MPL-2.0

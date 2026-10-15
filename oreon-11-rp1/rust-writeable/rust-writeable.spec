@@ -8,7 +8,7 @@
 
 Name:           rust-writeable
 Version:        0.6.4
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A more efficient alternative to fmt::Display
 
 License:        Unicode-3.0

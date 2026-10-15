@@ -8,7 +8,7 @@
 
 Name:           rust-tracing-attributes
 Version:        0.1.31
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Procedural macro attributes for automatically instrumenting functions.
 
 License:        MIT

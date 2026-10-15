@@ -9,7 +9,7 @@
 
 Name:           rust-ruzstd0.9
 Version:        0.9.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Decoder for the zstd compression format
 
 License:        MIT

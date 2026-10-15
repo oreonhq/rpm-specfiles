@@ -12,7 +12,7 @@
 
 Name:           rust-clap
 Version:        4.6.7
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Simple to use, efficient, and full-featured Command Line Argument Parser
 
 License:        MIT OR Apache-2.0

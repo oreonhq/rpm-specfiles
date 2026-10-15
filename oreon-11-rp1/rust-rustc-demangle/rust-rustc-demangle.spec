@@ -8,7 +8,7 @@
 
 Name:           rust-rustc-demangle
 Version:        0.1.28
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Rust compiler symbol demangling.
 
 License:        MIT OR Apache-2.0

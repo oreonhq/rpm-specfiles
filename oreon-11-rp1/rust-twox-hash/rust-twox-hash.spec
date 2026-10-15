@@ -8,7 +8,7 @@
 
 Name:           rust-twox-hash
 Version:        2.1.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A Rust implementation of the XXHash and XXH3 algorithms
 
 License:        MIT

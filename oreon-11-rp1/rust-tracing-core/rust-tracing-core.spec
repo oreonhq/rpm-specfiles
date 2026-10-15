@@ -8,7 +8,7 @@
 
 Name:           rust-tracing-core
 Version:        0.1.36
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Core primitives for application-level tracing.
 
 License:        MIT

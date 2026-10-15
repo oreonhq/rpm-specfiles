@@ -8,7 +8,7 @@
 
 Name:           rust-pathdiff
 Version:        0.2.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Library for diffing paths to obtain relative paths
 
 License:        MIT OR Apache-2.0

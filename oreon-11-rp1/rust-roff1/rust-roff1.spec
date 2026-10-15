@@ -8,7 +8,7 @@
 
 Name:           rust-roff1
 Version:        1.1.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        ROFF (man page format) generation library
 
 License:        MIT OR Apache-2.0

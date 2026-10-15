@@ -8,7 +8,7 @@
 
 Name:           rust-der
 Version:        0.8.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Pure Rust embedded-friendly implementation of the Distinguished Encod...
 
 License:        Apache-2.0 OR MIT

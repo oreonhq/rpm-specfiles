@@ -8,7 +8,7 @@
 
 Name:           rust-home
 Version:        0.5.12
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Shared definitions of home directories.
 
 License:        MIT OR Apache-2.0

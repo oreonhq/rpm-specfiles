@@ -8,7 +8,7 @@
 
 Name:           rust-io-close
 Version:        0.3.7
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        An extension trait for safely dropping I/O writers such as File and B...
 
 License:        MIT OR Apache-2.0

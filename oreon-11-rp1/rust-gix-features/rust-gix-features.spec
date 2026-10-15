@@ -8,7 +8,7 @@
 
 Name:           rust-gix-features
 Version:        0.49.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A crate to integrate various capabilities using compile-time feature...
 
 License:        MIT OR Apache-2.0

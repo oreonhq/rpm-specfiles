@@ -8,7 +8,7 @@
 
 Name:           rust-rawzip
 Version:        0.4.4
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A Zip archive reader and writer
 
 License:        MIT

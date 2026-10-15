@@ -8,7 +8,7 @@
 
 Name:           rust-ordered-float3
 Version:        3.9.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Wrappers for total ordering on floats
 
 License:        MIT

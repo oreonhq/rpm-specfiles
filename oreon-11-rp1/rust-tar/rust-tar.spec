@@ -8,7 +8,7 @@
 
 Name:           rust-tar
 Version:        0.4.46
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A Rust implementation of a TAR file reader and writer. This library d...
 
 License:        MIT OR Apache-2.0

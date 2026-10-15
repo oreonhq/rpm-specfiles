@@ -8,7 +8,7 @@
 
 Name:           rust-normalize-line-endings
 Version:        0.3.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Takes an iterator over chars and returns a new iterator with all
 
 License:        Apache-2.0

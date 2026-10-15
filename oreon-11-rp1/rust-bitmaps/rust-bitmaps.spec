@@ -8,7 +8,7 @@
 
 Name:           rust-bitmaps
 Version:        2.1.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Fixed size boolean arrays
 
 License:        MPL-2.0+

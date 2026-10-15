@@ -8,7 +8,7 @@
 
 Name:           rust-new_debug_unreachable
 Version:        1.0.6
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        panic in debug, intrinsics::unreachable() in release (fork of debug_u...
 
 License:        MIT

@@ -8,7 +8,7 @@
 
 Name:           rust-memmap2
 Version:        0.9.11
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Cross-platform Rust API for memory-mapped file IO
 
 License:        MIT OR Apache-2.0

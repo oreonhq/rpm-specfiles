@@ -9,7 +9,7 @@
 
 Name:           rust-target-features
 Version:        0.1.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Rust compiler target feature database
 
 License:        MIT OR Apache-2.0

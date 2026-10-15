@@ -8,7 +8,7 @@
 
 Name:           rust-scoped-tls
 Version:        1.0.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Library implementation of the standard library's old
 
 License:        MIT OR Apache-2.0

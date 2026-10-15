@@ -8,7 +8,7 @@
 
 Name:           rust-erased-serde
 Version:        0.4.10
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Type-erased Serialize and Serializer traits
 
 License:        MIT OR Apache-2.0

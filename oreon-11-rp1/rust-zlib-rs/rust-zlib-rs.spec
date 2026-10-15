@@ -8,7 +8,7 @@
 
 Name:           rust-zlib-rs
 Version:        0.6.6
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A memory-safe zlib implementation written in rust
 
 License:        Zlib

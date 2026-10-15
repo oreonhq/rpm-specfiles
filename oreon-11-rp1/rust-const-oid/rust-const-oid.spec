@@ -8,7 +8,7 @@
 
 Name:           rust-const-oid
 Version:        0.10.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Const-friendly implementation of the ISO/IEC Object Identifier (OID)...
 
 License:        Apache-2.0 OR MIT

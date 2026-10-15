@@ -8,7 +8,7 @@
 
 Name:           rust-core_detect
 Version:        1.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        No_std version of the std::is_x86_feature_detected! macro
 
 # Upstream license specification: MIT/Apache-2.0

@@ -8,7 +8,7 @@
 
 Name:           rust-gix-path
 Version:        0.12.6
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A crate of the gitoxide project dealing paths and their conversions
 
 License:        MIT OR Apache-2.0

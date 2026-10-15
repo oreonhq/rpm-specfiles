@@ -8,7 +8,7 @@
 
 Name:           rust-gix-macros
 Version:        0.1.6
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Proc-macro utilities for gix
 
 License:        MIT OR Apache-2.0

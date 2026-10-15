@@ -8,7 +8,7 @@
 
 Name:           rust-snapbox-macros0.4
 Version:        0.4.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Snapshot testing toolbox
 
 License:        MIT OR Apache-2.0

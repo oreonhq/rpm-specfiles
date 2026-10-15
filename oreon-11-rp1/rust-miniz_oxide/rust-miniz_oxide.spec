@@ -8,7 +8,7 @@
 
 Name:           rust-miniz_oxide
 Version:        0.9.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        DEFLATE compression and decompression library rewritten in Rust based on miniz
 
 License:        MIT OR Zlib OR Apache-2.0

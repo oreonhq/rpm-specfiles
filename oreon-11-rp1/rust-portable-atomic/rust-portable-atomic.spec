@@ -8,7 +8,7 @@
 
 Name:           rust-portable-atomic
 Version:        1.14.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Portable atomic types including support for 128-bit atomics, atomic f...
 
 License:        Apache-2.0 OR MIT

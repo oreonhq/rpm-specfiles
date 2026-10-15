@@ -8,7 +8,7 @@
 
 Name:           rust-arc-swap
 Version:        1.9.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Atomically swappable Arc
 
 License:        MIT OR Apache-2.0

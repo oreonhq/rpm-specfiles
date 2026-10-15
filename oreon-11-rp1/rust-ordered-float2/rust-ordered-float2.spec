@@ -8,7 +8,7 @@
 
 Name:           rust-ordered-float2
 Version:        2.10.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Wrappers for total ordering on floats
 
 License:        MIT

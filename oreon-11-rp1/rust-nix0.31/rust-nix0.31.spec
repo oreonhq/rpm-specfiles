@@ -8,7 +8,7 @@
 
 Name:           rust-nix0.31
 Version:        0.31.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Rust friendly bindings to *nix APIs
 
 License:        MIT

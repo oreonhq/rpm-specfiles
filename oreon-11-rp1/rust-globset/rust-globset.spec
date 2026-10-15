@@ -8,7 +8,7 @@
 
 Name:           rust-globset
 Version:        0.4.20
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Cross platform single glob and glob set matching
 
 License:        Unlicense OR MIT

@@ -8,7 +8,7 @@
 
 Name:           rust-sized-chunks
 Version:        0.6.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Efficient sized chunk datatypes
 
 License:        MPL-2.0+

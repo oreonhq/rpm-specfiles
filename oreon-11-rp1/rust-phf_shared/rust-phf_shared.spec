@@ -8,7 +8,7 @@
 
 Name:           rust-phf_shared
 Version:        0.14.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Support code shared by PHF libraries
 
 License:        MIT

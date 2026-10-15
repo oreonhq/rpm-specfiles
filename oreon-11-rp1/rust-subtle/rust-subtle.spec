@@ -8,7 +8,7 @@
 
 Name:           rust-subtle
 Version:        2.6.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Pure-Rust traits and utilities for constant-time cryptographic
 
 License:        BSD-3-Clause

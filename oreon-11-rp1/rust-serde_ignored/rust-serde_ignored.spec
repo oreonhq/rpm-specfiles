@@ -8,7 +8,7 @@
 
 Name:           rust-serde_ignored
 Version:        0.1.14
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Find out about keys that are ignored when deserializing data
 
 License:        MIT OR Apache-2.0

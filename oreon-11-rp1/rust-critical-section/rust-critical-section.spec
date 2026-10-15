@@ -8,7 +8,7 @@
 
 Name:           rust-critical-section
 Version:        1.2.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Cross-platform critical section
 
 License:        MIT OR Apache-2.0

@@ -8,7 +8,7 @@
 
 Name:           rust-prodash31
 Version:        31.0.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A dashboard for visualizing progress of asynchronous and possibly blo...
 
 License:        MIT

@@ -8,7 +8,7 @@
 
 Name:           rust-hashbrown0.14
 Version:        0.14.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A Rust port of Google's SwissTable hash map
 
 License:        MIT OR Apache-2.0

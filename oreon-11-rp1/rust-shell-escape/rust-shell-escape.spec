@@ -8,7 +8,7 @@
 
 Name:           rust-shell-escape
 Version:        0.1.5
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Escape characters that may have a special meaning in a shell
 
 License:        MIT OR Apache-2.0

@@ -7,7 +7,7 @@
 
 Name:           rust-darling_macro0.21
 Version:        0.21.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Internal support for a proc-macro library for reading attributes into structs when implementing custom derives
 
 License:        MIT

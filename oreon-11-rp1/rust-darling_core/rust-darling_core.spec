@@ -8,7 +8,7 @@
 
 Name:           rust-darling_core
 Version:        0.24.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Helper crate for proc-macro library for reading attributes into struc...
 
 License:        MIT

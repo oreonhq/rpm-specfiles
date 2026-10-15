@@ -8,7 +8,7 @@
 
 Name:           rust-byteorder
 Version:        1.5.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Library for reading/writing numbers in big-endian and little-endian.
 
 License:        Unlicense OR MIT

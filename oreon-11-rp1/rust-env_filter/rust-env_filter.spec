@@ -8,7 +8,7 @@
 
 Name:           rust-env_filter
 Version:        2.0.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Filter log events using environment variables
 
 License:        MIT OR Apache-2.0

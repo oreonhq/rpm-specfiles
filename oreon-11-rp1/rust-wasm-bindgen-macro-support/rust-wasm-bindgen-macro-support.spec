@@ -8,7 +8,7 @@
 
 Name:           rust-wasm-bindgen-macro-support
 Version:        0.2.126
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Internal support crate for the wasm-bindgen macro
 
 License:        MIT OR Apache-2.0

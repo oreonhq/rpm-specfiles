@@ -8,7 +8,7 @@
 
 Name:           rust-supports-unicode
 Version:        3.0.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Detects whether a terminal supports unicode.
 
 License:        Apache-2.0
