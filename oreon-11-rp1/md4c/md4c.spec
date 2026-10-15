@@ -38,8 +38,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cmake_install
 
 %check
-cd %__cmake_builddir
-bash %{_builddir}/%{name}-release-%{version}/scripts/run-tests.sh 
+%ctest
 
 %files
 %doc README.md

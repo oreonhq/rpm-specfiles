@@ -1,11 +1,11 @@
 %global source0_hash 5558c3328cd15c4ef32d1009ccda9aa43401e0436adf1177d1a34ecb0eb5f926
 
-%global uvcommit af4172ec713ee986ba1a989b9e33993a07c60c9e
+%global uvcommit b21d6d84e46f6c97ecbc8e4e8a8ea6ad98049ea8
 %global uvversion 1.48.0
 
-%global llvmversion 18.1.7
-%global llvmsoversion 18.1jl
-%global llvmcommit julia-18.1.7-4
+%global llvmversion 20.1.8
+%global llvmsoversion 20.1jl
+%global llvmcommit julia-20.1.8-2
 
 %global libwhichversion 1.2.0
 %global libwhichcommit 99a0ea12689e41164456dba03e93bc40924de880
@@ -13,7 +13,7 @@
 %global blastrampolineversion 5.15.0
 %global blastrampolinecommit 072b5f67895bec0b92f8c83194567c1c48e9833d
 
-%global libunwindversion 1.8.1
+%global libunwindversion 1.8.3
 
 %global ittapiversion 3.24.0
 %global ittapicommit 0014aec56fea2f30c1374f40861e1bccdd53d0cb
@@ -22,8 +22,8 @@
 # https://github.com/JuliaLang/julia/pull/31215
 %global gmpversion 6.3.0
 
-%global juliasyntaxcommit 46723f071d5b2efcb21ca6757788028afb91cc13
-%global juliasyntaxhighlightingcommit b666d3c98cca30d20d1e6f98c0e12c9350ffbc4c
+%global juliasyntaxcommit e8a07f51ed0b7c6b356f75354e0c408b299edef2
+%global juliasyntaxhighlightingcommit 2817dbaba2a4abaad91a5ad754558840d95ccf2e
 
 %global logocommit 168fb6c1164e341df360ed6ced519e1e0cb7de3a
 
@@ -56,7 +56,23 @@ Source6:        https://raw.githubusercontent.com/JuliaLang/julia-logo-graphics/
 Source7:        https://api.github.com/repos/staticfloat/libblastrampoline/tarball/%{blastrampolinecommit}#/blastrampoline-%{blastrampolinecommit}.tar.gz
 Source8:        https://github.com/libunwind/libunwind/releases/download/v%{libunwindversion}/libunwind-%{libunwindversion}.tar.gz
 Source9:        https://api.github.com/repos/intel/ittapi/tarball/%{ittapicommit}#/ittapi-%{ittapicommit}.tar.gz
-Source10:       https://api.github.com/repos/JuliaLang/JuliaSyntaxHighlighting.jl/tarball/%{juliasyntaxhighlightingcommit}#/JuliaSyntaxHiglighting-%{juliasyntaxhighlightingcommit}.tar.gz
+Source10:       https://api.github.com/repos/JuliaLang/JuliaSyntaxHighlighting.jl/tarball/%{juliasyntaxhighlightingcommit}#/JuliaSyntaxHighlighting-%{juliasyntaxhighlightingcommit}.tar.gz
+# stdlibs fetched at build time by stdlib/Makefile, stage them from Sources
+Source11:       https://api.github.com/repos/JuliaIO/ArgTools.jl/tarball/89d19599208c02bfa9609d4578ab72eabe6e8eee#/ArgTools-89d19599208c02bfa9609d4578ab72eabe6e8eee.tar.gz
+Source12:       https://api.github.com/repos/JuliaData/DelimitedFiles.jl/tarball/aac8c59e58cbf961fa15baf4d866901d9d1e6980#/DelimitedFiles-aac8c59e58cbf961fa15baf4d866901d9d1e6980.tar.gz
+Source13:       https://api.github.com/repos/JuliaLang/Distributed.jl/tarball/661112ef29b8d371b8612b94a629c0bbcf3d36f7#/Distributed-661112ef29b8d371b8612b94a629c0bbcf3d36f7.tar.gz
+Source14:       https://api.github.com/repos/JuliaLang/Downloads.jl/tarball/f72cd4d87b424fc48e1137c1fd1fbcec18f49371#/Downloads-f72cd4d87b424fc48e1137c1fd1fbcec18f49371.tar.gz
+Source15:       https://api.github.com/repos/JuliaPackaging/LazyArtifacts.jl/tarball/e4cfc39598c238f75bdfdbdb3f82c9329a5af59c#/LazyArtifacts-e4cfc39598c238f75bdfdbdb3f82c9329a5af59c.tar.gz
+Source16:       https://api.github.com/repos/JuliaWeb/LibCURL.jl/tarball/9ea5c5d6f5b88615d9fe23379b7f951787b99fd3#/LibCURL-9ea5c5d6f5b88615d9fe23379b7f951787b99fd3.tar.gz
+Source17:       https://api.github.com/repos/JuliaLang/LinearAlgebra.jl/tarball/61fae36d850d768ef4c44c5c14462d4624d131b7#/LinearAlgebra-61fae36d850d768ef4c44c5c14462d4624d131b7.tar.gz
+Source18:       https://api.github.com/repos/JuliaLang/NetworkOptions.jl/tarball/46e14ef20739c8011b105c339146062cd0e2938c#/NetworkOptions-46e14ef20739c8011b105c339146062cd0e2938c.tar.gz
+Source19:       https://api.github.com/repos/JuliaLang/Pkg.jl/tarball/f63c34b3ae4cacd758f64d6bb92f057630ad7c24#/Pkg-f63c34b3ae4cacd758f64d6bb92f057630ad7c24.tar.gz
+Source20:       https://api.github.com/repos/JuliaCrypto/SHA.jl/tarball/876bc0400f9a457eb2736388fc3d0fbe9460fc7d#/SHA-876bc0400f9a457eb2736388fc3d0fbe9460fc7d.tar.gz
+Source21:       https://api.github.com/repos/JuliaSparse/SparseArrays.jl/tarball/7ea433872f3667501cc5fd5ffd1c1751290b5b85#/SparseArrays-7ea433872f3667501cc5fd5ffd1c1751290b5b85.tar.gz
+Source22:       https://api.github.com/repos/JuliaStats/Statistics.jl/tarball/22dee82f9824d6045e87aa4b97e1d64fe6f01d8d#/Statistics-22dee82f9824d6045e87aa4b97e1d64fe6f01d8d.tar.gz
+Source23:       https://api.github.com/repos/JuliaLang/StyledStrings.jl/tarball/24cd74a309a29dd0a240884c1ced9fef7f06ba64#/StyledStrings-24cd74a309a29dd0a240884c1ced9fef7f06ba64.tar.gz
+Source24:       https://api.github.com/repos/JuliaSparse/SuiteSparse.jl/tarball/e8285dd13a6d5b5cf52d8124793fc4d622d07554#/SuiteSparse-e8285dd13a6d5b5cf52d8124793fc4d622d07554.tar.gz
+Source25:       https://api.github.com/repos/JuliaIO/Tar.jl/tarball/10e4e964e372dc644c375e99c43d907067c45190#/Tar-10e4e964e372dc644c375e99c43d907067c45190.tar.gz
 # https://gmplib.org/repo/gmp/rev/8e7bb4ae7a18
 Patch0:         julia-gmp-6.3.0-c23.patch
 Provides:       bundled(libuv) = %{uvversion}
@@ -194,6 +210,25 @@ pushd deps/srccache
     cp -p %SOURCE8 .
     cp -p %SOURCE9 .
     cp -p %SOURCE10 .
+popd
+
+pushd stdlib/srccache
+    cp -p %SOURCE10 .
+    cp -p %SOURCE11 .
+    cp -p %SOURCE12 .
+    cp -p %SOURCE13 .
+    cp -p %SOURCE14 .
+    cp -p %SOURCE15 .
+    cp -p %SOURCE16 .
+    cp -p %SOURCE17 .
+    cp -p %SOURCE18 .
+    cp -p %SOURCE19 .
+    cp -p %SOURCE20 .
+    cp -p %SOURCE21 .
+    cp -p %SOURCE22 .
+    cp -p %SOURCE23 .
+    cp -p %SOURCE24 .
+    cp -p %SOURCE25 .
 popd
 
 cp -p %SOURCE6 contrib/julia.svg

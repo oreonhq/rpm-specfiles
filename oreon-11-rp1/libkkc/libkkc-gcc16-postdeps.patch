@@ -1,0 +1,15 @@
+gcc 16 libtool postdeps has -latomic_asneeded which g-ir-scanner cannot resolve
+
+diff --git a/configure.ac b/configure.ac
+--- a/configure.ac
++++ b/configure.ac
+@@ -87,9 +87,10 @@
+   [AC_MSG_ERROR([can't find marisa])])
+
+ # libstdc++ needs to be linked with libmarisa-glib.a
+-MARISA_GLIB_STATIC_DEPENDENCIES="$postdeps_CXX"
++# gcc 16 libtool postdeps contains -latomic_asneeded which g-ir-scanner cannot resolve
++MARISA_GLIB_STATIC_DEPENDENCIES=$(printf '%s ' $postdeps_CXX | sed -e 's/-latomic_asneeded/-latomic/')
+ AC_SUBST(MARISA_GLIB_STATIC_DEPENDENCIES)
+
+ LIBKKC_CFLAGS="$GIO_CFLAGS $GEE_CFLAGS $JSON_GLIB_CFLAGS"

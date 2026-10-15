@@ -41,12 +41,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %license LICENSES/LGPL* LICENSES/LicenseRef-KDE*
 %doc README.md
-%{_libdir}/libMpvQt.so.{2,%{version}}
+%{_libdir}/libMpvQt.so.3*
 
 %files devel
 %{_includedir}/MpvQt/
 %{_libdir}/libMpvQt.so
 %{_libdir}/cmake/MpvQt/
+%{_libdir}/qt6/metatypes/
 
 %changelog
 %autochangelog

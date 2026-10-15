@@ -22,6 +22,7 @@ BuildRequires:  automake
 
 BuildRequires:  gettext-devel
 BuildRequires:  libtool
+BuildRequires:  zlib-devel
 
 %description
 Originally developed for Wizard, ReadStat is a command-line tool and

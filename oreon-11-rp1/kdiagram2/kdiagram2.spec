@@ -52,6 +52,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake_kf5 \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DBUILD_TESTING:BOOL=%{?tests:ON}%{?!tests:OFF}
 
 %cmake_build

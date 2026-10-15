@@ -7,7 +7,7 @@ Release:        %autorelease
 Summary:        A Doxygen filter for Python
 
 # No license information obtained, it's up to the packager to fill it in
-License:        ...
+License:        GPL-2.0-only
 URL:            https://github.com/Feneric/doxypypy
 Source:         %{pypi_source doxypypy}
 
@@ -46,7 +46,6 @@ Summary:        %{summary}
 
 %install
 %pyproject_install
-rm -rf %{buildroot}%{python3_sitelib}/doxypypy/test
 # For official Fedora packages, including files with '*' +auto is not allowed
 # Replace it with a list of relevant Python modules/globs and list extra files in %%files
 %pyproject_save_files '*' +auto

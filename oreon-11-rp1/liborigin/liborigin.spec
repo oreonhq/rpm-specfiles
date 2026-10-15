@@ -62,7 +62,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %exclude %{_docdir}/%{name}/html
 # We have license in different location and FORMAT in -doc
 %exclude %{_docdir}/%{name}/COPYING
-%exclude %{_docdir}/%{name}/FORMAT
+%exclude %{_docdir}/%{name}/doc/FORMAT
 
 %files devel
 %{_includedir}/%{name}/
@@ -70,7 +70,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/pkgconfig/%{name}.pc
 
 %files doc
-%doc FORMAT README
+%doc doc/FORMAT README
 %license COPYING
 %{_docdir}/%{name}/html/
 

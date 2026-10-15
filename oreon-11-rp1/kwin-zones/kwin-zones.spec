@@ -1,22 +1,18 @@
-%global source0_hash 25a66c7dad0dd0936b51d5aeff358d7664f549e264c2b7cd37c17cb26e8636a0
+%global source0_hash eca1591c33d37a8fc97a4729ad4ec905055d2d8774feccbfe4078392ac1ae711
 
 Name:          kwin-zones
-Version:       1.0.11
+Version:       1.0.12
 Release:       1%{?dist}
 Summary:       Wayland ext-zones for KWin
 
 License:       BSD-3-Clause AND GPL-2.0-or-later AND CC0-1.0 AND MIT
 URL:           https://invent.kde.org/automotive/%{name}
 
-Source:        %{url}/-/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        %{url}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 
 # https://invent.kde.org/automotive/kwin-zones/-/merge_requests/5
-# Couple fixes to make it usable with modern kwin
-Patch0:        5.patch
 
 # https://invent.kde.org/automotive/kwin-zones/-/merge_requests/6
-# Fix for building with GuiPrivate and Wayland
-Patch1:        test.patch
 
 BuildRequires: kf6-rpm-macros
 BuildRequires: extra-cmake-modules

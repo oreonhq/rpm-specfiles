@@ -1,4 +1,4 @@
-%global source0_hash f9cfeef7d4ddde78ad8978876cb3525843a302504f547c225e9c22c81d710760
+%global source0_hash 020c357c74c39c931435b49e7409328d0b7f6da5491b58c2f732ed7236ea9a45
 
 %if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %bcond_without kf6

@@ -3,7 +3,7 @@
 
 Name:           javax-inject
 Version:        1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Dependency injection API for Java
 License:        Apache-2.0
 URL:            https://github.com/javax-inject/javax-inject
@@ -15,7 +15,7 @@ Source1:        https://repo1.maven.org/maven2/javax/inject/javax.inject/%{versi
 
 Provides:       mvn(javax.inject:javax.inject) = %{version}
 
-BuildRequires:  javapackages-local-openjdk25
+BuildRequires:  java-25-openjdk-devel
 
 %description
 The javax.inject API defines the core annotations used for dependency
@@ -32,10 +32,14 @@ javac --release 8 -d classes $(find src -name '*.java')
 jar --create --file %{name}.jar -C classes javax
 
 %install
-%mvn_artifact %{SOURCE1} %{name}.jar
-%mvn_install
+mkdir -p %{buildroot}%{_javadir}/javax.inject
+install -m 0644 %{name}.jar %{buildroot}%{_javadir}/javax.inject/javax.inject.jar
+mkdir -p %{buildroot}%{_mavenpomdir}/javax.inject
+install -m 0644 %{SOURCE1} %{buildroot}%{_mavenpomdir}/javax.inject/javax.inject.pom
 
-%files -f .mfiles
+%files
+%{_javadir}/javax.inject/
+%{_mavenpomdir}/javax.inject/
 
 %changelog
 %autochangelog

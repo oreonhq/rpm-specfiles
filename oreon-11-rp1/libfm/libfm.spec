@@ -1,4 +1,4 @@
-%global source0_hash 601277a977053275f50ee696721e505501dd029fbd7f10b4262eb9c1f2b0373d
+%global source0_hash 1b4c9cd5cd4cbcce8ad15f364e62dfc2de1d3f663dfd9931a35ebd190fbbdbbc
 %{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
@@ -20,8 +20,8 @@
 %global		git_builddir	%{nil}
 
 %if 0%{?use_gitbare}
-%global		gittardate		20251217
-%global		gittartime		2335
+%global		gittardate		20251015
+%global		gittartime		1400
 %define		use_gitcommit_as_rel		0
 
 %global		gitbaredate	20251214

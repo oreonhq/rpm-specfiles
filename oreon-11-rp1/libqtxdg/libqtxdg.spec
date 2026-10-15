@@ -1,4 +1,4 @@
-%global source0_hash 2a19343cffaa869d5001ef8087781beedb25b3f2ebe29f202728a9dc86aaacc8
+%global source0_hash 1e59690f5e74b2a23ec91564e8c5d03baffa8a3c6243d935c0f299a54d2e44ea
 
 Name:           libqtxdg
 Summary:        QtXdg, a Qt6 implementation of XDG standards

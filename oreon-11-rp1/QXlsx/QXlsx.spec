@@ -41,6 +41,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cmake_install
+mkdir -p %{buildroot}%{_libdir}
+mv %{buildroot}%{_libdir}/cmake/QXlsxQt6/libQXlsx*.so* %{buildroot}%{_libdir}/
 
 %check
 %ctest

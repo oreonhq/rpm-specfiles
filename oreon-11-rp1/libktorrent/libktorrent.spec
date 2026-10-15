@@ -72,6 +72,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_libdir}/libKTorrent6.so.%{version}
 
 %files devel
+%{_includedir}/libktorrent/
 %{_kf6_libdir}/libKTorrent6.so
 %{_kf6_libdir}/cmake/KTorrent6/
 

@@ -3,7 +3,7 @@
 Summary:        Theme engines for GTK+ 2.0
 Name:           gtk2-engines
 Version:        2.91.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 # This release of gtk-engines is now solely LGPL 2.1 or any later version.
 License:        LGPL-2.1-or-later
 #VCS: git:git://git.gnome.org/gtk-engines
@@ -20,13 +20,6 @@ URL:            http://download.gnome.org/sources/gtk-engines
 
 # Fedora-specific tweaks
 # http://bugzilla.gnome.org/show_bug.cgi?id=593030
-Patch0: gtk-engines-2.18.2-change-bullet.patch
-# turn on new tooltips look
-Patch1: tooltips.patch
-# enable automatic mnemonics
-Patch2: auto-mnemonics.patch
-# allow dragging on empty areas in menubars
-Patch3: window-dragging.patch
 
 %description
 The gtk2-engines package contains shared objects and configuration
@@ -46,11 +39,6 @@ software that uses the theme engines in the gtk2-engines package.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n gtk-engines-%{version}
-
-%patch -P0 -p1 -b .bullet
-%patch -P1 -p1 -b .tooltips
-%patch -P2 -p1 -b .mnemonics
-%patch -P3 -p1 -b .window-dragging
 
 %build
 %configure --disable-static

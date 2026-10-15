@@ -87,7 +87,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cmake_build
 
 %if 0%{?apidocs}
-make docs -C %{__cmake_builddir}
+%cmake_build --target docs
 %endif
 
 %install

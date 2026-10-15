@@ -56,14 +56,12 @@ cat %_vpath_builddir/Testing/Temporary/LastTest.log
 
 %files
 %license LICENSE_1_0.txt COPYING
-%doc AUTHORS ChangeLog NOTICE README README.md
-%{_libdir}/*.so.*
+%doc NOTICE README.md
 
 %files devel
+%doc QUICKSTART-CPP.md
 %{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/msgpack.pc
-%{_libdir}/cmake/msgpack
+%{_libdir}/cmake/msgpack-cxx
 
 %changelog
 %autochangelog

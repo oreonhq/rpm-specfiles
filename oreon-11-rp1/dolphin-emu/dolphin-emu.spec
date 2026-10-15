@@ -126,6 +126,7 @@ BuildRequires:  portaudio-devel
 BuildRequires:  SDL2-devel
 BuildRequires:  SFML-devel
 BuildRequires:  spirv-headers-devel
+BuildRequires:  glslang-devel
 BuildRequires:  spirv-tools
 BuildRequires:  spirv-tools-devel
 BuildRequires:  systemd-devel

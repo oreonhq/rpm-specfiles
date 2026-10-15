@@ -1167,6 +1167,7 @@ fi
 
 %files stacktrace
 %license LICENSE_1_0.txt
+%{_libdir}/libboost_stacktrace_dump.so.%{sonamever}
 %{_libdir}/libboost_stacktrace_addr2line.so.%{sonamever}
 %{_libdir}/libboost_stacktrace_basic.so.%{sonamever}
 %{_libdir}/libboost_stacktrace_noop.so.%{sonamever}
@@ -1252,6 +1253,7 @@ fi
 %{_libdir}/libboost_serialization.so
 %{_libdir}/libboost_wserialization.so
 %{_libdir}/libboost_stacktrace_addr2line.so
+%{_libdir}/libboost_stacktrace_dump.so
 %{_libdir}/libboost_stacktrace_basic.so
 %{_libdir}/libboost_stacktrace_noop.so
 %if %{with stacktrace_from_exception}

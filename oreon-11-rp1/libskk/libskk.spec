@@ -17,6 +17,9 @@ BuildRequires:	pkgconfig(gee-0.8)
 BuildRequires:	json-glib-devel
 BuildRequires:	gobject-introspection-devel
 BuildRequires:	gettext-devel
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool
 
 %description
 The libskk project aims to provide GObject-based interface of Japanese
@@ -49,6 +52,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find -name '*.vala' -exec touch {} \;
 
 %build
+autoreconf -fi
 %configure --disable-static --enable-fep
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool

@@ -53,7 +53,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -n %{name}-%{commit} -p1
 
 %build
-%cmake -DBUILD_EXAMPLES=ON
+%cmake -DBUILD_EXAMPLES=ON -DBUILD_LINTING=OFF
 %cmake_build
 
 %check

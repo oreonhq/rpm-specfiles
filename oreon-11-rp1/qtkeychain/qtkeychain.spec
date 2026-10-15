@@ -5,7 +5,7 @@
 
 Name:           qtkeychain
 Version:        0.17.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A password store library
 
 License:        BSD-3-Clause

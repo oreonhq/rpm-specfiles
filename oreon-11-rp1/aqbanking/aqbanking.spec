@@ -1,4 +1,4 @@
-%global source0_hash 244b5f7a139f829928f5cdc3f5f7488517b3e8aa63625a92741c3efc1892bb3f026298cd7995f79821c480db35587f6b
+%global source0_hash 244b5f7a139f829928f5cdc3f5f7488517b3e8aa63625a92741c3efc1892bb3f
 
 Name: aqbanking
 Summary: A library for online banking functions and financial data import/export

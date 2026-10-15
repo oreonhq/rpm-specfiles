@@ -1,4 +1,4 @@
-%global source0_hash 018df6bf93924c5af55c927998f096f8c70845a2f6031f5e0fcc95edb336674b
+%global source0_hash 7aa9099345e48048ebdad768f583944ac042f87b216fa0b26a169c7e05425047
 
 %global _vpath_srcdir Kvantum
 %bcond  qt5           1

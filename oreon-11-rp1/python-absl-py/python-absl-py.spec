@@ -14,7 +14,7 @@ BuildArch:      noarch
 
 BuildRequires:  python3-devel
 BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3-setuptools
+BuildRequires:  python3-hatchling
 
 %global common_description %{expand:
 This repository is a collection of Python library code for building Python

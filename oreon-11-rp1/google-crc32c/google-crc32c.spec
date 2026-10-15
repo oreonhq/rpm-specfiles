@@ -47,6 +47,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # NOTE(mhayden): Thanks to the Arch Linux developers for providing ideas on how
 # to compile this properly. https://aur.archlinux.org/packages/google-crc32c/
 %cmake \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DCMAKE_BUILD_TYPE=Release \
     -DCRC32C_BUILD_BENCHMARKS=OFF \
     -DCRC32C_BUILD_TESTS=OFF \

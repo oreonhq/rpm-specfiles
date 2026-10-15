@@ -1,10 +1,14 @@
 %global source0_hash 5240f4a3475648773ba10af8b0ebe549cbfc5d6de00470a517330a80068a4f78
 
-%if 0%{?rhel}
-# EPEL - only Qt5 packages
+%if 0%{?rhel} || (0%{?oreon} >= 11)
+# no qt4 here, only Qt5/Qt6
 %bcond_with	qt4
 %bcond_without	qt5
+%if 0%{?rhel}
 %bcond_with	qt6
+%else
+%bcond_without	qt6
+%endif
 %else
 # Fedora - build everything
 %bcond_without	qt4

@@ -49,10 +49,8 @@ without losing the ball.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 bash %{SOURCE1} %{SOURCE0}
-rm -rf %{name}-%{version}
-mkdir %{name}-%{version}
-tar Jxf /tmp/%{name}-%{version}.tar.xz --strip-components=1 -C %{name}-%{version}
-cd %{name}-%{version}
+%setup -T -c -q -n %{name}-%{version}
+tar Jxf /tmp/%{name}-%{version}.tar.xz --strip-components=1
 
 %build
 %cmake_kf6

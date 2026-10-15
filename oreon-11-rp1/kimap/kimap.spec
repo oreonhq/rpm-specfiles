@@ -1,8 +1,8 @@
 %global stable_kf6 stable
-%global source0_hash 96303168f2bf97905e68bfbc93f7efba9a93a9331eca53294557d3ef3f56678a
+%global source0_hash 208bdf7b5cb97c2b2e328e97d107bac00bc53685998bebc64ba1e2033c3e7ecf
 
 Name:    kimap
-Version: 25.12.3
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: The KIMAP Library
 

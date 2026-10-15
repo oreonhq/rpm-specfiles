@@ -20,6 +20,7 @@ BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  cmake(KF6Archive)
 
 BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-doctools
 
 BuildRequires:  pkgconfig(shared-mime-info)
 %if "%(pkg-config --modversion shared-mime-info 2> /dev/null || echo 2.1)" < "2.2"

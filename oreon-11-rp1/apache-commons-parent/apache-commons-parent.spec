@@ -131,6 +131,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin :maven-changes-plugin
 
 %pom_remove_dep org.junit:junit-bom
+%pom_remove_dep org.mockito:mockito-bom
 
 # Remove profiles for plugins that are useless in package builds
 for profile in animal-sniffer japicmp jacoco; do

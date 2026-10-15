@@ -86,8 +86,8 @@ popd
 
 %files devel
 %{_includedir}/phonenumbers
-%{_libdir}/libgeocoding.so.*
-%{_libdir}/libphonenumber.so.*
+%{_libdir}/libgeocoding.so
+%{_libdir}/libphonenumber.so
 %{_libdir}/cmake/libphonenumber/
 
 

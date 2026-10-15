@@ -65,6 +65,7 @@ rm -f %{buildroot}%{_libdir}/libcec.a
 
 %files devel
 %{_includedir}/libcec/
+%{_libdir}/cmake/libcec/
 %{_libdir}/libcec.so
 %{_libdir}/pkgconfig/libcec.pc
 

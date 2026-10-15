@@ -29,7 +29,7 @@ Requires:       falkon%{?_isa} >= 3.1.0
 %{summary}.
 
 %prep
-%autosetup -n tarptaeya-PDFReader-%{gitcommit_full}
+%autosetup -n tarptaeya-PDFReader-%{gitcommit}
 mv pdfreader/pdfjs/LICENSE LICENSE_pdfjs
 
 %build

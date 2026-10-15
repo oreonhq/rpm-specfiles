@@ -47,11 +47,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -n %{archivename} -q
 
 %build
-%cmake3
-%cmake3_build
+%cmake
+%cmake_build
 
 %install
-%cmake3_install
+%cmake_install
 
 %find_lang %{name} --with-qt
 

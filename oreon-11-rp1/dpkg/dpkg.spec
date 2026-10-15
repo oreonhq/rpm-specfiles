@@ -376,54 +376,18 @@ make TEST_PARALLEL=4 check
 %{_mandir}/man5/dsc.5*
 %{_mandir}/man7/deb-version.7*
 %{_mandir}/man7/dpkg-build-api.7*
-%{_mandir}/*/man1/dpkg-architecture.1*
-%{_mandir}/*/man1/dpkg-buildapi.1*
-%{_mandir}/*/man1/dpkg-buildflags.1*
-%{_mandir}/*/man1/dpkg-buildpackage.1*
-%{_mandir}/*/man1/dpkg-buildtree.1*
-%{_mandir}/*/man1/dpkg-checkbuilddeps.1*
-%{_mandir}/*/man1/dpkg-distaddfile.1*
-%{_mandir}/*/man1/dpkg-genbuildinfo.1*
-%{_mandir}/*/man1/dpkg-genchanges.1*
-%{_mandir}/*/man1/dpkg-gencontrol.1*
-%{_mandir}/*/man1/dpkg-gensymbols.1*
-%{_mandir}/*/man1/dpkg-mergechangelogs.1*
-%{_mandir}/*/man1/dpkg-name.1*
-%{_mandir}/*/man1/dpkg-parsechangelog.1*
-%{_mandir}/*/man1/dpkg-scanpackages.1*
-%{_mandir}/*/man1/dpkg-scansources.1*
-%{_mandir}/*/man1/dpkg-shlibdeps.1*
-%{_mandir}/*/man1/dpkg-source.1*
-%{_mandir}/*/man1/dpkg-vendor.1*
-%{_mandir}/*/man5/deb.5*
-%{_mandir}/*/man5/deb822.5*
-%{_mandir}/*/man5/deb-buildinfo.5*
-%{_mandir}/*/man5/deb-changelog.5*
-%{_mandir}/*/man5/deb-changes.5*
-%{_mandir}/*/man5/deb-conffiles.5*
-%{_mandir}/*/man5/deb-control.5*
-%{_mandir}/*/man5/deb-extra-override.5*
-%{_mandir}/*/man5/deb-md5sums.5*
-%{_mandir}/*/man5/deb-old.5*
-%{_mandir}/*/man5/deb-origin.5*
-%{_mandir}/*/man5/deb-override.5*
-%{_mandir}/*/man5/deb-postinst.5*
-%{_mandir}/*/man5/deb-postrm.5*
-%{_mandir}/*/man5/deb-preinst.5*
-%{_mandir}/*/man5/deb-prerm.5*
-%{_mandir}/*/man5/deb-shlibs.5*
-%{_mandir}/*/man5/deb-split.5*
-%{_mandir}/*/man5/deb-src-control.5*
-%{_mandir}/*/man5/deb-src-files.5*
-%{_mandir}/*/man5/deb-src-rules.5*
-%{_mandir}/*/man5/deb-src-symbols.5*
-%{_mandir}/*/man5/deb-substvars.5*
-%{_mandir}/*/man5/deb-symbols.5*
-%{_mandir}/*/man5/deb-triggers.5*
-%{_mandir}/*/man5/dsc.5*
-%{_mandir}/*/man7/deb-version.7*
-%{_mandir}/*/man7/dpkg-build-api.7*
-%{pkgdatadir}/*.mk
+%exclude %{_mandir}/*/man1/dpkg-divert.1*
+%exclude %{_mandir}/*/man1/dpkg-maintscript-helper.1*
+%exclude %{_mandir}/*/man1/dpkg-realpath.1*
+%exclude %{_mandir}/*/man1/dpkg-split.1*
+%exclude %{_mandir}/*/man1/dpkg-trigger.1*
+%exclude %{_mandir}/*/man1/dselect.1*
+%exclude %{_mandir}/*/man5/dpkg.cfg.5*
+%exclude %{_mandir}/*/man5/dselect.cfg.5*
+%exclude %{_mandir}/*/man8/*
+%{_mandir}/*/man1/*
+%{_mandir}/*/man5/*
+%{_mandir}/*/man7/*
 
 %files perl
 %{_datadir}/dpkg/*.specs

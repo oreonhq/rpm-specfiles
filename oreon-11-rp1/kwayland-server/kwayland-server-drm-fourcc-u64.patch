@@ -1,6 +1,8 @@
+diff --git a/src/server/drm_fourcc.h b/src/server/drm_fourcc.h
+index a00d3e8..118cd5e 100644
 --- a/src/server/drm_fourcc.h
 +++ b/src/server/drm_fourcc.h
-@@ -8,9 +8,7 @@
+@@ -8,10 +8,7 @@
  #define DRM_FOURCC_H
  
  //#include "drm.h"

@@ -22,6 +22,7 @@ Patch3:        libkkc-pr40-int-conversion-fix.patch
 # Fix invalid escape on default.json
 Patch4:        libkkc-Fix-invalid-escape-on-json-file.patch
 Patch5:        libkkc-use-gettext.patch
+Patch6:        libkkc-gcc16-postdeps.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:	marisa-devel

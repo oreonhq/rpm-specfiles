@@ -16,7 +16,6 @@ Source2:        https://botan.randombit.net/pgpkey.txt
 # https://github.com/randombit/botan/pull/5040
 Patch1:         pyproject.patch
 # https://github.com/randombit/botan/pull/5152
-Patch2:         shebang-fix.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  python3

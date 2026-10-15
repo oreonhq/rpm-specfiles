@@ -2,7 +2,7 @@
 
 Name:           libunicode
 Version:        0.9.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Modern C++20 Unicode Library
 License:        Apache-2.0
 URL:            https://github.com/contour-terminal/libunicode
@@ -56,7 +56,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %license LICENSE
 %doc README.md
-%{_libdir}/libunicode*.so.0.7*
+%{_libdir}/libunicode*.so.0.9*
 
 %files devel
 %{_includedir}/libunicode/

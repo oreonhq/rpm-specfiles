@@ -46,7 +46,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 %pyproject_wheel
 
-make -C docs SPHINXBUILD=sphinx-build-3 html
+make -C docs SPHINXBUILD=sphinx-build html
 rm -rf docs/_build/html/{.buildinfo,_sources}
 
 %install

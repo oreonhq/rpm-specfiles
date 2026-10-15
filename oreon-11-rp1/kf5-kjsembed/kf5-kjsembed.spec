@@ -1,4 +1,4 @@
-%global source0_hash 5324ba68413d6ea8ac7791b8b2539397cf2b0169072c08a552cdc88930088c7e
+%global source0_hash 9b97d556b0c4e61154614879d804c98202dbde64ad352fbcab2b6f5e54b5b517
 
 %undefine __cmake_in_source_build
 %global framework kjsembed
@@ -17,7 +17,7 @@ URL:     https://invent.kde.org/frameworks/%{framework}
 
 %global majmin 5.116
 %global stable stable
-Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
+Source0:        https://invent.kde.org/frameworks/%{framework}/-/archive/v%{version}/%{framework}-v%{version}.tar.gz
 
 BuildRequires:  extra-cmake-modules >= %{majmin}
 BuildRequires:  kf5-kdoctools-devel >= %{majmin}
@@ -44,7 +44,7 @@ developing applications that use %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n %{framework}-%{version}
+%autosetup -n %{framework}-v%{version}
 
 %build
 %{cmake_kf5}

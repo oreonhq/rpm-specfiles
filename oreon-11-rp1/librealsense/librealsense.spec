@@ -25,6 +25,8 @@ Patch4:         librealsense.rsutils-shared-library.patch
 Patch5:         librealsense.use-system-json.patch
 # https://github.com/morxa/librealsense/tree/utf8-string-literals
 Patch6:         librealsense.utf8-string-literals.patch
+# use system yaml-cpp headers, no git clone
+Patch7:         librealsense.system-yaml-cpp.patch
 
 BuildRequires:  cmake
 BuildRequires:  cmake(glfw3)
@@ -40,6 +42,7 @@ BuildRequires:  mesa-libGLU-devel
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pybind11-devel
+BuildRequires:  yaml-cpp-devel
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 

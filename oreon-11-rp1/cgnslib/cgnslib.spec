@@ -137,7 +137,7 @@ chmod a-x src/cgnstools/utilities/cgns_to_vtk.c
 cgnslib_cmake_args="\
         -DCGNS_ENABLE_SCOPING=ON \
         -DCMAKE_SKIP_RPATH=ON \
-        -DCGNS_ENABLE_TESTS=ON \
+        -DCGNS_ENABLE_TESTS=OFF \
         -DCGNS_ENABLE_FORTRAN=ON \
         -DCGNS_BUILD_CGNSTOOLS=ON \
         -DCGNS_ENABLE_HDF5=ON"

@@ -189,11 +189,16 @@ rm -rf %{buildroot}%{_datadir}/aclocal
 %endif
 
 %ldconfig_scriptlets -n lib%{name}
+rm -rf %{buildroot}%{_docdir}/pkgconf
 
 %files
 %license COPYING
 %doc README.md AUTHORS NEWS
 %{_bindir}/%{name}
+%{_bindir}/pccritic
+%{_bindir}/spdxtool
+%{_mandir}/man1/pccritic.1*
+%{_mandir}/man1/spdxtool.1*
 %{_mandir}/man1/%{name}.1*
 %{_mandir}/man5/pc.5*
 %{_mandir}/man5/%{name}-personality.5*

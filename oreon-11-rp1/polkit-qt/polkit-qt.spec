@@ -66,6 +66,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %build
 %cmake \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DUSE_QT4:BOOL=ON -DUSE_QT5:BOOL=OFF \
   -DBUILD_EXAMPLES:BOOL=OFF \
   -DDATA_INSTALL_DIR:PATH=%{_datadir}

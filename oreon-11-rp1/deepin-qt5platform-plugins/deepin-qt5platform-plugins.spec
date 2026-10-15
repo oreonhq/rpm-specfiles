@@ -8,7 +8,7 @@ Version:        6.7.49
 Release:        %autorelease
 Summary:        Qt platform integration plugins for Deepin Desktop Environment
 License:        LGPL-3.0-or-later
-URL:            https://github.com/linuxdeepin/qt5platform-plugins
+URL:            https://github.com/linuxdeepin/dde-qtplatform-plugins
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  gcc-c++
@@ -64,7 +64,7 @@ Environment.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -p1 -n dde-%{repo}-%{version}
+%autosetup -p1 -n dde-qtplatform-plugins-%{version}
 
 # https://github.com/linuxdeepin/developer-center/issues/7217
 # remove wayland support

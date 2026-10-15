@@ -598,3 +598,7 @@ Traditional Chinese language support for KDE Applications.
 
 %files -n kde-l10n-zh_TW
 %lang(zh_TW) %{_datadir}/locale/zh_TW/
+
+%changelog
+* Thu Oct 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.04.1-1
+- Import

@@ -10,6 +10,7 @@ URL:     https://invent.kde.org/libraries/pulseaudio-qt
 Source:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
+BuildRequires:  qt6-doctools
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  kf5-rpm-macros
 BuildRequires:  pkgconfig(libpulse)
