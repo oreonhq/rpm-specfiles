@@ -8,7 +8,7 @@
 
 Name:           rust-rustc-demangle
 Version:        0.1.28
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Rust compiler symbol demangling.
 
 License:        MIT OR Apache-2.0
@@ -25,6 +25,8 @@ Rust compiler symbol demangling.}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

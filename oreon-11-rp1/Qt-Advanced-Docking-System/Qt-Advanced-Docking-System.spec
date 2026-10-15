@@ -48,6 +48,7 @@ rm -rfv %{buildroot}%{_datadir}/ads/license
 %license LICENSE gnu-lgpl-v2.1.md
 %doc README.md
 %{_libdir}/libqtadvanceddocking-qt6.so.%{version}
+%{_libdir}/libqtadvanceddocking-qt6.so.5*
 
 %files devel
 %{_includedir}/qtadvanceddocking-qt6/

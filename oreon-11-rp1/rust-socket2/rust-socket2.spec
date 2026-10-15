@@ -8,7 +8,7 @@
 
 Name:           rust-socket2
 Version:        0.6.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Utilities for handling networking sockets with a maximal amount of co...
 
 License:        MIT OR Apache-2.0
@@ -27,6 +27,8 @@ possible intended.}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

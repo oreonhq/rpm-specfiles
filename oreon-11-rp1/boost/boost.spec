@@ -749,7 +749,7 @@ EOF
 # built with pch=off to avoid this.
 
 echo ============================= build serial ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
@@ -777,7 +777,7 @@ module purge ||:
 
 %if %{with python3}
 echo ============================= build $MPI_COMPILER ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--with-mpi --with-graph_parallel --build-dir=$MPI_COMPILER \
 	variant=release threading=multi debug-symbols=on pch=off \
 	python=%{python3_version} stage
@@ -793,7 +793,7 @@ export PATH=/bin${PATH:+:}$PATH
 
 %if %{with python3}
 echo ============================= build $MPI_COMPILER ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--with-mpi --with-graph_parallel --build-dir=$MPI_COMPILER \
 	variant=release threading=multi debug-symbols=on pch=off \
 	python=%{python3_version} stage
@@ -885,7 +885,7 @@ export PATH=/bin${PATH:+:}$PATH
 %endif
 
 echo ============================= install serial ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \

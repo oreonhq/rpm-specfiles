@@ -48,7 +48,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %license LICENSE
 %doc README*
-%{_libdir}/libQXlsxQt6.so.0*
 %{_libdir}/libQXlsxQt6.so.1*
 
 %files devel

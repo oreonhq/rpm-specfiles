@@ -84,7 +84,7 @@ end
 
 Name:           xmvn-generator
 Version:        2.1.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        RPM dependency generator for Java
 License:        Apache-2.0
 URL:            https://github.com/fedora-java/xmvn-generator

@@ -134,12 +134,11 @@ rm -f %{buildroot}%{mingw64_bindir}/geos-config
 %{_includedir}/geos_c.h
 %{_includedir}/geos.h
 %{_libdir}/libgeos_c.so
-%{_libdir}/libgeos.so.*
+%{_libdir}/libgeos.so
 %{_libdir}/cmake/GEOS/
 %{_libdir}/pkgconfig/%{name}.pc
 
 %if %{with mingw}
-%{_libdir}/libgeos.so
 %files -n mingw32-%{name}
 %license COPYING
 %{mingw32_bindir}/geosop.exe

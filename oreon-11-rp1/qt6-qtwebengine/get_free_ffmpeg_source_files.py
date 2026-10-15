@@ -47,27 +47,56 @@ def parse_ffmpeg_gyni_file(gyni_path, arch_not_arm):
     content = input_file.read().replace('\n', '')
 
   output_sources = []
-  # Get all the sections.
-  sections = re.findall(r"if (.*?})", content, re.DOTALL)
-  for section in sections:
-    # Get all the conditions (first group) and sources (second group) for the
-    # current section.
-    blocks = re.findall(r"(\(.*?\))\s\{(.*?)\}", section, re.DOTALL)
-    for block in blocks:
-      conditions = re.findall(r"\(?\((.*?)\)", block[0])
-      inserted = False
-      for condition in conditions:
-        if inserted:
+  # Walk the file and find each if (...) { ... } block, handling nested parens.
+  pos = 0
+  sections = []
+  while True:
+    start = content.find('if', pos)
+    if start < 0:
+      break
+    open_paren = content.find('(', start)
+    open_brace = content.find('{', open_paren)
+    if open_paren < 0 or open_brace < 0:
+      break
+    # capture the full balanced condition
+    depth = 0
+    cond_end = open_paren
+    for i in range(open_paren, len(content)):
+      if content[i] == '(':
+        depth += 1
+      elif content[i] == ')':
+        depth -= 1
+        if depth == 0:
+          cond_end = i
           break
-        limitations = ['ffmpeg_branding == "Chrome"', 'ffmpeg_branding == "ChromeOS"']
-        if ('use_linux_config' in condition) and not any(limitation in condition for limitation in limitations):
-          if (arch_not_arm):
-            if ('x64' in condition) or ('x86' in condition):
-              parse_sources (block[1], output_sources, arch_not_arm)
-              inserted = True
-          else:
-            parse_sources (block[1], output_sources, arch_not_arm)
-            inserted = True
+    condition_full = content[open_paren + 1:cond_end]
+    # capture the balanced block body
+    depth = 0
+    body_end = open_brace
+    for i in range(open_brace, len(content)):
+      if content[i] == '{':
+        depth += 1
+      elif content[i] == '}':
+        depth -= 1
+        if depth == 0:
+          body_end = i
+          break
+    sections.append((condition_full, content[open_brace + 1:body_end]))
+    pos = body_end + 1
+
+  for section in sections:
+    condition = section[0]
+    body = section[1]
+    inserted = False
+    limitations = ['ffmpeg_branding == "Chrome"', 'ffmpeg_branding == "ChromeOS"']
+    if ('use_linux_config' in condition) and not any(limitation in condition for limitation in limitations):
+      if (arch_not_arm):
+        if ('x64' in condition) or ('x86' in condition):
+          parse_sources (body, output_sources, arch_not_arm)
+          inserted = True
+      else:
+        parse_sources (body, output_sources, arch_not_arm)
+        inserted = True
 
   if len(output_sources) == 0:
     sys.stderr.write("Something went wrong, no sources parsed!\n")

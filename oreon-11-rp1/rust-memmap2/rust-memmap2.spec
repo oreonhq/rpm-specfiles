@@ -8,7 +8,7 @@
 
 Name:           rust-memmap2
 Version:        0.9.11
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform Rust API for memory-mapped file IO
 
 License:        MIT OR Apache-2.0
@@ -25,6 +25,8 @@ Cross-platform Rust API for memory-mapped file IO}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

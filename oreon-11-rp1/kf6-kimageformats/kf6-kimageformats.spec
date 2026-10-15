@@ -37,6 +37,7 @@ BuildRequires:  pkgconfig(libjxl_threads) >= 0.9.4
 BuildRequires:  pkgconfig(libjxl_cms) >= 0.9.4
 %endif
 BuildRequires:  cmake(OpenJPEG)
+BuildRequires:  openjpeg-tools
 BuildRequires:  pkgconfig(libraw) >= 0.20.2
 BuildRequires:  pkgconfig(libraw_r) >= 0.20.2
 BuildRequires:  jxrlib-devel

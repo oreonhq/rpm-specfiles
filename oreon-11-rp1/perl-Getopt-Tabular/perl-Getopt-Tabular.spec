@@ -2,7 +2,7 @@
 
 Name:           perl-Getopt-Tabular
 Version:        0.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Table-driven argument parsing for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Getopt-Tabular

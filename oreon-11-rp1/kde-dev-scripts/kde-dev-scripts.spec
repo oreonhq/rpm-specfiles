@@ -6,7 +6,7 @@
 Name:    kde-dev-scripts
 Summary: KDE SDK scripts
 Version: 26.08.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND BSD-2-Clause
 URL:     https://invent.kde.org/sdk/%{name}.git
@@ -19,8 +19,6 @@ BuildRequires:  cmake(KF6DocTools)
 BuildRequires:  perl-generators
 BuildRequires:  python3-devel
 
-Requires:       advancecomp
-Requires:       optipng
 
 BuildArch:      noarch
 

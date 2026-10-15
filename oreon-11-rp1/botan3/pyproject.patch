@@ -1,8 +1,7 @@
-diff --git a/doc/building.rst b/doc/building.rst
-index da9f2aa6f..c532d1a31 100644
---- a/doc/building.rst
-+++ b/doc/building.rst
-@@ -595,11 +595,14 @@ Building the Python wrappers
+diff -ruN a/doc/building.rst b/doc/building.rst
+--- a/doc/building.rst	2026-08-13 03:11:32.000000000 -0700
++++ b/doc/building.rst	2026-10-15 09:58:30.205244813 -0700
+@@ -606,11 +606,14 @@
  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  
  The Python wrappers for Botan use ctypes and the C89 API so no special
@@ -18,11 +17,9 @@ index da9f2aa6f..c532d1a31 100644
  .. _minimized_builds:
  
  Minimized Builds
-diff --git a/pyproject.toml b/pyproject.toml
-new file mode 100644
-index 000000000..dc5d4bd98
---- /dev/null
-+++ b/pyproject.toml
+diff -ruN a/pyproject.toml b/pyproject.toml
+--- a/pyproject.toml	1969-12-31 16:00:00.000000000 -0800
++++ b/pyproject.toml	2026-10-15 09:58:30.207814508 -0700
 @@ -0,0 +1,39 @@
 +[project]
 +name = "botan3"
@@ -63,19 +60,10 @@ index 000000000..dc5d4bd98
 +
 +[tool.setuptools.package-dir]
 +"" = "src/python"
-diff --git a/src/scripts/ci_build.py b/src/scripts/ci_build.py
-index 580060436..f96df4997 100755
---- a/src/scripts/ci_build.py
-+++ b/src/scripts/ci_build.py
-@@ -769,6 +769,7 @@ def main(args=None):
-             'src/scripts/website.py',
-             'src/scripts/bench.py',
-             'src/scripts/test_python.py',
-+            'src/scripts/test_python_packaging.py',
-             'src/scripts/test_strubbed_symbols.py',
-             'src/scripts/test_fuzzers.py',
-             'src/scripts/test_cli.py',
-@@ -946,6 +947,11 @@ def main(args=None):
+diff -ruN a/src/scripts/ci_build.py b/src/scripts/ci_build.py
+--- a/src/scripts/ci_build.py	2026-08-13 03:11:32.000000000 -0700
++++ b/src/scripts/ci_build.py	2026-10-15 09:58:30.205155441 -0700
+@@ -1004,6 +1004,11 @@
          if target in ['shared', 'coverage'] and not (options.os == 'windows' and options.cpu == 'x86'):
              cmds.append([py_interp, '-b'] + python_tests)
  
@@ -84,15 +72,14 @@ index 580060436..f96df4997 100755
 +            cmds.append([os.path.join('test-venv', 'bin/python'), '-m', 'pip', 'install', root_dir])
 +            cmds.append([os.path.join('test-venv', 'bin/python'), os.path.join(root_dir, 'src/scripts/test_python_packaging.py')])
 +
-         if target in ['shared', 'static']:
-             cmds.append(make_cmd + ['install'])
-             build_config = os.path.join(build_dir, 'build', 'build_config.json')
-diff --git a/src/scripts/test_python_packaging.py b/src/scripts/test_python_packaging.py
-new file mode 100644
-index 000000000..97ea45211
---- /dev/null
+         if target in ['wycheproof']:
+             wycheproof_test_script = os.path.join(root_dir, 'src/scripts/wycheproof.py')
+             cmds.append([py_interp, wycheproof_test_script])
+diff -ruN a/src/scripts/test_python_packaging.py b/src/scripts/test_python_packaging.py
+--- a/src/scripts/test_python_packaging.py	1969-12-31 16:00:00.000000000 -0800
++++ b/src/scripts/test_python_packaging.py	2026-10-15 09:58:30.209814554 -0700
+@@ -0,0 +1,38 @@
 +++ b/src/scripts/test_python_packaging.py
-@@ -0,0 +1,37 @@
 +#!/usr/bin/env python3
 +
 +"""

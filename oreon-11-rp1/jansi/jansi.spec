@@ -86,7 +86,7 @@ end
 
 Name:           jansi
 Version:        2.4.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Generate and interpret ANSI escape sequences in Java
 License:        Apache-2.0
 URL:            https://fusesource.github.io/jansi/
@@ -133,6 +133,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 # We don't want GraalVM support in Fedora
 %pom_remove_plugin :exec-maven-plugin
+%pom_remove_plugin :central-publishing-maven-plugin
 %pom_remove_dep :picocli-codegen
 
 # Set the JNI path

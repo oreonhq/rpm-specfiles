@@ -26,7 +26,6 @@ Source1: %{qtcolor_url}/-/archive/%{qtcolor_commit}/Qt-Color-Widgets-%{qtcolor_c
 # Upstream Patches
 # See: https://github.com/flameshot-org/flameshot/pull/4363
 # Drop in next stable release, most likely
-Patch0:        0001-fix-copy-failures.patch
 
 BuildRequires: cmake(KDSingleApplication-qt6)
 BuildRequires: cmake(KF6GuiAddons)

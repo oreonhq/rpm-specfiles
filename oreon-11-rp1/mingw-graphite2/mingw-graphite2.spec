@@ -22,12 +22,6 @@ Patch1:        mingw-graphite2_pkgconfig.patch
 Patch2:        mingw-graphite2_staticbuild.patch
 # https://github.com/Alexpux/MINGW-packages/blob/master/mingw-w64-graphite2/004-graphite2-1.3.8-dllimport-fix.patch
 Patch3:        mingw-graphite2_dllimport-fix.patch
-# Drop use of LIB_SUFFIX
-Patch4:        graphite2_cmakelibsuffix.patch
-# Increase minimum cmake version
-Patch5:        graphite2_cmakever.patch
-# Fix build with gcc15
-Patch6:        graphite2_gcc15.patch
 
 BuildArch:     noarch
 

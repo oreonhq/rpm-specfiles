@@ -84,7 +84,7 @@ end
 
 Name:           dola
 Version:        1.3.2
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Declarative system for Java RPM packaging
 License:        Apache-2.0
 URL:            https://github.com/mizdebsk/dola

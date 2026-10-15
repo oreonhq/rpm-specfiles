@@ -7,11 +7,6 @@ Summary:    Libraries for Simplified-Traditional Chinese Conversion
 License:    Apache-2.0
 URL:        https://github.com/BYVoid/OpenCC
 Source0:    https://github.com/BYVoid/OpenCC/archive/ver.%{version}.tar.gz#/OpenCC-ver.%{version}.tar.gz
-Patch0:     opencc-fixes-compile.patch
-Patch1:     opencc-fixes-crash.patch
-Patch2:     opencc-fixes-cmake.patch
-Patch3:     opencc-fixes-cmake-vars.patch
-Patch4:     opencc-fixes-CVE.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gettext

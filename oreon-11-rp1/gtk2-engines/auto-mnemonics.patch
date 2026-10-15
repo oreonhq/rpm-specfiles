@@ -1,5 +1,5 @@
-diff -up gtk-engines-2.19.0/themes/Clearlooks/gtk-2.0/gtkrc.mnemonics gtk-engines-2.19.0/themes/Clearlooks/gtk-2.0/gtkrc
---- gtk-engines-2.19.0/themes/Clearlooks/gtk-2.0/gtkrc.mnemonics	2010-03-23 19:47:09.838066932 -0400
+diff -up gtk-engines-2.19.0/themes/Clearlooks/gtk-2.0/gtkrc gtk-engines-2.19.0/themes/Clearlooks/gtk-2.0/gtkrc
+--- gtk-engines-2.19.0/themes/Clearlooks/gtk-2.0/gtkrc	2010-03-23 19:47:09.838066932 -0400
 +++ gtk-engines-2.19.0/themes/Clearlooks/gtk-2.0/gtkrc	2010-01-12 22:29:47.507357239 -0500
 @@ -3,6 +3,8 @@
  

@@ -8,7 +8,7 @@
 
 Name:           rust-pathdiff
 Version:        0.2.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Library for diffing paths to obtain relative paths
 
 License:        MIT OR Apache-2.0
@@ -25,6 +25,8 @@ Library for diffing paths to obtain relative paths}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

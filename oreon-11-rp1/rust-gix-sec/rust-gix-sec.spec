@@ -8,7 +8,7 @@
 
 Name:           rust-gix-sec
 Version:        0.14.2
-Release:        %autorelease
+Release:        3%{?dist}
 Summary:        A crate of the gitoxide project providing a shared trust model
 
 License:        MIT OR Apache-2.0
@@ -25,6 +25,8 @@ A crate of the gitoxide project providing a shared trust model}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

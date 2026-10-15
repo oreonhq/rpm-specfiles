@@ -1,5 +1,5 @@
-diff -up gtk-engines-2.18.4/themes/Clearlooks/gtk-2.0/gtkrc.tooltips gtk-engines-2.18.4/themes/Clearlooks/gtk-2.0/gtkrc
---- gtk-engines-2.18.4/themes/Clearlooks/gtk-2.0/gtkrc.tooltips	2009-10-23 17:28:48.131886076 -0400
+diff -up gtk-engines-2.18.4/themes/Clearlooks/gtk-2.0/gtkrc gtk-engines-2.18.4/themes/Clearlooks/gtk-2.0/gtkrc
+--- gtk-engines-2.18.4/themes/Clearlooks/gtk-2.0/gtkrc	2009-10-23 17:28:48.131886076 -0400
 +++ gtk-engines-2.18.4/themes/Clearlooks/gtk-2.0/gtkrc	2009-10-23 17:29:58.968890361 -0400
 @@ -1,7 +1,7 @@
  

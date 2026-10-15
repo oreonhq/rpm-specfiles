@@ -8,7 +8,7 @@
 
 Name:           rust-fallible-streaming-iterator
 Version:        0.1.9
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Fallible streaming iteration
 
 License:        MIT OR Apache-2.0
@@ -25,6 +25,8 @@ Fallible streaming iteration}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

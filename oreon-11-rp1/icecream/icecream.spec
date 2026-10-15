@@ -7,7 +7,7 @@
 
 Name:     icecream
 Version:  1.4
-Release:  %autorelease -p -e %{preversion}
+Release:  2%{?dist}
 Summary:  Distributed compiler
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:  GPL-2.0-or-later
@@ -195,15 +195,15 @@ for selinuxvariant in %{selinux_variants}; do
 done
 
 for selinuxvariant in %{selinux_variants}; do
-	semanage port -a -S ${selinuxvariant} -t iceccd_port_t -p tcp 10245
-	semanage port -a -S ${selinuxvariant} -t icecc_scheduler_port_t -p tcp 8766
-	semanage port -a -S ${selinuxvariant} -t icecc_scheduler_port_t -p udp 8765
+	semanage port -a -S ${selinuxvariant} -t iceccd_port_t -p tcp 10245 || :
+	semanage port -a -S ${selinuxvariant} -t icecc_scheduler_port_t -p tcp 8766 || :
+	semanage port -a -S ${selinuxvariant} -t icecc_scheduler_port_t -p udp 8765 || :
 	# tcp 8765 is taken by LIRC. icecream.te knows it.
 	# semanage port -a -S ${selinuxvariant} -t icecc_scheduler_port_t -p tcp 8765
 done 2>/dev/null
 
 for selinuxvariant in %{selinux_variants}; do
-	%relabel ${selinuxvariant}
+	%relabel ${selinuxvariant} || :
 done
 
 restorecon -R %{_localstatedir}/cache/icecream /run/icecc 2>/dev/null
@@ -224,9 +224,9 @@ if [ $1 -eq 0 ]; then # Final removal
 		%saveFileContext ${selinuxvariant}
 	done
 	for selinuxvariant in %{selinux_variants}; do
-		semanage port -d -S ${selinuxvariant} -t iceccd_port_t -p tcp 10245
-		semanage port -d -S ${selinuxvariant} -t icecc_scheduler_port_t -p tcp 8766
-		semanage port -d -S ${selinuxvariant} -t icecc_scheduler_port_t -p udp 8765
+		semanage port -d -S ${selinuxvariant} -t iceccd_port_t -p tcp 10245 || :
+		semanage port -d -S ${selinuxvariant} -t icecc_scheduler_port_t -p tcp 8766 || :
+		semanage port -d -S ${selinuxvariant} -t icecc_scheduler_port_t -p udp 8765 || :
 	done 2>/dev/null
 fi
 %endif
@@ -239,7 +239,7 @@ exit 0
 if [ $1 -eq 0 ]; then # Final removal
 	for selinuxvariant in %{selinux_variants}; do
 		semodule -s ${selinuxvariant} -r icecream 2>/dev/null
-		%relabel ${selinuxvariant}
+		%relabel ${selinuxvariant} || :
 	done
 fi
 %endif

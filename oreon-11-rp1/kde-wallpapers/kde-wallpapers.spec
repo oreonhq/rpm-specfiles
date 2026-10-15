@@ -18,7 +18,6 @@ Source0:        https://download.kde.org/Attic/applications/%{version}/src/%{nam
 
 BuildArch: noarch
 
-BuildRequires: kdelibs4-devel >= 4.14
 BuildRequires: make
 Requires: kde-filesystem
 
@@ -40,18 +39,11 @@ sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*)/
 sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt 2>/dev/null || true
 
 
-%build
-export CMAKE_POLICY_VERSION_MINIMUM=3.5
-mkdir %{_target_platform}
-pushd %{_target_platform}
-%{cmake_kde4} ..
-popd
-
-make %{?_smp_mflags} -C %{_target_platform} 
-
-
 %install
-make install/fast DESTDIR=%{buildroot} -C %{_target_platform}
+mkdir -p %{buildroot}%{_datadir}/wallpapers
+for d in Ariya Auros Autumn Azul Blue_Wood Castilla_Sky Elarun Flores Flying_Field Fog_on_the_West_Lake Grass Hanami Horos Media_Life Prato; do
+	cp -a "$d" %{buildroot}%{_datadir}/wallpapers/
+done
 
 ## unpackaged files
 # omit conflicts with plasma-workspace-wallpapers-5.5.x

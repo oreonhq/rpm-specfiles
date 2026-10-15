@@ -16,8 +16,6 @@ URL:      https://github.com/AntiMicroX/%{name}
 %global archivename %{name}-%{version}
 
 Source0:        %{url}/archive/%{version}/%{archivename}.tar.gz
-Patch0:         isnan.patch
-
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -47,7 +45,6 @@ AntiMicro which was inspired by QJoyPad but has additional features.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -n %{archivename} -q
-%patch 0 -p1
 
 %build
 %cmake3

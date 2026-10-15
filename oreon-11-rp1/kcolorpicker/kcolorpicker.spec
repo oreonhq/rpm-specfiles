@@ -10,6 +10,7 @@ License: LGPL-3.0-or-later
 Summary: QToolButton control with color popup menu
 URL: https://github.com/ksnip/%{appname}
 Source0: %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Patch0:  kcolorpicker-cmake-libname.patch
 
 BuildRequires: cmake
 BuildRequires: gcc-c++

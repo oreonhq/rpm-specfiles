@@ -1400,7 +1400,7 @@ build()
 	env LDFLAGS.so="-Wl,--hash-style=both" \
 		LDFLAGS-rtld="-Wl,--hash-style=both" \
 		LDFLAGS="$LDFLAGS %{?_package_note_flags}" \
-		%make_build -r %{glibc_make_flags}
+		%make_build -s -r %{glibc_make_flags}
 	popd
 }
 
@@ -1461,7 +1461,7 @@ done
 %ifarch x86_64
 # Install for the glibc32 package.
 pushd build-%{target}-32
-%make_build install_root=%{glibc_sysroot} install
+%make_build -s install_root=%{glibc_sysroot} install
 popd
 pushd %{glibc_sysroot}
 rm -rf etc var usr/bin usr/lib/gconv usr/libexec usr/sbin usr/share
@@ -1475,8 +1475,8 @@ cp -a %{glibc_sysroot}%{_includedir} glibc32-headers
 
 # Build and install:
 pushd build-%{target}
-%make_build install_root=%{glibc_sysroot} install
-%make_build install_root=%{glibc_sysroot} \
+%make_build -s install_root=%{glibc_sysroot} install
+%make_build -s install_root=%{glibc_sysroot} \
 	install-locale-files -C ../localedata objdir=`pwd`
 popd
 # Locale creation via install-locale-files does not group identical files
@@ -1944,7 +1944,7 @@ run_tests () {
   # This hides a test suite build failure, which should be fatal.  We
   # check "Summary of test results:" below to verify that all tests
   # were built and run.
-  %make_build check |& tee rpmbuild.check.log >&2
+  %make_build -s check |& tee rpmbuild.check.log >&2
   test -n tests.sum
   if ! grep -Eq '^\s+=== Summary of results ===$' rpmbuild.check.log ; then
     echo "FAIL: test suite build of target: $(basename "$(pwd)")" >& 2

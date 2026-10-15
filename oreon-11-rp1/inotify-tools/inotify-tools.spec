@@ -11,7 +11,6 @@ Summary:        Command line utilities for inotify
 License:        GPL-2.0-only AND GPL-2.0-only WITH Linux-syscall-note AND LGPL-2.1-or-later
 URL:            https://github.com/inotify-tools/inotify-tools
 Source0:        https://github.com/inotify-tools/inotify-tools/archive/%{version}/inotify-tools-%{version}.tar.gz
-Patch0:         too-many-args.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  autoconf

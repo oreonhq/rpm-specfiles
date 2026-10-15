@@ -8,7 +8,7 @@
 
 Name:           rust-gix-glob
 Version:        0.27.1
-Release:        %autorelease
+Release:        3%{?dist}
 Summary:        A crate of the gitoxide project dealing with pattern matching
 
 License:        MIT OR Apache-2.0
@@ -25,6 +25,8 @@ A crate of the gitoxide project dealing with pattern matching}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

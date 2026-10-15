@@ -50,7 +50,7 @@ Source0:        https://github.com/JuliaLang/julia/releases/download/v%{version}
 Source1:        https://api.github.com/repos/JuliaLang/libuv/tarball/%{uvcommit}#/libuv-%{uvcommit}.tar.gz
 Source2:        https://api.github.com/repos/JuliaLang/llvm-project/tarball/%{llvmcommit}#/llvm-%{llvmcommit}.tar.gz
 Source3:        https://api.github.com/repos/vtjnash/libwhich/tarball/%{libwhichcommit}#/libwhich-%{libwhichcommit}.tar.gz
-Source4:        https://gmplib.org/download/gmp/gmp-%{gmpversion}.tar.bz2
+Source4:        https://ftp.gnu.org/gnu/gmp/gmp-%{gmpversion}.tar.bz2
 Source5:        https://api.github.com/repos/JuliaLang/JuliaSyntax.jl/tarball/%{juliasyntaxcommit}#/JuliaSyntax-%{juliasyntaxcommit}.tar.gz
 Source6:        https://raw.githubusercontent.com/JuliaLang/julia-logo-graphics/%{logocommit}/images/julia-logo-color.svg
 Source7:        https://api.github.com/repos/staticfloat/libblastrampoline/tarball/%{blastrampolinecommit}#/blastrampoline-%{blastrampolinecommit}.tar.gz

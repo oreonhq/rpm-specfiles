@@ -8,7 +8,7 @@
 
 Name:           rust-io-close
 Version:        0.3.7
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        An extension trait for safely dropping I/O writers such as File and B...
 
 License:        MIT OR Apache-2.0
@@ -26,6 +26,8 @@ An extension trait for safely dropping I/O writers such as File and BufWriter.}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

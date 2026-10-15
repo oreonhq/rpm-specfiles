@@ -2,7 +2,7 @@
 
 Name:           perl-Text-BibTeX
 Version:        0.91
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Interface to read and parse BibTeX files
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND GPL-2.0-or-later AND LGPL-2.0-or-later AND ANTLR-PD
 URL:            https://metacpan.org/release/Text-BibTeX

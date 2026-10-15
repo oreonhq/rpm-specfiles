@@ -312,6 +312,9 @@ mv %{_vpath_builddir}/sources/shiboken6_generator/generator/shiboken6 %{buildroo
 %py3_shebang_fix %{buildroot}%{python3_sitelib}/%{camel_name}/scripts
 %py3_shebang_fix %{buildroot}%{python3_sitelib}/shiboken6_generator/scripts
 
+# config bakes a doubled share/PySide6 path for typesystems, fix it to the real location
+grep -rl 'share/PySide6/share/PySide6/typesystems' %{buildroot}%{_libdir}/cmake/PySide6/ | xargs -r sed -i 's|share/PySide6/share/PySide6/typesystems|share/PySide6/typesystems|g'
+
 %check
 # Do basic import test (even without the test bcond)
 export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"

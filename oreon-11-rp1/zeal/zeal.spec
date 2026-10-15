@@ -8,7 +8,6 @@ Summary:        Offline documentation browser inspired by Dash
 License:        GPL-3.0-or-later
 URL:            https://zealdocs.org/
 Source:         https://github.com/zealdocs/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-Patch0:         0001-apply-websettings.patch
 
 ExclusiveArch:  %{qt6_qtwebengine_arches}
 

@@ -8,7 +8,7 @@
 
 Name:           rust-opener
 Version:        0.8.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Open a file or link using the system default program.
 
 License:        MIT OR Apache-2.0
@@ -26,6 +26,8 @@ Open a file or link using the system default program.}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

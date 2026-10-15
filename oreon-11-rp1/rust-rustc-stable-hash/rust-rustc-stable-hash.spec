@@ -8,7 +8,7 @@
 
 Name:           rust-rustc-stable-hash
 Version:        0.1.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A stable hashing algorithm used by rustc
 
 License:        Apache-2.0 OR MIT
@@ -25,6 +25,8 @@ A stable hashing algorithm used by rustc}
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
+# crate has no default feature declared upstream so the generator never emits this
+Provides:       crate(%{crate}/default) = %{version}
 
 %description    devel %{_description}
 

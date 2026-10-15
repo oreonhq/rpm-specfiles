@@ -52,6 +52,7 @@ bash %{SOURCE1} %{SOURCE0}
 rm -rf %{name}-%{version}
 mkdir %{name}-%{version}
 tar Jxf /tmp/%{name}-%{version}.tar.xz --strip-components=1 -C %{name}-%{version}
+cd %{name}-%{version}
 
 %build
 %cmake_kf6

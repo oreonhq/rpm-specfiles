@@ -19,7 +19,7 @@
 Summary:    X.Org X11 X server
 Name:       xorg-x11-server
 Version:    21.1.24
-Release:    1%{?dist}
+Release:    2%{?dist}
 URL:        http://www.x.org
 # SPDX
 License:    Adobe-Display-PostScript AND BSD-3-Clause AND DEC-3-Clause AND HPND AND HPND-sell-MIT-disclaimer-xserver AND HPND-sell-variant AND ICU AND ISC AND MIT AND MIT-open-group AND NTP AND SGI-B-2.0 AND SMLNJ AND X11 AND X11-distribute-modifications-variant
@@ -27,7 +27,7 @@ License:    Adobe-Display-PostScript AND BSD-3-Clause AND DEC-3-Clause AND HPND 
 Source0:        https://xorg.freedesktop.org/archive/individual/xserver/xorg-server-21.1.24.tar.xz
 Source10:        xserver.pamd
 # "useful" xvfb-run script
-Source20:   https://svn.exactcode.de/t2/trunk/package/xorg/xorg-server/xvfb-run.sh
+Source20:   xvfb-run.sh
 # for requires generation in drivers
 Source30:        xserver-sdk-abi-requires
 # maintainer convenience script

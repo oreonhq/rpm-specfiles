@@ -122,7 +122,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/com.githu
 %license LICENSE
 %{_bindir}/%{name}
 %{_datadir}/applications/com.github.wwmm.%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/com.github.wwmm.%{name}{,-symbolic}.svg
+%{_datadir}/icons/hicolor/scalable/apps/com.github.wwmm.%{name}{,-symbolic,-off-symbolic}.svg
 %{_datadir}/metainfo/com.github.wwmm.%{name}.metainfo.xml
 
 %changelog

@@ -80,6 +80,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_kf6_qmldir}/org/kde/kwin/decoration/MenuButton.qml
 %{_kf6_qmldir}/org/kde/kwin/decoration/libdecorationplugin.so
 %{_kf6_qmldir}/org/kde/kwin/decoration/qmldir
+%{_kf6_qmldir}/org/kde/kwin/decoration/decorationplugin.qmltypes
+%{_kf6_qmldir}/org/kde/kwin/decoration/kde-qmlmodule.version
 %{_kf6_qmldir}/org/kde/kwin/decorations/plastik/libplastikplugin.so
 %{_kf6_qmldir}/org/kde/kwin/decorations/plastik/qmldir
 %{_libexecdir}/plasma-apply-aurorae

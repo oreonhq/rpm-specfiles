@@ -9,6 +9,8 @@ License:        MIT
 URL:            https://github.com/corrosion-rs/corrosion
 Source:         %{url}/archive/v%{version}/corrosion-%{version}.tar.gz
 
+%global debug_package %{nil}
+
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  cargo

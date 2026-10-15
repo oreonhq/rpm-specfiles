@@ -14,6 +14,8 @@ Source0: https://github.com/steveire/grantlee/archive/v%{version}%{?pre:-%{pre}}
 
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 Source1: macros.grantlee5
+
+Patch0: grantlee-qt5-cpp20-ctor.patch
 %global grantlee5_plugins 5.3
 %global grantlee5_plugindir %{_libdir}/grantlee/%{grantlee5_plugins}/
 Provides: %{name}(%{grantlee5_plugins}) = %{version}-%{release}
