@@ -1,4 +1,5 @@
-%global source0_hash 84ae3b9973e443a2175f07aa0dc2aceeadb1501e0f8953cec83b0ec3347b7d52
+%global source0_hash 67388ac405f9fe92a40636cb03b0e1e0bb6403ad89ccc174b2ff190ef6f32349
+%global source2_key_fpr BB09FFB87563FA2E1A22146817A6D3FF338C9570
 
 Summary:	Gnome Partition Editor
 Name:		gparted
@@ -7,8 +8,12 @@ Release:	%autorelease
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later
 URL:		http://gparted.org
-Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:	https://downloads.sourceforge.net/project/%{name}/%{name}/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source1:	https://downloads.sourceforge.net/project/%{name}/%{name}/%{name}-%{version}/%{name}-%{version}.tar.gz.sig
+Source2:	https://keys.openpgp.org/vks/v1/by-fingerprint/BB09FFB87563FA2E1A22146817A6D3FF338C9570
 
+BuildRequires:	gnupg2
+BuildRequires:	gpgverify
 BuildRequires:	gtkmm30-devel
 BuildRequires:	parted-devel
 BuildRequires:	libuuid-devel
@@ -34,6 +39,8 @@ will be detected at runtime and don't require a rebuild of GParted
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -p1
 
