@@ -1,4 +1,5 @@
 %global source0_hash 05aa6079f4cebef9fbe8cc36c7315123afeb53fb3feed959f98d963060e1085c
+%oreon_bootstrap
 
 # This package has a dependency loop with psi4 which has to be broken to bootstrap new Python in Fedora
 %bcond tests 1

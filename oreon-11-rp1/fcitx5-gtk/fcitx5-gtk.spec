@@ -1,4 +1,4 @@
-%global source0_hash e5301bd55ba281cfcdf4cd30a30affea5b1ed31964954294f99ef56c9b7c4562
+%global source0_hash bda5aae72886d0f046e896c48461ffa257ecaa6045e17827ffe27f1530172c42
 
 Name:           fcitx5-gtk
 Version:        5.1.7

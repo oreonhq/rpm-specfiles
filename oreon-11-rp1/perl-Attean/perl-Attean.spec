@@ -1,4 +1,5 @@
 %global source0_hash 536e07755ce5948acfe3d1982d76a1c10f0fc593ce8b607a3137406a42789d7b
+%oreon_bootstrap
 
 # Perform optional tests
 %bcond_without perl_Attean_enables_optional_test

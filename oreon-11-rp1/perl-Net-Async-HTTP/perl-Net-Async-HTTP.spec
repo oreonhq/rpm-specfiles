@@ -1,4 +1,5 @@
 %global source0_hash 39206d069495d1b86aee37aa8ad3c9334d36e59cce6cf79cd386ac0cf3798cdb
+%oreon_bootstrap
 
 Name:           perl-Net-Async-HTTP
 Version:        0.49

@@ -1,4 +1,5 @@
 %global source0_hash b2b2f8774cddab6e3e49d34988efafe8fe0d500ff6d57b61f86614095bf1423e
+%oreon_bootstrap
 
 %if !%{defined perl_bootstrap}
 # Run optional tests.

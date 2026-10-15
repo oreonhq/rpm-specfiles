@@ -20,7 +20,6 @@ BuildRequires:  gcc
 %global _description %{expand:
 This is package 'zeroconf' generated automatically by pyp2spec.}
 
-Patch:          cython-3.2.patch
 
 %description %_description
 

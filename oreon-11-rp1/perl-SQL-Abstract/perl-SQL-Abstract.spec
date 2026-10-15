@@ -1,4 +1,5 @@
 %global source0_hash 35a642662c349420d44be6e0ef7d8765ea743eb12ad14399aa3a232bb94e6e9a
+%oreon_bootstrap
 
 Name:           perl-SQL-Abstract
 Version:        2.000001

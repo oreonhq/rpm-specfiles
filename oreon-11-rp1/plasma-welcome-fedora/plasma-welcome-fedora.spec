@@ -1,4 +1,4 @@
-%global source0_hash dd1e5c26deb22de4df668d06af99cae54b9b56ba2b667e8cccfe4f2680470b4f
+%global source0_hash d92ea96b63254e7145bd720a62fc56b2932c82c24534073ae5d9f20fc13bf511
 
 Name:      plasma-welcome-fedora
 Version:   6.3.4
@@ -7,7 +7,7 @@ Summary:   Fedora-related customizations for Plasma-welcome
 # License is specified in 01-EnableExtraRepos.qml
 License:   (GPL-2.0-only OR GPL-3.0-only) AND CC-BY-SA-4.0
 URL:       https://pagure.io/fedora-kde/plasma-welcome-fedora
-Source0:   https://pagure.io/fedora-kde/plasma-welcome-fedora/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:   %{name}-v%{version}.tar.gz
 BuildArch: noarch
 
 BuildRequires: make

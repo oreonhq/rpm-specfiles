@@ -1,4 +1,4 @@
-%global source0_hash ee1daf461e4942e9e6629cc74e60c03dd545fa28a71a0f4181fc5d50355cbb93
+%global source0_hash 319c9460ddc4bb412842e793c789f9dd5ee718c6d5a069d9ef2d36c19e4cfd8a
 
 %global project_name QtPBFImagePlugin
 

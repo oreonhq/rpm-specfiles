@@ -1,0 +1,8 @@
+xmvn
+plexus-archiver
+maven-compiler-plugin
+build-helper-maven-plugin
+mockito
+jakarta-inject
+objenesis
+plexus-utils

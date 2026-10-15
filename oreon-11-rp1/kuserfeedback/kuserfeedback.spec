@@ -1,4 +1,4 @@
-%global source0_hash 252308b822dd4690ea85ab1688c9b0da5512978ac6b435f77a5979fc1d2ffd13
+%global source0_hash c8a463c8e570f6d532cbe150732220575c6385df97c91399b6c84450691771ca
 
 %bcond kf6_compat %[0%{?fedora} >= 40 || 0%{?rhel} >= 10]
 
@@ -9,8 +9,8 @@ Release: 1%{?dist}
 
 License: MIT
 URL:     https://invent.kde.org/libraries/%{name}
-Source0: https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
-Source1: https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz.sig
+Source0: https://download.kde.org/stable/frameworks/6.30/%{name}-%{version}.tar.xz
+Source1: https://download.kde.org/stable/frameworks/6.30/%{name}-%{version}.tar.xz.sig
 Source2: gpgkey-E0A3EB202F8E57528E13E72FD7574483BB57B18D.gpg
 
 ## upstream patches

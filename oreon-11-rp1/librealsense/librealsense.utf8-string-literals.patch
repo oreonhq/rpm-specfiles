@@ -1,13 +1,12 @@
-diff --git a/common/textual-icons.h b/common/textual-icons.h
-index 775f6709d..ae2990387 100644
 --- a/common/textual-icons.h
 +++ b/common/textual-icons.h
-@@ -32,86 +32,86 @@ namespace rs2
+@@ -32,87 +32,87 @@
      namespace textual_icons
      {
          // A note to a maintainer - preserve order when adding values to avoid duplicates
 -        static const textual_icon search{ u8"\uf002" };
 -        static const textual_icon file_movie{ u8"\uf008" };
+-        static const textual_icon grid{ u8"\uf00a" };  // fa-th: 3x3 grid of squares (viewport grid overlay)
 -        static const textual_icon check{ u8"\uf00c" };
 -        static const textual_icon times{ u8"\uf00d" };
 -        static const textual_icon power_off{ u8"\uf011" };
@@ -88,6 +87,7 @@ index 775f6709d..ae2990387 100644
 -        static const textual_icon draw_polygon{ u8"\uf5ee" };
 +        static const textual_icon search{ "\uf002" };
 +        static const textual_icon file_movie{ "\uf008" };
++        static const textual_icon grid{ "\uf00a" };  // fa-th: 3x3 grid of squares (viewport grid overlay)
 +        static const textual_icon check{ "\uf00c" };
 +        static const textual_icon times{ "\uf00d" };
 +        static const textual_icon power_off{ "\uf011" };

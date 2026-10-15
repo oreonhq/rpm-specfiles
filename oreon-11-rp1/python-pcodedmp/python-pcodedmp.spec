@@ -1,4 +1,5 @@
 %global source0_hash 41ef07101c5807a5dfe7c36caa28678457630e4a8a092792acf2eb473f1b9e67
+%oreon_bootstrap
 
 Name:           python-pcodedmp
 Summary:        VBA p-code disassembler

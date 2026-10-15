@@ -1,4 +1,5 @@
 %global source0_hash 16d5b730c13a51b6899924de1467508db1f961c2d0bf6caab546fb6999825568
+%oreon_bootstrap
 
 %global	header_dir	%{ruby_vendorarchdir}
 

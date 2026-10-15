@@ -1,4 +1,5 @@
 %global source0_hash 8e891fd3acbac39dd8fdc01376b9abff931e625be41e0910ca30ad59363b4477
+%oreon_bootstrap
 
 # Run optional test
 %{bcond_without perl_Alien_Build_enables_optional_test}

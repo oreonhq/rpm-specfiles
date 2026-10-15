@@ -1,4 +1,4 @@
-%global source0_hash cc815f8d4911e195ed2f80fe750cd167c56b0685b98d100bd98f1bb7a2652776
+%global source0_hash 39ff9a7df25b319b0e0e74fe4161de17720a32bf73dea8096647e13efcd89f9d
 
 Name:		libskk
 Version:	1.0.4
@@ -8,7 +8,7 @@ Summary:	Library to deal with Japanese kana-to-kanji conversion method
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:	GPL-3.0-or-later
 URL:		http://github.com/ueno/libskk
-Source0:	https://bitbucket.org/libskk/libskk/downloads/%{name}-%{version}.tar.xz
+Source0:	https://github.com/ueno/libskk/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch:		libskk-1.0.5-int-conversion.patch
 Patch:		libskk-1.0.5-json-escape.patch
 

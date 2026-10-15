@@ -1,4 +1,5 @@
 %global source0_hash 2a1f5db720a179c7d6c447d1aa871633f0d63158d19ee3b396eadd600952e588
+%oreon_bootstrap
 
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then

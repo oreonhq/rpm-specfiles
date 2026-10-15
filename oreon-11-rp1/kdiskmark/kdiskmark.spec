@@ -1,4 +1,4 @@
-%global source0_hash ddab4bec60e4221580f8bb65ac200619bd2d1c9144a8ac7dccc0c78ea4667dc2
+%global source0_hash f0c5d695d3566b36ef86eda1286edc5b4cb1c3d447ec5a4d36c6878e79cea113
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}

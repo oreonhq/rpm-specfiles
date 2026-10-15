@@ -20,7 +20,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'testscenarios' generated automatically by pyp2spec.}
 
-Patch:          https://github.com/testing-cabal/testscenarios/pull/1.patch
 
 %description %_description
 

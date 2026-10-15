@@ -13,6 +13,12 @@ Release: 6%{?dist}
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/plasma/%{base_name}
 
+%global revision %(echo %{version} | cut -d. -f3)
+%if "%{revision}" >= "50"
+%global stable_kf5 unstable
+%else
+%global stable_kf5 stable
+%endif
 Source0: https://download.kde.org/%{stable_kf5}/plasma/%{version}/%{base_name}-%{version}.tar.xz
 
 Patch1:  libkscreen-5.6.4-rhel-nowayland.patch

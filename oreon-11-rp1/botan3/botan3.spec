@@ -13,7 +13,6 @@ Source0:        https://botan.randombit.net/releases/Botan-%{version}.tar.xz
 Source1:        https://botan.randombit.net/releases/Botan-%{version}.tar.xz.asc
 Source2:        https://botan.randombit.net/pgpkey.txt
 # https://github.com/randombit/botan/pull/5140
-Patch0:         install-fix.patch
 # https://github.com/randombit/botan/pull/5040
 Patch1:         pyproject.patch
 # https://github.com/randombit/botan/pull/5152

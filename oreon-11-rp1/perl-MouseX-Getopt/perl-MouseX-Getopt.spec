@@ -1,4 +1,5 @@
 %global source0_hash de3ea8ef452dd9501ea8c4eda8744b7224602602b04692607edd7d62b79f038f
+%oreon_bootstrap
 
 Name:		perl-MouseX-Getopt
 Summary:	Mouse role for processing command line options

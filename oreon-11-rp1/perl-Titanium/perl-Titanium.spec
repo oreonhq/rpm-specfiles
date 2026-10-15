@@ -1,4 +1,5 @@
 %global source0_hash be4e0d6ec4caaacff6e31b05555f68b77a1d537079da380fb584bdce595c0a2b
+%oreon_bootstrap
 
 Name:           perl-Titanium
 Version:        1.04

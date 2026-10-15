@@ -1,4 +1,4 @@
-%global source0_hash 80dde9d38a57993eb90df89a1d52ca479af2de4864d6360c4fc9f3dc7053fad9
+%global source0_hash ca1816b099836de6d10d62a49e07cc7ee7232b82c5b25fd27f5735797ceddccf
 
 %global _xinputconf %{_sysconfdir}/X11/xinit/xinput.d/fcitx5.conf
 %global __provides_exclude_from ^%{_libdir}/%{name}/.*\\.so$

@@ -1,7 +1,7 @@
 %global source0_hash 5547f80db067dea923ae693ba6bb88eb2b2eeac1da3ebec42fce453e31c290c0
 
 Name:           calamares
-Version:        3.4.3
+Version:        3.3.14
 Release:        1%{?dist}
 Summary:        Installer from a live CD/DVD/USB to disk
 

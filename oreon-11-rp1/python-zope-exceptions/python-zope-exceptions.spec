@@ -1,4 +1,5 @@
 %global source0_hash 00642014c4e584a5b6f518fc5b756b30bbcd0c6fac400d4af150c924355905f2
+%oreon_bootstrap
 
 %global modname zope.exceptions
 %global giturl  https://github.com/zopefoundation/zope.exceptions

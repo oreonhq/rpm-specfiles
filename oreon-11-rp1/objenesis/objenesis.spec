@@ -117,6 +117,7 @@ Release:        %autorelease
 Summary:        A library for instantiating Java objects
 License:        Apache-2.0
 URL:            https://objenesis.org
+Provides:       mvn(org.objenesis:objenesis) = %{version}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 

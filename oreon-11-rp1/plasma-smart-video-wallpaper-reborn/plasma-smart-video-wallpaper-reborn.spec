@@ -1,4 +1,4 @@
-%global source0_hash 67f7aeef28f4a88c3608f1a093850ff7164fca2f6af91022712171eba41792d7
+%global source0_hash c72ae438b7ce8bf04c20ae30c33cc23b5243d340f4b486f09b51893b816f7d73
 
 Name:           plasma-smart-video-wallpaper-reborn
 Version:        2.14.1

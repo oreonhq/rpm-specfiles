@@ -1,4 +1,5 @@
 %global source0_hash 9915db17c3e0deb4ff4c9065dc2eaf1d3833096937a0d46e573f6f2a76158c54
+%oreon_bootstrap
 
 Name:		perl-Mail-Message
 Version:	4.04

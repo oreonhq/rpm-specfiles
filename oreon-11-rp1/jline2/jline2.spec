@@ -6,6 +6,7 @@ Release:        17%{?dist}
 Summary:        Java library for handling console input
 License:        BSD-3-Clause
 URL:            http://jline.github.io/jline2/
+Provides:       mvn(jline:jline) = %{version}
 
 Source0:        https://github.com/jline/jline2/archive/jline-%{version}.tar.gz
 

@@ -1,4 +1,4 @@
-%global source0_hash b5e677f415b3812f2dca96f6d26afb62d97ffcd759b6318c29d76c436dc58c27
+%global source0_hash 7eb7589143ca770f2280a273a3946d733b5b2359ecf78ceb474f56809956e2db
 
 Name:          ruqola
 Version:       2.8.1

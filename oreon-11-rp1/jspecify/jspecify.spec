@@ -7,6 +7,7 @@ Release:        %autorelease
 Summary:        Standard Java annotations for nullness
 License:        Apache-2.0
 URL:            https://jspecify.dev/
+Provides:       mvn(org.jspecify:jspecify) = %{version}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 

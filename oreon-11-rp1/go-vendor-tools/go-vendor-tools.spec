@@ -1,4 +1,5 @@
 %global source0_hash 67cf80e00432f85503041fd91a551bcf8f79c2993337ea5012b9c6b7bed418c6
+%oreon_bootstrap
 
 %bcond check 1
 %bcond manpages 1

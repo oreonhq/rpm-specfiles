@@ -1,4 +1,5 @@
 %global source0_hash 129a341b0a85a7db7879e22acd66902fda67882db771754574338898b2d5d86f
+%oreon_bootstrap
 
 # TODO adjust once this is implemented:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1935266

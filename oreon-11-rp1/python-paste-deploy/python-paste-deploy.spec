@@ -1,4 +1,5 @@
 %global source0_hash 9ddbaf152f8095438a9fe81f82c78a6714b92ae8e066bed418b6a7ff6a095a95
+%oreon_bootstrap
 
 %global desc This tool provides code to load WSGI applications and servers from\
 URIs; these URIs can refer to Python Eggs for INI-style configuration\

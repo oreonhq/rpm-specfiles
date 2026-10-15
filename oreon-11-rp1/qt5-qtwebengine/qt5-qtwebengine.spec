@@ -1,4 +1,4 @@
-%global source0_hash 8a33499c8374bed4b100b471c9ddbc7e636d3b2ef08ccbc7cbf3dfa45244c2bf
+%global source0_hash 06627d8c6f10e06c25b42a7e88a6c61b4afc255914ca1a55bc72909899d36c2b
 
 %global qt_module qtwebengine
 
@@ -58,10 +58,8 @@ Release: 6%{?dist}
 # Automatically converted from old format: (LGPLv2 with exceptions or GPLv3 with exceptions) and BSD and LGPLv2+ and ASL 2.0 and IJG and MIT and GPLv2+ and ISC and OpenSSL and (MPLv1.1 or GPLv2 or LGPLv2) - review is highly recommended.
 License: (LGPL-2.0-or-later WITH FLTK-exception OR LicenseRef-Callaway-GPLv3-with-exceptions) AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-LGPLv2+ AND Apache-2.0 AND IJG AND LicenseRef-Callaway-MIT AND GPL-2.0-or-later AND ISC AND OpenSSL AND (LicenseRef-Callaway-MPLv1.1 OR GPL-2.0-only OR LicenseRef-Callaway-LGPLv2)
 URL:     http://www.qt.io
-# cleaned tarball with patent-encumbered codecs removed from the bundled FFmpeg
-# ./qtwebengine-release.sh
-# ./clean_qtwebengine.sh 5.15.1
-Source0: https://src.fedoraproject.org/repo/pkgs/qt5-qtwebengine/qtwebengine-everywhere-src-5.15.19-clean.tar.xz/sha512/cfc6f7bab4e2731fdc07097228a254eb7f20ee195b7ee6f1571253688fb421942fb85c859e0a50f2ac8077a5c65bf60443bdeef80984eac938291cacf7eb2752/qtwebengine-everywhere-src-%{version}-clean.tar.xz
+# official tarball, ffmpeg gets cleaned in prep
+Source0: https://download.qt.io/archive/qt/5.15/%{version}/submodules/qtwebengine-everywhere-opensource-src-%{version}.tar.xz
 # release script used above
 Source1: qtwebengine-release.sh
 # cleanup scripts used above
@@ -70,9 +68,6 @@ Source3: clean_ffmpeg.sh
 Source4: get_free_ffmpeg_source_files.py
 # macros
 Source10: macros.qt5-qtwebengine
-
-# pulseaudio headers
-Source20: pulseaudio-12.2-headers.tar.gz
 
 # fix extractCFlag to also look in QMAKE_CFLAGS_RELEASE, needed to detect the
 # ARM flags with our %%qmake_qt5 macro, including for the next patch
@@ -368,12 +363,11 @@ Summary: Example files for %{name}
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%setup -q -n %{qt_module}-everywhere-src-%{version}%{?prerelease:-%{prerelease}} -a20
+%setup -q -n %{qt_module}-everywhere-src-%{version}%{?prerelease:-%{prerelease}}
 
-mv pulse src/3rdparty/chromium/
-
-pushd src/3rdparty/chromium
-popd
+cp %{SOURCE4} . && chmod +x get_free_ffmpeg_source_files.py
+bash %{SOURCE3} src/3rdparty/chromium
+rm -rf src/3rdparty/chromium/third_party/openh264/src
 
 %patch -P2 -p1 -b .fix-extractcflag
 %if !0%{?arm_neon}

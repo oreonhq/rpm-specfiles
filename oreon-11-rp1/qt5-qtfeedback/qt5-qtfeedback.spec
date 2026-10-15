@@ -1,4 +1,4 @@
-%global source0_hash e5ae4a7e570ce636d425277eb2094dfae102e6d11156f1d55db55eb2b2a49c16
+%global source0_hash 9d63759185e8faecd92f8d90e5a198010393e3d7fa3cb1e68f06b963d2bf95f9
 
 %global qt_module qtfeedback
 
@@ -12,7 +12,7 @@ Release: 13%{?dist}
 
 License: GPL-2.0-or-later AND LGPL-3.0-only AND GFDL-1.3-only AND GPL-3.0-only WITH Qt-GPL-exception-1.0 AND LGPL-2.1-only WITH Qt-LGPL-exception-1.1
 Url:     https://code.qt.io/cgit/qt/qtfeedback.git/
-Source0: %{qt_module}-%{version}.tar.gz
+Source0: https://github.com/qt/qtfeedback/archive/a14bd0bb1373cde86e09e3619fb9dc70f34c71f2.tar.gz#/%{qt_module}-%{version}.tar.gz
 
 BuildRequires: gcc-c++
 BuildRequires: make
@@ -34,7 +34,7 @@ Requires: qt5-qtbase-devel%{?_isa}
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n %{qt_module}-%{version} -p1
+%autosetup -n %{qt_module}-a14bd0bb1373cde86e09e3619fb9dc70f34c71f2 -p1
 #  Taken from OpenSuse package (otherwise it fails to build)
 touch .git # To make sure syncqt is used
 

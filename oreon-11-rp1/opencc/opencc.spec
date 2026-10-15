@@ -1,4 +1,4 @@
-%global source0_hash ad4bcd8d87219a240a236d4a55c9decd2132a9436697d2882ead85c8939b0a99
+%global source0_hash 8e5f5cf7fe195bd9b9be851adc9738c1ef7dc5c24441dd5878a56db4087a9a70
 
 Name:       opencc
 Version:    1.4.2

@@ -124,6 +124,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_dep :jakarta.interceptor-api api
 rm -rf api/src/main/java/javax/enterprise/{context/,inject/spi/,inject/se/,inject/Model.java,inject/New.java}
 %pom_change_dep jakarta.inject:jakarta.inject-api javax.inject:javax.inject api
+%mvn_alias :jakarta.enterprise.cdi-api javax.enterprise:cdi-api
 
 %build
 %mvn_build -f -j

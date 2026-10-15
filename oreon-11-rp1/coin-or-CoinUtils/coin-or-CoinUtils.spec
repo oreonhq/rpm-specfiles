@@ -1,4 +1,4 @@
-%global source0_hash eef1785d78639b228ae2de26b334129fe6a7d399c4ac6f8fc5bb9054ba00de64
+%global source0_hash ddfea48e10209215748bc9f90a8c04abbb912b662c1aefaf280018d0a181ef79
 
 %global		module		CoinUtils
 

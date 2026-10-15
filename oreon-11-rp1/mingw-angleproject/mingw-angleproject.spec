@@ -1,4 +1,4 @@
-%global source0_hash 85e388726db2ad58ee00ec27951fe5762ae44e0ecbc678c754a01c9361df39aa
+%global source0_hash 05c81167ea9e77ad6899b8464b3ce52526a647bf4cc503eb2ff92da48bcd3214
 
 %{?mingw_package_header}
 
@@ -25,7 +25,7 @@ BuildArch:      noarch
 # shortcommit=$(echo ${commit:0:7})
 # git clone https://chromium.googlesource.com/angle/angle
 # (cd angle && git archive --format=tar --prefix=angle-$shortcommit/ $commit | gzip > ../angle-$shortcommit.tar.gz)
-Source0:        angle-%{shortcommit}.tar.gz
+Source0:        https://github.com/google/angle/archive/%{commit}.tar.gz#/angle-%{shortcommit}.tar.gz
 # Additional source files taken from Qt5
 Source1:        https://github.com/qt/qtbase/raw/v%{qtrefver}/src/3rdparty/angle/src/libGLESv2/libGLESv2_mingw32.def
 Source2:        https://github.com/qt/qtbase/raw/v%{qtrefver}/src/3rdparty/angle/src/libGLESv2/libGLESv2.def

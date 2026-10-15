@@ -1,4 +1,4 @@
-%global source0_hash 3fa6342c0d42f8cf4c1313a833011971ac555d9221dae2dcd362a3fe0ba250bb
+%global source0_hash 20138d2e452b190c48db192e0247448f7df64b7d26fbed7e133237859596b649
 
 Name:           treeland-protocols
 Version:        0.6.0

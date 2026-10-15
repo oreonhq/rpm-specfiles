@@ -89,6 +89,8 @@ Summary:        Provides classes to do asserts on xml
 # The whole package is ASL 2.0 except for xmlunit-legacy which is BSD
 License:        Apache-2.0
 URL:            https://www.xmlunit.org/
+Provides:       mvn(org.xmlunit:xmlunit-core) = %{version}
+Provides:       mvn(org.xmlunit:xmlunit-matchers) = %{version}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 

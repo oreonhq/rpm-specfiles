@@ -36,7 +36,7 @@ Summary:        %{summary}
 # Since we cannot run the full upstream test suite (see comments below), we
 # start with the implicit default import “smoke test.” Then:
 %prep
-%autosetup -p1
+%autosetup -n abseil-py-%{version} -p1
 
 %build
 %pyproject_wheel

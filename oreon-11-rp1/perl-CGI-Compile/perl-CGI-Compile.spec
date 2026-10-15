@@ -1,4 +1,5 @@
 %global source0_hash f6b0bae840260ee0b45a1a5be36e25b07ca91eedda264a83ce4f41483cb88ddd
+%oreon_bootstrap
 
 # Perform optional tests
 %bcond_without perl_CGI_Compile_enables_optional_test

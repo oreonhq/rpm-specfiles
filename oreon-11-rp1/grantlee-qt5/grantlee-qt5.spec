@@ -10,7 +10,7 @@ Release: 8%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://github.com/steveire/grantlee
-Source0: http://downloads.grantlee.org/grantlee-%{version}%{?pre:-%{pre}}.tar.gz
+Source0: https://github.com/steveire/grantlee/archive/v%{version}%{?pre:-%{pre}}.tar.gz#/grantlee-%{version}%{?pre:-%{pre}}.tar.gz
 
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 Source1: macros.grantlee5

@@ -1,4 +1,4 @@
-%global source0_hash b33073b705f0ccb6ac4942cf51151515407b40bb4e9a2dd0228c1c2cb1fbc11a
+%global source0_hash 00ac1f8e46c2d3e38c75cbb7a1af0a615751c158c611cb70053094b65ecfe8d5
 
 %if 0%{?el9}
 # Disable LTO for ppc64le to work around build failures

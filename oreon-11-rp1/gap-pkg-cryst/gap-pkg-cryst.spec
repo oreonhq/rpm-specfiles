@@ -1,4 +1,5 @@
 %global source0_hash d563ee3bda1e8b4bdff2c5b03d8d6be9a127011490dbad298bf4d2a15d0afc0e
+%oreon_bootstrap
 
 # When bootstrapping a new architecture, there is no gap-pkg-crystcat yet.  That
 # package is only needed for testing this one, but it needs this package to

@@ -1,4 +1,4 @@
-%global source0_hash 0763212d51e911614dd1b5f6b2660801998fa3cd66181d4690514b9adee1842b
+%global source0_hash 8e6baf053d47df8b51b55739b72433fb0310c0e46e96589574c0266eed990968
 
 %global repo qt5platform-plugins
 %global __provides_exclude_from ^%{_qt5_plugindir}/.*\\.so$

@@ -9,7 +9,6 @@ License: MIT
 URL: https://github.com/QtExcel/QXlsx
 Source0: %{url}/archive/v%{version}/QtXslx-%{version}.tar.gz
 
-Patch0:  qxlsx-fix-build-against-qt-6-10.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -34,7 +33,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %setup -q
 
-%patch -P0 -p1 -b .fix-build-against-qt-6-10
 
 %build
 

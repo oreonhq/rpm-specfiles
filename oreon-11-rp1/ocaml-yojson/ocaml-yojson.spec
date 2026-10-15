@@ -1,4 +1,5 @@
 %global source0_hash 99414da7609b92a02474ef4b49ecda15edc8cbba5229341b124e7e4695c39610
+%oreon_bootstrap
 
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}

@@ -1,4 +1,5 @@
 %global source0_hash 34b0a422df3fecd7597587048552457d48ae764c43bbefd2a9d62ceb6c8bac71
+%oreon_bootstrap
 
 %global use_x11_tests 1
 

@@ -1,4 +1,5 @@
 %global source0_hash 092c8d80e0350f925dc765f272c0ee28f992300b14f5b8698412204e6c857c42
+%oreon_bootstrap
 
 Name:           perl-Catalyst-Plugin-Session
 Summary:        Catalyst generic session plugin

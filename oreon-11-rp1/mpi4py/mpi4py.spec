@@ -1,4 +1,4 @@
-%global source0_hash 88ff8a8ae285097d2121604edaa332bacd9759cf716653bb69bbe18625b0bce2
+%global source0_hash a2c6eace524341c379b12e4cee375f6f27b1b181ac1c230e8f24664b9bc7fda7
 
 %global with_mpich 1
 

@@ -11,6 +11,12 @@ Release: 1%{?dist}
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://www.kde.org/applications/development/umbrello/
 
+%global revision %(echo %{version} | cut -d. -f3)
+%if "%{revision}" >= "50"
+%global stable_kf5 unstable
+%else
+%global stable_kf5 stable
+%endif
 Source0: http://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches

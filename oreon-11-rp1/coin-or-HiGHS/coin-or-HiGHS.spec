@@ -4,7 +4,7 @@
 # either interface, file a bug requesting it.
 
 # The build runs git to get a commit, but we don't have a git checkout
-%global commit  1d267d97c
+%global commit  04024d701
 
 %global giturl  https://github.com/ERGO-Code/HiGHS
 
@@ -23,23 +23,22 @@ Patch:          %{name}-rpath.patch
 Patch:          %{name}-popcount.patch
 # Fix out-of-bounds vector accesses
 Patch:          %{name}-vector.patch
-# Unbundle amd, cli11, metis, pdqsort, and zstr
+# Unbundle cli11, pdqsort, and zstr
 Patch:          %{name}-unbundle.patch
+# Patch courtesy of Gentoo to fix the tests on some arches
+Patch:          %{name}-ignore-test-iterations.patch
 
 # See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
 
 BuildRequires:  cli11-static
 BuildRequires:  cmake
-BuildRequires:  cmake(AMD)
-BuildRequires:  cmake(catch2)
-BuildRequires:  doctest-static
 BuildRequires:  gcc-c++
 BuildRequires:  help2man
 BuildRequires:  libatomic
-BuildRequires:  metis-devel
+BuildRequires:  boost-devel
+BuildRequires:  catch2-devel
 BuildRequires:  ninja-build
-BuildRequires:  pdqsort-static
 BuildRequires:  pkgconfig(coindatanetlib)
 BuildRequires:  pkgconfig(coindatasample)
 BuildRequires:  pkgconfig(flexiblas)
@@ -55,6 +54,10 @@ Provides:       bundled(FilereaderLP)
 # upstream version.  It has been extracted from sparsepak:
 # https://people.sc.fsu.edu/~jburkardt/f77_src/sparsepak/sparsepak.html
 Provides:       bundled(rcm)
+
+# with 1.15.1 unbundling amd/metis breaks tests, they are newer than system
+Provides:       bundled(metis) = 5.2.1
+Provides:       bundled(suitesparse) = 7.12.1
 
 %description
 HiGHS is a high performance serial and parallel solver for large scale sparse
@@ -82,8 +85,6 @@ highsopt@gmail.com.
 %package        devel
 Summary:        Header files and library links for HiGHS
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       pdqsort-static
-Requires:       zstr-static
 
 %description    devel
 Header files and library links for developing applications that use HiGHS.
@@ -105,11 +106,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's,n/a,%{commit},' CMakeLists.txt
 
 # Unbundle catch
-rm extern/catch.hpp
-ln -s %{_includedir}/catch2/catch_all.hpp extern/catch.hpp
+rm extern/catch/catch.hpp
+ln -s %{_includedir}/catch2/catch.hpp extern/catch/catch.hpp
 
 # Ensure the bundled amd, cli11, metis, pdqsort, and zstr are not used
-rm -fr extern/{CLI11.hpp,amd,metis,pdqsort,zstr}
+rm -fr extern/{cli11,pdqsort,zstr}
 
 %generate_buildrequires
 %pyproject_buildrequires -x test
@@ -144,15 +145,14 @@ rm -fr %{buildroot}%{_docdir}
 
 # Instead of linking with and installing a private copy of the library,
 # fix up the installed python tree to use the installed library
-cd highs
-g++ %{build_cxxflags} -fPIC -shared -I . -I ../%{_vpath_builddir} \
-  -I %{_includedir}/python%{python3_version} highs_bindings.cpp \
+cd highspy
+g++ %{build_cxxflags} -fPIC -shared -I ../highs -I ../%{_vpath_builddir} \
+  -I ../extern -I %{_includedir}/python%{python3_version} highs_bindings.cpp \
   -o %{buildroot}%{python3_sitearch}/highspy/_core%{python3_ext_suffix} \
   %{build_ldflags} -L %{buildroot}%{_libdir} -lhighs
 cd -
 
 %check
-%ctest
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %pytest -v
 

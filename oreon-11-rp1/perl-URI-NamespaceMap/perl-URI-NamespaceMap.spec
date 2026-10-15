@@ -1,4 +1,5 @@
 %global source0_hash b05c3fb3cbcec9db925c039a0814ac4bcc2962e6b367d32fc339d79e9510e6b8
+%oreon_bootstrap
 
 # Recomend modules for RDF prefixes support
 %bcond_without perl_URI_NamespaceMap_enables_rdf

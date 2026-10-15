@@ -13,7 +13,7 @@ URL:     https://invent.kde.org/frameworks/%{framework}
 
 %global majmin 5.116
 %global stable stable
-Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
+Source0:        https://download.kde.org/Attic/frameworks/5.116/portingAids/%{framework}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules >= %{majmin}
 BuildRequires:  kf5-kdoctools-devel >= %{majmin}

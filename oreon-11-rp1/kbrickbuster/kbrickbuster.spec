@@ -1,4 +1,4 @@
-%global source0_hash bcf8844996fc5c49dff82e52e219d773e05d61181f895bfad19c44e79a2c6d34
+%global source0_hash f550cf8750e7f818e6b5b60c04e14024ed760a8ace70f7b9ce4bb85d3d5c6d1e
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
@@ -12,11 +12,7 @@ Release: 2%{?dist}
 License: GPL-2.0-or-later AND LicenseRef-Callaway-GFDL
 URL:     https://apps.kde.org/kbreakout/
 
-# Upstream source. Cannot be used because we need to *PATCH* the sources
-#Source:  https://download.kde.org/%%{stable_kf6}/release-service/%%{version}/src/kbreakout-%%{version}.tar.xz
-Source:  kbrickbuster-%{version}.tar.xz
-# This patch is needed to modify upstream sources. They must be uploaded to the
-# side-cache
+Source:  https://download.kde.org/stable/release-service/%{version}/src/kbreakout-%{version}.tar.xz
 Source1: patch.sh
 
 BuildRequires: desktop-file-utils
@@ -52,7 +48,10 @@ without losing the ball.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
-%autosetup -n %{name}-%{version} -p1
+bash %{SOURCE1} %{SOURCE0}
+rm -rf %{name}-%{version}
+mkdir %{name}-%{version}
+tar Jxf /tmp/%{name}-%{version}.tar.xz --strip-components=1 -C %{name}-%{version}
 
 %build
 %cmake_kf6

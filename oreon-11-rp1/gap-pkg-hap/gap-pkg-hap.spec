@@ -1,4 +1,5 @@
 %global source0_hash none
+%oreon_bootstrap
 
 # TODO: This package wants homology, if the Pascal issues can be resolved:
 # http://ljk.imag.fr/membres/Jean-Guillaume.Dumas/Homology/

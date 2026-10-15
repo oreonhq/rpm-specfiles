@@ -1,4 +1,5 @@
 %global source0_hash 53d06f580062891baa5bcff6428ee4b5b1253458715cb2afaa932324b7a8e38a
+%oreon_bootstrap
 
 Name:           perl-Config-Model-Tester
 Version:        4.008

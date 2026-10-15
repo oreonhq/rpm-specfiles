@@ -1,4 +1,4 @@
-%global source0_hash 15b680abca6c773ecb85253521fa100dd3b8549befeecc7595b10209d62d66b5
+%global source0_hash e0ed144cdd298bc69b53face0e907369fb6a51f1eb333b5d04331f12758b454c
 
 Summary:        Theme engines for GTK+ 2.0
 Name:           gtk2-engines
@@ -7,7 +7,7 @@ Release:        1%{?dist}
 # This release of gtk-engines is now solely LGPL 2.1 or any later version.
 License:        LGPL-2.1-or-later
 #VCS: git:git://git.gnome.org/gtk-engines
-Source:         http://download.gnome.org/sources/gtk-engines/2.20/gtk-engines-%{version}.tar.bz2
+Source:         https://download.gnome.org/sources/gtk-engines/2.91/gtk-engines-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  gtk2-devel

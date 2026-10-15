@@ -1,4 +1,4 @@
-%global source0_hash 0fc04840b18c6323c5bbb80f475958f146bd6fc53cff8952e957b9d0048a8cf0
+%global source0_hash 0af711d8a37c4355b8e914855a637f47d0fd3ca8c66ba239523a65d45d5a15f5
 
 Name:           zeal
 Version:        0.9.1

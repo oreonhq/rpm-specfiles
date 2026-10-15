@@ -1,4 +1,4 @@
-%global source0_hash fba0319194bd99649be6646f3f4c39d6b5467e3d0eceb0b8a53a48ae6b9fdcb2
+%global source0_hash 810c399f3b9fbfd72e24e61417ede24243925f9c0d03040a8aba0d4866676d93
 
 # Qt-Color-Widgets and kdsingleapplication are linked statically within
 # flameshot, the standard upstream build systemd does this via a git clone

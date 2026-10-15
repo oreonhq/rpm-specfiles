@@ -1,4 +1,4 @@
-%global source0_hash 4690a35aa933b192751dd590a6b4f53fef3aa950246371112ad6e872f6b26ecb
+%global source0_hash edeaa2313cb74b650958d24cd98b300b73173ac8a9c87067de62babf02baa37c
 
 Name:           kdiff3
 Version:        1.12.6

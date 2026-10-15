@@ -1,4 +1,4 @@
-%global source0_hash 1dfa33f80b6797ce2f6c01f454fd486d30be4dca1b0c5c2ea9ba3c30a5c39855
+%global source0_hash d33a4fd24c72c2d08893f129d724adf725b93dae96c359e4f4e9f32573cc853b
 
 Name:           inotify-tools
 Version:        4.25.9.0

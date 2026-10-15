@@ -1,4 +1,4 @@
-%global source0_hash d7da661711c9bc565cc4c14713e3ea5916dca245fddfa00fa0441763985b1bae
+%global source0_hash 5ae52e1f1a66bd7d0f1a9bcaccc80447e0b8ea181c40c87119b2427546ed0e26
 
 %undefine __cmake_in_source_build
 %bcond_without tests

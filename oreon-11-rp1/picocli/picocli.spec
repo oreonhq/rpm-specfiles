@@ -94,6 +94,7 @@ Release:        %autorelease
 Summary:        Java command line parser with both an annotations API and a programmatic API
 License:        Apache-2.0
 URL:            https://github.com/remkop/picocli
+Provides:       mvn(info.picocli:picocli) = %{version}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 

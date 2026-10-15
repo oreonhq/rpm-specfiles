@@ -1,4 +1,4 @@
-%global source0_hash 407a073ee8f718200c3a004bc2186deccc33356ee5112a71d8b01b55230f4ee4
+%global source0_hash 5d265f3499b588681825d8093177830707b7035ad866b17189a3a6ab6dade0ff
 
 %{?mingw_package_header}
 

@@ -1,4 +1,5 @@
 %global source0_hash e34f8fb285517e25bfe41a4b8d1d54860d2636bd5fa5b9bff26ab96c1a098895
+%oreon_bootstrap
 
 # When we are bootstrapping, we drop some dependencies, and/or build time tests.
 %bcond_with bootstrap

@@ -88,28 +88,8 @@ use the "bytes" feature of the "%{crate}" crate.
 %files       -n %{name}+bytes-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+const-oid-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+const-oid-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "const-oid" feature of the "%{crate}" crate.
-
-%files       -n %{name}+const-oid-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+der_derive-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+der_derive-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "der_derive" feature of the "%{crate}" crate.
-
-%files       -n %{name}+der_derive-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+derive-devel
@@ -124,40 +104,10 @@ use the "derive" feature of the "%{crate}" crate.
 %files       -n %{name}+derive-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+derive_arbitrary-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+derive_arbitrary-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "derive_arbitrary" feature of the "%{crate}" crate.
-
-%files       -n %{name}+derive_arbitrary-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+flagset-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+flagset-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "flagset" feature of the "%{crate}" crate.
-
-%files       -n %{name}+flagset-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+heapless-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+heapless-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "heapless" feature of the "%{crate}" crate.
-
-%files       -n %{name}+heapless-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+oid-devel
@@ -184,16 +134,6 @@ use the "pem" feature of the "%{crate}" crate.
 %files       -n %{name}+pem-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+pem-rfc7468-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+pem-rfc7468-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "pem-rfc7468" feature of the "%{crate}" crate.
-
-%files       -n %{name}+pem-rfc7468-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+real-devel
@@ -220,28 +160,8 @@ use the "std" feature of the "%{crate}" crate.
 %files       -n %{name}+std-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+time-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+time-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "time" feature of the "%{crate}" crate.
-
-%files       -n %{name}+time-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+zeroize-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+zeroize-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "zeroize" feature of the "%{crate}" crate.
-
-%files       -n %{name}+zeroize-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

@@ -1,4 +1,4 @@
-%global source0_hash 7c6ba79723ad5d0ccdfbe6cadcfbd03f9f75b701d7ba96631eb1fd929a86ee72
+%global source0_hash abe134716f4c53fe60db2004b42adf6af60e64e45808135acfa4311454371ece
 
 # The examples fail to build with OpenCV 4.x and aren't terribly useful, so
 # disable them by default (https://github.com/libuvc/libuvc/issues/233)

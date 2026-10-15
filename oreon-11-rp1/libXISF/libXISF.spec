@@ -1,4 +1,4 @@
-%global source0_hash 5e955b4c6e165f96d32f322ff8e4e55797fcc83b04083abbfe212cc2e9de4e83
+%global source0_hash 1703a8ac4c4f3469e0d4d7b7e7ebff8d6206e73ec97d2669227a1280202e1396
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 # all packages requiring libXISF are now disabled on i686

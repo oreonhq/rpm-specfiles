@@ -1,4 +1,5 @@
 %global source0_hash dde8bdcfa6a136eedda06519ba0f3efaec085c39db0df9c472dc0ec6cd781a49
+%oreon_bootstrap
 
 Name:           perl-SQL-Statement
 Version:        1.414

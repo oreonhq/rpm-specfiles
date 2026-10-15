@@ -6,8 +6,10 @@
     %global arch %{_arch}
 %endif
 
-%ifarch %{?qt6_qtwebengine_arches}
+%if "%{?qt6_qtwebengine_arches}" != ""
+%ifarch %{qt6_qtwebengine_arches}
 %global webengine 1
+%endif
 %endif
 
 %global qt5_ver %(echo %{_qt5_version} | cut -d. -f1,2)
@@ -98,8 +100,10 @@ BuildRequires:	qt5-qtsvg-devel
 BuildRequires:	qt5-qtscxml-devel
 BuildRequires:	qt5-qttools-devel
 BuildRequires:	qt5-qtwayland-devel
-%ifarch %{?qt5_qtwebengine_arches}
+%if "%{?qt5_qtwebengine_arches}" != ""
+%ifarch %{qt5_qtwebengine_arches}
 BuildRequires: qt5-qtwebengine-devel
+%endif
 %endif
 
 Requires:	%{name}-probe = %{version}-%{release}

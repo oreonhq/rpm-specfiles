@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global with_qt4 0
+%global with_qt4 1
 
 %global ubuntu 16.04
 %global snapshot 20160218

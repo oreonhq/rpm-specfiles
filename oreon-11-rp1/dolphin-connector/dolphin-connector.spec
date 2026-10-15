@@ -1,4 +1,4 @@
-%global source0_hash 6bd0c5de22cdb77b941da3019adbb8c22e68e7fd37e81fa738412a7b54de34f0
+%global source0_hash b7d9ad1d73b4a33b86dc8e7af5749d33b5e121588ad8bbf499bb63e7901aa5a2
 
 Name:           dolphin-connector
 Version:        1.2
@@ -8,12 +8,7 @@ Summary:        Simple MySQL C API wrapper for C++
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://github.com/poetinha/dolphin-connector
-# The source for this package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-#  git clone https://github.com/poetinha/dolphin-connector.git
-#  cd dolphin-connector
-#  git archive --format=tar --prefix=dolphin-connector-1.2/ v1.2 | gzip >dolphin-connector-1.2.tar.gz
-Source0:        %{name}-%{version}.tar.gz
+Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  libtool mariadb-connector-c-devel boost-devel

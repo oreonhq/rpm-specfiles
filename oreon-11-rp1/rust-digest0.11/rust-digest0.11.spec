@@ -62,16 +62,6 @@ use the "alloc" feature of the "%{crate}" crate.
 %files       -n %{name}+alloc-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+blobby-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+blobby-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "blobby" feature of the "%{crate}" crate.
-
-%files       -n %{name}+blobby-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+block-api-devel
@@ -86,41 +76,8 @@ use the "block-api" feature of the "%{crate}" crate.
 %files       -n %{name}+block-api-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+block-buffer-devel
-Summary:        %{summary}
-BuildArch:      noarch
 
-%description -n %{name}+block-buffer-devel %{_description}
 
-This package contains library source intended for building other packages which
-use the "block-buffer" feature of the "%{crate}" crate.
-
-%files       -n %{name}+block-buffer-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+const-oid-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+const-oid-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "const-oid" feature of the "%{crate}" crate.
-
-%files       -n %{name}+const-oid-devel
-%ghost %{crate_instdir}/Cargo.toml
-
-%package     -n %{name}+ctutils-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+ctutils-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "ctutils" feature of the "%{crate}" crate.
-
-%files       -n %{name}+ctutils-devel
-%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+dev-devel
 Summary:        %{summary}

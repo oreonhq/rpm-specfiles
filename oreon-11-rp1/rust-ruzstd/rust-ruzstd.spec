@@ -48,40 +48,10 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+alloc-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+alloc-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "alloc" feature of the "%{crate}" crate.
-
-%files       -n %{name}+alloc-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+compiler_builtins-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+compiler_builtins-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "compiler_builtins" feature of the "%{crate}" crate.
-
-%files       -n %{name}+compiler_builtins-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+core-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+core-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "core" feature of the "%{crate}" crate.
-
-%files       -n %{name}+core-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+dict_builder-devel
@@ -96,16 +66,6 @@ use the "dict_builder" feature of the "%{crate}" crate.
 %files       -n %{name}+dict_builder-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+fastrand-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+fastrand-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "fastrand" feature of the "%{crate}" crate.
-
-%files       -n %{name}+fastrand-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+fuzz_exports-devel
@@ -156,16 +116,6 @@ use the "std" feature of the "%{crate}" crate.
 %files       -n %{name}+std-devel
 %ghost %{crate_instdir}/Cargo.toml
 
-%package     -n %{name}+twox-hash-devel
-Summary:        %{summary}
-BuildArch:      noarch
-
-%description -n %{name}+twox-hash-devel %{_description}
-
-This package contains library source intended for building other packages which
-use the "twox-hash" feature of the "%{crate}" crate.
-
-%files       -n %{name}+twox-hash-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

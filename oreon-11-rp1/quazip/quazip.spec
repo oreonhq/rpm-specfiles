@@ -1,4 +1,4 @@
-%global source0_hash 79633fd3a18e2d11a7d5c40c4c79c1786ba0c74b59ad752e8429746fe1781dd6
+%global source0_hash 5240f4a3475648773ba10af8b0ebe549cbfc5d6de00470a517330a80068a4f78
 
 %if 0%{?rhel}
 # EPEL - only Qt5 packages

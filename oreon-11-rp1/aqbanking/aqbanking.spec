@@ -1,11 +1,11 @@
-%global source0_hash fc94a2bebfbb4fc26b98dc93c8fa36a8026298cd7995f79821c480db35587f6b
+%global source0_hash 244b5f7a139f829928f5cdc3f5f7488517b3e8aa63625a92741c3efc1892bb3f026298cd7995f79821c480db35587f6b
 
 Name: aqbanking
 Summary: A library for online banking functions and financial data import/export
 Version: 6.9.2
 Release: 1%{?dist}
 # Download is PHP form at http://www.aquamaniac.de/sites/download/packages.php
-Source0: https://www.aquamaniac.de/rdm/attachments/download/652/aqbanking-%{version}.tar.gz
+Source0: https://www.aquamaniac.de/rdm/attachments/download/654/aqbanking-%{version}.tar.gz
 License: GPL-2.0-only AND GPL-3.0-only
 URL: https://www.aquamaniac.de/rdm/projects/aqbanking
 

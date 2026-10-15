@@ -5,7 +5,7 @@
 
 Name:           fluid
 Summary:        Library for fluid and dynamic applications development with QtQuick
-Version:        1.3.0
+Version:        0.8.0
 Release:        1%{?snaphash:.%{snapdate}git%(echo %{snaphash} | cut -c -13)}%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+

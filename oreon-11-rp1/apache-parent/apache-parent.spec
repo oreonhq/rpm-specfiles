@@ -87,6 +87,7 @@ Release:        %autorelease -b 2
 Summary:        Parent POM file for Apache projects
 License:        Apache-2.0
 URL:            https://apache.org/
+Provides:       mvn(org.apache:apache:pom:) = %{version}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 

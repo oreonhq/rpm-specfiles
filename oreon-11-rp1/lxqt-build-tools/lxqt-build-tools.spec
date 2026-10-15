@@ -1,4 +1,4 @@
-%global source0_hash f979142ceee22993da6f5d43a7eea9b0d8ef1ff9812ea9210f514e9a52407f42
+%global source0_hash 14999ff954e820a23af44389b9f7c65f9e58b2f1c0a559f0badd38f9b459aee6
 
 %global         project lxqt-build-tools
 Name:           lxqt-build-tools

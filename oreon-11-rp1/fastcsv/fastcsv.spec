@@ -7,6 +7,7 @@ Release:        %autorelease
 Summary:        Fast, lightweight and easy to use CSV library for Java
 License:        MIT
 URL:            https://fastcsv.org/
+Provides:       mvn(de.siegmar:fastcsv) = %{version}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 

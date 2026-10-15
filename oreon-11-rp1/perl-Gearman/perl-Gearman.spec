@@ -1,4 +1,5 @@
 %global source0_hash 7fb87634a5fac5c40ec221489e227b9e7b2e5f0897edada07e5a597ecb4053ec
+%oreon_bootstrap
 
 Name:           perl-Gearman
 Version:        2.004.015

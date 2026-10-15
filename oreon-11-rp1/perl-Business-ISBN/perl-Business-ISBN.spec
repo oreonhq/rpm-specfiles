@@ -1,4 +1,5 @@
 %global source0_hash 91135da48dd97fdbb40ea33306a008a2eae35ac5e3fae15fd420beab106b1e7a
+%oreon_bootstrap
 
 # Enable rendering ISBN into PNG barcodes with GD library
 %if 0%{?rhel} >= 9
