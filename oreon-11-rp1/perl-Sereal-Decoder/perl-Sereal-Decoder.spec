@@ -1,4 +1,5 @@
 %global source0_hash bc002d405ed18f7a15711918ab766af1e7278576f0661704329205bb9b9a1b3e
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Perform optinal tests

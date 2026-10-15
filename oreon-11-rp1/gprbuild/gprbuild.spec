@@ -1,4 +1,5 @@
 %global source0_hash df66eb8b2d57b3cefed29b65c0a2b4bd69605da0d94f3b780e44763872fc7e6a
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Bootstrapping GPRbuild

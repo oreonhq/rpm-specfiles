@@ -1,4 +1,5 @@
 %global source0_hash 6076f0c0036d592f6e3f36e60338e7fabf14eb282103169b8e1422e1594550a5
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Enable debugging with Devel::MAT

@@ -1,4 +1,5 @@
 %global source0_hash d2fbc8c84404a4b45bfd04601e2ff52bc519e3e68714df97b81720e15788f7e0
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:           perl-Dancer

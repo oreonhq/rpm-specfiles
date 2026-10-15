@@ -1,4 +1,5 @@
 %global source0_hash 6fc7893b47a7db812a3c1fe8bb90d9c235143c6937251e570e27bdbd0d844ece
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Run extra test

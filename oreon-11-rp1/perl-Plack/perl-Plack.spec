@@ -1,4 +1,5 @@
 %global source0_hash bebde91c42298ed6ec8e6c82b21433a1b49aa39412c247f3905b80f955acf77b
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Build with apache2 tests enabled

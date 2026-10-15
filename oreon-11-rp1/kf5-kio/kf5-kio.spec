@@ -1,4 +1,5 @@
 %global source0_hash efb719d6659c39a03b165dca3b6c84f729a833290fc44e7e1f99625690b6115a
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 %global framework kio

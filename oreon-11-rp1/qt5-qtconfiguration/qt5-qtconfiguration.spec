@@ -13,7 +13,8 @@ Release:        28%{?dist}
 # Automatically converted from old format: LGPLv2 with exceptions or GPLv3 with exceptions - review is highly recommended.
 License:        LGPL-2.0-or-later WITH FLTK-exception OR LicenseRef-Callaway-GPLv3-with-exceptions
 URL:            https://github.com/mauios/qtconfiguration
-Source0:        http://downloads.sourceforge.net/project/mauios/hawaii/%{qt_module}/%{qt_module}-%{version}.tar.gz
+Source0:        https://github.com/mauios/%{qt_module}/archive/refs/tags/v%{version}/%{qt_module}-%{version}.tar.gz
+%global source0_hash 44559bcd0f4f165ed7dbe2f78af0a2e10068e681174f632440264c52608c02d5
 
 # Fix FTBFS with newer gcc/glib2 combination, no longer need 'extern "C"' to include related headers
 Patch1: qtconfiguration-0.3.1-glib2_extern.patch

@@ -1,4 +1,5 @@
 %global source0_hash 601277a977053275f50ee696721e505501dd029fbd7f10b4262eb9c1f2b0373d
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Review: https://bugzilla.redhat.com/show_bug.cgi?id=567257

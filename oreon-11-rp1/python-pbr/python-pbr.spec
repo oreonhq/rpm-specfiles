@@ -1,4 +1,5 @@
 %global source0_hash b46004ec30a5324672683ec848aed9e8fc500b0d261d40a3229c2d2bbfcedc29
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 %global pypi_name pbr

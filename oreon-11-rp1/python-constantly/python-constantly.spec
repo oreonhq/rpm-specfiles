@@ -1,4 +1,5 @@
 %global source0_hash c158c7a71ced2a77471ae851089b4ea15c15fce968d3f0105a15819666cd641a
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 %global srcname constantly

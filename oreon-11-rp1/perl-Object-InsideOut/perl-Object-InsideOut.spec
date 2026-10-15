@@ -1,4 +1,5 @@
 %global source0_hash 9dfd6ca2822724347e0eb6759d00709425814703ad5c66bdb6214579868bcac4
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:           perl-Object-InsideOut

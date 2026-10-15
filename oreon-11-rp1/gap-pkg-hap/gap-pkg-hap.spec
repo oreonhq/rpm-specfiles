@@ -1,4 +1,5 @@
 %global source0_hash none
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # TODO: This package wants homology, if the Pascal issues can be resolved:

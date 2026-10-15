@@ -1,4 +1,5 @@
 %global source0_hash 12fbfd7659d15992c5994d88e66622c1dc0abce903fc9531f9db59449f4d393d
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:           perl-MooX-ConfigFromFile

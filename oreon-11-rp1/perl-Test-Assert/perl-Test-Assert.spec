@@ -1,4 +1,5 @@
 %global source0_hash cfa36da96c504331ff2026747ba47d477efe835cf6cf234ee10cb05fa9fb8ba4
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
  # Run release test

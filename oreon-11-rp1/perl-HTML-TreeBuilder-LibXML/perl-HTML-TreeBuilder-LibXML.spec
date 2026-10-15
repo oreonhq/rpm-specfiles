@@ -1,4 +1,5 @@
 %global source0_hash 057773f848bf08cff672ca3837c1932f868a63bd6d80a483ab70ca61869df3b4
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:           perl-HTML-TreeBuilder-LibXML

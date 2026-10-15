@@ -1,4 +1,5 @@
 %global source0_hash 0225ebe9089be8d5becd36cf7af60433b067e5e6cf5741753ad4dfd61d0965f9
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # When bootstrapping a new architecture, there is no gap-pkg-io package yet,

@@ -1,4 +1,5 @@
 %global source0_hash 572a7c8758ba1c0ab6daf0bd40297c4f0dcf1516f084522df2c2bf04d525e232
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Run author tests

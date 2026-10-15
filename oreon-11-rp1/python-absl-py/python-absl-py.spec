@@ -12,6 +12,10 @@ Source:         %{url}/archive/v%{version}/abseil-py-%{version}.tar.gz
 
 BuildArch:      noarch
 
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-setuptools
+
 %global common_description %{expand:
 This repository is a collection of Python library code for building Python
 applications. The code is collected from Google’s own Python code base, and has

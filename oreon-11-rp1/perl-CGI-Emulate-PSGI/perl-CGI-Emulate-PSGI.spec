@@ -1,4 +1,5 @@
 %global source0_hash dd5b6c353f08fba100dae09904284f7f73f8328d31f6a67b2c136fad728d158b
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:           perl-CGI-Emulate-PSGI

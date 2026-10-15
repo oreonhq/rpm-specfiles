@@ -1,4 +1,5 @@
 %global source0_hash 04e2437c41404782fa31cd74a881b475d75a6e692e4c88a24bf48cf5d263a93d
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Architectures that have libquadmath

@@ -1,4 +1,5 @@
 %global source0_hash b71da7748be3a0ab7c19fe8a3ddf7fec480180342c8e76654d28582281152e07
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Enable PPIx::Regexp optional feature

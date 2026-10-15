@@ -1,4 +1,5 @@
 %global source0_hash d7fa88855515769d8ece8f6715c407a61963336a1c682d9765c99bfc4367a187
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # When bootstrapping a new architecture, there is no gap-pkg-scscp package yet.

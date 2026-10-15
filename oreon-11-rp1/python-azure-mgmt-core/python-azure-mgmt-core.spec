@@ -1,4 +1,5 @@
 %global source0_hash b26232af857b021e61d813d9f4ae530465255cb10b3dde945ad3743f7a58e79c
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # EPEL9 does not have python-aiohttp packaged yet.

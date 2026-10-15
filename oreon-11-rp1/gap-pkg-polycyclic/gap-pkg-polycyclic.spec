@@ -1,4 +1,5 @@
 %global source0_hash 0d82a709155db7a0d3db7dd7ce96a50c7e7f4bd07dd0085eb0009de01f1e2ca1
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # When bootstrapping a new architecture, the alnuth package is not yet

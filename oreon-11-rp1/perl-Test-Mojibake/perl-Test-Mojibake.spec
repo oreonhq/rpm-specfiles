@@ -1,4 +1,5 @@
 %global source0_hash 8ffe75ff9b69352488727dca73db91f8aa14b59f2fa104eb7717c0d71a5f1b33
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # noarch, but to avoid debug* files interfering with manifest test:

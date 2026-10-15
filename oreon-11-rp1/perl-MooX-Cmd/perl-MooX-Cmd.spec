@@ -1,4 +1,5 @@
 %global source0_hash 943ff28daa80897327c7c5fec5a7100cfaac92daf0f9f97c38e3a77d00ae70f5
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:           perl-MooX-Cmd

@@ -1,4 +1,5 @@
 %global source0_hash a8a63e37fa802e8258be99983916cde4512581dc8062de50e73d66af6e2d8535
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:           perl-Any-Moose

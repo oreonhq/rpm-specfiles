@@ -1,4 +1,5 @@
 %global source0_hash 2c078e174dc1a7a308e091b6256fb34b4017897fc140ea707ba207b2913ea46d
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 %global		module		Clp

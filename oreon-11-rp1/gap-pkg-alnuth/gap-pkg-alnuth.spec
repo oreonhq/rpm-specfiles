@@ -1,4 +1,5 @@
 %global source0_hash b474c879dcf28023a80608c1354974337e2e598287e5a81ded5ef5ba3e7d63ca
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # When bootstrapping a new architecture, there is no gap-pkg-radiroot package

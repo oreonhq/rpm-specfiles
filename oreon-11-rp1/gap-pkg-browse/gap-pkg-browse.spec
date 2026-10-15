@@ -1,4 +1,5 @@
 %global source0_hash 4ff36bb787f7da968a920d657a615d601615a3dc0780d31f7bbdb3ff995748ae
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # Automated testing is difficult, since we really want to visually inspect

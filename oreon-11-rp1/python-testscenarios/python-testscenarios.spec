@@ -14,6 +14,7 @@ Source:         %{pypi_source testscenarios}
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
+BuildRequires:  python3-testtools
 
 
 # Fill in the actual package description to submit package to Fedora

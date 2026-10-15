@@ -11,9 +11,14 @@ Summary:        A concrete syntax tree with AST-like properties for Python 3.0 t
 License:        MIT
 URL:            https://github.com/Instagram/LibCST
 Source:         %{pypi_source libcst}
+Source1:        python-libcst-%{version}-vendor.tar.xz
+%global source1_hash be934874216d1ffa39987553130eac30eb1f0e316dd6bf2b5c13e89d5f0a2633
 
 BuildRequires:  python3-devel
 BuildRequires:  gcc
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  rust
 
 
 # Fill in the actual package description to submit package to Fedora
@@ -32,7 +37,11 @@ Summary:        %{summary}
 
 
 %prep
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n libcst-%{version}
+tar xf %{SOURCE1}
+%cargo_prep -v vendor
 
 
 %generate_buildrequires

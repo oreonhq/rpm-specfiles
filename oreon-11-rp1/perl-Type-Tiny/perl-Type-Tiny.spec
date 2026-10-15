@@ -1,4 +1,5 @@
 %global source0_hash cd583e4983039f35052d490f0c4439124ba667d4f09c4e3aec47de5200f9921a
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:           perl-Type-Tiny

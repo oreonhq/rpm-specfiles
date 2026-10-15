@@ -1,4 +1,5 @@
 %global source0_hash 2387431c0e83c4189cccb35b989141a3280d735cb5d42bacf3451af9869bebf7
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 Name:		lua-penlight

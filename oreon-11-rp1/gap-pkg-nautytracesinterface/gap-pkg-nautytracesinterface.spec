@@ -1,4 +1,5 @@
 %global source0_hash c7ed3f147e5fd5e1f9c7fdb41f7df5f5d06438cb738829f3a2c49d4be6c59e8d
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # When bootstrapping a new architecture, there is no gap-pkg-digraphs package

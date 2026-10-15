@@ -1,4 +1,5 @@
 %global source0_hash ee3c983e3f64708dee1feed5090cbf4bf5feaf9894672a8a4702cf7efc1385c7
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
 
 # When bootstrapping a new architecture, there is no gap-pkg-spinsym package
