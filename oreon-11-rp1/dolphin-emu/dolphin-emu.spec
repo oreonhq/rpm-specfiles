@@ -123,7 +123,7 @@ BuildRequires:  picojson-static
 BuildRequires:  pugixml-devel
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  portaudio-devel
-BuildRequires:  SDL2-devel
+BuildRequires:  SDL3-devel
 BuildRequires:  SFML-devel
 BuildRequires:  spirv-headers-devel
 BuildRequires:  glslang-devel

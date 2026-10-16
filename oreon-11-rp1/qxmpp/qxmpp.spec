@@ -24,6 +24,7 @@ BuildRequires:  doxygen
 # optional for QXmpp OMEMO module
 BuildRequires:  libomemo-c-devel
 BuildRequires:  protobuf-c-devel
+BuildRequires:  openssl-devel
 
 %global _description %{expand:
 QXmpp is a cross-platform C++ XMPP client and server library. It is written in
@@ -71,6 +72,7 @@ OPTIONS=(
     -DBUILD_TESTS=ON \
     -DBUILD_DOCUMENTATION=OFF \
     -DBUILD_OMEMO=ON \
+    -DWITH_ENCRYPTION=ON \
     -DWITH_GSTREAMER=ON \
 )
 

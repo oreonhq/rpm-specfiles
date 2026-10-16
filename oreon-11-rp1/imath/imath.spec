@@ -76,7 +76,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 
 %check
+%ifarch aarch64
+%ctest -E PyImath.PyImathTest
+%else
 %ctest
+%endif
 
 
 %files

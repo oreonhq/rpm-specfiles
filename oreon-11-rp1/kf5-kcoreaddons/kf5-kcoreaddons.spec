@@ -32,9 +32,6 @@ BuildRequires:  qt5-qttools-devel
 BuildRequires:  shared-mime-info
 BuildRequires:  systemd-devel
 
-%if ! 0%{?bootstrap}
-BuildRequires:  gamin-devel
-%endif
 %if 0%{?tests}
 BuildRequires: dbus-x11
 BuildRequires: time

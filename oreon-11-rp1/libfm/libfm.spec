@@ -301,7 +301,7 @@ cd libfm
 %if 0%{?use_gitbare} >= 1
 # Workaround
 # Once generate files anyway
-./configure
+./configure %{?bootstrap:--with-extra-only}
 make dist
 rm -f config.status
 %endif

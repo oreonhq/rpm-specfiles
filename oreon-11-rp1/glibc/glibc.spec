@@ -348,7 +348,6 @@ rpm.define("__debug_install_post bash " .. wrapper
 ##############################################################################
 Patch13: glibc-fedora-localedata-rh61908.patch
 Patch17: glibc-cs-path.patch
-Patch23: glibc-python3.patch
 Patch24: glibc-rh2426825.patch
 Patch25: glibc-open_tree_clone.patch
 

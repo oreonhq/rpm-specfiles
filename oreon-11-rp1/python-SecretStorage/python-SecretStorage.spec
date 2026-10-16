@@ -27,6 +27,7 @@ BuildRequires:  python3-gobject-base
 # For building the documentation
 %if %{with docs}
 BuildRequires:  python3-sphinx
+BuildRequires:  /usr/bin/sphinx-build-3
 %endif
 
 %generate_buildrequires

@@ -356,6 +356,14 @@ do
     cp -p $h ../tmp_ffmpeg/$dir_name
 done
 
+# chromium-generated autorename sources referenced by ffmpeg_generated.gni
+for f in $(find libavcodec libavformat libavutil libswresample -name 'autorename_*' 2>/dev/null)
+do
+    dir_name=`dirname $f`/
+    mkdir -p ../tmp_ffmpeg/$dir_name
+    cp -p $f ../tmp_ffmpeg/$dir_name
+done
+
 cd ..
 rm -rf ffmpeg
 mv tmp_ffmpeg ffmpeg

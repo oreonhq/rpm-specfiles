@@ -33,6 +33,7 @@ Requires:	gdk-pixbuf2-modules-extra%{?_isa}
 %else
 %if 0%{?rhel}
 BuildRequires:	gdk-pixbuf2-modules
+BuildRequires:  xdelta
 Requires:	gdk-pixbuf2-modules%{?_isa}
 %endif
 %endif

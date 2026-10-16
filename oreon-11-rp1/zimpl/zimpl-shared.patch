@@ -1,6 +1,7 @@
---- zimpl-3.7.0/CMakeLists.txt.orig	2025-11-23 05:19:53.000000000 -0700
-+++ zimpl-3.7.0/CMakeLists.txt	2025-11-23 13:14:26.606931058 -0700
-@@ -49,8 +49,6 @@ endif()
+diff -ruN zimpl-3.7.1/CMakeLists.txt z.new/CMakeLists.txt
+--- zimpl-3.7.1/CMakeLists.txt	2026-03-31 17:33:37.000000000 -0700
++++ z.new/CMakeLists.txt	2026-10-16 13:40:39.129251989 -0700
+@@ -49,8 +49,6 @@
  
  # use C99 standard
  set(CMAKE_C_STANDARD 99)
@@ -8,10 +9,11 @@
 -set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
  
  option(ZLIB "use ZLIB" ON)
- option(SANITIZE_ADDRESS "should the address sanitizer be enabled in debug mode if available" OFF)
---- zimpl-3.7.0/src/CMakeLists.txt.orig	2025-11-23 05:19:53.000000000 -0700
-+++ zimpl-3.7.0/src/CMakeLists.txt	2025-11-23 13:15:22.276583290 -0700
-@@ -119,12 +119,10 @@ if(MSVC)
+ option(SANITIZE "should sanitizers be enabled if available" OFF)
+diff -ruN zimpl-3.7.1/src/CMakeLists.txt z.new/src/CMakeLists.txt
+--- zimpl-3.7.1/src/CMakeLists.txt	2026-03-31 17:33:37.000000000 -0700
++++ z.new/src/CMakeLists.txt	2026-10-16 13:40:39.129313198 -0700
+@@ -118,12 +118,10 @@
  endif()
  
  #create zimpl with pic
@@ -28,7 +30,7 @@
  target_link_libraries(libzimpl ${libs})
  
  #create zimpl binary
-@@ -141,16 +139,13 @@ endif()
+@@ -138,9 +136,6 @@
  set_target_properties(libzimpl PROPERTIES
      OUTPUT_NAME "zimpl")
  
@@ -38,7 +40,8 @@
  include(GNUInstallDirs)
  
  # install the header files of zimpl
- install(FILES ${headers} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/zimpl)
+@@ -150,7 +145,7 @@
+ endif()
  
  # install the binary and the library to appropriate locations and add them to an export group
 -install(TARGETS libzimpl zimpl libzimpl-pic EXPORT zimpl-targets
@@ -46,7 +49,7 @@
          LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
          ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
          RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-@@ -164,7 +159,7 @@ endif()
+@@ -164,7 +159,7 @@
  install(FILES ${PROJECT_SOURCE_DIR}/LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/zimpl)
  
  # Add library targets to the build-tree export set
@@ -55,9 +58,10 @@
    FILE "${CMAKE_BINARY_DIR}/zimpl-targets.cmake")
  
  #configure the config file for the build tree
---- zimpl-3.7.0/src/zimpl/zimpllib.c.orig	2025-11-23 05:19:53.000000000 -0700
-+++ zimpl-3.7.0/src/zimpl/zimpllib.c	2025-11-23 13:14:26.607519615 -0700
-@@ -455,3 +455,66 @@ bool zpl_read_with_args(char** argv, int
+diff -ruN zimpl-3.7.1/src/zimpl/zimpllib.c z.new/src/zimpl/zimpllib.c
+--- zimpl-3.7.1/src/zimpl/zimpllib.c	2026-03-31 17:33:37.000000000 -0700
++++ z.new/src/zimpl/zimpllib.c	2026-10-16 13:40:42.796712100 -0700
+@@ -455,3 +455,66 @@
  
     return ret;
  }
@@ -120,13 +124,14 @@
 +   abort();
 +}
 +
-+void __attribute__((weak)) xlp_addtoobj(Lps* lp, Term const* term)
++void __attribute__((weak)) xlp_addtoobj(Lps const* lp, Term const* term)
 +{
 +   abort();
 +}
---- zimpl-3.7.0/zimpl-config.cmake.in.orig	2025-11-23 05:19:53.000000000 -0700
-+++ zimpl-3.7.0/zimpl-config.cmake.in	2025-11-23 13:14:26.607724336 -0700
-@@ -3,7 +3,7 @@ if(NOT TARGET libzimpl)
+diff -ruN zimpl-3.7.1/zimpl-config.cmake.in z.new/zimpl-config.cmake.in
+--- zimpl-3.7.1/zimpl-config.cmake.in	2026-03-31 17:33:37.000000000 -0700
++++ z.new/zimpl-config.cmake.in	2026-10-16 13:40:39.129348005 -0700
+@@ -3,7 +3,7 @@
  endif()
  
  set(ZIMPL_LIBRARIES libzimpl)

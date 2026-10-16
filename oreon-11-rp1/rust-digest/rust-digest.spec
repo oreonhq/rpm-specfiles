@@ -14,6 +14,7 @@ Summary:        Traits for cryptographic hash functions and message authenticati
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/digest
 Source:         %{crates_source}
+Patch:          digest-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 

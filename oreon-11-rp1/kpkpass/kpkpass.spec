@@ -1,8 +1,8 @@
 %global stable_kf6 stable
-%global source0_hash f916bdc37c11740cc527ee76a1326d3457ed9bf153d609cdb5ea7bb581885df9
+%global source0_hash fb03b04fa7d9b9097ff3570a45ca03aafd5da5f33ead17e5ceecb7b3ecc5cb87
 
 Name:    kpkpass
-Version: 25.12.3
+Version: 26.04.3
 Release: 1%{?dist}
 Summary: Library to deal with Apple Wallet pass files
 

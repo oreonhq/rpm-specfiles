@@ -46,8 +46,8 @@ Summary:        %{summary}
 
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
+rm -rf %{buildroot}%{python3_sitelib}/doxypypy/test
+sed -i '\|/doxypypy/test/|d' %{pyproject_files}
 %pyproject_save_files '*' +auto
 
 

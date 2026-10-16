@@ -44,7 +44,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 sed -i 's/find_package(kImageAnnotator/find_package(kImageAnnotator-Qt5/g' CMakeLists.txt
 sed -i 's/find_package(kColorPicker/find_package(kColorPicker-Qt5/g' CMakeLists.txt
-sed -i 's/kColorPicker::kColorPicker/kColorPicker::kColorPicker-Qt5/g' src/CMakeLists.txt
 
 %build
 %cmake -G Ninja \

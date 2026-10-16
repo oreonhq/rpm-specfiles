@@ -1,4 +1,4 @@
-%global source0_hash 249b67e904852506c832628ed98274e5df08a1293c9d0afca91bf7e998a23b29
+%global source0_hash 94f5f9b4d69aed88c735ca27e60d63c63b65679824d011a0559da8e95f329b8c
 
 %global __provides_exclude_from ^%{_libdir}/fcitx5/.*\\.so$
 

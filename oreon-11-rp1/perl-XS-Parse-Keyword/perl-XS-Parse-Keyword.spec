@@ -5,7 +5,7 @@
 
 Name:           perl-XS-Parse-Keyword
 Version:        0.51
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        XS functions to assist in parsing keyword syntax
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XS-Parse-Keyword
@@ -60,9 +60,7 @@ Provides:       perl(:XS_Parse_Infix_ABI_2) = 2
 %global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\(testcase\\)
 
 Provides:       perl(XS::Parse::Keyword)
-Provides:       perl(XS::Parse::Keyword::Builder)
 Provides:       perl(XS::Parse::Infix)
-Provides:       perl(XS::Parse::Infix::Builder)
 %description
 This module provides some XS functions to assist in writing syntax modules
 that provide new perl-visible syntax, primarily for authors of keyword plugins

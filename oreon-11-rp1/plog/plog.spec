@@ -15,6 +15,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  make
+Patch:          plog-test-c-lang.patch
 
 %global _description %{expand:
 Plog is a C++ logging library that is designed to be as simple,
@@ -37,7 +38,6 @@ developing applications that use %{name}.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
-Patch:  plog-test-c-lang.patch
 
 %build
 %cmake -DPLOG_BUILD_SAMPLES=OFF -DPLOG_BUILD_TESTS=ON

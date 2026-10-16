@@ -25,7 +25,7 @@ BuildRequires:  qt5-qtbase-static
 BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
-BuildRequires:  cmake(DtkCore) >= %{version}
+BuildRequires:  cmake(DtkCore) >= %(echo %{version} | sed 's/^6/5/')
 BuildRequires:  dtkcommon-devel >= %{version}
 BuildRequires:  cmake(TreelandProtocols)
 

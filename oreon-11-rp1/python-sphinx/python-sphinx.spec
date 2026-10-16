@@ -1,7 +1,7 @@
 %global source0_hash 7741722357dd75f8190766926071fed3bdc211c74dd2d7d4df5404da95930ddb
 Name:           python-sphinx
 Version:        9.1.0
-Release:        %autorelease
+Release:        2%{?dist}
 # Fill in the actual package summary to submit package to Fedora
 Summary:        Python documentation generator
 
