@@ -53,9 +53,9 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 rm -rf $RPM_BUILD_ROOT%{_datadir}/themes/Redmond
 rm -rf $RPM_BUILD_ROOT%{_libdir}/gtk-2.0/2.4.0/engines/libredmond95.so
 
-%find_lang gtk-engines
+%find_lang gtk3-engines
 
-%files -f gtk-engines.lang
+%files -f gtk3-engines.lang
 %doc README AUTHORS NEWS COPYING
 %{_libdir}/gtk-2.0/2.10.0/engines/*.so
 %{_datadir}/themes/*

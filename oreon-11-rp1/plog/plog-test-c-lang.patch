@@ -1,0 +1,11 @@
+--- plog-1.1.11/test/CMakeLists.txt	2025-08-10 15:52:37.000000000 -0700
++++ plog-fix/test/CMakeLists.txt	2026-10-16 10:13:13.542728041 -0700
+@@ -4,7 +4,7 @@
+     cmake_minimum_required(VERSION 3.27)
+ endif()
+ 
+-project(PlogTest CXX)
++project(PlogTest C CXX)
+ 
+ #
+ # Specify test sources

@@ -61,6 +61,7 @@ BuildRequires:  xcb-util-keysyms-devel
 BuildRequires:  cmake(KF6Declarative)
 BuildRequires:  plasma-workspace-devel
 BuildRequires:  libksysguard-devel
+BuildRequires:  pkgconfig(libudev)
 BuildRequires:  cmake(KF6XmlGui)
 
 BuildRequires:  cmake(Plasma)

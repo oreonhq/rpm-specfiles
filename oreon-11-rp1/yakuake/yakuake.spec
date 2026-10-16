@@ -22,6 +22,7 @@ Source0: https://download.kde.org/stable/release-service/%{version}/src/%{name}-
 Requires:       konsole-part%{?_isa} >= %{version}
 
 BuildRequires:  desktop-file-utils
+BuildRequires:  xcb-util-devel
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gettext
 BuildRequires:  kf6-rpm-macros

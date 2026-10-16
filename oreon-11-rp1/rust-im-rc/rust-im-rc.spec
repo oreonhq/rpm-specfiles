@@ -8,7 +8,7 @@
 
 Name:           rust-im-rc
 Version:        15.1.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Immutable collection datatypes (the fast but not thread safe version)
 
 License:        MPL-2.0+
@@ -37,6 +37,18 @@ use the "%{crate}" crate.
 %doc %{crate_instdir}/CHANGELOG.md
 %doc %{crate_instdir}/README.md
 %{crate_instdir}/
+
+%package     -n %{name}+default-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+default-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "default" feature of the "%{crate}" crate.
+
+%files       -n %{name}+default-devel
+%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+arbitrary-devel
 Summary:        %{summary}

@@ -1,4 +1,6 @@
 %global source0_hash 777d64d2938f5ea586300eef97ef03eacb43d4c1853c9c3b1091eb3311467970
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%oreon_bootstrap
 
 # some arches don't have valgrind so we need to disable its support on them
 # Note: ppc64 and ppc64le currently have broken valgrind:

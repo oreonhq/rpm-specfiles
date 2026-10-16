@@ -39,8 +39,6 @@ developing applications that use %{name}.
 CFLAGS="%{optflags} -DSQLITE_HAS_CODEC -DSQLITE_TEMP_STORE=2"
 LDFLAGS="%{?__global_ldflags} -lcrypto"
 %configure \
-    --enable-tempstore=yes \
-    --enable-releasemode \
     --disable-static \
     --disable-tcl
 

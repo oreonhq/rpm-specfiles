@@ -1,4 +1,6 @@
 %global source0_hash e9c669c01d7c951f9bfee899c147fc8c8ddd98d3f32329f94000c7b02f53366b
+%{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%oreon_bootstrap
 
 # Run optional test
 %bcond_with perl_PPIx_Regexp_enables_optional_test

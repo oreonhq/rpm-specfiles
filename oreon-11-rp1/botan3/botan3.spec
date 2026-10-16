@@ -129,7 +129,7 @@ mv %{buildroot}%{_mandir}/man1/botan.1 %{buildroot}%{_mandir}/man1/botan%{major_
 %check
 LD_LIBRARY_PATH=%{buildroot}%{_libdir} ./botan-test
 rm src/scripts/test_python_packaging.py
-LD_LIBRARY_PATH=%{buildroot}%{_libdir} %{py3_test_envvars} %{python3} src/scripts/ci_test.py --help >/dev/null
+LD_LIBRARY_PATH=%{buildroot}%{_libdir} PYTHONPATH=src/python %{python3} src/scripts/test_python.py
 
 %files
 %license license.txt

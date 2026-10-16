@@ -57,6 +57,7 @@ rm %{buildroot}%{_kf6_includedir}/pulseaudioqt_version.h
 %{_kf6_libdir}/libKF6PulseAudioQt.so
 %{_kf6_libdir}/cmake/KF6PulseAudioQt/
 %{_kf6_libdir}/pkgconfig/KF6PulseAudioQt.pc
+%{_qt6_metatypesdir}/qt6kf6pulseaudioqt_metatypes.json
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-1

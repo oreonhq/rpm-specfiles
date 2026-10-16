@@ -205,6 +205,8 @@ Core part of Apache Maven that can be used as a library.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n apache-maven-%{version}
 
+sed -i '/use-apache-snapshots/d; /use-apache-staging/d' .mvn/maven.config
+
 find -name '*.java' -exec sed -i 's/\r//' {} +
 find -name 'pom.xml' -exec sed -i 's/\r//' {} +
 

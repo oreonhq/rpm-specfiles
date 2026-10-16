@@ -40,6 +40,7 @@ Summary:        %{summary}
 
 %install
 %pyproject_install
+ln -s sphinx-build %{buildroot}%{_bindir}/sphinx-build-3
 # For official Fedora packages, including files with '*' +auto is not allowed
 # Replace it with a list of relevant Python modules/globs and list extra files in %%files
 %pyproject_save_files '*' +auto
@@ -50,5 +51,6 @@ Summary:        %{summary}
 
 
 %files -n python3-sphinx -f %{pyproject_files}
+%{_bindir}/sphinx-build-3
 %changelog
 %autochangelog

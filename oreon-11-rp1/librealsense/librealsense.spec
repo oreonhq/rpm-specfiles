@@ -104,6 +104,7 @@ with %{name}.
   -DCMAKE_INSTALL_LIBDIR=%{_libdir} \
   -DCMAKE_INSTALL_INCLUDEDIR=%{_includedir} \
   -DBUILD_PYTHON_BINDINGS:bool=true \
+  -DBUILD_ROSBAG2=NO \
   -DPYTHON_EXECUTABLE=%{python3}
 %cmake_build
 

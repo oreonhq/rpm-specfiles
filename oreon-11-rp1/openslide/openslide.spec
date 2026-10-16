@@ -24,6 +24,7 @@ BuildRequires:	pkgconfig(libdicom)
 
 BuildRequires:	gcc
 BuildRequires:	meson
+BuildRequires:	libjpeg-turbo-utils
 
 # Required for gdk-pixbuf2 to be able to load BMP images, including in tests
 %if (0%{?fedora} && 0%{?fedora} < 43) || 0%{?rhel} == 10

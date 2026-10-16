@@ -19,9 +19,6 @@ BuildRequires:  python3-devel
 %global _description %{expand:
 This is package 'twisted' generated automatically by pyp2spec.}
 
-Patch1:         0001-Fix-asyncio-get_event_loop-for-Python-3-14.patch
-Patch2:         0002-Fix-web-client-urljoin-for-Python-3-14.patch
-Patch3:         0003-Fix-tests-for-Python-3-14-2.patch
 
 %description %_description
 

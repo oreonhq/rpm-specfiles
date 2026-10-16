@@ -1,7 +1,10 @@
-diff -up a/lib/prison/CMakeLists.txt b/lib/prison/CMakeLists.txt
+diff --git a/lib/prison/CMakeLists.txt b/lib/prison/CMakeLists.txt
+index 0384375..72e96ed 100644
 --- a/lib/prison/CMakeLists.txt
 +++ b/lib/prison/CMakeLists.txt
-@@ -71,8 +71,7 @@
+@@ -68,8 +68,7 @@ install( FILES
+          )
+ 
  set(INCLUDE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/include)
 -get_target_property(LIB_OUT_NAME prison${PRISON_SUFFIX} LOCATION)
 -get_filename_component(LIB_OUT_NAME ${LIB_OUT_NAME} NAME)

@@ -166,8 +166,8 @@ rm -r xmlunit-core/src/main/java/org/xmlunit/builder/javax_jaxb\
 ;
 
 
-# Port to hamcrest 2.1
-%java_remove_annotations xmlunit-matchers -p org[.]hamcrest[.]Factory
+# Port to hamcrest 2.1, hamcrest dropped org.hamcrest.Factory
+find xmlunit-matchers -name '*.java' -exec sed -i '/^\s*@org\.hamcrest\.Factory\s*$/d; /^\s*@Factory\s*$/d' {} +
 
 %pom_disable_module xmlunit-assertj
 %pom_disable_module xmlunit-jakarta-jaxb-impl

@@ -23,6 +23,13 @@
 %global with_mpicheck 1
 %global with_mpichcheck 1
 
+%if 0%{?oreon}
+%global with_openmpi 0
+%global with_mpich 0
+%global with_mpicheck 0
+%global with_mpichcheck 0
+%endif
+
 %global with_asl 1
 %global blaslib flexiblas
 

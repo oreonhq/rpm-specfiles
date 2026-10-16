@@ -1,4 +1,4 @@
-%global source0_hash c59987b2c4388bf41226847261c168a6cb34637f881ed66a425440fea0769091
+%global source0_hash 8c93f717e222c63bbfbcff388c08d387604a778e361e5ddb8ae0da4e1ef308ac
 
 %define rpm_macros_dir %{_sysconfdir}/rpm
 %if 0%{?fedora}

@@ -330,7 +330,7 @@ other_files="   BUILD.gn \
                 README.md \
                 RELEASE "
 
-files=$generated_files$manual_files$other_files$generated_files_headers$header_files
+files=$generated_files$mp3_files$manual_files$other_files$generated_files_headers$header_files
 
 for f in $files
 do

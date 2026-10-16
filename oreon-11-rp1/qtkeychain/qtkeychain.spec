@@ -66,7 +66,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if %{with qt5}
 %define _vpath_builddir %{_target_platform}-qt5
 %cmake \
-  -DBUILD_WITH_QT6:BOOL=OFF \
+  -DBUILD_WITH_QT5:BOOL=ON \
   -DECM_MKSPECS_INSTALL_DIR=%{_qt5_archdatadir}/mkspecs/modules \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo
 %cmake_build

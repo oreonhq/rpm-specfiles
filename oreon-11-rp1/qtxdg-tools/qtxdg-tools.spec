@@ -1,4 +1,4 @@
-%global source0_hash eb86b9b622bf61947a234a4cb701c6531255c4d0144ba783f3f16a5afa53bfbb
+%global source0_hash 7dcbbd787606e522f874bf98305421d3c0c7d0550980ea2f4f39e718f3a28b2e
 
 Name:    qtxdg-tools
 Summary: User tools for libqtxdg

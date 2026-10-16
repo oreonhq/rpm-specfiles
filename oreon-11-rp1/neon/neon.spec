@@ -1,7 +1,7 @@
 %global source0_hash a99b7262525a454d1065cf76dd17240fd808dfc4ef15636990ff83a5d0d9e740
 
 %bcond tests 1
-%bcond pkcs11 %[0%{?fedora} < 43 && %{undefined rhel}]
+%bcond pkcs11 %[0%{?fedora} < 43 && %{undefined rhel} && %{undefined oreon}]
 %bcond libproxy %{undefined rhel}
 
 # Disable automatic .la file removal

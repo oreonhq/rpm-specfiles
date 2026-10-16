@@ -72,7 +72,7 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 %doc README.md
 %{_kf6_bindir}/%{name}
 %{_kf6_datadir}/applications/org.kde.%{name}.desktop
-%{_kf6_datadir}/icons/hicolor/*/apps/%{name}.*
+%{_kf6_datadir}/icons/hicolor/*/apps/org.kde.%{name}.*
 %{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
 %{_kf6_datadir}/qlogging-categories6/%{name}.categories
 %{_sysconfdir}/xdg/autostart/org.kde.%{name}.desktop

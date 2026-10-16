@@ -12,6 +12,7 @@ License:        GPL-2.0-or-later
 URL:            https://gitlab.com/inkscape/extensions
 Source:         %{pypi_source inkex}
 Patch:          fix-pyproject-lxml-constraint.patch
+Patch:          fix-pyproject-scour-constraint.patch
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

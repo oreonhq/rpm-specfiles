@@ -8,7 +8,7 @@
 
 Name:           rust-gix-ignore
 Version:        0.22.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A crate of the gitoxide project dealing .gitignore files
 
 License:        MIT OR Apache-2.0
@@ -36,6 +36,18 @@ use the "%{crate}" crate.
 %license %{crate_instdir}/LICENSE-MIT
 
 %{crate_instdir}/
+
+%package     -n %{name}+default-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+default-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "default" feature of the "%{crate}" crate.
+
+%files       -n %{name}+default-devel
+%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+document-features-devel
 Summary:        %{summary}

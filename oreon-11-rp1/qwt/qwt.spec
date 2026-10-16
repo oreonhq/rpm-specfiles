@@ -115,25 +115,24 @@ make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}-qt6
 %endif
 
 mkdir -p %{buildroot}%{_defaultdocdir}/%{name}
-mkdir -p %{buildroot}%{_mandir}
 
 # Move docs to proper dirs
 %if %{with qt5}
 mv %{buildroot}%{_qt5_docdir}/html/html %{buildroot}%{_defaultdocdir}/%{name}/html
 test -d %{buildroot}%{_qt5_docdir}/html/man/man3 && \
-    mv %{buildroot}%{_qt5_docdir}/html/man/man3 %{buildroot}%{_mandir}/ || :
+    mv %{buildroot}%{_qt5_docdir}/html/man/man3 %{buildroot}%{_defaultdocdir}/%{name}/man3 || :
 %endif
 %if %{with qt6}
 # Last build "wins"
 rm -rf %{buildroot}%{_defaultdocdir}/%{name}/html
 mv %{buildroot}%{_qt6_docdir}/html/html %{buildroot}%{_defaultdocdir}/%{name}/html
+rm -rf %{buildroot}%{_defaultdocdir}/%{name}/man3
 test -d %{buildroot}%{_qt6_docdir}/html/man/man3 && \
-    mv %{buildroot}%{_qt6_docdir}/html/man/man3 %{buildroot}%{_mandir}/ || :
+    mv %{buildroot}%{_qt6_docdir}/html/man/man3 %{buildroot}%{_defaultdocdir}/%{name}/man3 || :
 %endif
 
 %files doc
 %doc %{_defaultdocdir}/%{name}/
-%{_mandir}/man3/*
 
 %if %{with qt5}
 %files qt5

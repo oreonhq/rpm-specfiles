@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8466a05f19f60b7568641a449704666308848f7bcaf8335f92ee9474a451e4cd
 
 %global apiversion 0.20
 
@@ -9,7 +9,7 @@ Summary: A general purpose formula parser & interpreter library
 
 License: MPL-2.0
 URL: https://gitlab.com/ixion/ixion
-Source0: https://kohei.us/files/ixion/src/%{name}-%{version}.tar.xz
+Source0: https://gitlab.com/api/v4/projects/ixion%2Fixion/packages/generic/source/%{version}/%{name}-%{version}.tar.xz
 Patch0: bfe5ab6adadda265d575fec9c192e6f53f2ef9f5.patch
 
 BuildRequires: boost-devel

@@ -116,7 +116,7 @@ BuildRequires:  libzstd-devel >= 1.4.0
 BuildRequires:  lzo-devel
 BuildRequires:  lz4-devel >= 1.8
 BuildRequires:  mesa-libGL-devel
-BuildRequires:  minizip-ng-compat-devel >= 3.0.0
+BuildRequires:  minizip-ng-devel >= 4.0.4
 BuildRequires:  miniupnpc-devel
 BuildRequires:  openal-soft-devel
 BuildRequires:  picojson-static

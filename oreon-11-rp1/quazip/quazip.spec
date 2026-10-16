@@ -20,7 +20,7 @@
 
 # see top-ldevel CMakeLists.txt for variables of same name
 %global QUAZIP_LIB_VERSION %{version} 
-%global QUAZIP_LIB_SOVERSION 1.4.0
+%global QUAZIP_LIB_SOVERSION 1.7
 
 Name:		quazip
 Version:	1.7.2

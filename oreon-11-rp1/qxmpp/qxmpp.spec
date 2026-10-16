@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 04d5f9f7ecb96585d64bb563171c5e1f590ca3c70740eb674c94208f86a2b1bf
 
-%global sover 8
+%global sover 10
 
 %bcond_without check
 %bcond_with all_tests
@@ -16,9 +16,6 @@ Summary:        Cross-platform C++ XMPP client and server library
 License:        LGPL-2.1-or-later AND CC0-1.0 AND CC-BY-SA-4.0
 URL:            https://invent.kde.org/libraries/qxmpp
 Source0:        %{url}/-/archive/v%{version}/qxmpp-v%{version}.tar.gz
-# Generate docbook documentation instead of html
-# https://invent.kde.org/libraries/qxmpp/-/merge_requests/743
-Patch0:         docbook.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -63,13 +60,6 @@ Requires:       %{name}-qt6%{?_isa} = %{version}-%{release}
 This package contains libraries and header files for developing applications
 that use %{name}-qt6.
 
-%package        doc
-Summary:        Documentation for %{name}
-BuildArch:      noarch
-
-%description    doc
-This package contains documentation for %{name}.
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
@@ -80,7 +70,6 @@ OPTIONS=(
     -GNinja \
     -DBUILD_TESTS=ON \
     -DBUILD_DOCUMENTATION=OFF \
-    -DBUILD_DOCBOOK_DOCUMENTATION=ON \
     -DBUILD_OMEMO=ON \
     -DWITH_GSTREAMER=ON \
 )
@@ -136,10 +125,6 @@ SKIP_TESTS+='|tst_qxmppjinglemessageinitiationmanager'
 %{_libdir}/cmake/QXmppQt6/
 %{_libdir}/cmake/QXmppOmemoQt6/
 %{_libdir}/pkgconfig/QXmppQt6.pc
-
-%files doc
-%dir  %{_datadir}/help/en
-%lang(en) %{_datadir}/help/en/qxmpp
 
 %changelog
 %autochangelog

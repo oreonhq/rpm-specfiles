@@ -68,11 +68,7 @@ BuildRequires:  a52dec-devel
 BuildRequires:  aalib-devel
 BuildRequires:  alsa-lib-devel
 %{!?_without_faad2:BuildRequires:  faad2-devel}
-%if 0%{?fedora} || 0%{?rhel} >= 9
 BuildRequires:  ffmpeg-free-devel
-%else
-BuildRequires:  ffmpeg-devel
-%endif
 BuildRequires:  flac-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  gcc

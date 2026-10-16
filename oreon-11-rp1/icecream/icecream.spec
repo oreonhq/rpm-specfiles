@@ -189,6 +189,7 @@ done
 %post
 /sbin/ldconfig
 %if %{with selinux}
+if [ -f /etc/selinux/config ]; then
 for selinuxvariant in %{selinux_variants}; do
 	semodule -s ${selinuxvariant} -i \
 		%{_datadir}/selinux/${selinuxvariant}/icecream.pp 2>/dev/null
@@ -207,6 +208,7 @@ for selinuxvariant in %{selinux_variants}; do
 done
 
 restorecon -R %{_localstatedir}/cache/icecream /run/icecc 2>/dev/null
+fi
 %endif
 
 %firewalld_reload

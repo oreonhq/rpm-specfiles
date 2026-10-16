@@ -1,0 +1,6 @@
+diff -up a/pyproject.toml b/pyproject.toml
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -35,1 +35,1 @@
+-scour = "^0.37" # Used by Optimized SVG Extension
++scour = ">=0.37" # Used by Optimized SVG Extension

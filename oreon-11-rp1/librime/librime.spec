@@ -1,4 +1,4 @@
-%global source0_hash 8718e37c5ee059433f5a1b3232f3b8efad47135ff3e5016094beb9f18342ffb2
+%global source0_hash a60274da5d8b8a7187e6c7e9ba5023334ed7bdd182535e93c4e96de8cf188377
 
 Name:           librime
 Version:        1.17.0

@@ -8,7 +8,7 @@
 
 Name:           rust-openssl-sys
 Version:        0.9.117
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        FFI bindings to OpenSSL
 
 License:        MIT
@@ -37,6 +37,18 @@ use the "%{crate}" crate.
 %doc %{crate_instdir}/CHANGELOG.md
 %doc %{crate_instdir}/README.md
 %{crate_instdir}/
+
+%package     -n %{name}+default-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+default-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "default" feature of the "%{crate}" crate.
+
+%files       -n %{name}+default-devel
+%ghost %{crate_instdir}/Cargo.toml
 
 %package     -n %{name}+aws-lc-devel
 Summary:        %{summary}

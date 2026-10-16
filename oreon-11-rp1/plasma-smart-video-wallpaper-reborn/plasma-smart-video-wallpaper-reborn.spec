@@ -36,9 +36,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cmake_install
+%find_lang plasma_wallpaper_luisbocanegra.smart.video.wallpaper.reborn --filename=%{name}.lang
 chmod 755 %{buildroot}%{_datadir}/plasma/wallpapers/luisbocanegra.smart.video.wallpaper.reborn/contents/ui/tools/gdbus_get_signal.sh
 
-%files
+%files -f %{name}.lang
 %license LICENSE
 %doc CHANGELOG.md README.md
 %{_datadir}/plasma/wallpapers/luisbocanegra.smart.video.wallpaper.reborn/
