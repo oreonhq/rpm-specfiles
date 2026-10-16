@@ -11,6 +11,7 @@ Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  make
 BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(libcrypto)
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  readline-devel

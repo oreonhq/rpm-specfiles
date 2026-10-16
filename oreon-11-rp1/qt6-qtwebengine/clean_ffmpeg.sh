@@ -348,6 +348,14 @@ done
 mkdir -p ../tmp_ffmpeg/chromium
 cp -pr chromium/config ../tmp_ffmpeg/chromium/
 
+# headers referenced by the kept sources (whitelist above lags new ffmpeg)
+for h in $(find libavcodec libavformat libavutil libswresample compat -name '*.h' 2>/dev/null)
+do
+    dir_name=`dirname $h`/
+    mkdir -p ../tmp_ffmpeg/$dir_name
+    cp -p $h ../tmp_ffmpeg/$dir_name
+done
+
 cd ..
 rm -rf ffmpeg
 mv tmp_ffmpeg ffmpeg

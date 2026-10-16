@@ -1,7 +1,5 @@
 %global source0_hash c8a463c8e570f6d532cbe150732220575c6385df97c91399b6c84450691771ca
 
-%bcond kf6_compat %[0%{?fedora} >= 40 || 0%{?rhel} >= 10]
-
 Name:    kuserfeedback
 Summary: Framework for collecting user feedback for apps via telemetry and surveys
 Version: 6.30.0
@@ -19,20 +17,18 @@ BuildRequires: cmake
 BuildRequires: gnupg2
 BuildRequires: gcc-c++
 
-BuildRequires: kf5-rpm-macros
+BuildRequires: kf6-rpm-macros
 BuildRequires: libappstream-glib
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules
 
-BuildRequires: cmake(Qt5Qml)
-BuildRequires: cmake(Qt5Svg)
-BuildRequires: cmake(Qt5Core)
-BuildRequires: cmake(Qt5Test)
-BuildRequires: cmake(Qt5Charts)
-BuildRequires: cmake(Qt5Network)
-BuildRequires: cmake(Qt5Widgets)
-BuildRequires: cmake(Qt5PrintSupport)
-BuildRequires: cmake(Qt5LinguistTools)
+BuildRequires: cmake(Qt6Core)
+BuildRequires: cmake(Qt6Network)
+BuildRequires: cmake(Qt6Widgets)
+BuildRequires: cmake(Qt6Charts)
+BuildRequires: cmake(Qt6Svg)
+BuildRequires: cmake(Qt6PrintSupport)
+BuildRequires: cmake(Qt6Qml)
 
 BuildRequires: bison
 BuildRequires: flex
@@ -43,8 +39,8 @@ BuildRequires: flex
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       cmake(Qt5Network)
-Requires:       cmake(Qt5Widgets)
+Requires:       cmake(Qt6Network)
+Requires:       cmake(Qt6Widgets)
 
 %description    devel
 The %{name}-devel package contains libraries and header files for
@@ -53,8 +49,7 @@ developing applications that use %{name}.
 %package        console
 Summary:        Analytics and administration tool for UserFeedback servers
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-BuildRequires:  qt5-qtbase-private-devel
-Requires:       qt5-qtcharts%{?_isa}
+Requires:       qt6-qtcharts%{?_isa}
 
 %description    console
 Analytics and administration tool for UserFeedback servers.
@@ -66,44 +61,45 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-%cmake_kf5 \
+%cmake_kf6 \
    -DENABLE_DOCS:BOOL=OFF \
-   %{?with_kf6_compat:-DENABLE_CLI=OFF}
+   -DENABLE_CONSOLE:BOOL=ON \
+   -DENABLE_PHP:BOOL=OFF \
+   -DENABLE_PHP_UNIT:BOOL=OFF
 
 %cmake_build
 
 %install
 %cmake_install
 
-%find_lang userfeedbackconsole5 --with-qt
-%find_lang userfeedbackprovider5 --with-qt
+%find_lang userfeedbackconsole6 --with-qt
+%find_lang userfeedbackprovider6 --with-qt
 
 %check
-appstream-util validate-relax --nonet %{buildroot}%{_kf5_metainfodir}/org.kde.kuserfeedback-console.appdata.xml
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/org.kde.kuserfeedback-console.appdata.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kuserfeedback-console.desktop
 
-%files -f userfeedbackprovider5.lang
+%files -f userfeedbackprovider6.lang
 %doc README.md
 %license COPYING.LIB
-%if %{without kf6_compat}
 %{_bindir}/userfeedbackctl
-%endif
-%{_libdir}/libKUserFeedbackCore.so.1*
-%{_libdir}/libKUserFeedbackWidgets.so.1*
-%{_kf5_qmldir}/org/kde/userfeedback/
-%{_kf5_datadir}/qlogging-categories5/org_kde_UserFeedback.categories
+%{_libdir}/libKF6UserFeedbackCore.so.6*
+%{_libdir}/libKF6UserFeedbackWidgets.so.6*
+%{_kf6_qmldir}/org/kde/userfeedback/
 
 %files devel
-%{_includedir}/KUserFeedback/
-%{_libdir}/libKUserFeedbackCore.so
-%{_libdir}/libKUserFeedbackWidgets.so
-%{_kf5_libdir}/cmake/KUserFeedback/
-%{_kf5_archdatadir}/mkspecs/modules/qt_KUserFeedback*.pri
+%{_includedir}/KF6/KUserFeedback/
+%{_includedir}/KF6/KUserFeedbackCore/
+%{_includedir}/KF6/KUserFeedbackWidgets/
+%{_libdir}/libKF6UserFeedbackCore.so
+%{_libdir}/libKF6UserFeedbackWidgets.so
+%{_libdir}/cmake/KF6UserFeedback/
+%{_kf6_archdatadir}/mkspecs/modules/qt_KUserFeedback*.pri
 
-%files console -f userfeedbackconsole5.lang
+%files console -f userfeedbackconsole6.lang
 %{_bindir}/UserFeedbackConsole
 %{_datadir}/applications/org.kde.kuserfeedback-console.desktop
-%{_kf5_metainfodir}/org.kde.kuserfeedback-console.appdata.xml
+%{_datadir}/metainfo/org.kde.kuserfeedback-console.appdata.xml
 
 %changelog
 %autochangelog

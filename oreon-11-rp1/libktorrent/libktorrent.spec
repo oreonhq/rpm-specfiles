@@ -62,10 +62,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %cmake_install
+%find_lang %{name}6 --with kde
 
 
-
-%files
+%files -f %{name}6.lang
 %doc ChangeLog
 %license LICENSES/GPL*.txt
 %{_kf6_libdir}/libKTorrent6.so.6

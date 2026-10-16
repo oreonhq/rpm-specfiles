@@ -20,7 +20,6 @@ BuildRequires:  gcc
 This is package 'lz4' generated automatically by pyp2spec.}
 
 Patch:          python-lz4-deps.patch
-Patch:          https://github.com/python-lz4/python-lz4/pull/303.patch
 
 %description %_description
 

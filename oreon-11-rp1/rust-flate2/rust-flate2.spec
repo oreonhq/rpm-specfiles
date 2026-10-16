@@ -14,8 +14,6 @@ Summary:        DEFLATE compression and decompression exposed as Read/BufRead/Wr
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/flate2
 Source:         %{crates_source}
-# Automatically generated patch to strip dependencies and normalize metadata
-Patch:          flate2-fix-metadata-auto.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 

@@ -14,6 +14,9 @@ Summary:        PHF generation logic
 License:        MIT
 URL:            https://crates.io/crates/phf_generator
 Source:         %{crates_source}
+# Manually created patch for downstream crate metadata changes
+# * drop gen_hash_test binary, benchmark and criterion dev-dependency
+Patch:          phf_generator-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 
@@ -36,7 +39,6 @@ use the "%{crate}" crate.
 %doc %{crate_instdir}/CHANGELOG.md
 %doc %{crate_instdir}/README.md
 %{crate_instdir}/
-%{_bindir}/gen_hash_test
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }

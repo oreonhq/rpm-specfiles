@@ -17,6 +17,8 @@ License: GPL-2.0-or-later
 Url:     https://invent.kde.org/graphics/kdiagram
 Source0: http://download.kde.org/stable/kdiagram/%{version}/kdiagram-%{version}.tar.xz
 
+Patch0: kdiagram2-ecm-pri-version.patch
+
 BuildRequires: extra-cmake-modules
 BuildRequires: kf5-rpm-macros
 BuildRequires: cmake(Qt5Gui)

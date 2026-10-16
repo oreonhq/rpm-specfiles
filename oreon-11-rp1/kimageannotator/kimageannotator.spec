@@ -27,6 +27,7 @@ BuildRequires: cmake(Qt6Core)
 BuildRequires: cmake(Qt6Gui)
 BuildRequires: cmake(Qt6LinguistTools)
 BuildRequires: cmake(Qt6Svg)
+Patch1: kimageannotator-0.7.2-libname.patch
 
 
 %description

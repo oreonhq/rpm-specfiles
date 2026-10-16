@@ -13,6 +13,8 @@ URL:     https://invent.kde.org/plasma/%{name}
 
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source2:        %{name}-%{version}-vendor.tar.xz
+%global source2_hash d951bcfb35454427640feb8b91c4862901898137106ff77ad51e16b277eeb46d
 
 ExcludeArch: %{ix86}
 
@@ -103,7 +105,22 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{version} -p1
+
+# vendor the kameleon-qmk-helper subcrate so corrosion can build offline
+tar xf %{SOURCE2}
+mkdir -p .cargo
+cat > .cargo/config.toml <<'EOF'
+[source.crates-io]
+replace-with = "vendored-sources"
+
+[source.vendored-sources]
+directory = "vendor"
+
+[net]
+offline = true
+EOF
 
 %build
 %cmake_kf6

@@ -14,9 +14,6 @@ Requires: kde-filesystem
 
 Conflicts: kde-i18n < 1:3.5.10-13
 
-%description
-Internationalization support for KDE.
-
 Source1: https://download.kde.org/Attic/applications/%{version}/src/kde-l10n/kde-l10n-ar-%{version}.tar.xz
 Source2: https://download.kde.org/Attic/applications/%{version}/src/kde-l10n/kde-l10n-ast-%{version}.tar.xz
 Source3: https://download.kde.org/Attic/applications/%{version}/src/kde-l10n/kde-l10n-bg-%{version}.tar.xz
@@ -72,6 +69,9 @@ Source52: https://download.kde.org/Attic/applications/%{version}/src/kde-l10n/kd
 Source53: https://download.kde.org/Attic/applications/%{version}/src/kde-l10n/kde-l10n-wa-%{version}.tar.xz
 Source54: https://download.kde.org/Attic/applications/%{version}/src/kde-l10n/kde-l10n-zh_CN-%{version}.tar.xz
 Source55: https://download.kde.org/Attic/applications/%{version}/src/kde-l10n/kde-l10n-zh_TW-%{version}.tar.xz
+%description
+Internationalization support for KDE.
+
 
 
 %global l10n_hashes kde-l10n-ar-17.04.1.tar.xz:7bbcd32164fc1c9e553c9c11f31092aeea8e9b27d52ede386f861c84b6d67ba8 \\

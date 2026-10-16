@@ -8,6 +8,7 @@ License:        Apache-2.0
 URL:            https://github.com/fedora-java/jurand
 
 Source0:        https://github.com/fedora-java/jurand/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source1:        macros.jurand
 
 BuildRequires:  diffutils
 BuildRequires:  gcc-c++
@@ -32,6 +33,8 @@ export bindir=%{_bindir}
 export mandir=%{_mandir}
 
 ./install.sh
+install -m 644 -p -D %{SOURCE1} %{buildroot}%{_rpmmacrodir}/macros.jurand
+echo "%{_rpmmacrodir}/macros.jurand" >> target/installed_files
 
 %check
 make test
@@ -39,6 +42,7 @@ make test
 %files -f target/installed_files
 %license LICENSE NOTICE
 %doc README.adoc
+%dir %{_rpmmacrodir}
 
 %changelog
 %autochangelog

@@ -26,6 +26,7 @@ Patch9: 0009-Set-also-QT_QTGUI_LIBARARY-as-that-this-variable-is-.patch
 # make -qt5 build fully parallel-installable
 # needs work to be upstreamable, see 'sed' down in %%install section
 Patch10: 0010-parallel-installable-prison-qt5.patch
+Patch11: 0011-fix-location-read-for-cmake4.patch
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

@@ -65,3 +65,17 @@ index ad63592..cfcc5e2 100644
 -- 
 2.46.0
 
+--- a/xmlunit-matchers/src/test/java/org/xmlunit/matchers/ValidationMatcherTest.java	2026-10-15 20:11:56.097352278 -0700
++++ b/xmlunit-matchers/src/test/java/org/xmlunit/matchers/ValidationMatcherTest.java	2026-10-15 20:11:56.107011763 -0700
+@@ -86,9 +86,8 @@
+             assumeTrue("Skipping on Java6 as it doesn't like xmlunit.org's certificate",
+                        false);
+         }
+-        assertThat(new StreamSource(new File(TEST_RESOURCE_DIR + "BookXsdGenerated.xml")),
+-                   is(new ValidationMatcher()));
+-
++        // requires fetching the schema from xmlunit.org
++        assumeTrue("Skipping, requires network access", false);
+     }
+ 
+     @Test(expected = AssertionError.class)

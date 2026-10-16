@@ -10,7 +10,6 @@ URL:     https://invent.kde.org/libraries/pulseaudio-qt
 Source:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
-BuildRequires:  qt6-doctools
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  kf5-rpm-macros
 BuildRequires:  pkgconfig(libpulse)
@@ -33,11 +32,6 @@ Summary: Development files for %{name} (Qt6)
 Requires: %{name}-qt6%{?_isa} = %{version}-%{release}
 %description qt6-devel
 %{summary}.
-
-%package qt6-doc
-Summary: Developer Documentation files for %{name}
-%description qt6-doc
-Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 
 %prep
@@ -63,9 +57,6 @@ rm %{buildroot}%{_kf6_includedir}/pulseaudioqt_version.h
 %{_kf6_libdir}/libKF6PulseAudioQt.so
 %{_kf6_libdir}/cmake/KF6PulseAudioQt/
 %{_kf6_libdir}/pkgconfig/KF6PulseAudioQt.pc
-
-%files qt6-doc
-%{_qt6_docdir}/*.qch
 
 %changelog
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-1

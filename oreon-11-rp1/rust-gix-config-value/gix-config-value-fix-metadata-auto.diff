@@ -12,13 +12,3 @@
  
  [lib]
  name = "gix_config_value"
-@@ -70,9 +67,6 @@
- [dependencies.thiserror]
- version = "2.0.18"
- 
--[target."cfg(not(windows))".dependencies.libc]
--version = "0.2"
--
- [lints.clippy]
- bool_to_int_with_if = "allow"
- borrow_as_ptr = "allow"

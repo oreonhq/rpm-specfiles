@@ -310,9 +310,11 @@ popd
 
 %files devel
 %{_bindir}/pixeltool*
+%{_bindir}/qtpaths*
 %{_bindir}/qtdiag*
 %{_bindir}/qtplugininfo*
 %{_qt6_bindir}/pixeltool*
+%{_qt6_bindir}/qtpaths*
 %{_qt6_bindir}/qtdiag*
 %{_qt6_bindir}/qtplugininfo*
 %{_qt6_headerdir}/QtQDocCatch/

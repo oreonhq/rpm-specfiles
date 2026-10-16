@@ -39,7 +39,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup
 
 %build
-%cmake -DPLOG_BUILD_TESTS=ON
+%cmake -DPLOG_BUILD_SAMPLES=OFF -DPLOG_BUILD_TESTS=ON
 %cmake_build
 
 %install

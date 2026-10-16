@@ -15,6 +15,7 @@ URL:            https://crates.io/crates/libsqlite3-sys
 Source:         %{crates_source}
 
 BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  sqlite-devel
 
 %global _description %{expand:
 Native bindings to the libsqlite3 library.}

@@ -41,7 +41,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %files
 %license LICENSES/LGPL* LICENSES/LicenseRef-KDE*
 %doc README.md
-%{_libdir}/libMpvQt.so.3*
+%{_libdir}/libMpvQt.so.*
 
 %files devel
 %{_includedir}/MpvQt/

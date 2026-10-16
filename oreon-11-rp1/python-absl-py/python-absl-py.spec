@@ -47,6 +47,7 @@ Summary:        %{summary}
 
 %install
 %pyproject_install
+%pyproject_save_files -l absl
 
 %check
 # Upstream provides some “smoke tests” that we can run, too. We cannot use the

@@ -33,6 +33,7 @@ BuildRequires:  cmake(glfw3)
 BuildRequires:  cmake(nlohmann_json)
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
+BuildRequires:  git-core
 BuildRequires:  gdb-headless
 BuildRequires:  glfw-devel
 BuildRequires:  libGL-devel

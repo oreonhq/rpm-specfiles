@@ -1,4 +1,4 @@
-%global source0_hash a95771124823fd8ea38310a50314359041ba58e5812a105e3fa9a2e33d5cc18f
+%global source0_hash 95f24de663321a86d2cdef28e085f23d7604086e7bd4218782353b2e65d943bc
 
 %global giturl  https://github.com/scipopt/zimpl
 

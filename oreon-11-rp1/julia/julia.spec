@@ -57,6 +57,7 @@ Source7:        https://api.github.com/repos/staticfloat/libblastrampoline/tarba
 Source8:        https://github.com/libunwind/libunwind/releases/download/v%{libunwindversion}/libunwind-%{libunwindversion}.tar.gz
 Source9:        https://api.github.com/repos/intel/ittapi/tarball/%{ittapicommit}#/ittapi-%{ittapicommit}.tar.gz
 Source10:       https://api.github.com/repos/JuliaLang/JuliaSyntaxHighlighting.jl/tarball/%{juliasyntaxhighlightingcommit}#/JuliaSyntaxHighlighting-%{juliasyntaxhighlightingcommit}.tar.gz
+Source26:       https://api.github.com/repos/facebook/zstd/tarball/f8745da6ff1ad1e7bab384bd1f9d742439278e99#/zstd-f8745da6ff1ad1e7bab384bd1f9d742439278e99.tar.gz
 # stdlibs fetched at build time by stdlib/Makefile, stage them from Sources
 Source11:       https://api.github.com/repos/JuliaIO/ArgTools.jl/tarball/89d19599208c02bfa9609d4578ab72eabe6e8eee#/ArgTools-89d19599208c02bfa9609d4578ab72eabe6e8eee.tar.gz
 Source12:       https://api.github.com/repos/JuliaData/DelimitedFiles.jl/tarball/aac8c59e58cbf961fa15baf4d866901d9d1e6980#/DelimitedFiles-aac8c59e58cbf961fa15baf4d866901d9d1e6980.tar.gz
@@ -210,6 +211,7 @@ pushd deps/srccache
     cp -p %SOURCE8 .
     cp -p %SOURCE9 .
     cp -p %SOURCE10 .
+    cp -p %SOURCE26 .
 popd
 
 pushd stdlib/srccache

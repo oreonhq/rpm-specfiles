@@ -16,6 +16,7 @@ URL:            https://crates.io/crates/openssl-sys
 Source:         %{crates_source}
 
 BuildRequires:  cargo-rpm-macros >= 24
+BuildRequires:  openssl-devel
 
 %global _description %{expand:
 FFI bindings to OpenSSL}

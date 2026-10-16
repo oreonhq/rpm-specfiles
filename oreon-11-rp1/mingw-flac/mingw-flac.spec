@@ -123,8 +123,8 @@ rm %{buildroot}%{mingw64_libdir}/*.la
 %files -n mingw32-flac
 %doc AUTHORS README.md CHANGELOG.md
 %license COPYING*
-%{mingw32_bindir}/libFLAC-12.dll
-%{mingw32_bindir}/libFLAC++-10.dll
+%{mingw32_bindir}/libFLAC-14.dll
+%{mingw32_bindir}/libFLAC++-11.dll
 %{mingw32_includedir}/*
 %{mingw32_libdir}/libFLAC.dll.a
 %{mingw32_libdir}/libFLAC++.dll.a
@@ -139,8 +139,8 @@ rm %{buildroot}%{mingw64_libdir}/*.la
 %files -n mingw64-flac
 %doc AUTHORS README.md
 %license COPYING*
-%{mingw64_bindir}/libFLAC-12.dll
-%{mingw64_bindir}/libFLAC++-10.dll
+%{mingw64_bindir}/libFLAC-14.dll
+%{mingw64_bindir}/libFLAC++-11.dll
 %{mingw64_includedir}/*
 %{mingw64_libdir}/libFLAC.dll.a
 %{mingw64_libdir}/libFLAC++.dll.a

@@ -15,6 +15,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  extra-cmake-modules
 BuildRequires:  cmake(Plasma)
 BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6I18n)
 
 Requires:       plasma-desktop
 Requires:       qt6-qtmultimedia

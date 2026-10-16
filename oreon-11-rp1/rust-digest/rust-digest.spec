@@ -8,7 +8,7 @@
 
 Name:           rust-digest
 Version:        0.11.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Traits for cryptographic hash functions and message authentication codes
 
 License:        MIT OR Apache-2.0
@@ -120,6 +120,42 @@ This package contains library source intended for building other packages which
 use the "rand_core" feature of the "%{crate}" crate.
 
 %files       -n %{name}+rand_core-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+block-api-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+block-api-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "block-api" feature of the "%{crate}" crate.
+
+%files       -n %{name}+block-api-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+getrandom-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+getrandom-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "getrandom" feature of the "%{crate}" crate.
+
+%files       -n %{name}+getrandom-devel
+%ghost %{crate_instdir}/Cargo.toml
+
+%package     -n %{name}+zeroize-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+zeroize-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "zeroize" feature of the "%{crate}" crate.
+
+%files       -n %{name}+zeroize-devel
 %ghost %{crate_instdir}/Cargo.toml
 
 %prep

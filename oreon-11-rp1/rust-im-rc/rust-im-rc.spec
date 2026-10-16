@@ -14,6 +14,7 @@ Summary:        Immutable collection datatypes (the fast but not thread safe ver
 License:        MPL-2.0+
 URL:            https://crates.io/crates/im-rc
 Source:         %{crates_source}
+Patch:          im-rc-fix-metadata.diff
 
 BuildRequires:  cargo-rpm-macros >= 24
 

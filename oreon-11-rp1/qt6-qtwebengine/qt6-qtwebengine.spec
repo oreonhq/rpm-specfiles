@@ -360,7 +360,7 @@ Provides: bundled(brotli)
 # out. See clean_qtwebengine.sh, clean_ffmpeg.sh, and
 # get_free_ffmpeg_source_files.py.
 # see src/3rdparty/chromium/third_party/ffmpeg/Changelog for the version number
-Provides: bundled(ffmpeg) = 5.1.2
+Provides: bundled(ffmpeg) = 7.1
 Provides: bundled(hunspell) = 1.6.0
 Provides: bundled(iccjpeg)
 # bundled as "khronos", headers only

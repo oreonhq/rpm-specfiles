@@ -50,6 +50,7 @@ BuildRequires:  pkgconfig(xcb-keysyms)
 BuildRequires:  pkgconfig(xkeyboard-config)
 BuildRequires:  /usr/bin/appstream-util
 BuildRequires:  cmake(nlohmann_json)
+BuildRequires:  cmake(PlasmaWaylandProtocols)
 Requires:       dbus-common
 Requires:       %{name}-data = %{version}-%{release}
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}

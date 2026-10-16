@@ -49,6 +49,18 @@ use the "default" feature of the "%{crate}" crate.
 %files       -n %{name}+default-devel
 %ghost %{crate_instdir}/Cargo.toml
 
+%package     -n %{name}+console-devel
+Summary:        %{summary}
+BuildArch:      noarch
+
+%description -n %{name}+console-devel %{_description}
+
+This package contains library source intended for building other packages which
+use the "console" feature of the "%{crate}" crate.
+
+%files       -n %{name}+console-devel
+%ghost %{crate_instdir}/Cargo.toml
+
 %package     -n %{name}+_cargo_insta_internal-devel
 Summary:        %{summary}
 BuildArch:      noarch

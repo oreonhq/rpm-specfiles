@@ -11,6 +11,7 @@ Source:         https://download.gnome.org/sources/gtk-engines/2.91/gtk-engines-
 
 BuildRequires:  gcc
 BuildRequires:  gtk2-devel
+BuildRequires:  gtk3-devel
 BuildRequires:  intltool
 BuildRequires:  gettext
 BuildRequires:  pkgconfig

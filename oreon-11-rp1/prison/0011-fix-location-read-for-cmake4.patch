@@ -1,0 +1,11 @@
+diff -up a/lib/prison/CMakeLists.txt b/lib/prison/CMakeLists.txt
+--- a/lib/prison/CMakeLists.txt
++++ b/lib/prison/CMakeLists.txt
+@@ -71,8 +71,7 @@
+ set(INCLUDE_DIRECTORY ${CMAKE_INSTALL_PREFIX}/include)
+-get_target_property(LIB_OUT_NAME prison${PRISON_SUFFIX} LOCATION)
+-get_filename_component(LIB_OUT_NAME ${LIB_OUT_NAME} NAME)
++set(LIB_OUT_NAME ${CMAKE_SHARED_LIBRARY_PREFIX}prison${PRISON_SUFFIX}${CMAKE_SHARED_LIBRARY_SUFFIX}.${PRISON_VERSION_STRING})
+ 
+ if(QT5_BUILD)
+   set(LIBPATH ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2f9803154806ebae8a40b33ef2c691806a472857adc90303eaa32482bd8c19ed
 
 Name:           python-inkex
 Version:        1.4.1
@@ -11,6 +11,7 @@ Summary:        Python extensions for Inkscape core, separated out from main rep
 License:        GPL-2.0-or-later
 URL:            https://gitlab.com/inkscape/extensions
 Source:         %{pypi_source inkex}
+Patch:          fix-pyproject-lxml-constraint.patch
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

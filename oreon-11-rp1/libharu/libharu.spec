@@ -46,6 +46,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %license LICENSE
 %doc README.md
 %{_libdir}/libhpdf.so.%{sover}*
+%{_datadir}/doc/%{name}
 
 %files devel
 %{_includedir}/*

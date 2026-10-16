@@ -30,6 +30,7 @@ BuildRequires: pkgconfig(exiv2)
 BuildRequires: cmake(Qt6Core)
 BuildRequires: cmake(Qt6Sql)
 BuildRequires: cmake(Qt6Widgets)
+BuildRequires: cmake(Qt6Multimedia)
 BuildRequires: cmake(Qt6Xml)
 BuildRequires: cmake(Qt6Test)
 

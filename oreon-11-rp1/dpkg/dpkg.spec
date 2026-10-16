@@ -262,6 +262,10 @@ make TEST_PARALLEL=4 check
 %config(noreplace) %{_localstatedir}/lib/dpkg/status
 %{_datadir}/doc/dpkg/*
 %{_datadir}/dpkg/sh/dpkg-error.sh
+%dir %{pkgdatadir}
+%{pkgdatadir}/*.mk
+%{_datadir}/bash-completion/completions/*
+%{_mandir}/man7/deb-email.7*
 %{_bindir}/dpkg
 %{_bindir}/dpkg-deb
 %{_bindir}/dpkg-maintscript-helper

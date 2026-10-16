@@ -311,6 +311,7 @@ sed -i 's|ANT_VALID=.*|ANT_VALID=1|' aclocal/ax_javac_and_java.m4
 # explicitly set python3
 shopt -s globstar
 sed -i -E 's@^(#!.*/env) *python *$@\1 python3@' **/*.py
+sed -i 's|pip install . --root=|pip install --no-build-isolation . --root=|' lib/py/Makefile.in
 
 %build
 export PY_PREFIX=%{_prefix}

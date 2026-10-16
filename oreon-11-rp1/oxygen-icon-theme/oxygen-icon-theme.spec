@@ -104,6 +104,7 @@ gtk-update-icon-cache --force %{_datadir}/icons/oxygen &>/dev/null || :
 %doc AUTHORS CONTRIBUTING
 %license COPYING
 %{_datadir}/icons/oxygen/
+%{_datadir}/metainfo/org.kde.oxygenicon.metainfo.xml
 
 
 %changelog

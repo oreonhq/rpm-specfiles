@@ -34,6 +34,7 @@ BuildRequires:  qt6-qtbase-private-devel
 
 BuildRequires:  cmake(KF6Archive)
 BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(PlasmaWaylandProtocols)
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6DBusAddons)

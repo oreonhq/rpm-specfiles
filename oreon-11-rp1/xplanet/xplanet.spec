@@ -49,12 +49,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q
 %patch -P0 -p1 -b .gif
 
-%if 0%{?fedora} >= 24
 LANG=C grep -rl "inFile\.getline" . | \
 	xargs sed -i.c++11 \
 		-e '\@inFile\.getline@s|\(inFile\.getline[ \t]*\)\((.*)\)[ \t]*!= NULL|static_cast<bool> (\1\2)|' \
 		-e '\@inFile\.getline@s|\(inFile\.getline[ \t]*\)\((.*)\)[ \t]*== NULL|(!(static_cast<bool> (\1\2)))|'
-%endif
 
 %build
 %configure

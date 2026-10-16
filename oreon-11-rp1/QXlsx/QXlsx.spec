@@ -54,7 +54,7 @@ mv %{buildroot}%{_libdir}/cmake/QXlsxQt6/libQXlsx*.so* %{buildroot}%{_libdir}/
 
 %files devel
 %{_libdir}/libQXlsxQt6.so
-%{_includedir}/QXlsxQt6/
+%{_includedir}/QXlsx/
 %{_libdir}/cmake/QXlsxQt6/
 
 %changelog

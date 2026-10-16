@@ -39,6 +39,8 @@ BuildRequires:  cmake(KF6GuiAddons)
 BuildRequires:  cmake(KF6KirigamiPlatform)
 BuildRequires:  cmake(Qt6WaylandClient)
 BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6ImageFormats)
+BuildRequires:  kf6-kitemmodels
 BuildRequires:  pkgconfig(wayland-protocols)
 BuildRequires:  wayland-devel
 

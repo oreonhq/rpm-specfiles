@@ -119,17 +119,16 @@ mkdir -p %{buildroot}%{_mandir}
 
 # Move docs to proper dirs
 %if %{with qt5}
-# Last build "wins"
-rm -rf %{buildroot}%{_defaultdocdir}/%{name}/html %{buildroot}%{_mandir}/*
 mv %{buildroot}%{_qt5_docdir}/html/html %{buildroot}%{_defaultdocdir}/%{name}/html
-mv %{buildroot}%{_qt5_docdir}/html/man/man3 %{buildroot}%{_mandir}/
-
+test -d %{buildroot}%{_qt5_docdir}/html/man/man3 && \
+    mv %{buildroot}%{_qt5_docdir}/html/man/man3 %{buildroot}%{_mandir}/ || :
+%endif
 %if %{with qt6}
 # Last build "wins"
-rm -rf %{buildroot}%{_defaultdocdir}/%{name}/html %{buildroot}%{_mandir}/*
+rm -rf %{buildroot}%{_defaultdocdir}/%{name}/html
 mv %{buildroot}%{_qt6_docdir}/html/html %{buildroot}%{_defaultdocdir}/%{name}/html
-mv %{buildroot}%{_qt6_docdir}/html/man/man3 %{buildroot}%{_mandir}/
-%endif
+test -d %{buildroot}%{_qt6_docdir}/html/man/man3 && \
+    mv %{buildroot}%{_qt6_docdir}/html/man/man3 %{buildroot}%{_mandir}/ || :
 %endif
 
 %files doc

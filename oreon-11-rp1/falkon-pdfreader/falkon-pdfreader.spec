@@ -33,7 +33,7 @@ Requires:       falkon%{?_isa} >= 3.1.0
 mv pdfreader/pdfjs/LICENSE LICENSE_pdfjs
 
 %build
-%cmake_kf5
+%cmake_kf5 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
 %install
 %cmake_install

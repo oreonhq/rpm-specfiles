@@ -1,4 +1,5 @@
 %global source0_hash a72ff7471eb8adf8470a21aec33d70f184a20e215f167e2d4c38d56d9a377205
+%global debug_package %{nil}
 
 Name:		msgpack
 Version:	9.0.0

@@ -8,7 +8,7 @@
 
 Name:           rust-getrandom
 Version:        0.4.3
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Small cross-platform library for retrieving random data from system source
 
 License:        MIT OR Apache-2.0

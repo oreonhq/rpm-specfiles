@@ -40,6 +40,8 @@ Patch: https://github.com/simd-everywhere/simde/commit/f046ab773733f09edaadec303
 Patch: https://github.com/simd-everywhere/simde/commit/a1ce45cf5dc2253a1f9c0590fe111ebd8d1613c0.patch
 # Avoid undefined behaviour in signed multiplication https://github.com/simd-everywhere/simde/issues/1295
 Patch: %{name}-clang20.patch
+# same signed mul UB hits gcc16 -O3 in vmul_s32/vmulq_s32
+Patch: %{name}-gcc16.patch
 # gcc and clang are used in the unit tests.
 BuildRequires: clang
 BuildRequires: gcc

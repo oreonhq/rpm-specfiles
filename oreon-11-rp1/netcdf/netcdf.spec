@@ -306,6 +306,8 @@ done
 %{_includedir}/netcdf_meta.h
 %{_includedir}/netcdf_mem.h
 %{_includedir}/netcdf_proplist.h
+%{_includedir}/netcdf_vutils.h
+%{_includedir}/ncudfplugins.h
 %{_libdir}/libnetcdf.settings
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/netcdf.pc
@@ -341,6 +343,8 @@ done
 %{_includedir}/mpich-%{_arch}/netcdf_mem.h
 %{_includedir}/mpich-%{_arch}/netcdf_par.h
 %{_includedir}/mpich-%{_arch}/netcdf_proplist.h
+%{_includedir}/mpich-%{_arch}/netcdf_vutils.h
+%{_includedir}/mpich-%{_arch}/ncudfplugins.h
 %{_libdir}/mpich/lib/libnetcdf.settings
 %{_libdir}/mpich/lib/*.so
 %{_libdir}/mpich/lib/pkgconfig/%{name}.pc
@@ -377,6 +381,8 @@ done
 %{_includedir}/openmpi-%{_arch}/netcdf_mem.h
 %{_includedir}/openmpi-%{_arch}/netcdf_par.h
 %{_includedir}/openmpi-%{_arch}/netcdf_proplist.h
+%{_includedir}/openmpi-%{_arch}/netcdf_vutils.h
+%{_includedir}/openmpi-%{_arch}/ncudfplugins.h
 %{_libdir}/openmpi/lib/libnetcdf.settings
 %{_libdir}/openmpi/lib/*.so
 %{_libdir}/openmpi/lib/pkgconfig/%{name}.pc
