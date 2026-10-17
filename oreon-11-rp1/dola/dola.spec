@@ -103,6 +103,8 @@ Patch:          0003-Switch-to-OpenJDK-for-runtime.patch
 Patch:          0004-Add-commons-lang3-to-dola-generator-classpath.patch
 # https://github.com/mizdebsk/dola/pull/53
 Patch:          0005-Allow-override-of-classworlds-configuration-dir.patch
+# oreon specific
+Patch:          0006-Find-lujavrite.so-on-any-lua-version.patch
 
 Requires:       %{name}-bsx = %{version}-%{release}
 Requires:       %{name}-generator = %{version}-%{release}
