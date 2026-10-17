@@ -106,6 +106,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver} -a1
 # End cabal-rpm setup
+cabal-tweak-remove-upperbound QuickCheck
 
 %build
 # Begin cabal-rpm build:

@@ -117,6 +117,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n %{pkgver}
 dos2unix -k -n %{SOURCE1} %{pkg_name}.cabal
 # End cabal-rpm setup
+cabal-tweak-remove-upperbound QuickCheck
 %ifarch %{ix86}
 %patch -P0 -p2 -b .orig
 %patch -P1 -p1
