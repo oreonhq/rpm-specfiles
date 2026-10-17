@@ -1,5 +1,0 @@
-perl-Coro
-perl-BDB
-perl-IO-AIO
-perl-AnyEvent-AIO
-perl-AnyEvent-BDB
