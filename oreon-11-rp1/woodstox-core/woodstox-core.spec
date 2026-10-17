@@ -141,6 +141,8 @@ rm src/test/java/stax2/vwstream/{W3CSchemaWrite16Test,W3CSchemaWrite23Test}.java
 rm src/test/java/wstxtest/msv/{TestW3CSchema,TestW3CSchemaTypes,TestWsdlValidation}.java
 rm src/test/java/wstxtest/vstream/{TestRelaxNG,TestW3CSchemaComplexTypes}.java
 
+%mvn_file com.fasterxml.woodstox:woodstox-core woodstox-core
+
 %build
 %mvn_build -j -- -Dversion.junit=4.12
 

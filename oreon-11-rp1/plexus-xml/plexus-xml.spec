@@ -120,6 +120,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %setup -q -n plexus-xml-plexus-xml-4.0.4
 %autosetup -p1 -n plexus-xml-plexus-xml-4.0.4
 
+%mvn_file org.codehaus.plexus:plexus-xml plexus-xml
+
 %build
 # Test dependencies are not packaged
 %mvn_build -j -f

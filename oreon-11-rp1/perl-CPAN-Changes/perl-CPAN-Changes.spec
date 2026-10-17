@@ -1,4 +1,5 @@
 %global source0_hash 1b022a0a6451827d060ee9cbfe9b2d8edbac2a3d7155cbee33ea93274b830fb5
+%oreon_bootstrap
 
 # Extra tests require Test::Pod::Coverage::TrustMe, not yet available in Fedora
 %bcond_with perl_CPAN_Changes_enables_extra_test
