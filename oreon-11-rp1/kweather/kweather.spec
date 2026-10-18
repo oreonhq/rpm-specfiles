@@ -97,6 +97,7 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 
 %files plasma-applet
 %{_kf6_qtplugindir}/plasma/applets/org.kde.plasma.%{name}_1x4.so
+%{_libdir}/qt6/plugins/kf6/krunner/krunnerkweather.so
 
 %changelog
 %autochangelog

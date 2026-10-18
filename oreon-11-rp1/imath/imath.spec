@@ -102,7 +102,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{_libdir}/libImath.so
 %{_libdir}/libImath-3_2.so.*
 %{_libdir}/libPyImath_Python%{pyver_under}-3_2.so
-
+%{_libdir}/libImath-3_2.so
+%{_libdir}/libPyImath.so
 
 %changelog
 %autochangelog

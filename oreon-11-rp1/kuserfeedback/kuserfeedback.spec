@@ -86,6 +86,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kuserfeedback
 %{_libdir}/libKF6UserFeedbackCore.so.6*
 %{_libdir}/libKF6UserFeedbackWidgets.so.6*
 %{_kf6_qmldir}/org/kde/userfeedback/
+%{_libdir}/qt6/mkspecs/modules/qt_KF6UserFeedbackCore.pri
+%{_libdir}/qt6/mkspecs/modules/qt_KF6UserFeedbackWidgets.pri
 
 %files devel
 %{_includedir}/KF6/KUserFeedback/
@@ -99,6 +101,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kuserfeedback
 %{_bindir}/UserFeedbackConsole
 %{_datadir}/applications/org.kde.kuserfeedback-console.desktop
 %{_datadir}/metainfo/org.kde.kuserfeedback-console.appdata.xml
+%{_datadir}/qlogging-categories6/org_kde_UserFeedback.categories
 
 %changelog
 %autochangelog

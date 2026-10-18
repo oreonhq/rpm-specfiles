@@ -176,6 +176,11 @@ EOF
 %{_kf6_qtplugindir}/plasma/weather_ions/wettercom.so
 %{_datadir}/plasma/weather/noaa_station_list.xml
 %{_datadir}/kwin/scripts/virtualdesktopsonlyonprimary/
+%{_includedir}/plasma/weather/warnings.h
+%{_libexecdir}/kf6/kameleon-qmk-helper
+%{_datadir}/dbus-1/system-services/org.kde.kameleon.qmk.helper.service
+%{_datadir}/dbus-1/system.d/org.kde.kameleon.qmk.helper.conf
+%{_datadir}/polkit-1/actions/org.kde.kameleon.qmk.helper.policy
 
 %files -n kate-krunner-plugin
 %{_kf6_plugindir}/krunner/krunner_katesessions.so
@@ -187,7 +192,21 @@ EOF
 %{_includedir}/plasma/potdprovider/
 %{_kf6_datadir}/kdevappwizard/templates/plasmapotdprovider.tar.bz2
 %{_kf6_libdir}/libplasmapotdprovidercore.so
-
+%{_includedir}/plasma/weather/currentday.h
+%{_includedir}/plasma/weather/forecast.h
+%{_includedir}/plasma/weather/futuredays.h
+%{_includedir}/plasma/weather/ion.h
+%{_includedir}/plasma/weather/lastday.h
+%{_includedir}/plasma/weather/lastobservation.h
+%{_includedir}/plasma/weather/locations.h
+%{_includedir}/plasma/weather/metadata.h
+%{_includedir}/plasma/weather/plasmaweatherdata_export.h
+%{_includedir}/plasma/weather/plasmaweatherion_export.h
+%{_includedir}/plasma/weather/station.h
+%{_libdir}/cmake/PlasmaWeather/PlasmaWeatherConfig.cmake
+%{_libdir}/cmake/PlasmaWeather/PlasmaWeatherConfigVersion.cmake
+%{_libdir}/cmake/PlasmaWeather/PlasmaWeatherTargets-release.cmake
+%{_libdir}/cmake/PlasmaWeather/PlasmaWeatherTargets.cmake
 
 %changelog
 %autochangelog
