@@ -1,21 +1,20 @@
 %global source0_hash 75fd653745ea0705995c25e6c07b34252ecc2563c6a91b007a3a8c26f29cc252
-
 Summary:        A console-based network monitoring utility
 Name:           iptraf-ng
 Version:        1.2.2
-Release:        20%{?dist}
+Release:        1%{?dist}
 Source0:        https://github.com/iptraf-ng/iptraf-ng/archive/refs/tags/v%{version}.tar.gz#/iptraf-ng-1.2.2.tar.gz
-
 Source1:        %{name}-logrotate.conf
 Source2:        %{name}-tmpfiles.conf
 URL:            https://github.com/iptraf-ng/iptraf-ng/
 License:        GPL-2.0-or-later
-BuildRequires:  gcc
-BuildRequires:  ncurses-devel
-BuildRequires:  make
 Obsoletes:      iptraf < 3.1
 Provides:       iptraf = 3.1
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+# /oreon:deps
 %description
 IPTraf-ng is a console-based network monitoring utility.  IPTraf gathers
 data like TCP connection packet and byte counts, interface statistics
@@ -35,43 +34,31 @@ built-in raw socket interface of the Linux kernel, so it can be used
 on a wide variety of supported network cards.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build
+
 make %{?_smp_mflags} V=1 \
   CFLAGS="-g -O2 -Wall -W -std=gnu99 -Werror=format-security %{optflags}" \
   LDFLAGS="$RPM_LD_FLAGS"
-
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot} prefix=%{_prefix} sbindir=%{_sbindir}
-
-# remove everything besides the html and pictures in Documentation
 find Documentation -type f | grep -v '\.html$\|\.png$\|/stylesheet' | \
      xargs rm -f
-
 install -D -m 0644 -p %{SOURCE1} %{buildroot}%{_sysconfdir}/logrotate.d/iptraf-ng
-
 install -d -m 0755 %{buildroot}%{_localstatedir}/{log,lib}/iptraf-ng
-
 mkdir -p %{buildroot}%{_prefix}/lib/tmpfiles.d
 install -m 0644 %{SOURCE2} %{buildroot}%{_prefix}/lib/tmpfiles.d/%{name}.conf
-
 mkdir -p %{buildroot}/run
 install -d -m 0755 %{buildroot}/run/%{name}/
+%oreon_autofiles main
 
-%files
-%doc CHANGES FAQ LICENSE README*
-%doc Documentation
-%{_sbindir}/iptraf-ng
-%{_mandir}/man8/iptraf-ng.8*
-%{_localstatedir}/log/iptraf-ng
-%{_localstatedir}/lib/iptraf-ng
-%config(noreplace) %{_sysconfdir}/logrotate.d/iptraf-ng
-%dir /run/%{name}/
-%{_prefix}/lib/tmpfiles.d/%{name}.conf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.2-20
 - Import

@@ -1,59 +1,47 @@
-%global source0_hash none
-
+%global source0_hash 9ecec2b6aa4c2aa58da39d2572e7bef4373419dcd6ec52973c07de7be2b1c516
 Name:           python-sqlmodel
 Version:        0.0.42
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        SQLModel, SQL databases in Python, designed for simplicity, compatibility, and robustness.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/fastapi/sqlmodel
-Source:         %{pypi_source sqlmodel}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sqlmodel/sqlmodel-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sqlmodel' generated automatically by pyp2spec.}
-
 Patch:          0001-Downstream-only-Patch-for-running-tests-without-cove.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-sqlmodel = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-sqlmodel
-Summary:        %{summary}
-
-%description -n python3-sqlmodel %_description
-
+Summary:        SQLModel, SQL databases in Python, designed for simplicity, compatibility, and robustness.
+# oreon:reqs
+Requires:       python3dist(pydantic) >= 2.11.0
+Requires:       python3dist(sqlalchemy) < 2.1.0
+Requires:       python3dist(sqlalchemy) >= 2.0.14
+Requires:       python3dist(typing-extensions) >= 4.5.0
+# /oreon:reqs
+%description -n python3-sqlmodel
 
 %prep
-%autosetup -p1 -n sqlmodel-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sqlmodel-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sqlmodel usr/lib/python3*/site-packages/sqlmodel* usr/lib64/python3*/site-packages/sqlmodel* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sqlmodel* usr/lib64/python3*/site-packages/sqlmodel* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sqlmodel -f %{pyproject_files}
+%files
+%files -n python3-sqlmodel -f %{oreon_filedir}/python3-sqlmodel.list
 
 %changelog
+
 %autochangelog

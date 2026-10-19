@@ -1,34 +1,33 @@
 %global source0_hash dcb085896c28aaec5518cbc08c0ee2b4e60ada7ac929d82639f6189851a6129a
-
-# trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
-
 %bcond_without qt5
 %bcond_without qt6
-
 Name:    qwt
-Summary: Qt Widgets for Technical Applications
+Summary:        Qt Widgets for Technical Applications
 Version: 6.3.0
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: LGPL-2.1-or-later WITH Qwt-exception-1.0
 URL:     http://qwt.sourceforge.net
-Source:  http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
-
-## upstream patches
-
-## upstreamable patches
-# Use QT_INSTALL_ paths instead of custom prefix
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 Patch51: qwt-qt_install_paths.patch
-# Add qt suffix to libraries to make them parallel-installable
 Patch52: qwt-libsuffix.patch
-# Kill rpath
 Patch53: qwt-no_rpath.patch
-# Fix incorrect requires in pkgconfig files
 Patch54: qwt-pkgconfig.patch
-
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  pkgconfig(Qt5Concurrent)
+BuildRequires:  pkgconfig(Qt5Designer)
+BuildRequires:  pkgconfig(Qt5OpenGL)
+BuildRequires:  pkgconfig(Qt5PrintSupport)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt6Concurrent)
+BuildRequires:  pkgconfig(Qt6Designer)
+BuildRequires:  pkgconfig(Qt6OpenGL)
+BuildRequires:  pkgconfig(Qt6PrintSupport)
+BuildRequires:  pkgconfig(Qt6Svg)
+BuildRequires:  pkgconfig(Qt6Widgets)
+# /oreon:deps
 %description
 The Qwt library contains GUI Components and utility classes which are primarily
 useful for programs with a technical background.
@@ -84,28 +83,23 @@ Requires: %{name}-qt6%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %if %{with qt5}
 mkdir %{_target_platform}-qt5
 pushd %{_target_platform}-qt5
 %{qmake_qt5} QWT_CONFIG+=QwtPkgConfig ..
-
 %make_build
 popd
 %endif
-
 %if %{with qt6}
 mkdir %{_target_platform}-qt6
 pushd %{_target_platform}-qt6
 %{qmake_qt6} QWT_CONFIG+=QwtPkgConfig ..
-
 %make_build
 popd
 %endif
-
 %install
 %if %{with qt5}
 make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}-qt5
@@ -113,54 +107,27 @@ make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}-qt5
 %if %{with qt6}
 make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}-qt6
 %endif
-
 mkdir -p %{buildroot}%{_defaultdocdir}/%{name}
-
-# Move docs to proper dirs
 %if %{with qt5}
 mv %{buildroot}%{_qt5_docdir}/html/html %{buildroot}%{_defaultdocdir}/%{name}/html
 test -d %{buildroot}%{_qt5_docdir}/html/man/man3 && \
     mv %{buildroot}%{_qt5_docdir}/html/man/man3 %{buildroot}%{_defaultdocdir}/%{name}/man3 || :
 %endif
 %if %{with qt6}
-# Last build "wins"
 rm -rf %{buildroot}%{_defaultdocdir}/%{name}/html
 mv %{buildroot}%{_qt6_docdir}/html/html %{buildroot}%{_defaultdocdir}/%{name}/html
 rm -rf %{buildroot}%{_defaultdocdir}/%{name}/man3
 test -d %{buildroot}%{_qt6_docdir}/html/man/man3 && \
     mv %{buildroot}%{_qt6_docdir}/html/man/man3 %{buildroot}%{_defaultdocdir}/%{name}/man3 || :
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %endif
-
-%files doc
-%doc %{_defaultdocdir}/%{name}/
-
-%if %{with qt5}
-%files qt5
-%license COPYING
-%doc README
-%{_qt5_libdir}/libqwt-qt5.so.6*
-
-%files qt5-devel
-%{_qt5_headerdir}/qwt/
-%{_qt5_libdir}/libqwt-qt5.so
-%{_qt5_libdir}/pkgconfig/Qt5Qwt6.pc
-%{_qt5_archdatadir}/mkspecs/features/qwt*
-%{_qt5_plugindir}/designer/libqwt_designer_plugin.so
-%endif
-
-%if %{with qt6}
-%files qt6
-%license COPYING
-%doc README
-%{_qt6_libdir}/libqwt-qt6.so.6*
-
-%files qt6-devel
-%{_qt6_headerdir}/qwt/
-%{_qt6_libdir}/libqwt-qt6.so
-%{_qt6_libdir}/pkgconfig/Qt6Qwt6.pc
-%{_qt6_archdatadir}/mkspecs/features/qwt*
-%{_qt6_plugindir}/designer/libqwt_designer_plugin.so
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n qwt-doc -f %{oreon_filedir}/qwt-doc.list
+%files -n qwt-qt5 -f %{oreon_filedir}/qwt-qt5.list
+%files -n qwt-qt5-devel -f %{oreon_filedir}/qwt-qt5-devel.list
+%files -n qwt-qt6 -f %{oreon_filedir}/qwt-qt6.list
+%files -n qwt-qt6-devel -f %{oreon_filedir}/qwt-qt6-devel.list
 
 %changelog
+
 %autochangelog

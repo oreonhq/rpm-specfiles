@@ -1,19 +1,16 @@
 %global source0_hash f928073d3c69b2668e89b93cdcca5f390437831aab3eac3aa2129f8713e79dbf
-
 Name:           bubblemon
 Version:        1.46
 Release:        42%{?dist}
 Summary:        A system monitoring dockapp
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.ne.jp/asahi/linux/timecop/
 Source0:        http://www.ne.jp/asahi/linux/timecop/software/bubblemon-dockapp-1.46.tar.gz
-
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  gtk+-devel
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 his is a system monitoring dockapp, visually based on the GNOME "BubbleMon"
 applet (here). Basically, it displays CPU and memory load as bubbles in a jar
@@ -30,21 +27,22 @@ the extra "bloated" features can be compiled out or disabled on command-line,
 if you prefer original "BubbleMon" look.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-dockapp-%{version}
 
 %build
-make CFLAGS="${RPM_OPT_FLAGS} `gtk-config --cflags` -DENABLE_DUCK -DENABLE_CPU -DENABLE_MEMSCREEN -DKERNEL_26" %{?_smp_mflags}
 
+make CFLAGS="${RPM_OPT_FLAGS} `gtk-config --cflags` -DENABLE_DUCK -DENABLE_CPU -DENABLE_MEMSCREEN -DKERNEL_26" %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__mkdir_p} $RPM_BUILD_ROOT%{_bindir}
 make install PREFIX=$RPM_BUILD_ROOT%{_prefix}
+%oreon_autofiles main
 
-%files
-%doc ChangeLog README doc/*
-%{_bindir}/bubblemon
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

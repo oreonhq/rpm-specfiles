@@ -1,32 +1,26 @@
 %global source0_hash a95eb21eb0f5f0266835951c10763d0a6811f33fc717431eb9b7b18d4f564a57
-
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
-
 Name:           system-storage-manager
 Version:        1.3
-Release:        27%{?dist}
+Release:        1%{?dist}
 Summary:        A single tool to manage your storage
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://system-storage-manager.github.io/
 Source0:        https://github.com/system-storage-manager/ssm/archive/%{name}-%{version}.tar.gz#/system-storage-manager-1.3.tar.gz
-
 Patch1:         python3-sphinx.patch
-
 BuildArch:      noarch
-BuildRequires: make
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-sphinx
-BuildRequires:  python3-pwquality
 Requires:       util-linux
 Requires:       which
 Requires:       xfsprogs
 Requires:       e2fsprogs
 Requires:       python3-pwquality
-
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  python3-devel
+BuildRequires:  python3-pwquality
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-sphinx
+# /oreon:deps
 %description
 System Storage Manager provides an easy to use command line interface to manage
 your storage using various technologies like lvm, btrfs, encrypted volumes and
@@ -46,8 +40,8 @@ in general.
 You should install the ssm if you need to manage your storage with various
 technologies via a single unified interface.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n ssm-%{name}-%{version}
 
@@ -58,28 +52,22 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's/assert_/assertTrue/' tests/unittests/test_ssm.py
 
 %build
+
 make docs
-
-
 %install
 rm -rf ${RPM_BUILD_ROOT}
 %{__python3} setup.py install --root=${RPM_BUILD_ROOT}
 if [ "%{_pkgdocdir}" != "%{_docdir}/%{name}-%{version}" ]; then
     mv ${RPM_BUILD_ROOT}/{%{_docdir}/%{name}-%{version},%{_pkgdocdir}}
 fi
+%oreon_autofiles main
 
 %check
+
 %{__python3} test.py || :
-
-
-%files
-%{_bindir}/ssm
-%{_pkgdocdir}/
-%{_mandir}/man8/ssm.8*
-%{python3_sitelib}/ssmlib/
-%{python3_sitelib}/*.egg-info
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-27
 - Import

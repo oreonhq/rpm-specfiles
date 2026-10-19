@@ -1,42 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 64cb29934660456ec82cebdaa0d3d273a862e10760e8ee80443928d317242484
 %global __cmake_in_source_build 1
 Name:		xmoto
 Version:	0.6.3
-Release:	3%{?dist}
-Summary:	Challenging 2D Motocross Platform Game
-
+Release:        1%{?dist}
+Summary:        Challenging 2D Motocross Platform Game
 License:	GPL-2.0-or-later
 URL:		http://xmoto.sourceforge.net/
-Source0:	https://github.com/xmoto/xmoto/archive/v%{version}/%{version}.tar.gz
+Source0:        https://github.com/xmoto/xmoto/archive/v%{version}/%{version}.tar.gz
 Source1:	xmoto.desktop
 Source2:	xmoto.png
 Patch0:		xmoto-0.5.0-helpers-text-includes.patch
 Patch1:		xmoto-0.5.0-helpers-log-include.patch
-
-BuildRequires: make
-BuildRequires:  gcc-c++
-BuildRequires:	desktop-file-utils
-BuildRequires:	SDL2_mixer-devel
-BuildRequires:	SDL2_ttf-devel
-BuildRequires:	curl-devel
-BuildRequires:	ode-devel
-BuildRequires:	lua-devel
-BuildRequires:	libGL-devel
-BuildRequires:	libGLU-devel
-BuildRequires:	libjpeg-devel
-BuildRequires:	libpng-devel
-BuildRequires:	bzip2-devel
-BuildRequires:	sqlite-devel
-BuildRequires:	SDL2_net-devel
-BuildRequires:	libxdg-basedir-devel
-BuildRequires:	libxml2-devel
-BuildRequires:	pkgconfig
-BuildRequires:	gettext
-BuildRequires:  cmake
-BuildRequires:  zlib-devel
 Requires: dejavu-sans-fonts
-
+# oreon:deps
+BuildRequires:  SDL2_mixer-devel
+BuildRequires:  SDL2_net-devel
+BuildRequires:  SDL2_ttf-devel
+BuildRequires:  bzip2-devel
+BuildRequires:  cmake
+BuildRequires:  curl-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  libGL-devel
+BuildRequires:  libGLU-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libxdg-basedir-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  lua-devel
+BuildRequires:  make
+BuildRequires:  ode-devel
+BuildRequires:  pkgconfig
+BuildRequires:  sqlite-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 X-Moto is a challenging 2D motocross platform game, where physics play an all
 important role in the gameplay. You need to control your bike to its limit, if
@@ -46,33 +44,23 @@ First you'll try just to complete the levels, while later you'll compete with
 yourself and others, racing against the clock.
 
 %prep
+
 %setup -q
 %patch -P0 -p0
 %patch -P1 -p0
 
 %build
+
 mkdir build
 pushd build
 %cmake -DPREFER_SYSTEM_BZip2=ON -DPREFER_SYSTEM_Lua=ON -DPREFER_SYSTEM_ODE=ON -DPREFER_SYSTEM_XDG=ON ..
 %cmake_build
-
 %install
 pushd build
 %cmake_install
-
-# Install icon and desktop file
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
 cp -p %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
-
 desktop-file-install  --dir $RPM_BUILD_ROOT%{_datadir}/applications --add-category X-Fedora %{SOURCE1}
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -111,25 +99,14 @@ SentUpstream: 2014-09-25
   </screenshots>
 </application>
 EOF
-
 rm $RPM_BUILD_ROOT%{_datadir}/xmoto/Textures/Fonts/DejaVuSans.ttf 
 ln -s ../../../fonts/dejavu-sans-fonts/DejaVuSans.ttf $RPM_BUILD_ROOT%{_datadir}/xmoto/Textures/Fonts/DejaVuSans.ttf 
-
 popd
-
-# Locale files
 %find_lang %{name} %{name}.lang
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc ChangeLog README.md
-%{_bindir}/xmoto
-%{_datadir}/xmoto
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/xmoto.desktop
-%{_datadir}/icons/hicolor/48x48/apps/xmoto.png
-%{_mandir}/man6/xmoto.6.gz
-%{_datadir}/pixmaps/xmoto.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

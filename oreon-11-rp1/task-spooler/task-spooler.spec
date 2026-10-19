@@ -1,24 +1,15 @@
-%global source0_hash fa833311543dc535b60cb7ab83c64ab5ee31128dbaaaa13dde341984e542b428
-
+%global source0_hash b1ab3db52dca36af3699178b8d0e936a30107f8d5c86a974163c580823b01790
 Name:           task-spooler
 Version:        1.0.4
 Release:        1%{?dist}
 Summary:        Personal job scheduler
-
-# Licence headers in code files say:
-# > Please find the license in the provided COPYING file.
-# COPYING contains the GPL-2.0 text.
-# There's no mention of "or later version" anywhere.
-#
-# tsp.1 is subject to "LDP GENERAL PUBLIC LICENSE".
 License:        GPL-2.0-only AND LicenseRef-LDP-1
-
 URL:            http://vicerveza.homeunix.net/~viric/soft/ts
-Source0:        %{url}/ts-%{version}.tar.gz
-
-BuildRequires: make
+Source0:        http://vicerveza.homeunix.net/~viric/soft/ts/ts-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  gcc
-
+BuildRequires:  make
+# /oreon:deps
 %description
 Task spooler is a Unix batch system where the tasks spooled run one
 after the other. Each user in each system has his own job queue. The tasks are
@@ -29,23 +20,20 @@ output, or for whatever reason it's better not to run them at the same time.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n ts-%{version}
-
+%global oreon_srcdir ts-%{version}
+%oreon_prep
 %build
+
 export CFLAGS="${CFLAGS} -ansi"
 %make_build
-
 %install
 %make_install PREFIX=%{buildroot}%{_prefix}
 mv %{buildroot}%{_bindir}/ts %{buildroot}%{_bindir}/tsp
 mv %{buildroot}%{_mandir}/man1/ts.1 %{buildroot}%{_mandir}/man1/tsp.1
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc Changelog README TRICKS PROTOCOL
-%{_bindir}/tsp
-%{_mandir}/man1/tsp.1.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

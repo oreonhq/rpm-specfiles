@@ -1,31 +1,26 @@
 %global source0_hash 442c2b23c78d634cd3ae6578c53d938f0260b7429cabbf8b1a1189a59f854fea
-
 %bcond_without dom4j
-
 Name:           jaxen
 Summary:        An XPath engine written in Java
 Epoch:          0
 Version:        2.0.6
 Release:        1%{?dist}
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
-
 URL:            https://github.com/jaxen-xpath/jaxen
 Source0:        https://github.com/jaxen-xpath/jaxen/archive/refs/tags/v2.0.6.tar.gz#/jaxen-2.0.6.tar.gz
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+%if %{with dom4j}
+%endif
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(dom4j:dom4j)
 BuildRequires:  mvn(jdom:jdom)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 BuildRequires:  mvn(xerces:xercesImpl)
 BuildRequires:  mvn(xml-apis:xml-apis)
-%if %{with dom4j}
-BuildRequires:  mvn(dom4j:dom4j)
-%endif
-
+# /oreon:deps
 %description
 Jaxen is an open source XPath library written in Java. It is adaptable
 to many different object models, including DOM, XOM, dom4j, and JDOM.
@@ -33,23 +28,19 @@ Is it also possible to write adapters that treat non-XML trees such as compiled
 Java byte code or Java beans as XML, thus enabling you to query these trees
 with XPath too.
 
-
 %package        demo
 Summary:        Samples for %{name}
 Requires:       %{name} = 0:%{version}-%{release}
-
 %description    demo
 %{summary}.
 
-
 %package        javadoc
 Summary:        Javadoc for %{name}
-
 %description    javadoc
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
@@ -73,29 +64,20 @@ rm -rf core/src/java/main/org/jaxen/xom
 
 %mvn_file :jaxen %{name}
 
-
 %build
+
 %mvn_build -f -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
-
-
 %install
 %mvn_install
-
-# demo
 install -d -m 755 %{buildroot}%{_datadir}/%{name}/samples
 cp -pr src/java/samples/* %{buildroot}%{_datadir}/%{name}/samples
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-
-%files -f .mfiles
-%doc LICENSE.txt
-
-%files javadoc -f .mfiles-javadoc
-%doc LICENSE.txt
-
-%files demo
-%{_datadir}/%{name}
-
+%files -f %{oreon_filedir}/main.list
+%files -n jaxen-demo -f %{oreon_filedir}/jaxen-demo.list
+%files -n jaxen-javadoc -f %{oreon_filedir}/jaxen-javadoc.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-23
 - Prepare for Oreon 11 (RP1)

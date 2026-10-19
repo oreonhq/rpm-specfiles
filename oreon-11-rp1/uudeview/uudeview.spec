@@ -1,38 +1,34 @@
 %global source0_hash 69e5ccf7a49858e019cfd85831f4a37bd5e9d568322ff38a2fbbe000376df6ef
-
 %global _hardened_build 1
 %global snapshot 1
 %global OWNER hannob
 %global PROJECT uudeview
 %global commit 7ef9e26532b39bdcedd319c07b6b77fc70e270dd
 %global commitdate 20241111
-#global gittag 0.5.20
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           uudeview
 Version:        0.5.20%{?snapshot:^%{commitdate}git%{shortcommit}}
-Release:        5%{?dist}
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License:        GPL-2.0-or-later
 %if 0%{?snapshot}
-Source0:        https://github.com/%{OWNER}/%{PROJECT}/archive/%{commit}/%{name}-%{commit}.tar.gz
-BuildRequires:  autoconf
+Source0:        https://github.com/%{OWNER}/%{name}/archive/%{commit}/%{name}-%{commit}.tar.gz
 %else
-Source0:        http://www.fpx.de/fp/Software/UUDeview/download/uudeview-%{version}.tar.gz
 %endif
 Source1:        xdeview.desktop
 Patch0:         uudeview-threads.patch
 URL:            http://www.fpx.de/fp/Software/UUDeview/
 Summary:        Applications for uuencoding, uudecoding, ...
-BuildRequires:  make
-BuildRequires:  inews
-BuildRequires:  texlive-collection-latexextra
-BuildRequires:  transfig, desktop-file-utils
-BuildRequires:  tk-devel
-BuildRequires:  gcc
 Requires:       %{_sbindir}/sendmail
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  inews
+BuildRequires:  make
+BuildRequires:  texlive-collection-latexextra
+BuildRequires:  tk-devel
+BuildRequires:  transfig
+# /oreon:deps
 %description
 Handles uuencoding, xxencoding, yEnc, and base-64 encoding (MIME). Can do
 automatic splitting of large encodes, automatic posting.  A must for
@@ -44,7 +40,6 @@ Provides:       uulib = %{version}-%{release}
 Provides:       uulib-static = %{version}-%{release}
 Obsoletes:      uulib < 0.5.20-11
 Obsoletes:      uulib-static < 0.5.20-16
-
 %description    -n uulib-devel
 uulib is a library of functions for decoding uuencoded, xxencoded,
 Base64-encoded, and BinHex-encoded data. It is also capable of
@@ -53,6 +48,7 @@ encoding data in any of these formats except BinHex.
 This package contains header files and static libraries for uulib.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %if 0%{?snapshot}
@@ -64,12 +60,12 @@ autoreconf -i
 %{__sed} -i -e "s,for ff_subdir in lib,for ff_subdir in %{_lib},g" configure
 
 %build
+
 %configure --enable-sendmail=%{_sbindir}/sendmail
 make %{?_smp_mflags}
 cd doc
 make
 pdflatex library.ltx
-
 %install
 sed -i -e "s,xdeview.1,xdeview.1 uuwish.1,g" Makefile
 make install BINDIR=$RPM_BUILD_ROOT/%{_bindir} MANDIR=$RPM_BUILD_ROOT/%{_mandir}
@@ -82,20 +78,12 @@ mkdir -p $RPM_BUILD_ROOT/%{_includedir}
 install -p -m 0644 uulib/uudeview.h $RPM_BUILD_ROOT/%{_includedir}/
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}
 install -p -m 0644 uulib/libuu.a $RPM_BUILD_ROOT/%{_libdir}/
+%oreon_autofiles uulib-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc COPYING HISTORY IAFA-PACKAGE README uudeview.lsm
-%{_mandir}/man1/*.1*
-%{_bindir}/uudeview
-%{_bindir}/uuenview
-%{_bindir}/uuwish
-%{_bindir}/xdeview
-%{_datadir}/applications/*.desktop
-
-%files -n uulib-devel
-%doc COPYING HISTORY doc/library.pdf
-%{_includedir}/*.h
-%{_libdir}/*.a
+%files -f %{oreon_filedir}/main.list
+%files -n uulib-devel -f %{oreon_filedir}/uulib-devel.list
 
 %changelog
+
 %autochangelog

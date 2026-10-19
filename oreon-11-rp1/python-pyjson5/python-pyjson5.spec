@@ -1,59 +1,43 @@
-%global source0_hash none
-
+%global source0_hash a5b0e322e847b198a50d8a1ef16d6b2b19129644dc018d76773e81ef1487ca39
 Name:           python-pyjson5
 Version:        2.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        JSON5 serializer and parser for Python 3 written in Cython.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT OR Apache-2.0
 URL:            https://github.com/Kijewski/pyjson5
-Source:         %{pypi_source pyjson5}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyjson5' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyjson5/pyjson5-%{version}.tar.gz
 Patch0:         flags.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython) < 4
+BuildRequires:  python3dist(cython) >= 3.1
+BuildRequires:  python3dist(setuptools) >= 61
+Requires:       python3-pyjson5 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyjson5
-Summary:        %{summary}
-
-%description -n python3-pyjson5 %_description
-
+Summary:        JSON5 serializer and parser for Python 3 written in Cython.
+%description -n python3-pyjson5
 
 %prep
-%autosetup -p1 -n pyjson5-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyjson5-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyjson5 usr/lib/python3*/site-packages/pyjson5* usr/lib64/python3*/site-packages/pyjson5* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyjson5* usr/lib64/python3*/site-packages/pyjson5* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyjson5 -f %{pyproject_files}
+%files
+%files -n python3-pyjson5 -f %{oreon_filedir}/python3-pyjson5.list
 
 %changelog
+
 %autochangelog

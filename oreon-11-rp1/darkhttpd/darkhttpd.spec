@@ -1,21 +1,19 @@
 %global source0_hash 4fee9927e2d8bb0a302f0dd62f9ff1e075748fa9f5162c9481a7a58b41462b56
-
 %global _hardened_build 1
-
 Name:           darkhttpd
 Version:        1.17
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Secure, lightweight, fast, single-threaded HTTP/1.1 server
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://github.com/emikulic/darkhttpd
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/emikulic/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}.service
 Source2:        %{name}.sysconfig
+Requires:       /etc/mime.types
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  systemd
-Requires:       /etc/mime.types
-
+# /oreon:deps
 %description
 darkhttpd is a secure, lightweight, fast and single-threaded HTTP/1.1 server.
 
@@ -48,31 +46,27 @@ Limitations:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-%{__cc} %{optflags} darkhttpd.c -o %{name} %{?__global_ldflags}
 
+%{__cc} %{optflags} darkhttpd.c -o %{name} %{?__global_ldflags}
 %install
 install -pDm755 %{name} %{buildroot}%{_sbindir}/%{name}
 install -pDm644 %{S:1} %{buildroot}%{_unitdir}/%{name}.service
 install -pDm644 %{S:2} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+%oreon_autofiles main
 
 %post
+
 %systemd_post darkhttpd.service
-
 %preun
+
 %systemd_preun darkhttpd.service
-
 %postun
-%systemd_postun_with_restart darkhttpd.service
 
-%files
-%doc README.md
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%{_sbindir}/%{name}
-%{_unitdir}/%{name}.service
+%systemd_postun_with_restart darkhttpd.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

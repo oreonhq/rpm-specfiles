@@ -1,19 +1,16 @@
 %global source0_hash e6c954fde2a5a635187f19e1ab870a88c1a982012c5f1b33b8f2513e0ab7a50e
 %define fontdir %{_datadir}/fonts/%{name}
 %define catalogue %{_sysconfdir}/X11/fontpath.d
-
 Name:           zvbi
 Version:        0.2.45
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Raw VBI, Teletext and Closed Caption decoding library
-
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND MIT
 URL:            https://github.com/zapping-vbi/zvbi
 Source0:        https://github.com/zapping-vbi/zvbi/archive/v%{version}/%{name}-%{version}.tar.gz
-
 Patch0:         zvbi-0.2.24-tvfonts.patch
 Patch1:         zvbi-0.2.25-openfix.patch
-
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  bdftopcf
@@ -27,25 +24,24 @@ BuildRequires:  make
 BuildRequires:  mkfontdir
 BuildRequires:  systemd-units
 BuildRequires:  tzdata
-
+# /oreon:deps
 %description
 ZVBI provides functions to capture and decode VBI data.
 
 %package devel
 Summary:        Development files for zvbi
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files for zvbi.
 
 %package fonts
 Summary:        Fonts from zvbi converted to X11
 BuildArch:      noarch
-
 %description fonts
 Fonts from zvbi converted for use with X11.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 cat >zvbid.service <<EOF
@@ -62,6 +58,7 @@ WantedBy=multi-user.target
 EOF
 
 %build
+
 ./autogen.sh
 %configure --disable-rpath --enable-v4l --enable-dvb --enable-proxy
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
@@ -77,7 +74,6 @@ cat >fonts.alias <<EOF
 teletext   -ets-teletext-medium-r-normal--*-200-75-75-c-120-iso10646-1
 EOF
 popd
-
 %install
 mkdir -p %{buildroot}%{fontdir}
 %make_install
@@ -90,42 +86,25 @@ touch %{buildroot}%{fontdir}/fonts.cache-1
 mkdir -p %{buildroot}%{catalogue}
 ln -sf %{fontdir} %{buildroot}%{catalogue}/%{name}
 find %{buildroot}%{_libdir} -name '*.a' -delete
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 cd test
 make check
-
 %post
+
 %systemd_post zvbid.service
-
 %preun
+
 %systemd_preun zvbid.service
-
 %postun
+
 %systemd_postun_with_restart zvbid.service
-
-%files -f %{name}.lang
-%license COPYING.md
-%doc AUTHORS BUGS ChangeLog NEWS README.md TODO
-%{_bindir}/%{name}*
-%{_sbindir}/zvbid
-%{_unitdir}/zvbid.service
-%{_libdir}/libzvbi.so.0*
-%{_libdir}/libzvbi-chains.so.0*
-%{_mandir}/man1/zvbi*1*
-
-%files devel
-%{_includedir}/libzvbi.h
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/%{name}-0.2.pc
-
-%files fonts
-%dir %{_datadir}/fonts/%{name}
-%{fontdir}/*.gz
-%{fontdir}/fonts.dir
-%{fontdir}/fonts.alias
-%{catalogue}/%{name}
-%ghost %{fontdir}/fonts.cache-1
+%files -f %{oreon_filedir}/main.list
+%files -n zvbi-devel -f %{oreon_filedir}/zvbi-devel.list
+%files -n zvbi-fonts -f %{oreon_filedir}/zvbi-fonts.list
 
 %changelog
+
 %autochangelog

@@ -1,31 +1,28 @@
 %global source0_hash b25a1e4a59adca88665e08e24acf0af30da5b5d859f7d8f38fba52c28f405138
-
 %{!?_pkgdocdir:%global _pkgdocdir %{_docdir}/%{name}-%{version}}
 %global git_url https://raw.githubusercontent.com/jekyll/%{gem_name}/master
 %global gem_name mercenary
-
 Name:		rubygem-%{gem_name}
 Version:	0.4.0
-Release:	%autorelease
-Summary:	An easier way to build your command-line scripts in Ruby
-
+Release:        1%{?dist}
+Summary:        An easier way to build your command-line scripts in Ruby
 License:	MIT
 URL:		https://github.com/jekyll/%{gem_name}
-Source0:	https://rubygems.org/downloads/%{gem_name}-%{version}.gem
-
+Source0:        https://rubygems.org/downloads/%{gem_name}-%{version}.gem
 BuildArch:	noarch
-BuildRequires:	rubygems-devel
-
+# oreon:deps
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 Lightweight and flexible library for writing command-line apps in Ruby.
 
 %package doc
 Summary:	Documentation files for %{name}
-
 %description doc
 This package contains the documentation files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{__rm} -rf %{gem_name}-%{version}
@@ -43,26 +40,20 @@ do
 done
 
 %build
+
 %{_bindir}/gem build %{gem_name}.gemspec
 %gem_install
-
 %install
 %{__mkdir} -p %{buildroot}%{gem_dir}
 %{__cp} -a ./%{gem_dir}/* %{buildroot}%{gem_dir}
 %{__rm} -f %{buildroot}%{gem_instdir}/{*.gemspec,*.md,*.markdown,.travis.yml}
 %{__rm} -f %{buildroot}%{gem_instdir}/{.gitignore,.rspec,LICENSE.txt,Rakefile}
 %{__rm} -rf %{buildroot}%{gem_instdir}/script
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%exclude %{gem_cache}
-%license LICENSE
-%doc History.markdown README.markdown
-%{gem_instdir}
-%{gem_spec}
-
-%files doc
-%doc %{_pkgdocdir}
-%doc %{gem_docdir}
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-mercenary-doc -f %{oreon_filedir}/rubygem-mercenary-doc.list
 
 %changelog
+
 %autochangelog

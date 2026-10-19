@@ -1,64 +1,66 @@
-%global source0_hash none
-
+%global source0_hash 74fab961b1b8c0e9c2cf22fa195c0e783d635e78686d39dd06ff157c196ca0c9
 Name:           python-sphinx-hoverxref
 Version:        1.4.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Sphinx extension to show tooltips with content embedded when hover a reference.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/readthedocs/sphinx-hoverxref
-Source:         %{pypi_source sphinx_hoverxref}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sphinx_hoverxref/sphinx_hoverxref-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sphinx-hoverxref' generated automatically by pyp2spec.}
-
 Patch:          sphinx-hoverxref-fix_tox_ini.diff
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(flit-core) < 4
+BuildRequires:  python3dist(flit-core) >= 3.2
+Requires:       python3-sphinx-hoverxref = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-sphinx-hoverxref+test
+Summary:        Metapackage for python3-sphinx-hoverxref test extras
+Requires:       python3-sphinx-hoverxref = %{version}-%{release}
+Provides:       python3dist(sphinx-hoverxref[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-sphinx-hoverxref+test
+Metapackage for python3-sphinx-hoverxref test extras.
+
+%package -n       python3-sphinx-hoverxref+doc
+Summary:        Metapackage for python3-sphinx-hoverxref doc extras
+Requires:       python3-sphinx-hoverxref = %{version}-%{release}
+Requires:       python3dist(sphinxcontrib-bibtex) >= 2.6.0
+Provides:       python3dist(sphinx-hoverxref[doc]) = %{version}-%{release}
+
+%description -n python3-sphinx-hoverxref+doc
+Metapackage for python3-sphinx-hoverxref doc extras.
+
+%description
 
 %package -n     python3-sphinx-hoverxref
-Summary:        %{summary}
-
-%description -n python3-sphinx-hoverxref %_description
+Summary:        Sphinx extension to show tooltips with content embedded when hover a reference.
+# oreon:reqs
+Requires:       python3dist(sphinx) >= 5.0
+# /oreon:reqs
+%description -n python3-sphinx-hoverxref
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-sphinx-hoverxref doc,test
-
 
 %prep
-%autosetup -p1 -n sphinx_hoverxref-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sphinx_hoverxref-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sphinx-hoverxref usr/lib/python3*/site-packages/sphinx_hoverxref* usr/lib64/python3*/site-packages/sphinx_hoverxref* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sphinx_hoverxref* usr/lib64/python3*/site-packages/sphinx_hoverxref* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sphinx-hoverxref -f %{pyproject_files}
+%files
+%files -n python3-sphinx-hoverxref -f %{oreon_filedir}/python3-sphinx-hoverxref.list
 
 %changelog
+
 %autochangelog

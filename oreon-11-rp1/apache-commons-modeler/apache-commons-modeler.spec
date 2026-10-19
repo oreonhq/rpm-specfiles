@@ -1,29 +1,24 @@
 %global source0_hash e10a7ac6b6827cba25f40fed43380051023097244fe34b012227aabd5d01e8f0
-
 %global base_name       modeler
 %global short_name      commons-%{base_name}
-
 Name:             apache-%{short_name}
 Version:          2.0.1
-Release:          50%{?dist}
-Summary:          Model MBeans utility classes
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+Release:        50%{?dist}
+Summary:        Model MBeans utility classes
 License:          Apache-2.0
 URL:              http://commons.apache.org/%{base_name}/
 BuildArch:        noarch
 ExclusiveArch:  %{java_arches} noarch
-
-Source0:          http://www.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
-# POM file based on the one from an unreleased upstream snapstream
+Source0:        https://archive.apache.org/dist/commons/modeler/source/commons-modeler-2.0.1-src.tar.gz
 Source1:          pom.xml
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-digester:commons-digester)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.ant:ant)
 BuildRequires:  mvn(org.apache.commons:commons-parent:pom:)
 BuildRequires:  mvn(xml-apis:xml-apis)
-
+# /oreon:deps
 %description
 Commons Modeler makes the process of setting up JMX (Java Management
 Extensions) MBeans easier by configuring the required meta data using an XML
@@ -32,11 +27,11 @@ actual Model MBean instances.
 
 %package javadoc
 Summary:          Javadoc for %{name}
-
 %description javadoc
 This package contains the API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{short_name}-%{version}-src
@@ -64,16 +59,16 @@ cp -p %{SOURCE1} .
 %mvn_file : %{name} %{short_name}
 
 %build
-%mvn_build -- -Dcommons.packageId=modeler
 
+%mvn_build -- -Dcommons.packageId=modeler
 %install
 %mvn_install
+%oreon_autofiles apache-commons-modeler-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
-
-%files javadoc -f .mfiles-javadoc
-%doc LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
+%files -n apache-commons-modeler-javadoc -f %{oreon_filedir}/apache-commons-modeler-javadoc.list
 
 %changelog
+
 %autochangelog

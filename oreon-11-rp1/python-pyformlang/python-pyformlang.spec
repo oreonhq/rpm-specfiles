@@ -1,48 +1,42 @@
 %global source0_hash e292ec8b9cfa64c26b592faf9b7cfc72c4f4b0eb0d533f045a46061e75c5ce99
-
 Name:           python-pyformlang
 Version:        1.0.11
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A python framework for formal grammars
-
 License:        MIT
 URL:            https://github.com/Aunsiels/pyformlang
-Source:         %{pypi_source pyformlang}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyformlang/pyformlang-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(pytest)
-
-%global _description %{expand:
-A python framework for formal grammars.}
-
-%description %_description
+Requires:       python3-pyformlang = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyformlang
-Summary:        %{summary}
-
-%description -n python3-pyformlang %_description
+Summary:        A python framework for formal grammars
+%description -n python3-pyformlang
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n pyformlang-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir pyformlang-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l pyformlang
+%oreon_autofiles python3-pyformlang usr/lib/python3*/site-packages/pyformlang* usr/lib64/python3*/site-packages/pyformlang* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyformlang* usr/lib64/python3*/site-packages/pyformlang* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %pytest
-
-%files -n python3-pyformlang -f %{pyproject_files}
+%files
+%files -n python3-pyformlang -f %{oreon_filedir}/python3-pyformlang.list
 
 %changelog
+
 %autochangelog

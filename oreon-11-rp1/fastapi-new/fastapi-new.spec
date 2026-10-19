@@ -1,50 +1,29 @@
-%global source0_hash 3528df6d5bffbc563b3871252229772efac83d7e8724bcb82fab6436caf8ce97
-
-# Run tests that require network access for added confidence? We can only do
-# this in a local mock build with --enable-network or in COPR.
+%global source0_hash 4178c7d349960efc8f6254ce4c12ebceaaa9f238d59c1701661e1d908e766381
 %bcond network_tests 0
-
 Name:           fastapi-new
 Version:        0.0.7
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Create a new FastAPI project in one command
-
 License:        MIT
 URL:            https://github.com/fastapi/fastapi-new
-Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-# Written for Fedora in groff_man(7) format based on --help output
+Source0:        https://github.com/fastapi/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source10:       fastapi-new.1
-
-# Downstream-only: patch out coverage from script test
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 Patch:          0001-Downstream-only-patch-out-coverage-from-script-test.patch
-
-
 BuildArch:      noarch
-
 %py_provides python3-fastapi-new
-
-# Since the “tests” dependency group contains overly-strict version bounds and
-# unwanted linting/coverage/typechecking/formatting dependencies
-# (https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters),
-# we just list the few test dependencies we *do* want manually.
-BuildRequires:  %{py3_dist pytest} >= 8.3.5
-
-# As described in README.md, uv is required; however, there is no dependency on
-# python3-uv, only an expectation that the uv executable is in PATH.
-BuildRequires:  uv
 Requires:       uv
-
 %global common_description %{expand:
 Create a new FastAPI project in one command. ✨}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-fastapi-new = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %install
 %pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE10}'
-
 install -d \
     '%{buildroot}%{bash_completions_dir}' \
     '%{buildroot}%{zsh_completions_dir}' \
@@ -57,14 +36,15 @@ export _TYPER_COMPLETE_TEST_DISABLE_SHELL_DETECTION=1
     > '%{buildroot}%{zsh_completions_dir}/_fastapi-new'
 '%{buildroot}%{_bindir}/fastapi-new' --show-completion fish \
     > '%{buildroot}%{fish_completions_dir}/fastapi-new.fish'
+%oreon_autofiles main
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %check
+
 %if %{without network_tests}
 k="${k-}${k+ and }not test_creates_project_successfully"
 k="${k-}${k+ and }not test_creates_project_with_python_version"
@@ -74,23 +54,9 @@ k="${k-}${k+ and }not test_passes_single_digit_python_version_to_uv"
 k="${k-}${k+ and }not test_creates_project_without_python_flag"
 k="${k-}${k+ and }not test_file_write_failure"
 %endif
-
 %pytest -k "${k-}" -v
-
-%files -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%doc release-notes.md
-
-# This package provides its own fastapi-new executable entry point; it also
-# adds a “fastapi cloud” command to the fastapi CLI (entry point in
-# python3-fastapi; separate package fastapi-cli also relevant). The man page
-# integrates with those in python3-fastapi.
-%{_bindir}/fastapi-new
-%{_mandir}/man1/fastapi-new.1*
-%{bash_completions_dir}/fastapi-new
-%{zsh_completions_dir}/_fastapi-new
-%{fish_completions_dir}/fastapi-new.fish
+%files
 
 %changelog
+
 %autochangelog

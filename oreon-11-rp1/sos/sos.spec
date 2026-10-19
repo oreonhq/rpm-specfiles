@@ -1,37 +1,24 @@
 %global source0_hash 3bc1a378aeca1ccc96ed8da0bd27d0ca38ebfe38489766daa0e74d78ca678fe0
-
-Summary: A set of tools to gather troubleshooting information from a system
+Summary:        A set of tools to gather troubleshooting information from a system
 Name: sos
 Version: 4.12.0
-Release: %autorelease
+Release:        1%{?dist}
 Source0:        https://github.com/sosreport/sos/archive/refs/tags/%{version}.tar.gz#/sos-%{version}.tar.gz
-
 License: GPL-2.0-only
 BuildArch: noarch
 Url: https://github.com/sosreport/sos
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
 Requires: python3-pexpect
-%if 0%{?rhel} && 0%{?rhel} < 10
-Requires: python3-setuptools
-%else
 Requires: python3-packaging
-%endif
 Recommends: python3-file-magic
-# Mandatory just for uploading to a SFTP server:
 Recommends: python3-requests
 Recommends: python3-pyyaml
 Obsoletes: sos-collector <= 1.9
-# For the _tmpfilesdir macro.
-BuildRequires: systemd
-# Mandatory just for uploading to an S3 bucket:
 Recommends: python3-boto3
-%if 0%{?fedora}
-# Address duplicate man pages
-BuildRequires:  fdupes
-%endif
-
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-sos = %{version}-%{release}
+# /oreon:deps
 %description
 Sos is a set of tools that gathers information about system
 hardware and configuration. The information can then be used for
@@ -39,37 +26,26 @@ diagnostic purposes and debugging. Sos is commonly used to help
 support technicians and developers.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version}
 
 %if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
-%generate_buildrequires
-%pyproject_buildrequires
-%endif
-
 %build
+
 %if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %pyproject_wheel
 %else
 %py3_build
 %endif
-
 %check
-# Nothing to check
 
 %install
 %if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 %pyproject_install
-%pyproject_save_files sos
 %else
 %py3_install '--install-scripts=%{_sbindir}'
 %endif
-
-%if 0%{?fedora}
-# files-duplicate: duplicate man pages detected
-%fdupes %{buildroot}%{_mandir}
-%endif
-
 install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}
 install -d -m 700 %{buildroot}%{_sysconfdir}/%{name}/cleaner
 install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}/presets.d
@@ -78,32 +54,13 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/%{name}/extras.d
 install -d -m 755 %{buildroot}%{_tmpfilesdir}
 install -m 644 %{name}.conf %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 install -m 644 tmpfiles/tmpfilesd-sos-rh.conf %{buildroot}%{_tmpfilesdir}/%{name}.conf
-
 rm -rf %{buildroot}/usr/config/
-
 %find_lang %{name} || echo 0
+%oreon_autofiles main
 
-# internationalization is currently broken. Uncomment this line once fixed.
-# %%files -f %%{name}.lang
 %files
-%if 0%{?fedora} >= 39 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
-%{_bindir}/sos
-%else
-%{_sbindir}/sos
-%endif
-%dir /etc/sos
-%dir /etc/sos/cleaner
-%dir /etc/sos/presets.d
-%dir /etc/sos/extras.d
-%dir /etc/sos/groups.d
-%{_tmpfilesdir}/%{name}.conf
-%{python3_sitelib}/sos/
-%{python3_sitelib}/sos-*info/
-%{_mandir}/man1/*
-%{_mandir}/man5/*
-%doc AUTHORS README.md
-%license LICENSE
-%config(noreplace) %{_sysconfdir}/sos/sos.conf
 
 %changelog
+
 %autochangelog
+%endif

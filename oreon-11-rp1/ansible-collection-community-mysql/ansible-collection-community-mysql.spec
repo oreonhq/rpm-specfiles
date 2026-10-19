@@ -1,58 +1,43 @@
-%global source0_hash dc9a2d3ff46ab47b9c722fc7299caf9d5f31d30df23f488373af83ad219c1dfa
-
-%if %{defined fedora}
-%bcond_without tests
-%else
+%global source0_hash d04e826c494c176d1a9563a4f55de84568492281d68030b262acb2ab83296d8c
 %bcond_with tests
-%endif
-
 Name:           ansible-collection-community-mysql
 Version:        5.0.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        MySQL collection for Ansible
-
-# All files are GPL-3.0-or-later except:
-# PSF-2.0:      plugins/module_utils/_version.py
-# BSD-2-Clause: plugins/module_utils/user.py
-# BSD-2-Clause: plugins/module_utils/mysql.py
-# BSD-2-Clause: plugins/module_utils/database.py
 License:        GPL-3.0-or-later AND PSF-2.0 AND BSD-2-Clause
 URL:            %{ansible_collection_url community mysql}
-Source:         https://github.com/ansible-collections/community.mysql/archive/%{version}/%{name}-%{version}.tar.gz
-# Patch galaxy.yml to exclude unnecessary files from the built collection.
-# This is a downstream only patch.
+Source0:        https://github.com/ansible-collections/community.mysql/archive/%{version}/%{name}-%{version}.tar.gz
 Patch:          build_ignore.patch
-
-BuildRequires:  ansible-packaging
 %if %{with tests}
-BuildRequires:  ansible-packaging-tests
 %endif
-
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  ansible-packaging
+BuildRequires:  ansible-packaging-tests
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n community.mysql-%{version}
 find -type f ! -executable -name '*.py' -print -exec sed -i -e '1{\@^#!.*@d}' '{}' +
 
 %build
-%ansible_collection_build
 
+%ansible_collection_build
 %install
 %ansible_collection_install
-
+%oreon_autofiles main
 %if %{with tests}
 %check
+
 %ansible_test_unit
 %endif
-
-%files -f %{ansible_collection_filelist}
-%license COPYING PSF-license.txt simplified_bsd.txt CONTRIBUTORS
-%doc README.md CHANGELOG.rst
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,13 +1,10 @@
 %global source0_hash 0409e2ce4bfdb2dacb2c193d0fedfc49bb975cb057c5c6b0ffcca603a1188da7
-
-Summary: Displays who is logged in to local network machines
+Summary:        Displays who is logged in to local network machines
 Name: rwho
 Version: 0.17
-Release: 81%{?dist}
-# part of rwhod is under GPL+, other parts are under BSD
-# Automatically converted from old format: BSD and GPL+ - review is highly recommended.
+Release:        1%{?dist}
 License: LicenseRef-Callaway-BSD AND GPL-1.0-or-later
-Source: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-rwho-%{version}.tar.gz
+Source0:        ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-rwho-%{version}.tar.gz
 Source1: rwhod.service
 Patch0: rwho-0.15-alpha.patch
 Patch1: rwho-0.17-bug22014.patch
@@ -26,10 +23,12 @@ Patch13: rwho-c99.patch
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: systemd, perl-interpreter
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  perl-interpreter
+BuildRequires:  systemd
+# /oreon:deps
 %description
 The rwho command displays output similar to the output of the who
 command (it shows who is logged in) for all machines on the local
@@ -39,6 +38,7 @@ Install the rwho command if you need to keep track of the users who
 are logged in to your local network.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n netkit-rwho-%{version}
@@ -65,6 +65,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     ' configure
 
 %build
+
 %ifarch s390 s390x
 CFLAGS="$RPM_OPT_FLAGS -I../include -fPIC" \
 %else
@@ -72,38 +73,28 @@ CFLAGS="$RPM_OPT_FLAGS -I../include -fpic" \
 %endif
 sh configure --with-c-compiler=gcc
 make %{?_smp_mflags}
-
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man{1,8}
 mkdir -p ${RPM_BUILD_ROOT}%{_sbindir}
 mkdir -p ${RPM_BUILD_ROOT}%{_unitdir}
 mkdir -p ${RPM_BUILD_ROOT}/var/spool/rwho
-
 make INSTALLROOT=${RPM_BUILD_ROOT} install
 make INSTALLROOT=${RPM_BUILD_ROOT} install -C ruptime
-
 install -m 644 %SOURCE1 ${RPM_BUILD_ROOT}%{_unitdir}/rwhod.service
+%oreon_autofiles main
 
 %post
+
 %systemd_post rwhod.service
-
 %preun
+
 %systemd_preun rwhod.service
-
 %postun
-%systemd_postun_with_restart rwhod.service
 
-%files
-%doc README
-%{_bindir}/ruptime
-%{_mandir}/man1/ruptime.1*
-%{_bindir}/rwho
-%{_mandir}/man1/rwho.1*
-%{_sbindir}/rwhod
-%{_mandir}/man8/rwhod.8*
-/var/spool/rwho
-%{_unitdir}/*
+%systemd_postun_with_restart rwhod.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

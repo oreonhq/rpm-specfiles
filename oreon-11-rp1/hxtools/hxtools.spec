@@ -1,44 +1,32 @@
+%global source1_hash 9de5b9d0753d59d7440cac0cc3f2499d6e2836795dd08fcf423cb47676db8caf
 %global source0_hash 55265b16191831c4e332b0235b057e3f1e952298abf34734a8fa2ee9bb7be382
-
 %global _hardened_build 1
-
 Name:           hxtools
 Version:        20251011
 Release:        1%{?dist}
 Summary:        A collection of several tools
-# fd0ssh: LGPLv2 or LGPLv3
-# git-forest: GPLv2+
-# ofl: Public Domain, but LGPVv2 or LPGLv3 because of linking with libHX
-# peicon: GPLv2+
-# Automatically converted from old format: GPLv2+ or LGPLv2 or LGPLv3 - review is highly recommended.
 License:        GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2 OR LGPL-3.0-only
 URL:            http://inai.de/projects/hxtools/
-# Signature is usually from the key with the fingerpint
-# B56B 8B9D 9915 AA87 96ED  C013 DFFF 2CDB 19FC 338D
-# Verify it like this:
-# xzdec hxtools-%%{version}.tar.xz | gpg --verify hxtools-%%{version}.tar.asc -
 Source0:        http://inai.de/files/hxtools/hxtools-%{version}.tar.xz
 Source1:        http://inai.de/files/hxtools/hxtools-%{version}.tar.asc
 Source2:        gpgkey-B56B8B9D9915AA8796EDC013DFFF2CDB19FC338D.gpg
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  libHX-devel
-# for sys/capability.h in printcaps.c
-BuildRequires:  libcap-devel
-# for libmount.h in suser/sysinfo.c
-BuildRequires:  libmount-devel
-# for pci/pci.h in suser/sysinfo.c
-BuildRequires:  pciutils-devel
-# for xcb/xcb.h in suser/sysinfo.c
-BuildRequires:  libxcb-devel
-# For source verification with gpgv
-BuildRequires:  gpg perl-generators xz
-BuildRequires: make
 Provides:       fd0ssh
 Provides:       git-forest
 Provides:       ofl
 Provides:       peicon
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gpg
+BuildRequires:  libHX-devel
+BuildRequires:  libcap-devel
+BuildRequires:  libmount-devel
+BuildRequires:  libxcb-devel
+BuildRequires:  make
+BuildRequires:  pciutils-devel
+BuildRequires:  perl-generators
+BuildRequires:  xz
+# /oreon:deps
 %description
 hxtools contains several tools for different tasks written by Jan Engelhardt.
 
@@ -50,21 +38,18 @@ Currently only these tools are included in Fedora:
 * peicon - PE files icons extractor
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 xzcat %{SOURCE0} | gpgv --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %setup -q
 
 %build
+
 %configure --disable-silent-rules
 %make_build
-
 %install
 %make_install
-
-# remove unwanted files
-# Using %%exclude in %%files pollutes the debuginfo package :-/
-# This seems to be only build if some dependency is present
 rm "%{buildroot}%{_bindir}/bin2c"
 rm "%{buildroot}%{_bindir}/checkbrack"
 rm "%{buildroot}%{_bindir}/clock_info"
@@ -204,18 +189,10 @@ rm "%{buildroot}%{_mandir}/man8/printcaps.8"*
 rm "%{buildroot}%{_mandir}/man8/utmp_register.8"*
 rm "%{buildroot}%{_mandir}/man8/vcsaview.8"*
 rm "%{buildroot}%{_mandir}/man8/xfs_irecover.8"*
+%oreon_autofiles main
 
-%files
-%license LICENSE.GPL2 LICENSE.GPL3 LICENSE.WTFPL
-%doc LICENSES.txt
-%{_bindir}/git-forest
-%{_bindir}/ofl
-%{_libexecdir}/hxtools/fd0ssh
-%{_libexecdir}/hxtools/peicon
-%{_mandir}/man1/fd0ssh.1*
-%{_mandir}/man1/git-forest.1*
-%{_mandir}/man1/ofl.1*
-%{_mandir}/man1/peicon.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

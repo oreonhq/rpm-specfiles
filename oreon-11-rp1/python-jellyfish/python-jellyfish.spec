@@ -1,61 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 72d2fda61b23babe862018729be73c8b0dc12e3e6601f36f6e65d905e249f4db
 Name:           python-jellyfish
 Version:        1.2.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        ...
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://jellyfish.jpt.sh/
-Source:         %{pypi_source jellyfish}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'jellyfish' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/j/jellyfish/jellyfish-%{version}.tar.gz
 Patch0:         fix-build.patch
 Patch1:         test-only-python-implementation.diff
 Patch2:         nocimplementation-fix-0.9.1.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(maturin) < 2
+BuildRequires:  python3dist(maturin) >= 0.14
+Requires:       python3-jellyfish = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-jellyfish
-Summary:        %{summary}
-
-%description -n python3-jellyfish %_description
-
+Summary:        ...
+%description -n python3-jellyfish
 
 %prep
-%autosetup -p1 -n jellyfish-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir jellyfish-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-jellyfish usr/lib/python3*/site-packages/jellyfish* usr/lib64/python3*/site-packages/jellyfish* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/jellyfish* usr/lib64/python3*/site-packages/jellyfish* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-jellyfish -f %{pyproject_files}
+%files
+%files -n python3-jellyfish -f %{oreon_filedir}/python3-jellyfish.list
 
 %changelog
+
 %autochangelog

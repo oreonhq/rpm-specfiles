@@ -1,57 +1,47 @@
-%global source0_hash none
-
+%global source0_hash 30c5031552cd59f620ac0c8211dac45b345d3b2df310e7721879e4f46ef9c601
 Name:           python-flask-cors
 Version:        6.0.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Flask extension simplifying CORS support
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://corydolphin.github.io/flask-cors/
-Source:         %{pypi_source flask_cors}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flask_cors/flask_cors-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'flask-cors' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 64
+BuildRequires:  python3dist(setuptools-scm) >= 8
+Requires:       python3-flask-cors = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-flask-cors
-Summary:        %{summary}
-
-%description -n python3-flask-cors %_description
-
+Summary:        A Flask extension simplifying CORS support
+# oreon:reqs
+Requires:       python3dist(flask) >= 0.9
+Requires:       python3dist(typing-extensions) >= 4.6.0
+Requires:       python3dist(werkzeug) >= 0.7
+# /oreon:reqs
+%description -n python3-flask-cors
 
 %prep
-%autosetup -p1 -n flask_cors-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir flask_cors-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-flask-cors usr/lib/python3*/site-packages/flask_cors* usr/lib64/python3*/site-packages/flask_cors* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flask_cors* usr/lib64/python3*/site-packages/flask_cors* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-flask-cors -f %{pyproject_files}
+%files
+%files -n python3-flask-cors -f %{oreon_filedir}/python3-flask-cors.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 33cbfe7924e6d4524dfa9e8bd85608a3b779ecace0d9edb32444a4b356237549
 Name:           python-google-cloud-testutils
 Version:        1.9.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        ...
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/googleapis/google-cloud-python/packages/google-cloud-testutils
-Source:         %{pypi_source google_cloud_testutils}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/google_cloud_testutils/google_cloud_testutils-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'google-cloud-testutils' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-google-cloud-testutils = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-google-cloud-testutils
-Summary:        %{summary}
-
-%description -n python3-google-cloud-testutils %_description
-
+Summary:        ...
+%description -n python3-google-cloud-testutils
 
 %prep
-%autosetup -p1 -n google_cloud_testutils-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir google_cloud_testutils-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-google-cloud-testutils usr/lib/python3*/site-packages/google_cloud_testutils* usr/lib64/python3*/site-packages/google_cloud_testutils* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/google_cloud_testutils* usr/lib64/python3*/site-packages/google_cloud_testutils* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-google-cloud-testutils -f %{pyproject_files}
-%{_bindir}/lower-bound-checker
+%files
+%files -n python3-google-cloud-testutils -f %{oreon_filedir}/python3-google-cloud-testutils.list
 
 %changelog
+
 %autochangelog

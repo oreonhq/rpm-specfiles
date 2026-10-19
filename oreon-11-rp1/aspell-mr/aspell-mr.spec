@@ -1,27 +1,21 @@
 %global source0_hash d3a35a40bee0234a5b388375485ab8bf0ba8edbf3b0a82e2c2f76a40a8586f33
-
 %global debug_package %{nil}
 %global lang mr
 %global langrelease 0
-
 Name:           aspell-mr
 Version:        0.10
-Release:        39%{?dist}
+Release:        1%{?dist}
 Summary:        GNU Aspell Marathi Dictionary Package
-
 License:        GPL-2.0-only
 URL:            http://aspell.net/
 Source0:        https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}-%{langrelease}.tar.bz2
 Patch1:         marathi-specific-chars-426943.patch
-
-# This package has been deprecated since Fedora 39 due to aspell package deprecation
-# Change proposal is located here: https://fedoraproject.org/wiki/Changes/AspellDeprecation
 Provides:  deprecated()
-
-BuildRequires:  aspell >= 12:0.60
-BuildRequires: make
 Requires:       aspell >= 12:0.60
-
+# oreon:deps
+BuildRequires:  aspell
+BuildRequires:  make
+# /oreon:deps
 %description
 GNU Aspell Marathi Dictionary Package
 
@@ -37,6 +31,7 @@ GNU Aspell Marathi Dictionary Package
 #  --libdir, so this error is bogus.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n aspell6-%{lang}-%{version}-%{langrelease}
@@ -47,16 +42,15 @@ mv u-deva.cset u-deva-mr.cset
 mv u-deva.cmap u-deva-mr.cmap
 
 %build
+
 ./configure
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=%{buildroot}
+%oreon_autofiles main
 
-%files
-%doc Copyright
-%license COPYING
-%{_libdir}/aspell-0.60/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

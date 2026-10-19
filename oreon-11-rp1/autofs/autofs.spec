@@ -1,46 +1,24 @@
 %global source0_hash 46c30b763ef896f4c4a6df6d62aaaef7afc410e0b7f50d52dbfc6cf728cacd4f
-
-#
-# $Id: autofs.spec,v 1.11 2003/12/04 15:41:32 raven Exp $
-#
-# Use --without systemd in your rpmbuild command or force values to 0 to
-# disable them.
 %bcond systemd 1
-
-# Use --without fedfs in your rpmbuild command or force values to 0 to
-# disable them.
 %bcond fedfs 1
-
-# RHEL 10+ does not include NIS support
 %bcond nis %{undefined rhel}
-
-Summary: A tool for automatically mounting and unmounting filesystems
+Summary:        A tool for automatically mounting and unmounting filesystems
 Name: autofs
 Version: 5.1.9
-Release: 12%{?dist}
+Release:        1%{?dist}
 Epoch: 1
 License: GPL-2.0-or-later
-Source:        https://www.kernel.org/pub/linux/daemons/autofs/v5/autofs-%{version}.tar.gz
+Source0:        https://www.kernel.org/pub/linux/daemons/autofs/v5/autofs-%{version}.tar.gz
 Patch1: autofs-5.1.9-update-configure.patch
 Patch2: autofs-5.1.9-fix-ldap_parse_page_control-check.patch
 Patch3: autofs-5.1.9-fix-crash-in-make_options_string.patch
 Patch4: autofs-5.1.9-Fix-incompatible-function-pointer-types-in-cyrus-sasl-module.patch
 Patch5: autofs-5.1.9-fix-always-recreate-credential-cache.patch
 Patch6: autofs-5.1.9-fix-changelog.patch
-
 %if %{with systemd}
-BuildRequires: systemd-units
-BuildRequires: systemd-devel
 %endif
-BuildRequires: gcc
-BuildRequires: autoconf, openldap-devel, bison, flex, libxml2-devel
-BuildRequires: cyrus-sasl-devel, openssl-devel module-init-tools util-linux
-BuildRequires: e2fsprogs libtirpc-devel libsss_autofs
 %if %{with nis}
-BuildRequires: libnsl2-devel
 %endif
-BuildRequires: pkgconfig krb5-devel
-BuildRequires: make
 Conflicts: cyrus-sasl-lib < 2.1.23-9
 Requires: bash coreutils sed gawk grep module-init-tools /bin/ps
 %if %{with systemd}
@@ -58,7 +36,27 @@ Summary(de): autofs daemon
 Summary(fr): démon autofs
 Summary(tr): autofs sunucu süreci
 Summary(sv): autofs-daemon
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  bison
+BuildRequires:  cyrus-sasl-devel
+BuildRequires:  e2fsprogs
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  krb5-devel
+BuildRequires:  libnsl2-devel
+BuildRequires:  libsss_autofs
+BuildRequires:  libtirpc-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  module-init-tools
+BuildRequires:  openldap-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig
+BuildRequires:  systemd-devel
+BuildRequires:  systemd-units
+BuildRequires:  util-linux
+# /oreon:deps
 %description
 autofs is a daemon which automatically mounts filesystems when you use
 them, and unmounts them later when you are not using them.  This can
@@ -85,6 +83,7 @@ unmountar dem när de har varit oanvända en bestämd tid.  Detta kan
 inkludera nätfilsystem, CD-ROM, floppydiskar, och så vidare.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version}
 echo %{version}-%{release} > .version
@@ -97,6 +96,7 @@ echo %{version}-%{release} > .version
 %endif
 
 %build
+
 autoreconf -iv
 LDFLAGS=-Wl,-z,now
 %configure \
@@ -107,9 +107,7 @@ LDFLAGS=-Wl,-z,now
 	--with-libtirpc \
 	%{?systemd_configure_arg:} \
 	%{?fedfs_configure_arg:}
-
 make initdir=%{_initrddir} DONTSTRIP=1
-
 %install
 %if %{with systemd}
 install -d -m 755 $RPM_BUILD_ROOT%{unitdir}
@@ -121,13 +119,11 @@ mkdir -p -m755 $RPM_BUILD_ROOT%{_libdir}/autofs
 mkdir -p -m755 $RPM_BUILD_ROOT%{_mandir}/{man5,man8}
 mkdir -p -m755 $RPM_BUILD_ROOT/etc/sysconfig
 mkdir -p -m755 $RPM_BUILD_ROOT/etc/auto.master.d
-
 make install mandir=%{_mandir} initdir=%{_initrddir} systemddir=%{unitdir} INSTALLROOT=$RPM_BUILD_ROOT
 echo make -C redhat
 make -C redhat
 install -m 755 -d $RPM_BUILD_ROOT/misc
 %if %{with systemd}
-# Configure can get this wrong when the unit files appear under /lib and /usr/lib
 find $RPM_BUILD_ROOT -type f -name autofs.service -exec rm -f {} \;
 install -m 644 redhat/autofs.service $RPM_BUILD_ROOT%{unitdir}/autofs.service
 %define init_file_name %{unitdir}/autofs.service
@@ -137,14 +133,15 @@ install -m 755 redhat/autofs.init $RPM_BUILD_ROOT%{_initrddir}/autofs
 %endif
 install -m 644 redhat/autofs.conf $RPM_BUILD_ROOT/etc/autofs.conf
 install -m 644 redhat/autofs.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/autofs
-
 install -m 644 samples/auto.master $RPM_BUILD_ROOT/etc/auto.master
 install -m 644 samples/auto.misc $RPM_BUILD_ROOT/etc/auto.misc
 install -m 755 samples/auto.net $RPM_BUILD_ROOT/etc/auto.net
 install -m 755 samples/auto.smb $RPM_BUILD_ROOT/etc/auto.smb
 install -m 600 samples/autofs_ldap_auth.conf $RPM_BUILD_ROOT/etc/autofs_ldap_auth.conf
+%oreon_autofiles main
 
 %post
+
 %if %{with systemd}
 %systemd_post %{name}.service
 %else
@@ -152,8 +149,8 @@ if [ $1 -eq 1 ]; then
 	%{_sbindir}/sbin/chkconfig --add autofs
 fi
 %endif
-
 %preun
+
 %if %{with systemd}
 %systemd_preun %{name}.service
 %else
@@ -162,8 +159,8 @@ if [ $1 -eq 0 ] ; then
     %{_sbindir}/chkconfig --del autofs
 fi
 %endif
-
 %postun
+
 %if %{with systemd}
 %systemd_postun_with_restart %{name}.service
 %else
@@ -171,37 +168,14 @@ if [ $1 -ge 1 ] ; then
     %{_sbindir}/sbin/service autofs condrestart > /dev/null 2>&1 || :
 fi
 %endif
-
 %triggerun -- %{name} < 5.0.6-5
-# Save the current service runlevel info
-# User must manually run systemd-sysv-convert --apply %%{name}
-# to migrate them to systemd targets
-%{_bindir}/systemd-sysv-convert --save %{name} >/dev/null 2>&1 ||:
 
-# Run these because the SysV package being removed won't do them
+%{_bindir}/systemd-sysv-convert --save %{name} >/dev/null 2>&1 ||:
 %{_sbindir}/chkconfig --del %{name} >/dev/null 2>&1 || :
 %{_bindir}/systemctl try-restart %{name}.service >/dev/null 2>&1 || :
-
-%files
-%doc CREDITS INSTALL COPY* README* samples/ldap* samples/autofs.schema
-%config %{init_file_name}
-%config(noreplace,missingok) /etc/auto.master
-%config(noreplace) /etc/autofs.conf
-%config(noreplace,missingok) /etc/auto.misc
-%config(noreplace,missingok) /etc/auto.net
-%config(noreplace,missingok) /etc/auto.smb
-%config(noreplace) /etc/sysconfig/autofs
-%config(noreplace) /etc/autofs_ldap_auth.conf
-%{_sbindir}/automount
-%if %{with fedfs}
-%{_sbindir}/mount.fedfs
-%{_sbindir}/fedfs-map-nfs4
-%endif
-%{_libdir}/libautofs.so
-%{_libdir}/autofs/
-%{_mandir}/*/*
-%dir /etc/auto.master.d
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.9-12
 - Prepare for Oreon 11 (RP1)

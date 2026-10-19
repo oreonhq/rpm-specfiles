@@ -1,74 +1,29 @@
 %global source0_hash 8bc04cd513d47629508bd2fd6f455ced38316974913638e971f44e37786c6365
-
 %global _hardened_build 1
-
-# tmpfiles.d & systemd not supported in RHEL < 7
-%if 0%{?fedora} || 0%{?rhel} >= 7
-%global _with_tmpfilesd 1
-%global _with_systemd 1
-%endif
-
 %global _updatedb_conf /etc/updatedb.conf
-
 Name:           BackupPC
 Version:        4.4.0
 Release:        22%{?dist}
 Summary:        High-performance backup system
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://backuppc.github.io/backuppc/index.html
 Source0:        https://github.com/backuppc/backuppc/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:        BackupPC.htaccess
 Source2:        BackupPC.logrotate
 Source3:        README.setup
-#A C wrapper to use since perl-suidperl is no longer provided
 Source4:        BackupPC_Admin.c
 Source5:        backuppc.service
 Source6:        BackupPC.tmpfiles
 Source7:        README.RHEL
 Source8:        apache.users
-
 Patch0:         BackupPC-4.1.3-docfix.patch
-# Fixes https://bugzilla.redhat.com/show_bug.cgi?id=2091514
 Patch1:         https://github.com/backuppc/backuppc/commit/2c9270b9b849b2c86ae6301dd722c97757bc9256.patch
-
-BuildRequires:  gcc
-BuildRequires:  perl-generators
-BuildRequires:  perl(BackupPC::XS) >= 0.53
-BuildRequires:  perl(CGI)
-BuildRequires:  perl(Compress::Zlib)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(Digest::MD5)
-BuildRequires:  perl(Encode)
-BuildRequires:  perl(File::Copy)
-BuildRequires:  perl(File::Listing)
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(Getopt::Long)
-BuildRequires:  perl(Getopt::Std)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Pod::Usage)
-BuildRequires:  perl(Socket)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(utf8)
-BuildRequires:  perl(vars)
-BuildRequires:  perl(version)
 %if 0%{?_with_systemd}
-BuildRequires:  systemd
 %endif
-
-# Unbundled libraries
 Requires:       perl(Net::FTP::AutoReconnect)
 Requires:       perl(Net::FTP::RetrHandle)
-
 Requires:       bzip2
-%if 0%{?fedora} || 0%{?rhel} >= 8
-Requires:       webserver
-Recommends:     httpd
-%else
 Requires:       httpd
-%endif
 Requires:       iputils
 Requires:       openssh-clients
 %if ! 0%{?el6}
@@ -80,7 +35,6 @@ Requires:       perl(BackupPC::XS) >= 0.53
 Requires:       perl-Time-modules
 Requires:       samba-client
 Requires:       %{_sbindir}/sendmail
-
 %if 0%{?_with_systemd}
 Requires(post): shadow-utils
 %{?systemd_requires}
@@ -89,12 +43,35 @@ Requires(preun): initscripts chkconfig
 Requires(post): initscripts chkconfig shadow-utils
 Requires(postun): initscripts
 %endif
-
 Requires:       policycoreutils
-BuildRequires:  selinux-policy-devel checkpolicy
-BuildRequires: make
 Provides:       backuppc = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  checkpolicy
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  perl(BackupPC::XS)
+BuildRequires:  perl(CGI)
+BuildRequires:  perl(Compress::Zlib)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Digest::MD5)
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Listing)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(Getopt::Std)
+BuildRequires:  perl(Pod::Usage)
+BuildRequires:  perl(Socket)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(version)
+BuildRequires:  perl-generators
+BuildRequires:  selinux-policy-devel
+BuildRequires:  systemd
+# /oreon:deps
 %description
 BackupPC is a high-performance, enterprise-grade system for backing up Linux
 and WinXX and Mac OS X PCs and laptops to a server's disk. BackupPC is highly
@@ -104,6 +81,7 @@ NOTE: Proper configuration is required after install, see README.setup for more
 information.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -167,14 +145,11 @@ u backuppc - - %{_localstatedir}/lib/%{name} -
 EOF
 
 %build
-# Build C wrapper
-gcc -o BackupPC_Admin BackupPC_Admin.c %{optflags}
 
-# SElinux 
+gcc -o BackupPC_Admin BackupPC_Admin.c %{optflags}
 pushd selinux
 make -f %{_datadir}/selinux/devel/Makefile
 popd
-
 %install
 %{__perl} configure.pl \
         --batch \
@@ -204,17 +179,13 @@ popd
         --log-dir %{_localstatedir}/log/%{name} \
         --no-set-perms \
         --uid-ignore
-
-# Make bin files executable
 chmod +x %{buildroot}%{_datadir}/%{name}/bin/*
-
 %if 0%{?_with_tmpfilesd}
 mkdir -p %{buildroot}%{_tmpfilesdir}
 install -p -m 0644 %{SOURCE6} %{buildroot}%{_tmpfilesdir}/%{name}.conf
 %else
 mkdir -p %{buildroot}%{_localstatedir}/run/%{name}
 %endif
-
 %if 0%{?_with_systemd}
 mkdir -p %{buildroot}%{_unitdir}
 install -p -m 0644 %{SOURCE5} %{buildroot}%{_unitdir}/
@@ -222,62 +193,50 @@ install -p -m 0644 %{SOURCE5} %{buildroot}%{_unitdir}/
 mkdir -p %{buildroot}%{_initrddir}
 install -p -m 0755 systemd/src/init.d/linux-backuppc %{buildroot}%{_initrddir}/backuppc
 %endif
-
 mkdir -p %{buildroot}%{_sysconfdir}/httpd/conf.d/
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d/
 mkdir -p %{buildroot}%{_localstatedir}/log/%{name}
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}/pc
-
 install -p -m 0644 %{SOURCE1} \
     %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 install -p -m 0644 %{SOURCE2} \
     %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 install -p -m 0644 %{SOURCE8} \
     %{buildroot}%{_sysconfdir}/%{name}/
-
-# perl-suidperl is no longer avaialable, we use a C wrapper
 mkdir -p %{buildroot}%{_datadir}/%{name}/sbin
 mv %{buildroot}%{_libexecdir}/%{name}/BackupPC_Admin \
    %{buildroot}%{_datadir}/%{name}/sbin/BackupPC_Admin
 install -pm 0755 BackupPC_Admin %{buildroot}%{_libexecdir}/%{name}/
-
-# SElinux 
 mkdir -p %{buildroot}%{_datadir}/selinux/packages/%{name}
 install -m 0644 selinux/%{name}.pp %{buildroot}%{_datadir}/selinux/packages/%{name}/%{name}.pp
-
 install -m0644 -D backuppc.sysusers.conf %{buildroot}%{_sysusersdir}/backuppc.conf
+%oreon_autofiles main
 
 %preun
+
 %if 0%{?_with_systemd}
 %systemd_preun backuppc.service
 %else
 if [ $1 = 0 ]; then
-  # Package removal, not upgrade
   service backuppc stop > /dev/null 2>&1 || :
   chkconfig --del backuppc || :
 fi
 %endif
-
 %post
+
 (
-     # Install/update Selinux policy
      semodule -i %{_datadir}/selinux/packages/%{name}/%{name}.pp
-     # files created by app
      restorecon -R %{_sysconfdir}/%{name}
      restorecon -R %{_localstatedir}/log/%{name}
 ) &>/dev/null
-
 %if 0%{?_with_systemd}
 %systemd_post backuppc.service
 %else
 if [ $1 -eq 1 ]; then
-  # initial installation
   chkconfig --add backuppc || :
 fi
 %{_sbindir}/usermod -a -G backuppc apache || :
 %endif
-
-# add BackupPC backup directories to PRUNEPATHS in locate database
 if [ -w %{_updatedb_conf} ]; then
   grep ^PRUNEPATHS %{_updatedb_conf} | grep %{_localstatedir}/lib/%{name} > /dev/null
   if [ $? -eq 1 ]; then
@@ -285,52 +244,18 @@ if [ -w %{_updatedb_conf} ]; then
   fi
 fi
 :
-
 %postun
-# clear out any BackupPC configuration in apache
-service httpd condrestart > /dev/null 2>&1 || :
 
+service httpd condrestart > /dev/null 2>&1 || :
 if [ $1 -eq 0 ]; then
-  # uninstall
-  # Remove the SElinux policy.
   semodule -r %{name} &> /dev/null || :
-  # remove BackupPC backup directories from PRUNEPATHS in locate database
   if [ -w %{_updatedb_conf} ]; then
     sed -i '\@PRUNEPATHS@s@[ ]*'%{_localstatedir}/lib/%{name}'@@' %{_updatedb_conf} || :
   fi
 fi
-
 %systemd_postun_with_restart backuppc.service
-
-%files
-%doc README.md README.setup README.RHEL ChangeLog doc/*
-%license LICENSE
-%dir %attr(-,backuppc,backuppc) %{_localstatedir}/log/%{name} 
-%dir %attr(-,backuppc,apache) %{_sysconfdir}/%{name}/
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
-%config(noreplace) %attr(-,backuppc,apache) %{_sysconfdir}/%{name}/*
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/sbin
-%{_datadir}/%{name}/[^s]*
-%attr(750,backuppc,apache) %{_datadir}/%{name}/sbin/BackupPC_Admin
-
-%if 0%{?_with_tmpfilesd}
-%{_tmpfilesdir}/%{name}.conf
-%else
-%dir %attr(0775,root,backuppc) %{_localstatedir}/run/%{name} 
-%endif
-
-%if 0%{?_with_systemd}
-%{_unitdir}/backuppc.service
-%else
-%attr(0755,root,root) %{_initrddir}/backuppc
-%endif
-
-%attr(4750,backuppc,apache) %{_libexecdir}/%{name}/BackupPC_Admin
-%attr(-,backuppc,root) %{_localstatedir}/lib/%{name}/
-%{_datadir}/selinux/packages/%{name}/%{name}.pp
-%{_sysusersdir}/backuppc.conf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

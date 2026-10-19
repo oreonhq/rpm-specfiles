@@ -1,67 +1,81 @@
-%global source0_hash bd5f8d68af28fd69551a3cb48a2849cad5f6854aa48022e9d98c6236d109eeae
-
+%global source0_hash 4b0633a6ce753ea38fb1fe2dc54b66b732c4d0b29fadf48cad78b2e7f6636d9d
 Name:           pgcli
 Version:        4.6.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        CLI for Postgres Database. With auto-completion and syntax highlighting
-
 License:        BSD-3-Clause
 URL:            https://www.pgcli.com/
-Source:         %{pypi_source pgcli}
-
-# Bump click minimum version to 8.3.1
+Source0:        https://files.pythonhosted.org/packages/source/p/pgcli/pgcli-%{version}.tar.gz
 Patch:          https://github.com/dbcli/pgcli/commit/d0a6cc2.patch
-
 BuildArch:      noarch
-
-BuildRequires:  python3-devel
-
-BuildRequires:  help2man
-
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(behave)
-BuildRequires:  python3dist(pexpect)
-BuildRequires:  python3dist(sshtunnel)
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
 %py_provides python3-pgcli
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 64.0
+BuildRequires:  python3dist(setuptools-scm) >= 8
+Requires:       python3-pgcli = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pgcli+keyring
+Summary:        Metapackage for python3-pgcli keyring extras
+Requires:       python3-pgcli = %{version}-%{release}
+Requires:       python3dist(keyring) >= 12.2.0
+Provides:       python3dist(pgcli[keyring]) = %{version}-%{release}
+
+%description -n python3-pgcli+keyring
+Metapackage for python3-pgcli keyring extras.
+
+%package -n       python3-pgcli+sshtunnel
+Summary:        Metapackage for python3-pgcli sshtunnel extras
+Requires:       python3-pgcli = %{version}-%{release}
+Requires:       python3dist(sshtunnel) >= 0.4.0
+Provides:       python3dist(pgcli[sshtunnel]) = %{version}-%{release}
+
+%description -n python3-pgcli+sshtunnel
+Metapackage for python3-pgcli sshtunnel extras.
+
+%package -n       python3-pgcli+dev
+Summary:        Metapackage for python3-pgcli dev extras
+Requires:       python3-pgcli = %{version}-%{release}
+Requires:       python3dist(behave) >= 1.2.4
+Requires:       python3dist(coverage) >= 7.2.7
+Requires:       python3dist(docutils) >= 0.13.1
+Requires:       python3dist(keyrings.alt) >= 3.1
+Requires:       python3dist(pexpect) >= 4.9.0
+Requires:       python3dist(pytest) >= 7.4.4
+Requires:       python3dist(pytest-cov) >= 4.1.0
+Requires:       python3dist(ruff) >= 0.11.7
+Requires:       python3dist(sshtunnel) >= 0.4.0
+Requires:       python3dist(tox) >= 1.9.2
+Provides:       python3dist(pgcli[dev]) = %{version}-%{release}
+
+%description -n python3-pgcli+dev
+Metapackage for python3-pgcli dev extras.
 
 %description
 CLI for Postgres Database. With auto-completion and syntax highlighting
 
-%pyproject_extras_subpkg -n python3-pgcli keyring sshtunnel
-
-%generate_buildrequires
-%pyproject_buildrequires -x keyring -x sshtunnel
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l pgcli
-
-# We must do this in %%install rather than in %%build in order to use the
-# generated entry point:
 install -d '%{buildroot}%{_mandir}/man1'
 PYTHONPATH='%{buildroot}%{python3_sitelib}' \
     PYTHONDONTWRITEBYTECODE=1 \
     help2man --no-info --version-string='%{version}' \
         --output='%{buildroot}%{_mandir}/man1/pgcli.1' \
         %{buildroot}%{_bindir}/pgcli
+%oreon_autofiles main
 
 %check
-%pytest
 
-%files -f %{pyproject_files}
-%doc README.rst changelog.rst
-%{_bindir}/pgcli
-%{_mandir}/man1/pgcli.1*
+%pytest
+%files
 
 %changelog
+
 %autochangelog

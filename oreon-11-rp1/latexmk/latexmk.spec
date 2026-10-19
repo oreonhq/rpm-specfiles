@@ -1,23 +1,19 @@
 %global source0_hash b145a1ccfbde15985a517341dbd6510d391dfc21919c649669ebc977d91aa57f
-
 Name:           latexmk
 Version:        4.88
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A make-like utility for LaTeX files
-
 %global upstreamver %{gsub %version %. %{quote:}}
-
 License:        GPL-2.0-or-later
 URL:            https://www.cantab.net/users/johncollins/latexmk/
 Source0:        https://www.cantab.net/users/johncollins/latexmk/latexmk-488.zip
 Source1:        latexmkrc
 Source2:        latexmk-README.fedora
-
 BuildArch:      noarch
-BuildRequires:  perl-generators
-
 Requires:       tex-latex-bin, ghostscript-tools-dvipdf, xdg-utils
-
+# oreon:deps
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 Latexmk is a perl script for running LaTeX the correct number of times to
 resolve cross references, etc.; it also runs auxiliary programs (bibtex,
@@ -31,6 +27,7 @@ of the original version of latexmk.
 Before using a previewer, read the file README.fedora.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}
 
@@ -41,8 +38,8 @@ touch -r latexmk.pl.orig latexmk.pl
 rm latexmk.pl.orig
 
 %build
-cp -p %{SOURCE2} README.fedora
 
+cp -p %{SOURCE2} README.fedora
 %install
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_mandir}/man1
@@ -50,18 +47,12 @@ mkdir -p %{buildroot}%{_sysconfdir}
 install -m 0755 -p latexmk.pl %{buildroot}%{_bindir}/latexmk
 install -m 0644 -p latexmk.1 %{buildroot}%{_mandir}/man1
 install -m 0644 -p %{SOURCE1} %{buildroot}%{_sysconfdir}
-
-# Remove files we don't want in the docs
 rm -f extra-scripts/*.bat
+%oreon_autofiles main
 
-%files
-%{_bindir}/latexmk
-%{_mandir}/man1/latexmk.1*
-%config(noreplace) %{_sysconfdir}/latexmkrc
-%doc CHANGES README README.fedora extra-scripts example_rcfiles
-%doc latexmk.pdf
-%license COPYING
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.88-1
 - Prepare for Oreon 11 (RP1)

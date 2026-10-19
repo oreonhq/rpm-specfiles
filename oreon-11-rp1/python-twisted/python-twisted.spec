@@ -1,71 +1,55 @@
-%global source0_hash none
-
+%global source0_hash dbfd0fe1ee409d0243fdd7a6a6ff14f4948cec1fd78e0376291f805e1501fae9
 Name:           python-twisted
 Version:        26.4.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        An asynchronous networking framework written in Python
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://twisted.org/
-Source:         %{pypi_source twisted}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/twisted/twisted-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'twisted' generated automatically by pyp2spec.}
-
-
-%description %_description
+BuildRequires:  python3dist(hatch-fancy-pypi-readme) >= 22.5.0
+BuildRequires:  python3dist(hatchling) >= 1.10.0
+BuildRequires:  python3dist(incremental) >= 24.7.0
+Requires:       python3-twisted = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-twisted
-Summary:        %{summary}
-
-%description -n python3-twisted %_description
+Summary:        An asynchronous networking framework written in Python
+# oreon:reqs
+Requires:       python3dist(attrs) >= 22.2.0
+Requires:       python3dist(automat) >= 24.8.0
+Requires:       python3dist(constantly) >= 15.1
+Requires:       python3dist(hyperlink) >= 17.1.1
+Requires:       python3dist(incremental) >= 24.7.0
+Requires:       python3dist(typing-extensions) >= 4.2.0
+Requires:       python3dist(zope.interface) >= 5
+# /oreon:reqs
+%description -n python3-twisted
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-twisted all-non-platform,conch,dev,dev-release,gtk-platform,http2,macos-platform,mypy,osx-platform,serial,test,tls,websocket,windows-platform
-
 
 %prep
-%autosetup -p1 -n twisted-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir twisted-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-twisted usr/lib/python3*/site-packages/twisted* usr/lib64/python3*/site-packages/twisted* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/twisted* usr/lib64/python3*/site-packages/twisted* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-twisted -f %{pyproject_files}
-%{_bindir}/cftp
-%{_bindir}/ckeygen
-%{_bindir}/conch
-%{_bindir}/mailmail
-%{_bindir}/pyhtmlizer
-%{_bindir}/tkconch
-%{_bindir}/trial
-%{_bindir}/twist
-%{_bindir}/twistd
+%files
+%files -n python3-twisted -f %{oreon_filedir}/python3-twisted.list
 
 %changelog
+
 %autochangelog

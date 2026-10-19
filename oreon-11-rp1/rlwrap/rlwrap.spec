@@ -1,28 +1,25 @@
-%global source0_hash 944bc0e4812e61b2b7c4cd17b1b37b41325deffa0b84192aff8c0eace1a5da4c
-
+%global source0_hash b2721b1c0147aaafc98e6a31d875316ba032ad336bec7f2a8bc538f9e3c6db60
 %bcond autoreconf 1
-
 Name:           rlwrap
 Version:        0.48
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Wrapper for GNU readline
-
 License:        GPL-2.0-or-later
 URL:            https://github.com/hanslub42/rlwrap
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/hanslub42/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+%if %{with autoreconf}
+%endif
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  libptytty-devel
+BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  python3-rpm-macros
 BuildRequires:  readline-devel
-%if %{with autoreconf}
-BuildRequires:  autoconf
-BuildRequires:  automake
-BuildRequires:  libtool
-%endif
-
+# /oreon:deps
 %description
 rlwrap is a 'readline wrapper' that uses the GNU readline library to
 allow the editing of keyboard input for any other command. Input
@@ -31,6 +28,7 @@ history completion and search work as in bash and completion word
 lists can be specified on the command line.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -65,23 +63,17 @@ export CFLAGS="%{optflags} -std=gnu17"
 
 %install
 %make_install
-
-# Fix shebangs to prevent bogus requirements
 %{__sed} -r -i \
     -e 's|^#!.*perl$|#!%{__perl}|g' \
     -e 's|^#!.*python3$|#!%{__python3}|g' \
     $(find %{buildroot}%{_datadir}/%{name}/ -type f)
+%oreon_autofiles main
 
 %check
-make check
 
-%files
-%license COPYING
-%doc AUTHORS NEWS README.md
-%{_bindir}/rlwrap
-%{_mandir}/*/rlwrap.*
-%{_mandir}/man3/RlwrapFilter.*
-%{_datadir}/rlwrap
+make check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

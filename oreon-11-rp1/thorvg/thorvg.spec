@@ -1,31 +1,25 @@
-%global source0_hash none
-
+%global source0_hash 59c12500b7c2fc426e89667b3e4f3fdc2ff05a75cc12001a22c5f58fb1cdf592
 Name:           thorvg
 Version:        1.1.1
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        Lightweight vector-based scenes and animation drawing library
-
 License:        MIT
 URL:            https://www.thorvg.org/
-Source:         https://github.com/thorvg/thorvg/archive/v%{version}/thorvg-%{version}.tar.gz
+Source0:        https://github.com/thorvg/thorvg/archive/v%{version}/thorvg-%{version}.tar.gz
 Patch:          binarynameconflicts.patch
-
+Provides: bundled(rapidjson)
+# oreon:deps
+BuildRequires:  doxygen
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  meson
 BuildRequires:  ninja-build
-BuildRequires:  pkgconfig(libturbojpeg)
 BuildRequires:  pkgconfig(libpng)
+BuildRequires:  pkgconfig(libturbojpeg)
 BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(sdl2)
-# Documentation
-BuildRequires:  doxygen
-
-# Modifications do not allow for use of packaged rapidjson
-# https://github.com/thorvg/thorvg/issues/3358
-Provides: bundled(rapidjson)
-
+# /oreon:deps
 %description
 ThorVG is an open-source graphics library designed for creating vector-based
 scenes and animations. It combines immense power with remarkable lightweight
@@ -48,18 +42,17 @@ The following list shows primitives that are supported by ThorVG:
 %package devel
 Summary: Development headres and libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development headers and libraries for ThorVG.
 
 %package doc
 Summary: Documentation
 BuildArch:  noarch
-
 %description doc
 Docbook documentation for ThorVG.
 
 %prep
+
 %autosetup -n thorvg-%{version} -p1
 # Generate docbook documentation
 sed -i "s/GENERATE_DOCBOOK       = NO/GENERATE_DOCBOOK       = YES/g" docs/Doxyfile
@@ -67,6 +60,7 @@ sed -i "s/# DOCBOOK_PROGRAMLISTING = NO/ DOCBOOK_PROGRAMLISTING = YES/g" docs/Do
 sed -i "s/GENERATE_HTML          = YES/GENERATE_HTML          = NO/g" docs/Doxyfile
 
 %build
+
 %meson -Dengines=all \
        -Dexamples=true \
        -Dloaders=all \
@@ -76,11 +70,9 @@ sed -i "s/GENERATE_HTML          = YES/GENERATE_HTML          = NO/g" docs/Doxyf
        -Dstrip=false \
        -Dtests=true
 %meson_build
-# documentation
 pushd docs
 doxygen
 popd
-
 %install
 %meson_install
 mkdir -p %{buildroot}%{_datadir}/help/en/ThorVG
@@ -88,32 +80,15 @@ for file in docs/docbook/*.*
 do
   install -m644 $file  %{buildroot}%{_datadir}/help/en/ThorVG
 done
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %meson_test
-
-%files
-%license LICENSE
-%doc README.md
-%doc AUTHORS
-%doc CONTRIBUTING.md
-%{_libdir}/libthorvg.so.0
-%{_libdir}/libthorvg.so.0.*
-%{_bindir}/tvg-svg2png
-%{_bindir}/tvg-svg2tvg
-%{_bindir}/tvg-lottie2gif
-
-%files devel
-%{_includedir}/thorvg.h
-%{_includedir}/thorvg_capi.h
-%{_includedir}/thorvg_lottie.h
-%{_libdir}/libthorvg.so
-%{_libdir}/pkgconfig/thorvg.pc
-
-%files doc
-%license LICENSE
-%dir  %{_datadir}/help/en
-%lang(en) %{_datadir}/help/en/ThorVG
+%files -f %{oreon_filedir}/main.list
+%files -n thorvg-devel -f %{oreon_filedir}/thorvg-devel.list
+%files -n thorvg-doc -f %{oreon_filedir}/thorvg-doc.list
 
 %changelog
+
 %autochangelog

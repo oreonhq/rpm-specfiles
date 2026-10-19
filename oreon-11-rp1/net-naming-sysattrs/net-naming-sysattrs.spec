@@ -1,29 +1,23 @@
-%global source0_hash none
-
+%global source0_hash ba2e5f1280b3ecc182c4cb00ad464ffafd497b492fb2659f3fcd50cc478dbaae
 %global dracutmoddir %{_prefix}/lib/dracut/modules.d
-
 Name:           net-naming-sysattrs
 Version:        263
 Release:        1%{?dist}
 Summary:        Mechanism to emulate older network device naming behavior
-
 License:        MIT
 URL:            https://gitlab.com/mschmidt2/%{name}
 Source0:        https://gitlab.com/mschmidt2/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
-
 BuildArch:      noarch
+Requires:       systemd-udev
+Requires:       dracut
+Obsoletes:      rhel-net-naming-sysattrs < 253
+Provides:       rhel-net-naming-sysattrs = %{version}-%{release}
+# oreon:deps
 BuildRequires:  make
 BuildRequires:  pkgconfig
 BuildRequires:  pkgconfig(dracut)
 BuildRequires:  pkgconfig(udev)
-Requires:       systemd-udev
-Requires:       dracut
-
-# RHEL 9 had this stuff in the package "rhel-net-naming-sysattrs",
-# versioned together with systemd, so rhel-net-naming-sysattrs-252-*
-Obsoletes:      rhel-net-naming-sysattrs < 253
-Provides:       rhel-net-naming-sysattrs = %{version}-%{release}
-
+# /oreon:deps
 %description
 This package provides hwdb and udev rules to filter the sysfs attributes used
 by systemd-udev for network device naming.
@@ -40,25 +34,20 @@ The desired naming scheme can be specified on the kernel command line:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-v%{version}
-
+%global oreon_srcdir %{name}-v%{version}
+%oreon_prep
 %build
-# nothing
 
 %check
-make test
 
+make test
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc README
-%{_udevrulesdir}/70-net-naming-sysattrs.rules
-%{_udevhwdbdir}/50-net-naming-sysattr-allowlist.hwdb
-%dir %{dracutmoddir}/70net-naming-sysattrs
-%{dracutmoddir}/70net-naming-sysattrs/module-setup.sh
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 263-1
 - Import

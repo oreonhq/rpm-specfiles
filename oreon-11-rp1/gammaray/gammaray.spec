@@ -1,121 +1,96 @@
-%global source0_hash none
-
+%global source0_hash bcac8aa24671bcfd563213f5cfd9e61cf555b22ee3896e8111a5c3a588aacadf
 %ifarch %{ix86}
     %global arch i686
 %else
     %global arch %{_arch}
 %endif
-
 %if "%{?qt6_qtwebengine_arches}" != ""
 %ifarch %{qt6_qtwebengine_arches}
 %global webengine 1
 %endif
 %endif
-
 %global qt5_ver %(echo %{_qt5_version} | cut -d. -f1,2)
 %global qt5_target %(echo qt%{qt5_ver}-%{arch} | sed 's/\\./_/g')
-  
 %global qt6_ver %(echo %{_qt6_version} | cut -d. -f1,2)
 %global qt6_target %(echo qt%{qt6_ver}-%{arch} | sed 's/\\./_/g')
-
 %global gammaray_ver 3.4
 %global gammaray_ver_minor 0
 %global gammaray_version %{gammaray_ver}.%{gammaray_ver_minor}
-
 Name:    gammaray
 Version: 3.4.0
-Release: 1%{?dist}
-Summary: A tool for examining internals of Qt applications
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        A tool for examining internals of Qt applications
 License: GPL-2.0-or-later
 URL:     https://github.com/KDAB/GammaRay
-
-Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/KDAB/GammaRay/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch1:  gammaray-fix-build-with-qt6.8.patch
 Patch2:  gammaray-fix-build-for-qt-6.9.patch
 Patch3:  gammaray-fix-build-against-qt-6-10.patch
-
-BuildRequires: gcc-c++
-BuildRequires: cmake
-BuildRequires: ninja-build
-BuildRequires: desktop-file-utils
-
-BuildRequires: elfutils-devel
-BuildRequires: binutils-devel
-BuildRequires: libdwarf-devel
-BuildRequires: libunwind-devel
-
-BuildRequires: kf6-rpm-macros
-BuildRequires: extra-cmake-modules
-
-# to build the documentation
-BuildRequires: doxygen
-BuildRequires: qt6-doc-devel
-BuildRequires: qt6-doc-html
-BuildRequires: qt6-doctools
-
-# Qt6 GUI and probe
-BuildRequires: qt6-qtbase-private-devel
-BuildRequires: cmake(Qt6)
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt63DAnimation)
-BuildRequires: cmake(Qt63DExtras)
-BuildRequires: cmake(Qt63DInput)
-BuildRequires: cmake(Qt63DLogic)
-BuildRequires: cmake(Qt63DRender)
-BuildRequires: cmake(Qt63DQuick)
-BuildRequires: cmake(Qt6Bluetooth)
-BuildRequires: cmake(Qt6Concurrent)
-BuildRequires: cmake(Qt6Designer)
-BuildRequires: cmake(Qt6Location)
-BuildRequires: cmake(Qt6OpenGL)
-BuildRequires: cmake(Qt6Positioning)
-BuildRequires: cmake(Qt6Qml)
-BuildRequires: cmake(Qt6Quick)
-BuildRequires: cmake(Qt6QuickWidgets)
-BuildRequires: cmake(Qt6Svg)
-BuildRequires: cmake(Qt6Test)
-BuildRequires: cmake(Qt6ShaderTools)
 %if 0%{?webengine}
-BuildRequires: cmake(Qt6WebEngineWidgets)
 %endif
-BuildRequires: cmake(Qt6Widgets)
-BuildRequires: cmake(Qt6WaylandCompositor)
-BuildRequires: wayland-devel
-
-# optional dependencies
-BuildRequires: cmake(Qt6Scxml)
-BuildRequires: cmake(Qt6StateMachine)
-BuildRequires: cmake(KF6SyntaxHighlighting)
-
-# for building the probe qt5 for introspection of Qt5 apps
-BuildRequires:	qt5-qt3d-devel
-BuildRequires:	qt5-qtbase-devel
-BuildRequires:	qt5-qtbase-doc
-BuildRequires:	qt5-qtbase-private-devel
-BuildRequires:	qt5-qtdeclarative-devel
-BuildRequires:	qt5-qtscript-devel
-BuildRequires:	qt5-qtsvg-devel
-BuildRequires:	qt5-qtscxml-devel
-BuildRequires:	qt5-qttools-devel
-BuildRequires:	qt5-qtwayland-devel
 %if "%{?qt5_qtwebengine_arches}" != ""
 %ifarch %{qt5_qtwebengine_arches}
-BuildRequires: qt5-qtwebengine-devel
 %endif
 %endif
-
 Requires:	%{name}-probe = %{version}-%{release}
 Recommends:	(%{name}-probe-qt5%{?_isa} = %{version}-%{release} if qt5-qtbase)
 Recommends:	(%{name}-probe-qt6%{?_isa} = %{version}-%{release} if qt6-qtbase)
-# When -doc subpkg was removed
 Obsoletes: %{name}-doc <= 2.2.1
-
-# omit provides from plugins
 %global __provides_exclude_from \
          ^((%{_qt5_libdir}|%{_qt6_libdir})/libgammaray.*\\.so)$
-         
+# oreon:deps
+BuildRequires:  binutils-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6SyntaxHighlighting)
+BuildRequires:  cmake(Qt6)
+BuildRequires:  cmake(Qt63DAnimation)
+BuildRequires:  cmake(Qt63DExtras)
+BuildRequires:  cmake(Qt63DInput)
+BuildRequires:  cmake(Qt63DLogic)
+BuildRequires:  cmake(Qt63DQuick)
+BuildRequires:  cmake(Qt63DRender)
+BuildRequires:  cmake(Qt6Bluetooth)
+BuildRequires:  cmake(Qt6Concurrent)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Designer)
+BuildRequires:  cmake(Qt6Location)
+BuildRequires:  cmake(Qt6OpenGL)
+BuildRequires:  cmake(Qt6Positioning)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6QuickWidgets)
+BuildRequires:  cmake(Qt6Scxml)
+BuildRequires:  cmake(Qt6ShaderTools)
+BuildRequires:  cmake(Qt6StateMachine)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  cmake(Qt6WaylandCompositor)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  doxygen
+BuildRequires:  elfutils-devel
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libdwarf-devel
+BuildRequires:  libunwind-devel
+BuildRequires:  ninja-build
+BuildRequires:  qt5-qt3d-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtbase-doc
+BuildRequires:  qt5-qtbase-private-devel
+BuildRequires:  qt5-qtdeclarative-devel
+BuildRequires:  qt5-qtscript-devel
+BuildRequires:  qt5-qtscxml-devel
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  qt5-qttools-devel
+BuildRequires:  qt5-qtwayland-devel
+BuildRequires:  qt6-doc-devel
+BuildRequires:  qt6-doc-html
+BuildRequires:  qt6-doctools
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  wayland-devel
+# /oreon:deps
 %description
 A tool to poke around in a Qt-application and also to manipulate
 the application to some extent. It uses various DLL injection
@@ -130,7 +105,6 @@ Provides:	%{name}-probe = %{version}-%{release}
 Obsoletes:	%{name}-qt5 < %{version}-%{release}
 Requires:	qt5-qtbase%{?_isa} = %{_qt5_version}
 Requires:	%{name} = %{version}-%{release}
-
 %description probe-qt5
 Provides a Qt 5 probe for GammaRay that allows introspecting Qt 5
 applications. It is possible to install probes for different
@@ -141,7 +115,6 @@ to inspect those applications too.
 Summary:        Development files for %{name} Qt5 probe
 Requires:       %{name}-probe-qt5%{?_isa} = %{version}-%{release}
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description probe-qt5-devel
 The %{name}probe-qt5-devel package contains development libraries for
 the %{name} Qt5 integration.
@@ -151,7 +124,6 @@ Summary:    Qt 6 probe for GammaRay
 Provides:   %{name}-probe = %{version}-%{release}
 Requires:   qt6-qtbase%{?_isa} = %{_qt6_version}
 Requires:   %{name} = %{version}-%{release}
-
 %description probe-qt6
 Provides a Qt 6 probe for GammaRay that allows introspecting Qt 6
 applications. It is possible to install probes for different
@@ -162,7 +134,6 @@ to inspect those applications too.
 Summary:        Development files for %{name} Qt6 probe
 Requires:       %{name}-probe-qt6%{?_isa} = %{version}-%{release}
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description probe-qt6-devel
 The %{name}probe-qt6-devel package contains development libraries for
 the %{name} Qt6 integration.
@@ -179,13 +150,12 @@ developing plugins for %{name}.
 %package        doc
 Summary:        Developer Documentation files for %{name}
 BuildArch:      noarch
-
 %description    doc
 Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
-%autosetup -n %{name}-%{version} -p1
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
 
 %define _vpath_builddir %{_target_platform}_client
@@ -203,10 +173,7 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
     -DQT_INSTALL_BINS=%{_qt6_libexecdir} \
     -DQDOC_INDEX_DIR=%{_qt6_docdir} \
     -DQDOC_TEMPLATE_DIR=%{_qt6_docdir}
-
 %cmake_build
-
-# build the Qt6 probe only
 %define _vpath_builddir %{_target_platform}_qt6
 %cmake_qt6 \
     -DCMAKE_SKIP_INSTALL_RPATH:BOOL=TRUE \
@@ -218,10 +185,7 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
     -DGAMMARAY_PROBE_ONLY_BUILD:BOOL=TRUE \
     -DGAMMARAY_INSTALL_QT_LAYOUT:BOOL=FALSE \
     -DLIBEXEC_INSTALL_DIR=libexec
-
 %cmake_build
-
-# build the Qt5 probe only
 %define _vpath_builddir %{_target_platform}_qt5
 %cmake \
     -DCMAKE_SKIP_INSTALL_RPATH:BOOL=TRUE \
@@ -234,88 +198,29 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
     -DGAMMARAY_PROBE_ONLY_BUILD:BOOL=TRUE \
     -DGAMMARAY_INSTALL_QT_LAYOUT:BOOL=FALSE \
     -DLIBEXEC_INSTALL_DIR=libexec
-
 %cmake_build
-
 %install
-
 %define _vpath_builddir %{_target_platform}_client
 %cmake_install
 %define _vpath_builddir %{_target_platform}_qt6
 %cmake_install
 %define _vpath_builddir %{_target_platform}_qt5
 %cmake_install
-
-# We install the license manually
 rm -fv %{buildroot}%{_docdir}/gammaray/LICENSE.txt
 rm -rfv %{buildroot}%{_docdir}/gammaray/LICENSES
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/GammaRay.desktop
-
-%files
-%doc README.md
-%license LICENSES/*
-%{_bindir}/gammaray
-%{_qt6_libdir}/libgammaray_client.so.*
-%{_qt6_libdir}/libgammaray_launcher.so.*
-%{_qt6_libdir}/libgammaray_launcher_ui.so.*
-%{_qt6_libdir}/libgammaray_kuserfeedback.so.*
-%{_qt6_libdir}/gammaray/libexec/gammaray-launcher
-%{_qt6_libdir}/gammaray/libexec/gammaray-client
-%{_datadir}/applications/GammaRay.desktop
-%{_datadir}/icons/hicolor/*/apps/GammaRay.png
-%{_datadir}/metainfo/com.kdab.GammaRay.metainfo.xml
-%{_datadir}/zsh/site-functions/_gammaray
-%lang(de) %{_datadir}/gammaray/translations/gammaray_de.qm
-%lang(en) %{_datadir}/gammaray/translations/gammaray_en.qm
-
-%files probe-qt5
-%{_qt5_libdir}/libgammaray_common-%{qt5_target}.so.*
-%{_qt5_libdir}/libgammaray_core-%{qt5_target}.so.*
-%{_qt5_libdir}/libgammaray_kitemmodels-%{qt5_target}.so.*
-%{_qt5_libdir}/gammaray/%{gammaray_ver}/%{qt5_target}/
-
-%files probe-qt5-devel
-%{_qt5_libdir}/libgammaray_common-%{qt5_target}.so
-%{_qt5_libdir}/libgammaray_core-%{qt5_target}.so
-%{_qt5_libdir}/libgammaray_kitemmodels-%{qt5_target}.so
-  
-%files probe-qt6
-%{_qt6_libdir}/libgammaray_ui-%{qt6_target}.so.*
-%{_qt6_libdir}/libgammaray_common-%{qt6_target}.so.*
-%{_qt6_libdir}/libgammaray_core-%{qt6_target}.so.*
-%{_qt6_libdir}/libgammaray_kitemmodels-%{qt6_target}.so.*
-%{_qt6_libdir}/gammaray/%{gammaray_ver}/%{qt6_target}/
-
-%files probe-qt6-devel
-%{_qt6_libdir}/libgammaray_ui-%{qt6_target}.so
-%{_qt6_libdir}/libgammaray_common-%{qt6_target}.so
-%{_qt6_libdir}/libgammaray_core-%{qt6_target}.so
-%{_qt6_libdir}/libgammaray_kitemmodels-%{qt6_target}.so
-%{_qt6_libdir}/gammaray/%{gammaray_ver}/%{qt6_target}/
-
-%files devel
-%{_includedir}/gammaray
-%{_qt6_libdir}/libgammaray_client.so
-%{_qt6_libdir}/libgammaray_launcher.so
-%{_qt6_libdir}/libgammaray_launcher_ui.so
-%{_qt6_libdir}/libgammaray_kuserfeedback.so
-%{_libdir}/cmake/GammaRay/
-# this is an error in the sources, it should go to qt6
-%{_qt6_archdatadir}/mkspecs/modules/qt_GammaRayCommon.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_GammaRayCore.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_GammaRayUi.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_GammaRayClient.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_GammaRayKItemModels.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_GammaRayLauncher.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_GammaRayLauncherUi.pri
-
-%files doc
-%{_mandir}/man1/gammaray.1.gz
-%{_qt6_docdir}/gammaray-api.qch
-%{_qt6_docdir}/gammaray-manual.qch
-%{_qt6_docdir}/gammaray.qhc
+%files -f %{oreon_filedir}/main.list
+%files -n gammaray-probe-qt5 -f %{oreon_filedir}/gammaray-probe-qt5.list
+%files -n gammaray-probe-qt5-devel -f %{oreon_filedir}/gammaray-probe-qt5-devel.list
+%files -n gammaray-probe-qt6 -f %{oreon_filedir}/gammaray-probe-qt6.list
+%files -n gammaray-probe-qt6-devel -f %{oreon_filedir}/gammaray-probe-qt6-devel.list
+%files -n gammaray-devel -f %{oreon_filedir}/gammaray-devel.list
+%files -n gammaray-doc -f %{oreon_filedir}/gammaray-doc.list
 
 %changelog
+
 %autochangelog

@@ -1,18 +1,17 @@
-%global source0_hash e5f82dd90001ed53200b2383bcfd520b1d8ee06d6a2a75b39d37d68daef20c88
-
+%global source0_hash 512a82320cf5418ed70416b96cd49aa51a5ae418e96482144683cad6609add2e
 Name:           fpart
 Version:        1.7.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Helps you sort file trees and pack them into bags
-# main source is BSD-2-Clause
-# src/fts.c and src/fts.h are BSD-3-Clause
 License:        BSD-2-Clause AND BSD-3-Clause
 URL:            https://fpart.org
-Source:         https://github.com/martymac/fpart/archive/fpart-%{version}.tar.gz
-
-BuildRequires:  gcc autoconf automake
+Source0:        https://github.com/martymac/fpart/archive/fpart-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
 BuildRequires:  make
-
+# /oreon:deps
 %description
 Fpart is a Filesystem partitioner.  It helps you sort file trees and pack them
 into bags (called "partitions").  It is developed in C and available under the
@@ -20,24 +19,19 @@ BSD license.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n fpart-fpart-%{version}
-
+%global oreon_srcdir fpart-fpart-%{version}
+%oreon_prep
 %build
+
 autoreconf --install
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc docs/www.fpart.org/docs/changelog.md README.md
-%{_mandir}/man1/fpart.1*
-%{_mandir}/man1/fpsync.1*
-%{_bindir}/fpart
-%{_bindir}/fpsync
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,221 +1,146 @@
+%global source1_hash 23f8770deaa54d2cd18f110f50fe928e79c1ce28517201c41caee9aaefb989d9
 %global source0_hash 079fcf6b87d7bf65e3f2a4670d605fac9469344c279a285a98ad549332d7b53e
-
 %global stable_kf6 stable
 %global maj_ver_kf6 6
 %global min_ver_kf6 7
 %global bug_ver_kf6 5
 %global scim 1
-%if 0%{?rhel} && 0%{?rhel} > 7
-%undefine scim
-%endif
-
 Name:    plasma-desktop
-Summary: Plasma Desktop shell
+Summary:        Plasma Desktop shell
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/stable/plasma/%{version}/%{name}-%{version}.tar.xz
-
 Source1:        https://download.kde.org/stable/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-## upstream patches
-
-## downstream patches
-# default kickoff/kicker favorites: +kwrite +konsole
-# Patch100: plasma-desktop-5.90.0-default_favorites.patch
-
-# Hide virtual keyboard indicator on sddm.
-# Do not remove this as it breaks Fedora's QA policy
 Patch101:        hide-virtual-keyboard-indicator-on-sddm.patch
-
-## upstreamable patches
-
-BuildRequires:  pkgconfig(libusb)
-BuildRequires:  fontconfig-devel
-BuildRequires:  libX11-devel
-BuildRequires:  libxkbfile-devel
-BuildRequires:  libxcb-devel
-BuildRequires:  xcb-util-keysyms-devel
-BuildRequires:  xcb-util-image-devel
-BuildRequires:  xcb-util-renderutil-devel
-BuildRequires:  xcb-util-devel
-BuildRequires:  libxkbcommon-devel
-BuildRequires:  pkgconfig(xkeyboard-config)
-
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  qt6-qtbase-private-devel
-BuildRequires:  qt6-qtsvg-devel
-BuildRequires:  qt6-qtdeclarative-devel
-BuildRequires:  qt6-qtwayland-devel
-BuildRequires:  cmake(Qt6ShaderTools)
-BuildRequires:  cmake(Qt6Core5Compat)
-BuildRequires:  cmake(Phonon4Qt6)
-BuildRequires:  wayland-protocols-devel
-
-BuildRequires:  ibus-devel
 %if 0%{?scim}
-BuildRequires:  scim-devel
 %endif
-
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  extra-cmake-modules
-BuildRequires:  cmake(KF6Auth)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Codecs)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(PlasmaQuick)
-BuildRequires:  pkgconfig(gio-2.0)
-BuildRequires:  pkgconfig(gobject-2.0)
-BuildRequires:  cmake(KF6DocTools)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6KCMUtils)
-BuildRequires:  cmake(KF6GlobalAccel)
-BuildRequires:  cmake(KF6NewStuff)
-BuildRequires:  cmake(KF6NotifyConfig)
-BuildRequires:  cmake(KF6Su)
-BuildRequires:  cmake(KF6Attica)
-BuildRequires:  cmake(KF6Wallet)
-BuildRequires:  cmake(KF6Runner)
-BuildRequires:  cmake(KF6Baloo)
-BuildRequires:  cmake(KF6Declarative)
-BuildRequires:  cmake(KF6People)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6Sonnet)
-BuildRequires:  cmake(KF6Svg)
-BuildRequires:  cmake(KF6ItemModels)
-BuildRequires:  cmake(KF6KDED)
-BuildRequires:  cmake(KF6KIO)
-
-BuildRequires:  cmake(KSysGuard)
-BuildRequires:  cmake(Plasma5Support)
-BuildRequires:  kscreenlocker-devel
-BuildRequires:  kwin-devel
-BuildRequires:  plasma-breeze-qt6
-BuildRequires:  plasma-workspace-devel
-
-BuildRequires:  cmake(PlasmaActivities)
-BuildRequires:  cmake(PlasmaActivitiesStats)
-BuildRequires:  cmake(Plasma)
-
-# For theming info
-# /usr/share/backgrounds/default.{jxl,png}
-BuildRequires:  desktop-backgrounds-compat
-
-
-# Optional
-%if 0%{?fedora}
-BuildRequires:  cmake(AppStreamQt)
-%endif
-BuildRequires:  intltool
-BuildRequires:  cmake(KAccounts6)
-BuildRequires:  PackageKit-Qt6-devel
-BuildRequires:  libcanberra-devel
-BuildRequires:  boost-devel
-BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  SDL2-devel
-BuildRequires:  chrpath
-BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig(libwacom)
-
-BuildRequires:  xdg-user-dirs
-
-# xorg-x11 doesn't have hw_server and disable for s390/s390x
 %ifnarch s390 s390x
-# KCM touchpad has been merged to plasma-desktop in 5.3
 Provides:       kcm_touchpad = %{version}-%{release}
 Obsoletes:      kcm_touchpad < 5.3.0
-# for xserver-properties
-BuildRequires:  xorg-x11-server-devel
 Requires:       kf6-kded
-
-# for kcm_keyboard
-BuildRequires:  pkgconfig(libudev)
 Requires:       iso-codes
-
-# for kcm_input, kcm_touchpad
-BuildRequires:  pkgconfig(xorg-evdev)
-BuildRequires:  pkgconfig(xorg-libinput)
-
 %endif
-
-# kcm_users
 Requires:       accountsservice
-# kcm_clock
 Requires:       qt6-qtlocation%{?_isa}
-
-# Desktop
 Requires:       plasma-workspace
-
-# xdg-utils integration
 Requires:       xdg-utils >= 1.2.0~
 Requires:       kde-cli-tools
-
-# Qt Integration (brings in Breeze)
 Requires:       plasma-integration
-
-# Install systemsettings, full set of KIO slaves and write() notifications
 Requires:       plasma-systemsettings
 Requires:       kio-extras
 Requires:       kwrited
-
-# Install KWin
 Requires:       kwin
-
-# kickoff -> edit applications (#1229393)
 Requires:       kmenuedit
-
-BuildRequires:  cmake(KF6Kirigami)
 Requires:       kf6-kirigami%{?_isa}
-BuildRequires:  cmake(KF6KirigamiAddons)
 Requires:       kf6-kirigami-addons%{?_isa}
-BuildRequires:  kf6-qqc2-desktop-style
 Requires:       kf6-qqc2-desktop-style%{?_isa}
-BuildRequires:  kpipewire
 Requires:       kpipewire%{?_isa}
-BuildRequires:  signon-plugin-oauth2-devel
 Requires:       signon-plugin-oauth2%{?_isa}
-
-# applets/kickoff/KickoffSingleton.qml unconditionally imports org.kde.plasma.plasma5support
 Requires:       qt6qml(org.kde.plasma.plasma5support)
 Requires:       plasma5support%{?_isa}
-
-# for kimpanel-ibus-panel and kimpanel-ibus-panel-launcher
 Requires:       ibus%{?_isa}
 Requires:       libXcursor%{?_isa}
 Requires:       libksysguard%{?_isa}
-
-# for drawing tablet support
 Recommends: udev-hid-bpf-stable
-
-# Virtual provides for plasma-workspace
 Provides:       plasmashell(desktop) = %{version}-%{release}
 Provides:       plasmashell = %{version}-%{release}
-
 Obsoletes:      kde-workspace < 5.0.0-1
-
 Obsoletes:      kactivities-workspace < 5.6.0
 Provides:       kactivities-workspace = %{version}-%{release}
-
 Obsoletes:      plasma-user-manager < 5.19.50
 Provides:       plasma-user-manager = %{version}-%{release}
-
-# kimpanel moved here from kdeplasma-addons-5.5.x
 Conflicts:      kdeplasma-addons < 5.6.0
-
-# kcm_activities.mo moved here (#1325724)
 Conflicts:      kde-l10n < 15.12.3-4
-
-# See https://pagure.io/fedora-kde/SIG/issue/455 for more information
 Conflicts:      kde-settings < 39.1-7
-
+# oreon:deps
+BuildRequires:  PackageKit-Qt6-devel
+BuildRequires:  SDL2-devel
+BuildRequires:  boost-devel
+BuildRequires:  chrpath
+BuildRequires:  cmake(KAccounts6)
+BuildRequires:  cmake(KF6Attica)
+BuildRequires:  cmake(KF6Auth)
+BuildRequires:  cmake(KF6Baloo)
+BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6Declarative)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6GlobalAccel)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6ItemModels)
+BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  cmake(KF6KDED)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Kirigami)
+BuildRequires:  cmake(KF6KirigamiAddons)
+BuildRequires:  cmake(KF6NewStuff)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6NotifyConfig)
+BuildRequires:  cmake(KF6People)
+BuildRequires:  cmake(KF6Runner)
+BuildRequires:  cmake(KF6Sonnet)
+BuildRequires:  cmake(KF6Su)
+BuildRequires:  cmake(KF6Svg)
+BuildRequires:  cmake(KF6Wallet)
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(KSysGuard)
+BuildRequires:  cmake(Phonon4Qt6)
+BuildRequires:  cmake(Plasma)
+BuildRequires:  cmake(Plasma5Support)
+BuildRequires:  cmake(PlasmaActivities)
+BuildRequires:  cmake(PlasmaActivitiesStats)
+BuildRequires:  cmake(PlasmaQuick)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6ShaderTools)
+BuildRequires:  desktop-backgrounds-compat
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  fontconfig-devel
+BuildRequires:  ibus-devel
+BuildRequires:  intltool
+BuildRequires:  kf6-qqc2-desktop-style
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  kpipewire
+BuildRequires:  kscreenlocker-devel
+BuildRequires:  kwin-devel
+BuildRequires:  libX11-devel
+BuildRequires:  libcanberra-devel
+BuildRequires:  libxcb-devel
+BuildRequires:  libxkbcommon-devel
+BuildRequires:  libxkbfile-devel
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gobject-2.0)
+BuildRequires:  pkgconfig(libudev)
+BuildRequires:  pkgconfig(libusb)
+BuildRequires:  pkgconfig(libwacom)
+BuildRequires:  pkgconfig(xkeyboard-config)
+BuildRequires:  pkgconfig(xorg-evdev)
+BuildRequires:  pkgconfig(xorg-libinput)
+BuildRequires:  plasma-breeze-qt6
+BuildRequires:  plasma-workspace-devel
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  qt6-qtdeclarative-devel
+BuildRequires:  qt6-qtsvg-devel
+BuildRequires:  qt6-qtwayland-devel
+BuildRequires:  scim-devel
+BuildRequires:  signon-plugin-oauth2-devel
+BuildRequires:  wayland-protocols-devel
+BuildRequires:  xcb-util-devel
+BuildRequires:  xcb-util-image-devel
+BuildRequires:  xcb-util-keysyms-devel
+BuildRequires:  xcb-util-renderutil-devel
+BuildRequires:  xdg-user-dirs
+BuildRequires:  xorg-x11-server-devel
+# /oreon:deps
 %description
 %{summary}.
 
@@ -228,144 +153,59 @@ method framework.
 
 %package        doc
 Summary:        Documentation and user manuals for %{name}
-# when conflicting HTML docs were removed
 Conflicts:      kcm_colors < 1:4.11.16-10
-# when conflicting HTML docs were removed
 Conflicts:      kde-runtime-docs < 17.08.3-6
-# when made noarch
 Obsoletes: plasma-desktop-doc < 5.3.1-2
 BuildArch: noarch
 %description    doc
 %{summary}.
 
-
 %package -n sddm-breeze
 Summary:        SDDM breeze theme
 Requires:       sddm
-# upgrade path, when sddm-breeze was split out
 Obsoletes: plasma-workspace < 5.3.2-8
-# theme files from breeze plasma
 Requires:       libplasma
-# QML imports:
-# QtQuick.VirtualKeyboard
 Requires:       qt6-qtvirtualkeyboard
-# QML imports:
-# org.kde.plasma.breeze.components
-# org.kde.plasma.*
-# The dependency is with 3 version numbers due to upstream occasional respins containing an etra number (i.e: 6.0.5.1)
 Requires:       plasma-workspace >= %{maj_ver_kf6}.%{min_ver_kf6}
-# /usr/share/backgrounds/default.{jxl,png}
 Requires:       desktop-backgrounds-compat
-# for jxl support
 Requires:       kf6-kimageformats
 BuildArch: noarch
-
 %description -n sddm-breeze
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6 \
 %ifarch s390 s390x
     -DBUILD_KCM_MOUSE_X11=OFF \
     -DBUILD_KCM_TOUCHPAD_X11=OFF
 %endif
-
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang %{name} --with-html --all-name
-
 grep "%{_kf6_docdir}" %{name}.lang > %{name}-doc.lang
 cat  %{name}.lang %{name}-doc.lang | sort | uniq -u > plasmadesktop6.lang
-
+%oreon_autofiles sddm-breeze usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_{keyboard,access,clock,splashscreen,landingpage,keys,smserver,desktoppaths,gamecontroller,activities,recentFiles,kded,krunnersettings,plasmasearch,qtquicksettings,tablet,touchscreen,workspace,baloofile,solid_actions,mouse,touchpad}.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/kcmspellchecking.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.kde.knetattach.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.kde.plasma.emojier.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/kaccess.desktop
-
-%files -f plasmadesktop6.lang
-%license LICENSES
-%{_bindir}/kaccess
-%{_bindir}/knetattach
-%{_bindir}/solid-action-desktop-gen
-%{_bindir}/plasma-emojier
-%{_bindir}/tastenbrett
-%{_bindir}/krunner-plugininstaller
-%{_libexecdir}/kimpanel-ibus-panel
-%{_libexecdir}/kimpanel-ibus-panel-launcher
-%{_kf6_qmldir}/org/kde/plasma/private
-%{_kf6_qtplugindir}/attica_kde.so
-%{_kf6_qtplugindir}/plasma/kcms/desktop/kcm_krunnersettings.so
-%{_kf6_qtplugindir}/plasma/kcms/systemsettings/*.so
-%{_kf6_qtplugindir}/plasma/kcms/systemsettings_qwidgets/*.so
-%{_kf6_qtplugindir}/plasma/kcminit/kcm_touchpad_init.so
-%{_kf6_plugindir}/kded/*.so
-%{_kf6_plugindir}/krunner/krunner*.so
-%{_kf6_qmldir}/org/kde/plasma/activityswitcher
-%{_kf6_qmldir}/org/kde/plasma/emoji/
-%{_kf6_qmldir}/org/kde/private/desktopcontainment/*
-%{_kf6_datadir}/plasma/*
-%{_kf6_datadir}/applications/kde-mimeapps.list
-%ifnarch s390 s390x
-# kcminput
-%{_kf6_bindir}/kapplymousetheme
-%{_kf6_bindir}/kcm-touchpad-list-devices
-%endif
-%{_kf6_datadir}/kcmmouse/
-%{_kf6_qtplugindir}/plasma/kcminit/kcm_mouse_init.so
-%{_datadir}/config.kcfg/*.kcfg
-%{_datadir}/kglobalaccel/org.kde.plasma.emojier.desktop
-%{_datadir}/kglobalaccel/org.kde.touchpadshortcuts.desktop
-%{_datadir}/qlogging-categories6/*.categories
-%{_kf6_datadir}/dbus-1/interfaces/org.kde.touchpad.xml
-%{_kf6_datadir}/kcmkeys
-%{_kf6_datadir}/knsrcfiles/
-%{_kf6_datadir}/kcmsolidactions/
-%{_kf6_datadir}/solid/devices/*.desktop
-%{_kf6_datadir}/knotifications6/*.notifyrc
-%{_datadir}/icons/hicolor/*/*/*
-%{_kf6_metainfodir}/*.xml
-%{_datadir}/applications/*.desktop
-%{_kf6_datadir}/kconf_update/50-krunner-activate-typing.*
-%{_sysconfdir}/xdg/autostart/*.desktop
-%{_kf6_datadir}/accounts/providers/kde/*.provider
-%{_kf6_datadir}/accounts/services/kde/*.service
-%{_kf6_datadir}/kcm_recentFiles/workspace/settings/qml/recentFiles/ExcludedApplicationView.qml
-# How to include these in the .lang file?
-%{_kf6_datadir}/locale/sr/LC_SCRIPTS/kfontinst/kfontinst.js
-%{_kf6_datadir}/locale/sr@ijekavian/LC_SCRIPTS/kfontinst/kfontinst.js
-%{_kf6_datadir}/locale/sr@ijekavianlatin/LC_SCRIPTS/kfontinst/kfontinst.js
-%{_kf6_datadir}/locale/sr@latin/LC_SCRIPTS/kfontinst/kfontinst.js
-%{_userunitdir}/plasma-kaccess.service
-%{_libdir}/libkglobalaccelmodel.so.6
-%{_libdir}/libkglobalaccelmodel.so.%{version}
-%{_kf6_qtplugindir}/plasma/applets/org.kde.*.so
-
-
-%files -n sddm-breeze
-%{_datadir}/sddm/themes/breeze/
-
-
-%if 0%{?scim}
-%files kimpanel-scim
-%{_libexecdir}/kimpanel-scim-panel
-%endif
-
-%files doc -f %{name}-doc.lang
-
+%files -f %{oreon_filedir}/main.list
+%files -n plasma-desktop-kimpanel-scim -f %{oreon_filedir}/plasma-desktop-kimpanel-scim.list
+%files -n plasma-desktop-doc -f %{oreon_filedir}/plasma-desktop-doc.list
+%files -n sddm-breeze -f %{oreon_filedir}/sddm-breeze.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

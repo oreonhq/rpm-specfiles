@@ -1,41 +1,40 @@
 %global source0_hash 2c28ed7acea27ae3d541036f2e2ca5ed7e0121badf477e3cfa5ec8d282337e23
-
-Summary: pilot desktop software
+Summary:        pilot desktop software
 Name: jpilot
 Version: 2.1.0
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-only
 URL: https://www.jpilot.org/
-Source0: https://www.jpilot.org/tarballs/jpilot-%{version}.tar.gz
+Source0:        https://www.jpilot.org/tarballs/jpilot-%{version}.tar.gz
 Source1: jpilot.desktop
-
 Patch0: jpilot-0.99.7-conf.patch
 Patch1: jpilot-1.8.2-gcc10.patch
 Patch2: jpilot-configure-c99.patch
 Patch3: jpilot-callback-types.patch
-
-BuildRequires: gcc
-BuildRequires: gettext, pilot-link-devel, perl-XML-Parser, libgcrypt-devel
-BuildRequires: intltool
-BuildRequires: gtk2-devel >= 2.0.3
-BuildRequires: pilot-link >= 0.12.5
-BuildRequires: make
-BuildRequires: ImageMagick
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
 Requires: hicolor-icon-theme
-# for XMP icons support
 Requires: gdk-pixbuf2-modules-extra
-
 ExcludeArch: s390, s390x
-
+# oreon:deps
+BuildRequires:  ImageMagick
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  gtk2-devel
+BuildRequires:  intltool
+BuildRequires:  libappstream-glib
+BuildRequires:  libgcrypt-devel
+BuildRequires:  make
+BuildRequires:  perl-XML-Parser
+BuildRequires:  pilot-link
+BuildRequires:  pilot-link-devel
+# /oreon:deps
 %description
 J-Pilot is a desktop organizer application for the palm pilot that runs under
 Linux.  It is similar in functionality to the one that 3com distributes for a
 well known rampant legacy operating system.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -47,30 +46,23 @@ iconv -f windows-1252 -t utf-8 AUTHORS >AUTHORS.aux
 mv AUTHORS.aux AUTHORS
 
 %build
-%configure --disable-rpath --with-pilot-prefix=%{_prefix}
 
+%configure --disable-rpath --with-pilot-prefix=%{_prefix}
 cd po
 make clean
 make update-po
 cd ..
-
 make %{?_smp_mflags}
-
 %install
 make DESTDIR=$RPM_BUILD_ROOT libdir=%{_libdir}/jpilot/plugins install
-
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/jpilot/ \
          $RPM_BUILD_ROOT%{_datadir}/applications
-
 ls -la jpilotrc*
 install -m644 jpilotrc.* $RPM_BUILD_ROOT%{_datadir}/jpilot/
 install -p empty/*.pdb $RPM_BUILD_ROOT%{_datadir}/jpilot/
 desktop-file-install --dir $RPM_BUILD_ROOT%{_datadir}/applications %{SOURCE1}
-
-# install icon
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
 convert icons/jpilot-icon3.xpm $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/jpilot.png
-
 mkdir $RPM_BUILD_ROOT%{_metainfodir}
 cat <<EOF > $RPM_BUILD_ROOT%{_metainfodir}/%{name}.appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -118,18 +110,11 @@ cat <<EOF > $RPM_BUILD_ROOT%{_metainfodir}/%{name}.appdata.xml
 </component>
 EOF
 appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/%{name}.appdata.xml
-
 %find_lang %name
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc %{_docdir}/jpilot
-%{_bindir}/*
-%{_datadir}/jpilot
-%{_datadir}/icons/hicolor/*/*/jpilot.*
-%{_libdir}/%{name}
-%{_mandir}/man1/*.*
-%{_datadir}/applications/*
-%{_metainfodir}/%{name}.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

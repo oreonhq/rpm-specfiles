@@ -1,30 +1,23 @@
 %global source0_hash 473b194eea26b3912958a8798e50cf1efb4dd375a7a775619ffa9525ae7db568
-
 %global forgeurl https://github.com/UshakovVasilii/gnome-shell-extension-freon
-
 Name:           gnome-shell-extension-freon
 Epoch:          2
 Version:        62
 %global srcversion EGO-%{version}
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GNOME Shell extension to display system temperature, voltage, and fan speed
-
 License:        GPL-2.0-only
 URL:            %{forgeurl}/wiki
-Source:         %{forgeurl}/archive/%{srcversion}/%{name}-%{srcversion}.tar.gz
-# Mark compatible with GNOME Shell 50
-# https://github.com/UshakovVasilii/gnome-shell-extension-freon/pull/309
+Source0:        %{forgeurl}/archive/%{srcversion}/%{name}-%{srcversion}.tar.gz
 Patch:          %{forgeurl}/pull/309.patch
-
-BuildRequires:  glib2
-BuildRequires:  gnome-shell-rpm-generators
-
 Requires:       gnome-shell-extension-common
 Requires:       lm_sensors
 Recommends:     nvme-cli
-
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  glib2
+BuildRequires:  gnome-shell-rpm-generators
+# /oreon:deps
 %description
 Freon is a GNOME Shell extension for displaying the temperature of your
 CPU, hard disk, solid state, and video card (NVIDIA, Catalyst, and
@@ -39,6 +32,7 @@ and they will appear in the GNOME Shell top bar.
 %global  final_install_dir     %{buildroot}/%{gnome_extensions_dir}/%{UUID}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{srcversion} -p1
@@ -79,28 +73,20 @@ First, restart GNOME Shell (Open the command dialog with Alt-F2, type
 EOF
 
 %build
-# No compilation necessary.
 
 %install
 mkdir -p %{final_install_dir}
 cp --recursive --preserve=mode,timestamps  %{UUID}/*  %{final_install_dir}
-
-# RPM will take care of gschemas, but they should be installed to system-wide directory.
 mkdir -p %{buildroot}/%{_datadir}/glib-2.0/schemas/
 mv  %{final_install_dir}/schemas/org.gnome.shell.extensions.sensors.gschema.xml  \
     %{buildroot}/%{_datadir}/glib-2.0/schemas/
 rmdir %{final_install_dir}/schemas/
-
-# Remove source .po localization files, move binary .mo to system directory.
 mv  %{final_install_dir}/locale  %{buildroot}/%{_datadir}/
-
 %find_lang freon
+%oreon_autofiles main
 
-%files -f freon.lang
-%doc README.md  README-fedora.md
-%license LICENSE
-%{gnome_extensions_dir}/%{UUID}/
-%{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.sensors.gschema.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,59 +1,35 @@
 %global source0_hash 800498d35233672ef67f4bf74cc6e1d37e1fe70c0540e2d2e062f2319e7b5df7
-
-# If you want to skip building the firmware subpackage, define the macro
-# _without_firmware to 1. This is not the actual firmware itself 
-# (see alsa-firmware), it is some complementary tools.
-# Do *NOT* set it to zero or have a commented out define here, or it will not
-# work. (RPM spec file voodoo)
-%if 0%{?rhel}
-%global _without_tools 1
-%endif
-
 %ifarch ppc ppc64
-# sb16_csp doesn't build on PPC; see bug #219010
 %{?!_without_tools:     %global builddirstools as10k1 echomixer envy24control hdspconf hdspmixer hwmixvolume rmedigicontrol sbiload sscape_ctl us428control hda-verb hdajackretask hdajacksensetest }
 %else
 %{?!_without_tools:     %global builddirstools as10k1 echomixer envy24control hdspconf hdspmixer hwmixvolume rmedigicontrol sbiload sb16_csp sscape_ctl us428control hda-verb hdajackretask hdajacksensetest }
 %endif
-
 %{?!_without_firmware:  %global builddirsfirmw hdsploader mixartloader usx2yloader vxloader }
-
 %{?!_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
-
-# Note that the Version is intended to coincide with the version of ALSA
-# included with the Fedora kernel, rather than necessarily the very latest
-# upstream version of alsa-tools
-
 Summary:        Specialist tools for ALSA
 Name:           alsa-tools
 Version:        1.2.15
 Release:        4%{?dist}
-
-# Checked at least one source file from all the sub-projects contained in
-# the source tarball and they are consistent GPLv2+ - TJ 2007-11-15
 License:        GPL-2.0-or-later
 URL:            https://www.alsa-project.org/
-# HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
-Source:        https://ftp.alsa-project.org/pub/tools/%{name}-%{version}.tar.bz2
-
+Source0:        https://www.alsa-project.org/files/pub/tools/%{name}-%{version}.tar.bz2
 Source1:        90-alsa-tools-firmware.rules
-
 Patch1:         hwmixvolume-python.patch
-
-BuildRequires:  gcc gcc-c++
-BuildRequires:  alsa-lib-devel >= %{version}
 %if 0%{!?_without_tools:1}
+Requires:       xorg-x11-fonts-misc
+Requires:       python3-alsa
+%endif
+# oreon:deps
+BuildRequires:  alsa-lib-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  fltk-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  gtk2-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  gtk4-devel
-BuildRequires:  fltk-devel
-BuildRequires: make
-Buildrequires:  desktop-file-utils
-Requires:       xorg-x11-fonts-misc
-# Needed for hwmixvolume
-Requires:       python3-alsa
-%endif
-
+BuildRequires:  make
+# /oreon:deps
 %description
 This package contains several specialist tools for use with ALSA, including
 a number of programs that provide access to special hardware facilities on
@@ -76,14 +52,11 @@ certain sound cards.
 * hdajackretask - Reassign the I/O jacks on the HDA hardware
 * hdajacksensetest - The sense test for the I/O jacks on the HDA hardware
 
-
 %package firmware
 Summary:        ALSA tools for uploading firmware to some soundcards
 Requires:       udev
 Requires:       alsa-firmware
 Requires:       fxload
-
-
 %description firmware
 This package contains tools for flashing firmware into certain sound cards.
 The following tools are available:
@@ -93,13 +66,14 @@ The following tools are available:
 * vxloader     - for Digigram VX soundcards
 * usx2yloader  - second phase firmware loader for Tascam USX2Y USB soundcards
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
 %patch -P 1 -p1 -b .hwmixvolume-python
 
 %build
+
 mv seq/sbiload . ; rm -rf seq
 for i in %{?builddirstools:%builddirstools} %{?builddirsfirmw:%builddirsfirmw}
 do
@@ -107,10 +81,8 @@ do
   make %{?_smp_mflags} || exit 1
   cd ..
 done
-
 %install
 mkdir -p %{buildroot}%{_datadir}/{pixmaps,applications}
-
 for i in %{?builddirstools:%builddirstools} %{?builddirsfirmw:%builddirsfirmw}
 do
   case $i in
@@ -143,68 +115,15 @@ do
         %{buildroot}%{_datadir}/applications/${i}.desktop
    fi
 done
-
-# convert hotplug stuff to udev
 rm -f %{buildroot}/usr/lib/udev/tascam_fw.usermap
 mkdir -p %{buildroot}/usr/lib/udev/rules.d
 install -m 644 %{SOURCE1} %{buildroot}/usr/lib/udev/rules.d
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if 0%{!?_without_tools:1}
-%files
-%dir %{_pkgdocdir}
-%doc %{_pkgdocdir}/as10k1
-%doc %{_pkgdocdir}/echomixer
-%doc %{_pkgdocdir}/envy24control
-%doc %{_pkgdocdir}/hdspconf
-%doc %{_pkgdocdir}/hdspmixer
-%doc %{_pkgdocdir}/hwmixvolume
-%doc %{_pkgdocdir}/rmedigicontrol
-%doc %{_pkgdocdir}/sbiload
-%doc %{_pkgdocdir}/hda-verb
-%doc %{_pkgdocdir}/hdajackretask
-%{_bindir}/as10k1
-%{_bindir}/echomixer
-%{_bindir}/envy24control
-%{_bindir}/hdspconf
-%{_bindir}/hdspmixer
-%{_bindir}/hwmixvolume
-%{_bindir}/rmedigicontrol
-%{_bindir}/sbiload
-%{_bindir}/sscape_ctl
-%{_bindir}/us428control
-%{_bindir}/hda-verb
-%{_bindir}/hdajackretask
-%{_bindir}/hdajacksensetest
-%{_datadir}/sounds/*
-%{_datadir}/man/man1/envy24control.1.gz
-%{_datadir}/applications/*.desktop
-%{_datadir}/icons/hicolor/*/apps*
-
-# sb16_csp stuff which is excluded for PPCx
-%ifnarch ppc ppc64
-%doc %{_pkgdocdir}/sb16_csp
-%{_bindir}/cspctl
-%{_datadir}/man/man1/cspctl.1.gz
-%endif
-
-%endif
-
-%if 0%{!?_without_firmware:1}
-%files firmware
-%dir %{_pkgdocdir}
-%doc %{_pkgdocdir}/hdsploader
-%doc %{_pkgdocdir}/mixartloader
-%doc %{_pkgdocdir}/usx2yloader
-%doc %{_pkgdocdir}/vxloader
-/usr/lib/udev/rules.d/*.rules
-/usr/lib/udev/tascam_fpga
-/usr/lib/udev/tascam_fw
-%{_bindir}/hdsploader
-%{_bindir}/mixartloader
-%{_bindir}/usx2yloader
-%{_bindir}/vxloader
-%endif
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.15-4
 - Prepare for Oreon 11 (RP1)
+%endif

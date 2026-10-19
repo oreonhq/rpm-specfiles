@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash e7f195f30f0ab4e39c5a66e19e0d0bfee0ce5afb3f49e0ae4e5a491a8417db2a
 Name:           python-xvfbwrapper
 Version:        0.2.34
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Manage headless displays with Xvfb _X virtual framebuffer_
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/cgoldberg/xvfbwrapper
-Source:         %{pypi_source xvfbwrapper}
-
+Source0:        https://files.pythonhosted.org/packages/source/x/xvfbwrapper/xvfbwrapper-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'xvfbwrapper' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-xvfbwrapper = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-xvfbwrapper
-Summary:        %{summary}
-
-%description -n python3-xvfbwrapper %_description
-
+Summary:        Manage headless displays with Xvfb _X virtual framebuffer_
+%description -n python3-xvfbwrapper
 
 %prep
-%autosetup -p1 -n xvfbwrapper-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir xvfbwrapper-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-xvfbwrapper usr/lib/python3*/site-packages/xvfbwrapper* usr/lib64/python3*/site-packages/xvfbwrapper* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/xvfbwrapper* usr/lib64/python3*/site-packages/xvfbwrapper* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-xvfbwrapper -f %{pyproject_files}
+%files
+%files -n python3-xvfbwrapper -f %{oreon_filedir}/python3-xvfbwrapper.list
 
 %changelog
+
 %autochangelog

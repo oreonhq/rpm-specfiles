@@ -1,64 +1,61 @@
-%global source0_hash none
-
+%global source0_hash 88499b22f1353893743c3cd68f2ca561c4ad9ef75cd6bcc7f621161cd0e80744
 Name:           python-flask-httpauth
 Version:        4.8.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        HTTP authentication for Flask routes
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/miguelgrinberg/flask-httpauth
-Source:         %{pypi_source flask_httpauth}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flask_httpauth/flask_httpauth-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'flask-httpauth' generated automatically by pyp2spec.}
-
 Patch0:         python-flask-httpauth-toml.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.2
+Requires:       python3-flask-httpauth = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-flask-httpauth+dev
+Summary:        Metapackage for python3-flask-httpauth dev extras
+Requires:       python3-flask-httpauth = %{version}-%{release}
+Provides:       python3dist(flask-httpauth[dev]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-flask-httpauth+dev
+Metapackage for python3-flask-httpauth dev extras.
+
+%package -n       python3-flask-httpauth+docs
+Summary:        Metapackage for python3-flask-httpauth docs extras
+Requires:       python3-flask-httpauth = %{version}-%{release}
+Provides:       python3dist(flask-httpauth[docs]) = %{version}-%{release}
+
+%description -n python3-flask-httpauth+docs
+Metapackage for python3-flask-httpauth docs extras.
+
+%description
 
 %package -n     python3-flask-httpauth
-Summary:        %{summary}
-
-%description -n python3-flask-httpauth %_description
+Summary:        HTTP authentication for Flask routes
+%description -n python3-flask-httpauth
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-flask-httpauth dev,docs
-
 
 %prep
-%autosetup -p1 -n flask_httpauth-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir flask_httpauth-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-flask-httpauth usr/lib/python3*/site-packages/flask_httpauth* usr/lib64/python3*/site-packages/flask_httpauth* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flask_httpauth* usr/lib64/python3*/site-packages/flask_httpauth* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-flask-httpauth -f %{pyproject_files}
+%files
+%files -n python3-flask-httpauth -f %{oreon_filedir}/python3-flask-httpauth.list
 
 %changelog
+
 %autochangelog

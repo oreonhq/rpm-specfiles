@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 992f821e1e18fc8a0e701ecae24b51a2d598296a180caee0a24c0af181da02a9
 Name:           python-pdfkit
 Version:        1.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            UNKNOWN
-Source:         %{pypi_source pdfkit}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pdfkit/pdfkit-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pdfkit' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pdfkit = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pdfkit
-Summary:        %{summary}
-
-%description -n python3-pdfkit %_description
-
+Summary:        Wkhtmltopdf python wrapper to convert html to pdf using the webkit rendering engine and qt
+%description -n python3-pdfkit
 
 %prep
-%autosetup -p1 -n pdfkit-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pdfkit-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pdfkit usr/lib/python3*/site-packages/pdfkit* usr/lib64/python3*/site-packages/pdfkit* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pdfkit* usr/lib64/python3*/site-packages/pdfkit* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pdfkit -f %{pyproject_files}
+%files
+%files -n python3-pdfkit -f %{oreon_filedir}/python3-pdfkit.list
 
 %changelog
+
 %autochangelog

@@ -1,37 +1,33 @@
 %global source0_hash 1305ed46ea21f794304e97aa3dcd3a38519059785e9db7415daf2c218506c569
-
 Name:           perl-Getopt-Long
 Epoch:          1
 Version:        2.58
-Release:        521%{?dist}
+Release:        1%{?dist}
 Summary:        Extended processing of command line options
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Getopt-Long
 Source0:        https://cpan.metacpan.org/authors/id/J/JV/JV/Getopt-Long-%{version}.tar.gz
 BuildArch:      noarch
+Requires:       perl(Text::ParseWords)
+Requires:       perl(Pod::Usage) >= 1.14
+Provides:       perl(newgetopt.pl) = %{version}
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
 BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(lib)
-# Run-time:
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Text::ParseWords)
 BuildRequires:  perl(base)
 BuildRequires:  perl(constant)
-BuildRequires:  perl(Exporter)
+BuildRequires:  perl(lib)
 BuildRequires:  perl(overload)
 BuildRequires:  perl(strict)
-BuildRequires:  perl(Text::ParseWords)
 BuildRequires:  perl(warnings)
-# Tests
-BuildRequires:  perl(Test::More)
-Requires:       perl(Text::ParseWords)
-# Recommended:
-Requires:       perl(Pod::Usage) >= 1.14
-# Dependencies on these Perl 4 files are generated as perl(foo.pl):
-Provides:       perl(newgetopt.pl) = %{version}
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The Getopt::Long module implements an extended getopt function called
 GetOptions(). It parses the command line from @ARGV, recognizing and removing
@@ -47,12 +43,12 @@ Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
 Requires:       perl(newgetopt.pl)
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Getopt-Long-%{version}
 
@@ -63,36 +59,28 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%doc Changes examples README.md
-%dir %{perl_vendorlib}/Getopt
-%{perl_vendorlib}/Getopt/Long*
-%{perl_vendorlib}/newgetopt.pl*
-%{_mandir}/man3/Getopt::Long*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Getopt-Long-tests -f %{oreon_filedir}/perl-Getopt-Long-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.58-521
 - Prepare for Oreon 11 (RP1)

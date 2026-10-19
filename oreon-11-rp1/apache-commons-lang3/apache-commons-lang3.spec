@@ -1,5 +1,4 @@
 %global source0_hash fa013d1a23e95d248fdb86f19c3817bb3e5aa39c5255e3c5ce1cc70c8576aa67
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,23 +80,21 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           apache-commons-lang3
 Version:        3.21.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Provides a host of helper utilities for the java.lang API
 License:        Apache-2.0
 URL:            https://commons.apache.org/proper/commons-lang/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/commons/lang/source/commons-lang3-%{version}-src.tar.gz
-
 Patch:          0001-Remove-test-dependency-on-JUnit-Pioneer.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.17.0-7
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(biz.aQute.bnd:biz.aQute.bndlib)
 BuildRequires:  mvn(com.google.code.findbugs:jsr305)
@@ -107,10 +104,7 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.easymock:easymock)
 BuildRequires:  mvn(org.hamcrest:hamcrest)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.17.0-7
-
+# /oreon:deps
 %description
 The standard Java libraries fail to provide enough methods for
 manipulation of its core classes. The Commons Lang Component provides
@@ -129,6 +123,7 @@ the new version, while apache-commons-lang is the compatibility
 package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n commons-lang3-%{version}-src
 
@@ -153,15 +148,14 @@ rm -f src/test/java/org/apache/commons/lang3/HashSetvBitSetTest.java
 sed -i '/<argLine>/d' pom.xml
 
 %build
-# See "-DcommonsLang3Version" in maven-surefire for the tested version
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
-%doc RELEASE-NOTES.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

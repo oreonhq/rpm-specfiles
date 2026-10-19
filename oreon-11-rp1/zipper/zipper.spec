@@ -1,30 +1,19 @@
 %global source0_hash 4e8110904151196987322e606d3e6d580ff1d07ccab7a1b4457563343d548e6e
-
 Name:           zipper
 Summary:        C++ wrapper around minizip compression library
 Version:        1.0.3
-Release:        13%{?dist}
+Release:        1%{?dist}
 URL:            https://github.com/sebastiandev/zipper
-
-## Source archive from github obtained by
-## git clone -b v1.0.3 --depth 1 --single-branch --progress --recursive https://github.com/sebastiandev/zipper.git
-## rm -rf zipper/.git*
-## tar -czvf  zipper-1.0.3.tar.gz zipper
 Source0:        https://github.com/sebastiandev/zipper/archive/zipper/%{name}-%{version}.tar.gz
-
-#Patch0:         zipper-unbundle_minizip.patch
 Patch1:         zipper-gcc14.patch
-
-# zlib and GPL+ (no version) licenses come from minizip/ source code
 License:        MIT AND ZLIB AND GPL-1.0-or-later
-
-BuildRequires:  make
+Provides: bundled(minizip) = 1.1
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
+BuildRequires:  make
 BuildRequires:  pkgconfig(zlib)
-#BuildRequires:  minizip-compat-devel
-Provides: bundled(minizip) = 1.1
-
+# /oreon:deps
 %description
 Zipper brings the power and simplicity of minizip to a more
 object oriented/c++ user friendly library.
@@ -46,24 +35,21 @@ Features:
 %package devel
 Summary: Development files of %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package provides header files, shared and static library files of %{name}.
 
 %package static
 Summary: Static library of %{name}
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 This package provides static library file of %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name} -p1
-
+%global oreon_srcdir %{name}
+%oreon_prep
 %build
-# TODO: remove CMAKE_POLICY_VERSION_MINIMUM if the new upstream source is used
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake -Wno-cpp -Wno-dev \
  -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} -DBUILD_SHARED_VERSION:BOOL=ON -DBUILD_STATIC_VERSION:BOOL=ON \
@@ -75,30 +61,18 @@ export CMAKE_POLICY_VERSION_MINIMUM=3.5
   %{?_cmake_lib_suffix64}
 %endif
 %cmake_build
-
 %install
 %cmake_install
-
 rm -f %{buildroot}%{_bindir}/Zipper-test
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files
-%doc README.md VERSION.txt
-%license LICENSE.md
-%{_libdir}/*.so.1
-%{_libdir}/*.so.1.0.2
-
-%files devel
-%{_libdir}/*.so
-%{_includedir}/zipper/
-%{_libdir}/pkgconfig/*.pc
-%{_libdir}/cmake/*.cmake
-
-%files static
-%{_libdir}/libZipper.a
-%{_libdir}/libZipper-static.a
+%files -f %{oreon_filedir}/main.list
+%files -n zipper-devel -f %{oreon_filedir}/zipper-devel.list
+%files -n zipper-static -f %{oreon_filedir}/zipper-static.list
 
 %changelog
+
 %autochangelog

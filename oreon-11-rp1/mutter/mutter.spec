@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash 5d28f3ae225692428fcafb96500d673f34328b698b86960c9c1460d0b1d983b3
 %global glib_version 2.81.1
 %global gobject_introspection_version 1.41.4
 %global gtk3_version 3.19.8
@@ -15,69 +14,15 @@
 %global mutter_api_version 18
 %global wayland_protocols_version 1.45
 %global wayland_server_version 1.24
-
 %global tarball_version %(echo %{version} | tr '~' '.')
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
-
 Name:          mutter
 Version:       51.0
-Release:       %autorelease
-Summary:       Window and compositing manager based on Clutter
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Window and compositing manager based on Clutter
 License:       GPL-2.0-or-later
 URL:           http://www.gnome.org
-Source0:        http://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1)/%{name}-%{tarball_version}.tar.xz
-BuildRequires: cvt
-BuildRequires: desktop-file-utils
-BuildRequires: mesa-libEGL-devel
-BuildRequires: mesa-libGLES-devel
-BuildRequires: mesa-libGL-devel
-BuildRequires: mesa-libgbm-devel
-BuildRequires: pam-devel
-BuildRequires: pkgconfig(bash-completion)
-BuildRequires: pkgconfig(colord) >= %{colord_version}
-BuildRequires: pkgconfig(glib-2.0) >= %{glib_version}
-BuildRequires: pkgconfig(gobject-introspection-1.0) >= %{gobject_introspection_version}
-BuildRequires: pkgconfig(sm)
-BuildRequires: pkgconfig(lcms2) >= %{lcms2_version}
-BuildRequires: pkgconfig(libadwaita-1)
-BuildRequires: pkgconfig(libwacom)
-BuildRequires: pkgconfig(xkbcommon)
-BuildRequires: pkgconfig(glesv2)
-BuildRequires: pkgconfig(graphene-gobject-1.0)
-BuildRequires: pkgconfig(libdisplay-info)
-BuildRequires: pkgconfig(libpipewire-0.3) >= %{pipewire_version}
-BuildRequires: pkgconfig(sysprof-capture-4)
-BuildRequires: pkgconfig(libsystemd)
-BuildRequires: pkgconfig(umockdev-1.0)
-BuildRequires: python3-argcomplete
-BuildRequires: python3-docutils
-# Bootstrap requirements
-BuildRequires: gettext-devel git-core
-BuildRequires: pkgconfig(libcanberra)
-BuildRequires: pkgconfig(gsettings-desktop-schemas) >= %{gsettings_desktop_schemas_version}
-BuildRequires: pkgconfig(gtk4) >= %{gtk4_version}
-BuildRequires: pkgconfig(gnome-settings-daemon)
-BuildRequires: meson
-BuildRequires: pkgconfig(gbm)
-BuildRequires: pkgconfig(glycin-2)
-BuildRequires: pkgconfig(gnome-desktop-4)
-BuildRequires: pkgconfig(gudev-1.0)
-BuildRequires: pkgconfig(libdrm) >= %{libdrm_version}
-BuildRequires: pkgconfig(libei-1.0) >= %{libei_version}
-BuildRequires: pkgconfig(libeis-1.0) >= %{libei_version}
-BuildRequires: pkgconfig(libstartup-notification-1.0)
-BuildRequires: pkgconfig(wayland-protocols) >= %{wayland_protocols_version}
-BuildRequires: pkgconfig(wayland-server) >= %{wayland_server_version}
-BuildRequires: sysprof-devel
-
-BuildRequires: pkgconfig(libinput) >= %{libinput_version}
-BuildRequires: pkgconfig(pixman-1) >= %{pixman_version}
-BuildRequires: pkgconfig(xwayland)
-
-BuildRequires: python3-dbusmock
-
+Source0:        http://download.gnome.org/sources/%{name}/51/%{name}-%{version}.tar.xz
 Requires: gnome-control-center-filesystem
 Requires: glib2%{?_isa} >= %{glib_version}
 Requires: gsettings-desktop-schemas%{?_isa} >= %{gsettings_desktop_schemas_version}
@@ -89,25 +34,62 @@ Requires: pipewire%{_isa} >= %{pipewire_version}
 Requires: startup-notification
 Requires: dbus
 Requires: python3-argcomplete
-
-# Need common
 Requires: %{name}-common = %{version}-%{release}
-
 Recommends: mesa-dri-drivers%{?_isa}
-
 Provides: firstboot(windowmanager) = mutter
-
-# Cogl and Clutter were forked at these versions, but have diverged
-# significantly since then.
 Provides: bundled(cogl) = 1.22.0
 Provides: bundled(clutter) = 1.26.0
-
 Conflicts: mutter < 45~beta.1-2
-
-# Make sure dnf updates gnome-shell together with this package; otherwise we
-# might end up with broken gnome-shell installations due to mutter ABI changes.
 Conflicts: gnome-shell < 45~rc
-
+# oreon:deps
+BuildRequires:  cvt
+BuildRequires:  desktop-file-utils
+BuildRequires:  gettext-devel
+BuildRequires:  git-core
+BuildRequires:  mesa-libEGL-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLES-devel
+BuildRequires:  mesa-libgbm-devel
+BuildRequires:  meson
+BuildRequires:  pam-devel
+BuildRequires:  pkgconfig(bash-completion)
+BuildRequires:  pkgconfig(colord)
+BuildRequires:  pkgconfig(gbm)
+BuildRequires:  pkgconfig(glesv2)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(glycin-2)
+BuildRequires:  pkgconfig(gnome-desktop-4)
+BuildRequires:  pkgconfig(gnome-settings-daemon)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(graphene-gobject-1.0)
+BuildRequires:  pkgconfig(gsettings-desktop-schemas)
+BuildRequires:  pkgconfig(gtk4)
+BuildRequires:  pkgconfig(gudev-1.0)
+BuildRequires:  pkgconfig(lcms2)
+BuildRequires:  pkgconfig(libadwaita-1)
+BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(libdisplay-info)
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(libei-1.0)
+BuildRequires:  pkgconfig(libeis-1.0)
+BuildRequires:  pkgconfig(libinput)
+BuildRequires:  pkgconfig(libpipewire-0.3)
+BuildRequires:  pkgconfig(libstartup-notification-1.0)
+BuildRequires:  pkgconfig(libsystemd)
+BuildRequires:  pkgconfig(libwacom)
+BuildRequires:  pkgconfig(pixman-1)
+BuildRequires:  pkgconfig(sm)
+BuildRequires:  pkgconfig(sysprof-capture-4)
+BuildRequires:  pkgconfig(umockdev-1.0)
+BuildRequires:  pkgconfig(wayland-protocols)
+BuildRequires:  pkgconfig(wayland-server)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  pkgconfig(xwayland)
+BuildRequires:  python3-argcomplete
+BuildRequires:  python3-dbusmock
+BuildRequires:  python3-docutils
+BuildRequires:  sysprof-devel
+# /oreon:deps
 %description
 Mutter is a window and compositing manager that displays and manages
 your desktop via OpenGL. Mutter combines a sophisticated display engine
@@ -124,7 +106,6 @@ behaviors to meet the needs of the environment.
 Summary: Common files used by %{name} and forks of %{name}
 BuildArch: noarch
 Conflicts: mutter < 45~beta.1-2
-
 %description common
 Common files used by Mutter and soft forks of Mutter
 
@@ -132,9 +113,7 @@ Common files used by Mutter and soft forks of Mutter
 Summary: Development package for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: libei%{?_isa} >= %{libei_version}
-# for EGL/eglmesaext.h that's included from public cogl-egl-defines.h header
 Requires: mesa-libEGL-devel
-
 %description devel
 Header files and libraries for developing Mutter plugins. Also includes
 utilities for testing Metacity/Mutter themes.
@@ -145,7 +124,6 @@ Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: gtk3%{?_isa} >= %{gtk3_version}
 Requires: libei%{?_isa} >= %{libei_version}
-
 %description tests
 The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
@@ -153,11 +131,11 @@ the functionality of the installed %{name} package.
 %package devkit
 Summary: Mutter Development Kit
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devkit
 Viewer for nested mutter instances.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 # check for human errors
 if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
@@ -165,55 +143,21 @@ if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Er
 %autosetup -S git -n %{name}-%{tarball_version}
 
 %build
+
 %meson -Degl_device=true
 %meson_build
-
 %install
 %meson_install
-
 %find_lang %{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%license COPYING
-%doc NEWS
-%{_bindir}/gdctl
-%{_bindir}/gnome-service-client
-%{_bindir}/mutter
-%{_datadir}/polkit-1/actions/org.gnome.mutter.*.policy
-%{_libdir}/lib*.so.*
-%{_libdir}/mutter-%{mutter_api_version}/
-%exclude %{_libdir}/mutter-%{mutter_api_version}/*.gir
-%{_libexecdir}/mutter-backlight-helper
-%{_libexecdir}/mutter-x11-frames
-%{_mandir}/man1/mutter.1*
-%{_mandir}/man1/gdctl.1*
-%{_mandir}/man1/gnome-service-client.1*
-%{bash_completions_dir}/gdctl
-
-%files common
-%{_datadir}/GConf/gsettings/mutter-schemas.convert
-%{_datadir}/glib-2.0/schemas/org.gnome.mutter.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.gnome.mutter.wayland.gschema.xml
-%{_datadir}/gnome-control-center/keybindings/50-mutter-*.xml
-%{_udevrulesdir}/61-mutter.rules
-
-%files devel
-%{_includedir}/mutter-%{mutter_api_version}/
-%{_libdir}/lib*.so
-%{_libdir}/mutter-%{mutter_api_version}/*.gir
-%{_libdir}/pkgconfig/*
-
-%files tests
-%{_datadir}/installed-tests/mutter-%{mutter_api_version}
-%{_datadir}/mutter-%{mutter_api_version}/tests
-%{_libexecdir}/installed-tests/mutter-%{mutter_api_version}
-
-%files devkit
-%{_datadir}/applications/org.gnome.Mutter.Mdk.desktop
-%{_datadir}/glib-2.0/schemas/org.gnome.mutter.devkit.gschema.xml
-%{_datadir}/icons/hicolor/*/apps/org.gnome.Mutter.Mdk*
-%{_libexecdir}/mutter-devkit
+%files -f %{oreon_filedir}/main.list
+%files -n mutter-common -f %{oreon_filedir}/mutter-common.list
+%files -n mutter-devel -f %{oreon_filedir}/mutter-devel.list
+%files -n mutter-tests -f %{oreon_filedir}/mutter-tests.list
+%files -n mutter-devkit -f %{oreon_filedir}/mutter-devkit.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.0-1
 - Prepare for Oreon 11 (RP1)

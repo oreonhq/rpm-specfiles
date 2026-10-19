@@ -1,44 +1,31 @@
 %global source0_hash ba288ae9ed37ec0c3622ceb40ae1f7e1e6b2ea89216ad8587f0863d64be24f06
-
 %define apidocs 1
-
 Name:    grantlee-qt5
-Summary: Qt5 string template engine based on the Django template system
+Summary:        Qt5 string template engine based on the Django template system
 Version: 5.3.1
-Release: 8%{?dist}
-
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://github.com/steveire/grantlee
-Source0: https://github.com/steveire/grantlee/archive/v%{version}%{?pre:-%{pre}}.tar.gz#/grantlee-%{version}%{?pre:-%{pre}}.tar.gz
-
+Source0:        https://github.com/steveire/grantlee/archive/v%{version}.tar.gz#/grantlee-%{version}.tar.gz
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 Source1: macros.grantlee5
-
 Patch0: grantlee-qt5-cpp20-ctor.patch
 %global grantlee5_plugins 5.3
 %global grantlee5_plugindir %{_libdir}/grantlee/%{grantlee5_plugins}/
 Provides: %{name}(%{grantlee5_plugins}) = %{version}-%{release}
-
-## upstreamable patches
-# Install headers into a versioned directory to be parallel-installable
-# based on:
-# https://github.com/steveire/grantlee/pull/1
-#Patch1: grantlee-5.2.0-install_headers_into_versioned_directory.patch
-
-BuildRequires: cmake >= 2.8.12
-BuildRequires: gcc-c++
-BuildRequires: cmake(Qt5Gui)
-BuildRequires: cmake(Qt5Qml)
-BuildRequires: cmake(Qt5LinguistTools)
-BuildRequires: cmake(Qt5Test)
 %if 0%{?apidocs}
-BuildRequires: doxygen
-BuildRequires: graphviz
 %endif
-## for %%check
-BuildRequires: xorg-x11-server-Xvfb
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt5Gui)
+BuildRequires:  cmake(Qt5LinguistTools)
+BuildRequires:  cmake(Qt5Qml)
+BuildRequires:  cmake(Qt5Test)
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  graphviz
+BuildRequires:  xorg-x11-server-Xvfb
+# /oreon:deps
 %description
 Grantlee is a plug-in based String Template system written
 using the Qt framework. The goals of the project are to make it easier for
@@ -59,8 +46,6 @@ how to write templates, see the documentation.
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# without versioning patch above, conflicts with older kde4 grantlee-devel
-# no biggie, only one pkg in distro depends on kde4 grantlee -- rex
 Conflicts: grantlee-devel
 %description devel
 The %{name}-devel package contains libraries and header files for
@@ -76,29 +61,23 @@ format for easy browsing.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n grantlee-%{version} -p1
-
+%global oreon_srcdir grantlee-%{version}
+%oreon_prep
 %build
+
 %cmake \
   -DBUILD_TESTS:BOOL=OFF \
   -DCMAKE_BUILD_TYPE=release
-
 %cmake_build
-
 %if 0%{?apidocs}
 %cmake_build --target docs
 %endif
-
 %install
 %cmake_install
-
 %if 0%{?apidocs}
 mkdir -p %{buildroot}%{_docdir}/HTML/en/Grantlee5/
 cp -prf %{__cmake_builddir}/apidox/* %{buildroot}%{_docdir}/HTML/en/Grantlee5/
 %endif
-
-# rpm macros
 install -p -m644 -D %{SOURCE1} \
   %{buildroot}%{rpm_macros_dir}/macros.grantlee5
 sed -i \
@@ -109,34 +88,15 @@ sed -i \
   -e "s|@@GRANTLEE5_PLUGINS@@|%{grantlee5_plugins}|g" \
   -e "s|@@GRANTLEE5_PLUGINDIR@@|%{grantlee5_plugindir}|g" \
   %{buildroot}%{rpm_macros_dir}/macros.grantlee5
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-#export CTEST_OUTPUT_ON_FAILURE=1
-#xvfb-run -a make test -C %{__cmake_builddir} ||:
 
 %ldconfig_scriptlets
-
-%files
-%license COPYING.LIB
-%doc AUTHORS CHANGELOG README.md
-%{_libdir}/libGrantlee_Templates.so.5*
-%{_libdir}/libGrantlee_TextDocument.so.5*
-%dir %{_libdir}/grantlee/
-%{grantlee5_plugindir}/
-
-%files devel
-%{_includedir}/grantlee/
-%{_includedir}/grantlee_templates.h
-%{_includedir}/grantlee_textdocument.h
-%{_libdir}/libGrantlee_Templates.so
-%{_libdir}/libGrantlee_TextDocument.so
-%{_libdir}/cmake/Grantlee5/
-%{rpm_macros_dir}/macros.grantlee5
-
-%if 0%{?apidocs}
-%files apidocs
-%{_docdir}/HTML/en/Grantlee5/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n grantlee-qt5-devel -f %{oreon_filedir}/grantlee-qt5-devel.list
+%files -n grantlee-qt5-apidocs -f %{oreon_filedir}/grantlee-qt5-apidocs.list
 
 %changelog
+
 %autochangelog

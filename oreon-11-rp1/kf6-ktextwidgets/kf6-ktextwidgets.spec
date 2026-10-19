@@ -1,43 +1,37 @@
+%global source1_hash 1669fd261b69aa0fa7f5b6ae9dc7cc7b0d342b2deec423e9891ef45b6d1828ff
 %global source0_hash b06b11bb727bf9c3578797b1e40daad5f48e10433e456a337f1c40b4082879c8
-
 %global framework ktextwidgets
-
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.30
-
 Name:    kf6-%{framework}
 Version: 6.30.0
 Release:        1%{?dist}
-Summary: KDE Frameworks 6 Tier 3 addon with advanced text editing widgets
-
+Summary:        KDE Frameworks 6 Tier 3 addon with advanced text editing widgets
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}
-
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  extra-cmake-modules >= %{version}
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  cmake(Qt6UiPlugin)
-BuildRequires:  cmake(Qt6TextToSpeech)
-BuildRequires:  cmake(Qt6QmlIntegration)
-BuildRequires:  cmake(KF6Completion) >= %{version}
-BuildRequires:  cmake(KF6Config) >= %{version}
-BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
-BuildRequires:  cmake(KF6I18n) >= %{version}
-BuildRequires:  cmake(KF6Service) >= %{version}
-BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
-BuildRequires:  cmake(KF6WindowSystem) >= %{version}
-BuildRequires:  cmake(KF6Sonnet) >= %{version}
-BuildRequires:  cmake(KF6ColorScheme) >= %{version}
-
-BuildRequires:  pkgconfig(xkbcommon)
-
 Requires:  kf6-filesystem
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6Completion)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6Sonnet)
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(Qt6QmlIntegration)
+BuildRequires:  cmake(Qt6TextToSpeech)
+BuildRequires:  cmake(Qt6UiPlugin)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  qt6-qtbase-devel
+# /oreon:deps
 %description
 KDE Frameworks 6 Tier 3 addon with advanced text edting widgets.
 
@@ -51,29 +45,23 @@ Requires:       qt6-qtbase-devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{framework}-%{version} -p1
 
 %build
+
 %cmake_kf6
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %find_lang %{name} --all-name
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%doc README.md
-%license LICENSES/*.txt
-%{_kf6_libdir}/libKF6TextWidgets.so.*
-
-%files devel
-%{_kf6_includedir}/KTextWidgets/
-%{_kf6_libdir}/libKF6TextWidgets.so
-%{_kf6_libdir}/cmake/KF6TextWidgets/
-%{_kf6_qtplugindir}/designer/ktextwidgets6widgets.so
-
+%files -f %{oreon_filedir}/main.list
+%files -n kf6-ktextwidgets-devel -f %{oreon_filedir}/kf6-ktextwidgets-devel.list
 
 %changelog
+
 %autochangelog

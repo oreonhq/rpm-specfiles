@@ -1,27 +1,24 @@
 %global source0_hash 2f338af0231e930539c5e5e04dac7c3384257866cc29fda112215f8c410898c9
-
 %global forgeurl https://github.com/sonic-visualiser/sonic-visualiser
-
 Name:           sonic-visualiser
 Version:        5.2.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A program for viewing and exploring audio data
-
 License:        GPL-2.0-or-later
 URL:            https://sonicvisualiser.org/
-Source:         %{forgeurl}/releases/download/sv_v%{version}/%{name}-%{version}.tar.gz
-# Fix build with GCC 15.1 and Qt 6.9
+Source0:        %{forgeurl}/releases/download/sv_v%{version}/%{name}-%{version}.tar.gz
 Patch:          svcore-atomic-qt-fix.patch
-# Fix build with Qt 6.10
 Patch:          svgui-qt-fix.patch
-
-BuildRequires:  meson
+Requires:       hicolor-icon-theme
+Requires:       vamp-plugin-sdk%{?_isa} >= 2.10
+# oreon:deps
 BuildRequires:  alsa-lib-devel
 BuildRequires:  bzip2-devel
 BuildRequires:  capnproto
 BuildRequires:  dataquay-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  liblo-devel
+BuildRequires:  meson
 BuildRequires:  pkgconfig(capnp)
 BuildRequires:  pkgconfig(fftw3)
 BuildRequires:  pkgconfig(fftw3f)
@@ -36,26 +33,16 @@ BuildRequires:  pkgconfig(oggz)
 BuildRequires:  pkgconfig(opusfile)
 BuildRequires:  pkgconfig(portaudio-2.0)
 BuildRequires:  pkgconfig(raptor2)
-BuildRequires:  pkgconfig(rubberband) >= 3.0.0
+BuildRequires:  pkgconfig(rubberband)
 BuildRequires:  pkgconfig(samplerate)
 BuildRequires:  pkgconfig(serd-0)
 BuildRequires:  pkgconfig(sndfile)
 BuildRequires:  pkgconfig(sord-0)
-BuildRequires:  qt6-qtbase-devel
-# This is likely not really needed; if it is we need to scope it
-# to only x86_64 and aarch64
-# https://github.com/sonic-visualiser/sonic-visualiser/issues/95
-# BuildRequires:  qt6-qtpdf-devel
-BuildRequires:  qt6-qtsvg-devel
 BuildRequires:  qt6-linguist
-BuildRequires:  vamp-plugin-sdk-devel >= 2.10
-
-Requires:       hicolor-icon-theme
-# The automatic dependency on libvamp-hostsdk.so.3 is satisfied by
-# the previous vamp-plugin-sdk-2.9 package, so we need to explicitly
-# require v2.10 here to get the correct library build
-Requires:       vamp-plugin-sdk%{?_isa} >= 2.10
-
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtsvg-devel
+BuildRequires:  vamp-plugin-sdk-devel
+# /oreon:deps
 %description
 Sonic Visualiser is an application for viewing and analyzing the
 contents of music audio files.
@@ -72,30 +59,22 @@ analysis plugin format – as well as applying standard audio effects.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
 %check
+
 %meson_test
 desktop-file-validate \
   %{buildroot}%{_datadir}/applications/sonic-visualiser.desktop
-
-%files
-%license COPYING
-%doc CHANGELOG CITATION README.*
-%{_bindir}/piper-convert
-%{_bindir}/piper-vamp-simple-server
-%{_bindir}/sonic-visualiser
-%{_bindir}/vamp-plugin-load-checker
-%{_datadir}/applications/*.desktop
-%{_datadir}/icons/hicolor/scalable/apps/*.svg
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

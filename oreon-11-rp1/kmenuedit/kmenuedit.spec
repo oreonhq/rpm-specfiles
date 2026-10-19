@@ -1,73 +1,55 @@
+%global source1_hash fddb8a522dbd5debc87866843c8a4377fc0f03df4c960291f9791eab9634e02a
 %global source0_hash 2d9801b7f89988046472c2b32385d848a0a98095fb178d58d6e3b5090ced9b8b
-
 %global stable_kf6 stable
-
-
 Name:    kmenuedit
-Summary: KDE menu editor
+Summary:        KDE menu editor
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-BuildRequires:  qt6-qtbase-devel
-
+Conflicts:      kde-workspace < 4.11.15-3
+# oreon:deps
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6GlobalAccel)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6ItemViews)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Sonnet)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6XmlGui)
 BuildRequires:  desktop-file-utils
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6Sonnet)
-BuildRequires:  cmake(KF6GlobalAccel)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DocTools)
 BuildRequires:  libappstream-glib
-
-# when split out from kde-workspace-4.11.x
-Conflicts:      kde-workspace < 4.11.15-3
-
+BuildRequires:  qt6-qtbase-devel
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
 %find_lang kmenuedit5 --with-html --all-name
-
+%oreon_autofiles main
 
 %check
-desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kmenuedit.desktop
-# commented out until upstream fixes a duplicate entries problem
-#appstream-util validate-relax --nonet %%{buildroot}%%{_metainfodir}/*.appdata.xml
 
-%files -f kmenuedit5.lang
-%license LICENSES/*
-%{_bindir}/kmenuedit
-%{_datadir}/kmenuedit/
-%{_datadir}/applications/org.kde.kmenuedit.desktop
-%{_datadir}/icons/hicolor/*/apps/kmenuedit.*
-%{_kf6_datadir}/qlogging-categories6/kmenuedit.categories
-%{_kf6_datadir}/metainfo/org.kde.kmenuedit.appdata.xml
+desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kmenuedit.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

@@ -1,61 +1,56 @@
-%global source0_hash none
-
+%global source0_hash 5ff7ecad828e032a491fcb86947801768e32237f99dd049b649965b892ae9a63
 Name:           python-proto-plus
 Version:        1.28.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Beautiful, Pythonic protocol buffers
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/googleapis/google-cloud-python/tree/main/packages/proto-plus
-Source:         %{pypi_source proto_plus}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/proto_plus/proto_plus-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-proto-plus = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-proto-plus+testing
+Summary:        Metapackage for python3-proto-plus testing extras
+Requires:       python3-proto-plus = %{version}-%{release}
+Requires:       python3dist(google-api-core) >= 2.25.0
+Provides:       python3dist(proto-plus[testing]) = %{version}-%{release}
 
+%description -n python3-proto-plus+testing
+Metapackage for python3-proto-plus testing extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'proto-plus' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-proto-plus
-Summary:        %{summary}
-
-%description -n python3-proto-plus %_description
+Summary:        Beautiful, Pythonic protocol buffers
+# oreon:reqs
+Requires:       python3dist(protobuf) < 8.0.0
+Requires:       python3dist(protobuf) >= 6.33.5
+# /oreon:reqs
+%description -n python3-proto-plus
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-proto-plus testing
-
 
 %prep
-%autosetup -p1 -n proto_plus-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir proto_plus-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-proto-plus usr/lib/python3*/site-packages/proto_plus* usr/lib64/python3*/site-packages/proto_plus* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/proto_plus* usr/lib64/python3*/site-packages/proto_plus* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-proto-plus -f %{pyproject_files}
+%files
+%files -n python3-proto-plus -f %{oreon_filedir}/python3-proto-plus.list
 
 %changelog
+
 %autochangelog

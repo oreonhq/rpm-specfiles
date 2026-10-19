@@ -1,24 +1,22 @@
 %global source0_hash d311b3c899cba8d25e76ca2d3547f542fa469aa74c6b63a914f6d8cdf04c4dc9
-
 %global __cmake_in_source_build 1
-
 Name:           libsbw
-Summary:        C++ Broker library 
+Summary:        C++ Broker library
 Version:        2.12.2
 Release:        21%{?dist}
 URL:            http://sourceforge.net/projects/sbw/
 Source0:        https://sourceforge.net/projects/sbw/files/sbw/%{version}/sbw-core-%{version}.tar.bz2
 License:        BSD-3-Clause
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: gcc
-BuildRequires: zlib-devel
-BuildRequires: libxml2-devel
-BuildRequires: dos2unix
-BuildRequires: help2man
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  dos2unix
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  help2man
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 The Systems Biology Workbench (SBW) is a framework for application
 intercommunications. It uses a broker-based, distributed,
@@ -38,7 +36,6 @@ using the C++ Broker.
 %package devel
 Summary: Development files of libSBW
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package provides header files, shared and static library files of libSBW.
 
@@ -46,11 +43,11 @@ This package provides header files, shared and static library files of libSBW.
 %package static
 Summary: Static library of libSBW
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 This package provides static library file of libSBW.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n sbw-core-%{version}
@@ -71,7 +68,7 @@ find ./SBWCore \( -name \*.cpp -o -name \*.h \) -print0 | xargs -0 chmod -x
 find ./include/SBW \( -name \*.h \) -print0 | xargs -0 chmod -x
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380752)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export CXXFLAGS="-std=c++14 %{optflags} -Wl,-z,now -Wno-deprecated"
 export LDFLAGS="%{__global_ldflags} -Wl,-z,now -Wl,--as-needed"
@@ -83,35 +80,19 @@ export LDFLAGS="%{__global_ldflags} -Wl,-z,now -Wl,--as-needed"
  -DCPACK_BINARY_TZ:BOOL=OFF -DCPACK_BINARY_TGZ:BOOL=OFF -DCPACK_SOURCE_TBZ2:BOOL=OFF \
  -DCPACK_SOURCE_TGZ:BOOL=OFF -DCPACK_SOURCE_TZ:BOOL=OFF \
  -DCMAKE_SKIP_INSTALL_RPATH:BOOL=YES -DCMAKE_SKIP_RPATH:BOOL=YES
-
 %cmake_build
-
 %install
 export LIBDIR=%{_libdir}
 %cmake_install
-
-## Make Broker man page
 help2man SBWBroker/Broker -o Broker.1 --version-string=%{version}
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 install -pm 644 Broker.1 $RPM_BUILD_ROOT%{_mandir}/man1
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%doc ReadMe.txt VERSION
-%license LICENSE
-%{_bindir}/Broker
-%{_libdir}/libSBW.so.*
-%{_mandir}/man1/Broker.1*
-
-%files devel
-%{_libdir}/libSBW.so
-%{_includedir}/SBW/
-%{_libdir}/cmake/SBW-config-*.cmake
-%{_libdir}/cmake/SBW-config.cmake
-
-%files static
-%{_libdir}/libSBW-static.a
-%{_libdir}/cmake/SBW-static-config-*.cmake
-%{_libdir}/cmake/SBW-static-config.cmake
+%files -f %{oreon_filedir}/main.list
+%files -n libsbw-devel -f %{oreon_filedir}/libsbw-devel.list
+%files -n libsbw-static -f %{oreon_filedir}/libsbw-static.list
 
 %changelog
+
 %autochangelog

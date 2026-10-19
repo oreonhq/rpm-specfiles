@@ -1,68 +1,55 @@
-%global source0_hash none
-
+%global source0_hash a97d5549e9ad81fe17159ed02c68774ad5d266c72f8d9a0b5a9c371fe85d902b
 Name:           python3-docs
 Summary:        Documentation for the Python 3 programming language
-
-# The Version should be in-sync with the python3 package:
 %global         pybasever 3.14
 %global         general_version %{pybasever}.3
-#global         prerel ...
 %global         upstream_version %{general_version}%{?prerel}
 Version:        %{general_version}%{?prerel:~%{prerel}}
-Release:        %autorelease
-# The documentation is licensed as Python itself: Python-2.0.1
-# Examples, recipes, and other code in the documentation are dual licensed under Python-2.0.1/0BSD
+Release:        1%{?dist}
 License:        Python-2.0.1 AND (Python-2.0.1 OR 0BSD)
 URL:            https://www.python.org/
-Source:         %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz
-
+Source0:        https://www.python.org/ftp/python/%{general_version}/Python-%{general_version}.tar.xz
 BuildArch:      noarch
-
 Recommends:     python3 = %{version}
-
-BuildRequires:  make
-BuildRequires:  python3-devel
-BuildRequires:  python3-docs-theme >= 2022.1
-BuildRequires:  python3-sphinx >= 1:8.2.0
-BuildRequires:  python3-docutils
-BuildRequires:  python3-pygments
-BuildRequires:  gnupg2
-
 %bcond_without linkchecker
 %if %{with linkchecker}
-BuildRequires:  linkchecker
 %endif
-
+# oreon:deps
+BuildRequires:  gnupg2
+BuildRequires:  linkchecker
+BuildRequires:  make
+BuildRequires:  python3-devel
+BuildRequires:  python3-docs-theme
+BuildRequires:  python3-docutils
+BuildRequires:  python3-pygments
+BuildRequires:  python3-sphinx
+# /oreon:deps
 %description
 The python3-docs package contains documentation on the Python 3
 programming language and interpreter.
 
 %prep
+
 %autosetup -p1 -n Python-%{upstream_version}
 
 %build
+
 make -C Doc html PYTHON=%{__python3}
 rm Doc/build/html/.buildinfo
-
 %install
 mkdir -p %{buildroot}
+%oreon_autofiles main
 
 %check
-# Verify that all of the local links work (see rhbz#670493)
-#
-# (we can't check network links, as we shouldn't be making network connections
-# within a build.  Also, don't bother checking the .txt source files; some
-# contain example URLs, which don't work)
+
 %if %{with linkchecker}
 linkchecker \
   --ignore-url=^mailto: --ignore-url=^http --ignore-url=^ftp \
   --ignore-url=.txt\$ --no-warnings \
   Doc/build/html/index.html
 %endif
-
-%files
-%license LICENSE
-%doc Misc/NEWS Misc/HISTORY Misc/README Doc/build/html
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

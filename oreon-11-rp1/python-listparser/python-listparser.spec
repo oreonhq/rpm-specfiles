@@ -1,64 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 0dda5b41ca9531fc3c438eb4abf4d8a7cf03ef050d196875993e897a66c1f885
 Name:           python-listparser
 Version:        0.20
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Parse OPML subscription lists
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/kurtmckee/listparser/
-Source:         %{pypi_source listparser}
-
+Source0:        https://files.pythonhosted.org/packages/source/l/listparser/listparser-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'listparser' generated automatically by pyp2spec.}
-
 Patch0:         2to3.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-listparser = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-listparser
-Summary:        %{summary}
-
-%description -n python3-listparser %_description
+Summary:        Parse OPML subscription lists
+%description -n python3-listparser
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-listparser http,lxml
-
 
 %prep
-%autosetup -p1 -n listparser-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir listparser-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-listparser usr/lib/python3*/site-packages/listparser* usr/lib64/python3*/site-packages/listparser* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/listparser* usr/lib64/python3*/site-packages/listparser* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-listparser -f %{pyproject_files}
+%files
+%files -n python3-listparser -f %{oreon_filedir}/python3-listparser.list
 
 %changelog
+
 %autochangelog

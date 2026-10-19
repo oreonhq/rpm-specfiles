@@ -1,17 +1,16 @@
 %global source0_hash bae119297191a948fa50cfa6d32c8b89cf477ba5177d871185d41e14cf676dbf
-
 %global debug_package %{nil}
-
 Name:    kf6
-# This version MUST remain in sync with KF6 versions!
 Version: 6.30.0
-Release: 1%{?dist}
-Summary: Filesystem and RPM macros for KDE Frameworks 6
+Release:        1%{?dist}
+Summary:        Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
 URL:     http://www.kde.org
-Source0: macros.kf6
+Source0:        macros.kf6
 Source1: LICENSE
+# oreon:deps
 
+# /oreon:deps
 %description
 Filesystem and RPM macros for KDE Frameworks 6
 
@@ -28,9 +27,7 @@ Filesystem for KDE Frameworks 6.
 Summary: RPM macros for KDE Frameworks 6
 Requires: cmake >= 3
 Requires: qt6-rpm-macros >= 6
-# misc build environment dependencies
 Requires: gcc-c++
-# Optional qdoc stack (qt6-doc-devel, kde-qdoc-common, clang-devel, cmake(Qt6ToolsTools))
 Recommends: doxygen
 Recommends: qt6-doc-devel
 Recommends: kde-qdoc-common
@@ -48,7 +45,6 @@ then ``install_html_docs`` only when ``_kf6_html_docs`` is 1 and
 Use ``%%bcond_with kf6_html_docs`` plus ``%%global _kf6_html_docs %%{?with_kf6_html_docs:1}%%{!?with_kf6_html_docs:0}`` if you prefer rpmbuild flags.
 
 %install
-# See macros.kf6 where the directories are specified
 mkdir -p %{buildroot}%{_prefix}/{lib,%{_lib}}/qt6/plugins/kf6/
 mkdir -p %{buildroot}%{_prefix}/{lib,%{_lib}}/qt6/qml/org/kde/
 mkdir -p %{buildroot}%{_includedir}/kf6
@@ -68,42 +64,17 @@ mkdir -p %{buildroot}%{_datadir}/knsrcfiles/
 mkdir -p %{buildroot}%{_datadir}/solid/{actions,devices}
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/plasma-workspace/{env,shutdown}
 %endif
-
-# macros.zz-kf6 sorts after macros.qt6 so %%cmake_build_kf6 is not overwritten by qt6-rpm-macros.
 install -Dpm644 %{SOURCE0} %{buildroot}%{_rpmconfigdir}/macros.d/macros.zz-kf6
 install -Dpm644 %{SOURCE1} %{buildroot}%{_datadir}/kf6/LICENSE
 sed -i \
   -e "s|@@kf6_VERSION@@|%{version}|g" \
   %{buildroot}%{_rpmconfigdir}/macros.d/macros.zz-kf6
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files filesystem
-%{_datadir}/kf6/
-%{_datadir}/kio/
-%{_datadir}/kservices6/
-%{_datadir}/kservicetypes6/
-%{_datadir}/qlogging-categories6/
-%{_docdir}/qt6/
-%{_includedir}/kf6/
-%{_includedir}/KF6/
-%{_libexecdir}/kf6/
-%{_prefix}/%{_lib}/qt6/plugins/kf6/
-%{_prefix}/lib/qt6/plugins/kf6/
-%{_prefix}/%{_lib}/qt6/qml/org/kde/
-%{_prefix}/lib/qt6/qml/org/kde/
-%{_datadir}/locale/tok
-%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon})
-%{_datadir}/config.kcfg/
-%{_datadir}/kconf_update/
-%{_datadir}/knsrcfiles/
-%{_datadir}/kpackage/
-%{_datadir}/solid/
-%{_prefix}/%{_lib}/kconf_update_bin/
-%{_prefix}/lib/kconf_update_bin/
-%{_sysconfdir}/xdg/plasma-workspace/
-%endif
-
-%files rpm-macros
-%{_rpmconfigdir}/macros.d/macros.zz-kf6
+%files -f %{oreon_filedir}/main.list
+%files -n kf6-filesystem -f %{oreon_filedir}/kf6-filesystem.list
+%files -n kf6-rpm-macros -f %{oreon_filedir}/kf6-rpm-macros.list
 
 %changelog
+
 %autochangelog

@@ -1,30 +1,27 @@
 %global source0_hash 3b9def48422bd45f78af95936200b7f9287369a3db76c4907c42fe10f4922ab6
-
 Name:             gengetopt
 Version:          2.23.1
-Release:          1%{dist}
-Summary:          Tool to write command line option parsing code for C programs
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Tool to write command line option parsing code for C programs
 License:          GPL-3.0-or-later
 URL:              http://www.gnu.org/software/gengetopt/
-Source0:          https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
-
-
-BuildRequires:  gcc-c++
-BuildRequires:  gcc
+Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 %ifarch %{valgrind_arches}
-BuildRequires:  valgrind
 %endif
-BuildRequires:  texinfo
-BuildRequires: make
 Provides:         bundled(gnulib)
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  texinfo
+# /oreon:deps
 %description
 Gengetopt is a tool to generate C code to parse the command line arguments
 argc and argv that are part of every C or C++ program. The generated code uses
 the C library function getopt_long to perform the actual command line parsing.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -49,35 +46,26 @@ find . -name '*.h' -exec chmod 644 {} ';'
 find . -name '*.ggo' -exec chmod 644 {} ';'
 
 %build
-%configure
-# Parallel build doesn't work.
-make
 
+%configure
+make
 %install
 %make_install INSTALL="%{__install} -p"
 rm -frv %{buildroot}%{_infodir}/dir
-# Use %%doc macro to install instead.
 rm -frv %{buildroot}%{_docdir}/%{name}
-
 mkdir ./examples
 pushd ./doc
   cp -p README.example ../examples
   cp -p main1.cc sample1.ggo ../examples
   cp -p main2.c sample2.ggo ../examples
 popd
+%oreon_autofiles main
 
 %check
-make check
 
-%files
-%doc AUTHORS ChangeLog NEWS README THANKS TODO
-%doc doc/index.html doc/%{name}.html
-%doc examples/
-%license COPYING LICENSE
-%{_bindir}/%{name}
-%{_datadir}/%{name}/
-%{_infodir}/*.info*
-%{_mandir}/man1/%{name}.1*
+make check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

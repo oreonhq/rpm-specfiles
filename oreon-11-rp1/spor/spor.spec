@@ -1,22 +1,17 @@
 %global source0_hash bb301697fcdb4b832fdd13893a5de697fb7de305a0c6dfc29b8d6e33a00a9dd6
-
 Name:      spor
-Summary:   Store file modes (permission/ownership) recursively 
+Summary:        Store file modes (permission/ownership) recursively
 Version:   1.0
-Release:   34%{?dist}
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        34%{?dist}
 License:   GPL-3.0-or-later
 URL:       http://code.google.com/p/spor
-Source0:   http://spor.googlecode.com/files/%{name}-%{version}.tar.bz2 
-
-# Build changes
-# http://code.google.com/p/spor/issues/detail?id=1
+Source0:        http://spor.googlecode.com/files/%{name}-%{version}.tar.bz2
 Patch0:    spor.1.patch
-# Remove invalid -Wl from linker call
 Patch1:    spor-1.0-Makefile.patch
-
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 Spor recursively walks into a given directory, storing file mode & ownership 
 information in a flat-file database for future retrievals. It was firstly 
@@ -25,6 +20,7 @@ simple and safe method to save and restore particular meta-data information
 of a given directory.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}
@@ -32,16 +28,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P1 -p1
 
 %build
-%{__make} %{?_smp_mflags} CFLAGS="%{optflags}"
 
+%{__make} %{?_smp_mflags} CFLAGS="%{optflags}"
 %install
 %{__install} -D -p -m 0755 %{name} %{buildroot}/%{_bindir}/%{name}
 %{__install} -D -p -m 0644 %{name}.1 %{buildroot}/%{_mandir}/man1/%{name}.1
+%oreon_autofiles main
 
-%files
-%doc readme.txt LICENSE
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

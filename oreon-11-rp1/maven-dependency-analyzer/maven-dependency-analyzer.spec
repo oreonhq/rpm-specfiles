@@ -1,5 +1,4 @@
 %global source0_hash e9a1f0bece81dfc397c2b703c8e6265953117cc0293a0f6c9aff41f1e33bd856
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,35 +82,20 @@ end
 %bcond_with bootstrap
 Name:           maven-dependency-analyzer
 Version:        1.17.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven dependency analyzer
 License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-dependency-analyzer/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(commons-io:commons-io)
-BuildRequires:  mvn(javax.inject:javax.inject)
-BuildRequires:  mvn(org.apache.maven.shared:maven-shared-components:pom:)
-BuildRequires:  mvn(org.apache.maven:maven-artifact)
-BuildRequires:  mvn(org.apache.maven:maven-core)
-BuildRequires:  mvn(org.apache.maven:maven-model)
-BuildRequires:  mvn(org.assertj:assertj-core)
-BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
-BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
-BuildRequires:  mvn(org.ow2.asm:asm)
-BuildRequires:  mvn(org.slf4j:slf4j-api)
-BuildRequires:  mvn(org.slf4j:slf4j-simple)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1.17.2-19
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Analyzes the dependencies of a project for undeclared or unused artifacts.
 
@@ -122,16 +106,16 @@ dependency.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

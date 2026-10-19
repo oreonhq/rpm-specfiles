@@ -1,27 +1,23 @@
+%global source1_hash fabe9c53787bdb721f0f0626d4f21cc5754002c9d82d5561cb6c05faf5f964a7
 %global source0_hash b10bff1672640e9e0dc92a821e8173bd0d727a148b5939f01e95abc89621e3c1
-
 Name:           priv_wrapper
 Version:        1.0.1
-Release:        11%{?dist}
-
+Release:        1%{?dist}
 Summary:        A library to disable resource limits and other privilege dropping
 License:        GPL-3.0-or-later
 Url:            http://cwrap.org/
-
 Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        priv_wrapper.keyring
-
 Patch0:         priv_wrapper-fix-cmocka-1.1.6+-support.patch
-
-BuildRequires:  gcc
-BuildRequires:  cmake
-BuildRequires:  gnupg2
-BuildRequires:  libcmocka-devel >= 1.1.0
-
 Recommends:     cmake
 Recommends:     pkgconfig
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  libcmocka-devel
+# /oreon:deps
 %description
 priv_wrapper aims to help running processes which are dropping privileges or
 are restricting resources in test environments.
@@ -38,35 +34,27 @@ This package does not have a devel package, because this project is for
 development/testing.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
 %build
+
 %cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DUNIT_TESTING=ON
 %cmake_build
-
 %install
 %cmake_install
-
 %ldconfig_scriptlets
+%oreon_autofiles main
 
 %check
-%ctest
 
-%files
-%doc AUTHORS README.md CHANGELOG.md
-%license LICENSE
-%{_libdir}/libpriv_wrapper.so*
-%dir %{_libdir}/cmake
-%dir %{_libdir}/cmake/priv_wrapper
-%{_libdir}/cmake/priv_wrapper/priv_wrapper-config-version.cmake
-%{_libdir}/cmake/priv_wrapper/priv_wrapper-config.cmake
-%dir %{_libdir}/pkgconfig
-%{_libdir}/pkgconfig/priv_wrapper.pc
-%{_mandir}/man1/priv_wrapper.1*
+%ctest
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.1-11
 - Import

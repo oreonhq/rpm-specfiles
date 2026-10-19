@@ -1,20 +1,19 @@
 %global source0_hash 9c911320682287bf5d22e6da84be56355c95068d8bcb903e5d6e3cae04c7936a
-
 %global commit 7c7a99a90e2d898aad4790107486d3e21167443f
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapinfo 20220213git%{shortcommit}
 %global debug_package %{nil}
-
 Name:      googleapis
 Version:   0
-Release:   %autorelease -s %{snapinfo}
-Summary:   Public interface definitions of Google APIs
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Public interface definitions of Google APIs
 License:   Apache-2.0
 URL:       https://github.com/googleapis/googleapis
-Source0:   %{URL}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 BuildArch: noarch
+# oreon:deps
 
+# /oreon:deps
 %description
 This repository contains the original interface definitions of public Google
 APIs that support both REST and gRPC protocols. 
@@ -25,11 +24,11 @@ libraries, documentation, and other artifacts.
 
 %package devel
 Summary:   Protocol Buffers definitions of Google APIs
-
 %description devel
 This package contains Protocol Buffers definitions of the Google APIs
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n googleapis-%{commit}
@@ -41,11 +40,11 @@ done
 for f in $(find google -type f -name "*.proto"); do
     install --mode 0644 -vp "$f" %{buildroot}%{_includedir}/$f
 done
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files devel
-%license LICENSE
-%dir %{_includedir}/google
-%{_includedir}/google/*
+%files -f %{oreon_filedir}/main.list
+%files -n googleapis-devel -f %{oreon_filedir}/googleapis-devel.list
 
 %changelog
+
 %autochangelog

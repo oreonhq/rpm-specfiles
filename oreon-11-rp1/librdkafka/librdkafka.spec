@@ -1,32 +1,28 @@
 %global source0_hash 23c8575c7d1ced07246cb9cf200c11325b72201fd4134a02414ca869fbdd8ed3
-
 %bcond optional_tests %{undefined rhel}
-
 Name:		librdkafka
 Version:	2.15.1
-Release:	1%{?dist}
-Summary:	The Apache Kafka C library
-
+Release:        1%{?dist}
+Summary:        The Apache Kafka C library
 License:	Apache-2.0
 URL:		https://github.com/edenhill/librdkafka
 Source0:        https://github.com/edenhill/librdkafka/archive/refs/tags/v2.15.1.tar.gz#/librdkafka-2.15.1.tar.gz
-
-BuildRequires:	gcc
-BuildRequires:	gcc-c++
-BuildRequires:	make
-BuildRequires:	python3
-BuildRequires:	libzstd-devel
-BuildRequires:	lz4-devel
-BuildRequires:	openssl-devel
-BuildRequires:	cyrus-sasl-devel
-BuildRequires:	zlib-devel
 %if %{with optional_tests}
-BuildRequires:	rapidjson-devel
 %endif
-
 Patch1: disable-ssl-engine.patch
 Patch2: include-ossl-rand.patch
-
+# oreon:deps
+BuildRequires:  cyrus-sasl-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libzstd-devel
+BuildRequires:  lz4-devel
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  python3
+BuildRequires:  rapidjson-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Librdkafka is a C/C++ library implementation of the Apache Kafka protocol,
 containing both Producer and Consumer support.
@@ -37,7 +33,6 @@ messages/second for the consumer.
 %package	devel
 Summary:	The Apache Kafka C library (Development Environment)
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description	devel
 librdkafka is a C/C++ library implementation of the Apache Kafka protocol,
 containing both Producer and Consumer support.
@@ -46,18 +41,10 @@ using librdkafka.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-# This package has a configure test which uses ASMs, but does not link the
-# resultant .o files.  As such the ASM test is always successful, even on
-# architectures were the ASM is not valid when compiling with LTO.
-#
-# -ffat-lto-objects is sufficient to address this issue.  It is the default
-# for F33, but is expected to only be enabled for packages that need it in
-# F34, so we use it here explicitly
-%define _lto_cflags -flto=auto -ffat-lto-objects
 
+%define _lto_cflags -flto=auto -ffat-lto-objects
 %configure \
     --enable-zlib \
     --enable-zstd \
@@ -67,34 +54,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     --enable-gssapi \
     --enable-sasl \
     --disable-ssl-engine
-
 %make_build
-
 %check
-make check
 
+make check
 %install
 %make_install
 find %{buildroot} -name '*.a' -delete -print
 find %{buildroot} -name '*-static.pc' -delete -print
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_libdir}/librdkafka.so.*
-%{_libdir}/librdkafka++.so.*
-%doc README.md CONFIGURATION.md INTRODUCTION.md LICENSE LICENSES.txt STATISTICS.md CHANGELOG.md
-%license LICENSE LICENSE.pycrc LICENSE.snappy
-
-%files devel
-%dir %{_includedir}/librdkafka
-%{_includedir}/librdkafka/*
-%{_libdir}/librdkafka.so
-%{_libdir}/librdkafka++.so
-%{_libdir}/pkgconfig/rdkafka.pc
-%{_libdir}/pkgconfig/rdkafka++.pc
-
+%files -f %{oreon_filedir}/main.list
+%files -n librdkafka-devel -f %{oreon_filedir}/librdkafka-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.1-2
 - Prepare for Oreon 11 (RP1)

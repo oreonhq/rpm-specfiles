@@ -1,5 +1,4 @@
 %global source0_hash 6c85f80a054e91b4bc59fc6fc7e26f95645699ecef913ec3489a260a8e82324a
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,29 +80,25 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           plexus-classworlds
 Version:        2.12.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plexus Classworlds Classloader Framework
 License:        Apache-2.0 AND Plexus
 URL:            https://github.com/codehaus-plexus/plexus-classworlds
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/codehaus-plexus/plexus-classworlds/archive/refs/tags/plexus-classworlds-2.8.0.tar.gz#/plexus-classworlds-2.8.0.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 2.12.1-12
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.12.1-12
-
+# /oreon:deps
 %description
 Classworlds is a framework for container developers who require complex
 manipulation of Java's ClassLoaders. Java's native ClassLoader mechanisms and
@@ -113,6 +108,7 @@ represent a 'container' can benefit from the classloading control provided by
 classworlds.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n plexus-classworlds-plexus-classworlds-2.8.0
 %mvn_file : %{name} plexus/classworlds
@@ -125,14 +121,15 @@ sed -i /testConfigure_Valid/s/./@org.junit.jupiter.api.Disabled/ src/test/java/o
 sed -i /testConfigure_Optionally_Existent/s/./@org.junit.jupiter.api.Disabled/ src/test/java/org/codehaus/plexus/classworlds/launcher/ConfiguratorTest.java
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt LICENSE-Codehaus.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.0-1
 - Import

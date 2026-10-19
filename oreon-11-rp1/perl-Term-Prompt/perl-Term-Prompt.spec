@@ -1,30 +1,27 @@
 %global source0_hash f186ca66c7579d0ca8f673c0c096603089ea8ecc88b3e14260d0a1b11f4f94fe
-
 Name:           perl-Term-Prompt
 Version:        1.04
-Release:        46%{?dist}
+Release:        1%{?dist}
 Summary:        Perl extension for prompting a user for information
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-Prompt
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PERSICOM/Term-Prompt-%{version}.tar.gz
 BuildArch:      noarch
-# Build
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Runtime
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Exporter)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Term::ReadKey) >= 1
-BuildRequires:  perl(Text::Wrap)
-BuildRequires:  perl(warnings)
-# Tests only
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Term::ReadKey)
 BuildRequires:  perl(Test::More)
-
+BuildRequires:  perl(Text::Wrap)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This main function of this module is to accept interactive input. You
 specify the type of inputs allowed, a prompt, help text and defaults and it
@@ -34,6 +31,7 @@ one of the legal choices. Additional 'types' that could be added would be a
 phone type, a social security type, a generic numeric pattern type...
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Term-Prompt-%{version}
@@ -43,20 +41,19 @@ for f in $(find . -type f); do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%doc Changes README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

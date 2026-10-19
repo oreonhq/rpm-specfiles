@@ -1,36 +1,31 @@
-%global source0_hash none
-
+%global source0_hash e4c9470d3f4f2064ff89eeafc3cc105f16ec1eddd8a97d75580639a21e115505
 %global themes bloom bloom-dark bloom-classic bloom-classic-dark Sea vintage
 %global start_logo start-here
-
 Name:           deepin-icon-theme
 Version:        2026.02.27
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Icons for the Deepin Desktop Environment
 License:        GPL-3.0-or-later
 URL:            https://github.com/linuxdeepin/deepin-icon-theme
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/linuxdeepin/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  /usr/bin/python
-BuildRequires:  make
-BuildRequires:  gtk-update-icon-cache
-BuildRequires:  xcursorgen
-BuildRequires:  fedora-logos
-
 Requires:       papirus-icon-theme
 Requires:       fedora-logos
-
+# oreon:deps
+BuildRequires:  /usr/bin/python
+BuildRequires:  fedora-logos
+BuildRequires:  gtk-update-icon-cache
+BuildRequires:  make
+BuildRequires:  xcursorgen
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%make_build
 
+%make_build
 %install
 %make_install
 cp -a ./Sea ./usr/share/icons/hicolor %{buildroot}%{_datadir}/icons
@@ -45,36 +40,28 @@ for theme in %{themes}; do
     done
     touch %{buildroot}%{_datadir}/icons/$theme/icon-theme.cache
 done
+%oreon_autofiles main
 
 %post
+
 for theme in %{themes}; do
   touch --no-create %{_datadir}/icons/$theme &>/dev/null || :
 done
-
 %postun
+
 if [ $1 -eq 0 ] ; then
   for theme in %{themes}; do
     touch --no-create %{_datadir}/icons/$theme &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/$theme &>/dev/null || :
   done
 fi
-
 %posttrans
+
 for theme in %{themes}; do
   /usr/bin/gtk-update-icon-cache %{_datadir}/icons/$theme &>/dev/null || :
 done
-
-%files
-%license LICENSE
-%{_datadir}/icons/hicolor/*/status/*.svg
-%{_datadir}/icons/hicolor/*/apps/*.svg
-%{_datadir}/icons/bloom-dark/
-%{_datadir}/icons/bloom/
-%{_datadir}/icons/bloom-classic/
-%{_datadir}/icons/bloom-classic-dark/
-%{_datadir}/icons/Sea/
-%{_datadir}/icons/vintage/
-%ghost %{_datadir}/icons/*/icon-theme.cache
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

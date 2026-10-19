@@ -1,21 +1,19 @@
 %global source0_hash 7286b1e6ade66fe82b7c8208b4595deeb55d6486b410834fdc65702f46650542
-
 Name:           zxing-cpp
 Version:        3.1.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C++ port of the ZXing ("Zebra Crossing") barcode scanning library
-
-# The entire source is ASL 2.0, except:
-# - wrappers/wasm/base64ArrayBuffer.js is MIT (but is not used)
 License:        Apache-2.0 AND MIT
 URL:            https://github.com/zxing-cpp/zxing-cpp
-# codeload.github.com avoids intermittent 504s from /archive/ on busy workers.
 Source0:        https://codeload.github.com/zxing-cpp/zxing-cpp/tar.gz/refs/tags/v%{version}#/zxing-cpp-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  cmake(fmt)
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(nanobind) >= 2.11.0
+BuildRequires:  python3dist(scikit-build-core) >= 0.12
+BuildRequires:  python3dist(typing-extensions) >= 4.12
+Requires:       python3-zxing-cpp = %{version}-%{release}
+# /oreon:deps
 %description
 ZXing-C++ ("zebra crossing") is an open-source, multi-format 1D/2D barcode
 image processing library implemented in C++.
@@ -23,24 +21,21 @@ image processing library implemented in C++.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %package -n     python3-%{name}
 Summary:        Python bindings for the %{name} barcode library
-
 BuildRequires:  python3-devel
 BuildRequires:  pybind11-devel
 BuildRequires:  chrpath
-
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description -n python3-%{name}
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -52,19 +47,8 @@ sed -r -i '/cmake/d' wrappers/python/pyproject.toml
 sed -i 's/pybind11\[global\]/pybind11/' wrappers/python/pyproject.toml
 # build verbosely:
 
-%generate_buildrequires
-pushd wrappers/python &>/dev/null
-%pyproject_buildrequires -r
-popd &>/dev/null
-
 %build
-# Setting BUILD_PYTHON_MODULE builds a Python extension shared library module,
-# but we don’t get any metadata (dist-info), so it’s not terribly useful for
-# packaging purposes. Instead, it seems we must re-build the whole library
-# through setuptools to get that.
-# CMAKE_BUILD_TYPE=RelWithDebInfo prevents the build from stripping the
-# python module after it is built.  The stripping happens in
-# pybind11_add_module.
+
 %cmake \
     -DZXING_DEPENDENCIES=LOCAL \
     -DBUILD_EXAMPLES=OFF \
@@ -72,50 +56,29 @@ popd &>/dev/null
     -DCMAKE_BUILD_TYPE=RelWithDebInfo
 %cmake_build
 pushd wrappers/python
-# CMake respects this environment variable. We need to see the compiler
-# invocations to verify the distro build flags are respected. Unfortunately,
-# pybind11 does add -O3, and there doesn’t seem to be a way to turn that off.
-# It’s a global pybind11 decision, not something in this package’s sources.
 export VERBOSE=1
 %pyproject_wheel
 popd
-
 %install
 %cmake_install
 pushd wrappers/python
 %pyproject_install
-# Now we do something sneaky: we substitute the Python extension that was built
-# in the original CMake invocation, replacing the one built with setuptools. It
-# is dynamically linked against the main libZXing.so, which makes it smaller,
-# and it was not built with that pesky -O3 that was added by pybind11, so it
-# better complies with packaging guidelines. The only problem is it contains an
-# rpath that we need to remove.
 popd
 install -t '%{buildroot}%{python3_sitearch}' -p \
     %{_vpath_builddir}/wrappers/python/zxingcpp.*.so
 chrpath --delete %{buildroot}%{python3_sitearch}/zxingcpp.*.so
 pushd wrappers/python
-%pyproject_save_files zxingcpp
 popd
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/lib/python3*/site-packages/zxing_cpp* usr/lib64/python3*/site-packages/zxing_cpp* usr/bin/*
 
 %check
+
 %ctest
-
 %files
-%license LICENSE
-%{_libdir}/libZXing.so.3
-%{_libdir}/libZXing.so.%{version}
-
-%files devel
-%doc README.md
-%{_includedir}/ZXing/
-%{_libdir}/libZXing.so
-%{_libdir}/cmake/ZXing/
-%{_libdir}/pkgconfig/zxing.pc
-
-%files -n python3-%{name} -f %{pyproject_files}
-%{_libdir}/zxingcpp%{python3_ext_suffix}
+%files -n zxing-cpp-devel -f %{oreon_filedir}/zxing-cpp-devel.list
+%files -n python3-zxing-cpp -f %{oreon_filedir}/python3-zxing-cpp.list
 
 %changelog
+
 * Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.1-%autorelease
 - Import from Fedora dist-git f43 for Oreon 11

@@ -1,19 +1,10 @@
 %global source0_hash d993f118fdf2343c5bc4e891b6b5f39c70b201c39419e0a6b0e2260b5875ec5b
-
-# Copyright (c) 2007 oc2pus <toni@links2linux.de>
-# Copyright (c) 2007-2021 Hans de Goede <hdegoede@redhat.com>
-# This file and all modifications and additions to the pristine
-# package are under the same license as the package itself.
-#
-# Please submit bugfixes or comments to us at the above email addresses
-
 Name:           bolzplatz2006
 Version:        1.0.3
 Release:        66%{?dist}
 Summary:        Slam Soccer 2006 is a funny football game in 3D-comic-style
 Summary(fr):    Coup de Foot 2006 est un jeu comique en 3D
 Summary(de):    Bolzplatz 2006 ist ein spaßiges Fußballspiel im 3D-Comic-Stil
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.bolzplatz2006.de
 Source0:        http://downloads.sourceforge.net/bp2k6/%{name}-%{version}-src.zip
@@ -40,20 +31,34 @@ Patch10:        %{name}-use-system-extgl.patch
 Patch11:        %{name}-gcc6.patch
 Patch12:        %{name}-openjdk11.patch
 Patch13:        %{name}-gcc15.patch
-BuildRequires:  gcc-c++ make
-BuildRequires:  ant-openjdk25  sdljava dom4j vecmath1.2 swig xml-commons-apis
-BuildRequires:  libGLU-devel DevIL-devel libXxf86vm-devel libjpeg-devel
-BuildRequires:  libpng-devel libXext-devel libXrandr-devel libXcursor-devel
-BuildRequires:  libXt-devel libXrender-devel libvorbis-devel desktop-file-utils
-BuildRequires:  java-25-devel
-BuildRequires:  libappstream-glib
 Requires:       sdljava dom4j vecmath1.2 java-25 jpackage-utils
 Requires:       hicolor-icon-theme autodownloader
-# These are dynamically opened by lwjgl:
 Requires:       openal-soft
-# Bolzplatz2006 is a mix of java + native code, so it can only run on java_arches
 ExclusiveArch:  %{java_arches}
-
+# oreon:deps
+BuildRequires:  DevIL-devel
+BuildRequires:  ant-openjdk25
+BuildRequires:  desktop-file-utils
+BuildRequires:  dom4j
+BuildRequires:  gcc-c++
+BuildRequires:  java-25-devel
+BuildRequires:  libGLU-devel
+BuildRequires:  libXcursor-devel
+BuildRequires:  libXext-devel
+BuildRequires:  libXrandr-devel
+BuildRequires:  libXrender-devel
+BuildRequires:  libXt-devel
+BuildRequires:  libXxf86vm-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  make
+BuildRequires:  sdljava
+BuildRequires:  swig
+BuildRequires:  vecmath1.2
+BuildRequires:  xml-commons-apis
+# /oreon:deps
 %description
 Slam Soccer 2006 is a funny football game in
 3D-comic-style - and it's for free!
@@ -120,6 +125,7 @@ Gratuit et open-source.
 * 3 langues: allemand, anglais et français
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -c -p1
@@ -131,95 +137,62 @@ rm -r libsrc/irrlicht-0.14-patched/libpng libsrc/irrlicht-0.14-patched/zlib \
   libsrc/irrlicht-0.14-patched/jpeglib libsrc/irrlicht-0.14-patched/glext.h
 
 %build
+
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -D_GNU_SOURCE"
 export JAVA_HOME=/usr/lib/jvm/java-openjdk
-
-# special case ix86 as all of ix86 should look in the i386 jre lib subdir
 %ifarch %{ix86}
 export JAVA_ARCH=i386
 %endif
-# special case x86_64 as it should be mapped to amd64
 %ifarch x86_64
 export JAVA_ARCH=amd64
 %endif
-# All other archs
 if [ -z "$JAVA_ARCH" ]; then
   export JAVA_ARCH=%{_arch}
 fi
-
 echo "export LD_LIBRARY_PATH=/usr/lib/jvm/jre-openjdk/lib/$JAVA_ARCH" >> \
   %{name}-functions.sh
-
-# jbolzplatz ships with copies of several libraries, as these are heavily
-# patched we use the bolzplatz versions and not the system ones
-
-# build irrlicht-0.14
 pushd libsrc/irrlicht-0.14-patched
 make %{?_smp_mflags} CPP="g++ $RPM_OPT_FLAGS -fPIC -fno-strict-aliasing" \
   CC="g++ $RPM_OPT_FLAGS -fPIC -fno-strict-aliasing"
 popd
-
-# build jirr-0.6
 pushd libsrc/jirr-dev
 make CXX="g++ $RPM_OPT_FLAGS -fPIC -fno-strict-aliasing -fpermissive" \
   CC="g++ $RPM_OPT_FLAGS -fPIC -fno-strict-aliasing"
 popd
-
-# build lwjgl
 pushd libsrc/lwjgl
 ant jars
 ant compile_native
 popd
-
-# build bolzplatz itself
 mkdir classes
 javac -d classes -encoding iso-8859-1 \
   -cp `build-classpath dom4j sdljava vecmath1.2`:./libsrc/jirr-dev/lib/irrlicht.jar:./libsrc/lwjgl/libs/lwjgl.jar \
   `find ./src -name '*.java'`
 jar cf %{name}.jar -C classes .
-
 %install
-# dirs
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_javadir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps
-
-# jars
 install -m 644 %{name}.jar libsrc/jirr-dev/lib/irrlicht.jar \
   libsrc/lwjgl/libs/lwjgl.jar $RPM_BUILD_ROOT%{_javadir}/%{name}
-
-# native libraries
 install -m 755 libsrc/jirr-dev/libirrlicht_wrap.so \
   libsrc/lwjgl/libs/linux/liblwjgl.so $RPM_BUILD_ROOT%{_libdir}/%{name}
-
-# startscripts
 install -m 755 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 install -m 755 %{SOURCE3} $RPM_BUILD_ROOT%{_bindir}/%{name}-settings
-
-# icon and menu-entry
 install -p -m 644 %{SOURCE1} \
   $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps
 desktop-file-install --dir $RPM_BUILD_ROOT%{_datadir}/applications %{SOURCE4}
 install -p -m 644 %{SOURCE5} $RPM_BUILD_ROOT%{_datadir}/appdata
 appstream-util validate-relax --nonet \
   $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml
-
-# needed "data" files
 install -p -m 644 %{name}-functions.sh %{SOURCE8} %{SOURCE9} \
   $RPM_BUILD_ROOT%{_datadir}/%{name}
+%oreon_autofiles main
 
-%files
-%license license.txt
-%{_bindir}/%{name}*
-%{_libdir}/%{name}
-%{_datadir}/%{name}
-%{_javadir}/%{name}
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,32 +1,28 @@
 %global source0_hash 6e39dbfa1e6ad3730b006c8953a43cc6da3dfc91f00edeb68a641d364703b773
-
-# Testing needs to be online
 %global with_check 0
-
 Name: qrmumps
 Version: 3.1
-Release: %autorelease
-Summary: A multithreaded multifrontal QR solver
+Release:        1%{?dist}
+Summary:        A multithreaded multifrontal QR solver
 License: LGPL-3.0-or-later
 URL: http://buttari.perso.enseeiht.fr/qr_mumps/
-Source0: https://gitlab.com/qr_mumps/qr_mumps/-/archive/%{version}/qr_mumps-%{version}.tar.gz
-
-BuildRequires: gcc-gfortran, gcc-c++, gcc
-BuildRequires: cmake
-BuildRequires: metis-devel >= 5.1.0-12
-BuildRequires: scotch-devel
-BuildRequires: suitesparse-devel
-BuildRequires: perl-devel
-BuildRequires: perl-generators
-BuildRequires: flexiblas-devel
+Source0:        https://gitlab.com/qr_mumps/qr_mumps/-/archive/%{version}/qr_mumps-%{version}.tar.gz
 Requires: gcc-gfortran%{?_isa}
-
 Provides: qr_mumps = 0:%{version}-%{release}
 Obsoletes: qr_mumps < 0:3.0-1
-
-# Add libraries soname and fix the installation paths
 Patch0:   %{name}-fix_libpaths+libsoname.patch
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  flexiblas-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gcc-gfortran
+BuildRequires:  metis-devel
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  scotch-devel
+BuildRequires:  suitesparse-devel
+# /oreon:deps
 %description
 qr_mumps is a software package for the solution of sparse,
 linear systems on multicore computers.
@@ -65,6 +61,7 @@ PDF documentation files of %{name}.
 ########################################################
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n qr_mumps-%{version} -p1
@@ -73,8 +70,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -f aux/find/Find{BLAS,LAPACK}.cmake
 
 %build
-# TODO: Remove LIB_SUFFIX flag once upstream properly supports GNUInstallDirs
-# https://gitlab.com/qr_mumps/qr_mumps/-/merge_requests/9
+
 %cmake -Wno-dev -DQRM_VERSION:STRING=%{version} \
 %if "%{?_lib}" == "lib64"
  %{?_cmake_lib_suffix64} \
@@ -87,39 +83,21 @@ rm -f aux/find/Find{BLAS,LAPACK}.cmake
  -DBLAS_VERBOSE:BOOL=ON -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE \
  -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_SKIP_INSTALL_RPATH:BOOL=YES \
  -DINCLUDE_INSTALL_DIR:PATH=%{_includedir}/qrm -DLIB_INSTALL_DIR:PATH=%{_libdir}
-
 %cmake_build
-
 %install
 %cmake_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if 0%{?with_check}
 %check
+
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %ctest
 %endif
-
-%files
-%license doc/COPYING.LESSER
-%doc Changelog.org README.org
-%{_libdir}/lib*qrm.so.3
-%{_libdir}/libqrm_common.so.3
-%{_libdir}/lib*qrm.so.%{version}
-%{_libdir}/libqrm_common.so.%{version}
-
-%files devel
-%{_includedir}/qrm/
-%{_fmoddir}/qrm/
-%{_libdir}/lib*qrm.so
-%{_libdir}/libqrm_common.so
-%{_libdir}/cmake/qrm/
-
-%files benchmarks
-%{_bindir}/*qrm_*
-
-%files doc
-%license doc/COPYING.LESSER
-%doc doc/*
+%files -f %{oreon_filedir}/main.list
+%files -n qrmumps-devel -f %{oreon_filedir}/qrmumps-devel.list
+%files -n qrmumps-benchmarks -f %{oreon_filedir}/qrmumps-benchmarks.list
+%files -n qrmumps-doc -f %{oreon_filedir}/qrmumps-doc.list
 
 %changelog
+
 %autochangelog

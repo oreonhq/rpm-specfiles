@@ -1,6 +1,5 @@
 %global source0_hash 24c345b5c077c1b2b2fcbc1a364f1da051650fb6743ad5213096adc04c862ed4
 %global source1_hash d17123e101ada18cce7022d9794fb97344d3151028c4f51f652fcf992e8d0da2
-
 %global with_python3 %{?_without_python3: 0} %{?!_without_python3: 1}
 %global with_php %{?_without_php: 0} %{?!_without_php: 0}
 %global with_tcl %{?_without_tcl: 0} %{?!_without_tcl: 1}
@@ -9,62 +8,59 @@
 %global with_dbi %{?rhel: 0} %{?!rhel: 1}
 %global php_extdir %(php-config --extension-dir 2>/dev/null || echo %{_libdir}/php4)
 %global svnrev r1190
-#global pretag 1.2.99908020600
-
 %if "%{php_version}" < "5.6"
 %global ini_name     %{name}.ini
 %else
 %global ini_name     40-%{name}.ini
 %endif
-
-
-Summary: Round Robin Database Tool to store and display time-series data
+Summary:        Round Robin Database Tool to store and display time-series data
 Name: rrdtool
 Version: 1.11.0
-Release: 1%{?dist}
-# gd license in php bindings isn't by default built-in
+Release:        1%{?dist}
 License: gpl-1.0-or-later AND gpl-2.0-or-later AND gpl-2.0-or-later WITH rrdtool-floss-exception-2.0 AND mit AND lgpl-2.0-or-later AND lgpl-2.1-or-later AND bsd-source-code AND snprintf AND bsd-3-clause AND gpl-2.0-only AND licenseref-fedora-public-domain AND gtkbook
 URL: https://oss.oetiker.ch/rrdtool/
 Source0:        https://github.com/oetiker/rrdtool-1.x/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1: php4-%{svnrev}.tar.gz
 Patch1: rrdtool-1.4.4-php54.patch
-# disable logo for php 5.5.
 Patch2: rrdtool-1.4.7-php55.patch
 Patch3: rrdtool-1.6.0-ruby-2-fix.patch
-# enable php bindings on ppc
 Patch4: rrdtool-1.4.8-php-ppc-fix.patch
-# fix compatibility with tcl 9.0
-# https://github.com/oetiker/rrdtool-1.x/commit/4218ec7127ba6c7ea1c20d7c8ea6e2b3f83df73a
-
-BuildRequires: make
-BuildRequires: gcc-c++
-BuildRequires: freetype-devel
-BuildRequires: libpng-devel
-BuildRequires: zlib-devel
-BuildRequires: intltool >= 0.35.0
-BuildRequires: cairo-devel >= 1.4.6
-BuildRequires: pango-devel >= 1.17
-BuildRequires: libtool
-BuildRequires: groff
-BuildRequires: gettext
-BuildRequires: libxml2-devel
-BuildRequires: systemd
-BuildRequires: sed
 %if %{with_dbi}
-BuildRequires: libdbi-devel
 %endif
-BuildRequires: perl-ExtUtils-MakeMaker
-BuildRequires: perl-generators
-BuildRequires: perl-Pod-Html
-BuildRequires: perl-devel
-BuildRequires: automake
-BuildRequires: autoconf
 Requires: dejavu-sans-mono-fonts
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-
 Provides:       perl(RRDs)
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  cairo-devel
+BuildRequires:  freetype-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  groff
+BuildRequires:  intltool
+BuildRequires:  libpng-devel
+BuildRequires:  libtool
+BuildRequires:  libxml2-devel
+BuildRequires:  lua
+BuildRequires:  lua-devel
+BuildRequires:  make
+BuildRequires:  pango-devel
+BuildRequires:  perl-ExtUtils-MakeMaker
+BuildRequires:  perl-Pod-Html
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  ruby
+BuildRequires:  ruby-devel
+BuildRequires:  sed
+BuildRequires:  systemd
+BuildRequires:  tcl-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 RRD is the Acronym for Round Robin Database. RRD is a system to store and
 display time-series data (i.e. network bandwidth, machine-room temperature,
@@ -78,7 +74,6 @@ put a friendly user interface on it.
 Summary: RRDtool libraries and header files
 Requires: %{name} = %{version}-%{release}
 Requires: pkgconfig
-
 %description devel
 RRD is the Acronym for Round Robin Database. RRD is a system to store and
 display time-series data (i.e. network bandwidth, machine-room temperature,
@@ -86,7 +81,6 @@ server load average). This package allow you to use directly this library.
 
 %package doc
 Summary: RRDtool documentation
-
 %description doc
 RRD is the Acronym for Round Robin Database. RRD is a system to store and
 display time-series data (i.e. network bandwidth, machine-room temperature,
@@ -97,10 +91,8 @@ Summary: Perl RRDtool bindings
 Requires: %{name} = %{version}-%{release}
 Obsoletes: perl-%{name} < %{version}-%{release}
 Provides: perl-%{name} = %{version}-%{release}
-
 %description perl
 The Perl RRDtool bindings
-
 
 %package -n python3-rrdtool
 %{?python_provide:%python_provide python3-rrdtool}
@@ -108,7 +100,6 @@ Summary: Python RRDtool bindings
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
 Requires: %{name} = %{version}-%{release}
-
 %description -n python3-rrdtool
 Python RRDtool bindings.
 
@@ -123,7 +114,6 @@ Requires: php(api)
 Obsoletes: php-%{name} < %{version}-%{release}
 Provides: php-%{name} = %{version}-%{release}
 Provides: php-pecl(rrdtool)
-
 %description php
 The %{name}-php package includes a dynamic shared object (DSO) that adds
 RRDtool bindings to the PHP HTML-embedded scripting language.
@@ -137,7 +127,6 @@ Requires: tcl >= 8.0
 Requires: %{name} = %{version}-%{release}
 Obsoletes: tcl-%{name} < %{version}-%{release}
 Provides: tcl-%{name} = %{version}-%{release}
-
 %description tcl
 The %{name}-tcl package includes RRDtool bindings for Tcl.
 %endif
@@ -149,7 +138,6 @@ The %{name}-tcl package includes RRDtool bindings for Tcl.
 Summary: Ruby RRDtool bindings
 BuildRequires: ruby, ruby-devel
 Requires: %{name} = %{version}-%{release}
-
 %description ruby
 The %{name}-ruby package includes RRDtool bindings for Ruby.
 %endif
@@ -166,12 +154,12 @@ BuildRequires: lua, lua-devel
 Requires: lua(abi) = %{luaver}
 %endif
 Requires: %{name} = %{version}-%{release}
-
 %description lua
 The %{name}-lua package includes RRDtool bindings for Lua.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version} %{?with_php: -a 1}
@@ -205,6 +193,7 @@ perl -pi.orig -e 's|1.299907080300|1.29990708|' \
 cp -p /usr/lib/rpm/redhat/config.{guess,sub} php4/
 
 %build
+
 ./bootstrap
 %configure \
     --with-perl-options='INSTALLDIRS="vendor"' \
@@ -232,35 +221,23 @@ cp -p /usr/lib/rpm/redhat/config.{guess,sub} php4/
 %endif
     --disable-static \
     --with-pic
-
-# Fix another rpath issue
 perl -pi.orig -e 's|-Wl,--rpath -Wl,\$rp||g' \
     bindings/perl-shared/Makefile.PL
-
 %if %{with_ruby}
-# Remove Rpath from Ruby
 perl -pi.orig -e 's|-Wl,--rpath -Wl,\$\(EPREFIX\)/lib||g' \
     bindings/ruby/extconf.rb
 sed -i 's|extconf.rb \\|extconf.rb --vendor \\|' bindings/Makefile
 %endif
-
-# Force RRDp bits where we want 'em, not sure yet why the
-# --with-perl-options and --libdir don't take
 pushd bindings/perl-piped/
 perl Makefile.PL INSTALLDIRS=vendor
 perl -pi.orig -e 's|/lib/perl|/%{_lib}/perl|g' Makefile
 popd
-
 %{make_build}
-
-# Build the php module, the tmp install is required
 %if %{with_php}
 %global rrdtmp %{_tmppath}/%{name}-%{version}-tmpinstall
 %{__make} install DESTDIR="%{rrdtmp}"
 pushd php4/
-
 export PYTHON=%{__python3}
-
 %configure \
     --with-rrdtool="%{rrdtmp}%{_prefix}" \
     --disable-static
@@ -268,137 +245,67 @@ export PYTHON=%{__python3}
 popd
 rm -rf %{rrdtmp}
 %endif
-
-# Fix @perl@ and @PERL@
 find examples/ -type f \
     -exec perl -pi -e 's|^#! \@perl\@|#!%{__perl}|gi' {} \;
 find examples/ -name "*.pl" \
     -exec perl -pi -e 's|\015||gi' {} \;
-
 %install
 export PYTHON=%{__python3}
 %{make_install} PYTHON="$PYTHON"
-
-# Install the php module
 %if %{with_php}
 install -D -m0755 php4/modules/rrdtool.so \
     %{buildroot}%{php_extdir}/rrdtool.so
-# Clean up the examples for inclusion as docs
 rm -rf php4/examples/.svn
-# Put the php config bit into place
 mkdir -p %{buildroot}%{_sysconfdir}/php.d
 cat << __EOF__ > %{buildroot}%{_sysconfdir}/php.d/%{ini_name}
 ; Enable rrdtool extension module
 extension=rrdtool.so
 __EOF__
 %endif
-
-# Pesky RRDp.pm...
 mv $RPM_BUILD_ROOT%{perl_vendorlib}/RRDp.pm $RPM_BUILD_ROOT%{perl_vendorarch}/
-
-# Dunno why this is getting installed here...
 rm -f $RPM_BUILD_ROOT%{perl_vendorlib}/leaktest.pl
-
-# We only want .txt and .html files for the main documentation
 mkdir -p doc2/html doc2/txt
 cp -a doc/*.txt doc2/txt/
 cp -a doc/*.html doc2/html/
-
-# Put perl docs in perl package
 mkdir -p doc3/html
 mv doc2/html/RRD*.html doc3/html/
-
-# Clean up the examples
 rm -f examples/Makefile* examples/*.in examples/rrdcached/Makefile*
-
-# This is so rpm doesn't pick up perl module dependencies automatically
 find examples/ -type f -exec chmod 0644 {} \;
-
-# Clean up the buildroot
 rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}-* \
         $RPM_BUILD_ROOT%{perl_vendorarch}/ntmake.pl \
         $RPM_BUILD_ROOT%{perl_archlib}/perllocal.pod \
         $RPM_BUILD_ROOT%{_datadir}/%{name}/examples \
         $RPM_BUILD_ROOT%{perl_vendorarch}/auto/*/{.packlist,*.bs}
-
 %find_lang %{name}
+%oreon_autofiles python3-rrdtool usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# minimal load test for the PHP extension
+
 %if %{with_php}
 LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
     -d extension_dir=%{buildroot}%{php_extdir} \
     -d extension=rrdtool.so -m \
     | grep rrdtool
 %endif
-
-
 %post
-%systemd_post rrdcached.service rrdcached.socket
 
+%systemd_post rrdcached.service rrdcached.socket
 %preun
-%systemd_post rrdcached.service rrdcached.socket
 
+%systemd_post rrdcached.service rrdcached.socket
 %postun
+
 %systemd_post rrdcached.service rrdcached.socket
-
-%files -f %{name}.lang
-%license LICENSE
-%doc CONTRIBUTORS COPYRIGHT TODO NEWS CHANGES THREADS
-%{_bindir}/*
-%{_libdir}/*.so.*
-%{_unitdir}/rrdcached.service
-%{_unitdir}/rrdcached.socket
-%{_datadir}/%{name}
-%{_mandir}/man1/*
-%{_mandir}/man3/lib*.3*
-
-%files devel
-%{_includedir}/*.h
-%{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*.pc
-
-# License file is missing, upstream was notified
-%files doc
-%doc examples doc2/html doc2/txt
-
-%files perl
-%doc doc3/html
-%{_mandir}/man3/*.3pm*
-%{perl_vendorarch}/*.pm
-%attr(0755,root,root) %{perl_vendorarch}/auto/RRDs/
-
-
-%files -n python3-rrdtool
-%doc bindings/python/COPYING bindings/python/README.md
-%{python3_sitearch}/rrdtool*.so
-%{python3_sitearch}/rrdtool-*.egg-info
-
-%if %{with_php}
-%files php
-%doc php4/examples php4/README
-%config(noreplace) %{_sysconfdir}/php.d/%{ini_name}
-%{php_extdir}/rrdtool.so
-%endif
-
-%if %{with_tcl}
-%files tcl
-%doc bindings/tcl/README
-%{_libdir}/tclrrd*.so
-%{_libdir}/rrdtool/*.tcl
-%endif
-
-%if %{with_ruby}
-%files ruby
-%doc bindings/ruby/README
-%{ruby_vendorarchdir}/RRD.so
-%endif
-
-%if %{with_lua}
-%files lua
-%doc bindings/lua/README
-%{lualibdir}/*
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n rrdtool-devel -f %{oreon_filedir}/rrdtool-devel.list
+%files -n rrdtool-doc -f %{oreon_filedir}/rrdtool-doc.list
+%files -n rrdtool-perl -f %{oreon_filedir}/rrdtool-perl.list
+%files -n python3-rrdtool -f %{oreon_filedir}/python3-rrdtool.list
+%files -n rrdtool-tcl -f %{oreon_filedir}/rrdtool-tcl.list
+%files -n rrdtool-ruby -f %{oreon_filedir}/rrdtool-ruby.list
+%files -n rrdtool-lua -f %{oreon_filedir}/rrdtool-lua.list
 
 %changelog
+
 %autochangelog

@@ -1,31 +1,26 @@
-%global source0_hash 1d8f154e69b3055cb20f5eddda0fa438aea292e6ef835b129cd2efaae5eb95fc
-
+%global source0_hash 19262df1df00de75bdc419d31d544953a3589e6369e5dff1a4ebcee465c6d046
 Name:           egl-wayland2
 Version:        1.0.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Dma-buf-based Wayland external platform library
-# src/wayland/dma-buf.h is GPL 2, rest is Apache 2.0
 License:        Apache-2.0 and GPL-2.0
 URL:            https://github.com/NVIDIA/%{name}
-
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/NVIDIA/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Requires:       libglvnd-egl%{?_isa}
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  meson
 BuildRequires:  libtool
-BuildRequires:  pkgconfig(egl) >= 1.5
-BuildRequires:  pkgconfig(eglexternalplatform) >= 1.1
-BuildRequires:  pkgconfig(gbm) >= 21.2.0
+BuildRequires:  meson
+BuildRequires:  pkgconfig(egl)
+BuildRequires:  pkgconfig(eglexternalplatform)
+BuildRequires:  pkgconfig(gbm)
 BuildRequires:  pkgconfig(libdrm)
 BuildRequires:  pkgconfig(wayland-client)
-BuildRequires:  pkgconfig(wayland-egl-backend) >= 3
-BuildRequires:  pkgconfig(wayland-protocols) >= 1.38
+BuildRequires:  pkgconfig(wayland-egl-backend)
+BuildRequires:  pkgconfig(wayland-protocols)
 BuildRequires:  pkgconfig(wayland-scanner)
 BuildRequires:  pkgconfig(wayland-server)
-
-# Required for directory ownership
-Requires:       libglvnd-egl%{?_isa}
-
+# /oreon:deps
 %description
 This is a new implementation of the EGL External Platform Library for Wayland
 (EGL_KHR_platform_wayland), using the NVIDIA driver's new platform surface
@@ -33,24 +28,19 @@ interface, which simplifies a lot of the library and improves window resizing.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
 find %{buildroot} -name '*.la' -delete
 rm -f %{buildroot}%{_libdir}/libnvidia-egl-wayland2.so
+%oreon_autofiles main
 
-%files
-%doc README.md
-%license LICENSE
-%{_libdir}/libnvidia-egl-wayland2.so.1
-%{_libdir}/libnvidia-egl-wayland2.so.1.*
-%{_datadir}/egl/egl_external_platform.d/09_nvidia_wayland2.json
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

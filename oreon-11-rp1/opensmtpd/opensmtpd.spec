@@ -1,53 +1,41 @@
-%global source0_hash 4034de2e92c61fa83eedadb1d8d8bdfe65e57eb50ce9679e0140950e34ca4ab7
-
-# PAM support
+%global source0_hash 74e640de18a8ea63ef43ba2ddb1a6ad1eb82cce2e600b94e98cb551bb2a724c4
 %global _with_pam	1
-
-# Berkeley DB support
 %global _with_bdb	1
-
-Summary:	Free implementation of the server-side SMTP protocol as defined by RFC 5321
+Summary:        Free implementation of the server-side SMTP protocol as defined by RFC 5321
 Name:		opensmtpd
 Version:	7.9.0p0
-Release:	1%{?dist}
-
+Release:        1%{?dist}
 License:	ISC
 URL:		http://www.opensmtpd.org/
 Provides:	MTA smtpd smtpdaemon server(smtp)
-
-Source0:	http://www.opensmtpd.org/archives/%{name}-%{version}.tar.gz
+Source0:        http://www.opensmtpd.org/archives/%{name}-%{version}.tar.gz
 Source1:	opensmtpd.service
 Source2:	opensmtpd.pam
-
 %if 0%{?_with_pam}
-BuildRequires:	pam-devel
 %endif
 %if 0%{?_with_bdb}
-BuildRequires:	libdb-devel
 %endif
-
-BuildRequires:	openssl-devel
-BuildRequires:	libevent-devel
-BuildRequires:  libxcrypt-devel
-BuildRequires:	zlib-devel
-BuildRequires:	coreutils
-BuildRequires:	bison
-BuildRequires:	make
-BuildRequires:	automake
-BuildRequires:	libtool
-
 Requires(post):		systemd
 Requires(preun):	systemd
 Requires(postun):	systemd
-BuildRequires:		systemd
-
 %if "%{_sbindir}" == "%{_bindir}"
-# Compat symlinks for Requires in other packages.
-# We rely on filesystem to create the symlinks for us.
 Requires:       filesystem(unmerged-sbin-symlinks)
 Provides:       /usr/sbin/sendmail
 %endif
-
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  coreutils
+BuildRequires:  libdb-devel
+BuildRequires:  libevent-devel
+BuildRequires:  libtool
+BuildRequires:  libxcrypt-devel
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  pam-devel
+BuildRequires:  systemd
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 OpenSMTPD is a FREE implementation of the server-side SMTP protocol as defined
 by RFC 5321, with some additional standard extensions. It allows ordinary
@@ -71,6 +59,7 @@ do not modify the default systemd unit file. Instead, create an override
 configuration at "/etc/systemd/system/opensmtpd.service".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -82,8 +71,8 @@ u smtpq - 'opensmtpd queue user' %{_localstatedir}/empty/smtpd -
 EOF
 
 %build
-export CFLAGS="%{optflags}"
 
+export CFLAGS="%{optflags}"
 %configure \
     --sysconfdir=%{_sysconfdir}/opensmtpd \
     --with-path-CAfile=%{_sysconfdir}/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
@@ -102,20 +91,15 @@ export CFLAGS="%{optflags}"
     --with-path-socket=%{_rundir} \
     --with-path-pidfile=%{_rundir} \
     --without-rpath
-
 %make_build
-
 %install
 %make_install
 mkdir -p -m 0755 %{buildroot}/%{_localstatedir}/empty/smtpd
-
 install -Dpm 0644 %SOURCE1 %{buildroot}/%{_unitdir}/opensmtpd.service
-
 %if 0%{?_with_pam}
 install -Dpm 0644 %SOURCE2 %{buildroot}/%{_sysconfdir}/pam.d/smtp.opensmtpd
 touch %{buildroot}/%{_sysconfdir}/pam.d/smtp
 %endif
-
 rm -rf %{buildroot}/%{_bindir}/sendmail
 rm -rf %{buildroot}/%{_sbindir}/mailq
 ln -s %{_sbindir}/smtpctl %{buildroot}/%{_sbindir}/sendmail.%{name}
@@ -123,7 +107,6 @@ ln -s %{_sbindir}/smtpctl %{buildroot}/%{_bindir}/mailq.%{name}
 touch %{buildroot}/%{_sbindir}/sendmail
 touch %{buildroot}/usr/lib/sendmail
 touch %{buildroot}/%{_bindir}/mailq
-
 mv %{buildroot}/%{_mandir}/man1/smtp.1 %{buildroot}/%{_mandir}/man1/smtp.opensmtpd.1
 mv %{buildroot}/%{_mandir}/man5/aliases.5 %{buildroot}/%{_mandir}/man5/aliases.opensmtpd.5
 mv %{buildroot}/%{_mandir}/man8/sendmail.8 %{buildroot}/%{_mandir}/man8/sendmail.opensmtpd.8
@@ -135,7 +118,6 @@ touch %{buildroot}/%{_mandir}/man5/aliases.5
 touch %{buildroot}/%{_mandir}/man8/sendmail.8
 touch %{buildroot}/%{_mandir}/man8/smtp.8
 touch %{buildroot}/%{_mandir}/man8/smtpd.8
-
 %if 0%{?_with_bdb}
 ln -s %{_sbindir}/smtpctl %{buildroot}/%{_sbindir}/makemap.%{name}
 ln -s %{_sbindir}/smtpctl %{buildroot}/%{_bindir}/newaliases.%{name}
@@ -146,22 +128,17 @@ touch %{buildroot}/%{_bindir}/newaliases
 touch %{buildroot}/%{_mandir}/man1/newaliases.1
 touch %{buildroot}/%{_mandir}/man8/makemap.8
 %endif
-
-# smtpd spool directory
 for i in incoming offline purge queue; do
 	mkdir -p %{buildroot}/%{_localstatedir}/spool/smtpd/$i
 done
-
-# fix aliases path in the config
 sed -i -e 's|/etc/mail/aliases|/etc/aliases|g' %{buildroot}/%{_sysconfdir}/opensmtpd/smtpd.conf
 ln -s %{_sysconfdir}/aliases %{buildroot}/%{_sysconfdir}/opensmtpd/aliases
-
-# set mbox delivery method
 sed -i -e 's|^action "local" maildir|action "local" mbox|g' %{buildroot}/%{_sysconfdir}/opensmtpd/smtpd.conf
-
 install -m0644 -D opensmtpd.sysusers.conf %{buildroot}%{_sysusersdir}/opensmtpd.conf
+%oreon_autofiles main
 
 %post
+
 %systemd_post %{name}.service
 alternatives --install %{_sbindir}/sendmail mta %{_sbindir}/sendmail.opensmtpd 10 \
 	--follower %{_bindir}/mailq mta-mailq %{_bindir}/mailq.opensmtpd \
@@ -181,22 +158,17 @@ alternatives --install %{_sbindir}/sendmail mta %{_sbindir}/sendmail.opensmtpd 1
 	--follower %{_mandir}/man8/smtp.8.gz mta-smtpman %{_mandir}/man8/smtp.opensmtpd.8.gz \
 	--follower %{_mandir}/man8/smtpd.8.gz mta-smtpdman %{_mandir}/man8/smtpd.opensmtpd.8.gz \
 	--initscript opensmtpd
-
-# Make sure that /usr/sbin/sendmail is not missing, if /usr/sbin is a
-# directory. The symlink will only be created if there is no symlink
-# or file already.
 test -h /usr/sbin || ln -s ../bin/sendmail /usr/sbin/sendmail 2>/dev/null || :
-
 exit 0
-
 %preun
+
 %systemd_preun %{name}.service
 if [ "$1" = 0 ]; then
     alternatives --remove mta %{_sbindir}/sendmail.opensmtpd
 fi
 exit 0
-
 %postun
+
 %systemd_postun_with_restart %{name}.service
 if [ "$1" -ge "1" ]; then
 	mta=`readlink /etc/alternatives/mta`
@@ -205,67 +177,8 @@ if [ "$1" -ge "1" ]; then
 	fi
 fi
 exit 0
-
-%files
-%dir %attr(0711,root,root) %{_localstatedir}/empty/smtpd
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/smtpd.conf
-%{_sysconfdir}/%{name}/aliases
-%doc CHANGES.md README.md
-%license LICENSE
-%{_mandir}/man1/lockspool.1.gz
-%{_mandir}/man1/mailq.opensmtpd.1.gz
-%{_mandir}/man1/smtp.opensmtpd.1.gz
-%{_mandir}/man5/aliases.opensmtpd.5.gz
-%{_mandir}/man5/forward.5.gz
-%{_mandir}/man5/smtpd.conf.5.gz
-%{_mandir}/man5/table.5.gz
-%{_mandir}/man7/smtpd-filters.7.gz
-%{_mandir}/man7/smtpd-tables.7.gz
-%{_mandir}/man8/sendmail.opensmtpd.8.gz
-%{_mandir}/man8/smtp.opensmtpd.8.gz
-%{_mandir}/man8/smtpd.opensmtpd.8.gz
-%{_mandir}/man8/smtpctl.8.gz
-%{_mandir}/man8/mail.*.8.gz
-
-%dir %attr(0711,root,root) %{_localstatedir}/spool/smtpd
-%dir %attr(0700,smtpq,root) %{_localstatedir}/spool/smtpd/incoming
-%dir %attr(0770,root,smtpq) %{_localstatedir}/spool/smtpd/offline
-%dir %attr(0700,smtpq,root) %{_localstatedir}/spool/smtpd/purge
-%dir %attr(0700,smtpq,root) %{_localstatedir}/spool/smtpd/queue
-
-%if 0%{?_with_pam}
-%config(noreplace) %{_sysconfdir}/pam.d/smtp.%{name}
-%ghost %{_sysconfdir}/pam.d/smtp
-%endif
-
-%if 0%{?_with_bdb}
-%{_bindir}/newaliases.%{name}
-%{_sbindir}/makemap.%{name}
-%{_mandir}/man8/newaliases.opensmtpd.8.gz
-%{_mandir}/man8/makemap.opensmtpd.8.gz
-%ghost %attr(0755,root,root) %{_bindir}/newaliases
-%ghost %attr(0755,root,root) %{_sbindir}/makemap
-%ghost %{_mandir}/man1/newaliases.1.gz
-%ghost %{_mandir}/man8/makemap.8.gz
-%endif
-
-%{_unitdir}/%{name}.service
-%{_libexecdir}/%{name}
-%{_bindir}/smtp
-%{_bindir}/mailq.%{name}
-%{_sbindir}/sendmail.%{name}
-%{_sbindir}/smtpd
-%attr(2555,root,smtpq) %{_sbindir}/smtpctl
-%ghost %attr(0755,root,root) %{_sbindir}/sendmail
-%ghost %attr(0755,root,root) %{_bindir}/mailq
-%ghost %attr(0755,root,root) /usr/lib/sendmail
-%ghost %{_mandir}/man1/mailq.1.gz
-%ghost %{_mandir}/man5/aliases.5.gz
-%ghost %{_mandir}/man8/sendmail.8.gz
-%ghost %{_mandir}/man8/smtp.8.gz
-%ghost %{_mandir}/man8/smtpd.8.gz
-%{_sysusersdir}/opensmtpd.conf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

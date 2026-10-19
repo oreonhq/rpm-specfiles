@@ -1,21 +1,16 @@
-%global source0_hash 6718dfa932e20969c5112b457e4b730da36becdb9e362c933b3de8d189a388d9
-
-# This package should be updated together with python-hdmf to ensure
-# compatibility. Note that it currently depends on an exact version of this
-# package.
-
+%global source0_hash 7582283672d50e43a4bd73dc1e1a079b504e04f34dfb9afb25513a37b5a7590e
 Name:           hdmf-common-schema
 Version:        1.10.0
 Epoch:          1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Specifications for pre-defined data structures provided by HDMF
-
 License:        BSD-3-Clause-LBNL
 URL:            https://github.com/hdmf-dev/hdmf-common-schema
-Source:         %{url}/archive/%{version}/hdmf-common-schema-%{version}.tar.gz
-
+Source0:        https://github.com/hdmf-dev/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 
+# /oreon:deps
 %description
 The HDMF Common specification defines a collection of common, reusable data
 structures that build the foundation for the modeling of advanced data formats,
@@ -26,34 +21,14 @@ writing, and using HDMF-common data types.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
-# We could build and install the associated documentation, but we would have to
-# package python-hdmf-docutils to do so.
-#
-# Note that we would need to build PDF documentation, as Sphinx-generated HTML
-# documentation is not suitable for packaging; see
-# https://bugzilla.redhat.com/show_bug.cgi?id=2006555, the linked devel mailing
-# list thread, and https://pagure.io/packaging-committee/pull-request/1244, for
-# discussion.
-#
-# Overall, it doesn’t seem worthwhile.
-#
-# If we are not building documentation, then there is nothing to build.
-
+%oreon_prep
 %install
-# There is no build-system script or standard install location for the schemas.
 install -d '%{buildroot}%{_datadir}/hdmf-common-schema'
 cp -rp 'common/' '%{buildroot}%{_datadir}/hdmf-common-schema/'
+%oreon_autofiles main
 
-%files
-%license license.txt Legal.txt
-%doc README.md
-
-%dir %{_datadir}/hdmf-common-schema/
-%dir %{_datadir}/hdmf-common-schema/common/
-%{_datadir}/hdmf-common-schema/common/*.yaml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

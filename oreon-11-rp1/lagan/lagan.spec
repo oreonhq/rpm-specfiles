@@ -1,21 +1,19 @@
 %global source0_hash a65e61ed4fd6608f4e5ad5b11a1b77f4fec1a207d822c5885b3e86727496e1fe
-
 Name:           lagan
 Version:        2.0
 Release:        46%{?dist}
 Summary:        Local, global, and multiple alignment of DNA sequences
-
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            http://lagan.stanford.edu
 Source0:        http://lagan.stanford.edu/lagan_web/lagan20.tar.gz
 Patch0:         lagan20-chris.patch
 Patch1:         lagan20-gcc10.patch
 Patch2:         lagan-c99.patch
-BuildRequires:  perl-generators
+# oreon:deps
 BuildRequires:  gcc-c++
-BuildRequires: make
-
+BuildRequires:  make
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 LAGAN toolkit is a set of tools for local, global, and multiple alignment of
 DNA sequences.  Please visit http://lagan.stanford.edu for publications
@@ -29,6 +27,7 @@ The 4 main parts of LAGAN are:
 4. Shuffle-LAGAN pairwise global alignment
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n lagan20
@@ -54,8 +53,8 @@ rm prolagan
 chmod -x src/glocal/*
 
 %build
-make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS"
 
+make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS" CXXFLAGS="$RPM_OPT_FLAGS"
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%_bindir $RPM_BUILD_ROOT/%_libdir/lagan/utils
@@ -76,15 +75,10 @@ for f in bin2bl bin2mf cextract cmerge2.pl contigorder cstat dotplot \
 done
 install -m644 *.txt *.score $RPM_BUILD_ROOT/%_libdir/lagan
 rm -f Readmes/*.chris
+%oreon_autofiles main
 
-%files
-%doc Readmes/* sample.*
-%_bindir/chaos
-%_bindir/lagan
-%_bindir/mlagan
-%_bindir/slagan
-%_bindir/prolagan
-%_libdir/lagan/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

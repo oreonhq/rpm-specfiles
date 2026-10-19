@@ -1,22 +1,17 @@
-%global source0_hash 893e3c5a24b408ac312a0318b70f38f427f297646e323f31e79d3a06a92c1543
-
+%global source0_hash 94d0038ef92bb65b86d08f004197c56f8d81f82f9ac7a25c202a88afd653a30b
 Name:           intel-gmmlib
 Version:        22.10.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Intel Graphics Memory Management Library
-
 License:        MIT AND BSD-3-Clause
 URL:            https://github.com/intel/gmmlib
-Source0:        %{url}/archive/%{name}-%{version}.tar.gz
-
-# This package fails on s390x and ppc64le
-# g++: error: unrecognized argument in option ‘-march=corei7’
+Source0:        https://github.com/intel/gmmlib/archive/%{name}-%{version}.tar.gz
 ExcludeArch:  s390x ppc64le
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-
+# /oreon:deps
 %description
 The Intel Graphics Memory Management Library provides device specific
 and buffer management for the Intel Graphics Compute Runtime for OpenCL
@@ -25,12 +20,12 @@ and the Intel Media Driver for VAAPI.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n gmmlib-intel-gmmlib-%{version}
@@ -41,23 +36,17 @@ find Source -name "*.cpp" -exec chmod -x {} ';'
 find Source -name "*.h" -exec chmod -x {} ';'
 
 %build
+
 %cmake \
   -DRUN_TEST_SUITE:BOOL=False
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE.md
-%doc README.rst
-%{_libdir}/libigdgmm.so.12*
-
-%files devel
-%{_includedir}/igdgmm
-%{_libdir}/libigdgmm.so
-%{_libdir}/pkgconfig/igdgmm.pc
+%files -f %{oreon_filedir}/main.list
+%files -n intel-gmmlib-devel -f %{oreon_filedir}/intel-gmmlib-devel.list
 
 %changelog
+
 %autochangelog

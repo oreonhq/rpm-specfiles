@@ -1,29 +1,15 @@
 %global source0_hash d256f075f018b4a3cb0d165ed6151fda4ba7db1621727e0eb54569b6e2275547
-
 %global use_utf8_dict 1
 %global pkg  anthy
-
-%if 0%{?rhel} == 0 && 0%{?fedora} < 36
-%bcond_without xemacs
-%else
-# xemacs disabled on RHEL and Fedora 36+
 %bcond_with xemacs
-%endif
-
 Name:  anthy
 Version: 9100h
-Release: 61%{?dist}
-# The entire source code is LGPLv2+ and dictionaries is GPLv2. the corpus data is under Public Domain.
+Release:        61%{?dist}
 License: LGPL-2.1-or-later AND GPL-2.0-only AND LicenseRef-Fedora-Public-Domain
 URL:  http://sourceforge.jp/projects/anthy/
-BuildRequires: emacs
-BuildRequires: gcc
 %if %{with xemacs}
-BuildRequires: xemacs
-BuildRequires: make
 %endif
-
-Source0: http://osdn.dl.sourceforge.jp/anthy/37536/anthy-%{version}.tar.gz
+Source0:        http://osdn.dl.sourceforge.jp/anthy/37536/anthy-%{version}.tar.gz
 Source1: %{name}-init.el
 Patch0:  %{name}-fix-typo-in-dict.patch
 Patch1:  %{name}-fix-typo-in-dict-name.patch
@@ -33,8 +19,7 @@ Patch12: %{name}-aarch64.patch
 Patch13: %{name}-fix-segfault.patch
 Patch14: %{name}-fix-emacs29.patch
 Patch15: %{name}-fix-eol.patch
-
-Summary: Japanese character set input library
+Summary:        Japanese character set input library
 Requires: emacs-filesystem >= %{_emacs_version}
 Provides: emacs-%{pkg}-el <= 9100h-27, emacs-%{pkg} <= 9100h-27
 Obsoletes: emacs-%{pkg}-el <= 9100h-27, emacs-%{pkg} <= 9100h-27
@@ -43,7 +28,10 @@ Requires: xemacs-filesystem >= %{_xemacs_version}
 Provides: xemacs-%{pkg}-el <= 9100h-27, xemacs-%{pkg} <= 9100h-27
 Obsoletes: xemacs-%{pkg}-el <= 9100h-27, xemacs-%{pkg} <= 9100h-27
 %endif
-
+# oreon:deps
+BuildRequires:  emacs
+BuildRequires:  gcc
+# /oreon:deps
 %description
 Anthy provides the library to input Japanese on the applications, such as
 X applications and emacs. and the user dictionaries and the users information
@@ -54,12 +42,12 @@ So Anthy is secure than other conversion server.
 Summary: Header files and library for developing programs which uses Anthy
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
-
 %description devel
 The anthy-devel package contains the development files which is needed to build
 the programs which uses Anthy.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -71,7 +59,6 @@ for file in ChangeLog doc/protocol.txt; do
     mv $file.new $file
 done
 
-%if %{use_utf8_dict}
 function normalize_extra_dict() {
  sed -e 's/^\([^  ]*\)t[  ]*\(#[A-Z0-9\*]*\)[  ]*\([^  ]*\)$/\1 \2 \3/g' $1 > $1.norm
 }
@@ -123,26 +110,18 @@ touch -r $RPM_BUILD_DIR/%{name}-%{version}/mkworddic/dict.args.in{-orig,}
  done
 )
 gen_dict_args
-%endif
 
 %build
+
 %configure --disable-static --with-lispdir=%{_emacs_sitelispdir}
-# fix rpath issue
 sed -ie 's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/' libtool
 LD_LIBRARY_PATH=$RPM_BUILD_DIR/%{name}-%{version}/src-main/.libs:$RPM_BUILD_DIR/%{name}-%{version}/src-worddic/.libs make %{?_smp_mflags}
-
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
-
-# remove unnecessary files
 rm -rf $RPM_BUILD_ROOT%{_libdir}/lib*.{la,a}
-
-## for emacs-anthy
 mkdir -p $RPM_BUILD_ROOT%{_emacs_sitestartdir}
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_emacs_sitestartdir}
-
 %if %{with xemacs}
-## for xemacs-anthy
 mkdir -p $RPM_BUILD_ROOT%{_xemacs_sitestartdir}
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_xemacs_sitestartdir}
 pushd $RPM_BUILD_DIR/%{name}-%{version}/src-util
@@ -151,33 +130,11 @@ make EMACS=xemacs lispdir="%{_xemacs_sitelispdir}/%{pkg}"
 make install-lispLISP DESTDIR=$RPM_BUILD_ROOT EMACS=xemacs lispdir="%{_xemacs_sitelispdir}/%{pkg}" INSTALL="install -p"
 popd
 %endif
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS ChangeLog DIARY NEWS README
-%license COPYING
-%{_bindir}/*
-%{_sysconfdir}/*
-%{_libdir}/lib*.so.*
-%{_datadir}/anthy/
-%doc doc/ELISP
-%{_emacs_sitelispdir}/%{pkg}/*.el
-%{_emacs_sitelispdir}/%{pkg}/*.elc
-%{_emacs_sitestartdir}/*.el
-%dir %{_emacs_sitelispdir}/%{pkg}
-%if %{with xemacs}
-%{_xemacs_sitelispdir}/%{pkg}/*.el
-%{_xemacs_sitelispdir}/%{pkg}/*.elc
-%{_xemacs_sitestartdir}/*.el
-%dir %{_xemacs_sitelispdir}/%{pkg}
-%endif
-
-%files devel
-%doc doc/DICLIB doc/DICUTIL doc/GLOSSARY doc/GRAMMAR doc/GUIDE.english doc/ILIB doc/LEARNING doc/LIB doc/MISC doc/POS doc/SPLITTER doc/TESTING doc/protocol.txt
-%{_includedir}/*
-%{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*.pc
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

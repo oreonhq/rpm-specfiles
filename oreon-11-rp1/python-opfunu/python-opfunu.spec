@@ -1,64 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 1ae4e83f435c155d6a6ad28f6118d78df8c73d6827a59323167637d6a1d3bf07
 Name:           python-opfunu
 Version:        1.0.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Opfunu: An Open-source Python Library for Optimization Benchmark Functions
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/thieu1995/opfunu
-Source:         %{pypi_source opfunu}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/opfunu/opfunu-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'opfunu' generated automatically by pyp2spec.}
-
 Patch:          0001-do-not-package-tests-examples.patch
 Patch:          %{url}/pull/12.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-opfunu = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-opfunu
-Summary:        %{summary}
-
-%description -n python3-opfunu %_description
+Summary:        Opfunu: An Open-source Python Library for Optimization Benchmark Functions
+%description -n python3-opfunu
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-opfunu dev
-
 
 %prep
-%autosetup -p1 -n opfunu-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir opfunu-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-opfunu usr/lib/python3*/site-packages/opfunu* usr/lib64/python3*/site-packages/opfunu* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/opfunu* usr/lib64/python3*/site-packages/opfunu* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-opfunu -f %{pyproject_files}
+%files
+%files -n python3-opfunu -f %{oreon_filedir}/python3-opfunu.list
 
 %changelog
+
 %autochangelog

@@ -1,36 +1,32 @@
 %global source0_hash 8dc36cd79155ae37ab8a3de5fd9120ffba9a31e409258c28529ec5251c59747b
-
 Name:           perl-Hash-Ordered
 Version:        0.014
-Release:        8%{?dist}
+Release:        1%{?dist}
 Summary:        Perl class for ordered hashes
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Hash-Ordered
 Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Hash-Ordered-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.8
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
+BuildRequires:  perl(:VERSION)
 BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(overload)
-# Tests:
+BuildRequires:  perl(Config)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(List::Util)
 BuildRequires:  perl(Test::Deep)
 BuildRequires:  perl(Test::FailWarnings)
 BuildRequires:  perl(Test::Fatal)
-BuildRequires:  perl(Test::More) >= 0.96
-# Optional tests:
-# CPAN::Meta not helpful
-
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module implements an ordered hash, meaning that it associates keys
 with values like a Perl hash, but keeps the keys in a consistent order.
@@ -41,12 +37,12 @@ it is much slower than a Perl hash. This is the cost of keeping order.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Hash-Ordered-%{version}
@@ -58,38 +54,29 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 unset AUTHOR_TESTING
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/)
 {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%license LICENSE
-%doc Changes CONTRIBUTING.mkdn README
-%dir %{perl_vendorlib}/Hash
-%{perl_vendorlib}/Hash/Ordered
-%{perl_vendorlib}/Hash/Ordered.pm
-%{_mandir}/man3/Hash::Ordered.*
-%{_mandir}/man3/Hash::Ordered::*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Hash-Ordered-tests -f %{oreon_filedir}/perl-Hash-Ordered-tests.list
 
 %changelog
+
 %autochangelog

@@ -1,84 +1,65 @@
 %global source0_hash 7676478faa6793e8bd37cc7f6323495fc740b887c33b1eaa95f922c78629cc79
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:           calindori
 Version:        26.04.3
 Release:        1%{?dist}
 Summary:        Calendar application for Plasma Mobile
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://apps.kde.org/%{name}/
-Source:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Requires:      hicolor-icon-theme
+Requires:      kf6-kirigami
+Requires:      qt6-qtwayland
+# oreon:deps
 BuildRequires:  cmake
+BuildRequires:  cmake(KF6CalendarCore)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Kirigami2)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6People)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Network)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6QuickControls2)
+BuildRequires:  cmake(Qt6Svg)
 BuildRequires:  desktop-file-utils
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  libappstream-glib
-
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Gui)
-BuildRequires: cmake(Qt6Qml)
-BuildRequires: cmake(Qt6Quick)
-BuildRequires: cmake(Qt6QuickControls2)
-BuildRequires: cmake(Qt6Svg)
-BuildRequires: cmake(Qt6Network)
-BuildRequires: cmake(Qt6DBus)
-
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6Kirigami2)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6CalendarCore)
-BuildRequires: cmake(KF6Notifications)
-BuildRequires: cmake(KF6People)
-BuildRequires: cmake(KF6DBusAddons)
-
-
-Requires:      hicolor-icon-theme
-Requires:      kf6-kirigami
-Requires:      qt6-qtwayland
-
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake_kf6 -DBUILD_WITH_QT6=ON
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name}
 %find_lang calindac
 cat %{name}.lang calindac.lang > %{name}-full.lang
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
-
-%files -f %{name}-full.lang
-%{_kf6_bindir}/%{name}
-%{_kf6_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
-%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-
-%{_kf6_bindir}/calindac
-%{_kf6_datadir}/knotifications6/calindac.notifyrc
-%{_kf6_sysconfdir}/xdg/autostart/org.kde.calindac.desktop
-%{_kf6_datadir}/dbus-1/services/org.kde.calindac.service
-
-%license LICENSES/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

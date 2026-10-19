@@ -1,28 +1,23 @@
 %global source0_hash 9de915d949e389b3a4e21d236758d5ed6e6913f85759bddf5282d325bdc9cdcd
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 Name:           prooftree
 Version:        0.14
 Release:        10%{?dist}
 Summary:        Proof tree visualization for Proof General
-
 License:        GPL-3.0-or-later
 URL:            https://askra.de/software/prooftree/
 VCS:            git:%{url}.git
-Source:         %{url}/releases/%{name}-%{version}.tar.gz
-
+Source0:        https://askra.de/software/%{name}//releases/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  make
 BuildRequires:  ocaml
 BuildRequires:  ocaml-findlib
 BuildRequires:  ocaml-lablgtk-devel
 BuildRequires:  ocaml-ocamldoc
-
+# /oreon:deps
 %description
 Prooftree is a program for proof-tree visualization during interactive proof
 development in a theorem prover.  It is currently being developed for Coq and
@@ -43,6 +38,7 @@ variable and thus help to locate the problem when Coq says:
 No more subgoals but non-instantiated existential variables.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -54,18 +50,15 @@ sed -i 's/cp /cp -p /' Makefile.in
 sed -i 's/-I \$(LABLGTKDIR)/& -I +unix/' Makefile.in
 
 %build
-# Not an autoconf-generated script.  Do not use %%configure.
+
 ./configure --prefix %{_prefix}
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc README
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 84ea45eddf9bb4b40df7610b1b22a03137365e6257dbf9d7b72128fdccca564c
 Name:           python-dunamai
 Version:        1.26.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Dynamic version generation
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/mtkennerly/dunamai
-Source:         %{pypi_source dunamai}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/dunamai/dunamai-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'dunamai' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-dunamai = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-dunamai
-Summary:        %{summary}
-
-%description -n python3-dunamai %_description
-
+Summary:        Dynamic version generation
+%description -n python3-dunamai
 
 %prep
-%autosetup -p1 -n dunamai-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir dunamai-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-dunamai usr/lib/python3*/site-packages/dunamai* usr/lib64/python3*/site-packages/dunamai* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/dunamai* usr/lib64/python3*/site-packages/dunamai* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-dunamai -f %{pyproject_files}
-%{_bindir}/dunamai
+%files
+%files -n python3-dunamai -f %{oreon_filedir}/python3-dunamai.list
 
 %changelog
+
 %autochangelog

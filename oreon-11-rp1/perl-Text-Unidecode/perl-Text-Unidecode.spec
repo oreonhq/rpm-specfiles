@@ -1,33 +1,27 @@
 %global source0_hash 6c24f14ddc1d20e26161c207b73ca184eed2ef57f08b5fb2ee196e6e2e88b1c6
-
 Name:           perl-Text-Unidecode
 Version:        1.30
-Release:        28%{?dist}
+Release:        1%{?dist}
 Summary:        US-ASCII transliterations of Unicode text
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-Unidecode
 Source0:        https://cpan.metacpan.org/modules/by-module/Text/Text-Unidecode-%{version}.tar.gz
-
-
-
 BuildArch:      noarch
-# Build
+Provides:       perl(Text::Unidecode)
+# oreon:deps
 BuildRequires:  make
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-generators
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Runtime
 BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test)
+BuildRequires:  perl(Text::Wrap)
 BuildRequires:  perl(integer)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(utf8)
 BuildRequires:  perl(vars)
 BuildRequires:  perl(warnings)
-# Tests only
-BuildRequires:  perl(Test)
-BuildRequires:  perl(Text::Wrap)
-
-Provides:       perl(Text::Unidecode)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 
 Text::Unidecode provides a function, `unidecode(...)' that takes
@@ -38,27 +32,25 @@ conveying, in Roman letters, the pronunciation expressed by the text in
 some other writing system.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Text-Unidecode-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1
 make %{?_smp_mflags}
-
 %install
 make pure_install DESTDIR=%{buildroot}
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%{!?_licensedir:%global license %%doc}
-%license LICENSE
-%doc README TODO.txt ChangeLog
-%{perl_vendorlib}/Text/
-%{_mandir}/man3/*.3*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.30-28
 - Import

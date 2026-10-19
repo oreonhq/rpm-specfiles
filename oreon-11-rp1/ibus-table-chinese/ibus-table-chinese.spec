@@ -1,27 +1,25 @@
 %global source0_hash 341aa937f258c600fb748d0a998dc4bbdca4b54a594d66cbe61e84bbbeb1b784
-
 %global message_level 6
 %global ibus_tables_dir %{_datadir}/ibus-table/tables
 %global ibus_icons_dir %{_datadir}/ibus-table/icons
 Name:           ibus-table-chinese
 Version:        1.8.14
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Chinese input tables for IBus
 Summary(zh_CN): 中文码表输入法
 Summary(zh_TW): 中文碼表輸入法
 License:        GPL-3.0-or-later
 URL:            https://github.com/mike-fabian/ibus-table-chinese
 Source0:        https://github.com/mike-fabian/ibus-table-chinese/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires:  cmake >= 3.0.0
-BuildRequires:  ibus-table-devel >= 1.10.0
-BuildRequires: make
 Requires:       ibus-table >= 1.10.0
 Obsoletes:      ibus-table-yinma < 1.3
 Obsoletes:      ibus-table-xingma < 1.3
-
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  ibus-table-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 ibus-table-chinese is provides the infrastructure for Chinese input methods.
 Input tables themselves are in subpackages.
@@ -38,7 +36,6 @@ License:        LicenseRef-Fedora-UltraPermissive
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-array30 = %{version}-%{release}
 Obsoletes:      ibus-table-array30 < 1.3
-
 %description array
 Array input method is a free, open-minded character-structured
 input method. Includes:
@@ -64,7 +61,6 @@ License:        LicenseRef-Fedora-UltraPermissive AND GPL-2.0-only
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-cangjie = %{version}-%{release}
 Obsoletes:      ibus-table-cangjie < 1.3
-
 %description cangjie
 Cangjie based input methods, includes:
 Cangjie3, Canjie5, and Cangjie big tables.
@@ -80,7 +76,6 @@ License:        GPL-2.0-only AND GPL-3.0-or-later AND MIT
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-cantonese = %{version}-%{release}
 Obsoletes:      ibus-table-cantonese < 1.3
-
 %description cantonese
 Cantonese input methods, includes:
 Cantonese, Hong-Kong version of Cantonese,
@@ -99,7 +94,6 @@ License:        GPL-2.0-only
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-easy = %{version}-%{release}
 Obsoletes:      ibus-table-easy < 1.3
-
 %description easy
 Easy phrase-wise input method.
 
@@ -117,7 +111,6 @@ License:        GPL-2.0-or-later
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-erbi = %{version}-%{release}
 Obsoletes:      ibus-table-erbi < 1.3
-
 %description erbi
 Erbi input methods. Includes:
 Super Erbi (as erbi)
@@ -141,7 +134,6 @@ License:        LicenseRef-Fedora-UltraPermissive
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-quick = %{version}-%{release}
 Obsoletes:      ibus-table-quick < 1.3
-
 %description quick
 Quick-to-learn is based on Cangjie input method,
 but only need Canjie's first and last word-root
@@ -165,7 +157,6 @@ License:        GPL-3.0-or-later
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-cangjie = %{version}-%{release}
 Obsoletes:      ibus-table-cangjie < 1.3
-
 %description scj
 Smart Cangjie is an improved Cangjie base input method
 which handles Cangjie, Quick, Cantonese, Chinese punctuation,
@@ -203,7 +194,6 @@ Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-stroke5 = %{version}-%{release}
 Obsoletes:      ibus-table-stroke5 < 1.3
 Obsoletes:      ibus-table-yinma < 1.3
-
 %description stroke5
 Stroke5 input method.
 
@@ -221,7 +211,6 @@ License:        GPL-2.0-or-later
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-wu = %{version}-%{release}
 Obsoletes:      ibus-table-wu < 1.3
-
 %description wu
 Wu pronunciation input method.
 URL: http://input.foruto.com/wu/
@@ -243,7 +232,6 @@ License:        0BSD
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-wubi = %{version}-%{release}
 Obsoletes:      ibus-table-wubi < 1.3
-
 %description wubi-haifeng
 Haifeng Wubi input methods. Current includes:
 Haifeng Wubi 86.
@@ -262,7 +250,6 @@ License:        LicenseRef-Fedora-UltraPermissive
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-wubi = %{version}-%{release}
 Obsoletes:      ibus-table-wubi < 1.3
-
 %description wubi-jidian
 Jidian Wubi input methods. Current includes:
 Wubi 86.
@@ -281,7 +268,6 @@ License:        GPL-3.0-only
 Requires:       %{name} = %{version}-%{release}
 Provides:       ibus-table-yong = %{version}-%{release}
 Obsoletes:      ibus-table-yong < 1.3
-
 %description yong
 YongMa input method.
 
@@ -295,114 +281,42 @@ YongMa input method.
 Summary:        Cantonese input method based on yale romanization
 License:        GPL-2.0-only
 Requires:       %{name} = %{version}-%{release}
-
 %description cantonyale
 Cantonese input method based on yale romanization
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
 
 %build
+
 cmake -B build-noarch -S .
 make -C build-noarch
-
 %install
 rm -rf %{buildroot}
 make -C build-noarch install DESTDIR=%{buildroot}
-
-# Register as AppStream components to be visible in the software center
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/metainfo
 cp metainfo/*.appdata.xml $RPM_BUILD_ROOT%{_datadir}/metainfo
-
-# We install document using doc 
 rm -fr %{buildroot}%{_docdir}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS README ChangeLog COPYING
-
-%files array
-%{_datadir}/metainfo/ibus-table-chinese-array.appdata.xml
-%{ibus_icons_dir}/array30.*
-%{ibus_tables_dir}/array30.db
-%{ibus_icons_dir}/array30-big.*
-%{ibus_tables_dir}/array30-big.db
-
-%files cangjie
-%{_datadir}/metainfo/ibus-table-chinese-cangjie.appdata.xml
-%{ibus_icons_dir}/cangjie3.*
-%{ibus_tables_dir}/cangjie3.db
-%{ibus_icons_dir}/cangjie5.*
-%{ibus_tables_dir}/cangjie5.db
-%{ibus_icons_dir}/cangjie-big.*
-%{ibus_tables_dir}/cangjie-big.db
-
-%files cantonese
-%{_datadir}/metainfo/ibus-table-chinese-cantonese.appdata.xml
-%{ibus_icons_dir}/cantonese.*
-%{ibus_tables_dir}/cantonese.db
-%{ibus_icons_dir}/cantonhk.*
-%{ibus_tables_dir}/cantonhk.db
-%{ibus_icons_dir}/jyutping.*
-%{ibus_tables_dir}/jyutping.db
-
-%files easy
-%{_datadir}/metainfo/ibus-table-chinese-easy.appdata.xml
-%{ibus_icons_dir}/easy-big.*
-%{ibus_tables_dir}/easy-big.db
-
-%files erbi
-%{_datadir}/metainfo/ibus-table-chinese-erbi.appdata.xml
-%{ibus_icons_dir}/erbi.*
-%{ibus_tables_dir}/erbi.db
-%{ibus_icons_dir}/erbi-qs.*
-%{ibus_tables_dir}/erbi-qs.db
-
-%files quick
-%{_datadir}/metainfo/ibus-table-chinese-quick.appdata.xml
-%{ibus_icons_dir}/quick3.*
-%{ibus_tables_dir}/quick3.db
-%{ibus_icons_dir}/quick5.*
-%{ibus_tables_dir}/quick5.db
-%{ibus_icons_dir}/quick-classic.*
-%{ibus_tables_dir}/quick-classic.db
-
-%files scj
-%{_datadir}/metainfo/ibus-table-chinese-scj.appdata.xml
-%{ibus_icons_dir}/scj6.*
-%{ibus_tables_dir}/scj6.db
-
-%files stroke5
-%{_datadir}/metainfo/ibus-table-chinese-stroke5.appdata.xml
-%{ibus_icons_dir}/stroke5.*
-%{ibus_tables_dir}/stroke5.db
-
-%files wu
-%{_datadir}/metainfo/ibus-table-chinese-wu.appdata.xml
-%{ibus_icons_dir}/wu.*
-%{ibus_tables_dir}/wu.db
-
-%files wubi-haifeng
-%{_datadir}/metainfo/ibus-table-chinese-wubi-haifeng86.appdata.xml
-%doc tables/wubi-haifeng/COPYING tables/wubi-haifeng/README
-%{ibus_icons_dir}/wubi-haifeng86.*
-%{ibus_tables_dir}/wubi-haifeng86.db
-
-%files wubi-jidian
-%{_datadir}/metainfo/ibus-table-chinese-wubi-jidian86.appdata.xml
-%{ibus_icons_dir}/wubi-jidian86.*
-%{ibus_tables_dir}/wubi-jidian86.db
-
-%files yong
-%{_datadir}/metainfo/ibus-table-chinese-yong.appdata.xml
-%{ibus_icons_dir}/yong.*
-%{ibus_tables_dir}/yong.db
-
-%files cantonyale
-%{_datadir}/metainfo/ibus-table-chinese-cantonyale.appdata.xml
-%{ibus_icons_dir}/cantonyale.*
-%{ibus_tables_dir}/cantonyale.db
+%files -f %{oreon_filedir}/main.list
+%files -n ibus-table-chinese-array -f %{oreon_filedir}/ibus-table-chinese-array.list
+%files -n ibus-table-chinese-cangjie -f %{oreon_filedir}/ibus-table-chinese-cangjie.list
+%files -n ibus-table-chinese-cantonese -f %{oreon_filedir}/ibus-table-chinese-cantonese.list
+%files -n ibus-table-chinese-easy -f %{oreon_filedir}/ibus-table-chinese-easy.list
+%files -n ibus-table-chinese-erbi -f %{oreon_filedir}/ibus-table-chinese-erbi.list
+%files -n ibus-table-chinese-quick -f %{oreon_filedir}/ibus-table-chinese-quick.list
+%files -n ibus-table-chinese-scj -f %{oreon_filedir}/ibus-table-chinese-scj.list
+%files -n ibus-table-chinese-stroke5 -f %{oreon_filedir}/ibus-table-chinese-stroke5.list
+%files -n ibus-table-chinese-wu -f %{oreon_filedir}/ibus-table-chinese-wu.list
+%files -n ibus-table-chinese-wubi-haifeng -f %{oreon_filedir}/ibus-table-chinese-wubi-haifeng.list
+%files -n ibus-table-chinese-wubi-jidian -f %{oreon_filedir}/ibus-table-chinese-wubi-jidian.list
+%files -n ibus-table-chinese-yong -f %{oreon_filedir}/ibus-table-chinese-yong.list
+%files -n ibus-table-chinese-cantonyale -f %{oreon_filedir}/ibus-table-chinese-cantonyale.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.14-1
 - Prepare for Oreon 11 (RP1)

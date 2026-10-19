@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 607462a3bf3d28b0574214d400820f86c0c9f43466fdf73243e7f9f2e3d21584
 Name:           python-mkdocs-d2-plugin
 Version:        1.7.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        MkDocs plugin for D2
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/landmaj/mkdocs-d2-plugin
-Source:         %{pypi_source mkdocs_d2_plugin}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mkdocs_d2_plugin/mkdocs_d2_plugin-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mkdocs-d2-plugin' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-mkdocs-d2-plugin = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-mkdocs-d2-plugin
-Summary:        %{summary}
-
-%description -n python3-mkdocs-d2-plugin %_description
-
+Summary:        MkDocs plugin for D2
+%description -n python3-mkdocs-d2-plugin
 
 %prep
-%autosetup -p1 -n mkdocs_d2_plugin-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mkdocs_d2_plugin-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mkdocs-d2-plugin usr/lib/python3*/site-packages/mkdocs_d2_plugin* usr/lib64/python3*/site-packages/mkdocs_d2_plugin* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mkdocs_d2_plugin* usr/lib64/python3*/site-packages/mkdocs_d2_plugin* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mkdocs-d2-plugin -f %{pyproject_files}
+%files
+%files -n python3-mkdocs-d2-plugin -f %{oreon_filedir}/python3-mkdocs-d2-plugin.list
 
 %changelog
+
 %autochangelog

@@ -1,28 +1,15 @@
 %global source0_hash f80dcb757a623deda62200c08e0e1a88c76fb6b54964f31b35fa74da1c90ccc5
-
 %global debug_package %{nil}
-
 %global _firmwarepath	/usr/lib/firmware
 %define _binaries_in_noarch_packages_terminate_build 0
-
 Name:		linux-firmware
 Version:	20260916
-Release:	1%{?dist}
-Summary:	Firmware files used by the Linux kernel
+Release:        1%{?dist}
+Summary:        Firmware files used by the Linux kernel
 License:	GPL-1.0-or-later AND GPL-2.0-or-later AND MIT AND LicenseRef-Callaway-Redistributable-no-modification-permitted
 URL:		http://www.kernel.org/
 BuildArch:	noarch
-
 Source0:        https://cdn.kernel.org/pub/linux/kernel/firmware/%{name}-%{version}.tar.xz
-
-BuildRequires:	make
-BuildRequires:	git-core
-BuildRequires:	python3
-%if %{undefined rhel}
-# Not required but de-dupes FW so reduces size
-BuildRequires:	rdfind
-%endif
-
 Requires:	linux-firmware-whence = %{version}-%{release}
 Requires:	((linux-firmware = %{version}-%{release}) if linux-firmware)
 Recommends:	qcom-wwan-firmware
@@ -38,7 +25,11 @@ Recommends:	nvidia-gpu-firmware
 Recommends:	nxpwireless-firmware
 Recommends:	realtek-firmware
 Recommends:	tiwilink-firmware
-
+# oreon:deps
+BuildRequires:  git-core
+BuildRequires:  make
+BuildRequires:  python3
+# /oreon:deps
 %description
 This package includes firmware files required for some devices to
 operate.
@@ -120,7 +111,6 @@ provided LICENSE file. Please read it carefully.
 Summary:	MVM Firmware for Intel(R) Wireless WiFi adapters
 License:	LicenseRef-Callaway-Redistributable-no-modification-permitted
 Requires:	linux-firmware-whence = %{version}-%{release}
-# Same hardware, newer firmware with a different driver, enables smooth migration
 Requires:	iwlwifi-mld-firmware = %{version}-%{release}
 %description -n iwlwifi-mvm-firmware
 This package contains the firmware required by the iwlwifi driver
@@ -283,29 +273,16 @@ Terratec H5 DRX-K, ITEtech IT9135 Ax and Bx, and av7110.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git -p1
-
+%oreon_prep
 %build
 
 %install
 mkdir -p %{buildroot}/%{_firmwarepath}
 mkdir -p %{buildroot}/%{_firmwarepath}/updates
-
 make DESTDIR=%{buildroot}/ FIRMWAREDIR=%{_firmwarepath} install-xz
-%if %{undefined rhel}
-make DESTDIR=%{buildroot}/ FIRMWAREDIR=%{_firmwarepath} dedup
-%endif
-
-#Cleanup files we don't want to ship
 pushd %{buildroot}/%{_firmwarepath}
-# Remove firmware shipped in separate packages already
-# Perhaps these should be built as subpackages of linux-firmware?
 rm -rf ess korg sb16 yamaha
-
-# Remove firmware for Creative CA0132 HD as it's in alsa-firmware
 rm -f ctefx.bin* ctspeq.bin*
-
-# Remove source files we don't need to install
 rm -rf carl9170fw
 rm -rf cis/{src,Makefile}
 rm -f atusb/ChangeLog
@@ -314,17 +291,10 @@ rm -f dsp56k/{bootstrap.asm,concat-bootstrap.pl,Makefile}
 rm -f iscis/{*.c,*.h,README,Makefile}
 rm -f keyspan_pda/{keyspan_pda.S,xircom_pgs.S,Makefile}
 rm -f usbdux/*dux */*.asm
-
-# No need to install old firmware versions where we also provide newer versions
-# which are preferred and support the same (or more) hardware
 rm -f libertas/sd8686_v8*
 rm -f libertas/usb8388_v5.bin*
-
-# Remove superfluous infra files
 rm -f check_whence.py Makefile README
 popd
-
-# Create file list but exclude firmwares that we place in subpackages
 FILEDIR=`pwd`
 pushd %{buildroot}/%{_firmwarepath}
 find . \! -type d > $FILEDIR/linux-firmware.files
@@ -392,9 +362,38 @@ sed \
 sed -i -e 's!^!/usr/lib/firmware/!' linux-firmware.{files,dirs}
 sed -i -e 's/^/"/;s/$/"/' linux-firmware.files
 sed -e 's/^/%%dir /' linux-firmware.dirs >> linux-firmware.files
+%oreon_autofiles amd-gpu-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles intel-gpu-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles nvidia-gpu-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles amd-ucode-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles atheros-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles brcmfmac-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles iwlegacy-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles iwlwifi-dvm-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles iwlwifi-mvm-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles iwlwifi-mld-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles libertas-firmware usr/*/lib*.so.*
+%oreon_autofiles mt7xxx-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles nxpwireless-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles realtek-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qcom-wwan-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles tiwilink-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles liquidio-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mlxsw_spectrum-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mrvlprestera-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles netronome-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qcom-accel-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qed-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mediatek-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qcom-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles intel-vsc-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles cirrus-audio-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles intel-audio-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles dvb-firmware usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/*/lib*.so.* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# temporary workaround for directory->symlink changes/migration
 %pretrans -n nvidia-gpu-firmware -p <lua>
+
 path = "/usr/lib/firmware/nvidia/ad103"
 st = posix.stat(path)
 if st and st.type == "directory" then
@@ -447,288 +446,37 @@ if st and st.type == "directory" then
     os.rename(path, path .. ".rpmmoved")
   end
 end
-
-
-%files -f linux-firmware.files
-%dir %{_firmwarepath}
-%license LICENSE
-
-%files whence
-%license WHENCE
-
-# GPU firmwares
-%files -n amd-gpu-firmware
-%license LICENSES/LICENSE.radeon LICENSES/LICENSE.amdgpu LICENSES/LICENSE.amdnpu
-%{_firmwarepath}/amdgpu/
-%{_firmwarepath}/amdnpu/
-%{_firmwarepath}/radeon/
-
-%files -n intel-gpu-firmware
-%license LICENSES/LICENSE.i915
-%{_firmwarepath}/i915/
-
-%files -n nvidia-gpu-firmware
-%license LICENSES/LICENCE.nvidia
-%dir %{_firmwarepath}/nvidia/
-%{_firmwarepath}/nvidia/a*
-%{_firmwarepath}/nvidia/g*
-%{_firmwarepath}/nvidia/tu*
-
-# Microcode updates
-%files -n amd-ucode-firmware
-%license LICENSES/LICENSE.amd-ucode
-%{_firmwarepath}/amd/
-%{_firmwarepath}/amdtee/
-%{_firmwarepath}/amd-ucode/
-
-# WiFi/Bluetooth firmwares
-%files -n atheros-firmware
-%license LICENSES/LICENCE.atheros_firmware
-%license LICENSES/LICENSE.QualcommAtheros_ar3k
-%license LICENSES/LICENSE.QualcommAtheros_ath10k
-%license LICENSES/LICENCE.open-ath9k-htc-firmware
-%license LICENSES/NOTICE.qca
-%{_firmwarepath}/ar3k/
-%{_firmwarepath}/ath6k/
-%{_firmwarepath}/ath9k_htc/
-%{_firmwarepath}/ath10k/
-%{_firmwarepath}/ath11k/
-%{_firmwarepath}/ath12k/
-%{_firmwarepath}/qca/
-
-%files -n brcmfmac-firmware
-%license LICENSES/LICENCE.broadcom_bcm43xx
-%license LICENSES/LICENCE.cypress
-%{_firmwarepath}/brcm/
-%{_firmwarepath}/cypress/
-
-%files -n iwlegacy-firmware
-%license LICENSES/LICENCE.iwlwifi_firmware
-%{_firmwarepath}/iwlwifi-3945-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-3945-*.ucode*
-%{_firmwarepath}/iwlwifi-4965-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-4965-*.ucode*
-
-%files -n iwlwifi-dvm-firmware
-%license LICENSES/LICENCE.iwlwifi_firmware
-%{_firmwarepath}/iwlwifi-1??-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-1??-*.ucode*
-%{_firmwarepath}/iwlwifi-1000-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-1000-*.ucode*
-%{_firmwarepath}/iwlwifi-20?0-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-20?0-*.ucode*
-%{_firmwarepath}/iwlwifi-5??0-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-5??0-*.ucode*
-%{_firmwarepath}/iwlwifi-60?0-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-60?0-*.ucode*
-%{_firmwarepath}/iwlwifi-6000g2?-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-6000g2?-*.ucode*
-
-%files -n iwlwifi-mvm-firmware
-%license LICENSES/LICENCE.iwlwifi_firmware
-%{_firmwarepath}/iwlwifi-316?-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-316?-*.ucode*
-%{_firmwarepath}/iwlwifi-726?-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-726?-*.ucode*
-%{_firmwarepath}/iwlwifi-7265D-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-7265D-*.ucode*
-%{_firmwarepath}/iwlwifi-8000C-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-8000C-*.ucode*
-%{_firmwarepath}/iwlwifi-8265-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-8265-*.ucode*
-%{_firmwarepath}/iwlwifi-9??0-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-9??0-*.ucode*
-%{_firmwarepath}/iwlwifi-cc-a0-*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-cc-a0-*.ucode*
-%{_firmwarepath}/iwlwifi-gl-c0*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-gl-c0*
-%{_firmwarepath}/iwlwifi-ma-b0*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-ma-b0*
-%{_firmwarepath}/iwlwifi-Qu*.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-Qu*.ucode*
-%{_firmwarepath}/iwlwifi-ty-a0*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-ty-a0*
-%{_firmwarepath}/iwlwifi-so-a0*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-so-a0*
-%{_firmwarepath}/iwlwifi-bz-b0*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-bz-b0*
-%exclude %{_firmwarepath}/iwlwifi-bz-b0*9[7-9].ucode*
-%exclude %{_firmwarepath}/iwlwifi-bz-b0*1??.ucode*
-%exclude %{_firmwarepath}/intel/iwlwifi/iwlwifi-bz-b0*9[7-9].ucode*
-%exclude %{_firmwarepath}/intel/iwlwifi/iwlwifi-bz-b0*1??.ucode*
-%exclude %{_firmwarepath}/iwlwifi-gl-c0*9[7-9].ucode*
-%exclude %{_firmwarepath}/iwlwifi-gl-c0*1??.ucode*
-%exclude %{_firmwarepath}/intel/iwlwifi/iwlwifi-gl-c0*9[7-9].ucode*
-%exclude %{_firmwarepath}/intel/iwlwifi/iwlwifi-gl-c0*1??.ucode*
-
-%files -n iwlwifi-mld-firmware
-%license LICENSES/LICENCE.iwlwifi_firmware
-%{_firmwarepath}/iwlwifi-bz-b0*9[7-9].ucode*
-%{_firmwarepath}/iwlwifi-bz-b0*1??.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-bz-b0*9[7-9].ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-bz-b0*1??.ucode*
-%{_firmwarepath}/iwlwifi-gl-c0*9[7-9].ucode*
-%{_firmwarepath}/iwlwifi-gl-c0*1??.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-gl-c0*9[7-9].ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-gl-c0*1??.ucode*
-%{_firmwarepath}/iwlwifi-sc-a0-*1??.ucode*
-%{_firmwarepath}/intel/iwlwifi/iwlwifi-sc-a0-*1??.ucode*
-
-%files -n libertas-firmware
-%license LICENSES/LICENCE.Marvell LICENSES/LICENCE.OLPC
-%dir %{_firmwarepath}/libertas
-%dir %{_firmwarepath}/mrvl
-%{_firmwarepath}/libertas/*
-%{_firmwarepath}/mrvl/sd8787*
-
-%files -n mt7xxx-firmware
-%license LICENSES/LICENCE.mediatek
-%license LICENSES/LICENCE.ralink_a_mediatek_company_firmware
-%dir %{_firmwarepath}/mediatek
-%{_firmwarepath}/mediatek/mt76*
-%{_firmwarepath}/mediatek/mt791*
-%{_firmwarepath}/mediatek/mt7925/
-%{_firmwarepath}/mediatek/mt7927/
-%{_firmwarepath}/mediatek/mt7996/
-%{_firmwarepath}/mediatek/BT*
-%{_firmwarepath}/mediatek/WIFI*
-%{_firmwarepath}/mt76*
-
-%files -n nxpwireless-firmware
-%license LICENSES/LICENSE.nxp
-%dir %{_firmwarepath}/nxp
-%{_firmwarepath}/nxp/*
-
-%files -n qcom-wwan-firmware
-%license LICENSES/LICENSE.qcom LICENSES/NOTICE.qcom
-%dir %{_firmwarepath}/qcom
-%{_firmwarepath}/qcom/sdx*/
-
-%files -n realtek-firmware
-%license LICENSES/LICENCE.rtlwifi_firmware.txt
-%{_firmwarepath}/rtl_bt/
-%{_firmwarepath}/rtlwifi/
-%{_firmwarepath}/rtw88/
-%{_firmwarepath}/rtw89/
-
-%files -n tiwilink-firmware
-%license LICENSES/LICENCE.ti-connectivity
-%dir %{_firmwarepath}/ti-connectivity/
-%{_firmwarepath}/ti-connectivity/*
-
-# SMART NIC and network switch firmwares
-%files -n liquidio-firmware
-%license LICENSES/LICENCE.cavium_liquidio
-%dir %{_firmwarepath}/liquidio
-%{_firmwarepath}/liquidio/*
-
-%files -n mrvlprestera-firmware
-%license LICENSES/LICENCE.Marvell
-%dir %{_firmwarepath}/mrvl/prestera
-%{_firmwarepath}/mrvl/prestera/*
-
-%files -n mlxsw_spectrum-firmware
-%dir %{_firmwarepath}/mellanox/
-%{_firmwarepath}/mellanox/*
-
-%files -n netronome-firmware
-%license LICENSES/LICENCE.Netronome
-%dir %{_firmwarepath}/netronome
-%{_firmwarepath}/netronome/*
-
-%files -n qcom-accel-firmware
-%dir %{_firmwarepath}/qcom
-%dir %{_firmwarepath}/qcom/aic100
-%dir %{_firmwarepath}/qcom/qdu100
-%{_firmwarepath}/qcom/aic100/*
-%{_firmwarepath}/qcom/qdu100/*
-
-%files -n qed-firmware
-%dir %{_firmwarepath}/qed
-%{_firmwarepath}/qed/*
-
-# Silicon Vendor specific
-%files -n mediatek-firmware
-%license LICENSES/LICENCE.mediatek
-%dir %{_firmwarepath}/mediatek
-%{_firmwarepath}/mediatek/mt798?*
-%{_firmwarepath}/mediatek/mt8173/
-%{_firmwarepath}/mediatek/mt8183/
-%{_firmwarepath}/mediatek/mt8186/
-%{_firmwarepath}/mediatek/mt8188/
-%{_firmwarepath}/mediatek/mt8189/
-%{_firmwarepath}/mediatek/mt8192/
-%{_firmwarepath}/mediatek/mt8195/
-%{_firmwarepath}/mediatek/mt8196/
-%{_firmwarepath}/mediatek/sof/
-%{_firmwarepath}/mediatek/sof-tplg/
-
-%files -n qcom-firmware
-%license LICENSES/LICENSE.qcom LICENSES/LICENSE.qcom_yamato LICENSES/NOTICE.qcom
-%dir %{_firmwarepath}/qcom
-%{_firmwarepath}/qcom/glymur/
-%{_firmwarepath}/qcom/kaanapali/
-%{_firmwarepath}/qcom/maili/
-%{_firmwarepath}/qcom/eliza/
-%{_firmwarepath}/qcom/hawi/
-%{_firmwarepath}/qcom/nord/
-%{_firmwarepath}/qcom/shikra/*
-%{_firmwarepath}/a300_p*
-%{_firmwarepath}/qcom/*.fw*
-%{_firmwarepath}/qcom/*.bin*
-%{_firmwarepath}/qcom/*.m*
-%{_firmwarepath}/qcom/apq*/
-%{_firmwarepath}/qcom/qcm*/
-%{_firmwarepath}/qcom/qcs*/
-%{_firmwarepath}/qcom/qrb*/
-%{_firmwarepath}/qcom/sa*/
-%{_firmwarepath}/qcom/sc*/
-%{_firmwarepath}/qcom/sdm*/
-%{_firmwarepath}/qcom/sm*/
-%{_firmwarepath}/qcom/venus-*/
-%{_firmwarepath}/qcom/vpu*/
-%{_firmwarepath}/qcom/x1*/
-
-# Vision and ISP hardware
-%files -n intel-vsc-firmware
-%license LICENSES/LICENSE.ivsc
-%dir %{_firmwarepath}/intel/ipu/
-%dir %{_firmwarepath}/intel/vsc/
-%{_firmwarepath}/intel/ipu3-fw.bin*
-%{_firmwarepath}/intel/irci_irci_ecr-master_20161208_0213_20170112_1500.bin*
-%{_firmwarepath}/intel/ipu/*
-%{_firmwarepath}/intel/vsc/*
-
-# Sound codec hardware
-%files -n cirrus-audio-firmware
-%license LICENSES/LICENSE.cirrus
-%dir %{_firmwarepath}/cirrus
-%{_firmwarepath}/cirrus/*
-
-%files -n intel-audio-firmware
-%license LICENSES/LICENCE.adsp_sst LICENSES/LICENCE.IntcSST2
-%dir %{_firmwarepath}/intel/
-%dir %{_firmwarepath}/intel/avs/
-%dir %{_firmwarepath}/intel/catpt/
-%{_firmwarepath}/intel/avs/*
-%{_firmwarepath}/intel/catpt/*
-%{_firmwarepath}/intel/dsp_fw*
-%{_firmwarepath}/intel/fw_sst*
-%{_firmwarepath}/intel/IntcSST2.bin*
-
-# Random other hardware
-%files -n dvb-firmware
-%license LICENSES/LICENSE.dib0700 LICENSES/LICENCE.it913x LICENSES/LICENCE.siano
-%license LICENSES/LICENCE.xc4000 LICENSES/LICENCE.xc5000 LICENSES/LICENCE.xc5000c
-%dir %{_firmwarepath}/av7110/
-%{_firmwarepath}/av7110/*
-%{_firmwarepath}/as102_data*
-%{_firmwarepath}/cmmb*
-%{_firmwarepath}/dvb*
-%{_firmwarepath}/isdbt*
-%{_firmwarepath}/sms1xxx*
-%{_firmwarepath}/tdmb*
-%{_firmwarepath}/v4l-cx2*
+%files -f %{oreon_filedir}/main.list
+%files -n linux-firmware-whence -f %{oreon_filedir}/linux-firmware-whence.list
+%files -n amd-gpu-firmware -f %{oreon_filedir}/amd-gpu-firmware.list
+%files -n intel-gpu-firmware -f %{oreon_filedir}/intel-gpu-firmware.list
+%files -n nvidia-gpu-firmware -f %{oreon_filedir}/nvidia-gpu-firmware.list
+%files -n amd-ucode-firmware -f %{oreon_filedir}/amd-ucode-firmware.list
+%files -n atheros-firmware -f %{oreon_filedir}/atheros-firmware.list
+%files -n brcmfmac-firmware -f %{oreon_filedir}/brcmfmac-firmware.list
+%files -n iwlegacy-firmware -f %{oreon_filedir}/iwlegacy-firmware.list
+%files -n iwlwifi-dvm-firmware -f %{oreon_filedir}/iwlwifi-dvm-firmware.list
+%files -n iwlwifi-mvm-firmware -f %{oreon_filedir}/iwlwifi-mvm-firmware.list
+%files -n iwlwifi-mld-firmware -f %{oreon_filedir}/iwlwifi-mld-firmware.list
+%files -n libertas-firmware -f %{oreon_filedir}/libertas-firmware.list
+%files -n mt7xxx-firmware -f %{oreon_filedir}/mt7xxx-firmware.list
+%files -n nxpwireless-firmware -f %{oreon_filedir}/nxpwireless-firmware.list
+%files -n realtek-firmware -f %{oreon_filedir}/realtek-firmware.list
+%files -n qcom-wwan-firmware -f %{oreon_filedir}/qcom-wwan-firmware.list
+%files -n tiwilink-firmware -f %{oreon_filedir}/tiwilink-firmware.list
+%files -n liquidio-firmware -f %{oreon_filedir}/liquidio-firmware.list
+%files -n mlxsw_spectrum-firmware -f %{oreon_filedir}/mlxsw_spectrum-firmware.list
+%files -n mrvlprestera-firmware -f %{oreon_filedir}/mrvlprestera-firmware.list
+%files -n netronome-firmware -f %{oreon_filedir}/netronome-firmware.list
+%files -n qcom-accel-firmware -f %{oreon_filedir}/qcom-accel-firmware.list
+%files -n qed-firmware -f %{oreon_filedir}/qed-firmware.list
+%files -n mediatek-firmware -f %{oreon_filedir}/mediatek-firmware.list
+%files -n qcom-firmware -f %{oreon_filedir}/qcom-firmware.list
+%files -n intel-vsc-firmware -f %{oreon_filedir}/intel-vsc-firmware.list
+%files -n cirrus-audio-firmware -f %{oreon_filedir}/cirrus-audio-firmware.list
+%files -n intel-audio-firmware -f %{oreon_filedir}/intel-audio-firmware.list
+%files -n dvb-firmware -f %{oreon_filedir}/dvb-firmware.list
 
 %changelog
+
 %autochangelog

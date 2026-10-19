@@ -1,12 +1,9 @@
 %global source0_hash 242f0e775bc8e1017a5bfec841c776beafa7ea6b5bd2e4d7bc0ff9d7c57998f3
-
 %global project_version_prime 5
 %global project_version_major 4
 %global project_version_minor 6
 %global project_version_micro 0
-
 %bcond dnf5_obsoletes_dnf %[0%{?fedora} > 40 || 0%{?rhel} > 10]
-
 Name:           dnf5
 Version:        %{project_version_prime}.%{project_version_major}.%{project_version_minor}.%{project_version_micro}
 Release:        1%{?dist}
@@ -14,7 +11,6 @@ Summary:        Command-line package manager
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
 Source0:        https://github.com/rpm-software-management/dnf5/archive/refs/tags/5.4.6.0.tar.gz#/dnf5-5.4.6.0.tar.gz
-
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 %if %{without dnf5_obsoletes_dnf}
@@ -23,25 +19,13 @@ Requires:       dnf-data
 Recommends:     (dnf5-plugins if dnf-plugins-core)
 Recommends:     bash-completion
 Requires:       coreutils
-%if 0%{?fedora} > 41
-Recommends:     (libdnf5-plugin-expired-pgp-keys if gnupg2)
-%endif
-
-%if 0%{?fedora} || 0%{?rhel} > 10
-Provides:       microdnf = %{version}-%{release}
-Obsoletes:      microdnf < 4
-%endif
-
 %if %{with dnf5_obsoletes_dnf}
 Provides:       dnf = %{version}-%{release}
 Obsoletes:      dnf < 5
-
 Provides:       yum = %{version}-%{release}
 Obsoletes:      yum < 5
-
 Conflicts:      python3-dnf-plugins-core < 4.7.0
 %endif
-
 Provides:       dnf5-command(advisory)
 Provides:       dnf5-command(autoremove)
 Provides:       dnf5-command(check)
@@ -72,10 +56,6 @@ Provides:       dnf5-command(swap)
 Provides:       dnf5-command(system-upgrade)
 Provides:       dnf5-command(upgrade)
 Provides:       dnf5-command(versionlock)
-
-
-# ========== build options ==========
-
 %bcond_without dnf5daemon_client
 %bcond_without dnf5daemon_server
 %bcond_without libdnf_cli
@@ -87,596 +67,263 @@ Provides:       dnf5-command(versionlock)
 %bcond_without plugin_rhsm
 %bcond_without plugin_manifest
 %bcond_without python_plugins_loader
-
-%if 0%{?rhel} >= 10
-%bcond_with plugin_local
-%else
 %bcond_without plugin_local
-%endif
-
 %bcond_without acl
 %bcond_without comps
 %bcond_without modulemd
 %bcond_without systemd
-
 %bcond_with    html
-%if 0%{?rhel} == 8
-%bcond_with    man
-%else
 %bcond_without man
-%endif
-
-# TODO Go bindings fail to build, disable for now
 %bcond_with    go
 %bcond_without perl5
 %bcond_without python3
 %bcond_without ruby
-
 %bcond_with    clang
 %bcond_with    sanitizers
 %bcond_without tests
 %bcond_with    performance_tests
 %bcond_with    dnf5daemon_tests
-
-# Disable SOLVER_FLAG_FOCUS_NEW only for RHEL
-%if 0%{?rhel} && 0%{?rhel} < 11
-%bcond_with    focus_new
-%else
 %bcond_without focus_new
-%endif
-
 %if %{with clang}
     %global toolchain clang
 %endif
-
-# ========== versions of dependencies ==========
-
 %global libmodulemd_version 2.5.0
 %global librepo_version 1.20.0
 %global libsolv_version 0.7.35
 %global sqlite_version 3.35.0
 %global swig_version 4
-
-
-# ========== build requires ==========
-
-%if 0%{?fedora} > 40 || 0%{?rhel} > 10
-BuildRequires:  bash-completion-devel
-%else
-BuildRequires:  bash-completion
-%endif
-BuildRequires:  cmake >= 3.21
-BuildRequires:  doxygen
-BuildRequires:  gettext
-BuildRequires:  pkgconfig(check)
-BuildRequires:  pkgconfig(fmt)
-BuildRequires:  pkgconfig(json-c)
-BuildRequires:  pkgconfig(libcrypto)
-BuildRequires:  pkgconfig(librepo) >= %{librepo_version}
-BuildRequires:  pkgconfig(libsolv) >= %{libsolv_version}
-BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
-BuildRequires:  pkgconfig(rpm) >= 4.19.0
-BuildRequires:  pkgconfig(sqlite3) >= %{sqlite_version}
-BuildRequires:  toml11-static
-BuildRequires:  zlib-devel
-
 %if %{with acl}
-BuildRequires:  pkgconfig(libacl)
 %endif
-
 %if %{with clang}
-BuildRequires:  clang
 %else
-BuildRequires:  gcc-c++ >= 10.1
 %endif
-
 %if %{with tests}
-BuildRequires:  createrepo_c
-BuildRequires:  pkgconfig(cppunit)
-BuildRequires:  rpm-build
 %endif
-
 %if %{with comps}
-BuildRequires:  pkgconfig(libcomps)
 %endif
-
 %if %{with modulemd}
-BuildRequires:  pkgconfig(modulemd-2.0) >= %{libmodulemd_version}
 %endif
-
 %if %{with systemd}
-BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
-BuildRequires:  systemd-devel
-
- # We need to get the SYSTEMD_SYSTEM_UNIT_DIR from
- # /usr/share/pkgconfig/systemd.pc
-BuildRequires:  systemd
 %endif
-
 %if %{with html} || %{with man}
-BuildRequires:  python3dist(sphinx-autoapi)
-BuildRequires:  python3dist(breathe)
-BuildRequires:  python3dist(sphinx) >= 4.1.2
-BuildRequires:  python3dist(sphinx-rtd-theme)
 %endif
-
 %if %{with sanitizers}
-# compiler-rt is required by sanitizers in clang
-BuildRequires:  compiler-rt
-BuildRequires:  libasan
-BuildRequires:  liblsan
-BuildRequires:  libubsan
 %endif
-
 %if %{with libdnf_cli}
-# required for libdnf5-cli
-BuildRequires:  pkgconfig(smartcols)
 %endif
-
 %if %{with dnf5_plugins}
-BuildRequires:  libcurl-devel >= 7.62.0
 %if %{with plugin_manifest}
-BuildRequires:  pkgconfig(libpkgmanifest)
 %endif
 %endif
-
 %if %{with dnf5daemon_server}
-# required for dnf5daemon-server
-BuildRequires:  pkgconfig(sdbus-c++) >= 0.9.0
-BuildRequires:  systemd-rpm-macros
 %if %{with dnf5daemon_tests}
-BuildRequires:  dbus-daemon
-BuildRequires:  polkit
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(dbus-python)
 %endif
 %endif
-
 %if %{with plugin_rhsm}
-BuildRequires:  pkgconfig(librhsm) >= 0.0.3
-BuildRequires:  pkgconfig(glib-2.0) >= 2.44.0
 %endif
-
-# ========== language bindings section ==========
-
 %if %{with perl5} || %{with ruby} || %{with python3}
-BuildRequires:  swig >= %{swig_version}
 %endif
-
 %if %{with perl5}
-# required for perl-libdnf5 and perl-libdnf5-cli
+%if %{with tests}
+%endif
+%endif
+%if %{with ruby}
+%if %{with tests}
+%endif
+%endif
+%if %{with python3}
+%endif
+# oreon:deps
+BuildRequires:  bash-completion
+BuildRequires:  cmake
+BuildRequires:  createrepo_c
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  libcurl-devel
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Test::Exception)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
 BuildRequires:  perl-devel
 BuildRequires:  perl-generators
-%if %{with tests}
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Test::Exception)
-BuildRequires:  perl(warnings)
-BuildRequires:  perl(FindBin)
-%endif
-%endif
-
-%if %{with ruby}
-# required for ruby-libdnf5 and ruby-libdnf5-cli
+BuildRequires:  pkgconfig(appstream)
+BuildRequires:  pkgconfig(check)
+BuildRequires:  pkgconfig(cppunit)
+BuildRequires:  pkgconfig(fmt)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(json-c)
+BuildRequires:  pkgconfig(libacl)
+BuildRequires:  pkgconfig(libcomps)
+BuildRequires:  pkgconfig(libcrypto)
+BuildRequires:  pkgconfig(libpkgmanifest)
+BuildRequires:  pkgconfig(librepo)
+BuildRequires:  pkgconfig(librhsm)
+BuildRequires:  pkgconfig(libsolv)
+BuildRequires:  pkgconfig(libsolvext)
+BuildRequires:  pkgconfig(modulemd-2.0)
+BuildRequires:  pkgconfig(rpm)
 BuildRequires:  pkgconfig(ruby)
-%if %{with tests}
-BuildRequires:  rubygem-test-unit
-%endif
-%endif
-
-%if %{with python3}
-# required for python3-libdnf5 and python3-libdnf5-cli
+BuildRequires:  pkgconfig(sdbus-c++)
+BuildRequires:  pkgconfig(smartcols)
+BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  python3-devel
-%endif
-
+BuildRequires:  python3dist(breathe)
+BuildRequires:  python3dist(sphinx)
+BuildRequires:  python3dist(sphinx-autoapi)
+BuildRequires:  python3dist(sphinx-rtd-theme)
+BuildRequires:  rpm-build
+BuildRequires:  rubygem-test-unit
+BuildRequires:  swig
+BuildRequires:  systemd
+BuildRequires:  systemd-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  toml11-static
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 DNF5 is a command-line package manager that automates the process of installing,
 upgrading, configuring, and removing computer programs in a consistent manner.
 It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %post
+
 %if %{with dnf5_obsoletes_dnf}
 %systemd_post dnf-makecache.timer
 %else
 %systemd_post dnf5-makecache.timer
 %endif
-
 %preun
+
 %if %{with dnf5_obsoletes_dnf}
 %systemd_preun dnf-makecache.timer
 %else
 %systemd_preun dnf5-makecache.timer
 %endif
-
 %postun
+
 %if %{with dnf5_obsoletes_dnf}
 %systemd_postun_with_restart dnf-makecache.timer
 %else
 %systemd_postun_with_restart dnf5-makecache.timer
 %endif
-
-%files -f dnf5.lang
-%{_bindir}/dnf5
-%if %{with dnf5_obsoletes_dnf}
-%{_bindir}/dnf
-%{_bindir}/yum
-%endif
-%{_unitdir}/dnf*-makecache.service
-%{_unitdir}/dnf*-makecache.timer
-
-%if 0%{?fedora} || 0%{?rhel} > 10
-%{_bindir}/microdnf
-%endif
-
-%dir %{_sysconfdir}/dnf/dnf5-aliases.d
-%doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
-%dir %{_datadir}/dnf5
-%dir %{_datadir}/dnf5/aliases.d
-%{_datadir}/dnf5/aliases.d/compatibility.conf
-%dir %{_libdir}/dnf5
-%dir %{_libdir}/dnf5/plugins
-%dir %{_datadir}/dnf5/dnf5-plugins
-%dir %{_sysconfdir}/dnf/dnf5-plugins
-%doc %{_libdir}/dnf5/plugins/README
-%dir %{_libdir}/libdnf5/plugins
-%dir %{_datadir}/bash-completion/
-%dir %{_datadir}/bash-completion/completions/
-%{_datadir}/bash-completion/completions/dnf*
-%license COPYING.md
-%license gpl-2.0.txt
-%doc AUTHORS.md CHANGELOG.md CONTRIBUTING.md README.md
-%if %{with man}
-%{_mandir}/man8/dnf5.8.*
-%if %{with dnf5_obsoletes_dnf}
-%{_mandir}/man8/dnf.8.*
-%endif
-%{_mandir}/man8/dnf*-advisory.8.*
-%{_mandir}/man8/dnf*-autoremove.8.*
-%{_mandir}/man8/dnf*-check.8.*
-%{_mandir}/man8/dnf*-check-upgrade.8.*
-%{_mandir}/man8/dnf*-clean.8.*
-%{_mandir}/man8/dnf*-distro-sync.8.*
-%{_mandir}/man8/dnf*-do.8.*
-%{_mandir}/man8/dnf*-downgrade.8.*
-%{_mandir}/man8/dnf*-download.8.*
-%{_mandir}/man8/dnf*-environment.8.*
-%{_mandir}/man8/dnf*-group.8.*
-%{_mandir}/man8/dnf*-history.8.*
-%{_mandir}/man8/dnf*-info.8.*
-%{_mandir}/man8/dnf*-install.8.*
-%{_mandir}/man8/dnf*-leaves.8.*
-%{_mandir}/man8/dnf*-list.8.*
-%{_mandir}/man8/dnf*-makecache.8.*
-%{_mandir}/man8/dnf*-mark.8.*
-%{_mandir}/man8/dnf*-module.8.*
-%{_mandir}/man8/dnf*-offline.8.*
-%{_mandir}/man8/dnf*-provides.8.*
-%{_mandir}/man8/dnf*-reinstall.8.*
-%{_mandir}/man8/dnf*-remove.8.*
-%{_mandir}/man8/dnf*-replay.8.*
-%{_mandir}/man8/dnf*-repo.8.*
-%{_mandir}/man8/dnf*-repoquery.8.*
-%{_mandir}/man8/dnf*-search.8.*
-%{_mandir}/man8/dnf*-swap.8.*
-%{_mandir}/man8/dnf*-system-upgrade.8.*
-%{_mandir}/man8/dnf*-upgrade.8.*
-%{_mandir}/man8/dnf*-versionlock.8.*
-%{_mandir}/man7/dnf*-aliases.7.*
-%{_mandir}/man7/dnf*-caching.7.*
-%{_mandir}/man7/dnf*-comps.7.*
-%{_mandir}/man7/dnf*-filtering.7.*
-%{_mandir}/man7/dnf*-forcearch.7.*
-%{_mandir}/man7/dnf*-installroot.7.*
-%{_mandir}/man7/dnf*-modularity.7.*
-%{_mandir}/man7/dnf*-specs.7.*
-%{_mandir}/man7/dnf*-system-state.7.*
-%{_mandir}/man7/dnf*-changes-from-dnf4.7.*
-%{_mandir}/man5/dnf*.conf.5.*
-%{_mandir}/man5/dnf*.conf-vendorpolicy*.5.*
-%{_mandir}/man5/dnf*.conf-todo.5.*
-%{_mandir}/man5/dnf*.conf-deprecated.5.*
-%endif
-
-%if %{with systemd}
-%{_unitdir}/dnf5-offline-transaction.service
-%{_unitdir}/dnf5-offline-transaction-cleanup.service
-%{_unitdir}/system-update.target.wants/dnf5-offline-transaction.service
-%endif
-
-%if %{without dnf5_plugins}
-%exclude %{_datadir}/dnf5/aliases.d/compatibility-plugins.conf
-%exclude %{_datadir}/dnf5/aliases.d/compatibility-reposync.conf
-%endif
-
-# ========== libdnf5 ==========
 %package -n libdnf5
 Summary:        Package management library
 License:        LGPL-2.1-or-later
-#Requires:       libmodulemd{?_isa} >= {libmodulemd_version}
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 Requires:       sqlite-libs%{?_isa} >= %{sqlite_version}
 %if %{with dnf5_obsoletes_dnf}
 Conflicts:      dnf-data < 4.20.0
 %endif
-
 %description -n libdnf5
 Package management library.
 
-%files -n libdnf5 -f libdnf5.lang
-%if %{with dnf5_obsoletes_dnf}
-%config(noreplace) %{_sysconfdir}/dnf/dnf.conf
-%dir %{_sysconfdir}/dnf/vars
-%dir %{_sysconfdir}/dnf/protected.d
-%else
-%exclude %{_sysconfdir}/dnf/dnf.conf
-%endif
-%ghost %attr(0644, root, root) %{_sysconfdir}/dnf/versionlock.toml
-%dir %{_datadir}/dnf5/libdnf.conf.d
-%dir %{_sysconfdir}/dnf/libdnf5.conf.d
-%dir %{_datadir}/dnf5/repos.override.d
-%dir %{_sysconfdir}/dnf/repos.override.d
-%dir %{_sysconfdir}/dnf/libdnf5-plugins
-%dir %{_datadir}/dnf5/repos.d
-%dir %{_datadir}/dnf5/vars.d
-%dir %{_datadir}/dnf5/vendors.d
-%dir %{_datadir}/dnf5/libdnf.plugins.conf.d
-%dir %{_sysconfdir}/dnf/vendors.d
-%dir %{_libdir}/libdnf5
-%{_libdir}/libdnf5.so.2*
-%dir %{_prefix}/lib/sysimage/libdnf5
-%attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/comps_groups
-%attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/comps_groups/environments
-%attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/comps_groups/groups
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/environments.toml
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/groups.toml
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/modules.toml
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/nevras.toml
-%attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/offline
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/offline/offline-transaction-state.toml
-%attr(0755, root, root) %ghost %dir %{_prefix}/lib/sysimage/libdnf5/offline/packages
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/offline/transaction.json
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/packages.toml
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/system.toml
-%verify(not md5 size mtime) %attr(0644, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/transaction_history.sqlite{,-shm,-wal}
-%verify(not md5 size mtime) %attr(0664, root, root) %ghost %{_prefix}/lib/sysimage/libdnf5/system-repo.lock
-%license lgpl-2.1.txt
-%ghost %attr(0755, root, root) %dir %{_var}/cache/libdnf5
-%ghost %attr(0755, root, root) %dir %{_sharedstatedir}/dnf
-
-# ========== libdnf5-cli ==========
-
-%if %{with libdnf_cli}
 %package -n libdnf5-cli
 Summary:        Library for working with a terminal in a command-line package manager
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
-
 %description -n libdnf5-cli
 Library for working with a terminal in a command-line package manager.
 
-%files -n libdnf5-cli -f libdnf5-cli.lang
-%{_libdir}/libdnf5-cli.so.3*
-%license COPYING.md
-%license lgpl-2.1.txt
-%endif
-
-# ========== dnf5-devel ==========
-
+%if %{with libdnf_cli}
 %package -n dnf5-devel
 Summary:        Development files for dnf5
 License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-devel%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli-devel%{?_isa} = %{version}-%{release}
-
 %description -n dnf5-devel
 Development files for dnf5.
 
-%files -n dnf5-devel
-%{_includedir}/dnf5/
-%license COPYING.md
-%license lgpl-2.1.txt
-
-
-# ========== libdnf5-devel ==========
-
+%if %{with libdnf_cli}
 %package -n libdnf5-devel
 Summary:        Development files for libdnf
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libsolv-devel%{?_isa} >= %{libsolv_version}
-
 %description -n libdnf5-devel
 Development files for libdnf.
 
-%files -n libdnf5-devel
-%{_includedir}/libdnf5/
-%dir %{_libdir}/libdnf5
-%{_libdir}/libdnf5.so
-%{_libdir}/pkgconfig/libdnf5.pc
-%license COPYING.md
-%license lgpl-2.1.txt
-
-
-# ========== libdnf5-cli-devel ==========
-
+%if %{with libdnf_cli}
 %package -n libdnf5-cli-devel
 Summary:        Development files for libdnf5-cli
 License:        LGPL-2.1-or-later
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-
 %description -n libdnf5-cli-devel
 Development files for libdnf5-cli.
 
-%files -n libdnf5-cli-devel
-%{_includedir}/libdnf5-cli/
-%{_libdir}/libdnf5-cli.so
-%{_libdir}/pkgconfig/libdnf5-cli.pc
-%license COPYING.md
-%license lgpl-2.1.txt
-
-
-# ========== perl-libdnf5 ==========
-
-%if %{with perl5}
+%if %{with libdnf_cli}
 %package -n perl-libdnf5
 Summary:        Perl 5 bindings for the libdnf library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
-
-
 %description -n perl-libdnf5
 Perl 5 bindings for the libdnf library.
 
-%files -n perl-libdnf5
-%{perl_vendorarch}/libdnf5
-%{perl_vendorarch}/auto/libdnf5
-%license COPYING.md
-%license lgpl-2.1.txt
-%endif
-
-
-# ========== perl-libdnf5-cli ==========
-
-%if %{with perl5} && %{with libdnf_cli}
+%if %{with libdnf_cli}
 %package -n perl-libdnf5-cli
 Summary:        Perl 5 bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-
-
 %description -n perl-libdnf5-cli
 Perl 5 bindings for the libdnf5-cli library.
 
-%files -n perl-libdnf5-cli
-%{perl_vendorarch}/libdnf5_cli
-%{perl_vendorarch}/auto/libdnf5_cli
-%license COPYING.md
-%license lgpl-2.1.txt
-%endif
-
-
-# ========== python3-libdnf5 ==========
-
-%if %{with python3}
+%if %{with libdnf_cli}
 %package -n python3-libdnf5
 Summary:        Python 3 bindings for the libdnf5 library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
-
 %description -n python3-libdnf5
 Python 3 bindings for the libdnf library.
 
-%files -n python3-libdnf5
-%{python3_sitearch}/libdnf5
-%{python3_sitearch}/libdnf5-*.dist-info
-%license COPYING.md
-%license lgpl-2.1.txt
-%endif
-
-
-# ========== python3-libdnf5-cli ==========
-
-%if %{with python3} && %{with libdnf_cli}
+%if %{with libdnf_cli}
 %package -n python3-libdnf5-cli
 Summary:        Python 3 bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-
 %description -n python3-libdnf5-cli
 Python 3 bindings for the libdnf5-cli library.
 
-%files -n python3-libdnf5-cli
-%{python3_sitearch}/libdnf5_cli
-%{python3_sitearch}/libdnf5_cli-*.dist-info
-%license COPYING.md
-%license lgpl-2.1.txt
-%endif
-
-
-# ========== ruby-libdnf5 ==========
-
-%if %{with ruby}
+%if %{with libdnf_cli}
 %package -n ruby-libdnf5
 Summary:        Ruby bindings for the libdnf library
 License:        LGPL-2.1-or-later
 Provides:       ruby(libdnf) = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
-
 %description -n ruby-libdnf5
 Ruby bindings for the libdnf library.
 
-%files -n ruby-libdnf5
-%{ruby_vendorarchdir}/libdnf5
-%license COPYING.md
-%license lgpl-2.1.txt
-%endif
-
-
-# ========== ruby-libdnf5-cli ==========
-
-%if %{with ruby} && %{with libdnf_cli}
+%if %{with libdnf_cli}
 %package -n ruby-libdnf5-cli
 Summary:        Ruby bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
 Provides:       ruby(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
-
 %description -n ruby-libdnf5-cli
 Ruby bindings for the libdnf5-cli library.
 
-%files -n ruby-libdnf5-cli
-%{ruby_vendorarchdir}/libdnf5_cli
-%license COPYING.md
-%license lgpl-2.1.txt
-%endif
-
-
-# ========== libdnf5-plugin-actions ==========
-
-%if %{with plugin_actions}
+%if %{with libdnf_cli}
 %package -n libdnf5-plugin-actions
 Summary:        Libdnf5 plugin that allows to run actions (external executables) on hooks
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
-
 %description -n libdnf5-plugin-actions
 Libdnf5 plugin that allows to run actions (external executables) on hooks.
 
-%files -n libdnf5-plugin-actions -f libdnf5-plugin-actions.lang
-%{_libdir}/libdnf5/plugins/actions.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/actions.conf
-%dir %{_sysconfdir}/dnf/libdnf5-plugins/actions.d
-%if %{with man}
-%{_mandir}/man8/libdnf5-actions.8.*
-%endif
-%endif
-
-# ========== libdnf5-plugin-appstream ==========
-
-%if %{with plugin_appstream}
-
+%if %{with libdnf_cli}
 %package -n libdnf5-plugin-appstream
 Summary:        Libdnf5 plugin to install repository AppStream data
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 BuildRequires:  pkgconfig(appstream) >= 0.16
-
 %description -n libdnf5-plugin-appstream
 Libdnf5 plugin that installs repository's AppStream data, for repositories which provide them.
 
-%files -n libdnf5-plugin-appstream
-%{_libdir}/libdnf5/plugins/appstream.so
-%config %{_sysconfdir}/dnf/libdnf5-plugins/appstream.conf
-
-%endif
-
-# ========== libdnf5-plugin-expired-pgp-keys ==========
-
-%if %{with plugin_expired_pgp_keys}
+%if %{with libdnf_cli}
 %package -n libdnf5-plugin-expired-pgp-keys
 Summary:        Libdnf5 plugin for detecting and removing expired PGP keys
 License:        LGPL-2.1-or-later
@@ -685,105 +332,49 @@ Requires:       gnupg2
 %if 0%{?fedora} >= 43 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
 Requires:       rpm-libs%{?_isa} >= 5.99.90
 %endif
-
 %description -n libdnf5-plugin-expired-pgp-keys
 Libdnf5 plugin for detecting and removing expired PGP keys.
 
-%files -n libdnf5-plugin-expired-pgp-keys -f libdnf5-plugin-expired-pgp-keys.lang
-%{_libdir}/libdnf5/plugins/expired-pgp-keys.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/expired-pgp-keys.conf
-%if %{with man}
-%{_mandir}/man8/libdnf5-expired-pgp-keys.8.*
-%endif
-%endif
-
-# ========== libdnf5-plugin-plugin_rhsm ==========
-
-%if %{with plugin_rhsm}
+%if %{with libdnf_cli}
 %package -n libdnf5-plugin-rhsm
 Summary:        Libdnf5 rhsm (Red Hat Subscription Manager) plugin
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
-
 %description -n libdnf5-plugin-rhsm
 Libdnf5 plugin with basic support for Red Hat subscriptions.
 Synchronizes the the enrollment with the vendor system. This can change
 the contents of the repositories configuration files according
 to the subscription levels.
 
-%files -n libdnf5-plugin-rhsm -f libdnf5-plugin-rhsm.lang
-%{_libdir}/libdnf5/plugins/rhsm.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/rhsm.conf
-%endif
-
-
-# ========== python3-libdnf5-plugins-loader ==========
-
-%if %{with python_plugins_loader}
+%if %{with libdnf_cli}
 %package -n python3-libdnf5-python-plugins-loader
 Summary:        Libdnf5 plugin that allows loading Python plugins
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       python3-libdnf5%{?_isa} = %{version}-%{release}
-
 %description -n python3-libdnf5-python-plugins-loader
 Libdnf5 plugin that allows loading Python plugins.
 
-%files -n python3-libdnf5-python-plugins-loader
-%{_libdir}/libdnf5/plugins/python_plugins_loader.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/python_plugins_loader.conf
-%dir %{_sysconfdir}/dnf/libdnf5-plugins/python_plugins_loader.d
-%dir %{python3_sitelib}/libdnf_plugins/
-%doc %{python3_sitelib}/libdnf_plugins/README
-%endif
-
-# ========== libdnf5-plugin-local ==========
-
-%if %{with plugin_local}
+%if %{with libdnf_cli}
 %package -n libdnf5-plugin-local
 Summary:        Libdnf5 plugin that automatically copies all downloaded packages to a local repository
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       createrepo_c
-
 %description -n libdnf5-plugin-local
 Libdnf5 plugin that automatically copies all downloaded packages to a repository on the local filesystem and generates repo metadata.
 
-%files -n libdnf5-plugin-local
-%{_libdir}/libdnf5/plugins/local.*
-%config %{_sysconfdir}/dnf/libdnf5-plugins/local.conf
-%if %{with man}
-%{_mandir}/man8/libdnf5-local.8.*
-%endif
-%endif
-
-
-# ========== dnf5daemon-client ==========
-
-%if %{with dnf5daemon_client}
+%if %{with libdnf_cli}
 %package -n dnf5daemon-client
 Summary:        Command-line interface for dnf5daemon-server
 License:        GPL-2.0-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf5daemon-server
-
 %description -n dnf5daemon-client
 Command-line interface for dnf5daemon-server.
 
-%files -n dnf5daemon-client -f dnf5daemon-client.lang
-%{_bindir}/dnf5daemon-client
-%license COPYING.md
-%license gpl-2.0.txt
-%if %{with man}
-%{_mandir}/man8/dnf5daemon-client.8.*
-%endif
-%endif
-
-
-# ========== dnf5daemon-server ==========
-
-%if %{with dnf5daemon_server}
+%if %{with libdnf_cli}
 %package -n dnf5daemon-server
 Summary:        Package management service with a DBus interface
 License:        GPL-2.0-or-later
@@ -794,56 +385,30 @@ Requires:       polkit
 %if %{without dnf5_obsoletes_dnf}
 Requires:       dnf-data
 %endif
-
 %description -n dnf5daemon-server
 Package management service with a DBus interface.
 
 %post -n dnf5daemon-server
+
 %systemd_post dnf5daemon-server.service
-
 %preun -n dnf5daemon-server
+
 %systemd_preun dnf5daemon-server.service
-
 %postun -n dnf5daemon-server
+
 %systemd_postun_with_restart dnf5daemon-server.service
-
-%files -n dnf5daemon-server -f dnf5daemon-server.lang
-%config(noreplace) %{_sysconfdir}/dnf/dnf5daemon-server.conf
-%{_sbindir}/dnf5daemon-server
-%{_unitdir}/dnf5daemon-server.service
-%{_datadir}/dbus-1/system.d/org.rpm.dnf.v0.conf
-%{_datadir}/dbus-1/system-services/org.rpm.dnf.v0.service
-%{_datadir}/dbus-1/interfaces/org.rpm.dnf.v0.*.xml
-%{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
-%license COPYING.md
-%license gpl-2.0.txt
-%if %{with man}
-%{_mandir}/man8/dnf5daemon-server.8.*
-%{_mandir}/man8/dnf5daemon-dbus-api.8.*
-%endif
-
-
-# ========== dnf5daemon-server-polkit ==========
-
+%if %{with libdnf_cli}
 %package -n dnf5daemon-server-polkit
 Summary:        Polkit rule to allow wheel group members install trusted packages
 License:        GPL-2.0-or-later
 Requires:       polkit
 Requires:       dnf5daemon-server = %{version}-%{release}
 BuildArch:      noarch
-
 %description -n dnf5daemon-server-polkit
 Polkit rule to allow active local wheel group members install packages from
 trusted repositories using dnf5daemon-server.
 
-%files -n dnf5daemon-server-polkit
-%{_datadir}/polkit-1/rules.d/org.rpm.dnf.v0.rules
-%endif
-
-
-# ========== dnf5-plugins ==========
-%if %{with dnf5_plugins}
-
+%if %{with libdnf_cli}
 %package -n dnf5-plugins
 Summary:        Plugins for dnf5
 License:        LGPL-2.1-or-later
@@ -859,36 +424,11 @@ Provides:       dnf5-command(needs-restarting)
 Provides:       dnf5-command(repoclosure)
 Provides:       dnf5-command(reposync)
 Provides:       dnf5-command(repomanage)
-
 %description -n dnf5-plugins
 Core DNF5 plugins that enhance dnf5 with builddep, changelog, config-manager,
 copr, needs-restarting, repoclosure, repomanage, and reposync commands.
 
-%files -n dnf5-plugins -f dnf5-plugin-builddep.lang -f dnf5-plugin-changelog.lang -f dnf5-plugin-config-manager.lang -f dnf5-plugin-copr.lang -f dnf5-plugin-needs-restarting.lang -f dnf5-plugin-repoclosure.lang -f dnf5-plugin-reposync.lang
-%{_libdir}/dnf5/plugins/builddep_cmd_plugin.so
-%{_libdir}/dnf5/plugins/changelog_cmd_plugin.so
-%{_libdir}/dnf5/plugins/config-manager_cmd_plugin.so
-%{_libdir}/dnf5/plugins/copr_cmd_plugin.so
-%{_libdir}/dnf5/plugins/needs_restarting_cmd_plugin.so
-%{_libdir}/dnf5/plugins/repoclosure_cmd_plugin.so
-%{_libdir}/dnf5/plugins/reposync_cmd_plugin.so
-%{_libdir}/dnf5/plugins/repomanage_cmd_plugin.so
-%if %{with man}
-%{_mandir}/man8/dnf*-builddep.8.*
-%{_mandir}/man8/dnf*-changelog.8.*
-%{_mandir}/man8/dnf*-config-manager.8.*
-%{_mandir}/man8/dnf*-copr.8.*
-%{_mandir}/man8/dnf*-needs-restarting.8.*
-%{_mandir}/man8/dnf*-repoclosure.8.*
-%{_mandir}/man8/dnf*-reposync.8.*
-%{_mandir}/man8/dnf*-repomanage.8.*
-%endif
-%{_datadir}/dnf5/aliases.d/compatibility-plugins.conf
-%{_datadir}/dnf5/aliases.d/compatibility-reposync.conf
-
-
-# ========== dnf5-automatic plugin ==========
-
+%if %{with libdnf_cli}
 %package plugin-automatic
 Summary:        Package manager - automated upgrades
 License:        LGPL-2.1-or-later
@@ -903,33 +443,10 @@ Obsoletes:      dnf-automatic < 5
 %else
 Conflicts:      dnf-automatic < 5
 %endif
-
 %description plugin-automatic
 Alternative command-line interface "dnf upgrade" suitable to be executed
 automatically and regularly from systemd timers, cron jobs or similar.
 
-%files plugin-automatic -f dnf5-plugin-automatic.lang
-%ghost %attr(0644, root, root) %{_sysconfdir}/motd.d/dnf5-automatic
-%{_libdir}/dnf5/plugins/automatic_cmd_plugin.so
-%{_datadir}/dnf5/dnf5-plugins/automatic.conf
-%ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/automatic.conf
-%ghost %attr(0644, root, root) %config(noreplace) %{_sysconfdir}/dnf/dnf5-plugins/automatic.conf
-%if %{with man}
-%{_mandir}/man8/dnf*-automatic.8.*
-%endif
-%{_unitdir}/dnf5-automatic.service
-%{_unitdir}/dnf5-automatic.timer
-%{_unitdir}/dnf-automatic.service
-%{_unitdir}/dnf-automatic.timer
-%if %{with dnf5_obsoletes_dnf}
-%{_bindir}/dnf-automatic
-%else
-%exclude %{_bindir}/dnf-automatic
-%endif
-
-# ========== dnf5-manifest plugin ==========
-
-%if %{with plugin_manifest}
 %package plugin-manifest
 Summary:        DNF5 plugin for working with RPM package manifest files
 License:        LGPL-2.1-or-later
@@ -937,28 +454,15 @@ Requires:       dnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Provides:       dnf5-command(manifest)
-
 %description plugin-manifest
 DNF5 plugin for working with RPM package manifest files.
 
-%files plugin-manifest
-%{_libdir}/dnf5/plugins/manifest_cmd_plugin.so
-%if %{with man}
-%{_mandir}/man8/dnf*-manifest.8.*
-%endif
-%endif
-
-%endif
-
-
-# ========== unpack, build, check & install ==========
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n dnf5-%{version}
-
-
+%global oreon_srcdir dnf5-%{version}
+%oreon_prep
 %build
+
 %cmake \
     -DPACKAGE_VERSION=%{version} \
     -DPERL_INSTALLDIRS=vendor \
@@ -1005,17 +509,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if %{with man}
     %cmake_build --target doc-man
 %endif
-
-
 %check
+
 %if %{with tests}
     %ctest
 %endif
-
-
 %install
 %cmake_install
-
 %if %{with dnf5_obsoletes_dnf}
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/dnf
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/yum
@@ -1027,14 +527,11 @@ ln -sr %{buildroot}%{_datadir}/bash-completion/completions/dnf5 %{buildroot}%{_d
         ln -sr $file $dir/${filename/dnf5/dnf}
     done
 %endif
-# Make "dnf-makecache" the "real" unit name, but keep compatibility for playbooks that refer to dnf5-makecache
 mv %{buildroot}%{_unitdir}/dnf5-makecache.service %{buildroot}%{_unitdir}/dnf-makecache.service
 mv %{buildroot}%{_unitdir}/dnf5-makecache.timer %{buildroot}%{_unitdir}/dnf-makecache.timer
 ln -s dnf-makecache.service %{buildroot}%{_unitdir}/dnf5-makecache.service
 ln -s dnf-makecache.timer %{buildroot}%{_unitdir}/dnf5-makecache.timer
 %endif
-
-# own dirs and files that dnf5 creates on runtime
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/libdnf5
 for file in \
     environments.toml groups.toml modules.toml nevras.toml packages.toml \
@@ -1048,20 +545,13 @@ done
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/libdnf5/comps_groups
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/libdnf5/offline
 touch %{buildroot}%{_sysconfdir}/dnf/versionlock.toml
-
-%if 0%{?fedora} || 0%{?rhel} > 10
-ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
-%endif
-
 %if %{with systemd}
 mkdir -p %{buildroot}%{_unitdir}/system-update.target.wants/
 pushd %{buildroot}%{_unitdir}/system-update.target.wants/
   ln -sr ../dnf5-offline-transaction.service
 popd
 %endif
-
 mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
-
 %find_lang dnf5
 %if %{with dnf5_plugins}
 %find_lang dnf5-plugin-automatic
@@ -1092,8 +582,75 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %if %{with plugin_rhsm}
 %find_lang libdnf5-plugin-rhsm
 %endif
-
 %ldconfig_scriptlets
+%oreon_autofiles libdnf5 usr/*/lib*.so.*
+%oreon_autofiles libdnf5-cli usr/*/lib*.so.*
+%oreon_autofiles dnf5-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles libdnf5-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles libdnf5-cli-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles perl-libdnf5 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles perl-libdnf5-cli usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles python3-libdnf5 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles python3-libdnf5-cli usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ruby-libdnf5 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ruby-libdnf5-cli usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles libdnf5-plugin-actions usr/*/lib*.so.*
+%oreon_autofiles libdnf5-plugin-appstream usr/*/lib*.so.*
+%oreon_autofiles libdnf5-plugin-expired-pgp-keys usr/*/lib*.so.*
+%oreon_autofiles libdnf5-plugin-rhsm usr/*/lib*.so.*
+%oreon_autofiles python3-libdnf5-python-plugins-loader usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles libdnf5-plugin-local usr/*/lib*.so.*
+%oreon_autofiles dnf5daemon-client usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles dnf5daemon-server usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles dnf5daemon-server-polkit usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles dnf5-plugins usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/*/lib*.so.* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/*/lib*.so.* usr/*/lib*.so.* usr/*/lib*.so.* usr/*/lib*.so.* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/*/lib*.so.* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+
+%files -f %{oreon_filedir}/main.list
+%files -n libdnf5 -f %{oreon_filedir}/libdnf5.list
+%files -n libdnf5-cli -f %{oreon_filedir}/libdnf5-cli.list
+%files -n dnf5-devel -f %{oreon_filedir}/dnf5-devel.list
+%files -n libdnf5-devel -f %{oreon_filedir}/libdnf5-devel.list
+%files -n libdnf5-cli-devel -f %{oreon_filedir}/libdnf5-cli-devel.list
+%files -n perl-libdnf5 -f %{oreon_filedir}/perl-libdnf5.list
+%files -n perl-libdnf5-cli -f %{oreon_filedir}/perl-libdnf5-cli.list
+%files -n python3-libdnf5 -f %{oreon_filedir}/python3-libdnf5.list
+%files -n python3-libdnf5-cli -f %{oreon_filedir}/python3-libdnf5-cli.list
+%files -n ruby-libdnf5 -f %{oreon_filedir}/ruby-libdnf5.list
+%files -n ruby-libdnf5-cli -f %{oreon_filedir}/ruby-libdnf5-cli.list
+%files -n libdnf5-plugin-actions -f %{oreon_filedir}/libdnf5-plugin-actions.list
+%files -n libdnf5-plugin-appstream -f %{oreon_filedir}/libdnf5-plugin-appstream.list
+%files -n libdnf5-plugin-expired-pgp-keys -f %{oreon_filedir}/libdnf5-plugin-expired-pgp-keys.list
+%files -n libdnf5-plugin-rhsm -f %{oreon_filedir}/libdnf5-plugin-rhsm.list
+%files -n python3-libdnf5-python-plugins-loader -f %{oreon_filedir}/python3-libdnf5-python-plugins-loader.list
+%files -n libdnf5-plugin-local -f %{oreon_filedir}/libdnf5-plugin-local.list
+%files -n dnf5daemon-client -f %{oreon_filedir}/dnf5daemon-client.list
+%files -n dnf5daemon-server -f %{oreon_filedir}/dnf5daemon-server.list
+%files -n dnf5daemon-server-polkit -f %{oreon_filedir}/dnf5daemon-server-polkit.list
+%files -n dnf5-plugins -f %{oreon_filedir}/dnf5-plugins.list
+%files -n dnf5-plugin-automatic -f %{oreon_filedir}/dnf5-plugin-automatic.list
+%files -n dnf5-plugin-manifest -f %{oreon_filedir}/dnf5-plugin-manifest.list
 
 %changelog
+
 %autochangelog
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif
+%endif

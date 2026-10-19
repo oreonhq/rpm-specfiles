@@ -1,28 +1,23 @@
 %global source0_hash 516a099239ad0541598be87025556c878c0d11c6d43e09115d2bb2e24508b6ec
-
 %global short_name igsc
-
 Name:    intel-gsc
 Version: 0.9.5
-Release: %autorelease
-Summary: Intel Graphics System Controller Firmware Update Library (IGSC FUL)
-
+Release:        1%{?dist}
+Summary:        Intel Graphics System Controller Firmware Update Library (IGSC FUL)
 License: Apache-2.0
 URL:     https://github.com/intel/igsc
-Source0: %{url}/archive/V%{version}/%{short_name}-%{version}.tar.gz
+Source0:        https://github.com/intel/%{short_name}/archive/V%{version}/%{short_name}-%{version}.tar.gz
 Patch0:  dont_hardcode_libdir.patch
-
+ExclusiveArch:  x86_64
+# oreon:deps
 BuildRequires:  cmake
+BuildRequires:  doxygen
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  doxygen
+BuildRequires:  intel-metee-devel
 BuildRequires:  python3-sphinx
 BuildRequires:  systemd-devel
-BuildRequires:  intel-metee-devel >= 5.0.0
-
-# Upstream only supports x86_64
-ExclusiveArch:  x86_64
-
+# /oreon:deps
 %description
 The Intel Graphics System Firmware Update Library (IGSC FUL) is
 a pure C low level library that exposes a required API
@@ -45,7 +40,6 @@ Requires:       intel-metee >= 5.0.0
 Summary:        Development headers for igsc
 Requires:       intel-gsc = %{version}-%{release}
 Requires:       intel-metee-devel >= 5.0.0
-
 %description    devel
 The Intel Graphics System Firmware Update Library (IGSC FUL) is
 a pure C low level library that exposes a required API
@@ -62,31 +56,24 @@ both graphic device and supplied firmware or OPROM image as well as
 function for firmware update of those images to the device.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{short_name}-%{version}
 
 %build
+
 %cmake \
    -DCMAKE_BUILD_TYPE=Release \
    -DENABLE_DOCS=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE.txt
-%{_bindir}/igsc
-%{_libdir}/libigsc.so.%{version}
-%{_libdir}/libigsc.so.0
-
-%files devel
-%{_libdir}/libigsc.so
-%{_libdir}/cmake/igsc/
-%{_includedir}/igsc_lib.h
-%{_docdir}/%{short_name}
-%{_mandir}/man3/*
+%files -f %{oreon_filedir}/main.list
+%files -n intel-gsc-devel -f %{oreon_filedir}/intel-gsc-devel.list
 
 %changelog
+
 %autochangelog

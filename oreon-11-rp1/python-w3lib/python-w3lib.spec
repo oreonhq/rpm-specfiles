@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 8dd69ee39ff6398d708c793abc779c334a69bac7cee1cdf71736c669ed6be864
 Name:           python-w3lib
 Version:        2.4.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Library of web-related functions
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/scrapy/w3lib
-Source:         %{pypi_source w3lib}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/w3lib/w3lib-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'w3lib' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(hatchling) >= 1.27.0
+Requires:       python3-w3lib = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-w3lib
-Summary:        %{summary}
-
-%description -n python3-w3lib %_description
-
+Summary:        Library of web-related functions
+%description -n python3-w3lib
 
 %prep
-%autosetup -p1 -n w3lib-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir w3lib-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-w3lib usr/lib/python3*/site-packages/w3lib* usr/lib64/python3*/site-packages/w3lib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/w3lib* usr/lib64/python3*/site-packages/w3lib* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-w3lib -f %{pyproject_files}
+%files
+%files -n python3-w3lib -f %{oreon_filedir}/python3-w3lib.list
 
 %changelog
+
 %autochangelog

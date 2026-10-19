@@ -1,32 +1,23 @@
 %global source0_hash 1a000a9c42ef0a561aa5b797df745f072a48a9d87bd65ec24a107e9e782927e0
-
 %global bits %{__isa_bits}
 %global debug_package %{nil}
-
-# jansi-native-1.8 tag is missing from git
-# https://github.com/fusesource/jansi-native/commit/5015ad0
 %global commit 5015ad023a55785dbe6ad19cc786c0533387feff
-
 Name:           jansi-native
 Version:        1.8
-Release:        24%{?dist}
+Release:        1%{?dist}
 Summary:        Jansi Native implements the JNI Libraries used by the Jansi project
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            http://jansi.fusesource.org/
-Source0:        https://github.com/fusesource/jansi-native/archive/refs/tags/%{commit}.tar.gz#/jansi-native-%{version}.tar.gz
-
+Source0:        https://github.com/fusesource/%{name}/archive/refs/tags/%{commit}.tar.gz#/%{name}-%{version}.tar.gz
+ExclusiveArch:  %{java_arches}
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.fusesource:fusesource-pom:pom:)
-# jansi-native is embedded in jansi 2.x
+BuildRequires:  mvn(org.fusesource.hawtjni:hawtjni-runtime)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
-BuildRequires:  mvn(org.fusesource.hawtjni:hawtjni-runtime) >= 1.9-2
-# jansi-native provides JNI libraries for use by the JAVA Jansi project,
-# so it is only necessary on java_arches
-ExclusiveArch:  %{java_arches}
-
+BuildRequires:  mvn(org.fusesource:fusesource-pom:pom:)
+# /oreon:deps
 %description
 Jansi is a small java library that allows you to use ANSI escape sequences
 in your Java console applications. It implements ANSI support on platforms
@@ -36,11 +27,11 @@ when output is being sent to output devices which cannot support ANSI sequences.
 %package javadoc
 Summary:          Javadocs for %{name}
 BuildArch:        noarch
-
 %description javadoc
 This package contains the API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n jansi-native-%{commit}
 
@@ -64,25 +55,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_xpath_remove "pom:plugin[pom:artifactId='hawtjni-maven-plugin']"
 
 %build
-%mvn_build
 
-# copy libjansi.so
+%mvn_build
 so_dir=target/generated-sources/hawtjni/lib/META-INF/native/linux%{bits}/
 mkdir -p $so_dir
 cp -a %{_prefix}/lib/jansi/libjansi.so $so_dir
-
 %mvn_build -- -Dplatform=linux%{bits}
-
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc readme.md changelog.md
-%license license.txt
-
-%files javadoc -f .mfiles-javadoc
-%license license.txt
+%files -f %{oreon_filedir}/main.list
+%files -n jansi-native-javadoc -f %{oreon_filedir}/jansi-native-javadoc.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8-24
 - Prepare for Oreon 11 (RP1)

@@ -1,23 +1,41 @@
-%global source0_hash 0117543796804211447176b3dad24cb6a9041aebc94e9ae1b0aa21486baf7032
-
+%global source0_hash f66bd0aba3a5b46a2d29b9fac004842b81822c750ee39ca96ea627d8111927ad
 %bcond_without test
-
 Name:           py3status
 Version:        3.64
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        An extensible i3status wrapper written in python
-
 License:        BSD-3-Clause
 URL:            https://github.com/ultrabug/py3status
 Source0:        https://github.com/ultrabug/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-
 BuildArch:      noarch
-BuildRequires:  python3-devel
 %if %{with test}
-BuildRequires:  python3-pytest
 %endif
 Requires:       i3status
 Obsoletes:      %{name}-doc < 3.44-1
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatchling) >= 1.26.1
+Requires:       python3-py3status = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-py3status+dbus
+Summary:        Metapackage for python3-py3status dbus extras
+Requires:       python3-py3status = %{version}-%{release}
+Requires:       python3dist(dbus-python) == 1.3.2
+Requires:       python3dist(pygobject) == 3.46.0
+Provides:       python3dist(py3status[dbus]) = %{version}-%{release}
+
+%description -n python3-py3status+dbus
+Metapackage for python3-py3status dbus extras.
+
+%package -n       python3-py3status+udev
+Summary:        Metapackage for python3-py3status udev extras
+Requires:       python3-py3status = %{version}-%{release}
+Requires:       python3dist(pyudev) >= 0.21.0
+Provides:       python3dist(py3status[udev]) = %{version}-%{release}
+
+%description -n python3-py3status+udev
+Metapackage for python3-py3status udev extras.
 
 %description
 Using py3status, you can take control of your i3bar easily by:
@@ -26,10 +44,8 @@ Using py3status, you can take control of your i3bar easily by:
 - seeing your clock tick every second whatever your i3status interval
 No extra configuration file needed, just install & enjoy !
 
-%pyproject_extras_subpkg -n %{name} dbus
-%pyproject_extras_subpkg -n %{name} udev
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}
@@ -37,27 +53,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e 's/dbus-python\s*==\s*/dbus-python >= /' pyproject.toml
 sed -i -e 's/PyGObject\s*==\s*/PyGObject >= /' pyproject.toml
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-
-%pyproject_save_files %{name}
-
+%oreon_autofiles main
 %if %{with test}
 %check
+
 %pytest
 %endif
-
-%files -f %{pyproject_files}
-%license LICENSE
-%doc README.md CHANGELOG
-%{_bindir}/py3-cmd
-%{_bindir}/py3status
+%files
 
 %changelog
+
 %autochangelog

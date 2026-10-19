@@ -1,94 +1,59 @@
 %global source0_hash 45bd63e3791eaef421a7e0172ce26f5df8da5be5f5d1052cb23be72e25685208
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    kcalc 
-Summary: Scientific Calculator 
+Summary:        Scientific Calculator
 Version: 26.04.3
-Release: 1%{?dist}
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/utils/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-## upstreamable patches
-# fix arithmetic fault in mod, factorial
-## FIXME: review if still needed, rebase, upstream -- rdieter
-#Patch100: kcalc-4.9.90-misc.patch
-
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-
-BuildRequires: pkgconfig(Qt6Core)
-BuildRequires: pkgconfig(Qt6Widgets)
-BuildRequires: pkgconfig(Qt6Core5Compat)
-
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6Crash)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6ConfigWidgets)
-BuildRequires: cmake(KF6GuiAddons)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6Notifications)
-BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KF6DocTools)
-BuildRequires: cmake(KF6IconThemes)
-
-BuildRequires: gmp-devel
-BuildRequires: mpfr-devel
-BuildRequires: libmpc-devel
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gmp-devel
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  libmpc-devel
+BuildRequires:  mpfr-devel
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  pkgconfig(Qt6Core5Compat)
+BuildRequires:  pkgconfig(Qt6Widgets)
+# /oreon:deps
 %description
 KCalc is a calculator which offers many more mathematical
 functions than meet the eye on a first glance.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6 %{?flatpak:-DINSTALL_ICONS=ON}
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html --with-man
-
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml ||:
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop ||:
-
-
-%files -f %{name}.lang
-%license LICENSES/*
-#doc README
-%{_kf6_bindir}/%{name}
-%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-%{_kf6_datadir}/kglobalaccel/org.kde.%{name}.desktop
-%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
-%{_kf6_datadir}/kconf_update/%{name}*
-%{_kf6_datadir}/config.kcfg/%{name}.kcfg
-%if 0%{?flatpak}
-%{_kf6_datadir}/icons/hicolor/*/*/accessories-calculator.*
-%endif
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

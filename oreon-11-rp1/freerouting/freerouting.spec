@@ -1,31 +1,25 @@
 %global source0_hash 81332ab624736a2f9f71ec14cf3b24610c98dceeeb816f5635d4479307f2ad1a
-
 Name:           freerouting
 Version:        2.0.1
 Release:        1%{?dist}
 Summary:        Circuit Board Routing Tool
-
-# Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only
 URL:            http://www.freerouting.org/
 Source0:        https://freerouting.org/freerouting/changelog/freeRouting-%{version}.tar.gz
-
 Source1:        freerouting.xml
 Source2:        freerouting.desktop
 Source3:        freerouting.svg
 Source4:        freerouting.appdata.xml
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-BuildRequires:  java-25-devel >= 1:1.8
-BuildRequires:  jpackage-utils
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-
 Requires:       java-25 >= 1:1.8
 Requires:       jpackage-utils
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  java-25-devel
+BuildRequires:  jpackage-utils
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 FreeRouting is a routing software intended but not limited for Printed Circuit
 Boards (PCB). By using the standard Specctra or Electra DSN interface it
@@ -37,43 +31,29 @@ under the GPL in 2014. From 2015 FreeRouting is included in the LayoutEditor
 packages and its source code is maintained by its team.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n freeRouting
 
 %build
+
 find -name '*.java' | \
     xargs javac -encoding ISO-8859-1 -Xlint:unchecked -Xlint:deprecation
 find -name '*.class' -o -wholename '*/resources/*' | \
     xargs jar cf %{name}.jar
-
 %install
-# install mimeinfo
 install -p -m 0644 -D %{SOURCE1} %{buildroot}%{_datadir}/mime/packages/%{name}.xml
-
-# install .desktop and icon files
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE2}
 install -p -m 0644 -D %{SOURCE3} %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-
-# install .jar file
 install -p -m 0644 -D %{name}.jar %{buildroot}%{_javadir}/%{name}.jar
-
-# install wrapper script
 %jpackage_script gui.MainApplication "" "" freerouting freerouting true
-
-# install and AppStream metadata
 install -p -m 0644 -D %{SOURCE4} %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc README.md
-%{_javadir}/%{name}.jar
-%{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/mime/packages/%{name}.xml
-%{_datadir}/metainfo/%{name}.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

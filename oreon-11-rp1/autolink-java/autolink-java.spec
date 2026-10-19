@@ -1,25 +1,22 @@
 %global source0_hash 0c7c85680ffc23bbbb55167385424c6157a55e766e1321566c46de7a5be56da3
-
 Name:           autolink-java
 Version:        0.12.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java library to extract links from plain text
-
 License:        MIT
 URL:            https://github.com/robinst/autolink-java
 VCS:            git:%{url}.git
-Source:         %{url}/archive/autolink-%{version}.tar.gz
-
+Source0:        https://github.com/robinst/%{name}/archive/autolink-%{version}.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  noarch %{java_arches}
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-compiler-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-jar-plugin)
 BuildRequires:  mvn(org.apiguardian:apiguardian-api)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
-
+# /oreon:deps
 %description
 Autolink is a Java library to extract links such as URLs and email addresses
 from plain text.  It's smart about where a link ends, such as with trailing
@@ -28,6 +25,7 @@ punctuation.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-autolink-%{version}
@@ -46,14 +44,14 @@ rm src/test/java/org/nibor/autolink/AutolinkBenchmark.java
 %pom_add_dep org.apiguardian:apiguardian-api:1.1.2:test
 
 %build
-%mvn_build
 
+%mvn_build
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc CHANGELOG.md README.md
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

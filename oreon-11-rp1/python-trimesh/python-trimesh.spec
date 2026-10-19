@@ -1,137 +1,102 @@
-%global source0_hash 7a0d25b4ae4897f1723e7b78c3b68074b2138fe3a850f7957e9322db04bc4ac1
-
+%global source0_hash c3132a0ed9032dfe5d256ab74a0870e75a39d148e6e4a7e46c26fcda9001db10
 %bcond blender 1
 %bcond skimage 1
-
 Name:           python-trimesh
 Version:        5.1.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Import, export, process, analyze and view triangular meshes
-
-# The entire source is (SPDX) MIT, except:
-#   - trimesh/transformations.py is BSD-3-Clause
-# Additionally, the following are under the same (SPDX) MIT license as the
-# overall source, but with a different copyright statement:
-#   - trimesh/viewer/trackball.py
 License:        MIT AND BSD-3-Clause
 URL:            https://trimsh.org
 Source0:        https://github.com/mikedh/trimesh/archive/%{version}/trimesh-%{version}.tar.gz
-# Man page hand-written for Fedora in groff_man(7) format based on --help
-# output and on the docstring of trimesh.__main__.main
 Source1:        trimesh.1
-
-# With v4, [all] = [easy,recommend,test,test_more,deprecated].
-
-# The combination of an arched package with only noarch binary packages makes
-# it easier for us to detect arch-dependent test failures, since the tests will
-# always be run on every platform, and easier for us to skip failing tests if
-# necessary, since we can be sure that %%ifarch macros work as expected.
-#
-# Since the package still contains no compiled machine code, we still have no
-# debuginfo.
 %global debug_package %{nil}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  tomcli
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-trimesh = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-trimesh+easy
+Summary:        Metapackage for python3-trimesh easy extras
+Requires:       python3-trimesh = %{version}-%{release}
+Requires:       python3dist(manifold3d) >= 2.3.0
+Requires:       python3dist(mapbox-earcut) >= 1.0.2
+Provides:       python3dist(trimesh[easy]) = %{version}-%{release}
 
-# Run tests in parallel:
-BuildRequires:  %{py3_dist pytest-xdist}
+%description -n python3-trimesh+easy
+Metapackage for python3-trimesh easy extras.
 
-# Command-line tools that are (optional) test dependencies:
-# tests/test_gltf.py
-# Not yet packaged: https://github.com/KhronosGroup/glTF-Validator
-#BuildRequires:  /usr/bin/gltf_validator
+%package -n       python3-trimesh+recommend
+Summary:        Metapackage for python3-trimesh recommend extras
+Requires:       python3-trimesh = %{version}-%{release}
+Requires:       python3dist(pyglet) < 2
+Provides:       python3dist(trimesh[recommend]) = %{version}-%{release}
 
-%global _description %{expand:
-Trimesh is a pure Python library for loading and using triangular meshes with
-an emphasis on watertight meshes. The goal of the library is to provide a fully
-featured and well tested Trimesh object which allows for easy manipulation and
-analysis, in the style of the Polygon object in the Shapely library.}
+%description -n python3-trimesh+recommend
+Metapackage for python3-trimesh recommend extras.
 
-%description %{_description}
+%package -n       python3-trimesh+test
+Summary:        Metapackage for python3-trimesh test extras
+Requires:       python3-trimesh = %{version}-%{release}
+Provides:       python3dist(trimesh[test]) = %{version}-%{release}
+
+%description -n python3-trimesh+test
+Metapackage for python3-trimesh test extras.
+
+%package -n       python3-trimesh+test_more
+Summary:        Metapackage for python3-trimesh test_more extras
+Requires:       python3-trimesh = %{version}-%{release}
+Requires:       python3dist(dracopy) >= 1.7.0
+Provides:       python3dist(trimesh[test_more]) = %{version}-%{release}
+
+%description -n python3-trimesh+test_more
+Metapackage for python3-trimesh test_more extras.
+
+%package -n       python3-trimesh+deprecated
+Summary:        Metapackage for python3-trimesh deprecated extras
+Requires:       python3-trimesh = %{version}-%{release}
+Provides:       python3dist(trimesh[deprecated]) = %{version}-%{release}
+
+%description -n python3-trimesh+deprecated
+Metapackage for python3-trimesh deprecated extras.
+
+%package -n       python3-trimesh+all
+Summary:        Metapackage for python3-trimesh all extras
+Requires:       python3-trimesh = %{version}-%{release}
+Provides:       python3dist(trimesh[all]) = %{version}-%{release}
+
+%description -n python3-trimesh+all
+Metapackage for python3-trimesh all extras.
+
+%description
 
 %package -n     python3-trimesh
-Summary:        %{summary}
+Summary:        Import, export, process, analyze and view triangular meshes
 BuildArch:      noarch
-
 Recommends:     python3-trimesh+easy = %{version}-%{release}
 Recommends:     python3-trimesh+recommend = %{version}-%{release}
-
-# The source trimesh-4.10.0/trimesh/viewer/trackball.py is copied from an
-# unspecified version of pyrender.
 Provides:       bundled(python3dist(pyrender))
-
-# The [recommends] extra was renamed to [recommend] for v4.
 Obsoletes:      python3-trimesh+recommends < 4.0.0~~dev0-1
-# In v4, the [all] extra became the same as [easy,recommend,test]. Since we
-# don’t want to package the [test] extra, we no longer package [all]. If any
-# package depends on it (unlikely), the dependency should be changed to
-# [easy,recommend], and it should be suggested to upstream that this is really
-# what they needed anyway.
 Obsoletes:      python3-trimesh+all < 4.0.0~~dev0-1
-
-# A number of external command-line executables provide optional functionality.
-# We choose to make these weak dependencies (Recommends). Hints (Suggests)
-# would also be justifiable—although it should be noted that dnf does not do
-# anything with hints. Any weak dependencies should also be BuildRequires so
-# that their satisfiability is verified at build time; some may also enable
-# additional tests.
-#
-# trimesh.exchange.binvox
-# Cannot be packaged (closed-source): https://www.patrickmin.com/binvox/
-#BuildRequires:  /usr/bin/binvox
-#Recommends:     /usr/bin/binvox
 %if %{with blender}
-# trimesh.interfaces.blender
-# Since 5.0.0, Blender doesn’t support big-endian architectures.
-#
-# This seems to work fine at least on primary arches, but not on riscv64:
-#   (/usr/bin/blender or python3(s390-64))
-# Some kind of bug with rich/boolean dependencies + file paths is suspected,
-# perhaps in libsolv, but not characterized well enough to file a useful bug
-# report. As a workaround, this works just fine.
 BuildRequires:  (blender or python3(s390-64))
 Recommends:     (blender or python3(s390-64))
 %endif
-# trimesh.graph
 BuildRequires:  /usr/bin/dot
 Recommends:     /usr/bin/dot
-# trimesh.exchange.ply
-# On s390x, ExportTest.test_export fails with:
-#   subprocess.CalledProcessError: Command '['/usr/bin/draco_encoder', '-qp',
-#   '28', '-i', '/tmp/tmpd1uz557y.ply', '-o', '/tmp/tmpkbowi3es.drc']' died
-#   with <Signals.SIGABRT: 6>.
-# and stderr is:
-#   terminate called after throwing an instance of 'std::bad_alloc'
-#     what():  std::bad_alloc
-# See also:
-#   gtest failure on s390x
-#   https://bugzilla.redhat.com/show_bug.cgi?id=2165173
-# We conclude that draco is not necessarily usable on this platform.
-# The executables we need are: /usr/bin/draco_decoder, /usr/bin/draco_encoder
 BuildRequires:  (draco or python3(s390-64))
 Recommends:     (draco or python3(s390-64))
-# “openscad”: trimesh.interfaces.scad
-# Library would also recognize “OpenSCAD”
 BuildRequires:  /usr/bin/openscad
 Recommends:     /usr/bin/openscad
-
-# This probably should be in the [easy] extra but isn’t in the metadata at all;
-# see README.rst and trimesh/ray/. However, it cannot be packaged until it
-# supports the current version (3.x) of embree
-# (https://github.com/scopatz/pyembree/issues/28).
-#Recommends:     python3dist(pyembree)
-
-%description -n python3-trimesh %{_description}
+# oreon:reqs
+Requires:       python3dist(numpy) >= 1.21
+# /oreon:reqs
+%description -n python3-trimesh
 
 # We skip packaging the “deprecated” extra, since we no longer wish to maintain
 # python-openctm. We therefore cannot package the “all” extra, either.
-%pyproject_extras_subpkg -n python3-trimesh -a easy
 # Note that the "recommend" extra does have an arch-dependent dependency.
-%pyproject_extras_subpkg -n python3-trimesh recommend
 
 # We elect not to build a documentation package, for the following reasons:
 #
@@ -153,6 +118,7 @@ Recommends:     /usr/bin/openscad
 #     documentation is not well-suited to building as a PDF instead of HTML.
 
 %prep
+
 %autosetup -p1
 # Stub out unavailable pyinstrument test dependency; we don’t really need to do
 # profiling anyway. Note that this does mean that API function
@@ -235,86 +201,49 @@ tomcli set pyproject.toml lists delitem \
 
 %install
 %pyproject_install
-%pyproject_save_files -l trimesh
-
 install -t '%{buildroot}%{_mandir}/man1' -p -m 0644 -D '%{SOURCE1}'
+%oreon_autofiles python3-trimesh usr/lib/python3*/site-packages/trimesh* usr/lib64/python3*/site-packages/trimesh* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/trimesh* usr/lib64/python3*/site-packages/trimesh* usr/bin/*
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %check
-# Some dependencies are unavailable; see the prep section above.
-# trimesh.ray.ray_pyembree requires embreex or pyembree.
-# trimesh.viewer.widget requires glooey.
-# trimesh.viewer.windowed requires pyglet.
+
 %{pyproject_check_import \
   -e trimesh.ray.ray_pyembree \
   -e trimesh.viewer.widget \
   -e trimesh.viewer.windowed \
 }
-
 while read -r t
 do
   k="${k-}${k+ and }not ($(sed -r 's/::/ and /' <<<"${t}"))"
 done < <(sed -r '/^[[:blank:]]*($|#)/d' <<'EOF'
 %ifnarch x86_64
-# CacheTest.test_hash fails, or may fail, because xxhash is not faster than CRC
-# and/or MD5.
-#
-# This is not as intended, and upstream might or might not care, but it’s only
-# a performance defect, so we just skip the test here.
 CacheTest::test_hash
 %endif
-
 %ifarch s390x
-# Several test failures remain on s390x. For now, we choose to skip these tests
-# rather than excluding the architecture, even though they certainly represent
-# real defects.
-#
-# https://github.com/mikedh/trimesh/issues/1351
-# https://github.com/mikedh/trimesh/files/7385479/test-failures.log
 GLTFTest::test_export_custom_attributes
 OBJTest::test_vertex_color
 PermutateTest::test_permutate
 PlyTest::test_face_attributes
 PlyTest::test_uv_export
 PlyTest::test_vertex_attributes
-# Regressions in test_boolean.py with Blender 4.2.0
-# https://github.com/mikedh/trimesh/issues/2267
-# Fixed in trimesh 4.4.7, except on s390x:
-# https://github.com/mikedh/trimesh/issues/2267#issuecomment-2302365583
-# https://github.com/mikedh/trimesh/issues/2267#issuecomment-2414122193
 test_boolean
 test_multiple
 test_multiple_difference
 %endif
-
-# This has been observed failing on at least x86_64, ppc64le, and s390x.
-# https://github.com/mikedh/trimesh/issues/1351#issuecomment-2964820046
-# https://github.com/mikedh/trimesh/issues/1351#issuecomment-3016671094
 test_data_model
-
-# This test fails if it doesn’t finish within 30 seconds, and executing it in
-# parallel with other tests tends to slow it down too much. We exclude it here,
-# then run it serially on its own.
 test_obb_mesh_large
-
-# Hangs flakily since 4.10.0; cannot reproduce in a git checkout
-# tests/test_primitives.py::test_primitives
-# (Unfortunately, there are other test called test_primitives that this will
-# also skip.)
 test_primitives
 EOF
 )
-
 export PYTHONPATH="${PWD}/_stub:%{buildroot}%{python3_sitelib}"
 %pytest -v -k "${k-}" -n auto
 %pytest -v -k 'test_obb_mesh_large'
-
-%files -n python3-trimesh -f %{pyproject_files}
-%doc README.md
-%{_bindir}/trimesh
-%{_mandir}/man1/trimesh.1*
+%files
+%files -n python3-trimesh -f %{oreon_filedir}/python3-trimesh.list
 
 %changelog
+
 %autochangelog

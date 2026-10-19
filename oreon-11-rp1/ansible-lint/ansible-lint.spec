@@ -1,39 +1,35 @@
-%global source0_hash dd44678ac5cdcbb282b159c4025855f6569b3a6b432df68045a8abe614e14494
-
+%global source0_hash 75737f16e5e5f003101baf519612e06e1785bb8cba0e576783deef52a142c81a
 %global archive_name ansible-lint
 %global lib_name ansiblelint
-
 Name:           %{archive_name}
 Epoch:          1
 Version:        26.9.0
 Release:        1%{?dist}
 Summary:        Best practices checker for Ansible
-
-# README file says its just GPLv3
 License:        GPL-3.0-only
 URL:            https://github.com/ansible/ansible-lint
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{archive_name}-%{version}.tar.gz
-
+Source0:        https://github.com/ansible/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:	pyproject-rpm-macros
-# for check section
-BuildRequires:  python3dist(pytest)
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 65.3.0
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 7.0.5
+Requires:       python3-ansible-lint = %{version}-%{release}
+# /oreon:deps
 %description
 Checks playbooks for practices and behavior that could potentially be improved.
 
 %package -n python3-%{archive_name}
-Summary:        %{summary}
+Summary:        Best practices checker for Ansible
 Obsoletes:      python2-%{archive_name} < 3.4.23-6
 Provides:       %{archive_name} = %{version}-%{release}
-
-# Finally fixing this https://bugzilla.redhat.com/show_bug.cgi?id=1949362
 Requires:       /usr/bin/ansible
-
 %description  -n python3-%{archive_name}
 Python3 module for ansible-lint.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{archive_name}-%{version}
@@ -41,28 +37,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # Fedora's ansible-core is 2.18.9 version currently
 sed -i '37d' pyproject.toml
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-# On newer releases, which only have Python 3, you will get:
-#   ansible-lint => Python 3
-#   ansible-lint-3 => Python 3 (to avoid breaking anyone's scripts)
 ln -sr %{buildroot}%{_bindir}/%{name}{,-3}
-%pyproject_save_files %{lib_name}
+%oreon_autofiles main usr/lib/python3*/site-packages/ansible_lint* usr/lib64/python3*/site-packages/ansible_lint* usr/bin/*
 
 %check
-%pyproject_check_import
 
-%files -n python3-%{archive_name} -f %{pyproject_files}
-%doc README.md examples
-%license COPYING
-%{_bindir}/%{name}
-%{_bindir}/%{name}-3
+%pyproject_check_import
+%files
+%files -n python3-ansible-lint -f %{oreon_filedir}/python3-ansible-lint.list
 
 %changelog
+
 %autochangelog

@@ -1,40 +1,33 @@
 %global source0_hash 91f0eb6a471637cd16877be59947048c90912ea80495f78f8c2d4f465f12d6a0
-
 %global pkgname thermal_daemon
-
 %bcond qt %[%{undefined rhel} || 0%{?rhel} < 10]
-
 Name:		thermald
 Version:	2.15.10
-Release:	%autorelease
-Summary:	Thermal Management daemon
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Thermal Management daemon
 License:	GPL-2.0-or-later
 URL:		https://github.com/intel/%{pkgname}
 Source0:        https://github.com/intel/thermal_daemon/archive/refs/tags/v%{version}.tar.gz#/thermald-%{version}.tar.gz
-
-# No cpuid.h on other arches.
 ExclusiveArch:	%{ix86} x86_64
-
-BuildRequires:	make
-BuildRequires:	autoconf autoconf-archive
-BuildRequires:	automake
-BuildRequires:	desktop-file-utils
-BuildRequires:	gcc-c++
-BuildRequires:	glib2-devel
-BuildRequires:	libxml2-devel
-BuildRequires:	systemd-rpm-macros
-BuildRequires:  upower-devel
-BuildRequires:  libevdev-devel
-BuildRequires:  gtk-doc
-
 Requires:	dbus%{?_isa}
-
 Requires(pre):	glibc-common
-
 %{?systemd_requires}
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  autoconf-archive
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  glib2-devel
+BuildRequires:  gtk-doc
+BuildRequires:  libevdev-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  qcustomplot-qt5-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  upower-devel
+# /oreon:deps
 %description
 %{name} monitors and controls platform temperature.
 
@@ -42,19 +35,14 @@ Thermal issues are important to handle proactively to reduce performance
 impact.  %{name} uses the existing Linux kernel infrastructure and can
 be easily enhanced.
 
-
 %if %{with qt}
 %package monitor
 Summary:	Application for monitoring %{name}
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:	GPL-3.0-or-later
-
 BuildRequires:	qcustomplot-qt5-devel
 BuildRequires:	qt5-qtbase-devel
-
 Requires:	hicolor-icon-theme
 Requires:	%{name}%{?_isa}		== %{version}-%{release}
-
 %description monitor
 This package contains an Application to monitor %{name} for system
 developers who want to enable application developers and their
@@ -63,8 +51,8 @@ supporting optimal performance in desktop, clam-shell, mobile and
 embedded devices.
 %endif
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{pkgname}-%{version} -p 1
 
@@ -159,17 +147,14 @@ cat >thermald.sysusers.conf <<EOF
 g power -
 EOF
 
-
 %build
+
 %configure									\
 	--with-systemdsystemunitdir=%{_unitdir}					\
 	--disable-option-checking						\
 	--disable-silent-rules
-
 %make_build
-
 %if %{with qt}
-# Build the monitor-app.
 pushd tools/thermal_monitor
 sed -i -e 's/QCustomPlot/qcustomplot-qt5/' ThermalMonitor.pro
 mkdir -p %{_target_platform}
@@ -179,23 +164,15 @@ pushd %{_target_platform}
 popd
 popd
 %endif
-
-
 %install
 %make_install
-
-# Install management-script.
 install -Dpm 0755 tools/thermald_set_pref.sh				\
 	%{buildroot}%{_bindir}/%{name}-set-pref
-
-# Setup tmpfiles.d
 install -Dpm 0644 fedora_addons/%{name}.conf %{buildroot}%{_tmpfilesdir}/%{name}.conf
 install -dm 0755 %{buildroot}%{_rundir}/%{name}
 /bin/echo "%{name}_pid" > %{buildroot}%{_rundir}/%{name}/%{name}.pid
 chmod -c 0644 %{buildroot}%{_rundir}/%{name}/%{name}.pid
-
 %if %{with qt}
-# Install the monitor-app.
 install -Dpm 0755 tools/thermal_monitor/%{_target_platform}/ThermalMonitor	\
 	%{buildroot}%{_bindir}/ThermalMonitor
 install -Dpm 0644 fedora_addons/%{name}-monitor.desktop			\
@@ -203,56 +180,27 @@ install -Dpm 0644 fedora_addons/%{name}-monitor.desktop			\
 install -Dpm 0644 fedora_addons/%{name}-monitor.svg			\
 	%{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}-monitor.svg
 %endif
-
 install -m0644 -D thermald.sysusers.conf %{buildroot}%{_sysusersdir}/thermald.conf
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with qt}
 %{_bindir}/desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %endif
-
-
-
-
 %post
+
 %systemd_post thermald.service
-
-
 %preun
+
 %systemd_preun thermald.service
-
-
 %postun
+
 %systemd_postun_with_restart thermald.service
-
-%files
-%license COPYING
-%config(noreplace) %{_sysconfdir}/%{name}
-%doc README.txt thermal_daemon_usage.txt
-%ghost %dir %{_rundir}/%{name}
-%ghost %{_rundir}/%{name}/%{name}.pid
-%{_bindir}/%{name}-set-pref
-%{_datadir}/dbus-1/system-services/org.freedesktop.%{name}.service
-%{_datadir}/dbus-1/system.d/org.freedesktop.%{name}.conf
-%{_mandir}/man5/thermal-conf.xml.5*
-%{_mandir}/man8/%{name}.8*
-%{_sbindir}/%{name}
-%{_tmpfilesdir}/%{name}.conf
-%{_unitdir}/%{name}.service
-%{_sysusersdir}/thermald.conf
-
-
-%if %{with qt}
-%files monitor
-%doc fedora_addons/%{name}-monitor.ReadMe.txt
-%license tools/thermal_monitor/COPYING
-%{_bindir}/ThermalMonitor
-%{_datadir}/applications/%{name}-monitor.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{name}-monitor.svg
-%endif
-
+%files -f %{oreon_filedir}/main.list
+%files -n thermald-monitor -f %{oreon_filedir}/thermald-monitor.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.9-1
 - Import

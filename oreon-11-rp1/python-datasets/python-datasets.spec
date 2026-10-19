@@ -1,62 +1,43 @@
-%global source0_hash none
-
+%global source0_hash ce22bb851efd7494f08aad33b940803784434f6e77763d00679a0dc45fcf686a
 Name:           python-datasets
 Version:        5.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        HuggingFace community-driven open-source library of datasets
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/huggingface/datasets
-Source:         %{pypi_source datasets}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/datasets/datasets-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'datasets' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-datasets = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-datasets
-Summary:        %{summary}
-
-%description -n python3-datasets %_description
+Summary:        HuggingFace community-driven open-source library of datasets
+%description -n python3-datasets
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-datasets audio,benchmarks,dev,docs,iceberg,jax,mesh,nibabel,pdfs,quality,streaming,tensorflow,tensorflow-gpu,tests,tests-numpy2,torch,vision
-
 
 %prep
-%autosetup -p1 -n datasets-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir datasets-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-datasets usr/lib/python3*/site-packages/datasets* usr/lib64/python3*/site-packages/datasets* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/datasets* usr/lib64/python3*/site-packages/datasets* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-datasets -f %{pyproject_files}
-%{_bindir}/datasets-cli
+%files
+%files -n python3-datasets -f %{oreon_filedir}/python3-datasets.list
 
 %changelog
+
 %autochangelog

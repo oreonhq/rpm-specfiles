@@ -1,71 +1,48 @@
 %global source0_hash f816031d6fa024a7ff8cf768205ff24c528ae2c69eca86ad7d7b5ddab4e16022
-
-# This breaks basic usage of the package:
-# ocamlfind ocamlopt -package labltk tktest.ml -linkpkg -o tktest
-# gcc: fatal error: environment variable ‘RPM_ARCH’ not defined
 %undefine _package_note_flags
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %global giturl https://github.com/garrigue/labltk
-
 Name:          ocaml-labltk
 Version:       8.06.16
-Release:       1%{?dist}
-
-Summary:       Tcl/Tk interface for OCaml
-
+Release:        1%{?dist}
+Summary:        Tcl/Tk interface for OCaml
 License:       LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
-
 URL:           https://garrigue.github.io/labltk/
 VCS:           git:%{giturl}.git
 Source0:        https://github.com/garrigue/labltk/archive/refs/tags/8.06.16.tar.gz#/labltk-8.06.15.tar.gz
-
-# This adds debugging (-g) everywhere.
 Patch1:        labltk-8.06.11-enable-debugging.patch
-
-# Resolve an issue with ./configure and Tcl detection.
 Patch2:        labltk-8.06.12-use-fpic-configure.patch
-
-BuildRequires: make
-BuildRequires: ocaml
-BuildRequires: ocaml-ocamldoc
-BuildRequires: ocaml-rpm-macros
-BuildRequires: tcl-devel, tk-devel
-
 %global _desc %{expand:
 labltk or mlTk is a library for interfacing OCaml with the scripting
 language Tcl/Tk (all versions since 8.0.3, but no betas).}
-
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  ocaml
+BuildRequires:  ocaml-ocamldoc
+BuildRequires:  ocaml-rpm-macros
+BuildRequires:  tcl-devel
+BuildRequires:  tk-devel
+# /oreon:deps
 %description %_desc
-
 
 %package devel
 Summary:       Tcl/Tk interface for OCaml
-
 Requires:      %{name}%{?_isa} = %{version}-%{release}
 Requires:      tcl-devel%{?_isa}
 Requires:      tk-devel%{?_isa}
-
-
 %description devel %_desc
 
 This package contains the development files.
 
-
 %package doc
 Summary:       Documentation for labltk
 BuildArch:     noarch
-
-
 %description doc %_desc
 
 This package contains the API reference.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n labltk-%{version} -p1
 
@@ -81,13 +58,10 @@ echo -e 'all:\ninstall:\n' > browser/Makefile
 # failure of the configure script.  We don't need linker flags for this step.
 sed -i 's/^cclibs=.*/cclibs=/' configure
 
-
 %build
+
 ./configure -verbose
-
-# Build does not work in parallel.
 unset MAKEFLAGS
-
 %ifarch %{ocaml_native_compiler}
 make all opt \
      SHAREDCCCOMPOPTS='%{build_cflags} -fPIC' \
@@ -95,17 +69,12 @@ make all opt \
 %else
 make byte
 %endif
-
-# Build documentation
-# make apiref does not work
 MLIS=$(ls -1d labltk/*.mli | grep -Fv _tkgen.mli)
 mkdir apiref
 /usr/bin/ocamldoc -I +unix -I +threads -I support -I labltk -I camltk \
   support/fileevent.mli support/support.mli support/textvariable.mli \
   support/timer.mli support/tkthread.mli support/widget.mli $MLIS \
   labltk/tk.ml -sort -d apiref -html
-
-
 %install
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/ocaml/labltk
@@ -115,26 +84,15 @@ make install \
     INSTALLDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml/labltk \
     STUBLIBDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs \
     RANLIB=:
-
 sed 's/8\.06\.6/%{version}/' support/META > \
     $RPM_BUILD_ROOT%{ocamldir}/labltk/META
-
 %ocaml_files
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-
-%files -f .ofiles
-%doc Changes README.mlTk
-
-
-%files devel -f .ofiles-devel
-%doc README.mlTk
-
-
-%files doc
-%doc examples_camltk
-%doc examples_labltk
-%doc apiref
-
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-labltk-devel -f %{oreon_filedir}/ocaml-labltk-devel.list
+%files -n ocaml-labltk-doc -f %{oreon_filedir}/ocaml-labltk-doc.list
 
 %changelog
+
 %autochangelog

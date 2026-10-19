@@ -1,33 +1,16 @@
-%global source0_hash none
-
-# Bug: https://bugzilla.redhat.com/show_bug.cgi?id=2061194
+%global source0_hash 876f20c476f07a07c53756b84c8ede7162d455ee0927b995acceb7c64e5c17a7
 %define _lto_cflags %{nil}
-
 %global qt_module qtdeclarative
-
-# definition borrowed from qtbase
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
-
-#global bootstrap 1
-
-Summary: Qt5 - QtDeclarative component
+Summary:        Qt5 - QtDeclarative component
 Name:    qt5-%{qt_module}
 Version: 5.15.18
-Release: 2%{?dist}
-
-# See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
+Release:        1%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
 %global majmin %(echo %{version} | cut -d. -f1-2)
 Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
-# header file to workaround multilib issue
-# https://bugzilla.redhat.com/show_bug.cgi?id=1441343
 Source5: qv4global_p-multilib.h
-
-## upstream patches
-## repo: https://invent.kde.org/qt/qt/qtdeclarative
-## branch: kde/5.15
-## git format-patch v5.15.18-lts-lgpl
 Patch0:  0001-Remove-unused-QPointer-QQuickPointerMask.patch
 Patch1:  0002-QQmlDelegateModel-Refresh-the-view-when-a-column-is-.patch
 Patch2:  0003-Fix-TapHandler-so-that-it-actually-registers-a-tap.patch
@@ -50,39 +33,30 @@ Patch18: 0019-Revert-QQuickItem-Fix-effective-visibility-for-items.patch
 Patch19: 0020-QML-Fortify-qmlExecuteDeferred-some-more.patch
 Patch20: 0021-QtQml-Clean-up-QQmlData-ctor.patch
 Patch21: 0022-Avoid-undefined-behavior-in-the-JIT.patch
-
-
-## upstreamable patches
 Patch100: %{name}-gcc11.patch
-# https://pagure.io/fedora-kde/SIG/issue/82
 Patch101: qtdeclarative-5.15.0-FixMaxXMaxYExtent.patch
-
-# filter qml provides
 %global __provides_exclude_from ^%{_qt5_archdatadir}/qml/.*\\.so$
-
 Obsoletes: qt5-qtjsbackend < 5.2.0
 Obsoletes: qt5-qtdeclarative-render2d < 5.7.1-10
-
-BuildRequires: make
-BuildRequires: gcc-c++
-BuildRequires: qt5-rpm-macros
-BuildRequires: qt5-qtbase-devel >= %{version}
-BuildRequires: qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
-BuildRequires: python%{python3_pkgversion}
-
 %if 0%{?bootstrap}
 Obsoletes: %{name}-examples < %{version}-%{release}
 %global no_examples CONFIG-=compile_examples
 %endif
-
 %if 0%{?tests}
-BuildRequires: dbus-x11
-BuildRequires: mesa-dri-drivers
-BuildRequires: time
-BuildRequires: xorg-x11-server-Xvfb
 %endif
-
+# oreon:deps
+BuildRequires:  dbus-x11
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  mesa-dri-drivers
+BuildRequires:  python3
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtbase-private-devel
+BuildRequires:  qt5-rpm-macros
+BuildRequires:  time
+BuildRequires:  xorg-x11-server-Xvfb
+# /oreon:deps
 %description
 %{summary}.
 
@@ -108,44 +82,32 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description examples
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{qt_module}-everywhere-src-%{version} -p1
 
-
 %build
 
-# HACK so calls to "python" get what we want
 ln -s %{__python3} python
 export PATH=`pwd`:$PATH
-
 %qmake_qt5
-
 %make_build
-
-
 %install
 %make_install INSTALL_ROOT=%{buildroot}
-
 %ifarch %{multilib_archs}
-# multilib: qv4global_p.h
   mv %{buildroot}%{_qt5_headerdir}/QtQml/%{version}/QtQml/private/qv4global_p.h \
      %{buildroot}%{_qt5_headerdir}/QtQml/%{version}/QtQml/private/qv4global_p-%{__isa_bits}.h
   install -p -m644 -D %{SOURCE5} %{buildroot}%{_qt5_headerdir}/QtQml/%{version}/QtQml/private/qv4global_p.h
 %endif
-
-# hardlink files to %%{_bindir}, add -qt5 postfix to not conflict
 mkdir %{buildroot}%{_bindir}
 pushd %{buildroot}%{_qt5_bindir}
 for i in * ; do
   case "${i}" in
-    # qt4 conflicts
     qmlplugindump|qmlprofiler)
       ln -v  ${i} %{buildroot}%{_bindir}/${i}-qt5
       ln -sv ${i} ${i}-qt5
       ;;
-    # qtchooser stuff
     qml|qmlbundle|qmlmin|qmlscene)
       ln -v  ${i} %{buildroot}%{_bindir}/${i}
       ln -v  ${i} %{buildroot}%{_bindir}/${i}-qt5
@@ -157,9 +119,6 @@ for i in * ; do
   esac
 done
 popd
-
-## .prl/.la file love
-# nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
 pushd %{buildroot}%{_qt5_libdir}
 for prl_file in libQt5*.prl ; do
   sed -i -e "/^QMAKE_PRL_BUILD_DIR/d" ${prl_file}
@@ -167,9 +126,10 @@ for prl_file in libQt5*.prl ; do
   sed -i -e "/^QMAKE_PRL_LIBS/d" ${prl_file}
 done
 popd
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if 0%{?tests}
 export CTEST_OUTPUT_ON_FAILURE=1
 export PATH=%{buildroot}%{_qt5_bindir}:$PATH
@@ -180,60 +140,13 @@ dbus-launch --exit-with-session \
 time \
 make check -k -C tests ||:
 %endif
-
-
 %ldconfig_scriptlets
-
-%files
-%license LICENSE.LGPL*
-%{_qt5_libdir}/libQt5Qml.so.5*
-%{_qt5_libdir}/libQt5QmlModels.so.5*
-%{_qt5_libdir}/libQt5QmlWorkerScript.so.5*
-%{_qt5_libdir}/libQt5Quick.so.5*
-%{_qt5_libdir}/libQt5QuickWidgets.so.5*
-%{_qt5_libdir}/libQt5QuickParticles.so.5*
-%{_qt5_libdir}/libQt5QuickShapes.so.5*
-%{_qt5_libdir}/libQt5QuickTest.so.5*
-%{_qt5_plugindir}/qmltooling/
-%{_qt5_archdatadir}/qml/Qt*
-%{_qt5_archdatadir}/qml/builtins.qmltypes
-
-%files devel
-%{_bindir}/qml*
-%{_qt5_bindir}/qml*
-%{_qt5_headerdir}/Qt*/
-%{_qt5_libdir}/libQt5Qml.so
-%{_qt5_libdir}/libQt5Qml.prl
-%{_qt5_libdir}/libQt5QmlModels.so
-%{_qt5_libdir}/libQt5QmlModels.prl
-%{_qt5_libdir}/libQt5QmlWorkerScript.so
-%{_qt5_libdir}/libQt5QmlWorkerScript.prl
-%{_qt5_libdir}/libQt5Quick*.so
-%{_qt5_libdir}/libQt5Quick*.prl
-%dir %{_qt5_libdir}/cmake/Qt5Quick*/
-%{_qt5_libdir}/cmake/Qt5*/Qt5*Config*.cmake
-%{_qt5_libdir}/metatypes/qt5*_metatypes.json
-%{_qt5_libdir}/pkgconfig/Qt5*.pc
-%{_qt5_archdatadir}/mkspecs/modules/*.pri
-%{_qt5_archdatadir}/mkspecs/features/*.prf
-%dir %{_qt5_libdir}/cmake/Qt5Qml/
-%{_qt5_libdir}/cmake/Qt5Qml/Qt5Qml_*Factory.cmake
-%{_qt5_libdir}/cmake/Qt5QmlImportScanner/
-
-%files static
-%{_qt5_libdir}/libQt5QmlDevTools.a
-%{_qt5_libdir}/libQt5QmlDevTools.prl
-%{_qt5_libdir}/libQt5PacketProtocol.a
-%{_qt5_libdir}/libQt5PacketProtocol.prl
-%{_qt5_libdir}/libQt5QmlDebug.a
-%{_qt5_libdir}/libQt5QmlDebug.prl
-
-%if ! 0%{?no_examples:1}
-%files examples
-%{_qt5_examplesdir}/
-%endif
-
+%files -f %{oreon_filedir}/main.list
+%files -n qt5-qtdeclarative-devel -f %{oreon_filedir}/qt5-qtdeclarative-devel.list
+%files -n qt5-qtdeclarative-static -f %{oreon_filedir}/qt5-qtdeclarative-static.list
+%files -n qt5-qtdeclarative-examples -f %{oreon_filedir}/qt5-qtdeclarative-examples.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
 - Import

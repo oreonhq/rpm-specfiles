@@ -1,62 +1,81 @@
 %global source0_hash 717f9179a0dbed357012ddad50a5ad3d5e4d9a0b8712680d4e687f5e6e6ed9b3
-
 %bcond tests 1
-
 Name:           python-lazy-loader
 Version:        0.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Populate library namespace without incurring immediate import costs
-
 License:        BSD-3-Clause
 URL:            https://github.com/scientific-python/lazy-loader
-Source:         %{pypi_source lazy_loader}
-
-
+Source0:        https://files.pythonhosted.org/packages/source/l/lazy_loader/lazy_loader-%{version}.tar.gz
 BuildArch:      noarch
-
 %if %{with tests}
-# The “test” extra includes unwanted linters, etc.; we manually BR pytest
-# rather than patching out all the others from pyproject.toml.
-BuildRequires:  %{py3_dist pytest}
-# These are required for some of the tests, but are not captured in the
-# metadata, so we must BR them manually as well:
-BuildRequires:  %{py3_dist numpy}
-BuildRequires:  %{py3_dist scipy}
 %endif
-
 %global common_description %{expand:
 lazy-loader makes it easy to load subpackages and functions on demand.
-
 Motivation:
-
 • Allow subpackages to be made visible to users without incurring import costs.
 • Allow external libraries to be imported only when used, improving import
   times.}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.2
+Requires:       python3-lazy-loader = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-lazy-loader+test
+Summary:        Metapackage for python3-lazy-loader test extras
+Requires:       python3-lazy-loader = %{version}-%{release}
+Requires:       python3dist(pytest) >= 8.0
+Requires:       python3dist(pytest-cov) >= 5.0
+Requires:       python3dist(coverage[toml]) >= 7.2
+Provides:       python3dist(lazy-loader[test]) = %{version}-%{release}
+
+%description -n python3-lazy-loader+test
+Metapackage for python3-lazy-loader test extras.
+
+%package -n       python3-lazy-loader+lint
+Summary:        Metapackage for python3-lazy-loader lint extras
+Requires:       python3-lazy-loader = %{version}-%{release}
+Requires:       python3dist(pre-commit) == 4.3.0
+Provides:       python3dist(lazy-loader[lint]) = %{version}-%{release}
+
+%description -n python3-lazy-loader+lint
+Metapackage for python3-lazy-loader lint extras.
+
+%package -n       python3-lazy-loader+dev
+Summary:        Metapackage for python3-lazy-loader dev extras
+Requires:       python3-lazy-loader = %{version}-%{release}
+Requires:       python3dist(changelist) == 0.5
+Requires:       python3dist(spin) == 0.15
+Provides:       python3dist(lazy-loader[dev]) = %{version}-%{release}
+
+%description -n python3-lazy-loader+dev
+Metapackage for python3-lazy-loader dev extras.
 
 %description %{common_description}
 
 %package -n python3-lazy-loader
-Summary:        %{summary}
-
+Summary:        Populate library namespace without incurring immediate import costs
 %description -n python3-lazy-loader %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-lazy-loader usr/lib/python3*/site-packages/lazy_loader* usr/lib64/python3*/site-packages/lazy_loader* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/lazy_loader* usr/lib64/python3*/site-packages/lazy_loader* usr/bin/*
 
 %check
+
 %if %{with tests}
 %pytest
 %endif
-
-%files -n python3-lazy-loader -f %{pyproject_files}
-%doc CHANGELOG.md
-%doc README.md
+%files
+%files -n python3-lazy-loader -f %{oreon_filedir}/python3-lazy-loader.list
 
 %changelog
+
 %autochangelog

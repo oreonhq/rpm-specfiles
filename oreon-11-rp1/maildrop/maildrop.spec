@@ -1,28 +1,29 @@
+%global source1_hash 4748d1e5e237f6553eec799bd86f0ba31f42f09259699fd28a16746dec7abcfe
 %global source0_hash b6000075de1d4ffd0d1e7dc3127bc06c04bf1244b00bae853638150823094fec
-
 %global _hardened_build 1
-
-Summary: Mail delivery agent with filtering abilities
+Summary:        Mail delivery agent with filtering abilities
 Name: maildrop
 Version: 3.1.0
-Release: 8%{?dist}
-# Exception is explicit permission to link to OpenSSL
+Release:        1%{?dist}
 License: GPL-3.0-only WITH Classpath-exception-2.0
 URL: http://www.courier-mta.org/maildrop/
-Source0: https://downloads.sourceforge.net/project/courier/%{name}/%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://downloads.sourceforge.net/project/courier/%{name}/%{version}/%{name}-%{version}.tar.bz2
 Source1: https://downloads.sourceforge.net/project/courier/%{name}/%{version}/%{name}-%{version}.tar.bz2.sig
 Source2: pubkey.maildrop
-
-BuildRequires: automake, libtool, autoconf
-BuildRequires: gcc-c++, gdbm-devel, libdb-devel, pcre2-devel
-BuildRequires: gawk
-BuildRequires: gnupg
-BuildRequires: courier-unicode-devel >= 2.1
-BuildRequires: libidn2-devel
-BuildRequires: make
-#Once this is available uncomment and rebuild
-#BuildRequires: courier-authlib-devel
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  courier-unicode-devel
+BuildRequires:  gawk
+BuildRequires:  gcc-c++
+BuildRequires:  gdbm-devel
+BuildRequires:  gnupg
+BuildRequires:  libdb-devel
+BuildRequires:  libidn2-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pcre2-devel
+# /oreon:deps
 %description
 maildrop is the mail filter/mail delivery agent that's used by the
 Courier Mail Server. This is a standalone build of the maildrop mail
@@ -52,46 +53,29 @@ delivering the message. The user can fix the typo without causing any
 mail to be lost.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
 %build
+
 %configure --disable-shared \
   --enable-use-flock=1 --with-locking-method=fcntl \
   --enable-use-dotlock=1 \
   --enable-syslog=1 \
   --enable-sendmail=%{_sbindir}/sendmail
-# prevent 'install: will not overwrite just-created' error
-# notification sent to courier-maildrop@lists.sourceforge.net on 2009/09/04
-#sed -i 's|DELIVERQUOTAMAN = maildirquota.7 deliverquota.8|DELIVERQUOTAMAN =|' Makefile
 %make_build
-
 %install
 rm -rf %{buildroot}
 %make_install DESTDIR=%{buildroot} htmldir=%{_defaultdocdir}/%{name}
 cp -pr COPYING COPYING.GPL AUTHORS %{buildroot}%{_defaultdocdir}/%{name}
 cp -pr README README.postfix ChangeLog UPGRADE %{buildroot}%{_defaultdocdir}/%{name}
+%oreon_autofiles main
 
-%files
-%doc %{_defaultdocdir}/%{name}
-%attr(555,root,mail) %{_bindir}/maildrop
-%attr(555,root,mail) %{_bindir}/lockmail
-%{_bindir}/deliverquota
-%{_bindir}/mailbot
-%{_bindir}/maildirmake
-%{_bindir}/makemime
-%{_bindir}/reformail
-%{_bindir}/reformime
-%{_bindir}/makedat
-%{_bindir}/makedatprog
-%{_bindir}/maildirwatch
-%{_bindir}/maildirkw
-%{_mandir}/man1/*.1*
-%{_mandir}/man5/*.5*
-%{_mandir}/man7/*.7*
-%{_mandir}/man8/*.8*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

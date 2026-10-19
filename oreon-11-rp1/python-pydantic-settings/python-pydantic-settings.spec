@@ -1,62 +1,94 @@
-%global source0_hash none
-
+%global source0_hash 694b793e84f766ba76a90ebdefc01d0a9a045dab0382bee70393da93712ad117
 Name:           python-pydantic-settings
 Version:        2.15.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Settings management using Pydantic
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pydantic/pydantic-settings
-Source:         %{pypi_source pydantic_settings}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pydantic_settings/pydantic_settings-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-pydantic-settings = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pydantic-settings+yaml
+Summary:        Metapackage for python3-pydantic-settings yaml extras
+Requires:       python3-pydantic-settings = %{version}-%{release}
+Requires:       python3dist(pyyaml) >= 6.0.1
+Provides:       python3dist(pydantic-settings[yaml]) = %{version}-%{release}
 
+%description -n python3-pydantic-settings+yaml
+Metapackage for python3-pydantic-settings yaml extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pydantic-settings' generated automatically by pyp2spec.}
+%package -n       python3-pydantic-settings+toml
+Summary:        Metapackage for python3-pydantic-settings toml extras
+Requires:       python3-pydantic-settings = %{version}-%{release}
+Requires:       python3dist(tomli) >= 2.0.1
+Provides:       python3dist(pydantic-settings[toml]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-pydantic-settings+toml
+Metapackage for python3-pydantic-settings toml extras.
+
+%package -n       python3-pydantic-settings+azure-key-vault
+Summary:        Metapackage for python3-pydantic-settings azure-key-vault extras
+Requires:       python3-pydantic-settings = %{version}-%{release}
+Requires:       python3dist(azure-keyvault-secrets) >= 4.8.0
+Requires:       python3dist(azure-identity) >= 1.16.0
+Provides:       python3dist(pydantic-settings[azure-key-vault]) = %{version}-%{release}
+
+%description -n python3-pydantic-settings+azure-key-vault
+Metapackage for python3-pydantic-settings azure-key-vault extras.
+
+%package -n       python3-pydantic-settings+aws-secrets-manager
+Summary:        Metapackage for python3-pydantic-settings aws-secrets-manager extras
+Requires:       python3-pydantic-settings = %{version}-%{release}
+Requires:       python3dist(boto3) >= 1.35.0
+Provides:       python3dist(pydantic-settings[aws-secrets-manager]) = %{version}-%{release}
+
+%description -n python3-pydantic-settings+aws-secrets-manager
+Metapackage for python3-pydantic-settings aws-secrets-manager extras.
+
+%package -n       python3-pydantic-settings+gcp-secret-manager
+Summary:        Metapackage for python3-pydantic-settings gcp-secret-manager extras
+Requires:       python3-pydantic-settings = %{version}-%{release}
+Requires:       python3dist(google-cloud-secret-manager) >= 2.23.1
+Provides:       python3dist(pydantic-settings[gcp-secret-manager]) = %{version}-%{release}
+
+%description -n python3-pydantic-settings+gcp-secret-manager
+Metapackage for python3-pydantic-settings gcp-secret-manager extras.
+
+%description
 
 %package -n     python3-pydantic-settings
-Summary:        %{summary}
-
-%description -n python3-pydantic-settings %_description
+Summary:        Settings management using Pydantic
+# oreon:reqs
+Requires:       python3dist(pydantic) >= 2.7.0
+Requires:       python3dist(python-dotenv) >= 0.21.0
+Requires:       python3dist(typing-inspection) >= 0.4.0
+# /oreon:reqs
+%description -n python3-pydantic-settings
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pydantic-settings aws-secrets-manager,azure-key-vault,gcp-secret-manager,toml,yaml
-
 
 %prep
-%autosetup -p1 -n pydantic_settings-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pydantic_settings-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pydantic-settings usr/lib/python3*/site-packages/pydantic_settings* usr/lib64/python3*/site-packages/pydantic_settings* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pydantic_settings* usr/lib64/python3*/site-packages/pydantic_settings* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pydantic-settings -f %{pyproject_files}
+%files
+%files -n python3-pydantic-settings -f %{oreon_filedir}/python3-pydantic-settings.list
 
 %changelog
+
 %autochangelog

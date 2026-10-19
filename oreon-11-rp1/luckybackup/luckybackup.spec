@@ -1,24 +1,20 @@
 %global source0_hash e801af2483cbdd62bc9af8e2ded252c51adbad81482e291042f58e21c3d4925b
-
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 Name:		luckybackup
 Version:	0.5.0
-Release:	%autorelease
-Summary:	A powerful, fast and reliable backup and sync tool
-
+Release:        1%{?dist}
+Summary:        A powerful, fast and reliable backup and sync tool
 License:	GPL-3.0-or-later
 URL:		http://luckybackup.sourceforge.net/index.html
-Source0:	http://downloads.sourceforge.net/project/%{name}/%{version}/source/%{name}-%{version}.tar.gz
-
-BuildRequires:	qt-devel
-Buildrequires:	desktop-file-utils
-Buildrequires:	gcc-c++
-BuildRequires:	make
+Source0:        http://downloads.sourceforge.net/project/%{name}/%{version}/source/%{name}-%{version}.tar.gz
 Requires:	polkit
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  qt-devel
+# /oreon:deps
 %description
 luckyBackup is an application that backs-up and/or synchronizes any 
 directories with the power of rsync.
@@ -28,6 +24,7 @@ safe (keeps your data safe by checking all declared directories before
 proceeding in any data manipulation ), reliable and fully customizable.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -39,31 +36,21 @@ sed -i '/Fedora users/d' manual/index.html
 chmod a-x manual/index.html
 
 %build
+
 %{qmake_qt4}
 %make_build CFLAGS="$RPM_OPT_FLAGS"
-
 %install
 INSTALL_ROOT=%{buildroot} \
   make install DESTDIR=%{buildroot}
-# We want this in in the license dir:
 rm -f %{buildroot}%{_docdir}/%{name}/license/gpl.txt
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}-su.desktop
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
-
-%files
-%doc readme/README readme/changelog
-%license license/gpl.txt
-%{_bindir}/%{name}
-%{_bindir}/%{name}-pkexec
-%{_datadir}/applications/%{name}*
-%{_datadir}/polkit-1/actions/net.%{name}.su.policy
-%{_datadir}/pixmaps/%{name}*
-%{_datadir}/%{name}
-%{_docdir}/%{name}/license
-%{_docdir}/%{name}/manual
-%{_mandir}/man8/%{name}*.8.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

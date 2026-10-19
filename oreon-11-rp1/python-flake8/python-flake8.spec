@@ -1,60 +1,41 @@
-%global source0_hash none
-
+%global source0_hash fe044858146b9fc69b551a4b490d69cf960fcb78ad1edcb84e7fbb1b4a8e3872
 Name:           python-flake8
 Version:        7.3.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        the modular source code checker: pep8 pyflakes and co
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pycqa/flake8
-Source:         %{pypi_source flake8}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flake8/flake8-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'flake8' generated automatically by pyp2spec.}
-
 Patch:            Support-Python-3.14.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-flake8 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-flake8
-Summary:        %{summary}
-
-%description -n python3-flake8 %_description
-
+Summary:        the modular source code checker: pep8 pyflakes and co
+%description -n python3-flake8
 
 %prep
-%autosetup -p1 -n flake8-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir flake8-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-flake8 usr/lib/python3*/site-packages/flake8* usr/lib64/python3*/site-packages/flake8* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flake8* usr/lib64/python3*/site-packages/flake8* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-flake8 -f %{pyproject_files}
-%{_bindir}/flake8
+%files
+%files -n python3-flake8 -f %{oreon_filedir}/python3-flake8.list
 
 %changelog
+
 %autochangelog

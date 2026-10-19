@@ -1,88 +1,69 @@
+%global source1_hash 24ab28ac12dab8f74971e04312d858be5a037dec6f6af424329f8de1ed2ca9d2
 %global source0_hash c19cbd4878347b67a9e05ee6541083f51dd90f9e58ee245b4d7634e09f9c04b2
-
 %global framework kio
-
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.30
-
-
 Name:    kf6-%{framework}
 Version: 6.30.0
 Release:        1%{?dist}
-Summary: KDE Frameworks 6 Tier 3 solution for filesystem abstraction
-
+Summary:        KDE Frameworks 6 Tier 3 solution for filesystem abstraction
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:     https://invent.kde.org/frameworks/%{framework}
-
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
-
-# https://invent.kde.org/frameworks/kio/-/issues/26
-# I'm not sending this upstream because I'm not sure it's really
-# exactly what upstream will want, but it solves the practical
-# issue for us for now
 Patch0:  0001-Give-the-kuriikwsfiltereng_private-a-VERSION-and-SOV.patch
-
 %if 0%{?flatpak}
-# Disable the help: and ghelp: protocol for Flatpak builds, to avoid depending
-# on the docbook stack.
 Patch101: kio-no-help-protocol.patch
 %endif
-
-
-BuildRequires:  extra-cmake-modules
-BuildRequires:  gcc-c++
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake
-BuildRequires:  cmake(KF6Archive) >= %{version}
-BuildRequires:  cmake(KF6Crash) >= %{version}
-BuildRequires:  cmake(KF6Solid) >= %{version}
-BuildRequires:  switcheroo-control
-BuildRequires:  cmake(KF6ColorScheme) >= %{version}
-BuildRequires:  cmake(KF6Config) >= %{version}
-BuildRequires:  cmake(KF6CoreAddons) >= %{version}
-BuildRequires:  cmake(KF6DBusAddons) >= %{version}
-BuildRequires:  cmake(KF6DocTools) >= %{version}
-BuildRequires:  cmake(KF6GuiAddons) >= %{version}
-BuildRequires:  cmake(KF6I18n) >= %{version}
-BuildRequires:  cmake(KF6Service) >= %{version}
-BuildRequires:  qt6-qtbase-private-devel
-BuildRequires:  cmake(KF6Bookmarks) >= %{version}
-BuildRequires:  cmake(KF6Completion) >= %{version}
-BuildRequires:  cmake(KF6ConfigWidgets) >= %{version}
-BuildRequires:  cmake(KF6IconThemes) >= %{version}
-BuildRequires:  cmake(KF6ItemViews) >= %{version}
-BuildRequires:  cmake(KF6JobWidgets) >= %{version}
-BuildRequires:  cmake(KF6WindowSystem) >= %{version}
-BuildRequires:  cmake(KF6Notifications) >= %{version}
-BuildRequires:  cmake(KF6Wallet) >= %{version}
-BuildRequires:  cmake(KF6WidgetsAddons) >= %{version}
-BuildRequires:  cmake(KF6XmlGui) >= %{version}
-
-BuildRequires:  libacl-devel
 %if !0%{?flatpak}
-BuildRequires:  libxml2-devel
-BuildRequires:  libxslt-devel
 %endif
-BuildRequires:  pkgconfig(blkid)
-BuildRequires:  pkgconfig(mount)
-BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  zlib-devel
-
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  cmake(Qt6UiPlugin)
-BuildRequires:  cmake(Qt6Qml)
-
-BuildRequires:  cmake(KF6KDED) >= %{version}
-BuildRequires:  cmake(Qt6Core5Compat)
-
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 Requires:       %{name}-widgets%{?_isa} = %{version}-%{release}
 Requires:       %{name}-file-widgets%{?_isa} = %{version}-%{release}
 Requires:       %{name}-gui%{?_isa} = %{version}-%{release}
-
 Requires: kf6-kded
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6Archive)
+BuildRequires:  cmake(KF6Bookmarks)
+BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6Completion)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6ItemViews)
+BuildRequires:  cmake(KF6JobWidgets)
+BuildRequires:  cmake(KF6KDED)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6Solid)
+BuildRequires:  cmake(KF6Wallet)
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6UiPlugin)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libacl-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  libxslt-devel
+BuildRequires:  pkgconfig(blkid)
+BuildRequires:  pkgconfig(mount)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  switcheroo-control
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 KDE Frameworks 6 Tier 3 solution for filesystem abstraction
 
@@ -103,7 +84,6 @@ Requires:       qt6-qtbase-devel
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
-
 
 %package        doc
 Summary:        Documentation files for %{name}
@@ -131,8 +111,6 @@ Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 
 %package        widgets
 Summary:        Widgets for KIO Framework
-## org.kde.klauncher6 service referenced from : widgets/krun.cpp
-## included here for completeness, even those -core already has a dependency.
 %{?kf6_kinit_requires}
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 %description    widgets
@@ -159,62 +137,29 @@ Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{framework}-%{version} -p1
 
-
 %build
+
 %cmake_kf6
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %find_lang %{name} --all-name --with-man --with-html
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSES/*.txt
-%doc README.md
-
-%files core
-%{_kf6_libexecdir}/kioexec
-%{_kf6_libexecdir}/kiod6
-%{_kf6_libexecdir}/kioworker
-%{_kf6_bindir}/ktelnetservice6
-%{_kf6_bindir}/ktrash6
-%{_kf6_plugindir}/kio/
-%{_kf6_plugindir}/kded/
-%{_kf6_plugindir}/kiod/
-%{_kf6_plugindir}/kio_dnd/
-%{_kf6_datadir}/kf6/searchproviders/*.desktop
-%{_kf6_datadir}/applications/*.desktop
-%{_datadir}/dbus-1/services/org.kde.*.service
-%{_kf6_datadir}/qlogging-categories6/*categories
-
-%files core-libs
-%{_kf6_libdir}/libKF6KIOCore.so.*
-
-%files doc -f %{name}.lang
-
-%files gui
-%{_kf6_libdir}/libKF6KIOGui.so.*
-
-%files widgets
-%dir %{_kf6_plugindir}/urifilters/
-%{_kf6_plugindir}/urifilters/*.so
-%{_kf6_libdir}/libkuriikwsfiltereng_private.so.*
-
-%files widgets-libs
-%{_kf6_libdir}/libKF6KIOWidgets.so.*
-
-%files file-widgets
-%{_kf6_libdir}/libKF6KIOFileWidgets.so.*
-
-%files devel
-%{_kf6_includedir}/*
-%{_kf6_libdir}/*.so
-%{_kf6_libdir}/cmake/KF6KIO/
-%{_kf6_datadir}/kdevappwizard/templates/kioworker6.tar.bz2
-%{_kf6_qtplugindir}/designer/kio6widgets.so
-
+%files -f %{oreon_filedir}/main.list
+%files -n kf6-kio-devel -f %{oreon_filedir}/kf6-kio-devel.list
+%files -n kf6-kio-doc -f %{oreon_filedir}/kf6-kio-doc.list
+%files -n kf6-kio-core -f %{oreon_filedir}/kf6-kio-core.list
+%files -n kf6-kio-core-libs -f %{oreon_filedir}/kf6-kio-core-libs.list
+%files -n kf6-kio-widgets -f %{oreon_filedir}/kf6-kio-widgets.list
+%files -n kf6-kio-widgets-libs -f %{oreon_filedir}/kf6-kio-widgets-libs.list
+%files -n kf6-kio-file-widgets -f %{oreon_filedir}/kf6-kio-file-widgets.list
+%files -n kf6-kio-gui -f %{oreon_filedir}/kf6-kio-gui.list
 
 %changelog
+
 %autochangelog

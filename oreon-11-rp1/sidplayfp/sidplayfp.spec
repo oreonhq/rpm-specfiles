@@ -1,24 +1,26 @@
-%global source0_hash a0a87952bac79668b30fedd3d80dffd0cb83c605414b60491f04a56fe861fb36
-
+%global source0_hash 0a26e98719b1ff1e83b9ceeaa76ba6bc7adf3275545798e5c84df4440cf3b1a2
 Name:           sidplayfp
 Version:        3.2.0
 Release:        1%{?dist}
 Summary:        SID chip music module player
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://github.com/libsidplayfp
 Source0:        https://github.com/libsidplayfp/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
-BuildRequires:  make
+# oreon:deps
+BuildRequires:  alsa-lib-devel
 BuildRequires:  gcc-c++
-BuildRequires:  libsidplayfp-devel >= 2.0
-BuildRequires:  alsa-lib-devel pulseaudio-libs-devel libtool
 BuildRequires:  gettext-devel
-
+BuildRequires:  libsidplayfp-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pulseaudio-libs-devel
+# /oreon:deps
 %description
 A player for playing SID music modules originally created on the Commodore 64
 and compatibles.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -31,19 +33,15 @@ touch build-aux/config.rpath
 autoreconf -ivf
 
 %build
+
 %configure
 make %{?_smp_mflags}
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%doc AUTHORS README
-%license COPYING
-%{_bindir}/sidplayfp
-%{_bindir}/stilview
-%{_mandir}/man?/sidplayfp.*
-%{_mandir}/man1/stilview.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

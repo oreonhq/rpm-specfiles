@@ -1,64 +1,54 @@
-%global source0_hash 5b526cdd6c2c38c89b1966afca481b54b1342ac1f53b150f2ca0353659ac7efa
-
+%global source0_hash 321152d9c9c1d5d0182c098e631f5ccb23f4675760933930f18395a0bb69fac3
 Summary:        C++ parallel computing and asynchronous networking engine
 Name:           workflow
-# Main files are available under Apache-2.0 license except
-# src/util/crc32c.h available under BSD-2-Clause license
-# src/util/crc32c.c available under Zlib license
-# src/kernel/rbtree.c available under GPL-2.0-or-later
-# src/kernel/rbtree.h available under GPL-2.0-or-later
 License:        Apache-2.0 AND BSD-2-Clause AND Zlib AND GPL-2.0-or-later
-
 Version:        1.1.0
-Release:        %autorelease
-
+Release:        1%{?dist}
 URL:            https://github.com/sogou/workflow
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/sogou/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:          workflow-0.11.10-test-c++17.patch
-
+%ifnarch %{ix86}
+%endif
+%ifarch %{valgrind_arches}
+%endif
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  ninja-build
 BuildRequires:  gtest-devel
+BuildRequires:  ninja-build
 BuildRequires:  openssl-devel
-%if 0%{?fedora} >= 41
-BuildRequires:  openssl-devel-engine
-%endif
-%ifnarch %{ix86}
-# Needed for redis check
 BuildRequires:  redis
-%endif
 BuildRequires:  sed
-# Needed for memory check
-%ifarch %{valgrind_arches}
-BuildRequires:  valgrind
-%endif
-
-%global _description %{expand:
+# /oreon:deps
+%description
 As Sogou`s C++ server engine, Sogou C++ Workflow supports almost all back-end
 C++ online services of Sogou, including all search services, cloud input
 method, online advertisements, etc., handling more than 10 billion requests
 every day. This is an enterprise-level programming engine in light and elegant
-design which can satisfy most C++ back-end development requirements. }
-
-%description
-%_description
+design which can satisfy most C++ back-end development requirements.
 
 %package devel
 Summary:        C++ parallel computing and asynchronous networking engine
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
-%_description
+As Sogou`s C++ server engine, Sogou C++ Workflow supports almost all back-end
+C++ online services of Sogou, including all search services, cloud input
+method, online advertisements, etc., handling more than 10 billion requests
+every day. This is an enterprise-level programming engine in light and elegant
+design which can satisfy most C++ back-end development requirements.
 
 %package docs
 Summary:       C++ parallel computing and asynchronous networking engine
 BuildArch:     noarch
-
 %description docs
-%_description
+As Sogou`s C++ server engine, Sogou C++ Workflow supports almost all back-end
+C++ online services of Sogou, including all search services, cloud input
+method, online advertisements, etc., handling more than 10 billion requests
+every day. This is an enterprise-level programming engine in light and elegant
+design which can satisfy most C++ back-end development requirements.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -74,9 +64,6 @@ popd
 
 %cmake -GNinja
 %cmake_build
-# remove copies of header files to minimize
-# size of debugsource package, these files are
-# copied into a _include directory
 rm -r _include
 mkdir -p _include/workflow
 ln -s src/algorithm/*.h   _include/workflow/
@@ -92,38 +79,19 @@ ln -s src/protocol/*.h    _include/workflow/
 ln -s src/protocol/*.inl  _include/workflow/
 ln -s src/server/*.h      _include/workflow/
 ln -s src/util/*.h        _include/workflow/
-
 %install
 %cmake_install
-
-# Package Readmes separately
 rm %{buildroot}/%{_docdir}/%{name}-%{version}/README.md
-# Do not package static library
 rm %{buildroot}/%{_libdir}/libworkflow.a
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Run tests
+
 make check
-
-%files
-%license LICENSE LICENSE_GPLV2
-%doc README.md
-%doc README_cn.md
-%{_libdir}/libworkflow.so.0.*
-%{_libdir}/libworkflow.so.0
-
-%files devel
-%{_libdir}/libworkflow.so
-%dir %{_libdir}/cmake/%{name}
-%{_libdir}/cmake/%{name}/*.cmake
-%dir %{_includedir}/workflow
-%{_includedir}/workflow/*.h
-%{_includedir}/workflow/*.inl
-
-%files docs
-%license LICENSE
-%doc docs/*.md
-%doc tutorial/
+%files -f %{oreon_filedir}/main.list
+%files -n workflow-devel -f %{oreon_filedir}/workflow-devel.list
+%files -n workflow-docs -f %{oreon_filedir}/workflow-docs.list
 
 %changelog
+
 %autochangelog

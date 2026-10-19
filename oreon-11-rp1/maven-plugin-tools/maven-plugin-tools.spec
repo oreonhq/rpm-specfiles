@@ -1,6 +1,5 @@
 %global source0_hash 2ef485adc3421a6fca6a0b8c149e14e25afe44f78ec2416a75c9161d453f703c
 %oreon_bootstrap
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,22 +83,21 @@ end
 %bcond_with bootstrap
 Name:           maven-plugin-tools
 Version:        3.16.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven Plugin Tools
 License:        Apache-2.0
 URL:            https://maven.apache.org/plugin-tools/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugin-tools/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
 Patch:          0001-Disable-help-MOJO-generation.patch
 Patch:          0002-Remove-dependency-on-jtidy.patch
 Patch:          0003-Disable-reporting.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.16.0-22
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.thoughtworks.qdox:qdox)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
@@ -122,23 +120,18 @@ BuildRequires:  mvn(org.jsoup:jsoup)
 BuildRequires:  mvn(org.ow2.asm:asm)
 BuildRequires:  mvn(org.ow2.asm:asm-commons)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.16.0-22
-
+# /oreon:deps
 %description
 The Maven Plugin Tools contains the necessary tools to be able to produce Maven
 Plugins in a variety of languages.
 
 %package -n maven-plugin-annotations
 Summary:        Maven Plugin Java 5 Annotations
-
 %description -n maven-plugin-annotations
 This package contains Java 5 annotations to use in Mojos.
 
 %package -n maven-plugin-plugin
 Summary:        Maven Plugin Plugin
-
 %description -n maven-plugin-plugin
 The Plugin Plugin is used to create a Maven plugin descriptor for any Mojo's
 found in the source tree, to include in the JAR. It is also used to generate
@@ -147,21 +140,18 @@ artifact metadata and a generic help goal.
 
 %package annotations
 Summary:        Maven Plugin Tool for Annotations
-
 %description annotations
 This package provides Java 5 annotation tools for use with Apache Maven.
 
 %package api
 Summary:        Maven Plugin Tools APIs
 Provides:       maven-shared-plugin-tools-api = 0:%{version}-%{release}
-
 %description api
 The Maven Plugin Tools API provides an API to extract information from
 and generate documentation for Maven Plugins.
 
 %package generators
 Summary:        Maven Plugin Tools Generators
-
 %description generators
 The Maven Plugin Tools Generators provides content generation
 (documentation, help) from plugin descriptor.
@@ -169,11 +159,11 @@ The Maven Plugin Tools Generators provides content generation
 %package java
 Summary:        Maven Plugin Tool for Java
 Provides:       maven-shared-plugin-tools-java = 0:%{version}-%{release}
-
 %description java
 Descriptor extractor for plugins written in Java.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 find -name '*.java' -exec sed -i 's/\r//' {} +
@@ -199,30 +189,23 @@ rm -r maven-plugin-tools-api/src/test/resources/javadoc
 %pom_remove_dep :maven-plugin-tools-ant maven-plugin-plugin
 %pom_remove_dep :maven-plugin-tools-beanshell maven-plugin-plugin
 
-
 %build
-%mvn_build -j -s -f
 
+%mvn_build -j -s -f
 %install
 %mvn_install
+%oreon_autofiles maven-plugin-annotations usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles maven-plugin-plugin usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-maven-plugin-tools
-%license LICENSE NOTICE
-
-%files -n maven-plugin-annotations -f .mfiles-maven-plugin-annotations
-%license LICENSE NOTICE
-
-%files -n maven-plugin-plugin -f .mfiles-maven-plugin-plugin
-
-%files annotations -f .mfiles-maven-plugin-tools-annotations
-%license LICENSE NOTICE
-
-%files api -f .mfiles-maven-plugin-tools-api
-%license LICENSE NOTICE
-
-%files generators -f .mfiles-maven-plugin-tools-generators
-
-%files java -f .mfiles-maven-plugin-tools-java
+%files -f %{oreon_filedir}/main.list
+%files -n maven-plugin-annotations -f %{oreon_filedir}/maven-plugin-annotations.list
+%files -n maven-plugin-plugin -f %{oreon_filedir}/maven-plugin-plugin.list
+%files -n maven-plugin-tools-annotations -f %{oreon_filedir}/maven-plugin-tools-annotations.list
+%files -n maven-plugin-tools-api -f %{oreon_filedir}/maven-plugin-tools-api.list
+%files -n maven-plugin-tools-generators -f %{oreon_filedir}/maven-plugin-tools-generators.list
+%files -n maven-plugin-tools-java -f %{oreon_filedir}/maven-plugin-tools-java.list
 
 %changelog
+
 %autochangelog

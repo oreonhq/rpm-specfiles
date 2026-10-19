@@ -1,19 +1,16 @@
-%global source0_hash 7138b3789b7506bd683f451d4f7d853077a91803b7b35d86ec667f0f9cd401cd
-
+%global source0_hash 2ffabc4853bb1c70e29e6585ea15dfef8b2bdb86b6ccaad0a3b8c92b5d526d1b
 Name:		adns
 Version:	1.7.0
-Release:	1%{?dist}
-
-Summary:	Advanced, easy to use, asynchronous-capable DNS client library
-
+Release:        1%{?dist}
+Summary:        Advanced, easy to use, asynchronous-capable DNS client library
 License:	GPL-1.0-or-later
 URL:		http://www.chiark.greenend.org.uk/~ian/adns/
-Source0:	http://www.chiark.greenend.org.uk/~ian/adns/ftp/%{name}-%{version}.tar.gz
-
-BuildRequires:	autoconf
+Source0:        http://www.chiark.greenend.org.uk/~ian/adns/ftp/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  autoconf
 BuildRequires:  gcc
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 adns is a resolver library for C (and C++) programs. In contrast with
 the existing interfaces, gethostbyname et al and libresolv, it has the
@@ -46,14 +43,12 @@ following features:
 %package devel
 Summary:	Asynchronous-capable DNS client library - development files
 Requires:	%{name} = %{version}
-
 %description devel
 Asynchronous-capable DNS client library - development files.
 
 %package progs
 Summary:	Asynchronous-capable DNS client library - utility programs
 Requires:	%{name} = %{version}
-
 %description progs
 DNS utility programs: adns also comes with a number of utility
 programs for use from the command line and in scripts:
@@ -69,11 +64,13 @@ programs for use from the command line and in scripts:
    communicate with subprocesses.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 %ifarch sparcv9 sparc64 s390 s390x
 export CFLAGS="$RPM_OPT_FLAGS -D_GNU_SOURCE -fPIC"
 %else
@@ -82,7 +79,6 @@ export CFLAGS="$RPM_OPT_FLAGS -D_GNU_SOURCE -fpic"
 autoreconf -fiv
 %configure --enable-dynamic
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 make \
@@ -91,21 +87,16 @@ make \
     includedir=$RPM_BUILD_ROOT%{_includedir} \
     libdir=$RPM_BUILD_ROOT%{_libdir} \
     install
-
 rm -f $RPM_BUILD_ROOT%{_libdir}/libadns.a
-
 %ldconfig_scriptlets
+%oreon_autofiles adns-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles adns-progs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README TODO changelog
-%attr(755,root,root) %{_libdir}/lib*.so.*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/lib*.so
-
-%files progs
-%attr(755,root,root) %{_bindir}/*
+%files -f %{oreon_filedir}/main.list
+%files -n adns-devel -f %{oreon_filedir}/adns-devel.list
+%files -n adns-progs -f %{oreon_filedir}/adns-progs.list
 
 %changelog
+
 %autochangelog

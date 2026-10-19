@@ -1,93 +1,64 @@
 %global source0_hash 37abc38d7f1931842d2b910ee28f8788b40d8a021a926c4a1b9b7f0aedd05fa4
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    step
-Summary: Interactive Physics Simulator 
+Summary:        Interactive Physics Simulator
 Version: 26.04.3
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/edu/%{name}
-Source:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: gettext
-BuildRequires: kf6-rpm-macros
-BuildRequires: extra-cmake-modules
-BuildRequires: libappstream-glib
-BuildRequires: desktop-file-utils
-
-BuildRequires: cmake(KF6Crash)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6IconThemes)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6NewStuff)
-BuildRequires: cmake(KF6Plotting)
-BuildRequires: cmake(KF6TextWidgets)
-BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KF6DocTools)
-
-BuildRequires: cmake(Qt6Xml) 
-BuildRequires: cmake(Qt6Svg) 
-BuildRequires: cmake(Qt6OpenGL) 
-
-
-BuildRequires: pkgconfig(eigen3)
-BuildRequires: pkgconfig(gsl)
-BuildRequires: pkgconfig(libqalculate)
-
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6NewStuff)
+BuildRequires:  cmake(KF6Plotting)
+BuildRequires:  cmake(KF6TextWidgets)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(Qt6OpenGL)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Xml)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(eigen3)
+BuildRequires:  pkgconfig(gsl)
+BuildRequires:  pkgconfig(libqalculate)
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6 \
 	-DQT_MAJOR_VERSION=6
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html --with-qt
-
-## unpackaged files
-# omit bundled copies of python-(mwclient,simplejson)
 rm -frv %{buildroot}%{_kf6_datadir}/parley/plugins/mwclient/
 rm -fv %{buildroot}%{_kf6_datadir}/locale/*/LC_SCRIPTS/step/*.js
-
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml ||:
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-
-%files -f %{name}.lang
-%doc README
-%{_kf6_bindir}/%{name}
-%{_kf6_datadir}/knsrcfiles/%{name}*.knsrc
-%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
-%{_kf6_datadir}/icons/hicolor/*/actions/*
-%{_kf6_datadir}/icons/hicolor/*/apps/%{name}*
-%{_kf6_datadir}/%{name}/
-%{_kf6_datadir}/config.kcfg/%{name}.kcfg
-%{_datadir}/mime/packages/org.kde.%{name}.xml
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

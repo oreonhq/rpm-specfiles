@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash f992dac2aecc75c9a0ca0abb848f524aa1361635c866f7c42365b95bb41b78b2
 Name:           python-flufl-bounce
 Version:        5.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Email bounce detectors
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://fluflbounce.readthedocs.io
-Source:         %{pypi_source flufl_bounce}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flufl_bounce/flufl_bounce-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'flufl-bounce' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-flufl-bounce = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-flufl-bounce
-Summary:        %{summary}
-
-%description -n python3-flufl-bounce %_description
-
+Summary:        Email bounce detectors
+%description -n python3-flufl-bounce
 
 %prep
-%autosetup -p1 -n flufl_bounce-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir flufl_bounce-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-flufl-bounce usr/lib/python3*/site-packages/flufl_bounce* usr/lib64/python3*/site-packages/flufl_bounce* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flufl_bounce* usr/lib64/python3*/site-packages/flufl_bounce* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-flufl-bounce -f %{pyproject_files}
+%files
+%files -n python3-flufl-bounce -f %{oreon_filedir}/python3-flufl-bounce.list
 
 %changelog
+
 %autochangelog

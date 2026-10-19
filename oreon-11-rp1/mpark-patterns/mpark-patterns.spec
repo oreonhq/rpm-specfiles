@@ -1,28 +1,20 @@
 %global source0_hash 80e6af808a4d74d5d7358666303eb1dbfc5582313ff9fa31d1c0d3280d3bd9e7
-
 %global debug_package %{nil}
-
 Name:           mpark-patterns
 Version:        0.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        An experimental pattern matching library for C++17
-
 License:        BSL-1.0
 URL:            https://github.com/mpark/patterns
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-# change installation path for headers
-# use system gtest
-# disable balance test - requires lots of ram
+Source0:        https://github.com/mpark/patterns/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:          cmake.patch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
-BuildRequires:  gcc-c++
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  gtest-devel
+BuildRequires:  gcc-c++
 BuildRequires:  gmock-devel
-
+BuildRequires:  gtest-devel
+# /oreon:deps
 %description
 %{summary}.
 
@@ -30,30 +22,27 @@ BuildRequires:  gmock-devel
 Summary:        Header files for %{name}
 BuildArch:      noarch
 Provides:       %{name}-static = %{version}-%{release}
-
 %description    devel
 %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n patterns-%{version} -p1
-
+%global oreon_srcdir patterns-%{version}
+%oreon_prep
 %build
+
 %cmake -DMPARK_PATTERNS_INCLUDE_TESTS=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-%ctest
 
-%files devel
-%license LICENSE.md
-%doc README.md
-%{_includedir}/mpark/
-%{_datadir}/cmake/mpark_patterns/
+%ctest
+%files -f %{oreon_filedir}/main.list
+%files -n mpark-patterns-devel -f %{oreon_filedir}/mpark-patterns-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash dc32a556b3ad31ae79813bb9e7ba60a23469760acee69119dcbfbd80aa16f728
 Name:           python-pyopnsense
 Version:        0.4.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A python API client for OPNsense
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            ...
-Source:         %{pypi_source pyopnsense}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyopnsense/pyopnsense-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyopnsense' generated automatically by pyp2spec.}
-
 Patch0:         python-opnsense-rm-python-mock-usage.diff
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pyopnsense = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyopnsense
-Summary:        %{summary}
-
-%description -n python3-pyopnsense %_description
-
+Summary:        A python API client for OPNsense
+%description -n python3-pyopnsense
 
 %prep
-%autosetup -p1 -n pyopnsense-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyopnsense-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyopnsense usr/lib/python3*/site-packages/pyopnsense* usr/lib64/python3*/site-packages/pyopnsense* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyopnsense* usr/lib64/python3*/site-packages/pyopnsense* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyopnsense -f %{pyproject_files}
+%files
+%files -n python3-pyopnsense -f %{oreon_filedir}/python3-pyopnsense.list
 
 %changelog
+
 %autochangelog

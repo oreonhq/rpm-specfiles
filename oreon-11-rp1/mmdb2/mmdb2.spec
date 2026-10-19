@@ -1,18 +1,16 @@
 %global source0_hash 6df04205747ae35cd62edc9649ab0187f902a56fb16f355cbdbdc7ca3e14b6bd
-
-Summary: Macromolecular coordinate library
+Summary:        Macromolecular coordinate library
 Name: mmdb2
 Version: 2.0.1
-Release: 28%{?dist}
-# Automatically converted from old format: LGPLv3 - review is highly recommended.
+Release:        1%{?dist}
 License: LGPL-3.0-only
 URL: ftp://ftp.ccp4.ac.uk/opensource/
-Source0: ftp://ftp.ccp4.ac.uk/opensource/%{name}-%{version}.tar.gz
-
-BuildRequires: make
+Source0:        ftp://ftp.ccp4.ac.uk/opensource/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-
+BuildRequires:  make
+# /oreon:deps
 %description
 MMDB is a macromolecular coordinate library, written by Eugene
 Krissinel primarily for use by the collaborative computational project
@@ -36,38 +34,30 @@ that have been compiled with the mmdb library.
 Summary: Header files and library for developing programs with mmdb
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
-
 %description devel
 This package contains libraries and header files needed for program
 development using the macromolecular coordinate library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}
 chmod 644 README COPYING AUTHORS
 
 %build
+
 %configure --enable-shared --disable-static
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=%{buildroot} INSTALL='install -p'
-
-# remove unpackaged files from the buildroot
 rm -f %{buildroot}%{_libdir}/*.la
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS COPYING README
-%{_libdir}/libmmdb2.so.0.0.0
-%{_libdir}/libmmdb2.so.0
-
-%files devel
-%{_libdir}/libmmdb2.so
-%{_includedir}/mmdb2/
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n mmdb2-devel -f %{oreon_filedir}/mmdb2-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,49 +1,38 @@
 %global source0_hash 06b1858988c8bc9a48b89bda8c55a9a47b8e55d08009cb74cb60b28ecc858d38
-
-# Version available in bundles/org.eclipse.swt
 %global swt_bundle_version 3.132.0
 %global major_version   4
 %global minor_version   38
 %global forgeurl https://github.com/eclipse-platform/eclipse.platform.swt
 %global tag R%{major_version}_%{minor_version}
 Epoch:                  1
-
 %global swtsrcdir       bundles/org.eclipse.swt
 %global eclipse_arch    %{_arch}
-
 Name:           eclipse-swt
 Version:        %{major_version}.%{minor_version}
 Release:        1%{?dist}
 Summary:        Eclipse SWT: The Standard Widget Toolkit for GTK+
 %forgemeta
-
 License:        EPL-2.0
 URL:            %{forgeurl}
-
-Source0:        %{forgesource}
-
-# Add fedora cflags to build native libs
+Source0:        %{forgeurl}/archive/%{tag}/eclipse.platform.swt-%{tag}.tar.gz
 Patch0:         eclipse-swt-fedora-build-native.patch
-
 ExclusiveArch:  %{java_arches} 
-
 Requires:       java-25-headless
 Requires:       webkit2gtk4.1
-
-BuildRequires:  javapackages-tools
-BuildRequires:  java-25-devel
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  ant-openjdk25
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  webkit2gtk4.1-devel
-BuildRequires:  cairo-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  mesa-libGLU-devel
-
 Provides:       eclipse-swt = 1:%{version}-%{release}
 Obsoletes:      eclipse-swt <= 1:4.19-3
-
+# oreon:deps
+BuildRequires:  ant-openjdk25
+BuildRequires:  cairo-devel
+BuildRequires:  gcc
+BuildRequires:  gtk3-devel
+BuildRequires:  java-25-devel
+BuildRequires:  javapackages-tools
+BuildRequires:  make
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  webkit2gtk4.1-devel
+# /oreon:deps
 %description
 SWT is an open source widget toolkit for Java designed to provide 
 efficient, portable access to the user-interface facilities of the 
@@ -52,6 +41,7 @@ operating systems on which it is implemented.
 %javadoc_package
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgesetup
@@ -119,42 +109,29 @@ rm .mvn/extensions.xml
 %build
 
 cd %{swtsrcdir}
-
-# Build native part
 export SWT_LIB_DEBUG=1
 export SWT_JAVA_HOME=/usr/lib/jvm/java-25-openjdk
 export CFLAGS="${RPM_OPT_FLAGS} -std=gnu17 -Wno-deprecated-declarations"
 export LFLAGS="${RPM_LD_FLAGS}"
 cd Eclipse\ SWT\ PI/gtk/library/
 sh build.sh -gtk3
-
-# Build Java part
 cd ../../..
 %mvn_build
-
 %install
-# Generate addition Maven metadata
 rm -rf .xmvn/ .xmvn-reactor
-
-# Install Maven metadata for SWT
 JAR="$(ls -1 %{swtsrcdir}/target/org.eclipse.swt-*.jar | head -n1)"
 VER="$(basename "$JAR" | sed -E 's/^org\.eclipse\.swt-([0-9][0-9.]*(-SNAPSHOT)?)\.jar/\1/')"
 %mvn_artifact "org.eclipse.swt:org.eclipse.swt:jar:$VER" "$JAR"
 %mvn_alias "org.eclipse.swt:org.eclipse.swt" "org.eclipse.swt:swt"
 %mvn_file "org.eclipse.swt:org.eclipse.swt" swt
-
 %mvn_install -J %{swtsrcdir}/target/xmvn-apidocs
-
-# fix so permissions
 find %{swtsrcdir}/Eclipse\ SWT\ PI/gtk/library/*.so -name *.so -exec chmod a+x {} \;
-
 install -d 755 %{buildroot}/%{_libdir}/%{name}
 cp -a %{swtsrcdir}/Eclipse\ SWT\ PI/gtk/library/*.so %{buildroot}/%{_libdir}/%{name}
+%oreon_autofiles main
 
-%files -f .mfiles
-%{_libdir}/%{name}
-%license LICENSE
-%license NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

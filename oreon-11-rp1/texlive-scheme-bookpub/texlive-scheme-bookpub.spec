@@ -1,17 +1,13 @@
 %global source0_hash none
-
 %global tl_version 2025
-
 Name:           texlive-scheme-bookpub
 Epoch:          12
 Version:        svn63547
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        book publishing scheme (core LaTeX and add-ons)
-
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-barcodes
 Requires:       biber
@@ -39,7 +35,9 @@ Requires:       texlive-titlesec
 Requires:       texlive-tocloft
 Requires:       texlive-tufte-latex
 Requires:       texlive-willowtreebook
-
+# oreon:deps
+BuildRequires:  texlive-base
+# /oreon:deps
 %description
 book publishing scheme (core LaTeX and add-ons) This is a book publishing
 scheme, containing core (Lua)LaTeX and selected additional packages likely to
@@ -48,13 +46,13 @@ fonts (different books need different fonts, and the packages are large), nor
 does it contain additional mathematical or other technical packages.
 
 %build
-# Nothing to build
 
 %install
-# Nothing to install
 
-# Main scheme metapackage (empty)
-%files
+%oreon_autofiles main
+
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

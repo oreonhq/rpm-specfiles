@@ -1,57 +1,43 @@
 %global source0_hash fc73170ad7506f301bb3beabcaa259814bff4547b26f0531bd56c63965dbaac8
-
 Name:           python-sushy
 Version:        5.13.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Sushy is a small Python library to communicate with Redfish based systems
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://docs.openstack.org/sushy/latest/
-Source:         %{pypi_source sushy}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sushy/sushy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sushy' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(pbr) >= 6.0.0
+BuildRequires:  python3dist(setuptools) >= 64.0.0
+Requires:       python3-sushy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-sushy
-Summary:        %{summary}
-
-%description -n python3-sushy %_description
-
+Summary:        Sushy is a small Python library to communicate with Redfish based systems
+%description -n python3-sushy
 
 %prep
-%autosetup -p1 -n sushy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sushy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sushy usr/lib/python3*/site-packages/sushy* usr/lib64/python3*/site-packages/sushy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sushy* usr/lib64/python3*/site-packages/sushy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sushy -f %{pyproject_files}
+%files
+%files -n python3-sushy -f %{oreon_filedir}/python3-sushy.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.2.0-7
 - Prepare for Oreon 11 (RP1)

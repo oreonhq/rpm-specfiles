@@ -1,45 +1,39 @@
 %global source0_hash bfaab019ab2ea4e93550f6150c0a49fe8590b2505cb9bd09793ff3aa894ffe20
-
-%if (%{defined fedora} && 0%{?fedora} <= 42) || (%{defined rhel} && 0%{?rhel} <= 10)
-# setuptools < 77, can't use new license metadata
-%bcond old_setuptools 1
-%else
 %bcond old_setuptools 0
-%endif
-
 Name:           python-merge3
 Version:        0.0.16
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Python implementation of 3-way merge
 License:        GPL-2.0-or-later
 URL:            https://www.breezy-vcs.org
-# PyPI source does not contain tests
-# Source:         %%{pypi_source merge3}
-Source:         https://github.com/breezy-team/merge3/archive/v%{version}/merge3-%{version}.tar.gz
-# pass -v in tox.ini to unittest invocation
+Source0:        https://github.com/breezy-team/merge3/archive/v%{version}/merge3-%{version}.tar.gz
 Patch:          merge3-verbose-testlog.diff
-# conditional patches (1000+)
 Patch1000:      merge3-revert-setuptools-bump.diff
-
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77.0.0
+Requires:       python3-merge3 = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-merge3+dev
+Summary:        Metapackage for python3-merge3 dev extras
+Requires:       python3-merge3 = %{version}-%{release}
+Requires:       python3dist(ruff) == 0.14.0
+Requires:       python3dist(mypy) >= 1.0.0
+Provides:       python3dist(merge3[dev]) = %{version}-%{release}
 
-BuildRequires:  python%{python3_pkgversion}-devel
+%description -n python3-merge3+dev
+Metapackage for python3-merge3 dev extras.
 
-%global _description %{expand:
-A Python implementation of 3-way merge of texts.
-
-Given BASE, OTHER, THIS, tries to produce a combined text
-incorporating the changes from both BASE->OTHER and BASE->THIS.
-All three will typically be sequences of lines.}
-
-%description %{_description}
+%description
 
 %package -n python3-merge3
-Summary:        %{summary}
-
-%description -n python3-merge3 %{_description}
+Summary:        Python implementation of 3-way merge
+%description -n python3-merge3
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n merge3-%{version} -N
@@ -48,23 +42,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autopatch -p1 1000
 %endif
 
-%generate_buildrequires
-%pyproject_buildrequires -t
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files merge3
+%oreon_autofiles python3-merge3 usr/lib/python3*/site-packages/merge3* usr/lib64/python3*/site-packages/merge3* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/merge3* usr/lib64/python3*/site-packages/merge3* usr/bin/*
 
 %check
-%tox
 
-%files -n python3-merge3 -f %{pyproject_files}
-# license already auto-detected, verified with rpm -qpL
-%doc README.rst
-%{_bindir}/merge3
+%tox
+%files
+%files -n python3-merge3 -f %{oreon_filedir}/python3-merge3.list
 
 %changelog
+
 %autochangelog

@@ -1,24 +1,22 @@
 %global source0_hash 208c7a07e95383fbd7b466b5681590789dcb41f41bf197369c41a95383b57c5e
-
 Name:		f2fs-tools
 Version:	1.16.0
-Release:	11%{?dist}
-Summary:	Tools for Flash-Friendly File System (F2FS)
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Tools for Flash-Friendly File System (F2FS)
 License:	GPL-2.0-or-later
 URL:		http://sourceforge.net/projects/f2fs-tools/
 Source0:        http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/%{name}-%{version}.tar.gz
-# Patch  from https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/patch/?id=6617d15a660becc23825007ab3fc2d270b5b250f
 Patch0:		f2fs-tools-1.16.0-c23.patch
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	uuid-devel
-BuildRequires:	libuuid-devel
-BuildRequires:	libtool
-BuildRequires:	libselinux-devel
-BuildRequires:	libblkid-devel
-BuildRequires:	make
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libblkid-devel
+BuildRequires:  libselinux-devel
+BuildRequires:  libtool
+BuildRequires:  libuuid-devel
+BuildRequires:  make
+BuildRequires:  uuid-devel
+# /oreon:deps
 %description
 NAND flash memory-based storage devices, such as SSD, and SD cards,
 have been widely being used for ranging from mobile to server systems. 
@@ -49,48 +47,29 @@ This package contains the libraries needed to develop applications
 that use %{name}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 %patch 0 -p1 -b .c23
 sed -i 's/AC_PROG_LIBTOOL/LT_INIT/' configure.ac
 
-
 %build
+
 autoreconf --install
 %configure --disable-static
 %{make_build}
-
-
 %install
 %{make_install}
 install -m 644 mkfs/f2fs_format_utils.h %{buildroot}%{_includedir}
 find %{buildroot} -type f -name "*.la" -delete
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc AUTHORS ChangeLog
-%{_sbindir}/mkfs.f2fs
-%{_sbindir}/fibmap.f2fs
-%{_sbindir}/fsck.f2fs
-%{_sbindir}/dump.f2fs
-%{_sbindir}/parse.f2fs
-%{_sbindir}/defrag.f2fs
-%{_sbindir}/resize.f2fs
-%{_sbindir}/sload.f2fs
-%{_sbindir}/f2fs_io
-%{_sbindir}/f2fscrypt
-%{_sbindir}/f2fslabel
-
-%{_libdir}/*.so.*
-%{_mandir}/man8/*f2*.gz
-
-%files devel
-%{_includedir}/*.h
-%{_libdir}/*.so
+%files -f %{oreon_filedir}/main.list
+%files -n f2fs-tools-devel -f %{oreon_filedir}/f2fs-tools-devel.list
 
 %changelog
+
 * Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.16.0-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

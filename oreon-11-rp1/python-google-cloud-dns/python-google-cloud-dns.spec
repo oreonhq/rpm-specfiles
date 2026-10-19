@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 84e87e6bbe11845e3576484f55be5aa44abcbd2e677cd57d3f841e77ab927702
 Name:           python-google-cloud-dns
 Version:        0.37.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Google Cloud DNS API client library
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-dns
-Source:         %{pypi_source google_cloud_dns}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/google_cloud_dns/google_cloud_dns-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'google-cloud-dns' generated automatically by pyp2spec.}
-
 Patch0:         python-google-cloud-dns-mock.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-google-cloud-dns = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-google-cloud-dns
-Summary:        %{summary}
-
-%description -n python3-google-cloud-dns %_description
-
+Summary:        Google Cloud DNS API client library
+%description -n python3-google-cloud-dns
 
 %prep
-%autosetup -p1 -n google_cloud_dns-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir google_cloud_dns-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-google-cloud-dns usr/lib/python3*/site-packages/google_cloud_dns* usr/lib64/python3*/site-packages/google_cloud_dns* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/google_cloud_dns* usr/lib64/python3*/site-packages/google_cloud_dns* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-google-cloud-dns -f %{pyproject_files}
+%files
+%files -n python3-google-cloud-dns -f %{oreon_filedir}/python3-google-cloud-dns.list
 
 %changelog
+
 %autochangelog

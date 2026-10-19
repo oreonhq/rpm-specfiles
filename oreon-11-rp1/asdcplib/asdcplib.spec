@@ -1,25 +1,20 @@
 %global source0_hash ee40998f737d5751cf9157c4c416f2ef4f63fc5bdae579afefbb91a3265e6039
-
 %global gittag rel_2_13_2
-
 Name:           asdcplib
 Version:        2.13.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        AS-DCP file access libraries
 License:        BSD-3-Clause
 URL:            http://www.cinecert.com/asdcplib/
-
 Source0:        https://github.com/cinecert/%{name}/archive/%{gittag}/%{name}-%{version}.tar.gz
 Source1:        %{name}.pc
-
 ExcludeArch:    %{ix86} %{arm}
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-# https://fedoraproject.org/wiki/Licensing:FAQ#What.27s_the_deal_with_the_OpenSSL_license.3F
 BuildRequires:  openssl-devel
 BuildRequires:  xerces-c-devel
-
+# /oreon:deps
 %description
 Open source implementation of SMPTE and the MXF Interop “Sound & Picture Track
 File” format. It was originally developed with support from DCI. Development
@@ -31,7 +26,6 @@ both supported using OpenSSL for cryptographic support.
 
 %package        tools
 Summary:        AS-DCP file access libraries tools
-
 %description    tools
 Open source implementation of SMPTE and the MXF Interop “Sound & Picture Track
 File” format. It was originally developed with support from DCI. Development
@@ -46,12 +40,12 @@ This package contains tools and testing programs for %{name}.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{gittag}
@@ -63,14 +57,12 @@ find . -name "*.cpp" -exec chmod 644 {} \;
 chmod 644 README.md
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380464)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake -DCMAKE_SKIP_RPATH=True
 %cmake_build
-
 %install
 %cmake_install
-
 install -p -D -m 644 %{SOURCE1} %{buildroot}%{_libdir}/pkgconfig/%{name}.pc
 sed -i \
     -e 's|PREFIX|%{_prefix}|g' \
@@ -78,44 +70,16 @@ sed -i \
     -e 's|INCLUDEDIR|%{_includedir}|g' \
     -e 's|VERSION|%{version}|g' \
     %{buildroot}%{_libdir}/pkgconfig/%{name}.pc
-
 find %{buildroot} -name '*.la' -delete
 rm -fr  %{buildroot}%{_prefix}/targets
+%oreon_autofiles asdcplib-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles asdcplib-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc README.md
-%{_libdir}/libas02.so.2
-%{_libdir}/libas02.so.2.*
-%{_libdir}/libasdcp.so.2
-%{_libdir}/libasdcp.so.2.*
-%{_libdir}/libkumu.so.2
-%{_libdir}/libkumu.so.2.*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/libas02.so
-%{_libdir}/libasdcp.so
-%{_libdir}/libkumu.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files tools
-%{_bindir}/as-02-info
-%{_bindir}/as-02-unwrap
-%{_bindir}/as-02-wrap
-%{_bindir}/as-02-wrap-iab
-%{_bindir}/asdcp-info
-%{_bindir}/asdcp-test
-%{_bindir}/asdcp-unwrap
-%{_bindir}/asdcp-util
-%{_bindir}/asdcp-wrap
-%{_bindir}/blackwave
-%{_bindir}/j2c-test
-%{_bindir}/klvwalk
-%{_bindir}/kmfilegen
-%{_bindir}/kmrandgen
-%{_bindir}/kmuuidgen
-%{_bindir}/wavesplit
+%files -f %{oreon_filedir}/main.list
+%files -n asdcplib-tools -f %{oreon_filedir}/asdcplib-tools.list
+%files -n asdcplib-devel -f %{oreon_filedir}/asdcplib-devel.list
 
 %changelog
+
 %autochangelog

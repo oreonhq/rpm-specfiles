@@ -1,62 +1,51 @@
-%global source0_hash none
-
+%global source0_hash 0154689a5aa009174b5e332a6997318e82e1b12b57fce03162ed49ea25c65652
 Name:           python-blurb
 Version:        2.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Command-line tool to manage CPython Misc/NEWS.d entries.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/python/blurb
-Source:         %{pypi_source blurb}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/blurb/blurb-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-blurb = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-blurb+tests
+Summary:        Metapackage for python3-blurb tests extras
+Requires:       python3-blurb = %{version}-%{release}
+Provides:       python3dist(blurb[tests]) = %{version}-%{release}
 
+%description -n python3-blurb+tests
+Metapackage for python3-blurb tests extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'blurb' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-blurb
-Summary:        %{summary}
-
-%description -n python3-blurb %_description
+Summary:        Command-line tool to manage CPython Misc/NEWS.d entries.
+%description -n python3-blurb
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-blurb tests
-
 
 %prep
-%autosetup -p1 -n blurb-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir blurb-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-blurb usr/lib/python3*/site-packages/blurb* usr/lib64/python3*/site-packages/blurb* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/blurb* usr/lib64/python3*/site-packages/blurb* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-blurb -f %{pyproject_files}
-%{_bindir}/blurb
+%files
+%files -n python3-blurb -f %{oreon_filedir}/python3-blurb.list
 
 %changelog
+
 %autochangelog

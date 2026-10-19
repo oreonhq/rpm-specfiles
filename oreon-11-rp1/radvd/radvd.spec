@@ -1,36 +1,32 @@
-%global source0_hash none
-
+%global source2_hash 67c51aab37441f2827b52855366b2dd5912ce3722209be91de9dae736d7a47ba
+%global source1_hash 0afe03d690db4b92c799c9522fdf52cba41f572a116e5cae16c5f58dddd59092
+%global source0_hash 91df2ed7faca0716bbd726a17d6467ed92fcb2b6e45b57d9e619f9686ab99e1b
 %global source2_key_fpr 11ACBA4F4778E3F6E4EDF38EB27B944E34884E85
-
 Name: radvd
 Version: 2.21
-Release: %autorelease
-Summary: A Router Advertisement daemon
+Release:        1%{?dist}
+Summary:        A Router Advertisement daemon
 License: radvd
 URL: https://radvd.litech.org
-
 Source0:        https://github.com/radvd-project/radvd/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1:        https://github.com/radvd-project/radvd/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
-# Robin Hugh Johnson's public key
 Source2:        https://github.com/robbat2.gpg
 Source3: radvd.sysusers
-
-# allow glibc strlcpy, avoid libbsd dependency
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: bison
-BuildRequires: flex
-BuildRequires: flex-static
-BuildRequires: pkgconfig
-BuildRequires: check-devel
-BuildRequires: systemd
-BuildRequires: systemd-rpm-macros
 %{?systemd_requires}
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: gpgverify
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  check-devel
+BuildRequires:  flex
+BuildRequires:  flex-static
+BuildRequires:  gcc
+BuildRequires:  gpgverify
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 radvd is the router advertisement daemon for IPv6.  It listens to router
 solicitations and sends router advertisements as described in "Neighbor
@@ -43,6 +39,7 @@ Install radvd if you are setting up IPv6 network and/or Mobile IPv6
 services.
 
 %prep
+
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
@@ -54,6 +51,7 @@ for F in CHANGES; do
 done
 
 %build
+
 autoreconf -fiv
 export CFLAGS="$RPM_OPT_FLAGS -fPIE " 
 export LDFLAGS='-pie -Wl,-z,relro,-z,now,-z,noexecstack,-z,nodlopen'
@@ -62,49 +60,34 @@ export LDFLAGS='-pie -Wl,-z,relro,-z,now,-z,noexecstack,-z,nodlopen'
     --disable-silent-rules \
     --with-pidfile=/run/radvd/radvd.pid
 %make_build 
-
 %install
 %make_install
-
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 mkdir -p %{buildroot}/run/radvd
 mkdir -p %{buildroot}%{_unitdir}
-
 install -m 644 redhat/SysV/radvd.conf.empty %{buildroot}%{_sysconfdir}/radvd.conf
 install -m 644 redhat/SysV/radvd.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/radvd
-
 install -d -m 755 %{buildroot}%{_tmpfilesdir}
 install -p -m 644 redhat/systemd/radvd-tmpfs.conf %{buildroot}%{_tmpfilesdir}/radvd.conf
 install -m 644 redhat/systemd/radvd.service %{buildroot}%{_unitdir}
 install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/radvd.conf
+%oreon_autofiles main
 
 %check
+
 make check
-
 %postun
+
 %systemd_postun_with_restart radvd.service
-
 %post
+
 %systemd_post radvd.service
-
 %preun
+
 %systemd_preun radvd.service
-
-
-%files
-%{_unitdir}/radvd.service
-%config(noreplace) %{_sysconfdir}/radvd.conf
-%config(noreplace) %{_sysconfdir}/sysconfig/radvd
-%{_tmpfilesdir}/radvd.conf
-%{_sysusersdir}/radvd.conf
-%dir %attr(755,radvd,radvd) /run/radvd/
-%doc radvd.conf.example
-%{_mandir}/man5/radvd.conf.5*
-%{_mandir}/man8/radvd.8*
-%{_mandir}/man8/radvdump.8*
-%{_sbindir}/radvd
-%{_sbindir}/radvdump
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20-1
 - Prepare for Oreon 11 (RP1)

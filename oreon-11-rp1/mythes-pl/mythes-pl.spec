@@ -1,25 +1,25 @@
 %global source0_hash 9a04ade7f6e7532edebb2582001719c82886884553f15dcba9baf409b9c49420
-
 Name: mythes-pl
-Summary: Polish thesaurus
+Summary:        Polish thesaurus
 Version: 1.5
-Release: 38%{?dist}
-Source:        https://downloads.sourceforge.net/synonimy/OOo2-Thesaurus-1.5.zip
-# URL is dead now, please don't file bugs to fix it
+Release:        1%{?dist}
+Source0:        https://downloads.sourceforge.net/synonimy/OOo2-Thesaurus-1.5.zip
 URL: http://synonimy.ux.pl/
 License: LGPL-2.1-only
 BuildArch: noarch
 Requires: mythes
 Supplements: (mythes and langpacks-pl)
+# oreon:deps
 
+# /oreon:deps
 %description
 Polish thesaurus.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c
-
+%oreon_prep
 %build
+
 for i in README_th_pl_PL_v2.txt; do
   if ! iconv -f utf-8 -t utf-8 -o /dev/null $i > /dev/null 2>&1; then
     iconv -f ISO-8859-2 -t UTF-8 $i > $i.new
@@ -30,16 +30,14 @@ for i in README_th_pl_PL_v2.txt; do
   touch -r $i $i.new
   mv -f $i.new $i
 done
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/mythes
 cp -p th_pl_PL_v2.* $RPM_BUILD_ROOT/%{_datadir}/mythes
+%oreon_autofiles main
 
-
-%files
-%doc README_th_pl_PL_v2.txt
-%{_datadir}/mythes/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5-38
 - Import

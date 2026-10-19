@@ -1,9 +1,4 @@
 %global source0_hash 6faaa0ac942d388bbabfac8840949a0548d351400005adca008df6291ee99819
-
-# Lists copied from gcc.spec
-# Current as of 15.2.1 (lines 74, 94, and 84, respectively).
-# Note that asan and ubsan are available on all Fedora primary architectures;
-# tsan is missing on i686 only.
 %ifarch %{ix86} x86_64 ppc ppc64 ppc64le ppc64p7 s390 s390x %{arm} aarch64 riscv64
 %global arch_has_asan 1
 %endif
@@ -13,68 +8,13 @@
 %ifarch x86_64 ppc64 ppc64le aarch64 s390x riscv64
 %global arch_has_tsan 1
 %endif
-
-# By default, enable sanitizers whenever they are available on the architecture.
 %bcond asan 0%{?arch_has_asan:1}
 %bcond ubsan 0%{?arch_has_ubsan:1}
 %bcond tsan 0%{?arch_has_tsan:1}
-
 Name:           wlcs
 Version:        1.8.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Wayland Conformance Test Suite
-
-# The entire source is GPL-3.0-only, except:
-#
-# (GPL-2.0-only OR GPL-3.0-only):
-#   - CMakeLists.txt
-# > Build system file that does not contribute to the licenses of the binary
-#   RPMs
-#
-# (LGPL-2.0-only OR LGPL-3.0-only):
-#   - include/geometry/*
-#   - include/mutex.h
-#   - include/shared_library.h
-#   - src/helpers.cpp
-#   - src/shared_library.cpp
-# > Since (L)GPLv2-only code is not compatible with (L)GPLv3 or (L)GPLv3+ code,
-#   and these sources are combined with GPLv3 code, the LGPLv3 option is used
-#   in this package. However, we encode both options in the SPDX expression.
-#
-# GPL-2.0-or-later
-#   - debian/*
-# > Not used in this package
-#
-# MIT:
-#   - src/protocol/gtk-primary-selection.xml
-#   - src/protocol/input-method-unstable-v1.xml
-#   - src/protocol/pointer-constraints-unstable-v1.xml
-#   - src/protocol/primary-selection-unstable-v1.xml
-#   - src/protocol/relative-pointer-unstable-v1.xml
-#   - src/protocol/wayland.xml
-#   - src/protocol/wlr-virtual-pointer-unstable-v1.xml
-#   - src/protocol/xdg-output-unstable-v1.xml
-#   - src/protocol/xdg-shell-unstable-v6.xml
-#   - src/protocol/xdg-shell.xml
-#   - tests/test_bad_buffer.cpp
-#   - tests/test_surface_events.cpp
-#   - tests/text_input_v3_with_input_method_v2.cpp
-#   - tests/wlr_virtual_pointer_v1.cpp
-#   - tests/xdg_popup_v6.cpp
-#   - tests/xdg_surface_stable.cpp
-#   - tests/xdg_surface_v6.cpp
-#   - tests/xdg_toplevel_stable.cpp
-#   - tests/xdg_toplevel_v6.cpp
-# > Files in tests/ are all test code that is not installed (so does not
-#   contribute to the licenses of the binary RPMs). Files in src/protocol/ are
-#   used as inputs to “wayland-scanner” to generate C source files and headers,
-#   and are not directly included in the binary RPMs.
-#
-# HPND-sell-variant:
-#   - src/protocol/text-input-unstable-v2.xml
-# > Files in src/protocol/ are used as inputs to “wayland-scanner” to generate
-#   C source files and headers, and are not directly included in the binary
-#   RPMs.
 License:        GPL-3.0-only AND (LGPL-2.0-only OR LGPL-3.0-only)
 SourceLicense:  %{shrink:
                 %{license} AND
@@ -84,31 +24,25 @@ SourceLicense:  %{shrink:
                 MIT
                 }
 URL:            https://github.com/MirServer/wlcs
-Source:         %{url}/archive/v%{version}/wlcs-%{version}.tar.gz
-
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-
-BuildRequires:  cmake
-BuildRequires:  ninja-build
-
-BuildRequires:  boost-devel
-BuildRequires:  cmake(GTest)
-BuildRequires:  gmock-devel
-BuildRequires:  pkgconfig(wayland-client)
-BuildRequires:  pkgconfig(wayland-server)
-BuildRequires:  pkgconfig(wayland-scanner)
-
+Source0:        https://github.com/MirServer/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 %if %{with asan}
-BuildRequires:  libasan
 %endif
 %if %{with ubsan}
-BuildRequires:  libubsan
 %endif
 %if %{with tsan}
-BuildRequires:  libtsan
 %endif
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(GTest)
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gmock-devel
+BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-scanner)
+BuildRequires:  pkgconfig(wayland-server)
+# /oreon:deps
 %description
 wlcs aspires to be a protocol-conformance-verifying test suite usable by
 Wayland compositor implementors.
@@ -128,7 +62,6 @@ compositor and back again.
 %package        devel
 Summary:        Development files for wlcs
 Requires:       wlcs%{?_isa} = %{version}-%{release}
-
 %description    devel
 wlcs aspires to be a protocol-conformance-verifying test suite usable by
 Wayland compositor implementors.
@@ -137,6 +70,7 @@ The wlcs-devel package contains libraries and header files for developing
 Wayland compositor tests that use wlcs.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -152,26 +86,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -GNinja
 
 %build
-%cmake_build
 
+%cmake_build
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license COPYING.*
-%doc README.rst
-
-%{_libexecdir}/wlcs/
-
-%files devel
-%doc README.rst
-%doc example/
-
-%{_includedir}/wlcs/
-%{_libdir}/pkgconfig/wlcs.pc
+%files -f %{oreon_filedir}/main.list
+%files -n wlcs-devel -f %{oreon_filedir}/wlcs-devel.list
 
 %changelog
+
 %autochangelog

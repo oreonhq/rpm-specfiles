@@ -1,16 +1,20 @@
 %global source0_hash 85b2a996bdbf65028b92a8c1d7ceed62787560562344a3f66397e7cd85d72030
-
-Summary: Password manager with GTK3 GUI
+Summary:        Password manager with GTK3 GUI
 Name: fpm2
 Version: 0.90.2
-Release: 2%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-or-later
-Source: https://als.regnet.cz/%{name}/download/%{name}-%{version}.tar.xz
+Source0:        https://als.regnet.cz/%{name}/download/%{name}-%{version}.tar.xz
 URL: https://als.regnet.cz/fpm2/
-BuildRequires: meson
-BuildRequires: gcc, desktop-file-utils, gettext
-BuildRequires: gtk3-devel, libxml2-devel, nettle-devel
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  gtk3-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  meson
+BuildRequires:  nettle-devel
+# /oreon:deps
 %description
 Figaro's Password Manager 2 is a program that allows you to securely store the
 passwords using GTK3 interface. Features include:
@@ -31,6 +35,7 @@ passwords using GTK3 interface. Features include:
   to the tray icon.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -39,29 +44,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %meson
 
 %build
-%meson_build
 
+%meson_build
 %install
 %meson_install
-
 %find_lang %{name}
-
 desktop-file-install \
   --delete-original \
   --dir %{buildroot}%{_datadir}/applications \
   %{buildroot}%{_datadir}/applications/%{name}.desktop
-
-%files -f %{name}.lang
-%doc AUTHORS COPYING ChangeLog NEWS README TODO
-%{_bindir}/fpm2
-%{_datadir}/pixmaps/fpm2
-%{_mandir}/man1/fpm2.1.gz
-%{_datadir}/applications/fpm2.desktop
-%{_datadir}/icons/hicolor/*/apps/fpm2.png
-%{_datadir}/metainfo/fpm2.metainfo.xml
+%oreon_autofiles main
 
 %check
-# No tests available for this package
+
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

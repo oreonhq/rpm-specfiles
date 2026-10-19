@@ -1,34 +1,14 @@
-%global source0_hash a9a118bbe84d8764da0ea0d28b3ab3fae8477fc7e4085d90102b8596fc7c75e4
-
-# We are not using this as the system libc,
-# so this remains disabled by default.
+%global source0_hash d585fd3b613c66151fc3249e8ed44f77020cb5e6c1e635a616d3f9f82460512a
 %bcond_with system_libc
-
-# Fedora uses multilib with /usr/lib64
-# This switch changes it to multiarch, with /usr/lib/[arch]-linux-musl
-# This switch only has effect if system_libc is disabled.
-# This switch is disabled by default.
 %bcond_with multiarch
-
-# Fedora uses glibc as the standard libc.
-# This means any packages that would use musl would be treated
-# as a cross-compilation target. Cross-mode sets it up for this application.
-# In cross-mode, a prefix root is created with a new child FHS area.
-# This switch only has effect if system_libc is disabled.
-# This switch is enabled by default.
 %bcond_without crossmode
-
-# Ensure the value is set correctly
 %ifarch %{x86_64}
 %global _musl_target_cpu x86_64
 %endif
-
 %ifarch %{ix86}
 %global _musl_target_cpu i386
 %endif
-
 %ifarch %{arm}
-# ARM is... complicated...
 %ifarch armv3l armv4b armv4l armv4tl armv5tl armv5tel armv5tejl armv6l armv7l
 %global _musl_target_cpu arm
 %else
@@ -36,91 +16,63 @@
 %endif
 %global _musl_platform_suffix eabi
 %endif
-
 %ifarch %{mips64}
 %global _musl_target_cpu mips64
 %endif
-
 %ifarch %{mips32}
 %global _musl_target_cpu mips
 %endif
-
 %ifarch ppc
 %global _musl_target_cpu powerpc
 %endif
-
 %ifarch %{power64}
-# POWER architectures have a different name if little-endian
 %ifarch ppc64le
 %global _musl_target_cpu powerpc64le
 %else
 %global _musl_target_cpu powerpc64
 %endif
 %endif
-
 %ifnarch %{x86_64} %{ix86} %{arm} %{mips} %{power64} ppc
 %global _musl_target_cpu %{_target_cpu}
 %endif
-
-# Define the platform name
 %global _musl_platform %{_musl_target_cpu}-linux-musl%{?_musl_platform_suffix}
-
-# Paths to use when not set up in cross-mode
 %if %{without crossmode}
-# Set up alternate paths when not using as system libc
 %if %{without system_libc}
-# Set up libdir path for when using multilib
 %if %{without multiarch}
 %global _libdir %{_prefix}/%{_lib}/%{_musl_platform}
 %else
-# Set up libdir path for when using multiarch
 %global _libdir %{_prefix}/lib/%{_musl_platform}
 %endif
 %global _includedir %{_prefix}/include/%{_musl_platform}
 %endif
 %else
-# Cross-mode paths
 %global _libdir %{_prefix}/%{_musl_platform}/%{_lib}
 %global _includedir %{_prefix}/%{_musl_platform}/include
 %endif
-
 %if %{without multiarch}
-# We need to be multilib aware
 %global _syslibdir /%{_lib}
 %else
 %global _syslibdir /lib
 %endif
-
 Name:		musl
 Version:	1.2.6
-Release:	1%{?dist}
-Summary:	Fully featured lightweight standard C library for Linux
+Release:        1%{?dist}
+Summary:        Fully featured lightweight standard C library for Linux
 License:	MIT
 URL:		https://musl.libc.org
-Source0:	%{url}/releases/%{name}-%{version}.tar.gz
+Source0:        https://%{name}.libc.org/releases/%{name}-%{version}.tar.gz
 Source1:	%{url}/releases/%{name}-%{version}.tar.gz.asc
 Source2:	%{url}/musl.pub
-
-# Fix Makefile to not use INSTALL variable so make_install macro works
 Patch0:		musl-1.1.18-Makefile-rename-INSTALL-var.patch
-# Support PIE with static linking
 Patch1:		musl-1.2.0-Support-static-pie-with-musl-gcc-specs.patch
-
-# From upstream to fix systemd builds on musl
 Patch10:        https://git.musl-libc.org/cgit/musl/patch/?id=fde29c04adbab9d5b081bf6717b5458188647f1c#/musl-1.2.5-stdio-skip-empty-iovec-when-buffering-is-disabled.patch
-
-# musl is only for Linux
 ExclusiveOS:	linux
-
-# s390 is not supported by musl-libc
 ExcludeArch:	s390
-
-BuildRequires:	gcc
-BuildRequires:	make
-
-# For GPG signature verification
-BuildRequires:	gnupg2
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  make
+# /oreon:deps
 %description
 musl is a C standard library to power a new generation
 of Linux-based devices. It is lightweight, fast, simple,
@@ -129,16 +81,12 @@ conformance and safety.
 
 %package libc
 Summary:	Fully featured lightweight standard C library for Linux
-
-# This package provides musl dynamic libs too
 Obsoletes:	%{name}-libs < %{version}-%{release}
 Provides:	%{name}-libs = %{version}-%{release}
 Provides:	%{name}-libs%{?_isa} = %{version}-%{release}
-# Ensure the filesystem skeleton is installed if it was built
 %if %{without system_libc}
 Requires:	%{name}-filesystem%{?_isa} = %{version}-%{release}
 %endif
-
 %description libc
 musl is a C standard library to power a new generation
 of Linux-based devices. It is lightweight, fast, simple,
@@ -152,7 +100,6 @@ programs and libraries against musl.
 %if %{without system_libc}
 %package filesystem
 Summary:	Base filesystem for %{name}
-
 %description filesystem
 musl is a C standard library to power a new generation
 of Linux-based devices. It is lightweight, fast, simple,
@@ -165,16 +112,9 @@ for libraries and headers linked against musl.
 
 %package devel
 Summary:	Development files for %{name}
-
-# This package also provides the headers for using musl
 Provides:	%{name}-headers = %{version}-%{release}
 Provides:	%{name}-headers%{?_isa} = %{version}-%{release}
-
 Requires:	%{name}-libc = %{version}-%{release}
-%if ! (0%{?rhel} && 0%{?rhel} < 8)
-Recommends:	%{name}-libc-static = %{version}-%{release}
-%endif
-
 %description devel
 musl is a C standard library to power a new generation
 of Linux-based devices. It is lightweight, fast, simple,
@@ -190,7 +130,6 @@ Obsoletes:	%{name}-static < %{version}-%{release}
 Provides:	%{name}-static = %{version}-%{release}
 Provides:	%{name}-static%{?_isa} = %{version}-%{release}
 Requires:	%{name}-devel%{?_isa} = %{version}-%{release}
-
 %description libc-static
 musl is a C standard library to power a new generation
 of Linux-based devices. It is lightweight, fast, simple,
@@ -204,7 +143,6 @@ statically linking musl into programs and libraries.
 Summary:	Wrapper for using gcc with musl
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	gcc
-
 %description gcc
 musl is a C standard library to power a new generation
 of Linux-based devices. It is lightweight, fast, simple,
@@ -218,7 +156,6 @@ programs and libraries with musl easily.
 Summary:	Wrapper for using clang with musl
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	clang
-
 %description clang
 musl is a C standard library to power a new generation
 of Linux-based devices. It is lightweight, fast, simple,
@@ -229,6 +166,7 @@ This package provides a wrapper around clang to compile
 programs and libraries with musl easily.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # Verify *before* actually unpacking!
@@ -238,94 +176,47 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autosetup -p1
 
 %build
-# musl is known not to work with LTO
-# Disable LTO
-%define _lto_cflags %{nil}
 
+%define _lto_cflags %{nil}
 %ifarch %{power64}
-# Deal with ABI mismatch on long double between glibc and musl
 export CC="gcc -mlong-double-64"
 %endif
-
-# Set linker flags to get correct soname...
 export LDFLAGS="%{?build_ldflags} -Wl,-soname,ld-musl-%{_musl_target_cpu}.so.1"
 %configure --enable-debug --enable-wrapper=all
 %make_build
-
 %install
 %make_install
-
-# Swap the files around for libc.so, making libc.so a symlink to the real file
 rm %{buildroot}/lib/ld-musl-%{_musl_target_cpu}.so.1
 mv %{buildroot}%{_libdir}/libc.so %{buildroot}/lib/ld-musl-%{_musl_target_cpu}.so.1
 ln -sr %{buildroot}/lib/ld-musl-%{_musl_target_cpu}.so.1 %{buildroot}%{_libdir}/ld-musl-%{_musl_target_cpu}.so.1
 ln -sr %{buildroot}%{_libdir}/ld-musl-%{_musl_target_cpu}.so.1 %{buildroot}%{_libdir}/libc.so
-
-# Write search path for dynamic linker
 mkdir -p %{buildroot}%{_sysconfdir}
 touch %{buildroot}%{_sysconfdir}/ld-musl-%{_musl_target_cpu}.path
 cat > %{buildroot}%{_sysconfdir}/ld-musl-%{_musl_target_cpu}.path <<EOF
 %{_libdir}
 EOF
-
 %if %{without multiarch}
-# Write symlink for syslib to /lib64 for compatibility with Fedora standards, where applicable
 mkdir -p %{buildroot}%{_syslibdir}
 %if "%{_lib}" == "lib64"
 ln -sr %{buildroot}/lib/ld-musl-%{_musl_target_cpu}.so.1 %{buildroot}%{_syslibdir}/ld-musl-%{_musl_target_cpu}.so.1
 %endif
 %endif
-
 mkdir -p %{buildroot}%{_rpmconfigdir}/macros.d
 touch %{buildroot}%{_rpmconfigdir}/macros.d/macros.musl
 cat > %{buildroot}%{_rpmconfigdir}/macros.d/macros.musl <<EOF
 %%_musl_libdir %{_libdir}
 %%_musl_includedir %{_includedir}
 EOF
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files libc
-%license COPYRIGHT
-/lib/ld-musl-%{_musl_target_cpu}.so.1
-%if %{without multiarch}
-%if "%{_lib}" == "lib64"
-%{_syslibdir}/ld-musl-%{_musl_target_cpu}.so.1
-%endif
-%endif
-%{_libdir}/ld-musl-%{_musl_target_cpu}.so.1
-%config(noreplace) %{_sysconfdir}/ld-musl-%{_musl_target_cpu}.path
-
-%if %{without system_libc}
-%files filesystem
-%if %{with crossmode}
-%dir %{_prefix}/%{_musl_platform}
-%endif
-%dir %{_libdir}
-%dir %{_includedir}
-%endif
-
-%files devel
-%license COPYRIGHT
-%doc README WHATSNEW
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/*.o
-%{_libdir}/*.a
-%exclude %{_libdir}/libc.a
-%{_rpmconfigdir}/macros.d/macros.musl
-
-%files libc-static
-%license COPYRIGHT
-%{_libdir}/libc.a
-
-%files gcc
-%license COPYRIGHT
-%{_bindir}/musl-gcc
-%{_libdir}/musl-gcc.specs
-
-%files clang
-%license COPYRIGHT
-%{_bindir}/musl-clang
-%{_bindir}/ld.musl-clang
+%files -f %{oreon_filedir}/main.list
+%files -n musl-libc -f %{oreon_filedir}/musl-libc.list
+%files -n musl-filesystem -f %{oreon_filedir}/musl-filesystem.list
+%files -n musl-devel -f %{oreon_filedir}/musl-devel.list
+%files -n musl-libc-static -f %{oreon_filedir}/musl-libc-static.list
+%files -n musl-gcc -f %{oreon_filedir}/musl-gcc.list
+%files -n musl-clang -f %{oreon_filedir}/musl-clang.list
 
 %changelog
+
 %autochangelog

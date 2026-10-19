@@ -1,12 +1,10 @@
-%global source0_hash none
-
+%global source0_hash 7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a
 %define	_bindir	/bin
-
-Summary: A utility for configuring serial ports
+Summary:        A utility for configuring serial ports
 Name: setserial
 Version: 2.17
-Release: 64%{?dist}
-Source:        https://sourceforge.net/projects/setserial/files/setserial/%{version}/%{name}-%{version}.tar.gz
+Release:        1%{?dist}
+Source0:        https://sourceforge.net/projects/setserial/files/setserial/%{version}/%{name}-%{version}.tar.gz
 Patch0:        setserial-2.17-fhs.patch
 Patch1:        setserial-2.17-rc.patch
 Patch2:        setserial-2.17-readme.patch
@@ -18,17 +16,18 @@ Patch7:        setserial-c99.patch
 License: GPL-1.0-or-later
 URL: http://setserial.sourceforge.net/
 ExcludeArch: s390 s390x
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: groff
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  groff
+BuildRequires:  make
+# /oreon:deps
 %description
 Setserial is a basic system utility for displaying or setting serial
 port information. Setserial can reveal and allow you to alter the I/O
 port and IRQ that a particular serial device is using, and more.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 # Use FHS directory layout.
@@ -53,23 +52,21 @@ rm -f config.cache
 %patch -P7 -p1
 
 %build
+
 %set_build_flags
-# Makefile expects CFLAGS to contain linker flags.
 CFLAGS="$CFLAGS $LDFLAGS"
 %configure
 make %{?_smp_mflags}
-
 %install
 rm -rf ${RPM_BUILD_ROOT}
 mkdir -p ${RPM_BUILD_ROOT}/%{_bindir}
 mkdir -p ${RPM_BUILD_ROOT}/%{_mandir}/man8
 make install DESTDIR=${RPM_BUILD_ROOT}
+%oreon_autofiles main
 
-%files
-%doc README rc.serial
-%{_bindir}/setserial
-%{_mandir}/man*/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17-64
 - Import

@@ -1,57 +1,48 @@
-%global source0_hash none
-
+%global source0_hash 5925fe087eb16fc404a7ed91e31e2c1e2a9b230da4b64f34d81358c0d0e27e88
 Name:           python-parsel
 Version:        1.11.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Parsel is a library to extract data from HTML and XML using XPath and CSS selectors
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/scrapy/parsel
-Source:         %{pypi_source parsel}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/parsel/parsel-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'parsel' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(hatchling) >= 1.27.0
+Requires:       python3-parsel = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-parsel
-Summary:        %{summary}
-
-%description -n python3-parsel %_description
-
+Summary:        Parsel is a library to extract data from HTML and XML using XPath and CSS selectors
+# oreon:reqs
+Requires:       python3dist(cssselect) >= 1.2.0
+Requires:       python3dist(jmespath) >= 1.0.0
+Requires:       python3dist(lxml) >= 5.1.0
+Requires:       python3dist(packaging) >= 23.0
+Requires:       python3dist(w3lib) >= 1.19.0
+# /oreon:reqs
+%description -n python3-parsel
 
 %prep
-%autosetup -p1 -n parsel-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir parsel-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-parsel usr/lib/python3*/site-packages/parsel* usr/lib64/python3*/site-packages/parsel* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/parsel* usr/lib64/python3*/site-packages/parsel* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-parsel -f %{pyproject_files}
+%files
+%files -n python3-parsel -f %{oreon_filedir}/python3-parsel.list
 
 %changelog
+
 %autochangelog

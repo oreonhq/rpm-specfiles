@@ -1,30 +1,28 @@
 %global source0_hash d92212dc0316e4ae711f7480d59e16095c75e19aff6e0095db2209e7d31702d4
-
 Name:           ftnchek
 Version:        3.3.1
-Release:        45%{?dist}
+Release:        1%{?dist}
 Summary:        Static analyzer for Fortran 77 programs
-
 License:        MIT
 URL:            http://www.dsm.fordham.edu/~ftnchek/
 Source0:        http://www.dsm.fordham.edu/~ftnchek/download/ftnchek-3.3.1.tar.gz
 Patch0:         ftnchek-3.3.1-datadir.patch
 Patch1:         http://www.dsm.fordham.edu/~ftnchek/download/ftnchek-3.3.1-varfmt.patch
-# Patch to support bison 2.6
 Patch2:         ftnchek-3.3.1-bison26.patch
 Patch3: ftnchek-configure-c99.patch
-
-BuildRequires:  gcc
-BuildRequires:  bison
-BuildRequires:  groff, emacs
-BuildRequires:  perl
-BuildRequires: make
 Requires:       emacs-filesystem
 Obsoletes:      emacs-ftnchek < 3.3.1-21
 Provides:       emacs-ftnchek = %{version}-%{release}
 Obsoletes:      emacs-ftnchek-el < 3.3.1-21
 Provides:       emacs-ftnchek-el = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  bison
+BuildRequires:  emacs
+BuildRequires:  gcc
+BuildRequires:  groff
+BuildRequires:  make
+BuildRequires:  perl
+# /oreon:deps
 %description
 ftnchek is a static analyzer for Fortran 77 programs. It is designed to
 detect certain errors in a Fortran program that a compiler usually does
@@ -41,6 +39,7 @@ compiler. Prior to using ftnchek, the user should verify that the program
 compiles correctly.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -52,25 +51,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e 's/CFLAGS="-DUNIX.*"//' configure
 
 %build
+
 export CFLAGS="$RPM_OPT_FLAGS -DUNIX"
 %configure
 make || :
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/ftnchek
 %makeinstall STRIP=/bin/true datadir=$RPM_BUILD_ROOT%{_datadir}/ftnchek \
              lispdir=$RPM_BUILD_ROOT%{_datadir}/emacs/site-lisp/ftnchek
+%oreon_autofiles main
 
-%files
-%doc LICENSE README FAQ PATCHES
-%{_bindir}/dcl2inc
-%{_bindir}/ftnchek
-%{_datadir}/ftnchek/
-%{_mandir}/man1/dcl2inc.1*
-%{_mandir}/man1/ftnchek.1*
-%{_emacs_sitelispdir}/ftnchek/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

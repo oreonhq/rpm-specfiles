@@ -1,30 +1,24 @@
 %global source0_hash 64d38ceb52ef574cb314bdd693f7e4a9c9e483e80a58595db22f2df76a8a59e6
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 Name:           ocaml-mew
 Version:        0.1.0
-Release:        34%{?dist}
+Release:        1%{?dist}
 Summary:        Modal Editing Witch
-
 License:        MIT
 URL:            https://github.com/kandu/mew
 VCS:            git:%{url}.git
-Source:         %{url}/archive/%{version}/mew-%{version}.tar.gz
-# Expose a dependency on the math library so RPM can see it
+Source0:        https://github.com/kandu/mew/archive/%{version}/mew-%{version}.tar.gz
 Patch:          %{name}-mathlib.patch
-
-BuildRequires:  ocaml >= 4.02.3
-BuildRequires:  ocaml-dune >= 1.1.0
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-dune
 BuildRequires:  ocaml-ppx-expect-devel
 BuildRequires:  ocaml-result-devel
-BuildRequires:  ocaml-trie-devel >= 1.0.0
-
+BuildRequires:  ocaml-trie-devel
+# /oreon:deps
 %description
 This is the core module of mew, a general modal editing engine generator.  You
 can provide `Key`, `Mode`, and `Concurrent` modules to define the real world
@@ -38,30 +32,27 @@ Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ocaml-result-devel%{?_isa}
 Requires:       ocaml-trie-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n mew-%{version} -p1
-
+%global oreon_srcdir mew-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%doc CHANGES.md README.md
-%license LICENSE
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-mew-devel -f %{oreon_filedir}/ocaml-mew-devel.list
 
 %changelog
+
 %autochangelog

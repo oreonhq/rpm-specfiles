@@ -1,65 +1,51 @@
-%global source0_hash 7227b36e4392dcc7fec07fd31f8347a35286a56483dc33457c12a50c555bc8a7
-
+%global source0_hash 530f0780e62b517cb60f519416e08a7a5d46b370a2b0cf718f39e0cb580ce382
 %global pkg slime
-
 Name:            emacs-%{pkg}
 Epoch:           2
 Version:         2.32
-Release:         1%{?dist}
-Summary:         The superior lisp interaction mode for emacs        
-
-#Public domain: Mentioned in README file
-#LLGPL: Mentioned in swank-ccl.lisp
-#GPLv2+: slime.el,slime-autoloads.el
-#GPLv3+: Many files in contrib are GPLv3+
+Release:        1%{?dist}
+Summary:        The superior lisp interaction mode for emacs
 License:         LicenseRef-Fedora-Public-Domain AND GPL-3.0-or-later AND GPL-2.0-or-later AND LLGPL
 URL:             http://common-lisp.net/project/slime/
-Source0:         https://github.com/slime/slime/archive/v%{version}.tar.gz#/%{pkg}-%{version}.tar.gz
-
-BuildRequires:   emacs texinfo common-lisp-controller
-# for testing
-BuildRequires:   sbcl
-BuildRequires: make
-
+Source0:        https://github.com/%{pkg}/%{pkg}/archive/v%{version}.tar.gz#/%{pkg}-%{version}.tar.gz
 Requires:        emacs(bin) >= %{_emacs_version} common-lisp-controller
-
 Requires(post):  common-lisp-controller
 Requires(preun): common-lisp-controller
-
 Provides:        %{name}-el = %{epoch}:%{version}-%{release}
 Obsoletes:       %{name}-el < 1:2.19-5
-
 BuildArch:      noarch
-# taken from sbcl.spec since we use it for testing
 ExclusiveArch:  %{arm} %{ix86} x86_64 ppc sparcv9 aarch64
-
+# oreon:deps
+BuildRequires:  common-lisp-controller
+BuildRequires:  emacs
+BuildRequires:  make
+BuildRequires:  sbcl
+BuildRequires:  texinfo
+# /oreon:deps
 %description
 SLIME is a Emacs mode for common Lisp development.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{pkg}-%{version} -p1
 
 %build
-#{_emacs_bytecompile} *.el
+
 make
 cd doc/
 make slime.info
-
 %install
 install -pm 755 -d %{buildroot}%{_emacs_sitestartdir}
 install -pm 644 *.el  %{buildroot}%{_emacs_sitestartdir}
-
 install -pm 755 -d %{buildroot}%{_infodir}
 install -pm 644 doc/%{pkg}.info %{buildroot}%{_infodir}/
-
 install -pm 755 -d %{buildroot}%{_emacs_sitelispdir}/%{pkg}
 install -pm 755 -d %{buildroot}%{_emacs_sitelispdir}/%{pkg}/contrib
 install -pm 755 -d %{buildroot}%{_emacs_sitelispdir}/%{pkg}/lib
 install -pm 644 *.el* %{buildroot}%{_emacs_sitelispdir}/%{pkg}/
 install -pm 644 lib/*.el* %{buildroot}%{_emacs_sitelispdir}/%{pkg}/lib/
-
 install -pm 755 -d %{buildroot}%{_datadir}/common-lisp/source/slime
 install -pm 755 -d %{buildroot}%{_datadir}/common-lisp/source/slime/contrib
 install -pm 755 -d %{buildroot}%{_datadir}/common-lisp/source/slime/lib
@@ -71,44 +57,20 @@ install -pm 644 contrib/README.md %{buildroot}%{_datadir}/common-lisp/source/sli
 install -pm 644 lib/*.el %{buildroot}%{_datadir}/common-lisp/source/slime/lib
 install -pm 644 swank/*.lisp %{buildroot}%{_datadir}/common-lisp/source/slime/swank
 install -pm 644 *.asd %{buildroot}%{_datadir}/common-lisp/source/slime
-
 mv contrib/README.md contrib/contrib-README.md
+%oreon_autofiles main
 
 %check
+
 make check
-
 %post
+
 /usr/sbin/register-common-lisp-source swank
-
 %preun
+
 /usr/sbin/unregister-common-lisp-source swank 
-
-%files
-%doc NEWS PROBLEMS README.md doc/slime-small.pdf doc/slime-refcard.pdf contrib/contrib-README.md
-%doc CONTRIBUTING.md
-
-%dir %{_emacs_sitestartdir}
-%{_emacs_sitestartdir}/*.el
-
-%dir %{_emacs_sitelispdir}/%{pkg}
-%dir %{_emacs_sitelispdir}/%{pkg}/contrib
-%dir %{_emacs_sitelispdir}/%{pkg}/lib
-%{_emacs_sitelispdir}/%{pkg}/*.el
-%{_emacs_sitelispdir}/%{pkg}/*.elc
-%{_emacs_sitelispdir}/%{pkg}/lib/*.el
-%{_emacs_sitelispdir}/%{pkg}/lib/*.elc
-
-%dir %{_datadir}/common-lisp/source/slime
-%dir %{_datadir}/common-lisp/source/slime/contrib
-%dir %{_datadir}/common-lisp/source/slime/lib
-%{_datadir}/common-lisp/source/slime/*.lisp
-%{_datadir}/common-lisp/source/slime/contrib/*.lisp
-%{_datadir}/common-lisp/source/slime/contrib/*.el
-%{_datadir}/common-lisp/source/slime/lib/*.el
-%{_datadir}/common-lisp/source/slime/swank/*.lisp
-%{_datadir}/common-lisp/source/slime/contrib/README.md
-%{_datadir}/common-lisp/source/slime/*.asd
-%{_infodir}/%{pkg}.info.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,22 +1,19 @@
 %global source0_hash 0d189874a299af3853e97e88e41f089cad2949251ef0a68c9b217485ccc76ac6
-
 Name:           gns3-net-converter
 Version:        1.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Convert old ini-style GNS3 topologies to v1+ JSON format
-
-# This project is archived by upstream, thus downstream patch
 Patch1:         0001-Explicitly-require-setuptools-utils-get_resource.py-.patch
-
-# Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only
 URL:            https://pypi.org/project/gns3-net-converter/
 Source0:        https://files.pythonhosted.org/packages/source/g/%{name}/%{name}-%{version}.tar.gz
-
 BuildArch:      noarch
-BuildRequires:  python3-devel
 Requires: python3-configobj
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-gns3-net-converter = %{version}-%{release}
+# /oreon:deps
 %description
 GNS3 is a graphical network simulator that allows you to design complex network
 topologies. You may run simulations or configure devices ranging from simple 
@@ -27,26 +24,19 @@ to the newer version v1+ JSON format for use in GNS3 v1+.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup 
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l gns3converter
+%oreon_autofiles main
 
 %check
-%pyproject_check_import
-# Does not have one
 
-%files -f %{pyproject_files}
-%doc README.rst ChangeLog
-%{_bindir}/gns3-converter
+%pyproject_check_import
+%files
 
 %changelog
+
 %autochangelog

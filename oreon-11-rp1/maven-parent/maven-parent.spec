@@ -1,6 +1,5 @@
 %global source0_hash 6cc249df513c6751b13274470023294b4f5a3e330d39ba6e314d06a6a1d455a7
 %oreon_bootstrap
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,30 +83,29 @@ end
 %bcond_with bootstrap
 Name:           maven-parent
 Version:        50
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Apache Maven parent POM
 License:        Apache-2.0
 URL:            https://maven.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.maven.plugin-tools:maven-plugin-annotations)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-remote-resources-plugin)
 BuildRequires:  mvn(org.apache:apache:pom:)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
-%endif
-
+# /oreon:deps
 %description
 Apache Maven parent POM file used by other Maven projects.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 %pom_remove_plugin -r :maven-enforcer-plugin
@@ -121,13 +119,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_xpath_remove "pom:execution[pom:id='generate-helpmojo']" maven-plugins
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

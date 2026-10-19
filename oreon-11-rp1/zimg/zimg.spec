@@ -1,21 +1,19 @@
 %global source0_hash be89390f13a5c9b2388ce0f44a5e89364a20c1c57ce46d382b1fcc3967057577
-
 Name:           zimg
 Version:        3.0.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Scaling, color space conversion, and dithering library
 License:        WTFPL
 URL:            https://github.com/sekrit-twc/zimg
-
-Source0:        %{url}/archive/release-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/sekrit-twc/%{name}/archive/release-%{version}/%{name}-%{version}.tar.gz
 Patch0:         zimg-b013c7b.patch
-
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gcc-c++
 BuildRequires:  libtool
 BuildRequires:  make
-
+# /oreon:deps
 %description
 The "z" library implements the commonly required image processing basics of
 scaling, color space conversion, and depth conversion. A simple API enables
@@ -28,42 +26,31 @@ programmer to adapt "z" to many scenarios.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n zimg-release-%{version}
-
+%global oreon_srcdir zimg-release-%{version}
+%oreon_prep
 %build
+
 autoreconf -vif
 %configure \
     --disable-static \
     --enable-testapp
 %make_build V=1
-
 %install
 %make_install
 install -m 755 -p -D testapp %{buildroot}%{_bindir}/testapp
-
 find %{buildroot} -name '*.la' -delete
-
-# Pick up docs in the files section
 rm -fr %{buildroot}%{_docdir}/%{name}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc README.md ChangeLog
-%{_libdir}/lib%{name}.so.2.0.0
-%{_libdir}/lib%{name}.so.2
-
-%files devel
-%{_bindir}/testapp
-%{_includedir}/*
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n zimg-devel -f %{oreon_filedir}/zimg-devel.list
 
 %changelog
+
 %autochangelog

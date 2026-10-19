@@ -1,22 +1,21 @@
 %global source0_hash 2d267de3c9d75d8de95e5b51da11e7aa5e981291ee9a34ef6edcf8fea5084424
-
 Name:		c-graph
 Version:	2.0.1
-Release:	17%{?dist}
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        17%{?dist}
 License:	GPL-3.0-or-later
-Summary:	Convolution Graph
+Summary:        Convolution Graph
 URL:		http://www.gnu.org/software/%{name}
-Source0:	http://ftp.gnu.org/gnu/c-graph/%{name}-%{version}.tar.gz
-BuildRequires:	gcc-gfortran
-BuildRequires:	help2man
-BuildRequires: make
+Source0:        http://ftp.gnu.org/gnu/c-graph/%{name}-%{version}.tar.gz
 Requires:	coreutils
 Requires:	gnuplot
 Requires:	ImageMagick
 Requires:	less
 Requires:	ncurses
-
+# oreon:deps
+BuildRequires:  gcc-gfortran
+BuildRequires:  help2man
+BuildRequires:  make
+# /oreon:deps
 %description
 Convolution Theorem Visualization
 
@@ -36,30 +35,25 @@ convolution in university courses worldwide. "C-Graph" stands for
 easy!
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 %configure
-# remove \r\n line endings
 sed -e 's|\r||' README > README.new
 touch -r README.new README
 mv README.new README
 make %{?_smp_mflags} FCFLAGS="$FFLAGS"
-
 %install
 make install DESTDIR=%{buildroot}
-
-# must be created when installing info
 rm -f %{buildroot}%{_infodir}/dir
+%oreon_autofiles main
 
-%files
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%doc %{_docdir}/%{name}
-%doc %{_infodir}/%{name}*
-%doc %{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,83 +1,54 @@
 %global source0_hash 08e918a91ea438d0d30f6acc5167451e57199dc4b5b7beac51805c9c4904f703
-
 %global stable_kf6 stable
 %global maj_ver_kf6 26
 %global min_ver_kf6 04
 %global bug_ver_kf6 3
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    dolphin-plugins
-Summary: Dolphin plugins
+Summary:        Dolphin plugins
 Version: 26.08.0
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/sdk/%{name}
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  dolphin-devel >= %{maj_ver_kf6}.%{min_ver_kf6}
-BuildRequires:  extra-cmake-modules
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6XmlGui)
+Requires:       dolphin >= %{maj_ver_kf6}.%{min_ver_kf6}
+# oreon:deps
+BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6TextWidgets)
-BuildRequires:  cmake(KF6TextEditor)
-BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Solid)
+BuildRequires:  cmake(KF6TextEditor)
+BuildRequires:  cmake(KF6TextWidgets)
+BuildRequires:  cmake(KF6XmlGui)
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6Core5Compat)
-BuildRequires:  cmake(Qt6Widgets)
-BuildRequires:  cmake(Qt6Network)
 BuildRequires:  cmake(Qt6DBus)
-
-Requires:       dolphin >= %{maj_ver_kf6}.%{min_ver_kf6}
-
-
+BuildRequires:  cmake(Qt6Network)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  dolphin-devel
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 Dolphin integration for revision control systems, Dropbox, and disk images.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name
+%oreon_autofiles main
 
+%files -f %{oreon_filedir}/main.list
 
-%files -f %{name}.lang
-%license LICENSES/*
-%{_kf6_metainfodir}/org.kde.dolphin-plugins.metainfo.xml
-%{_kf6_datadir}/qlogging-categories6/dolphingit.categories
-%dir %{_kf6_qtplugindir}/dolphin/
-%dir %{_kf6_qtplugindir}/dolphin/vcs/
-%{_kf6_qtplugindir}/dolphin/vcs/fileviewbazaarplugin.so
-%{_kf6_qtplugindir}/dolphin/vcs/fileviewdropboxplugin.so
-%{_kf6_qtplugindir}/dolphin/vcs/fileviewgitplugin.so
-%{_kf6_qtplugindir}/dolphin/vcs/fileviewsvnplugin.so
-%{_kf6_qtplugindir}/dolphin/vcs/fileviewhgplugin.so
-%{_kf6_plugindir}/kfileitemaction/mountisoaction.so
-%{_kf6_plugindir}/kfileitemaction/makefileactions.so
-%{_kf6_datadir}/config.kcfg/fileviewgitpluginsettings.kcfg
-%{_kf6_datadir}/config.kcfg/fileviewsvnpluginsettings.kcfg
-%{_kf6_datadir}/config.kcfg/fileviewhgpluginsettings.kcfg
-
-
-/usr/lib64/qt6/plugins/kf6/overlayicon/mountedisooverlay.so
 %changelog
+
 * Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
 - Latest upstream release
 

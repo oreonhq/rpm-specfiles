@@ -1,32 +1,24 @@
 %global source0_hash a49398c86adb8fabcb79a4d737733ac49c8dec1a60df9d28c764a5b870bff9e7
-
 Name:           ocaml-pyml
 Version:        20250807
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        OCaml bindings for Python
-
-# The project is BSD-2-Clause except for pycaml.mli, which is LGPLv2+
 License:        BSD-2-Clause AND LGPL-2.1-or-later
 URL:            https://github.com/ocamllibs/pyml
 VCS:            git:%{url}.git
-Source:         %{url}/archive/%{version}/pyml-%{version}.tar.gz
-# Fix various incompatibilities with python 3.13.  See:
-# https://github.com/thierry-martinez/pyml/issues/84
+Source0:        https://github.com/ocamllibs/pyml/archive/%{version}/pyml-%{version}.tar.gz
 Patch:          %{name}-python3.13.patch
-# Guard against passing NULL to memcpy
 Patch:          %{name}-memcpy.patch
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch:    %{ix86}
-
-BuildRequires:  ocaml >= 4.11.0
-BuildRequires:  ocaml-dune >= 2.8
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-dune
 BuildRequires:  ocaml-findlib
-BuildRequires:  ocaml-stdcompat-devel >= 18
+BuildRequires:  ocaml-stdcompat-devel
 BuildRequires:  python3-devel
-BuildRequires:  %{py3_dist ipython}
-BuildRequires:  %{py3_dist numpy}
-
+BuildRequires:  python3dist(ipython)
+BuildRequires:  python3dist(numpy)
+# /oreon:deps
 %description
 py.ml provides OCaml bindings for Python 2 and Python 3.  This library
 subsumes the pycaml library, which is no longer actively maintained.
@@ -52,30 +44,27 @@ Bindings are split in three modules:
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ocaml-stdcompat-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n pyml-%{version} -p1
-
+%global oreon_srcdir pyml-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%doc CHANGES.md README.md
-%license LICENSE
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-pyml-devel -f %{oreon_filedir}/ocaml-pyml-devel.list
 
 %changelog
+
 %autochangelog

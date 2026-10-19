@@ -1,67 +1,79 @@
-%global source0_hash none
-
+%global source0_hash be600beb2f762f0116025e05490d399e724f668bef84025a7c421bb266688bdb
 Name:           python-spdx-tools
 Version:        0.8.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        SPDX parser and tools.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/spdx/tools-python
-Source:         %{pypi_source spdx_tools}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/spdx_tools/spdx_tools-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'spdx-tools' generated automatically by pyp2spec.}
-
 Patch:          0001-Update-excepted-typecheck-error-after-beartype-updat.patch
 Patch:          0002-relationship_writer-properly-access-__annotations__-.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.2
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 3.4.3
+Requires:       python3-spdx-tools = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-spdx-tools+test
+Summary:        Metapackage for python3-spdx-tools test extras
+Requires:       python3-spdx-tools = %{version}-%{release}
+Provides:       python3dist(spdx-tools[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-spdx-tools+test
+Metapackage for python3-spdx-tools test extras.
+
+%package -n       python3-spdx-tools+code_style
+Summary:        Metapackage for python3-spdx-tools code_style extras
+Requires:       python3-spdx-tools = %{version}-%{release}
+Provides:       python3dist(spdx-tools[code_style]) = %{version}-%{release}
+
+%description -n python3-spdx-tools+code_style
+Metapackage for python3-spdx-tools code_style extras.
+
+%package -n       python3-spdx-tools+graph_generation
+Summary:        Metapackage for python3-spdx-tools graph_generation extras
+Requires:       python3-spdx-tools = %{version}-%{release}
+Provides:       python3dist(spdx-tools[graph_generation]) = %{version}-%{release}
+
+%description -n python3-spdx-tools+graph_generation
+Metapackage for python3-spdx-tools graph_generation extras.
+
+%package -n       python3-spdx-tools+development
+Summary:        Metapackage for python3-spdx-tools development extras
+Requires:       python3-spdx-tools = %{version}-%{release}
+Provides:       python3dist(spdx-tools[development]) = %{version}-%{release}
+
+%description -n python3-spdx-tools+development
+Metapackage for python3-spdx-tools development extras.
+
+%description
 
 %package -n     python3-spdx-tools
-Summary:        %{summary}
-
-%description -n python3-spdx-tools %_description
+Summary:        SPDX parser and tools.
+%description -n python3-spdx-tools
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-spdx-tools code-style,development,graph-generation,test
-
 
 %prep
-%autosetup -p1 -n spdx_tools-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir spdx_tools-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-spdx-tools usr/lib/python3*/site-packages/spdx_tools* usr/lib64/python3*/site-packages/spdx_tools* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/spdx_tools* usr/lib64/python3*/site-packages/spdx_tools* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-spdx-tools -f %{pyproject_files}
-%{_bindir}/pyspdxtools
-%{_bindir}/pyspdxtools3
+%files
+%files -n python3-spdx-tools -f %{oreon_filedir}/python3-spdx-tools.list
 
 %changelog
+
 %autochangelog

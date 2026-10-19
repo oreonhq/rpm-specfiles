@@ -1,88 +1,67 @@
-%global source0_hash 50b65d22062ffe351d4f66ee665ab2af975ba5b805f319b59a322dbc19867c0a
-
+%global source0_hash cf47e23ec5090b1767f67cd11057aeb777225ec880fd4a5a387a16f076e35da4
 %bcond tests 1
-
 Name:           python-snakemake-executor-plugin-slurm
 Version:        2.8.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A Snakemake executor plugin for submitting jobs to a SLURM cluster
-
-# SPDX
 License:        MIT
 URL:            https://github.com/snakemake/snakemake-executor-plugin-slurm
-# We use the GitHub archive instead of the PyPI sdist to get CHANGELOG.md and
-# the tests.
-Source0:        %{url}/archive/v%{version}/snakemake-executor-plugin-slurm-%{version}.tar.gz
-# Man page hand-written for Fedora in groff_man(7) format based on --help.
+Source0:        https://github.com/snakemake/snakemake-executor-plugin-slurm/archive/v%{version}/snakemake-executor-plugin-slurm-%{version}.tar.gz
 Source1:        generate-slurm-partition-config.1
-
-
 BuildArch:      noarch
-
-# See: [tool.poetry.dev-dependencies] in pyproject.toml
-BuildRequires:  snakemake >= 8
-# If slurm is not installed, importing snakemake_executor_plugin_slurm
-# produces:
-#
-# snakemake_interface_common.exceptions.WorkflowError: Neither 'sacct' nor
-# 'squeue' commands are available on this system. At least one of these
-# commands is required for job status queries.
-BuildRequires:  slurm
 %if %{with tests}
-BuildRequires:  %{py3_dist pytest}
 %endif
-
 %global common_description %{expand:
 %{summary}.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-snakemake-executor-plugin-slurm = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-snakemake-executor-plugin-slurm
-Summary:        %{summary}
-
-# The plugin cannot even be imported without slurm; see the note above the
-# corresponding BuildRequires.
+Summary:        A Snakemake executor plugin for submitting jobs to a SLURM cluster
 Requires:       slurm
-
+# oreon:reqs
+Requires:       python3dist(numpy) < 3
+Requires:       python3dist(numpy) >= 2.4.5
+Requires:       python3dist(pandas) < 4
+Requires:       python3dist(pandas) >= 2.3.3
+Requires:       python3dist(pyyaml) < 7
+Requires:       python3dist(pyyaml) >= 6.0.3
+Requires:       python3dist(snakemake-executor-plugin-slurm-jobstep) < 1
+Requires:       python3dist(snakemake-executor-plugin-slurm-jobstep) >= 0.6.0
+Requires:       python3dist(snakemake-interface-common) < 2
+Requires:       python3dist(snakemake-interface-common) >= 1.23.0
+Requires:       python3dist(snakemake-interface-executor-plugins) < 10
+Requires:       python3dist(snakemake-interface-executor-plugins) >= 9.4.0
+Requires:       python3dist(throttler) < 2
+Requires:       python3dist(throttler) >= 1.2.2
+# /oreon:reqs
 %description -n python3-snakemake-executor-plugin-slurm %{common_description}
 
 %install
 %pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE1}'
+%oreon_autofiles python3-snakemake-executor-plugin-slurm usr/lib/python3*/site-packages/snakemake_executor_plugin_slurm* usr/lib64/python3*/site-packages/snakemake_executor_plugin_slurm* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/snakemake_executor_plugin_slurm* usr/lib64/python3*/site-packages/snakemake_executor_plugin_slurm* usr/bin/*
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %check
+
 %if %{with tests}
-# These tests seem to want to talk to a real cluster controller:
-#
-# tests/tests.py::TestEfficiencyReport::test_group_workflow
-# tests/tests.py::TestEfficiencyReport::test_simple_workflow
-# tests/tests.py::TestSLURMResources::test_group_workflow
-# tests/tests.py::TestSLURMResources::test_simple_workflow
-# tests/tests.py::TestWildcardsWithSlashes::test_group_workflow
-# tests/tests.py::TestWildcardsWithSlashes::test_simple_workflow
-# tests/tests.py::TestWorkflows::test_group_workflow
-# tests/tests.py::TestWorkflows::test_simple_workflow
-# tests/tests.py::TestWorkflowsRequeue::test_group_workflow
-# tests/tests.py::TestWorkflowsRequeue::test_simple_workflow
 k="${k-}${k+ and }not test_group_workflow"
 k="${k-}${k+ and }not test_simple_workflow"
-
 %pytest -k "${k-}" -v tests/tests.py
 %endif
-
-%files -n python3-snakemake-executor-plugin-slurm -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md
-%doc README.md
-
-%{_bindir}/generate-slurm-partition-config
-%{_mandir}/man1/generate-slurm-partition-config.1*
+%files
+%files -n python3-snakemake-executor-plugin-slurm -f %{oreon_filedir}/python3-snakemake-executor-plugin-slurm.list
 
 %changelog
+
 %autochangelog

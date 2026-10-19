@@ -1,24 +1,21 @@
-%global source0_hash 60fa5501e770542abe7a8fdaa0223c035e83b404c4d377fdbc91705471419935
-
+%global source2_hash 60fa5501e770542abe7a8fdaa0223c035e83b404c4d377fdbc91705471419935
+%global source1_hash 4b50354e3fc3b4f26527265a5b7ef58a025e1eb674180fed400b2316b360bb02
+%global source0_hash e8c2fd6ca79022a832da405e8faa6af2c05d019ebf1effb258f5ec6945865654
 %global fontname artwiz-aleczapka
 %global fontconf 60-%{fontname}
-
 %global common_desc \
 Artwiz is a family of very small futuristic fonts, with varying styles of \
 typefaces designed at a single pixel size. The minimal nature of the \
 fonts makes them popular with users of lightweight window managers. These \
 fonts have been updated by Alec Zapka to be compatible with modern \
 software and support an extended character set. \
-
 Name:		%{fontname}-fonts
 Version:	1.3
-Release:	43%{?dist}
-Summary:	Very small futuristic font family
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        43%{?dist}
+Summary:        Very small futuristic font family
 License:	GPL-2.0-only
 URL:		http://artwizaleczapka.sourceforge.net/
-
-Source0:	http://downloads.sourceforge.net/project/artwizaleczapka/iso-8859-1/sources-%{version}/%{fontname}-en-sources-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/project/artwizaleczapka/iso-8859-1/sources-%{version}/%{fontname}-en-sources-%{version}.tar.bz2
 Source1:	http://downloads.sourceforge.net/project/artwizaleczapka/iso-8859-1/sources-%{version}/%{fontname}-de-sources-%{version}.tar.bz2
 Source2:	http://downloads.sourceforge.net/project/artwizaleczapka/iso-8859-1/sources-%{version}/%{fontname}-se-sources-%{version}.tar.bz2
 Source3:	artwiz-aleczapka-fonts-anorexia-fontconfig.conf
@@ -39,8 +36,6 @@ Source17:	artwiz-aleczapka-fonts-snap-fontconfig.conf
 Patch0:		artwiz-aleczapka-fkp-cleanups.patch
 Patch1:		artwiz-aleczapka-fonts-1.3-fix-makepcf.patch
 BuildArch:	noarch
-BuildRequires:	bdftopcf
-BuildRequires:	fontpackages-devel
 Requires:	%{fontname}-anorexia-fonts = %{version}-%{release}
 Requires:	%{fontname}-aqui-fonts = %{version}-%{release}
 Requires:	%{fontname}-cure-fonts = %{version}-%{release}
@@ -56,7 +51,10 @@ Requires:	%{fontname}-mints-strong-fonts = %{version}-%{release}
 Requires:	%{fontname}-nu-fonts = %{version}-%{release}
 Requires:	%{fontname}-smoothansi-fonts = %{version}-%{release}
 Requires:	%{fontname}-snap-fonts = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  bdftopcf
+BuildRequires:  fontpackages-devel
+# /oreon:deps
 %description
 %common_desc
 This is a metapackage, which pulls in all the separated fonts in this family.
@@ -64,14 +62,12 @@ This is a metapackage, which pulls in all the separated fonts in this family.
 %package common
 Summary:	Common files for Artwiz Aleczapka fonts (documentation...)
 Requires:	fontpackages-filesystem
-
 %description common
 %common_desc
 
 %package -n %{fontname}-anorexia-fonts
 Summary:	Anorexia font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-anorexia-fonts
 %common_desc
 This package contains the Anorexia font in three encodings, English, German,
@@ -82,7 +78,6 @@ and Swedish.
 %package -n %{fontname}-aqui-fonts
 Summary:	Aqui font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-aqui-fonts
 %common_desc
 This package contains the Aqui font in three encodings, English, German, and
@@ -93,7 +88,6 @@ Swedish.
 %package -n %{fontname}-cure-fonts
 Summary:	Cure font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n	%{fontname}-cure-fonts
 %common_desc
 This package contains the Cure font in three encodings, English, German, and
@@ -104,7 +98,6 @@ Swedish.
 %package -n %{fontname}-drift-fonts
 Summary:	Drift font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-drift-fonts
 %common_desc
 This package contains the Drift font in three encodings, English, German,
@@ -115,7 +108,6 @@ and Swedish.
 %package -n %{fontname}-edges-fonts
 Summary:	Edges font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-edges-fonts
 %common_desc
 This package contains the Edges font in three encodings, English, German,
@@ -126,7 +118,6 @@ and Swedish.
 %package -n %{fontname}-fkp-fonts
 Summary:	Fkp font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-fkp-fonts
 %common_desc
 This package contains the fkp font in three encodings, English, German,
@@ -137,7 +128,6 @@ and Swedish.
 %package -n %{fontname}-gelly-fonts
 Summary:	Gelly font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-gelly-fonts
 %common_desc
 This package contains the Gelly font in three encodings, English, German,
@@ -148,7 +138,6 @@ and Swedish.
 %package -n %{fontname}-glisp-fonts
 Summary:	Glisp fonts in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-glisp-fonts
 %common_desc
 This package contains the Glisp font in three encodings, English, German,
@@ -160,7 +149,6 @@ each encoding.
 %package -n %{fontname}-kates-fonts
 Summary:	Kates font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-kates-fonts
 %common_desc
 This package contains the Kates font in three encodings, English, German,
@@ -171,7 +159,6 @@ and Swedish.
 %package -n %{fontname}-lime-fonts
 Summary:	Lime font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-lime-fonts
 %common_desc
 This package contains the Lime font in three encodings, English, German,
@@ -182,7 +169,6 @@ and Swedish.
 %package -n %{fontname}-mints-mild-fonts
 Summary:	Mints Mild font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-mints-mild-fonts
 %common_desc
 This package contains the Mints Mild font in three encodings, English, German,
@@ -193,7 +179,6 @@ and Swedish.
 %package -n %{fontname}-mints-strong-fonts
 Summary:	Mints Strong font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-mints-strong-fonts
 %common_desc
 This package contains the Mints Strong font in three encodings, English,
@@ -204,7 +189,6 @@ German, and Swedish.
 %package -n %{fontname}-nu-fonts
 Summary:	Nu font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-nu-fonts
 %common_desc
 This package contains the Nu font in three encodings, English, German,
@@ -215,7 +199,6 @@ and Swedish.
 %package -n %{fontname}-smoothansi-fonts
 Summary:	Smoothansi font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-smoothansi-fonts
 %common_desc
 This package contains the Smoothansi font in three encodings, English,
@@ -226,7 +209,6 @@ German, and Swedish.
 %package -n %{fontname}-snap-fonts
 Summary:	Snap font in Artwiz family
 Requires:	%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-snap-fonts
 %common_desc
 This package contains the Snap font in three encodings, English, German,
@@ -235,6 +217,7 @@ and Swedish.
 %_font_pkg -n snap -f %{fontconf}-snap.conf snap*.pcf
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c %{name}-%{version} -a1 -a2
@@ -242,12 +225,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P1 -p1 -b .fix-makepcf
 
 %build
+
 for lang in de en se; do
     pushd %{_builddir}/%{name}-%{version}/artwiz-aleczapka-$lang-sources-%{version}
     sh makepcf.sh
     popd
 done
-
 %install
 rm -rf %{buildroot}
 install -m 0755 -d %{buildroot}%{_fontdir}
@@ -270,25 +253,32 @@ install -m 0644 -p %{SOURCE14} %{buildroot}%{_fontconfig_templatedir}/%{fontconf
 install -m 0644 -p %{SOURCE15} %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-nu.conf
 install -m 0644 -p %{SOURCE16} %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-smoothansi.conf
 install -m 0644 -p %{SOURCE17} %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-snap.conf
-
 for fontconf in %{fontconf}-anorexia.conf %{fontconf}-aqui.conf %{fontconf}-cure.conf %{fontconf}-drift.conf %{fontconf}-edges.conf %{fontconf}-fkp.conf %{fontconf}-gelly.conf\
 		%{fontconf}-glisp.conf %{fontconf}-kates.conf %{fontconf}-lime.conf %{fontconf}-mints-mild.conf %{fontconf}-mints-strong.conf %{fontconf}-nu.conf \
 		%{fontconf}-smoothansi.conf %{fontconf}-snap.conf
 do
 	ln -s %{_fontconfig_templatedir}/$fontconf %{buildroot}%{_fontconfig_confdir}/$fontconf
 done
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-# This is a dummy metapackage.
-
-%files common
-# generic docs are the same for every lang (AUTHORS has all info in german dir
-# so use it from german font dir)
-%license artwiz-aleczapka-de-sources-1.3/COPYING
-%doc artwiz-aleczapka-de-sources-1.3/{AUTHORS,README,VERSION}
-%doc artwiz-aleczapka-de-sources-1.3/README.DE
-%doc artwiz-aleczapka-se-sources-1.3/README.SE
-%dir %{_fontdir}
+%files -f %{oreon_filedir}/main.list
+%files -n artwiz-aleczapka-fonts-common -f %{oreon_filedir}/artwiz-aleczapka-fonts-common.list
+%files -n artwiz-aleczapka-anorexia-fonts -f %{oreon_filedir}/artwiz-aleczapka-anorexia-fonts.list
+%files -n artwiz-aleczapka-aqui-fonts -f %{oreon_filedir}/artwiz-aleczapka-aqui-fonts.list
+%files -n artwiz-aleczapka-cure-fonts -f %{oreon_filedir}/artwiz-aleczapka-cure-fonts.list
+%files -n artwiz-aleczapka-drift-fonts -f %{oreon_filedir}/artwiz-aleczapka-drift-fonts.list
+%files -n artwiz-aleczapka-edges-fonts -f %{oreon_filedir}/artwiz-aleczapka-edges-fonts.list
+%files -n artwiz-aleczapka-fkp-fonts -f %{oreon_filedir}/artwiz-aleczapka-fkp-fonts.list
+%files -n artwiz-aleczapka-gelly-fonts -f %{oreon_filedir}/artwiz-aleczapka-gelly-fonts.list
+%files -n artwiz-aleczapka-glisp-fonts -f %{oreon_filedir}/artwiz-aleczapka-glisp-fonts.list
+%files -n artwiz-aleczapka-kates-fonts -f %{oreon_filedir}/artwiz-aleczapka-kates-fonts.list
+%files -n artwiz-aleczapka-lime-fonts -f %{oreon_filedir}/artwiz-aleczapka-lime-fonts.list
+%files -n artwiz-aleczapka-mints-mild-fonts -f %{oreon_filedir}/artwiz-aleczapka-mints-mild-fonts.list
+%files -n artwiz-aleczapka-mints-strong-fonts -f %{oreon_filedir}/artwiz-aleczapka-mints-strong-fonts.list
+%files -n artwiz-aleczapka-nu-fonts -f %{oreon_filedir}/artwiz-aleczapka-nu-fonts.list
+%files -n artwiz-aleczapka-smoothansi-fonts -f %{oreon_filedir}/artwiz-aleczapka-smoothansi-fonts.list
+%files -n artwiz-aleczapka-snap-fonts -f %{oreon_filedir}/artwiz-aleczapka-snap-fonts.list
 
 %changelog
+
 %autochangelog

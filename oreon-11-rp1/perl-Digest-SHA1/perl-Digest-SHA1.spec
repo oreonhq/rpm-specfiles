@@ -1,35 +1,32 @@
 %global source0_hash 68c1dac2187421f0eb7abf71452a06f190181b8fc4b28ededf5b90296fb943cc
-
 Name:           perl-Digest-SHA1
 Version:        2.13
-Release:        49%{?dist}
+Release:        1%{?dist}
 Summary:        Digest-SHA1 Perl module
-
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Digest-SHA1
 Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/Digest-SHA1-%{version}.tar.gz
+Recommends:     perl(Digest::base)
+Provides:       perl(Digest::SHA1)
+Provides:       perl(Digest::SHA1)
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  glibc-common
 BuildRequires:  make
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
 BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Run-time
 BuildRequires:  perl(Digest::base)
 BuildRequires:  perl(DynaLoader)
 BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(vars)
-# Tests
-BuildRequires:  perl(Test)
-Recommends:     perl(Digest::base)
-
-Provides:       perl(Digest::SHA1)
-Provides:       perl(Digest::SHA1)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The Digest::SHA1 module allows you to use the NIST SHA-1 message
 digest algorithm from within Perl programs. The algorithm takes as
@@ -47,12 +44,12 @@ characters long. A base64 digest will be 27 characters long.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Digest-SHA1-%{version} 
 f=Changes ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
@@ -64,22 +61,17 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}" NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 find %{buildroot} -type f -name '*.bs' -empty -delete
 %{_fixperms} %{buildroot}
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Some tests write into temporary files/directories. The easiest solution
-# is to copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -88,20 +80,16 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%doc Changes README fip180-1.{gif,html}
-%{perl_vendorarch}/Digest/
-%{perl_vendorarch}/auto/Digest/
-%{_mandir}/man3/*.3*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Digest-SHA1-tests -f %{oreon_filedir}/perl-Digest-SHA1-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.13-49
 - Prepare for Oreon 11 (RP1)

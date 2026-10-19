@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash ad1e2dd9b500c58ee462acd839d0a0ea9a2b9248a1287840bc601e774fb6b28f
 Summary:        C library for portable packet creation and injection
 Name:           libnet
 Version:        1.3
@@ -8,10 +7,13 @@ License:        BSD-2-Clause AND BSD-3-Clause
 URL:            https://github.com/libnet/libnet
 Source0:        https://github.com/libnet/libnet/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch0:        libnet-config.patch
+# oreon:deps
+BuildRequires:  /usr/bin/pod2man
+BuildRequires:  doxygen
 BuildRequires:  gcc
+BuildRequires:  graphviz
 BuildRequires:  make
-BuildRequires:  %{_bindir}/pod2man
-
+# /oreon:deps
 %description
 Libnet is an API to help with the construction and handling of network
 packets. It provides a portable framework for low-level network packet
@@ -24,7 +26,6 @@ complementary functionality.
 Summary:        Development files for the libnet library
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description devel
 The libnet-devel package includes header files and libraries necessary
 for developing programs which use the libnet library. Libnet is very
@@ -37,7 +38,6 @@ Summary:        Documentation files for the libnet library
 BuildArch:      noarch
 BuildRequires:  doxygen
 BuildRequires:  graphviz
-
 %description doc
 Libnet is an API to help with the construction and handling of network
 packets. It provides a portable framework for low-level network packet
@@ -46,6 +46,7 @@ developing applications that use libnet.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 %patch -P 0 -p1
@@ -53,19 +54,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -e 's/-version-info 9:0:0/-version-info 9:0:8/' -i src/Makefile.{am,in}
 
 %build
+
 %configure
 %make_build
-
 %install
 %make_install INSTALL='install -p'
-
-# Don't install any libtool .la files
 rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}.{a,la}
-
-# Clean up for later usage in documentation
 rm -rf $RPM_BUILD_ROOT%{_defaultdocdir}
-
-# Prepare samples for usage in documentation
 rm -rf sample/{Makefile*,win32}
 for file in sample/*.[hc]; do
   sed \
@@ -75,29 +70,14 @@ for file in sample/*.[hc]; do
     touch -c -r $file{,.new}
     mv -f $file{.new,}
 done
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%license LICENSE
-%doc README.md ChangeLog.md
-%{_libdir}/%{name}.so.*
-
-%files devel
-%doc doc/MIGRATION.md doc/RAWSOCKET.md sample/
-%{_bindir}/%{name}-config
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_includedir}/%{name}.h
-%{_includedir}/%{name}/
-%{_mandir}/man1/%{name}*.1*
-%{_mandir}/man3/%{name}*.3*
-
-%if 0%{!?_without_doc:1}
-%files doc
-%doc doc/html/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n libnet-devel -f %{oreon_filedir}/libnet-devel.list
+%files -n libnet-doc -f %{oreon_filedir}/libnet-doc.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-7
 - Import

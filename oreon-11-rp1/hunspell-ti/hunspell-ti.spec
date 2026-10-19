@@ -1,37 +1,36 @@
 %global source0_hash 81880aa7ab2ae91603ab5cfd5b02f1afa1cbac97f17154f9e8a5bf13f0491733
-
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-ti
-Summary: Tigrigna hunspell dictionaries
+Summary:        Tigrigna hunspell dictionaries
 %global upstreamid 20090911
 Version: 0.%{upstreamid}
-Release: 32%{?dist}
+Release:        1%{?dist}
 URL: http://www.cs.ru.nl/~biniam/geez/index.php
 License: GPL-1.0-or-later
 BuildArch: noarch
-
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ti)
-
 Source0:        https://www.cs.ru.nl/~biniam/geez/dict/ti_ER.zip
+# oreon:deps
 
+# /oreon:deps
 %description
 Tigrigna hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 
 %build
+
 tr -d '\r' < README.txt > README.txt.new
 touch -r README.txt README.txt.new
 mv -f README.txt.new README.txt
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p ti_ER.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
@@ -41,11 +40,11 @@ for lang in $ti_ER_aliases; do
         ln -s ti_ER.aff $lang.aff
         ln -s ti_ER.dic $lang.dic
 done
+%oreon_autofiles main
 
-%files
-%doc README.txt
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-32
 - Prepare for Oreon 11 (RP1)

@@ -1,5 +1,4 @@
 %global source0_hash 4908e8bc610bad4a74ea4b09e0cf77f53af41b648a68d805400195f710a55e43
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,23 +83,20 @@ end
 Name:           maven-shared-io
 Epoch:          1
 Version:        3.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        API for I/O support like logging, download or file scanning
 License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-shared-io
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
-# Rejected upstream: https://issues.apache.org/jira/browse/MSHARED-490
 Patch:          0001-Fix-running-tests-with-Maven-3.3.9.patch
-# From upstream commit: https://github.com/apache/maven-shared-io/commit/5e37cfb2f0fa79e77a9cd627278e28b4d45aa5f8
 Patch:          0002-Fix-incorrect-parent-relativePath.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1:3.0.0-47
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.maven.shared:maven-shared-components:pom:)
@@ -111,26 +107,23 @@ BuildRequires:  mvn(org.apache.maven:maven-compat)
 BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.easymock:easymock)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1:3.0.0-47
-
+# /oreon:deps
 %description
 API for I/O support like logging, download or file scanning.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-%mvn_build -j -- -Dmaven.compiler.target=8
 
+%mvn_build -j -- -Dmaven.compiler.target=8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.0-1
 - Prepare for Oreon 11 (RP1)

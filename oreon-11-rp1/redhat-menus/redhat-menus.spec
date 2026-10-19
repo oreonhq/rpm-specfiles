@@ -1,54 +1,42 @@
 %global source0_hash 10c9730d32c92912a1123f3dfd378e190b04f5e94e95294ab792033f4825a9a3
-
 %define gettext_package redhat-menus
-
-Summary: Configuration and data files for the desktop menus
+Summary:        Configuration and data files for the desktop menus
 Name: redhat-menus
 Version: 12.0.2
-Release: %autorelease
+Release:        1%{?dist}
 URL: http://www.redhat.com
-# no public upstream host, tarball vendored next to spec
-Source0: %{name}-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 License: GPL-1.0-or-later
 BuildArch: noarch
-BuildRequires: make
+# oreon:deps
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
-BuildRequires: desktop-file-utils
-BuildRequires: intltool
-
+BuildRequires:  intltool
+BuildRequires:  make
+# /oreon:deps
 %description
 This package contains the XML files that describe the menu layout for
 GNOME and KDE, and the .desktop files that define the names and icons
 of "subdirectories" in the menus.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
-
 %find_lang %{gettext_package}
-
-# create the settings-merged to prevent gamin from looking for it
-# in a loop
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xdg/menus/settings-merged ||:
+%oreon_autofiles main
 
-%files  -f %{gettext_package}.lang
-%doc COPYING
-%dir %{_sysconfdir}/xdg/menus
-%dir %{_sysconfdir}/xdg/menus/applications-merged
-%dir %{_sysconfdir}/xdg/menus/preferences-merged
-%dir %{_sysconfdir}/xdg/menus/preferences-post-merged
-%dir %{_sysconfdir}/xdg/menus/settings-merged
-%config %{_sysconfdir}/xdg/menus/*.menu
-%exclude %{_datadir}/desktop-menu-patches/*.desktop
-%{_datadir}/desktop-directories/*.directory
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.0.2-1
 - Prepare for Oreon 11 (RP1)

@@ -1,25 +1,21 @@
 %global source0_hash 9e1f00c4c9f286be59ac0e07ddb7504f3b6433c93c5c7941d6e3208306ff5806
-
 Name:		fastx_toolkit
 Version:	0.0.14
-Release:	39%{?dist}
-Summary:	Tools to process short-reads FASTA/FASTQ files
-
+Release:        1%{?dist}
+Summary:        Tools to process short-reads FASTA/FASTQ files
 License:	AGPL-3.0-or-later
 URL:		http://hannonlab.cshl.edu/%{name}/index.html
-Source0:	http://hannonlab.cshl.edu/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://hannonlab.cshl.edu/%{name}/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-gcc47.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:	libgtextutils-devel
-BuildRequires:	perl-generators
-BuildRequires: make
-# FASTX-Barcode-Splitter requires the GNU Sed program.
 Requires:	sed
-# fasta_clipping_histogram requires PerlIO::gzip and GD::Graph::bars
 Requires:	perl-PerlIO-gzip
 Requires:	perl-GDGraph
-
+# oreon:deps
+BuildRequires:  gcc-c++
+BuildRequires:  libgtextutils-devel
+BuildRequires:  make
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 
 The FASTX-Toolkit is a collection of command line tools for
@@ -43,7 +39,6 @@ The FASTX-Toolkit tools perform some of these preprocessing tasks.
 %package       galaxy
 Summary:       Integrate fastx_toolkit with a local Galaxy installation
 Requires:      %{name} = %{version}-%{release}
-
 %description   galaxy
 
 These files allow the integration of fastx_toolkit with a local
@@ -52,6 +47,7 @@ platform for analyzing multiple alignments, comparing genomic
 annotations, profiling metagenomic samples and much more.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -59,28 +55,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P0 -p1 -b .%{name}-gcc47.patch
 
 %build
+
 %configure
 make %{?_smp_mflags} CFLAGS="%{optflags}" CXXFLAGS="%{optflags}"
-
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot} INSTALL="install -p"
-
 mkdir %{buildroot}/%{_datadir}/%{name}
 cp -a galaxy/ %{buildroot}/%{_datadir}/%{name}
-
-# remove unnecessary m4 files
 rm %{buildroot}/%{_datadir}/aclocal/*.m4
-
-# remove autotools Makefile
 find %{buildroot}/%{_datadir}/%{name}/galaxy/ -name "Makefile\.*" -delete
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS COPYING NEWS README THANKS
-%{_bindir}/fast*
-
-%files	galaxy
-%{_datadir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n fastx_toolkit-galaxy -f %{oreon_filedir}/fastx_toolkit-galaxy.list
 
 %changelog
+
 %autochangelog

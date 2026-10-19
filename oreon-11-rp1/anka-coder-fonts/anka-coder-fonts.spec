@@ -1,9 +1,7 @@
 %global source0_hash 6a133aaad52a10617197f8b74c9f58a84190319690f27cb39bf3e759ae6c2e1e
-
 %global fontname anka-coder
 %global fontconf 65-%{fontname}
 %global hgrev 4348cf4ec395
-
 %global common_desc \
 The Anka/Coder family is a mono spaced, courier-width (60% of height; em size \
 2048x1229) font that contains characters from 437, 866, 1251, 1252 and some \
@@ -12,18 +10,12 @@ There are 3 font sets (regular. italic, bold, bold-italic each): 1. \
 Anka/Coder (em size 2048x1229) 2. Anka/Coder Condensed (condensed by \
 12.5%; em size 2048x1075) 3. Anka/Coder Narrow (condensed by 25%; em \
 size 2048x922)
-
 Name:           %{fontname}-fonts
 Version:        1.100
-Release:        0.27.20130409hg%{hgrev}%{?dist}
+Release:        1%{?dist}
 Summary:        A mono spaced, courier-width font
-
 License:        OFL-1.1
 URL:            http://code.google.com/p/anka-coder-fonts/
-
-# Generated from an hg clone since sfd sources were available
-# hg clone https://code.google.com/p/anka-coder-fonts/
-# tar -cvzf anka-coder-fonts-20130409-hg.tar.gz --exclude="\.hg" anka-coder-fonts/
 Source0:        anka-coder-fonts-20130409-hg.tar.gz
 Source1:        %{name}-norm.conf
 Source2:        %{name}-condensed.conf
@@ -32,19 +24,18 @@ Source4:        %{fontname}.metainfo.xml
 Source5:        %{fontname}-condensed.metainfo.xml
 Source6:        %{fontname}-narrow.metainfo.xml
 Source7:        %{fontname}-norm.metainfo.xml
-
 BuildArch:      noarch
-BuildRequires:  fontpackages-devel
-BuildRequires:  fontforge
 Requires:       fontpackages-filesystem
-
+# oreon:deps
+BuildRequires:  fontforge
+BuildRequires:  fontpackages-devel
+# /oreon:deps
 %description
 %common_desc
 
 %package common
 Summary:        Common files of %{name}
 Requires:       fontpackages-filesystem
-
 %description common
 %common_desc
 
@@ -53,7 +44,6 @@ This package consists of files used by other %{name} packages.
 %package -n %{fontname}-norm-fonts
 Summary:        Normal version of %{name}
 Requires:       %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-norm-fonts
 %common_desc
 
@@ -67,7 +57,6 @@ Requires:       %{name}-common = %{version}-%{release}
 %package -n %{fontname}-condensed-fonts
 Summary:        Condensed version of %{name}
 Requires:       %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-condensed-fonts
 %common_desc
 
@@ -81,7 +70,6 @@ viewing of source code, also as for displaying terminal windows.
 %package -n %{fontname}-narrow-fonts
 Summary:        Narrow version of %{name}
 Requires:       %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-narrow-fonts
 %common_desc
 
@@ -93,11 +81,13 @@ is too tight for screen resolution.
 %{_datadir}/appdata/%{fontname}-narrow.metainfo.xml
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}
 
 %build
+
 for family in "AnkaCoder" "AnkaCoder Condensed" "AnkaCoder Narrow"
 do
 pushd "$family"
@@ -116,42 +106,41 @@ mv *.ttf ../ -v
 mv *.pdf ../ -v
 popd
 done
-
 sed -i 's/\r//' AnkaCoder/OFL.txt
-
 %install
 install -m 0755 -d %{buildroot}%{_fontdir}
-
 install -m 0644 -p *.ttf %{buildroot}%{_fontdir}
-
 install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
                    %{buildroot}%{_fontconfig_confdir}
-
 install -m 0644 -p %{SOURCE1} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-norm.conf
-
 install -m 0644 -p %{SOURCE2} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-condensed.conf
-
 install -m 0644 -p %{SOURCE3} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-narrow.conf
-
 mkdir -p %{buildroot}/%{_datadir}/appdata/
 cp %{SOURCE4} %{buildroot}/%{_datadir}/appdata/  -v
 cp %{SOURCE5} %{buildroot}/%{_datadir}/appdata/  -v
 cp %{SOURCE6} %{buildroot}/%{_datadir}/appdata/  -v
 cp %{SOURCE7} %{buildroot}/%{_datadir}/appdata/  -v
-
 for fconf in %{fontconf}-norm.conf \
              %{fontconf}-condensed.conf \
              %{fontconf}-narrow.conf ; do
   ln -s %{_fontconfig_templatedir}/$fconf \
         %{buildroot}%{_fontconfig_confdir}/$fconf
 done
+%oreon_autofiles anka-coder-fonts-common usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anka-coder-norm-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anka-coder-condensed-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anka-coder-narrow-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files common
-%license AnkaCoder/OFL.txt
-%{_datadir}/appdata/%{fontname}.metainfo.xml
+%files -f %{oreon_filedir}/main.list
+%files -n anka-coder-fonts-common -f %{oreon_filedir}/anka-coder-fonts-common.list
+%files -n anka-coder-norm-fonts -f %{oreon_filedir}/anka-coder-norm-fonts.list
+%files -n anka-coder-condensed-fonts -f %{oreon_filedir}/anka-coder-condensed-fonts.list
+%files -n anka-coder-narrow-fonts -f %{oreon_filedir}/anka-coder-narrow-fonts.list
 
 %changelog
+
 %autochangelog

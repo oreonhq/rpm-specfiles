@@ -1,19 +1,18 @@
-%global source0_hash 0ff5e3d716b2d55be95539d756f721865b274f59509aeedf0d6a49086b1064e3
-
+%global source0_hash dc31ee7d52b8525223b041cb69a084816f092ffaae039cfa0c6f40f85024ab78
 Name:		open-amp
 Version:	2026.04.0
-Release:	%autorelease
-Summary:	Open Asymmetric Multi Processing (OpenAMP) framework project
+Release:        1%{?dist}
+Summary:        Open Asymmetric Multi Processing (OpenAMP) framework project
 License:	BSD-3-Clause OR BSD-2-Clause
 URL:		https://github.com/OpenAMP/open-amp/
-Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:	cmake
-BuildRequires:	gcc
-BuildRequires:	gcc-c++
-BuildRequires:	libmetal-devel
-BuildRequires:	libsysfs-devel
-
+Source0:        https://github.com/OpenAMP/%{name}//archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libmetal-devel
+BuildRequires:  libsysfs-devel
+# /oreon:deps
 %description
 The OpenAMP framework provides software components that enable development of
 software applications for Asymmetric Multiprocessing (AMP) systems.
@@ -34,29 +33,22 @@ baremetal, and RTOS environments.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir} \
 	-DCMAKE_INCLUDE_PATH=%{_includedir}/libmetal/ \
 	-DCMAKE_LIBRARY_PATH=%{_libdir} \
 	-DWITH_STATIC_LIB=OFF
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files libs
-%license LICENSE.md
-%doc README.md
-%{_libdir}/libopen_amp.so.1
-%{_libdir}/libopen_amp.so.1.*
-
-%files devel
-%{_includedir}/openamp/
-%{_libdir}/libopen_amp.so
+%files -f %{oreon_filedir}/main.list
+%files -n open-amp-libs -f %{oreon_filedir}/open-amp-libs.list
+%files -n open-amp-devel -f %{oreon_filedir}/open-amp-devel.list
 
 %changelog
+
 %autochangelog

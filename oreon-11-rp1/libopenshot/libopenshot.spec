@@ -1,12 +1,7 @@
-%global source0_hash none
-
-# Try opting-out of LTO, due to test failures
+%global source0_hash 5c5f3790f6f70977f3573b9d039372d5b85bddc46f8944244a6225a79891acf2
 %define _lto_cflags %{nil}
-
 %global soversion 28
-
 %bcond openh264 0
-
 %global skip_tests Clip:verify parent Timeline|\\\
 Clip:time remapping|\\\
 Clip:resample_audio_8000_to_48000_reverse|\\\
@@ -60,49 +55,43 @@ CVOutline:Outline_Tests
 %else
 %global skip_s390x_tests %nil
 %endif
-
 Name:           libopenshot
 Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Library for creating and editing videos
-
-# See .reuse/dep5 for details
 License:        LGPL-3.0-or-later and BSD-3-Clause
 URL:            http://www.openshot.org/
 Source0:        https://github.com/OpenShot/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-# Fix build with FFmpeg 8
-# https://github.com/OpenShot/libopenshot/pull/1018
 Patch0:         %{name}-ffmpeg8.patch
-# Fix babl detection
 Patch1:         %{name}-fix-babl-detection.patch
-
-# libopenshot is completely broken on ppc64le, see rfbz #5528
 ExcludeArch:    ppc64le
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
+%if %{with openh264}
+%endif
+# oreon:deps
+BuildRequires:  ImageMagick-c++-devel
 BuildRequires:  alsa-lib-devel
 BuildRequires:  babl-devel
-BuildRequires:  ImageMagick-c++-devel
-# EPEL 8 don't have ffmpeg-free so we can't build it on EPEL 8
+BuildRequires:  catch-devel
+BuildRequires:  cmake
+BuildRequires:  cppzmq-devel
 BuildRequires:  ffmpeg-free-devel
+BuildRequires:  gcc-c++
+BuildRequires:  jsoncpp-devel
+BuildRequires:  libopenshot-audio-devel
 BuildRequires:  opencv-devel
-%if %{with openh264}
-BuildRequires:  openh264
-%endif
 BuildRequires:  protobuf-devel
-BuildRequires:  qt5-qttools-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-distutils-extra
+BuildRequires:  python3-libs
+BuildRequires:  python3-setuptools
 BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  qt5-qttools-devel
+BuildRequires:  ruby-devel
+BuildRequires:  swig
 BuildRequires:  unittest-cpp-devel
-BuildRequires:  cppzmq-devel
 BuildRequires:  zeromq-devel
-BuildRequires:  jsoncpp-devel
-BuildRequires:  libopenshot-audio-devel >= %{version}
-BuildRequires:  catch-devel
-BuildRequires:  python3-distutils-extra
-BuildRequires:  python3-setuptools
-
+# /oreon:deps
 %description
 OpenShot Library (libopenshot) is an open-source project
 dedicated to delivering high quality video editing, animation,
@@ -111,7 +100,6 @@ and playback solutions to the world.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -124,7 +112,6 @@ BuildRequires:  python%{python3_pkgversion}-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Obsoletes:      python-%{name} < 0.1.1-2
 Provides:       python-%{name} = %{version}-%{release}
-
 %description -n python%{python3_pkgversion}-%{name}
 The python-%{name} package contains python bindings for
 applications that use %{name}.
@@ -133,45 +120,33 @@ applications that use %{name}.
 Summary:        Ruby bindings for %{name}
 BuildRequires:  ruby-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description -n ruby-%{name}
 The ruby-%{name} package contains ruby bindings for
 applications that use %{name}.
 
 %prep
+
 %autosetup -p1
 
 rm -rf third_party/jsoncpp
 
 %build
+
 %cmake -Wno-dev -DCMAKE_BUILD_TYPE:STRING=Release
 %cmake_build
-
 %check
-# Some tests soft-fail because of missing OpenH264
-# https://github.com/OpenShot/libopenshot/issues/1020
+
 export QT_QPA_PLATFORM=offscreen
 %ctest --exclude-regex "%{skip_tests}%{skip_openh264_tests}%{skip_s390x_tests}"
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS README.md
-%license LICENSES/* .reuse/dep5
-%{_libdir}/%{name}.so.%{soversion}
-%{_libdir}/%{name}.so.%{version}
-
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/%{name}.so
-
-%files -n python%{python3_pkgversion}-libopenshot
-%pycached %{python3_sitearch}/openshot.py
-%{python3_sitearch}/_openshot.so
-
-%files -n ruby-libopenshot
-%{ruby_vendorarchdir}/openshot.so
+%files -f %{oreon_filedir}/main.list
+%files -n libopenshot-devel -f %{oreon_filedir}/libopenshot-devel.list
+%files -n python3-libopenshot -f %{oreon_filedir}/python3-libopenshot.list
+%files -n ruby-libopenshot -f %{oreon_filedir}/ruby-libopenshot.list
 
 %changelog
+
 %autochangelog

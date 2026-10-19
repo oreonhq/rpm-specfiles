@@ -1,5 +1,4 @@
 %global source0_hash c8c5a4716b0f18f70ef47f019b81967932f4487d0730aae81c595cb672dabae6
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -82,38 +81,32 @@ end
 }
 %bcond_with bootstrap
 %global bundle org.apache.felix.utils
-
 Name:           felix-utils
 Version:        1.11.8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Utility classes for OSGi
 License:        Apache-2.0
 URL:            https://felix.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/felix/%{bundle}/%{version}/%{bundle}-%{version}-source-release.tar.gz
-
-# The module org.osgi.cmpn requires implementing methods which were not
-# implemented in previous versions where org.osgi.compendium was used
 Patch:          0000-Port-to-osgi-cmpn.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.11.8-24
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.osgi:osgi.cmpn)
 BuildRequires:  mvn(org.osgi:osgi.core)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.11.8-24
-
+# /oreon:deps
 %description
 Utility classes for OSGi
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n org.apache.felix.utils-1.11.8
 %autosetup -p1 -n org.apache.felix.utils-1.11.8
@@ -126,15 +119,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_file :%{bundle} "felix/%{bundle}"
 
 %build
-%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
-%doc DEPENDENCIES
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11.8-1
 - Import

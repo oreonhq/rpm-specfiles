@@ -1,56 +1,41 @@
-%global source0_hash ad3c867f35804a94993c7ed5ac01df127b8bbf3d7ea84ed9f46ae1fd428e80c0
-
+%global source0_hash 71fb8eda5ee37ab3405ea5df6c2a9490716e411db82e6c0878132bdf29aedb17
 %global libname Newtonsoft.Json
-
-# mono is without any packagable debuginfo
 %global debug_package %{nil}
-
 %ifarch ppc64 ppc64le aarch64 armv7hl s390x
-# disable the tests for some arches because quite a number of them fail
 %bcond_with tests
 %else
 %bcond_without tests
 %endif
-
 Name:           newtonsoft-json
 Version:        13.0.4
 Release:        1%{?dist}
 Summary:        Popular high-performance JSON framework
-
-# almost all files are licensed as MIT/X11, but BSD for LinqBridge.cs
-# (and LGPLv2.1+ for Tools/7-Zip, not used)
-# Automatically converted from old format: MIT and BSD - review is highly recommended.
 License:        LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD
 URL:            http://www.newtonsoft.com/json
 Source0:        https://github.com/JamesNK/%{libname}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 Patch10:         %{name}-tests-skip-samples.patch
 Patch11:         %{name}-nunit.patch
 Patch12:         %{name}-mscorlibtest.patch
-
 ExclusiveArch:  %{mono_arches}
-
-# nunit2 fails to build on armv7hl. Mono crashes. see bug 1923663
-# it is too much work to switch to nunit (version 3) at the moment.
 ExcludeArch:    armv7hl
-
-BuildRequires:  mono-devel
-BuildRequires:  mono-web
+# oreon:deps
 BuildRequires:  mono-data
+BuildRequires:  mono-devel
 BuildRequires:  mono-mvc
+BuildRequires:  mono-web
 BuildRequires:  nunit2-devel
-
+# /oreon:deps
 %description
 %{libname} aka Json.NET is a popular high-performance JSON framework
 
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qn%{libname}-%{version}
@@ -116,13 +101,12 @@ sed -i 's/\[Ignore\]/[Ignore("Ignore")]/g' Src/Newtonsoft.Json.Tests/JsonTextRea
 %endif
 
 %build
+
 pushd Src/%{libname}
 xbuild /p:Configuration=Release %{libname}.Net40.csproj /p:TargetFrameworkVersion="v4.7.1"
-
 %install
 mkdir -p %{buildroot}/%{_monogacdir}
 gacutil -i Src/%{libname}/bin/Release/Net40/%{libname}.dll -package %{name} -root %{buildroot}/usr/lib
-# pkgconfig
 mkdir -p %{buildroot}/%{_libdir}/pkgconfig
 cat <<EOT >>%{buildroot}/%{_libdir}/pkgconfig/%{name}.pc
 Name: %{libname}
@@ -132,23 +116,18 @@ Requires: mono
 Libs: -r:%{_monodir}/%{name}/%{libname}.dll
 Libraries=%{_monodir}/%{name}/%{libname}.dll
 EOT
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %if %{with tests}
 pushd Src/%{libname}.Tests
 xbuild /p:Configuration=Release %{libname}.Tests.Net40.csproj /p:TargetFrameworkVersion="v4.7.1"
 nunit-console26 -labels bin/Release/Net40/*Tests.dll
-#rm -r obj bin
 %endif
-
-%files
-%license Doc/license.txt
-%doc *.md Doc/readme.txt
-%{_monogacdir}/%{libname}
-%{_monodir}/%{name}
-
-%files devel
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n newtonsoft-json-devel -f %{oreon_filedir}/newtonsoft-json-devel.list
 
 %changelog
+
 %autochangelog

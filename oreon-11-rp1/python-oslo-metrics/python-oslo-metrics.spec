@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 3fa3d6d6209efdbdcf88840a2016efa53fa6c1a3e98847e60ded0d91d074216b
 Name:           python-oslo-metrics
 Version:        0.17.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Oslo Metrics library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://docs.openstack.org/oslo.metrics
-Source:         %{pypi_source oslo_metrics}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/oslo_metrics/oslo_metrics-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'oslo-metrics' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(pbr) >= 6.1.1
+Requires:       python3-oslo-metrics = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-oslo-metrics
-Summary:        %{summary}
-
-%description -n python3-oslo-metrics %_description
-
+Summary:        Oslo Metrics library
+%description -n python3-oslo-metrics
 
 %prep
-%autosetup -p1 -n oslo_metrics-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir oslo_metrics-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-oslo-metrics usr/lib/python3*/site-packages/oslo_metrics* usr/lib64/python3*/site-packages/oslo_metrics* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/oslo_metrics* usr/lib64/python3*/site-packages/oslo_metrics* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-oslo-metrics -f %{pyproject_files}
-%{_bindir}/oslo-metrics
+%files
+%files -n python3-oslo-metrics -f %{oreon_filedir}/python3-oslo-metrics.list
 
 %changelog
+
 %autochangelog

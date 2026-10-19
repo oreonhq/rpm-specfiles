@@ -1,57 +1,39 @@
 %global source0_hash 5ae624bd785e299523f6132c204bd562cc73066dd33a10a12aa96389f55a4de7
-
-# Fedora spec file for php-pecl-amqp
-#
-# SPDX-FileCopyrightText:  Copyright 2012-2026 Remi Collet
-# SPDX-License-Identifier: CECILL-2.1
-# http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
-#
-# Please, preserve the changelog entries
-#
-
 %bcond_with         tests
-
 %global pie_vend         php-amqp
 %global pie_proj         php-amqp
 %global pecl_name        amqp
 %global ini_name         40-%{pecl_name}.ini
-
 %global upstream_version 2.2.0
-#global upstream_prever  RC1
-#global upstream_lower   rc1
 %global sources          %{pecl_name}-%{upstream_version}%{?upstream_prever}
 %global _configure       ../%{sources}/configure
-
-Summary:       Communicate with any AMQP compliant server
+Summary:        Communicate with any AMQP compliant server
 Name:          php-pecl-amqp
 Version:       %{upstream_version}%{?upstream_prever:~%{upstream_lower}}
-Release:       2%{?dist}
+Release:        1%{?dist}
 License:       PHP-3.01
 URL:           https://pecl.php.net/package/amqp
-Source0:       https://pecl.php.net/get/%{pecl_name}-%{upstream_version}%{?upstream_prever}.tgz
-
+Source0:        https://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 ExcludeArch:   %{ix86}
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: php-devel >= 7.4
-BuildRequires: php-pear
-BuildRequires: pkgconfig(librabbitmq) >= 0.8.0
 %if %{with tests}
-BuildRequires: rabbitmq-server
-BuildRequires: hostname
 %endif
-
 Requires:      php(zend-abi) = %{php_zend_api}
 Requires:      php(api) = %{php_core_api}
-
 Provides:      php-%{pecl_name}                 = %{version}
 Provides:      php-%{pecl_name}%{?_isa}         = %{version}
 Provides:      php-pecl(%{pecl_name})           = %{version}
 Provides:      php-pecl(%{pecl_name})%{?_isa}   = %{version}
 Provides:      php-pecl(%{pecl_name})%{?_isa}   = %{version}
 Provides:      php-pie(%{pie_vend}/%{pie_proj}) = %{version}
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  hostname
+BuildRequires:  make
+BuildRequires:  php-devel
+BuildRequires:  php-pear
+BuildRequires:  pkgconfig(librabbitmq)
+BuildRequires:  rabbitmq-server
+# /oreon:deps
 %description
 This extension can communicate with any AMQP spec 0-9-1 compatible server,
 such as RabbitMQ, OpenAMQP and Qpid, giving you the ability to create and
@@ -59,6 +41,7 @@ delete exchanges and queues, as well as publish to any exchange and consume
 from any queue.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c
@@ -131,36 +114,32 @@ extension = %{pecl_name}.so
 EOF
 
 %build
+
 cd %{sources}
 %{__phpize}
 sed -e 's/INSTALL_ROOT/DESTDIR/' -i build/Makefile.global
-
 %configure --with-php-config=%{__phpconfig}
 %make_build
-
 %install
 cd %{sources}
-
 : Install the extension
 %make_install
-
 : Drop in the bit of configuration
 install -Dpm 644 ../%{ini_name} %{buildroot}%{php_inidir}/%{ini_name}
-
 : Install XML package description
 install -Dpm 644 ../package.xml %{buildroot}%{pecl_xmldir}/%{name}.xml
-
 : Install the Documentation
 for i in $(grep 'role="doc"' ../package.xml | sed -e 's/^.*name="//;s/".*$//')
 do install -Dpm 644 $i %{buildroot}%{pecl_docdir}/%{pecl_name}/$i
 done
+%oreon_autofiles main
 
 %check
+
 : Minimal load test for the extension
 %{__php} --no-php-ini \
     --define extension=%{sources}/modules/%{pecl_name}.so \
     -m | grep '^%{pecl_name}$'
-
 %if %{with tests}
 mkdir log run base
 : Launch the RabbitMQ service
@@ -171,30 +150,21 @@ export RABBITMQ_MNESIA_BASE=$PWD/base
 export PHP_AMQP_HOST=localhost
 /usr/lib/rabbitmq/bin/rabbitmq-server &>log/output &
 /usr/lib/rabbitmq/bin/rabbitmqctl wait $RABBITMQ_PID_FILE
-
 ret=0
 pushd %{sources}
 : Run the upstream test Suite for the extension
 TEST_PHP_ARGS="-n -d extension=$PWD/modules/%{pecl_name}.so" \
 %{__php} -n run-tests.php -q --show-diff || ret=1
 popd
-
 : Cleanup
 if [ -s $RABBITMQ_PID_FILE ]; then
    kill $(cat $RABBITMQ_PID_FILE)
 fi
 rm -rf log run base
-
 exit $ret
 %endif
-
-%files
-%license %{sources}/LICENSE
-%doc %{pecl_docdir}/%{pecl_name}
-%{pecl_xmldir}/%{name}.xml
-
-%config(noreplace) %{php_inidir}/%{ini_name}
-%{php_extdir}/%{pecl_name}.so
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

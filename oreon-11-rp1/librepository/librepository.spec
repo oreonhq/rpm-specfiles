@@ -1,14 +1,10 @@
 Name: librepository
 Version: 1.1.3
-Release: %autorelease
-Summary: Hierarchical repository abstraction layer
+Release:        1%{?dist}
+Summary:        Hierarchical repository abstraction layer
 License: LGPL-2.1-only
-#Original source: http://downloads.sourceforge.net/jfreereport/%%name}-%%{version}.zip
-#unzip, find . -name "*.jar" -exec rm {} \;
-#to simplify the licensing
-Source: %{name}-%{version}-jarsdeleted.zip
+Source0:        %{name}-%{version}-jarsdeleted.zip
 URL: http://reporting.pentaho.org/
-BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase >= 1.1.3
 Requires: java-25-headless, jpackage-utils, libbase >= 1.1.3
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -16,7 +12,12 @@ Patch0: librepository-1.1.2.build.patch
 Patch1: librepository-1.1.2.java11.patch
 Patch2: librepository-1.1.3-remove-ant-contrib-support.patch
 Patch3: librepository-1.1.3-remove-commons-logging.patch
-
+# oreon:deps
+BuildRequires:  ant-openjdk25
+BuildRequires:  java-25-devel
+BuildRequires:  jpackage-utils
+BuildRequires:  libbase
+# /oreon:deps
 %description
 LibRepository provides a simple abstraction layer to access bulk content that
 is organized in a hierarchical layer.
@@ -25,11 +26,11 @@ is organized in a hierarchical layer.
 Summary: Javadoc for %{name}
 Requires: %{name} = %{version}-%{release}
 Requires: jpackage-utils
-
 %description javadoc
 Javadoc for %{name}.
 
 %prep
+
 %setup -q -c
 %patch -P0 -p1 -b .build
 %patch -P1 -p1 -b .java11
@@ -41,25 +42,22 @@ mkdir -p lib
 build-jar-repository -s -p lib libbase
 
 %build
+
 ant jar javadoc
 for file in README.txt licence-LGPL.txt ChangeLog.txt; do
     tr -d '\r' < $file > $file.new
     mv $file.new $file
 done
-
 %install
 mkdir -p $RPM_BUILD_ROOT%{_javadir}
 cp -p ./dist/%{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}/%{name}.jar
-
 mkdir -p $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 cp -rp bin/javadoc/docs/api $RPM_BUILD_ROOT%{_javadocdir}/%{name}
+%oreon_autofiles main usr/*/lib*.so.*
 
-%files
-%doc licence-LGPL.txt README.txt ChangeLog.txt
-%{_javadir}/%{name}.jar
-
-%files javadoc
-%{_javadocdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n librepository-javadoc -f %{oreon_filedir}/librepository-javadoc.list
 
 %changelog
+
 %autochangelog

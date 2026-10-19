@@ -1,55 +1,26 @@
-%global source0_hash 0f5f642b6a5c8f07159aa75919106ac13a62c638c7613373f469dcc3bfb88dfe
-
+%global source0_hash 9f6f7f00664adcd470069cbe2b05e41bd1e9bbe4506856a8029c56353eacee7d
 Name:           pdfarranger
 Version:        1.14.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        PDF file merging, rearranging, and splitting
-
 License:        GPL-3.0-or-later
 URL:            https://github.com/pdfarranger/%{name}
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
-BuildRequires:  gettext
-BuildRequires:  python3-devel
-
-# For checks only
-BuildRequires:  libappstream-glib
-BuildRequires:  desktop-file-utils
-
-# For dogtail tests
-# pyproject_buildrequires without '-R'
-BuildRequires:	python3-dogtail
-BuildRequires:	xorg-x11-server-Xvfb
-BuildRequires:	dbus-daemon
-# dnf provides /usr/share/glib-2.0/schemas/org.gnome.desktop.interface.gschema.xml
-BuildRequires:  gsettings-desktop-schemas
-BuildRequires:  gobject-introspection
-# all runtime requires:
-BuildRequires:  python3-gobject
-BuildRequires:  gtk3
-BuildRequires:  python3-cairo
-BuildRequires:  poppler-glib
-BuildRequires:  python3-img2pdf
-
 Recommends:     python3-img2pdf >= 0.3.4
-
-# These seem to be included in the default desktop install
 Requires:       python3-gobject
 Requires:       gtk3
 Requires:       python3-cairo
 Requires:       poppler-glib
-
 Provides:       pdfshuffler = %{version}-%{release}
 Obsoletes:      pdfshuffler < 0.6.1-1
-
-# The repository changed to pdfarranger/pdfarranger but we leave the app_id
-# for now.
 %global app_id com.github.jeromerobert.pdfarranger
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pdfarranger = %{version}-%{release}
+# /oreon:deps
 %description
 PDF Arranger is a small python-gtk application, which helps the user to merge 
 or split pdf documents and rotate, crop and rearrange their pages using an 
@@ -59,39 +30,25 @@ PDF Arranger is a fork of Konstantinos Poulios’s PDF-Shuffler.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files %{name}
 %find_lang %{name}
 ln -s pdfarranger %{buildroot}%{_bindir}/pdfshuffler
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 python3 -X tracemalloc -u -m unittest -v -f tests.test_core
 python3 -X tracemalloc -u -m unittest -v -f tests.test_exporter
-# main gui tests curently failing, may be due to outdated dogtail package
-# python3 -X tracemalloc -u -m unittest -v tests.test
-
-%files -f %{name}.lang -f %{pyproject_files}
-%license COPYING
-%doc README.md
-%{_mandir}/man1/pdfarranger.1*
-%{_datadir}/icons/hicolor/*/apps/*
-%{_metainfodir}/%{app_id}.metainfo.xml
-%{_datadir}/applications/%{app_id}.desktop
-%{_datadir}/%{name}/
-%{_bindir}/pdfarranger
-%{_bindir}/pdfshuffler
+%files
 
 %changelog
+
 %autochangelog

@@ -1,47 +1,35 @@
 %global source0_hash ed41b3eced568c82a1f6d1bdb6e8c5c7dbe7264b718da506e8cd52e52b9b175a
-
 %global app_id  org.kde.skladnik
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:           skladnik
 Version:        25.12.3
 Release:        1%{?dist}
 Summary:        Warehouse keeper game
-# GPL: code
-# GFDL: docs
-# CC0: metadata, themes
-# CC-BY-SA: themes
 License:        GPL-2.0-or-later AND CC0-1.0 AND CC-BY-SA-4.0 AND GFDL-1.2-or-later
 URL:            https://apps.kde.org/skladnik/
 Source :        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  extra-cmake-modules
-BuildRequires:  gcc-c++
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  libappstream-glib
-# Qt dependencies
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(Qt6Widgets)
-# KF dependencies
+Requires:       hicolor-icon-theme
+# oreon:deps
+BuildRequires:  cmake(KDEGames6)
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6ConfigWidgets)
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6DocTools)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KIO)
 BuildRequires:  cmake(KF6WidgetsAddons)
 BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6DocTools)
-# KDE Gear dependencies
-BuildRequires:  cmake(KDEGames6)
-
-Requires:       hicolor-icon-theme
-
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 Skladnik is an implementation of a Japanese warehouse keeper game.
 The idea is that you are a warehouse keeper trying to push crates to their
@@ -51,30 +39,22 @@ stuck in wrong places and/or block your way.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --with-html --with-man
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{app_id}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{app_id}.metainfo.xml
-
-%files -f %{name}.lang
-%license LICENSES/*.txt
-%doc AUTHORS README
-%{_bindir}/%{name}
-%{_datadir}/applications/%{app_id}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{name}.*
-%{_datadir}/%{name}/
-%{_mandir}/man6/%{name}.6*
-%{_metainfodir}/%{app_id}.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

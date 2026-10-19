@@ -1,26 +1,21 @@
 %global source0_hash b0956210863cc24f480203ba3c2ef06dfae5579536a05744364e7de58822b230
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %global giturl  https://github.com/backtracking/ocamlgraph
-
 Name:           ocaml-ocamlgraph
 Version:        2.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        OCaml library for arc and node graphs
-
 License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 URL:            https://backtracking.github.io/ocamlgraph/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/%{version}/ocamlgraph-%{version}.tbz
-
-BuildRequires:  ocaml >= 4.08.0
-BuildRequires:  ocaml-dune >= 2.0
+Source0:        %{giturl}/releases/download/%{version}/ocamlgraph-%{version}.tbz
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-dune
 BuildRequires:  ocaml-graphics-devel
 BuildRequires:  ocaml-lablgtk-devel
 BuildRequires:  pkgconfig(libgnomecanvas-2.0)
-
+# /oreon:deps
 %description
 Ocamlgraph provides several different implementations of graph data
 structures.  It also provides implementations for a number of classical graph
@@ -34,7 +29,6 @@ visualization) tools.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
@@ -42,7 +36,6 @@ developing applications that use %{name}.
 %package        gtk
 Summary:        Display graphs using OCamlGraph and GTK2
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    gtk
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
@@ -53,7 +46,6 @@ Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
 Requires:       %{name}-gtk%{?_isa} = %{version}-%{release}
 Requires:       ocaml-lablgtk-devel%{?_isa}
 Requires:       libgnomecanvas-devel%{?_isa}
-
 %description    gtk-devel
 The %{name}-gtk-devel package contains libraries and signature files for
 developing applications that use %{name}-gtk.
@@ -61,12 +53,12 @@ developing applications that use %{name}-gtk.
 %package        tools
 Summary:        Graph editing tools for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    tools
 The %{name}-tools package contains graph editing tools for use with
 %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n ocamlgraph-%{version}
@@ -80,12 +72,10 @@ for fil in COPYING TODO.md; do
 done
 
 %build
-%dune_build @default editor
 
+%dune_build @default editor
 %install
 %dune_install -s
-
-# Install the graph editing tools
 mkdir -p %{buildroot}%{_bindir}
 install -m 0755 -p _build/default/editor/editor.exe \
         %{buildroot}/%{_bindir}/ocamlgraph-editor
@@ -97,25 +87,17 @@ install -m 0755 -p _build/default/dgraph/dGraphViewer.exe \
         %{buildroot}%{_bindir}/dGraphViewer
 install -m 0755 -p _build/default/view_graph/viewGraph_test.exe \
         %{buildroot}%{_bindir}/ocamlgraph-viewgraph
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles-ocamlgraph
-%doc CREDITS FAQ
-%license COPYING LICENSE
-
-%files devel -f .ofiles-ocamlgraph-devel
-%doc examples CHANGES.md README.md
-
-%files gtk -f .ofiles-ocamlgraph_gtk
-
-%files gtk-devel -f .ofiles-ocamlgraph_gtk-devel
-
-%files tools
-%{_bindir}/dGraphViewer
-%{_bindir}/graphEdGTK
-%{_bindir}/ocamlgraph*
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-ocamlgraph-devel -f %{oreon_filedir}/ocaml-ocamlgraph-devel.list
+%files -n ocaml-ocamlgraph-gtk -f %{oreon_filedir}/ocaml-ocamlgraph-gtk.list
+%files -n ocaml-ocamlgraph-gtk-devel -f %{oreon_filedir}/ocaml-ocamlgraph-gtk-devel.list
+%files -n ocaml-ocamlgraph-tools -f %{oreon_filedir}/ocaml-ocamlgraph-tools.list
 
 %changelog
+
 %autochangelog

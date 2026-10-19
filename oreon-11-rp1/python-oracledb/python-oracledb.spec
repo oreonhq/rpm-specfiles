@@ -1,62 +1,89 @@
-%global source0_hash none
-
+%global source0_hash 0a380ab72853487ea2764c5df772f35026b4219868fc3eba68e193c9aea230ac
 Name:           python-oracledb
 Version:        4.0.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python interface to Oracle Database
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        UPL-1.0 OR Apache-2.0
 URL:            https://oracle.github.io/python-oracledb
-Source:         %{pypi_source oracledb}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/oracledb/oracledb-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
+BuildRequires:  python3dist(cython) >= 3.2
+BuildRequires:  python3dist(setuptools) >= 77.0.0
+Requires:       python3-oracledb = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-oracledb+test
+Summary:        Metapackage for python3-oracledb test extras
+Requires:       python3-oracledb = %{version}-%{release}
+Provides:       python3dist(oracledb[test]) = %{version}-%{release}
 
+%description -n python3-oracledb+test
+Metapackage for python3-oracledb test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'oracledb' generated automatically by pyp2spec.}
+%package -n       python3-oracledb+oci_config
+Summary:        Metapackage for python3-oracledb oci_config extras
+Requires:       python3-oracledb = %{version}-%{release}
+Provides:       python3dist(oracledb[oci_config]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-oracledb+oci_config
+Metapackage for python3-oracledb oci_config extras.
+
+%package -n       python3-oracledb+oci_auth
+Summary:        Metapackage for python3-oracledb oci_auth extras
+Requires:       python3-oracledb = %{version}-%{release}
+Requires:       python3dist(requests) >= 2.33
+Provides:       python3dist(oracledb[oci_auth]) = %{version}-%{release}
+
+%description -n python3-oracledb+oci_auth
+Metapackage for python3-oracledb oci_auth extras.
+
+%package -n       python3-oracledb+azure_config
+Summary:        Metapackage for python3-oracledb azure_config extras
+Requires:       python3-oracledb = %{version}-%{release}
+Provides:       python3dist(oracledb[azure_config]) = %{version}-%{release}
+
+%description -n python3-oracledb+azure_config
+Metapackage for python3-oracledb azure_config extras.
+
+%package -n       python3-oracledb+azure_auth
+Summary:        Metapackage for python3-oracledb azure_auth extras
+Requires:       python3-oracledb = %{version}-%{release}
+Provides:       python3dist(oracledb[azure_auth]) = %{version}-%{release}
+
+%description -n python3-oracledb+azure_auth
+Metapackage for python3-oracledb azure_auth extras.
+
+%description
 
 %package -n     python3-oracledb
-Summary:        %{summary}
-
-%description -n python3-oracledb %_description
+Summary:        Python interface to Oracle Database
+# oreon:reqs
+Requires:       python3dist(cryptography) >= 3.2.1
+Requires:       python3dist(typing-extensions) >= 4.14.0
+# /oreon:reqs
+%description -n python3-oracledb
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-oracledb azure-auth,azure-config,oci-auth,oci-config,test
-
 
 %prep
-%autosetup -p1 -n oracledb-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir oracledb-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-oracledb usr/lib/python3*/site-packages/oracledb* usr/lib64/python3*/site-packages/oracledb* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/oracledb* usr/lib64/python3*/site-packages/oracledb* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-oracledb -f %{pyproject_files}
+%files
+%files -n python3-oracledb -f %{oreon_filedir}/python3-oracledb.list
 
 %changelog
+
 %autochangelog

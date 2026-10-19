@@ -1,22 +1,20 @@
-%global source0_hash 04fc21de858863560423e79c822f405225f829afd8e5d62293099fbef341f9e8
-
+%global source0_hash ab2f81bcca410c1b41a8410cf72124a3f19bda9bacc45fcbaa2bad48a952d9e1
 %global srcname flent
-
 Name:             flent
 Version:          2.3.0
-Release:          1%{?dist}
-Summary:          FLExible Network Tester for bufferbloat testing and more
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        FLExible Network Tester for bufferbloat testing and more
 License:          GPL-3.0-or-later
 URL:              https://flent.org/
-Source0:          %{pypi_source}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flent/flent-%{version}.tar.gz
 BuildArch:        noarch
-BuildRequires:    python3-devel python3-sphinx desktop-file-utils libappstream-glib python3-setuptools make
 Recommends:       python3-matplotlib python3-matplotlib-qt5 python3-pyside2 python3-QtPy
 Requires:         fping netperf golang-github-heistp-irtt
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-flent = %{version}-%{release}
+# /oreon:deps
 %description
 The FLExible Network Tester is a Python wrapper to run multiple simultaneous
 netperf/iperf/ping instances and aggregate the results.
@@ -37,7 +35,6 @@ ping times before, during and after a link is loaded.
 %package doc
 Summary:          Documentation for Flent: The FLExible Network Tester
 BuildArch:        noarch
-
 %description doc
 Documentation for users of The FLExible Network Tester
 
@@ -58,40 +55,28 @@ the actual measurement points. This makes it possible to graph (e.g.)
 ping times before, during and after a link is loaded.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{srcname}-%{version}
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
+
 %pyproject_wheel
 %make_build -C doc/ html PYTHON=%{__python3} SPHINXBUILD=sphinx-build-3
 rm -f doc/_build/html/index.html doc/_build/html/.buildinfo
-
 %install
 %pyproject_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %make_build test PYTHON=%{__python3}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/flent.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
-
 %files
-%{python3_sitelib}/flent
-%{python3_sitelib}/%{srcname}-*.dist-info/
-%{_bindir}/flent
-%{_bindir}/flent-gui
-%{_datadir}/applications/flent.desktop
-%{_datadir}/mime/packages/flent-mime.xml
-%{_metainfodir}/flent.appdata.xml
-%{_mandir}/man1/flent.1.gz
-%doc README.rst CHANGES.md BUGS batchfile.example flentrc.example flent-paper.batch misc/
-%license LICENSE
-
-%files doc
-%doc doc/_build/html
+%files -n flent-doc -f %{oreon_filedir}/flent-doc.list
 
 %changelog
+
 %autochangelog

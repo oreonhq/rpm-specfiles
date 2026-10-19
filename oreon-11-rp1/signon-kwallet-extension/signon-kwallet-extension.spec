@@ -1,62 +1,46 @@
 %global source0_hash 329bd9bc50504eb6bd7d431f7db6725287832550d60f7189ef8d0201092753c7
-
 %undefine __cmake_in_source_build
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    signon-kwallet-extension
 Version: 26.04.3
-Release: 1%{?dist}
-Summary: KWallet integration for Sign-on framework
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        KWallet integration for Sign-on framework
 License: GPL-2.0-or-later
 URL:     https://cgit.kde.org/%{name}.git
-
 %global revision %(echo %{version} | cut -d. -f3)
 %if %{revision} >= 50
 %global stable unstable
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/%{stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires:  extra-cmake-modules
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  kf6-kwallet-devel
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  pkgconfig(signon-plugins)
-
+Source0:        https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 Supplements:    (kf6-kwallet and signon)
-
+# oreon:deps
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-kwallet-devel
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  pkgconfig(signon-plugins)
+BuildRequires:  qt6-qtbase-devel
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6 \
     -DQT_MAJOR_VERSION=6
-
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-
-%files
-%license COPYING
-%{_libdir}/signon/extensions/libkeyring-kwallet.so
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

@@ -1,45 +1,24 @@
 %global source0_hash 083b504a1cd865e8bfbb42134a34318ce42ef5130daebfc5b0e2f2fb444326c5
 %global source1_hash 0ed13668906e86dbc0dcddf30fdee68c10203dea4e83852b4edb810821bee3c4
-
-# Upstream actually uses a post-release snapshot of commit
-# df4d68c09cdef73e023b8838a8bc7ca4dff1d1de “that addresses a missing include
-# directive needed in more recent Visual Studio releases;” we should be able to
-# get by with the release.
 %global antl4_ver 4.13.2
-
 Name:		adobe-afdko
 Version:	5.0.1
-Release:	1%{?dist}
-Summary:	Adobe Font Development Kit for OpenType
-# Everything is Apache-2.0 except:
-#
-# The following would affect the license of a python3-afdko subpackage, which
-# we currently don’t have.
-#
-# - License of afdko-3.6.1/python/afdko/pdflib/pdfgen.py is said to be “same as
-#   the Python license,” which would seem to suggest Python-2.0.1, but the
-#   license text matches MIT-CMU.
-# - Contents of python/afdko/resources/ are derived from adobe-mappings-cmap
-#   and share its BSD-3-Clause license.
-#
-# The following do not affect the licenses of the binary RPMs.
-#
-# - ExternalAntlr4Cpp.cmake is BSD-3-Clause, as noted in LICENSE.md, but this
-#   is a build-system file and does not affect the licenses of the binary RPMs
-# - Various fonts and other test data files are OFL-1.1 (and/or
-#   OFL-1.0-RFN/OFL-1.0-no-RFN?), but do not contribute to the licenses of the
-#   binary RPMs
+Release:        1%{?dist}
+Summary:        Adobe Font Development Kit for OpenType
 License:	Apache-2.0
 URL:		https://github.com/adobe-type-tools/afdko
 Source0:        https://github.com/adobe-type-tools/afdko/releases/download/%{version}/afdko-%{version}.tar.gz
 Source1:        https://www.antlr.org/download/antlr4-cpp-runtime-4.13.2-source.zip
-BuildRequires:  python3-devel
-BuildRequires:	gcc g++
-BuildRequires:	cmake
-BuildRequires:	libuuid-devel
-BuildRequires:	libxml2-devel
-BuildRequires:	utf8cpp-devel
 Provides: bundled(antlr4-project) = %{antl4_ver}
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  g++
+BuildRequires:  gcc
+BuildRequires:  libuuid-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  python3-devel
+BuildRequires:  utf8cpp-devel
+# /oreon:deps
 %description
 Adobe Font Development Kit for OpenType (AFDKO).
 The AFDKO is a set of tools for building OpenType font files
@@ -48,9 +27,10 @@ from PostScript and TrueType font data.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n afdko-%{version}
-
+%global oreon_srcdir afdko-%{version}
+%oreon_prep
 %build
+
 %set_build_flags
 export XFLAGS="${CFLAGS} ${LDFLAGS}"
 %cmake \
@@ -58,22 +38,12 @@ export XFLAGS="${CFLAGS} ${LDFLAGS}"
   -DFETCHCONTENT_FULLY_DISCONNECTED=ON \
   -DAFDKO_USE_SYSTEM_LIBXML2=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%license LICENSE.md
-%doc docs/ README.md NEWS.md
-%{_bindir}/detype1
-%{_bindir}/makeotfexe
-%{_bindir}/mergefonts
-%{_bindir}/rotatefont
-%{_bindir}/sfntdiff
-%{_bindir}/sfntedit
-%{_bindir}/spot
-%{_bindir}/tx
-%{_bindir}/type1
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

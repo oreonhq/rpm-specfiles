@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash eb1a594161c84a4e67df7db1c269a3392a645bd50e4c82e1298892db0cdb0965
 Name:           python-pyspellchecker
 Version:        0.9.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Pure python spell checker based on work by Peter Norvig
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/barrust/pyspellchecker
-Source:         %{pypi_source pyspellchecker}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyspellchecker/pyspellchecker-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyspellchecker' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.0
+Requires:       python3-pyspellchecker = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyspellchecker
-Summary:        %{summary}
-
-%description -n python3-pyspellchecker %_description
-
+Summary:        Pure python spell checker based on work by Peter Norvig
+%description -n python3-pyspellchecker
 
 %prep
-%autosetup -p1 -n pyspellchecker-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyspellchecker-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyspellchecker usr/lib/python3*/site-packages/pyspellchecker* usr/lib64/python3*/site-packages/pyspellchecker* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyspellchecker* usr/lib64/python3*/site-packages/pyspellchecker* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyspellchecker -f %{pyproject_files}
+%files
+%files -n python3-pyspellchecker -f %{oreon_filedir}/python3-pyspellchecker.list
 
 %changelog
+
 %autochangelog

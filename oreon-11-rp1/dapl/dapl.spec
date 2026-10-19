@@ -1,23 +1,22 @@
-%global source0_hash 40982b43c5e2f1d5b007add9917bc461fdffb95bd52f589de95b15aa59a9d0b6
-
+%global source0_hash 8eb6df3b47fcaad8ea6d35453ffc884b1ef2148f7a0984a3556795bab650fa9b
 Name: dapl
 Version: 2.1.10
-Release: 1%{?dist}
-Summary: Library providing access to the DAT 2.0 API
-# Automatically converted from old format: GPLv2 or BSD or CPL - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Library providing access to the DAT 2.0 API
 License: GPL-2.0-only OR LicenseRef-Callaway-BSD OR CPL-1.0
 Url: https://www.openfabrics.org/
-Source0: https://www.openfabrics.org/downloads/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://www.openfabrics.org/downloads/%{name}/%{name}-%{version}.tar.gz
 Patch0: dapl-c99.patch
 Patch1: dapl-c23.patch
-BuildRequires: libibverbs-devel >= 1.2.1
-BuildRequires: librdmacm-devel >= 1.1.0
-BuildRequires: ibacm-devel
-BuildRequires: gcc
-BuildRequires: make
 Requires: rdma
-# Platforms missing in dapl/udapl/linux/dapl_osd.h
 ExcludeArch: s390, armv7hl
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  ibacm-devel
+BuildRequires:  libibverbs-devel
+BuildRequires:  librdmacm-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 Along with the RDMA kernel drivers, libdat and libdapl provide
 a user-space RDMA API that supports DAT 2.0 specification and IB
@@ -43,42 +42,32 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Useful test suites to validate the dapl library APIs and operation.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
 find . -type f -iname '*.[ch]' -exec chmod a-x '{}' ';'
 
 %build
+
 %configure --sysconfdir=/etc/rdma
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags} V=1
-
 %install
 make DESTDIR=%{buildroot} install
-# remove unpackaged files from the buildroot
 rm -f %{buildroot}%{_libdir}/*.la
-
 %ldconfig_scriptlets
+%oreon_autofiles dapl-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles dapl-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles dapl-utils usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_libdir}/*.so.*
-%{_mandir}/man5/*
-%config(noreplace) %{_sysconfdir}/rdma/dat.conf
-%doc AUTHORS README ChangeLog README.mcm
-%license COPYING LICENSE.txt LICENSE2.txt LICENSE3.txt
-
-%files devel
-%{_libdir}/*.so
-%dir %{_includedir}/dat2
-%{_includedir}/dat2/*
-
-%files static
-%{_libdir}/*.a
-
-%files utils
-%{_bindir}/*
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
+%files -n dapl-devel -f %{oreon_filedir}/dapl-devel.list
+%files -n dapl-static -f %{oreon_filedir}/dapl-static.list
+%files -n dapl-utils -f %{oreon_filedir}/dapl-utils.list
 
 %changelog
+
 %autochangelog

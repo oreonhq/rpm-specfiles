@@ -1,55 +1,23 @@
 %global source0_hash 79a1f400523d629a5f7545f23c152f5b2ba17668a0e07edf8949658ee4066002
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
-
-# For testing
-# Depends on downloading and being in a git repo
 %bcond_with test
-
-# Header only package
 %global debug_package %{nil}
-
 Summary:        Header-only library for using Keras (TensorFlow) models in C++
 Name:           frugally-deep
 License:        MIT
-# Main license is MIT
-# BSD-2-Clause is only for cmake/HunterGate.cmake and that is not distributed
 Version:        0.20.0
 Release:        1%{?dist}
-
 URL:            https://github.com/Dobiasd/frugally-deep
-Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/Dobiasd/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+%if 0%{?suse_version}
+%else
+%endif
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  eigen3-devel
 BuildRequires:  fplus-devel
-%if 0%{?suse_version}
-BuildRequires:  nlohmann_json-devel
-%else
-BuildRequires:  json-devel
-%endif
 BuildRequires:  gcc-c++
-
+BuildRequires:  json-devel
+# /oreon:deps
 %description
 Would you like to build/train a model using Keras/Python? And would
 you like to run the prediction (forward pass) on your model in C++
@@ -81,10 +49,8 @@ frugally-deep
   application/pipeline.
 
 %package devel
-
 Summary:        Header-only library for using Keras (TensorFlow) models in C++
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel
 Would you like to build/train a model using Keras/Python? And would
 you like to run the prediction (forward pass) on your model in C++
@@ -116,6 +82,7 @@ frugally-deep
   application/pipeline.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{version}
@@ -124,24 +91,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e 's@cmake_minimum_required(VERSION 3.2)@cmake_minimum_required(VERSION 3.5)@' CMakeLists.txt
 
 %build
+
 %cmake 
 %cmake_build
-
 %if %{with test}
 %check
+
 %ctest
 %endif
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files devel
-%dir %_includedir/fdeep
-%dir %_libdir/cmake/%{name}
-%license LICENSE
-%doc README.md
-%_includedir/fdeep/*
-%_libdir/cmake/%{name}/*
+%files -f %{oreon_filedir}/main.list
+%files -n frugally-deep-devel -f %{oreon_filedir}/frugally-deep-devel.list
 
 %changelog
+
 %autochangelog

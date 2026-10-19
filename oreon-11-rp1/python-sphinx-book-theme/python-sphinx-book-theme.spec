@@ -1,48 +1,30 @@
 %global source0_hash d9e83fc768a3a22b4f6be4b0c53f60f433cc1d518748d5e7bfcd812ad5c09e53
-
 %global giturl  https://github.com/executablebooks/sphinx-book-theme
-
 Name:           python-sphinx-book-theme
 Version:        1.4.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Interactive book theme for Sphinx
-
 License:        BSD-3-Clause
 BuildArch:      noarch
 URL:            https://jupyterbook.org/
 VCS:            git:%{giturl}.git
 Source0:        %{giturl}/archive/v%{version}/sphinx-book-theme-%{version}.tar.gz
-# Source1 and Source2 created with ./prepare_vendor.sh
 Source1:        sphinx-book-theme-%{version}-vendor.tar.xz
 Source2:        sphinx-book-theme-%{version}-vendor-licenses.txt
-
-
-BuildRequires:  nodejs-devel
+# oreon:deps
 BuildRequires:  /usr/bin/node
 BuildRequires:  /usr/bin/npm
+BuildRequires:  nodejs-devel
 BuildRequires:  yarnpkg
-
-%global _description %{expand:
-This is a lightweight Sphinx theme designed to mimic the look-and-feel of an
-interactive book.  It has the following primary features:
-
-- Bootstrap 5 for visual elements and functionality
-- Flexible content layout that is inspired by beautiful online books, such as
-  the Edward Tufte CSS guide
-- Visual classes designed for Jupyter Notebooks.  Cell inputs, outputs, and
-  interactive functionality are all supported.
-- Launch buttons for online interactivity.  For pages that are built with
-  computational material, connect your site to an online BinderHub for
-  interactive content.}
-
-%description %_description
+# /oreon:deps
+%description
 
 %package     -n python3-sphinx-book-theme
 Summary:        Interactive book theme for Sphinx
-
-%description -n python3-sphinx-book-theme %_description
+%description -n python3-sphinx-book-theme
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n sphinx-book-theme-%{version} -a1 -p1
@@ -61,19 +43,21 @@ sed -i '/coverage/d;/pytest-cov/d' pyproject.toml
 sed -i 's,^\(node-version = \)".*",\1"%{nodejs_version}",' pyproject.toml
 
 %build -p
+
 export YARN_CACHE_FOLDER="$PWD/.package-cache"
 yarn install --offline
 nodeenv --node=system --prebuilt --clean-src $PWD/.nodeenv
-
 %install
 %pyproject_install
+%oreon_autofiles python3-sphinx-book-theme usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%pytest -v
 
-%files -n python3-sphinx-book-theme -f %{pyproject_files}
-%doc CHANGELOG.md README.md
-%license LICENSE sphinx-book-theme-%{version}-vendor-licenses.txt
+%pytest -v
+%files -f %{oreon_filedir}/main.list
+%files -n python3-sphinx-book-theme -f %{oreon_filedir}/python3-sphinx-book-theme.list
 
 %changelog
+
 %autochangelog

@@ -1,5 +1,4 @@
 %global source0_hash e8623c04c9a018ba8026f7ba55c86902315c501c5ec7b8fa27f66fdd54575021
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,18 +82,18 @@ end
 %bcond_with bootstrap
 Name:           moditect
 Version:        1.3.0.Final
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tooling for the Java Module System
 License:        Apache-2.0
 URL:            https://github.com/moditect/moditect
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/moditect/moditect/archive/refs/tags/%{version}.tar.gz#/moditect-%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.3.0.Final-12
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.beust:jcommander)
 BuildRequires:  mvn(com.github.javaparser:javaparser-core)
@@ -106,10 +105,7 @@ BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
 BuildRequires:  mvn(org.assertj:assertj-core)
 BuildRequires:  mvn(org.eclipse.aether:aether-util)
 BuildRequires:  mvn(org.ow2.asm:asm)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.3.0.Final-12
-
+# /oreon:deps
 %description
 The ModiTect project aims at providing productivity tools for working with the
 Java module system ("Jigsaw"). Currently the following tasks are supported:
@@ -127,6 +123,7 @@ to add a module descriptor to your project JAR while staying on Java 8 with your
 own build.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -145,14 +142,14 @@ rm core/src/test/java/org/moditect/test/AddModuleInfoTest.java
 rm core/src/test/java/org/moditect/internal/parser/JavaVersionHelperTest.java
 
 %build
-%mvn_build -j -- -Dproject.build.sourceEncoding=UTF-8
 
+%mvn_build -j -- -Dproject.build.sourceEncoding=UTF-8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

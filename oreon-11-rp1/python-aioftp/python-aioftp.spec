@@ -1,61 +1,64 @@
-%global source0_hash none
-
+%global source0_hash 311f66e9ff726055f73e74764fb62e097ab806da3177c13f1356c8e7eaf9a65d
 Name:           python-aioftp
 Version:        0.28.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        ftp client/server for asyncio
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/aio-libs/aioftp
-Source:         %{pypi_source aioftp}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aioftp/aioftp-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-aioftp = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-aioftp+socks
+Summary:        Metapackage for python3-aioftp socks extras
+Requires:       python3-aioftp = %{version}-%{release}
+Requires:       python3dist(siosocks) >= 0.2.0
+Provides:       python3dist(aioftp[socks]) = %{version}-%{release}
 
+%description -n python3-aioftp+socks
+Metapackage for python3-aioftp socks extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aioftp' generated automatically by pyp2spec.}
+%package -n       python3-aioftp+dev
+Summary:        Metapackage for python3-aioftp dev extras
+Requires:       python3-aioftp = %{version}-%{release}
+Requires:       python3dist(async-timeout) >= 4.0.0
+Provides:       python3dist(aioftp[dev]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-aioftp+dev
+Metapackage for python3-aioftp dev extras.
+
+%description
 
 %package -n     python3-aioftp
-Summary:        %{summary}
-
-%description -n python3-aioftp %_description
+Summary:        ftp client/server for asyncio
+# oreon:reqs
+Requires:       python3dist(typing-extensions) >= 4.13.2
+# /oreon:reqs
+%description -n python3-aioftp
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-aioftp dev,socks
-
 
 %prep
-%autosetup -p1 -n aioftp-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aioftp-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aioftp usr/lib/python3*/site-packages/aioftp* usr/lib64/python3*/site-packages/aioftp* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aioftp* usr/lib64/python3*/site-packages/aioftp* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aioftp -f %{pyproject_files}
+%files
+%files -n python3-aioftp -f %{oreon_filedir}/python3-aioftp.list
 
 %changelog
+
 %autochangelog

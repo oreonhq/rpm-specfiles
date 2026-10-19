@@ -1,56 +1,45 @@
-%global source0_hash none
-
+%global source0_hash e4b68bb881802dda1a7d878b2fc84c06d1ee57fb40b874d3dc97dabfa36b8312
 Name:           python-flask-sqlalchemy
 Version:        3.1.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Add SQLAlchemy support to your Flask application.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/pallets-eco/flask-sqlalchemy/
-Source:         %{pypi_source flask_sqlalchemy}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flask_sqlalchemy/flask_sqlalchemy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'flask-sqlalchemy' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(flit-core) < 4
+Requires:       python3-flask-sqlalchemy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-flask-sqlalchemy
-Summary:        %{summary}
-
-%description -n python3-flask-sqlalchemy %_description
-
+Summary:        Add SQLAlchemy support to your Flask application.
+# oreon:reqs
+Requires:       python3dist(flask) >= 2.2.5
+Requires:       python3dist(sqlalchemy) >= 2.0.16
+# /oreon:reqs
+%description -n python3-flask-sqlalchemy
 
 %prep
-%autosetup -p1 -n flask_sqlalchemy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir flask_sqlalchemy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-flask-sqlalchemy usr/lib/python3*/site-packages/flask_sqlalchemy* usr/lib64/python3*/site-packages/flask_sqlalchemy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flask_sqlalchemy* usr/lib64/python3*/site-packages/flask_sqlalchemy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-flask-sqlalchemy -f %{pyproject_files}
+%files
+%files -n python3-flask-sqlalchemy -f %{oreon_filedir}/python3-flask-sqlalchemy.list
 
 %changelog
+
 %autochangelog

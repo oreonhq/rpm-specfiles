@@ -1,36 +1,29 @@
-%global source0_hash fe68b2187d1e5fcce6e63d959d657776b9a6b9c394a7794022181bacd63ce6f2
-
+%global source0_hash 85377cbac10a1b2fafd0fc0cc8394d958d5b1da14cada3e1c93fc2c3ecabec7e
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 Name:           not-ocamlfind
 Version:        0.15
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Front-end to ocamlfind that adds a few new commands
-
 License:        MIT
 URL:            https://github.com/chetmurthy/not-ocamlfind
 VCS:            git:%{url}.git
-Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
+Source0:        https://github.com/chetmurthy/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+Requires:       ocaml-findlib%{?_isa}
+Recommends:     %{py3_dist xdot}
+# oreon:deps
 BuildRequires:  m4
 BuildRequires:  ocaml
 BuildRequires:  ocaml-camlp-streams-devel
 BuildRequires:  ocaml-compiler-libs
-BuildRequires:  ocaml-findlib-devel >= 1.8.0
-BuildRequires:  ocaml-fmt-devel >= 0.8.8
-BuildRequires:  ocaml-ocamlgraph-devel >= 2.0.0
-BuildRequires:  ocaml-rresult-devel >= 0.6.0
+BuildRequires:  ocaml-findlib-devel
+BuildRequires:  ocaml-fmt-devel
+BuildRequires:  ocaml-ocamlgraph-devel
+BuildRequires:  ocaml-rresult-devel
 BuildRequires:  which
-
-Requires:       ocaml-findlib%{?_isa}
-
-Recommends:     %{py3_dist xdot}
-
+# /oreon:deps
 %description
 The command not-ocamlfind is a pass-thru to ocamlfind, but adds three new
 commands: preprocess, reinstall-if-diff and package-graph.
@@ -51,14 +44,9 @@ commands: preprocess, reinstall-if-diff and package-graph.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-# The build wants us to use a patched vendored version of findlib.  However,
-# the findlib in Fedora already has the patches, and is a later version.  Do
-# not use the configure script or Makefile until it is possible to build
-# without the vendored findlib.
+
 %ifarch %{ocaml_native_compiler}
 ocamlfind ocamlopt \
   -I +findlib findlib.cmxa \
@@ -72,7 +60,6 @@ ocamlfind ocamlc \
   -linkpkg \
   fsmod.ml frontend.ml main.ml \
   -o not-ocamlfind
-
 %ifarch %{ocaml_native_compiler}
 ocamlfind ocamlopt \
   -I +findlib findlib.cmxa \
@@ -86,25 +73,18 @@ ocamlfind ocamlc \
   -linkpkg \
   papr_official.ml \
   -o papr_official.exe
-
 %install
-# The makefile ignores DESTDIR, and there are only 4 files to install anyway...
 mkdir -p %{buildroot}%{_bindir}
 cp -p not-ocamlfind %{buildroot}%{_bindir}
-
 mkdir -p %{buildroot}%{ocamldir}/not-ocamlfind
 cp -p META opam papr_official.exe %{buildroot}%{ocamldir}/not-ocamlfind
+%oreon_autofiles main
 
 %check
-# Upstream provides no tests, so we just check that simple usage gives us a
-# zero exit code
-./not-ocamlfind package-graph -predicates true -package findlib
 
-%files
-%doc CHANGES README.md
-%license LICENSE
-%{_bindir}/not-ocamlfind
-%{ocamldir}/not-ocamlfind/
+./not-ocamlfind package-graph -predicates true -package findlib
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

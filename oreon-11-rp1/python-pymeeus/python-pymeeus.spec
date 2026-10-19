@@ -1,59 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 548f7186bd8b96cbc069cf649a8e8e377dce49ac74486709849fe63a99cad684
 Name:           python-pymeeus
 Version:        0.5.12
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python implementation of Jean Meeus astronomical routines
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/architest/pymeeus
-Source:         %{pypi_source PyMeeus}
-
+Source0:        https://files.pythonhosted.org/packages/source/P/PyMeeus/PyMeeus-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pymeeus' generated automatically by pyp2spec.}
-
 Patch0:         0001-Fix-documentation-build-with-sphinx-8.patch
 Patch1:         0002-fix-pytest-7-2-compatibility.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pymeeus = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pymeeus
-Summary:        %{summary}
-
-%description -n python3-pymeeus %_description
-
+Summary:        Python implementation of Jean Meeus astronomical routines
+%description -n python3-pymeeus
 
 %prep
-%autosetup -p1 -n PyMeeus-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir PyMeeus-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pymeeus usr/lib/python3*/site-packages/pymeeus* usr/lib64/python3*/site-packages/pymeeus* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pymeeus* usr/lib64/python3*/site-packages/pymeeus* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pymeeus -f %{pyproject_files}
+%files
+%files -n python3-pymeeus -f %{oreon_filedir}/python3-pymeeus.list
 
 %changelog
+
 %autochangelog

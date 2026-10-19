@@ -1,5 +1,4 @@
 %global source0_hash 070d94fe77969d8949bd129a618e6a7bee6b83b5b5db3ef3f983395a5428b914
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,30 +82,26 @@ end
 %bcond_with bootstrap
 Name:           apache-commons-collections
 Version:        3.2.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Provides new interfaces, implementations and utilities for Java Collections
 License:        Apache-2.0
 URL:            https://commons.apache.org/proper/commons-collections/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        http://www.apache.org/dist/commons/collections/source/commons-collections-%{version}-src.tar.gz
-
 Patch:          0001-Port-to-Java-8.patch
 Patch:          0002-Port-to-OpenJDK-11.patch
 Patch:          0003-Port-to-OpenJDK-21.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.2.2-57
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.commons:commons-parent:pom:)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.2.2-57
-
+# /oreon:deps
 %description
 The introduction of the Collections API by Sun in JDK 1.2 has been a
 boon to quick and effective Java programming. Ready access to powerful
@@ -125,18 +120,17 @@ such as union, intersection, and closure.
 %package testframework
 Summary:        Testframework for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description testframework
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n commons-collections-%{version}-src
 
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;
 find . -name "*.class" -exec rm -f {} \;
-
 
 # Port to maven-antrun-plugin 3.0.0
 sed -i s/tasks/target/ pom.xml
@@ -148,19 +142,19 @@ sed -i 's/\r//' LICENSE.txt PROPOSAL.html README.txt NOTICE.txt
 %mvn_file ':commons-collections{,-testframework}' %{name}@1 commons-collections@1
 
 %build
-%mvn_build -j -- -Dcommons.packageId=collections
 
+%mvn_build -j -- -Dcommons.packageId=collections
 %install
 %mvn_artifact commons-collections:commons-collections-testframework:%{version} target/commons-collections-testframework-%{version}.jar
 %mvn_install
+%oreon_autofiles apache-commons-collections-testframework usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc PROPOSAL.html README.txt
-%license LICENSE.txt NOTICE.txt
-
-%files testframework -f .mfiles-testframework
+%files -f %{oreon_filedir}/main.list
+%files -n apache-commons-collections-testframework -f %{oreon_filedir}/apache-commons-collections-testframework.list
 
 %changelog
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.2-3
 - bump release (retry failed build)
 

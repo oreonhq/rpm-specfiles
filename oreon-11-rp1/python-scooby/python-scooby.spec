@@ -1,51 +1,36 @@
-%global source0_hash 1c06cda6fd2dc9f7f9fe4575bc1823bf69ff43935a58d231c4c1ee646b65d01e
-
+%global source0_hash 407c45068cd9aa7ccc31e7371c942b27bf24c4e08771f980efc42d7bc362022a
 %bcond tests 1
-
 Name:           python-scooby
 Version:        0.12.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A Great Dane turned Python environment detective
-
 License:        MIT
 URL:            https://github.com/banesullivan/scooby
-# The GitHub archive contains tests; the PyPI sdist lacks them.
-Source0:        %{url}/archive/v%{version}/scooby-%{version}.tar.gz
-# Man page hand-written for Fedora in groff_man(7) format based on --help
+Source0:        https://github.com/banesullivan/scooby/archive/v%{version}/scooby-%{version}.tar.gz
 Source1:        scooby.1
-
-# We cannot package (nor generate BR’s from) the “cpu” extra because it
-# requires python3dist(mkl), which is proprietary software.
 %if %{with tests}
 %endif
-
 BuildArch:      noarch
-
-BuildRequires:  python3-devel
-
 %if %{with tests}
-BuildRequires:  /usr/bin/time
 %endif
-
 %global common_description %{expand:
 This is a lightweight tool for easily reporting your Python environment’s
 package versions and hardware resources.}
-
+# oreon:deps
+BuildRequires:  /usr/bin/time
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(psutil)
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-scooby
-Summary:        %{summary}
-
-# We cannot package the “cpu” extra because it requires python3dist(mkl), which
-# is proprietary software. However, python3dist(psutil), which it also
-# requires, adds additional detail to scooby’s reports independent of
-# python3dist(mkl), so we add it as a weak dependency.
+Summary:        A Great Dane turned Python environment detective
 BuildRequires:  %{py3_dist psutil}
 Recommends:     %{py3_dist psutil}
-
 %description -n python3-scooby %{common_description}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n scooby-%{version} -p1
@@ -59,36 +44,27 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # - https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 sed -r -i 's/^(mkl|pyvips|no_version|pytest-cov)\b/# &/' requirements_test.txt
 
-%generate_buildrequires -p
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
-
 %build -p
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
+export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %install
 %pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 '%{SOURCE1}'
+%oreon_autofiles python3-scooby usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with tests}
-# These require the no_version package; see notes in %%prep.
 k="${k-}${k+ and }not test_get_version"
 k="${k-}${k+ and }not test_tracking"
-# This requires pyvips to be installed *without* libvips, as it is in upstream
-# CI; we would have both if we had pyvips, so this test makes no sense for us.
-# See also the comments in the source of the test.
 k="${k-}${k+ and }not test_import_os_error"
-# Import performance test may fail flakily or on slower hardware
 k="${k-}${k+ and }not test_import_time"
-
 %pytest -k "${k-}" -v
 %endif
-
-%files -n python3-scooby -f %{pyproject_files}
-%doc README.md
-
-%{_bindir}/scooby
-%{_mandir}/man1/scooby.1*
+%files -f %{oreon_filedir}/main.list
+%files -n python3-scooby -f %{oreon_filedir}/python3-scooby.list
 
 %changelog
+
 %autochangelog

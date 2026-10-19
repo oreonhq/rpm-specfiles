@@ -1,31 +1,28 @@
-%global source0_hash a317018c44d67496693ccf943cf9a1df8a147a38adb3044a1fdbebe7d90d70fc
-
+%global source1_hash a317018c44d67496693ccf943cf9a1df8a147a38adb3044a1fdbebe7d90d70fc
+%global source0_hash ebefbf0d7b58b90666373a578d1e48fd8858940ccb46529269044091adad247f
 %global __provides_exclude_from ^%{_libdir}/psi-plus/plugins/.*$
-
 %global version_l10n 1.5.2073
-
 Name:           psi-plus
 Version:        1.5.2182
-Release:        %autorelease
+Release:        1%{?dist}
 Epoch:          1
-
-# GPL-2.0-or-later - core project.
-# LGPL-2.1-or-later - iris library, widgets, several tools.
-# Zlib - bundled minizip library.
-# MIT - bundled http-parser and qhttp libraries.
-# Apache-2.0 - bundled libqite library.
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND Zlib AND MIT AND Apache-2.0
 Summary:        XMPP client based on Qt
 URL:            https://%{name}.com
-
 Source0:        https://github.com/%{name}/%{name}-snapshots/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/%{name}/%{name}-l10n/archive/%{version_l10n}/%{name}-l10n-%{version_l10n}.tar.gz
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} && 0%{?fedora} >= 42
-ExcludeArch: %{ix86}
-%endif
-
+Requires:       %{name}-common = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       %{name}-plugins%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       hicolor-icon-theme
+Requires:       qca-qt6-gnupg%{?_isa}
+Requires:       qca-qt6-ossl%{?_isa}
+Provides:       bundled(http-parser) = 2.9.4
+Provides:       bundled(iris) = 0~git
+Provides:       bundled(libqite) = 0~git
+Provides:       bundled(minizip) = 1.2.11
+Provides:       bundled(qhttp) = 2.0.0
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  cmake(Qca-qt6)
 BuildRequires:  cmake(Qt6Concurrent)
 BuildRequires:  cmake(Qt6Core)
@@ -39,7 +36,12 @@ BuildRequires:  cmake(Qt6Svg)
 BuildRequires:  cmake(Qt6SvgWidgets)
 BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6Xml)
-
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  libgcrypt-devel
+BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gstreamer-1.0)
 BuildRequires:  pkgconfig(gstreamer-app-1.0)
@@ -55,28 +57,7 @@ BuildRequires:  pkgconfig(tidy)
 BuildRequires:  pkgconfig(usrsctp)
 BuildRequires:  pkgconfig(xscrnsaver)
 BuildRequires:  pkgconfig(zlib)
-
-BuildRequires:  cmake
-BuildRequires:  desktop-file-utils
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  libappstream-glib
-BuildRequires:  libgcrypt-devel
-BuildRequires:  ninja-build
-
-Requires:       %{name}-common = %{?epoch:%{epoch}:}%{version}-%{release}
-Requires:       %{name}-plugins%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
-Requires:       hicolor-icon-theme
-Requires:       qca-qt6-gnupg%{?_isa}
-Requires:       qca-qt6-ossl%{?_isa}
-
-Provides:       bundled(http-parser) = 2.9.4
-Provides:       bundled(iris) = 0~git
-Provides:       bundled(libqite) = 0~git
-Provides:       bundled(minizip) = 1.2.11
-Provides:       bundled(qhttp) = 2.0.0
-
+# /oreon:deps
 %description
 %{name} is the premiere cross-platform Instant Messaging application.
 
@@ -96,7 +77,6 @@ Provides:       %{name}-i18n = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      %{name}-i18n < %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       %{name}-icons = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes:      %{name}-icons < %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description common
 This package contains architecture-agnostic common assets (language packs,
 icons, themes, skins, etc.) for %{name}.
@@ -105,11 +85,11 @@ icons, themes, skins, etc.) for %{name}.
 License:        GPL-2.0-or-later
 Summary:        Additional plugins for %{name}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description plugins
 This package adds additional plugins to %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-snapshots-%{version} -p1
@@ -121,6 +101,7 @@ tar -xf %{SOURCE1} %{name}-l10n-%{version_l10n}/translations --strip=1
 rm -rf iris/src/jdns
 
 %build
+
 %cmake -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_DEMO:BOOL=OFF \
@@ -133,11 +114,6 @@ rm -rf iris/src/jdns
     -DINSTALL_PLUGINS_SDK:BOOL=OFF \
     -DLIMIT_X11_USAGE:BOOL=OFF \
     -DPRODUCTION:BOOL=ON \
-%if 0%{?fedora} && 0%{?fedora} >= 43
-%if "%{?_lib}" == "lib64"
-    -DLIB_SUFFIX:STRING=64 \
-%endif
-%endif
     -DUSE_ASPELL:BOOL=OFF \
     -DUSE_CRASH:BOOL=OFF \
     -DUSE_DBUS:BOOL=ON \
@@ -148,35 +124,20 @@ rm -rf iris/src/jdns
     -DUSE_X11:BOOL=ON \
     -DUSE_XSS:BOOL=ON
 %cmake_build
-
 %install
 %cmake_install
 %find_lang psi --with-qt
 rm -rf %{buildroot}%{_datadir}/%{name}/COPYING
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.appdata.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
-
-%files
-%license COPYING
-%doc README
-%{_bindir}/%{name}
-%dir %{_datadir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{name}.png
-%{_datadir}/pixmaps/%{name}.png
-%{_metainfodir}/%{name}.appdata.xml
-
-%files common -f psi.lang
-%{_datadir}/%{name}/certs
-%{_datadir}/%{name}/iconsets
-%{_datadir}/%{name}/skins
-%{_datadir}/%{name}/sound
-%{_datadir}/%{name}/*.{txt,html}
-
-%files plugins
-%{_libdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n psi-plus-common -f %{oreon_filedir}/psi-plus-common.list
+%files -n psi-plus-plugins -f %{oreon_filedir}/psi-plus-plugins.list
 
 %changelog
+
 %autochangelog

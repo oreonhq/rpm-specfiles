@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash e7af11fa8ec7de3d3eb3d98b1e722d15d44017d8b35d8aa11d54f6719b312f22
 Name:           python-beniget
 Version:        0.5.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Extract semantic information about static Python code
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/serge-sans-paille/beniget/
-Source:         %{pypi_source beniget}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/beniget/beniget-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'beniget' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-beniget = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-beniget
-Summary:        %{summary}
-
-%description -n python3-beniget %_description
-
+Summary:        Extract semantic information about static Python code
+%description -n python3-beniget
 
 %prep
-%autosetup -p1 -n beniget-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir beniget-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-beniget usr/lib/python3*/site-packages/beniget* usr/lib64/python3*/site-packages/beniget* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/beniget* usr/lib64/python3*/site-packages/beniget* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-beniget -f %{pyproject_files}
+%files
+%files -n python3-beniget -f %{oreon_filedir}/python3-beniget.list
 
 %changelog
+
 %autochangelog

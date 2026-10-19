@@ -1,57 +1,44 @@
-%global source0_hash none
-
+%global source0_hash cae32d3e441e608f39f3f1ca6b3f028c38d5d04d74c98d8ab96d46022dee3163
 Name:           python-django-debug-toolbar
 Version:        8.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A configurable set of panels that display various debug information about the current request/response.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/django-commons/django-debug-toolbar
-Source:         %{pypi_source django_debug_toolbar}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/django_debug_toolbar/django_debug_toolbar-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'django-debug-toolbar' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-django-debug-toolbar = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-django-debug-toolbar
-Summary:        %{summary}
-
-%description -n python3-django-debug-toolbar %_description
-
+Summary:        A configurable set of panels that display various debug information about the current request/response.
+# oreon:reqs
+Requires:       python3dist(django) >= 5.2
+Requires:       python3dist(sqlparse) >= 0.2
+# /oreon:reqs
+%description -n python3-django-debug-toolbar
 
 %prep
-%autosetup -p1 -n django_debug_toolbar-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir django_debug_toolbar-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-django-debug-toolbar usr/lib/python3*/site-packages/django_debug_toolbar* usr/lib64/python3*/site-packages/django_debug_toolbar* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/django_debug_toolbar* usr/lib64/python3*/site-packages/django_debug_toolbar* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-django-debug-toolbar -f %{pyproject_files}
+%files
+%files -n python3-django-debug-toolbar -f %{oreon_filedir}/python3-django-debug-toolbar.list
 
 %changelog
+
 %autochangelog

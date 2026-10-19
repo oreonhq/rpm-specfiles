@@ -1,35 +1,24 @@
 %global source0_hash 58a9b55e053a108290a4da15c7bff3f40119f752d3fc324b5a6bd1651b49263b
 %global pkgname greenboot
-
-# Tests require privileged operations (grub edits, fs remount) and cannot run in mock.
-# Tests are executed in external CI instead.
 %bcond check 0
-
-%if 0%{?rhel}
-%bcond_without bundled_rust_deps
-%else
 %bcond_with bundled_rust_deps
-%endif
-
 Name:		greenboot-rs
 Version:	0.16.4
-Release:	1%{?dist}
-Summary:	Generic Health Check Framework for systemd
-# Aggregated license of statically linked dependencies as per %%cargo_license_summary
+Release:        1%{?dist}
+Summary:        Generic Health Check Framework for systemd
 License:	BSD-3-Clause AND ISC AND MIT AND Unicode-DFS-2016 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
 URL:		https://github.com/fedora-iot/greenboot-rs
 Source0:        https://github.com/fedora-iot/greenboot-rs/archive/refs/tags/v%{version}.tar.gz#/greenboot-rs-%{version}.tar.gz
-
 ExcludeArch:	%{ix86}
-
 %if %{with bundled_rust_deps}
-BuildRequires:	rust-toolset
 %else
-BuildRequires:	cargo-rpm-macros
 %endif
-BuildRequires:	systemd-rpm-macros
-
-
+# oreon:deps
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  rustc
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Greenboot is a generic health check framework for systemd allowing
 the use of healthchecks to check the state of the system post
@@ -37,13 +26,12 @@ upgrade to ensure the system is in a known-good state and to allow
 automated rollback actions if it's not.
 
 %package -n %{pkgname}
-Summary:	%{summary}
+Summary:        Generic Health Check Framework for systemd
 %{?systemd_requires}
 Requires:	systemd >= 240
 Requires:	rpm-ostree
 Requires:	pam >= 1.4.0
 Recommends:	openssh
-
 %description -n %{pkgname}
 
 %{description}.
@@ -54,7 +42,6 @@ License:	BSD-3-Clause
 Requires:	%{pkgname} = %{version}-%{release}
 Requires:	util-linux
 Requires:	jq
-
 %description -n %{pkgname}-default-health-checks
 %{description}.
 
@@ -65,23 +52,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if %{with bundled_rust_deps}
 %autosetup -p1 -n %{name}-%{version}
 cargo vendor --versioned-dirs
-%cargo_prep -v vendor
 %else
 %autosetup -n %{name}-%{version}
-%cargo_prep
-%generate_buildrequires
-%cargo_generate_buildrequires
-%endif
-
+%oreon_vendor_cargo
 %build
+
 %cargo_build
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
-
 %if %{with bundled_rust_deps}
 %cargo_vendor_manifest
 %endif
-
 %install
 mkdir -p %{buildroot}%{_libexecdir}
 mkdir -p %{buildroot}%{_libexecdir}/%{pkgname}
@@ -105,52 +86,29 @@ mkdir -p %{buildroot}%{_tmpfilesdir}
 install -DpZm 0755 usr/lib/greenboot/check/required.d/* %{buildroot}%{_prefix}/lib/%{pkgname}/check/required.d
 install -DpZm 0755 usr/lib/greenboot/check/wanted.d/* %{buildroot}%{_prefix}/lib/%{pkgname}/check/wanted.d
 install -DpZm 0644 usr/lib/systemd/system/greenboot-healthcheck.service.d/10-network-online.conf %{buildroot}%{_unitdir}/greenboot-healthcheck.service.d/10-network-online.conf
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post -n %{pkgname}
+
 %systemd_post greenboot-healthcheck.service
 %systemd_post greenboot-set-rollback-trigger.service
 %systemd_post greenboot-success.target
-
 %preun -n %{pkgname}
+
 %systemd_preun greenboot-healthcheck.service
 %systemd_preun greenboot-set-rollback-trigger.service
 %systemd_preun greenboot-success.target
-
 %postun -n %{pkgname}
+
 %systemd_postun greenboot-healthcheck.service
 %systemd_postun greenboot-set-rollback-trigger.service
 %systemd_postun greenboot-success.target
-
-%files -n %{pkgname}
-%license LICENSE LICENSE.dependencies
-%doc README.md
-%dir %{_libexecdir}/%{pkgname}
-%{_libexecdir}/%{pkgname}/%{pkgname}
-%{_unitdir}/greenboot-healthcheck.service
-%{_unitdir}/greenboot-set-rollback-trigger.service
-%{_unitdir}/greenboot-success.target
-%config(noreplace) %{_sysconfdir}/%{pkgname}/greenboot.conf
-%{_prefix}/lib/bootupd/grub2-static/configs.d/08_greenboot.cfg
-%dir %{_prefix}/lib/%{pkgname}
-%dir %{_prefix}/lib/%{pkgname}/check
-%dir %{_prefix}/lib/%{pkgname}/check/required.d
-%dir %{_prefix}/lib/%{pkgname}/check/wanted.d
-%dir %{_prefix}/lib/%{pkgname}/green.d
-%dir %{_prefix}/lib/%{pkgname}/red.d
-%dir %{_sysconfdir}/%{pkgname}
-%dir %{_sysconfdir}/%{pkgname}/check
-%dir %{_sysconfdir}/%{pkgname}/check/required.d
-%dir %{_sysconfdir}/%{pkgname}/check/wanted.d
-%dir %{_sysconfdir}/%{pkgname}/green.d
-%dir %{_sysconfdir}/%{pkgname}/red.d
-
-%files -n %{pkgname}-default-health-checks
-%dir %{_unitdir}/greenboot-healthcheck.service.d
-%{_prefix}/lib/%{pkgname}/check/wanted.d/01_update_platforms_check.sh
-%{_prefix}/lib/%{pkgname}/check/required.d/02_watchdog.sh
-%{_prefix}/lib/%{pkgname}/check/required.d/01_repository_dns_check.sh
-%{_unitdir}/greenboot-healthcheck.service.d/10-network-online.conf
+%files -f %{oreon_filedir}/main.list
+%files -n greenboot -f %{oreon_filedir}/greenboot.list
+%files -n greenboot-default-health-checks -f %{oreon_filedir}/greenboot-default-health-checks.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.16.3-0
 - Import
+%endif

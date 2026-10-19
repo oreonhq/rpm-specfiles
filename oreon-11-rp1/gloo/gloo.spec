@@ -1,40 +1,21 @@
 %global source0_hash 74da6d9089941c7abc21aeced3c551216cdf3b1f04155d4dd80e3e84886ebacf
-
 %global commit0 dc507d1eb822c4396aaca284efff498aba33c7dc
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global date0 20241203
-# MPI build based on spec file dbcsr by Orion
 %global mpi_list openmpi mpich
-# $mpi will be evaluated in the loops below
 %global _vpath_builddir %{_vendor}-%{_target_os}-build-${mpi:-serial}
-
 Summary:        Communications library for AI/ML
 Name:           gloo
 License:        BSD-3-Clause
 Version:        0.5.0^git%{date0}.%{shortcommit0}
-Release:        %autorelease
-
+Release:        1%{?dist}
 URL:            https://github.com/facebookincubator/%{name}
-Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
+Source0:        https://github.com/facebookincubator/%{name}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
 Patch0:         0001-gloo-fedora-cmake-changes.patch
 Patch1:         0002-gloo-fedora-cmake-libuv.patch
 Patch2:         0001-gloo-gcc-15-cstdint.patch
-# See CMakeLists, gloo only builds on 64 bit systems
 ExcludeArch:    i686
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  hiredis-devel
-BuildRequires:  libibverbs
-BuildRequires:  libuv-devel
-BuildRequires:  libuv-static
-BuildRequires:  mpich-devel
-BuildRequires:  openmpi-devel
-BuildRequires:  rdma-core-devel
-BuildRequires:  redis-devel
-
 Requires:       %{name}-docs
-
 %global base_description \
 Gloo is a collective communications library. It comes with a number of\
 collective algorithms useful for machine learning applications. These\
@@ -49,14 +30,24 @@ Where applicable, algorithms have an implementation that works with\
 system memory buffers, and one that works with NVIDIA GPU memory buffers.\
 In the latter case, it is not necessary to copy memory between host and\
 device; this is taken care of by the algorithm implementations.
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  hiredis-devel
+BuildRequires:  libibverbs
+BuildRequires:  libuv-devel
+BuildRequires:  libuv-static
+BuildRequires:  mpich-devel
+BuildRequires:  openmpi-devel
+BuildRequires:  rdma-core-devel
+BuildRequires:  redis-devel
+# /oreon:deps
 %description
 %{base_description}
 
 %package docs
 Summary: Documentation and license for %{name}
 Buildarch: noarch
-
 %description docs
 Documentation only package used by other packages for
 %{name}.
@@ -64,7 +55,6 @@ Documentation only package used by other packages for
 %package devel
 Summary:        Headers and libraries for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Libraries and headers for developing applications that
 use %{name}.
@@ -73,7 +63,6 @@ use %{name}.
 Summary: Gloo - openmpi version
 BuildRequires:  openmpi-devel
 Requires: %{name}-docs
-
 %description openmpi
 %{base_description}
 
@@ -82,7 +71,6 @@ This package can use openmpi as a backend.
 %package openmpi-devel
 Summary:   Development libraries and headers
 Requires: %{name}-openmpi%{?_isa} = %{version}-%{release}
-
 %description openmpi-devel
 Libraries and header files for developing applications
 that use %{name}-openmpi.
@@ -91,7 +79,6 @@ that use %{name}-openmpi.
 Summary: Gloo - mpich version
 BuildRequires:  mpich-devel
 Requires: %{name}-docs
-
 %description mpich
 %{base_description}
 
@@ -101,12 +88,12 @@ This package can use mpich as a backend.
 Summary: Development libraries and headers
 BuildRequires:  mpich-devel
 Requires: %{name}-mpich%{?_isa} = %{version}-%{release}
-
 %description mpich-devel
 Libraries and header files for developing applications
 that use %{name}-mpich.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{commit0}
@@ -115,15 +102,13 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e 's@cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)@cmake_minimum_required(VERSION 3.5 FATAL_ERROR)@' CMakeLists.txt
 
 %build
-%define gloo_cmake_options -DUSE_IBVERBS=ON -DUSE_LIBUV=OFF -DUSE_REDIS=ON
 
+%define gloo_cmake_options -DUSE_IBVERBS=ON -DUSE_LIBUV=OFF -DUSE_REDIS=ON
 %cmake %gloo_cmake_options \
        -DUSE_MPI=OFF \
        -DCMAKE_INSTALL_PREFIX=%{_prefix} \
        -DCMAKE_INSTALL_LIBDIR=lib64
-
 %cmake_build
-
 for mpi in %{mpi_list}
 do
   module load mpi/$mpi-%{_arch}
@@ -131,11 +116,9 @@ do
          -DUSE_MPI=ON \
          -DCMAKE_INSTALL_PREFIX=$MPI_HOME \
 	 -DCMAKE_INSTALL_LIBDIR=lib
-
    %cmake_build
    module purge
 done
-
 %install
 %cmake_install
 mkdir -p %{buildroot}%{_datadir}/Gloo/docs
@@ -146,36 +129,16 @@ do
   %cmake_install
   module purge
 done
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files docs
-%license LICENSE
-%doc README.md
-%dir %{_datadir}/Gloo
-%doc %{_datadir}/Gloo/docs/
-
-%files
-%{_libdir}/lib%{name}.so.*
-
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/cmake/Gloo/
-%{_libdir}/lib%{name}.so
-
-%files mpich
-%{_libdir}/mpich/lib/lib%{name}.so.*
-
-%files mpich-devel
-%{_libdir}/mpich/lib/lib%{name}.so
-%{_libdir}/mpich/lib/cmake/
-%{_libdir}/mpich/include/
-
-%files openmpi
-%{_libdir}/openmpi/lib/lib%{name}.so.*
-
-%files openmpi-devel
-%{_libdir}/openmpi/lib/lib%{name}.so
-%{_libdir}/openmpi/lib/cmake/
-%{_libdir}/openmpi/include/
+%files -f %{oreon_filedir}/main.list
+%files -n gloo-docs -f %{oreon_filedir}/gloo-docs.list
+%files -n gloo-devel -f %{oreon_filedir}/gloo-devel.list
+%files -n gloo-openmpi -f %{oreon_filedir}/gloo-openmpi.list
+%files -n gloo-openmpi-devel -f %{oreon_filedir}/gloo-openmpi-devel.list
+%files -n gloo-mpich -f %{oreon_filedir}/gloo-mpich.list
+%files -n gloo-mpich-devel -f %{oreon_filedir}/gloo-mpich-devel.list
 
 %changelog
+
 %autochangelog

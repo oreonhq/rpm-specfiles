@@ -1,18 +1,13 @@
 %global source0_hash 5781ddc9de0557b60434dc903042798906ecb64a24ea8572cc152164c8e113f1
-
 Name:		rteval
 Version:	3.13
-Release:	1%{?dist}
-Summary:	Utility to evaluate system suitability for RT Linux
-
+Release:        1%{?dist}
+Summary:        Utility to evaluate system suitability for RT Linux
 Group:		Development/Tools
 License:	GPL-2.0-only AND GPL-2.0-or-later
 URL:		https://git.kernel.org/pub/scm/utils/rteval/rteval.git
 Source0:        https://www.kernel.org/pub/linux/utils/%{name}/%{name}-%{version}.tar.xz
-# https://lore.kernel.org/linux-rt-users/20251126231223.100316-1-yselkowi@redhat.com/T/#u
 Patch0:         0001-rteval-do-not-require-wheel-for-building.patch
-
-BuildRequires:	python3-devel
 Requires:	python3-libxml2
 Requires:	realtime-tests
 Requires:	rteval-loads >= 6.17.7-1
@@ -29,9 +24,21 @@ Requires:	stress-ng
 Requires:	perl-interpreter, perl-devel, perl-generators
 Requires:	libmpc, libmpc-devel
 Requires:	dwarves
-# not available on all arches
 Recommends:	dmidecode
 BuildArch:	noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-rteval = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-rteval+mcp
+Summary:        Metapackage for python3-rteval mcp extras
+Requires:       python3-rteval = %{version}-%{release}
+Provides:       python3dist(rteval[mcp]) = %{version}-%{release}
+
+%description -n python3-rteval+mcp
+Metapackage for python3-rteval mcp extras.
 
 %description
 The rteval script is a utility for measuring various aspects of
@@ -43,44 +50,28 @@ a statistical analysis of the event response times is done and printed
 to the screen.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 # Delete setup.py so pyproject.toml build doesn't use it
 rm -f setup.py
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files rteval
-
-# Manually install rteval-cmd as rteval (pyproject.toml doesn't define scripts)
 install -D -m 0755 rteval-cmd %{buildroot}%{_bindir}/rteval
-
-# Manually install man page
 mkdir -p %{buildroot}%{_mandir}/man8
 gzip -c doc/rteval.8 > %{buildroot}%{_mandir}/man8/rteval.8.gz
-
-# Manually install XSL files
 mkdir -p %{buildroot}%{_datadir}/%{name}
 install -m 0644 rteval/rteval_*.xsl %{buildroot}%{_datadir}/%{name}/
-
-# Manually install config file
 mkdir -p %{buildroot}%{_sysconfdir}
 install -m 0644 rteval.conf %{buildroot}%{_sysconfdir}/rteval.conf
+%oreon_autofiles main
 
-%files -f %{pyproject_files}
-%defattr(-,root,root,-)
-%license COPYING
-%dir %{_datadir}/%{name}
-%{_mandir}/man8/rteval.8.gz
-%config(noreplace) %{_sysconfdir}/rteval.conf
-%{_datadir}/%{name}/rteval_*.xsl
-%{_bindir}/rteval
+%files
 
 %changelog
+
 %autochangelog

@@ -1,14 +1,8 @@
 %global source0_hash a9803a7a02ddfe5fb9704ce86f0ffc48453c321e88db85810db411ba0841152a
-
 Summary:        Tools for network auditing and penetration testing
 Name:           dsniff
 Version:        2.4
-Release:        0.48.b1%{?dist}
-# dsniff itself is BSD-3-Clause but uses other source codes, breakdown:
-# BSD-4-Clause-UC: missing/{err.[ch],{memcmp,strsep}.c,sys/queue.h}
-# ISC: base64.[ch]
-# LicenseRef-Fedora-Public-Domain: missing/md5.[ch]
-# MIT: remote.c
+Release:        1%{?dist}
 License:        BSD-3-Clause AND BSD-4-Clause-UC AND ISC AND LicenseRef-Fedora-Public-Domain AND MIT
 URL:            https://www.monkey.org/~dugsong/%{name}/
 Source0:        https://www.monkey.org/~dugsong/%{name}/beta/%{name}-%{version}b1.tar.gz
@@ -48,19 +42,20 @@ Patch32:        dsniff-2.4-smp_mflags.patch
 Patch33:        dsniff-2.4-libtirpc.patch
 Patch34:        dsniff-2.4-pcap_init.patch
 Patch35:        dsniff-configure-c99.patch
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  libnet-devel
-BuildRequires:  openssl-devel
-BuildRequires:  libnids-devel
 BuildRequires:  glib2-devel
-BuildRequires:  libpcap-devel
-BuildRequires:  libdb-devel
 BuildRequires:  libXmu-devel
-BuildRequires:  rpcgen
-BuildRequires:  libtirpc-devel
+BuildRequires:  libdb-devel
+BuildRequires:  libnet-devel
+BuildRequires:  libnids-devel
 BuildRequires:  libnsl2-devel
+BuildRequires:  libpcap-devel
+BuildRequires:  libtirpc-devel
 BuildRequires:  make
-
+BuildRequires:  openssl-devel
+BuildRequires:  rpcgen
+# /oreon:deps
 %description
 A collection of tools for network auditing and penetration testing. Dsniff,
 filesnarf, mailsnarf, msgsnarf, urlsnarf and webspy allow to passively monitor
@@ -72,50 +67,18 @@ by exploiting weak bindings in ad-hoc PKI.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 export CFLAGS="$CFLAGS -std=gnu17"
 %configure
 %make_build
-
 %install
 %make_install install_prefix=$RPM_BUILD_ROOT
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc CHANGES README TODO
-%dir %{_sysconfdir}/%{name}/
-%config(noreplace) %{_sysconfdir}/%{name}/*
-%{_sbindir}/arpspoof
-%{_sbindir}/dnsspoof
-%{_sbindir}/%{name}
-%{_sbindir}/filesnarf
-%{_sbindir}/macof
-%{_sbindir}/mailsnarf
-%{_sbindir}/msgsnarf
-%{_sbindir}/sshmitm
-%{_sbindir}/sshow
-%{_sbindir}/tcpkill
-%{_sbindir}/tcpnice
-%{_sbindir}/urlsnarf
-%{_sbindir}/webmitm
-%{_sbindir}/webspy
-%{_mandir}/man8/arpspoof.8*
-%{_mandir}/man8/dnsspoof.8*
-%{_mandir}/man8/%{name}.8*
-%{_mandir}/man8/filesnarf.8*
-%{_mandir}/man8/macof.8*
-%{_mandir}/man8/mailsnarf.8*
-%{_mandir}/man8/msgsnarf.8*
-%{_mandir}/man8/sshmitm.8*
-%{_mandir}/man8/sshow.8*
-%{_mandir}/man8/tcpkill.8*
-%{_mandir}/man8/tcpnice.8*
-%{_mandir}/man8/urlsnarf.8*
-%{_mandir}/man8/webmitm.8*
-%{_mandir}/man8/webspy.8*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,24 +1,21 @@
 %global source0_hash 75957ad5071956f563542c7557af16a57e40b4a7f66bc9b6373d022ec5eef548
-
 Name:           playerctl
 Version:        2.4.1
-Release:        12%{?dist}
+Release:        1%{?dist}
 Summary:        Command-line MPRIS-compatible Media Player Controller
-
 License:        LGPL-3.0-or-later
 URL:            https://github.com/acrisci/playerctl
-Source:         %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
-
+Source0:        https://github.com/acrisci/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
+Obsoletes:      playerctl-static < 2.3.1-3
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  gtk-doc
 BuildRequires:  meson
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
-
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
-Obsoletes:      playerctl-static < 2.3.1-3
-
+# /oreon:deps
 %description
 Playerctl is a command-line utility and library for controlling media players
 that implement the MPRIS D-Bus Interface Specification. Playerctl makes it easy
@@ -37,7 +34,6 @@ vlc, mpv, RhythmBox, web browsers, cmus, mpd, spotify and others.
 %package devel
 Summary:        Development libraries and header files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}.
 
@@ -46,56 +42,34 @@ Summary:        Documentation related to %{name}
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 BuildRequires:  gtk-doc
-
 %description docs
 %{summary}.
 
 %package libs
 Summary:        Libraries and shared code for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description libs
 %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %meson -Dbash-completions=true -Dzsh-completions=true
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %meson_test
-
-%files
-%license COPYING
-%{_bindir}/%{name}
-%{_bindir}/%{name}d
-%{_datadir}/bash-completion/
-%{_datadir}/dbus-1/services/org.mpris.MediaPlayer2.playerctld.service
-%{_datadir}/man/man1/%{name}.*
-%{_datadir}/zsh/
-
-%files devel
-%license COPYING
-%{_datadir}/gir-1.0/Playerctl-2.0.gir
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files docs
-%license COPYING
-%{_datadir}/gtk-doc/
-
-%files libs
-%license COPYING
-%{_libdir}/girepository-1.0/
-%{_libdir}/lib%{name}.so.2*
+%files -f %{oreon_filedir}/main.list
+%files -n playerctl-devel -f %{oreon_filedir}/playerctl-devel.list
+%files -n playerctl-docs -f %{oreon_filedir}/playerctl-docs.list
+%files -n playerctl-libs -f %{oreon_filedir}/playerctl-libs.list
 
 %changelog
+
 %autochangelog

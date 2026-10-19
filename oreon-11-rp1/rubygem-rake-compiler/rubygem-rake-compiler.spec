@@ -1,37 +1,30 @@
-%global source0_hash 47ea05125006271abbe55763f8f3cff2a17cc85bd81aa02849141a5f46e6da18
-
+%global source0_hash 6b351612b6e2d73ddd5563ee799bb58685176e05363db6758504bd11573d670a
 %global	gem_name	rake-compiler
-
 %undefine       _changelog_trimtime
-
-Summary:	Rake-based Ruby C Extension task generator
+Summary:        Rake-based Ruby C Extension task generator
 Name:		rubygem-%{gem_name}
 Version:	1.3.1
-Release:	2%{?dist}
-# SPDX confirmed
+Release:        1%{?dist}
 License:	MIT
 URL:		https://github.com/rake-compiler/rake-compiler
-Source0:	https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1:	%{gem_name}-%{version}-test-missing-files.tar.gz
-# Source1 is created by $ bash %%SOURCE2 %%version
 Source2:	%{gem_name}-create-missing-test-files.sh
-
 Requires:	ruby(release)
-BuildRequires:	ruby(release)
-BuildRequires:	ruby(rubygems) >= 1.3.5
-BuildRequires:	rubygems-devel
-# %%check
-BuildRequires:	rubygem(rake)
-BuildRequires:	rubygem(cucumber)
-BuildRequires:	rubygem(rspec) >= 3
-# cucumber test needs ruby.h header and compiler
-BuildRequires:	gcc
-BuildRequires:	ruby-devel
 Requires:	ruby(rubygems) >= 1.3.5
 Requires:	rubygem(rake) >= 0.8.3
 BuildArch:	noarch
 Provides:	rubygem(%{gem_name}) = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  ruby(release)
+BuildRequires:  ruby(rubygems)
+BuildRequires:  ruby-devel
+BuildRequires:  rubygem(cucumber)
+BuildRequires:  rubygem(rake)
+BuildRequires:  rubygem(rspec)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 rake-compiler aims to help Gem developers while dealing with
 Ruby C extensions, simplifiying the code and reducing the duplication.
@@ -47,11 +40,11 @@ clarity of code were lacking.
 %package	doc
 Summary:	Documentation for %{name}
 Requires:	%{name} = %{version}-%{release}
-
 %description	doc
 This package contains documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
@@ -75,15 +68,13 @@ sed -i tasks/bin/cross-ruby.rake \
 sed -i cucumber.yml -e "s|~@java|'not @java'|"
 
 %build
+
 gem build %{gem_name}-%{version}.gemspec
 %gem_install
-
 %install
 rm -rf %{buildroot}
-
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{_prefix}/* %{buildroot}%{_prefix}/
-
 rm -f %{buildroot}%{gem_cache}
 pushd %{buildroot}%{gem_instdir}
 rm -rf \
@@ -97,34 +88,20 @@ rm -rf \
     tmp/ \
     %{nil}
 popd
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 rm -rf .%{gem_instdir}/spec
 cp -a spec/ .%{gem_instdir}/
-
 pushd .%{gem_instdir}
 ruby -Ilib -S rspec spec/
-
 export CUCUMBER_PUBLISH_QUIET=true
 ruby -Ilib -S cucumber
 popd
-
-%files
-%{_bindir}/rake-compiler
-
-%license %{gem_instdir}/LICENSE.txt
-
-%dir %{gem_instdir}
-%doc %{gem_instdir}/README.md
-%doc %{gem_instdir}/History.md
-
-%{gem_instdir}/bin/
-%{gem_libdir}
-
-%{gem_spec}
-
-%files doc
-%{gem_docdir}
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-rake-compiler-doc -f %{oreon_filedir}/rubygem-rake-compiler-doc.list
 
 %changelog
+
 %autochangelog

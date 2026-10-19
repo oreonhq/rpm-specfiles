@@ -1,38 +1,30 @@
 %global source0_hash 1ebb01ab14e98afd1727f68f64981c37bd23305b1f131f5667c02b94cf593192
-
-# Disable tests on s390x arch
-#   * integration-test-menu-popup FAIL
 %ifnarch s390x
 %bcond check 0
 %else
 %bcond check 1
 %endif
-
 Name:           gtk4-layer-shell
 Version:        1.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Library to create panels and other desktop components for Wayland
-
 License:        MIT
 URL:            https://github.com/wmww/gtk4-layer-shell
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/wmww/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+%if %{with check}
+%endif
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  meson
-BuildRequires:  vala
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(gtk4)
-BuildRequires:  pkgconfig(wayland-client) >= 1.10.0
-BuildRequires:  pkgconfig(wayland-protocols) >= 1.16
-BuildRequires:  pkgconfig(wayland-scanner) >= 1.10.0
-BuildRequires:  pkgconfig(wayland-server) >= 1.10.0
-%if %{with check}
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-protocols)
+BuildRequires:  pkgconfig(wayland-scanner)
+BuildRequires:  pkgconfig(wayland-server)
 BuildRequires:  python3-gobject
-### For smoke tests
-# BuildRequires:  luarocks
-# BuildRequires:  pkgconfig(luajit)
-%endif
-
+BuildRequires:  vala
+# /oreon:deps
 %description
 A library for using the Layer Shell and Session Lock Wayland protocols with
 GTK4. This Library is compatible with C, C++ and any language that supports
@@ -47,26 +39,14 @@ The Session Lock protocol allows building lock screens.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 Development files for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-# Disable smoke tests since they introduce two problems:
-#   1. They need the examples which will be installed and check-files fails with
-#      the error 'Installed (but unpackaged) file(s) found'
-#   2. The lua-lgi package is based on the (latest) release from 2017 which does
-#      not work with GTK4.
-# See also:
-#   - https://github.com/wmww/gtk4-layer-shell/issues/28
-#   - https://github.com/wmww/gtk4-layer-shell/issues/32#issuecomment-2089302515
-#   - https://github.com/lgi-devs/lgi/issues/225
-#   - https://github.com/lgi-devs/lgi/issues/278
+
 %meson \
     %if %{with check}
     -Dsmoke-tests=false \
@@ -74,31 +54,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     %endif
     %{nil}
 %meson_build
-
 %install
 %meson_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with check}
 %check
+
 %meson_test
 %endif
-
-%files
-%license LICENSE
-%doc README.md CHANGELOG.md
-%{_libdir}/girepository-1.0/Gtk4LayerShell-*.typelib
-%{_libdir}/girepository-1.0/Gtk4SessionLock-*.typelib
-%{_libdir}/lib%{name}.so.%{version}
-%{_libdir}/lib%{name}.so.0
-
-%files devel
-%{_datadir}/gir-1.0/Gtk4LayerShell-*.gir
-%{_datadir}/gir-1.0/Gtk4SessionLock-*.gir
-%{_datadir}/vala/vapi/%{name}-*
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
-%{_libdir}/liblayer-shell-preload.so
-%{_libdir}/pkgconfig/*.pc
+%files -f %{oreon_filedir}/main.list
+%files -n gtk4-layer-shell-devel -f %{oreon_filedir}/gtk4-layer-shell-devel.list
 
 %changelog
+
 %autochangelog

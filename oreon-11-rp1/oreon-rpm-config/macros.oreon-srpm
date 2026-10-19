@@ -1,0 +1,124 @@
+%oreon_filedir %{_builddir}/.oreon-files
+
+%oreon_verify_source() \
+GNUPGHOME=$(mktemp -d); \
+export GNUPGHOME; \
+gpg --batch --import '%{SOURCE100}'; \
+curl -fsSL '%{source0_sig}' -o .source0.sig; \
+gpg --batch --verify .source0.sig '%{_sourcedir}/%{oreon_srcfile}'; \
+rm -rf "$GNUPGHOME" .source0.sig \
+%{nil}
+
+%oreon_vendor_cargo() \
+if [ -f Cargo.lock ]; then \
+  cargo vendor vendor >/dev/null; \
+  %cargo_prep -v vendor \
+elif [ -d vendor ]; then \
+  %cargo_prep -v vendor \
+else \
+  %cargo_prep -N \
+fi; \
+%{nil}
+
+%oreon_vendor_golang() \
+if [ -f go.mod ]; then \
+  export GOPROXY=off; \
+  go mod vendor; \
+fi; \
+%{nil}
+
+%oreon_vendor_node() \
+if [ -f package-lock.json ]; then \
+  npm ci --offline --no-audit --no-fund; \
+fi; \
+%{nil}
+
+%oreon_prep() \
+%{?source0_sig:%oreon_verify_source} \
+%autosetup -p1 -n %{?oreon_srcdir}%{!?oreon_srcdir:%{name}-%{version}} \
+%{?oreon_vendor_%{oreon_lang}} \
+%{nil}
+
+%oreon_build_none() %{nil}
+
+%oreon_install_none() %{nil}
+
+%oreon_build_golang() \
+export GOPROXY=off; \
+go build -mod=vendor ./... \
+%{nil}
+
+%oreon_install_golang() %{nil}
+
+%oreon_build_node() %{nil}
+
+%oreon_install_node() %{nil}
+
+%oreon_build_make() %make_build
+
+%oreon_install_make() %make_install
+
+%oreon_build_cargo() %cargo_build
+
+%oreon_install_cargo() %cargo_install
+
+%oreon_build_python() %pyproject_wheel
+
+%oreon_install_python() %pyproject_install
+
+%oreon_build_cmake() \
+%cmake \
+%cmake_build \
+%{nil}
+
+%oreon_install_cmake() %cmake_install
+
+%oreon_build() %{expand:%%oreon_build_%{oreon_lang}}
+
+%oreon_install() %{expand:%%oreon_install_%{oreon_lang}}
+
+%oreon_autofiles() \
+mkdir -p %{oreon_filedir}; \
+af_key="%1"; \
+af_globs="%*"; \
+af_globs="${af_globs#"$af_key"}"; \
+af_globs="${af_globs# }"; \
+af_list="%{oreon_filedir}/%1.list"; \
+af_in=$(mktemp); \
+af_din=$(mktemp); \
+af_out=$(mktemp); \
+af_dirs=$(mktemp); \
+(cd %{buildroot} && find . -mindepth 1 -type d -not -path './usr/lib/.build-id*' -not -path './.build-id*' -print | sed 's|^./||' | LC_ALL=C sort) > "$af_din"; \
+(cd %{buildroot} && find . -mindepth 1 -type f -not -name '*.la' -print; find . -mindepth 1 -type l -not -name '*.la' -print) | sed 's|^./||' | LC_ALL=C sort > "$af_in"; \
+while IFS= read -r af_f; do \
+  af_keep=0; \
+  if [ "$af_key" = "main" ]; then \
+    af_keep=1; \
+    for af_g in $af_globs; do \
+      case "$af_f" in $af_g) af_keep=0; break;; esac; \
+    done; \
+  else \
+    for af_g in $af_globs; do \
+      case "$af_f" in $af_g) af_keep=1; break;; esac; \
+    done; \
+  fi; \
+  [ "$af_keep" = 1 ] || continue; \
+  case "$af_f" in usr/share/man/*) echo "/$af_f*" >> "$af_out";; *) echo "/$af_f" >> "$af_out";; esac; \
+  af_o="$af_f"; \
+  af_p="${af_f%/*}"; \
+  while [ "$af_p" != "$af_o" ] && [ -n "$af_p" ]; do \
+    case "$af_p" in */*) echo "%dir /$af_p" >> "$af_dirs";; esac; \
+    af_o="$af_p"; \
+    af_p="${af_p%/*}"; \
+  done; \
+done < "$af_in"; \
+if [ "$af_key" != "main" ]; then \
+  while IFS= read -r af_d; do \
+    for af_g in $af_globs; do \
+      case "$af_d" in $af_g) echo "%dir /$af_d" >> "$af_dirs"; break;; esac; \
+    done; \
+  done < "$af_din"; \
+fi; \
+{ sort -u "$af_dirs"; sort -u "$af_out"; } > "$af_list"; \
+rm -f "$af_in" "$af_din" "$af_out" "$af_dirs" \
+%{nil}

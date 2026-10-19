@@ -1,52 +1,35 @@
+%global source1_hash a582f01fa4db00dbbeb6217d304c8a7ab6f4e92dd1ea6b7034feb973bf9eb142
 %global source0_hash adbc6a62d272a3866461274bb78de49e0f83c9971225f619adb3042399be6997
-
 %global stable_kf6 stable
-
-
-# Disable ufw for RHEL
-# TODO: Consider dropping it for Fedora too
-# Cf. https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/message/GNC2UEHAE7VVSN6K24GBJYSIUNCLKJ6L/
 %bcond backend_ufw %[%{undefined rhel}]
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    plasma-firewall
 Version:        6.7.5
-Release: 1%{?dist}
-Summary: Control Panel for your system firewall
-
+Release:        1%{?dist}
+Summary:        Control Panel for your system firewall
 License: BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-BuildRequires: gcc-c++
-BuildRequires: make
-BuildRequires: cmake
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6KCMUtils)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6Declarative)
-BuildRequires: cmake(KF6I18n)
-
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
-BuildRequires: qt6-qtbase-devel
-
-# Owns KCM directories
 Requires: kf6-kcmutils%{?_isa}
-
 Requires: %{name}-backend = %{version}-%{release}
 Suggests: %{name}-firewalld
-
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  cmake(KF6Auth)
 BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Declarative)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  qt6-qtbase-devel
+# /oreon:deps
 %description
 %{summary}.
 
@@ -56,7 +39,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-backend = %{version}-%{release}
 Conflicts: %{name}-backend
 Requires: firewalld
-
 %description firewalld
 This package provides the backend code for Plasma Firewall
 to interface with FirewallD.
@@ -68,57 +50,36 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-backend = %{version}-%{release}
 Conflicts: %{name}-backend
 Requires: ufw
-# For dbus directories
 Requires: dbus-common
-# For polkit directories
 Requires: polkit
-
 %description ufw
 This package provides the backend code for Plasma Firewall
 to interface with the Uncomplicated Firewall (UFW).
 %endif
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6 %{!?with_backend_ufw:-DBUILD_UFW_BACKEND=OFF}
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --all-name --with-html
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml || :
 desktop-file-validate %{buildroot}%{_datadir}/applications/kcm_firewall.desktop
-
-%files -f %{name}.lang
-%license LICENSES/*.txt
-%{_libdir}/libkcm_firewall_core.so
-%{_qt6_plugindir}/plasma/kcms/systemsettings/kcm_firewall.so
-%dir %{_qt6_plugindir}/kf6/plasma_firewall
-%{_datadir}/applications/kcm_firewall.desktop
-%{_metainfodir}/org.kde.plasma.firewall.metainfo.xml
-
-%files firewalld
-%{_qt6_plugindir}/kf6/plasma_firewall/firewalldbackend.so
-
-%if %{with backend_ufw}
-%files ufw
-%{_qt6_plugindir}/kf6/plasma_firewall/ufwbackend.so
-%{_libexecdir}/kde_ufw_plugin_helper.py
-%{_kf6_libexecdir}/kauth/kde_ufw_plugin_helper
-%{_datadir}/dbus-1/system-services/org.kde.ufw.service
-%{_datadir}/dbus-1/system.d/org.kde.ufw.conf
-%dir %{_datadir}/kcm_ufw
-%{_datadir}/kcm_ufw/defaults
-%{_datadir}/polkit-1/actions/org.kde.ufw.policy
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n plasma-firewall-firewalld -f %{oreon_filedir}/plasma-firewall-firewalld.list
+%files -n plasma-firewall-ufw -f %{oreon_filedir}/plasma-firewall-ufw.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

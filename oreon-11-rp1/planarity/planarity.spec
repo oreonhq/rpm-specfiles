@@ -1,25 +1,21 @@
-%global source0_hash 94a6738cf4e5aaa912f0dd47b0b9b6a8022eccb9d668bd1d7d3de2fc920ec129
-
+%global source0_hash 76fe578ff18f11d9acdd05299ffcad5f57915174e0634d4665dd5e2c1ad22639
 Name:		planarity
-Summary:	Implementations of several planarity-related graph algorithms
+Summary:        Implementations of several planarity-related graph algorithms
 Version:	5.1.0.0
-Release:	%autorelease
+Release:        1%{?dist}
 License:	BSD-3-Clause
 URL:		https://github.com/graph-algorithms/edge-addition-planarity-suite
 VCS:		git:%{url}.git
-Source:		%{url}/archive/Version_%{version}/%{name}-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/graph-algorithms/edge-addition-%{name}-suite/archive/Version_%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:	%{ix86}
-
 %global _docdir_fmt %{name}
-
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	gcc
-BuildRequires:	make
-BuildRequires:	libtool
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  libtool
+BuildRequires:  make
+# /oreon:deps
 %description
 This code project provides a library for implementing graph algorithms as well
 as implementations of several planarity-related graph algorithms.  The origin
@@ -39,7 +35,6 @@ and a number of subgraph homeomorphism search algorithms.
 %package	devel
 Summary:	Development files for %{name}
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description	devel
 This package contains the header files and development documentation for
 %{name}.
@@ -48,13 +43,13 @@ This package contains the header files and development documentation for
 Summary:	Sample files for %{name}
 BuildArch:	noarch
 Requires:	%{name} = %{version}-%{release}
-
 %description	samples
 This package contains sample files for planarity.  For example:
 
 planarity -test /usr/share/doc/planarity/samples
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n edge-addition-%{name}-suite-Version_%{version}
@@ -64,40 +59,25 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 autoreconf -fi .
 
 %build
-%configure --enable-static=false
 
-# Eliminate hardcoded rpaths, and workaround libtool moving all -Wl options
-# after the libraries to be linked
+%configure --enable-static=false
 sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
     -e 's|-nostdlib|-Wl,--as-needed &|' \
     -i libtool
-
 %make_build
-
 %install
 %make_install
-
-# We package the samples below
 rm -rf %{buildroot}%{_docdir}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make check
-
-%files
-%license LICENSE.TXT
-%doc README.md
-%{_mandir}/man1/%{name}.1*
-%{_bindir}/%{name}
-%{_libdir}/lib%{name}.so.2{,.*}
-
-%files		devel
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/libplanarity.pc
-
-%files		samples
-%doc c/samples/
+%files -f %{oreon_filedir}/main.list
+%files -n planarity-devel -f %{oreon_filedir}/planarity-devel.list
+%files -n planarity-samples -f %{oreon_filedir}/planarity-samples.list
 
 %changelog
+
 %autochangelog

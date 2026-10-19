@@ -1,62 +1,55 @@
-%global source0_hash none
-
+%global source0_hash a6125ea7db6cc1a900d76a967f262535af09831160a93c56d7f0d522a79b5faf
 Name:           python-mkdocs-static-i18n
 Version:        1.3.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        MkDocs i18n plugin using static translation markdown files
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/ultrabug/mkdocs-static-i18n
-Source:         %{pypi_source mkdocs_static_i18n}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mkdocs_static_i18n/mkdocs_static_i18n-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-mkdocs-static-i18n = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-mkdocs-static-i18n+material
+Summary:        Metapackage for python3-mkdocs-static-i18n material extras
+Requires:       python3-mkdocs-static-i18n = %{version}-%{release}
+Requires:       python3dist(mkdocs-material) < 9.7.2
+Provides:       python3dist(mkdocs-static-i18n[material]) = %{version}-%{release}
 
+%description -n python3-mkdocs-static-i18n+material
+Metapackage for python3-mkdocs-static-i18n material extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mkdocs-static-i18n' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-mkdocs-static-i18n
-Summary:        %{summary}
-
-%description -n python3-mkdocs-static-i18n %_description
+Summary:        MkDocs i18n plugin using static translation markdown files
+# oreon:reqs
+Requires:       python3dist(mkdocs) >= 1.5.2
+# /oreon:reqs
+%description -n python3-mkdocs-static-i18n
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-mkdocs-static-i18n material
-
 
 %prep
-%autosetup -p1 -n mkdocs_static_i18n-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mkdocs_static_i18n-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mkdocs-static-i18n usr/lib/python3*/site-packages/mkdocs_static_i18n* usr/lib64/python3*/site-packages/mkdocs_static_i18n* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mkdocs_static_i18n* usr/lib64/python3*/site-packages/mkdocs_static_i18n* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mkdocs-static-i18n -f %{pyproject_files}
+%files
+%files -n python3-mkdocs-static-i18n -f %{oreon_filedir}/python3-mkdocs-static-i18n.list
 
 %changelog
+
 %autochangelog

@@ -1,34 +1,21 @@
 %global source0_hash 464303645bafafd72418898368b2429458f709cf1eb6a15372fbcc396b64da63
-# Allow build without test
 %bcond_without tests
-
 Name:           pytz
 Version:        2026.4
 Release:        1%{?dist}
 Summary:        World Timezone Definitions for Python
-
 License:        MIT
 URL:            http://pytz.sourceforge.net/
-Source:         %pypi_source
-# Patch to use the system supplied zoneinfo files
+Source0:        https://files.pythonhosted.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 Patch:          pytz-zoneinfo.patch
-# https://bugzilla.redhat.com/1497572
 Patch:          remove_tzinfo_test.patch
-
 BuildArch:      noarch
-BuildRequires:  tzdata
-
-%global _description\
-pytz brings the Olson tz database into Python. This library allows accurate\
-and cross platform timezone calculations using Python 2.3 or higher. It\
-also solves the issue of ambiguous times at the end of daylight savings,\
-which you can read more about in the Python Library Reference\
-(datetime.tzinfo).\
-\
-Almost all (over 540) of the Olson timezones are supported.
-
-%description %_description
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pytz = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-%{name}
 Summary:        %summary
@@ -37,38 +24,29 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
 %endif
 Requires:       tzdata
-
-%description -n python3-%{name} %_description
-
+%description -n python3-%{name}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
 rm -r %{buildroot}%{python3_sitelib}/pytz/zoneinfo
-
-
+%oreon_autofiles main usr/lib/python3*/site-packages/pytz* usr/lib64/python3*/site-packages/pytz* usr/bin/*
 %if %{with tests}
 %check
+
 %pytest -v
 %endif
-
-
-%files -n python3-pytz
 %doc README.rst
 %{python3_sitelib}/pytz/
 %{python3_sitelib}/pytz-%{version}.dist-info
+%files
+%files -n python3-pytz -f %{oreon_filedir}/python3-pytz.list
 
 %changelog
+
 %autochangelog

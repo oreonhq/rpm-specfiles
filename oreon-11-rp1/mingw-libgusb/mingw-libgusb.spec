@@ -1,31 +1,28 @@
 %global source0_hash 9df5ef301d6a4b361002aa52cce1165a87a89744055879bdbab31e7e86f1e846
-
 %{?mingw_package_header}
-
 Name:           mingw-libgusb
 Version:        0.4.9
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GLib wrapper around libusb1 for MinGW
-
 License:        LGPL-2.1-or-later
 URL:            https://github.com/hughsie/libgusb
 Source0:        https://github.com/hughsie/libgusb/releases/download/%{version}/libgusb-%{version}.tar.xz
-
 BuildArch:      noarch
-BuildRequires:  meson
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  mingw32-filesystem >= 95
-BuildRequires:  mingw64-filesystem >= 95
-BuildRequires:  mingw32-gcc
-BuildRequires:  mingw64-gcc
-BuildRequires:  mingw32-json-glib
-BuildRequires:  mingw64-json-glib
-BuildRequires:  mingw32-libusbx >= 1.0.19
-BuildRequires:  mingw64-libusbx >= 1.0.19
-BuildRequires:  mingw32-glib2 >= 2.38.0
-BuildRequires:  mingw64-glib2 >= 2.38.0
 BuildRequires:  gobject-introspection-devel
-
+BuildRequires:  meson
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc
+BuildRequires:  mingw32-glib2
+BuildRequires:  mingw32-json-glib
+BuildRequires:  mingw32-libusbx
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc
+BuildRequires:  mingw64-glib2
+BuildRequires:  mingw64-json-glib
+BuildRequires:  mingw64-libusbx
+# /oreon:deps
 %description
 GUsb is a GObject wrapper for libusb1 that makes it easy to do
 asynchronous control, bulk and interrupt transfers with proper
@@ -36,7 +33,6 @@ This is the MinGW version of this library.
 %package -n mingw32-libgusb
 Summary:        MinGW library which allows easy access to USB devices
 Requires:       pkgconfig
-
 %description -n mingw32-libgusb
 This package contains the header files and libraries needed to develop MinGW
 applications that use libgusb.
@@ -44,7 +40,6 @@ applications that use libgusb.
 %package -n mingw32-libgusb-static
 Summary:        MinGW static library which allows easy access to USB devices
 Requires:       mingw32-libgusb = %{version}-%{release}
-
 %description -n mingw32-libgusb-static
 This package contains the static libraries needed to develop MinGW
 applications that use libgusb.
@@ -52,7 +47,6 @@ applications that use libgusb.
 %package -n mingw64-libgusb
 Summary:        MinGW library which allows easy access to USB devices
 Requires:       pkgconfig
-
 %description -n mingw64-libgusb
 This package contains the header files and libraries needed to develop MinGW
 applications that use libgusb.
@@ -60,7 +54,6 @@ applications that use libgusb.
 %package -n mingw64-libgusb-static
 Summary:        MinGW static library which allows easy access to USB devices
 Requires:       mingw64-libgusb = %{version}-%{release}
-
 %description -n mingw64-libgusb-static
 This package contains the static libraries needed to develop MinGW
 applications that use libgusb.
@@ -68,6 +61,7 @@ applications that use libgusb.
 %{?mingw_debug_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n libgusb-%{version}
@@ -81,33 +75,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
         -Dintrospection=false \
         -Ddocs=false
 %mingw_ninja
-
 %install
 %mingw_ninja_install
+%oreon_autofiles mingw32-libgusb usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw32-libgusb-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-libgusb usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-libgusb-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n mingw32-libgusb
-%license COPYING
-%doc AUTHORS README.md NEWS
-%{mingw32_bindir}/gusbcmd.exe
-%{mingw32_bindir}/libgusb-2.dll
-%{mingw32_includedir}/gusb-1/
-%{mingw32_libdir}/libgusb.dll.a
-%{mingw32_libdir}/pkgconfig/gusb.pc
-
-%files -n mingw32-libgusb-static
-%{mingw32_libdir}/libgusb.a
-
-%files -n mingw64-libgusb
-%license COPYING
-%doc AUTHORS README.md NEWS
-%{mingw64_bindir}/gusbcmd.exe
-%{mingw64_bindir}/libgusb-2.dll
-%{mingw64_includedir}/gusb-1/
-%{mingw64_libdir}/libgusb.dll.a
-%{mingw64_libdir}/pkgconfig/gusb.pc
-
-%files -n mingw64-libgusb-static
-%{mingw64_libdir}/libgusb.a
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-libgusb -f %{oreon_filedir}/mingw32-libgusb.list
+%files -n mingw32-libgusb-static -f %{oreon_filedir}/mingw32-libgusb-static.list
+%files -n mingw64-libgusb -f %{oreon_filedir}/mingw64-libgusb.list
+%files -n mingw64-libgusb-static -f %{oreon_filedir}/mingw64-libgusb-static.list
 
 %changelog
+
 %autochangelog

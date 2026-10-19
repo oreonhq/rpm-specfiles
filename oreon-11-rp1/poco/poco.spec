@@ -1,49 +1,39 @@
-%global source0_hash e711712d68d01e580be315e1cca21d2d10ce941fc3252c0402c0a5732f719445
-
+%global source0_hash 4f112fea59e0c65f0fffe30a4957f8d66cf41528c21dd9903e6d7550022c794e
 %global _bundled_pcre2_version 10.44
-# read from libversion
 %global libversion 111
-
 %bcond check 0
 %bcond_without samples
-
-# mongodb still available only on little endian arches
 %ifarch aarch64 %{arm} %{ix86} x86_64 ppc64le
 %bcond_without mongodb
 %endif
-
 Name:           poco
 Version:        1.15.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C++ class libraries for network-centric applications
 License:        BSL-1.0
 URL:            https://pocoproject.org
-Source:         https://github.com/pocoproject/poco/archive/poco-%{version}-release/poco-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  ninja-build
-BuildRequires:  openssl-devel
+Source0:        https://github.com/pocoproject/poco/archive/poco-%{version}-release/poco-%{version}.tar.gz
+Provides:       bundled(pcre2) = %{_bundled_pcre2_version}
+# oreon:deps
 BuildRequires:  apr-devel
 BuildRequires:  apr-util-devel
+BuildRequires:  cmake
+BuildRequires:  expat-devel
+BuildRequires:  gcc-c++
 BuildRequires:  httpd-devel
-BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  libatomic
 BuildRequires:  libiodbc-devel
+BuildRequires:  libpng-devel
 BuildRequires:  libpq-devel
-BuildRequires:  zlib-devel
+BuildRequires:  libtool-ltdl-devel
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  ninja-build
+BuildRequires:  openssl-devel
 BuildRequires:  pcre2-devel
 BuildRequires:  sqlite-devel
-BuildRequires:  expat-devel
-BuildRequires:  libtool-ltdl-devel
 BuildRequires:  utf8proc-devel
-BuildRequires:  libpng-devel
-BuildRequires:  libatomic
-
-# We build poco to unbundle as much as possible, but unfortunately, it uses
-# some internal functions of pcre so there are a few files from pcre that are
-# still bundled.  See https://github.com/pocoproject/poco/issues/120.
-Provides:       bundled(pcre2) = %{_bundled_pcre2_version}
-
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 The POCO C++ Libraries (POCO stands for POrtable COmponents)
 are open source C++ class libraries that simplify and accelerate the
@@ -53,135 +43,113 @@ including the standard library.
 
 %package        foundation
 Summary:        The Foundation POCO component
-
 %description    foundation
 This package contains the Foundation component of POCO library.
 
 %package        encodings
 Summary:        The Encodings POCO component
-
 %description    encodings
 This package contains the Encodings component of POCO library.
 
 %package        xml
 Summary:        The XML POCO component
-
 %description    xml
 This package contains the XML component of POCO library.
 
 %package        json
 Summary:        The JSON POCO component
-
 %description    json
 This package contains the JSON component of POCO library.
 
 %package        util
 Summary:        The Util POCO component
-
 %description    util
 This package contains the Util component of POCO library.
 
 %package        net
 Summary:        The Net POCO component
-
 %description    net
 This package contains the Net component of POCO library.
 
 %if %{with mongodb}
 %package        mongodb
 Summary:        The MongoDB POCO component
-
 %description    mongodb
 This package contains the MongoDB component of POCO library.
 %endif
 
 %package        redis
 Summary:        The Redis POCO component
-
 %description    redis
 This package contains the Redis component of POCO library.
 
 %package        prometheus
 Summary:        The Prometheus POCO component
-
 %description    prometheus
 This package contains the Prometheus component of POCO library.
 
 %package        pdf
 Summary:        The PDF POCO component
-
 %description    pdf
 This package contains the PDF component of POCO library.
 
 %package        jwt
 Summary:        The JWT POCO component
-
 %description    jwt
 This package contains the JWT component of POCO library.
 
 %package        netssl
 Summary:        The NetSSL POCO component
-
 %description    netssl
 This package contains the NetSSL component of POCO library.
 
 %package        crypto
 Summary:        The Crypto POCO component
-
 %description    crypto
 This package contains the Crypto component of POCO library.
 
 %package        data
 Summary:        The Data POCO component
-
 %description    data
 This package contains the Data component of POCO library.
 
 %package        odbc
 Summary:        The Data/ODBC POCO component
-
 %description    odbc
 This package contains the Data/ODBC component of POCO library.
 
 %package        sqlite
 Summary:        The Data/SQLite POCO component
-
 %description    sqlite
 This package contains the Data/SQLite component of POCO library.
 
 %package        mysql
 Summary:        The Data/MySQL POCO component
-
 %description    mysql
 This package contains the Data/MySQL component of POCO library.
 
 %package        postgresql
 Summary:        The Data/PostgreSQL POCO component
-
 %description    postgresql
 This package contains the Data/PostgreSQL component of POCO library.
 
 %package        zip
 Summary:        The Zip POCO component
-
 %description    zip
 This package contains the Zip component of POCO library.
 
 %package        cppparser
 Summary:        The CppParser POCO component
-
 %description    cppparser
 This package contains the CppParser component of POCO library.
 
 %package        activerecord
 Summary:        The ActiveRecord POCO component
-
 %description    activerecord
 This package contains the ActiveRecord component of POCO library.
 
 %package        devel
 Summary:        Development files for %{name}
-
 Requires:       poco-foundation%{?_isa} = %{version}-%{release}
 Requires:       poco-encodings%{?_isa} = %{version}-%{release}
 Requires:       poco-xml%{?_isa} = %{version}-%{release}
@@ -205,23 +173,21 @@ Requires:       poco-postgresql%{?_isa} = %{version}-%{release}
 Requires:       poco-zip%{?_isa} = %{version}-%{release}
 Requires:       poco-cppparser%{?_isa} = %{version}-%{release}
 Requires:       poco-activerecord%{?_isa} = %{version}-%{release}
-
 Requires:       zlib-devel
 Requires:       pcre2-devel
 Requires:       expat-devel
 Requires:       openssl-devel
 Requires:       utf8proc-devel
-
 %description    devel
 This package contains development files for %{name}.
 
 %package        doc
 Summary:        Documentation for %{name}
-
 %description    doc
 This package contains documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{name}-%{version}-release
@@ -300,6 +266,7 @@ rm -v XML/src/xmltok_impl.h
 rm -v XML/src/xmltok_ns.c
 
 %build
+
 %cmake \
     -GNinja \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -313,13 +280,13 @@ rm -v XML/src/xmltok_ns.c
     -DENABLE_PDF=ON \
     -DENABLE_CPPPARSER=ON \
     -DENABLE_ENCODINGS_COMPILER=ON \
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with check}
 %ifarch s390x
 %ctest -E "Redis|NetSSL|DataMySQL|DataPostgreSQL|DataODBC|Data"
@@ -327,84 +294,30 @@ rm -v XML/src/xmltok_ns.c
 %ctest -E "MongoDB|Redis|NetSSL|DataMySQL|DataPostgreSQL|DataODBC|Data"
 %endif
 %endif
-
-%files foundation
-%license LICENSE
-%{_libdir}/libPocoFoundation.so.%{libversion}
-
-%files encodings
-%{_libdir}/libPocoEncodings.so.%{libversion}
-
-%files xml
-%{_libdir}/libPocoXML.so.%{libversion}
-
-%files json
-%{_libdir}/libPocoJSON.so.%{libversion}
-
-%files util
-%{_libdir}/libPocoUtil.so.%{libversion}
-
-%files net
-%{_libdir}/libPocoNet.so.%{libversion}
-
-%if %{with mongodb}
-%files mongodb
-%{_libdir}/libPocoMongoDB.so.%{libversion}
-%endif
-
-%files redis
-%{_libdir}/libPocoRedis.so.%{libversion}
-
-%files prometheus
-%{_libdir}/libPocoPrometheus.so.%{libversion}
-
-%files pdf
-%{_libdir}/libPocoPDF.so.%{libversion}
-
-%files jwt
-%{_libdir}/libPocoJWT.so.%{libversion}
-
-%files netssl
-%{_libdir}/libPocoNetSSL.so.%{libversion}
-
-%files crypto
-%{_libdir}/libPocoCrypto.so.%{libversion}
-
-%files data
-%{_libdir}/libPocoData.so.%{libversion}
-
-%files odbc
-%{_libdir}/libPocoDataODBC.so.%{libversion}
-
-%files sqlite
-%{_libdir}/libPocoDataSQLite.so.%{libversion}
-
-%files mysql
-%{_libdir}/libPocoDataMySQL.so.%{libversion}
-
-%files postgresql
-%{_libdir}/libPocoDataPostgreSQL.so.%{libversion}
-
-%files zip
-%{_libdir}/libPocoZip.so.%{libversion}
-
-%files cppparser
-%{_libdir}/libPocoCppParser.so.%{libversion}
-
-%files activerecord
-%{_libdir}/libPocoActiveRecord.so.%{libversion}
-
-%files devel
-%{_includedir}/Poco
-%{_libdir}/cmake/Poco
-%{_libdir}/libPoco*.so
-%{_bindir}/cpspc
-%{_bindir}/f2cpsp
-%{_bindir}/poco-arc
-%{_bindir}/tec
-
-%files doc
-%doc README CONTRIBUTORS CHANGELOG doc/*
+%files -f %{oreon_filedir}/main.list
+%files -n poco-foundation -f %{oreon_filedir}/poco-foundation.list
+%files -n poco-encodings -f %{oreon_filedir}/poco-encodings.list
+%files -n poco-xml -f %{oreon_filedir}/poco-xml.list
+%files -n poco-json -f %{oreon_filedir}/poco-json.list
+%files -n poco-util -f %{oreon_filedir}/poco-util.list
+%files -n poco-net -f %{oreon_filedir}/poco-net.list
+%files -n poco-redis -f %{oreon_filedir}/poco-redis.list
+%files -n poco-prometheus -f %{oreon_filedir}/poco-prometheus.list
+%files -n poco-pdf -f %{oreon_filedir}/poco-pdf.list
+%files -n poco-jwt -f %{oreon_filedir}/poco-jwt.list
+%files -n poco-netssl -f %{oreon_filedir}/poco-netssl.list
+%files -n poco-crypto -f %{oreon_filedir}/poco-crypto.list
+%files -n poco-data -f %{oreon_filedir}/poco-data.list
+%files -n poco-odbc -f %{oreon_filedir}/poco-odbc.list
+%files -n poco-sqlite -f %{oreon_filedir}/poco-sqlite.list
+%files -n poco-mysql -f %{oreon_filedir}/poco-mysql.list
+%files -n poco-postgresql -f %{oreon_filedir}/poco-postgresql.list
+%files -n poco-zip -f %{oreon_filedir}/poco-zip.list
+%files -n poco-cppparser -f %{oreon_filedir}/poco-cppparser.list
+%files -n poco-activerecord -f %{oreon_filedir}/poco-activerecord.list
+%files -n poco-devel -f %{oreon_filedir}/poco-devel.list
+%files -n poco-doc -f %{oreon_filedir}/poco-doc.list
 
 %changelog
+
 %autochangelog

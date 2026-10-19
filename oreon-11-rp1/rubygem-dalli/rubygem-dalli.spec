@@ -1,33 +1,27 @@
+%global source1_hash 9fc067f44c39d710685a20e22ef99c7fe736481126087b23c2cbae809295475c
 %global source0_hash c29ada31c0f750b1d10c1a20442d015dc5052b80548b68d421bfded7adde2f87
-
 %global gem_name dalli
-
-# Depends on Rails and its needed by Rails
 %bcond_with tests
-
 Name: rubygem-%{gem_name}
 Version: 3.2.0
-Release: 11%{?dist}
-Summary: High performance memcached client for Ruby
+Release:        1%{?dist}
+Summary:        High performance memcached client for Ruby
 License: MIT
 URL: https://github.com/petergoldstein/dalli
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
-# Tests are not shipped with the gem, you may get them like so
-# git clone https://github.com/petergoldstein/dalli.git --no-checkout
-# git -C dalli archive -v -o dalli-3.2.0-tests.txz v3.2.0 test/
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1: https://github.com/petergoldstein/dalli/archive/refs/tags/v3.2.0.tar.gz
-
-BuildRequires: ruby(release)
-BuildRequires: rubygems-devel
 %if %{with tests}
-BuildRequires: memcached
-BuildRequires: rubygem(minitest)
-BuildRequires: rubygem(connection_pool)
 %endif
-BuildRequires: ruby
 Requires:  rubygem(base64)
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  memcached
+BuildRequires:  ruby
+BuildRequires:  ruby(release)
+BuildRequires:  rubygem(connection_pool)
+BuildRequires:  rubygem(minitest)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 High performance memcached client for Ruby
 
@@ -35,48 +29,38 @@ High performance memcached client for Ruby
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
 %description doc
 Documentation for %{name}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b1
 find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
 
 %build
+
 gem build ../%{gem_name}-%{version}.gemspec
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -pa .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with tests}
 pushd .%{gem_instdir}
-# Symlink tests into place
 ln -s %{_builddir}/test .
-
 sed -i '/bundler/ s/^/#/' test/helper.rb
 ruby -Ilib:test -rdalli -e "Dir.glob('./test/test_*.rb').sort.each{ |x| require x }"
 popd
 %endif
-
-%files
-%dir %{gem_instdir}
-%{gem_libdir}
-%exclude %{gem_cache}
-%{gem_spec}
-%license %{gem_instdir}/LICENSE
-
-%files doc
-%doc %{gem_docdir}
-%doc %{gem_instdir}/README.md
-%doc %{gem_instdir}/History.md
-%{gem_instdir}/Gemfile
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-dalli-doc -f %{oreon_filedir}/rubygem-dalli-doc.list
 
 %changelog
+
 %autochangelog

@@ -1,51 +1,40 @@
-%global source0_hash ef085ffde2d48b05b3665939e5ae1e359d3a381008fb827684f7d6fd4c533704
-
+%global source0_hash 2b7455e63344b98e4db4ca50ff6982f5f81c309e563014d7401cccf2b3acc6bf
 Name:           qiv
 Version:        3.0.1
-Release:        %autorelease
-
+Release:        1%{?dist}
 Summary:        Quick Image Viewer
-
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            http://spiegl.de/qiv/
 Source0:        http://spiegl.de/qiv/download/%{name}-%{version}.tgz
-
 Patch0:         3.0.1-makefile-destdir.patch
 Patch1:         3.0.1-fix-prototypes.patch
-
-BuildRequires:  make
+# oreon:deps
+BuildRequires:  file-devel
 BuildRequires:  gcc
 BuildRequires:  gtk2-devel
 BuildRequires:  imlib2-devel
-BuildRequires:  file-devel
 BuildRequires:  lcms2-devel
-BuildRequires:  libjpeg-devel
 BuildRequires:  libexif-devel
+BuildRequires:  libjpeg-devel
 BuildRequires:  libtiff-devel
-
+BuildRequires:  make
+# /oreon:deps
 %description
 qiv is a very small and pretty fast gdk2/Imlib2 image viewer.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-%make_build CFLAGS="%{optflags}"
 
+%make_build CFLAGS="%{optflags}"
 %install
 %make_install PREFIX="%{_prefix}"
 chmod 644 contrib/qiv-command.example
+%oreon_autofiles main
 
-%files
-%doc README Changelog README.TODO contrib/qiv-command.example
-%license README.COPYING
-%{_bindir}/qiv
-%{_mandir}/man1/qiv.1*
-%{_datadir}/applications/qiv.desktop
-%{_datadir}/pixmaps/qiv.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

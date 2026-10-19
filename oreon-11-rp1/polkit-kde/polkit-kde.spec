@@ -1,83 +1,59 @@
+%global source1_hash 78a86c171a5671339f3b5b06004b46ae7795a25de2b488612b83fa411924bdaf
 %global source0_hash fb731dd979c0296994b5efe37b0a9cdeec5e704f91565540930effdbd7efee58
-
 %global stable_kf6 stable
-
-
 %global         base_name polkit-kde-agent-1
-
 Name:    polkit-kde
-Summary: PolicyKit integration for KDE Desktop
+Summary:        PolicyKit integration for KDE Desktop
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: GPL-2.0-or-later AND CC0-1.0
 URL:     https://invent.kde.org/plasma/%{base_name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
-
-
-## upstreamable patches
-
-
-BuildRequires:  extra-cmake-modules
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  qt6-qtbase-devel
-
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6Declarative)
-
-BuildRequires:  polkit-qt6-1-devel
-
 Provides: PolicyKit-authentication-agent = %{version}-%{release}
 Provides: polkit-kde-1 = %{version}-%{release}
 Provides: polkit-kde-agent-1 = %{version}-%{release}
-
 Obsoletes: PolicyKit-kde < 4.5
-
-# Add explicit dependency on polkit, since polkit-libs were split out
 Requires: polkit
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6Declarative)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  polkit-qt6-1-devel
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Provides Policy Kit Authentication Agent that nicely fits to KDE.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{base_name}-%{version} -p1
 
-
 %build
+
 %cmake_kf6 \
   -DKDE_INSTALL_LIBEXECDIR:PATH=%{_kf6_libexecdir}
-
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang polkit-kde-authentication-agent-1
+%oreon_autofiles main
 
-
-%files -f polkit-kde-authentication-agent-1.lang
-%license LICENSES/*
-%{_kf6_libexecdir}/polkit-kde-authentication-agent-1
-%{_sysconfdir}/xdg/autostart/polkit-kde-authentication-agent-1.desktop
-%{_kf6_datadir}/knotifications6/polkit-kde-authentication-agent-1.notifyrc
-%{_kf6_datadir}/applications/org.kde.polkit-kde-authentication-agent-1.desktop
-%{_userunitdir}/plasma-polkit-agent.service
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

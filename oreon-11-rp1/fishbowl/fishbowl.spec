@@ -1,16 +1,14 @@
 %global source0_hash ea6e368aa16e71861e9a9ea62fa7f9c4131c54ee2ab3994f17669161e36f8392
-
 Name:           fishbowl
 Version:        1.4.1
-Release:        14%{?dist}
+Release:        1%{?dist}
 Summary:        A collection of helper methods for dealing with exceptions in Java 8
 License:        MIT
 URL:            https://stefanbirkner.github.io/fishbowl
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/stefanbirkner/%{name}/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.assertj:assertj-core)
@@ -19,13 +17,14 @@ BuildRequires:  mvn(org.hamcrest:hamcrest-core)
 BuildRequires:  mvn(org.hamcrest:hamcrest-library)
 BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.testng:testng)
-
+# /oreon:deps
 %description
 Fishbowl provides helper methods for dealing with exceptions.
 
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{name}-%{version}
@@ -51,14 +50,14 @@ rm ./src/test/java8/com/github/stefanbirkner/fishbowl/FishbowlJUnitReadmeTest.ja
 rm ./src/test/java8/com/github/stefanbirkner/fishbowl/FishbowlTestNgReadmeTest.java
 
 %build
-%mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,26 +1,22 @@
 %global source0_hash 35de1c071a9acf7c933d2042d6795568a44750373f0d82b1a519b0db871c0dbc
-
 %global extuuid		unite@hardpixel.eu
 %global extdir		%{_datadir}/gnome-shell/extensions/%{extuuid}
 %global gschemadir	%{_datadir}/glib-2.0/schemas
 %global gitname		unite-shell
 %global giturl		https://github.com/hardpixel/%{gitname}
-
 Name:		gnome-shell-extension-unite
 Version:	85
-Release:	1%{?dist}
-Summary:	GNOME Shell Extension Unite by hardpixel
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        GNOME Shell Extension Unite by hardpixel
 License:	GPL-3.0-or-later
 URL:		https://extensions.gnome.org/extension/1287/unite
-Source0:	%{giturl}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
+Source0:        %{giturl}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch:	noarch
-
 Requires:	gnome-shell-extension-common
 Requires:	xprop
+# oreon:deps
 
+# /oreon:deps
 %description
 Unite is a GNOME Shell extension which makes a few layout tweaks to the
 top panel and removes window decorations to make it look like Ubuntu
@@ -37,21 +33,20 @@ Unity Shell.
   * Hides activities button.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{gitname}-%{version} -p 1
 
 %build
-# noop
 
 %install
 %{__mkdir} -p %{buildroot}%{extdir}
 %{__cp} -pr %{extuuid}/* %{buildroot}%{extdir}
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc README.md
-%{extdir}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

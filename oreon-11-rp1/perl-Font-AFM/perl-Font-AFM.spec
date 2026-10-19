@@ -1,29 +1,15 @@
 %global source0_hash 32671166da32596a0f6baacd0c1233825a60acaf25805d79c81a3f18d6088bc1
-
 Name:           perl-Font-AFM
 Version:        1.20
-Release:        52%{?dist}
+Release:        1%{?dist}
 Summary:        Perl interface to Adobe Font Metrics files
-
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Font-AFM
 Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/Font-AFM-%{version}.tar.gz
-
-
 BuildArch:      noarch
-
-BuildRequires:  %{__make}
-BuildRequires:  perl-generators
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(ExtUtils::MakeMaker)
 %if 0%{?fedora} >= 40 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
-# REGRESSION: dnf5 is unable to BuildRequires: files
-BuildRequires: urw-base35-nimbus-sans-fonts
 %else
-# This is what is actually BuildRequired
-BuildRequires:  %{_fontbasedir}/urw-base35/NimbusSans-Bold.afm
 %endif
-
 Provides:       perl(Font::Metrics::Courier)
 Provides:       perl(Font::Metrics::CourierBold)
 Provides:       perl(Font::Metrics::CourierBoldOblique)
@@ -36,10 +22,18 @@ Provides:       perl(Font::Metrics::TimesBold)
 Provides:       perl(Font::Metrics::TimesBoldItalic)
 Provides:       perl(Font::Metrics::TimesItalic)
 Provides:       perl(Font::Metrics::TimesRoman)
+# oreon:deps
+BuildRequires:  /usr/bin/make
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl-generators
+BuildRequires:  urw-base35-nimbus-sans-fonts
+# /oreon:deps
 %description
 Interface to Adobe Font Metrics files
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Font-AFM-%{version}
 # We don't have Helvetica, use NimbusSans-Bold.afm instead
@@ -51,24 +45,20 @@ sed -i -e 's,Helvetica,NimbusSans-Bold,g' t/afm.t
 sed -i -e 's,4279,4558,g' t/afm.t
 
 %build
+
 %{__perl} Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
-
 %install
 %{make_install}
 chmod -R u+w $RPM_BUILD_ROOT/*
-
+%oreon_autofiles main
 
 %check
+
 %{__make} test METRICS=%{_fontbasedir}/urw-base35
-
-
-%files
-%doc Changes README
-%{perl_vendorlib}/Font
-%{_mandir}/man3/Font*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.20-52
 - Prepare for Oreon 11 (RP1)

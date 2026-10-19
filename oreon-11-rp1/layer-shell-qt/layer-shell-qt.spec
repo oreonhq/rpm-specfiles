@@ -1,33 +1,25 @@
+%global source1_hash 9db8e06f0be50d1281aa60e824041e6e1d08866c7e4b86e9a11dc0caa200f16b
 %global source0_hash ccdcfec7081ca956f7a52c9113a4df3a226575bfbe98b56a2a9a4d7d7e19e8f0
-
 %global stable_kf6 stable
-
-
 Name:    layer-shell-qt
 Version:        6.7.5
-Release: 1%{?dist}
-Summary: Library to easily use clients based on wlr-layer-shell
-
+Release:        1%{?dist}
+Summary:        Library to easily use clients based on wlr-layer-shell
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-3.0-or-later AND MIT
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-
-BuildRequires: extra-cmake-modules
-
-BuildRequires: qt6-qtbase-devel
-BuildRequires: qt6-qtbase-private-devel
-
-BuildRequires: cmake(Qt6WaylandClient)
-BuildRequires: cmake(Qt6Qml)
-
-BuildRequires: libxkbcommon-devel
-BuildRequires: plasma-wayland-protocols-devel
-BuildRequires: wayland-devel
-BuildRequires: wayland-protocols-devel
-
+# oreon:deps
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6WaylandClient)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  libxkbcommon-devel
+BuildRequires:  plasma-wayland-protocols-devel
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  wayland-devel
+BuildRequires:  wayland-protocols-devel
+# /oreon:deps
 %description
 This component is meant for applications to be able to easily use clients
 based on wlr-layer-shell
@@ -39,38 +31,22 @@ Requires: cmake(Qt6Gui)
 %description devel
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
-
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%license LICENSES/*
-%{_libdir}/libLayerShellQtInterface.so.*
-%{_qt6_plugindir}/wayland-shell-integration/
-%{_kf6_qmldir}/org/kde/layershell/LayerShellQtQml.qmltypes
-%{_kf6_qmldir}/org/kde/layershell/kde-qmlmodule.version
-%{_kf6_qmldir}/org/kde/layershell/libLayerShellQtQml.so
-%{_kf6_qmldir}/org/kde/layershell/qmldir
-
-%files devel
-%{_includedir}/LayerShellQt/
-%{_libdir}/libLayerShellQtInterface.so
-%{_libdir}/cmake/LayerShellQt/
-
+%files -f %{oreon_filedir}/main.list
+%files -n layer-shell-qt-devel -f %{oreon_filedir}/layer-shell-qt-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

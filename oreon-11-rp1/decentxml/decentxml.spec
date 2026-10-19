@@ -1,38 +1,22 @@
 %global source0_hash 84e096c352ffd8f9c1da4a3422c1db186d960aa4bb961676166c4f3687d752ad
 %global source1_hash 4f03503040be97dc04eb2fd5c7a448d197e720f069a6c6f33eba1b2c2bb17706
-
 %global revision 572a0baa91d1
-
 Name:             decentxml
 Version:          1.4
-Release:          44%{?dist}
-Summary:          XML parser optimized for round-tripping and code reuse
-# Automatically converted from old format: BSD - review is highly recommended.
+Release:        1%{?dist}
+Summary:        XML parser optimized for round-tripping and code reuse
 License:          LicenseRef-Callaway-BSD
-# Google Code has shut down.
-# URL:            http://code.google.com/p/decentxml
 URL:              https://bitbucket.org/digulla/%{name}
 BuildArch:        noarch
 ExclusiveArch:  %{java_arches} noarch
-
-# Google Code has shut down.
-# Source0:        https://decentxml.googlecode.com/files/decentxml-1.4-src.zip
-#
-# This version is equivalent to the last Google Code release, other than
-# folder structure due to how Bitbucket makes zip archives:
-#
-# decentxml-1.4 -> digulla-decentxml-572a0baa91d1
 Source0:        https://repo1.maven.org/maven2/de/pdark/%{name}/%{version}/%{name}-%{version}-src.zip
-
-# For running w3c conformance test suite.
 Source1:          https://www.w3.org/XML/Test/xmlts20031210.zip
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
-
-
+# /oreon:deps
 %description
 XML parser optimized for round-tripping and code reuse with main
 features being:
@@ -46,11 +30,11 @@ features being:
 
 %package javadoc
 Summary:          API documentation for %{name}
-
 %description javadoc
 This package contains the API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
@@ -76,7 +60,6 @@ while read -r line; do
 done < $evil
 mv $evil.nw $evil
 
-
 %pom_remove_plugin :maven-javadoc-plugin
 
 # remove maven-compiler-plugin configuration that is broken with Java 11
@@ -87,19 +70,18 @@ mv $evil.nw $evil
 %pom_xpath_set "pom:plugin[pom:artifactId='maven-assembly-plugin']/pom:executions/pom:execution/pom:goals/pom:goal[text()='attached']" single
 
 %build
+
 %mvn_file  : %{name}
 %mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
-
 %install
 %mvn_install
+%oreon_autofiles decentxml-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE
-%doc README
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n decentxml-javadoc -f %{oreon_filedir}/decentxml-javadoc.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4-44
 - Import

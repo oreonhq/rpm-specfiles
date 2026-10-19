@@ -1,28 +1,24 @@
 %global source0_hash 5ddcd5652ff95627504fbf1d3c22d9b94c033e1e5a7b0d8c7e77602d6720675a
-
-Summary:	A Pluggable Authentication Module for Kerberos 5
+Summary:        A Pluggable Authentication Module for Kerberos 5
 Name:		pam_krb5
 Version:	4.11
-Release:	11%{?dist}
-# Automatically converted from old format: MIT and BSD - review is highly recommended.
+Release:        1%{?dist}
 License:	LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD
 Group:		System/Libraries
 URL:		https://github.com/rra/pam-krb5
-Source0:	%{url}/archive/refs/tags/upstream/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/rra/pam-krb5/archive/refs/tags/upstream/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch0001:	0001-Drop-module-long-test.patch
-
 Requires:	pam
-
-BuildRequires:	byacc
-BuildRequires:	flex
-BuildRequires:	gcc
-BuildRequires:	krb5-devel
-BuildRequires:	pam pam-devel
-
-# for testing
-BuildRequires:	perl(lib)
-BuildRequires:	perl(Test::Pod)
-
+# oreon:deps
+BuildRequires:  byacc
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  krb5-devel
+BuildRequires:  pam
+BuildRequires:  pam-devel
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(lib)
+# /oreon:deps
 %description 
 pam-krb5 is a Kerberos v5 PAM module for either MIT Kerberos or
 Heimdal.  It supports ticket refreshing by screen savers, configurable
@@ -36,6 +32,7 @@ with recent versions of both MIT Kerberos and Heimdal and FAST is
 supported with recent MIT Kerberos.
   
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n pam-krb5-upstream-%{version}
@@ -43,31 +40,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %autopatch -p1
 
 %build
+
 %configure --libdir=%{_pam_libdir}
 %make_build
-
 %install
 %make_install
-
-# Make the paths jive to avoid conflicts on multilib systems.
 sed -ri -e 's|/lib(64)?/|/\$LIB/|g' %{buildroot}/%{_mandir}/man*/pam_krb5*.5*
-
-# cleanup
 rm -f %{buildroot}/%{_pam_libdir}/security/*.la
+%oreon_autofiles main
 
 %check
-# https://github.com/rra/pam-krb5/issues/25
-# self-tests fail unless a default realm is set.
-# That has to be done as someone with write access to /etc/
-# which is not the mockbuild user.
-#
-%{__make} check
 
-%files
-%license LICENSE
-%doc README NEWS TODO
-%{_pam_libdir}/security/*
-%{_mandir}/man5/*
+%{__make} check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

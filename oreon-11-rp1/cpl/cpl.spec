@@ -1,22 +1,19 @@
-%global source0_hash a50c265a8630e61606567d153d3c70025aa958a28473a2411585b96894be7720
-
+%global source0_hash 63171467e9deab880842f3e5589c02698c4637cf75106c4aa39affd84ecd8bd4
 Name: cpl
 Version: 7.4
-Release: 1%{?dist}
-Summary: ESO library for automated astronomical data-reduction tasks
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        ESO library for automated astronomical data-reduction tasks
 License: GPL-2.0-or-later
 URL: http://www.eso.org/sci/software/cpl/
-Source: https://ftp.eso.org/pub/dfs/pipelines/libraries/cpl/%{name}-%{version}.tar.gz
+Source0:        https://ftp.eso.org/pub/dfs/pipelines/libraries/cpl/%{name}-%{version}.tar.gz
 Patch0: cpl-i386.patch
-
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: cfitsio-devel >= 3.450
-BuildRequires: wcslib-devel >= 4.24
-BuildRequires: fftw-devel > 3.3.4
-
+# oreon:deps
+BuildRequires:  cfitsio-devel
+BuildRequires:  fftw-devel
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  wcslib-devel
+# /oreon:deps
 %description
 The Common Pipeline Library (CPL) comprises a set of ISO-C libraries 
 that provide a comprehensive, efficient and robust software toolkit. 
@@ -34,33 +31,27 @@ These are the header files and libraries needed to develop a %{name}
 application
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 %patch 0 -p1
 
 %build
+
 %configure --disable-static
-# http://fedoraproject.org/wiki/PackagingGuidelines#Beware_of_Rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
-
 %install
 make DESTDIR=%{buildroot} install
-
 %ldconfig_scriptlets
+%oreon_autofiles cpl-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS BUGS COPYING NEWS
-%license COPYING 
-%{_libdir}/*so.*
-
-%files devel
-%doc README
-%{_libdir}/*.so
-%{_includedir}/*
-%{_libdir}/pkgconfig/cext.pc
+%files -f %{oreon_filedir}/main.list
+%files -n cpl-devel -f %{oreon_filedir}/cpl-devel.list
 
 %changelog
+
 %autochangelog

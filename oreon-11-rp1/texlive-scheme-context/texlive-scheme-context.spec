@@ -1,17 +1,13 @@
 %global source0_hash none
-
 %global tl_version 2025
-
 Name:           texlive-scheme-context
 Epoch:          12
 Version:        svn75426
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        ConTeXt scheme
-
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-almfixed
 Requires:       texlive-antt
@@ -62,7 +58,9 @@ Requires:       texlive-tex-gyre-math
 Requires:       texlive-xcharter
 Requires:       texlive-xcharter-math
 Requires:       texlive-xits
-
+# oreon:deps
+BuildRequires:  texlive-base
+# /oreon:deps
 %description
 ConTeXt scheme This is the TeX Live scheme for installing ConTeXt. It's
 intended to give essentially the same results as the ConTeXt standalone
@@ -73,13 +71,13 @@ https://contextgarden.net and https://pragma-ade.com for information about
 ConTeXt.
 
 %build
-# Nothing to build
 
 %install
-# Nothing to install
 
-# Main scheme metapackage (empty)
-%files
+%oreon_autofiles main
+
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

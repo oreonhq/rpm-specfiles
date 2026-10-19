@@ -1,20 +1,19 @@
 %global source0_hash b4552a858aa2456f14d356f614d886e08c6cb32716ab049fe4db7180718f04b8
-
 %global realname setup
-
 Name:		erlang-%{realname}
 Version:	2.2.1
-Release:	%autorelease
+Release:        1%{?dist}
 BuildArch:	noarch
-Summary:	Generic setup utility for Erlang-based systems
+Summary:        Generic setup utility for Erlang-based systems
 License:	Apache-2.0
 URL:		https://github.com/uwiger/%{realname}
 VCS:		git:%{url}.git
-Source0:	%{url}/archive/%{version}/%{realname}-%{version}.tar.gz
+Source0:        https://github.com/uwiger/%{realname}/archive/%{version}/%{realname}-%{version}.tar.gz
 Patch1:		erlang-setup-0001-Don-t-escriptize.patch
-BuildRequires:	erlang-edown
-BuildRequires:	erlang-rebar3
-
+# oreon:deps
+BuildRequires:  erlang-edown
+BuildRequires:  erlang-rebar3
+# /oreon:deps
 %description
 While Erlang/OTP comes with many wonderful applications, including the Mnesia
 DBMS, there is no standard or convention for installing a system. Erlang/OTP
@@ -35,23 +34,23 @@ The callbacks are defined through OTP application environment variables, which
 can easily be overriden at install time.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{realname}-%{version}
 
 %build
-%{erlang3_compile}
 
+%{erlang3_compile}
 %install
 %{erlang3_install}
+%oreon_autofiles main
 
 %check
-%{erlang3_test}
 
-%files
-%license LICENSE
-%doc doc/ examples/ README.md
-%{erlang_appdir}/
+%{erlang3_test}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

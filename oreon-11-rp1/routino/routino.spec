@@ -1,24 +1,22 @@
-%global source0_hash 4eba067d32c97ca9388ad6e97c0f5a3c10d48829367240d78c51375d8cc11e54
-
+%global source0_hash a7017ff04313fa4fb53b995de50feda39ea5e7867bb40a3f9c886187af702830
 Name: routino
-Summary: Router for OpenStreetMap Data
+Summary:        Router for OpenStreetMap Data
 Version: 3.4.4
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: AGPL-3.0-or-later AND MIT
 URL: http://www.routino.org/
-Source0: http://www.routino.org/download/routino-%{version}.tgz
-# documentation for how to set up Routino for use with Marble
+Source0:        http://www.routino.org/download/routino-%{version}.tgz
 Source1: README-MARBLE.txt
-# https://github.com/sharkcz/routino/commits/fedora
 Patch0: routino-3.4-fedora.patch
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: bzip2-devel
-BuildRequires: xz-devel
-BuildRequires: zlib-devel
-BuildRequires: perl-generators
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  perl-generators
+BuildRequires:  xz-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Routino is a command-line application for finding a route between two points
 using the dataset of topographical information collected by OpenStreetMap. It
@@ -27,7 +25,6 @@ can be used as a routing tool in Marble.
 %package libs
 Summary: Routing library for OpenStreetMap Data
 Requires: %{name}-data = %{version}-%{release}
-
 %description libs
 The Routino library is a library for finding a route between two points using
 the dataset of topographical information collected by OpenStreetMap. It can be
@@ -37,7 +34,6 @@ compatible with the AGPLv3.
 %package data
 Summary: Data files for %{name} and %{name}-libs
 BuildArch: noarch
-
 %description data
 This package contains the architecture-independent data files used by %{name}
 and %{name}-libs.
@@ -45,9 +41,7 @@ and %{name}-libs.
 %package doc
 Summary: Documentation files for %{name} and %{name}-libs
 BuildArch: noarch
-# ensure the version matches the actual library (and application if installed)
 Requires: %{name}-libs = %{version}-%{release}
-
 %description doc
 This package contains the architecture-independent documentation files for
 %{name} and %{name}-libs.
@@ -55,12 +49,12 @@ This package contains the architecture-independent documentation files for
 %package devel
 Summary: Development files for %{name}-libs
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description devel
 This package contains the files required to compile applications that use
 %{name}-libs.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -77,27 +71,18 @@ rm -rf web
 rm -rf extras
 
 %build
-%make_build libdir=%{_libdir}
 
+%make_build libdir=%{_libdir}
 %install
 %make_install libdir=%{_libdir}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_bindir}/%{name}-*
-
-%files libs
-%{_libdir}/lib%{name}*.so.*
-
-%files data
-%license agpl-3.0.txt
-%{_datadir}/%{name}/
-
-%files doc
-%{_docdir}/%{name}/
-
-%files devel
-%{_includedir}/%{name}.h
-%{_libdir}/lib%{name}*.so
+%files -f %{oreon_filedir}/main.list
+%files -n routino-libs -f %{oreon_filedir}/routino-libs.list
+%files -n routino-data -f %{oreon_filedir}/routino-data.list
+%files -n routino-doc -f %{oreon_filedir}/routino-doc.list
+%files -n routino-devel -f %{oreon_filedir}/routino-devel.list
 
 %changelog
+
 %autochangelog

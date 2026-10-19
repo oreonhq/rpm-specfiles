@@ -1,5 +1,4 @@
 %global source0_hash 5f49f7aef895d327dafdf2744f39c176c8ab0e4b8227d2d6e3de689a259bdec1
-
 Name:           perl-Test-MockTime-HiRes
 Version:        0.08
 Release:        9%{?dist}
@@ -8,25 +7,24 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MockTime-HiRes
 Source0:        https://cpan.metacpan.org/authors/id/T/TA/TARAO/Test-MockTime-HiRes-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  coreutils
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(Module::Build::Tiny) >= 0.035
-BuildRequires:  perl(strict)
-# Run-time
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(Test::MockTime)
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Time::HiRes)
-BuildRequires:  perl(warnings)
-# Tests
 BuildRequires:  perl(AnyEvent)
 BuildRequires:  perl(AnyEvent::Impl::Perl)
-BuildRequires:  perl(parent)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(Module::Build::Tiny)
 BuildRequires:  perl(Test::Class)
+BuildRequires:  perl(Test::MockTime)
+BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Requires)
-
+BuildRequires:  perl(Time::HiRes)
+BuildRequires:  perl(parent)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Test::MockTime::HiRes is a Time::HiRes compatible version of
 Test::MockTime. You can wait milliseconds in simulated time.
@@ -35,12 +33,12 @@ Test::MockTime. You can wait milliseconds in simulated time.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Test-MockTime-HiRes-%{version}
@@ -52,35 +50,27 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Build.PL --installdirs=vendor
 ./Build
-
 %install
 ./Build install --destdir=%{buildroot} --create_packlist=0
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 ./Build test
-
-%files
-%license LICENSE
-%doc Changes README.md
-%dir %{perl_vendorlib}/Test
-%{perl_vendorlib}/Test/MockTime
-%{_mandir}/man3/Test::MockTime::*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Test-MockTime-HiRes-tests -f %{oreon_filedir}/perl-Test-MockTime-HiRes-tests.list
 
 %changelog
+
 %autochangelog

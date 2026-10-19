@@ -1,62 +1,43 @@
 %global source0_hash b70961a76c412cd34f9cc2c9558e63f89fb37045c59eee396c585b52973be280
-
 Name:           python-pycurl
 Version:        7.48.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        PycURL -- A Python Interface To The cURL library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-2.1-only OR MIT
 URL:            https://pycurl.github.io/
-Source:         %{pypi_source pycurl}
-
-BuildRequires:  libcurl-devel
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pycurl' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pycurl/pycurl-%{version}.tar.gz
 Patch1:         0001-python-pycurl-7.45.1-tls-backend.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77
+Requires:       python3-pycurl = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pycurl
-Summary:        %{summary}
-
-%description -n python3-pycurl %_description
-
+Summary:        PycURL -- A Python Interface To The cURL library
+%description -n python3-pycurl
 
 %prep
-%autosetup -p1 -n pycurl-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pycurl-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pycurl usr/lib/python3*/site-packages/pycurl* usr/lib64/python3*/site-packages/pycurl* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pycurl* usr/lib64/python3*/site-packages/pycurl* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pycurl -f %{pyproject_files}
+%files
+%files -n python3-pycurl -f %{oreon_filedir}/python3-pycurl.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.45.7-2
 - Prepare for Oreon 11 (RP1)
 /usr/share/doc/pycurl/examples/__pycache__/async_multi.cpython-314.pyc

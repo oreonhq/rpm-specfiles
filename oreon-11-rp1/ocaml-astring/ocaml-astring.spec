@@ -1,36 +1,26 @@
 %global source0_hash 63e22783e06d17db027367e82fc08954c55f81a7db40fb7057a73713c16f3523
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 Name:           ocaml-astring
 Version:        0.8.5
-Release:        32%{?dist}
+Release:        1%{?dist}
 Summary:        Alternative String module for OCaml
-
 License:        ISC
 URL:            https://erratique.ch/software/astring
 VCS:            git:https://erratique.ch/repos/astring/.git
-Source:         https://github.com/dbuenzli/astring/archive/v%{version}/astring-%{version}.tar.gz
-
-# Adapt to changed behavior of Char.compare in OCaml 5.
-# This affects x86_64, but not bytecode-only architectures.
+Source0:        https://github.com/dbuenzli/astring/archive/v%{version}/astring-%{version}.tar.gz
 Patch:          %{name}-ocaml5.patch
-
-BuildRequires:  ocaml >= 4.05.0
+%global __ocaml_requires_opts -i Asttypes -i Build_path_prefix_map -i Cmi_format -i Env -i Format_doc -i Ident -i Identifiable -i Load_path -i Location -i Longident -i Misc -i Oprint -i Outcometree -i Parsetree -i Path -i Primitive -i Shape -i Subst -i Toploop -i Type_immediacy -i Types -i Unit_info -i Warnings
+# oreon:deps
+BuildRequires:  ocaml
 BuildRequires:  ocaml-compiler-libs
 BuildRequires:  ocaml-findlib
 BuildRequires:  ocaml-ocamlbuild
 BuildRequires:  ocaml-rpm-macros
 BuildRequires:  ocaml-topkg-devel
-
-# Do not require ocaml-compiler-libs at runtime
-%global __ocaml_requires_opts -i Asttypes -i Build_path_prefix_map -i Cmi_format -i Env -i Format_doc -i Ident -i Identifiable -i Load_path -i Location -i Longident -i Misc -i Oprint -i Outcometree -i Parsetree -i Path -i Primitive -i Shape -i Subst -i Toploop -i Type_immediacy -i Types -i Unit_info -i Warnings
-
+# /oreon:deps
 %description
 Astring exposes an alternative `String` module for OCaml.  This module tries
 to balance minimality and expressiveness for basic, index-free, string
@@ -45,12 +35,12 @@ few missing functions and fully exploits OCaml's newfound string immutability.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -N -n astring-%{version}
@@ -73,20 +63,18 @@ for fil in $(find . -type f); do
 done
 
 %build
-# Build the library and the tests
-ocaml pkg/pkg.ml build --tests true
 
+ocaml pkg/pkg.ml build --tests true
 %install
 %ocaml_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 ocaml pkg/pkg.ml test
-
-%files -f .ofiles
-%doc CHANGES.md README.md
-%license LICENSE.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-astring-devel -f %{oreon_filedir}/ocaml-astring-devel.list
 
 %changelog
+
 %autochangelog

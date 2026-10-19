@@ -1,22 +1,18 @@
-%global source0_hash 9bdf0338850fd66036cb4db1f7a61b35f502158c315981f7176d8f834a0b5a02
-
-Summary: Display information about users currently logged on 
+%global source0_hash 1b8d54e3de4d8325c47a0fb8765cbaaeee8744359b5dacd4bdb3e40b4e31797e
+Summary:        Display information about users currently logged on
 Name: whowatch
 Version: 1.8.6
-Release: 22%{?dist}
+Release:        22%{?dist}
 License: GPL-2.0-only
 URL: http://wizard.ae.krakow.pl/~mike/
-
-Source0: https://github.com/mtsuszycki/whowatch/archive/whowatch-%{version}.tar.gz
+Source0:        https://github.com/mtsuszycki/whowatch/archive/whowatch-%{version}.tar.gz
 Patch0: whowatch-configure-c99.patch
-
-# Submitted upstream: https://github.com/mtsuszycki/whowatch/pull/13
 Patch1: whowatch-gcc15-fixes.patch
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: ncurses-devel
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+# /oreon:deps
 %description
 Whowatch is an interactive who-like program that displays information about the
 users currently logged on to the machine, in real time. Besides standard
@@ -27,26 +23,20 @@ signals.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-# Avoid regenerating configure script because whowatch-configure-c99.patch
-# updates it directly.
+
 touch aclocal.m4 Makefile.in src/config.h.in
 %configure
 %{__make} %{?_smp_mflags}
-
 %install
 %{__install} -d -m0755 %{buildroot}%{_mandir}/man1/ \
 			%{buildroot}%{_bindir}
 %makeinstall
+%oreon_autofiles main
 
-%files
-%doc AUTHORS ChangeLog PLUGINS.readme README TODO
-%doc %{_mandir}/man1/whowatch.1*
-%license COPYING
-%{_bindir}/whowatch
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

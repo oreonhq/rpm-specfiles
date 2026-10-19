@@ -1,5 +1,4 @@
 %global source0_hash 0b59da2f3204e1c80cb85d1f6d72285fc07b01a2f5678abf5dccfbbefd650325
-
 Name:           libnetfilter_cttimeout
 Version:        1.0.1
 Release:        1%{?dist}
@@ -7,11 +6,13 @@ Summary:        Timeout policy tuning for Netfilter/conntrack
 License:        GPL-2.0-or-later
 URL:            http://netfilter.org
 Source0:        https://www.netfilter.org/projects/%{name}/files/%{name}-%{version}.tar.bz2
-
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  libmnl-devel >= 1.0.1, pkgconfig, kernel-headers
-BuildRequires: make
-
+BuildRequires:  kernel-headers
+BuildRequires:  libmnl-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
+# /oreon:deps
 %description
 This infrastructure allows you to define fine-grain timeout
 policies per flow. Basically, from user-space, you can create
@@ -25,7 +26,6 @@ Summary:        Timeout policy tuning for Netfilter/conntrack
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libmnl-devel >= 1.0.1
 Requires:       kernel-headers
-
 %description    devel
 This infrastructure allows you to define fine-grain timeout
 policies per flow. Basically, from user-space, you can create
@@ -35,31 +35,25 @@ build the ctnetlink message to communicate this new timeout
 policy to the kernel.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build
+
 %configure --disable-static
-
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -type f -name "*.la" -exec rm -f {} ';'
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc COPYING README
-%{_libdir}/*.so.*
-
-%files devel
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-%dir %{_includedir}/libnetfilter_cttimeout
-%{_includedir}/libnetfilter_cttimeout/*.h
+%files -f %{oreon_filedir}/main.list
+%files -n libnetfilter_cttimeout-devel -f %{oreon_filedir}/libnetfilter_cttimeout-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-29
 - Import

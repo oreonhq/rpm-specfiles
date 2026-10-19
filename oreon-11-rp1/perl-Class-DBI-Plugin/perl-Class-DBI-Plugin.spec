@@ -1,30 +1,26 @@
 %global source0_hash dcda0371cd11dd3ed71e59bd33a8e432cf51560ec75eb82ca04a2d8975af7b18
-
 Name:           perl-Class-DBI-Plugin
 Version:        0.03
-Release:        56%{?dist}
+Release:        1%{?dist}
 Summary:        Abstract base class for Class::DBI plugins
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-DBI-Plugin
 Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-DBI-Plugin-%{version}.tar.gz
 BuildArch:      noarch
-# Install
+Requires:       perl(Class::DBI) >= 0.9
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Module
-BuildRequires:  perl(Class::DBI) >= 0.9
-# Test
-BuildRequires:  perl(base)
+BuildRequires:  perl(Class::DBI)
 BuildRequires:  perl(DBD::SQLite)
 BuildRequires:  perl(DBI)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(SQL::Abstract)
 BuildRequires:  perl(Test::More)
-# Dependencies
-Requires:       perl(Class::DBI) >= 0.9
-
+BuildRequires:  perl(base)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Class::DBI::Plugin is an abstract base class for Class::DBI plugins. Its
 purpose is to make writing plugins easier. Writers of plugins should be able
@@ -42,25 +38,25 @@ Only three things must be remembered:
   plugged-in class, not the plugin class.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Class-DBI-Plugin-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%doc Changes README
-%{perl_vendorlib}/Class/
-%{_mandir}/man3/Class::DBI::Plugin.3*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

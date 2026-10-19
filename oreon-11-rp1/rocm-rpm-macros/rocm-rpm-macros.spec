@@ -1,31 +1,7 @@
 %global source0_hash f3629cdf4ebb19129b567bdf4ec9bc2c79e935f7ce97fffd2108d3e309aaab25
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
-
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_suffix -%{rocm_release}
@@ -33,17 +9,14 @@
 %global pkg_suffix %{nil}
 %endif
 %global pkg_name rocm-rpm-macros%{pkg_suffix}
-
 Name:           %{pkg_name}
 Version:        %{rocm_version}
-Release:        9%{?dist}
+Release:        1%{?dist}
 Summary:        ROCm RPM macros
 License:        GPL-2.0-or-later
-
 URL:            https://github.com/trixirt/rocm-rpm-macros
 Source0:        macros.rocm
 Source1:        GPL
-# Modules
 Source2:        default
 Source3:        gfx8
 Source4:        gfx9
@@ -63,20 +36,18 @@ Source17:       default.rhel
 Source18:       gfx12
 Source19:       gfx950
 Source30:       rocm-7.1
-
-# Just some files
 %global debug_package %{nil}
-
 Requires:       rpm
 %if 0%{?suse_version}
 Requires:       Modules
 %else
 Requires:       environment-modules
 %endif
-# Only infra files
 BuildArch: noarch
-# ROCm only working on x86_64
 ExclusiveArch:  x86_64
+# oreon:deps
+
+# /oreon:deps
 %description
 This package contains ROCm RPM macros for building ROCm packages.
 
@@ -91,21 +62,17 @@ Requires: environment(modules)
 Requires: cmake-filesystem
 Requires: rocm-llvm-filesystem
 %endif
-
 %description modules
 This package contains ROCm environment modules for switching
 between different GPU families.
 
 %prep
+
 %setup -cT
 install -pm 644 %{SOURCE0} .
 install -pm 644 %{SOURCE1} .
 mkdir modules
-%if 0%{?rhel}
-install -pm 644 %{SOURCE17} modules/default
-%else
 install -pm 644 %{SOURCE2} modules
-%endif
 install -pm 644 %{SOURCE3} modules
 install -pm 644 %{SOURCE4} modules
 install -pm 644 %{SOURCE5} modules
@@ -134,19 +101,11 @@ cp -p modules/* %{buildroot}%{_datadir}/modules/rocm/
 %else
 mkdir -p %{buildroot}%{_datadir}/modulefiles/rocm/
 cp -p modules/* %{buildroot}%{_datadir}/modulefiles/rocm/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
-%files
-%license GPL
-%{_rpmmacrodir}/macros.rocm
-
-%files modules
-%license GPL
-%if 0%{?suse_version}
-%{_datadir}/modules
-%else
-%{_datadir}/modulefiles/rocm/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n rocm-rpm-macros-7.1-modules -f %{oreon_filedir}/rocm-rpm-macros-7.1-modules.list
 
 %changelog
+
 %autochangelog

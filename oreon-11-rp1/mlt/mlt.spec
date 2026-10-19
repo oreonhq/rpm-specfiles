@@ -1,144 +1,83 @@
-%global source0_hash 0d2b956864ba2ff58bb4e2b2779aa36870bd2a3a835e2dbfda33faa5fc6f4d3a
-
-%if 0%{?rhel} == 8
-%bcond_with     ruby
-%bcond_with     php
-%bcond_with     opencv
-%else
+%global source0_hash f11c30e21670f62a3dfc56a31306ac02f3feea00908a2821a4a0bf3e989d3d6a
 %bcond_without  ruby
-%if 0%{?fedora} >= 41 && 0%{?fedora} <= 43
-%ifarch %{ix86}
-%bcond_with     php
-%else
 %bcond_without  php
-%endif
-%else
-%bcond_without  php
-%endif
 %bcond_without  opencv
-%endif
-
-# Temporarily restore Qt5 support
-%if 0%{?fedora} && 0%{?fedora} < 44
-%bcond_without qt5
-%else
 %bcond_with qt5
-%endif
-
-# needs nonfree/ndi-sdk
 %bcond_with  ndi
-
 Name:           mlt
 Version:        7.40.0
 Release:        1%{?dist}
 Summary:        Toolkit for broadcasters, video editors, media players, transcoders
-
-# mlt/src/win32/fnmatch.{c,h} are BSD-licensed.
-# but is not used in Linux
-# Automatically converted from old format: GPLv3 and LGPLv2+ - review is highly recommended.
 License:        GPL-3.0-only AND LicenseRef-Callaway-LGPLv2+
 URL:            http://www.mltframework.org/
 Source0:        https://github.com/mltframework/mlt/releases/download/v%{version}/%{name}-%{version}.tar.gz
-
-# Upstream backports (0~500)
-
-# Proposed fixes (501~1000)
-
-# Downstream only changes (1001~2000)
-
-# Temporary fixes (2001+)
-## Only for 7.36.x and for F43 and older
 Patch2001:      mlt-7.36-restore-qt5-support.patch
-
-%if 0%{?fedora} > 43
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-%endif
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  sed
-BuildRequires:  frei0r-devel
-BuildRequires:  opencv-devel
 %if %{with qt5}
-BuildRequires:  cmake(Qt5Core)
-BuildRequires:  cmake(Qt5Gui)
-BuildRequires:  cmake(Qt5Xml)
-BuildRequires:  cmake(Qt5Widgets)
-BuildRequires:  cmake(Qt5Svg)
-BuildRequires:  cmake(Qt5Network)
 %endif
-BuildRequires:  cmake(Qt6CoreTools)
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6GuiTools)
-BuildRequires:  cmake(Qt6DBusTools)
-BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(Qt6Xml)
-BuildRequires:  cmake(Qt6WidgetsTools)
-BuildRequires:  cmake(Qt6SvgWidgets)
-BuildRequires:  cmake(Qt6Network)
-BuildRequires:  cmake(Qt6Core5Compat)
-BuildRequires:  SDL2-devel
-#BuildRequires:  gtk2-devel
-BuildRequires:  gdk-pixbuf2-devel
-BuildRequires:  pipewire-jack-audio-connection-kit-devel
-BuildRequires:  libatomic
-BuildRequires:  libogg-devel
-#Deprecated dv and kino modules are not built.
-#https://github.com/mltframework/mlt/commit/9d082192a4d79157e963fd7f491da0f8abab683f
-#BuildRequires:  libdv-devel
-BuildRequires:  libvorbis-devel
-BuildRequires:  libsamplerate-devel
-BuildRequires:  ladspa-devel
-BuildRequires:  libxml2-devel
-BuildRequires:  sox-devel
-# verion 3.0.11 needed for php7 IIRC
-BuildRequires:  swig >= 3.0.11
-BuildRequires:  python3-devel
-BuildRequires:  freetype-devel
-BuildRequires:  libexif-devel
-BuildRequires:  fftw-devel
-BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  alsa-lib-devel
-BuildRequires:  vid.stab-devel
-BuildRequires:  movit-devel
-BuildRequires:  eigen3-devel
-BuildRequires:  libebur128-devel
-BuildRequires:  rubberband-devel
-BuildRequires:  ffmpeg-free-devel
-BuildRequires:  xine-lib-devel
 Provides:  mlt-freeworld = %{version}-%{release}
 Obsoletes: mlt-freeworld < %{version}-%{release}
-
 %if %{with ndi}
-BuildRequires:  libndi-devel
-BuildRequires:  ndi-sdk-devel
 %endif
 %if %{with opencv}
-BuildRequires:  opencv-devel
 %endif
-BuildRequires:  pkgconfig(libarchive)
-
 %if %{with ruby}
-BuildRequires:  ruby-devel
-BuildRequires:  ruby
 %else
 Obsoletes: mlt-ruby < %{version}-%{release}
 %endif
-
 %if %{with php}
-BuildRequires: php-devel
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}%{php_extdir}/.*\\.so$
 %endif
-
 %if %{with qt5}
 Requires:      (%{name}-qt5%{?_isa} = %{version}-%{release} if qt5-qtbase%{?_isa})
 %else
 Obsoletes:      mlt-qt5 < %{version}-%{release}
 %endif
-
 Requires:      (%{name}-qt6%{?_isa} = %{version}-%{release} if qt6-qtbase%{?_isa})
-
+# oreon:deps
+BuildRequires:  SDL2-devel
+BuildRequires:  alsa-lib-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6CoreTools)
+BuildRequires:  cmake(Qt6DBusTools)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6GuiTools)
+BuildRequires:  cmake(Qt6Network)
+BuildRequires:  cmake(Qt6SvgWidgets)
+BuildRequires:  cmake(Qt6WidgetsTools)
+BuildRequires:  cmake(Qt6Xml)
+BuildRequires:  eigen3-devel
+BuildRequires:  ffmpeg-free-devel
+BuildRequires:  fftw-devel
+BuildRequires:  freetype-devel
+BuildRequires:  frei0r-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gdk-pixbuf2-devel
+BuildRequires:  ladspa-devel
+BuildRequires:  libatomic
+BuildRequires:  libebur128-devel
+BuildRequires:  libexif-devel
+BuildRequires:  libogg-devel
+BuildRequires:  libsamplerate-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  movit-devel
+BuildRequires:  opencv-devel
+BuildRequires:  php-devel
+BuildRequires:  pipewire-jack-audio-connection-kit-devel
+BuildRequires:  pkgconfig(libarchive)
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  python3-devel
+BuildRequires:  rubberband-devel
+BuildRequires:  ruby
+BuildRequires:  ruby-devel
+BuildRequires:  sed
+BuildRequires:  sox-devel
+BuildRequires:  swig
+BuildRequires:  vid.stab-devel
+BuildRequires:  xine-lib-devel
+# /oreon:deps
 %description
 MLT is an open source multimedia framework, designed and developed for
 television broadcasting.
@@ -171,11 +110,9 @@ This package adds NDI support through the NDI SDK to MLT.
 
 %package devel
 Summary:        Libraries, includes to develop applications with %{name}
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 Requires:       pkgconfig
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains the header files and static libraries for
 building applications which use %{name}.
@@ -184,14 +121,12 @@ building applications which use %{name}.
 %{?python_provide:%python_provide python3-mlt}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Summary: Python package to work with MLT
-
 %description -n python3-mlt
 This module allows to work with MLT using python 3.
 
 %package ruby
 Requires: %{name}%{_isa} = %{version}-%{release}
 Summary: Ruby package to work with MLT
-
 %description ruby
 This module allows to work with MLT using ruby.
 
@@ -200,11 +135,11 @@ Requires: php(zend-abi) = %{php_zend_api}
 Requires: php(api) = %{php_core_api}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Summary: PHP package to work with MLT
-
 %description php
 This module allows to work with MLT using PHP.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -N
@@ -236,11 +171,10 @@ rm -r src/win32/
        %{?with_ndi: -DMOD_NDI:BOOL=ON -DNDI_SDK_INCLUDE_PATH=%{_includedir}/ndi-sdk -DNDI_SDK_LIBRARY_PATH=%{_libdir} -DNDI_INCLUDE_DIR=%{_includedir}/ndi-sdk -DNDI_LIBRARY_DIR=%{_libdir}}
 
 %build
-%cmake_build
 
+%cmake_build
 %install
 %cmake_install
-
 %if %{with php}
 install -d %{buildroot}%{_sysconfdir}/php.d
 cat > %{buildroot}%{_sysconfdir}/php.d/mlt.ini << 'EOF'
@@ -248,72 +182,22 @@ cat > %{buildroot}%{_sysconfdir}/php.d/mlt.ini << 'EOF'
 extension=mlt.so
 EOF
 %endif
-
-# maintain binary /usr/bin/mlt-melt
 mv %{buildroot}%{_bindir}/melt %{buildroot}%{_bindir}/mlt-melt
-
-# Remove rpath file '/usr/bin/melt-7' contains an invalid rpath '/home/martin/rpmbuild/BUILD/mlt-7.0.1/x86_64-redhat-linux-gnu/out/lib' in [/home/martin/rpmbuild/BUILD/mlt-7.0.1/x86_64-redhat-linux-gnu/out/lib]
-#chrpath --delete %{buildroot}%{_bindir}/melt-7
+%oreon_autofiles python3-mlt usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# verify pkg-config version sanity
+
 export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
 test "$(pkg-config --modversion mlt-framework-7)" = "%{version}"
 test "$(pkg-config --modversion mlt++-7)" = "%{version}"
-
-%files
-%doc AUTHORS NEWS README*
-%doc demo/
-%license COPYING GPL
-%{_bindir}/mlt-melt
-%{_bindir}/melt-7
-%{_libdir}/mlt-7/
-%{_libdir}/libmlt++-7.so.*
-%{_libdir}/libmlt-7.so.*
-%{_datadir}/mlt-7/
-%{_mandir}/man1/melt-7.1*
-%exclude %{_libdir}/mlt-7/libmltglaxnimate*.so
-%exclude %{_libdir}/mlt-7/libmltqt*.so
-%if %{with ndi}
-%exclude %{_libdir}/mlt-7/libmltndi.so
-
-%files ndi
-%{_libdir}/mlt-7/libmltndi.so
-%endif
-
-%if %{with qt5}
-%files qt5
-%{_libdir}/mlt-7/libmltglaxnimate.so
-%{_libdir}/mlt-7/libmltqt.so
-%endif
-
-%files qt6
-%{_libdir}/mlt-7/libmltglaxnimate-qt6.so
-%{_libdir}/mlt-7/libmltqt6.so
-
-%files -n python3-mlt
-%{python3_sitearch}/mlt7.py*
-%{python3_sitearch}/_mlt7.so
-%{python3_sitearch}/__pycache__/mlt7.*
-
-%if %{with ruby}
-%files ruby
-%{ruby_vendorarchdir}/mlt.so
-%endif
-
-%if %{with php}
-%files php
-%config(noreplace) %{_sysconfdir}/php.d/mlt.ini
-%{php_extdir}/mlt.so
-%endif
-
-%files devel
-%{_libdir}/pkgconfig/mlt-framework-7.pc
-%{_libdir}/pkgconfig/mlt++-7.pc
-%{_libdir}/libmlt-7.so
-%{_libdir}/libmlt++-7.so
-%{_libdir}/cmake/Mlt7/Mlt7*.cmake
-%{_includedir}/mlt-7/
+%files -f %{oreon_filedir}/main.list
+%files -n mlt-qt6 -f %{oreon_filedir}/mlt-qt6.list
+%files -n mlt-devel -f %{oreon_filedir}/mlt-devel.list
+%files -n python3-mlt -f %{oreon_filedir}/python3-mlt.list
+%files -n mlt-ruby -f %{oreon_filedir}/mlt-ruby.list
+%files -n mlt-php -f %{oreon_filedir}/mlt-php.list
 
 %changelog
+
 %autochangelog

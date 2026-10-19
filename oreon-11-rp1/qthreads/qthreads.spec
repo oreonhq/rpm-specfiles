@@ -1,34 +1,21 @@
 %global source0_hash 09a5877a8dd821374e5795d12b15187794831cb197c9e1c095247f8eab3cfe4d
-
-# Use commit to enable builds on ppc64le and add soname
 %global commit       cedb1fc6f725ea1a51dc9f5bbdc1ec6ec00e33d7
 %global shortcommit  %(c=%{commit}; echo ${c:0:7})
 %global commitdate   20251007
-
 Name:           qthreads
 Version:        1.22^%{commitdate}git%{shortcommit}
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        Lightweight locality-aware user-level threading runtime
-
-# Breakdown of licenses is documented in COPYING
 License:        BSD-3-Clause AND MIT AND dtoa
 URL:            https://www.sandia.gov/qthreads/
-Source:         https://github.com/sandialabs/qthreads/archive/%{commit}/qthreads-%{shortcommit}.tar.gz
-# This library relies on some low-level platform-specific code, so it can
-# only be expected to work on explicitly-supported architectures, and it only
-# compiles on architectures that upstream has attempted to support. See:
-#
-# https://github.com/sandialabs/qthreads/blob/1.22/README.md#compatibility
-# https://github.com/sandialabs/qthreads/blob/1.22/include/qthread/common.h#L44-L58.
-#
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/sandialabs/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 ExcludeArch:    %{ix86} s390x
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  hwloc-devel
-
+# /oreon:deps
 %description
 The Qthreads API is designed to make using large numbers of threads convenient
 and easy. The Qthreads API also provides access to full/empty-bit (FEB)
@@ -52,11 +39,11 @@ similar operations convenient.
 %package devel
 Summary:   Development files for qthreads library
 Requires:  %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Header files and development libraries for qthreads library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n qthreads-%{commit}
@@ -66,41 +53,25 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -rv test/benchmarks/mantevo/hpccg/
 
 %build
-# Fast context swap is broken on ppc64le
-#https://github.com/sandialabs/qthreads/issues/371#issuecomment-3378502168
+
 %ifarch ppc64le
 %cmake -DQTHREADS_CONTEXT_SWAP_IMPL=system
 %else
 %cmake
 %endif
 %cmake_build
-
 %install
 %cmake_install
 install -t '%{buildroot}%{_mandir}/man3' -p -m 0644 -D man/man3/*.3
 rm %{buildroot}%{_includedir}/qthread/.gitignore
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license COPYING
-%doc AUTHORS
-%doc NEWS
-%doc README.md
-%doc README.affinity
-%doc SCHEDULING
-%{_libdir}/libqthread.so.1{,.*}
-
-%files devel
-%{_includedir}/qthread.h
-%dir %{_includedir}/qthread
-%{_includedir}/qthread/*.h
-%{_includedir}/qthread/*.hpp
-%dir %{_libdir}/cmake/qthread
-%{_libdir}/cmake/qthread/*.cmake
-%{_libdir}/libqthread.so
-%{_mandir}/man3/q*.3*
+%files -f %{oreon_filedir}/main.list
+%files -n qthreads-devel -f %{oreon_filedir}/qthreads-devel.list
 
 %changelog
+
 %autochangelog

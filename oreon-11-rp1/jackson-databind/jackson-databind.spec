@@ -1,39 +1,35 @@
 %global source0_hash b0fb72e9d00739b566a5a14f804d5f6961ca011bf08933c5e59f3715f711259b
-
 Name:           jackson-databind
 Version:        2.22.3
 Release:        1%{?dist}
 Summary:        General data-binding package for Jackson (2.x)
 License:        Apache-2.0 and LGPL-2.0-or-later
-
 URL:            https://github.com/FasterXML/jackson-databind
 Source0:        https://github.com/FasterXML/jackson-databind/archive/refs/tags/jackson-databind-%{version}.tar.gz#/jackson-databind-%{version}.tar.gz
-
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || (0%{?oreon} >= 11)
-BuildRequires:  maven-local
 %else
-BuildRequires:  maven-local-openjdk25
 %endif
-
-BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-annotations) >= %{version}
-BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-core) >= %{version}
-BuildRequires:  mvn(com.fasterxml.jackson:jackson-base:pom:) >= %{version}
-BuildRequires:  mvn(com.google.code.maven-replacer-plugin:replacer)
-Buildrequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.mockito:mockito-core)
-
 BuildArch:      noarch
 %if 0%{?fedora} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 ExclusiveArch:  %{java_arches} noarch
 %endif
-
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-annotations)
+BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-core)
+BuildRequires:  mvn(com.fasterxml.jackson:jackson-base:pom:)
+BuildRequires:  mvn(com.google.code.maven-replacer-plugin:replacer)
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires:  mvn(org.mockito:mockito-core)
+# /oreon:deps
 %description
 The general-purpose data-binding functionality and tree-model for Jackson Data
 Processor. It builds on core streaming parser/generator package, and uses
 Jackson Annotations for configuration.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{name}-%{version}
 
@@ -61,14 +57,14 @@ rm src/test/java/com/fasterxml/jackson/databind/introspect/NoClassDefFoundWorkar
 %mvn_file : %{name}
 
 %build
-%mvn_build -f -j -- -Dmaven.test.failure.ignore=true
 
+%mvn_build -f -j -- -Dmaven.test.failure.ignore=true
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md release-notes/*
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,44 +1,30 @@
 %global source0_hash 5604cf1e8a574caca62735c513b45e083a830d3be0b684c6d05d475713ed786f
-
-# -*- rpm-spec -*-
-
 %define with_qemu 1
-
-# RHEL does not provide the 9p.ko kernel module
-# nor the virtio-9p KVM backend driver.
-%if 0%{?rhel}
-%define with_qemu 0
-%endif
-
 %define libvirt_version 1.0.2
-
 Name: libvirt-sandbox
 Version: 0.8.0
-Release: 20%{?dist}
-Summary: libvirt application sandbox framework
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        libvirt application sandbox framework
 License: LicenseRef-Callaway-LGPLv2+
 URL: http://libvirt.org/
-Source0: ftp://libvirt.org/libvirt/sandbox/%{name}-%{version}.tar.gz
-BuildRequires: make
-BuildRequires: libvirt-gobject-devel >= 0.2.1
-BuildRequires: gobject-introspection-devel
-BuildRequires: glibc-static
-BuildRequires: /usr/bin/pod2man
-BuildRequires: intltool
-BuildRequires: libselinux-devel
-BuildRequires: glib2-devel >= 2.32.0
-BuildRequires: xz-devel >= 5.0.0, xz-static
-BuildRequires: zlib-devel >= 1.2.0, zlib-static
-%if 0%{fedora} > 27
-BuildRequires: libtirpc-devel
-BuildRequires: rpcgen
-%endif
+Source0:        ftp://libvirt.org/libvirt/sandbox/%{name}-%{version}.tar.gz
 Requires: %{name}-libs = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  /usr/bin/pod2man
+BuildRequires:  glib2-devel
+BuildRequires:  glibc-static
+BuildRequires:  gobject-introspection-devel
+BuildRequires:  intltool
+BuildRequires:  libselinux-devel
+BuildRequires:  libvirt-gobject-devel
+BuildRequires:  make
+BuildRequires:  xz-devel
+BuildRequires:  xz-static
+BuildRequires:  zlib-devel
+BuildRequires:  zlib-static
+# /oreon:deps
 %package libs
 Summary: libvirt application sandbox framework libraries
-# So we get the full libvirtd daemon, not just client libs
 %if %{with_qemu}
  %ifarch %{ix86} x86_64
 Requires: libvirt-daemon-kvm >= %{libvirt_version}
@@ -47,11 +33,9 @@ Requires: libvirt-daemon-qemu >= %{libvirt_version}
  %endif
 %endif
 Requires: libvirt-daemon-lxc >= %{libvirt_version}
-
 %package devel
 Summary: libvirt application sandbox framework development files
 Requires: %{name}-libs = %{version}-%{release}
-
 %description
 This package provides a command for running applications within
 a sandbox using libvirt.
@@ -65,6 +49,7 @@ This package provides development header files and libraries for
 the libvirt sandbox
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -73,46 +58,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %configure --enable-introspection
 %__make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 chmod a-x examples/*.py examples/*.pl examples/*.js
 %__make install  DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libvirt-sandbox-1.0.a
 rm -f $RPM_BUILD_ROOT%{_libdir}/libvirt-sandbox-1.0.la
-
 %find_lang %{name}
-
 %ldconfig_scriptlets libs
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_bindir}/virt-sandbox
-%{_mandir}/man1/virt-sandbox.1*
-
-%files libs -f %{name}.lang
-%doc README COPYING AUTHORS ChangeLog NEWS
-%dir %{_sysconfdir}/libvirt-sandbox
-%dir %{_sysconfdir}/libvirt-sandbox/scratch
-%config %{_sysconfdir}/libvirt-sandbox/scratch/README
-%{_libexecdir}/libvirt-sandbox-init-common
-%{_libexecdir}/libvirt-sandbox-init-lxc
-%{_libexecdir}/libvirt-sandbox-init-qemu
-%{_libdir}/libvirt-sandbox-1.0.so.*
-%{_libdir}/girepository-1.0/LibvirtSandbox-1.0.typelib
-
-%files devel
-%doc examples/virt-sandbox.pl
-%doc examples/virt-sandbox.py
-%doc examples/virt-sandbox.js
-%doc examples/virt-sandbox-mkinitrd.py
-%{_libdir}/libvirt-sandbox-1.0.so
-%{_libdir}/pkgconfig/libvirt-sandbox-1.0.pc
-%dir %{_includedir}/libvirt-sandbox-1.0
-%dir %{_includedir}/libvirt-sandbox-1.0/libvirt-sandbox
-%{_includedir}/libvirt-sandbox-1.0/libvirt-sandbox/libvirt-sandbox.h
-%{_includedir}/libvirt-sandbox-1.0/libvirt-sandbox/libvirt-sandbox-*.h
-%{_datadir}/gir-1.0/LibvirtSandbox-1.0.gir
-%{_datadir}/gtk-doc/html/Libvirt-sandbox
+%files -f %{oreon_filedir}/main.list
+%files -n libvirt-sandbox-libs -f %{oreon_filedir}/libvirt-sandbox-libs.list
+%files -n libvirt-sandbox-devel -f %{oreon_filedir}/libvirt-sandbox-devel.list
 
 %changelog
+
 %autochangelog

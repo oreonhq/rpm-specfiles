@@ -1,60 +1,41 @@
 %global source0_hash dd31f52ea1086513bb9df30f8fcee9b8918323ae067a3d5b78bc826a000712be
-
 Name:           python-cffi
 Version:        2.1.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Foreign Function Interface for Python calling C code.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT-0
 URL:            https://github.com/python-cffi/cffi
-Source:         %{pypi_source cffi}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/cffi/cffi-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-BuildRequires:  libffi-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'cffi' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-cffi = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-cffi
-Summary:        %{summary}
-
-%description -n python3-cffi %_description
-
+Summary:        Foreign Function Interface for Python calling C code.
+%description -n python3-cffi
 
 %prep
-%autosetup -p1 -n cffi-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir cffi-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-cffi usr/lib/python3*/site-packages/cffi* usr/lib64/python3*/site-packages/cffi* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cffi* usr/lib64/python3*/site-packages/cffi* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-cffi -f %{pyproject_files}
-%{_bindir}/cffi-gen-src
+%files
+%files -n python3-cffi -f %{oreon_filedir}/python3-cffi.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.0-1
 - Prepare for Oreon 11 (RP1)

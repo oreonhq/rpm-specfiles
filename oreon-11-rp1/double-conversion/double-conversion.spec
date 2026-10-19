@@ -1,18 +1,16 @@
 %global source0_hash 42fd4d980ea86426e457b24bdfa835a6f5ad9517ddb01cdb42b99ab9c8dd5dc9
-
 Summary:        Library providing binary-decimal and decimal-binary routines for IEEE doubles
 Name:           double-conversion
 Version:        3.4.0
-Release:        3%{?dist}
-
+Release:        1%{?dist}
 License:        BSD-3-Clause
 URL:            https://github.com/google/double-conversion
 Source0:        https://github.com/google/double-conversion/archive/refs/tags/v3.4.0.tar.gz#/double-conversion-3.4.0.tar.gz
-
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  cmake
-
+# /oreon:deps
 %description
 Provides binary-decimal and decimal-binary routines for IEEE doubles.
 The library consists of efficient conversion routines that have been
@@ -23,7 +21,6 @@ and improved so that it can be used more easily in other projects.
 Summary:        %{summary}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Obsoletes:      %{name}-static < 3.1.5-10
-
 %description devel
 Contains header files for developing applications that use the %{name}
 library.
@@ -33,29 +30,22 @@ examples can be found in test/cctest/test-conversions.cc.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -DBUILD_TESTING=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license LICENSE
-%doc README.md AUTHORS Changelog
-%{_libdir}/libdouble-conversion.so.3{,.*}
-
-%files devel
-%{_libdir}/libdouble-conversion.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/cmake/%{name}/
-%{_includedir}/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n double-conversion-devel -f %{oreon_filedir}/double-conversion-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.0-3
 - Prepare for Oreon 11 (RP1)

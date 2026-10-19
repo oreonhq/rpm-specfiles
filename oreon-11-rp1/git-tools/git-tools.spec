@@ -1,21 +1,16 @@
 %global source0_hash 65eb05f2959861d16e60d132b2175169e6e1aec840ab6e4bae556c6d08a199a7
-
 Name:           git-tools
 Version:        2025.08
 Release:        2%{?dist}
 Summary:        Assorted git-related scripts and tools
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://github.com/MestreLion/%{name}
 Source0:        https://github.com/MestreLion/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 BuildArch:      noarch
-
 Requires:       git
-
+# oreon:deps
 BuildRequires:  python3-devel
-
+# /oreon:deps
 %description
 Assorted git-related scripts and tools:
 
@@ -39,6 +34,7 @@ git-strip-merge:
 A git-merge wrapper that deletes files on a "foreign" branch before merging
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -60,12 +56,10 @@ cp -p git-restore-mtime %{buildroot}%{_bindir}/.
 cp -p git-strip-merge %{buildroot}%{_bindir}/.
 mkdir -p %{buildroot}%{_mandir}/man1
 cp -p man1/git-* %{buildroot}%{_mandir}/man1/.
+%oreon_autofiles main
 
-%files
-%license LICENSE.txt
-%doc README.md
-%{_bindir}/*
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

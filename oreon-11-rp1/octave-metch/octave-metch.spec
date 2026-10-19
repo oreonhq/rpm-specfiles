@@ -1,22 +1,19 @@
 %global source0_hash b1167be254ed1cae2f1152d72e642259823a4e558124ce89d3ff46ab8cdfba92
-
 %global octpkg metch
-
 Name:           octave-%{octpkg}
 Version:        0.6
-Release:        20%{?dist}
+Release:        1%{?dist}
 Summary:        Mesh/volume registration toolbox
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://iso2mesh.sourceforge.net/cgi-bin/index.cgi?metch
 Source0:        https://github.com/fangq/%{octpkg}/archive/%{version}/%{octpkg}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  octave-devel
-
 Requires:       octave
 Requires(post): octave
 Requires(postun): octave
-
+# oreon:deps
+BuildRequires:  octave-devel
+# /oreon:deps
 %description
 Matlab/Octave-based mesh/volume registration toolbox. It provides
 straightforward functions to register point clouds (or surfaces) to a
@@ -27,6 +24,7 @@ and guarantee the conformity of the points to the surface. At this point, metch
 can only perform rigid-body registration in terms of a linear transformation. 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{octpkg}-%{version}
@@ -69,26 +67,23 @@ mv *.m inst/
 chmod -x inst/*
 
 %build
-%octave_pkg_build
 
+%octave_pkg_build
 %install
 %octave_pkg_install
+%oreon_autofiles main
 
 %post
-%octave_cmd pkg rebuild
 
+%octave_cmd pkg rebuild
 %preun
+
 %octave_pkg_preun
-
 %postun
-%octave_cmd pkg rebuild
 
-%files
-%license COPYING
-%dir %{octpkgdir}
-%{octpkgdir}/*.m
-%doc %{octpkgdir}/doc-cache
-%{octpkgdir}/packinfo
+%octave_cmd pkg rebuild
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

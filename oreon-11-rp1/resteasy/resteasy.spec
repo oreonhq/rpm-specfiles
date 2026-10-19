@@ -1,62 +1,51 @@
 %global source0_hash f811bbe3c04d4ebe697ce46b4a80ab1b2af7b5359d2d88dec4ff8f96fdb2efac
 %global source1_hash eba80c042b856fc9de9e7ea373228abef4e0712e921e9d4badd69b0ead07834a
-
 %global namedreltag .Final
 %global namedversion %{version}%{namedreltag}
-
 Name:           resteasy
 Version:        3.0.26
-Release:        41%{?dist}
+Release:        1%{?dist}
 Summary:        Framework for RESTful Web services and Java applications
 License:        Apache-2.0
 URL:            http://resteasy.jboss.org/
-Source0:        https://github.com/resteasy/Resteasy/archive/%{namedversion}/%{name}-%{namedversion}.tar.gz#/resteasy-%{version}.tar.gz
+Source0:        https://github.com/%{name}/Resteasy/archive/%{namedversion}/%{name}-%{namedversion}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        resteasy-jakarta.patch
 Patch1:        0001-RESTEASY-2559-Improper-validation-of-response-header.patch
 Patch2:        0001-Remove-Log4jLogger.patch
 Patch3:        0001-Replace-javax.activation-imports-with-jakarta.activa.patch
 Patch4:        0001-Update-to-new-jakarta-xml-bind-namespace.patch
-
 BuildArch:      noarch
 %if 0%{?fedora} || (0%{?oreon} >= 11)
 ExclusiveArch:  %{java_arches} noarch
 %endif
-
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} < 43 || (0%{?oreon} >= 11)
-BuildRequires:  maven-local
 %else
-BuildRequires:  maven-local-openjdk21
 %endif
-
-BuildRequires:  mvn(commons-io:commons-io)
-BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)
-BuildRequires:  mvn(jakarta.xml.bind:jakarta.xml.bind-api)
-BuildRequires:  mvn(org.apache.httpcomponents:httpclient)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
-
 %if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?fedora} && 0%{?fedora} < 43 || (0%{?oreon} >= 11)
-BuildRequires:  mvn(org.apache.tomcat:tomcat-servlet-api)
 %elif 0%{?rhel}
-BuildRequires:  tomcat9-servlet-4.0-api
 %else
-BuildRequires:  tomcat-servlet-6.0-api
-BuildRequires:  tomcat-jakartaee-migration
 %endif
-
-# Jackson 2
+# oreon:deps
+BuildRequires:  maven-local-openjdk21
 BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-annotations)
 BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-core)
 BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-databind)
 BuildRequires:  mvn(com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider)
-
-BuildRequires:  mvn(org.jboss:jboss-parent:pom:)
+BuildRequires:  mvn(commons-io:commons-io)
+BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)
+BuildRequires:  mvn(jakarta.xml.bind:jakarta.xml.bind-api)
+BuildRequires:  mvn(javax.annotation:javax.annotation-api)
+BuildRequires:  mvn(org.apache.httpcomponents:httpclient)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 BuildRequires:  mvn(org.jboss.logging:jboss-logging)
 BuildRequires:  mvn(org.jboss.logging:jboss-logging-annotations)
 BuildRequires:  mvn(org.jboss.logging:jboss-logging-processor)
-BuildRequires:  mvn(javax.annotation:javax.annotation-api)
 BuildRequires:  mvn(org.jboss.spec.javax.ws.rs:jboss-jaxrs-api_2.0_spec)
+BuildRequires:  mvn(org.jboss:jboss-parent:pom:)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-
+BuildRequires:  tomcat-jakartaee-migration
+BuildRequires:  tomcat-servlet-6.0-api
+# /oreon:deps
 %description
 %global desc \
 RESTEasy contains a JBoss project that provides frameworks to help\
@@ -72,13 +61,10 @@ Summary:        Framework for RESTful Web services and Java applications
 Obsoletes:      %{name} < %{version}-%{release}
 Conflicts:      %{name} < %{version}-%{release}
 Provides:       %{name} = %{version}-%{release}
-
 Requires:       pki-%{name}-client              = %{version}-%{release}
 Requires:       pki-%{name}-core                = %{version}-%{release}
 Requires:       pki-%{name}-jackson2-provider   = %{version}-%{release}
 Requires:       pki-%{name}-servlet-initializer = %{version}-%{release}
-
-# subpackages removed in fedora 32
 Obsoletes:      %{name}-fastinfoset-provider < 3.0.26-1
 Obsoletes:      %{name}-jackson-provider < 3.0.26-1
 Obsoletes:      %{name}-jettison-provider < 3.0.26-1
@@ -89,7 +75,6 @@ Obsoletes:      %{name}-optional < 3.0.26-1
 Obsoletes:      %{name}-test < 3.0.26-1
 Obsoletes:      %{name}-validator-provider-11 < 3.0.26-1
 Obsoletes:      %{name}-yaml-provider < 3.0.26-1
-
 %description -n pki-%{name}
 %{desc}
 
@@ -99,7 +84,6 @@ Obsoletes:      resteasy-jaxrs-api < 3.0.7
 Obsoletes:      %{name}-core < %{version}-%{release}
 Conflicts:      %{name}-core < %{version}-%{release}
 Provides:       %{name}-core = %{version}-%{release}
-
 %description -n pki-%{name}-core
 %{extdesc} %{summary}.
 
@@ -108,7 +92,6 @@ Summary:        Module jackson2-provider for %{name}
 Obsoletes:      %{name}-jackson2-provider < %{version}-%{release}
 Conflicts:      %{name}-jackson2-provider < %{version}-%{release}
 Provides:       %{name}-jackson2-provider = %{version}-%{release}
-
 %description -n pki-%{name}-jackson2-provider
 %{extdesc} %{summary}.
 
@@ -117,7 +100,6 @@ Summary:        Client for %{name}
 Obsoletes:      %{name}-client < %{version}-%{release}
 Conflicts:      %{name}-client < %{version}-%{release}
 Provides:       %{name}-client = %{version}-%{release}
-
 %description -n pki-%{name}-client
 %{extdesc} %{summary}.
 
@@ -126,11 +108,11 @@ Summary:        %{name} Servlet Initializer
 Obsoletes:      %{name}-servlet-initializer < %{version}-%{release}
 Conflicts:      %{name}-servlet-initializer < %{version}-%{release}
 Provides:       %{name}-servlet-initializer = %{version}-%{release}
-
 %description -n pki-%{name}-servlet-initializer
 %{extdesc} %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -n resteasy-%{namedversion}
@@ -245,34 +227,23 @@ find -name '*.jar' -print -delete
 %build
 
 %mvn_build -f -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
-
 %install
-
 %mvn_install
-
 %if 0%{?rhel} >= 10 || 0%{?fedora} && 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-client.jar %{buildroot}%{_datadir}/java/resteasy/%{name}-client.jar
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-jackson2-provider.jar %{buildroot}%{_datadir}/java/resteasy/%{name}-jackson2-provider.jar
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-jaxrs.jar  %{buildroot}%{_datadir}/java/resteasy/%{name}-jaxrs.jar
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-servlet-initializer.jar %{buildroot}%{_datadir}/java/resteasy/%{name}-servlet-initializer.jar
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
-%files -n pki-%{name}
-%doc README.md
-%license License.html
-
-%files -n pki-%{name}-core -f .mfiles-core
-%license License.html
-
-%files -n pki-%{name}-jackson2-provider -f .mfiles-jackson2-provider
-%license License.html
-
-%files -n pki-%{name}-client -f .mfiles-client
-%license License.html
-
-%files -n pki-%{name}-servlet-initializer -f .mfiles-servlet-initializer
-%license License.html
+%files -f %{oreon_filedir}/main.list
+%files -n pki-resteasy -f %{oreon_filedir}/pki-resteasy.list
+%files -n pki-resteasy-core -f %{oreon_filedir}/pki-resteasy-core.list
+%files -n pki-resteasy-jackson2-provider -f %{oreon_filedir}/pki-resteasy-jackson2-provider.list
+%files -n pki-resteasy-client -f %{oreon_filedir}/pki-resteasy-client.list
+%files -n pki-resteasy-servlet-initializer -f %{oreon_filedir}/pki-resteasy-servlet-initializer.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.26-41
 - Import

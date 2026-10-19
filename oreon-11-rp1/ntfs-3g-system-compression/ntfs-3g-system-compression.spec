@@ -1,21 +1,20 @@
 %global source0_hash ac18aa1ccb926c8acbf8093084547bf11feae90c19541eef21116bab81973108
-
 Name:     ntfs-3g-system-compression
-Summary:  NTFS-3G plugin for reading "system compressed" files
+Summary:        NTFS-3G plugin for reading "system compressed" files
 Version:  1.1
-Release:  2%{?dist}
+Release:        2%{?dist}
 License:  GPL-2.0-or-later
 URL:      https://github.com/ebiggers/ntfs-3g-system-compression
-Source:   %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc
+Source0:        https://github.com/ebiggers/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Supplements:    ntfs-3g
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  make
-BuildRequires:  pkgconfig(libntfs-3g) >= 2017.3.23
-Supplements:    ntfs-3g
-
+BuildRequires:  pkgconfig(libntfs-3g)
+# /oreon:deps
 %description
 System compression, also known as "Compact OS", is a Windows feature that
 allows rarely modified files to be compressed using the XPRESS or LZX
@@ -29,6 +28,7 @@ supported. Compressing an existing file may be done by using the "compact"
 utility on Windows.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -38,17 +38,15 @@ autoreconf -i
 %configure
 
 %build
-%make_build
 
+%make_build
 %install
 %make_install
 rm -rf %{buildroot}%{_libdir}/ntfs-3g/*.la
+%oreon_autofiles main
 
-%files
-%doc README.md
-%license COPYING
-%dir %{_libdir}/ntfs-3g/
-%{_libdir}/ntfs-3g/ntfs-plugin-80000017.so
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

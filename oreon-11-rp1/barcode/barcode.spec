@@ -1,5 +1,4 @@
-%global source0_hash 4229e19279b9787ac7e98852fa0bfd93986dce93b9cb07d93a017d68d409b635
-
+%global source0_hash 7c031cf3eb811242f53664379aebbdd9fae0b7b26b5e5d584c31a9f338154b64
 Summary:        Generates barcodes from text strings
 Name:           barcode
 Version:        0.99
@@ -12,13 +11,14 @@ Patch1:         barcode-install-info.patch
 Patch2:         barcode-0.98-format-security.patch
 Patch3:         barcode-configure-c99.patch
 Patch4:         barcode-c99.patch
+# oreon:deps
+BuildRequires:  /usr/bin/dvips
+BuildRequires:  /usr/bin/makeinfo
+BuildRequires:  /usr/bin/texindex
 BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  %{_bindir}/texindex
-BuildRequires:  %{_bindir}/dvips
-BuildRequires:  %{_bindir}/makeinfo
 BuildRequires:  ghostscript
-
+BuildRequires:  make
+# /oreon:deps
 %description
 Barcode is meant to solve most needs in barcode creation with a
 conventional printer. It can create printouts for the conventional
@@ -30,24 +30,19 @@ Encapsulated Postscript.
 Summary:        Header files and libraries for %{name} development
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains the header files and libraries needed
 to develop programs that use the %{name} library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-# fix definition of INFOTOHTML
+
 export MAKEINFO=makeinfo
 %configure
-# rebuild all documentation
 make -C doc clean
 make # doesn't support %%{?_smp_mflags}
-
 %install
 %make_install \
   bindir=%{buildroot}%{_bindir} \
@@ -55,18 +50,12 @@ make # doesn't support %%{?_smp_mflags}
   libdir=%{buildroot}%{_libdir} \
   mandir=%{buildroot}%{_mandir} \
   infodir=%{buildroot}%{_infodir}
+%oreon_autofiles barcode-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc ChangeLog README doc/barcode.html
-%{_bindir}/barcode
-%{_mandir}/man1/barcode.1*
-%{_infodir}/barcode.info.*
-
-%files devel
-%{_includedir}/*.h
-%{_libdir}/*.a
-%{_mandir}/man3/barcode.3*
+%files -f %{oreon_filedir}/main.list
+%files -n barcode-devel -f %{oreon_filedir}/barcode-devel.list
 
 %changelog
+
 %autochangelog

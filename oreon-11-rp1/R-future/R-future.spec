@@ -1,18 +1,16 @@
 %global source0_hash 2577bf3d0676dc4c7467e21a3925b5b907157be9d72fafa7a77f501965932fbf
-
 Name:           R-future
 Version:        %R_rpm_version 1.69.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Unified Parallel and Distributed Processing in R for Everyone
-
 License:        LGPL-2.1-or-later
 URL:            %{cran_url}
-Source:         %{cran_source}
-
+Source0:        https://cran.r-project.org/package=future&version=%{version}#/future_%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  R-devel
 BuildRequires:  hostname
-
+# /oreon:deps
 %description
 The purpose of this package is to provide a lightweight and unified Future
 API for sequential and parallel processing of R expression via futures.
@@ -31,22 +29,19 @@ to tweak existing code to make use of futures.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

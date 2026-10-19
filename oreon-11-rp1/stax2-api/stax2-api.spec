@@ -1,3 +1,4 @@
+%global source0_hash 93d6ec4e2f3da5ae88d73c438fa07bdbbf14baba8d8b6501b11eeb972a21dfbf
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -79,30 +80,27 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond bootstrap 0
-
 Name:           stax2-api
 Version:        4.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Streaming API for XML
 License:        BSD-2-Clause
 URL:            https://github.com/FasterXML/stax2-api
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-Source0:        %{url}/archive/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/FasterXML/%{name}/archive/%{name}-%{version}.tar.gz
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 %endif
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Stax2 API is an extension to standard Java Streaming API for XML
 (StAX) added in JDK 6.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n stax2-api-stax2-api-%{version}
 
@@ -112,14 +110,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_file org.codehaus.woodstox:stax2-api stax2-api
 
 %build
-%mvn_build -j -- -Dmaven.compiler.source=8 -Dmaven.compiler.target=8
 
+%mvn_build -j -- -Dmaven.compiler.source=8 -Dmaven.compiler.target=8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

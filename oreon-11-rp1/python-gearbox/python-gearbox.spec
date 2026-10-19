@@ -1,63 +1,57 @@
-%global source0_hash none
-
+%global source0_hash e69da08c9d47d9424268a958be682bc1b108f38b2fcf50f37187e37afd4a266b
 Name:           python-gearbox
 Version:        0.5.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Command line toolkit born as a PasteScript replacement for the TurboGears2 web framework
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/TurboGears/gearbox
-Source:         %{pypi_source gearbox}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/gearbox/gearbox-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 42
+Requires:       python3-gearbox = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-gearbox+test
+Summary:        Metapackage for python3-gearbox test extras
+Requires:       python3-gearbox = %{version}-%{release}
+Requires:       python3dist(pytest) >= 7.0
+Provides:       python3dist(gearbox[test]) = %{version}-%{release}
 
+%description -n python3-gearbox+test
+Metapackage for python3-gearbox test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'gearbox' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-gearbox
-Summary:        %{summary}
-
-%description -n python3-gearbox %_description
+Summary:        Command line toolkit born as a PasteScript replacement for the TurboGears2 web framework
+# oreon:reqs
+Requires:       python3dist(hupper) >= 1.3
+Requires:       python3dist(pastedeploy) >= 3.1.0
+# /oreon:reqs
+%description -n python3-gearbox
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-gearbox test
-
 
 %prep
-%autosetup -p1 -n gearbox-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir gearbox-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-gearbox usr/lib/python3*/site-packages/gearbox* usr/lib64/python3*/site-packages/gearbox* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/gearbox* usr/lib64/python3*/site-packages/gearbox* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-gearbox -f %{pyproject_files}
-%{_bindir}/gearbox
+%files
+%files -n python3-gearbox -f %{oreon_filedir}/python3-gearbox.list
 
 %changelog
+
 %autochangelog

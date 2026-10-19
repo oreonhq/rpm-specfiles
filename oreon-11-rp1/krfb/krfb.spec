@@ -1,83 +1,66 @@
 %global source0_hash fa2a0d4c7058fff729a2eb04d2a5f46a3a9192a6f472eac3e669c72d62ab3cf7
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    krfb
-Summary: Desktop sharing
+Summary:        Desktop sharing
 Version: 26.04.3
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: GPL-2.0-only AND LGPL-2.1-only AND GFDL-1.2-no-invariants-only
 URL:     https://apps.kde.org/krfb/
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-
-BuildRequires: desktop-file-utils
-BuildRequires: extra-cmake-modules
-BuildRequires: gettext
-BuildRequires: hicolor-icon-theme
-
-BuildRequires: cmake(PlasmaWaylandProtocols)
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6DBus)
-BuildRequires: cmake(Qt6Widgets)
-BuildRequires: cmake(Qt6WaylandClient)
-BuildRequires: qt6-qtbase-private-devel
-BuildRequires: lzo-devel
-BuildRequires: libpng-devel
-BuildRequires: libgcrypt-devel
-BuildRequires: openssl-devel
-
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6Crash)
-BuildRequires: cmake(KF6DBusAddons)
-BuildRequires: cmake(KF6DNSSD)
-BuildRequires: cmake(KF6DocTools)
-BuildRequires: cmake(KF6Notifications)
-BuildRequires: cmake(KF6Wallet)
-BuildRequires: cmake(KF6WidgetsAddons)
-BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KF6StatusNotifierItem)
-BuildRequires: cmake(KF6WindowSystem)
-BuildRequires: cmake(KPipeWire)
-BuildRequires: cmake(KWayland)
-
-BuildRequires: pipewire-devel
-BuildRequires: pkgconfig(zlib)
-BuildRequires: pkgconfig(libvncserver)
-BuildRequires: pkgconfig(x11)
-BuildRequires: pkgconfig(xcb)
-BuildRequires: pkgconfig(xcb-damage)
-BuildRequires: pkgconfig(xcb-image)
-BuildRequires: pkgconfig(xcb-render)
-BuildRequires: pkgconfig(xcb-shape)
-BuildRequires: pkgconfig(xcb-shm)
-BuildRequires: pkgconfig(xcb-xfixes)
-BuildRequires: pkgconfig(xdamage)
-BuildRequires: pkgconfig(wayland-client)
-BuildRequires: pkgconfig(libsystemd)
-
-BuildRequires: pkgconfig(xtst)
-BuildRequires: libjpeg-devel
-BuildRequires: libepoxy-devel
-
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
-# when split occurred
 Conflicts: kdenetwork-common < 7:4.10.80
 Obsoletes: kdenetwork-krfb < 7:4.10.80
 Provides:  kdenetwork-krfb = 7:%{version}-%{release}
-
-# translations moved here
 Conflicts: kde-l10n < 17.03
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6DNSSD)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6StatusNotifierItem)
+BuildRequires:  cmake(KF6Wallet)
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(KPipeWire)
+BuildRequires:  cmake(KWayland)
+BuildRequires:  cmake(PlasmaWaylandProtocols)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6WaylandClient)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gettext
+BuildRequires:  hicolor-icon-theme
+BuildRequires:  libepoxy-devel
+BuildRequires:  libgcrypt-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  lzo-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pipewire-devel
+BuildRequires:  pkgconfig(libsystemd)
+BuildRequires:  pkgconfig(libvncserver)
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xcb)
+BuildRequires:  pkgconfig(xcb-damage)
+BuildRequires:  pkgconfig(xcb-image)
+BuildRequires:  pkgconfig(xcb-render)
+BuildRequires:  pkgconfig(xcb-shape)
+BuildRequires:  pkgconfig(xcb-shm)
+BuildRequires:  pkgconfig(xcb-xfixes)
+BuildRequires:  pkgconfig(xdamage)
+BuildRequires:  pkgconfig(xtst)
+BuildRequires:  pkgconfig(zlib)
+BuildRequires:  qt6-qtbase-private-devel
+# /oreon:deps
 %description
 %{summary}.
 
@@ -89,44 +72,26 @@ Provides:  kdenetwork-krfb-libs = 7:%{version}-%{release}
 %description libs
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang %{name} --all-name --with-html
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.krfb.desktop
-
-
-%files -f %{name}.lang
-%license COPYING*
-%doc README AUTHORS
-%{_kf6_bindir}/krfb
-# package seperately? -- rdieter
-%{_kf6_bindir}/krfb-virtualmonitor
-%{_kf6_datadir}/krfb/
-%{_kf6_datadir}/applications/org.kde.krfb.desktop
-%{_kf6_datadir}/applications/org.kde.krfb.virtualmonitor.desktop
-%{_kf6_metainfodir}/org.kde.krfb.appdata.xml
-%{_kf6_datadir}/qlogging-categories6/*categories
-%{_datadir}/icons/hicolor/*/apps/krfb.*
-
-%files libs
-%{_kf6_libdir}/libkrfbprivate.so.5*
-%{_kf6_qtplugindir}/krfb/
-
+%files -f %{oreon_filedir}/main.list
+%files -n krfb-libs -f %{oreon_filedir}/krfb-libs.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

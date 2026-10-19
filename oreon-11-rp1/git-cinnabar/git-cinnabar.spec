@@ -1,52 +1,36 @@
-%global source0_hash 20f94f6a9b05fff2684e8c5619a1a5703e7d472fd2d0e87b020b20b4190a6338
-
-#global rcver b4
+%global source1_hash 97ddf8ea58a2b9e0fbc2508e245028ca75911bd38d1551616b148c1aa5740ad9
+%global source0_hash 44636e1e5d4a5fb70cd7c87b8f2ffa5e4059ab89510f225fdb9798fb246c1f9c
 %global bundled_git_version 2.38.1
 %global gitexecdir %{_libexecdir}/git-core
 %global _python_bytecompile_extra 0
-
 Name:           git-cinnabar
 Version:        0.7.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Git remote helper to interact with mercurial repositories
-
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            https://github.com/glandium/git-cinnabar
-Source0:        https://github.com/glandium/%{name}/archive/%{version}%{?rcver}/%{name}-%{version}%{?rcver}.tar.gz
+Source0:        https://github.com/glandium/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        https://mirrors.edge.kernel.org/pub/software/scm/git/git-%{bundled_git_version}.tar.xz
-# hg clone https://hg.mozilla.org/users/mh_glandium.org/jqplot &&
-# cd jqplot &&
-# hg bundle --all ../jqplot$(hg id -i).hg
 Source2:        jqplot-e8af8a37f0f1.hg
-# Skip stuff that's not relevant for a tarball.
 Patch:          0001-Skip-version-checks.patch
-# Shebangs must match package requirements.
 Patch:          0002-Make-Python-shebangs-explicit.patch
-# Test errors due to a missing module 'distutils'
 Patch:          0003-Skip-more-version-checks.patch
 Patch:          0004-Fix-compatibility-with-Mercurial-6.4.patch
-# Backport of https://github.com/glandium/git-cinnabar/pull/320 for C + Python codebase
 Patch:          0005-Fix-access-to-ssh-remotes-with-absolute-path.patch
-
-# Patches over 1000 are for bundled git.
 Patch1000:      https://github.com/git/git/commit/639cd8db63b07c958062bde4d3823dadbf469b0b.patch
-
+Requires:       git-core
+Requires:       hg >= 1.9
+Provides:       bundled(git) = %{bundled_git_version}
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  git
+BuildRequires:  hg
+BuildRequires:  libcurl-devel
 BuildRequires:  make
 BuildRequires:  perl-macros
 BuildRequires:  python3-devel
-BuildRequires:  hg >= 1.9
-# Bundled git requirements:
-BuildRequires:  git
-BuildRequires:  libcurl-devel
-BuildRequires:  zlib-devel >= 1.2
-
-Requires:       git-core
-Requires:       hg >= 1.9
-
-Provides:       bundled(git) = %{bundled_git_version}
-
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 git-cinnabar is a git remote helper to interact with mercurial repositories.
 Contrary to other such helpers, it doesn't use a local mercurial clone under
@@ -54,6 +38,7 @@ the hood, although it currently does require mercurial to be installed for some
 of its libraries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -N -n %{name}-%{version}%{?rcver}
@@ -93,10 +78,9 @@ GIT_TEST_OPTS = -x --verbose-log
 EOF
 
 %build
-%make_build helper
 
+%make_build helper
 %install
-# Can't make_install because it tries to build all of git.
 install -d %{buildroot}%{gitexecdir}
 install -p -m 0755 git-cinnabar %{buildroot}%{gitexecdir}
 install -p -m 0755 git-cinnabar-helper %{buildroot}%{gitexecdir}
@@ -107,13 +91,12 @@ install -d %{buildroot}%{gitexecdir}/cinnabar/cmd
 install -p -m 0644 cinnabar/cmd/*.py %{buildroot}%{gitexecdir}/cinnabar/cmd
 install -d %{buildroot}%{gitexecdir}/cinnabar/hg
 install -p -m 0644 cinnabar/hg/*.py %{buildroot}%{gitexecdir}/cinnabar/hg
-
 %py_byte_compile %{python3} %{buildroot}%{gitexecdir}/cinnabar
+%oreon_autofiles main
 
 %check
-# Silence a git warning.
+
 git config --global init.defaultBranch main
-# Check the installed copies.
 mkdir gitexecdir
 for f in %{gitexecdir}/* %{buildroot}%{gitexecdir}/*; do
     ln -s $f gitexecdir/
@@ -121,17 +104,10 @@ done
 export GIT_EXEC_PATH=$PWD/gitexecdir
 rm -r cinnabar
 ln -s %{buildroot}%{gitexecdir}/cinnabar
-
 %{python3} -m unittest discover -v -s tests/ -p '*.py'
 make -f CI/tests.mk REPO=%SOURCE2 check check-graft
-
-%files
-%doc README.md
-%license COPYING
-%{gitexecdir}/git-cinnabar
-%{gitexecdir}/git-cinnabar-helper
-%{gitexecdir}/git-remote-hg
-%{gitexecdir}/cinnabar
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

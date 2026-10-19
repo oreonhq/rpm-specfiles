@@ -1,36 +1,36 @@
-%global source0_hash 2821194dc09630b3238d4a95665501b5fa4578d8e76626c92f184dfd0025e782
-
+%global source0_hash 26ed1b33e38cc39635d363e2860a36dbc8b97b5e35f4b4dc7dffd6192fecf498
 %global pname QMPlay2
 %global __provides_exclude_from ^%{_libdir}/%{name}/modules/.*$
 %undefine _strict_symbol_defs_build
-
 Name:           qmplay2
 Version:        26.08.02
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A Qt based media player, streamer and downloader
-# LGPL-3.0-or-later: QMPlay2
-# MIT: src/qmvk, src/modules/AudioFilters/bs2b
-# Public-Domain: src/modules/Modplug/libmodplug
 License:        LGPL-3.0-or-later AND MIT AND LicenseRef-Fedora-Public-Domain
 URL:            https://github.com/zaps166/QMPlay2
-Source:         %{url}/releases/download/%{version}/%{pname}-src-%{version}.tar.xz
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/zaps166/%{pname}/releases/download/%{version}/%{pname}-src-%{version}.tar.xz
 ExcludeArch:    %{ix86}
-
+Requires:       hicolor-icon-theme
+Requires:       kde-filesystem
+Requires:       shared-mime-info
+Recommends:     yt-dlp
+Provides:       bundled(libbs2b) = 3.1.0
+Provides:       bundled(libmodplug)
+Provides:       bundled(qmvk)
+Obsoletes:      %{name}-kde-integration < %{version}-%{release}
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  desktop-file-utils
-BuildRequires:  gcc-c++
-BuildRequires:  libappstream-glib
-BuildRequires:  ninja-build
-
 BuildRequires:  cmake(Qt6Core5Compat)
-BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6LinguistTools)
 BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  cmake(Qt6Svg)
-BuildRequires:  cmake(Qt6LinguistTools)
-
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  glslc
+BuildRequires:  libappstream-glib
+BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(libass)
 BuildRequires:  pkgconfig(libavcodec)
@@ -53,21 +53,7 @@ BuildRequires:  pkgconfig(taglib)
 BuildRequires:  pkgconfig(vulkan)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xv)
-BuildRequires:  glslc
-
-Requires:       hicolor-icon-theme
-Requires:       kde-filesystem
-Requires:       shared-mime-info
-Recommends:     yt-dlp
-
-# These have been converted to C++ and otherwise modified, not cleanly unbundleable
-Provides:       bundled(libbs2b) = 3.1.0
-Provides:       bundled(libmodplug)
-# Private library from the same project
-Provides:       bundled(qmvk)
-
-Obsoletes:      %{name}-kde-integration < %{version}-%{release}
-
+# /oreon:deps
 %description
 %{name} is a video player, it can play and stream all formats supported by
 ffmpeg and libmodplug (including J2B). It has an integrated Youtube browser.
@@ -75,11 +61,11 @@ ffmpeg and libmodplug (including J2B). It has an integrated Youtube browser.
 %package        devel
 Summary:        %{pname} development files
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 It's a development package for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{pname}-src-%{version}
@@ -90,45 +76,26 @@ cp src/qmvk/LICENSE LICENSE.qmvk
 cp src/modules/Modplug/libmodplug/COPYING COPYING.libmodplug
 
 %build
+
 %cmake \
     -G Ninja \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DUSE_UPDATES=OFF \
     -DSOLID_ACTIONS_INSTALL_PATH=%{_datadir}/solid/actions
-
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-qt
-
-# AUTHORS & ChangeLog are required for Help->About window
 rm -f %{buildroot}%{_datadir}/qmplay2/{LICENSE,README.md}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{pname}*.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{pname}.appdata.xml
-
-%files -f %{name}.lang
-%doc AUTHORS ChangeLog README.md
-%license LICENSE LICENSE.qmvk COPYING.libmodplug
-%{_bindir}/%{pname}
-%{_libdir}/%{name}/
-%{_libdir}/libqmplay2.so
-%{_datadir}/applications/%{pname}*.desktop
-%{_datadir}/icons/hicolor/*/apps/%{pname}.*
-%{_datadir}/mime/packages/x-*.xml
-%{_datadir}/solid/actions/*.desktop
-%dir %{_datadir}/%{name}/
-%{_datadir}/%{name}/AUTHORS
-%{_datadir}/%{name}/ChangeLog
-%dir %{_datadir}/%{name}/lang/
-%{_mandir}/man1/%{pname}.1*
-%{_metainfodir}/%{pname}.appdata.xml
-
-%files devel
-%{_includedir}/%{pname}/
+%files -f %{oreon_filedir}/main.list
+%files -n qmplay2-devel -f %{oreon_filedir}/qmplay2-devel.list
 
 %changelog
+
 %autochangelog

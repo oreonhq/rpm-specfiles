@@ -1,32 +1,26 @@
 %global source0_hash 3dcd65e1f5d9c0c891b3be204fa2bb418ce485d32310e1ca052e81d36623208e
 %global source1_hash b3f3413654003c1e773360d7fc60ebb8abd0e8c9af8e7d6c4b55f124f34d1e7f
-
 Name: docbook5-schemas
 Version: 5.1
-Release: 17%{?dist}
-
-Summary: Norman Walsh's schemas (DTD, Relax NG, W3C schema) for Docbook 5.X
-
+Release:        1%{?dist}
+Summary:        Norman Walsh's schemas (DTD, Relax NG, W3C schema) for Docbook 5.X
 License: LicenseRef-OASIS-spec AND DocBook-Stylesheet AND LicenseRef-Fedora-UltraPermissive
 URL: http://www.oasis-open.org/docbook/
-
 Provides: docbook5-dtd = %{version}-%{release}
 Provides: docbook5-rng = %{version}-%{release}
 Provides: docbook5-sch = %{version}-%{release}
 Provides: docbook5-xsd = %{version}-%{release}
-
 Requires(post): libxml2 >= 2.4.8
 Requires(postun): libxml2 >= 2.4.8
 Requires: xml-common >= 0.6.3-24
-BuildRequires: perl-generators
-BuildRequires: unzip
-BuildRequires: libxml2 >= 2.4.8
-
 BuildArch: noarch
-
-Source0:  https://archive.docbook.org/xml/5.0/docbook-5.0.zip
+Source0:        https://archive.docbook.org/xml/5.0/docbook-5.0.zip
 Source1:  https://archive.docbook.org/xml/5.1/docbook-v5.1-os.zip
-
+# oreon:deps
+BuildRequires:  libxml2
+BuildRequires:  perl-generators
+BuildRequires:  unzip
+# /oreon:deps
 %description
 Docbook 5.X is a complete rewrite of Docbook in RELAX NG and not compatible
 with previous Docbook versions. This package contains Relax NG , DTD and W3C
@@ -34,6 +28,7 @@ schema for Docbook 5.X. Syntax of those schemas is XML-compliant and is
 developed by the OASIS consortium.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -c -T 
@@ -67,11 +62,11 @@ mv schemas/docbook.nvdl .
 cd ..
 
 %build
+
 CATALOG=docbook-5.xml
 %{_bindir}/xmlcatalog --create --noout $CATALOG
 for v in 5.0
 do
-  # DTD
   %{_bindir}/xmlcatalog --noout --add "public" \
      "-//OASIS//DTD DocBook XML ${v}//EN" \
      "file://%{_datadir}/xml/docbook5/schema/dtd/${v}/docbook.dtd" ${CATALOG}
@@ -81,14 +76,12 @@ do
   %{_bindir}/xmlcatalog --noout --add "system" \
      "http://docbook.org/xml/${v}/dtd/docbook.dtd" \
      "file://%{_datadir}/xml/docbook5/schema/dtd/${v}/docbook.dtd" ${CATALOG}
-  # XSD
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://www.oasis-open.org/docbook/xml/${v}/xsd/docbook.xsd" \
      "file://%{_datadir}/xml/docbook5/schema/xsd/${v}/docbook.xsd" ${CATALOG}
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://docbook.org/xml/${v}/xsd/docbook.xsd" \
      "file://%{_datadir}/xml/docbook5/schema/xsd/${v}/docbook.xsd" ${CATALOG}
-  # XSD + XInclude
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://www.oasis-open.org/docbook/xml/${v}/xsd/docbookxi.xsd" \
      "file://%{_datadir}/xml/docbook5/schema/xsd/${v}/docbookxi.xsd" ${CATALOG}
@@ -101,7 +94,6 @@ do
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://docbook.org/xml/${v}/xsd/xi.xsd" \
      "file://%{_datadir}/xml/docbook5/schema/xsd/${v}/xi.xsd" ${CATALOG}
-  # XLink + XML
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://www.oasis-open.org/docbook/xml/${v}/xsd/xlink.xsd" \
      "file://%{_datadir}/xml/docbook5/schema/xsd/${v}/xlink.xsd" ${CATALOG}
@@ -117,35 +109,30 @@ do
 done
 for v in 5.0 5.1
 do
-  # RNG
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://www.oasis-open.org/docbook/xml/${v}/rng/docbook.rng" \
      "file://%{_datadir}/xml/docbook5/schema/rng/${v}/docbook.rng" ${CATALOG}
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://docbook.org/xml/${v}/rng/docbook.rng" \
      "file://%{_datadir}/xml/docbook5/schema/rng/${v}/docbook.rng" ${CATALOG}
-  # RNG+XInclude
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://www.oasis-open.org/docbook/xml/${v}/rng/docbookxi.rng" \
      "file://%{_datadir}/xml/docbook5/schema/rng/${v}/docbookxi.rng" ${CATALOG}
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://docbook.org/xml/${v}/rng/docbookxi.rng" \
      "file://%{_datadir}/xml/docbook5/schema/rng/${v}/docbookxi.rng" ${CATALOG}
-  # RNC
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://www.oasis-open.org/docbook/xml/${v}/rnc/docbook.rnc" \
      "file://%{_datadir}/xml/docbook5/schema/rng/${v}/docbook.rnc" ${CATALOG}
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://docbook.org/xml/${v}/rng/docbook.rnc" \
      "file://%{_datadir}/xml/docbook5/schema/rng/${v}/docbook.rnc" ${CATALOG}
-  # RNC+XInclude
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://www.oasis-open.org/docbook/xml/${v}/rnc/docbookxi.rnc" \
      "file://%{_datadir}/xml/docbook5/schema/rng/${v}/docbookxi.rnc" ${CATALOG}
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://docbook.org/xml/${v}/rng/docbookxi.rnc" \
      "file://%{_datadir}/xml/docbook5/schema/rng/${v}/docbookxi.rnc" ${CATALOG}
-  # Schematron
   %{_bindir}/xmlcatalog --noout --add "uri" \
      "http://www.oasis-open.org/docbook/xml/${v}/sch/docbook.sch" \
      "file://%{_datadir}/xml/docbook5/schema/sch/${v}/docbook.sch" ${CATALOG}
@@ -153,8 +140,6 @@ do
      "http://docbook.org/xml/${v}/sch/docbook.sch" \
      "file://%{_datadir}/xml/docbook5/schema/sch/${v}/docbook.sch" ${CATALOG}
 done
-# ---------------------
-# Build XML catalog files for each Schema
 for v in 5.0 5.1
 do
   for s in rng sch; do
@@ -213,8 +198,6 @@ do
        "docbook.dtd" ${cat}
      ;;
     xsd)
-     # http://www.oasis-open.org/docbook/xml/5.0/xsd/docbookxi.xsd
-     # http://www.oasis-open.org/docbook/xml/5.0/xsd/xlink.xsd
      %{_bindir}/xmlcatalog --noout --add "uri" \
        "http://docbook.org/xml/${v}/${s}/docbook.${s}" \
        "docbook.${s}" ${cat}
@@ -227,7 +210,6 @@ do
      %{_bindir}/xmlcatalog --noout --add "uri" \
        "http://www.oasis-open.org/docbook/xml/${v}/${s}/docbookxi.${s}" \
        "docbookxi.${s}" ${cat}
-     # XLink + XML:
      %{_bindir}/xmlcatalog --noout --add "uri" \
        "http://docbook.org/xml/${v}/${s}/xlink.xsd" \
        "xlink.xsd" ${cat}
@@ -244,7 +226,6 @@ do
    esac
   done
 done
-
 %install
 DOCBOOK5DIR=$RPM_BUILD_ROOT%{_datadir}/xml/docbook5
 for v in 5.0 5.1
@@ -262,11 +243,12 @@ mkdir -p $RPM_BUILD_ROOT%{_bindir}
 install -m755 %{version}/tools/db4-entities.pl $RPM_BUILD_ROOT%{_bindir}            
 mkdir -p ${DOCBOOK5DIR}/stylesheet/upgrade            
 install -m644 %{version}/tools/db4-upgrade.xsl ${DOCBOOK5DIR}/stylesheet/upgrade
-
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/xml
 install -m644 docbook-5.xml $RPM_BUILD_ROOT%{_sysconfdir}/xml/docbook-5.xml
+%oreon_autofiles main
 
 %post
+
 ROOTCATALOG=%{_sysconfdir}/xml/catalog
 if [ -w $ROOTCATALOG ]
 then
@@ -298,8 +280,8 @@ then
     "file://%{_datadir}/xml/docbook5/schema/dtd/${v}/catalog.xml" \
     $ROOTCATALOG
 fi
-
 %postun
+
 if [ "$1" = 0 ]; then
   ROOTCATALOG=%{_sysconfdir}/xml/catalog
   if [ -w $ROOTCATALOG ]
@@ -319,32 +301,11 @@ if [ "$1" = 0 ]; then
       %{_bindir}/xmlcatalog --noout --del \
        "file://%{_datadir}/xml/docbook5/schema/xsd/5.0/catalog.xml" \
        $ROOTCATALOG
-
   fi
 fi
-
-%files
-%doc docs/* README ChangeLog
-%config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/xml/docbook-5.xml
-%dir %{_datadir}/xml/docbook5/
-%dir %{_datadir}/xml/docbook5/schema
-%dir %{_datadir}/xml/docbook5/schema/dtd
-%dir %{_datadir}/xml/docbook5/schema/rng
-%dir %{_datadir}/xml/docbook5/schema/sch
-%dir %{_datadir}/xml/docbook5/schema/xsd
-%dir %{_datadir}/xml/docbook5/stylesheet            
-%dir %{_datadir}/xml/docbook5/stylesheet/upgrade
-# Docbook5.0
-%{_datadir}/xml/docbook5/schema/dtd/5.0
-%{_datadir}/xml/docbook5/schema/rng/5.0
-%{_datadir}/xml/docbook5/schema/sch/5.0
-%{_datadir}/xml/docbook5/schema/xsd/5.0
-# Docbook 5.1
-%{_datadir}/xml/docbook5/schema/rng/%{version}
-%{_datadir}/xml/docbook5/schema/sch/%{version}
-%{_datadir}/xml/docbook5/stylesheet/upgrade/db4-upgrade.xsl
-%{_bindir}/db4-entities.pl
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1-17
 - Prepare for Oreon 11 (RP1)

@@ -1,31 +1,28 @@
-%global source0_hash none
-
+%global source0_hash 7d3ed2b18955ddd090adfd0865f88d23582b8f79e00e0afc22459d83e7fd9b73
 %define         name            efont-unicode-bdf
 %define         fontdir         %{_datadir}/fonts/japanese/%{name}
 %define         catalogdir      %{_sysconfdir}/X11/fontpath.d
 %define         catalogname     %{name}
-
 Name:           %{name}
 Version:        0.4.2
-Release:        42%{?dist}
+Release:        1%{?dist}
 Summary:        Unicode font by Electronic Font Open Laboratory
-
-# Automatically converted from old format: BSD and Public Domain and Baekmuk and MIT - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-Public-Domain AND Baekmuk AND LicenseRef-Callaway-MIT
 URL:            http://openlab.jp/efont/unicode/
 Source0:        http://openlab.jp/efont/dist/unicode-bdf/efont-unicode-bdf-%{version}.tar.bz2
 BuildArch:      noarch
-
-BuildRequires:  %{_bindir}/bdftopcf
-BuildRequires:  %{_bindir}/mkfontdir
-BuildRequires:  %{_bindir}/ttmkfdir
+# oreon:deps
+BuildRequires:  /usr/bin/bdftopcf
+BuildRequires:  /usr/bin/mkfontdir
+BuildRequires:  /usr/bin/ttmkfdir
 BuildRequires:  gzip
-
+# /oreon:deps
 %description
 This package provides Unicode bitmap fonts provided by
 Electronic Font Open Laboratory.
 
 %prep
+
 %setup -q
 
 # convert documents' encoding to UTF8.
@@ -37,30 +34,20 @@ for f in README.{naga10,shinonome} ; do
 done
 
 %build
+
 for f in *bdf ; do
   g=${f%bdf}pcf
   bdftopcf -o $g $f
   gzip -9 $g
 done
-
 %install
-# 1. install actual fonts
 mkdir -p $RPM_BUILD_ROOT%{fontdir}
 for g in *pcf.gz ; do
   install -m 644 $g $RPM_BUILD_ROOT%{fontdir}
 done
-
-# 2-1. create fonts.scale and fonts.dir in advance
 ttmkfdir -d $RPM_BUILD_ROOT%{fontdir} -o $RPM_BUILD_ROOT%{fontdir}/fonts.scale
 mkfontdir $RPM_BUILD_ROOT%{fontdir}
-
-# 2-2. create ghost files
 touch $RPM_BUILD_ROOT%{fontdir}/encodings.dir
-%if 0%{?fedora} < 29
-touch $RPM_BUILD_ROOT%{fontdir}/fonts.cache-1
-%endif
-
-# 2.3 create libXfont catalogue symlink
 mkdir -p $RPM_BUILD_ROOT%{catalogdir}
 pushd $RPM_BUILD_ROOT%{catalogdir}
 pushd ../../..
@@ -71,18 +58,10 @@ fi
 popd
 ln -sf ../../..%{fontdir} fonts-%{name}
 popd
+%oreon_autofiles main
 
-%files
-%license COPYRIGHT
-%doc README* ChangeLog List.html
-
-%dir %{fontdir}
-%{fontdir}/*pcf.gz
-%verify(not md5 size mtime) %{fontdir}/fonts.scale
-%verify(not md5 size mtime) %{fontdir}/fonts.dir
-%ghost %verify(not md5 size mtime) %{fontdir}/encodings.dir
-
-%{catalogdir}/fonts-%{name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

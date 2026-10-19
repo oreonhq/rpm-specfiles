@@ -1,5 +1,4 @@
 %global source0_hash dfd2b9e446b2cf68e83e21b25317d8f868de6f1b246c7e99e04d07f4e1b0b97e
-
 %ifarch x86_64
 %global archs %{ix86} x86_64
 %else
@@ -9,49 +8,37 @@
 %global archs %{_target_cpu}
 %endif
 %endif
-
 %define abs2rel() perl -MFile::Spec -e 'print File::Spec->abs2rel(@ARGV)' %1 %2
 %global relccache %(%abs2rel %{_bindir}/ccache %{_libdir}/ccache)
-
 Name:           ccache
 Version:        4.14.1
 Release:        1%{?dist}
 Summary:        C/C++ compiler cache
-
-# See LICENSE.adoc for licenses of bundled codes
-# blake3 is Apache-2.0
-# span.hpp is BSL-1.0
-# url.cpp/hpp is MIT
 License:        GPL-3.0-or-later AND Apache-2.0 AND BSL-1.0 AND MIT
 URL:            http://ccache.dev/
 Source0:        https://github.com/ccache/ccache/releases/download/v%{version}/%{name}-%{version}.tar.gz
-
 Source1:        %{name}.sh.in
 Source2:        %{name}.csh.in
-
+Requires:       coreutils
+Provides:       bundled(blake3) = 1.5.1
+Provides:       bundled(span-lite) = 0.11.0
+Provides:       bundled(cxxurl)
+ExcludeArch:    %{ix86}
+# oreon:deps
 BuildRequires:  /usr/bin/asciidoctor
+BuildRequires:  clang
+BuildRequires:  clang-tools-extra
 BuildRequires:  cmake
-# Uses a patched version and is missing on i686 in Fedora
-#BuildRequires:  blake3-devel
 BuildRequires:  cpp-httplib-devel
 BuildRequires:  doctest-devel
 BuildRequires:  expected-devel
 BuildRequires:  fmt-devel
 BuildRequires:  hiredis-devel
 BuildRequires:  libzstd-devel
-BuildRequires:  perl perl(File::Spec)
+BuildRequires:  perl
+BuildRequires:  perl(File::Spec)
 BuildRequires:  xxhash-devel
-# clang for additional tests
-BuildRequires:  clang clang-tools-extra
-# coreutils for triggerin, triggerpostun
-Requires:       coreutils
-# For groupadd
-Provides:       bundled(blake3) = 1.5.1
-Provides:       bundled(span-lite) = 0.11.0
-Provides:       bundled(cxxurl)
-
-ExcludeArch:    %{ix86}
-
+# /oreon:deps
 %description
 ccache is a compiler cache.  It speeds up recompilation of C/C++ code
 by caching previous compiles and detecting when the same compile is
@@ -59,6 +46,7 @@ being done again.  The main focus is to handle the GNU C/C++ compiler
 (GCC), but it may also work with compilers that mimic GCC good enough.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -75,21 +63,16 @@ g ccache -
 EOF
 
 %build
+
 %cmake
 %cmake_build
 %cmake_build --target doc
-
 %install
 %cmake_install
-
 install -Dpm 644 %{__cmake_builddir}/doc/ccache.1 $RPM_BUILD_ROOT%{_mandir}/man1/ccache.1
-
 install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/profile.d
 install -pm 644 %{name}.sh %{name}.csh $RPM_BUILD_ROOT%{_sysconfdir}/profile.d
-
 install -dm 770 $RPM_BUILD_ROOT%{_var}/cache/ccache
-
-# %%ghost files for ownership, keep in sync with triggers
 install -dm 755 $RPM_BUILD_ROOT%{_libdir}/ccache
 for n in cc gcc g++ c++ ; do
     ln -s %{relccache} $RPM_BUILD_ROOT%{_libdir}/ccache/$n
@@ -114,16 +97,16 @@ for n in clang clang++ ; do
 done
 find $RPM_BUILD_ROOT%{_libdir}/ccache -type l | \
     sed -e "s|^$RPM_BUILD_ROOT|%%ghost |" > %{name}-%{version}.compilers
-
 install -m0644 -D ccache.sysusers.conf %{buildroot}%{_sysusersdir}/ccache.conf
-
 install -m0644 README.md %{buildroot}%{_pkgdocdir}/
+%oreon_autofiles main
 
 %check
-%ctest
 
+%ctest
 %define ccache_trigger(p:) \
 %triggerin -- %{-p*}\
+
 for n in %* ; do\
     [ ! -x %{_bindir}/$n ] || ln -sf %{relccache} %{_libdir}/ccache/$n\
     for a in %{archs} ; do\
@@ -133,6 +116,7 @@ for n in %* ; do\
 done\
 :\
 %triggerpostun -- %{-p*}\
+
 for n in %* ; do\
     [ -x %{_bindir}/$n ] || rm -f %{_libdir}/ccache/$n\
     for a in %{archs} ; do\
@@ -142,7 +126,6 @@ for n in %* ; do\
 done\
 :\
 %{nil}
-
 %ccache_trigger -p arm-gp2x-linux-gcc arm-gp2x-linux-cc arm-gp2x-linux-gcc
 %ccache_trigger -p arm-gp2x-linux-gcc-c++ arm-gp2x-linux-c++ arm-gp2x-linux-g++
 %ccache_trigger -p arm-none-eabi-gcc-cs arm-none-eabi-gcc
@@ -167,7 +150,6 @@ done\
 %ccache_trigger -p msp430-gcc msp430-cc msp430-gcc
 %ccache_trigger -p nacl-arm-gcc arm-nacl-gcc
 %ccache_trigger -p nacl-gcc nacl-gcc nacl-c++ nacl-g++
-# cross-gcc
 %ccache_trigger -p gcc-aarch64-linux-gnu aarch64-linux-gnu-gcc
 %ccache_trigger -p gcc-c++-aarch64-linux-gnu aarch64-linux-gnu-c++ aarch64-linux-gnu-g++
 %ccache_trigger -p gcc-alpha-linux-gnu alpha-linux-gnu-gcc
@@ -225,16 +207,8 @@ done\
 %ccache_trigger -p gcc-c++-x86_64-linux-gnu x86_64-linux-gnu-c++ x86_64-linux-gnu-g++
 %ccache_trigger -p gcc-xtensa-linux-gnu xtensa-linux-gnu-gcc
 %ccache_trigger -p gcc-c++-xtensa-linux-gnu xtensa-linux-gnu-c++ xtensa-linux-gnu-g++
-
-%files -f %{name}-%{version}.compilers
-%license GPL-3.0.txt LICENSE.*
-%{_pkgdocdir}/
-%config(noreplace) %{_sysconfdir}/profile.d/%{name}.*sh
-%{_bindir}/ccache
-%dir %{_libdir}/ccache/
-%attr(2770,root,ccache) %dir %{_var}/cache/ccache/
-%{_mandir}/man1/ccache.1*
-%{_sysusersdir}/ccache.conf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,24 +1,21 @@
-%global source0_hash 039f73b7bfa99124b8e94871b90a0807774f03b1a653a845b475009062d2173b
-
+%global source0_hash 41379b2d5f310e6808ef047101a742a1ad31503bbd78a2fbe9b8ca7cf851f46c
 Name:           janino
 Version:        3.1.12
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Super-small, super-fast Java compiler
 License:        BSD-3-Clause
 URL:            http://janino-compiler.github.io/janino
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/janino-compiler/janino/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.ant:ant)
-
 Requires:       javapackages-tools
 Requires:       commons-compiler = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.ant:ant)
+BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
+# /oreon:deps
 %description
 Janino is a super-small, super-fast Java compiler.
 
@@ -43,6 +40,7 @@ Summary:        API documentation for %{name}
 API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -67,28 +65,22 @@ cd -
 %build
 
 cd %{name}-parent
-# de.unkrig.jdisasm:jdisasm is missing
   %mvn_build -s -f -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 cd -
-
 %install
-
 cd %{name}-parent
   %mvn_install
-# create janinoc script
   %jpackage_script org.codehaus.commons.compiler.samples.CompilerDemo "" "" %{name}/janino:%{name}/commons-compiler janinoc true
 cd -
+%oreon_autofiles commons-compiler usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles commons-compiler-jdk usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}-parent/.mfiles-%{name}
-%license LICENSE
-%{_bindir}/janinoc
-
-%files -n commons-compiler -f %{name}-parent/.mfiles-commons-compiler
-%license LICENSE
-%files -n commons-compiler-jdk -f %{name}-parent/.mfiles-commons-compiler-jdk
-%license LICENSE
-%files javadoc -f %{name}-parent/.mfiles-javadoc
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n commons-compiler -f %{oreon_filedir}/commons-compiler.list
+%files -n commons-compiler-jdk -f %{oreon_filedir}/commons-compiler-jdk.list
+%files -n janino-javadoc -f %{oreon_filedir}/janino-javadoc.list
 
 %changelog
+
 %autochangelog

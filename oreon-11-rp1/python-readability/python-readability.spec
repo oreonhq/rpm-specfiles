@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 5aace888855cb3ef1b7dd059e41bbc6ac1f7daba321b2d24062ca75fdf6e576d
 Name:           python-readability
 Version:        0.3.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Measure the readability of a given text using surface characteristics
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/andreasvc/readability/
-Source:         %{pypi_source readability}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/readability/readability-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'readability' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-readability = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-readability
-Summary:        %{summary}
-
-%description -n python3-readability %_description
-
+Summary:        Measure the readability of a given text using surface characteristics
+%description -n python3-readability
 
 %prep
-%autosetup -p1 -n readability-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir readability-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-readability usr/lib/python3*/site-packages/readability* usr/lib64/python3*/site-packages/readability* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/readability* usr/lib64/python3*/site-packages/readability* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-readability -f %{pyproject_files}
+%files
+%files -n python3-readability -f %{oreon_filedir}/python3-readability.list
 
 %changelog
+
 %autochangelog

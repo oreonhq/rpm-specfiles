@@ -1,51 +1,40 @@
 %global stable_kf6 stable
 %global source0_hash e7b7f90aa23ee5b2b5943003a376f96fa75591716cb7d99a22b5ef08020fa519
-
 Name:    kdeedu-data
-Summary: Shared icons, artwork and data files for educational applications
+Summary:        Shared icons, artwork and data files for educational applications
 Version: 26.04.3
-Release: 1%{?dist}
-
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-only
 URL:     https://invent.kde.org/education/%{name}
-Source:  https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 BuildArch: noarch
-
-BuildRequires: kde-filesystem
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-# ECM macro used in kdeedu-data needs qmake
-BuildRequires: qt6-qtbase-devel
-
 Requires: hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kde-filesystem
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  qt6-qtbase-devel
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
-
 %build
+
 %cmake_kf6 -DQT_MAJOR_VERSION=6
-
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-
-%files
-%license COPYING
-%{_kf6_datadir}/apps/kvtml/
-%{_datadir}/icons/hicolor/*/*/*
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog
 

@@ -1,27 +1,21 @@
-%global source0_hash none
-
+%global source0_hash 816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec
 %{?mingw_package_header}
-
 Name: mingw-brotli
 Version: 1.2.0
-Release: 1%{?dist}
-Summary: MinGW port of Lossless compression algorithm
-
+Release:        1%{?dist}
+Summary:        MinGW port of Lossless compression algorithm
 License: MIT
 URL: https://github.com/google/brotli
-Source0: %{url}/archive/v%{version}/brotli-%{version}.tar.gz
-
+Source0:        https://github.com/google/brotli/archive/v%{version}/brotli-%{version}.tar.gz
 BuildArch: noarch
-
-BuildRequires: make
-BuildRequires: cmake
-
-BuildRequires: mingw32-filesystem
-BuildRequires: mingw32-gcc
-
-BuildRequires: mingw64-filesystem
-BuildRequires: mingw64-gcc
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  make
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc
+# /oreon:deps
 %description
 Brotli is a generic-purpose lossless compression algorithm that compresses
 data using a combination of a modern variant of the LZ77 algorithm, Huffman
@@ -30,8 +24,7 @@ to the best currently available general-purpose compression methods.
 It is similar in speed with deflate but offers more dense compression.
 
 %package -n mingw32-brotli
-Summary: %{summary}
-
+Summary:        MinGW port of Lossless compression algorithm
 %description -n mingw32-brotli
 Brotli is a generic-purpose lossless compression algorithm that compresses
 data using a combination of a modern variant of the LZ77 algorithm, Huffman
@@ -40,8 +33,7 @@ to the best currently available general-purpose compression methods.
 It is similar in speed with deflate but offers more dense compression.
 
 %package -n mingw64-brotli
-Summary: %{summary}
-
+Summary:        MinGW port of Lossless compression algorithm
 %description -n mingw64-brotli
 Brotli is a generic-purpose lossless compression algorithm that compresses
 data using a combination of a modern variant of the LZ77 algorithm, Huffman
@@ -52,6 +44,7 @@ It is similar in speed with deflate but offers more dense compression.
 %{?mingw_debug_package}
 
 %prep
+
 %autosetup -n brotli-%{version}
 # fix permissions for -debuginfo
 # rpmlint will complain if I create an extra %%files section for
@@ -61,53 +54,26 @@ chmod 644 c/include/brotli/*.h
 chmod 644 c/tools/brotli.c
 
 %build
+
 %mingw_cmake
 %mingw_make %{?_smp_mflags}
-
 %install
 %mingw_make_install DESTDIR=$RPM_BUILD_ROOT
-
-# Remove static libraries but DON'T remove *.dll.a files.
 rm -f $RPM_BUILD_ROOT%{mingw32_libdir}/*-static.a
 rm -f $RPM_BUILD_ROOT%{mingw64_libdir}/*-static.a
-
-# Libtool files don't need to be bundled
 find $RPM_BUILD_ROOT -name "*.la" -delete
-
-# Manpages don't need to be bundled
 rm -rf $RPM_BUILD_ROOT%{mingw32_datadir}/man
 rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}/man
-
 rm -rf $RPM_BUILD_ROOT%{mingw32_datadir}/gtk-doc
 rm -rf $RPM_BUILD_ROOT%{mingw64_datadir}/gtk-doc
+%oreon_autofiles mingw32-brotli usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-brotli usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n mingw32-brotli
-%{mingw32_bindir}/brotli.exe
-%{mingw32_bindir}/libbrotlicommon.dll
-%{mingw32_bindir}/libbrotlidec.dll
-%{mingw32_bindir}/libbrotlienc.dll
-%{mingw32_includedir}/brotli
-%{mingw32_libdir}/libbrotlicommon.dll.a
-%{mingw32_libdir}/libbrotlidec.dll.a
-%{mingw32_libdir}/libbrotlienc.dll.a
-%{mingw32_libdir}/pkgconfig/libbrotlicommon.pc
-%{mingw32_libdir}/pkgconfig/libbrotlidec.pc
-%{mingw32_libdir}/pkgconfig/libbrotlienc.pc
-%license LICENSE
-
-%files -n mingw64-brotli
-%{mingw64_bindir}/brotli.exe
-%{mingw64_bindir}/libbrotlicommon.dll
-%{mingw64_bindir}/libbrotlidec.dll
-%{mingw64_bindir}/libbrotlienc.dll
-%{mingw64_includedir}/brotli
-%{mingw64_libdir}/libbrotlicommon.dll.a
-%{mingw64_libdir}/libbrotlidec.dll.a
-%{mingw64_libdir}/libbrotlienc.dll.a
-%{mingw64_libdir}/pkgconfig/libbrotlicommon.pc
-%{mingw64_libdir}/pkgconfig/libbrotlidec.pc
-%{mingw64_libdir}/pkgconfig/libbrotlienc.pc
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-brotli -f %{oreon_filedir}/mingw32-brotli.list
+%files -n mingw64-brotli -f %{oreon_filedir}/mingw64-brotli.list
 
 %changelog
+
 %autochangelog

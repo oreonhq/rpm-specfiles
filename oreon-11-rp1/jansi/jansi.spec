@@ -1,7 +1,6 @@
 %global source0_hash 2a1f5db720a179c7d6c447d1aa871633f0d63158d19ee3b396eadd600952e588
 %{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,36 +82,23 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           jansi
 Version:        2.4.3
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Generate and interpret ANSI escape sequences in Java
 License:        Apache-2.0
 URL:            https://fusesource.github.io/jansi/
 ExclusiveArch:  %{java_arches}
-
-# ./generate-tarball.sh
 Source0:        https://github.com/fusesource/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jansi-%{version}.tar.gz
-# Remove bundled binaries which cannot be easily verified for licensing
-# Change the location of the native artifact to where Fedora wants it
 Patch:          %{name}-jni.patch
-
-BuildRequires:  gcc
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
-BuildRequires:  mvn(org.fusesource:fusesource-pom:pom:)
-BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
-BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-params)
-BuildRequires:  mvn(org.moditect:moditect-maven-plugin)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.4.1-16
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Jansi is a small java library that allows you to use ANSI escape sequences
 in your Java console applications. It implements ANSI support on platforms
@@ -120,6 +106,7 @@ which don't support it like Windows and provides graceful degradation for
 when output is being sent to output devices which cannot support ANSI sequences.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{name}-%{version}
 
@@ -141,9 +128,9 @@ sed -i 's,@LIBDIR@,%{_prefix}/lib,' \
     src/main/java/org/fusesource/jansi/internal/JansiLoader.java
 
 %build
+
 %set_build_flags
 CC="${CC:-gcc}"
-# Build the native artifact
 CFLAGS="$CFLAGS -I. -I%{java_home}/include -I%{java_home}/include/linux -fPIC -fvisibility=hidden"
 cd src/main/native
 $CC $CFLAGS -c jansi.c
@@ -152,22 +139,15 @@ $CC $CFLAGS -c jansi_structs.c
 $CC $CFLAGS -c jansi_ttyname.c
 $CC $CFLAGS $LDFLAGS -shared -o libjansi.so *.o -lutil
 cd -
-
-# Build the Java artifacts
 %mvn_build -j -- -Dlibrary.jansi.path=$PWD/src/main/native
-
 %install
-# Install the native artifact
 mkdir -p %{buildroot}%{_prefix}/lib/%{name}
 cp -p src/main/native/libjansi.so %{buildroot}%{_prefix}/lib/%{name}
-
-# Install the Java artifacts
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license license.txt
-%doc readme.md changelog.md
-%{_prefix}/lib/%{name}/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

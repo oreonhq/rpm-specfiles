@@ -1,21 +1,20 @@
-%global source0_hash none
-
+%global source0_hash 38cccf29fab4c2f236b2c0a383244267e0e1851a78233bddd4b1c43e7f20f3ac
 Name:       ibus-table-others
 Version:    1.3.22
-Release:    %autorelease
-Summary:    Various tables for IBus-Table
+Release:        1%{?dist}
+Summary:        Various tables for IBus-Table
 License:    LGPL-2.1-or-later AND GPL-3.0-or-later AND WTFPL
 URL:        http://github.com/moebiuscurve/ibus-table-others
 Source0:        https://github.com/mike-fabian/ibus-table-others/archive/%{version}/%{name}-%{version}.tar.gz#/ibus-table-others-1.3.22.tar.gz
 BuildArch:  noarch
-
 Requires:         ibus-table
-BuildRequires:    ibus-table-devel
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: libtool
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  ibus-table-devel
+BuildRequires:  libtool
+BuildRequires:  make
+# /oreon:deps
 %description
 The package contains various IBus-Tables which include languages of \
 Latin-America, Europe, Southeast Asia, as well as math and other symbols
@@ -24,7 +23,6 @@ Latin-America, Europe, Southeast Asia, as well as math and other symbols
 Requires:  ibus-table
 Summary:   Ibus-Tables for Latex, CNS11643 & Emoticons
 License:   LGPL-2.1-or-later
-
 %description -n ibus-table-code
 The package contains ibus-tables for Latex, CNS11643, Emoticons.
 
@@ -32,7 +30,6 @@ The package contains ibus-tables for Latex, CNS11643, Emoticons.
 Requires:  ibus-table
 Summary:   Ibus-Tables for Cyrillic
 License:   LGPL-2.1-or-later
-
 %description -n ibus-table-cyrillic
 The Cyrillic rustrad & yawerty tables for IBus Table.
 
@@ -40,7 +37,6 @@ The Cyrillic rustrad & yawerty tables for IBus Table.
 Requires:  ibus-table
 Summary:   Ibus-Tables for Latin
 License:   LGPL-2.1-or-later AND GPL-3.0-or-later
-
 %description -n ibus-table-latin
 The Latin compose & ipa-x-sampa tables for Ibus-Table.
 
@@ -48,7 +44,6 @@ The Latin compose & ipa-x-sampa tables for Ibus-Table.
 Requires:  ibus-table
 Summary:   Ibus-Tables for Russian Translit
 License:   LGPL-2.1-or-later
-
 %description -n ibus-table-translit
 The Cyrillic translit & translit-ua tables for IBus-Table.
 
@@ -56,7 +51,6 @@ The Cyrillic translit & translit-ua tables for IBus-Table.
 Requires:  ibus-table
 Summary:   Ibus-Tables for Thai and Viqr (Vietnamese)
 License:   LGPL-2.1-or-later
-
 %description -n ibus-table-tv
 The Thai and Viqr (Vietnamese) tables for IBus-Table.
 
@@ -64,7 +58,6 @@ The Thai and Viqr (Vietnamese) tables for IBus-Table.
 Requires:  ibus-table
 Summary:  Ibus-Tables for Unicode mathematics symbols
 License:  LGPL-2.1-or-later
-
 %description -n ibus-table-mathwriter
 The package contains table for writing Unicode mathematics symbols.
 
@@ -72,20 +65,19 @@ The package contains table for writing Unicode mathematics symbols.
 Requires:  ibus-table
 Summary:  Ibus-Tables for Mongol Script
 License:  WTFPL
-
 %description -n ibus-table-mongol
 The package contains a table for transliterating Latin Script to Mongol Script
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 autoreconf -fi
 
 %build
+
 %configure
-
 make %{?_smp_mflags}
-
 %install
 make DESTDIR=${RPM_BUILD_ROOT} NO_INDEX=true install
 cd ${RPM_BUILD_ROOT}/%{_datadir}/ibus-table/tables/
@@ -106,14 +98,6 @@ cd ${RPM_BUILD_ROOT}/%{_datadir}/ibus-table/tables/
 %{_bindir}/ibus-table-createdb -i -n hu-old-hungarian-rovas.db
 %{_bindir}/ibus-table-createdb -i -n hu_Hung_HU_traditional.db
 %{_bindir}/ibus-table-createdb -i -n mongol_bichig.db
-
-# Register as AppStream components to be visible in the software center
-#
-# NOTE: It would be *awesome* if these files were maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/emoticon-table.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -234,66 +218,25 @@ cat > $RPM_BUILD_ROOT%{_datadir}/appdata/mongol_bichig.appdata.xml <<EOF
   <update_contact><!-- upstream-contact_at_email.com --></update_contact>
 </component>
 EOF
+%oreon_autofiles ibus-table-code usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ibus-table-cyrillic usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ibus-table-latin usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ibus-table-translit usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ibus-table-tv usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ibus-table-mathwriter usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ibus-table-mongol usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS COPYING README
-
-%files -n ibus-table-code
-%{_datadir}/appdata/emoticon-table.appdata.xml
-%{_datadir}/ibus-table/tables/lean.db
-%{_datadir}/ibus-table/tables/latex.db
-%{_datadir}/ibus-table/tables/cns11643.db
-%{_datadir}/ibus-table/tables/emoticon-table.db
-%{_datadir}/ibus-table/icons/lean.svg
-%{_datadir}/ibus-table/icons/latex.svg
-%{_datadir}/ibus-table/icons/cns11643.png
-%{_datadir}/ibus-table/icons/ibus-emoticon.svg
-
-%files -n ibus-table-cyrillic
-%{_datadir}/ibus-table/tables/rusle.db
-%{_datadir}/ibus-table/tables/rustrad.db
-%{_datadir}/ibus-table/tables/yawerty.db
-%{_datadir}/ibus-table/icons/rusle.png
-%{_datadir}/ibus-table/icons/rustrad.png
-%{_datadir}/ibus-table/icons/yawerty.png
-
-%files -n ibus-table-latin
-%{_datadir}/appdata/ipa-x-sampa.appdata.xml
-%{_datadir}/ibus-table/tables/compose.db
-%{_datadir}/ibus-table/tables/ipa-x-sampa.db
-%{_datadir}/ibus-table/tables/hu-old-hungarian-rovas.db
-%{_datadir}/ibus-table/tables/hu_Hung_HU_traditional.db
-%{_datadir}/ibus-table/icons/compose.svg
-%{_datadir}/ibus-table/icons/ipa-x-sampa.svg
-%{_datadir}/ibus-table/icons/hu-old-hungarian-rovas.svg
-%{_datadir}/ibus-table/icons/hu_Hung_HU_traditional.png
-
-%files -n ibus-table-translit
-%{_datadir}/ibus-table/tables/translit.db
-%{_datadir}/ibus-table/tables/translit-ua.db
-%{_datadir}/ibus-table/icons/translit.svg
-%{_datadir}/ibus-table/icons/translit-ua.svg
-
-%files -n ibus-table-tv
-%{_datadir}/ibus-table/tables/telex.db
-%{_datadir}/ibus-table/tables/thai.db
-%{_datadir}/ibus-table/tables/viqr.db
-%{_datadir}/ibus-table/tables/vni.db
-%{_datadir}/ibus-table/icons/telex.png
-%{_datadir}/ibus-table/icons/thai.png
-%{_datadir}/ibus-table/icons/viqr.png
-%{_datadir}/ibus-table/icons/vni.png
-
-%files -n ibus-table-mathwriter
-%{_datadir}/appdata/mathwriter-ibus.appdata.xml
-%{_datadir}/ibus-table/tables/mathwriter-ibus.db
-%{_datadir}/ibus-table/icons/mathwriter.png
-
-%files -n ibus-table-mongol
-%{_datadir}/appdata/mongol_bichig.appdata.xml
-%{_datadir}/ibus-table/tables/mongol_bichig.db
-%{_datadir}/ibus-table/icons/mongol_bichig.svg
+%files -f %{oreon_filedir}/main.list
+%files -n ibus-table-code -f %{oreon_filedir}/ibus-table-code.list
+%files -n ibus-table-cyrillic -f %{oreon_filedir}/ibus-table-cyrillic.list
+%files -n ibus-table-latin -f %{oreon_filedir}/ibus-table-latin.list
+%files -n ibus-table-translit -f %{oreon_filedir}/ibus-table-translit.list
+%files -n ibus-table-tv -f %{oreon_filedir}/ibus-table-tv.list
+%files -n ibus-table-mathwriter -f %{oreon_filedir}/ibus-table-mathwriter.list
+%files -n ibus-table-mongol -f %{oreon_filedir}/ibus-table-mongol.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.22-1
 - Import

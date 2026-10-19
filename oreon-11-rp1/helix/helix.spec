@@ -1,32 +1,11 @@
-%global source0_hash none
-
+%global source200_hash e04167ff997aa3b646e5818e620943d577c4410fd55e364b3cd8c662388a9f7d
+%global source0_hash 2d0cf264ac77f8c25386a636e2b3a09a23dec555568cc9a5b2927f84322f544e
 %bcond check 0
-
 %global binary_name hx
 %global runtime_directory_path %{_libdir}/helix/runtime
-
 Name:           helix
 Version:        25.07.1
-Release:        %autorelease
-# Output of %%{cargo_license_summary} + themes specific licenses (Unlicense)
-# (Apache-2.0 OR MIT) AND BSD-3-Clause
-# (MIT OR Apache-2.0) AND Unicode-DFS-2016
-# Apache-2.0
-# Apache-2.0 OR BSL-1.0
-# Apache-2.0 OR MIT
-# Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
-# ISC
-# MIT
-# MIT OR Apache-2.0
-# MIT OR Apache-2.0 OR Zlib
-# MIT-0 OR Apache-2.0
-# MPL-2.0
-# MPL-2.0 AND MIT AND Unicode-DFS-2016
-# MPL-2.0+
-# Unicode-3.0
-# Unlicense OR MIT
-# Zlib
-# Zlib OR Apache-2.0 OR MIT
+Release:        1%{?dist}
 License:        %{shrink:
                 (Apache-2.0 OR MIT) AND
                 BSD-3-Clause AND
@@ -48,42 +27,17 @@ License:        %{shrink:
                 }
 Summary:        A post-modern modal text editor written in Rust
 URL:            https://helix-editor.com/
-# This tarball includes grammars because we can't download them at build time
-Source:         https://github.com/helix-editor/%{name}/releases/download/%{version}/%{name}-%{version}-source.tar.xz
-# A PR for this has been filed upstream but it is unlikely to get merged since upstream
-# is dead
+Source0:        https://github.com/helix-editor/%{name}/releases/download/%{version}/%{name}-%{version}-source.tar.xz
 Source200:      https://raw.githubusercontent.com/blinxen/tree-sitter-eex/main/LICENSE#/LICENSE-tree-sitter-eex
-
-# Remove windows dependencies
 Patch:          remove-windows-dependency.patch
-# Backport PR 14673
 Patch:          pr-14673.patch
-
-# Exclude %%{ix86} since the build fails with LLVM ERROR: out of memory Allocation failed error
 ExcludeArch: %{ix86}
-
-BuildRequires:  cargo-rpm-macros >= 24
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-# Used to build grammars
-BuildRequires:  gcc-c++
-BuildRequires:  git-core
-# Patch Cargo.toml
-BuildRequires:  tomcli
-
-# Required to allow users to fetch and build grammars
 Requires:       git-core
 Requires:       gcc-c++
-
-# Clipboard integration
 Recommends:     xsel
 Recommends:     wl-clipboard
-
-# Added manually
 Provides:       bundled(tree-sitter-sql)
 Provides:       bundled(tree-sitter-v)
-# Created with:
-# cd runtime/grammars/sources && fd '^package.json$' --max-depth 2 --exec /bin/sh -c 'cat {} | jq  ". | \"Provides:       bundled(\" + .name + \")\""' | sort | sed s/\"//g
 Provides:       bundled(tree-sitter-pkl)
 Provides:       bundled(tree-sitter-elm)
 Provides:       bundled(tree-sitter-gren)
@@ -321,108 +275,70 @@ Provides:       bundled(tree-sitter-XTC)
 Provides:       bundled(tree-sitter-yaml)
 Provides:       bundled(tree-sitter-yara)
 Provides:       bundled(tree-sitter-yuck)
-
+# oreon:deps
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  git-core
+BuildRequires:  libappstream-glib
+BuildRequires:  rustc
+BuildRequires:  tomcli
+# /oreon:deps
 %description
 A Kakoune / Neovim inspired editor, written in Rust.
 
-%files
-%license LICENSE
-%license LICENSE.dependencies
-# Theme licenses
-%license LICENSE-themes-*
-# tree-sitter licenses
-%license LICENSE-tree-sitter-*
-%doc README.md CHANGELOG.md
-%{_bindir}/%{binary_name}
-# Added so the parent directory of the runtime directory is owned by this package
-%dir %{_libdir}/helix
-# We include the whole directory here because we always want to have all grammars + queries installed
-%{runtime_directory_path}
-%{_datadir}/applications/Helix.desktop
-%{_metainfodir}/Helix.appdata.xml
-%{_datadir}/pixmaps/helix.png
-%{bash_completions_dir}/%{binary_name}
-%{fish_completions_dir}/%{binary_name}.fish
-%{zsh_completions_dir}/_%{binary_name}
-# There is also a completion script for elvish shell but elvish is not packaged for Fedora
-
 %prep
 %autosetup -c -p1
-# Bump gix to version 0.73
 tomcli set helix-vcs/Cargo.toml str dependencies.gix.version 0.75
-# Relax unicode-width lower bound
 tomcli set helix-core/Cargo.toml str dependencies.unicode-width 0.1.14
-# Allow etcetera 0.11; not suitable for offering upstream yet because this has
-# MSRV 1.87 and helix has MSRV 1.82.
 tomcli set helix-stdx/Cargo.toml str dependencies.etcetera '>=0.10.0, <0.12.0'
 tomcli set helix-loader/Cargo.toml str dependencies.etcetera '>=0.10.0, <0.12.0'
-
-# Rename license files for themes so they can be installed
 find runtime/themes/licenses -type f -exec /bin/sh -c 'cp -pav {} LICENSE-themes-$(basename {} .LICENSE)' \;
-# License for for tree-sitter-eex
 cp -pav %{SOURCE200} .
-# Rename license files for tree-sitter grammars so they can be installed
 find runtime/grammars -name "LICENSE*" -type f -not -path '*/docs/*' -exec /bin/sh -c 'cp -pav {} LICENSE-tree-sitter-$(basename $(dirname {}))' \;
 find runtime/grammars -name "LICENCE*" -type f -not -path '*/docs/*' -exec /bin/sh -c 'cp -pav {} LICENSE-tree-sitter-$(basename $(dirname {}))' \;
 find runtime/grammars -name "COPYING*" -type f -not -path '*/docs/*' -exec /bin/sh -c 'cp -pav {} LICENSE-tree-sitter-$(basename $(dirname {}))' \;
-# Some license files have weird permission bits
 chmod -x LICENSE-*
-%cargo_prep
-
-%generate_buildrequires
-%cargo_generate_buildrequires
-
+%oreon_vendor_cargo
 %build
-# This will set the default runtime directly in the binary
+
 export HELIX_DEFAULT_RUNTIME=%{runtime_directory_path}
 %cargo_build
-
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
-
 %install
-# We can't use %%cargo_install here because it does not support setting --path
 install -Dpm 0755 target/release/%{binary_name} %{buildroot}%{_bindir}/%{binary_name}
-
-# Install desktop file and icon
-# Use absolute path for binary
 sed -i \
     -e "s|Exec=hx %%F|Exec=%{_bindir}/%{binary_name} %%F|g" \
     -e "s|TryExec=hx|TryExec=%{_bindir}/%{binary_name}|g" contrib/Helix.desktop
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications contrib/Helix.desktop
 install -Dpm 0644 contrib/helix.png %{buildroot}%{_datadir}/pixmaps/helix.png
-# Install AppData
 install -Dpm 0644 contrib/Helix.appdata.xml %{buildroot}%{_metainfodir}/Helix.appdata.xml
-# Install runtime configuration (includes tutor + queries + compiled grammars)
-# Step 1: create directory structure
 install -dm 0755 %{buildroot}%{runtime_directory_path}/
 install -dm 0755 %{buildroot}%{runtime_directory_path}/grammars
 install -dm 0755 %{buildroot}%{runtime_directory_path}/queries
 find runtime/queries/ -type d -exec sh -c 'install -dm 0755 $(basename {}) %{buildroot}%{runtime_directory_path}/queries/$(basename {})' \;
 install -dm 0755 %{buildroot}%{runtime_directory_path}/themes
-# Step 2: install files
 install -Dpm 0644 runtime/tutor %{buildroot}%{runtime_directory_path}/tutor
 install -Dpm 0755 runtime/grammars/*.so -t %{buildroot}%{runtime_directory_path}/grammars
 find runtime/queries/ -type f -exec sh -c 'install -Dpm 0644 {} %{buildroot}%{runtime_directory_path}/queries/$(basename $(dirname {}))' \;
 install -Dpm 0644 runtime/themes/*.toml -t %{buildroot}%{runtime_directory_path}/themes
-
-# Add shell completions
 install -Dpm 0644 contrib/completion/%{binary_name}.bash %{buildroot}/%{bash_completions_dir}/%{binary_name}
 install -Dpm 0644 contrib/completion/%{binary_name}.fish %{buildroot}/%{fish_completions_dir}/%{binary_name}.fish
 install -Dpm 0644 contrib/completion/%{binary_name}.zsh %{buildroot}/%{zsh_completions_dir}/_%{binary_name}
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/Helix.desktop
-# This fails in epel9 because of an old version, so we just skip it
-%if %{defined fedora}
-appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/Helix.appdata.xml
-%endif
 %if %{with check}
-# Grammars are already built
 export HELIX_DISABLE_AUTO_GRAMMAR_BUILD=true
 %cargo_test
 %{buildroot}%{_bindir}/%{binary_name} --health
 %endif
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

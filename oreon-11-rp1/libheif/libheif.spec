@@ -1,98 +1,58 @@
 %global source0_hash 3be49950c75d3fd9318ba775e8253248dd9e08c61ea955fca81b6b89c02d6b2b
-
 %global somajor 1
-# this is used for breaking a self-dependency on build:
-# libheif BuildRequires: pkgconfig(sdl2) == sdl2-compat-devel
-# sdl2-compat-devel -> sdl2-compat
-# sdl2-compat -> SDL3
-# SDL3 -> libdecor
-# libdecor -> gtk3
-# gtk3 -> gtk-update-icon-cache
-# gtk-update-icon-cache -> gdk-pixbuf2
-# gdk-pixbuf2 -> glycin-libs
-# glycin-libs -> glycin-loaders
-# glycin-loaders -> libheif
 %bcond bootstrap 0
-
 Name:           libheif
 Version:        1.23.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        HEIF and AVIF file format decoder and encoder
-
 License:        LGPL-3.0-or-later and MIT
 URL:            https://github.com/strukturag/libheif
 Source0:        https://github.com/strukturag/libheif/archive/refs/tags/v%{version}.tar.gz#/libheif-%{version}.tar.gz
-
-BuildRequires:  openjpeg2-tools
+%if !%{with bootstrap}
+%endif
+Obsoletes:      heif-pixbuf-loader < %{version}-%{release}
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
+BuildRequires:  openjpeg2-tools
 BuildRequires:  pkgconfig(dav1d)
-BuildRequires:  pkgconfig(libsharpyuv)
 BuildRequires:  pkgconfig(libbrotlidec)
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libopenjp2)
 BuildRequires:  pkgconfig(libpng)
+BuildRequires:  pkgconfig(libsharpyuv)
 BuildRequires:  pkgconfig(libtiff-4)
-%if !%{with bootstrap}
 BuildRequires:  pkgconfig(sdl2)
-%endif
 BuildRequires:  pkgconfig(zlib)
-
-Obsoletes:      heif-pixbuf-loader < %{version}-%{release}
-
+# /oreon:deps
 %description
 libheif is an ISO/IEC 23008-12:2017 HEIF and AVIF (AV1 Image File Format)
 file format decoder and encoder.
-
-%files
-%license COPYING
-%doc README.md
-%{_libdir}/%{name}.so.%{somajor}{,.*}
-%dir %{_libdir}/%{name}
-
-# ----------------------------------------------------------------------
 
 %package        tools
 Summary:        Tools for manipulating HEIF files
 License:        MIT
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       shared-mime-info
-
 %description    tools
 This package provides tools for manipulating HEIF files.
-
-%files tools
-%{_bindir}/heif-*
-%{_mandir}/man1/heif-*
-%{_datadir}/thumbnailers/heif.thumbnailer
-
-# ----------------------------------------------------------------------
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/cmake/%{name}/
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/%{name}.so
-
-# ----------------------------------------------------------------------
-
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 rm -rf third-party/
 
-
 %build
+
 %cmake \
  -GNinja \
  -DBUILD_TESTING=ON \
@@ -123,43 +83,26 @@ rm -rf third-party/
  -DWITH_UNCOMPRESSED_CODEC=ON \
  -DWITH_GDK_PIXBUF=OFF \
  -Wno-dev
-
 %cmake_build
-
-
 %install
 %cmake_install
-
-# fix multilib issues: Rename the provided file with platform-bits in name.
-# Create platform independent file inplace of the provided one and conditionally
-# include the required one.
-# $1 - filename.h to process.
 function multilibFileVersions(){
 mv $1 ${1%%.h}-%{__isa_bits}.h
-
 local basename=$(basename $1)
-
 cat >$1 <<EOF
-#include <bits/wordsize.h>
-
-# if __WORDSIZE == 32
-# include "${basename%%.h}-32.h"
-#elif __WORDSIZE == 64
-# include "${basename%%.h}-64.h"
-#else
-# error "unexpected value for __WORDSIZE macro"
-# endif
 EOF
 }
-
 multilibFileVersions %{buildroot}%{_includedir}/%{name}/heif_version.h
-
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-# %%cmake from redhat-rpm-config uses this out-of-tree dir (same as %%ctest would)
+
 cd redhat-linux-build
 ctest %{?_smp_mflags} --output-on-failure -E '^region$'
-
+%files -f %{oreon_filedir}/main.list
+%files -n libheif-tools -f %{oreon_filedir}/libheif-tools.list
+%files -n libheif-devel -f %{oreon_filedir}/libheif-devel.list
 
 %changelog
+
 %autochangelog

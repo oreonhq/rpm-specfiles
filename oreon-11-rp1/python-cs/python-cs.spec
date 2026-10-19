@@ -1,65 +1,60 @@
-%global source0_hash none
-
+%global source0_hash dcfa2ab6103dcbd3a53f9f5d40731b4addd6a5a30f0d905ee80479a1e73df852
 Name:           python-cs
 Version:        5.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A simple yet powerful CloudStack API client for Python and the command-line.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/ngine-io/cs
-Source:         %{pypi_source cs}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/cs/cs-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'cs' generated automatically by pyp2spec.}
-
 Patch:          %{forgeurl}/pull/141.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-cs = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-cs+async
+Summary:        Metapackage for python3-cs async extras
+Requires:       python3-cs = %{version}-%{release}
+Provides:       python3dist(cs[async]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-cs+async
+Metapackage for python3-cs async extras.
+
+%package -n       python3-cs+highlight
+Summary:        Metapackage for python3-cs highlight extras
+Requires:       python3-cs = %{version}-%{release}
+Provides:       python3dist(cs[highlight]) = %{version}-%{release}
+
+%description -n python3-cs+highlight
+Metapackage for python3-cs highlight extras.
+
+%description
 
 %package -n     python3-cs
-Summary:        %{summary}
-
-%description -n python3-cs %_description
+Summary:        A simple yet powerful CloudStack API client for Python and the command-line.
+%description -n python3-cs
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-cs async,highlight
-
 
 %prep
-%autosetup -p1 -n cs-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir cs-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-cs usr/lib/python3*/site-packages/cs* usr/lib64/python3*/site-packages/cs* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cs* usr/lib64/python3*/site-packages/cs* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-cs -f %{pyproject_files}
-%{_bindir}/cs
+%files
+%files -n python3-cs -f %{oreon_filedir}/python3-cs.list
 
 %changelog
+
 %autochangelog

@@ -1,63 +1,83 @@
-%global source0_hash none
-
+%global source0_hash a8eeedc4e87cf070f7ef450b76cdecd120d1e5c602a9c35855ec7777591f949f
 Name:           python-salib
 Version:        1.5.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Tools for global sensitivity analysis. Contains Sobol_, Morris, FAST, DGSM, PAWN, HDMR, Moment Independent and fractional factorial methods
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/SALib/SALib
-Source:         %{pypi_source salib}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/salib/salib-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-salib = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-salib+distributed
+Summary:        Metapackage for python3-salib distributed extras
+Requires:       python3-salib = %{version}-%{release}
+Requires:       python3dist(pathos) >= 0.3.2
+Provides:       python3dist(salib[distributed]) = %{version}-%{release}
 
+%description -n python3-salib+distributed
+Metapackage for python3-salib distributed extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'salib' generated automatically by pyp2spec.}
+%package -n       python3-salib+test
+Summary:        Metapackage for python3-salib test extras
+Requires:       python3-salib = %{version}-%{release}
+Provides:       python3dist(salib[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-salib+test
+Metapackage for python3-salib test extras.
+
+%package -n       python3-salib+doc
+Summary:        Metapackage for python3-salib doc extras
+Requires:       python3-salib = %{version}-%{release}
+Requires:       python3dist(pydata-sphinx-theme) >= 0.15.2
+Provides:       python3dist(salib[doc]) = %{version}-%{release}
+
+%description -n python3-salib+doc
+Metapackage for python3-salib doc extras.
+
+%package -n       python3-salib+dev
+Summary:        Metapackage for python3-salib dev extras
+Requires:       python3-salib = %{version}-%{release}
+Provides:       python3dist(salib[dev]) = %{version}-%{release}
+
+%description -n python3-salib+dev
+Metapackage for python3-salib dev extras.
+
+%description
 
 %package -n     python3-salib
-Summary:        %{summary}
-
-%description -n python3-salib %_description
+Summary:        Tools for global sensitivity analysis. Contains Sobol_, Morris, FAST, DGSM, PAWN, HDMR, Moment Independent and fractional factorial methods
+# oreon:reqs
+Requires:       python3dist(matplotlib) >= 3.5
+Requires:       python3dist(numpy) >= 2.0
+Requires:       python3dist(pandas) >= 2.0
+Requires:       python3dist(scipy) >= 1.9.3
+# /oreon:reqs
+%description -n python3-salib
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-salib dev,distributed,doc,test
-
 
 %prep
-%autosetup -p1 -n salib-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir salib-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-salib usr/lib/python3*/site-packages/salib* usr/lib64/python3*/site-packages/salib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/salib* usr/lib64/python3*/site-packages/salib* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-salib -f %{pyproject_files}
-%{_bindir}/salib
+%files
+%files -n python3-salib -f %{oreon_filedir}/python3-salib.list
 
 %changelog
+
 %autochangelog

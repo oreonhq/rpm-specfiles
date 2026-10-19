@@ -1,82 +1,55 @@
 %global source0_hash c5269bab4dae8060699235f680e14c0e88804e092b540e6d0aac4b5665d0a5cd
-
-# TODO: Package trompeloeil
-# https://github.com/rollbear/trompeloeil
 %bcond_with tests
-
 %global forgeurl https://gitlab.com/%{name}/%{name}
 %global tag v%{version}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 %undefine __cmake_in_source_build
 %global uuid    org.%{name}.%{name}
-
 Name:           corectrl
 Version:        1.5.2
 %forgemeta
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Profile based system control utility
-
-# The entire source code is GPLv3+ except bundled libs:
-# * Boost:          tests/3rdparty/catch
-#                   tests/3rdparty/trompeloeil
-# * MIT:            3rdparty/units
-# * Public Domain:  FindBotan.cmake
-# Automatically converted from old format: GPLv3+ and Boost and MIT and Public Domain - review is highly recommended.
 License:        GPL-3.0-or-later AND BSL-1.0 AND LicenseRef-Callaway-MIT AND LicenseRef-Callaway-Public-Domain
 URL:            %{forgeurl}
-Source0:        %{forgesource}
+Source0:        %{forgeurl}/-/archive/%{tag}/%{name}-%{tag}.tar.bz2
 Source1:        README.fedora.md
-
-BuildRequires:  cmake >= 3.22
-BuildRequires:  desktop-file-utils
-BuildRequires:  extra-cmake-modules
-BuildRequires:  gcc-c++ >= 13.1
-BuildRequires:  libappstream-glib
-BuildRequires:  libdrm-devel
-BuildRequires:  ninja-build
+%if %{with tests}
+%endif
+Requires:       dbus-common
+Requires:       hicolor-icon-theme
+Requires:       polkit%{?_isa}
+Recommends:     mesa-demos%{?_isa}
+Recommends:     util-linux%{?_isa}
+Recommends:     vulkan-tools%{?_isa}
+Provides:       bundled(units)
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  cmake(Catch2)
-BuildRequires:  cmake(fmt)
-BuildRequires:  cmake(pugixml) >= 1.11
 BuildRequires:  cmake(Qt6Charts)
 BuildRequires:  cmake(Qt6Concurrent)
-BuildRequires:  cmake(Qt6Core) >= 6.8
+BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6LinguistTools)
 BuildRequires:  cmake(Qt6Multimedia)
 BuildRequires:  cmake(Qt6Network)
 BuildRequires:  cmake(Qt6Svg)
 BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(QuaZip-Qt6)
-BuildRequires:  cmake(spdlog) >= 1.4
-%if 0%{?fedora} >= 44
-BuildRequires:  pkgconfig(botan-3)
-%else
+BuildRequires:  cmake(fmt)
+BuildRequires:  cmake(pugixml)
+BuildRequires:  cmake(spdlog)
+BuildRequires:  cmake(trompeloeil)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  libdrm-devel
+BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(botan-2)
-%endif
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(polkit-gobject-1)
 BuildRequires:  pkgconfig(x11)
-%if %{with tests}
-BuildRequires:  cmake(trompeloeil) >= 40
-%endif
-
-Requires:       dbus-common
-Requires:       hicolor-icon-theme
-Requires:       polkit%{?_isa}
-
-# Used to gather more information
-#   * For glxinfo
-Recommends:     mesa-demos%{?_isa}
-#   * For lscpu
-Recommends:     util-linux%{?_isa}
-#   * For vulkaninfo
-Recommends:     vulkan-tools%{?_isa}
-
-# https://gitlab.com/corectrl/corectrl/issues/13
-Provides:       bundled(units)
-
+# /oreon:deps
 %description
 CoreCtrl is a Free and Open Source GNU/Linux application that allows you to
 control with ease your computer hardware using application profiles. It aims to
@@ -87,6 +60,7 @@ be flexible, comfortable and accessible to regular users.
   $ xdg-open %{_docdir}/%{name}/README.fedora.md
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
@@ -102,6 +76,7 @@ popd
 echo "set_property(TARGET corectrl_lib PROPERTY SOVERSION 0)" >> src/CMakeLists.txt
 
 %build
+
 %cmake \
     -G Ninja \
     %if %{with tests}
@@ -111,33 +86,20 @@ echo "set_property(TARGET corectrl_lib PROPERTY SOVERSION 0)" >> src/CMakeLists.
     %endif
     %{nil}
 %cmake_build
-
 %install
 %cmake_install
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_docdir}/%{name}/README.fedora.md
 find README.md -type f -perm /111 -exec chmod 644 {} \;
 find %{buildroot}/%{_datadir}/. -type f -executable -exec chmod -x "{}" \;
-
-# Useless symlink without headers
 rm %{buildroot}/%{_libdir}/libcorectrl.so
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
-
-%files
-%license COPYING LICENSE
-%doc README.md README.fedora.md
-%{_bindir}/%{name}
-%{_datadir}/applications/*.desktop
-%{_datadir}/dbus-1/system-services/*.service
-%{_datadir}/dbus-1/system.d/*.conf
-%{_datadir}/icons/hicolor/*/*/*.svg
-%{_datadir}/polkit-1/actions/*.policy
-%{_libdir}/libcorectrl.so.0*
-%{_libexecdir}/%{name}/%{name}_helper
-%{_libexecdir}/%{name}/%{name}_helperkiller
-%{_metainfodir}/*.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

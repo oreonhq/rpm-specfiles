@@ -1,13 +1,10 @@
 %global source0_hash f28e9c6a159a84c4893deff69a8c74a1494750d819e6a47310b3ad176edc74fd
-
 Name:           raidem
 Version:        0.3.1
 Release:        61%{?dist}
 Summary:        2d top-down shoot'em up
 License:        zlib
 URL:            http://home.exetel.com.au/tjaden/raidem/
-# This is an exacy copy of the upstream src except that lib/almp3 which is
-# an included mp3 decoder has been removed.
 Source0:        %{name}-%{version}-src.zip
 Source1:        raidem.png
 Source2:        raidem.desktop
@@ -22,12 +19,20 @@ Patch7:         raidem-0.3.1-Makefile-race-condition.patch
 Patch8:		raidem-0.3.1-enum.patch
 Patch9:		raidem-0.3.1-counter-dup.patch
 Patch10:	raidem-missedcast.patch
-BuildRequires: make
-BuildRequires:  gcc-objc glyph-keeper-allegro-devel freetype-devel adime-devel
-BuildRequires:  zziplib-devel libpng-devel AllegroOGG-devel
-BuildRequires:  automake desktop-file-utils gnustep-base-devel
 Requires:       hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  AllegroOGG-devel
+BuildRequires:  adime-devel
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  freetype-devel
+BuildRequires:  gcc-objc
+BuildRequires:  glyph-keeper-allegro-devel
+BuildRequires:  gnustep-base-devel
+BuildRequires:  libpng-devel
+BuildRequires:  make
+BuildRequires:  zziplib-devel
+# /oreon:deps
 %description
 Raid'em is a 2d top-down shoot'em up. It began as a remake of Raid II
 (abandoned long ago), but has turned out very differently.
@@ -37,6 +42,7 @@ platform. And some snow, 2 player mode, Demo recording and playback, Loads of
 fun.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}-src
@@ -59,19 +65,14 @@ aclocal
 autoconf
 
 %build
-# override _datadir otherwise it expects its datafile directly under /use/share
+
 %configure --datadir=%{_datadir}/%{name} --disable-id3
 %make_build
-
 %install
-# DIY, since the Makefile uses install -s and install -g games, etc.
-# Fixable but this is easier
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 install -m 755 %{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
 cp -a data demos maps $RPM_BUILD_ROOT%{_datadir}/%{name}
-
-# below is the desktop file and icon stuff.
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install                            \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -79,14 +80,10 @@ desktop-file-install                            \
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
 install -p -m 644 %{SOURCE1} \
   $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
+%oreon_autofiles main
 
-%files
-%doc ChangeLog docs/README.txt docs/damages.txt
-%license docs/LICENCE.txt
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

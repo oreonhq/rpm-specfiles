@@ -1,33 +1,28 @@
-%global source0_hash 9753796b2a525a4d6b13696681e9fbb094edcc20e8aadffcd5bb6fe22d0a5fdb
-
+%global source0_hash 1442f14aefdb0de26822562d69c446b0e2b4e607597925a2e0c2c7b063e1654e
 %global github_name FeatherPad
-
 Name:           featherpad
 Version:        1.6.4
 Release:        1%{?dist}
 Summary:        Lightweight Qt Plain-Text Editor
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://github.com/tsujan/%{github_name}
-Source0:        %{url}/archive/V%{version}.tar.gz#/%{github_name}-%{version}.tar.xz
-
+Source0:        https://github.com/tsujan/%{github_name}/archive/V%{version}.tar.gz#/%{github_name}-%{version}.tar.xz
+Requires:       hicolor-icon-theme
+# oreon:deps
 BuildRequires:  cmake
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6LinguistTools)
+BuildRequires:  cmake(Qt6PrintSupport)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(Qt6Widgets)
-BuildRequires:  cmake(Qt6Svg)
-BuildRequires:  cmake(Qt6PrintSupport)
-BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(Qt6LinguistTools)
+BuildRequires:  pkgconfig(hunspell)
 BuildRequires:  pkgconfig(x11-xcb)
-BuildRequires:  pkgconfig(hunspell) >= 1.6
 BuildRequires:  pkgconfig(xext)
-
-Requires:       hicolor-icon-theme
-
+# /oreon:deps
 %description
 FeatherPad is a lightweight Qt plain-text editor for Linux. It is independent
 of any desktop environment and has:
@@ -48,31 +43,25 @@ of any desktop environment and has:
 * Appropriate but non-interrupting prompts;
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{github_name}-%{version} -p 1
 
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --with-qt
+%oreon_autofiles main
 
 %check
-desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
-%files -f %{name}.lang
-%license COPYING
-%doc ChangeLog INSTALL NEWS README.md
-%{_bindir}/*
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/help
-%dir %{_datadir}/%{name}/translations
-%{_datadir}/metainfo/featherpad.metainfo.xml
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

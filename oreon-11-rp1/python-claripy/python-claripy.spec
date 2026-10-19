@@ -1,57 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 6ec519ab39d851496c5a1f467b2d723c1f473eae6096df90cd567be6bcd646ca
 Name:           python-claripy
 Version:        9.3.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        An abstraction layer for constraint solvers
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://github.com/angr/claripy
-Source:         %{pypi_source claripy}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/claripy/claripy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'claripy' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.0
+Requires:       python3-claripy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-claripy
-Summary:        %{summary}
-
-%description -n python3-claripy %_description
-
+Summary:        An abstraction layer for constraint solvers
+# oreon:reqs
+Requires:       python3dist(z3-solver) == 4.13.0.0
+# /oreon:reqs
+%description -n python3-claripy
 
 %prep
-%autosetup -p1 -n claripy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir claripy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-claripy usr/lib/python3*/site-packages/claripy* usr/lib64/python3*/site-packages/claripy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/claripy* usr/lib64/python3*/site-packages/claripy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-claripy -f %{pyproject_files}
+%files
+%files -n python3-claripy -f %{oreon_filedir}/python3-claripy.list
 
 %changelog
+
 %autochangelog

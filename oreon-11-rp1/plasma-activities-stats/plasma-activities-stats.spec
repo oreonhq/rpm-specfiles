@@ -1,41 +1,31 @@
+%global source1_hash 82c6f5e9bfe8e7e5fcad6f34baabb20311623d99fe19427d9b10ac2bf8b4740f
 %global source0_hash 9896396e29d5841c7a0f42814ced01ab58fcad406a552ddee2c950f205549acf
-
 %global stable_kf6 stable
-
-
 Name:    plasma-activities-stats
-Summary: Library to access the usage statistics data collected by the KDE activity manager
+Summary:        Library to access the usage statistics data collected by the KDE activity manager
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: CC0-1.0, GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-BuildRequires:  boost-devel
-BuildRequires:  extra-cmake-modules
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  pkgconfig
-
-BuildRequires:  cmake(PlasmaActivities)
-
-BuildRequires:  qt6-qtdeclarative-devel
-BuildRequires:  qt6-qtbase-devel
-
-# Renamed from kf6-kactivities-stats
 Obsoletes:      kf6-kactivities-stats < 1:%{version}-%{release}
 Provides:       kf6-kactivities-stats = 1:%{version}-%{release}
-
-# Renamed from kactivities-stats
 Obsoletes:      kactivities-stats < 5.27.81
 Obsoletes:      plasma-activities-stats-doc < %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(PlasmaActivities)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  pkgconfig
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtdeclarative-devel
+# /oreon:deps
 %description
 %{summary}.
 
@@ -50,32 +40,21 @@ Provides:       kf6-kactivities-stats-devel = 1:%{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
-# Avoid QCH/tags under %%{_docdir}/qt6 when distro macros turn BUILD_QCH on
+
 %cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc MAINTAINER README.developers TODO
-%license LICENSES/*.txt
-%{_kf6_datadir}/qlogging-categories6/%{name}.*
-%{_kf6_libdir}/libPlasmaActivitiesStats.so.1
-%{_kf6_libdir}/libPlasmaActivitiesStats.so.%{version}
-
-%files devel
-%{_includedir}/PlasmaActivitiesStats/
-%{_kf6_libdir}/cmake/PlasmaActivitiesStats/
-%{_kf6_libdir}/libPlasmaActivitiesStats.so
-%{_kf6_libdir}/pkgconfig/PlasmaActivitiesStats.pc
+%files -f %{oreon_filedir}/main.list
+%files -n plasma-activities-stats-devel -f %{oreon_filedir}/plasma-activities-stats-devel.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

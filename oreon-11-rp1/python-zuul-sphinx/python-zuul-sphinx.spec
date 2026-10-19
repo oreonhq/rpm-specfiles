@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 0b85fbef5e10c4e5b4aef8f059da49e3c770ef659b471e82d90b7b95791b9291
 Name:           python-zuul-sphinx
 Version:        0.8.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Sphinx extension for documenting Zuul jobs
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://docs.openstack.org/infra/zuul-sphinx/
-Source:         %{pypi_source zuul_sphinx}
-
+Source0:        https://files.pythonhosted.org/packages/source/z/zuul_sphinx/zuul_sphinx-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'zuul-sphinx' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-zuul-sphinx = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-zuul-sphinx
-Summary:        %{summary}
-
-%description -n python3-zuul-sphinx %_description
-
+Summary:        A Sphinx extension for documenting Zuul jobs
+%description -n python3-zuul-sphinx
 
 %prep
-%autosetup -p1 -n zuul_sphinx-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir zuul_sphinx-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-zuul-sphinx usr/lib/python3*/site-packages/zuul_sphinx* usr/lib64/python3*/site-packages/zuul_sphinx* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/zuul_sphinx* usr/lib64/python3*/site-packages/zuul_sphinx* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-zuul-sphinx -f %{pyproject_files}
+%files
+%files -n python3-zuul-sphinx -f %{oreon_filedir}/python3-zuul-sphinx.list
 
 %changelog
+
 %autochangelog

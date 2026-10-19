@@ -1,56 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 0bdff1fa67a7856ec899c6f7810a86911253d76201a30822d7e4ef14b671bdc0
 Name:           python-pytest-astropy
 Version:        0.12.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Meta-package containing dependencies for testing
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/astropy/pytest-astropy
-Source:         %{pypi_source pytest_astropy}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_astropy/pytest_astropy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pytest-astropy' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 30.3.0
+Requires:       python3-pytest-astropy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pytest-astropy
-Summary:        %{summary}
-
-%description -n python3-pytest-astropy %_description
-
+Summary:        Meta-package containing dependencies for testing
+%description -n python3-pytest-astropy
 
 %prep
-%autosetup -p1 -n pytest_astropy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pytest_astropy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pytest-astropy usr/lib/python3*/site-packages/pytest_astropy* usr/lib64/python3*/site-packages/pytest_astropy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_astropy* usr/lib64/python3*/site-packages/pytest_astropy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pytest-astropy -f %{pyproject_files}
+%files
+%files -n python3-pytest-astropy -f %{oreon_filedir}/python3-pytest-astropy.list
 
 %changelog
+
 %autochangelog

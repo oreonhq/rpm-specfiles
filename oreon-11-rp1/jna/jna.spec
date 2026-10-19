@@ -1,67 +1,43 @@
 %global source0_hash 33a9e27b5a6eaa024bb117325392d1ccba7ca63f95d201230ad7c33d60f54c23
-
-# Allow conditionally building without the reflections library
 %if %{defined rhel} || (0%{?oreon} >= 11)
 %bcond_with reflections
 %else
 %bcond_without reflections
 %endif
-
 Name:           jna
 Version:        5.19.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Pure Java access to native libraries
-# Most of code is dual-licensed under either LGPL 2.1+ only or Apache
-# License 2.0.  WeakIdentityHashMap.java was taken from Apache CXF,
-# which is pure Apache License 2.0.
 License:        Apache-2.0 OR LGPL-2.1-or-later
-
 URL:            https://github.com/java-native-access/jna/
-# ./generate-tarball.sh
 Source0:        https://github.com/java-native-access/jna/archive/refs/tags/%{version}.tar.gz#/jna-%{version}.tar.gz
 Source1:        package-list
 Patch0:        0001-Adapt-build.patch
-# This patch is Fedora-specific for now until we get the huge
-# JNI library location mess sorted upstream
 Patch1:        0002-Load-system-library.patch
-# The X11 tests currently segfault; overall I think the X11 JNA stuff is just a
-# Really Bad Idea, for relying on AWT internals, using the X11 API at all,
-# and using a complex API like X11 through JNA just increases the potential
-# for problems.
 Patch2:        0003-Tests-headless.patch
-# Adds --allow-script-in-comments arg to javadoc to avoid error
 Patch3:        0004-Fix-javadoc-build.patch
-# Avoid generating duplicate manifest entry
-# See https://bugzilla.redhat.com/show_bug.cgi?id=1469022
 Patch4:        0005-Fix-duplicate-manifest-entry.patch
-# We don't want newly added warnings to break our build
 Patch5:        0006-Remove-Werror.patch
-
 Patch6:        0007-Support-openjdk-17.patch
-
 ExclusiveArch:  %{java_arches}
-
-# We manually require libffi because find-requires doesn't work
-# inside jars.
 Requires:       libffi
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  javapackages-local-openjdk25
-BuildRequires:  libffi-devel
-BuildRequires:  ant-openjdk25 
+%if %{with reflections}
+%endif
+Obsoletes:      %{name}-javadoc < 5.15.0-4
+# oreon:deps
 BuildRequires:  ant-junit
+BuildRequires:  ant-openjdk25
+BuildRequires:  gcc
+BuildRequires:  hamcrest
+BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  junit
 BuildRequires:  libX11-devel
 BuildRequires:  libXt-devel
+BuildRequires:  libffi-devel
+BuildRequires:  make
 BuildRequires:  objectweb-asm
-BuildRequires:  hamcrest
-%if %{with reflections}
 BuildRequires:  reflections
-%endif
-
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.15.0-4
-
+# /oreon:deps
 %description
 JNA provides Java programs easy access to native shared libraries
 (DLLs on Windows) without writing anything but Java code. JNA's
@@ -74,11 +50,11 @@ of use take priority.
 Summary:        Contrib for %{name}
 Requires:       %{name} = %{version}-%{release}
 BuildArch:      noarch
-
 %description    contrib
 This package contains the contributed examples for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 cp %{SOURCE1} .
@@ -116,39 +92,25 @@ ln -s $(xmvn-resolve org.reflections:reflections) lib/test/reflections.jar
 cp lib/native/aix-ppc64.jar lib/clover.jar
 
 %build
-# We pass -Ddynlink.native which comes from our patch because
-# upstream doesn't want to default to dynamic linking.
-# -Drelease removes the .SNAPSHOT suffix from maven artifact names
-#ant -Dcflags_extra.native="%%{optflags}" -Ddynlink.native=true native compile javadoc jar contrib-jars
+
 ant -Drelease -Dcompatibility=1.8 -Dplatform.compatibility=1.8\
  -Dcflags_extra.native="%{optflags}" -Ddynlink.native=true -DCC=%{__cc} native dist
-# remove compiled contribs
 find contrib -name build -exec rm -rf {} \; || :
-
 %install
-# NOTE: JNA has highly custom code to look for native jars in this
-# directory.  Since this roughly matches the jpackage guidelines,
-# we'll leave it unchanged.
 install -d -m 755 %{buildroot}%{_libdir}/%{name}
 install -m 755 build/native*/libjnidispatch*.so %{buildroot}%{_libdir}/%{name}/
-
 %mvn_file :jna jna jna/jna %{_javadir}/jna
-
 %mvn_package :jna-platform contrib
 %mvn_alias :jna-platform :platform
-
 %mvn_artifact pom-jna.xml build/jna-min.jar
 %mvn_artifact pom-jna-platform.xml contrib/platform/dist/jna-platform.jar
-
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc OTHERS README.md CHANGES.md TODO
-%license LICENSE LGPL2.1 AL2.0
-%{_libdir}/%{name}
-
-%files contrib -f .mfiles-contrib
+%files -f %{oreon_filedir}/main.list
+%files -n jna-contrib -f %{oreon_filedir}/jna-contrib.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.17.0-1
 - Import

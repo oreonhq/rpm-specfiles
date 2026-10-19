@@ -1,37 +1,33 @@
 %global source0_hash 0246c6716ce449cebb14798d4b7177556310d506f6098c16d4e59fbf23c4493f
-
 Name:           python-sphinx-lint
 Version:        1.0.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Check stylistic and formal issues in .rst and .py files in the documentation
 License:        PSF-2.0
 URL:            https://github.com/sphinx-contrib/sphinx-lint
-Source:         %{url}/archive/v%{version}/sphinx-lint-%{version}.tar.gz
-
+Source0:        https://github.com/sphinx-contrib/sphinx-lint/archive/v%{version}/sphinx-lint-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-sphinx-lint = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-sphinx-lint+tests
+Summary:        Metapackage for python3-sphinx-lint tests extras
+Requires:       python3-sphinx-lint = %{version}-%{release}
+Provides:       python3dist(sphinx-lint[tests]) = %{version}-%{release}
 
-%global _description %{expand:
-Sphinx Lint should:
+%description -n python3-sphinx-lint+tests
+Metapackage for python3-sphinx-lint tests extras.
 
-- be reasonably fast so it's comfortable to use as a linter in your editor.
-- be usable on a single file.
-- not give any false positives (probably a utopia, but let's try).
-- not spend too much effort finding errors that sphinx-build already finds (or
-can easily find).
-- focus on finding errors that are not visible to sphinx-build.
-}
-
-%description %_description
+%description
 
 %package -n     python3-sphinx-lint
-Summary:        %{summary}
-
-%description -n python3-sphinx-lint %_description
-
-%pyproject_extras_subpkg -n python3-sphinx-lint tests
+Summary:        Check stylistic and formal issues in .rst and .py files in the documentation
+%description -n python3-sphinx-lint
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n sphinx-lint-%{version}
@@ -44,22 +40,21 @@ sed -i '/"version",/{n;d;}' pyproject.toml
 sed -i '/  "version",/d' pyproject.toml
 sed -i '/^dynamic = \[/d' pyproject.toml
 
-%generate_buildrequires
-%pyproject_buildrequires -x tests
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files sphinxlint
+%oreon_autofiles python3-sphinx-lint usr/lib/python3*/site-packages/sphinx_lint* usr/lib64/python3*/site-packages/sphinx_lint* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sphinx_lint* usr/lib64/python3*/site-packages/sphinx_lint* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %pytest
-
-%files -n python3-sphinx-lint -f %{pyproject_files}
-%{_bindir}/sphinx-lint
+%files
+%files -n python3-sphinx-lint -f %{oreon_filedir}/python3-sphinx-lint.list
 
 %changelog
+
 %autochangelog

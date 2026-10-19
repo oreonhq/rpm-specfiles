@@ -1,163 +1,122 @@
-# explicitely set clang as toolchain to avoid gcc usage
+%global source0_hash cba47efbaad1bedd529725cbc14e21f156c7a19366f07b3edfbb076ffd7afdf8
 %global toolchain clang
-
-# needed to ship deploy_lib template files
 %global _python_bytecompile_errors_terminate_build 0
-
 %global pypi_name pyside6
 %global camel_name PySide6
 %global qt6ver 6.11.2
-
 Name:           python-%{pypi_name}
 Version:        6.11.2
 Release:        1%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
-
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 URL:            https://wiki.qt.io/Qt_for_Python
-
-Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name}/%{camel_name}-%{qt6ver}-src/pyside-setup-everywhere-src-%{version}.tar.xz
-# for documentation generation
+Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name}/%{camel_name}-%{version}-src/pyside-setup-everywhere-src-%{version}.tar.xz
 %global docs 0
 %global qt_module qtbase
 %global  majmin %(echo %{version} | cut -d. -f1-2)
-#Source1:	https://download.qt.io/official_releases/qt/%{majmin}/%{qt6ver}/submodules/%{qt_module}-everywhere-src-%{qt6ver}.tar.xz
-
-# Upstream post-6.11.1 fixes for header install paths (PYSIDE-3306)
 Patch:          0001-Fix-header-installation-path-to-follow-filesystem-st.patch
 Patch:          0001-Fix-header-packaging-and-include-path-regressions.patch
 Patch:          0001-Always-link-to-python-libraries.patch
-
-BuildRequires:  cmake
-BuildRequires:  ninja-build
-BuildRequires:  gcc
-BuildRequires:  git
+%if 0%{?docs}
+%endif
+%ifarch %{qt6_qtwebengine_arches}
+%endif
+# oreon:deps
+BuildRequires:  /usr/bin/wlheadless-run
 BuildRequires:  clang-devel
 BuildRequires:  clang-tools-extra
-BuildRequires:  llvm-devel
-BuildRequires:  python3-numpy
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-wheel
-BuildRequires:  python3-packaging
-
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt63DAnimation)
+BuildRequires:  cmake(Qt63DCore)
+BuildRequires:  cmake(Qt63DExtras)
+BuildRequires:  cmake(Qt63DInput)
+BuildRequires:  cmake(Qt63DLogic)
+BuildRequires:  cmake(Qt63DRender)
+BuildRequires:  cmake(Qt6Bluetooth)
+BuildRequires:  cmake(Qt6Charts)
+BuildRequires:  cmake(Qt6Concurrent)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6DataVisualization)
+BuildRequires:  cmake(Qt6Designer)
+BuildRequires:  cmake(Qt6Graphs)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Help)
+BuildRequires:  cmake(Qt6HttpServer)
+BuildRequires:  cmake(Qt6Location)
+BuildRequires:  cmake(Qt6Multimedia)
+BuildRequires:  cmake(Qt6MultimediaWidgets)
+BuildRequires:  cmake(Qt6Network)
+BuildRequires:  cmake(Qt6NetworkAuth)
+BuildRequires:  cmake(Qt6Nfc)
+BuildRequires:  cmake(Qt6OpenGL)
+BuildRequires:  cmake(Qt6OpenGLWidgets)
+BuildRequires:  cmake(Qt6Positioning)
+BuildRequires:  cmake(Qt6PrintSupport)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6Quick3D)
+BuildRequires:  cmake(Qt6QuickControls2)
+BuildRequires:  cmake(Qt6QuickWidgets)
+BuildRequires:  cmake(Qt6RemoteObjects)
+BuildRequires:  cmake(Qt6Scxml)
+BuildRequires:  cmake(Qt6Sensors)
+BuildRequires:  cmake(Qt6SerialBus)
+BuildRequires:  cmake(Qt6SerialPort)
+BuildRequires:  cmake(Qt6SpatialAudio)
+BuildRequires:  cmake(Qt6Sql)
+BuildRequires:  cmake(Qt6StateMachine)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6SvgWidgets)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  cmake(Qt6TextToSpeech)
+BuildRequires:  cmake(Qt6UiPlugin)
+BuildRequires:  cmake(Qt6UiTools)
+BuildRequires:  cmake(Qt6WebChannel)
+BuildRequires:  cmake(Qt6WebSockets)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cmake(Qt6Xml)
+BuildRequires:  gcc
+BuildRequires:  git
+BuildRequires:  graphviz
 BuildRequires:  libxml2-devel
 BuildRequires:  libxslt-devel
-BuildRequires:  graphviz
-BuildRequires:  python3-sphinx >= 7.4.7
-
-%if 0%{?docs}
-# for generating the documentation, see requirements-doc.txt
-BuildRequires:  python3-sphinx-design >= 0.6.0
-BuildRequires:  python3-sphinx-copybutton >= 0.5.2
-BuildRequires:  python3-sphinx-tags >= 0.4
-BuildRequires:  python3-sphinx-toolbox >= 3.7.0
-BuildRequires:  python3-sphinx-reredirects >= 0.1.5
-BuildRequires:  python3-myst-parser >= 3.0.1
-BuildRequires:  python3-furo
-%endif
-
-# essential modules
-BuildRequires:  cmake(Qt6Core) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Gui) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Widgets) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Help) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Network) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Concurrent) >= %{qt6ver}
-BuildRequires:  cmake(Qt6DBus) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Designer) >= %{qt6ver}
-BuildRequires:  cmake(Qt6OpenGL) >= %{qt6ver}
-BuildRequires:  cmake(Qt6OpenGLWidgets) >= %{qt6ver}
-BuildRequires:  cmake(Qt6PrintSupport) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Qml) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Quick) >= %{qt6ver}
-BuildRequires:  cmake(Qt6QuickControls2) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Xml) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Test) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Sql) >= %{qt6ver}
-BuildRequires:  qt6-qtbase-mysql >= %{qt6ver}
-BuildRequires:  qt6-qtbase-odbc >= %{qt6ver}
-BuildRequires:  qt6-qtbase-postgresql >= %{qt6ver}
-BuildRequires:  cmake(Qt6Svg) >= %{qt6ver}
-BuildRequires:  cmake(Qt6SvgWidgets) >= %{qt6ver}
-BuildRequires:  cmake(Qt6UiTools) >= %{qt6ver}
-
-BuildRequires:  qt6-qtbase-gui >= %{qt6ver}
-BuildRequires:  qt6-qtbase-static >= %{qt6ver}
-
-# from qt6-qtbase for XKB
-BuildRequires: pkgconfig(xcb-xkb) >= 1.10
-BuildRequires: pkgconfig(xcb-util)
-BuildRequires: pkgconfig(xkbcommon) >= 0.4.1
-BuildRequires: pkgconfig(xkbcommon-x11) >= 0.4.1
-BuildRequires: pkgconfig(xkeyboard-config)
-
-# Add-On modules
-BuildRequires:  cmake(Qt6Multimedia) >= %{qt6ver}
-BuildRequires:  cmake(Qt6MultimediaWidgets) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Positioning) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Location) >= %{qt6ver}
-BuildRequires:  cmake(Qt6NetworkAuth) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Nfc) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Quick3D) >= %{qt6ver}
-BuildRequires:  cmake(Qt6QuickWidgets) >= %{qt6ver}
-BuildRequires:  cmake(Qt6RemoteObjects) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Scxml) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Sensors) >= %{qt6ver}
-BuildRequires:  cmake(Qt6SerialPort) >= %{qt6ver}
-BuildRequires:  cmake(Qt6SerialBus) >= %{qt6ver}
-BuildRequires:  cmake(Qt6StateMachine) >= %{qt6ver}
-BuildRequires:  cmake(Qt6TextToSpeech) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Charts) >= %{qt6ver}
-BuildRequires:  cmake(Qt6SpatialAudio) >= %{qt6ver}
-BuildRequires:  cmake(Qt6DataVisualization) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Graphs) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Bluetooth) >= %{qt6ver}
-BuildRequires:  cmake(Qt6WebChannel) >= %{qt6ver}
-%ifarch %{qt6_qtwebengine_arches}
-BuildRequires:  cmake(Qt6WebEngineCore) >= %{qt6ver}
-BuildRequires:  cmake(Qt6WebEngineWidgets) >= %{qt6ver}
-BuildRequires:  cmake(Qt6WebEngineQuick) >= %{qt6ver}
-BuildRequires:  cmake(Qt6Pdf) >= %{qt6ver}
-BuildRequires:  cmake(Qt6PdfWidgets) >= %{qt6ver}
-BuildRequires:  cmake(Qt6WebView) >= %{qt6ver}
-%endif
-BuildRequires:  cmake(Qt6WebSockets) >= %{qt6ver}
-BuildRequires:  cmake(Qt6HttpServer) >= %{qt6ver}
-BuildRequires:  cmake(Qt63DCore) >= %{qt6ver}
-BuildRequires:  cmake(Qt63DRender) >= %{qt6ver}
-BuildRequires:  cmake(Qt63DInput) >= %{qt6ver}
-BuildRequires:  cmake(Qt63DLogic) >= %{qt6ver}
-BuildRequires:  cmake(Qt63DAnimation) >= %{qt6ver}
-BuildRequires:  cmake(Qt63DExtras) >= %{qt6ver}
-
-BuildRequires:  qt6-qtbase-private-devel >= %{qt6ver}
-
-# Qt Tools
-BuildRequires:  cmake(Qt6UiPlugin) >= %{qt6ver}
-BuildRequires:  qt6-assistant >= %{qt6ver}
-BuildRequires:  qt6-designer >= %{qt6ver}
-BuildRequires:  qt6-doctools >= %{qt6ver}
-
-# Tests use a fake graphical environment
-BuildRequires:  /usr/bin/wlheadless-run
+BuildRequires:  llvm-devel
 BuildRequires:  mesa-dri-drivers
-
+BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  pkgconfig(xcb-xkb)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  pkgconfig(xkbcommon-x11)
+BuildRequires:  pkgconfig(xkeyboard-config)
+BuildRequires:  python3-devel
+BuildRequires:  python3-numpy
+BuildRequires:  python3-packaging
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-sphinx
+BuildRequires:  python3-wheel
+BuildRequires:  qt6-assistant
+BuildRequires:  qt6-designer
+BuildRequires:  qt6-doctools
+BuildRequires:  qt6-qtbase-gui
+BuildRequires:  qt6-qtbase-mysql
+BuildRequires:  qt6-qtbase-odbc
+BuildRequires:  qt6-qtbase-postgresql
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  qt6-qtbase-static
+# /oreon:deps
 %description
 PySide6 is the official Python module from the Qt for Python project, which
 provides access to the complete Qt 6+ framework.
 
-
 %package -n     python%{python3_pkgversion}-%{pypi_name}
 Provides:       python%{python3_pkgversion}-%{camel_name} = %{version}-%{release}
-Summary:        %{summary}
+Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{camel_name}}
-
 %description -n python%{python3_pkgversion}-%{pypi_name}
 PySide6 is the official Python module from the Qt for Python project, which
 provides access to the complete Qt 6 framework.
-
 
 %package -n     python%{python3_pkgversion}-%{pypi_name}-devel
 Requires:       pyside6-tools
@@ -165,10 +124,8 @@ Requires:       shiboken6
 Summary:        Development files related to %{name}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}-devel}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{camel_name}-devel}
-
 %description -n python%{python3_pkgversion}-%{pypi_name}-devel
 %{summary}.
-
 
 %package -n pyside6-tools
 Requires:       qt6-qtbase-devel
@@ -178,35 +135,28 @@ Requires:       qt6-designer
 Requires:       qt6-linguist
 Requires:       python3-%{pypi_name}
 Summary:        PySide6 tools for the Qt 6 framework
-
 %description -n pyside6-tools
 PySide6 provides Python bindings for the Qt6 cross-platform application
 and UI framework.
 
-
 %package -n shiboken6
 Summary:        Python / C++ bindings generator for %camel_name
-
 %description -n shiboken6
 Shiboken is the Python binding generator that Qt for Python uses to create the
 PySide module, in other words, is the system we use to expose the Qt C++ API to
 Python.
 
-
 %package -n python%{python3_pkgversion}-shiboken6
 Summary:        Python / C++ bindings libraries for %camel_name
-
 %description -n python%{python3_pkgversion}-shiboken6
 Shiboken is the Python binding generator that Qt for Python uses to create the
 PySide module, in other words, is the system we use to expose the Qt C++ API to
 Python.
 
-
 %package -n python%{python3_pkgversion}-shiboken6-devel
 Summary:        Python / C++ bindings helper module for %camel_name
 Requires:       shiboken6
 Requires:       python%{python3_pkgversion}-shiboken6
-
 %description -n python%{python3_pkgversion}-shiboken6-devel
 Shiboken is the Python binding generator that Qt for Python uses to create the
 PySide module, in other words, is the system we use to expose the Qt C++ API to
@@ -219,8 +169,8 @@ Summary: Qt API Documentation in HTML and QCH format
 %{summary}.
 %endif
 
-
 %prep
+
 %autosetup -p1 -n pyside-setup-everywhere-src-%{qt6ver}
 # https://build.opensuse.org/package/view_file/KDE:Qt6/python3-pyside6/python3-pyside6.spec?expand=1
 # Restore 6.6.1 RPATH value. rpmlint will complain otherwise
@@ -233,9 +183,7 @@ tar xf %{SOURCE1}
 %endif
 
 %build
-# https://src.fedoraproject.org/rpms/polyclipping/c/02c70e17ef9e9fcdfbc65021418a3e332e465b20?branch=rawhide
-# Prior to Fedora 43, %%cmake set the nonstandard -DLIB_SUFFIX=... variable.
-# cmake %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""]
+
 %cmake_qt6 %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""] \
     -DCMAKE_BUILD_TYPE=None \
     -DSHIBOKEN_PYTHON_LIBRARIES=`pkgconf python3-embed --libs` \
@@ -250,34 +198,21 @@ tar xf %{SOURCE1}
     -DDOC_OUTPUT_FORMAT=qthelp \
 %endif
     -DNO_QT_TOOLS=yes
-
-# Generate a build_history entry (for tests) manually, since we're performing
-# a cmake build.
 TODAY=$(date -Id)
 mkdir build_history/$TODAY
 echo $PWD/%{_vpath_builddir}/sources > build_history/$TODAY/build_dir.txt
 export PYTHONPATH=$PWD/%{_vpath_builddir}/sources
-
 %cmake_build
 %if 0%{?docs}
-# build api documentation
 cd %{_vpath_builddir}
 ninja apidoc
 %endif
-
-
 %install
 %cmake_install
 %if 0%{?docs}
-# install api documentation
 cd %{_vpath_builddir}
 ninja apidocinstall
 %endif
-
-# Generate egg-info manually and install since we're performing a cmake build.
-#
-# Copy CMake configuration files from the BINARY dir back to the SOURCE dir so
-# setuptools can find them.
 cp %{_vpath_builddir}/sources/shiboken6/shibokenmodule/{*.py,*.txt} sources/shiboken6/shibokenmodule/
 cp %{_vpath_builddir}/sources/pyside6/PySide6/*.py sources/pyside6/PySide6/
 %{__python3} setup.py --qtpaths=/usr/%{_lib}/qt6/bin/qtpaths install_scripts --install-dir=%{buildroot}%{_bindir}
@@ -289,89 +224,36 @@ for name in PySide6 shiboken6 shiboken6_generator; do
     cp -p $name.egg-info/entry_points.txt %{buildroot}%{python3_sitearch}/$name-%{version}-py%{python3_version}.egg-info/
   fi
 done
-
-# Add symlinks for tools used by pyside_tool.py
 mkdir -p %{buildroot}%{python3_sitelib}/%{camel_name}/Qt/libexec
 ln -sf /usr/%{_lib}/qt6/libexec/{qmlcachegen,qmlimportscanner,qmltyperegistrar,rcc,uic} %{buildroot}%{python3_sitelib}/%{camel_name}/Qt/libexec
 ln -sf /usr/%{_lib}/qt6/bin/{assistant,balsam,balsamui,designer,linguist,lrelease,lupdate,qmlformat,qmllint,qmlls,qsb} %{buildroot}%{python3_sitelib}/%{camel_name}
-
-# Create scripts folders (this basically replicates prepare_packages() in build_scripts/main.py)
 mkdir -p %{buildroot}%{python3_sitelib}/%{camel_name}/scripts
 mv %{buildroot}%{_bindir}/{android_deploy.py,deploy_lib,deploy.py,metaobjectdump.py,project_lib,project.py,pyside_tool.py,qml.py,qtpy2cpp_lib,qtpy2cpp.py,requirements-android.txt} %{buildroot}%{python3_sitelib}/%{camel_name}/scripts
 mkdir -p %{buildroot}%{python3_sitelib}/shiboken6_generator/scripts
 mv %{buildroot}%{_bindir}/shiboken_tool.py %{buildroot}%{python3_sitelib}/shiboken6_generator/scripts
-
-# Install shiboken6
 mv %{_vpath_builddir}/sources/shiboken6_generator/generator/shiboken6 %{buildroot}%{python3_sitelib}/shiboken6_generator
-
-# Fix all Python shebangs recursively
-# -p preserves timestamps
-# -n prevents creating ~backup files
-# -i specifies the interpreter for the shebang
-# Need to list files that do not match ^[a-zA-Z0-9_]+\.py$ explicitly!
 %py3_shebang_fix %{buildroot}%{python3_sitelib}/%{camel_name}/scripts
 %py3_shebang_fix %{buildroot}%{python3_sitelib}/shiboken6_generator/scripts
-
-# config bakes a doubled share/PySide6 path for typesystems, fix it to the real location
 grep -rl 'share/PySide6/share/PySide6/typesystems' %{buildroot}%{_libdir}/cmake/PySide6/ | xargs -r sed -i 's|share/PySide6/share/PySide6/typesystems|share/PySide6/typesystems|g'
+%oreon_autofiles pyside6-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles shiboken6 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-# Do basic import test (even without the test bcond)
+
 export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %py3_check_import PySide6
 %py3_check_import shiboken6
-
-
-%files -n python%{python3_pkgversion}-%{pypi_name}
-%license LICENSES/*
-%doc README.md
-%{_libdir}/libpyside6*.so.6.11*
-%{python3_sitelib}/%{camel_name}/
-%{python3_sitearch}/%{camel_name}-%{version}-py%{python3_version}.egg-info/
-
-%files -n python%{python3_pkgversion}-%{pypi_name}-devel
-%{_datadir}/PySide6/
-%{_includedir}/PySide6/
-%{_libdir}/libpyside6*.so
-%{_libdir}/libpyside6remoteobjects.a
-%{_libdir}/cmake/PySide6*
-%{_libdir}/pkgconfig/pyside6.pc
-
-%files -n pyside6-tools
-%doc README.pyside*
-%license LICENSES/*
-%{_bindir}/pyside*
-%{_libdir}/qt6/plugins/designer/libPySidePlugin.so
-
-%files -n shiboken6
-%doc README.shiboken6-generator.md
-%license LICENSES/*
-%{_libdir}/cmake/Shiboken6Tools/*
-
-%files -n python%{python3_pkgversion}-shiboken6
-%doc README.shiboken6.md
-%license LICENSES/*
-%{_libdir}/libshiboken6*.so.6.11*
-%{python3_sitelib}/shiboken6/
-%{python3_sitearch}/shiboken6-%{version}-py%{python3_version}.egg-info/
-
-%files -n python%{python3_pkgversion}-shiboken6-devel
-%{_bindir}/shiboken6*
-%{_includedir}/shiboken6/
-%{_libdir}/cmake/Shiboken6/
-%{_libdir}/libshiboken6*.so
-%{_libdir}/pkgconfig/shiboken6.pc
-%{python3_sitelib}/shiboken6_generator/
-%{python3_sitearch}/shiboken6_generator-%{version}-py%{python3_version}.egg-info/
-
-%if 0%{?docs}
-%files doc
-%{_docdir}/
-%endif
-
-%global source0_hash cba47efbaad1bedd529725cbc14e21f156c7a19366f07b3edfbb076ffd7afdf8
+%files -f %{oreon_filedir}/main.list
+%files -n python3-pyside6 -f %{oreon_filedir}/python3-pyside6.list
+%files -n python3-pyside6-devel -f %{oreon_filedir}/python3-pyside6-devel.list
+%files -n pyside6-tools -f %{oreon_filedir}/pyside6-tools.list
+%files -n shiboken6 -f %{oreon_filedir}/shiboken6.list
+%files -n python3-shiboken6 -f %{oreon_filedir}/python3-shiboken6.list
+%files -n python3-shiboken6-devel -f %{oreon_filedir}/python3-shiboken6-devel.list
 
 %changelog
+
 * Tue Aug 25 2026 Jan Grulich <jgrulich@redhat.com> - 6.11.2-1
 - 6.11.2
 

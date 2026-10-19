@@ -1,5 +1,4 @@
 %global source0_hash 9a27844f4bea314fa3add288c1705360d59d9b7f1ca129062f07d0477d3effc5
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -82,26 +81,24 @@ end
 }
 %bcond_with bootstrap
 %bcond_without jp_minimal
-
 Name:           log4j
 Version:        2.20.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java logging package
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 License:        Apache-2.0
-
 URL:            https://logging.apache.org/%{name}
-
-# ./generate-tarball.sh
 Source0:        https://archive.apache.org/dist/logging/%{name}/%{version}/apache-%{name}-%{version}-src.tar.gz
-
 Patch:          logging-log4j-Remove-unsupported-EventDataConverter.patch
 Patch:          0002-Remove-usage-of-toolchains.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+%if %{without jp_minimal}
+%endif
+Obsoletes:      %{name}-javadoc < 2.2.0-18
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.lmax:disruptor)
 BuildRequires:  mvn(commons-logging:commons-logging)
@@ -117,102 +114,57 @@ BuildRequires:  mvn(org.fusesource.jansi:jansi)
 BuildRequires:  mvn(org.jctools:jctools-core)
 BuildRequires:  mvn(org.osgi:osgi.core)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-%endif
-
-%if %{without jp_minimal}
-BuildRequires:  mvn(com.datastax.cassandra:cassandra-driver-core)
-BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-annotations)
-BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-core)
-BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-databind)
-BuildRequires:  mvn(com.fasterxml.jackson.dataformat:jackson-dataformat-xml)
-BuildRequires:  mvn(com.fasterxml.jackson.dataformat:jackson-dataformat-yaml)
-BuildRequires:  mvn(com.fasterxml.woodstox:woodstox-core)
-BuildRequires:  mvn(com.lmax:disruptor)
-BuildRequires:  mvn(jakarta.mail:jakarta.mail-api)
-BuildRequires:  mvn(jakarta.servlet:jakarta.servlet-api)
-BuildRequires:  mvn(javax.servlet.jsp:jsp-api)
-BuildRequires:  mvn(org.apache.commons:commons-csv)
-BuildRequires:  mvn(org.apache.logging:logging-parent:pom:)
-BuildRequires:  mvn(org.apache.tomcat:tomcat-catalina)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
-BuildRequires:  mvn(org.eclipse.jetty:jetty-util)
-BuildRequires:  mvn(org.eclipse.persistence:javax.persistence)
-BuildRequires:  mvn(org.fusesource.jansi:jansi:1)
-BuildRequires:  mvn(org.jboss.spec.javax.jms:jboss-jms-api_1.1_spec)
-BuildRequires:  mvn(org.jctools:jctools-core)
-BuildRequires:  mvn(org.lightcouch:lightcouch)
-BuildRequires:  mvn(org.osgi:osgi.core)
-BuildRequires:  mvn(org.slf4j:slf4j-api)
-BuildRequires:  mvn(org.slf4j:slf4j-ext)
-BuildRequires:  mvn(org.zeromq:jeromq)
-BuildRequires:  mvn(sun.jdk:jconsole)
-
-# Also needs:
-# - Various Spring dependencies
-# - javax.jms
-# - io.fabric8.kubernetes-client
-%endif
-
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.2.0-18
-
+# /oreon:deps
 %description
 Log4j is a tool to help the programmer output log statements to a
 variety of output targets.
 
 %package slf4j
 Summary:        Binding between LOG4J 2 API and SLF4J
-
 %description slf4j
 Binding between LOG4J 2 API and SLF4J.
 
 %package jcl
 Summary:        Apache Log4j Commons Logging Bridge
-
 %description jcl
 Apache Log4j Commons Logging Bridge.
 
 %package web
 Summary:        Apache Log4j Web
-
 %description web
 Support for Log4j in a web servlet container.
 
 %package bom
 Summary:        Apache Log4j BOM
-
 %description bom
 Apache Log4j 2 Bill of Material
 
 %if %{without jp_minimal}
 %package osgi
 Summary:        Apache Log4J Core OSGi Bundles
-
 %description osgi
 Apache Log4J Core OSGi Bundles.
 
 %package taglib
 Summary:        Apache Log4j Tag Library
-
 %description taglib
 Apache Log4j Tag Library for Web Applications.
 
 %package jmx-gui
 Summary:        Apache Log4j JMX GUI
 Requires:       java-25-devel
-
 %description jmx-gui
 Swing-based client for remotely editing the log4j configuration and remotely
 monitoring StatusLogger output. Includes a JConsole plug-in.
 
 %package nosql
 Summary:        Apache Log4j NoSql
-
 %description nosql
 Use NoSQL databases such as MongoDB and CouchDB to append log messages.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n apache-%{name}-%{version}-src
 
@@ -356,30 +308,21 @@ rm log4j-core/src/main/java/org/apache/logging/log4j/core/filter/MutableThreadCo
 %pom_remove_plugin -r org.ops4j.pax.exam:exam-maven-plugin
 
 %build
-# missing test deps (mockejb)
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
-
 %if %{without jp_minimal}
 %jpackage_script org.apache.logging.log4j.jmx.gui.ClientGUI '' '' %{name}/%{name}-jmx-gui:%{name}/%{name}-core %{name}-jmx false
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
-
-%files slf4j -f .mfiles-slf4j
-%files jcl -f .mfiles-jcl
-%files web -f .mfiles-web
-%files bom -f .mfiles-bom
-%if %{without jp_minimal}
-%files taglib -f .mfiles-taglib
-%files nosql -f .mfiles-nosql
-%files jmx-gui -f .mfiles-jmx-gui
-%{_bindir}/%{name}-jmx
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n log4j-slf4j -f %{oreon_filedir}/log4j-slf4j.list
+%files -n log4j-jcl -f %{oreon_filedir}/log4j-jcl.list
+%files -n log4j-web -f %{oreon_filedir}/log4j-web.list
+%files -n log4j-bom -f %{oreon_filedir}/log4j-bom.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.0-1
 - Import

@@ -1,61 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 08b5e25de58f21ce71dc7db3b3b8106c1fa776f3024c54e45b45b374e89234c9
 Name:           python-xlrd
 Version:        2.0.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Library for developers to extract data from Microsoft Excel _tm_ .xls spreadsheet files
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            http://www.python-excel.org/
-Source:         %{pypi_source xlrd}
-
+Source0:        https://files.pythonhosted.org/packages/source/x/xlrd/xlrd-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'xlrd' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-xlrd = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-xlrd
-Summary:        %{summary}
-
-%description -n python3-xlrd %_description
+Summary:        Library for developers to extract data from Microsoft Excel _tm_ .xls spreadsheet files
+%description -n python3-xlrd
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-xlrd build,docs,test
-
 
 %prep
-%autosetup -p1 -n xlrd-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir xlrd-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-xlrd usr/lib/python3*/site-packages/xlrd* usr/lib64/python3*/site-packages/xlrd* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/xlrd* usr/lib64/python3*/site-packages/xlrd* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-xlrd -f %{pyproject_files}
+%files
+%files -n python3-xlrd -f %{oreon_filedir}/python3-xlrd.list
 
 %changelog
+
 %autochangelog

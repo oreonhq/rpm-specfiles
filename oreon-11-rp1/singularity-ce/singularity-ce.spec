@@ -1,32 +1,12 @@
-%global source0_hash none
-
-# Disable debugsource packages; otherwise it ends up with an empty %%files
-# file in debugsourcefiles.list on Fedora
+%global source0_hash f3bf1049514c1d6b7ee1768a9bf73941566db22a8f95b4df5a3ba037c3051357
 %undefine _debugsource_packages
-
 Name: singularity-ce
 Version: 4.4.0
-Release: 1%{?dist}
-Summary: Application and environment virtualization
-
-# From 'go_vendor_license report' output.
-# Note that 'github.com/therootcompany/xz' is a fork of 'github.com/xi2/xz',
-# which is included in fedora-license-data/public-domain-text.txt.
+Release:        1%{?dist}
+Summary:        Application and environment virtualization
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain AND ISC AND MIT AND MPL-2.0 AND Unlicense
-
 URL: https://www.sylabs.io/singularity/
-Source: https://github.com/sylabs/singularity/releases/download/v%{version}/singularity-ce-%{version}.tar.gz
-
-BuildRequires: golang >= 1.25.6
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: libseccomp-devel
-# Paths to runtime dependencies detected by mconfig, so must be present at build time.
-BuildRequires: cryptsetup
-BuildRequires: squashfs-tools >= 4.5.0
-# Required for libsubid support
-BuildRequires: shadow-utils-subid-devel
-
+Source0:        https://github.com/sylabs/singularity/releases/download/v%{version}/singularity-ce-%{version}.tar.gz
 Requires: conmon >= 2.0.24
 Requires: crun
 Requires: cryptsetup
@@ -35,12 +15,8 @@ Requires: fuse3
 Requires: shadow-utils
 Requires: squashfs-tools >= 4.5.0
 Requires: squashfuse >= 0.5.0
-
 ExclusiveArch: %{go_arches}
 ExcludeArch: %{ix86}
-
-# vendored libraries
-# awk '{print "Provides: bundled(golang("$1")) = "$2}' go.mod | sort | uniq | sed -e 's/-/_/g' -e '/bundled(golang())/d' -e '/bundled(golang(go\|module\|replace\|require))/d'
 Provides: bundled(golang(cyphar.com/go_pathrs)) = v0.2.2
 Provides: bundled(golang(github.com/AdaLogics/go_fuzz_headers)) = v0.0.0_20240806141605_e8a1dd7889d6
 Provides: bundled(golang(github.com/Azure/go_ansiterm)) = v0.0.0_20250102033503_faa5f7b0171c
@@ -284,27 +260,26 @@ Provides: bundled(golang(sigs.k8s.io/knftables)) = v0.0.18
 Provides: bundled(golang(sigs.k8s.io/yaml)) = v1.6.0
 Provides: bundled(golang(tags.cncf.io/container_device_interface)) = v1.1.0
 Provides: bundled(golang(tags.cncf.io/container_device_interface/specs_go)) = v1.1.0
-
-# Multiple packages contain /usr/bin/singularity and /usr/bin/run-singularity,
-# which are necessary to run SIF images.  Use a pivot provides/conflicts to
-# avoid them all needing to conflict with each other.
 Provides: sif-runtime
 Conflicts: sif-runtime
-
-# User-choice upgrade path from singularity -> singularity-ce / apptainer.
-# https://pagure.io/fesco/issue/2934#comment-839598
 Provides: alternative-for(singularity)
-
+# oreon:deps
+BuildRequires:  cryptsetup
+BuildRequires:  gcc
+BuildRequires:  golang
+BuildRequires:  libseccomp-devel
+BuildRequires:  make
+BuildRequires:  shadow-utils-subid-devel
+BuildRequires:  squashfs-tools
+# /oreon:deps
 %description
 SingularityCE is the Community Edition of Singularity, an open source
 container platform designed to be simple, fast, and secure.
 
 %prep
-%autosetup
-
+%oreon_prep
 %build
-# Note --localstatedir= is set to ensure session dir is in /var/lib.
-# See discussion at https://bugzilla.redhat.com/show_bug.cgi?id=2145834
+
 ./mconfig -V %{version}-%{release} \
         --prefix=%{_prefix} \
         --exec-prefix=%{_exec_prefix} \
@@ -320,45 +295,13 @@ container platform designed to be simple, fast, and secure.
         --mandir=%{_mandir} \
         --infodir=%{_infodir} \
         --without-squashfuse
-
 %make_build -C builddir old_config= V=
-
 %install
 %make_install -C builddir V=
+%oreon_autofiles main
 
-%files
-%attr(4755, root, root) %{_libexecdir}/singularity/bin/starter-suid
-%{_bindir}/singularity
-%{_bindir}/run-singularity
-%dir %{_libexecdir}/singularity
-%dir %{_libexecdir}/singularity/bin
-%{_libexecdir}/singularity/bin/singularity-buildkitd
-%{_libexecdir}/singularity/bin/starter
-%dir %{_libexecdir}/singularity/cni
-%{_libexecdir}/singularity/cni/*
-%dir %{_sysconfdir}/singularity
-%config(noreplace) %{_sysconfdir}/singularity/*.conf
-%config(noreplace) %{_sysconfdir}/singularity/*.toml
-%config(noreplace) %{_sysconfdir}/singularity/*.json
-%config(noreplace) %{_sysconfdir}/singularity/*.yaml
-%config(noreplace) %{_sysconfdir}/singularity/global-pgp-public
-%dir %{_sysconfdir}/singularity/cgroups
-%config(noreplace) %{_sysconfdir}/singularity/cgroups/*
-%dir %{_sysconfdir}/singularity/network
-%config(noreplace) %{_sysconfdir}/singularity/network/*
-%dir %{_sysconfdir}/singularity/seccomp-profiles
-%config(noreplace) %{_sysconfdir}/singularity/seccomp-profiles/*
-%{_datadir}/bash-completion/completions/singularity
-%dir %{_sharedstatedir}/singularity
-%dir %{_sharedstatedir}/singularity/mnt
-%dir %{_sharedstatedir}/singularity/mnt/session
-%{_mandir}/man1/singularity*
-%license LICENSE.md
-%license LICENSE_THIRD_PARTY.md
-%license LICENSE_DEPENDENCIES.md
-%doc README.md
-%doc CHANGELOG.md
-%doc CONTRIBUTING.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

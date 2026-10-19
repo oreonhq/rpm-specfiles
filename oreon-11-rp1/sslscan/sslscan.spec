@@ -1,38 +1,27 @@
-%global source0_hash 188b94d99072727e8abd1439359611c18ea6983c2c535eaef726bbc2144c933d
-
+%global source1_hash 967311f84955316969bdb1d8d4b983718ef42338639c621ec4c34fddef355e99
+%global source0_hash b0498467604c3f4eb7a1b3258ee9f37b709f7844d7edf338d40e85af40ede960
 Name:           sslscan
 Version:        2.2.3
 %global         bundled_openssl_version    3.5.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Security assessment tool for SSL/TLS
-
-# Special exception to allow linking against the OpenSSL libraries
-# Automatically converted from old format: GPLv3+ with exceptions - review is highly recommended.
 License:        LicenseRef-Callaway-GPLv3+-with-exceptions
-
-# By default build with bundled openssl, with explicitly enabled weak ciphers
-# use --without bundled_openssl to override and build with system openssl
 %bcond_without     bundled_openssl
-
-# rbsec sslscan fork
 URL:            https://github.com/rbsec/sslscan/
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/rbsec/%{name}//archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        https://www.openssl.org/source/openssl-%{bundled_openssl_version}.tar.gz
 Patch0:         sslscan-override-CFLAGS.patch
 Patch1:         sslscan-disable-opensslpull.patch
-
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  perl
-BuildRequires:  zlib-devel
-BuildRequires:  openssl-devel
-
 %if %{with bundled_openssl}
-# Bundled openssl is used to explicitly enable weak ciphers for the purpose of the scan
 Provides: bundled(openssl) = %{bundled_openssl_version}
 %endif
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  perl
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 SSLScan queries SSL services, such as HTTPS, in order to determine the ciphers
 that are supported. SSLScan is designed to be easy, lean and fast. 
@@ -40,6 +29,7 @@ The output includes preferred ciphers of the SSL service, the certificate
 and is in text and XML formats.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version}
@@ -51,20 +41,18 @@ tar xvf %{SOURCE1} --strip-components=1
 %endif
 
 %build
+
 %if %{with bundled_openssl}
 make %{?_smp_mflags} CFLAGS="%{optflags}" static
 %else
 make %{?_smp_mflags} CFLAGS="%{optflags}"
 %endif
-
 %install
 make install DESTDIR=%{buildroot} BINPATH=%{_bindir}/ MANPATH=%{_mandir}/
+%oreon_autofiles main
 
-%files
-%doc Changelog README.md INSTALL
-%license LICENSE
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

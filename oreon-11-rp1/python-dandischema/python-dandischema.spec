@@ -1,64 +1,73 @@
-%global source0_hash none
-
+%global source0_hash 963af71311c356bce99c4e056754f3a2bd1a4f33836f13d9197c399c7732176f
 Name:           python-dandischema
 Version:        0.14.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Schemata for DANDI archive project
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            http://dandiarchive.org
-Source:         %{pypi_source dandischema}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/dandischema/dandischema-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'dandischema' generated automatically by pyp2spec.}
-
 Patch:          %{forgeurl}/pull/249.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0.0
+Requires:       python3-dandischema = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-dandischema+style
+Summary:        Metapackage for python3-dandischema style extras
+Requires:       python3-dandischema = %{version}-%{release}
+Provides:       python3dist(dandischema[style]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-dandischema+style
+Metapackage for python3-dandischema style extras.
+
+%package -n       python3-dandischema+test
+Summary:        Metapackage for python3-dandischema test extras
+Requires:       python3-dandischema = %{version}-%{release}
+Provides:       python3dist(dandischema[test]) = %{version}-%{release}
+
+%description -n python3-dandischema+test
+Metapackage for python3-dandischema test extras.
+
+%package -n       python3-dandischema+all
+Summary:        Metapackage for python3-dandischema all extras
+Requires:       python3-dandischema = %{version}-%{release}
+Provides:       python3dist(dandischema[all]) = %{version}-%{release}
+
+%description -n python3-dandischema+all
+Metapackage for python3-dandischema all extras.
+
+%description
 
 %package -n     python3-dandischema
-Summary:        %{summary}
-
-%description -n python3-dandischema %_description
+Summary:        Schemata for DANDI archive project
+# oreon:reqs
+Requires:       python3dist(packaging) >= 14.0
+Requires:       python3dist(pydantic[email]) >= 2.4
+# /oreon:reqs
+%description -n python3-dandischema
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-dandischema all,style,test
-
 
 %prep
-%autosetup -p1 -n dandischema-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir dandischema-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-dandischema usr/lib/python3*/site-packages/dandischema* usr/lib64/python3*/site-packages/dandischema* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/dandischema* usr/lib64/python3*/site-packages/dandischema* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-dandischema -f %{pyproject_files}
+%files
+%files -n python3-dandischema -f %{oreon_filedir}/python3-dandischema.list
 
 %changelog
+
 %autochangelog

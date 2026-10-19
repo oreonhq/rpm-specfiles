@@ -1,13 +1,12 @@
 %global source0_hash 935470b2440987d9c4efa49769cbe9eef213cd7437ec6726f0fbb1fc32ed614c
-
 %define _default_patch_fuzz 2
 Name: pads
 Version: 1.2
-Release: 44%{?dist}
-Summary: Passive Asset Detection System
+Release:        1%{?dist}
+Summary:        Passive Asset Detection System
 License: GPL-2.0-or-later 
 URL: http://passive.sourceforge.net/
-Source0: http://prdownloads.sourceforge.net/passive/%{name}-%{version}.tar.gz
+Source0:        http://prdownloads.sourceforge.net/passive/%{name}-%{version}.tar.gz
 Source1: pads.service
 Source2: pads.sysconfig
 Patch1: pads-1.2-cleanup.patch
@@ -30,21 +29,25 @@ Patch17: pads-1.2-pthreads.patch
 Patch18: pads-aarch64.patch
 Patch19: pads-1.2-inline-cleanup.patch
 Patch20: pads-1.2-extra-libs.patch
-BuildRequires: make
-BuildRequires:  gcc
-BuildRequires: automake autoconf
-BuildRequires: pcre-devel libpcap-devel
-BuildRequires: perl-generators
-BuildRequires: systemd
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  libpcap-devel
+BuildRequires:  make
+BuildRequires:  pcre-devel
+BuildRequires:  perl-generators
+BuildRequires:  systemd
+# /oreon:deps
 %description
 PADS is a libpcap based detection engine used to passively 
 detect network assets.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -70,10 +73,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch 20 -p1
 
 %build
+
 autoreconf -fv --install
 %configure 
 make %{?_smp_mflags}
-
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_unitdir}
@@ -81,28 +84,20 @@ mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 make install DESTDIR=%{buildroot}
 install -m 644 %SOURCE1 %{buildroot}%{_unitdir}/pads.service
 install -m 640 %SOURCE2 %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-# Remove installed docs since we pick this up another way
 rm -rf $RPM_BUILD_ROOT/usr/share/pads/
+%oreon_autofiles main
 
 %post
+
 %systemd_post pads.service
-
 %preun
+
 %systemd_preun pads.service
-
 %postun
-%systemd_postun_with_restart pads.service
 
-%files
-%doc doc/AUTHORS doc/COPYING doc/README doc/ChangeLog
-%{_sysconfdir}/pads-ether-codes
-%{_sysconfdir}/pads-signature-list
-%config(noreplace) %attr(0640,root,root) %{_sysconfdir}/pads.conf
-%config(noreplace) %attr(0640,root,root) %{_sysconfdir}/sysconfig/%{name}
-%{_unitdir}/pads.service
-%{_bindir}/pads
-%{_bindir}/pads-report
-%{_mandir}/*/*
+%systemd_postun_with_restart pads.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

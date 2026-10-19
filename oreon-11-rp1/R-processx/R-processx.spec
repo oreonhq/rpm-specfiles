@@ -1,19 +1,15 @@
 %global source0_hash c5f1cafd0e4351caf512298888574a6b3bdd1b4d0fb42ef2834c7bf955734221
-
 Name:           R-processx
 Version:        %R_rpm_version 3.8.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Execute and Control System Processes
-
 License:        MIT
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=processx&version=%{version}#/processx_%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Tools to run system processes in the background. It can check if a
 background process is running; wait on a background process to finish; get
@@ -24,22 +20,19 @@ with a timeout. It can also poll several processes at once.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-tests
 
-%files -f %{R_files}
+%R_check \--no-tests
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

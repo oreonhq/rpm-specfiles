@@ -1,29 +1,20 @@
 %global source0_hash fb7e8facda7749c2fa5fa5dc241c0adc302da3d31d588964a2570db501aa49e5
 %define python3dist(name) python3-%{name}
-
 Name:           linkchecker
-
 Version:        10.6.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Check HTML documents for broken links
 License:        GPL-2.0-or-later
 URL:            https://linkcheck.github.io/linkchecker/
-Source:         %pypi_source LinkChecker
-
+Source0:        https://files.pythonhosted.org/packages/source/L/LinkChecker/LinkChecker-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  gettext
-BuildRequires:	python3dist(beautifulsoup4) >= 4.8.1
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-# For compiling the translations
-BuildRequires:  python3dist(polib)
-
-# For the tests (subset of [tool.hatch.envs.test])
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pyopenssl)
-
+BuildRequires:  python3dist(hatchling) >= 1.8.0
+BuildRequires:  python3dist(setuptools-scm) >= 7.1.0
+Requires:       python3-linkchecker = %{version}-%{release}
+# /oreon:deps
 %description
 LinkChecker is a website validator. LinkChecker checks links in web documents or full websites.
 
@@ -43,31 +34,20 @@ different formats
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n LinkChecker-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir LinkChecker-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files linkcheck
+%oreon_autofiles main
 
 %check
-%pytest
 
-%files -f %{pyproject_files}
-%doc README.rst doc/changelog.txt doc/upgrading.txt
-%{_bindir}/linkchecker
-%{_mandir}/man1/linkchecker*.1*
-%{_mandir}/man5/linkcheckerrc.5*
-%lang(de) %{_mandir}/de/man1/linkchecker*.1*
-%lang(de) %{_mandir}/de/man5/linkcheckerrc.5*
-%dir %{_datadir}/linkchecker/
-%doc %{_datadir}/linkchecker/examples/
+%pytest
+%files
 
 %changelog
+
 %autochangelog

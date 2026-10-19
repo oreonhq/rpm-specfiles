@@ -1,63 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 0b27774d285f507a3445805a05f8fb2998f56d709270f78b89208b65b0d84917
 Name:           python-phply
 Version:        1.2.6
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Lexer and parser for PHP source implemented using PLY
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/viraptor/phply
-Source:         %{pypi_source phply}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/phply/phply-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'phply' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-phply = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-phply
-Summary:        %{summary}
-
-%description -n python3-phply %_description
+Summary:        Lexer and parser for PHP source implemented using PLY
+%description -n python3-phply
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-phply test
-
 
 %prep
-%autosetup -p1 -n phply-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir phply-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-phply usr/lib/python3*/site-packages/phply* usr/lib64/python3*/site-packages/phply* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/phply* usr/lib64/python3*/site-packages/phply* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-phply -f %{pyproject_files}
-%{_bindir}/phplex
-%{_bindir}/phpparse
+%files
+%files -n python3-phply -f %{oreon_filedir}/python3-phply.list
 
 %changelog
+
 %autochangelog

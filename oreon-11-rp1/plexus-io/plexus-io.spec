@@ -1,5 +1,5 @@
+%global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
 %global source0_hash ce70ac28427a7ace63390d912058852e63a7927d02dfc154f203e6bda880b9ba
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,22 +81,21 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           plexus-io
 Version:        3.8.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plexus IO Components
 License:        Apache-2.0
 URL:            https://github.com/codehaus-plexus/plexus-io
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/codehaus-plexus/plexus-io/archive/refs/tags/plexus-io-%{version}.tar.gz#/plexus-io-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.7.0-7
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.code.findbugs:jsr305)
 BuildRequires:  mvn(com.google.inject:guice)
@@ -110,15 +109,13 @@ BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.7.0-7
-
+# /oreon:deps
 %description
 Plexus IO is a set of plexus components, which are designed for use
 in I/O operations.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n plexus-io-plexus-io-%{version}
 cp %{SOURCE1} .
@@ -129,13 +126,14 @@ sed -i /class/i@org.junit.jupiter.api.Disabled src/test/java/org/codehaus/plexus
 %mvn_file : plexus/io
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license NOTICE.txt LICENSE-2.0.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

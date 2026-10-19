@@ -1,58 +1,59 @@
-%global source0_hash none
-
+%global source0_hash 802d22046eb84937ffd2aadb7dd192a3cc2b830b026f9878617349614076810f
 Name:           python-pyinfra
 Version:        3.10.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        pyinfra automates/provisions/manages/deploys infrastructure.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://pyinfra.com
-Source:         %{pypi_source pyinfra}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyinfra/pyinfra-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyinfra' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pyinfra = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyinfra
-Summary:        %{summary}
-
-%description -n python3-pyinfra %_description
-
+Summary:        pyinfra automates/provisions/manages/deploys infrastructure.
+# oreon:reqs
+Requires:       python3dist(click) > 2
+Requires:       python3dist(distro) < 2
+Requires:       python3dist(distro) >= 1.6
+Requires:       python3dist(gevent) >= 1.5
+Requires:       python3dist(jinja2) < 4
+Requires:       python3dist(jinja2) > 3
+Requires:       python3dist(packaging) >= 16.1
+Requires:       python3dist(paramiko) < 5
+Requires:       python3dist(paramiko) >= 2.11
+Requires:       python3dist(pydantic) < 3
+Requires:       python3dist(pydantic) >= 2.11
+Requires:       python3dist(python-dateutil) < 3
+Requires:       python3dist(python-dateutil) > 2
+Requires:       python3dist(typeguard) < 5
+Requires:       python3dist(typeguard) >= 4
+Requires:       python3dist(types-paramiko) < 5
+Requires:       python3dist(types-paramiko) >= 2.7
+# /oreon:reqs
+%description -n python3-pyinfra
 
 %prep
-%autosetup -p1 -n pyinfra-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyinfra-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyinfra usr/lib/python3*/site-packages/pyinfra* usr/lib64/python3*/site-packages/pyinfra* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyinfra* usr/lib64/python3*/site-packages/pyinfra* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyinfra -f %{pyproject_files}
-%{_bindir}/pyinfra
+%files
+%files -n python3-pyinfra -f %{oreon_filedir}/python3-pyinfra.list
 
 %changelog
+
 %autochangelog

@@ -1,12 +1,5 @@
 %global source0_hash 970fd13accd3d538e637db080ebbd9898020c8b5591837c8493a39edd737922d
-
-# Run optional test
-%if ! (0%{?rhel})
-%bcond_without perl_Module_Pluggable_enables_optional_test
-%else
 %bcond_with perl_Module_Pluggable_enables_optional_test
-%endif
-
 Name:           perl-Module-Pluggable
 Epoch:          2
 Version:        6.4
@@ -16,54 +9,43 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Pluggable
 Source0:        https://cpan.metacpan.org/authors/id/S/SI/SIMONW/Module-Pluggable-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  make
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-generators
-BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(File::Spec::Functions) >= 3.00
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(deprecate)
-BuildRequires:  perl(Exporter) >= 5.57
-BuildRequires:  perl(File::Basename)
-BuildRequires:  perl(File::Find)
-BuildRequires:  perl(if)
-BuildRequires:  perl(vars)
-BuildRequires:  perl(Scalar::Util)
-# Recommended run-time:
-BuildRequires:  perl(Module::Runtime) >= 0.012
-# Tests:
-BuildRequires:  perl(base)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(FindBin)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Test::More) >= 0.62
-# IncTest is a locally overloaded module in t/lib/Text/Abbrev.pm
 %if %{with perl_Module_Pluggable_enables_optional_test}
-# Optional tests:
-BuildRequires:  perl(App::FatPacker) >= 0.10.0
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(File::Copy)
 %endif
 Requires:       perl(File::Spec::Functions) >= 3.00
 Requires:       perl(deprecate)
-# Recommended run-time:
 Recommends:     perl(Module::Runtime) >= 0.012
-
-# Filter under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(File::Spec::Functions\\)$
-# Remove private modules
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(No::Middle\\)$
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
-
 Provides:       perl(Module::Pluggable)
 Provides:       perl(Module::Pluggable::Object)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  make
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Find)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Spec::Functions)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Module::Runtime)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(base)
+BuildRequires:  perl(deprecate)
+BuildRequires:  perl(if)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This package provides a simple but, hopefully, extensible way of having
 'plugins' for your module. Essentially all it does is export a method into
@@ -75,12 +57,12 @@ Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
 Requires:       perl(File::Spec::Functions) >= 3.00
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Module-Pluggable-%{version}
 find -type f -exec chmod -x {} +
@@ -91,31 +73,26 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files
-%doc Changes README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Module-Pluggable-tests -f %{oreon_filedir}/perl-Module-Pluggable-tests.list
 
 %changelog
+
 %autochangelog

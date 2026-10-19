@@ -1,77 +1,41 @@
-%global source0_hash none
-
-# RHEL/Fedora spec file for php-pecl-redis6
-# without SCL compatibility from:
-#
-# remirepo spec file for php-pecl-redis6
-#
-# SPDX-FileCopyrightText:  Copyright 2012-2025 Remi Collet
-# SPDX-License-Identifier: CECILL-2.1
-# http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
-#
-# Please, preserve the changelog entries
-#
-
+%global source0_hash 0d5141f634bd1db6c1ddcda053d25ecf2c4fc1c395430d534fd3f8d51dd7f0b5
 %global php_base     php
-
 %bcond_without       tests
 %if 0%{?fedora} || (0%{?oreon} >= 11)
-# optional compressors/serializers enabled by default
 %bcond_without       igbinary
 %bcond_without       msgpack
 %bcond_without       liblzf
 %else
-# optional compressors/serializers disabled by default
 %bcond_with          igbinary
 %bcond_with          msgpack
 %bcond_with          liblzf
 %endif
 %bcond_without       valkey
-
 %global pie_vend     phpredis
 %global pie_proj     phpredis
 %global pecl_name    redis
-# after 40-igbinary and 40-msgpack
 %global ini_name     50-%{pecl_name}.ini
-
 %global upstream_version 6.3.0
-#global upstream_prever  RC2
 %global sources          %{pecl_name}-%{upstream_version}%{?upstream_prever}
-
-Summary:       PHP extension for interfacing with key-value stores
+Summary:        PHP extension for interfacing with key-value stores
 Name:          %{php_base}-pecl-redis6
 Version:       %{upstream_version}%{?upstream_prever:~%{upstream_prever}}
-Release:       2%{?dist}
+Release:        1%{?dist}
 License:       PHP-3.01
 URL:           https://pecl.php.net/package/redis
-Source0:        https://pecl.php.net/get/%{sources}.tgz
-
+Source0:        https://pecl.%{php_base}.net/get/%{pecl_name}-%{version}.tgz
 ExcludeArch:   %{ix86}
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: %{php_base}-devel >= 8.0
-BuildRequires: php-pear
 %if %{with igbinary}
-BuildRequires: %{php_base}-pecl-igbinary-devel
 %endif
 %if %{with msgpack}
-BuildRequires: %{php_base}-pecl-msgpack-devel >= 2.0.3
 %endif
 %if %{with liblzf}
-BuildRequires: pkgconfig(liblzf)
 %endif
-BuildRequires: pkgconfig(libzstd) >= 1.3.0
-BuildRequires: pkgconfig(liblz4)
-# to run Test suite
 %if %{with tests}
 %if %{with valkey}
-BuildRequires: valkey
 %else
-BuildRequires: redis
 %endif
 %endif
-
 Requires:      php(zend-abi)
 Requires:      php(api)
 %if %{with igbinary}
@@ -80,14 +44,12 @@ Requires:      %{php_base}-pecl-igbinary%{?_isa}
 %if %{with msgpack}
 Requires:      %{php_base}-pecl-msgpack%{?_isa}
 %endif
-
 Provides:      php-%{pecl_name}                 = %{version}
 Provides:      php-%{pecl_name}%{?_isa}         = %{version}
 Provides:      php-pecl(%{pecl_name})           = %{version}
 Provides:      php-pecl(%{pecl_name})%{?_isa}   = %{version}
 Provides:      php-pie(%{pie_vend}/%{pie_proj}) = %{version}
 Provides:      php-%{pie_vend}-%{pie_proj}      = %{version}
-
 %if "%{php_base}" != "php"
 Requires:      %{php_base}-common%{?_isa}
 Conflicts:     php-pecl-%{pecl_name}6
@@ -95,7 +57,6 @@ Provides:      php-pecl-%{pecl_name}6 = %{version}-%{release}
 Provides:      php-pecl-%{pecl_name}6%{?_isa} = %{version}-%{release}
 Provides:      php-pecl-%{pecl_name}          = %{version}-%{release}
 Provides:      php-pecl-%{pecl_name}%{?_isa}  = %{version}-%{release}
-
 %elif 0%{?fedora} >= 42 || 0%{?rhel} >= 10 || "%{php_version}" > "8.4"
 Obsoletes:     php-pecl-%{pecl_name}          < 6
 Provides:      php-pecl-%{pecl_name}          = %{version}-%{release}
@@ -106,15 +67,23 @@ Provides:      php-pecl-%{pecl_name}4%{?_isa} = %{version}-%{release}
 Obsoletes:     php-pecl-%{pecl_name}5         < 6
 Provides:      php-pecl-%{pecl_name}5         = %{version}-%{release}
 Provides:      php-pecl-%{pecl_name}5%{?_isa} = %{version}-%{release}
-
 %else
-# A single version can be installed
 Conflicts:     php-pecl-%{pecl_name}  < 6
 Conflicts:     php-pecl-%{pecl_name}4 < 6
 Conflicts:     php-pecl-%{pecl_name}5 < 6
 %endif
-
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  php-devel
+BuildRequires:  php-pear
+BuildRequires:  php-pecl-igbinary-devel
+BuildRequires:  php-pecl-msgpack-devel
+BuildRequires:  pkgconfig(liblz4)
+BuildRequires:  pkgconfig(liblzf)
+BuildRequires:  pkgconfig(libzstd)
+BuildRequires:  valkey
+# /oreon:deps
 %description
 This extension provides an API for communicating with RESP-based key-value
 stores, such as Redis, Valkey, and KeyDB.
@@ -123,8 +92,8 @@ This client implements most of the latest API.
 As method only works when also implemented on the server side,
 some doesn't work with an old server version.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 
@@ -198,8 +167,8 @@ extension = %{pecl_name}.so
 ;redis.session.compression_level = 3
 EOF
 
-
 %build
+
 peclconf() {
 %configure \
     --enable-redis \
@@ -222,47 +191,34 @@ peclconf() {
     --with-liblz4 \
     --with-php-config=$1
 }
-
 cd %{sources}
 %{__phpize}
 sed -e 's/INSTALL_ROOT/DESTDIR/' -i build/Makefile.global
-
 peclconf %{__phpconfig}
 %make_build
-
-
 %install
-# Install the configuration file
 install -D -m 644 %{ini_name} %{buildroot}%{php_inidir}/%{ini_name}
-
-# Install the package XML file
 install -D -m 644 package.xml %{buildroot}%{pecl_xmldir}/%{name}.xml
-
 cd %{sources}
 %make_install
-
-# Documentation
 for i in $(grep 'role="doc"' ../package.xml | sed -e 's/^.*name="//;s/".*$//')
 do install -Dpm 644 $i %{buildroot}%{pecl_docdir}/%{pecl_name}/$i
 done
-
+%oreon_autofiles main
 
 %check
-# simple module load test
+
 DEPS="--no-php-ini"
 for i in igbinary msgpack
 do  [ -f %{php_extdir}/${i}.so ] && DEPS="$DEPS --define extension=${i}.so"
 done
-
 %{__php} $DEPS \
     --define extension=%{buildroot}%{php_extdir}/%{pecl_name}.so \
     --modules | grep '^%{pecl_name}$'
-
 %if %{with tests}
 cd %{sources}/tests
 : Ignore ONLINE test
 sed -e 's/testConnectException/skipConnectException/' -i RedisTest.php
-
 : Launch redis server
 %if %{with valkey}
 SRV=%{_bindir}/valkey-server
@@ -271,7 +227,6 @@ CLI=%{_bindir}/valkey-cli
 SRV=%{_bindir}/redis-server
 CLI=%{_bindir}/redis-cli
 %endif
-
 mkdir -p data
 pidfile=$PWD/server.pid
 port=$(%{__php} -r 'echo 9000 + PHP_MAJOR_VERSION*100 + PHP_MINOR_VERSION*10 + PHP_INT_SIZE;')
@@ -282,38 +237,26 @@ $SRV   \
     --logfile   $PWD/server.log \
     --dir       $PWD/data      \
     --pidfile   $pidfile
-
-
 : Run the test Suite
 sed -e "s/6379/$port/" -i *.php
-
 ret=0
 export TEST_PHP_EXECUTABLE=%{__php}
 export TEST_PHP_ARGS="$DEPS \
     --define extension=%{buildroot}%{php_extdir}/%{pecl_name}.so"
 $TEST_PHP_EXECUTABLE $TEST_PHP_ARGS TestRedis.php || ret=1
-
 : Cleanup
 if [ -f $pidfile ]; then
    $CLI -p $port shutdown nosave
    sleep 2
 fi
 cat $PWD/server.log
-
 exit $ret
 %else
 : Upstream test suite disabled
 %endif
-
-%files
-%license %{sources}/LICENSE
-%doc %{pecl_docdir}/%{pecl_name}
-%{pecl_xmldir}/%{name}.xml
-
-%{php_extdir}/%{pecl_name}.so
-%config(noreplace) %{php_inidir}/%{ini_name}
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.3.0-2
 - Import

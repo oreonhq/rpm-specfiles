@@ -1,24 +1,21 @@
-%global source0_hash 7a2ccafc87803b6c42009019e0786cb1307f492c2d61d2fcb0be5dcfdd0049da
-
+%global source0_hash 0cac6849efb8a9447268fb273de3fab38f8460adb26a1770934e3f325fab8f5d
 Name:           bfs
 Version:        4.1.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A breadth-first version of the UNIX find command
-
 License:        0BSD
 URL:            https://github.com/tavianator/bfs
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  make
+Source0:        https://github.com/tavianator/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  acl
 BuildRequires:  gcc
+BuildRequires:  make
 BuildRequires:  pkgconfig(libacl)
 BuildRequires:  pkgconfig(libcap)
-BuildRequires:  pkgconfig(oniguruma)
-BuildRequires:  pkgconfig(liburing)
 BuildRequires:  pkgconfig(libselinux)
-# needed to run check
-BuildRequires:  acl
-
+BuildRequires:  pkgconfig(liburing)
+BuildRequires:  pkgconfig(oniguruma)
+# /oreon:deps
 %description
 bfs is a breadth-first version of the UNIX find(1) command.
 
@@ -29,27 +26,20 @@ command line parser and some additional options.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 ./configure --enable-release
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-%make_build check
 
-%files
-%license LICENSE
-%doc README.md docs/{CHANGELOG,USAGE}.md
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
-%{bash_completions_dir}/%{name}
-%{fish_completions_dir}/%{name}.fish
-%{zsh_completions_dir}/_%{name}
+%make_build check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

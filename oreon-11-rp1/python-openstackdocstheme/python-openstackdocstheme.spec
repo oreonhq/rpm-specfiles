@@ -1,59 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 53afa5b541942c8b32034703f20639691d45048da67926fdbef525df357ce0d0
 Name:           python-openstackdocstheme
 Version:        3.6.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        OpenStack Docs Theme
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://docs.openstack.org/openstackdocstheme
-Source:         %{pypi_source openstackdocstheme}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/openstackdocstheme/openstackdocstheme-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'openstackdocstheme' generated automatically by pyp2spec.}
-
 Patch0001:      0001-Remove-all-Google-Analytics-tracking.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(pbr) >= 6.1.1
+Requires:       python3-openstackdocstheme = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-openstackdocstheme
-Summary:        %{summary}
-
-%description -n python3-openstackdocstheme %_description
-
+Summary:        OpenStack Docs Theme
+%description -n python3-openstackdocstheme
 
 %prep
-%autosetup -p1 -n openstackdocstheme-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir openstackdocstheme-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-openstackdocstheme usr/lib/python3*/site-packages/openstackdocstheme* usr/lib64/python3*/site-packages/openstackdocstheme* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/openstackdocstheme* usr/lib64/python3*/site-packages/openstackdocstheme* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-openstackdocstheme -f %{pyproject_files}
+%files
+%files -n python3-openstackdocstheme -f %{oreon_filedir}/python3-openstackdocstheme.list
 
 %changelog
+
 %autochangelog

@@ -1,23 +1,22 @@
 %global source0_hash e6b080bdc4395b22548358bca54f0e7a7005e7c64d3fe70eb834982c781ee9aa
-
 %global  src_name  panini
-
 Name:       Panini
 Version:    0.75.0
-Release:    %autorelease
-Summary:    A tool for creating perspective views from panoramic and wide angle images
+Release:        1%{?dist}
+Summary:        A tool for creating perspective views from panoramic and wide angle images
 License:    GPL-3.0-or-later
 URL:        https://lazarus-pkgs.github.io/lazarus-pkgs/%{src_name}.html
-Source0:    https://github.com/lazarus-pkgs/%{src_name}/archive/v%{version}/%{src_name}-%{version}.tar.gz
-
-BuildRequires: make
-BuildRequires: desktop-file-utils
-BuildRequires: gcc gcc-c++
-BuildRequires: qt5-qtbase-devel
-BuildRequires: mesa-libGLU-devel
-BuildRequires: libappstream-glib
-BuildRequires: zlib-devel
-
+Source0:        https://github.com/lazarus-pkgs/%{src_name}/archive/v%{version}/%{src_name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Panini can load most common photo and panoramic formats from image files such
 as those created with hugin or QuickTimeVR (QTVR .mov) files.  Like all pano
@@ -27,6 +26,7 @@ stereographic and "Pannini" vedutismo families of projections, and shift,
 rotate, and stretch the image like a software view camera.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{src_name}-%{version}
@@ -41,16 +41,13 @@ for txt in *.txt ; do
 done
 
 %build
+
 %{qmake_qt5} panini.pro
 %make_build
-
 %install
 %make_install
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{src_name}.desktop
-
-# Remove appdata file from upstream
 rm -f %{buildroot}%{_metainfodir}/*.appdata.xml
-
 cat > %{buildroot}%{_metainfodir}/%{src_name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop">
@@ -84,16 +81,11 @@ cat > %{buildroot}%{_metainfodir}/%{src_name}.appdata.xml <<EOF
   <updatecontact>jubalh AT iodoru DOT org</updatecontact>
 </component>
 EOF
-
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
+%oreon_autofiles main
 
-%files
-%doc README.md NEWS USAGE.md
-%license GPLversion3.txt
-%{_bindir}/%{src_name}
-%{_datadir}/pixmaps/*.png
-%{_metainfodir}/*.appdata.xml
-%{_datadir}/applications/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

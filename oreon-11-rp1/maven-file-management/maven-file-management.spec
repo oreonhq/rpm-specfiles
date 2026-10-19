@@ -1,5 +1,4 @@
 %global source0_hash 4f0418dc1e32148664921f1470f59ad345477ca2dc9c81d2df9ae242be9b8d02
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,49 +80,39 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           maven-file-management
 Epoch:          1
 Version:        3.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven File Management API
 License:        Apache-2.0
 URL:            https://maven.apache.org/shared/file-management
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/file-management/%{version}/file-management-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(commons-io:commons-io)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.maven.shared:maven-shared-components:pom:)
-BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-BuildRequires:  mvn(org.slf4j:slf4j-api)
-BuildRequires:  mvn(org.slf4j:slf4j-simple)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1:3.2.0-19
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Provides a component for plugins to easily resolve project dependencies.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n file-management-%{version}
-
+%global oreon_srcdir file-management-%{version}
+%oreon_prep
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

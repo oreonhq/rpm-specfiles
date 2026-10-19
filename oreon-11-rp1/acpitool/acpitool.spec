@@ -1,16 +1,11 @@
 %global source0_hash 004fb6cd43102918b6302cf537a2db7ceadda04aef2e0906ddf230f820dad34f
-
-Summary: Command line ACPI client
+Summary:        Command line ACPI client
 Name: acpitool
 Version: 0.5.1
-Release: 39%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL: https://sourceforge.net/projects/acpitool/
-BuildRequires: gcc-c++
-BuildRequires: make
-
-Source0:	https://sourceforge.net/projects/acpitool/files/acpitool/%{version}/acpitool-%{version}.tar.bz2
+Source0:        https://sourceforge.net/projects/acpitool/files/acpitool/%{version}/acpitool-%{version}.tar.bz2
 Patch0:		ac_adapter.patch
 Patch1:		battery.patch
 Patch2:		kernel3.patch
@@ -19,7 +14,10 @@ Patch4:		var-line.patch
 Patch5:		typos.patch
 Patch6:		cleanup.patch
 Patch7:		cache-size.patch
-
+# oreon:deps
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 AcpiTool is a Linux ACPI client. It's a small command line application, 
 intended to be a replacement for the apm tool. Besides "basic" ACPI 
@@ -29,6 +27,7 @@ IBM Thinkpad laptops, allowing you to change the LCD brightness level,
 toggle fan on/off, and more. 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -42,17 +41,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P7 -p1 -b .cache-size
 
 %build
+
 %configure
 make %{?_smp_mflags}
-
 %install
 rm -fr $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
+%oreon_autofiles main
 
-%files
-%doc AUTHORS ChangeLog COPYING INSTALL README TODO
-%{_bindir}/acpitool
-%{_mandir}/man1/acpitool*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

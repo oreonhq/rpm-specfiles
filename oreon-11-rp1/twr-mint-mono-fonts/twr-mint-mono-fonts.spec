@@ -1,45 +1,17 @@
-%global source0_hash none
-
-# Packaging template: multi-family fonts packaging.
-#
-# SPDX-License-Identifier: MIT
-#
-# This template documents spec declarations, used when packaging multiple font
-# families, from a single dedicated source archive. The source rpm is named
-# after the first (main) font family). Look up “fonts-3-sub” when the source
-# rpm needs to be named some other way.
-#
-# It is part of the following set of packaging templates:
-# “fonts-0-simple”: basic single-family fonts packaging
-# “fonts-1-full”:   less common patterns for single-family fonts packaging
-# “fonts-2-multi”:  multi-family fonts packaging
-# “fonts-3-sub”:    packaging fonts, released as part of something else
-#
+%global source1_hash 3fc019a3c0fc4c106acd73d98797d45910bb1735b14885c5855d5353fa33f56d
+%global source0_hash db024b5facab56ff342d2effecf8f780ce1c7f41be951679df71b204f0a36e51
 Version: 0.0.1
-Release: %autorelease
+Release:        1%{?dist}
 URL:     https://github.com/yuru7/mint-mono/
-BuildRequires: fonts-rpm-macros >= 1:2.0.5-9
-
-# The following declarations will be aliased to [variable]0 and reused for all
-# generated *-fonts packages unless overriden by a specific [variable][number]
-# declaration.
 %global foundry           TWR
 %global fontlicense       OFL-1.1
 %global fontlicenses      LICENSE
 %global fontdocs          %{nil}
 %global fontdocsex        %{fontlicenses}
-
-# A text block that can be reused as part of the description of each generated
-# subpackage.
 %global common_description %{expand:
 Mint Mono is designed for programming which is based on Intel One Mono
 and Circle M+.
 }
-
-# Declaration for the subpackage containing the first font family. Also used as
-# source rpm info. All the [variable]0 declarations are equivalent and aliased
-# to [variable].
-
 %global fontfamily0       Mint Mono
 %global fontsummary0      Mint Mono, monospace typeface TrueType font
 %global fontpkgheader0    %{expand:
@@ -52,7 +24,6 @@ and Circle M+.
 %{common_description}
 This package contains Mint Mono which is a monospace typeface of TrueType font.
 }
-
 %global fontfamily1       Mint Mono 35
 %global fontsummary1      Mint Mono 35, monospace typeface TrueType font
 %global fontpkgheader1    %{expand:
@@ -65,59 +36,43 @@ This package contains Mint Mono which is a monospace typeface of TrueType font.
 %{common_description}
 This package contains Mint Mono 35 which is a monospace typeface of TrueType font.
 }
-
-Source0:  https://github.com/yuru7/mint-mono/releases/download/v%{version}/MintMono_v%{version}.zip
+Source0:        https://github.com/yuru7/mint-mono/releases/download/v%{version}/MintMono_v%{version}.zip
 Source1:  https://raw.githubusercontent.com/yuru7/mint-mono/refs/heads/main/LICENSE
 Source11: 69-twr-mint-mono-fonts.conf
 Source12: 69-twr-mint-mono-35-fonts.conf
-
-# “fontpkg” will generate the font subpackage headers corresponding to the
-# elements declared above.
-# “fontpkg” accepts the following selection arguments:
-# – “-a”          process everything
-# – “-z [number]” process a specific declaration block
-# If no flag is specified it will only process the zero/nosuffix block.
 %fontpkg -a
-
-# “fontmetapkg” will generate a font meta(sub)package header for all the font
-# subpackages generated in this spec. Optional arguments:
-# – “-n [name]”      use [name] as metapackage name
-# – “-s [variable]”  use the content of [variable] as metapackage summary
-# – “-d [variable]”  use the content of [variable] as metapackage description
-# – “-z [numbers]”   restrict metapackaging to [numbers] comma-separated list
-#                    of font package suffixes
 %fontmetapkg
-
+# oreon:deps
+BuildRequires:  fonts-rpm-macros
+# /oreon:deps
 %prep
+
 %setup -q -n MintMono_v0.0.1
 cp %{SOURCE1} .
 
 %build
-# “fontbuild” accepts the usual selection arguments:
-# – “-a”          process everything
-# – “-z [number]” process a specific declaration block
-# If no flag is specified it will only process the zero/nosuffix block.
-%fontbuild -a
 
+%fontbuild -a
 %install
-# “fontinstall” accepts the usual selection arguments:
-# – “-a”          process everything
-# – “-z [number]” process a specific declaration block
-# If no flag is specified it will only process the zero/nosuffix block.
 %fontinstall -a
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# “fontcheck” accepts the usual selection arguments:
-# – “-a”          process everything
-# – “-z [number]” process a specific declaration block
-# If no flag is specified it will only process the zero/nosuffix block.
-%fontcheck -a
 
-# “fontfiles” accepts the usual selection arguments:
-# – “-a”          process everything
-# – “-z [number]” process a specific declaration block
-# If no flag is specified it will only process the zero/nosuffix block
+%fontcheck -a
 %fontfiles -a
+%files -f %{oreon_filedir}/main.list
+%files -n google-go-fonts -f %{oreon_filedir}/google-go-fonts.list
+%files -n adf-gillius-2-fonts -f %{oreon_filedir}/adf-gillius-2-fonts.list
+%files -n google-go-smallcaps-fonts -f %{oreon_filedir}/google-go-smallcaps-fonts.list
+%files -n lomt-mscorebc-fonts -f %{oreon_filedir}/lomt-mscorebc-fonts.list
+%files -n lomt-mscoretabulature-fonts -f %{oreon_filedir}/lomt-mscoretabulature-fonts.list
+%files -n lomt-musejazz-fonts -f %{oreon_filedir}/lomt-musejazz-fonts.list
+%files -n lomt-musejazz-text-fonts -f %{oreon_filedir}/lomt-musejazz-text-fonts.list
+%files -n lomt-gootville-fonts -f %{oreon_filedir}/lomt-gootville-fonts.list
+%files -n lomt-gootville-text-fonts -f %{oreon_filedir}/lomt-gootville-text-fonts.list
+%files -n adf-gillius-fonts-all -f %{oreon_filedir}/adf-gillius-fonts-all.list
 
 %changelog
+
 %autochangelog

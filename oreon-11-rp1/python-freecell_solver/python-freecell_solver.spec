@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 354be418ab23ed2afa30228b30e6af7eb245c7a8c150e8d0c48a06816b3b0733
 Name:           python-freecell-solver
 Version:        0.6.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Freecell Solver bindings
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/shlomif/freecell_solver
-Source:         %{pypi_source freecell_solver}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/freecell_solver/freecell_solver-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'freecell-solver' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-freecell-solver = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-freecell-solver
-Summary:        %{summary}
-
-%description -n python3-freecell-solver %_description
-
+Summary:        Freecell Solver bindings
+%description -n python3-freecell-solver
 
 %prep
-%autosetup -p1 -n freecell_solver-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir freecell_solver-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-freecell-solver usr/lib/python3*/site-packages/freecell_solver* usr/lib64/python3*/site-packages/freecell_solver* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/freecell_solver* usr/lib64/python3*/site-packages/freecell_solver* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-freecell-solver -f %{pyproject_files}
+%files
+%files -n python3-freecell-solver -f %{oreon_filedir}/python3-freecell-solver.list
 
 %changelog
+
 %autochangelog

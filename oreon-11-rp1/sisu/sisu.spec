@@ -1,5 +1,4 @@
 %global source0_hash 0b3032e6d66bfdb166c956c6f9bdf661010be652f67900099f8ffd83ae07a8c2
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,70 +80,40 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           sisu
 Epoch:          1
 Version:        1.1.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Eclipse dependency injection framework
-# sisu is EPL-1.0, the bundled asm is BSD
 License:        EPL-1.0 AND BSD-3-Clause
 URL:            https://eclipse.org/sisu/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/eclipse-sisu/sisu-project/archive/refs/tags/milestones/0.9.0.M3.tar.gz#/sisu-%{version}.tar.gz
-
 Patch:          0001-Add-ASM-support-for-Java-24-and-25.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(com.google.inject.extensions:guice-servlet)
-BuildRequires:  mvn(com.google.inject:guice)
-BuildRequires:  mvn(javax.annotation:javax.annotation-api)
-BuildRequires:  mvn(javax.enterprise:cdi-api)
-BuildRequires:  mvn(javax.servlet:servlet-api)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.maven.plugin-tools:maven-plugin-annotations)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
-BuildRequires:  mvn(org.apache.maven.shared:maven-common-artifact-filters)
-BuildRequires:  mvn(org.apache.maven:maven-artifact)
-BuildRequires:  mvn(org.apache.maven:maven-core)
-BuildRequires:  mvn(org.apache.maven:maven-model)
-BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
-BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
-BuildRequires:  mvn(org.osgi:osgi.core)
-BuildRequires:  mvn(org.slf4j:slf4j-api)
-BuildRequires:  mvn(org.slf4j:slf4j-nop)
-BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
-BuildRequires:  mvn(org.testng:testng)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1:1.1.0-14
 Provides:       %{name}-inject = %{epoch}:%{version}-%{release}
 Provides:       %{name}-plexus = %{epoch}:%{version}-%{release}
 Provides:       bundled(objectweb-asm)
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Java dependency injection framework with backward support for plexus and bean
 style dependency injection.
 
 %package maven-plugin
 Summary:        Sisu plugin for Apache Maven
-# Remove in Fedora 45
 Obsoletes:      sisu-mojos < 1:1.1.0
-
 %description maven-plugin
 The Sisu Plugin for Maven provides mojos to generate
 META-INF/sisu/javax.inject.Named index files for the Sisu container.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n sisu-project-milestones-0.9.0.M3
 %autosetup -p1 -n sisu-project-milestones-0.9.0.M3
@@ -168,17 +137,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_alias :org.eclipse.sisu.plexus org.sonatype.sisu:sisu-inject-plexus org.codehaus.plexus:plexus-container-default
 
 %build
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE.txt
-
-%files maven-plugin -f .mfiles-maven-plugin
+%files -f %{oreon_filedir}/main.list
+%files -n sisu-maven-plugin -f %{oreon_filedir}/sisu-maven-plugin.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:0.9.0~M3-1
 - Import

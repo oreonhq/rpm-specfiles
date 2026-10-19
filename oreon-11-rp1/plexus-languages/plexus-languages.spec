@@ -1,5 +1,5 @@
+%global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
 %global source0_hash 3020cc8df6d78a6f73217aa55241f1b51e46ba2d5a50835cc5bd48fdfc502ae4
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,23 +81,21 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           plexus-languages
 Version:        1.6.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plexus Languages
 License:        Apache-2.0
 URL:            https://github.com/codehaus-plexus/plexus-languages
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-# ./generate-tarball.sh
 Source0:        https://github.com/codehaus-plexus/plexus-languages/archive/refs/tags/%{name}-%{version}.tar.gz#/plexus-languages-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-# Sources contain bundled jars that we cannot verify for licensing
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.6.0-15
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.github.javaparser:javaparser-core)
 BuildRequires:  mvn(com.thoughtworks.qdox:qdox)
@@ -106,15 +104,13 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-failsafe-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.ow2.asm:asm)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.6.0-15
-
+# /oreon:deps
 %description
 Plexus Languages is a set of Plexus components that maintain shared
 language features.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{name}-%{version}
 
@@ -123,14 +119,14 @@ cp %{SOURCE1} .
 %pom_remove_plugin :maven-enforcer-plugin
 
 %build
-# many tests rely on bundled test jars/classes
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE-2.0.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

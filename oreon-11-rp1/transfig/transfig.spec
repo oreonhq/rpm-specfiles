@@ -1,42 +1,35 @@
 %global source0_hash 61e185393176852f03b901b3b05b19fbc5ad8258ff142f3da6e70b1b83513326
-
 %bcond_without tests
-
 %global git_commit ee3f4d841d1ba7d5b1b57544c5068822ca92b1af
 %global git_short_commit %(echo %{git_commit} | cut -c -7)
-
 Name:           transfig
 Version:        3.2.9a
-Release:        %autorelease
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Utility for converting FIG files (made by xfig) to other formats
 License:        Xfig
 URL:            https://sourceforge.net/projects/mcj/
-#Source0:        https://downloads.sourceforge.net/mcj/fig2dev-%%{version}.tar.xz
 Source0:        https://downloads.sourceforge.net/project/mcj/fig2dev-%{version}.tar.xz
-
 Patch:        0002-Fix-invalid-value-passed-to-strchr.patch
 Patch:        0003-fix-putfig-prototype.patch
 Patch:        0004-fix-strip-mksuff-prototypes.patch
-
 Requires:       ghostscript
 Requires:       bc
 Requires:       netpbm-progs
-
-BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  libtool
-BuildRequires:  libpng-devel
-BuildRequires:  libjpeg-devel
-BuildRequires:  libXpm-devel
-BuildRequires:  ghostscript
-
 %if %{with tests}
+%endif
+# oreon:deps
 BuildRequires:  GraphicsMagick
 BuildRequires:  ImageMagick
+BuildRequires:  gcc
+BuildRequires:  ghostscript
+BuildRequires:  libXpm-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libtool
+BuildRequires:  make
 BuildRequires:  netpbm-progs
-%endif
-
+# /oreon:deps
 %description
 The transfig utility creates a makefile which translates FIG (created by xfig)
 or PIC figures into a specified LaTeX graphics language (for example,
@@ -47,6 +40,7 @@ Install transfig if you need a utility for translating FIG or PIC figures into
 certain graphics languages.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n fig2dev-%{version}
 autoreconf -i
@@ -57,26 +51,20 @@ touch -r man/fig2dev.1.in fig2dev.1.in.new
 mv fig2dev.1.in.new man/fig2dev.1.in
 
 %build
+
 %configure --enable-transfig
 %make_build
-
 %install
 %make_install
-
+%oreon_autofiles main
 %if %{with tests}
 %check
+
 %make_build check
 %endif
-
-%files
-%doc CHANGES transfig/doc/manual.pdf
-%{_bindir}/transfig
-%{_bindir}/fig2dev
-%{_bindir}/fig2ps2tex
-%{_bindir}/pic2tpic
-%{_datadir}/fig2dev/i18n/*.ps
-%{_mandir}/man1/*.1.gz
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.2.9a^20250619.-1
 - Import

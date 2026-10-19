@@ -1,13 +1,9 @@
 %global source0_hash f5555dfd0d4cd576cf77990d35f1d915f7ebccd7d91cd162abc6db3187ead9c3
-
-# added temporarily due to errors in libqt5core
 %define _lto_cflags %{nil}
-
 Name:           FlightGear
 Summary:        The FlightGear Flight Simulator
 Version:        2024.1.7
 Release:        1%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 Source0:        https://gitlab.com/flightgear/fgmeta/-/jobs/12799933767/artifacts/raw/fgbuild/flightgear-%{version}.tar.bz2
 Patch:          0001-check-to-be-sure-that-n-is-not-being-set-as-format-t.patch
@@ -16,20 +12,38 @@ Patch:          0003-make-fglauncher-a-static-library.patch
 Patch:          0004-desktop-use-fgfs-wrapper.patch
 Patch:          0005-make-fgqmlui-a-static-library.patch
 Patch:          0006-fgviewer-fix-crash-on-exit.patch
-
 URL:            http://www.flightgear.org/
-BuildRequires:  openal-soft-devel, SimGear-devel >= %{version}
-BuildRequires:  libpng-devel, freeglut-devel, libXi-devel, libXmu-devel
-BuildRequires:  OpenSceneGraph-devel >= 3.2.0, boost-devel >= 1.44.0
-BuildRequires:  fltk-fluid, fltk-devel, dbus-devel, sqlite-devel, glew-devel
-BuildRequires:  cmake, desktop-file-utils, iaxclient-devel, libevent-devel
-BuildRequires:  bzip2-devel, systemd-devel, qt5-qtbase-devel, libcurl-devel
-BuildRequires:  qt5-qtdeclarative-devel, qt5-qtsvg-devel, qt5-linguist, xz-devel
-BuildRequires:  FlightGear-data >= %{version}
 Requires:       FlightGear-data >= %{version}, opengl-games-utils
 Requires:	qt5-qtquickcontrols2
 Requires:       hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  FlightGear-data
+BuildRequires:  OpenSceneGraph-devel
+BuildRequires:  SimGear-devel
+BuildRequires:  boost-devel
+BuildRequires:  bzip2-devel
+BuildRequires:  cmake
+BuildRequires:  dbus-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  fltk-devel
+BuildRequires:  fltk-fluid
+BuildRequires:  freeglut-devel
+BuildRequires:  glew-devel
+BuildRequires:  iaxclient-devel
+BuildRequires:  libXi-devel
+BuildRequires:  libXmu-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libevent-devel
+BuildRequires:  libpng-devel
+BuildRequires:  openal-soft-devel
+BuildRequires:  qt5-linguist
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtdeclarative-devel
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  systemd-devel
+BuildRequires:  xz-devel
+# /oreon:deps
 %description
 The Flight Gear project is working to create a sophisticated flight
 simulator framework for the development and pursuit of interesting
@@ -37,6 +51,7 @@ flight simulator ideas. We are developing a solid basic sim that can be
 expanded and improved upon by anyone interested in contributing
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n flightgear-%{version}
@@ -59,6 +74,7 @@ do
 done
 
 %build
+
 export CXXFLAGS="-fPIC $RPM_OPT_FLAGS"
 %cmake \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
@@ -66,24 +82,15 @@ export CXXFLAGS="-fPIC $RPM_OPT_FLAGS"
     -DSYSTEM_SQLITE=ON \
     -DFG_DATA_DIR:PATH=%{_datadir}/flightgear \
     -DCMAKE_INSTALL_DOCDIR:PATH=%{_docdir}/%{name}
-
 %cmake_build
-
 %install
 %cmake_install
 ln -s opengl-game-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/fgfs-wrapper
 rm -rf $RPM_BUILD_ROOT/usr/appdir
+%oreon_autofiles main
 
-%files
-%doc AUTHORS NEWS README Thanks docs-mini/*
-%license COPYING
-%{_bindir}/*
-%{_mandir}/*/*
-%{_datadir}/applications/*.desktop
-%{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/bash-completion/completions/*
-%{_datadir}/zsh/site-functions/*
-%{_datadir}/metainfo/*.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,40 +1,27 @@
 %global source0_hash 0b68a2f3e123f27c32b971029658abaae00b4c3ae6e79c3f2c18c5dbbfe554d3
-
-%if 0%{?fedora}
-%bcond_without docs
-%else
-# rubygem dependencies not in EPEL yet
 %bcond_with docs
-%endif
-
 %if ! %{defined conf}
 %global conf %nil
 %endif
-
 Name:           nickle
 Version:        2.108
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A programming language-based prototyping environment
-
 License:        MIT
 URL:            https://nickle.org
 Source0:        https://nickle.org/release/nickle-%{version}.tar.xz
-
+%if %{with docs}
+%endif
+# oreon:deps
 BuildRequires:  bc
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  gcc
 BuildRequires:  gmp-devel
-BuildRequires:  meson >= 1.0
+BuildRequires:  meson
 BuildRequires:  ncurses-devel
 BuildRequires:  readline-devel
-%if %{with docs}
-# for documentation
-BuildRequires:  rubygem(asciidoctor-pdf)
-BuildRequires:  rubygem(prawn-icon)
-BuildRequires:  rubygem(prawn-svg)
-%endif
-
+# /oreon:deps
 %description
 Nickle is a programming language based prototyping environment with
 powerful programming and scripting capabilities. Nickle supports a
@@ -53,12 +40,12 @@ text-oriented languages such as AWK and PERL.
 %package devel
 Summary:  Include files for Nickle
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Include files for Nickle, used for building external FFI (foreign
 function interface) libraries (e.g. the Cairo interface for Nickle).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -67,29 +54,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %meson
 
 %build
+
 %meson_build
-
 %check
-%meson_test
 
+%meson_test
 %install
 %meson_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc README README.name AUTHORS TODO debian/changelog
-%doc examples
-%if %{with docs}
-%doc doc/tutorial/nickle-tutorial.pdf
-%endif
-%{_bindir}/nickle
-%{_datadir}/nickle/
-%exclude %{_datadir}/nickle/COPYING
-%exclude %{_datadir}/nickle/examples
-%{_mandir}/man1/nickle.1*
-
-%files devel
-%{_includedir}/nickle
+%files -f %{oreon_filedir}/main.list
+%files -n nickle-devel -f %{oreon_filedir}/nickle-devel.list
 
 %changelog
+
 %autochangelog

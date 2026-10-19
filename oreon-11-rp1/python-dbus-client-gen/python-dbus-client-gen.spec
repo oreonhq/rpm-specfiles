@@ -1,54 +1,46 @@
 %global source0_hash 19006c799fa0f5e198bc1371d551e672b03c799d67dea61d0670edc88e0df971
-
 %global srcname dbus-client-gen
-
 Name:           python-%{srcname}
 Version:        0.5.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Library for Generating D-Bus Client Code
-
 License:        MPL-2.0
 URL:            https://github.com/stratis-storage/dbus-client-gen
 Source0:        https://github.com/stratis-storage/dbus-client-gen/archive/refs/tags/v%{version}.tar.gz#/dbus-client-gen-0.5.2.tar.gz
-
 BuildArch:      noarch
-
-%global _description \
-This library contains a few methods that consume an XML specification\
-of a D-Bus interface and return classes or functions that may be useful\
-in constructing a python D-Bus client. The XML specification has the format\
-of the data returned by the Introspect() method\
-of the Introspectable interface.
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77
+Requires:       python3-dbus-client-gen = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-%{srcname}
-Summary:        %{summary}
+Summary:        Library for Generating D-Bus Client Code
 BuildRequires:  python3-devel
-
-%description -n python3-%{srcname} %{_description}
+%description -n python3-%{srcname}
 
 Python 3 version.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{srcname}-%{version}
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l dbus_client_gen
+%oreon_autofiles main usr/lib/python3*/site-packages/dbus_client_gen* usr/lib64/python3*/site-packages/dbus_client_gen* usr/bin/*
 
 %check
-%pyproject_check_import
 
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc README.rst
+%pyproject_check_import
+%files
+%files -n python3-dbus-client-gen -f %{oreon_filedir}/python3-dbus-client-gen.list
 
 %changelog
+
 %autochangelog

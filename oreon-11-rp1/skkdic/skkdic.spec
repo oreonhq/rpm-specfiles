@@ -1,39 +1,32 @@
+%global source1_hash 34bc5b7c1edb5296b0e1951f0340b68f5b7cf9a4a5ca54c71f45eb8700a293e9
 %global source0_hash 59b32e1a664ac8ed90f2ef8558f3d26eabeaa4e9de930b5b0ce9d3b85ed928cf
-
 %global         githash     b798a46b886f71c0c25ad2a9e78b1c3e8933970c
 %global         shorthash   %(TMP=%githash ; echo ${TMP:0:10})
 %global         gitdate     Wed Jan 31 21:19:24 2024 +0900
 %global         gitdate_num 20240131
-
 %global         githash_tools     0fe2106fbc052445c611e6c5b2a79899d740edcb
-
 %global         baserelease       6
-
 %undefine        _changelog_trimtime
-
-Summary:	Dictionaries for SKK (Simple Kana-Kanji conversion program)
+Summary:        Dictionaries for SKK (Simple Kana-Kanji conversion program)
 Name:		skkdic
 Version:	%{gitdate_num}
-Release:	%{baserelease}.git%{shorthash}%{?dist}
-# See Source2
-# Automatically converted from old format: GPLv2+ and CC-BY-SA and Unicode and Public Domain and MIT - review is highly recommended.
+Release:        1%{?dist}
 License:	GPL-2.0-or-later AND LicenseRef-Callaway-CC-BY-SA AND Unicode-DFS-2015 AND LicenseRef-Callaway-Public-Domain AND LicenseRef-Callaway-MIT
-
-Source0:        https://github.com/skk-dev/dict/archive/%{githash}/%{name}-%{gitdate_num}.git%{githash}.tar.gz#/skkdic-%{gitdate_num}.tar.gz
+Source0:        https://github.com/skk-dev/dict/archive/%{githash}/%{name}-%{version}.git%{githash}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        https://raw.githubusercontent.com/skk-dev/skktools/%{githash_tools}/unannotation.awk
 Source2:	license-investigation.txt
 Source200:	README-skkdic.rh.ja
-
 URL:		https://skk-dev.github.io/dict/
 BuildArch:	noarch
-
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  make
+# /oreon:deps
 %description
 This package includes the SKK dictionaries, including the large dictionary
 SKK-JISYO.L and pubdic+ dictionary.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -T -a 0
 ln -sf dict-%{githash} src
@@ -47,8 +40,8 @@ cp -a zipcode/README.md zipcode/README-zipcode.md
 popd
 
 %build
-pushd src
 
+pushd src
 for dic in \
 	SKK-JISYO.L.unannotated \
 	SKK-JISYO.wrong
@@ -56,31 +49,22 @@ do
 	rm -f $dic
 	make $dic
 done
-
 popd
-
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/skk
-
 pushd src
 for f in SKK-JISYO* zipcode/SKK-JISYO*
 do
 	install -p -m 644 $f $RPM_BUILD_ROOT%{_datadir}/skk
 done
 gzip -9 ChangeLog
-
 popd
+%oreon_autofiles main
 
-%files
-%doc	src/ChangeLog.gz
-%doc	README-skkdic.rh.ja
-%doc	src/committers.md
-%doc	src/edict_doc.html
-%doc	src/zipcode/README-zipcode.md
-
-%{_datadir}/skk/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20240131-6.gitb798a46b88
 - Import

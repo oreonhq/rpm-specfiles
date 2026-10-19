@@ -1,31 +1,25 @@
-%global source0_hash none
-
+%global source0_hash aea98ecf5bc5c5e0b789a76de0083a21a70457050ea4cc2aec7566935f5e258e
 Name:           raylib
 Version:        5.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A simple and easy-to-use library to enjoy videogames programming
-
 License:        Zlib AND MIT
 URL:            https://github.com/raysan5/%{name}
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: cmake
-BuildRequires: pkgconfig
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: libXcursor-devel
-BuildRequires: libXi-devel
-BuildRequires: libXinerama-devel
-BuildRequires: libXrandr-devel
-BuildRequires: mesa-libGL-devel
-BuildRequires: wayland-devel
-BuildRequires: libxkbcommon-devel
-BuildRequires: wayland-protocols-devel
-# raylib ships an in-tree glfw that is a copy of *a* git revision of upstream glfw
-# containing features they need. They are unhappy that it takes such
-# a long time for 3.4 to be released. So ship it.
-#BuildRequires: glfw-devel >= 3.4
-
+Source0:        https://github.com/raysan5/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libXcursor-devel
+BuildRequires:  libXi-devel
+BuildRequires:  libXinerama-devel
+BuildRequires:  libXrandr-devel
+BuildRequires:  libxkbcommon-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  pkgconfig
+BuildRequires:  wayland-devel
+BuildRequires:  wayland-protocols-devel
+# /oreon:deps
 %description
 raylib is a simple and easy-to-use library to enjoy videogames programming.
 
@@ -52,14 +46,13 @@ Requires: mesa-libGL-devel
 Requires: wayland-devel
 Requires: libxkbcommon-devel
 Requires: wayland-protocols-devel
-
 %description devel
 The %{name}-devel package contains header files for developing with %{name}.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake \
     -DBUILD_EXAMPLES=ON \
     -DBUILD_SHARED_LIBS=ON \
@@ -68,32 +61,14 @@ The %{name}-devel package contains header files for developing with %{name}.
     -DUSE_WAYLAND=ON \
     -DBUILD_EXAMPLES=ON \
     -DPLATFORM=Desktop
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%doc README.md
-%doc CHANGELOG
-%doc FAQ.md
-%doc HISTORY.md
-%{_libdir}/libraylib.so.5.5.0
-%{_libdir}/libraylib.so.550
-
-%files devel
-%doc BINDINGS.md
-%doc CONTRIBUTING.md
-%doc CONVENTIONS.md
-%doc ROADMAP.md
-%{_includedir}/%{name}.h
-%{_includedir}/rlgl.h
-%{_includedir}/raymath.h
-%{_libdir}/libraylib.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/cmake/raylib/
+%files -f %{oreon_filedir}/main.list
+%files -n raylib-devel -f %{oreon_filedir}/raylib-devel.list
 
 %changelog
+
 %autochangelog

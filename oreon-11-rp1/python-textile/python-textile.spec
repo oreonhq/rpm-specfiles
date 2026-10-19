@@ -1,62 +1,63 @@
-%global source0_hash none
-
+%global source0_hash 89428d848712b041cf4e354c0a6332339810d519a5c3109cb42a0c594f882a0d
 Name:           python-textile
 Version:        4.0.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Textile processing for python.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/textile/python-textile
-Source:         %{pypi_source textile}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/textile/textile-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-textile = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-textile+develop
+Summary:        Metapackage for python3-textile develop extras
+Requires:       python3-textile = %{version}-%{release}
+Provides:       python3dist(textile[develop]) = %{version}-%{release}
 
+%description -n python3-textile+develop
+Metapackage for python3-textile develop extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'textile' generated automatically by pyp2spec.}
+%package -n       python3-textile+imagesize
+Summary:        Metapackage for python3-textile imagesize extras
+Requires:       python3-textile = %{version}-%{release}
+Requires:       python3dist(pillow) >= 3.0.0
+Provides:       python3dist(textile[imagesize]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-textile+imagesize
+Metapackage for python3-textile imagesize extras.
+
+%description
 
 %package -n     python3-textile
-Summary:        %{summary}
-
-%description -n python3-textile %_description
+Summary:        Textile processing for python.
+# oreon:reqs
+Requires:       python3dist(regex) > 1.0
+# /oreon:reqs
+%description -n python3-textile
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-textile develop,imagesize
-
 
 %prep
-%autosetup -p1 -n textile-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir textile-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-textile usr/lib/python3*/site-packages/textile* usr/lib64/python3*/site-packages/textile* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/textile* usr/lib64/python3*/site-packages/textile* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-textile -f %{pyproject_files}
-%{_bindir}/pytextile
+%files
+%files -n python3-textile -f %{oreon_filedir}/python3-textile.list
 
 %changelog
+
 %autochangelog

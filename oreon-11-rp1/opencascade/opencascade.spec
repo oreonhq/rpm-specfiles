@@ -1,19 +1,14 @@
 %global source0_hash 0d6913eae4bcc09a3653ceced6dda1aec11c35a1513d4c06762c9b002092c68a
-
 %global major 8
 %global minor 0
 %global patch 1
 %global ver_under %{major}_%{minor}_%{patch}
-
 Name:           opencascade
 Version:        8.0.1
 Release:        1%{?dist}
 Summary:        SDK intended for development of applications dealing with 3D CAD data
-
-# https://dev.opencascade.org/resources/licensing
 License:        LGPL-2.1-only WITH OCCT-exception-1.0
 URL:            https://www.opencascade.com/content/overview
-
 Source0:        https://github.com/Open-Cascade-SAS/OCCT/archive/refs/tags/V%{ver_under}.tar.gz#/%{name}-%{version}.tgz
 Source1:        DRAWEXE.1
 Source2:        opencascade-draw.desktop
@@ -21,42 +16,41 @@ Source3:        occ-256.png
 Source4:        occ-128.png
 Source5:        occ-64.png
 Source6:        occ-48.png
-
 Patch0:         occt-config.patch
-
-# Utilities
-BuildRequires:  cmake gcc gcc-c++
-BuildRequires:  ninja-build
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(RapidJSON)
 BuildRequires:  desktop-file-utils
 BuildRequires:  doxygen
-# Libraries
-BuildRequires:  xorg-x11-proto-devel
+BuildRequires:  freeimage-devel
+BuildRequires:  ftgl-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gl2ps-devel
 BuildRequires:  libXScrnSaver-devel
-BuildRequires:  libXrandr-devel
-BuildRequires:  libXpm-devel
-BuildRequires:  libxkbfile-devel
-BuildRequires:  libXinerama-devel
-BuildRequires:  libXres-devel
-BuildRequires:  libXtst-devel
 BuildRequires:  libXcomposite-devel
 BuildRequires:  libXcursor-devel
 BuildRequires:  libXdmcp-devel
 BuildRequires:  libXi-devel
-BuildRequires:  libXv-devel
-BuildRequires:  mesa-libGL-devel mesa-libGLU-devel
+BuildRequires:  libXinerama-devel
 BuildRequires:  libXmu-devel
-BuildRequires:  ftgl-devel
-BuildRequires:  freeimage-devel
-BuildRequires:  gl2ps-devel
+BuildRequires:  libXpm-devel
+BuildRequires:  libXrandr-devel
+BuildRequires:  libXres-devel
+BuildRequires:  libXtst-devel
+BuildRequires:  libXv-devel
 BuildRequires:  libgomp
-BuildRequires:  cmake(RapidJSON)
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_packaging_header_only_libraries
+BuildRequires:  libxkbfile-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  ninja-build
 BuildRequires:  rapidjson-static
+BuildRequires:  tbb-devel
 BuildRequires:  tcl-devel
 BuildRequires:  tk-devel
-BuildRequires:  tbb-devel
 BuildRequires:  vtk-devel
-
+BuildRequires:  xorg-x11-proto-devel
+# /oreon:deps
 %description
 Open CASCADE Technology (OCCT) is a suite for 3D surface and solid
 modeling, visualization, data exchange and rapid application development. It
@@ -65,7 +59,6 @@ including CAD/CAM/CAE, AEC and GIS, as well as PDM applications.
 
 %package foundation
 Summary:        OpenCASCADE CAE platform shared libraries
-
 %description foundation
 OpenCASCADE CAE platform shared libraries
 
@@ -76,7 +69,6 @@ math tools.
 
 %package modeling
 Summary:        OpenCASCADE CAE platform shared libraries
-
 %description modeling
 OpenCASCADE CAE platform shared libraries
 
@@ -85,7 +77,6 @@ as well as topological and geometrical algorithms.
 
 %package ocaf
 Summary:        OpenCASCADE CAE platform shared libraries
-
 %description ocaf
 OpenCASCADE CAE platform shared libraries
 
@@ -94,7 +85,6 @@ support for data exchange.
 
 %package visualization
 Summary:        OpenCASCADE CAE platform shared libraries
-
 %description visualization
 OpenCASCADE CAE platform shared libraries
 
@@ -102,7 +92,6 @@ This package provides services for displaying 2D and 3D graphics.
 
 %package examples
 Summary:        OpenCASCADE CAE platform shared libraries
-
 %description examples
 OpenCASCADE CAE platform shared libraries
 
@@ -110,7 +99,6 @@ This package contains example input files for OpenCASCADE in various formats.
 
 %package draw
 Summary:        OpenCASCADE CAE platform shared libraries
-
 %description draw
 OpenCASCADE CAE DRAW test harness.
 
@@ -143,17 +131,16 @@ Requires:       libXv-devel
 Requires:       mesa-libGL-devel
 Requires:       mesa-libGLU-devel
 Requires:       cmake(RapidJSON)
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_packaging_header_only_libraries
 Requires:       rapidjson-static
 Requires:       tbb-devel
 Requires:       tcl-devel
 Requires:       tk-devel
 Requires:       vtk-devel
-
 %description devel
 OpenCASCADE CAE platform library development files
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n OCCT-%{ver_under}
 
@@ -164,10 +151,8 @@ find ./src -type f -exec chmod -x {} \;
 chmod 0644 *.txt
 
 %build
-# opencascade does some manual install trickery that does not respect DESTDIR.
-# Make DESTDIR an environment variable that can be passed into the CMake config.
-export DESTDIR="%{buildroot}"
 
+export DESTDIR="%{buildroot}"
 %cmake -GNinja \
        -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DUSE_RAPIDJSON=True \
@@ -181,141 +166,34 @@ export DESTDIR="%{buildroot}"
        -DBUILD_DOC_Overview:BOOL=OFF \
        -DINSTALL_DIR_LIB=%{_lib} \
        -DINSTALL_DIR_CMAKE=%{_lib}/cmake/%{name}
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Draw binary should not be versioned.
 mv %{buildroot}%{_bindir}/DRAWEXE-* \
    %{buildroot}%{_bindir}/DRAWEXE
-
-# Install manpage for DRAWEXE
 install -Dm 0644 %{SOURCE1} %{buildroot}%{_mandir}/man1/DRAWEXE.1
-
-# Install and validate desktop file
 desktop-file-install                           \
     --dir=%{buildroot}%{_datadir}/applications \
     %{SOURCE2}
-
-# Install icons
 for size in 256 128 64 48; do
     icon=%{_sourcedir}/occ-${size}.png
     install -Dm 0644 $icon \
         %{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps/occ.png
 done
-
-# Remove license files so they can be included by %%license.
 rm -f %{buildroot}%{_docdir}/%{name}/{LICENSE_LGPL_21.txt,OCCT_LGPL_EXCEPTION.txt}
-
-# Fix non-executable shell scripts
 chmod 0755 %{buildroot}%{_bindir}/*.sh
+sed -i "s/\\\\\${OCCT_INSTALL_BIN_LETTER}//g" %{buildroot}%{_libdir}/cmake/opencascade/*.cmake
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-# Fix library target manipulation attempt by upstream
-sed -i "s/\\\\\${OCCT_INSTALL_BIN_LETTER}//g" %{buildroot}%{_libdir}/cmake/opencascade/*.cmake 
-
-%files foundation
-%doc README.md
-%license LICENSE_LGPL_21.txt OCCT_LGPL_EXCEPTION.txt
-# Foundation
-%{_libdir}/libTKernel.so.*
-%{_libdir}/libTKMath.so.*
-%{_datadir}/opencascade/
-
-%files modeling
-# Modeling Data
-%{_libdir}/libTKG2d.so.*
-%{_libdir}/libTKG3d.so.*
-%{_libdir}/libTKGeomBase.so.*
-%{_libdir}/libTKBRep.so.*
-# Modeling Algorithms
-%{_libdir}/libTKGeomAlgo.so.*
-%{_libdir}/libTKTopAlgo.so.*
-%{_libdir}/libTKPrim.so.*
-%{_libdir}/libTKBO.so.*
-%{_libdir}/libTKBool.so.*
-%{_libdir}/libTKHLR.so.*
-%{_libdir}/libTKFillet.so.*
-%{_libdir}/libTKOffset.so.*
-%{_libdir}/libTKFeat.so.*
-%{_libdir}/libTKMesh.so.*
-%{_libdir}/libTKXMesh.so.*
-%{_libdir}/libTKShHealing.so.*
-# Data exchange
-%{_libdir}/libTKXSBase.so.*
-%{_libdir}/libTKDESTEP.so.*
-%{_libdir}/libTKDEIGES.so.*
-%{_libdir}/libTKXCAF.so.*
-%{_libdir}/libTKDE.so.*
-%{_libdir}/libTKDECascade.so.*
-%{_libdir}/libTKDEGLTF.so.*
-%{_libdir}/libTKDEOBJ.so.*
-%{_libdir}/libTKDEPLY.so.*
-%{_libdir}/libTKDESTL.so.*
-%{_libdir}/libTKDEVRML.so.*
-%{_libdir}/libTKXmlXCAF.so.*
-%{_libdir}/libTKBinXCAF.so.*
-%{_libdir}/libTKRWMesh.so.*
-%{_libdir}/libTKExpress.so.*
-
-%files visualization
-# Visualization Dependents
-%{_libdir}/libTKService.so.*
-%{_libdir}/libTKV3d.so.*
-# Visualization
-%{_libdir}/libTKOpenGl.so.*
-%{_libdir}/libTKOpenGlTest.so.*
-%{_libdir}/libTKMeshVS.so.*
-%{_libdir}/libTKIVtk.so.*
-
-%files ocaf
-# Application framework
-%{_libdir}/libTKCDF.so.*
-%{_libdir}/libTKLCAF.so.*
-%{_libdir}/libTKCAF.so.*
-%{_libdir}/libTKBinL.so.*
-%{_libdir}/libTKXmlL.so.*
-%{_libdir}/libTKBin.so.*
-%{_libdir}/libTKXml.so.*
-%{_libdir}/libTKStdL.so.*
-%{_libdir}/libTKStd.so.*
-%{_libdir}/libTKTObj.so.*
-%{_libdir}/libTKBinTObj.so.*
-%{_libdir}/libTKXmlTObj.so.*
-%{_libdir}/libTKVCAF.so.*
-
-%files draw
-# Draw Libraries
-%{_libdir}/libTKDraw.so.*
-%{_libdir}/libTKIVtkDraw.so.*
-%{_libdir}/libTKQADraw.so.*
-%{_libdir}/libTKTopTest.so.*
-%{_libdir}/libTKViewerTest.so.*
-%{_libdir}/libTKXSDRAW.so.*
-%{_libdir}/libTKXSDRAWDE.so.*
-%{_libdir}/libTKXSDRAWGLTF.so.*
-%{_libdir}/libTKXSDRAWIGES.so.*
-%{_libdir}/libTKXSDRAWOBJ.so.*
-%{_libdir}/libTKXSDRAWPLY.so.*
-%{_libdir}/libTKXSDRAWSTEP.so.*
-%{_libdir}/libTKXSDRAWSTL.so.*
-%{_libdir}/libTKXSDRAWVRML.so.*
-%{_libdir}/libTKDCAF.so.*
-%{_libdir}/libTKXDEDRAW.so.*
-%{_libdir}/libTKTObjDRAW.so.*
-# DRAWEXE application
-%{_bindir}/DRAWEXE
-%{_mandir}/man1/DRAWEXE.1.gz
-%{_datadir}/applications/opencascade-draw.desktop
-%{_datadir}/icons/hicolor/*/apps/*
-
-%files devel
-%{_bindir}/*.sh
-%{_bindir}/ExpToCasExe*
-%{_includedir}/opencascade
-%{_libdir}/*.so
-%{_libdir}/cmake/opencascade/*.cmake
+%files -f %{oreon_filedir}/main.list
+%files -n opencascade-foundation -f %{oreon_filedir}/opencascade-foundation.list
+%files -n opencascade-modeling -f %{oreon_filedir}/opencascade-modeling.list
+%files -n opencascade-ocaf -f %{oreon_filedir}/opencascade-ocaf.list
+%files -n opencascade-visualization -f %{oreon_filedir}/opencascade-visualization.list
+%files -n opencascade-examples -f %{oreon_filedir}/opencascade-examples.list
+%files -n opencascade-draw -f %{oreon_filedir}/opencascade-draw.list
+%files -n opencascade-devel -f %{oreon_filedir}/opencascade-devel.list
 
 %changelog
+
 %autochangelog

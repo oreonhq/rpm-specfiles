@@ -1,62 +1,86 @@
-%global source0_hash none
-
+%global source0_hash b185acc9bbb80f371e811a79391eb3303d11be6e0e73cd117161c8e7c54ac380
 Name:           python-slixmpp-omemo
 Version:        2.2.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        OMEMO plugin for Slixmpp
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        AGPL-3.0-only
 URL:            https://github.com/Syndace/slixmpp-omemo
-Source:         %{pypi_source slixmpp_omemo}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/slixmpp_omemo/slixmpp_omemo-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-slixmpp-omemo = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-slixmpp-omemo+docs
+Summary:        Metapackage for python3-slixmpp-omemo docs extras
+Requires:       python3-slixmpp-omemo = %{version}-%{release}
+Provides:       python3dist(slixmpp-omemo[docs]) = %{version}-%{release}
 
+%description -n python3-slixmpp-omemo+docs
+Metapackage for python3-slixmpp-omemo docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'slixmpp-omemo' generated automatically by pyp2spec.}
+%package -n       python3-slixmpp-omemo+test
+Summary:        Metapackage for python3-slixmpp-omemo test extras
+Requires:       python3-slixmpp-omemo = %{version}-%{release}
+Provides:       python3dist(slixmpp-omemo[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-slixmpp-omemo+test
+Metapackage for python3-slixmpp-omemo test extras.
+
+%package -n       python3-slixmpp-omemo+lint
+Summary:        Metapackage for python3-slixmpp-omemo lint extras
+Requires:       python3-slixmpp-omemo = %{version}-%{release}
+Provides:       python3dist(slixmpp-omemo[lint]) = %{version}-%{release}
+
+%description -n python3-slixmpp-omemo+lint
+Metapackage for python3-slixmpp-omemo lint extras.
+
+%package -n       python3-slixmpp-omemo+dev
+Summary:        Metapackage for python3-slixmpp-omemo dev extras
+Requires:       python3-slixmpp-omemo = %{version}-%{release}
+Provides:       python3dist(slixmpp-omemo[dev]) = %{version}-%{release}
+
+%description -n python3-slixmpp-omemo+dev
+Metapackage for python3-slixmpp-omemo dev extras.
+
+%description
 
 %package -n     python3-slixmpp-omemo
-Summary:        %{summary}
-
-%description -n python3-slixmpp-omemo %_description
+Summary:        OMEMO plugin for Slixmpp
+# oreon:reqs
+Requires:       python3dist(oldmemo[xml]) < 3
+Requires:       python3dist(oldmemo[xml]) >= 2.0.0
+Requires:       python3dist(omemo) < 3
+Requires:       python3dist(omemo) >= 2.0.0
+Requires:       python3dist(slixmpp) < 2
+Requires:       python3dist(slixmpp) >= 1.8.0
+Requires:       python3dist(twomemo[xml]) < 3
+Requires:       python3dist(twomemo[xml]) >= 2.0.0
+Requires:       python3dist(typing-extensions) >= 4.4.0
+# /oreon:reqs
+%description -n python3-slixmpp-omemo
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-slixmpp-omemo dev,docs,lint,test
-
 
 %prep
-%autosetup -p1 -n slixmpp_omemo-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir slixmpp_omemo-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-slixmpp-omemo usr/lib/python3*/site-packages/slixmpp_omemo* usr/lib64/python3*/site-packages/slixmpp_omemo* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/slixmpp_omemo* usr/lib64/python3*/site-packages/slixmpp_omemo* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-slixmpp-omemo -f %{pyproject_files}
+%files
+%files -n python3-slixmpp-omemo -f %{oreon_filedir}/python3-slixmpp-omemo.list
 
 %changelog
+
 %autochangelog

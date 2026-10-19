@@ -1,62 +1,51 @@
-%global source0_hash b3619436e1e1e3cba15856839666edcb769fce97b47f5bba5e2789b03eed3156
-
+%global source0_hash 0faeba6d5d5276d5b59ce71809b2f16d18a3d66b07791007714e09d60e8ad8ad
 Name:           python-bidict
 Version:        0.24.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Bidirectional mapping library for Python
-
 License:        MPL-2.0
 URL:            https://bidict.readthedocs.io
-Source:         https://github.com/jab/bidict/archive/v%{version}/bidict-%{version}.tar.gz
-
-
+Source0:        https://github.com/jab/bidict/archive/v%{version}/bidict-%{version}.tar.gz
 BuildArch:      noarch
-
-# In 0.24.1, test dependencies are in dev-deps/test.in. Later, they are moved
-# to a test dependency group in pyproject.toml. In either case, we must curate
-# them: we don’t want benchmarks, coverage analysis, linters, etc, and
-# pytest-sphinx, while perhaps potentially useful, is not packaged. See
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters.
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist hypothesis}
-BuildRequires:  %{py3_dist pytest-xdist}
-BuildRequires:  %{py3_dist typing-extensions}
-# The sortedcontainers dependency is mentioned in documentation, but does not
-# appear in a doctest that we actually run. The sortedcollections dependency is
-# used for only one doctest, which we ignore.
-
 %global common_description %{expand:
 The bidirectional mapping library for Python.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(uv-build) < 0.12
+BuildRequires:  python3dist(uv-build) >= 0.8.13
+Requires:       python3-bidict = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n     python3-bidict
-Summary:        %{summary}
-
+Summary:        Bidirectional mapping library for Python
+# oreon:reqs
+Requires:       python3dist(typing-extensions) >= 4.0
+# /oreon:reqs
 %description -n python3-bidict %{common_description}
 
 %prep
+
 %autosetup -p1
 # Since we have patched out pytest-benchmark, this would not be recognized.
 sed -r -i '/--benchmark/d' pytest.ini
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-bidict usr/lib/python3*/site-packages/bidict* usr/lib64/python3*/site-packages/bidict* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/bidict* usr/lib64/python3*/site-packages/bidict* usr/bin/*
 
 %check
-# This contains one doctest, which requires the sortedcollections dependency.
-# It’s not worth maintaining the dependency solely for that, especially as it
-# is otherwise not needed in Fedora at all.
+
 ignore="${ignore-} --ignore=docs/extending.rst"
-
 %pytest ${ignore-}
-
-%files -n python3-bidict -f %{pyproject_files}
-%doc CHANGELOG.rst
-%doc README.rst
+%files
+%files -n python3-bidict -f %{oreon_filedir}/python3-bidict.list
 
 %changelog
+
 %autochangelog

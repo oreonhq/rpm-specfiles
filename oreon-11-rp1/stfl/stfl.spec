@@ -1,28 +1,20 @@
 %global source0_hash c5e77dd2e40e14f0e68dd08df1f21cd1378d88d5001e7c1926ceb7c4a977ab86
-
 %global commit bbb2404580e845df2556560112c8aefa27494d66
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           stfl
 Version:        0.24
-Release:        2.newsboat.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        The Structured Terminal Forms Language/Library
-
 License:        LGPL-3.0-or-later
 URL:            https://github.com/newsboat/stfl
-Source0:        https://github.com/newsboat/stfl/archive/%{commit}.tar.gz
-
-# STFL is unmaintained and the bindings are not used within Fedora. Obsolete
-# them to reduce the footprint of the package and avoid needing rebuilds for
-# language ecosystems unnecessarily.
-# https://bugzilla.redhat.com/show_bug.cgi?id=2420468
+Source0:        https://github.com/newsboat/%{name}/archive/%{commit}.tar.gz
 Obsoletes:      stfl-perl < 0.22-54
 Obsoletes:      stfl-ruby < 0.22-54
-
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  make
 BuildRequires:  ncurses-devel
-
+# /oreon:deps
 %description
 STFL is a library which implements a curses-based widget set for text
 terminals.
@@ -31,12 +23,12 @@ terminals.
 Summary:        Development files for %{name}
 Requires:       %{name} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{commit}
@@ -63,33 +55,19 @@ sed -i.cflags -e 's|-Os||' Makefile
 sed -i.path -e 's|lib$|%{_lib}|' -e 's|/usr/local$|%{_prefix}|' Makefile.cfg
 
 %build
-# building with smp flags causes random failures
+
 export CFLAGS="%{optflags}"
-# test with explicit prefix and echo
-#make prefix=/usr libdir=%{_lib}
-
-# Parallel build is unstable :/
-#make  %{?_smp_mflags}
 make
-
 %install
 %make_install
-# give the shared libraries executable permissions so they get stripped
-# also fixes the 0555 permissions on the perl bindings
 find %{buildroot} -name '*.so' -exec chmod 755 {} ';'
-# fedora doesn't ship static libraries
 rm -f %{buildroot}%{_libdir}/libstfl.a
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README COPYING
-%{_libdir}/*.so.0*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/stfl.pc
+%files -f %{oreon_filedir}/main.list
+%files -n stfl-devel -f %{oreon_filedir}/stfl-devel.list
 
 %changelog
+
 %autochangelog

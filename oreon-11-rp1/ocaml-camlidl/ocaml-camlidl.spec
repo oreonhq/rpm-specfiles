@@ -1,30 +1,22 @@
 %global source0_hash c82bfd106208ebedd8c264300e939010f87eed83e6f6339e3a6cf8f66caeed54
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 Name:           ocaml-camlidl
 Version:        1.13
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Stub code generator and COM binding for Objective Caml
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
-
 %global shortversion %(tr -d . <<< %{version})
 %global giturl  https://github.com/xavierleroy/camlidl
-
 URL:            https://xavierleroy.org/camlidl/
 VCS:            git:%{giturl}.git
 Source0:        %{giturl}/archive/camlidl%{shortversion}.tar.gz
-
-# Patch sent upstream on 2020-05-20.
-# Pass -g option to ocamlmklib.
 Patch:          0001-Pass-g-option-to-ocamlmklib.patch
-
+# oreon:deps
 BuildRequires:  make
 BuildRequires:  ocaml
 BuildRequires:  ocaml-ocamldoc
 BuildRequires:  ocaml-rpm-macros
-
+# /oreon:deps
 %description
 CamlIDL is a stub code generator and COM binding for Objective Caml.
 
@@ -43,12 +35,12 @@ CamlIDL comprises two parts:
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n camlidl-camlidl%{shortversion} -p1
@@ -71,24 +63,20 @@ find . \( -name .cvsignore -o -name .gitignore \) -delete
 sed -i 's/cp/cp -p/' runtime/Makefile.unix
 
 %build
-# Parallel builds will fail.
-make
 
+make
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}/ocaml
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}/ocaml/caml
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}/ocaml/stublibs
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
-
 %make_install
 %ocaml_files
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f .ofiles
-%license LICENSE
-
-%files devel -f .ofiles-devel
-%doc README Changes docs tests
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-camlidl-devel -f %{oreon_filedir}/ocaml-camlidl-devel.list
 
 %changelog
+
 %autochangelog

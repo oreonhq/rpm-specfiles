@@ -1,30 +1,19 @@
 %global source0_hash 1046857c337f5bd05f6fa482446b5a42a011615105743efbe4efee0970b24bb7
-
 %bcond check 0
-
-# https://github.com/junegunn/fzf
 %global goipath         github.com/junegunn/fzf
 Version:                0.74.4
-
 %gometa
-
 Name:           fzf
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A command-line fuzzy finder written in Go
-
 License:        MIT
 URL:            %{gourl}
-Source0:        %{gosource}
+Source0:        https://%{goipath}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        README.Fedora
-
-BuildRequires:  golang(github.com/charlievieth/fastwalk) >= 1.0.9
-BuildRequires:  golang(github.com/gdamore/tcell/v2) >= 2.7.4
-BuildRequires:  golang(github.com/junegunn/go-shellwords)
-BuildRequires:  golang(github.com/mattn/go-isatty) >= 0.0.20
-BuildRequires:  golang(github.com/rivo/uniseg) >= 0.4.7
-BuildRequires:  golang(golang.org/x/sys/unix) >= 0.28
-BuildRequires:  golang(golang.org/x/term) >= 0.25
-
+# oreon:deps
+BuildRequires:  go-rpm-macros
+BuildRequires:  golang
+# /oreon:deps
 %description
 fzf is a general-purpose command-line fuzzy finder.
 
@@ -33,6 +22,7 @@ list; files, command history, processes, hostnames, bookmarks, git commits,
 etc.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %goprep
@@ -40,45 +30,25 @@ cp %{SOURCE1} .
 %autopatch -p1
 
 %build
+
 export LDFLAGS='-X main.version=%{version} -X main.revision=Fedora '
 %gobuild -o %{gobuilddir}/bin/fzf %{goipath}
-
 %install
 install -Dpm0755 -t %{buildroot}%{_bindir} %{gobuilddir}/bin/fzf bin/fzf-tmux
 install -Dpm0644 -t %{buildroot}%{_mandir}/man1 man/man1/*.1
-
-# Install vim plugin
 install -Dpm0644 -t %{buildroot}%{_datadir}/vim/vimfiles/plugin plugin/fzf.vim
 install -Dpm0644 -t %{buildroot}%{_datadir}/nvim/site/plugin plugin/fzf.vim
-
-# Install shell completion
-# fzf is special, bash completion must be in /etc/bash_completion.d
-# https://bugzilla.redhat.com/show_bug.cgi?id=1789958#c7
 install -Dpm0644 shell/completion.bash %{buildroot}%{_sysconfdir}/bash_completion.d/fzf
 install -Dpm0644 shell/completion.zsh %{buildroot}%{zsh_completions_dir}/_fzf
-
-# Install shell key bindings (not enabled)
 install -Dpm0644 -t %{buildroot}%{_datadir}/fzf/shell shell/key-bindings.*
-
+%oreon_autofiles main
 %if %{with check}
 %check
+
 %gocheck
 %endif
-
-%files
-%license LICENSE
-%doc README.md README-VIM.md CHANGELOG.md README.Fedora
-%{_bindir}/fzf
-%{_bindir}/fzf-tmux
-%{_mandir}/man1/fzf.1*
-%{_mandir}/man1/fzf-tmux.1*
-%{_datadir}/fzf
-%dir %{_datadir}/vim/vimfiles/plugin
-%{_datadir}/vim/vimfiles/plugin/fzf.vim
-%dir %{_datadir}/nvim/site/plugin
-%{_datadir}/nvim/site/plugin/fzf.vim
-%{_sysconfdir}/bash_completion.d/fzf
-%{zsh_completions_dir}/_fzf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

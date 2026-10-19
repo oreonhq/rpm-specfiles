@@ -1,34 +1,34 @@
 %global source0_hash 8435e3d409c6f5af1f2a76a8aa6ef97e80fe471514a95c93d9bb3d9f7413d8a1
-
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-hil
-Summary: Hiligaynon hunspell dictionaries
+Summary:        Hiligaynon hunspell dictionaries
 Epoch: 1
 Version: 0.14
-Release: 33%{?dist}
+Release:        1%{?dist}
 URL: http://extensions.services.openoffice.org/project/hunspell-hil
 License: GPL-2.0-or-later
 BuildArch: noarch
-
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-hil)
-
 Source0:        https://github.com/openela-main/hunspell-hil/raw/el9/SOURCES/litreoir_hiligaynon-0.14-tb+fx+sm.xpi
+# oreon:deps
 
+# /oreon:deps
 %description
 Hiligaynon hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -T
 unzip -q %{SOURCE0}
 
 %build
+
 for i in dictionaries/README_hil_PH.txt; do
   if ! iconv -f utf-8 -t utf-8 -o /dev/null $i > /dev/null 2>&1; then
     iconv -f ISO-8859-1 -t UTF-8 $i > $i.new
@@ -39,16 +39,15 @@ for i in dictionaries/README_hil_PH.txt; do
   touch -r $i $i.new
   mv -f $i.new $i
 done
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/hil.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/hil_PH.dic
 cp -p dictionaries/hil.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/hil_PH.aff
+%oreon_autofiles main
 
-%files
-%doc dictionaries/README_hil_PH.txt
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:0.14-33
 - Import

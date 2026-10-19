@@ -1,45 +1,24 @@
 %global source0_hash f43502561c28ba47ab77e18e1a973d07361c68cc8b14178e619bd5796b70eabd
-
 %global _hardened_build 1
-
 Name:           hostapd
 Version:        2.12
 Release:        1%{?dist}
 Summary:        IEEE 802.11 AP, IEEE 802.1X/WPA/WPA2/EAP/RADIUS Authenticator
 License:        BSD-3-Clause
 URL:            http://w1.fi/hostapd
-
 Source0:        http://w1.fi/releases/%{name}-%{version}.tar.gz
 Source1:        %{name}.service
 Source2:        %{name}.conf
 Source3:        %{name}.conf.5
 Source4:        %{name}.sysconfig
 Source5:        %{name}.init
-
-# use pkcs11-provider instead of OpenSSL engine
 Patch1: OpenSSL-Use-pkcs11-provider-when-OPENSSL_NO_ENGINE-i.patch
-
+# oreon:deps
+BuildRequires:  gcc
 BuildRequires:  libnl3-devel
 BuildRequires:  openssl-devel
 BuildRequires:  perl-generators
-BuildRequires:  gcc
-
-%if 0%{?fedora} || 0%{?rhel} >= 7
-BuildRequires:      systemd
-BuildRequires: make
-Requires(post):     systemd
-Requires(preun):    systemd
-Requires(postun):   systemd
-Requires: pkcs11-provider >= 1.0
-%endif
-
-%if 0%{?rhel} == 6
-Requires(post):     /sbin/chkconfig
-Requires(preun):    /sbin/chkconfig
-Requires(preun):    /sbin/service
-Requires(postun):   /sbin/service
-%endif
-
+# /oreon:deps
 %description
 %{name} is a user space daemon for access point and authentication servers. It
 implements IEEE 802.11 access point management, IEEE 802.1X/WPA/WPA2/EAP
@@ -54,16 +33,12 @@ included with %{name}.
 Summary:        Logwatch scripts for hostapd
 Requires:       %{name} = %{version}-%{release}
 Requires:       logwatch
-%if 0%{?rhel} == 6 || 0%{?rhel} == 7
-Requires:       perl
-%else
 Requires:       perl-interpreter
-%endif
-
 %description logwatch
 Logwatch scripts for hostapd.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 sed \
@@ -92,111 +67,36 @@ sed \
 echo "CFLAGS += -I%{_includedir}/libnl3 -DOPENSSL_NO_ENGINE" >> hostapd/.config
 echo "LIBS += -L%{_libdir}" >> hostapd/.config
 
-
 %build
+
 make %{?_smp_mflags} EXTRA_CFLAGS="$RPM_OPT_FLAGS -DOPENSSL_NO_ENGINE" -C hostapd
-
-
 %install
-%if 0%{?fedora} || 0%{?rhel} >= 7
-
-# Systemd unit files
-install -p -m 644 -D %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
-
-%else
-
-# Initscripts
 install -p -m 755 -D %{SOURCE5} %{buildroot}%{_initrddir}/%{name}
-
-%endif
-
-# logwatch files
 install -d %{buildroot}/%{_sysconfdir}/logwatch/conf/services
 install -pm 0644 %{name}/logwatch/%{name}.conf  \
         %{buildroot}/%{_sysconfdir}/logwatch/conf/services/%{name}.conf
 install -d %{buildroot}/%{_sysconfdir}/logwatch/scripts/services
 install -pm 0755 %{name}/logwatch/%{name} \
         %{buildroot}/%{_sysconfdir}/logwatch/scripts/services/%{name}
-
-# config files
 install -d %{buildroot}/%{_sysconfdir}/%{name}
 install -pm 0600 %{SOURCE2} %{buildroot}/%{_sysconfdir}/%{name}
-
 install -d %{buildroot}/%{_sysconfdir}/sysconfig
 install -pm 0644 %{SOURCE4} %{buildroot}/%{_sysconfdir}/sysconfig/%{name}
-
-# binaries
 install -d %{buildroot}/%{_sbindir}
 install -pm 0755 %{name}/%{name} %{buildroot}%{_sbindir}/%{name}
 install -pm 0755 %{name}/%{name}_cli %{buildroot}%{_sbindir}/%{name}_cli
-
-# man pages
 install -d %{buildroot}%{_mandir}/man{1,5,8}
 install -pm 0644 %{name}/%{name}_cli.1 %{buildroot}%{_mandir}/man1
 install -pm 0644 %{SOURCE3} %{buildroot}%{_mandir}/man5
 install -pm 0644 %{name}/%{name}.8 %{buildroot}%{_mandir}/man8
-
-# prepare docs
 cp %{name}/README ./README.%{name}
 cp %{name}/README-WPS ./README-WPS.%{name}
 cp %{name}/logwatch/README ./README.logwatch
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%if 0%{?fedora} || 0%{?rhel} >= 7
-
-%post
-%systemd_post %{name}.service
-
-%preun
-%systemd_preun %{name}.service
-
-%postun
-%systemd_postun_with_restart %{name}.service
-
-%endif
-
-%if 0%{?rhel} == 6
-
-%post
-/sbin/chkconfig --add %{name}
-
-%preun
-if [ $1 -eq 0 ]; then
-    /sbin/service %{name} stop >/dev/null 2>&1 || :
-    /sbin/chkconfig --del %{name}
-fi
-
-%postun
-if [ $1 -ge 1 ]; then
-    /sbin/service %{name} condrestart >/dev/null 2>&1 || :
-fi
-
-%endif
-
-%files
-%license COPYING
-%doc README README.hostapd README-WPS.hostapd
-%doc %{name}/%{name}.conf %{name}/wired.conf
-%doc %{name}/%{name}.accept %{name}/%{name}.deny
-%doc %{name}/%{name}.eap_user %{name}/%{name}.radius_clients
-%doc %{name}/%{name}.vlan %{name}/%{name}.wpa_psk
-%config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%{_sbindir}/%{name}
-%{_sbindir}/%{name}_cli
-%dir %{_sysconfdir}/%{name}
-%{_mandir}/man1/*
-%{_mandir}/man5/*
-%{_mandir}/man8/*
-%if 0%{?fedora} || 0%{?rhel} >= 7
-%{_unitdir}/%{name}.service
-%else
-%{_initrddir}/%{name}
-%endif
-
-%files logwatch
-%doc %{name}/logwatch/README
-%config(noreplace) %{_sysconfdir}/logwatch/conf/services/%{name}.conf
-%{_sysconfdir}/logwatch/scripts/services/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n hostapd-logwatch -f %{oreon_filedir}/hostapd-logwatch.list
 
 %changelog
+
 %autochangelog

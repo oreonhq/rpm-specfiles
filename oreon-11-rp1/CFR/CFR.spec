@@ -1,29 +1,23 @@
 %global source0_hash a71a70dfe7d77f90a2d53762c88d9dd69c4d067fe37f6f1adf1a69b72a7945e3
-
 Name:           CFR
 Version:        0.152
 Release:        2%{?dist}
 Summary:        CFR - Another Java Decompiler
-
 License:        MIT
 URL:            https://github.com/leibnitz27/cfr
 Source0:        https://github.com/leibnitz27/cfr/archive/refs/tags/%{version}.tar.gz
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  maven-compiler-plugin
-
 Requires:       java-headless
 Requires:       javapackages-tools
-
 Provides:       cfr
 Provides:       Cfr
-
 %global lowercase_name cfr
 %global build_folder %{lowercase_name}-%{version}
-
+# oreon:deps
+BuildRequires:  maven-compiler-plugin
+BuildRequires:  maven-local-openjdk25
+# /oreon:deps
 %description
 CFR will decompile modern Java features - including much of Java 9, 12 & 14,21 and 25
 but is written entirely in Java 6, so will work anywhere!
@@ -31,11 +25,11 @@ It'll even make a decent go of turning class files from other JVM languages back
 
 %package javadoc
 Summary: Javadoc for %{name}
-
 %description javadoc
 Javadoc for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{build_folder}
@@ -54,20 +48,18 @@ sed -i 's/${git.dirty}/false/' %{_builddir}/%{build_folder}/src-templates/org/be
 cp %{_builddir}/%{build_folder}/src-templates/org/benf/cfr/reader/util/CfrVersionInfo.java %{_builddir}/%{build_folder}/src/org/benf/cfr/reader/util/CfrVersionInfo.java
 
 %build
-%mvn_build
 
+%mvn_build
 %install
 rm -rf $RPM_BUILD_ROOT
 %mvn_install
 %jpackage_script org.benf.cfr.reader.Main "" "" %{name}/%{name} %{lowercase_name}
+%oreon_autofiles CFR-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE
-%doc README.md
-%{_bindir}/%{lowercase_name}
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n CFR-javadoc -f %{oreon_filedir}/CFR-javadoc.list
 
 %changelog
+
 %autochangelog

@@ -1,25 +1,29 @@
-%global source0_hash none
-
+%global source2_hash 153b53c2bbefa5f5e748ff1d0dd6779e5f2c16b0052a4540a929d5d901f24202
+%global source1_hash 5e5b1041abe154b3ef2790a20bb6d3272e343d0d05c5efdce64f9d21c95f3837
+%global source0_hash 10bd584d8f00d8091e814902b9f0a3e209f16e938f510fc23ba05f3fa469db5a
 %global pkgname libisofs
-
 Summary:        Library to create ISO 9660 disk images
 Name:           libisofs
 Version:        1.5.8
 Release:        3%{?dist}
-# libisofs/make_isohybrid_mbr.c is LGPL-2.0-or-later, rest is GPL-2.0-or-later
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            https://libburnia-project.org/
-Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz
+Source0:        https://files.libburnia-project.org/releases/%{name}-%{version}.pl02.tar.gz
 Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz.sig
 Source2:        https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
 Patch0:        libisofs-0.6.16-multilib.patch
 Patch1:        libisofs-1.5.4-rpath.patch
-BuildRequires:  gnupg2
-BuildRequires:  gcc, make, libacl-devel, zlib-devel
 %if 0%{?rhel} && "%{name}" != "%{pkgname}" || (0%{?oreon} >= 11)
-BuildRequires:  autoconf, automake, libtool
 %endif
-
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  graphviz
+BuildRequires:  libacl-devel
+BuildRequires:  make
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Libisofs is a library to create an ISO-9660 filesystem and supports
 extensions like RockRidge or Joliet. It is also a full featured
@@ -32,7 +36,6 @@ zlib, it supports zisofs compression, too.
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}, pkgconfig
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -42,7 +45,6 @@ developing applications that use %{name}.
 Summary:        Documentation files for %{name}
 BuildArch:      noarch
 BuildRequires:  doxygen, graphviz
-
 %description doc
 Libisofs is a library to create an ISO-9660 filesystem and supports
 extensions like RockRidge or Joliet. This package contains the API
@@ -50,6 +52,7 @@ documentation for developing applications that use %{name}.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -n %{pkgname}-%{version} -p1
@@ -68,36 +71,22 @@ autoreconf --force --install
 %endif
 
 %build
+
 %configure --disable-static
 %make_build
 %{!?_without_doc:doxygen doc/doxygen.conf}
-
 %install
 %make_install
-
-# Don't install any libtool .la files
 rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}.la
-
-# Clean up for later usage in documentation
 rm -rf $RPM_BUILD_ROOT%{_defaultdocdir}
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%license COPYING
-%doc AUTHORS COPYRIGHT README
-%{_libdir}/%{name}*.so.*
-
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}*.pc
-
-%if 0%{!?_without_doc:1}
-%files doc
-%doc doc/html/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n libisofs-devel -f %{oreon_filedir}/libisofs-devel.list
+%files -n libisofs-doc -f %{oreon_filedir}/libisofs-doc.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.8-3
 - Import

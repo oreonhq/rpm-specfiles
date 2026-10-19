@@ -1,34 +1,26 @@
-%global source0_hash none
-
-# first two digits of version
+%global source0_hash 0869c81d19ab139c667d79567c14ddcb6cb5cbfc0108d04cade287eb29536706
 %define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
-
 Name:           grilo
 Version:        0.3.19
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Content discovery framework
-
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/Grilo
-Source0:        https://download.gnome.org/sources/grilo/%{release_version}/grilo-%{version}.tar.xz
-BuildRequires:  meson
-BuildRequires:  git
+Source0:        https://download.gnome.org/sources/%{name}/%{release_version}/%{name}-%{version}.tar.xz
+# oreon:deps
 BuildRequires:  chrpath
 BuildRequires:  gettext
-BuildRequires:  vala >= 0.27.1
-BuildRequires:  gtk-doc
-BuildRequires:  gobject-introspection-devel >= 0.9.0
-BuildRequires:  libxml2-devel
-BuildRequires:  libsoup3-devel
+BuildRequires:  git
 BuildRequires:  glib2-devel
-
-# For the test UI
+BuildRequires:  gobject-introspection-devel
+BuildRequires:  gtk-doc
 BuildRequires:  gtk3-devel
-%if 0%{?fedora}
-BuildRequires:  liboauth-devel
-%endif
+BuildRequires:  libsoup3-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  meson
 BuildRequires:  totem-pl-parser-devel
-
+BuildRequires:  vala
+# /oreon:deps
 %description
 Grilo is a framework that provides access to different sources of
 multimedia content, using a pluggable system.
@@ -37,7 +29,6 @@ This package contains the core library and elements.
 %package devel
 Summary:        Libraries/include files for Grilo framework
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Grilo is a framework that provides access to different sources of
 multimedia content, using a pluggable system.
@@ -46,46 +37,23 @@ general and API documentation.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -S git
-
+%oreon_prep
 %build
+
 %meson \
     -Denable-gtk-doc=true
-
 %meson_build
-
 %install
 %meson_install
-
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/grilo-%{release_version}/
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/grilo-%{release_version}/plugins/
-
 %find_lang grilo
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f grilo.lang
-%license COPYING
-%doc AUTHORS NEWS README.md TODO
-%{_libdir}/libgrilo-%{release_version}.so.0*
-%{_libdir}/libgrlnet-%{release_version}.so.0*
-%{_libdir}/libgrlpls-%{release_version}.so.0*
-%{_libdir}/girepository-1.0/
-%{_bindir}/grl-inspect-%{release_version}
-%{_bindir}/grl-launch-%{release_version}
-%{_bindir}/grilo-test-ui-%{release_version}
-%{_libdir}/grilo-%{release_version}/
-%{_datadir}/grilo-%{release_version}/
-%{_mandir}/man1/grilo-test-ui-%{release_version}.1*
-%{_mandir}/man1/grl-inspect-%{release_version}.1*
-%{_mandir}/man1/grl-launch-%{release_version}.1*
-
-%files devel
-%{_datadir}/gtk-doc/html/%{name}
-%{_includedir}/%{name}-%{release_version}/
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-%{_datadir}/gir-1.0/
-%{_datadir}/vala/
+%files -f %{oreon_filedir}/main.list
+%files -n grilo-devel -f %{oreon_filedir}/grilo-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.19-1
 - Prepare for Oreon 11 (RP1)

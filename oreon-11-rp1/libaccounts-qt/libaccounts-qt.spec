@@ -1,23 +1,22 @@
 %global source0_hash 8a5da408de988aaef151a2d994a7023eefa71361ada32edbcaec945da4269a78
-
 %global commit0 c8fdd05f1a1ff5886f4649d24f2ba8c5f61cfa3a
-
 Name:           libaccounts-qt
 Summary:        Accounts framework Qt bindings
 Version:        1.17
 Release:        4%{?dist}
-
 License:        LGPL-2.1-only
 URL:            https://gitlab.com/accounts-sso/libaccounts-qt
-
-# Main Branch
 Source0:        https://gitlab.com/accounts-sso/libaccounts-qt/-/archive/VERSION_%{version}/libaccounts-qt-%{version}.tar.gz
-
-BuildRequires:  pkgconfig(libaccounts-glib) >= 1.23
+# oreon:deps
+BuildRequires:  cmake(Qt6Test)
 BuildRequires:  doxygen
 BuildRequires:  graphviz
+BuildRequires:  make
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt6Gui)
+BuildRequires:  pkgconfig(libaccounts-glib)
 BuildRequires:  qt-devel
-
+# /oreon:deps
 %description
 %{summary}.
 
@@ -65,13 +64,13 @@ BuildArch:      noarch
 %description    doc
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n libaccounts-qt-VERSION_%{version}-%{commit0}
 
-
 %build
+
 mkdir %{_target_platform}_qt5
 pushd %{_target_platform}_qt5
 %{qmake_qt5} \
@@ -81,7 +80,6 @@ pushd %{_target_platform}_qt5
     ../accounts-qt.pro
 popd
 %make_build -C %{_target_platform}_qt5
-
 mkdir %{_target_platform}_qt6
 pushd %{_target_platform}_qt6
 %{qmake_qt6} \
@@ -91,53 +89,29 @@ pushd %{_target_platform}_qt6
     ../accounts-qt.pro
 popd
 %make_build -C %{_target_platform}_qt6
-
 %install
 make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}_qt5
 make install INSTALL_ROOT=%{buildroot} -C %{_target_platform}_qt6
-
-# create/own dirs
 mkdir -p %{buildroot}%{_datadir}/accounts/{providers,services}
-
-## unpackaged files
 rm -fv %{buildroot}%{_datadir}/doc/accounts-qt/html/installdox
-
-#remove tests for now
 rm -rfv %{buildroot}%{_datadir}/libaccounts-qt-tests
 rm -fv %{buildroot}%{_bindir}/accountstest
+%oreon_autofiles libaccounts-qt5 usr/*/lib*.so.*
+%oreon_autofiles libaccounts-qt5-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles libaccounts-qt6 usr/*/lib*.so.*
+%oreon_autofiles libaccounts-qt6-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files -n libaccounts-qt5
-%license COPYING
-%{_libdir}/libaccounts-qt5.so.*
-%dir %{_datadir}/accounts/
-%dir %{_datadir}/accounts/providers/
-%dir %{_datadir}/accounts/services/
-
-%files -n libaccounts-qt5-devel
-%{_libdir}/libaccounts-qt5.so
-%{_includedir}/accounts-qt5/
-%{_libdir}/pkgconfig/accounts-qt5.pc
-%{_libdir}/cmake/AccountsQt5
-
-%files -n libaccounts-qt6
-%license COPYING
-%{_libdir}/libaccounts-qt6.so.*
-%dir %{_datadir}/accounts/
-%dir %{_datadir}/accounts/providers/
-%dir %{_datadir}/accounts/services/
-
-%files -n libaccounts-qt6-devel
-%{_libdir}/libaccounts-qt6.so
-%{_includedir}/accounts-qt6/
-%{_libdir}/pkgconfig/accounts-qt6.pc
-%{_libdir}/cmake/AccountsQt6
-
-
-%files doc
-%{_docdir}/accounts-qt/
-
+%files -f %{oreon_filedir}/main.list
+%files -n libaccounts-qt-devel -f %{oreon_filedir}/libaccounts-qt-devel.list
+%files -n libaccounts-qt5 -f %{oreon_filedir}/libaccounts-qt5.list
+%files -n libaccounts-qt5-devel -f %{oreon_filedir}/libaccounts-qt5-devel.list
+%files -n libaccounts-qt6 -f %{oreon_filedir}/libaccounts-qt6.list
+%files -n libaccounts-qt6-devel -f %{oreon_filedir}/libaccounts-qt6-devel.list
+%files -n libaccounts-qt-doc -f %{oreon_filedir}/libaccounts-qt-doc.list
 
 %changelog
+
 * Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.17-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

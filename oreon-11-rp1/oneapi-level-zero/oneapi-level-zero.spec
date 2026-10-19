@@ -1,30 +1,24 @@
 %global source0_hash 5856f6ff3ad465f8ea5dc7b7dc4f8b3d436d826f2751f91896d204b638fdc0d9
-
 %global srcname level-zero
 %global lib_version 1.34
 %global patch_version 0
 %global _lto_cflags %nil
-
 Name:           oneapi-%{srcname}
 Version:        %{lib_version}.%{patch_version}
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        OneAPI Level Zero Specification Headers and Loader
-
 License:        MIT
 URL:            https://github.com/oneapi-src/%{srcname}
-Source0:        %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz#/level-zero-%{version}.tar.gz
-
+Source0:        https://github.com/oneapi-src/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
 ExclusiveArch:  x86_64
-
+Recommends:     %{name}-zello_world
+# oreon:deps
 BuildRequires:  chrpath
-BuildRequires:  gcc-c++
 BuildRequires:  cmake
+BuildRequires:  gcc-c++
 BuildRequires:  help2man
 BuildRequires:  spdlog-devel
-
-# Useful for a quick oneAPI Level-Zero testing
-Recommends:     %{name}-zello_world
-
+# /oreon:deps
 %description
 The objective of the oneAPI Level-Zero Application Programming Interface
 (API) is to provide direct-to-metal interfaces to offload accelerator
@@ -36,7 +30,6 @@ and I/O capabilities.
 %package        devel
 Summary:        The oneAPI Level Zero Specification Headers and Loader development package
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains library and header files for
 developing applications that use %{name}.
@@ -44,29 +37,25 @@ developing applications that use %{name}.
 %package        zello_world
 Summary:        The oneAPI Level Zero quick test package with zello_world binary
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    zello_world
 The %{name}-zello_world package contains a zello_world binary which is capable of a quick test
 of the oneAPI Level-Zero driver and dumping out the basic device and driver characteristics.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{srcname}-%{version}
 
 %build
-# spdlog uses fmt, but since this doesn't setup linking, use it in header only mode
+
 export CXXFLAGS="%{build_cxxflags} -DFMT_HEADER_ONLY=1"
 %cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DSYSTEM_SDPLOG=ON
 %cmake_build
-
 %install
 %cmake_install
-# Install also the zello_world binary to ease up testing of the l0
 mkdir -p %{buildroot}%{_bindir}/
 install -p -m 755 ./%{_vpath_builddir}/bin/zello_world %{buildroot}%{_bindir}/zello_world
 chrpath --delete %{buildroot}%{_bindir}/zello_world
-
-# Generate and install man pages.
 install -d '%{buildroot}%{_mandir}/man1'
 for cmd in %{buildroot}%{_bindir}/*
 do
@@ -76,28 +65,12 @@ do
       --output="%{buildroot}%{_mandir}/man1/$(basename "${cmd}").1" \
       "${cmd}"
 done
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE
-%doc README.md SECURITY.md
-%{_libdir}/libze_loader.so.%{lib_version}.%{patch_version}
-%{_libdir}/libze_loader.so.1
-%{_libdir}/libze_validation_layer.so.%{lib_version}.%{patch_version}
-%{_libdir}/libze_validation_layer.so.1
-%{_libdir}/libze_tracing_layer.so.%{lib_version}.%{patch_version}
-%{_libdir}/libze_tracing_layer.so.1
-
-%files zello_world
-%{_bindir}/zello_world
-%{_mandir}/man1/zello_world.1.gz
-
-%files devel
-%{_includedir}/level_zero
-%{_libdir}/libze_loader.so
-%{_libdir}/libze_validation_layer.so
-%{_libdir}/libze_tracing_layer.so
-%{_libdir}/pkgconfig/libze_loader.pc
-%{_libdir}/pkgconfig/%{srcname}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n oneapi-level-zero-devel -f %{oreon_filedir}/oneapi-level-zero-devel.list
+%files -n oneapi-level-zero-zello_world -f %{oreon_filedir}/oneapi-level-zero-zello_world.list
 
 %changelog
+
 %autochangelog

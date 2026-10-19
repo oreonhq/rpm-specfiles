@@ -1,39 +1,16 @@
+%global source3_hash 3b86e778174be05eb880a4f2411796b23bffe4649f8e19ba902dc6d9ca76b17e
+%global source2_hash 3a2b9dd46fcb218a5ec628452db45bb14825a9f2d0a7301ec154cf87897eec0e
+%global source1_hash 11df2b889929d4923eed6298ba44c6e746c9ca5b9de41bd9b1b1a694a2aea65e
 %global source0_hash 71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071
-
-# Build with new api?
-%if 0%{?fedora} || 0%{?rhel} > 8
-%bcond_without new_api
-%else
 %bcond_with    new_api
-%endif
-
-
-# Build the compat package?
-%if 0%{?fedora} >= 999 || (0%{?rhel} >= 11 && !0%{?eln}) || %{without new_api}
-%bcond_with    compat_pkg
-%else
 %bcond_without compat_pkg
-%endif
-
-
-# Replace obsolete functions with a stub?
 %if %{with new_api} && %{with compat_pkg}
 %bcond_without enosys_stubs
 %else
 %bcond_with    enosys_stubs
 %endif
-
-
-# Build the static library?
 %bcond_without staticlib
-
-
-# When we are bootstrapping, we omit the
-# verification of the source tarball with GnuPG.
 %bcond_with    bootstrap
-
-
-# Shared object version of libcrypt.
 %if %{with new_api}
 %global soc  2
 %global sol  0
@@ -45,82 +22,35 @@
 %global sof  0
 %global sov  %{soc}.%{sol}.%{sof}
 %endif
-
 %if %{with compat_pkg}
 %global csoc 1
 %global csol 1
 %global csof 0
 %global csov %{csoc}.%{csol}.%{csof}
 %endif
-
-
-# First version of glibc built without libcrypt.
 %global glibc_minver     2.28
-
-
-# Minimum version of Perl needed for some build-scripts.
 %global perl_minver      5.14
-
-
-# The libxcrypt-devel package conflicts with out-dated manuals
-# shipped with the man-pages packages *before* this EVR.
 %global man_pages_minver 4.15-3
-
-
-# Need versioned requires on glibc and man-pages?
-%if !(0%{?fedora} || 0%{?rhel} > 9)
-%global trans_pkg        1
-%endif
-
-
-# Hash methods and API supported by libcrypt.
-# NEVER EVER touch this, if you do NOT know what you are doing!
 %global hash_methods   all
-
 %if %{with new_api}
 %global obsolete_api   no
 %else
 %global obsolete_api   glibc
 %endif
-
 %if %{with compat_pkg}
 %global compat_methods all
 %global compat_api     glibc
 %endif
-
-
-# Do we replace the obsolete API functions with stubs?
 %if %{with enosys_stubs}
 %global enosys_stubs   yes
 %else
 %global enosys_stubs   no
 %endif
-
-
-# Needed for the distribution README file.
-%if 0%{?fedora}
-%global distname .fedora
-%else
-%if 0%{?rhel}
-%global distname .rhel
-%else
 %global distname .distribution
-%endif
-%endif
-
-
-# Needed for out-of-tree builds.
 %global _configure "$(realpath ../configure)"
-
-
-# Create config.cache to speedup the run of
-# the configure script for the compat package.
 %global nvrt_str %{name}-%{version}-%{release}.%{_target_cpu}
 %global mktemplate %{nvrt_str}-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 %global config_cache %(mktemp -tu %{mktemplate}-config.cache)
-
-
-# Common configure options.
 %global common_configure_options           \\\
   --cache-file=%{config_cache}             \\\
   --disable-failure-tokens                 \\\
@@ -134,15 +64,7 @@
   --disable-valgrind                       \\\
   --srcdir=$(realpath ..)                  \\\
   --with-pkgconfigdir=%{_libdir}/pkgconfig
-
-
-# Macros for shorthand.
 %global _fipsdir %{_libdir}/fipscheck
-
-
-# Add generation of HMAC checksums of the final stripped
-# binaries.  %%define with lazy globbing is used here
-# intentionally, because using %%global does not work.
 %define __spec_install_post                 \
 %{?__debug_package:%{__debug_install_post}} \
 %{__arch_install_post}                      \
@@ -169,94 +91,64 @@ if [[ %{with compat_pkg} == 1 ]]; then      \
     $fipsdir/libcrypt.so.%{csoc}.hmac       \
 fi                                          \
 %{nil}
-
-
-# Fail linking if there are undefined symbols.
-# Required for proper ELF symbol versioning support.
 %global _ld_strict_symbol_defs 1
-
-
 Name:           libxcrypt
 Version:        4.5.2
 Release:        3%{?dist}
 Summary:        Extended crypt library for descrypt, md5crypt, bcrypt, and others
-
-# For explicit license breakdown, see the
-# LICENSING file in the source tarball.
 License:        LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND BSD-2-Clause-FreeBSD AND 0BSD AND CC0-1.0 AND LicenseRef-Fedora-Public-Domain
 URL:            https://github.com/besser82/%{name}
 Source0:        https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz
 Source1:        https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz.asc
 Source2:        https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-gpgkey.asc
 Source3:        https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz.sha256sum
-
-# Patch 0000 - 2999: Backported patches from upstream.
 Patch0000:        https://github.com/besser82/libxcrypt/commit/174c24d6e87a.patch#/libxcrypt-4.5.2-Werror_discarded-qualifiers.patch
-# Patch 3000 - 5999: Backported patches from pull requests.
-# Do not use github .../commit/ba67911314f5.patch here: that diff does not apply to the v4.5.2 release tarball (Makefile.am, doc/crypt_gensalt.3).
 Patch3000:        https://github.com/besser82/libxcrypt/archive/refs/tags/v4.5.2.tar.gz
-# Patch 6000 - 9999: Downstream patches.
-
+%if %{without bootstrap}
+%endif
+%if 0%{?trans_pkg}
+%endif
+%if 0%{?trans_pkg}
+Obsoletes:      libcrypt-nss           < %{glibc_minver}
+Provides:       libcrypt-nss           = %{glibc_minver}
+Provides:       libcrypt-nss%{?_isa}   = %{glibc_minver}
+Obsoletes:      libcrypt               < %{glibc_minver}
+Provides:       libcrypt               = %{glibc_minver}
+Provides:       libcrypt%{?_isa}       = %{glibc_minver}
+Obsoletes:      %{name}-common         < 4.3.3-4
+Provides:       %{name}-common         = %{version}-%{release}
+Requires:       glibc%{?_isa}         >= %{glibc_minver}
+%endif
+%if %{with new_api} && %{without compat_pkg}
+Obsoletes:      %{name}-compat         < %{version}-%{release}
+%endif
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  coreutils
 BuildRequires:  fipscheck
 BuildRequires:  gcc
-%if %{without bootstrap}
 BuildRequires:  gnupg2
-%endif
-%if 0%{?trans_pkg}
-BuildRequires:  glibc-devel                  >= %{glibc_minver}
-%endif
 BuildRequires:  libtool
+BuildRequires:  libxcrypt-compat
 BuildRequires:  make
-BuildRequires:  perl(:VERSION)               >= %{perl_minver}
+BuildRequires:  perl(:VERSION)
 BuildRequires:  perl(Class::Struct)
 BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Exporter)
 BuildRequires:  perl(File::Spec::Functions)
 BuildRequires:  perl(File::Temp)
 BuildRequires:  perl(FindBin)
-BuildRequires:  perl(if)
 BuildRequires:  perl(IPC::Open3)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(open)
 BuildRequires:  perl(POSIX)
 BuildRequires:  perl(Symbol)
+BuildRequires:  perl(if)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(open)
 BuildRequires:  perl(utf8)
 BuildRequires:  perl(warnings)
 BuildRequires:  perl-interpreter
-
-# We do not need to keep this forever.
-%if 0%{?trans_pkg}
-# Inherited from former libcrypt package.
-Obsoletes:      libcrypt-nss           < %{glibc_minver}
-Provides:       libcrypt-nss           = %{glibc_minver}
-Provides:       libcrypt-nss%{?_isa}   = %{glibc_minver}
-
-# Obsolete former libcrypt properly and provide a virtual libcrypt
-# package as it has been done by the former packages, which were
-# built by glibc before.
-Obsoletes:      libcrypt               < %{glibc_minver}
-Provides:       libcrypt               = %{glibc_minver}
-Provides:       libcrypt%{?_isa}       = %{glibc_minver}
-
-# Obsolete former libxcrypt-common properly.
-Obsoletes:      %{name}-common         < 4.3.3-4
-Provides:       %{name}-common         = %{version}-%{release}
-
-# We need a version of glibc, that doesn't build libcrypt anymore.
-Requires:       glibc%{?_isa}         >= %{glibc_minver}
-%endif
-
-%if %{with new_api} && %{without compat_pkg}
-Obsoletes:      %{name}-compat         < %{version}-%{release}
-%endif
-
-%if 0%{?fedora}
-Recommends:     mkpasswd
-%endif
-
+# /oreon:deps
 %description
 libxcrypt is a modern library for one-way hashing of passwords.
 It supports a wide variety of both modern and historical hashing
@@ -280,18 +172,13 @@ This version of the library does not provide the legacy API functions
 that have been provided by glibc's libcrypt.so.1.
 %endif
 
-
 %if %{with compat_pkg}
 %package        compat
 Summary:        Compatibility library providing legacy API functions
-
 %if %{without bootstrap}
-# For testing the glibc compatibility symbols.
 BuildRequires:  libxcrypt-compat
 %endif
-
 Requires:       %{name}%{?_isa}        = %{version}-%{release}
-
 %description    compat
 This package contains the library providing the compatibility API
 for applications that are linked against glibc's libxcrypt, or that
@@ -304,32 +191,26 @@ All existing binary executables linked against glibc's libcrypt should
 work unmodified with the library supplied by this package.
 %endif
 
-
 %package        devel
 Summary:        Development files for %{name}
-
 Requires:       %{name}%{?_isa}        = %{version}-%{release}
 Requires:       glibc-devel%{?_isa}
 %if 0%{?trans_pkg}
 Conflicts:      man-pages              < %{man_pages_minver}
 Requires:       glibc-devel%{?_isa}   >= %{glibc_minver}
 %endif
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %if %{with staticlib}
 %package        static
 Summary:        Static library for -static linking with %{name}
-
 Requires:       %{name}-devel%{?_isa}  = %{version}-%{release}
 Requires:       glibc-static%{?_isa}
 %if 0%{?trans_pkg}
 Requires:       glibc-static%{?_isa}  >= %{glibc_minver}
 %endif
-
 %description    static
 This package contains the libxcrypt static library for -static
 linking.
@@ -338,8 +219,8 @@ You don't need this, unless you link statically, which is highly
 discouraged.
 %endif
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %if %{without bootstrap}
 # Omitted during bootstrap.
@@ -401,12 +282,10 @@ the object files provided in the static library libcrypt.a.
 EOF
 %endif
 
-
 %build
+
 touch %{config_cache}
 mkdir -p %{_vpath_builddir}
-
-# Build the default system library.
 pushd %{_vpath_builddir}
 %configure                                       \
   %{common_configure_options}                    \
@@ -419,11 +298,8 @@ pushd %{_vpath_builddir}
 %endif
 %make_build
 popd
-
 %if %{with compat_pkg}
 mkdir -p %{_vpath_builddir}-compat
-
-# Build the compatibility library.
 pushd %{_vpath_builddir}-compat
 %configure                                       \
   %{common_configure_options}                    \
@@ -434,33 +310,21 @@ pushd %{_vpath_builddir}-compat
 popd
 %endif
 rm -f %{config_cache}
-
-
 %install
 %if %{with compat_pkg}
-# Install the compatibility library.
 %make_install -C %{_vpath_builddir}-compat
-
-# Cleanup everything we do not need from the compatibility library.
 find %{buildroot}                                               \
   -not -type d -not -name 'libcrypt.so.%{csoc}*' -delete -print
 %endif
-
-# Install the default system library.
 %make_install -C %{_vpath_builddir}
-
-# Get rid of libtool crap.
 find %{buildroot} -name '*.la' -delete -print
-
-# Install documentation to shared %%_pkgdocdir.
 install -Dpm 0644 -t %{buildroot}%{_pkgdocdir} \
   ChangeLog NEWS README* THANKS TODO
-
-# Drop README.md as it is identical to README.
 rm -f %{buildroot}%{_pkgdocdir}/README.md
-
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
 %check
+
 build_dirs="%{_vpath_builddir}"
 %if %{with compat_pkg}
 build_dirs="${build_dirs} %{_vpath_builddir}-compat"
@@ -475,86 +339,16 @@ for dir in ${build_dirs}; do
       exit $rc;
     }
 done
-
-
 %ldconfig_scriptlets
 %if %{with compat_pkg}
 %ldconfig_scriptlets compat
 %endif
-
-
-%files
-%dir %{_fipsdir}
-%doc %dir %{_pkgdocdir}
-%doc %{_pkgdocdir}/NEWS
-%doc %{_pkgdocdir}/README
-%if %{with new_api}
-%doc %{_pkgdocdir}/README%{distname}
-%endif
-%if %{with enosys_stubs} && %{without compat_pkg}
-%doc %{_pkgdocdir}/README.posix
-%endif
-%doc %{_pkgdocdir}/THANKS
-%license AUTHORS COPYING.LIB LICENSING
-%{_fipsdir}/libcrypt.so.%{soc}.hmac
-%{_fipsdir}/libcrypt.so.%{sov}.hmac
-%{_libdir}/libcrypt.so.%{soc}
-%{_libdir}/libcrypt.so.%{sov}
-%{_mandir}/man5/crypt.5*
-
-
-%if %{with compat_pkg}
-%files          compat
-%dir %{_fipsdir}
-%if %{with enosys_stubs}
-%doc %{_pkgdocdir}/README.posix
-%endif
-%{_fipsdir}/libcrypt.so.%{csoc}.hmac
-%{_fipsdir}/libcrypt.so.%{csov}.hmac
-%{_libdir}/libcrypt.so.%{csoc}
-%{_libdir}/libcrypt.so.%{csov}
-%endif
-
-
-%files          devel
-%doc %{_pkgdocdir}/ChangeLog
-%doc %{_pkgdocdir}/TODO
-%{_libdir}/libcrypt.so
-%if %{without new_api}
-%{_libdir}/libxcrypt.so
-%endif
-%{_includedir}/crypt.h
-%if %{without new_api}
-%{_includedir}/xcrypt.h
-%endif
-%{_libdir}/pkgconfig/libcrypt.pc
-%{_libdir}/pkgconfig/%{name}.pc
-%{_mandir}/man3/crypt.3*
-%{_mandir}/man3/crypt_r.3*
-%{_mandir}/man3/crypt_ra.3*
-%{_mandir}/man3/crypt_rn.3*
-%{_mandir}/man3/crypt_checksalt.3*
-%{_mandir}/man3/crypt_gensalt.3*
-%{_mandir}/man3/crypt_gensalt_ra.3*
-%{_mandir}/man3/crypt_gensalt_rn.3*
-%{_mandir}/man3/crypt_preferred_method.3*
-
-
-%if %{with staticlib}
-%files          static
-%dir %{_fipsdir}
-%doc %{_pkgdocdir}/README.static
-%{_fipsdir}/libcrypt.a.hmac
-%if %{without new_api}
-%{_fipsdir}/libxcrypt.a.hmac
-%endif
-%{_libdir}/libcrypt.a
-%if %{without new_api}
-%{_libdir}/libxcrypt.a
-%endif
-%endif
-
+%files -f %{oreon_filedir}/main.list
+%files -n libxcrypt-compat -f %{oreon_filedir}/libxcrypt-compat.list
+%files -n libxcrypt-devel -f %{oreon_filedir}/libxcrypt-devel.list
+%files -n libxcrypt-static -f %{oreon_filedir}/libxcrypt-static.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.5.2-3
 - Prepare for Oreon 11 (RP1)

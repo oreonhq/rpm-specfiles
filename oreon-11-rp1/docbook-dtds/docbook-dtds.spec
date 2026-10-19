@@ -19,21 +19,16 @@
 %global source18_hash c6b988431003b857927239d11254a57158b893e4960c80ae1a5ce02e8c6af7f5
 %global source19_hash 710db64c36ed962aa8dab97bd1b5bea1b1fb4c613e0d3b8f8adf0069f535c699
 %global source20_hash 31aa130bdb88a22907ce78326f846a093dac7a77c6dbc5f943278a5946637c1f
-
 %global openjadever 1.3.2
 %global version_list "{3,4}.{0,1}-sgml 4.1.2-xml 4.{2,3,4,5}-{sgml,xml} 4.{2,3,4,5}-rng 4.{2,3,4,5}-xsd"
 %global catalog_list "{3,4}.{0,1}-sgml 4.1.2-xml 4.{2,3,4,5}-{sgml,xml}"
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
-
 Name: docbook-dtds
 Version: 1.0
-Release: 91%{?dist}
-
-Summary: SGML and XML document type definitions for DocBook
-
+Release:        1%{?dist}
+Summary:        SGML and XML document type definitions for DocBook
 License: LicenseRef-docbook-dtds
 URL: http://www.oasis-open.org/docbook/
-
 Obsoletes: docbook-dtd30-sgml < %{version}-%{release}
 Obsoletes: docbook-dtd31-sgml < %{version}-%{release}
 Obsoletes: docbook-dtd40-sgml < %{version}-%{release}
@@ -54,7 +49,6 @@ Provides: docbook-dtd44-sgml = %{version}-%{release}
 Provides: docbook-dtd44-xml = %{version}-%{release}
 Provides: docbook-dtd45-sgml = %{version}-%{release}
 Provides: docbook-dtd45-xml = %{version}-%{release}
-
 Requires(post): %{_bindir}/xmlcatalog
 Requires(postun): %{_bindir}/xmlcatalog
 Requires(post): %{_bindir}/chmod
@@ -62,11 +56,8 @@ Requires(post): sed
 Requires(postun): sed
 Requires: sgml-common
 Requires: xml-common
-
-BuildRequires: unzip
-
 BuildArch: noarch
-Source0: https://www.oasis-open.org/docbook/sgml/3.0/docbk30.zip
+Source0:        https://www.oasis-open.org/docbook/sgml/3.0/docbk30.zip
 Source1: https://www.oasis-open.org/docbook/sgml/3.1/docbk31.zip
 Source2: https://www.oasis-open.org/docbook/sgml/4.0/docbk40.zip
 Source3: https://www.oasis-open.org/docbook/sgml/4.1/docbk41.zip
@@ -82,37 +73,31 @@ Source12: https://www.oasis-open.org/docbook/xml/4.5/docbook-xml-4.5.zip
 Source13: https://www.oasis-open.org/docbook/rng/4.2/docbook-rng-4.2.zip
 Source14: https://www.oasis-open.org/docbook/rng/4.3/docbook-rng-4.3.zip
 Source15: https://www.oasis-open.org/docbook/rng/4.4/docbook-rng-4.4.zip
-# Compressed from http://www.docbook.org/rng/4.5/ upstream archive unavailable
 Source16: docbook-rng-4.5.zip
 Source17: https://www.oasis-open.org/docbook/xsd/4.2/docbook-xsd-4.2.zip
 Source18: https://www.oasis-open.org/docbook/xsd/4.3/docbook-xsd-4.3.zip
 Source19: https://www.oasis-open.org/docbook/xsd/4.4/docbook-xsd-4.4.zip
-# Compressed from http://www.docbook.org/xsd/4.5/ upstream archive unavailable
 Source20: docbook-xsd-4.5.zip
-
-# Fix old catalog files
 Patch0: docbook-dtd30-sgml-1.0.catalog.patch
 Patch1: docbook-dtd31-sgml-1.0.catalog.patch
 Patch2: docbook-dtd40-sgml-1.0.catalog.patch
 Patch3: docbook-dtd41-sgml-1.0.catalog.patch
 Patch4: docbook-dtd42-sgml-1.0.catalog.patch
-# Fix euro sign in 4.2 dtds
 Patch5: docbook-4.2-euro.patch
-# Fix ISO entities in 4.3/4.4/4.5 SGML
 Patch6: docbook-dtds-ents.patch
-# Use system rewrite for web URL's in sgml catalogs to prevent reading from the network(#478680)
 Patch7: docbook-sgml-systemrewrite.patch
-# Use XML at the end of public identificators of XML 4.1.2 ISO entities
 Patch8: docbook-dtd412-entities.patch
-
+# oreon:deps
+BuildRequires:  unzip
+# /oreon:deps
 %description
 The DocBook Document Type Definition (DTD) describes the syntax of
 technical documentation texts (articles, books and manual pages).
 This syntax is XML-compliant and is developed by the OASIS consortium.
 This package contains SGML and XML versions of the DocBook DTD.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -183,39 +168,26 @@ sed -e's,\(NAMELEN\s\+\)44\(\s\*\)\?,\1256,' -i.namelen */docbook.dcl
 # Fix of \r\n issue from rpmlint
 sed -i 's/\r//' */*.txt
 
-
 if [ `id -u` -eq 0 ]; then
   %{_bindir}/chown -R root:root .
   %{_bindir}/chmod -R a+rX,g-w,o-w .
 fi
 
-
 %build
 
-
 %install
-# Creating a directory for SGML
 eval mkdir -p %{buildroot}/etc/sgml
-
-# Loop through sgml and xml formats
 for fmt in sgml xml; do
-  # Creating symbolic links for docbook catalog files
   ln -s $fmt-docbook-4.5.cat %{buildroot}/etc/sgml/$fmt-docbook.cat
 done
-
-# Loop through different versions of docbook
 eval set %{version_list}
 for dir in $@; do
   pushd $dir
   fmt=${dir#*-} ver=${dir%%-*} # Formatting and versioning
-
-  # Directory paths for different formats
   case $fmt in
     sgml|xml)   DESTDIR=%{buildroot}/usr/share/sgml/docbook/$fmt-dtd-$ver ;;
     rng|xsd)    DESTDIR=%{buildroot}/usr/share/sgml/docbook/$fmt-$ver ;;
   esac
-
-  # Installing files to the corresponding directories
   case $fmt in
     sgml)   mkdir -p $DESTDIR ; install *.dcl $DESTDIR ;;
     xml)    mkdir -p $DESTDIR/ent ; install ent/* $DESTDIR/ent ;;
@@ -224,47 +196,26 @@ for dir in $@; do
   esac
   popd
 done
-
-# Loop through different catalog versions
 eval set %{catalog_list}
 for dir in $@; do
   pushd $dir
   fmt=${dir#*-} ver=${dir%%-*} # Formatting and versioning
   DESTDIR=%{buildroot}/usr/share/sgml/docbook/$fmt-dtd-$ver
-
-  # Installing dtd and mod files, along with the catalog file
   install *.dtd *.mod $DESTDIR
   install docbook.cat $DESTDIR/catalog
   popd
-
-  # Creating ghost file for each format-version pair
   touch %{buildroot}/etc/sgml/$fmt-docbook-$ver.cat
 done
-
-# Workaround for missing support for --parents in rpm 4.11+
 mkdir -p %{buildroot}%{_pkgdocdir}
-
-# Copying text, ChangeLog, and README files to pkgdocdir with their parent directories
 for i in */*.txt */ChangeLog */README; do
   cp -pr --parents $i %{buildroot}%{_pkgdocdir}
 done
-
-
-%files
-# There is a lot of files with 0755 permissions in upstream tarballs,
-# but it is not needed. 0644 is enough for every file in tarball
-%doc %{_pkgdocdir}
-%{_datadir}/sgml/docbook/*ml-dtd-*
-%{_datadir}/sgml/docbook/rng-*
-%{_datadir}/sgml/docbook/xsd-*
-%config(noreplace) %{_sysconfdir}/sgml/*ml-docbook.cat
-%ghost %config(noreplace) %{_sysconfdir}/sgml/*ml-docbook-*.cat
+%oreon_autofiles main
 
 %post
+
 catcmd='/usr/bin/xmlcatalog --noout'
 xmlcatalog=%{_datadir}/sgml/docbook/xmlcatalog
-
-# Clean up pre-docbook-dtds mess caused by broken trigger.
 for v in 3.0 3.1 4.0 4.1 4.2 4.3 4.4 4.5
 do
   if [ -f %{_sysconfdir}/sgml/sgml-docbook-$v.cat ]
@@ -273,9 +224,6 @@ do
       %{_datadir}/sgml/openjade-%{openjadever}/catalog 2>/dev/null
   fi
 done
-
-# The STYLESHEETS/catalog command is for the case in which the style sheets
-# were installed after another DTD but before this DTD
 for STYLESHEETS in %{_datadir}/sgml/docbook/dsssl-stylesheets-*; do : ; done
 case $STYLESHEETS in
   *-"*") STYLESHEETS= ;;
@@ -285,12 +233,9 @@ for dir
 do
   fmt=${dir#*-} ver=${dir%%-*}
   sgmldir=%{_datadir}/sgml/docbook/$fmt-dtd-$ver
-  # SGML catalog
-  # Update the centralized catalog corresponding to this version of the DTD
   for cat_dir in %{_datadir}/sgml/sgml-iso-entities-8879.1986 $sgmldir $STYLESHEETS; do
     $catcmd --sgml --add %{_sysconfdir}/sgml/$fmt-docbook-$ver.cat $cat_dir/catalog
   done
-  # XML catalog
   if [ $fmt = xml -a -w $xmlcatalog ]; then
     while read f desc; do
       case $ver in 4.[45]) f=${f/-/} ;; esac
@@ -330,21 +275,6 @@ ENDENT
     done
   fi
 done
-
-# Historic versions of this scriptlet contained the following comment:
-# <quote>
-# Fix up SGML super catalog so that there isn't an XML DTD before an
-# SGML one.  We need to do this (*sigh*) because xmlcatalog messes up
-# the order of the lines, and SGML tools don't like to see XML things
-# they aren't expecting.
-# </quote>
-# But the code that followed just found the first XML DTD and the first
-# SGML DTD, swappinmg these two lines if the XML one preceded.
-# But that only ensures that there is an SGML DTD before all XML ones.
-# No one complained, so either this was enough, or the buggy SGML tools
-# are long dead, or their users do not use bugzilla.
-# Anyway, the following code, introduced in 1.0-46, does better: it ensures
-# that all XML DTDs are after all SGML ones, by moving them to the end.
 sed -ni '
   /xml-docbook/ H
   /xml-docbook/ !p
@@ -353,12 +283,9 @@ sed -ni '
           s/^\n//p
   }
   ' %{_sysconfdir}/sgml/catalog
-
-# Finally, make sure everything in /etc/sgml is readable!
 %{_bindir}/chmod a+r %{_sysconfdir}/sgml/*
-
 %postun
-# Remove entries only on removal of package
+
 if [ "$1" = 0 ]; then
   catcmd='%{_bindir}/xmlcatalog --noout'
   xmlcatalog=%{_datadir}/sgml/docbook/xmlcatalog
@@ -396,11 +323,8 @@ ent/iso-cyr2.ent
   do
     fmt=${dir#*-} ver=${dir%%-*}
     sgmldir=%{_datadir}/sgml/docbook/$fmt-dtd-$ver
-    ## SGML catalog
-    # Update the centralized catalog corresponding to this version of the DTD
     $catcmd --sgml --del %{_sysconfdir}/sgml/catalog %{_sysconfdir}/sgml/$fmt-docbook-$ver.cat >/dev/null
     rm -f %{_sysconfdir}/sgml/$fmt-docbook-$ver.cat
-    ## XML catalog
     if [ $fmt = xml -a -w $xmlcatalog ]; then
       for f in $entities; do
         case $ver in 4.[45]) f=${f/-/} ;; esac
@@ -409,8 +333,6 @@ ent/iso-cyr2.ent
       $catcmd --del $sgmldir $xmlcatalog >/dev/null
     fi
   done
-
-  # See the comment attached to this command in the %%post scriptlet.
   sed -ni '
   /xml-docbook/ H
   /xml-docbook/ !p
@@ -420,8 +342,8 @@ ent/iso-cyr2.ent
   }
     ' %{_sysconfdir}/sgml/catalog
 fi
-
 %triggerin -- openjade >= %{openjadever}
+
 eval set %{catalog_list}
 for dir
 do
@@ -429,8 +351,8 @@ do
   %{_bindir}/xmlcatalog --sgml --noout --add %{_sysconfdir}/sgml/$fmt-docbook-$ver.cat \
     %{_datadir}/sgml/openjade-%{openjadever}/catalog
 done
-
 %triggerun -- openjade >= %{openjadever}
+
 [ $2 = 0 ] || exit 0
 eval set %{catalog_list}
 for dir
@@ -439,7 +361,9 @@ do
   %{_bindir}/xmlcatalog --sgml --noout --del %{_sysconfdir}/sgml/$fmt-docbook-$ver.cat \
     %{_datadir}/sgml/openjade-%{openjadever}/catalog
 done
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-91
 - Import

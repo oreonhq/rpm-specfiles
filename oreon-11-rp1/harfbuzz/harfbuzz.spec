@@ -1,38 +1,30 @@
 %global source0_hash 7e2fa4e8c7c98e8d8140671f5772542afaaa6acccfbd746506886b6d85f7f8d6
-
-BuildRequires:  pkgconfig(glfw3)
 Name:           harfbuzz
 Version:        14.5.1
 Release:        1%{?dist}
 Summary:        Text shaping library
-
 License:        MIT-Modern-Variant
 URL:            https://github.com/harfbuzz/harfbuzz/
 Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/%{version}/harfbuzz-%{version}.tar.xz
-
-BuildRequires:  pkgconfig(glew)
-BuildRequires:  cairo-devel
-BuildRequires:  freetype-devel
-BuildRequires:  glib2-devel
-BuildRequires:  gobject-introspection-devel
-BuildRequires:  libicu-devel
-BuildRequires:  graphite2-devel
-BuildRequires:  gtk-doc
-BuildRequires:  gcc-c++
-BuildRequires:  make
-BuildRequires:  meson
-
-# Graphite shaping links libgraphite2; explicit Requires for minimal ISO roots
-# where auto-deps are not always pulled into the transaction.
 Requires:       graphite2%{?_isa}
-
-# https://github.com/harfbuzz/harfbuzz/issues/3163
 %global _distro_extra_cflags -fno-exceptions
 %global _distro_extra_cxxflags -fno-exceptions -fno-rtti
-
+# oreon:deps
+BuildRequires:  cairo-devel
+BuildRequires:  freetype-devel
+BuildRequires:  gcc-c++
+BuildRequires:  glib2-devel
+BuildRequires:  gobject-introspection-devel
+BuildRequires:  graphite2-devel
+BuildRequires:  gtk-doc
+BuildRequires:  libicu-devel
+BuildRequires:  make
+BuildRequires:  meson
+BuildRequires:  pkgconfig(glew)
+BuildRequires:  pkgconfig(glfw3)
+# /oreon:deps
 %description
 HarfBuzz is an implementation of the OpenType Layout engine.
-
 
 %package        devel
 Summary:        Development files for %{name}
@@ -41,7 +33,6 @@ Requires:       %{name}-icu%{?_isa} = %{version}-%{release}
 Requires:       %{name}-cairo%{?_isa} = %{version}-%{release}
 Requires:       %{name}-raster%{?_isa} = %{version}-%{release}
 Requires:       %{name}-vector%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -49,112 +40,53 @@ developing applications that use %{name}.
 %package        icu
 Summary:        Harfbuzz ICU support library
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    icu
 This package contains Harfbuzz ICU support library.
 
 %package        cairo
 Summary:        Harfbuzz Cairo support library
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    cairo
 This package contains Harfbuzz Cairo support library.
 
 %package        raster
 Summary:        Harfbuzz Raster support library
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    raster
 This package contains Harfbuzz Raster support library.
 
 %package        vector
 Summary:        Harfbuzz Vector support library
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    vector
 This package contains Harfbuzz Vector support library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %meson -Dgraphite2=enabled -Dchafa=disabled
 %meson_build
-
-
 %install
 %meson_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %meson_test
-
-
 %ldconfig_scriptlets
-
 %ldconfig_scriptlets icu
-
 %ldconfig_scriptlets cairo
-
 %ldconfig_scriptlets raster
-
 %ldconfig_scriptlets vector
-
-%files
-%license COPYING
-%doc NEWS AUTHORS README.md
-%{_libdir}/libharfbuzz.so.0*
-%{_libdir}/libharfbuzz-gobject.so.0*
-%{_libdir}/libharfbuzz-subset.so.0*
-%dir %{_libdir}/girepository-1.0
-%{_libdir}/girepository-1.0/HarfBuzz-0.0.typelib
-%{_libdir}/libharfbuzz-gpu.so.*
-%{_libdir}/libharfbuzz-gpu.so.*
-
-%files devel
-%doc %{_datadir}/gtk-doc
-%{_bindir}/hb-info
-%{_bindir}/hb-view
-%{_bindir}/hb-raster
-%{_bindir}/hb-shape
-%{_bindir}/hb-subset
-%{_bindir}/hb-vector
-%{_includedir}/harfbuzz/
-%{_libdir}/libharfbuzz.so
-%{_libdir}/libharfbuzz-gobject.so
-%{_libdir}/libharfbuzz-cairo.so
-%{_libdir}/libharfbuzz-icu.so
-%{_libdir}/libharfbuzz-raster.so
-%{_libdir}/libharfbuzz-subset.so
-%{_libdir}/libharfbuzz-vector.so
-%{_libdir}/pkgconfig/harfbuzz.pc
-%{_libdir}/pkgconfig/harfbuzz-cairo.pc
-%{_libdir}/pkgconfig/harfbuzz-gobject.pc
-%{_libdir}/pkgconfig/harfbuzz-icu.pc
-%{_libdir}/pkgconfig/harfbuzz-raster.pc
-%{_libdir}/pkgconfig/harfbuzz-subset.pc
-%{_libdir}/pkgconfig/harfbuzz-vector.pc
-%{_libdir}/cmake/harfbuzz/
-%dir %{_datadir}/gir-1.0
-%{_datadir}/gir-1.0/HarfBuzz-0.0.gir
-%{_libdir}/pkgconfig/harfbuzz-gpu.pc
-%{_bindir}/hb-gpu
-%{_libdir}/libharfbuzz-gpu.so.*
-
-%{_libdir}/libharfbuzz-gpu.so
-%files icu
-%{_libdir}/libharfbuzz-icu.so.*
-
-%files cairo
-%{_libdir}/libharfbuzz-cairo.so.*
-
-%files raster
-%{_libdir}/libharfbuzz-raster.so.*
-
-%files vector
-%{_libdir}/libharfbuzz-vector.so.*
+%files -f %{oreon_filedir}/main.list
+%files -n harfbuzz-devel -f %{oreon_filedir}/harfbuzz-devel.list
+%files -n harfbuzz-icu -f %{oreon_filedir}/harfbuzz-icu.list
+%files -n harfbuzz-cairo -f %{oreon_filedir}/harfbuzz-cairo.list
+%files -n harfbuzz-raster -f %{oreon_filedir}/harfbuzz-raster.list
+%files -n harfbuzz-vector -f %{oreon_filedir}/harfbuzz-vector.list
 
 %changelog
+
 %autochangelog

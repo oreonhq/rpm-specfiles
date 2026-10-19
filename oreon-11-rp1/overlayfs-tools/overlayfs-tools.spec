@@ -1,25 +1,22 @@
 %global source0_hash f8737544b29fac6099f6cb78dab945add3b6a179a9b98ce6df39855c2930b14b
-
 %global date 20200817
 %global commit 77bf3f7ad3e7b834a15e2166780167646d51cce8
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
-Summary: OverlayFS layers manipulation tools
+Summary:        OverlayFS layers manipulation tools
 Name: overlayfs-tools
 Version: 0
-Release: 0.13.%{date}git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 URL: https://github.com/kmxz/overlayfs-tools/
-Source0: %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-# https://github.com/kmxz/overlayfs-tools/issues/14
+Source0:        https://github.com/kmxz/%{name}//archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Patch0: %{name}-missing-errno-h.patch
-# https://patch-diff.githubusercontent.com/raw/kmxz/overlayfs-tools/pull/13
 Patch1: https://patch-diff.githubusercontent.com/raw/kmxz/overlayfs-tools/pull/13.diff
 License: WTFPL
-BuildRequires: gcc
-BuildRequires: help2man
-BuildRequires: libattr-devel
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  help2man
+BuildRequires:  libattr-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 OverlayFS is the union filesystem provided by Linux kernel.
 
@@ -48,29 +45,25 @@ For safety reasons, vacuum and merge will not actually modify the filesystem,
 but generate a shell script to do the changes instead.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{commit}
 
 %build
+
 %set_build_flags
 %make_build CFLAGS="$CFLAGS" LFLAGS="$LDFLAGS"
 help2man --no-info --version-string=%{shortcommit} --output=overlay.1 ./overlay
-
 %install
 install -dm755 %{buildroot}%{_bindir}
 install -pm755 overlay %{buildroot}%{_bindir}
 install -dm755 %{buildroot}%{_mandir}/man1
 install -pm644 overlay.1 %{buildroot}%{_mandir}/man1
+%oreon_autofiles main
 
-#%%check
-# TODO: testsuite calls sudo
-
-%files
-%license LICENSE.txt
-%doc README.md
-%{_bindir}/overlay
-%{_mandir}/man1/overlay.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

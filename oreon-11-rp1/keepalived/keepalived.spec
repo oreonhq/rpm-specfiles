@@ -1,5 +1,4 @@
 %global source0_hash 6afd95ddb7d3e0d3b8b8e5b3a489144131b61a01b06d29e883d0c44acc8a36bf
-
 %bcond_without snmp
 %bcond_without vrrp
 %bcond_without sha1
@@ -7,43 +6,36 @@
 %bcond_without nftables
 %bcond_with profile
 %bcond_with debug
-
 %global _hardened_build 1
-
 Name: keepalived
-Summary: High Availability monitor built upon LVS, VRRP and service pollers
+Summary:        High Availability monitor built upon LVS, VRRP and service pollers
 Version: 2.3.4
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL: http://www.keepalived.org/
-
 Source0:        http://www.keepalived.org/software/keepalived-%{version}.tar.gz
 Source1: keepalived.service
-#Patch0: keepalived-configure-c99.patch
-
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-
 %if %{with snmp}
-BuildRequires: net-snmp-devel
 %endif
 %if %{with nftables}
-BuildRequires: libmnl-devel
-BuildRequires: libnftnl-devel
 %else
-BuildRequires: ipset-devel
-BuildRequires: iptables-devel
 %endif
-BuildRequires: gcc
-BuildRequires: systemd-units
-BuildRequires: systemd-devel
-BuildRequires: openssl-devel
-BuildRequires: libnl3-devel
-BuildRequires: libnfnetlink-devel
-BuildRequires: file-devel
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  file-devel
+BuildRequires:  gcc
+BuildRequires:  libmnl-devel
+BuildRequires:  libnfnetlink-devel
+BuildRequires:  libnftnl-devel
+BuildRequires:  libnl3-devel
+BuildRequires:  make
+BuildRequires:  net-snmp-devel
+BuildRequires:  openssl-devel
+BuildRequires:  systemd-devel
+BuildRequires:  systemd-units
+# /oreon:deps
 %description
 Keepalived provides simple and robust facilities for load balancing
 and high availability to Linux system and Linux based infrastructures.
@@ -59,6 +51,7 @@ can be used independently or all together to provide resilient
 infrastructures.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -66,6 +59,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 touch aclocal.m4 Makefile.in lib/config.h.in configure
 
 %build
+
 %configure \
     %{?with_debug:--enable-debug} \
     %{?with_profile:--enable-profile} \
@@ -76,7 +70,6 @@ touch aclocal.m4 Makefile.in lib/config.h.in configure
     %{?with_sha1:--enable-sha1} \
     --with-init=systemd
 %{__make} %{?_smp_mflags} STRIP=/bin/true
-
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
@@ -86,34 +79,19 @@ mv %{buildroot}%{_sysconfdir}/keepalived/keepalived.conf.sample \
    %{buildroot}%{_sysconfdir}/keepalived/keepalived.conf
 %{__install} -p -D -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/keepalived.service
 mkdir -p %{buildroot}%{_libexecdir}/keepalived
+%oreon_autofiles main
 
 %post
+
 %systemd_post keepalived.service
-
 %preun
+
 %systemd_preun keepalived.service
-
 %postun
-%systemd_postun_with_restart keepalived.service
 
-%files
-%attr(0755,root,root) %{_sbindir}/keepalived
-%config(noreplace) %attr(0644,root,root) %{_sysconfdir}/sysconfig/keepalived
-%config(noreplace) %attr(0644,root,root) %{_sysconfdir}/keepalived/keepalived.conf
-%doc AUTHOR ChangeLog CONTRIBUTORS COPYING README TODO
-%doc doc/keepalived.conf.SYNOPSIS doc/samples/keepalived.conf.*
-%dir %{_sysconfdir}/keepalived/
-%dir %{_libexecdir}/keepalived/
-%if %{with snmp}
-%{_datadir}/snmp/mibs/KEEPALIVED-MIB.txt
-%{_datadir}/snmp/mibs/VRRP-MIB.txt
-%{_datadir}/snmp/mibs/VRRPv3-MIB.txt
-%endif
-%{_bindir}/genhash
-%{_unitdir}/keepalived.service
-%{_mandir}/man1/genhash.1*
-%{_mandir}/man5/keepalived.conf.5*
-%{_mandir}/man8/keepalived.8*
+%systemd_postun_with_restart keepalived.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

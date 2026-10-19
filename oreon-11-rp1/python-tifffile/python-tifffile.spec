@@ -1,66 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 2ad086262b5bd3b3804f2d044926e5f63d8f6ae72b235d8b774f164b79f587c4
 Name:           python-tifffile
 Version:        2026.9.15
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Read and write TIFF files
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/cgohlke/tifffile
-Source:         %{pypi_source tifffile}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tifffile/tifffile-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'tifffile' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-tifffile = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-tifffile
-Summary:        %{summary}
-
-%description -n python3-tifffile %_description
+Summary:        Read and write TIFF files
+%description -n python3-tifffile
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-tifffile all,codecs,plot,test,xml,zarr
-
 
 %prep
-%autosetup -p1 -n tifffile-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir tifffile-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-tifffile usr/lib/python3*/site-packages/tifffile* usr/lib64/python3*/site-packages/tifffile* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tifffile* usr/lib64/python3*/site-packages/tifffile* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-tifffile -f %{pyproject_files}
-%{_bindir}/lsm2bin
-%{_bindir}/tiff2fsspec
-%{_bindir}/tiffcomment
-%{_bindir}/tifffile
+%files
+%files -n python3-tifffile -f %{oreon_filedir}/python3-tifffile.list
 
 %changelog
+
 %autochangelog

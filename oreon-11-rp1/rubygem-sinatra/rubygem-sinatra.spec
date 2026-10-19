@@ -1,68 +1,42 @@
+%global source1_hash 0a0b5a3de3b5e7af0554e062879bf6899bdddf7625abf3e26a1f2f0e49bf30d4
 %global source0_hash b7aeb9b11d046b552972ade834f1f9be98b185fa8444480688e3627625377080
-
 %global gem_name sinatra
-
 %bcond_with bootstrap
 %bcond_without tilt_integration_tests
-
 Name: rubygem-%{gem_name}
 Version: 4.2.1
-Release: %autorelease
-Summary: Ruby-based web application framework
+Release:        1%{?dist}
+Summary:        Ruby-based web application framework
 License: MIT
 URL: http://sinatrarb.com/
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
-# git clone https://github.com/sinatra/sinatra.git && cd sinatra
-# git archive -v -o sinatra-4.2.1-test.tar.gz v4.2.1 test/
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1: https://github.com/sinatra/sinatra/archive/refs/tags/v4.2.1.tar.gz
-# Fix test failures caused by RDoc 6.16+
-# https://github.com/sinatra/sinatra/pull/2132
 Patch0: rubygem-sinatra-4.2.1-Fix-RDoc-6-16-compatibility-by-relaxing-the-check.patch
-# Fix compatibility with minitest 6
 Patch1: rubygem-sinatra-4.2.1-minitest6.patch
-BuildRequires: ruby(release)
-BuildRequires: rubygems-devel
-BuildRequires: ruby
 %if %{without bootstrap}
-BuildRequires: rubygem(minitest) > 5
-BuildRequires: rubygem(minitest-mock)
-BuildRequires: rubygem(mustermann)
-BuildRequires: rubygem(rack)
-BuildRequires: rubygem(rack-test)
-BuildRequires: rubygem(rack-protection) >= %{version}
-BuildRequires: rubygem(rack-session)
-BuildRequires: rubygem(rackup)
-# Tilt is actually required from base_test
-BuildRequires: rubygem(tilt)
 %if %{with tilt_integration_tests}
-BuildRequires: rubygem(asciidoctor)
-BuildRequires: rubygem(builder)
-BuildRequires: rubygem(erubi)
-BuildRequires: rubygem(haml)
-BuildRequires: rubygem(kramdown)
-BuildRequires: rubygem(nokogiri)
-BuildRequires: rubygem(rdiscount)
-BuildRequires: rubygem(redcarpet)
-BuildRequires: rubygem(slim)
 %endif
 %endif
 Epoch: 1
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  ruby
+BuildRequires:  ruby(release)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 Sinatra is a DSL for quickly creating web applications in Ruby with minimal
 effort.
-
 
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{epoch}:%{version}-%{release}
 BuildArch: noarch
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
 find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
@@ -73,65 +47,32 @@ find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec
 )
 
 %build
-# Create the gem as gem install only works on a gem file
+
 gem build ../%{gem_name}-%{version}.gemspec
-
-# %%gem_install compiles any C extensions and installs the gem into ./%%gem_dir
-# by default, so that we can move it into the buildroot in %%install
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
-
-
-# Fix shebangs, though those are examples.
 sed -i -e 's|^#!/usr/bin/env ruby|#!/usr/bin/ruby|' \
   %{buildroot}%{gem_instdir}/examples/*.rb
 chmod a+x %{buildroot}%{gem_instdir}/examples/*.rb
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{without bootstrap}
 %check
+
 pushd .%{gem_instdir}
 cp -a %{builddir}/test test
-
-# Avoid ActiveSupport dependency, which should not be needed anyway.
 sed -i '/active_support/ s/^/#/' test/test_helper.rb
-
-# We can't do integration test
-# because we don't ship sinatra-contrib including Sinatra::Runner.
 mv test/integration_test.rb{,.disabled}
 mv test/integration_async_test.rb{,.disabled}
-# These would require additional dependencies, such as Zeitwerk, Puma, etc.
 mv test/integration_start_test.rb{,.disabled}
-
-# TODO: Is it worth of testing all the possible template engines integration?
 ruby -e 'Dir.glob "./test/*_test.rb", &method(:require)'
 popd
 %endif
-
-%files
-%dir %{gem_instdir}
-%exclude %{gem_instdir}/.yardopts
-%license %{gem_instdir}/LICENSE
-%{gem_libdir}
-%exclude %{gem_cache}
-%{gem_spec}
-
-%files doc
-%doc %{gem_docdir}
-%doc %{gem_instdir}/AUTHORS.md
-%doc %{gem_instdir}/CHANGELOG.md
-%doc %{gem_instdir}/CONTRIBUTING.md
-%{gem_instdir}/Gemfile
-%doc %{gem_instdir}/MAINTENANCE.md
-%doc %{gem_instdir}/README.md
-%{gem_instdir}/Rakefile
-%doc %{gem_instdir}/SECURITY.md
-%{gem_instdir}/VERSION
-%{gem_instdir}/examples
-%{gem_instdir}/sinatra.gemspec
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-sinatra-doc -f %{oreon_filedir}/rubygem-sinatra-doc.list
 
 %changelog
+
 %autochangelog

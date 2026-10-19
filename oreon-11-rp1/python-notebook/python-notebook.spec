@@ -1,62 +1,90 @@
-%global source0_hash none
-
+%global source0_hash cc02b5f0bb972160cccfe44ad8a1a202036206ba3439469c514f03aefa9ae807
 Name:           python-notebook
 Version:        7.6.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Jupyter Notebook - A web-based notebook environment for interactive computing
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/jupyter/notebook
-Source:         %{pypi_source notebook}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/notebook/notebook-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatch-jupyter-builder) >= 0.5
+BuildRequires:  python3dist(hatchling) >= 1.11
+BuildRequires:  python3dist(jupyter-builder) < 2
+BuildRequires:  python3dist(jupyter-builder) >= 1.0.2
+Requires:       python3-notebook = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-notebook+test
+Summary:        Metapackage for python3-notebook test extras
+Requires:       python3-notebook = %{version}-%{release}
+Requires:       python3dist(pytest) >= 7.0
+Requires:       python3dist(jupyter-server[test]) >= 2.19.0
+Requires:       python3dist(jupyter-server[test]) < 3
+Requires:       python3dist(jupyterlab-server[test]) >= 2.28.0
+Requires:       python3dist(jupyterlab-server[test]) < 3
+Provides:       python3dist(notebook[test]) = %{version}-%{release}
 
+%description -n python3-notebook+test
+Metapackage for python3-notebook test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'notebook' generated automatically by pyp2spec.}
+%package -n       python3-notebook+docs
+Summary:        Metapackage for python3-notebook docs extras
+Requires:       python3-notebook = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 1.3.6
+Provides:       python3dist(notebook[docs]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-notebook+docs
+Metapackage for python3-notebook docs extras.
+
+%package -n       python3-notebook+dev
+Summary:        Metapackage for python3-notebook dev extras
+Requires:       python3-notebook = %{version}-%{release}
+Provides:       python3dist(notebook[dev]) = %{version}-%{release}
+
+%description -n python3-notebook+dev
+Metapackage for python3-notebook dev extras.
+
+%description
 
 %package -n     python3-notebook
-Summary:        %{summary}
-
-%description -n python3-notebook %_description
+Summary:        Jupyter Notebook - A web-based notebook environment for interactive computing
+# oreon:reqs
+Requires:       python3dist(jupyter-builder) < 2
+Requires:       python3dist(jupyter-builder) >= 1.0.2
+Requires:       python3dist(jupyter-server) < 3
+Requires:       python3dist(jupyter-server) >= 2.19.0
+Requires:       python3dist(jupyterlab) < 4.7
+Requires:       python3dist(jupyterlab) >= 4.6.3
+Requires:       python3dist(jupyterlab-server) < 3
+Requires:       python3dist(jupyterlab-server) >= 2.28.0
+Requires:       python3dist(notebook-shim) < 0.3
+Requires:       python3dist(notebook-shim) >= 0.2
+Requires:       python3dist(tornado) >= 6.2.0
+# /oreon:reqs
+%description -n python3-notebook
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-notebook dev,docs,test
-
 
 %prep
-%autosetup -p1 -n notebook-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir notebook-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-notebook usr/lib/python3*/site-packages/notebook* usr/lib64/python3*/site-packages/notebook* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/notebook* usr/lib64/python3*/site-packages/notebook* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-notebook -f %{pyproject_files}
-%{_bindir}/jupyter-notebook
+%files
+%files -n python3-notebook -f %{oreon_filedir}/python3-notebook.list
 
 %changelog
+
 %autochangelog

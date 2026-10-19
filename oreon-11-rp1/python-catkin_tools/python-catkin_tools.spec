@@ -1,60 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 2de860e29778064b5f06f32202a667665654269ad70ea95f7ab54741fae57794
 Name:           python-catkin-tools
 Version:        0.9.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Command line tools for working with catkin.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://catkin-tools.readthedocs.org/
-Source:         %{pypi_source catkin_tools}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/catkin_tools/catkin_tools-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'catkin-tools' generated automatically by pyp2spec.}
-
 Patch0:         %{srcname}-0.9.5-sphinx8.patch
 Patch1:         %{name}-rm-python-mock-usage.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-catkin-tools = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-catkin-tools
-Summary:        %{summary}
-
-%description -n python3-catkin-tools %_description
-
+Summary:        Command line tools for working with catkin.
+%description -n python3-catkin-tools
 
 %prep
-%autosetup -p1 -n catkin_tools-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir catkin_tools-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-catkin-tools usr/lib/python3*/site-packages/catkin_tools* usr/lib64/python3*/site-packages/catkin_tools* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/catkin_tools* usr/lib64/python3*/site-packages/catkin_tools* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-catkin-tools -f %{pyproject_files}
-%{_bindir}/catkin
+%files
+%files -n python3-catkin-tools -f %{oreon_filedir}/python3-catkin-tools.list
 
 %changelog
+
 %autochangelog

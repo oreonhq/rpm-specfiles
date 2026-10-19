@@ -1,35 +1,28 @@
 %global source0_hash 45d32868ea30eaf3df8c0e52854319654391063df061343370cc985527c2e819
-
 Name:           python-pyxdameraulevenshtein
 Version:        1.10.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Damerau-Levenshtein (DL) edit distance algorithm
-
 License:        BSD-3-Clause
 URL:            https://github.com/lanl/pyxDamerauLevenshtein
-# The PyPI sdist lacks the tests.
-Source:         %{url}/archive/v%{version}/pyxDamerauLevenshtein-%{version}.tar.gz
-
-
-BuildRequires:  dos2unix
-BuildRequires:  gcc
-
-# The tests only require unittest, but pytest is a more convenient runner.
-# See: dev-requirements.txt.
-BuildRequires:  %{py3_dist pytest}
-
+Source0:        https://github.com/lanl/pyxDamerauLevenshtein/archive/v%{version}/pyxDamerauLevenshtein-%{version}.tar.gz
 %global common_description %{expand:
 pyxDamerauLevenshtein implements the Damerau-Levenshtein (DL) edit distance
 algorithm for Python in Cython for high performance.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 40.8.0
+Requires:       python3-pyxdameraulevenshtein = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-pyxdameraulevenshtein
-Summary:        %{summary}
-
+Summary:        Damerau-Levenshtein (DL) edit distance algorithm
 %description -n python3-pyxdameraulevenshtein %{common_description}
 
 %prep
+
 %autosetup -p1
 # Remove Cythonized C sources (_initialize.c, but the following is general):
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_using_cython
@@ -43,22 +36,20 @@ dos2unix --keepdate CHANGES.md
 
 %install
 %pyproject_install
-# It’s not necessary or particularly useful to ship Cythonized C sources in
-# wheels/bdists, and they are quite large. We would like to fix this in
-# pyproject.toml and offer upstream a PR, but we’re not quite sure what to
-# suggest. Help is welcome.
 rm '%{buildroot}%{python3_sitearch}/pyxdameraulevenshtein/_initialize.c'
 sed -r -i 's/.*\/_initialize\.c$/# &/' %{pyproject_files}
+%oreon_autofiles python3-pyxdameraulevenshtein usr/lib/python3*/site-packages/pyxdameraulevenshtein* usr/lib64/python3*/site-packages/pyxdameraulevenshtein* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyxdameraulevenshtein* usr/lib64/python3*/site-packages/pyxdameraulevenshtein* usr/bin/*
 
 %build
+
 %pyproject_wheel
-
 %check
-%pytest -v
 
-%files -n python3-pyxdameraulevenshtein -f %{pyproject_files}
-%doc CHANGES.md
-%doc README.md
+%pytest -v
+%files
+%files -n python3-pyxdameraulevenshtein -f %{oreon_filedir}/python3-pyxdameraulevenshtein.list
 
 %changelog
+
 %autochangelog

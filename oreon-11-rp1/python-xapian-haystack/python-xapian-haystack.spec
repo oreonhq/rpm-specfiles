@@ -1,57 +1,46 @@
-%global source0_hash none
-
+%global source0_hash db4917cace93ecf3f321b96f974e4f0798936e1f883a2ab17f14112d3bfede0c
 Name:           python-xapian-haystack
 Version:        4.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Xapian backend for Haystack
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://github.com/notanumber/xapian-haystack
-Source:         %{pypi_source xapian_haystack}
-
+Source0:        https://files.pythonhosted.org/packages/source/x/xapian_haystack/xapian_haystack-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'xapian-haystack' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-xapian-haystack = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-xapian-haystack
-Summary:        %{summary}
-
-%description -n python3-xapian-haystack %_description
-
+Summary:        A Xapian backend for Haystack
+# oreon:reqs
+Requires:       python3dist(django) >= 4.2
+Requires:       python3dist(django-haystack) >= 3.0
+Requires:       python3dist(filelock) >= 3.4
+# /oreon:reqs
+%description -n python3-xapian-haystack
 
 %prep
-%autosetup -p1 -n xapian_haystack-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir xapian_haystack-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-xapian-haystack usr/lib/python3*/site-packages/xapian_haystack* usr/lib64/python3*/site-packages/xapian_haystack* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/xapian_haystack* usr/lib64/python3*/site-packages/xapian_haystack* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-xapian-haystack -f %{pyproject_files}
+%files
+%files -n python3-xapian-haystack -f %{oreon_filedir}/python3-xapian-haystack.list
 
 %changelog
+
 %autochangelog

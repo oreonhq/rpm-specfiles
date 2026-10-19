@@ -1,17 +1,19 @@
 %global source0_hash c14ffaf742ccdc47dad7ad98f2bf93cf01f6a00bfce6ce4c020227b41006a90d
-
 Name:           mtn-browse
 Version:        1.20
 Release:        23%{?dist}
 Summary:        Application for browsing Monotone VCS databases
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            http://www.coosoft.plus.com/software.html
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Source1:        mtn-browse.desktop
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(base)
+Requires:       meld graphviz
+BuildArch:      noarch
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gettext
+BuildRequires:  graphviz
+BuildRequires:  meld
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Digest::SHA)
 BuildRequires:  perl(Exporter)
@@ -25,22 +27,20 @@ BuildRequires:  perl(Gnome2::VFS)
 BuildRequires:  perl(Gtk2)
 BuildRequires:  perl(Gtk2::GladeXML)
 BuildRequires:  perl(Gtk2::SourceView2)
-BuildRequires:  perl(integer)
 BuildRequires:  perl(IO::Dir)
 BuildRequires:  perl(IO::File)
+BuildRequires:  perl(Locale::TextDomain)
+BuildRequires:  perl(Monotone::AutomateStdio)
+BuildRequires:  perl(Pod::Usage)
+BuildRequires:  perl(base)
+BuildRequires:  perl(integer)
 BuildRequires:  perl(lib)
 BuildRequires:  perl(locale)
-BuildRequires:  perl(Locale::TextDomain)
-BuildRequires:  perl(Monotone::AutomateStdio) >= 1.10
-BuildRequires:  perl(Pod::Usage)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-BuildRequires:  gettext
-BuildRequires:  desktop-file-utils
-BuildRequires:  meld graphviz
-Requires:       meld graphviz
-BuildArch:      noarch
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Monotone browser (mtn-browse) is an application for browsing Monotone
 VCS databases without the need for a work space. The interface allows
@@ -80,12 +80,12 @@ one to:
 %global __requires_exclude %__requires_exclude|perl\\(WindowManager\\)
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
-# empty
 
 %install
 ./linux-installer \
@@ -94,24 +94,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
   --file-comparison=meld \
   --no-use-dists-mas \
   --libdir=share/%{name}
-
 install -m 644 -D -p \
   ./lib/ui/pixmaps/mtn-browse-small.png \
   %{buildroot}%{_datadir}/pixmaps/%{name}.png
-
 desktop-file-install \
   --dir=%{buildroot}%{_datadir}/applications \
   %{SOURCE1}
-
 %find_lang %{name} --with-gnome
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc NEWS README
-%license COPYING
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/pixmaps/%{name}.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

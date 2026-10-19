@@ -1,33 +1,25 @@
 %global source0_hash 5db9dcbd939153942a08581fabd846d0f3f2b8c67fe68b855127e0472d4d1859
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 Name:           ocaml-zarith
 Version:        1.14
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        OCaml interface to GMP
-
 License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 URL:            https://github.com/ocaml/Zarith
 VCS:            git:%{url}.git
-Source:         %{url}/archive/release-%{version}.tar.gz
-
+Source0:        https://github.com/ocaml/Zarith/archive/release-%{version}.tar.gz
+%global __ocaml_requires_opts -i Asttypes -i Build_path_prefix_map -i Cmi_format -i Env -i Format_doc -i Ident -i Identifiable -i Load_path -i Location -i Longident -i Misc -i Oprint -i Outcometree -i Parsetree -i Path -i Primitive -i Shape -i Subst -i Toploop -i Type_immediacy -i Types -i Unit_info -i Warnings
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  gmp-devel
 BuildRequires:  make
-BuildRequires:  ocaml >= 4.04.0
+BuildRequires:  ocaml
 BuildRequires:  ocaml-findlib
 BuildRequires:  ocaml-ocamldoc
 BuildRequires:  ocaml-rpm-macros
 BuildRequires:  perl-interpreter
-
-# Replace config.guess with a more up to date version which knows about POWER.
 BuildRequires:  redhat-rpm-config
-
-# Do not require ocaml-compiler-libs at runtime
-%global __ocaml_requires_opts -i Asttypes -i Build_path_prefix_map -i Cmi_format -i Env -i Format_doc -i Ident -i Identifiable -i Load_path -i Location -i Longident -i Misc -i Oprint -i Outcometree -i Parsetree -i Path -i Primitive -i Shape -i Subst -i Toploop -i Type_immediacy -i Types -i Unit_info -i Warnings
-
+# /oreon:deps
 %description
 This library implements arithmetic and logical operations over
 arbitrary-precision integers.
@@ -57,12 +49,12 @@ Additional features include:
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       gmp-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n Zarith-release-%{version}
@@ -73,37 +65,29 @@ sed -i "s|^ccdef=''|ccdef='%{build_cflags}'|" configure
 sed -i "s/-shared/-g &/" project.mak
 
 %build
+
 export CC="gcc"
-# This is NOT an autoconf-generated configure script; %%configure doesn't work
 ./configure
-# %%{?_smp_mflags} is not safe; same action performed by multiple CPUs
 make
 make doc
-
 %install
 mkdir -p %{buildroot}%{ocamldir}/stublibs
 make install INSTALLDIR=%{buildroot}%{ocamldir}
-
-# Install missing files
 cp -p {big_int_Z,q,z}.cmt zarith_version.cm{i,t} zarith_top.{cm{i,t},ml} \
       z_mlgmpidl.mli %{buildroot}%{ocamldir}/zarith
 cp -p zarith.opam %{buildroot}%{ocamldir}/zarith/opam
-
 %ocaml_files
-
 %ifarch %{ocaml_native_compiler}
-# The tests assume the availability of ocamlopt
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+
 %check
+
 export LD_LIBRARY_PATH=$PWD
 make tests
 %endif
-
-%files -f .ofiles
-%doc README.md
-%license LICENSE
-
-%files devel -f .ofiles-devel
-%doc Changes html
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-zarith-devel -f %{oreon_filedir}/ocaml-zarith-devel.list
 
 %changelog
+
 %autochangelog

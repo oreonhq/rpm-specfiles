@@ -1,36 +1,32 @@
 %global source0_hash 1c767308174337a74694da0f3ec069c271452163a1ef4540964c50c301f157d4
-
 %define pixman_version 0.36.0
 %define freetype_version 9.7.3
 %define fontconfig_version 2.2.95
-
 Name:           cairo
 Version:        1.18.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A 2D graphics library
-
 License:        LGPL-2.1-only OR MPL-1.1
 URL:            https://cairographics.org
-Source:        https://cairographics.org/releases/%{name}-%{version}.tar.xz
-
+Source0:        https://cairographics.org/releases/%{name}-%{version}.tar.xz
 Patch:          cairo-multilib.patch
-
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gtk-doc
 BuildRequires:  meson
 BuildRequires:  pkgconfig(expat)
-BuildRequires:  pkgconfig(pixman-1) >= %{pixman_version}
-BuildRequires:  pkgconfig(freetype2) >= %{freetype_version}
-BuildRequires:  pkgconfig(fontconfig) >= %{fontconfig_version}
+BuildRequires:  pkgconfig(fontconfig)
+BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(librsvg-2.0)
 BuildRequires:  pkgconfig(lzo2)
-BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(pixman-1)
 BuildRequires:  pkgconfig(xcb-render)
+BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xrender)
-
+# /oreon:deps
 %description
 Cairo is a 2D graphics library designed to provide high-quality display
 and print output. Currently supported output targets include the X Window
@@ -42,7 +38,6 @@ taking advantage of display hardware acceleration when available.
 %package devel
 Summary: Development files for cairo
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Cairo is a 2D graphics library designed to provide high-quality display
 and print output.
@@ -53,7 +48,6 @@ needed for developing software which uses the cairo graphics library.
 %package gobject
 Summary: GObject bindings for cairo
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description gobject
 Cairo is a 2D graphics library designed to provide high-quality display
 and print output.
@@ -65,7 +59,6 @@ integrate well with the GObject object system used by GNOME.
 Summary: Development files for cairo-gobject
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 Requires: %{name}-gobject%{?_isa} = %{version}-%{release}
-
 %description gobject-devel
 Cairo is a 2D graphics library designed to provide high-quality display
 and print output.
@@ -76,7 +69,6 @@ needed for developing software which uses the cairo Gobject library.
 %package tools
 Summary: Development tools for cairo
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description tools
 Cairo is a 2D graphics library designed to provide high-quality display
 and print output.
@@ -86,9 +78,9 @@ This package contains tools for working with the cairo graphics library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson \
   -Dfreetype=enabled \
   -Dfontconfig=enabled \
@@ -102,61 +94,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
   -Dxlib=enabled \
   %{nil}
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles cairo-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles cairo-gobject usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles cairo-gobject-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles cairo-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
-%doc AUTHORS BUGS NEWS README.md
-%{_libdir}/libcairo.so.2*
-%{_libdir}/libcairo-script-interpreter.so.2*
-
-%files devel
-%dir %{_includedir}/cairo/
-%{_includedir}/cairo/cairo-deprecated.h
-%{_includedir}/cairo/cairo-features.h
-%{_includedir}/cairo/cairo-ft.h
-%{_includedir}/cairo/cairo.h
-%{_includedir}/cairo/cairo-pdf.h
-%{_includedir}/cairo/cairo-ps.h
-%{_includedir}/cairo/cairo-script-interpreter.h
-%{_includedir}/cairo/cairo-svg.h
-%{_includedir}/cairo/cairo-tee.h
-%{_includedir}/cairo/cairo-version.h
-%{_includedir}/cairo/cairo-xlib-xrender.h
-%{_includedir}/cairo/cairo-xlib.h
-%{_includedir}/cairo/cairo-script.h
-%{_includedir}/cairo/cairo-xcb.h
-%{_libdir}/libcairo.so
-%{_libdir}/libcairo-script-interpreter.so
-%{_libdir}/pkgconfig/cairo-fc.pc
-%{_libdir}/pkgconfig/cairo-ft.pc
-%{_libdir}/pkgconfig/cairo.pc
-%{_libdir}/pkgconfig/cairo-pdf.pc
-%{_libdir}/pkgconfig/cairo-png.pc
-%{_libdir}/pkgconfig/cairo-ps.pc
-%{_libdir}/pkgconfig/cairo-script-interpreter.pc
-%{_libdir}/pkgconfig/cairo-svg.pc
-%{_libdir}/pkgconfig/cairo-tee.pc
-%{_libdir}/pkgconfig/cairo-xlib.pc
-%{_libdir}/pkgconfig/cairo-xlib-xrender.pc
-%{_libdir}/pkgconfig/cairo-script.pc
-%{_libdir}/pkgconfig/cairo-xcb-shm.pc
-%{_libdir}/pkgconfig/cairo-xcb.pc
-%{_datadir}/gtk-doc/html/cairo
-
-%files gobject
-%{_libdir}/libcairo-gobject.so.2*
-
-%files gobject-devel
-%{_includedir}/cairo/cairo-gobject.h
-%{_libdir}/libcairo-gobject.so
-%{_libdir}/pkgconfig/cairo-gobject.pc
-
-%files tools
-%{_bindir}/cairo-trace
-%{_libdir}/cairo/
+%files -f %{oreon_filedir}/main.list
+%files -n cairo-devel -f %{oreon_filedir}/cairo-devel.list
+%files -n cairo-gobject -f %{oreon_filedir}/cairo-gobject.list
+%files -n cairo-gobject-devel -f %{oreon_filedir}/cairo-gobject-devel.list
+%files -n cairo-tools -f %{oreon_filedir}/cairo-tools.list
 
 %changelog
+
 %autochangelog

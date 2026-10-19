@@ -1,18 +1,15 @@
 %global source0_hash b2b8f743213af39f40e8bc611147d69e2ea9e010b9b19cb65246582338f28d96
-
-# -*-Mode: rpm-spec -*-
-
 Name:     aml
 Version:  1.0.0
-Release:  1%{?dist}
-Summary:  Another Main Loop
+Release:        1%{?dist}
+Summary:        Another Main Loop
 License:  ISC AND LicenseRef-Callaway-BSD
 URL:      https://github.com/any1/aml
-Source0:  https://github.com/any1/aml/archive/v%{version}/aml-%{version}.tar.gz
-
-BuildRequires: gcc
-BuildRequires: meson
-
+Source0:        https://github.com/any1/aml/archive/v%{version}/aml-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  meson
+# /oreon:deps
 %description
 
 Event loop handler developed for wayvnc (Wayland VNC server) and
@@ -44,27 +41,19 @@ This package contains header files for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles aml-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_libdir}/lib%{name}.so.*
-
-%doc README.md
-
-%license COPYING
-
-%files devel
-%{_includedir}/aml1/
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/*
+%files -f %{oreon_filedir}/main.list
+%files -n aml-devel -f %{oreon_filedir}/aml-devel.list
 
 %changelog
+
 %autochangelog

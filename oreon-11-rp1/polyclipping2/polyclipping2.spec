@@ -1,31 +1,22 @@
 %global source0_hash 2a3693aceab4aed3e39b743e038d87701acc53cf05ed7b2013aab3e0aec5287e
-
-# The Clipper C++ crystallographic library already uses the name "clipper".
-# The developer is fine with the chosen name polyclipping for the previous version
-# of the library. This rpm packages the "clipper2" polygon clipping library
-
-# Conditionals for optional features
 %bcond_without tests  # Disable tests by default
 %bcond_without docs   # Enable docs by default
-
 Name:           polyclipping2
 Version:        2.0.1_DLLs_DLLs
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Polygon Clipping and Offsetting Library v2
 License:        BSL-1.0
 URL:            https://angusj.com/clipper2/Docs/Overview.htm
-Source:         https://github.com/AngusJohnson/Clipper2/archive/refs/tags/Clipper2_%{version}.tar.gz
-
-# Build dependencies
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  gtest-devel
-
-# Obsolete the redundant clipper2 only for Rawhide
-# https://bugzilla.redhat.com/show_bug.cgi?id=2386078
+Source0:        https://github.com/AngusJohnson/Clipper2/archive/refs/tags/Clipper2_%{version}.tar.gz
 Obsoletes:      clipper2 < %{version}
 Provides:       clipper2 = %{version}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  graphviz
+BuildRequires:  gtest-devel
+# /oreon:deps
 %description
 This library primarily performs the boolean clipping operations -
 intersection, union, difference & xor - on 2D polygons. It also performs
@@ -38,7 +29,6 @@ and outperforms other clipping libraries.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -55,10 +45,10 @@ Documentation for Clipper2 library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n Clipper2-Clipper2_%{version}
-
+%global oreon_srcdir Clipper2-Clipper2_%{version}
+%oreon_prep
 %build
+
 %cmake -S CPP \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_SHARED_LIBS=ON \
@@ -69,40 +59,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -DCLIPPER2_PKGCONFIG=ON \
     -DUSE_EXTERNAL_GTEST=ON
 %cmake_build
-
 %install
 %cmake_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with tests}
 %check
-# Skip failing test
-# https://github.com/AngusJohnson/Clipper2/issues/1001
+
 %ctest -E  "TestMultiplePolygons" \
    --test-dir %{_vpath_builddir}  # Out-of-source test directory
 %endif
-
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libClipper2.so.2
-%{_libdir}/libClipper2.so.%{version}
-%{_libdir}/libClipper2Z.so.2
-%{_libdir}/libClipper2Z.so.%{version}
-
-%files devel
-%license LICENSE
-%{_libdir}/pkgconfig/Clipper2.pc
-%{_libdir}/pkgconfig/Clipper2Z.pc
-%{_includedir}/clipper2/
-%{_libdir}/libClipper2.so
-%{_libdir}/libClipper2Z.so
-%{_libdir}/cmake/clipper2/
-
-# Documentation
-%if %{with docs}
-%files doc
-%doc %{_docdir}/%{name}
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n polyclipping2-devel -f %{oreon_filedir}/polyclipping2-devel.list
+%files -n polyclipping2-doc -f %{oreon_filedir}/polyclipping2-doc.list
 
 %changelog
+
 %autochangelog

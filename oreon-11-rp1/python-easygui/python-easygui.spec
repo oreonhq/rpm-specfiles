@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash d653ff79ee1f42f63b5a090f2f98ce02335d86ad8963b3ce2661805cafe99a04
 Name:           python-easygui
 Version:        0.98.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        EasyGUI is a module for very simple, very easy GUI programming in Python.  EasyGUI is different from other GUI generators in that EasyGUI is NOT event-driven.  Instead, all GUI interactions are invoked by simple function calls.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/robertlugg/easygui
-Source:         %{pypi_source easygui}
-
+Source0:        https://files.pythonhosted.org/packages/source/e/easygui/easygui-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'easygui' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-easygui = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-easygui
-Summary:        %{summary}
-
-%description -n python3-easygui %_description
-
+Summary:        EasyGUI is a module for very simple, very easy GUI programming in Python.  EasyGUI is different from other GUI generators in that EasyGUI is NOT event-driven.  Instead, all GUI interactions are invoked by simple function calls.
+%description -n python3-easygui
 
 %prep
-%autosetup -p1 -n easygui-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir easygui-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-easygui usr/lib/python3*/site-packages/easygui* usr/lib64/python3*/site-packages/easygui* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/easygui* usr/lib64/python3*/site-packages/easygui* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-easygui -f %{pyproject_files}
+%files
+%files -n python3-easygui -f %{oreon_filedir}/python3-easygui.list
 
 %changelog
+
 %autochangelog

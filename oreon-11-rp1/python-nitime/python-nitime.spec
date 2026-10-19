@@ -1,61 +1,59 @@
-%global source0_hash none
-
+%global source0_hash 12cbf488b0655dc05aa18a0ca5982de970302604e461fc92e87ebd9b7539b6ff
 Name:           python-nitime
 Version:        0.12.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Nitime: timeseries analysis for neuroscience data
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            http://nipy.org/nitime
-Source:         %{pypi_source nitime}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/nitime/nitime-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
+BuildRequires:  python3dist(numpy) >= 2
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.2
+Requires:       python3-nitime = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-nitime+full
+Summary:        Metapackage for python3-nitime full extras
+Requires:       python3-nitime = %{version}-%{release}
+Requires:       python3dist(networkx) >= 3.0
+Requires:       python3dist(nibabel) >= 5.0
+Provides:       python3dist(nitime[full]) = %{version}-%{release}
 
+%description -n python3-nitime+full
+Metapackage for python3-nitime full extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'nitime' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-nitime
-Summary:        %{summary}
-
-%description -n python3-nitime %_description
+Summary:        Nitime: timeseries analysis for neuroscience data
+# oreon:reqs
+Requires:       python3dist(matplotlib) >= 3.7
+Requires:       python3dist(numpy) >= 1.24
+Requires:       python3dist(scipy) >= 1.10
+# /oreon:reqs
+%description -n python3-nitime
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-nitime full
-
 
 %prep
-%autosetup -p1 -n nitime-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir nitime-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-nitime usr/lib/python3*/site-packages/nitime* usr/lib64/python3*/site-packages/nitime* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/nitime* usr/lib64/python3*/site-packages/nitime* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-nitime -f %{pyproject_files}
+%files
+%files -n python3-nitime -f %{oreon_filedir}/python3-nitime.list
 
 %changelog
+
 %autochangelog

@@ -1,20 +1,18 @@
 %global source0_hash 67bc662955c6ca2fa6a0ce372c4794ec3d0cd2c1e50b124e7a75af7e23dd1d0c
-
 Name:		sha2
 Version:	1.0.1
-Release:	31%{?dist}
-Summary:	SHA Implementation Library
-# Automatically converted from old format: BSD - review is highly recommended.
+Release:        1%{?dist}
+Summary:        SHA Implementation Library
 License:	LicenseRef-Callaway-BSD
 URL:		http://www.aarongifford.com/computers/sha.html
-Source0:	http://www.aarongifford.com/computers/%{name}-%{version}.tgz
-# Makefile to build the binaries. Sent upstream via email
+Source0:        http://www.aarongifford.com/computers/%{name}-%{version}.tgz
 Source1:	%{name}-Makefile
 Patch0:		sha2-c99.patch
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  make
 BuildRequires:  perl-interpreter
-
+# /oreon:deps
 %description
 The library implements the SHA-256, SHA-384, and SHA-512 hash algorithms. The
 interface is similar to the interface to SHA-1 found in the OpenSSL library.
@@ -27,21 +25,21 @@ three at once).
 %package	devel
 Summary:	Development files for %{name}
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description	devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
 cp -a %{SOURCE1} Makefile
 
 %build
+
 make %{?_smp_mflags} \
 	OPTFLAGS="%{optflags}"
-
 %install
 make install \
 	DESTDIR=%{buildroot} \
@@ -49,20 +47,15 @@ make install \
 	INCLUDEDIR=%{_includedir} \
 	BINDIR=%{_bindir} \
 	OPTFLAGS="%{optflags}"
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 LD_PRELOAD=./libsha2.so ./sha2test.pl
-
 %ldconfig_scriptlets
-
-%files
-%doc README
-%{_libdir}/libsha2.so.*
-%{_bindir}/sha2*
-
-%files devel
-%{_includedir}/sha2.h
-%{_libdir}/libsha2.so
+%files -f %{oreon_filedir}/main.list
+%files -n sha2-devel -f %{oreon_filedir}/sha2-devel.list
 
 %changelog
+
 %autochangelog

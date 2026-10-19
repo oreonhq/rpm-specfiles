@@ -1,62 +1,55 @@
-%global source0_hash none
-
+%global source0_hash bcc27edfff7d727a7eb30424138766e1ee216ae2ffc1af03dab0448f29c4731c
 Name:           python-smbprotocol
 Version:        1.17.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Interact with a server using the SMB 2/3 Protocol
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jborean93/smbprotocol
-Source:         %{pypi_source smbprotocol}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/smbprotocol/smbprotocol-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77.0.0
+Requires:       python3-smbprotocol = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-smbprotocol+kerberos
+Summary:        Metapackage for python3-smbprotocol kerberos extras
+Requires:       python3-smbprotocol = %{version}-%{release}
+Provides:       python3dist(smbprotocol[kerberos]) = %{version}-%{release}
 
+%description -n python3-smbprotocol+kerberos
+Metapackage for python3-smbprotocol kerberos extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'smbprotocol' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-smbprotocol
-Summary:        %{summary}
-
-%description -n python3-smbprotocol %_description
+Summary:        Interact with a server using the SMB 2/3 Protocol
+# oreon:reqs
+Requires:       python3dist(cryptography) >= 2.0
+# /oreon:reqs
+%description -n python3-smbprotocol
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-smbprotocol kerberos
-
 
 %prep
-%autosetup -p1 -n smbprotocol-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir smbprotocol-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-smbprotocol usr/lib/python3*/site-packages/smbprotocol* usr/lib64/python3*/site-packages/smbprotocol* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/smbprotocol* usr/lib64/python3*/site-packages/smbprotocol* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-smbprotocol -f %{pyproject_files}
+%files
+%files -n python3-smbprotocol -f %{oreon_filedir}/python3-smbprotocol.list
 
 %changelog
+
 %autochangelog

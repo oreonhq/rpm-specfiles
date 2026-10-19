@@ -1,30 +1,25 @@
-%global source0_hash none
-
+%global source0_hash 6f2ec142a004f9d5e3b28bfa03246472fee93ceb12837206960bcb560eb72376
 %global gap_pkgname transgrp
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        3.6.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Transitive groups library
-
 License:        GPL-2.0-only OR GPL-3.0-only
 URL:            https://www.gap-system.org/Packages/transgrp.html
 VCS:            git:https://github.com/hulpke/transgrp.git
-Source:         https://www.math.colostate.edu/~hulpke/transgrp/%{gap_upname}%{version}.tar.gz
-
+Source0:        https://www.math.colostate.edu/~hulpke/%{gap_pkgname}/%{gap_pkgname}%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    gap
 BuildOption(install): data htm lib tst
 BuildOption(check): --bare -c 'LoadPackage("GAPDoc");LoadPackage("smallgrp");' tst/testall.g
-
-BuildRequires:  gap-devel
-BuildRequires:  gap-pkg-smallgrp
-BuildRequires:  GAPDoc-latex
-BuildRequires:  tth
-
 Requires:       gap-core
 Requires:       %{name}-data = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  GAPDoc-latex
+BuildRequires:  gap-devel
+BuildRequires:  gap-pkg-smallgrp
+BuildRequires:  tth
+# /oreon:deps
 %description
 A library of transitive groups.  This package contains the code for
 accessing the library.  The actual data is in the data subpackage.
@@ -33,10 +28,7 @@ accessing the library.  The actual data is in the data subpackage.
 Summary:        Data files for groups of degree other than 32 and 48
 License:        Artistic-2.0
 Requires:       %{name} = %{version}-%{release}
-
-# This can be removed when Fedora 46 reaches EOL
 Obsoletes:      %{name}-data32 < 3.6.5-11
-
 %description data
 This package contains a library of transitive groups.  Groups of degree 15-30
 are due to Alexander Hulpke.  Groups of degree 32 are due to John Cannon and
@@ -52,21 +44,15 @@ file (about 30 GB).  Download it separately from
 https://zenodo.org/record/5935751 if you need it.
 
 %package doc
-# The content is GPL-2.0-only OR GPL-3.0-only.  The remaining licenses cover
-# the various fonts embedded in PDFs.  Note that Artistic-2.0 is omitted
-# since that covers the data files only.
-# AMS: OFL-1.1-RFN
-# CM: Knuth-CTAN
-# Nimbus: AGPL-3.0-only
 License:        (GPL-2.0-only OR GPL-3.0-only) AND OFL-1.1-RFN AND Knuth-CTAN AND AGPL-3.0-only
 Summary:        Transitive groups library documentation
 Requires:       %{name} = %{version}-%{release}
 Requires:       gap-online-help
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 %autosetup -n %{gap_upname}
 
 %conf
@@ -74,7 +60,7 @@ This package contains documentation for gap-pkg-%{gap_pkgname}.
 sed -i '/UseReferences.*ext/d' doc/manual.tex
 
 %build
-# Build the documentation
+
 mkdir ../../doc
 ln -s %{gap_libdir}/doc/ref ../../doc
 cd doc
@@ -84,23 +70,10 @@ ln -s %{gap_libdir}/doc/manualindex .
 ./make_doc
 cd -
 rm -fr ../../doc doc/{convert.pl,gapmacro.tex,manualindex}
-
-%files
-%doc README.md
-%license LICENSE
-%dir %{gap_libdir}/pkg/%{gap_upname}/
-%{gap_libdir}/pkg/%{gap_upname}/*.g
-%{gap_libdir}/pkg/%{gap_upname}/lib/
-%{gap_libdir}/pkg/%{gap_upname}/tst/
-
-%files data
-%{gap_libdir}/pkg/%{gap_upname}/data/
-
-%files doc
-%docdir %{gap_libdir}/pkg/%{gap_upname}/doc/
-%docdir %{gap_libdir}/pkg/%{gap_upname}/htm/
-%{gap_libdir}/pkg/%{gap_upname}/doc/
-%{gap_libdir}/pkg/%{gap_upname}/htm/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-transgrp-data -f %{oreon_filedir}/gap-pkg-transgrp-data.list
+%files -n gap-pkg-transgrp-doc -f %{oreon_filedir}/gap-pkg-transgrp-doc.list
 
 %changelog
+
 %autochangelog

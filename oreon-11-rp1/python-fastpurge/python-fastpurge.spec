@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 650ca73b28e64d46a198e3d7ea3f7ee79bfd0404a3030d057addd11e79ef80e3
 Name:           python-fastpurge
 Version:        1.0.6
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A client for the Akamai Fast Purge API
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-3.0-or-later
 URL:            https://release-engineering.github.io/python-fastpurge/
-Source:         %{pypi_source fastpurge}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/fastpurge/fastpurge-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'fastpurge' generated automatically by pyp2spec.}
-
 Patch: 0001-Use-unittest.mock-on-Python-3.3.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-fastpurge = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-fastpurge
-Summary:        %{summary}
-
-%description -n python3-fastpurge %_description
-
+Summary:        A client for the Akamai Fast Purge API
+%description -n python3-fastpurge
 
 %prep
-%autosetup -p1 -n fastpurge-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir fastpurge-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-fastpurge usr/lib/python3*/site-packages/fastpurge* usr/lib64/python3*/site-packages/fastpurge* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/fastpurge* usr/lib64/python3*/site-packages/fastpurge* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-fastpurge -f %{pyproject_files}
+%files
+%files -n python3-fastpurge -f %{oreon_filedir}/python3-fastpurge.list
 
 %changelog
+
 %autochangelog

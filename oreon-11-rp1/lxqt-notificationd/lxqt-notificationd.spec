@@ -1,25 +1,25 @@
-%global source0_hash bdaa5d361c66a99f9af03be351d437e896bfb405e8623729d2f7450548d60145
-
+%global source0_hash 2a50fd423fce0e4f79966fd4cd887692f564778289ee6988af10eca7566d7a4a
 Name:          lxqt-notificationd
-Summary:       Notification daemon for LXQt desktop suite
+Summary:        Notification daemon for LXQt desktop suite
 Version:       2.4.0
-Release:       1%{?dist}
+Release:        1%{?dist}
 License:       LGPL-2.1-only
 URL:           https://lxqt-project.org/
-Source0:       https://github.com/lxqt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/lxqt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:       notifications.conf
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: cmake(Qt6DBus)
-BuildRequires: cmake(Qt6LinguistTools)
-BuildRequires: cmake(KF6WindowSystem)
-BuildRequires: cmake(lxqt2-build-tools)
-BuildRequires: cmake(LayerShellQt)
-BuildRequires: pkgconfig(lxqt)
-BuildRequires: desktop-file-utils
-BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: perl
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(LayerShellQt)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6LinguistTools)
+BuildRequires:  cmake(lxqt2-build-tools)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  perl
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(lxqt)
+# /oreon:deps
 %description
 %{summary}.
 
@@ -32,39 +32,24 @@ This package provides translations for the lxqt-notificationd package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 desktop-file-edit --remove-category=LXQt --add-category=X-LXQt \
 	--remove-only-show-in=LXQt --add-only-show-in=X-LXQt %{buildroot}%{_datadir}/applications/lxqt-config-notificationd.desktop
 mkdir -p %{buildroot}%{_sysconfdir}/lxqt/
 install -m644 %{SOURCE1} %{buildroot}%{_sysconfdir}/lxqt/
-
 %find_lang lxqt-notificationd --with-qt
 %find_lang lxqt-config-notificationd --with-qt
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_bindir}/lxqt-notificationd
-%{_bindir}/lxqt-config-notificationd
-%{_datadir}/applications/lxqt-config-notificationd.desktop
-%{_sysconfdir}/xdg/autostart/lxqt-notifications.desktop
-%{_sysconfdir}/lxqt/notifications.conf
-
-%files l10n -f lxqt-notificationd.lang -f lxqt-config-notificationd.lang
-%license LICENSE
-%doc AUTHORS CHANGELOG README.md
-%dir %{_datadir}/lxqt/translations/lxqt-notificationd
-%{_datadir}/lxqt/translations/lxqt-notificationd/lxqt-notificationd_arn.qm
-%{_datadir}/lxqt/translations/lxqt-notificationd/lxqt-notificationd_ast.qm
-%dir %{_datadir}/lxqt/translations/lxqt-config-notificationd
-%{_datadir}/lxqt/translations/lxqt-config-notificationd/lxqt-config-notificationd_arn.qm
-%{_datadir}/lxqt/translations/lxqt-config-notificationd/lxqt-config-notificationd_ast.qm
+%files -f %{oreon_filedir}/main.list
+%files -n lxqt-notificationd-l10n -f %{oreon_filedir}/lxqt-notificationd-l10n.list
 
 %changelog
+
 %autochangelog

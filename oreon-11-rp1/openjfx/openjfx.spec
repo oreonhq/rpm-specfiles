@@ -1,20 +1,16 @@
 %global source0_hash none
-
 %global forgeurl https://github.com/openjdk/jfx25u
 %global openjfxdir %{_jvmdir}/%{name}
 %global rtdir jfx25u-25.0.2-3
-
 Name:           openjfx
 Epoch:          3
 Version:        25.0.5+3
 Release:        1%{?dist}
 Summary:        Rich client application platform for Java
 %forgemeta
-
 License:        GPL-2.0-only WITH Classpath-exception-2.0 AND BSD-2-Clause AND BSD-3-Clause
 URL:            %{forgeurl}
-
-Source0:        %{forgesource}
+Source0:        %{forgeurl}/archive/v%{version}/jfx25u-%{version}.tar.gz
 Source1:        pom-base.xml
 Source2:        pom-controls.xml
 Source3:        pom-fxml.xml
@@ -47,40 +43,36 @@ Source29:       pom-jdk.jsobject.xml
 Source30:       pom-jfx.incubator.input.xml
 Source31:       pom-jfx.incubator.richtext.xml	
 Patch0:         openjfx-disable-mtl.patch
-
 ExclusiveArch:  %{java_arches}
-
 Requires:       java-25-headless
-
-BuildRequires:  javapackages-tools
-BuildRequires:  java-25-devel
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  ant-openjdk25 
+# oreon:deps
+BuildRequires:  ant-openjdk25
+BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+BuildRequires:  gperf
+BuildRequires:  java-25-devel
+BuildRequires:  javapackages-tools
 BuildRequires:  libstdc++-static
-BuildRequires:  mvn(org.eclipse.swt:swt)
+BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.antlr:antlr)
 BuildRequires:  mvn(org.antlr:antlr4-maven-plugin)
 BuildRequires:  mvn(org.antlr:stringtemplate)
 BuildRequires:  mvn(org.apache.ant:ant)
-BuildRequires:  mvn(org.codehaus.mojo:native-maven-plugin)
-BuildRequires:  mvn(org.codehaus.mojo:exec-maven-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
-
+BuildRequires:  mvn(org.codehaus.mojo:exec-maven-plugin)
+BuildRequires:  mvn(org.codehaus.mojo:native-maven-plugin)
+BuildRequires:  mvn(org.eclipse.swt:swt)
+BuildRequires:  perl
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(gthread-2.0)
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(gthread-2.0)
-BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(libjpeg)
+BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xxf86vm)
-BuildRequires:  pkgconfig(gl)
-
-BuildRequires:  cmake
-BuildRequires:  gperf
-BuildRequires:  perl
 BuildRequires:  python3
-
+# /oreon:deps
 %description
 JavaFX/OpenJFX is a set of graphics and media APIs that enables Java
 developers to design, create, test, debug, and deploy rich client
@@ -91,6 +83,7 @@ The media module have been removed due to missing dependencies.
 %global debug_package %{nil}
 
 %prep
+
 %autosetup -p1 -n %{rtdir}
 
 #Drop *src/test folders
@@ -144,31 +137,18 @@ rm -rf ./modules/javafx.web/src/main/native/Source/ThirdParty/icu
 
 export CFLAGS="${RPM_OPT_FLAGS}"
 export CXXFLAGS="${RPM_OPT_FLAGS}" 
-
 %mvn_build --skip-javadoc
-
-# Disable libjfxwebkit build. It fails since F36
-#{cmake} -DPORT="Java" --icu-unicode --64-bit --cmakeargs= -DENABLE_TOOLS=1 -DCMAKE_C_COMPILER='gcc' -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=x86_64 -DCMAKE_C_FLAGS='-fno-strict-aliasing -fPIC -fno-omit-frame-pointer -fstack-protector -Wextra -Wall -Wformat-security -Wno-unused -Wno-parentheses -Werror=implicit-function-declaration -DGLIB_DISABLE_DEPRECATION_WARNINGS' -DCMAKE_CXX_FLAGS='-fno-strict-aliasing -fPIC -fno-omit-frame-pointer -fstack-protector -Wextra -Wall -Wformat-security -Wno-unused -Wno-parentheses -Werror=implicit-function-declaration -DGLIB_DISABLE_DEPRECATION_WARNINGS' -DCMAKE_SHARED_LINKER_FLAGS='-static-libgcc -static-libstdc++ -shared -fno-strict-aliasing -fPIC -fno-omit-frame-pointer -fstack-protector -Wextra -Wall -Wformat-security -Wno-unused -Wno-parentheses -Werror=implicit-function-declaration -DGLIB_DISABLE_DEPRECATION_WARNINGS -z relro -Wl,--gc-sections' -DCMAKE_EXE_LINKER_FLAGS='-static-libgcc -static-libstdc++  -fno-strict-aliasing -fPIC -fno-omit-frame-pointer -fstack-protector -Wextra -Wall -Wformat-security -Wno-unused -Wno-parentheses -Werror=implicit-function-declaration -DGLIB_DISABLE_DEPRECATION_WARNINGS -z relro -Wl,--gc-sections' -DJAVAFX_RELEASE_VERSION=17 ./modules/javafx.web/src/main/native
-#{cmake} -DPORT="Java" -DENABLE_TOOLS=1 -DCMAKE_C_COMPILER='gcc' -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_PROCESSOR=x86_64 -DCMAKE_C_FLAGS='-fno-strict-aliasing -fPIC -fno-omit-frame-pointer -fstack-protector -Wextra -Wall -Wformat-security -Wno-unused -Wno-parentheses -Werror=implicit-function-declaration -DGLIB_DISABLE_DEPRECATION_WARNINGS' -DCMAKE_CXX_FLAGS='-fno-strict-aliasing -fPIC -fno-omit-frame-pointer -fstack-protector -Wextra -Wall -Wformat-security -Wno-unused -Wno-parentheses -Werror=implicit-function-declaration -DGLIB_DISABLE_DEPRECATION_WARNINGS' -DCMAKE_SHARED_LINKER_FLAGS='-static-libgcc -static-libstdc++ -shared -fno-strict-aliasing -fPIC -fno-omit-frame-pointer -fstack-protector -Wextra -Wall -Wformat-security -Wno-unused -Wno-parentheses -Werror=implicit-function-declaration -DGLIB_DISABLE_DEPRECATION_WARNINGS -z relro -Wl,--gc-sections' -DCMAKE_EXE_LINKER_FLAGS='-static-libgcc -static-libstdc++  -fno-strict-aliasing -fPIC -fno-omit-frame-pointer -fstack-protector -Wextra -Wall -Wformat-security -Wno-unused -Wno-parentheses -Werror=implicit-function-declaration -DGLIB_DISABLE_DEPRECATION_WARNINGS -z relro -Wl,--gc-sections' -DJAVAFX_RELEASE_VERSION=17 -S ./modules/javafx.web/src/main/native .
-#{cmake_build}
-#strip -g %{_builddir}/%{rtdir}/%_target_platform/lib/libjfxwebkit.so
-
 %install
-
 install -d -m 755 %{buildroot}%{openjfxdir}
 cp -a modules/javafx.{base,controls,fxml,media,swing,swt,web}/target/*.jar %{buildroot}%{openjfxdir}
 cp -a modules/jdk.jsobject/target/*.jar %{buildroot}%{openjfxdir}
 cp -a modules/jfx.incubator.{input,richtext}/target/*.jar %{buildroot}%{openjfxdir}
 cp -a modules/javafx.graphics/mvn-compileJava/mvn-java/target/*.jar %{buildroot}%{openjfxdir}
 cp -a modules/javafx.graphics/mvn-lib{decora,javafx_font,javafx_font_freetype,javafx_font_pango,glass,glassgtk3,javafx_iio,prism_common,prism_es2,prism_sw}/target/*.so %{buildroot}%{openjfxdir}
-#cp -a %_target_platform/lib/libjfxwebkit.so %{buildroot}%{openjfxdir}
+%oreon_autofiles main
 
-%files
-%{openjfxdir}/
-%license LICENSE
-%license ADDITIONAL_LICENSE_INFO
-%license ASSEMBLY_EXCEPTION
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

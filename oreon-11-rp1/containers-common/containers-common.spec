@@ -1,57 +1,39 @@
+%global source2_hash d4b2543626bee31d9438d4a31731aae712c072893c7aed8854f16c42fafc742b
+%global source1_hash c19bf37a7366d64b9605dfee0b5dd0fce5c1ec1edbb34b53d4c87a9e536525a8
 %global source0_hash 503756a080d66141fc3103952b6a5c0253c45da8475673c8d4ee5c948f4dade4
-
 %global project containers
 %global repo container-libs
-
 %if %{defined copr_username}
 %define copr_build 1
 %endif
-
-# See https://github.com/containers/netavark/blob/main/rpm/netavark.spec
-# for netavark epoch
 %if %{defined copr_build}
 %define netavark_epoch 102
 %else
 %define netavark_epoch 2
 %endif
-
 Name: containers-common
 %if %{defined copr_build}
 Epoch: 102
 %else
 Epoch: 5
 %endif
-# DO NOT TOUCH the Version string!
-# The TRUE source of this specfile is:
-# https://github.com/containers/container-libs/blob/main/common/rpm/containers-common.spec
-# If that's what you're reading, Version must be 0, and will be updated by Packit for
-# copr and koji builds.
-# If you're reading this on dist-git, the version is automatically filled in by Packit.
 Version: 0.67.0
-Release: %autorelease
+Release:        1%{?dist}
 License: Apache-2.0
 BuildArch: noarch
-# for BuildRequires: go-md2man
 ExclusiveArch: %{golang_arches} noarch
-Summary: Common configuration and documentation for containers
-BuildRequires: git-core
-BuildRequires: go-md2man
+Summary:        Common configuration and documentation for containers
 Provides: skopeo-containers = %{epoch}:%{version}-%{release}
 Requires: (container-selinux >= 2:2.162.1 if selinux-policy)
-%if 0%{?fedora}
-Recommends: fuse-overlayfs
-Requires: (fuse-overlayfs if fedora-release-identity-server)
-%else
 Suggests: fuse-overlayfs
-%endif
 URL: https://github.com/%{project}/%{repo}
 Source0:        https://github.com/containers/container-libs/archive/refs/tags/common/v%{version}.tar.gz#/v%{version}.tar.gz
 Source1: https://raw.githubusercontent.com/containers/shortnames/refs/heads/main/shortnames.conf
-# Fetch RPM-GPG-KEY-redhat-release from the authoritative source instead of storing
-# a copy in repo or dist-git. Depending on distribution-gpg-keys rpm is also
-# not an option because that package doesn't exist on CentOS Stream.
 Source2: https://access.redhat.com/security/data/fd431d51.txt
-
+# oreon:deps
+BuildRequires:  git-core
+BuildRequires:  go-md2man
+# /oreon:deps
 %description
 This package contains common configuration files and documentation for container
 tools ecosystem, such as Podman, Buildah and Skopeo.
@@ -66,24 +48,12 @@ Requires: %{name} = %{epoch}:%{version}-%{release}
 Requires: container-network-stack
 Requires: oci-runtime
 Requires: passt
-%if %{defined fedora}
-Conflicts: podman < 5:5.0.0~rc4-1
-Recommends: composefs
-Recommends: crun
-Requires: (crun if fedora-release-identity-server)
-Requires: netavark >= %{netavark_epoch}:1.10.3-1
-Suggests: slirp4netns
-Recommends: qemu-user-static
-Requires: (qemu-user-static-aarch64 if fedora-release-identity-server)
-Requires: (qemu-user-static-arm if fedora-release-identity-server)
-Requires: (qemu-user-static-x86 if fedora-release-identity-server)
-%endif
-
 %description extra
 This subpackage will handle dependencies common to Podman and Buildah which are
 not required by Skopeo.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git -n %{repo}-common-v%{version}
 
@@ -92,13 +62,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 bash common/rpm/update-config-files.sh
 
 %build
+
 mkdir -p man5
 for i in common/docs/*.5.md image/docs/*.5.md storage/docs/*.5.md; do
    go-md2man -in $i -out man5/$(basename $i .md)
 done
-
 %install
-# install config and policy files for registries
 install -dp %{buildroot}%{_sysconfdir}/containers/{certs.d,oci/hooks.d,networks,systemd}
 install -dp %{buildroot}%{_sharedstatedir}/containers/sigstore
 install -dp %{buildroot}%{_datadir}/containers/systemd
@@ -107,87 +76,33 @@ install -dp -m 700 %{buildroot}%{_prefix}/lib/containers/storage/overlay-images
 touch %{buildroot}%{_prefix}/lib/containers/storage/overlay-images/images.lock
 install -dp -m 700 %{buildroot}%{_prefix}/lib/containers/storage/overlay-layers
 touch %{buildroot}%{_prefix}/lib/containers/storage/overlay-layers/layers.lock
-
 install -Dp -m0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/containers/registries.conf.d/000-shortnames.conf
 install -Dp -m0644 image/default.yaml %{buildroot}%{_sysconfdir}/containers/registries.d/default.yaml
 install -Dp -m0644 image/default-policy.json %{buildroot}%{_sysconfdir}/containers/policy.json
 install -Dp -m0644 image/registries.conf %{buildroot}%{_sysconfdir}/containers/registries.conf
 install -Dp -m0644 storage/storage.conf %{buildroot}%{_datadir}/containers/storage.conf
-
-# RPM-GPG-KEY-redhat-release already exists on rhel envs, install only on
-# fedora and centos
-%if %{defined fedora} || %{defined centos}
-install -Dp -m0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
-%endif
-
 install -Dp -m0644 common/contrib/redhat/registry.access.redhat.com.yaml -t %{buildroot}%{_sysconfdir}/containers/registries.d
 install -Dp -m0644 common/contrib/redhat/registry.redhat.io.yaml -t %{buildroot}%{_sysconfdir}/containers/registries.d
-
-# install manpages
 for i in man5/*.5; do
     install -Dp -m0644 $i -t %{buildroot}%{_mandir}/man5
 done
 ln -s containerignore.5 %{buildroot}%{_mandir}/man5/.containerignore.5
-
-# install config files for mounts, containers and seccomp
 install -m0644 common/pkg/subscriptions/mounts.conf %{buildroot}%{_datadir}/containers/mounts.conf
 install -m0644 common/pkg/seccomp/seccomp.json %{buildroot}%{_datadir}/containers/seccomp.json
 install -m0644 common/pkg/config/containers.conf %{buildroot}%{_datadir}/containers/containers.conf
-
-# install secrets patch directory
 install -d -p -m 755 %{buildroot}/%{_datadir}/rhel/secrets
-# rhbz#1110876 - update symlinks for subscription management
 ln -s ../../../..%{_sysconfdir}/pki/entitlement %{buildroot}%{_datadir}/rhel/secrets/etc-pki-entitlement
 ln -s ../../../..%{_sysconfdir}/rhsm %{buildroot}%{_datadir}/rhel/secrets/rhsm
 ln -s ../../../..%{_sysconfdir}/yum.repos.d/redhat.repo %{buildroot}%{_datadir}/rhel/secrets/redhat.repo
+%oreon_autofiles containers-common-extra usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# Placeholder check to silence rpmlint warnings
 %check
 
-%files
-%dir %{_sysconfdir}/containers
-%dir %{_sysconfdir}/containers/certs.d
-%dir %{_sysconfdir}/containers/networks
-%dir %{_sysconfdir}/containers/oci
-%dir %{_sysconfdir}/containers/oci/hooks.d
-%dir %{_sysconfdir}/containers/registries.conf.d
-%dir %{_sysconfdir}/containers/registries.d
-%dir %{_sysconfdir}/containers/systemd
-%dir %{_prefix}/lib/containers
-%dir %{_prefix}/lib/containers/storage
-%dir %{_prefix}/lib/containers/storage/overlay-images
-%dir %{_prefix}/lib/containers/storage/overlay-layers
-%{_prefix}/lib/containers/storage/overlay-images/images.lock
-%{_prefix}/lib/containers/storage/overlay-layers/layers.lock
-
-%config(noreplace) %{_sysconfdir}/containers/policy.json
-%config(noreplace) %{_sysconfdir}/containers/registries.conf
-%config(noreplace) %{_sysconfdir}/containers/registries.conf.d/000-shortnames.conf
-%if 0%{?fedora} || 0%{?centos}
-%{_sysconfdir}/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
-%endif
-%config(noreplace) %{_sysconfdir}/containers/registries.d/default.yaml
-%config(noreplace) %{_sysconfdir}/containers/registries.d/registry.redhat.io.yaml
-%config(noreplace) %{_sysconfdir}/containers/registries.d/registry.access.redhat.com.yaml
-%ghost %{_sysconfdir}/containers/storage.conf
-%ghost %{_sysconfdir}/containers/containers.conf
-%dir %{_sharedstatedir}/containers/sigstore
-%{_mandir}/man5/Containerfile.5.gz
-%{_mandir}/man5/containerignore.5.gz
-%{_mandir}/man5/.containerignore.5.gz
-%{_mandir}/man5/containers*.5.gz
-%dir %{_datadir}/containers
-%dir %{_datadir}/containers/systemd
-%{_datadir}/containers/storage.conf
-%{_datadir}/containers/containers.conf
-%{_datadir}/containers/mounts.conf
-%{_datadir}/containers/seccomp.json
-%dir %{_datadir}/rhel
-%dir %{_datadir}/rhel/secrets
-%{_datadir}/rhel/secrets/*
-
-%files extra
+%files -f %{oreon_filedir}/main.list
+%files -n containers-common-extra -f %{oreon_filedir}/containers-common-extra.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.67.0-1
 - Prepare for Oreon 11 (RP1)

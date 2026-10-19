@@ -1,33 +1,25 @@
 %global source0_hash e7b509c76a2ea162ebdda77fb6b6f51f2f37dedee0866077d428e214516f0c2b
-
 %global commit0 98b0a46bce017382a6351a19577ec43a715b6835
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global date0 20240619
-
 %bcond check 1
-
 Summary:        Conversion to/from half-precision floating point format
 Name:           FP16
 License:        MIT
 Version:        1.0^git%{date0}.%{shortcommit0}
-Release:        %autorelease
-
-# Only a header
+Release:        1%{?dist}
 BuildArch:      noarch
-
 URL:            https://github.com/Maratyszcza/%{name}
-Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
-# https://github.com/Maratyszcza/FP16/issues/36
+Source0:        https://github.com/Maratyszcza/%{name}/archive/%{commit0}/%{name}-98b0a46.tar.gz
 Patch0:         0001-Revert-Remove-PeachPy-implementations.patch
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: python3-devel
-
 %if %{with check}
-BuildRequires: gtest-devel
 %endif
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 Header-only library for conversion to/from half-precision floating point formats
 
@@ -40,11 +32,9 @@ Header-only library for conversion to/from half-precision floating point formats
 * Fully covered with unit tests and microbenchmarks
 
 %package devel
-
 Summary:        Conversion to/from half-precision floating point format
 Provides:       %{name}-static = %{version}-%{release}
 Requires: python3dist(peachpy)
-
 %description devel
 Header-only library for conversion to/from half-precision floating point formats
 
@@ -57,6 +47,7 @@ Header-only library for conversion to/from half-precision floating point formats
 * Fully covered with unit tests and microbenchmarks
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{commit0}
@@ -69,21 +60,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
        -DFP16_BUILD_TESTS=OFF \
        -DFP16_BUILD_BENCHMARKS=OFF \
        -DFETCHCONTENT_FULLY_DISCONNECTED=ON \
-       
 %cmake_build
-
 %install
 %cmake_install
-
 mkdir -p %{buildroot}%{python3_sitelib}/fp16
 cp -p include/fp16/*.py %{buildroot}%{python3_sitelib}/fp16
+%oreon_autofiles FP16-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files devel
-%license LICENSE
-%doc README.md
-%{_includedir}/fp16.h
-%{_includedir}/fp16/
-%{python3_sitelib}/fp16/*
+%files -f %{oreon_filedir}/main.list
+%files -n FP16-devel -f %{oreon_filedir}/FP16-devel.list
 
 %changelog
+
 %autochangelog

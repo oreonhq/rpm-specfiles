@@ -1,21 +1,18 @@
 %global source0_hash none
-
 %global forgeurl  https://gitlab.freedesktop.org/monado/demos/xrgears
-# Upstream tag request: https://gitlab.freedesktop.org/monado/demos/xrgears/-/issues/16
 %global commit    6376389139a11eec16138148e17073bbe96f137d
 %global date      20231207
 %forgemeta
-
 Name:           xrgears
 Version:        1.0.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        OpenXR VR demo using Vulkan for rendering
-
 License:        MIT AND Apache-2.0 AND BSL-1.0
 URL:            %{forgeurl}
-Source0:        %{forgesource}
-
+Source0:        %{forgeurl}/-/archive/%{commit}/%{name}-%{commit}.tar.bz2
 ExcludeArch:    %{ix86}
+Provides: bundled(KTX-Software)
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  glm-devel
@@ -26,32 +23,27 @@ BuildRequires:  pkgconfig(glslang)
 BuildRequires:  pkgconfig(openxr)
 BuildRequires:  pkgconfig(vulkan)
 BuildRequires:  xxd
-
-# src/ktx_stream.{c,h} Apache-2.0
-# src/ktx_texture.{c,h} Apache-2.0
-Provides: bundled(KTX-Software)
-
+# /oreon:deps
 %description
 xrgears is an OpenXR VR demo using Vulkan for rendering.
 
 %prep
+
 %forgeautosetup -p1
 
 %build
-# W: no-manual-page-for-binary xrgears
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
 %check
-%meson_test
 
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/xrgears
+%meson_test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

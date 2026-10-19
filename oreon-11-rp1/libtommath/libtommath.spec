@@ -1,19 +1,17 @@
 %global source0_hash 0e9247ab1c4e64110024e34082ce8401f089f7df8e40de0b1ce6a03641302d56
-
 Name:           libtommath
 Version:        1.3.1~rc1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A portable number theoretic multiple-precision integer library
 License:        Unlicense
 URL:            https://www.libtom.net/
-
-Source0:        https://github.com/libtom/%{name}/archive/v%{version_no_tilde}.tar.gz#/%{name}-%{version_no_tilde}.tar.gz
-
-BuildRequires:  make
-BuildRequires:  libtool
+Source0:        https://github.com/libtom/%{name}/archive/v1.3.1-rc1.tar.gz#/%{name}-1.3.1-rc1.tar.gz
+# oreon:deps
 BuildRequires:  ghostscript
 BuildRequires:  ghostscript-tools-dvipdf
 BuildRequires:  libtiff-tools
+BuildRequires:  libtool
+BuildRequires:  make
 BuildRequires:  tex(amssymb.sty)
 BuildRequires:  tex(cmr10.tfm)
 BuildRequires:  tex(epstopdf-base.sty)
@@ -28,7 +26,7 @@ BuildRequires:  texlive-latex-bin-bin
 BuildRequires:  texlive-makeindex-bin
 BuildRequires:  texlive-metafont
 BuildRequires:  texlive-mfware-bin
-
+# /oreon:deps
 %description
 A free open source portable number theoretic multiple-precision integer library
 written entirely in C. (phew!). The library is designed to provide a simple to
@@ -38,7 +36,6 @@ without configuration.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
@@ -48,11 +45,11 @@ Summary:        Documentation files for %{name}
 BuildArch:      noarch
 Provides:       %{name}-doc = %{version}-%{release}
 Obsoletes:      %{name}-doc < 0.42-1
-
 %description    doc
 The %{name}-doc package contains PDF documentation for using %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version_no_tilde}
 sed -i -e 's/644 $(LIBNAME)/755 $(LIBNAME)/g' makefile.shared
@@ -62,34 +59,26 @@ sed -i \
     %{name}.pc.in
 
 %build
+
 %set_build_flags
 %make_build V=1 CFLAGS="$CFLAGS -I./" -f makefile.shared
 make V=1 -f makefile manual docs
-
 %check
+
 make test
 ./test
-
 %install
 %make_install V=1 CFLAGS="$CFLAGS -I./" PREFIX=%{_prefix} LIBPATH=%{_libdir} -f makefile.shared
-
 find %{buildroot} -name '*.la' -delete
 find %{buildroot} -name '*.a' -delete
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%license LICENSE
-%{_libdir}/*.so.*
-
-%files devel
-%{_includedir}/*.h
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-
-%files doc
-%doc doc/bn.pdf
+%files -f %{oreon_filedir}/main.list
+%files -n libtommath-devel -f %{oreon_filedir}/libtommath-devel.list
+%files -n libtommath-doc -f %{oreon_filedir}/libtommath-doc.list
 
 %changelog
+
 * Sat May 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.1~rc1-1
 - Import libtommath

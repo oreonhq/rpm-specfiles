@@ -1,56 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 830f94a326a5790c1a17b29bc9944b30de97b6cc66e6f9d06895e3ff3a60b211
 Name:           python-wtf-peewee
 Version:        3.2.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        wtforms integration for peewee
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/coleifer/wtf-peewee
-Source:         %{pypi_source wtf_peewee}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/wtf_peewee/wtf_peewee-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'wtf-peewee' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-wtf-peewee = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-wtf-peewee
-Summary:        %{summary}
-
-%description -n python3-wtf-peewee %_description
-
+Summary:        wtforms integration for peewee
+# oreon:reqs
+Requires:       python3dist(peewee) >= 3.0.0
+Requires:       python3dist(wtforms) >= 3.0
+# /oreon:reqs
+%description -n python3-wtf-peewee
 
 %prep
-%autosetup -p1 -n wtf_peewee-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir wtf_peewee-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-wtf-peewee usr/lib/python3*/site-packages/wtf_peewee* usr/lib64/python3*/site-packages/wtf_peewee* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/wtf_peewee* usr/lib64/python3*/site-packages/wtf_peewee* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-wtf-peewee -f %{pyproject_files}
+%files
+%files -n python3-wtf-peewee -f %{oreon_filedir}/python3-wtf-peewee.list
 
 %changelog
+
 %autochangelog

@@ -1,40 +1,32 @@
 %global source0_hash 98417080e742829794584a794995c4a08900d22e11b879cb8cc240323b1f4a4a
-
 %global framework sonnet
-
 Name:    kf5-%{framework}
 Version: 5.116.0
-Release: 5%{?dist}
-Summary: KDE Frameworks 5 Tier 1 solution for spell checking
-
+Release:        5%{?dist}
+Summary:        KDE Frameworks 5 Tier 1 solution for spell checking
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
-
 %global majmin 5.116
 %global stable stable
-Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
-
-# filter plugin provides
+Source0:        https://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
 %global __provides_exclude_from ^(%{_kf5_plugindir}/.*\\.so)$
-
-BuildRequires:	gcc-c++
-BuildRequires:	cmake
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-rpm-macros >= %{majmin}
+Requires:       kf5-filesystem >= %{majmin}
+Requires:       %{name}-core%{?_isa} = %{version}-%{release}
+Requires:       %{name}-ui%{?_isa} = %{version}-%{release}
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  hspell-devel
+BuildRequires:  kf5-rpm-macros
+BuildRequires:  pkgconfig(aspell)
+BuildRequires:  pkgconfig(hunspell)
+BuildRequires:  pkgconfig(libvoikko)
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  qt5-qttools-devel
 BuildRequires:  zlib-devel
-BuildRequires:	pkgconfig(aspell)
-BuildRequires:	pkgconfig(hunspell)
-BuildRequires:	hspell-devel
-BuildRequires:	pkgconfig(libvoikko)
-
-Requires:       kf5-filesystem >= %{majmin}
-Requires:       %{name}-core%{?_isa} = %{version}-%{release}
-Requires:       %{name}-ui%{?_isa} = %{version}-%{release}
-	
- 
+# /oreon:deps
 %description
 KDE Frameworks 5 Tier 1 solution for spell checking.
 
@@ -90,59 +82,29 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{framework}-%{version} -p1
 
 %build
+
 %cmake_kf5
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang_kf5 sonnet5_qt
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.md
-%license LICENSES/*.txt
-
-%files core
-%{_kf5_libdir}/libKF5SonnetCore.so.*
-%{_kf5_bindir}/parsetrigrams
-%{_kf5_bindir}/gentrigrams
-%{_kf5_qmldir}/org/kde/sonnet/
-%{_kf5_datadir}/qlogging-categories5/*categories
-
-%files ui -f sonnet5_qt.lang
-%{_kf5_libdir}/libKF5SonnetUi.so.*
-
-%files aspell
-%dir %{_kf5_plugindir}/sonnet	
-%{_kf5_plugindir}/sonnet/sonnet_aspell.so
-
-%files hunspell
-%dir %{_kf5_plugindir}/sonnet	
-%{_kf5_plugindir}/sonnet/sonnet_hunspell.so
-	
-%files hspell
-%dir %{_kf5_plugindir}/sonnet
-%{_kf5_plugindir}/sonnet/sonnet_hspell.so
-
-%files voikko
-%dir %{_kf5_plugindir}/sonnet
-%{_kf5_plugindir}/sonnet/sonnet_voikko.so
-
-%files devel
-%{_kf5_includedir}/Sonnet/
-%{_kf5_includedir}/SonnetCore/
-%{_kf5_includedir}/SonnetUi/
-%{_kf5_libdir}/libKF5SonnetCore.so
-%{_kf5_libdir}/libKF5SonnetUi.so
-%{_kf5_libdir}/cmake/KF5Sonnet/
-%{_kf5_archdatadir}/mkspecs/modules/qt_SonnetCore.pri
-%{_kf5_archdatadir}/mkspecs/modules/qt_SonnetUi.pri
-%{_kf5_qtplugindir}/designer/sonnetui5widgets.so
+%files -f %{oreon_filedir}/main.list
+%files -n kf5-sonnet-core -f %{oreon_filedir}/kf5-sonnet-core.list
+%files -n kf5-sonnet-ui -f %{oreon_filedir}/kf5-sonnet-ui.list
+%files -n kf5-sonnet-aspell -f %{oreon_filedir}/kf5-sonnet-aspell.list
+%files -n kf5-sonnet-hunspell -f %{oreon_filedir}/kf5-sonnet-hunspell.list
+%files -n kf5-sonnet-hspell -f %{oreon_filedir}/kf5-sonnet-hspell.list
+%files -n kf5-sonnet-voikko -f %{oreon_filedir}/kf5-sonnet-voikko.list
+%files -n kf5-sonnet-devel -f %{oreon_filedir}/kf5-sonnet-devel.list
 
 %changelog
+
 %autochangelog

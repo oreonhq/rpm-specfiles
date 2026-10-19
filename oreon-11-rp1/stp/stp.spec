@@ -1,49 +1,34 @@
 %global source0_hash dc197e337c058dc048451b712169a610f7040b31d0078b6602b831fbdcbec990
-
 %global giturl  https://github.com/stp/stp
 %global _cmake_generator "Unix Makefiles"
-
 Name:		stp
 Version:	2.4.1
-Release:	%autorelease
-Summary:	Constraint solver/decision procedure
-
-# MIT: the project as a whole
-# MIT-Modern-Variant: lib/extlib-abc
-# LGPL-2.0-or-later: lib/extlib-constbv
-# BSD-3-Clause: include/stp/Simplifier/constantBitP/MersenneTwister.h
+Release:        1%{?dist}
+Summary:        Constraint solver/decision procedure
 License:	MIT AND MIT-Modern-Variant AND LGPL-2.0-or-later AND BSD-3-Clause
 URL:		https://stp.github.io/
 VCS:		git:%{giturl}.git
-Source0:	%{giturl}/archive/%{version}/%{name}-%{version}.tar.gz
-# The code assumes that certain minisat names are variables, but in the Fedora
-# package, they are macros instead, leading to build failures
+Source0:        %{giturl}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:		%{name}-minisat-macros.patch
-# Do not declare cryptominisat and minisat as public libs
-# See https://bugzilla.redhat.com/show_bug.cgi?id=1981466
 Patch1:		%{name}-private-libs.patch
-# Distutils has been deprecated.  Use sysconfig instead.
-# https://github.com/stp/stp/pull/450
 Patch2:		%{name}-distutils.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:	%{ix86}
-
-BuildRequires:	bison
-BuildRequires:	boost-devel
-BuildRequires:	cmake
-BuildRequires:	cmake(cryptominisat5)
-BuildRequires:	cryptominisat
-BuildRequires:	flex
-BuildRequires:	gcc-c++
-BuildRequires:	help2man
-BuildRequires:	make
-BuildRequires:	minisat2-devel
-BuildRequires:	perl(Getopt::Long)
-BuildRequires:	pkgconfig(gmp)
-BuildRequires:	pkgconfig(sqlite3)
-BuildRequires:	python3-devel
-
+# oreon:deps
+BuildRequires:  bison
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(cryptominisat5)
+BuildRequires:  cryptominisat
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  help2man
+BuildRequires:  make
+BuildRequires:  minisat2-devel
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  pkgconfig(gmp)
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 STP (Simple Theorem Prover) is a constraint solver (also referred to as
 a decision procedure or automated prover) aimed at solving constraints
@@ -65,7 +50,6 @@ Additional information can be found at https://stp.readthedocs.io/.
 License:	MIT
 Summary:	Development files for STP constraint solver/decision procedure
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files for the STP (Simple Theorem Prover),
 a constraint solver (also referred to as a decision procedure
@@ -76,11 +60,11 @@ License:	MIT
 Summary:	Python 3 interface to STP
 Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
-
 %description -n python3-%{name}
 Python 3 interface to STP.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -99,40 +83,25 @@ sed -e '/CMAKE_SKIP_BUILD_RPATH/s/FALSE/TRUE/' \
     -i CMakeLists.txt
 
 %build
+
 export CFLAGS='%{build_cflags} -I %{_includedir}/minisat'
 export CXXFLAGS='%{build_cxxflags} -I %{_includedir}/minisat'
 %cmake -DPYTHON_EXECUTABLE:FILEPATH=%{_bindir}/python%{python3_version} \
        -DPYTHON_LIBRARY:FILEPATH=%{_libdir}/libpython%{python3_version}.so \
        -DPYTHON_INCLUDE_DIR:FILEPATH=%{_includedir}/python%{python3_version}
-
-# Fix the help2man invocation
 sed -i "s,help2man,LD_LIBRARY_PATH=$PWD/%{_vpath_builddir}/lib &," \
     %{_vpath_builddir}/CMakeFiles/man_stp.dir/build.make
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Fix the location of the man page
 mkdir -p %{buildroot}%{_datadir}
 mv %{buildroot}%{_prefix}/man %{buildroot}%{_datadir}/man
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_bindir}/stp
-%{_bindir}/stp_simple
-%{_libdir}/libstp.so.2*
-%{_mandir}/man1/stp.1*
-%doc AUTHORS README.markdown papers
-%license LICENSE LICENSE_COMPONENTS
-
-%files devel
-%{_includedir}/stp/
-%{_libdir}/cmake/STP/
-%{_libdir}/libstp.so
-
-%files -n python3-%{name}
-%{python3_sitelib}/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n stp-devel -f %{oreon_filedir}/stp-devel.list
+%files -n python3-stp -f %{oreon_filedir}/python3-stp.list
 
 %changelog
+
 %autochangelog

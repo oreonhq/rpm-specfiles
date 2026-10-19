@@ -1,38 +1,23 @@
 %global source0_hash 77aa9d8f28c532f2e7a5157a7f4ba8df1001f00fa1cb72cb70b388b3d0e16b61
-
 %global debug_package %{nil}
-
 %define _default_patch_fuzz 2
-
 %define debug 0 
 %define final 1 
 %define redhatify 1
 %define arts 1
-
 %define _with_libutempter 1
 %define _with_samba --with-samba
-
-# make -pim-ioslaves subpkg
 %define pim 1
-
-# trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
-
-# Disable automatic .la file removal
 %global __brp_remove_la_files %nil
-
 Name:    kdebase3
-Summary: KDE 3 core files
+Summary:        KDE 3 core files
 Version: 3.5.10
-Release: 86%{?dist}
-
-# programs: GPLv2, libs: LGPLv2
+Release:        1%{?dist}
 License: GPL-2.0-only
 Url: http://www.kde.org
-Source0: https://download.kde.org/stable/%{version}/src/kdebase-%{version}.tar.bz2
-
+Source0:        https://download.kde.org/stable/%{version}/src/kdebase-%{version}.tar.bz2
 Source1: konsole.desktop
-
 Source5: kde-np.pamd
 Source6: logrotate-kdm
 Source7: mailsettings.cc
@@ -40,11 +25,9 @@ Source8: env.sh
 Source9: cr16-app-package_games_kids.png
 Source10: cr32-app-package_games_kids.png
 Source11: cr48-app-package_games_kids.png
-
 Source50:   kde-np-legacy.pamd
 Source1001: kde.pamd
 Source1002: kde-legacy.pamd
-
 Patch0: kdebase-3.5.5-redhat-pam.patch
 Patch1: kdebase-3.5.9-redhat-startkde.patch
 Patch2: kdebase-3.3.92-vroot.patch
@@ -69,57 +52,24 @@ Patch26: kdebase-3.5.5-suspend.patch
 Patch27: kdebase-3.5.8-consolekit-kdm.patch
 Patch28: kdebase-3.5.6-kdm-alternatebackground.patch
 Patch30: kdebase-3.5.7-kio_media_mounthelper.patch
-# kdebase: "Root Shell" sessions will not close, http://bugzilla.redhat.com/301841
 Patch31: kdebase-3.5.10-konsolesu-kdesu.patch
-# modified version of kubuntu_9915_userdiskmount.diff
-# fixes NTFS (#378041) and adds PolicyKit support (#428212)
 Patch36: kdebase-3.5.9-userdiskmount.patch
-# don't link kcm_colors against libkrdb (and don't call runRdb)
 Patch37: kdebase-3.5.10-libkrdb_dep.patch
-# find the Samba 4 libsmbclient.h using pkg-config (fixes FTBFS)
 Patch39: kdebase-3.5.10-samba4.patch
-# remove obsolete MimeType from printmgr/printers.desktop (#587568)
-# patch by Ilya Chernykh from openSUSE
 Patch40: kdebase-3.5.10-printmanager-desktop-fix.patch
-# patch to use libtirpc for RPC, from Cygwin Ports
-# https://github.com/cygwinports/kdebase3/blob/master/3.5.10-libtirpc.patch
 Patch41: kdebase-3.5.10-libtirpc.patch
 Patch42: kdebase-3.5.10-uic.patch
-
-# http://aseigo.blogspot.com/2008/10/dear-kde3-kdesktop-users.html
 Patch100: kdebase-3.5.10-minicli-decimal-comma.patch
-
-## Trinity backports
-# OpenSSL 1.1 support by Slávek Banko (with prerequisite patches by Timothy
-# Pearson), backported by Kevin Kofler
-# The patch also fixes OpenSSL 1.0 support, by using the KSSLProxy abstraction.
-# http://git.trinitydesktop.org/cgit/tdebase/commit/?id=30e57327d5921be080bad5394860fce33b7c3f74
-# http://git.trinitydesktop.org/cgit/tdebase/commit/?id=4040124e875f442f1ef618c669e108a3d2bc9662
-# http://git.trinitydesktop.org/cgit/tdebase/commit/?id=48c6b8ff3d2cac37dccce46db29499a14fb025b1
-# http://git.trinitydesktop.org/cgit/tdebase/commit/?id=d9b4ee04db7e614a59470acc38a6482c15aed032
 Patch150: kdebase-3.5.10-openssl-1.1.patch
 Patch151: kdebase3-configure-c99.patch
-
-# security fixes
-
-# fixes to common KDE 3 autotools machinery
-# tweak autoconfigury so that it builds with autoconf 2.64 or 2.65
 Patch300: kde3-acinclude.patch
-# remove flawed and obsolete automake version check in admin/cvs.sh
 Patch301: kde3-automake-version.patch
-# fix build failure with automake 1.13: add the --add-missing --copy flags
-# also add --force-missing to get aarch64 support (#925029/#925627)
 Patch302: kde3-automake-add-missing.patch
-# fix aarch64 FTBFS due to libtool not liking the file output on *.so files
 Patch303: kde3-libtool-aarch64.patch
-# fix for autoconf 2.7x
 Patch304: kde3-autoconf-version.patch
-# fix FTBFS due to gcc14
 Patch305: kdebase3-ftbfs-gcc14.patch
 Patch306: kdebase3-autoconf-2.72.patch
-
 Requires: %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %if 0%{?extras} == 0
 Obsoletes: kdebase-extras < 6:%{version}-%{release}
 Provides: kdebase-extras = 6:%{version}-%{release}
@@ -130,68 +80,59 @@ Requires: kdebase3-pim-ioslaves = %{version}-%{release}
 Obsoletes: kdebase3-pim-ioslaves < %{version}-%{release}
 Provides: kdebase3-pim-ioslaves = %{version}-%{release}
 %endif
-
-#Requires(post): coreutils fileutils
-#Requires(postun): coreutils fileutils
-# /sbin/fuser
 Requires: psmisc
-
 %ifnarch s390 s390x
 Requires: eject
 %endif
-
-BuildRequires: kdelibs3-devel >= %{version}-16
-BuildRequires: libxslt-devel libxml2-devel
 %if 0%{?_with_samba:1}
-BuildRequires: libsmbclient-devel
 %endif
-BuildRequires: pam-devel
-BuildRequires: gettext
-BuildRequires: perl-interpreter
-BuildRequires: perl-generators
-BuildRequires: sed
-BuildRequires: automake libtool
-BuildRequires: pkgconfig
-BuildRequires: doxygen
 %ifarch %{ix86} x86_64 ia64 ppc ppc64
 %define _with_suspend 1
-## drop runtime dep, https://bugzilla.redhat.com/show_bug.cgi?id=1208312
-#Requires: pm-utils
 %endif
-BuildRequires: bzip2-devel
-BuildRequires: freetype-devel
-BuildRequires: openldap-devel
-BuildRequires: cyrus-sasl-devel
-BuildRequires: libart_lgpl-devel
-## X11 support details (xmkmf, bdftopcf)
-BuildRequires: bdftopcf mkfontdir mkfontscale
-BuildRequires: imake
-BuildRequires: xorg-x11-proto-devel
-BuildRequires: libfontenc-devel
-BuildRequires: libtirpc-devel
-BuildRequires: libXScrnSaver-devel
-BuildRequires: libXdamage-devel
-BuildRequires: libXcomposite-devel
-BuildRequires: libXinerama-devel
-BuildRequires: libXrandr-devel
-BuildRequires: libXrender-devel
-BuildRequires: libXfixes-devel
-BuildRequires: libXext-devel
-BuildRequires: libXtst-devel
-BuildRequires: libxkbfile-devel
 %ifnarch s390 s390x
-BuildRequires: libraw1394-devel
-%if 0%{?fedora} > 36
-BuildRequires: libusb-compat-0.1-devel
-%else
-BuildRequires: libusb-devel
 %endif
-%endif
-# Moving dependency to compat package openexr2.
-BuildRequires: pkgconfig(OpenEXR) < 3
-BuildRequires: gtk2-devel
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  bdftopcf
+BuildRequires:  bzip2-devel
+BuildRequires:  cyrus-sasl-devel
+BuildRequires:  doxygen
+BuildRequires:  freetype-devel
+BuildRequires:  gettext
+BuildRequires:  gtk2-devel
+BuildRequires:  imake
+BuildRequires:  kdelibs3-devel
+BuildRequires:  libXScrnSaver-devel
+BuildRequires:  libXcomposite-devel
+BuildRequires:  libXdamage-devel
+BuildRequires:  libXext-devel
+BuildRequires:  libXfixes-devel
+BuildRequires:  libXinerama-devel
+BuildRequires:  libXrandr-devel
+BuildRequires:  libXrender-devel
+BuildRequires:  libXtst-devel
+BuildRequires:  libart_lgpl-devel
+BuildRequires:  libfontenc-devel
+BuildRequires:  libraw1394-devel
+BuildRequires:  libsmbclient-devel
+BuildRequires:  libtirpc-devel
+BuildRequires:  libtool
+BuildRequires:  libusb-devel
+BuildRequires:  libxkbfile-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  libxslt-devel
+BuildRequires:  make
+BuildRequires:  mkfontdir
+BuildRequires:  mkfontscale
+BuildRequires:  openldap-devel
+BuildRequires:  pam-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  pkgconfig
+BuildRequires:  pkgconfig(OpenEXR)
+BuildRequires:  sed
+BuildRequires:  xorg-x11-proto-devel
+# /oreon:deps
 %description
 Core runtime files for KDE 3, for compatibility with KDE 3 applications.
 
@@ -219,7 +160,6 @@ Requires: %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 %package libs
 Summary: %{name} runtime libraries
 Requires: kdelibs3 >= %{version}
-# include to be paranoid, installing libs-only is still mostly untested -- Rex
 Requires: %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 %description libs
 %{summary}.
@@ -236,6 +176,7 @@ Protocol handlers (KIOslaves) for personal information management, including:
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n kdebase-%{version}
 %patch -P0 -p1 -b .redhat-pam
@@ -306,17 +247,12 @@ install -p -m644 %{SOURCE9} %{SOURCE10} %{SOURCE11} pics/crystalsvg/
 make -f admin/Makefile.common cvs
 
 %build
-# set some default enviroments
-unset QTDIR && . /etc/profile.d/qt.sh
 
+unset QTDIR && . /etc/profile.d/qt.sh
 export DO_NOT_COMPILE="kappfinder kdesktop kdesu klipper kdm kmenuedit kpager kpersonalizer ktip nsplugins"
 export DO_NOT_COMPILE="$DO_NOT_COMPILE konqueror kscreensaver ksysguard knetattach kwin"
 export DO_NOT_COMPILE="$DO_NOT_COMPILE kdialog kicker ksplashml khelpcenter kxkb"
 export DO_NOT_COMPILE="$DO_NOT_COMPILE khotkeys kdepasswd kcheckpass drkonqi"
-# Keep these (kcontrol for kcms, konsole for KonsolePart, kioslave for ioslaves
-# kate for kscope
-# export DO_NOT_COMPILE="$DO_NOT_COMPILE kcontrol konsole kioslave kate"
-
 %configure \
    --disable-new-ldflags \
    --disable-dependency-tracking \
@@ -353,22 +289,12 @@ export DO_NOT_COMPILE="$DO_NOT_COMPILE khotkeys kdepasswd kcheckpass drkonqi"
    --includedir=%{_includedir}/kde \
   %{?_with_hal} %{!?_with_hal:--without-hal} \
   %{?_with_samba} %{!?_with_samba:--without-samba}
-
 %make_build
-
-# build mail setting tool
 %{__cxx} $CXXFLAGS -o mailsettings %{SOURCE7}
-
 %install
 %make_install RUN_KAPPFINDER=no
-
-# Nuke man2html - we get it from man
 find %{buildroot} -name "man2html*" | xargs rm -rf
-
-# nuke default kdm setup in favor of our own
 rm -rf  %{buildroot}%{_datadir}/config/kdm
-
-# Make symlinks relative
 pushd %{buildroot}/%{_docdir}/HTML/en
 for i in */*/*; do
    if [ -d "$i" -a -L "$i"/common ]; then
@@ -389,10 +315,8 @@ for i in *; do
    fi
 done
 popd
-
 %if %{redhatify}
    rm -f %{buildroot}%{_datadir}/locale/l10n/*/flag.png
-   # mark KDE-Only
    pushd %{buildroot}%{_datadir}/applications/kde
       for f in *.desktop ; do
          if [ "$f" == "konqbrowser.desktop" ] ; then
@@ -408,17 +332,9 @@ popd
       echo "OnlyShowIn=KDE;" >> $f
    done
 %endif
-
-# Own Mozilla plugin dir
 mkdir -p %{buildroot}%{_libdir}/mozilla/plugins
-
-# exclude fonts.dir
 rm -f %{buildroot}%{_datadir}/fonts/override/fonts.dir
-
-# now in kde-filesystem (see #321771)
 rm -f %{buildroot}%{_datadir}/applnk/.hidden/.directory
-
-# remove conflicts with kdebase-workspace
 pushd %{buildroot}%{_bindir}
 rm -f genkdmconf kaccess kappfinder kapplymousetheme kate kbookmarkmerger \
       kblankscrn.kss kcheckrunning kcminit kcminit_startup kcontroledit kdebugdialog \
@@ -442,29 +358,20 @@ rm -f %{buildroot}%{_datadir}/config.kcfg/kwin.kcfg
 rm -f %{buildroot}%{_datadir}/config/klipperrc
 rm -f %{buildroot}%{_datadir}/config/kshorturifilterrc
 rm -f %{buildroot}%{_datadir}/xsessions/kde.desktop
-
-# dups of kde4 services
 rm -f %{buildroot}%{_datadir}/applications/kde/cookies.desktop
 rm -f %{buildroot}%{_datadir}/applications/kde/desktop.desktop
-
-# remove mediamanager stuff #447852 and kdebug:163717
 rm -f %{buildroot}%{_libdir}/kde3/kded_mediamanager.*
 rm -f %{buildroot}%{_libdir}/kde3/kded_medianotifier.*
 rm -f %{buildroot}%{_libdir}/kde3/kcm_media.*
 rm -f %{buildroot}%{_datadir}/services/kded/mediamanager.desktop
 rm -f %{buildroot}%{_datadir}/services/kded/medianotifier.desktop
 rm -f %{buildroot}%{_datadir}/applications/kde/media.desktop
-
-# remove conflicts with kdesdk
 rm -f %{buildroot}%{_datadir}/config/katerc
-
-# remove docs
 pushd %{buildroot}%{_docdir}/HTML/en/
 rm -rf kate kcontrol kdebugdialog kdesu kdm kfind khelpcenter kinfocenter \
        kioslave klipper kmenuedit knetattach konqueror konsole ksysguard \
        kwrite kxkb 
 popd
-# remove .desktop files for apps we don't ship
 pushd %{buildroot}%{_datadir}/applications/kde/
 rm -f Help.desktop Home.desktop Kfind.desktop installktheme.desktop \
       kappfinder.desktop kate.desktop kdepasswd.desktop kfmclient.desktop \
@@ -473,11 +380,8 @@ rm -f Help.desktop Home.desktop Kfind.desktop installktheme.desktop \
       konqbrowser.desktop konquerorsu.desktop konsole.desktop \
       konsolesu.desktop krandrtray.desktop ksysguard.desktop ktip.desktop \
       kwrite.desktop KControl.desktop
-
 sed -i -e "s,^OnlyShowIn=KDE;,OnlyShowIn=KDE3;," *.desktop
 popd
-
-# hicolor
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/*/apps/kappfinder.*
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/*/apps/kate.*
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/*/apps/khelpcenter.*
@@ -507,266 +411,15 @@ rm -rf %{buildroot}%{_datadir}/apps/apps/kbookmark
 rm -rf %{buildroot}%{_datadir}/apps/ksmserver
 rm -rf %{buildroot}%{_datadir}/applnk
 rm -rf %{buildroot}/etc/xdg/menus/
-
-# Stop check-rpaths from complaining about standard runpaths.
 export QA_RPATHS=0x0001
-
-# legacy scriptlets
-%if 0%{?fedora} < 25
-%post
-touch --no-create %{_datadir}/icons/crystalsvg 2> /dev/null || :
-
-%posttrans
-gtk-update-icon-cache -q %{_datadir}/icons/crystalsvg  2> /dev/null || :
-
-%postun
-if [ $1 -eq 0 ] ; then
-  touch --no-create %{_datadir}/icons/crystalsvg &> /dev/null || :
-  gtk-update-icon-cache -q %{_datadir}/icons/crystalsvg  &> /dev/null || :
-fi
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if 0%{?extras}
-%post extras
-touch --no-create %{_datadir}/icons/crystalsvg &> /dev/null ||:
-
-%posttrans extras
-gtk-update-icon-cache -q %{_datadir}/icons/crystalsvg &> /dev/null ||:
-
-%postun extras
-if [ $1 -eq 0 ] ; then
-  touch --no-create %{_datadir}/icons/crystalsvg &> /dev/null ||:
-  gtk-update-icon-cache -q %{_datadir}/icons/crystalsvg &> /dev/null ||:
-fi
-%endif
-%endif
-
-%if 0%{?extras}
-%files extras
-# kappfinder
-%{_bindir}/kappfinder
-%{_datadir}/applications/kde/kappfinder.desktop
-%{_datadir}/applnk/System/kappfinder.desktop
-%{_datadir}/apps/kappfinder/
-%{_datadir}/icons/hicolor/*/apps/kappfinder.png
-
-# ktip
-%{_bindir}/ktip
-%{_datadir}/applications/kde/ktip.desktop
-%{_datadir}/applnk/Toys/ktip.desktop
-%{_datadir}/apps/kdewizard
-%{_datadir}/autostart/ktip.desktop
-%{_datadir}/icons/hicolor/*/apps/ktip*
-
-# kpersonalizer
-%{_bindir}/kpersonalizer
-%{_datadir}/applications/kde/kpersonalizer.desktop
-%{_datadir}/applnk/System/kpersonalizer.desktop
-%{_datadir}/apps/kpersonalizer/
-%{_datadir}/icons/crystalsvg/*/apps/kpersonalizer.png
-
-# kpager
-%{_bindir}/kpager
-%{_datadir}/applications/kde/kpager.desktop
-%{_datadir}/applnk/Utilities/kpager.desktop
-%{_datadir}/icons/hicolor/*/apps/kpager.png
-%endif
-
-%files
-%if 0%{?extras}
-# kappfinder
-%exclude %{_datadir}/applications/kde/kappfinder.desktop
-%exclude %{_datadir}/applnk/System/kappfinder.desktop
-%exclude %{_datadir}/apps/kappfinder/
-%exclude %{_datadir}/icons/hicolor/*/apps/kappfinder.png
-
-# ktip
-%exclude %{_datadir}/applications/kde/ktip.desktop
-%exclude %{_datadir}/applnk/Toys/ktip.desktop
-%exclude %{_datadir}/apps/kdewizard
-%exclude %{_datadir}/autostart/ktip.desktop
-%exclude %{_datadir}/icons/hicolor/*/apps/ktip*
-
-# kpersonalizer
-%exclude %{_datadir}/applications/kde/kpersonalizer.desktop
-%exclude %{_datadir}/applnk/System/kpersonalizer.desktop
-%exclude %{_datadir}/apps/kpersonalizer/
-%exclude %{_datadir}/icons/crystalsvg/*/apps/kpersonalizer.png
-
-# kpager
-%exclude %{_datadir}/applications/kde/kpager.desktop
-%exclude %{_datadir}/applnk/Utilities/kpager.desktop
-%exclude %{_datadir}/icons/hicolor/*/apps/kpager.png
-%endif
-
-%doc AUTHORS README
-%license COPYING
-%{_docdir}/HTML/en/*
-%if "%{name}" == "kdebase"
-%{_sysconfdir}/kde/env/*
-%config(noreplace) /etc/logrotate.d/kdm
-%config(noreplace) /etc/ksysguarddrc
-%config(noreplace) /etc/pam.d/*
-%config(noreplace) %{_datadir}/xsessions/*
-%{_bindir}/drkonqi
-%{_bindir}/genkdmconf
-%{_bindir}/kaccess
-%{_bindir}/kapplymousetheme
-%{_bindir}/kate
-%{_bindir}/kblankscrn.kss
-%{_bindir}/kbookmarkmerger
-%{_bindir}/kcminit
-%{_bindir}/kcminit_startup
-%{_bindir}/kcontrol
-%{_bindir}/kcontroledit
-%{_bindir}/kdebugdialog
-%{_bindir}/kdeinstallktheme
-%{_bindir}/kdepasswd
-%{_bindir}/kdesu
-%attr(0755,root,root) %{_bindir}/kdesud
-%{_bindir}/kdialog
-%{_bindir}/kdm
-%{_bindir}/kdmctl
-%{_bindir}/keditbookmarks
-%{_bindir}/keditfiletype
-%{_bindir}/kfind
-%{_bindir}/kfmclient
-%{_bindir}/khelpcenter
-%{_bindir}/khotkeys
-%{_bindir}/kinfocenter
-%{_bindir}/klipper
-%{_bindir}/kmenuedit
-%{_bindir}/konqueror
-%{?_with_libutempter:%attr(2755,root,utempter) }%{_bindir}/konsole
-%{_bindir}/krandom.kss
-%{_bindir}/krandrtray
-%{_bindir}/krdb
-%{_bindir}/kreadconfig
-%{_bindir}/ksmserver
-%{_bindir}/ksplashsimple
-%{_bindir}/kstart
-%{_bindir}/ksysguard
-%{_bindir}/ksysguardd
-%{_bindir}/ksystraycmd
-%{_bindir}/ktrash
-%{_bindir}/kwin
-%{_bindir}/kwin_killer_helper
-%{_bindir}/kwin_rules_dialog
-%{_bindir}/kwrite
-%{_bindir}/kwriteconfig
-%{_bindir}/kxkb
-%{_bindir}/nspluginscan
-%{_bindir}/nspluginviewer
-%{_bindir}/startkde
-%{_bindir}/kcheckrunning
-%{_bindir}/kdesktop
-%{_bindir}/kdesktop_lock
-%{_bindir}/kdm_config
-%{_bindir}/kdm_greet
-%{_bindir}/kfontinst
-%{_bindir}/kfontview
-%{_bindir}/krootimage
-%{_bindir}/kwebdesktop
-%{_datadir}/autostart/*
-%{_datadir}/desktop-directories/*
-%{_datadir}/locale/*/entry.desktop
-%{_datadir}/locale/l10n
-%{_datadir}/templates/*
-%{_datadir}/templates/.source/*
-%{_datadir}/wallpapers/*
-%config(noreplace) /etc/xdg/menus/*
-%dir %{_libdir}/mozilla
-%dir %{_libdir}/mozilla/plugins
-%{_bindir}/appletproxy
-%{_bindir}/extensionproxy
-%{_bindir}/kasbar
-%{_bindir}/kcheckpass
-%{_bindir}/kdeeject
-%{_bindir}/khc_docbookdig.pl
-%{_bindir}/khc_htdig.pl
-%{_bindir}/khc_htsearch.pl
-%{_bindir}/khc_indexbuilder
-%{_bindir}/khc_mansearch.pl
-%{_bindir}/kicker
-%{_bindir}/knetattach
-%{_bindir}/kompmgr
-%{_bindir}/kpm
-%{_bindir}/ksplash
-%{_bindir}/mailsettings
-%{_libdir}/kconf_update_bin
-%{_datadir}/applnk/*.desktop
-%{_datadir}/applnk/*/*
-%{_datadir}/applnk/.hidden/*
-%config(noreplace) %{_datadir}/config/*
-%if ! %{redhatify}
-%{_datadir}/fonts/bitmap-fonts/*
-%endif
-%dir %{_localstatedir}/lib/kdm
-%ghost %{_localstatedir}/lib/kdm/kdmsts
-%endif
-%{_datadir}/config.kcfg/*
-%{_bindir}/kde3
-%{_bindir}/kio_media_mounthelper
-%{_bindir}/kio_system_documenthelper
-%{_bindir}/kdcop
-%{_bindir}/kdeprintfax
-%{_bindir}/kjobviewer
-%{_bindir}/klocaldomainurifilterhelper
-%{_bindir}/kprinter
-%{_datadir}/applications/*/*
-%{_datadir}/apps/*
-%{_datadir}/icons/hicolor/*/*/*
-%{_datadir}/icons/crystalsvg/*/*/*
-%{_datadir}/mimelnk/*/*
-%{_datadir}/services/*
-%{_datadir}/servicetypes/*
-%{_datadir}/sounds/*
-%{_libdir}/kde3/*
-%{_libdir}/libkdeinit_*.*
-%if 0%{?pim}
-# exclude pim-ioslaves files from main package
-%exclude %{_libdir}/kde3/kio_ldap.*
-%exclude %{_libdir}/kde3/kio_nntp.*
-%exclude %{_libdir}/kde3/kio_pop3.*
-%exclude %{_libdir}/kde3/kio_smtp.*
-%exclude %{_datadir}/services/ldap*.protocol
-%exclude %{_datadir}/services/nntp*.protocol
-%exclude %{_datadir}/services/pop3*.protocol
-%exclude %{_datadir}/services/smtp*.protocol
-%endif
-
-%ldconfig_scriptlets libs
-
-%files libs
-%exclude %{_libdir}/libkdeinit_*.*
-%{_libdir}/lib*.so.*
-%{_libdir}/lib*.la
-
-%if 0%{?pim}
-%files pim-ioslaves
-%{_libdir}/kde3/kio_ldap.*
-%{_libdir}/kde3/kio_nntp.*
-%{_libdir}/kde3/kio_pop3.*
-%{_libdir}/kde3/kio_smtp.*
-%{_datadir}/services/ldap*.protocol
-%{_datadir}/services/nntp*.protocol
-%{_datadir}/services/pop3*.protocol
-%{_datadir}/services/smtp*.protocol
-%endif
-
-%files devel
-%{_includedir}/kde/*.h
-%dir %{_includedir}/kde/kate
-%{_includedir}/kde/kate/*
-%if "%{name}" == "kdebase"
-%dir %{_includedir}/kde/kwin
-%{_includedir}/kde/kwin/*
-%dir %{_includedir}/kde/ksgrd
-%{_includedir}/kde/ksgrd/*
-%dir %{_includedir}/kde/ksplash
-%{_includedir}/kde/ksplash/*
-%endif
-%{_libdir}/lib*.so
-%exclude %{_libdir}/libkdeinit_*.*
+%files -f %{oreon_filedir}/main.list
+%files -n kdebase3-devel -f %{oreon_filedir}/kdebase3-devel.list
+%files -n kdebase3-libs -f %{oreon_filedir}/kdebase3-libs.list
+%files -n kdebase3-pim-ioslaves -f %{oreon_filedir}/kdebase3-pim-ioslaves.list
 
 %changelog
+
 %autochangelog
+%endif

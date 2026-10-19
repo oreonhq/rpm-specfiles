@@ -1,32 +1,28 @@
+%global source3_hash 177f1f21d88e889aec1f7ad6800ecf19895a4a03d3e1e7cebad90ff2164be4d1
+%global source2_hash 98ec0541e80e223785bb6029ebf81e93ca5111da41d6565b3b5c4aa86d59bb5d
+%global source1_hash 2b8489b521b06d2b18a7903c0e4eac102b22025f9349eeb942acdfae07002b92
 %global source0_hash 6b8b7e38dc26a977a24f5a321215b7054c14a4469d04134d70cb93a860eeeea7
-
 Name:		lhapdf
 Version:	6.5.6
 Release:        2%{?dist}
-Summary:	Les Houches Accord PDF Interface
-
+Summary:        Les Houches Accord PDF Interface
 License:	GPL-3.0-only
 URL:		https://lhapdf.hepforge.org/
-Source0:	https://lhapdf.hepforge.org/downloads/?f=LHAPDF-%{version}.tar.gz#/LHAPDF-%{version}.tar.gz
-#		PDFs used during testing
+Source0:        https://lhapdf.hepforge.org/downloads/?f=LHAPDF-%{version}.tar.gz#/LHAPDF-%{version}.tar.gz
 Source1:	https://lhapdfsets.web.cern.ch/current/CT10nlo.tar.gz
 Source2:	https://lhapdfsets.web.cern.ch/current/MSTW2008nlo68cl.tar.gz
 Source3:	https://lhapdfsets.web.cern.ch/current/NNPDF31_lo_as_0130.tar.gz
-#		Missing file in source tarfile
-#		See: https://gitlab.com/hepcedar/lhapdf/-/merge_requests/120
 Source4:	testunc.py
-
-BuildRequires:	make
-BuildRequires:	gcc-c++
-BuildRequires:	yaml-cpp-devel
-BuildRequires:	python3-Cython
-BuildRequires:	python3-devel
-BuildRequires:	doxygen
-
-#		Obsolete LHAPDF5 packages not provided by LHAPDF6
 Obsoletes:	octave-lhapdf < 6
 Obsoletes:	lhapdf-pdfsets-minimal < 6
-
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  python3-Cython
+BuildRequires:  python3-devel
+BuildRequires:  yaml-cpp-devel
+# /oreon:deps
 %description
 LHAPDF is a general purpose C++ interpolator, used for evaluating PDFs
 from discretized data files. Previous versions of LHAPDF were written
@@ -55,7 +51,6 @@ LHAPDF6 is documented in more detail in http://arxiv.org/abs/1412.7420
 %package devel
 Summary:	Les Houches Accord PDF Interface - development files
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package provides development files of LHAPDF, including C++ bindings.
 
@@ -63,7 +58,6 @@ This package provides development files of LHAPDF, including C++ bindings.
 Summary:	Les Houches Accord PDF Interface - Python 3 module
 %py_provides	python%{python3_pkgversion}-%{name}
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description -n python%{python3_pkgversion}-%{name}
 This package provides Python 3 bindings for LHAPDF.
 This package also provides a script called "lhapdf" which can be used
@@ -74,11 +68,11 @@ the command line. It accepts commands "list", "update", "install" and
 %package doc
 Summary:	Les Houches Accord PDF Interface - documentation
 BuildArch:	noarch
-
 %description doc
 This package provides API documentation and examples for LHAPDF.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n LHAPDF-%{version}
@@ -99,69 +93,39 @@ sed 's!/usr/bin/env python!%{__python3}!' -i examples/*.py
 sed 's!/usr/bin/env bash!/bin/bash!' -i bin/lhapdf-config.in
 
 %build
+
 %configure \
 	--disable-static \
 	--with-yaml-cpp \
 	--enable-librelease \
 	--docdir=%{_pkgdocdir} \
 	PYTHON=%{__python3}
-
-%if %{?rhel}%{!?rhel:0} == 8
-# cython version on RHEL 8 is too old and generates broken code.
-# touch the pregenerated bundled source file to prevent regeneration.
-# See: https://gitlab.com/hepcedar/lhapdf/-/merge_requests/122
-touch wrappers/python/lhapdf.cpp
-%else
 rm wrappers/python/lhapdf.cpp
-%endif
-
 %make_build
-
-# Build doxygen documentation
 %make_build doxy
-
 %install
 %make_install
-
 mkdir %{buildroot}%{python3_sitearch}/%{name}-%{version}.dist-info
 cat << EOF > %{buildroot}%{python3_sitearch}/%{name}-%{version}.dist-info/METADATA
 Name: %{name}
 Version: %{version}
 EOF
-
 rm %{buildroot}%{_libdir}/libLHAPDF.la
 find %{buildroot}%{_pkgdocdir}/examples -type f -a '!' -name '*.*' -delete
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Workaround incomplete test environment
-# See: https://gitlab.com/hepcedar/lhapdf/-/merge_requests/121
+
 cp -p pdfsets.index tests/SETS
 cp -p lhapdf.conf tests/SETS
 export PYTHONPATH=$PWD/wrappers/python/build
 export LD_LIBRARY_PATH=$PWD/src/.libs
 %make_build check
-
-%files
-%{_libdir}/libLHAPDF-%{version}.so
-%{_datadir}/LHAPDF
-%doc AUTHORS ChangeLog
-%license COPYING
-
-%files devel
-%{_bindir}/%{name}-config
-%{_includedir}/LHAPDF
-%{_libdir}/libLHAPDF.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files -n python%{python3_pkgversion}-%{name}
-%{_bindir}/%{name}
-%{python3_sitearch}/%{name}-%{version}.dist-info
-%{python3_sitearch}/%{name}
-
-%files doc
-%doc %{_pkgdocdir}/doxygen
-%doc %{_pkgdocdir}/examples
-%license COPYING
+%files -f %{oreon_filedir}/main.list
+%files -n lhapdf-devel -f %{oreon_filedir}/lhapdf-devel.list
+%files -n python3-lhapdf -f %{oreon_filedir}/python3-lhapdf.list
+%files -n lhapdf-doc -f %{oreon_filedir}/lhapdf-doc.list
 
 %changelog
+
 %autochangelog

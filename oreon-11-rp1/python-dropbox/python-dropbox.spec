@@ -1,62 +1,77 @@
-%global source0_hash none
-
+%global source0_hash 61fcb821f7e8585aa4b9e2abc94801aaf8d65ed5ca89313450e56d51c46add7e
 Name:           python-dropbox
 Version:        12.2.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Official Dropbox API Client
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            http://www.dropbox.com/developers
-Source:         %{pypi_source dropbox}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/dropbox/dropbox-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77
+BuildRequires:  python3dist(setuptools-scm) < 9
+BuildRequires:  python3dist(setuptools-scm) >= 8
+Requires:       python3-dropbox = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-dropbox+test
+Summary:        Metapackage for python3-dropbox test extras
+Requires:       python3-dropbox = %{version}-%{release}
+Requires:       python3dist(stone) >= 3.5.3
+Requires:       python3dist(stone) < 4
+Provides:       python3dist(dropbox[test]) = %{version}-%{release}
 
+%description -n python3-dropbox+test
+Metapackage for python3-dropbox test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'dropbox' generated automatically by pyp2spec.}
+%package -n       python3-dropbox+docs
+Summary:        Metapackage for python3-dropbox docs extras
+Requires:       python3-dropbox = %{version}-%{release}
+Provides:       python3dist(dropbox[docs]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-dropbox+docs
+Metapackage for python3-dropbox docs extras.
+
+%package -n       python3-dropbox+dev
+Summary:        Metapackage for python3-dropbox dev extras
+Requires:       python3-dropbox = %{version}-%{release}
+Provides:       python3dist(dropbox[dev]) = %{version}-%{release}
+
+%description -n python3-dropbox+dev
+Metapackage for python3-dropbox dev extras.
+
+%description
 
 %package -n     python3-dropbox
-Summary:        %{summary}
-
-%description -n python3-dropbox %_description
+Summary:        Official Dropbox API Client
+# oreon:reqs
+Requires:       python3dist(requests) >= 2.16.2
+Requires:       python3dist(stone) < 4
+Requires:       python3dist(stone) >= 3.5.3
+# /oreon:reqs
+%description -n python3-dropbox
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-dropbox dev,docs,test
-
 
 %prep
-%autosetup -p1 -n dropbox-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir dropbox-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-dropbox usr/lib/python3*/site-packages/dropbox* usr/lib64/python3*/site-packages/dropbox* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/dropbox* usr/lib64/python3*/site-packages/dropbox* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-dropbox -f %{pyproject_files}
+%files
+%files -n python3-dropbox -f %{oreon_filedir}/python3-dropbox.list
 
 %changelog
+
 %autochangelog

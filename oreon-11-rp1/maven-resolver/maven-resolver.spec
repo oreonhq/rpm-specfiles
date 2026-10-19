@@ -1,5 +1,4 @@
 %global source0_hash dfead7be16788159b5f44b0b6842627f23901b48ea8cd26eade2083926d78ba6
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,21 +83,29 @@ end
 Name:           maven-resolver
 Epoch:          1
 Version:        1.9.27
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Apache Maven Artifact Resolver library
 License:        Apache-2.0
 URL:            https://maven.apache.org/resolver/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/maven/resolver/maven-resolver-%{version}-source-release.zip
-
 Patch:          0001-Remove-use-of-deprecated-SHA-1-and-MD5-algorithms.patch
 Patch:          0002-Make-I-O-errors-during-test-cleanup-non-fatal.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1:1.9.22-10
+Provides:       maven-resolver-api = %{epoch}:%{version}-%{release}
+Provides:       maven-resolver-connector-basic = %{epoch}:%{version}-%{release}
+Provides:       maven-resolver-impl = %{epoch}:%{version}-%{release}
+Provides:       maven-resolver-spi = %{epoch}:%{version}-%{release}
+Provides:       maven-resolver-transport-classpath = %{epoch}:%{version}-%{release}
+Provides:       maven-resolver-transport-file = %{epoch}:%{version}-%{release}
+Provides:       maven-resolver-transport-http = %{epoch}:%{version}-%{release}
+Provides:       maven-resolver-transport-wagon = %{epoch}:%{version}-%{release}
+Provides:       maven-resolver-util = %{epoch}:%{version}-%{release}
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.inject:guice)
 BuildRequires:  mvn(commons-codec:commons-codec)
@@ -124,19 +131,7 @@ BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1:1.9.22-10
-Provides:       maven-resolver-api = %{epoch}:%{version}-%{release}
-Provides:       maven-resolver-connector-basic = %{epoch}:%{version}-%{release}
-Provides:       maven-resolver-impl = %{epoch}:%{version}-%{release}
-Provides:       maven-resolver-spi = %{epoch}:%{version}-%{release}
-Provides:       maven-resolver-transport-classpath = %{epoch}:%{version}-%{release}
-Provides:       maven-resolver-transport-file = %{epoch}:%{version}-%{release}
-Provides:       maven-resolver-transport-http = %{epoch}:%{version}-%{release}
-Provides:       maven-resolver-transport-wagon = %{epoch}:%{version}-%{release}
-Provides:       maven-resolver-util = %{epoch}:%{version}-%{release}
-
+# /oreon:deps
 %description
 Apache Maven Artifact Resolver is a library for working with artifact
 repositories and dependency resolution. Maven Artifact Resolver deals with the
@@ -144,6 +139,7 @@ specification of local repository, remote repository, developer workspaces,
 artifact transports and artifact resolution.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -193,13 +189,14 @@ done
 %mvn_file ':maven-resolver{*}' %{name}/maven-resolver@1 aether/aether@1
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

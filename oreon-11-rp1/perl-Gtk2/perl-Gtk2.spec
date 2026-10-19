@@ -1,39 +1,14 @@
 %global source0_hash 49c443743b2eefe11a768002724f7f6a4c48efc94ff3cd3a559fb7e7b693c967
-
-#
-# Rebuild option:
-#
-#   --with testsuite         - run the test suite (requires X)
-#
-
-# We need to manually generate the Provides here, here's the best way I know of:
-# for i in `grep -r "PACKAGE = " * | cut -d " " -f 3 | cut -f 1`; do printf "Provides: perl($i)\n" &>>provides.txt; done
-# cat provides.txt | sort -n | uniq
-
 Name:           perl-Gtk2
 Version:        1.24993
 Release:        24%{?dist}
 Summary:        Perl interface to the 2.x series of the Gimp Toolkit library
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://metacpan.org/release/Gtk2
 Source0:        https://cpan.metacpan.org/authors/id/X/XA/XAOC/Gtk2-%{version}.tar.gz
-BuildRequires: make
-BuildRequires:  gcc
-BuildRequires:  perl-interpreter >= 2:5.8.0
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  gtk2-devel
-BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(ExtUtils::Depends), perl(ExtUtils::PkgConfig)
-BuildRequires:  perl(Glib) >= 1.240
-BuildRequires:	perl(Pango) >= 1.220
-BuildRequires:  perl(Glib::MakeHelper)
-BuildRequires:  perl(Cairo) >= 1.00
 Requires:       perl(Glib) >= 1.240
 Requires:       perl(Cairo) >= 1.00
 Requires:       perl(Pango) >= 1.220
-# Be sure to update this list on any upstream change
 Provides: perl(Gtk2)
 Provides: perl(Gtk2::AboutDialog)
 Provides: perl(Gtk2::AccelGroup)
@@ -247,7 +222,21 @@ Provides: perl(Gtk2::VScrollbar)
 Provides: perl(Gtk2::VSeparator)
 Provides: perl(Gtk2::Widget)
 Provides: perl(Gtk2::Window)
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gtk2-devel
+BuildRequires:  make
+BuildRequires:  perl(Cairo)
+BuildRequires:  perl(ExtUtils::Depends)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(ExtUtils::PkgConfig)
+BuildRequires:  perl(Glib)
+BuildRequires:  perl(Glib::MakeHelper)
+BuildRequires:  perl(Pango)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module allows you to write Gtk+ graphical user interfaces in a
 perlish and object-oriented way, freeing you from the casting and
@@ -255,6 +244,7 @@ memory management in C, yet remaining very close in spirit to original
 API.  Find out more about Gtk+ at http://www.gtk.org.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Gtk2-%{version}
@@ -263,27 +253,22 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # mv pm/Helper.pm{.utf8,}
 
 %build
-# gtk2 is not c23 friendly
+
 %{__perl} Makefile.PL INSTALLDIRS=vendor OPTIMIZE="$RPM_OPT_FLAGS -std=gnu17"
 make %{?_smp_mflags}
-
 %install
 make pure_install PERL_INSTALL_ROOT=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -type f -name .packlist -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -type f -name '*.bs' -empty -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null ';'
 chmod -R u+w $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-%{?_with_testsuite:make test}
 
-%files
-%doc AUTHORS ChangeLog.pre-git NEWS README TODO
-%doc examples/ gtk-demo/
-%license LICENSE
-%{perl_vendorarch}/auto/Gtk2/
-%{perl_vendorarch}/Gtk2*
-%{_mandir}/man3/*.3pm*
+%{?_with_testsuite:make test}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,22 +1,20 @@
 %global source0_hash deeed4a9ea87f62437990ddfb3c7c10e736010789fef81c04d93b371b0d2bb14
-
 %global maj_ver 0
 %global min_ver 9
-
 Name:           dataquay
 Version:        0.9.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Simple RDF for C++ and Qt applications
-
 License:        X11-distribute-modifications-variant
 URL:            https://www.breakfastquay.com/dataquay/
 Source0:        https://www.breakfastquay.com/files/releases/dataquay-%{version}.tar.bz2
-
+# oreon:deps
+BuildRequires:  Xvfb
+BuildRequires:  make
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  redland-devel
-BuildRequires:  Xvfb xauth
-BuildRequires:  make
-
+BuildRequires:  xauth
+# /oreon:deps
 %description
 Dataquay is a free open source library that provides a friendly C++
 interface to an RDF datastore using Qt classes and
@@ -44,12 +42,12 @@ developers for general use.
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       redland-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -62,27 +60,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
          deploy/dataquay.pc.in
 
 %build
+
 %{qmake_qt6} dataquay.pro PREFIX=%{_prefix}
 xvfb-run -a -w 1 make %{?_smp_mflags}
-
 %install
 make install INSTALL_ROOT=%{buildroot}
-# actually copy .pc file
 %{__cp} -p deploy/dataquay.pc %{buildroot}%{_libdir}/pkgconfig/
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+%oreon_autofiles dataquay-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc CHANGELOG README.txt
-%{_libdir}/*.so.%{maj_ver}
-%{_libdir}/*.so.%{maj_ver}.%{min_ver}
-%{_libdir}/*.so.%{version}
-
-%files devel
-%doc examples
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n dataquay-devel -f %{oreon_filedir}/dataquay-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 61348cfb77d53b9242e0017029244b559b810c142ced65b4e21eeca1843959a7
 Name:           python-threadpoolctl
 Version:        3.7.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        threadpoolctl
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/joblib/threadpoolctl
-Source:         %{pypi_source threadpoolctl}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/threadpoolctl/threadpoolctl-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'threadpoolctl' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(flit-core) < 5
+BuildRequires:  python3dist(flit-core) >= 3.2
+Requires:       python3-threadpoolctl = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-threadpoolctl
-Summary:        %{summary}
-
-%description -n python3-threadpoolctl %_description
-
+Summary:        threadpoolctl
+%description -n python3-threadpoolctl
 
 %prep
-%autosetup -p1 -n threadpoolctl-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir threadpoolctl-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-threadpoolctl usr/lib/python3*/site-packages/threadpoolctl* usr/lib64/python3*/site-packages/threadpoolctl* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/threadpoolctl* usr/lib64/python3*/site-packages/threadpoolctl* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-threadpoolctl -f %{pyproject_files}
+%files
+%files -n python3-threadpoolctl -f %{oreon_filedir}/python3-threadpoolctl.list
 
 %changelog
+
 %autochangelog

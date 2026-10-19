@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash 8e6445afe1abb3dcd43c60c8cd6c0f15b052a8f4228812559ba521c5ce91db34
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,33 +80,27 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           osgi-compendium
 Version:        7.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Interfaces and Classes for use in compiling OSGi bundles
 License:        Apache-2.0
 URL:            https://www.osgi.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://osgi.org/download/r7/osgi.cmpn-%{version}.jar
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.osgi:osgi.annotation)
-BuildRequires:  mvn(org.osgi:osgi.core)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 7.0.0-38
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 OSGi Compendium, Interfaces and Classes for use in compiling bundles.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -T -n osgi-compendium-7.0.0
 jar xf %{SOURCE0}
@@ -155,15 +148,15 @@ rm -r src/main/java/org/osgi/service/jpa
 rm -r src/main/java/org/osgi/service/transaction/control/jpa
 
 %build
-%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE
-%doc about.html
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.0-1
 - Import

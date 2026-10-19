@@ -1,29 +1,24 @@
-%global source0_hash 34011a41c4b936c6df1fa3282fe4c74c9619c9e009e15432a75922157795d1c5
-
+%global source0_hash 9b3e14e95a5b6aa0ee909b1d1e5c1fac04042024f29b66377cfb9e1923b25f5c
 %global _docdir_fmt %{name}
-
 Name:		gappa
 Version:	1.8.3
-Release:	%autorelease
-Summary:	Prove programs with floating-point or fixed-point arithmetic
-
+Release:        1%{?dist}
+Summary:        Prove programs with floating-point or fixed-point arithmetic
 License:	GPL-3.0-only OR CECILL-2.1
 URL:		https://gappa.gitlabpages.inria.fr/
 VCS:		git:https://gitlab.inria.fr/gappa/gappa.git
-Source:		%{url}/releases/%{name}-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://%{name}.gitlabpages.inria.fr//releases/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
-BuildRequires:	bison
-BuildRequires:	boost-devel
-BuildRequires:	flex
-BuildRequires:	gcc-c++
-BuildRequires:	gmp-devel
-BuildRequires:	mpfr-devel
-BuildRequires:	%{py3_dist sphinx}
-BuildRequires:	remake
-
+# oreon:deps
+BuildRequires:  bison
+BuildRequires:  boost-devel
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  gmp-devel
+BuildRequires:  mpfr-devel
+BuildRequires:  python3dist(sphinx)
+BuildRequires:  remake
+# /oreon:deps
 %description
 Gappa is a tool intended to help verifying and formally prove
 properties on numerical programs and circuits handling floating-point
@@ -38,28 +33,12 @@ written by Guillaume Melquiond.
 %package doc
 Summary:	Documentation for gappa
 BuildArch:	noarch
-# In addition to the project license, the Javascript and CSS bundled with the
-# documentation has the following licenses:
-# - searchindex.js: BSD-2-Clause
-# - _static/_sphinx_javascript_frameworks_compat.js: BSD-2-Clause
-# - _static/alabaster.css: BSD-3-Clause
-# - _static/basic.css: BSD-2-Clause
-# - _static/custom.css: BSD-3-Clause
-# - _static/doctools.js: BSD-2-Clause
-# - _static/documentation_options.js: BSD-2-Clause
-# - _static/file.png: BSD-2-Clause
-# - _static/jquery*.js: MIT
-# - _static/language_data.js: BSD-2-Clause
-# - _static/minus.png: BSD-2-Clause
-# - _static/plus.png: BSD-2-Clause
-# - _static/searchtools.js: BSD-2-Clause
-# - _static/underscore*.js: MIT
 License:	(GPL-3.0-only OR CECILL-2.1) AND MIT AND BSD-2-Clause AND BSD-3-Clause
-
 %description doc
 Documentation for gappa.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -69,27 +48,23 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's/timeout 5/&0/' Remakefile.in
 
 %build
+
 %configure
-# Use the system remake
 rm -f remake
 ln -s %{_bindir}/remake remake
 remake -d %{?_smp_mflags}
 remake -d doc/html/index.html
 rm doc/html/.buildinfo
-
 %install
 DESTDIR=%{buildroot} remake install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 remake check
-
-%files
-%{_bindir}/gappa
-%doc README.md NEWS.md
-%license COPYING COPYING.GPL
-
-%files doc
-%doc AUTHORS doc/html
+%files -f %{oreon_filedir}/main.list
+%files -n gappa-doc -f %{oreon_filedir}/gappa-doc.list
 
 %changelog
+
 %autochangelog

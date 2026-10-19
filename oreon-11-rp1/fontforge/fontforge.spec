@@ -1,51 +1,43 @@
 %global source0_hash 613424039e0e1b6bb106f8f0df287e1d249ac285d854f4e1964d68e9b9ad7eb0
-
 %global gettext_package FontForge
-
 Name:           fontforge
 Version:        20251009
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Outline and bitmap font editor
-
 License:        GPL-3.0-or-later
 URL:            http://fontforge.github.io/
 Source0:        https://github.com/fontforge/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 Requires:       xdg-utils
 Requires:       (autotrace or potrace)
 Requires:       hicolor-icon-theme
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  libjpeg-devel
-BuildRequires:  libtiff-devel
-BuildRequires:  libpng-devel
-BuildRequires:  giflib-devel
-BuildRequires:  libxml2-devel
-BuildRequires:  freetype-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  libXt-devel
-BuildRequires:  xorg-x11-proto-devel
-BuildRequires:  gettext
-BuildRequires:  pango-devel
-BuildRequires:  cairo-devel
-BuildRequires:  libspiro-devel
-BuildRequires:  python3-devel
-BuildRequires:  readline-devel
-BuildRequires:  libappstream-glib
-BuildRequires:  woff2-devel
-# F25 build is failing add following to fix
-BuildRequires:  shared-mime-info
-# F33 onward need now
-BuildRequires:  gtk3-devel
-BuildRequires:  python3-sphinx
-BuildRequires: make
-# 20151009 version requires below
-BuildRequires: gtkmm3.0-devel
-
 %py_provides python3-fontforge
 %py_provides python3-psMat
-
+# oreon:deps
+BuildRequires:  cairo-devel
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  freetype-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  giflib-devel
+BuildRequires:  gtk3-devel
+BuildRequires:  gtkmm3.0-devel
+BuildRequires:  libXt-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libspiro-devel
+BuildRequires:  libtiff-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  pango-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-sphinx
+BuildRequires:  readline-devel
+BuildRequires:  shared-mime-info
+BuildRequires:  woff2-devel
+BuildRequires:  xorg-x11-proto-devel
+# /oreon:deps
 %description
 FontForge (former PfaEdit) is a font editor for outline and bitmap
 fonts. It supports a range of font formats, including PostScript
@@ -56,7 +48,6 @@ fonts. It supports a range of font formats, including PostScript
 Summary: Development files for fontforge
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-doc = %{version}-%{release}
-
 %description devel
 This package includes the library files you will need to compile
 applications against fontforge.
@@ -64,63 +55,40 @@ applications against fontforge.
 %package doc
 Summary: Documentation files for %{name}
 BuildArch: noarch
-
 %description doc
 This package contains documentation files for %{name}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
+%oreon_prep
 %build
+
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 %cmake -DCMAKE_BUILD_TYPE=Release \
           -DENABLE_WOFF2=ON \
           -DPYHOOK_INSTALL_DIR=%{python3_sitearch}
 %cmake_build
-
 %install
 %cmake_install
-
 desktop-file-install \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications            \
   --add-category X-Fedora                                  \
   desktop/org.fontforge.FontForge.desktop
-
-# remove unneeded .la and .a files
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -name '*.a' -exec rm -f {} ';'
-
 rm -f %{buildroot}%{_datadir}/doc/fontforge/{.buildinfo,.nojekyll}
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
-
-# Find translations
 %find_lang %{gettext_package}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files -f %{gettext_package}.lang
-%doc AUTHORS
-%license LICENSE COPYING.gplv3
-%{_bindir}/*
-%{_libdir}/lib*.so.*
-%{_datadir}/applications/*FontForge.desktop
-%{_datadir}/fontforge
-%{_datadir}/icons/hicolor/*/apps/org.fontforge.FontForge*
-%{_mandir}/man1/*.1*
-%{_datadir}/mime/packages/fontforge.xml
-%{_metainfodir}/org.fontforge.FontForge.appdata.xml
-%{python3_sitearch}/fontforge.so
-%{python3_sitearch}/psMat.so
-
-%files devel
-%{_libdir}/lib*.so
-
-%files doc
-%doc %{_pkgdocdir}
+%files -f %{oreon_filedir}/main.list
+%files -n fontforge-devel -f %{oreon_filedir}/fontforge-devel.list
+%files -n fontforge-doc -f %{oreon_filedir}/fontforge-doc.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20251009-2
 - Prepare for Oreon 11 (RP1)

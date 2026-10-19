@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash b1d756fd04d17c291303bf9777da11c052cac795a4d3e82569e250a76c72d28c
 Name:           python-repoze-who
 Version:        3.2.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Identification and authentication framework for WSGI.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/repoze/repoze.who
-Source:         %{pypi_source repoze_who}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/repoze_who/repoze_who-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'repoze-who' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-repoze-who = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-repoze-who
-Summary:        %{summary}
-
-%description -n python3-repoze-who %_description
-
+Summary:        Identification and authentication framework for WSGI.
+%description -n python3-repoze-who
 
 %prep
-%autosetup -p1 -n repoze_who-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir repoze_who-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-repoze-who usr/lib/python3*/site-packages/repoze_who* usr/lib64/python3*/site-packages/repoze_who* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/repoze_who* usr/lib64/python3*/site-packages/repoze_who* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-repoze-who -f %{pyproject_files}
+%files
+%files -n python3-repoze-who -f %{oreon_filedir}/python3-repoze-who.list
 
 %changelog
+
 %autochangelog

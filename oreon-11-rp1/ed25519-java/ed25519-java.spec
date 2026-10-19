@@ -1,27 +1,21 @@
 %global source0_hash a89a2331afb1db0bd06ce029c731db2d24684cebf111e796b51deb6e2a20a310
-
 Name:          ed25519-java
 Version:       0.3.0
-Release:       27%{?dist}
-Summary:       Implementation of EdDSA (Ed25519) in Java
-# Automatically converted from old format: CC0 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Implementation of EdDSA (Ed25519) in Java
 License:       CC0-1.0
 URL:           https://github.com/str4d/ed25519-java
-Source0:       https://github.com/str4d/ed25519-java/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# https://github.com/str4d/ed25519-java/commit/e0ac35769db8553fb714b09f0d3f3d2b001fd033
+Source0:        https://github.com/str4d/ed25519-java/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0: 0001-EdDSAEngine.initVerify-Handle-any-non-EdDSAPublicKey.patch
-
 Patch1: 0002-Disable-test-that-relies-on-internal-sun-JDK-classes.patch
-
-BuildRequires: maven-local-openjdk25
-BuildRequires: mvn(junit:junit)
-BuildRequires: mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires: mvn(org.hamcrest:hamcrest-all)
-
 BuildArch:     noarch
 ExclusiveArch:  %{java_arches} noarch
-
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires:  mvn(org.hamcrest:hamcrest-all)
+# /oreon:deps
 %description
 This is an implementation of EdDSA in Java. Structurally, it
 is based on the ref10 implementation in SUPERCOP (see
@@ -37,11 +31,11 @@ There are two internal implementations:
 
 %package javadoc
 Summary:       Javadoc for %{name}
-
 %description javadoc
 This package contains javadoc for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}
@@ -62,17 +56,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_xpath_remove pom:plugin/pom:configuration/pom:source
 
 %build
-%mvn_build -- -Dmaven.compiler.release=11
 
+%mvn_build -- -Dmaven.compiler.release=11
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE.txt
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE.txt
+%files -f %{oreon_filedir}/main.list
+%files -n ed25519-java-javadoc -f %{oreon_filedir}/ed25519-java-javadoc.list
 
 %changelog
+
 %autochangelog

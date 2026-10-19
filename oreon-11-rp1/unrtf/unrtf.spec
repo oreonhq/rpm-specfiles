@@ -1,22 +1,21 @@
+%global source1_hash 6d9c595d9d052984865a215bb2c2a9c62cdbb8e54253082ae999bb74a724b0a3
 %global source0_hash b49f20211fa69fff97d42d6e782a62d7e2da670b064951f14bbff968c93734ae
-
 Name:		unrtf
-Summary:	RTF (Rich Text Format) to other formats converter
+Summary:        RTF (Rich Text Format) to other formats converter
 Version:	0.21.10
-Release:	%autorelease
+Release:        1%{?dist}
 License:	GPL-3.0-or-later
 URL:		https://www.gnu.org/software/unrtf
-Source0:	https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
 Source1:	https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz.sig
-# gpg --no-default-keyring --keyring ./keyring.gpg --keyserver keyserver.ubuntu.com --recv-key 46EA854F5FC5F5A0A9D2BFE89175BF0B3EC83090
-# gpg --no-default-keyring --keyring ./keyring.gpg --output 46EA854F5FC5F5A0A9D2BFE89175BF0B3EC83090.gpg --export
 Source2:	46EA854F5FC5F5A0A9D2BFE89175BF0B3EC83090.gpg
 Patch:		0001-Adjust-malloc-types.patch
-BuildRequires:	automake
-BuildRequires:	gcc
-BuildRequires:	gnupg2
-BuildRequires:	make
-
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  make
+# /oreon:deps
 %description
 UnRTF is a command-line program written in C which converts documents in
 Rich Text Format (.rtf) to HTML, LaTeX, troff macros, and RTF itself.
@@ -31,28 +30,26 @@ Converting to HTML, it supports a number of features of Rich Text Format:
     * Conversion of special characters to HTML entities
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
 %build
+
 autoreconf -ivf
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-make check
 
-%files
-%doc README ChangeLog AUTHORS NEWS
-%license COPYING
-%{_bindir}/%{name}
-%{_mandir}/man1/*
-%{_datadir}/%{name}/
+make check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

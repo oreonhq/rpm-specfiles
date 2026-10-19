@@ -1,25 +1,18 @@
 %global source0_hash a289434347cc96054c75d1e4e4408b84adc2e8c7862f0be4e2da8fafbf26bf26
-
 %undefine __cmake_in_source_build
-
 Name:    oxygen-gtk2
-Summary: Oxygen GTK+2 theme
+Summary:        Oxygen GTK+2 theme
 Version: 1.4.6
-Release: 31%{?dist}
-
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://cgit.kde.org/oxygen-gtk.git/
 Source0:        https://download.kde.org/stable/oxygen-gtk2/%{version}/src/%{name}-%{version}.tar.bz2
-
-## upstream patches
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: gtk2-devel
-
 Obsoletes: oxygen-gtk < 1.2.1
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gtk2-devel
+# /oreon:deps
 %description
 Oxygen-Gtk is a port of the default KDE widget theme (Oxygen), to gtk.
 
@@ -33,33 +26,22 @@ attempt does not depend on Qt (via some Qt to Gtk conversion engine),
 nor does render the widget appearance via hard-coded pixmaps, which 
 otherwise breaks every time some setting is changed in KDE.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
-
+%oreon_prep
 %build
-# TODO: Please submit an issue to upstream (rhbz#2381350)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake \
   -DOXYGEN_FORCE_KDE_ICONS_AND_FONTS=0
-
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-
-%files
-%doc AUTHORS README
-%license COPYING
-%{_bindir}/oxygen-gtk-demo
-%{_libdir}/gtk-2.0/*/engines/liboxygen-gtk.so
-%{_datadir}/themes/oxygen-gtk/
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.6-31
 - Prepare for Oreon 11 (RP1)

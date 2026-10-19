@@ -1,40 +1,33 @@
-%global source0_hash none
-
-Summary: Multimedia framework api
+%global source0_hash 3287ffe0fbcc2d4aa1363f9e15747302d0b080090fe76e5f211d809ecb43f39a
+Summary:        Multimedia framework api
 Name:    phonon
 Version: 4.12.0
-Release: 11%{?dist}
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://community.kde.org/Phonon
-
 Source0:        https://download.kde.org/stable/phonon/%{version}/phonon-%{version}.tar.xz
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: kf5-rpm-macros
-BuildRequires: pkgconfig
-BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: pkgconfig(libpulse-mainloop-glib) > 0.9.15
-BuildRequires: pkgconfig(libxml-2.0)
-BuildRequires: pkgconfig(xkbcommon)
-# Qt6
-BuildRequires: cmake(Qt6DBus)
-BuildRequires: cmake(Qt6Designer)
-BuildRequires: cmake(Qt6OpenGL)
-BuildRequires: cmake(Qt6Widgets)
-BuildRequires: cmake(Qt6Core5Compat)
-
-# Qt5
-BuildRequires: cmake(Qt5DBus)
-BuildRequires: cmake(Qt5Designer)
-BuildRequires: cmake(Qt5OpenGL)
-BuildRequires: cmake(Qt5Widgets)
-
-BuildRequires: pkgconfig(xcb)
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt5DBus)
+BuildRequires:  cmake(Qt5Designer)
+BuildRequires:  cmake(Qt5OpenGL)
+BuildRequires:  cmake(Qt5Widgets)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Designer)
+BuildRequires:  cmake(Qt6OpenGL)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf5-rpm-macros
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  pkgconfig
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(libpulse-mainloop-glib)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(xcb)
+BuildRequires:  pkgconfig(xkbcommon)
+# /oreon:deps
 %description
 %{summary}.
 
@@ -76,9 +69,10 @@ BuildArch: noarch
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n phonon-%{version} -p1
-
+%global oreon_srcdir phonon-%{version}
+%oreon_prep
 %build
+
 mkdir -p phononqt6
 pushd phononqt6
 %cmake_kf6 -S .. \
@@ -87,7 +81,6 @@ pushd phononqt6
   -DPHONON_BUILD_QT6:BOOL=ON
 %cmake_build
 popd
-
 mkdir -p phononqt5
 pushd phononqt5
 %cmake_kf5 -S .. \
@@ -97,62 +90,32 @@ pushd phononqt5
   -DPHONON_BUILD_SETTINGS=OFF
 %cmake_build
 popd
-
-
 %install
 pushd phononqt6
 %cmake_install
 popd
-
 pushd phononqt5
 %cmake_install
 popd
-
 %find_lang %{name} --with-qt --all-name
-# own these dirs
 mkdir -p %{buildroot}%{_qt5_plugindir}/phonon4qt5_backend
 mkdir -p %{buildroot}%{_qt6_plugindir}/phonon4qt6_backend
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export PKG_CONFIG_PATH="%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig${PKG_CONFIG_PATH:+:}${PKG_CONFIG_PATH}"
 test "$(pkg-config --modversion phonon4qt5)" = "%{version}"
 test "$(pkg-config --modversion phonon4qt6)" = "%{version}"
-
-
-%files qt5
-%license COPYING.LIB
-%{_libdir}/libphonon4qt5.so.4*
-%{_libdir}/libphonon4qt5experimental.so.4*
-# own backends dir
-%dir %{_qt5_plugindir}/phonon4qt5_backend/
-
-%files qt5-devel
-%{_libdir}/cmake/phonon4qt5/
-%{_includedir}/phonon4qt5/
-%{_libdir}/libphonon4qt5.so
-%{_libdir}/libphonon4qt5experimental.so
-%{_libdir}/pkgconfig/phonon4qt5.pc
-%{_qt5_archdatadir}/mkspecs/modules/qt_phonon4qt5.pri
-%{_qt5_plugindir}/designer/phonon4qt5widgets.so
-
-%files qt6
-%{_bindir}/phononsettings
-%{_libdir}/libphonon4qt6.so.4*
-%{_libdir}/libphonon4qt6experimental.so.4*
-# own backends dir
-%dir %{_qt6_plugindir}/phonon4qt6_backend/
-
-%files qt6-devel
-%{_libdir}/cmake/phonon4qt6/
-%{_includedir}/phonon4qt6/
-%{_libdir}/libphonon4qt6.so
-%{_libdir}/libphonon4qt6experimental.so
-%{_libdir}/pkgconfig/phonon4qt6.pc
-%{_qt6_plugindir}/designer/phonon4qt6widgets.so
-
-%files common -f %{name}.lang
+%files -f %{oreon_filedir}/main.list
+%files -n phonon-qt5 -f %{oreon_filedir}/phonon-qt5.list
+%files -n phonon-qt5-devel -f %{oreon_filedir}/phonon-qt5-devel.list
+%files -n phonon-qt6 -f %{oreon_filedir}/phonon-qt6.list
+%files -n phonon-qt6-devel -f %{oreon_filedir}/phonon-qt6-devel.list
+%files -n phonon-common -f %{oreon_filedir}/phonon-common.list
 
 %changelog
+
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 4.12.0-11
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

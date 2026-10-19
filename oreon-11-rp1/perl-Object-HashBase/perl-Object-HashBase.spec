@@ -1,5 +1,4 @@
 %global source0_hash ab4f6ba451f717c96122f44030cd0228d25293aaa7fb232985fe4aedb450e024
-
 Name:           perl-Object-HashBase
 Version:        0.018
 Release:        1%{?dist}
@@ -7,33 +6,28 @@ Summary:        Build hash-based classes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Object-HashBase
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Object-HashBase-%{version}.tar.gz
-# Correct shebangs
 Patch0:         Object-HashBase-0.008-Normalize-shebang.patch
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.8.1
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Run-time:
-BuildRequires:  perl(base)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(Test::More) >= 0.98
-BuildRequires:  perl(vars)
-# Tests:
-BuildRequires:  perl(File::Temp)
 Suggests:       perl(Class::XSAccessor)
-
-# Remove under-specified dependenices
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Test::More\\)$
-# Remove private modules
 %global __requires_exclude %{__requires_exclude}|^perl\\(Object::HashBase::Test::HBase.*
 %global __requires_exclude %{__requires_exclude}|^perl\\(My::Prefix::HashBase\\)$
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(base)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This package is used to generate classes based on hash references. Using this
 class will give you a new() method, as well as generating accessors you
@@ -46,7 +40,6 @@ also supported.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
@@ -55,13 +48,13 @@ with "%{_libexecdir}/%{name}/test".
 Summary:        Generate inlined Object::HashBase Perl module
 Requires:       %{name} = %{version}-%{release}
 Requires:       perl(Test::More) >= 0.98
-
 %description tools
 hashbase_inc.pl script generates a Perl module that contains
 a Object::HashBase module mangled into a name space of your choice. It can
 also generate the tests for it.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Object-HashBase-%{version}
 %patch -P0 -p1
@@ -72,37 +65,27 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files
-%license LICENSE
-%doc Changes README
-%{perl_vendorlib}/*
-%exclude %{perl_vendorlib}/Object/HashBase
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
-
-%files tools
-%{_bindir}/hashbase_inc.pl
-%{perl_vendorlib}/Object/HashBase
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Object-HashBase-tests -f %{oreon_filedir}/perl-Object-HashBase-tests.list
+%files -n perl-Object-HashBase-tools -f %{oreon_filedir}/perl-Object-HashBase-tools.list
 
 %changelog
+
 %autochangelog

@@ -1,63 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 67df66e327579500e4c465348c2dd9aa8238f0b0268ded4e156bc0f304abaf5a
 Name:           python-catkin-lint
 Version:        1.6.25
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Check catkin packages for common errors
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/fkie/catkin_lint
-Source:         %{pypi_source catkin_lint}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/catkin_lint/catkin_lint-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'catkin-lint' generated automatically by pyp2spec.}
-
 Patch:          0001-Handle-changed-ntpath.isabs-behaviour-in-Python-3.13.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-catkin-lint = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-catkin-lint
-Summary:        %{summary}
-
-%description -n python3-catkin-lint %_description
+Summary:        Check catkin packages for common errors
+%description -n python3-catkin-lint
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-catkin-lint ros
-
 
 %prep
-%autosetup -p1 -n catkin_lint-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir catkin_lint-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-catkin-lint usr/lib/python3*/site-packages/catkin_lint* usr/lib64/python3*/site-packages/catkin_lint* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/catkin_lint* usr/lib64/python3*/site-packages/catkin_lint* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-catkin-lint -f %{pyproject_files}
+%files
+%files -n python3-catkin-lint -f %{oreon_filedir}/python3-catkin-lint.list
 
 %changelog
+
 %autochangelog

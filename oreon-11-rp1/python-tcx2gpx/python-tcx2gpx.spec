@@ -1,39 +1,62 @@
 %global source0_hash 6b094264c8d235178daf6249fb1e25561d35cdef8820097ff7aa582eb0a3be6d
-
 %bcond tests 1
-
 Name:           python-tcx2gpx
 Version:        0.1.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Convert Garmin TPX to GPX
-
 License:        GPL-3.0-only
 URL:            https://gitlab.com/nshephard/tcx2gpx
-Source:         %{pypi_source tcx2gpx}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tcx2gpx/tcx2gpx-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  python3-devel
-BuildRequires:  tomcli
-
 %if %{with tests}
-BuildRequires:  python3dist(pytest)
 %endif
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 45
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.2
+Requires:       python3-tcx2gpx = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-tcx2gpx+dev
+Summary:        Metapackage for python3-tcx2gpx dev extras
+Requires:       python3-tcx2gpx = %{version}-%{release}
+Provides:       python3dist(tcx2gpx[dev]) = %{version}-%{release}
 
-%global _description %{expand:
-This module converts the Garmin tcx GPS file format to the more commonly used
-gpx file format. Both formats are a form of XML but there are some fields in
-the former that are not present in the later. It uses two packages to do the
-grunt work tcxparser and gpxpy.}
+%description -n python3-tcx2gpx+dev
+Metapackage for python3-tcx2gpx dev extras.
 
-%description %_description
+%package -n       python3-tcx2gpx+docs
+Summary:        Metapackage for python3-tcx2gpx docs extras
+Requires:       python3-tcx2gpx = %{version}-%{release}
+Provides:       python3dist(tcx2gpx[docs]) = %{version}-%{release}
+
+%description -n python3-tcx2gpx+docs
+Metapackage for python3-tcx2gpx docs extras.
+
+%package -n       python3-tcx2gpx+pypi
+Summary:        Metapackage for python3-tcx2gpx pypi extras
+Requires:       python3-tcx2gpx = %{version}-%{release}
+Provides:       python3dist(tcx2gpx[pypi]) = %{version}-%{release}
+
+%description -n python3-tcx2gpx+pypi
+Metapackage for python3-tcx2gpx pypi extras.
+
+%package -n       python3-tcx2gpx+test
+Summary:        Metapackage for python3-tcx2gpx test extras
+Requires:       python3-tcx2gpx = %{version}-%{release}
+Provides:       python3dist(tcx2gpx[test]) = %{version}-%{release}
+
+%description -n python3-tcx2gpx+test
+Metapackage for python3-tcx2gpx test extras.
+
+%description
 
 %package -n python3-tcx2gpx
-Summary:        %{summary}
-
-%description -n python3-tcx2gpx %_description
+Summary:        Convert Garmin TPX to GPX
+%description -n python3-tcx2gpx
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n tcx2gpx-%{version}
@@ -41,25 +64,23 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 tomcli set pyproject.toml lists delitem tool.pytest.ini_options.addopts \
     '^--cov.*'
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l tcx2gpx
+%oreon_autofiles python3-tcx2gpx usr/lib/python3*/site-packages/tcx2gpx* usr/lib64/python3*/site-packages/tcx2gpx* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tcx2gpx* usr/lib64/python3*/site-packages/tcx2gpx* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %if %{with tests}
 %pytest
 %endif
-
-%files -n python3-tcx2gpx -f %{pyproject_files}
-%doc README.md
-%{_bindir}/tcx2gpx
+%files
+%files -n python3-tcx2gpx -f %{oreon_filedir}/python3-tcx2gpx.list
 
 %changelog
+
 %autochangelog

@@ -1,65 +1,77 @@
-%global source0_hash none
-
+%global source0_hash 03b0e1551ae235c7290e9bfdf69fa9cdc194f8a2be51198c1924b15d826102ed
 Name:           python-healpy
 Version:        1.20.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Healpix tools package for Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-only
 URL:            https://github.com/healpy/healpy
-Source:         %{pypi_source healpy}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'healpy' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/h/healpy/healpy-%{version}.tar.gz
 Patch:          pykg-config_requirements.patch
 Patch:          no_pytest-cython_doctests.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython) >= 0.16
+BuildRequires:  python3dist(numpy) >= 2.0.0
+BuildRequires:  python3dist(setuptools) >= 77
+BuildRequires:  python3dist(setuptools-scm) >= 8.0
+Requires:       python3-healpy = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-healpy+all
+Summary:        Metapackage for python3-healpy all extras
+Requires:       python3-healpy = %{version}-%{release}
+Provides:       python3dist(healpy[all]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-healpy+all
+Metapackage for python3-healpy all extras.
+
+%package -n       python3-healpy+test
+Summary:        Metapackage for python3-healpy test extras
+Requires:       python3-healpy = %{version}-%{release}
+Provides:       python3dist(healpy[test]) = %{version}-%{release}
+
+%description -n python3-healpy+test
+Metapackage for python3-healpy test extras.
+
+%package -n       python3-healpy+doc
+Summary:        Metapackage for python3-healpy doc extras
+Requires:       python3-healpy = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 6
+Requires:       python3dist(sphinx) < 9
+Provides:       python3dist(healpy[doc]) = %{version}-%{release}
+
+%description -n python3-healpy+doc
+Metapackage for python3-healpy doc extras.
+
+%description
 
 %package -n     python3-healpy
-Summary:        %{summary}
-
-%description -n python3-healpy %_description
+Summary:        Healpix tools package for Python
+# oreon:reqs
+Requires:       python3dist(numpy) >= 2.0.0
+# /oreon:reqs
+%description -n python3-healpy
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-healpy all,doc,test
-
 
 %prep
-%autosetup -p1 -n healpy-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir healpy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-healpy usr/lib/python3*/site-packages/healpy* usr/lib64/python3*/site-packages/healpy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/healpy* usr/lib64/python3*/site-packages/healpy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-healpy -f %{pyproject_files}
+%files
+%files -n python3-healpy -f %{oreon_filedir}/python3-healpy.list
 
 %changelog
+
 %autochangelog

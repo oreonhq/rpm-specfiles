@@ -1,22 +1,27 @@
-%global source0_hash none
-
-Summary:	A sophisticated file transfer program
+%global source0_hash 96e7199d7935be33cf6b1161e955b2aab40ab77ecdf2a19cea4fc1193f457edc
+Summary:        A sophisticated file transfer program
 Name:		lftp
 Version:	4.9.3
-Release:	6%{?dist}
+Release:        6%{?dist}
 License:	GPL-3.0-or-later
 Source0:        https://lftp.yar.ru/ftp/%{name}-%{version}.tar.xz
 URL:		http://lftp.yar.ru/
-BuildRequires:	ncurses-devel, gnutls-devel, perl-generators, pkgconfig, readline-devel, gettext
-BuildRequires:	zlib-devel, gcc-c++
-BuildRequires: desktop-file-utils
-BuildRequires: make
-
 Patch1:        lftp-4.0.9-date_fmt.patch
 Patch2:        lftp-4.9.2-cdefs.patch
 Patch3:        lftp-4.9.2-tls-close.patch
 Patch4:        lftp-4.9.3-cert-pem-location.patch
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  gnutls-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  perl-generators
+BuildRequires:  pkgconfig
+BuildRequires:  readline-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 LFTP is a sophisticated ftp/http file transfer program. Like bash, it has job
 control and uses the readline library for input. It has bookmarks, built-in
@@ -27,11 +32,11 @@ reliability in mind.
 Summary:	Scripts for lftp
 Requires:	lftp >= %{version}-%{release}
 BuildArch:	noarch
-
 %description scripts
 Utility scripts for use with lftp.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
@@ -51,9 +56,9 @@ sed -i.norpath -e \
 	configure
 
 %build
+
 %configure --with-modules --disable-static --with-gnutls --without-openssl --with-debug
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 export tagname=CC
@@ -63,8 +68,6 @@ chmod 0755 $RPM_BUILD_ROOT%{_libdir}/lftp/%{version}/*.so
 iconv -f ISO88591 -t UTF8 NEWS -o NEWS.tmp
 touch -c -r NEWS NEWS.tmp
 mv NEWS.tmp NEWS
-# Remove files from $RPM_BUILD_ROOT that we aren't shipping.
-#rm $RPM_BUILD_ROOT%%{_libdir}/lftp/%%{version}/*.la
 rm $RPM_BUILD_ROOT%{_libdir}/liblftp-jobs.la
 rm $RPM_BUILD_ROOT%{_libdir}/liblftp-tasks.la
 rm $RPM_BUILD_ROOT%{_libdir}/liblftp-jobs.so
@@ -72,42 +75,14 @@ rm $RPM_BUILD_ROOT%{_libdir}/liblftp-tasks.so
 desktop-file-install	\
 --dir=%{buildroot}%{_datadir}/applications	\
 %{buildroot}/%{_datadir}/applications/lftp.desktop
-
 %find_lang %{name}
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%doc BUGS COPYING ChangeLog FAQ FEATURES README* NEWS THANKS TODO
-%config(noreplace) %{_sysconfdir}/lftp.conf
-%{_bindir}/lftp
-%{_bindir}/lftpget
-%{_mandir}/man1/lftp*.1*
-%{_mandir}/man5/lftp.conf.5*
-%dir %{_libdir}/lftp
-%dir %{_libdir}/lftp/%{version}
-%{_libdir}/lftp/%{version}/cmd-torrent.so
-%{_libdir}/lftp/%{version}/cmd-mirror.so
-%{_libdir}/lftp/%{version}/cmd-sleep.so
-%{_libdir}/lftp/%{version}/liblftp-network.so
-%{_libdir}/lftp/%{version}/liblftp-pty.so
-%{_libdir}/lftp/%{version}/proto-file.so
-%{_libdir}/lftp/%{version}/proto-fish.so
-%{_libdir}/lftp/%{version}/proto-ftp.so
-%{_libdir}/lftp/%{version}/proto-http.so
-%{_libdir}/lftp/%{version}/proto-sftp.so
-%{_libdir}/liblftp-jobs.so.*
-%{_libdir}/liblftp-tasks.so.*
-%{_datadir}/applications/lftp.desktop
-%{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/zsh/site-functions/_lftp
-
-
-
-%files scripts
-%{_datadir}/lftp
-
+%files -f %{oreon_filedir}/main.list
+%files -n lftp-scripts -f %{oreon_filedir}/lftp-scripts.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.9.3-6
 - Import

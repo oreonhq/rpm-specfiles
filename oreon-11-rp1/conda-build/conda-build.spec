@@ -1,20 +1,22 @@
-%global source0_hash c567f98f11dd279442e209ecf81ab18ae06375912c9d5fce64ac8c6ebd6f2339
-
+%global source0_hash c843d219fcc5eb8f8e7d46c0b6c2f397f9034deaa3846b151da6ea9e110e5aa0
 %bcond_without tests
-
 Name:           conda-build
 Version:        26.7.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Commands and tools for building conda packages
-# version.py is BSD-2-Clause
 License:        BSD-3-Clause AND BSD-2-Clause
 URL:            https://github.com/conda/conda-build
 Source0:        https://github.com/conda/conda-build/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  make
 Requires:       python%{python3_pkgversion}-conda-build = %{version}-%{release}
-
-%global _description %{expand:
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatch-vcs) >= 0.2.0
+BuildRequires:  python3dist(hatchling) >= 1.12.2
+Requires:       python3-conda-build = %{version}-%{release}
+# /oreon:deps
+%description
 You can easily build your own packages for conda, and upload them to
 anaconda.org, a free service for hosting packages for conda, as well as other
 package managers. To build a package, create a recipe. See
@@ -40,20 +42,15 @@ conda install will find and install their packages, run
 $ conda config --add channels https://conda.anaconda.org/username
 
 (replacing username with the user name of the person whose channel you want to
-add).}
-
-%description %_description
+add).
 
 %package -n python%{python3_pkgversion}-conda-build
-Summary:        %{summary}
-
+Summary:        Commands and tools for building conda packages
 BuildRequires:  python%{python3_pkgversion}-devel
-# For tests
 BuildRequires:  python%{python3_pkgversion}-pytest
 BuildRequires:  python%{python3_pkgversion}-pytest-mock
 BuildRequires:  python%{python3_pkgversion}-conda-index
 BuildRequires:  python%{python3_pkgversion}-flaky
-# For docs
 BuildRequires:  python%{python3_pkgversion}-myst-parser
 BuildRequires:  python%{python3_pkgversion}-sphinx
 BuildRequires:  python%{python3_pkgversion}-conda-sphinx-theme
@@ -61,10 +58,36 @@ BuildRequires:  conda
 BuildRequires:  /usr/bin/hostname
 BuildRequires:  /usr/bin/git
 BuildRequires:  /usr/bin/python
+%description -n python%{python3_pkgversion}-conda-build
+You can easily build your own packages for conda, and upload them to
+anaconda.org, a free service for hosting packages for conda, as well as other
+package managers. To build a package, create a recipe. See
+http://github.com/conda/conda-recipes for many example recipes, and
+http://conda.pydata.org/docs/build.html for documentation on how to build
+recipes.
 
-%description -n python%{python3_pkgversion}-conda-build %_description
+To upload to anaconda.org, create an account. Then, install the
+anaconda-client and login
+
+$ conda install anaconda-client
+$ anaconda login
+
+Then, after you build your recipe
+
+$ conda build <recipe-dir>
+
+you will be prompted to upload to anaconda.org.
+
+To add your anaconda.org channel, or the channel of others to conda so that
+conda install will find and install their packages, run
+
+$ conda config --add channels https://conda.anaconda.org/username
+
+(replacing username with the user name of the person whose channel you want to
+add).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -79,29 +102,21 @@ sed -i -E -e '/--(no-)?cov/d' -e '/xdoctest/d' pyproject.toml
 # Not needed for man pages
 sed -i -E -e '/linkify/d' -e '/sphinx_(design|sitemap)/d' docs/source/conf.py
 
-%generate_buildrequires
-%pyproject_buildrequires %{?with_tests:tests/requirements.txt}
-
 %build
+
 %pyproject_wheel
 make -C docs man
-
 %install
 %pyproject_install
-%pyproject_save_files conda_build
 mkdir -p %{buildroot}%{_mandir}/man1
 cp -p docs/_build/man/*.1 %{buildroot}%{_mandir}/man1/
+%oreon_autofiles python3-conda-build usr/lib/python3*/site-packages/conda_build* usr/lib64/python3*/site-packages/conda_build* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/conda_build* usr/lib64/python3*/site-packages/conda_build* usr/bin/*
 
 %check
+
 %if %{with tests}
 export PATH=%{buildroot}%{_bindir}:$PATH
-# test_api_build.py - requires unpackaged binstar_client
-# Most tests require network access to the anaconda repositories
-# Needs an environment to test
-# tests/test_post.py::test_menuinst_* - conda_build.environ.InvalidEnvironment: Unable to load environment /usr
-# tests/test_api_render.py::test_get_output_file_paths_jinja2 - Requires GIT/CI env
-# tests/test_api_render.py::test_noarch_with_no_platform_deps - fails in koji for an unknown reason
-# tests/test_api_render.py::test_transitive_subpackage_dependency - nettwork
 py.test-%{python3_version} -rs -vv -W ignore::DeprecationWarning -W ignore::PendingDeprecationWarning \
   --ignore tests/test_api_build.py --ignore tests/cli/test_main_skeleton.py \
   --deselect='tests/test_api_build_conda_v2.py::test_conda_pkg_format[None-.tar.bz2]' \
@@ -306,20 +321,9 @@ py.test-%{python3_version} -rs -vv -W ignore::DeprecationWarning -W ignore::Pend
   --deselect='tests/cli/test_main_render.py::test_render_with_python_arg_reduces_subspace' \
   --deselect='tests/cli/test_main_render.py::test_render_with_python_arg_CLI_reduces_subspace' \
 %endif
-
 %files
-%{_bindir}/conda-build
-%{_bindir}/conda-convert
-%{_bindir}/conda-debug
-%{_bindir}/conda-develop
-%{_bindir}/conda-inspect
-%{_bindir}/conda-metapackage
-%{_bindir}/conda-render
-%{_bindir}/conda-skeleton
-%{_mandir}/man1/conda-build.1*
-
-%files -n python%{python3_pkgversion}-conda-build -f %pyproject_files
-%doc CHANGELOG.md README.md
+%files -n python3-conda-build -f %{oreon_filedir}/python3-conda-build.list
 
 %changelog
+
 %autochangelog

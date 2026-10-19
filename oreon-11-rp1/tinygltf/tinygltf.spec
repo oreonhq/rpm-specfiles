@@ -1,37 +1,28 @@
-%global source0_hash 9d31cf7f22e81febaf1ad587d7722582c154f7d9125673ee46c0c594765e8f35
-
-# https://github.com/syoyo/tinygltf/issues/484
+%global source0_hash b7e953f13a30d7b6fd677e484de35febde954143a265da15dacd92ed171c73e6
 %ifarch ppc64le s390x
 %bcond tests 0
 %else
 %bcond tests 1
 %endif
-
 %global common_description %{expand:
 TinyGLTF is a header only C++11 glTF 2.0 library.}
-
 Name:           tinygltf
 Version:        3.0.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Header only C++11 tiny glTF 2.0 library
-
 License:        MIT
 URL:            https://github.com/syoyo/tinygltf
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/syoyo/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  catch1-devel
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
+BuildRequires:  json-devel
 BuildRequires:  make
 BuildRequires:  sed
-
-BuildRequires:  catch1-devel
-BuildRequires:  json-devel
-# Minimum version to contain fixes for upstream issues
-# https://github.com/nothings/stb/issues/1860
-# https://github.com/nothings/stb/issues/1861
-BuildRequires:  stb_image-devel >= 2.30^20251025gitf1c79c0-2
+BuildRequires:  stb_image-devel
 BuildRequires:  stb_image_write-devel
-
+# /oreon:deps
 %description    %{common_description}
 
 %package        devel
@@ -41,17 +32,16 @@ Requires:       cmake-filesystem
 Requires:       json-devel
 Requires:       stb_image-devel >= 2.30^20251025gitf1c79c0-2
 Requires:       stb_image_write-devel
-
 %description    devel %{common_description}
 
 %package        examples
 Summary:        Examples for %{name}
-
 %description    examples %{common_description}
 
 This package provides examples exercising %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -82,34 +72,27 @@ sed -i tests/Makefile \
   -e 's:-O0:%{build_cxxflags} %{build_ldflags}:g'
 
 %build
+
 %cmake -DTINYGLTF_HEADER_ONLY=ON
 %cmake_build
 %make_build -C tests
-
 %install
 %cmake_install
-
-# Install the examples
 install -Dpm0755 %{_vpath_builddir}/loader_example \
   %{buildroot}%{_bindir}/%{name}_loader_example
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with tests}
 %check
+
 for t in tester tester_noexcept; do
   echo "Running $t"
   (cd tests && ./"$t")
 done
 %endif
-
-%files devel
-%license LICENSE
-%doc README.md
-%{_includedir}/tiny_gltf.h
-%{_libdir}/cmake/%{name}/
-
-%files examples
-%license LICENSE
-%{_bindir}/%{name}_loader_example
+%files -f %{oreon_filedir}/main.list
+%files -n tinygltf-devel -f %{oreon_filedir}/tinygltf-devel.list
+%files -n tinygltf-examples -f %{oreon_filedir}/tinygltf-examples.list
 
 %changelog
+
 %autochangelog

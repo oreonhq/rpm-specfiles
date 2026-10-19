@@ -1,41 +1,26 @@
 %global source0_hash c16cbd1d5494b1b058b787ef936fa483ac2f3ce92657372c92b3dbf153750457
-
 Name:           festival-freebsoft-utils
 Version:        0.10
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Utilities that enhance Festival with some useful features
-
 BuildArch:      noarch
-
 License:        GPL-2.0-or-later
-# The documentation is dual-licensed.
 %global doc_license GPL-2.0-or-later OR GFDL-1.2-no-invariants-or-later
 SourceLicense:  %{license} AND %{doc_license}
 URL:            https://www.freebsoft.org/festival-freebsoft-utils
-Source:         https://freebsoft.org/pub/projects/%{name}/%{name}-%{version}.tar.gz
-
-# Fix a section level error in fdl.texi
-# https://github.com/brailcom/festival-freebsoft-utils/pull/1
+Source0:        https://freebsoft.org/pub/projects/%{name}/%{name}-%{version}.tar.gz
 Patch:          https://github.com/brailcom/festival-freebsoft-utils/pull/1.patch
-
-# We don’t actually need any of these to build, but BR’ing our runtime
-# dependencies makes sure we don’t build a package that will fail to install.
-BuildRequires:  festival
-BuildRequires:  sox
-BuildRequires:  /usr/bin/iconv
-
 Requires:       festival
-# From docs/festival-freebsoft-utils.texi:
-#   Having SoX (@url{http://sox.sourceforge.net}) installed is strongly
-#   recommended, many festival-freebsoft-utils functions don't work without it.
 Recommends:     sox
-# From docs/festival-freebsoft-utils.texi:
-#   As Festival does not support UTF-8 encoding, festival-freebsoft-utils uses
-#   the iconv utility for character coding conversions.
-# Note that this is currently provided by glibc-common, so it should be
-# available even without the explicit dependency.
 Recommends:     /usr/bin/iconv
-
+# oreon:deps
+BuildRequires:  /usr/bin/iconv
+BuildRequires:  festival
+BuildRequires:  make
+BuildRequires:  sox
+BuildRequires:  tex(latex)
+BuildRequires:  texinfo-tex
+# /oreon:deps
 %description
 A collection of utilities that enhance Festival with some useful features. They
 provide all that is needed for interaction with Speech Dispatcher.
@@ -61,47 +46,29 @@ Key festival-freebsoft-utils features are:
 %package doc
 Summary:        Documentation for festival-freebsoft-utils
 License:        %{doc_license}
-
 BuildRequires:  make
 BuildRequires:  texinfo-tex
 BuildRequires:  tex(latex)
-
 %description doc
 Documentation for festival-freebsoft-utils in info, PDF, and HTML formats.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-# Remove pre-built info page
-%make_build clean
-# Build info, PDF, and HTML docs from the texinfo sources.
-%make_build info pdf html
 
+%make_build clean
+%make_build info pdf html
 %install
 install -t '%{buildroot}/%{_datadir}/festival' -D -p -m 0644 *.scm
 install -t '%{buildroot}/%{_infodir}' -D -p -m 0644 doc/*.info
 install -t '%{buildroot}/%{_pkgdocdir}' -D -p -m 0644 \
     doc/*.pdf doc/*.html ANNOUNCE NEWS README
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# Upstream does not provide any tests.
-
-%files
-%license COPYING
-%{_datadir}/festival/*.scm
-
-%files doc
-%license COPYING
-%doc %{_pkgdocdir}/ANNOUNCE
-%doc %{_pkgdocdir}/NEWS
-%doc %{_pkgdocdir}/README
-
-%doc %{_pkgdocdir}/festival-freebsoft-utils.pdf
-%doc %{_pkgdocdir}/festival-freebsoft-utils.html
-
-%doc %{_infodir}/festival-freebsoft-utils.info*
+%files -f %{oreon_filedir}/main.list
+%files -n festival-freebsoft-utils-doc -f %{oreon_filedir}/festival-freebsoft-utils-doc.list
 
 %changelog
+
 %autochangelog

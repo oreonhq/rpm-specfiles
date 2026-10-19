@@ -1,9 +1,8 @@
 %global source0_hash 442c29528e34fefc946dd356fcf8240e1953aed89eb5597fc55898d3d06f183f
-
 Name:		mod_fcgid
 Version:	2.3.9
-Release:	37%{?dist}
-Summary:	FastCGI interface module for Apache 2
+Release:        37%{?dist}
+Summary:        FastCGI interface module for Apache 2
 License:	Apache-2.0
 URL:		http://httpd.apache.org/mod_fcgid/
 Source0:        http://www.apache.org/dist/httpd/mod_fcgid/mod_fcgid-%{version}.tar.bz2
@@ -14,22 +13,20 @@ Source5:	fcgid24.conf
 Patch0:		mod_fcgid-2.3.4-fixconf-shellbang.patch
 Patch1:		mod_fcgid-2.3.9-segfault-upload.patch
 Patch2:		mod_fcgid-2.3.9-r1848298.patch
-BuildRequires:	coreutils
-BuildRequires:	gcc
-BuildRequires:	httpd-devel >= 2.4
-BuildRequires:	make
-BuildRequires:	pkgconfig
-BuildRequires:	sed
-# systemd-rpm-macros needed for definition of %%{_tmpfilesdir}
 %if (0%{?fedora} && 0%{?fedora} <= 30) || (0%{?oreon} >= 11)
-BuildRequires:	systemd
 %else
-BuildRequires:	systemd-rpm-macros
 %endif
 Requires:	httpd-mmn
-# systemd needed for ownership of %%{_tmpfilesdir}
 Requires:	systemd
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  gcc
+BuildRequires:  httpd-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  sed
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 mod_fcgid is a binary-compatible alternative to the Apache module mod_fastcgi.
 mod_fcgid has a new process management strategy, which concentrates on reducing
@@ -37,6 +34,7 @@ the number of fastcgi servers, and kicking out corrupt fastcgi servers as soon
 as possible.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 cp -p %{SOURCE2} README.RPM
@@ -52,36 +50,23 @@ cp -p %{SOURCE5} fcgid24.conf
 %patch -P 2 -p1 -b .r1848298
 
 %build
+
 APXS=%{_httpd_apxs} ./configure.apxs
 make
-
 %install
 %make_install MKINSTALLDIRS="mkdir -p"
 mkdir -p %{buildroot}{%{_httpd_confdir},%{_httpd_modconfdir}}
 echo "LoadModule fcgid_module modules/mod_fcgid.so" > %{buildroot}%{_httpd_modconfdir}/10-fcgid.conf
 install -D -m 644 fcgid24.conf %{buildroot}%{_httpd_confdir}/fcgid.conf
 install -d -m 755 %{buildroot}/run/mod_fcgid
-
-# Include the manual as %%doc, don't need it elsewhere
 rm -rf %{buildroot}%{_httpd_contentdir}/manual
-
-# Make sure /run/mod_fcgid exists at boot time (#656625)
 install -d -m 755 %{buildroot}%{_tmpfilesdir}
 install -p -m 644 %{SOURCE4} %{buildroot}%{_tmpfilesdir}/mod_fcgid.conf
+%oreon_autofiles main
 
-%files
-%license LICENSE-FCGID
-%doc README.RPM README.SELinux
-# mod_fcgid.html.en is explicitly encoded as ISO-8859-1
-%doc CHANGES-FCGID NOTICE-FCGID README-FCGID STATUS-FCGID
-%doc docs/manual/mod/mod_fcgid.html.en modules/fcgid/ChangeLog
-%doc build/fixconf.sed
-%{_libdir}/httpd/modules/mod_fcgid.so
-%config(noreplace) %{_httpd_modconfdir}/10-fcgid.conf
-%config(noreplace) %{_httpd_confdir}/fcgid.conf
-%{_tmpfilesdir}/mod_fcgid.conf
-%dir %attr(0775,root,apache) /run/mod_fcgid/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.9-37
 - Import

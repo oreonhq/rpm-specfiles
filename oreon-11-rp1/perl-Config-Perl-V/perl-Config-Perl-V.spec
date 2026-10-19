@@ -1,5 +1,4 @@
 %global source0_hash fd03a3ead6a71041d429a488309383fc13e171129b69503f7e91f4c329acfcdc
-
 Name:           perl-Config-Perl-V
 Version:        0.40
 Release:        1%{?dist}
@@ -7,30 +6,26 @@ Summary:        Structured data retrieval of perl -V output
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Config-Perl-V
 Source0:        https://cpan.metacpan.org/authors/id/H/HM/HMBRAND/Config-Perl-V-%{version}.tgz
-# Correct example
 Patch0:         Config-Perl-V-0.24-Remove-invalid-shellbang.patch
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-# Run-time:
-BuildRequires:  perl(Config)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(warnings)
-# Optional run-time:
-BuildRequires:  perl(Digest::MD5)
-# Tests:
-BuildRequires:  perl(Test::More)
 %if !%{defined perl_bootstrap}
-# Building core modules must not require non-core modules when bootstrapping
-BuildRequires:  perl(Test::NoWarnings)
 %endif
 Suggests:       perl(Digest::MD5)
 Conflicts:      perl < 4:5.22.0-347
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Digest::MD5)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::NoWarnings)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The command "perl -V" will return you an excerpt from the %%Config::Config
 hash combined with the output of "perl -V" that is not stored inside the hash,
@@ -45,12 +40,12 @@ Requires:       perl-Test-Harness
 Requires:       perl(Digest::MD5)
 Requires:       perl(Test::NoWarnings)
 %endif
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Config-Perl-V-%{version}
 %patch -P0 -p1
@@ -62,35 +57,27 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
-# Building core modules must not require non-core modules when bootstrapping
 make test PERL_CORE=%{defined perl_bootstrap}
-
-%files
-%doc Changelog CONTRIBUTING.md examples README
-%dir %{perl_vendorlib}/Config
-%{perl_vendorlib}/Config/Perl
-%{_mandir}/man3/Config::Perl::V*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Config-Perl-V-tests -f %{oreon_filedir}/perl-Config-Perl-V-tests.list
 
 %changelog
+
 %autochangelog

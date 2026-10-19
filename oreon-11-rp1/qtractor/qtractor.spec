@@ -1,59 +1,45 @@
-%global source0_hash c1712c32e49c625f97e5b35d7677f0765269594b5e9ef37241f023f716435cd8
-
+%global source0_hash ad78e20f2b525dbf9a4996550124a4cc6beabe4c5a08576e05241651710a92ef
 Name:           qtractor
 Version:        1.6.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Audio/MIDI multi-track sequencer
 License:        GPL-2.0-or-later
 URL:            https://www.qtractor.org
 Source0:        https://download.sourceforge.net/qtractor/qtractor-%{version}.tar.gz
-# https://bugzilla.redhat.com/show_bug.cgi?id=2385565
 Patch0:         0001-cmake-jack-libs.patch
-
-BuildRequires:  gcc-c++
+Requires:       hicolor-icon-theme
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  ninja-build
-
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6LinguistTools)
+BuildRequires:  cmake(Qt6Network)
+BuildRequires:  cmake(Qt6Svg)
 BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6Xml)
-BuildRequires:  cmake(Qt6Svg)
-BuildRequires:  cmake(Qt6Network)
-BuildRequires:  cmake(Qt6LinguistTools)
-
-BuildRequires:  pkgconfig(jack)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  ladspa-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(alsa)
+BuildRequires:  pkgconfig(aubio)
+BuildRequires:  pkgconfig(dssi)
+BuildRequires:  pkgconfig(jack)
+BuildRequires:  pkgconfig(liblo)
+BuildRequires:  pkgconfig(lilv-0)
+BuildRequires:  pkgconfig(lv2)
+BuildRequires:  pkgconfig(mad)
+BuildRequires:  pkgconfig(ogg)
+BuildRequires:  pkgconfig(rubberband)
+BuildRequires:  pkgconfig(samplerate)
 BuildRequires:  pkgconfig(sndfile)
 BuildRequires:  pkgconfig(vorbis)
 BuildRequires:  pkgconfig(vorbisenc)
 BuildRequires:  pkgconfig(vorbisfile)
-BuildRequires:  pkgconfig(ogg)
-BuildRequires:  pkgconfig(mad)
-BuildRequires:  pkgconfig(samplerate)
-BuildRequires:  pkgconfig(rubberband)
-BuildRequires:  pkgconfig(aubio)
-BuildRequires:  pkgconfig(liblo)
-BuildRequires:  pkgconfig(zlib)
 BuildRequires:  pkgconfig(xcb)
-BuildRequires:  pkgconfig(lv2)
-BuildRequires:  pkgconfig(lilv-0)
-
-# disable for Qt6
-#BuildRequires:  pkgconfig(suil-0)
-
-# https://github.com/rncbc/qtractor/issues/431
-#BuildRequires:  pkgconfig(gtk+-2.0)
-#BuildRequires:  pkgconfig(gtkmm-2.4)
-
-BuildRequires:  ladspa-devel
-BuildRequires:  pkgconfig(dssi)
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-
-Requires:       hicolor-icon-theme
-
+BuildRequires:  pkgconfig(zlib)
+# /oreon:deps
 %description
 Qtractor is an Audio/MIDI multi-track sequencer application written in C++ with
 the Qt framework. Target platform is Linux, where the Jack Audio Connection Kit
@@ -63,10 +49,9 @@ workstation GUI, specially dedicated to the personal home-studio.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake \
     -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
@@ -79,30 +64,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -DCONFIG_LV2_UI_GTK2=OFF \
     -DCONFIG_LV2_UI_GTKMM2=OFF
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --with-qt
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainfo.xml
-
-%files -f %{name}.lang
-%doc ChangeLog README
-%license LICENSE
-%{_bindir}/%{name}
-%{_libdir}/%{name}
-%{_datadir}/applications/org.rncbc.qtractor.desktop
-%{_datadir}/icons/hicolor/*/*/*
-%{_datadir}/mime/packages/org.rncbc.qtractor.xml
-%{_datadir}/man/man1/%{name}*
-%{_datadir}/man/*/man1/%{name}*
-%{_datadir}/metainfo/org.rncbc.qtractor.metainfo.xml
-%dir %{_datadir}/qtractor
-%{_datadir}/qtractor/audio/
-%{_datadir}/qtractor/instruments/
-%{_datadir}/qtractor/palette/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,18 +1,10 @@
+%global source4_hash efaafbc1cbe97852157319bfb98bf1b43c70223251d388507c168697afd832c6
+%global source1_hash 1f4b69b78b20f6e8432a873c98b545ee0b20a6b66fa9a0dcc6856b05336d405f
 %global source0_hash b98e9c5239b2b9e9df2b78c05afba0b186b9aa0f2b6e7bd1659eaa03f8367d93
-
 Name:           fop
 Summary:        XSL-driven print formatter
 Version:        2.11
-Release:        %autorelease
-# ASL 1.1:
-# several files in fop-core/src/main/resources/org/apache/fop/render/awt/viewer/resources
-# * Viewer_cs.properties
-# * Viewer_fi.properties
-# * Viewer_ja.properties
-# * Viewer_pl.properties
-# * Viewer_ru.properties
-# * Viewer_tr.properties
-# rest is ASL 2.0
+Release:        1%{?dist}
 License:        Apache-2.0 AND Apache-1.1
 URL:            https://xmlgraphics.apache.org/fop
 Source0:        https://www.apache.org/dist/xmlgraphics/%{name}/source/%{name}-%{version}-src.tar.gz
@@ -25,21 +17,18 @@ Patch1:         0001-Main.patch
 Patch2:         0002-Use-sRGB.icc-color-profile-from-colord-package.patch
 Patch3:         0003-Port-to-QDox-2.0.patch
 Patch4:         0004-jdk25.patch
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Requires:       java-25
 Requires:       xalan-j2 >= 2.7.0
 Requires:       xml-commons-apis >= 1.3.04
-BuildRequires:  bouncycastle-pkix
-# Explicit requires for javapackages-tools since fop script
-# uses /usr/share/java-utils/java-functions
 Requires:       javapackages-tools
-
+# oreon:deps
 BuildRequires:  apache-commons-io
 BuildRequires:  apache-commons-logging
 BuildRequires:  batik
+BuildRequires:  bouncycastle-pkix
+BuildRequires:  build-helper-maven-plugin
 BuildRequires:  fontbox
 BuildRequires:  gnupg2
 BuildRequires:  javapackages-local-openjdk25
@@ -48,19 +37,15 @@ BuildRequires:  maven-antrun-plugin
 BuildRequires:  maven-assembly-plugin
 BuildRequires:  maven-clean-plugin
 BuildRequires:  maven-local-openjdk25
-BuildRequires:  build-helper-maven-plugin
 BuildRequires:  mvn(javax.servlet:servlet-api)
-BuildRequires:  bouncycastle-pkix
-# For servlet, not packaged
-#BuildRequires:  maven-war-plugin
 BuildRequires:  pdfbox
 BuildRequires:  qdox
 BuildRequires:  xml-maven-plugin
-BuildRequires:  xmlgraphics-commons >= 2.8
+BuildRequires:  xmlgraphics-commons
 BuildRequires:  xmlunit
 BuildRequires:  xmlunit-assertj
 BuildRequires:  xmlunit-core
-
+# /oreon:deps
 %description
 FOP is the world's first print formatter driven by XSL formatting
 objects. It is a Java application that reads a formatting object tree
@@ -71,11 +56,11 @@ XT) SAX events.
 
 %package javadoc
 Summary:        Javadoc for %{name}
-
 %description    javadoc
 Javadoc for %{name}.
 
 %prep
+
 %{gpgverify} --keyring='%{SOURCE5}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
@@ -100,36 +85,23 @@ rm -f fop/lib/*.jar fop/lib/build/*.jar
 rm fop-core/src/main/java/org/apache/fop/util/bitmap/JAIMonochromeBitmapConverter.java
 
 %build
-# Skip tests for now, make dirs needed by build but created by tests
+
 mkdir -p fop-events/target/test-classes
 %mvn_build -f
-
 %install
 %mvn_install
-# inject OSGi manifest
 jar ufm %{buildroot}%{_javadir}/%{name}/%{name}.jar %{SOURCE3}
-
-# script
 install -d -m 755 %{buildroot}%{_bindir}
 install -p -m 755 %{SOURCE2} %{buildroot}%{_bindir}/fop
-
-# data
 install -d -m 755 %{buildroot}%{_datadir}/%{name}/conf
 cp -rp fop/conf/* %{buildroot}%{_datadir}/%{name}/conf
-
-# javadoc
 install -d -m 755 %{buildroot}%{_javadocdir}/%{name}
 cp -rp target/xmvn-apidocs/* %{buildroot}%{_javadocdir}/%{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc README NOTICE
-%license LICENSE LICENSE-1.1
-%{_datadir}/%{name}
-%{_bindir}/fop
-
-%files javadoc
-%doc %{_javadocdir}/%{name}
-%license LICENSE LICENSE-1.1
+%files -f %{oreon_filedir}/main.list
+%files -n fop-javadoc -f %{oreon_filedir}/fop-javadoc.list
 
 %changelog
+
 %autochangelog

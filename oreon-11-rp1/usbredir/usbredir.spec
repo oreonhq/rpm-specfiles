@@ -1,5 +1,4 @@
 %global source0_hash 6dc2a380277688a068191245dac2ab7063a552999d8ac3ad8e841c10ff050961
-
 Name:           usbredir
 Version:        0.15.0
 Release:        3%{?dist}
@@ -7,13 +6,15 @@ Summary:        USB network redirection protocol libraries
 License:        LGPL-2.1-or-later
 URL:            https://www.spice-space.org/usbredir.html
 Source0:        https://www.spice-space.org/download/%{name}/%{name}-%{version}.tar.xz
-BuildRequires:  gnupg2
-BuildRequires:  gcc g++
-BuildRequires:  glib2-devel
-BuildRequires:  libusb1-devel >= 1.0.9
+# oreon:deps
+BuildRequires:  g++
+BuildRequires:  gcc
 BuildRequires:  git-core
+BuildRequires:  glib2-devel
+BuildRequires:  gnupg2
+BuildRequires:  libusb1-devel
 BuildRequires:  meson
-
+# /oreon:deps
 %description
 The usbredir libraries allow USB devices to be used on remote and/or virtual
 hosts over TCP.  The following libraries are provided:
@@ -28,65 +29,41 @@ All that an application wishing to implement a USB host needs to do is:
 * Provide write and read callbacks for the actual transport of usbredir data
 * Monitor for usbredir and libusb read/write events and call their handlers
 
-
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %package        tools
 Summary:        usbredir utility tools
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    tools
 Includes usbredirect that uses libusbredirhost to export an USB device for use
 in another (virtual) machine
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am
-
-
+%oreon_prep
 %build
+
 %meson \
     -Dgit_werror=disabled \
     -Dtools=enabled \
     -Dfuzzing=disabled
-
 %meson_build
-
-
 %install
 %meson_install
-
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-
-%files
-%{!?_licensedir:%global license %%doc}
-%license COPYING.LIB
-%{_libdir}/libusbredir*.so.*
-
-%files devel
-%doc docs/usb-redirection-protocol.md docs/multi-thread.md ChangeLog.md TODO
-%{_includedir}/usbredir*.h
-%{_libdir}/libusbredir*.so
-%{_libdir}/pkgconfig/libusbredir*.pc
-
-%files tools
-%{!?_licensedir:%global license %%doc}
-%license COPYING
-%{_bindir}/usbredirect
-%{_mandir}/man1/usbredirect.1*
-
+%files -f %{oreon_filedir}/main.list
+%files -n usbredir-devel -f %{oreon_filedir}/usbredir-devel.list
+%files -n usbredir-tools -f %{oreon_filedir}/usbredir-tools.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.15.0-3
 - Import

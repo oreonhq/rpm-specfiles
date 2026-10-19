@@ -1,21 +1,20 @@
-%global source0_hash ecacfc7f18d87f4ff503198177e51a83316b59b4646f31caa8140fdbfaa40389
-
+%global source0_hash c40d33acd97b89c2e943bfd839c19b69e5a7a5997052e2fc9a595602745c0465
 Name:           openfortivpn
 Version:        1.24.1
 Release:        1%{?dist}
 Summary:        Client for PPP+SSL VPN tunnel services
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://github.com/adrienverge/openfortivpn
 Source0:        https://github.com/adrienverge/openfortivpn/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires: make
-BuildRequires:  gcc autoconf automake
+Requires:       ppp
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  make
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(systemd)
-Requires:       ppp
-
+# /oreon:deps
 %description
 openfortivpn is a client for PPP+SSL VPN tunnel services. It spawns a pppd
 process and operates the communication between the gateway and this process.
@@ -23,27 +22,22 @@ process and operates the communication between the gateway and this process.
 It is compatible with Fortinet VPNs.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 autoreconf -fi
 %configure --enable-resolvconf --with-resolvconf=/usr/sbin/resolvconf
 make %{?_smp_mflags} V=1
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%{_bindir}/openfortivpn
-%{_mandir}/man1/openfortivpn.1*
-%{_datadir}/openfortivpn
-%{_unitdir}/openfortivpn@.service
-%dir %{_sysconfdir}/openfortivpn
-%config(noreplace) %{_sysconfdir}/openfortivpn/config
-%doc README.md
-%license LICENSE LICENSE.OpenSSL
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

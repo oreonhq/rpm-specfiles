@@ -1,38 +1,23 @@
 %global source0_hash 9874b69aec9cfe6331970eb2271f7c24e5433ba696c1a9ea5a429862b62338ab
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %ifarch %{ocaml_native_compiler}
-# The only source file for this package consists of a single "include" line.
-# It exports some private functions from the library in ocaml-base.  Although
-# debuginfo is generated, it is tagged with the file names from ocaml-base,
-# rather than the single 1-line source file in this project.  That leads to
-# this error:
-#
-# Processing files: ocaml-variantslib-debugsource-0.13.0-1.fc32.x86_64
-# error: Empty %%files file /builddir/build/BUILD/variantslib-0.13.0/debugsourcefiles.list
-#
-# Do not try to gather debug sources to workaround the problem.
 %undefine _debugsource_packages
 %else
 %global debug_package %{nil}
 %endif
-
 Name:           ocaml-variantslib
 Version:        0.17.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        OCaml variants as first class values
-
 License:        MIT
 URL:            https://github.com/janestreet/variantslib
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/variantslib-%{version}.tar.gz
-
-BuildRequires:  ocaml >= 5.1.0
-BuildRequires:  ocaml-base-devel >= 0.17
-BuildRequires:  ocaml-dune >= 3.11.0
-
+Source0:        https://github.com/janestreet/variantslib/archive/v%{version}/variantslib-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-base-devel
+BuildRequires:  ocaml-dune
+# /oreon:deps
 %description
 This package contains an OCaml syntax extension to define first class values
 representing variants.
@@ -41,30 +26,27 @@ representing variants.
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ocaml-base-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n variantslib-%{version}
-
+%global oreon_srcdir variantslib-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%doc CHANGES.md
-%license LICENSE.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-variantslib-devel -f %{oreon_filedir}/ocaml-variantslib-devel.list
 
 %changelog
+
 %autochangelog

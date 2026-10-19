@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 636e10bc0efba784a2c88c672334674da06be96039abf65744710860312b0a26
 Name:           python-ly
 Version:        1.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        This is just a test module
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://pypi.org/project/ly/
-Source:         %{pypi_source ly}
-
+Source0:        https://files.pythonhosted.org/packages/source/l/ly/ly-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ly' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-ly = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ly
-Summary:        %{summary}
-
-%description -n python3-ly %_description
-
+Summary:        This is just a test module
+%description -n python3-ly
 
 %prep
-%autosetup -p1 -n ly-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ly-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ly usr/lib/python3*/site-packages/ly* usr/lib64/python3*/site-packages/ly* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ly* usr/lib64/python3*/site-packages/ly* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ly -f %{pyproject_files}
+%files
+%files -n python3-ly -f %{oreon_filedir}/python3-ly.list
 
 %changelog
+
 %autochangelog

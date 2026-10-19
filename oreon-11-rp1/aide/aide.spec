@@ -1,56 +1,52 @@
 %global source0_hash 47ab7c696f0745911479a41f90d7ad99d26536e186d66c4aad093bc72d20ff5f
-
 %global source2_key_fpr 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931
-
 Summary:        Intrusion detection environment
 Name:           aide
 Version:        0.19.4
-Release:        %autorelease
+Release:        1%{?dist}
 URL:            https://github.com/aide/aide
 License:        GPL-2.0-or-later
-
 Source0:        https://github.com/aide/aide/releases/download/v%{version}/aide-%{version}.tar.gz
 Source1:        aide-%{version}.tar.gz.asc
-# gpg2 --recv-keys 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931
-# gpg2 --export --export-options export-minimal 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931 >gpgkey-aide.gpg
 Source2:        gpgkey-aide.gpg
 Source3:        aide.conf
 Source4:        README.quickstart
 Source5:        aide.logrotate
-
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  bison flex
-BuildRequires:  pcre2-devel
-BuildRequires:  libgpg-error-devel nettle-devel
-BuildRequires:  zlib-devel
-BuildRequires:  libcurl-devel
-BuildRequires:  libacl-devel
-BuildRequires:  pkgconfig(libselinux)
-BuildRequires:  libattr-devel
-BuildRequires:  e2fsprogs-devel
-BuildRequires:  audit-libs-devel
-BuildRequires:  autoconf automake libtool
-# For verifying signatures
-BuildRequires:  gnupg2
-# For being able to run 'make check'
-BuildRequires:  check-devel
-
-
 Requires:       logrotate
-
+# oreon:deps
+BuildRequires:  audit-libs-devel
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  check-devel
+BuildRequires:  e2fsprogs-devel
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  libacl-devel
+BuildRequires:  libattr-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libgpg-error-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  nettle-devel
+BuildRequires:  pcre2-devel
+BuildRequires:  pkgconfig(libselinux)
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 AIDE (Advanced Intrusion Detection Environment) is a file integrity
 checker and intrusion detection program.
 
 %prep
+
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 cp -a %{SOURCE4} .
 
 %build
-#autoreconf -ivf
+
 %configure  \
   --disable-static \
   --with-config_file=%{_sysconfdir}/aide.conf \
@@ -64,29 +60,20 @@ cp -a %{SOURCE4} .
   --with-e2fsattrs \
   --with-audit
 %make_build
-
 %check
-make check
 
+make check
 %install
 %make_install bindir=%{_sbindir}
 install -Dpm0644 -t %{buildroot}%{_sysconfdir} %{SOURCE3}
 install -Dpm0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/logrotate.d/aide
 mkdir -p %{buildroot}%{_localstatedir}/log/aide
 mkdir -p -m0700 %{buildroot}%{_localstatedir}/lib/aide
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc AUTHORS ChangeLog NEWS README
-%doc README.quickstart
-%{_sbindir}/aide
-%{_mandir}/man1/*.1*
-%{_mandir}/man5/*.5*
-%config(noreplace) %attr(0600,root,root) %{_sysconfdir}/aide.conf
-%config(noreplace) %{_sysconfdir}/logrotate.d/aide
-%dir %attr(0700,root,root) %{_localstatedir}/lib/aide
-%dir %attr(0700,root,root) %{_localstatedir}/log/aide
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.2-1
 - Prepare for Oreon 11 (RP1)

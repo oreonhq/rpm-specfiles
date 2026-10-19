@@ -1,26 +1,20 @@
 %global source0_hash 949e3fdcad406a63075811ab1b11afcc4afddc035fbc69a3acfc8b655b82e9a5
-
 Name:      spatialindex2.0
 Version:   2.0.0
-Release:   3%{?dist}
+Release:        3%{?dist}
 %global so_version 7
-Summary:   Spatial index 2.0 compatibility library
-
+Summary:        Spatial index 2.0 compatibility library
 License:   MIT
 URL:       https://libspatialindex.org
-Source:    https://github.com/libspatialindex/libspatialindex/releases/download/%{version}/spatialindex-src-%{version}.tar.bz2
-
-# Support testing with a system/external copy of GTest
-# https://github.com/libspatialindex/libspatialindex/pull/270
+Source0:        https://github.com/libspatialindex/libspatialindex/releases/download/%{version}/spatialindex-src-%{version}.tar.bz2
 Patch:          https://github.com/libspatialindex/libspatialindex/pull/270.patch
-
-BuildRequires:  make
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(GTest)
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  cmake
-
-BuildRequires:  cmake(GTest)
-
+BuildRequires:  make
+# /oreon:deps
 %description
 Spatialindex 2.0 compatibility library.
 
@@ -28,11 +22,11 @@ Spatialindex 2.0 compatibility library.
 Summary: Development files for %{name}
 Requires:  %{name}%{?_isa} = %{version}-%{release}
 Conflicts: spatialindex-devel
-
 %description devel
 Development files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n spatialindex-src-%{version} -p1
@@ -56,25 +50,18 @@ rm -rv test/gtest/gtest-*
     -DCMAKE_CXX_STANDARD=17
 
 %build
-%cmake_build
 
+%cmake_build
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license COPYING
-%doc AUTHORS ChangeLog CITATION.cff
-
-%{_libdir}/libspatialindex{,_c}.so.%{so_version}{,.*}
-
-%files devel
-%{_includedir}/spatialindex/
-%{_libdir}/libspatialindex{,_c}.so
-%{_libdir}/cmake/libspatialindex/
-%{_libdir}/pkgconfig/libspatialindex.pc
+%files -f %{oreon_filedir}/main.list
+%files -n spatialindex2.0-devel -f %{oreon_filedir}/spatialindex2.0-devel.list
 
 %changelog
+
 %autochangelog

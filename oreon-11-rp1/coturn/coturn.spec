@@ -1,10 +1,8 @@
-%global source0_hash e01c0701792231d67768e0e314ebad6395501759ea56772dc7e36d3badec5549
-
+%global source0_hash 28d55294ac596fbd129b293a85e7bb1c5dc4bd15b7fb55c500f355149e5f4e28
 Name:           coturn
 Version:        4.18.0
 Release:        1%{?dist}
 Summary:        TURN/STUN & ICE Server
-# MIT (src/{apps/relay/acme.c,server/ns_turn_khash.h} and BSD-3-Clause (the rest)
 License:        BSD-3-Clause AND MIT
 URL:            https://github.com/coturn/coturn/
 Source0:        https://github.com/coturn/coturn/archive/%{version}/%{name}-%{version}.tar.gz
@@ -13,20 +11,6 @@ Source2:        coturn.tmpfilesd
 Source3:        coturn.logrotate
 Source4:        coturn.sysusersd
 Patch0:         coturn-4.9.0-openssl-1.1.patch
-BuildRequires:  gcc
-BuildRequires:  hiredis-devel
-BuildRequires:  libevent-devel >= 2.0.0
-BuildRequires:  libpq-devel
-BuildRequires:  make
-BuildRequires:  mariadb-connector-c-devel
-%if 0%{?fedora} || 0%{?rhel} >= 9
-BuildRequires:  openssl-devel >= 3
-%else
-BuildRequires:  openssl-devel >= 1.1.1
-%endif
-BuildRequires:  sqlite-devel
-BuildRequires:  systemd-devel
-BuildRequires:  systemd-rpm-macros
 Recommends:     perl-interpreter
 Recommends:     perl(DBI)
 Recommends:     perl(HTTP::Request::Common)
@@ -36,7 +20,18 @@ Recommends:     telnet
 Provides:       turnserver = %{version}
 %{?systemd_requires}
 %{?sysusers_requires_compat}
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  hiredis-devel
+BuildRequires:  libevent-devel
+BuildRequires:  libpq-devel
+BuildRequires:  make
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  openssl-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  systemd-devel
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 The Coturn TURN Server is a VoIP media traffic NAT traversal server and gateway.
 It can be used as a general-purpose network traffic TURN server/gateway, too.
@@ -87,23 +82,21 @@ combination of them):
 
 %package utils
 Summary:        Coturn utils
-
 %description utils
 This package contains the TURN client utils.
 
 %package client-libs
 Summary:        TURN client static library
-
 %description client-libs
 This package contains the TURN client static library.
 
 %package client-devel
 Summary:        Coturn client development headers
-
 %description client-devel
 This package contains the TURN client development headers.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -116,6 +109,7 @@ sed -i \
     src/apps/uclient/mainuclient.c
 
 %build
+
 %configure \
     --confdir=%{_sysconfdir}/%{name} \
     --examplesdir=%{_docdir}/%{name} \
@@ -125,7 +119,6 @@ sed -i \
     --turndbdir=%{_localstatedir}/lib/%{name} \
     --disable-rpath
 %make_build
-
 %install
 %make_install
 mkdir -p %{buildroot}{%{_sysconfdir}/pki/coturn/{public,private},{%{_rundir},%{_localstatedir}/{lib,log}}/%{name}}
@@ -142,91 +135,37 @@ sed -i \
     %{buildroot}%{_sysconfdir}/%{name}/turnserver.conf.default
 touch -c -r examples/etc/turnserver.conf %{buildroot}%{_sysconfdir}/%{name}/turnserver.conf.default
 mv -f %{buildroot}%{_sysconfdir}/%{name}/turnserver.conf{.default,}
-
-# Remove generated SQLite database, certificate and key
 rm -f %{buildroot}%{_localstatedir}/lib/%{name}/turndb
 rm -f %{buildroot}%{_docdir}/%{name}/etc/{cacert,turn_{client,server}_{cert,pkey}}.pem
 rm -f %{buildroot}%{_docdir}/%{name}/etc/coturn.service
+%oreon_autofiles coturn-utils usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles coturn-client-libs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles coturn-client-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-make test
 
-# Check if turnserver is really linked against MariaDB, PostgreSQL and systemd,
-# because ./configure unfortunately has no proper failure mechanism...
+make test
 ldd %{buildroot}%{_bindir}/turnserver | grep -q libmariadb.so
 ldd %{buildroot}%{_bindir}/turnserver | grep -q libpq.so
 ldd %{buildroot}%{_bindir}/turnserver | grep -q libsystemd.so
-
 %pre
+
 %sysusers_create_compat %{SOURCE4}
-
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
+
 %systemd_postun_with_restart %{name}.service
-
-%files
-%license LICENSE
-%{_bindir}/turnserver
-%{_bindir}/turnadmin
-%dir %{_datadir}/%{name}/
-%{_datadir}/%{name}/*.redis
-%{_datadir}/%{name}/*.sql
-%{_datadir}/%{name}/*.sh
-%dir %{_docdir}/%{name}/
-%{_docdir}/%{name}/README.*
-%exclude %{_docdir}/%{name}/README.turnutils
-%exclude %{_docdir}/%{name}/INSTALL
-%exclude %{_docdir}/%{name}/LICENSE
-%exclude %{_docdir}/%{name}/postinstall.txt
-%dir %{_docdir}/%{name}/etc/
-%doc %{_docdir}/%{name}/etc/turnserver.conf
-%dir %{_docdir}/%{name}/scripts/
-%dir %{_docdir}/%{name}/scripts/*/
-%{_docdir}/%{name}/scripts/*.sh
-%{_docdir}/%{name}/scripts/readme.txt
-%doc %{_docdir}/%{name}/scripts/*/*
-%{_mandir}/man1/%{name}.1.*
-%{_mandir}/man1/turnserver.1.*
-%{_mandir}/man1/turnadmin.1.*
-%dir %attr(0750,root,%{name}) %{_sysconfdir}/%{name}/
-%config(noreplace) %attr(0640,root,%{name}) %{_sysconfdir}/%{name}/turnserver.conf
-%dir %{_sysconfdir}/pki/%{name}/
-%dir %{_sysconfdir}/pki/%{name}/public/
-%dir %attr(0750,root,%{name}) %{_sysconfdir}/pki/%{name}/private/
-%{_unitdir}/%{name}.service
-%{_tmpfilesdir}/%{name}.conf
-%{_sysusersdir}/%{name}.conf
-%dir %attr(0750,%{name},%{name}) %{_rundir}/%{name}/
-%dir %attr(0750,%{name},%{name}) %{_localstatedir}/lib/%{name}/
-%dir %attr(0750,%{name},%{name}) %{_localstatedir}/log/%{name}/
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-
-%files utils
-%license LICENSE
-%{_bindir}/turnutils_peer
-%{_bindir}/turnutils_stunclient
-%{_bindir}/turnutils_uclient
-%{_bindir}/turnutils_oauth
-%{_bindir}/turnutils_natdiscovery
-%doc %{_docdir}/%{name}/README.turnutils
-%{_mandir}/man1/turnutils.1.*
-%{_mandir}/man1/turnutils_*.1.*
-
-%files client-libs
-%license LICENSE
-%{_libdir}/libturnclient.a
-
-%files client-devel
-%license LICENSE
-%dir %{_includedir}/turn/
-%{_includedir}/turn/*.h
-%dir %{_includedir}/turn/client/
-%{_includedir}/turn/client/*
+%files -f %{oreon_filedir}/main.list
+%files -n coturn-utils -f %{oreon_filedir}/coturn-utils.list
+%files -n coturn-client-libs -f %{oreon_filedir}/coturn-client-libs.list
+%files -n coturn-client-devel -f %{oreon_filedir}/coturn-client-devel.list
 
 %changelog
+
 %autochangelog

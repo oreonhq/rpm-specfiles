@@ -1,9 +1,6 @@
 %global source0_hash f806e77e8cd08a0d3e4c002d8a8d3fefc64840ff663c2ac46bd66398c779c6db
-
-# Default to no static libraries
 %{!?with_static: %global with_static 0}
 %bcond_with bundled_libpfm
-# rdma is not available
 %ifarch %{arm}
 %{!?with_rdma: %global with_rdma 0}
 %else
@@ -14,10 +11,10 @@
 %else
 %{!?with_pcp: %global with_pcp 1}
 %endif
-Summary: Performance Application Programming Interface
+Summary:        Performance Application Programming Interface
 Name: papi
 Version: 7.2.0
-Release: 3%{?dist}
+Release:        1%{?dist}
 License: BSD-3-Clause
 Requires: papi-libs = %{version}-%{release}
 URL: http://icl.cs.utk.edu/papi/
@@ -26,34 +23,31 @@ Patch1: papi-nostatic.patch
 Patch2: papi-avail-path-fix.patch
 Patch3: papi-revert-event-depr.patch
 Patch4: papi-revert-arm-test.patch
-BuildRequires: make
-BuildRequires: autoconf
-BuildRequires: doxygen
-BuildRequires: ncurses-devel
-BuildRequires: gcc-gfortran
-BuildRequires: kernel-headers >= 2.6.32
-BuildRequires: chrpath
-BuildRequires: lm_sensors-devel
 %if %{without bundled_libpfm}
-BuildRequires: libpfm-devel >= 4.13.0-1
 %if %{with_static}
-BuildRequires: libpfm-static >= 4.6.0-1
 %endif
 %endif
-# Following required for net component
-BuildRequires: net-tools
 %if  %{with_rdma}
-# Following required for inifiband component
-BuildRequires: rdma-core-devel
-BuildRequires: infiniband-diags-devel
 %endif
 %if %{with_pcp}
-BuildRequires: pcp-libs-devel
 %endif
-BuildRequires: perl-generators
-#Right now libpfm does not know anything about s390 and will fail
 ExcludeArch: s390 s390x
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  chrpath
+BuildRequires:  doxygen
+BuildRequires:  gcc-gfortran
+BuildRequires:  infiniband-diags-devel
+BuildRequires:  kernel-headers
+BuildRequires:  libpfm-devel
+BuildRequires:  lm_sensors-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  net-tools
+BuildRequires:  pcp-libs-devel
+BuildRequires:  perl-generators
+BuildRequires:  rdma-core-devel
+# /oreon:deps
 %description
 PAPI provides a programmer interface to monitor the performance of
 running programs.
@@ -96,6 +90,7 @@ the PAPI user-space libraries and interfaces.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n papi-papi-7-2-0-t
 %patch 1 -p1 -b papi-nostatic.patch
@@ -106,30 +101,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 
 %if %{without bundled_libpfm}
-# Build our own copy of libpfm.
 %global libpfm_config --with-pfm-incdir=%{_includedir} --with-pfm-libdir=%{_libdir}
 %endif
-
 %if %{with_static}
 %global static_lib_config --with-static-lib=yes
 %else
 %global static_lib_config --with-static-lib=no
 %endif
-
-# set up environment variable for the various components
-# cuda
-# host_micpower
 %if  %{with_rdma}
   export PAPI_INFINIBAND_UMAD_ROOT=/usr
 %endif
-# lmsensors
 export PAPI_LMSENSORS_ROOT=/usr
-#pushd vmware; ./configure; popd
 %if %{with_pcp}
 %global pcp_enable pcp
 export PAPI_PCP_ROOT=/usr
 %endif
-
 cd src
 autoconf
 %configure --with-perf-events \
@@ -137,64 +123,24 @@ autoconf
 %{?static_lib_config} \
 --with-shared-lib=yes --with-shlib-tools \
 --with-components="appio coretemp example infiniband lmsensors lustre micpower mx net %{?pcp_enable} rapl stealtime"
-# implicit enabled components: perf_event perf_event_uncore
-#components currently left out because of build configure/build issues
-# --with-components="bgpm coretemp_freebsd cuda host_micpower nvml vmware"
-
-#DBG workaround to make sure libpfm just uses the normal CFLAGS
 DBG="" make %{?_smp_mflags}
-
-#generate updated versions of the documentation
-#DBG workaround to make sure libpfm just uses the normal CFLAGS
 pushd ../doc
 DBG="" make
 DBG="" make install
 popd
-
 %install
 rm -rf $RPM_BUILD_ROOT
 cd src
 make DESTDIR=$RPM_BUILD_ROOT LDCONFIG=/bin/true install-all
-
-# Scrub the rpath/runpath from all the binaries.
 find %{buildroot} -type f -executable ! -iname "*.py" ! -iname "*.sh" | xargs chrpath --delete
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_bindir}/*
-%dir /usr/share/papi
-/usr/share/papi/papi_events.csv
-%doc INSTALL.txt README.md LICENSE.txt RELEASENOTES.txt
-%doc %{_mandir}/man1/*
-
-%ldconfig_scriptlets libs
-
-%files libs
-%{_libdir}/*.so.*
-%doc INSTALL.txt README.md LICENSE.txt RELEASENOTES.txt
-
-%files devel
-%{_includedir}/*.h
-%{_includedir}/*.hpp
-%if %{with bundled_libpfm}
-%{_includedir}/perfmon/*.h
-%endif
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/papi*.pc
-%doc %{_mandir}/man3/*
-
-%files testsuite
-/usr/share/papi/run_tests*
-/usr/share/papi/ctests
-/usr/share/papi/ftests
-/usr/share/papi/validation_tests
-/usr/share/papi/components
-/usr/share/papi/testlib
-
-%if %{with_static}
-%files static
-%{_libdir}/*.a
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n papi-libs -f %{oreon_filedir}/papi-libs.list
+%files -n papi-devel -f %{oreon_filedir}/papi-devel.list
+%files -n papi-testsuite -f %{oreon_filedir}/papi-testsuite.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.2.0-3
 - Import

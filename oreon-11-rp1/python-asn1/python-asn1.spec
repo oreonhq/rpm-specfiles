@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 0493484b714418c75ffa3810883c3ce2570d6210cea9ce98e3e616b1b99bc494
 Name:           python-asn1
 Version:        3.3.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python-ASN1 is a simple ASN.1 encoder and decoder for Python 2.7+ and 3.5+.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/andrivet/python-asn1
-Source:         %{pypi_source asn1}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/asn1/asn1-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'asn1' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-asn1 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-asn1
-Summary:        %{summary}
-
-%description -n python3-asn1 %_description
-
+Summary:        Python-ASN1 is a simple ASN.1 encoder and decoder for Python 2.7+ and 3.5+.
+%description -n python3-asn1
 
 %prep
-%autosetup -p1 -n asn1-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir asn1-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-asn1 usr/lib/python3*/site-packages/asn1* usr/lib64/python3*/site-packages/asn1* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/asn1* usr/lib64/python3*/site-packages/asn1* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-asn1 -f %{pyproject_files}
+%files
+%files -n python3-asn1 -f %{oreon_filedir}/python3-asn1.list
 
 %changelog
+
 %autochangelog

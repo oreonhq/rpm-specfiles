@@ -1,5 +1,4 @@
 %global source0_hash b18bd1ed53c90ee57d5714d66ad6bb72b64e930d4aeca9830892c08bb28da608
-
 Summary:        Mercurial Python library
 Name:           python-hglib
 Version:        2.6.2
@@ -11,9 +10,11 @@ Patch:          0001-hglib-tests-migrate-away-from-unmaintained-nose.patch
 Patch:          0001-hglib-tests-remove-deprecated-constructions.patch
 Patch:          0001-Use-raw-string-to-avoid-invalid-escape-sequence.patch
 BuildArch:      noarch
-BuildRequires:  mercurial
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
+Requires:       python3-hglib = %{version}-%{release}
+# /oreon:deps
 %description
 python-hglib is a library with a fast, convenient interface to
 Mercurial. It uses Mercurials command server for communication with
@@ -28,25 +29,22 @@ hg.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%oreon_prep
 %build
-%{pyproject_wheel}
 
+%{pyproject_wheel}
 %install
 %{pyproject_install}
-%pyproject_save_files -l hglib
+%oreon_autofiles python3-hglib usr/lib/python3*/site-packages/hglib* usr/lib64/python3*/site-packages/hglib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/hglib* usr/lib64/python3*/site-packages/hglib* usr/bin/*
 
 %check
+
 %pyproject_check_import
-
 %pytest
-
-%files -n python3-hglib -f %{pyproject_files}
+%files
+%files -n python3-hglib -f %{oreon_filedir}/python3-hglib.list
 
 %changelog
+
 %autochangelog

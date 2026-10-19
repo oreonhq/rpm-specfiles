@@ -1,38 +1,38 @@
 %global source0_hash f99010aad2f6b9d78f13deebee006441755e5501efcc1680174316d4bb0ab509
-
-#
 Name:           tvlsim
 Version:        1.01.12
-Release:        %autorelease
-
+Release:        1%{?dist}
 Summary:        Travel Market Simulator
-
 License:        LGPL-2.1-or-later
 URL:            https://github.com/airsim/%{name}
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
+Source0:        https://github.com/airsim/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  boost-devel
-BuildRequires:  pkgconfig(readline)
-BuildRequires:  pkgconfig(libzmq)
-BuildRequires:  pkgconfig(cppzmq)
-BuildRequires:  soci-devel
-BuildRequires:  soci-mysql-devel
-BuildRequires:  soci-sqlite3-devel
-BuildRequires:  soci-postgresql-devel
-BuildRequires:  pkgconfig(stdair)
-BuildRequires:  stdair-data
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  ghostscript
+BuildRequires:  pkgconfig(airinv)
 BuildRequires:  pkgconfig(airrac)
+BuildRequires:  pkgconfig(airtsp)
+BuildRequires:  pkgconfig(cppzmq)
+BuildRequires:  pkgconfig(libzmq)
+BuildRequires:  pkgconfig(readline)
 BuildRequires:  pkgconfig(rmol)
 BuildRequires:  pkgconfig(sevmgr)
-BuildRequires:  pkgconfig(airtsp)
-BuildRequires:  pkgconfig(simfqt)
-BuildRequires:  pkgconfig(airinv)
 BuildRequires:  pkgconfig(simcrs)
+BuildRequires:  pkgconfig(simfqt)
+BuildRequires:  pkgconfig(stdair)
 BuildRequires:  pkgconfig(trademgen)
 BuildRequires:  pkgconfig(travelccm)
-
+BuildRequires:  soci-devel
+BuildRequires:  soci-mysql-devel
+BuildRequires:  soci-postgresql-devel
+BuildRequires:  soci-sqlite3-devel
+BuildRequires:  stdair-data
+BuildRequires:  tex(latex)
+BuildRequires:  texlive-epstopdf
+# /oreon:deps
 %description
 The Travel Market Simulator project aims at providing reference implementation,
 mainly in C++, of a travel market simulator, focusing on revenue management (RM)
@@ -68,7 +68,6 @@ for airline-related travel market simulation.
 Summary:        Header files, libraries and development helper tools for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description    devel
 This package contains the header files, shared libraries and
 development helper tools for %{name}. If you would like to develop
@@ -81,7 +80,6 @@ BuildRequires:  tex(latex)
 BuildRequires:  doxygen
 BuildRequires:  ghostscript
 BuildRequires:  texlive-epstopdf
-
 %description    doc
 This package contains HTML pages, as well as a PDF reference manual,
 for %{name}. All that documentation is generated thanks to Doxygen
@@ -90,55 +88,25 @@ online (https://%{name}.org).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
-
-# Rename the simulate binary
 mv %{buildroot}%{_bindir}/simulate %{buildroot}%{_bindir}/%{name}_simulate
 mv %{buildroot}%{_mandir}/man1/simulate.1 %{buildroot}%{_mandir}/man1/%{name}_simulate.1
-
-# Removed the Doxygen installer
 rm -f %{buildroot}%{_docdir}/%{name}/html/installdox
-
-# Remove additional documentation files (those files are already available
-# in the project top directory)
 rm -f %{buildroot}%{_docdir}/%{name}/{NEWS,README.md,AUTHORS}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-#%%ctest
 
-%files
-%doc AUTHORS ChangeLog NEWS README.md
-%license COPYING
-%{_bindir}/%{name}
-%{_bindir}/%{name}_simulate
-%{_bindir}/TvlSimServer
-%{_libdir}/lib%{name}.so.*
-%{_mandir}/man1/%{name}.1.*
-%{_mandir}/man1/%{name}_simulate.1.*
-%{_mandir}/man1/TvlSimServer.1.*
-
-%files devel
-%license COPYING
-%{_includedir}/%{name}
-%{_bindir}/%{name}-config
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/cmake/%{name}/
-%{_datadir}/aclocal/%{name}.m4
-%{_mandir}/man1/%{name}-config.1.*
-%{_mandir}/man3/%{name}-library.3.*
-
-%files doc
-%doc %{_docdir}/%{name}/
-%license COPYING
+%files -f %{oreon_filedir}/main.list
+%files -n tvlsim-devel -f %{oreon_filedir}/tvlsim-devel.list
+%files -n tvlsim-doc -f %{oreon_filedir}/tvlsim-doc.list
 
 %changelog
+
 %autochangelog

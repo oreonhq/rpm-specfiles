@@ -1,24 +1,8 @@
-%global source0_hash 074651b3045890b170230510c8fee6b9ef74c0d365dab75bf8825f0488ab4a4c
-
-# spec file for package sfp-master
-#
-# Copyright (c) 2024 Mikhail Medvedev <e-ink-reader@yandex.ru>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 3
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
+%global source0_hash 655345b4c2db5182d7023761a9f1baa3bbf849650fd8e198e86f333f7564997f
 Name: sfp-master
 Version: 1.0.7
-Release: 2%dist
-
-Summary: Reading, writing SFP modules data
+Release:        1%{?dist}
+Summary:        Reading, writing SFP modules data
 Summary(ru_RU.UTF-8): Чтение, запись данных SFP-модулей
 Summary(de_DE.UTF-8): Lesen und Schreiben von SFP-Modul-Daten
 Summary(es_ES.UTF-8): Lectura, escritura de datos de módulos SFP
@@ -29,19 +13,18 @@ Summary(uk_UA.UTF-8): Читання, запис даних SFP модулів
 Summary(zh_CN.UTF-8): 读取、写入 SFP 模块数据
 License: GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-only
 Group: Applications/Engineering
-
 Url: https://github.com/bigbigmdm/SFP-Master
-Source: https://github.com/bigbigmdm/SFP-Master/archive/refs/tags/v%{version}.tar.gz
-
-BuildRequires: gcc-c++
-BuildRequires: pkgconfig(Qt6Core)
-BuildRequires: pkgconfig(Qt6Widgets)
-BuildRequires: cmake(Qt6LinguistTools)
-BuildRequires: pkgconfig(libusb-1.0)
-BuildRequires: cmake
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
+Source0:        https://github.com/bigbigmdm/SFP-Master/archive/refs/tags/v%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt6LinguistTools)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  pkgconfig(Qt6Widgets)
+BuildRequires:  pkgconfig(libusb-1.0)
+# /oreon:deps
 %description
 SFP-Master is a free software programmer of optical SFP modules for CH341a 
 devices. It can be used to read, write and save SFP module data to the computer.
@@ -108,34 +91,23 @@ SFP-Master 是用于 CH341a 设备的光学 SFP 模块的免费编程软件。
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n SFP-Master-%{version}
-
+%global oreon_srcdir SFP-Master-%{version}
+%oreon_prep
 %build
-# update translations
-lrelease-qt6 language/*.ts
 
+lrelease-qt6 language/*.ts
 %cmake -DCMAKE_INSTALL_SYSCONFDIR=%_sysconfdir
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.xml
-
-%files
-%doc README.md 
-%_docdir/sfp-master/
-%_bindir/SFP-Master
-%_datadir/applications/SFP-Master.desktop
-%_datadir/metainfo/*.xml
-/usr/lib/udev/rules.d/*.rules
-%_datadir/pixmaps/SFP-Master.png
-%_datadir/man/man1/*.1.*
-%_datadir/sfp-master/*.qm
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

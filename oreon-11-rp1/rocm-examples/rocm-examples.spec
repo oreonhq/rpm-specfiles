@@ -1,31 +1,8 @@
 %global source0_hash d64a82ba472126bb426c54abd1b2516479a375db895171bbc4024a7c8d0f4e94
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
 %global upstreamname rocm-examples
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -38,76 +15,51 @@
 %global pkg_suffix %{nil}
 %global pkg_module default
 %endif
-
 %global toolchain rocm
-
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-mtls-dialect=gnu2//')
-
 %bcond_with debug
 %if %{with debug}
 %global build_type DEBUG
 %else
 %global build_type RelWithDebInfo
 %endif
-
-# To test install the rocm-examples on a machine with an AMD gpu and run them manually
-
-# Compression type and level for source/binary package payloads.
-#  "w7T0.xzdio"         xz level 7 using %%{getncpus} threads
-# Multithreading the compress reduces the build time.
 %global _source_payload w7T0.xzdio
 %global _binary_payload w7T0.xzdio
-
-# some example cmake's do not like :xnack suffix
-# reduce the default list
 %global gpu_list %rocm_gpu_list_test
 %global _gpu_list gfx1100
-
 Name:           rocm-examples%{pkg_suffix}
 Version:        %{rocm_version}
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        A collection of examples for the ROCm software stack
 Url:            https://github.com/ROCm/%{upstreamname}
 License:        MIT AND Apache-2.0
-# The main license is MIT
-# A couple of assembly/llvm ir files that are Apache-2.0
-# HIP-Basic/assembly_to_executable/hip_obj_gen.mcin
-# HIP-Basic/assembly_to_executable/hip_obj_gen_win.mcin
-# HIP-Basic/llvm_ir_to_executable/hip_obj_gen.mcin
-# HIP-Basic/llvm_ir_to_executable/hip_obj_gen_win.mcin
-Source0:        %{url}/archive/rocm-%{version}.tar.gz#/%{upstreamname}-%{version}.tar.gz
-
+Source0:        https://github.com/ROCm/%{upstreamname}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{name}.%{rocm_patch}.tar.gz
+%if 0%{?suse_version}
+%else
+%endif
+ExclusiveArch:  x86_64
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  hipblas%{pkg_suffix}-devel
-BuildRequires:  hipcub%{pkg_suffix}-devel
-BuildRequires:  hipfft%{pkg_suffix}-devel
-BuildRequires:  hipify%{pkg_suffix}
-BuildRequires:  hiprand%{pkg_suffix}-devel
-BuildRequires:  hipsolver%{pkg_suffix}-devel
-BuildRequires:  rocm-comgr%{pkg_suffix}-devel
-BuildRequires:  rocm-compilersupport%{pkg_suffix}-macros
-BuildRequires:  rocm-hip%{pkg_suffix}-devel
-BuildRequires:  rocm-runtime%{pkg_suffix}-devel
-BuildRequires:  rocm-rpm-macros%{pkg_suffix}
-BuildRequires:  rocblas%{pkg_suffix}-devel
-BuildRequires:  rocfft%{pkg_suffix}-devel
-BuildRequires:  rocsolver%{pkg_suffix}-devel
-BuildRequires:  rocsparse%{pkg_suffix}-devel
-BuildRequires:  rocthrust%{pkg_suffix}-devel
-
-%if 0%{?suse_version}
-BuildRequires:  benchmark-devel
-BuildRequires:  gtest
-%else
 BuildRequires:  google-benchmark-devel
 BuildRequires:  gtest-devel
-%endif
-
-# Only x86_64 works right now:
-ExclusiveArch:  x86_64
-
+BuildRequires:  hipblas-7.1-devel
+BuildRequires:  hipcub-7.1-devel
+BuildRequires:  hipfft-7.1-devel
+BuildRequires:  hipify-7.1
+BuildRequires:  hiprand-7.1-devel
+BuildRequires:  hipsolver-7.1-devel
+BuildRequires:  rocblas-7.1-devel
+BuildRequires:  rocfft-7.1-devel
+BuildRequires:  rocm-comgr-7.1-devel
+BuildRequires:  rocm-compilersupport-7.1-macros
+BuildRequires:  rocm-hip-7.1-devel
+BuildRequires:  rocm-rpm-macros-7.1
+BuildRequires:  rocm-runtime-7.1-devel
+BuildRequires:  rocsolver-7.1-devel
+BuildRequires:  rocsparse-7.1-devel
+BuildRequires:  rocthrust-7.1-devel
+# /oreon:deps
 %description
 This repository is a collection of examples to enable new users
 to start using ROCm, as well as provide more advanced examples
@@ -132,6 +84,7 @@ The examples are structured in several categories:
   repository contents.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{upstreamname}-rocm-%{version}
@@ -166,7 +119,6 @@ sed -i -e 's@${CMAKE_HIP_COMPILER}@${CMAKE_HIP_COMPILER} -I%{pkg_prefix}/include
 %build
 
 export ROCM_ROOT=%{pkg_prefix}
-
 %cmake \
     -DCMAKE_C_COMPILER=%rocmllvm_bindir/amdclang \
     -DCMAKE_CXX_COMPILER=%rocmllvm_bindir/amdclang++ \
@@ -180,16 +132,13 @@ export ROCM_ROOT=%{pkg_prefix}
     -DGPU_TARGETS=%{gpu_list} \
     -DCMAKE_BUILD_TYPE=%{build_type} \
     -DHIP_PLATFORM=amd
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%license LICENSE.md
-%doc README.md
-%{pkg_prefix}/bin/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

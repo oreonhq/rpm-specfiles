@@ -1,14 +1,11 @@
 %global source0_hash f0c0960b4ff8ec78d1547d04e2fb94d77069f500225db356a6ac8b27e03e2350
-
 Version:        1.200
 Release:        32%{?dist}
-
 %global foundry           SIL
 %global fontlicense       OFL-1.1
 %global fontlicenses      OFL.txt
 %global fontdocs          *.txt documentation/*.txt
 %global fontdocsex        %{fontlicenses}
-
 %global fontfamily        Abyssinica SIL
 %global fontsummary       SIL Abyssinica fonts
 %global projectname       AbyssinicaSIL
@@ -19,41 +16,40 @@ URL:                      https://software.sil.org/%{projectname}/
 %global fontdescription   %{expand:
 SIL Abyssinica is a Unicode typeface family containing glyphs for the
 Ethiopic script.
-
 The Ethiopic script is used for writing many of the languages of Ethiopia and
 Eritrea. Abyssinica SIL supports all Ethiopic characters which are in Unicode
 including the Unicode 4.1 extensions. Some languages of Ethiopia are not yet
 able to be fully represented in Unicode and, where necessary, we have included
 non-Unicode characters in the Private Use Area (see Private-use (PUA)
 characters supported by Abyssinica SIL).
-
 Abyssinica SIL is based on Ethiopic calligraphic traditions. This release is
 a regular typeface, with no bold or italic version available or planned.}
-
-
-# download from http://scripts.sil.org/cms/scripts/render_download.php?site_id=nrsi&format=file&media_id=AbyssinicaSIL1.200.zip&filename=AbyssinicaSIL1.200.zip
 Source0:        https://software.sil.org/downloads/r/abyssinica/AbyssinicaSIL1.200.zip
 Source1:        66-sil-abyssinica-fonts.conf
-
 %fontpkg
-
+# oreon:deps
+BuildRequires:  fonts-rpm-macros
+# /oreon:deps
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{projectname}-%{version}
 %linuxtext FONTLOG.txt OFL.txt OFL-FAQ.txt README.txt documentation/DOCUMENTATION.txt
 
 %build
-%fontbuild
 
+%fontbuild
 %install
 %fontinstall
+%oreon_autofiles main
 
 %check
+
 %fontcheck
-
 %fontfiles
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.200-32
 - Import

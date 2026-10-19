@@ -1,22 +1,19 @@
 %global source0_hash b189ee636e839d12c00dabefae099fd488ab2358dec24d264761c011950b02a9
-
 Name:           mm-common
 Version:        1.0.8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Common build files of the C++ bindings
-
 BuildArch:      noarch
 License:        GPL-2.0-or-later
 URL:            https://gtkmm.org
 Source0:        https://download.gnome.org/sources/%{name}/1.0/%{name}-%{version}.tar.xz
-
-BuildRequires:  meson
-
 Requires:       doxygen
 Requires:       graphviz
 Requires:       libxslt
 Requires:       pkgconfig
-
+# oreon:deps
+BuildRequires:  meson
+# /oreon:deps
 %description
 The mm-common module provides the build infrastructure and utilities
 shared among the GNOME C++ binding libraries.  It is a required dependency
@@ -25,35 +22,24 @@ to build glibmm and gtkmm from git.
 %package docs
 Summary:        Documentation for %{name}, includes example mm module skeleton
 Requires:       %{name} = %{version}-%{release}
-
 %description docs
 Package contains short documentation for %{name} and example skeleton module,
 which could be used as a base for new mm module.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license COPYING
-%doc NEWS OVERVIEW.md README.md
-%{_mandir}/man1/*
-%{_bindir}/*
-%{_datadir}/aclocal/*
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/*
-%{_datadir}/pkgconfig/*.pc
-
-%files docs
-%dir %{_docdir}/%{name}
-%{_docdir}/%{name}/*
+%files -f %{oreon_filedir}/main.list
+%files -n mm-common-docs -f %{oreon_filedir}/mm-common-docs.list
 
 %changelog
+
 %autochangelog

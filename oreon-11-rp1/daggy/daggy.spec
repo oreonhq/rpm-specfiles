@@ -1,25 +1,22 @@
 %global source0_hash 66a81b3b4d560102d00d858d4ad31a051b9e28981e341fd05ae301c12099d1fd
-
 %undefine __cmake_in_source_build
 %global _vpath_srcdir src
-
 Name:           daggy
 Version:        2.2.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Data Aggregation Utility and C/C++ developer library
-
 License:        MIT
 URL:            https://github.com/synacker/daggy
-Source0:        %{url}/archive/v%{version}/%{name}-v%{version}.tar.gz
-
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  gcc-c++
-BuildRequires:  mustache-devel
-BuildRequires:  libssh2-devel
-BuildRequires:  yaml-cpp-devel
-BuildRequires:  cmake
+Source0:        https://github.com/synacker/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
 ExcludeArch: s390x
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  libssh2-devel
+BuildRequires:  mustache-devel
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  yaml-cpp-devel
+# /oreon:deps
 %description
 Daggy - Data Aggregation Utility and C/C++ developer library for data streams
 catching
@@ -32,35 +29,28 @@ distributed network systems, for example, based on micro-service architecture.
 
 %package devel
 Summary: Development files for %{name}
-
 %description devel
 %{summary}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake -DVERSION=%{version}.0 src
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles daggy-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}:${LD_LIBRARY_PATH}
 %ctest
-
-%files
-%license LICENSE
-%doc docs/*.md
-%{_bindir}/%{name}
-%{_libdir}/libDaggyCore.so
-
-%files devel
-%{_includedir}/DaggyCore
-%{_libdir}/cmake/DaggyCore
+%files -f %{oreon_filedir}/main.list
+%files -n daggy-devel -f %{oreon_filedir}/daggy-devel.list
 
 %changelog
+
 %autochangelog

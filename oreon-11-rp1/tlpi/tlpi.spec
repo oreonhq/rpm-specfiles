@@ -1,25 +1,21 @@
-%global source0_hash 26975fc411ff8b97bc31c88002bac2a0f1c329cfc448c0b1d0f26ced9aa94024
-
+%global source0_hash 7bb1155f6a90f382e18eaf961133d4f3b0583afd278416fba97406bdb0c606e2
 Name:		tlpi
 Version:	260523
-Release:	%autorelease
-Summary:	Utilities to display namespaces and control groups
-
+Release:        1%{?dist}
+Summary:        Utilities to display namespaces and control groups
 License:	GPL-3.0-or-later
 URL:		https://man7.org/tlpi/index.html
-Source:		https://man7.org/tlpi/code/download/tlpi-%version-dist.tar.gz
+Source0:        https://man7.org/%{name}/code/download/%{name}-%{version}-dist.tar.gz
 Patch:		Makefile.patch
-
-BuildRequires:	gcc-go
-BuildRequires:	libacl-devel
-BuildRequires:	libcap-devel
-BuildRequires:	libseccomp-devel
-BuildRequires:  libxcrypt-devel
-
 Requires:	tlpi-licenses
-
 %global examplesdir %_pkgdocdir/examples
-
+# oreon:deps
+BuildRequires:  gcc-go
+BuildRequires:  libacl-devel
+BuildRequires:  libcap-devel
+BuildRequires:  libseccomp-devel
+BuildRequires:  libxcrypt-devel
+# /oreon:deps
 %description
 The book The Linux Programming Interface and training courses given by
 man7.org are accompanied with a set of code examples. Some of these
@@ -55,7 +51,6 @@ cases.
 Summary:	Example code from the tlpi package
 BuildArch:	noarch
 Requires:	tlpi-licenses
-
 %description examples
 The book The Linux Programming Interface and training courses given by
 man7.org are accompanied with a set of code examples. This package
@@ -67,7 +62,6 @@ The package is probably mostly useful in conjunction with the book.
 Summary:	Compiled examples from the tlpi package
 Recommends:	tlpi-examples = %version-%release
 Requires:	tlpi-licenses
-
 %description examples-bin
 The book The Linux Programming Interface and training courses given by
 man7.org are accompanied with a set of code examples. This package
@@ -81,11 +75,11 @@ The package is probably mostly useful in conjunction with the book.
 Summary:	License files from tlpi source
 BuildArch:	noarch
 Requires:	tlpi-licenses
-
 %description licenses
 This package contains the license files from tlpi packages.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p 0 -n tlpi-dist
@@ -95,7 +89,7 @@ sed --in-place /seccomp_control_open/d seccomp/Makefile
 %endif
 
 %build
-# Remember all source files for the examples, save before building
+
 ls --format=single-column --directory [a-z]* > dirs_examples
 find $(cat dirs_examples) -type f -printf '%h %f\n' > source_examples
 %ifnarch aarch64 riscv64 s390x
@@ -107,7 +101,6 @@ gccgo -fPIE -pie -o pid_namespaces namespaces/pid_namespaces.go
 gccgo -fPIE -pie -o namespaces_of namespaces/namespaces_of.go
 gccgo -fPIE -pie -o userns_overview namespaces/userns_overview.go
 gccgo -fPIE -pie -o view_v2_cgroups cgroups/view_v2_cgroups.go
-
 %install
 install -p -D --target-directory=%buildroot%_bindir \
 	pid_namespaces namespaces_of userns_overview view_v2_cgroups \
@@ -122,23 +115,13 @@ find $(cat dirs_examples) -type f -executable -printf '%h %f\n'| \
 while read dir file
 do  install -p $dir/$file %buildroot%_bindir/tlpi-${dir/\//-}-$file
 done
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc namespaces/namespaces_of.go CHANGES
-%_bindir/namespaces_of
-%_bindir/view_v2_cgroups
-%_bindir/ns_capable
-%_bindir/pid_namespaces
-%_bindir/userns_overview
-
-%files examples
-%doc %examplesdir
-
-%files examples-bin
-%_bindir/tlpi-*
-
-%files licenses
-%license COPYING.*
+%files -f %{oreon_filedir}/main.list
+%files -n tlpi-examples -f %{oreon_filedir}/tlpi-examples.list
+%files -n tlpi-examples-bin -f %{oreon_filedir}/tlpi-examples-bin.list
+%files -n tlpi-licenses -f %{oreon_filedir}/tlpi-licenses.list
 
 %changelog
+
 %autochangelog

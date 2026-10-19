@@ -1,57 +1,45 @@
-%global source0_hash none
-
+%global source0_hash fe5d7cb59fdc2c8c646ce84b727ac2bca8912a247e6e68e1fb507372178e59e8
 Name:           python-django-cors-headers
 Version:        4.9.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing _CORS_.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/adamchainz/django-cors-headers
-Source:         %{pypi_source django_cors_headers}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/django_cors_headers/django_cors_headers-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'django-cors-headers' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77
+Requires:       python3-django-cors-headers = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-django-cors-headers
-Summary:        %{summary}
-
-%description -n python3-django-cors-headers %_description
-
+Summary:        django-cors-headers is a Django application for handling the server headers required for Cross-Origin Resource Sharing _CORS_.
+# oreon:reqs
+Requires:       python3dist(asgiref) >= 3.6
+Requires:       python3dist(django) >= 4.2
+# /oreon:reqs
+%description -n python3-django-cors-headers
 
 %prep
-%autosetup -p1 -n django_cors_headers-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir django_cors_headers-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-django-cors-headers usr/lib/python3*/site-packages/django_cors_headers* usr/lib64/python3*/site-packages/django_cors_headers* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/django_cors_headers* usr/lib64/python3*/site-packages/django_cors_headers* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-django-cors-headers -f %{pyproject_files}
+%files
+%files -n python3-django-cors-headers -f %{oreon_filedir}/python3-django-cors-headers.list
 
 %changelog
+
 %autochangelog

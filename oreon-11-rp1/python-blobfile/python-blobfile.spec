@@ -1,56 +1,47 @@
-%global source0_hash none
-
+%global source0_hash 98bd9fafed8d0175d315a5b605680f522949057e16cb4932b07ce5a5f67e8985
 Name:           python-blobfile
 Version:        3.3.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Read GCS, ABS and local paths with the same interface, clone of tensorflow.io.gfile
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/blobfile/blobfile
-Source:         %{pypi_source blobfile}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/blobfile/blobfile-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'blobfile' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 69
+Requires:       python3-blobfile = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-blobfile
-Summary:        %{summary}
-
-%description -n python3-blobfile %_description
-
+Summary:        Read GCS, ABS and local paths with the same interface, clone of tensorflow.io.gfile
+# oreon:reqs
+Requires:       python3dist(filelock) >= 3.0
+Requires:       python3dist(lxml) >= 4.9
+Requires:       python3dist(pycryptodomex) >= 3.8
+Requires:       python3dist(urllib3) >= 2
+# /oreon:reqs
+%description -n python3-blobfile
 
 %prep
-%autosetup -p1 -n blobfile-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir blobfile-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-blobfile usr/lib/python3*/site-packages/blobfile* usr/lib64/python3*/site-packages/blobfile* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/blobfile* usr/lib64/python3*/site-packages/blobfile* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-blobfile -f %{pyproject_files}
+%files
+%files -n python3-blobfile -f %{oreon_filedir}/python3-blobfile.list
 
 %changelog
+
 %autochangelog

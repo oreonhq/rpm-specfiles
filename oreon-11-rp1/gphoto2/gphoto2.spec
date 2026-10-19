@@ -1,5 +1,4 @@
-%global source0_hash 2a648dcdf12da19e208255df4ebed3e7d2a02f905be4165f2443c984cf887375
-
+%global source0_hash 4e379a0f12f72b49ee5ee2283ffd806b5d12d099939d75197a3f4bbc7f27a1a1
 Name:           gphoto2
 Version:        2.5.32
 Release:        1%{?dist}
@@ -7,15 +6,15 @@ Summary:        Software for accessing digital cameras
 License:        GPL-2.0-or-later
 Url:            http://www.gphoto.org/
 Source0:        http://downloads.sourceforge.net/gphoto/%{name}-%{version}.tar.bz2
-
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  pkgconfig(libgphoto2) >= %{version}
 BuildRequires:  libjpeg-devel
+BuildRequires:  make
 BuildRequires:  pkgconfig(libexif)
+BuildRequires:  pkgconfig(libgphoto2)
 BuildRequires:  popt-devel
 BuildRequires:  readline-devel
-
+# /oreon:deps
 %description
 The gPhoto2 project is a universal, free application and library
 framework that lets you download images from several different
@@ -30,23 +29,19 @@ Other (GUI) frontends are available separately.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
 rm %{buildroot}%{_docdir}/%{name}/test-hook.sh
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc NEWS README TODO
-%{_bindir}/gphoto2
-%{_mandir}/man1/gphoto2.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

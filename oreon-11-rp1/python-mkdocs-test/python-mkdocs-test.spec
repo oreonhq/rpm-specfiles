@@ -1,62 +1,61 @@
-%global source0_hash none
-
+%global source0_hash ea28fd1aa737a55a3529bd9fd8277874d7365c6644785fb2fd4ac974ab77e698
 Name:           python-mkdocs-test
 Version:        0.6.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A test framework for MkDocs projects
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/fralau/mkdocs-test
-Source:         %{pypi_source mkdocs_test}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mkdocs_test/mkdocs_test-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-mkdocs-test = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-mkdocs-test+test
+Summary:        Metapackage for python3-mkdocs-test test extras
+Requires:       python3-mkdocs-test = %{version}-%{release}
+Requires:       python3dist(pytest) >= 7.0
+Provides:       python3dist(mkdocs-test[test]) = %{version}-%{release}
 
+%description -n python3-mkdocs-test+test
+Metapackage for python3-mkdocs-test test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mkdocs-test' generated automatically by pyp2spec.}
+%package -n       python3-mkdocs-test+doc
+Summary:        Metapackage for python3-mkdocs-test doc extras
+Requires:       python3-mkdocs-test = %{version}-%{release}
+Provides:       python3dist(mkdocs-test[doc]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-mkdocs-test+doc
+Metapackage for python3-mkdocs-test doc extras.
+
+%description
 
 %package -n     python3-mkdocs-test
-Summary:        %{summary}
-
-%description -n python3-mkdocs-test %_description
+Summary:        A test framework for MkDocs projects
+%description -n python3-mkdocs-test
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-mkdocs-test doc,test
-
 
 %prep
-%autosetup -p1 -n mkdocs_test-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mkdocs_test-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mkdocs-test usr/lib/python3*/site-packages/mkdocs_test* usr/lib64/python3*/site-packages/mkdocs_test* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mkdocs_test* usr/lib64/python3*/site-packages/mkdocs_test* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mkdocs-test -f %{pyproject_files}
+%files
+%files -n python3-mkdocs-test -f %{oreon_filedir}/python3-mkdocs-test.list
 
 %changelog
+
 %autochangelog

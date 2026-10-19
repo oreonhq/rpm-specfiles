@@ -1,25 +1,22 @@
-%global source0_hash none
-
+%global source0_hash 07c261e54e1e4cbcd4f7eaaf4f62efcbbbc68c76797ddca704592d99ebed3d10
 Name:           xmount
 Version:        1.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A on-the-fly convert for multiple hard disk image types
-
 License:        GPL-3.0-or-later
 URL:            https://www.sits.lu/xmount
 Source0:        https://code.sits.lu/foss/xmount/-/archive/%{version}/xmount-%{version}.tar.bz2
 Patch0:         xmount-suffix.patch
 Patch1:         xmount-cflags.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  fuse3-devel
-BuildRequires:  libewf-devel
-BuildRequires:  afflib-devel
-BuildRequires:  zlib-devel
-BuildRequires:  cmake
-
 Provides:       bundled(md5-deutsch)
-
+# oreon:deps
+BuildRequires:  afflib-devel
+BuildRequires:  cmake
+BuildRequires:  fuse3-devel
+BuildRequires:  gcc-c++
+BuildRequires:  libewf-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 xmount allows you to convert on-the-fly between multiple input
 and output hard disk image types. xmount creates a virtual file
@@ -34,6 +31,7 @@ to boot acquired hard disk images using QEMU, KVM, VirtualBox,
 VmWare, or alike.
 
 %prep
+
 %setup -q
 %patch -P0 -p1 -b .suffix
 %patch -P1 -p1 -b .cflags
@@ -41,23 +39,19 @@ VmWare, or alike.
 chmod -x src/xmount.*
 
 %build
+
 %cmake \
     -DCMAKE_C_FLAGS="%{optflags} -fno-strict-aliasing" \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_SKIP_RPATH=ON \
     %{nil}
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%doc AUTHORS ChangeLog NEWS README ROADMAP TODO
-%license COPYING
-%{_mandir}/man*/%{name}*.*
-%{_bindir}/%{name}
-%{_libdir}/xmount
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

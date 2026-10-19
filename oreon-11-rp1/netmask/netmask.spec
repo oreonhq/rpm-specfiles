@@ -1,26 +1,23 @@
 %global source0_hash f352d8117a4f9377a15919d9ad4989cfba8816958718a914abf1414242a9f636
-
 Name:           netmask
-
 %global forgeurl https://github.com/tlby/netmask
 %global version0 2.5.0
 %forgemeta
 Version:        %forgeversion
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Utility for determining network masks
 Summary(sv):    Verktyg för att bestämma nätverksmasker
-
 License:        GPL-2.0-or-later
 URL:            %forgeurl
-Source0:        %forgesource
-
+Source0:        %{forgeurl}/archive/v%{version0}/%{name}-%{version0}.tar.gz
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  autoconf-archive
 BuildRequires:  automake
 BuildRequires:  check-devel
 BuildRequires:  gcc
 BuildRequires:  texinfo
-
+# /oreon:deps
 %description
 This is a handy tool for generating terse netmasks in several common
 formats.  If you've ever maintained a firewall with more than a few
@@ -40,30 +37,24 @@ brandväggen.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 aclocal
 autoheader
 automake --add-missing
 autoconf
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-make check
 
-%files
-%license COPYING
-%doc AUTHORS ChangeLog README
-%{_bindir}/netmask
-%{_mandir}/man1/netmask.1*
-%exclude %{_infodir}/dir
-%{_infodir}/netmask.info*
+make check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

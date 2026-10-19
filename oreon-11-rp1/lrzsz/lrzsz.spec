@@ -1,11 +1,10 @@
-%global source0_hash none
-
-Summary: The lrz and lsz modem communications programs
+%global source0_hash c28b36b14bddb014d9e9c97c52459852f97bd405f89113f30bee45ed92728ff1
+Summary:        The lrz and lsz modem communications programs
 Name: lrzsz
 Version: 0.12.20
-Release: %autorelease
+Release:        1%{?dist}
 License: GPL-2.0-or-later AND GPL-2.0-only
-Source:        https://www.ohse.de/uwe/releases/%{name}-%{version}.tar.gz
+Source0:        https://www.ohse.de/uwe/releases/%{name}-%{version}.tar.gz
 Patch1:        lrzsz-0.12.20-glibc21.patch
 Patch2:        lrzsz-0.12.20.patch
 Patch3:        lrzsz-0.12.20-man.patch
@@ -15,9 +14,11 @@ Patch6:        lrzsz-c99.patch
 Patch7:        lrzsz-socklen.patch
 Patch8:        lrzsz-gcc15.patch
 Url: http://www.ohse.de/uwe/software/lrzsz.html
-BuildRequires: gcc gettext
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  make
+# /oreon:deps
 %description
 Lrzsz (consisting of lrz and lsz) is a cosmetically modified
 zmodem/ymodem/xmodem package built from the public-domain version of
@@ -25,32 +26,29 @@ the rzsz package. Lrzsz was created to provide a working GNU
 copylefted Zmodem solution for Linux systems.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n lrzsz-0.12.20
 
 rm -f po/*.gmo
 
 %build
+
 %configure --disable-pubdir \
            --enable-syslog \
            --program-transform-name=s/l//
-
 %make_build
-
 %install
 %make_install prefix=%{buildroot}/usr \
   datadir=%{buildroot}/usr/share
-
 for m in rb rx; do ln -s rz.1 %{buildroot}%{_mandir}/man1/$m.1; done
 for m in sb sx; do ln -s sz.1 %{buildroot}%{_mandir}/man1/$m.1; done
-
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%{_bindir}/*
-%{_mandir}/*/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.12.20-1
 - Import

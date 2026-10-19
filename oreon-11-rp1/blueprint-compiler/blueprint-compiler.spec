@@ -1,26 +1,22 @@
 %global source0_hash 231d72efbac931c235ac3e022fe94982095c20d88721d9a8dcf60152f2017e07
-
 %global tarball_version %%(echo %%{version} | tr '~' '.')
 %global major_minor_version %%(echo %%{tarball_version} | cut -d "." -f 1-2)
-
 Name:           blueprint-compiler
 Version:        0.22.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A markup language for GTK user interfaces
 License:        LGPL-3.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/blueprint-compiler
-Source0:        https://download.gnome.org/sources/%{name}/%{major_minor_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0:        https://download.gnome.org/sources/%{name}/0.22/%{name}-%{version}.tar.xz
 BuildArch:      noarch
-
-BuildRequires:  meson
+Requires:       python3-gobject-devel
+# oreon:deps
 BuildRequires:  gtk4-devel
 BuildRequires:  libadwaita-devel
+BuildRequires:  meson
 BuildRequires:  python3-devel
 BuildRequires:  python3-gobject-devel
-
-Requires:       python3-gobject-devel
-
+# /oreon:deps
 %description
 GtkBuilder XML format is quite verbose, and many app developers don't like
 using WYSIWYG editors for creating UIs. Blueprint files are intended to be a
@@ -32,28 +28,21 @@ server--so that less knowledge of the format is required. Hopefully this will
 increase adoption of cool advanced features like GtkExpression.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
-# Tests fail in mock, but pass otherwise. For some reason, no log is available
-# to debug the issue when it fails.
-#check
-#meson_test
-
-%files
-%license COPYING
-%doc README.md docs/*.rst
-%{_bindir}/%{name}
-%{python3_sitelib}/blueprintcompiler
-%{_datadir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

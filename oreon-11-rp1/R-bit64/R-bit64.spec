@@ -1,19 +1,15 @@
 %global source0_hash fbc0ce142fc22c9a9fdcbac930a814dfb648563d4b6a77dff739c23cc81319b7
-
 Name:           R-bit64
 Version:        %R_rpm_version 4.6.0-1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A S3 Class for Vectors of 64bit Integers
-
 License:        GPL-2.0-only OR GPL-3.0-only
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=bit64&version=4.6.0-1#/bit64_4.6.0-1.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Package 'bit64' provides serializable S3 atomic 64bit (signed) integers. These
 are useful for handling database keys and exact counting in +-2^63. WARNING: do
@@ -28,24 +24,21 @@ optionally leverage caching.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
+
 %ifnarch s390x
 %R_check
 %endif
-
-%files -f %{R_files}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

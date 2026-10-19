@@ -1,39 +1,21 @@
-%global source0_hash 8891cc0b10774f3d048e2a213ea623306386d901034813d55feb082751ce1b4c
-
+%global source0_hash a43b27547309ac95ce428a737428f18bf5f61f957d026e17500e5840dda01d8c
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 Name:           ocaml-store
 Version:        0.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Snapshottable data structures
-
-# The overarching project license is MIT.  Files with other license are present
-# in the the bench and fuzzing subdirectories, but they are neither built nor
-# shipped in any binary RPM.
-# LGPL-2.1-only:
-# - bench/vendor/colibri2/context.ml
-# LGPL-2.1-or-later:
-# - bench/vendor/facile/*.ml
-# LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception:
-# - bench/StoreBacktrackingRef.ml
-# - bench/StoreMap.ml
-# - bench/StoreRef.ml
-# - bench/StoreTransactionalRef.ml
-# - bench/StoreVector.ml
 License:        MIT
 SourceLicense:  %{license} AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 URL:            https://gitlab.com/basile.clement/store
 VCS:            git:%{url}.git
-Source:         %{url}/-/archive/v%{version}/store-v%{version}.tar.bz2
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
+Source0:        https://gitlab.com/basile.clement/store/-/archive/v%{version}/store-v%{version}.tar.bz2
 ExcludeArch:    %{ix86}
-
-BuildRequires:  ocaml >= 4.05
-BuildRequires:  ocaml-dune >= 3.7
-
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-dune
+# /oreon:deps
 %description
 `Store` is a library to add snapshotting capabilities to imperative data
 structures with low runtime cost and safe, user-friendly APIs.  It is designed
@@ -54,30 +36,27 @@ The design of the Store library is described in the ICFP'24 paper:
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n store-v%{version}
-
+%global oreon_srcdir store-v%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%license LICENSE
-%doc CHANGES.md README.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-store-devel -f %{oreon_filedir}/ocaml-store-devel.list
 
 %changelog
+
 %autochangelog

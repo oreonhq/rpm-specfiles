@@ -1,21 +1,17 @@
 %global source0_hash 13b53f14d276adf6cafd3564fcda1d4b3e72342108d1c40ec4b4f0c7fc3ac95a
-
 Name:           iir1
 Version:        1.10.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        DSP IIR Realtime C++ filter library
-
 License:        MIT
 URL:            https://berndporr.github.io/iir1/
-Source:         https://github.com/berndporr/iir1/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/berndporr/iir1/archive/%{version}/%{name}-%{version}.tar.gz
+ExcludeArch: %{ix86}
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
-
-# Not needed for multilib
-ExcludeArch: %{ix86}
-
+# /oreon:deps
 %description
 An infinite impulse response (IIR) filter library for Linux, Mac OSX and Windows
 which implements Butterworth, RBJ, Chebychev filters and can easily import
@@ -35,7 +31,6 @@ and main program at the same time.
 Summary:        Development libraries and header files for %{name}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       cmake-filesystem
-
 %description devel
 %{summary}.
 
@@ -43,11 +38,11 @@ Requires:       cmake-filesystem
 Summary:        Development documentation for %{name}
 Requires:       %{name}-devel = %{version}-%{release}
 BuildArch:      noarch
-
 %description devel-doc
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -55,33 +50,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -rf docs
 
 %build
+
 %cmake -DIIR1_INSTALL_STATIC=OFF
 %cmake_build
-# Rebuild documentation
 (cat Doxyfile; echo GENERATE_LATEX = NO ) | doxygen -
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files
-%{_libdir}/libiir.so.1*
-%license COPYING
-
-%files devel
-%{_includedir}/Iir.h
-%{_includedir}/iir
-%{_libdir}/libiir.so
-%{_libdir}/cmake/iir 
-%{_libdir}/pkgconfig/iir.pc
-
-%files devel-doc
-%doc README.md
-%doc title.png
-%doc demo
-%doc docs
+%files -f %{oreon_filedir}/main.list
+%files -n iir1-devel -f %{oreon_filedir}/iir1-devel.list
+%files -n iir1-devel-doc -f %{oreon_filedir}/iir1-devel-doc.list
 
 %changelog
+
 %autochangelog

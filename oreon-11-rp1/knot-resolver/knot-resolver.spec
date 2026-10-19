@@ -1,106 +1,54 @@
-%global source0_hash 500ccd3a560300e547b8dc5aaff322f7c8e2e7d6f0d7ef5f36e59cb60504d674
-
+%global source1_hash 82a9f95c0070e6ae5ee3f17c1ff564f63893e779c4b010065842f71c4aa23357
+%global source0_hash 854ad23367bab66392f7d74f142f2219e3090ae81126b635430fce7b1916f1a3
 %global _hardened_build 1
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
-
 %define GPG_CHECK 1
 %define repodir %{_builddir}/%{name}-%{version}
 %define NINJA ninja-build
-
 Name:           knot-resolver
 Version:        6.4.2
 Release:        1%{?dist}
 Summary:        Caching full DNS Resolver
-
 License:        GPL-3.0-or-later
 URL:            https://www.knot-resolver.cz/
 Source0:        https://secure.nic.cz/files/%{name}/%{name}-%{version}.tar.xz
-
-# LuaJIT only on these arches
-%if 0%{?rhel} == 7
-# RHEL 7 does not have aarch64 LuaJIT
-ExclusiveArch:	%{ix86} x86_64
-%else
 ExclusiveArch:	%{arm} aarch64 %{ix86} x86_64
-%endif
-
 %if 0%{GPG_CHECK}
 Source1:        https://secure.nic.cz/files/%{name}/%{name}-%{version}.tar.xz.asc
-# PGP keys used to sign upstream releases
-# Export with --armor using command from https://fedoraproject.org/wiki/PackagingDrafts:GPGSignatures
-# Don't forget to update %%prep section when adding/removing keys
-# This key is from: https://secure.nic.cz/files/knot-resolver/kresd-keyblock.asc
 Source100:      kresd-keyblock.asc
-BuildRequires:  gnupg2
 %endif
-
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  meson
-BuildRequires:  pkgconfig(cmocka)
-BuildRequires:  pkgconfig(gnutls)
-BuildRequires:  pkgconfig(libedit)
-BuildRequires:  pkgconfig(libknot) >= 3.0.2
-BuildRequires:  pkgconfig(libzscanner) >= 3.0.2
-BuildRequires:  pkgconfig(libdnssec) >= 3.0.2
-BuildRequires:  pkgconfig(libnghttp2)
-BuildRequires:  pkgconfig(libsystemd)
-BuildRequires:  pkgconfig(libcap-ng)
-BuildRequires:  pkgconfig(libuv)
-BuildRequires:  pkgconfig(luajit) >= 2.0
-BuildRequires:  pkgconfig(jemalloc)
-BuildRequires:  systemd-rpm-macros
-
 Requires:       systemd
 Requires(post): systemd
-
-# dnstap module dependencies
-# SUSE is missing protoc protobuf compiler
 %if "x%{?suse_version}" == "x"
-BuildRequires:  pkgconfig(libfstrm)
-BuildRequires:  pkgconfig(libprotobuf-c)
 %endif
-
-# Distro-dependent dependencies
-%if 0%{?rhel} == 7
-BuildRequires:  lmdb-devel
-# Lua 5.1 version of the libraries have different package names
-Requires:       lua-basexx
-Requires:       lua-psl
-Requires:       lua-http
-%endif
-%if 0%{?fedora} || 0%{?rhel} > 7
-BuildRequires:  pkgconfig(lmdb)
-BuildRequires:  python3-sphinx
-Requires:       lua5.1-basexx
-Requires:       lua5.1-cqueues
-Requires:       lua5.1-http
-Recommends:     lua5.1-psl
-%endif
-
-# we do not build HTTP module on SuSE so the build requires is not needed
 %if "x%{?suse_version}" == "x"
-BuildRequires:  openssl-devel
 %endif
-
 %if 0%{?suse_version}
 %define NINJA ninja
-BuildRequires:  lmdb-devel
-BuildRequires:  python3-Sphinx
 Requires(pre):  shadow
 %endif
-
-%if "x%{?rhel}" == "x"
-# dependencies for doc package
-# NOTE: doc isn't possible to build on CentOS 7, 8
-#       python2-sphinx is too old and python36-breathe is broken on CentOS 7
-#       python3-breathe isn't available for CentOS 8 (yet? rhbz#1808766)
-BuildRequires:  doxygen
-BuildRequires:  python3-breathe
-BuildRequires:  python3-sphinx_rtd_theme
-BuildRequires:  texinfo
-%endif
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gnupg2
+BuildRequires:  meson
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig(cmocka)
+BuildRequires:  pkgconfig(gnutls)
+BuildRequires:  pkgconfig(jemalloc)
+BuildRequires:  pkgconfig(libcap-ng)
+BuildRequires:  pkgconfig(libdnssec)
+BuildRequires:  pkgconfig(libedit)
+BuildRequires:  pkgconfig(libfstrm)
+BuildRequires:  pkgconfig(libknot)
+BuildRequires:  pkgconfig(libnghttp2)
+BuildRequires:  pkgconfig(libprotobuf-c)
+BuildRequires:  pkgconfig(libsystemd)
+BuildRequires:  pkgconfig(libuv)
+BuildRequires:  pkgconfig(libzscanner)
+BuildRequires:  pkgconfig(luajit)
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 The Knot Resolver is a DNSSEC-enabled caching full resolver implementation
 written in C and LuaJIT, including both a resolver library and a daemon.
@@ -114,25 +62,13 @@ $ systemctl start kresd@1.service
 %package devel
 Summary:        Development headers for Knot Resolver
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The package contains development headers for Knot Resolver.
-
-%if "x%{?rhel}" == "x"
-%package doc
-Summary:        Documentation for Knot Resolver
-BuildArch:      noarch
-Requires:       %{name} = %{version}-%{release}
-
-%description doc
-Documentation for Knot Resolver
-%endif
 
 %if "x%{?suse_version}" == "x"
 %package module-dnstap
 Summary:        dnstap module for Knot Resolver
 Requires:       %{name} = %{version}-%{release}
-
 %description module-dnstap
 dnstap module for Knot Resolver supports logging DNS responses to a unix socket
 in dnstap format using fstrm framing library.  This logging is useful if you
@@ -143,14 +79,8 @@ need effectively log all DNS traffic.
 %package module-http
 Summary:        HTTP module for Knot Resolver
 Requires:       %{name} = %{version}-%{release}
-%if 0%{?fedora} || 0%{?rhel} > 7
-Requires:       lua5.1-http
-Requires:       lua5.1-mmdb
-%else
 Requires:       lua-http
 Requires:       lua-mmdb
-%endif
-
 %description module-http
 HTTP module for Knot Resolver can serve as API endpoint for other modules or
 provide a web interface for local visualization of the resolver cache and
@@ -159,6 +89,7 @@ native C implementation, which doesn't require this package.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %if 0%{GPG_CHECK}
@@ -175,10 +106,8 @@ u knot-resolver - 'Knot Resolver' %{_sysconfdir}/knot-resolver -
 EOF
 
 %build
+
 CFLAGS="%{optflags}" LDFLAGS="%{?__global_ldflags}" meson build_rpm \
-%if "x%{?rhel}" == "x"
-    -Ddoc=enabled \
-%endif
     -Dsystemd_files=enabled \
     -Dclient=enabled \
 %if "x%{?suse_version}" == "x"
@@ -196,191 +125,45 @@ CFLAGS="%{optflags}" LDFLAGS="%{?__global_ldflags}" meson build_rpm \
     --libdir="%{_libdir}" \
     --includedir="%{_includedir}" \
     --sysconfdir="%{_sysconfdir}" \
-
 %{NINJA} -v -C build_rpm
-%if "x%{?rhel}" == "x"
-%{NINJA} -v -C build_rpm doc
-%endif
-
 %check
-meson test -C build_rpm
 
+meson test -C build_rpm
 %install
 DESTDIR="${RPM_BUILD_ROOT}" %{NINJA} -v -C build_rpm install
-
-# add kresd.target to multi-user.target.wants to support enabling kresd services
 install -m 0755 -d %{buildroot}%{_unitdir}/multi-user.target.wants
 ln -s ../kresd.target %{buildroot}%{_unitdir}/multi-user.target.wants/kresd.target
-
-# remove modules with missing dependencies
 rm %{buildroot}%{_libdir}/knot-resolver/kres_modules/etcd.lua
-
-# remove unused sysusers
 rm %{buildroot}%{_prefix}/lib/sysusers.d/knot-resolver.conf
-
 %if 0%{?suse_version}
 rm %{buildroot}%{_libdir}/knot-resolver/kres_modules/experimental_dot_auth.lua
 rm -r %{buildroot}%{_libdir}/knot-resolver/kres_modules/http
 rm %{buildroot}%{_libdir}/knot-resolver/kres_modules/http*.lua
 rm %{buildroot}%{_libdir}/knot-resolver/kres_modules/prometheus.lua
 %endif
-
-# rename doc directory for centos 7, opensuse
-%if 0%{?suse_version} || 0%{?rhel} == 7
-install -m 755 -d %{buildroot}/%{_pkgdocdir}
-mv %{buildroot}/%{_datadir}/doc/%{name}/* %{buildroot}/%{_pkgdocdir}/
-%endif
-
 install -m0644 -D knot-resolver.sysusers.conf %{buildroot}%{_sysusersdir}/knot-resolver.conf
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %pre
-%if "x%{?rhel}" == "x"
-# upgrade-4-to-5
-if [ -f %{_unitdir}/kresd.socket ] ; then
-	export UPG_DIR=%{_sharedstatedir}/knot-resolver/.upgrade-4-to-5
-	mkdir -p ${UPG_DIR}
-	touch ${UPG_DIR}/.unfinished
-
-	for sock in kresd.socket kresd-tls.socket kresd-webmgmt.socket kresd-doh.socket ; do
-		if systemctl is-enabled ${sock} 2>/dev/null | grep -qv masked ; then
-			systemctl show ${sock} -p Listen > ${UPG_DIR}/${sock}
-			case "$(systemctl show ${sock} -p BindIPv6Only)" in
-			*ipv6-only)
-				touch ${UPG_DIR}/${sock}.v6only
-				;;
-			*default)
-				if cat /proc/sys/net/ipv6/bindv6only | grep -q 1 ; then
-					touch ${UPG_DIR}/${sock}.v6only
-				fi
-				;;
-			esac
-		fi
-	done
-fi
-%endif
 
 %post
-# upgrade-4-to-5
-%if "x%{?rhel}" == "x"
-export UPG_DIR=%{_sharedstatedir}/knot-resolver/.upgrade-4-to-5
-if [ -f ${UPG_DIR}/.unfinished ] ; then
-	rm -f ${UPG_DIR}/.unfinished
-	kresd -c %{_libdir}/knot-resolver/upgrade-4-to-5.lua &>/dev/null
-	echo -e "\n   !!! WARNING !!!"
-	echo -e "Knot Resolver configuration file requires manual upgrade.\n"
-	cat ${UPG_DIR}/kresd.conf.net 2>/dev/null
-fi
-%endif
 
-# 5.0.1 fix to force restart of kres-cache-gc.service, which was missing in systemd_postun_with_restart
-# TODO: remove once most users upgrade to 5.0.1+
 systemctl daemon-reload >/dev/null 2>&1 || :
 if [ $1 -ge 2 ] ; then
         systemctl try-restart kres-cache-gc.service >/dev/null 2>&1 || :
 fi
-
-# systemd_post macro is not needed for anything (calls systemctl preset)
 %tmpfiles_create %{_tmpfilesdir}/knot-resolver.conf
-%if "x%{?fedora}" == "x"
-/sbin/ldconfig
-%endif
-
 %preun
+
 %systemd_preun kres-cache-gc.service kresd.target
-
 %postun
+
 %systemd_postun_with_restart 'kresd@*.service' kres-cache-gc.service
-%if "x%{?fedora}" == "x"
-/sbin/ldconfig
-%endif
-
-%files
-%dir %{_pkgdocdir}
-%license %{_pkgdocdir}/COPYING
-%doc %{_pkgdocdir}/AUTHORS
-%doc %{_pkgdocdir}/NEWS
-%doc %{_pkgdocdir}/examples
-%dir %{_sysconfdir}/knot-resolver
-%config(noreplace) %{_sysconfdir}/knot-resolver/kresd.conf
-%config(noreplace) %{_sysconfdir}/knot-resolver/root.hints
-%{_sysconfdir}/knot-resolver/icann-ca.pem
-%attr(750,knot-resolver,knot-resolver) %dir %{_sharedstatedir}/knot-resolver
-%attr(640,knot-resolver,knot-resolver) %{_sharedstatedir}/knot-resolver/root.keys
-%{_unitdir}/kresd@.service
-%{_unitdir}/kres-cache-gc.service
-%{_unitdir}/kresd.target
-%dir %{_unitdir}/multi-user.target.wants
-%{_unitdir}/multi-user.target.wants/kresd.target
-%{_mandir}/man7/kresd.systemd.7.gz
-%{_tmpfilesdir}/knot-resolver.conf
-%ghost /run/%{name}
-%ghost %{_localstatedir}/cache/%{name}
-%attr(750,knot-resolver,knot-resolver) %dir %{_libdir}/%{name}
-%{_sbindir}/kresd
-%{_sbindir}/kresc
-%{_sbindir}/kres-cache-gc
-%{_libdir}/libkres.so.*
-%{_libdir}/knot-resolver/*.so
-%{_libdir}/knot-resolver/*.lua
-%dir %{_libdir}/knot-resolver/kres_modules
-%{_libdir}/knot-resolver/kres_modules/bogus_log.so
-%{_libdir}/knot-resolver/kres_modules/edns_keepalive.so
-%{_libdir}/knot-resolver/kres_modules/extended_error.so
-%{_libdir}/knot-resolver/kres_modules/hints.so
-%{_libdir}/knot-resolver/kres_modules/nsid.so
-%{_libdir}/knot-resolver/kres_modules/refuse_nord.so
-%{_libdir}/knot-resolver/kres_modules/stats.so
-%{_libdir}/knot-resolver/kres_modules/daf
-%{_libdir}/knot-resolver/kres_modules/daf.lua
-%{_libdir}/knot-resolver/kres_modules/detect_time_jump.lua
-%{_libdir}/knot-resolver/kres_modules/detect_time_skew.lua
-%{_libdir}/knot-resolver/kres_modules/dns64.lua
-%if "x%{?suse_version}" == "x"
-%{_libdir}/knot-resolver/kres_modules/experimental_dot_auth.lua
-%endif
-%{_libdir}/knot-resolver/kres_modules/graphite.lua
-%{_libdir}/knot-resolver/kres_modules/policy.lua
-%{_libdir}/knot-resolver/kres_modules/predict.lua
-%{_libdir}/knot-resolver/kres_modules/prefill.lua
-%{_libdir}/knot-resolver/kres_modules/priming.lua
-%{_libdir}/knot-resolver/kres_modules/rebinding.lua
-%{_libdir}/knot-resolver/kres_modules/renumber.lua
-%{_libdir}/knot-resolver/kres_modules/serve_stale.lua
-%{_libdir}/knot-resolver/kres_modules/ta_sentinel.lua
-%{_libdir}/knot-resolver/kres_modules/ta_signal_query.lua
-%{_libdir}/knot-resolver/kres_modules/ta_update.lua
-%{_libdir}/knot-resolver/kres_modules/view.lua
-%{_libdir}/knot-resolver/kres_modules/watchdog.lua
-%{_libdir}/knot-resolver/kres_modules/workarounds.lua
-%{_mandir}/man8/kresd.8.gz
-%{_sysusersdir}/knot-resolver.conf
-
-%files devel
-%{_includedir}/libkres
-%{_libdir}/pkgconfig/libkres.pc
-%{_libdir}/libkres.so
-
-%if "x%{?rhel}" == "x"
-%files doc
-%dir %{_pkgdocdir}
-%doc %{_pkgdocdir}/html
-%doc %{_datadir}/info/knot-resolver.info*
-%dir %{_datadir}/info/knot-resolver-figures
-%doc %{_datadir}/info/knot-resolver-figures/*
-%endif
-
-%if "x%{?suse_version}" == "x"
-%files module-dnstap
-%{_libdir}/knot-resolver/kres_modules/dnstap.so
-%endif
-
-%if "x%{?suse_version}" == "x"
-%files module-http
-%{_libdir}/knot-resolver/debug_opensslkeylog.so
-%{_libdir}/knot-resolver/kres_modules/http
-%{_libdir}/knot-resolver/kres_modules/http*.lua
-%{_libdir}/knot-resolver/kres_modules/prometheus.lua
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n knot-resolver-devel -f %{oreon_filedir}/knot-resolver-devel.list
+%files -n knot-resolver-module-dnstap -f %{oreon_filedir}/knot-resolver-module-dnstap.list
+%files -n knot-resolver-module-http -f %{oreon_filedir}/knot-resolver-module-http.list
 
 %changelog
+
 %autochangelog

@@ -1,32 +1,25 @@
 %global source0_hash 9c4c53d9e67855eb04ef87b7525045b4c5b34a9e782c44615dac3ba1a2950f39
-
 %bcond_with	dvdrom
-
-Summary: Additional error protection for CD/DVD media
+Summary:        Additional error protection for CD/DVD media
 Name: dvdisaster
 Version: 0.79.5
-Release: 24%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL: http://dvdisaster.net
-Source0: http://dvdisaster.net/downloads/dvdisaster-%{version}.tar.bz2
-
-# Nothing illegal, just a scratch wiping from the media
-# (legally bought) with a probably copyrighted content,
-# but see http://bugzilla.redhat.com/231574 why it is
-# not enabled by default...
+Source0:        http://dvdisaster.net/downloads/dvdisaster-%{version}.tar.bz2
 Patch1: dvdisaster-0.79.5-dvdrom.patch
-
 Patch0: dvdisaster-configure-c99.patch
-
-BuildRequires: gcc
-BuildRequires: glib2-devel >= 2.32.0
-BuildRequires: gtk2-devel >= 2.6.0
-BuildRequires: gettext, desktop-file-utils
-BuildRequires: bzip2-devel, libpng-devel
-BuildRequires: make
 Requires: xdg-utils
-
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  glib2-devel
+BuildRequires:  gtk2-devel
+BuildRequires:  libpng-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 %{name} provides a margin of safety against data loss on CD and DVD media
 caused by scratches or aging. It creates error correction data,
@@ -52,6 +45,7 @@ jsou použita pro obnovu nečitelných sektorů, pokud se disk později
 poškodí.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -61,49 +55,31 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 
 export CFLAGS="$RPM_OPT_FLAGS -fcommon"
-
 %configure	\
 	--docdir=%{_docdir} \
 	--docsubdir=%{name} \
 	--localedir=%{_datadir}/locale
-
-# can not build locales with %{?_smp_mflags}
 make
-
 %install
-
 make install BUILDROOT=$RPM_BUILD_ROOT
-
 rm -f $RPM_BUILD_ROOT%{_bindir}/*-uninstall.sh
-
 install -d $RPM_BUILD_ROOT%{_datadir}/pixmaps
 install -p -m644 -D contrib/dvdisaster48.png $RPM_BUILD_ROOT%{_datadir}/pixmaps/dvdisaster48.png
-
 for NN in 16 24 32 48 64
 do
     install -p -m644 -D contrib/dvdisaster${NN}.png \
 		$RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${NN}x${NN}/apps/dvdisaster${NN}.png
 done
-
 desktop-file-install \
 	--dir ${RPM_BUILD_ROOT}%{_datadir}/applications	\
 	--add-category=AudioVideo \
 	--add-category=DiscBurning \
 	contrib/%{name}.desktop
-	
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%{_bindir}/*
-%{_datadir}/applications/*
-%{_datadir}/pixmaps/*
-%{_datadir}/icons/hicolor/*/apps/*
-
-%{_docdir}/%{name}
-%lang(de) %{_docdir}/%{name}/CREDITS.de
-
-%{_mandir}/man1/*
-%lang(de) %{_mandir}/de/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

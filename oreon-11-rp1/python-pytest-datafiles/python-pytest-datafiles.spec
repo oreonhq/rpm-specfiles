@@ -1,57 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 05fc3eef2429fe26ae42283cccb1f3831b53b12d4bd8b4734bf42973d4af6e16
 Name:           python-pytest-datafiles
 Version:        3.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        py.test plugin to create a _tmp_path_ containing predefined files/directories.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/omarkohl/pytest-datafiles
-Source:         %{pypi_source pytest_datafiles}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_datafiles/pytest_datafiles-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pytest-datafiles' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pytest-datafiles = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pytest-datafiles
-Summary:        %{summary}
-
-%description -n python3-pytest-datafiles %_description
-
+Summary:        py.test plugin to create a _tmp_path_ containing predefined files/directories.
+# oreon:reqs
+Requires:       python3dist(pytest) >= 6.2.0
+# /oreon:reqs
+%description -n python3-pytest-datafiles
 
 %prep
-%autosetup -p1 -n pytest_datafiles-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pytest_datafiles-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pytest-datafiles usr/lib/python3*/site-packages/pytest_datafiles* usr/lib64/python3*/site-packages/pytest_datafiles* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_datafiles* usr/lib64/python3*/site-packages/pytest_datafiles* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pytest-datafiles -f %{pyproject_files}
+%files
+%files -n python3-pytest-datafiles -f %{oreon_filedir}/python3-pytest-datafiles.list
 
 %changelog
+
 %autochangelog

@@ -1,44 +1,18 @@
-%global source0_hash none
+%global source0_hash 4b8caf527d85f7eabc63ebe9d2320e0490653c2e138b88fbf42e6f41dd3e451c
 %if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_without bundled_rust_deps
 %else
 %bcond_with bundled_rust_deps
 %endif
-
-# djvulibre is not available in RHEL 10+
 %bcond djvu %{undefined rhel}
-
-# Filter out soname provides for plugins
 %global __provides_exclude_from ^(%{_libdir}/papers/.*\\.so|%{_libdir}/nautilus/extensions-4/.*\\.so)$
-
 %global tarball_version %(echo %{version} | tr '~' '.')
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
-
 Name:           papers
 Version:        51.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        View multipage documents
-
-# papers itself is:
 SourceLicense:  GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT AND libtiff
-# ... and its crate dependencies are:
-# (MIT OR Apache-2.0) AND Unicode-3.0
-# (MIT OR Apache-2.0) AND Unicode-DFS-2016
-# 0BSD OR MIT OR Apache-2.0
-# Apache-2.0 OR MIT
-# Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
-# BSD-2-Clause
-# BSD-2-Clause OR Apache-2.0 OR MIT
-# BSD-3-Clause
-# BSD-3-Clause OR Apache-2.0
-# GPL-2.0-or-later
-# MIT
-# MIT OR Apache-2.0
-# MIT OR Zlib OR Apache-2.0
-# Unicode-3.0
-# Unlicense OR MIT
-# Zlib
-# Zlib OR Apache-2.0 OR MIT
 License:        %{shrink:
     GPL-2.0-or-later AND
     GPL-3.0-or-later AND
@@ -60,17 +34,23 @@ License:        %{shrink:
     (Unlicense OR MIT)
 }
 URL:            https://gitlab.gnome.org/GNOME/Incubator/papers
-Source:         https://download.gnome.org/sources/papers/%(echo %{version} | cut -d. -f1)/papers-%{tarball_version}.tar.xz
-# To generate vendored cargo sources:
-#   tar xf papers-%%{tarball_version}.tar.xz
-#   pushd papers-%%{tarball_version}
-#   cargo vendor --versioned-dirs
-#   tar Jcvf ../papers-%%{tarball_version}-vendor.tar.xz vendor/
-#   popd
-# 
+Source0:        https://download.gnome.org/sources/%{name}/51/%{name}-%{version}.tar.xz
 ExcludeArch:    %{ix86}
-
+%if %{with djvu}
+%endif
+%if 0%{?rhel} || (0%{?oreon} >= 11)
+%else
+%endif
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
+Requires:       %{name}-previewer%{?_isa} = %{version}-%{release}
+Requires:       %{name}-thumbnailer%{?_isa} = %{version}-%{release}
+Requires:       hicolor-icon-theme
+# oreon:deps
+BuildRequires:  /usr/bin/appstream-util
+BuildRequires:  /usr/bin/desktop-file-validate
 BuildRequires:  blueprint-compiler
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros
 BuildRequires:  gcc
 BuildRequires:  itstool
 BuildRequires:  meson
@@ -78,9 +58,7 @@ BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(cairo-pdf)
 BuildRequires:  pkgconfig(cairo-ps)
 BuildRequires:  pkgconfig(dbus-1)
-%if %{with djvu}
 BuildRequires:  pkgconfig(ddjvuapi)
-%endif
 BuildRequires:  pkgconfig(exempi-2.0)
 BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
 BuildRequires:  pkgconfig(gio-2.0)
@@ -96,169 +74,92 @@ BuildRequires:  pkgconfig(libarchive)
 BuildRequires:  pkgconfig(libgxps)
 BuildRequires:  pkgconfig(libnautilus-extension-4)
 BuildRequires:  pkgconfig(libsecret-1)
+BuildRequires:  pkgconfig(libspelling-1)
 BuildRequires:  pkgconfig(libtiff-4)
 BuildRequires:  pkgconfig(poppler-glib)
 BuildRequires:  pkgconfig(sysprof-capture-4)
-BuildRequires:  pkgconfig(libspelling-1)
-BuildRequires:  /usr/bin/appstream-util
-BuildRequires:  /usr/bin/desktop-file-validate
-
-%if 0%{?rhel} || (0%{?oreon} >= 11)
-BuildRequires:  rust-toolset
-%else
-BuildRequires:  cargo-rpm-macros
-%endif
-
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-Requires:       %{name}-previewer%{?_isa} = %{version}-%{release}
-Requires:       %{name}-thumbnailer%{?_isa} = %{version}-%{release}
-
-# For hicolor icon theme directories
-Requires:       hicolor-icon-theme
-
+BuildRequires:  rustc
+# /oreon:deps
 %description
 Papers is a document viewer for multiple document formats for GNOME.
 
-
 %package        libs
 Summary:        Libraries for the Papers document viewer
-
 %description    libs
 This package contains shared libraries needed for Papers.
-
 
 %package        devel
 Summary:        Support for developing backends for the Papers document viewer
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description    devel
 This package contains libraries and header files needed for Papers
 backend development.
-
 
 %package        nautilus
 Summary:        Papers extension for nautilus
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       nautilus%{?_isa}
 Supplements:    (nautilus and %{name})
-
 %description    nautilus
 This package contains the Papers extension for the Nautilus file manager.
 It adds an additional tab called "Document" to the file properties dialog.
 
-
 %package        previewer
 Summary:        Papers previewer
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description    previewer
 This package brings the Papers previewer independently from Papers.
 It provides the printing preview for the GTK printing dialog.
 
-
 %package        thumbnailer
 Summary:        Papers thumbnailer
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description    thumbnailer
 This package brings the Papers thumbnailer independently from Papers.
-
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
-
 %if %{with bundled_rust_deps}
 %autosetup -p1 -n papers-%{tarball_version}
 cargo vendor --versioned-dirs
-%cargo_prep -v vendor
 %else
 %autosetup -p1 -n papers-%{tarball_version}
-%cargo_prep
 %endif
-
 %if %{without bundled_rust_deps}
-%generate_buildrequires
-%cargo_generate_buildrequires -a -t
-%endif
-
-
+%oreon_vendor_cargo
 %build
+
 %meson \
        -Ddjvu=%{?with_djvu:enabled}%{!?with_djvu:disabled} \
        -Dintrospection=disabled \
        -Dtests=false \
        %{nil}
-
 %meson_build
-
 %cargo_license_summary -a
 %{cargo_license -a} > LICENSE.dependencies
 %if %{with bundled_rust_deps}
 %cargo_vendor_manifest
 %endif
-
-
 %install
 %meson_install
 %find_lang papers --with-gnome
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%meson_test
 
+%meson_test
 appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/*.metainfo.xml
 desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/*.desktop
-
-
-%files -f papers.lang
-%doc README.md
-%license COPYING
-%license LICENSE.dependencies
-%if %{with bundled_rust_deps}
-%license cargo-vendor.txt
-%endif
-%{_bindir}/papers
-%{_datadir}/applications/org.gnome.Papers.desktop
-%{_datadir}/glib-2.0/schemas/org.gnome.Papers.gschema.xml
-%{_datadir}/icons/hicolor/scalable/apps/org.gnome.Papers.svg
-%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Papers-symbolic.svg
-%{_mandir}/man1/papers.1*
-%{_metainfodir}/org.gnome.Papers.metainfo.xml
-
-%files libs
-%license COPYING
-%{_libdir}/libppsdocument-4.0.so.6{,.*}
-%{_libdir}/libppsview-4.0.so.5{,.*}
-%{_libdir}/papers/
-%{_metainfodir}/org.gnome.Papers.ComicsDocument.metainfo.xml
-%if %{with djvu}
-%{_metainfodir}/org.gnome.Papers.DjvuDocument.metainfo.xml
-%endif
-%{_metainfodir}/org.gnome.Papers.PdfDocument.metainfo.xml
-%{_metainfodir}/org.gnome.Papers.TiffDocument.metainfo.xml
-
-%files devel
-%{_includedir}/papers/
-%{_libdir}/libppsdocument-4.0.so
-%{_libdir}/libppsview-4.0.so
-%{_libdir}/pkgconfig/papers-document-4.0.pc
-%{_libdir}/pkgconfig/papers-view-4.0.pc
-
-%files nautilus
-%{_libdir}/nautilus/extensions-4/libpapers-document-properties.so
-
-%files previewer
-%{_bindir}/papers-previewer
-%{_datadir}/applications/org.gnome.Papers-previewer.desktop
-%{_mandir}/man1/papers-previewer.1*
-
-%files thumbnailer
-%{_bindir}/papers-thumbnailer
-%{_datadir}/thumbnailers/
-%{_mandir}/man1/papers-thumbnailer.1*
-
+%files -f %{oreon_filedir}/main.list
+%files -n papers-libs -f %{oreon_filedir}/papers-libs.list
+%files -n papers-devel -f %{oreon_filedir}/papers-devel.list
+%files -n papers-nautilus -f %{oreon_filedir}/papers-nautilus.list
+%files -n papers-previewer -f %{oreon_filedir}/papers-previewer.list
+%files -n papers-thumbnailer -f %{oreon_filedir}/papers-thumbnailer.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 49.6-1
 - Import
+%endif

@@ -1,19 +1,17 @@
 %global source0_hash 721bab18ff37160fd9e903eb211ff26fdee38c3d0041d556b07d76089c435d17
-
 %bcond_with static_libs # don't build static libraries
-
 Summary:        High quality system independent, open source libm
 Name:           openlibm
 Version:        0.8.8
 Release:        1%{?dist}
-# Automatically converted from old format: BSD and MIT and ISC and Public Domain - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT AND ISC AND LicenseRef-Callaway-Public-Domain
 Source0:        https://github.com/JuliaLang/openlibm/archive/v%{version}.tar.gz
 URL:            https://github.com/JuliaLang/openlibm/
 ExclusiveArch:  %{arm} %{ix86} x86_64 aarch64 %{power64}
-
-BuildRequires: make
-BuildRequires: gcc
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 OpenLIBM is an effort to have a high quality standalone LIBM library.
 It is meant to be used standalone in applications and programming language
@@ -25,7 +23,6 @@ assembly versions of many functions.
 %package devel
 Summary:    High quality system independent, open source libm
 Requires:   %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Contains header files for developing applications that use the %{name}
 library.
@@ -33,11 +30,11 @@ library.
 %package static
 Summary:    High quality system independent, open source libm
 Requires:   %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 Static %{name} library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -48,42 +45,30 @@ rm -f test/ieeetestnew.c
 rm -f i387/osx_asm.h
 
 %build
+
 make %{?_smp_mflags} \
       FFLAGS="%{optflags}" \
       CFLAGS="%{optflags}"
-
 %check
-# Tests still fail on ARM because of floating-point exceptions
-# which are not set correctly (but other tests are fine)
+
 %ifnarch %{arm}
 make test
 %endif
-
 %install
 make install prefix=%{_prefix} \
              libdir=%{_libdir} \
              includedir=%{_includedir} \
              DESTDIR=%{buildroot}
-
 %if ! %{with static_libs}
 rm %{buildroot}/%{_libdir}/libopenlibm.a
 %endif
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc LICENSE.md README.md
-%{_libdir}/libopenlibm.so.3*
-
-%files devel
-%{_libdir}/libopenlibm.so
-%{_libdir}/pkgconfig/openlibm.pc
-%{_includedir}/openlibm/
-
-%if %{with static_libs}
-%files static
-%{_libdir}/libopenlibm.a
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n openlibm-devel -f %{oreon_filedir}/openlibm-devel.list
+%files -n openlibm-static -f %{oreon_filedir}/openlibm-static.list
 
 %changelog
+
 %autochangelog

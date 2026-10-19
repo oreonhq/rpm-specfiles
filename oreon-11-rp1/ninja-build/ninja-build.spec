@@ -1,9 +1,5 @@
 %global source0_hash 974d6b2f4eeefa25625d34da3cb36bdcebe7fbce40f4c16ac0835fd1c0cbae17
-
-# Set to bcond_without or use --with bootstrap,
-# when bootstrapping a new architecture.
 %bcond_with bootstrap
-
 Name:           ninja-build
 Version:        1.13.2
 Release:        2%{?dist}
@@ -13,22 +9,19 @@ URL:            https://ninja-build.org/
 Source0:        https://github.com/ninja-build/ninja/archive/refs/tags/v%{version}.tar.gz#/ninja-%{version}.tar.gz
 Source1:        ninja.vim
 Source2:        macros.ninja
-# https://github.com/ninja-build/ninja/pull/2640
 Patch0:         ninja-1.13.1-test-endianness.patch
-BuildRequires:  gcc-c++
-BuildRequires:  python3-devel
 %if %{without bootstrap}
-BuildRequires:  asciidoc
-BuildRequires:  gtest-devel
-BuildRequires:  cmake
-%endif
-%if !0%{?rhel}
-BuildRequires:  re2c >= 0.11.3
 %endif
 %if %{without bootstrap}
 Requires:       vim-filesystem
 %endif
-
+# oreon:deps
+BuildRequires:  asciidoc
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 Ninja is a small build system with a focus on speed. It differs from other
 build systems in two major respects: it is designed to have its input files
@@ -39,7 +32,6 @@ fast as possible.
 Summary:        Python metadata for packages depending on ninja
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 BuildArch:      noarch
-
 %description -n python3-ninja
 Package provides metadata only for Python packages depending on ninja.
 This is to make automatic dependency resolution work. The package is NOT
@@ -47,24 +39,21 @@ using anything from the PyPI package called ninja.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n ninja-%{version} -p1
-
+%global oreon_srcdir ninja-%{version}
+%oreon_prep
 %build
+
 %set_build_flags
 %python3 configure.py --bootstrap --verbose
 ./ninja -v all
 %if %{without bootstrap}
 ./ninja -v manual
-# For testing with the ninja we just built, we need to add current
-# directory to PATH, otherwise CMake fails to find the ninja binary.
 PATH=$(pwd):"$PATH" %cmake \
   -G Ninja \
   -B cmake-build \
   -DCMAKE_BUILD_TYPE=Release
 ./ninja -C cmake-build ninja_test
 %endif
-
-# Provide Python metadata
 %global ninja_distinfo ninja-%{version}.dist-info
 mkdir %{ninja_distinfo}
 cat > %{ninja_distinfo}/METADATA << EOF
@@ -73,12 +62,10 @@ Name: ninja
 Version: %{version}
 Summary: %{summary}
 Description-Content-Type: text/plain
-
 Metadata only package for automatic dependency resolution in the RPM
 ecosystem. This package is separate from the PyPI package called ninja.
 EOF
 echo rpm > %{ninja_distinfo}/INSTALLER
-
 %install
 install -Dpm0755 ninja -t %{buildroot}%{_bindir}/
 %if %{without bootstrap}
@@ -89,44 +76,20 @@ install -Dpm0644 misc/zsh-completion %{buildroot}%{_datadir}/zsh/site-functions/
 install -Dpm0644 misc/ninja_syntax.py %{buildroot}%{python3_sitelib}/ninja_syntax.py
 %endif
 install -Dpm0644 %{S:2} %{buildroot}%{_rpmmacrodir}/macros.ninja
-
-# Macro should not change when we are redefining bindir
 sed -i -e "/^%%__ninja /s| .*$| %{_bindir}/ninja|" %{buildroot}%{_rpmmacrodir}/macros.ninja
-
 ln -s ninja %{buildroot}%{_bindir}/ninja-build
-
-# Install Python metadata
 cp -a %{ninja_distinfo} %{buildroot}%{python3_sitelib}
-
+%oreon_autofiles python3-ninja usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{without bootstrap}
 %check
+
 ./cmake-build/ninja_test
 %endif
-
-%files
-%license COPYING
-%doc README.md
-%if %{without bootstrap}
-%doc doc/manual.html
-%endif
-%{_bindir}/ninja
-%{_bindir}/ninja-build
-%if %{without bootstrap}
-%{_datadir}/bash-completion/completions/ninja
-%{_datadir}/vim/vimfiles/syntax/ninja.vim
-%{_datadir}/vim/vimfiles/ftdetect/ninja.vim
-# zsh does not have a -filesystem package
-%dir %{_datadir}/zsh
-%dir %{_datadir}/zsh/site-functions
-%{_datadir}/zsh/site-functions/_ninja
-%pycached %{python3_sitelib}/ninja_syntax.py
-%endif
-%{_rpmmacrodir}/macros.ninja
-
-%files -n python3-ninja
-%{python3_sitelib}/%{ninja_distinfo}
-
+%files -f %{oreon_filedir}/main.list
+%files -n python3-ninja -f %{oreon_filedir}/python3-ninja.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.13.2-2
 - Prepare for Oreon 11 (RP1)

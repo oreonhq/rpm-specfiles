@@ -1,71 +1,50 @@
+%global source1_hash 54ff2db5511f01eecc5d012f46083382ce49348b9e1ce62db87b06e5d860890f
 %global source0_hash d88519a094797c645ca34797a24a14efc10965829c4c3352c8ef33782a556336
-
-# Enabled by default
 %bcond_without tests
-
-# note ABI does not change in patch releases
-# https://sourceforge.net/p/gdcm/mailman/message/36768376/
-
-# Docs do not build on i686 because some LaTeX deps are unsatisfied. So skip
-# these docs entirely.
 %bcond_with texdocs
-
 Name:       gdcm
 Version:    3.0.24
-Release:    %autorelease
-Summary:    Grassroots DiCoM is a C++ library to parse DICOM medical files
-# SPDX
+Release:        1%{?dist}
+Summary:        Grassroots DiCoM is a C++ library to parse DICOM medical files
 License:    BSD-3-Clause
 URL:        https://sourceforge.net/projects/gdcm/
-# Use github release
-Source0:    https://github.com/malaterre/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/malaterre/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:    http://downloads.sourceforge.net/project/gdcm/gdcmData/gdcmData/gdcmData.tar.gz
-
 Patch1: 0001-3.0.1-Use-copyright.patch
-# Fix for 1687233
 Patch2: 0002-Fix-export-variables.patch
 Patch3: 0003-fix-set-C-23-for-poppler-usage.patch
-# Sent upstream: https://github.com/malaterre/GDCM/pull/205
 Patch4: 0004-fix-GooString-use-std-string-size.patch
-
-BuildRequires:  CharLS-devel >= 2.2
+%if %{with texdocs}
+%endif
+# oreon:deps
+BuildRequires:  CharLS-devel
 BuildRequires:  cmake
-BuildRequires:  doxygen
-BuildRequires:  libxslt-devel
 BuildRequires:  dcmtk-devel
-BuildRequires:  docbook5-style-xsl
 BuildRequires:  docbook-style-xsl
+BuildRequires:  docbook5-style-xsl
+BuildRequires:  doxygen
 BuildRequires:  expat-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  git-core
-BuildRequires:  graphviz
 BuildRequires:  gl2ps-devel
+BuildRequires:  graphviz
+BuildRequires:  json-c-devel
 BuildRequires:  libogg-devel
 BuildRequires:  libtheora-devel
 BuildRequires:  libuuid-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  libxslt-devel
+BuildRequires:  make
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  openssl-devel
 BuildRequires:  pkgconfig(libopenjp2)
 BuildRequires:  poppler-devel
 BuildRequires:  python3-devel
-BuildRequires:  swig
 BuildRequires:  sqlite-devel
-BuildRequires:  json-c-devel
-BuildRequires:  libxml2-devel
-BuildRequires:  make
-
-# BuildRequires:  vtk-devel
-
-# deps aren't available on i686, so we skip docs building entirely
-%if %{with texdocs}
-BuildRequires:  texlive-scheme-medium
-BuildRequires:  tex(hanging.sty)
-BuildRequires:  tex(tocloft.sty)
-BuildRequires:  tex(newunicodechar.sty)
-%endif
-
+BuildRequires:  swig
+# /oreon:deps
 %description
 Grassroots DiCoM (GDCM) is a C++ library for DICOM medical files.
 It supports ACR-NEMA version 1 and 2 (huffman compression is not supported),
@@ -81,7 +60,6 @@ Summary:    Includes html documentation for gdcm
 BuildArch:  noarch
 Provides:   %{name}-examples = %{version}-%{release}
 Obsoletes:  %{name}-examples < %{version}-%{release}
-
 %description doc
 You should install the gdcm-doc package if you would like to
 access upstream documentation for gdcm.
@@ -91,7 +69,6 @@ in html pages
 %package    applications
 Summary:    Includes command line programs for GDCM
 Requires:   %{name}%{?_isa} = %{version}-%{release}
-
 %description applications
 You should install the gdcm-applications package if you would like to
 use command line programs part of GDCM. Includes tools to convert,
@@ -101,7 +78,6 @@ anonymize, manipulate, concatenate, and view DICOM files.
 Summary:    Libraries and headers for GDCM
 Requires:   %{name}%{?_isa} = %{version}-%{release}
 Requires:   %{name}-applications%{?_isa} = %{version}-%{release}
-
 %description devel
 You should install the gdcm-devel package if you would like to
 compile applications based on gdcm
@@ -110,12 +86,12 @@ compile applications based on gdcm
 Summary:    Python binding for GDCM
 %{?python_provide:%python_provide python3-gdcm}
 Requires:   %{name}%{?_isa} = %{version}-%{release}
-
 %description -n python3-gdcm
 You should install the python3-gdcm package if you would like to
 used this library with python
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n GDCM-%{version} -S git
@@ -148,6 +124,7 @@ rm -rf Utilities/wxWidgets
 sed -i -e 's@cmake_minimum_required(VERSION 2.8.7)@cmake_minimum_required(VERSION 3.5)@' Examples/CMakeLists.txt
 
 %build
+
 %cmake \
     -DCMAKE_VERBOSE_MAKEFILE=ON \
     -DGDCM_INSTALL_PACKAGE_DIR=%{_libdir}/cmake/%{name} \
@@ -179,91 +156,22 @@ sed -i -e 's@cmake_minimum_required(VERSION 2.8.7)@cmake_minimum_required(VERSIO
     -DGDCM_USE_SYSTEM_LIBXML2:BOOL=ON \
     -DGDCM_USE_SYSTEM_JSON:BOOL=ON \
     -DGDCM_USE_SYSTEM_POPPLER:BOOL=ON
-
-#Cannot build wrap_java:
-#   -DGDCM_VTK_JAVA_JAR:PATH=/usr/share/java/vtk.jar no found!
-#   yum provides */vtk.jar -> No results found
-
 %cmake_build
-
 %install
 %cmake_install
-
+%oreon_autofiles python3-gdcm usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with tests}
 %check
-# Making the tests informative only for now. Several failing tests (27/228):
-# 11,40,48,49,107-109,111-114,130-135,146,149,,151-154,157,194,216,219
+
 make test -C %{__cmake_builddir} || exit 0
 %endif
-
-%files
-%doc AUTHORS README.md
-%license Copyright.txt README.Copyright.txt
-%{_libdir}/libgdcmCommon.so.3.0
-%{_libdir}/libgdcmCommon.so.3.0.24
-%{_libdir}/libgdcmDICT.so.3.0
-%{_libdir}/libgdcmDICT.so.3.0.24
-%{_libdir}/libgdcmDSED.so.3.0
-%{_libdir}/libgdcmDSED.so.3.0.24
-%{_libdir}/libgdcmIOD.so.3.0
-%{_libdir}/libgdcmIOD.so.3.0.24
-%{_libdir}/libgdcmMEXD.so.3.0
-%{_libdir}/libgdcmMEXD.so.3.0.24
-%{_libdir}/libgdcmMSFF.so.3.0
-%{_libdir}/libgdcmMSFF.so.3.0.24
-%{_libdir}/libgdcmjpeg12.so.3.0
-%{_libdir}/libgdcmjpeg12.so.3.0.24
-%{_libdir}/libgdcmjpeg16.so.3.0
-%{_libdir}/libgdcmjpeg16.so.3.0.24
-%{_libdir}/libgdcmjpeg8.so.3.0
-%{_libdir}/libgdcmjpeg8.so.3.0.24
-%{_libdir}/libgdcmmd5.so.3.0
-%{_libdir}/libgdcmmd5.so.3.0.24
-%{_libdir}/libsocketxx.so.1.2
-%{_libdir}/libsocketxx.so.1.2.0
-%dir %{_datadir}/%{name}-3.0/
-%{_datadir}/%{name}-3.0/XML/
-
-%files doc
-%doc %{_docdir}/%{name}
-
-%files applications
-%{_bindir}/gdcmanon
-%{_bindir}/gdcmconv
-%{_bindir}/gdcmclean
-%{_bindir}/gdcmdiff
-%{_bindir}/gdcmdump
-%{_bindir}/gdcmgendir
-%{_bindir}/gdcmimg
-%{_bindir}/gdcminfo
-%{_bindir}/gdcmpap3
-%{_bindir}/gdcmpdf
-%{_bindir}/gdcmraw
-%{_bindir}/gdcmscanner
-%{_bindir}/gdcmscu
-%{_bindir}/gdcmtar
-%{_bindir}/gdcmxml
-%doc %{_mandir}/man1/*.1*
-
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/libgdcmCommon.so
-%{_libdir}/libgdcmDICT.so
-%{_libdir}/libgdcmDSED.so
-%{_libdir}/libgdcmIOD.so
-%{_libdir}/libgdcmMEXD.so
-%{_libdir}/libgdcmMSFF.so
-%{_libdir}/libgdcmjpeg12.so
-%{_libdir}/libgdcmjpeg16.so
-%{_libdir}/libgdcmjpeg8.so
-%{_libdir}/libgdcmmd5.so
-%{_libdir}/libsocketxx.so
-%{_libdir}/cmake/%{name}/
-
-%files -n python3-gdcm
-%{python3_sitearch}/%{name}*.py
-%{python3_sitearch}/_%{name}swig.so
-%{python3_sitearch}/__pycache__/%{name}*
+%files -f %{oreon_filedir}/main.list
+%files -n gdcm-doc -f %{oreon_filedir}/gdcm-doc.list
+%files -n gdcm-applications -f %{oreon_filedir}/gdcm-applications.list
+%files -n gdcm-devel -f %{oreon_filedir}/gdcm-devel.list
+%files -n python3-gdcm -f %{oreon_filedir}/python3-gdcm.list
 
 %changelog
+
 %autochangelog

@@ -1,63 +1,66 @@
-%global source0_hash none
-
+%global source0_hash 26787dd3f422cfbab8f55b80a776e2edea7a11092cb74e960bef1312515708ef
 Name:           python-pytest-django
 Version:        4.14.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Django plugin for pytest.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/pytest-dev/pytest-django
-Source:         %{pypi_source pytest_django}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_django/pytest_django-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pytest-django' generated automatically by pyp2spec.}
-
 Patch:          pytest_django-lower-pytest-req.diff
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0.0
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 5.0.0
+Requires:       python3-pytest-django = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pytest-django+django
+Summary:        Metapackage for python3-pytest-django django extras
+Requires:       python3-pytest-django = %{version}-%{release}
+Requires:       python3dist(django) >= 5.2
+Provides:       python3dist(pytest-django[django]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-pytest-django+django
+Metapackage for python3-pytest-django django extras.
+
+%package -n       python3-pytest-django+docs
+Summary:        Metapackage for python3-pytest-django docs extras
+Requires:       python3-pytest-django = %{version}-%{release}
+Provides:       python3dist(pytest-django[docs]) = %{version}-%{release}
+
+%description -n python3-pytest-django+docs
+Metapackage for python3-pytest-django docs extras.
+
+%description
 
 %package -n     python3-pytest-django
-Summary:        %{summary}
-
-%description -n python3-pytest-django %_description
+Summary:        A Django plugin for pytest.
+# oreon:reqs
+Requires:       python3dist(pytest) >= 7.0.0
+# /oreon:reqs
+%description -n python3-pytest-django
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pytest-django django,docs
-
 
 %prep
-%autosetup -p1 -n pytest_django-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pytest_django-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pytest-django usr/lib/python3*/site-packages/pytest_django* usr/lib64/python3*/site-packages/pytest_django* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_django* usr/lib64/python3*/site-packages/pytest_django* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pytest-django -f %{pyproject_files}
+%files
+%files -n python3-pytest-django -f %{oreon_filedir}/python3-pytest-django.list
 
 %changelog
+
 %autochangelog

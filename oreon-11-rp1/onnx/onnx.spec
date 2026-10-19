@@ -1,81 +1,51 @@
 %global source0_hash 42ffedcd8c9b6363694300c6ffec1ada77f9620176465719acb27b13a4d6f2de
-
 %global so_version 1
-
 Name:       onnx
 Version:    1.21.0
-Release:    %autorelease
-Summary:    Open standard for machine learning interoperability
+Release:        1%{?dist}
+Summary:        Open standard for machine learning interoperability
 License:    Apache-2.0
-
 URL:        https://github.com/onnx/onnx
-Source0:    https://github.com/onnx/onnx/archive/v%{version}/%{name}-%{version}.tar.gz
-# Build shared libraries and fix install location 
+Source0:        https://github.com/onnx/onnx/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:     0001-Build-shared-libraries.patch
 Patch:     0002-Fix-install-location.patch
-# Latest nanobind uses different argument format
 Patch:     0003-Fix-nanobind-arguments.patch
-# Let pyproject_wheel use binaries from cmake_build
 Patch:     0004-Let-pyproject_wheel-use-binaries-from-cmake_build.patch
-# Fixes protobuf conflicts when using both python-onnx and python-onnxruntime
 Patch:     0005-Python-binary-should-link-to-system-onnx.patch
-# Remove obsoleted testing dependency
 Patch:     0006-Remove-python-parameterized-dependency.patch
-# Add fixes for use with onnxruntime
 Patch:     0007-Add-fixes-for-use-with-onnxruntime.patch
-
 %if %{undefined fc40} && %{undefined fc41}
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
 %endif
-
-BuildRequires:  cmake >= 3.13
-BuildRequires:  make
-BuildRequires:  findutils
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  zlib-devel
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3-pip
-BuildRequires:  python3-pybind11
-BuildRequires:  python3-pytest
-BuildRequires:  python3-nanobind
-BuildRequires:  python3-ml-dtypes 
-BuildRequires:  protobuf-devel
-BuildRequires:  protobuf-static
-
-%global _description %{expand:
-%{name} provides an open source format for AI models, both deep learning and
-traditional ML. It defines an extensible computation graph model, as well as
-definitions of built-in operators and standard data types.}
-
-%description %_description
+BuildRequires:  python3dist(protobuf) >= 4.25.1
+BuildRequires:  python3dist(setuptools) >= 77
+Requires:       python3-onnx = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package libs
 Summary:    Libraries for %{name}
-
-%description libs %_description
+%description libs
 
 %package devel
 Summary:    Development files for %{name}
 Requires:   %{name}-libs = %{version}-%{release}
-
-%description devel %_description
+%description devel
 
 %package -n python3-onnx
-Summary:    %{summary}
+Summary:        Development files for onnx
 Requires:   %{name}-libs = %{version}-%{release}
-
-%description -n python3-onnx %_description
+%description -n python3-onnx
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n onnx-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires requirements-reference.txt
-
+%global oreon_srcdir onnx-%{version}
+%oreon_prep
 %build
+
 export VPATH_BUILDDIR=%{_vpath_builddir}
 %cmake \
     -DONNX_USE_LITE_PROTO=OFF \
@@ -86,24 +56,19 @@ export VPATH_BUILDDIR=%{_vpath_builddir}
     -DPY_SITEARCH=%{python3_sitearch} \
     -DCMAKE_SKIP_RPATH:BOOL=ON \
     -DONNX_DISABLE_STATIC_REGISTRATION=OFF
-
-# Build 
 %cmake_build
-# Build python libs
 %pyproject_wheel
-
 %install
 %cmake_install
-# Need to remove empty directories
 find "%{buildroot}/%{_includedir}" -type d -empty -delete
 find "%{buildroot}/%{python3_sitearch}" -type d -empty -delete
-# Install *.proto files
 install -p "./onnx/"*.proto -t "%{buildroot}/%{_includedir}/onnx/"
-
 %pyproject_install
-%pyproject_save_files onnx
+%oreon_autofiles python3-onnx usr/lib/python3*/site-packages/onnx* usr/lib64/python3*/site-packages/onnx* usr/bin/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/lib/python3*/site-packages/onnx* usr/lib64/python3*/site-packages/onnx* usr/bin/*
 
 %check
+
 export LD_LIBRARY_PATH=%{buildroot}/%{_libdir}
 %ifarch riscv64
 export PYTEST_ADDOPTS="-k 'not test_float8_e4m3fn_negative_nan and \
@@ -112,25 +77,12 @@ not test_float8_e5m2_negative_nan and not test_maxpool_2d_uint8_cpu'"
 %ifarch s390x
 export PYTEST_ADDOPTS="-k 'not test_make_tensor_raw'"
 %endif
-
 %pytest
-
-%files libs
-%license LICENSE
-%doc README.md
-%{_libdir}/libonnx.so.%{so_version}{,.*}
-%{_libdir}/libonnx_proto.so.%{so_version}{,.*}
-
-%files devel
-%{_libdir}/libonnx.so
-%{_libdir}/libonnx_proto.so
-%{_libdir}/cmake/ONNX
-%{_includedir}/%{name}/
-
-%files -n python3-onnx -f %{pyproject_files}
-%{_bindir}/backend-test-tools
-%{_bindir}/check-model
-%{_bindir}/check-node
+%files
+%files -n onnx-libs -f %{oreon_filedir}/onnx-libs.list
+%files -n onnx-devel -f %{oreon_filedir}/onnx-devel.list
+%files -n python3-onnx -f %{oreon_filedir}/python3-onnx.list
 
 %changelog
+
 %autochangelog

@@ -1,23 +1,22 @@
 %global source0_hash 09c39af89b4ffb2cdd50bbfc6d89472efc985538ab1762f4d1e4f7725010bc56
-
 Name:           system-rules
 Version:        1.19.0
 Release:        14%{?dist}
 Summary:        A collection of JUnit rules for testing code which uses java.lang.System
-# Automatically converted from old format: CPL - review is highly recommended.
 License:        CPL-1.0
 URL:            https://stefanbirkner.github.io/system-rules
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 Source0:        https://github.com/stefanbirkner/%{name}/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
 Source1:         sm.patch
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.github.stefanbirkner:fishbowl)
 BuildRequires:  mvn(commons-io:commons-io)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.assertj:assertj-core)
 BuildRequires:  mvn(org.mockito:mockito-core)
-
+# /oreon:deps
 %description
 System Rules is a collection of JUnit rules for testing code which uses
 java.lang.System.
@@ -25,6 +24,7 @@ java.lang.System.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # -n: base directory name
@@ -54,13 +54,14 @@ find -type f '(' -iname '*.jar' -o -iname '*.class' ')' -print -delete
 %pom_remove_plugin :animal-sniffer-maven-plugin
 
 %build
-%mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

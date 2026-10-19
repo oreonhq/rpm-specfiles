@@ -1,17 +1,15 @@
 %global source0_hash 7571e54d7fd5e83f83948e6f7469abde94b379f5763862551ecc6e0ae4eb024b
-
 Name:           R-spelling
 Version:        %R_rpm_version 2.3.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tools for Spell Checking in R
-
 License:        MIT
 URL:            %{cran_url}
-Source:         %{cran_source}
-
+Source0:        https://cran.r-project.org/package=spelling&version=%{version}#/spelling_%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Spell checking common document formats including latex, markdown, manual
 pages, and description files. Includes utilities to automate checking of
@@ -22,22 +20,19 @@ allow custom terminology without having to abuse punctuation.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

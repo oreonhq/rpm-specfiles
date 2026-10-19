@@ -1,32 +1,25 @@
 %global source0_hash a0beaa2f4c495afaa7e218885d2457c01a38edb05e0f0342aa9f535aece4dbac
-
 Name:           lmdb
 Version:        0.9.34
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Memory-mapped key-value database
 License:        OLDAP-2.8
 URL:            https://www.symas.com/lmdb
-
-# Main source is retrieved from OpenLDAP GitLab
 %global forgeurl    https://git.openldap.org/openldap/openldap
 %global tag         LMDB_%{version}
 %global archivename openldap-%{tag}
 %global archiveext  tar.gz
 %global archiveurl  %{forgeurl}/-/archive/%{tag}/%{archivename}.%{archiveext}
 %forgemeta
-
-Source:         %{forgesource}
-Source:         lmdb.pc.in
-# Patch description in the corresponding file
+Source0:        %{archiveurl}
 Patch:          lmdb-make.patch
 Patch:          lmdb-s390-check.patch
-
-BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  doxygen
-
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 LMDB is an ultra-fast, ultra-compact key-value embedded data
 store developed by Symas for the OpenLDAP Project. By using memory-mapped files,
@@ -36,7 +29,6 @@ to the size of the virtual address space.
 
 %package        libs
 Summary:        Shared libraries for %{name}
-
 %description    libs
 The %{name}-libs package contains shared libraries necessary for running
 applications that use the %{name} embedded database.
@@ -44,7 +36,6 @@ applications that use the %{name} embedded database.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -52,12 +43,11 @@ developing applications that use %{name}.
 %package        doc
 Summary:        Documentation files for %{name}
 BuildArch:      noarch
-
 %description    doc
 The %{name}-doc package contains automatically generated documentation for %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 # forgeautosetup does not pass the -n argument
 %autosetup -n %{archivename} -p1
@@ -66,25 +56,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %global archive_path libraries/lib%{name}
 
 %build
+
 pushd %{archive_path}
 %set_build_flags
 %make_build XCFLAGS="%{build_cflags}"
-# Build doxygen documentation
 doxygen
-# remove unpackaged files
 rm -f Doxyfile
 rm -rf man # Doxygen generated manpages
 popd
-
 %install
 pushd %{archive_path}
-# make install expects existing directory tree
 mkdir -m 0755 -p %{buildroot}{%{_bindir},%{_includedir}}
 mkdir -m 0755 -p %{buildroot}{%{_libdir}/pkgconfig,%{_mandir}/man1}
 %make_install prefix=%{_prefix} libdir=%{_libdir} mandir=%{_mandir}
 popd
-
-# Install pkgconfig file
 sed -e 's:@PREFIX@:%{_prefix}:g' \
     -e 's:@EXEC_PREFIX@:%{_exec_prefix}:g' \
     -e 's:@LIBDIR@:%{_libdir}:g' \
@@ -92,42 +77,20 @@ sed -e 's:@PREFIX@:%{_prefix}:g' \
     -e 's:@PACKAGE_VERSION@:%{version}:g' \
     %{SOURCE1} >lmdb.pc
 install -Dpm 0644 -t %{buildroot}%{_libdir}/pkgconfig lmdb.pc
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%if 0%{?rhel} == 6 && "%{_arch}" == "ppc64"
-  # rhel6 ppc64: skip unit tests
-  exit 0
-%endif
 
 pushd %{archive_path}
 rm -rf testdb
 LD_LIBRARY_PATH=$PWD make test
 popd
-
 %ldconfig_scriptlets libs
-
-
-%files
-%{_bindir}/*
-%{_mandir}/man1/*
-
-%files libs
-%doc %{archive_path}/COPYRIGHT
-%doc %{archive_path}/CHANGES
-%license %{archive_path}/LICENSE
-%{_libdir}/*.so.*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-
-%files doc
-%doc %{archive_path}/html
-%doc %{archive_path}/COPYRIGHT
-%doc %{archive_path}/CHANGES
-%license %{archive_path}/LICENSE
-
+%files -f %{oreon_filedir}/main.list
+%files -n lmdb-libs -f %{oreon_filedir}/lmdb-libs.list
+%files -n lmdb-devel -f %{oreon_filedir}/lmdb-devel.list
+%files -n lmdb-doc -f %{oreon_filedir}/lmdb-doc.list
 
 %changelog
+
 %autochangelog

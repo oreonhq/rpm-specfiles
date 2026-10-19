@@ -1,62 +1,74 @@
-%global source0_hash none
-
+%global source0_hash 20743e7183be82aaaa8ad6c93f8893c923bd6658a04c32ee115edb3c8a835f78
 Name:           python-graphviz
 Version:        0.21
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Simple Python interface for Graphviz
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/xflr6/graphviz
-Source:         %{pypi_source graphviz}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/graphviz/graphviz-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-graphviz = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-graphviz+dev
+Summary:        Metapackage for python3-graphviz dev extras
+Requires:       python3-graphviz = %{version}-%{release}
+Requires:       python3dist(tox) >= 3
+Provides:       python3dist(graphviz[dev]) = %{version}-%{release}
 
+%description -n python3-graphviz+dev
+Metapackage for python3-graphviz dev extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'graphviz' generated automatically by pyp2spec.}
+%package -n       python3-graphviz+test
+Summary:        Metapackage for python3-graphviz test extras
+Requires:       python3-graphviz = %{version}-%{release}
+Requires:       python3dist(pytest) >= 7
+Requires:       python3dist(pytest) < 8.1
+Requires:       python3dist(pytest-mock) >= 3
+Provides:       python3dist(graphviz[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-graphviz+test
+Metapackage for python3-graphviz test extras.
+
+%package -n       python3-graphviz+docs
+Summary:        Metapackage for python3-graphviz docs extras
+Requires:       python3-graphviz = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 5
+Requires:       python3dist(sphinx) < 7
+Requires:       python3dist(sphinx-rtd-theme) >= 0.2.5
+Provides:       python3dist(graphviz[docs]) = %{version}-%{release}
+
+%description -n python3-graphviz+docs
+Metapackage for python3-graphviz docs extras.
+
+%description
 
 %package -n     python3-graphviz
-Summary:        %{summary}
-
-%description -n python3-graphviz %_description
+Summary:        Simple Python interface for Graphviz
+%description -n python3-graphviz
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-graphviz dev,docs,test
-
 
 %prep
-%autosetup -p1 -n graphviz-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir graphviz-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-graphviz usr/lib/python3*/site-packages/graphviz* usr/lib64/python3*/site-packages/graphviz* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/graphviz* usr/lib64/python3*/site-packages/graphviz* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-graphviz -f %{pyproject_files}
+%files
+%files -n python3-graphviz -f %{oreon_filedir}/python3-graphviz.list
 
 %changelog
+
 %autochangelog

@@ -1,66 +1,26 @@
-%global source0_hash 7e67936ed66ccc466760b451ce28d0aab7d6a6d4cd3afa9482c2b1b8fbe3135a
-
+%global source0_hash 7099fcf6e94b6a6a8e57f8a3d434e7a66dbe476737f0f02f7bb3349586aa3b85
 %global debug_package %{nil}
-
-# Chainloading support requires the aarch64-unknown-none-softfloat rust target,
-# which is only available on aarch64
 %ifarch aarch64
 %bcond chainloading 1
 %else
 %bcond chainloading 0
 %endif
-
-# We need to vendor fatfs because m1n1 stage1 relies on unreleased changes
-# (notably, the lfn feature): https://github.com/rafalh/rust-fatfs/issues/81
 %global fatfs_commit 87fc1ed5074a32b4e0344fcdde77359ef9e75432
-
-%global _description %{expand:
-m1n1 is the bootloader developed by the Asahi Linux project to bridge the Apple
-(XNU) boot ecosystem to the Linux boot ecosystem.}
-
 Name:           m1n1
 Version:        1.6.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Bootloader and experimentation playground for Apple Silicon
-
-# m1n1 proper is MIT licensed, but it relies on a number of vendored projects
-# See the "License" section in README.md for the breakdown
 License:        MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later)
 URL:            https://github.com/AsahiLinux/m1n1
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-Source:         https://github.com/rafalh/rust-fatfs/archive/%{fatfs_commit}/rust-fatfs-%{fatfs_commit}.tar.gz
-# Use distribution packages instead of the vendored ones
+Source0:        https://github.com/AsahiLinux/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:          m1n1-rust-deps.patch
-# https://github.com/rafalh/rust-fatfs/commit/eb274ca10d035c176e5eac79420ca734c02613ae
 Patch:          rust-fatfs-fix-build-log.patch
-
 %ifarch aarch64
-# On aarch64 m1n1 does a native build
-BuildRequires:  gcc
 %else
-# On non-aarch64 m1n1 does a cross build
-BuildRequires:  gcc-aarch64-linux-gnu
 %endif
-
 %global buildflags RELEASE=1
-BuildRequires:  make
-
-# For the bootloader logos and the framebuffer console
-BuildRequires:  adobe-source-code-pro-fonts
-BuildRequires:  coreutils
-BuildRequires:  fontconfig
-BuildRequires:  system-logos
-BuildRequires:  ImageMagick
-
-# For the udev rule
-BuildRequires:  systemd-rpm-macros
-
 %if %{with chainloading}
-BuildRequires:  cargo-rpm-macros >= 24
-BuildRequires:  rust-std-static-aarch64-unknown-none-softfloat
 %endif
-
-# These are bundled, modified and statically linked into m1n1
 Provides:       bundled(arm-trusted-firmware)
 Provides:       bundled(dwc3)
 Provides:       bundled(dlmalloc)
@@ -68,23 +28,24 @@ Provides:       bundled(PDCLib)
 Provides:       bundled(libfdt)
 Provides:       bundled(minilzlib)
 Provides:       bundled(tinf)
-
-%description    %_description
+# oreon:deps
+BuildRequires:  ImageMagick
+BuildRequires:  adobe-source-code-pro-fonts
+BuildRequires:  coreutils
+BuildRequires:  fontconfig
+BuildRequires:  gcc-aarch64-linux-gnu
+BuildRequires:  make
+BuildRequires:  system-logos
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
+%description
 
 %if %{with chainloading}
 %package        stage1
 Summary:        %{summary}
-# The following breakdown only covers the rust dependencies
-# Apache-2.0 OR MIT
-# MIT
-# MIT OR Apache-2.0
 License:        MIT AND CC0-1.0 AND OFL-1.1-RFN AND Zlib AND (BSD-2-Clause OR GPL-2.0-or-later) AND (BSD-3-Clause OR GPL-2.0-or-later) AND (Apache-2.0 OR MIT) AND MIT AND (MIT OR Apache-2.0)
-# LICENSE.dependencies contains a full license breakdown of the rust dependencies
-
-# This is vendored and statically linked into m1n1 when building for stage 1
 Provides:       bundled(crate(fatfs))= 0.4.0
-
-%description    stage1 %_description
+%description    stage1
 
 This package contains the stage1 build of m1n1 that is used by the Asahi Linux
 Installer.
@@ -98,12 +59,12 @@ Requires:       python3dist(construct)
 Requires:       python3dist(pyserial)
 Requires:       systemd-udev
 BuildArch:      noarch
-
-%description    tools %_description
+%description    tools
 
 This package contains various developer tools for m1n1.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -N
@@ -131,14 +92,8 @@ popd
 tar -xf %{SOURCE1} -C rust/vendor/rust-fatfs --strip-components 1
 %autopatch -p1
 
-%cargo_prep
-
-%generate_buildrequires
-cd rust
-%cargo_generate_buildrequires
-%endif
-
 %build
+
 %if %{with chainloading}
 %make_build %{buildflags} CHAINLOADING=1 LOGO=fedora
 mv build build-stage1
@@ -147,9 +102,7 @@ pushd rust
 %{cargo_license} > LICENSE.dependencies
 popd
 %endif
-
 %make_build %{buildflags} LOGO=fedora
-
 %install
 install -Dpm0644 -t %{buildroot}%{_libdir}/%{name} \
   build/%{name}.{bin,macho} build/%{name}-asahi.bin
@@ -161,24 +114,12 @@ install -Ddpm0755 %{buildroot}%{_libexecdir}/%{name}
 cp -pr proxyclient tools %{buildroot}%{_libexecdir}/%{name}/
 install -Dpm0644 -t %{buildroot}%{_udevrulesdir} udev/80-m1n1.rules
 install -Dpm0644 m1n1.conf.example %{buildroot}%{_sysconfdir}/m1n1.conf
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE 3rdparty_licenses/LICENSE.*
-%doc README.md
-%doc m1n1.conf.example
-%{_libdir}/%{name}
-%config(noreplace) %{_sysconfdir}/m1n1.conf
-
-%if %{with chainloading}
-%files stage1
-%license LICENSE 3rdparty_licenses/LICENSE.* rust/vendor/rust-fatfs/LICENSE.txt rust/LICENSE.dependencies
-%doc README.md
-%{_libdir}/%{name}-stage1
-%endif
-
-%files tools
-%{_libexecdir}/%{name}
-%{_udevrulesdir}/80-m1n1.rules
+%files -f %{oreon_filedir}/main.list
+%files -n m1n1-tools -f %{oreon_filedir}/m1n1-tools.list
 
 %changelog
+
 %autochangelog
+%endif

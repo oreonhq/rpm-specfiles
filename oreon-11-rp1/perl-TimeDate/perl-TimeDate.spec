@@ -1,5 +1,4 @@
 %global source0_hash baddd0306ae2e86e9ec28d3de5439e514643e80b3735e43bd0fbb426d73304de
-
 Name:           perl-TimeDate
 Version:        2.35
 Epoch:          1
@@ -9,27 +8,26 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/TimeDate
 Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/TimeDate-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
-BuildRequires:  perl(base)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(Time::Local)
-BuildRequires:  perl(utf8)
-# Tests:
-BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(Test::More)
-
 Provides:       perl(Date::Format)
 Provides:       perl(Date::Parse)
 Provides:       perl(Time::Zone)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Time::Local)
+BuildRequires:  perl(base)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module includes a number of smaller modules suited for
 manipulation of time and date strings with Perl. In particular, the
@@ -41,12 +39,12 @@ textual representations of points in time.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n TimeDate-%{version}
 # Bogus exec permissions on some language modules
@@ -59,43 +57,26 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -r -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files 
-%doc README Changes
-%license LICENSE
-%dir %{perl_vendorlib}/Date/
-%{perl_vendorlib}/Date/Format*
-%{perl_vendorlib}/Date/Language*
-%{perl_vendorlib}/Date/Parse.pm
-%dir %{perl_vendorlib}/Time/
-%{perl_vendorlib}/Time/Zone.pm
-%{perl_vendorlib}/TimeDate.pm
-%{_mandir}/man3/Date::Format*.3*
-%{_mandir}/man3/Date::Language*.3*
-%{_mandir}/man3/Date::Parse*.3*
-%{_mandir}/man3/Time::Zone*.3*
-%{_mandir}/man3/TimeDate*.3*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-TimeDate-tests -f %{oreon_filedir}/perl-TimeDate-tests.list
 
 %changelog
+
 %autochangelog

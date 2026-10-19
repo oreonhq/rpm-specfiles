@@ -1,108 +1,43 @@
-%global source0_hash e4fbbdacbeffb560715e6c74c128aee07a7053a1fec78dc904bcc0a88e2efd67
-
-#
-# Copyright (c) Contributors to the Apptainer project, established as
-#   Apptainer a Series of LF Projects LLC.
-#   For website terms of use, trademark policy, privacy policy and other
-#   project policies see https://lfprojects.org/policies
-# Copyright (c) 2017-2022, SyLabs, Inc. All rights reserved.
-# Copyright (c) 2017, SingularityWare, LLC. All rights reserved.
-#
-# Copyright (c) 2015-2017, Gregory M. Kurtzer. All rights reserved.
-#
-# Copyright (c) 2016, The Regents of the University of California, through
-# Lawrence Berkeley National Laboratory (subject to receipt of any required
-# approvals from the U.S. Dept. of Energy).  All rights reserved.
-#
-# This software is licensed under a customized 3-clause BSD license.  Please
-# consult LICENSE file distributed with the sources of this project regarding
-# your rights to use or distribute this software.
-#
-# NOTICE.  This Software was developed under funding from the U.S. Department of
-# Energy and the U.S. Government consequently retains certain rights. As such,
-# the U.S. Government has been granted for itself and others acting on its
-# behalf a paid-up, nonexclusive, irrevocable, worldwide license in the Software
-# to reproduce, distribute copies to the public, prepare derivative works, and
-# perform publicly and display publicly, and to permit other to do so.
-#
-#
-
-# Disable debugsource packages; otherwise it ends up with an empty %%files
-#   file in debugsourcefiles.list on Fedora
+%global source14_hash 9c4974e07c61547dae14af4ed1f358b7d04618ae194e54d6be72ee126f0d2f53
+%global source13_hash e4fbbdacbeffb560715e6c74c128aee07a7053a1fec78dc904bcc0a88e2efd67
+%global source11_hash fee364242fb4eea72e082ec674b6e6661856408a06719e1e88ce8673a22dc78a
+%global source10_hash b37fc5aefd552c8d78acb896d115bfee1ed8aa4c9880b307b150f505f0a4d52e
+%global source0_hash 5a3bf360a5240086324aa7f7005ab7eeee91095e2091078b3f9783eaf6e7288a
 %undefine _debugsource_packages
-
-# This can be slightly different than %%{version}.
-# For example, it has dash instead of tilde for release candidates.
 %global package_version 1.5.3
-
 %global gocryptfs_version 2.5.1
 %global squashfuse_version 0.6.0
 %global e2fsprogs_version 1.47.3
 %global fuse_overlayfs_version 1.15
 %global squashfs_tools_version 4.6.1
-
-# The last singularity version number in EPEL/Fedora
 %global last_singularity_version 3.8.7-3
-
-Summary: Application and environment virtualization formerly known as Singularity
+Summary:        Application and environment virtualization formerly known as Singularity
 Name: apptainer
 Version: 1.5.3
-Release: 1%{?dist}
-# See LICENSE.md for first party code (BSD-3-Clause and LBNL BSD)
-# See LICENSE_THIRD_PARTY.md for incorporated code (ASL 2.0)
-# See LICENSE_DEPENDENCIES.md for dependencies
-# License identifiers taken from: https://fedoraproject.org/wiki/Licensing
+Release:        1%{?dist}
 License: LicenseRef-Callaway-BSD AND BSD-3-Clause-LBNL AND Apache-2.0
 URL: https://apptainer.org
-Source: https://github.com/%{name}/%{name}/releases/download/v%{package_version}/%{name}-%{package_version}.tar.gz
-
+Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 %if "%{?gocryptfs_version}" != ""
-# In order to build offline, this source tarball needs to have the "vendor"
-# directory added, which can be done by unpacking it, doing the command
-#   go mod vendor
-# and then recreating the tarball.  Use scripts/download-dependencies.
 Source10: https://github.com/rfjakob/gocryptfs/archive/v%{gocryptfs_version}/gocryptfs-%{gocryptfs_version}.tar.gz
 %endif
 %if "%{?squashfuse_version}" != ""
 Source11: https://github.com/vasi/squashfuse/archive/%{squashfuse_version}/squashfuse-%{squashfuse_version}.tar.gz
 %endif
 %if "%{?e2fsprogs_version}" != ""
-# URL: https://github.com/tytso/e2fsprogs/archive/refs/tags/v%%{e2fsprogs_version}.tar.gz
 Source12: e2fsprogs-%{e2fsprogs_version}.tar.gz
-# URL: https://github.com/tytso/e2fsprogs/pull/246.patch
 Patch121: e2fsprogs-246.patch
-# this is PR 250 from tytso/e2fsprogs backported to apply cleanly on v1.47.3
-# URL: https://github.com/DrDaveD/e2fsprogs/pull/2.patch
 Patch122: e2fsprogs-250.patch
-# URL: https://github.com/tytso/e2fsprogs/pull/251.patch
 Patch123: e2fsprogs-251.patch
 %endif
 Source13: https://github.com/containers/fuse-overlayfs/archive/v%{fuse_overlayfs_version}/fuse-overlayfs-%{fuse_overlayfs_version}.tar.gz
 %if "%{?squashfs_tools_version}" != ""
 Source14: https://github.com/plougher/squashfs-tools/archive/%{squashfs_tools_version}/squashfs-tools-%{squashfs_tools_version}.tar.gz
 %endif
-
-# This Conflicts is in case someone tries to install the main apptainer
-# package when an old singularity package is installed.  An Obsoletes is on
-# the apptainer-suid subpackage below.  If an Obsoletes were here too, it
-# would get different behavior with yum and dnf: a "yum install apptainer"
-# on EL7 would install only apptainer but a "dnf install apptainer" on EL8
-# or greater would install both apptainer and apptainer-suid.  With this
-# Conflicts, both yum and dnf consistently install both apptainer and
-# apptainer-suid when apptainer is requested while singularity is installed.
 Conflicts: singularity <= %{last_singularity_version}
-
-# In the singularity 2.x series there was a singularity-runtime package
-#  that could have been installed independently, but starting in 3.x
-#  there was only one package
 Obsoletes: singularity-runtime < 3.0
-
-# Multiple packages contain /usr/bin/singularity and /usr/bin/run-singularity,
-# which are necessary to run SIF images.  Use a pivot provides/conflicts to
-# avoid them all needing to conflict with each other.
 Provides: sif-runtime
 Conflicts: sif-runtime
-
 Provides: bundled(gocryptfs) = %{gocryptfs_version}
 Provides: bundled(squashfuse) = %{squashfuse_version}
 Provides: bundled(e2fsprogs) = %{e2fsprogs_version}
@@ -280,40 +215,37 @@ Provides: bundled(golang(gopkg.in/yaml.v2)) = v2.4.0
 Provides: bundled(golang(gopkg.in/yaml.v3)) = v3.0.1
 Provides: bundled(golang(gotest.tools/v3)) = v3.5.2
 Provides: bundled(golang(mvdan.cc/sh/v3)) = v3.10.0
-
 %if "%{_target_vendor}" == "suse"
-BuildRequires: go
-BuildRequires: liblz4-devel
 %if 0%{?suse_version} > 1600
-BuildRequires: libsubid-devel
 %endif
 %else
-BuildRequires: shadow-utils-subid-devel
-BuildRequires: golang
-BuildRequires: lz4-devel
 %endif
-BuildRequires: git
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: libseccomp-devel
-BuildRequires: cryptsetup
-BuildRequires: fuse3-devel
 %if ("%{?squashfuse_version}" != "") || ("%{e2fsprogs_version}" != "") || ("%{fuse_overlayfs_version}" != "") || ("%{?squashfs_tools_version}" != "")
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: libtool
-BuildRequires: pkgconfig
-BuildRequires: zlib-devel
-BuildRequires: lzo-devel
-BuildRequires: xz-devel
-BuildRequires: libzstd-devel
 %endif
 %if "%{_target_vendor}" == "suse"
 Recommends: fakeroot
 %else
 Requires: fakeroot
 %endif
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  cryptsetup
+BuildRequires:  fuse3-devel
+BuildRequires:  gcc
+BuildRequires:  git
+BuildRequires:  golang
+BuildRequires:  libseccomp-devel
+BuildRequires:  libtool
+BuildRequires:  libzstd-devel
+BuildRequires:  lz4-devel
+BuildRequires:  lzo-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  shadow-utils-subid-devel
+BuildRequires:  xz-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Apptainer provides functionality to make portable
 containers that can be used across host environments.
@@ -321,17 +253,13 @@ containers that can be used across host environments.
 %package suid
 Summary: Setuid component of Apptainer
 Requires: %{name} = %{version}-%{release}
-# The singularity package was renamed to apptainer.  The Obsoletes is
-# on this subpackage for greater compatibility after an update from the
-# old singularity.
 Obsoletes: singularity <= %{last_singularity_version}
-# FESCo asked to have this form of Provides
 Provides: alternative-for(singularity)
-
 %description suid
 Provides the optional setuid-root portion of Apptainer.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -n %{name}-%{package_version}
@@ -339,10 +267,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # that is done by the compile-dependencies script
 
 %build
+
 %if "%{?SOURCE1}" != ""
 GOVERSION="$(echo %SOURCE1|sed 's,.*/,,;s/go//;s/\.src.*//')"
 if ! ./mlocal/scripts/check-min-go-version go $GOVERSION; then
-	# build the go tool chain, the existing version is too old
 	pushd ..
 	tar -xf %SOURCE1
 	cd go/src
@@ -352,14 +280,8 @@ if ! ./mlocal/scripts/check-min-go-version go $GOVERSION; then
 	popd
 fi
 %endif
-
-# enable FIPS support in go programs
 export GODEBUG=fips140=on
-
 ./scripts/compile-dependencies $(dirname %{SOURCE10})
-
-# Not all of these parameters currently have an effect, but they might be
-#  used someday.  They are the same parameters as in the configure macro.
 ./mconfig %{?mconfig_opts} -V %{version}-%{release} --with-suid \
         --prefix=%{_prefix} \
         --exec-prefix=%{_exec_prefix} \
@@ -374,53 +296,41 @@ export GODEBUG=fips140=on
         --sharedstatedir=%{_sharedstatedir} \
         --mandir=%{_mandir} \
         --infodir=%{_infodir}
-
 %make_build -C builddir V= old_config=
-
 %install
 %if "%{?SOURCE1}" != ""
 export PATH=$PWD/go/bin:$PATH
 %endif
-
 %make_install -C builddir V=
-
 %if "%{?gocryptfs_version}" != ""
 install -m 755 gocryptfs-%{gocryptfs_version}/gocryptfs %{buildroot}%{_libexecdir}/%{name}/bin/gocryptfs
 %endif
-
 %if "%{?squashfuse_version}" != ""
 install -m 755 squashfuse-%{squashfuse_version}/squashfuse_ll %{buildroot}%{_libexecdir}/%{name}/bin/squashfuse_ll
 %endif
-
 %if "%{?e2fsprogs_version}" != ""
 install -m 755 e2fsprogs-%{e2fsprogs_version}/fuse2fs %{buildroot}%{_libexecdir}/%{name}/bin/fuse2fs
 %endif
-
 %if "%{?fuse_overlayfs_version}" != ""
 install -m 755 fuse-overlayfs-%{fuse_overlayfs_version}/fuse-overlayfs %{buildroot}%{_libexecdir}/%{name}/bin/fuse-overlayfs
 %endif
-
 %if "%{?squashfs_tools_version}" != ""
 install -m 755 squashfs-tools-%{squashfs_tools_version}/squashfs-tools/mksquashfs %{buildroot}%{_libexecdir}/%{name}/bin/mksquashfs
 install -m 755 squashfs-tools-%{squashfs_tools_version}/squashfs-tools/unsquashfs %{buildroot}%{_libexecdir}/%{name}/bin/unsquashfs
+%oreon_autofiles apptainer-suid usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
 %post
-# $1 in %%posttrans cannot distinguish between fresh installs and upgrades,
-# so check it here and create a file to pass the knowledge to that step
+
 if [ "$1" -eq 1 ] && [ -d %{_sysconfdir}/singularity ]; then
 	touch %{_sysconfdir}/%{name}/.singularityupgrade
 fi
-
 %posttrans
-# clean out empty directories under /etc/singularity
+
 rmdir %{_sysconfdir}/singularity/* %{_sysconfdir}/singularity 2>/dev/null || true
 if [ -f %{_sysconfdir}/%{name}/.singularityupgrade ]; then
 	pushd %{_sysconfdir}/%{name} >/dev/null
 	rm .singularityupgrade
-	# This is the first install of apptainer after removal of singularity.
-	# Import any singularity configurations that remain, which were left
-	# because they were non-default.
 	find %{_sysconfdir}/singularity ! -type d 2>/dev/null|while read F; do
 		B="$(echo $F|sed 's,%{_sysconfdir}/singularity/,,;s/\.rpmsave//')"
 		if [ "$B" == singularity.conf ]; then
@@ -448,52 +358,10 @@ if [ -f %{_sysconfdir}/%{name}/.singularityupgrade ]; then
 	done
 	popd >/dev/null
 fi
-
-# Define `%%license` tag if not already defined.
-# This is needed for EL 7 compatibility.
 %{!?_licensedir:%global license %doc}
-
-%files
-%{_bindir}/%{name}
-%{_bindir}/singularity
-%{_bindir}/run-singularity
-%dir %{_libexecdir}/%{name}
-%dir %{_libexecdir}/%{name}/bin
-%{_libexecdir}/%{name}/bin/starter
-%if "%{?gocryptfs_version}" != ""
-%{_libexecdir}/%{name}/bin/gocryptfs
-%endif
-%if "%{?squashfuse_version}" != ""
-%{_libexecdir}/%{name}/bin/squashfuse_ll
-%endif
-%if "%{?e2fsprogs_version}" != ""
-%{_libexecdir}/%{name}/bin/fuse2fs
-%endif
-%if "%{?fuse_overlayfs_version}" != ""
-%{_libexecdir}/%{name}/bin/fuse-overlayfs
-%endif
-%if "%{?squashfs_tools_version}" != ""
-%{_libexecdir}/%{name}/bin/mksquashfs
-%{_libexecdir}/%{name}/bin/unsquashfs
-%endif
-%{_libexecdir}/%{name}/cni
-%{_libexecdir}/%{name}/lib
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/*
-%{_datadir}/bash-completion/completions/*
-%dir %{_sharedstatedir}/%{name}
-%dir %{_sharedstatedir}/%{name}/mnt
-%dir %{_sharedstatedir}/%{name}/mnt/session
-%{_mandir}/man1/%{name}*
-%{_mandir}/man1/singularity*
-%license LICENSE.md
-%license LICENSE_THIRD_PARTY.md
-%license LICENSE_DEPENDENCIES.md
-%doc README.md
-%doc CHANGELOG.md
-
-%files suid
-%attr(4755, root, root) %{_libexecdir}/%{name}/bin/starter-suid
+%files -f %{oreon_filedir}/main.list
+%files -n apptainer-suid -f %{oreon_filedir}/apptainer-suid.list
 
 %changelog
+
 %autochangelog

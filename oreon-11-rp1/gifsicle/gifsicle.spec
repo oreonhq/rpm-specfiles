@@ -1,19 +1,16 @@
 %global source0_hash fd23d279681a6dfe3c15264e33f344045b3ba473da4d19f49e67a50994b077fb
-
 Name:           gifsicle
 Version:        1.96
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Powerful program for manipulating GIF images and animations
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.lcdf.org/gifsicle/
 Source0:        http://www.lcdf.org/gifsicle/gifsicle-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  libX11-devel
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 Gifsicle is a command-line tool for creating, editing, and getting
 information about GIF images and animations.
@@ -41,36 +38,28 @@ and gifdiff compares two GIFs for identical visual appearance.
 
 %package -n gifview
 Summary:        Lightweight animated-GIF viewer
-
 %description -n gifview
 gifview is a lightweight animated-GIF viewer which can show animations as
 slideshows or in real time,
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles gifview usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license COPYING
-%doc NEWS.md README.md
-%{_bindir}/gifdiff
-%{_bindir}/gifsicle
-%{_mandir}/man1/gifdiff.1*
-%{_mandir}/man1/gifsicle.1*
-
-%files -n gifview
-%license COPYING
-%doc NEWS.md README.md
-%{_bindir}/gifview
-%{_mandir}/man1/gifview.1*
+%files -f %{oreon_filedir}/main.list
+%files -n gifview -f %{oreon_filedir}/gifview.list
 
 %changelog
+
 %autochangelog

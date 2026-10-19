@@ -1,22 +1,20 @@
 %global source0_hash 94c5bc7de89f185cbc0ac7a4add21e890ca9680a6d01c21841aae69c4b9e724f
-
 Name:           asylum
 Version:        0.3.2
-Release:        36%{?dist}
+Release:        1%{?dist}
 Summary:        Game involving shooting anything that moves & collecting others
-# For detailed licensing, see the README
 License:        GPL-3.0-only and LicenseRef-Fedora-Public-Domain
 URL:            http://sdl-asylum.sourceforge.net
 Source0:        http://downloads.sourceforge.net/sdl-%{name}/%{name}-%{version}.tar.gz
 Source1:        %{name}.png
 Patch0:         asylum-0.3.2-paths.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  desktop-file-utils
-BuildRequires:  SDL_mixer-devel
-BuildRequires: make
 Requires:       hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 SDL Asylum is a C port of the computer game Asylum, which was written by Andy
 Southgate in 1994 for the Acorn Archimedes and is now public domain. The object
@@ -26,6 +24,7 @@ doesn't move and most importantly, finding your way to each of the eight
 pulsating neurons scattered through the immense map.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -40,9 +39,8 @@ iconv -f iso8859-1 README -t utf8 > README.conv \
 rm -f %{name}
 
 %build
-make %{?_smp_mflags} CFLAGS="%{optflags}" LDFLAGS="%{?__global_ldflags}"
 
-# Build desktop icon
+make %{?_smp_mflags} CFLAGS="%{optflags}" LDFLAGS="%{?__global_ldflags}"
 cat >%{name}.desktop <<EOF
 [Desktop Entry]
 Name=Asylum
@@ -55,27 +53,16 @@ Type=Application
 StartupNotify=false
 Categories=Game;ActionGame;
 EOF
-
 %install
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_datadir}/%{name}
 mkdir -p %{buildroot}%{_var}/games/%{name}
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
 touch %{buildroot}%{_var}/games/%{name}/{EgoHighScores,PsycheHighScores,IdHighScores,ExtendedHighScores}
-
 install -m0755 %{name} %{buildroot}%{_bindir}
 cp -a data/* %{buildroot}%{_datadir}/%{name}
-
 install -m0644 %{SOURCE1} %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
 desktop-file-install --dir %{buildroot}%{_datadir}/applications %{name}.desktop
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -105,20 +92,10 @@ SentUpstream: 2014-09-24
   </screenshots>
 </application>
 EOF
+%oreon_autofiles main
 
-%files
-# Note the game is SETGID games for the hi-scores.
-%{_datadir}/%{name}
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%attr(0775,root,games) %dir %{_var}/games/%{name}
-%attr(2755,root,games) %{_bindir}/%{name}
-%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
-%doc Instruct README COPYING
-%ghost %{_var}/games/%{name}/EgoHighScores
-%ghost %{_var}/games/%{name}/PsycheHighScores
-%ghost %{_var}/games/%{name}/IdHighScores
-%ghost %{_var}/games/%{name}/ExtendedHighScores
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

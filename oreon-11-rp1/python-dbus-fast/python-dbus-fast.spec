@@ -1,57 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 34dc67d7d21a12399828dd13e63b352750580beea54ea7c729e708f2d2905fef
 Name:           python-dbus-fast
 Version:        5.0.22
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A faster version of dbus-next
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/bluetooth-devices/dbus-fast
-Source:         %{pypi_source dbus_fast}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/dbus_fast/dbus_fast-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'dbus-fast' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(cython) < 3.3.0
+BuildRequires:  python3dist(cython) >= 3
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+BuildRequires:  python3dist(setuptools) >= 65.4.1
+Requires:       python3-dbus-fast = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-dbus-fast
-Summary:        %{summary}
-
-%description -n python3-dbus-fast %_description
-
+Summary:        A faster version of dbus-next
+%description -n python3-dbus-fast
 
 %prep
-%autosetup -p1 -n dbus_fast-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir dbus_fast-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-dbus-fast usr/lib/python3*/site-packages/dbus_fast* usr/lib64/python3*/site-packages/dbus_fast* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/dbus_fast* usr/lib64/python3*/site-packages/dbus_fast* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-dbus-fast -f %{pyproject_files}
+%files
+%files -n python3-dbus-fast -f %{oreon_filedir}/python3-dbus-fast.list
 
 %changelog
+
 %autochangelog

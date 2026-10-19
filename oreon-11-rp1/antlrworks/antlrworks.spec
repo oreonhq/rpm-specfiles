@@ -1,21 +1,22 @@
 %global source0_hash b0a5606cf4bf96d0500f240a11872164881349f3dbe7d3e23cc6e4068f5ae931
-
 Name:           antlrworks
 Version:        1.5.2
-Release:        36%{?dist}
+Release:        1%{?dist}
 Summary:        Grammar development environment for ANTLR v3 grammars
-
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.antlr3.org/works
 Source0:        https://github.com/antlr/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}.desktop
 Source2:        %{name}.appdata.xml
-# Fix compilation with JGoodies Forms >= 1.7.1
 Patch0:         %{name}-1.5.2-jgoodies-forms_1.7.1.patch
-# Add xdg-open to the list of available browsers to open the help
 Patch1:         %{name}-1.5.2-browsers.patch
-
+Requires:       graphviz
+Requires:       hicolor-icon-theme
+Requires:       java-25-devel >= 1:1.6.0
+Requires:       javapackages-tools
+BuildArch:      noarch
+ExclusiveArch:  %{java_arches} noarch
+# oreon:deps
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
 BuildRequires:  maven-local-openjdk25
@@ -24,17 +25,7 @@ BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.antlr:antlr)
 BuildRequires:  mvn(org.antlr:antlr-runtime)
 BuildRequires:  mvn(org.antlr:stringtemplate)
-Requires:       graphviz
-# Owns /usr/share/icons/hicolor
-Requires:       hicolor-icon-theme
-# Antlrworks requires javac
-Requires:       java-25-devel >= 1:1.6.0
-# Explicit requires for javapackages-tools since antlrworks-script
-# uses /usr/share/java-utils/java-functions
-Requires:       javapackages-tools
-BuildArch:      noarch
-ExclusiveArch:  %{java_arches} noarch
-
+# /oreon:deps
 %description
 ANTLRWorks is a novel grammar development environment for ANTLR v3 grammars
 written by Jean Bovet (with suggested use cases from Terence Parr). It combines
@@ -49,6 +40,7 @@ refactoring tools, and address the most common questions and problems
 encountered by grammar developers.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p0
@@ -66,35 +58,27 @@ rm -r src/org/antlr/xjlib/appkit/app/MacOS/
 %pom_remove_plugin :maven-compiler-plugin
 
 %build
-%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
-
 %jpackage_script org.antlr.works.IDE "-Xmx400m" "" antlrworks:antlr:antlr3:antlr3-runtime:jgoodies-common:jgoodies-forms:stringtemplate:stringtemplate4 %{name} false
-
 desktop-file-install \
   --dir=$RPM_BUILD_ROOT%{_datadir}/applications \
   %{SOURCE1}
-
 install -Dpm 0644 resources/icons/app.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
 for i in 16 32 64; do
   install -Dpm 0644 resources/icons/app_${i}x$i.png $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/${i}x$i/apps/%{name}.png
 done
-
 install -Dpm 0644 %{SOURCE2} $RPM_BUILD_ROOT/%{_datadir}/appdata/%{name}.appdata.xml
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
-
 appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml
-
-%files -f .mfiles
-%doc History.txt
-%{_bindir}/%{name}
-%{_datadir}/applications/*.desktop
-%{_datadir}/icons/hicolor/*/apps/*.*
-%{_datadir}/appdata/*.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

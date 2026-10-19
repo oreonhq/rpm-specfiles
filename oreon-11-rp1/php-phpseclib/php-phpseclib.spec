@@ -1,30 +1,22 @@
 %global source0_hash aa7869104990ab51bb758421810730944abdce89f0f0e37845cfe6e33fa33e9b
-
 %global composer_vendor         phpseclib
 %global composer_project        phpseclib
-
 %global github_owner            phpseclib
 %global github_name             phpseclib
 %global github_commit           2552c4001631d1cc844332faea6a08a49c964b28
 %global github_short            %(c=%{github_commit}; echo ${c:0:7})
 %bcond_without                  tests
-
 Name:       php-%{composer_vendor}
 Version:    4.0.1
-Release:    1%{?dist}
-Summary:    PHP Secure Communications Library
+Release:        1%{?dist}
+Summary:        PHP Secure Communications Library
 License:    MIT
 URL:        https://github.com/%{github_owner}/%{github_name}
-
-Source0:    %{name}-%{version}-%{github_short}.tgz
+Source0:        %{name}-%{version}-%{github_short}.tgz
 Source1:    %{name}-autoload.php
-# Generate a full archive from git snapshot, with tests
 Source2:    makesrc.sh
-
 BuildArch:      noarch
-
 %if %{with tests}
-BuildRequires:  php-composer(fedora/autoloader)
 %if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global phpunit %{_bindir}/phpunit9
 %else
@@ -34,14 +26,7 @@ BuildRequires:  php-composer(fedora/autoloader)
 %global phpunit %{_bindir}/phpunit
 %endif
 %endif
-BuildRequires:  %{phpunit}
-BuildRequires:  %{_bindir}/phpab
-# Optional at runtime, to avoid too muck skipped tests
-BuildRequires:  php-bcmath
-BuildRequires:  php-gmp
-BuildRequires:  php-mcrypt
 %endif
-
 Requires:   php(language) >= 5.3.3
 Requires:   php-bcmath
 Requires:   php-date
@@ -53,17 +38,23 @@ Requires:   php-pcre
 Requires:   php-session
 Requires:   php-standard
 Requires:   php-xml
-# Autoloader
 Requires:   php-composer(fedora/autoloader)
-
 Provides:   php-composer(%{composer_vendor}/%{composer_project}) = %{version}
-
+# oreon:deps
+BuildRequires:  /usr/bin/phpab
+BuildRequires:  /usr/bin/phpunit9
+BuildRequires:  php-bcmath
+BuildRequires:  php-composer(fedora/autoloader)
+BuildRequires:  php-gmp
+BuildRequires:  php-mcrypt
+# /oreon:deps
 %description
 MIT-licensed pure-PHP implementations of an arbitrary-precision integer 
 arithmetic library, fully PKCS#1 (v2.1) compliant RSA, DES, 3DES, RC4, 
 Rijndael, AES, Blowfish, Twofish, SSH-1, SSH-2, SFTP, and X.509
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qn %{github_name}-%{github_commit}
@@ -74,9 +65,10 @@ cp %{SOURCE1} %{composer_vendor}/autoload.php
 %install
 mkdir -p %{buildroot}%{_datadir}/php
 cp -pr %{composer_vendor} %{buildroot}%{_datadir}/php
-
+%oreon_autofiles main
 %if %{with tests}
 %check
+
 %{_bindir}/phpab --output tests/bootstrap.php tests
 cat << 'EOF' | tee -a tests/bootstrap.php
 if (class_exists("PHPUnit_Framework_TestCase") && !class_exists("PHPUnit\\Framework\\TestCase")) {
@@ -88,8 +80,6 @@ if (class_exists("PHPUnit_Framework_Error_Notice") && !class_exists("PHPUnit\Fra
 require "%{buildroot}%{_datadir}/php/%{composer_vendor}/autoload.php";
 date_default_timezone_set('UTC');
 EOF
-
-# from travis/run-phpunit.sh
 if %{phpunit} --atleast-version 8
 then
     find tests -type f -name "*.php" -print0 | xargs -0 sed -i 's/n setUpBeforeClass()/n setUpBeforeClass(): void/g'
@@ -106,11 +96,7 @@ then
     find tests -type f -name "*.php" -print0 | xargs -0 sed -i 's/^class Functional_Net_/class /g'
     find tests -type f -name "*.php" -print0 | xargs -0 sed -i 's/extends Unit_Crypt_Hash_\(SHA512Test\|SHA256Test\)/extends \1/g'
 fi
-
-# avoid already defined class
 sed -e '/require /d' -i tests/Unit/Crypt/Hash/SHA*_96Test.php
-
-# testAuthorityInfoAccess fails without internet access
 ret=0
 for cmd in "php %{phpunit}" php80 php81 php82 php83 php84 php85; do
   if which $cmd; then
@@ -122,12 +108,8 @@ for cmd in "php %{phpunit}" php80 php81 php82 php83 php84 php85; do
 done
 exit $ret
 %endif
-
-%files
-%{_datadir}/php/%{composer_vendor}
-%doc AUTHORS CHANGELOG.md composer.json README.md
-%{!?_licensedir:%global license %%doc}
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

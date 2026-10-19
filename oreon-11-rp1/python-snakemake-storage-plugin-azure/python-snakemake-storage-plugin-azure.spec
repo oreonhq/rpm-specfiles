@@ -1,60 +1,46 @@
 %global source0_hash a41232732ac66a9fd001aae50bf9a7f359002ecddfd24fa4e0d83bff4edf1d86
-
-# Currently, even *collecting* the tests requires network access, and even when
-# that is enabled (--enable-network option to mock, or working in a git
-# checkout from upstream), this hangs and eventually fails with:
-#   [Errno 111] Connection refused.
 %bcond tests 0
-
 Name:           python-snakemake-storage-plugin-azure
 Version:        0.4.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Snakemake storage plugin for Azure Blob Storage
-
-# SPDX
 License:        MIT
 URL:            https://github.com/snakemake/snakemake-storage-plugin-azure
-# We use the GitHub archive instead of the PyPI sdist to get CHANGELOG.md and
-# the tests.
-Source:         %{url}/archive/v%{version}/snakemake-storage-plugin-azure-%{version}.tar.gz
-
-
+Source0:        https://github.com/snakemake/snakemake-storage-plugin-azure/archive/v%{version}/snakemake-storage-plugin-azure-%{version}.tar.gz
 BuildArch:      noarch
-
 %if %{with tests}
-# See: [tool.poetry.dev-dependencies] in pyproject.toml
-BuildRequires:  %{py3_dist pytest}
 %endif
-BuildRequires:  snakemake >= 9
-
 %global common_description %{expand:
 A Snakemake storage plugin to read and write from Azure Blob Storage.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-snakemake-storage-plugin-azure = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-snakemake-storage-plugin-azure
-Summary:        %{summary}
-
+Summary:        Snakemake storage plugin for Azure Blob Storage
 %description -n python3-snakemake-storage-plugin-azure %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-snakemake-storage-plugin-azure usr/lib/python3*/site-packages/snakemake_storage_plugin_azure* usr/lib64/python3*/site-packages/snakemake_storage_plugin_azure* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/snakemake_storage_plugin_azure* usr/lib64/python3*/site-packages/snakemake_storage_plugin_azure* usr/bin/*
 
 %check
+
 %if %{with tests}
 %pytest -v -k "${k-}" tests/tests.py
 %endif
-
-%files -n python3-snakemake-storage-plugin-azure -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md
-%doc README.md
+%files
+%files -n python3-snakemake-storage-plugin-azure -f %{oreon_filedir}/python3-snakemake-storage-plugin-azure.list
 
 %changelog
+
 %autochangelog

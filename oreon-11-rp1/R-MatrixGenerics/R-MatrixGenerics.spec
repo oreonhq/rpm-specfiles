@@ -1,17 +1,15 @@
 %global source0_hash b53dcb3c9ac7e1e6e0a297f90c1603ab2a39e052718bd70d76aeed6f6110557a
-
 Name:           R-MatrixGenerics
 Version:        %R_rpm_version 1.22.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        S4 Generic Summary Statistic Functions that Operate on Matrix-Like Objects
-
 License:        Artistic-2.0
 URL:            %{bioc_url}
-Source:         %{bioc_source}
-
+Source0:        https://bioconductor.org/packages/3.22/bioc/src/contrib/MatrixGenerics_1.22.0.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 S4 generic functions modeled after the 'matrixStats' API for alternative matrix
 implementations. Packages with alternative matrix implementation can depend on
@@ -22,22 +20,19 @@ worrying about incompatibilities.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-tests
 
-%files -f %{R_files}
+%R_check \--no-tests
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

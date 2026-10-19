@@ -1,20 +1,19 @@
-%global source0_hash 6e74696bdcccb1b0ace57e040758ca10b02c8c2df4c465e1b63cfbb689a3dba4
-
+%global source0_hash 9d7488915db9710b0d394c7a3e6f2af998b7ae2e8a04cfcf7360f0d614f5c8ae
 Name:		libmetal
 Version:	2026.04.0
-Release:	%autorelease
-Summary:	An abstraction layer across user-space Linux, baremetal, and RTOS environments 
+Release:        1%{?dist}
+Summary:        An abstraction layer across user-space Linux, baremetal, and RTOS environments
 License:	BSD-3-Clause OR Apache-2.0 OR GPL-2.0-only
 URL:		https://github.com/OpenAMP/libmetal/
-Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/OpenAMP/%{name}//archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:		libmetal-add-additional-arches.patch
-
-BuildRequires:	cmake
-BuildRequires:	doxygen
-BuildRequires:	gcc
-BuildRequires:	glibc-devel
-BuildRequires:	libsysfs-devel
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  glibc-devel
+BuildRequires:  libsysfs-devel
+# /oreon:deps
 %description
 An abstraction layer across user-space Linux, baremetal, and RTOS environments.
 
@@ -34,31 +33,19 @@ baremetal, and RTOS environments.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -DCMAKE_INSTALL_LIBDIR=%{_libdir} -DWITH_STATIC_LIB=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%license LICENSE.md
-%doc README.md
-%{_bindir}/test-metal-shared
-%{_libdir}/libmetal.so.1
-%{_libdir}/libmetal.so.1.*
-
-%files devel
-%{_libdir}/libmetal.so
-%{_includedir}/metal/
-
-%files doc
-%license LICENSE.md
-%doc README.md
-%doc %{_datarootdir}/doc/metal/
+%files -f %{oreon_filedir}/main.list
+%files -n libmetal-devel -f %{oreon_filedir}/libmetal-devel.list
+%files -n libmetal-doc -f %{oreon_filedir}/libmetal-doc.list
 
 %changelog
+
 %autochangelog

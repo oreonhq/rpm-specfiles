@@ -1,7 +1,6 @@
 %global source0_hash 39206d069495d1b86aee37aa8ad3c9334d36e59cce6cf79cd386ac0cf3798cdb
 %{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
-
 Name:           perl-Net-Async-HTTP
 Version:        0.49
 Release:        9%{?dist}
@@ -10,49 +9,51 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/Net-Async-HTTP
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Net-Async-HTTP-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  perl-interpreter perl-generators coreutils
-BuildRequires:  perl(:VERSION) >= 5.14.0
+%if !0%{?perl_bootstrap}
+%endif
+Recommends:     perl(Compress::Bzip2) >= 2.010
+Recommends:     perl(Compress::Raw::Zlib) >= 2.057
+Recommends:     perl(IO::Async::SSL) >= 0.12
+Recommends:     perl(Net::Async::SOCKS) >= 0.003
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  perl(:VERSION)
 BuildRequires:  perl(Carp)
-BuildRequires:  perl(Compress::Bzip2) >= 2.10
-BuildRequires:  perl(Compress::Raw::Zlib) >= 2.057
+BuildRequires:  perl(Compress::Bzip2)
+BuildRequires:  perl(Compress::Raw::Zlib)
 BuildRequires:  perl(Errno)
-BuildRequires:  perl(Future) >= 0.28
-BuildRequires:  perl(Future::Utils) >= 0.16
+BuildRequires:  perl(Future)
+BuildRequires:  perl(Future::Utils)
 BuildRequires:  perl(HTTP::Cookies)
 BuildRequires:  perl(HTTP::Request)
 BuildRequires:  perl(HTTP::Request::Common)
 BuildRequires:  perl(HTTP::Response)
-BuildRequires:  perl(IO::Async::Loop) >= 0.59
+BuildRequires:  perl(IO::Async::Loop)
 BuildRequires:  perl(IO::Async::Notifier)
-BuildRequires:  perl(IO::Async::SSL) >= 0.12
-BuildRequires:  perl(IO::Async::Stream) >= 0.59
+BuildRequires:  perl(IO::Async::SSL)
+BuildRequires:  perl(IO::Async::Stream)
 BuildRequires:  perl(IO::Async::Test)
 BuildRequires:  perl(IO::Async::Timer::Countdown)
-BuildRequires:  perl(List::Util) >= 1.29
-BuildRequires:  perl(Metrics::Any) >= 0.05
+BuildRequires:  perl(List::Util)
+BuildRequires:  perl(Metrics::Any)
 BuildRequires:  perl(Module::Build)
-%if !0%{?perl_bootstrap}
 BuildRequires:  perl(Net::Async::HTTP::Server)
-%endif
 BuildRequires:  perl(Net::Async::SOCKS)
 BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(Socket) >= 2.010
-BuildRequires:  perl(Struct::Dumb) >= 0.07
-BuildRequires:  perl(Test2::V0) >= 0.000147
+BuildRequires:  perl(Socket)
+BuildRequires:  perl(Struct::Dumb)
+BuildRequires:  perl(Test2::V0)
 BuildRequires:  perl(Test::Metrics::Any)
-BuildRequires:  perl(Test::Pod) >= 1.00
+BuildRequires:  perl(Test::Pod)
 BuildRequires:  perl(Time::HiRes)
 BuildRequires:  perl(URI)
 BuildRequires:  perl(base)
 BuildRequires:  perl(constant)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-# some optional runtime deps
-Recommends:     perl(Compress::Bzip2) >= 2.010
-Recommends:     perl(Compress::Raw::Zlib) >= 2.057
-Recommends:     perl(IO::Async::SSL) >= 0.12
-Recommends:     perl(Net::Async::SOCKS) >= 0.003
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This object class implements an asynchronous HTTP user agent. It sends
 requests to servers, returning Future instances to yield responses when
@@ -62,27 +63,26 @@ connection. Normally, only one such object will be needed per program to
 support any number of requests.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Net-Async-HTTP-%{version}
 
 %build
+
 perl Build.PL --installdirs=vendor
 ./Build
-
 %install
 ./Build install --destdir=%{buildroot} --create_packlist=0
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
+
 unset NET_ASYNC_HTTP_MAXCONNS
 ./Build test
-
-%files
-%doc Changes examples README
-%license LICENSE
-%{perl_vendorlib}/Net/Async/HTTP*
-%{_mandir}/man3/Net::Async::HTTP*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

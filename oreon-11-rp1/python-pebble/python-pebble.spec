@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash eb49a0f6862f7e75df4a40107f1c8c267cf8adfbd6d29a0dac29d17ac188c878
 Name:           python-pebble
 Version:        5.2.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Threading and multiprocessing eye-candy.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/noxdafox/pebble
-Source:         %{pypi_source pebble}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pebble/pebble-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pebble' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pebble = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pebble
-Summary:        %{summary}
-
-%description -n python3-pebble %_description
-
+Summary:        Threading and multiprocessing eye-candy.
+%description -n python3-pebble
 
 %prep
-%autosetup -p1 -n pebble-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pebble-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pebble usr/lib/python3*/site-packages/pebble* usr/lib64/python3*/site-packages/pebble* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pebble* usr/lib64/python3*/site-packages/pebble* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pebble -f %{pyproject_files}
+%files
+%files -n python3-pebble -f %{oreon_filedir}/python3-pebble.list
 
 %changelog
+
 %autochangelog

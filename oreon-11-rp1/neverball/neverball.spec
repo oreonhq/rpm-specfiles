@@ -1,25 +1,29 @@
-%global source0_hash none
-
+%global source0_hash 73fe63cca4f96e2d355480d03bc0b2904e83a0abdf65fe8c52db5cc3cca88fa0
 Name:           neverball
 Version:        1.6.0
-Release:        36%{?dist}
-
+Release:        1%{?dist}
 Summary:        Common files for neverball and neverputt
-
 License:        GPL-2.0-or-later
 URL:            http://neverball.org
 Source0:        http://neverball.org/neverball-%{version}.tar.gz
 Source1:        neverball.desktop
 Source2:        neverputt.desktop
-#Patch0:         neverball-1.5.4-dso.patch
-#Patch1:		neverball-1.5.4-sizeof.patch
-BuildRequires: make
+# oreon:deps
+BuildRequires:  SDL2_image-devel
+BuildRequires:  SDL2_mixer-devel
+BuildRequires:  SDL2_ttf-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  freetype-devel
 BuildRequires:  gcc
-BuildRequires:  SDL2_image-devel, SDL2_ttf-devel, SDL2_mixer-devel
-BuildRequires:  freetype-devel, desktop-file-utils, zlib-devel
-BuildRequires:  libGL-devel, libjpeg-devel, libpng-devel, physfs-devel
-BuildRequires:  gettext, libvorbis-devel
-
+BuildRequires:  gettext
+BuildRequires:  libGL-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  make
+BuildRequires:  physfs-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 This package provides common files needed by both the Neverball and Neverputt
 games.
@@ -28,7 +32,6 @@ games.
 Summary: Minigolf like game
 Requires: opengl-games-utils dejavu-sans-fonts
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description neverputt
 A hot-seat multiplayer miniature golf game, built on the physics and graphics
 engine of Neverball.
@@ -37,7 +40,6 @@ engine of Neverball.
 Summary: Roll a ball through an obstacle course
 Requires: opengl-games-utils dejavu-sans-fonts
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description neverball
 Tilt the floor to roll a ball through an obstacle course within the
 given time.  If the ball falls or time expires, a ball is lost.
@@ -46,20 +48,19 @@ Collect 100 coins to save your progress and earn an extra ball.  Red
 coins are worth 5.  Blue coins are worth 10.
 
 %prep
+
 %setup -q
 #%patch0 -p0
 #%patch1 -p0
 
 %build
-make CFLAGS="$RPM_OPT_FLAGS -ansi `sdl2-config --cflags` -fcommon" DATADIR=%{_datadir}/%{name} LOCALEDIR=%{_datadir}/locale ENABLE_NLS=1 %{?_smp_mflags}
 
+make CFLAGS="$RPM_OPT_FLAGS -ansi `sdl2-config --cflags` -fcommon" DATADIR=%{_datadir}/%{name} LOCALEDIR=%{_datadir}/locale ENABLE_NLS=1 %{?_smp_mflags}
 %install
 install -p -D -m0755 neverball $RPM_BUILD_ROOT/%{_bindir}/neverball
 install -p -D -m0755 neverputt $RPM_BUILD_ROOT/%{_bindir}/neverputt
 install -p -d -m0755 $RPM_BUILD_ROOT/%{_datadir}/%{name}/
 cp -ap  data/* $RPM_BUILD_ROOT/%{_datadir}/%{name}/
-
-# install proper icons
 install -p -D -m0644 dist/neverball_128.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/128x128/apps/neverball.png
 install -p -D -m0644 dist/neverball_16.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/16x16/apps/neverball.png
 install -p -D -m0644 dist/neverball_24.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/24x24/apps/neverball.png
@@ -76,29 +77,16 @@ install -p -D -m0644 dist/neverputt_32.png $RPM_BUILD_ROOT/%{_datadir}/icons/hic
 install -p -D -m0644 dist/neverputt_48.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/48x48/apps/neverputt.png
 install -p -D -m0644 dist/neverputt_512.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/512x512/apps/neverputt.png
 install -p -D -m0644 dist/neverputt_64.png $RPM_BUILD_ROOT/%{_datadir}/icons/hicolor/64x64/apps/neverputt.png
-
-# Use system fonts instead of bundling our own
 rm $RPM_BUILD_ROOT%{_datadir}/%{name}/ttf/DejaVuSans-Bold.ttf
 ln -s %{_datadir}/fonts/dejavu-sans-fonts/DejaVuSans-Bold.ttf $RPM_BUILD_ROOT%{_datadir}/%{name}/ttf/DejaVuSans-Bold.ttf
-
 ln -s opengl-game-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/neverball-wrapper
 ln -s opengl-game-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/neverputt-wrapper
-
 desktop-file-install \
   --dir $RPM_BUILD_ROOT/%{_datadir}/applications \
 %{SOURCE1}
-
 desktop-file-install \
   --dir $RPM_BUILD_ROOT/%{_datadir}/applications \
 %{SOURCE2}
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -156,32 +144,15 @@ SentUpstream: 2014-09-24
   <url type="homepage">http://neverball.org</url>
 </application>
 EOF
-
 mkdir -p %{buildroot}%{_datadir}/locale
 cp -pr locale/* %{buildroot}%{_datadir}/locale/
-
 %find_lang %{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%defattr(0644,root,root,0755)
-%doc README.md LICENSE.md doc/
-%{_datadir}/%{name}/
-
-%files neverputt
-%doc LICENSE.md
-%attr(0755,root,root) %{_bindir}/neverputt
-%{_bindir}/neverputt-wrapper
-%{_datadir}/appdata/neverputt.appdata.xml
-%{_datadir}/applications/neverputt.desktop
-%{_datadir}/icons/hicolor/*/apps/neverputt.png
-
-%files neverball
-%doc LICENSE.md
-%attr(0755,root,root) %{_bindir}/neverball
-%{_bindir}/neverball-wrapper
-%{_datadir}/appdata/neverball.appdata.xml
-%{_datadir}/applications/neverball.desktop
-%{_datadir}/icons/hicolor/*/apps/neverball.png
+%files -f %{oreon_filedir}/main.list
+%files -n neverball-neverputt -f %{oreon_filedir}/neverball-neverputt.list
+%files -n neverball-neverball -f %{oreon_filedir}/neverball-neverball.list
 
 %changelog
+
 %autochangelog

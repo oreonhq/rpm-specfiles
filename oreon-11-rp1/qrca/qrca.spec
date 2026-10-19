@@ -1,54 +1,44 @@
 %global source0_hash d67d2fa3ba6d96ef73e0335ccd99661c6cd479e99bffc1e3b21ddb23ac21148e
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:          qrca
 Version:       26.04.3
-Release:       1%{?dist}
+Release:        1%{?dist}
 License:       CC0-1.0 AND BSD-3-Clause AND BSD-2-Clause AND GPL-2.0-or-later AND LGPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-or-later
-Summary:       QR code scanner for KDE Plasma
+Summary:        QR code scanner for KDE Plasma
 URL:           https://apps.kde.org/%{name}/
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires: extra-cmake-modules
-BuildRequires: gcc-c++
-BuildRequires: kf6-rpm-macros
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Quick)
-BuildRequires: cmake(Qt6Test)
-BuildRequires: cmake(Qt6Gui)
-BuildRequires: cmake(Qt6Svg)
-BuildRequires: cmake(Qt6QuickControls2)
-BuildRequires: cmake(Qt6Multimedia)
-
-BuildRequires: cmake(KF6Kirigami)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6Contacts)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6Notifications)
-BuildRequires: cmake(KF6Prison)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6Service)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Crash)
-BuildRequires: cmake(KF6NetworkManagerQt)
-BuildRequires: cmake(KF6DBusAddons)
-BuildRequires: cmake(KF6KirigamiAddons)
-
-# Qml Imports
 Requires: qt6qml(org.kde.config)
 Requires: qt6qml(org.kde.kirigami)
 Requires: qt6qml(org.kde.kirigamiaddons.formcard)
 Requires: qt6qml(org.kde.prison)
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6Contacts)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Kirigami)
+BuildRequires:  cmake(KF6KirigamiAddons)
+BuildRequires:  cmake(KF6NetworkManagerQt)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6Prison)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Multimedia)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6QuickControls2)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 Qrca is a simple application for Plasma Desktop
 and Plasma Mobile that lets you scan many barcode
@@ -56,29 +46,24 @@ formats and create your own QR code images.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name}
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/*.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
-
-%files -f %{name}.lang
-%license LICENSES/*
-%doc README.md
-%{_kf6_bindir}/qrca
-%{_kf6_datadir}/applications/org.kde.qrca*.desktop
-%{_kf6_datadir}/icons/hicolor/scalable/apps/org.kde.qrca.svg
-%{_kf6_metainfodir}/org.kde.qrca.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

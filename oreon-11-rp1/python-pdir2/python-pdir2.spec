@@ -1,59 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 34de77cec1250e0f00a1a50c1b9252c2a1a7fe4768b8d31fb95289d9ebdde991
 Name:           python-pdir2
 Version:        1.1.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Pretty dir printing with joy
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/laike9m/pdir2
-Source:         %{pypi_source pdir2}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pdir2/pdir2-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pdir2' generated automatically by pyp2spec.}
-
 Patch0:         python313.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pdir2 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pdir2
-Summary:        %{summary}
-
-%description -n python3-pdir2 %_description
-
+Summary:        Pretty dir printing with joy
+# oreon:reqs
+Requires:       python3dist(typing-extensions) == 4.*
+# /oreon:reqs
+%description -n python3-pdir2
 
 %prep
-%autosetup -p1 -n pdir2-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pdir2-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pdir2 usr/lib/python3*/site-packages/pdir2* usr/lib64/python3*/site-packages/pdir2* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pdir2* usr/lib64/python3*/site-packages/pdir2* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pdir2 -f %{pyproject_files}
+%files
+%files -n python3-pdir2 -f %{oreon_filedir}/python3-pdir2.list
 
 %changelog
+
 %autochangelog

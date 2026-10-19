@@ -1,28 +1,20 @@
 %global source0_hash e646da6ac00a885cfae33dc935e52bb42bd1d05e41b8437cbc25ca3d74930f35
-
 %global debug_package %{nil}
-
 Name: guidelines-support-library
 Version: 5.0.0
-Release: %autorelease
-
+Release:        1%{?dist}
 License: MIT
 URL: https://github.com/microsoft/GSL
-Summary: Guidelines Support Library
-Source0: %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Summary:        Guidelines Support Library
+Source0:        https://github.com/microsoft/GSL/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:   guidelines-support-library-4.2.0-test-c++17.patch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} && 0%{?fedora} >= 42
-ExcludeArch: %{ix86}
-%endif
-
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: gtest-devel
-BuildRequires: ninja-build
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  ninja-build
+# /oreon:deps
 %description
 Header-only %{summary}.
 
@@ -30,7 +22,6 @@ Header-only %{summary}.
 Summary: Development files for %{name}
 Provides: %{name}-static = %{?epoch:%{epoch}:}%{version}-%{release}
 BuildArch: noarch
-
 %description devel
 The Guidelines Support Library (GSL) contains functions and types that are
 suggested for use by the C++ Core Guidelines maintained by the Standard C++
@@ -44,6 +35,7 @@ While some types have been broken out into their own headers (e.g. gsl/span),
 it is simplest to just include gsl/gsl and gain access to the entire library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n GSL-%{version} -p1
@@ -51,23 +43,22 @@ sed -e 's/4.1.0/%{version}/g' -i CMakeLists.txt
 sed -e '/-Werror/d' -i tests/CMakeLists.txt
 
 %build
+
 %cmake -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DGSL_INSTALL:BOOL=ON \
     -DGSL_TEST:BOOL=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-%ctest
 
-%files devel
-%doc README.md CONTRIBUTING.md
-%license LICENSE ThirdPartyNotices.txt
-%{_datadir}/cmake/Microsoft.GSL/
-%{_includedir}/gsl/
+%ctest
+%files -f %{oreon_filedir}/main.list
+%files -n guidelines-support-library-devel -f %{oreon_filedir}/guidelines-support-library-devel.list
 
 %changelog
+
 %autochangelog

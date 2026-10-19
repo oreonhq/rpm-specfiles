@@ -1,57 +1,44 @@
 %global source0_hash 8809a4df6fe08279b39a8890669506ed3158e0617855ac9aff098fcbe772ae4c
-
 Name:           python-pyproject-metadata
 Version:        0.12.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        PEP 621 metadata parsing
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pypa/pyproject-metadata
-Source:         %{pypi_source pyproject_metadata}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyproject_metadata/pyproject_metadata-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyproject-metadata' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(flit-core) >= 3.11
+Requires:       python3-pyproject-metadata = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyproject-metadata
-Summary:        %{summary}
-
-%description -n python3-pyproject-metadata %_description
-
+Summary:        PEP 621 metadata parsing
+# oreon:reqs
+Requires:       python3dist(packaging) >= 23.2
+# /oreon:reqs
+%description -n python3-pyproject-metadata
 
 %prep
-%autosetup -p1 -n pyproject_metadata-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyproject_metadata-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyproject-metadata usr/lib/python3*/site-packages/pyproject_metadata* usr/lib64/python3*/site-packages/pyproject_metadata* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyproject_metadata* usr/lib64/python3*/site-packages/pyproject_metadata* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyproject-metadata -f %{pyproject_files}
+%files
+%files -n python3-pyproject-metadata -f %{oreon_filedir}/python3-pyproject-metadata.list
 
 %changelog
+
 %autochangelog

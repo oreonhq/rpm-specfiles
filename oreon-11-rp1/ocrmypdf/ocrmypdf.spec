@@ -1,47 +1,53 @@
-%global source0_hash a0f6509e7780b286391f8847fae1811d2b157b14283ad74a2431d6755c5c0ed0
-
+%global source0_hash aca73a23a80cf2f46a4c15040b0035203dbf74054b7a0c3a7ee93b05abc555a6
 %global srcname ocrmypdf
-
 Name:           %{srcname}
 Version:        17.12.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Add an OCR text layer to scanned PDF files
-
-# See all SPDX-License-Identifier tags in files.
-# No docs or tests are included in RPM.
 License:        MPL-2.0 AND Zlib
 URL:            https://github.com/ocrmypdf/OCRmyPDF
-Source:         %pypi_source %{srcname}
-# Fedora specific.
-# We drop pi-heif for now, as it is optional.
+Source0:        https://files.pythonhosted.org/packages/source/o/%{name}/%{name}-%{version}.tar.gz
 Patch:          0001-Remove-unnecessary-dependencies.patch
-# Replace typer-slim dependency with typer. Upstream has deprecated typer-slim,
-# and it’s now just a shallow wrapper around typer. Downstream-only because
-# upstream has switched to cyclopts,
-# https://github.com/ocrmypdf/OCRmyPDF/commit/4c7086c609eda08c75d4b146759e1daf608a3ead.
 Patch:          ocrmypdf-16.12.0-no-typer-slim.patch
-
 BuildArch:      noarch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
-BuildRequires:  ghostscript >= 9.50
-BuildRequires:  /usr/bin/pdftotext
-BuildRequires:  pngquant >= 2.0.0
-BuildRequires:  tesseract >= 4.1.1
-BuildRequires:  tesseract-osd
-BuildRequires:  tesseract-langpack-deu
-BuildRequires:  unpaper >= 6.1
-BuildRequires:  python3-devel
-
 Requires:       ghostscript >= 9.15
 Recommends:     pngquant >= 2.0.0
 Requires:       tesseract >= 4.1.1
 Recommends:     unpaper >= 6.1
-
-# Dropped because we don't have streamlit.
 Obsoletes:      ocrmypdf+webservice < 16.7.0-3
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-ocrmypdf = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-ocrmypdf+heic
+Summary:        Metapackage for python3-ocrmypdf heic extras
+Requires:       python3-ocrmypdf = %{version}-%{release}
+Requires:       python3dist(pillow-heif) >= 1.7.0
+Provides:       python3dist(ocrmypdf[heic]) = %{version}-%{release}
+
+%description -n python3-ocrmypdf+heic
+Metapackage for python3-ocrmypdf heic extras.
+
+%package -n       python3-ocrmypdf+watcher
+Summary:        Metapackage for python3-ocrmypdf watcher extras
+Requires:       python3-ocrmypdf = %{version}-%{release}
+Requires:       python3dist(watchfiles) >= 1.0
+Requires:       python3dist(cyclopts) >= 3
+Provides:       python3dist(ocrmypdf[watcher]) = %{version}-%{release}
+
+%description -n python3-ocrmypdf+watcher
+Metapackage for python3-ocrmypdf watcher extras.
+
+%package -n       python3-ocrmypdf+webservice
+Summary:        Metapackage for python3-ocrmypdf webservice extras
+Requires:       python3-ocrmypdf = %{version}-%{release}
+Requires:       python3dist(streamlit) >= 1.41.0
+Provides:       python3dist(ocrmypdf[webservice]) = %{version}-%{release}
+
+%description -n python3-ocrmypdf+webservice
+Metapackage for python3-ocrmypdf webservice extras.
 
 %description
 OCRmyPDF adds an OCR text layer to scanned PDF files, allowing them to be
@@ -50,14 +56,13 @@ searched or copy-pasted.
 %package -n %{srcname}-doc
 Summary:        ocrmypdf documentation
 License:        CC-BY-SA-4.0
-
 %description -n %{srcname}-doc
 Documentation for ocrmypdf
 
-%pyproject_extras_subpkg -n %{srcname} watcher
 %{_bindir}/%{srcname}-watcher
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{srcname}-%{version} -p1
@@ -70,45 +75,25 @@ for f in src/%{srcname}/*.py src/%{srcname}/*/*.py; do
     chmod -x $f
 done
 
-%generate_buildrequires
-%pyproject_buildrequires -x docs -x test -x watcher
-
 %build
+
 %pyproject_wheel
-
-# generate html docs
 PYTHONPATH="$PWD/build/lib" OCRMYPDF_VERSION="%{version}" sphinx-build-3 docs html
-# remove the sphinx-build leftovers
 rm -rf html/.{doctrees,buildinfo}
-
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}
-
-# Install completion files.
 install -Dpm 0644 misc/completion/ocrmypdf.bash %{buildroot}%{_datadir}/bash-completion/completions/ocrmypdf
 install -Dpm 0644 misc/completion/ocrmypdf.fish %{buildroot}%{_datadir}/fish/vendor_completions.d/ocrmypdf.fish
-
-# Install optional programs.
 install -Dpm 0755 misc/watcher.py %{buildroot}%{_bindir}/%{srcname}-watcher
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 k="${k-}${k+ and }not test_tesseract_config_invalid"
-
 %{pytest} -ra -n auto --runslow -k "${k-}"
-
-%files -n %{srcname} -f %{pyproject_files}
-%doc README.md
-%license LICENSE
-%{_bindir}/ocrmypdf
-%{_datadir}/bash-completion/completions/ocrmypdf
-%dir %{_datadir}/fish
-%dir %{_datadir}/fish/vendor_completions.d
-%{_datadir}/fish/vendor_completions.d/ocrmypdf.fish
-
-%files -n %{srcname}-doc
-%doc html
-%license LICENSE
+%files
+%files -n ocrmypdf-doc -f %{oreon_filedir}/ocrmypdf-doc.list
 
 %changelog
+
 %autochangelog

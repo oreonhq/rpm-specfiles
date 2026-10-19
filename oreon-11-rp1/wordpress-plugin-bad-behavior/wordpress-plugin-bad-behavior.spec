@@ -1,22 +1,18 @@
-%global source0_hash 6072eaec2a3937e5cf80247c3324e66ff991c067a6cec2c202952ed4f4a6b5cc
-
+%global source0_hash 5a9485db807704ea5526ca02d2b81cb3c3670a78dd6bb2e5d39d4c561a4a6ab4
 %global plugin_name bad-behavior
 %global plugin_human_name Bad Behavior
-
 Name:		wordpress-plugin-%{plugin_name}
 Version:	2.2.13
-Release:	25%{?dist}
-Summary:	%{plugin_human_name} plugin for WordPress
-
-# According to http://plugins.trac.wordpress.org/ all plugins are licensed
-# under the GPL unless otherwise stated in the plugin source.
-# Automatically converted from old format: LGPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Bad Behavior plugin for WordPress
 License:	LGPL-3.0-or-later
 URL:		http://www.bad-behavior.ioerror.us/
-Source0:	http://downloads.wordpress.org/plugin/%{plugin_name}.%{version}.zip
+Source0:        http://downloads.wordpress.org/plugin/%{plugin_name}.%{version}.zip
 Requires:	wordpress
 BuildArch:	noarch
+# oreon:deps
 
+# /oreon:deps
 %description
 Bad Behavior is a PHP-based solution for blocking link spam and the robots
 which deliver it.
@@ -40,6 +36,7 @@ it in combination with a more traditional spam prevention service.
 This package is built for use with WordPress (wordpress), not WordPress MU.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c
@@ -50,17 +47,14 @@ of your blog, "Plugins", and enable the plugin there.' > README.fedora
 
 %install
 rm -rf %{buildroot}
-# Pull doc files up so they aren't duplicated
 mv %{plugin_name}/{lgpl-3.0.txt,README.txt} .
-# Trim some non-WordPress files we don't need
 rm -f %{plugin_name}/bad-behavior-{lifetype,mediawiki}.php
 mkdir -p %{buildroot}%{_datadir}/wordpress/wp-content/plugins/
 cp -a %{plugin_name} %{buildroot}%{_datadir}/wordpress/wp-content/plugins/
-# Note, no %find_lang since there are no language files
+%oreon_autofiles main
 
-%files
-%doc lgpl-3.0.txt README.txt README.fedora
-%{_datadir}/wordpress/wp-content/plugins/%{plugin_name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

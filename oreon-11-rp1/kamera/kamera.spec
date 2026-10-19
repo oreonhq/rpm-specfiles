@@ -1,79 +1,53 @@
 %global source0_hash 6b695382b8bf27deea190c48b29c63ffeae416f84da014de105cc8f86b7a7ae6
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    kamera
-Summary: Digital camera support for KDE 
+Summary:        Digital camera support for KDE
 Version: 26.04.3
-Release: 1%{?dist}
-
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-only
 URL:     https://www.kde.org/applications/graphics/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/kamera-%{version}.tar.xz
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Core5Compat)
-
-BuildRequires: cmake(KF6ConfigWidgets)
-BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6KCMUtils)
-BuildRequires: cmake(KF6DocTools)
-
-BuildRequires: pkgconfig(libgphoto2)
-
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 Requires: kde-cli-tools
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(libgphoto2)
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html
-
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/kcm_%{name}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{name}.metainfo.xml
-
-
-%files -f %{name}.lang
-%doc AUTHORS README
-%license LICENSES/*.txt
-%{_kf6_datadir}/applications/kcm_%{name}.desktop
-%{_kf6_datadir}/solid/actions/solid_camera.desktop
-%{_kf6_datadir}/qlogging-categories6/%{name}.categories
-%{_kf6_qtplugindir}/plasma/kcms/systemsettings_qwidgets/kcm_%{name}.so
-%{_kf6_metainfodir}/org.kde.%{name}.metainfo.xml
-%{_kf6_plugindir}/kio/kio_%{name}.so
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

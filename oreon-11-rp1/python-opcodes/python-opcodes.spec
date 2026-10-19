@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 16ec1cea4cf3dda767e6c0a718f664ef97a34ed24c91998a3c25c3f960c15fba
 Name:           python-opcodes
 Version:        0.3.14
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Database of Processor Instructions/Opcodes
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/Maratyszcza/Opcodes
-Source:         %{pypi_source opcodes}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/opcodes/opcodes-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'opcodes' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-opcodes = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-opcodes
-Summary:        %{summary}
-
-%description -n python3-opcodes %_description
-
+Summary:        Database of Processor Instructions/Opcodes
+%description -n python3-opcodes
 
 %prep
-%autosetup -p1 -n opcodes-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir opcodes-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-opcodes usr/lib/python3*/site-packages/opcodes* usr/lib64/python3*/site-packages/opcodes* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/opcodes* usr/lib64/python3*/site-packages/opcodes* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-opcodes -f %{pyproject_files}
+%files
+%files -n python3-opcodes -f %{oreon_filedir}/python3-opcodes.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash aa62cbe338ddcb11ebf2460bcd6a005a766e516ed3d00751cc2e0379b937c587
 Name:           python-xd
 Version:        0.1.8
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        a list of useful commands which makes life easier
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/damnever/xd
-Source:         %{pypi_source xd}
-
+Source0:        https://files.pythonhosted.org/packages/source/x/xd/xd-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'xd' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-xd = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-xd
-Summary:        %{summary}
-
-%description -n python3-xd %_description
-
+Summary:        a list of useful commands which makes life easier
+%description -n python3-xd
 
 %prep
-%autosetup -p1 -n xd-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir xd-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-xd usr/lib/python3*/site-packages/xd* usr/lib64/python3*/site-packages/xd* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/xd* usr/lib64/python3*/site-packages/xd* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-xd -f %{pyproject_files}
-%{_bindir}/xd
+%files
+%files -n python3-xd -f %{oreon_filedir}/python3-xd.list
 
 %changelog
+
 %autochangelog

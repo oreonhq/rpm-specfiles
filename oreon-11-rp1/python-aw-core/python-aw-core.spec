@@ -1,60 +1,41 @@
-%global source0_hash none
-
+%global source0_hash dc14867ed15b4529d6e69b1d07df3fb29c91ccf7ab174de3f9100b90a95cc826
 Name:           python-aw-core
 Version:        0.5.18
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Core library for ActivityWatch
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
 URL:            https://activitywatch.net/
-Source:         %{pypi_source aw_core}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aw_core/aw_core-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aw-core' generated automatically by pyp2spec.}
-
 Patch:          https://github.com/ActivityWatch/aw-core/pull/127.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-aw-core = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-aw-core
-Summary:        %{summary}
-
-%description -n python3-aw-core %_description
-
+Summary:        Core library for ActivityWatch
+%description -n python3-aw-core
 
 %prep
-%autosetup -p1 -n aw_core-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aw_core-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aw-core usr/lib/python3*/site-packages/aw_core* usr/lib64/python3*/site-packages/aw_core* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aw_core* usr/lib64/python3*/site-packages/aw_core* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aw-core -f %{pyproject_files}
-%{_bindir}/aw-cli
+%files
+%files -n python3-aw-core -f %{oreon_filedir}/python3-aw-core.list
 
 %changelog
+
 %autochangelog

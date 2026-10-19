@@ -1,63 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 4fa27087166c1a74e2cb6a1dd7c298827c62de98ba1364c37171d8f9f28c0204
 Name:           python-opytimizer
 Version:        4.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Nature-Inspired Python Optimizer
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/recogna-lab/opytimizer
-Source:         %{pypi_source opytimizer}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/opytimizer/opytimizer-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'opytimizer' generated automatically by pyp2spec.}
-
 Patch:          remove-ci-deps.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-opytimizer = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-opytimizer
-Summary:        %{summary}
-
-%description -n python3-opytimizer %_description
+Summary:        Nature-Inspired Python Optimizer
+%description -n python3-opytimizer
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-opytimizer tests
-
 
 %prep
-%autosetup -p1 -n opytimizer-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir opytimizer-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-opytimizer usr/lib/python3*/site-packages/opytimizer* usr/lib64/python3*/site-packages/opytimizer* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/opytimizer* usr/lib64/python3*/site-packages/opytimizer* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-opytimizer -f %{pyproject_files}
+%files
+%files -n python3-opytimizer -f %{oreon_filedir}/python3-opytimizer.list
 
 %changelog
+
 %autochangelog

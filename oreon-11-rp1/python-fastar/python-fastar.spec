@@ -1,43 +1,27 @@
-%global source0_hash 555720a4158fe5961d89fe2325e70d1764ca4519964be193ef006bcf2420cb27
-
+%global source0_hash 1da58f764b88694485134b4bfdc1a9ebdb1dbb8f4fc82018742982593e63b2ee
 Name:           python-fastar
 Version:        0.12.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        High-level bindings for the Rust tar crate
-
 License:        MIT
 URL:            https://github.com/DoctorJohn/fastar
-Source:         %{url}/archive/v%{version}/fastar-%{version}.tar.gz
-
-# Downstream-only: allow PyO3 0.27 until we have 0.28:
-# https://bugzilla.redhat.com/show_bug.cgi?id=2435852
+Source0:        https://github.com/DoctorJohn/fastar/archive/v%{version}/fastar-%{version}.tar.gz
 Patch:          fastar-0.9.0-allow-pyo3-0.27.patch
-
-
-BuildRequires:  tomcli
-BuildRequires:  cargo-rpm-macros >= 24
-
-# Test dependencies; see the “dev” dependency group, which also contains
-# unwanted linters, type-checkers, benchmarking tools, etc.,
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters.
-BuildRequires:  %{py3_dist psutil}
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist typing-extensions}
-
 %global common_description %{expand:
 The fastar library wraps the Rust tar, flate2, and zstd crates, providing a
 high-performance way to work with compressed and uncompressed tar archives in
 Python.}
-
+# oreon:deps
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  python3dist(psutil)
+BuildRequires:  python3dist(pytest)
+BuildRequires:  python3dist(typing-extensions)
+BuildRequires:  tomcli
+# /oreon:deps
 %description %{common_description}
 
 %package -n     python3-fastar
-Summary:        %{summary}
-# 0BSD OR MIT OR Apache-2.0
-# Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
-# MIT
-# MIT OR Apache-2.0
-# MIT OR Zlib OR Apache-2.0
+Summary:        High-level bindings for the Rust tar crate
 License:        %{shrink:
                 MIT AND
                 (0BSD OR MIT OR Apache-2.0) AND
@@ -45,38 +29,29 @@ License:        %{shrink:
                 (MIT OR Apache-2.0) AND
                 (MIT OR Zlib OR Apache-2.0)
                 }
-
 %description -n python3-fastar %{common_description}
 
 %prep
-%autosetup -p1
-%cargo_prep
-
-%generate_buildrequires -a
-%cargo_generate_buildrequires
-
+%oreon_prep
 %build -p
+
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
-
 %install
 %pyproject_install
+%oreon_autofiles python3-fastar usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# These tests assume there are no open file descriptors inherited from the
-# environment, which is not a good assumption. They fail because the process
-# has /usr/lib/sysimage/rpm/.rpm.lock open.
+
 k="${k-}${k+ and }not test_close_closes_archive"
 k="${k-}${k+ and }not test_context_manager_closes_archive"
 k="${k-}${k+ and }not test_unpack_preserves_file_modification_time_only_if_option_is_true"
-
-# We are not interested in benchmarks
 ignore="${ignore-} --ignore=tests/benchmarks/"
-
 %pytest -k "${k-}" ${ignore} -v
-
-%files -n python3-fastar -f %{pyproject_files}
-%doc README.md
+%files -f %{oreon_filedir}/main.list
+%files -n python3-fastar -f %{oreon_filedir}/python3-fastar.list
 
 %changelog
+
 %autochangelog

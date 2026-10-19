@@ -1,34 +1,29 @@
 %global source0_hash 7a5628c4182b61be3b228f6b88ecbd4e0f46f34daa525ce572c3df142fd493de
-
 Name:           dtk6core
 Version:        6.7.32
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Deepin tool kit core modules
 License:        LGPL-3.0-or-later
 URL:            https://github.com/linuxdeepin/dtkcore
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  ninja-build
-
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(Qt6CorePrivate)
-BuildRequires:  cmake(Qt6Xml)
-BuildRequires:  cmake(Qt6ToolsTools)
-BuildRequires:  cmake(Qt6Concurrent)
-
-BuildRequires:  cmake(Dtk6Log)
-BuildRequires:  cmake(DtkBuildHelper) >= %{version}
-BuildRequires:  cmake(spdlog)
-
-BuildRequires:  pkgconfig(icu-uc)
-BuildRequires:  pkgconfig(uchardet)
-BuildRequires:  pkgconfig(libsystemd)
-
+Source0:        https://github.com/linuxdeepin/dtkcore/archive/%{version}/%{name}-%{version}.tar.gz
 Requires:       deepin-desktop-base
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Dtk6Log)
+BuildRequires:  cmake(DtkBuildHelper)
+BuildRequires:  cmake(Qt6Concurrent)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6CorePrivate)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6ToolsTools)
+BuildRequires:  cmake(Qt6Xml)
+BuildRequires:  cmake(spdlog)
+BuildRequires:  gcc-c++
+BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(icu-uc)
+BuildRequires:  pkgconfig(libsystemd)
+BuildRequires:  pkgconfig(uchardet)
+# /oreon:deps
 %description
 Deepin tool kit core modules.
 
@@ -36,11 +31,11 @@ Deepin tool kit core modules.
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       dtkcommon-devel%{_isa}
-
 %description    devel
 This package contains development files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -48,28 +43,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's|/etc/os-version|/etc/dde-version|' src/dsysinfo.cpp
 
 %build
+
 %cmake -GNinja -DDTK5=OFF -DBUILD_WITH_SYSTEMD=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libdtk6core.so.6*
-%{_libexecdir}/dtk6/DCore/
-
-%files devel
-%{_libdir}/libdtk6core.so
-%{_includedir}/dtk6/DCore/
-%{_libdir}/cmake/Dtk6Core/
-%{_libdir}/cmake/Dtk6CMake/
-%{_libdir}/cmake/Dtk6DConfig/
-%{_libdir}/cmake/Dtk6Tools/
-%{_libdir}/pkgconfig/dtk6core.pc
-%{_qt6_archdatadir}/mkspecs/modules/*.pri
-%{_qt6_archdatadir}/mkspecs/features/*.prf
+%files -f %{oreon_filedir}/main.list
+%files -n dtk6core-devel -f %{oreon_filedir}/dtk6core-devel.list
 
 %changelog
+
 %autochangelog

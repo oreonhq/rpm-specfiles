@@ -1,59 +1,43 @@
-%global source0_hash none
-
+%global source0_hash a48b5e6db21062bc6258548e6a3e4363043d40128f0e6b796774a59b6a7dbe82
 Name:           python-ansible-pylibssh
 Version:        1.4.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python bindings for libssh client specific to Ansible use case
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ansible/pylibssh
-Source:         %{pypi_source ansible_pylibssh}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ansible-pylibssh' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/ansible_pylibssh/ansible_pylibssh-%{version}.tar.gz
 Patch0:         python-ansible-pylibssh-nocov.patch
 Patch1:         python-ansible-pylibssh-debug.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 45
+BuildRequires:  python3dist(setuptools-scm) >= 7.0.0
+Requires:       python3-ansible-pylibssh = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ansible-pylibssh
-Summary:        %{summary}
-
-%description -n python3-ansible-pylibssh %_description
-
+Summary:        Python bindings for libssh client specific to Ansible use case
+%description -n python3-ansible-pylibssh
 
 %prep
-%autosetup -p1 -n ansible_pylibssh-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ansible_pylibssh-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ansible-pylibssh usr/lib/python3*/site-packages/ansible_pylibssh* usr/lib64/python3*/site-packages/ansible_pylibssh* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ansible_pylibssh* usr/lib64/python3*/site-packages/ansible_pylibssh* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ansible-pylibssh -f %{pyproject_files}
+%files
+%files -n python3-ansible-pylibssh -f %{oreon_filedir}/python3-ansible-pylibssh.list
 
 %changelog
+
 %autochangelog

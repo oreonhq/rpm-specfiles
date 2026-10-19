@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 4855ede3ea66e645eaee016bbeb004e20570ada7714ecb1947cd45ce85d0c08e
 Name:           python-uhashring
 Version:        2.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Full featured consistent hashing python library compatible with ketama.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/ultrabug/uhashring
-Source:         %{pypi_source uhashring}
-
+Source0:        https://files.pythonhosted.org/packages/source/u/uhashring/uhashring-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'uhashring' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(hatchling) >= 1.26.1
+Requires:       python3-uhashring = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-uhashring
-Summary:        %{summary}
-
-%description -n python3-uhashring %_description
-
+Summary:        Full featured consistent hashing python library compatible with ketama.
+%description -n python3-uhashring
 
 %prep
-%autosetup -p1 -n uhashring-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir uhashring-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-uhashring usr/lib/python3*/site-packages/uhashring* usr/lib64/python3*/site-packages/uhashring* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/uhashring* usr/lib64/python3*/site-packages/uhashring* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-uhashring -f %{pyproject_files}
+%files
+%files -n python3-uhashring -f %{oreon_filedir}/python3-uhashring.list
 
 %changelog
+
 %autochangelog

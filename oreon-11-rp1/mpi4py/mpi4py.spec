@@ -1,55 +1,28 @@
 %global source0_hash a2c6eace524341c379b12e4cee375f6f27b1b181ac1c230e8f24664b9bc7fda7
-
 %global with_mpich 1
-
-### TESTSUITE ###
-# The testsuite currently fails only on the buildsystem, but works localy.
-# So to easily enable/disable the testsuite, the following variables are
-# introduced:
-#
-# * MPICH:     if '1' enable mpich
-# * OPENMPI:   if '1' enable openmpi
 %ifarch %{arm}
-# Disable tests on arm until upstream bug is fixed:
-# https://bitbucket.org/mpi4py/mpi4py/issues/145
 %global MPICH 0
 %else
 %global MPICH 1
 %endif
 %global OPENMPI 1
-# Run full testsuite or just with 1 core
 %global FULLTESTS 0
-
 Name:           mpi4py
 Version:        4.1.2
 Release:        1%{?dist}
 Summary:        Python bindings of the Message Passing Interface (MPI)
-
 License:        BSD-2-Clause
 URL:            https://mpi4py.readthedocs.io/en/stable/
 Source0:        https://github.com/mpi4py/mpi4py/archive/%{version}/%{name}-%{version}.tar.gz
-
 ExcludeArch:    %{ix86}
-
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
+# oreon:deps
+BuildRequires:  mpich-devel
+BuildRequires:  openmpi-devel
 BuildRequires:  python3-cython
-# For testing
-#BuildRequires:  python%{python3_pkgversion}-numpy
-#BuildRequires:  python%{python3_pkgversion}-simplejson
-#BuildRequires:  python%{python3_pkgversion}-yaml
-#BuildRequires:  python%{python3_pkgversion}-dill
-
-%global _description %{expand:
-This package is constructed on top of the MPI-1/MPI-2 specification and
-provides an object oriented interface which closely follows MPI-2 C++
-bindings. It supports point-to-point (sends, receives) and collective
-(broadcasts, scatters, gathers) communications of any picklable Python
-object as well as optimized communications of Python object exposing the
-single-segment buffer interface (NumPy arrays, built-in bytes/string/array
-objects).}
-
-%description %_description
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+# /oreon:deps
+%description
 
 %package docs
 Summary:        Documentation for %{name}
@@ -62,7 +35,7 @@ This package contains the documentation and examples for %{name}.
 Requires:       %{name}-common = %{version}-%{release}
 Summary:        Python %{python3_version} bindings of the Message Passing Interface (MPI)
 %{?python_provide:%python_provide python%{python3_pkgversion}-mpi4py}
-%description -n python%{python3_pkgversion}-mpi4py %_description
+%description -n python%{python3_pkgversion}-mpi4py
 
 %package -n python%{python3_pkgversion}-mpi4py-openmpi
 BuildRequires:  openmpi-devel
@@ -71,11 +44,10 @@ Requires:       python%{python3_pkgversion}-openmpi%{?_isa}
 Summary:        Python %{python3_version} bindings of MPI, Open MPI version
 Provides:       python%{python3_pkgversion}-mpi4py-runtime = %{version}-%{release}
 %{?python_provide:%python_provide python%{python3_pkgversion}-mpi4py-openmpi}
-%description -n python%{python3_pkgversion}-mpi4py-openmpi %_description
+%description -n python%{python3_pkgversion}-mpi4py-openmpi
 
 This package contains %{name} compiled against Open MPI.
 
-%if %{with_mpich}
 %package -n python%{python3_pkgversion}-mpi4py-mpich
 BuildRequires:  mpich-devel
 Requires:       %{name}-common = %{version}-%{release}
@@ -85,10 +57,9 @@ Provides:       python%{python3_pkgversion}-mpi4py-runtime = %{version}-%{releas
 Provides:       python%{python3_pkgversion}-%{name}-mpich2 = %{version}-%{release}
 Obsoletes:      python%{python3_pkgversion}-%{name}-mpich2 < 1.3-8
 %{?python_provide:%python_provide python%{python3_pkgversion}-mpi4py-mpich}
-%description -n python%{python3_pkgversion}-mpi4py-mpich %_description
+%description -n python%{python3_pkgversion}-mpi4py-mpich
 
 This package contains %{name} compiled against MPICH.
-%endif
 
 %package common
 Summary:        Common files for mpi4py packages
@@ -98,6 +69,7 @@ Requires:       %{name}-common = %{version}-%{release}
 This package contains the license file shared between the subpackages of %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 %{?commit:-n %{name}-%{name}-%{shortcommit}}
@@ -119,29 +91,21 @@ cp src/mpi4py/__init__.py .__init__openmpi.py
 python3 conf/cythonize.py
 
 %build
-# Build parallel versions: set compiler variables to MPI wrappers
+
 export CC=mpicc
 export CXX=mpicxx
-
-# Build OpenMPI version
 %{_openmpi_load}
 %{_libdir}/openmpi/bin/ompi_info
 cp .__init__openmpi.py src/mpi4py/__init__.py
 %py3_build
 mv build openmpi
 %{_openmpi_unload}
-
-%if %{with_mpich}
-# Build mpich version
 %{_mpich_load}
 cp .__init__mpich.py src/mpi4py/__init__.py
 %py3_build
 mv build mpich
 %{_mpich_unload}
-%endif
-
 %install
-# Install OpenMPI version
 %{_openmpi_load}
 cp .__init__openmpi.py src/mpi4py/__init__.py
 mv openmpi build
@@ -150,9 +114,6 @@ mkdir -p %{buildroot}%{python3_sitearch}/openmpi
 mv %{buildroot}%{python3_sitearch}/%{name}/ %{buildroot}%{python3_sitearch}/%{name}*.egg-info %{buildroot}%{python3_sitearch}/openmpi
 mv build openmpi
 %{_openmpi_unload}
-
-%if %{with_mpich}
-# Install MPICH version
 %{_mpich_load}
 cp .__init__mpich.py src/mpi4py/__init__.py
 mv mpich build
@@ -161,70 +122,15 @@ mkdir -p %{buildroot}%{python3_sitearch}/mpich
 mv %{buildroot}%{python3_sitearch}/%{name}/ %{buildroot}%{python3_sitearch}/%{name}*.egg-info %{buildroot}%{python3_sitearch}/mpich
 mv build mpich
 %{_mpich_unload}
-%endif
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-#%check
-## test openmpi?
-#%if 0%{?OPENMPI}
-#%{_openmpi_load}
-#cp .__init__openmpi.py src/mpi4py/__init__.py
-#mv openmpi build
-#PYTHONPATH=%{buildroot}%{python3_sitearch}/openmpi \
-#    mpiexec -np 1 python3 test/runtests.py -v --no-builddir \
-#    -e spawn \
-#%ifarch ppc64le
-#    -e test_datatype
-#%endif
-
-# test_datatype: https://bitbucket.org/mpi4py/mpi4py/issues/127/test-failure-with-openmpi-on-ppc64le
-
-#%if 0%{?FULLTESTS}
-## Allow running with more processes than cores
-#export OMPI_MCA_rmaps_base_oversubscribe=1
-#PYTHONPATH=%{buildroot}%{python3_sitearch}/openmpi \
-#    mpiexec -np 5 python3 test/runtests.py -v --no-builddir -e spawn
-#PYTHONPATH=%{buildroot}%{python3_sitearch}/openmpi \
-#    mpiexec -np 8 python3 test/runtests.py -v --no-builddir -e spawn
-#%endif
-#mv build openmpi
-#%{_openmpi_unload}
-#%endif
-
-# test mpich?
-#%if 0%{?MPICH}
-#%if %{with_mpich}
-#%{_mpich_load}
-#cp .__init__mpich.py src/mpi4py/__init__.py
-#mv mpich build
-#PYTHONPATH=%{buildroot}%{python3_sitearch}/mpich \
-#    mpiexec -np 1 python3 test/runtests.py -v --no-builddir -e spawn
-#%if 0%{?FULLTESTS}
-#PYTHONPATH=%{buildroot}%{python3_sitearch}/mpich \
-#    mpiexec -np 5 python3 test/runtests.py -v --no-builddir -e spawn
-#PYTHONPATH=%{buildroot}%{python3_sitearch}/mpich \
-#    mpiexec -np 8 python3 test/runtests.py -v --no-builddir -e spawn
-#%endif
-#mv build mpich
-#%{_mpich_unload}
-#%endif
-#%endif
-
-%files common
-%license LICENSE.rst
-%doc CHANGES.rst DESCRIPTION.rst README.rst
-
-%files -n python%{python3_pkgversion}-mpi4py-openmpi
-%{python3_sitearch}/openmpi/%{name}-*.egg-info
-%{python3_sitearch}/openmpi/%{name}
-
-%if %{with_mpich}
-%files -n python%{python3_pkgversion}-mpi4py-mpich
-%{python3_sitearch}/mpich/%{name}-*.egg-info
-%{python3_sitearch}/mpich/%{name}
-%endif
-
-%files docs
-%doc docs/* demo
+%files -f %{oreon_filedir}/main.list
+%files -n mpi4py-docs -f %{oreon_filedir}/mpi4py-docs.list
+%files -n python3-mpi4py -f %{oreon_filedir}/python3-mpi4py.list
+%files -n python3-mpi4py-openmpi -f %{oreon_filedir}/python3-mpi4py-openmpi.list
+%files -n python3-mpi4py-mpich -f %{oreon_filedir}/python3-mpi4py-mpich.list
+%files -n mpi4py-common -f %{oreon_filedir}/mpi4py-common.list
 
 %changelog
+
 %autochangelog

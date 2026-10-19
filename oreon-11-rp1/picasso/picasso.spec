@@ -1,46 +1,27 @@
 %global source0_hash f17db7e14cbb536e6014af3c088c9d71c6a820adac6c54a1f2e7cc334228eb88
-
 Name:           picasso
 Version:        2.8.0
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        2D vector graphic rendering library
-
-# All code is under BSD-3-Clause except demos/platform_gix.c
-# which is under LGPL-2.1-or-later
 License:        BSD-3-Clause and LGPL-2.1-or-later
 URL:            http://onecoolx.github.io/picasso/
-#Source:        https://github.com/onecoolx/picasso/archive/v%%{version}/picasso-%%{version}.tar.gz
-# Replace font with unknown license with one packaged in Fedora
-# https://github.com/onecoolx/picasso/issues/14
-# Obtained using
-#> wget   https://github.com/onecoolx/picasso/archive/v%%{version}/picasso-%%{version}.tar.gz
-#> tar -xf picasso-%%{version}.tar.gz
-#> rm picasso-%%{version}/cfg/sunglobe.ttf
-#> tar -cf picasso-%%{version}-clean.tar picasso-%%{version}
-#> gzip picasso-%%{version}-clean.tar
-Source:         picasso-%{version}-clean.tar.gz
-# https://github.com/onecoolx/picasso/pull/16
+Source0:        picasso-%{version}-clean.tar.gz
 Patch:          consistenttypes.patch
-# Use Fedora build flags
 Patch:          buildflags.patch
-#  GifQuantizeBuffer() has moved
-#  https://src.fedoraproject.org/rpms/giflib/pull-request/2#
 Patch:          getarg.patch
 Patch:          installdirs.patch
-
+Requires:       open-sans-fonts
+# oreon:deps
 BuildRequires:  cmake
+BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  giflib-devel
 BuildRequires:  gtk2-devel
 BuildRequires:  libjpeg-turbo-devel
-BuildRequires:  libwebp-devel
 BuildRequires:  libpng-devel
+BuildRequires:  libwebp-devel
 BuildRequires:  zlib-ng-compat-devel
-# Documentation
-BuildRequires:  doxygen
-# Fonts
-Requires:       open-sans-fonts
-
+# /oreon:deps
 %description
 Picasso is a high quality vector graphic rendering library. It has high
 performance and low footprint. Picasso provides a set of high level 2D
@@ -51,25 +32,23 @@ image and truetype font.
 %package devel
 Summary: Development headers and libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development headers and libraries for picasso.
 
 %package demos
 Summary: Demonstration programs
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description demos
 Demonstration programs for picasso.
 
 %package doc
 Summary: Documentation in html format
 BuildArch:  noarch
-
 %description doc
 Documentation for Picasso in html format.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n picasso-%{version} -p1
@@ -85,6 +64,7 @@ rm -r third_party/zlib-1.2.8
 rm -r android
 
 %build
+
 %cmake -DOPT_FAST_COPY="ON"       \
        -DOPT_FONT_CONFIG="ON"     \
        -DOPT_FORMAT_ABGR="ON"     \
@@ -106,12 +86,8 @@ rm -r android
        -DCMAKE_BUILD_TYPE=Release \
        -DCMAKE_LIBDIR=%{_libdir}  \
        -DCMAKE_SKIP_RPATH=YES
-
 %cmake_build 
-#Build documentation
 doxygen
-# While manpages are built, the names are generic and would conflict with other packages
-
 %install
 %cmake_install
 mkdir -p %{buildroot}/%{_bindir}
@@ -119,39 +95,16 @@ install -pm755 %{__cmake_builddir}/clock %{buildroot}%{_bindir}/picasso-clock
 install -pm755 %{__cmake_builddir}/flowers %{buildroot}%{_bindir}/picasso-flowers
 install -pm755 %{__cmake_builddir}/subwaymap %{buildroot}%{_bindir}/picasso-subwaymap
 install -pm755 %{__cmake_builddir}/tiger %{buildroot}%{_bindir}/picasso-tiger
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files
-%license LICENSE
-%doc README
-%doc AUTHORS
-%doc CREDITS
-%{_libdir}/libpicasso2_sw.so.2.8.0
-%{_libdir}/libpicasso2_sw.so.1
-%{_libdir}/libpsx_image.so.2.8.0
-%{_libdir}/libpsx_image.so.1
-%dir %{_libdir}/picasso
-%{_libdir}/picasso/libpsxm_image_png.so
-%{_libdir}/picasso/libpsxm_image_jpeg.so
-%{_libdir}/picasso/libpsxm_image_gif.so
-%{_libdir}/picasso/libpsxm_image_webp.so
-
-%files devel
-%{_includedir}/picasso/
-%{_libdir}/libpicasso2_sw.so
-%{_libdir}/libpsx_image.so
-
-%files demos
-%{_bindir}/picasso-clock
-%{_bindir}/picasso-flowers
-%{_bindir}/picasso-subwaymap
-%{_bindir}/picasso-tiger
-
-%files doc
-%license LICENSE
-%doc doc/html
+%files -f %{oreon_filedir}/main.list
+%files -n picasso-devel -f %{oreon_filedir}/picasso-devel.list
+%files -n picasso-demos -f %{oreon_filedir}/picasso-demos.list
+%files -n picasso-doc -f %{oreon_filedir}/picasso-doc.list
 
 %changelog
+
 %autochangelog

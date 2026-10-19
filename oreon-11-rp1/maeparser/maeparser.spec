@@ -1,23 +1,11 @@
 %global source0_hash 78e7571a779ea4952e752ecef57c62fb26463947e29ef7f4b31b11988d88ca07
-
 Name:          maeparser
 Version:       1.3.3
-Release:       %autorelease
-Summary:       A parser for Schrodinger Maestro files
+Release:        1%{?dist}
+Summary:        A parser for Schrodinger Maestro files
 License:       MIT
 URL:           https://github.com/schrodinger/%{name}/
-Source0:       %{url}archive/refs/tags/v%{version}.tar.gz
-
-# put cmake config in architecture-correct location
-# pull request: https://github.com/schrodinger/maeparser/pull/73
-
-BuildRequires:  boost-devel
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  git
-BuildRequires:  make
-BuildRequires:  zlib-devel
-
+Source0:        https://github.com/schrodinger/%{name}/archive/refs/tags/v%{version}.tar.gz
 %global common_description %{expand: \
  Maestro is a commercial "all-purpose molecular modeling environment",
  produced and distributed by the company Schrödinger. Maestro has its
@@ -34,7 +22,14 @@ BuildRequires:  zlib-devel
  * Quantum Mechanics applications, such as Jaguar
  * Protein-Protein Docking applications
  * ... many other backends used in both Life and Material Sciences}
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  git
+BuildRequires:  make
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 %{common_description}
 
@@ -48,27 +43,20 @@ Summary: Header files for maeparser
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}-%{version}
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %set_build_flags
 %cmake
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE.txt
-%doc README.md
-%{_libdir}/lib%{name}.so.1
-%{_libdir}/lib%{name}.so.%{version}
-
-%files devel
-%{_includedir}/%{name}
-%{_libdir}/lib%{name}.so
-%{_libdir}/cmake/%{name}*.cmake
+%files -f %{oreon_filedir}/main.list
+%files -n maeparser-devel -f %{oreon_filedir}/maeparser-devel.list
 
 %changelog
+
 %autochangelog

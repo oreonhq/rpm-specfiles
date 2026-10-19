@@ -1,21 +1,17 @@
 %global source0_hash 2d5d12b343f57de90029ee13c66f7fe0494b3af54b286f00e327ec2a1f976e68
-
 Name:           perl-Hash-Layout
 Version:        2.00
-Release:        16%{?dist}
+Release:        1%{?dist}
 Summary:        Hashes with predefined levels, composite keys and default values
-# Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
-
 URL:            https://metacpan.org/release/Hash-Layout
 Source0:        https://cpan.metacpan.org/authors/id/V/VA/VANSTYN/Hash-Layout-%{version}.tar.gz
-
 BuildArch:      noarch
-BuildRequires: make
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-generators
+%{?perl_default_filter}
+# oreon:deps
+BuildRequires:  make
 BuildRequires:  perl(Clone)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(FindBin)
 BuildRequires:  perl(Hash::Merge::Simple)
 BuildRequires:  perl(Moo)
@@ -29,9 +25,9 @@ BuildRequires:  perl(Types::Standard)
 BuildRequires:  perl(lib)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-
-%{?perl_default_filter}
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Hash::Layout provides deep hashes with a predefined number of levels which
 you can access using special "composite keys". These are essentially string
@@ -42,26 +38,25 @@ values, such as when defining overlapping configs ranging from broad to
 narrowing scope.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Hash-Layout-%{version}
 
 %build
+
 /usr/bin/perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-%{make_build} test
 
-%files
-%doc Changes README README.md
-%license LICENSE
-%{perl_vendorlib}/Hash*
-%{_mandir}/man3/Hash*
+%{make_build} test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,53 +1,31 @@
 %global source0_hash 3a081805979bfa54b7443cbbd03e42ce5a3770e12088c1d828185a343f9e0286
-
 %global _docdir_fmt %{name}
-
 Name:           ansible-collection-ansible-netcommon
 Version:        8.7.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Ansible Network Collection for Common Code
-
-# All files are licensed under GPL-3.0-or-later except:
-# rg --pcre2 -g '!tests/sanity/extra/licenses.py' 'SPDX-License-Identifier: (?!GPL-3\.0-or-later)' | sort | sed 's|^|# |'
-#
-# plugins/module_utils/cli_parser/cli_parserbase.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/cli_parser/cli_parsertemplate.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/config.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/netconf.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/network.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/network_template.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/parsing.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/resource_module.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/rm_base/network_template.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/rm_base/resource_module_base.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/rm_base/resource_module.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/common/utils.py:# SPDX-License-Identifier: BSD-2-Clause
-# plugins/module_utils/network/restconf/restconf.py:# SPDX-License-Identifier: BSD-2-Clause
 License:        GPL-3.0-or-later AND BSD-2-Clause
 URL:            %{ansible_collection_url ansible netcommon}
-Source:         https://github.com/ansible-collections/ansible.netcommon/archive/v%{version}/%{name}-%{version}.tar.gz
-
-
-BuildRequires:  ansible-packaging
-BuildRequires:  %{py3_dist pyyaml}
-
+Source0:        https://github.com/ansible-collections/ansible.netcommon/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-
-%global _description %{expand:
+# oreon:deps
+BuildRequires:  ansible-packaging
+BuildRequires:  python3dist(pyyaml)
+# /oreon:deps
+%description
 The Ansible ansible.netcommon collection includes common content to help
 automate the management of network, security, and cloud devices. This includes
-connection plugins, such as network_cli, httpapi, and netconf.}
-
-%description %_description
+connection plugins, such as network_cli, httpapi, and netconf.
 
 %package        doc
 Summary:        %{summary} - Docs
-
-%description    doc %_description
-
-This subpackage provides documentation for ansible-collection-ansible-netcommon.
+%description    doc
+The Ansible ansible.netcommon collection includes common content to help
+automate the management of network, security, and cloud devices. This includes
+connection plugins, such as network_cli, httpapi, and netconf.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n ansible.netcommon-%{version} -p1
@@ -87,18 +65,16 @@ with open("galaxy.yml", "w") as fp2:
 EOF
 
 %build
-%ansible_collection_build
 
+%ansible_collection_build
 %install
 %ansible_collection_install
+%oreon_autofiles ansible-collection-ansible-netcommon-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{ansible_collection_filelist}
-%license LICENSE LICENSES/
-%doc README.md CHANGELOG.rst
-
-%files doc
-%license LICENSE
-%doc docs
+%files -f %{oreon_filedir}/main.list
+%files -n ansible-collection-ansible-netcommon-doc -f %{oreon_filedir}/ansible-collection-ansible-netcommon-doc.list
 
 %changelog
+
 %autochangelog

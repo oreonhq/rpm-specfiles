@@ -1,44 +1,40 @@
-%global source0_hash 2dd844694aad36b7900824c8c2e31345ad0b8dcbf366a9086f6b981714eaa8b9
-
+%global source0_hash 5a7f679b7dddb455e3a7da57c74f1b39023ff1e3e9e98c58d9c699aa679537ce
 Name: mk-configure
 Version: 0.40.0
-Release: 1%{?dist}
-Summary: A build system on top of bmake
+Release:        1%{?dist}
+Summary:        A build system on top of bmake
 License: BSD-2-Clause AND BSD-4-Clause AND ISC
-# Licenses listed in the doc/LICENSE file
 URL: https://github.com/cheusov/mk-configure/
-
-Source0: https://github.com/cheusov/mk-configure/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/cheusov/mk-configure/archive/%{version}/%{name}-%{version}.tar.gz
 Source1: mkcmake.macros
-
 Patch0: 0001-ignore-incompatible-pointer-types-errors.patch
 Patch1: prototype-fix.patch
-
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: bison
-BuildRequires: bmake
-BuildRequires: imake
-BuildRequires: texinfo
-BuildRequires: clang
-BuildRequires: fdupes
-BuildRequires: flex
-BuildRequires: libfl-devel
-BuildRequires: gcc-c++
-BuildRequires: glib2-devel
-BuildRequires: groff
-BuildRequires: byacc
-BuildRequires: info
-BuildRequires: libbsd-devel
-BuildRequires: lua-devel
-BuildRequires: pkgconfig
-BuildRequires: zlib-devel
-BuildRequires: glibc-devel
 Requires: bmake
 Requires: imake
 Requires: redhat-rpm-config
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  bmake
+BuildRequires:  byacc
+BuildRequires:  clang
+BuildRequires:  fdupes
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  glib2-devel
+BuildRequires:  glibc-devel
+BuildRequires:  groff
+BuildRequires:  imake
+BuildRequires:  info
+BuildRequires:  libbsd-devel
+BuildRequires:  libfl-devel
+BuildRequires:  lua-devel
+BuildRequires:  pkgconfig
+BuildRequires:  texinfo
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 The mk-configure tool is a build system, written in and for bmake
 (portable version of NetBSD make) and UNIX tools (shell, awk etc.).
@@ -46,12 +42,7 @@ The mk-configure tool is a build system, written in and for bmake
 %package doc
 Summary: The mk-configure documentation
 License: BSD-2-Clause AND ISC AND CC0-1.0
-# ISC in the strlcpy and strlcpy2 examples
-# CC0-1.0 in the hello_world example
-# BSD-2-Clause in the rest as implied by the doc/LICENSE file upstream
-
 Requires: %{name} = %{version}-%{release}
-
 %description doc
 The mk-configure package examples
 
@@ -69,13 +60,11 @@ The mk-configure package examples
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %{env}
 bmake all
-
 %install
 %{env}
 bmake install DESTDIR=%{buildroot}
@@ -85,35 +74,15 @@ mkdir -p %{buildroot}%{_docdir}/%{name}
 chmod -x examples/*/*.in
 chmod -x examples/*/*/*.in
 cp -r examples %{buildroot}%{_docdir}/%{name}/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 unset MAKEFLAGS
-# Disable all compilation warnings so that the test diffs can work
 env bmake test-tests
-
-%files
-%doc README.md doc/FAQ doc/NEWS doc/TODO
-%license doc/LICENSE
-%{_bindir}/mkc_check_*
-%{_bindir}/mkc_compiler_settings
-%{_bindir}/mkc_install
-%{_bindir}/mkc_which
-%{_bindir}/mkcmake
-%{_datadir}/mk-configure/
-%{_mandir}/man1/mkc_check_*.1*
-%{_mandir}/man1/mkc_compiler_settings.1*
-%{_mandir}/man1/mkc_install.1*
-%{_mandir}/man1/mkc_which.1*
-%{_mandir}/man1/mkcmake.1*
-%{_mandir}/man7/mk-configure.7*
-%{_rpmmacrodir}/macros.mkcmake
-%{_libexecdir}/mk-configure
-
-%files doc
-%license %{_docdir}/mk-configure/examples/autoconf/proj/COPYING
-%license %{_docdir}/mk-configure/examples/autotools/proj/COPYING
-%license %{_docdir}/mk-configure/examples/hello_world/COPYRIGHT
-%doc %{_docdir}/mk-configure/examples
+%files -f %{oreon_filedir}/main.list
+%files -n mk-configure-doc -f %{oreon_filedir}/mk-configure-doc.list
 
 %changelog
+
 %autochangelog

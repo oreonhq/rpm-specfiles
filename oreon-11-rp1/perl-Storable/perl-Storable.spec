@@ -1,79 +1,60 @@
 %global source0_hash d95613e62dac79dc77df23a4a91990f4d44e0aba0d1d31f81cb966f776af8510
-
 %global base_version %{version}
 Name:           perl-Storable
 Epoch:          1
 Version:        3.41
 Release:        1%{?dist}
 Summary:        Persistence for Perl data structures
-# Storable.pm:  GPL+ or Artistic
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Storable
 Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Storable-%{version}.tar.gz
-# Unbundled from perl 5.37.12
-# Unbundled from perl 5.42.0
-BuildRequires:  coreutils
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(Devel::PPPort)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(File::Copy)
-BuildRequires:  perl(File::Spec) >= 0.8
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Win32 not used on Linux
-# Win32API::File not used on Linux
-# Run-time:
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(Exporter)
-# Fcntl is optional, but locking is good
-BuildRequires:  perl(Fcntl)
-BuildRequires:  perl(IO::File)
-# Log::Agent is optional
-BuildRequires:  perl(XSLoader)
-# Tests:
-BuildRequires:  perl(base)
-BuildRequires:  perl(bytes)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(integer)
-BuildRequires:  perl(overload)
-BuildRequires:  perl(utf8)
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(threads)
-BuildRequires:  perl(Safe)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(Symbol)
-BuildRequires:  perl(Tie::Array)
-# Optional tests:
-# gzip not used
-# Data::Dump not used
-# Data::Dumper not used
-BuildRequires:  perl(B::Deparse) >= 0.61
-BuildRequires:  perl(Digest::MD5)
-BuildRequires:  perl(Hash::Util)
-# Test::LeakTrace omitted because it's not a core module requried for building
-# core Storable.
-BuildRequires:  perl(Tie::Hash)
 Requires:       perl(Config)
-# Fcntl is optional, but locking is good
 Requires:       perl(Fcntl)
 Requires:       perl(IO::File)
-
 %{?perl_default_filter}
-
-# Filter modules bundled for tests
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(HAS_OVERLOAD\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(STDump\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(STTestLib\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(testlib.pl\\)
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  perl(B::Deparse)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Devel::PPPort)
+BuildRequires:  perl(Digest::MD5)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Fcntl)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(Hash::Util)
+BuildRequires:  perl(IO::File)
+BuildRequires:  perl(Safe)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Symbol)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Tie::Array)
+BuildRequires:  perl(Tie::Hash)
+BuildRequires:  perl(XSLoader)
+BuildRequires:  perl(base)
+BuildRequires:  perl(bytes)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(integer)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(threads)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The Storable package brings persistence to your Perl data structures
 containing scalar, array, hash or reference objects, i.e. anything that
@@ -85,12 +66,12 @@ Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
 Requires:       perl(B::Deparse) >= 0.61
 Requires:       perl(Digest::MD5)
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n Storable-%{base_version}
 
@@ -105,23 +86,18 @@ for F in t/*.t t/*.pl; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 OPTIMIZE="%{optflags}"
 %{make_build}
-
 %install
 %{make_install}
 find %{buildroot} -type f -name '*.bs' -size 0 -delete
 find %{buildroot} -type f -name '*.3pm' -size 0 -delete
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}/%{_libexecdir}/%{name}
 cp -a t %{buildroot}/%{_libexecdir}/%{name}
 cat > %{buildroot}/%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Some tests write into temporary files/directories. The easiest solution
-# is to copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -130,20 +106,16 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}/%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 unset PERL_CORE PERL_TEST_MEMORY PERL_RUN_SLOW_TESTS
 make test
-
-%files
-%doc ChangeLog README
-%{perl_vendorarch}/auto/*
-%{perl_vendorarch}/Storable*
-%{_mandir}/man3/Storable*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Storable-tests -f %{oreon_filedir}/perl-Storable-tests.list
 
 %changelog
+
 %autochangelog

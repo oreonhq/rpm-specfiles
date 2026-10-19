@@ -1,25 +1,18 @@
-%global source1_hash 505f69a93a052701f7ff641caae7af24f3d6abba0edc4e78f4bddd352ee40f61
+%global source1_hash 01aee712e8b65d567f7301eded87cf015936b5e4ad52e950d7a1362509a7f903
 %global source0_hash 9f32b378f14e6a5357b5b901351ebe8d8c8b86e6b7a4299b3c95336ecfc92642
-
 %bcond_without tests
-
 %bcond_without libheif
-
 %if 0%{?flatpak}
 %bcond_with perl
 %else
 %bcond_without perl
 %endif
-
-# Disable automatic .la file removal
 %global __brp_remove_la_files %nil
-
 Name:           ImageMagick
 Epoch:          1
 Version:        7.1.2.32
 Release:        1%{?dist}
 Summary:        An X application for displaying and manipulating images
-
 %global VER %(foo=%{version}; echo ${foo:0:5})
 %global Patchlevel %(foo=%{version}; echo ${foo:6})
 %global libsover 10
@@ -30,69 +23,59 @@ URL:            https://imagemagick.org/
 Source0:        https://download.imagemagick.org/archive/releases/%{name}-%{VER}-%{Patchlevel}.tar.xz
 Source1:        https://download.imagemagick.org/archive/releases/%{name}-%{VER}-%{Patchlevel}.tar.xz.asc
 Source2:        ImageMagick.keyring
-
-BuildRequires:  pkgconfig(bzip2)
-BuildRequires:  pkgconfig(freetype2)
-BuildRequires:  pkgconfig(libjpeg)
-BuildRequires:  pkgconfig(libpng)
-BuildRequires:  pkgconfig(libtiff-4)
-BuildRequires:  giflib-devel
-BuildRequires:  pkgconfig(zlib)
 %if %{with perl}
-BuildRequires:  perl-devel >= 5.8.1
-BuildRequires:  perl-generators
 %endif
-BuildRequires:  libgs-devel
-# Used in configure to check device availability
+Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
+Obsoletes:      %{name}7            < %{epoch}:%{version}-%{release}
+Provides:       %{name}7            = %{epoch}:%{version}-%{release}
+Provides:       perl(Image::Magick)
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  ghostscript
-BuildRequires:  pkgconfig(ddjvuapi)
-BuildRequires:  pkgconfig(libwmf)
-BuildRequires:  pkgconfig(jasper)
+BuildRequires:  giflib-devel
+BuildRequires:  gnupg2
+BuildRequires:  jbigkit-devel
+BuildRequires:  libgs-devel
 BuildRequires:  libtool-ltdl-devel
+BuildRequires:  make
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  pkgconfig(OpenEXR)
+BuildRequires:  pkgconfig(bzip2)
+BuildRequires:  pkgconfig(ddjvuapi)
+BuildRequires:  pkgconfig(fftw3)
+BuildRequires:  pkgconfig(freetype2)
+BuildRequires:  pkgconfig(jasper)
+BuildRequires:  pkgconfig(lcms2)
+BuildRequires:  pkgconfig(libcgraph)
+BuildRequires:  pkgconfig(libheif)
+BuildRequires:  pkgconfig(libjpeg)
+BuildRequires:  pkgconfig(libjxl)
+BuildRequires:  pkgconfig(libopenjp2)
+BuildRequires:  pkgconfig(libpng)
+BuildRequires:  pkgconfig(libraw)
+BuildRequires:  pkgconfig(librsvg-2.0)
+BuildRequires:  pkgconfig(libtiff-4)
+BuildRequires:  pkgconfig(libuhdr)
+BuildRequires:  pkgconfig(libwebp)
+BuildRequires:  pkgconfig(libwmf)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(libzip)
+BuildRequires:  pkgconfig(libzstd)
+BuildRequires:  pkgconfig(lqr-1)
+BuildRequires:  pkgconfig(pango)
+BuildRequires:  pkgconfig(pangocairo)
+BuildRequires:  pkgconfig(raqm)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xt)
-BuildRequires:  pkgconfig(lcms2)
-BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(librsvg-2.0)
-%if 0%{?rhel} && 0%{?rhel} < 9
-BuildRequires:  pkgconfig(IlmBase), pkgconfig(OpenEXR) < 2.5.6
-%else
-BuildRequires:  pkgconfig(OpenEXR)
-%endif
-BuildRequires:  pkgconfig(fftw3)
-BuildRequires:  pkgconfig(libwebp)
-BuildRequires:  jbigkit-devel
-BuildRequires:  pkgconfig(libjxl)
-BuildRequires:  pkgconfig(libopenjp2) >= 2.1.0
-BuildRequires:  pkgconfig(libcgraph) >= 2.9.0
-BuildRequires:  pkgconfig(raqm)
-%if 0%{?fedora} || 0%{?rhel} > 8
-BuildRequires:  pkgconfig(lqr-1)
-%endif
-BuildRequires:  pkgconfig(libraw) >= 0.14.8
-# Ultra HDR support available of Fedora 43 and onward
-%if 0%{?fedora} >= 43
-BuildRequires:  pkgconfig(libuhdr) >= 1.3.0
-%endif
-BuildRequires:  pkgconfig(libzstd)
-BuildRequires:  pkgconfig(libzip) >= 1.0.0
-BuildRequires:  pkgconfig(pango) >= 1.28.1
-BuildRequires:  pkgconfig(pangocairo) >= 1.28.1
+BuildRequires:  pkgconfig(zlib)
 BuildRequires:  urw-base35-fonts-devel
-BuildRequires:  autoconf automake gcc gcc-c++
-BuildRequires:  make
-BuildRequires:  gnupg2
-# for doc
-BuildRequires:  doxygen
-
-Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
-# allow smooth upgrade for 3rd party repository
-# providing latest version/soname as ImageMagick7
-Obsoletes:      %{name}7            < %{epoch}:%{version}-%{release}
-Provides:       %{name}7            = %{epoch}:%{version}-%{release}
-
-Provides:       perl(Image::Magick)
+# /oreon:deps
 %description
 ImageMagick is an image display and manipulation tool for the X
 Window System. ImageMagick can read and write JPEG, TIFF, PNM, GIF,
@@ -108,14 +91,12 @@ and display images. If you want to develop your own applications
 which use ImageMagick code or APIs, you need to install
 ImageMagick-devel as well.
 
-
 %package devel
 Summary:        Library links and header files for ImageMagick app development
 Requires:       %{name}%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Obsoletes:      %{name}7-devel       < %{epoch}:%{version}-%{release}
 Provides:       %{name}7-devel       = %{epoch}:%{version}-%{release}
-
 %description devel
 ImageMagick-devel contains the library links and header files you'll
 need to develop ImageMagick applications. ImageMagick is an image
@@ -126,54 +107,43 @@ APIs, you need to install ImageMagick-devel as well as ImageMagick.
 You do not need to install it if you just want to use ImageMagick,
 however.
 
-
 %package libs
 Summary: ImageMagick libraries to link with
 Obsoletes: %{name}7-libs < %{epoch}:%{version}-%{release}
 Provides:  %{name}7-libs = %{epoch}:%{version}-%{release}
-# These may be used for some functions
 Recommends: urw-base35-fonts
-# default font is OpenSans-Regular
 Recommends: open-sans-fonts
-
 %description libs
 This packages contains a shared libraries to use within other applications.
-
 
 %package djvu
 Summary: DjVu plugin for ImageMagick
 Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Obsoletes: %{name}7-djvu       < %{epoch}:%{version}-%{release}
 Provides:  %{name}7-djvu       = %{epoch}:%{version}-%{release}
-
 %description djvu
 This packages contains a plugin for ImageMagick which makes it possible to
 save and load DjvU files from ImageMagick and libMagickCore using applications.
-
 
 %if %{with libheif}
 %package heic
 Summary: HEIC plugin for ImageMagick
 BuildRequires:  pkgconfig(libheif) >= 1.4.0
 Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
-
 %description heic
 This packages contains a plugin for ImageMagick which makes it possible to
 save and load HEIC files from ImageMagick and libMagickCore using applications.
 %endif
 
-
 %package doc
 Summary: ImageMagick html documentation
 Obsoletes: %{name}7-doc < %{epoch}:%{version}-%{release}
 Provides:  %{name}7-doc = %{epoch}:%{version}-%{release}
-
 %description doc
 ImageMagick documentation, this package contains usage (for the
 commandline tools) and API (for the libraries) documentation in html format.
 Note this documentation can also be found on the ImageMagick website:
 http://www.imagemagick.org/
-
 
 %if %{with perl}
 %package perl
@@ -181,7 +151,6 @@ Summary:        ImageMagick perl bindings
 Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Obsoletes:      %{name}7-perl        < %{epoch}:%{version}-%{release}
 Provides:       %{name}7-perl        = %{epoch}:%{version}-%{release}
-
 %description perl
 Perl bindings to ImageMagick.
 
@@ -189,19 +158,16 @@ Install ImageMagick-perl if you want to use any perl scripts that use
 ImageMagick.
 %endif
 
-
 %package c++
 Summary:        ImageMagick Magick++ library (C++ bindings)
 Requires:       %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Obsoletes:      %{name}7-c++         < %{epoch}:%{version}-%{release}
 Provides:       %{name}7-c++         = %{epoch}:%{version}-%{release}
-
 %description c++
 This package contains the Magick++ library, a C++ binding to the ImageMagick
 graphics manipulation library.
 
 Install ImageMagick-c++ if you want to use any applications that use Magick++.
-
 
 %package c++-devel
 Summary:        C++ bindings for the ImageMagick library
@@ -209,7 +175,6 @@ Requires:       %{name}-c++%{?_isa} = %{epoch}:%{version}-%{release}
 Requires:       %{name}-devel%{?_isa} = %{epoch}:%{version}-%{release}
 Obsoletes:      %{name}7-c++-devel    < %{epoch}:%{version}-%{release}
 Provides:       %{name}7-c++-devel    = %{epoch}:%{version}-%{release}
-
 %description c++-devel
 ImageMagick-devel contains the static libraries and header files you'll
 need to develop ImageMagick applications using the Magick++ C++ bindings.
@@ -222,17 +187,16 @@ You don't need to install it if you just want to use ImageMagick, or if you
 want to develop/compile applications using the ImageMagick C interface,
 however.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}
 %autosetup -p1 -n %{name}-%{VER}-%{Patchlevel}
 
-
 %build
+
 autoconf -f -i -v
-# Reduce thread contention, upstream sets this flag for Linux hosts
 export CFLAGS="%{optflags} -DIMPNG_SETJMP_IS_THREAD_SAFE"
 %configure \
         --enable-shared \
@@ -261,49 +225,24 @@ export CFLAGS="%{optflags} -DIMPNG_SETJMP_IS_THREAD_SAFE"
         --with-jxl \
         --with-openjp2 \
         --with-raw \
-%if 0%{?fedora} || 0%{?rhel} > 8
-        --with-lqr \
-%if 0%{?fedora} >= 43
-        --with-uhdr \
-%endif
-%endif
         --with-gvc \
         --with-raqm \
 %if %{with libheif}
            --with-heic \
 %endif
-
-# Do *NOT* use %%{?_smp_mflags}, this causes PerlMagick to be silently misbuild
 make
-# Generate API docs
 make html-local
-
-
 %install
 %make_install
-
-# Compatibility symlinks for headers for IM6->IM7 transition
 ln -sr %{buildroot}%{_includedir}/%{name}-7/MagickCore %{buildroot}%{_includedir}/%{name}-7/magick
 ln -sr %{buildroot}%{_includedir}/%{name}-7/MagickWand %{buildroot}%{_includedir}/%{name}-7/wand
-
-# Do NOT remove .la files for codecs
-# https://bugzilla.opensuse.org/show_bug.cgi?id=579798
-# Delete *ONLY* _libdir/*.la files! .la files used internally to handle plugins - BUG#185237!!!
 rm %{buildroot}%{_libdir}/*.la
-
 %if %{with perl}
-# fix weird perl module permissions
 chmod 755 %{buildroot}%{perl_vendorarch}/auto/Image/Magick/Q16HDRI/Q16HDRI.so
-
-# perlmagick: fix perl path of demo files
 %{__perl} -MExtUtils::MakeMaker -e 'MY->fixin(@ARGV)' PerlMagick/demo/*.pl
-
-# perlmagick: cleanup various perl tempfiles from the build which get installed
 find %{buildroot} -name "*.bs" |xargs rm -f
 find %{buildroot} -name ".packlist" |xargs rm -f
 find %{buildroot} -name "perllocal.pod" |xargs rm -f
-
-# perlmagick: build files list
 find %{buildroot}/%{_libdir}/perl* -type f -print \
         | sed "s@^%{buildroot}@@g" > perl-pkg-files
 find %{buildroot}%{perl_vendorarch} -type d -print \
@@ -315,118 +254,43 @@ if [ -z perl-pkg-files ] ; then
         exit -1
 fi
 %endif
-
-# fix multilib issues: Rename the provided file with platform-bits in name.
-# Create platform independent file inplace of the provided one and conditionally
-# include the required one.
-# $1 - filename.h to process.
 function multilibFileVersions(){
 mv $1 ${1%%.h}-%{__isa_bits}.h
-
 local basename=$(basename $1)
-
 cat >$1 <<EOF
-#include <bits/wordsize.h>
-
-#if __WORDSIZE == 32
-# include "${basename%%.h}-32.h"
-#elif __WORDSIZE == 64
-# include "${basename%%.h}-64.h"
-#else
-# error "unexpected value for __WORDSIZE macro"
-#endif
 EOF
 }
-
 multilibFileVersions %{buildroot}%{_includedir}/%{name}-7/MagickCore/magick-config.h
 multilibFileVersions %{buildroot}%{_includedir}/%{name}-7/MagickCore/magick-baseconfig.h
 multilibFileVersions %{buildroot}%{_includedir}/%{name}-7/MagickCore/version.h
-
 find %{buildroot} -type f -name "*%{subsover}*" >/dev/null 2>&1
 if [ $? -ne 0 ]; then
     echo Error: No files containing %{subsover} found
     exit 1
 fi
+%oreon_autofiles ImageMagick-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles ImageMagick-libs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ImageMagick-djvu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ImageMagick-heic usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ImageMagick-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ImageMagick-perl usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with tests}
 export LD_LIBRARY_PATH=%{buildroot}/%{_libdir}
 %make_build check
 %endif
 rm PerlMagick/demo/Generic.ttf
-
-
-%files
-%doc NOTICE AUTHORS.txt
-%license LICENSE
-%{_bindir}/[a-z]*
-%{_mandir}/man[145]/[a-z]*
-%{_mandir}/man1/%{name}.*
-
-%files libs
-%doc NOTICE AUTHORS.txt
-%license LICENSE
-%{_libdir}/libMagickCore-7.Q16HDRI.so.%{libsover}{,.*}
-%{_libdir}/libMagickWand-7.Q16HDRI.so.%{libsover}{,.*}
-%{_libdir}/%{name}-%{VER}
-%{_datadir}/%{name}-7
-%exclude %{_libdir}/%{name}-%{VER}/modules-Q16HDRI/coders/djvu.*
-%if %{with libheif}
-%exclude %{_libdir}/%{name}-%{VER}/modules-Q16HDRI/coders/heic.*
-%endif
-%dir %{_sysconfdir}/%{name}-7
-%config(noreplace) %{_sysconfdir}/%{name}-7/*.xml
-
-%files devel
-%{_bindir}/MagickCore-config
-%{_bindir}/MagickWand-config
-%{_libdir}/libMagickCore-7.Q16HDRI.so
-%{_libdir}/libMagickWand-7.Q16HDRI.so
-%{_libdir}/pkgconfig/MagickCore.pc
-%{_libdir}/pkgconfig/MagickCore-7.Q16HDRI.pc
-%{_libdir}/pkgconfig/ImageMagick.pc
-%{_libdir}/pkgconfig/ImageMagick-7.Q16HDRI.pc
-%{_libdir}/pkgconfig/MagickWand.pc
-%{_libdir}/pkgconfig/MagickWand-7.Q16HDRI.pc
-%dir %{_includedir}/%{name}-7
-%{_includedir}/%{name}-7/MagickCore/
-%{_includedir}/%{name}-7/MagickWand/
-%{_includedir}/%{name}-7/magick
-%{_includedir}/%{name}-7/wand
-%{_mandir}/man1/MagickCore-config.*
-%{_mandir}/man1/MagickWand-config.*
-
-%files djvu
-%{_libdir}/%{name}-%{VER}/modules-Q16HDRI/coders/djvu.*
-
-%if %{with libheif}
-%files heic
-%{_libdir}/%{name}-%{VER}/modules-Q16HDRI/coders/heic.*
-%endif
-
-%files doc
-%doc %{_datadir}/doc/%{name}-7
-
-%files c++
-%doc Magick++/AUTHORS
-%license Magick++/LICENSE
-%{_libdir}/libMagick++-7.Q16HDRI.so.%{libcxxsover}{,.*}
-
-%files c++-devel
-%doc Magick++/demo
-%{_bindir}/Magick++-config
-%{_includedir}/%{name}-7/Magick++/
-%{_includedir}/%{name}-7/Magick++.h
-%{_libdir}/libMagick++-7.Q16HDRI.so
-%{_libdir}/pkgconfig/Magick++.pc
-%{_libdir}/pkgconfig/Magick++-7.Q16HDRI.pc
-%{_mandir}/man1/Magick++-config.*
-
-%if %{with perl}
-%files perl -f perl-pkg-files
-%{_mandir}/man3/*
-%doc PerlMagick/demo/ PerlMagick/Changelog PerlMagick/README.txt
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n ImageMagick-devel -f %{oreon_filedir}/ImageMagick-devel.list
+%files -n ImageMagick-libs -f %{oreon_filedir}/ImageMagick-libs.list
+%files -n ImageMagick-djvu -f %{oreon_filedir}/ImageMagick-djvu.list
+%files -n ImageMagick-heic -f %{oreon_filedir}/ImageMagick-heic.list
+%files -n ImageMagick-doc -f %{oreon_filedir}/ImageMagick-doc.list
+%files -n ImageMagick-perl -f %{oreon_filedir}/ImageMagick-perl.list
 
 %changelog
+
 %autochangelog

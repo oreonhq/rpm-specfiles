@@ -1,65 +1,119 @@
-%global source0_hash none
-
+%global source0_hash 011e3cf1a68b31747cb762ba3d755ae1bdcc464c8fad0dc212a9adc550719552
 Name:           python-pyshacl
 Version:        0.40.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python SHACL Validator
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/RDFLib/pySHACL
-Source:         %{pypi_source pyshacl}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyshacl/pyshacl-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(poetry-core) < 3
+BuildRequires:  python3dist(poetry-core) >= 2.0
+Requires:       python3-pyshacl = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pyshacl+js
+Summary:        Metapackage for python3-pyshacl js extras
+Requires:       python3-pyshacl = %{version}-%{release}
+Requires:       python3dist(pyduktape2) < 1
+Requires:       python3dist(pyduktape2) >= 0.4.6
+Requires:       python3dist(pyduktape2) >= 0.5.0
+Provides:       python3dist(pyshacl[js]) = %{version}-%{release}
 
+%description -n python3-pyshacl+js
+Metapackage for python3-pyshacl js extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyshacl' generated automatically by pyp2spec.}
+%package -n       python3-pyshacl+oxigraph
+Summary:        Metapackage for python3-pyshacl oxigraph extras
+Requires:       python3-pyshacl = %{version}-%{release}
+Requires:       python3dist(pyoxigraph) >= 0.5.6
+Provides:       python3dist(pyshacl[oxigraph]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-pyshacl+oxigraph
+Metapackage for python3-pyshacl oxigraph extras.
+
+%package -n       python3-pyshacl+http
+Summary:        Metapackage for python3-pyshacl http extras
+Requires:       python3-pyshacl = %{version}-%{release}
+Requires:       python3dist(sanic) < 23
+Requires:       python3dist(sanic) >= 22.12
+Requires:       python3dist(sanic-ext) < 23.6
+Requires:       python3dist(sanic-ext) >= 23.3
+Requires:       python3dist(sanic-cors) == 2.2.0
+Provides:       python3dist(pyshacl[http]) = %{version}-%{release}
+
+%description -n python3-pyshacl+http
+Metapackage for python3-pyshacl http extras.
+
+%package -n       python3-pyshacl+dev-lint
+Summary:        Metapackage for python3-pyshacl dev-lint extras
+Requires:       python3-pyshacl = %{version}-%{release}
+Requires:       python3dist(ruff) < 0.10
+Requires:       python3dist(ruff) >= 0.9.3
+Provides:       python3dist(pyshacl[dev-lint]) = %{version}-%{release}
+
+%description -n python3-pyshacl+dev-lint
+Metapackage for python3-pyshacl dev-lint extras.
+
+%package -n       python3-pyshacl+dev-type-checking
+Summary:        Metapackage for python3-pyshacl dev-type-checking extras
+Requires:       python3-pyshacl = %{version}-%{release}
+Requires:       python3dist(mypy) >= 1.13.0
+Provides:       python3dist(pyshacl[dev-type-checking]) = %{version}-%{release}
+
+%description -n python3-pyshacl+dev-type-checking
+Metapackage for python3-pyshacl dev-type-checking extras.
+
+%package -n       python3-pyshacl+dev-coverage
+Summary:        Metapackage for python3-pyshacl dev-coverage extras
+Requires:       python3-pyshacl = %{version}-%{release}
+Requires:       python3dist(pytest-cov) < 3
+Requires:       python3dist(pytest-cov) >= 2.8.1
+Requires:       python3dist(coverage) > 6
+Requires:       python3dist(coverage) < 7
+Provides:       python3dist(pyshacl[dev-coverage]) = %{version}-%{release}
+
+%description -n python3-pyshacl+dev-coverage
+Metapackage for python3-pyshacl dev-coverage extras.
+
+%description
 
 %package -n     python3-pyshacl
-Summary:        %{summary}
-
-%description -n python3-pyshacl %_description
+Summary:        Python SHACL Validator
+# oreon:reqs
+Requires:       python3dist(importlib-metadata) > 6
+Requires:       python3dist(owlrl) < 8
+Requires:       python3dist(owlrl) >= 7.6.2
+Requires:       python3dist(packaging) >= 21.3
+Requires:       python3dist(prettytable) >= 3.5.0
+Requires:       python3dist(prettytable) >= 3.7.0
+Requires:       python3dist(rdflib[html]) < 8.0
+Requires:       python3dist(rdflib[html]) >= 7.3.0
+# /oreon:reqs
+%description -n python3-pyshacl
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pyshacl dev-coverage,dev-lint,dev-type-checking,http,js,oxigraph
-
 
 %prep
-%autosetup -p1 -n pyshacl-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyshacl-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyshacl usr/lib/python3*/site-packages/pyshacl* usr/lib64/python3*/site-packages/pyshacl* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyshacl* usr/lib64/python3*/site-packages/pyshacl* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyshacl -f %{pyproject_files}
-%{_bindir}/pyshacl
-%{_bindir}/pyshacl_rules
-%{_bindir}/pyshacl_server
-%{_bindir}/pyshacl_validate
+%files
+%files -n python3-pyshacl -f %{oreon_filedir}/python3-pyshacl.list
 
 %changelog
+
 %autochangelog

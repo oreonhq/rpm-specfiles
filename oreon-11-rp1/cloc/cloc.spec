@@ -1,5 +1,4 @@
-%global source0_hash 8099b6275c124f662690f2db3581cd2ad4e9ad4e08332288719838ded00d1da5
-
+%global source0_hash a8fac35f4cf42728765580ba11afc2568ad205509a22204663f526169548436d
 Name:           cloc
 Version:        2.10
 Release:        1%{?dist}
@@ -8,12 +7,10 @@ License:        GPL-2.0-or-later
 URL:            https://github.com/AlDanial/cloc
 Source0:        https://github.com/AlDanial/%{name}/archive/v%{version}.tar.gz#/%{name}-v%{version}.tar.gz
 BuildArch:      noarch
-# Build
+%{?perl_default_filter}
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
-BuildRequires:  perl-podlators
-BuildRequires:  perl-generators
-# Runtime
 BuildRequires:  perl(Algorithm::Diff)
 BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Digest::MD5)
@@ -25,43 +22,37 @@ BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(File::Temp)
 BuildRequires:  perl(Getopt::Long)
 BuildRequires:  perl(IO::File)
-BuildRequires:  perl(Parallel::ForkManager)
 BuildRequires:  perl(POSIX)
+BuildRequires:  perl(Parallel::ForkManager)
 BuildRequires:  perl(Regexp::Common)
-BuildRequires:  perl(strict)
+BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Text::Tabs)
 BuildRequires:  perl(Time::HiRes)
+BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-# Tests only
-BuildRequires:  perl-interpreter
 BuildRequires:  perl-Pod-Checker
-BuildRequires:  perl(Test::More)
-
-%{?perl_default_filter}
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  perl-podlators
+# /oreon:deps
 %description
 A tool to count lines of code in various languages from a given directory.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}-%{version}/Unix
-
+%global oreon_srcdir %{name}-%{version}/Unix
+%oreon_prep
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-# Fail with tests about issue #132
+
 sed -i -e '/01_opts.t/d' Makefile
-# Requires a git submodule
 sed -i -e '/02_git.t/d' Makefile
 make test
-
-%files
-%license COPYING
-%doc AUTHORS NEWS README
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

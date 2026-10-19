@@ -1,37 +1,25 @@
 %global source0_hash 58fa258d0e1f93074c9afa792027fc259b85cb974ccc0b932b061d4ada5bd83a
-
 Name:           armadillo
 Version:        15.4.2
 Release:        1%{?dist}
 Summary:        Fast C++ matrix library with syntax similar to MATLAB and Octave
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            http://arma.sourceforge.net/
-Source:         http://sourceforge.net/projects/arma/files/%{name}-%{version}.tar.xz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  make
-BuildRequires:  arpack-devel
-BuildRequires:  hdf5-devel
-BuildRequires:  SuperLU-devel
-
-# flexiblas is only available on Fedora, for EPEL replace it by atlas, lapack and openblas
-%if 0%{?fedora} || 0%{?rhel} >= 9
-%global extra_options -DALLOW_FLEXIBLAS_LINUX=ON
-BuildRequires:  flexiblas-devel
-%else
+Source0:        http://sourceforge.net/projects/arma/files/%{name}-%{version}.tar.xz
 %undefine __cmake_in_source_build
 %global extra_options %{nil}
-BuildRequires:  atlas-devel
-BuildRequires:  lapack-devel
 %{!?openblas_arches:%global openblas_arches x86_64 %{ix86} armv7hl %{power64} aarch64}
 %ifarch %{openblas_arches}
-BuildRequires:  openblas-devel
 %endif
-%endif
-
+# oreon:deps
+BuildRequires:  SuperLU-devel
+BuildRequires:  arpack-devel
+BuildRequires:  cmake
+BuildRequires:  flexiblas-devel
+BuildRequires:  gcc-c++
+BuildRequires:  hdf5-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 Armadillo is a C++ linear algebra library (matrix maths)
 aiming towards a good balance between speed and ease of use.
@@ -54,23 +42,18 @@ Requires:       libstdc++-devel
 Requires:       arpack-devel
 Requires:       hdf5-devel
 Requires:       SuperLU-devel
-
-%if 0%{?fedora} || 0%{?rhel} >= 9
-Requires:  flexiblas-devel
-%else
 Requires:  atlas-devel
 Requires:  lapack-devel
 %ifarch %{openblas_arches}
 Requires:  openblas-devel
 %endif
-%endif
-
 %description devel
 This package contains files necessary for development using the
 Armadillo C++ library. It contains header files, example programs,
 and user documentation (API reference guide).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -79,37 +62,21 @@ rm -rf examples/*win64*
 sed -i 's/cmake_minimum_required(VERSION 3.5)/cmake_minimum_required(VERSION 3.5...3.30)/' CMakeLists.txt
 
 %build
+
 %cmake %{extra_options} -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles armadillo-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %cmake %{extra_options} -DBUILD_SMOKE_TEST=ON
-
 %ctest
-
-%if (0%{?rhel} && 0%{?rhel} <= 7)
-%post -p /sbin/ldconfig
-
-%postun -p /sbin/ldconfig
-%endif
-
-%files
-%{_libdir}/libarmadillo.so.*
-%license LICENSE.txt NOTICE.txt
-
-%files devel
-%{_libdir}/libarmadillo.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_includedir}/armadillo
-%{_includedir}/armadillo_bits/
-%{_datadir}/Armadillo/
-%doc README.md
-%doc index.html
-%doc docs.html
-%doc examples
+%files -f %{oreon_filedir}/main.list
+%files -n armadillo-devel -f %{oreon_filedir}/armadillo-devel.list
 
 %changelog
+
 %autochangelog

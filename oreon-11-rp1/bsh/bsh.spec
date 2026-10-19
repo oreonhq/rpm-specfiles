@@ -1,81 +1,31 @@
 %global source0_hash 12dada19d9554e3133d51f809e67d604e400b4c81ac70149db502de873741ec3
-
-# Copyright (c) 2000-2007, JPackage Project
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the
-#    distribution.
-# 3. Neither the name of the JPackage Project nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-
 Name:           bsh
 Version:        2.1.1
 Release:        1%{?dist}
 Epoch:          0
 Summary:        Lightweight Scripting for Java
 URL:            https://beanshell.github.io/
-# bundled asm is BSD
-# bsf/src/bsh/util/BeanShellBSFEngine.java is public-domain
 License:        Apache-2.0 AND BSD-3-Clause AND LicenseRef-Public-Domain
-
-# ./generate-tarball.sh
 Source0:        https://github.com/beanshell/beanshell/archive/refs/tags/2.1.1.tar.gz#/bsh-2.1.1.tar.gz
-
-# Remove bundled jars which cannot be easily verified for licensing
-# Remove code marked as SUN PROPRIETARY/CONFIDENTAIL
-# compatibility with Java 11:
-# - set javac / javadoc source and target values to 1.8
 Patch0:        0000-source-target-1.8.patch
-# - remove references to invisible symbols and methods
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-BuildRequires:  ant-openjdk25 
+Requires:       bsf
+Requires:       java-25-headless
+Requires:       jline2
+Requires:       javapackages-tools
+Provides:       %{name}-utils = %{epoch}:%{version}-%{release}
+Obsoletes:      %{name}-utils < 0:2.0
+Obsoletes:      %{name}-demo < 0:2.0
+Provides:       bundled(objectweb-asm) = 1.3.6
+# oreon:deps
+BuildRequires:  ant-openjdk25
 BuildRequires:  bsf
 BuildRequires:  glassfish-servlet-api
 BuildRequires:  javacc
 BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  junit
-
-Requires:       bsf
-Requires:       java-25-headless
-Requires:       jline2
-
-# Explicit javapackages-tools requires since scripts use
-# /usr/share/java-utils/java-functions
-Requires:       javapackages-tools
-
-Provides:       %{name}-utils = %{epoch}:%{version}-%{release}
-Obsoletes:      %{name}-utils < 0:2.0
-Obsoletes:      %{name}-demo < 0:2.0
-
-# bsh uses small subset of modified (shaded) classes from ancient version of
-# objecweb-asm under asm directory
-Provides:       bundled(objectweb-asm) = 1.3.6
-
+# /oreon:deps
 %description
 BeanShell is a small, free, embeddable, Java source interpreter with
 object scripting language features, written in Java. BeanShell
@@ -98,17 +48,16 @@ results.
 
 %package manual
 Summary:        Manual for %{name}
-
 %description manual
 Documentation for %{name}.
 
 %package javadoc
 Summary:        API documentation for %{name}
-
 %description javadoc
 This package provides %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n beanshell-%{version}
 %patch 0 -p1
@@ -120,46 +69,31 @@ sed -i 's,org.apache.xalan.xslt.extensions.Redirect,http://xml.apache.org/xalan/
 %mvn_file : %{name}
 
 %build
+
 rm -rf lib
 mkdir -p lib
 build-jar-repository lib bsf javacc junit glassfish-servlet-api
-
 ant dist
-
 %install
 %mvn_artifact pom.xml dist/%{name}-%{version}.jar
-
 %mvn_install -J javadoc
-
 install -d -m 755 %{buildroot}%{_datadir}/%{name}
 install -d -m 755 %{buildroot}%{_datadir}/%{name}/webapps
 install -m 644 dist/bshservlet.war %{buildroot}%{_datadir}/%{name}/webapps
 install -m 644 dist/bshservlet-wbsh.war %{buildroot}%{_datadir}/%{name}/webapps
-
-# scripts
 install -d %{buildroot}%{_bindir}
-
 %jpackage_script bsh.Interpreter "\${BSH_DEBUG:+-Ddebug=true}" jline.console.internal.ConsoleRunner %{name}:jline2/jline %{name} true
 %jpackage_script bsh.Console "\${BSH_DEBUG:+-Ddebug=true}" "" bsh bsh-console true
-
 echo '#!%{_bindir}/bsh' > %{buildroot}%{_bindir}/bshdoc
 cat scripts/bshdoc.bsh >> %{buildroot}%{_bindir}/bshdoc
+%oreon_autofiles bsh-manual usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bsh-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE NOTICE
-%doc README.md src/Changes.html src/CodeMap.html docs/faq/faq.html
-
-%attr(0755,root,root) %{_bindir}/%{name}*
-%{_datadir}/%{name}/
-
-%files manual
-%doc docs/manual/html
-%doc docs/manual/images/*.jpg
-%doc docs/manual/images/*.gif
-%license LICENSE NOTICE
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
+%files -n bsh-manual -f %{oreon_filedir}/bsh-manual.list
+%files -n bsh-javadoc -f %{oreon_filedir}/bsh-javadoc.list
 
 %changelog
+
 %autochangelog

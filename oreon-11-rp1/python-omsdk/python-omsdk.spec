@@ -1,51 +1,30 @@
-%global source0_hash 507af6e8b8f02e5ce2134fdb850cf32db77fbed2373907998da4cd91c57f100a
-
+%global source0_hash 400aa28e1d695a0c0839ab7ebc36899bf0ee4070968e91da4aca3b0cee953e9e
 Name:           python-omsdk
 Version:        1.2.519
-Release:        %autorelease
-Summary:        Dell EMC OpenManage Python SDK 
-
+Release:        1%{?dist}
+Summary:        Dell EMC OpenManage Python SDK
 License:        Apache-2.0
 URL:            https://github.com/dell/omsdk
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/dell/omsdk/archive/refs/tags/v%{version}.tar.gz
 Patch0:         setup-omsdk.py.patch
-
-# https://github.com/dell/omsdk/pull/45
 Patch1:         00_remove_future.patch 
-
 BuildArch:      noarch
-BuildRequires:  python3-devel
-BuildRequires:  sed
+# oreon:deps
 BuildRequires:  pyproject-rpm-macros
-
-# Untracked upstream dependency (https://github.com/dell/omsdk/issues/36)
-BuildRequires:  python%{python3_pkgversion}dist(pywinrm)
-
-%global _description %{expand:
-DellEMC OpenManage Python SDK (OMSDK) is a python library that helps 
-developers and customers to automate the lifecycle management of 
-PowerEdge Servers.
-OMSDK module leverages the iDRAC's REST APIs based on DMTF Redfish standards 
-as well as WS-Man and SNMP protocols for configuration, deployment, updates 
-and monitoring of PowerEdge Servers.
-}
-
-%description %_description
+BuildRequires:  python3-devel
+Requires:       python3-omsdk = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-omsdk
-Summary:        %{summary}
-
-# Whilst omsdk and omdrivers are seperate modules, they have circular dependencies which prevent them being distributed seperately
-# If you install one of them from PyPi you get a wheel containing both.
+Summary:        Dell EMC OpenManage Python SDK
 %py_provides python3-omsdk
 %py_provides python3-omdrivers
-
-# Untracked upstream dependency (https://github.com/dell/omsdk/issues/36)
 Requires:       python%{python3_pkgversion}dist(pywinrm)
-
-%description -n python3-omsdk %_description
+%description -n python3-omsdk
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n omsdk-%{version}
@@ -66,24 +45,20 @@ find omdrivers -type f -exec sed -i '/\/usr\/bin\/env python3/d' {} +
 # Fix line endings without dos2unix
 sed -i 's/\r$//' README.md
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files omsdk omdrivers
+%oreon_autofiles python3-omsdk usr/lib/python3*/site-packages/omsdk* usr/lib64/python3*/site-packages/omsdk* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/omsdk* usr/lib64/python3*/site-packages/omsdk* usr/bin/*
 
 %check
-# omsdk.listener.sdktrapreceiver tries to start listening as soon as it is imported
-# omsdk.sdksnmptrap depends on outdated SNMP support (https://github.com/dell/omsdk/issues/37)
-%pyproject_check_import -e 'omsdk.listener.sdktrapreceiver' -e 'omsdk.sdksnmptrap'
 
-%files -n python3-omsdk -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+%pyproject_check_import -e 'omsdk.listener.sdktrapreceiver' -e 'omsdk.sdksnmptrap'
+%files
+%files -n python3-omsdk -f %{oreon_filedir}/python3-omsdk.list
 
 %changelog
+
 %autochangelog

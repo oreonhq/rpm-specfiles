@@ -1,16 +1,14 @@
-%global source0_hash 99d4a0fdd3d93547ebacfe511195cb92e4f75b91644c06293c067f401addeb3e
-
+%global source0_hash 5adeabdcd93aa0423d618da8b878b53482bef6e0e9e1fe224acc0f18031fe91e
 %global bash_completion_dir %(pkg-config --variable=completionsdir bash-completion || echo /etc/bash_completion.d)/
-
 Name:           tig
 Version:        2.6.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Text-mode interface for the git revision control system
-
 License:        GPL-2.0-or-later
 URL:            https://jonas.github.io/tig/
-Source0:        https://github.com/jonas/tig/releases/download/tig-%version/tig-%version.tar.gz
-
+Source0:        https://github.com/jonas/%{name}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
+Requires:       git-core
+# oreon:deps
 BuildRequires:  asciidoc
 BuildRequires:  bash-completion
 BuildRequires:  gcc
@@ -19,8 +17,7 @@ BuildRequires:  make
 BuildRequires:  ncurses-devel
 BuildRequires:  readline-devel
 BuildRequires:  xmlto
-Requires:       git-core
-
+# /oreon:deps
 %description
 Tig is a repository browser for the git revision control system that
 additionally can act as a pager for output from various git commands.
@@ -33,34 +30,20 @@ Using it as a pager, it will display input from stdin and colorize it.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %configure
 %make_build all doc-man doc-html
-
-#Convert to unix line endings
 sed -i -e 's/\r//' *.html
-
-# Remove shebang from bash-completion script
 sed -i '/^#!bash/,+1 d' contrib/%{name}-completion.bash
-
 %install
 %make_install install-doc-man
-
-# Setup bash completion
 install -Dpm 644 contrib/%{name}-completion.bash %{buildroot}%{bash_completion_dir}/%{name}
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc COPYING NEWS.adoc README.adoc *.html
-%{_bindir}/tig
-%{bash_completion_dir}
-%config(noreplace) %{_sysconfdir}/%{name}rc
-%{_mandir}/man1/tig.1*
-%{_mandir}/man5/tigrc.5*
-%{_mandir}/man7/tigmanual.7*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

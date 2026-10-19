@@ -1,59 +1,37 @@
-%global source0_hash ff515c0bed331451bfdf0190ff8c9762472739f1bb2d3930f4018e8b3bbef5c1
-
+%global source3_hash 7d69c1cd2baa011e39bd7550bf58087b081807985334aa8ce0270531a7e5ea24
+%global source1_hash e9cf240c9c020399da5b87a9f696a8ecb038fbcd49b366dd16c1a4f316a14e5d
+%global source0_hash 441f36715e5fed477ceb5fd8ed9ac6ebad2a6041aad90e7af0498a2a35965770
 %bcond tests %{undefined rhel}
-
 Name:           ansible-collection-dellemc-openmanage
 Version:        10.0.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Dell OpenManage collection for Ansible
-
-# All file are GPL-3.0-only except for:
-# plugins/module_utils/dellemc_idrac.py: BSD 2-Clause License
-# plugins/module_utils/idrac_redfish.py: BSD 2-Clause License
-# plugins/module_utils/ome.py: BSD 2-Clause License
-# plugins/module_utils/redfish.py: BSD 2-Clause License
-# plugins/module_utils/session_utils.py: BSD 2-Clause License
-# plugins/module_utils/utils.py: BSD 2-Clause License
-# Clarification requested upstream at https://github.com/dell/dellemc-openmanage-ansible-modules/issues/754
 License:        GPL-3.0-only AND BSD-2-Clause
-
 URL:            %{ansible_collection_url dellemc openmanage}
 Source0:        https://github.com/dell/dellemc-openmanage-ansible-modules/releases/download/v%{version}/dellemc-openmanage-%{version}.tar.gz
 Source1:        https://github.com/dell/dellemc-openmanage-ansible-modules/releases/download/v%{version}/dellemc-openmanage-%{version}.tar.gz.sign
-# https://linux.dell.com/files/pgp_pubkeys/0x1285491434D8786F.asc
 Source2:        gpgkey-42550ABD1E80D7C1BC0BAD851285491434D8786F.gpg
-
-# File is missing from signed archive, but is required for RPM Macros
-# https://github.com/dell/dellemc-openmanage-ansible-modules/issues/674
 Source3:        https://raw.githubusercontent.com/dell/dellemc-openmanage-ansible-modules/v%{version}/galaxy.yml
-
-# build_ignore development files, tests, and docs, downstream only
 Patch0:          build_ignore.patch
-
 BuildArch:      noarch
-
-BuildRequires:  gnupg2
-BuildRequires:  ansible-packaging
 %if %{with tests}
-BuildRequires:  ansible-packaging-tests
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3dist(mock)
 %endif
-
-# From bindep.txt
 Requires:       xorriso
 Requires:       syslinux
 Requires:       isomd5sum
 Requires:       wget
-
-# From requirements.txt
 Requires:       python3dist(omsdk)
 Requires:       python3dist(netaddr)
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-ansible-collection-dellemc-openmanage = %{version}-%{release}
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -68,24 +46,21 @@ find -type f ! -executable -name '*.py' -print -exec sed -i -e '1{\@^#!.*@d}' '{
 find . -type f -empty ! -name __init__.py -print -delete
 
 %if %{with tests}
-%generate_buildrequires
-%pyproject_buildrequires -N requirements.txt
-%endif
-
 %build
-%ansible_collection_build
 
+%ansible_collection_build
 %install
 %ansible_collection_install
+%oreon_autofiles main
 
 %check
+
 %if %{with tests}
 %ansible_test_unit
 %endif
-
-%files -f %{ansible_collection_filelist}
-%license LICENSE
-%doc README.md CHANGELOG.rst docs/*
+%files
 
 %changelog
+
 %autochangelog
+%endif

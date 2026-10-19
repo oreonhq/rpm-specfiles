@@ -1,31 +1,33 @@
 %global source0_hash ec5cbb9bc80178a3541f2dd8dcd1a7c553fae3ed48369425e26c73a77cbe0c7f
-
 Name:           kbilliards
-# Note: the "b" in 0.8.7b is supposed to go in the Release tag.
-# Keep that in mind when/if you next upgrade the package
-# https://fedoraproject.org/wiki/Packaging:NamingGuidelines
 Version:        0.8.7b
-Release:        49%{?dist}
+Release:        1%{?dist}
 Summary:        A Fun Billiards Simulator Game
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.hostnotfound.it/kbilliards.php
-Source:         http://www.hostnotfound.it/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://www.hostnotfound.it/%{name}/%{name}-%{version}.tar.bz2
 Patch0:         sqrtl.patch
 Patch1:         %{name}-%{version}-compiler_warnings.patch
 Patch2:         %{name}-destdir.patch
 Patch3:         %{name}-%{version}-gcc43.patch
 Patch4:         %{name}-%{version}-fix-configure-checks.patch
-BuildRequires:  make gcc gcc-c++
-BuildRequires:  kdelibs3-devel bzip2-devel desktop-file-utils gettext
-# required to fix the PNGs (vim-common for xxd)
-BuildRequires:  pngcrush vim-common
 Requires:       hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  kdelibs3-devel
+BuildRequires:  make
+BuildRequires:  pngcrush
+BuildRequires:  vim-common
+# /oreon:deps
 %description
 A billiards simulator game designed for KDE.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -53,16 +55,13 @@ mv media/maps/kbilliards2004.xml.bz2 media/maps/kbilliards2004.kbm
 sed -i -e 's/^\(Categories=.*\)$/\1\;/g' src/%{name}.desktop
 
 %build
+
 %configure --disable-rpath
-# Don't use rpath!
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %make_build
-
 %install
 %make_install
-
-# fixup translation stuff
 pushd po
 for i in *.po; do
    POLANG=`echo $i|sed 's/\.po//'`
@@ -71,24 +70,17 @@ for i in *.po; do
 done
 popd
 %find_lang %{name}
-
-# below is the desktop file and icon stuff.
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install \
   --delete-original \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications --remove-key=DocPath \
   --add-category Simulation \
   $RPM_BUILD_ROOT%{_datadir}/applnk/Games/%{name}.desktop
-
 rm -fr $RPM_BUILD_ROOT%{_datadir}/icons/locolor
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc AUTHORS ChangeLog TODO src/NOATUN_AUTHORS
-%license COPYING
-%{_bindir}/%{name}
-%{_datadir}/apps/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{name}.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

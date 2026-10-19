@@ -1,65 +1,61 @@
-%global source0_hash none
-
+%global source0_hash d3c72e0e46a8fa1ddabea8f830762402dee090caf33c30c2295ac7010db8f09c
 Name:           python-doit
 Version:        0.37.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        doit - Automation Tool
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://pydoit.org
-Source:         %{pypi_source doit}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/doit/doit-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'doit' generated automatically by pyp2spec.}
-
 Patch1:         python-doit_ignore_versions.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 68.0
+Requires:       python3-doit = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-doit+toml
+Summary:        Metapackage for python3-doit toml extras
+Requires:       python3-doit = %{version}-%{release}
+Provides:       python3dist(doit[toml]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-doit+toml
+Metapackage for python3-doit toml extras.
+
+%package -n       python3-doit+cloudpickle
+Summary:        Metapackage for python3-doit cloudpickle extras
+Requires:       python3-doit = %{version}-%{release}
+Provides:       python3dist(doit[cloudpickle]) = %{version}-%{release}
+
+%description -n python3-doit+cloudpickle
+Metapackage for python3-doit cloudpickle extras.
+
+%description
 
 %package -n     python3-doit
-Summary:        %{summary}
-
-%description -n python3-doit %_description
+Summary:        doit - Automation Tool
+%description -n python3-doit
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-doit cloudpickle,toml
-
 
 %prep
-%autosetup -p1 -n doit-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir doit-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-doit usr/lib/python3*/site-packages/doit* usr/lib64/python3*/site-packages/doit* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/doit* usr/lib64/python3*/site-packages/doit* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-doit -f %{pyproject_files}
-%{_bindir}/doit
+%files
+%files -n python3-doit -f %{oreon_filedir}/python3-doit.list
 
 %changelog
+
 %autochangelog

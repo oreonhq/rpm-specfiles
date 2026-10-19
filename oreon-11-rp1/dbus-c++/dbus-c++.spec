@@ -1,43 +1,33 @@
 %global source0_hash bc11ac297b3cb010be904c72789695543ee3fdf3d75cdc8225fd371385af4e61
-
 %bcond_without ecore
-
 Name:          dbus-c++
 Version:       0.9.0
-Release:       38%{?dist}
-Summary:       Native C++ bindings for D-Bus
-
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Native C++ bindings for D-Bus
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://sourceforge.net/projects/dbus-cplusplus/
 Source0:        https://downloads.sourceforge.net/dbus-cplusplus/lib%{name}-%{version}.tar.gz
-
 Patch1: dbus-c++-gcc4.7.patch
 Patch2: dbus-c++-linkfix.patch
-# Fix collision between macro bind_property in dbus-c++/interface.h and method
-# bind_property in glibmm/binding.h
 Patch3: dbus-c++-macro_collision.patch
-# Remove broken classes for multithreading support
-# https://sourceforge.net/p/dbus-cplusplus/patches/18/
 Patch4: dbus-c++-threading.patch
-# https://sourceforge.net/p/dbus-cplusplus/patches/19/
 Patch5: dbus-c++-writechar.patch
-# Fix template/operator issues
-# https://github.com/pkgw/dbus-cplusplus/commit/a0b9ef3b469ca23c6a3229d8abb967cbbddcee38
 Patch6: dbus-c++-template-operators.patch
-
+%if %{with ecore}
+%endif
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  dbus-devel
+BuildRequires:  ecore-devel
+BuildRequires:  expat-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires: dbus-devel
-BuildRequires: glib2-devel
-BuildRequires: gtkmm24-devel
-BuildRequires: autoconf automake libtool
-BuildRequires: expat-devel
-%if %{with ecore}
-BuildRequires: ecore-devel
-%endif
-BuildRequires: make
-
+BuildRequires:  glib2-devel
+BuildRequires:  gtkmm24-devel
+BuildRequires:  libtool
+BuildRequires:  make
+# /oreon:deps
 %description
 dbus-c++ attempts to provide a C++ API for D-Bus.
 Subpackages are provided with mainloop integration.
@@ -64,8 +54,8 @@ Requires:      pkgconfig
 This package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n lib%{name}-%{version}
 sed -i 's/\r//' AUTHORS
@@ -78,6 +68,7 @@ sed -i 's/libtoolize --force --copy/libtoolize -if --copy/' bootstrap
 %patch -P6 -p1 -b .template-operators
 
 %build
+
 autoreconf -vfi
 export CPPFLAGS='%{optflags}' CXXFLAGS='--std=gnu++11 %{optflags}'
 %configure --disable-static --disable-tests \
@@ -87,35 +78,15 @@ export CPPFLAGS='%{optflags}' CXXFLAGS='--std=gnu++11 %{optflags}'
   ;
 %endif
 %make_build
-
 %install
 %make_install
 find $RPM_BUILD_ROOT -name '*.la' -print -delete
-
 %ldconfig_scriptlets
+%oreon_autofiles main
 
-
-%files
-%license COPYING
-%doc AUTHORS
-%{_bindir}/dbusxx-introspect
-%{_bindir}/dbusxx-xml2cpp
-%{_libdir}/libdbus-c++-1.so.0*
-
-%if %{with ecore}
-%files ecore
-%{_libdir}/libdbus-c++-ecore-1.so.0*
-%endif
-
-%files glib
-%{_libdir}/libdbus-c++-glib-1.so.0*
-
-%files devel
-%doc TODO
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.0-38
 - Prepare for Oreon 11 (RP1)

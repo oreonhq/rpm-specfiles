@@ -1,60 +1,42 @@
 %global source0_hash 0b48f17296f869db89221c3bde463fdff35152a4cb99ae4aaa42b0b64333fc6c
-
 Name:           python-gssapi
 Version:        1.12.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python GSSAPI Wrapper
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
 URL:            https://github.com/pythongssapi/python-gssapi
-Source:         %{pypi_source gssapi}
-
-BuildRequires:  krb5-devel
+Source0:        https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'gssapi' generated automatically by pyp2spec.}
-
-
-%description %_description
+BuildRequires:  python3dist(cython) == 3.3.0
+BuildRequires:  python3dist(setuptools) >= 40.6.0
+Requires:       python3-gssapi = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-gssapi
-Summary:        %{summary}
-
-%description -n python3-gssapi %_description
-
+Summary:        Python GSSAPI Wrapper
+%description -n python3-gssapi
 
 %prep
-%autosetup -p1 -n gssapi-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir gssapi-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-gssapi usr/lib/python3*/site-packages/gssapi* usr/lib64/python3*/site-packages/gssapi* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/gssapi* usr/lib64/python3*/site-packages/gssapi* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-gssapi -f %{pyproject_files}
+%files
+%files -n python3-gssapi -f %{oreon_filedir}/python3-gssapi.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.3-16
 - Import

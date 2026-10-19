@@ -1,5 +1,4 @@
 %global source0_hash bf5a518e781459385baf51ce3e5fee37f97ff80cb8ad7195ae8670f6dfc5ad91
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,32 +82,22 @@ end
 %bcond_with bootstrap
 Name:           httpcomponents-core
 Version:        4.4.16
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Set of low level Java HTTP transport components for HTTP services
 License:        Apache-2.0
 URL:            https://hc.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-core/%{version}/httpcomponents-core-%{version}-source-release.zip
-
 Patch:          0001-Port-to-mockito-2.patch
 Patch:          0002-Port-to-Mockito-5.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(commons-logging:commons-logging)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.httpcomponents:httpcomponents-parent:pom:)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
-BuildRequires:  mvn(org.mockito:mockito-core)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 4.4.16-25
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 HttpCore is a set of low level HTTP transport components that can be
 used to build custom client and server side HTTP services with a
@@ -123,6 +112,7 @@ less important than the ability to handle thousands of simultaneous
 HTTP connections in a resource efficient manner.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -175,15 +165,15 @@ sed -i '/testRequestTargetHostFallback()/i@org.junit.Ignore' httpcore/src/test/j
 rm httpcore-nio/src/test/java/org/apache/http/impl/nio/TestContentChannel.java
 
 %build
-%mvn_build -j -- -Dmaven.compiler.release=8
 
+%mvn_build -j -- -Dmaven.compiler.release=8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
-%doc README.txt RELEASE_NOTES.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.4.16-1
 - Prepare for Oreon 11 (RP1)

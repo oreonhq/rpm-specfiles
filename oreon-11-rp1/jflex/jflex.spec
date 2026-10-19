@@ -1,5 +1,4 @@
 %global source0_hash e0c1e9eef91ff6df04d73fa5eaff13f3a02b679fee1474e5ccae007224df6df6
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,30 +82,23 @@ end
 %bcond_with bootstrap
 Name:           jflex
 Version:        1.9.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Fast Scanner Generator
 License:        BSD-3-Clause
 URL:            https://jflex.de/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://jflex.de/release/jflex-1.9.1.tar.gz
 Source4:        %{name}.1
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(java_cup:java_cup)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.ant:ant)
 %endif
 %if %{without bootstrap}
-BuildRequires:  jflex
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1.9.1-44
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 JFlex is a lexical analyzer generator (also known as scanner
 generator) for Java, written in Java.  It is also a rewrite of the
@@ -119,6 +111,7 @@ used together with other parser generators like ANTLR or as a
 standalone tool.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 find . -name '*.jar' -delete
@@ -145,27 +138,21 @@ rm -rf src/main/java/java_cup examples
 sed -i /%%inputstreamctor/d src/main/jflex/LexScan.flex
 
 %build
+
 %{?jpb_env}
 cup -parser LexParse -interface -destdir src/main/java src/main/cup/LexParse.cup
 jflex -d src/main/java/jflex --skel src/main/jflex/skeleton.nested src/main/jflex/LexScan.flex
 %mvn_build -j -- -P\!error-prone -Djflex.jdk.version=1.8
-
 %install
 %mvn_install
-
-# wrapper script for direct execution
 %jpackage_script jflex.Main "" "" jflex:java_cup jflex true
-
-# manpage
 install -d -m 755 %{buildroot}%{_mandir}/man1
 install -p -m 644 %{SOURCE4} %{buildroot}%{_mandir}/man1
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc doc
-%license COPYRIGHT
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.0-1
 - Prepare for Oreon 11 (RP1)

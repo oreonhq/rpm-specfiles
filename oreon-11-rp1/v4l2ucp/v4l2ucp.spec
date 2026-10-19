@@ -1,10 +1,8 @@
-%global source0_hash 4c488bd804e8272da28857da27ebd37b17770160d31ceaccfe719e0a912a13b9
-
+%global source0_hash dc30459622a2c38726124fb0d9fe74be50d90b797d979273f78f78aa722fa5de
 Name:           v4l2ucp
 Version:        2.0.2
 Release:        1%{?dist}
 Summary:        Video4linux universal control panel
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://v4l2ucp.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/v4l2ucp/v4l2ucp-%{version}.tar.gz
@@ -13,10 +11,15 @@ Patch1:         v4l2ucp-2.0.1-desktop.patch
 Patch2:         v4l2ucp-2.0.1-better-textinput.patch
 Patch3:         v4l2ucp-2.0.1-no-more-v4l1.patch
 Patch4:         v4l2ucp-2.0.1-flags.patch
-BuildRequires:  qt-devel libXi-devel libXmu-devel libv4l-devel cmake
-BuildRequires:  desktop-file-utils
 Requires:       hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  libXi-devel
+BuildRequires:  libXmu-devel
+BuildRequires:  libv4l-devel
+BuildRequires:  qt-devel
+# /oreon:deps
 %description
 v4l2 is a control panel for video4linux2 devices, it reads a description of the
 controls that the V4L2 device supports from the device, and presents the user
@@ -27,31 +30,23 @@ controls to their default state.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
-
-# below is the desktop file and icon stuff.
 desktop-file-install --delete-original \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
   $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps
 mv $RPM_BUILD_ROOT%{_datadir}/icons/%{name}.png \
   $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc README
-%{_bindir}/%{name}
-%{_bindir}/v4l2ctrl
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

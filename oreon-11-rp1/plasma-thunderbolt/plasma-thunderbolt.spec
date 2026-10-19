@@ -1,42 +1,31 @@
+%global source1_hash 19d33ec132a5ee930b01023f2d362ceb8f8ecfb591c651cc2e8be6a7b2b42b08
 %global source0_hash d8179c353f89de0eee69619e300b9df9b7788fce4864cfb2ce1255f0bc691664
-
 %global stable_kf6 stable
-
-
 %global base_name    plasma-thunderbolt
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    plasma-thunderbolt
-Summary: Plasma integration for controlling Thunderbolt devices
+Summary:        Plasma integration for controlling Thunderbolt devices
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{base_name}
-
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
-
-BuildRequires:  extra-cmake-modules
-BuildRequires:  kf6-rpm-macros
+Requires:       bolt
+# oreon:deps
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6DBusAddons)
 BuildRequires:  cmake(KF6Declarative)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  cmake(KF6Notifications)
-
-BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Quick)
-
 BuildRequires:  desktop-file-utils
-
-Requires:       bolt
-
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 Plasma Sytem Settings module and a KDED module to handle authorization of
 Thunderbolt devices connected to the computer. There's also a shared library
@@ -44,33 +33,27 @@ Thunderbolt devices connected to the computer. There's also a shared library
 system-wide bolt daemon, which does the actual hard work of talking to the
 kernel.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{base_name}-%{version} -p1
 
-
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --all-name
+%oreon_autofiles main
 
 %check
-desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_bolt.desktop
 
-%files -f %{name}.lang
-%doc README.md
-%license LICENSES/*
-%{_kf6_libdir}/libkbolt.so
-%{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_bolt.so
-%{_kf6_qtplugindir}/kf6/kded/kded_bolt.so
-%{_kf6_datadir}/knotifications6/kded_bolt.notifyrc
-%{_kf6_datadir}/applications/kcm_bolt.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_bolt.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

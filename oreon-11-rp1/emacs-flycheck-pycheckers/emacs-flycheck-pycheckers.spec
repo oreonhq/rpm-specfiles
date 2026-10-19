@@ -1,26 +1,21 @@
 %global source0_hash 8403bf5a550673e05895c79e6f9a961d1a72be0286ecf76b15d6d54a34746964
-
 %global pkg flycheck-pycheckers
-
 Name:           emacs-%{pkg}
 Version:        0.16
-Release:        7%{?dist}
+Release:        1%{?dist}
 Summary:        Multiple syntax checker for Python in Emacs, using Flycheck
-
 License:        GPL-3.0-or-later
 URL:            https://github.com/msherry/%{pkg}/
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/msherry/%{pkg}//archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        %{pkg}-init.el
-# Fix arguments in call to define-obsolete-variable-alias (since Emacs 28, see
-# also https://github.com/msherry/flycheck-pycheckers/pull/60)
 Patch0:         %{name}-0.15-emacs28.patch
-
-BuildRequires:  emacs
-BuildRequires:  emacs-flycheck
 Requires:       emacs(bin) >= %{_emacs_version}
 Requires:       emacs-flycheck
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  emacs
+BuildRequires:  emacs-flycheck
+# /oreon:deps
 %description
 This package provides a way to run multiple syntax checkers on Python code, in
 parallel. The list of supported checkers includes:
@@ -42,6 +37,7 @@ This also allows us to run multiple syntax checkers in parallel, rather than
 sequentially.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{pkg}-%{version}
@@ -52,21 +48,18 @@ touch -r bin/pycheckers.py bin/pycheckers.py.new && \
 mv bin/pycheckers.py.new bin/pycheckers.py
 
 %build
-%{_emacs_bytecompile} %{pkg}.el
 
+%{_emacs_bytecompile} %{pkg}.el
 %install
 install -dm 0755 $RPM_BUILD_ROOT%{_emacs_sitelispdir}/%{pkg}/
 install -pm 0644 %{pkg}.el* -t $RPM_BUILD_ROOT%{_emacs_sitelispdir}/%{pkg}/
 cp -a bin/ $RPM_BUILD_ROOT%{_emacs_sitelispdir}/%{pkg}/
 chmod 0755  $RPM_BUILD_ROOT%{_emacs_sitelispdir}/%{pkg}/bin/pycheckers.py
-
 install -Dpm 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_emacs_sitestartdir}/%{pkg}-init.el
+%oreon_autofiles main
 
-%files
-%doc pycheckers-EXAMPLE README.md
-%license LICENSE
-%{_emacs_sitelispdir}/%{pkg}/
-%{_emacs_sitestartdir}/*.el
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,28 +1,20 @@
 %global source0_hash 38f406bf21acc67e45f414b7980463b2e6e6270ba3616ffd41995d997078cbe6
-
-# pytest-xdist is not included in RHEL, and on Fedora it depends on psutil
 %bcond xdist %[%{defined fedora} && %{undefined bootstrap}]
-
 Name:           python-psutil
 Version:        7.2.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A process and system utilities module for Python
-
 License:        BSD-3-Clause
 URL:            https://github.com/giampaolo/psutil
-Source:        https://github.com/giampaolo/psutil/archive/refs/tags/release-7.2.2.tar.gz#/psutil-7.2.2.tar.gz
-
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  sed
-# Test dependencies
-BuildRequires:  procps-ng
-BuildRequires:  python%{python3_pkgversion}-pytest
+Source0:        https://github.com/giampaolo/psutil/archive/refs/tags/release-7.2.2.tar.gz#/psutil-7.2.2.tar.gz
 %if %{with xdist}
-BuildRequires:  python%{python3_pkgversion}-pytest-xdist
 %endif
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 43
+Requires:       python3-psutil = %{version}-%{release}
+# /oreon:deps
 %description
 psutil is a module providing an interface for retrieving information on all
 running processes and system utilization (CPU, memory, disks, network, users) in
@@ -30,13 +22,9 @@ a portable way by using Python, implementing many functionalities offered by
 command line tools such as: ps, top, df, kill, free, lsof, free, netstat,
 ifconfig, nice, ionice, iostat, iotop, uptime, pidof, tty, who, taskset, pmap.
 
-
 %package -n python%{python3_pkgversion}-psutil
-Summary:        %{summary}
-# psutil.tests dropped in 7.2.0
-# see https://raw.githubusercontent.com/giampaolo/psutil/refs/tags/release-7.2.0/HISTORY.rst
+Summary:        A process and system utilities module for Python
 Obsoletes:      python%{python3_pkgversion}-psutil-tests < 7.0.0-10
-
 %description -n python%{python3_pkgversion}-psutil
 psutil is a module providing an interface for retrieving information on all
 running processes and system utilization (CPU, memory, disks, network, users) in
@@ -44,8 +32,8 @@ a portable way by using Python 3, implementing many functionalities offered by
 command line tools such as: ps, top, df, kill, free, lsof, free, netstat,
 ifconfig, nice, ionice, iostat, iotop, uptime, pidof, tty, who, taskset, pmap.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n psutil-release-%{version}
 
@@ -63,29 +51,16 @@ done
  sed -i "s/test_disk_partitions/notest_disk_partitions/" tests/test_system.py
 %endif
 
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
 %build
+
 %pyproject_wheel
-# to trigger build_ext needed for testing
-# see https://github.com/giampaolo/psutil/issues/2637
 make build
-
-
 %install
 %pyproject_install
-%pyproject_save_files -l psutil
-
-
-# Ignore tests when building with flatpak-module-tools to avoid build failures
-# when building inside VMs or containers. Flatpaks would usually build this package
-# as dependency from stable and already tested branches.
+%oreon_autofiles main usr/lib/python3*/site-packages/psutil* usr/lib64/python3*/site-packages/psutil* usr/bin/*
 %if ! 0%{?flatpak}
 %check
-# Deselect tests that fail in mock chroots
+
 k="${k-}${k+ and }not (TestProcessAgainstStatus and test_cpu_affinity and not eligible_cpus)"
 k="${k-}${k+ and }not (TestSystemVirtualMemory and test_used)"
 k="${k-}${k+ and }not (test_process_all and test_all)"
@@ -99,50 +74,25 @@ k="${k-}${k+ and }not test_disk_partitions_mocked"
 k="${k-}${k+ and }not test_emulate_use_cpuinfo"
 k="${k-}${k+ and }not test_emulate_use_second_file"
 k="${k-}${k+ and }not test_exe_mocked"
-
-# Failure reported upstream: https://github.com/giampaolo/psutil/issues/2374
 k="${k-}${k+ and }not test_debug"
-
-# Flaky failure reported upstream: https://github.com/giampaolo/psutil/issues/2434
 k="${k-}${k+ and }not (test_system and test_sensors_temperatures and not fahreneit)"
-
-# Skip test_emulate_multi_cpu on aarch64, ppc64le, riscv64
-# Failure reported upstream: https://github.com/giampaolo/psutil/issues/2373
 %ifarch aarch64 ppc64le riscv64
 k="${k-}${k+ and }not test_emulate_multi_cpu"
 %endif
-
-# The following options were present in the specfile without explanation
-# when the pytest -k option was expanded across multiple lines:
 k="${k-}${k+ and }not emulate_energy_full_0"
 k="${k-}${k+ and }not emulate_energy_full_not_avail"
 k="${k-}${k+ and }not emulate_no_power"
 k="${k-}${k+ and }not emulate_power_undetermined"
-
-# Setting GITHUB_ACTIONS to convince the test suite this is a CI.
-# That way, some unreliable tests are skipped and some timeouts are extended.
-
-# --deselect notes
-# TestDiskAPIs: FileNotFoundError: [Errno 2] No such file or directory: '/sys/fs/cgroup/net_cls'
-# TestMiscAPIs: flaky assert 0 > 0
-
-# --ignore notes
-# tests/test_memleaks: depends on unpackaged psleak
-
-# Note: We deliberately bypass the Makefile here to test the installed modules.
 GITHUB_ACTIONS=1 %{pytest} -v %{?with_xdist:-n auto} "${k:+-k $k}" --pyargs tests \
   --deselect tests/test_system.py::TestDiskAPIs::test_disk_partitions \
   --deselect tests/test_system.py::TestMiscAPIs::test_heap_info \
   --ignore tests/test_memleaks.py \
   ;
 %endif
-
-
-%files -n python%{python3_pkgversion}-psutil -f %{pyproject_files}
-%doc CREDITS HISTORY.rst README.rst
-%exclude %{python3_sitearch}/psutil/tests
-
+%files
+%files -n python3-psutil -f %{oreon_filedir}/python3-psutil.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.2.2-1
 - Prepare for Oreon 11 (RP1)

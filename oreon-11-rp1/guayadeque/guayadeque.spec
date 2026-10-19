@@ -1,5 +1,4 @@
-%global source0_hash 123a461d81c9eecd7af1528a81aa5e8ddd65bb2c8268f09fe888a6c69ee28079
-
+%global source0_hash 333203a0aa3ea8c7d81e32467aff2b24fe739da942c0d8cd25643a7ba2d845e3
 %global usesnapshot 0
 %global commit0 5f80bc4c5d0cb532f1a5ad9679d56bd16db89414
 %if 0%{?usesnapshot}
@@ -7,48 +6,43 @@
 %global gitdate 20241205
 %endif
 %global metadata_name org.guayadeque.Guayadeque
-
 Name:           guayadeque
 %if 0%{?usesnapshot}
 Version:        0.7.5
-Release:        1.7.beta6.git%{shortcommit0}%{dist}
+Release:        1%{?dist}
 %else
 Version:        0.7.5
-Release:        4%{?dist}
+Release:        1%{?dist}
 %endif
 Summary:        Music player
-# The entire source code is GPL-3.0-or-later except hmac/ which is BSD-3-Clause
 License:        GPL-3.0-or-later AND BSD-3-Clause
 URL:            https://codeberg.org/thothix/guayadeque
 %if 0%{?usesnapshot}
-Source0:        %url/archive/%{commit0}/%{name}-%{commit0}.tar.gz#/%{name}-%{shortcommit0}.tar.gz
+Source0:        https://codeberg.org/thothix/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %else
-Source0:        %url/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %endif
-# For a breakdown of the licensing, see PACKAGE-LICENSING
 Source1:        PACKAGE-LICENSING
-
+Suggests:       gstreamer1-libav
+Provides:       bundled(md5-polstra)
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  dbus-devel
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  pkgconfig(jsoncpp)
-BuildRequires:  taglib-devel
+BuildRequires:  gettext-devel
+BuildRequires:  libappstream-glib
 BuildRequires:  libcurl-devel
 BuildRequires:  libgpod-devel
-BuildRequires:  pkgconfig(icu-io)
 BuildRequires:  pkgconfig(gstreamer-app-1.0)
 BuildRequires:  pkgconfig(gstreamer-pbutils-1.0)
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(icu-io)
+BuildRequires:  pkgconfig(jsoncpp)
 BuildRequires:  sqlite-devel
+BuildRequires:  taglib-devel
 BuildRequires:  wxGTK-devel
 BuildRequires:  wxsqlite3-devel
-BuildRequires:  dbus-devel
-BuildRequires:  gettext-devel
-Suggests:       gstreamer1-libav
-
-Provides:       bundled(md5-polstra)
-
+# /oreon:deps
 %description
 Guayadeque is a lightweight and easy-to-use music player and music collection
 organizer that can easily manage large music collections and supports smart
@@ -105,38 +99,8 @@ Supplements:    (%{name} = %{version}-%{release} and langpacks-%{1})\
 %description    langpack-%{1}\
 %{2} language data for %{name}.\
 \
-%files          langpack-%{1}\
-%{_datadir}/locale/%{1}*/LC_MESSAGES/%{name}.mo
-
-%lang_subpkg bg Bulgarian
-%lang_subpkg ca_ES Catalan
-%lang_subpkg cs Czech
-%lang_subpkg da Danish
-%lang_subpkg de German
-%lang_subpkg el Greek
-%lang_subpkg es Spanish
-%lang_subpkg fr French
-%lang_subpkg hr Croatian
-%lang_subpkg hu Hungarian
-%lang_subpkg is Icelandic
-%lang_subpkg it Italian
-%lang_subpkg ja Japanese
-%lang_subpkg lt Lithuanian
-%lang_subpkg ms "Malay (Malaysia)"
-%lang_subpkg nb Norwegian
-%lang_subpkg nl Dutch
-%lang_subpkg pl Polish
-%lang_subpkg pt Portuguese
-%lang_subpkg pt_BR Brazil
-%lang_subpkg ru Russian
-%lang_subpkg sk Slovakian
-%lang_subpkg sr "Serbian (Cyrillic and Latin)"
-%lang_subpkg sv Swedish
-%lang_subpkg th Thai
-%lang_subpkg tr Turkish
-%lang_subpkg uk Ukrainian
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %if 0%{?usesnapshot}
@@ -147,12 +111,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 cp -p %{SOURCE1} PACKAGE-LICENSING
 
 %build
+
 %cmake .                                                       \
  -DCMAKE_BUILD_TYPE='Release'                                  \
  -DCMAKE_CXX_FLAGS="%{optflags}"                               \
  -D_GUREVISION_:STRING="%{release}"
 %cmake_build
-
 %install
 %cmake_install
 mkdir -p %{buildroot}%{_datadir}/{applications,appdata}
@@ -160,22 +124,41 @@ desktop-file-install --delete-original  \
         --dir %{buildroot}%{_datadir}/applications   \
         --remove-category Application \
         %{buildroot}%{_datadir}/applications/%{metadata_name}.desktop
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainfo.xml
-
-%files
-%doc README
-%license INSTALL.md LICENSE PACKAGE-LICENSING
-%{_bindir}/%{name}
-%{_datadir}/%{name}/*.conf
-%{_datadir}/%{name}/*.xml
-%dir %{_datadir}/%{name}
-%exclude %{_datadir}/locale/*/LC_MESSAGES/%{name}.mo
-%{_datadir}/applications/%{metadata_name}.desktop
-%{_datadir}/icons/hicolor/64x64/apps/%{name}.png
-%{_datadir}/metainfo/%{metadata_name}.metainfo.xml
+%files -f %{oreon_filedir}/main.list
+%files -n guayadeque-langpack-bg -f %{oreon_filedir}/guayadeque-langpack-bg.list
+%files -n guayadeque-langpack-ca_ES -f %{oreon_filedir}/guayadeque-langpack-ca_ES.list
+%files -n guayadeque-langpack-cs -f %{oreon_filedir}/guayadeque-langpack-cs.list
+%files -n guayadeque-langpack-da -f %{oreon_filedir}/guayadeque-langpack-da.list
+%files -n guayadeque-langpack-de -f %{oreon_filedir}/guayadeque-langpack-de.list
+%files -n guayadeque-langpack-el -f %{oreon_filedir}/guayadeque-langpack-el.list
+%files -n guayadeque-langpack-es -f %{oreon_filedir}/guayadeque-langpack-es.list
+%files -n guayadeque-langpack-fr -f %{oreon_filedir}/guayadeque-langpack-fr.list
+%files -n guayadeque-langpack-hr -f %{oreon_filedir}/guayadeque-langpack-hr.list
+%files -n guayadeque-langpack-hu -f %{oreon_filedir}/guayadeque-langpack-hu.list
+%files -n guayadeque-langpack-is -f %{oreon_filedir}/guayadeque-langpack-is.list
+%files -n guayadeque-langpack-it -f %{oreon_filedir}/guayadeque-langpack-it.list
+%files -n guayadeque-langpack-ja -f %{oreon_filedir}/guayadeque-langpack-ja.list
+%files -n guayadeque-langpack-lt -f %{oreon_filedir}/guayadeque-langpack-lt.list
+%files -n guayadeque-langpack-ms -f %{oreon_filedir}/guayadeque-langpack-ms.list
+%files -n guayadeque-langpack-nb -f %{oreon_filedir}/guayadeque-langpack-nb.list
+%files -n guayadeque-langpack-nl -f %{oreon_filedir}/guayadeque-langpack-nl.list
+%files -n guayadeque-langpack-pl -f %{oreon_filedir}/guayadeque-langpack-pl.list
+%files -n guayadeque-langpack-pt -f %{oreon_filedir}/guayadeque-langpack-pt.list
+%files -n guayadeque-langpack-pt_BR -f %{oreon_filedir}/guayadeque-langpack-pt_BR.list
+%files -n guayadeque-langpack-ru -f %{oreon_filedir}/guayadeque-langpack-ru.list
+%files -n guayadeque-langpack-sk -f %{oreon_filedir}/guayadeque-langpack-sk.list
+%files -n guayadeque-langpack-sr -f %{oreon_filedir}/guayadeque-langpack-sr.list
+%files -n guayadeque-langpack-sv -f %{oreon_filedir}/guayadeque-langpack-sv.list
+%files -n guayadeque-langpack-th -f %{oreon_filedir}/guayadeque-langpack-th.list
+%files -n guayadeque-langpack-tr -f %{oreon_filedir}/guayadeque-langpack-tr.list
+%files -n guayadeque-langpack-uk -f %{oreon_filedir}/guayadeque-langpack-uk.list
 
 %changelog
+
 %autochangelog

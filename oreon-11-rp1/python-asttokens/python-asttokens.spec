@@ -1,61 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 3ecdbd8f2cc195f53ccada3a613538bb5f9ef6f6869129f13e03c30a677b8fe2
 Name:           python-asttokens
 Version:        3.0.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Annotate AST trees with source code positions
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://asttokens.readthedocs.io/en/latest/index.html
-Source:         %{pypi_source asttokens}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/asttokens/asttokens-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'asttokens' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 44
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 3.4.3
+Requires:       python3-asttokens = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-asttokens
-Summary:        %{summary}
-
-%description -n python3-asttokens %_description
+Summary:        Annotate AST trees with source code positions
+%description -n python3-asttokens
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-asttokens astroid,test
-
 
 %prep
-%autosetup -p1 -n asttokens-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir asttokens-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-asttokens usr/lib/python3*/site-packages/asttokens* usr/lib64/python3*/site-packages/asttokens* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/asttokens* usr/lib64/python3*/site-packages/asttokens* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-asttokens -f %{pyproject_files}
+%files
+%files -n python3-asttokens -f %{oreon_filedir}/python3-asttokens.list
 
 %changelog
+
 %autochangelog

@@ -1,31 +1,29 @@
 %global source0_hash b73cbdd4202b29eab97e0c08dcd59d9273633610e8721cf449078656bd591a7c
-
 Name:           perl-Parallel-Pipes
 Version:        0.201
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        Parallel processing using pipes for communication and synchronization
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Parallel-Pipes
 Source0:        https://cpan.metacpan.org/authors/id/S/SK/SKAJI/Parallel-Pipes-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  coreutils
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(Module::Build::Tiny)
-# Run-time
 BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(File::Temp)
 BuildRequires:  perl(IO::Handle)
 BuildRequires:  perl(IO::Select)
+BuildRequires:  perl(Module::Build::Tiny)
 BuildRequires:  perl(Storable)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Time::HiRes)
+BuildRequires:  perl(constant)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-# Tests
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(Test::More) >= 0.98
-BuildRequires:  perl(Time::HiRes)
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Parallel::Pipes tries to solve problems of parallel processing for
 communication and synchronization by using pipe(2) and select(2).
@@ -34,12 +32,12 @@ communication and synchronization by using pipe(2) and select(2).
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Parallel-Pipes-%{version}
@@ -51,33 +49,26 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Build.PL --installdirs=vendor
 ./Build
-
 %install
 ./Build install --destdir=$RPM_BUILD_ROOT --create_packlist=0
 %{_fixperms} $RPM_BUILD_ROOT/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 ./Build test
-
-%files
-%license LICENSE
-%doc Changes
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Parallel-Pipes-tests -f %{oreon_filedir}/perl-Parallel-Pipes-tests.list
 
 %changelog
+
 %autochangelog

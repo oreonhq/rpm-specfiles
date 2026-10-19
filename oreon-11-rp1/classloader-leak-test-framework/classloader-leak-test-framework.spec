@@ -1,23 +1,20 @@
 %global source0_hash 97465fe025149bcfbfd2fbea072da710a99dc0eb1c63fb040d291dd64a102562
-
 %bcond_without tests
 %global nwname classloader-leak-prevention-parent
-
 Name:           classloader-leak-test-framework
 Version:        2.7.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Detection and verification of Java ClassLoader leaks
 License:        Apache-2.0
 URL:            https://github.com/mjiderhamn/classloader-leak-prevention/tree/master/%{name}
-Source0:        https://github.com/mjiderhamn/classloader-leak-prevention/archive/refs/tags/%{nwname}-%{version}.tar.gz#/classloader-leak-test-framework-2.7.0.tar.gz
-
+Source0:        https://github.com/mjiderhamn/classloader-leak-prevention/archive/refs/tags/%{nwname}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.bcel:bcel)
-
+# /oreon:deps
 %description
 Stand-alone test framework for detecting and/or verifying the existence or
 non-existence of Java ClassLoader leaks. It is also possible to test leak
@@ -26,11 +23,11 @@ is an built upon JUnit.
 
 %package        javadoc
 Summary:        Javadoc for %{name}
-
 %description    javadoc
 This package contains the API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n classloader-leak-prevention-%{nwname}-%{version}
 
@@ -47,22 +44,21 @@ cp -r %{name}/* .
 %pom_remove_plugin -r :maven-javadoc-plugin
 
 %build
+
 %if %{with tests}
 %mvn_build --xmvn-javadoc
 %else
 %mvn_build -f --xmvn-javadoc
 %endif
-
 %install
 %mvn_install
+%oreon_autofiles classloader-leak-test-framework-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE.txt
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE.txt
+%files -f %{oreon_filedir}/main.list
+%files -n classloader-leak-test-framework-javadoc -f %{oreon_filedir}/classloader-leak-test-framework-javadoc.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.7.0-1
 - Prepare for Oreon 11 (RP1)

@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash c83e73c581427af92a0a67da0178386c91cfb93706f1a3f3e3cd41ee03435d80
 Name:           python-sport-activities-features
 Version:        0.5.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A minimalistic toolbox for extracting features from sport activity files
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/firefly-cpp/sport-activities-features
-Source:         %{pypi_source sport_activities_features}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sport_activities_features/sport_activities_features-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sport-activities-features' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-sport-activities-features = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-sport-activities-features
-Summary:        %{summary}
-
-%description -n python3-sport-activities-features %_description
-
+Summary:        A minimalistic toolbox for extracting features from sport activity files
+%description -n python3-sport-activities-features
 
 %prep
-%autosetup -p1 -n sport_activities_features-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sport_activities_features-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sport-activities-features usr/lib/python3*/site-packages/sport_activities_features* usr/lib64/python3*/site-packages/sport_activities_features* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sport_activities_features* usr/lib64/python3*/site-packages/sport_activities_features* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sport-activities-features -f %{pyproject_files}
+%files
+%files -n python3-sport-activities-features -f %{oreon_filedir}/python3-sport-activities-features.list
 
 %changelog
+
 %autochangelog

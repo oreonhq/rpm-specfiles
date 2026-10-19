@@ -1,10 +1,8 @@
-%global source0_hash 7ab6057f826402381e1298602e2c53065e7511fe1c304e9569bf7daa92f9fd08
-
+%global source0_hash 8be3cc8775929944ddd3c4dc0b3111c3269dc894cc086c151ff2117e0450c984
 Name: imsprog
 Version: 1.9.1
-Release: 1%dist
-
-Summary: I2C, SPI and MicroWire EEPROM/Flash chip programmer for CH341a/CH347t devices
+Release:        1%{?dist}
+Summary:        I2C, SPI and MicroWire EEPROM/Flash chip programmer for CH341a/CH347t devices
 Summary(ru_RU.UTF-8): I2C, SPI and MicroWire EEPROM/Flash программатор для CH341a/CH347t устройств
 Summary(de_DE.UTF-8): I2C, SPI und MicroWire EEPROM/Flash Chip-Programmierer für CH341a/CH347t Geräte
 Summary(es_ES.UTF-8): Programador de chips EEPROM/Flash I2C, SPI y MicroWire para dispositivos CH341a/CH347t
@@ -16,21 +14,19 @@ Summary(zh_CN.UTF-8): 用于 CH341a/CH347t 设备的 I2C、SPI 和 MicroWire EEP
 SourceLicense: GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.1-only and BSD-1-Clause
 License: GPL-3.0-or-later AND LGPL-2.1-only
 ExcludeArch: s390x
-
 Group: Applications/Engineering
-
 Url: https://github.com/bigbigmdm/IMSProg
-Source: https://github.com/bigbigmdm/IMSProg/archive/refs/tags/v%{version}.tar.gz
-
-BuildRequires: gcc-c++
-BuildRequires: pkgconfig(Qt5Core)
-BuildRequires: pkgconfig(Qt5Widgets)
-BuildRequires: cmake(Qt5LinguistTools)
-BuildRequires: pkgconfig(libusb-1.0)
-BuildRequires: cmake
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
+Source0:        https://github.com/bigbigmdm/IMSProg/archive/refs/tags/v%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt5LinguistTools)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(libusb-1.0)
+# /oreon:deps
 %description
 IMSProg is a free software for CH341A/CH347T based chip programmers with 
 graphical interface. With IMSProg you can read, verify, program, erase i2C, SPI, 
@@ -139,58 +135,37 @@ IMSProg_database_update - 使用外部Web服务器更新芯片数据库的脚本
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n IMSProg-%{version}
-
+%global oreon_srcdir IMSProg-%{version}
+%oreon_prep
 %build
-# update translations
+
 lrelease-qt5 IMSProg_editor/language/*.ts
 lrelease-qt5 IMSProg_programmer/language/*.ts
-
 pushd IMSProg_editor
 %cmake -DCMAKE_INSTALL_SYSCONFDIR=%_sysconfdir
 %cmake_build
 popd
-
 pushd IMSProg_programmer
 %cmake -DCMAKE_INSTALL_SYSCONFDIR=%_sysconfdir
 %cmake_build
 popd
-
 %install
 pushd IMSProg_editor
 %cmake_install
 popd
-
 pushd IMSProg_programmer
 %cmake_install
 popd
-
-# rename README
 cp IMSProg_editor/README.md IMSProg_editor.md
 cp IMSProg_programmer/README.md IMSProg_programmer.md
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.xml
-
-%files
-%doc README.md IMSProg_editor.md IMSProg_programmer.md ChangeLog
-%_docdir/imsprog/
-%_bindir/IMSProg
-%_bindir/IMSProg_editor
-%_bindir/IMSProg_database_update
-%_datadir/imsprog
-%_datadir/applications/IMSProg.desktop
-%_datadir/applications/IMSProg_editor.desktop
-%_datadir/applications/IMSProg_database_update.desktop
-%_datadir/metainfo/*.xml
-/usr/lib/udev/rules.d/*.rules
-%_datadir/pixmaps/chipEdit64.png
-%_datadir/pixmaps/IMSProg64.png
-%_datadir/pixmaps/IMSProg_database_update.png
-%_datadir/man/man1/*.1.*
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

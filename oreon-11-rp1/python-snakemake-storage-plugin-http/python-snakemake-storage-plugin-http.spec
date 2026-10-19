@@ -1,62 +1,47 @@
 %global source0_hash 316d5a83f103489accb03f96606f370456bfe82355984329f53555a23d8dc974
-
-# We can’t run tests that access the network in koji, but this build
-# conditional allows us to try them in local mock builds for added confidence:
-#   fedpkg mockbuild --enable-network --with network_tests
 %bcond network_tests 0
-
 Name:           python-snakemake-storage-plugin-http
 Version:        0.3.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Snakemake storage plugin for downloading input files from HTTP(s)
-
-# SPDX
 License:        MIT
 URL:            https://github.com/snakemake/snakemake-storage-plugin-http
-# We use the GitHub archive instead of the PyPI sdist to get CHANGELOG.md and
-# the tests.
-Source:         %{url}/archive/v%{version}/snakemake-storage-plugin-http-%{version}.tar.gz
-
-
+Source0:        https://github.com/snakemake/snakemake-storage-plugin-http/archive/v%{version}/snakemake-storage-plugin-http-%{version}.tar.gz
 BuildArch:      noarch
-
-# See: [tool.poetry.dev-dependencies] in pyproject.toml
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  snakemake >= 9
-
 %global common_description %{expand:
 %{summary}.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-snakemake-storage-plugin-http = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-snakemake-storage-plugin-http
-Summary:        %{summary}
-
+Summary:        Snakemake storage plugin for downloading input files from HTTP(s)
 %description -n python3-snakemake-storage-plugin-http %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-snakemake-storage-plugin-http usr/lib/python3*/site-packages/snakemake_storage_plugin_http* usr/lib64/python3*/site-packages/snakemake_storage_plugin_http* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/snakemake_storage_plugin_http* usr/lib64/python3*/site-packages/snakemake_storage_plugin_http* usr/bin/*
 
 %check
+
 %if %{without network_tests}
-# The following tests require network access:
 k="${k-}${k+ and }not (TestStorageNoSettings and test_storage)"
 k="${k-}${k+ and }not (TestStorageNoSettings and test_storage_not_existing)"
 k="${k-}${k+ and }not (TestStorageNoSettings and test_inventory)"
 %endif
-
 %pytest -v -k "${k-}" tests/tests.py
-
-%files -n python3-snakemake-storage-plugin-http -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md
-%doc README.md
+%files
+%files -n python3-snakemake-storage-plugin-http -f %{oreon_filedir}/python3-snakemake-storage-plugin-http.list
 
 %changelog
+
 %autochangelog

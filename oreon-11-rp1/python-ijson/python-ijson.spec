@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash af40bd1a85f55db0b8b30715c858761306bd92d5590148636f75c3309e6e76bd
 Name:           python-ijson
 Version:        3.5.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Iterative JSON parser with standard Python iterator interfaces
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause AND ISC
 URL:            https://github.com/ICRAR/ijson
-Source:         %{pypi_source ijson}
-
+Source0:        https://files.pythonhosted.org/packages/source/i/ijson/ijson-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ijson' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0
+Requires:       python3-ijson = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ijson
-Summary:        %{summary}
-
-%description -n python3-ijson %_description
-
+Summary:        Iterative JSON parser with standard Python iterator interfaces
+%description -n python3-ijson
 
 %prep
-%autosetup -p1 -n ijson-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ijson-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ijson usr/lib/python3*/site-packages/ijson* usr/lib64/python3*/site-packages/ijson* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ijson* usr/lib64/python3*/site-packages/ijson* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ijson -f %{pyproject_files}
+%files
+%files -n python3-ijson -f %{oreon_filedir}/python3-ijson.list
 
 %changelog
+
 %autochangelog

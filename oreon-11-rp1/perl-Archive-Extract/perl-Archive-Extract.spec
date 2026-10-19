@@ -1,57 +1,20 @@
 %global source0_hash cffcf135cd0622287d3b02154f7d6716495449fcaed03966621948e25ea5f742
-
-# Enable LZMA and XZ support via pure-Perl implementation
-%if 0%{?rhel}
-%bcond_with perl_Archive_Extract_enables_perl_xz
-%else
 %bcond_without perl_Archive_Extract_enables_perl_xz
-%endif
-
 Name:           perl-Archive-Extract
-# Epoch to compete with core module from perl.spec
 Epoch:          1
 Version:        0.88
-Release:        15%{?dist}
+Release:        1%{?dist}
 Summary:        Generic archive extracting mechanism
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Archive-Extract
 Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Archive-Extract-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-# Run-time:
-# Prefer Archive::Tar to suppress warnings, bug #1217352, CPAN RT#104121
-BuildRequires:  perl(Archive::Tar)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(deprecate)
-BuildRequires:  perl(File::Basename)
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(File::Spec) >= 0.82
-BuildRequires:  perl(FileHandle)
-BuildRequires:  perl(if)
-BuildRequires:  perl(IPC::Cmd) >= 0.64
-BuildRequires:  perl(Locale::Maketext::Simple)
-BuildRequires:  perl(Module::Load::Conditional) >= 0.66
-BuildRequires:  perl(Params::Check) >= 0.07
-BuildRequires:  perl(vars)
-# Tests:
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(File::Spec::Unix)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Test::More)
 Requires:       perl(deprecate)
-# Prefer Archive::Tar to suppress warnings, bug #1217352, CPAN RT#104121
 Requires:       perl(Archive::Tar)
 Requires:       perl(File::Spec) >= 0.82
 Requires:       perl(IPC::Cmd) >= 0.64
 Requires:       perl(Module::Load::Conditional) >= 0.66
 Requires:       perl(Params::Check) >= 0.07
-# Decompressors:
 Requires:       %{name}-bz2
 Requires:       %{name}-gz
 Requires:       %{name}-lzma
@@ -62,10 +25,33 @@ Requires:       %{name}-txz
 Requires:       %{name}-Z
 Requires:       %{name}-zip
 Requires:       %{name}-xz
-
-# Filter under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((File::Spec|IPC::Cmd|Module::Load::Conditional|Params::Check)\\)$
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  perl(Archive::Tar)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Spec::Unix)
+BuildRequires:  perl(FileHandle)
+BuildRequires:  perl(IPC::Cmd)
+BuildRequires:  perl(Locale::Maketext::Simple)
+BuildRequires:  perl(Module::Load::Conditional)
+BuildRequires:  perl(Params::Check)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(deprecate)
+BuildRequires:  perl(if)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Archive::Extract is a generic archive extraction mechanism.  It allows you to
 extract any archive file of the type .tar, .tar.gz, .gz, .Z, tar.bz2, .tbz,
@@ -123,8 +109,6 @@ Summary:    Lzma decompressor for %{name} via IO::Uncompress::UnLzma
 Provides:   %{name}-lzma = %{epoch}:%{version}-%{release}
 Requires:   %{name} = %{epoch}:%{version}-%{release}
 Requires:   perl(IO::Uncompress::UnLzma)
-# perl-Extract-Archive-lzma-Compress-unLZMA removed because Compress::unLZMA
-# is not yet packaged
 Obsoletes:  perl-Archive-Extract-lzma-Compress-unLZMA < 1:0.80-8
 %description lzma-IO-Uncompress-UnLzma
 %{summary}.
@@ -283,56 +267,46 @@ Requires:   perl(IO::Uncompress::UnXz)
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Archive-Extract-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files
-%doc CHANGES README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files bz2-bunzip2
-%files bz2-IO-Uncompress-Bunzip2
-%files gz-gzip
-%files gz-Compress-Zlib
-%files lzma-unlzma
-%if %{with perl_Archive_Extract_enables_perl_xz}
-%files lzma-IO-Uncompress-UnLzma
-%endif
-%if %{with perl_Archive_Extract_enables_perl_xz}
-#%%files lzma-Compress-unLZMA
-%endif
-%files tar-tar
-%files tar-Archive-Tar
-%files tbz-tar-bunzip2
-%files tbz-Archive-Tar-IO-Uncompress-Bunzip2
-%files tgz-tar-gzip
-%files tgz-Archive-Tar-Compress-Zlib
-%files tgz-Archive-Tar-IO-Zlib
-%files txz-tar-unxz
-%if %{with perl_Archive_Extract_enables_perl_xz}
-%files txz-Archive-Tar-IO-Uncompress-UnXz
-%endif
-%files Z-uncompress
-%files Z-Compress-Zlib
-%files zip-unzip
-%files zip-Archive-Zip
-%files xz-unxz
-%if %{with perl_Archive_Extract_enables_perl_xz}
-%files xz-IO-Uncompress-UnXz
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Archive-Extract-bz2-bunzip2 -f %{oreon_filedir}/perl-Archive-Extract-bz2-bunzip2.list
+%files -n perl-Archive-Extract-bz2-IO-Uncompress-Bunzip2 -f %{oreon_filedir}/perl-Archive-Extract-bz2-IO-Uncompress-Bunzip2.list
+%files -n perl-Archive-Extract-gz-gzip -f %{oreon_filedir}/perl-Archive-Extract-gz-gzip.list
+%files -n perl-Archive-Extract-gz-Compress-Zlib -f %{oreon_filedir}/perl-Archive-Extract-gz-Compress-Zlib.list
+%files -n perl-Archive-Extract-lzma-unlzma -f %{oreon_filedir}/perl-Archive-Extract-lzma-unlzma.list
+%files -n perl-Archive-Extract-lzma-IO-Uncompress-UnLzma -f %{oreon_filedir}/perl-Archive-Extract-lzma-IO-Uncompress-UnLzma.list
+%files -n perl-Archive-Extract-tar-tar -f %{oreon_filedir}/perl-Archive-Extract-tar-tar.list
+%files -n perl-Archive-Extract-tar-Archive-Tar -f %{oreon_filedir}/perl-Archive-Extract-tar-Archive-Tar.list
+%files -n perl-Archive-Extract-tbz-tar-bunzip2 -f %{oreon_filedir}/perl-Archive-Extract-tbz-tar-bunzip2.list
+%files -n perl-Archive-Extract-tbz-Archive-Tar-IO-Uncompress-Bunzip2 -f %{oreon_filedir}/perl-Archive-Extract-tbz-Archive-Tar-IO-Uncompress-Bunzip2.list
+%files -n perl-Archive-Extract-tgz-tar-gzip -f %{oreon_filedir}/perl-Archive-Extract-tgz-tar-gzip.list
+%files -n perl-Archive-Extract-tgz-Archive-Tar-Compress-Zlib -f %{oreon_filedir}/perl-Archive-Extract-tgz-Archive-Tar-Compress-Zlib.list
+%files -n perl-Archive-Extract-tgz-Archive-Tar-IO-Zlib -f %{oreon_filedir}/perl-Archive-Extract-tgz-Archive-Tar-IO-Zlib.list
+%files -n perl-Archive-Extract-txz-tar-unxz -f %{oreon_filedir}/perl-Archive-Extract-txz-tar-unxz.list
+%files -n perl-Archive-Extract-txz-Archive-Tar-IO-Uncompress-UnXz -f %{oreon_filedir}/perl-Archive-Extract-txz-Archive-Tar-IO-Uncompress-UnXz.list
+%files -n perl-Archive-Extract-Z-uncompress -f %{oreon_filedir}/perl-Archive-Extract-Z-uncompress.list
+%files -n perl-Archive-Extract-Z-Compress-Zlib -f %{oreon_filedir}/perl-Archive-Extract-Z-Compress-Zlib.list
+%files -n perl-Archive-Extract-zip-unzip -f %{oreon_filedir}/perl-Archive-Extract-zip-unzip.list
+%files -n perl-Archive-Extract-zip-Archive-Zip -f %{oreon_filedir}/perl-Archive-Extract-zip-Archive-Zip.list
+%files -n perl-Archive-Extract-xz-unxz -f %{oreon_filedir}/perl-Archive-Extract-xz-unxz.list
+%files -n perl-Archive-Extract-xz-IO-Uncompress-UnXz -f %{oreon_filedir}/perl-Archive-Extract-xz-IO-Uncompress-UnXz.list
 
 %changelog
+
 %autochangelog

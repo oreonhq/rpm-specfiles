@@ -1,53 +1,117 @@
-%global source0_hash 99db059725dc7061c1647099fe8ce619ba2ce520018606a2f7a720032622a9b5
-
+%global source0_hash 461244cf1de8ed28d0c07cc548342b9e7969d46e17ef8d71b5d3064307930a25
 Name:           xonsh
 Version:        0.24.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A general purpose, Python-ish shell
-
-# xonsh is BSD-2-Clause.
-# xonsh/winutils.py and xonsh/xoreutils/_which.py contain MIT code.
 License:        BSD-2-Clause AND MIT
 URL:            https://xon.sh
-Source0:        %pypi_source
+Source0:        https://files.pythonhosted.org/packages/source/x/%{name}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  python3-devel
-# needed for tests:
-BuildRequires:  %{py3_dist ply}
-BuildRequires:  %{py3_dist prompt-toolkit}
-BuildRequires:  %{py3_dist pygments}
-BuildRequires:  %{py3_dist pyte}
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist pytest-mock}
-BuildRequires:  %{py3_dist pytest-subprocess}
-BuildRequires:  %{py3_dist pytest-rerunfailures}
-BuildRequires:  %{py3_dist requests}
-BuildRequires:  %{py3_dist virtualenv}
-BuildRequires:  bash-completion
-BuildRequires:  git-core
-BuildRequires:  man-db
-BuildRequires:  /usr/bin/python
-
-# required by "ptk" extra:
 Requires:       %{py3_dist prompt-toolkit}
 Requires:       %{py3_dist pygments}
 Requires:       %{py3_dist pyperclip}
-
-# required by "setproctitle" extra:
 Requires:       %{py3_dist setproctitle}
-
-# required by "full" extra:
 Requires:       %{py3_dist distro}
 Requires:       %{py3_dist ujson}
-
-# unbundled in prep
 Requires:       %{py3_dist ply}
-
-# required for vox
 Requires:       %{py3_dist virtualenv}
-
 Recommends:     bash-completion
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61
+Requires:       python3-xonsh = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-xonsh+ptk
+Summary:        Metapackage for python3-xonsh ptk extras
+Requires:       python3-xonsh = %{version}-%{release}
+Requires:       python3dist(prompt-toolkit) >= 3.0.29
+Provides:       python3dist(xonsh[ptk]) = %{version}-%{release}
+
+%description -n python3-xonsh+ptk
+Metapackage for python3-xonsh ptk extras.
+
+%package -n       python3-xonsh+pygments
+Summary:        Metapackage for python3-xonsh pygments extras
+Requires:       python3-xonsh = %{version}-%{release}
+Requires:       python3dist(pygments) >= 2.2
+Provides:       python3dist(xonsh[pygments]) = %{version}-%{release}
+
+%description -n python3-xonsh+pygments
+Metapackage for python3-xonsh pygments extras.
+
+%package -n       python3-xonsh+mac
+Summary:        Metapackage for python3-xonsh mac extras
+Requires:       python3-xonsh = %{version}-%{release}
+Provides:       python3dist(xonsh[mac]) = %{version}-%{release}
+
+%description -n python3-xonsh+mac
+Metapackage for python3-xonsh mac extras.
+
+%package -n       python3-xonsh+linux
+Summary:        Metapackage for python3-xonsh linux extras
+Requires:       python3-xonsh = %{version}-%{release}
+Provides:       python3dist(xonsh[linux]) = %{version}-%{release}
+
+%description -n python3-xonsh+linux
+Metapackage for python3-xonsh linux extras.
+
+%package -n       python3-xonsh+proctitle
+Summary:        Metapackage for python3-xonsh proctitle extras
+Requires:       python3-xonsh = %{version}-%{release}
+Provides:       python3dist(xonsh[proctitle]) = %{version}-%{release}
+
+%description -n python3-xonsh+proctitle
+Metapackage for python3-xonsh proctitle extras.
+
+%package -n       python3-xonsh+full
+Summary:        Metapackage for python3-xonsh full extras
+Requires:       python3-xonsh = %{version}-%{release}
+Provides:       python3dist(xonsh[full]) = %{version}-%{release}
+
+%description -n python3-xonsh+full
+Metapackage for python3-xonsh full extras.
+
+%package -n       python3-xonsh+bestshell
+Summary:        Metapackage for python3-xonsh bestshell extras
+Requires:       python3-xonsh = %{version}-%{release}
+Requires:       python3dist(prompt-toolkit) >= 3.0.29
+Requires:       python3dist(pygments) >= 2.2
+Provides:       python3dist(xonsh[bestshell]) = %{version}-%{release}
+
+%description -n python3-xonsh+bestshell
+Metapackage for python3-xonsh bestshell extras.
+
+%package -n       python3-xonsh+test
+Summary:        Metapackage for python3-xonsh test extras
+Requires:       python3-xonsh = %{version}-%{release}
+Requires:       python3dist(pytest) >= 7
+Requires:       python3dist(prompt-toolkit) >= 3.0.29
+Requires:       python3dist(pygments) >= 2.2
+Requires:       python3dist(coverage) >= 5.3.1
+Requires:       python3dist(pyte) >= 0.8.0
+Requires:       python3dist(virtualenv) >= 20.16.2
+Provides:       python3dist(xonsh[test]) = %{version}-%{release}
+
+%description -n python3-xonsh+test
+Metapackage for python3-xonsh test extras.
+
+%package -n       python3-xonsh+dev
+Summary:        Metapackage for python3-xonsh dev extras
+Requires:       python3-xonsh = %{version}-%{release}
+Provides:       python3dist(xonsh[dev]) = %{version}-%{release}
+
+%description -n python3-xonsh+dev
+Metapackage for python3-xonsh dev extras.
+
+%package -n       python3-xonsh+doc
+Summary:        Metapackage for python3-xonsh doc extras
+Requires:       python3-xonsh = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 3.1
+Provides:       python3dist(xonsh[doc]) = %{version}-%{release}
+
+%description -n python3-xonsh+doc
+Metapackage for python3-xonsh doc extras.
 
 %description
 xonsh is a Python-powered, cross-platform, Unix-gazing shell language and
@@ -58,6 +122,7 @@ xonsh (pronounced conch) is meant for the daily use of experts and novices
 alike.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{version}
@@ -72,25 +137,19 @@ rm -r xonsh/parsers/ply
 # Remove shebang.
 sed --in-place "s:#!\s*/usr.*::" xonsh/xoreutils/_which.py xonsh/webconfig/main.py
 
-%generate_buildrequires
-%pyproject_buildrequires -r
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files xompletions xonsh xontrib
+%oreon_autofiles main
 
 %check
-# Altering PYTHONPATH makes the tests importable.
-%global __pytest PYTHONPATH="$PYTHONPATH:$(pwd)" %{python3} -m xonsh run-tests.xsh test --
-# TODO: broken tests
-# deselected test_integrations fail due to unexpected DeprecationWarning in output, setting PYTHONWARNINGS does not help
-#pytest -v -k "not test_is_tok_color_dict and not test_ptk_prompt and not test_vc_get_branch[hg] and not test_vc_get_branch[fossil] and not test_callable_alias_no_bad_file_descriptor and not test_dirty_working_directory[hg]"
-%pytest -v || :
 
+%global __pytest PYTHONPATH="$PYTHONPATH:$(pwd)" %{python3} -m xonsh run-tests.xsh test --
+%pytest -v || :
 %post
+
 if [ "$1" -ge 1 ]; then
   if [ ! -f %{_sysconfdir}/shells ] ; then
     touch %{_sysconfdir}/shells
@@ -102,20 +161,14 @@ if [ "$1" -ge 1 ]; then
     fi
   done
 fi
-
 %postun
+
 if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
   sed -e '\!^%{_bindir}/xonsh$!d' -e '\!^/bin/xonsh$!d' < %{_sysconfdir}/shells > %{_sysconfdir}/shells.new
   mv %{_sysconfdir}/shells{.new,}
 fi
-
-%files -f %{pyproject_files}
-%doc README.rst
-%license license
-%{_bindir}/xonsh
-%{_bindir}/xonsh-cat
-%{_bindir}/xonsh-uname
-%{_bindir}/xonsh-uptime
+%files
 
 %changelog
+
 %autochangelog

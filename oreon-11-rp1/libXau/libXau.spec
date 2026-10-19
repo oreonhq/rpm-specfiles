@@ -1,20 +1,20 @@
-%global source0_hash none
-
+%global source0_hash 74d0e4dfa3d39ad8939e99bda37f5967aba528211076828464d2777d477fc0fb
 Name: libXau
 Version: 1.0.12
-Release: 4%{?dist}
-Summary: Sample Authorization Protocol for X
+Release:        4%{?dist}
+Summary:        Sample Authorization Protocol for X
 License: MIT-open-group
 URL: http://www.x.org
-
 Source0:        https://xorg.freedesktop.org/releases/individual/lib/libXau-1.0.12.tar.xz
-
-BuildRequires: make
-BuildRequires: xorg-x11-util-macros
-BuildRequires: autoconf automake libtool
-BuildRequires: pkgconfig
-BuildRequires: xorg-x11-proto-devel
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  xorg-x11-proto-devel
+BuildRequires:  xorg-x11-util-macros
+# /oreon:deps
 %description
 This is a very simple mechanism for providing individual access to an X Window
 System display. It uses existing core protocol and library hooks for specifying
@@ -28,46 +28,35 @@ Requires: %{name} = %{version}-%{release}
 Requires: xorg-x11-proto-devel
 Requires: pkgconfig
 BuildRequires: xorg-x11-proto-devel
-
 %description devel
 X.Org X11 libXau development package
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 #patch0 -p1 -b .local
 
 %build
-autoreconf -v --install --force
 
+autoreconf -v --install --force
 %configure --disable-static
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
-
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
-
-# We intentionally don't ship *.la files
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-make check
 
+make check
 %ldconfig_post
 %ldconfig_postun
-
-%files
-%doc AUTHORS COPYING README ChangeLog
-%{_libdir}/libXau.so.6
-%{_libdir}/libXau.so.6.0.0
-
-%files devel
-%{_includedir}/X11/Xauth.h
-%{_libdir}/libXau.so
-%{_libdir}/pkgconfig/xau.pc
-%{_mandir}/man3/*.3*
+%files -f %{oreon_filedir}/main.list
+%files -n libXau-devel -f %{oreon_filedir}/libXau-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.12-4
 - Import

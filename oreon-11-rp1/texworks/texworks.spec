@@ -1,45 +1,37 @@
 %global source0_hash f4017afb359e7c91824bd32b06a96426db88498dc43edfd5fe041599b2a30f19
-
 %global __provides_exclude_from ^%{_libdir}/%{name}/.*\\.so$
-
 Name:           texworks
 Version:        0.6.11
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A simple IDE for authoring TeX documents
 License:        GPL-2.0-or-later
 URL:            https://tug.org/texworks/
 Source0:        https://github.com/TeXworks/texworks/archive/release-%{version}/texworks-release-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  ninja-build
-
-BuildRequires:  hunspell-devel
-BuildRequires:  poppler-qt6-devel
-
+BuildRequires:  cmake(Qt6Concurrent)
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6Core5Compat)
-BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(Qt6UiTools)
-BuildRequires:  cmake(Qt6Concurrent)
-BuildRequires:  cmake(Qt6Xml)
 BuildRequires:  cmake(Qt6LinguistTools)
 BuildRequires:  cmake(Qt6Qml)
-BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Test)
-
-BuildRequires:  zlib-devel
-BuildRequires:  python3-devel
-BuildRequires:  lua-devel
-# provides /usr/bin/xvfb-run
-BuildRequires:  xorg-x11-server-Xvfb
-# for testing
-BuildRequires:  urw-base35-fonts
-
+BuildRequires:  cmake(Qt6UiTools)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cmake(Qt6Xml)
 BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  hunspell-devel
 BuildRequires:  libappstream-glib
-
+BuildRequires:  lua-devel
+BuildRequires:  ninja-build
+BuildRequires:  poppler-qt6-devel
+BuildRequires:  python3-devel
+BuildRequires:  urw-base35-fonts
+BuildRequires:  xorg-x11-server-Xvfb
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 TeXworks is an environment for authoring TeX (LaTeX, ConTeXt, etc) documents,
 with a Unicode-based, TeX-aware editor, integrated PDF viewer, and a clean,
@@ -53,10 +45,10 @@ platforms, especially GNU/Linux and Windows.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}-release-%{version}
-
+%global oreon_srcdir %{name}-release-%{version}
+%oreon_prep
 %build
+
 %cmake \
     -GNinja \
     -DCMAKE_BUILD_TYPE=Release \
@@ -65,34 +57,23 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -DTeXworks_DIC_DIR=%{_datadir}/hunspell \
     -DTeXworks_PLUGIN_DIR=%{_libdir}/texworks \
     -DQT_DEFAULT_MAJOR_VERSION=6
-
 %cmake_build
-
 %install
 %cmake_install
 rm %{buildroot}%{_docdir}/%{name}/COPYING
+%oreon_autofiles main
 
 %check
-# https://github.com/TeXworks/texworks/issues/1035
+
 %ifarch s390x
 xvfb-run -a bash -c "%ctest -E test_poppler-qt6"
 %else
 xvfb-run -a bash -c "%ctest"
 %endif
-
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.xml
-
-%files
-%license COPYING
-%doc %{_docdir}/texworks/
-%{_bindir}/texworks
-%dir %{_libdir}/texworks
-%{_libdir}/texworks/*.so
-%{_mandir}/man1/texworks.1*
-%{_datadir}/applications/org.tug.texworks.desktop
-%{_datadir}/icons/hicolor/*/apps/TeXworks.png
-%{_datadir}/metainfo/org.tug.texworks.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

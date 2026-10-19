@@ -1,31 +1,19 @@
 %global source0_hash d2e4637ae700f72e5196b8fbd749850ed2e5e1e09c5a5be8d06ff55aaccf3b01
-
 Name:           SDL3_image
 Version:        3.4.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Image loading library for SDL
 License:        Zlib AND (HPND-Pbmplus AND Zlib) AND MIT AND (MIT OR Unlicense) AND LicenseRef-Fedora-Public-Domain
-# License breakdown:
-# ./examples/showanim.c: Zlib
-# ./examples/showimage.c: Zlib
-# ./include/SDL3_image/SDL_image.h: Zlib
-# ./src/IMG*.c: Zlib
-# Except:
-# ./src/IMG_gif.c: HPND-Pbmplus AND Zlib
-# ./src/nanosvg.h: Zlib
-# ./src/nanosvgrast.h: Zlib
-# ./src/qoi.h: MIT
-# ./src/stb_image.h: MIT OR Unlicense
-# ./src/tiny_jpeg.h: Public Domain
 URL:            https://github.com/libsdl-org/SDL_image
-
-Source0:        %{url}/releases/download/release-%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/libsdl-org/SDL_image/releases/download/release-%{version}/%{name}-%{version}.tar.gz
+Provides:       bundled(nanosvg)
+# oreon:deps
+BuildRequires:  SDL3-test
 BuildRequires:  cmake
 BuildRequires:  cmake(libavif)
 BuildRequires:  cmake(libjpeg-turbo)
+BuildRequires:  cmake(sdl3)
 BuildRequires:  cmake(webp)
-BuildRequires:  cmake(sdl3) >= 3.2.4
 BuildRequires:  gcc
 BuildRequires:  libjxl-devel
 BuildRequires:  libpng-devel
@@ -33,12 +21,8 @@ BuildRequires:  libpng-static
 BuildRequires:  libtiff-devel
 BuildRequires:  make
 BuildRequires:  perl
-BuildRequires:  SDL3-test
 BuildRequires:  zlib-static
-
-# Some custom version of it:
-Provides:       bundled(nanosvg)
-
+# /oreon:deps
 %description
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library designed
 to provide fast access to the graphics frame buffer and audio device.
@@ -52,7 +36,6 @@ WebP images.
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       cmake-filesystem
-
 %description devel
 The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
@@ -60,17 +43,15 @@ applications that use %{name}.
 %package tests
 Summary:        Tests for the %{name} package
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description tests
 The %{name}-tests package contains tests that can be used to verify the
 functionality of the installed %{name} package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake \
   -DSDLIMAGE_ANI=ON \
   -DSDLIMAGE_ANI_SAVE=ON \
@@ -116,35 +97,22 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
   -DSDLIMAGE_XCF=ON \
   -DSDLIMAGE_XPM=ON \
   -DSDLIMAGE_XV=ON
-
 %cmake_build
-
 %install
 %cmake_install
-
-# s390x fails on WEBP animations:
-# ERROR: 01/23/26 10:14:24: Frame data mismatch at index 1. Expected (256, 256, 20), Got (256, 256, 40)
 %ifnarch s390x
+%oreon_autofiles SDL3_image-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles SDL3_image-tests usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+
 %check
+
 %ctest
 %endif
-
-%files
-%license LICENSE.txt
-%doc CHANGES.txt README.md
-%{_libdir}/lib%{name}.so.*
-
-%files devel
-%{_libdir}/lib%{name}.so
-%{_includedir}/%{name}/
-%{_libdir}/cmake/%{name}/
-%{_libdir}/pkgconfig/sdl3-image.pc
-%{_mandir}/man3/IMG_*.3*
-%{_mandir}/man3/SDL_IMAGE_*.3*
-
-%files tests
-%{_libexecdir}/installed-tests/%{name}
-%{_datadir}/installed-tests/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n SDL3_image-devel -f %{oreon_filedir}/SDL3_image-devel.list
+%files -n SDL3_image-tests -f %{oreon_filedir}/SDL3_image-tests.list
 
 %changelog
+
 %autochangelog

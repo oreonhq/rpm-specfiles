@@ -1,26 +1,24 @@
 %global source0_hash 8419e20e58e493f3ec9d545a17053900ea5686c3e3db25e2c9b338f8a3b4e575
-
 Name: hid4java
 Version: 0.7.0
-Release: 13%{?dist}
-Summary: Java wrapper for the hidapi library
-
+Release:        1%{?dist}
+Summary:        Java wrapper for the hidapi library
 License: MIT
 URL: https://github.com/gary-rowe/hid4java
-Source0: https://github.com/gary-rowe/%{name}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/gary-rowe/%{name}/archive/%{name}-%{version}.tar.gz
 Patch0: load-correct-library-name.patch
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Requires: java-25-headless
 Requires: hidapi
-
-BuildRequires: maven-local-openjdk25
-BuildRequires: mvn(net.java.dev.jna:jna)
-BuildRequires: maven-surefire maven-surefire-provider-junit5
-BuildRequires: junit5
-BuildRequires: apiguardian
-
+# oreon:deps
+BuildRequires:  apiguardian
+BuildRequires:  junit5
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  maven-surefire
+BuildRequires:  maven-surefire-provider-junit5
+BuildRequires:  mvn(net.java.dev.jna:jna)
+# /oreon:deps
 %description
 hid4java supports USB HID devices through a common API. The API is very simple
 but provides great flexibility such as support for feature reports and blocking
@@ -29,11 +27,11 @@ respond instantly to device availability.
 
 %package javadoc
 Summary: Javadoc for %{name}
-
 %description javadoc
 This package contains the API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{name}-%{version}
@@ -55,18 +53,15 @@ for x in `find | grep pom.xml$` ; do
 done
 
 %build
-%mvn_build
 
+%mvn_build
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc AUTHORS README.md
-%license LICENSE
-
-%files javadoc -f .mfiles-javadoc
-%doc AUTHORS README.md
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n hid4java-javadoc -f %{oreon_filedir}/hid4java-javadoc.list
 
 %changelog
+
 %autochangelog

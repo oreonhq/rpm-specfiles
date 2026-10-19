@@ -1,22 +1,20 @@
 %global source0_hash b87ee07ba2c1d0ab92a3e4eccacdf568f981a095a392e3b9efd7e7e4a9e125b1
-
 %global giturl  https://github.com/cddlib/cddlib
-
 Name:           cddlib
 Epoch:          1
 Version:        0.94n
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A library for generating all vertices in convex polyhedrons
 License:        GPL-2.0-or-later
 URL:            https://people.inf.ethz.ch/fukudak/cdd_home/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        %{giturl}/releases/download/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  gmp-devel
 BuildRequires:  make
 BuildRequires:  tex(latex)
-
+# /oreon:deps
 %description
 The C-library cddlib is a C implementation of the Double Description Method of
 Motzkin et al. for generating all vertices (i.e. extreme points) and extreme
@@ -35,32 +33,26 @@ of a polyhedron with cdd.  Also, cdd can solve a linear programming problem,
 i.e. a problem of maximizing and minimizing a linear function over `P`.
 
 %package devel
-# The content is GPL-2.0-or-later.  The remaining licenses cover the various
-# fonts embedded in PDFs.
-# AMS: OFL-1.1-RFN
-# CM: Knuth-CTAN
 License:        GPL-2.0-or-later AND OFL-1.1-RFN AND Knuth-CTAN
 Summary:        Headers for cddlib
 Requires:       gmp-devel%{?_isa}
 Requires:       %{name}%{?_isa} = 1:%{version}-%{release}
-
 %description devel
 Include files for cddlib.
 
 %package static
 Summary:        Static libraries for cddlib
-
 %description static
 Static libraries for cddlib.
 
 %package tools
 Summary:        Sample binaries that use cddlib
 Requires:       %{name}%{?_isa} = 1:%{version}-%{release}
-
 %description tools
 Sample binaries that use cddlib.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -79,75 +71,29 @@ done
 rm -f doc/cddlibman.pdf
 
 %build
-%configure
 
-# Get rid of undesirable hardcoded rpaths; workaround libtool reordering
-# -Wl,--as-needed after all the libraries.
+%configure
 sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
     -e 's|CC="\(.*g..\)"|CC="\1 -Wl,--as-needed"|' \
     -i libtool
-
 %make_build
-
-# Need one more invocation of pdflatex to get cross references correct
 pushd doc
 pdflatex cddlibman
 popd
-
 %install
 %make_install
-
-# Do not prematurely install documentation
 rm -fr %{buildroot}%{_pkgdocdir}
+%oreon_autofiles cddlib-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles cddlib-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles cddlib-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS ChangeLog
-%license COPYING
-%{_libdir}/libcdd.so.0{,.*}
-%{_libdir}/libcddgmp.so.0{,.*}
-
-%files devel
-%doc doc/cddlibman.pdf examples*
-%{_includedir}/cddlib
-%{_libdir}/libcdd.so
-%{_libdir}/libcddgmp.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/pkgconfig/cddgmp.pc
-
-%files static
-%{_libdir}/libcdd.a
-%{_libdir}/libcddgmp.a
-
-%files tools
-%{_bindir}/adjacency
-%{_bindir}/adjacency_gmp
-%{_bindir}/allfaces
-%{_bindir}/allfaces_gmp
-%{_bindir}/cddexec
-%{_bindir}/cddexec_gmp
-%{_bindir}/fourier
-%{_bindir}/fourier_gmp
-%{_bindir}/lcdd
-%{_bindir}/lcdd_gmp
-%{_bindir}/projection
-%{_bindir}/projection_gmp
-%{_bindir}/redcheck
-%{_bindir}/redcheck_gmp
-%{_bindir}/scdd
-%{_bindir}/scdd_gmp
-%{_bindir}/testcdd1
-%{_bindir}/testcdd1_gmp
-%{_bindir}/testcdd2
-%{_bindir}/testcdd2_gmp
-%{_bindir}/testlp1
-%{_bindir}/testlp1_gmp
-%{_bindir}/testlp2
-%{_bindir}/testlp2_gmp
-%{_bindir}/testlp3
-%{_bindir}/testlp3_gmp
-%{_bindir}/testshoot
-%{_bindir}/testshoot_gmp
+%files -f %{oreon_filedir}/main.list
+%files -n cddlib-devel -f %{oreon_filedir}/cddlib-devel.list
+%files -n cddlib-static -f %{oreon_filedir}/cddlib-static.list
+%files -n cddlib-tools -f %{oreon_filedir}/cddlib-tools.list
 
 %changelog
+
 %autochangelog

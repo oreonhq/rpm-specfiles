@@ -1,56 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 90f612afccdb454d2447ecb5229266c6e7f991093deed4ed0a791db01f7fc994
 Name:           python-pysam
 Version:        0.24.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Package for reading, manipulating, and writing genomic data
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://pysam.readthedocs.io/
-Source:         %{pypi_source pysam}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pysam/pysam-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pysam' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(cython) < 4
+BuildRequires:  python3dist(cython) >= 3
+BuildRequires:  python3dist(setuptools) >= 59.0
+Requires:       python3-pysam = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pysam
-Summary:        %{summary}
-
-%description -n python3-pysam %_description
-
+Summary:        Package for reading, manipulating, and writing genomic data
+%description -n python3-pysam
 
 %prep
-%autosetup -p1 -n pysam-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pysam-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pysam usr/lib/python3*/site-packages/pysam* usr/lib64/python3*/site-packages/pysam* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pysam* usr/lib64/python3*/site-packages/pysam* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pysam -f %{pyproject_files}
+%files
+%files -n python3-pysam -f %{oreon_filedir}/python3-pysam.list
 
 %changelog
+
 %autochangelog

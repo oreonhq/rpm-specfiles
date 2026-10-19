@@ -1,27 +1,21 @@
 %global source0_hash 72ea48500ad3d61877f7212aa3d673eab2db28d77b874c5a0b9f88decf41cb73
-
-# I think it's time we blow this scene
-# Get everybody and the stuff together
-# Okay, three, two, one, let's jam
-
 Name:		jam
 Version:	2.6.1
-Release:	4%{?dist}
-# https://spdx.org/licenses/Jam.html
+Release:        1%{?dist}
 License:	Jam
-Summary:	Program construction tool, similar to make
+Summary:        Program construction tool, similar to make
 URL:		http://public.perforce.com/public/jam/index.html
-Source0:	ftp://ftp.perforce.com/jam/%{name}-%{version}.zip
-# Submitted upstream by e-mail
+Source0:        ftp://ftp.perforce.com/jam/%{name}-%{version}.zip
 Patch0:		jam-2.5-overflow.patch
 Patch1:		jam-missing-includes.patch
 Patch2:		jam-implicit-int.patch
 Patch3:		jam-2.5-argv-fixup.patch
 Patch4:		jam-2.6.1-fix-typo.patch
-BuildRequires:	gcc
-BuildRequires:	byacc
-BuildRequires:	make
-
+# oreon:deps
+BuildRequires:  byacc
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 Jam is a program construction tool, like make. Jam recursively builds target
 files from source files, using dependency information and updating actions
@@ -31,6 +25,7 @@ for common use, relying on a user-provide file "Jamfile" to enumerate actual
 targets and sources.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -41,18 +36,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P4 -p1 -b .fix-typo
 
 %build
-make CFLAGS="$RPM_OPT_FLAGS" CCFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
 
+make CFLAGS="$RPM_OPT_FLAGS" CCFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 install -m0755 bin.linux*/jam $RPM_BUILD_ROOT/%{_bindir}
 install -m0755 bin.linux*/mkjambase $RPM_BUILD_ROOT/%{_bindir}
+%oreon_autofiles main
 
-%files
-%doc README RELNOTES *.html
-%{_bindir}/jam
-%{_bindir}/mkjambase
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

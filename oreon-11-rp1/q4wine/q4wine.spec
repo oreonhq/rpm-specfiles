@@ -1,26 +1,24 @@
-%global source0_hash 6d1f2bfbca4b783dabc7748ba34e9856c25fc4fca469e7f78fd2442797096e68
-
+%global source0_hash e27d32c09e53c36cdd6ab9e9a2587f1d5a8800b3efab8784ead3e1713c8cbfd9
 %undefine __cmake_in_source_build
-
 Name:           q4wine
 Version:        1.4.2
 Release:        1%{?dist}
 Summary:        Qt GUI for wine
-
 License:        GPL-3.0-or-later
 URL:            http://q4wine.brezblock.org.ua/
-Source:         http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-
-BuildRequires:  qt6-qtbase-devel qt6-linguist qt6-qttools-devel qt6-qtsvg-devel
-#BuildRequires:  qtsingleapplication-qt6-devel
-BuildRequires:  cmake >= 3.24
-BuildRequires:  desktop-file-utils libappstream-glib
-BuildRequires:  icoutils
-
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Requires:       wine-core icoutils sqlite
-
 ExclusiveArch:  %{ix86} x86_64 %{arm} aarch64
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  icoutils
+BuildRequires:  libappstream-glib
+BuildRequires:  qt6-linguist
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtsvg-devel
+BuildRequires:  qt6-qttools-devel
+# /oreon:deps
 %description
 Q4Wine is a qt GUI for wine. It will help
 you manage wine prefixes and installed applications.
@@ -37,6 +35,7 @@ General features:
 * Winetriks support.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -45,39 +44,27 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 #rm -rf src/third-party/SingleApplication*
 
 %build
+
 %{cmake} \
     -DWITH_SYSTEM_SINGLEAPP=OFF \
     -DWITH_ICOUTILS=ON \
     -DUSE_GZIP=ON \
     -DRELEASE=ON ..
 %cmake_build
-
 %install
 %cmake_install
-
-# metadata magic
 mkdir -p %{buildroot}%{_metainfodir}
 install -pm 644 ua.org.brezblock.q4wine.appdata.xml %{buildroot}%{_metainfodir}/
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
-
 rm -f %{buildroot}%{_datadir}/icons/ubuntu-mono-dark/scalable/apps/q4wine.svg
-
-# no %find_lang macro as l10n go to main /usr/share/q4wine dir
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/q4wine.desktop
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*.appdata.xml
-
-%files
-%license COPYING
-%doc AUTHORS.md README.md Changelog.md
-%{_bindir}/q4wine*
-%{_libdir}/q4wine
-%{_datadir}/applications/q4wine.desktop
-%{_mandir}/man1/q4wine*.gz
-%{_datadir}/icons/hicolor/scalable/apps/q4wine*.svg
-%{_datadir}/metainfo/*.xml
-%{_datadir}/q4wine
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

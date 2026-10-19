@@ -1,57 +1,48 @@
 %global source0_hash a5967141527dc5b172d322a6003c23aeec253160f650bb36430a06ddaefa7e2e
-
 %global branch 1.28
-
 Name:          mate-applets
 Version:       %{branch}.1
-Release:       %autorelease
-Summary:       MATE Desktop panel applets
-# Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        MATE Desktop panel applets
 License:       GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL:           http://mate-desktop.org
-Source0:       http://pub.mate-desktop.org/releases/%{branch}/%{name}-%{version}.tar.xz
-
-BuildRequires: dbus-glib-devel
-BuildRequires: gucharmap-devel
-BuildRequires: libgtop2-devel
-BuildRequires: libmateweather-devel
-BuildRequires: libnl3-devel
-BuildRequires: libnotify-devel
-BuildRequires: libICE-devel
-BuildRequires: libSM-devel
-BuildRequires: libwnck3-devel
-BuildRequires: libxml2-devel
-BuildRequires: make
-BuildRequires: mate-common
-BuildRequires: mate-desktop-devel
-BuildRequires: mate-settings-daemon-devel
-BuildRequires: mate-notification-daemon
-BuildRequires: mate-panel-devel
-BuildRequires: polkit-devel
-BuildRequires: startup-notification-devel
-Buildrequires: upower-devel
-Buildrequires: gtksourceview4-devel
+Source0:        http://pub.mate-desktop.org/releases/%{branch}/%{name}-%{version}.tar.xz
 %ifnarch s390 s390x sparc64
-BuildRequires: kernel-tools-libs-devel
 %endif
-
-# not kernel-tools for this arch any more
 ExcludeArch: i386 i686
-
 Provides:   mate-netspeed%{?_isa} = %{version}-%{release}
 Provides:   mate-netspeed = %{version}-%{release}
 Obsoletes:  mate-netspeed < %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  dbus-glib-devel
+BuildRequires:  gtksourceview4-devel
+BuildRequires:  gucharmap-devel
+BuildRequires:  kernel-tools-libs-devel
+BuildRequires:  libICE-devel
+BuildRequires:  libSM-devel
+BuildRequires:  libgtop2-devel
+BuildRequires:  libmateweather-devel
+BuildRequires:  libnl3-devel
+BuildRequires:  libnotify-devel
+BuildRequires:  libwnck3-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  mate-common
+BuildRequires:  mate-desktop-devel
+BuildRequires:  mate-notification-daemon
+BuildRequires:  mate-panel-devel
+BuildRequires:  mate-settings-daemon-devel
+BuildRequires:  polkit-devel
+BuildRequires:  startup-notification-devel
+BuildRequires:  upower-devel
+# /oreon:deps
 %description
 MATE Desktop panel applets
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-#NOCONFIGURE=1 ./autogen.sh
 
 %configure   \
     --disable-schemas-compile                \
@@ -63,58 +54,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     --libexecdir=%{_libexecdir}/mate-applets \
     --with-dbus-sys=%{_datadir}/dbus-1/system.d \
     --enable-in-process
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=2241946
-# fix linking gtksourceview
 sed -i /LDFLAGS/s/--as-needed/--no-as-needed/g stickynotes/Makefile
-
 make %{?_smp_mflags} V=1
-
 %install
 %{make_install}
-
 %find_lang %{name} --with-gnome --all-name
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc AUTHORS COPYING README
-%{_bindir}/mate-cpufreq-selector
-%{_libdir}/mate-applets
-#%%{_libexecdir}/mate-applets
-%config(noreplace) %{_sysconfdir}/sound/events/mate-battstat_applet.soundlist
-%{_datadir}/dbus-1/system.d/org.mate.CPUFreqSelector.conf
-%{_datadir}/mate-applets
-%{_datadir}/mate-panel/applets
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.CommandAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.TimerAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.AccessxStatusAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.BattstatAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.CharpickerAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.DriveMountAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.GeyesAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.StickyNotesAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.TrashAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.MateWeatherAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.MultiLoadAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.NetspeedAppletFactory.service
-#%%{_datadir}/dbus-1/services/org.mate.panel.applet.CPUFreqAppletFactory.service
-%{_datadir}/dbus-1/system-services/org.mate.CPUFreqSelector.service
-%{_datadir}/glib-2.0/schemas/org.mate.panel.applet.battstat.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.panel.applet.charpick.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.drivemount.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.panel.applet.geyes.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.panel.applet.multiload.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.stickynotes.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.panel.applet.cpufreq.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.panel.applet.command.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.panel.applet.timer.gschema.xml
-%{_datadir}/glib-2.0/schemas/org.mate.panel.applet.netspeed.gschema.xml
-%{_datadir}/polkit-1/actions/org.mate.cpufreqselector.policy
-%{_datadir}/icons/hicolor/*/apps/*.png
-%{_datadir}/icons/hicolor/*/devices/*.png
-%{_datadir}/icons/hicolor/*/status/*.png
-%{_datadir}/icons/hicolor/scalable/apps/*.svg
-%{_mandir}/man1/*
-%{_datadir}/pixmaps/mate-cpufreq-applet
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

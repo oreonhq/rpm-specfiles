@@ -1,49 +1,39 @@
 %global source0_hash ec56d12ec9ffdb9877c12692ea6e51620b1ae44473d3d253b27fc31ed9ebb4dd
-
 Summary:        A program for recovering corrupt partition tables
 Name:           gpart
 Version:        0.3
-Release:        25%{?dist}
+Release:        1%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://github.com/baruch/%{name}/
-Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-# https://github.com/baruch/gpart/pull/16
+Source0:        https://github.com/baruch/%{name}//archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         fsf_address.patch
-
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  gcc
 BuildRequires:  make
-
+# /oreon:deps
 %description
 Gpart is a small tool which tries to guess what partitions are on a PC
 type harddisk in case the primary partition table was damaged.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
 autoreconf -f -i
 
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%license COPYING
-%if 0%{?el7}
-%dir %{_datadir}/doc/%{name}
-%{_datadir}/doc/%{name}/*
-%else
-%dir %{_pkgdocdir}
-%{_pkgdocdir}/*
-%endif
-%{_sbindir}/%{name}
-%{_mandir}/man8/%{name}.8*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

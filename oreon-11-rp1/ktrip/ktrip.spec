@@ -1,77 +1,61 @@
 %global source0_hash 99d58a9bf2bf1ff4ee357e1f910eb995719350d2ff8bcc6d6fa250444f101d42
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:          ktrip
 Version:       26.04.3
-Release:       1%{?dist}
-Summary:       Public transport navigation, allows you to find journeys between specified locations, departures for a specific station and shows real-time delay and disruption information.
-
+Release:        1%{?dist}
+Summary:        Public transport navigation, allows you to find journeys between specified locations, departures for a specific station and shows real-time delay and disruption information.
 License:       GPL-2.0-or-later
 Url:           https://invent.kde.org/utilities/ktrip
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires: gcc-c++
-BuildRequires: cmake 
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Qml)
-BuildRequires: cmake(Qt6QuickControls2)
-BuildRequires: cmake(Qt6Widgets)
-
-BuildRequires: cmake(KF6QQC2DesktopStyle)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KPublicTransport)
-BuildRequires: cmake(KF6KirigamiAddons)
-BuildRequires: cmake(KF6Crash)
-
-BuildRequires: pkgconfig(zlib)
-
-# QML module dependencies
 Requires:      kf6-ki18n%{?_isa}
 Requires:      kf6-kirigami2%{?_isa}
 Requires:      kf6-kirigami2-addons%{?_isa}
 Requires:      kpublictransport%{?_isa}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KirigamiAddons)
+BuildRequires:  cmake(KF6QQC2DesktopStyle)
+BuildRequires:  cmake(KPublicTransport)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6QuickControls2)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(zlib)
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake_kf6
-
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name}
 desktop-file-install --dir=%{buildroot}%{_kf6_datadir}/applications/ %{buildroot}/%{_kf6_datadir}/applications/org.kde.%{name}.desktop
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_datadir}/metainfo/org.kde.%{name}.appdata.xml
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-
-%files -f %{name}.lang
-%{_kf6_bindir}/%{name}
-%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-%{_kf6_datadir}/icons/hicolor/*/apps/org.kde.%{name}.*
-%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

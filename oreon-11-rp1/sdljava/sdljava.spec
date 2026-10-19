@@ -1,53 +1,39 @@
 %global source0_hash cb2e3b798ae599d0126e5a9b806da76a608a809babf69bd5d288db361c779859
-
-# Copyright (c) 2007 oc2pus <toni@links2linux.de>
-# Copyright (c) 2007 Hans de Goede <j.w.r.degoede@hhs.nl>
-# This file and all modifications and additions to the pristine
-# package are under the same license as the package itself.
-#
-# Please submit bugfixes or comments to us at the above email addresses
-
 Name:           sdljava
 Version:        0.9.1
-Release:        68%{?dist}
+Release:        1%{?dist}
 Summary:        Java binding to the SDL API
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://sdljava.sourceforge.net/
-# this is http://downloads.sourceforge.net/%%{name}/%%{name}-%%{version}.tar.gz
-# with the included Microsoft Copyrighted Arial fonts removed
 Source0:        %{name}-%{version}.tar.gz
 Source1:        %{name}-runtest.sh
 Patch0:         sdljava-0.9.1-regen.patch
 Patch1:         sdljava-0.9.1-ftgl213.patch
 Patch2:         sdljava-0.9.1-ruby19.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  make
-BuildRequires:  ftgl-devel
-BuildRequires:  glew-devel
+ExclusiveArch:  %{java_arches}
+Requires:       java-25
+Requires:       javapackages-filesystem
+Requires:       jdom
+# oreon:deps
+BuildRequires:  //bin/ruby
 BuildRequires:  SDL-devel
 BuildRequires:  SDL_gfx-devel
 BuildRequires:  SDL_image-devel
 BuildRequires:  SDL_mixer-devel
 BuildRequires:  SDL_ttf-devel
-
+BuildRequires:  ant-openjdk25
+BuildRequires:  font(dejavusans)
+BuildRequires:  fontconfig
+BuildRequires:  ftgl-devel
+BuildRequires:  gcc-c++
+BuildRequires:  glew-devel
 BuildRequires:  javapackages-local-openjdk25
-BuildRequires:  ant-openjdk25 
-BuildRequires:  swig
 BuildRequires:  jdom
-BuildRequires:  xml-commons-apis
-BuildRequires:  %{_bindir}/ruby
+BuildRequires:  make
 BuildRequires:  rubygems
-# To generate the replacement font symlinks for the sdljava-demo testdata
-BuildRequires:  font(dejavusans) fontconfig
-# sdljava provides java bindings for SDL, so it can only run on java_arches
-ExclusiveArch:  %{java_arches}
-
-Requires:       java-25
-Requires:       javapackages-filesystem
-Requires:       jdom
-
+BuildRequires:  swig
+BuildRequires:  xml-commons-apis
+# /oreon:deps
 %description
 sdljava is a Java binding to the SDL API being developed by Ivan Ganza.
 
@@ -58,7 +44,6 @@ efficient and easy to use.
 %package javadoc
 Summary:        Javadoc for %{name}
 BuildArch:      noarch
-
 %description javadoc
 Javadoc for %{name}.
 
@@ -68,11 +53,11 @@ BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 Requires:       font(dejavusans)
 Requires:       javapackages-tools
-
 %description demo
 Demonstrations and samples for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -110,10 +95,7 @@ rm src/sdljava/native/SDL*_wrap.c src/sdljava/native/SDL_types.h
 rm src/org/gljava/opengl/native/glew_wrap.c
 
 %build
-# We must add -D__%%{_arch}__ to swigs arguments as swig doesn't do that itself.
-# Special case ppc as the define is powerpc not ppc and both ppc and ppc64
-# must be set for ppc64, also add -D__LONG_DOUBLE_128__ which works around
-# swig barfing on bits/stdlib-ldbl.h
+
 %ifarch ppc
 export ARCH_DEFINE="-D__powerpc__ -D__LONG_DOUBLE_128__"
 %endif
@@ -126,58 +108,40 @@ export ARCH_DEFINE="-D__powerpc__ -D__powerpc64__ -D__LITTLE_ENDIAN__ -D\"__BYTE
 %ifarch s390x
 export ARCH_DEFINE="-D__s390x__ -D__LONG_DOUBLE_128__"
 %endif
-# special case ix86 as all of ix86 should define __i386__
 %ifarch %{ix86}
 export ARCH_DEFINE="-D__i386__"
 %endif
-# arm also needs a bunch of special defines
 %ifarch %{arm}
 export ARCH_DEFINE="-D__arm__ -D__ARMEL__ -D__ARM_EABI__"
 %ifnarch armv5tel
 export ARCH_DEFINE="$ARCH_DEFINE -D__ARM_PCS_VFP"
 %endif
 %endif
-# All other archs
 if [ -z "$ARCH_DEFINE" ]; then
   export ARCH_DEFINE="-D__%{_arch}__"
 fi
-
 export JAVA_HOME=%{_jvmdir}/java
-
 pushd src/sdljava/native
 make CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fPIC"
 make libsdljava_gfx.so CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fPIC"
 popd
-
 pushd src/org/gljava/opengl/native
 make CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fPIC"
 popd
-
 pushd src/org/gljava/opengl/native/ftgl
 make CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fPIC"
 popd
-
 ant jar javadoc
-
 %install
-# dirs
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_jnidir}
 mkdir -p $RPM_BUILD_ROOT%{_javadocdir}/%{name}
-
-# jars
 install -m 644 lib/%{name}.jar \
   $RPM_BUILD_ROOT%{_jnidir}/%{name}.jar
-
-# native libraries
 install -m 755 lib/*.so $RPM_BUILD_ROOT%{_libdir}/%{name}
-
-# javadoc
 cp -pr docs/api/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}
-
-# demo scripts
 install -m 755 %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}
 pushd bin
 rm runtest.sh
@@ -188,8 +152,6 @@ for i in `ls -1 *.sh`; do
    install -m 755 $i $RPM_BUILD_ROOT%{_bindir}/%{name}-$FN.sh
 done
 popd
-
-#test data
 cp -a testdata $RPM_BUILD_ROOT%{_datadir}/%{name}
 ln -s $(fc-match -f "%{file}" "sans") \
   $RPM_BUILD_ROOT%{_datadir}/%{name}/testdata/arial.ttf
@@ -199,18 +161,12 @@ ln -s $(fc-match -f "%{file}" "sans:italic") \
   $RPM_BUILD_ROOT%{_datadir}/%{name}/testdata/ariali.ttf
 ln -s $(fc-match -f "%{file}" "sans:bold:italic") \
   $RPM_BUILD_ROOT%{_datadir}/%{name}/testdata/arialbi.ttf
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README TODO docs/CHANGES_0_9_1
-%{_jnidir}/%{name}.jar
-%{_libdir}/%{name}
-
-%files javadoc
-%doc %{_javadocdir}/%{name}
-
-%files demo
-%{_bindir}/%{name}-*.sh
-%{_datadir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n sdljava-javadoc -f %{oreon_filedir}/sdljava-javadoc.list
+%files -n sdljava-demo -f %{oreon_filedir}/sdljava-demo.list
 
 %changelog
+
 %autochangelog

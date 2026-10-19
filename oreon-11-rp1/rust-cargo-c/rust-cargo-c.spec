@@ -1,36 +1,30 @@
 %global source0_hash 6b2ddde58a8a773ccce4b6384acacd3ce01373f52717dd2424633ed46755c627
-
 %bcond check 1
-
 %ifarch %{ix86}
 %global rustflags_debuginfo 1
 %endif
-
 %global crate cargo-c
 %global crate_version 0.10.25+cargo-0.99.0
 %global crate_instdir %{cargo_registry}/%{crate}-%{crate_version}
-
 Name:           rust-cargo-c
 Version:        0.10.25
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Helper program to build and install c-like libraries
-
 License:        MIT
 URL:            https://crates.io/crates/cargo-c
-Source0:        https://static.crates.io/crates/cargo-c/cargo-c-%{crate_version}.crate
+Source0:        https://static.crates.io/crates/%{crate}/%{crate}-%{crate_version}.crate
 Source1:        macros.cargo-c
 Patch:          cargo-c-fix-metadata-auto.diff
 Patch:          cargo-c-fix-metadata.diff
-
-BuildRequires:  cargo-rpm-macros >= 24
-
-%global _description %{expand:
-Helper program to build and install c-like libraries.}
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  rustc
+# /oreon:deps
+%description
 
 %package     -n %{crate}
-Summary:        %{summary}
+Summary:        Helper program to build and install c-like libraries
 License:        %{shrink:
     MIT AND
     AND Apache-2.0
@@ -50,67 +44,46 @@ License:        %{shrink:
     AND (MIT-0 OR Apache-2.0)
     AND (Unlicense OR MIT)
 }
-
-%description -n %{crate} %{_description}
-
-%files       -n %{crate}
-%license LICENSE
-%license LICENSE.dependencies
-%doc README.md
-%{_bindir}/cargo-capi
-%{_bindir}/cargo-cbuild
-%{_bindir}/cargo-cinstall
-%{_bindir}/cargo-ctest
-%{_rpmmacrodir}/macros.cargo-c
-Provides:       cargo-c = %{version}-%{release}
+%description -n %{crate}
 
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
-
-%description    devel %{_description}
+%description    devel
 
 This package contains library source intended for building other packages which
 use the "%{crate}" crate.
 
-%files          devel
-%license %{crate_instdir}/LICENSE
-%doc %{crate_instdir}/README.md
-%{crate_instdir}/
-
 %package     -n %{name}+default-devel
-Summary:        %{summary}
+Summary:        Helper program to build and install c-like libraries
 BuildArch:      noarch
-
-%description -n %{name}+default-devel %{_description}
+%description -n %{name}+default-devel
 
 This package contains library source intended for building other packages which
 use the "default" feature of the "%{crate}" crate.
 
-%files       -n %{name}+default-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{crate}-%{crate_version} -p1
-%cargo_prep
-
-%generate_buildrequires
-%cargo_generate_buildrequires
-
+%oreon_vendor_cargo
 %build
+
 %cargo_build
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
-
 %install
 %cargo_install
 install -D -p -m 0644 -t %{buildroot}/%{_rpmmacrodir} %{SOURCE1}
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with check}
 %check
+
 %cargo_test
 %endif
+%files -f %{oreon_filedir}/main.list
+%files -n cargo-c -f %{oreon_filedir}/cargo-c.list
+%files -n rust-cargo-c-devel -f %{oreon_filedir}/rust-cargo-c-devel.list
 
 %changelog
+
 %autochangelog

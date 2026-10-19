@@ -1,50 +1,45 @@
 %global source0_hash 4dea880ff3c2f698bfd62c982b259340f9abcd7f67e6c8eb2b32c61f71644b7b
-
 Name:           netsurf
 Version:        3.11
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        Compact graphical web browser
-
-# There are MIT licensed bits as well as LGPL-licensed talloc, but most
-# files are GPLv2 and that is the computed effective license.
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            https://www.netsurf-browser.org/
 Source0:        https://download.netsurf-browser.org/netsurf/releases/source-full/netsurf-all-%{version}.tar.gz
-
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  flex
-BuildRequires:  bison
-BuildRequires:  gperf
-BuildRequires:  zlib-devel
-BuildRequires:  libjpeg-devel
-BuildRequires:  openssl-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  expat-devel
-BuildRequires:  curl-devel
-BuildRequires:  libpng-devel
-BuildRequires:  /usr/bin/xxd
+# oreon:deps
 BuildRequires:  /usr/bin/hostname
 BuildRequires:  /usr/bin/perl
-BuildRequires:  perl(Getopt::Long)
-BuildRequires:  perl(Digest::MD5)
-BuildRequires:  perl(IO::Compress::Gzip)
-BuildRequires:  perl(HTML::Entities)
-BuildRequires:  pkgconfig(libwebp)
-BuildRequires:  pkgconfig(librsvg-2.0)
+BuildRequires:  /usr/bin/xxd
+BuildRequires:  bison
+BuildRequires:  curl-devel
 BuildRequires:  desktop-file-utils
+BuildRequires:  expat-devel
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  gdk-pixbuf2-modules-extra(x86-64)
+BuildRequires:  gperf
+BuildRequires:  gtk3-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  perl(Digest::MD5)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(HTML::Entities)
+BuildRequires:  perl(IO::Compress::Gzip)
+BuildRequires:  pkgconfig(librsvg-2.0)
 BuildRequires:  pkgconfig(libvncserver)
+BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(sdl)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(xcb)
+BuildRequires:  pkgconfig(xcb-atom)
 BuildRequires:  pkgconfig(xcb-icccm)
 BuildRequires:  pkgconfig(xcb-image)
 BuildRequires:  pkgconfig(xcb-keysyms)
-BuildRequires:  pkgconfig(xcb-atom)
 BuildRequires:  pkgconfig(xcb-util)
-BuildRequires:  gdk-pixbuf2-modules-extra%{?_isa}
-
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 NetSurf is a compact graphical web browser which aims for HTML5, CSS and
 JavaScript support.
@@ -54,11 +49,9 @@ want to use.
 
 %package fb
 Summary:        Compact graphical web browser (framebuffer frontend)
-
 Requires:       dejavu-sans-fonts >= 2.37-5
 Requires:       dejavu-serif-fonts >= 2.37-5
 Requires:       dejavu-sans-mono-fonts >= 2.37-5
-
 %description fb
 NetSurf is a compact graphical web browser which aims for HTML5, CSS and
 JavaScript support.
@@ -66,6 +59,7 @@ JavaScript support.
 This package ships the version with a special-purpose framebuffer frontend.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n netsurf-all-%{version}
@@ -99,18 +93,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
         NETSURF_USE_RSVG=YES
 
 %build
-# Abort the build if there's a new font we should substitute
-[ $(grep NETSURF_FB_FONT_ netsurf/frontends/framebuffer/Makefile.defaults |wc -l) = 10 ]
 
+[ $(grep NETSURF_FB_FONT_ netsurf/frontends/framebuffer/Makefile.defaults |wc -l) = 10 ]
 export CFLAGS='%{optflags}'
 export CXXFLAGS='%{optflags}'
 make %{?_smp_mflags} %{fb_make_opts}
 make %{?_smp_mflags} %{gtk_make_opts}
-
 %install
 %make_install %{fb_make_opts}
 %make_install %{gtk_make_opts}
-
 mkdir -p %{buildroot}%{_datadir}/pixmaps \
         %{buildroot}%{_datadir}/applications
 install -pm644 netsurf/frontends/gtk/res/netsurf.xpm \
@@ -120,16 +111,11 @@ sed 's/Exec=netsurf-gtk/Exec=netsurf-gtk3/;s/netsurf.png/netsurf/' \
         >%{buildroot}%{_datadir}/applications/netsurf-gtk.desktop
 desktop-file-validate \
         %{buildroot}%{_datadir}/applications/netsurf-gtk.desktop
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_bindir}/netsurf-gtk3
-%{_datadir}/netsurf
-%{_datadir}/applications/netsurf-gtk.desktop
-%{_datadir}/pixmaps/netsurf.xpm
-
-%files fb
-%{_bindir}/netsurf-fb
-%{_datadir}/netsurf
+%files -f %{oreon_filedir}/main.list
+%files -n netsurf-fb -f %{oreon_filedir}/netsurf-fb.list
 
 %changelog
+
 %autochangelog

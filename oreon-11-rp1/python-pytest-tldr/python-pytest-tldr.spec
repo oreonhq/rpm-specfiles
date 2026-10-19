@@ -1,57 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 5c0ccc6991276c8489ff1720f1498d5130690bb8504aaf8c7bd115bf91abc035
 Name:           python-pytest-tldr
 Version:        0.2.6
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A pytest plugin that limits the output to just the things you need.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/freakboy3742/pytest-tldr
-Source:         %{pypi_source pytest_tldr}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_tldr/pytest_tldr-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pytest-tldr' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) == 80.9.0
+BuildRequires:  python3dist(setuptools-scm) == 9.2.2
+Requires:       python3-pytest-tldr = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pytest-tldr
-Summary:        %{summary}
-
-%description -n python3-pytest-tldr %_description
-
+Summary:        A pytest plugin that limits the output to just the things you need.
+# oreon:reqs
+Requires:       python3dist(pytest) >= 7.0.0
+# /oreon:reqs
+%description -n python3-pytest-tldr
 
 %prep
-%autosetup -p1 -n pytest_tldr-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pytest_tldr-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pytest-tldr usr/lib/python3*/site-packages/pytest_tldr* usr/lib64/python3*/site-packages/pytest_tldr* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_tldr* usr/lib64/python3*/site-packages/pytest_tldr* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pytest-tldr -f %{pyproject_files}
+%files
+%files -n python3-pytest-tldr -f %{oreon_filedir}/python3-pytest-tldr.list
 
 %changelog
+
 %autochangelog

@@ -1,31 +1,28 @@
 %global source0_hash 1a858b2960ff9d65c14e24db0cbc5e340ac33323c8fe04b3003ab23a0c6b3471
-
 Name: kdbg
-Summary: A GUI for gdb, the GNU debugger, and KDE
+Summary:        A GUI for gdb, the GNU debugger, and KDE
 Version: 3.2.0
-Release: 3%{?dist}
+Release:        1%{?dist}
 Epoch: 1
-Source:        http://download.sourceforge.net/kdbg/%{name}-%{version}.tar.gz
-# No version specified.
+Source0:        http://download.sourceforge.net/kdbg/%{name}-%{version}.tar.gz
 License: GPL-1.0-or-later
 URL: http://www.kdbg.org/
-
 Requires: gdb
 Requires: xterm
-
-BuildRequires: desktop-file-utils
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Core5Compat)
-BuildRequires: cmake(Qt6Widgets)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6IconThemes)
-BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KF6WindowSystem)
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 KDbg is a K Desktop Environment (KDE) GUI for gdb, the GNU debugger.
 KDbg provides the programmer with an intuitive interface for setting
@@ -33,29 +30,23 @@ breakpoints, inspecting variables, and stepping through code. KDbg
 requires X and KDE to be installed in order to run.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build
+
 %cmake_kf6 -DBUILD_FOR_KDE_VERSION=6
-
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang %{name} --with-html
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc BUGS COPYING README TODO ReleaseNotes-*
-%config (noreplace) /etc/xdg/kdbgrc
-%{_bindir}/*
-%{_datadir}/kxmlgui5/%{name}
-%{_datadir}/applications/*
-%{_kf6_datadir}/%{name}
-%{_datadir}/icons/*/*/*/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Sun Jan 18 2026 Yaakov Selkowitz <yselkowi@redhat.com> - 1:3.2.0-3
 - Build with KF6
 
@@ -377,10 +368,4 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 * Wed Apr 21 1999 Preston Brown <pbrown@redhat.com>
 - initial RPM for PowerTools 6.0
-
-
-
-
-
-
 

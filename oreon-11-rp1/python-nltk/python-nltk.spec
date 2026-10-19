@@ -1,64 +1,44 @@
-%global source0_hash none
-
+%global source0_hash bb9327a461c3811c2fa4900e03840401f2126adfb30c0072827c433bd2444ea4
 Name:           python-nltk
 Version:        3.10.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Natural Language Toolkit
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/nltk/nltk
-Source:         %{pypi_source nltk}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/nltk/nltk-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'nltk' generated automatically by pyp2spec.}
-
 Patch1: fix-import-WordNetLemmatizer.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-nltk = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-nltk
-Summary:        %{summary}
-
-%description -n python3-nltk %_description
+Summary:        Natural Language Toolkit
+%description -n python3-nltk
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-nltk all,corenlp,machine-learning,plot,tgrep,twitter
-
 
 %prep
-%autosetup -p1 -n nltk-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir nltk-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-nltk usr/lib/python3*/site-packages/nltk* usr/lib64/python3*/site-packages/nltk* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/nltk* usr/lib64/python3*/site-packages/nltk* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-nltk -f %{pyproject_files}
-%{_bindir}/nltk
+%files
+%files -n python3-nltk -f %{oreon_filedir}/python3-nltk.list
 
 %changelog
+
 %autochangelog

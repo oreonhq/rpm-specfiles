@@ -1,62 +1,54 @@
-%global source0_hash none
-
+%global source0_hash 1fbd6ef62b491d1a24b7d9302354a66ca6ff12b412f787130be48d7e5c3b318d
 Name:           python-ogr
 Version:        0.63.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        One API for multiple git forges.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/packit/ogr
-Source:         %{pypi_source ogr}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/ogr/ogr-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-ogr = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-ogr+testing
+Summary:        Metapackage for python3-ogr testing extras
+Requires:       python3-ogr = %{version}-%{release}
+Provides:       python3dist(ogr[testing]) = %{version}-%{release}
 
+%description -n python3-ogr+testing
+Metapackage for python3-ogr testing extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ogr' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-ogr
-Summary:        %{summary}
-
-%description -n python3-ogr %_description
+Summary:        One API for multiple git forges.
+# oreon:reqs
+Requires:       python3dist(pyforgejo) >= 2.0.0
+# /oreon:reqs
+%description -n python3-ogr
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-ogr testing
-
 
 %prep
-%autosetup -p1 -n ogr-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ogr-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ogr usr/lib/python3*/site-packages/ogr* usr/lib64/python3*/site-packages/ogr* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ogr* usr/lib64/python3*/site-packages/ogr* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ogr -f %{pyproject_files}
+%files
+%files -n python3-ogr -f %{oreon_filedir}/python3-ogr.list
 
 %changelog
+
 %autochangelog

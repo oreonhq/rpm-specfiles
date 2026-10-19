@@ -1,38 +1,30 @@
 %global source0_hash 302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96
-
 %global libseat_sover   1
 %global _hardened_build 1
-
 %bcond_without  server
-
 Name:           seatd
 Version:        0.9.3
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Minimal seat management daemon
-
 License:        MIT
 URL:            https://sr.ht/~kennylevinsen/seatd/
 Source0:        https://git.sr.ht/~kennylevinsen/seatd/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        seatd.sysusers
-
-BuildRequires:  gcc
-BuildRequires:  meson >= 0.60.0
-
-BuildRequires:  pkgconfig(libsystemd)
 %if %{with server}
+%endif
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  meson
+BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(scdoc)
 BuildRequires:  systemd-rpm-macros
-%endif
-
-
+# /oreon:deps
 %description
 A seat management daemon, that does everything it needs to do.
 Nothing more, nothing less. Depends only on libc.
 
-
 %package -n     libseat
 Summary:        Universal seat management library
-
 %description -n libseat
 A seat management library allowing applications to use whatever seat
 management is available.
@@ -48,80 +40,55 @@ manually selected with the LIBSEAT_BACKEND environment variable.
 Which backend is in use is transparent to the application, providing a
 simple common interface.
 
-
 %package -n     libseat-devel
 Summary:        Development files for libseat
 Requires:       libseat%{?_isa} = %{version}-%{release}
-
 %description -n libseat-devel
 The libseat-devel package contains libraries and header files for
 developing applications that use libseat.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
-
+%oreon_prep
 %build
+
 %meson \
     -Dlibseat-logind=systemd \
     -Dserver=%[%{with server}?"enabled":"disabled"]
 %meson_build
-
-
 %install
 %meson_install
-
 %if %{with server}
 install -D -m 0644 -pv contrib/systemd/%{name}.service \
     %{buildroot}%{_unitdir}/%{name}.service
 install -D -m 0644 -pv %{SOURCE1} \
     %{buildroot}%{_sysusersdir}/%{name}.conf
+%oreon_autofiles libseat usr/*/lib*.so.*
+%oreon_autofiles libseat-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %endif
-
-
 %check
+
 %meson_test
-
-
 %if %{with server}
 %pre
+
 %sysusers_create_compat %{SOURCE1}
-
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
+
 %systemd_postun %{name}.service
-
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/%{name}
-# TODO: seatd-launch should run with elevated privileges, i.e. SUID or CAP_SETUID
-%{_bindir}/%{name}-launch
-%{_mandir}/man1/%{name}.1*
-%{_mandir}/man1/%{name}-launch.1*
-%{_sysusersdir}/%{name}.conf
-%{_unitdir}/%{name}.service
-%endif
-
-%files -n libseat
-%license LICENSE
-%doc README.md
-%{_libdir}/libseat.so.%{libseat_sover}
-
-%files -n libseat-devel
-%{_includedir}/libseat.h
-%{_libdir}/libseat.so
-%{_libdir}/pkgconfig/libseat.pc
-
+%files -f %{oreon_filedir}/main.list
+%files -n libseat -f %{oreon_filedir}/libseat.list
+%files -n libseat-devel -f %{oreon_filedir}/libseat-devel.list
 
 %changelog
+
 * Sun Mar 01 2026 Aleksei Bavshin <alebastr@fedoraproject.org> - 0.9.3-1
 - Update to 0.9.3 (#2443608)
 
@@ -189,3 +156,4 @@ install -D -m 0644 -pv %{SOURCE1} \
 
 * Wed Apr 14 2021 Aleksei Bavshin <alebastr@fedoraproject.org> - 0.5.0-1
 - Initial import (#1949358)
+%endif

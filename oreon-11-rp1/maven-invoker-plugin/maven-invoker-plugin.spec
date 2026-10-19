@@ -1,19 +1,17 @@
 %global source0_hash 69001daaba185861778514f83eaf34778b289cdd32550b096866f05a4342e691
-
 %bcond_with     groovy
-
 Name:           maven-invoker-plugin
 Version:        3.10.1
 Release:        1%{?dist}
 Summary:        Maven Invoker Plugin
-
 License:        Apache-2.0
 URL:            https://maven.apache.org/plugins/maven-invoker-plugin/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo.maven.apache.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
+%if %{with groovy}
+%endif
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-beanutils:commons-beanutils)
 BuildRequires:  mvn(commons-codec:commons-codec)
@@ -21,12 +19,6 @@ BuildRequires:  mvn(commons-collections:commons-collections)
 BuildRequires:  mvn(commons-io:commons-io)
 BuildRequires:  mvn(javax.inject:javax.inject)
 BuildRequires:  mvn(org.apache-extras.beanshell:bsh)
-%if %{with groovy}
-BuildRequires:  mvn(org.apache.groovy:groovy)
-BuildRequires:  mvn(org.apache.groovy:groovy-bom)
-BuildRequires:  mvn(org.apache.groovy:groovy-json)
-BuildRequires:  mvn(org.apache.groovy:groovy-xml)
-%endif
 BuildRequires:  mvn(org.apache.maven.doxia:doxia-sink-api)
 BuildRequires:  mvn(org.apache.maven.plugin-tools:maven-plugin-annotations)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-enforcer-plugin)
@@ -58,7 +50,7 @@ BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.mockito:mockito-junit-jupiter)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
-
+# /oreon:deps
 %description
 The Maven Invoker Plugin is used to run a set of Maven projects. The plugin
 can determine whether each project execution is successful, and optionally
@@ -66,11 +58,11 @@ can verify the output generated from a given project execution.
 
 %package javadoc
 Summary:        Javadoc for %{name}
-
 %description javadoc
 API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q 
 
@@ -83,16 +75,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin org.apache.maven.plugins:maven-checkstyle-plugin
 
 %build
-%mvn_build -f 
 
+%mvn_build -f 
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE NOTICE
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
+%files -n maven-invoker-plugin-javadoc -f %{oreon_filedir}/maven-invoker-plugin-javadoc.list
 
 %changelog
+
 %autochangelog

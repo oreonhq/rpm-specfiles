@@ -1,25 +1,25 @@
 %global source0_hash 97bd59f787d19bc3dff633d35eeb627176574aa7adf65b64a6a4d8dc08f752ed
-
-Summary: Client for sending messages to a host's logged in users
+Summary:        Client for sending messages to a host's logged in users
 Name: rwall
 Version: 0.17
-Release: 71%{?dist}
-# Automatically converted from old format: BSD - review is highly recommended.
+Release:        1%{?dist}
 License: LicenseRef-Callaway-BSD
 Url: ftp://ftp.linux.org.uk/pub/linux/Networking/netkit/
-Source: ftp://ftp.linux.org.uk/pub/linux/Networking/netkit/netkit-rwall-%{version}.tar.gz
+Source0:        ftp://ftp.linux.org.uk/pub/linux/Networking/netkit/netkit-rwall-%{version}.tar.gz
 Source1: rwalld.service
 Patch1: netkit-rwalld-0.10-banner.patch
 Patch2: netkit-rwall-0.17-strip.patch
 Patch3: netkit-rwall-0.17-netgroup.patch
 Patch4: netkit-rwall-0.17-droppriv.patch
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: perl-interpreter
-BuildRequires: libtirpc-devel
-BuildRequires: libnsl2-devel
-BuildRequires: rpcgen
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  libnsl2-devel
+BuildRequires:  libtirpc-devel
+BuildRequires:  make
+BuildRequires:  perl-interpreter
+BuildRequires:  rpcgen
+BuildRequires:  systemd-units
+# /oreon:deps
 %description
 The rwall command sends a message to all of the users logged into a
 specified host.  Actually, your machine's rwall client sends the
@@ -37,7 +37,6 @@ Requires(preun): systemd-units
 Requires(postun): systemd-units
 Requires: portmap
 BuildRequires: systemd-units
-
 %description server
 The rwall command sends a message to all of the users logged into
 a specified host.  The rwall-server package contains the daemon for
@@ -49,6 +48,7 @@ Install rwall-server if you'd like the ability to receive messages
 from users on remote hosts.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n netkit-rwall-%{version}
@@ -65,6 +65,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     ' configure
 
 %build
+
 export CFLAGS="$CFLAGS -I/usr/include/tirpc"
 %ifarch s390 s390x
 CFLAGS="$CFLAGS $RPM_OPT_FLAGS -fPIC" \
@@ -73,35 +74,27 @@ CFLAGS="$CFLAGS $RPM_OPT_FLAGS -fpic" \
 %endif
 sh configure --with-c-compiler=gcc
 make RPM_OPT_FLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
-
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
 mkdir -p ${RPM_BUILD_ROOT}%{_sbindir}
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man{1,8}
 mkdir -p ${RPM_BUILD_ROOT}%{_unitdir}/
-
 make INSTALLROOT=${RPM_BUILD_ROOT} install
-
 install -m 755 %{SOURCE1} ${RPM_BUILD_ROOT}%{_unitdir}/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post server
+
 %systemd_post rwalld.service
-
 %preun server
+
 %systemd_preun rwalld.service
-
 %postun server
+
 %systemd_postun_with_restart rwalld.service
-
-%files
-%{_bindir}/rwall
-%{_mandir}/man1/rwall.1*
-
-%files server
-%{_sbindir}/rpc.rwalld
-%{_mandir}/man8/rpc.rwalld.8*
-%{_mandir}/man8/rwalld.8*
-%{_unitdir}/*
+%files -f %{oreon_filedir}/main.list
+%files -n rwall-server -f %{oreon_filedir}/rwall-server.list
 
 %changelog
+
 %autochangelog

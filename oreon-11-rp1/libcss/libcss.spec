@@ -1,21 +1,19 @@
 %global source0_hash 2df215bbec34d51d60c1a04b01b2df4d5d18f510f1f3a7af4b80cddb5671154e
-
 Name: libcss
 Version: 0.9.2
-Release: %autorelease
-Summary: A CSS parser and selection engine
-
+Release:        1%{?dist}
+Summary:        A CSS parser and selection engine
 License: MIT
 URL: http://www.netsurf-browser.org/projects/libcss/
-Source: http://download.netsurf-browser.org/libs/releases/%{name}-%{version}-src.tar.gz
-
-BuildRequires: gcc
-BuildRequires: netsurf-buildsystem
-BuildRequires: pkgconfig(check)
-BuildRequires: pkgconfig(libparserutils)
-BuildRequires: pkgconfig(libwapcaplet)
-BuildRequires: make
-
+Source0:        http://download.netsurf-browser.org/libs/releases/%{name}-%{version}-src.tar.gz
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  netsurf-buildsystem
+BuildRequires:  pkgconfig(check)
+BuildRequires:  pkgconfig(libparserutils)
+BuildRequires:  pkgconfig(libwapcaplet)
+# /oreon:deps
 %description
 LibCSS is a CSS (Cascading Style Sheet) parser and selection engine,
 written in C. It was developed as part of the NetSurf project. For
@@ -31,7 +29,6 @@ Features:
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -40,6 +37,7 @@ developing applications that use %{name}.
 %global build_vars OPTCFLAGS='%{optflags}' OPTLDFLAGS="$RPM_LD_FLAGS"
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version} -p1
@@ -47,24 +45,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e s@-Werror@@ Makefile
 
 %build
-make %{?_smp_mflags} %{make_vars} %{build_vars}
 
+make %{?_smp_mflags} %{make_vars} %{build_vars}
 %install
 make install DESTDIR=%{buildroot} %{make_vars}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 make %{?_smp_mflags} test %{make_vars} %{build_vars}
-
-%files
-%doc README
-%license COPYING
-%{_libdir}/%{name}.so.*
-
-%files devel
-%doc docs/*
-%{_includedir}/%{name}
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libcss-devel -f %{oreon_filedir}/libcss-devel.list
 
 %changelog
+
 %autochangelog

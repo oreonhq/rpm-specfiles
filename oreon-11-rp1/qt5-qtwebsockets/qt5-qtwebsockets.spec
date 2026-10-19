@@ -1,36 +1,24 @@
-%global source0_hash none
-
+%global source0_hash 8cfc13d6465ab43717c508a90b6be15c5cec4952afb3b8c6e5192dabe83ec610
 %global qt_module qtwebsockets
-
-Summary: Qt5 - WebSockets component
+Summary:        Qt5 - WebSockets component
 Name:    qt5-%{qt_module}
 Version: 5.15.18
-Release: 2%{?dist}
-
-# See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
+Release:        2%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url: http://qt-project.org/
 %global majmin %(echo %{version} | cut -d. -f1-2)
 Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
-## upstream patches
-## repo: https://invent.kde.org/qt/qt/qtwebsockets
-## branch: kde/5.15
-## git format-patch v5.15.16-lts-lgpl
 Patch1:   0001-Clear-frame-on-reconnect.patch
 Patch2:   0002-Disconnect-when-handshake-fails.patch
-
 Patch100: %{name}-gcc11.patch
-
-# filter qml provides
 %global __provides_exclude_from ^%{_qt5_archdatadir}/qml/.*\\.so$
-
-BuildRequires: make
-BuildRequires: qt5-qtbase-devel >= %{version}
-BuildRequires: qt5-qtbase-private-devel
-#libQt5Core.so.5(Qt_5_PRIVATE_API)(64bit)
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
-BuildRequires: qt5-qtdeclarative-devel
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtbase-private-devel
+BuildRequires:  qt5-qtdeclarative-devel
+# /oreon:deps
 %description
 The QtWebSockets module implements the WebSocket protocol as specified in RFC
 6455. It solely depends on Qt (no external dependencies).
@@ -49,21 +37,16 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{qt_module}-everywhere-src-%{version} -p1
 
-
 %build
+
 %{qmake_qt5}
-
 %make_build
-
-
 %install
 make install INSTALL_ROOT=%{buildroot}
-
-## .prl/.la file love
-# nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
 pushd %{buildroot}%{_qt5_libdir}
 for prl_file in libQt5*.prl ; do
   sed -i -e "/^QMAKE_PRL_BUILD_DIR/d" ${prl_file}
@@ -73,31 +56,14 @@ for prl_file in libQt5*.prl ; do
   fi
 done
 popd
-
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE.*
-%{_qt5_libdir}/libQt5WebSockets.so.5*
-%{_qt5_archdatadir}/qml/Qt/WebSockets/
-
-%files devel
-%{_qt5_headerdir}/QtWebSockets/
-%{_qt5_libdir}/libQt5WebSockets.so
-%{_qt5_libdir}/libQt5WebSockets.prl
-%dir %{_qt5_libdir}/cmake/Qt5WebSockets/
-%{_qt5_libdir}/cmake/Qt5WebSockets/Qt5WebSocketsConfig*.cmake
-%{_qt5_libdir}/pkgconfig/Qt5WebSockets.pc
-%{_qt5_libdir}/qt5/qml/QtWebSockets/
-%{_qt5_archdatadir}/mkspecs/modules/qt_lib_websockets*.pri
-
-%if 0%{?_qt5_examplesdir:1}
-%files examples
-%{_qt5_examplesdir}/
-%endif
-
+%files -f %{oreon_filedir}/main.list
+%files -n qt5-qtwebsockets-devel -f %{oreon_filedir}/qt5-qtwebsockets-devel.list
+%files -n qt5-qtwebsockets-examples -f %{oreon_filedir}/qt5-qtwebsockets-examples.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
 - Import

@@ -1,5 +1,4 @@
 %global source0_hash 020ce0f7500d33f6341e0e45305b34ff7ec272f8d52231e78011851e4fb5aa67
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,39 +82,26 @@ end
 %bcond_with bootstrap
 Name:           httpcomponents-client
 Version:        4.5.14
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        HTTP agent implementation based on httpcomponents HttpCore
 License:        Apache-2.0
 URL:            https://hc.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-client/%{version}/httpcomponents-client-%{version}-source-release.zip
-
 Patch:          0001-Use-system-copy-of-effective_tld_names.dat.patch
 Patch:          0002-Port-to-mockito-2.patch
 Patch:          0003-Port-to-Mockito-5.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(commons-codec:commons-codec)
-BuildRequires:  mvn(commons-logging:commons-logging)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.httpcomponents:httpcomponents-parent:pom:)
-BuildRequires:  mvn(org.apache.httpcomponents:httpcore)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
-BuildRequires:  mvn(org.mockito:mockito-core)
 %endif
 %if %{without bootstrap}
-BuildRequires:  publicsuffix-list
 %endif
 Requires:       publicsuffix-list
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 4.5.14-25
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 HttpClient is a HTTP/1.1 compliant HTTP agent implementation based on
 httpcomponents HttpCore. It also provides reusable components for
@@ -125,6 +111,7 @@ for Commons HttpClient 3.x. Users of Commons HttpClient are strongly
 encouraged to upgrade.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -194,17 +181,16 @@ rm httpclient/src/test/java/org/apache/http/conn/ssl/TestSSLSocketFactory.java
 rm httpclient/src/test/java/org/apache/http/client/config/TestRequestConfig.java
 
 %build
+
 %mvn_file ":{*}" httpcomponents/@1
-
 %mvn_build -j -- -Dmaven.compiler.release=8
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
-%doc README.txt RELEASE_NOTES.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.5.14-1
 - Prepare for Oreon 11 (RP1)

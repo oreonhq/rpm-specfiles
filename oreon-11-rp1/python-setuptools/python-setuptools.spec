@@ -1,84 +1,143 @@
 %global source0_hash 8b0e9d10c784bf7d262c4e5ec5d4ec94127ce206e8738f29a437945fbc219b70
-
 %global srcname setuptools
-
-# used when bootstrapping new Python versions
 %bcond bootstrap 0
-
-# The original RHEL N+1 content set is defined by (build)dependencies
-# of the packages in Fedora ELN. Hence we disable tests and documentation here
-# to prevent pulling many unwanted packages in.
 %bcond tests %[%{without bootstrap} && %{defined fedora}]
-
 %global python_wheel_name %{srcname}-%{version}-py3-none-any.whl
-
 Name:           python-setuptools
-# When updating, update the bundled libraries versions bellow!
 Version:        80.10.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
-
 %{?oreon:%global python_wheel_pkg_prefix python3}
-
-# setuptools is MIT
-# autocommand is LGPL-3.0-only
-# backports-tarfile is MIT
-# importlib-metadata is Apache-2.0
-# jaraco-context is MIT
-# jaraco-functools is MIT
-# jaraco-text is MIT
-# more-itertools is MIT
-# packaging is BSD-2-Clause OR Apache-2.0
-# platformdirs is MIT
-# tomli is MIT
-# wheel is MIT
-# zipp is MIT
-# the setuptools logo is MIT
 License:        MIT AND Apache-2.0 AND (BSD-2-Clause OR Apache-2.0) AND LGPL-3.0-only
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-80.10.2.tar.gz
-
-# Some test deps are optional and either not desired or not available in Fedora, thus this patch removes them.
 Patch:        Remove-optional-or-unpackaged-test-deps.patch
-
-# The `setup.py install` deprecation notice might be confusing for RPM packagers
-# adjust it, but only when $RPM_BUILD_ROOT is set
 Patch:        Adjust-the-setup.py-install-deprecation-message.patch
-
-# setuptools rewrites all shebangs to "#!python" which breaks workflows
-# where no external installers (usually rewriting this) are involved.
-# https://github.com/pypa/setuptools/issues/4883
-# - Resolution: deprecated functionality won't be fixed.
-# brp-mangle-shebang script cannot mangle this and fails for many pkgs.
 Patch:        Revert-Always-rewrite-a-Python-shebang-to-python.patch
-
-# Avoid using (deprecated in Python 3.15) json.__version__ in tests,
-# merged upstream.
 Patch:          https://github.com/pypa/setuptools/pull/5194.patch
-
 BuildArch:      noarch
-
-BuildRequires:  python%{python3_pkgversion}-devel
-
 %if %{with bootstrap}
-BuildRequires:  unzip
 %endif
-
 %if %{with tests}
-BuildRequires:  gcc
 %endif
-
-# python3 bootstrap: this is built before the final build of python3, which
-# adds the dependency on python3-rpm-generators, so we require it manually
-# The minimal version is for bundled provides verification script to accept multiple files as input
-BuildRequires:  python3-rpm-generators >= 12-8
-# we also use %%{_pyproject_wheeldir}, so an explicit requirement on the pyproject-macros is needed
-BuildRequires:  pyproject-rpm-macros
-
 %if %{without bootstrap}
-# Not to use the pre-generated egg-info, we use setuptools from previous build to generate it
-BuildRequires:  python%{python3_pkgversion}-setuptools
 %endif
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-setuptools = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-setuptools+test
+Summary:        Metapackage for python3-setuptools test extras
+Requires:       python3-setuptools = %{version}-%{release}
+Requires:       python3dist(pytest) >= 6
+Requires:       python3dist(virtualenv) >= 13.0.0
+Requires:       python3dist(wheel) >= 0.44.0
+Requires:       python3dist(pip) >= 19.1
+Requires:       python3dist(packaging) >= 24.2
+Requires:       python3dist(jaraco.envs) >= 2.2
+Requires:       python3dist(pytest-xdist) >= 3
+Requires:       python3dist(jaraco.path) >= 3.7.2
+Requires:       python3dist(build[virtualenv]) >= 1.0.3
+Requires:       python3dist(filelock) >= 3.4.0
+Requires:       python3dist(ini2toml[lite]) >= 0.14
+Requires:       python3dist(tomli-w) >= 1.0.0
+Requires:       python3dist(jaraco.develop) >= 7.21
+Requires:       python3dist(pytest-home) >= 0.5
+Requires:       python3dist(pyproject-hooks)
+Requires:       python3dist(jaraco.test) >= 5.5
+Provides:       python3dist(setuptools[test]) = %{version}-%{release}
+
+%description -n python3-setuptools+test
+Metapackage for python3-setuptools test extras.
+
+%package -n       python3-setuptools+doc
+Summary:        Metapackage for python3-setuptools doc extras
+Requires:       python3-setuptools = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 3.5
+Requires:       python3dist(jaraco.packaging) >= 9.3
+Requires:       python3dist(rst.linker) >= 1.9
+Requires:       python3dist(jaraco.tidelift) >= 1.4
+Requires:       python3dist(pygments-github-lexers) == 0.0.5
+Requires:       python3dist(sphinx-notfound-page) >= 1
+Requires:       python3dist(sphinx-notfound-page) < 2
+Requires:       python3dist(pyproject-hooks)
+Requires:       python3dist(towncrier) < 24.7
+Provides:       python3dist(setuptools[doc]) = %{version}-%{release}
+
+%description -n python3-setuptools+doc
+Metapackage for python3-setuptools doc extras.
+
+%package -n       python3-setuptools+ssl
+Summary:        Metapackage for python3-setuptools ssl extras
+Requires:       python3-setuptools = %{version}-%{release}
+Provides:       python3dist(setuptools[ssl]) = %{version}-%{release}
+
+%description -n python3-setuptools+ssl
+Metapackage for python3-setuptools ssl extras.
+
+%package -n       python3-setuptools+certs
+Summary:        Metapackage for python3-setuptools certs extras
+Requires:       python3-setuptools = %{version}-%{release}
+Provides:       python3dist(setuptools[certs]) = %{version}-%{release}
+
+%description -n python3-setuptools+certs
+Metapackage for python3-setuptools certs extras.
+
+%package -n       python3-setuptools+core
+Summary:        Metapackage for python3-setuptools core extras
+Requires:       python3-setuptools = %{version}-%{release}
+Requires:       python3dist(packaging) >= 24.2
+Requires:       python3dist(more-itertools) >= 8.8
+Requires:       python3dist(jaraco.text) >= 3.7
+Requires:       python3dist(importlib-metadata) >= 6
+Requires:       python3dist(tomli) >= 2.0.1
+Requires:       python3dist(wheel) >= 0.43.0
+Requires:       python3dist(platformdirs) >= 4.2.2
+Requires:       python3dist(jaraco.functools) >= 4
+Provides:       python3dist(setuptools[core]) = %{version}-%{release}
+
+%description -n python3-setuptools+core
+Metapackage for python3-setuptools core extras.
+
+%package -n       python3-setuptools+check
+Summary:        Metapackage for python3-setuptools check extras
+Requires:       python3-setuptools = %{version}-%{release}
+Requires:       python3dist(pytest-checkdocs) >= 2.4
+Requires:       python3dist(pytest-ruff) >= 0.2.1
+Requires:       python3dist(ruff) >= 0.8.0
+Provides:       python3dist(setuptools[check]) = %{version}-%{release}
+
+%description -n python3-setuptools+check
+Metapackage for python3-setuptools check extras.
+
+%package -n       python3-setuptools+cover
+Summary:        Metapackage for python3-setuptools cover extras
+Requires:       python3-setuptools = %{version}-%{release}
+Provides:       python3dist(setuptools[cover]) = %{version}-%{release}
+
+%description -n python3-setuptools+cover
+Metapackage for python3-setuptools cover extras.
+
+%package -n       python3-setuptools+enabler
+Summary:        Metapackage for python3-setuptools enabler extras
+Requires:       python3-setuptools = %{version}-%{release}
+Requires:       python3dist(pytest-enabler) >= 2.2
+Provides:       python3dist(setuptools[enabler]) = %{version}-%{release}
+
+%description -n python3-setuptools+enabler
+Metapackage for python3-setuptools enabler extras.
+
+%package -n       python3-setuptools+type
+Summary:        Metapackage for python3-setuptools type extras
+Requires:       python3-setuptools = %{version}-%{release}
+Requires:       python3dist(mypy) == 1.14.*
+Requires:       python3dist(importlib-metadata) >= 7.0.2
+Requires:       python3dist(jaraco.develop) >= 7.21
+Provides:       python3dist(setuptools[type]) = %{version}-%{release}
+
+%description -n python3-setuptools+type
+Metapackage for python3-setuptools type extras.
 
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
@@ -110,12 +169,8 @@ Provides: bundled(python%{python3_pkgversion}dist(zipp)) = 3.23
 %package -n python%{python3_pkgversion}-setuptools
 Summary:        Easily build and distribute Python 3 packages
 %{bundled}
-
-# For users who might see ModuleNotFoundError: No module named 'pkg_resoureces'
-# NB: Those are two different provides: one contains underscore, the other hyphen
 %py_provides    python%{python3_pkgversion}-pkg_resources
 %py_provides    python%{python3_pkgversion}-pkg-resources
-
 %description -n python%{python3_pkgversion}-setuptools
 Setuptools is a collection of enhancements to the Python 3 distutils that allow
 you to more easily build and distribute Python 3 packages, especially ones that
@@ -124,18 +179,16 @@ have dependencies on other packages.
 This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.
 
-
 %package -n     %{python_wheel_pkg_prefix}-%{srcname}-wheel
 Summary:        The setuptools wheel
 Provides:        python-setuptools-wheel = %{version}-%{release}
 Provides:        python%{python3_pkgversion}-setuptools-wheel = %{version}-%{release}
 %{bundled}
-
 %description -n %{python_wheel_pkg_prefix}-%{srcname}-wheel
 A Python wheel of setuptools to use with venv.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{srcname}-%{version}
 %if %{without bootstrap}
@@ -158,11 +211,8 @@ rm -r docs/conf.py
 sed -i '/:coverage/d' pytest.ini
 
 %if %{without bootstrap}
-%generate_buildrequires
-%pyproject_buildrequires -r %{?with_tests:-x test}
-%endif
-
 %build
+
 %if %{with bootstrap}
 %{python3} setup.py bdist_wheel
 mkdir -p %{_pyproject_wheeldir}
@@ -170,8 +220,6 @@ mv dist/%{python_wheel_name} %{_pyproject_wheeldir}
 %else
 %pyproject_wheel
 %endif
-
-
 %install
 %if %{with bootstrap}
 mkdir -p %{buildroot}%{python3_sitelib}
@@ -179,53 +227,26 @@ unzip %{_pyproject_wheeldir}/%{python_wheel_name} -d %{buildroot}%{python3_sitel
 echo rpm > %{buildroot}%{python3_sitelib}/setuptools-%{version}.dist-info/INSTALLER
 %else
 %pyproject_install
-%pyproject_save_files -l setuptools pkg_resources _distutils_hack
 sed -Ei '/\/tests\b/d' %{pyproject_files}
 %endif
-
-# https://github.com/pypa/setuptools/issues/2709
 find %{buildroot}%{python3_sitelib} -name tests -print0 | xargs -0 rm -r
-
-# Install the wheel for the python-setuptools-wheel package
-# and inject SBOM into it (if the macro is available)
 mkdir -p %{buildroot}%{python_wheel_dir}
 install -p %{_pyproject_wheeldir}/%{python_wheel_name} -t %{buildroot}%{python_wheel_dir}
 %{?python_wheel_inject_sbom:%python_wheel_inject_sbom %{buildroot}%{python_wheel_dir}/%{python_wheel_name}}
-
+%oreon_autofiles main usr/lib/python3*/site-packages/setuptools* usr/lib64/python3*/site-packages/setuptools* usr/bin/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{without bootstrap}
-# Verify bundled provides are up to date
 %{python3} -m pip freeze --path setuptools/_vendor > vendored.txt
 %{_rpmconfigdir}/pythonbundles.py vendored.txt --namespace 'python%{python3_pkgversion}dist' --compare-with '%{bundled}'
-
-# Regression test, the wheel should not be larger than 1300 kB
-# https://bugzilla.redhat.com/show_bug.cgi?id=1914481#c3
 test $(stat --format %%s %{_pyproject_wheeldir}/%{python_wheel_name}) -lt 1300000
-
 %pyproject_check_import -e '*.tests' -e '*.tests.*'
 %endif
-
-# Regression test, the tests are not supposed to be installed
 test ! -d %{buildroot}%{python3_sitelib}/pkg_resources/tests
 test ! -d %{buildroot}%{python3_sitelib}/setuptools/tests
 test ! -d %{buildroot}%{python3_sitelib}/setuptools/_distutils/tests
-
 %if %{with tests}
-# Upstream tests
-# PIP_NO_BUILD_ISOLATION allows us to run more tests offline with pip 25.3+,
-# or else they fecth setuptools from the internet,
-# see https://bugzilla.redhat.com/2417963.
-# --ignore=setuptools/tests/integration/
-# --ignore=setuptools/tests/config/test_apply_pyprojecttoml.py
-# -k "not not test_equivalent_output"
-#   the tests require internet connection
-# --ignore=setuptools/tests/test_editable_install.py
-#   the tests require pip-run which we don't have in Fedora
-# -k "not test_wheel_includes_cli_scripts"
-#   the test expects removed .exe files to be installed
-# --ignore=tools
-#   the tests test various upstream release tools we don't use/ship
 PRE_BUILT_SETUPTOOLS_WHEEL=%{_pyproject_wheeldir}/%{python_wheel_name} \
 PIP_NO_BUILD_ISOLATION=0 \
 PYTHONPATH=$(pwd) %pytest \
@@ -236,26 +257,12 @@ PYTHONPATH=$(pwd) %pytest \
  --ignore=tools \
  -k "not test_wheel_includes_cli_scripts and not test_equivalent_output"
 %endif
-
-
-%files -n python%{python3_pkgversion}-setuptools %{?!with_bootstrap:-f %{pyproject_files}}
-%doc docs/* NEWS.rst README.rst
-%{python3_sitelib}/distutils-precedence.pth
-%if %{with bootstrap}
-%{python3_sitelib}/setuptools-%{version}.dist-info/
-%license %{python3_sitelib}/setuptools-%{version}.dist-info/licenses/LICENSE
-%{python3_sitelib}/pkg_resources/
-%{python3_sitelib}/setuptools/
-%{python3_sitelib}/_distutils_hack/
-%endif
-
-%files -n %{python_wheel_pkg_prefix}-%{srcname}-wheel
-%license LICENSE
-# we own the dir for simplicity
-%dir %{python_wheel_dir}/
-%{python_wheel_dir}/%{python_wheel_name}
-
+%files
+%files -n python3-setuptools -f %{oreon_filedir}/python3-setuptools.list
+%files -n python3-setuptools-wheel -f %{oreon_filedir}/python3-setuptools-wheel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 80.10.2-1
 - Prepare for Oreon 11 (RP1)
+%endif

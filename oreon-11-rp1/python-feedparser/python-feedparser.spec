@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 088679b0c4b543ee211a820dd544698c76a402122eae7473c04a43425f283d06
 Name:           python-feedparser
 Version:        6.0.14
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Universal feed parser, handles RSS 0.9x, RSS 1.0, RSS 2.0, CDF, Atom 0.3, and Atom 1.0 feeds
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://github.com/kurtmckee/feedparser
-Source:         %{pypi_source feedparser}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/feedparser/feedparser-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'feedparser' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-feedparser = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-feedparser
-Summary:        %{summary}
-
-%description -n python3-feedparser %_description
-
+Summary:        Universal feed parser, handles RSS 0.9x, RSS 1.0, RSS 2.0, CDF, Atom 0.3, and Atom 1.0 feeds
+%description -n python3-feedparser
 
 %prep
-%autosetup -p1 -n feedparser-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir feedparser-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-feedparser usr/lib/python3*/site-packages/feedparser* usr/lib64/python3*/site-packages/feedparser* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/feedparser* usr/lib64/python3*/site-packages/feedparser* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-feedparser -f %{pyproject_files}
+%files
+%files -n python3-feedparser -f %{oreon_filedir}/python3-feedparser.list
 
 %changelog
+
 %autochangelog

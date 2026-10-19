@@ -1,29 +1,14 @@
 %global source0_hash e3d60c83405268c422f95feec740455a1cc4b911d00bd8424d5d1272bc509b1a
 %global source5_hash 0acb39e92d947e30175de0969a5b2e479e2983bc3e3d69c835ee5174610e9636
-
 %define rsyslog_statedir %{_sharedstatedir}/rsyslog
 %define rsyslog_pkidir %{_sysconfdir}/pki/rsyslog
 %define rsyslog_docdir %{_docdir}/rsyslog
 %define qpid_proton_v 0.40.0
-# The following packages are not enabled on rhel:
-#   hiredis, libdbi, mongodb, rabbitmq, impstats_push
-# The omamqp1 plugin is built differently as qpid-proton is not available on rhel
-%if 0%{?rhel}
-%bcond_with hiredis
-%bcond_with libdbi
-%bcond_with mongodb
-%bcond_with rabbitmq
-%bcond_with impstats_push
-%else
 %bcond_without hiredis
 %bcond_without libdbi
 %bcond_without mongodb
 %bcond_without rabbitmq
 %bcond_without impstats_push
-%endif
-
-# Add options to not build with features listed below,
-# the default is to build with them.
 %bcond_without clickhouse
 %bcond_without imdocker
 %bcond_without improg
@@ -38,11 +23,10 @@
 %bcond_without snmp
 %bcond_without udpspoof
 %bcond_without mmtaghostname
-
-Summary: Enhanced system logging and kernel message trapping daemon
+Summary:        Enhanced system logging and kernel message trapping daemon
 Name: rsyslog
 Version: 8.2608.0
-Release: %autorelease
+Release:        1%{?dist}
 License: GPL-3.0-or-later AND Apache-2.0
 URL: http://www.rsyslog.com/
 Source0:        http://www.rsyslog.com/files/download/rsyslog/%{name}-%{version}.tar.gz
@@ -50,120 +34,120 @@ Source1: rsyslog.conf
 Source2: rsyslog.sysconfig
 Source3: rsyslog.log
 Source4: rsyslog.service
-# Add qpid-proton as another source, enable omamqp1 module in a
-# separatae sub-package with it statically linked(see rhbz#1713427)
 Source5:        https://archive.apache.org/dist/qpid/proton/0.40.0/qpid-proton-0.40.0.tar.gz
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: bison
-BuildRequires: dos2unix
-BuildRequires: flex
-BuildRequires: libfastjson-devel >= 0.99.8
-BuildRequires: libestr-devel
-BuildRequires: libtool
-BuildRequires: libuuid-devel
-BuildRequires: pkgconfig
-BuildRequires: python3-docutils
-# make sure systemd is in a version that isn't affected by rhbz#974132
-BuildRequires: systemd-devel >= 204-8
-BuildRequires: systemd-rpm-macros
-BuildRequires: zlib-devel
-BuildRequires: libcap-ng-devel
 %if %{with impstats_push}
-BuildRequires: protobuf-c-devel
-BuildRequires: protobuf-c-compiler
-BuildRequires: snappy-devel
 %endif
-
 Recommends: logrotate
 Obsoletes: rsyslog-logrotate < 8.2310.0-2
 Provides: rsyslog-logrotate = %{version}-%{release}
 Requires: bash >= 2.0
 %{?systemd_ordering}
-
 Provides: syslog
 Obsoletes: sysklogd < 1.5-11
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  cmake
+BuildRequires:  cyrus-sasl-devel
+BuildRequires:  dos2unix
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gnutls-devel
+BuildRequires:  hiredis-devel
+BuildRequires:  krb5-devel
+BuildRequires:  libcap-ng-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libdbi-devel
+BuildRequires:  libestr-devel
+BuildRequires:  libfastjson-devel
+BuildRequires:  liblognorm-devel
+BuildRequires:  libnet-devel
+BuildRequires:  libpq-devel
+BuildRequires:  librabbitmq-devel
+BuildRequires:  librdkafka-devel
+BuildRequires:  librelp-devel
+BuildRequires:  libtool
+BuildRequires:  libuuid-devel
+BuildRequires:  make
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  mongo-c-driver-devel
+BuildRequires:  net-snmp-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig
+BuildRequires:  protobuf-c-compiler
+BuildRequires:  protobuf-c-devel
+BuildRequires:  python3
+BuildRequires:  python3-docutils
+BuildRequires:  snappy-devel
+BuildRequires:  systemd-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  zlib-devel
+# /oreon:deps
 %package crypto
 Summary: Encryption support
 Requires: %name = %version-%release
-
 %package doc
 Summary: HTML documentation for rsyslog
 BuildArch: noarch
-
 %package elasticsearch
 Summary: ElasticSearch output module for rsyslog
 Requires: %name = %version-%release
 BuildRequires: libcurl-devel
-
 %package mmjsonparse
 Summary: JSON enhanced logging support
 Requires: %name = %version-%release
-
 %package mmnormalize
 Summary: Log normalization support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: libestr-devel liblognorm-devel >= 1.0.2
-
 %package mmaudit
 Summary: Message modification module supporting Linux audit format
 Requires: %name = %version-%release
-
 %package mmfields
 Summary: Fields extraction module
 Requires: %name = %version-%release
-
 %if %{with mmtaghostname}
 %package mmtaghostname
 Summary: Message modification module supporting adding tags
 Requires: %name = %version-%release
 %endif
-
 %if %{with snmp}
 %package mmsnmptrapd
 Summary: Message modification module for snmptrapd generated messages
 Requires: %name = %version-%release
 %endif
-
 %if %{with mysql}
 %package mysql
 Summary: MySQL support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: mariadb-connector-c-devel
 %endif
-
 %if %{with pgsql}
 %package pgsql
 Summary: PostgresSQL support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: libpq-devel
 %endif
-
 %if %{with gssapi}
 %package gssapi
 Summary: GSSAPI authentication and encryption support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: krb5-devel
 %endif
-
 %if %{with relp}
 %package relp
 Summary: RELP protocol support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: librelp-devel >= 1.2.16
 %endif
-
 %if %{with gnutls}
 %package gnutls
 Summary: TLS protocol support for rsyslog via GnuTLS library
 Requires: %name = %version-%release
 BuildRequires: gnutls-devel
 %endif
-
 %if %{with openssl}
 %package openssl
 Summary: TLS protocol support for rsyslog via OpenSSL library
@@ -172,21 +156,18 @@ Requires: %name = %version-%release
 Requires: openssl-libs
 BuildRequires: openssl-devel
 %endif
-
 %if %{with snmp}
 %package snmp
 Summary: SNMP protocol support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: net-snmp-devel
 %endif
-
 %if %{with udpspoof}
 %package udpspoof
 Summary: Provides the omudpspoof module
 Requires: %name = %version-%release
 BuildRequires: libnet-devel
 %endif
-
 %if %{with omamqp1}
 %package omamqp1
 Summary: Provides the omamqp1 module
@@ -201,48 +182,40 @@ BuildRequires: cyrus-sasl-devel
 BuildRequires: openssl-devel
 BuildRequires: python3
 %endif
-
 %if %{with rdkafka}
 %package kafka
 Summary: Provides the omkafka module
 Requires: %name = %version-%release
 BuildRequires: librdkafka-devel
 %endif
-
 %package mmkubernetes
 Summary: Provides the mmkubernetes module
 Requires: %name = %version-%release
 BuildRequires: libcurl-devel
-
 %if %{with hiredis}
 %package hiredis
 Summary: Redis support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: hiredis-devel
 %endif
-
 %if %{with libdbi}
 %package libdbi
 Summary: Libdbi database support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: libdbi-devel
 %endif
-
 %if %{with mongodb}
 %package mongodb
 Summary: MongoDB support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: mongo-c-driver-devel snappy-devel cyrus-sasl-devel
 %endif
-
 %if %{with rabbitmq}
 %package rabbitmq
 Summary: RabbitMQ support for rsyslog
 Requires: %name = %version-%release
 BuildRequires: librabbitmq-devel
 %endif
-
-
 %description
 Rsyslog is an enhanced, multi-threaded syslog daemon. It supports MySQL,
 syslog/TCP, RFC 3195, permitted sender lists, filtering on any message part,
@@ -382,6 +355,7 @@ This module allows rsyslog to send messages to a RabbitMQ server.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
 # set up rsyslog sources
@@ -393,22 +367,17 @@ test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "ore
 %endif
 
 %build
+
 %ifarch sparc64
-#sparc64 need big PIC
 export CFLAGS="$RPM_OPT_FLAGS -fPIC"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fpic"
 %endif
-
 %if %{with omamqp1}
-# build the proton first
 (
 	cd %{_builddir}/qpid-proton-%{qpid_proton_v}
 	mkdir bld
 	cd bld
-
-	# Need ENABLE_FUZZ_TESTING=NO to avoid a link failure
-	# Modern approach for Python discovery in CMake
 	cmake .. \
 		-DBUILD_BINDINGS="" \
 		-DBUILD_STATIC_LIBS=YES \
@@ -419,23 +388,17 @@ export CFLAGS="$RPM_OPT_FLAGS -fpic"
 	make -j8
 )
 %endif
-
 %ifarch sparc64
-#sparc64 need big PIE
 export CFLAGS="$RPM_OPT_FLAGS -fPIE"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fpie"
 %endif
 export LDFLAGS="-pie -Wl,-z,relro -Wl,-z,now"
-
 %if %{with hiredis}
-# the hiredis-devel package doesn't provide a pkg-config file
 export HIREDIS_CFLAGS=-I/usr/include/hiredis
 export HIREDIS_LIBS="-L%{_libdir} -lhiredis"
 %endif
-
 sed -i 's/%{version}/%{version}-%{release}/g' configure.ac
-
 autoreconf -if
 %configure \
 	--prefix=/usr \
@@ -533,15 +496,12 @@ autoreconf -if
 	--enable-usertools \
 	--disable-libgcrypt \
 	--enable-openssl_crypto_provider
-
 make V=1
-
 %check
-make V=1 check
 
+make V=1 check
 %install
 make V=1 DESTDIR=%{buildroot} install
-
 install -d -m 755 %{buildroot}%{_sysconfdir}/sysconfig
 install -d -m 755 %{buildroot}%{_sysconfdir}/logrotate.d
 install -d -m 755 %{buildroot}%{_unitdir}
@@ -549,229 +509,67 @@ install -d -m 755 %{buildroot}%{_sysconfdir}/rsyslog.d
 install -d -m 700 %{buildroot}%{rsyslog_statedir}
 install -d -m 700 %{buildroot}%{rsyslog_pkidir}
 install -d -m 755 %{buildroot}%{rsyslog_docdir}/html
-
 install -p -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/rsyslog.conf
 install -p -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/rsyslog
 install -p -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/rsyslog
 install -p -m 644 %{SOURCE4} %{buildroot}%{_unitdir}/rsyslog.service
-
 %if %{with mysql}
 install -p -m 644 plugins/ommysql/createDB.sql %{buildroot}%{rsyslog_docdir}/mysql-createDB.sql
 %endif
-
 %if %{with pgsql}
 install -p -m 644 plugins/ompgsql/createDB.sql %{buildroot}%{rsyslog_docdir}/pgsql-createDB.sql
 %endif
-
 dos2unix tools/recover_qi.pl
 install -p -m 644 tools/recover_qi.pl %{buildroot}%{rsyslog_docdir}/recover_qi.pl
 install -p -m 644 contrib/mmkubernetes/*.rulebase %{buildroot}%{rsyslog_docdir}
-# extract documentation
 cp -r doc/* %{buildroot}%{rsyslog_docdir}/html
-# get rid of libtool libraries
 rm -f %{buildroot}%{_libdir}/rsyslog/*.la
-# imdiag and liboverride is only used for testing
 rm -f %{buildroot}%{_libdir}/rsyslog/imdiag.so
 rm -f %{buildroot}%{_libdir}/rsyslog/liboverride_gethostname.so
 rm -f %{buildroot}%{_libdir}/rsyslog/liboverride_getaddrinfo.so
 rm -f %{buildroot}%{_libdir}/rsyslog/liboverride_gethostname_nonfqdn.so
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
+
 for n in /var/log/{messages,secure,maillog,spooler}
 do
 	[ -f $n ] && continue
 	umask 066 && touch $n
 done
 %systemd_post rsyslog.service
-
 %preun
+
 %systemd_preun rsyslog.service
-
 %postun
+
 %systemd_postun_with_restart rsyslog.service
-
-%files
-%{!?_licensedir:%global license %%doc}
-%license COPYING*
-%doc AUTHORS ChangeLog README.md
-%exclude %{rsyslog_docdir}/html
-%exclude %{rsyslog_docdir}/recover_qi.pl
-%if %{with mysql}
-%exclude %{rsyslog_docdir}/mysql-createDB.sql
-%endif
-%if %{with pgsql}
-%exclude %{rsyslog_docdir}/pgsql-createDB.sql
-%endif
-%dir %{_libdir}/rsyslog
-%dir %{_sysconfdir}/rsyslog.d
-%dir %{rsyslog_statedir}
-%dir %{rsyslog_pkidir}
-%{_sbindir}/rsyslogd
-%{_mandir}/man5/rsyslog.conf.5.gz
-%{_mandir}/man8/rsyslogd.8.gz
-%{_unitdir}/rsyslog.service
-%config(noreplace) %{_sysconfdir}/rsyslog.conf
-%config(noreplace) %{_sysconfdir}/sysconfig/rsyslog
-%config(noreplace) %{_sysconfdir}/logrotate.d/rsyslog
-# plugins
-%{_libdir}/rsyslog/fmhash.so
-%{_libdir}/rsyslog/fmhttp.so
-%{_libdir}/rsyslog/imfile.so
-%{_libdir}/rsyslog/imjournal.so
-%{_libdir}/rsyslog/imklog.so
-%{_libdir}/rsyslog/immark.so
-%{_libdir}/rsyslog/impstats.so
-%{_libdir}/rsyslog/imptcp.so
-%{_libdir}/rsyslog/imtcp.so
-%{_libdir}/rsyslog/imudp.so
-%{_libdir}/rsyslog/imuxsock.so
-%{_libdir}/rsyslog/lmnet.so
-%{_libdir}/rsyslog/lmnetstrms.so
-%{_libdir}/rsyslog/lmnsd_ptcp.so
-%{_libdir}/rsyslog/lmregexp.so
-%{_libdir}/rsyslog/lmtcpclt.so
-%{_libdir}/rsyslog/lmtcpsrv.so
-%{_libdir}/rsyslog/lmzlibw.so
-%{_libdir}/rsyslog/mmanon.so
-%{_libdir}/rsyslog/mmcount.so
-%{_libdir}/rsyslog/mmexternal.so
-%{_libdir}/rsyslog/mmleefparse.so
-%{_libdir}/rsyslog/mmutf8fix.so
-%{_libdir}/rsyslog/omhttp.so
-%{_libdir}/rsyslog/omjournal.so
-%{_libdir}/rsyslog/ommail.so
-%{_libdir}/rsyslog/omprog.so
-%{_libdir}/rsyslog/omstdout.so
-%{_libdir}/rsyslog/omtesting.so
-%{_libdir}/rsyslog/omuxsock.so
-%{_libdir}/rsyslog/pmaixforwardedfrom.so
-%{_libdir}/rsyslog/pmcisconames.so
-%{_libdir}/rsyslog/pmlastmsg.so
-%{_libdir}/rsyslog/pmsnare.so
-%if %{with imdocker}
-%{_libdir}/rsyslog/imdocker.so
-%endif
-%if %{with improg}
-%{_libdir}/rsyslog/improg.so
-%endif
-%if %{with clickhouse}
-%{_libdir}/rsyslog/omclickhouse.so
-%endif
-
-%files crypto
-%{_bindir}/rscryutil
-%{_mandir}/man1/rscryutil.1.gz
-%{_libdir}/rsyslog/lmcry_ossl.so
-
-%files doc
-%{rsyslog_docdir}/html
-%{rsyslog_docdir}/recover_qi.pl
-
-%files elasticsearch
-%{_libdir}/rsyslog/omelasticsearch.so
-
-%files mmaudit
-%{_libdir}/rsyslog/mmaudit.so
-
-%files mmfields
-%{_libdir}/rsyslog/mmfields.so
-
-%files mmjsonparse
-%{_libdir}/rsyslog/mmjsonparse.so
-
-%files mmnormalize
-%{_libdir}/rsyslog/mmnormalize.so
-
-%files mmtaghostname
-%{_libdir}/rsyslog/mmtaghostname.so
-
-%if %{with snmp}
-%files mmsnmptrapd
-%{_libdir}/rsyslog/mmsnmptrapd.so
-%endif
-
-%if %{with mysql}
-%files mysql
-%doc %{rsyslog_docdir}/mysql-createDB.sql
-%{_libdir}/rsyslog/ommysql.so
-%endif
-
-%if %{with pgsql}
-%files pgsql
-%doc %{rsyslog_docdir}/pgsql-createDB.sql
-%{_libdir}/rsyslog/ompgsql.so
-%endif
-
-%if %{with gssapi}
-%files gssapi
-%{_libdir}/rsyslog/lmgssutil.so
-%{_libdir}/rsyslog/imgssapi.so
-%{_libdir}/rsyslog/omgssapi.so
-%endif
-
-%if %{with relp}
-%files relp
-%{_libdir}/rsyslog/imrelp.so
-%{_libdir}/rsyslog/omrelp.so
-%endif
-
-%if %{with gnutls}
-%files gnutls
-%{_libdir}/rsyslog/lmnsd_gtls.so
-%endif
-
-%if %{with openssl}
-%files openssl
-%{_libdir}/rsyslog/lmnsd_ossl.so
-%endif
-
-%if %{with snmp}
-%files snmp
-%{_libdir}/rsyslog/omsnmp.so
-%endif
-
-%if %{with udpspoof}
-%files udpspoof
-%{_libdir}/rsyslog/omudpspoof.so
-%endif
-
-%if %{with omamqp1}
-%files omamqp1
-%{_libdir}/rsyslog/omamqp1.so
-%endif
-
-%if %{with rdkafka}
-%files kafka
-%{_libdir}/rsyslog/imkafka.so
-%{_libdir}/rsyslog/omkafka.so
-%endif
-
-%files mmkubernetes
-%{_libdir}/rsyslog/mmkubernetes.so
-%doc %{rsyslog_docdir}/k8s_filename.rulebase
-%doc %{rsyslog_docdir}/k8s_container_name.rulebase
-
-%if %{with hiredis}
-%files hiredis
-%{_libdir}/rsyslog/omhiredis.so
-%endif
-
-%if %{with libdbi}
-%files libdbi
-%{_libdir}/rsyslog/omlibdbi.so
-%endif
-
-%if %{with mongodb}
-%files mongodb
-%{_bindir}/logctl
-%{_libdir}/rsyslog/ommongodb.so
-%endif
-
-%if %{with rabbitmq}
-%files rabbitmq
-%{_libdir}/rsyslog/omrabbitmq.so
-%endif
-
+%files -f %{oreon_filedir}/main.list
+%files -n rsyslog-crypto -f %{oreon_filedir}/rsyslog-crypto.list
+%files -n rsyslog-doc -f %{oreon_filedir}/rsyslog-doc.list
+%files -n rsyslog-elasticsearch -f %{oreon_filedir}/rsyslog-elasticsearch.list
+%files -n rsyslog-mmjsonparse -f %{oreon_filedir}/rsyslog-mmjsonparse.list
+%files -n rsyslog-mmnormalize -f %{oreon_filedir}/rsyslog-mmnormalize.list
+%files -n rsyslog-mmaudit -f %{oreon_filedir}/rsyslog-mmaudit.list
+%files -n rsyslog-mmfields -f %{oreon_filedir}/rsyslog-mmfields.list
+%files -n rsyslog-mmtaghostname -f %{oreon_filedir}/rsyslog-mmtaghostname.list
+%files -n rsyslog-mmsnmptrapd -f %{oreon_filedir}/rsyslog-mmsnmptrapd.list
+%files -n rsyslog-mysql -f %{oreon_filedir}/rsyslog-mysql.list
+%files -n rsyslog-pgsql -f %{oreon_filedir}/rsyslog-pgsql.list
+%files -n rsyslog-gssapi -f %{oreon_filedir}/rsyslog-gssapi.list
+%files -n rsyslog-relp -f %{oreon_filedir}/rsyslog-relp.list
+%files -n rsyslog-gnutls -f %{oreon_filedir}/rsyslog-gnutls.list
+%files -n rsyslog-openssl -f %{oreon_filedir}/rsyslog-openssl.list
+%files -n rsyslog-snmp -f %{oreon_filedir}/rsyslog-snmp.list
+%files -n rsyslog-udpspoof -f %{oreon_filedir}/rsyslog-udpspoof.list
+%files -n rsyslog-omamqp1 -f %{oreon_filedir}/rsyslog-omamqp1.list
+%files -n rsyslog-kafka -f %{oreon_filedir}/rsyslog-kafka.list
+%files -n rsyslog-mmkubernetes -f %{oreon_filedir}/rsyslog-mmkubernetes.list
+%files -n rsyslog-hiredis -f %{oreon_filedir}/rsyslog-hiredis.list
+%files -n rsyslog-libdbi -f %{oreon_filedir}/rsyslog-libdbi.list
+%files -n rsyslog-mongodb -f %{oreon_filedir}/rsyslog-mongodb.list
+%files -n rsyslog-rabbitmq -f %{oreon_filedir}/rsyslog-rabbitmq.list
 
 %changelog
+
 %autochangelog

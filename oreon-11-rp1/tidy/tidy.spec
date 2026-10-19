@@ -3,29 +3,23 @@
 %global libname libtidy
 %global upname tidy-html5
 %global tidy_compat_headers 1
-
 Name:    tidy
-Summary: Utility to clean up and pretty print HTML/XHTML/XML
+Summary:        Utility to clean up and pretty print HTML/XHTML/XML
 Version: 5.8.0
-Release: 13%{?dist}
-
+Release:        1%{?dist}
 License: W3C
 URL:     http://www.html-tidy.org/
-Source0: https://github.com/htacg/%{upname}/archive/%{version}.tar.gz#/%{upname}-%{version}.tar.gz
-
-## upstream patches
-
-BuildRequires: make
-BuildRequires: gcc-c++
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: libxslt
-BuildRequires: pkgconfig
-
+Source0:        https://github.com/htacg/%{upname}/archive/%{version}.tar.gz#/%{upname}-%{version}.tar.gz
 Provides: tidy-html5 = %{version}-%{release}
-
 Requires: %{libname}%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libxslt
+BuildRequires:  make
+BuildRequires:  pkgconfig
+# /oreon:deps
 %description
 When editing HTML it's easy to make mistakes. Wouldn't it be nice if
 there was a simple way to fix these mistakes automatically and tidy up
@@ -50,6 +44,7 @@ Requires: %{libname}%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{upname}-%{version} -p1
@@ -59,6 +54,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 ln -s tidy build/cmake/tidy5
 
 %build
+
 pushd build/cmake
 %cmake ../../ \
   -DCMAKE_BUILD_TYPE:STRING=Release \
@@ -69,37 +65,19 @@ pushd build/cmake
    %{?_cmake_lib_suffix64} \
 %endif
   %{?tidy_compat_headers:-DTIDY_COMPAT_HEADERS:BOOL=ON}
-
 %cmake_build
 popd
-
 %install
 pushd build/cmake
 %cmake_install
 popd
-
-## unpackaged files
-# omit static lib
 rm -fv $RPM_BUILD_ROOT%{_libdir}/libtidy.a
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_bindir}/tidy
-%{_mandir}/man1/tidy.1*
-
-%ldconfig_scriptlets -n %{libname}
-
-%files -n %{libname}
-%license README/LICENSE.md
-%{_libdir}/libtidy.so.5*
-
-%files -n %{libname}-devel
-%{_includedir}/tidy*.h
-%if 0%{?tidy_compat_headers}
-%{_includedir}/buffio.h
-%{_includedir}/platform.h
-%endif
-%{_libdir}/libtidy.so
-%{_libdir}/pkgconfig/tidy.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libtidy -f %{oreon_filedir}/libtidy.list
+%files -n libtidy-devel -f %{oreon_filedir}/libtidy-devel.list
 
 %changelog
+
 %autochangelog

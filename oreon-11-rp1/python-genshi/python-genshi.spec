@@ -1,61 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 82c4f9bbf4b03be5162a24d6d8e4fdbfe3ed2602d3ebcbf505a33350a379dcb7
 Name:           python-genshi
 Version:        0.7.11
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A toolkit for generation of output for the web
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/edgewall/genshi
-Source:         %{pypi_source genshi}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/genshi/genshi-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'genshi' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-genshi = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-genshi
-Summary:        %{summary}
-
-%description -n python3-genshi %_description
+Summary:        A toolkit for generation of output for the web
+%description -n python3-genshi
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-genshi i18n,plugin
-
 
 %prep
-%autosetup -p1 -n genshi-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir genshi-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-genshi usr/lib/python3*/site-packages/genshi* usr/lib64/python3*/site-packages/genshi* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/genshi* usr/lib64/python3*/site-packages/genshi* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-genshi -f %{pyproject_files}
+%files
+%files -n python3-genshi -f %{oreon_filedir}/python3-genshi.list
 
 %changelog
+
 %autochangelog

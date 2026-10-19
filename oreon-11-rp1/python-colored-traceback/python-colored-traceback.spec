@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash ecbc8e41f0712ea81931d7cd436b8beb9f3eff1595d2498f183e0ef69b56fe84
 Name:           python-colored-traceback
 Version:        0.4.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Automatically color uncaught exception tracebacks
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
 URL:            https://www.github.com/staticshock/colored-traceback.py
-Source:         %{pypi_source colored-traceback}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/colored-traceback/colored-traceback-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'colored-traceback' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-colored-traceback = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-colored-traceback
-Summary:        %{summary}
-
-%description -n python3-colored-traceback %_description
-
+Summary:        Automatically color uncaught exception tracebacks
+%description -n python3-colored-traceback
 
 %prep
-%autosetup -p1 -n colored-traceback-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir colored-traceback-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-colored-traceback usr/lib/python3*/site-packages/colored_traceback* usr/lib64/python3*/site-packages/colored_traceback* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/colored_traceback* usr/lib64/python3*/site-packages/colored_traceback* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-colored-traceback -f %{pyproject_files}
+%files
+%files -n python3-colored-traceback -f %{oreon_filedir}/python3-colored-traceback.list
 
 %changelog
+
 %autochangelog

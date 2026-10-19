@@ -1,69 +1,48 @@
+%global source1_hash 6b561820cfebeb11586a42de2f6d515b8c9bf5db5d064789aceeabb041356ffb
 %global source0_hash d71f5945ef3086f56f52f531508c2ab363078fbbd5ae4084bd3647049e6ee94f
-
 %global stable_kf6 stable
-
-
 %global  base_name kwallet-pam
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    pam-kwallet
-Summary: PAM module for KWallet
+Summary:        PAM module for KWallet
 Version:        6.7.5
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: LGPL-2.0-or-later
 URL:     https://invent.kde.org/plasma/%{base_name}.git
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
-
-## upstream patches
-
-## upstreamable patches
-
 Provides: %{base_name} = %{version}-%{release}
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: systemd-rpm-macros
-BuildRequires: libgcrypt-devel >= 1.5.0
-BuildRequires: pam-devel
-BuildRequires: cmake(KF6Wallet)
-BuildRequires: socat
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=1155873
 Requires: socat
-# pam module makes little sense without the actually kwallet service
 Requires: kf6-kwallet
-
+# oreon:deps
+BuildRequires:  cmake(KF6Wallet)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libgcrypt-devel
+BuildRequires:  pam-devel
+BuildRequires:  socat
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{base_name}-%{version} -p1
 
-
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-
-%files
-%{_sysconfdir}/xdg/autostart/pam_kwallet_init.desktop
-%{_userunitdir}/plasma-kwallet-pam.service
-%{_libexecdir}/pam_kwallet_init
-%{_libdir}/security/pam_kwallet5.so
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

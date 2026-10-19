@@ -1,28 +1,23 @@
 %global source0_hash 84671643a479182b35a77756af9042070950d4a05f96cbf073fa5848622083da
-
-Summary: Xt / Motif OpenGL widgets
+Summary:        Xt / Motif OpenGL widgets
 Name: mesa-libGLw
 Version: 8.0.0
-Release: 33%{?dist}
+Release:        1%{?dist}
 License: SGI-OpenGL
 URL: http://www.mesa3d.org
-# archived project
 %global gitver b060a0782f09ebe4f60c8fd4564c11ba043c331f
 Source0:        https://gitlab.freedesktop.org/mesa/glw/-/archive/b060a0782f09ebe4f60c8fd4564c11ba043c331f/glw-b060a0782f09ebe4f60c8fd4564c11ba043c331f.tar.bz2
-
-BuildRequires: make
-BuildRequires: autoconf automake libtool
-BuildRequires: gcc
-BuildRequires: libXt-devel
-BuildRequires: libGL-devel
-%if 0%{?rhel}
-BuildRequires: openmotif-devel
-%else
-BuildRequires: motif-devel
-%endif
-
 Provides: libGLw
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  libGL-devel
+BuildRequires:  libXt-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  motif-devel
+# /oreon:deps
 %description
 Mesa libGLw runtime library.
 
@@ -30,48 +25,35 @@ Mesa libGLw runtime library.
 Summary: Mesa libGLw development package
 Requires: %{name} = %{version}-%{release}
 Requires: libGL-devel
-%if 0%{?rhel}
-Requires: openmotif-devel
-%else
 Requires: motif-devel
-%endif
 Provides: libGLw-devel
-
 %description devel
 Mesa libGLw development package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n glw-%{gitver}
 
 %build
+
 autoreconf -f -i -v
 %configure --disable-static --enable-motif
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -name \*.la | xargs rm -f
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
 
 %ldconfig_post
 %ldconfig_postun
-
-%files
-%doc README
-%{_libdir}/libGLw.so.1
-%{_libdir}/libGLw.so.1.0.0
-
-%files devel
-%{_libdir}/libGLw.so
-%{_libdir}/pkgconfig/glw.pc
-%{_includedir}/GL/GLwDrawA.h
-%{_includedir}/GL/GLwDrawAP.h
-%{_includedir}/GL/GLwMDrawA.h
-%{_includedir}/GL/GLwMDrawAP.h
+%files -f %{oreon_filedir}/main.list
+%files -n mesa-libGLw-devel -f %{oreon_filedir}/mesa-libGLw-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.0.0-33
 - Prepare for Oreon 11 (RP1)

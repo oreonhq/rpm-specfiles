@@ -1,54 +1,42 @@
 %global source0_hash 73977fc746b36cc41184dd43c3fe81323e7b8b06c2bb0826c4f59a20c56bb9f1
-
 Name:           python-sdnotify
 Version:        0.3.2
-Release:        %autorelease
+Release:        1%{?dist}
 License:        MIT
 Summary:        A pure Python implementation of systemd's service notification protocol
 URL:            https://github.com/bb4242/sdnotify
-Source0:        %{pypi_source sdnotify}
+Source0:        https://files.pythonhosted.org/packages/source/s/sdnotify/sdnotify-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires: python3-devel
-
 Requires: systemd
-
-%global _description %{expand:
-This is a pure Python implementation of the systemd sd_notify protocol. This
-protocol can be used to inform systemd about service start-up completion,
-watchdog events, and other service status changes. Thus, this package can be
-used to write system services in Python that play nicely with systemd. sdnotify
-is compatible with both Python 2 and Python 3.
-}
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-sdnotify = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-sdnotify
-Summary:        %{summary}
-
-%description -n python3-sdnotify %_description
+Summary:        A pure Python implementation of systemd's service notification protocol
+%description -n python3-sdnotify
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n sdnotify-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir sdnotify-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files sdnotify
+%oreon_autofiles python3-sdnotify usr/lib/python3*/site-packages/sdnotify* usr/lib64/python3*/site-packages/sdnotify* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sdnotify* usr/lib64/python3*/site-packages/sdnotify* usr/bin/*
 
 %check
-# NOTE(neil) - 2023-01-25 upstream does not provide any tests yet
-%pyproject_check_import
 
-%files -n python3-sdnotify -f %{pyproject_files}
-%license LICENSE.txt
+%pyproject_check_import
+%files
+%files -n python3-sdnotify -f %{oreon_filedir}/python3-sdnotify.list
 
 %changelog
+
 %autochangelog

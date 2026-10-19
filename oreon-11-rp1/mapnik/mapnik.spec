@@ -1,71 +1,71 @@
-%global source0_hash 4b858c7d9cdc711832ddace213c32c773795e23ac9177e8e25e35a23fbec709f
-
+%global source3_hash 577722d9ec8f52b8369a989c2d4048c33be75cb90f9737f987c4f5cebdefabc2
+%global source2_hash 96fc622a2891893ff37e8ff0235a65c9138223d199b5277717606d59e588b729
+%global source1_hash 4b858c7d9cdc711832ddace213c32c773795e23ac9177e8e25e35a23fbec709f
+%global source0_hash aadfe037a8fdf7524bca7d72594ed9783c7047b7a53c6cf2e767f6e802d53edd
 %global vectortiledate 20250505
 %global vectortilecommit 5a0cfbb6b909ae945f4a9e40777772a2b1c8fe9b
 %global testcommit 5716a2794023035b64ced1143bf8a391dd9a0e02
 %global visualcommit db003ccfe204725035e89e543e54cef764b1e3bb
-
 %global vectortileshortcommit %(c=%{vectortilecommit}; echo ${c:0:7})
-
 Name:      mapnik
 Version:   4.3.1
-Release:   %autorelease
-Summary:   Free Toolkit for developing mapping applications
+Release:        1%{?dist}
+Summary:        Free Toolkit for developing mapping applications
 License:   LGPL-2.1-only
 URL:       http://mapnik.org/
-Source0:   https://github.com/mapnik/mapnik/releases/download/v%{version}/mapnik-v%{version}.tar.bz2
+Source0:        https://github.com/mapnik/mapnik/releases/download/v%{version}/mapnik-v%{version}.tar.bz2
 Source1:   https://github.com/mapnik/mapnik-vector-tile/archive/%{vectortilecommit}/mapnik-vector-tile-%{vectortilecommit}.tar.gz
 Source2:   https://github.com/mapnik/test-data/archive/%{testcommit}/test-data-%{testcommit}.tar.gz
 Source3:   https://github.com/mapnik/test-data-visual/archive/%{visualcommit}/test-data-visual-%{visualcommit}.tar.gz
 Source4:   mapnik-data.license
 Source5:   viewer.desktop
-# Build against the system version of sparsehash
 Patch:     mapnik-system-sparsehash.patch
-# Build against the system version of catch
 Patch:     mapnik-system-catch.patch
-# Allow some minor differences in the visual tests
 Patch:     mapnik-visual-compare.patch
-
-# Exclude big endian architectures as mapnik does not support them
-# https://github.com/mapnik/mapnik/issues/2313
-# https://bugzilla.redhat.com/show_bug.cgi?id=1395208
 ExcludeArch: ppc ppc64 s390 s390x
-
 Requires: dejavu-serif-fonts dejavu-sans-fonts dejavu-sans-mono-fonts dejavu-lgc-serif-fonts dejavu-lgc-sans-fonts dejavu-lgc-sans-mono-fonts
 Requires: proj
-
-BuildRequires: libpq-devel pkgconfig
-BuildRequires: gdal-devel proj-devel
-BuildRequires: cmake make desktop-file-utils gcc-c++
-BuildRequires: qt6-qtbase-devel
-BuildRequires: libxml2-devel boost-devel boost-url libicu-devel
-BuildRequires: libtiff-devel libjpeg-devel libpng-devel libwebp-devel libavif-devel
-BuildRequires: cairo-devel freetype-devel harfbuzz-devel
-BuildRequires: sqlite-devel
-BuildRequires: sparsehash-devel
-BuildRequires: geometry-hpp-devel geometry-hpp-static
-BuildRequires: polylabel-devel polylabel-static
-BuildRequires: protozero-devel protozero-static
-BuildRequires: mapbox-variant-devel mapbox-variant-static
-BuildRequires: catch2-devel
-BuildRequires: dejavu-sans-fonts
-BuildRequires: postgresql-test-rpm-macros postgis
-
-# Bundled version is git snapshot of forked npm module
-# used just for it's source code
 Provides: bundled(mapnik-vector-tile) = 3.0.1^%{vectortiledate}git%{vectortileshortcommit}
-
-# Bundled version has many local patches and upstream is essentially dead
 Provides: bundled(agg) = 2.4
-
-# Bundles a couple of files from the unreleased "toolbox" extension
-# of the boost GIL library. Attempts are being made to establish the
-# status of these files (https://svn.boost.org/trac/boost/ticket/11819)
-# in the hope of unbundling them
 Provides: bundled(boost)
-
 %global __provides_exclude_from ^%{_libdir}/%{name}/input/.*$
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  boost-url
+BuildRequires:  cairo-devel
+BuildRequires:  catch2-devel
+BuildRequires:  cmake
+BuildRequires:  dejavu-sans-fonts
+BuildRequires:  desktop-file-utils
+BuildRequires:  freetype-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gdal-devel
+BuildRequires:  geometry-hpp-devel
+BuildRequires:  geometry-hpp-static
+BuildRequires:  harfbuzz-devel
+BuildRequires:  libavif-devel
+BuildRequires:  libicu-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libpq-devel
+BuildRequires:  libtiff-devel
+BuildRequires:  libwebp-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  mapbox-variant-devel
+BuildRequires:  mapbox-variant-static
+BuildRequires:  pkgconfig
+BuildRequires:  polylabel-devel
+BuildRequires:  polylabel-static
+BuildRequires:  postgis
+BuildRequires:  postgresql-test-rpm-macros
+BuildRequires:  proj-devel
+BuildRequires:  protozero-devel
+BuildRequires:  protozero-static
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  sparsehash-devel
+BuildRequires:  sqlite-devel
+# /oreon:deps
 %description
 Mapnik is a Free Toolkit for developing mapping applications.
 It's written in C++ and there are Python bindings to
@@ -94,7 +94,6 @@ Requires: geometry-hpp-devel
 Requires: polylabel-devel
 Requires: protozero-devel
 Requires: mapbox-variant-devel
-
 %description devel
 Mapnik is a Free Toolkit for developing mapping applications.
 It's written in C++ and there are Python bindings to
@@ -114,7 +113,6 @@ industry standard libraries from boost.org
 %package static
 Summary: Static libraries for the Mapnik spatial visualization library
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description static
 Static libraries for the Mapnik spatial visualization library.
 
@@ -122,7 +120,6 @@ Static libraries for the Mapnik spatial visualization library.
 License:  GPL-2.0-or-later
 Summary:  Utilities distributed with the Mapnik spatial visualization library
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description utils
 Miscellaneous utilities distributed with the Mapnik spatial visualization
 library.
@@ -132,12 +129,12 @@ Summary:  Demo utility and some sample data distributed with mapnik
 License:  GPL-2.0-or-later AND LicenseRef-GeoGratis
 Requires: %{name}-devel = %{version}-%{release}
 Requires: python3-%{name}
-
 %description demo
 Demo application and sample vector datas distributed with the Mapnik
 spatial visualization library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n mapnik-v%{version} -a 1 -a 2 -a 3
@@ -156,6 +153,7 @@ sed -i -e 's|+init=||' test/data-visual/styles/*.xml
 rm -rf deps/mapnik/sparsehash deps/mapbox/geometry deps/mapbox/polylabel deps/mapbox/protozero deps/mapbox/variant
 
 %build
+
 %cmake \
   -DUSE_EXTERNAL_MAPBOX_GEOMETRY=ON \
   -DUSE_EXTERNAL_MAPBOX_POLYLABEL=ON \
@@ -163,13 +161,14 @@ rm -rf deps/mapnik/sparsehash deps/mapbox/geometry deps/mapbox/polylabel deps/ma
   -DUSE_EXTERNAL_MAPBOX_VARIANT=ON \
   -DFONTS_INSTALL_DIR=share/fonts
 %cmake_build
-
 %install
 %cmake_install
 rm -rf %{buildroot}/%{_bindir}/viewer.ini %{buildroot}/%{_datadir}/fonts
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE5}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 PGTESTS_LOCALE="C.UTF-8" %postgresql_tests_run
 createdb template_postgis
 psql -c "CREATE EXTENSION postgis" template_postgis
@@ -180,41 +179,12 @@ rm test/data-visual/styles/line-pattern-issue-2726.xml
 %endif
 ./mapnik-test-visual -j %{_smp_build_ncpus} --output-dir ./visual-test-result
 popd
-
-%files
-%doc AUTHORS.md CHANGELOG.md README.md
-%license COPYING
-%dir %{_libdir}/%{name}
-%dir %{_libdir}/%{name}/input
-%{_libdir}/%{name}/input/*.input
-%{_libdir}/lib%{name}*.so.*
-
-%files devel
-%doc docs/
-%dir %{_includedir}/%{name}
-%{_includedir}/%{name}/*
-%{_libdir}/lib%{name}*.so
-%{_libdir}/cmake/%{name}
-%{_libdir}/pkgconfig/lib%{name}*.pc
-
-%files static
-%{_libdir}/lib%{name}*.a
-
-%files utils
-%{_bindir}/geometry_to_wkb
-%{_bindir}/mapnik-index
-%{_bindir}/mapnik-render
-%{_bindir}/mapnik-viewer
-%{_bindir}/pgsql2sqlite
-%{_bindir}/shapeindex
-%{_bindir}/svg2png
-%{_datadir}/applications/viewer.desktop
-
-%files demo
-%doc demo/c++
-%doc demo/data
-%doc demo/simple-renderer
-%license demo/data/mapnik-data.license
+%files -f %{oreon_filedir}/main.list
+%files -n mapnik-devel -f %{oreon_filedir}/mapnik-devel.list
+%files -n mapnik-static -f %{oreon_filedir}/mapnik-static.list
+%files -n mapnik-utils -f %{oreon_filedir}/mapnik-utils.list
+%files -n mapnik-demo -f %{oreon_filedir}/mapnik-demo.list
 
 %changelog
+
 %autochangelog

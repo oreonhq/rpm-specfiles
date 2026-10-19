@@ -1,32 +1,26 @@
 %global source0_hash 3112924625b3b2b5d0ae1a84fe7babccaaa900b0044dca37fbf33f8b3f455682
-
 %global gap_pkgname kbmag
 %global giturl      https://github.com/gap-packages/kbmag
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        1.6.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Knuth-Bendix on Monoids and Automatic Groups
-
 License:        GPL-2.0-or-later
 URL:            https://gap-packages.github.io/kbmag/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/v%{version}/%{gap_upname}-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        %{giturl}/releases/download/v%{version}/%{gap_pkgname}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
 BuildSystem:    gap
 BuildOption(install): bin gap tst
 BuildOption(check): tst/testall.g
-
-BuildRequires:  gcc
+Requires:       gap-core%{?_isa}
+# oreon:deps
 BuildRequires:  gap-devel
 BuildRequires:  gap-pkg-autodoc
 BuildRequires:  gap-pkg-nq-doc
+BuildRequires:  gcc
 BuildRequires:  make
-
-Requires:       gap-core%{?_isa}
-
+# /oreon:deps
 %description
 KBMAG (pronounced Kay-bee-mag) stands for Knuth-Bendix on Monoids, and
 Automatic Groups.  It is a stand-alone package written in C, for use under
@@ -76,22 +70,16 @@ collection of functions for manipulating finite state automata that may be of
 independent interest.
 
 %package doc
-# The content is GPL-2.0-or-later.
-# The remaining licenses cover the various fonts embedded in PDFs:
-# CM: Knuth-CTAN
-# CM-Super: GPL-1.0-or-later
-# Nimbus: AGPL-3.0-only
-# StandardSymL: GPL-1.0-or-later
 License:        GPL-2.0-or-later AND GPL-1.0-or-later AND Knuth-CTAN AND AGPL-3.0-only
 Summary:        Documentation for the GAP kbmag package
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 Requires:       gap-pkg-nq-doc
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{gap_upname}-%{version}
@@ -101,25 +89,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's/cp /cp -p /' standalone/src/makefile
 
 %build -p
-# This is not an autoconf-generated script.  Do not use %%configure.
+
 ./configure --with-gaproot=%{gap_archdir}
 %make_build
-
 %check -p
+
 make test
-
-%files
-%doc CHANGES README.md
-%license LICENSE
-%dir %{gap_archdir}/pkg/%{gap_upname}/
-%{gap_archdir}/pkg/%{gap_upname}/*.g
-%{gap_archdir}/pkg/%{gap_upname}/bin/
-%{gap_archdir}/pkg/%{gap_upname}/gap/
-%{gap_archdir}/pkg/%{gap_upname}/tst/
-
-%files doc
-%docdir %{gap_archdir}/pkg/%{gap_upname}/doc/
-%{gap_archdir}/pkg/%{gap_upname}/doc/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-kbmag-doc -f %{oreon_filedir}/gap-pkg-kbmag-doc.list
 
 %changelog
+
 %autochangelog

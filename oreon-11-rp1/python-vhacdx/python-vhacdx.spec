@@ -1,61 +1,58 @@
 %global source0_hash fcc23201e319d79fe25e064847efc254bd39ac30af28cc761409e1f9142dd033
-
 Name:           python-vhacdx
 Version:        0.0.10
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Python bindings for V-HACD
-
-# The entire source is MIT, except:
-#
-# BSD-3-Clause:
-#   A bundled copy of the header-only V-HACD library appears as
-#   src/vhacdx/VHACD.h. We remove it in %%prep in favor of the system library,
-#   but since header-only libraries are effectively static libraries,
-#   BSD-3-Clause still appears in the licenses of the binary RPMs.
 License:        MIT AND BSD-3-Clause
 URL:            https://github.com/trimesh/vhacdx
-Source:         %{pypi_source vhacdx}
-
-
-BuildRequires:  gcc-c++
-
-BuildRequires:  v-hacd-devel
-# For tracking of header-only library dependencies
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_packaging_header_only_libraries
-BuildRequires:  v-hacd-static
-
+Source0:        https://files.pythonhosted.org/packages/source/v/vhacdx/vhacdx-%{version}.tar.gz
 %global common_description %{expand:
 A very simple and raw Python binding for V-HACD that is forked from
 https://github.com/thomwolf/pyVHACD which generates an approximate convex
 decomposition of a triangle mesh.}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(pybind11) >= 2.13.1
+BuildRequires:  python3dist(setuptools) >= 42
+Requires:       python3-vhacdx = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-vhacdx+test
+Summary:        Metapackage for python3-vhacdx test extras
+Requires:       python3-vhacdx = %{version}-%{release}
+Provides:       python3dist(vhacdx[test]) = %{version}-%{release}
+
+%description -n python3-vhacdx+test
+Metapackage for python3-vhacdx test extras.
 
 %description %{common_description}
 
 %package -n python3-vhacdx
-Summary:        %{summary}
-
+Summary:        Python bindings for V-HACD
 %description -n python3-vhacdx %{common_description}
 
 %prep
+
 %autosetup -p1
 # Remove the bundled copy of the V-HACD library (use the system one instead).
 rm -v src/vhacdx/VHACD.h
 
 %install
 %pyproject_install
-# We have no idea what to suggest upstream should change to keep pybind11 from
-# installing C++ source files, but it isn’t useful to package them.
 find '%{buildroot}%{python3_sitearch}' -type f -name '*.cpp' -print -delete
 sed -r -i '/\.cpp$/d' '%{pyproject_files}'
+%oreon_autofiles python3-vhacdx usr/lib/python3*/site-packages/vhacdx* usr/lib64/python3*/site-packages/vhacdx* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/vhacdx* usr/lib64/python3*/site-packages/vhacdx* usr/bin/*
 
 %build
+
 %pyproject_wheel
-
 %check
-%pytest
 
-%files -n python3-vhacdx -f %{pyproject_files}
-%doc README.md
+%pytest
+%files
+%files -n python3-vhacdx -f %{oreon_filedir}/python3-vhacdx.list
 
 %changelog
+
 %autochangelog

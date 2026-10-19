@@ -1,35 +1,34 @@
 %global source0_hash 810f800bcc7665f4c1b35e19aaecb35f3729b712ad1d807105059b4bdb1cf049
-
 Name:           libdsk
 Version:        1.5.22
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Library for accessing disk images
 License:        LGPL-2.0-or-later
 URL:            http://www.seasip.info/Unix/LibDsk
 Source0:        http://www.seasip.info/Unix/LibDsk/%{name}-%{version}.tar.gz
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  bzip2-devel
-BuildRequires:  zlib-devel
+BuildRequires:  gcc
 BuildRequires:  make
-
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 A library for accessing disk images, particularly for use with emulators.
 
 %package devel
 Summary:    Development files for libdsk
 Requires:   %{name} = %{version}-%{release}
-
 %description devel
 Development files for libdsk.
 
 %package tools
 Summary:    Tools for use with libdsk
 Requires:   %{name} = %{version}
-
 %description tools
 Tools for use with libdsk.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -45,29 +44,20 @@ iconv -f iso8859-1 doc/libdsk.txt -t utf8 > doc/libdsk.conv \
     && /bin/mv -f doc/libdsk.conv doc/libdsk.txt
 
 %build
+
 %configure --disable-static
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=%{buildroot}
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%{_libdir}/libdsk.so.*
-%doc doc/COPYING ChangeLog TODO doc/libdsk.{pdf,txt}
-
-%files tools
-%{_bindir}/*
-%{_mandir}/man1/*
-%{_mandir}/man5/*
-
-%files devel
-%{_libdir}/libdsk.so
-%{_includedir}/libdsk.h
-%doc doc/cfi.html doc/apridisk.html doc/protocol.txt
+%files -f %{oreon_filedir}/main.list
+%files -n libdsk-devel -f %{oreon_filedir}/libdsk-devel.list
+%files -n libdsk-tools -f %{oreon_filedir}/libdsk-tools.list
 
 %changelog
+
 %autochangelog

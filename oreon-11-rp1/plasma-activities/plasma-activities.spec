@@ -1,40 +1,31 @@
+%global source1_hash 1016892827c3680be3ad7a41cfe254c952127462f3e322e818837691c8a07212
 %global source0_hash d93f31b6f33733ad3803098f4f622e55e3ef52cb5cd97e621a7b803e6f0e3f7c
-
 %global stable_kf6 stable
-
-
 Name:    plasma-activities
-Summary: Core components for the KDE Activity concept
+Summary:        Core components for the KDE Activity concept
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
+Requires:  kf6-filesystem
+Obsoletes:      kf6-kactivities < 1:%{version}-%{release}
+Provides:       kf6-kactivities = 1:%{version}-%{release}
+Obsoletes:      kactivities < 5.27.81
+Obsoletes:      plasma-activities-doc < %{version}-%{release}
+# oreon:deps
 BuildRequires:  boost-devel
-BuildRequires:  extra-cmake-modules
 BuildRequires:  cmake
-BuildRequires:  gcc-c++
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel
-Requires:  kf6-filesystem
-
-# Renamed from kf6-kactivities
-Obsoletes:      kf6-kactivities < 1:%{version}-%{release}
-Provides:       kf6-kactivities = 1:%{version}-%{release}
-
-# Renamed from kactivities
-Obsoletes:      kactivities < 5.27.81
-# Former -doc only shipped unused *.qch paths
-Obsoletes:      plasma-activities-doc < %{version}-%{release}
-
+# /oreon:deps
 %description
 KActivities provides the infrastructure needed to manage a user's activities,
 allowing them to switch between tasks, and for applications to update their
@@ -53,32 +44,21 @@ Provides:       kf6-kactivities-devel = 1:%{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.md
-%license LICENSES/*.txt
-%{_kf6_bindir}/plasma-activities-cli6
-%{_kf6_datadir}/qlogging-categories6/plasma-activities.categories
-%{_kf6_datadir}/qlogging-categories6/plasma-activities.renamecategories
-%{_kf6_libdir}/libPlasmaActivities.so.7
-%{_kf6_libdir}/libPlasmaActivities.so.%{version}
-%{_kf6_qmldir}/org/kde/activities/
-
-%files devel
-%{_includedir}/PlasmaActivities/
-%{_kf6_libdir}/cmake/PlasmaActivities/
-%{_kf6_libdir}/libPlasmaActivities.so
-%{_kf6_libdir}/pkgconfig/PlasmaActivities.pc
+%files -f %{oreon_filedir}/main.list
+%files -n plasma-activities-devel -f %{oreon_filedir}/plasma-activities-devel.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

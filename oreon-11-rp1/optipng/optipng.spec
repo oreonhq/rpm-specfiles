@@ -1,26 +1,25 @@
 %global source0_hash c2579be58c2c66dae9d63154edcb3d427fef64cb00ec0aff079c9d156ec46f29
-
 Name:           optipng
 Version:        7.9.1
 Release:        3%{?dist}
 Summary:        PNG optimizer and converter
-
 License:        zlib
 URL:            http://optipng.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/optipng/%{name}-%{version}.tar.gz
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: zlib-devel libpng-devel
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  libpng-devel
+BuildRequires:  make
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 OptiPNG is a PNG optimizer that recompresses image files to a smaller size,
 without losing any information. This program also converts external formats
 (BMP, GIF, PNM and TIFF) to optimized PNG, and performs PNG integrity checks
 and corrections.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -32,33 +31,24 @@ done
 # the bundled headers if present even with -with-system-*, causing failures.
 rm -rf src/libpng src/zlib
 
-
 %build
-# TODO: switch to cmake
+
 %set_build_flags
 ./configure -prefix=%{_prefix} -mandir=%{_mandir} \
     -with-system-zlib -with-system-libpng
 %make_build
-
-
 %install
 rm -rf $RPM_BUILD_ROOT
 %make_install
 chmod -c 755 $RPM_BUILD_ROOT%{_bindir}/optipng
-
+%oreon_autofiles main
 
 %check
+
 %__make test
-
-
-%files
-%{!?_licensedir:%global license %%doc}
-%license LICENSE.txt
-%doc AUTHORS.txt README.md doc/*
-%{_bindir}/optipng
-%{_mandir}/man1/optipng.1*
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog
 

@@ -1,15 +1,12 @@
 %global source0_hash a14b1b59ea4856844e27bc4e22129b7906b8815afaf50a25ac60998dafcc93a7
-
 Name:           tiptop
 Version:        2.3.2
 Release:        6%{?dist}
 Summary:        Performance monitoring tool based on hardware counters
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
-
 URL:            https://team.inria.fr/pacap/software/tiptop/
-Source:         https://files.inria.fr/pacap/%{name}/%{name}-%{version}.tar.gz
-
+Source0:        https://files.inria.fr/pacap/%{name}/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  gcc
@@ -17,7 +14,7 @@ BuildRequires:  hostname
 BuildRequires:  libxml2-devel
 BuildRequires:  make
 BuildRequires:  ncurses-devel
-
+# /oreon:deps
 %description
 Hardware performance monitoring counters have recently received a lot of
 attention. They have been used by diverse communities to understand and
@@ -40,21 +37,17 @@ counters.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %configure CFLAGS='%optflags -Wno-error=unused-function'
 %make_build -j1
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%doc AUTHORS README tiptoprc
-%license COPYING
-%{_bindir}/*tiptop
-%{_mandir}/man1/*tiptop.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

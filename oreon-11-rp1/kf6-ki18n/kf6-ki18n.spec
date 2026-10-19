@@ -1,34 +1,31 @@
+%global source1_hash cfb450233e152714a476de06c5d6b8ebac7d2f8926566f85f48a4147bcc5a994
 %global source0_hash dfbfc8af89b3bc68810b094bf87746db87c3eeb35b75caeb1882681ebed563bd
-
 %global		framework ki18n
-
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.30
-
 Name:		kf6-%{framework}
 Version:	6.30.0
 Release:        2%{?dist}
-Summary:	KDE Frameworks 6 Tier 1 addon for localization
+Summary:        KDE Frameworks 6 Tier 1 addon for localization
 License:	BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND ODbl-1.0
 URL:		https://invent.kde.org/frameworks/%{framework}
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
-
-BuildRequires:	cmake
-BuildRequires:	gcc-c++
-BuildRequires:	extra-cmake-modules >= %{version}
-BuildRequires:	gettext
-BuildRequires:	kf6-rpm-macros
-BuildRequires:	perl-interpreter
-BuildRequires:	python3
-BuildRequires:	qt6-qtbase-devel
-BuildRequires:	qt6-qtdeclarative-devel
-BuildRequires:	cmake(Qt6Qml)
-BuildRequires:	pkgconfig(iso-codes)
-
 Requires:	iso-codes
 Requires:	kf6-filesystem
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  perl-interpreter
+BuildRequires:  pkgconfig(iso-codes)
+BuildRequires:  python3
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtdeclarative-devel
+# /oreon:deps
 %description
 KDE Frameworks 6 Tier 1 addon for localization.
 
@@ -41,55 +38,23 @@ Requires:	python3
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{framework}-%{version} -p1
 
-
 %build
+
 %cmake_kf6
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %find_lang %{name} --all-name
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%doc README.md
-%license LICENSES/*.txt
-%{_kf6_libdir}/libKF6I18n.so.6
-%{_kf6_libdir}/libKF6I18n.so.%{version}
-%{_kf6_libdir}/libKF6I18nQml.so.6
-%{_kf6_libdir}/libKF6I18nQml.so.%{version}
-%{_kf6_libdir}/libKF6I18nLocaleData.so.6
-%{_kf6_libdir}/libKF6I18nLocaleData.so.%{version}
-%{_kf6_datadir}/qlogging-categories6/*%{framework}*
-%{_kf6_qmldir}/org/kde/i18n/localeData/
-%{_kf6_qmldir}/org/kde/ki18n/
-%{_kf6_qtplugindir}/kf6/ktranscript.so
-%lang(ca) %{_datadir}/locale/ca/LC_SCRIPTS/ki18n6/
-%lang(ca@valencia) %{_datadir}/locale/ca@valencia/LC_SCRIPTS/ki18n6/
-%lang(fi) %{_datadir}/locale/fi/LC_SCRIPTS/ki18n6/
-%lang(gd) %{_datadir}/locale/gd/LC_SCRIPTS/ki18n6/
-%lang(ja) %{_datadir}/locale/ja/LC_SCRIPTS/ki18n6/
-%lang(ko) %{_datadir}/locale/ko/LC_SCRIPTS/ki18n6/
-%lang(ru) %{_datadir}/locale/ru/LC_SCRIPTS/ki18n6/
-%lang(sr) %{_datadir}/locale/sr/LC_SCRIPTS/ki18n6/
-%lang(nb) %{_datadir}/locale/nb/LC_SCRIPTS/ki18n6/
-%lang(nn) %{_datadir}/locale/nn/LC_SCRIPTS/ki18n6/
-%lang(sr@ijekavian) %{_datadir}/locale/sr@ijekavian/LC_SCRIPTS/ki18n6/
-%lang(sr@ijekavianlatin) %{_datadir}/locale/sr@ijekavianlatin/LC_SCRIPTS/ki18n6/
-%lang(sr@latin) %{_datadir}/locale/sr@latin/LC_SCRIPTS/ki18n6/
-%lang(sr) %{_datadir}/locale/uk/LC_SCRIPTS/ki18n6/
-
-%files devel
-%{_kf6_includedir}/KI18n/
-%{_kf6_includedir}/KI18nLocaleData/
-%{_kf6_libdir}/libKF6I18n.so
-%{_kf6_libdir}/libKF6I18nQml.so
-%{_kf6_libdir}/libKF6I18nLocaleData.so
-%{_kf6_libdir}/cmake/KF6I18n/
-
+%files -f %{oreon_filedir}/main.list
+%files -n kf6-ki18n-devel -f %{oreon_filedir}/kf6-ki18n-devel.list
 
 %changelog
+
 %autochangelog

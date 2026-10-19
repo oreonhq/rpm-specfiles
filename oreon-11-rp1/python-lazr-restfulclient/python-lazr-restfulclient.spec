@@ -1,61 +1,68 @@
-%global source0_hash none
-
+%global source0_hash 79577938dabce496675454105c37c5aa06deed7928818a98411adfb22f9e294b
 Name:           python-lazr-restfulclient
 Version:        4.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A programmable client library that takes advantage of the commonalities among lazr.restful web services.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://launchpad.net/lazr.restfulclient
-Source:         %{pypi_source lazr_restfulclient}
-
+Source0:        https://files.pythonhosted.org/packages/source/l/lazr_restfulclient/lazr_restfulclient-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-lazr-restfulclient = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-lazr-restfulclient+docs
+Summary:        Metapackage for python3-lazr-restfulclient docs extras
+Requires:       python3-lazr-restfulclient = %{version}-%{release}
+Provides:       python3dist(lazr-restfulclient[docs]) = %{version}-%{release}
 
+%description -n python3-lazr-restfulclient+docs
+Metapackage for python3-lazr-restfulclient docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'lazr-restfulclient' generated automatically by pyp2spec.}
+%package -n       python3-lazr-restfulclient+test
+Summary:        Metapackage for python3-lazr-restfulclient test extras
+Requires:       python3-lazr-restfulclient = %{version}-%{release}
+Requires:       python3dist(fixtures) >= 1.3.0
+Requires:       python3dist(lazr.restful) >= 0.11.0
+Requires:       python3dist(zope.testing) >= 4.6.0
+Requires:       python3dist(zope.testrunner) >= 6.6.1
+Provides:       python3dist(lazr-restfulclient[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-lazr-restfulclient+test
+Metapackage for python3-lazr-restfulclient test extras.
+
+%description
 
 %package -n     python3-lazr-restfulclient
-Summary:        %{summary}
-
-%description -n python3-lazr-restfulclient %_description
+Summary:        A programmable client library that takes advantage of the commonalities among lazr.restful web services.
+# oreon:reqs
+Requires:       python3dist(httplib2) >= 0.7.7
+Requires:       python3dist(wadllib) >= 1.1.4
+# /oreon:reqs
+%description -n python3-lazr-restfulclient
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-lazr-restfulclient docs,test
-
 
 %prep
-%autosetup -p1 -n lazr_restfulclient-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir lazr_restfulclient-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-lazr-restfulclient usr/lib/python3*/site-packages/lazr_restfulclient* usr/lib64/python3*/site-packages/lazr_restfulclient* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/lazr_restfulclient* usr/lib64/python3*/site-packages/lazr_restfulclient* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-lazr-restfulclient -f %{pyproject_files}
+%files
+%files -n python3-lazr-restfulclient -f %{oreon_filedir}/python3-lazr-restfulclient.list
 
 %changelog
+
 %autochangelog

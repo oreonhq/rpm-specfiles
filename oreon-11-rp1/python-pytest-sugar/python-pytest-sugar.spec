@@ -1,50 +1,44 @@
 %global source0_hash 73b8b65163ebf10f9f671efab9eed3d56f20d2ca68bda83fa64740a92c08f65d
-
-%global _description %{expand:
-pytest-sugar is a plugin for pytest that shows failures and errors instantly
-and shows a progress bar.}
-
 Name:           python-pytest-sugar
 Version:        1.1.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Change the default look and feel of pytest
-
-# SPDX
 License:        BSD-3-Clause
 URL:            https://pypi.org/project/pytest-sugar
-Source:         %{pypi_source pytest-sugar}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest-sugar/pytest-sugar-%{version}.tar.gz
 BuildArch:      noarch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 40.6.0
+Requires:       python3-pytest-sugar = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-pytest-sugar
-Summary:        %{summary}
+Summary:        Change the default look and feel of pytest
 BuildRequires:  python3-devel
 BuildRequires:  %{py3_dist pytest}
-
-%description -n python3-pytest-sugar %_description
+%description -n python3-pytest-sugar
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n pytest-sugar-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir pytest-sugar-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l pytest_sugar
+%oreon_autofiles python3-pytest-sugar usr/lib/python3*/site-packages/pytest_sugar* usr/lib64/python3*/site-packages/pytest_sugar* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_sugar* usr/lib64/python3*/site-packages/pytest_sugar* usr/bin/*
 
 %check
-PYTHONPATH=. %{pytest} -v -s
 
-%files -n python3-pytest-sugar -f %{pyproject_files}
-%doc README.md
+PYTHONPATH=. %{pytest} -v -s
+%files
+%files -n python3-pytest-sugar -f %{oreon_filedir}/python3-pytest-sugar.list
 
 %changelog
+
 %autochangelog

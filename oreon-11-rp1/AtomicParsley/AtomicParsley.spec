@@ -1,24 +1,20 @@
 %global source0_hash 6d6338f3b5e4d2bef66ad37a94e292d5acaefacfad32652d0cf3245465fba7e9
-
-Summary:   Command-line program to read and set MPEG-4 tags compatible with iPod/iTunes 
+Summary:        Command-line program to read and set MPEG-4 tags compatible with iPod/iTunes
 URL:       http://atomicparsley.sourceforge.net/
 Name:      AtomicParsley
 Version:   20240608.083822.1ed9031
-Release:   1%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License:   GPL-2.0-or-later
-Source0:   https://bitbucket.org/wez/atomicparsley/overview/%{name}-%{version}.tar.gz
-#Patch0:    %{name}-fix_bad_math.patch
-BuildRequires:  gcc-c++
+Source0:        https://bitbucket.org/wez/atomicparsley/overview/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  gcc
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: perl-generators
-
-# Need the following to not fail on Koji build on x86_64
-BuildRequires: zlib-devel
-BuildRequires: make
-
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  perl-generators
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 AtomicParsley is a command line program for reading, parsing and setting
 tags and meta-data into MPEG-4 files supporting these styles of meta-data:
@@ -31,23 +27,22 @@ tags and meta-data into MPEG-4 files supporting these styles of meta-data:
   files
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 ./autogen.sh
 %configure --prefix=%{_prefix}
-#OPTFLAGS="%{optflags} -Wall -Wno-parentheses -Wno-unused-result -Wno-write-strings -Wno-deprecated -fno-strict-aliasing" \
 make %{?_smp_mflags}
-
 %install
 make install install DESTDIR=%{buildroot} BINDIR=%{_bindir}
-#install -D -m0755 AtomicParsley "%{buildroot}%{_bindir}/AtomicParsley"
+%oreon_autofiles main
 
-%files
-%doc COPYING Changes.txt tools/iTunMOVI-1.1.pl
-%{_bindir}/AtomicParsley
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

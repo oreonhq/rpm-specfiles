@@ -1,44 +1,25 @@
-%global source0_hash fa5a4aeba0a07761511af2c26c779bd811b5ea0ef06a5d94535b6dd7b2e0ce59
-
-# Currently does not build with opencl/libxsmm
+%global source0_hash 3d897220fbb4498215331efad6905eb7744881b4cf04eb5c5fb4db7c48a56ef9
 %bcond_with opencl
-
-# No openmpi on i668 with openmpi 5 in Fedora 40+
-%if 0%{?fedora} >= 40
-%ifarch %{ix86}
-%bcond_with openmpi
-%else
 %bcond_without openmpi
-%endif
-%else
-%bcond_without openmpi
-%endif
-
 Name:          dbcsr
 Version:       2.10.0
-Release:       %autorelease
-Summary:       Distributed Block Compressed Sparse Row matrix library
+Release:        1%{?dist}
+Summary:        Distributed Block Compressed Sparse Row matrix library
 License:       GPL-2.0-or-later
 URL:           https://cp2k.github.io/dbcsr/develop/
-Source0:       https://github.com/cp2k/dbcsr/releases/download/v%{version}/dbcsr-%{version}.tar.gz
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: gcc-gfortran
-BuildRequires: make
-BuildRequires: flexiblas-devel
+Source0:        https://github.com/cp2k/dbcsr/releases/download/v%{version}/dbcsr-%{version}.tar.gz
 %if %{with opencl}
-BuildRequires: libxsmm-devel
 %endif
-BuildRequires: python3-fypp
-
-%global _description %{expand:
-DBCSR stands for Distributed Blocked Compressed Sparse Row.
-
-DBCSR is a library designed to efficiently perform sparse matrix-matrix
-multiplication, among other operations.  It is MPI and OpenMP parallel and
-can exploit Nvidia and AMD GPUs via CUDA and HIP.}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  flexiblas-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gcc-gfortran
+BuildRequires:  make
+BuildRequires:  mpich-devel
+BuildRequires:  openmpi-devel
+BuildRequires:  python3-fypp
+# /oreon:deps
 %description
 %{_description}
 
@@ -48,7 +29,6 @@ This package contains the non-MPI single process and multi-threaded versions.
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: gcc-gfortran%{_isa}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -60,7 +40,6 @@ developing applications that use %{name}.
 %package openmpi
 Summary: DBCSR - openmpi version
 BuildRequires:  openmpi-devel
-
 %description openmpi
 %{_description}
 
@@ -70,7 +49,6 @@ using OpenMPI.
 %package openmpi-devel
 Summary: Development files for %{name}-openmpi
 Requires: %{name}-openmpi%{?_isa} = %{version}-%{release}
-
 %description openmpi-devel
 The %{name}-openmpi-devel package contains libraries and header files for
 developing applications that use %{name}-openmpi.
@@ -79,7 +57,6 @@ developing applications that use %{name}-openmpi.
 %package mpich
 Summary: DBCSR - mpich version
 BuildRequires:  mpich-devel
-
 %description mpich
 %{_description}
 
@@ -89,12 +66,12 @@ using mpich.
 %package mpich-devel
 Summary: Development files for %{name}-mpich
 Requires: %{name}-mpich%{?_isa} = %{version}-%{release}
-
 %description mpich-devel
 The %{name}-mpich-devel package contains libraries and header files for
 developing applications that use %{name}-mpich.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -105,6 +82,7 @@ rm -r tools
 %global _vpath_builddir %{_vendor}-%{_target_os}-build-${mpi:-serial}
 
 %build
+
 export CFLAGS="%{optflags} -fPIC"
 export CXXFLAGS="%{optflags} -fPIC"
 export FFLAGS="%{optflags} -fPIC"
@@ -126,7 +104,6 @@ do
   %cmake_build
   module purge
 done
-
 %install
 %cmake_install
 for mpi in %{mpi_list}
@@ -135,61 +112,26 @@ do
   %cmake_install
   module purge
 done
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
 for mpi in %{mpi_list}
 do
   module load mpi/$mpi-%{_arch}
   fail=
-  # mpich tests fail on s390x - reported https://github.com/cp2k/dbcsr/issues/703
   [ $mpi = mpich -a %{_arch} = s390x ] && fail=no
   %ctest || test $fail
   module purge
 done
-
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libdbcsr.so.*
-
-%files devel
-%{_fmoddir}/dbcsr_api.mod
-%{_fmoddir}/dbcsr_tensor_api.mod
-%{_libdir}/cmake/dbcsr/
-%{_libdir}/libdbcsr.so
-
-%if %{with openmpi}
-%files openmpi
-%license LICENSE
-%doc README.md
-%{_libdir}/openmpi/lib/libdbcsr.so.*
-%{_libdir}/openmpi/lib/libdbcsr_c.so.*
-
-%files openmpi-devel
-%{_libdir}/openmpi/include/dbcsr.h
-%{_libdir}/openmpi/include/dbcsr_tensor.h
-%{_fmoddir}/openmpi/dbcsr_api.mod
-%{_fmoddir}/openmpi/dbcsr_tensor_api.mod
-%{_libdir}/openmpi/lib/cmake/dbcsr/
-%{_libdir}/openmpi/lib/libdbcsr.so
-%{_libdir}/openmpi/lib/libdbcsr_c.so
-%endif
-
-%files mpich
-%license LICENSE
-%doc README.md
-%{_libdir}/mpich/lib/libdbcsr.so.*
-%{_libdir}/mpich/lib/libdbcsr_c.so.*
-
-%files mpich-devel
-%{_libdir}/mpich/include/dbcsr.h
-%{_libdir}/mpich/include/dbcsr_tensor.h
-%{_fmoddir}/mpich/dbcsr_api.mod
-%{_fmoddir}/mpich/dbcsr_tensor_api.mod
-%{_libdir}/mpich/lib/cmake/dbcsr/
-%{_libdir}/mpich/lib/libdbcsr.so
-%{_libdir}/mpich/lib/libdbcsr_c.so
+%files -f %{oreon_filedir}/main.list
+%files -n dbcsr-devel -f %{oreon_filedir}/dbcsr-devel.list
+%files -n dbcsr-openmpi -f %{oreon_filedir}/dbcsr-openmpi.list
+%files -n dbcsr-openmpi-devel -f %{oreon_filedir}/dbcsr-openmpi-devel.list
+%files -n dbcsr-mpich -f %{oreon_filedir}/dbcsr-mpich.list
+%files -n dbcsr-mpich-devel -f %{oreon_filedir}/dbcsr-mpich-devel.list
 
 %changelog
+
 %autochangelog

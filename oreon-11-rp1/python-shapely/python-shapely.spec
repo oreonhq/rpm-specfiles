@@ -1,62 +1,56 @@
 %global source0_hash 2ed4ecb28320a433db18a5bf029986aa8afcfd740745e78847e330d5d94922a9
-
-# Break a circular dependency on pyproj introduced by running doctests.
 %bcond bootstrap 0
 %bcond doctests %{without bootstrap}
-# Enables more tests, but could sometimes be broken on new Pythons
 %bcond matplotlib 1
-
 Name:           python-shapely
 Version:        2.1.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Manipulation and analysis of geometric objects in the Cartesian plane
-
-# The entire source is BSD-3-Clause, except:
-#   Unlicense: versioneer.py (not packaged) and the generated
-#              shapely/_version.py
-#   MIT: src/kvec.h
 License:        BSD-3-Clause AND Unlicense AND MIT
 URL:            https://github.com/shapely/shapely
-Source:         %{pypi_source shapely}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://files.pythonhosted.org/packages/source/s/shapely/shapely-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
-
-BuildRequires:  tomcli
-BuildRequires:  gcc
-BuildRequires:  geos-devel
-
 %if %{with matplotlib}
-# Enables shapely/tests/test_plotting.py
-BuildRequires:  %{py3_dist matplotlib}
 %endif
 %if %{with doctests}
-BuildRequires:  %{py3_dist pyproj}
 %endif
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(numpy) < 3
+BuildRequires:  python3dist(numpy) >= 1.25
+BuildRequires:  python3dist(setuptools) >= 61.0.0
+Requires:       python3-shapely = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-shapely+test
+Summary:        Metapackage for python3-shapely test extras
+Requires:       python3-shapely = %{version}-%{release}
+Provides:       python3dist(shapely[test]) = %{version}-%{release}
 
-%global _description %{expand:
-Shapely is a package for creation, manipulation, and analysis of planar
-geometry objects – designed especially for developers of cutting edge
-geographic information systems. In a nutshell: Shapely lets you do PostGIS-ish
-stuff outside the context of a database using idiomatic Python.
+%description -n python3-shapely+test
+Metapackage for python3-shapely test extras.
 
-You can use this package with python-matplotlib and numpy. See README.rst for
-more information!}
+%package -n       python3-shapely+docs
+Summary:        Metapackage for python3-shapely docs extras
+Requires:       python3-shapely = %{version}-%{release}
+Requires:       python3dist(numpydoc) == 1.1.*
+Provides:       python3dist(shapely[docs]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-shapely+docs
+Metapackage for python3-shapely docs extras.
+
+%description
 
 %package -n python3-shapely
 Summary:        Manipulation and analysis of geometric objects in the Cartesian plane
-
-# The file src/kvec.h comes from klib
-# (https://github.com/attractivechaos/klib), which is intended to be used as a
-# collection of mostly-independent “copylib” components.
 Provides:       bundled(klib-kvec) = 0.1.0
-
-%description -n python3-shapely %_description
+# oreon:reqs
+Requires:       python3dist(numpy) >= 1.21
+# /oreon:reqs
+%description -n python3-shapely
 
 %prep
+
 %autosetup -p1
 # Currently, the PyPI sdist does not ship with pre-generated Cython C sources.
 # We preventively check for them anyway, as they must be removed if they do
@@ -74,37 +68,30 @@ tomcli set pyproject.toml lists delitem \
 %endif
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-shapely usr/lib/python3*/site-packages/shapely* usr/lib64/python3*/site-packages/shapely* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/shapely* usr/lib64/python3*/site-packages/shapely* usr/bin/*
 
 %check
-# Ensure the “un-built” package is not imported. Otherwise compiled extensions
-# cannot be tested.
+
 mkdir empty
 cd empty
 ln -s ../shapely/tests/
-
 %pyproject_check_import -e 'shapely.tests*' %{?!with_matplotlib:-e shapely.plotting}
 %pytest -rs -v
-
 %if %{with doctests}
-# Doctest shapely.constructive.maximum_inscribed_circle fails
-# https://github.com/shapely/shapely/issues/2391
 dtk="${dtk-}${dtk+ and }not shapely.constructive.maximum_inscribed_circle"
-
 %pytest --doctest-modules --doctest-only-doctests=true \
     '%{buildroot}%{python3_sitearch}/shapely' \
     --ignore='%{buildroot}%{python3_sitearch}/shapely/tests' \
     -k="${dtk-}" -v
 %endif
-
-%files -n python3-shapely -f %{pyproject_files}
-%doc CHANGES.txt
-%doc CITATION.cff
-%doc CREDITS.txt
-%doc README.rst
+%files
+%files -n python3-shapely -f %{oreon_filedir}/python3-shapely.list
 
 %changelog
+
 %autochangelog

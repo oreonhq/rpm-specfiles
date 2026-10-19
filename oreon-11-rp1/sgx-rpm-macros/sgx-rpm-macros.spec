@@ -1,30 +1,29 @@
 %global source0_hash none
-
 Name: sgx-rpm-macros
 Version: 1
-Release: 4%{?dist}
+Release:        4%{?dist}
 License: MIT-0
-Summary: RPM macros for working with the SGX SDK
-
-Source0: macros.sgx
+Summary:        RPM macros for working with the SGX SDK
+Source0:        macros.sgx
 Source1: MIT-0
-
 BuildArch: noarch
+# oreon:deps
 
+# /oreon:deps
 %description
 RPM macros for working with the SGX SDK
 
 %build
-cp %{SOURCE1} MIT-0
 
+cp %{SOURCE1} MIT-0
 %install
 %__install -d %{buildroot}/%{_rpmmacrodir}/
 cp %{SOURCE0} %{buildroot}/%{_rpmmacrodir}/
+%oreon_autofiles main
 
-%files
-%license MIT-0
-%{_rpmmacrodir}/macros.sgx
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1-4
 - Prepare for Oreon 11 (RP1)

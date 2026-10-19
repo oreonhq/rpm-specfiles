@@ -1,58 +1,42 @@
 %global source0_hash 0236b0567513356e7b1679d20f1eba704d18221347a355b4bfde6b1385f31b66
-
 Name:           python-justbases
 Version:        0.15.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        conversion of ints and rationals to any base
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-2.1-or-later
 URL:            https://github.com/mulkieran/justbases
-Source:         %{pypi_source justbases}
-
+Source0:        https://files.pythonhosted.org/packages/source/j/justbases/justbases-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'justbases' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0
+Requires:       python3-justbases = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-justbases
-Summary:        %{summary}
-
-%description -n python3-justbases %_description
-
+Summary:        conversion of ints and rationals to any base
+%description -n python3-justbases
 
 %prep
-%autosetup -p1 -n justbases-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir justbases-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-justbases usr/lib/python3*/site-packages/justbases* usr/lib64/python3*/site-packages/justbases* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/justbases* usr/lib64/python3*/site-packages/justbases* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-justbases -f %{pyproject_files}
+%files
+%files -n python3-justbases -f %{oreon_filedir}/python3-justbases.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.15.2-1
 - Prepare for Oreon 11 (RP1)

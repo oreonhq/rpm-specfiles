@@ -1,39 +1,35 @@
-%global source0_hash none
-
+%global source0_hash c7dd87d55eb1a9c3bf21a20cbd0b03f16b99f3c82975153c4932fdcdee8b75be
 %{!?postgresql_default:%global postgresql_default 0}
-
 %global pre Final
 %global majorname postgres-decoderbufs
 %global pgversion 16
-
 Name:		postgresql%{pgversion}-decoderbufs
 Version:	3.2.0
-Release:	3%{?pre:.%pre}%{?dist}
-Summary:	PostgreSQL Protocol Buffers logical decoder plugin
-
+Release:        1%{?dist}
+Summary:        PostgreSQL Protocol Buffers logical decoder plugin
 License:	MIT
 URL:		https://github.com/debezium/postgres-decoderbufs
-
 %global full_version %{version}.%{?pre:%pre}%{?!pre:Final}
-
-Source0:        https://github.com/debezium/%{majorname}/archive/refs/tags/v%{full_version}.tar.gz#/postgresql16-decoderbufs-3.2.0.tar.gz
-
+Source0:        https://github.com/debezium/%{majorname}/archive/refs/tags/v%{version}.%{pre}.tar.gz#/%{name}-%{version}.tar.gz
 %if %?postgresql_default
 %global pkgname %{majorname}
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  postgresql16-server-devel
+BuildRequires:  protobuf-c-devel
+# /oreon:deps
 %package -n %{pkgname}
 Summary: PostgreSQL Audit Extension
 %else
 %global pkgname %name
 %endif
-
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	postgresql16-server-devel
 BuildRequires:	protobuf-c-devel
-
 Requires:	protobuf-c
 Requires(pre): postgresql16-server
-
 %global precise_version %{?epoch:%epoch:}%version-%release
 Provides: %{pkgname} = %precise_version
 %if %?postgresql_default
@@ -43,7 +39,6 @@ Provides: postgresql-%{majorname} = %precise_version
 Provides: %{pkgname}%{?_isa} = %precise_version
 Provides: %{majorname}-any
 Conflicts: %{majorname}-any
-
 %description
 A PostgreSQL logical decoder output plugin to deliver data as Protocol Buffers messages.
 
@@ -56,34 +51,28 @@ A PostgreSQL logical decoder output plugin to deliver data as Protocol Buffers m
 %package llvmjit
 Summary:	Just-in-time compilation support for %{majorname}
 Requires:	%{majorname}%{?_isa} = %{version}-%{release}
-
 %description llvmjit
 Just-in-time compilation support for %{majorname}.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{majorname}-%{full_version} -p1
 
 %build
-%make_build
 
+%make_build
 %install
 %make_install
-
-%files -n %{pkgname}
-%doc README.md
-%license LICENSE
-%{_libdir}/pgsql/decoderbufs.so
-%{_datadir}/pgsql/extension/decoderbufs.control
-
-%if 0%{?postgresql_server_llvmjit}
-%files llvmjit
-%{_libdir}/pgsql/bitcode/decoderbufs.index.bc
-%{_libdir}/pgsql/bitcode/decoderbufs/
-%endif
-
+%oreon_autofiles main
+%if %?postgresql_default
+%if %?postgresql_default
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-3.Final
 - Import
+%endif
+%endif

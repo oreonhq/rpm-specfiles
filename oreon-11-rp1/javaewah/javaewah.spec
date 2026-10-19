@@ -1,23 +1,19 @@
 %global source0_hash faa7aea9ee077388758971d541702fcc9df65b986a2406e8d93793c07b64e704
-
 Name:           javaewah
 Version:        1.1.13
-Release:        16%{?dist}
+Release:        1%{?dist}
 Summary:        A word-aligned compressed variant of the Java bitset class
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://github.com/lemire/javaewah
 Source0:        https://github.com/lemire/javaewah/archive/JavaEWAH-%{version}.tar.gz
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-
+# /oreon:deps
 %description
 JavaEWAH is a word-aligned compressed variant of the Java bitset class.
 It uses a 64-bit run-length encoding (RLE) compression scheme.
@@ -31,11 +27,11 @@ some alternatives, javaewah does not rely on a patented scheme.
 
 %package javadoc
 Summary:        Javadoc for %{name}
-
 %description javadoc
 API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qn javaewah-JavaEWAH-%{version}
@@ -52,17 +48,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin :maven-javadoc-plugin
 
 %build
-%mvn_build
 
+%mvn_build
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc CHANGELOG README.md
-%license LICENSE-2.0.txt
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE-2.0.txt
+%files -f %{oreon_filedir}/main.list
+%files -n javaewah-javadoc -f %{oreon_filedir}/javaewah-javadoc.list
 
 %changelog
+
 %autochangelog

@@ -1,58 +1,45 @@
 %global source0_hash f628585c4c2d5e3a9f447a6274e2f59d7811272da557e75341e36948aa3f9d43
-
 %global wayland_min_version 1.4
 %global debug_package %{nil}
-
 Name:    plasma-wayland-protocols
 Version: 1.22.0
-Release: 1%{?dist}
-Summary: Plasma Specific Protocols for Wayland
-
+Release:        1%{?dist}
+Summary:        Plasma Specific Protocols for Wayland
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-or-later AND MIT-CMU
 URL:     https://invent.kde.org/libraries/%{name}
-
 Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
-
-## upstream patches (lookaside cache)
-BuildRequires:  kf6-rpm-macros
+# oreon:deps
 BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt5-qtbase-devel
-
+# /oreon:deps
 %description
 %{summary}.
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%license LICENSES/* COPYING.LIB
-%{_kf6_datadir}/plasma-wayland-protocols/
-
-%files devel
-%{_kf6_datadir}/cmake/PlasmaWaylandProtocols/
-
+%files -f %{oreon_filedir}/main.list
+%files -n plasma-wayland-protocols-devel -f %{oreon_filedir}/plasma-wayland-protocols-devel.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

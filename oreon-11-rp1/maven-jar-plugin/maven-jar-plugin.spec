@@ -1,5 +1,4 @@
 %global source0_hash d67f6156b2b86fb97818680def3172f58b1620add55474d26738220615e5c097
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,18 +82,18 @@ end
 %bcond_with bootstrap
 Name:           maven-jar-plugin
 Version:        3.5.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven JAR Plugin
 License:        Apache-2.0
 URL:            https://maven.apache.org/plugins/maven-jar-plugin/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.5.1-17
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.maven.plugin-testing:maven-plugin-testing-harness)
@@ -109,28 +108,27 @@ BuildRequires:  mvn(org.apache.maven:maven-core)
 BuildRequires:  mvn(org.apache.maven:maven-model)
 BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.5.1-17
-
+# /oreon:deps
 %description
 Builds a Java Archive (JAR) file from the compiled
 project classes and resources.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 # System version of maven-jar-plugin should be used, not reactor version
 %pom_xpath_inject pom:pluginManagement/pom:plugins "<plugin><artifactId>maven-jar-plugin</artifactId><version>SYSTEM</version></plugin>"
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

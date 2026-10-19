@@ -1,18 +1,12 @@
 %global source0_hash 57da8dfb320575825854217e58a773d972c80e43031e83fd0e85cd2e68269884
-
 %undefine __cmake_in_source_build
-
 Name:           prison
 Summary:        A Qt-based barcode abstraction library
 Version:        1.1.1
-Release:        29%{?dist}
-
+Release:        1%{?dist}
 License:        MIT
 URL:            https://projects.kde.org/projects/kdesupport/prison
 Source0:        http://download.kde.org/stable/prison/%{version}/src/%{name}-%{version}.tar.xz
-
-## upstream patches
-# post 1.1.1 commits from master/ branch
 Patch1: 0001-Add-automoc-increase-cmake-version.patch
 Patch2: 0002-Allow-to-build-with-qt5-and-qt4.patch
 Patch3: 0003-Generate-cmake-config-version-file.patch
@@ -22,22 +16,18 @@ Patch6: 0006-Use-ECM-to-locate-the-correct-install-paths-on-a-Qt5.patch
 Patch7: 0007-Use-PRISON_VERSION_MAJOR-for-SOVERSION.patch
 Patch8: 0008-increase-ECM.patch
 Patch9: 0009-Set-also-QT_QTGUI_LIBARARY-as-that-this-variable-is-.patch
-## upstreamable patch
-# make -qt5 build fully parallel-installable
-# needs work to be upstreamable, see 'sed' down in %%install section
 Patch10: 0010-parallel-installable-prison-qt5.patch
 Patch11: 0011-fix-location-read-for-cmake4.patch
-
+%if 0%{?qt5}
+%endif
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf5-rpm-macros
+BuildRequires:  pkgconfig(QtGui)
 BuildRequires:  pkgconfig(libdmtx)
 BuildRequires:  pkgconfig(libqrencode)
-BuildRequires:  pkgconfig(QtGui)
-%if 0%{?qt5}
-BuildRequires:  pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets) pkgconfig(Qt5Test)
-%endif
-
+# /oreon:deps
 %description
 Prison is a Qt-based barcode abstraction layer/library that provides
 an uniform access to generation of barcodes with data.
@@ -62,27 +52,21 @@ Requires: %{name}-qt5%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-
 %cmake_build
-
 %install
 %cmake_install
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%{_libdir}/libprison.so.0*
-
-%files devel
-%{_includedir}/prison/
-%{_libdir}/libprison.so
-%{_libdir}/cmake/Prison/
+%files -f %{oreon_filedir}/main.list
+%files -n prison-devel -f %{oreon_filedir}/prison-devel.list
+%files -n prison-qt5 -f %{oreon_filedir}/prison-qt5.list
+%files -n prison-qt5-devel -f %{oreon_filedir}/prison-qt5-devel.list
 
 %changelog
+
 %autochangelog

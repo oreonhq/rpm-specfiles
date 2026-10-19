@@ -1,60 +1,42 @@
-%global source0_hash none
-
-# Smoldyn provides the SFMT-1.3.3 (SIMD-oriented Fast Mersenne Twister) source code;
-# currently unavailable on Fedora.
-# http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/index.html
-
-# VTK support?
-# See https://github.com/ssandrews/Smoldyn-official/issues/3
+%global source0_hash 916041e90182ebe5cbe95d301378379e9ee55428b054a1c53e5269f804fc4132
 %global with_vtk 0
-
 Name:  smoldyn
-Summary: A particle-based spatial stochastic simulator
+Summary:        A particle-based spatial stochastic simulator
 Version: 2.74
-Release: %autorelease
-
-# The rxnparam.c and SurfaceParam.c source code files are in the public domain.
-#
-# The Next Subvolume module is Copyright 2012 by Martin Robinson and is distributed
-# under the Gnu LGPL license.
-#
-# The rest of the code is Copyright 2003-2018 by Steven Andrews and also
-# distributed under the Gnu LGPL.
-#
-# source/libSteve/SFMT is licensed under the 'BSD 3-clause "New" or "Revised" License'
+Release:        1%{?dist}
 License: LGPL-3.0-or-later AND GPL-3.0-only AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
 URL:   http://www.smoldyn.org
-Source0: https://github.com/ssandrews/Smoldyn/archive/refs/tags/v%{version}/Smoldyn-%{version}.tar.gz
-
-# Fix library paths according to the Fedora Project guidelines
+Source0:        https://github.com/ssandrews/Smoldyn/archive/refs/tags/v%{version}/Smoldyn-%{version}.tar.gz
 Patch0: %{name}-fix_libpaths.patch
 Patch1: %{name}-freeglut.patch
 Patch2: %{name}-create_soname.patch
 Patch3: %{name}-avoid_automatic_wheel.patch
-
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: boost-devel
-BuildRequires: freeglut-devel
-BuildRequires: libXmu-devel
-BuildRequires: libXi-devel
-BuildRequires: libtiff-devel
-BuildRequires: libglvnd-devel
-BuildRequires: make
-BuildRequires: perl-macros
-# For testing
-BuildRequires: xorg-x11-server-Xvfb
 %if %{?with_vtk}
-BuildRequires: vtk-devel
 %endif
-BuildRequires: zlib-devel
-BuildRequires: xorg-x11-server-Xvfb
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 Requires: bionetgen-perl
 Provides: bundled(SFMT) = 1.3.3 
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  freeglut-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libXi-devel
+BuildRequires:  libXmu-devel
+BuildRequires:  libglvnd-devel
+BuildRequires:  libtiff-devel
+BuildRequires:  make
+BuildRequires:  perl-macros
+BuildRequires:  pybind11-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-flaky
+BuildRequires:  python3-matplotlib
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-wheel
+BuildRequires:  xorg-x11-server-Xvfb
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Smoldyn is a computer program for cell-scale biochemical simulations.
 It simulates each molecule of interest individually to capture natural
@@ -96,7 +78,6 @@ BuildRequires: python3-setuptools
 BuildRequires: python3-wheel
 BuildRequires: pybind11-devel
 Requires: python3-numpy
-# For testing
 BuildRequires: python3-matplotlib
 BuildRequires: python3-flaky
 %{?python_provide:%python_provide python3-%{name}}
@@ -104,6 +85,7 @@ BuildRequires: python3-flaky
 %{name} libraries for Python.
 
 %prep
+
 %autosetup -n Smoldyn-%{version} -N
 %patch -P 0 -p0 -b .fix_libpaths
 %patch -P 1 -p0 -b .freeglut
@@ -144,7 +126,7 @@ cp -p source/libSteve/SFMT/README.txt source/libSteve/SFMT/SFMT-README.txt
 find -name '*.pyc' -delete
 
 %build
-# Python binding needs shared libraries
+
 %cmake -Wno-dev \
 %if "%{?_lib}" == "lib64"
  %{?_cmake_lib_suffix64} \
@@ -177,43 +159,28 @@ find -name '*.pyc' -delete
  -DCMAKE_SKIP_RPATH:BOOL=YES \
  -DHAVE_GL_FREEGLUT_H=TRUE -DOPTION_EXAMPLES:BOOL=OFF -DOPTION_DOCS:BOOL=OFF
 %cmake_build
-
 %install
 %cmake_install
 pushd %{__cmake_builddir}/py
 mkdir -p %{buildroot}%{python3_sitearch}
 cp -a smoldyn *.egg-info %{buildroot}%{python3_sitearch}/
 popd
+%oreon_autofiles python3-smoldyn usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Most tests look not executable
+
 pushd %{__cmake_builddir}
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 export PYTHONPATH=%{buildroot}%{python3_sitearch}
 xvfb-run ctest -j1 -R "test_api|test_sanity|test_biosimulator" --output-on-failure
 popd
-
-%files
-%{_bindir}/%{name}
-%doc Using-Smoldyn-with-SED-ML-COMBINE-BioSimulators.md README.md
-
-%files libs
-%license License.txt source/libSteve/SFMT/SFMT-LICENSE.txt LICENSE
-%{_libdir}/lib%{name}_shared.so.%{version}
-%{_libdir}/lib%{name}_shared.so.2
-
-%files libs-devel
-%{_libdir}/lib%{name}_shared.so
-%{_libdir}/lib%{name}_static.a
-%{_includedir}/%{name}/
-
-%files -n python3-smoldyn
-%license License.txt source/libSteve/SFMT/SFMT-LICENSE.txt LICENSE
-%{python3_sitearch}/%{name}/
-%{python3_sitearch}/*.egg-info
-
-%files doc
-%doc docs/*
+%files -f %{oreon_filedir}/main.list
+%files -n smoldyn-doc -f %{oreon_filedir}/smoldyn-doc.list
+%files -n smoldyn-libs -f %{oreon_filedir}/smoldyn-libs.list
+%files -n smoldyn-libs-devel -f %{oreon_filedir}/smoldyn-libs-devel.list
+%files -n python3-smoldyn -f %{oreon_filedir}/python3-smoldyn.list
 
 %changelog
+
 %autochangelog

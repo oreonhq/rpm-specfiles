@@ -1,30 +1,25 @@
-%global source0_hash 89f8c405437e2eac385bd15ea065f85c18e7c5c24bd79ba477e6924834bc282d
-
+%global source0_hash e87485ef61010fb554009f8f32bbc55b1a7b0c5d69efbd4b8ccec935145f6074
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 Name:           ocaml-uucd
 Version:        18.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Unicode character database decoder for OCaml
-
 License:        ISC
 URL:            https://erratique.ch/software/uucd
 VCS:            git:https://erratique.ch/repos/uucd.git
-Source:         %{url}/releases/uucd-%{version}.tbz
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
+Source0:        https://erratique.ch/software/uucd/releases/uucd-%{version}.tbz
 ExcludeArch:    %{ix86}
-
-BuildRequires:  ocaml >= 4.08.0
+# oreon:deps
+BuildRequires:  ocaml
 BuildRequires:  ocaml-compiler-libs
 BuildRequires:  ocaml-findlib
 BuildRequires:  ocaml-ocamlbuild
 BuildRequires:  ocaml-rpm-macros
-BuildRequires:  ocaml-topkg-devel >= 1.1.0
+BuildRequires:  ocaml-topkg-devel
 BuildRequires:  ocaml-xmlm-devel
-
+# /oreon:deps
 %description
 Uucd is an OCaml module to decode the data of the Unicode character database
 (http://www.unicode.org/reports/tr44/) from its XML representation
@@ -39,31 +34,27 @@ ISC license.
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ocaml-xmlm-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n uucd-%{version}
-
+%global oreon_srcdir uucd-%{version}
+%oreon_prep
 %build
-# Build the library and the tests
-ocaml pkg/pkg.ml build --dev-pkg false --tests true
 
+ocaml pkg/pkg.ml build --dev-pkg false --tests true
 %install
 %ocaml_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 ocaml pkg/pkg.ml test
-
-%files -f .ofiles
-%license LICENSE.md
-%doc README.md CHANGES.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-uucd-devel -f %{oreon_filedir}/ocaml-uucd-devel.list
 
 %changelog
+
 %autochangelog

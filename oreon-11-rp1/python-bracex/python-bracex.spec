@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 4e38e32392e4a4780fe15d644bfc7c8514057cfc3861e060b11814ce829c25e4
 Name:           python-bracex
 Version:        3.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Bash style brace expander.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/facelessuser/bracex
-Source:         %{pypi_source bracex}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/bracex/bracex-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'bracex' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(hatchling) >= 0.21.1
+Requires:       python3-bracex = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-bracex
-Summary:        %{summary}
-
-%description -n python3-bracex %_description
-
+Summary:        Bash style brace expander.
+%description -n python3-bracex
 
 %prep
-%autosetup -p1 -n bracex-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir bracex-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-bracex usr/lib/python3*/site-packages/bracex* usr/lib64/python3*/site-packages/bracex* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/bracex* usr/lib64/python3*/site-packages/bracex* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-bracex -f %{pyproject_files}
+%files
+%files -n python3-bracex -f %{oreon_filedir}/python3-bracex.list
 
 %changelog
+
 %autochangelog

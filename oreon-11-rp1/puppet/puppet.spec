@@ -1,9 +1,18 @@
-%global source0_hash 3583352bf60cb9013907b880868c1eeee053d2dd647a4f9e388a34cba373622d
-
+%global source12_hash 7c722015b3d16b6a48bec1b6f79dd7369cfd0de70731f17b94c27553f7e08096
+%global source11_hash 8971b3bc892590fb94faf6ce16af9a543038f799f37f73ffd4dabe020914ab35
+%global source10_hash 32e78df32121fa65312f0948f614dab8c7414ccfedbc5e2c70a8cf468fe89cbe
+%global source9_hash b67365307a2b21c1ba2ecf444c3e4895244559d8c5bd40cc2ead4d33fe27cd11
+%global source8_hash 140e41c1ab4c0523b46b0e89f3316945ae4b5328e661da87aebfc33628d92b57
+%global source7_hash 9f0ba59b55caadeb658ba2d5cc51f0a76136d4bb5fffe008bbd5c911b42ac43f
+%global source6_hash 5924b9e974f6fa592cea29cbe93a07b5d7e08bbf2e98145f7ae7157305946b4a
+%global source5_hash 3583352bf60cb9013907b880868c1eeee053d2dd647a4f9e388a34cba373622d
+%global source4_hash 2a7be4004acc3881357b2e11db1a8937f4d64d37d8ce38872cefe1c7c4a2a6ef
+%global source3_hash 470406981b7638869acb4ecc75e2fd079b5999b5aeeb8324b9b475fe07bca935
+%global source1_hash 8272ba5ec733f39f1c33ca8910939bb07f3a40ad3e85120d95fe06f8642a43a1
+%global source0_hash 6eedc184c546b5f2b8d2dc3f8189255235fcf26b09953d8477ab9768b8827b4f
 %global nm_dispatcher_dir %{_prefix}/lib/NetworkManager
 %global puppet_libdir %{ruby_vendorlibdir}
 %global puppet_vendor_mod_dir %{_datadir}/%{name}/vendor_modules
-
 Name:           puppet
 Version:        8.10.0
 Release:        4%{?dist}
@@ -13,8 +22,6 @@ URL:            https://puppet.com
 Source0:        https://downloads.puppetlabs.com/puppet/%{name}-%{version}.tar.gz
 Source1:        https://downloads.puppetlabs.com/puppet/%{name}-%{version}.tar.gz.asc
 Source2:        RPM-GPG-KEY-puppet-20250406
-# Get these by checking out the right tag from https://github.com/puppetlabs/puppet-agent and:
-# sed 's|.\+puppetlabs/\([a-z_-]\+\).git.\+tags/v\?\([0-9\.]\+\)"}|https://forge.puppet.com/v3/files/\1-\2.tar.gz|' configs/components/module-puppetlabs-*.json
 Source3:        https://forge.puppet.com/v3/files/puppetlabs-augeas_core-1.5.0.tar.gz
 Source4:        https://forge.puppet.com/v3/files/puppetlabs-cron_core-1.3.0.tar.gz
 Source5:        https://forge.puppet.com/v3/files/puppetlabs-host_core-1.3.0.tar.gz
@@ -28,20 +35,9 @@ Source12:       https://forge.puppet.com/v3/files/puppetlabs-zone_core-1.2.0.tar
 Source13:       puppet-nm-dispatcher.systemd
 Source14:       start-puppet-wrapper
 Source15:       logrotate
-
 Patch:          0001-Avoid-closing-directory-we-re-iterating.patch
 Patch:          openvox-dnf5.patch
-
 BuildArch: noarch
-
-# ruby-devel does not require the base package, but requires -libs instead
-BuildRequires: ruby
-BuildRequires: ruby-devel
-BuildRequires: rubygem-json
-BuildRequires: facter
-BuildRequires: hiera
-BuildRequires: systemd
-BuildRequires: gnupg2
 Requires: hiera >= 3.3.1
 Requires: facter >= 4.3.0
 Requires: rubygem(concurrent-ruby) >= 1.1.9
@@ -52,7 +48,6 @@ Requires: rubygem(puppet-resource_api) >= 1.5
 Requires: rubygem(semantic_puppet) >= 1.0.2
 Requires: rubygem(scanf) >= 1.0
 Requires: ruby-augeas >= 0.5.0
-# racc was a default gem, is now a bundled gem but shipped as a sepeate package
 Requires: (ruby-default-gems < 3.3 or rubygem(racc))
 Requires: augeas >= 1.10.1
 Requires: augeas-libs >= 1.10.1
@@ -60,7 +55,15 @@ Requires: ruby(selinux) libselinux-utils
 Obsoletes: puppet-headless < 6.0.0
 Obsoletes: puppet-server < 6.0.0
 Obsoletes: puppet < 6.0.0
-
+# oreon:deps
+BuildRequires:  facter
+BuildRequires:  gnupg2
+BuildRequires:  hiera
+BuildRequires:  ruby
+BuildRequires:  ruby-devel
+BuildRequires:  rubygem-json
+BuildRequires:  systemd
+# /oreon:deps
 %description
 Puppet lets you centrally manage every important aspect of your system using a
 cross-platform specification language that manages all the separate elements
@@ -68,6 +71,7 @@ normally aggregated in different files, like users, cron jobs, and hosts,
 along with obviously discrete elements like packages, services, and files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -106,116 +110,39 @@ ruby install.rb --destdir=%{buildroot} \
  --vardir=%{_sharedstatedir}/%{name} \
  --publicdir=%{_sharedstatedir}/%{name}/public \
  --sitelibdir=%{puppet_libdir}
-
 mkdir -p %{buildroot}%{_datadir}/%{name}/vendor_modules
 for d in $(find -mindepth 1 -maxdepth 1 -type d -name 'puppetlabs-*'); do
   modver=${d#*-}
   mod=${modver%-*}
   cp -a $d %{buildroot}%{_datadir}/%{name}/vendor_modules/$mod
 done
-
 install -Dp -m0644 %{SOURCE15} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-
 install -d -m0755 %{buildroot}%{_unitdir}
 install -Dp -m0644 ext/systemd/puppet.service %{buildroot}%{_unitdir}/%{name}.service
 install -D -m0644 puppet.sysusers.conf %{buildroot}%{_sysusersdir}/puppet.conf
-
-# Note(hguemar): Conflicts with config file from hiera package
 rm %{buildroot}%{_sysconfdir}/%{name}/hiera.yaml
-
-# Install a NetworkManager dispatcher script to pickup changes to
-# /etc/resolv.conf and such (https://bugzilla.redhat.com/532085).
 install -Dpv -m0755 %{SOURCE13} \
  %{buildroot}%{nm_dispatcher_dir}/dispatcher.d/98-%{name}
-
-# Install the ext/ directory to %%{_datadir}/%%{name}
 install -d %{buildroot}%{_datadir}/%{name}
 cp -a ext/ %{buildroot}%{_datadir}/%{name}
-
-# Install wrappers for SELinux
 install -Dp -m0755 %{SOURCE14} %{buildroot}%{_bindir}/start-puppet-agent
 sed -i 's|^ExecStart=.*/bin/puppet|ExecStart=%{_bindir}/start-puppet-agent|' \
  %{buildroot}%{_unitdir}/%{name}.service
-
-# Setup tmpfiles.d config
 mkdir -p %{buildroot}%{_tmpfilesdir}
 echo "D %{_rundir}/%{name} 0755 %{name} %{name} -" > \
  %{buildroot}%{_tmpfilesdir}/%{name}.conf
-
-# Unbundle
-# Note(hguemar): remove unrelated OS/distro specific folders
-# These mess-up with RPM automatic dependencies compute by adding
-# unnecessary deps like /sbin/runscripts
-# some other things were removed with the patch
 rm -r %{buildroot}%{_datadir}/%{name}/ext/{debian,osx,solaris,suse,windows,systemd,redhat}
 rm %{buildroot}%{_datadir}/%{name}/ext/{build_defaults.yaml,project_data.yaml}
-
-%files
-%attr(-, puppet, puppet) %{_localstatedir}/log/%{name}
-%attr(-, root, root) %{_datadir}/%{name}
-%{_unitdir}/%{name}.service
-%{_tmpfilesdir}/%{name}.conf
-%dir %{nm_dispatcher_dir}
-%dir %{nm_dispatcher_dir}/dispatcher.d
-%{nm_dispatcher_dir}/dispatcher.d/98-puppet
-
-# Vendor modules
-%doc %{_datadir}/%{name}/vendor_modules/*/*.md
-%doc %{_datadir}/%{name}/vendor_modules/*/readmes
-%license %{_datadir}/%{name}/vendor_modules/*/LICENSE
-# Strip development files
-%exclude %{_datadir}/%{name}/vendor_modules/*/.{github,puppet-lint.rc,sync.yml}
-%exclude %{_datadir}/%{name}/vendor_modules/*/{CODEOWNERS,Gemfile,appveyor.yml,spec}
-
-%doc README.md examples
-%license LICENSE
-%{_datadir}/ruby/vendor_ruby/hiera
-%{_datadir}/ruby/vendor_ruby/hiera_puppet.rb
-%{_datadir}/ruby/vendor_ruby/puppet
-%{_datadir}/ruby/vendor_ruby/puppet_pal.rb
-%{_datadir}/ruby/vendor_ruby/puppet.rb
-%{_datadir}/ruby/vendor_ruby/puppet_x.rb
-%dir %{_sharedstatedir}/%{name}
-%dir %{_sharedstatedir}/%{name}/public
-%{_bindir}/puppet
-%{_bindir}/start-puppet-agent
-%{_mandir}/man5/puppet.conf.5*
-%{_mandir}/man8/puppet-plugin.8*
-%{_mandir}/man8/puppet-report.8*
-%{_mandir}/man8/puppet-resource.8*
-%{_mandir}/man8/puppet-script.8*
-%{_mandir}/man8/puppet-ssl.8*
-%{_mandir}/man8/puppet-agent.8*
-%{_mandir}/man8/puppet.8*
-%{_mandir}/man8/puppet-apply.8*
-%{_mandir}/man8/puppet-catalog.8*
-%{_mandir}/man8/puppet-config.8*
-%{_mandir}/man8/puppet-describe.8*
-%{_mandir}/man8/puppet-device.8*
-%{_mandir}/man8/puppet-doc.8*
-%{_mandir}/man8/puppet-epp.8*
-%{_mandir}/man8/puppet-facts.8*
-%{_mandir}/man8/puppet-filebucket.8*
-%{_mandir}/man8/puppet-generate.8*
-%{_mandir}/man8/puppet-help.8*
-%{_mandir}/man8/puppet-lookup.8*
-%{_mandir}/man8/puppet-module.8*
-%{_mandir}/man8/puppet-node.8*
-%{_mandir}/man8/puppet-parser.8*
-
-%config(noreplace) %attr(-, root, root) %dir %{_sysconfdir}/%{name}
-%config(noreplace) %attr(-, root, root) %dir %{_sysconfdir}/%{name}/code
-%config(noreplace) %attr(644, root, root) %{_sysconfdir}/%{name}/puppet.conf
-%config(noreplace) %attr(644, root, root) %{_sysconfdir}/logrotate.d/%{name}
-
-%ghost %attr(755, puppet, puppet) %{_rundir}/%{name}
-%{_sysusersdir}/puppet.conf
+%oreon_autofiles main
 
 %post
-%systemd_post %{name}.service
 
+%systemd_post %{name}.service
 %postun
+
 %systemd_postun_with_restart %{name}.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

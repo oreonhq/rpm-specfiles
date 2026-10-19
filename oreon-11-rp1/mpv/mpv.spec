@@ -1,51 +1,24 @@
-%global source0_hash none
-
-# Disable X11 for RHEL 10+
+%global source0_hash ee21092a5ee427353392360929dc64645c54479aefdb5babc5cfbb5fad626209
 %bcond x11 %[%{undefined rhel} || 0%{?rhel} < 10]
-
 Name:           mpv
 Version:        0.41.0
 Release:        6%{?dist}
-
-# overall license is GPL-2.0-or-later and LGPL-2.1-or-later
-# BSD-2-Clause
-#   osdep/android/strnlen.c
-#   osdep/android/strnlen.h
-# BSD-3-Clause
-#   audio/filter/af_scaletempo2_internals.h
-# ISC
-#   audio/out/ao_sndio.c
-#   include/mpv/client.h
-#   include/mpv/render.h
-#   include/mpv/render_gl.h
-#   include/mpv/stream_cb.h
-#   misc/thread_pool.c
-#   misc/thread_tools.c
-#   osdep/win32-console-wrapper.c
-#   player/client.c
-#   player/lua/console.lua
-#   ta/ta.c
-#   ta/ta.h
-#   ta/ta_talloc.c
-#   ta/ta_talloc.h
-#   ta/ta_utils.c
-# MIT
-#   misc/codepoint_width.c
-#   osdep/dirent-win.h
-#   osdep/timer-darwin.c
-#   player/lua/fzy.lua
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MIT
 Summary:        Movie player playing most video formats and DVDs
 URL:            https://%{name}.io/
 Source0:        https://github.com/%{name}-player/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+%if %{with x11}
+%endif
+Requires:       hicolor-icon-theme
+Provides:       mplayer-backend
+Recommends:     (yt-dlp or youtube-dl)
+Suggests:       yt-dlp
+# oreon:deps
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  libappstream-glib
 BuildRequires:  libatomic
 BuildRequires:  meson
-BuildRequires:  python3-docutils
-
 BuildRequires:  perl(Encode)
 BuildRequires:  perl(Math::BigInt)
 BuildRequires:  perl(Math::BigRat)
@@ -58,26 +31,25 @@ BuildRequires:  pkgconfig(gbm)
 BuildRequires:  pkgconfig(gl)
 BuildRequires:  pkgconfig(jack)
 BuildRequires:  pkgconfig(lcms2)
-BuildRequires:  pkgconfig(libarchive) >= 3.4.0
+BuildRequires:  pkgconfig(libarchive)
 BuildRequires:  pkgconfig(libass)
-BuildRequires:  pkgconfig(libavcodec) >= 60.31.102
-BuildRequires:  pkgconfig(libavdevice) >= 60.3.100
-BuildRequires:  pkgconfig(libavfilter) >= 9.12.100
-BuildRequires:  pkgconfig(libavformat) >= 60.16.100
-BuildRequires:  pkgconfig(libavutil) >= 58.29.100
+BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libavdevice)
+BuildRequires:  pkgconfig(libavfilter)
+BuildRequires:  pkgconfig(libavformat)
+BuildRequires:  pkgconfig(libavutil)
 BuildRequires:  pkgconfig(libbluray)
 BuildRequires:  pkgconfig(libcdio)
 BuildRequires:  pkgconfig(libcdio_paranoia)
-BuildRequires:  pkgconfig(libdrm)
 BuildRequires:  pkgconfig(libdisplay-info)
+BuildRequires:  pkgconfig(libdrm)
 BuildRequires:  pkgconfig(libjpeg)
-BuildRequires:  pkgconfig(libpipewire-0.3) >= 0.3.57
-BuildRequires:  pkgconfig(libplacebo) >= 6.338.2
+BuildRequires:  pkgconfig(libpipewire-0.3)
+BuildRequires:  pkgconfig(libplacebo)
 BuildRequires:  pkgconfig(libpulse)
-BuildRequires:  pkgconfig(libswresample) >= 4.12.100
-BuildRequires:  pkgconfig(libswscale) >= 7.5.100
+BuildRequires:  pkgconfig(libswresample)
+BuildRequires:  pkgconfig(libswscale)
 BuildRequires:  pkgconfig(libva)
-# https://github.com/mpv-player/mpv/wiki/FAQ#user-content-Why_does_mpv_not_support_Lua_53_or_newer
 BuildRequires:  pkgconfig(lua-5.1)
 BuildRequires:  pkgconfig(mujs)
 BuildRequires:  pkgconfig(openal)
@@ -85,6 +57,7 @@ BuildRequires:  pkgconfig(rubberband)
 BuildRequires:  pkgconfig(sdl2)
 BuildRequires:  pkgconfig(uchardet)
 BuildRequires:  pkgconfig(vapoursynth)
+BuildRequires:  pkgconfig(vdpau)
 BuildRequires:  pkgconfig(vulkan)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-cursor)
@@ -96,21 +69,14 @@ BuildRequires:  pkgconfig(xdamage)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xinerama)
 BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  pkgconfig(xrandr)
-BuildRequires:  pkgconfig(zimg) >= 2.9
-BuildRequires:  pkgconfig(zlib)
-%if %{with x11}
-BuildRequires:  pkgconfig(vdpau)
 BuildRequires:  pkgconfig(xpresent)
+BuildRequires:  pkgconfig(xrandr)
 BuildRequires:  pkgconfig(xscrnsaver)
 BuildRequires:  pkgconfig(xv)
-%endif
-
-Requires:       hicolor-icon-theme
-Provides:       mplayer-backend
-Recommends:     (yt-dlp or youtube-dl)
-Suggests:       yt-dlp
-
+BuildRequires:  pkgconfig(zimg)
+BuildRequires:  pkgconfig(zlib)
+BuildRequires:  python3-docutils
+# /oreon:deps
 %description
 Mpv is a movie player based on MPlayer and mplayer2. It supports a wide variety
 of video file formats, audio and video codecs, and subtitle types. Special
@@ -138,7 +104,6 @@ a library and facilitate easy integration into other applications.
 Summary: Dynamic library for Mpv frontends
 Recommends: (yt-dlp or youtube-dl)
 Suggests: yt-dlp
-
 %description libs
 This package contains the dynamic library libmpv, which provides access to Mpv.
 
@@ -147,17 +112,18 @@ Summary: Development package for libmpv
 Provides: %{name}-libs-devel = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes: %{name}-libs-devel < %{?epoch:%{epoch}:}%{version}-%{release}
 Requires: %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description devel
 This package contains development header files and libraries for Mpv.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
 sed -e "s|/usr/local/etc|%{_sysconfdir}/%{name}|" -i etc/%{name}.conf
 
 %build
+
 %meson --auto-features=auto \
     -Dalsa=enabled \
     -Dbuild-date=false \
@@ -222,38 +188,20 @@ sed -e "s|/usr/local/etc|%{_sysconfdir}/%{name}|" -i etc/%{name}.conf
     -Dzimg=enabled \
     -Dzlib=enabled
 %meson_build
-
 %install
 %meson_install
 install -d -m 0755 %{buildroot}%{_sysconfdir}/%{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
-
-%files
-%docdir %{_docdir}/%{name}/
-%license LICENSE.GPL LICENSE.LGPL Copyright
-%{_docdir}/%{name}/
-%{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{name}*.*
-%{bash_completions_dir}/%{name}
-%{zsh_completions_dir}/_%{name}
-%{fish_completions_dir}/%{name}.fish
-%{_mandir}/man1/%{name}.*
-%{_metainfodir}/%{name}.metainfo.xml
-%dir %{_sysconfdir}/%{name}/
-
-%files libs
-%license LICENSE.GPL LICENSE.LGPL Copyright
-%{_libdir}/lib%{name}.so.2{,.*}
-
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n mpv-libs -f %{oreon_filedir}/mpv-libs.list
+%files -n mpv-devel -f %{oreon_filedir}/mpv-devel.list
 
 %changelog
+
 %autochangelog
 

@@ -1,24 +1,21 @@
 %global source0_hash 73cd47ecf370a33c6e76afb5d9a8abf99489361d7bd191781dbd9b7efd082aa5
-
 Name:           jansi1
 Version:        1.18
-Release:        26%{?dist}
+Release:        1%{?dist}
 Summary:        Generate and interpret ANSI escape sequences in Java
 License:        Apache-2.0
 URL:            https://fusesource.github.io/jansi/
-
 Source0:        https://github.com/fusesource/jansi/archive/jansi-project-%{version}.tar.gz
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.fusesource:fusesource-pom:pom:)
 BuildRequires:  mvn(org.fusesource.hawtjni:hawtjni-runtime)
 BuildRequires:  mvn(org.fusesource.jansi:jansi-native)
-
+BuildRequires:  mvn(org.fusesource:fusesource-pom:pom:)
+# /oreon:deps
 %description
 Jansi is a small Java library that allows you to use ANSI escape
 sequences in your Java console applications.  It implements ANSI support
@@ -29,6 +26,7 @@ ANSI sequences.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n jansi-jansi-project-%{version}
@@ -61,15 +59,15 @@ cd -
 %pom_xpath_set //pom:target 1.8
 
 %build
+
 %mvn_compat_version org.fusesource.jansi:jansi %{version} 1
 %mvn_build
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license license.txt
-%doc readme.md changelog.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

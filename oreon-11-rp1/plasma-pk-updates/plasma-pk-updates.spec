@@ -1,19 +1,13 @@
-%global source0_hash none
-
+%global source0_hash 2ffdbd645ceec85ceb8002f4fbb73e46145612a9ceb831a770e6295f426d2f6c
 %undefine __cmake_in_source_build
-
 Name:           plasma-pk-updates
 Epoch:          1
 Version: 0.3.2
-Release: 24%{?dist}
+Release:        24%{?dist}
 Summary:        Plasma applet for system updates using PackageKit
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/system/plasma-pk-updates
 Source0:        https://download.kde.org/stable/plasma-pk-updates/%{version}/plasma-pk-updates-%{version}.tar.xz
-
-# Upstream patches
 Patch5:        0005-Several-fixes-related-to-the-network-state-and-apple.patch
 Patch6:        0006-Don-t-force-a-check-for-updates-when-the-applet-runs.patch
 Patch8:        0008-Replace-KIconLoader-pixmaps-with-standard-icon-names.patch
@@ -23,69 +17,50 @@ Patch11:        0011-Make-the-notifications-less-obtrusive.patch
 Patch12:        0012-Fix-minor-typos.patch
 Patch13:        0013-Fix-warning-remove-unsigned-int-0-check.patch
 Patch14:        0014-Remove-explicit-initialization-of-default-constructe.patch
-## Requires new SIP Power API from solid, not enabled by default
 Patch15:        0015-Port-away-from-KDELibs4Support-use-Solid-Power-inter.patch
 Patch30:        0030-Add-support-for-license-prompts.patch
 Patch35:        0035-Make-action-buttons-translatable.patch
 Patch42:        0042-Don-t-show-an-error-for-a-failed-automatic-refresh.patch
-
-# Downstream patches
 Patch100:        plasma-pk-updates-0.3.2-notif.patch
-
+Requires:       PackageKit
+Requires:       kf5-solid%{?_isa} >= 5.75.0-2
+# oreon:deps
+BuildRequires:  PackageKit-Qt5-devel
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf5-kcoreaddons-devel
 BuildRequires:  kf5-ki18n-devel
 BuildRequires:  kf5-kiconthemes-devel
 BuildRequires:  kf5-knotifications-devel
 BuildRequires:  kf5-plasma-devel
-# 5.75.0-2 when WIP api's used here were enabled -- rdieter
-BuildRequires:  kf5-solid-devel >= 5.75.0-2
 BuildRequires:  kf5-rpm-macros
-BuildRequires:  PackageKit-Qt5-devel
+BuildRequires:  kf5-solid-devel
+BuildRequires:  libappstream-glib
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtdeclarative-devel
-
-BuildRequires:  libappstream-glib
-
-Requires:       PackageKit
-Requires:       kf5-solid%{?_isa} >= 5.75.0-2
-
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
-# CMake 4 rejects cmake_minimum_required older than 3.5 unless policy is set for the whole run
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_kf5 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name
-
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf5_metainfodir}/org.kde.plasma.pkupdates.appdata.xml ||:
-
-
-%files -f %{name}.lang
-%{_kf5_datadir}/kservices5/plasma-applet-org.kde.plasma.pkupdates.desktop
-%{_kf5_qmldir}/org/kde/plasma/PackageKit/
-%{_kf5_datadir}/plasma/plasmoids/org.kde.plasma.pkupdates/
-%{_kf5_metainfodir}/org.kde.plasma.pkupdates.appdata.xml
-%{_kf5_datadir}/knotifications5/plasma_pk_updates.notifyrc
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Thu May 28 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1:0.3.2-24
 - 0.3.2 from download.kde.org
 

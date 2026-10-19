@@ -1,5 +1,4 @@
 %global source0_hash 0368079783335eca4de866c78149dea24239e5419161e1edde0b4c2ca508509e
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,21 +80,25 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           maven-wagon
 Version:        3.5.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tools to manage artifacts and deployment
 License:        Apache-2.0
 URL:            https://maven.apache.org/wagon
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/wagon/wagon/%{version}/wagon-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.5.3-21
+Provides:       maven-wagon-file = %{version}-%{release}
+Provides:       maven-wagon-http = %{version}-%{release}
+Provides:       maven-wagon-http-shared = %{version}-%{release}
+Provides:       maven-wagon-provider-api = %{version}-%{release}
+Provides:       maven-wagon-providers = %{version}-%{release}
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.httpcomponents:httpclient)
 BuildRequires:  mvn(org.apache.httpcomponents:httpcore)
@@ -104,15 +107,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.5.3-21
-Provides:       maven-wagon-file = %{version}-%{release}
-Provides:       maven-wagon-http = %{version}-%{release}
-Provides:       maven-wagon-http-shared = %{version}-%{release}
-Provides:       maven-wagon-provider-api = %{version}-%{release}
-Provides:       maven-wagon-providers = %{version}-%{release}
-
+# /oreon:deps
 %description
 Maven Wagon is a transport abstraction that is used in Maven's
 artifact and repository handling code. Currently wagon has the
@@ -125,6 +120,7 @@ following providers:
 * SCM (in progress)
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n wagon-3.5.3
 %autosetup -p1 -n wagon-3.5.3
@@ -160,19 +156,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_package ":wagon"
 
 %build
-# tests are disabled because of missing dependencies
+
 %mvn_build -j -f -- -DjavaVersion=8
-
-# Maven requires Wagon HTTP with classifier "shaded"
 %mvn_alias :wagon-http :::shaded:
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
-%doc DEPENDENCIES
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.3-1
 - Import

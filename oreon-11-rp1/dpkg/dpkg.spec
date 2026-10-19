@@ -1,66 +1,48 @@
 %global source0_hash 4baf0632157bfac430b7dc1fe8800ea0787dac91f8bb272404ae19d98e569dd3
-
-# Remove bad dependencies added by perl-generators
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(at|extra|file\\)$
-
 %global pkgconfdir %{_sysconfdir}/dpkg
 %global pkgdatadir %{_datadir}/dpkg
-
 Name:           dpkg
 Version:        1.23.11
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Package maintenance system for Debian Linux
-# The entire source code is GPLv2+ with exception of the following
-# lib/dpkg/md5.c, lib/dpkg/md5.h - Public domain
-# lib/dpkg/showpkg.c, dselect/methods/multicd, lib/dpkg/utils.c, lib/dpkg/showpkg.c - GPLv2
-# dselect/methods/ftp - GPL no version info
-# scripts/Dpkg/Gettext.pm - BSD
-# lib/compat/obstack.h, lib/compat/gettext.h,lib/compat/obstack.c - LGPLv2+
-# Automatically converted from old format: GPLv2 and GPLv2+ and LGPLv2+ and Public Domain and BSD - review is highly recommended.
 License:        GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-Public-Domain AND LicenseRef-Callaway-BSD
 URL:            https://tracker.debian.org/pkg/dpkg
 Source0:        http://ftp.debian.org/debian/pool/main/d/dpkg/%{name}_%{version}.tar.xz
-
+Requires:      tar
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  bzip2-devel
 BuildRequires:  dotconf-devel
 BuildRequires:  doxygen
+BuildRequires:  fakeroot
 BuildRequires:  gcc-c++
 BuildRequires:  gettext
 BuildRequires:  gettext-devel
+BuildRequires:  gnupg2
 BuildRequires:  libmd-devel
 BuildRequires:  libselinux-devel
 BuildRequires:  libtool
 BuildRequires:  libzstd-devel
 BuildRequires:  make
 BuildRequires:  ncurses-devel
-BuildRequires:  perl-devel >= 5.36.0
+BuildRequires:  perl(Digest::MD5)
+BuildRequires:  perl(Digest::SHA)
+BuildRequires:  perl(IO::String)
+BuildRequires:  perl(IPC::Cmd)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(Tie::Handle)
+BuildRequires:  perl(Time::Piece)
+BuildRequires:  perl-devel
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 BuildRequires:  perl-podlators
-BuildRequires:  po4a >= 0.59
+BuildRequires:  po4a
 BuildRequires:  xz-devel
-%if 0%{?rhel} == 9
-BuildRequires:  zlib-devel
-%else
 BuildRequires:  zlib-ng-devel
-%endif
-
-# Need by make check
-BuildRequires: fakeroot
-BuildRequires: gnupg2
-BuildRequires: perl(Digest::MD5)
-BuildRequires: perl(Digest::SHA)
-BuildRequires: perl(IO::String)
-BuildRequires: perl(IPC::Cmd)
-BuildRequires: perl(Test::More)
-BuildRequires: perl(Test::Pod)
-BuildRequires: perl(Tie::Handle)
-BuildRequires: perl(Time::Piece)
-
-Requires:      tar
-
+# /oreon:deps
 %description
 This package provides the low-level infrastructure for handling the
 installation and removal of Debian software packages.
@@ -80,7 +62,6 @@ packages dependencies will likely be unmet.
 %package devel
 Summary:    Debian package management static library
 Provides:   dpkg-static = %{version}-%{release}
-
 %description devel
 This package provides the header files and static library necessary to develop
 software using dpkg, the same library used internally by dpkg.
@@ -91,7 +72,6 @@ time, use at your own risk.
 %package dev
 Summary:    Debian package development tools
 BuildArch:  noarch
-
 Requires:   binutils
 Requires:   bzip2
 Requires:   dpkg-perl = %{version}-%{release}
@@ -101,7 +81,6 @@ Requires:   make
 Requires:   patch
 Requires:   xz
 Requires:   zstd
-
 %description dev
 This package provides the development tools (including dpkg-source) required to
 unpack, build and upload Debian source packages.
@@ -112,13 +91,11 @@ most packages need make and the C compiler gcc.
 %package perl
 Summary:    Dpkg perl modules
 BuildArch:  noarch
-
 Requires:   dpkg = %{version}-%{release}
 Requires:   perl-TimeDate
 Requires:   perl(Digest::MD5)
 Requires:   perl(Digest::SHA)
 Requires:   perl(Digest::SHA1)
-
 %description perl
 This package provides the perl modules used by the scripts in dpkg-dev. They
 cover a wide range of functionality. Among them there are the following public
@@ -172,7 +149,6 @@ modules.
 %package -n dselect
 Summary:  Debian package management front-end
 Requires: %{name} = %{version}-%{release}
-
 %description -n dselect
 dselect is a high-level interface for managing the installation and removal of
 Debian software packages. Many users find dselect intimidating and new users may
@@ -180,10 +156,9 @@ prefer to use apt-based user interfaces.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 autoreconf -vif
 %configure \
     --disable-linker-optimizations \
@@ -194,221 +169,43 @@ autoreconf -vif
     --with-libbz2 \
     --with-liblzma \
     --with-libselinux \
-%if 0%{?rhel} == 9
-    --with-libz \
-%else
     --with-libz-ng \
-%endif
     --with-libzstd
-
 %make_build
-
 %install
 %make_install
-
 mkdir -p %{buildroot}/%{pkgconfdir}/origins
-
-# Prepare "vendor" files for dpkg-vendor
 cat <<EOF > %{buildroot}/%{pkgconfdir}/origins/fedora
 Vendor: Fedora
 Vendor-URL: http://www.fedoraproject.org/
 Bugs: https://bugzilla.redhat.com
 EOF
-%if 0%{?fedora}
-ln -sf fedora %{buildroot}/%{pkgconfdir}/origins/default
-%endif
-
-# from debian/dpkg.install
 install -pm0644 debian/dpkg.cfg %{buildroot}/%{pkgconfdir}
 install -pm0644 debian/dselect.cfg %{buildroot}/%{pkgconfdir}
 install -pm0644 debian/shlibs.default %{buildroot}/%{pkgconfdir}
 install -pm0644 debian/shlibs.override %{buildroot}/%{pkgconfdir}
-
-# debian/dpkg.logrotate
 install -D -pm0644 debian/dpkg.logrotate %{buildroot}/%{_sysconfdir}/logrotate.d/%{name}
-
-# from dpkg.postinst
 for file in diversions statoverride status; do
     touch %{buildroot}%{_localstatedir}/lib/dpkg/$file
 done
-
-# Create log
 mkdir -p %{buildroot}%{_localstatedir}/log/
 touch %{buildroot}%{_localstatedir}/log/dpkg.log
-
 %find_lang dpkg
 %find_lang dpkg-dev
 %find_lang dselect
-
 rm %{buildroot}%{_libdir}/libdpkg.la
+%oreon_autofiles dselect usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make TEST_PARALLEL=4 check
-
-%files -f dpkg.lang
-%license debian/copyright
-%doc README AUTHORS THANKS TODO
-%doc debian/changelog debian/README.bug-usertags debian/dpkg.cron.daily
-%dir %{pkgconfdir}
-%dir %{pkgconfdir}/dpkg.cfg.d
-%dir %{pkgconfdir}/origins
-%config(noreplace) %{pkgconfdir}/dpkg.cfg
-%config(noreplace) %{pkgconfdir}/origins/*
-%config(noreplace) %{_sysconfdir}/logrotate.d/dpkg
-%config(noreplace) %{_localstatedir}/log/%{name}.log
-%dir %{_localstatedir}/lib/dpkg
-%config(noreplace) %{_localstatedir}/lib/dpkg/diversions
-%config(noreplace) %{_localstatedir}/lib/dpkg/statoverride
-%config(noreplace) %{_localstatedir}/lib/dpkg/status
-%{_datadir}/doc/dpkg/*
-%{_datadir}/dpkg/sh/dpkg-error.sh
-%dir %{pkgdatadir}
-%{pkgdatadir}/*.mk
-%{_datadir}/bash-completion/completions/*
-%{_mandir}/man7/deb-email.7*
-%{_bindir}/dpkg
-%{_bindir}/dpkg-deb
-%{_bindir}/dpkg-maintscript-helper
-%{_bindir}/dpkg-query
-%{_bindir}/dpkg-split
-%{_bindir}/dpkg-trigger
-%{_bindir}/dpkg-divert
-%{_bindir}/dpkg-statoverride
-%{_bindir}/dpkg-realpath
-%{_sbindir}/start-stop-daemon
-%{_libexecdir}/dpkg/dpkg-db-backup
-%{_libexecdir}/dpkg/dpkg-db-keeper
-%{_mandir}/man1/dpkg.1*
-%{_mandir}/man1/dpkg-deb.1*
-%{_mandir}/man1/dpkg-divert.1*
-%{_mandir}/man1/dpkg-maintscript-helper.1*
-%{_mandir}/man1/dpkg-query.1*
-%{_mandir}/man1/dpkg-realpath.1*
-%{_mandir}/man1/dpkg-split.1*
-%{_mandir}/man1/dpkg-statoverride.1*
-%{_mandir}/man1/dpkg-trigger.1*
-%{_mandir}/man5/dpkg.cfg.5*
-%{_mandir}/man8/start-stop-daemon.8*
-%{_mandir}/*/man1/dpkg-divert.1*
-%{_mandir}/*/man1/dpkg-maintscript-helper.1*
-%{_mandir}/*/man1/dpkg-realpath.1*
-%{_mandir}/*/man1/dpkg-split.1*
-%{_mandir}/*/man1/dpkg-trigger.1*
-%{_mandir}/*/man5/dpkg.cfg.5*
-%{_mandir}/*/man8/start-stop-daemon.8*
-%dir %{pkgdatadir}
-%{pkgdatadir}/abitable
-%{pkgdatadir}/cputable
-%{pkgdatadir}/ostable
-%{pkgdatadir}/tupletable
-
-%files devel
-%{_datadir}/aclocal/dpkg-*.m4
-%{_includedir}/dpkg/*.h
-%{_libdir}/libdpkg.a
-%{_libdir}/pkgconfig/libdpkg.pc
-%{_mandir}/man7/libdpkg.7*
-
-%files dev -f dpkg-dev.lang
-%doc doc/README.feature-removal-schedule doc/README.api doc/spec
-%config(noreplace) %{pkgconfdir}/shlibs.default
-%config(noreplace) %{pkgconfdir}/shlibs.override
-%{_bindir}/dpkg-architecture
-%{_bindir}/dpkg-buildapi
-%{_bindir}/dpkg-buildpackage
-%{_bindir}/dpkg-buildtree
-%{_bindir}/dpkg-buildflags
-%{_bindir}/dpkg-checkbuilddeps
-%{_bindir}/dpkg-distaddfile
-%{_bindir}/dpkg-genbuildinfo
-%{_bindir}/dpkg-genchanges
-%{_bindir}/dpkg-gencontrol
-%{_bindir}/dpkg-gensymbols
-%{_bindir}/dpkg-mergechangelogs
-%{_bindir}/dpkg-name
-%{_bindir}/dpkg-parsechangelog
-%{_bindir}/dpkg-scanpackages
-%{_bindir}/dpkg-scansources
-%{_bindir}/dpkg-shlibdeps
-%{_bindir}/dpkg-source
-%{_bindir}/dpkg-vendor
-%{_datadir}/zsh/vendor-completions/_dpkg-parsechangelog
-%{_mandir}/man1/dpkg-architecture.1*
-%{_mandir}/man1/dpkg-buildapi.1*
-%{_mandir}/man1/dpkg-buildflags.1*
-%{_mandir}/man1/dpkg-buildpackage.1*
-%{_mandir}/man1/dpkg-buildtree.1*
-%{_mandir}/man1/dpkg-checkbuilddeps.1*
-%{_mandir}/man1/dpkg-distaddfile.1*
-%{_mandir}/man1/dpkg-genbuildinfo.1*
-%{_mandir}/man1/dpkg-genchanges.1*
-%{_mandir}/man1/dpkg-gencontrol.1*
-%{_mandir}/man1/dpkg-gensymbols.1*
-%{_mandir}/man1/dpkg-mergechangelogs.1*
-%{_mandir}/man1/dpkg-name.1*
-%{_mandir}/man1/dpkg-parsechangelog.1*
-%{_mandir}/man1/dpkg-scanpackages.1*
-%{_mandir}/man1/dpkg-scansources.1*
-%{_mandir}/man1/dpkg-shlibdeps.1*
-%{_mandir}/man1/dpkg-source.1*
-%{_mandir}/man1/dpkg-vendor.1*
-%{_mandir}/man5/deb.5*
-%{_mandir}/man5/deb822.5*
-%{_mandir}/man5/deb-buildinfo.5*
-%{_mandir}/man5/deb-changelog.5*
-%{_mandir}/man5/deb-changes.5*
-%{_mandir}/man5/deb-conffiles.5*
-%{_mandir}/man5/deb-control.5*
-%{_mandir}/man5/deb-extra-override.5*
-%{_mandir}/man5/deb-md5sums.5*
-%{_mandir}/man5/deb-old.5*
-%{_mandir}/man5/deb-origin.5*
-%{_mandir}/man5/deb-override.5*
-%{_mandir}/man5/deb-postinst.5*
-%{_mandir}/man5/deb-postrm.5*
-%{_mandir}/man5/deb-preinst.5*
-%{_mandir}/man5/deb-prerm.5*
-%{_mandir}/man5/deb-shlibs.5*
-%{_mandir}/man5/deb-split.5*
-%{_mandir}/man5/deb-src-control.5*
-%{_mandir}/man5/deb-src-files.5*
-%{_mandir}/man5/deb-src-rules.5*
-%{_mandir}/man5/deb-src-symbols.5*
-%{_mandir}/man5/deb-substvars.5*
-%{_mandir}/man5/deb-symbols.5*
-%{_mandir}/man5/deb-triggers.5*
-%{_mandir}/man5/dsc.5*
-%{_mandir}/man7/deb-version.7*
-%{_mandir}/man7/dpkg-build-api.7*
-%exclude %{_mandir}/*/man1/dpkg-divert.1*
-%exclude %{_mandir}/*/man1/dpkg-maintscript-helper.1*
-%exclude %{_mandir}/*/man1/dpkg-realpath.1*
-%exclude %{_mandir}/*/man1/dpkg-split.1*
-%exclude %{_mandir}/*/man1/dpkg-trigger.1*
-%exclude %{_mandir}/*/man1/dselect.1*
-%exclude %{_mandir}/*/man5/dpkg.cfg.5*
-%exclude %{_mandir}/*/man5/dselect.cfg.5*
-%exclude %{_mandir}/*/man8/*
-%{_mandir}/*/man1/*
-%{_mandir}/*/man5/*
-%{_mandir}/*/man7/*
-
-%files perl
-%{_datadir}/dpkg/*.specs
-%{_mandir}/man3/Dpkg*.3*
-%{perl_vendorlib}/Dpkg*
-
-%files -n dselect -f dselect.lang
-%config(noreplace) %{pkgconfdir}/dselect.cfg
-%{_bindir}/dselect
-%{perl_vendorlib}/Dselect
-%{_libexecdir}/dpkg/methods
-%{_localstatedir}/lib/dpkg/methods
-%{_mandir}/man1/dselect.1*
-%{_mandir}/man5/dselect.cfg.5*
-%{_mandir}/*/man1/dselect.1*
-%{_mandir}/*/man5/dselect.cfg.5*
-%dir %{pkgconfdir}/dselect.cfg.d
+%files -f %{oreon_filedir}/main.list
+%files -n dpkg-devel -f %{oreon_filedir}/dpkg-devel.list
+%files -n dpkg-dev -f %{oreon_filedir}/dpkg-dev.list
+%files -n dpkg-perl -f %{oreon_filedir}/dpkg-perl.list
+%files -n dselect -f %{oreon_filedir}/dselect.list
 
 %changelog
+
 %autochangelog

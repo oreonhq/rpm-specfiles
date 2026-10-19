@@ -1,33 +1,30 @@
 %global source0_hash 38bb9666524dc384c3366f6342cb9656c50bac0f9716a3d44f1cf552ccbe0eb9
-
 Name:           perl-DateTime-Format-Pg
 Version:        0.16014
-Release:        14%{?dist}
+Release:        1%{?dist}
 Summary:        Parse and format PostgreSQL dates and times
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-Pg
 Source0:        https://cpan.metacpan.org/authors/id/D/DM/DMAKI/DateTime-Format-Pg-%{version}.tar.gz
 BuildArch:      noarch
-# Build
+# oreon:deps
 BuildRequires:  coreutils
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Module::Build::Tiny) >= 0.035
-BuildRequires:  perl(strict)
-# Runtime
 BuildRequires:  perl(Carp)
-BuildRequires:  perl(DateTime) >= 0.13
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(DateTime)
 BuildRequires:  perl(DateTime::Duration)
-BuildRequires:  perl(DateTime::Format::Builder) >= 0.72
-BuildRequires:  perl(DateTime::TimeZone) >= 0.12
+BuildRequires:  perl(DateTime::Format::Builder)
+BuildRequires:  perl(DateTime::TimeZone)
 BuildRequires:  perl(DateTime::TimeZone::Floating)
 BuildRequires:  perl(DateTime::TimeZone::UTC)
-BuildRequires:  perl(vars)
-# Tests only
-BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Module::Build::Tiny)
 BuildRequires:  perl(Test::More)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
 BuildRequires:  perl(warnings)
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module understands the formats used by PostgreSQL for its DATE, TIME,
 TIMESTAMP, and INTERVAL data types. It can be used to parse these formats
@@ -39,12 +36,12 @@ it in a format accepted by PostgreSQL.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n DateTime-Format-Pg-%{version}
@@ -62,35 +59,27 @@ for F in t/99-pod.t t/99-pod-coverage.t; do
 done
 
 %build
+
 perl Build.PL --installdirs=vendor
 ./Build
-
 %install
 ./Build install --destdir=%{buildroot} --create_packlist=0
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
-
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 ./Build test
-
-%files
-%license LICENSE
-%doc Changes
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-DateTime-Format-Pg-tests -f %{oreon_filedir}/perl-DateTime-Format-Pg-tests.list
 
 %changelog
+
 %autochangelog

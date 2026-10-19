@@ -1,57 +1,42 @@
-%global source0_hash none
-
+%global source0_hash fb733957396cb82301f3f79cd320aef262cd0592c93d6b4fd656771506999624
 Name:           python-bytecode
 Version:        0.19.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python module to generate and modify bytecode
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/MatthieuDartiailh/bytecode
-Source:         %{pypi_source bytecode}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/bytecode/bytecode-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'bytecode' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61.2
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 3.4.3
+Requires:       python3-bytecode = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-bytecode
-Summary:        %{summary}
-
-%description -n python3-bytecode %_description
-
+Summary:        Python module to generate and modify bytecode
+%description -n python3-bytecode
 
 %prep
-%autosetup -p1 -n bytecode-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir bytecode-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-bytecode usr/lib/python3*/site-packages/bytecode* usr/lib64/python3*/site-packages/bytecode* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/bytecode* usr/lib64/python3*/site-packages/bytecode* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-bytecode -f %{pyproject_files}
+%files
+%files -n python3-bytecode -f %{oreon_filedir}/python3-bytecode.list
 
 %changelog
+
 %autochangelog

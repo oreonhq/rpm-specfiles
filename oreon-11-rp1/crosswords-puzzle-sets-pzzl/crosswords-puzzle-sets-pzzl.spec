@@ -1,33 +1,26 @@
 %global source0_hash 525df88ee7fafac37a73920dbd2049b9f76a6598dde54cc3cecb1ae963712f14
-
 %global puzzleset pzzl
 %global srcname puzzle-sets-%{puzzleset}
-
 Name:           crosswords-%{srcname}
 Version:        4.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Dutch puzzle sets from pzzl.net for GNOME Crosswords
-
 License:        GPL-3.0-or-later
 URL:            https://gitlab.gnome.org/philip.goto/%{srcname}
-Source:         %{url}/-/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://gitlab.gnome.org/philip.goto/%{srcname}/-/archive/%{version}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  gcc
-BuildRequires:  libappstream-glib
-BuildRequires:  meson
-
-BuildRequires:  glib2-devel
-BuildRequires:  json-glib-devel
-
 Requires:       crosswords
 Supplements:    crosswords
-
-# For the downloader script
 Requires:       python3
 Requires:       python3dist(python-dateutil)
 Requires:       python3dist(requests)
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  glib2-devel
+BuildRequires:  json-glib-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  meson
+# /oreon:deps
 %description
 This package contains Dutch puzzle set downloaders for GNOME Crosswords. The
 puzzles are pulled from pzzl.net and converted to ipuz format supported by
@@ -35,29 +28,26 @@ Crosswords. Right now this puzzle set contains both mini and large puzzles
 published on De Telegraaf.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{srcname}-%{version} -p1
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
-
 install -Dpm0755 ipzzl.py %{buildroot}%{_libexecdir}/ipzzl
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet \
   %{buildroot}%{_metainfodir}/org.gnome.Crosswords.PuzzleSets.%{puzzleset}.metainfo.xml
-
-%files
-%license COPYING
-%doc README.md
-%{_datadir}/crosswords/puzzle-sets/%{puzzleset}
-%{_libexecdir}/ipzzl
-%{_metainfodir}/org.gnome.Crosswords.PuzzleSets.%{puzzleset}.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 164403fa9ebc83280bbc4705f4b243a28837e164310b4e65c38ccab1ebafeeb3
 Name:           python-prefixed
 Version:        0.9.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Prefixed alternative numeric library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
 URL:            https://prefixed.readthedocs.io
-Source:         %{pypi_source prefixed}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/prefixed/prefixed-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'prefixed' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-prefixed = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-prefixed
-Summary:        %{summary}
-
-%description -n python3-prefixed %_description
-
+Summary:        Prefixed alternative numeric library
+%description -n python3-prefixed
 
 %prep
-%autosetup -p1 -n prefixed-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir prefixed-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-prefixed usr/lib/python3*/site-packages/prefixed* usr/lib64/python3*/site-packages/prefixed* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/prefixed* usr/lib64/python3*/site-packages/prefixed* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-prefixed -f %{pyproject_files}
+%files
+%files -n python3-prefixed -f %{oreon_filedir}/python3-prefixed.list
 
 %changelog
+
 %autochangelog

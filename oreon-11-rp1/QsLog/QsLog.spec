@@ -1,28 +1,21 @@
 %global source0_hash 705de180fcf9524712a93afb4156e5d8a77644a2874a4f550cc89d71112a4f24
-
 %global commit 2959cec27825e53d1554a32668f1f7892ca351c7
 %global medcommit %(c=%{commit}; echo ${c:0:12})
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           QsLog
 Version:        0
-Release:        33.%{shortcommit}git%{?dist}
+Release:        1%{?dist}
 Summary:        An easy to use logger that is based on Qt's QDebug class
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://bitbucket.org/razvanpetru/qslog
-
 Source0:        https://bitbucket.org/razvanpetru/qslog/get/%{shortcommit}.tar.gz
-
-# Don't install docs
 Patch0:         QsLog-nodoc.patch
-# Install libraries in correct directory
 Patch1:         QsLog-libdir.patch
-
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc-c++
+BuildRequires:  make
 BuildRequires:  qt4-devel
-
+# /oreon:deps
 %description
 QsLog is an easy to use logger that is based on Qt's QDebug class.
 Features:
@@ -36,12 +29,12 @@ Features:
 %package devel
 Summary:         Development headers and library for QsLog
 Requires:        %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package contains the development headers and libraries necessary
 for compiling against QsLog.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n razvanpetru-qslog-%{medcommit}
@@ -59,21 +52,17 @@ for f in QsLog.h QsLogDestConsole.h QsLogLevel.h QsLogDest.h LICENSE; do
 done
 
 %build
+
 %qmake_qt4 QsLogSharedLibrary.pro
 make %{?_smp_mflags}
-
 %install
 make install INSTALL_ROOT=%{buildroot}
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc LICENSE QsLogReadme.txt
-%{_libdir}/libQsLog.so.*
-
-%files devel
-%{_includedir}/QsLog/
-%{_libdir}/libQsLog.so
+%files -f %{oreon_filedir}/main.list
+%files -n QsLog-devel -f %{oreon_filedir}/QsLog-devel.list
 
 %changelog
+
 %autochangelog

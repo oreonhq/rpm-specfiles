@@ -1,5 +1,4 @@
 %global source0_hash e60346ae303bea6b58b9d68dd70186d5be51b326ebcd92d739c017c24c2bd702
-
 Name:           libacars
 Version:        1.3.1
 Release:        18%{?dist}
@@ -7,19 +6,18 @@ Summary:        A library for decoding various ACARS message payloads
 License:        MIT
 URL:            https://github.com/szpajder/libacars
 Source0:        https://github.com/szpajder/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig(zlib)
 BuildRequires:  ninja-build
-
+BuildRequires:  pkgconfig(zlib)
+# /oreon:deps
 %description
 libacars is a library for decoding various ACARS message payloads.
 
 %package devel
 Summary:        Development files for libacars
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 libacars is a library for decoding various ACARS message payloads.
 
@@ -28,7 +26,6 @@ applications that want to make use of libacars.
 
 %package -n acars-examples
 Summary:        Example applications for libacars
-
 %description -n acars-examples
 Example applications for for libacars:
 
@@ -42,6 +39,7 @@ Example applications for for libacars:
    reports)
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -49,34 +47,23 @@ mkdir -p %{_target_platform}
 sed -i -e "/acars_static/d" src/libacars/CMakeLists.txt
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380704)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_LIBDIR:PATH=%{_lib} \
     -DCMAKE_SHARED_LINKER_FLAGS=""
 %cmake_build
-
 %install
 %cmake_install
 rm -rf %{buildroot}/%{_datadir}/doc
+%oreon_autofiles acars-examples usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc CHANGELOG.md README.md
-%license LICENSE.md
-%{_libdir}/%{name}.so.1
-
-%files devel
-%doc doc/API_REFERENCE.md doc/API_REFERENCE.md
-%{_includedir}/%{name}
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files -n acars-examples
-%{_bindir}/adsc_get_position
-%{_bindir}/cpdlc_get_position
-%{_bindir}/decode_acars_apps
-%{_bindir}/media_advisory
+%files -f %{oreon_filedir}/main.list
+%files -n libacars-devel -f %{oreon_filedir}/libacars-devel.list
+%files -n acars-examples -f %{oreon_filedir}/acars-examples.list
 
 %changelog
+
 %autochangelog

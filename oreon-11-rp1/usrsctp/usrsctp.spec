@@ -1,20 +1,18 @@
 %global source0_hash 260107caf318650a57a8caa593550e39bca6943e93f970c80d6c17e59d62cd92
-
 Name: usrsctp
 Version: 0.9.5.0
-Release: 12%{?dist}
+Release:        12%{?dist}
 Epoch: 1
-
 License: BSD-3-Clause
-Summary: Portable SCTP userland stack
+Summary:        Portable SCTP userland stack
 URL: https://github.com/sctplab/%{name}
-Source0: %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: ninja-build
-BuildRequires: gcc-c++
-BuildRequires: meson
-BuildRequires: gcc
-
+Source0:        https://github.com/sctplab/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  meson
+BuildRequires:  ninja-build
+# /oreon:deps
 %description
 SCTP is a message oriented, reliable transport protocol with direct support
 for multihoming that runs on top of IP or UDP, and supports both v4 and v6
@@ -36,16 +34,14 @@ sockets API that are not mentioned in this document, please refer to RFC
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description devel
 %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson \
     -Dwerror=false \
     -Dsctp_debug=false \
@@ -53,22 +49,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -Dsctp_inet6=true \
     -Dsctp_build_programs=false
 %meson_build
-
 %check
-%meson_test
 
+%meson_test
 %install
 %meson_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.md Manual.md
-%license LICENSE.md
-%{_libdir}/lib%{name}.so.2*
-
-%files devel
-%{_includedir}/%{name}.h
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n usrsctp-devel -f %{oreon_filedir}/usrsctp-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,52 +1,45 @@
 %global source0_hash e61edb71344dcd5daa6e7175dfbb274a758be8b58452773569bb35645b85a238
-
 %global po_package %{name}-3.0
-
 Name:           gnome-applets
 Version:        3.58.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Small applications for the GNOME Flashback panel
-
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Projects/GnomeApplets
-Source:         https://download.gnome.org/sources/%{name}/3.58/%{name}-%{version}.tar.xz
-
+Source0:        https://download.gnome.org/sources/%{name}/3.58/%{name}-%{version}.tar.xz
+%ifnarch s390 s390x sparc64 i686
+%endif
+Requires:       gnome-panel >= 3.41.1
+Requires:       hicolor-icon-theme
+ExcludeArch:    %{ix86}
+# oreon:deps
 BuildRequires:  autoconf
-BuildRequires:  automake >= 1.16.4
+BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  intltool
+BuildRequires:  kernel-tools-devel
 BuildRequires:  libSM-devel
 BuildRequires:  libtool
 BuildRequires:  libxslt
 BuildRequires:  make
-BuildRequires:  yelp-tools
-
-BuildRequires:  pkgconfig(adwaita-icon-theme) >= 3.14.0
-BuildRequires:  pkgconfig(dbus-1) >= 1.1.2
-BuildRequires:  pkgconfig(dbus-glib-1) >= 0.74
-BuildRequires:  pkgconfig(glib-2.0) >= 2.44.0
-BuildRequires:  pkgconfig(gtk+-3.0) >= 3.20.0
-BuildRequires:  pkgconfig(gucharmap-2.90) >= 2.33.0
-BuildRequires:  pkgconfig(gweather4) >= 3.91
-BuildRequires:  pkgconfig(libgnome-panel) >= 3.41.1
-BuildRequires:  pkgconfig(libgtop-2.0) >= 2.11.92
-BuildRequires:  pkgconfig(libnotify) >= 0.7
-BuildRequires:  pkgconfig(libwnck-3.0) >= 43.0
-BuildRequires:  pkgconfig(libxml-2.0) >= 2.5.0
-BuildRequires:  pkgconfig(polkit-gobject-1) >= 0.97
+BuildRequires:  pkgconfig(adwaita-icon-theme)
+BuildRequires:  pkgconfig(dbus-1)
+BuildRequires:  pkgconfig(dbus-glib-1)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(gucharmap-2.90)
+BuildRequires:  pkgconfig(gweather4)
+BuildRequires:  pkgconfig(libgnome-panel)
+BuildRequires:  pkgconfig(libgtop-2.0)
+BuildRequires:  pkgconfig(libnotify)
+BuildRequires:  pkgconfig(libwnck-3.0)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(polkit-gobject-1)
 BuildRequires:  pkgconfig(tracker-sparql-3.0)
-BuildRequires:  pkgconfig(upower-glib) >= 0.9.4
+BuildRequires:  pkgconfig(upower-glib)
 BuildRequires:  pkgconfig(x11)
-%ifnarch s390 s390x sparc64 i686
-BuildRequires:  kernel-tools-devel
-%endif
-
-Requires:       gnome-panel >= 3.41.1
-Requires:       hicolor-icon-theme
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-
+BuildRequires:  yelp-tools
+# /oreon:deps
 %description
 Gnome Applets component is part of the GnomeFlashback project. It currently
 provides the following applets:
@@ -71,12 +64,14 @@ provides the following applets:
   (windowpicker)
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
 autoreconf -fiv
 
 %build
+
 %configure                      \
     --disable-scrollkeeper      \
     --disable-static            \
@@ -87,33 +82,14 @@ autoreconf -fiv
     --without-hal               \
     %{nil}
 %make_build
-
 %install
 %make_install
 %find_lang %{po_package} --all-name
-
-# drop non-XKB support files
 rm -rf %{buildroot}%{_datadir}/xmodmap
+%oreon_autofiles main
 
-%files -f %{po_package}.lang
-%license COPYING COPYING-DOCS
-%doc README.md AUTHORS NEWS
-%{_datadir}/%{name}/
-%{_datadir}/glib-2.0/schemas/*.gschema.xml
-%{_datadir}/icons/hicolor/*/*/*.png
-%{_datadir}/icons/hicolor/scalable/apps/*.svg
-%{_libdir}/gnome-panel/modules/org.gnome.%{name}.so
-%{_datadir}/glib-2.0/schemas/*.enums.xml
-%ifnarch s390 s390x i686
-%{_bindir}/cpufreq-selector
-%{_datadir}/dbus-1/system-services/org.gnome.CPUFreqSelector.service
-%{_datadir}/dbus-1/system.d/org.gnome.CPUFreqSelector.conf
-%{_datadir}/polkit-1/actions/org.gnome.cpufreqselector.policy
-%endif
-
-# Don't make it as separate noarch package since it builds differently on 's390x'
-# arch and we got build error here
-%{_datadir}/help/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

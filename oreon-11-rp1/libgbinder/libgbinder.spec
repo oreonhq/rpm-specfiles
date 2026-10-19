@@ -1,23 +1,22 @@
-%global source0_hash 31e40d30b5624352681a0eb4e155708679b0349e084913e419f5b3c2c668ac76
-
+%global source0_hash ed1517146e6cf66ddedaddd372eb8045e9345a011e68d89a2887af7a87165ebc
 Name: libgbinder
 Version: 1.1.52
-Release: 1%{?dist}
-Summary: Binder client library
+Release:        1%{?dist}
+Summary:        Binder client library
 License: BSD
 URL: https://github.com/mer-hybris/libgbinder
-Source0: %{url}/archive/refs/tags/%{version}.tar.gz
-
+Source0:        https://github.com/mer-hybris/%{name}/archive/refs/tags/%{version}.tar.gz
 %global libglibutil_version 1.0.52
-
-BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: pkgconfig(libglibutil) >= %{libglibutil_version}
-BuildRequires: pkgconfig
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: bison flex
 Requires: libglibutil >= %{libglibutil_version}
-
+# oreon:deps
+BuildRequires:  bison
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(libglibutil)
+# /oreon:deps
 %description
 GLib-style interface to binder (Android IPC mechanism)
 
@@ -35,55 +34,40 @@ and yet keeping its own API unchanged.
 %package devel
 Summary: Development library for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package contains the development library for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %{make_build} LIBDIR=%{_libdir} KEEP_SYMBOLS=1 release pkgconfig
 %{make_build} -C test/binder-bridge KEEP_SYMBOLS=1 release
 %{make_build} -C test/binder-list KEEP_SYMBOLS=1 release
 %{make_build} -C test/binder-ping KEEP_SYMBOLS=1 release
 %{make_build} -C test/binder-call KEEP_SYMBOLS=1 release
-
 %install
 %{make_build} LIBDIR=%{_libdir} DESTDIR=%{buildroot} install-dev
 %{make_build} -C test/binder-bridge DESTDIR=%{buildroot} install
 %{make_build} -C test/binder-list DESTDIR=%{buildroot} install
 %{make_build} -C test/binder-ping DESTDIR=%{buildroot} install
 %{make_build} -C test/binder-call DESTDIR=%{buildroot} install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
 %check
+
 %{make_build} -C unit test
-
-%files
-%{_libdir}/%{name}.so.*
-%license LICENSE
-
-%files devel
-%{_libdir}/pkgconfig/*.pc
-%{_libdir}/%{name}.so
-%{_includedir}/gbinder
-
-# Tools
-# Missing manpages: https://github.com/mer-hybris/libgbinder/issues/107
 %package tools
 Summary: Binder tools
 Requires: %{name} >= %{version}
-
 %description tools
 Binder command line utilities
 
-%files tools
-%{_bindir}/binder-bridge
-%{_bindir}/binder-list
-%{_bindir}/binder-ping
-%{_bindir}/binder-call
+%files -f %{oreon_filedir}/main.list
+%files -n libgbinder-devel -f %{oreon_filedir}/libgbinder-devel.list
+%files -n libgbinder-tools -f %{oreon_filedir}/libgbinder-tools.list
 
 %changelog
+
 %autochangelog

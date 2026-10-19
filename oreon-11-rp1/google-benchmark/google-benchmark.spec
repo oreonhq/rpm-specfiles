@@ -1,8 +1,6 @@
 %global source0_hash 9631341c82bac4a288bef951f8b26b41f69021794184ece969f8473977eaa340
-
 %bcond ctest 1
 %bcond libpfm 1
-
 Name:           google-benchmark
 Version:        1.9.5
 Release:        1%{?dist}
@@ -11,31 +9,31 @@ License:        Apache-2.0
 URL:            https://github.com/google/benchmark
 Source0:        https://github.com/google/benchmark/archive/v%{version}/benchmark-%{version}.tar.gz
 Patch0:         0001-In-PerfCountersTest.MultiThreaded-serialize-worker-t.patch
-
-BuildRequires:  cmake
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  ninja-build
 %if %{with libpfm}
-BuildRequires:  libpfm-devel
 %endif
 %if %{with ctest}
-BuildRequires:  cmake(GTest)
-BuildRequires:  gmock-devel
-BuildRequires:  glibc-langpack-en
 %endif
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(GTest)
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  glibc-langpack-en
+BuildRequires:  gmock-devel
+BuildRequires:  libpfm-devel
+BuildRequires:  ninja-build
+# /oreon:deps
 %description
 Library for benchmarking C++ functions, similar to unit tests.
 
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Headers and libraries for developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n benchmark-%{version}
 sed --in-place \
@@ -44,6 +42,7 @@ sed --in-place \
     CMakeLists.txt
 
 %build
+
 %cmake -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DGIT_VERSION='%{version}' \
@@ -58,24 +57,15 @@ sed --in-place \
     -DBENCHMARK_INSTALL_TOOLS=OFF \
     -DBENCHMARK_USE_BUNDLED_GTEST=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %if %{with ctest}
 %ctest --exclude-regex '^perf_counters_g?test$'
 %endif
 
-%files
-%license AUTHORS CONTRIBUTORS LICENSE
-%doc README.md
-%{_libdir}/libbenchmark.so.1{,.*}
-%{_libdir}/libbenchmark_main.so.1{,.*}
-
-%files devel
-%{_libdir}/libbenchmark.so
-%{_libdir}/libbenchmark_main.so
-%{_includedir}/benchmark/
-%{_libdir}/cmake/benchmark/
-%{_libdir}/pkgconfig/benchmark*.pc
+%files -f %{oreon_filedir}/main.list
+%files -n google-benchmark-devel -f %{oreon_filedir}/google-benchmark-devel.list

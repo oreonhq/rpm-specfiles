@@ -1,78 +1,65 @@
-%global source0_hash none
-
+%global source0_hash aa9dfe316cddcb2451f0195ce4f8c5b0d3e17504574c8d00db6adeef36cdcfa6
 Name:           deepin-image-viewer
 Version:        6.0.48
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Deepin Image Viewer
-# Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only
 URL:            https://github.com/linuxdeepin/deepin-image-viewer
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/linuxdeepin/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}-appdata.xml
 Patch0:         libraw.patch
 Patch1:         includes.patch
-
-BuildRequires:  gcc-c++
+Requires:       hicolor-icon-theme
+Recommends:     deepin-manual
+# oreon:deps
+BuildRequires:  desktop-file-utils
 BuildRequires:  freeimage-devel
-BuildRequires:  qt5-linguist
-BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  make
 BuildRequires:  pkgconfig(Qt5Concurrent)
+BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(Qt5OpenGL)
 BuildRequires:  pkgconfig(Qt5PrintSupport)
 BuildRequires:  pkgconfig(Qt5Sql)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(Qt5Multimedia)
-BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
+BuildRequires:  pkgconfig(dtkwidget)
+BuildRequires:  pkgconfig(gio-qt)
 BuildRequires:  pkgconfig(gio-unix-2.0)
-BuildRequires:  pkgconfig(libraw)
 BuildRequires:  pkgconfig(libexif)
+BuildRequires:  pkgconfig(libraw)
 BuildRequires:  pkgconfig(libstartup-notification-1.0)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(xext)
-BuildRequires:  pkgconfig(gio-qt)
-BuildRequires:  udisks2-qt5-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
+BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-private-devel
-BuildRequires:  make
-Requires:       hicolor-icon-theme
-Recommends:     deepin-manual
-
+BuildRequires:  udisks2-qt5-devel
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-# help find (and prefer) qt5 utilities, e.g. qmake, lrelease
+
 export PATH=%{_qt5_bindir}:$PATH
 %qmake_qt5 PREFIX=%{_prefix}
 %make_build
-
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 install -Dm644 %SOURCE1 %{buildroot}%{_metainfodir}/%{name}.appdata.xml
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
-
-%files
-%doc README.md
-%license LICENSE
-%{_bindir}/%{name}
-%{_qt5_plugindir}/imageformats/*.so
-%{_datadir}/dbus-1/services/*.service
-%{_datadir}/%{name}/
-%{_datadir}/dman/%{name}/
-%{_metainfodir}/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/deepin-manual/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

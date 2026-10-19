@@ -1,24 +1,20 @@
 %global source0_hash 59a65873837d4aaec0984c394d05586d93bcf5b68f16d5ffdf2209d0309aa06e
-
 %global wrpname q%{name}
-
 Name: jdns
 Version: 2.0.6
-Release: %autorelease
-
+Release:        1%{?dist}
 License: MIT
-Summary: A simple DNS queries library
+Summary:        A simple DNS queries library
 URL: https://github.com/psi-im/%{name}
-Source0: %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: cmake
-BuildRequires: doxygen
-BuildRequires: gcc-c++
-BuildRequires: ninja-build
-
-BuildRequires: cmake(Qt5Core)
-BuildRequires: cmake(Qt5Network)
-
+Source0:        https://github.com/psi-im/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt5Core)
+BuildRequires:  cmake(Qt5Network)
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  ninja-build
+# /oreon:deps
 %description
 JDNS is a simple DNS implementation that can perform normal DNS
 queries of any record type (notably SRV), as well as Multicast DNS
@@ -33,7 +29,6 @@ callbacks.
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description devel
 This package contains contains libraries and header files for developing
 applications that use %{name}.
@@ -42,7 +37,6 @@ applications that use %{name}.
 Summary: %{name} API documentation
 Requires: %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 BuildArch: noarch
-
 %description doc
 This package includes %{name} API documentation in HTML format.
 
@@ -50,7 +44,6 @@ This package includes %{name} API documentation in HTML format.
 Summary: Qt5-wrapper for %{name}
 Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes: %{wrpname}-qt4 < 2.0.6-23
-
 %description -n %{wrpname}-qt5
 For Qt5 users there is a wrapper available called QJDns and a very
 high-level wrapper called QJDnsShared (under its original name
@@ -61,7 +54,6 @@ Summary: Development files for %{wrpname}-qt5
 Requires: %{name}-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires: %{wrpname}-qt5%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes: %{wrpname}-qt4-devel < 2.0.6-23
-
 %description -n %{wrpname}-qt5-devel
 This package contains libraries and header files for developing applications
 that use %{wrpname}-qt5.
@@ -69,61 +61,31 @@ that use %{wrpname}-qt5.
 %package -n %{wrpname}-qt5-tools
 Summary: Qt-based command-line tool %{name}
 Requires: %{wrpname}-qt5%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description -n %{wrpname}-qt5-tools
 This package contains Qt-based command-line tool called %{name} that can
 be used to test functionality.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_JDNS_TOOL:BOOL=ON \
-%if 0%{?fedora} && 0%{?fedora} >= 43
-%if "%{?_lib}" == "lib64"
-    -DLIB_SUFFIX:STRING=64 \
-%endif
-    -DLIB_INSTALL_DIR:PATH="%{_libdir}" \
-%endif
     -DQT4_BUILD:BOOL=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license COPYING
-%doc README.md
-%{_libdir}/lib%{name}.so.2*
-
-%files devel
-%dir %{_includedir}/%{name}/
-%{_includedir}/%{name}/%{name}.h
-%{_includedir}/%{name}/%{name}_export.h
-%{_libdir}/lib%{name}.so
-%{_libdir}/cmake/%{name}/
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files doc
-%{_docdir}/%{name}/html/
-
-%files -n %{wrpname}-qt5
-%{_libdir}/lib%{wrpname}-qt5.so.2*
-
-%files -n %{wrpname}-qt5-devel
-%{_includedir}/%{name}/%{wrpname}.h
-%{_includedir}/%{name}/%{wrpname}shared.h
-%{_libdir}/lib%{wrpname}-qt5.so
-%{_libdir}/cmake/%{wrpname}/
-%{_libdir}/cmake/%{wrpname}-qt5/
-%{_libdir}/pkgconfig/%{wrpname}-qt5.pc
-
-%files -n %{wrpname}-qt5-tools
-%{_bindir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n jdns-devel -f %{oreon_filedir}/jdns-devel.list
+%files -n jdns-doc -f %{oreon_filedir}/jdns-doc.list
+%files -n qjdns-qt5 -f %{oreon_filedir}/qjdns-qt5.list
+%files -n qjdns-qt5-devel -f %{oreon_filedir}/qjdns-qt5-devel.list
+%files -n qjdns-qt5-tools -f %{oreon_filedir}/qjdns-qt5-tools.list
 
 %changelog
+
 %autochangelog

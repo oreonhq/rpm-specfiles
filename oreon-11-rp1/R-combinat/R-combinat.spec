@@ -1,40 +1,37 @@
-%global source0_hash fc6dae73266e69891b59e6e11661247fe44c9a3f56277c8bbe0c10bb79382f67
-
+%global source0_hash 1513cf6b6ed74865bfdd9f8ca58feae12b62f38965d1a32c6130bef810ca30c1
 Name:           R-combinat
 Version:        %R_rpm_version 0.0-8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        R routines for combinatorics
-
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            %{cran_url}
-Source:         %{cran_source}
-
+Source0:        https://cran.r-project.org/package=combinat&version=0.0-8#/combinat_0.0-8.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 R routines for combinatorics
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -c
 [ -f combinat/NAMESPACE ] || echo 'exportPattern("^[^\\.]")' > combinat/NAMESPACE
-
-%generate_buildrequires
-%R_buildrequires
 
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

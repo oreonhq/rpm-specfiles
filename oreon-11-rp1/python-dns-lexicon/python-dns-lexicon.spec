@@ -1,65 +1,123 @@
-%global source0_hash none
-
+%global source0_hash a377bf2b4017ee46de8d5515cf2c204bfda74b49032dc5420bd3100993f28deb
 Name:           python-dns-lexicon
 Version:        3.25.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Manipulate DNS records on various DNS providers in a standardized/agnostic way
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://dns-lexicon.github.io/dns-lexicon/introduction.html
-Source:         %{pypi_source dns_lexicon}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/dns_lexicon/dns_lexicon-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'dns-lexicon' generated automatically by pyp2spec.}
-
 Patch:          python-dns-lexicon-tox-config.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-dns-lexicon = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-dns-lexicon+route53
+Summary:        Metapackage for python3-dns-lexicon route53 extras
+Requires:       python3-dns-lexicon = %{version}-%{release}
+Requires:       python3dist(boto3) >= 1.28
+Provides:       python3dist(dns-lexicon[route53]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-dns-lexicon+route53
+Metapackage for python3-dns-lexicon route53 extras.
+
+%package -n       python3-dns-lexicon+localzone
+Summary:        Metapackage for python3-dns-lexicon localzone extras
+Requires:       python3-dns-lexicon = %{version}-%{release}
+Requires:       python3dist(localzone) >= 0.9.8
+Provides:       python3dist(dns-lexicon[localzone]) = %{version}-%{release}
+
+%description -n python3-dns-lexicon+localzone
+Metapackage for python3-dns-lexicon localzone extras.
+
+%package -n       python3-dns-lexicon+softlayer
+Summary:        Metapackage for python3-dns-lexicon softlayer extras
+Requires:       python3-dns-lexicon = %{version}-%{release}
+Requires:       python3dist(softlayer) >= 5
+Provides:       python3dist(dns-lexicon[softlayer]) = %{version}-%{release}
+
+%description -n python3-dns-lexicon+softlayer
+Metapackage for python3-dns-lexicon softlayer extras.
+
+%package -n       python3-dns-lexicon+gransy
+Summary:        Metapackage for python3-dns-lexicon gransy extras
+Requires:       python3-dns-lexicon = %{version}-%{release}
+Requires:       python3dist(zeep) >= 3
+Provides:       python3dist(dns-lexicon[gransy]) = %{version}-%{release}
+
+%description -n python3-dns-lexicon+gransy
+Metapackage for python3-dns-lexicon gransy extras.
+
+%package -n       python3-dns-lexicon+oci
+Summary:        Metapackage for python3-dns-lexicon oci extras
+Requires:       python3-dns-lexicon = %{version}-%{release}
+Requires:       python3dist(oci) >= 2
+Provides:       python3dist(dns-lexicon[oci]) = %{version}-%{release}
+
+%description -n python3-dns-lexicon+oci
+Metapackage for python3-dns-lexicon oci extras.
+
+%package -n       python3-dns-lexicon+qcloud
+Summary:        Metapackage for python3-dns-lexicon qcloud extras
+Requires:       python3-dns-lexicon = %{version}-%{release}
+Requires:       python3dist(tencentcloud-sdk-python) >= 3
+Provides:       python3dist(dns-lexicon[qcloud]) = %{version}-%{release}
+
+%description -n python3-dns-lexicon+qcloud
+Metapackage for python3-dns-lexicon qcloud extras.
+
+%package -n       python3-dns-lexicon+full
+Summary:        Metapackage for python3-dns-lexicon full extras
+Requires:       python3-dns-lexicon = %{version}-%{release}
+Requires:       python3dist(boto3) >= 1.28
+Requires:       python3dist(localzone) >= 0.9.8
+Requires:       python3dist(softlayer) >= 5
+Requires:       python3dist(zeep) >= 3
+Requires:       python3dist(oci) >= 2
+Requires:       python3dist(tencentcloud-sdk-python) >= 3
+Provides:       python3dist(dns-lexicon[full]) = %{version}-%{release}
+
+%description -n python3-dns-lexicon+full
+Metapackage for python3-dns-lexicon full extras.
+
+%description
 
 %package -n     python3-dns-lexicon
-Summary:        %{summary}
-
-%description -n python3-dns-lexicon %_description
+Summary:        Manipulate DNS records on various DNS providers in a standardized/agnostic way
+# oreon:reqs
+Requires:       python3dist(beautifulsoup4) >= 4
+Requires:       python3dist(cryptography) >= 2
+Requires:       python3dist(dnspython) >= 2
+Requires:       python3dist(importlib-metadata) >= 4.6
+Requires:       python3dist(pyotp) >= 2
+Requires:       python3dist(pyyaml) >= 3
+Requires:       python3dist(requests) >= 2
+Requires:       python3dist(requests-unixsocket) >= 0.4
+Requires:       python3dist(tldextract) >= 2
+# /oreon:reqs
+%description -n python3-dns-lexicon
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-dns-lexicon full,gransy,localzone,oci,qcloud,route53,softlayer
-
 
 %prep
-%autosetup -p1 -n dns_lexicon-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir dns_lexicon-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-dns-lexicon usr/lib/python3*/site-packages/dns_lexicon* usr/lib64/python3*/site-packages/dns_lexicon* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/dns_lexicon* usr/lib64/python3*/site-packages/dns_lexicon* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-dns-lexicon -f %{pyproject_files}
-%{_bindir}/lexicon
+%files
+%files -n python3-dns-lexicon -f %{oreon_filedir}/python3-dns-lexicon.list
 
 %changelog
+
 %autochangelog

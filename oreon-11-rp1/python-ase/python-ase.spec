@@ -1,63 +1,85 @@
-%global source0_hash none
-
+%global source0_hash ef4e2caa38169e3fbbc4164764a060d1877a6692519a4bed82521328eeb0d9aa
 Name:           python-ase
 Version:        3.29.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Atomic Simulation Environment
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-2.1-or-later
 URL:            https://ase-lib.org/
-Source:         %{pypi_source ase}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/ase/ase-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-ase = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-ase+docs
+Summary:        Metapackage for python3-ase docs extras
+Requires:       python3-ase = %{version}-%{release}
+Provides:       python3dist(ase[docs]) = %{version}-%{release}
 
+%description -n python3-ase+docs
+Metapackage for python3-ase docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ase' generated automatically by pyp2spec.}
+%package -n       python3-ase+test
+Summary:        Metapackage for python3-ase test extras
+Requires:       python3-ase = %{version}-%{release}
+Requires:       python3dist(pytest) >= 7.4.0
+Requires:       python3dist(pytest-xdist) >= 3.2.0
+Provides:       python3dist(ase[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-ase+test
+Metapackage for python3-ase test extras.
+
+%package -n       python3-ase+spglib
+Summary:        Metapackage for python3-ase spglib extras
+Requires:       python3-ase = %{version}-%{release}
+Requires:       python3dist(spglib) >= 1.9
+Provides:       python3dist(ase[spglib]) = %{version}-%{release}
+
+%description -n python3-ase+spglib
+Metapackage for python3-ase spglib extras.
+
+%package -n       python3-ase+lint
+Summary:        Metapackage for python3-ase lint extras
+Requires:       python3-ase = %{version}-%{release}
+Provides:       python3dist(ase[lint]) = %{version}-%{release}
+
+%description -n python3-ase+lint
+Metapackage for python3-ase lint extras.
+
+%description
 
 %package -n     python3-ase
-Summary:        %{summary}
-
-%description -n python3-ase %_description
+Summary:        Atomic Simulation Environment
+# oreon:reqs
+Requires:       python3dist(matplotlib) >= 3.5.2
+Requires:       python3dist(numpy) >= 1.21.6
+Requires:       python3dist(scipy) >= 1.8.1
+Requires:       python3dist(typing-extensions) >= 4.13.1
+# /oreon:reqs
+%description -n python3-ase
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-ase docs,lint,spglib,test
-
 
 %prep
-%autosetup -p1 -n ase-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ase-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ase usr/lib/python3*/site-packages/ase* usr/lib64/python3*/site-packages/ase* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ase* usr/lib64/python3*/site-packages/ase* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ase -f %{pyproject_files}
-%{_bindir}/ase
+%files
+%files -n python3-ase -f %{oreon_filedir}/python3-ase.list
 
 %changelog
+
 %autochangelog

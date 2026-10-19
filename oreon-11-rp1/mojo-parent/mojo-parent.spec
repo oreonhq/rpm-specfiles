@@ -1,6 +1,5 @@
 %global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
 %global source0_hash 4a3760863105581c05ddcb344afea06019eb4c10120330e0dbdc47e9ca445962
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,27 +83,25 @@ end
 %bcond_with bootstrap
 Name:           mojo-parent
 Version:        97
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Codehaus MOJO parent project pom file
 License:        Apache-2.0
 URL:            https://www.mojohaus.org/mojo-parent/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/mojo-parent/%{version}/mojo-parent-%{version}-source-release.zip
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 %endif
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Codehaus MOJO parent project pom file
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 # Not needed in Fedora.
@@ -117,14 +114,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 cp %SOURCE1 .
 
 %build
+
 %mvn_alias : org.codehaus.mojo:mojo
 %mvn_build -j
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc LICENSE-2.0.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

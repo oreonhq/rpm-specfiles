@@ -1,80 +1,17 @@
 %global source0_hash 1f5e119cade1466c39c71e5bc35a8d4f4e672635db03d79a5a0dcf08c4e2b5a3
-
-# Run prefork and optional test
-%if ! (0%{?rhel})
-%{bcond_without perl_Module_ScanDeps_enables_prefork}
-%{bcond_without perl_Module_ScanDeps_enables_optional_tests}
-%else
 %{bcond_with perl_Module_ScanDeps_enables_prefork}
 %{bcond_with perl_Module_ScanDeps_enables_optional_tests}
-%endif
-
 Name:           perl-Module-ScanDeps
 Summary:        Recursively scan Perl code for dependencies
 Version:        1.37
-Release:        4%{?dist}
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-ScanDeps
 Source0:        https://cpan.metacpan.org/authors/id/R/RS/RSCHUPP/Module-ScanDeps-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
-BuildRequires:  perl(B)
-BuildRequires:  perl(Config)
-BuildRequires:  perl(constant)
-# CPANPLUS::Backend is optional and not used by tests
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(Data::Dumper)
-# Digest::MD5 is optional and not used by tests
-BuildRequires:  perl(DynaLoader)
-BuildRequires:  perl(Encode)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(File::Basename)
-BuildRequires:  perl(File::Find)
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(File::Spec::Functions)
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(FileHandle)
-BuildRequires:  perl(FindBin)
-# Getopt::Long not used by tests
-BuildRequires:  perl(List::Util)
-BuildRequires:  perl(Module::Metadata)
-# Storable is optional and not used by tests
-# subs not used by tests
-# Text::ParseWords not used by tests
-BuildRequires:  perl(vars)
-BuildRequires:  perl(version)
-# VMS::Filespec never used
-# Tests:
-BuildRequires:  perl(autouse)
-BuildRequires:  perl(AutoLoader)
-BuildRequires:  perl(blib)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(if)
-BuildRequires:  perl(IPC::Run3) >= 0.048
-BuildRequires:  perl(less)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Net::FTP)
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Test::Requires)
-# Optional tests:
 %if %{with perl_Module_ScanDeps_enables_optional_tests}
-BuildRequires:  perl(Module::Pluggable)
 %if !%{defined perl_bootstrap} && %{with perl_Module_ScanDeps_enables_prefork}
-# Cycle: perl-Module-ScanDeps → perl-prefork → perl-Perl-MinimumVersion
-# → perl-Perl-Critic → perl-Pod-Spell → perl-File-ShareDir-ProjectDistDir
-# → perl-Path-Tiny → perl-Unicode-UTF8 → perl-Module-Install
-# → perl-Module-ScanDeps
-BuildRequires:  perl(prefork)
 %endif
-BuildRequires:  perl(Test::Pod) >= 1.00
 %endif
 Requires:       perl(B)
 Requires:       perl(DynaLoader)
@@ -86,13 +23,50 @@ Requires:       perl(Text::ParseWords)
 Recommends:     perl(Digest::MD5)
 Recommends:     perl(Storable)
 Suggests:       perl(CPANPLUS::Backend)
-
-# Filter modules bundled for tests
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}/%{name}
 %global __requires_exclude_from %{?__requires_exclude_from:%__requires_exclude_from|}^%{_libexecdir}/%{name}/t/data
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Utils\\)
-
 Provides:       perl(Module::ScanDeps)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(AutoLoader)
+BuildRequires:  perl(B)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(DynaLoader)
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Find)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Spec::Functions)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(FileHandle)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(IPC::Run3)
+BuildRequires:  perl(List::Util)
+BuildRequires:  perl(Module::Metadata)
+BuildRequires:  perl(Net::FTP)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Requires)
+BuildRequires:  perl(autouse)
+BuildRequires:  perl(blib)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(if)
+BuildRequires:  perl(less)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(version)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module scans potential modules used by perl programs and returns a
 hash reference.  Its keys are the module names as they appear in %%INC (e.g.
@@ -108,19 +82,18 @@ Requires:       perl(Carp)
 Requires:       perl(if)
 Requires:       perl(less)
 Requires:       perl(Net::FTP)
-# Optional tests:
 %if %{with perl_Module_ScanDeps_enables_optional_tests}
 Requires:       perl(Module::Pluggable)
 %if !%{defined perl_bootstrap} && %{with perl_Module_ScanDeps_enables_prefork}
 Requires:       perl(prefork)
 %endif
 %endif
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Module-ScanDeps-%{version}
 
@@ -131,23 +104,18 @@ for F in `find t -name *.t -o -name *.pl`; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 rm -f %{buildroot}%{_libexecdir}/%{name}/t/0-pod.t
 perl -i -pe 's{ "-Mblib",}{}' %{buildroot}%{_libexecdir}/%{name}/t/19-autosplit.t
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Some tests write into temporary files/directories. The easiest solution
-# is to copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -156,22 +124,16 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%license LICENSE
-%doc AUTHORS Changes README
-%{_bindir}/scandeps.pl
-%{perl_vendorlib}/Module/
-%{_mandir}/man1/scandeps.pl.1*
-%{_mandir}/man3/Module::ScanDeps.3pm*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Module-ScanDeps-tests -f %{oreon_filedir}/perl-Module-ScanDeps-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.37-4
 - Prepare for Oreon 11 (RP1)

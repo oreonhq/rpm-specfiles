@@ -1,21 +1,17 @@
 %global source0_hash none
-
 %global     reponame   %{name}.repo
 %global     repodir    %{_sysconfdir}/yum.repos.d
 %global     thirdparty %{_prefix}/lib/fedora-third-party/conf.d
-
 %define obsoleteLine() %{expand:
 Obsoletes: java-%{?1}-openjdk%{?2}%{?3} < 1:100000
 Obsoletes: java-%{?1}-openjdk-portable%{?2}%{?3} < 1:1000
 }
-
 %define obsoleteLines() %{expand:
 %{obsoleteLine -- %{?1} %{?2} %{nil}}
 %{obsoleteLine -- %{?1} %{?2} -fastdebug}
 %{obsoleteLine -- %{?1} %{?2} -slowdebug}
 %{obsoleteLine -- %{?1} %{?2} -unstripped}
 }
-
 %define obsoleteJdk() %{expand:
 %{obsoleteLines -- %{?1} %{nil}}
 %{obsoleteLines -- %{?1} -headless}
@@ -32,34 +28,28 @@ Obsoletes: java-%{?1}-openjdk-portable%{?2}%{?3} < 1:1000
 %{obsoleteLines -- %{?1} -sources}
 %{obsoleteLines -- %{?1} -misc}
 }
-
-# 0/1 may vary in time, and is always enabled to 1 per FESCO exception
 %global     enabled_by_default 0
-
 Name:       adoptium-temurin-java-repository
 Version:    1
-Release:    %autorelease
-Summary:    Fedora package repository files for yum and dnf along with gpg public keys
-
+Release:        1%{?dist}
+Summary:        Fedora package repository files for yum and dnf along with gpg public keys
 License:    EPL-2.0
 URL:        https://adoptium.net/installation/linux/#_centosrhelfedora_instructions
-Source0:    LICENSE
+Source0:        LICENSE
 Source1:    %{name}.conf
 Source2:    %{reponame}
 Source3:    README.md
-
 BuildArch:  noarch
-# fedora-third-party contains tools to work with 3rd party repos and owns fedora-third-party/conf.d/ directory
 Requires:   fedora-third-party
-
-#dont forget to update the lua list in pre and bash list in post
 %{obsoleteJdk -- 1.8.0}
 %{obsoleteJdk -- 11}
 %{obsoleteJdk -- 17}
 %{obsoleteJdk -- 21}
 Obsoletes: openjfx8 < 1000
 Obsoletes: openjfx8-devel < 1000
+# oreon:deps
 
+# /oreon:deps
 %description
 This package adds configuration to add a remote repository
 of https://adoptium.net/installation/linux/#_centosrhelfedora_instructions ,
@@ -75,6 +65,7 @@ Since f44 it will be obsoleting also java-(21)-openjdk-*
 https://fedoraproject.org/wiki/Changes/Java21RemovedEarlierThenScheduled
 
 %prep
+
 cat %{SOURCE2} |  sed "s/^enabled=0/enabled=%{enabled_by_default}/" > %{reponame}
 
 %build
@@ -84,19 +75,18 @@ install -D -m0644 %{SOURCE0} %{buildroot}%{_datadir}/licenses/%{name}/LICENSE
 install -D -m0644 %{SOURCE1} -t %{buildroot}%{thirdparty}/
 install -D -m0644 %{reponame} -t %{buildroot}%{repodir}/
 install -D -m0644 %{SOURCE3} -t %{buildroot}%{_docdir}/%{name}/
+%oreon_autofiles main
 
 %pre -p <lua>
+
 -- in dnf5 lua goes to stdout, but not to logs
 local posix = require ("posix")
-
 local jdksKnown={"1.8.0", "11", "17", "21"}
 local jdksFound={}
-
 local javadir="/usr/lib/jvm"
 local binJava="bin/java"
 local binJavac="bin/javac"
 local jreBinJava="jre/bin/java"
-
 for key, value in pairs(jdksKnown) do
   jdksFound[value]=0;
   local java="java-"..value.."-openjdk"
@@ -148,9 +138,8 @@ if counter>0 then
   print("https://fedoraproject.org/wiki/Changes/Java21RemovedEarlierThenScheduled")
   print("") --dnf5 is consuming first and alst line of output. this is it
 end
-
 %post
-# in dnf5 bash goes to logs, but not to stdout
+
 hits=0
 for x in 1.8.0 11 17 21; do
   key="$x"
@@ -170,12 +159,8 @@ if [ $hits -gt 0 ] ; then
   echo "https://fedoraproject.org/wiki/Changes/ThirdPartyLegacyJdks"
   echo "https://fedoraproject.org/wiki/Changes/Java21RemovedEarlierThenScheduled"
 fi
-
-%files
-%license LICENSE
-%{thirdparty}/*
-%config(noreplace) %{repodir}/%{reponame}
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

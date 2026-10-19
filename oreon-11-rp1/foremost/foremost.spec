@@ -1,20 +1,19 @@
 %global source0_hash 502054ef212e3d90b292e99c7f7ac91f89f024720cd5a7e7680c3d1901ef5f34
-
 Name:		foremost
 Version:	1.5.7
-Release:	37%{?dist}
-Summary:	Recover files by "carving" them from a raw disk
-
+Release:        1%{?dist}
+Summary:        Recover files by "carving" them from a raw disk
 License:	LicenseRef-Fedora-Public-Domain
 URL:		http://foremost.sf.net
-Source0:	http://foremost.sourceforge.net/pkg/%{name}-%{version}.tar.gz
+Source0:        http://foremost.sourceforge.net/pkg/%{name}-%{version}.tar.gz
 Patch0:		foremost-broken-jpeg.patch
 Patch1:		foremost-fix-permission-timestamp.patch
 Patch2:		foremost-1.5.7-format-security.patch
 Patch3:		foremost-1.5.7-gcc10.patch
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 Foremost recovers files files based on their headers, footers, and internal
 data structures. This process is commonly referred to as data carving.
@@ -25,6 +24,7 @@ look at the data structures of a given file format allowing for a more
 reliable and faster recovery.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -33,8 +33,8 @@ sed -i 's!/usr/local/etc/foremost.conf!%{_sysconfdir}/foremost.conf!' config.c
 sed -i 's|^RAW_FLAGS =.*|RAW_FLAGS = %{optflags}|' Makefile
 
 %build
-make %{?_smp_mflags} CONF=%{_sysconfdir} V=1
 
+make %{?_smp_mflags} CONF=%{_sysconfdir} V=1
 %install
 chmod 0644 *
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
@@ -42,12 +42,10 @@ mkdir -p $RPM_BUILD_ROOT%{_mandir}/man8
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}
 make install BIN=$RPM_BUILD_ROOT%{_bindir} MAN=$RPM_BUILD_ROOT%{_mandir}/man8 \
     CONF=$RPM_BUILD_ROOT%{_sysconfdir}
+%oreon_autofiles main
 
-%files
-%doc README CHANGES
-%{_bindir}/*
-%{_mandir}/man8/*
-%config(noreplace) %{_sysconfdir}/foremost.conf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

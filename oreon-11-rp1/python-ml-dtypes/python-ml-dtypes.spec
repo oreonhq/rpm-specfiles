@@ -1,68 +1,63 @@
 %global source0_hash acaef497b420a15761cb525562b04d880b5c7afacea02d435a5d166fd8a99a16
-
 %global _distro_extra_cxxflags -I/usr/include/eigen3
-
 Name:           python-ml-dtypes
 Version:        0.5.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Implementation of several NumPy dtype extensions
-
 License:        Apache-2.0 and MPL-2.0
 URL:            https://github.com/jax-ml/ml_dtypes
-#Pypi sources without test
-Source0:        %{url}/archive/v%{version}/ml_dtypes-%{version}.tar.gz
-# Fix pytest testArange_float8_e4m3b11fnuz because of numpy version
+Source0:        https://github.com/jax-ml/ml_dtypes/archive/v%{version}/ml_dtypes-%{version}.tar.gz
 Patch:          04c4dc8b23720d9d92f3cc849ffc387d5798db84.patch
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(absl-py)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  eigen3-devel
-BuildRequires:  eigen3-static
-BuildRequires:  g++
+BuildRequires:  python3dist(numpy) >= 2.0
+BuildRequires:  python3dist(setuptools) >= 80.9.0
+Requires:       python3-ml-dtypes = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-ml-dtypes+dev
+Summary:        Metapackage for python3-ml-dtypes dev extras
+Requires:       python3-ml-dtypes = %{version}-%{release}
+Requires:       python3dist(pylint) >= 2.6.0
+Provides:       python3dist(ml-dtypes[dev]) = %{version}-%{release}
 
+%description -n python3-ml-dtypes+dev
+Metapackage for python3-ml-dtypes dev extras.
 
-%global _description %{expand:
-ml_dtypes is a stand-alone implementation of several NumPy dtype extensions
-used in machine learning libraries, including: bfloat16, 8-bit floating point
-representations, Microscaling (MX) sub-byte floating point representations,
-and Narrow integer encodings.}
-
-
-%description %_description
+%description
 
 %package -n     python3-ml-dtypes
-Summary:        %{summary}
-
-%description -n python3-ml-dtypes %_description
-
+Summary:        Implementation of several NumPy dtype extensions
+# oreon:reqs
+Requires:       python3dist(numpy) >= 1.21
+Requires:       python3dist(numpy) >= 1.21.2
+Requires:       python3dist(numpy) >= 1.23.3
+Requires:       python3dist(numpy) >= 1.26.0
+Requires:       python3dist(numpy) >= 2.1.0
+# /oreon:reqs
+%description -n python3-ml-dtypes
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n ml_dtypes-%{version}
 sed -i 's/"setuptools.*",/"setuptools >= 80.9",/g' pyproject.toml
 
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-%pyproject_save_files -l ml_dtypes
-
+%oreon_autofiles python3-ml-dtypes usr/lib/python3*/site-packages/ml_dtypes* usr/lib64/python3*/site-packages/ml_dtypes* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ml_dtypes* usr/lib64/python3*/site-packages/ml_dtypes* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %pytest ./ml_dtypes/tests/
-
-
-%files -n python3-ml-dtypes -f %{pyproject_files}
-
+%files
+%files -n python3-ml-dtypes -f %{oreon_filedir}/python3-ml-dtypes.list
 
 %changelog
+
 %autochangelog

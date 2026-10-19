@@ -1,46 +1,39 @@
 %global source0_hash 6a1ccd4008d4cc66ded4e2a1694b5b2a21d7655e276e1354160012ba2be2a284
-
 Name:		perl-true
 Version:	1.0.2
-Release:	18%{?dist}
-Summary:	Automatically return a true value when a file is required
+Release:        18%{?dist}
+Summary:        Automatically return a true value when a file is required
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/true
-Source0:	http://cpan.metacpan.org/authors/id/C/CH/CHOCOLATE/true-v%{version}.tar.gz
-# ============= Module Build ====================
-BuildRequires:	coreutils
-BuildRequires:	findutils
-BuildRequires:	gcc
-BuildRequires:	make
-BuildRequires:	perl-devel
-BuildRequires:	perl-generators
-BuildRequires:	perl-interpreter
-BuildRequires:	perl(Config)
-BuildRequires:	perl(ExtUtils::Depends) >= 0.304
-BuildRequires:	perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:	perl(File::Copy)
-# ============= Module Runtime ==================
-BuildRequires:	perl(B::Hooks::OP::Annotation) >= 0.44
-BuildRequires:	perl(B::Hooks::OP::Check) >= 0.22
-BuildRequires:	perl(Devel::StackTrace) >= 2.03
-BuildRequires:	perl(strict)
-BuildRequires:	perl(version) >= 0.77
-BuildRequires:	perl(warnings)
-BuildRequires:	perl(XSLoader)
-# ============= Test Suite ======================
-BuildRequires:	perl(base)
-BuildRequires:	perl(File::Spec)
-BuildRequires:	perl(FindBin)
-BuildRequires:	perl(Function::Parameters) >= 2.001003
-BuildRequires:	perl(lib)
-BuildRequires:	perl(Moo) >= 2.003004
-BuildRequires:	perl(Test::More)
-# ============= Module Dependencies =============
-# (none)
-
-# Don't "provide" private Perl libs
+Source0:        http://cpan.metacpan.org/authors/id/C/CH/CHOCOLATE/true-v%{version}.tar.gz
 %{?perl_default_filter}
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  perl(B::Hooks::OP::Annotation)
+BuildRequires:  perl(B::Hooks::OP::Check)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Devel::StackTrace)
+BuildRequires:  perl(ExtUtils::Depends)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Function::Parameters)
+BuildRequires:  perl(Moo)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(XSLoader)
+BuildRequires:  perl(base)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(version)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Perl's require built-in (and its use wrapper) requires the files it loads to
 return a true value. This is usually accomplished by placing a single
@@ -64,34 +57,30 @@ from the import method of a Modern::Perl-style module that enables modern Perl
 features and conveniences and cleans up legacy Perl warts.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n true-v%{version}
 
 %build
+
 perl Makefile.PL \
 	INSTALLDIRS=vendor \
 	NO_PACKLIST=1 \
 	NO_PERLLOCAL=1 \
 	OPTIMIZE="%{optflags}"
 %{make_build}
-
 %install
 %{make_install}
 find %{buildroot} -type f -name '*.bs' -empty -delete
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%license LICENSE.md
-%doc Changes README
-%{perl_vendorarch}/auto/true/
-%{perl_vendorarch}/true.pm
-%{perl_vendorarch}/true/
-%{_mandir}/man3/true.3*
-%{_mandir}/man3/true::VERSION.3*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

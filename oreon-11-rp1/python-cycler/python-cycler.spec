@@ -1,55 +1,57 @@
-%global source0_hash none
-
+%global source0_hash 88bb128f02ba341da8ef447245a9e138fae777f6a23943da4540077d3601eb1c
 Name:           python-cycler
 Version:        0.12.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Composable style cycles
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://matplotlib.org/cycler/
-Source:         %{pypi_source cycler}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/cycler/cycler-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61
+Requires:       python3-cycler = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-cycler+docs
+Summary:        Metapackage for python3-cycler docs extras
+Requires:       python3-cycler = %{version}-%{release}
+Provides:       python3dist(cycler[docs]) = %{version}-%{release}
 
+%description -n python3-cycler+docs
+Metapackage for python3-cycler docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'cycler' generated automatically by pyp2spec.}
+%package -n       python3-cycler+tests
+Summary:        Metapackage for python3-cycler tests extras
+Requires:       python3-cycler = %{version}-%{release}
+Provides:       python3dist(cycler[tests]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-cycler+tests
+Metapackage for python3-cycler tests extras.
+
+%description
 
 %package -n     python3-cycler
-Summary:        %{summary}
-
-%description -n python3-cycler %_description
+Summary:        Composable style cycles
+%description -n python3-cycler
 
 %prep
-%autosetup -p1 -n cycler-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires -p
-
-
+%global oreon_srcdir cycler-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-cycler usr/lib/python3*/site-packages/cycler* usr/lib64/python3*/site-packages/cycler* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cycler* usr/lib64/python3*/site-packages/cycler* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-cycler -f %{pyproject_files}
+%files
+%files -n python3-cycler -f %{oreon_filedir}/python3-cycler.list
 
 %changelog
+
 %autochangelog

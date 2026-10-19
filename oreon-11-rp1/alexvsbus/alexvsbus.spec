@@ -1,33 +1,24 @@
 %global source0_hash 58f1a74d9889630849f20fbd11b624f90f89531502039f7f3afaee2de6dd6e8d
-
 Name: alexvsbus
 %global pretty_name Alex vs Bus: The Race
-
-Summary: Help Alex catch the bus on time!
+Summary:        Help Alex catch the bus on time!
 License: GPL-3.0-or-later
-
 Version: 2025.06.16.0
-Release: 5%{?dist}
-
+Release:        1%{?dist}
 URL: https://github.com/M374LX/alexvsbus
-Source0: %{URL}/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/M374LX/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source10: alexvsbus.metainfo.xml
-
-# Remove bunbled raylib v5.0 and fix compatibility with raylib v5.5
 Patch0: alexvsbus--unbundle-raylib.patch
-
-BuildRequires: desktop-file-utils
-BuildRequires: gcc
-BuildRequires: libappstream-glib
-BuildRequires: make
-
-BuildRequires: raylib-devel
-BuildRequires: SDL2-devel
-BuildRequires: stb_image-devel >= 2.30^20251025gitf1c79c0-2
-
 Requires: %{name}-data = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  SDL2-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  raylib-devel
+BuildRequires:  stb_image-devel
+# /oreon:deps
 %description
 %{pretty_name} is a free and open source platform runner game in which
 a man who depends on public transportation in a developing country needs
@@ -38,9 +29,7 @@ for the next bus to come.
 Summary: Data files for %{pretty_name}
 License: CC-BY-SA-4.0
 BuildArch: noarch
-
 Requires: hicolor-icon-theme
-
 %description data
 Data files (graphics, sounds, etc.) required to play %{pretty_name}.
 
@@ -48,11 +37,11 @@ Data files (graphics, sounds, etc.) required to play %{pretty_name}.
 Summary: Documentation for %{pretty_name}
 License: CC-BY-SA-4.0
 BuildArch: noarch
-
 %description doc
 User and developer manuals for %{pretty_name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -62,52 +51,39 @@ rm -rf raylib/
 sed -e 's/ -fPIC / -fPIE -pie /' -i Makefile
 
 %build
-%make_build SDL=1
 
+%make_build SDL=1
 %install
 install -m 755 -d %{buildroot}%{_bindir}
 install -m 755 %{name} %{buildroot}%{_bindir}/
-
 install -m 755 -d %{buildroot}%{_datadir}/games/
 cp -a assets %{buildroot}%{_datadir}/games/%{name}
-
 for ICON_SIZE in 32 128; do
 	ICON_DIR="%{buildroot}%{_datadir}/icons/hicolor/${ICON_SIZE}x${ICON_SIZE}/apps"
 	install -m 755 -d "${ICON_DIR}"
 	install -m 644 "icons/icon${ICON_SIZE}.png" "${ICON_DIR}/%{name}.png"
 done
-
 install -m 755 -d %{buildroot}%{_datadir}/applications
 install -m 644 icons/%{name}.desktop %{buildroot}%{_datadir}/applications/
-
 install -m 755 -d %{buildroot}%{_metainfodir}
 install -m 644 %{SOURCE10} %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
-
 install -m 755 -d %{buildroot}%{_docdir}/%{name}
 install -m 644 docs/*.md -t %{buildroot}%{_docdir}/%{name}/
 cp -a docs/manual %{buildroot}%{_docdir}/%{name}/manual
 rm %{buildroot}%{_docdir}/%{name}/manual/manual.pdf
+%oreon_autofiles alexvsbus-data usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles alexvsbus-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
 %{buildroot}%{_bindir}/%{name} -v
-
-%files
-%license LICENSE.txt
-%license docs/licenses/GPL-3.0.txt
-%{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_metainfodir}/%{name}.metainfo.xml
-
-%files data
-%license docs/licenses/CC-BY-SA-4.0.txt
-%{_datadir}/games/
-%{_datadir}/icons/hicolor/**/apps/%{name}.png
-
-%files doc
-%license docs/licenses/CC-BY-SA-4.0.txt
-%doc %{_docdir}/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n alexvsbus-data -f %{oreon_filedir}/alexvsbus-data.list
+%files -n alexvsbus-doc -f %{oreon_filedir}/alexvsbus-doc.list
 
 %changelog
+
 %autochangelog

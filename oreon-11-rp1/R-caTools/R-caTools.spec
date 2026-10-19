@@ -1,19 +1,15 @@
 %global source0_hash e71b3942a7a239779028b1104c262ec5f70183128638ac7fb649c8d62c0468d8
-
 Name:           R-caTools
 Version:        %R_rpm_version 1.18.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tools: Moving Window Statistics, GIF, Base64, ROC AUC, etc
-
 License:        GPL-3.0-only
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=caTools&version=%{version}#/caTools_%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Contains several basic utility functions including: moving (rolling,
 running) window statistic functions, read/write for GIF and ENVI binary
@@ -22,22 +18,19 @@ encoder/decoder, round-off-error-free sum and cumsum, etc.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

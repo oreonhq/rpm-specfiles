@@ -1,22 +1,15 @@
 %global source0_hash 9bcf9986eb9637d1b8e8ab62a61c80f3422d628e837e72c6ad8c2e38604ccaf4
-
 %global _hardened_build 1
-
-Summary: Clients for remote access commands (rsh, rlogin, rcp)
+Summary:        Clients for remote access commands (rsh, rlogin, rcp)
 Name: rsh
 Version: 0.17
-Release: 113%{?dist}
+Release:        1%{?dist}
 License: BSD-4-Clause-UC
-
-BuildRequires: make
-BuildRequires: perl-interpreter, ncurses-devel, pam-devel, audit-libs-devel, systemd, gcc
-
 URL: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit
-Source0: ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-rsh-%{version}.tar.gz
+Source0:        ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/netkit-rsh-%{version}.tar.gz
 Source1: rexec.pam
 Source2: rlogin.pam
 Source3: rsh.pam
-# Source is no longer publicly available.
 Source4: rexec-1.5.tar.gz
 Source5: rsh@.service
 Source6: rsh.socket
@@ -24,60 +17,37 @@ Source7: rlogin@.service
 Source8: rlogin.socket
 Source9: rexec@.service
 Source10: rexec.socket
-
 Patch1: netkit-rsh-0.17-sectty.patch
-# Make rexec installation process working
 Patch2: netkit-rsh-0.17-rexec.patch
 Patch3: netkit-rsh-0.10-stdarg.patch
-# Improve installation process
 Patch4: netkit-rsh-0.16-jbj.patch
-# Link rshd against libpam
 Patch8: netkit-rsh-0.16-jbj4.patch
 Patch9: netkit-rsh-0.16-prompt.patch
 Patch10: netkit-rsh-0.16-rlogin=rsh.patch
-# Improve documentation
 Patch11: netkit-rsh-0.16-nokrb.patch
-# Remove spurious double-reporting of errors
 Patch12: netkit-rsh-0.17-pre20000412-jbj5.patch
-# RH #42880
 Patch13: netkit-rsh-0.17-userandhost.patch
-# Don't strip binaries during installation
 Patch14: netkit-rsh-0.17-strip.patch
-# RH #67362
 Patch15: netkit-rsh-0.17-lfs.patch
-# RH #57392
 Patch16: netkit-rsh-0.17-chdir.patch
-# RH #63806
 Patch17: netkit-rsh-0.17-pam-nologin.patch
-# RH #135643
 Patch19: netkit-rsh-0.17-rexec-netrc.patch
-# RH #68590
 Patch20: netkit-rsh-0.17-pam-sess.patch
-# RH #67361
 Patch21: netkit-rsh-0.17-errno.patch
-# RH #118630
 Patch22: netkit-rsh-0.17-rexec-sig.patch
-# RH #135827
 Patch23: netkit-rsh-0.17-nohost.patch
-# RH #122315
 Patch24: netkit-rsh-0.17-ignchld.patch
-# RH #146464
 Patch25: netkit-rsh-0.17-checkdir.patch
 Patch26: netkit-rsh-0.17-pam-conv.patch
-# RH #174045
 Patch27: netkit-rsh-0.17-rcp-largefile.patch
-# RH #174146
 Patch28: netkit-rsh-0.17-pam-rhost.patch
-# RH #178916
 Patch29: netkit-rsh-0.17-rlogin-linefeed.patch
 Patch30: netkit-rsh-0.17-ipv6.patch
 Patch31: netkit-rsh-0.17-pam_env.patch
 Patch33: netkit-rsh-0.17-dns.patch
 Patch34: netkit-rsh-0.17-nohostcheck-compat.patch
-# RH #448904
 Patch35: netkit-rsh-0.17-audit.patch
 Patch36: netkit-rsh-0.17-longname.patch
-# RH #440867
 Patch37: netkit-rsh-0.17-arg_max.patch
 Patch38: netkit-rsh-0.17-rh448904.patch
 Patch39: netkit-rsh-0.17-rh461903.patch
@@ -98,7 +68,15 @@ Patch53: netkit-rsh-0.17-cmdbuflen.patch
 Patch54: netkit-rsh-0.17-CVE-2019-7282.patch
 Patch55: netkit-rsh-0.17-c99.patch
 Patch56: netkit-rsh-0.17-c99-2.patch
-
+# oreon:deps
+BuildRequires:  audit-libs-devel
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  pam-devel
+BuildRequires:  perl-interpreter
+BuildRequires:  systemd
+# /oreon:deps
 %description
 The rsh package contains a set of programs which allow users to run
 commands on remote machines, login to other machines and copy files
@@ -114,7 +92,6 @@ Requires: pam, /etc/pam.d/system-auth
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-
 %description server
 The rsh-server package contains a set of programs which allow users
 to run commands on remote machines, login to other machines and copy
@@ -129,6 +106,7 @@ The rsh-server package should be installed to enable remote access
 from other machines
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n netkit-rsh-%{version} -a 4
@@ -188,6 +166,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -f rexec/rexec
 
 %build
+
 sh configure --with-c-compiler=%{__cc}
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %ifarch s390 s390x
@@ -210,19 +189,15 @@ export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
     ' MCONFIG
 %endif
 %{make_build}
-
 %install
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_sbindir}
 mkdir -p %{buildroot}%{_mandir}/man{1,5,8}
 mkdir -p %{buildroot}%{_sysconfdir}/pam.d
-
 %{make_install} INSTALLROOT=%{buildroot} BINDIR=%{_bindir} MANDIR=%{_mandir}
-
 install -m 644 %SOURCE1 %{buildroot}%{_sysconfdir}/pam.d/rexec
 install -m 644 %SOURCE2 %{buildroot}%{_sysconfdir}/pam.d/rlogin
 install -m 644 %SOURCE3 %{buildroot}%{_sysconfdir}/pam.d/rsh
-
 mkdir -p %{buildroot}%{_unitdir}
 install -m644 %SOURCE5 %{buildroot}%{_unitdir}/rsh@.service
 install -m644 %SOURCE6 %{buildroot}%{_unitdir}/rsh.socket
@@ -230,39 +205,26 @@ install -m644 %SOURCE7 %{buildroot}%{_unitdir}/rlogin@.service
 install -m644 %SOURCE8 %{buildroot}%{_unitdir}/rlogin.socket
 install -m644 %SOURCE9 %{buildroot}%{_unitdir}/rexec@.service
 install -m644 %SOURCE10 %{buildroot}%{_unitdir}/rexec.socket
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post server
+
 %systemd_post rsh.socket
 %systemd_post rlogin.socket
 %systemd_post rexec.socket
-
 %preun server
+
 %systemd_preun rsh.socket
 %systemd_preun rlogin.socket
 %systemd_preun rexec.socket
-
 %postun server
+
 %systemd_postun_with_restart rsh.socket
 %systemd_postun_with_restart rlogin.socket
 %systemd_postun_with_restart rexec.socket
-
-%files
-%doc README BUGS
-%attr(0755,root,root) %caps(cap_net_bind_service=pe) %{_bindir}/rcp
-%{_bindir}/rexec
-%attr(0755,root,root) %caps(cap_net_bind_service=pe) %{_bindir}/rlogin
-%attr(0755,root,root) %caps(cap_net_bind_service=pe) %{_bindir}/rsh
-%{_mandir}/man1/*.1*
-
-%files server
-%config(noreplace) %{_sysconfdir}/pam.d/rsh
-%config(noreplace) %{_sysconfdir}/pam.d/rlogin
-%config(noreplace) %{_sysconfdir}/pam.d/rexec
-%{_sbindir}/in.rexecd
-%{_sbindir}/in.rlogind
-%{_sbindir}/in.rshd
-%{_unitdir}/*
-%{_mandir}/man8/*.8*
+%files -f %{oreon_filedir}/main.list
+%files -n rsh-server -f %{oreon_filedir}/rsh-server.list
 
 %changelog
+
 %autochangelog

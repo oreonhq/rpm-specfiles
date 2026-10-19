@@ -1,59 +1,51 @@
-%global source0_hash none
-
+%global source0_hash da153e7d4bb4e7c1becff79c9dc4097750f56f77bef4aa5b9c2c446fe54f59ad
 Name:           python-xnat
 Version:        0.8.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        An XNAT client that exposes the XNAT REST interface as python objects. Part of the interface is automatically generated based on the servers data model as defined by the xnat schema.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://gitlab.com/radiology/infrastructure/xnatpy
-Source:         %{pypi_source xnat}
-
+Source0:        https://files.pythonhosted.org/packages/source/x/xnat/xnat-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'xnat' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-xnat = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-xnat
-Summary:        %{summary}
-
-%description -n python3-xnat %_description
-
+Summary:        An XNAT client that exposes the XNAT REST interface as python objects. Part of the interface is automatically generated based on the servers data model as defined by the xnat schema.
+# oreon:reqs
+Requires:       python3dist(click) >= 8.0
+Requires:       python3dist(click-option-group) >= 0.5.6
+Requires:       python3dist(importlib-metadata) >= 6.8
+Requires:       python3dist(isodate) >= 0.6
+Requires:       python3dist(progressbar2) >= 4.2
+Requires:       python3dist(pydicom) >= 2.3
+Requires:       python3dist(python-dateutil) >= 2.8.2
+Requires:       python3dist(pyyaml) >= 6.0
+Requires:       python3dist(requests) >= 2.30
+# /oreon:reqs
+%description -n python3-xnat
 
 %prep
-%autosetup -p1 -n xnat-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir xnat-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-xnat usr/lib/python3*/site-packages/xnat* usr/lib64/python3*/site-packages/xnat* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/xnat* usr/lib64/python3*/site-packages/xnat* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-xnat -f %{pyproject_files}
-%{_bindir}/xnat
-%{_bindir}/xnat_cp_project
-%{_bindir}/xnat_data_integrity-check
+%files
+%files -n python3-xnat -f %{oreon_filedir}/python3-xnat.list
 
 %changelog
+
 %autochangelog

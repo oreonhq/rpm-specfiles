@@ -1,53 +1,46 @@
 %global source0_hash 9c535c4c61193c2df8871222567d7fd7e5014d835f97dc7b7439069e2413d343
-
 Name:           python-ghp-import
 Version:        2.1.0
-Release:        16%{?dist}
+Release:        1%{?dist}
 Summary:        GitHub Pages Import
 BuildArch:      noarch
-
 License:        Apache-2.0
 URL:            https://github.com/c-w/ghp-import
-Source0:        %{pypi_source ghp-import}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/ghp-import/ghp-import-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
+Requires:       python3-ghp-import = %{version}-%{release}
+# /oreon:deps
 %description
 GitHub Pages Import.
 
 %package -n python3-ghp-import
-Summary:        %{summary}
+Summary:        GitHub Pages Import
 Obsoletes:      python3-ghp-import2 < 1.0.1-12
 Provides:       python3-ghp-import2 = %{version}-%{release}
-
 %description -n python3-ghp-import
 GitHub Pages Import.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n ghp-import-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires -r
-
+%global oreon_srcdir ghp-import-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files ghp_import
-
-# Remove shebang on non-executable script
 sed -i '1{/^#!/d}' %{buildroot}%{python3_sitelib}/ghp_import.py
+%oreon_autofiles python3-ghp-import usr/lib/python3*/site-packages/ghp_import* usr/lib64/python3*/site-packages/ghp_import* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ghp_import* usr/lib64/python3*/site-packages/ghp_import* usr/bin/*
 
 %check
-%py3_check_import ghp_import
 
-%files -n python3-ghp-import -f %{pyproject_files}
-%doc README.md
-%license LICENSE
-%{_bindir}/ghp-import
+%py3_check_import ghp_import
+%files
+%files -n python3-ghp-import -f %{oreon_filedir}/python3-ghp-import.list
 
 %changelog
+
 %autochangelog

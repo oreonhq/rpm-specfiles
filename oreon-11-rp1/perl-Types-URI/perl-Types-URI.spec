@@ -1,65 +1,49 @@
 %global source0_hash 4c159ff53c5c383eb8eedf93d6310b26bcc83ae0547560968e65c57926df0304
 %{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
-
-# Perform optional tests
-%if 0%{?rhel}
-%bcond_with perl_Types_URI_enables_optional_test
-%else
 %bcond_without perl_Types_URI_enables_optional_test
-%endif
-
 %define optional_test %[%{with perl_Types_URI_enables_optional_test} && !%{defined %perl_bootstrap}]
-
 Name:           perl-Types-URI
 Version:        0.007
-Release:        22%{?dist}
+Release:        1%{?dist}
 Summary:        Type constraints and coercions for URIs
-# COPYRIGHT:    LicenseRef-Fedora-Public-Domain
-# other files:  GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/Types-URI
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TOBYINK/Types-URI-%{version}.tar.gz
 BuildArch:      noarch
+%if %{optional_test}
+%endif
+Requires:       perl(Type::Library) >= 1.000000
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Moose|Test::More|Type::Library|Types::Attean|Types::Namespace)\\)$
+# oreon:deps
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Attean)
+BuildRequires:  perl(Attean::IRI)
 BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-# Run-time:
-BuildRequires:  perl(:VERSION) >= 5.8
-BuildRequires:  perl(Type::Library) >= 1.000000
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(IRI)
+BuildRequires:  perl(Moose)
+BuildRequires:  perl(RDF::Trine)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Requires)
+BuildRequires:  perl(Type::Library)
+BuildRequires:  perl(Types::Attean)
+BuildRequires:  perl(Types::Namespace)
 BuildRequires:  perl(Types::Path::Tiny)
 BuildRequires:  perl(Types::Standard)
 BuildRequires:  perl(Types::UUID)
 BuildRequires:  perl(URI)
-BuildRequires:  perl(URI::data)
-BuildRequires:  perl(URI::file)
 BuildRequires:  perl(URI::FromHash)
 BuildRequires:  perl(URI::WithBase)
-BuildRequires:  perl(warnings)
-# Tests:
+BuildRequires:  perl(URI::data)
+BuildRequires:  perl(URI::file)
 BuildRequires:  perl(if)
-BuildRequires:  perl(Test::More) >= 0.96
-# Test::Warnings not used
-# Build cycle: perl-Attean → perl-Types-URI
-%if %{optional_test}
-# Optional tests:
-BuildRequires:  perl(Attean)
-BuildRequires:  perl(Attean::IRI)
-BuildRequires:  perl(IRI) >= 0.004
-BuildRequires:  perl(Moose) >= 2.0000
-BuildRequires:  perl(RDF::Trine) >= 1.000
-BuildRequires:  perl(Test::Requires)
-BuildRequires:  perl(Types::Attean) >= 0.024
-BuildRequires:  perl(Types::Namespace) >= 1.10
-%endif
-Requires:       perl(Type::Library) >= 1.000000
-
-# Remove under-specified dependencies
-%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Moose|Test::More|Type::Library|Types::Attean|Types::Namespace)\\)$
-
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Types::URI is a type constraint Perl library suitable for use with Moo/Moose
 attributes, Kavorka sub signatures, and so forth.
@@ -78,12 +62,12 @@ Requires:       perl(RDF::Trine) >= 1.000
 Requires:       perl(Types::Attean) >= 0.024
 Requires:       perl(Types::Namespace) >= 1.10
 %endif
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Types-URI-%{version}
@@ -100,40 +84,33 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 %if %{optional_test}
 unset AUTHOR_TESTING
 %endif
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{optional_test}
 unset AUTHOR_TESTING
 %endif
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%license LICENSE
-%doc Changes COPYRIGHT CREDITS README
-%dir %{perl_vendorlib}/Types
-%{perl_vendorlib}/Types/URI.pm
-%{_mandir}/man3/Types::URI.*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Types-URI-tests -f %{oreon_filedir}/perl-Types-URI-tests.list
 
 %changelog
+
 %autochangelog

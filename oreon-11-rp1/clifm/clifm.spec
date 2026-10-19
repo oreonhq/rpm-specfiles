@@ -1,28 +1,21 @@
 %global source0_hash dfdc0f339437345d9d5d8c2cb4bd43294c05821ebc8d5f0c9abfa4eec8f6c905
-
 Name:           clifm
 Version:        1.29
 Release:        1%{?dist}
 Summary:        Shell-like, command line terminal file manager
-
-# source is pretty evently split between these
 License:        GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only
-# misc/colors/ and plugins/ are GPL-3.0-only
-# src/ are GPL-2.0-or-later
-
 URL:            https://github.com/leo-arch/clifm
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  readline-devel
-BuildRequires:  libcap-devel
-BuildRequires:  libacl-devel
-BuildRequires:  file-devel
-BuildRequires:  desktop-file-utils
-
+Source0:        https://github.com/leo-arch/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Requires:       hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  file-devel
+BuildRequires:  gcc-c++
+BuildRequires:  libacl-devel
+BuildRequires:  libcap-devel
+BuildRequires:  readline-devel
+# /oreon:deps
 %description
 CliFM is a Command Line Interface File Manager: all input and interaction
 is performed via commands. This is its main feature and strength.
@@ -42,6 +35,7 @@ Briefly put, with CliFM the command-line is always already there, never
 hidden.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -49,24 +43,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -f src/{printf*,qsort.h}
 
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc README.md CHANGELOG
-%{_bindir}/%{name}
-%{_datadir}/applications/clifm.desktop
-%{_datadir}/%{name}/
-%{_mandir}/man1/%{name}.1*
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/bash-completion/completions/%{name}
-%{_datadir}/zsh/site-functions/_%{name}
-%{_datadir}/fish/vendor_completions.d/%{name}.fish
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

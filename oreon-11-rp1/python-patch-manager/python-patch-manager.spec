@@ -1,63 +1,81 @@
-%global source0_hash none
-
+%global source0_hash 4788a510607addfba56fa33c17ffca78e93359e6210ccc34b914fae902f986db
 Name:           python-patch-manager
 Version:        0.2.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Create, check and email patch series, with Patchwork integration
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://github.com/nxtboot/patman
-Source:         %{pypi_source patch_manager}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/patch_manager/patch_manager-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 78.1.1
+Requires:       python3-patch-manager = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-patch-manager+gmail
+Summary:        Metapackage for python3-patch-manager gmail extras
+Requires:       python3-patch-manager = %{version}-%{release}
+Provides:       python3dist(patch-manager[gmail]) = %{version}-%{release}
 
+%description -n python3-patch-manager+gmail
+Metapackage for python3-patch-manager gmail extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'patch-manager' generated automatically by pyp2spec.}
+%package -n       python3-patch-manager+review
+Summary:        Metapackage for python3-patch-manager review extras
+Requires:       python3-patch-manager = %{version}-%{release}
+Provides:       python3dist(patch-manager[review]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-patch-manager+review
+Metapackage for python3-patch-manager review extras.
+
+%package -n       python3-patch-manager+test
+Summary:        Metapackage for python3-patch-manager test extras
+Requires:       python3-patch-manager = %{version}-%{release}
+Provides:       python3dist(patch-manager[test]) = %{version}-%{release}
+
+%description -n python3-patch-manager+test
+Metapackage for python3-patch-manager test extras.
+
+%package -n       python3-patch-manager+all
+Summary:        Metapackage for python3-patch-manager all extras
+Requires:       python3-patch-manager = %{version}-%{release}
+Provides:       python3dist(patch-manager[all]) = %{version}-%{release}
+
+%description -n python3-patch-manager+all
+Metapackage for python3-patch-manager all extras.
+
+%description
 
 %package -n     python3-patch-manager
-Summary:        %{summary}
-
-%description -n python3-patch-manager %_description
+Summary:        Create, check and email patch series, with Patchwork integration
+# oreon:reqs
+Requires:       python3dist(aiohttp) >= 3.9
+Requires:       python3dist(patatt) >= 0.6
+Requires:       python3dist(pygit2) >= 1.14
+# /oreon:reqs
+%description -n python3-patch-manager
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-patch-manager all,gmail,review,test
-
 
 %prep
-%autosetup -p1 -n patch_manager-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir patch_manager-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-patch-manager usr/lib/python3*/site-packages/patch_manager* usr/lib64/python3*/site-packages/patch_manager* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/patch_manager* usr/lib64/python3*/site-packages/patch_manager* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-patch-manager -f %{pyproject_files}
-%{_bindir}/patman
+%files
+%files -n python3-patch-manager -f %{oreon_filedir}/python3-patch-manager.list
 
 %changelog
+
 %autochangelog

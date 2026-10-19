@@ -1,44 +1,34 @@
 %global source0_hash 8edadb7d86a897d5468e51aa498df8cad8a237e51b80b7dd8542d6d7c88393a9
-
 Summary:        Enhanced TeX modes for Emacs
 Name:           emacs-auctex
 Version:        14.2.0
-Release:        %autorelease
-
-# The project as a whole is GPL-3.0-or-later.  Exceptions:
-# - doc/intro.texi is FSFAP
-# - doc/auctex* and doc/preview* are GFDL-1.3-no-invariants-or-later
-# - the generated PDF file contains fonts distributed under Knuth-CTAN
+Release:        1%{?dist}
 License:        GPL-3.0-or-later AND FSFAP AND GFDL-1.3-no-invariants-or-later AND Knuth-CTAN
 URL:            https://www.gnu.org/software/auctex/
 VCS:            git:https://git.savannah.gnu.org/cgit/auctex.git
-Source:        https://github.com/emacsmirror/auctex/archive/auctex-%{version}.tar.gz#/emacs-auctex-%{version}.tar.gz
-
+Source0:        https://github.com/emacsmirror/auctex/archive/auctex-%{version}.tar.gz#/emacs-auctex-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  emacs-nw
-BuildRequires:  ghostscript
-BuildRequires:  make
-BuildRequires:  perl-interpreter
-BuildRequires:  tex(german.ldf)
-BuildRequires:  tex(tex)
-BuildRequires:  texinfo
-BuildRequires:  texinfo-tex
-BuildRequires:  tex(latex)
-BuildRequires:  texlive-mylatex
-
 Requires:       dvipng
 Requires:       emacs(bin) >= %{?_emacs_version}%{!?_emacs_version:0}
 Requires:       ghostscript
 Requires:       tex-preview = %{version}-%{release}
 Requires:       texlive-dvips
 Requires:       tex(latex)
-
 Recommends:     texlive-mylatex
-
-# This can be removed when F48 reaches EOL
 Obsoletes:      %{name}-doc < 14.0.0
 Provides:       %{name}-doc = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  emacs-nw
+BuildRequires:  ghostscript
+BuildRequires:  make
+BuildRequires:  perl-interpreter
+BuildRequires:  tex(german.ldf)
+BuildRequires:  tex(latex)
+BuildRequires:  tex(tex)
+BuildRequires:  texinfo
+BuildRequires:  texinfo-tex
+BuildRequires:  texlive-mylatex
+# /oreon:deps
 %description
 AUCTeX is an extensible package that supports writing and formatting TeX files
 for most variants of Emacs.
@@ -56,17 +46,12 @@ as single formulas or graphics) directly as images in the source buffer.
 This package is for GNU Emacs.
 
 %package -n tex-preview
-# The content is GPL-3.0-or-later.  The remaining licenses cover the various
-# fonts embedded in PDFs.
-# CM: Knuth-CTAN
 License:        GPL-3.0-or-later AND Knuth-CTAN
 Summary:        Preview style files for LaTeX
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-# This is the latest build we accidentally provided from texlive
 Obsoletes:      texlive-preview <= 12:svn78824-5
 Provides:       texlive-preview = 12:svn78824-5
-
 %description -n tex-preview
 The preview package for LaTeX allows for the processing of selected parts of a
 LaTeX input file.  This package extracts indicated pieces from a source file
@@ -87,51 +72,35 @@ The tex-preview package is generated from the AUCTeX package for Emacs.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n auctex-auctex-%{version}
-
+%global oreon_srcdir auctex-auctex-%{version}
+%oreon_prep
 %build
+
 %make_build
 %make_build preview.pdf
-
 %install
-# The makefile no longer has an install target, so install by hand
 mkdir -p %{buildroot}%{_emacs_sitelispdir}/auctex
 cp -a *.el *.elc images style %{buildroot}%{_emacs_sitelispdir}/auctex
-
-# The tex-site file needs to be one directory higher
 mv %{buildroot}%{_emacs_sitelispdir}/auctex/tex-site.el \
    %{buildroot}%{_emacs_sitelispdir}
-
-# The startup files go in _emacs_sitestartdir
 mkdir -p %{buildroot}%{_emacs_sitestartdir}
 mv %{buildroot}%{_emacs_sitelispdir}/auctex/auctex{,-autoloads}.el* \
    %{buildroot}%{_emacs_sitestartdir}
-
-# Install the info files
 mkdir -p %{buildroot}%{_infodir}
 cp -p doc/{auctex,preview-latex}.info* %{buildroot}%{_infodir}
-
-# Install the LaTeX files
 mkdir -p %{buildroot}%{_texmf_main}/tex/latex/preview
 cp -p latex/*.{cfg,def,sty} %{buildroot}%{_texmf_main}/tex/latex/preview
 mkdir -p %{buildroot}%{_texmf_main}/doc/latex/preview
 cp -p latex/{README,preview.pdf} %{buildroot}%{_texmf_main}/doc/latex/preview
+%oreon_autofiles tex-preview usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make -C tests
-
-%files
-%doc ChangeLog.1 NEWS.org
-%doc %{_infodir}/*.info*
-%license COPYING
-%{_emacs_sitestartdir}/*
-%{_emacs_sitelispdir}/auctex/
-%{_emacs_sitelispdir}/tex-site.el
-
-%files -n tex-preview
-%license COPYING
-%{_texmf_main}/tex/latex/preview/
-%{_texmf_main}/doc/latex/preview/
+%files -f %{oreon_filedir}/main.list
+%files -n tex-preview -f %{oreon_filedir}/tex-preview.list
 
 %changelog
+
 %autochangelog

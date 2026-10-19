@@ -1,64 +1,48 @@
 %global source0_hash 836a778de4fec4dcd1dcd89ed8abff8a221f58308462e1c4aa2a3cf30148f0b9
-
 Name:           python-stack-data
 Version:        0.6.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Extract data from python stack frames and tracebacks for informative displays
-
-# SPDX
 License:        MIT
 URL:            http://github.com/alexmojaki/stack_data
-Source0:        %{pypi_source stack_data}
-# don't run type checks, see
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
+Source0:        https://files.pythonhosted.org/packages/source/s/stack_data/stack_data-%{version}.tar.gz
 Patch:          no-typeguard.patch
-
-# Support pygments 2.19+
 Patch:          https://github.com/alexmojaki/stack_data/pull/58.patch
-# Patches for Alpine; not submitted to the upstream project
-# https://gitlab.alpinelinux.org/alpine/aports/-/merge_requests/83491
 Patch:          fix-pygments2.patch
 Patch:          fix-pygments3.patch
-
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-# Extra test dependency
-# Tests use Cython and try to compile some extensions
-BuildRequires:  gcc
-
-%global _description %{expand:
-This is a library that extracts data from stack frames and tracebacks,
-particularly to display more useful tracebacks than the default.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 44
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 3.4.3
+Requires:       python3-stack-data = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-stack-data
-Summary:        %{summary}
-
-%description -n python3-stack-data %_description
+Summary:        Extract data from python stack frames and tracebacks for informative displays
+%description -n python3-stack-data
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n stack_data-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires -r -t
-
+%global oreon_srcdir stack_data-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files stack_data
+%oreon_autofiles python3-stack-data usr/lib/python3*/site-packages/stack_data* usr/lib64/python3*/site-packages/stack_data* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/stack_data* usr/lib64/python3*/site-packages/stack_data* usr/bin/*
 
 %check
-# A hack for until https://github.com/alexmojaki/stack_data/issues/59 is fixed
+
 export FIX_STACK_DATA_TESTS=1
 %tox
-
-%files -n python3-stack-data -f %{pyproject_files}
-%doc README.md
+%files
+%files -n python3-stack-data -f %{oreon_filedir}/python3-stack-data.list
 
 %changelog
+
 %autochangelog

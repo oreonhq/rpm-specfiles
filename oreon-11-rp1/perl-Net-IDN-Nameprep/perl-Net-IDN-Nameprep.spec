@@ -1,27 +1,23 @@
 %global source0_hash c4a21dc1ca8a35a612415eb8027d9407142f2b27b5fa9e67917a88f388947726
-
 Name:           perl-Net-IDN-Nameprep
 Summary:        Stringprep Profile for Internationalized Domain Names (RFC 3491)
 Version:        1.102
-Release:        32%{?dist}
-# Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-IDN-Nameprep
 Source0:        https://cpan.metacpan.org/authors/id/C/CF/CFAERBER/Net-IDN-Nameprep-%{version}.tar.gz
-
 BuildArch:      noarch
-
-BuildRequires:  perl-generators
+%{?perl_default_filter}
+# oreon:deps
 BuildRequires:  perl(Exporter)
 BuildRequires:  perl(Module::Build)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::NoWarnings)
-BuildRequires:  perl(Unicode::Stringprep) >= 1.1
+BuildRequires:  perl(Unicode::Stringprep)
 BuildRequires:  perl(Unicode::Stringprep::Mapping)
 BuildRequires:  perl(Unicode::Stringprep::Prohibited)
-
-%{?perl_default_filter}
-
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 This module implements the nameprep specification, which describes how to
 prepare internationalized domain name (IDN) labels in order to increase the
@@ -31,6 +27,7 @@ stringprep protocol and is used as part of a suite of on-the-wire protocols
 for internationalizing the Domain Name System (DNS).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Net-IDN-Nameprep-%{version}
@@ -51,21 +48,19 @@ done
 rm -f t/nameprep_vec.t
 
 %build
+
 perl Build.PL installdirs=vendor
 ./Build
-
 %install
 ./Build install destdir=%{buildroot} create_packlist=0
-
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-./Build test
 
-%files
-%doc Changes LICENSE README
-%{perl_vendorlib}/Net
-%{_mandir}/man3/Net::IDN::Nameprep.3pm*
+./Build test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

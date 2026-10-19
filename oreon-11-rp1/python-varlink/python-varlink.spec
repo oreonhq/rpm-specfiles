@@ -1,34 +1,28 @@
 %global source0_hash d31aee370ded51bc2bf8ad375fcd8b4cf3b7587306c0e05cffb45026ea9b9c40
-
 Name:           python-varlink
 Version:        32.1.0
 Release:        1%{?dist}
 Summary:        Python implementation of Varlink
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://github.com/varlink/%{name}
 Source0:        https://github.com/varlink/%{name}/archive/%{version}/%{name}-%{version}.tar.gz#/python-varlink-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  python3-devel
 BuildRequires:  python3-rpm-macros
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-setuptools_scm
-
-%global _description \
-An python module for Varlink with client and server support.
-
-%description %_description
+# /oreon:deps
+%description
 
 %package -n python3-varlink
 Summary:       %summary
 %{?python_provide:%python_provide python3-varlink}
-# The varlink copr had this package under the "python-varlink"
-# name. Add Obsoletes to make it easy to upgrade.
 Obsoletes:     python-varlink <= 3-1.git.61.1bc637d.fc27
-
-%description -n python3-varlink %_description
+%description -n python3-varlink
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{version}
 # varlink also supports python-2.7 but python3 is required here
@@ -37,21 +31,22 @@ sed -i -e 's#env python#env python3#' varlink/tests/test_certification.py
 sed -i -e 's#env python#env python3#' varlink/tests/test_orgexamplemore.py
 
 %build
+
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %py3_build
-
 %check
+
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 CFLAGS="%{optflags}" %{__python3} %{py_setup} %{?py_setup_args} check
-
 %install
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %py3_install
+%oreon_autofiles python3-varlink usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n python3-varlink
-%license LICENSE.txt
-%doc README.md
-%{python3_sitelib}/*
+%files -f %{oreon_filedir}/main.list
+%files -n python3-varlink -f %{oreon_filedir}/python3-varlink.list
 
 %changelog
+
 %autochangelog

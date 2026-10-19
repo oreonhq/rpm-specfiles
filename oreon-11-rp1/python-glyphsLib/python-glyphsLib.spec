@@ -1,65 +1,46 @@
-%global source0_hash none
-
+%global source0_hash 275bda269a5868c9d7ab0ab098892fee2b68dc087443dbc58e409ad1e2218f2a
 Name:           python-glyphslib
 Version:        6.14.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A bridge from Glyphs source files _.glyphs_ to UFOs
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/googlefonts/glyphsLib
-Source:         %{pypi_source glyphslib}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/glyphslib/glyphslib-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'glyphslib' generated automatically by pyp2spec.}
-
 Patch:          %{url}/pull/1073.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 45
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.0
+Requires:       python3-glyphslib = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-glyphslib
-Summary:        %{summary}
-
-%description -n python3-glyphslib %_description
+Summary:        A bridge from Glyphs source files _.glyphs_ to UFOs
+%description -n python3-glyphslib
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-glyphslib colr,defcon,ufo-normalization
-
 
 %prep
-%autosetup -p1 -n glyphslib-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir glyphslib-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-glyphslib usr/lib/python3*/site-packages/glyphslib* usr/lib64/python3*/site-packages/glyphslib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/glyphslib* usr/lib64/python3*/site-packages/glyphslib* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-glyphslib -f %{pyproject_files}
-%{_bindir}/glyphs2ufo
-%{_bindir}/ufo2glyphs
+%files
+%files -n python3-glyphslib -f %{oreon_filedir}/python3-glyphslib.list
 
 %changelog
+
 %autochangelog

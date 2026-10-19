@@ -1,34 +1,26 @@
-%global source0_hash 2ed81ecb86da44d571f950010dc174fe6d702a9942259c7c2890fdfc025e4b9c
-
+%global source0_hash bb4060bddb3fa87eaf58ac3427097fff46d79a6142037380c624636f705174df
 Name:           cura-fdm-materials
 Version:        5.13.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Cura FDM Material database
-
-# See https://github.com/Ultimaker/Cura/issues/1779 for clarification
 License:        LicenseRef-Fedora-Public-Domain
-
 URL:            https://github.com/Ultimaker/fdm_materials
-Source0:        %{url}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-# Cmake bits taken from 4.13.1, before upstream went nuts with conan
+Source0:        https://github.com/Ultimaker/fdm_materials/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source2:        CMakeLists.txt
 Source3:        CPackConfig.cmake
-
 BuildArch:      noarch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
-BuildRequires:  cmake
 Requires:       cura >= 1:%{version}
-
+# oreon:deps
+BuildRequires:  cmake
+# /oreon:deps
 %description
 Cura material files.
 
 These files are needed to work with printers like Ultimaker 2+ and Ultimaker 3.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n fdm_materials-%{version} -p1
@@ -37,15 +29,15 @@ rm -rf CMakeLists.txt
 cp %{SOURCE2} %{SOURCE3} .
 
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%{_datadir}/cura/resources/materials/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

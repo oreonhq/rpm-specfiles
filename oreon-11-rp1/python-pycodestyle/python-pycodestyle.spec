@@ -1,58 +1,40 @@
-%global source0_hash none
-
+%global source0_hash c4b5b517d278089ff9d0abdec919cd97262a3367449ea1c8b49b91529167b783
 Name:           python-pycodestyle
 Version:        2.14.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python style guide checker
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://pycodestyle.pycqa.org/en/latest/developer.html#changes
-Source:         %{pypi_source pycodestyle}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pycodestyle/pycodestyle-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pycodestyle' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pycodestyle = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pycodestyle
-Summary:        %{summary}
-
-%description -n python3-pycodestyle %_description
-
+Summary:        Python style guide checker
+%description -n python3-pycodestyle
 
 %prep
-%autosetup -p1 -n pycodestyle-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pycodestyle-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pycodestyle usr/lib/python3*/site-packages/pycodestyle* usr/lib64/python3*/site-packages/pycodestyle* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pycodestyle* usr/lib64/python3*/site-packages/pycodestyle* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pycodestyle -f %{pyproject_files}
-%{_bindir}/pycodestyle
+%files
+%files -n python3-pycodestyle -f %{oreon_filedir}/python3-pycodestyle.list
 
 %changelog
+
 %autochangelog

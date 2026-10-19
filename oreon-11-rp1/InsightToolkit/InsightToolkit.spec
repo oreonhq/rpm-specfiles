@@ -1,13 +1,12 @@
-%global source0_hash none
-
+%global source3_hash 02e55b9aa090ec0d231e2cb99132b144a5d352963784db6cfb5402c3ef341a5a
+%global source2_hash 1c8cf62c1016399913f843794f6bf69de16a87f28b34777cf19bb0c6445bb62f
+%global source1_hash 22625015a49e99ae075542066affad1ee3381229128f2f06a1777e95e675a8c9
+%global source0_hash b8ea18a5c97c62972c00c4679ff5a224eb393a766c334bd20884b379ca2b34ce
 %undefine __cmake_in_source_build
-# Disable LTO for now - fails to build
 %undefine _lto_cflags
-
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %bcond_without flexiblas
 %endif
-
 Name:           InsightToolkit
 Summary:        Insight Toolkit library for medical image processing
 %global version_major_minor 4.13
@@ -15,7 +14,6 @@ Version:        %{version_major_minor}.3
 %global version_doc_major_minor 4.13
 %global version_doc %{version_doc_major_minor}.0
 Release:        32%{?dist}
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 Source0:        https://github.com/InsightSoftwareConsortium/ITK/releases/download/v%{version}/InsightToolkit-%{version}.tar.gz
 Source1:        https://downloads.sourceforge.net/project/itk/itk/%{version_doc_major_minor}/InsightSoftwareGuide-Book1-%{version_doc}.pdf
@@ -25,50 +23,36 @@ URL:            https://www.itk.org/
 Patch0:         InsightToolkit-0001-Set-lib-lib64-according-to-the-architecture.patch
 Patch2:         InsightToolkit-sse.patch
 Patch3:         remove-test.diff
-# https://github.com/InsightSoftwareConsortium/ITK/pull/1599
 Patch4:         InsightToolkit-pr1599-fix-invalid-const-member-func.patch
-# https://github.com/InsightSoftwareConsortium/ITK/pull/1920/files: remove use of triangle from vxl (patched out in vxl system package also)
-# backported
 Patch5:         InsightToolkit-remove-vxl-netlib.patch
-
-# fix __riscv define
 Patch6:         fix-riscv.patch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
-BuildRequires:  cmake
-BuildRequires:  doxygen
-BuildRequires:  fftw-devel
+%if %{with flexiblas}
+%else
+%endif
+# oreon:deps
 BuildRequires:  castxml
+BuildRequires:  cmake
+BuildRequires:  dcmtk
+BuildRequires:  doxygen
+BuildRequires:  expat-devel
+BuildRequires:  fftw-devel
+BuildRequires:  flexiblas-devel
 BuildRequires:  gdcm-devel
 BuildRequires:  graphviz
 BuildRequires:  hdf5-devel
+BuildRequires:  jsoncpp-devel
 BuildRequires:  libjpeg-devel
-BuildRequires:  libxml2-devel
+BuildRequires:  libminc-devel
 BuildRequires:  libpng-devel
 BuildRequires:  libtiff-devel
-BuildRequires:  libjpeg-devel
-%if 0%{?fedora} >= 30
-BuildRequires:  qt5-qtwebkit-devel
-%else
-BuildRequires:  qtwebkit-devel
-%endif
-BuildRequires:  vxl-devel
-BuildRequires:  vtk-devel
-BuildRequires:  zlib-devel
-%if %{with flexiblas}
-BuildRequires:	flexiblas-devel
-%else
-BuildRequires:	blas-devel
-BuildRequires:  lapack-devel
-%endif
+BuildRequires:  libxml2-devel
 BuildRequires:  netcdf-cxx-devel
-BuildRequires:  jsoncpp-devel
-BuildRequires:  expat-devel
-BuildRequires:  libminc-devel
-BuildRequires:  dcmtk
-
+BuildRequires:  qt5-qtwebkit-devel
+BuildRequires:  vtk-devel
+BuildRequires:  vxl-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 ITK is an open-source software toolkit for performing registration and 
 segmentation. Segmentation is the process of identifying and classifying data
@@ -88,7 +72,6 @@ discovered at compile-time, rather than at run-time during program execution.
 Summary:        Insight Toolkit
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       %{name}-vtk-devel%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}.
 Install this if you want to develop applications that use ITK.
@@ -96,14 +79,12 @@ Install this if you want to develop applications that use ITK.
 %package        examples
 Summary:        C++, Tcl and Python example programs/scripts for ITK
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description examples
 ITK examples
 
 %package        doc
 Summary:        Documentation for ITK
 BuildArch:      noarch
-
 %description    doc
 %{summary}.
 This package contains additional documentation.
@@ -123,7 +104,6 @@ This package contains additional documentation.
 %package        vtk
 Summary:        Provides an interface between ITK and VTK
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description vtk
 Provides an interface between ITK and VTK
 
@@ -131,11 +111,11 @@ Provides an interface between ITK and VTK
 Summary:        Libraries and header files for development of ITK-VTK bridge
 Requires:       %{name}-vtk%{?_isa} = %{version}-%{release}
 Requires:       vtk-devel%{?_isa}
-
 %description vtk-devel
 Libraries and header files for development of ITK-VTK bridge
 
 %prep
+
 %autosetup -p1
 
 # copy guide into the appropriate directory
@@ -172,6 +152,7 @@ sed -r -i 's/resample->SetDefaultPixelValue/\/\/\0/' \
     Modules/Registration/Metricsv4/test/itkMeanSquaresImageToImageMetricv4VectorRegistrationTest.cxx
 
 %build
+
 extra_cflags=(
 	-DITK_LEGACY_FUTURE_REMOVE # fix build with new vtk
 	-Wno-deprecated-copy       # reduce noise in the logs...
@@ -218,68 +199,30 @@ extra_cflags=(
        -DITK_INSTALL_PACKAGE_DIR=%{_lib}/cmake/%{name}/ \
        -DITK_INSTALL_RUNTIME_DIR:PATH=%{_bindir} \
        -DITK_INSTALL_DOC_DIR=share/doc/%{name}/
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Install examples
 mkdir -p %{buildroot}%{_datadir}/%{name}/examples
 cp -ar Examples/* %{buildroot}%{_datadir}/%{name}/examples/
+%oreon_autofiles InsightToolkit-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles InsightToolkit-examples usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles InsightToolkit-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles InsightToolkit-vtk usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles InsightToolkit-vtk-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-# There are a couple of tests randomly failing on f19 and rawhide and I'm debugging
-# it with upstream. Making the tests informative for now
+
 %ctest || exit 0
-
-# In F31 rawhide (some most likely related to the patching done above):
-# The following tests FAILED:
-#	234 - itkNumericTraitsTest (Failed)
-#	2395 - itkVtkMedianImageFilterTest (Child aborted)
-#	2399 - QuickViewTest (Child aborted)
-#	2400 - itkVtkConnectedComponentImageFilterTest (Child aborted)
-
 %ldconfig_scriptlets
-
 %ldconfig_scriptlets vtk
-
-%files
-%doc LICENSE NOTICE README.md
-%{_libdir}/*.so.*
-%exclude %{_libdir}/libITKVtkGlue*.so.*
-%{_bindir}/itkTestDriver
-
-%files devel
-%{_libdir}/*.so
-%exclude %{_libdir}/libITKVtkGlue*.so
-%{_libdir}/cmake/%{name}/
-%{_includedir}/%{name}/
-%exclude %{_includedir}/%{name}/itkImageToVTKImageFilter.h*
-%exclude %{_includedir}/%{name}/itkVTKImageToImageFilter.h*
-%exclude %{_includedir}/%{name}/QuickView.h
-%exclude %{_includedir}/%{name}/vtkCaptureScreen.h
-%exclude %{_libdir}/cmake/%{name}/Modules/ITKVtkGlue.cmake
-
-%files examples
-%{_datadir}/%{name}/examples
-
-%files doc
-%dir %{_docdir}/%{name}/
-%{_docdir}/%{name}/*
-%doc InsightSoftwareGuide-Book1-%{version_doc}.pdf
-%doc InsightSoftwareGuide-Book2-%{version_doc}.pdf
-
-%files vtk
-%{_libdir}/libITKVtkGlue*.so.*
-
-%files vtk-devel
-%{_libdir}/libITKVtkGlue*.so
-%{_includedir}/%{name}/itkImageToVTKImageFilter.h*
-%{_includedir}/%{name}/itkVTKImageToImageFilter.h*
-%{_includedir}/%{name}/QuickView.h
-%{_includedir}/%{name}/vtkCaptureScreen.h
-%{_libdir}/cmake/%{name}/Modules/ITKVtkGlue.cmake
+%files -f %{oreon_filedir}/main.list
+%files -n InsightToolkit-devel -f %{oreon_filedir}/InsightToolkit-devel.list
+%files -n InsightToolkit-examples -f %{oreon_filedir}/InsightToolkit-examples.list
+%files -n InsightToolkit-doc -f %{oreon_filedir}/InsightToolkit-doc.list
+%files -n InsightToolkit-vtk -f %{oreon_filedir}/InsightToolkit-vtk.list
+%files -n InsightToolkit-vtk-devel -f %{oreon_filedir}/InsightToolkit-vtk-devel.list
 
 %changelog
+
 %autochangelog

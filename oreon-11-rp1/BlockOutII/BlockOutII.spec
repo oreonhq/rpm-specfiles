@@ -1,15 +1,9 @@
+%global source1_hash 2bf9ab1798e7d3f82a372a3fae26a5c7699d1c57263253dce66f07fa418b702b
 %global source0_hash 3abf61c4a7bd921988596a2239d76a5800fc94d8fd84dcc82c720d4d4f84cf0f
-
-# Copyright (c) 2007 oc2pus <toni@links2linux.de>
-# Copyright (c) 2007 Hans de Goede <j.w.r.degoede@hhs.nl>
-# This file and all modifications and additions to the pristine
-# package are under the same license as the package itself.
-
 Name:           BlockOutII
 Version:        2.5
 Release:        34%{?dist}
 Summary:        A free adaptation of the original BlockOut DOS game
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.blockout.net/blockout2/
 Source0:        http://downloads.sourceforge.net/blockout/bl25-src.tar.gz
@@ -19,13 +13,18 @@ Patch0:         BlockOutII-2.3-syslibs.patch
 Patch1:         BlockOutII-2.3-bl2Home.patch
 Patch2:         BlockOutII-2.3-restore-resolution.patch
 Patch3:         BlockOutII-2.3-libpng15.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=1037001
 Patch4:         BlockOutII-2.3-format-security.patch
 Patch5:		BlockOutII-c99.patch
-BuildRequires:  SDL_mixer-devel alsa-lib-devel libpng-devel
-BuildRequires:  make gcc-c++ desktop-file-utils ImageMagick
 Requires:       hicolor-icon-theme opengl-games-utils
-
+# oreon:deps
+BuildRequires:  ImageMagick
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  alsa-lib-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libpng-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 BlockOut II is a free adaptation of the original BlockOut
 DOS game edited by California Dreams in 1989. BlockOut II
@@ -40,6 +39,7 @@ used by permission for the BlockOut II application by Jean-Luc
 Pons.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n BL_SRC -a 1
@@ -60,30 +60,26 @@ mv t BlockOut/README.txt
 rm -r ImageLib/src/png/png ImageLib/src/png/zlib
 
 %build
+
 pushd ImageLib/src
 make %{?_smp_mflags} CFLAGS="$RPM_OPT_FLAGS -Dlinux -c" \
     CXXFLAGS="$RPM_OPT_FLAGS -Dlinux -c"
 popd
-
 pushd BlockOut
 make %{?_smp_mflags} \
     CXXFLAGS="$RPM_OPT_FLAGS -Dlinux `sdl-config --cflags` -I../ImageLib/src -c" \
     ADD_LIBS="-L../ImageLib/src -limagelib -lpng -lz"
 popd
-
 convert BlockOut/block_icon.ico BlockOutII.png
 convert BlockOutII-2.png -resize 64x64 BlockOutII-64x64.png
-
 %install
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}/images
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}/sounds
-
 install -m 755 BlockOut/blockout $RPM_BUILD_ROOT%{_bindir}/%{name}
 ln -s opengl-game-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/%{name}-wrapper
 install -p -m 644 blockout/images/* $RPM_BUILD_ROOT%{_datadir}/%{name}/images
 install -p -m 644 blockout/sounds/* $RPM_BUILD_ROOT%{_datadir}/%{name}/sounds
-
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install --dir $RPM_BUILD_ROOT%{_datadir}/applications %{SOURCE2}
 install -D -p -m 644 %{name}-1.png \
@@ -94,14 +90,6 @@ install -D -p -m 644 %{name}-2.png \
   $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
 install -D -p -m 644 %{name}-64x64.png \
   $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps/%{name}.png
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -132,14 +120,10 @@ SentUpstream: 2014-09-17
    -->
 </application>
 EOF
+%oreon_autofiles main
 
-%files
-%doc BlockOut/README.txt
-%{_bindir}/%{name}*
-%{_datadir}/%{name}
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{name}.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

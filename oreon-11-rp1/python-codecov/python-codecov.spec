@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 2362b685633caeaf45b9951a9b76ce359cd3581dd515b430c6c3f5dfb4d92a8c
 Name:           python-codecov
 Version:        2.1.13
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Hosted coverage reports for GitHub, Bitbucket and Gitlab
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/codecov/codecov-python
-Source:         %{pypi_source codecov}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/codecov/codecov-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'codecov' generated automatically by pyp2spec.}
-
 Patch0:         python-codecov-rm-python-mock-usage.diff
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-codecov = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-codecov
-Summary:        %{summary}
-
-%description -n python3-codecov %_description
-
+Summary:        Hosted coverage reports for GitHub, Bitbucket and Gitlab
+%description -n python3-codecov
 
 %prep
-%autosetup -p1 -n codecov-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir codecov-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-codecov usr/lib/python3*/site-packages/codecov* usr/lib64/python3*/site-packages/codecov* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/codecov* usr/lib64/python3*/site-packages/codecov* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-codecov -f %{pyproject_files}
-%{_bindir}/codecov
+%files
+%files -n python3-codecov -f %{oreon_filedir}/python3-codecov.list
 
 %changelog
+
 %autochangelog

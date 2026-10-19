@@ -1,32 +1,29 @@
 %global source0_hash 3046f8397b70bd83d151fb856767af32f9145747f8bd5e238db5f8740d0ff348
-
 %global glib2_minver 2.72
-
 Name:           btrfsd
 Version:        0.2.2
 Release:        6%{?dist}
 Summary:        Tiny Btrfs maintenance daemon
-
 License:        LGPL-2.1-or-later
 URL:            https://github.com/ximion/btrfsd
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  docbook-style-xsl
+Source0:        https://github.com/ximion/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Requires:       btrfs-progs
+%{?systemd_ordering}
+# oreon:deps
+BuildRequires:  /usr/bin/xsltproc
 BuildRequires:  btrfs-progs
-BuildRequires:  meson >= 0.60
+BuildRequires:  docbook-style-xsl
 BuildRequires:  gcc
-BuildRequires:  pkgconfig(glib-2.0) >= %{glib2_minver}
-BuildRequires:  pkgconfig(gobject-2.0) >= %{glib2_minver}
-BuildRequires:  pkgconfig(gio-2.0) >= %{glib2_minver}
-BuildRequires:  pkgconfig(json-glib-1.0) >= 1.6.2
+BuildRequires:  meson
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gobject-2.0)
+BuildRequires:  pkgconfig(json-glib-1.0)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(mount)
 BuildRequires:  pkgconfig(systemd)
 BuildRequires:  systemd-rpm-macros
-BuildRequires:  /usr/bin/xsltproc
-Requires:       btrfs-progs
-%{?systemd_ordering}
-
+# /oreon:deps
 %description
 Btrfsd is a lightweight daemon that takes care of all Btrfs filesystems
 on a Linux system.
@@ -45,37 +42,29 @@ the daemon will be completely inert.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
 %check
+
 %meson_test
-
 %preun
+
 %systemd_preun %{name}.timer
-
 %post
+
 %systemd_post %{name}.timer
-
 %postun
-%systemd_postun %{name}.timer
 
-%files
-%license LICENSE
-%doc README.md NEWS.md
-%{_libexecdir}/%{name}
-%{_mandir}/man8/%{name}.8*
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/settings.conf
-%{_unitdir}/%{name}.service
-%{_unitdir}/%{name}.timer
+%systemd_postun %{name}.timer
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

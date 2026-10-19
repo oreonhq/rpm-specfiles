@@ -1,56 +1,45 @@
 %global source0_hash 83e0e350cc82781f1142e4bc8deea901324a23f9d64e8ead80102dfd680a83df
-
-## Disabling debug package 
-## Can't build as noarch due to dmidecode requires
 %global debug_package %{nil}
-
 Name:        fusioninventory-agent
-Summary:     FusionInventory agent
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Summary:        FusionInventory agent
 License:     GPL-2.0-or-later
 URL:         http://fusioninventory.org/
-
 Version:     2.6
-Release:     16%{?dist}
-Source0:     https://github.com/fusioninventory/%{name}/releases/download/%{version}/FusionInventory-Agent-%{version}.tar.gz
+Release:        1%{?dist}
+Source0:        https://github.com/fusioninventory/%{name}/releases/download/%{version}/FusionInventory-Agent-%{version}.tar.gz
 Source1:     %{name}.cron
 Source10:    %{name}.service
-
-BuildRequires: coreutils
-BuildRequires: findutils
-BuildRequires: make
-BuildRequires: perl-generators
-BuildRequires: perl-interpreter
-BuildRequires: perl(Config)
-BuildRequires: perl(English)
-BuildRequires: perl(inc::Module::Install)
-BuildRequires: perl(Module::AutoInstall)
-BuildRequires: perl(Module::Install::Include)
-BuildRequires: perl(Module::Install::Makefile)
-BuildRequires: perl(Module::Install::Metadata)
-BuildRequires: perl(Module::Install::Scripts)
-BuildRequires: perl(Module::Install::WriteAll)
-BuildRequires: perl(strict)
-BuildRequires: perl(warnings)
-BuildRequires: sed
-BuildRequires: systemd
-
 Requires:  perl-FusionInventory-Agent = %{version}-%{release}
 Requires:  cronie
 %ifarch %{ix86} x86_64
 Requires:  dmidecode
 %endif
-
 Requires(post):     systemd
 Requires(preun):    systemd
 Requires(postun):   systemd
-
-# excluding internal requires and windows stuff
-# excluding perl(setup) and windows stuff
 %{?perl_default_filter}
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(setup\\)$
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Win32|setup\\)$
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  make
+BuildRequires:  perl(Config)
+BuildRequires:  perl(English)
+BuildRequires:  perl(Module::AutoInstall)
+BuildRequires:  perl(Module::Install::Include)
+BuildRequires:  perl(Module::Install::Makefile)
+BuildRequires:  perl(Module::Install::Metadata)
+BuildRequires:  perl(Module::Install::Scripts)
+BuildRequires:  perl(Module::Install::WriteAll)
+BuildRequires:  perl(inc::Module::Install)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  sed
+BuildRequires:  systemd
+# /oreon:deps
 %description
 FusionInventory Agent is an application designed to help a network
 or system administrator to keep track of the hardware and software
@@ -82,7 +71,6 @@ Requires:       perl(Net::CUPS)
 Requires:       perl(Net::SSLeay)
 Requires:       perl(Proc::Daemon)
 Requires:       perl(Socket::GetAddrInfo)
-
 %description -n perl-FusionInventory-Agent
 Libraries for Fusioninventory agent.
 
@@ -90,7 +78,6 @@ Libraries for Fusioninventory agent.
 Summary:    FusionInventory plugin to inventory vCenter/ESX/ESXi
 BuildArch:  noarch
 Requires:   %{name} = %{version}-%{release}
-
 %description task-esx
 fusioninventory-agent-task-ESX ask the running service agent to inventory an 
 VMWare vCenter/ESX/ESXi server through SOAP interface
@@ -99,7 +86,6 @@ VMWare vCenter/ESX/ESXi server through SOAP interface
 Summary:    NetDiscovery and NetInventory task for FusionInventory
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
-
 %description task-network
 fusioninventory-task-netdiscovery and fusioninventory-task-netinventory
 
@@ -108,7 +94,6 @@ Summary:    Software deployment support for FusionInventory agent
 BuildArch:  noarch
 Requires:   %{name} = %{version}-%{release}
 Requires:   perl(Archive::Extract)
-
 %description task-deploy
 This package provides software deployment support for FusionInventory-agent
 
@@ -116,7 +101,6 @@ This package provides software deployment support for FusionInventory-agent
 Summary:    WakeOnLan task for FusionInventory
 BuildArch:  noarch
 Requires:   %{name} = %{version}-%{release}
-
 %description task-wakeonlan
 fusioninventory-task-wakeonlan
 
@@ -125,14 +109,12 @@ Summary:    Inventory task for FusionInventory
 Requires:   %{name} = %{version}-%{release}
 Requires:   perl(Net::CUPS)
 Requires:   perl(Parse::EDID)
-
 %description task-inventory
 fusioninventory-task-inventory
 
 %package task-collect
 Summary:    Custom information retrieval support for FusionInventory agent
 Requires:   %{name} = %{version}-%{release}
-
 %description task-collect
 This package provides custom information retrieval support for
 FusionInventory agent
@@ -140,11 +122,11 @@ FusionInventory agent
 %package cron
 Summary:    Cron for FusionInventory agent
 Requires:   %{name} = %{version}-%{release}
-
 %description cron
 fusioninventory cron task
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n FusionInventory-Agent-%{version}
@@ -191,105 +173,47 @@ OCSTAG[0]=
 EOF
 
 %build
+
 perl Makefile.PL \
      PREFIX=%{_prefix} \
      SYSCONFDIR=%{_sysconfdir}/fusioninventory \
      LOCALSTATEDIR=%{_localstatedir}/lib/%{name} \
      VERSION=%{version}-%{release}
-
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=%{buildroot}
 find %{buildroot} -type f -name .packlist -exec rm -f {} ';'
-
 %{_fixperms} %{buildroot}/*
-
 mkdir -p %{buildroot}%{_localstatedir}/lib/%{name}
 mkdir -p %{buildroot}%{_sysconfdir}/fusioninventory/conf.d
 mkdir -p %{buildroot}%{_sysconfdir}/systemd/system/%{name}.service.d
-
 install -m 644 -D  %{name}.conf  %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 install -m 755 -Dp %{SOURCE1}    %{buildroot}%{_sysconfdir}/cron.hourly/%{name}
 install -m 644 -D  %{SOURCE10}   %{buildroot}%{_unitdir}/%{name}.service
+%oreon_autofiles perl-FusionInventory-Agent usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-#make test
 
 %post
+
 %systemd_post fusioninventory-agent.service
-
 %preun
+
 %systemd_preun fusioninventory-agent.service
-
 %postun
+
 %systemd_postun_with_restart fusioninventory-agent.service
-
-%files
-%dir %{_sysconfdir}/fusioninventory
-%config(noreplace) %{_sysconfdir}/fusioninventory/agent.cfg
-%config(noreplace) %{_sysconfdir}/fusioninventory/conf.d
-%config(noreplace) %{_sysconfdir}/fusioninventory/inventory-server-plugin.cfg
-%config(noreplace) %{_sysconfdir}/fusioninventory/server-test-plugin.cfg
-%config(noreplace) %{_sysconfdir}/fusioninventory/ssl-server-plugin.cfg
-%config(noreplace) %{_sysconfdir}/fusioninventory/proxy-server-plugin.cfg
-%config(noreplace) %{_sysconfdir}/fusioninventory/proxy2-server-plugin.cfg
-
-%{_unitdir}/%{name}.service
-%dir %{_sysconfdir}/systemd/system/%{name}.service.d
-%{_bindir}/fusioninventory-agent
-%{_bindir}/fusioninventory-injector
-%{_mandir}/man1/fusioninventory-agent*
-%{_mandir}/man1/fusioninventory-injector*
-%dir %{_localstatedir}/lib/%{name}
-%dir %{_datadir}/fusioninventory
-%dir %{_datadir}/fusioninventory/lib
-%dir %{_datadir}/fusioninventory/lib/FusionInventory
-%dir %{_datadir}/fusioninventory/lib/FusionInventory/Agent
-%dir %{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task
-
-%files -n perl-FusionInventory-Agent
-%doc Changes LICENSE THANKS
-#excluding sub-packages files
-#%%exclude %%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/*
-%{_datadir}/fusioninventory
-
-%files task-esx
-%{_bindir}/fusioninventory-esx
-%{_mandir}/man1/fusioninventory-esx.1*
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/ESX.pm
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/SOAP
-
-%files task-network
-%{_bindir}/fusioninventory-netdiscovery
-%{_bindir}/fusioninventory-netinventory
-%{_mandir}/man1/fusioninventory-netdiscovery.1*
-%{_mandir}/man1/fusioninventory-netinventory.1*
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/NetDiscovery.pm
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/NetInventory.pm
-
-%files task-deploy
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/Deploy.pm
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/Deploy
-
-%files task-wakeonlan
-%{_bindir}/fusioninventory-wakeonlan
-%{_mandir}/man1/fusioninventory-wakeonlan.1*
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/WakeOnLan.pm
-
-%files task-inventory
-%{_bindir}/fusioninventory-inventory
-%{_bindir}/fusioninventory-remoteinventory
-%{_mandir}/man1/fusioninventory-*inventory.1*
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/Inventory.pm
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/Inventory
-
-%files task-collect
-%{_datadir}/fusioninventory/lib/FusionInventory/Agent/Task/Collect.pm
-
-%files cron
-%{_sysconfdir}/cron.hourly/%{name}
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-FusionInventory-Agent -f %{oreon_filedir}/perl-FusionInventory-Agent.list
+%files -n fusioninventory-agent-task-esx -f %{oreon_filedir}/fusioninventory-agent-task-esx.list
+%files -n fusioninventory-agent-task-network -f %{oreon_filedir}/fusioninventory-agent-task-network.list
+%files -n fusioninventory-agent-task-deploy -f %{oreon_filedir}/fusioninventory-agent-task-deploy.list
+%files -n fusioninventory-agent-task-wakeonlan -f %{oreon_filedir}/fusioninventory-agent-task-wakeonlan.list
+%files -n fusioninventory-agent-task-inventory -f %{oreon_filedir}/fusioninventory-agent-task-inventory.list
+%files -n fusioninventory-agent-task-collect -f %{oreon_filedir}/fusioninventory-agent-task-collect.list
+%files -n fusioninventory-agent-cron -f %{oreon_filedir}/fusioninventory-agent-cron.list
 
 %changelog
+
 %autochangelog

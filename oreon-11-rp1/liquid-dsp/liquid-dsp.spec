@@ -1,68 +1,59 @@
-%global source0_hash 33c42ebc2e6088570421e282c6332e899705d42b4f73ebd1212e6a11da714dd4
-
+%global source0_hash a0adbc3ec5630d620a55351285573f59948153a14c703fb64b4ad58989bd6e2f
 %global sover 1.8.2
-
 Name:           liquid-dsp
 Version:        1.8.2
 Release:        1%{?dist}
 Summary:        Digital Signal Processing Library for Software-Defined Radios
-
 License:        MIT
 URL:            http://liquidsdr.org/
 Source0:        https://github.com/jgaeddert/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-# Patch configure.ac for ppc64
 Patch1:         ppc64-configureac.patch
-# fixes ppc64 altivec, other 64-bit problems. Patch by Dan Horák.
-# https://github.com/jgaeddert/liquid-dsp/pull/136
 Patch3:         ppc64.patch
-
 ExcludeArch:    i686
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  fftw-devel
+BuildRequires:  fftw-libs-single
 BuildRequires:  gcc
-BuildRequires:  fftw-devel fftw-libs-single
-BuildRequires:  autoconf automake libtool
+BuildRequires:  libtool
 BuildRequires:  make
-
+# /oreon:deps
 %description
 Digital signal processing library for software-defined radios
 
 %package -n %{name}-devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description -n %{name}-devel
 Digital signal processing library for software-defined radios
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{version}
 autoreconf -f -i
 
 %build
+
 %configure --exec_prefix=/ --enable-simdoverride
 %make_build
-
 %check
-make check
 
+make check
 %install
 %make_install
 pushd ${RPM_BUILD_ROOT}/%{_libdir} > /dev/null 2>&1
 rm libliquid.a
 chmod a+x libliquid.so.%{sover}
 popd > /dev/null 2>&1
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%{_libdir}/libliquid.so.1
-%{_libdir}/libliquid.so.%{sover}
-
-%files -n %{name}-devel
-%{_includedir}/liquid/
-%{_libdir}/libliquid.so
+%files -f %{oreon_filedir}/main.list
+%files -n liquid-dsp-devel -f %{oreon_filedir}/liquid-dsp-devel.list
 
 %changelog
+
 %autochangelog

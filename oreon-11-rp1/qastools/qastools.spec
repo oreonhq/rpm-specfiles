@@ -1,33 +1,30 @@
-%global source0_hash d18ee5e1045ec44a18d5f7b8613f3987f225b4ef96c63128bf5cc645b2e6dbbb
-
+%global source0_hash 59d7dcd0022b3024a572b5f267df04e2cc940c1e6480e01682e9e775d8add851
 Name:           qastools
 Version:        1.5.0
 Release:        1%{?dist}
 Summary:        Collection of desktop applications for ALSA
-# Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only
-
 URL:            https://gitlab.com/sebholt/qastools
 Source0:        https://gitlab.com/sebholt/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.bz2
-
-BuildRequires:  cmake gcc-c++
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-BuildRequires:  qt5-qtbase-devel qt5-qtsvg-devel qt5-linguist
-BuildRequires:  pkgconfig(alsa)
-# For libudev.h
-BuildRequires:  systemd-devel
-
 Requires:       qasconfig%{?_isa} = %{version}-%{release}
 Requires:       qashctl%{?_isa} = %{version}-%{release}
 Requires:       qasmixer%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(alsa)
+BuildRequires:  qt5-linguist
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  systemd-devel
+# /oreon:deps
 %description
 QasTools is a collection of desktop applications for the ALSA sound system.
 
 %package -n qascommon
 Summary:        Common part of QasTools
-
 %description -n qascommon
 Common part of QasTools.
 
@@ -35,7 +32,6 @@ Common part of QasTools.
 Summary:	    ALSA configuration browser
 Requires:	    qascommon%{?_isa} = %{version}-%{release}
 Requires:       hicolor-icon-theme
-
 %description -n qasconfig
 Browser for the ALSA configuration tree.
 
@@ -43,7 +39,6 @@ Browser for the ALSA configuration tree.
 Summary: 	    ALSA complex mixer
 Requires:	    qascommon%{?_isa} = %{version}-%{release}
 Requires:       hicolor-icon-theme
-
 %description -n qashctl
 Mixer for ALSA's more complex "High level Control Interface".
 
@@ -51,61 +46,38 @@ Mixer for ALSA's more complex "High level Control Interface".
 Summary:        ALSA simple mixer
 Requires:       qascommon%{?_isa} = %{version}-%{release}
 Requires:       hicolor-icon-theme
-
 %description -n qasmixer
 Desktop mixer for ALSA's "Simple Mixer Interface" (alsamixer).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}-v%{version}
-
+%global oreon_srcdir %{name}-v%{version}
+%oreon_prep
 %build
+
 %cmake -DSKIP_LICENSE_INSTALL:BOOL=ON
 %cmake_build
-
 %install
 %cmake_install
 for file in %{buildroot}/%{_datadir}/applications/*.desktop; do
     desktop-file-validate $file
 done
 %find_lang %{name} --with-qt --without-mo
-# hack
-#rm -f %{buildroot}/%{_datadir}/%{name}/l10n/qastools_default.qm
+%oreon_autofiles qascommon usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qasconfig usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qashctl usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qasmixer usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
-
-%files
-# meta package
-
-%files -n qascommon -f %{name}.lang
-%license COPYING
-%doc CHANGELOG README.md TODO
-%dir %{_datadir}/%{name}/
-%{_datadir}/%{name}/widgets/
-
-%files -n qasconfig
-%{_bindir}/qasconfig
-%{_datadir}/applications/qasconfig.desktop
-%{_datadir}/icons/hicolor/*/apps/qasconfig.*
-%{_mandir}/man1/qasconfig.1.*
-%{_metainfodir}/qasconfig.appdata.xml
-
-%files -n qashctl
-%{_bindir}/qashctl
-%{_datadir}/applications/qashctl.desktop
-%{_datadir}/icons/hicolor/*/apps/qashctl.*
-%{_mandir}/man1/qashctl.1.*
-%{_metainfodir}/qashctl.appdata.xml
-
-%files -n qasmixer
-%{_bindir}/qasmixer
-%{_datadir}/%{name}/icons/
-%{_datadir}/applications/qasmixer.desktop
-%{_datadir}/icons/hicolor/*/apps/qasmixer.*
-%{_mandir}/man1/qasmixer.1.*
-%{_metainfodir}/qasmixer.appdata.xml
+%files -f %{oreon_filedir}/main.list
+%files -n qascommon -f %{oreon_filedir}/qascommon.list
+%files -n qasconfig -f %{oreon_filedir}/qasconfig.list
+%files -n qashctl -f %{oreon_filedir}/qashctl.list
+%files -n qasmixer -f %{oreon_filedir}/qasmixer.list
 
 %changelog
+
 %autochangelog

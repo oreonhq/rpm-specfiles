@@ -1,24 +1,23 @@
 %global source0_hash 2cc53e3996dda4dceb5d7a794ba15107adb7a6614e19b485c0b8e47a5ab8b69a
-
 %bcond check 1
-
 Name:           perl-Statistics-Regression
 Version:        0.53
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Weighted linear regression package (line+plane fitting)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/Statistics-Regression
 Source0:        https://cpan.metacpan.org/authors/id/I/IA/IAWELCH/Statistics-Regression-%{version}.tar.gz
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(inc::Module::Install)
 %if %{with check}
-BuildRequires:  perl(Test::Pod)
 %endif
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(inc::Module::Install)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Regression.pm is a multivariate linear regression package. That is, it
 estimates the c coefficients for a line-fit of the type
@@ -34,29 +33,25 @@ regression package to fit an intercept.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n Statistics-Regression-%{version}
-
+%global oreon_srcdir Statistics-Regression-%{version}
+%oreon_prep
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}" \
   NO_PACKLIST=1 NO_PERLLOCAL=1
 %make_build
-
 %install
 %make_install
 find %{buildroot} -type f -name '*.bs' -empty -delete
 %{_fixperms} '%{buildroot}'/*
-
+%oreon_autofiles main
 %if %{with check}
 %check
+
 make test
 %endif
-
-%files
-%doc README
-%dir %{perl_vendorlib}/Statistics
-%{perl_vendorlib}/Statistics/Regression.pm
-%{_mandir}/man3/Statistics::Regression.3pm.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

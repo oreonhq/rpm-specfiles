@@ -1,45 +1,37 @@
 %global source0_hash d6b2a42378233aaff6188a0a5ff9fa0e959cb95742367e2cdfa2c6a023c7fe26
-
 %bcond_without build_lib
-
 Name:       ddcutil
 Version:    3.0.2
-Release:    1%{?dist}
-Summary:    Query and update monitor settings
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Query and update monitor settings
 License:    GPL-2.0-or-later
 URL:        http://www.ddcutil.com
 Source0:        https://github.com/rockowitz/ddcutil/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-# Excluding arch s390/s390x due to i2c-tools does so
 ExcludeArch:    s390 s390x
-
-BuildRequires:  libacl-devel
-BuildRequires:      automake
-BuildRequires:      autoconf
-BuildRequires:      libtool
-BuildRequires:      gcc
-BuildRequires:      make
-BuildRequires:      pkgconfig(glib-2.0)   >= 2.40
-BuildRequires:      pkgconfig(libusb-1.0) >= 1.0.15
-BuildRequires:      pkgconfig(systemd)
-BuildRequires:      pkgconfig(libudev)
-BuildRequires:      pkgconfig(xrandr)
-BuildRequires:      pkgconfig(libdrm) >= 2.4.67
-BuildRequires:      pkgconfig(libkmod)
-BuildRequires:      pkgconfig(jansson) >= 2.0
-
 Requires:   hwdata
 Requires:   i2c-tools
-
-# file that may be used at runtime
 Recommends: /usr/bin/lsusb
 Recommends: /usr/bin/modprobe
 Recommends: pkg-config
 Recommends: /usr/bin/lscpu
 Recommends: /usr/bin/lsb_release
 Recommends: xrandr
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  libacl-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(jansson)
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(libkmod)
+BuildRequires:  pkgconfig(libudev)
+BuildRequires:  pkgconfig(libusb-1.0)
+BuildRequires:  pkgconfig(systemd)
+BuildRequires:  pkgconfig(xrandr)
+# /oreon:deps
 %description
 Query and change monitor settings
 
@@ -53,26 +45,25 @@ changing a monitor's input source and adjusting its brightness.
 %if %{with build_lib}
 %package -n libddcutil
 Summary:        Shared library to query and update monitor settings
-
 %description -n libddcutil
 Shared library version of ddcutil, exposing a C API.
 
 %package -n libddcutil-devel
 Summary:        Development files for libddcutil
-# FindDDCUtils.cmake has BSD-3-Clause license header
 License:        GPL-2.0-or-later AND BSD-3-Clause
 Requires:       libddcutil%{?_isa} = %{version}-%{release}
 Requires:       cmake-filesystem%{?_isa}
-
 %description -n libddcutil-devel
 Development files for libddcutil
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build
+
 NOCONFIGURE=1 ./autogen.sh
 %configure \
 %if %{with build_lib}
@@ -81,31 +72,16 @@ NOCONFIGURE=1 ./autogen.sh
     --enable-lib=no
 %endif
 %make_build
-
 %install
 %make_install
+%oreon_autofiles libddcutil usr/*/lib*.so.*
+%oreon_autofiles libddcutil-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS NEWS.md README.md CHANGELOG.md
-%license COPYING
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%{_mandir}/man1/%{name}.1.*
-%{_udevrulesdir}/60-ddcutil-i2c.rules
-%{_modulesloaddir}/ddcutil.conf
-
-%if %{with build_lib}
-%files -n libddcutil
-%doc AUTHORS NEWS.md README.md CHANGELOG.md
-%license COPYING
-%{_libdir}/lib%{name}.so.5*
-
-%files -n libddcutil-devel
-%{_libdir}/lib%{name}.so
-%{_includedir}/%{name}*.h
-%{_libdir}/cmake/%{name}
-%{_libdir}/pkgconfig/%{name}.pc
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n libddcutil -f %{oreon_filedir}/libddcutil.list
+%files -n libddcutil-devel -f %{oreon_filedir}/libddcutil-devel.list
 
 %changelog
+
 %autochangelog

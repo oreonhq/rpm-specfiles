@@ -1,37 +1,30 @@
 %global source0_hash f3b4448904f1656d6d7cd5a557d22fe1c50624eb32ed369f34726beff9ce0589
-
 Name:          ktextaddons
 Version:       2.1.2
-Release:       1%{?dist}
-Summary:       Various text handling addons
-
+Release:        1%{?dist}
+Summary:        Various text handling addons
 License:       CC0-1.0 AND LGPL-2.0-or-later AND GPL-2.0-or-later AND BSD-3-Clause
-
 URL:           https://invent.kde.org/libraries/%{name}
-
 Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: kf6-rpm-macros
-BuildRequires: extra-cmake-modules
-
-
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Keychain)
-BuildRequires: cmake(Qt6TextToSpeech)
-BuildRequires: cmake(Qt6UiPlugin)
-
-BuildRequires: cmake(KF6Archive)
-BuildRequires: cmake(KF6ConfigWidgets)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Sonnet)
-BuildRequires: cmake(KF6SyntaxHighlighting)
-BuildRequires: cmake(KF6TextWidgets)
-BuildRequires: cmake(KF6IconThemes)
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6Archive)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Sonnet)
+BuildRequires:  cmake(KF6SyntaxHighlighting)
+BuildRequires:  cmake(KF6TextWidgets)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Keychain)
+BuildRequires:  cmake(Qt6TextToSpeech)
+BuildRequires:  cmake(Qt6UiPlugin)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
@@ -61,116 +54,22 @@ BuildArch:      noarch
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang %{name} --all-name
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files qt6
-%license LICENSES/
-%{_kf6_libdir}/libKF6TextAddonsWidgets.so.1
-%{_kf6_libdir}/libKF6TextAddonsWidgets.so.%{version}
-%{_kf6_libdir}/libKF6TextAutoCorrectionCore.so.1
-%{_kf6_libdir}/libKF6TextAutoCorrectionCore.so.%{version}
-%{_kf6_libdir}/libKF6TextAutoCorrectionWidgets.so.1
-%{_kf6_libdir}/libKF6TextAutoCorrectionWidgets.so.%{version}
-%{_kf6_libdir}/libKF6TextCustomEditor.so.1
-%{_kf6_libdir}/libKF6TextCustomEditor.so.%{version}
-%{_kf6_libdir}/libKF6TextEmoticonsCore.so.1
-%{_kf6_libdir}/libKF6TextEmoticonsCore.so.%{version}
-%{_kf6_libdir}/libKF6TextEmoticonsWidgets.so.1
-%{_kf6_libdir}/libKF6TextEmoticonsWidgets.so.%{version}
-%{_kf6_libdir}/libKF6TextEditTextToSpeech.so.1
-%{_kf6_libdir}/libKF6TextEditTextToSpeech.so.%{version}
-%{_kf6_libdir}/libKF6TextGrammarCheck.so.1
-%{_kf6_libdir}/libKF6TextGrammarCheck.so.%{version}
-%{_kf6_libdir}/libKF6TextTranslator.so.1
-%{_kf6_libdir}/libKF6TextTranslator.so.%{version}
-%{_kf6_libdir}/libKF6TextUtils.so.1
-%{_kf6_libdir}/libKF6TextUtils.so.%{version}
-%{_kf6_libdir}/libKF6TextAutoGenerateText.so.1
-%{_kf6_libdir}/libKF6TextAutoGenerateText.so.%{version}
-%{_kf6_libdir}/libKF6TextSpeechToText.so.1
-%{_kf6_libdir}/libKF6TextSpeechToText.so.%{version}
-%{_kf6_libdir}/libtextautogenerateollama.so.1
-%{_kf6_libdir}/libtextautogenerateollama.so.%{version}
-%{_kf6_plugindir}/translator/translator_bing.so
-%{_kf6_plugindir}/translator/translator_deepl.so
-%{_kf6_plugindir}/translator/translator_google.so
-%{_kf6_plugindir}/translator/translator_libretranslate.so
-%{_kf6_plugindir}/translator/translator_lingva.so
-%{_kf6_plugindir}/translator/translator_yandex.so
-%{_kf6_plugindir}/textautogeneratetext/autogeneratetext*.so
-%{_kf6_libdir}/libtextutils-cmark-rc-copy.so.0
-%{_kf6_libdir}/libtextutils-cmark-rc-copy.so.0.31.0
-%{_kf6_libdir}/libtextautogenerateollamacloud.so.%{version}
-%{_kf6_libdir}/libtextautogenerateollamacloud.so.1
-%{_kf6_libdir}/libtextautogenerateollamacommon.so.1
-%{_kf6_libdir}/libtextautogenerateollamacommon.so.%{version}
-%{_kf6_libdir}/libtextautogenerateollamaonline.so.1
-%{_kf6_libdir}/libtextautogenerateollamaonline.so.%{version}
-%{_kf6_libdir}/libtextautogenerategenericnetwork.so.1
-%{_kf6_libdir}/libtextautogenerategenericnetwork.so.%{version}
-%{_kf6_datadir}/qlogging-categories6/ktextaddons.categories
-%{_kf6_datadir}/qlogging-categories6/ktextaddons.renamecategories
-
-
-%files qt6-devel
-%{_kf6_includedir}/TextAddonsWidgets/
-%{_kf6_includedir}/TextAutoCorrectionCore/
-%{_kf6_includedir}/TextAutoCorrectionWidgets/
-%{_kf6_includedir}/TextCustomEditor/
-%{_kf6_includedir}/TextEditTextToSpeech/
-%{_kf6_includedir}/TextEmoticonsCore/
-%{_kf6_includedir}/TextEmoticonsWidgets/
-%{_kf6_includedir}/TextGrammarCheck/
-%{_kf6_includedir}/TextTranslator/
-%{_kf6_includedir}/TextUtils/
-%{_kf6_includedir}/TextAutoGenerateText/
-%{_kf6_includedir}/TextSpeechToText/
-%{_kf6_libdir}/libKF6TextAddonsWidgets.so
-%{_kf6_libdir}/libKF6TextAutoCorrectionCore.so
-%{_kf6_libdir}/libKF6TextAutoCorrectionWidgets.so
-%{_kf6_libdir}/libKF6TextCustomEditor.so
-%{_kf6_libdir}/libKF6TextEditTextToSpeech.so
-%{_kf6_libdir}/libKF6TextEmoticonsCore.so
-%{_kf6_libdir}/libKF6TextEmoticonsWidgets.so
-%{_kf6_libdir}/libKF6TextGrammarCheck.so
-%{_kf6_libdir}/libKF6TextTranslator.so
-%{_kf6_libdir}/libKF6TextUtils.so
-%{_kf6_libdir}/cmake/KF6TextAddonsWidgets/
-%{_kf6_libdir}/cmake/KF6TextAutoCorrectionCore/
-%{_kf6_libdir}/cmake/KF6TextAutoCorrectionWidgets/
-%{_kf6_libdir}/cmake/KF6TextCustomEditor/
-%{_kf6_libdir}/cmake/KF6TextEmoticonsCore/
-%{_kf6_libdir}/cmake/KF6TextEmoticonsWidgets/
-%{_kf6_libdir}/cmake/KF6TextEditTextToSpeech/
-%{_kf6_libdir}/cmake/KF6TextGrammarCheck/
-%{_kf6_libdir}/cmake/KF6TextTranslator/
-%{_kf6_libdir}/cmake/KF6TextUtils/
-%{_kf6_libdir}/cmake/KF6TextAutoGenerateText/
-%{_kf6_libdir}/cmake/KF6TextSpeechToText/
-%{_kf6_libdir}/cmake/textutils-cmark-rc-copy/
-%{_kf6_libdir}/libtextutils-cmark-rc-copy.so
-%{_kf6_libdir}/libKF6TextAutoGenerateText.so
-%{_kf6_libdir}/libKF6TextSpeechToText.so
-%{_kf6_qtplugindir}/designer/textcustomeditor.so
-%{_kf6_qtplugindir}/designer/texttranslatorwidgets6.so
-%{_kf6_qtplugindir}/kf6/speechtotext/speechtotext_google.so
-%{_kf6_qtplugindir}/kf6/speechtotext/speechtotext_whisper.so
-%{_kf6_qtplugindir}/kf6/textautogeneratetext/autogeneratetext_ollama.so
-
-%files qt6-doc
-
-%files common -f %{name}.lang
-%doc README.md
+%files -f %{oreon_filedir}/main.list
+%files -n ktextaddons-qt6 -f %{oreon_filedir}/ktextaddons-qt6.list
+%files -n ktextaddons-qt6-devel -f %{oreon_filedir}/ktextaddons-qt6-devel.list
+%files -n ktextaddons-qt6-doc -f %{oreon_filedir}/ktextaddons-qt6-doc.list
+%files -n ktextaddons-common -f %{oreon_filedir}/ktextaddons-common.list
 
 %changelog
+
 %autochangelog

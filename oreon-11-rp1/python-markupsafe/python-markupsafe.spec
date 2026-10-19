@@ -1,58 +1,41 @@
 %global source0_hash 722695808f4b6457b320fdc131280796bdceb04ab50fe1795cd540799ebe1698
-
 Name:           python-markupsafe
 Version:        3.0.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Safely add untrusted strings to HTML/XML markup.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/pallets/markupsafe/
-Source:         %{pypi_source markupsafe}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'markupsafe' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77
+Requires:       python3-markupsafe = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-markupsafe
-Summary:        %{summary}
-
-%description -n python3-markupsafe %_description
-
+Summary:        Safely add untrusted strings to HTML/XML markup.
+%description -n python3-markupsafe
 
 %prep
-%autosetup -p1 -n markupsafe-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir markupsafe-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-markupsafe usr/lib/python3*/site-packages/markupsafe* usr/lib64/python3*/site-packages/markupsafe* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/markupsafe* usr/lib64/python3*/site-packages/markupsafe* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-markupsafe -f %{pyproject_files}
+%files
+%files -n python3-markupsafe -f %{oreon_filedir}/python3-markupsafe.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.2-1
 - Prepare for Oreon 11 (RP1)

@@ -1,46 +1,32 @@
 %global source0_hash 9d2021f47a4501c667862c9942a92d1953694b21d11bcd1702e83eb594e3d67d
-
-# The testsuite is unsuitable for running on buildsystems
 %global tests_enabled 0
-
-Summary: System and process monitoring utilities
+Summary:        System and process monitoring utilities
 Name: procps-ng
 Version: 4.0.7
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://sourceforge.net/projects/procps-ng/
-
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
-
-BuildRequires: make
-BuildRequires: ncurses-devel
-BuildRequires: libtool
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: gcc
-BuildRequires: gettext-devel
-BuildRequires: systemd-devel
-BuildRequires: git
-BuildRequires: po4a
-
-%if %{tests_enabled}
-BuildRequires: dejagnu
-%endif
-
 Provides: procps = %{version}-%{release}
 Obsoletes: procps < 4.0.1-1
-
-# usrmove hack - will be removed once initscripts are fixed
 Provides: /sbin/sysctl
 Provides: /bin/ps
-
 %if "%{_sbindir}" == "%{_bindir}"
-# Compat symlinks for Requires in other packages.
-# We rely on filesystem to create the symlinks for us.
 Requires:       filesystem(unmerged-sbin-symlinks)
 Provides:       /usr/sbin/sysctl
 %endif
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  git
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  po4a
+BuildRequires:  systemd-devel
+# /oreon:deps
 %description
 The procps package contains a set of system utilities that provide
 system information. Procps includes ps, free, skill, pkill, pgrep,
@@ -69,7 +55,6 @@ Summary:  System and process monitoring utilities
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: procps-devel = %{version}-%{release}
 Obsoletes: procps-devel < 3.3.17-8
-
 %description devel
 System and process monitoring utilities development headers
 
@@ -77,26 +62,18 @@ System and process monitoring utilities development headers
 Summary:  Internationalization pack for procps-ng
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
-# fortunately the same release number for f21 and f22
 Conflicts: man-pages-de < 1.7-3
 Conflicts: man-pages-fr < 3.66-3
 Conflicts: man-pages-pl < 0.7-5
-
 %description i18n
 Internationalization pack for procps-ng
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git
-
+%oreon_prep
 %build
-# The following stuff is needed for git archives only
-#echo "%%{version}" > .tarball-version
-#./autogen.sh
 
 autoreconf --verbose --force --install
-
 %configure \
            --exec-prefix=/ \
            --disable-static \
@@ -109,57 +86,23 @@ autoreconf --verbose --force --install
            --with-systemd \
            --disable-modern-top\
            --enable-pidwait
-
 make CFLAGS="%{optflags}"
-
-
-%if %{tests_enabled}
-%check
-make check
-%endif
-
-
 %install
 %make_install
-
-# these are created by make, yet empty. This causes rpmbuild errors.
 rm -rf %{buildroot}%{_mandir}/{pl,fr,pt_BR}/man5
 rm -rf %{buildroot}%{_mandir}/{fr,de,pt_BR,pl,zh_CN}/man3
-# kill is delivered with util-linux pkg along with i18n manpage
 rm -rf %{buildroot}%{_mandir}/{fr,de,pt_BR,ro,sv,uk}/man1/kill.1
-
-
 %find_lang %{name} --all-name --with-man
-
 %if "%{_sbindir}" != "%{_bindir}"
 ln -s %{_bindir}/pidof %{buildroot}%{_sbindir}/pidof
 %endif
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS bugs.md FAQ NEWS README.md
-%license COPYING COPYING.LIB
-%{_libdir}/libproc2.so.1{,.*}
-%{_bindir}/*
-%if "%{_sbindir}" != "%{_bindir}"
-%{_sbindir}/pidof
-%{_sbindir}/sysctl
-%endif
-%{_mandir}/man1/*
-%{_mandir}/man8/*
-%{_mandir}/man5/*
-
-%exclude %{_pkgdocdir}/libproc.supp
-
-%files devel
-%license COPYING COPYING.LIB
-%{_libdir}/libproc2.so
-%{_libdir}/pkgconfig/libproc2.pc
-%{_includedir}/libproc2
-%{_mandir}/man3/*
-
-%files i18n -f %{name}.lang
+%files -f %{oreon_filedir}/main.list
+%files -n procps-ng-devel -f %{oreon_filedir}/procps-ng-devel.list
+%files -n procps-ng-i18n -f %{oreon_filedir}/procps-ng-i18n.list
 
 %changelog
+
 %autochangelog

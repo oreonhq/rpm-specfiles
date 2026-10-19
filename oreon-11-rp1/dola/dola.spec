@@ -1,5 +1,4 @@
 %global source0_hash e091f16cb6096d3556e6dc33cb58d0f58c5f355f6ff1f35bfbddfc1e97d35cfd
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,31 +80,21 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           dola
 Version:        1.3.2
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Declarative system for Java RPM packaging
 License:        Apache-2.0
 URL:            https://github.com/mizdebsk/dola
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-Source:         https://github.com/mizdebsk/dola/releases/download/%{version}/dola-%{version}.tar.zst
-
-# https://github.com/mizdebsk/dola/pull/30
+Source0:        https://github.com/mizdebsk/dola/releases/download/%{version}/dola-%{version}.tar.zst
 Patch:          0001-Update-to-XMvn-5.1.0.patch
-# https://github.com/mizdebsk/dola/pull/32
 Patch:          0002-Ensure-os_install_post-commands-are-NL-terminated.patch
-# https://github.com/mizdebsk/dola/pull/33
 Patch:          0003-Switch-to-OpenJDK-for-runtime.patch
-# https://github.com/mizdebsk/dola/pull/42
 Patch:          0004-Add-commons-lang3-to-dola-generator-classpath.patch
-# https://github.com/mizdebsk/dola/pull/53
 Patch:          0005-Allow-override-of-classworlds-configuration-dir.patch
-# oreon specific
 Patch:          0006-Find-lujavrite.so-on-any-lua-version.patch
-
 Requires:       %{name}-bsx = %{version}-%{release}
 Requires:       %{name}-generator = %{version}-%{release}
 Requires:       dola-gleaner
@@ -113,15 +102,13 @@ Requires:       dola-transformer
 Requires:       xmvn5-minimal
 Requires:       xmvn5-mojo
 Requires:       xmvn5-tools
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
-BuildRequires:  lujavrite
 %else
+%endif
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
-%endif
-
+# /oreon:deps
 %description
 Dola is a modern, declarative system for RPM packaging of Maven-based
 Java projects.  It enables package maintainers to entirely avoid
@@ -135,7 +122,6 @@ Summary:        Runtime layer for running Dola inside RPM builds
 Requires:       java-25-openjdk-headless
 Requires:       lujavrite
 Requires:       rpm-build
-
 %description bsx
 Dola BSX is a minimal execution layer that bridges the gap between
 rpmbuild and high-level packaging logic implemented in Java via Dola.
@@ -145,13 +131,13 @@ evaluation, logging, and event handling.
 %package generator
 Summary:        RPM dependency generator for Java
 Requires:       %{name}-bsx = %{version}-%{release}
-
 %description generator
 Dola Generator is a dependency generator for RPM Package Manager
 written in Java and Lua, that uses LuJavRite library to call Java code
 from Lua.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 %pom_remove_parent
@@ -165,47 +151,28 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %build
-%mvn_build -j -- -Dmaven.compiler.release=21
 
+%mvn_build -j -- -Dmaven.compiler.release=21
 %install
 %mvn_install
-# BSX
 install -D -p -m 644 dola-bsx/src/main/lua/dola-bsx.lua %{buildroot}%{_rpmluadir}/dola-bsx.lua
 install -D -p -m 644 dola-bsx/src/main/rpm/macros.dola-bsx %{buildroot}%{_rpmmacrodir}/macros.dola-bsx
 install -D -p -m 644 dola-bsx/src/main/conf/dola-bsx.conf %{buildroot}%{_javaconfdir}/dola/classworlds/00-dola-bsx.conf
 install -D -p -m 644 dola-bsx-api/src/main/conf/dola-bsx-api.conf %{buildroot}%{_javaconfdir}/dola/classworlds/01-dola-bsx-api.conf
-# DBS
 install -D -p -m 644 dola-dbs/src/main/lua/dola-dbs.lua %{buildroot}%{_rpmluadir}/dola-dbs.lua
 install -D -p -m 644 dola-dbs/src/main/rpm/macros.dola-dbs %{buildroot}%{_rpmmacrodir}/macros.zzz-dola-dbs
 install -D -p -m 644 dola-dbs/src/main/conf/dola-dbs.conf %{buildroot}%{_javaconfdir}/dola/classworlds/04-dola-dbs.conf
-# Generator
 install -D -p -m 644 dola-generator/src/main/lua/dola-generator.lua %{buildroot}%{_rpmluadir}/dola-generator.lua
 install -D -p -m 644 dola-generator/src/main/rpm/macros.dola-generator %{buildroot}%{_rpmmacrodir}/macros.dola-generator
 install -D -p -m 644 dola-generator/src/main/rpm/macros.dola-generator-etc %{buildroot}%{_sysconfdir}/rpm/macros.dola-generator-etc
 install -D -p -m 644 dola-generator/src/main/rpm/dolagen.attr %{buildroot}%{_fileattrsdir}/dolagen.attr
 install -D -p -m 644 dola-generator/src/main/conf/dola-generator.conf %{buildroot}%{_javaconfdir}/dola/classworlds/03-dola-generator.conf
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files bsx -f .mfiles-dola-bsx -f .mfiles-dola-bsx-api
-%{_rpmluadir}/dola-bsx.lua
-%{_rpmmacrodir}/macros.dola-bsx
-%dir %{_javaconfdir}/dola
-%dir %{_javaconfdir}/dola/classworlds
-%{_javaconfdir}/dola/classworlds/00-dola-bsx.conf
-%{_javaconfdir}/dola/classworlds/01-dola-bsx-api.conf
-%license LICENSE NOTICE
-
-%files -f .mfiles-dola-dbs -f .mfiles-dola-parent
-%{_rpmluadir}/dola-dbs.lua
-%{_rpmmacrodir}/macros.zzz-dola-dbs
-%{_javaconfdir}/dola/classworlds/04-dola-dbs.conf
-%doc README.md
-
-%files generator -f .mfiles-dola-generator
-%{_rpmluadir}/dola-generator.lua
-%{_rpmmacrodir}/macros.dola-generator
-%{_sysconfdir}/rpm/macros.dola-generator-etc
-%{_fileattrsdir}/dolagen.attr
-%{_javaconfdir}/dola/classworlds/03-dola-generator.conf
+%files -f %{oreon_filedir}/main.list
+%files -n dola-bsx -f %{oreon_filedir}/dola-bsx.list
+%files -n dola-generator -f %{oreon_filedir}/dola-generator.list
 
 %changelog
+
 %autochangelog

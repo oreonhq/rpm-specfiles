@@ -1,57 +1,49 @@
-%global source0_hash none
-
+%global source0_hash fe3697ad9364344384485202b2dae373d5e8bf499d4bff674d12fa8397d53893
 Name:           python-aioruckus
 Version:        0.49
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python API to interact with Ruckus Unleashed and ZoneDirector devices
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        0BSD
 URL:            https://github.com/ms264556/aioruckus
-Source:         %{pypi_source aioruckus}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aioruckus/aioruckus-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aioruckus' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-aioruckus = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-aioruckus
-Summary:        %{summary}
-
-%description -n python3-aioruckus %_description
-
+Summary:        Python API to interact with Ruckus Unleashed and ZoneDirector devices
+# oreon:reqs
+Requires:       python3dist(aiohttp) >= 3.14.3
+Requires:       python3dist(aiohttp) >= 3.9.5
+Requires:       python3dist(cryptography) >= 41.0.7
+Requires:       python3dist(cryptography) >= 48.0.1
+Requires:       python3dist(typing-extensions) >= 4.5.0
+Requires:       python3dist(xmltodict) >= 0.13.0
+Requires:       python3dist(xmltodict) >= 1.0.4
+# /oreon:reqs
+%description -n python3-aioruckus
 
 %prep
-%autosetup -p1 -n aioruckus-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aioruckus-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aioruckus usr/lib/python3*/site-packages/aioruckus* usr/lib64/python3*/site-packages/aioruckus* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aioruckus* usr/lib64/python3*/site-packages/aioruckus* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aioruckus -f %{pyproject_files}
+%files
+%files -n python3-aioruckus -f %{oreon_filedir}/python3-aioruckus.list
 
 %changelog
+
 %autochangelog

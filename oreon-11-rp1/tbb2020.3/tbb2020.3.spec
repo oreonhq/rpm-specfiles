@@ -1,52 +1,29 @@
 %global source0_hash ebc4f6aa47972daed1f7bf71d100ae5bf6931c2e3144cf299c8cc7d041dca2f3
-
 Name:    tbb2020.3
-Summary: The Threading Building Blocks library abstracts low-level threading details
+Summary:        The Threading Building Blocks library abstracts low-level threading details
 Version: 2020.3
-Release: 8%{?dist}
+Release:        1%{?dist}
 License: Apache-2.0 AND BSD-3-Clause
 URL:     http://threadingbuildingblocks.org/
-
-Source0: https://github.com/intel/tbb/archive/v%{version}/tbb-%{version}.tar.gz
-# These three are downstream sources.
+Source0:        https://github.com/intel/tbb/archive/v%{version}/tbb-%{version}.tar.gz
 Source6: tbb.pc
 Source7: tbbmalloc.pc
 Source8: tbbmalloc_proxy.pc
-
-# Don't snip -Wall from C++ flags.  Add -fno-strict-aliasing, as that
-# uncovers some static-aliasing warnings.
-# Related: https://bugzilla.redhat.com/show_bug.cgi?id=1037347
 Patch0: tbb-2019-dont-snip-Wall.patch
-
-# Make attributes of aliases match those on the aliased function.
 Patch1: tbb-2020-attributes.patch
-
-# Fix test-thread-monitor, which had multiple bugs that could (and did, on
-# ppc64le) result in a hang.
 Patch2: tbb-2019-test-thread-monitor.patch
-
-# Fix a test that builds a 4-thread barrier, but cannot guarantee that more
-# than 2 threads will be available to use it.
 Patch3: tbb-2019-test-task-scheduler-init.patch
-
-# Fix ABI break resulting from tbb::empty_task being removed from libtbb.so's
-# exported symbols
 Patch4: tbb-mark-empty_task-execute-with-gnu-used.patch
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=2161412
-# https://github.com/oneapi-src/oneTBB/pull/833
 Patch5: tbb-2020-task-namespace.patch
-
-# For compat package - only build tbb
 Patch6: tbb2020.3-compat.patch
-
-BuildRequires: cmake
-BuildRequires: doxygen
-BuildRequires: gcc-c++
-BuildRequires: make
-BuildRequires: swig
-BuildRequires: tbb
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  swig
+BuildRequires:  tbb
+# /oreon:deps
 %description
 Threading Building Blocks (TBB) is a C++ runtime library that
 abstracts the low-level threading details necessary for optimal
@@ -63,12 +40,12 @@ Summary: The Threading Building Blocks C++ headers and shared development librar
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: tbb%{?_isa}
 Conflicts: tbb-devel
-
 %description devel
 Header files and shared object symlinks for the Threading Building
 Blocks (TBB) C++ libraries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n oneTBB-%{version}
@@ -81,6 +58,7 @@ sed -i 's/"`hostname -s`" ("`uname -m`"/fedorabuild (%{_arch}/' \
 sed -i "s/-fPIC/& -Wl,--as-needed/" build/linux.gcc.inc
 
 %build
+
 compiler=""
 if [[ %{__cc} == *"gcc"* ]]; then
     compiler="gcc"
@@ -89,7 +67,6 @@ elif [[ %{__cc} == *"clang"* ]]; then
 else
     compiler="%{__cc}"
 fi
-
 %make_build tbb_build_prefix=obj stdver=c++14 \
     compiler=${compiler} \
     CXXFLAGS="%{optflags} -DUSE_PTHREAD" \
@@ -99,21 +76,13 @@ for file in %{SOURCE6} %{SOURCE7} %{SOURCE8}; do
     sed 's/_FEDORA_VERSION/%{version}/' ${file} > ${base}
     touch -r ${file} ${base}
 done
-
 %check
-# This test assumes it can create thread barriers for arbitrary numbers of
-# threads, but tbb limits the number of threads spawned to a function of the
-# number of CPUs available.  Some of the koji builders have a small number of
-# CPUs, so the test hangs waiting for threads that have not been created to
-# arrive at the barrier.  Skip this test until upstream fixes it.
+
 sed -i '/test_task_scheduler_observer/d' build/Makefile.test
-
 make test tbb_build_prefix=obj stdver=c++14 CXXFLAGS="%{optflags}"
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}
 mkdir -p $RPM_BUILD_ROOT/%{_includedir}
-
 pushd build/obj_release
     for file in libtbb; do
         install -p -D -m 755 ${file}.so.2 $RPM_BUILD_ROOT/%{_libdir}
@@ -123,44 +92,27 @@ popd
 ln -s libtbbmalloc.so.2 $RPM_BUILD_ROOT/%{_libdir}/libtbbmalloc.so
 ln -s libtbbmalloc_proxy.so.2 $RPM_BUILD_ROOT/%{_libdir}/libtbbmalloc_proxy.so
 ln -s libirml.so.1 $RPM_BUILD_ROOT/%{_libdir}/libirml.so
-
 pushd include
     find tbb -type f ! -name \*.htm\* -exec \
         install -p -D -m 644 {} $RPM_BUILD_ROOT/%{_includedir}/{} \
     \;
 popd
-
 for file in %{SOURCE6} %{SOURCE7} %{SOURCE8}; do
     install -p -D -m 644 $(basename ${file}) \
         $RPM_BUILD_ROOT/%{_libdir}/pkgconfig/$(basename ${file})
 done
-
-# Install the rml headers
 mkdir -p $RPM_BUILD_ROOT%{_includedir}/rml
 cp -p src/rml/include/*.h $RPM_BUILD_ROOT%{_includedir}/rml
-
-# Install the cmake files
 cmake \
   -DINSTALL_DIR=$RPM_BUILD_ROOT%{_libdir}/cmake/TBB \
   -DSYSTEM_NAME=Linux \
   -DLIB_REL_PATH=../.. \
   -P cmake/tbb_config_installer.cmake
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc doc/Release_Notes.txt README.md
-%license LICENSE
-%{_libdir}/libtbb.so.2
-
-%files devel
-%doc CHANGES cmake/README.rst
-%{_includedir}/rml/
-%{_includedir}/tbb/
-%{_libdir}/libtbb.so
-%{_libdir}/libtbbmalloc.so
-%{_libdir}/libtbbmalloc_proxy.so
-%{_libdir}/libirml.so
-%{_libdir}/cmake/TBB/
-%{_libdir}/pkgconfig/*.pc
+%files -f %{oreon_filedir}/main.list
+%files -n tbb2020.3-devel -f %{oreon_filedir}/tbb2020.3-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,64 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 5e0be7908a715aa20333caddd73f1d6f01e4cd0c26e869fa2dd0b7f344da2249
 Name:           python-pymupdf
 Version:        1.28.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A high performance Python library for data extraction, analysis, conversion _ manipulation of PDF _and other_ documents.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/pymupdf/pymupdf
-Source:         %{pypi_source pymupdf}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pymupdf' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pymupdf/pymupdf-%{version}.tar.gz
 Patch:		0001-fix-test_-font.patch
 Patch:		0001-test_pixmap-adjust-to-turbojpeg.patch
 Patch:		0001-setup.py-do-not-require-libclang-and-swig.patch
 Patch:		0001-tests-adjust-to-verbose-font-warning.patch
 Patch:		0001-adjust-tests-to-tesseract-5.5.1.patch
 Patch:		0001-tests-conftest-do-not-call-pip.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pymupdf = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pymupdf
-Summary:        %{summary}
-
-%description -n python3-pymupdf %_description
-
+Summary:        A high performance Python library for data extraction, analysis, conversion _ manipulation of PDF _and other_ documents.
+%description -n python3-pymupdf
 
 %prep
-%autosetup -p1 -n pymupdf-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pymupdf-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pymupdf usr/lib/python3*/site-packages/pymupdf* usr/lib64/python3*/site-packages/pymupdf* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pymupdf* usr/lib64/python3*/site-packages/pymupdf* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pymupdf -f %{pyproject_files}
-%{_bindir}/pymupdf
+%files
+%files -n python3-pymupdf -f %{oreon_filedir}/python3-pymupdf.list
 
 %changelog
+
 %autochangelog

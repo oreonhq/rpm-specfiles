@@ -1,25 +1,21 @@
 %global source0_hash 2713f07a6adec7e253d91f1fca70e658b93e1a63f1b6a36f4907a2b83088543f
-
 %global short_name commons-digester
-
 Name:          apache-%{short_name}
 Version:       2.1
-Release:       37%{?dist}
-Summary:       XML to Java object mapping module
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        XML to Java object mapping module
 License:       Apache-2.0
 URL:           http://commons.apache.org/digester/
 BuildArch:     noarch
 ExclusiveArch:  %{java_arches} noarch
-
-Source0:       http://archive.apache.org/dist/commons/digester/source/%{short_name}-%{version}-src.tar.gz
-
+Source0:        http://archive.apache.org/dist/commons/digester/source/%{short_name}-%{version}-src.tar.gz
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-beanutils:commons-beanutils)
 BuildRequires:  mvn(commons-logging:commons-logging)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.commons:commons-parent:pom:)
-
+# /oreon:deps
 %description
 Many projects read XML configuration files to provide initialization of
 various Java objects within the system. There are several ways of doing this,
@@ -28,11 +24,11 @@ that can be used in many different projects
 
 %package javadoc
 Summary:       API documentation for %{name}
-
 %description javadoc
 This package contains the %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{short_name}-%{version}-src
@@ -42,16 +38,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_file :%{short_name} %{short_name} %{name}
 
 %build
-%mvn_build -- -Dcommons.packageId=digester
 
+%mvn_build -- -Dcommons.packageId=digester
 %install
 %mvn_install
+%oreon_autofiles apache-commons-digester-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc LICENSE.txt NOTICE.txt RELEASE-NOTES.txt
-
-%files javadoc -f .mfiles-javadoc
-%doc LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
+%files -n apache-commons-digester-javadoc -f %{oreon_filedir}/apache-commons-digester-javadoc.list
 
 %changelog
+
 %autochangelog

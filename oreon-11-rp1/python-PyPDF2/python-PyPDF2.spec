@@ -1,63 +1,90 @@
-%global source0_hash none
-
+%global source0_hash a74408f69ba6271f71b9352ef4ed03dc53a31aa404d29b5d31f53bfecfee1440
 Name:           python-pypdf2
 Version:        3.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/py-pdf/PyPDF2
-Source:         %{pypi_source PyPDF2}
-
+Source0:        https://files.pythonhosted.org/packages/source/P/PyPDF2/PyPDF2-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pypdf2' generated automatically by pyp2spec.}
-
 Patch01:        599.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(flit-core) < 4
+BuildRequires:  python3dist(flit-core) >= 3.2
+Requires:       python3-pypdf2 = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pypdf2+full
+Summary:        Metapackage for python3-pypdf2 full extras
+Requires:       python3-pypdf2 = %{version}-%{release}
+Provides:       python3dist(pypdf2[full]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-pypdf2+full
+Metapackage for python3-pypdf2 full extras.
+
+%package -n       python3-pypdf2+crypto
+Summary:        Metapackage for python3-pypdf2 crypto extras
+Requires:       python3-pypdf2 = %{version}-%{release}
+Provides:       python3dist(pypdf2[crypto]) = %{version}-%{release}
+
+%description -n python3-pypdf2+crypto
+Metapackage for python3-pypdf2 crypto extras.
+
+%package -n       python3-pypdf2+image
+Summary:        Metapackage for python3-pypdf2 image extras
+Requires:       python3-pypdf2 = %{version}-%{release}
+Provides:       python3dist(pypdf2[image]) = %{version}-%{release}
+
+%description -n python3-pypdf2+image
+Metapackage for python3-pypdf2 image extras.
+
+%package -n       python3-pypdf2+dev
+Summary:        Metapackage for python3-pypdf2 dev extras
+Requires:       python3-pypdf2 = %{version}-%{release}
+Requires:       python3dist(pre-commit) < 2.18.0
+Provides:       python3dist(pypdf2[dev]) = %{version}-%{release}
+
+%description -n python3-pypdf2+dev
+Metapackage for python3-pypdf2 dev extras.
+
+%package -n       python3-pypdf2+docs
+Summary:        Metapackage for python3-pypdf2 docs extras
+Requires:       python3-pypdf2 = %{version}-%{release}
+Provides:       python3dist(pypdf2[docs]) = %{version}-%{release}
+
+%description -n python3-pypdf2+docs
+Metapackage for python3-pypdf2 docs extras.
+
+%description
 
 %package -n     python3-pypdf2
-Summary:        %{summary}
-
-%description -n python3-pypdf2 %_description
+Summary:        A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files
+# oreon:reqs
+Requires:       python3dist(typing-extensions) >= 3.10.0.0
+# /oreon:reqs
+%description -n python3-pypdf2
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pypdf2 crypto,dev,docs,full,image
-
 
 %prep
-%autosetup -p1 -n PyPDF2-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir PyPDF2-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pypdf2 usr/lib/python3*/site-packages/pypdf2* usr/lib64/python3*/site-packages/pypdf2* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pypdf2* usr/lib64/python3*/site-packages/pypdf2* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pypdf2 -f %{pyproject_files}
+%files
+%files -n python3-pypdf2 -f %{oreon_filedir}/python3-pypdf2.list
 
 %changelog
+
 %autochangelog

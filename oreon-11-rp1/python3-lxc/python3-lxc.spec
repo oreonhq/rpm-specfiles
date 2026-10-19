@@ -1,26 +1,22 @@
-%global source0_hash 59c2d46106621df40eb3de331521c5664a71fe35a43ec1d640ec3a88d4e4730e
-
+%global source0_hash f4da1fb5a89624a1fdac6769c87290572c0c88461f2f8080dcc3710ef44131ee
 Name:           python3-lxc
 Version:        7.0.0
 Release:        1%{?dist}
 Summary:        Python binding for LXC
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://linuxcontainers.org/lxc
 Source0:        https://linuxcontainers.org/downloads/lxc/%{name}-%{version}.tar.gz
-# see https://github.com/lxc/python3-lxc/issues/35
 Patch0:         lxc-5.0.0_py3.13.patch
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  lxc-devel >= 3.0.0
-BuildRequires:  pkgconfig
-BuildRequires:  gcc
-
 %global desc Linux Resource Containers provide process and resource isolation\
 without the overhead of full virtualization.\
 \
 The python%{python3_pkgversion}-lxc package contains the Python3\
 binding for LXC.
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-python3-lxc = %{version}-%{release}
+# /oreon:deps
 %description
 %{desc}
 
@@ -28,7 +24,6 @@ binding for LXC.
 %global subpkg -n python%{python3_pkgversion}-lxc
 %package %{?subpkg}
 Summary: Python binding for LXC
-
 %description %{?subpkg}
 %{desc}
 %endif
@@ -37,30 +32,22 @@ Summary: Python binding for LXC
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l _lxc lxc
-
-# fix examples
 chmod -x examples/*.py
 sed -i -e '1 s@^#!.*@#!%{__python3}@' examples/*.py
+%oreon_autofiles main
 
 %check
+
 %pyproject_check_import
-
 %py3_check_import lxc _lxc
-
-%files %{?subpkg} -f %{pyproject_files}
-%doc README.md examples
+%files
 
 %changelog
+
 %autochangelog

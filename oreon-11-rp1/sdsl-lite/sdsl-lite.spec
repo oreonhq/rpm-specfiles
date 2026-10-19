@@ -1,13 +1,9 @@
 %global source0_hash 5af7fa42b39987938b40d2ac716a01325e8a3b0b8e75e2503b1ca7531e287d97
-
 %global debug_package %{nil}
 %global middle_release 1
-
 %bcond check 0
 %bcond_with doc
-
 ExclusiveArch: %{power64} x86_64 aarch64
-
 %if 0%{?middle_release}
 %global  commit      bb2eebb2de8a556661c00ba3c5b4c33b7c2c7a25
 %global  date        .20250414git
@@ -17,23 +13,23 @@ ExclusiveArch: %{power64} x86_64 aarch64
 %global  date        %{nil}
 %global  shortcommit %{nil}
 %endif
-
 Name:      sdsl-lite
-Summary:   SDSL v3 - Succinct Data Structure Library
+Summary:        SDSL v3 - Succinct Data Structure Library
 Version:   3.0.3
-Release:   6%{date}%{shortcommit}%{?dist}
+Release:        1%{?dist}
 License:   BSD-3-Clause
 URL:       https://github.com/xxsds/%{name}
-Source0:   https://github.com/xxsds/%{name}/archive/%{commit}/%{name}-%{commit}.tar.gz
-
-BuildRequires: gcc, gcc-c++
-BuildRequires: cmake
-BuildRequires: cereal-devel >= 1.3.2
-BuildRequires: gtest-devel >= 1.13.0
-BuildRequires: texlive-endnotes
-
+Source0:        https://github.com/xxsds/%{name}/archive/%{commit}/%{name}-%{commit}.tar.gz
 Patch0: %{name}-unbundle_libraries.patch
-
+# oreon:deps
+BuildRequires:  cereal-devel
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  texlive-endnotes
+# /oreon:deps
 %description
 The Succinct Data Structure Library (SDSL) is a powerful and flexible C++11
 library implementing succinct data structures.
@@ -50,7 +46,6 @@ Summary: SDSL v3 - Succinct Data Structure Library
 Requires: cmake >= 3.13
 Requires: cereal-devel%{?_isa} >= 1.3.2
 Obsoletes: %{name}-doc < 0:3.0.3-6
-
 %description devel
 Developer files for SDSL 3, in the form for C header files.
 
@@ -59,12 +54,12 @@ Developer files for SDSL 3, in the form for C header files.
 Summary: SDSL v3 HTML/Latex documentation
 BuildRequires: doxygen
 BuildArch: noarch
-
 %description doc
 SDSL v3 HTML/Latex documentation.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n sdsl-lite-%{commit} -N
@@ -72,33 +67,27 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P 0 -p1 -b .backup
 
 %build
+
 %cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING=Release \
        -DSDSL_HEADER_TEST:BOOL=OFF -DGENERATE_DOC:BOOL=OFF -DUSE_LIBCPP:BOOL=OFF -DSDSL_CEREAL=1 \
        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-
 %cmake_build
-
 %install
 mkdir -p %{buildroot}%{_prefix}
 cp -a include %{buildroot}%{_prefix}/
-
 rm -f %{buildroot}%{_includedir}/sdsl/.gitignore
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with check}
 %check
-# Test excluded by upstream
+
 %ctest -- -E 'k2-treap-test_k2-0.1.0.0'
 %endif
-
 %if %{with doc}
-%files doc
-%doc %__cmake_builddir/extras/docs/html
-%doc %__cmake_builddir/extras/docs/latex
-%endif
-
-%files devel
-%license LICENSE
-%{_includedir}/sdsl/
+%files -f %{oreon_filedir}/main.list
+%files -n sdsl-lite-devel -f %{oreon_filedir}/sdsl-lite-devel.list
+%files -n sdsl-lite-doc -f %{oreon_filedir}/sdsl-lite-doc.list
 
 %changelog
+
 %autochangelog
+%endif

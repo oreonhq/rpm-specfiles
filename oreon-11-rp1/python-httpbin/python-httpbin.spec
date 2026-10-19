@@ -1,63 +1,65 @@
 %global source0_hash 6023a5a2e8fb8e91abdd6d34d1f1f455092f97d567c25600e1b48ee1178aa738
-
 Name:           python-httpbin
 Version:        0.10.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        HTTP Request and Response Service
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC AND MIT
 URL:            https://github.com/psf/httpbin
-Source:         %{pypi_source httpbin}
-
+Source0:        https://files.pythonhosted.org/packages/source/h/httpbin/httpbin-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-httpbin = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-httpbin+test
+Summary:        Metapackage for python3-httpbin test extras
+Requires:       python3-httpbin = %{version}-%{release}
+Provides:       python3dist(httpbin[test]) = %{version}-%{release}
 
+%description -n python3-httpbin+test
+Metapackage for python3-httpbin test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'httpbin' generated automatically by pyp2spec.}
+%package -n       python3-httpbin+mainapp
+Summary:        Metapackage for python3-httpbin mainapp extras
+Requires:       python3-httpbin = %{version}-%{release}
+Provides:       python3dist(httpbin[mainapp]) = %{version}-%{release}
 
+%description -n python3-httpbin+mainapp
+Metapackage for python3-httpbin mainapp extras.
 
-%description %_description
+%description
 
 %package -n     python3-httpbin
-Summary:        %{summary}
-
-%description -n python3-httpbin %_description
+Summary:        HTTP Request and Response Service
+# oreon:reqs
+Requires:       python3dist(flask) >= 2.2.4
+Requires:       python3dist(greenlet) < 3.0
+Requires:       python3dist(greenlet) >= 3.0.0a1
+Requires:       python3dist(werkzeug) >= 2.2.2
+# /oreon:reqs
+%description -n python3-httpbin
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-httpbin mainapp,test
-
 
 %prep
-%autosetup -p1 -n httpbin-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir httpbin-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-httpbin usr/lib/python3*/site-packages/httpbin* usr/lib64/python3*/site-packages/httpbin* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/httpbin* usr/lib64/python3*/site-packages/httpbin* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-httpbin -f %{pyproject_files}
+%files
+%files -n python3-httpbin -f %{oreon_filedir}/python3-httpbin.list
 
 %changelog
+
 %autochangelog

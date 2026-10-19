@@ -1,61 +1,65 @@
-%global source0_hash none
-
+%global source0_hash ed900c2b631aa3a112811139fa97b8d2c3bad5e989656bba4b7e52c7852c18c1
 Name:           python-traitlets
 Version:        5.16.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Traitlets Python configuration system
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ipython/traitlets
-Source:         %{pypi_source traitlets}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/traitlets/traitlets-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatchling) >= 1.5
+Requires:       python3-traitlets = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-traitlets+test
+Summary:        Metapackage for python3-traitlets test extras
+Requires:       python3-traitlets = %{version}-%{release}
+Requires:       python3dist(argcomplete) >= 3.0.3
+Requires:       python3dist(argcomplete) >= 3.5.2
+Requires:       python3dist(mypy) >= 2.0
+Requires:       python3dist(pytest) >= 7.0
+Requires:       python3dist(pytest) < 10.0
+Provides:       python3dist(traitlets[test]) = %{version}-%{release}
 
+%description -n python3-traitlets+test
+Metapackage for python3-traitlets test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'traitlets' generated automatically by pyp2spec.}
+%package -n       python3-traitlets+docs
+Summary:        Metapackage for python3-traitlets docs extras
+Requires:       python3-traitlets = %{version}-%{release}
+Provides:       python3dist(traitlets[docs]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-traitlets+docs
+Metapackage for python3-traitlets docs extras.
+
+%description
 
 %package -n     python3-traitlets
-Summary:        %{summary}
-
-%description -n python3-traitlets %_description
+Summary:        Traitlets Python configuration system
+%description -n python3-traitlets
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-traitlets docs,test
-
 
 %prep
-%autosetup -p1 -n traitlets-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir traitlets-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-traitlets usr/lib/python3*/site-packages/traitlets* usr/lib64/python3*/site-packages/traitlets* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/traitlets* usr/lib64/python3*/site-packages/traitlets* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-traitlets -f %{pyproject_files}
+%files
+%files -n python3-traitlets -f %{oreon_filedir}/python3-traitlets.list
 
 %changelog
+
 %autochangelog

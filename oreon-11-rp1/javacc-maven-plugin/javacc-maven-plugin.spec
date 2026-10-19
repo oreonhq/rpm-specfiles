@@ -1,6 +1,5 @@
+%global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
 %global source0_hash 6b7632943f6f1936f06e5f6e53dda652de0932a19d8f1ddc27135788d9736145
-
-# Break dependency loops in a bootstrap situation
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -82,17 +81,12 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond bootstrap 0
-
-# Disable Maven reporting in bootstrap mode and in RHEL
 %bcond maven_reporting %[!(%{with bootstrap} || 0%{?rhel})]
-
 %global giturl  https://github.com/mojohaus/javacc-maven-plugin
-
 Name:           javacc-maven-plugin
 Version:        3.2.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        JavaCC Maven Plugin
-
 License:        Apache-2.0
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -100,38 +94,20 @@ URL:            https://www.mojohaus.org/javacc-maven-plugin/
 VCS:            git:%{giturl}.git
 Source0:        https://github.com/mojohaus/javacc-maven-plugin/archive/refs/tags/javacc-maven-plugin-3.2.0.tar.gz#/javacc-maven-plugin-3.2.0.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(net.java.dev.javacc:javacc)
-BuildRequires:  mvn(org.apache.maven:maven-artifact)
-BuildRequires:  mvn(org.apache.maven:maven-core)
-BuildRequires:  mvn(org.apache.maven:maven-model)
-BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
-BuildRequires:  mvn(org.apache.maven.plugin-tools:maven-plugin-annotations)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
-BuildRequires:  mvn(org.codehaus.mojo:mojo-parent:pom:)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-xml)
 %endif
-
 %if %{with maven_reporting}
-BuildRequires:  mvn(org.apache.maven.doxia:doxia-sink-api)
-BuildRequires:  mvn(org.apache.maven.doxia:doxia-site-renderer)
-BuildRequires:  mvn(org.apache.maven.reporting:maven-reporting-api)
-BuildRequires:  mvn(org.apache.maven.reporting:maven-reporting-impl)
 %endif
-
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 3.1.1-4
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Maven Plugin for processing JavaCC grammar files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n javacc-maven-plugin-javacc-maven-plugin-3.2.0
 
@@ -157,14 +133,15 @@ rm src/main/java/org/codehaus/mojo/javacc/JJDocMojo.java
 %endif
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE-2.0.txt src/main/resources/NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-1
 - Import

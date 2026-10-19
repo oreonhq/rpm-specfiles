@@ -1,21 +1,17 @@
 %global source0_hash 61757bc0a58d789b8fcbdddf56c88a0230597184a70dcb2ac05b4c6b619f7d5c
 %global source10_hash ed21012c5b99da72abea53e9499f8df35b2394d3558bfcb4dbd1e61ee7e6381d
 %global source11_hash 63dfb389efc15323892a971200b65324fba102b5db2fa4a2269c3c57c8775453
-
 %global _hardened_build 1
 %global testsuite_ver d27dbd
 %global clknetsim_ver 64df92
 %global selinuxtype targeted
 %bcond_without selinux
-
 Name:		linuxptp
 Version:	4.4
-Release:	10%{?dist}
-Summary:	PTP implementation for Linux
-
+Release:        1%{?dist}
+Summary:        PTP implementation for Linux
 License:	GPL-2.0-or-later
 URL:		https://www.linuxptp.org/
-
 Source0:        https://downloads.nwtime.org/%{name}/%{name}-%{version}.tgz
 Source1:	phc2sys.service
 Source2:	ptp4l.service
@@ -26,30 +22,29 @@ Source6:	ts2phc.service
 Source7:	ts2phc.conf
 Source8:	linuxptp.sysusers
 Source9:	linuxptp.tmpfiles
-# external test suite
 Source10:        https://github.com/mlichvar/linuxptp-testsuite/archive/refs/tags/d27dbd.tar.gz#/linuxptp-testsuite-d27dbd.tar.gz
-# simulator for test suite
 Source11:        https://github.com/mlichvar/clknetsim/archive/refs/tags/64df92.tar.gz#/clknetsim-64df92.tar.gz
-# selinux policy
 Source20:	linuxptp.fc
 Source21:	linuxptp.if
 Source22:	linuxptp.te
-
-# add support for dropping root privileges
 Patch1:		linuxptp-droproot.patch
-
-BuildRequires:	gcc gcc-c++ gnutls-devel libcap-devel make systemd
-
-# require the clock group to be defined
 Requires(pre):	setup >= 2.15.0-11
-
 %{?systemd_requires}
 %{?sysusers_requires_compat}
-
 %if 0%{?with_selinux}
 Requires:	(%{name}-selinux if selinux-policy-%{selinuxtype})
 %endif
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gnutls-devel
+BuildRequires:  libcap-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig(systemd)
+BuildRequires:  selinux-policy
+BuildRequires:  selinux-policy-devel
+BuildRequires:  systemd
+# /oreon:deps
 %description
 This software is an implementation of the Precision Time Protocol (PTP)
 according to IEEE standard 1588 for Linux. The dual design goals are to provide
@@ -65,13 +60,13 @@ Requires:	selinux-policy-%{selinuxtype}
 Requires(post):	selinux-policy-%{selinuxtype}
 BuildRequires:	selinux-policy-devel
 %{?selinux_requires}
-
 %description selinux
 linuxptp SELinux policy module
 
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; }
 test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; }
@@ -94,18 +89,16 @@ mkdir selinux
 cp -p %{SOURCE20} %{SOURCE21} %{SOURCE22} selinux
 
 %build
+
 %{make_build} \
 	EXTRA_CFLAGS="$RPM_OPT_FLAGS" \
 	EXTRA_LDFLAGS="$RPM_LD_FLAGS"
-
 %if 0%{?with_selinux}
 make -C selinux -f %{_datadir}/selinux/devel/Makefile linuxptp.pp
 bzip2 -9 selinux/linuxptp.pp
 %endif
-
 %install
 %makeinstall
-
 mkdir -p $RPM_BUILD_ROOT{%{_sysconfdir}/sysconfig,%{_unitdir},%{_mandir}/man5}
 mkdir -p $RPM_BUILD_ROOT{%{_sysusersdir},%{_tmpfilesdir}}
 install -m 644 -p %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE6} \
@@ -114,92 +107,59 @@ install -m 644 -p %{SOURCE4} %{SOURCE5} %{SOURCE7} \
 	$RPM_BUILD_ROOT%{_sysconfdir}
 install -m 644 -p %{SOURCE8} $RPM_BUILD_ROOT%{_sysusersdir}/linuxptp.conf
 install -m 644 -p %{SOURCE9} $RPM_BUILD_ROOT%{_tmpfilesdir}/linuxptp.conf
-
 echo 'OPTIONS="-f /etc/ptp4l.conf"' > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/ptp4l
 echo 'OPTIONS="-a -r"' > $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/phc2sys
 echo 'OPTIONS="-f /etc/ts2phc.conf"' > \
 	$RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/ts2phc
-
 for s in ptp4l timemaster ts2phc; do
 	echo ".so man8/$s.8" > $RPM_BUILD_ROOT%{_mandir}/man5/$s.conf.5
 done
-
 %if 0%{?with_selinux}
 install -D -m 0644 selinux/linuxptp.pp.bz2 \
 	$RPM_BUILD_ROOT%{_datadir}/selinux/packages/%{selinuxtype}/linuxptp.pp.bz2
 install -D -p -m 0644 selinux/linuxptp.if \
 	$RPM_BUILD_ROOT%{_datadir}/selinux/devel/include/distributed/linuxptp.if
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
 %check
+
 cd testsuite
-# set random seed to get deterministic results
 export CLKNETSIM_RANDOM_SEED=26743
 %{make_build} -C clknetsim
 PATH=..:$PATH ./run
-
 %pre
-%sysusers_create_package linuxptp %{SOURCE8}
 
+%sysusers_create_package linuxptp %{SOURCE8}
 %post
+
 %tmpfiles_create_package linuxptp %{SOURCE9}
 %systemd_post phc2sys.service ptp4l.service timemaster.service ts2phc.service
-
 %preun
+
 %systemd_preun phc2sys.service ptp4l.service timemaster.service ts2phc.service
-
 %postun
-%systemd_postun_with_restart phc2sys.service ptp4l.service timemaster.service ts2phc.service
 
+%systemd_postun_with_restart phc2sys.service ptp4l.service timemaster.service ts2phc.service
 %if 0%{?with_selinux}
 %pre selinux
-%selinux_relabel_pre -s %{selinuxtype}
 
+%selinux_relabel_pre -s %{selinuxtype}
 %post selinux
+
 %selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/linuxptp.pp.bz2
 %selinux_relabel_post -s %{selinuxtype}
-
 %postun selinux
+
 if [ $1 -eq 0 ]; then
 	%selinux_modules_uninstall -s %{selinuxtype} linuxptp
 	%selinux_relabel_post -s %{selinuxtype}
 fi
-
-%files selinux
-%{_datadir}/selinux/packages/%{selinuxtype}/linuxptp.pp.*
-%{_datadir}/selinux/devel/include/distributed/linuxptp.if
-%ghost %verify(not md5 size mode mtime) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/linuxptp
-
-%endif
-
-%files
-%license COPYING
-%doc README.org configs
-%config(noreplace) %{_sysconfdir}/ptp4l.conf
-%config(noreplace) %{_sysconfdir}/sysconfig/phc2sys
-%config(noreplace) %{_sysconfdir}/sysconfig/ptp4l
-%config(noreplace) %{_sysconfdir}/sysconfig/ts2phc
-%config(noreplace) %{_sysconfdir}/timemaster.conf
-%config(noreplace) %{_sysconfdir}/ts2phc.conf
-%{_unitdir}/phc2sys.service
-%{_unitdir}/ptp4l.service
-%{_unitdir}/timemaster.service
-%{_unitdir}/ts2phc.service
-%{_sysusersdir}/linuxptp.conf
-%{_tmpfilesdir}/linuxptp.conf
-%{_sbindir}/hwstamp_ctl
-%{_sbindir}/nsm
-%{_sbindir}/phc2sys
-%{_sbindir}/phc_ctl
-%{_sbindir}/pmc
-%{_sbindir}/ptp4l
-%{_sbindir}/timemaster
-%{_sbindir}/ts2phc
-%{_sbindir}/tz2alt
-%{_mandir}/man5/*.5*
-%{_mandir}/man8/*.8*
+%files -f %{oreon_filedir}/main.list
+%files -n linuxptp-selinux -f %{oreon_filedir}/linuxptp-selinux.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.4-10
 - Prepare for Oreon 11 (RP1)
+%endif

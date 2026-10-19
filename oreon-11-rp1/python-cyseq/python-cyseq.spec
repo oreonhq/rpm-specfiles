@@ -1,62 +1,44 @@
-%global source0_hash none
-
+%global source0_hash e41e2e9c7698f8239d0f53b0745c746630030d804d0283e5a6fee62d29cfd22f
 Name:           python-cyseq
 Version:        0.1.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        _A Cython version of ScanCode-toolkit_s licensedcode.seq_
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/aboutcode-org/cyseq
-Source:         %{pypi_source cyseq}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/cyseq/cyseq-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'cyseq' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 50
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6
+Requires:       python3-cyseq = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-cyseq
-Summary:        %{summary}
-
-%description -n python3-cyseq %_description
+Summary:        _A Cython version of ScanCode-toolkit_s licensedcode.seq_
+%description -n python3-cyseq
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-cyseq dev
-
 
 %prep
-%autosetup -p1 -n cyseq-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir cyseq-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-cyseq usr/lib/python3*/site-packages/cyseq* usr/lib64/python3*/site-packages/cyseq* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cyseq* usr/lib64/python3*/site-packages/cyseq* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-cyseq -f %{pyproject_files}
+%files
+%files -n python3-cyseq -f %{oreon_filedir}/python3-cyseq.list
 
 %changelog
+
 %autochangelog

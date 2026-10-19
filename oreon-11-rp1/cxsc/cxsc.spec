@@ -1,45 +1,30 @@
 %global source0_hash fd0d824fd94bef3aae55b95e5ef19342b653fe3ff4fb561364e942c809eb616b
-
 %global upstreamver 2-5-4
-
 Name:           cxsc
 Version:        %(tr - . <<< %{upstreamver})
-Release:        33%{?dist}
+Release:        1%{?dist}
 Summary:        C++ library for Extended Scientific Computing
-
 %global majver  %(cut -d. -f1 <<< %{version})
-
 License:        LGPL-2.0-or-later
 URL:            https://www2.math.uni-wuppertal.de/wrswt/xsc/cxsc_new.html
-Source:         https://www2.math.uni-wuppertal.de/wrswt/xsc/%{name}/%{name}-%{upstreamver}.tar.gz
-# Sent upstream 22 Jun 2016.  Fix an operator error.
+Source0:        https://www%{majver}.math.uni-wuppertal.de/wrswt/xsc/%{name}/%{name}-%{upstreamver}.tar.gz
 Patch:          %{name}-operator.patch
-# Sent upstream 22 Jun 2016.  Fix build problem on ppc64.
 Patch:          %{name}-ppc64.patch
-# Fix endianness detection
 Patch:          %{name}-endian.patch
-# Fix a sequence point error
 Patch:          %{name}-seq.patch
-# Fix a mistaken euro symbol which leads to LaTeX errors
 Patch:          %{name}-euro.patch
-# Fix access to an uninitialized variable
 Patch:          %{name}-uninit.patch
-# Do not allocate arrays with negative size
 Patch:          %{name}-neg-alloc.patch
-# Remove template IDs from constructors
 Patch:          %{name}-template-id.patch
-# Disambiguate the name "complex"
 Patch:          %{name}-complex.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  doxygen-latex
 BuildRequires:  gcc-c++
 BuildRequires:  ghostscript
 BuildRequires:  make
 BuildRequires:  pkgconfig(flexiblas)
-
+# /oreon:deps
 %description
 C-XSC is the C language variant of the XSC (eXtensions for Scientific
 Computing) project.  It provides routines that guarantee accuracy and
@@ -64,29 +49,19 @@ engineering and the natural sciences.  Some of the features of C-XSC are:
 %package devel
 Summary:        Header files for developing applications that use %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Header files and library links for developing applications that use %{name}.
 
 %package doc
-# The project as a whole is LGPL-2.0-or-later.
-# Doxygen adds files with other licenses.
-# GPL-1.0-or-later: bc_s.png, bc_sd.png, bdwn.png, closed.png, doc.png,
-#   docd.png, doxygen.css, doxygen.svg, folderclosed.png, folderopen.png,
-#   nav_f.png, nav_fd.png, nav_g.png, nav_h.png, nav_hd.png, navtree.css,
-#   open.png, splitbar.png, splitbard.png, sync_off.png, sync_on.png, tab_a.png,
-#   tab_ad.png, tab_b.png, tab_bd.png, tab_h.png, tab_hd.png, tab_s.png,
-#   tab_sd.png, tabs.css
-# MIT: dynsections.js, jquery.js, menu.js, menudata.js, navtree.js, resize.js
 License:        LGPL-2.0-or-later AND GPL-1.0-or-later AND MIT
 Summary:        API documentation for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       bundled(js-jquery)
-
 %description doc
 API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p0 -n %{name}-%{upstreamver}
@@ -136,7 +111,7 @@ for fil in $(find src -type f); do
 done
 
 %build
-# FIXME: tests fail without -fno-inline.  Why?
+
 %if 0%{?__isa_bits} == 64
 use64=-DIS_64_BIT
 %else
@@ -161,9 +136,6 @@ safe\n\
 %{buildroot}%{_prefix}\n\
 dynamic\n\
 no\n" | ./install_cxsc
-
-# The individual targets can be built in parallel, but specifying more than one
-# to the same make invocation leads to build failures.
 %make_build cxsc
 %make_build libcxsc.so
 mkdir usr
@@ -172,25 +144,20 @@ ln -s lib%{name}.so.%{version} src/lib%{name}.so.%{majver}
 ln -s lib%{name}.so.%{majver} src/lib%{name}.so
 export LD_LIBRARY_PATH=$PWD/usr/lib
 %make_build toolbox_dyn CXSCDIR=$PWD/usr
-
-# Make the documentation
 cd src
 doxygen src-doxyfile
-
 %install
 make install_dyn PREFIX=%{buildroot}%{_prefix}
-
-# Fix permissions on the library
 chmod 0755 %{buildroot}%{_libdir}/lib%{name}.so.%{version}
-
-# There are a lot of header files, so hide them in a private directory
 mkdir %{buildroot}%{_includedir}/%{name}
 mv %{buildroot}%{_includedir}/*.{h,hpp,inl} %{buildroot}%{_includedir}/%{name}
-
-# Don't package the example binaries
 rm -fr %{buildroot}/%{_prefix}/examples
+%oreon_autofiles cxsc-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles cxsc-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 sed -i 's/ASM$/ASM LD_LIBRARY_PATH/' Makefile
 sed -i 's/export RPATH/export LD_LIBRARY_PATH/' CToolbox/Makefile
 if [ %{_libdir} != "%{_prefix}/lib" ]; then
@@ -198,19 +165,10 @@ if [ %{_libdir} != "%{_prefix}/lib" ]; then
 fi
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 make toolboxtest_dyn
-
-%files
-%doc changelog README
-%license docu/COPYING
-%{_libdir}/lib%{name}.so.2{,.*}
-
-%files devel
-%doc examples
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
-
-%files doc
-%doc docu/apidoc
+%files -f %{oreon_filedir}/main.list
+%files -n cxsc-devel -f %{oreon_filedir}/cxsc-devel.list
+%files -n cxsc-doc -f %{oreon_filedir}/cxsc-doc.list
 
 %changelog
+
 %autochangelog

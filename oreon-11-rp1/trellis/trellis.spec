@@ -1,39 +1,31 @@
+%global source1_hash bbf219d49d89b9e22b5cd0f5c5b7fb33a8dbd77e5f4c54669709a6e4789dab87
 %global source0_hash d6474805bc0f998a5b78767d5a0464e244e4b5d7e2420271d9adb031d848fd48
-
 %global commit0 92345b77edf775fe5668700dd9931e19db2d36b0
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
-
 %global commit1 015e0330630d7c238c0e4f2cdd9c8157eb78c54a
 %global shortcommit1 %(c=%{commit1}; echo ${c:0:7})
-
 %global snapdate 20251010
-
 %global __python %{__python3}
-
 Name:          trellis
 Version:       1.2.1
-Release:       37.%{snapdate}git%{shortcommit0}%{?dist}
-Summary:       Lattice ECP5 FPGA bitstream creation/analysis/programming tools
+Release:        1%{?dist}
+Summary:        Lattice ECP5 FPGA bitstream creation/analysis/programming tools
 License:       ISC
 URL:           https://github.com/YosysHQ/prj%{name}
-Source0:       https://github.com/YosysHQ/prj%{name}/archive/%{commit0}/prj%{name}-%{shortcommit0}.tar.gz
+Source0:        https://github.com/YosysHQ/prj%{name}/archive/%{commit0}/prj%{name}-%{shortcommit0}.tar.gz
 Source1:       https://github.com/YosysHQ/prj%{name}-db/archive/%{commit1}/prj%{name}-db-%{shortcommit1}.tar.gz
-
-BuildRequires: make
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: python3-devel
-BuildRequires: boost-python3-devel
-#BuildRequires: pybind11-devel
-# for building docs:
-BuildRequires: python3-sphinx-latex
-BuildRequires: python3-recommonmark
-BuildRequires: latexmk
-# for building manpages:
-BuildRequires: help2man
-
 Requires:      %{name}-data = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  boost-python3-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  help2man
+BuildRequires:  latexmk
+BuildRequires:  make
+BuildRequires:  python3-devel
+BuildRequires:  python3-recommonmark
+BuildRequires:  python3-sphinx-latex
+# /oreon:deps
 %description
 Project Trellis enables a fully open-source flow for ECP5 FPGAs using
 Yosys for Verilog synthesis and nextpnr for place and route. Project
@@ -43,25 +35,21 @@ Trellis provides the device database and tools for bitstream creation.
 Summary:       Development files for Project Trellis
 Requires:      %{name}%{?_isa} = %{version}-%{release}
 Requires:      %{name}-data = %{version}-%{release}
-
-# pytrellis.so is an extension module which only works with a given Python version
-# be explicit about it
 %if "%{?python3_version}" != ""
 Requires:      python(abi) = %{python3_version}
 %endif
-
 %description devel
 Development files to build packages using Project Trellis
 
 %package data
 Summary:       Project Trellis - Lattice ECP5 Bitstream Database
 BuildArch:     noarch
-
 %description data
 This package contains the bitstream documentation database for
 Lattice ECP5 FPGA devices.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n prj%{name}-%{commit0} -a 1
@@ -78,16 +66,13 @@ find . -name \*.py -exec sed -i 's|/usr/bin/env python3|/usr/bin/python3|' {} \;
 find . -name \.gitignore -delete
 
 %build
-# building manpages requires in-source build:
+
 %define __cmake_in_source_build 1
-# disable LTO to allow building for f33 rawhide (BZ 1865586):
 %define _lto_cflags %{nil}
 %cmake libtrellis \
 	-DCURRENT_GIT_VERSION=%{version}-%{release}
-#	-DPYBIND11_INCLUDE_DIR="/usr/include/pybind11/" \
 %cmake_build
 %make_build -C docs latexpdf
-# build manpages:
 mkdir man1
 for f in ecp*
 do
@@ -97,34 +82,17 @@ do
              -o man1/$f.1 ./$f
   sed -i '/required but missing/d' man1/$f.1
 done
-
 %install
 %cmake_install
 install -Dpm644 -t %{buildroot}%{_mandir}/man1 man1/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# nothing to do for now.
 
-%files
-%license COPYING
-%doc README.md
-%doc docs/_build/latex/ProjectTrellis.pdf
-%doc examples
-%{_bindir}/*
-%dir %{_libdir}/%{name}
-%{_libdir}/%{name}/libtrellis.so
-%{_datadir}/%{name}/misc
-%{_mandir}/man1/ecp*.1*
-
-%files devel
-%doc libtrellis/examples
-%{_libdir}/%{name}/pytrellis.so
-%{_datadir}/%{name}/timing
-%{_datadir}/%{name}/util
-
-%files data
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/database
+%files -f %{oreon_filedir}/main.list
+%files -n trellis-devel -f %{oreon_filedir}/trellis-devel.list
+%files -n trellis-data -f %{oreon_filedir}/trellis-data.list
 
 %changelog
+
 %autochangelog

@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 680e969cae18c30adbddd6a087ed09f6a296b4937b4c8bc69be813bdbbfa9847
 Name:           python-openidc-client
 Version:        0.6.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        OpenID Connect Client with caching and token management
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/puiterwijk/python-openidc-client
-Source:         %{pypi_source openidc-client}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/openidc-client/openidc-client-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'openidc-client' generated automatically by pyp2spec.}
-
 Patch:          0001-feat-really-support-not-receiving-refresh-token.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-openidc-client = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-openidc-client
-Summary:        %{summary}
-
-%description -n python3-openidc-client %_description
-
+Summary:        OpenID Connect Client with caching and token management
+%description -n python3-openidc-client
 
 %prep
-%autosetup -p1 -n openidc-client-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir openidc-client-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-openidc-client usr/lib/python3*/site-packages/openidc_client* usr/lib64/python3*/site-packages/openidc_client* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/openidc_client* usr/lib64/python3*/site-packages/openidc_client* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-openidc-client -f %{pyproject_files}
+%files
+%files -n python3-openidc-client -f %{oreon_filedir}/python3-openidc-client.list
 
 %changelog
+
 %autochangelog

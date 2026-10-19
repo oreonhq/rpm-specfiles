@@ -1,76 +1,48 @@
-%global source0_hash none
-
-Summary:       A high-performance MySQL proxy
+%global source0_hash b8b2e2b27fd1d9bd013b3bde698f27c0290876e4a97de14fd8577693785dcfa3
+Summary:        A high-performance MySQL proxy
 Name:          proxysql
 Version:       4.0.11
-Release:       %autorelease
-# Proxysql Google group for free community support: https://groups.google.com/g/proxysql
+Release:        1%{?dist}
 URL:           https://proxysql.com/
-# GPL-3.0-or-later
-# deps/coredumper: BSD-3-Clause
-# deps/jemalloc: BSD-2-Clause
-# deps/mariadb-connector-c: LGPL-2.1-or-later
-# deps/prometheus-cpp: MIT
-# deps/re2: BSD-3-Clause
 License:       GPL-3.0-or-later AND LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND MIT
-
-BuildRequires: make, automake
-BuildRequires: cmake, gcc-c++
-BuildRequires: systemd-rpm-macros
-
-# Required by proxysql code
-BuildRequires: libtool
-BuildRequires: pcre-devel
-BuildRequires: zlib-devel
-BuildRequires: libev-devel
-BuildRequires: sqlite-devel
-BuildRequires: openssl-devel
-BuildRequires: libcurl-devel
-BuildRequires: libdaemon-devel
-BuildRequires: libconfig-devel
-BuildRequires: lz4-devel
-BuildRequires: libuuid-devel
-BuildRequires: libicu-devel
-BuildRequires: libevent-devel
-
-# Used by provided (scripts) tools
-BuildRequires: perl
-BuildRequires: python3
-
-# Specific dependency for Fedora/RHEL/Centos
-BuildRequires: gnutls-devel
-
 Suggests: mariadb, mysql, postgresql
-
-# Build in other architectures aside from x86 is not yet supported due to some
-# use of assembly code, but is on the upstream roadmap to support them.
-# https://github.com/sysown/proxysql/issues/977
-
-# Update 8/2021
-# Support for arm64 has been added.
 ExcludeArch:   %{power64} s390x %{ix86}
-
 Provides:      bundled(jemalloc) = 5.2.0
 Provides:      bundled(mariadb-connector-c) = 3.3.8
 Provides:      bundled(re2) = 20221201
 Provides:      bundled(clickhouse-cpp) = 2.3.0
 Provides:      bundled(prometheus-cpp) = 1.1.0
-# The hash looks weird but it is still 1.1.1
 Provides:      bundled(cityhash) = 1.1.1
 Provides:      bundled(libhttpserver) = 0.18.2
 Provides:      bundled(libmicrohttpd) = 0.9.77
 Provides:      bundled(coredumper) = 0^cb6cead
-
-# There is inconsistency between name and URL of file and main unpacked source folder
-Source0:       https://github.com/sysown/proxysql/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# Manpage for binary is missing. Instead we provide it manually.
-# Link for tracking current status in upstream:
-# https://github.com/sysown/proxysql/issues/3564
+Source0:        https://github.com/sysown/proxysql/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:       proxysql.1
-
 Source2:       0007-Fix-gcc-15.patch
 Source3:       0009-Fix-gcc-15-postgresql.patch
-
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gnutls-devel
+BuildRequires:  libconfig-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libdaemon-devel
+BuildRequires:  libev-devel
+BuildRequires:  libevent-devel
+BuildRequires:  libicu-devel
+BuildRequires:  libtool
+BuildRequires:  libuuid-devel
+BuildRequires:  lz4-devel
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  pcre-devel
+BuildRequires:  perl
+BuildRequires:  python3
+BuildRequires:  sqlite-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 ProxySQL is a high performance, high availability, protocol aware proxy for
 MySQL and forks (like Percona Server and MariaDB).
@@ -97,6 +69,7 @@ MySQL and forks (like Percona Server and MariaDB).
 0010-btree-uint16_t.patch 
 
 %prep
+
 %autosetup -p1
 # Remove sources of debundled libraries
 rm -r deps/{libssl,pcre,curl,lz4,libev,libconfig,libdaemon,sqlite3}
@@ -113,6 +86,7 @@ mv %{SOURCE2} deps/mariadb-client-library/ma_global.h.patch
 mv %{SOURCE3} deps/postgresql/c.h.patch
 
 %build
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export GIT_VERSION=%{version}
 %global _configure :
@@ -120,7 +94,6 @@ export GIT_VERSION=%{version}
 CXXFLAGS="$CXXFLAGS -Wno-error=cpp -Wno-error=template-body"
 export CPPFLAGS=$CXXFLAGS
 %make_build
-
 %install
 install -p -D -m 0755 src/proxysql %{buildroot}%{_bindir}/proxysql
 install -p -D -m 0640 etc/proxysql.cnf %{buildroot}%{_sysconfdir}/proxysql.cnf
@@ -135,29 +108,20 @@ install -p -D -m 0644 doc/release_notes/*.md -t %{buildroot}%{_docdir}/proxysql
 install -p -D -m 0644 doc/internal/*.txt -t %{buildroot}%{_docdir}/proxysql
 install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_mandir}/man1/%{name}.1
 install -d -m 0755 %{buildroot}%{_sharedstatedir}/proxysql
-
 install -m0644 -D proxysql.sysusers.conf %{buildroot}%{_sysusersdir}/proxysql.conf
+%oreon_autofiles main
 
 %post
+
 %systemd_post proxysql.service
-
 %preun
+
 %systemd_preun proxysql.service
-
 %postun
-%systemd_postun_with_restart proxysql.service
 
-%files
-%license LICENSE
-%{_bindir}/proxysql
-%{_unitdir}/proxysql.service
-%{_unitdir}/proxysql-initial.service
-%{_datadir}/proxysql/
-%{_docdir}/proxysql/
-%{_mandir}/man1/proxysql.1*
-%attr(-,proxysql,proxysql) %{_sharedstatedir}/proxysql/
-%attr(-,proxysql,root) %config(noreplace) %{_sysconfdir}/proxysql.cnf
-%{_sysusersdir}/proxysql.conf
+%systemd_postun_with_restart proxysql.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

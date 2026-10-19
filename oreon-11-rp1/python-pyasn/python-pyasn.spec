@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash a2d55fb3ee47947609f50211ca5b0bac411a86f3c935fb92ca4b0b8ab7c668ff
 Name:           python-pyasn
 Version:        1.6.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Offline IP address to Autonomous System Number lookup module.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/hadiasghari/pyasn
-Source:         %{pypi_source pyasn}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyasn/pyasn-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyasn' generated automatically by pyp2spec.}
-
 Patch:          %{url}/commit/1d64d6d2f20e0353b46fbf5b94f8bdea8f41e9ce.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pyasn = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyasn
-Summary:        %{summary}
-
-%description -n python3-pyasn %_description
-
+Summary:        Offline IP address to Autonomous System Number lookup module.
+%description -n python3-pyasn
 
 %prep
-%autosetup -p1 -n pyasn-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyasn-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyasn usr/lib/python3*/site-packages/pyasn* usr/lib64/python3*/site-packages/pyasn* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyasn* usr/lib64/python3*/site-packages/pyasn* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyasn -f %{pyproject_files}
+%files
+%files -n python3-pyasn -f %{oreon_filedir}/python3-pyasn.list
 
 %changelog
+
 %autochangelog

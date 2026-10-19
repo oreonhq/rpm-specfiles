@@ -1,22 +1,19 @@
 %global source0_hash 3893de9a8ebe5543b9b11c4b575075e59509ddb0f26e6229b2554ee625d25687
-
 Name:           cpdup
 Version:        1.18
-Release:        23%{?dist}
+Release:        1%{?dist}
 Summary:        Filesystem mirroring utility
-
 %if 0%{?el5}
 %endif
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://apollo.backplane.com/FreeSrc/
 Source0:        http://apollo.backplane.com/FreeSrc/cpdup-%{version}.tgz
 Source1:        Makefile.linux
 Patch0:         cpdup-c99.patch
-
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 The cpdup utility makes an exact mirror copy of the source in the
 destination, creating and deleting files and directories as necessary.
@@ -30,6 +27,7 @@ destination.  As a safety measure, cpdup refuses to replace a
 destination directory with a file.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}
@@ -39,15 +37,14 @@ mv md5.c{,.off}
 chmod -x scripts/*
 
 %build
-make %{?_smp_mflags} CFLAGS="${RPM_OPT_FLAGS}" -f %{SOURCE1}
 
+make %{?_smp_mflags} CFLAGS="${RPM_OPT_FLAGS}" -f %{SOURCE1}
 %install
 make install DESTDIR=$RPM_BUILD_ROOT -f %{SOURCE1}
+%oreon_autofiles main
 
-%files
-%doc BACKUPS PORTING scripts
-%{_bindir}/*
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

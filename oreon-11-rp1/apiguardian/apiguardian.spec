@@ -1,5 +1,5 @@
+%global source100_hash 32355081d109095c3d5d374d5a43b4f4c1b75d549e983ef50723e2772e5302a0
 %global source0_hash 59655868b2f301868ae85745d3e003e17f7d75608f9d5dac8879c3f5d0e970ec
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,27 +81,23 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           apiguardian
 Version:        1.1.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        API Guardian Java annotation
 License:        Apache-2.0
 URL:            https://github.com/apiguardian-team/apiguardian
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/apiguardian-team/apiguardian/archive/r%{version}.tar.gz#/apiguardian-%{version}.tar.gz
 Source100:        https://repo1.maven.org/maven2/org/apiguardian/apiguardian-api/%{version}/apiguardian-api-%{version}.pom
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1.1.2-28
-
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
+# /oreon:deps
 %description
 API Guardian indicates the status of an API element and therefore its
 level of stability as well.  It is used to annotate public types,
@@ -110,6 +106,7 @@ order to publish their API status and level of stability and to
 indicate how they are intended to be used by consumers of the API.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n apiguardian-r%{version}
 find -name \*.jar -delete
@@ -177,14 +174,15 @@ mv src/module/java/* src/main/java
   </build>"
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-1
 - Import

@@ -1,65 +1,53 @@
-%global source0_hash 820d854355d80a3fe6dbe6c5428c45d42542541213cf0c3b3aee705f8ba1399f
-
-##Documents generation and Octave binding look not available yet
-
+%global source0_hash 23aa7fdebf3e9a82b11368d2e42aea0a34fe0ebaf1a024a348304cda43488f08
 %global with_python  1
 %global with_ruby    0
 %global with_java    0
-
 %global with_octave  0
 %global with_perl    0
 %global with_r       0
-
 %ifarch %{mono_arches}
 %global with_mono    0
 %else
 %global with_mono    0
 %endif
-
 %global with_doc     1
-
-# No tests?
 %global with_check   0
-
 %global octpkg NUML
 %if 0%{?with_octave}
-# Exclude .oct files from provides
 %global __provides_exclude_from ^%{octpkglibdir}/.*\\.oct$
 %endif
-
 %global _docdir_fmt %{name}
-
 %global commit 50815eb877aaa42bf9428cfa32f6ea33fc101e3f
 %global date 20201214
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 ExcludeArch:    %{ix86}
-
 Name:           libnuml
 Summary:        Numerical Markup Language
 Version:        1.1.7
-Release:        %autorelease
+Release:        1%{?dist}
 URL:            https://github.com/NuML/NuML
 Source0:        https://github.com/NuML/NuML/archive/%{commit}/NuML-%{version}.tar.gz
 License:        LGPL-2.0-or-later
-
-BuildRequires: cmake
-BuildRequires: gcc, gcc-c++
-BuildRequires: zlib-devel
-BuildRequires: swig
-BuildRequires: libsbml-devel
-BuildRequires: libxml2-devel
-BuildRequires: bzip2-devel
-BuildRequires: xerces-c-devel
-BuildRequires: minizip-ng-compat-devel
-
 %if 0%{?with_check}
-BuildRequires: check-devel
 %endif
-
 Obsoletes:     python2-libnuml < 0:1.1.4
 Obsoletes:     java-%{octpkg} < 0:1.1.4
-
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libsbml-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  minizip-ng-compat-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  swig
+BuildRequires:  xerces-c-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 LibNuML is a library for reading/writing documents describing numerical
 results in an XML dialect.
@@ -174,10 +162,10 @@ of libNUML libraries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n NuML-%{version}
-
+%global oreon_srcdir NuML-%{version}
+%oreon_prep
 %build
+
 pushd libnuml
 %cmake -Wno-dev \
  -DEXTRA_INCLUDE_DIRS:STRING=%{_includedir}/minizip \
@@ -228,140 +216,58 @@ pushd libnuml
  -DCPACK_SOURCE_TZ:BOOL=OFF -DWITH_ZLIB:BOOL=ON -DWITH_CPP_NAMESPACE:BOOL=OFF \
  -DCMAKE_SKIP_RPATH:BOOL=YES -DCMAKE_SKIP_INSTALL_RPATH:BOOL=YES
 %cmake_build
-
 %if 0%{?with_doc}
 doxygen
 %endif
 popd
-
-####################################################################################################
-
 %install
 pushd libnuml
 %cmake_install
 popd
-
 rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}
-
-##Only for R library
 %if 0%{?with_r}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/R/library
 %{_bindir}/R CMD INSTALL -l $RPM_BUILD_ROOT%{_libdir}/R/library build/bindings/r/libNUML_%{version}_R_*.tar.gz
 test -d %{octpkg}/src && (cd %{octpkg}/src; rm -f *.o *.so)
 rm -rf $RPM_BUILD_ROOT%{_libdir}/R/library/%{octpkg}/R.css
-
-# Make symlink instead hard-link
 ln -sf %{_libdir}/libNUML.so $RPM_BUILD_ROOT%{_libdir}/R/library/libNUML/libs/libNUML.so
 %endif
-##
-
 %if 0%{?with_octave}
 mkdir -p $RPM_BUILD_ROOT%{octpkgdir}/packinfo
 install -pm 644 LICENSE.txt *.md $RPM_BUILD_ROOT%{octpkgdir}/packinfo
 %endif
-
 %if 0%{?with_java}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_jnidir}
 mv $RPM_BUILD_ROOT%{_libdir}/libnumlj.so $RPM_BUILD_ROOT%{_libdir}/%{name}/
 ln -sf %{_libdir}/%{name}/libnumlj.so $RPM_BUILD_ROOT%{_jnidir}/libnumlj.so
 %endif
-
-## Remove libtool archives
 find $RPM_BUILD_ROOT -name '*.la' -delete
-
+%oreon_autofiles python3-libnuml usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/*/lib*.so.*
 %if 0%{?with_octave}
 %post -n octave-%{octpkg}
-%octave_cmd pkg rebuild
 
+%octave_cmd pkg rebuild
 %postun -n octave-%{octpkg}
-%octave_cmd pkg rebuild
 
+%octave_cmd pkg rebuild
 %preun -n octave-%{octpkg}
+
 %octave_pkg_preun
 %endif
-
 %if 0%{?with_check}
 %check
+
 pushd libnuml
 %ctest
 %endif
-
-%files
-%doc libnuml/*.md
-%license libnuml/LICENSE.txt
-%{_libdir}/libnuml.so.*
-
-%files devel
-%{_libdir}/%{name}.so
-%{_libdir}/cmake/numl-*.cmake
-%{_includedir}/numl/
-%{_datadir}/cmake/Modules/FindLIBNUML.cmake
-
-%files static
-%doc libnuml/*.md
-%license libnuml/LICENSE.txt
-%{_libdir}/%{name}-static.a
-%{_libdir}/cmake/numl-static-config*.cmake
-
-%if 0%{?with_python}
-%files -n python3-%{name}
-%doc libnuml/*.md
-%license libnuml/LICENSE.txt
-%{python3_sitearch}/%{name}/
-%{python3_sitearch}/*.pth
-%endif
-
-%if 0%{?with_java}
-%files -n java-%{octpkg}
-%{_javadir}/libnumlj.jar
-%{_jnidir}/libnumlj.so
-%{_libdir}/%{name}/
-%endif
-
-%if 0%{?with_octave}
-%files -n octave-%{octpkg}
-%{octpkgdir}/packinfo
-%{octpkglibdir}/
-%endif
-
-%if 0%{?with_perl}
-%files -n perl-%{octpkg}
-%doc libnuml/*.md
-%license libnuml/LICENSE.txt
-%{perl_vendorarch}/LibNUML.*
-%exclude %dir %{perl_vendorarch}/auto/
-%{perl_vendorarch}/auto/libNUML/
-%endif
-
-%if 0%{?with_ruby}
-%files -n ruby-%{octpkg}
-%doc libnuml/*.md
-%license libnuml/LICENSE.txt
-%{ruby_vendorarchdir}/*.so
-%endif
-
-%if 0%{?with_r}
-%files -n R-%{octpkg}
-%doc libnuml/*.md
-%license libnuml/LICENSE.txt
-%{_libdir}/R/library/libNUML/
-%{_libdir}/libNUML.so
-%endif
-
-%if 0%{?with_mono}
-%files sharp
-%doc libnuml/*.md
-%license libnuml/LICENSE.txt
-#%%{_monogacdir}/libnumlcsP
-%{_monodir}/LibnumlcsP/
-%endif
-
-%if 0%{?with_doc}
-%files doc
-%license libnuml/LICENSE.txt
-%doc libnuml/doc/html *.pdf
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n libnuml-devel -f %{oreon_filedir}/libnuml-devel.list
+%files -n libnuml-static -f %{oreon_filedir}/libnuml-static.list
+%files -n python3-libnuml -f %{oreon_filedir}/python3-libnuml.list
+%files -n libnuml-doc -f %{oreon_filedir}/libnuml-doc.list
 
 %changelog
+
 %autochangelog

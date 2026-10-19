@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 1971d86c7dc0f3e6b906890297635d6a3a84e5e7ad64d36521b74da202fda62f
 Name: fluent-bit
 Version: 5.1.2
-Release: %autorelease
-Summary: Fluent Bit is a super fast, lightweight, and highly scalable logging and metrics processor and forwarder.
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Fluent Bit is a super fast, lightweight, and highly scalable logging and metrics processor and forwarder.
 License: Apache-2.0
 URL: https://github.com/fluent/fluent-bit
-Source0: https://github.com/fluent/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: pkgconfig
-BuildRequires: make
-BuildRequires: cmake
-BuildRequires: systemd-rpm-macros
-# systemd-devel BR is needed for systemd input plugin
-BuildRequires: systemd-devel
-BuildRequires: gcc-c++
-BuildRequires: flex
-BuildRequires: bison
-BuildRequires: doxygen
-BuildRequires: graphviz
-BuildRequires: libpq-devel
-BuildRequires: zlib-devel
-BuildRequires: gnutls-devel
-BuildRequires: openssl-devel
-BuildRequires: cyrus-sasl-devel
-BuildRequires: libyaml-devel
-BuildRequires: libzstd-devel
-BuildRequires: openssl
-
-%if 0%{?rhel} <= 9
-BuildRequires: netcat
-%endif
-
-%if 0%{?fedora} >= 41
-BuildRequires: openssl-devel-engine
-BuildRequires: netcat
-%endif
-
+Source0:        https://github.com/fluent/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 %{?systemd_requires}
-
-# Exclude armv7hl temporarily because of failing runtime tests
-# https://github.com/fluent/fluent-bit/issues/4395
 ExclusiveArch: x86_64 aarch64
-
+# oreon:deps
+BuildRequires:  bison
+BuildRequires:  cmake
+BuildRequires:  cyrus-sasl-devel
+BuildRequires:  doxygen
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  gnutls-devel
+BuildRequires:  graphviz
+BuildRequires:  libpq-devel
+BuildRequires:  libyaml-devel
+BuildRequires:  libzstd-devel
+BuildRequires:  make
+BuildRequires:  openssl
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig
+BuildRequires:  systemd-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Fluent Bit is a high performance and multi-platform log forwarder.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake\
     -DCMAKE_BUILD_TYPE=RelWithDebInfo\
     -DCMAKE_C_STANDARD=17\
@@ -71,36 +55,26 @@ Fluent Bit is a high performance and multi-platform log forwarder.
     -DFLB_TLS=On\
     -DSYSTEMD_UNITDIR=%{_unitdir}\
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-
 %cmake_build
-
 %install
 %cmake_install
-# We don't ship headers and shared library for plugins (yet)
 rm -rvf %{buildroot}%{_includedir}
+%oreon_autofiles main
 
 %check
+
 %ctest
-
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
+
 %systemd_postun_with_restart %{name}.service
-
-%files
-%license LICENSE
-%doc README.md MAINTAINERS.md CODE_OF_CONDUCT.md CONTRIBUTING.md GOLANG_OUTPUT_PLUGIN.md GOVERNANCE.md
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/*.conf
-%{_bindir}/%{name}
-%{_unitdir}/%{name}.service
-
-%exclude /usr/bin/luajit
-%exclude /usr/lib64/libluajit.a
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

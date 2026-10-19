@@ -1,20 +1,16 @@
 %global source0_hash none
-
 Name:           gnome-shell-rpm-generators
 Version:        1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        RPM generators for gnome-shell
-
 License:        MIT
 URL:            https://src.fedoraproject.org/rpms/gnome-shell-rpm-generators
-Source:         LICENSE
-Source:         gnome_shell.attr
-Source:         gnome_shell_requires.sh
-
+Source0:        LICENSE
 BuildArch:      noarch
-
 Requires:       jq
+# oreon:deps
 
+# /oreon:deps
 %description
 RPM generators for gnome-shell.
 
@@ -26,6 +22,7 @@ Requires: (gnome-shell(api) = VER1 or gnome-shell(api) = VER2 or ...)
 ```
 
 %prep
+
 %autosetup -c -T
 cp -a %{sources} .
 
@@ -34,11 +31,10 @@ cp -a %{sources} .
 %install
 install -Dpm0644 -t %{buildroot}%{_fileattrsdir} *.attr
 install -Dpm0755 -t %{buildroot}%{_rpmconfigdir} *.sh
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%{_fileattrsdir}/gnome_shell.attr
-%{_rpmconfigdir}/gnome_shell_requires.sh
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

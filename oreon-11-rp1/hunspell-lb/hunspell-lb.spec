@@ -1,29 +1,28 @@
-%global source0_hash 114b4ffacc52fd034d3bccd377ec0eb37ee124a43c21cf16bf336a83853d7e3b
-
+%global source0_hash 22f2fd629a4410ce941262820e2ce13da074db7009fc24f49e7408ae0eee8f01
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-lb
-Summary: Luxembourgish hunspell dictionaries
+Summary:        Luxembourgish hunspell dictionaries
 %global upstreamid 20121128
 Version: 0.%{upstreamid}
-Release: 29%{?dist}
+Release:        1%{?dist}
 URL: http://spellchecker.lu
 License: EUPL-1.1
 BuildArch: noarch
-BuildRequires: unzip
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-lb)
-
 Source0:        https://downloads.spellchecker.lu/packages/OOo3/SpellcheckerLu.oxt
-
+# oreon:deps
+BuildRequires:  unzip
+# /oreon:deps
 %description
 Luxembourgish hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -T -D
 unzip -q %{SOURCE0}
@@ -35,13 +34,11 @@ mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p lb_LU.dic lb_LU.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/mythes
 cp -p th_lb_LU_v2.* $RPM_BUILD_ROOT/%{_datadir}/mythes
+%oreon_autofiles main
 
-%files
-%doc registration/README_lb_LU.txt
-%{_datadir}/%{dict_dirname}/*
-%{_datadir}/mythes/th_lb_LU_v2.dat
-%{_datadir}/mythes/th_lb_LU_v2.idx
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-28
 - Prepare for Oreon 11 (RP1)

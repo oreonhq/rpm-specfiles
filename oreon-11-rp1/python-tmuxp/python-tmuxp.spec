@@ -1,58 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 9e0480ea012999602635887e0461d395c2d8aa6e36a85b5a6d1d65dcd6c7809c
 Name:           python-tmuxp
 Version:        1.74.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Session manager for tmux, which allows users to save and load tmux sessions through simple configuration files.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/tmux-python/tmuxp
-Source:         %{pypi_source tmuxp}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tmuxp/tmuxp-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'tmuxp' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-tmuxp = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-tmuxp
-Summary:        %{summary}
-
-%description -n python3-tmuxp %_description
-
+Summary:        Session manager for tmux, which allows users to save and load tmux sessions through simple configuration files.
+# oreon:reqs
+Requires:       python3dist(tmuxp) >= 1.7.0
+# /oreon:reqs
+%description -n python3-tmuxp
 
 %prep
-%autosetup -p1 -n tmuxp-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir tmuxp-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-tmuxp usr/lib/python3*/site-packages/tmuxp* usr/lib64/python3*/site-packages/tmuxp* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tmuxp* usr/lib64/python3*/site-packages/tmuxp* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-tmuxp -f %{pyproject_files}
-%{_bindir}/tmuxp
+%files
+%files -n python3-tmuxp -f %{oreon_filedir}/python3-tmuxp.list
 
 %changelog
+
 %autochangelog

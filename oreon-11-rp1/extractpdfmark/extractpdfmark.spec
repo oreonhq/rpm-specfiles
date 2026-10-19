@@ -1,21 +1,18 @@
 %global source0_hash c62f3774c5a97df0517042dd5bbc1c3cdb65687617d1f0a3e8a6910f3191a21b
-
 Name:           extractpdfmark
 Version:        1.1.1
-Release:        13%{?dist}
+Release:        1%{?dist}
 Summary:        Extract page mode and named destinations as PDFmark from PDF
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://github.com/trueroad/extractpdfmark/
 Source0:        https://github.com/trueroad/extractpdfmark/releases/download/v%{version}/%{name}-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  automake
 BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel
-BuildRequires:  poppler-cpp-devel
 BuildRequires:  make
-
+BuildRequires:  poppler-cpp-devel
+# /oreon:deps
 %description
 When you create a PDF document using something like a TeX system you may include
 many small PDF files in the main PDF file. It is common for each of the small
@@ -46,27 +43,21 @@ PDF. By using this you can get the small PDF files that have preserved them.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %configure --with-poppler=cpp
 %make_build
-
 %install
 %make_install
 rm %{buildroot}%{_pkgdocdir}/COPYING
+%oreon_autofiles main
 
 %check
+
 make check
-
-%files
-%{_mandir}/man1/extractpdfmark.1.*
-%{_bindir}/extractpdfmark
-
-%license COPYING
-
-%doc NEWS README.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

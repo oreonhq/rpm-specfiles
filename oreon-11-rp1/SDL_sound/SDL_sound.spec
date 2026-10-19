@@ -1,23 +1,25 @@
 %global source0_hash e175c149e7c49827153d5a7810aa463205214007dc5e622914fa11a5c4f39fe7
-
 Name:           SDL_sound
 Version:        1.0.3
 Release:        44%{?dist}
 Summary:        Library handling decoding of several popular sound file formats
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://www.icculus.org/SDL_sound
-# This is:
-# http://www.icculus.org/SDL_sound/downloads/%{name}-%{version}.tar.gz
-# With PBProjects.tar.gz (contains binaries) removed
 Source0:        %{name}-%{version}-clean.tar.gz
-BuildRequires: make
-BuildRequires:  SDL-devel flac-devel speex-devel libvorbis-devel libogg-devel
-BuildRequires:  mikmod-devel libmodplug-devel physfs-devel doxygen
-# SDL_sound uses a very stripped down mpg123-libs called mpglib
 Provides:       bundled(mpglib)
 Provides:       bundled(mpg123-libs)
-
+# oreon:deps
+BuildRequires:  SDL-devel
+BuildRequires:  doxygen
+BuildRequires:  flac-devel
+BuildRequires:  libmodplug-devel
+BuildRequires:  libogg-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  make
+BuildRequires:  mikmod-devel
+BuildRequires:  physfs-devel
+BuildRequires:  speex-devel
+# /oreon:deps
 %description
 SDL_sound is a library that handles the decoding of several popular sound file 
 formats, such as .WAV and .OGG.
@@ -35,11 +37,11 @@ and behind-the-scenes, if the programmer desires.
 Summary:        %{summary}
 Requires:       %{name} = %{version}-%{release}
 Requires:       SDL-devel
-
 %description    devel
 This package contains the headers and libraries for SDL_sound development.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -47,20 +49,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
 
 %build
+
 export CFLAGS="$RPM_OPT_FLAGS -D__EXPORT__= -Wno-pointer-sign -Wno-deprecated-declarations"
-# no smpeg because of patents!
 %configure --disable-dependency-tracking --disable-static \
     --disable-smpeg --enable-mpglib --enable-mikmod --enable-ogg \
     --enable-modplug --enable-speex --enable-flac --enable-midi
 make %{?_smp_mflags}
 doxygen Doxyfile
-
 %install
 %make_install
-# Avoid conflict with SDL2_sound, users who want this should use SDL2_sound
 rm $RPM_BUILD_ROOT%{_bindir}/playsound*
-
-# Add namespaces to man pages (livna bug #1181)
 cp -a docs/man/man3 man3
 pushd man3
 mv actual.3 Sound_Sample::actual.3
@@ -81,24 +79,16 @@ mv patch.3 Sound_Version::patch.3
 mv rate.3 Sound_AudioInfo::rate.3
 mv url.3 Sound_DecoderInfo::url.3
 popd
-
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}
 mv man3 $RPM_BUILD_ROOT/%{_mandir}
-
 find $RPM_BUILD_ROOT -type f -name "*.la" -exec rm -f {} ';'
-
 %ldconfig_scriptlets
+%oreon_autofiles SDL_sound-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc README TODO
-%{_libdir}/libSDL_sound-1.0.so.*
-
-%files devel
-%doc docs/html
-%{_libdir}/libSDL_sound*.so
-%{_includedir}/SDL/SDL_sound.h
-%{_mandir}/man3/*
+%files -f %{oreon_filedir}/main.list
+%files -n SDL_sound-devel -f %{oreon_filedir}/SDL_sound-devel.list
 
 %changelog
+
 %autochangelog

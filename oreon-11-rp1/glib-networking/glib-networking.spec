@@ -1,42 +1,34 @@
-%global source0_hash none
-
+%global source0_hash 83a75e3d9c36b66ee86d3281c2fc997816101968a5126ba322b2acb9a74dd8c0
 %define glib2_version 2.73.3
 %global libproxy_version 0.4.16
-
 %global tarball_version %(echo %{version} | tr '~' '.')
-
-# Not yet sure whether to have libproxy in el10, but assume yes for now.
 %global with_libproxy 1
-
 Name:           glib-networking
 Version:        2.90.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Networking support for GLib
-
 License:        LGPL-2.1-or-later WITH cryptsetup-OpenSSL-exception
 URL:            https://gitlab.gnome.org/GNOME/glib-networking
-Source0:        https://download.gnome.org/sources/glib-networking/%(echo %{version} | cut -d. -f1-2)/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/2.90/%{name}-%{version}.tar.xz
+%if 0%{?with_libproxy}
+%endif
+Requires:       ca-certificates
+Requires:       glib2%{?_isa} >= %{glib2_version}
+Requires:       gsettings-desktop-schemas
+Recommends:     libproxy-duktape
+# oreon:deps
 BuildRequires:  ca-certificates
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  meson
-BuildRequires:  pkgconfig(glib-2.0) >= %{glib2_version}
 BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gnutls)
 BuildRequires:  pkgconfig(gsettings-desktop-schemas)
-%if 0%{?with_libproxy}
-BuildRequires:  pkgconfig(libproxy-1.0) >= %{libproxy_version}
-%endif
+BuildRequires:  pkgconfig(libproxy-1.0)
 BuildRequires:  pkgconfig(p11-kit-1)
 BuildRequires:  systemd-rpm-macros
-
-Requires:       ca-certificates
-Requires:       glib2%{?_isa} >= %{glib2_version}
-Requires:       gsettings-desktop-schemas
-
-# For glib-pacrunner
-Recommends:     libproxy-duktape
-
+# /oreon:deps
 %description
 This package contains modules that extend the networking support in
 GIO. In particular, it contains libproxy- and GSettings-based
@@ -45,21 +37,19 @@ implementation.
 
 %package tests
 Summary: Tests for the glib-networking package
-# glib-networking-2.78.0/tls/tests/mock-pkcs11.c is Apache-2.0
-# pkcs11t.h is LicenseRef-RSA
-# dtls-connection.c is LGPL-2.0-or-later but not currently included in the binaries
 License: LGPL-2.1-or-later WITH cryptsetup-OpenSSL-exception AND Apache-2.0 AND LicenseRef-RSA
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description tests
 The glib-networking-tests package contains tests that can be used to verify
 the functionality of the installed glib-networking package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build
+
 %meson \
 %if !0%{?with_libproxy}
   -Dlibproxy=disabled \
@@ -68,33 +58,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
   -Dinstalled_tests=true \
   %nil
 %meson_build
-
 %install
 %meson_install
-
 %find_lang %{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %meson_test
-
-%files -f %{name}.lang
-%license COPYING LICENSE_EXCEPTION
-%doc NEWS README
-%{_libdir}/gio/modules/libgiognomeproxy.so
-%{_libdir}/gio/modules/libgiognutls.so
-%if 0%{?with_libproxy}
-%{_libdir}/gio/modules/libgiolibproxy.so
-%{_libexecdir}/glib-pacrunner
-%{_datadir}/dbus-1/services/org.gtk.GLib.PACRunner.service
-%{_userunitdir}/glib-pacrunner.service
-%else
-%{_libdir}/gio/modules/libgioenvironmentproxy.so
-%endif
-
-%files tests
-%{_libexecdir}/installed-tests/glib-networking
-%{_datadir}/installed-tests
+%files -f %{oreon_filedir}/main.list
+%files -n glib-networking-tests -f %{oreon_filedir}/glib-networking-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.80.1-1
 - Prepare for Oreon 11 (RP1)

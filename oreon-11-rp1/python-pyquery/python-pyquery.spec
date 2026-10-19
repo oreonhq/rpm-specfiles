@@ -1,63 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 75238388750fc6e254b7a52f771027b9beb3a6202b88048bef52a00b0abeadbb
 Name:           python-pyquery
 Version:        2.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A jquery-like library for python
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/gawel/pyquery
-Source:         %{pypi_source pyquery}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyquery/pyquery-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyquery' generated automatically by pyp2spec.}
-
 Patch:          python-pyquery-skip-test-requiring-net-connection.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pyquery = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyquery
-Summary:        %{summary}
-
-%description -n python3-pyquery %_description
+Summary:        A jquery-like library for python
+%description -n python3-pyquery
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pyquery test
-
 
 %prep
-%autosetup -p1 -n pyquery-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyquery-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyquery usr/lib/python3*/site-packages/pyquery* usr/lib64/python3*/site-packages/pyquery* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyquery* usr/lib64/python3*/site-packages/pyquery* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyquery -f %{pyproject_files}
+%files
+%files -n python3-pyquery -f %{oreon_filedir}/python3-pyquery.list
 
 %changelog
+
 %autochangelog

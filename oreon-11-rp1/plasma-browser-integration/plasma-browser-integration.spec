@@ -1,95 +1,67 @@
+%global source1_hash 6e8e9670762eb79b868d752a2303c60ae071d0316eee50025c1b427e953611a4
 %global source0_hash d88bdf85a990b4ff819e08843c74faa17715d14419981bbe24f68ec7cff0b8ce
-
 %global stable_kf6 stable
-
-
 Name:    plasma-browser-integration
-Summary: %{name} provides components necessary to integrate browsers into the Plasma Desktop
+Summary:        plasma-browser-integration provides components necessary to integrate browsers into the Plasma Desktop
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND MIT
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-## downstream patches
-
-## upstream patches
-
-## upstreamable patches
-
-BuildRequires:  extra-cmake-modules
+Supplements: (plasma-workspace and chromium)
+Supplements: (plasma-workspace and firefox)
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6JobWidgets)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(Qt6Quick)
-BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
 BuildRequires:  cmake(KF6FileMetaData)
-BuildRequires:  cmake(KF6KIO)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6ItemModels)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6JobWidgets)
+BuildRequires:  cmake(KF6KIO)
 BuildRequires:  cmake(KF6Notifications)
 BuildRequires:  cmake(KF6Purpose)
 BuildRequires:  cmake(KF6Runner)
-BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6Service)
 BuildRequires:  cmake(KF6StatusNotifierItem)
-
+BuildRequires:  cmake(KF6WindowSystem)
 BuildRequires:  cmake(PlasmaActivities)
-
-BuildRequires:  plasma-workspace-devel >= %{version}
-
-Supplements: (plasma-workspace and chromium)
-Supplements: (plasma-workspace and firefox)
-
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  plasma-workspace-devel
+# /oreon:deps
 %description
 %{name} coupled with a browser plugin provides integration of the browser in the desktop.
 
 For more information, see
 https://community.kde.org/Plasma/Browser_Integration
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6 \
   -DMOZILLA_DIR:PATH=%{_libdir}/mozilla \
   -DLIBREWOLF_DIR:PATH=%{_libdir}/librewolf \
   -DWATERFOX_DIR:PATH=%{_libdir}/waterfox
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang %{name} --all-name
+%oreon_autofiles main
 
-
-%files -f %{name}.lang
-%license LICENSES/*
-%config %{_sysconfdir}/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json
-%config %{_sysconfdir}/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json
-%config %{_sysconfdir}/opt/edge/native-messaging-hosts/org.kde.plasma.browser_integration.json
-%{_libdir}/waterfox/native-messaging-hosts/org.kde.plasma.browser_integration.json
-%{_bindir}/plasma-browser-integration-host
-%{_libdir}/mozilla/native-messaging-hosts/org.kde.plasma.browser_integration.json
-%{_libdir}/librewolf/native-messaging-hosts/org.kde.plasma.browser_integration.json
-%{_kf6_plugindir}/kded/browserintegrationreminder.so
-%{_kf6_datadir}/krunner/dbusplugins/plasma-runner-browserhistory.desktop
-%{_kf6_datadir}/krunner/dbusplugins/plasma-runner-browsertabs.desktop
-%{_kf6_datadir}/applications/org.kde.plasma.browser_integration.host.desktop
-%{_kf6_qtplugindir}/kf6/kded/browserintegrationflatpakintegrator.so
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

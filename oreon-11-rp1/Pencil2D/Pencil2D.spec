@@ -1,112 +1,16 @@
 %global source0_hash 22af8bf304cd18ae5d7a84e66d80ea2a21a53963476ffabb60d1d5f37f091a0c
-
 Name:           Pencil2D
 Version:        0.7.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Create traditional hand-drawn animation (cartoon)
-# For translations, check translations/*.ts.
-# Our Summary is based on the upstream description. Since it must be edited to
-# make a concise description, localized/translated summaries can be added only
-# with sufficient knowledge of the languages in question. We can still have a
-# full set of localized/translated descriptions. PR’s to add translated summary
-# text are welcome.
-# Summary(ar):    <?>
-# Summary(bg):    (no upstream translation)
 Summary(ca):    Crear animacions tradicionals fetes a mà (dibuixos animats)
-# Summary(cs):    <?>
-# Summary(da):    <?>
-# Summary(de):    <?>
-# Summary(el):    <?>
 Summary(en):    Create traditional hand-drawn animation (cartoon)
 Summary(es):    Crear animaciones (cartoons) de manera tradicional
-# Summary(et):    (no upstream translation)
-# Summary(fa):    (no upstream translation)
 Summary(fr):    Créer une animation traditionnelle (dessin animé) à la main
-# Summary(he):    <?>
-# Summary(hu_HU): <?>
-# Summary(id):    <?>
 Summary(it):    Creare animazioni tradizionali disegnate a mano (cartoni animati)
-# Summary(ja):    <?>
-# Summary(kab):   <?>
-# Summary(ko):    <?>
-# Summary(nb):    (no upstream translation)
-# Summary(nl_NL): (no upstream translation)
-# Summary(pl):    <?>
 Summary(pt_BR): Criar animações tradicionais feitas a mão (desenhos animados)
 Summary(pt):    Criar animações tradicionais feitas a mão (desenhos animados)
-# Summary(ru):    <?>
-# Summary(sl):    <?>
-# Summary(sv):    <?>
-# Summary(tr):    <?>
-# Summary(vi):    (no upstream translation)
-# Summary(yue):   <?>
-# Summary(zh_CN): <?>
-# Summary(zh_TW): <?>
-
-# The entire source is GPL-2.0-only, except:
-#
-# -----
-#
-# In LICENSE.QT.TXT, upstream reports:
-#
-#   The following source files are part of the examples of the Qt Toolkit:
-#
-#     core_lib/src/interface/flowlayout.cpp
-#     core_lib/src/interface/flowlayout.h
-#
-#   The following source files are part of the QtCore module of the Qt Toolkit:
-#
-#     app/src/elidedlabel.cpp
-#     app/src/elidedlabel.h
-#
-# All four files are BSD-3-Clause.
-#
-# The version of Qt from which these are taken is unknown, although based on
-# the copyright date of 2016 and some comparison of sources, it seems to have
-# been a Qt5 release. See:
-#
-#   https://github.com/qt/qtbase/blob/5.15/examples/widgets/layouts/flowlayout/flowlayout.h
-#   https://github.com/qt/qtbase/blob/5.15/examples/widgets/layouts/flowlayout/flowlayout.cpp
-#
-# It looks like, despite upstream’s description, the elidedlabel souces are
-# also from an example shipped with qtbase (which contains QtCore) rather than
-# from the QtCore library itself:
-#
-#   https://github.com/qt/qtbase/blob/5.15/examples/widgets/widgets/elidedlabel/elidedlabel.h
-#   https://github.com/qt/qtbase/blob/5.15/examples/widgets/widgets/elidedlabel/elidedlabel.cpp
-#
-# Since all four files are from Qt examples rather than from library code, we
-# do not treat these as a case of bundling.
-#
-# -----
-#
-# The following sources are “heavily influenced by” QAquarelle, which is
-# GPL-2.0-or-later, and bear its copyright/license notice.
-#   - core_lib/src/tool/strokeinterpolator.cpp
 License:        GPL-2.0-only AND BSD-3-Clause AND GPL-2.0-or-later
-# Additionally, the following are under other allowed licenses but, for one
-# reason or another, do not contribute to the licenses of the binary RPMs.
-#
-# The following sources belong to a bundled copy of the miniz library
-# (MZ_VERSION 10.1.0, corresponding to release 2.1.0, as of this writing);
-# they are removed in %%prep in order to use the system miniz library, and
-# their licenses do not contribute to the licenses of
-# the binary RPMs.
-#   - core_lib/src/miniz.cpp is MIT
-#   - core_lib/src/miniz.h appears to be Unlicense
-#
-# The following source belongs to a bundled copy of Catch2 (version 2.13.9 as
-# of this writing); it is removed in %%prep in order to use the system Catch2
-# library. Because version 2.x (catch2) is header-only, it is treated as a
-# static library and would contribute to the licenses of the binary RPMs,
-# except that it is used only for test executables that are not installed.
-#   - tests/src/catch.hpp is BSL-1.0
-#
-# The following source is part of support for Windows Installer, which is not
-# used in this package; furthermore, it is OK to distribute in the source RPM
-# because it is content (for which CC0-1.0 is allowed) rather than code (for
-# which it is not-allowed).
-#   - util/installer/cog.svg
 SourceLicense:  %{shrink:
                 %{license} AND
                 BSL-1.0 AND
@@ -116,30 +20,23 @@ SourceLicense:  %{shrink:
                 }
 URL:            https://www.pencil2d.org
 %global forgeurl https://github.com/pencil2d/pencil
-Source:         %{forgeurl}/archive/v%{version}/pencil-%{version}.tar.gz
-
-# Use the latest GPLv2 license text
-# https://github.com/pencil2d/pencil/pull/1914
-# OK to patch license text downstream since the PR was merged upstream.
+Source0:        %{forgeurl}/archive/v%{version}/pencil-%{version}.tar.gz
 Patch:          %{forgeurl}/pull/1914.patch
-
-# Downstream-only: Hide “Check for Updates” in the Help menu
-# Package users will update through the appropriate package manager.
 Patch:          0001-Downstream-only-Hide-Check-for-Updates-in-the-Help-m.patch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
+Requires:       /usr/bin/ffmpeg
+Requires:       qt6-qtsvg
+Requires:       hicolor-icon-theme
+%global app_id org.pencil2d.Pencil2D
+# oreon:deps
+BuildRequires:  /usr/bin/ffmpeg
+BuildRequires:  appstream
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
+BuildRequires:  help2man
+BuildRequires:  libappstream-glib
 BuildRequires:  make
-
 BuildRequires:  pkgconfig(Qt6)
-# app/app.pro:
-# QT += core widgets gui xml multimedia svg network
-# core_lib/core_lib.pro:
-# QT += core widgets gui xml multimedia svg
-# tests/tests.pro:
-# QT += core widgets gui xml multimedia svg
 BuildRequires:  pkgconfig(Qt6Core)
 BuildRequires:  pkgconfig(Qt6Gui)
 BuildRequires:  pkgconfig(Qt6Multimedia)
@@ -147,39 +44,10 @@ BuildRequires:  pkgconfig(Qt6Network)
 BuildRequires:  pkgconfig(Qt6Svg)
 BuildRequires:  pkgconfig(Qt6Widgets)
 BuildRequires:  pkgconfig(Qt6Xml)
-
-# app/app.pro:
-# CONFIG += precompile_header lrelease embed_translations
-BuildRequires:  qt6-linguist
-
+BuildRequires:  pkgconfig(catch2)
 BuildRequires:  pkgconfig(miniz)
-# Please consider supporting Catch2 version 3.x
-# https://github.com/pencil2d/pencil/issues/1977
-BuildRequires:  pkgconfig(catch2) >= 3.0
-
-BuildRequires:  desktop-file-utils
-# Required by guidelines (https://pagure.io/packaging-committee/issue/1053):
-BuildRequires:  libappstream-glib
-# Matches what gnome-software and others use:
-BuildRequires:  appstream
-
-BuildRequires:  help2man
-
-# Required to import and export videos. This is essential functionality for an
-# animation tool, so we make it a hard dependency.
-BuildRequires:  /usr/bin/ffmpeg
-Requires:       /usr/bin/ffmpeg
-
-# Provides plugins required for loading SVG icons
-# https://github.com/pencil2d/pencil/pull/1796#issuecomment-1805940297
-Requires:       qt6-qtsvg
-
-# For %%{_datadir}/icons/hicolor
-Requires:       hicolor-icon-theme
-
-%global app_id org.pencil2d.Pencil2D
-
-# For translations, check translations/*.ts.
+BuildRequires:  qt6-linguist
+# /oreon:deps
 %description
 Pencil2D is an animation/drawing software for Mac OS X, Windows, and Linux. It
 lets you create traditional hand-drawn animation (cartoon) using both bitmap
@@ -330,6 +198,7 @@ Pencil2D是适用于Mac OS X，Windows和Linux的动画/绘图软件。它允许
 图形创建传统的手绘动画（卡通）。
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n pencil-%{version} -p1
@@ -357,45 +226,24 @@ echo "LIBS += $(pkgconf --libs catch2)" >> tests/tests.pro
     VERSION='%{version}'
 
 %build
+
 %make_build
-
-# Sometimes the formatting in help2man-generated man pages is of poor to
-# marginal quality; in this case, it is good enough that it is not worth
-# furnishing a hand-written man page. We need QT_QPA_PLATFORM=offscreen to run
-# the application in headless mode for long enough to print its --help output.
 QT_QPA_PLATFORM=offscreen help2man --no-info --output=pencil2d.1 ./app/pencil2d
-
 %install
 %make_install INSTALL_ROOT='%{buildroot}'
-
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 pencil2d.1
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate '%{buildroot}%{_datadir}/applications/%{app_id}.desktop'
 appstream-util validate-relax --nonet \
     '%{buildroot}%{_metainfodir}/%{app_id}.metainfo.xml'
 appstreamcli validate --no-net --explain \
     '%{buildroot}%{_metainfodir}/%{app_id}.metainfo.xml'
-
-# Run catch tests; QT_QPA_PLATFORM=offscreen keeps us from needing xvfb-run.
 QT_QPA_PLATFORM=offscreen ./tests/tests
-
-%files
-%license LICENSE.TXT LICENSE.QT.TXT
-
-%doc README.md
-%doc ChangeLog.md
-
-%{_bindir}/pencil2d
-%{_mandir}/man1/pencil2d.1*
-
-%{_datadir}/applications/%{app_id}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{app_id}.png
-%{_metainfodir}/%{app_id}.metainfo.xml
-%{_datadir}/mime/packages/%{app_id}.xml
-
-%{_datadir}/bash-completion/completions/pencil2d
-%{_datadir}/zsh/site-functions/_pencil2d
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

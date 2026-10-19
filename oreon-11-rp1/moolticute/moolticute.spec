@@ -1,69 +1,40 @@
 %global source0_hash 90e3cc00a6c10f3de882f467d0815668e1631b4617664e220a9c03e36e881e33
-
 %bcond_without  tests
-
-%if 0%{?fedora} >= 40
-%global qtver 6
-%else
 %global qtver 5
-%endif
-
 %global qmake %{expand:%{qmake_qt%{qtver}}}
-
 %global forgeurl    https://github.com/mooltipass/%{name}
-
 Version:        1.04.0
-
 %forgemeta
-
 Name:           moolticute
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Companion GUI application for Mooltipass password manager devices
-
-# The entire source code is GPL-3.0-or-later except:
-# src/AnsiEscapeCodeHandler.[cpp|h] which is GPL-3.0-only WITH Qt-GPL-exception-1.0,
-# src/CyoEncode/ which is BSD-2-Clause,
-# src/QtAwesome/ which is MIT AND OFL-1.1 AND CC-BY-3.0 (see src/QtAwesome/README.md for details),
-# src/SimpleCrypt/ which is BSD-3-Clause,
-# src/http-parser/ which is MIT,
-# src/qtcsv/ which is MIT,
-# src/qtcsv6/ which is MIT,
-# src/zxcvbn-c which is BSD-3-Clause.
-#
-# Note: src/qwinoverlappedionotifier.[cpp|h] is not compiled, and thus ignored.
-# Note: Missing license files are being added: https://github.com/mooltipass/moolticute/pull/1098
 License:        GPL-3.0-or-later AND (GPL-3.0-only WITH Qt-GPL-exception-1.0) AND BSD-2-Clause AND BSD-3-Clause AND MIT AND OFL-1.1 AND CC-BY-3.0
 URL:            %{forgeurl}
-Source0:        %{forgesource}
-
-# https://github.com/mooltipass/moolticute/pull/1231
+Source0:        %{forgeurl}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch1:         moolticute-unbundle-QZXing.patch
-# QSimpleUpdater is licensed under DBAD, which isn't approved. The updater isn't used anyway, so this patch removes it.
 Patch2:         moolticute-remove-updater.patch
-
 Requires:       systemd
 Requires:       hicolor-icon-theme
 Requires:       mooltipass-udev
-
-BuildRequires:  gcc-c++
-BuildRequires:  make
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  pkgconfig(libudev)
-BuildRequires:  pkgconfig(Qt%{qtver}Core)
-BuildRequires:  pkgconfig(Qt%{qtver}DBus)
-BuildRequires:  pkgconfig(Qt%{qtver}Gui)
-BuildRequires:  pkgconfig(Qt%{qtver}Network)
-BuildRequires:  pkgconfig(Qt%{qtver}WebSockets)
-BuildRequires:  pkgconfig(Qt%{qtver}Widgets)
-BuildRequires:  pkgconfig(QZXing)
-BuildRequires:  qt%{qtver}-linguist
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-
 %if %{with tests}
-BuildRequires:  pkgconfig(Qt%{qtver}Test)
 %endif
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  pkgconfig(QZXing)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  pkgconfig(Qt5Test)
+BuildRequires:  pkgconfig(Qt5WebSockets)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(libudev)
+BuildRequires:  qt5-linguist
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Moolticute is an easy to use companion app to your Mooltipass device and extends
 the power of the device to more platform/tools. It allows you to manage your
@@ -75,6 +46,7 @@ app to control your Mooltipass. Other clients can also connect and talk to the
 daemon (it uses a WebSocket connection and simple JSON messages).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
@@ -96,15 +68,13 @@ cat <<EOF > ./src/version.h
 EOF
 
 %build
+
 %qmake  Moolticute.pro -o build/ \
     PREFIX=%{_prefix} \
     CONFIG+=use_system_qzxing
 %make_build -C build
-
 %install
 %make_install INSTALL_ROOT=%{buildroot} -C build
-
-# Collect licenses
 mkdir LICENSES
 install -pm 0644 LICENSE LICENSES/LICENSE.GPL3
 install -pm 0644 src/AnsiEscapeCodeHandler/LICENSE.GPL3-EXCEPT LICENSES/LICENSE.AnsiEscapeCodeHandler
@@ -115,34 +85,26 @@ install -pm 0644 src/qtcsv6/LICENSE LICENSES/LICENSE.qtcsv6
 install -pm 0644 src/CyoEncode/LICENSE.TXT LICENSES/LICENSE.CyoEncode
 install -pm 0644 src/SimpleCrypt/LICENSE LICENSES/LICENSE.SimpleCrypt
 install -pm 0644 src/zxcvbn-c/LICENSE LICENSES/LICENSE.zxcvbn-c
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/moolticute.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 %if %{with tests}
 %make_build -C build check
 %endif
-
 %post
+
 %systemd_post moolticuted.service
-
 %preun
+
 %systemd_preun moolticuted.service
-
 %postun
-%systemd_postun_with_restart moolticuted.service
 
-%files
-%license LICENSES/*
-%doc README.md
-%{_bindir}/moolticute
-%{_bindir}/moolticuted
-%{_metainfodir}/*.metainfo.xml
-%{_datadir}/applications/moolticute.desktop
-%{_datadir}/icons/hicolor/scalable/apps/moolticute.svg
-%{_datadir}/icons/hicolor/32x32/apps/moolticute.png
-%{_datadir}/icons/hicolor/128x128/apps/moolticute.png
-%{_unitdir}/moolticuted.service
+%systemd_postun_with_restart moolticuted.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

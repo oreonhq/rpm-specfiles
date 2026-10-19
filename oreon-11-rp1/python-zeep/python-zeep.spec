@@ -1,62 +1,80 @@
-%global source0_hash none
-
+%global source0_hash 99d5059f92f721020998695fd9c85289ccb03ec5a2398ad49c6dbe43f19cfb94
 Name:           python-zeep
 Version:        4.3.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Python SOAP client
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/mvantellingen/python-zeep
-Source:         %{pypi_source zeep}
-
+Source0:        https://files.pythonhosted.org/packages/source/z/zeep/zeep-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 40.6.0
+Requires:       python3-zeep = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-zeep+docs
+Summary:        Metapackage for python3-zeep docs extras
+Requires:       python3-zeep = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 1.4.0
+Provides:       python3dist(zeep[docs]) = %{version}-%{release}
 
+%description -n python3-zeep+docs
+Metapackage for python3-zeep docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'zeep' generated automatically by pyp2spec.}
+%package -n       python3-zeep+async
+Summary:        Metapackage for python3-zeep async extras
+Requires:       python3-zeep = %{version}-%{release}
+Requires:       python3dist(httpx) >= 0.15.0
+Provides:       python3dist(zeep[async]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-zeep+async
+Metapackage for python3-zeep async extras.
+
+%package -n       python3-zeep+xmlsec
+Summary:        Metapackage for python3-zeep xmlsec extras
+Requires:       python3-zeep = %{version}-%{release}
+Requires:       python3dist(xmlsec) >= 0.6.1
+Provides:       python3dist(zeep[xmlsec]) = %{version}-%{release}
+
+%description -n python3-zeep+xmlsec
+Metapackage for python3-zeep xmlsec extras.
+
+%description
 
 %package -n     python3-zeep
-Summary:        %{summary}
-
-%description -n python3-zeep %_description
+Summary:        A Python SOAP client
+# oreon:reqs
+Requires:       python3dist(attrs) >= 17.2.0
+Requires:       python3dist(isodate) >= 0.5.4
+Requires:       python3dist(lxml) >= 4.6.0
+Requires:       python3dist(platformdirs) >= 1.4.0
+Requires:       python3dist(requests) >= 2.7.0
+Requires:       python3dist(requests-file) >= 1.5.1
+Requires:       python3dist(requests-toolbelt) >= 0.7.1
+# /oreon:reqs
+%description -n python3-zeep
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-zeep async,docs,xmlsec
-
 
 %prep
-%autosetup -p1 -n zeep-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir zeep-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-zeep usr/lib/python3*/site-packages/zeep* usr/lib64/python3*/site-packages/zeep* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/zeep* usr/lib64/python3*/site-packages/zeep* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-zeep -f %{pyproject_files}
+%files
+%files -n python3-zeep -f %{oreon_filedir}/python3-zeep.list
 
 %changelog
+
 %autochangelog

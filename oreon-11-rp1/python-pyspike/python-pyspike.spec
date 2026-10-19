@@ -1,61 +1,45 @@
-%global source0_hash none
-
+%global source0_hash b74008d88723a7781a6b7265621fe4555197d724156a6905ee5328c3e31e1fad
 Name:           python-pyspike
 Version:        0.9.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Python library for the numerical analysis of spike train similarity
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://github.com/mariomulansky/PySpike
-Source:         %{pypi_source pyspike}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyspike' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyspike/pyspike-%{version}.tar.gz
 Patch:          %{url}/pull/75.patch
 Patch:          %{url}/pull/76.patch
 Patch:          %{url}/pull/77.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython) >= 3.0
+BuildRequires:  python3dist(numpy) >= 1.25
+BuildRequires:  python3dist(setuptools) >= 77
+Requires:       python3-pyspike = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyspike
-Summary:        %{summary}
-
-%description -n python3-pyspike %_description
-
+Summary:        A Python library for the numerical analysis of spike train similarity
+%description -n python3-pyspike
 
 %prep
-%autosetup -p1 -n pyspike-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyspike-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyspike usr/lib/python3*/site-packages/pyspike* usr/lib64/python3*/site-packages/pyspike* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyspike* usr/lib64/python3*/site-packages/pyspike* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyspike -f %{pyproject_files}
+%files
+%files -n python3-pyspike -f %{oreon_filedir}/python3-pyspike.list
 
 %changelog
+
 %autochangelog

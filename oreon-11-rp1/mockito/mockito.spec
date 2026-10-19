@@ -1,7 +1,6 @@
 %global source0_hash 7e2614a4fe1f463cc3b64907b18309b734971ca57a64036804aef77a7471e159
 %global source3_hash 718074bfcba3592e3283a1cbcff2eb0163dddd742e2ed22d54a78eafedadc062
 %global source4_hash 40b153c904cc535cc18cd8f679aad01d77b7278917fb70a163f573f5907d5e17
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,46 +82,36 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           mockito
 Version:        5.24.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tasty mocking framework for unit tests in Java
 License:        MIT
 URL:            https://site.mockito.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-# ./generate-tarball.sh
 Source0:        https://github.com/mockito/mockito/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        generate-tarball.sh
-# A custom build script to allow building with maven instead of gradle
 Source2:        aggregator.pom
-# Maven central POMs for subprojects
 Source3:        https://repo1.maven.org/maven2/org/mockito/mockito-core/%{version}/mockito-core-%{version}.pom
 Source4:        https://repo1.maven.org/maven2/org/mockito/mockito-junit-jupiter/%{version}/mockito-junit-jupiter-%{version}.pom
-
-# Mockito expects byte-buddy to have a shaded/bundled version of ASM, but
-# we don't bundle in Fedora, so this patch makes mockito use ASM explicitly
 Patch:          use-unbundled-asm.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 5.8.0-16
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(net.bytebuddy:byte-buddy)
 BuildRequires:  mvn(net.bytebuddy:byte-buddy-agent)
 BuildRequires:  mvn(net.bytebuddy:byte-buddy-dep)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
+BuildRequires:  mvn(org.jspecify:jspecify)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 BuildRequires:  mvn(org.objenesis:objenesis)
-BuildRequires:  mvn(org.jspecify:jspecify)
 BuildRequires:  mvn(org.opentest4j:opentest4j)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 5.8.0-16
-
+# /oreon:deps
 %description
 Mockito is a mocking framework that tastes really good. It lets you write
 beautiful tests with clean & simple API. Mockito doesn't give you hangover
@@ -132,11 +121,11 @@ errors.
 %package junit-jupiter
 Summary:        Mockito JUnit 5 support
 Requires:       %{name} = %{version}-%{release}
-
 %description junit-jupiter
 Mockito JUnit 5 support.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
@@ -194,18 +183,16 @@ echo 'mock-maker-subclass' > mockito-core/src/main/resources/mockito-extensions/
 %mvn_package :aggregator __noinstall
 
 %build
+
 %mvn_build -j -f -- -Dmaven.compiler.release=11 -Dproject.build.sourceEncoding=UTF-8 -f aggregator.pom
-
 %mvn_package org.mockito:mockito-junit-jupiter junit-jupiter
-
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE
-%doc README.md doc/design-docs/custom-argument-matching.md
-
-%files junit-jupiter -f .mfiles-junit-jupiter
+%files -f %{oreon_filedir}/main.list
+%files -n mockito-junit-jupiter -f %{oreon_filedir}/mockito-junit-jupiter.list
 
 %changelog
+
 %autochangelog

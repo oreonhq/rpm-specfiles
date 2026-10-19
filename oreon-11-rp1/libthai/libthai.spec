@@ -1,21 +1,19 @@
 %global source0_hash ddba8b53dfe584c3253766030218a88825488a51a7deef041d096e715af64bdd
-
-Summary:  Thai language support routines
+Summary:        Thai language support routines
 Name: libthai
 Version: 0.1.30
-Release: 4%{?dist}
+Release:        4%{?dist}
 License: LGPL-2.1-or-later
-Source:        http://linux.thai.net/pub/thailinux/software/libthai/libthai-%{version}.tar.xz
+Source0:        http://linux.thai.net/pub/thailinux/software/libthai/libthai-%{version}.tar.xz
 Patch0: libthai-0.1.9-multilib.patch
 URL: http://linux.thai.net
-
 Requires: libdatrie%{?_isa}
-
-BuildRequires: gcc
-BuildRequires: pkgconfig(datrie-0.2)
-BuildRequires: doxygen
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  pkgconfig(datrie-0.2)
+# /oreon:deps
 %description
 LibThai is a set of Thai language support routines aimed to ease
 developers' tasks to incorporate Thai language support in their applications.
@@ -26,7 +24,6 @@ output methods as well as basic character and string supports.
 Summary:  Thai language support routines
 Requires: %{name} = %{version}-%{release}
 Requires: pkgconfig
-
 %description devel
 The libthai-devel package includes the header files and developer docs 
 for the libthai package.
@@ -36,19 +33,14 @@ libthai.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %configure --disable-static
 make
-
 %install
 rm -rf $RPM_BUILD_ROOT
-
 %makeinstall
-
-# move installed doc files back to build directory to package them
-# in the right place
 if [ -d $RPM_BUILD_ROOT%{_docdir}/libthai ]; then
   mkdir installed-docs
   mv $RPM_BUILD_ROOT%{_docdir}/libthai/* installed-docs
@@ -57,23 +49,15 @@ else
   mkdir -p installed-docs
   touch installed-docs/README.docs
 fi
-
 rm $RPM_BUILD_ROOT%{_libdir}/*.la
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README AUTHORS COPYING ChangeLog
-%{_libdir}/lib*.so.*
-%{_datadir}/libthai
-
-%files devel
-%doc installed-docs/*
-%{_includedir}/thai
-%{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*
+%files -f %{oreon_filedir}/main.list
+%files -n libthai-devel -f %{oreon_filedir}/libthai-devel.list
 
 %changelog
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.30-4
 - Require libdatrie at runtime
 

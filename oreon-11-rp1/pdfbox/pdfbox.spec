@@ -1,48 +1,38 @@
 %global source0_hash 25dab2698c4ae72be76161d0cafc053680288e334b8a907b8d1738acde27f815
-
 Name:          pdfbox
 Version:       3.0.8
-Release:       1%{?dist}
-Summary:       Apache PDFBox library for working with PDF documents
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Apache PDFBox library for working with PDF documents
 License:       Apache-2.0
 URL:           http://pdfbox.apache.org/
-Source0:       http://archive.apache.org/dist/pdfbox/%{version}/pdfbox-%{version}-src.zip
-
+Source0:        http://archive.apache.org/dist/pdfbox/%{version}/pdfbox-%{version}-src.zip
+Requires:      liberation-sans-fonts
+Requires:      mvn(org.apache.pdfbox:pdfbox-io)
+BuildArch:     noarch
+ExclusiveArch:  %{java_arches} noarch
+Obsoletes:     %{name}-ant < %{version}-%{release}
+Obsoletes:     jempbox < %{version}-%{release}
+Obsoletes:     %{name}-examples < %{version}-%{release}
+# oreon:deps
+BuildRequires:  dejavu-sans-mono-fonts
+BuildRequires:  fontconfig
+BuildRequires:  google-noto-emoji-fonts
+BuildRequires:  icc-profiles-openicc
+BuildRequires:  liberation-sans-fonts
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-io:commons-io)
 BuildRequires:  mvn(commons-logging:commons-logging)
+BuildRequires:  mvn(jakarta.activation:jakarta.activation-api:1.2.2)
+BuildRequires:  mvn(jakarta.xml.bind:jakarta.xml.bind-api:2)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.ant:ant)
-BuildRequires:  mvn(org.apache:apache:pom:)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires:  mvn(org.apache:apache:pom:)
 BuildRequires:  mvn(org.bouncycastle:bcmail-jdk15)
 BuildRequires:  mvn(org.bouncycastle:bcprov-jdk15)
-BuildRequires:  mvn(jakarta.xml.bind:jakarta.xml.bind-api:2)
-BuildRequires:  mvn(jakarta.activation:jakarta.activation-api:1.2.2)
 BuildRequires:  mvn(org.mockito:mockito-core)
-
-BuildRequires: picocli
-BuildRequires: dejavu-sans-mono-fonts
-BuildRequires: google-noto-emoji-fonts
-BuildRequires: liberation-sans-fonts
-BuildRequires: icc-profiles-openicc
-BuildRequires: fontconfig
-Requires:      liberation-sans-fonts
-Requires:      mvn(org.apache.pdfbox:pdfbox-io)
-
-# TODO: Require liberation-sans-fonts >= 2 and don't ignore test failures
-
-BuildArch:     noarch
-ExclusiveArch:  %{java_arches} noarch
-
-# Ant support was removed by upstream (Obsoletes added in F28)
-Obsoletes:     %{name}-ant < %{version}-%{release}
-# Jempbox subproject was removed by upstream (Obsoletes added in F28)
-Obsoletes:     jempbox < %{version}-%{release}
-# Examples package was dropped due to requiring too old lucene (Obsoletes added in F29)
-Obsoletes:     %{name}-examples < %{version}-%{release}
-
+BuildRequires:  picocli
+# /oreon:deps
 %description
 Apache PDFBox is an open source Java PDF library for working with PDF
 documents. This project allows creation of new PDF documents, manipulation of
@@ -51,22 +41,18 @@ PDFBox also includes several command line utilities. Apache PDFBox is
 published under the Apache License v2.0.
 
 %package debugger
-# See: debugger/target/classes/META-INF/DEPENDENCIES
 Requires:      mvn(commons-logging:commons-logging)
 Requires:      mvn(org.apache.pdfbox:fontbox)
 Requires:      mvn(org.apache.pdfbox:pdfbox)
 Requires:      mvn(org.bouncycastle:bcmail-jdk15)
 Requires:      mvn(org.bouncycastle:bcpkix-jdk15)
 Requires:      mvn(org.bouncycastle:bcprov-jdk15)
-# needed by wrapper script
 Requires:      javapackages-tools
 Summary:       Apache PDFBox Debugger
-
 %description debugger
 This package contains the PDF debugger for Apache PDFBox.
 
 %package tools
-# See: tools/target/classes/META-INF/DEPENDENCIES
 Requires:      mvn(commons-logging:commons-logging)
 Requires:      mvn(org.apache.pdfbox:fontbox)
 Requires:      mvn(org.apache.pdfbox:pdfbox)
@@ -75,46 +61,38 @@ Requires:      mvn(org.apache.pdfbox:pdfbox-io)
 Requires:      mvn(org.bouncycastle:bcmail-jdk15)
 Requires:      mvn(org.bouncycastle:bcpkix-jdk15)
 Requires:      mvn(org.bouncycastle:bcprov-jdk15)
-# needed by wrapper script
 Requires:      javapackages-tools
 Summary:       Apache PDFBox Tools
-
 %description tools
 This package contains command line tools for Apache PDFBox.
 
 %package io
 Summary:        Apache pdfbox-io
-
 %description io
 IO calasses subbpkg
 
 %package javadoc
 Summary:        Javadoc for %{name}
-
 %description javadoc
 This package contains the API documentation for %{name}.
 
 %package -n fontbox
 Summary:        Apache FontBox
-
 %description -n fontbox
 FontBox is a Java library used to obtain low level information from font
 files. FontBox is a subproject of Apache PDFBox.
 
 %package parent
 Summary:        Apache PDFBox Parent POM
-
 %description parent
 Apache PDFBox Parent POM.
 
 %package reactor
 Summary:        Apache PDFBox Reactor POM
-
 %description reactor
 Apache PDFBox Reactor POM.
 
 %package -n preflight
-# See: preflight/target/classes/META-INF/DEPENDENCIES
 Requires:      mvn(commons-logging:commons-logging)
 Requires:      mvn(org.apache.pdfbox:fontbox)
 Requires:      mvn(org.apache.pdfbox:pdfbox)
@@ -122,10 +100,8 @@ Requires:      mvn(org.apache.pdfbox:xmpbox)
 Requires:      mvn(org.bouncycastle:bcmail-jdk15)
 Requires:      mvn(org.bouncycastle:bcpkix-jdk15)
 Requires:      mvn(org.bouncycastle:bcprov-jdk15)
-# needed by wrapper script
 Requires:      javapackages-tools
 Summary:        Apache Preflight
-
 %description -n preflight
 The Apache Preflight library is an open source Java tool that implements 
 a parser compliant with the ISO-19005 (PDF/A) specification. Preflight is a 
@@ -133,7 +109,6 @@ subproject of Apache PDFBox.
 
 %package -n xmpbox
 Summary:        Apache XmpBox
-
 %description -n xmpbox
 The Apache XmpBox library is an open source Java tool that implements Adobe's
 XMP(TM) specification.  It can be used to parse, validate and create xmp
@@ -141,6 +116,7 @@ contents.  It is mainly used by subproject preflight of Apache PDFBox.
 XmpBox is a subproject of Apache PDFBox.
 
 %prep
+
 %setup -q
 find -name '*.class' -delete
 find -name '*.jar' -delete
@@ -208,57 +184,29 @@ rm pdfbox/src/test/java/org/apache/pdfbox/pdmodel/graphics/image/CCITTFactoryTes
 %pom_change_dep -r info.picocli:picocli info.picocli:picocli:4.7.6
 
 %build
-# Integration tests all require internet access to download test resources, so skip
-# Use compat version of lucene
-# Ignore test failures on F38 and earlier due to liberation fonts being too old
-##[INFO] --- xmvn-mojo:4.2.0:javadoc (default-cli) @ pdfbox-reactor ---
-##[INFO] Ignoring JPMS as source level 1.7 is below 9
-##[INFO] error: Source option 7 is no longer supported. Use 8 or later.
-##[INFO] error: Target option 7 is no longer supported. Use 8 or later.
-##[INFO] 2 errors
-# No idea where this is from. Disabling javadoc 
-%mvn_build -f --skip-javadoc -s -- -DskipITs -Dlucene.version=4 -Dmaven.test.failure.ignore=true -P !jdkGte9
 
+%mvn_build -f --skip-javadoc -s -- -DskipITs -Dlucene.version=4 -Dmaven.test.failure.ignore=true -P !jdkGte9
 %install
 %mvn_install
-
-# wrapper scripts
 %jpackage_script org.apache.pdfbox.debugger.PDFDebugger "" "" %{name}-debugger:commons-logging:fontbox:%{name}:bcmail:bcpkix:bcprov pdfbox-debugger true
 %jpackage_script org.apache.pdfbox.tools.PDFBox "" "" %{name}-tools:commons-logging:fontbox:%{name}:%{name}-debugger:bcmail:bcpkix:bcprov pdfbox true
 %jpackage_script org.apache.pdfbox.preflight.Validator_A1b "" "" preflight:jakarta-activation1/jakarta.activation-api-1:jaxb-api2/jakarta.xml.bind-api-2:commons-logging:fontbox:%{name}:xmpbox:bcmail:bcpkix:bcprov pdfbox-preflight true
+%oreon_autofiles fontbox usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles preflight usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles xmpbox usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-%{name}
-%doc README.md RELEASE-NOTES.txt
-%license LICENSE.txt NOTICE.txt
-
-%files debugger -f .mfiles-%{name}-debugger
-%{_bindir}/pdfbox-debugger
-%license LICENSE.txt NOTICE.txt
-
-%files tools -f .mfiles-%{name}-tools
-%{_bindir}/pdfbox
-%license LICENSE.txt NOTICE.txt
-
-%files io -f .mfiles-pdfbox-io
-%license LICENSE.txt NOTICE.txt
-
-%files -n fontbox -f .mfiles-fontbox
-%doc fontbox/README.txt
-%license LICENSE.txt NOTICE.txt
-
-%files parent -f .mfiles-%{name}-parent
-%license LICENSE.txt NOTICE.txt
-
-%files -n preflight -f .mfiles-preflight
-%{_bindir}/pdfbox-preflight
-%doc preflight/README.txt
-
-%files -n xmpbox -f .mfiles-xmpbox
-%doc xmpbox/README.txt
-%license LICENSE.txt NOTICE.txt
-
-%files reactor -f .mfiles-pdfbox-reactor
-%license LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
+%files -n pdfbox-debugger -f %{oreon_filedir}/pdfbox-debugger.list
+%files -n pdfbox-tools -f %{oreon_filedir}/pdfbox-tools.list
+%files -n pdfbox-io -f %{oreon_filedir}/pdfbox-io.list
+%files -n pdfbox-javadoc -f %{oreon_filedir}/pdfbox-javadoc.list
+%files -n fontbox -f %{oreon_filedir}/fontbox.list
+%files -n pdfbox-parent -f %{oreon_filedir}/pdfbox-parent.list
+%files -n pdfbox-reactor -f %{oreon_filedir}/pdfbox-reactor.list
+%files -n preflight -f %{oreon_filedir}/preflight.list
+%files -n xmpbox -f %{oreon_filedir}/xmpbox.list
 
 %changelog
+
 %autochangelog

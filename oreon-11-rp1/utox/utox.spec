@@ -1,79 +1,62 @@
-%global source0_hash ec4b27f4a55effeb26817dba549f823e7d15e917f3bf37f997e80948e93e4d62
-
+%global source0_hash 16177e5c3935d604257c6708e82d03ed3681ad00b3ec20a02b8da38df601ff76
 Name:       utox
 Version:    0.18.1
-Release:    %autorelease
-Summary:    The lightweight Tox client
-
-# Automatically converted from old format: MIT or GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        The lightweight Tox client
 License:    LicenseRef-Callaway-MIT OR GPL-3.0-or-later
 URL:        https://github.com/uTox/uTox/
-Source0:    %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/uTox/uTox//archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:    %{name}.appdata.xml
-# git clone https://github.com/uTox/uTox
-# cd uTox
-# git checkout v0.18.1
-# git submodule init ; git submodule update
-# tar -zcvf third_party.tar.gz third_party/
 Source2:    third_party.tar.gz
-
-# https://github.com/uTox/uTox/issues/1541
-# ExcludeArch:    s390x
-
-BuildRequires:  gcc-c++
+Requires:       hicolor-icon-theme
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
 BuildRequires:  libappstream-glib
 BuildRequires:  pkgconfig(check)
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(filteraudio)
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(gtk+-2.0)
-BuildRequires:  pkgconfig(opus)
-BuildRequires:  pkgconfig(vpx)
-BuildRequires:  pkgconfig(openal)
+BuildRequires:  pkgconfig(libsodium)
 BuildRequires:  pkgconfig(libv4l2)
+BuildRequires:  pkgconfig(openal)
+BuildRequires:  pkgconfig(opus)
+BuildRequires:  pkgconfig(toxcore)
+BuildRequires:  pkgconfig(vpx)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xrender)
-BuildRequires:  pkgconfig(libsodium)
-BuildRequires:  pkgconfig(toxcore)
-Requires:       hicolor-icon-theme
-
+# /oreon:deps
 %description
 %summary
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p 1 -n uTox-%{version}
 %autosetup -N -T -D -a 2 -n uTox-%{version}
 
 %build
-# We use CMAKE_BUILD_TYPE="Release" to turn ASAN off
+
 %cmake -DCMAKE_BUILD_TYPE="Release"
 %cmake_build
-
 %install
 %cmake_install
 install -Dp -m 644 %{SOURCE1} %{buildroot}/%{_datadir}/metainfo/%{name}.appdata.xml
 rm -rf %{buildroot}/%{_datadir}/icons/hicolor/14x14
+%oreon_autofiles main
 
 %check
-# Test "chrono" fails on armv7l
+
 %ifnarch %{arm}
 %ctest
 %endif
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/%{name}.appdata.xml
-
-%files
-%license LICENSE
-%doc README.md CHANGELOG.md
-%{_bindir}/%{name}
-%{_datadir}/metainfo/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{name}*
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

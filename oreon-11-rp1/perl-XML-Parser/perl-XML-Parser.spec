@@ -1,61 +1,53 @@
 %global source0_hash a358fd7c49f5e27717a644a9102bd21dc7fc25a415983279c59b1580e2b62a58
-
-BuildRequires:  perl(File::ShareDir)
 Name:           perl-XML-Parser
 Version:        2.59
 Release:        1%{?dist}
 Summary:        Perl module for parsing XML documents
-
 License:        Artistic-2.0
 Url:            https://metacpan.org/release/XML-Parser
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-%{version}.tar.gz
-
-# Build
-BuildRequires:  perl(File::ShareDir::Install)
+Requires:       perl(IO::File)
+Requires:       perl(IO::Handle)
+Requires:       perl(LWP::UserAgent)
+Requires:       perl(URI)
+Requires:       perl(URI::file)
+%{?perl_default_filter}
+%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(XML::Parser\\)$
+Provides:       perl(XML::Parser)
+Provides:       perl(XML::Parser::PerlSAX)
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  expat-devel
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  glibc-common
 BuildRequires:  make
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(Devel::CheckLib) >= 1.16
-BuildRequires:  perl(English)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(lib)
-# Runtime
 BuildRequires:  perl(Carp)
-BuildRequires:  perl(FileHandle)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Devel::CheckLib)
+BuildRequires:  perl(English)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::ShareDir)
+BuildRequires:  perl(File::ShareDir::Install)
 BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(if)
+BuildRequires:  perl(FileHandle)
 BuildRequires:  perl(IO::File)
 BuildRequires:  perl(IO::Handle)
-# LWPExternEnt.pl script is loaded by Parser.pm
 BuildRequires:  perl(LWP::UserAgent)
-BuildRequires:  perl(overload)
-BuildRequires:  perl(strict)
+BuildRequires:  perl(Test)
+BuildRequires:  perl(Test::More)
 BuildRequires:  perl(URI)
 BuildRequires:  perl(URI::file)
 BuildRequires:  perl(XSLoader)
-# Tests
 BuildRequires:  perl(if)
-BuildRequires:  perl(Test)
-BuildRequires:  perl(Test::More)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-Requires:       perl(IO::File)
-Requires:       perl(IO::Handle)
-Requires:       perl(LWP::UserAgent)
-Requires:       perl(URI)
-Requires:       perl(URI::file)
-
-%{?perl_default_filter}
-%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(XML::Parser\\)$
-
-Provides:       perl(XML::Parser)
-Provides:       perl(XML::Parser::PerlSAX)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module provides ways to parse XML documents. It is built on top
 of XML::Parser::Expat, which is a lower level interface to James
@@ -71,12 +63,12 @@ creation time.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n XML-Parser-%{version} 
 chmod 644 samples/{canonical,xml*}
@@ -95,28 +87,22 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 OPTIMIZE="$RPM_OPT_FLAGS"
 %{make_build}
-
 %install
 %{make_install}
 find $RPM_BUILD_ROOT -type f -name '*.bs' -a -size 0 -delete
 %{_fixperms} $RPM_BUILD_ROOT/*
-
 for file in samples/REC-xml-19980210.xml; do
   iconv -f iso-8859-1 -t utf-8 < "$file" > "${file}_"
   mv -f "${file}_" "$file"
   perl -i -pe "s/encoding='ISO-8859-1'/encoding='UTF-8'/" "$file"
 done
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t samples %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Some tests write into temporary files/directories. The easiest solution
-# is to copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -125,42 +111,15 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%doc README.md Changes samples/
-%license LICENSE
-%{perl_vendorarch}/XML/
-%{perl_vendorarch}/auto/XML/
-%{_mandir}/man3/XML::Parser*.3*
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/big5.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/euc-kr.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/ibm866.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-15.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-2.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-3.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-4.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-5.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-7.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-8.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/iso-8859-9.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/koi8-r.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/windows-1250.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/windows-1251.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/windows-1252.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/windows-1255.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-euc-jp-jisx0221.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-euc-jp-unicode.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-sjis-cp932.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-sjis-jdk117.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-sjis-jisx0221.enc
-%{_libdir}/perl5/vendor_perl/auto/share/dist/XML-Parser/x-sjis-unicode.enc
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-XML-Parser-tests -f %{oreon_filedir}/perl-XML-Parser-tests.list
 
 %changelog
+
 %autochangelog

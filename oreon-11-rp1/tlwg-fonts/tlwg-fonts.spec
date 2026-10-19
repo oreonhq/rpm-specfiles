@@ -1,32 +1,21 @@
 %global source0_hash 2531d3e02de1d293e4a9f8527ac4d3d044a845f49dc2d314c5766b4f68730735
-
-# SPDX-License-Identifier: MIT
-
 %global fontname tlwg-fonts
 %global archivename fonts-tlwg
-
 BuildArch: noarch
-BuildRequires: make
-BuildRequires: fontforge >= 20071110
-
 Version: 0.7.4
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-or-later AND Bitstream-Vera
 URL:     https://linux.thai.net/projects/fonts-tlwg
-
 %global foundry           TLWG
 %global fontlicenses      COPYING
 %global fontdocs          AUTHORS README NEWS
-
 %global common_description %{expand:
 %{archivename} provides a collection of free scalable Thai fonts.
 }
-
 %global obsoletes_thai()\
 %define familyname %1 \
 Obsoletes:       thai-scalable-%{familyname}-fonts < 0.7.4-7 \
 Provides:        thai-scalable-%{familyname}-fonts = %{version}-%{release} \
-
 %global fontfamily1       Garuda
 %global fontsummary1      Thai Garuda fonts
 %global fontpkgheader1    %{expand:
@@ -36,10 +25,8 @@ Provides:        thai-scalable-%{familyname}-fonts = %{version}-%{release} \
 %global fontconfs1        %{SOURCE13}
 %global fontdescription1  %{expand:
 %{common_description}
-
 This package provides the Garuda family of Thai fonts.
 }
-
 %global fontfamily2       Kinnari
 %global fontsummary2      Thai Kinnari fonts
 %global fontpkgheader2    %{expand:
@@ -49,10 +36,8 @@ This package provides the Garuda family of Thai fonts.
 %global fontconfs2        %{SOURCE14}
 %global fontdescription2  %{expand:
 %{common_description}
-
 This package provides the Kinnari family of Thai fonts.
 }
-
 %global fontfamily3       Loma
 %global fontsummary3      Thai Loma fonts
 %global fontpkgheader3    %{expand:
@@ -61,10 +46,8 @@ This package provides the Kinnari family of Thai fonts.
 %global fonts3            nectec/Loma*.otf
 %global fontdescription3  %{expand:
 %{common_description}
-
 This package provides the Loma family of Thai fonts.
 }
-
 %global fontfamily4       Norasi
 %global fontsummary4      Thai Norasi fonts
 %global fontpkgheader4    %{expand:
@@ -74,10 +57,8 @@ This package provides the Loma family of Thai fonts.
 %global fontconfs4        %{SOURCE11}
 %global fontdescription4  %{expand:
 %{common_description}
-
 This package provides the Norasi family of Thai fonts.
 }
-
 %global fontfamily5       Purisa
 %global fontsummary5      Thai Purisa fonts
 %global fontpkgheader5    %{expand:
@@ -86,10 +67,8 @@ This package provides the Norasi family of Thai fonts.
 %global fonts5            tlwg/Purisa*.otf
 %global fontdescription5  %{expand:
 %{common_description}
-
 This package provides the Purisa family of Thai fonts.
 }
-
 %global fontfamily6       Sawasdee
 %global fontsummary6      Thai Sawasdee fonts
 %global fontpkgheader6    %{expand:
@@ -98,10 +77,8 @@ This package provides the Purisa family of Thai fonts.
 %global fonts6            tlwg/Sawasdee*.otf
 %global fontdescription6  %{expand:
 %{common_description}
-
 This package provides the Sawasdee family of Thai fonts.
 }
-
 %global fontfamily7       Tlwg Mono
 %global fontsummary7      Thai Tlwg Mono fonts
 %global fontpkgheader7    %{expand:
@@ -110,10 +87,8 @@ This package provides the Sawasdee family of Thai fonts.
 %global fonts7            tlwg/TlwgMono*.otf
 %global fontdescription7  %{expand:
 %{common_description}
-
 This package provides the Tlwg Mono family of Thai fonts.
 }
-
 %global fontfamily8       Tlwg Typewriter
 %global fontsummary8      Thai Tlwg Typewriter fonts
 %global fontpkgheader8    %{expand:
@@ -122,10 +97,8 @@ This package provides the Tlwg Mono family of Thai fonts.
 %global fonts8            tlwg/TlwgTypewriter*.otf
 %global fontdescription8  %{expand:
 %{common_description}
-
 This package provides the Tlwg Typewriter family of Thai fonts.
 }
-
 %global fontfamily9       Tlwg Typist
 %global fontsummary9      Thai Tlwg Typist fonts
 %global fontpkgheader9    %{expand:
@@ -134,10 +107,8 @@ This package provides the Tlwg Typewriter family of Thai fonts.
 %global fonts9            tlwg/TlwgTypist*.otf
 %global fontdescription9  %{expand:
 %{common_description}
-
 This package provides the Tlwg Typist family of Thai fonts.
 }
-
 %global fontfamily10       Tlwg Typo
 %global fontsummary10      Thai Tlwg Typo fonts
 %global fontpkgheader10    %{expand:
@@ -146,10 +117,8 @@ This package provides the Tlwg Typist family of Thai fonts.
 %global fonts10            tlwg/TlwgTypo*.otf
 %global fontdescription10  %{expand:
 %{common_description}
-
 This package provides the Tlwg Typo family of Thai fonts.
 }
-
 %global fontfamily11       Umpush
 %global fontsummary11      Thai Umpush fonts
 %global fontpkgheader11    %{expand:
@@ -159,10 +128,8 @@ This package provides the Tlwg Typo family of Thai fonts.
 %global fontconfs11        %{SOURCE16}
 %global fontdescription11  %{expand:
 %{common_description}
-
 This package provides the Umpush family of Thai fonts.
 }
-
 %global fontfamily12       Laksaman
 %global fontsummary12      Thai Laksaman fonts
 %global fontpkgheader12    %{expand:
@@ -172,10 +139,8 @@ This package provides the Umpush family of Thai fonts.
 %global fontconfs12        %{SOURCE15}
 %global fontdescription12  %{expand:
 %{common_description}
-
 This package provides the Laksaman family of Thai fonts.
 }
-
 %global fontfamily13       Waree
 %global fontsummary13      Thai Waree fonts
 %global fontpkgheader13    %{expand:
@@ -187,42 +152,47 @@ Provides:  thai-scalable-fonts-common = %{version}-%{release}
 %global fontconfs13        %{SOURCE12}
 %global fontdescription13  %{expand:
 %{common_description}
-
 This package provides the Waree family of Thai fonts.
 }
-
-Source0:  http://linux.thai.net/pub/ThaiLinux/software/%{archivename}/%{archivename}-%{version}.tar.xz
+Source0:        http://linux.thai.net/pub/ThaiLinux/software/%{archivename}/%{archivename}-%{version}.tar.xz
 Source11: 68-thai-scalable-norasi.conf
 Source12: 68-thai-scalable-waree.conf
 Source13: 90-thai-scalable-synthetic-garuda.conf
 Source14: 90-thai-scalable-synthetic-kinnari.conf
 Source15: 90-thai-scalable-synthetic-laksaman.conf
 Source16: 90-thai-scalable-synthetic-umpush.conf
-
 Name:     tlwg-fonts
-Summary:  Thai TrueType fonts
+Summary:        Thai TrueType fonts
+# oreon:deps
+BuildRequires:  fontforge
+BuildRequires:  make
+# /oreon:deps
 %description
 %wordwrap -v common_description
 
 %fontpkg -a
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{archivename}-%{version}
 
 %build
+
 %configure
 make
 %fontbuild -a
-
 %install
 %fontinstall -a
+%oreon_autofiles main
 
 %check
-%fontcheck -a
 
+%fontcheck -a
 %fontfiles -a
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

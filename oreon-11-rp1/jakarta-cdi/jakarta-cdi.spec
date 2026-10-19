@@ -1,5 +1,4 @@
-%global source0_hash 0b912cfe45ec4e3ff00c98ea6eaa9bd7523c8c903788e64b8b991467b885620d
-
+%global source0_hash 1a53eb1889334759e2a2f341d173c17889e6489161730ddee0d3c0af90074335
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,29 +80,22 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           jakarta-cdi
 Version:        5.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Jakarta Contexts and Dependency Injection
 License:        Apache-2.0
 URL:            https://jakarta.ee/specifications/cdi/2.0/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/jakartaee/cdi/archive/%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(javax.inject:javax.inject)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 %endif
-
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 5.0.0-23
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Jakarta Contexts Dependency Injection specifies a means for obtaining
 objects in such a way as to maximize reusability, testability and
@@ -111,6 +103,7 @@ maintainability compared to traditional approaches such as
 constructors, factories, and service locators (e.g., JNDI).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n cdi-%{version}
@@ -127,14 +120,14 @@ rm -rf api/src/main/java/javax/enterprise/{context/,inject/spi/,inject/se/,injec
 %mvn_alias :jakarta.enterprise.cdi-api javax.enterprise:cdi-api
 
 %build
-%mvn_build -f -j
 
+%mvn_build -f -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

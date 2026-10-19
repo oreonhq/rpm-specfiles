@@ -1,63 +1,54 @@
 %global source0_hash 7dc2244a2f84a4bfb1d36c37bac80cd78e35cdc5c119206d87b018e1445f3a3f
-
 Name:           python-humanize
 Version:        4.16.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python humanize utilities
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/python-humanize/humanize
-Source:         %{pypi_source humanize}
-
+Source0:        https://files.pythonhosted.org/packages/source/h/humanize/humanize-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatchling) >= 1.27
+Requires:       python3-humanize = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-humanize+tests
+Summary:        Metapackage for python3-humanize tests extras
+Requires:       python3-humanize = %{version}-%{release}
+Requires:       python3dist(pytest) >= 9
+Provides:       python3dist(humanize[tests]) = %{version}-%{release}
 
+%description -n python3-humanize+tests
+Metapackage for python3-humanize tests extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'humanize' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-humanize
-Summary:        %{summary}
-
-%description -n python3-humanize %_description
+Summary:        Python humanize utilities
+%description -n python3-humanize
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-humanize tests
-
 
 %prep
-%autosetup -p1 -n humanize-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir humanize-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-humanize usr/lib/python3*/site-packages/humanize* usr/lib64/python3*/site-packages/humanize* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/humanize* usr/lib64/python3*/site-packages/humanize* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-humanize -f %{pyproject_files}
+%files
+%files -n python3-humanize -f %{oreon_filedir}/python3-humanize.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.15.0-1
 - Prepare for Oreon 11 (RP1)

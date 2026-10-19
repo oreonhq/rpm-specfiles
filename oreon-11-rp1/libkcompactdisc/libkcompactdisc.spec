@@ -1,43 +1,28 @@
-%global source0_hash none
-
+%global source0_hash 02e5bb5330a2dd9fbae0dba1e1c8536a78dc1f88ba2756e8b96f928156d3c180
 %global stable_kf6 stable
-
-
 Name:    libkcompactdisc 
 Version: 25.12.2
-Release: 1%{?dist}
-Summary: A KDE compact disc library
-
-# License for this library is very nebulous.
+Release:        1%{?dist}
+Summary:        A KDE compact disc library
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/multimedia/libkcompactdisc
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-## upstreamable patches
-
-BuildRequires: gcc-c++
-BuildRequires: cmake
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6Solid)
-BuildRequires: cmake(KF6I18n)
-
-BuildRequires: cmake(Qt6DBus)
-
-BuildRequires: pkgconfig(alsa)
-BuildRequires: pkgconfig(phonon4qt6)
-
-# historical conflicts
-# when split occured (kdemultimedia to libkcompactdisc)
 Conflicts: kdemultimedia-libs < 6:4.8.80
-# translations moved here (during kf5-libkcompactdisc)
 Conflicts: kde-l10n < 17.03
- # translations conflict with kf5-libkcompactdisc
 Conflicts: kf5-libkcompactdisc < 24.01.85
 Obsoletes: kf5-libkcompactdisc < 24.01.85
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Solid)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  pkgconfig(alsa)
+BuildRequires:  pkgconfig(phonon4qt6)
+# /oreon:deps
 %description
 %{summary}.
 
@@ -48,36 +33,23 @@ Obsoletes: kf5-libkcompactdisc-devel < 24.01.85
 %description devel
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6 \
 	-DQT_MAJOR_VERSION=6
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html --with-man
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%license COPYING*
-%{_kf6_libdir}/libKCompactDisc6.so.5*
-
-%files devel
-%{_includedir}/KCompactDisc6/
-%{_kf6_libdir}/libKCompactDisc6.so
-%{_kf6_libdir}/cmake/KCompactDisc6/
-%{_qt6_archdatadir}/mkspecs/modules/qt_KCompactDisc.pri
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Sun Feb 08 2026 Yaakov Selkowitz <yselkowi@redhat.com> - 25.12.2-1
 - 25.12.2
 

@@ -1,34 +1,23 @@
+%global source1_hash 358f60c1f471bec9c5275395466e3f9fc16d7e655c85b42cdca31cb05f9b0d3c
 %global source0_hash 1b4c9cd5cd4cbcce8ad15f364e62dfc2de1d3f663dfd9931a35ebd190fbbdbbc
 %{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
-
-# Review: https://bugzilla.redhat.com/show_bug.cgi?id=567257
-
-# Upstream git:
-# git://pcmanfm.git.sourceforge.net/gitroot/pcmanfm/libfm
-# add bootstrap, need to build menu-cache in epel7
 %global         use_release  0
 %global         use_gitbare  1
-
 %if 0%{?use_gitbare} < 1
-# force
 %global         use_release  1
 %endif
-
 %global		git_version	%{nil}
 %global		git_ver_rpm	%{nil}
 %global		git_builddir	%{nil}
-
 %if 0%{?use_gitbare}
 %global		gittardate		20251015
 %global		gittartime		1400
 %define		use_gitcommit_as_rel		0
-
 %global		gitbaredate	20251214
 %global		git_rev		7e575d13fcf0532fc181fc26391ad6fd7717ed66
 %global		git_short		%(echo %{git_rev} | cut -c-8)
 %global		git_version	%{gitbaredate}git%{git_short}
-
 %if 0%{?use_gitcommit_as_rel}
 %global		git_ver_rpm	^%{git_version}
 %global		git_builddir	-%{git_version}
@@ -36,91 +25,53 @@
 %global		git_ver_rpm	%{nil}
 %global		git_builddir	%{nil}
 %endif
-
 %endif
-
 %global		main_version	1.4.1
-
 %{!?bootstrap:%global bootstrap 0}
 %global         build_doc   1
-
 %undefine        _changelog_trimtime
-
 Name:           libfm
 Version:        %{main_version}%{git_ver_rpm}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        GIO-based library for file manager-like programs
-
-# src/actions/	GPL-2.0-or-later
-# src/base/	LGPL-2.1-or-later
-# src/demo/	GPL-2.0-or-later
-# src/extra/	LGPL-2.1-or-later
-# src/fm-gtk.{c,h}	GPL-2.0-or-later
-# src/gtk-compat.c	GPL-2.0-or-later
-# src/*.c		(rest) LGPL-2.1-or-later
-# src/gio/		GPL-2.0-or-later
-# src/gtk/exo/	LGPL-2.1-or-later AND GPL-2.0-or-later
-# src/gtk/		GPL-2.0-or-later AND LGPL-2.1-or-later
-# src/job/		LGPL-2.1-or-later
-# src/modules/	GPL-2.0-or-later
-# src/tests/	GPL-2.0-or-later
-# src/tools/	GPL-2.0-or-later
-# src/udisks/	GPL-2.0-or-later
-
-# SPDX confirmed
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            http://pcmanfm.sourceforge.net/
 %if 0%{?use_release} >= 1
-Source0:        http://downloads.sourceforge.net/pcmanfm/%{name}-%{mainver}%{?prever}.tar.xz
+Source0:        %{name}-%{gittardate}T%{gittartime}.tar.gz
 Source1:        https://raw.githubusercontent.com/lxde/libfm/master/autogen.sh
 %endif
 %if 0%{?use_gitbare} >= 1
-Source0:        libfm-%{gittardate}T%{gittartime}.tar.gz
 %endif
 Source10:       create-libfm-git-bare-tarball.sh
-
-# Make fm_config_load_from_key_file don't replace string key value
-# when subsequent config file does not contain such key but previous key had
-# (related to bug 2011471)
 Patch1:         libfm-1.3.2-0001-fm_config_load_from_key_file-don-t-replace-string-va.patch
-# http://sourceforge.net/p/pcmanfm/feature-requests/385/
-#Patch1000:      http://sourceforge.net/p/pcmanfm/feature-requests/_discuss/thread/0a50a386/597e/attachment/libfm-1.2.3-moduledir-gtkspecific-v02.patch
 Patch1000:      libfm-1.3.0.2-moduledir-gtkspecific-v03.patch
-
-BuildRequires:  pkgconfig(gio-unix-2.0) >= 2.26.0
-BuildRequires:  pkgconfig(glib-2.0) >= 2.27.0
-BuildRequires:  pkgconfig(gtk+-2.0)
-BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(pango)
-BuildRequires:  pkgconfig(cairo)
-BuildRequires:  pkgconfig(dbus-glib-1)
-BuildRequires:  pkgconfig(libexif)
-
 %if ! 0%{?bootstrap}
-BuildRequires:  pkgconfig(libmenu-cache) >= 0.3.2
 %endif
-
-BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  gettext
-BuildRequires:  intltool
-BuildRequires:  desktop-file-utils
-
-BuildRequires:  gtk-doc
-BuildRequires:  libxslt
-BuildRequires:  %{_bindir}/valac
-
-# Patch1000 needs the below anyway
-BuildRequires:  automake
-BuildRequires:  libtool
-
-# Anyway use git
-BuildRequires:  git
-
 %if 0%{?build_doc} < 1
 Obsoletes:      %{name}-devel-docs < 0.1.15
 %endif
-
+# oreon:deps
+BuildRequires:  //bin/valac
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  git
+BuildRequires:  gtk-doc
+BuildRequires:  intltool
+BuildRequires:  libtool
+BuildRequires:  libxslt
+BuildRequires:  make
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(dbus-glib-1)
+BuildRequires:  pkgconfig(gio-unix-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(libexif)
+BuildRequires:  pkgconfig(libmenu-cache)
+BuildRequires:  pkgconfig(pango)
+# /oreon:deps
 %description
 LibFM is a GIO-based library used to develop file manager-like programs. It is
 developed as the core of next generation PCManFM and takes care of all file-
@@ -134,7 +85,6 @@ This package contains the generic non-gui functions of libfm.
 Summary:        File manager-related GTK+ widgets of %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       gvfs
-
 %description    gtk
 libfm is a GIO-based library used to develop file manager-like programs. It is
 developed as the core of next generation PCManFM and takes care of all file-
@@ -148,7 +98,6 @@ This package provides useful file manager-related GTK+ 3 widgets.
 Summary:        File manager-related GTK+ widgets of %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       gvfs
-
 %description    gtk2
 libfm is a GIO-based library used to develop file manager-like programs. It is
 developed as the core of next generation PCManFM and takes care of all file-
@@ -164,7 +113,6 @@ Requires:       %{name}-gtk%{?isa} = %{version}-%{release}
 Obsoletes:      lxshortcut < 0.1.3
 Provides:       lxshortcut = %{version}-%{release}
 Provides:       lxshortcut%{?_isa} = %{version}-%{release}
-
 %description    gtk-utils
 This package contains some GTK+ related utility files for
 %{name}.
@@ -172,7 +120,6 @@ This package contains some GTK+ related utility files for
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -181,7 +128,6 @@ developing applications that use %{name}.
 Summary:        Common Development files for %{name}-gtk
 Requires:       %{name}-devel = %{version}-%{release}
 BuildArch:		noarch
-
 %description    gtk-devel-common
 The %{name}-gtk-devel package contains common header files for
 developing applications that use %{name}-gtk.
@@ -190,7 +136,6 @@ developing applications that use %{name}-gtk.
 Summary:        Development files for %{name}-gtk
 Requires:       %{name}-gtk%{?_isa} = %{version}-%{release}
 Requires:       %{name}-gtk-devel-common = %{version}-%{release}
-
 %description    gtk-devel
 The %{name}-gtk-devel package contains libraries files for
 developing applications that use %{name}-gtk.
@@ -199,18 +144,17 @@ developing applications that use %{name}-gtk.
 Summary:        Development files for %{name}-gtk2
 Requires:       %{name}-gtk2%{?_isa} = %{version}-%{release}
 Requires:       %{name}-gtk-devel-common = %{version}-%{release}
-
 %description    gtk2-devel
 The %{name}-gtk2-devel package contains libraries files for
 developing applications that use %{name}-gtk2.
 
 %package        devel-docs
 Summary:        Development documation for %{name}
-
 %description    devel-docs
 This package containg development documentation files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %if 0%{?use_release} >= 1
@@ -294,18 +238,15 @@ git commit -m "ignore po/ directory make check error" -a || true
 find . -name \*.vala | xargs touch
 
 %build
+
 %if 0%{?use_gitbare} >= 1
 cd libfm
 %endif
-
 %if 0%{?use_gitbare} >= 1
-# Workaround
-# Once generate files anyway
 ./configure %{?bootstrap:--with-extra-only}
 make dist
 rm -f config.status
 %endif
-
 for ver in \
 	2 \
 	3 \
@@ -315,7 +256,6 @@ do
 	mkdir _BUILDDIR_gtk${ver}
 	pushd _BUILDDIR_gtk${ver}
 	ln -sf ../configure
-
 	%configure \
 	    --srcdir=$(pwd)/.. \
 %if 0%{?bootstrap}
@@ -324,32 +264,20 @@ do
 	    --enable-gtk-doc \
 	    --enable-udisks \
 	    --with-gtk=${ver} \
-%if 0
-	    --enable-demo \
-%endif
 	    --disable-silent-rules \
 	    --disable-static
-
-	# To show translation status
 	make -C po -j1 GMSGFMT="msgfmt --statistics"
 	make %{?_smp_mflags} -k
-
 	make install DESTDIR=$(pwd)/../INSTDIR-gtk${ver} INSTALL="install -p"
 	popd
 done
-
 %install
 TOPDIR=$(pwd)
-
 %if 0%{?use_gitbare} >= 1
 cd libfm
 %endif
-
-# GTK3
 cp -a INSTDIR-gtk3/* $RPM_BUILD_ROOT
-
 rm -f $RPM_BUILD_ROOT%{_libdir}/pkgconfig/libfm-gtk.pc
-
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 %if ! 0%{?bootstrap}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
@@ -358,10 +286,8 @@ cd $TOPDIR
 %find_lang %{name}
 )
 %endif
-
 echo '%%defattr(-,root,root,-)' > $TOPDIR/base-header.files
 echo '%%defattr(-,root,root,-)' > $TOPDIR/gtk-header.files
-
 for f in $RPM_BUILD_ROOT%_includedir/%name-1.0/*.h
 do
   bf=$(basename $f)
@@ -380,17 +306,12 @@ do
     fi
   done
 done
-
-# GTK2
 %if ! 0%{?bootstrap}
 pushd INSTDIR-gtk2
-
 find . -name '*.la' -exec rm -f {} ';'
 rm -f .%{_libdir}/pkgconfig/libfm-gtk3.pc
-
 diff -urNp .%{_includedir}/%{name}-1.0 $RPM_BUILD_ROOT%{_includedir}/%name-1.0
 diff -urNp .%{_datadir}/%{name} $RPM_BUILD_ROOT/%{_datadir}/%{name}
-
 cp -a ./%{_libdir}/libfm-gtk* $RPM_BUILD_ROOT%{_libdir}
 cp -a ./%{_libdir}/pkgconfig/libfm-gtk.pc \
 	$RPM_BUILD_ROOT%{_libdir}/pkgconfig/
@@ -398,14 +319,14 @@ cp -a ./%{_libdir}/libfm/modules/gtk/ \
 	$RPM_BUILD_ROOT%{_libdir}/libfm/modules/
 popd
 %endif
-
 /usr/lib/rpm/check-rpaths
+%oreon_autofiles main usr/*/lib*.so.* usr/*/lib*.so.* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
 %check
+
 %if 0%{?use_gitbare} >= 1
 cd libfm
 %endif
-
 for ver in \
 	2 \
 	3 \
@@ -415,89 +336,23 @@ do
 	make check
 	popd
 done
-
 %pre devel
-# Directory -> symlink
+
 if [ -d %{_includedir}/libfm ] ; then
   rm -rf %{_includedir}/libfm
 fi
-
 %if 0%{?bootstrap}
-%files
-%else
-%files -f %{name}.lang
-%endif
-# FIXME: Add ChangeLog if not empty
-%doc AUTHORS
-%license COPYING
-%doc NEWS
-%doc README
-
-%if ! 0%{?bootstrap}
-%dir %{_sysconfdir}/xdg/libfm/
-%config(noreplace) %{_sysconfdir}/xdg/libfm/libfm.conf
-
-%{_datadir}/%{name}/
-%{_libdir}/%{name}.so.4*
-
-%dir %{_libdir}/libfm
-%dir %{_libdir}/libfm/modules
-%{_libdir}/libfm/modules/vfs-*.so
-%{_datadir}/mime/packages/libfm.xml
-%endif
-
-%{_libdir}/%{name}-extra.so.4*
-
-%if ! 0%{?bootstrap}
-%files gtk
-%{_libdir}/%{name}-gtk3.so.4*
-%{_libdir}/libfm/modules/gtk3/
-
-%files gtk-utils
-%{_mandir}/man1/libfm-pref-apps.1.*
-%{_mandir}/man1/lxshortcut.1.*
-
-%{_bindir}/libfm-pref-apps
-%{_bindir}/lxshortcut
-%{_datadir}/applications/libfm-pref-apps.desktop
-%{_datadir}/applications/lxshortcut.desktop
-%endif
-
-%files devel -f base-header.files
-%doc TODO
-%{_includedir}/libfm
-%dir %{_includedir}/libfm-1.0/
-
-%if ! 0%{?bootstrap}
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/libfm.pc
-%endif
-%{_libdir}/%{name}-extra.so
-%{_libdir}/pkgconfig/libfm-extra.pc
-
-%if ! 0%{?bootstrap}
-%files gtk-devel-common -f gtk-header.files
-%{_includedir}/libfm-1.0/fm-gtk.h
-
-%files gtk-devel
-%{_libdir}/%{name}-gtk3.so
-%{_libdir}/pkgconfig/libfm-gtk3.pc
-
-%files gtk2
-%{_libdir}/%{name}-gtk.so.4*
-%{_libdir}/libfm/modules/gtk/
-
-%files gtk2-devel
-%{_libdir}/%{name}-gtk.so
-%{_libdir}/pkgconfig/libfm-gtk.pc
-
-%if 0%{?build_doc}
-%files devel-docs
-%dir %{_datadir}/gtk-doc
-%dir %{_datadir}/gtk-doc/html
-%{_datadir}/gtk-doc/html/%{name}
-%endif
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n libfm-gtk -f %{oreon_filedir}/libfm-gtk.list
+%files -n libfm-gtk2 -f %{oreon_filedir}/libfm-gtk2.list
+%files -n libfm-gtk-utils -f %{oreon_filedir}/libfm-gtk-utils.list
+%files -n libfm-devel -f %{oreon_filedir}/libfm-devel.list
+%files -n libfm-gtk-devel-common -f %{oreon_filedir}/libfm-gtk-devel-common.list
+%files -n libfm-gtk-devel -f %{oreon_filedir}/libfm-gtk-devel.list
+%files -n libfm-gtk2-devel -f %{oreon_filedir}/libfm-gtk2-devel.list
+%files -n libfm-devel-docs -f %{oreon_filedir}/libfm-devel-docs.list
 
 %changelog
+
 %autochangelog
+%endif

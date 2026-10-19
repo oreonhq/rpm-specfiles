@@ -1,19 +1,16 @@
 %global source0_hash 26ed316a20217b2d54408fbdea9aea6dc64077ad6d8790169595199e5f2d9f26
-
 %global fontname ektype-mukta
 %global fontconf 67-%{fontname}
 %global common_desc \
 Mukta is a typeface available in \
 seven weights, supporting Devanagari, Gujarati, Tamil and Latin scripts.
-
 Name:			%{fontname}-fonts
 Version:			2.538
-Release:			20%{?dist}
-Summary:		Free Indian truetype/open type fonts
-# Automatically converted from old format: OFL - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Free Indian truetype/open type fonts
 License:			LicenseRef-Callaway-OFL
 URL:			https://github.com/EkType/Mukta
-Source0:		https://github.com/EkType/Mukta/releases/download/%{version}/Mukta.Font.Family.%{version}.zip
+Source0:        https://github.com/EkType/Mukta/releases/download/%{version}/Mukta.Font.Family.%{version}.zip
 Source1:		%{name}-devanagari-fontconfig.conf
 Source2:		%{name}-vaani-fontconfig.conf
 Source3:		%{name}-mahee-fontconfig.conf
@@ -23,17 +20,17 @@ Source6:		%{fontname}.vaani.metainfo.xml
 Source7:		%{fontname}.mahee.metainfo.xml
 Source8:		%{fontname}.malar.metainfo.xml
 BuildArch:		noarch
-BuildRequires:	fontpackages-devel
-BuildRequires:	libappstream-glib
 Requires:		fontpackages-filesystem
-
+# oreon:deps
+BuildRequires:  fontpackages-devel
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 %common_desc
 
 %package common
 Summary:		Common files of %{name}
 Requires:		fontpackages-filesystem
-
 %description common
 %common_desc
 
@@ -42,7 +39,6 @@ Summary:		Free Devanagari font
 Requires:		%{name}-common = %{version}-%{release}
 Obsoletes:		ekmukta-fonts < 1.2.2-9
 Provides:		ekmukta-fonts = %{version}-%{release}
-
 %description -n %{fontname}-devanagari-fonts
 %common_desc
 This package provides a free devanagari truetype/open type font.
@@ -52,7 +48,6 @@ This package provides a free devanagari truetype/open type font.
 %package -n %{fontname}-vaani-fonts
 Summary:		Free Gujarati font
 Requires:		%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-vaani-fonts
 %common_desc
 This package provides a free Gujarati truetype/open type font.
@@ -62,7 +57,6 @@ This package provides a free Gujarati truetype/open type font.
 %package -n %{fontname}-mahee-fonts
 Summary:		Free Gurmukhi font
 Requires:		%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-mahee-fonts
 %common_desc
 This package provides a free Gurmukhi truetype/open type font.
@@ -72,7 +66,6 @@ This package provides a free Gurmukhi truetype/open type font.
 %package -n %{fontname}-malar-fonts
 Summary:		Free Tamil font
 Requires:		%{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-malar-fonts
 %common_desc
 This package provides a free Tamil truetype/open type font.
@@ -80,6 +73,7 @@ This package provides a free Tamil truetype/open type font.
 %{_datadir}/metainfo/%{fontname}.malar.metainfo.xml
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -c  
@@ -92,8 +86,6 @@ install -m 0755 -d %{buildroot}%{_fontdir}
 install -m 0644 -p */*.ttf %{buildroot}%{_fontdir}
 install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
 		%{buildroot}%{_fontconfig_confdir}
-
-# Repeat for every font family
 install -m 0644 -p %{SOURCE1} \
 		%{buildroot}%{_fontconfig_templatedir}/%{fontconf}-devanagari.conf
 install -m 0644 -p %{SOURCE2} \
@@ -102,7 +94,6 @@ install -m 0644 -p %{SOURCE3} \
 		%{buildroot}%{_fontconfig_templatedir}/%{fontconf}-mahee.conf
 install -m 0644 -p %{SOURCE4} \
 		%{buildroot}%{_fontconfig_templatedir}/%{fontconf}-malar.conf
-
 install -Dm 0644 -p %{SOURCE5} \
 	%{buildroot}%{_datadir}/metainfo/%{fontname}.devanagari.metainfo.xml
 install -Dm 0644 -p %{SOURCE6} \
@@ -111,7 +102,6 @@ install -Dm 0644 -p %{SOURCE7} \
 	%{buildroot}%{_datadir}/metainfo/%{fontname}.mahee.metainfo.xml
 install -Dm 0644 -p %{SOURCE8} \
 	%{buildroot}%{_datadir}/metainfo/%{fontname}.malar.metainfo.xml
-
 for fconf in %{fontconf}-devanagari.conf \
 		%{fontconf}-vaani.conf \
 		%{fontconf}-mahee.conf \
@@ -119,14 +109,19 @@ for fconf in %{fontconf}-devanagari.conf \
 	ln -s %{_fontconfig_templatedir}/$fconf \
 		%{buildroot}%{_fontconfig_confdir}/$fconf
 done
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 appstream-util validate-relax --nonet \
 	%{buildroot}%{_datadir}/metainfo/%{fontname}.*.metainfo.xml
-
-%files common
-%doc AUTHORS.txt README.md CONTRIBUTORS.txt
-%license OFL.txt Copyright.txt 
+%files -f %{oreon_filedir}/main.list
+%files -n ektype-mukta-fonts-common -f %{oreon_filedir}/ektype-mukta-fonts-common.list
+%files -n ektype-mukta-devanagari-fonts -f %{oreon_filedir}/ektype-mukta-devanagari-fonts.list
+%files -n ektype-mukta-vaani-fonts -f %{oreon_filedir}/ektype-mukta-vaani-fonts.list
+%files -n ektype-mukta-mahee-fonts -f %{oreon_filedir}/ektype-mukta-mahee-fonts.list
+%files -n ektype-mukta-malar-fonts -f %{oreon_filedir}/ektype-mukta-malar-fonts.list
 
 %changelog
+
 %autochangelog

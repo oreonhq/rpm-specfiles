@@ -1,51 +1,33 @@
 %global source0_hash b070a34acf69ed92e523902683d104abb295d78b6f37663f4668e929b9e90470
-
 %undefine __cmake_in_source_build
-
-#global commit0 5db249cfb09b40cd80a933da8aa2fb8431054a35
-#global cdate0  20190318
-
 %global engine  dreamer
-
 Name:           dreamchess
 Version:        0.3.0%{?cdate0:~%{cdate0}git}
-Release:        7%{?dist}
+Release:        1%{?dist}
 Summary:        Portable chess game
-# GPL-3.0-or-later generally for most of sources
-# but BSD-3-Clause for dreamchess/src/include/gamegui/queue.h
 License:        GPL-3.0-or-later AND BSD-3-Clause
 URL:            https://www.%{name}.org/
 %if 0%{?cdate0}
-Source0:        https://github.com/%{name}/%{name}/archive/%{commit0}.tar.gz#/%{name}-%{commit0}.tar.gz
-%else
 Source0:        https://github.com/%{name}/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+%else
 %endif
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  bison flex
-
+Requires:       hicolor-icon-theme
+Requires:       chessprogram
+Requires:       %{name}-data = %{version}-%{release}
+# oreon:deps
 BuildRequires:  SDL2-devel
 BuildRequires:  SDL2_image-devel
 BuildRequires:  SDL2_mixer-devel
+BuildRequires:  bison
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
 BuildRequires:  expat-devel
+BuildRequires:  flex
+BuildRequires:  gcc-c++
 BuildRequires:  glew-devel
 BuildRequires:  help2man
-BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
-
-# icons get installed into hicolor folders
-Requires:       hicolor-icon-theme
-
-Requires:       chessprogram
-
-%if 0%{?fedora}
-Suggests:       %{name}-engine
-Suggests:       gnuchess
-%endif
-
-Requires:       %{name}-data = %{version}-%{release}
-
+# /oreon:deps
 %description
 DreamChess is an open source chess game.
 
@@ -63,11 +45,6 @@ A moderately strong chess engine as a sub-package: Dreamer.
 Summary:        A moderately strong chess engine for the game DreamChess
 License:        GPL-3.0-or-later
 Provides:       chessprogram
-
-%if 0%{?fedora}
-Supplements:    %{name}
-%endif
-
 %description engine
 Should this chess engine be too weak for you, then you can use any other
 XBoard-compatible chess engine, including the popular Crafty and GNU Chess.
@@ -76,29 +53,27 @@ XBoard-compatible chess engine, including the popular Crafty and GNU Chess.
 Summary:        Data files for the game DreamChess
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
-
 %description data
 Data files for the game DreamChess:
 Boards, Pieces, Sounds, Styles, Themes.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup %{?cdate0:-n %{name}-%{commit0}}
 
 %build
+
 %cmake \
  -DCMAKE_INSTALL_DOCDIR=%{_docdir}/%{name}
 %cmake_build
-# generate manpage
 help2man -o %{name}.1 --no-discard-stderr \
  --version-string='%{version}' -v'%{release}' \
  %{_vpath_builddir}/%{name}/src/%{name}
-
 %install
 %cmake_install
 install -D -t %{buildroot}%{_mandir}/man1 %{name}.1
-
 mkdir -p %{buildroot}%{_metainfodir}
 cat <<EOF > %{buildroot}%{_metainfodir}/%{name}.appdata.xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -158,29 +133,16 @@ cat <<EOF > %{buildroot}%{_metainfodir}/%{name}.appdata.xml
     <url type="homepage">%{url}</url>
 </component>
 EOF
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.appdata.xml
-
-%files
-%license LICENSE.txt
-%doc README.md NEWS.md AUTHORS.txt LICENSE.txt
-%{_bindir}/%{name}
-%{_datadir}/icons/hicolor/*/apps/%{name}.png
-%{_datadir}/applications/%{name}.desktop
-%{_mandir}/man*/%{name}.*
-%{_metainfodir}/%{name}.appdata.xml
-
-%files engine
-%license LICENSE.txt
-%doc AUTHORS.txt
-%{_bindir}/%{engine}
-%{_mandir}/man*/%{engine}.*
-
-%files data
-%license LICENSE.txt
-%{_datadir}/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n dreamchess-engine -f %{oreon_filedir}/dreamchess-engine.list
+%files -n dreamchess-data -f %{oreon_filedir}/dreamchess-data.list
 
 %changelog
+
 %autochangelog

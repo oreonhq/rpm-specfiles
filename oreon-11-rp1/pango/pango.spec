@@ -1,5 +1,4 @@
 %global source0_hash f138f964a8390c8aecc6c79dc18756989cc2d4db624b12f94a01a92ec57111ff
-
 %global glib2_version 2.80
 %global fribidi_version 1.0.6
 %global libthai_version 0.1.9
@@ -8,32 +7,13 @@
 %global libXft_version 2.0.0
 %global cairo_version 1.18
 %global freetype_version 2.1.5
-
 Name:    pango
 Version: 1.90.0
-Release: %autorelease
-Summary: System for layout and rendering of internationalized text
-
+Release:        1%{?dist}
+Summary:        System for layout and rendering of internationalized text
 License: LGPL-2.0-or-later
 URL:     https://pango.gnome.org/
 Source0:        https://download.gnome.org/sources/%{name}/1.90/%{name}-%{version}.tar.xz
-
-BuildRequires: pkgconfig(cairo) >= %{cairo_version}
-BuildRequires: pkgconfig(cairo-gobject) >= %{cairo_version}
-BuildRequires: pkgconfig(freetype2) >= %{freetype_version}
-BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}
-BuildRequires: pkgconfig(fontconfig) >= %{fontconfig_version}
-BuildRequires: pkgconfig(harfbuzz) >= %{harfbuzz_version}
-BuildRequires: pkgconfig(libthai) >= %{libthai_version}
-BuildRequires: pkgconfig(xft) >= %{libXft_version}
-BuildRequires: pkgconfig(fribidi) >= %{fribidi_version}
-BuildRequires: pkgconfig(gobject-introspection-1.0)
-BuildRequires: help2man
-BuildRequires: meson
-BuildRequires: gcc gcc-c++
-BuildRequires: gi-docgen
-BuildRequires: python3-docutils
-
 Requires: glib2%{?_isa} >= %{glib2_version}
 Requires: freetype%{?_isa} >= %{freetype_version}
 Requires: fontconfig%{?_isa} >= %{fontconfig_version}
@@ -42,10 +22,26 @@ Requires: harfbuzz%{?_isa} >= %{harfbuzz_version}
 Requires: libthai%{?_isa} >= %{libthai_version}
 Requires: libXft%{?_isa} >= %{libXft_version}
 Requires: fribidi%{?_isa} >= %{fribidi_version}
-
 Provides: pango-tests = %{version}-%{release}
 Obsoletes: pango-tests < 1.54.0-1
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gi-docgen
+BuildRequires:  help2man
+BuildRequires:  meson
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(cairo-gobject)
+BuildRequires:  pkgconfig(fontconfig)
+BuildRequires:  pkgconfig(freetype2)
+BuildRequires:  pkgconfig(fribidi)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(harfbuzz)
+BuildRequires:  pkgconfig(libthai)
+BuildRequires:  pkgconfig(xft)
+BuildRequires:  python3-docutils
+# /oreon:deps
 %description
 Pango is a library for laying out and rendering of text, with an emphasis
 on internationalization. Pango can be used anywhere that text layout is needed,
@@ -65,80 +61,41 @@ Requires: glib2-devel%{?_isa} >= %{glib2_version}
 Requires: freetype-devel%{?_isa} >= %{freetype_version}
 Requires: fontconfig-devel%{?_isa} >= %{fontconfig_version}
 Requires: cairo-devel%{?_isa} >= %{cairo_version}
-
 %description devel
 The pango-devel package includes the header files for the pango package.
 
 %package doc
 Summary: Developer documentation for pango
 Requires: pango%{?_isa} = %{version}-%{release}
-# Because web fonts from upstream are not bundled in the gi-docgen package,
-# packages containing documentation generated with gi-docgen should depend on
-# this metapackage to ensure the proper system fonts are present.
 Recommends: gi-docgen-fonts
-
 %description doc
 The pango-doc package contains developer documentation for the pango package.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n pango-%{version} -p1
-
-
+%global oreon_srcdir pango-%{version}
+%oreon_prep
 %build
+
 export CFLAGS='-std=c11 %optflags'
 %meson \
   -Dbuild-examples=true \
   -Ddocumentation=true
-
 %meson_build
-
-
 %install
 %meson_install
-
 PANGOXFT_SO=$RPM_BUILD_ROOT%{_libdir}/libpangoxft-1.0.so
 if ! test -e $PANGOXFT_SO; then
         echo "$PANGOXFT_SO not found; did not build with Xft support?"
         ls $RPM_BUILD_ROOT%{_libdir}
         exit 1
 fi
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-
-%files
-%license COPYING
-%doc NEWS README.md
-%{_libdir}/libpango*-*.so.*
-%{_bindir}/pango-list
-%{_bindir}/pango-segmentation
-%{_bindir}/pango-view
-%{_libdir}/girepository-1.0/Pango-1.0.typelib
-%{_libdir}/girepository-1.0/PangoCairo-1.0.typelib
-%{_libdir}/girepository-1.0/PangoFc-1.0.typelib
-%{_libdir}/girepository-1.0/PangoFT2-1.0.typelib
-%{_libdir}/girepository-1.0/PangoOT-1.0.typelib
-%{_libdir}/girepository-1.0/PangoXft-1.0.typelib
-
-%files devel
-%{_libdir}/libpango*.so
-%{_includedir}/*
-%{_libdir}/pkgconfig/*
-%{_datadir}/gir-1.0/Pango-1.0.gir
-%{_datadir}/gir-1.0/PangoCairo-1.0.gir
-%{_datadir}/gir-1.0/PangoFc-1.0.gir
-%{_datadir}/gir-1.0/PangoFT2-1.0.gir
-%{_datadir}/gir-1.0/PangoOT-1.0.gir
-%{_datadir}/gir-1.0/PangoXft-1.0.gir
-
-%files doc
-%{_docdir}/Pango/
-%{_docdir}/PangoCairo/
-%{_docdir}/PangoFT2/
-%{_docdir}/PangoFc/
-%{_docdir}/PangoOT/
-%{_docdir}/PangoXft/
-
+%files -f %{oreon_filedir}/main.list
+%files -n pango-devel -f %{oreon_filedir}/pango-devel.list
+%files -n pango-doc -f %{oreon_filedir}/pango-doc.list
 
 %changelog
+
 %autochangelog

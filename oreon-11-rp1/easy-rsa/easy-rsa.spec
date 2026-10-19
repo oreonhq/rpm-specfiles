@@ -1,18 +1,16 @@
 %global source0_hash 308743bc9fe871b902d47dbe98d749daff3a05b27531684f02625ce7208d4598
-
 Name:      easy-rsa
 Version:   3.2.7
-Release:   1%{?dist}
-
-Summary:   Simple shell based CA utility
+Release:        1%{?dist}
+Summary:        Simple shell based CA utility
 License:   GPL-2.0-only
-
 URL:       https://github.com/OpenVPN/easy-rsa
-Source0:   %{url}/releases/download/v%{version}/EasyRSA-%{version}.tgz
-
+Source0:        https://github.com/OpenVPN/%{name}/releases/download/v%{version}/EasyRSA-%{version}.tgz
 Requires:  openssl
 BuildArch: noarch
+# oreon:deps
 
+# /oreon:deps
 %description
 This is a small RSA key management package, based on the openssl
 command line tool, that can be found in the easy-rsa subdirectory
@@ -22,11 +20,9 @@ be used for building web certificates.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n EasyRSA-%{version} -p1
-
+%global oreon_srcdir EasyRSA-%{version}
+%oreon_prep
 %build
-#Nothing to build
 
 %install
 mkdir -p %{buildroot}%{_datadir}/easy-rsa/%{version}/
@@ -38,11 +34,10 @@ ln -s %{version} 3
 cp -rp easyrsa %{buildroot}%{_datadir}/easy-rsa/%{version}/
 cp -rp openssl-easyrsa.cnf %{buildroot}%{_datadir}/easy-rsa/%{version}/
 cp -rp x509-types %{buildroot}%{_datadir}/easy-rsa/%{version}/
+%oreon_autofiles main
 
-%files
-%doc ChangeLog *.md vars.example
-%license gpl-2.0.txt COPYING.md
-%{_datadir}/easy-rsa/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

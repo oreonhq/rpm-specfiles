@@ -1,50 +1,41 @@
 %global source0_hash 00c3d9c9ea935c6ea821cd1d96cbcba3547732d496f2619db60a64daf9cf7e76
-
 Name:           python-snakemake-executor-plugin-cluster-sync
 Version:        0.1.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A Snakemake executor plugin for cluster jobs that are executed synchronously
-
-# SPDX
 License:        MIT
 URL:            https://github.com/snakemake/snakemake-executor-plugin-cluster-sync
-# We use the GitHub archive instead of the PyPI sdist to get CHANGELOG.md and
-# the tests.
-Source:         %{url}/archive/v%{version}/snakemake-executor-plugin-cluster-sync-%{version}.tar.gz
-
-
+Source0:        https://github.com/snakemake/snakemake-executor-plugin-cluster-sync/archive/v%{version}/snakemake-executor-plugin-cluster-sync-%{version}.tar.gz
 BuildArch:      noarch
-
-# See: [tool.poetry.dev-dependencies] in pyproject.toml
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  snakemake >= 8
-
 %global common_description %{expand:
 %{summary}.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-snakemake-executor-plugin-cluster-sync = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-snakemake-executor-plugin-cluster-sync
-Summary:        %{summary}
-
+Summary:        A Snakemake executor plugin for cluster jobs that are executed synchronously
 %description -n python3-snakemake-executor-plugin-cluster-sync %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-snakemake-executor-plugin-cluster-sync usr/lib/python3*/site-packages/snakemake_executor_plugin_cluster_sync* usr/lib64/python3*/site-packages/snakemake_executor_plugin_cluster_sync* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/snakemake_executor_plugin_cluster_sync* usr/lib64/python3*/site-packages/snakemake_executor_plugin_cluster_sync* usr/bin/*
 
 %check
-%pytest -v tests/tests.py
 
-%files -n python3-snakemake-executor-plugin-cluster-sync -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md
-%doc README.md
+%pytest -v tests/tests.py
+%files
+%files -n python3-snakemake-executor-plugin-cluster-sync -f %{oreon_filedir}/python3-snakemake-executor-plugin-cluster-sync.list
 
 %changelog
+
 %autochangelog

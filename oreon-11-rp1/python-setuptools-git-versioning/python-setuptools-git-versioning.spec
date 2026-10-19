@@ -1,58 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 612dfcf184addac9e1c2216f4f229724b2390e5bf613fb925ae80b84f2529172
 Name:           python-setuptools-git-versioning
 Version:        3.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Use git repo data for building a version number according to PEP-440
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://setuptools-git-versioning.readthedocs.io
-Source:         %{pypi_source setuptools_git_versioning}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/setuptools_git_versioning/setuptools_git_versioning-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'setuptools-git-versioning' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(tomli) >= 2.0.1
+Requires:       python3-setuptools-git-versioning = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-setuptools-git-versioning
-Summary:        %{summary}
-
-%description -n python3-setuptools-git-versioning %_description
-
+Summary:        Use git repo data for building a version number according to PEP-440
+# oreon:reqs
+Requires:       python3dist(tomli) >= 2.0.1
+# /oreon:reqs
+%description -n python3-setuptools-git-versioning
 
 %prep
-%autosetup -p1 -n setuptools_git_versioning-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir setuptools_git_versioning-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-setuptools-git-versioning usr/lib/python3*/site-packages/setuptools_git_versioning* usr/lib64/python3*/site-packages/setuptools_git_versioning* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/setuptools_git_versioning* usr/lib64/python3*/site-packages/setuptools_git_versioning* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-setuptools-git-versioning -f %{pyproject_files}
-%{_bindir}/setuptools-git-versioning
+%files
+%files -n python3-setuptools-git-versioning -f %{oreon_filedir}/python3-setuptools-git-versioning.list
 
 %changelog
+
 %autochangelog

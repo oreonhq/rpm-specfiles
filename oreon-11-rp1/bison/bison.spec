@@ -1,49 +1,27 @@
-%global source0_hash none
-
+%global source1_hash aeff6fd7d7d7cad905ba3bc5228a2ccb95500c0f51fb4483e229c47c7c50f835
+%global source0_hash 9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2
 %global source2_key_fpr 7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E
-
-Summary: GNU general-purpose parser generator
+Summary:        GNU general-purpose parser generator
 Name: bison
 Version: 3.8.2
-Release: 15%{?dist}
-
-# An SPDX license string check done against bison-3.8.2 found strings
-# corresponding to the following licenses across the bison source tree:
+Release:        15%{?dist}
 License: GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Bison-exception-2.2 AND GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND LGPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later AND FSFULLR AND GFDL-1.3-or-later AND X11
-
 Source0:        https://mirrors.kernel.org/gnu/%{name}/%{name}-%{version}.tar.xz
 Source1:        https://mirrors.kernel.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
-# genereted from https://ftp.gnu.org/gnu/gnu-keyring.gpg via:
-# curl https://ftp.gnu.org/gnu/gnu-keyring.gpg | gpg2 --import
-# gpg2 --export --export-options export-minimal 7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E > gpgkey-7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E.gpg
 Source2: gpgkey-7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E.gpg
-
-# from Gentoo sys-devel/bison
 Patch0: bison-3.8.2-gcc15-glibcxx-assertions.patch
-
-# Upstream fix for GCC 16 change:
-# index-parse.c:1114:9: error: variable ‘yynerrs’ set but not used [-Werror=unused-but-set-variable=]
-# https://bugzilla.redhat.com/show_bug.cgi?id=2429571
 Patch1: https://github.com/akimd/bison/commit/a166d5450e3f47587b98f6005f9f5627dbe21a5b.patch
-
-# testsuite dependency
-BuildRequires: gcc-c++
-BuildRequires: autoconf
-BuildRequires: flex
-BuildRequires: gnupg2
-
 URL: https://www.gnu.org/software/%{name}/
-BuildRequires: m4 >= 1.4
-BuildRequires: make
-#java-1.7.0-openjdk-devel
 Requires: m4 >= 1.4
-
-# bison contains a copy of gnulib.  As a copylib, gnulib was granted
-# an exception that allows bundling it with other software.  For
-# details, see:
-# https://fedoraproject.org/wiki/Packaging:No_Bundled_Libraries#Exceptions
 Provides: bundled(gnulib)
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  gnupg2
+BuildRequires:  m4
+BuildRequires:  make
+# /oreon:deps
 %description
 Bison is a general purpose parser generator that converts a grammar
 description for an LALR(1) context-free grammar into a C program to
@@ -62,7 +40,6 @@ Bison.
 %package devel
 Summary: -ly library for development using Bison-generated parsers
 Provides: bison-static = %{version}-%{release}
-
 %description devel
 The bison-devel package contains the -ly library sometimes used by
 programs using Bison-generated parsers.  If you are developing programs
@@ -82,7 +59,6 @@ simple programs to supply minimal support for the generated parsers.
 
 %package runtime
 Summary: Runtime support files used by Bison-generated parsers
-
 %description runtime
 The bison-runtime package contains files used at runtime by parsers
 that Bison generates.  Packages whose binaries contain parsers
@@ -91,53 +67,39 @@ these files are available.  See the Internationalization in the
 Bison manual section for more information.
 
 %prep
+
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
 %build
+
 %configure
 %make_build
-
 %check
-make check
-#make maintainer-check
 
+make check
 %install
 %make_install
-
-# Remove unpackaged files.
 rm -f %{buildroot}%{_bindir}/yacc
 rm -f %{buildroot}%{_infodir}/dir
 rm -f %{buildroot}%{_mandir}/man1/yacc*
 rm -rf %{buildroot}%{_docdir}/%{name}/examples/*
 rm -f %{buildroot}%{_docdir}/%{name}/COPYING
 rm -f %{buildroot}%{_docdir}/%{name}/TODO
-
 %find_lang %{name}
 %find_lang %{name}-runtime
 %find_lang %{name}-gnulib
-
 gzip -9nf ${RPM_BUILD_ROOT}%{_infodir}/bison.info*
+%oreon_autofiles bison-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles bison-runtime usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# The distribution contains also source files.  These are used by m4
-# when the target parser file is generated.
-%files -f %{name}.lang -f %{name}-gnulib.lang
-%license COPYING
-%doc AUTHORS ChangeLog NEWS README THANKS
-%{_mandir}/*/bison*
-%{_datadir}/bison
-%{_infodir}/bison.info*
-%{_bindir}/bison
-%{_datadir}/aclocal/bison*.m4
-
-%files -f %{name}-runtime.lang runtime
-%license COPYING
-
-%files devel
-%license COPYING
-%{_libdir}/liby.a
+%files -f %{oreon_filedir}/main.list
+%files -n bison-devel -f %{oreon_filedir}/bison-devel.list
+%files -n bison-runtime -f %{oreon_filedir}/bison-runtime.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.8.2-15
 - Prepare for Oreon 11 (RP1)

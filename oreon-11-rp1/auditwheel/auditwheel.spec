@@ -1,27 +1,22 @@
-%global source0_hash 277f3b315ad0b04df0a2be2d126c3fd39930bc265df0f9589d78c970ff06f52b
-
+%global source0_hash d007c4fd8c9c4b5113690ab0b159e05c5aa9b2d31b69efc40875826cc095594b
 Name:           auditwheel
 Version:        6.8.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Cross-distribution Linux wheels auditing and relabeling
-
 License:        MIT
 URL:            https://github.com/pypa/auditwheel
-Source:         %{pypi_source}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/auditwheel/auditwheel-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-# For tests and runtime
-BuildRequires:  patchelf >= 0.14
 Requires:       patchelf >= 0.14
-
-# From src/auditwheel/_vendor/wheel/__init__.py
-# See the rationale in https://github.com/pypa/auditwheel/pull/275
-# This is also MIT
 %global wheel_version 0.36.2
 Provides:       bundled(python3dist(wheel)) = %{wheel_version}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61
+BuildRequires:  python3dist(setuptools_scm) >= 8
+Requires:       python3-auditwheel = %{version}-%{release}
+# /oreon:deps
 %description
 auditwheel is a command-line tool to facilitate the creation of Python wheel
 packages for Linux (containing pre-compiled binary extensions)
@@ -43,6 +38,7 @@ Packagers are advised that bundling,
 like static linking, may implicate copyright concerns.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -52,39 +48,25 @@ sed -E -i 's/(, ?)?\"patchelf\"//' pyproject.toml
 # docker is only used for integration testing we don't run
 sed -E -i 's/(, ?)?\"docker\"//' pyproject.toml
 
-%generate_buildrequires
-%pyproject_buildrequires -g test
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l auditwheel
+%oreon_autofiles main
 
 %check
-# Upstream uses nox, so we invoke pytest directly
-# Integration tests need docker manylinux images, so we only run unit
+
 %pytest -v tests/unit
-
 export %{py3_test_envvars}
-
-# Sanity check for the command line tool
 %{buildroot}%{_bindir}/auditwheel --help
 %{buildroot}%{_bindir}/auditwheel lddtree %{python3}
-
-# Assert the bundled wheel version
 test "$(%{python3} -c 'from auditwheel._vendor import wheel; print(wheel.__version__)')" == "%{wheel_version}"
-
-# Assert the policy files are installed
-# Regression test for https://github.com/pypa/auditwheel/issues/321
 for json in manylinux-policy.json musllinux-policy.json; do
   test -f %{buildroot}%{python3_sitelib}/auditwheel/policy/${json}
 done
-
-%files -f %{pyproject_files}
-%doc README.rst
-%{_bindir}/auditwheel
+%files
 
 %changelog
+
 %autochangelog

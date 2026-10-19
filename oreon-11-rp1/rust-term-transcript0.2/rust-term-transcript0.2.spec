@@ -1,96 +1,71 @@
 %global source0_hash 6d77280c9041d978e4ffedbdd19f710a1360085510c5e99dbcfec8e2f2bd4285
 %global debug_package %{nil}
 %bcond check 1
-
 %global crate term-transcript
-
 Name:           rust-term-transcript0.2
 Version:        0.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Snapshotting and snapshot testing for CLI / REPL applications
-
 License:        MIT OR Apache-2.0
 URL:            https://crates.io/crates/term-transcript
-Source:         %{crates_source}
-
-BuildRequires:  cargo-rpm-macros >= 24
-
-%global _description %{expand:
-Snapshotting and snapshot testing for CLI / REPL applications.}
-
-%description %{_description}
+Source0:        https://static.crates.io/crates/term-transcript/term-transcript-%{version}.crate
+# oreon:deps
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  rustc
+# /oreon:deps
+%description
 
 %package        devel
 Summary:        %{summary}
 BuildArch:      noarch
-
-%description    devel %{_description}
+%description    devel
 
 This package contains library source intended for building other packages which
 use the "%{crate}" crate.
 
-%files          devel
-%license %{crate_instdir}/LICENSE-APACHE
-%license %{crate_instdir}/LICENSE-MIT
-%doc %{crate_instdir}/CHANGELOG.md
-%doc %{crate_instdir}/README.md
-%{crate_instdir}/
-
 %package     -n %{name}+default-devel
-Summary:        %{summary}
+Summary:        Snapshotting and snapshot testing for CLI / REPL applications
 BuildArch:      noarch
-
-%description -n %{name}+default-devel %{_description}
+%description -n %{name}+default-devel
 
 This package contains library source intended for building other packages which
 use the "default" feature of the "%{crate}" crate.
 
-%files       -n %{name}+default-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+svg-devel
-Summary:        %{summary}
+Summary:        Snapshotting and snapshot testing for CLI / REPL applications
 BuildArch:      noarch
-
-%description -n %{name}+svg-devel %{_description}
+%description -n %{name}+svg-devel
 
 This package contains library source intended for building other packages which
 use the "svg" feature of the "%{crate}" crate.
 
-%files       -n %{name}+svg-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %package     -n %{name}+test-devel
-Summary:        %{summary}
+Summary:        Snapshotting and snapshot testing for CLI / REPL applications
 BuildArch:      noarch
-
-%description -n %{name}+test-devel %{_description}
+%description -n %{name}+test-devel
 
 This package contains library source intended for building other packages which
 use the "test" feature of the "%{crate}" crate.
 
-%files       -n %{name}+test-devel
-%ghost %{crate_instdir}/Cargo.toml
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
 %autosetup -n %{crate}-%{version}
-%cargo_prep
-
-%generate_buildrequires
-%cargo_generate_buildrequires
-
+%oreon_vendor_cargo
 %build
-%cargo_build
 
+%cargo_build
 %install
 %cargo_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with check}
 %check
+
 %cargo_test
 %endif
+%files -f %{oreon_filedir}/main.list
+%files -n rust-term-transcript0.2-devel -f %{oreon_filedir}/rust-term-transcript0.2-devel.list
 
 %changelog
+
 %autochangelog

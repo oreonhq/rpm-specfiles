@@ -1,17 +1,16 @@
 %global source0_hash 26a206663d7bc68e0bfc8489adf5d4e36ab0a3f94491b2d4eeb04904b9032609
-
 Name:           ansible-srpm-macros
 Version:        1
-Release:        20.1%{?dist}
+Release:        1%{?dist}
 Summary:        SRPM stage RPM packaging macros for Ansible collections
-
 License:        GPL-3.0-or-later
 URL:            https://github.com/ansible/ansible
 Source0:        macros.ansible-srpm
 Source1:        COPYING
-
 BuildArch:      noarch
+# oreon:deps
 
+# /oreon:deps
 %description
 This package provides SRPM-stage rpm automation to simplify the creation
 of Ansible collections.
@@ -19,21 +18,21 @@ of Ansible collections.
 The rest of the automation is provided by the ansible-packaging package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -T -c
 cp -a %{sources} .
 
 %build
-# Nothing to build
 
 %install
 install -Dpm0644 -t %{buildroot}%{_rpmmacrodir} %{SOURCE0}
 install -Dpm0644 %{SOURCE1} %{buildroot}%{_datadir}/licenses/%{name}/COPYING
+%oreon_autofiles main
 
-%files
-%license %{_datadir}/licenses/%{name}/COPYING
-%{_rpmmacrodir}/macros.ansible-srpm
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1-20.1
 - Import

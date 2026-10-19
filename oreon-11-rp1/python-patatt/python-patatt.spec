@@ -1,58 +1,45 @@
-%global source0_hash none
-
+%global source0_hash c226b5e7e449a4981b827c48e2586a928fa45b690af19a3892b9279b334f2551
 Name:           python-patatt
 Version:        0.8.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A simple library to add cryptographic attestation to patches sent via email
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT-0
 URL:            https://git.kernel.org/pub/scm/utils/patatt/patatt.git/about/
-Source:         %{pypi_source patatt}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/patatt/patatt-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'patatt' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 42
+Requires:       python3-patatt = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-patatt
-Summary:        %{summary}
-
-%description -n python3-patatt %_description
-
+Summary:        A simple library to add cryptographic attestation to patches sent via email
+# oreon:reqs
+Requires:       python3dist(pynacl) < 2.0
+Requires:       python3dist(pynacl) >= 1.5
+# /oreon:reqs
+%description -n python3-patatt
 
 %prep
-%autosetup -p1 -n patatt-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir patatt-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-patatt usr/lib/python3*/site-packages/patatt* usr/lib64/python3*/site-packages/patatt* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/patatt* usr/lib64/python3*/site-packages/patatt* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-patatt -f %{pyproject_files}
-%{_bindir}/patatt
+%files
+%files -n python3-patatt -f %{oreon_filedir}/python3-patatt.list
 
 %changelog
+
 %autochangelog

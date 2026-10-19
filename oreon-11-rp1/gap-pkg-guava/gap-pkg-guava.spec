@@ -1,27 +1,22 @@
 %global source0_hash f3ecfcd66163f37a850fc71806cb6cefc21b54a050c8a4df2d04c3392c51c348
-
 %global gap_pkgname guava
 %global giturl      https://github.com/gap-packages/guava
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        3.21
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Computing with error-correcting codes
-
 License:        GPL-2.0-or-later
 URL:            https://gap-packages.github.io/guava/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/v%{version}/%{gap_upname}-%{version}.tar.gz
-# Patch to fix C compiler warnings that indicate possible runtime problems.
+Source0:        %{giturl}/archive/v%{version}/%{gap_pkgname}-%{version}.tar.gz
 Patch:          %{name}-warning.patch
-# Use popcount instructions where available.
 Patch:          %{name}-popcount.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
 BuildSystem:    gap
 BuildOption(install): bin lib tbl tst
-
+Requires:       gap-pkg-sonata
+%global _docdir_fmt %{name}
+# oreon:deps
 BuildRequires:  gap-devel
 BuildRequires:  gap-pkg-autodoc
 BuildRequires:  gap-pkg-sonata
@@ -29,11 +24,7 @@ BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  parallel
-
-Requires:       gap-pkg-sonata
-
-%global _docdir_fmt %{name}
-
+# /oreon:deps
 %description
 GUAVA is a package that implements coding theory algorithms in GAP.  Codes can
 be created and manipulated and information about codes can be calculated.
@@ -58,23 +49,16 @@ The functions within GUAVA can be divided into four categories:
   BoundsMinimumDistance.
 
 %package doc
-# The content is GFDL-1.2-no-invariants-or-later.  The remaining licenses cover
-# the various fonts embedded in PDFs.
-# AMS: OFL-1.1-RFN
-# CM: Knuth-CTAN
-# CM-Super: GPL-1.0-or-later
-# Nimbus: AGPL-3.0-only
-# StandardSymL: GPL-1.0-or-later
 License:        GFDL-1.2-no-invariants-or-later AND OFL-1.1-RFN AND Knuth-CTAN AND GPL-1.0-or-later AND AGPL-3.0-only
 Summary:        GUAVA documentation
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 Requires:       gap-online-help
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p0 -n %{gap_upname}-%{version}
@@ -84,23 +68,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 cp -p src/ctjhai/README README.ctjhai
 
 %build -p
-# This is NOT an autoconf-generated script.  Do not use %%configure.
+
 ./configure %{gap_archdir}
-
-# Building with %%{?_smp_mflags} fails
 make CFLAGS='%{build_cflags} -DLONG_EXTERNAL_NAMES'
-
-# Compress large tables
 parallel %{?_smp_mflags} --no-notice gzip --best ::: tbl/*.g
-
-# Build documentation
 pushd src/leon/doc
 pdftex manual.tex
 popd
-
 %check
-# Tests that generate random values often fail.
-# Only run the deterministic tests.
+
 cd tst
 gap -l '%{buildroot}%{gap_archdir};' << EOF
 LoadPackage("guava");
@@ -115,21 +91,9 @@ if Test("hadamard.tst", rec( compareFunction := "uptowhitespace" ) ) = false the
 if Test("QCLDPCCodeFromGroup.tst", rec( compareFunction := "uptowhitespace" ) ) = false then GAP_EXIT_CODE(1); fi;
 if Test("table.tst", rec( compareFunction := "uptowhitespace" ) ) = false then GAP_EXIT_CODE(1); fi;
 EOF
-
-%files
-%doc CHANGES HISTORY README.md README.ctjhai
-%license COPYING
-%dir %{gap_archdir}/pkg/%{gap_upname}/
-%{gap_archdir}/pkg/%{gap_upname}/*.g
-%{gap_archdir}/pkg/%{gap_upname}/bin/
-%{gap_archdir}/pkg/%{gap_upname}/lib/
-%{gap_archdir}/pkg/%{gap_upname}/tbl/
-%{gap_archdir}/pkg/%{gap_upname}/tst/
-
-%files doc
-%doc src/leon/doc/manual.pdf
-%docdir %{gap_archdir}/pkg/%{gap_upname}/doc/
-%{gap_archdir}/pkg/%{gap_upname}/doc/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-guava-doc -f %{oreon_filedir}/gap-pkg-guava-doc.list
 
 %changelog
+
 %autochangelog

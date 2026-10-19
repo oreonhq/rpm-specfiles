@@ -1,20 +1,16 @@
 %global source0_hash bb0d4c54bac2990e1bdf8132f2c9477ae752859d523e141e72b3b11a12c26e7b
-
 %define _lto_cflags %{nil}
-
 Name:           chrpath
 Version:        0.16
 Release:        28%{?dist}
 Summary:        Modify rpath of compiled programs
-
 License:        GPL-2.0-or-later
 URL:            https://salsa.debian.org/debian/chrpath
 Source0:        https://alioth-archive.debian.org/releases/chrpath/chrpath/0.16/%{name}-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  make
-
-
+# /oreon:deps
 %description
 chrpath allows you to modify the dynamic library load path (rpath) of
 compiled programs.  Currently, only removing and modifying the rpath
@@ -22,29 +18,23 @@ is supported.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %set_build_flags
 ./configure --build=%{_build} --host=%{_host} --prefix=%{_prefix} --exec-prefix=%{_exec_prefix} --bindir=%{_bindir} --sbindir=%{_sbindir} --sysconfdir=%{_sysconfdir} --datadir=%{_datadir} --includedir=%{_includedir} --libdir=%{_libdir} --libexecdir=%{_libexecdir} --localstatedir=%{_localstatedir} --sharedstatedir=%{_sharedstatedir} --mandir=%{_mandir} --infodir=%{_infodir} --disable-dependency-tracking
 %{__make} %{?_smp_mflags} -j${RPM_BUILD_NCPUS} %{?_make_verbose}
-
 %check
-make check
 
+make check
 %install
 %make_install
 rm -fr %{buildroot}/usr/doc
+%oreon_autofiles main
 
-
-%files
-%doc AUTHORS README NEWS ChangeLog*
-%license COPYING
-%{_bindir}/chrpath
-%{_mandir}/man1/chrpath.1*
-
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.16-28
 - Prepare for Oreon 11 (RP1)

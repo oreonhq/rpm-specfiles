@@ -1,44 +1,28 @@
 %global source0_hash 366000427e194d4ce22e272519b608afbebb1fc9915bcf5da924157a8a47fe10
-
 %global __remake_config 0
-
-# FTBFS on i686 with GCC 14 -Werror=incompatible-pointer-types
-# https://github.com/ofiwg/libfabric/issues/9763
 %if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon} >= 11
 %ifarch %{ix86}
 %global build_type_safety_c 2
 %endif
 %endif
-
 Name:           libfabric
 Version:        2.7.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Open Fabric Interfaces
-
 License:        BSD-2-Clause OR GPL-2.0-only
 URL:            https://github.com/ofiwg/libfabric
 Source0:        https://github.com/ofiwg/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.bz2
-
-%if %{__remake_config}
-BuildRequires:  automake
-BuildRequires:  autoconf
-BuildRequires:  libtool
-%endif
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  libnl3-devel
-# RDMA not available on 32-bit ARM: #1484155
 %ifnarch %{arm}
-BuildRequires:  libibverbs-devel
-BuildRequires:  librdmacm-devel
 %endif
 %ifarch x86_64
-%if 0%{?fedora} || (0%{?rhel} >= 7 && 0%{?rhel} < 10)
-BuildRequires:  libpsm2-devel
 %endif
-BuildRequires:  numactl-devel
-%endif
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  libibverbs-devel
+BuildRequires:  libnl3-devel
+BuildRequires:  librdmacm-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 OpenFabrics Interfaces (OFI) is a framework focused on exporting fabric
 communication services to applications.  OFI is best described as a collection
@@ -51,56 +35,30 @@ exports the user-space API of OFI, and is typically the only software that
 applications deal with directly.  It works in conjunction with provider
 libraries, which are often integrated directly into libfabric.
 
-
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{version}
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
-%if %{__remake_config}
-./autogen.sh
-%endif
+
 %configure --disable-static --disable-silent-rules
 %make_build
-
-
 %install
 %make_install
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
-
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%license COPYING
-%{_bindir}/fi_info
-%{_bindir}/fi_mon_sampler
-%{_bindir}/fi_pingpong
-%{_bindir}/fi_strerror
-%{_libdir}/*.so.1*
-%{_mandir}/man1/*.1*
-
-%files devel
-%license COPYING
-%doc AUTHORS README
-# We knowingly share this with kernel-headers and librdmacm-devel
-# https://github.com/ofiwg/libfabric/issues/1277
-%{_includedir}/rdma/
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_mandir}/man3/*.3*
-%{_mandir}/man7/*.7*
-
+%files -f %{oreon_filedir}/main.list
+%files -n libfabric-devel -f %{oreon_filedir}/libfabric-devel.list
 
 %changelog
+
 %autochangelog

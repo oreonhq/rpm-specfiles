@@ -1,28 +1,23 @@
 %global source0_hash dc53d3c2d1603145ceaa336a3eef5a4143583a4e64834343ae0db12a339f38c6
-
 Name: realtime-setup
 Version: 2.5
-Release: 8%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-or-later
-Summary: Setup RT/low-latency environment details
+Summary:        Setup RT/low-latency environment details
 Source0:        https://gitlab.com/rt-linux-tools/realtime-setup/-/archive/master/realtime-setup-master.tar.bz2#/realtime-setup-2.5.tar.bz2
 URL:  https://gitlab.com/rt-linux-tools/realtime-setup.git
-
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: systemd
-BuildRequires: systemd-rpm-macros
 Requires: pam
 Requires: tuna
 Requires: tuned
 Requires: tuned-profiles-realtime
 Requires: systemd
-
-# disable generation of debuginfo packages for this package
-# the only executable from this package is realtime-entsk and it's not really
-# something that requires debugging.
 %global debug_package %{nil}
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Configure details useful for low-latency environments.
 
@@ -44,8 +39,8 @@ key and never exiting, so no deactivation/activation sequences will be seen.
 
 Neither the slub script or realtime-entsk are active by default.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n realtime-setup-master
 
@@ -54,33 +49,22 @@ cat >realtime-setup.sysusers.conf <<EOF
 g realtime 71
 EOF
 
-
 %build
-%make_build CFLAGS="%{build_cflags} -D_GNU_SOURCE -fPIC" LDFLAGS="%{build_ldflags} -Wl,-z,now -Wl,-z,relro -pie" all
 
+%make_build CFLAGS="%{build_cflags} -D_GNU_SOURCE -fPIC" LDFLAGS="%{build_ldflags} -Wl,-z,now -Wl,-z,relro -pie" all
 %install
 make install DEST='%{buildroot}'
 install -D -m755 kernel-is-rt %{buildroot}%{_sbindir}/kernel-is-rt
 install -D -m755 realtime-entsk %{buildroot}%{_sbindir}/realtime-entsk
-
 install -m0644 -D realtime-setup.sysusers.conf %{buildroot}%{_sysusersdir}/realtime-setup.conf
-
+%oreon_autofiles main
 
 %preun
-%systemd_preun realtime-setup.service
 
-%files
-%config(noreplace) %{_sysconfdir}/security/limits.d/realtime.conf
-%config(noreplace) %{_sysconfdir}/udev/rules.d/99-rhel-rt.rules
-%config(noreplace) %{_sysconfdir}/sysconfig/realtime-setup
-%{_bindir}/slub_cpu_partial_off
-%{_sbindir}/realtime-entsk
-%{_sbindir}/kernel-is-rt
-%{_unitdir}/realtime-setup.service
-%{_bindir}/realtime-setup
-%{_unitdir}/realtime-entsk.service
-%{_sysusersdir}/realtime-setup.conf
+%systemd_preun realtime-setup.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5-8
 - Import

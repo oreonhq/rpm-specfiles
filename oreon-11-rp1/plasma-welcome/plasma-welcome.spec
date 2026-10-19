@@ -1,93 +1,75 @@
+%global source1_hash 6583b4333e81fc920537df280f0b5db6236bef235d03ff90e5dc3837b81bc1e5
 %global source0_hash 894137f8653d3311fae50ba0c70bdc4c8036f8f15082a583d9b3bb4ef51b18ba
-
 %global stable_kf6 stable
-
-
 %global orgname org.kde.plasma-welcome
-
 Name:           plasma-welcome
 Version:        6.7.5
-Release: 1%{?dist}
+Release:        1%{?dist}
 License:        GPL-2.0-or-later and BSD-3-Clause
 Summary:        Plasma Welcome
 Url:            https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-# Upstream patches
-
-BuildRequires:  gcc-c++
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-BuildRequires:  extra-cmake-modules
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  kf6-rpm-macros
-
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6Quick)
-BuildRequires:  cmake(Qt6Widgets)
-BuildRequires:  cmake(Qt6QuickControls2)
-BuildRequires:  cmake(Qt6Svg)
-
-BuildRequires:  cmake(KF6Kirigami2)
-BuildRequires:  cmake(KF6KirigamiAddons)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6NewStuff)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6KCMUtils)
-BuildRequires:  cmake(KF6Svg)
-BuildRequires:  cmake(KF6JobWidgets)
-BuildRequires:  cmake(KF6GlobalAccel)
-
-BuildRequires:  cmake(Plasma)
-
 Requires:       kf6-kuserfeedback
-
 Provides:       plasma-welcome-app = %{version}-%{release}
 Obsoletes:      plasma-welcome-app < 5.27.0-2
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6GlobalAccel)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6JobWidgets)
+BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Kirigami2)
+BuildRequires:  cmake(KF6KirigamiAddons)
+BuildRequires:  cmake(KF6NewStuff)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6Svg)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(Plasma)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6QuickControls2)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  qt6-qtbase-devel
+# /oreon:deps
 %description
 A Friendly onboarding wizard for Plasma.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{version} -p1
 # It is for generate pot file for translate so we can ignore it.
 rm Messages.sh
 
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --all-name --with-html
 rm -fv %{buildroot}%{_kf6_libdir}/libplasma-welcome-publicplugin.a
+%oreon_autofiles main
+
 %check
-# commented out until upstream fixes duplicate entries
-#appstream-util validate-relax --nonet %%{buildroot}%%{_kf6_metainfodir}/%%{orgname}.*.xml
+
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/%{orgname}.desktop
-
-%files -f %{name}.lang
-%license LICENSES/{BSD-3-Clause.txt,GPL-2.0-or-later.txt,FSFAP.txt}
-%doc README.md
-%{_kf6_bindir}/plasma-welcome
-%{_kf6_datadir}/applications/%{orgname}.desktop
-%{_kf6_metainfodir}/%{orgname}.*.xml
-%{_kf6_plugindir}/kded/kded_plasma_welcome.so
-%{_kf6_qmldir}/org/kde/plasma/welcome/
-%{_kf6_datadir}/qlogging-categories6/welcome.categories
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

@@ -1,33 +1,26 @@
-%global source0_hash none
-
+%global source2_hash c667e2db9a3cd17bde492584263cb7c30d8050538678ece3078ae58230e6e5e1
+%global source0_hash ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
 %global source3_key_fpr EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A
-
 %global library_version 1.0.8
-
-Summary: File compression utility
+Summary:        File compression utility
 Name: bzip2
 Version: 1.0.8
-Release: 23%{?dist}
+Release:        23%{?dist}
 License: BSD-4-Clause
 URL: https://sourceware.org/bzip2
-#Source0: http://www.bzip.org/%%{version}/%%{name}-%%{version}.tar.gz
 Source0:        https://sourceware.org/pub/bzip2/%{name}-%{version}.tar.gz
 Source1:        bzip2.pc
 Source2:        https://sourceware.org/pub/bzip2/%{name}-%{version}.tar.gz.sig
-# https://sourceware.org/bzip2/downloads.html links to the gpg key
-# https://sourceware.org/pub/bzip2/gpgkey-5C1D1AA44BE649DE760A.gpg
-# with which the tarballs are signed
 Source3:        gpgkey-5C1D1AA44BE649DE760A.gpg
-
 Patch0:        bzip2-saneso.patch
 Patch1:        bzip2-cflags.patch
 Patch2:        bzip2-ldflags.patch
 Patch3:        man_gzipdiff.patch
-
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: gnupg2
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  make
+# /oreon:deps
 %description
 Bzip2 is a freely available, patent-free, high quality data compressor.
 Bzip2 compresses files to within 10 to 15 percent of the capabilities
@@ -42,24 +35,22 @@ Install bzip2 if you need a compression utility.
 %package devel
 Summary: Libraries and header files for apps which will use bzip2
 Requires: bzip2-libs%{?_isa} = %{version}-%{release}
-
 %description devel
 Header files and a library of bzip2 functions, for developing apps
 which will use the library.
 
 %package libs
 Summary: Libraries for applications using bzip2
-
 %description libs
 Libraries for applications using the bzip2 compression format.
 
 %package static
 Summary: Libraries for applications using bzip2
-
 %description static
 Static libraries for applications using the bzip2 compression format.
 
 %prep
+
 test -z "%{source3_key_fpr}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source3_key_fpr}" || { echo "oreon: Source3 key fingerprint mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE2}' --data='%{SOURCE0}'
 %setup -q
@@ -77,13 +68,11 @@ sed -i "s|^libdir=|libdir=%{_libdir}|" bzip2.pc
     CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64 -fpic -fPIC" \
     LDFLAGS="%{__global_ldflags}" \
     all
-
 rm -f *.o
 %make_build CC="%{__cc}" AR="%{__ar}" RANLIB="ranlib" \
     CFLAGS="$RPM_OPT_FLAGS -D_FILE_OFFSET_BITS=64" \
     LDFLAGS="%{__global_ldflags}" \
     all
-
 %install
 chmod 644 bzlib.h
 mkdir -p $RPM_BUILD_ROOT{%{_bindir},%{_mandir}/man1,%{_libdir}/pkgconfig,%{_includedir}}
@@ -109,30 +98,19 @@ ln -s bzdiff.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzcmp.1
 ln -s bzmore.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzless.1
 ln -s bzgrep.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzegrep.1
 ln -s bzgrep.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzfgrep.1
-
 %ldconfig_scriptlets libs
+%oreon_autofiles bzip2-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles bzip2-libs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bzip2-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc CHANGES README
-%license LICENSE
-%{_bindir}/*
-%{_mandir}/*/*
-
-%files libs
-%license LICENSE
-%{_libdir}/libbz2.so.1*
-
-%files static
-%license LICENSE
-%{_libdir}/libbz2.a
-
-%files devel
-%doc manual.html manual.pdf
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/bzip2.pc
+%files -f %{oreon_filedir}/main.list
+%files -n bzip2-devel -f %{oreon_filedir}/bzip2-devel.list
+%files -n bzip2-libs -f %{oreon_filedir}/bzip2-libs.list
+%files -n bzip2-static -f %{oreon_filedir}/bzip2-static.list
 
 %changelog
+
 * Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.8-23
 - Escape macros in commented legacy Source0 line (rpmlint)
 

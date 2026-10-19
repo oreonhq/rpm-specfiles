@@ -1,52 +1,46 @@
-%global source0_hash 997f7fe64b0d8b41d1875151c3b27d299cbdb6879458dc736fd15e1f7eabe02c
-
-# The tests are stored in a separate repository, which is normally accessed
-# as a git submodule.
+%global source0_hash ef0a9739c4d7370741f49aadb0e6e463399b6cf8aaa018a8abde4ff57e5f51ee
 %global tests_commit 895b3a65d0d823dbd0acf2bc402376381995d1b1
-
 Name:           python-editorconfig
 Version:        0.17.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        EditorConfig File Locator and Interpreter for Python
-
-# See COPYING: the overall license is BSD-2-Clause, but the following files are derived
-# from the Python standard library under the PSF-2.0 license:
-#   - editorconfig/fnmatch.py
-#   - editorconfig/ini.py
 License:        BSD-2-Clause AND PSF-2.0
 URL:            https://github.com/editorconfig/editorconfig-core-py
-Source0:        %{url}/archive/v%{version}/editorconfig-core-py-%{version}.tar.gz
+Source0:        https://github.com/editorconfig/editorconfig-core-py/archive/v%{version}/editorconfig-core-py-%{version}.tar.gz
 %global tests_url https://github.com/editorconfig/editorconfig-core-test
 Source1:        %{tests_url}/archive/%{tests_commit}/editorconfig-core-test-%{tests_commit}.tar.gz
-
-
 BuildArch:      noarch
-
-BuildRequires:  tomcli
-
-# For tests:
-BuildRequires:  cmake
-
 %global common_description %{expand:
 EditorConfig Python Core provides the same functionality as the EditorConfig C
 Core.}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 80.9.0
+Requires:       python3-editorconfig = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-editorconfig+dev
+Summary:        Metapackage for python3-editorconfig dev extras
+Requires:       python3-editorconfig = %{version}-%{release}
+Requires:       python3dist(mypy) >= 1.15
+Provides:       python3dist(editorconfig[dev]) = %{version}-%{release}
+
+%description -n python3-editorconfig+dev
+Metapackage for python3-editorconfig dev extras.
 
 %description %{common_description}
 
 %package     -n python3-editorconfig
-Summary:        %{summary}
-
-# Dropped without replacement for F43+; we can remove the Obsoletes in F45.
+Summary:        EditorConfig File Locator and Interpreter for Python
 Obsoletes:      python-editorconfig-doc < 0.17.1-2
-
 %description -n python3-editorconfig %{common_description}
 
 %package        doc
 Summary:        Documentation for python-editorconfig
-
 %description    doc %{common_description}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n editorconfig-core-py-%{version}
@@ -62,23 +56,23 @@ tomcli set pyproject.toml lists replace build-system.requires \
     'setuptools>.*' 'setuptools'
 
 %build
-%pyproject_wheel
-# This prepares for testing.
-%cmake -DPYTHON_EXECUTABLE='%{python3}'
 
+%pyproject_wheel
+%cmake -DPYTHON_EXECUTABLE='%{python3}'
 %install
 %pyproject_install
-# The command-line tool would conflict with the one from the C version of
-# EditorConfig. It could be installed under a different name, if anyone ever
-# reports a need for it.
 rm '%{buildroot}%{_bindir}/editorconfig'
+%oreon_autofiles python3-editorconfig usr/lib/python3*/site-packages/editorconfig* usr/lib64/python3*/site-packages/editorconfig* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/editorconfig* usr/lib64/python3*/site-packages/editorconfig* usr/bin/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export %{py3_test_envvars}
 %ctest
-
-%files -n python3-editorconfig -f %{pyproject_files}
-%doc README.rst
+%files
+%files -n python3-editorconfig -f %{oreon_filedir}/python3-editorconfig.list
+%files -n python-editorconfig-doc -f %{oreon_filedir}/python-editorconfig-doc.list
 
 %changelog
+
 %autochangelog

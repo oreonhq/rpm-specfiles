@@ -1,23 +1,18 @@
 %global source0_hash 24b16febc4016412952090fd535fa0d9332e5f160132ce8a20984222613043ce
-
 %global commit0 076cb3d2536b7c5d0629093ad886e10ac05f3623
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global date0 20230214
-
 Summary:        C++ header for FFT
 Name:           pocketfft
 License:        BSD-3-Clause
 Version:        1.0^git%{date0}.%{shortcommit0}
-Release:        8%{?dist}
-
-# Only a header
+Release:        1%{?dist}
 BuildArch:      noarch
-
 URL:            https://github.com/mreineck/%{name}
-Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
-
+Source0:        https://github.com/mreineck/%{name}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
+# oreon:deps
 BuildRequires:  gcc-c++
-
+# /oreon:deps
 %description
 PocketFFT for C++
 =================
@@ -43,10 +38,8 @@ advantages:
 - Has optional multi-threading support for multidimensional transforms
 
 %package devel
-
 Summary:        C++ header for FFT
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel
 PocketFFT for C++
 =================
@@ -72,22 +65,23 @@ advantages:
 - Has optional multi-threading support for multidimensional transforms
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{commit0}
 
 %check
+
 g++ pocketfft_demo.cc -o test
 ./test
-
 %install
 mkdir -p %{buildroot}%{_includedir}
 install -p -m 644 pocketfft_hdronly.h %{buildroot}%{_includedir}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files devel
-%doc README.md
-%license LICENSE.md
-%{_includedir}/pocketfft_hdronly.h
+%files -f %{oreon_filedir}/main.list
+%files -n pocketfft-devel -f %{oreon_filedir}/pocketfft-devel.list
 
 %changelog
+
 %autochangelog

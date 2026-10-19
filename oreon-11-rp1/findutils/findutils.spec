@@ -1,54 +1,35 @@
+%global source1_hash 532caaa3173e1bd500db929cd7bc1c9a8769e4607d97a754d57c274fc00f7c5c
 %global source0_hash bfd19cb06cc71f3352d567e90284d8cdac02ac89774bbeadf0b533b0c11432fd
-
 %global source2_key_fpr 0CF4E8D871593224842832B888DD9E08C5DDACB9
-
-Summary: The GNU versions of find utilities (find and xargs)
+Summary:        The GNU versions of find utilities (find and xargs)
 Name: findutils
 Version: 4.11.0
-Release: 1%{?dist}
+Release:        1%{?dist}
 Epoch: 1
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/findutils/
-
 Source0:        https://mirrors.kernel.org/gnu/%{name}/%{name}-%{version}.tar.xz
 Source1:        https://mirrors.kernel.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
-# From https://savannah.gnu.org/project/release-gpgkeys.php?group=findutils&download=1
-# which is linked as project keyring on https://savannah.gnu.org/projects/findutils
 Source2:        findutils-keyring.gpg
-
-# do not build locate
 Patch1:        findutils-4.5.15-no-locate.patch
-
-# add -xautofs option to not descend into directories on autofs file systems
 Patch2:        findutils-4.4.2-xautofs.patch
-
-# eliminate compile-time warnings
 Patch3:        findutils-4.5.13-warnings.patch
-
-# test-lock: disable the rwlock test
 Patch4:        findutils-4.6.0-test-lock.patch
-
-# implement the -noleaf option of find (#1252549)
 Patch5:        findutils-4.6.0-leaf-opt.patch
-
-# fix find not obeying -ignore_readdir_race in symlink_loop (#2232278)
-
 Conflicts: filesystem < 3
 Provides: /bin/find
 Provides: bundled(gnulib)
-
-BuildRequires: automake
-BuildRequires: dejagnu
-BuildRequires: gettext-devel
-BuildRequires: gcc
-BuildRequires: git
-BuildRequires: libselinux-devel
-BuildRequires: make
-BuildRequires: texinfo
-
-# For gpg verification of source tarball
-BuildRequires: gnupg2
-
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  dejagnu
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  git
+BuildRequires:  gnupg2
+BuildRequires:  libselinux-devel
+BuildRequires:  make
+BuildRequires:  texinfo
+# /oreon:deps
 %description
 The findutils package contains programs which will help you locate
 files on your system.  The find utility searches through a hierarchy
@@ -61,6 +42,7 @@ You should install findutils because it includes tools that are very
 useful for finding things on your system.
 
 %prep
+
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -N -S git -n findutils-%{version}
@@ -94,34 +76,25 @@ git add --all .
 git commit -q -m "after invocation of autoreconf"
 
 %build
+
 mkdir build
 cd build
 %global _configure ../configure
 %configure
-
 %make_build
-
 %check
-make %{?_smp_mflags} check -C build V=1
 
+make %{?_smp_mflags} check -C build V=1
 %install
 %make_install -C build
-
 rm -f %{buildroot}%{_infodir}/dir
-
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc AUTHORS NEWS README THANKS TODO
-%{_bindir}/find
-%{_bindir}/xargs
-%{_mandir}/man1/find.1*
-%{_mandir}/man1/xargs.1*
-%{_infodir}/find.info*
-%{_infodir}/find-maint.info.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.10.0-7
 - Fix .gitignore so Fedora patches are not excluded from the tree
 

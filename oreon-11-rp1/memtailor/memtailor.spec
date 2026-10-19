@@ -1,25 +1,21 @@
-%global source0_hash 700325b4787b86bb3738bc80b3d81c2b4a80a0f9ba545c4656ee096775b47947
-
+%global source0_hash d16726040d73751d220f2a2d6404a74b2a3f7d2d7a62d11d69f845bafce55136
 Name:           memtailor
 Version:        1.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C++ library of special-purpose memory allocators
-
 License:        BSD-3-Clause
 URL:            https://github.com/Macaulay2/memtailor
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/Macaulay2/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
-BuildRequires:  gcc-c++
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  gcc-c++
 BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  pkgconfig(gtest)
-
+# /oreon:deps
 %description
 Memtailor is a C++ library of special purpose memory allocators.  It currently
 offers an arena allocator and a memory pool.
@@ -43,11 +39,11 @@ allocation is not tied to a function invocation.
 %package devel
 Summary:        Development files for memtailor
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Files for developing applications that use memtailor.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -60,35 +56,25 @@ sed -i 's/broune/Macaulay2/' build/autotools/memtailor.pc.in
 autoreconf -fi
 
 %build
+
 export GTEST_PATH=%{_prefix}
 export GTEST_VERSION=$(gtest-config --version)
 %configure --disable-static --enable-shared --with-gtest=yes
-
-# Get rid of undesirable hardcoded rpaths; workaround libtool reordering
-# -Wl,--as-needed after all the libraries.
 sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
     -e 's|CC=.g..|& -Wl,--as-needed|' \
     -i libtool
-
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 LD_LIBRARY_PATH=$PWD/.libs make check
-
-%files
-%doc README.md
-%license license.txt
-%{_libdir}/lib%{name}.so.0{,.*}
-
-%files devel
-%{_includedir}/%{name}/
-%{_includedir}/%{name}.h
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n memtailor-devel -f %{oreon_filedir}/memtailor-devel.list
 
 %changelog
+
 %autochangelog

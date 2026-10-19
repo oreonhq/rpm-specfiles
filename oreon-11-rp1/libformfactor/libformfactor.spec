@@ -1,20 +1,17 @@
-%global source0_hash b5cdb57fcbde6b39e314d7a040466a863f25625f112057e6d369a9ea5049dc1f
-
+%global source0_hash b01b52157ccbb74a8711f9b935a5f6426603186756502aba6f31b5790107f978
 Name:           libformfactor
 Version:        0.5.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Efficient computation of scattering form factors of arbitrary polyhedra
-# the library is under GPL-3.0-or-later
-# test/3rdparty/catch.hpp - BSL-1.0
 License:        GPL-3.0-or-later
 URL:            https://jugit.fz-juelich.de/mlz/libformfactor
-Source0:        %{url}/-/archive/v%{version}/%{name}-v%{version}.tar.bz2
-
-BuildRequires:  gcc-c++
+Source0:        https://jugit.fz-juelich.de/mlz/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.bz2
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  ninja-build
 BuildRequires:  cmake(LibHeinz)
-
+BuildRequires:  gcc-c++
+BuildRequires:  ninja-build
+# /oreon:deps
 %description
 A C++ library for the efficient computation of scattering form factors
 (Fourier shape transforms) of arbitrary polyhedra according to Joachim Wuttke,
@@ -23,11 +20,11 @@ A C++ library for the efficient computation of scattering form factors
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains development files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-v%{version}
@@ -36,24 +33,19 @@ sed -i 's|DESTINATION lib|DESTINATION %{_libdir}|g' ff/CMakeLists.txt
 sed -i 's|DESTINATION cmake|DESTINATION %{_libdir}/cmake/formfactor|g' CMakeLists.txt
 
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libformfactor.so.%{version}
-
-%files devel
-%{_libdir}/libformfactor.so
-%{_includedir}/ff/
-%{_libdir}/cmake/formfactor/
+%files -f %{oreon_filedir}/main.list
+%files -n libformfactor-devel -f %{oreon_filedir}/libformfactor-devel.list
 
 %changelog
+
 %autochangelog

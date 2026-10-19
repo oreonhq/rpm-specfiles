@@ -1,18 +1,19 @@
 %global source0_hash 5234f4f29473e9a06bc7847d8371858dd135d38466eeeaa652fdc9f8f9ff0c20
-
 Name:           glfw
 Version:        3.5.1
-Release:        %autorelease
+Release:        1%{?dist}
 Epoch:          1
 Summary:        A cross-platform multimedia library
 Summary(fr):    Une bibliothèque multimédia multi-plateforme
 License:        Zlib
 URL:            http://www.glfw.org/index.html
 Source0:        https://github.com/glfw/glfw/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  doxygen >= 1.9.8
+BuildRequires:  doxygen
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc
+BuildRequires:  libxkbcommon-devel
 BuildRequires:  pkgconfig(dri)
 BuildRequires:  pkgconfig(glu)
 BuildRequires:  pkgconfig(x11)
@@ -20,13 +21,10 @@ BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(xinerama)
 BuildRequires:  pkgconfig(xrandr)
-
-BuildRequires:  extra-cmake-modules
-BuildRequires:  libxkbcommon-devel
 BuildRequires:  vulkan-loader-devel
 BuildRequires:  wayland-devel
 BuildRequires:  wayland-protocols-devel
-
+# /oreon:deps
 %description
 GLFW is a free, Open Source, multi-platform library for OpenGL application
 development that provides a powerful API for handling operating system specific
@@ -51,7 +49,6 @@ Requires:       pkgconfig(xcursor)
 Requires:       pkgconfig(xi)
 Requires:       pkgconfig(xinerama)
 Requires:       pkgconfig(xrandr)
-
 %description devel
 The glfw-devel package contains header files for developing glfw
 applications.
@@ -63,37 +60,29 @@ des applications utilisant glfw.
 %package        doc
 Summary:        Documentation for %{name}
 BuildArch:      noarch
-
 %description doc
 The %{name}-doc package contains documentation for developing applications
 with %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
 find . -type f | xargs sed -i 's/\r//'
 
 %build
+
 %cmake
 %cmake_build --target all
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE.md
-%doc README.md
-%{_libdir}/libglfw.so.3*
-
-%files devel
-%{_includedir}/GLFW/
-%{_libdir}/libglfw.so
-%{_libdir}/pkgconfig/glfw3.pc
-%{_libdir}/cmake/glfw3/
-
-%files doc
-%doc %{_docdir}/GLFW/
+%files -f %{oreon_filedir}/main.list
+%files -n glfw-devel -f %{oreon_filedir}/glfw-devel.list
+%files -n glfw-doc -f %{oreon_filedir}/glfw-doc.list
 
 %changelog
+
 %autochangelog

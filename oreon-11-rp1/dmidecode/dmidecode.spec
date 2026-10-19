@@ -1,5 +1,4 @@
 %global source0_hash 2c3aed12c85a1e6a9410d406d5e417c455466dc1bc7c89278bb32cf7cad91e8a
-
 Summary:        Tool to analyse BIOS DMI data
 Name:           dmidecode
 Version:        3.7
@@ -8,16 +7,16 @@ Epoch:          1
 License:        GPL-2.0-or-later
 Source0:        https://download.savannah.gnu.org/releases/%{name}/%{name}-%{version}.tar.xz
 URL:            https://www.nongnu.org/dmidecode/
-BuildRequires:  gcc make
-BuildRequires:  pkgconfig(bash-completion)
 ExclusiveArch:  %{ix86} x86_64 ia64 aarch64 riscv64
-
 %if "%{_sbindir}" == "%{_bindir}"
-# We rely on filesystem to create the compat symlinks for us
 Requires: filesystem(unmerged-sbin-symlinks)
 Provides: /usr/sbin/dmidecode
 %endif
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  pkgconfig(bash-completion)
+# /oreon:deps
 %description
 dmidecode reports information about x86 & ia64 hardware as described in the
 system BIOS according to the SMBIOS/DMI standard. This information
@@ -31,28 +30,16 @@ I/O ports (e.g. serial, parallel, USB).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
+%oreon_prep
 %build
-%make_build CFLAGS="%{optflags}" LDFLAGS="%{__global_ldflags}"
 
+%make_build CFLAGS="%{optflags}" LDFLAGS="%{__global_ldflags}"
 %install
 %make_install %{?_smp_mflags} prefix=%{_prefix} sbindir=%{_sbindir} install-bin install-man
+%oreon_autofiles main
 
-%files
-%doc AUTHORS NEWS README
-%license LICENSE
-%{_sbindir}/dmidecode
-%ifnarch ia64 aarch64 riscv64
-%{_sbindir}/vpddecode
-%{_sbindir}/ownership
-%{_sbindir}/biosdecode
-%{bash_completions_dir}/vpddecode
-%{bash_completions_dir}/ownership
-%{bash_completions_dir}/biosdecode
-%endif
-%{_mandir}/man8/*
-%{bash_completions_dir}/%{name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

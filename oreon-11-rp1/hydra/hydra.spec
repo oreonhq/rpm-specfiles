@@ -1,5 +1,4 @@
-%global source0_hash c839e5c64ef60185c69a07a9a59831bd2cfe9ac2eac0c4d9e87fdf38dbf04c40
-
+%global source0_hash 8dbe11e5858b8c1aab7bd670bc39a3483accd09e147d3dd981fe11a7fa0d10de
 Summary:        Very fast network log-on cracker
 Name:           hydra
 Version:        9.7
@@ -7,18 +6,13 @@ Release:        1%{?dist}
 License:        AGPL-3.0-only
 URL:            https://github.com/vanhauser-thc/thc-hydra
 VCS:            git:https://github.com/vanhauser-thc/thc-hydra
-# Old URL       https://www.thc.org/thc-hydra/
-
 Source0:        https://github.com/vanhauser-thc/thc-hydra/archive/v%{version}/%{name}-%{version}.tar.gz
-# Sent upstream via email 20120518
 Patch0:         hydra-use-system-libpq-fe.patch
 Patch1:         hydra-fix-dpl4hydra-dir.patch
-
-# Upstream fixes for gtk3 support
 Patch100:       0000-port-xhydra-gtk3.patch
 Patch101:       0000-more-hydra-gtk.patch
 Patch102:       0000-hydra-gtk-last.patch
-
+# oreon:deps
 BuildRequires:  afpfs-ng-devel
 BuildRequires:  apr-devel
 BuildRequires:  automake
@@ -45,7 +39,7 @@ BuildRequires:  openssl-devel
 BuildRequires:  pcre2-devel
 BuildRequires:  pkgconfig
 BuildRequires:  subversion-devel
-
+# /oreon:deps
 %description
 Hydra is a parallelized log-in cracker which supports numerous protocols to
 attack. New modules are easy to add, beside that, it is flexible and very fast.
@@ -61,13 +55,12 @@ This package includes xhydra, a GTK+ front end for hydra.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p 1 -n thc-hydra-%{version}
-
+%global oreon_srcdir thc-hydra-%{version}
+%oreon_prep
 %build
+
 %configure --nostrip
 %make_build
-
 %install
 %make_install \
     PREFIX="" \
@@ -76,29 +69,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     DATADIR="%{_datadir}/%{name}" \
     PIXDIR="%{_datadir}/pixmaps" \
     APPDIR="%{_datadir}/applications"
-
-# Fix dpl4hydra.sh (w/o buildroot prefix)
 sed -i 's|^INSTALLDIR=.*|INSTALLDIR=/usr|' %{buildroot}/%{_bindir}/dpl4hydra.sh
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/xhydra.desktop
-
-%files
-%doc CHANGES README
-%license LICENSE
-%{_bindir}/dpl4hydra.sh
-%{_bindir}/hydra
-%{_bindir}/hydra-wizard.sh
-%{_bindir}/pw-inspector
-%{_datadir}/%{name}
-%{_mandir}/man1/hydra.1*
-%{_mandir}/man1/pw-inspector.1*
-
-%files frontend
-%{_bindir}/xhydra
-%{_datadir}/pixmaps/xhydra.png
-%{_datadir}/applications/xhydra.desktop
-%{_mandir}/man1/xhydra.1*
+%files -f %{oreon_filedir}/main.list
+%files -n hydra-frontend -f %{oreon_filedir}/hydra-frontend.list
 
 %changelog
+
 %autochangelog

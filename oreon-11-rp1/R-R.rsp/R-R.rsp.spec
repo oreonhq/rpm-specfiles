@@ -1,17 +1,15 @@
 %global source0_hash 1a9f680ffe563abdaa91add6ebf5e6c0ecbe57f0d39687bcb272ff2a987c33bb
-
 Name:           R-R.rsp
 Version:        %R_rpm_version 0.46.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Dynamic Generation of Scientific Reports
-
 License:        LGPL-2.1-or-later
 URL:            %{cran_url}
-Source:         %{cran_source}
-
+Source0:        https://cran.r-project.org/package=R.rsp&version=%{version}#/R.rsp_%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 The RSP markup language makes any text-based document come alive.  RSP provides
 a powerful markup for controlling the content and output of LaTeX, HTML,
@@ -29,24 +27,24 @@ and R package vignettes.  It's easy to use - if you know how to write an R
 script, you'll be up and running within minutes.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -c
 rm -f R.rsp/tests/multi,selfcontained.R # unconditional suggest, should be fixed
-
-%generate_buildrequires
-%R_buildrequires
 
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

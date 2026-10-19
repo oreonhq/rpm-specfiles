@@ -1,17 +1,15 @@
-%global source0_hash none
-
+%global source0_hash 715f44773b05b73a9ec9b62b0e152f3f281be1a1512fbaaa386176da94cffb9d
 Name:		freedink-data
 Version:	1.08.20190120
-Release:	18%{?dist}
-Summary:	Adventure and role-playing game (assets)
-
+Release:        1%{?dist}
+Summary:        Adventure and role-playing game (assets)
 License:	Zlib AND CC-BY-SA-3.0 AND GPL-2.0-or-later
 URL:		https://www.gnu.org/software/freedink/
-Source0:	https://ftp.gnu.org/gnu/freedink/%{name}-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/freedink/%{name}-%{version}.tar.gz
 BuildArch:	noarch
-
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  make
+# /oreon:deps
 %description
 Dink Smallwood is an adventure/role-playing game, similar to Zelda,
 made by RTsoft. Besides twisted humor, it includes the actual game
@@ -22,6 +20,7 @@ This package contains architecture-independent data for the original
 game, along with free sound and music replacements.
 
 %prep
+
 %setup -q
 # Strip DOS EOL from documentation
 # https://fedoraproject.org/wiki/PackageMaintainers/Common_Rpmlint_Issues#wrong-file-end-of-line-encoding
@@ -31,12 +30,10 @@ sed -i 's/\r//' README.txt README-REPLACEMENTS.txt
 
 %install
 make install PREFIX=%{_prefix} DESTDIR=%{buildroot}
-# D-Mod .mo files are pre-generated in upstream tarball, and engine uses an alternate $dmod/l10n/ path
-#%%find_lang dink
+%oreon_autofiles main
 
-%files
-%doc README.txt README-REPLACEMENTS.txt licenses/
-%{_datadir}/dink/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

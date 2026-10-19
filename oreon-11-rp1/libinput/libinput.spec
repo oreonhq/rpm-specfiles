@@ -1,16 +1,10 @@
 %global source0_hash 3a6065c07b118c08d0c7b7b85a265ecb050a8cfc91eeb360890d768a51b4cce9
-
 %global udevdir %(pkg-config --variable=udevdir udev)
-
-#global gitdate 20141211
 %global gitversion 58abea394
-
 Name:           libinput
 Version:        1.32.0
-Release:        1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release:        1%{?dist}
 Summary:        Input device library
-
-# SPDX
 License:        MIT
 URL:            http://www.freedesktop.org/wiki/Software/libinput/
 %if 0%{?gitdate}
@@ -18,21 +12,19 @@ Source0:        https://gitlab.freedesktop.org/libinput/libinput/-/archive/%{ver
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://gitlab.freedesktop.org/libinput/libinput/-/archive/%{version}/libinput-%{version}.tar.bz2
 %endif
-
-BuildRequires:  git-core
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  git-core
+BuildRequires:  lua-devel
 BuildRequires:  meson
+BuildRequires:  pkgconfig(libevdev)
 BuildRequires:  pkgconfig(libudev)
-BuildRequires:  pkgconfig(mtdev) >= 1.1.0
-BuildRequires:  pkgconfig(libevdev) >= 0.4
-BuildRequires:  pkgconfig(libwacom) >= 0.20
+BuildRequires:  pkgconfig(libwacom)
+BuildRequires:  pkgconfig(mtdev)
 BuildRequires:  pkgconfig(udev)
 BuildRequires:  python3-rpm-macros
-
-BuildRequires:  lua-devel
-
+# /oreon:deps
 %description
 libinput is a library that handles input devices for display servers and other
 applications that need to directly deal with input devices.
@@ -41,11 +33,9 @@ It provides device detection, device handling, input device event processing
 and abstraction so minimize the amount of custom input code the user of
 libinput need to provide the common set of functionality that users expect.
 
-
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -54,7 +44,6 @@ developing applications that use %{name}.
 Summary:        Utilities and tools for debugging %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       python3-pyudev python3-libevdev
-
 %description    utils
 The %{name}-utils package contains tools to debug hardware and analyze
 %{name}.
@@ -62,18 +51,19 @@ The %{name}-utils package contains tools to debug hardware and analyze
 %package        test
 Summary:        libinput integration test suite
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    test
 The %{name}-test package contains the libinput test suite. It is not
 intended to be run by users.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git -p1
 # Replace whatever the source uses with the approved call
 %py3_shebang_fix $(git grep -l  '#!/usr/bin/.*python3')
 
 %build
+
 %meson -Ddebug-gui=false \
        -Ddocumentation=false \
        -Dtests=true \
@@ -81,87 +71,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
        -Dautoload-plugins=true \
        -Dudev-dir=%{udevdir}
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/*/lib*.so.*
 
 %post
+
 %{?ldconfig}
-
 %ldconfig_postun
-
-
-%files
-%doc COPYING
-%{_libdir}/libinput.so.*
-%{udevdir}/libinput-device-group
-%{udevdir}/libinput-fuzz-to-zero
-%{udevdir}/libinput-fuzz-extract
-%{udevdir}/rules.d/80-libinput-device-groups.rules
-%{udevdir}/rules.d/90-libinput-fuzz-override.rules
-%{_bindir}/libinput
-%dir %{_libexecdir}/libinput/
-%{_libexecdir}/libinput/libinput-debug-events
-%{_libexecdir}/libinput/libinput-list-devices
-%{_mandir}/man1/libinput.1*
-%dir %{_datadir}/libinput
-%{_datadir}/libinput/*.quirks
-%dir %{_datadir}/zsh
-%dir %{_datadir}/zsh/site-functions
-%{_datadir}/zsh/site-functions/*
-%{_mandir}/man1/libinput-list-devices.1*
-%{_mandir}/man1/libinput-debug-events.1*
-
-%files devel
-%{_includedir}/libinput.h
-%{_libdir}/libinput.so
-%{_libdir}/pkgconfig/libinput.pc
-
-%files utils
-%{_libexecdir}/libinput/libinput-analyze
-%{_libexecdir}/libinput/libinput-analyze-buttons
-%{_libexecdir}/libinput/libinput-analyze-per-slot-delta
-%{_libexecdir}/libinput/libinput-analyze-recording
-%{_libexecdir}/libinput/libinput-analyze-touch-down-state
-%{_libexecdir}/libinput/libinput-debug-tablet
-%{_libexecdir}/libinput/libinput-debug-tablet-pad
-%{_libexecdir}/libinput/libinput-list-kernel-devices
-%{_libexecdir}/libinput/libinput-measure
-%{_libexecdir}/libinput/libinput-measure-fuzz
-%{_libexecdir}/libinput/libinput-measure-touchpad-tap
-%{_libexecdir}/libinput/libinput-measure-touchpad-pressure
-%{_libexecdir}/libinput/libinput-measure-touchpad-size
-%{_libexecdir}/libinput/libinput-measure-touch-size
-%{_libexecdir}/libinput/libinput-quirks
-%{_libexecdir}/libinput/libinput-record
-%{_libexecdir}/libinput/libinput-replay
-%{_mandir}/man1/libinput-analyze.1*
-%{_mandir}/man1/libinput-analyze-buttons.1*
-%{_mandir}/man1/libinput-analyze-per-slot-delta.1*
-%{_mandir}/man1/libinput-analyze-recording.1*
-%{_mandir}/man1/libinput-analyze-touch-down-state.1*
-%{_mandir}/man1/libinput-debug-tablet.1*
-%{_mandir}/man1/libinput-debug-tablet-pad.1*
-%{_mandir}/man1/libinput-list-kernel-devices.1*
-%{_mandir}/man1/libinput-measure.1*
-%{_mandir}/man1/libinput-measure-fuzz.1*
-%{_mandir}/man1/libinput-measure-touchpad-tap.1*
-%{_mandir}/man1/libinput-measure-touch-size.1*
-%{_mandir}/man1/libinput-measure-touchpad-pressure.1*
-%{_mandir}/man1/libinput-measure-touchpad-size.1*
-%{_mandir}/man1/libinput-quirks.1*
-%{_mandir}/man1/libinput-quirks-list.1*
-%{_mandir}/man1/libinput-quirks-validate.1*
-%{_mandir}/man1/libinput-record.1*
-%{_mandir}/man1/libinput-replay.1*
-
-%files test
-%{_libexecdir}/libinput/libinput-test
-%{_libexecdir}/libinput/libinput-test-suite
-%{_libexecdir}/libinput/libinput-test-utils
-%{_mandir}/man1/libinput-test.1*
-%{_mandir}/man1/libinput-test-suite.1*
-
+%files -f %{oreon_filedir}/main.list
+%files -n libinput-devel -f %{oreon_filedir}/libinput-devel.list
+%files -n libinput-utils -f %{oreon_filedir}/libinput-utils.list
+%files -n libinput-test -f %{oreon_filedir}/libinput-test.list
 
 %changelog
+
 %autochangelog

@@ -1,17 +1,15 @@
 %global source0_hash 70c0787d6d3762c89bb68218fbee19e861fcb5d4c05b787a9692055d95dd3061
-
 Name:           R-kernlab
 Version:        %R_rpm_version 0.9-33
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GNU R package for kernel-based machine learning lab
-
 License:	    GPL-2.0-only
 URL:            %{cran_url}
-Source:         %{cran_source}
-
+Source0:        https://cran.r-project.org/package=kernlab&version=0.9-33#/kernlab_0.9-33.tar.gz
 ExcludeArch:	%{ix86} s390x
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Kernel-based machine learning methods for classification,
 regression, clustering, novelty detection, quantile regression
@@ -21,22 +19,19 @@ Kernel PCA, Gaussian Processes and a QP solver.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,51 +1,26 @@
 %global source0_hash 89881a1dfdd1c0f508fd5e3efbb7b18b2d4d2e2384230c0d3abd635e76b7d554
 %global source1_hash aa3cac4ca339a49b0dc563b5c38612091580e5207108fba37a16b9fb0f27d568
-
-# SPDX-License-Identifier: LGPL-2.1-or-later
-#
-# Copyright (C) 2017-2020 Red Hat, Inc.
-
 Name:           cockpit-podman
 Version:        131
 Release:        1%{?dist}
 Summary:        Cockpit component for Podman containers
 License:        LGPL-2.1-or-later
 URL:            https://github.com/cockpit-project/cockpit-podman
-
-# distributions which ship nodejs-esbuild can rebuild the bundle during package build
-%if 0%{?fedora} >= 42
-%define rebuild_bundle 1
-%endif
-
 Source0:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-node-%{version}.tar.xz
-
 BuildArch:      noarch
 %if 0%{?suse_version}
-# Suse's package has a different name
-BuildRequires:  appstream-glib
 %else
-BuildRequires:  libappstream-glib
-%endif
-BuildRequires:  make
-BuildRequires: gettext
-%if 0%{?rhel} && 0%{?rhel} <= 8
-BuildRequires: libappstream-glib-devel
 %endif
 %if %{defined rebuild_bundle}
-BuildRequires: /usr/bin/node
-BuildRequires: nodejs-esbuild
 %endif
-
 Requires:       cockpit-bridge
 Requires:       podman >= 2.0.4
-# HACK https://github.com/containers/crun/issues/1091
 %if 0%{?centos} == 9
 Requires:       criu-libs
 %elif 0%{?suse_version}
 Requires:       libcriu2
 %endif
-
 Provides: bundled(npm(@patternfly/patternfly)) = 6.4.0
 Provides: bundled(npm(@patternfly/react-core)) = 6.4.1
 Provides: bundled(npm(@patternfly/react-icons)) = 6.4.0
@@ -65,11 +40,18 @@ Provides: bundled(npm(scheduler)) = 0.23.2
 Provides: bundled(npm(tabbable)) = 6.4.0
 Provides: bundled(npm(throttle-debounce)) = 5.0.2
 Provides: bundled(npm(tslib)) = 2.8.1
-
+# oreon:deps
+BuildRequires:  /usr/bin/node
+BuildRequires:  gettext
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  nodejs-esbuild
+# /oreon:deps
 %description
 The Cockpit user interface for Podman containers.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}
@@ -78,24 +60,19 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %endif
 
 %build
+
 %if %{defined rebuild_bundle}
 rm -rf dist
-# HACK: node module packaging is broken in Fedora ≤ 43; should be in
-# common location, not major version specific one
 NODE_ENV=production NODE_PATH=/usr/lib/node_modules:$(echo /usr/lib/node_modules_*) ./build.js
 %else
-# Use pre-built bundle on distributions without nodejs-esbuild
 %endif
-
 %install
 %make_install PREFIX=/usr
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*
+%oreon_autofiles main
 
-%files
-%doc README.md
-%license LICENSE dist/index.js.LEGAL.txt dist/index.css.LEGAL.txt
-%{_datadir}/cockpit/*
-%{_datadir}/metainfo/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

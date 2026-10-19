@@ -1,43 +1,34 @@
+%global source2_hash 5bb2f1a372c841621d2269ba4a3f5d9ddd3c2804523fdcf41ea65c4e9a65a63e
+%global source1_hash 2e90858df5d385d5bdfc91e2ff03a093a388f70b91458a6dd5c2160f75f2cd0a
 %global source0_hash c897a5d0aadfdeb07784e1411ceac0efef2c97bea8143fb3b1dcde8274e14fc0
-
 %bcond check 0
 %global libchewing_python_dir %{python3_sitelib}
-
 %global im_name_zh_TW 新酷音輸入法
 %global name_zh_TW %{im_name_zh_TW}函式庫
-
 Name:           libchewing
 Version:        0.13.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Intelligent phonetic input method library for Traditional Chinese
 Summary(zh_TW): %{name_zh_TW}
-
-# Apache-2.0 OR MIT
-# BSD-2-Clause OR Apache-2.0 OR MIT
-# LGPL-2.1-or-later
-# MIT
-# MIT OR Apache-2.0
-# MPL-2.0
 License:        LGPL-2.1-or-later AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND MIT AND (MIT OR Apache-2.0) AND MPL-2.0
-# LICENSE.dependencies contains a full license breakdown
-
 URL:            https://chewing.im
 Source0:        https://codeberg.org/chewing/%{name}/releases/download/v%{version}/libchewing-%{version}.tar.zst
 Source1:        https://codeberg.org/chewing/%{name}/releases/download/v%{version}/libchewing-%{version}.tar.zst.asc
 Source2:        https://chewing.im/.well-known/openpgpkey/hu/y84sdmnksfqswe7fxf5mzjg53tbdz8f5?l=release#/libchewing.pgp
-
 Patch0:         0001-delete-sqlite-bundled-feature.patch
-# clap_mangen 0.2 to 0.3
 Patch1:         libchewing-0.13.1-clap_mangen0.13.patch
-
-BuildRequires:  gcc cmake make pkgconf texinfo
-BuildRequires:  cargo-rpm-macros >= 24
-BuildRequires:  cmake(Corrosion)
-BuildRequires:  gnupg2
-BuildRequires:  python3-devel
-# since f31
 Obsoletes:      python2-libchewing < 0.5.1-13
-
+# oreon:deps
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  cmake
+BuildRequires:  cmake(Corrosion)
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  make
+BuildRequires:  pkgconf
+BuildRequires:  python3-devel
+BuildRequires:  texinfo
+# /oreon:deps
 %description
 libchewing is an intelligent phonetic input method library for Chinese.
 
@@ -55,7 +46,6 @@ input method that is useful for inputting Mandarin Chinese.
 Summary:        Development files for libchewing
 Summary(zh_TW): %{name_zh_TW}開發者套件
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description -n %{name}-devel
 Headers and other files needed to develop applications using the %{name}
 library.
@@ -69,7 +59,6 @@ Summary:        Python binding for libchewing
 BuildArch:      noarch
 Summary(zh_TW): %{name_zh_TW} python 綁定
 Requires:       %{name} = %{version}-%{release}
-
 %description -n python3-%{name}
 Python binding of libchewing.
 
@@ -77,57 +66,33 @@ Python binding of libchewing.
 %{name_zh_TW} python 綁定
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n libchewing-%{version}
-%cargo_prep
-
-%generate_buildrequires
-%cargo_generate_buildrequires -f mangen,sqlite
 
 %build
+
 %cmake --preset default
 %cmake_build
 %{cargo_license_summary -f sqlite}
 %{cargo_license -f sqlite} > LICENSE.dependencies
-
 %install
 %cmake_install
-
 mkdir -p %{buildroot}%{libchewing_python_dir}
 cp -p contrib/python/chewing.py %{buildroot}%{libchewing_python_dir}
-
 rm -f %{buildroot}/%{_infodir}/dir
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with check}
 %check
+
 %ctest -j1
 %endif
-
-%files
-%license COPYING
-%license LICENSE.dependencies
-%doc README.md AUTHORS NEWS
-%{_datadir}/%{name}/
-%{_bindir}/chewing-cli
-%{_libdir}/libchewing.so.*
-%{_infodir}/%{name}.info.*
-%{_mandir}/man1/chewing-cli*
-
-%files devel
-%dir %{_includedir}/chewing
-%{_includedir}/chewing/*
-%{_libdir}/pkgconfig/chewing.pc
-%{_libdir}/libchewing.so
-%{_libdir}/cmake/Chewing/ChewingConfig.cmake
-%{_libdir}/cmake/Chewing/ChewingConfigVersion.cmake
-%{_libdir}/cmake/Chewing/ChewingTargets-release.cmake
-%{_libdir}/cmake/Chewing/ChewingTargets.cmake
-
-%files -n python3-%{name}
-%{libchewing_python_dir}/chewing.py
-%{libchewing_python_dir}/__pycache__/*
+%files -f %{oreon_filedir}/main.list
+%files -n libchewing-devel -f %{oreon_filedir}/libchewing-devel.list
+%files -n python3-libchewing -f %{oreon_filedir}/python3-libchewing.list
 
 %changelog
+
 %autochangelog

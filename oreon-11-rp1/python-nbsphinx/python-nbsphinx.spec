@@ -1,31 +1,18 @@
 %global source0_hash d0765908399a8ee2b57be7ae881cf2ea58d66db3af7bbf33e6eb48f83bea5495
-
 Name:           python-nbsphinx
 Version:        0.9.8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Jupyter Notebook Tools for Sphinx
-
-# SPDX
 License:        MIT
 URL:            http://nbsphinx.rtfd.io/
-Source0:        %{pypi_source nbsphinx}
+Source0:        https://files.pythonhosted.org/packages/source/n/nbsphinx/nbsphinx-%{version}.tar.gz
 Patch0:         allow-errors-in-notebooks-with-external-images.patch
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3-ipykernel
-BuildRequires:  python3-ipython-sphinx
-BuildRequires:  python3-jupyter-client
-BuildRequires:  python3-matplotlib
-BuildRequires:  python3-nbconvert
-BuildRequires:  python3-sphinxcontrib-bibtex
-BuildRequires:  python3-sphinx-copybutton
-BuildRequires:  python3-sphinxcontrib-rsvgconverter
-BuildRequires:  python3-sphinx-gallery
-BuildRequires:  python3-sphinx-last-updated-by-git
-BuildRequires:  git-core
-BuildRequires:  pandoc
-
+Requires:       python3-nbsphinx = %{version}-%{release}
+# /oreon:deps
 %description
 nbsphinx is a Sphinx extension that provides a source parser for *.ipynb
 files. Custom Sphinx directives are used to show Jupyter Notebook code cells
@@ -34,8 +21,13 @@ notebooks, i.e. notebooks without stored output cells, will be automatically
 executed during the Sphinx build process.
 
 %package -n     python3-nbsphinx
-Summary:        %{summary}
-
+Summary:        Jupyter Notebook Tools for Sphinx
+# oreon:reqs
+Requires:       python3dist(docutils) >= 0.18.1
+Requires:       python3dist(nbconvert) >= 5.3
+Requires:       python3dist(sphinx) >= 1.8
+Requires:       python3dist(traitlets) >= 5
+# /oreon:reqs
 %description -n python3-nbsphinx
 nbsphinx is a Sphinx extension that provides a source parser for *.ipynb
 files. Custom Sphinx directives are used to show Jupyter Notebook code cells
@@ -49,6 +41,7 @@ Summary:        nbsphinx documentation
 Documentation for nbsphinx
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n nbsphinx-%{version} -S git
@@ -64,33 +57,26 @@ sed -i "/\['jupytext.reads', {'fmt'/d" doc/conf.py
 # its absence doesn't break the nbsphinx' docs
 sed -i "/'sphinx_codeautolink',  # automatic links from code to documentation/d" doc/conf.py
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
-# fake the git tag for docs to put the right version in
-git tag %{version}
-# ignore errors - nbsphinx cannot load images from Internet
-echo "nbsphinx_allow_errors = True" >> doc/conf.py
-# generate html docs 
-PYTHONPATH=build/lib sphinx-build-3 doc html
-# remove the sphinx-build leftovers
-rm -rf html/{.doctrees,.buildinfo,conf.py,_sources}
 
+%pyproject_wheel
+git tag %{version}
+echo "nbsphinx_allow_errors = True" >> doc/conf.py
+PYTHONPATH=build/lib sphinx-build-3 doc html
+rm -rf html/{.doctrees,.buildinfo,conf.py,_sources}
 %install
 %pyproject_install
-%pyproject_save_files -l nbsphinx
+%oreon_autofiles python3-nbsphinx usr/lib/python3*/site-packages/nbsphinx* usr/lib64/python3*/site-packages/nbsphinx* usr/bin/*
+%oreon_autofiles python-nbsphinx-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/lib/python3*/site-packages/nbsphinx* usr/lib64/python3*/site-packages/nbsphinx* usr/bin/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %pyproject_check_import
-
-%files -n python3-nbsphinx -f %{pyproject_files}
-%doc README.rst
-
-%files -n python-nbsphinx-doc
-%license LICENSE
-%doc html 
+%files
+%files -n python3-nbsphinx -f %{oreon_filedir}/python3-nbsphinx.list
+%files -n python-nbsphinx-doc -f %{oreon_filedir}/python-nbsphinx-doc.list
 
 %changelog
+
 %autochangelog

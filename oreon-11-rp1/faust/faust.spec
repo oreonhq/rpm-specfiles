@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash e4e175cf236924b5b7d4784cbb8c50cc01e211159e169655dd9e6d8f92b871d9
 %global __provides_exclude ^(libsndfile[.]so.*)$
 %global __requires_exclude_from (^libstdc[+][+].so([(][)][(]64bit[)])$|^libstdc[+][+].so$)
 %global __requires_exclude %{__requires_exclude_from}|libc.so
@@ -12,30 +11,27 @@
 %global __requires_exclude %{__requires_exclude}|libm.so()(64bit)
 %global __requires_exclude %{__requires_exclude}|libm.so(LIBC)
 %global __requires_exclude %{__requires_exclude}|libm.so(LIBC)(64bit)
-
 Name:		faust
 Version:	2.88.0
-Release:	1%{?dist}
-Summary:	Compiled language for real-time audio signal processing
-# Examples are BSD
-# The rest is GPLv2+
+Release:        1%{?dist}
+Summary:        Compiled language for real-time audio signal processing
 License:	GPL-2.0-or-later AND MIT AND GPL-3.0-or-later AND BSD-3-Clause AND LGPL-3.0-or-later AND LGPL-2.1-or-later AND Apache-2.0 AND AML AND BSL-1.0
 URL:		https://faust.grame.fr/
-Source0:	https://github.com/grame-cncm/faust/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/grame-cncm/faust/releases/download/%{version}/%{name}-%{version}.tar.gz
 Patch0:         includes.patch
 Patch1:         nostatic.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  doxygen
-BuildRequires:  graphviz
-BuildRequires:  make
-BuildRequires:  libmicrohttpd-devel
-BuildRequires:  llvm-devel
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  zlib-devel
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  graphviz
+BuildRequires:  libmicrohttpd-devel
 BuildRequires:  libxml2-devel
+BuildRequires:  llvm-devel
+BuildRequires:  make
 BuildRequires:  ncurses-static
-
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Faust AUdio STreams is a functional programming language for real-time audio
 signal processing. Its programming model combines two approaches : functional
@@ -58,7 +54,6 @@ Summary:	Documentation for %{name}
 License:	GPL-2.0-or-later
 BuildArch:	noarch
 Requires:	%{name} = %{version}-%{release}
-
 %description doc
 Faust AUdio STreams is a functional programming language for real-time audio
 signal processing. This package provides documentation files to help with 
@@ -68,7 +63,6 @@ writing programs with faust.
 Summary:	OSCLib Library
 License:	GPL-2.0-or-later AND MIT
 Requires:	%{name} = %{version}-%{release}
-
 %description osclib
 Faust AUdio STreams is a functional programming language for real-time audio
 signal processing. This package provides osclib.
@@ -77,7 +71,6 @@ signal processing. This package provides osclib.
 Summary:	Headers for the OSCLib Library
 License:	GPL-2.0-or-later AND MIT
 Requires:	%{name}-osclib = %{version}-%{release}
-
 %description osclib-devel
 Faust AUdio STreams is a functional programming language for real-time audio
 signal processing. This package provides the development files for osclib.
@@ -87,7 +80,6 @@ Summary:	3rd party tools written for %{name}
 License:	GPL-2.0-or-later
 BuildArch:	noarch
 Requires:	%{name}-osclib-devel = %{version}-%{release}
-
 %description tools
 Faust AUdio STreams is a functional programming language for real-time audio
 signal processing. These additional tools are provided by various contributors
@@ -98,13 +90,13 @@ Summary:	Kate/Kwrite plugin for %{name}
 License:	GPL-2.0-or-later
 BuildArch:	noarch
 Requires:	%{name} = %{version}-%{release}
-
 %description kate
 Faust AUdio STreams is a functional programming language for real-time audio
 signal processing. This package provides Faust code syntax highlighting support
 for KDE's Kate/Kwrite.
 
 %prep
+
 %setup -q
 %patch -P 0 -p0
 %patch -P 1 -p1
@@ -130,67 +122,30 @@ for i in CHANGES LICENSE README TODO; do
 done
 
 %build
-# Build the main executable
-make all PREFIX=%{_prefix} LIBDIR=%{_libdir} %{?_smp_mflags}
 
+make all PREFIX=%{_prefix} LIBDIR=%{_libdir} %{?_smp_mflags}
 %install
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_datadir}/%{name}
 make install PREFIX=%{_prefix} LIBDIR=%{_libdir} INCLUDEDIR=%{_includedir} DESTDIR=%{buildroot}
-
-# Sort out the documentation
 mv documentation/misc/* documentation
 rm -fr documentation/faust-quick-reference-src documentation/misc
-
-# Install tools
-
 cp -a tools/%{name}2appls/%{name}2* %{buildroot}%{_bindir}
 mv tools/%{name}2appls/README.md README.appls
-
-# Install the kate plugin
 mkdir -p %{buildroot}%{_datadir}/kde4/apps/katepart/syntax/
 cp -a syntax-highlighting/%{name}.xml \
 	%{buildroot}%{_datadir}/kde4/apps/katepart/syntax/
-
 find %{buildroot} -type f -name '*.a' -print0 | xargs -0 rm
-
 %ldconfig_scriptlets osclib
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc COPYING.txt README.md examples WHATSNEW.md
-%{_bindir}/%{name}
-%{_bindir}/encoderunitypackage
-%{_bindir}/faust-config
-%{_bindir}/faustoptflags
-%{_bindir}/faustpath
-%{_bindir}/faustremote
-%{_bindir}/filename2ident
-%{_bindir}/sound2reader
-%{_bindir}/usage.sh
-%{_datadir}/%{name}/
-
-%files osclib
-%doc architecture/osclib/*.md architecture/osclib/faust/*.txt architecture/osclib/oscpack/*.txt
-%{_prefix}/lib/libOSCFaust.so.1*
-%{_prefix}/lib/libfaust.so.2*
-%{_prefix}/lib/libfaustmachine.so.0*
-%{_prefix}/lib/libfaustmachine.so.1*
-%{_prefix}/lib/libHTTPDFaust.so.0*
-%{_mandir}/man1/faust.1*
-
-%files osclib-devel
-%{_prefix}/lib/*.so
-%{_includedir}/faust/
-
-%files doc
-%doc documentation/* 
-
-%files tools
-%doc README.appls tools/%{name}2pd
-%{_bindir}/%{name}2*
-
-%files kate
-%{_datadir}/kde4/apps/katepart/syntax/%{name}.xml
+%files -f %{oreon_filedir}/main.list
+%files -n faust-doc -f %{oreon_filedir}/faust-doc.list
+%files -n faust-osclib -f %{oreon_filedir}/faust-osclib.list
+%files -n faust-osclib-devel -f %{oreon_filedir}/faust-osclib-devel.list
+%files -n faust-tools -f %{oreon_filedir}/faust-tools.list
+%files -n faust-kate -f %{oreon_filedir}/faust-kate.list
 
 %changelog
+
 %autochangelog

@@ -1,21 +1,18 @@
 %global source0_hash 8c19f5d62127c11c20976ae130d1914a64f0115e5113810c38fe53bf8715378b
-
 Name:           jdepend
 Version:        2.10
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java Design Quality Metrics
 License:        MIT
 URL:            https://github.com/clarkware/jdepend
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/clarkware/jdepend/archive/refs/tags/2.10.tar.gz#/jdepend-2.10.tar.gz
-
-BuildRequires:  javapackages-local-openjdk25
-BuildRequires:  ant-openjdk25 
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.10-27
-
+# oreon:deps
+BuildRequires:  ant-openjdk25
+BuildRequires:  javapackages-local-openjdk25
+# /oreon:deps
 %description
 JDepend traverses a set of Java class and source file directories and
 generates design quality metrics for each Java package. JDepend allows
@@ -24,6 +21,7 @@ extensibility, reusability, and maintainability to effectively manage
 and control package dependencies.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 # remove all binary libs
@@ -35,16 +33,16 @@ find . -type f -exec chmod 644 {} \;
 %mvn_file %{name}:%{name} %{name}
 
 %build
-%ant -Dant.build.javac.source=1.8 -Dant.build.javac.target=1.8 jar
 
+%ant -Dant.build.javac.source=1.8 -Dant.build.javac.target=1.8 jar
 %install
 %mvn_artifact jdepend:jdepend:%{version} dist/%{name}-%{version}.jar
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md CHANGELOG.md docs
-%license LICENSE.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.10-1
 - Prepare for Oreon 11 (RP1)

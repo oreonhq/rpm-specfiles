@@ -1,62 +1,42 @@
-%global source0_hash none
-
+%global source0_hash f82fafe0bcb4fe7a010d942099b5a84d721d37c897538ed632f788962c1411f8
 Name:           python-intbitset
 Version:        4.1.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        C-based extension implementing fast integer bit sets.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
 URL:            http://github.com/inveniosoftware-contrib/intbitset/
-Source:         %{pypi_source intbitset}
-
+Source0:        https://files.pythonhosted.org/packages/source/i/intbitset/intbitset-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'intbitset' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-intbitset = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-intbitset
-Summary:        %{summary}
-
-%description -n python3-intbitset %_description
+Summary:        C-based extension implementing fast integer bit sets.
+%description -n python3-intbitset
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-intbitset tests
-
 
 %prep
-%autosetup -p1 -n intbitset-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir intbitset-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-intbitset usr/lib/python3*/site-packages/intbitset* usr/lib64/python3*/site-packages/intbitset* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/intbitset* usr/lib64/python3*/site-packages/intbitset* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-intbitset -f %{pyproject_files}
+%files
+%files -n python3-intbitset -f %{oreon_filedir}/python3-intbitset.list
 
 %changelog
+
 %autochangelog

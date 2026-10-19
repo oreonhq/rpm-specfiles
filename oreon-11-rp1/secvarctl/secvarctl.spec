@@ -1,22 +1,20 @@
 %global source0_hash 19f5925c9f032c92c9f1eb919816945b36412a2c78841bdf1f25c83f9c1e890b
 %global source1_hash b1adf3dd540ad62ec9e5eb36d1f8ccb219c22b755f7b1c9bdd6a3980393a6af2
-
 Name:		    secvarctl
 Version:	    1.1.0
-Release:	    %autorelease
-Summary:	    Suite of tools to manipulate and generate Secure Boot variables on POWER
+Release:        1%{?dist}
+Summary:        Suite of tools to manipulate and generate Secure Boot variables on POWER
 License:	    Apache-2.0
 URL:		    https://github.com/open-power/secvarctl
 Source0:        https://github.com/open-power/secvarctl/archive/refs/tags/v1.1.0.tar.gz#/secvarctl-1.1.0.tar.gz
 Source1:        https://github.com/ibm/libstb-secvar/archive/ce98be9d15ac2df062726b4451f0ec0c0b27fbf2.tar.gz#/secvarctl-1.1.0.tar.gz
-
-BuildRequires:	gcc
-BuildRequires:	cmake
-BuildRequires:	openssl-devel
-BuildRequires:  libasan
-
 Provides:       bundled(libstb-secvar)
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  libasan
+BuildRequires:  openssl-devel
+# /oreon:deps
 %description
 Suite of tools to manipulate and generate Secure Boot variables on POWER.
 
@@ -26,29 +24,28 @@ commands, with the keys efficiently. It is supporting automate process of the
 both host and guest secure boot keys.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 tar xf %{SOURCE1} -C external/libstb-secvar --strip-components=1
 
 %build
+
 %cmake -DCMAKE_BUILD_TYPE=Release
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
+
 %ifarch ppc64le
 make check
 %endif
-
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-1
 - Import

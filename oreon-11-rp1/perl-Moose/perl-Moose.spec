@@ -1,119 +1,20 @@
 %global source0_hash c4bdcbe4daaeb50dcf40ea17dfb1483db22cb8832287abd8762a44ab98fb561f
 %{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
-
-# Tests with requirements that would need bootstrapping
-%if ! (0%{?rhel})
-%bcond_without perl_Moose_enables_optional_tests
-%else
 %bcond_with perl_Moose_enables_optional_tests
-%endif
-
 Name:           perl-Moose
 Summary:        Complete modern object system for Perl 5
 Version:        2.4000
-Release:        5%{?dist}
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Moose
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Moose-%{version}.tar.gz
-# configure / build
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(base)
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(lib)
-# module runtime
-BuildRequires:  perl(B)
-BuildRequires:  perl(Carp) >= 1.22
-BuildRequires:  perl(Class::Load) >= 0.09
-BuildRequires:  perl(Class::Load::XS) >= 0.01
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(Data::OptList) >= 0.107
-BuildRequires:  perl(Devel::GlobalDestruction)
-BuildRequires:  perl(Devel::OverloadInfo) >= 0.005
-BuildRequires:  perl(Devel::PartialDump) >= 0.14
-BuildRequires:  perl(Devel::StackTrace) >= 2.03
-BuildRequires:  perl(Dist::CheckConflicts) >= 0.02
-BuildRequires:  perl(Eval::Closure) >= 0.04
-BuildRequires:  perl(Filter::Simple)
-BuildRequires:  perl(if)
-BuildRequires:  perl(List::Util) >= 1.56
-BuildRequires:  perl(Module::Runtime) >= 0.014
-BuildRequires:  perl(Module::Runtime::Conflicts) >= 0.002
-BuildRequires:  perl(MRO::Compat) >= 0.05
-BuildRequires:  perl(overload)
-BuildRequires:  perl(Package::DeprecationManager) >= 0.11
-BuildRequires:  perl(Package::Stash) >= 0.32
-BuildRequires:  perl(Package::Stash::XS) >= 0.24
-BuildRequires:  perl(Params::Util) >= 1.00
-BuildRequires:  perl(parent) >= 0.223
-BuildRequires:  perl(re)
-BuildRequires:  perl(Scalar::Util) >= 1.19
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Sub::Exporter) >= 0.980
-BuildRequires:  perl(Sub::Util) >= 1.40
-BuildRequires:  perl(Test::Builder)
-BuildRequires:  perl(Try::Tiny) >= 0.17
-BuildRequires:  perl(warnings)
-# script runtime
-BuildRequires:  perl(Getopt::Long)
-# tests
-BuildRequires:  perl(Algorithm::C3)
-BuildRequires:  perl(CPAN::Meta::Check) >= 0.011
-BuildRequires:  perl(CPAN::Meta::Requirements)
-BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(FindBin)
-BuildRequires:  perl(IO::File)
-BuildRequires:  perl(Module::Metadata)
-BuildRequires:  perl(Symbol)
-BuildRequires:  perl(Term::ANSIColor)
-BuildRequires:  perl(Test::Builder::Tester)
-BuildRequires:  perl(Test::Fatal) >= 0.001
-BuildRequires:  perl(Test::More) >= 0.96
-BuildRequires:  perl(Test::Needs) >= 0.002010
-BuildRequires:  perl(Tie::Scalar)
-# optional tests
-BuildRequires:  perl(CPAN::Meta) >= 2.120900
 %if 0%{!?perl_bootstrap:1} && %{with perl_Moose_enables_optional_tests}
-BuildRequires:  perl(Data::Visitor) >= 0.26
 %endif
-BuildRequires:  perl(DateTime)
-BuildRequires:  perl(DateTime::Calendar::Mayan)
-BuildRequires:  perl(DateTime::Format::MySQL)
-BuildRequires:  perl(DBM::Deep) >= 1.003
-BuildRequires:  perl(Declare::Constraints::Simple)
-BuildRequires:  perl(HTTP::Headers)
-BuildRequires:  perl(Locale::US)
-BuildRequires:  perl(Module::Refresh)
 %if 0%{!?perl_bootstrap:1} && %{with perl_Moose_enables_optional_tests}
-BuildRequires:  perl(Moo)
-BuildRequires:  perl(MooseX::MarkAsMethods)
-BuildRequires:  perl(MooseX::NonMoose) >= 0.25
 %endif
-BuildRequires:  perl(PadWalker)
-BuildRequires:  perl(Params::Coerce)
-BuildRequires:  perl(Regexp::Common)
-BuildRequires:  perl(Specio) >= 0.10
-BuildRequires:  perl(SUPER) >= 1.10
-BuildRequires:  perl(Test::Deep)
-BuildRequires:  perl(Test::LeakTrace)
-BuildRequires:  perl(Test::Memory::Cycle)
-BuildRequires:  perl(Test::Output)
-BuildRequires:  perl(Test::Warnings) >= 0.016
 %if 0%{!?perl_bootstrap:1} && %{with perl_Moose_enables_optional_tests}
-# Break build cycle: perl-Moose → perl-Type-Tiny → perl-Moose
-BuildRequires:  perl(Types::Standard)
 %endif
-BuildRequires:  perl(URI)
-# versioned and optional dependencies
 Requires:       perl(Class::Load) >= 0.09
 Requires:       perl(Class::Load::XS) >= 0.01
 Requires:       perl(Data::Dumper)
@@ -130,15 +31,9 @@ Requires:       perl(Params::Util) >= 1.00
 Requires:       perl(parent) >= 0.223
 Requires:       perl(Sub::Util) >= 1.40
 Requires:       perl(Try::Tiny) >= 0.17
-
-# hidden from PAUSE
 Provides:       perl(Moose::Conflicts) = 0
-
-# virtual provides for perl-Any-Moose
 Provides:       perl(Any-Moose) = %{version}
-
 %{?perl_default_filter}
-
 Provides:       perl(Moose)
 Provides:       perl(Moose::Role)
 Provides:       perl(Moose::Util::TypeConstraints)
@@ -164,6 +59,88 @@ Provides:       perl(Moose::Meta::Method)
 Provides:       perl(Moose::Object)
 Provides:       perl(Moose::Exporter)
 Provides:       perl(Moose::Util::MetaRole)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  perl(Algorithm::C3)
+BuildRequires:  perl(B)
+BuildRequires:  perl(CPAN::Meta)
+BuildRequires:  perl(CPAN::Meta::Check)
+BuildRequires:  perl(CPAN::Meta::Requirements)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Class::Load)
+BuildRequires:  perl(Class::Load::XS)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(DBM::Deep)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Data::OptList)
+BuildRequires:  perl(DateTime)
+BuildRequires:  perl(DateTime::Calendar::Mayan)
+BuildRequires:  perl(DateTime::Format::MySQL)
+BuildRequires:  perl(Declare::Constraints::Simple)
+BuildRequires:  perl(Devel::GlobalDestruction)
+BuildRequires:  perl(Devel::OverloadInfo)
+BuildRequires:  perl(Devel::PartialDump)
+BuildRequires:  perl(Devel::StackTrace)
+BuildRequires:  perl(Dist::CheckConflicts)
+BuildRequires:  perl(Eval::Closure)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(Filter::Simple)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(HTTP::Headers)
+BuildRequires:  perl(IO::File)
+BuildRequires:  perl(List::Util)
+BuildRequires:  perl(Locale::US)
+BuildRequires:  perl(MRO::Compat)
+BuildRequires:  perl(Module::Metadata)
+BuildRequires:  perl(Module::Refresh)
+BuildRequires:  perl(Module::Runtime)
+BuildRequires:  perl(Module::Runtime::Conflicts)
+BuildRequires:  perl(Package::DeprecationManager)
+BuildRequires:  perl(Package::Stash)
+BuildRequires:  perl(Package::Stash::XS)
+BuildRequires:  perl(PadWalker)
+BuildRequires:  perl(Params::Coerce)
+BuildRequires:  perl(Params::Util)
+BuildRequires:  perl(Regexp::Common)
+BuildRequires:  perl(SUPER)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Specio)
+BuildRequires:  perl(Sub::Exporter)
+BuildRequires:  perl(Sub::Util)
+BuildRequires:  perl(Symbol)
+BuildRequires:  perl(Term::ANSIColor)
+BuildRequires:  perl(Test::Builder)
+BuildRequires:  perl(Test::Builder::Tester)
+BuildRequires:  perl(Test::Deep)
+BuildRequires:  perl(Test::Fatal)
+BuildRequires:  perl(Test::LeakTrace)
+BuildRequires:  perl(Test::Memory::Cycle)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Needs)
+BuildRequires:  perl(Test::Output)
+BuildRequires:  perl(Test::Warnings)
+BuildRequires:  perl(Tie::Scalar)
+BuildRequires:  perl(Try::Tiny)
+BuildRequires:  perl(URI)
+BuildRequires:  perl(base)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(if)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(parent)
+BuildRequires:  perl(re)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Moose is an extension of the Perl 5 object system.
 
@@ -181,11 +158,11 @@ system, but instead an extension of the existing one.
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Test functions for Moose specific features
 Requires:   %{name} = %{version}-%{release}
-
 %description -n perl-Test-Moose
 This module provides some useful test functions for Moose based classes.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Moose-%{version}
 
@@ -196,35 +173,26 @@ find t/ -type f -name '*.t' -print0 \
   | xargs -0 sed -i '1s,#!.*perl,#!%{__perl},'
 
 %build
+
 perl Makefile.PL \
   INSTALLDIRS=vendor \
   OPTIMIZE="%{optflags}" \
   NO_PERLLOCAL=1 \
   NO_PACKLIST=1
 %{make_build}
-
 %install
 %{make_install}
 find %{buildroot} -type f -name '*.bs' -empty -delete
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles perl-Test-Moose usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files
-%license LICENSE
-%doc Changes Changes.Class-MOP README.md TODO
-%doc t/ benchmarks/ doc/
-%{perl_vendorarch}/*
-%exclude %dir %{perl_vendorarch}/auto/
-%{_mandir}/man3/*
-%{_bindir}/moose-outdated
-%exclude %{perl_vendorarch}/Test
-%exclude %{_mandir}/man3/Test::Moose*
-
-%files -n perl-Test-Moose
-%{perl_vendorarch}/Test
-%{_mandir}/man3/Test::Moose*
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Test-Moose -f %{oreon_filedir}/perl-Test-Moose.list
 
 %changelog
+
 %autochangelog

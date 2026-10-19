@@ -1,31 +1,30 @@
 %global source0_hash 7d7015bee0803f4b8257eefc5e1d7f437d581c6dcc0cd48628acf9896f0bc491
-
 Name:           opencity
 Version:        0.0.6.5
 Release:        28%{?dist}
 Summary:        Full 3D city simulator game project
-
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            http://www.opencity.info
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}stable.tar.bz2
 Source1:        %{name}.appdata.xml
-# Remove bundled libraries tinyxml, tinyxpath and binreloc from Makefiles.am
 Patch0:        %{name}.remove_bundled_libraries.patch
-# Remove binreloc references from code.
 Patch1:        %{name}.remove_binreloc_references.patch
-
-BuildRequires: make
-BuildRequires:  SDL-devel SDL_image-devel SDL_net-devel SDL_mixer-devel 
-BuildRequires:  libpng-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-BuildRequires:  libtool autoconf
-BuildRequires:  tinyxml-devel tinyxpath-devel
-BuildRequires:  gcc-c++
-
 Requires: %{name}-data
-
+# oreon:deps
+BuildRequires:  SDL-devel
+BuildRequires:  SDL_image-devel
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  SDL_net-devel
+BuildRequires:  autoconf
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  libpng-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  tinyxml-devel
+BuildRequires:  tinyxpath-devel
+# /oreon:deps
 %description
 This is just another city simulation.
 The idea is simple: you have to build a city with 3 types of "zones":
@@ -40,6 +39,7 @@ BuildArch: noarch
 Data files for opencity.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}stable
@@ -71,42 +71,27 @@ done
 sed -i 's/\r$//' docs/*_it.txt
 
 %build
-# https://sourceforge.net/p/opencity/code/HEAD/tree/trunk/opencity/autogen.sh
+
 aclocal
 libtoolize -c
 autoconf
 autoheader
 automake -a -c
-
 %configure CXXFLAGS="-I%{_includedir}/tinyxpath \
 -DWITHOUT_BINRELOC %{optflags}" LDFLAGS="-ltinyxml -ltinyxpath"
-
 make %{?_smp_mflags}
-
 %install
 %make_install
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
-
-# Install the appdata file
 mkdir %{buildroot}%{_datadir}/appdata/
 install -pDm644 %{SOURCE1} %{buildroot}%{_datadir}/appdata/
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/%{name}.appdata.xml
-
-# Documentation handled by %%doc
 rm -rfv %{buildroot}%{_defaultdocdir}/%{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS README docs/FAQ* docs/README*
-%{_bindir}/%{name}
-%{_mandir}/man6/%{name}.6*
-%{_datadir}/pixmaps/%{name}.png
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/appdata/%{name}.appdata.xml
-%config(noreplace) %{_sysconfdir}/%{name}
-
-%files data
-%{_datadir}/%{name} 
-%license COPYING COPYRIGHT
+%files -f %{oreon_filedir}/main.list
+%files -n opencity-data -f %{oreon_filedir}/opencity-data.list
 
 %changelog
+
 %autochangelog

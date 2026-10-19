@@ -1,57 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 605d79fa2ec2f02905492e5ea13d903c2d842d0b4c915a57f7bf02ab9f3c91dd
 Name:           python-djangorestframework
 Version:        3.18.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Web APIs for Django, made easy.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://www.django-rest-framework.org
-Source:         %{pypi_source djangorestframework}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/djangorestframework/djangorestframework-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'djangorestframework' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-djangorestframework = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-djangorestframework
-Summary:        %{summary}
-
-%description -n python3-djangorestframework %_description
-
+Summary:        Web APIs for Django, made easy.
+# oreon:reqs
+Requires:       python3dist(django) >= 5.2
+# /oreon:reqs
+%description -n python3-djangorestframework
 
 %prep
-%autosetup -p1 -n djangorestframework-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir djangorestframework-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-djangorestframework usr/lib/python3*/site-packages/djangorestframework* usr/lib64/python3*/site-packages/djangorestframework* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/djangorestframework* usr/lib64/python3*/site-packages/djangorestframework* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-djangorestframework -f %{pyproject_files}
+%files
+%files -n python3-djangorestframework -f %{oreon_filedir}/python3-djangorestframework.list
 
 %changelog
+
 %autochangelog

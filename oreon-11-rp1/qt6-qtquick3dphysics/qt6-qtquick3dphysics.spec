@@ -1,44 +1,33 @@
 %global source0_hash 8ddb23147e4677c759d36a65ae50f6b0d0d79fa8590ac89576b91f572918b481
-
 %global qt_module qtquick3dphysics
-
-#global unstable 0
 %if 0%{?unstable}
 %global prerelease rc
 %endif
-
 %global examples 1
-
-Summary: Qt6 - Quick3D Physics Libraries and utilities
+Summary:        Qt6 - Quick3D Physics Libraries and utilities
 Name:    qt6-%{qt_module}
 Version: 6.12.0
-Release: %autorelease
-
+Release:        1%{?dist}
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
-
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 %global  qt_version %(echo %{version} | cut -d~ -f1)
-
 %if 0%{?unstable}
-Source0: https://download.qt.io/development_releases/qt/%{majmin}/%{qt_version}/submodules/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
+Source0:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-s%{prerelease}-%{version}.tar.xz
 %else
-Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
-
 ExclusiveArch: aarch64 i686 x86_64
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: ninja-build
-BuildRequires: qt6-rpm-macros >= %{version}
-BuildRequires: qt6-qtbase-private-devel
-#libQt6Core.so.6(Qt_6_PRIVATE_API)(64bit)
 %{?_qt6:Requires: %{_qt6}%{?_isa} = %{_qt6_version}}
-BuildRequires: qt6-qtdeclarative-devel
-BuildRequires: qt6-qtshadertools-devel
-BuildRequires: qt6-qtquick3d-devel
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  ninja-build
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  qt6-qtdeclarative-devel
+BuildRequires:  qt6-qtquick3d-devel
+BuildRequires:  qt6-qtshadertools-devel
+BuildRequires:  qt6-rpm-macros
+# /oreon:deps
 %description
 The Qt 6 Quick3D Physics library.
 
@@ -60,6 +49,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}} -p1
@@ -69,52 +59,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cmake_qt6 \
   -DQT_BUILD_EXAMPLES=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSES/*
-%{_qt6_archdatadir}/sbom/%{qt_module}-%{qt_version}.spdx
-%{_qt6_libdir}/libQt6Quick3DPhysics.so.*
-%{_qt6_libdir}/libQt6Quick3DPhysicsHelpers.so.*
-%{_qt6_qmldir}//QtQuick3D/
-
-%files devel
-%{_qt6_bindir}/cooker
-%dir %{_qt6_headerdir}/QtQuick3DPhysics
-%{_qt6_headerdir}/QtQuick3DPhysics/*
-%dir %{_qt6_headerdir}/QtQuick3DPhysicsHelpers
-%{_qt6_headerdir}/QtQuick3DPhysicsHelpers/*
-%{_qt6_libdir}/libQt6BundledPhysX.a
-%{_qt6_libdir}/libQt6Quick3DPhysics.so
-%{_qt6_libdir}/libQt6Quick3DPhysics.prl
-%{_qt6_libdir}/libQt6Quick3DPhysicsHelpers.so
-%{_qt6_libdir}/libQt6Quick3DPhysicsHelpers.prl
-%dir %{_qt6_libdir}/cmake/Qt6BundledPhysX
-%dir %{_qt6_libdir}/cmake/Qt6Quick3DPhysics
-%dir %{_qt6_libdir}/cmake/Qt6Quick3DPhysicsHelpers
-%dir %{_qt6_libdir}/cmake/Qt6Quick3DPhysicsHelpersPrivate
-%dir %{_qt6_libdir}/cmake/Qt6Quick3DPhysicsPrivate
-%{_qt6_libdir}/cmake/Qt6/
-%{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/QtQuick3DPhysicsTestsConfig.cmake
-%{_qt6_libdir}/cmake/Qt6BundledPhysX/*
-%{_qt6_libdir}/cmake/Qt6Qml/
-%{_qt6_libdir}/cmake/Qt6Quick3DPhysics/*.cmake
-%{_qt6_libdir}/cmake/Qt6Quick3DPhysicsHelpers/*.cmake
-%{_qt6_libdir}/cmake/Qt6Quick3DPhysicsHelpersPrivate/*.cmake
-%{_qt6_libdir}/cmake/Qt6Quick3DPhysicsPrivate/*.cmake
-%{_qt6_archdatadir}/mkspecs/modules/*
-%{_qt6_libdir}/qt6/metatypes/qt6*_metatypes.json
-%{_qt6_libdir}/qt6/modules/*.json
-%{_qt6_libdir}/pkgconfig/*.pc
-
-%if 0%{?examples}
-%files examples
-%{_qt6_examplesdir}/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n qt6-qtquick3dphysics-devel -f %{oreon_filedir}/qt6-qtquick3dphysics-devel.list
+%files -n qt6-qtquick3dphysics-examples -f %{oreon_filedir}/qt6-qtquick3dphysics-examples.list
 
 %changelog
+
 %autochangelog

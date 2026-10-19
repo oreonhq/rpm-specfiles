@@ -1,25 +1,24 @@
 %global source0_hash 507b4b2bcb268d79ec09780285f704990772b86b3087819c086a09b688f4df60
-
 Name:           jaero
 Version:        1.0.4.11
-Release:        16%{?dist}
+Release:        1%{?dist}
 Summary:        A SatCom ACARS demodulator and decoder for the Aero standard
-
-# LGPLv2+ for JAERO/gui_classes/console.cpp
-# Automatically converted from old format: MIT and LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-MIT AND LicenseRef-Callaway-LGPLv2+
 URL:            http://jontio.zapto.org/hda1/jaero.html
 Source0:        https://github.com/jontio/JAERO/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.xz
 Source1:        %{name}.appdata.xml
-# Fix for Werror=format-security
 Patch0:         bcb5b78c74f06cc878cb347b9f99b08cddfafef4.patch
-# Fix support system qcustomplot
 Patch1:         fe604fb7e221fc615c0526a48f1f73954d6e70bb.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  libcorrect-devel
-BuildRequires:  pkgconfig
+Requires:       hicolor-icon-theme
+Requires:       unzip%{?_isa}
+# oreon:deps
 BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  kiss-fft-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libcorrect-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Multimedia)
@@ -30,14 +29,8 @@ BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(libacars)
 BuildRequires:  pkgconfig(vorbis)
-BuildRequires:  kiss-fft-devel
 BuildRequires:  qcustomplot-qt5-devel
-BuildRequires:  libappstream-glib
-BuildRequires:  make
-
-Requires:       hicolor-icon-theme
-Requires:       unzip%{?_isa}
-
+# /oreon:deps
 %description
 JAERO is a program that demodulates and decodes Classic Aero ACARS (Aircraft
 Communications Addressing and Reporting System) messages sent from satellites to
@@ -50,6 +43,7 @@ low-gain antenna that can be home-brewed in conjunction with an
 RTL-SDR dongle.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n JAERO-%{version}
@@ -88,28 +82,24 @@ sed -e "s|/opt/jaero/JAERO|%{_bindir}/%{name}|" \
     -e "s|/opt/jaero/jaero.ico|%{name}|" -i JAERO/%{name}.desktop
 
 %build
+
 mkdir JAERO/build
 pushd JAERO/build
     %{qmake_qt5} ..
     %make_build
 popd
-
 %install
 install -Dpm 0755 JAERO/build/JAERO  %{buildroot}%{_bindir}/%{name}
 install -Dpm 0644 JAERO/images/primary-modem.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 desktop-file-install JAERO/%{name}.desktop
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
+%oreon_autofiles main
 
 %check
-appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
 
-%files
-%license JAERO/LICENSE
-%doc README.md
-%{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/metainfo/%{name}.appdata.xml
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

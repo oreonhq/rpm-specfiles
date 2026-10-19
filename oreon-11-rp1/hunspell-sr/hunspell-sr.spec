@@ -1,30 +1,28 @@
-%global source0_hash none
-
+%global source0_hash 03f2616f11de380a28bb9a10cfa957378116a0d1240756e48e3da9e98600abc8
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-sr
-Summary: Serbian hunspell dictionaries
+Summary:        Serbian hunspell dictionaries
 Version: 26.8.0.3
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: LGPL-3.0-only
 URL: https://cgit.freedesktop.org/libreoffice/dictionaries/tree/sr
-Source0: https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
+Source0:        https://deb.debian.org/debian/pool/main/libr/libreoffice-dictionaries/libreoffice-dictionaries_25.2.3.orig.tar.xz#/libreoffice-dictionaries-25.2.3.tar.xz
 BuildArch: noarch
-
 Requires: hunspell
 Supplements: (hunspell and langpacks-sr)
 Provides: hunspell-bs = %{version}-%{release}
+# oreon:deps
 
+# /oreon:deps
 %package -n hyphen-sr
 Requires: hyphen
 Summary: Serbian hyphenation rules
 Provides: hyphen-bs = %{version}-%{release}
 Supplements: (hyphen and langpacks-sr)
-
 %description -n hyphen-sr
 Serbian hyphenation rules.
 
@@ -32,6 +30,7 @@ Serbian hyphenation rules.
 Serbian hunspell dictionaries
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n libreoffice-25.2.3.2
 
@@ -54,17 +53,13 @@ pushd %{buildroot}%{_datadir}/hyphen/
 for lang in sr_ME sr_RS; do ln -s hyph_sr_YU.dic hyph_${lang}.dic; done
 for lang in sh_ME sh_RS bs_BA; do ln -s hyph_sh_YU.dic hyph_${lang}.dic; done
 popd
+%oreon_autofiles hyphen-sr usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc dictionaries/sr/README.txt
-%{_datadir}/%{dict_dirname}/*
-
-%files -n hyphen-sr
-%doc dictionaries/sr/README.txt
-%{_datadir}/hyphen/*
-
-
+%files -f %{oreon_filedir}/main.list
+%files -n hyphen-sr -f %{oreon_filedir}/hyphen-sr.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.2.3-1
 - Import

@@ -1,79 +1,54 @@
 %global source0_hash 8a58af5b6141319287c1883bec8bd1bd545b7567b7fc5e6ce5d25a1c85f36397
 %global source1_hash 28c840e27a375675d756ace75fad49efeffb66e9620a271492067a8bebdbd8b2
-
-Summary: Command-line tools and library for transforming PDF files
+Summary:        Command-line tools and library for transforming PDF files
 Name:    qpdf
 Version: 12.4.2
-Release: 1%{?dist}
-# MIT: e.g. libqpdf/sha2.c, but those are not compiled in (GNUTLS is used)
-# upstream uses ASL 2.0 now, but he allowed other to distribute qpdf under
-# old license (see README)
+Release:        1%{?dist}
 License: Apache-2.0 OR Artistic-2.0
 URL:     https://qpdf.sourceforge.io/
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}-doc.zip
-
-# make qpdf working under FIPS, downstream patch
 Patch1:  qpdf-relax.patch
-
-# zlib/zlib-ng has different behavior for inflate/deflate errors
-# on s390x
-# it might be fixed upstream in qpdf once it migrates to zlib-ng...
 Patch1000: qpdf-s390x-disable-tests-zlib.patch
-
-
-# gcc and gcc-c++ are no longer in buildroot by default
-# gcc is needed for qpdf-ctest.c
-BuildRequires: gcc
-# gcc-c++ is need for everything except for qpdf-ctest
-BuildRequires: gcc-c++
-# uses cmake
-BuildRequires: cmake
-
-BuildRequires: zlib-devel
-BuildRequires: libjpeg-turbo-devel
-
-# for gnutls crypto
-BuildRequires: gnutls-devel
-
-# for fix-qdf and test suite
-BuildRequires: perl-generators
-BuildRequires: perl-interpreter
-BuildRequires: perl(Carp)
-BuildRequires: perl(Config)
-BuildRequires: perl(constant)
-BuildRequires: perl(Cwd)
-BuildRequires: perl(Digest::MD5)
-BuildRequires: perl(Digest::SHA)
-BuildRequires: perl(File::Basename)
-BuildRequires: perl(File::Compare)
-BuildRequires: perl(File::Copy)
-BuildRequires: perl(File::Find)
-BuildRequires: perl(File::Spec)
-BuildRequires: perl(FileHandle)
-BuildRequires: perl(IO::Handle)
-BuildRequires: perl(IO::Select)
-BuildRequires: perl(IO::Socket)
-BuildRequires: perl(POSIX)
-BuildRequires: perl(strict)
-# perl(Term::ANSIColor) - not needed for tests
-# perl(Term::ReadKey) - not needed for tests
-
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gnutls-devel
+BuildRequires:  libjpeg-turbo-devel
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Digest::MD5)
+BuildRequires:  perl(Digest::SHA)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Compare)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Find)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(FileHandle)
+BuildRequires:  perl(IO::Handle)
+BuildRequires:  perl(IO::Select)
+BuildRequires:  perl(IO::Socket)
+BuildRequires:  perl(POSIX)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(strict)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  unzip
+BuildRequires:  zlib-devel
+# /oreon:deps
 %package libs
 Summary: QPDF library for transforming PDF files
-
 %package devel
 Summary: Development files for QPDF library
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 %package doc
 Summary: QPDF Manual
 BuildArch: noarch
 BuildRequires: unzip
 Requires: %{name}-libs = %{version}-%{release}
-
 %description
 QPDF is a command-line program that does structural, content-preserving
 transformations on PDF files. It could have been called something
@@ -94,6 +69,7 @@ for developing programs using the QPDF library.
 QPDF Manual
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q
@@ -107,59 +83,31 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 # unpack zip file with manual
 unzip %{SOURCE1}
 
-
 %build
+
 %cmake -DBUILD_STATIC_LIBS=0 \
        -DREQUIRE_CRYPTO_GNUTLS=1 \
        -DUSE_IMPLICIT_CRYPTO=0 \
        -DSHOW_FAILED_TEST_OUTPUT=1
-
 %cmake_build
-
 %install
 %cmake_install
-
 install -m 0644 %{name}-%{version}-doc/%{name}-manual.pdf %{buildroot}/%{_pkgdocdir}/%{name}-manual.pdf
-
-# install bash/zsh completions
 mkdir -p %{buildroot}%{bash_completions_dir}
 mkdir -p %{buildroot}%{zsh_completions_dir}
 install -m 0644 completions/bash/qpdf %{buildroot}%{bash_completions_dir}/qpdf
 install -m 0644 completions/zsh/_qpdf %{buildroot}%{zsh_completions_dir}/_qpdf
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
 %ldconfig_scriptlets libs
-
-%files
-%{_bindir}/fix-qdf
-%{_bindir}/qpdf
-%{_bindir}/zlib-flate
-%{_mandir}/man1/fix-qdf.1.gz
-%{_mandir}/man1/qpdf.1.gz
-%{_mandir}/man1/zlib-flate.1.gz
-%dir %{bash_completions_dir}
-%{bash_completions_dir}/qpdf
-%dir %{zsh_completions_dir}
-%{zsh_completions_dir}/_qpdf
-
-%files libs
-%doc README.md TODO.md ChangeLog
-%license Artistic-2.0 LICENSE.txt NOTICE.md
-%{_libdir}/libqpdf.so.30
-%{_libdir}/libqpdf.so.30.*
-
-%files devel
-%doc examples/*.cc examples/*.c
-%{_includedir}/qpdf/
-%{_libdir}/libqpdf.so
-%{_libdir}/pkgconfig/libqpdf.pc
-%{_libdir}/cmake/qpdf/
-
-%files doc
-%{_pkgdocdir}
-
+%files -f %{oreon_filedir}/main.list
+%files -n qpdf-libs -f %{oreon_filedir}/qpdf-libs.list
+%files -n qpdf-devel -f %{oreon_filedir}/qpdf-devel.list
+%files -n qpdf-doc -f %{oreon_filedir}/qpdf-doc.list
 
 %changelog
+
 %autochangelog

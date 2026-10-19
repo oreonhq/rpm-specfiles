@@ -1,5 +1,5 @@
+%global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
 %global source0_hash a1c546949847eb2cb24b55f4083b51e2fd08e66cea7d9d56170700e719dc80ad
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,43 +83,21 @@ end
 %bcond_with bootstrap
 Name:           modello
 Version:        2.8.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Modello Data Model toolkit
-# The majority of files are under MIT license, but some of them are ASL 2.0.
-# Some parts of the project are derived from the Exolab project,
-# and are licensed under a 5-clause BSD license (Plexus in SPDX).
 License:        MIT AND Apache-2.0 AND Plexus
 URL:            https://codehaus-plexus.github.io/modello
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/codehaus/%{name}/%{name}/%{version}/%{name}-%{version}-source-release.zip
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(com.google.inject:guice)
-BuildRequires:  mvn(org.apache.maven.plugin-tools:maven-plugin-annotations)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
-BuildRequires:  mvn(org.apache.maven:maven-core)
-BuildRequires:  mvn(org.apache.maven:maven-model)
-BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
-BuildRequires:  mvn(org.apache.velocity:velocity-engine-core)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
-BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
-BuildRequires:  mvn(org.jsoup:jsoup)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-build-api)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.8.1-23
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Modello is a Data Model toolkit in use by the Apache Maven Project.
 
@@ -130,6 +108,7 @@ from the single model, including Java POJOs, XML
 marshallers/unmarshallers, XSD and documentation.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 cp -p %{SOURCE1} LICENSE
@@ -152,17 +131,15 @@ cp -p %{SOURCE1} LICENSE
 %pom_disable_module modello-test
 
 %build
-# skip tests because we have too old xmlunit in Fedora now (1.0.8)
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
-
 %jpackage_script org.codehaus.modello.ModelloCli "" "" modello:sisu/org.eclipse.sisu.plexus:sisu/org.eclipse.sisu.inject:google-guice:aopalliance:atinject:plexus-containers/plexus-component-annotations:plexus/classworlds:plexus/utils:plexus/plexus-build-api:guava:velocity/velocity-engine-core %{name} true
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE
-%{_bindir}/modello
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

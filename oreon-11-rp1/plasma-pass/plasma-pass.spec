@@ -1,77 +1,60 @@
 %global source0_hash 5a88985dc522ca3287f13ed989609a93871996d4e8c5b0a41594e2d3a2fe8f2a
-
 Name:           plasma-pass
 Version: 1.3.1
-Release: 1%{?dist}
+Release:        1%{?dist}
 Summary:        Plasma applet to access passwords from the Pass password manager
 License:        CC0-1.0 AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/%{name}.git
 Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
-
-
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
+Requires:       plasmashell(desktop)
+Requires:       gnupg2
+Recommends:     pass
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  extra-cmake-modules
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  desktop-file-utils
-
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(Qt6Qml)
-BuildRequires:  cmake(Qt6Concurrent)
-
-BuildRequires:  cmake(Plasma)
-BuildRequires:  cmake(Plasma5Support)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6ItemModels)
 BuildRequires:  cmake(KF6KIO)
 BuildRequires:  cmake(KF6Package)
-
+BuildRequires:  cmake(Plasma)
+BuildRequires:  cmake(Plasma5Support)
 BuildRequires:  cmake(QGpgmeQt6)
-
+BuildRequires:  cmake(Qt6Concurrent)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel
 BuildRequires:  gpgmepp-devel
+BuildRequires:  kf6-rpm-macros
 BuildRequires:  pkgconfig(liboath)
-
-
-Requires:       plasmashell(desktop)
-# Invokes the gpg2 executable to decrypt passwords
-Requires:       gnupg2
-
-# Does not use pass directly, but is a GUI for its store, also using
-# the command line is currently the only way how to add new passwords.
-Recommends:     pass
-
+# /oreon:deps
 %description
 Plasma Pass is a Plasma systray applet to easily access passwords from the Pass
 password manager.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{version}
 sed -i 's/set(KF6_MIN_VERSION "6.18.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeLists.txt
 
-
 %build
+
 %cmake_kf6 -DBUILD_WITH_QT6=ON
 %cmake_build
-
 %install
 %cmake_install
 %find_lang plasma_applet_org.kde.plasma.pass
+%oreon_autofiles main
 
-%files -f plasma_applet_org.kde.plasma.pass.lang
-%license LICENSES/*
-%doc README.md
-%{_kf6_qmldir}/org/kde/plasma/private/plasmapass/
-%{_kf6_datadir}/plasma/plasmoids/org.kde.plasma.pass/
-%{_kf6_datadir}/qlogging-categories6/plasma-pass.categories
-%{_kf6_metainfodir}/org.kde.plasma.pass.appdata.xml
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Thu May 28 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1.3.1-1
 - 1.3.1 from invent.kde.org
 
@@ -122,7 +105,6 @@ sed -i 's/set(KF6_MIN_VERSION "6.18.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeList
 - min kf5 ver changed to 5.82
 - cpp BRs added.
 - missing qt and kf5 BRs added.
-
 
 * Mon Feb 15 2021 Daniel Vrátil <dvratil@fedoraproject.org> - 1.2.0-1
 - Plasma Pass 1.2.0

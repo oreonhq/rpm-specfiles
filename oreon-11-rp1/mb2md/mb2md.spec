@@ -1,16 +1,17 @@
+%global source1_hash 89861ab07df753f4bca32548e7a8c5604e9cd0ed5f0b3e682d5240b2d2670f20
 %global source0_hash af45a9b5413a9fe49be0092e560485bf17efc50a4eb4a90744e380c4869f732f
-
 Name:		mb2md
 Version:	3.20
-Release:	34%{?dist}
-Summary:	Mailbox to maildir converter
+Release:        34%{?dist}
+Summary:        Mailbox to maildir converter
 License:	LicenseRef-Fedora-Public-Domain
 URL:		http://batleth.sapienti-sat.org/projects/mb2md
-Source0:	http://batleth.sapienti-sat.org/projects/mb2md/mb2md-%{version}.pl.gz
+Source0:        http://batleth.sapienti-sat.org/projects/mb2md/mb2md-%{version}.pl.gz
 Source1:	http://batleth.sapienti-sat.org/projects/mb2md/changelog.txt
 BuildArch:	noarch
-BuildRequires:	perl-generators
-
+# oreon:deps
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 Convert your emails folders in mailbox format to maildirs.
 Some of the current features of mb2md.pl are:
@@ -33,6 +34,7 @@ Some of the current features of mb2md.pl are:
   original mail
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -Tc -n %{name}-%{version}
@@ -55,10 +57,10 @@ touch -r %{SOURCE0} readme.txt
 %install
 rm -rf %{buildroot}
 install -D -p -m 755 mb2md.pl %{buildroot}%{_bindir}/mb2md
+%oreon_autofiles main
 
-%files
-%doc changelog.txt readme.txt
-%{_bindir}/mb2md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

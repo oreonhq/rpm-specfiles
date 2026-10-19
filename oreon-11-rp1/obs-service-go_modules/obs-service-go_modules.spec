@@ -1,19 +1,19 @@
 %global source0_hash 98851c8a63ba3d77c0c504a0f28fd2baf1de1c32ea12b09ab633257bec4158f2
-
 %define service go_modules
 Name:           obs-service-%{service}
 Version:        0.6.9
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        An OBS source service: Download, verify and vendor Go module dependencies
 License:        GPL-2.0-or-later
 URL:            https://github.com/openSUSE/obs-service-%{service}
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-BuildRequires:  go-md2man
+Source0:        https://github.com/openSUSE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Requires:       python3-libarchive-c
 Requires:       golang-go >= 1.21
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  go-md2man
 BuildRequires:  python3
-
+# /oreon:deps
 %description
 An OBS Source Service that will download,
 verify and vendor Go module dependency sources.
@@ -30,28 +30,19 @@ vendor/
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-# nothing to build
 
 %install
 mkdir -p %{buildroot}%{_prefix}/lib/obs/service
 install -m 0755 go_modules %{buildroot}%{_prefix}/lib/obs/service
 install -m 0644 go_modules.service %{buildroot}%{_prefix}/lib/obs/service
-
 go-md2man -in README.md -out %{name}.1
 install -D -m 0644 %{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
+%oreon_autofiles main
 
-%files
-%doc README.md
-%license LICENSE
-%dir %{_prefix}/lib/obs
-%dir %{_prefix}/lib/obs/service
-%{_prefix}/lib/obs/service/%{service}
-%{_prefix}/lib/obs/service/%{service}.service
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

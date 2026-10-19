@@ -1,59 +1,39 @@
-%global source0_hash none
-
-# This is built as an arched package, as its includes a cache as a Python
-# pickle file which is apparently not an architecture-independent format (fails
-# on s390x). Still, this needs does not produce any debug data.
+%global source0_hash 6758710e80719bbe40e07050d889fb44abc610d58b3219a234f6171ac7868b49
 %global debug_package %{nil}
-
 %bcond tests 1
-
 Name:           scancode-toolkit
 Version:        32.5.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Scan code and detect licenses, copyrights, and more
-
-# Apache-2.0: main program
-# CC-BY-4.0: ScanCode datasets for license detection
 License:        Apache-2.0 AND CC-BY-4.0
 URL:            https://scancode-toolkit.readthedocs.io/
-Source:         https://github.com/aboutcode-org/scancode-toolkit/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# TODO: Is this upstreamable?
+Source0:        https://github.com/aboutcode-org/scancode-toolkit/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:          0001-tests-fix-pytest-traceback.patch
-# See note in https://github.com/aboutcode-org/scancode-toolkit/issues/4541
-# about why pkginfo2 was removed.
 Patch:          0002-Replace-pkginfo2-with-pkginfo.patch
-
-# scancode has dependencies that are not compatible with ix86
 ExcludeArch:    %{ix86}
-
-BuildRequires:  python3-devel
 %if %{with tests}
-BuildRequires:  python3dist(pytest)
 %endif
-BuildRequires:  python3dist(sphinx)
-BuildRequires:  python3dist(sphinx-copybutton)
-BuildRequires:  python3dist(sphinx-reredirects)
-BuildRequires:  python3dist(sphinx-rtd-theme)
-BuildRequires:  tomcli
-
 %global common_description %{expand:
 ScanCode is an open-source tool to scan code and detect licenses, copyrights,
 and more. It provides detailed information about discovered licenses,
 copyrights, and other important details in various formats.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-scancode-toolkit = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package doc
 Summary:        Documentation for python-%{name}
 BuildArch:      noarch
-
 %description doc
 %{common_description}
 
 This package is providing the documentation for %{name}.
 
 %prep
+
 %autosetup -p1
 sed -i 's|\(fallback_version = "\)[^"]*|\1%{version}|' pyproject.toml
 sed -Ei \
@@ -71,52 +51,30 @@ setup.cfg
 sed -i '/"sphinx_rtd_dark_mode"/d' docs/source/conf.py
 sed -i 's/JSON data/JSON text data/' tests/summarycode/data/todo/ignore_issue/invariant-2.2.4-expected.json
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-# NOTE: Upstream's wheels include the license and package cache as a Python pickle, so
-# let's build that here. Without these files, scancode tries to write the cache
-# to site-packages itself which it doesn't have permissions for.
-# TODO: Upstream's approach to caching is problematic.
-# It treats pickles as a portable data format and tries to write a new cache to
-# site-packages if the cache is invalid or does not exist.
-# See https://github.com/aboutcode-org/scancode-toolkit/issues/3497.
-# This should be fixed to prefer a user-writable cache directory.
+
 PYTHONPATH="$(pwd)/src" %{python3} -m licensedcode.reindex
 test -f src/licensedcode/data/cache/license_index/index_cache
 PYTHONPATH="$(pwd)/src" %{python3} -m packagedcode.cache
 test -f src/packagedcode/data/cache/package_patterns_index/index_cache
 %pyproject_wheel
-
-# generate html docs
 sphinx-build-3 -b html docs/source html
-# remove the sphinx-build-3 leftovers
 rm -rf html/.{doctrees,buildinfo}
-
 %install
 %pyproject_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with tests}
-# https://github.com/aboutcode-org/scancode-toolkit/issues/3496
 mkdir -p venv/bin
 ln -s %{buildroot}%{_bindir}/scancode venv/bin/regen-package-docs
 ln -s %{buildroot}%{_bindir}/scancode venv/bin/scancode
 ln -s %{buildroot}%{_bindir}/scancode venv/bin/scancode-license-data
 ln -s %{buildroot}%{_bindir}/scancode venv/bin/scancode-reindex-licenses
-# The tests expect that the directory of each file is added to sys.path, but
-# this doesn't happen in importlib mode, so do it manually.
 tomcli set pyproject.toml arrays str \
     tool.pytest.ini_options.pythonpath 'tests/packagedcode' 'tests/cluecode'
-# The tests expect to be run from a source checkout.
 export PYTHONPATH="$(pwd)/src"
-
-# we use system libmagic 5.45 while upstream uses 5.39
-# real failures start at test_is_licensing_works \
-# to be reported upstream but probably some different library version somewhere too
-# test_about_files: inside the venv we don't use
-# Use importlib mode because some test files have the same filenames.
 %pytest --import-mode importlib -vv -k '%{shrink:
     not test_json_pretty_print and not
         test_jsonlines and not
@@ -171,33 +129,9 @@ export PYTHONPATH="$(pwd)/src"
         %dnl Add new entries above this line.
         placeholder}'
 %endif
-
 %files
-%doc AUTHORS.rst CHANGELOG.rst CODE_OF_CONDUCT.rst
-%doc CONTRIBUTING.rst README.rst ROADMAP.rst
-%license NOTICE apache-2.0.LICENSE cc-by-4.0.LICENSE
-
-%{_bindir}/scancode*
-# TODO: Should these extra utility binaries be included in the package?
-# They are installed as console_scripts but may not be meant for end-user
-# consumption.
-%{_bindir}/add-required-phrases
-%{_bindir}/gen-new-required-phrases-rules
-%{_bindir}/regen-package-docs
-
-%{python3_sitelib}/scancode_toolkit-*.dist-info/
-%{python3_sitelib}/cluecode
-%{python3_sitelib}/formattedcode
-%{python3_sitelib}/licensedcode
-%{python3_sitelib}/packagedcode
-%{python3_sitelib}/scancode
-%pycached %{python3_sitelib}/scancode_config.py
-%{python3_sitelib}/summarycode
-%{python3_sitelib}/textcode
-
-%files doc
-%doc html
-%license NOTICE apache-2.0.LICENSE cc-by-4.0.LICENSE
+%files -n scancode-toolkit-doc -f %{oreon_filedir}/scancode-toolkit-doc.list
 
 %changelog
+
 %autochangelog

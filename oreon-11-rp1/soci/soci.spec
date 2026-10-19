@@ -1,14 +1,4 @@
-%global source0_hash c0974067e57242f21d9a85677c5f6cc7848fba3cbd5ec58d76c95570a5a7a15b
-
-#
-##
-# Default values are %%{?with_empty} %%{?with_sqlite3} %%{?with_mysql}
-#                    %%{?with_postgresql} %%{?with_odbc} %%{!?with_oracle}
-# Note that, for Oracle, when enabled, the following options should
-# also be given:
-# --with-oracle-include=/opt/oracle/app/oracle/product/11.1.0/db_1/rdbms/public
-# --with-oracle-lib=/opt/oracle/app/oracle/product/11.1.0/db_1/lib
-# If the macros are defined, redefine them with the correct compilation flags.
+%global source0_hash 144f017cccc2e2d806badb3313d6ab3c67a1925bccaa747a46fb3907108a615d
 %bcond empty 1
 %bcond sqlite3 1
 %bcond mysql 1
@@ -16,27 +6,28 @@
 %bcond odbc 1
 %bcond oracle 0
 %bcond tests 1
-
 %global _default_oracle_dir /opt/oracle/app/oracle/product/11.1.0/db_1
 %{!?_with_oracle_incdir: %define _with_oracle_incdir --with-oracle-include=%{_default_oracle_dir}/rdbms/public}
 %{!?_with_oracle_libdir: %define _with_oracle_libdir --with-oracle-lib=%{_default_oracle_dir}/lib}
-#
-##
-#
 Name:           soci
 Version:        4.1.4
 %global ups_ver 4.1.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        The database access library for C++ programmers
 License:        BSL-1.0
 URL:            https://github.com/SOCI/%{name}
-Source0:        %{url}/archive/v%{ups_ver}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires:  dos2unix
-BuildRequires:  gcc gcc-c++
-BuildRequires:  cmake
+Source0:        https://github.com/SOCI/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  boost-devel
-
+BuildRequires:  cmake
+BuildRequires:  dos2unix
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libpq-devel
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  unixODBC-devel
+# /oreon:deps
 %description
 %{name} is a C++ database access library that provides the
 illusion of embedding SQL in regular C++ code, staying entirely within
@@ -110,7 +101,6 @@ use %{name} in your programs with Oracle, you will need to install
 Summary:        Header files, libraries and development documentation for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description    devel
 This package contains the header files, dynamic libraries and
 development documentation for %{name}. If you would like to develop
@@ -189,14 +179,12 @@ to install %{name}-oracle.}
 %package        doc
 Summary:        HTML documentation for the %{name} library
 BuildArch:      noarch
-#BuildRequires:  tex(latex)
-#BuildRequires:  doxygen, ghostscript
-
 %description    doc
 This package contains the documentation in the HTML format of the %{name}
 library. The documentation is the same as at the %{name} web page.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{ups_ver}
@@ -215,12 +203,11 @@ chmod a-x AUTHORS README ChangeLog COPYING NEWS
 dos2unix AUTHORS README ChangeLog COPYING NEWS
 
 %build
-# Support for building tests.
+
 %define soci_testflags -DBUILD_TESTS="NONE"
 %if %{with tests}
 %define soci_testflags -DSOCI_TEST=ON -DSOCI_EMPTY_TEST_CONNSTR="dummy" -DSOCI_SQLITE3_TEST_CONNSTR="test.db" -DSOCI_POSTGRESQL_TEST_CONNSTR:STRING="dbname=soci_test" -DSOCI_MYSQL_TEST_CONNSTR:STRING="db=soci_test user=mloskot password=pantera"
 %endif
-
 %cmake \
  -DSOCI_STATIC=OFF \
  -DSOCI_EMPTY=%{?with_empty:ON}%{!?with_empty:OFF} \
@@ -231,94 +218,29 @@ dos2unix AUTHORS README ChangeLog COPYING NEWS
  -DSOCI_ORACLE=%{?with_oracle:ON %{?_with_oracle_incdir} %{?_with_oracle_libdir}}%{!?with_oracle:OFF} \
  %{soci_testflags}
 %cmake_build
-
 %install
 %cmake_install
-
-# The SOCI libraries are now released in a non-standard location
 mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-#echo "%%{_libdir}/%%{name}" > %%{buildroot}%%{_sysconfdir}/ld.so.conf.d/%%{name}64.conf
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with tests}
 %check
+
 %{ctest --exclude-regex 'soci_(odbc|mysql|postgresql)_test'}
 %endif
-
-%files
-%doc AUTHORS ChangeLog COPYING NEWS README
-#%%{_sysconfdir}/ld.so.conf.d/%%{name}64.conf
-%{_libdir}/lib%{name}_core.so.*
-
-%{?with_empty:%files empty
-%doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/lib%{name}_empty.so.*}
-
-%{?with_sqlite3:%files sqlite3
-%doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/lib%{name}_sqlite3.so.*}
-
-%{?with_mysql:%files mysql
-%doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/lib%{name}_mysql.so.*}
-
-%{?with_postgresql:%files postgresql
-%doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/lib%{name}_postgresql.so.*}
-
-%{?with_odbc:%files odbc
-%doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/lib%{name}_odbc.so.*}
-
-%{?with_oracle:%files oracle
-%doc AUTHORS ChangeLog COPYING NEWS README
-%{_libdir}/lib%{name}_oracle.so.*}
-
-%files devel
-%doc AUTHORS ChangeLog COPYING NEWS README
-%dir %{_includedir}/%{name}/
-%{_includedir}/%{name}/*.h
-%{_libdir}/lib%{name}_core.so
-%{_libdir}/cmake/%{name}-%{version}
-
-%{?with_empty:%files empty-devel
-%doc AUTHORS ChangeLog COPYING NEWS README
-%dir %{_includedir}/%{name}
-%{_includedir}/%{name}/empty/
-%{_libdir}/lib%{name}_empty.so}
-
-%{?with_sqlite3:%files sqlite3-devel
-%doc AUTHORS ChangeLog COPYING NEWS README
-%dir %{_includedir}/%{name}
-%{_includedir}/%{name}/sqlite3/
-%{_libdir}/lib%{name}_sqlite3.so}
-
-%{?with_mysql:%files mysql-devel
-%doc AUTHORS ChangeLog COPYING NEWS README
-%dir %{_includedir}/%{name}
-%{_includedir}/%{name}/mysql
-%{_libdir}/lib%{name}_mysql.so}
-
-%{?with_postgresql:%files postgresql-devel
-%doc AUTHORS ChangeLog COPYING NEWS README
-%dir %{_includedir}/%{name}
-%{_includedir}/%{name}/postgresql
-%{_libdir}/lib%{name}_postgresql.so}
-
-%{?with_odbc:%files odbc-devel
-%doc AUTHORS ChangeLog COPYING NEWS README
-%dir %{_includedir}/%{name}
-%{_includedir}/%{name}/odbc/
-%{_libdir}/lib%{name}_odbc.so}
-
-%{?with_oracle:%files oracle-devel
-%doc AUTHORS ChangeLog COPYING NEWS README
-%dir %{_includedir}/%{name}
-%{_includedir}/%{name}/oracle
-%{_libdir}/lib%{name}_oracle.so}
-
-%files doc
-%doc AUTHORS ChangeLog NEWS README
-%license COPYING
+%files -f %{oreon_filedir}/main.list
+%files -n soci-empty -f %{oreon_filedir}/soci-empty.list
+%files -n soci-sqlite3 -f %{oreon_filedir}/soci-sqlite3.list
+%files -n soci-mysql -f %{oreon_filedir}/soci-mysql.list
+%files -n soci-postgresql -f %{oreon_filedir}/soci-postgresql.list
+%files -n soci-odbc -f %{oreon_filedir}/soci-odbc.list
+%files -n soci-devel -f %{oreon_filedir}/soci-devel.list
+%files -n soci-empty-devel -f %{oreon_filedir}/soci-empty-devel.list
+%files -n soci-sqlite3-devel -f %{oreon_filedir}/soci-sqlite3-devel.list
+%files -n soci-mysql-devel -f %{oreon_filedir}/soci-mysql-devel.list
+%files -n soci-postgresql-devel -f %{oreon_filedir}/soci-postgresql-devel.list
+%files -n soci-odbc-devel -f %{oreon_filedir}/soci-odbc-devel.list
+%files -n soci-doc -f %{oreon_filedir}/soci-doc.list
 
 %changelog
+
 %autochangelog

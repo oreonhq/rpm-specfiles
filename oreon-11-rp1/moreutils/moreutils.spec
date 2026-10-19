@@ -1,31 +1,26 @@
 %global source0_hash f2bf46d410ba567cc8d01507e94916994e48742722e690dc498fab59f5250132
-
 Name:           moreutils
 Version:        0.70
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Additional unix utilities
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            https://joeyh.name/code/moreutils/
-# upstream host unreachable; tarball from Fedora lookaside cache
 Source0:        https://src.fedoraproject.org/repo/pkgs/moreutils/moreutils-0.70.tar.gz/sha512/7e6623d4ecf50a79d1301f0c63b991f5eb32e4edccb46a99df5c39a7d5cb4d5965fb7d00214afd094f7ac4db311fe49b2a785e7429da99b4324214f0ace5c7d4/moreutils-0.70.tar.gz
-# fixes docbook XSL path
 Patch1:         0001-dont-overwrite-docbooxsl-path.patch
-BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  docbook2X
-BuildRequires:  docbook-dtds
-BuildRequires:  libxml2
-BuildRequires:  perl-generators
-BuildRequires:  perl-podlators
-BuildRequires:  docbook-style-xsl
 Requires:       perl(TimeDate)
 Requires:       perl(Time::Duration)
 Requires:       perl(Time::HiRes)
 Requires:       perl(IPC::Run)
-# These perl modules add functionality to the ts command, as they are added in eval'd code they are not
-# picked up automatically by rpm.
-
+# oreon:deps
+BuildRequires:  docbook-dtds
+BuildRequires:  docbook-style-xsl
+BuildRequires:  docbook2X
+BuildRequires:  gcc
+BuildRequires:  libxml2
+BuildRequires:  make
+BuildRequires:  perl-generators
+BuildRequires:  perl-podlators
+# /oreon:deps
 %description
  This is a growing collection of the unix tools that nobody thought
  to write thirty years ago.
@@ -52,7 +47,6 @@ Requires:       perl(IPC::Run)
 Summary:        Additional unix utility - parallel command
 Requires:       %{name} = %{version}-%{release}
 Conflicts:      parallel
-
 %description parallel
  This is a growing collection of the unix tools that nobody thought
  to write thirty years ago.
@@ -62,6 +56,7 @@ Conflicts:      parallel
   - parallel: run multiple jobs at once
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version}
@@ -78,49 +73,18 @@ sed -r -i "s|pod2man|/usr/bin/pod2man|" Makefile
 sed -r -i "s|install -s|install|" Makefile
 
 %build
+
 %make_build
-
 %check
-make check
 
+make check
 %install
 %make_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README COPYING
-%{_mandir}/man1/chronic.1.gz
-%{_mandir}/man1/combine.1.gz
-%{_mandir}/man1/errno.1.gz
-%{_mandir}/man1/ifdata.1.gz
-%{_mandir}/man1/ifne.1.gz
-%{_mandir}/man1/isutf8.1.gz
-%{_mandir}/man1/lckdo.1.gz
-%{_mandir}/man1/mispipe.1.gz
-%{_mandir}/man1/pee.1.gz
-%{_mandir}/man1/sponge.1.gz
-%{_mandir}/man1/ts.1.gz
-%{_mandir}/man1/vidir.1.gz
-%{_mandir}/man1/vipe.1.gz
-%{_mandir}/man1/zrun.1.gz
-%{_bindir}/chronic
-%{_bindir}/combine
-%{_bindir}/errno
-%{_bindir}/ifdata
-%{_bindir}/ifne
-%{_bindir}/isutf8
-%{_bindir}/lckdo
-%{_bindir}/mispipe
-%{_bindir}/pee
-%{_bindir}/sponge
-%{_bindir}/ts
-%{_bindir}/vidir
-%{_bindir}/vipe
-%{_bindir}/zrun
-
-%files parallel
-%doc README COPYING
-%{_mandir}/man1/parallel.1.gz
-%{_bindir}/parallel
+%files -f %{oreon_filedir}/main.list
+%files -n moreutils-parallel -f %{oreon_filedir}/moreutils-parallel.list
 
 %changelog
+
 %autochangelog

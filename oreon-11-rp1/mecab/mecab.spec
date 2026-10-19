@@ -1,33 +1,24 @@
 %global source0_hash 1f1a63767bc36e4758b06db0daae556733530fec543775082bbe477655c20db1
-
 %define		mainver		0.996
-#%%define		betaver		pre3
 %define		baserelease	11
-
-# Note:
-# mecab dictionary requires mecab-devel to rebuild it,
-# and mecab requires mecab dictionary
-
 Name:		mecab
 Version:	%{mainver}
 %if %{?betaver:0}%{!?betaver:1}
-Release:	%{baserelease}%{?dist}
+Release:        1%{?dist}
 %else
-Release:	0.%{baserelease}.%{betaver}%{?dist}
+Release:        1%{?dist}
 %endif
-Summary:	Yet Another Part-of-Speech and Morphological Analyzer
-
-# SPDX confirmed
+Summary:        Yet Another Part-of-Speech and Morphological Analyzer
 License:	BSD-3-Clause OR LGPL-2.1-or-later OR GPL-2.0-or-later
 URL:		http://mecab.sourceforge.net/
-Source0:        https://github.com/taku910/mecab/archive/master/%{name}-%{version}.tar.gz#/mecab-%{mainver}.tar.gz
-
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	gcc-c++
-BuildRequires:	libtool
-BuildRequires:	make
-
+Source0:        https://github.com/taku910/%{name}/archive/master/%{name}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc-c++
+BuildRequires:  libtool
+BuildRequires:  make
+# /oreon:deps
 %description
 MeCab is a open source morphological analyzer which uses 
 CRF (Conditional Random Fields) as the estimation of parameters.
@@ -39,12 +30,12 @@ of MeCab.
 %package devel
 Summary:	Libraries and Header files for Mecab
 Requires:	%{name}%{?isa} = %{version}-%{release}
-
 %description devel
 This is the development package that provides header files and libraries
 for MeCab.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n mecab-master
 cd mecab
@@ -64,55 +55,33 @@ find . -name \*.cpp -print0 | xargs -0 %{__chmod} 0644
 	mecab-config.in mecabrc.in
 
 %build
+
 cd mecab
 %configure
-# remove rpath from libtool
 %{__sed} -i.rpath \
 	-e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
 	-e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
 	libtool
-
 %make_build
-
 %install
 cd mecab
 %make_install
-
 %{__rm} -f $RPM_BUILD_ROOT%{_libdir}/lib*.{a,la}
 %{__rm} -f doc/Makefile*
-
-# create directory
 %{__mkdir} -p $RPM_BUILD_ROOT%{_libdir}/mecab/dic/
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-# here enable rpath
+
 export LD_LIBRARY_PATH=$(pwd)/mecab/src/.libs
 cd mecab/tests
 %{__make} check || :
 cd ..
-
 %ldconfig_scriptlets
-
-%files
-%doc mecab/AUTHORS
-%license mecab/BSD mecab/COPYING mecab/GPL mecab/LGPL
-%doc mecab/doc/ mecab/example/
-%{_mandir}/man1/%{name}.1*
-
-%config(noreplace) %{_sysconfdir}/mecabrc
-%{_bindir}/%{name}
-%{_libexecdir}/%{name}/
-%{_libdir}/lib%{name}.so.2*
-# several dictionaries can install data files
-# into the following directory.
-%dir %{_libdir}/%{name}/
-%dir %{_libdir}/%{name}/dic/
-
-%files devel
-%{_bindir}/%{name}-config
-%{_libdir}/lib%{name}.so
-%{_includedir}/%{name}.h
+%files -f %{oreon_filedir}/main.list
+%files -n mecab-devel -f %{oreon_filedir}/mecab-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.996-11
 - Import

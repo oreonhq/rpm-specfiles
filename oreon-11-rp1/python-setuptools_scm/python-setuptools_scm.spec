@@ -1,63 +1,80 @@
 %global source0_hash a69f28bfc245608781205e912faae437c2b2165773afa4e7b979d77447a69dd2
-
 Name:           python-setuptools-scm
 Version:        10.3.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        the blessed package to manage your versions by scm tags
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pypa/setuptools-scm/
-Source:         %{pypi_source setuptools_scm}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/setuptools_scm/setuptools_scm-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 45
+BuildRequires:  python3dist(tomli) >= 1
+BuildRequires:  python3dist(typing-extensions) >= 4.1
+BuildRequires:  python3dist(vcs-versioning) < 3
+BuildRequires:  python3dist(vcs-versioning) >= 2.5.0.dev0
+Requires:       python3-setuptools-scm = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-setuptools-scm+rich
+Summary:        Metapackage for python3-setuptools-scm rich extras
+Requires:       python3-setuptools-scm = %{version}-%{release}
+Requires:       python3dist(rich) >= 13
+Provides:       python3dist(setuptools-scm[rich]) = %{version}-%{release}
 
+%description -n python3-setuptools-scm+rich
+Metapackage for python3-setuptools-scm rich extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'setuptools-scm' generated automatically by pyp2spec.}
+%package -n       python3-setuptools-scm+simple
+Summary:        Metapackage for python3-setuptools-scm simple extras
+Requires:       python3-setuptools-scm = %{version}-%{release}
+Provides:       python3dist(setuptools-scm[simple]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-setuptools-scm+simple
+Metapackage for python3-setuptools-scm simple extras.
+
+%package -n       python3-setuptools-scm+toml
+Summary:        Metapackage for python3-setuptools-scm toml extras
+Requires:       python3-setuptools-scm = %{version}-%{release}
+Provides:       python3dist(setuptools-scm[toml]) = %{version}-%{release}
+
+%description -n python3-setuptools-scm+toml
+Metapackage for python3-setuptools-scm toml extras.
+
+%description
 
 %package -n     python3-setuptools-scm
-Summary:        %{summary}
-
-%description -n python3-setuptools-scm %_description
+Summary:        the blessed package to manage your versions by scm tags
+# oreon:reqs
+Requires:       python3dist(packaging) >= 20
+Requires:       python3dist(tomli) >= 1
+Requires:       python3dist(typing-extensions) >= 4.1
+Requires:       python3dist(vcs-versioning) < 3
+Requires:       python3dist(vcs-versioning) >= 2.5.0.dev0
+# /oreon:reqs
+%description -n python3-setuptools-scm
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-setuptools-scm rich,simple,toml
-
 
 %prep
-%autosetup -p1 -n setuptools_scm-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir setuptools_scm-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-setuptools-scm usr/lib/python3*/site-packages/setuptools_scm* usr/lib64/python3*/site-packages/setuptools_scm* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/setuptools_scm* usr/lib64/python3*/site-packages/setuptools_scm* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-setuptools-scm -f %{pyproject_files}
-%{_bindir}/setuptools-scm
+%files
+%files -n python3-setuptools-scm -f %{oreon_filedir}/python3-setuptools-scm.list
 
 %changelog
+
 %autochangelog

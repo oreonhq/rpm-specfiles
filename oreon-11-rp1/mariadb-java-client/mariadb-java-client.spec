@@ -1,19 +1,17 @@
 %global source0_hash 1f548021beb8465a586db420b0dedfd621fdba3983c2c193eafc7444a6504fe7
-
 Name:           mariadb-java-client
 Version:        3.5.10
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Connects applications developed in Java to MariaDB and MySQL databases
 License:        LGPL-2.1-or-later
 URL:            https://mariadb.com/kb/en/mariadb/about-mariadb-connector-j/
 Source0:        https://github.com/mariadb-corporation/mariadb-connector-j/archive/refs/tags/%{version}.tar.gz#/mariadb-connector-j-%{version}.tar.gz
-# optional dependency not in Fedora
 Patch:          0001-Remove_waffle-jna.patch
 Patch:          0002-Remove-usage-of-junit-pioneer.patch
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+Obsoletes:      %{name}-javadoc < 3.5.0-7
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(net.java.dev.jna:jna)
 BuildRequires:  mvn(net.java.dev.jna:jna-platform)
@@ -23,10 +21,7 @@ BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 BuildRequires:  mvn(org.osgi:osgi.cmpn)
 BuildRequires:  mvn(org.osgi:osgi.core)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.5.0-7
-
+# /oreon:deps
 %description
 MariaDB Connector/J is a Type 4 JDBC driver, also known as the Direct to
 Database Pure Java Driver. It was developed specifically as a lightweight
@@ -34,11 +29,11 @@ JDBC connector for use with MySQL and MariaDB database servers.
 
 %package tests
 Summary: Tests for %{name}
-
 %description tests
 This package contains tests for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n mariadb-connector-j-%{version}
 
@@ -102,23 +97,17 @@ rm -f src/main/java/org/mariadb/jdbc/plugin/authentication/addon/gssapi/WindowsN
 %mvn_package org.mariadb.jdbc:mariadb-java-client::tests: tests
 
 %build
-# tests are skipped, while they require running application server
-# NOTE this parameter skips running tests but still compiles them (instead of -f)
+
 %mvn_build -j -- -DskipTests=true
-
 xmvn --offline -Dmdep.outputFile=tests-classpath dependency:build-classpath
-
 %install
 %mvn_install
 install -m 644 -D tests-classpath %{buildroot}/%{_datadir}/%{name}-tests/classpath
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE
-
-%files tests -f .mfiles-tests
-%{_datadir}/%{name}-tests
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n mariadb-java-client-tests -f %{oreon_filedir}/mariadb-java-client-tests.list
 
 %changelog
+
 %autochangelog

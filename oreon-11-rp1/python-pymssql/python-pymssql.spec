@@ -1,56 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 16720f33d7dcfc7ef906cad8d182f05ba7e5d2c35c6be6a5bc17ce5edfc428b2
 Name:           python-pymssql
 Version:        2.4.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        DB-API interface to Microsoft SQL Server for Python. _new Cython-based version_
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/pymssql/pymssql
-Source:         %{pypi_source pymssql}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pymssql/pymssql-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pymssql' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(cython) >= 3.1.0
+BuildRequires:  python3dist(packaging) >= 24.2
+BuildRequires:  python3dist(setuptools) > 80.0
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 8.0
+BuildRequires:  python3dist(wheel) >= 0.36.2
+Requires:       python3-pymssql = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pymssql
-Summary:        %{summary}
-
-%description -n python3-pymssql %_description
-
+Summary:        DB-API interface to Microsoft SQL Server for Python. _new Cython-based version_
+%description -n python3-pymssql
 
 %prep
-%autosetup -p1 -n pymssql-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pymssql-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pymssql usr/lib/python3*/site-packages/pymssql* usr/lib64/python3*/site-packages/pymssql* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pymssql* usr/lib64/python3*/site-packages/pymssql* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pymssql -f %{pyproject_files}
+%files
+%files -n python3-pymssql -f %{oreon_filedir}/python3-pymssql.list
 
 %changelog
+
 %autochangelog

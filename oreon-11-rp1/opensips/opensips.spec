@@ -1,17 +1,13 @@
-%global source0_hash 8916af6992e84ee798c49579254cced7c888ddfe5ac60c9214dd5a0c10da0953
-
+%global source0_hash 5e268186500a6a1f5db7379e90d7e32a26f46752ebeba583c148662631bffed4
 %global git_commit 2367deb8e2c408a2d38e90d80b5a9580dbdff959
-
 %global EXCLUDE_MODULES cachedb_cassandra cachedb_dynamodb %{!?_with_oracle:db_oracle} event_sqs example launch_darkly osp rtp.io sngtc tls_wolfssl
-
-Summary:  Open Source SIP Server
+Summary:        Open Source SIP Server
 Name:     opensips
 Version:  4.0.2
-Release:  %autorelease
+Release:        1%{?dist}
 License:  GPL-2.0-or-later
-Source0:  https://github.com/%{name}/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source3:  opensips.sysusers
-# Fedora-specific patches
 Patch: opensips-0001-Consistently-use-rtpproxy-switches.patch
 Patch: opensips-0002-Cleanup-Oracle-s-makefiles.patch
 Patch: opensips-0003-db_ora-null-terminating-string-is-more-safely-most-m.patch
@@ -23,30 +19,65 @@ Patch: opensips-0008-Fix-uninitialized-va_list-warning-on-ppc64le-and-i68.patch
 Patch: opensips-0009-Fix-format-specifier-warnings-on-32-bit-architecture.patch
 Patch: opensips-0010-Fix-pointer-truncation-warning-on-32-bit-architectur.patch
 Patch: opensips-0011-Fix-C90-style-declaration-warnings-in-snmpstats-modu.patch
-
 URL:      https://opensips.org
-
-BuildRequires: bison
-BuildRequires: docbook-xsl
-BuildRequires: flex
-BuildRequires: gcc
-BuildRequires: libxslt
-BuildRequires: lynx
-BuildRequires: make
-BuildRequires: ncurses-devel
-BuildRequires: pcre-devel
-BuildRequires: systemd-units
-
-# Users and groups
 Requires(post): systemd
 Requires(preun): systemd
-
 Obsoletes: %{name}-auth_diameter < 2.2.2
 Obsoletes: %{name}-event_datagram < 1.9.1
 Obsoletes: %{name}-event_jsonrpc < 3.1.0
 Obsoletes: %{name}-seas < 3.1.0
 Obsoletes: %{name}-sms < 3.1.0
-
+# oreon:deps
+BuildRequires:  GeoIP-devel
+BuildRequires:  bison
+BuildRequires:  compat-lua-devel
+BuildRequires:  curl-devel
+BuildRequires:  docbook-xsl
+BuildRequires:  expat-devel
+BuildRequires:  flex
+BuildRequires:  freeDiameter-devel
+BuildRequires:  gcc
+BuildRequires:  hiredis-devel
+BuildRequires:  json-c-devel
+BuildRequires:  libconfuse-devel
+BuildRequires:  libcouchbase-devel
+BuildRequires:  libdb-devel
+BuildRequires:  libevent-devel
+BuildRequires:  libjwt-devel
+BuildRequires:  libmaxminddb-devel
+BuildRequires:  libmemcached-devel
+BuildRequires:  libmicrohttpd-devel
+BuildRequires:  libmnl-devel
+BuildRequires:  libnghttp2-devel
+BuildRequires:  libpq-devel
+BuildRequires:  librabbitmq-devel
+BuildRequires:  librdkafka-devel
+BuildRequires:  libuuid-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  libxslt
+BuildRequires:  lksctp-tools-devel
+BuildRequires:  lynx
+BuildRequires:  make
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  mongo-c-driver-devel
+BuildRequires:  ncurses-devel
+BuildRequires:  net-snmp-devel
+BuildRequires:  openldap-devel
+BuildRequires:  pcre-devel
+BuildRequires:  perl(ExtUtils::Embed)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  radcli-devel
+BuildRequires:  snappy-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  systemd-units
+BuildRequires:  unixODBC-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 OpenSIPS or Open SIP Server is a very fast and flexible SIP (RFC3261)
 proxy server. Written entirely in C, opensips can handle thousands calls
@@ -63,7 +94,6 @@ registrar and user location.
 Summary:  Diameter backend for AAA API
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: freeDiameter-devel
-
 %description aaa_diameter
 This module provides the Diameter backend for the AAA API - group, auth, uri
 module use the AAA API for performing Diameter ops.
@@ -72,7 +102,6 @@ module use the AAA API for performing Diameter ops.
 Summary:  RADIUS backend for AAA API
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: radcli-devel
-
 %description aaa_radius
 This module provides the RADIUS backend for the AAA API - group, auth, uri
 module use the AAA API for performing RADIUS ops.
@@ -80,7 +109,6 @@ module use the AAA API for performing RADIUS ops.
 %package  acc
 Summary:  Accounts transactions information to different backends
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description acc
 ACC module is used to account transactions information to different backends
 like syslog, SQL, AAA.
@@ -89,7 +117,6 @@ like syslog, SQL, AAA.
 Summary:  Diameter AKA AV Manager
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-aaa_diameter%{?_isa} = %{version}-%{release}
-
 %description aka_av_diameter
 This module is an extension to the AKA_AUTH module providing a Diameter AKA AV
 Manager that implements the Multimedia-Auth-Request and Multimedia-Auth-Answer
@@ -100,7 +127,6 @@ in the AKA authentication process.
 %package  auth_aaa
 Summary:  Performs authentication using an AAA server
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description auth_aaa
 This module contains functions that are used to perform authentication using
 an AAA server.  Basically the proxy will pass along the credentials to the
@@ -113,7 +139,6 @@ Summary:  Performs authentication over JSON Web Tokens
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: libjwt-devel
 BuildRequires: pkgconfig(openssl)
-
 %description auth_jwt
 The module implements authentication over JSON Web Tokens. Any database module
 (currently mysql, postgres, dbtext), must be loaded before this module in case
@@ -123,7 +148,6 @@ the db_url parameter is set.
 Summary:  Back-2-Back User Agent
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua%{?_isa} = %{version}-%{release}
-
 %description b2bua
 B2BUA is an implementation of the behavior of a B2BUA as defined in RFC 3261
 that offers the possibility to build certain services on top of it.
@@ -132,7 +156,6 @@ that offers the possibility to build certain services on top of it.
 Summary:  Couchbase connector for cache subsystem
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: libcouchbase-devel
-
 %description cachedb_couchbase
 Couchbase module is an implementation of a cache system designed to
 work with a Couchbase server.
@@ -143,7 +166,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-memcached%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-memcached < 1.11.6
 BuildRequires: libmemcached-devel
-
 %description cachedb_memcached
 Memcached module is an implementation of a cache system designed to
 work with a memcached server.
@@ -154,7 +176,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: json-c-devel
 BuildRequires: mongo-c-driver-devel
 BuildRequires: snappy-devel
-
 %description cachedb_mongodb
 MongoDB module is an implementation of a cache system designed to
 work with a MongoDB server.
@@ -165,7 +186,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-redis%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-redis < 1.11.6
 BuildRequires: hiredis-devel
-
 %description cachedb_redis
 This module is an implementation of a cache system designed to work
 with a Redis server.
@@ -174,7 +194,6 @@ with a Redis server.
 Summary:  An inbound call center system
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-b2bua%{?_isa} = %{version}-%{release}
-
 %description call_center
 The Call Center module implements an inbound call center system with call flows
 (for queueing the received calls) and agents (for answering the calls).
@@ -183,14 +202,12 @@ The Call Center module implements an inbound call center system with call flows
 Summary:  Routing extension suitable for carriers
 BuildRequires: libconfuse-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description carrierroute
 A module which provides routing, balancing and blacklisting capabilities.
 
 %package  cgrates
 Summary:  Billing module for CGRates engine
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description cgrates
 This module can be used to communicate with the CGRates engine in order to do
 call authorization and accounting for billing purposes. The OpenSIPS module
@@ -202,7 +219,6 @@ asynchronous ways.
 Summary:  Message compression/decompression and base64 encoding
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: zlib-devel
-
 %description compression
 This module provides message compression/decompression and base64 encoding for
 sip messages using deflate and gzip algorithm/headers. Another feature of this
@@ -216,7 +232,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-cpl-c%{?_isa} = %{version}-%{release}
 Provides: %{name}-cpl-c = %{version}-%{release}
 Obsoletes:%{name}-cpl-c < 2.2.2-1
-
 %description cpl_c
 This module implements a CPL (Call Processing Language) interpreter.
 Support for uploading/downloading/removing scripts via SIP REGISTER method
@@ -226,7 +241,6 @@ is present.
 Summary:  Berkeley DB backend support
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: libdb-devel
-
 %description db_berkeley
 This is a module which integrates the Berkeley DB into OpenSIPS. It implements
 the DB API defined in OpenSIPS.
@@ -234,7 +248,6 @@ the DB API defined in OpenSIPS.
 %package  db_http
 Summary:  HTTP DB backend support
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description db_http
 This module provides access to a database that is implemented as a
 HTTP server.
@@ -245,7 +258,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-mysql%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-mysql < 1.11.6
 BuildRequires: mariadb-connector-c-devel
-
 %description db_mysql
 This module contains the MySQL plugin for %{name}, which allows
 a MySQL database to be used for persistent storage.
@@ -257,7 +269,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-oracle%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-oracle < 1.11.6
 BuildRequires: oracle-instantclient-devel
-
 %description db_oracle
 This module package contains the Oracle plugin for %{name}, which allows
 a Oracle database to be used for persistent storage.
@@ -265,13 +276,11 @@ a Oracle database to be used for persistent storage.
 
 %package  db_perlvdb
 Summary:  Perl virtual database engine
-# require perl-devel for >F7 and perl for <=F6
 BuildRequires: perl(ExtUtils::MakeMaker)
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-perl%{?_isa} = %{version}-%{release}
 Provides: %{name}-perlvdb%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-perlvdb < 1.11.6
-
 %description db_perlvdb
 The Perl Virtual Database (VDB) provides a virtualization framework for
 OpenSIPS's database access. It does not handle a particular database engine
@@ -283,7 +292,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-postgresql%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-postgresql < 1.11.6
 BuildRequires: libpq-devel
-
 %description db_postgresql
 This module contains the PostgreSQL plugin for %{name},
 which allows a PostgreSQL database to be used for persistent storage.
@@ -292,7 +300,6 @@ which allows a PostgreSQL database to be used for persistent storage.
 Summary:  SQLite sorage support for OpenSIPS
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: sqlite-devel
-
 %description db_sqlite
 This module contains the SQLite plugin for %{name}, which
 allows SQLite to be used for persistent storage.
@@ -303,7 +310,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Provides: %{name}-unixodbc%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-unixodbc < 1.11.6
 BuildRequires: unixODBC-devel
-
 %description db_unixodbc
 This module contains the unixODBC plugin for %{name}, which
 allows unixODBC to be used for persistent storage.
@@ -312,7 +318,6 @@ allows unixODBC to be used for persistent storage.
 Summary:  Event Kafka module
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: librdkafka-devel
-
 %description event_kafka
 This module provides the implementation of a Kafka client for the Event
 Interface. It is used to send AMQP messages to a Kafka server each time the
@@ -323,7 +328,6 @@ Summary:  Event RabbitMQ module
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: librabbitmq-devel
 Obsoletes: %{name}-rabbitmq < 3.6.0
-
 %description event_rabbitmq
 This module provides the implementation of a RabbitMQ client for the Event Interface.
 It is used to send AMQP messages to a RabbitMQ server each time the Event Interface
@@ -333,7 +337,6 @@ triggers an event subscribed for.
 Summary:  Emergency call treatment
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: curl-devel
-
 %description emergency
 This module provides emergency call treatment for OpenSIPS, following the
 architecture i2 specification of the American entity NENA. (National Emergency
@@ -343,7 +346,6 @@ Number Association).
 Summary:  H350 implementation
 BuildRequires: openldap-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description h350
 The OpenSIPS H350 module enables an OpenSIPS SIP proxy server to access SIP
 account data stored in an LDAP [RFC4510] directory  containing H.350 [H.350]
@@ -353,7 +355,6 @@ commObjects.
 Summary:  HTTP transport layer implementation
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: libmicrohttpd-devel
-
 %description httpd
 This module provides an HTTP transport layer for OpenSIPS.
 
@@ -362,7 +363,6 @@ Summary:  HTTP/2 server implementation
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: libnghttp2-devel
 BuildRequires: libevent-devel
-
 %description http2d
 This module provides an RFC 7540/9113 HTTP/2 server implementation with "h2"
 ALPN support.
@@ -371,7 +371,6 @@ ALPN support.
 Summary:  Support for SIP Identity (see RFC 4474)
 BuildRequires: pkgconfig(openssl)
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description identity
 This module provides support for SIP Identity (see RFC 4474).
 
@@ -379,7 +378,6 @@ This module provides support for SIP Identity (see RFC 4474).
 Summary:  Gateway between OpenSIPS and a jabber server
 BuildRequires: expat-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description jabber
 Jabber module that integrates XODE XML parser for parsing Jabber messages.
 
@@ -387,7 +385,6 @@ Jabber module that integrates XODE XML parser for parsing Jabber messages.
 Summary:  A JSON variables within the script
 BuildRequires: json-c-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description json
 This module introduces a new type of variable that provides both serialization and
 de-serialization from JSON format.
@@ -396,7 +393,6 @@ de-serialization from JSON format.
 Summary:  LDAP connector
 BuildRequires: openldap-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description ldap
 The LDAP module implements an LDAP search interface for OpenSIPS.
 
@@ -405,7 +401,6 @@ Summary:  Helps implement your own OpenSIPS extensions in Lua
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: compat-lua-devel
 BuildRequires: libmemcached-devel
-
 %description lua
 The time needed when writing a new OpenSIPS module unfortunately is quite
 high, while the options provided by the configuration file are limited to
@@ -416,7 +411,6 @@ easily implement your own OpenSIPS extensions in Lua.
 Summary:  Lets exchange SDP between calls
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-b2bua%{?_isa} = %{version}-%{release}
-
 %description media_exchange
 This module provides the means to exchange media SDP between different SIP
 proxied calls, and calls started or received from a Media Server. The module
@@ -433,7 +427,6 @@ as a back-to-back user agent with the aim of the OpenSIPS B2B entities module.
 Summary:  A minimal web user interface for the Management Interface
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-httpd%{?_isa} = %{version}-%{release}
-
 %description mi_html
 This module implements a minimal web user interface for the OpenSIPS's
 Management Interface.
@@ -442,7 +435,6 @@ Management Interface.
 Summary:  A JSON REST interface for the Management Interface
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-httpd%{?_isa} = %{version}-%{release}
-
 %description mi_http
 This module implements a JSON server for the Management Interface that handles
 GET requests and generates JSON responses.
@@ -456,7 +448,6 @@ Provides: %{name}-xmlrpc_ng%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-mi_xmlrpc_ng < 2.2.2
 Obsoletes: %{name}-xmlrpc_ng < 1.11.6
 Obsoletes: %{name}-xmlrpc < 1.11.6
-
 %description mi_xmlrpc_ng
 This module implements a xmlrpc server that handles xmlrpc requests and generates
 xmlrpc responses. When a xmlrpc message is received a default method is executed.
@@ -466,7 +457,6 @@ Summary:  Wrapper for the MaxMind GeoIP API
 BuildRequires: GeoIP-devel
 BuildRequires: libmaxminddb-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description mmgeoip
 Mmgeoip is a lightweight wrapper for the MaxMind GeoIP API. It adds
 IP address-to-location lookup capability to OpenSIPS scripts.
@@ -477,7 +467,6 @@ BuildRequires: pkgconfig(openssl)
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-b2bua%{?_isa} = %{version}-%{release}
 Requires: %{name}-tls_mgm%{?_isa} = %{version}-%{release}
-
 %description msrp
 This module provides the MSRP support for OpenSIPS. This includes MSRP UA, MSRP
 gateway between SIP MESSAGE and MSRP, MSRP relay as describned in RFC 4976.
@@ -485,7 +474,6 @@ gateway between SIP MESSAGE and MSRP, MSRP relay as describned in RFC 4976.
 %package  peering
 Summary:  Radius peering
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description peering
 Peering module allows SIP providers (operators or organizations)
 to verify from a broker if source or destination  of a SIP request
@@ -497,7 +485,6 @@ BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: perl(ExtUtils::Embed), perl-devel
 BuildRequires: perl-generators
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description perl
 The time needed when writing a new OpenSIPS module unfortunately is quite
 high, while the options provided by the configuration file are limited to
@@ -511,7 +498,6 @@ e.g. LDAP or Berkeley DB files, is now extremely simple.
 Summary:  A HTTP provisioning interface for OpenSIPS
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-httpd%{?_isa} = %{version}-%{release}
-
 %description pi_http
 This module provides an HTTP provisioning interface for OpenSIPS. It is using
 the OpenSIPS's internal database API to provide a simple way of manipulating
@@ -520,7 +506,6 @@ records inside OpenSIPS's tables.
 %package  presence
 Summary:  Presence server
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description presence
 This module implements a presence server. It handles PUBLISH and SUBSCRIBE
 messages and generates NOTIFY messages. It offers support for aggregation
@@ -532,7 +517,6 @@ rules.
 Summary:  SIMPLE Presence extension
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
-
 %description presence_callinfo
 The module enables the handling of "call-info" and "line-seize" events inside
 the presence module. It is used with the general event handling module:
@@ -545,7 +529,6 @@ Summary:  Extension to Presence server for Broadsoft's DFKS
 BuildRequires: libxml2-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
-
 %description presence_dfks
 The module enables handling of the "as-feature-event" event package (as defined
 by Broadsoft's Device Feature Key Synchronization protocol) by the presence
@@ -555,7 +538,6 @@ module.
 Summary:  Extension to Presence server for Dialog-Info
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
-
 %description presence_dialoginfo
 The module enables the handling of "Event: dialog" (as defined
 in RFC 4235) inside of the presence module. This can be used
@@ -565,7 +547,6 @@ distribute the dialog-info status to the subscribed watchers.
 Summary:  Extension to Presence server for Message Waiting Indication
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
-
 %description presence_mwi
 The module does specific handling for notify-subscribe message-summary
 (message waiting indication) events as specified in RFC 3842. It is used
@@ -576,7 +557,6 @@ message-summary event to it.
 Summary:  Handles of "Event: reg" inside of the presence module
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
-
 %description presence_reginfo
 The module enables the handling of "Event: reg" (as defined in RFC 3680) inside
 of the presence module. This can be used distribute the registration-info
@@ -587,7 +567,6 @@ Summary:  Extension to Presence server for XCAP-DIFF event
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua_mi%{?_isa} = %{version}-%{release}
-
 %description presence_xcapdiff
 The presence_xcapdiff is an OpenSIPS module that adds support
 for the "xcap-diff" event to presence and pua.
@@ -597,7 +576,6 @@ Summary:  SIMPLE Presence extension
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
 Requires: %{name}-xcap_client%{?_isa} = %{version}-%{release}
-
 %description presence_xml
 The module does specific handling for notify-subscribe events using xml bodies.
 It is used with the general event handling module, presence.
@@ -606,7 +584,6 @@ It is used with the general event handling module, presence.
 Summary:  A HTTP interface for the Prometheus monitoring system
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-httpd%{?_isa} = %{version}-%{release}
-
 %description prometheus
 This module provides a HTTP interface for the Prometheus monitoring system,
 allowing it to fetch different statistics from OpenSIPS.
@@ -616,7 +593,6 @@ Summary:  A secure Binary clustering protocol
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-tls_mgm%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-tlsops < 2.2.2
-
 %description proto_bins
 This module provides a secure Binary communication protocol
 over TLS, to be used by the OpenSIPS clustering engine provided
@@ -626,7 +602,6 @@ by the clusterer module.
 Summary:  IPSec sockets for establishing secure communication channels
 BuildRequires: libmnl-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description proto_ipsec
 This module provides IPSec sockets for establishing secure communication
 channels. It relies on RFC 3329 (Security Mechanism Agreement for the Session
@@ -637,7 +612,6 @@ creating dynamic Security Associations (SAs) for each connection.
 Summary:  An optional SCTP transport module
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: lksctp-tools-devel
-
 %description proto_sctp
 This module is an optional transport module (shared library) which exports the
 required logic in order to handle SCTP-based communication. (socket
@@ -650,7 +624,6 @@ Summary:  An optional TLS transport module
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-tls_mgm%{?_isa} = %{version}-%{release}
 Obsoletes: %{name}-tlsops < 2.2.2
-
 %description proto_tls
 This module is an optional transport module (shared library) which exports the
 required logic in order to handle TLS-based communication. (socket
@@ -662,7 +635,6 @@ script.
 Summary:  An optional Secure WebSocket transport module
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-tls_mgm%{?_isa} = %{version}-%{release}
-
 %description proto_wss
 This module is an optional transport module (shared library) which exports the
 required logic in order to handle Secure WebSocket-based communication. (socket
@@ -673,7 +645,6 @@ script.
 %package  pua
 Summary:  Offer the functionality of a presence user agent client
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description pua
 This module offer the functionality of a presence user agent client, sending
 Subscribe and Publish messages.
@@ -683,7 +654,6 @@ Summary:  BLA extension for PUA
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
-
 %description pua_bla
 The pua_bla module enables Bridged Line Appearances support according to the
 specifications in draft-anil-sipping-bla-03.txt.
@@ -692,7 +662,6 @@ specifications in draft-anil-sipping-bla-03.txt.
 Summary:  Dialog-Info extension for PUA
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua%{?_isa} = %{version}-%{release}
-
 %description pua_dialoginfo
 The pua_dialoginfo retrieves dialog state information from the dialog module
 and PUBLISHes the dialog-information using the pua module. Thus, in combination
@@ -703,7 +672,6 @@ dialog module and NOTIFY the subscribed watchers about dialog-info changes.
 Summary:  Connector between usrloc and MI interface
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua%{?_isa} = %{version}-%{release}
-
 %description pua_mi
 The pua_mi sends offer the possibility to publish presence information
 via MI transports.  Using this module you can create independent
@@ -714,7 +682,6 @@ resources like CPU-usage, memory, number of active subscribers ...)
 Summary:  Publishes information about "reg"-events according to to RFC 3680
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua%{?_isa} = %{version}-%{release}
-
 %description pua_reginfo
 This module publishes information about "reg"-events according to to RFC 3680.
 This can be used distribute the registration-info status to the subscribed
@@ -734,7 +701,6 @@ local registry accordingly.
 Summary:  Connector between usrloc and pua modules
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua%{?_isa} = %{version}-%{release}
-
 %description pua_usrloc
 This module is the connector between usrloc and pua modules. It creates the
 environment to send PUBLISH requests for user location records, on specific
@@ -749,7 +715,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
 Requires: %{name}-xmpp%{?_isa} = %{version}-%{release}
-
 %description pua_xmpp
 This module is a gateway for presence between SIP and XMPP. It translates one
 format into another and uses xmpp, pua and presence modules to manage the
@@ -764,7 +729,6 @@ Obsoletes: %{name}-python < 2.4.6-4
 Obsoletes: python2-%{name} < 2.4.6-4
 Summary:  Python scripting support
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description -n python3-opensips
 Helps implement your own OpenSIPS extensions in Python
 
@@ -772,7 +736,6 @@ Helps implement your own OpenSIPS extensions in Python
 Summary:  RabbitMQ message receiver
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: librabbitmq-devel
-
 %description rabbitmq_consumer
 This module allows managing received messages in queues, taking advantage of
 the flexible AMQP protocol.
@@ -780,7 +743,6 @@ the flexible AMQP protocol.
 %package  regex
 Summary:  RegExp via PCRE library
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description regex
 This module offers matching operations against regular
 expressions using the powerful PCRE library.
@@ -788,7 +750,6 @@ expressions using the powerful PCRE library.
 %package  rest_client
 Summary:  HTTP client module for OpenSIPS
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description rest_client
 This module provides a means of interacting with an HTTP server by doing
 RESTful queries, such as GET and POST.
@@ -799,7 +760,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-pua%{?_isa} = %{version}-%{release}
 Requires: %{name}-presence%{?_isa} = %{version}-%{release}
 Requires: %{name}-xcap%{?_isa} = %{version}-%{release}
-
 %description rls
 The modules is a Resource List Server implementation following the
 specification in RFC 4662 and RFC 4826.
@@ -809,7 +769,6 @@ Summary:  Call recording using SIPREC protocol
 BuildRequires: libuuid-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-b2bua%{?_isa} = %{version}-%{release}
-
 %description siprec
 This module provides the means to do calls recording using an external recorder
 - the entity that records the call is not in the media path between the caller
@@ -822,7 +781,6 @@ protocol.
 Summary:  SNMP management interface for the OpenSIPS
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: net-snmp-devel
-
 %description snmpstats
 The %{name}-snmpstats package provides an SNMP management interface to
 OpenSIPS.  Specifically, it provides general SNMP queryable scalar statistics,
@@ -834,7 +792,6 @@ Summary:  Support for implementing STIR/SHAKEN
 BuildRequires: pkgconfig(openssl)
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-b2bua%{?_isa} = %{version}-%{release}
-
 %description stir_shaken
 This module provides support for implementing STIR/SHAKEN (RFC 8224, RFC 8588)
 Authentication and Verification services in OpenSIPS.
@@ -843,7 +800,6 @@ Authentication and Verification services in OpenSIPS.
 Summary:  Management for TLS certificates and parameters
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-tls_openssl%{?_isa} = %{version}-%{release}
-
 %description tls_mgm
 This module provides an interfaces for all the modules that use the TLS
 protocol. It also implements TLS related functions to use in the routing
@@ -853,7 +809,6 @@ script, and exports pseudo variables with certificate and TLS parameters.
 Summary:  OpenSSL low level API for tls_mgm module
 BuildRequires: pkgconfig(openssl)
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description tls_openssl
 This module provides an OpenSSL backend for tls_mgm module.
 
@@ -861,7 +816,6 @@ This module provides an OpenSSL backend for tls_mgm module.
 Summary:  Generates UUIDs as specified in RFC 4122
 BuildRequires: libuuid-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description uuid
 The module generates universally unique identifiers (UUID) as specified in RFC
 4122.
@@ -869,7 +823,6 @@ The module generates universally unique identifiers (UUID) as specified in RFC
 %package  xcap
 Summary:  XCAP common functions
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description xcap
 The module contains several parameters and functions common to all modules
 using XCAP capabilities.
@@ -878,7 +831,6 @@ using XCAP capabilities.
 Summary:  XCAP client
 Requires: %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: curl-devel
-
 %description xcap_client
 The modules is an XCAP client for OpenSIPS that can be used by other modules.
 It fetches XCAP elements, either documents or part of them, by sending HTTP
@@ -888,7 +840,6 @@ library as a client-side HTTP transfer library.
 %package  xml
 Summary:  Basic XML parsing and manipulation
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description xml
 This module exposes a script variable that provides basic parsing and
 manipulation of XML documents or blocks of XML data. The processing does not
@@ -898,7 +849,6 @@ take into account any DTDs or schemas in terms of validation.
 Summary:  Gateway between OpenSIPS and a jabber server
 BuildRequires: expat-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description xmpp
 This modules is a gateway between Openser and a jabber server. It enables
 the exchange of instant messages between SIP clients and XMPP(jabber)
@@ -906,15 +856,13 @@ clients.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 LOCALBASE=/usr NICER=0 CFLAGS="%{optflags}" LDFLAGS="%{?__global_ldflags}" %{?_with_oracle:ORAHOME="$ORACLE_HOME"} %{__make} all modules-readme %{?_smp_mflags} TLS=1 VERSIONTYPE=git THISREVISION=%{sub %git_commit 0 9} HTTP2D_USE_SYSTEM=yes HTTP2D_USE_SHARED=yes \
   exclude_modules="%EXCLUDE_MODULES" \
   PYTHON=/usr/bin/python3 \
   cfg_target=%{_sysconfdir}/opensips/
-
 %install
 NICER=0 make install TLS=1 VERSIONTYPE=git THISREVISION=%{sub %git_commit 0 9} HTTP2D_USE_SYSTEM=yes HTTP2D_USE_SHARED=yes LIBDIR=%{_lib} \
   exclude_modules="%EXCLUDE_MODULES" \
@@ -923,15 +871,11 @@ NICER=0 make install TLS=1 VERSIONTYPE=git THISREVISION=%{sub %git_commit 0 9} H
   bin_dir=bin \
   cfg_prefix=%{buildroot} \
   DBTEXTON=yes # fixed dbtext documentation installation
-
-# clean some things
 mkdir -p %{buildroot}/%{perl_vendorlib}
 if [ -d "%{buildroot}/%{_prefix}/perl" ]; then
-  # for fedora>=11
   mv %{buildroot}/%{_prefix}/perl/* \
     %{buildroot}/%{perl_vendorlib}/
 else
-  # for fedora<=10
   mv %{buildroot}/%{_libdir}/opensips/perl/* \
     %{buildroot}/%{perl_vendorlib}/
 fi
@@ -939,648 +883,101 @@ mv %{buildroot}/%{_sysconfdir}/opensips/tls/README \
   %{buildroot}/%{_docdir}/opensips/README.tls
 rm -f %{buildroot}%{_docdir}/opensips/INSTALL
 mv %{buildroot}/%{_docdir}/opensips docdir
-
-# install systemd files
 install -D -m 0644 -p %{SOURCE3} %{buildroot}%{_sysusersdir}/%{name}.conf
 install -D -m 0644 -p packaging/redhat_fedora/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
 install -D -m 0644 -p packaging/redhat_fedora/%{name}.tmpfiles.conf %{buildroot}%{_tmpfilesdir}/%{name}.conf
 mkdir -p %{buildroot}%{_localstatedir}/run/%{name}
-
-#install sysconfig file
 install -D -p -m 644 packaging/redhat_fedora/%{name}.sysconfig %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+%oreon_autofiles python3-opensips usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
-%files
-%{_bindir}/opensips
-%{_bindir}/osipsconfig
-
-%attr(750,%{name},%{name}) %dir %{_sysconfdir}/opensips
-%attr(750,%{name},%{name}) %dir %{_sysconfdir}/opensips/tls
-%attr(750,%{name},%{name}) %dir %{_sysconfdir}/opensips/tls/rootCA
-%attr(750,%{name},%{name}) %dir %{_sysconfdir}/opensips/tls/rootCA/certs
-%attr(750,%{name},%{name}) %dir %{_sysconfdir}/opensips/tls/rootCA/private
-%attr(750,%{name},%{name}) %dir %{_sysconfdir}/opensips/tls/user
-%dir %{_libdir}/opensips/
-%dir %{_libdir}/opensips/modules/
-
-%{_sysusersdir}/%{name}.conf
-%{_unitdir}/%{name}.service
-%{_tmpfilesdir}/%{name}.conf
-%dir %attr(0755, opensips, opensips) %{_localstatedir}/run/%{name}
-
-%config(noreplace) %{_sysconfdir}/opensips/dictionary.opensips
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%attr(640,%{name},%{name}) %config(noreplace) %{_sysconfdir}/opensips/opensips.cfg
-# these files are just an examples so no need to restrict access to them
-%config(noreplace) %{_sysconfdir}/opensips/tls/ca.conf
-%config(noreplace) %{_sysconfdir}/opensips/tls/request.conf
-%config(noreplace) %{_sysconfdir}/opensips/tls/rootCA/cacert.pem
-%config(noreplace) %{_sysconfdir}/opensips/tls/rootCA/certs/01.pem
-%config(noreplace) %{_sysconfdir}/opensips/tls/rootCA/index.txt
-%config(noreplace) %{_sysconfdir}/opensips/tls/rootCA/private/cakey.pem
-%config(noreplace) %{_sysconfdir}/opensips/tls/rootCA/serial
-%config(noreplace) %{_sysconfdir}/opensips/tls/user.conf
-%config(noreplace) %{_sysconfdir}/opensips/tls/user/user-calist.pem
-%config(noreplace) %{_sysconfdir}/opensips/tls/user/user-cert.pem
-%config(noreplace) %{_sysconfdir}/opensips/tls/user/user-cert_req.pem
-%config(noreplace) %{_sysconfdir}/opensips/tls/user/user-privkey.pem
-
-%dir %{_datadir}/opensips/
-%dir %{_datadir}/opensips/dbtext/
-%dir %{_datadir}/opensips/dbtext/opensips/
-%dir %{_datadir}/opensips/menuconfig_templates/
-
-%{_datadir}/opensips/dbtext/opensips/*
-%{_datadir}/opensips/menuconfig_templates/*.m4
-
-%{_mandir}/man5/opensips.cfg.5*
-%{_mandir}/man8/opensips.8*
-
-%doc docdir/AUTHORS
-%doc docdir/NEWS
-%doc docdir/README
-%doc docdir/README.tls
-%license COPYING
-
-%{_libdir}/opensips/modules/acc.so
-%{_libdir}/opensips/modules/alias_db.so
-%{_libdir}/opensips/modules/auth.so
-%{_libdir}/opensips/modules/auth_aka.so
-%{_libdir}/opensips/modules/auth_db.so
-%{_libdir}/opensips/modules/benchmark.so
-%{_libdir}/opensips/modules/cachedb_local.so
-%{_libdir}/opensips/modules/cachedb_sql.so
-%{_libdir}/opensips/modules/call_control.so
-%{_libdir}/opensips/modules/callops.so
-%{_libdir}/opensips/modules/cfgutils.so
-%{_libdir}/opensips/modules/clusterer.so
-%{_libdir}/opensips/modules/config.so
-%{_libdir}/opensips/modules/db_cachedb.so
-%{_libdir}/opensips/modules/db_flatstore.so
-%{_libdir}/opensips/modules/db_text.so
-%{_libdir}/opensips/modules/db_virtual.so
-%{_libdir}/opensips/modules/dialog.so
-%{_libdir}/opensips/modules/dialplan.so
-%{_libdir}/opensips/modules/dispatcher.so
-%{_libdir}/opensips/modules/diversion.so
-%{_libdir}/opensips/modules/dns_cache.so
-%{_libdir}/opensips/modules/domain.so
-%{_libdir}/opensips/modules/domainpolicy.so
-%{_libdir}/opensips/modules/drouting.so
-%{_libdir}/opensips/modules/enum.so
-%{_libdir}/opensips/modules/event_datagram.so
-%{_libdir}/opensips/modules/event_flatstore.so
-%{_libdir}/opensips/modules/event_routing.so
-%{_libdir}/opensips/modules/event_stream.so
-%{_libdir}/opensips/modules/event_virtual.so
-%{_libdir}/opensips/modules/event_xmlrpc.so
-%{_libdir}/opensips/modules/exec.so
-%{_libdir}/opensips/modules/fraud_detection.so
-%{_libdir}/opensips/modules/freeswitch.so
-%{_libdir}/opensips/modules/freeswitch_scripting.so
-%{_libdir}/opensips/modules/gflags.so
-%{_libdir}/opensips/modules/group.so
-%{_libdir}/opensips/modules/imc.so
-%{_libdir}/opensips/modules/janus.so
-%{_libdir}/opensips/modules/jsonrpc.so
-%{_libdir}/opensips/modules/load_balancer.so
-%{_libdir}/opensips/modules/mangler.so
-%{_libdir}/opensips/modules/mathops.so
-%{_libdir}/opensips/modules/maxfwd.so
-%{_libdir}/opensips/modules/mediaproxy.so
-%{_libdir}/opensips/modules/mi_datagram.so
-%{_libdir}/opensips/modules/mi_fifo.so
-%{_libdir}/opensips/modules/mi_script.so
-%{_libdir}/opensips/modules/mid_registrar.so
-%{_libdir}/opensips/modules/mqueue.so
-%{_libdir}/opensips/modules/msilo.so
-%{_libdir}/opensips/modules/nat_traversal.so
-%{_libdir}/opensips/modules/nathelper.so
-%{_libdir}/opensips/modules/options.so
-%{_libdir}/opensips/modules/path.so
-%{_libdir}/opensips/modules/permissions.so
-%{_libdir}/opensips/modules/pike.so
-%{_libdir}/opensips/modules/proto_bin.so
-%{_libdir}/opensips/modules/proto_hep.so
-%{_libdir}/opensips/modules/proto_smpp.so
-%{_libdir}/opensips/modules/proto_ws.so
-%{_libdir}/opensips/modules/qos.so
-%{_libdir}/opensips/modules/qrouting.so
-%{_libdir}/opensips/modules/rate_cacher.so
-%{_libdir}/opensips/modules/ratelimit.so
-%{_libdir}/opensips/modules/registrar.so
-%{_libdir}/opensips/modules/rr.so
-%{_libdir}/opensips/modules/rtp_relay.so
-%{_libdir}/opensips/modules/rtpengine.so
-%{_libdir}/opensips/modules/rtpproxy.so
-%{_libdir}/opensips/modules/script_helper.so
-%{_libdir}/opensips/modules/signaling.so
-%{_libdir}/opensips/modules/sip_i.so
-%{_libdir}/opensips/modules/sipcapture.so
-%{_libdir}/opensips/modules/sipmsgops.so
-%{_libdir}/opensips/modules/sl.so
-%{_libdir}/opensips/modules/sockets_mgm.so
-%{_libdir}/opensips/modules/speeddial.so
-%{_libdir}/opensips/modules/sql_cacher.so
-%{_libdir}/opensips/modules/sqlops.so
-%{_libdir}/opensips/modules/sst.so
-%{_libdir}/opensips/modules/statistics.so
-%{_libdir}/opensips/modules/status_report.so
-%{_libdir}/opensips/modules/stun.so
-%{_libdir}/opensips/modules/tcp_mgm.so
-%{_libdir}/opensips/modules/textops.so
-%{_libdir}/opensips/modules/tm.so
-%{_libdir}/opensips/modules/topology_hiding.so
-%{_libdir}/opensips/modules/tracer.so
-%{_libdir}/opensips/modules/trie.so
-%{_libdir}/opensips/modules/uac.so
-%{_libdir}/opensips/modules/uac_auth.so
-%{_libdir}/opensips/modules/uac_redirect.so
-%{_libdir}/opensips/modules/uac_registrant.so
-%{_libdir}/opensips/modules/userblacklist.so
-%{_libdir}/opensips/modules/usrloc.so
-
-%doc docdir/README.acc
-%doc docdir/README.alias_db
-%doc docdir/README.auth
-%doc docdir/README.auth_aka
-%doc docdir/README.auth_db
-%doc docdir/README.benchmark
-%doc docdir/README.cachedb_local
-%doc docdir/README.cachedb_sql
-%doc docdir/README.call_control
-%doc docdir/README.callops
-%doc docdir/README.cfgutils
-%doc docdir/README.clusterer
-%doc docdir/README.config
-%doc docdir/README.db_cachedb
-%doc docdir/README.db_flatstore
-%doc docdir/README.db_text
-%doc docdir/README.db_virtual
-%doc docdir/README.dialog
-%doc docdir/README.dialplan
-%doc docdir/README.dispatcher
-%doc docdir/README.diversion
-%doc docdir/README.dns_cache
-%doc docdir/README.domain
-%doc docdir/README.domainpolicy
-%doc docdir/README.drouting
-%doc docdir/README.enum
-%doc docdir/README.event_datagram
-%doc docdir/README.event_flatstore
-%doc docdir/README.event_routing
-%doc docdir/README.event_stream
-%doc docdir/README.event_virtual
-%doc docdir/README.event_xmlrpc
-%doc docdir/README.exec
-%doc docdir/README.fraud_detection
-%doc docdir/README.freeswitch
-%doc docdir/README.freeswitch_scripting
-%doc docdir/README.gflags
-%doc docdir/README.group
-%doc docdir/README.imc
-%doc docdir/README.janus
-%doc docdir/README.jsonrpc
-%doc docdir/README.load_balancer
-%doc docdir/README.mangler
-%doc docdir/README.mathops
-%doc docdir/README.maxfwd
-%doc docdir/README.mediaproxy
-%doc docdir/README.mi_datagram
-%doc docdir/README.mi_fifo
-%doc docdir/README.mi_script
-%doc docdir/README.mid_registrar
-%doc docdir/README.mqueue
-%doc docdir/README.msilo
-%doc docdir/README.nat_traversal
-%doc docdir/README.nathelper
-%doc docdir/README.options
-%doc docdir/README.path
-%doc docdir/README.permissions
-%doc docdir/README.pike
-%doc docdir/README.proto_bin
-%doc docdir/README.proto_hep
-%doc docdir/README.proto_smpp
-%doc docdir/README.proto_ws
-%doc docdir/README.qos
-%doc docdir/README.qrouting
-%doc docdir/README.rate_cacher
-%doc docdir/README.ratelimit
-%doc docdir/README.registrar
-%doc docdir/README.rr
-%doc docdir/README.rtp_relay
-%doc docdir/README.rtpengine
-%doc docdir/README.rtpproxy
-%doc docdir/README.script_helper
-%doc docdir/README.signaling
-%doc docdir/README.sip_i
-%doc docdir/README.sipcapture
-%doc docdir/README.sipmsgops
-%doc docdir/README.sl
-%doc docdir/README.sockets_mgm
-%doc docdir/README.speeddial
-%doc docdir/README.sql_cacher
-%doc docdir/README.sqlops
-%doc docdir/README.sst
-%doc docdir/README.statistics
-%doc docdir/README.status_report
-%doc docdir/README.stun
-%doc docdir/README.tcp_mgm
-%doc docdir/README.textops
-%doc docdir/README.tm
-%doc docdir/README.topology_hiding
-%doc docdir/README.tracer
-%doc docdir/README.trie
-%doc docdir/README.uac
-%doc docdir/README.uac_auth
-%doc docdir/README.uac_redirect
-%doc docdir/README.uac_registrant
-%doc docdir/README.userblacklist
-%doc docdir/README.usrloc
-
-%files aaa_diameter
-%{_libdir}/opensips/modules/aaa_diameter.so
-%doc docdir/README.aaa_diameter
-
-%files aaa_radius
-%{_libdir}/opensips/modules/aaa_radius.so
-%doc docdir/README.aaa_radius
-
-%files acc
-%{_libdir}/opensips/modules/acc.so
-%doc docdir/README.acc
-
-%files aka_av_diameter
-%{_libdir}/opensips/modules/aka_av_diameter.so
-%doc docdir/README.aka_av_diameter
-
-%files auth_aaa
-%{_libdir}/opensips/modules/auth_aaa.so
-%doc docdir/README.auth_aaa
-
-%files auth_jwt
-%{_libdir}/opensips/modules/auth_jwt.so
-%doc docdir/README.auth_jwt
-
-%files b2bua
-%{_libdir}/opensips/modules/b2b_entities.so
-%{_libdir}/opensips/modules/b2b_logic.so
-%{_libdir}/opensips/modules/b2b_sca.so
-%{_libdir}/opensips/modules/b2b_sdp_demux.so
-%doc docdir/README.b2b_entities
-%doc docdir/README.b2b_logic
-%doc docdir/README.b2b_sca
-%doc docdir/README.b2b_sdp_demux
-
-%files cachedb_couchbase
-%{_libdir}/opensips/modules/cachedb_couchbase.so
-%doc docdir/README.cachedb_couchbase
-
-%files cachedb_memcached
-%{_libdir}/opensips/modules/cachedb_memcached.so
-%doc docdir/README.cachedb_memcached
-
-%files cachedb_mongodb
-%{_libdir}/opensips/modules/cachedb_mongodb.so
-%doc docdir/README.cachedb_mongodb
-
-%files cachedb_redis
-%{_libdir}/opensips/modules/cachedb_redis.so
-%doc docdir/README.cachedb_redis
-
-%files call_center
-%attr(640,%{name},%{name}) %config(noreplace) %{_sysconfdir}/opensips/scenario_callcenter.xml
-%{_libdir}/opensips/modules/call_center.so
-%doc docdir/README.call_center
-
-%files carrierroute
-%{_libdir}/opensips/modules/carrierroute.so
-%doc docdir/README.carrierroute
-
-%files cgrates
-%{_libdir}/opensips/modules/cgrates.so
-%doc docdir/README.cgrates
-
-%files compression
-%{_libdir}/opensips/modules/compression.so
-%doc docdir/README.compression
-
-%files cpl_c
-%{_libdir}/opensips/modules/cpl_c.so
-%doc docdir/README.cpl_c
-
-%files db_berkeley
-%{_bindir}/bdb_recover
-%{_libdir}/opensips/modules/db_berkeley.so
-%dir %{_datadir}/opensips/db_berkeley
-%dir %{_datadir}/opensips/db_berkeley/opensips
-%{_datadir}/opensips/db_berkeley/opensips/*
-%doc docdir/README.db_berkeley
-
-%files db_http
-%{_libdir}/opensips/modules/db_http.so
-%doc docdir/README.db_http
-
-%files db_mysql
-%{_libdir}/opensips/modules/db_mysql.so
-%dir %{_datadir}/opensips/mysql
-%{_datadir}/opensips/mysql/*.sql
-%doc docdir/README.db_mysql
-
-%if 0%{?_with_oracle}
-%files db_oracle
-%{_bindir}/opensips_orasel
-%{_libdir}/opensips/modules/db_oracle.so
-%dir %{_datadir}/opensips/oracle
-%{_datadir}/opensips/oracle/*
-%doc docdir/README.db_oracle
-%endif
-
-%files db_perlvdb
-%dir %{perl_vendorlib}/OpenSIPS/VDB
-%dir %{perl_vendorlib}/OpenSIPS/VDB/Adapter
-%{_libdir}/opensips/modules/db_perlvdb.so
-%{perl_vendorlib}/OpenSIPS/VDB.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Adapter/AccountingSIPtrace.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Adapter/Alias.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Adapter/Auth.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Adapter/Describe.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Adapter/Speeddial.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Adapter/TableVersions.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Column.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Pair.pm
-%{perl_vendorlib}/OpenSIPS/VDB/ReqCond.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Result.pm
-%{perl_vendorlib}/OpenSIPS/VDB/VTab.pm
-%{perl_vendorlib}/OpenSIPS/VDB/Value.pm
-%doc docdir/README.db_perlvdb
-
-%files db_postgresql
-%{_libdir}/opensips/modules/db_postgres.so
-%dir %{_datadir}/opensips/postgres
-%{_datadir}/opensips/postgres/*.sql
-%doc docdir/README.db_postgres
-
-%files db_sqlite
-%{_libdir}/opensips/modules/db_sqlite.so
-%dir %{_datadir}/opensips/sqlite
-%{_datadir}/opensips/sqlite/*.sql
-%doc docdir/README.db_sqlite
-
-%files db_unixodbc
-%{_libdir}/opensips/modules/db_unixodbc.so
-%doc docdir/README.db_unixodbc
-
-%files event_kafka
-%{_libdir}/opensips/modules/event_kafka.so
-%doc docdir/README.event_kafka
-
-%files emergency
-%{_libdir}/opensips/modules/emergency.so
-%doc docdir/README.emergency
-
-%files event_rabbitmq
-%{_libdir}/opensips/modules/event_rabbitmq.so
-%doc docdir/README.event_rabbitmq
-
-%files h350
-%{_libdir}/opensips/modules/h350.so
-%doc docdir/README.h350
-
-%files httpd
-%{_libdir}/opensips/modules/httpd.so
-%doc docdir/README.httpd
-
-%files http2d
-%{_libdir}/opensips/modules/http2d.so
-%doc docdir/README.http2d
-
-%files identity
-%{_libdir}/opensips/modules/identity.so
-%doc docdir/README.identity
-
-%files jabber
-%{_libdir}/opensips/modules/jabber.so
-%doc docdir/README.jabber
-
-%files json
-%{_libdir}/opensips/modules/json.so
-%doc docdir/README.json
-
-%files ldap
-%{_libdir}/opensips/modules/ldap.so
-%doc docdir/README.ldap
-
-%files lua
-%{_libdir}/opensips/modules/lua.so
-%doc docdir/README.lua
-
-%files media_exchange
-%{_libdir}/opensips/modules/media_exchange.so
-%doc docdir/README.media_exchange
-
-%files mi_html
-%{_libdir}/opensips/modules/mi_html.so
-%doc docdir/README.mi_html
-
-%files mi_http
-%{_libdir}/opensips/modules/mi_http.so
-%doc docdir/README.mi_http
-
-%files mi_xmlrpc_ng
-%{_libdir}/opensips/modules/mi_xmlrpc_ng.so
-%doc docdir/README.mi_xmlrpc_ng
-
-%files mmgeoip
-%{_libdir}/opensips/modules/mmgeoip.so
-%doc docdir/README.mmgeoip
-
-%files msrp
-%{_libdir}/opensips/modules/msrp_gateway.so
-%{_libdir}/opensips/modules/msrp_relay.so
-%{_libdir}/opensips/modules/msrp_ua.so
-%{_libdir}/opensips/modules/proto_msrp.so
-%doc docdir/README.msrp_gateway
-%doc docdir/README.msrp_relay
-%doc docdir/README.msrp_ua
-%doc docdir/README.proto_msrp
-
-%files peering
-%{_libdir}/opensips/modules/peering.so
-%doc docdir/README.peering
-
-%files perl
-%dir %{perl_vendorlib}/OpenSIPS
-%dir %{perl_vendorlib}/OpenSIPS/LDAPUtils
-%dir %{perl_vendorlib}/OpenSIPS/Utils
-%{_libdir}/opensips/modules/perl.so
-%{perl_vendorlib}/OpenSIPS.pm
-%{perl_vendorlib}/OpenSIPS/Constants.pm
-%{perl_vendorlib}/OpenSIPS/LDAPUtils/LDAPConf.pm
-%{perl_vendorlib}/OpenSIPS/LDAPUtils/LDAPConnection.pm
-%{perl_vendorlib}/OpenSIPS/Message.pm
-%{perl_vendorlib}/OpenSIPS/Utils/PhoneNumbers.pm
-%{perl_vendorlib}/OpenSIPS/Utils/Debug.pm
-%doc docdir/README.perl
-
-%files pi_http
-%{_libdir}/opensips/modules/pi_http.so
-%{_datadir}/opensips/pi_http/
-%doc docdir/README.pi_http
-
-%files presence
-%{_libdir}/opensips/modules/presence.so
-%doc docdir/README.presence
-
-%files presence_callinfo
-%{_libdir}/opensips/modules/presence_callinfo.so
-%doc docdir/README.presence_callinfo
-
-%files presence_dfks
-%{_libdir}/opensips/modules/presence_dfks.so
-%doc docdir/README.presence_dfks
-
-%files presence_dialoginfo
-%{_libdir}/opensips/modules/presence_dialoginfo.so
-%doc docdir/README.presence_dialoginfo
-
-%files presence_mwi
-%{_libdir}/opensips/modules/presence_mwi.so
-%doc docdir/README.presence_mwi
-
-%files presence_reginfo
-%{_libdir}/opensips/modules/presence_reginfo.so
-%doc docdir/README.presence_reginfo
-
-%files presence_xcapdiff
-%{_libdir}/opensips/modules/presence_xcapdiff.so
-
-%files presence_xml
-%{_libdir}/opensips/modules/presence_xml.so
-%doc docdir/README.presence_xml
-
-%files prometheus
-%{_libdir}/opensips/modules/prometheus.so
-%doc docdir/README.prometheus
-
-%files proto_bins
-%{_libdir}/opensips/modules/proto_bins.so
-%doc docdir/README.proto_bins
-
-%files proto_ipsec
-%{_libdir}/opensips/modules/proto_ipsec.so
-%doc docdir/README.proto_ipsec
-
-%files proto_sctp
-%{_libdir}/opensips/modules/proto_sctp.so
-%doc docdir/README.proto_sctp
-
-%files proto_tls
-%{_libdir}/opensips/modules/proto_tls.so
-%doc docdir/README.proto_tls
-
-%files proto_wss
-%{_libdir}/opensips/modules/proto_wss.so
-%doc docdir/README.proto_wss
-
-%files pua
-%{_libdir}/opensips/modules/pua.so
-%doc docdir/README.pua
-
-%files pua_bla
-%{_libdir}/opensips/modules/pua_bla.so
-%doc docdir/README.pua_bla
-
-%files pua_dialoginfo
-%{_libdir}/opensips/modules/pua_dialoginfo.so
-%doc docdir/README.pua_dialoginfo
-
-%files pua_mi
-%{_libdir}/opensips/modules/pua_mi.so
-%doc docdir/README.pua_mi
-
-%files pua_reginfo
-%{_libdir}/opensips/modules/pua_reginfo.so
-%doc docdir/README.pua_reginfo
-
-%files pua_usrloc
-%{_libdir}/opensips/modules/pua_usrloc.so
-%doc docdir/README.pua_usrloc
-
-%files pua_xmpp
-%{_libdir}/opensips/modules/pua_xmpp.so
-%doc docdir/README.pua_xmpp
-
-%files -n python3-opensips
-%{_libdir}/opensips/modules/python.so
-
-%files rabbitmq_consumer
-%{_libdir}/opensips/modules/rabbitmq_consumer.so
-%doc docdir/README.rabbitmq_consumer
-
-%files regex
-%{_libdir}/opensips/modules/regex.so
-%doc docdir/README.regex
-
-%files rest_client
-%{_libdir}/opensips/modules/rest_client.so
-%doc docdir/README.rest_client
-
-%files rls
-%{_libdir}/opensips/modules/rls.so
-%doc docdir/README.rls
-
-%files siprec
-%{_libdir}/opensips/modules/siprec.so
-%doc docdir/README.siprec
-
-%files snmpstats
-%{_libdir}/opensips/modules/snmpstats.so
-%doc docdir/README.snmpstats
-%dir %{_datadir}/snmp
-%dir %{_datadir}/snmp/mibs
-%{_datadir}/snmp/mibs/OPENSER-MIB
-%{_datadir}/snmp/mibs/OPENSER-REG-MIB
-%{_datadir}/snmp/mibs/OPENSER-SIP-COMMON-MIB
-%{_datadir}/snmp/mibs/OPENSER-SIP-SERVER-MIB
-%{_datadir}/snmp/mibs/OPENSER-TC
-
-%files stir_shaken
-%{_libdir}/opensips/modules/stir_shaken.so
-%doc docdir/README.stir_shaken
-
-%files tls_mgm
-%{_libdir}/opensips/modules/tls_mgm.so
-%doc docdir/README.tls_mgm
-
-%files tls_openssl
-%{_libdir}/opensips/modules/tls_openssl.so
-%doc docdir/README.tls_openssl
-
-%files uuid
-%{_libdir}/opensips/modules/uuid.so
-%doc docdir/README.uuid
-
-%files xcap
-%{_libdir}/opensips/modules/xcap.so
-%doc docdir/README.xcap
-
-%files xcap_client
-%{_libdir}/opensips/modules/xcap_client.so
-%doc docdir/README.xcap_client
-
-%files xml
-%{_libdir}/opensips/modules/xml.so
-%doc docdir/README.xml
-
-%files xmpp
-%{_libdir}/opensips/modules/xmpp.so
-%doc docdir/README.xmpp
+%files -f %{oreon_filedir}/main.list
+%files -n opensips-aaa_diameter -f %{oreon_filedir}/opensips-aaa_diameter.list
+%files -n opensips-aaa_radius -f %{oreon_filedir}/opensips-aaa_radius.list
+%files -n opensips-acc -f %{oreon_filedir}/opensips-acc.list
+%files -n opensips-aka_av_diameter -f %{oreon_filedir}/opensips-aka_av_diameter.list
+%files -n opensips-auth_aaa -f %{oreon_filedir}/opensips-auth_aaa.list
+%files -n opensips-auth_jwt -f %{oreon_filedir}/opensips-auth_jwt.list
+%files -n opensips-b2bua -f %{oreon_filedir}/opensips-b2bua.list
+%files -n opensips-cachedb_couchbase -f %{oreon_filedir}/opensips-cachedb_couchbase.list
+%files -n opensips-cachedb_memcached -f %{oreon_filedir}/opensips-cachedb_memcached.list
+%files -n opensips-cachedb_mongodb -f %{oreon_filedir}/opensips-cachedb_mongodb.list
+%files -n opensips-cachedb_redis -f %{oreon_filedir}/opensips-cachedb_redis.list
+%files -n opensips-call_center -f %{oreon_filedir}/opensips-call_center.list
+%files -n opensips-carrierroute -f %{oreon_filedir}/opensips-carrierroute.list
+%files -n opensips-cgrates -f %{oreon_filedir}/opensips-cgrates.list
+%files -n opensips-compression -f %{oreon_filedir}/opensips-compression.list
+%files -n opensips-cpl_c -f %{oreon_filedir}/opensips-cpl_c.list
+%files -n opensips-db_berkeley -f %{oreon_filedir}/opensips-db_berkeley.list
+%files -n opensips-db_http -f %{oreon_filedir}/opensips-db_http.list
+%files -n opensips-db_mysql -f %{oreon_filedir}/opensips-db_mysql.list
+%files -n opensips-db_perlvdb -f %{oreon_filedir}/opensips-db_perlvdb.list
+%files -n opensips-db_postgresql -f %{oreon_filedir}/opensips-db_postgresql.list
+%files -n opensips-db_sqlite -f %{oreon_filedir}/opensips-db_sqlite.list
+%files -n opensips-db_unixodbc -f %{oreon_filedir}/opensips-db_unixodbc.list
+%files -n opensips-event_kafka -f %{oreon_filedir}/opensips-event_kafka.list
+%files -n opensips-event_rabbitmq -f %{oreon_filedir}/opensips-event_rabbitmq.list
+%files -n opensips-emergency -f %{oreon_filedir}/opensips-emergency.list
+%files -n opensips-h350 -f %{oreon_filedir}/opensips-h350.list
+%files -n opensips-httpd -f %{oreon_filedir}/opensips-httpd.list
+%files -n opensips-http2d -f %{oreon_filedir}/opensips-http2d.list
+%files -n opensips-identity -f %{oreon_filedir}/opensips-identity.list
+%files -n opensips-jabber -f %{oreon_filedir}/opensips-jabber.list
+%files -n opensips-json -f %{oreon_filedir}/opensips-json.list
+%files -n opensips-ldap -f %{oreon_filedir}/opensips-ldap.list
+%files -n opensips-lua -f %{oreon_filedir}/opensips-lua.list
+%files -n opensips-media_exchange -f %{oreon_filedir}/opensips-media_exchange.list
+%files -n opensips-mi_html -f %{oreon_filedir}/opensips-mi_html.list
+%files -n opensips-mi_http -f %{oreon_filedir}/opensips-mi_http.list
+%files -n opensips-mi_xmlrpc_ng -f %{oreon_filedir}/opensips-mi_xmlrpc_ng.list
+%files -n opensips-mmgeoip -f %{oreon_filedir}/opensips-mmgeoip.list
+%files -n opensips-msrp -f %{oreon_filedir}/opensips-msrp.list
+%files -n opensips-peering -f %{oreon_filedir}/opensips-peering.list
+%files -n opensips-perl -f %{oreon_filedir}/opensips-perl.list
+%files -n opensips-pi_http -f %{oreon_filedir}/opensips-pi_http.list
+%files -n opensips-presence -f %{oreon_filedir}/opensips-presence.list
+%files -n opensips-presence_callinfo -f %{oreon_filedir}/opensips-presence_callinfo.list
+%files -n opensips-presence_dfks -f %{oreon_filedir}/opensips-presence_dfks.list
+%files -n opensips-presence_dialoginfo -f %{oreon_filedir}/opensips-presence_dialoginfo.list
+%files -n opensips-presence_mwi -f %{oreon_filedir}/opensips-presence_mwi.list
+%files -n opensips-presence_reginfo -f %{oreon_filedir}/opensips-presence_reginfo.list
+%files -n opensips-presence_xcapdiff -f %{oreon_filedir}/opensips-presence_xcapdiff.list
+%files -n opensips-presence_xml -f %{oreon_filedir}/opensips-presence_xml.list
+%files -n opensips-prometheus -f %{oreon_filedir}/opensips-prometheus.list
+%files -n opensips-proto_bins -f %{oreon_filedir}/opensips-proto_bins.list
+%files -n opensips-proto_ipsec -f %{oreon_filedir}/opensips-proto_ipsec.list
+%files -n opensips-proto_sctp -f %{oreon_filedir}/opensips-proto_sctp.list
+%files -n opensips-proto_tls -f %{oreon_filedir}/opensips-proto_tls.list
+%files -n opensips-proto_wss -f %{oreon_filedir}/opensips-proto_wss.list
+%files -n opensips-pua -f %{oreon_filedir}/opensips-pua.list
+%files -n opensips-pua_bla -f %{oreon_filedir}/opensips-pua_bla.list
+%files -n opensips-pua_dialoginfo -f %{oreon_filedir}/opensips-pua_dialoginfo.list
+%files -n opensips-pua_mi -f %{oreon_filedir}/opensips-pua_mi.list
+%files -n opensips-pua_reginfo -f %{oreon_filedir}/opensips-pua_reginfo.list
+%files -n opensips-pua_usrloc -f %{oreon_filedir}/opensips-pua_usrloc.list
+%files -n opensips-pua_xmpp -f %{oreon_filedir}/opensips-pua_xmpp.list
+%files -n python3-opensips -f %{oreon_filedir}/python3-opensips.list
+%files -n opensips-rabbitmq_consumer -f %{oreon_filedir}/opensips-rabbitmq_consumer.list
+%files -n opensips-regex -f %{oreon_filedir}/opensips-regex.list
+%files -n opensips-rest_client -f %{oreon_filedir}/opensips-rest_client.list
+%files -n opensips-rls -f %{oreon_filedir}/opensips-rls.list
+%files -n opensips-siprec -f %{oreon_filedir}/opensips-siprec.list
+%files -n opensips-snmpstats -f %{oreon_filedir}/opensips-snmpstats.list
+%files -n opensips-stir_shaken -f %{oreon_filedir}/opensips-stir_shaken.list
+%files -n opensips-tls_mgm -f %{oreon_filedir}/opensips-tls_mgm.list
+%files -n opensips-tls_openssl -f %{oreon_filedir}/opensips-tls_openssl.list
+%files -n opensips-uuid -f %{oreon_filedir}/opensips-uuid.list
+%files -n opensips-xcap -f %{oreon_filedir}/opensips-xcap.list
+%files -n opensips-xcap_client -f %{oreon_filedir}/opensips-xcap_client.list
+%files -n opensips-xml -f %{oreon_filedir}/opensips-xml.list
+%files -n opensips-xmpp -f %{oreon_filedir}/opensips-xmpp.list
 
 %changelog
+
 %autochangelog

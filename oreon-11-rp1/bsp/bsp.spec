@@ -1,17 +1,16 @@
 %global source0_hash 641c4350fd620d485e874dc9e504e6feeb6f44272be50f8622c97cbe396bc00e
-
 Name:           bsp
 Version:        5.2
 Release:        41%{?dist}
 Summary:        The most popular node builder for Doom
-
 License:        GPL-2.0-or-later
 URL:            http://games.moria.org.uk/doom/bsp/
 Source0:        http://games.moria.org.uk/doom/bsp/download/%{name}-%{version}.tar.bz2
-BuildRequires:  gcc
-BuildRequires: make
 Patch0:         bsp-configure-c99.patch
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 Before you can play a level that you have created, you must use a node
 builder to create the data that Doom will use to render the level.
@@ -28,6 +27,7 @@ most widely used node builder throughout the height of the Doom
 editing craze in the mid 1990s.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -36,18 +36,16 @@ mv bsp.6.tmp bsp.6
 %patch -P0 -p1
 
 %build
+
 %configure
 %make_build CFLAGS='%{optflags}' LIBS="-lm"
-
 %install
 install -D -p -m 755 bsp $RPM_BUILD_ROOT/%{_bindir}/bsp
 install -D -p -m 644 bsp.6 $RPM_BUILD_ROOT/%{_mandir}/man6/bsp.6
+%oreon_autofiles main
 
-%files
-%doc AUTHORS ChangeLog INSTALL NEWS README visplane.txt test-wads/
-%license COPYING
-%{_bindir}/bsp
-%{_mandir}/man6/bsp.6*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

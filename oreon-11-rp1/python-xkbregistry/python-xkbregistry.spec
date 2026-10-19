@@ -1,60 +1,42 @@
 %global source0_hash 3a116c73ea381d12d08bdc39a6204cbde86e138a2b2b614c54259f0e20e8043f
-
 Name:           python-xkbregistry
 Version:        1.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Bindings for libxkbregistry using cffi
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/sde1000/python-xkbregistry
-Source:         %{pypi_source xkbregistry}
-
+Source0:        https://files.pythonhosted.org/packages/source/x/xkbregistry/xkbregistry-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-BuildRequires:  libxkbcommon-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'xkbregistry' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 45.0
+Requires:       python3-xkbregistry = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-xkbregistry
-Summary:        %{summary}
-
-%description -n python3-xkbregistry %_description
-
+Summary:        Bindings for libxkbregistry using cffi
+%description -n python3-xkbregistry
 
 %prep
-%autosetup -p1 -n xkbregistry-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir xkbregistry-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-xkbregistry usr/lib/python3*/site-packages/xkbregistry* usr/lib64/python3*/site-packages/xkbregistry* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/xkbregistry* usr/lib64/python3*/site-packages/xkbregistry* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-xkbregistry -f %{pyproject_files}
+%files
+%files -n python3-xkbregistry -f %{oreon_filedir}/python3-xkbregistry.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3-1
 - Prepare for Oreon 11 (RP1)

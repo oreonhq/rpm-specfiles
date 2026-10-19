@@ -1,25 +1,22 @@
 %global source0_hash b725b218062c03150d97ce01294e53a8d67e276b931690f334e6deeee2397e71
-
 %global pkg     jinx
 %global emacs_version_with_archsitelispdir 1:30.2-9
-
 Name:           emacs-%{pkg}
 Version:        2.11
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        Fast just-in-time spell-checker for Emacs
 License:        GPL-3.0-or-later
 URL:            https://github.com/minad/%{pkg}
-Source:         https://github.com/minad/%{pkg}/archive/refs/tags/%{version}.tar.gz#/%{pkg}-%{version}.tar.gz
-
-BuildRequires:  /usr/bin/pkg-config
-BuildRequires:  emacs-devel
-BuildRequires:  emacs-nw >= %{emacs_version_with_archsitelispdir}
-BuildRequires:  enchant2-devel
-BuildRequires:  gcc
-
+Source0:        https://github.com/minad/%{pkg}/archive/refs/tags/%{version}.tar.gz#/%{pkg}-%{version}.tar.gz
 Requires:       emacs(bin) >= %{emacs_version_with_archsitelispdir}
 Requires:       emacs(bin)%{?_emacs_version: >= 1:%{_emacs_version}}
-
+# oreon:deps
+BuildRequires:  /usr/bin/pkg-config
+BuildRequires:  emacs-devel
+BuildRequires:  emacs-nw
+BuildRequires:  enchant2-devel
+BuildRequires:  gcc
+# /oreon:deps
 %description
 Jinx is a fast just-in-time spell-checker for Emacs. Jinx highlights
 misspelled words in the text of the visible portion of the buffer. For
@@ -27,11 +24,13 @@ efficiency, Jinx highlights misspellings lazily, recognizes window
 boundaries and text folding, if any.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{pkg}-%{version}
 
 %build
+
 %{_emacs_bytecompile} jinx.el
 %{__cc} \
  $(emacs --batch --load=jinx.elc \
@@ -40,7 +39,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
  $(pkg-config --cflags --libs enchant-2) \
  -o %{pkg}-mod.so %{pkg}-mod.c
 emacs --batch --eval '(loaddefs-generate "." "%{pkg}-autoloads.el")'
-
 %install
 install -d %{buildroot}%{_emacs_archsitelispdir}/ \
            %{buildroot}%{_emacs_sitelispdir}/ \
@@ -49,21 +47,16 @@ install -m 0644 %{pkg}-autoloads.el \
         %{buildroot}%{_emacs_sitelispdir}/site-start.d/
 install -m 0644 %{pkg}.el %{pkg}.elc %{buildroot}%{_emacs_sitelispdir}/
 install -m 0755 %{pkg}-mod.so %{buildroot}%{_emacs_archsitelispdir}/
+%oreon_autofiles main
 
 %check
+
 emacs --batch \
       --eval '(add-to-list '"'"'load-path "%{buildroot}%{_emacs_archsitelispdir}")' \
       --load %{buildroot}%{_emacs_sitelispdir}/%{pkg}.elc \
       --funcall jinx-mode
-
-%files
-%license LICENSE
-%doc CHANGELOG.org
-%doc README.org
-%{_emacs_archsitelispdir}/%{pkg}-mod.so
-%{_emacs_sitelispdir}/%{pkg}.el
-%{_emacs_sitelispdir}/%{pkg}.elc
-%{_emacs_sitelispdir}/site-start.d/%{pkg}-autoloads.el
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

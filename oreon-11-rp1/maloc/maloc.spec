@@ -1,25 +1,21 @@
 %global source0_hash 58e1197fcd4c74d3cbb1d39d712eb0a3c5886a1e6629f22c5c78ce2bac983fc0
-
 Name: maloc
 Version: 1.5
-Release: 35%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        35%{?dist}
 License: GPL-2.0-or-later
 URL: http://www.fetk.org
-Summary: Minimal Abstraction Layer for Object-oriented C
-Source0: http://www.fetk.org/codes/download/%{name}-%{version}.tar.gz
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: doxygen
-BuildRequires: libtool
-BuildRequires: readline-devel
-
-# removes hardcoded libdir setting
+Summary:        Minimal Abstraction Layer for Object-oriented C
+Source0:        http://www.fetk.org/codes/download/%{name}-%{version}.tar.gz
 Patch0: maloc-makefile.am.patch
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  readline-devel
+# /oreon:deps
 %description
 MALOC is a small, portable, abstract C environment library for
 object-oriented C programming. MALOC is used as the foundation layer
@@ -36,13 +32,13 @@ placed in MALOC.
 %package devel
 Summary: Header files and library for developing programs with maloc
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 
 This package contains libraries and header files needed for program
 development using MALOC.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name} -p0
@@ -54,25 +50,18 @@ automake --gnu --add-missing
 autoheader
 
 %build
+
 %configure --disable-static
 %make_build
-
 make maloc_doc -C doc/doxygen
-
 %install
 %make_install
-
-# remove unpackaged files from the buildroot
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_libdir}/*.so.1
-%{_libdir}/*.so.1.0.0
-
-%files devel
-%doc doc/api/html/*
-%{_libdir}/*.so
-%{_includedir}/maloc/
+%files -f %{oreon_filedir}/main.list
+%files -n maloc-devel -f %{oreon_filedir}/maloc-devel.list
 
 %changelog
+
 %autochangelog

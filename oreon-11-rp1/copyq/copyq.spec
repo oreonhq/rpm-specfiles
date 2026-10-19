@@ -1,38 +1,43 @@
 %global source0_hash 9fbbd133b43da8fb10fe6c24bbc350d1d282848787985149e03df94e9ec20c7b
-
 %global forgeurl https://github.com/hluk/CopyQ/
 %global commit fa209998b981460003349194b5ba1237d9804ea8
-
 Name:    copyq
 Version: 16.0.0
-Release: %autorelease
-Summary: Advanced clipboard manager
+Release:        1%{?dist}
+Summary:        Advanced clipboard manager
 License: GPL-3.0-or-later
-
 %{forgemeta}
-
 Url:     %{forgeurl}
-Source0: %{forgesource}
+Source0:        %{forgeurl}archive/%{commit}/CopyQ-%{commit}.tar.gz
 Source1: %{name}.rpmlintrc
-
-BuildRequires: cmake, extra-cmake-modules, gcc-c++
-BuildRequires: libappstream-glib
-BuildRequires: desktop-file-utils, git
-BuildRequires: libXtst-devel, libXfixes-devel
-BuildRequires: kf6-knotifications-devel
-BuildRequires: kf6-kguiaddons-devel
-BuildRequires: kf6-rpm-macros
-BuildRequires: qt6-qtbase-devel, qt6-qtbase-private-devel
-BuildRequires: qt6-qtsvg-devel, qt6-qtdeclarative-devel
-BuildRequires: qt6-qttools-devel, kf6-kstatusnotifieritem-devel
-BuildRequires: qwt-qt6-devel
-BuildRequires: wayland-devel, qt6-qtwayland-devel
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  git
+BuildRequires:  kf6-kguiaddons-devel
+BuildRequires:  kf6-knotifications-devel
+BuildRequires:  kf6-kstatusnotifieritem-devel
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libXfixes-devel
+BuildRequires:  libXtst-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  qt6-qtdeclarative-devel
+BuildRequires:  qt6-qtsvg-devel
+BuildRequires:  qt6-qttools-devel
+BuildRequires:  qt6-qtwayland-devel
+BuildRequires:  qwt-qt6-devel
+BuildRequires:  wayland-devel
+# /oreon:deps
 %description
 CopyQ is advanced clipboard manager with searchable and editable history with
 support for image formats, command line control and more.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{forgesetup}
@@ -59,37 +64,25 @@ if grep -R --line-number -F 'Qt::GuiPrivate' src ; then
 fi
 
 %build
+
 %cmake_kf6 \
   -Wno-dev \
   -DWITH_QT6:BOOL=ON \
   -DWITH_TESTS:BOOL=ON \
   -DPLUGIN_INSTALL_PREFIX=%{_libdir}/%{name}/plugins \
   -DTRANSLATION_INSTALL_PREFIX:PATH=%{_datadir}/%{name}/locale
-
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --with-qt
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/com.github.hluk.%{name}.desktop
 appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_datadir}/metainfo/com.github.hluk.%{name}.appdata.xml
-
-%files -f %{name}.lang
-%doc AUTHORS CHANGES.md HACKING README.md
-%license LICENSE
-%{_bindir}/%{name}
-%{_libdir}/%{name}/
-%{_datadir}/metainfo/com.github.hluk.%{name}.appdata.xml
-%{_datadir}/applications/com.github.hluk.%{name}.desktop
-%{_datadir}/bash-completion/completions/copyq
-%{_datadir}/icons/hicolor/*/apps/%{name}*.png
-%{_datadir}/icons/hicolor/*/apps/%{name}*.svg
-%dir %{_datadir}/%{name}/
-%dir %{_datadir}/%{name}/locale/
-%{_datadir}/%{name}/themes/
-%{_mandir}/man1/%{name}.1.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

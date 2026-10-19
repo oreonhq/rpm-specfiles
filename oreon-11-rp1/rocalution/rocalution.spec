@@ -1,31 +1,8 @@
 %global source0_hash 0f8d8c24317b30d7269841b9fe5ab2d24dddd3d5132e84b4f8ac1cd9d30b0ff2
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
 %global upstreamname rocALUTION
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -43,18 +20,14 @@
 %else
 %global rocalution_name rocalution%{pkg_suffix}
 %endif
-
 %global toolchain rocm
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-mtls-dialect=gnu2//')
-
 %bcond_with debug
 %if %{with debug}
 %global build_type DEBUG
 %else
 %global build_type RelWithDebInfo
 %endif
-
 %bcond_with test
 %if %{with test}
 %global build_test ON
@@ -62,78 +35,53 @@
 %else
 %global build_test OFF
 %endif
-
-# Compression type and level for source/binary package payloads.
-#  "w7T0.xzdio"	xz level 7 using %%{getncpus} threads
 %global _source_payload w7T0.xzdio
 %global _binary_payload w7T0.xzdio
-
 %global gpu_list %{rocm_gpu_list_default}
 %global _gpu_list gfx1100
-
-# Use ninja if it is available
-%if 0%{?fedora} || 0%{?suse_version}
-%bcond_without ninja
-%else
 %bcond_with ninja
-%endif
-
 %if %{with ninja}
 %global cmake_generator -G Ninja
 %else
 %global cmake_generator %{nil}
 %endif
-
 Name:           %{rocalution_name}
 Version:        %{rocm_version}
 Release:        4%{?dist}
 Summary:        Next generation library for iterative sparse solvers for ROCm platform
 Url:            https://github.com/ROCm/%{upstreamname}
 License:        MIT
-
-Source0:        %{url}/archive/rocm-%{version}.tar.gz#/%{upstreamname}-%{version}.tar.gz
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  rocblas%{pkg_suffix}-devel
-BuildRequires:  rocm-cmake%{pkg_suffix}
-BuildRequires:  rocm-comgr%{pkg_suffix}-devel
-BuildRequires:  rocm-compilersupport%{pkg_suffix}-macros
-BuildRequires:  rocm-hip%{pkg_suffix}-devel
-BuildRequires:  rocm-runtime%{pkg_suffix}-devel
-BuildRequires:  rocm-rpm-macros%{pkg_suffix}
-BuildRequires:  rocprim%{pkg_suffix}-static
-BuildRequires:  rocrand%{pkg_suffix}-devel
-BuildRequires:  rocsparse%{pkg_suffix}-devel
-
+Source0:        https://github.com/ROCm/%{upstreamname}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{upstreamname}-%{version}.tar.gz
 %if %{with test}
 %if 0%{?suse_version}
-BuildRequires:  gtest
 %else
-BuildRequires:  gtest-devel
 %endif
 %endif
-
 %if %{with ninja}
-%if 0%{?fedora}
-BuildRequires:  ninja-build
-%endif
 %if 0%{?suse_version}
-BuildRequires:  ninja
 %define __builder ninja
 %endif
 %endif
-
 Provides:       rocalution%{pkg_suffix} = %{version}-%{release}
-
 %if 0%{?suse_version}
-# Got the name wrong
 Obsoletes:      libalution1 <= 6.4.1
 %endif
-
-# Only x86_64 works right now:
 ExclusiveArch:  x86_64
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  rocblas-7.1-devel
+BuildRequires:  rocm-cmake-7.1
+BuildRequires:  rocm-comgr-7.1-devel
+BuildRequires:  rocm-compilersupport-7.1-macros
+BuildRequires:  rocm-hip-7.1-devel
+BuildRequires:  rocm-rpm-macros-7.1
+BuildRequires:  rocm-runtime-7.1-devel
+BuildRequires:  rocprim-7.1-static
+BuildRequires:  rocrand-7.1-devel
+BuildRequires:  rocsparse-7.1-devel
+# /oreon:deps
 %description
 rocALUTION is a sparse linear algebra library that can be used
 to explore fine-grained parallelism on top of the ROCm platform
@@ -149,13 +97,13 @@ Host
 * MPI: Designed for multi-node clusters and multi-GPU setups
 
 %post -p /sbin/ldconfig
+
 %postun -p /sbin/ldconfig
 
 %package devel
 Summary: Libraries and headers for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       rocalution%{pkg_suffix}-devel = %{version}-%{release}
-
 %description devel
 %{summary}
 
@@ -163,12 +111,12 @@ Provides:       rocalution%{pkg_suffix}-devel = %{version}-%{release}
 %package test
 Summary:        Tests for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description test
 %{summary}
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{upstreamname}-rocm-%{version}
@@ -180,6 +128,7 @@ sed -i -e 's@set(CMAKE_CXX_STANDARD 14)@set(CMAKE_CXX_STANDARD 17)@' clients/CMa
 %endif
 
 %build
+
 %cmake %{cmake_generator} \
     -DCMAKE_C_COMPILER=%rocmllvm_bindir/amdclang \
     -DCMAKE_CXX_COMPILER=%rocmllvm_bindir/amdclang++ \
@@ -200,30 +149,16 @@ sed -i -e 's@set(CMAKE_CXX_STANDARD 14)@set(CMAKE_CXX_STANDARD 17)@' clients/CMa
     -DHIP_ROOT_DIR=%{pkg_prefix} \
     -DCMAKE_BUILD_TYPE=%{build_type} \
     -DBUILD_CLIENTS_TESTS=%{build_test}
-
 %cmake_build
-
 %install
 %cmake_install
-
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rocalution/LICENSE.md
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE.md
-%{pkg_prefix}/%{pkg_libdir}/librocalution.so.1{,.*}
-%{pkg_prefix}/%{pkg_libdir}/librocalution_hip.so.1{,.*}
-
-%files devel
-%doc README.md
-%{pkg_prefix}/include/rocalution/
-%{pkg_prefix}/%{pkg_libdir}/librocalution.so
-%{pkg_prefix}/%{pkg_libdir}/librocalution_hip.so
-%{pkg_prefix}/%{pkg_libdir}/cmake/rocalution/
-
-%if %{with test}
-%files test
-%{pkg_prefix}/bin/rocalution*
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n rocalution-7.1-devel -f %{oreon_filedir}/rocalution-7.1-devel.list
+%files -n rocalution-7.1-test -f %{oreon_filedir}/rocalution-7.1-test.list
 
 %changelog
+
 %autochangelog

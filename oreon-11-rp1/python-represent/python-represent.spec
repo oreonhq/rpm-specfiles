@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 403daa7f8360390b84b143b7bf1dd720965a3e93a234994923c7123cc55d5fe1
 Name:           python-represent
 Version:        2.2.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Create __repr__ automatically or declaratively.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/RazerM/represent
-Source:         %{pypi_source represent}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/represent/represent-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'represent' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-represent = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-represent
-Summary:        %{summary}
-
-%description -n python3-represent %_description
-
+Summary:        Create __repr__ automatically or declaratively.
+%description -n python3-represent
 
 %prep
-%autosetup -p1 -n represent-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir represent-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-represent usr/lib/python3*/site-packages/represent* usr/lib64/python3*/site-packages/represent* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/represent* usr/lib64/python3*/site-packages/represent* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-represent -f %{pyproject_files}
+%files
+%files -n python3-represent -f %{oreon_filedir}/python3-represent.list
 
 %changelog
+
 %autochangelog

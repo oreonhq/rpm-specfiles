@@ -1,42 +1,26 @@
 %global source0_hash 390f0ac0aedafbd6bb75974fcffefe7e0232ad6c4ea0ab4f1a77e656a3ce263d
-
 %global soname 6
-
-%if 0%{?fedora} >= 33
-%global blaslib flexiblas
-%global blasvar %{nil}
-%else
 %global blaslib openblas
 %global blasvar o
-%endif
-
 Name:           crest
 Version:        2.12
-Release:        10%{?dist}
+Release:        1%{?dist}
 Summary:        Conformer-Rotamer Ensemble Sampling Tool: a driver for the xtb program
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://crest-lab.github.io/crest-docs/
 Source0:        https://github.com/crest-lab/crest/archive/v%{version}/crest-%{version}.tar.gz
-
-# Do not use "true" as a function name
 Patch0:         https://github.com/crest-lab/crest/pull/397.patch
-
+Requires:       xtb
+ExcludeArch:    s390x
+# oreon:deps
+BuildRequires:  flexiblas-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-gfortran
 BuildRequires:  meson
 BuildRequires:  ninja-build
-BuildRequires:  %{blaslib}-devel
-# To generate man pages
 BuildRequires:  rubygem-asciidoctor
-
-# xtb may be required to run tests
 BuildRequires:  xtb
-Requires:       xtb
-
-# xtb is not available on s390x
-ExcludeArch:    s390x
-
+# /oreon:deps
 %description
 CREST is an utility/driver program for the xtb program. Originally it
 was designed as conformer sampling program, hence the abbreviation
@@ -60,26 +44,25 @@ The main publication for the CREST program can be found at
 Phys. Chem. Chem. Phys., 2020, 22, 7169-7192.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 %patch -P0 -p1 -b .notrue
 
 %build
+
 %meson -Dla_backend=custom -Dcustom_libraries=%{blaslib}%{blasvar}
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
 %check
-%meson_test -t 2000
 
-%files
-%license COPYING COPYING.LESSER
-%doc README.md
-%{_bindir}/crest
-%{_mandir}/man1/crest.1.*
+%meson_test -t 2000
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

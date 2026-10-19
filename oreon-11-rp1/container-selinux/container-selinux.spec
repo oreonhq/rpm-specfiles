@@ -1,56 +1,24 @@
 %global source0_hash 701271b9221eadec0f5f4c99a74a3ef4214123222b757d78d62ef73690f7d8e7
-
 %global debug_package %{nil}
-
-# container-selinux stuff (prefix with ds_ for version/release etc.)
-# Some bits borrowed from the openstack-selinux package
 %global moduletype services
 %global modulenames container
-
-# Usage: _format var format
-# Expand 'modulenames' into various formats as needed
-# Format must contain '$x' somewhere to do anything useful
 %global _format() export %1=""; for x in %{modulenames}; do %1+=%2; %1+=" "; done;
-
-# RHEL < 10 and Fedora < 40 use file context entries in /var/run
-%if %{defined rhel} && 0%{?rhel} < 10 || %{defined fedora} && 0%{?fedora} < 40
-%define legacy_var_run 1
-%endif
-
-# https://github.com/containers/container-selinux/issues/203
-%if %{!defined fedora} && %{!defined rhel} || %{defined rhel} && 0%{?rhel} <= 9
-%define no_user_namespace 1
-%endif
-
-# set copr_build is more intuitive than copr_username
 %if %{defined copr_username} && "%{copr_username}" == "rhcontainerbot" && "%{copr_projectname}" == "podman-next"
 %define next_build 1
 %endif
-
 Name: container-selinux
-# Set different Epoch for rhcontainerbot/podman-next copr build
 %if %{defined next_build}
 Epoch: 102
 %else
 Epoch: 4
 %endif
-# Keep Version in upstream specfile at 0. It will be automatically set
-# to the correct value by Packit for copr and koji builds.
-# IGNORE this comment if you're looking at it in dist-git.
 Version: 2.251.0
-Release: %autorelease
+Release:        1%{?dist}
 License: GPL-2.0-only
 URL: https://github.com/containers/%{name}
-Summary: SELinux policies for container runtimes
+Summary:        SELinux policies for container runtimes
 Source0:        https://github.com/containers/container-selinux/archive/refs/tags/v2.251.0.tar.gz#/container-selinux-2.251.0.tar.gz
-
 BuildArch: noarch
-BuildRequires: make
-BuildRequires: git-core
-BuildRequires: pkgconfig(systemd)
-BuildRequires: selinux-policy >= %_selinux_policy_version
-BuildRequires: selinux-policy-devel >= %_selinux_policy_version
-# RE: rhbz#1195804 - ensure min NVR for selinux-policy
 Requires: selinux-policy >= %_selinux_policy_version
 Requires(post): selinux-policy-base >= %_selinux_policy_version
 Requires(post): selinux-policy-any >= %_selinux_policy_version
@@ -63,11 +31,18 @@ Obsoletes: docker-selinux <= 2:1.12.4-28
 Provides: docker-selinux = %{?epoch:%{epoch}:}%{version}-%{release}
 Conflicts: udica < 0.2.6-1
 Conflicts: k3s-selinux <= 0.4-1
-
+# oreon:deps
+BuildRequires:  git-core
+BuildRequires:  make
+BuildRequires:  pkgconfig(systemd)
+BuildRequires:  selinux-policy
+BuildRequires:  selinux-policy-devel
+# /oreon:deps
 %description
 SELinux policy modules for use with container runtimes.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git %{name}-%{version}
 
@@ -83,18 +58,18 @@ sed -i 's|^/run/|/var/run/|' container.fc
 %endif
 
 %build
-make
 
+make
 %install
-# install policy modules
 %_format MODULES $x.pp.bz2
 %{__make} DATADIR=%{buildroot}%{_datadir} SYSCONFDIR=%{buildroot}%{_sysconfdir} install install.udica-templates install.selinux-user
+%oreon_autofiles main
 
 %pre
-%selinux_relabel_pre
 
+%selinux_relabel_pre
 %post
-# Install all modules in a single transaction
+
 if [ $1 -eq 1 ]; then
    %{_sbindir}/setsebool -P -N virt_use_nfs=1 virt_sandbox_use_all_caps=1
 fi
@@ -106,41 +81,26 @@ fi
 %selinux_modules_install -s ${SELINUXTYPE} $MODULES
 sed -e "\|container_file_t|h; \${x;s|container_file_t||;{g;t};a\\" -e "container_file_t" -e "}" -i /etc/selinux/${SELINUXTYPE}/contexts/customizable_types
 matchpathcon -qV %{_sharedstatedir}/containers || restorecon -R %{_sharedstatedir}/containers &> /dev/null || :
-
 %postun
+
 if [ $1 -eq 0 ]; then
    %selinux_modules_uninstall %{modulenames} docker
 fi
-
 %posttrans
-%selinux_relabel_post
 
-# Empty placeholder check to silence rpmlint
+%selinux_relabel_post
 %check
 
-#define license tag if not already defined
 %{!?_licensedir:%global license %doc}
-
-%files
-%doc README.md
-%{_datadir}/selinux/*
-%dir %{_datadir}/containers/selinux
-%{_datadir}/containers/selinux/contexts
-%dir %{_datadir}/udica
-%dir %{_datadir}/udica/templates/
-%{_datadir}/udica/templates/*
-# Ref: https://bugzilla.redhat.com/show_bug.cgi?id=2209120
-%{_mandir}/man8/container_selinux.8.gz
-%{_sysconfdir}/selinux/targeted/contexts/users/container_u
-%ghost %verify(not mode) %{_selinux_store_path}/targeted/active/modules/200/%{modulenames}
-%ghost %verify(not mode) %{_selinux_store_path}/mls/active/modules/200/%{modulenames}
-
 %triggerpostun -- container-selinux < 2:2.162.1-3
+
 if %{_sbindir}/selinuxenabled ; then
     echo "Fixing Rootless SELinux labels in homedir"
     %{_sbindir}/restorecon -R /home/*/.local/share/containers/storage/overlay*  2> /dev/null
 fi
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.247.0-1
 - Prepare for Oreon 11 (RP1)

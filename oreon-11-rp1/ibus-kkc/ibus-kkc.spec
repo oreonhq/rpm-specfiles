@@ -1,52 +1,40 @@
 %global source0_hash 22fe2552f08a34a751cef7d1ea3c088e8dc0f0af26fd7bba9cdd27ff132347ce
-
 Name:		ibus-kkc
 Version:	1.5.22
-Release:	29%{?dist}
-Summary:	Japanese Kana Kanji input method for ibus
-
+Release:        1%{?dist}
+Summary:        Japanese Kana Kanji input method for ibus
 License:	GPL-2.0-or-later
 URL:		https://github.com/ueno/ibus-kkc
 Source0:        https://github.com/ueno/ibus-kkc/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch0:		ibus-kkc-content-type.patch
 Patch1:         ibus-HEAD.patch
-
-BuildRequires:	vala
-BuildRequires:	intltool
-BuildRequires:	libkkc-devel >= 0.3.4
-BuildRequires:	ibus-devel
-BuildRequires:	gtk3-devel
-BuildRequires:	desktop-file-utils
-BuildRequires: make
 Requires:	ibus
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gtk3-devel
+BuildRequires:  ibus-devel
+BuildRequires:  intltool
+BuildRequires:  libkkc-devel
+BuildRequires:  make
+BuildRequires:  vala
+# /oreon:deps
 %description
 A Japanese Kana Kanji Input Method Engine for ibus.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 rm src/*vala.stamp
 # don't touch XKB layout under Fedora
 sed -i 's!<layout>jp</layout>!<layout>default</layout>!' src/kkc.xml.in.in
 
-
 %build
+
 %configure
 make %{?_smp_mflags}
-
-
 %install
 %make_install INSTALL="install -p"
-
-# Register as an AppStream component to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/kkc.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -77,21 +65,13 @@ cat > $RPM_BUILD_ROOT%{_datadir}/appdata/kkc.appdata.xml <<EOF
   <update_contact><!-- upstream-contact_at_email.com --></update_contact>
 </component>
 EOF
-
 desktop-file-validate %{buildroot}/%{_datadir}/applications/ibus-setup-kkc.desktop
-
 %find_lang %{name}
+%oreon_autofiles main
 
-
-%files -f %{name}.lang
-%doc AUTHORS COPYING ChangeLog README
-%{_datadir}/appdata/*.appdata.xml
-%{_datadir}/ibus-kkc
-%{_libexecdir}/ibus-*-kkc
-%{_datadir}/ibus/component/kkc.xml
-%{_datadir}/applications/ibus-setup-kkc.desktop
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.22-29
 - Prepare for Oreon 11 (RP1)

@@ -1,26 +1,25 @@
 %global source0_hash 8cb7e97d96d86f37e29fc5b731afde2e9b26f6f407b74352ffea3ee2148be829
-
 %define htmldir %{_docdir}/liblognorm/html
-
 Name:		liblognorm
 Version:	2.1.1
-Release:	1%{?dist}
-Summary:	Fast samples-based log normalization library
+Release:        1%{?dist}
+Summary:        Fast samples-based log normalization library
 License:	LGPL-2.1-or-later AND Apache-2.0
 URL:		http://www.liblognorm.com
 Source0:        http://www.liblognorm.com/files/download/%{name}-%{version}.tar.gz
-
-BuildRequires:	gcc
-BuildRequires:	chrpath
-BuildRequires:	libfastjson-devel
-BuildRequires:	libestr-devel
-BuildRequires:	pcre2-devel
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	libtool
-
 Patch1: liblognorm-configure-glitch.patch
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  chrpath
+BuildRequires:  gcc
+BuildRequires:  libestr-devel
+BuildRequires:  libfastjson-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pcre2-devel
+BuildRequires:  python3-sphinx
+# /oreon:deps
 %description
 Briefly described, liblognorm is a tool to normalize log data.
 
@@ -37,7 +36,6 @@ Summary:	Development tools for programs using liblognorm library
 Requires:	%{name}%{?_isa} = %{version}-%{release}
 Requires:	json-c-devel%{?_isa}
 Requires:	libestr-devel%{?_isa}
-
 %description devel
 The liblognorm-devel package includes header files, libraries necessary for
 developing programs which use liblognorm library.
@@ -46,59 +44,42 @@ developing programs which use liblognorm library.
 Summary: HTML documentation for liblognorm
 BuildRequires: python3-sphinx
 BuildRequires: make
-
 %description doc
 This sub-package contains documentation for liblognorm in a HTML form.
 
 %package utils
 Summary:	Lognormalizer utility for normalizing log files
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description utils
 The lognormalizer is the core of liblognorm, it is a utility for normalizing
 log files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %patch -P 1 -p1 -b .configure-glitch
 
 %build
-# Prevent rebuild of the configure script.
+
 touch configure aclocal.m4 Makefile.in config.h.in
 autoreconf --verbose --force --install
 %configure --enable-regexp --enable-docs --docdir=%{htmldir} --includedir=%{_includedir}/%{name}/
-
-
 %install
 make V=1 install INSTALL="install -p" DESTDIR=%{buildroot}
 rm -f %{buildroot}/%{_libdir}/*.{a,la}
 chrpath -d %{buildroot}%{_bindir}/lognormalizer
 chrpath -d %{buildroot}%{_libdir}/liblognorm.so
 rm %{buildroot}%{htmldir}/{objects.inv,.buildinfo}
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/*/lib*.so.*
 
-%files
-%{!?_licensedir:%global license %%doc}
-%license COPYING
-%doc AUTHORS ChangeLog README
-%exclude %{htmldir}
-
-%{_libdir}/lib*.so.*
-
-%files devel
-%{_libdir}/lib*.so
-%{_includedir}/%{name}/*.h
-%{_libdir}/pkgconfig/*.pc
-
-%files doc
-%doc %{htmldir}
-
-%files utils
-%{_bindir}/lognormalizer
-
+%files -f %{oreon_filedir}/main.list
+%files -n liblognorm-devel -f %{oreon_filedir}/liblognorm-devel.list
+%files -n liblognorm-doc -f %{oreon_filedir}/liblognorm-doc.list
+%files -n liblognorm-utils -f %{oreon_filedir}/liblognorm-utils.list
 
 %changelog
+
 %autochangelog

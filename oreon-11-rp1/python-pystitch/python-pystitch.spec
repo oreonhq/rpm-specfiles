@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 4c067aeaf86e7489efdd8524b22beea089df66746b401a9efb34637ae1855e3b
 Name:           python-pystitch
 Version:        1.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Embroidery IO library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/inkstitch/pystitch.git
-Source:         %{pypi_source pystitch}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pystitch/pystitch-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pystitch' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-pystitch = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pystitch
-Summary:        %{summary}
-
-%description -n python3-pystitch %_description
-
+Summary:        Embroidery IO library
+%description -n python3-pystitch
 
 %prep
-%autosetup -p1 -n pystitch-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pystitch-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pystitch usr/lib/python3*/site-packages/pystitch* usr/lib64/python3*/site-packages/pystitch* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pystitch* usr/lib64/python3*/site-packages/pystitch* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pystitch -f %{pyproject_files}
+%files
+%files -n python3-pystitch -f %{oreon_filedir}/python3-pystitch.list
 
 %changelog
+
 %autochangelog

@@ -1,30 +1,25 @@
 %global source0_hash 29efadd34bc54361b23883e0acc6f9fb7deafa7940fbd9689b34ea5faa573c0a
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 Name:           ocaml-uutf
 Version:        1.0.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Non-blocking streaming Unicode codec for OCaml
-
 License:        ISC
 URL:            https://erratique.ch/software/uutf
 VCS:            git:https://erratique.ch/repos/uutf.git
-Source:         https://github.com/dbuenzli/uutf/archive/v%{version}/uutf-%{version}.tar.gz
-
-BuildRequires:  ocaml >= 4.08.0
-BuildRequires:  ocaml-cmdliner-devel >= 1.3.0
+Source0:        https://github.com/dbuenzli/uutf/archive/v%{version}/uutf-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-cmdliner-devel
 BuildRequires:  ocaml-findlib
 BuildRequires:  ocaml-ocamlbuild
 BuildRequires:  ocaml-ocamldoc
 BuildRequires:  ocaml-rpm-macros
-BuildRequires:  ocaml-topkg-devel >= 1.0.3
-
+BuildRequires:  ocaml-topkg-devel
+# /oreon:deps
 %description
 Uutf is a non-blocking streaming codec to decode and encode the UTF-8, UTF-16,
 UTF-16LE and UTF-16BE encoding schemes.  It can efficiently work character by
@@ -37,12 +32,12 @@ string values and to directly encode characters in OCaml Buffer.t values.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n uutf-%{version} -p1
@@ -60,25 +55,20 @@ for fil in $(find . -type f); do
 done
 
 %build
-# Build the library and the tests
-ocaml pkg/pkg.ml build --dev-pkg false --tests true --with-cmdliner true
 
-# Build the documentation
+ocaml pkg/pkg.ml build --dev-pkg false --tests true --with-cmdliner true
 mkdir html
 ocamldoc -html -d html -I _build/src _build/src/uutf.mli
-
 %install
 %ocaml_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 ocaml pkg/pkg.ml test
-
-%files -f .ofiles
-%doc CHANGES.md README.md
-%license LICENSE.md
-
-%files devel -f .ofiles-devel
-%doc html/*
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-uutf-devel -f %{oreon_filedir}/ocaml-uutf-devel.list
 
 %changelog
+
 %autochangelog

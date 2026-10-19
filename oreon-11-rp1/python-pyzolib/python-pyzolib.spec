@@ -1,46 +1,38 @@
-%global source0_hash 2f4d61920d7eeb6ff4709241d8779bc65d2bdf30d6e7ecdfbd1021297293be33
-
+%global source0_hash 35f949964615a1d0dead0711212dc73d0f0b8a323e27e9cab3b26d14649ad006
 Name:           python-pyzolib
 Version:        0.3.4
 Release:        1%{?dist}
 Summary:        Utilities for the Pyzo environment
-
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.pyzo.org
 Source0:        https://pypi.python.org/packages/source/p/pyzolib/pyzolib-%{version}.tar.gz
-
 BuildArch:      noarch
-
-%global _description\
-This package implements several small sub-modules and sub-packages that expose\
-common functionality in a range of packages and applications in the Pyzo\
-framework.
-
-%description %_description
+# oreon:deps
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+# /oreon:deps
+%description
 
 %package -n python%{python3_pkgversion}-pyzolib
 Summary:        Utilities for the Pyzo environment
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-setuptools
-
-%description -n python%{python3_pkgversion}-pyzolib %_description
+%description -n python%{python3_pkgversion}-pyzolib
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n pyzolib-%{version}
-
+%global oreon_srcdir pyzolib-%{version}
+%oreon_prep
 %build
-%py3_build
 
+%py3_build
 %install
 %py3_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n python%{python3_pkgversion}-pyzolib
-%doc
-%{python3_sitelib}/pyzolib/
-%{python3_sitelib}/pyzolib-%{version}-py%{python3_version}.egg-info/
+%files -f %{oreon_filedir}/main.list
+%files -n python3-pyzolib -f %{oreon_filedir}/python3-pyzolib.list
 
 %changelog
+
 %autochangelog

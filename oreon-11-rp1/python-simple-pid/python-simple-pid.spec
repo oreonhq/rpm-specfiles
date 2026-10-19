@@ -1,62 +1,71 @@
-%global source0_hash none
-
+%global source0_hash 5771761c54541c900e597d6c2e4ea93fd2cc98f4e48cb9eca265fba2e65be99e
 Name:           python-simple-pid
 Version:        2.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A simple, easy to use PID controller
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/m-lundberg/simple-pid
-Source:         %{pypi_source simple_pid}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/simple_pid/simple_pid-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-simple-pid = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-simple-pid+test
+Summary:        Metapackage for python3-simple-pid test extras
+Requires:       python3-simple-pid = %{version}-%{release}
+Provides:       python3dist(simple-pid[test]) = %{version}-%{release}
 
+%description -n python3-simple-pid+test
+Metapackage for python3-simple-pid test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'simple-pid' generated automatically by pyp2spec.}
+%package -n       python3-simple-pid+doc
+Summary:        Metapackage for python3-simple-pid doc extras
+Requires:       python3-simple-pid = %{version}-%{release}
+Requires:       python3dist(furo) == 2023.3.27
+Requires:       python3dist(myst-parser) == 1.0.0
+Requires:       python3dist(sphinx) == 6.2.1
+Requires:       python3dist(sphinx-copybutton) == 0.5.2
+Provides:       python3dist(simple-pid[doc]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-simple-pid+doc
+Metapackage for python3-simple-pid doc extras.
+
+%package -n       python3-simple-pid+examples
+Summary:        Metapackage for python3-simple-pid examples extras
+Requires:       python3-simple-pid = %{version}-%{release}
+Provides:       python3dist(simple-pid[examples]) = %{version}-%{release}
+
+%description -n python3-simple-pid+examples
+Metapackage for python3-simple-pid examples extras.
+
+%description
 
 %package -n     python3-simple-pid
-Summary:        %{summary}
-
-%description -n python3-simple-pid %_description
+Summary:        A simple, easy to use PID controller
+%description -n python3-simple-pid
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-simple-pid doc,examples,test
-
 
 %prep
-%autosetup -p1 -n simple_pid-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir simple_pid-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-simple-pid usr/lib/python3*/site-packages/simple_pid* usr/lib64/python3*/site-packages/simple_pid* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/simple_pid* usr/lib64/python3*/site-packages/simple_pid* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-simple-pid -f %{pyproject_files}
+%files
+%files -n python3-simple-pid -f %{oreon_filedir}/python3-simple-pid.list
 
 %changelog
+
 %autochangelog

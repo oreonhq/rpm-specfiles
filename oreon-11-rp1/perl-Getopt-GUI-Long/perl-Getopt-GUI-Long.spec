@@ -1,25 +1,22 @@
 %global source0_hash a7268e49773a2c367ec9a0d268b15a57073c4b98f7d7a1be93400d663de35044
-
 Name:           perl-Getopt-GUI-Long
 Version:        0.93
-Release:        33%{?dist}
+Release:        1%{?dist}
 Summary:        Wrapper around Getopt::Long to provide a GUI to applications
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Getopt-GUI-Long
 Source0:        https://cpan.metacpan.org/authors/id/H/HA/HARDAKER/Getopt-GUI-Long-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Run-time:
-# QWizard modules are technically optional, but without them this package does
-# not make much sense.
 Requires:       perl(QWizard)
 Requires:       perl(QWizard::Plugins::Bookmarks)
 Requires:       perl(QWizard::Storage::File)
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module is a wrapper around Getopt::Long that extends the value of
 the original Getopt::Long module to:
@@ -45,6 +42,7 @@ providing automatic good-looking usage output without the
 programmer needing to write usage() functions.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n Getopt-GUI-Long-%{version}
@@ -52,19 +50,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 chmod a-x examples/*
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
-%files
-%doc examples README
-%dir %{perl_vendorlib}/Getopt
-%dir %{perl_vendorlib}/Getopt/GUI
-%{perl_vendorlib}/Getopt/GUI/Long.pm
-%{_mandir}/man3/Getopt::GUI::Long.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

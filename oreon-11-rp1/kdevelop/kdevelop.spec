@@ -1,10 +1,6 @@
 %global source0_hash dd77921d7e403bfbb60bfa8a7998a2e2c1eb53ab7b4b1a2f8a52360493c586ab
-
 %global stable_kf6 stable
-
-
 %bcond svn %{undefined flatpak}
-
 Name:           kdevelop
 Summary:        Integrated Development Environment for C++/C
 Epoch:          9
@@ -13,98 +9,11 @@ Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://www.kdevelop.org/
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 Source10:       macros.kdevelop
-
-# upstreamable patches
-
-# upstream patches
-
-# depends on qt6-qtwebengine, which is only available on some arches
 ExclusiveArch:  %{qt6_qtwebengine_arches}
-
-BuildRequires:  gcc-c++ gcc
-BuildRequires:  desktop-file-utils
-BuildRequires:  extra-cmake-modules
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  libappstream-glib
-
-# top-level library dependencies
-BuildRequires:  cmake(Qt6Concurrent)
-BuildRequires:  cmake(Qt6Core5Compat)
-BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(Qt6Quick)
-BuildRequires:  cmake(Qt6QuickWidgets)
-BuildRequires:  cmake(Qt6Widgets)
-BuildRequires:  cmake(Qt6Test)
-
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6DocTools)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6ItemModels)
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6JobWidgets)
-BuildRequires:  cmake(KF6KCMUtils)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6NewStuff)
-BuildRequires:  cmake(KF6NotifyConfig)
-BuildRequires:  cmake(KF6Parts)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6TextEditor)
-BuildRequires:  cmake(KF6ThreadWeaver)
-BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6Archive)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6Sonnet)
-BuildRequires:  cmake(KF6TextTemplate)
-BuildRequires:  cmake(KF6TextWidgets)
-
-BuildRequires:  cmake(KSysGuard)
-BuildRequires:  cmake(KDevelop-PG-Qt) >= 2.3.0
-
-BuildRequires:  pkgconfig(bash-completion)
-BuildRequires:  pkgconfig(shared-mime-info)
-
-# kdevplatform
-BuildRequires:  boost-devel
-# kdevplatform/documentation
-BuildRequires:  cmake(Qt6WebEngineWidgets)
-BuildRequires:  qt6-qtwebengine-devel
-
-# app/plasma
-BuildRequires:  cmake(Plasma)
-BuildRequires:  cmake(KF6Runner)
-
-# plugins/astyle
-BuildRequires:  astyle-devel
-# plugins/clang
-BuildRequires:  cmake(Clang)
-BuildRequires:  cmake(LLVM)
-# plugins/clazy
-BuildRequires:  clazy
-# plugins/cppcheck
-BuildRequires:  cppcheck
-# plugins/gdb (not yet ported to Qt6)
-#BuildRequires:  cmake(OktetaGui)
-# plugins/heaptrack
-BuildRequires:  heaptrack
-# plugins/meson
-BuildRequires:  meson
-# plugins/patchreview
-BuildRequires:  cmake(KompareDiff2)
-BuildRequires:  cmake(KF6Purpose)
-# plugins/qthelp
-BuildRequires:  cmake(Qt6Help)
 %if %{with svn}
-# plugins/subversion
-BuildRequires:  subversion-devel
 %endif
-
 Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: astyle
 Requires: cmake
@@ -115,7 +24,65 @@ Recommends: clang-tools-extra
 Recommends: clazy
 Recommends: heaptrack
 Recommends: meson
-
+# oreon:deps
+BuildRequires:  astyle-devel
+BuildRequires:  boost-devel
+BuildRequires:  clazy
+BuildRequires:  cmake(Clang)
+BuildRequires:  cmake(KDevelop-PG-Qt)
+BuildRequires:  cmake(KF6Archive)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6ItemModels)
+BuildRequires:  cmake(KF6ItemViews)
+BuildRequires:  cmake(KF6JobWidgets)
+BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6NewStuff)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6NotifyConfig)
+BuildRequires:  cmake(KF6Parts)
+BuildRequires:  cmake(KF6Purpose)
+BuildRequires:  cmake(KF6Runner)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6Sonnet)
+BuildRequires:  cmake(KF6TextEditor)
+BuildRequires:  cmake(KF6TextTemplate)
+BuildRequires:  cmake(KF6TextWidgets)
+BuildRequires:  cmake(KF6ThreadWeaver)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(KSysGuard)
+BuildRequires:  cmake(KompareDiff2)
+BuildRequires:  cmake(LLVM)
+BuildRequires:  cmake(Plasma)
+BuildRequires:  cmake(Qt6Concurrent)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Help)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6QuickWidgets)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  cmake(Qt6WebEngineWidgets)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  cppcheck
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  heaptrack
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  meson
+BuildRequires:  pkgconfig(bash-completion)
+BuildRequires:  pkgconfig(shared-mime-info)
+BuildRequires:  qt6-qtwebengine-devel
+BuildRequires:  subversion-devel
+# /oreon:deps
 %description
 The KDevelop Integrated Development Environment provides many features
 that developers need as well as providing a unified interface to programs
@@ -140,7 +107,6 @@ with KIconEdit; The inclusion of any other program you need for
 development by adding it to the "Tools"-menu according to your
 individual needs.
 
-
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
@@ -157,22 +123,16 @@ Summary: %{name} runtime libraries
 %description libs
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake_kf6
 cmake --build "%{_vpath_builddir}" -j${RPM_BUILD_NCPUS} -- -s
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name
-
-# rpm macros
 install -p -m644 -D %{SOURCE10} \
   %{buildroot}%{rpm_macros_dir}/macros.kdevelop
 sed -i \
@@ -181,63 +141,17 @@ sed -i \
   -e "s|@@VERSION@@|%{version}|g" \
   -e "s|@@EVR@@|%{?epoch:%{epoch}:}%{version}-%{release}|g" \
   %{buildroot}%{rpm_macros_dir}/macros.kdevelop
-
-# drop zsh, using bash as default
 rm -f %{buildroot}%{_datadir}/kdevplatform/shellutils/.zshrc
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kdevelop.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/org.kde.kdevelop.appdata.xml
-
-
-%files -f %{name}.lang
-%doc AUTHORS
-%license COPYING.DOC
-%{_bindir}/kdevelop
-%{_bindir}/kdevelop!
-%{_bindir}/kdev_includepathsconverter
-%{_bindir}/kdev_dbus_socket_transformer
-%{_bindir}/kdevplatform_shell_environment.sh
-%{_bindir}/kdev_format_source
-%{_datadir}/kdev*/
-%{_datadir}/applications/org.kde.kdevelop.desktop
-%{_datadir}/applications/org.kde.kdevelop_ps.desktop
-%{_datadir}/applications/org.kde.kdevelop_bzr.desktop
-%{_datadir}/applications/org.kde.kdevelop_git.desktop
-%{_datadir}/applications/org.kde.kdevelop_kdev4.desktop
-%if %{with svn}
-%{_datadir}/applications/org.kde.kdevelop_svn.desktop
-%endif
-%{_datadir}/mime/packages/kdevelop.xml
-%{_datadir}/mime/packages/kdevclang.xml
-%{_datadir}/mime/packages/kdevgit.xml
-%{_datadir}/plasma/plasmoids/org.kde.kdevelopsessions/*
-%{_datadir}/knotifications6/kdevelop.notifyrc
-%{_datadir}/icons/hicolor/*/*/*
-%{_datadir}/qlogging-categories6/kdevelop.categories
-%{_datadir}/qlogging-categories6/kdevplatform.categories
-%{_datadir}/bash-completion/completions/kdevelop
-%{_datadir}/knsrcfiles/kdev*.knsrc
-%{_docdir}/HTML/*/kdevelop/
-%{_metainfodir}/org.kde.kdevelop.appdata.xml
-%{_qt6_qmldir}/org/kde/plasma/private/kdevelopsessions/libkdevelopsessionsplugin.so
-%{_qt6_qmldir}/org/kde/plasma/private/kdevelopsessions/qmldir
-
-%files libs
-%{_libdir}/libKDev*.so.{61,62,63,64,65,6.*}
-%{_libdir}/libKDevelopSessionsWatch.so
-%{_kf6_qtplugindir}/kdevplatform/
-%{_kf6_plugindir}/krunner/kdevelopsessions.so
-%{_kf6_plugindir}/ktexttemplate/kdev_filters.so
-
-%files devel
-%{_libdir}/cmake/KDevelop/
-%{_libdir}/cmake/KDevPlatform
-%{_includedir}/kdevelop/
-%{_includedir}/kdevplatform/
-%exclude %{_libdir}/libKDevelopSessionsWatch.so
-%{_libdir}/libKDev*.so
-%{rpm_macros_dir}/macros.kdevelop
+%files -f %{oreon_filedir}/main.list
+%files -n kdevelop-devel -f %{oreon_filedir}/kdevelop-devel.list
+%files -n kdevelop-libs -f %{oreon_filedir}/kdevelop-libs.list
 
 %changelog
+
 %autochangelog

@@ -1,48 +1,39 @@
 %global source0_hash 24045199af12d93fe5fdbbbf7e386e823e4842071e9432e2b90ac108b889a923
-
-# widely used
 %bcond openssl 1
-# used by libreoffice
 %bcond nss 1
-# not used
 %bcond gcrypt %{undefined rhel}
-# not used; gnutls depends on gcrypt
 %bcond gnutls %{with gcrypt}
-
-Summary: Library providing support for "XML Signature" and "XML Encryption" standards
+Summary:        Library providing support for "XML Signature" and "XML Encryption" standards
 Name: xmlsec1
 Version: 1.3.12
-Release: 1%{?dist}%{?extra_release}
+Release:        1%{?dist}
 Epoch: 1
 License: MIT
 Source0:        https://github.com/lsh123/xmlsec/releases/download/%{version}/xmlsec1-%{version}.tar.gz
 URL: http://www.aleksey.com/xmlsec/
-
 Patch0: 0001-Conditional-include-for-openssl-engines.patch
-
-BuildRequires: make
-BuildRequires: pkgconfig(libxml-2.0) >= 2.8.0
-BuildRequires: pkgconfig(libxslt) >= 1.0.20
 %if %{with openssl}
-BuildRequires: pkgconfig(openssl) >= 3.0.0
 %endif
 %if %{with nss}
-BuildRequires: pkgconfig(nss) >= 3.49.0
-BuildRequires: pkgconfig(nspr) >= 4.25.0
 %endif
 %if %{with gcrypt}
-BuildRequires: libgcrypt-devel >= 1.4.0
 %endif
 %if %{with gnutls}
-BuildRequires: pkgconfig(gnutls) >= 3.6.13
 %endif
-BuildRequires: libtool-ltdl-devel
-# autoreconf stuff
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: gettext-devel
-BuildRequires: libtool
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gettext-devel
+BuildRequires:  libtool
+BuildRequires:  libtool-ltdl-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig(gnutls)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(libxslt)
+BuildRequires:  pkgconfig(nspr)
+BuildRequires:  pkgconfig(nss)
+BuildRequires:  pkgconfig(openssl)
+# /oreon:deps
 %description
 XML Security Library is a C library based on LibXML2  and OpenSSL.
 The library was created with a goal to support major XML security
@@ -52,7 +43,6 @@ standards "XML Digital Signature" and "XML Encryption".
 Summary: Libraries, includes, etc. to develop applications with XML Digital Signatures and XML Encryption support.
 Requires: xmlsec1%{?_isa} = 1:%{version}-%{release}
 Requires: openssl-devel%{?_isa} >= 1.0.0
-
 %description devel
 Libraries, includes, etc. you can use to develop applications with XML Digital
 Signatures and XML Encryption support.
@@ -61,7 +51,6 @@ Signatures and XML Encryption support.
 %package openssl
 Summary: OpenSSL crypto plugin for XML Security Library
 Requires: xmlsec1%{?_isa} = 1:%{version}-%{release}
-
 %description openssl
 OpenSSL plugin for XML Security Library provides OpenSSL based crypto services
 for the xmlsec library.
@@ -70,7 +59,6 @@ for the xmlsec library.
 Summary: OpenSSL crypto plugin for XML Security Library
 Requires: xmlsec1-devel%{?_isa} = 1:%{version}-%{release}
 Requires: xmlsec1-openssl%{?_isa} = 1:%{version}-%{release}
-
 %description openssl-devel
 Libraries, includes, etc. for developing XML Security applications with OpenSSL
 %endif
@@ -80,7 +68,6 @@ Libraries, includes, etc. for developing XML Security applications with OpenSSL
 Summary: GCrypt crypto plugin for XML Security Library
 Requires: xmlsec1%{?_isa} = 1:%{version}-%{release}
 Provides: deprecated()
-
 %description gcrypt
 GCrypt plugin for XML Security Library provides GCrypt based crypto services
 for the xmlsec library.
@@ -90,7 +77,6 @@ Summary: GCrypt crypto plugin for XML Security Library
 Requires: xmlsec1-devel%{?_isa} = 1:%{version}-%{release}
 Requires: xmlsec1-gnutls-devel%{?_isa} = 1:%{version}-%{release}
 Provides: deprecated()
-
 %description gcrypt-devel
 Libraries, includes, etc. for developing XML Security applications with GCrypt.
 %endif
@@ -100,7 +86,6 @@ Libraries, includes, etc. for developing XML Security applications with GCrypt.
 Summary: GNUTls crypto plugin for XML Security Library
 Requires: xmlsec1%{?_isa} = 1:%{version}-%{release}
 Provides: deprecated()
-
 %description gnutls
 GNUTls plugin for XML Security Library provides GNUTls based crypto services
 for the xmlsec library.
@@ -111,7 +96,6 @@ Requires: xmlsec1-devel%{?_isa} = 1:%{version}-%{release}
 Requires: xmlsec1-openssl-devel%{?_isa} = 1:%{version}-%{release}
 Requires: gnutls-devel%{?_isa} >= 1.0.20
 Provides: deprecated()
-
 %description gnutls-devel
 Libraries, includes, etc. for developing XML Security applications with GNUTls.
 %endif
@@ -120,7 +104,6 @@ Libraries, includes, etc. for developing XML Security applications with GNUTls.
 %package nss
 Summary: NSS crypto plugin for XML Security Library
 Requires: xmlsec1%{?_isa} = 1:%{version}-%{release}
-
 %description nss
 NSS plugin for XML Security Library provides NSS based crypto services
 for the xmlsec library
@@ -129,90 +112,37 @@ for the xmlsec library
 Summary: NSS crypto plugin for XML Security Library
 Requires: xmlsec1-devel%{?_isa} = 1:%{version}-%{release}
 Requires: xmlsec1-nss%{?_isa} = 1:%{version}-%{release}
-
 %description nss-devel
 Libraries, includes, etc. for developing XML Security applications with NSS.
 %endif
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 autoreconf -vfi
 %configure --disable-static
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %make_build V=1
-
-# positively ugly but only sane way to get around #192756
 sed 's+/lib64+/$archlib+g' < xmlsec1-config | sed 's+/lib+/$archlib+g' | sed 's+ -DXMLSEC_NO_SIZE_T++' > xmlsec1-config.$$ && mv xmlsec1-config.$$ xmlsec1-config
-
 %install
 %make_install
 rm -vf %{buildroot}%{_libdir}/*.la
-
-# move installed docs to include them in -devel package via %%doc magic
 rm -rf __tmp_doc ; mkdir __tmp_doc
 mv %{buildroot}%{_docdir}/xmlsec1/* __tmp_doc
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS ChangeLog NEWS Copyright
-%{_mandir}/man1/xmlsec1.1*
-%{_libdir}/libxmlsec1.so.*
-%{_bindir}/xmlsec1
-
-%files devel
-%{_bindir}/xmlsec1-config
-%dir %{_includedir}/xmlsec1
-%dir %{_includedir}/xmlsec1/xmlsec
-%{_includedir}/xmlsec1/xmlsec/*.h
-%{_libdir}/libxmlsec1.so
-%{_libdir}/pkgconfig/xmlsec1.pc
-%{_libdir}/xmlsec1Conf.sh
-%{_datadir}/aclocal/xmlsec1.m4
-%{_mandir}/man1/xmlsec1-config.1*
-%doc HACKING __tmp_doc/*
-
-%if %{with openssl}
-%files openssl
-%{_libdir}/libxmlsec1-openssl.so.*
-%{_libdir}/libxmlsec1-openssl.so
-
-%files openssl-devel
-%{_includedir}/xmlsec1/xmlsec/openssl/
-%{_libdir}/pkgconfig/xmlsec1-openssl.pc
-%endif
-
-%if %{with gcrypt}
-%files gcrypt
-%{_libdir}/libxmlsec1-gcrypt.so.*
-%{_libdir}/libxmlsec1-gcrypt.so
-
-%files gcrypt-devel
-%{_includedir}/xmlsec1/xmlsec/gcrypt/
-%{_libdir}/pkgconfig/xmlsec1-gcrypt.pc
-%endif
-
-%if %{with gnutls}
-%files gnutls
-%{_libdir}/libxmlsec1-gnutls.so.*
-%{_libdir}/libxmlsec1-gnutls.so
-
-%files gnutls-devel
-%{_includedir}/xmlsec1/xmlsec/gnutls/
-%{_libdir}/pkgconfig/xmlsec1-gnutls.pc
-%endif
-
-%if %{with nss}
-%files nss
-%{_libdir}/libxmlsec1-nss.so.*
-%{_libdir}/libxmlsec1-nss.so
-
-%files nss-devel
-%{_includedir}/xmlsec1/xmlsec/nss/
-%{_libdir}/pkgconfig/xmlsec1-nss.pc
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n xmlsec1-devel -f %{oreon_filedir}/xmlsec1-devel.list
+%files -n xmlsec1-openssl -f %{oreon_filedir}/xmlsec1-openssl.list
+%files -n xmlsec1-openssl-devel -f %{oreon_filedir}/xmlsec1-openssl-devel.list
+%files -n xmlsec1-gnutls -f %{oreon_filedir}/xmlsec1-gnutls.list
+%files -n xmlsec1-gnutls-devel -f %{oreon_filedir}/xmlsec1-gnutls-devel.list
+%files -n xmlsec1-nss -f %{oreon_filedir}/xmlsec1-nss.list
+%files -n xmlsec1-nss-devel -f %{oreon_filedir}/xmlsec1-nss-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,34 +1,24 @@
-%global source0_hash none
-%global source1_hash e418172c99f9c3c9231191de271fe7dd24388d6c194683282c56939459a43672
-
+%global source0_hash bb085f1e127ddd6219092fbcdfdfde5df223d57517999bf92e672d7404ff6776
 %bcond_without check
-
 %global crate mdevctl
-
 Name:           mdevctl
 Version:        1.4.0
 Release:        4%{?dist}
 Summary:        A mediated device management utility for Linux
-
 License:        LGPL-2.1-only
 URL:            https://crates.io/crates/mdevctl
-Source:         %{crates_source}
-Source1:        https://github.com/mdevctl/mdevctl/releases/download/v%{version}/mdevctl-%{version}-vendor.tar.gz
-
-# Patches >=1000 are only applied when using system Rust dependencies:
-# - Update nix dev-dependency to 0.31
-#   https://github.com/mdevctl/mdevctl/pull/132
+Source0:        https://static.crates.io/crates/mdevctl/mdevctl-%{version}.crate
 Patch1000:      mdevctl-fix-metadata.diff
-
-BuildRequires: make systemd python3-docutils
-BuildRequires: sed
-%if 0%{?rhel}
-BuildRequires:  rust-toolset
-%else
-BuildRequires:  rust-packaging >= 21
-%endif
 Requires(post,postun): %{_sbindir}/udevadm
-
+# oreon:deps
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  make
+BuildRequires:  python3-docutils
+BuildRequires:  rustc
+BuildRequires:  sed
+BuildRequires:  systemd
+# /oreon:deps
 %description
 mdevctl is a utility for managing and persisting devices in the
 mediated device device framework of the Linux kernel.  Mediated
@@ -38,55 +28,25 @@ vfio-mdev for assignment to virtual machines.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{crate}-%{version_no_tilde} -p1 %{?rhel:-a1 -N}
+%autosetup -n %{crate}-%{version_no_tilde} -p1
 sed  -e 's/SBINDIR=/SBINDIR\?=/' -i Makefile.in
-%if 0%{?rhel}
-%autopatch -p1 -M999
-%cargo_prep -v vendor
-%else
-%cargo_prep
-
-%generate_buildrequires
-%cargo_generate_buildrequires
-%endif
-
+%oreon_vendor_cargo
 %build
+
 %cargo_build
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?rhel}
-%cargo_vendor_manifest
-%endif
-
 %install
 %make_install SBINDIR=%{_sbindir}
-
+%oreon_autofiles main
 %if %{with check}
 %check
+
 %cargo_test
 %endif
-
-%files
-%license COPYING
-%license LICENSE.dependencies
-%if 0%{?rhel}
-%license cargo-vendor.txt
-%endif
-%doc README.md
-%{_sbindir}/mdevctl
-%{_sbindir}/lsmdev
-%{_udevrulesdir}/60-mdevctl.rules
-%dir %{_sysconfdir}/mdevctl.d
-%dir %{_prefix}/lib/mdevctl/
-%dir %{_prefix}/lib/mdevctl/scripts.d/
-%dir %{_prefix}/lib/mdevctl/scripts.d/callouts
-%dir %{_prefix}/lib/mdevctl/scripts.d/notifiers
-%{_mandir}/man8/mdevctl.8*
-%{_mandir}/man8/lsmdev.8*
-%{_datadir}/bash-completion/completions/mdevctl
-%{_datadir}/bash-completion/completions/lsmdev
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.0-4
 - Prepare for Oreon 11 (RP1)

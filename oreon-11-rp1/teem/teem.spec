@@ -1,36 +1,15 @@
 %global source0_hash a01386021dfa802b3e7b4defced2f3c8235860d500c1fa2f347483775d4c8def
-
 %bcond levmar %{defined fedora}
-
 Name:           teem
 Version:        1.11.0
 %global so_version 1
-Release:        %autorelease -b 13
+Release:        1%{?dist}
 Summary:        Libraries for processing and visualizing scientific raster data
-
-# The entire source is LGPL-2.1-or-later WITH Simple-Library-Usage-exception,
-# except files noted at the License fields of certain subpackages.
-#
-# See https://gitlab.com/fedora/legal/fedora-license-data/-/issues/658,
-# https://github.com/spdx/license-list-xml/issues/2745.
 License:        LGPL-2.1-or-later WITH Simple-Library-Usage-exception
-# Additionally, the following are removed in %%prep to assert that they do not
-# contribute to the built package:
-#
-# Zlib:
-#   arch/win32/include/zlib.h
-# MIT:
-#   python/ctypes/Nrrd.py
-#   python/ctypes/pullDemo.py
-#   python/ctypes/teem-gen.py
-#   python/ctypes/teem.py
 SourceLicense:  %{license} AND BSD-3-Clause AND MIT AND Zlib
 URL:            https://teem.sourceforge.net
 Source0:        https://downloads.sourceforge.net/project/teem/teem/%{version}/teem-%{version}-src.tar.gz
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
 Source1:        gprobe.1
 Source2:        ilk.1
 Source3:        miter.1
@@ -41,7 +20,6 @@ Source7:        puller.1
 Source8:        tend.1
 Source9:        unu.1
 Source10:       vprobe.1
-
 Source800:      tend-about.1
 Source801:      tend-grads.1
 Source802:      tend-epireg.1
@@ -82,7 +60,6 @@ Source836:      tend-expand.1
 Source837:      tend-shrink.1
 Source838:      tend-bfit.1
 Source839:      tend-satin.1
-
 Source900:      unu-about.1
 Source901:      unu-env.1
 Source902:      unu-i2w.1
@@ -145,36 +122,16 @@ Source958:      unu-ccadj.1
 Source959:      unu-ccmerge.1
 Source960:      unu-ccsettle.1
 Source961:      unu-save.1
-
-# This is the combination of an older patch to fix library install paths to
-# suit FHS standards for Fedora, and some adjustments for compatibility with
-# CMake 4. This is downstream-only for now because upstream development has
-# progressed so far since the last stable release (in 2012!) that
-# CMakeLists.txt now looks quite different. However, a new release is planned,
-# and we should re-evaluate what might need to be upstreamed when that happens.
 Patch:          teem-1.11.0-cmake.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  make
-
-BuildRequires:  zlib-devel
-BuildRequires:  libpng-devel
-BuildRequires:  bzip2-devel
-BuildRequires:  fftw-devel
 %if %{with levmar}
-BuildRequires:  levmar-devel
 %endif
-
 %global common_description %{expand:
 What Is Teem?
-
 Teem is a coordinated group of libraries for representing, processing, and
 visualizing scientific raster data. Teem includes command-line tools that
 permit the library functions to be quickly applied to files and streams,
 without having to write any code. The most important and useful libraries in
 Teem are:
-
   • Nrrd (and the unu command-line tool on top of it) supports a range of
     operations for transforming N-dimensional raster data (resample, crop,
     slice, project, histogram, etc.), as well as the NRRD file format for
@@ -185,9 +142,7 @@ Teem are:
     based on any quantity Gage can measure
   • Ten: for estimating, processing, and visualizing diffusion tensor fields,
     including fiber tractography methods.
-
 Strengths of Teem
-
   • Teem works: Its purpose is to enable research in visualization and image
     processing, and research is enabled when simple things are simple to do.
     Teem’s functionality and its ease of use have allowed it to become a
@@ -208,14 +163,22 @@ Strengths of Teem
   • Teem is open source: Anyone can use it, and contributions are welcome. Teem
     is licensed under the GNU Lesser General Public License, plus exceptions
     which facilitate linking Teem into binary-only applications.}
-
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  cmake
+BuildRequires:  fftw-devel
+BuildRequires:  gcc-c++
+BuildRequires:  levmar-devel
+BuildRequires:  libpng-devel
+BuildRequires:  make
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description %{common_description}
 
 The teem package contains the command-line tools included with Teem.
 
 %package libs
 Summary:        Libraries for teem
-
 %description libs %{common_description}
 
 The teem-libs package contains libraries that may be required at runtime by
@@ -223,9 +186,7 @@ applications that use Teem.
 
 %package devel
 Summary:        Development files for teem
-
 Requires:       teem-libs%{?_isa} = %{version}-%{release}
-
 %description devel %{common_description}
 
 The teem-devel package contains libraries and header files for developing
@@ -233,26 +194,19 @@ applications that use Teem.
 
 %package examples
 Summary:        Examples for developing with for teem
-# The entire contents of this subpackage are
-# LGPL-2.1-or-later WITH Simple-Library-Usage-exception, except:
-#
-# Zlib:
-#   UseTeemCMakeDemo/sanity.c
-# BSD-3-Clause:
-#   Examples/sanity/sanity.c
 License:        %{shrink:
     LGPL-2.1-or-later WITH Simple-Library-Usage-exception AND
     Zlib AND
     BSD-3-Clause
     }
 BuildArch:      noarch
-
 %description examples %{common_description}
 
 The teem-examples package contains examples for developing applications that
 use Teem.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n teem-%{version}-src -p1
@@ -272,11 +226,10 @@ rm -rvf python
     -DTeem_LEVMAR=%{?with_levmar:ON}%{?!with_levmar:OFF}
 
 %build
-%cmake_build
 
+%cmake_build
 %install
 %cmake_install
-
 install -d %{buildroot}%{_mandir}/man1
 install -t %{buildroot}%{_mandir}/man1 -p -m 0644 \
     %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} \
@@ -302,56 +255,18 @@ install -t %{buildroot}%{_mandir}/man1 -p -m 0644 \
     %{SOURCE950} %{SOURCE951} %{SOURCE952} %{SOURCE953} %{SOURCE954} \
     %{SOURCE955} %{SOURCE956} %{SOURCE957} %{SOURCE958} %{SOURCE959} \
     %{SOURCE960} %{SOURCE961}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Tests probeSS_ctmr04 and probeSS_ctmr10 have overly-strict rounding
-# requirements; they fail on certain architectures, and the details may differ
-# in e.g. EPEL branches. We find it best to skip them unconditionally.
-%global ctest_excludes --exclude-regex '^(probeSS_ctmr(04|10))$'
 
-# Tests are not parallel-safe
+%global ctest_excludes --exclude-regex '^(probeSS_ctmr(04|10))$'
 %global _smp_mflags -j1
 %ctest %{?ctest_excludes}
-
-%files
-%doc README.txt
-%{_bindir}/gprobe
-%{_bindir}/ilk
-%{_bindir}/miter
-%{_bindir}/mrender
-%{_bindir}/nrrdSanity
-%{_bindir}/overrgb
-%{_bindir}/puller
-%{_bindir}/tend
-%{_bindir}/unu
-%{_bindir}/vprobe
-
-%{_mandir}/man1/gprobe.1*
-%{_mandir}/man1/ilk.1*
-%{_mandir}/man1/miter.1*
-%{_mandir}/man1/mrender.1*
-%{_mandir}/man1/nrrdSanity.1*
-%{_mandir}/man1/overrgb.1*
-%{_mandir}/man1/puller.1*
-%{_mandir}/man1/tend.1*
-%{_mandir}/man1/tend-*.1*
-%{_mandir}/man1/unu.1*
-%{_mandir}/man1/unu-*.1*
-%{_mandir}/man1/vprobe.1*
-
-%files libs
-%license LICENSE.txt
-%{_libdir}/libteem.so.%{so_version}{,.*}
-
-%files devel
-%{_includedir}/teem/
-%{_libdir}/libteem.so
-%{_libdir}/cmake/Teem-%{version}/
-
-%files examples
-%license LICENSE.txt
-%doc Examples
-%doc UseTeemCMakeDemo
+%files -f %{oreon_filedir}/main.list
+%files -n teem-libs -f %{oreon_filedir}/teem-libs.list
+%files -n teem-devel -f %{oreon_filedir}/teem-devel.list
+%files -n teem-examples -f %{oreon_filedir}/teem-examples.list
 
 %changelog
+
 %autochangelog

@@ -1,61 +1,53 @@
-%global source0_hash fb1c6b3fcd66fdb267781ee65980bdf8d5d3ef0dca3361b07bdc6747225961d0
-
+%global source1_hash fb1c6b3fcd66fdb267781ee65980bdf8d5d3ef0dca3361b07bdc6747225961d0
+%global source0_hash 4a57cb65b6064c13e80e714b39dcf1dbdd90a7c6a6649f8544bc25d02b55734a
 %global libcall_ui_commit f66056ace818ff19b507335634dd67138a92c77f
-
 Name:       calls
 Version:    50.0
-Release:    1%{?dist}
-Summary:    A phone dialer and call handler
-
+Release:        1%{?dist}
+Summary:        A phone dialer and call handler
 License:    GPL-3.0-or-later AND LGPL-2.1-or-later
 URL:        https://gitlab.gnome.org/GNOME/calls
-Source0:    https://gitlab.gnome.org/GNOME/calls/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:        https://gitlab.gnome.org/GNOME/calls/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 Source1:    https://gitlab.gnome.org/World/Phosh/libcall-ui/-/archive/%{libcall_ui_commit}/libcall-ui-%{libcall_ui_commit}.tar.gz
-# https://gitlab.gnome.org/GNOME/calls/-/merge_requests/807
 Patch0:     807.patch
-
 ExcludeArch:    %{ix86}
-
-BuildRequires:  gcc
-BuildRequires:  meson
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  dbus-daemon
-
-BuildRequires:  pkgconfig(libcallaudio-0.1)
-BuildRequires:  pkgconfig(gobject-2.0) >= 2.74
-BuildRequires:  pkgconfig(glib-2.0) >= 2.74
-BuildRequires:  pkgconfig(gtk4) >= 4.12
-BuildRequires:  pkgconfig(libadwaita-1) >= 1.6
-BuildRequires:  pkgconfig(gsound)
-BuildRequires:  pkgconfig(libpeas-2)
-BuildRequires:  pkgconfig(gom-1.0)
-BuildRequires:  pkgconfig(libebook-contacts-1.2)
-BuildRequires:  pkgconfig(folks)
-BuildRequires:  pkgconfig(mm-glib)
-BuildRequires:  pkgconfig(libfeedback-0.0) >= 0.0.1
-BuildRequires:  pkgconfig(gstreamer-1.0)
-BuildRequires:  gstreamer1-plugins-good-gtk
-BuildRequires:  sofia-sip-glib-devel
-BuildRequires:  systemd-rpm-macros
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  /usr/bin/xvfb-run
-BuildRequires:  /usr/bin/xauth
-BuildRequires:  libappstream-glib
-BuildRequires:  python3-docutils
-
 Requires:  hicolor-icon-theme
-
 Recommends: feedbackd
-
 Provides: gnome-calls = %{version}-%{release}
 Provides: gnome-calls%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  /usr/bin/xauth
+BuildRequires:  /usr/bin/xvfb-run
+BuildRequires:  cmake
+BuildRequires:  dbus-daemon
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gstreamer1-plugins-good-gtk
+BuildRequires:  libappstream-glib
+BuildRequires:  meson
+BuildRequires:  pkgconfig(folks)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gobject-2.0)
+BuildRequires:  pkgconfig(gom-1.0)
+BuildRequires:  pkgconfig(gsound)
+BuildRequires:  pkgconfig(gstreamer-1.0)
+BuildRequires:  pkgconfig(gtk4)
+BuildRequires:  pkgconfig(libadwaita-1)
+BuildRequires:  pkgconfig(libcallaudio-0.1)
+BuildRequires:  pkgconfig(libebook-contacts-1.2)
+BuildRequires:  pkgconfig(libfeedback-0.0)
+BuildRequires:  pkgconfig(libpeas-2)
+BuildRequires:  pkgconfig(mm-glib)
+BuildRequires:  python3-docutils
+BuildRequires:  sofia-sip-glib-devel
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 A phone dialer and call handler.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -a1 -p1 -n %{name}-v%{version}
@@ -66,58 +58,24 @@ mv libcall-ui-%{libcall_ui_commit}/* subprojects/libcall-ui/
 %meson
 
 %build
-%meson_build
 
+%meson_build
 %install
 %meson_install
-
-# Remove call-ui translations
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/call-ui.mo
-
-# We do not support the ofono backend
 rm -rf %{buildroot}%{_libdir}/calls/plugins/provider/ofono/
-
 %find_lang %{name}
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/org.gnome.Calls.metainfo.xml
-
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Calls.desktop
-
-# Some tests are failing in the build environment, so we manually just run a handful for now.
 LC_ALL=C.UTF-8 xvfb-run sh <<'SH'
 %meson_test plugins
 SH
-
-%files -f %{name}.lang
-%{_sysconfdir}/xdg/autostart/org.gnome.Calls-daemon.desktop
-%{_userunitdir}/calls-daemon.service
-%{_bindir}/gnome-%{name}
-
-%dir %{_libdir}/calls/plugins/provider
-
-%dir %{_libdir}/calls/plugins/provider/mm
-%dir %{_libdir}/calls/plugins/provider/dummy
-%dir %{_libdir}/calls/plugins/provider/sip
-
-%{_libdir}/calls/plugins/provider/mm/libmm.so
-%{_libdir}/calls/plugins/provider/mm/mm.plugin
-%{_libdir}/calls/plugins/provider/dummy/dummy.plugin
-%{_libdir}/calls/plugins/provider/dummy/libdummy.so
-%{_libdir}/calls/plugins/provider/sip/libsip.so
-%{_libdir}/calls/plugins/provider/sip/sip.plugin
-
-%{_datadir}/dbus-1/services/org.gnome.Calls.service
-%{_datadir}/glib-2.0/schemas/org.gnome.Calls.gschema.xml
-%{_datadir}/applications/org.gnome.Calls.desktop
-%{_datadir}/icons/hicolor/scalable/apps/org.gnome.Calls.svg
-%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Calls-symbolic.svg
-%{_datadir}/metainfo/org.gnome.Calls.metainfo.xml
-
-%{_mandir}/man1/gnome-calls.1*
-
-%doc README.md
-%license COPYING
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

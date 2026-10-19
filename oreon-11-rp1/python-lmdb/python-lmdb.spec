@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 260f443640ee2da3cfd059a84258659319ff39ca912c16bf9748c324076b9d09
 Name:           python-lmdb
 Version:        2.3.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Universal Python binding for the LMDB _Lightning_ Database
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        OLDAP-2.8
 URL:            http://github.com/jnwatson/py-lmdb/
-Source:         %{pypi_source lmdb}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'lmdb' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/l/lmdb/lmdb-%{version}.tar.gz
 Patch:          https://github.com/jnwatson/py-lmdb/pull/368.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cffi) >= 0.8
+Requires:       python3-lmdb = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-lmdb
-Summary:        %{summary}
-
-%description -n python3-lmdb %_description
-
+Summary:        Universal Python binding for the LMDB _Lightning_ Database
+%description -n python3-lmdb
 
 %prep
-%autosetup -p1 -n lmdb-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir lmdb-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-lmdb usr/lib/python3*/site-packages/lmdb* usr/lib64/python3*/site-packages/lmdb* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/lmdb* usr/lib64/python3*/site-packages/lmdb* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-lmdb -f %{pyproject_files}
+%files
+%files -n python3-lmdb -f %{oreon_filedir}/python3-lmdb.list
 
 %changelog
+
 %autochangelog

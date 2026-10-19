@@ -1,58 +1,48 @@
+%global source1_hash 65922f74e92fd12a1c707e7117f82eb99b49176abe4de44b67e7367bebbb125a
 %global source0_hash acf25d4c7eed41e0d0ba9c897e6dae081b9021f9bcb75e3ca532ef5406ffa0ad
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:          flatpak-kcm
 Version:        6.7.5
-Release: 1%{?dist}
+Release:        1%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later
-Summary:       Flatpak Permissions Management KCM
+Summary:        Flatpak Permissions Management KCM
 Url:           https://invent.kde.org/plasma/flatpak-kcm
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-BuildRequires: extra-cmake-modules
-BuildRequires: gcc-c++
-BuildRequires: kf6-rpm-macros
-BuildRequires: desktop-file-utils
-
-BuildRequires: cmake(KF6Declarative)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6ItemModels)
-BuildRequires: cmake(KF6KCMUtils)
-BuildRequires: cmake(KF6IconThemes)
-
-BuildRequires: cmake(Qt6Svg)
-
-BuildRequires: pkgconfig(flatpak)
-
+# oreon:deps
+BuildRequires:  cmake(KF6Declarative)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6ItemModels)
+BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  pkgconfig(flatpak)
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
 desktop-file-validate %{buildroot}%{_datadir}/applications/kcm_app-permissions.desktop
 %find_lang kcm_app-permissions
+%oreon_autofiles main
 
-%files -f kcm_app-permissions.lang
-%license LICENSES/*
-%{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_app-permissions.so
-%{_kf6_datadir}/applications/kcm_app-permissions.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

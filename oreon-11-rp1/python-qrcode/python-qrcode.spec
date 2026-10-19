@@ -1,63 +1,44 @@
 %global source0_hash 35c3f2a4172b33136ab9f6b3ef1c00260dd2f66f858f24d88418a015f446506c
-
 Name:           python-qrcode
 Version:        8.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        QR Code image generator
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/lincolnloop/python-qrcode
-Source:         %{pypi_source qrcode}
-
+Source0:        https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'qrcode' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-qrcode = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-qrcode
-Summary:        %{summary}
-
-%description -n python3-qrcode %_description
+Summary:        QR Code image generator
+%description -n python3-qrcode
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-qrcode all,pil,png
-
 
 %prep
-%autosetup -p1 -n qrcode-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir qrcode-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-qrcode usr/lib/python3*/site-packages/qrcode* usr/lib64/python3*/site-packages/qrcode* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/qrcode* usr/lib64/python3*/site-packages/qrcode* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-qrcode -f %{pyproject_files}
-%{_bindir}/qr
+%files
+%files -n python3-qrcode -f %{oreon_filedir}/python3-qrcode.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.0-1
 - Prepare for Oreon 11 (RP1)

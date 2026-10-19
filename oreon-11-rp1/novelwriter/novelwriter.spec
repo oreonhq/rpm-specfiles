@@ -1,47 +1,20 @@
 %global source0_hash 3faab2ddfc69b43eec95527ee696d385bda9b6167b81424dbb5a1dc6c4863188
-
 Name:           novelwriter
 Version:        2.7.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plain text editor designed for writing novels
-
-# Code is GPL-3.0-or-later, icons are CC-BY-SA-4.0 and Apache-2.0 and MIT
 License:        GPL-3.0-or-later AND CC-BY-SA-4.0 AND Apache-2.0 AND MIT
 URL:            https://novelwriter.io/
-Source:         https://github.com/vkbo/novelwriter/archive/v%{version}/novelwriter-%{version}.tar.gz
-
+Source0:        https://github.com/vkbo/novelwriter/archive/v%{version}/novelwriter-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  adobe-source-sans-pro-fonts
-BuildRequires:  hunspell-en
-BuildRequires:  hunspell-en-GB
-BuildRequires:  hunspell-en-US
-BuildRequires:  enchant2-devel
-BuildRequires:  hunspell-devel
-BuildRequires:  python3-enchant
-BuildRequires:  python3-zlib-ng
-BuildRequires:  qt6-qttools-devel
-BuildRequires:  qt6-qtsvg-devel
-BuildRequires:  python3-devel
-
-BuildRequires: libappstream-glib
-BuildRequires: desktop-file-utils
-
-# Test requirements
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-qt)
-BuildRequires:  python3dist(pytest-xvfb)
-# Documentation requirements
-BuildRequires:  python3dist(docutils)
-BuildRequires:  python3dist(sphinx)
-# Generate DocBook for internal documentation
-BuildRequires:  python3-sphinx-design
-BuildRequires:  python3-sphinx-copybutton
-BuildRequires:  texinfo
-# Needed for directory ownership
 Requires:       hicolor-icon-theme
-# Bundles svg material design icons
 Provides:       bundled(material-design-icons)
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-novelwriter = %{version}-%{release}
+# /oreon:deps
 %description
 novelWriter is a plain text editor designed for writing novels assembled from
 many smaller text documents. It uses a minimal formatting syntax inspired by
@@ -57,13 +30,12 @@ project XML file. Other meta data is primarily saved as JSON files.
 
 %package doc
 Summary: Documentation for novelWriter
-
 BuildArch:  noarch
-
 %description doc
 Documentation for novelWriter in docbook format. 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n novelWriter-%{version} -p1
@@ -73,29 +45,19 @@ sed -i 's/spellcheck = en/spellcheck = en_US/g' tests/reference/baseConfig_novel
 # Use Fedora specific variant for qt6
 sed -i 's/"lrelease"/"lrelease-qt6"/g' utils/assets.py
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-# Build translations
+
 %python3 pkgutils.py qtlrelease
-# Build sample
 %python3 pkgutils.py sample
-# Build documentation
 pushd docs
 sphinx-build source texinfo -b texinfo
 pushd texinfo
 makeinfo --docbook novelwriter.texi
 popd
 popd
-# Build package
 %pyproject_wheel
-
 %install
 %pyproject_install
-# Do not include this for now as .qm language files are not automatically marked
-#pyproject_save_files novelwriter
-
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications setup/data/novelwriter.desktop
 mkdir -p %{buildroot}%{_metainfodir}/
 install -m644 setup/novelwriter.appdata.xml %{buildroot}%{_metainfodir}/
@@ -108,50 +70,16 @@ do
   install -pDm0644 $file \
   %{buildroot}%{_datadir}/help/en/novelwriter/novelwriter-figures/$(basename $file)
 done
-
 %find_lang nw --with-qt
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 QT_QPA_PLATFORM=offscreen %pytest
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/novelwriter.appdata.xml
-
-# Include once qm files get marked as language files
-#files -n novelwriter -f %%{pyproject_files} -f nw.lang
-%files -n novelwriter -f nw.lang
-%license LICENSE.md
-%doc README.md
-%{_bindir}/novelwriter
-%{python3_sitelib}/novelwriter-%{version}.dist-info/
-%dir %{python3_sitelib}/novelwriter
-%dir %{python3_sitelib}/novelwriter/assets
-%dir %{python3_sitelib}/novelwriter/assets/i18n
-%{python3_sitelib}/novelwriter/assets/i18n/*.json
-%{python3_sitelib}/novelwriter/assets/icons/
-%{python3_sitelib}/novelwriter/assets/images/
-%{python3_sitelib}/novelwriter/assets/sample.zip
-%{python3_sitelib}/novelwriter/assets/syntax/
-%{python3_sitelib}/novelwriter/assets/text/
-%{python3_sitelib}/novelwriter/assets/themes/
-%pycached %{python3_sitelib}/novelwriter/*.py
-%dir  %{python3_sitelib}/novelwriter/__pycache__
-%{python3_sitelib}/novelwriter/core/
-%{python3_sitelib}/novelwriter/dialogs/
-%{python3_sitelib}/novelwriter/extensions/
-%{python3_sitelib}/novelwriter/formats/
-%{python3_sitelib}/novelwriter/gui/
-%{python3_sitelib}/novelwriter/text/
-%{python3_sitelib}/novelwriter/tools/
-%{_datadir}/applications/novelwriter.desktop
-%{_metainfodir}/novelwriter.appdata.xml
-%{_datadir}/icons/hicolor/*/apps/*.png
-%{_datadir}/icons/hicolor/*/mimetypes/*.png
-%{_datadir}/icons/hicolor/*/apps/*.svg
-%{_datadir}/icons/hicolor/*/mimetypes/*.svg
-
-%files doc
-%license LICENSE.md
-%dir  %{_datadir}/help/en
-%lang(en) %{_datadir}/help/en/novelwriter
+%files
+%files -n novelwriter-doc -f %{oreon_filedir}/novelwriter-doc.list
 
 %changelog
+
 %autochangelog

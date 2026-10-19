@@ -1,31 +1,28 @@
 %global source0_hash 09914a4c2c7bdb99cab680c183cbf492ec98d6e23fbcc487fcc4ae10567dfd1f
-
 Name:           perl-Context-Preserve
 Summary:        Run code after a subroutine call, preserving the context
 Version:        0.03
-Release:        25%{?dist}
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Context-Preserve-%{version}.tar.gz
 URL:            https://metacpan.org/release/Context-Preserve
 BuildArch:      noarch
-# Build
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Runtime
-BuildRequires:  perl(base)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Exporter)
-# Tests only
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(ok)
 BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(Test::More)
-
+BuildRequires:  perl(base)
+BuildRequires:  perl(ok)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Sometimes you need to call a function, get the results, act on the results,
 then return the result of the function. This is painful because of contexts;
@@ -42,26 +39,25 @@ ignored and the value 'wantarray' returns is related to the context that the
 original function was called in.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Context-Preserve-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%license LICENCE
-%doc CONTRIBUTING README Changes
-%{perl_vendorlib}/*
-%{_mandir}/man3/*.3*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

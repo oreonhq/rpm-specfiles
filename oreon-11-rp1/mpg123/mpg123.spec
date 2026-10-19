@@ -1,49 +1,34 @@
 %global source0_hash 31d0e35a4ca567ec9b5ebda6c3062bb4435d6d3eacd6ef0d95cadd7854dc03ee
-
 %global out out123
 %global fmt fmt123
 %global syn syn123
-
 Name: mpg123
 Version: 1.33.7
-Release: %autorelease
-
-Summary: Real time MPEG 1.0/2.0/2.5 audio player/decoder for layers 1, 2 and 3
+Release:        1%{?dist}
+Summary:        Real time MPEG 1.0/2.0/2.5 audio player/decoder for layers 1, 2 and 3
 License: GPL-2.0-or-later
 URL: https://mpg123.org
-
 Source0:        https://mpg123.org/download/mpg123-1.33.7.tar.bz2
-
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: gcc
-BuildRequires: libtool
-BuildRequires: make
-BuildRequires: pkgconfig(alsa)
-
 Requires: %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
-%if 0%{?fedora}
-%global enable_jack 1
-%global enable_portaudio 1
-%endif
-
 %global _summary %{summary}
-
-%global _description \
-Real time MPEG 1.0/2.0/2.5 audio player/decoder for layers 1, 2 and 3 (most \
-commonly MPEG 1.0 layer 3 aka MP3), as well as re-usable decoding and output \
-libraries.
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  /usr/bin/doxygen
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig(alsa)
+BuildRequires:  pkgconfig(libpulse-simple)
+# /oreon:deps
+%description
 
 %package plugins-pulseaudio
 Summary: Pulseaudio output plug-in for %{name}
 BuildRequires: pkgconfig(libpulse-simple)
 Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Supplements: (mpg123%{?_isa} and pulseaudio%{?_isa})
-
-%description plugins-pulseaudio %{_description}
+%description plugins-pulseaudio
 
 Pulseaudio output plug-in.
 
@@ -54,8 +39,7 @@ BuildRequires: pkgconfig(jack)
 Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Supplements: (mpg123%{?_isa} and jack-audio-connection-kit%{?_isa})
 Obsoletes: %{name}-plugins-extras < 1.23.4-1
-
-%description plugins-jack %{_description}
+%description plugins-jack
 
 JACK output plug-in.
 %endif
@@ -66,8 +50,7 @@ Summary: PortAudio output plug-in for %{name}
 BuildRequires: pkgconfig(portaudio-2.0)
 Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Supplements: (mpg123%{?_isa} and portaudio%{?_isa})
-
-%description plugins-portaudio %{_description}
+%description plugins-portaudio
 
 PortAudio output plug-in.
 %endif
@@ -77,8 +60,7 @@ Summary: %{_summary}
 Provides: lib%{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Provides: lib%{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes: lib%{name} < 1.23.4-1
-
-%description libs %{_description}
+%description libs
 
 %package devel
 Summary: %{_summary}
@@ -88,16 +70,15 @@ Provides: lib%{name}-devel = %{?epoch:%{epoch}:}%{version}-%{release}
 Provides: lib%{name}-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes: lib%{name}-devel < 1.23.4-1
 Obsoletes: %{name}-libs-devel < 1.23.8-3
-
-%description devel %{_description}
+%description devel
 
 Development files for decoding and output libraries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
+%oreon_prep
 %build
+
 autoreconf -vfi
 %configure --enable-modules=yes --with-default-audio=alsa \
   --with-audio=alsa,%{?enable_jack:jack},pulse,oss,%{?enable_portaudio:portaudio}
@@ -105,57 +86,17 @@ autoreconf -vfi
 pushd doc
   doxygen doxygen.conf
 popd
-
 %install
 %make_install
 rm %{buildroot}%{_libdir}/*.la
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc doc/README.remote
-%{_bindir}/%{name}
-%{_bindir}/%{name}-id3dump
-%{_bindir}/%{name}-strip
-%{_bindir}/%{out}
-%doc %{_mandir}/man1/%{name}.1*
-%doc %{_mandir}/man1/%{out}.1*
-%dir %{_libdir}/%{name}/
-%{_libdir}/%{name}/output_alsa.*
-%{_libdir}/%{name}/output_dummy.*
-%{_libdir}/%{name}/output_oss.*
-
-%files plugins-pulseaudio
-%{_libdir}/%{name}/output_pulse.*
-
-%if 0%{?enable_jack}
-%files plugins-jack
-%{_libdir}/%{name}/output_jack.*
-%endif
-
-%if 0%{?enable_portaudio}
-%files plugins-portaudio
-%{_libdir}/%{name}/output_portaudio.*
-%endif
-
-%files libs
-%license COPYING
-%doc NEWS
-%{_libdir}/lib%{name}.so.0*
-%{_libdir}/lib%{out}.so.0*
-%{_libdir}/lib%{syn}.so.0*
-
-%files devel
-%doc NEWS.lib%{name} doc/html doc/examples doc/BENCHMARKING doc/README.gain
-%{_includedir}/%{name}.h
-%{_includedir}/%{out}.h
-%{_includedir}/%{fmt}.h
-%{_includedir}/%{syn}.h
-%{_libdir}/lib%{name}.so
-%{_libdir}/lib%{out}.so
-%{_libdir}/lib%{syn}.so
-%{_libdir}/pkgconfig/lib%{name}.pc
-%{_libdir}/pkgconfig/lib%{out}.pc
-%{_libdir}/pkgconfig/lib%{syn}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n mpg123-plugins-pulseaudio -f %{oreon_filedir}/mpg123-plugins-pulseaudio.list
+%files -n mpg123-libs -f %{oreon_filedir}/mpg123-libs.list
+%files -n mpg123-devel -f %{oreon_filedir}/mpg123-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.32.10-1
 - Prepare for Oreon 11 (RP1)

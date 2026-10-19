@@ -1,66 +1,47 @@
-%global source0_hash none
-
+%global source0_hash 99b957c3fb05728c4cb542fd1f2168b69160a4179df8423a8c791684b4869df8
 Name:           python-pyobd
 Version:        0.3.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        BYMA Market Data Library - Open Data API client
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/franco-lamas/PyOBD
-Source:         %{pypi_source pyobd}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyobd/pyobd-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyobd' generated automatically by pyp2spec.}
-
 Patch0:         python-pyobd-0.9.3-pyobd-module.patch
 Patch1:         python-pyobd-0.9.3-invalid-device-traceback-fix.patch
 Patch2:         python-pyobd-0.9.3-configure-dialog-traceback-fix.patch
 Patch3:         python-pyobd-0.9.3-python3.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pyobd = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyobd
-Summary:        %{summary}
-
-%description -n python3-pyobd %_description
+Summary:        BYMA Market Data Library - Open Data API client
+%description -n python3-pyobd
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pyobd dev
-
 
 %prep
-%autosetup -p1 -n pyobd-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyobd-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyobd usr/lib/python3*/site-packages/pyobd* usr/lib64/python3*/site-packages/pyobd* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyobd* usr/lib64/python3*/site-packages/pyobd* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyobd -f %{pyproject_files}
+%files
+%files -n python3-pyobd -f %{oreon_filedir}/python3-pyobd.list
 
 %changelog
+
 %autochangelog

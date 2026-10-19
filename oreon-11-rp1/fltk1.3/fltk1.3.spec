@@ -1,51 +1,41 @@
 %global source0_hash 92805abc84505e3e7e27aec775ab0754ecb4182fe2d8ff2a9d568ccdcb2811ac
-
-# Explicitly use Makefiles
 %global _cmake_generator "Unix Makefiles"
-
 %global srcname fltk
-
 Name:		    fltk1.3
 Version:	    1.3.11
-Release:	    5%{?dist}
-Summary:	    C++ user interface toolkit
-
-# see COPYING (or http://www.fltk.org/COPYING.php ) for exceptions details
+Release:        1%{?dist}
+Summary:        C++ user interface toolkit
 License:	    LGPL-2.0-or-later WITH FLTK-exception
 URL:            http://www.fltk.org/
-
 Source0:        https://github.com/%{srcname}/%{srcname}/releases/download/release-%{version}/%{srcname}-%{version}-source.tar.gz
 Source1:        fltk-config.sh
-
 Patch0:         fltk-cmake.patch
-# add lib64 support, drop extraneous libs (bug #708185) and ldflags (#1112930)
 Patch1:         fltk-1.3.4-fltk_config.patch
-# Fix cmake install location for MinGW build
 Patch2:         mingw-fltk-cmake.patch
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  make
-BuildRequires:  texlive-latex
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(glu)
+BuildRequires:  pkgconfig(ice)
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libpng)
-BuildRequires:  pkgconfig(gl) pkgconfig(glu)
-BuildRequires:  pkgconfig(ice)
 BuildRequires:  pkgconfig(sm)
-BuildRequires:  pkgconfig(xext) pkgconfig(xinerama) pkgconfig(xft) pkgconfig(xt) pkgconfig(x11)
+BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xcursor)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(xft)
+BuildRequires:  pkgconfig(xinerama)
 BuildRequires:  pkgconfig(xproto)
+BuildRequires:  pkgconfig(xt)
 BuildRequires:  pkgconfig(zlib)
-
-%global _description \
-FLTK (pronounced "fulltick") is a cross-platform C++ GUI toolkit. \
-It provides modern GUI functionality without the bloat, and supports \
-3D graphics via OpenGL and its built-in GLUT emulation.
-
+BuildRequires:  texlive-latex
+# /oreon:deps
 %description
-%{_description}
+\
 
 %package devel
 Summary:        Development files for %{name}
@@ -78,6 +68,7 @@ Requires:       %{name}-devel
 %{summary}, an interactive GUI designer for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{srcname}-%{version}
@@ -90,58 +81,24 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
        -DOPTION_BUILD_SHARED_LIBS:BOOL=ON
 
 %build
+
 %cmake_build
-
 %cmake_build --target docs
-
 %install
 %cmake_install
-
-# Deal with license file of same name
 mv src/xutf8/COPYING ./COPYING.xutf8
-
-# we only apply this hack to multilib arch's
 %ifarch x86_64 %{ix86}
 %global arch %(uname -m 2>/dev/null || echo undefined)
 mv $RPM_BUILD_ROOT%{_bindir}/fltk-config \
    $RPM_BUILD_ROOT%{_bindir}/fltk-config-%{arch}
 install -p -m755 -D %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}/fltk-config
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
-%files
-%doc ANNOUNCEMENT CHANGES CREDITS README
-%license COPYING COPYING.xutf8
-%{_libdir}/libfltk.so.1.3*
-%{_libdir}/libfltk_forms.so.1.3*
-%{_libdir}/libfltk_gl.so.1.3*
-%{_libdir}/libfltk_images.so.1.3*
-
-%files devel
-%doc %{_vpath_builddir}/documentation/html
-%{_bindir}/fltk-config
-%{?arch:%{_bindir}/fltk-config-%{arch}}
-%{_includedir}/FL/
-%{_libdir}/libfltk.so
-%{_libdir}/libfltk_forms.so
-%{_libdir}/libfltk_gl.so
-%{_libdir}/libfltk_images.so
-%{_libdir}/cmake/fltk/
-%{_mandir}/man1/fltk-config.1*
-%{_mandir}/man3/fltk.3*
-%{_mandir}/man6/*.6*
-
-%files static
-%{_libdir}/libfltk.a
-%{_libdir}/libfltk_forms.a
-%{_libdir}/libfltk_gl.a
-%{_libdir}/libfltk_images.a
-
-%files fluid
-%{_bindir}/fluid
-%{_mandir}/man1/fluid.1*
-%{_datadir}/applications/fluid.desktop
-%{_datadir}/mime/packages/fluid.xml
-%{_datadir}/icons/hicolor/*/*/fluid.png
+%files -f %{oreon_filedir}/main.list
+%files -n fltk1.3-devel -f %{oreon_filedir}/fltk1.3-devel.list
+%files -n fltk1.3-static -f %{oreon_filedir}/fltk1.3-static.list
+%files -n fltk1.3-fluid -f %{oreon_filedir}/fltk1.3-fluid.list
 
 %changelog
+
 %autochangelog

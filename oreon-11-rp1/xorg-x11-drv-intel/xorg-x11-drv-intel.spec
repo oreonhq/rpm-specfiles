@@ -1,33 +1,26 @@
-%global source0_hash 00b781eea055582820a123c47b62411bdf6aabf4f03dc0568faec55faf9667c9
-
+%global source0_hash 28725d1bb1aa2cc594be2ea9cd886cdd3bb349283c1ca3b317c99451cce2c207
 %global commit ce811e78882d9f31636351dfe65351f4ded52c74
 %global date 20240506
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-#global tag %%{version}
-
 %define moduledir %(pkg-config xorg-server --variable=moduledir )
 %define driverdir	%{moduledir}/drivers
-
 %undefine _hardened_build
-
-Summary:   Xorg X11 Intel video driver
+Summary:        Xorg X11 Intel video driver
 Name:      xorg-x11-drv-intel
 Version:   2.99.917%{!?tag:^%{date}git%{shortcommit}}
-Release:   65%{?dist}
+Release:        65%{?dist}
 URL:       http://www.x.org
 License:   MIT
-
-Source0:    https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Source30:        xserver-sdk-abi-requires
-
 Patch0:        intel-gcc-pr65873.patch
-# https://bugs.freedesktop.org/show_bug.cgi?id=96255#c11
 Patch1:        0001-sna-Avoid-clobbering-output-physical-size-with-xf86O.patch
-# https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/issues/180
 Patch2:        xvmc-workaround.patch
-
 ExclusiveArch: %{ix86} x86_64
-
+Requires: Xorg %(sh %{SOURCE30} ansic)
+Requires: Xorg %(sh %{SOURCE30} videodrv)
+Requires: polkit
+# oreon:deps
 BuildRequires:  cairo-devel
 BuildRequires:  gcc
 BuildRequires:  kernel-headers
@@ -35,14 +28,14 @@ BuildRequires:  libXfont2-devel
 BuildRequires:  libXinerama-devel
 BuildRequires:  libXv-devel
 BuildRequires:  make
-BuildRequires:  mesa-libGL-devel >= 6.5-9
+BuildRequires:  mesa-libGL-devel
 BuildRequires:  meson
-BuildRequires:  pkgconfig(libdrm) >= 2.4.20
-BuildRequires:  pkgconfig(libdrm_intel) >= 2.4.52
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(libdrm_intel)
 BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(libudev)
-BuildRequires:  pkgconfig(pciaccess) >= 0.10
-BuildRequires:  pkgconfig(pixman-1) >= 0.27.1
+BuildRequires:  pkgconfig(pciaccess)
+BuildRequires:  pkgconfig(pixman-1)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(x11-xcb)
 BuildRequires:  pkgconfig(xcb-aux)
@@ -55,7 +48,7 @@ BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  pkgconfig(xdamage)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xfixes)
-BuildRequires:  pkgconfig(xorg-server) >= 1.6
+BuildRequires:  pkgconfig(xorg-server)
 BuildRequires:  pkgconfig(xrandr)
 BuildRequires:  pkgconfig(xrender)
 BuildRequires:  pkgconfig(xscrnsaver)
@@ -63,15 +56,12 @@ BuildRequires:  pkgconfig(xshmfence)
 BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xvmc)
 BuildRequires:  pkgconfig(xxf86vm)
-
-Requires: Xorg %(sh %{SOURCE30} ansic)
-Requires: Xorg %(sh %{SOURCE30} videodrv)
-Requires: polkit
-
+# /oreon:deps
 %description
 X.Org X11 Intel video driver.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %if 0%{?tag:1}
 %autosetup -p1 -n xf86-video-intel-%{version}
@@ -80,11 +70,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
 
 %build
-# This package causes LTO to thrash sucking up enormous amounts of VM.  This
-# is almost certainly a GCC bug that will need to be analyzed/fixed.  Until
-# then, disable LTO.
-%define _lto_cflags %{nil}
 
+%define _lto_cflags %{nil}
 %meson \
     -D async-swap=false \
     -D backlight-helper=true \
@@ -106,26 +93,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -D valgrind=false \
     -D xaa=true \
     -D xvmc=true
-
 %meson_build
-
 %install
 %meson_install
-
 find %{buildroot} -name "*.la" -delete
-
-# libXvMC opens the versioned file name, these are useless
 rm -f %{buildroot}%{_libdir}/libI*XvMC.so
+%oreon_autofiles main
 
-%files
-%doc COPYING
-%{driverdir}/intel_drv.so
-%{_libdir}/libIntelXvMC.so.1*
-%{_libexecdir}/xf86-video-intel-backlight-helper
-%{_datadir}/polkit-1/actions/org.x.xf86-video-intel.backlight-helper.policy
-%{_mandir}/man4/i*
-%{_bindir}/intel-virtual-output
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.99.917^20240506gitce811e7-65
 - Import

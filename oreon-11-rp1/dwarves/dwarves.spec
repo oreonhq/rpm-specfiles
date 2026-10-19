@@ -1,21 +1,20 @@
 %global source0_hash 319cbf319e9fc92065a5407ce47eb868d73566f3d4840a56832734e4579df947
-
 %define libname libdwarves
 %define libver 1
-
 Name: dwarves
 Version: 1.32
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-only
-Summary: Debugging Information Manipulation Tools (pahole & friends)
+Summary:        Debugging Information Manipulation Tools (pahole & friends)
 URL: http://acmel.wordpress.com
-Source:        http://fedorapeople.org/~acme/dwarves/%{name}-%{version}.tar.xz
+Source0:        http://fedorapeople.org/~acme/dwarves/%{name}-%{version}.tar.xz
 Requires: %{libname}%{libver} = %{version}-%{release}
-BuildRequires: gcc
-BuildRequires: cmake >= 2.8.12
-BuildRequires: zlib-devel
-BuildRequires: elfutils-devel >= 0.130
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  elfutils-devel
+BuildRequires:  gcc
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 dwarves is a set of tools that use the debugging information inserted in ELF
 binaries by compilers such as GCC, used by well known debuggers such as GDB,
@@ -54,85 +53,34 @@ sure they produce the same results.
 
 %package -n %{libname}%{libver}
 Summary: Debugging information  processing library
-
 %description -n %{libname}%{libver}
 Debugging information processing library.
 
 %package -n %{libname}%{libver}-devel
 Summary: Debugging information library development files
 Requires: %{libname}%{libver} = %{version}-%{release}
-
 %description -n %{libname}%{libver}-devel
 Debugging information processing library development files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build
+
 %cmake -DCMAKE_BUILD_TYPE=Release .
 %cmake_build
-
 %install
 rm -Rf %{buildroot}
 %cmake_install
-
 %ldconfig_scriptlets -n %{libname}%{libver}
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.ctracer
-%doc README.btf
-%doc changes-v1.30
-%doc NEWS
-%{_bindir}/btfdiff
-%{_bindir}/codiff
-%{_bindir}/ctracer
-%{_bindir}/dtagnames
-%{_bindir}/fullcircle
-%{_bindir}/pahole
-%{_bindir}/pdwtags
-%{_bindir}/pfunct
-%{_bindir}/pglobal
-%{_bindir}/prefcnt
-%{_bindir}/scncopy
-%{_bindir}/syscse
-%{_bindir}/ostra-cg
-%dir %{_datadir}/dwarves/
-%dir %{_datadir}/dwarves/runtime/
-%dir %{_datadir}/dwarves/runtime/python/
-%defattr(0644,root,root,0755)
-%{_mandir}/man1/pahole.1*
-%{_datadir}/dwarves/runtime/Makefile
-%{_datadir}/dwarves/runtime/linux.blacklist.cu
-%{_datadir}/dwarves/runtime/ctracer_relay.c
-%{_datadir}/dwarves/runtime/ctracer_relay.h
-%attr(0755,root,root) %{_datadir}/dwarves/runtime/python/ostra.py*
-
-%{_mandir}/man1/pfunct.1.gz
-%files -n %{libname}%{libver}
-%{_libdir}/%{libname}.so.*
-%{_libdir}/%{libname}_emit.so.*
-%{_libdir}/%{libname}_reorganize.so.*
-
-%files -n %{libname}%{libver}-devel
-%doc MANIFEST README
-%{_includedir}/dwarves/btf_encoder.h
-%{_includedir}/dwarves/config.h
-%{_includedir}/dwarves/ctf.h
-%{_includedir}/dwarves/dutil.h
-%{_includedir}/dwarves/dwarves.h
-%{_includedir}/dwarves/dwarves_emit.h
-%{_includedir}/dwarves/dwarves_reorganize.h
-%{_includedir}/dwarves/elfcreator.h
-%{_includedir}/dwarves/elf_symtab.h
-%{_includedir}/dwarves/gobuffer.h
-%{_includedir}/dwarves/hash.h
-%{_includedir}/dwarves/libctf.h
-%{_includedir}/dwarves/list.h
-%{_includedir}/dwarves/rbtree.h
-%{_libdir}/%{libname}.so
-%{_libdir}/%{libname}_emit.so
-%{_libdir}/%{libname}_reorganize.so
+%files -f %{oreon_filedir}/main.list
+%files -n libdwarves1 -f %{oreon_filedir}/libdwarves1.list
+%files -n libdwarves1-devel -f %{oreon_filedir}/libdwarves1-devel.list
 
 %changelog
+
 %autochangelog

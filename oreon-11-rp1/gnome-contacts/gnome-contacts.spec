@@ -1,86 +1,66 @@
-%global source0_hash 2a3bea343171be244f12b7c21a40ca38e9a92dea9890393af5e8ac139bc0dab3
-
+%global source0_hash c8b60752f65a966e0a2c0cbf7c1e1607ee3b4a49318b50b19bdad2ab7fc6706d
 %global gtk4_version 4.15.3
-
 %global tarball_version %%(echo %{version} | tr '~' '.')
-
 Name:           gnome-contacts
 Version:        51.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Contacts manager for GNOME
-
 %global tarball_version %%(echo %{version} | tr '~' '.')
 %global major_version %%(cut -d "." -f 1 <<<%{tarball_version})
-
-# Sources are GPL-2.0-or-later, Appdata is CC0-1.0, icon is CC-BY-SA-4.0.
 License:        GPL-2.0-or-later AND CC0-1.0 AND CC-BY-SA-4.0
 URL:            https://apps.gnome.org/Contacts
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0:        https://download.gnome.org/sources/%{name}/51/%{name}-%{version}.tar.xz
+Requires:       gtk4%{?_isa} >= %{gtk4_version}
+Requires:       hicolor-icon-theme
+Requires:       gstreamer1-plugin-gtk4
+Requires:       pipewire-gstreamer
+# oreon:deps
+BuildRequires:  /usr/bin/appstreamcli
+BuildRequires:  /usr/bin/xsltproc
+BuildRequires:  blueprint-compiler
 BuildRequires:  desktop-file-utils
 BuildRequires:  docbook-dtds
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext
 BuildRequires:  meson
-BuildRequires:  vala
-BuildRequires:  blueprint-compiler
-BuildRequires:  /usr/bin/appstreamcli
-BuildRequires:  /usr/bin/xsltproc
 BuildRequires:  pkgconfig(folks)
 BuildRequires:  pkgconfig(folks-eds)
 BuildRequires:  pkgconfig(gee-0.8)
+BuildRequires:  pkgconfig(glycin-gtk4-2)
 BuildRequires:  pkgconfig(goa-1.0)
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(gstreamer-1.0)
-BuildRequires:  pkgconfig(gtk4) >= %{gtk4_version}
+BuildRequires:  pkgconfig(gtk4)
 BuildRequires:  pkgconfig(libadwaita-1)
 BuildRequires:  pkgconfig(libportal-gtk4)
 BuildRequires:  pkgconfig(libqrencode)
-BuildRequires:  pkgconfig(glycin-gtk4-2)
-
-Requires:       gtk4%{?_isa} >= %{gtk4_version}
-Requires:       hicolor-icon-theme
-# Camera support for avatar
-Requires:       gstreamer1-plugin-gtk4
-Requires:       pipewire-gstreamer
-
+BuildRequires:  vala
+# /oreon:deps
 %description
 %{name} is a standalone contacts manager for GNOME desktop.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
 appstreamcli metainfo-to-news %{buildroot}/%{_metainfodir}/org.gnome.Contacts.metainfo.xml NEWS
 %find_lang %{name}
+%oreon_autofiles main
 
 %check
+
 appstreamcli validate --no-net %{buildroot}/%{_metainfodir}/org.gnome.Contacts.metainfo.xml
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.gnome.Contacts.desktop
-
-%files -f %{name}.lang
-%doc NEWS README.md
-%license COPYING
-%{_bindir}/gnome-contacts
-%{_libexecdir}/gnome-contacts/
-%{_libexecdir}/gnome-contacts-search-provider
-%{_datadir}/applications/org.gnome.Contacts.desktop
-%{_datadir}/dbus-1/services/org.gnome.Contacts.service
-%{_datadir}/dbus-1/services/org.gnome.Contacts.SearchProvider.service
-%{_datadir}/glib-2.0/schemas/org.gnome.Contacts.gschema.xml
-%dir %{_datadir}/gnome-shell
-%dir %{_datadir}/gnome-shell/search-providers
-%{_datadir}/gnome-shell/search-providers/org.gnome.Contacts.search-provider.ini
-%{_datadir}/icons/hicolor/*/apps/org.gnome.Contacts*.svg
-%{_metainfodir}/org.gnome.Contacts.metainfo.xml
-%{_mandir}/man1/gnome-contacts.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

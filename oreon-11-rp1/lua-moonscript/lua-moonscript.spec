@@ -1,38 +1,28 @@
-%global source0_hash b98e58f4657ffc2e730904da0b4034796ff16f08e4e6c47c681905fd56509037
-
-# missing test dependencies
+%global source0_hash 98fcf86d47694c81ccf9012e310f86d443ddf516e90b267ea33eb7ff1b0747c4
 %bcond tests 0
-
 %global pkgname moonscript
-
 Name:           lua-%{pkgname}
 Version:        0.7.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A little language that compiles to Lua
-
-# license text part of README.md
 License:        MIT
 URL:            http://moonscript.org/
-Source:         https://github.com/leafo/moonscript/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
-
+Source0:        https://github.com/leafo/%{pkgname}/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  lua-devel >= 5.1
-BuildRequires:  lua-argparse >= 0.7
-BuildRequires:  lua-filesystem >= 1.5
-# avoid lpeg 0.11 per upstream rockspec
-BuildRequires:  lua-lpeg >= 0.12
 %if %{with tests}
-BuildRequires:  make
 %endif
 Requires:       /usr/bin/lua
 Requires:       lua-argparse >= 0.7
 Requires:       lua-filesystem >= 1.5
 Requires:       lua-lpeg >= 0.12
-# lua-inotify is a soft requirement;
-# needed for the directory watching feature
 Recommends:     lua-inotify
-
+# oreon:deps
+BuildRequires:  lua-argparse
+BuildRequires:  lua-devel
+BuildRequires:  lua-filesystem
+BuildRequires:  lua-lpeg
+BuildRequires:  make
+# /oreon:deps
 %description
 MoonScript is a dynamic scripting language that compiles into Lua. It
 gives you the power of Lua combined with a rich set of features.
@@ -50,6 +40,7 @@ The command line tools also let you run MoonScript directly from the
 command line, like any first-class scripting language.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{pkgname}-%{version}
@@ -60,19 +51,15 @@ mkdir -p $RPM_BUILD_ROOT%{_bindir}
 cp -p bin/moon{,c,-tags} $RPM_BUILD_ROOT%{_bindir}/
 mkdir -p $RPM_BUILD_ROOT%{lua_pkgdir}
 cp -pr moon moonscript $RPM_BUILD_ROOT%{lua_pkgdir}/
+%oreon_autofiles main
 
 %check
+
 %if %{with tests}
 make test
 %endif
-
-%files
-%doc CHANGELOG.md README.md docs/*
-%{_bindir}/moon
-%{_bindir}/moonc
-%{_bindir}/moon-tags
-%{lua_pkgdir}/moon
-%{lua_pkgdir}/moonscript
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,51 +1,41 @@
 %global source0_hash 750dcf5c797765eb42265e0a56d1a99f97f94b7f6f4534263a5410503f0caf59
-
-Summary: Linux UDF Filesystem userspace utilities
+Summary:        Linux UDF Filesystem userspace utilities
 Name: udftools
 Version: 2.3
-Release: 13%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL: http://sourceforge.net/projects/linux-udf/
-Source:        https://github.com/pali/udftools/releases/download/%{version}/udftools-%{version}.tar.gz
+Source0:        https://github.com/pali/udftools/releases/download/%{version}/udftools-%{version}.tar.gz
 Patch1: udftools-2.3-backported_fixes.patch
-BuildRequires: make
-BuildRequires: readline-devel, ncurses-devel
-BuildRequires: autoconf, automake, libtool, perl-Carp
-BuildRequires: udev
 Requires: udev
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  perl-Carp
+BuildRequires:  readline-devel
+BuildRequires:  udev
+# /oreon:deps
 %description
 Linux UDF Filesystem userspace utilities.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-#./bootstrap #not in the tarball anymore, lets use pregenerated autotools
-##export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing --std=gnu99"
+
 %configure
 %make_build
-##%%{__make} %%{?_smp_mflags}
-
 %install
 %make_install
-#./libtool --finish %%{buildroot}%%{_libdir} #causes failure and is probably unneeded, we dont ship a library
 rm -rf %{buildroot}%{_bindir}/udffsck
+%oreon_autofiles main
 
-
-%files
-%doc AUTHORS NEWS
-%license COPYING
-%{_bindir}/*
-%{_sbindir}/*
-%{_pkgdocdir}/*
-%{_mandir}/man?/*
-%{_udevrulesdir}/80-pktsetup.rules
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3-13
 - Prepare for Oreon 11 (RP1)

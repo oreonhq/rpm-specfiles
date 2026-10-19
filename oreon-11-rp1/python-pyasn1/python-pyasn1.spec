@@ -1,58 +1,41 @@
 %global source0_hash 9c447d8431c947fe4c8febc4ed9e760bc29011a5b01e5c74b67025bd9fb8ce81
-
 Name:           python-pyasn1
 Version:        0.6.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Pure-Python implementation of ASN.1 types and DER/BER/CER codecs _X.208_
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://github.com/pyasn1/pyasn1
-Source:         %{pypi_source pyasn1}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyasn1/pyasn1-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyasn1' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pyasn1 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyasn1
-Summary:        %{summary}
-
-%description -n python3-pyasn1 %_description
-
+Summary:        Pure-Python implementation of ASN.1 types and DER/BER/CER codecs _X.208_
+%description -n python3-pyasn1
 
 %prep
-%autosetup -p1 -n pyasn1-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyasn1-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyasn1 usr/lib/python3*/site-packages/pyasn1* usr/lib64/python3*/site-packages/pyasn1* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyasn1* usr/lib64/python3*/site-packages/pyasn1* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyasn1 -f %{pyproject_files}
+%files
+%files -n python3-pyasn1 -f %{oreon_filedir}/python3-pyasn1.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.2-1
 - Prepare for Oreon 11 (RP1)

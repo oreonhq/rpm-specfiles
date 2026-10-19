@@ -1,42 +1,35 @@
-%global source0_hash none
-
-#no jars in this native build, so skip signing
+%global source0_hash 8f19ca024cc7f5729737a3c731d4d37cd3b24047a19a11e31dd115c360120937
 %define _jarsign_opts --nocopy
-
 %global namedreltag .Final
 %global namedversion %{version}%{?namedreltag} 
 %global selinuxtype targeted
 %define aplibdir %{_libdir}/httpd/modules/
- 
 %define serial 1
- 
 Name:          mod_proxy_cluster
-Summary:       JBoss mod_proxy_cluster for Apache httpd
+Summary:        JBoss mod_proxy_cluster for Apache httpd
 Version:       1.3.22
-Release:       %{serial}%{?dist}.2
+Release:        1%{?dist}
 License:       LGPL-3.0-only
 URL:           https://github.com/modcluster/mod_cluster
-Source0:        https://github.com/modcluster/mod_cluster/archive/refs/tags/1.3.22%{?namedreltag}.tar.gz#/mod_cluster-1.3.22%{?namedreltag}.tar.gz
+Source0:        https://github.com/modcluster/mod_cluster/archive/refs/tags/%{version}%{namedreltag}.tar.gz#/mod_cluster-%{version}%{namedreltag}.tar.gz
 Source1:       %{name}.conf.sample
 Source2:       %{name}.te
 Source3:       %{name}.fc
- 
-# 64 bit natives only
 ExcludeArch:      i686 i386
- 
-BuildRequires:    httpd-devel
-BuildRequires:    apr-devel
-BuildRequires:    apr-util-devel
-BuildRequires:    autoconf
-BuildRequires:    gcc
- 
 Requires:         (%{name}-selinux if selinux-policy-%{selinuxtype})
- 
 Requires:         httpd >= 0:2.4.49
 Requires:         apr
 Requires:         apr-util
- 
-# SELinux subpackage
+# oreon:deps
+BuildRequires:  apr-devel
+BuildRequires:  apr-util-devel
+BuildRequires:  autoconf
+BuildRequires:  gcc
+BuildRequires:  httpd-devel
+BuildRequires:  pkgconfig(systemd)
+BuildRequires:  selinux-policy
+BuildRequires:  selinux-policy-devel
+# /oreon:deps
 %package selinux
 Summary:             mod_proxy_cluster SELinux policy
 BuildArch:           noarch
@@ -44,7 +37,6 @@ Requires:            selinux-policy-%{selinuxtype}
 Requires(post):      selinux-policy-%{selinuxtype}
 BuildRequires:       selinux-policy-devel
 %{?selinux_requires}
- 
 %description selinux
 mod_proxy_cluster SELinux policy module
  
@@ -52,10 +44,12 @@ mod_proxy_cluster SELinux policy module
 JBoss mod_proxy_cluster for Apache httpd.
  
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n mod_cluster-%{namedversion}
  
 %build
+
 pushd native
 for i in advertise mod_manager mod_proxy_cluster mod_cluster_slotmem
 do
@@ -68,66 +62,52 @@ export CFLAGS='%{optflags} -fno-strict-aliasing -DMOD_CLUSTER_RELEASE_VERSION="-
 popd
 done
 popd
- 
-# for SELinux
 mkdir selinux
 cp -p %{SOURCE2} selinux/
 cp -p %{SOURCE3} selinux/
- 
 make -f %{_datadir}/selinux/devel/Makefile %{name}.pp
 bzip2 -9 %{name}.pp
- 
 %install
 install -d -m 755 $RPM_BUILD_ROOT%{_datadir}/%{name}-%{version}
 install -d -m 755 $RPM_BUILD_ROOT/%{aplibdir}/
 cp -p native/*/*.so ${RPM_BUILD_ROOT}/%{aplibdir}/
 install -d -m 755 $RPM_BUILD_ROOT/%{_localstatedir}/cache/httpd/mod_proxy_cluster
-
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/
 install -p -m 644 %{SOURCE1} \
         $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d/mod_proxy_cluster.conf.sample
- 
 install -D -m 0644 %{name}.pp.bz2 %{buildroot}%{_datadir}/selinux/packages/%{selinuxtype}/%{name}.pp.bz2
- 
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+
 %pre selinux
+
 %selinux_relabel_pre -s %{selinuxtype}
- 
 %post selinux
+
 %selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/%{name}.pp.bz2
- 
 %postun selinux
+
 if [ $1 -eq 0 ]; then
     %selinux_modules_uninstall -s %{selinuxtype} %{name}
 fi
- 
 %posttrans selinux
+
 %selinux_relabel_post -s %{selinuxtype}
- 
 %post
-# first install
+
 if [ $1 -eq 1 ]; then
     %{_sbindir}/semanage port -a -t http_port_t -p udp 23364 || true
     %{_sbindir}/semanage port -a -t http_port_t -p tcp 6666 || true
 fi
- 
 %postun
-# Delete port labeling when the package is removed
+
 if [ $1 -eq 0 ]; then
     %{_sbindir}/semanage port -d -t http_port_t -p udp 23364 || true
     %{_sbindir}/semanage port -d -t http_port_t -p tcp 6666 || true
 fi
- 
-%files
-%license lgpl.txt
-%dir %{_localstatedir}/cache/httpd/mod_proxy_cluster
-%attr(0755,root,root) %{aplibdir}/*
-%{_sysconfdir}/httpd/conf.d/mod_proxy_cluster.conf.sample
- 
-%files selinux
-%{_datadir}/selinux/packages/%{selinuxtype}/%{name}.pp.*
-%ghost %verify(not md5 size mode mtime) %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/%{name}
-
+%files -f %{oreon_filedir}/main.list
+%files -n mod_proxy_cluster-selinux -f %{oreon_filedir}/mod_proxy_cluster-selinux.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.22-1
 - Prepare for Oreon 11 (RP1)

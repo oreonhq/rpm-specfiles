@@ -1,11 +1,9 @@
 %global source0_hash none
-
 %bcond_without httpd
 %bcond_without nginx
-
 Name:           web-assets
 Version:        5
-Release:        25%{?dist}
+Release:        1%{?dist}
 Summary:        A simple framework for bits pushed to browsers
 License:        MIT
 URL:            https://fedoraproject.org/wiki/User:Patches/PackagingDrafts/Web_Assets
@@ -15,17 +13,16 @@ Source2:        macros.web-assets
 Source3:        httpd-web-assets.conf
 Source4:        nginx-web-assets.conf
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  coreutils
-
+# /oreon:deps
 %description
 %{summary}.
 
 %package filesystem
 Summary:        The basic directory layout for Web Assets
-#there's nothing copyrightable about a few directories and symlinks
 License:        LicenseRef-Not-Copyrightable
 Requires:       fonts-filesystem
-
 %description filesystem
 %{summary}.
 
@@ -33,7 +30,6 @@ Requires:       fonts-filesystem
 Summary:        RPM macros for Web Assets packaging
 License:        MIT
 Requires:       web-assets-filesystem = %{version}-%{release}
-
 %description devel
 %{summary}.
 
@@ -43,7 +39,6 @@ Summary:        Web Assets aliases for the Apache HTTP daemon
 License:        MIT
 Requires:       web-assets-filesystem = %{version}-%{release}
 Requires:       httpd
-
 %description httpd
 %{summary}.
 %endif
@@ -54,19 +49,18 @@ Summary:        Web Assets aliases for the nginx daemon
 License:        MIT
 Requires:       web-assets-filesystem = %{version}-%{release}
 Requires:       nginx
-
 %description nginx
 %{summary}.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -c -T
 cp %{SOURCE0} LICENSE
 cp %{SOURCE1} README.devel
 
 %build
-#nothing to do
 
 %install
 mkdir -p %{buildroot}%{_datadir}/web-assets
@@ -80,45 +74,31 @@ install -Dpm0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/httpd/conf.d/web-assets.c
 %endif
 %if %{with nginx}
 install -Dpm0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/nginx/default.d/web-assets.conf
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
 %if %{with httpd}
 %post httpd
-[ -x %{_bindir}/systemctl ] && reload-or-try-restart httpd.service || :
 
+[ -x %{_bindir}/systemctl ] && reload-or-try-restart httpd.service || :
 %postun httpd
+
 [ -x %{_bindir}/systemctl ] && reload-or-try-restart httpd.service || :
 %endif
-
 %if %{with nginx}
 %post nginx
-[ -x %{_bindir}/systemctl ] && systemctl reload-or-try-restart nginx.service || :
 
+[ -x %{_bindir}/systemctl ] && systemctl reload-or-try-restart nginx.service || :
 %postun nginx
+
 [ -x %{_bindir}/systemctl ] && systemctl reload-or-try-restart nginx.service || :
 %endif
-
-%files filesystem
-%{_datadir}/web-assets
-%{_datadir}/javascript
-
-%files devel
-%{_rpmconfigdir}/macros.d/macros.web-assets
-%license LICENSE
-%doc README.devel
-
-%if %{with httpd}
-%files httpd
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/web-assets.conf
-%license LICENSE
-%endif
-
-%if %{with nginx}
-%files nginx
-%config(noreplace) %{_sysconfdir}/nginx/default.d/web-assets.conf
-%license LICENSE
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n web-assets-filesystem -f %{oreon_filedir}/web-assets-filesystem.list
+%files -n web-assets-devel -f %{oreon_filedir}/web-assets-devel.list
+%files -n web-assets-httpd -f %{oreon_filedir}/web-assets-httpd.list
+%files -n web-assets-nginx -f %{oreon_filedir}/web-assets-nginx.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5-25
 - Prepare for Oreon 11 (RP1)

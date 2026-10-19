@@ -1,70 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 4e3a95b63175be8e10f0662de506a36d8cc6cb86ecc5b30ae880c8dafb34a0cd
 Name:           python-wxpython
 Version:        4.3.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Cross platform GUI toolkit for Python, _Phoenix_ version
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://wxPython.org/
-Source:         %{pypi_source wxpython}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'wxpython' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/wxpython/wxpython-%{version}.tar.gz
 Patch:          fix-ftbfs-doxygen-1.15.0.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython) >= 3.0.10
+BuildRequires:  python3dist(requests) >= 2.26.0
+BuildRequires:  python3dist(setuptools) >= 70.1
+BuildRequires:  python3dist(sip) == 6.12.0
+Requires:       python3-wxpython = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-wxpython
-Summary:        %{summary}
-
-%description -n python3-wxpython %_description
-
+Summary:        Cross platform GUI toolkit for Python, _Phoenix_ version
+%description -n python3-wxpython
 
 %prep
-%autosetup -p1 -n wxpython-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir wxpython-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-wxpython usr/lib/python3*/site-packages/wxpython* usr/lib64/python3*/site-packages/wxpython* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/wxpython* usr/lib64/python3*/site-packages/wxpython* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-wxpython -f %{pyproject_files}
-%{_bindir}/helpviewer
-%{_bindir}/img2png
-%{_bindir}/img2py
-%{_bindir}/img2xpm
-%{_bindir}/pycrust
-%{_bindir}/pyshell
-%{_bindir}/pyslices
-%{_bindir}/pyslicesshell
-%{_bindir}/pywxrc
-%{_bindir}/wxdemo
-%{_bindir}/wxdocs
-%{_bindir}/wxget
+%files
+%files -n python3-wxpython -f %{oreon_filedir}/python3-wxpython.list
 
 %changelog
+
 %autochangelog

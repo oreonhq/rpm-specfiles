@@ -1,38 +1,31 @@
 %global source0_hash 6e233253f4d1dd22dfce9f9a245cc036d814fc99ba7f6732f4e345de62cfe458
-
 Name:           libAfterImage
 Version:        1.20
 Release:        39%{?dist}
 Summary:        A generic image manipulation library
-
 License:        LGPL-2.1-or-later
 URL:            http://www.afterstep.org/afterimage/index.php
 Source0:        ftp://ftp.afterstep.org/stable/%{name}/%{name}-%{version}.tar.bz2
 Source1:        %{name}-COPYING
-#               Don't call ldconfig as part of "make install"
 Patch0:         %{name}-Makefile-ldconfig.patch
-#               Port to libpng 1.5 and later (patch from gentoo)
 Patch1:         %{name}-libpng15.patch
-#               Port to giflib version 5 and allow unbundling of giflib
 Patch2:         %{name}-unbundle-libgif.patch
-#               Link the shared library with its dependencies
 Patch3:         %{name}-link.patch
-#               Patch configure script for C99 compatibility.
 Patch4:         %{name}-configure-c99.patch
-
-BuildRequires:  make
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  freetype-devel
-BuildRequires:  zlib-devel
-BuildRequires:  libtiff-devel
-BuildRequires:  libpng-devel
+BuildRequires:  gawk
+BuildRequires:  gcc
 BuildRequires:  giflib-devel
-BuildRequires:  libjpeg-devel
-BuildRequires:  librsvg2-devel
 BuildRequires:  libX11-devel
 BuildRequires:  libXext-devel
-BuildRequires:  gawk
-
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  librsvg2-devel
+BuildRequires:  libtiff-devel
+BuildRequires:  make
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 libAfterImage is a generic image manipulation library. It was initially
 implemented to address AfterStep Window Manager's needs for image handling,
@@ -51,9 +44,7 @@ from X window system.
 %package devel
 Summary:        Files needed for software development with %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-#               Package split (apps split out from devel)
 Obsoletes:      %{name}-devel < 1.20-21
-
 %description devel
 The %{name}-devel package contains the files needed for development with
 %{name}.
@@ -61,13 +52,12 @@ The %{name}-devel package contains the files needed for development with
 %package apps
 Summary:        Sample programs using %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-#               Package split (apps split out from devel)
 Obsoletes:      %{name}-devel < 1.20-21
-
 %description apps
 The %{name}-apps package contains sample programs using %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -86,31 +76,21 @@ rm zlib/*
 sed /zlib/d -i .depend
 
 %build
+
 %configure --enable-i18n --disable-staticlibs --enable-sharedlibs \
 --disable-mmx-optimization --without-builtin-gif --without-afterbase \
 --x-includes=%{_includedir} --x-libraries=%{_libdir}
-
 %make_build CCFLAGS="-DNO_DEBUG_OUTPUT -fPIC %{optflags}" AR="ar cq"
-
 %install
 %make_install CCFLAGS="-DNO_DEBUG_OUTPUT -fPIC %{optflags}" AR="ar cq"
-
 cp %{SOURCE1} COPYING
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%doc README ChangeLog
-%license COPYING
-%{_libdir}/*.so.*
-
-%files devel
-%{_bindir}/afterimage-*
-%{_includedir}/%{name}
-%{_libdir}/*.so
-
-%files apps
-%{_bindir}/as*
+%files -f %{oreon_filedir}/main.list
+%files -n libAfterImage-devel -f %{oreon_filedir}/libAfterImage-devel.list
+%files -n libAfterImage-apps -f %{oreon_filedir}/libAfterImage-apps.list
 
 %changelog
+
 %autochangelog

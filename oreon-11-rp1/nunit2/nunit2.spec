@@ -1,12 +1,9 @@
-%global source0_hash none
-
+%global source0_hash d5d3ed8d4f811b33f07ede67025dbcf1c4949e076130489a292002bee73e68b1
 %global debug_package %{nil}
-
 Name:           nunit2
 Version:        2.6.4
 Release:        39%{?dist}
 Summary:        Unit test framework for CLI
-# Automatically converted from old format: MIT with advertising - review is highly recommended.
 License:        LicenseRef-Callaway-MIT-with-advertising
 Url:            http://www.nunit.org/
 Source0:        https://github.com/nunit/nunitv2/archive/%{version}.tar.gz
@@ -14,13 +11,14 @@ Source1:        nunit2.pc
 Source2:        nunit2-gui.sh
 Source3:        nunit2-console.sh
 Source4:        nunit2.desktop
-BuildRequires:  mono-devel libgdiplus-devel desktop-file-utils mono-winforms
 ExclusiveArch:  %{mono_arches}
-
-# nunit2 fails to build on armv7hl. Mono crashes.
-# https://bugzilla.redhat.com/show_bug.cgi?id=1923663
 ExcludeArch:    armv7hl
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  libgdiplus-devel
+BuildRequires:  mono-devel
+BuildRequires:  mono-winforms
+# /oreon:deps
 %description
 NUnit is a unit testing framework for all .NET languages. It serves the
 same purpose as JUnit does in the Java world. It supports test
@@ -34,14 +32,12 @@ the Microsoft .NET Framework.
 Summary:        Tools for run NUnit test
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       mono-winforms
-
 %description gui
 Desktop application for run NUnit test
 
 %package doc
 Summary:        Documentation package for NUnit
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description doc
 Documentation for NUnit
 
@@ -49,19 +45,17 @@ Documentation for NUnit
 Summary:        Development files for NUnit
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description devel
 Development files for %{name}.
 
 %prep
+
 %setup -qn nunitv2-%{version}
 
 %build
 
-# fix compile with Mono4
 find . -name "*.sln" -print -exec sed -i 's/Format Version 10.00/Format Version 11.00/g' {} \;
 find . -name "*.csproj" -print -exec sed -i 's#ToolsVersion="3.5"#ToolsVersion="4.0"#g; s#<TargetFrameworkVersion>.*</TargetFrameworkVersion>##g; s#<PropertyGroup>#<PropertyGroup><TargetFrameworkVersion>v4.5</TargetFrameworkVersion>#g' {} \;
-
 %{?exp_env}
 %{?env_options}
 xbuild /property:Configuration=Debug ./src/NUnitCore/core/nunit.core.dll.csproj
@@ -75,7 +69,6 @@ xbuild /property:Configuration=Debug ./src/GuiRunner/nunit-gui/nunit-gui.csproj
 xbuild /property:Configuration=Debug ./src/GuiComponents/UiKit/nunit.uikit.dll.csproj
 xbuild /property:Configuration=Debug ./src/GuiException/UiException/nunit.uiexception.dll.csproj
 xbuild /property:Configuration=Debug ./src/GuiRunner/nunit-gui-exe/nunit-gui.exe.csproj
-
 %install
 %{?env_options}
 mkdir -p %{buildroot}%{_monodir}/nunit2
@@ -95,39 +88,25 @@ for i in nunit-console-runner.dll nunit.core.dll nunit.core.interfaces.dll nunit
 done
 desktop-file-install --dir=%{buildroot}/%{_datadir}/applications %{SOURCE4}
 cp -p src/GuiRunner/nunit-gui-exe/App.ico %{buildroot}/%{_datadir}/icons/NUnit2/nunit.ico
-
-%files
-%license license.txt
-%{_bindir}/nunit-console*
-%dir %{_monodir}/nunit2
-%{_monodir}/nunit2/nunit-console.exe*
-%{_monogacdir}/nunit*
-%{_monodir}/nunit2/*.dll
-
-%files gui
-%{_bindir}/nunit-gui*
-%{_monodir}/nunit2/nunit.exe*
-%{_datadir}/applications/nunit2.desktop
-%{_datadir}/icons/NUnit2
-
-%files doc
-%license doc/license.html
-%doc doc/*
-
-%files devel
-%{_libdir}/pkgconfig/nunit2.pc
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %post gui
-/bin/touch --no-create %{_datadir}/icons/NUnit &>/dev/null || :
 
+/bin/touch --no-create %{_datadir}/icons/NUnit &>/dev/null || :
 %postun gui
+
 if [ $1 -eq 0 ] ; then
     /bin/touch --no-create %{_datadir}/icons/NUnit &>/dev/null
     /usr/bin/gtk-update-icon-cache %{_datadir}/icons/NUnit &>/dev/null || :
 fi
-
 %posttrans gui
+
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/NUnit &>/dev/null || :
+%files -f %{oreon_filedir}/main.list
+%files -n nunit2-gui -f %{oreon_filedir}/nunit2-gui.list
+%files -n nunit2-doc -f %{oreon_filedir}/nunit2-doc.list
+%files -n nunit2-devel -f %{oreon_filedir}/nunit2-devel.list
 
 %changelog
+
 %autochangelog

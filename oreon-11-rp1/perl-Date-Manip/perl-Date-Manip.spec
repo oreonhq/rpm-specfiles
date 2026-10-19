@@ -1,5 +1,4 @@
 %global source0_hash 37133eeb09d36da6d461546cc216b8f6a2297a43331c680a6848f3fff925975c
-
 Name:           perl-Date-Manip
 Version:        7.00
 Release:        1%{?dist}
@@ -8,51 +7,35 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Date-Manip
 Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Date-Manip-%{version}.tar.gz
 BuildArch:      noarch
-# Build
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Runtime
-BuildRequires:  perl(:VERSION) >= 5.10.0
-BuildRequires:  perl(Carp)
-# Cwd not used at tests
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(Encode)
-BuildRequires:  perl(Exporter)
-# File::Find not used at tests
-# File::Spec not used at tests
-BuildRequires:  perl(integer)
-BuildRequires:  perl(IO::File)
-BuildRequires:  perl(Storable)
-BuildRequires:  perl(utf8)
-# Win32::TieRegistry not used
-# Tests only
-# File::Basename not used
-# File::Find::Rule not used
-# lib not used
-BuildRequires:  perl(Test::Inter) >= 1.09
-BuildRequires:  perl(Test::More)
-# Test::Pod 1.00 not used
-# Test::Pod::Coverage 1.00 not used
 Requires:       perl(Cwd)
 Requires:       perl(File::Find)
 Requires:       perl(File::Spec)
-
-# This package was formerly known as perl-DateManip
 Provides: perl-DateManip = %{version}-%{release}
 Obsoletes: perl-DateManip < 5.48-1
-
 %{?perl_default_filter}
-
-# Filter modules bundled for tests
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(tests.pl\\)
-
 Provides:       perl(Date::Manip)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(IO::File)
+BuildRequires:  perl(Storable)
+BuildRequires:  perl(Test::Inter)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(integer)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Date::Manip is a series of modules designed to make any common date/time
 operation easy to do. Operations such as comparing two times, determining
@@ -65,12 +48,12 @@ to daylight saving time.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Date-Manip-%{version}
 
@@ -81,21 +64,17 @@ for F in t/*.t t/*.pl; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
-# Remove release tests
 rm -f %{buildroot}%{_libexecdir}/%{name}/t/_pod*
 rm -f %{buildroot}%{_libexecdir}/%{name}/t/_version.t
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 unset DATE_MANIP DATE_MANIP_DEBUG DATE_MANIP_DEBUG_ABBREVS \
     DATE_MANIP_DEBUG_ZONES Date_Manip_RELEASE_TESTING DATE_MANIP_TEST_DM5 \
     OS MULTINET_TIMEZONE 'SYS$TIMEZONE_DIFFERENTIAL' 'SYS$TIMEZONE_NAME' \
@@ -103,28 +82,19 @@ unset DATE_MANIP DATE_MANIP_DEBUG DATE_MANIP_DEBUG_ABBREVS \
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 unset DATE_MANIP DATE_MANIP_DEBUG DATE_MANIP_DEBUG_ABBREVS \
     DATE_MANIP_DEBUG_ZONES Date_Manip_RELEASE_TESTING DATE_MANIP_TEST_DM5 \
     OS MULTINET_TIMEZONE 'SYS$TIMEZONE_DIFFERENTIAL' 'SYS$TIMEZONE_NAME' \
     'SYS$TIMEZONE_RULE' 'TCPIP$TZ' 'UCX$TZ'
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%license LICENSE
-%doc README README.first
-%dir %{perl_vendorlib}/Date
-%{perl_vendorlib}/Date/Manip
-%{perl_vendorlib}/Date/Manip.{pm,pod}
-%{_mandir}/man1/dm_*.1*
-%{_mandir}/man3/Date::Manip.3*
-%{_mandir}/man3/Date::Manip::*.3*
-%{_bindir}/dm_*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Date-Manip-tests -f %{oreon_filedir}/perl-Date-Manip-tests.list
 
 %changelog
+
 %autochangelog

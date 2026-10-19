@@ -1,26 +1,22 @@
 %global source0_hash 51ca50295c8005e6bb4a32a0cdc7ee5bc224406ae402075b031f5b3073bf2bdb
-
 Name:           tomcat-native
 Epoch:          1
 Version:        2.0.14
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tomcat native library
-
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://tomcat.apache.org/native-doc/index.html
-Source0:        http://www.apache.org/dist/tomcat/tomcat-connectors/native/%{version}/source/%{name}-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/tomcat/tomcat-connectors/native/%{version}/source/%{name}-%{version}-src.tar.gz
 ExclusiveArch: %{java_arches}
-
-BuildRequires:  make
+Provides:       tcnative = %{version}-%{release}
+# oreon:deps
+BuildRequires:  apr-devel
 BuildRequires:  gcc-c++
 BuildRequires:  java-25-devel
 BuildRequires:  jpackage-utils
-BuildRequires:  apr-devel
+BuildRequires:  make
 BuildRequires:  openssl-devel
-# Upstream compatibility:
-Provides:       tcnative = %{version}-%{release}
-
+# /oreon:deps
 %description
 Tomcat can use the Apache Portable Runtime to provide superior
 scalability, performance, and better integration with native server
@@ -33,35 +29,31 @@ Unix sockets).  This package contains the Tomcat native library which
 provides support for using APR in Tomcat.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}-src
 f=CHANGELOG.txt ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 
 %build
+
 cd native
 export CFLAGS="${CFLAGS} -DOPENSSL_NO_ENGINE"
 %configure \
     --with-apr=%{_bindir}/apr-1-config \
     --with-java-home=%{_jvmdir}/java
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 make -C native install DESTDIR=$RPM_BUILD_ROOT
-# Perhaps a devel package sometime?  Not for now; no headers are installed.
 rm -f $RPM_BUILD_ROOT%{_libdir}/libtcnative*.*a
 rm -rf $RPM_BUILD_ROOT%{_libdir}/pkgconfig
 rm -rf ${RPM_BUILD_ROOT}%{_includedir}/*.h
-
 %ldconfig_scriptlets
+%oreon_autofiles main
 
-%files
-%{!?_licensedir:%global license %%doc}
-%license LICENSE NOTICE
-%doc CHANGELOG.txt README.txt
-# Note: unversioned *.so needed here due to how Tomcat loads the lib :(
-%{_libdir}/libtcnative*.so*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

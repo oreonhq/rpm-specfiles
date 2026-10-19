@@ -1,22 +1,18 @@
 %global source0_hash fc673560595ebe4687d314934be2810b7ac5167742a80659246149791abb59ba
-
 Name:           R-units
 Version:        %R_rpm_version 1.0-0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Measurement Units for R Vectors
-
 License:        GPL-2.0-or-later
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=units&version=1.0-0#/units_1.0-0.tar.gz
 ExcludeArch:    %{ix86}
-
-BuildRequires:  R-devel
-BuildRequires:  udunits2-devel
 Obsoletes:      %{name}-devel < 0.6.3
 Recommends:     R-xml2
-
+# oreon:deps
+BuildRequires:  R-devel
+BuildRequires:  udunits2-devel
+# /oreon:deps
 %description
 Support for measurement units in R vectors, matrices and arrays: automatic
 propagation, conversion, derivation and simplification of units; raising
@@ -29,22 +25,19 @@ a vignette; see 'citation("units")' for details.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

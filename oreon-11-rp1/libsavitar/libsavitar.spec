@@ -1,25 +1,23 @@
+%global source1_hash 968a5c8306448ebe8129449b097d76eedd9e7ddfd1e68888a71975897374d281
 %global source0_hash ed44dd42426ba4f592c2d83f652af5c2c60a1f619d16d31afa0babc2a0c997ce
-
 Name:           libsavitar
 Version:        5.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C++ implementation of 3mf loading with SIP Python bindings
 License:        LGPL-3.0-or-later
 URL:            https://github.com/Ultimaker/libSavitar
-Source0:        %{url}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# Python bits
+Source0:        https://github.com/Ultimaker/libSavitar/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        https://github.com/Ultimaker/pySavitar/archive/%{version}.tar.gz#/pySavitar-%{version}.tar.gz
-
-# Cmake bits taken from 4.13.1, before upstream went nuts with conan
 Source2:        FindSIP.cmake
 Source3:        SIPMacros.cmake
 Source4:        CMakeLists.txt
 Source5:        SavitarConfig.cmake.in
 Source6:        COPYING-CMAKE-SCRIPTS
-
-# Actually export symbols into the shared lib
 Patch0:         libsavitar-5.2.2-export-fix.patch
-
+ExcludeArch:    %{ix86}
+# oreon:deps
+BuildRequires:  (python3-setuptools if python3-devel >= 3.12)
+BuildRequires:  /usr/bin/sip
 BuildRequires:  cmake
 BuildRequires:  dos2unix
 BuildRequires:  gcc-c++
@@ -27,14 +25,7 @@ BuildRequires:  git-core
 BuildRequires:  pugixml-devel
 BuildRequires:  python3-devel
 BuildRequires:  python3-sip-devel
-BuildRequires:  /usr/bin/sip
-
-# we add a dependency on setuptools to provide the distutils module for FindSIP.cmake
-BuildRequires:  (python3-setuptools if python3-devel >= 3.12)
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-
+# /oreon:deps
 %description
 Savitar is a C++ implementation of 3mf loading with SIP Python bindings.
 3mf is a 3D printing file format.
@@ -42,9 +33,7 @@ Savitar is a C++ implementation of 3mf loading with SIP Python bindings.
 %package        devel
 Summary:        Development files for libsavitar
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-# The cmake scripts are BSD
 License:        LGPL-3.0-or-later AND BSD-3-Clause
-
 %description    devel
 Savitar is a C++ implementation of 3mf loading with SIP Python bindings.
 3mf is a 3D printing file format.
@@ -54,7 +43,6 @@ Development files.
 %package -n     python3-savitar
 Summary:        Python 3 libSavitar bindings
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description -n python3-savitar
 Savitar is a C++ implementation of 3mf loading with SIP Python bindings.
 3mf is a 3D printing file format.
@@ -62,6 +50,7 @@ Savitar is a C++ implementation of 3mf loading with SIP Python bindings.
 The Python bindings.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n libSavitar-%{version} -p1 -S git -a 1
@@ -76,29 +65,19 @@ cp -a %{SOURCE4} %{SOURCE5} .
 dos2unix README.md
 
 %build
+
 export CXXFLAGS="%{optflags} -Wl,--as-needed"
 %cmake -DCMAKE_SKIP_RPATH:BOOL=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles python3-savitar usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libSavitar.so.*
-
-%files devel
-%license LICENSE cmake/COPYING-CMAKE-SCRIPTS
-%{_libdir}/libSavitar.so
-%{_includedir}/Savitar
-# Own the dir not to depend on cmake:
-%{_libdir}/cmake
-
-%files -n python3-savitar
-%license LICENSE
-%doc README.md
-%{python3_sitearch}/pySavitar.so
+%files -f %{oreon_filedir}/main.list
+%files -n libsavitar-devel -f %{oreon_filedir}/libsavitar-devel.list
+%files -n python3-savitar -f %{oreon_filedir}/python3-savitar.list
 
 %changelog
+
 %autochangelog

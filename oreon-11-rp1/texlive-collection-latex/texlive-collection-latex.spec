@@ -117,26 +117,19 @@
 %global source116_hash 21a9d565c228bc8ae0a3afea4d32cd77b8627fab72f16d7ab2f11e58b3733611
 %global source117_hash c34ebb397279bf645aaf3b6705b0da1da260bf5c832fdad5c53d735f1a7e83e2
 %global source118_hash b0fd2bb8fc6070ffc128bf88cd045670f5b6a6194733546c5f4a36bf2037de97
-
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
 %global tl_version 2025
-
 Name:           texlive-collection-latex
 Epoch:          12
 Version:        svn78733
 Release:        7%{?dist}
 Summary:        LaTeX fundamental packages
-
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-# Main collection source
 Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-latex.tar.xz#/collection-latex.or11.tar.xz
-
-# License texts
 Source1:        texlive-licenses.tar.xz
-
 Source2:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ae.tar.xz#/ae.or11.tar.xz
 Source3:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ae.doc.tar.xz#/ae.doc.or11.tar.xz
 Source4:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/amscls.tar.xz#/amscls.or11.tar.xz
@@ -254,8 +247,6 @@ Source115:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/ur
 Source116:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/url.doc.tar.xz#/url.doc.or11.tar.xz
 Source117:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/appendix.tar.xz#/appendix.or11.tar.xz
 Source118:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/appendix.doc.tar.xz#/appendix.doc.or11.tar.xz
-
-BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-ae
 Requires:       texlive-amscls
@@ -321,11 +312,12 @@ Requires:       texlive-tagpdf
 Requires:       texlive-tools
 Requires:       texlive-uniquecounter
 Requires:       texlive-url
-
+# oreon:deps
+BuildRequires:  texlive-base
+# /oreon:deps
 %description
 These packages are either mandated by the core LaTeX team, or very widely used
 and strongly recommended in practice.
-
 
 %package -n texlive-ae
 Summary:        Virtual fonts for T1 encoded CMR-fonts
@@ -336,7 +328,6 @@ Requires:       texlive-kpathsea
 Provides:       texlive-ae-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-ae-doc <= 11:%{version}
 Requires:       tex(fontenc.sty)
-
 %description -n texlive-ae
 A set of virtual fonts which emulates T1 coded fonts using the standard CM
 fonts. The package name, AE fonts, supposedly stands for "Almost European". The
@@ -353,7 +344,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-amscls-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-amscls-doc <= 11:%{version}
-
 %description -n texlive-amscls
 This bundle contains three AMS classes, amsart (for writing articles for the
 AMS), amsbook (for books) and amsproc (for proceedings), together with some
@@ -370,7 +360,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-amsmath-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-amsmath-doc <= 11:%{version}
-
 %description -n texlive-amsmath
 The package provides the principal packages in the AMS-LaTeX distribution. It
 adapts for use in LaTeX most of the mathematical features found in AMS-TeX; it
@@ -390,7 +379,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-appendix-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-appendix-doc <= 11:%{version}
-
 %description -n texlive-appendix
 The appendix package provides various ways of formatting the titles of
 appendices. Also (sub)appendices environments are provided that can be used,
@@ -410,7 +398,6 @@ Requires:       texlive-kpathsea
 Requires:       tex(iftex.sty)
 Requires:       tex(infwarerr.sty)
 Requires:       tex(ltxcmds.sty)
-
 %description -n texlive-atbegshi
 This package is a modern reimplementation of package everyshi, providing
 various commands to be executed before a \shipout command. It makes use of
@@ -423,7 +410,6 @@ Version:        svn77682
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-atveryend
 This LaTeX package provides some wrapper commands around LaTeX end document
 hooks.
@@ -434,7 +420,6 @@ Version:        svn77682
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-auxhook
 This package auxhook provides hooks for adding stuff at the begin of .aux
 files.
@@ -449,7 +434,6 @@ Provides:       texlive-babel-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-babel-doc <= 11:%{version}
 Requires:       tex(fontspec.sty)
 Requires:       tex(hhline.sty)
-
 %description -n texlive-babel
 Babel is the multilingual environment for LaTeX (tailored for LuaTeX, pdfTeX
 and XeTeX), and sometimes Plain. Its aim is to provide a comprehensive
@@ -472,7 +456,6 @@ Requires:       texlive-kpathsea
 Provides:       texlive-babel-english-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-babel-english-doc <= 11:%{version}
 Requires:       texlive-hyphen-english
-
 %description -n texlive-babel-english
 The package provides the language definition file for support of English in
 babel. Care is taken to select british hyphenation patterns for British English
@@ -488,7 +471,6 @@ Requires:       texlive-kpathsea
 Provides:       texlive-babelbib-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-babelbib-doc <= 11:%{version}
 Requires:       tex(babel.sty)
-
 %description -n texlive-babelbib
 This package enables the user to generate multilingual bibliographies in
 cooperation with babel. Two approaches are possible: Each citation may be
@@ -503,7 +485,6 @@ License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(pdftexcmds.sty)
-
 %description -n texlive-bigintcalc
 This package provides expandable arithmetic operations with big integers that
 can exceed TeX's number limits.
@@ -518,7 +499,6 @@ Requires:       texlive-bigintcalc
 Requires:       tex(bigintcalc.sty)
 Requires:       tex(infwarerr.sty)
 Requires:       tex(intcalc.sty)
-
 %description -n texlive-bitset
 This package defines and implements the data type bit set, a vector of bits.
 The size of the vector may grow dynamically. Individual bits can be
@@ -531,7 +511,6 @@ License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(hyperref.sty)
-
 %description -n texlive-bookmark
 This package implements a new bookmark (outline) organization for package
 hyperref. Bookmark properties such as style and color can now be set. Other
@@ -549,7 +528,6 @@ Obsoletes:      texlive-carlisle-doc <= 11:%{version}
 Requires:       tex(color.sty)
 Requires:       tex(longtable.sty)
 Requires:       tex(tabularx.sty)
-
 %description -n texlive-carlisle
 Many of David Carlisle's more substantial packages stand on their own, or as
 part of the LaTeX latex-tools set; this set contains: Making dotless 'j'
@@ -569,7 +547,6 @@ Provides:       texlive-colortbl-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-colortbl-doc <= 11:%{version}
 Requires:       tex(array.sty)
 Requires:       tex(color.sty)
-
 %description -n texlive-colortbl
 The package allows rows and columns to be coloured, and even individual cells.
 
@@ -584,7 +561,6 @@ Requires:       tex(grfext.sty)
 Requires:       tex(infwarerr.sty)
 Requires:       tex(kvoptions.sty)
 Requires:       tex(pdftexcmds.sty)
-
 %description -n texlive-epstopdf-pkg
 The package adds support for EPS files in the graphicx package when running
 under pdfTeX. If an EPS graphic is detected, the package spawns a process to
@@ -599,7 +575,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(iftex.sty)
 Requires:       tex(infwarerr.sty)
-
 %description -n texlive-etexcmds
 New primitive commands are introduced in e-TeX; sometimes the names collide
 with existing macros. This package solves the name clashes by adding a prefix
@@ -615,7 +590,6 @@ Requires:       texlive-kpathsea
 Provides:       texlive-etoolbox-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-etoolbox-doc <= 11:%{version}
 Requires:       tex(etex.sty)
-
 %description -n texlive-etoolbox
 The package is a toolbox of programming facilities geared primarily towards
 LaTeX class and package authors. It provides LaTeX frontends to some of the new
@@ -635,7 +609,6 @@ Requires:       texlive-kpathsea
 Provides:       texlive-fancyhdr-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-fancyhdr-doc <= 11:%{version}
 Requires:       tex(xparse.sty)
-
 %description -n texlive-fancyhdr
 The package provides extensive facilities, both for constructing headers and
 footers, and for controlling their use (for example, at times when LaTeX would
@@ -647,7 +620,6 @@ Version:        svn76740
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-firstaid
 This package contains some first aid for LaTeX packages or classes that require
 updates because of internal changes to the LaTeX kernel that are not yet
@@ -663,7 +635,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-fix2col-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-fix2col-doc <= 11:%{version}
-
 %description -n texlive-fix2col
 OBSOLETE: do not use in new documents. This package will do nothing in LaTeX
 formats after 2015/01/01 as the fixes that it implements were incorporated into
@@ -686,7 +657,6 @@ Requires:       texlive-iftex
 Requires:       tex(atbegshi.sty)
 Requires:       tex(ifvtex.sty)
 Requires:       tex(keyval.sty)
-
 %description -n texlive-geometry
 The package provides an easy and flexible user interface to customize page
 layout, implementing auto-centering and auto-balancing mechanisms so that the
@@ -706,7 +676,6 @@ License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(kvoptions.sty)
-
 %description -n texlive-gettitlestring
 Cleans up the title string (removing \label commands) for packages (such as
 nameref) that typeset such strings.
@@ -723,7 +692,6 @@ Requires:       texlive-epstopdf-pkg
 Requires:       texlive-graphics-cfg
 Requires:       texlive-graphics-def
 Requires:       tex(ifthen.sty)
-
 %description -n texlive-graphics
 This is a collection of LaTeX packages for: producing colour including graphics
 (eg PostScript) files rotation and scaling of text in LaTeX documents. It
@@ -738,7 +706,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-graphics-cfg-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-graphics-cfg-doc <= 11:%{version}
-
 %description -n texlive-graphics-cfg
 This bundle includes color.cfg and graphics.cfg files that set default "driver"
 options for the color and graphics packages. It contains support for defaulting
@@ -754,7 +721,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(infwarerr.sty)
 Requires:       tex(kvdefinekeys.sty)
-
 %description -n texlive-grfext
 This package provides macros for adding to, and reordering the list of graphics
 file extensions recognised by package graphics.
@@ -766,7 +732,6 @@ License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(ltxcmds.sty)
-
 %description -n texlive-hopatch
 Hopatch provides a command with which the user may register of patch code for a
 particular package. Hopatch will apply the patch immediately, if the relevant
@@ -780,7 +745,6 @@ License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(hopatch.sty)
-
 %description -n texlive-hycolor
 This package provides the code for the color option that is used by packages
 hyperref and bookmark. It is not intended as package for the user.
@@ -792,7 +756,6 @@ License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(letltxmacro.sty)
-
 %description -n texlive-hypcap
 The package offers a solution to the problem that when you link to a float
 using hyperref, the link anchors to below the float's caption, rather than the
@@ -848,7 +811,6 @@ Requires:       tex(refcount.sty)
 Requires:       tex(rerunfilecheck.sty)
 Requires:       tex(stringenc.sty)
 Requires:       tex(url.sty)
-
 %description -n texlive-hyperref
 The hyperref package is used to handle cross-referencing commands in LaTeX to
 produce hypertext links in the document. The package provides backends for the
@@ -865,7 +827,6 @@ Version:        svn77682
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-intcalc
 This package provides expandable arithmetic operations with integers, using the
 e-TeX extension \numexpr if it is available.
@@ -876,7 +837,6 @@ Version:        svn77682
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-kvdefinekeys
 The package provides a macro \kv@define@key (analogous to keyval's \define@key,
 to define keys for use by kvsetkeys.
@@ -891,7 +851,6 @@ Requires:       tex(etexcmds.sty)
 Requires:       tex(keyval.sty)
 Requires:       tex(kvsetkeys.sty)
 Requires:       tex(ltxcmds.sty)
-
 %description -n texlive-kvoptions
 This package offers support for package authors who want to use options in
 key-value format for their package options.
@@ -902,7 +861,6 @@ Version:        svn77682
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-kvsetkeys
 This package provides \kvsetkeys, a variant of package keyval's \setkeys. It
 allows the user to specify a handler that deals with unknown options. Active
@@ -915,7 +873,6 @@ Version:        svn78544
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-l3backend
 LaTeX3 backend drivers for the PDF, DVI, and related output engines.
 
@@ -929,7 +886,6 @@ Provides:       texlive-l3kernel-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-l3kernel-doc <= 11:%{version}
 Requires:       texlive-l3backend
 Requires:       texlive-lua-uni-algos
-
 %description -n texlive-l3kernel
 The l3kernel bundle provides an implementation of the LaTeX3 programmers'
 interface, as a set of packages that run under LaTeX2e. The interface provides
@@ -946,7 +902,6 @@ Requires:       texlive-kpathsea
 Provides:       texlive-l3packages-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-l3packages-doc <= 11:%{version}
 Requires:       texlive-l3kernel
-
 %description -n texlive-l3packages
 This collection deals with higher-level ideas such as the Designer Interface,
 as part of LaTeX3 developments. The packages here have over time migrated into
@@ -963,7 +918,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-latex-fonts-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-latex-fonts-doc <= 11:%{version}
-
 %description -n texlive-latex-fonts
 This is a collection of fonts for use with standard LaTeX packages and classes.
 It includes 'invisible' fonts (for use with the slides class), line and circle
@@ -983,7 +937,6 @@ Requires:       texlive-kpathsea
 Requires:       tex(array.sty)
 Requires:       tex(graphicx.sty)
 Requires:       tex(tagpdf.sty)
-
 %description -n texlive-latex-lab
 This bundle holds optional files that are loaded in certain situations by
 kernel code (if available). While this code is still in development and the use
@@ -1000,7 +953,6 @@ Version:        svn68923
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-latexconfig
 configuration files for LaTeX-related formats
 
@@ -1010,7 +962,6 @@ Version:        svn77682
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-letltxmacro
 TeX's \let assignment does not work for LaTeX macros with optional arguments or
 for macros that are defined as robust macros by \DeclareRobustCommand. This
@@ -1023,7 +974,6 @@ Version:        svn77682
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-ltxcmds
 This package exports some utility macros from the LaTeX kernel into a separate
 namespace and also makes them available for other formats such as plain TeX.
@@ -1040,7 +990,6 @@ Requires:       tex(euler.sty)
 Requires:       tex(ifthen.sty)
 Requires:       tex(pifont.sty)
 Requires:       tex(verbatim.sty)
-
 %description -n texlive-ltxmisc
 Miscellaneous LaTeX packages, etc.
 
@@ -1050,7 +999,6 @@ Version:        svn76195
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-lua-uni-algos
 Lua code working with Unicode data has to deal with quite some challenges. For
 example there are many canonically equivalent sequences which should be treated
@@ -1073,7 +1021,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-mfnfss-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-mfnfss-doc <= 11:%{version}
-
 %description -n texlive-mfnfss
 This bundle contains two packages: - oldgerm, a package to typeset with old
 german fonts designed by Yannis Haralambous. - pandora, a package to typeset
@@ -1089,7 +1036,6 @@ Requires:       texlive-kpathsea
 Provides:       texlive-natbib-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-natbib-doc <= 11:%{version}
 Requires:       tex(citeref.sty)
-
 %description -n texlive-natbib
 The bundle provides a package that implements both author-year and numbered
 references, as well as much detailed of support for other bibliography use.
@@ -1104,7 +1050,6 @@ License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(everyshi.sty)
-
 %description -n texlive-pagesel
 Selects single pages, ranges of pages, odd pages or even pages for output.
 
@@ -1116,7 +1061,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(ltxcmds.sty)
 Requires:       tex(pdftexcmds.sty)
-
 %description -n texlive-pdfescape
 This package implements pdfTeX's escape features (\pdfescapehex,
 \pdfunescapehex, \pdfescapename, \pdfescapestring) using TeX or e-TeX.
@@ -1129,7 +1073,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(hyperref.sty)
 Requires:       tex(tagpdf-base.sty)
-
 %description -n texlive-pdfmanagement
 This package is used to load LaTeX's PDF management code. The PDF management
 code offers backend independent interfaces to central PDF dictionaries, tools
@@ -1148,7 +1091,6 @@ Requires:       texlive-kpathsea
 Requires:       tex(iftex.sty)
 Requires:       tex(infwarerr.sty)
 Requires:       tex(ltxcmds.sty)
-
 %description -n texlive-pdftexcmds
 LuaTeX provides most of the commands of pdfTeX 1.40. However, a number of
 utility functions are not available. This package tries to fill the gap and
@@ -1160,7 +1102,6 @@ Version:        svn67469
 License:        LPPL-1.3c
 Requires:       texlive-base
 Requires:       texlive-kpathsea
-
 %description -n texlive-pslatex
 A small package that makes LaTeX default to 'standard' PostScript fonts. It is
 basically a merger of the times and the (obsolete) mathptm packages from the
@@ -1187,7 +1128,6 @@ Requires:       texlive-graphics
 Requires:       texlive-symbol
 Requires:       texlive-zapfding
 Requires:       tex(keyval.sty)
-
 %description -n texlive-psnfss
 Font definition files, macros and font metrics for freely-available Adobe Type
 1 fonts. The font set consists of the 'LaserWriter 35' set (originally 'freely
@@ -1220,7 +1160,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-pspicture-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-pspicture-doc <= 11:%{version}
-
 %description -n texlive-pspicture
 A replacement for LaTeX's picture macros, that uses PostScript \special
 commands. The package is now largely superseded by pict2e.
@@ -1233,7 +1172,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(infwarerr.sty)
 Requires:       tex(ltxcmds.sty)
-
 %description -n texlive-refcount
 Provides commands \setcounterref and \addtocounterref which use the section (or
 whatever) number from the reference as the value to put into the counter, as
@@ -1254,7 +1192,6 @@ Requires:       tex(infwarerr.sty)
 Requires:       tex(kvoptions.sty)
 Requires:       tex(pdftexcmds.sty)
 Requires:       tex(uniquecounter.sty)
-
 %description -n texlive-rerunfilecheck
 The package provides additional rerun warnings if some auxiliary files have
 changed. It is based on MD5 checksum provided by pdfTeX, LuaTeX, XeTeX.
@@ -1268,7 +1205,6 @@ Requires:       texlive-kpathsea
 Requires:       tex(infwarerr.sty)
 Requires:       tex(ltxcmds.sty)
 Requires:       tex(pdfescape.sty)
-
 %description -n texlive-stringenc
 This package provides \StringEncodingConvert for converting a string between
 different encodings. Both LaTeX and plain-TeX are supported.
@@ -1281,7 +1217,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(etoolbox.sty)
 Requires:       tex(xpatch.sty)
-
 %description -n texlive-tagpdf
 The package contains the core code for tagging and accessibility used by the
 LaTeX kernel in the Tagged PDF project. See
@@ -1296,7 +1231,6 @@ Requires:       texlive-kpathsea
 Provides:       texlive-tools-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-tools-doc <= 11:%{version}
 Requires:       tex(color.sty)
-
 %description -n texlive-tools
 A collection of (variously) simple tools provided as part of the LaTeX required
 tools distribution, comprising the packages: afterpage, array, bm, calc,
@@ -1312,7 +1246,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Requires:       tex(bigintcalc.sty)
 Requires:       tex(infwarerr.sty)
-
 %description -n texlive-uniquecounter
 This package provides a kind of counter that provides unique number values.
 Several counters can be created with different names. The numeric values are
@@ -1326,7 +1259,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       texlive-url-doc = %{epoch}:%{version}-%{release}
 Obsoletes:      texlive-url-doc <= 11:%{version}
-
 %description -n texlive-url
 The command \url is a form of verbatim command that allows linebreaks at
 certain characters or combinations of characters, accepts reconfiguration, and
@@ -1338,8 +1270,8 @@ package ignores spaces in its argument. However, a package option "allows
 spaces", which is useful for operating systems where spaces are a common part
 of file names.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h_expected="%{source0_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h_expected="%{source1_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h_expected="%{source2_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -1462,11 +1394,9 @@ test "%{source118_hash}" = "none" || { f="%{SOURCE118}"; test -f "$f" || { echo 
 tar -xf %{SOURCE1}
 
 %build
-# Nothing to build
 
 %install
 mkdir -p %{buildroot}%{_texmf_main}
-
 tar -xf %{SOURCE2} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE3} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE4} -C %{buildroot}%{_texmf_main}
@@ -1584,326 +1514,132 @@ tar -xf %{SOURCE115} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE116} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE117} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE118} -C %{buildroot}%{_texmf_main}
-
-# Remove tlpobj files
 rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
-
 mv %{buildroot}%{_texmf_main}/fonts/map/dvips/psnfss/psnfss.map %{buildroot}%{_texmf_main}/fonts/map/dvips/psnfss/psnfss.oldmap
+%oreon_autofiles texlive-ae usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-amscls usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-amsmath usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-appendix usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-atbegshi usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-atveryend usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-auxhook usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-babel usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-babel-english usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-babelbib usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-bigintcalc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-bitset usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-bookmark usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-carlisle usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-colortbl usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-epstopdf-pkg usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-etexcmds usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-etoolbox usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-fancyhdr usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-firstaid usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-fix2col usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-geometry usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-gettitlestring usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-graphics usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-graphics-cfg usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-grfext usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-hopatch usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-hycolor usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-hypcap usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-hyperref usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-intcalc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-kvdefinekeys usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-kvoptions usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-kvsetkeys usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-l3backend usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-l3kernel usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-l3packages usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-latex-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-latex-lab usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-latexconfig usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-letltxmacro usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-ltxcmds usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-ltxmisc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-lua-uni-algos usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-mfnfss usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-natbib usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-pagesel usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-pdfescape usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-pdfmanagement usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-pdftexcmds usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-pslatex usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-psnfss usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-pspicture usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-refcount usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-rerunfilecheck usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-stringenc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-tagpdf usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-uniquecounter usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-url usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# Main collection metapackage (empty)
-%files
-
-%files -n texlive-ae
-%license lppl1.3c.txt
-%{_texmf_main}/fonts/tfm/public/ae/
-%{_texmf_main}/fonts/vf/public/ae/
-%{_texmf_main}/tex/latex/ae/
-%doc %{_texmf_main}/doc/fonts/ae/
-
-%files -n texlive-amscls
-%license lppl1.3c.txt
-%{_texmf_main}/bibtex/bst/amscls/
-%{_texmf_main}/tex/latex/amscls/
-%doc %{_texmf_main}/doc/latex/amscls/
-
-%files -n texlive-amsmath
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/amsmath/
-%doc %{_texmf_main}/doc/latex/amsmath/
-
-%files -n texlive-appendix
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/appendix/
-%doc %{_texmf_main}/doc/latex/appendix/
-
-%files -n texlive-atbegshi
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/atbegshi/
-%doc %{_texmf_main}/doc/latex/atbegshi/
-
-%files -n texlive-atveryend
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/atveryend/
-%doc %{_texmf_main}/doc/latex/atveryend/
-
-%files -n texlive-auxhook
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/auxhook/
-%doc %{_texmf_main}/doc/latex/auxhook/
-
-%files -n texlive-babel
-%license lppl1.3c.txt
-%{_texmf_main}/makeindex/babel/
-%{_texmf_main}/tex/generic/babel/
-%doc %{_texmf_main}/doc/latex/babel/
-
-%files -n texlive-babel-english
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/babel-english/
-%doc %{_texmf_main}/doc/generic/babel-english/
-
-%files -n texlive-babelbib
-%license lppl1.3c.txt
-%{_texmf_main}/bibtex/bst/babelbib/
-%{_texmf_main}/tex/latex/babelbib/
-%doc %{_texmf_main}/doc/bibtex/babelbib/
-
-%files -n texlive-bigintcalc
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/bigintcalc/
-%doc %{_texmf_main}/doc/latex/bigintcalc/
-
-%files -n texlive-bitset
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/bitset/
-%doc %{_texmf_main}/doc/latex/bitset/
-
-%files -n texlive-bookmark
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/bookmark/
-%doc %{_texmf_main}/doc/latex/bookmark/
-
-%files -n texlive-carlisle
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/carlisle/
-%doc %{_texmf_main}/doc/latex/carlisle/
-
-%files -n texlive-colortbl
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/colortbl/
-%doc %{_texmf_main}/doc/latex/colortbl/
-
-%files -n texlive-epstopdf-pkg
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/epstopdf-pkg/
-%doc %{_texmf_main}/doc/latex/epstopdf-pkg/
-
-%files -n texlive-etexcmds
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/etexcmds/
-%doc %{_texmf_main}/doc/latex/etexcmds/
-
-%files -n texlive-etoolbox
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/etoolbox/
-%doc %{_texmf_main}/doc/latex/etoolbox/
-
-%files -n texlive-fancyhdr
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/fancyhdr/
-%doc %{_texmf_main}/doc/latex/fancyhdr/
-
-%files -n texlive-firstaid
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/firstaid/
-%doc %{_texmf_main}/doc/latex/firstaid/
-
-%files -n texlive-fix2col
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/fix2col/
-%doc %{_texmf_main}/doc/latex/fix2col/
-
-%files -n texlive-geometry
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/geometry/
-%doc %{_texmf_main}/doc/latex/geometry/
-
-%files -n texlive-gettitlestring
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/gettitlestring/
-%doc %{_texmf_main}/doc/latex/gettitlestring/
-
-%files -n texlive-graphics
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/graphics/
-%doc %{_texmf_main}/doc/latex/graphics/
-
-%files -n texlive-graphics-cfg
-%license pd.txt
-%{_texmf_main}/tex/latex/graphics-cfg/
-%doc %{_texmf_main}/doc/latex/graphics-cfg/
-
-%files -n texlive-grfext
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/grfext/
-%doc %{_texmf_main}/doc/latex/grfext/
-
-%files -n texlive-hopatch
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/hopatch/
-%doc %{_texmf_main}/doc/latex/hopatch/
-
-%files -n texlive-hycolor
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/hycolor/
-%doc %{_texmf_main}/doc/latex/hycolor/
-
-%files -n texlive-hypcap
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/hypcap/
-%doc %{_texmf_main}/doc/latex/hypcap/
-
-%files -n texlive-hyperref
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/hyperref/
-%doc %{_texmf_main}/doc/latex/hyperref/
-
-%files -n texlive-intcalc
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/intcalc/
-%doc %{_texmf_main}/doc/latex/intcalc/
-
-%files -n texlive-kvdefinekeys
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/kvdefinekeys/
-%doc %{_texmf_main}/doc/latex/kvdefinekeys/
-
-%files -n texlive-kvoptions
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/kvoptions/
-%doc %{_texmf_main}/doc/latex/kvoptions/
-
-%files -n texlive-kvsetkeys
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/kvsetkeys/
-%doc %{_texmf_main}/doc/latex/kvsetkeys/
-
-%files -n texlive-l3backend
-%license lppl1.3c.txt
-%{_texmf_main}/dvips/l3backend/
-%{_texmf_main}/tex/latex/l3backend/
-%doc %{_texmf_main}/doc/latex/l3backend/
-
-%files -n texlive-l3kernel
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/l3kernel/
-%doc %{_texmf_main}/doc/latex/l3kernel/
-
-%files -n texlive-l3packages
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/l3packages/
-%doc %{_texmf_main}/doc/latex/l3packages/
-
-%files -n texlive-latex-fonts
-%license lppl1.3c.txt
-%{_texmf_main}/fonts/source/public/latex-fonts/
-%{_texmf_main}/fonts/tfm/public/latex-fonts/
-%doc %{_texmf_main}/doc/fonts/latex-fonts/
-
-%files -n texlive-latex-lab
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/latex-lab/
-%doc %{_texmf_main}/doc/latex/latex-lab/
-
-%files -n texlive-latexconfig
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/latexconfig/
-
-%files -n texlive-letltxmacro
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/letltxmacro/
-%doc %{_texmf_main}/doc/latex/letltxmacro/
-
-%files -n texlive-ltxcmds
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/ltxcmds/
-%doc %{_texmf_main}/doc/generic/ltxcmds/
-
-%files -n texlive-ltxmisc
-%license gpl2.txt
-%license lppl1.3c.txt
-%license pd.txt
-%{_texmf_main}/tex/latex/ltxmisc/
-
-%files -n texlive-lua-uni-algos
-%license lppl1.3c.txt
-%{_texmf_main}/tex/luatex/lua-uni-algos/
-%doc %{_texmf_main}/doc/luatex/lua-uni-algos/
-
-%files -n texlive-mfnfss
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/mfnfss/
-%doc %{_texmf_main}/doc/latex/mfnfss/
-
-%files -n texlive-natbib
-%license lppl1.3c.txt
-%{_texmf_main}/bibtex/bst/natbib/
-%{_texmf_main}/tex/latex/natbib/
-%doc %{_texmf_main}/doc/latex/natbib/
-
-%files -n texlive-pagesel
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/pagesel/
-%doc %{_texmf_main}/doc/latex/pagesel/
-
-%files -n texlive-pdfescape
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/pdfescape/
-%doc %{_texmf_main}/doc/latex/pdfescape/
-
-%files -n texlive-pdfmanagement
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/pdfmanagement/
-%doc %{_texmf_main}/doc/latex/pdfmanagement/
-
-%files -n texlive-pdftexcmds
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/pdftexcmds/
-%doc %{_texmf_main}/doc/generic/pdftexcmds/
-
-%files -n texlive-pslatex
-%license lppl1.3c.txt
-%{_texmf_main}/fonts/map/dvips/pslatex/
-%{_texmf_main}/fonts/tfm/public/pslatex/
-%{_texmf_main}/fonts/vf/public/pslatex/
-%{_texmf_main}/tex/latex/pslatex/
-
-%files -n texlive-psnfss
-%license lppl1.3c.txt
-%{_texmf_main}/fonts/map/dvips/psnfss/
-%{_texmf_main}/tex/latex/psnfss/
-%doc %{_texmf_main}/doc/latex/psnfss/
-
-%files -n texlive-pspicture
-%license lppl1.3c.txt
-%{_texmf_main}/dvips/pspicture/
-%{_texmf_main}/tex/latex/pspicture/
-%doc %{_texmf_main}/doc/latex/pspicture/
-
-%files -n texlive-refcount
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/refcount/
-%doc %{_texmf_main}/doc/latex/refcount/
-
-%files -n texlive-rerunfilecheck
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/rerunfilecheck/
-%doc %{_texmf_main}/doc/latex/rerunfilecheck/
-
-%files -n texlive-stringenc
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/stringenc/
-%doc %{_texmf_main}/doc/latex/stringenc/
-
-%files -n texlive-tagpdf
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/tagpdf/
-%doc %{_texmf_main}/doc/latex/tagpdf/
-
-%files -n texlive-tools
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/tools/
-%doc %{_texmf_main}/doc/latex/tools/
-
-%files -n texlive-uniquecounter
-%license lppl1.3c.txt
-%{_texmf_main}/tex/generic/uniquecounter/
-%doc %{_texmf_main}/doc/latex/uniquecounter/
-
-%files -n texlive-url
-%license lppl1.3c.txt
-%{_texmf_main}/tex/latex/url/
-%doc %{_texmf_main}/doc/latex/url/
+%files -f %{oreon_filedir}/main.list
+%files -n texlive-ae -f %{oreon_filedir}/texlive-ae.list
+%files -n texlive-amscls -f %{oreon_filedir}/texlive-amscls.list
+%files -n texlive-amsmath -f %{oreon_filedir}/texlive-amsmath.list
+%files -n texlive-appendix -f %{oreon_filedir}/texlive-appendix.list
+%files -n texlive-atbegshi -f %{oreon_filedir}/texlive-atbegshi.list
+%files -n texlive-atveryend -f %{oreon_filedir}/texlive-atveryend.list
+%files -n texlive-auxhook -f %{oreon_filedir}/texlive-auxhook.list
+%files -n texlive-babel -f %{oreon_filedir}/texlive-babel.list
+%files -n texlive-babel-english -f %{oreon_filedir}/texlive-babel-english.list
+%files -n texlive-babelbib -f %{oreon_filedir}/texlive-babelbib.list
+%files -n texlive-bigintcalc -f %{oreon_filedir}/texlive-bigintcalc.list
+%files -n texlive-bitset -f %{oreon_filedir}/texlive-bitset.list
+%files -n texlive-bookmark -f %{oreon_filedir}/texlive-bookmark.list
+%files -n texlive-carlisle -f %{oreon_filedir}/texlive-carlisle.list
+%files -n texlive-colortbl -f %{oreon_filedir}/texlive-colortbl.list
+%files -n texlive-epstopdf-pkg -f %{oreon_filedir}/texlive-epstopdf-pkg.list
+%files -n texlive-etexcmds -f %{oreon_filedir}/texlive-etexcmds.list
+%files -n texlive-etoolbox -f %{oreon_filedir}/texlive-etoolbox.list
+%files -n texlive-fancyhdr -f %{oreon_filedir}/texlive-fancyhdr.list
+%files -n texlive-firstaid -f %{oreon_filedir}/texlive-firstaid.list
+%files -n texlive-fix2col -f %{oreon_filedir}/texlive-fix2col.list
+%files -n texlive-geometry -f %{oreon_filedir}/texlive-geometry.list
+%files -n texlive-gettitlestring -f %{oreon_filedir}/texlive-gettitlestring.list
+%files -n texlive-graphics -f %{oreon_filedir}/texlive-graphics.list
+%files -n texlive-graphics-cfg -f %{oreon_filedir}/texlive-graphics-cfg.list
+%files -n texlive-grfext -f %{oreon_filedir}/texlive-grfext.list
+%files -n texlive-hopatch -f %{oreon_filedir}/texlive-hopatch.list
+%files -n texlive-hycolor -f %{oreon_filedir}/texlive-hycolor.list
+%files -n texlive-hypcap -f %{oreon_filedir}/texlive-hypcap.list
+%files -n texlive-hyperref -f %{oreon_filedir}/texlive-hyperref.list
+%files -n texlive-intcalc -f %{oreon_filedir}/texlive-intcalc.list
+%files -n texlive-kvdefinekeys -f %{oreon_filedir}/texlive-kvdefinekeys.list
+%files -n texlive-kvoptions -f %{oreon_filedir}/texlive-kvoptions.list
+%files -n texlive-kvsetkeys -f %{oreon_filedir}/texlive-kvsetkeys.list
+%files -n texlive-l3backend -f %{oreon_filedir}/texlive-l3backend.list
+%files -n texlive-l3kernel -f %{oreon_filedir}/texlive-l3kernel.list
+%files -n texlive-l3packages -f %{oreon_filedir}/texlive-l3packages.list
+%files -n texlive-latex-fonts -f %{oreon_filedir}/texlive-latex-fonts.list
+%files -n texlive-latex-lab -f %{oreon_filedir}/texlive-latex-lab.list
+%files -n texlive-latexconfig -f %{oreon_filedir}/texlive-latexconfig.list
+%files -n texlive-letltxmacro -f %{oreon_filedir}/texlive-letltxmacro.list
+%files -n texlive-ltxcmds -f %{oreon_filedir}/texlive-ltxcmds.list
+%files -n texlive-ltxmisc -f %{oreon_filedir}/texlive-ltxmisc.list
+%files -n texlive-lua-uni-algos -f %{oreon_filedir}/texlive-lua-uni-algos.list
+%files -n texlive-mfnfss -f %{oreon_filedir}/texlive-mfnfss.list
+%files -n texlive-natbib -f %{oreon_filedir}/texlive-natbib.list
+%files -n texlive-pagesel -f %{oreon_filedir}/texlive-pagesel.list
+%files -n texlive-pdfescape -f %{oreon_filedir}/texlive-pdfescape.list
+%files -n texlive-pdfmanagement -f %{oreon_filedir}/texlive-pdfmanagement.list
+%files -n texlive-pdftexcmds -f %{oreon_filedir}/texlive-pdftexcmds.list
+%files -n texlive-pslatex -f %{oreon_filedir}/texlive-pslatex.list
+%files -n texlive-psnfss -f %{oreon_filedir}/texlive-psnfss.list
+%files -n texlive-pspicture -f %{oreon_filedir}/texlive-pspicture.list
+%files -n texlive-refcount -f %{oreon_filedir}/texlive-refcount.list
+%files -n texlive-rerunfilecheck -f %{oreon_filedir}/texlive-rerunfilecheck.list
+%files -n texlive-stringenc -f %{oreon_filedir}/texlive-stringenc.list
+%files -n texlive-tagpdf -f %{oreon_filedir}/texlive-tagpdf.list
+%files -n texlive-tools -f %{oreon_filedir}/texlive-tools.list
+%files -n texlive-uniquecounter -f %{oreon_filedir}/texlive-uniquecounter.list
+%files -n texlive-url -f %{oreon_filedir}/texlive-url.list
 
 %changelog
+
 %autochangelog

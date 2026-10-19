@@ -13,7 +13,6 @@
 %global source304_hash 10f7e85b5ce53014c946b14c750b09097bed1892ecaf2cea05d12aab6e8677d2
 %global source400_hash 1e16275273bc5bbee2a248f563f977d4177203a1624a7992cb842af0d800078b
 %global source500_hash a9000043610a3e90c852e779a6b1a8eb724a9f312cf5f7ddd57862b010c65dc8
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -95,24 +94,19 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-# Component versions, taken from gradle.properties
 %global platform_version %{version}
 %global jupiter_version %{version}
 %global vintage_version %{version}
-
 Name:           junit5
 Version:        6.1.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java regression testing framework
 License:        EPL-2.0
 URL:            https://junit.org/junit5/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/junit-team/junit5/archive/r%{version}/junit5-%{version}.tar.gz
-# Aggregator POM (used for packaging only)
 Source100:      aggregator.pom
-# Platform POMs
 Source200:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform-commons/%{platform_version}/junit-platform-commons-%{platform_version}.pom
 Source201:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console/%{platform_version}/junit-platform-console-%{platform_version}.pom
 Source202:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/%{platform_version}/junit-platform-console-standalone-%{platform_version}.pom
@@ -120,40 +114,25 @@ Source203:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform
 Source205:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform-launcher/%{platform_version}/junit-platform-launcher-%{platform_version}.pom
 Source207:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform-suite-api/%{platform_version}/junit-platform-suite-api-%{platform_version}.pom
 Source209:      https://repo1.maven.org/maven2/org/junit/platform/junit-platform-testkit/%{platform_version}/junit-platform-testkit-%{platform_version}.pom
-# Jupiter POMs
 Source300:      https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter/%{jupiter_version}/junit-jupiter-%{jupiter_version}.pom
 Source301:      https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/%{jupiter_version}/junit-jupiter-api-%{jupiter_version}.pom
 Source302:      https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/%{jupiter_version}/junit-jupiter-engine-%{jupiter_version}.pom
 Source303:      https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-migrationsupport/%{jupiter_version}/junit-jupiter-migrationsupport-%{jupiter_version}.pom
 Source304:      https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-params/%{jupiter_version}/junit-jupiter-params-%{jupiter_version}.pom
-# Vintage POM
 Source400:      https://repo1.maven.org/maven2/org/junit/vintage/junit-vintage-engine/%{vintage_version}/junit-vintage-engine-%{vintage_version}.pom
-# BOM POM
 Source500:      https://repo1.maven.org/maven2/org/junit/junit-bom/%{version}/junit-bom-%{version}.pom
-
 Patch:          0001-Drop-transitive-requirement-on-apiguardian.patch
 Patch:          0002-Add-missing-module-static-requires.patch
 Patch:          0003-Remove-legacy-XML-console-support.patch
 Patch:          0004-Add-JRE-class-generated-from-template.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(de.siegmar:fastcsv)
-BuildRequires:  mvn(info.picocli:picocli)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apiguardian:apiguardian-api)
-BuildRequires:  mvn(org.assertj:assertj-core)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
-BuildRequires:  mvn(org.opentest4j:opentest4j)
-BuildRequires:  mvn(org.jspecify:jspecify)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-guide < 5.10.2-16
 Obsoletes:      %{name}-javadoc < 5.10.2-16
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 JUnit is a popular regression testing framework for Java platform.
 
@@ -166,6 +145,7 @@ Suggests:       %{name}-platform-console-openjdk25 = %{version}-%{release}
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source200_hash}" = "none" || { f="%{SOURCE200}"; test -f "$f" || { echo "oreon: missing Source200 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source200_hash}" || { echo "oreon: Source200 hash mismatch" >&2; exit 1; }; }
 test "%{source201_hash}" = "none" || { f="%{SOURCE201}"; test -f "$f" || { echo "oreon: missing Source201 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source201_hash}" || { echo "oreon: Source201 hash mismatch" >&2; exit 1; }; }
@@ -219,31 +199,22 @@ done
 %mvn_package :aggregator __noinstall
 
 %build
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
-
 %jpackage_script org.junit.platform.console.ConsoleLauncher "" "" junit5:opentest4j:picocli:junit:hamcrest:fastcsv junit-platform-console
-
-# JDK bindings
 install -d -m 755 %{buildroot}%{_javaconfdir}/
 ln -s %{_jpbindingdir}/%{name}-platform-console.conf %{buildroot}%{_javaconfdir}/%{name}-platform-console.conf
-#
 echo 'JAVA_HOME=%{_jvmdir}/jre-25-openjdk' > %{buildroot}%{_javaconfdir}/%{name}-platform-console-openjdk25.conf
 %jp_binding --verbose --variant platform-console-openjdk25 --ghost %{name}-platform-console.conf --target %{_javaconfdir}/%{name}-platform-console-openjdk25.conf --provides %{name}-platform-console-jdk-binding --requires %{name}-platform-console --requires java-25-openjdk-headless
-#
 touch %{buildroot}%{_javaconfdir}/%{name}-platform-console-unbound.conf
 %jp_binding --verbose --variant platform-console-unbound --ghost %{name}-platform-console.conf --target %{_javaconfdir}/%{name}-platform-console-unbound.conf --provides %{name}-platform-console-jdk-binding --requires %{name}-platform-console
-#
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE.md NOTICE.md
-
-%files platform-console
-%{_bindir}/junit-platform-console
-%config %{_javaconfdir}/%{name}*.conf
-%license LICENSE.md NOTICE.md
+%files -f %{oreon_filedir}/main.list
+%files -n junit5-platform-console -f %{oreon_filedir}/junit5-platform-console.list
 
 %changelog
+
 %autochangelog

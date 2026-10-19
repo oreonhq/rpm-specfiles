@@ -1,60 +1,46 @@
-%global source0_hash none
-
+%global source0_hash 5f3025529bb968fdc3b627457dd8d418dbf9d53bc73735d50e69c28544d53031
 Name:           python-ansible-runner
 Version:        2.4.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        _Consistent Ansible Python API and CLI with container and process isolation runtime capabilities_
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ansible/ansible-runner
-Source:         %{pypi_source ansible_runner}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/ansible_runner/ansible_runner-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ansible-runner' generated automatically by pyp2spec.}
-
 Patch:          0001-Base64IO-set-write-buffer-before-doing-attr-check.patch
 Patch:          0001-Python-3.14-compat-replace-codecs.open-with-open.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) <= 70.0.0
+BuildRequires:  python3dist(setuptools) >= 45
+BuildRequires:  python3dist(setuptools-scm[toml]) <= 8.1.0
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.2
+Requires:       python3-ansible-runner = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ansible-runner
-Summary:        %{summary}
-
-%description -n python3-ansible-runner %_description
-
+Summary:        _Consistent Ansible Python API and CLI with container and process isolation runtime capabilities_
+%description -n python3-ansible-runner
 
 %prep
-%autosetup -p1 -n ansible_runner-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ansible_runner-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ansible-runner usr/lib/python3*/site-packages/ansible_runner* usr/lib64/python3*/site-packages/ansible_runner* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ansible_runner* usr/lib64/python3*/site-packages/ansible_runner* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ansible-runner -f %{pyproject_files}
-%{_bindir}/ansible-runner
+%files
+%files -n python3-ansible-runner -f %{oreon_filedir}/python3-ansible-runner.list
 
 %changelog
+
 %autochangelog

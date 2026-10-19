@@ -1,35 +1,27 @@
-%global source0_hash none
-
+%global source1_hash e74c5106fa3d8b7e3855807bf10dca8325f4f141586f6b99058c868873def09a
+%global source0_hash 2005cac17520b2771d6f3ddbcedb96da0944f7a2af9bf5c0bfb3dd543b4440a5
 %global gitcommit_full c6e6c03143c5b397a9217fae2f6423ccf9c03fb7
 %global gitcommit %(c=%{gitcommit_full}; echo ${c:0:7})
-
 %global tools_build convbin pos2kml str2str rnx2rtkp rtkrcv
-
 Name:           rtklib
 Version:        2.4.3.b33
-Release:        18%{?dist}
+Release:        1%{?dist}
 Summary:        Program Package for GNSS Positioning
-
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.rtklib.com
 Source0:        https://github.com/tomojitakasu/RTKLIB/tarball/%{gitcommit_full}/%{name}-%{gitcommit}.tar.gz
-# Full readme from master branch
 Source1:        https://raw.githubusercontent.com/tomojitakasu/RTKLIB/master/readme.txt
-# https://github.com/JensReimann/RTKLIB/tree/rtklib_2.4.3
-# ceb8106d53afa44cad6c45ae7873ba85ca458dc5
-# All 69 commits ahead of tomojitakasu:rtklib_2.4.3
 Patch0:         rtklib-qt.patch
-
-BuildRequires: make
+# oreon:deps
+BuildRequires:  chrpath
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
+BuildRequires:  make
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  qt5-qtserialport-devel
-BuildRequires:  chrpath
-
+# /oreon:deps
 %description
 RTKLIB is an open source program package for standard and precise
 positioning with GNSS (global navigation satellite system). RTKLIB
@@ -39,7 +31,6 @@ programs) utilizing the library.
 %package        devel
 Summary:        Include files and mandatory libraries for development
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description    devel
 Include files and mandatory libraries for development.
 
@@ -47,13 +38,11 @@ Include files and mandatory libraries for development.
 Summary:        RTKLIB manual
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
-
 %description    doc
 Manual for RTKLIB tools.
 
 %package        libs
 Summary:        RTKLIB shared library
-
 %description    libs
 RTKLIB Shared library.
 
@@ -61,11 +50,11 @@ RTKLIB Shared library.
 Summary:        RTKLIB GUI tools
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description    qt
 GUI part of RTKLIB tools.
 
 %prep
+
 %setup -q -n tomojitakasu-RTKLIB-%{gitcommit}
 # License text not in separate file and not in packaged branch
 # https://github.com/tomojitakasu/RTKLIB/issues/540
@@ -83,21 +72,18 @@ for i in %{tools_build}; do
 done
 
 %build
-# Build GUI tools
+
 %{qmake_qt5}
 %make_build
-# Build lib
 pushd lib
     %{qmake_qt5}
     %make_build
 popd
-# Build cli tools
 for i in %{tools_build}; do
     pushd app/$i/gcc
         %make_build
     popd
 done
-
 %install
 %make_install
 mkdir -p %{buildroot}/%{_bindir}
@@ -116,7 +102,6 @@ install -pm 755 app/str2str/gcc/str2str %{buildroot}%{_bindir}
 install -pm 755 app/rnx2rtkp/gcc/rnx2rtkp %{buildroot}%{_bindir}
 install -pm 755 app/rtkrcv/gcc/rtkrcv %{buildroot}%{_bindir}
 install -pm 755 app/rtkrcv/gcc/rtk*.sh %{buildroot}%{_bindir}
-
 install -pm 644 data/P1C1_ALL.DCB %{buildroot}%{_datadir}/%{name}/
 install -pm 644 data/P1P2_ALL.DCB %{buildroot}%{_datadir}/%{name}/
 install -pm 644 data/P2C2.DCB %{buildroot}%{_datadir}/%{name}/
@@ -134,41 +119,15 @@ install -pm 644 data/gnssdatasrc.txt %{buildroot}%{_datadir}/%{name}/
 install -pm 644 data/igs10P1565_wocov.snx %{buildroot}%{_datadir}/%{name}/
 install -pm 644 data/ngs_abs.pcv %{buildroot}%{_datadir}/%{name}/
 install -pm 644 data/stations.pos %{buildroot}%{_datadir}/%{name}/
-
 chrpath --delete %{buildroot}%{_bindir}/*_qt
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-# %license add-license-file-here
-%doc readme.txt readme_orig.txt
-%{_bindir}/convbin
-%{_bindir}/pos2kml
-%{_bindir}/str2str
-%{_bindir}/rnx2rtkp
-%{_bindir}/rtkrcv
-%{_bindir}/rtkstart.sh
-%{_bindir}/rtkshut.sh
-%{_datadir}/%{name}/
-
-%files devel
-%{_libdir}/libRTKLib.so
-
-%files doc
-%doc doc
-
-%files libs
-# %license add-license-file-here
-%doc readme.txt readme_orig.txt
-%{_libdir}/libRTKLib.so.1*
-
-%files qt
-%{_bindir}/rtknavi_qt
-%{_bindir}/rtkget_qt
-%{_bindir}/rtkplot_qt
-%{_bindir}/rtkpost_qt
-%{_bindir}/rtklaunch_qt
-%{_bindir}/srctblbrows_qt
-%{_bindir}/strsvr_qt
-%{_bindir}/rtkconv_qt
+%files -f %{oreon_filedir}/main.list
+%files -n rtklib-devel -f %{oreon_filedir}/rtklib-devel.list
+%files -n rtklib-doc -f %{oreon_filedir}/rtklib-doc.list
+%files -n rtklib-libs -f %{oreon_filedir}/rtklib-libs.list
+%files -n rtklib-qt -f %{oreon_filedir}/rtklib-qt.list
 
 %changelog
+
 %autochangelog

@@ -1,82 +1,55 @@
 %global source0_hash 441ecb818ad39c1fbec95f2979e5447c24196d72ad74a7d08331a0e874f30114
-
 %global stable_kf6 stable
-
-
 %if 0%{?flatpak}
 %global database_backend SQLITE
 %endif
-
 Name:    akonadi-server
-Summary: PIM Storage Service
+Summary:        PIM Storage Service
 Version: 26.08.0
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://invent.kde.org/pim/akonadi
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/akonadi-%{version}.tar.xz
-
-## mysql config
 Source10:       akonadiserverrc.mysql
 Source11:       akonadiserverrc.sqlite
-
-
-## upstreamable patches
-
-## upstream patches
-
-
-## downstream patches
-
 %define mysql_conf_timestamp 20170512
-
-BuildRequires:  extra-cmake-modules
-BuildRequires:  python3-devel
-BuildRequires:  python3-shiboken6-devel
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  desktop-file-utils
-
-BuildRequires:  cmake(KF6ItemViews)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6ItemModels)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6Completion)
-BuildRequires:  cmake(KF6Crash)
-
-BuildRequires:  boost-devel
-BuildRequires:  pkgconfig(libxslt)
-BuildRequires:  pkgconfig(shared-mime-info)
-BuildRequires:  pkgconfig(sqlite3) >= 3.6.23
-
-## (some) optional deps
-BuildRequires:  pkgconfig(Qt6Designer)
-BuildRequires:  cmake(AccountsQt6)
-BuildRequires:  cmake(KAccounts6)
-
-BuildRequires:  systemd
-BuildRequires:  systemd-rpm-macros
-
 %if ! 0%{?flatpak}
-BuildRequires: mariadb-server
 %endif
-
 Requires(post): /usr/sbin/update-alternatives
 Requires(postun): /usr/sbin/update-alternatives
-
 %if ! 0%{?flatpak}
 Recommends:     %{name}-mysql = %{version}-%{release}
 %endif
-
-# Plasma 6
 Obsoletes:      kf5-akonadi-server < 24.01.80-1
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake(AccountsQt6)
+BuildRequires:  cmake(KAccounts6)
+BuildRequires:  cmake(KF6Completion)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6ItemModels)
+BuildRequires:  cmake(KF6ItemViews)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  mariadb-server
+BuildRequires:  pkgconfig(Qt6Designer)
+BuildRequires:  pkgconfig(libxslt)
+BuildRequires:  pkgconfig(shared-mime-info)
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  python3-devel
+BuildRequires:  python3-shiboken6-devel
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
@@ -95,10 +68,7 @@ Requires:       cmake(Qt6Gui)
 Requires:       cmake(Qt6Network)
 Requires:       cmake(Qt6Widgets)
 Requires:       cmake(Qt6Xml)
-# For testing
 Requires:       cmake(Qt6Test)
-
-# at least dbus-1/interfaces conflict, maybe more -- rex
 Conflicts:      akonadi-devel
 Conflicts:      kf5-akonadi-server-devel
 %description devel
@@ -106,7 +76,6 @@ Conflicts:      kf5-akonadi-server-devel
 
 %package mysql
 Summary:        Akonadi MySQL backend support
-# upgrade path
 Obsoletes:      kf5-akonadi-server-mysql < 24.01.80-1
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       mariadb-server
@@ -128,14 +97,15 @@ BuildArch:      noarch
 Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n akonadi-%{version} -p1
 
 # Remove together with move-translations.patch once released
 find ./po -type f -name libakonadi5.po -execdir mv {} libakonadi6.po \;
 
-
 %build
+
 %cmake_kf6 \
   %{?database_backend:-DDATABASE_BACKEND=%{database_backend}} \
   -DINSTALL_APPARMOR:BOOL=OFF \
@@ -143,127 +113,66 @@ find ./po -type f -name libakonadi5.po -execdir mv {} libakonadi6.po \;
   -DMYSQLD_SCRIPTS_PATH:FILEPATH=%{_bindir}/mysql_install_db \
   -DPOSTGRES_PATH:FILEPATH=%{_bindir}/pg_ctl
 %cmake_build
-
-
 %install
 %cmake_install
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.akonadi.configdialog.desktop
 %find_lang libakonadi6 --all-name --with-html --with-qt
-
 install -p -m644 -D %{SOURCE10} %{buildroot}%{_sysconfdir}/xdg/akonadi/akonadiserverrc.mysql
 install -p -m644 -D %{SOURCE11} %{buildroot}%{_sysconfdir}/xdg/akonadi/akonadiserverrc.sqlite
-
 mkdir -p %{buildroot}%{_datadir}/akonadi/agents
-
 touch -d %{mysql_conf_timestamp} \
   %{buildroot}%{_sysconfdir}/xdg/akonadi/mysql-global*.conf \
   %{buildroot}%{_sysconfdir}/xdg/akonadi/mysql-local.conf
-
-# create/own these dirs
 mkdir -p %{buildroot}%{_kf6_datadir}/akonadi/plugins
 mkdir -p %{buildroot}%{_kf6_libdir}/akonadi
-
-# %%ghost'd global akonadiserverrc
 touch akonadiserverrc
 install -p -m644 -D akonadiserverrc %{buildroot}%{_sysconfdir}/xdg/akonadi/akonadiserverrc
-
-## unpackaged files
-# omit mysql-global-mobile.conf
 rm -fv %{buildroot}%{_sysconfdir}/xdg/akonadi/mysql-global-mobile.conf
+%oreon_autofiles akonadi-server-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles akonadi-server-mysql usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles akonadi-server-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
+
 /usr/sbin/update-alternatives \
   --install %{_sysconfdir}/xdg/akonadi/akonadiserverrc \
   akonadiserverrc \
   %{_sysconfdir}/xdg/akonadi/akonadiserverrc.sqlite \
   8
 %systemd_user_post akonadi_control.service
-
 %preun
-%systemd_preun akonadi_control.service
 
+%systemd_preun akonadi_control.service
 %postun
+
 if [ $1 -eq 0 ] ; then
 /usr/sbin/update-alternatives \
   --remove akonadiserverrc \
   %{_sysconfdir}/xdg/akonadi/akonadiserverrc.sqlite
 fi
 %systemd_postun akonadi_control.service
-
-
-%files -f libakonadi6.lang
-%doc AUTHORS
-%doc README*
-%license LICENSES/*
-%dir %{_sysconfdir}/xdg/akonadi/
-%ghost %config(missingok,noreplace) %{_sysconfdir}/xdg/akonadi/akonadiserverrc
-%config(noreplace) %{_sysconfdir}/xdg/akonadi/akonadiserverrc.sqlite
-%{_kf6_datadir}/qlogging-categories6/akonadi.*
-%{_kf6_bindir}/akonadi-db-migrator
-%{_kf6_bindir}/akonadi_agent_launcher
-%{_kf6_bindir}/akonadi_agent_server
-%{_kf6_bindir}/akonadi_control
-%{_kf6_bindir}/akonadi_rds
-%{_kf6_bindir}/akonadictl
-%{_kf6_bindir}/akonadiserver
-%{_kf6_bindir}/asapcat
-%{_kf6_bindir}/akonadi2xml
-%{_kf6_bindir}/akonadiselftest
-%{_kf6_bindir}/akonaditest
-%{_kf6_bindir}/akonadiagentconfigdialog
-%{_kf6_datadir}/dbus-1/services/org.freedesktop.Akonadi.*.service
-%{_kf6_datadir}/mime/packages/akonadi-mime.xml
-%{_kf6_datadir}/akonadi/
-%{_kf6_datadir}/config.kcfg/resourcebase.kcfg
-%{_kf6_datadir}/kf6/akonadi/
-%{_kf6_libdir}/libKPim6Akonadi*.so.*
-%{_kf6_datadir}/icons/hicolor/*/apps/akonadi.*
-# akonadi_knut_resource
-%{_kf6_bindir}/akonadi_knut_resource
-%{_kf6_datadir}/kf6/akonadi_knut_resource/
-%{_kf6_qmldir}/org/kde/akonadi/
-%{_kf6_datadir}/applications/org.kde.akonadi.configdialog.desktop
-%{_userunitdir}/akonadi_control.service
-
-%files devel
-%{_kf6_datadir}/dbus-1/interfaces/org.freedesktop.Akonadi.*.xml
-%{_includedir}/KPim6/Akonadi/
-%{_includedir}/KPim6/AkonadiAgentBase/
-%{_includedir}/KPim6/AkonadiCore/
-%{_includedir}/KPim6/AkonadiWidgets/
-%{_includedir}/KPim6/AkonadiXml/
-%{_includedir}/KPim6/AkonadiAgentWidgetBase/
-%{_kf6_libdir}/libKPim6Akonadi*.so
-%{_kf6_libdir}/cmake/KPim6Akonadi/
-%{_kf6_qtplugindir}/pim6/akonadi/akonadi_test_searchplugin.so
-%{_kf6_qtplugindir}/pim6/akonadi/config/knutconfig.so
-%{_kf6_qtplugindir}/designer/akonadi6widgets.so
-%{_kf6_datadir}/kdevappwizard/templates/akonadiresource.tar.bz2
-%{_kf6_datadir}/kdevappwizard/templates/akonadiserializer.tar.bz2
-
-%files doc
-
 %post mysql
+
 /usr/sbin/update-alternatives \
   --install %{_sysconfdir}/xdg/akonadi/akonadiserverrc \
   akonadiserverrc \
   %{_sysconfdir}/xdg/akonadi/akonadiserverrc.mysql \
   10
-
 %postun mysql
+
 if [ $1 -eq 0 ]; then
 /usr/sbin/update-alternatives \
   --remove akonadiserverrc \
   %{_sysconfdir}/xdg/akonadi/akonadiserverrc.mysql
 fi
-
-%files mysql
-%config(noreplace) %{_sysconfdir}/xdg/akonadi/akonadiserverrc.mysql
-%config(noreplace) %{_sysconfdir}/xdg/akonadi/mysql-global.conf
-%config(noreplace) %{_sysconfdir}/xdg/akonadi/mysql-local.conf
-
+%files -f %{oreon_filedir}/main.list
+%files -n akonadi-server-devel -f %{oreon_filedir}/akonadi-server-devel.list
+%files -n akonadi-server-mysql -f %{oreon_filedir}/akonadi-server-mysql.list
+%files -n akonadi-server-doc -f %{oreon_filedir}/akonadi-server-doc.list
 
 %changelog
+
 * Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
 - Latest upstream release
 

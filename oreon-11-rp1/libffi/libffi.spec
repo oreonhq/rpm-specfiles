@@ -1,59 +1,23 @@
 %global source0_hash 7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4
-
 %bcond_with bootstrap
-
 %global multilib_arches %{ix86} x86_64
-
 Name:		libffi
 Version:	3.8.0
-Release:	1%{?dist}
-Summary:	A portable foreign function interface library
-# No license change for 3.8.0
-# No license change for 3.5.1
-# No license change for 3.4.8
-# No license change for 3.4.7
-# No license change for 3.4.6
-# The following SPDX licenses are extracted from the sources using
-# ScanCode 32.0.8 on build libffi-3.4.4-7.fc40:
-#
-# MIT - Most of the project sources (Required)
-# CC-PDDC - src/dlmalloc.c (Required)
-# mit OR gpl-3.0 - ltmain.sh (Ignored)
-# mit OR gpl-1.0-plus - ltmain.sh (Ignored)
-# gpl-2.0-plus WITH libtool-exception-2.0 - ltmain.sh, libtool.m4, configure (Ignored, not shipped)
-# warranty-disclaimer - ltmain.sh (Ignored)
-# unknown-license-reference - ltmain.sh (Ignored)
-# gpl-2.0-plus - Used by build system only (Ignored)
-# gpl-2.0 - Used by build system only (Ignored)
-# free-unknown - config.guess, config.sub (Ignored)
-# fsf-ap - Used by build system only (Ignored)
-# fsf-free - Used by build system only (Ignored)
-# fsf-unlimited - Used by build system only (Ignored)
-# fsf-unlimited-no-warranty - Used by build system only (Ignored)
-# gpl-1.0-plus - False positive in texinfo.tex (Ignored)
-# gpl-3.0-plus WITH tex-exception - texinfo.tex used in libffi-devel docs (Required)
-# gpl-2.0-plus WITH autoconf-simple-exception-2.0 - Used by build system only (Ignored)
-# gpl-3.0 - Used by build system only (Ignored)
-# gpl-3.0-plus - Used by the testsuite only (Ignored)
-# gpl-3.0-plus WITH autoconf-exception-2.0 - Used by build system only (Ignored)
-# gpl-3.0-plus WITH autoconf-simple-exception - Used by build system only (Ignored)
-# mpl-1.1 OR gpl-2.0-plus OR lgpl-2.1-plus - Not used in build (Ignored)
-# public-domain - Used by build system only (Ignored)
-# x11-xconsortium - Used by build system only (Ignored)
+Release:        1%{?dist}
+Summary:        A portable foreign function interface library
 License:	MIT AND CC-PDDC AND (GPL-3.0-or-later WITH Texinfo-exception)
 URL:		http://sourceware.org/libffi
-
 Source0:        https://github.com/libffi/libffi/releases/download/v%{version}/libffi-%{version}.tar.gz
 Source1:	ffi-multilib.h
 Source2:	ffitarget-multilib.h
-
-BuildRequires: make
-BuildRequires: gcc
 %if %{without bootstrap}
-BuildRequires: gcc-c++
-BuildRequires: dejagnu
 %endif
-
+# oreon:deps
+BuildRequires:  dejagnu
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 Compilers for high level languages generate code that follow certain
 conventions.  These conventions are necessary, in part, for separate
@@ -85,65 +49,44 @@ between the two languages.
 Summary:	Development files for %{name}
 Requires:	%{name} = %{version}-%{release}
 Requires:	pkgconfig
-
 %description	devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-# --disable-multi-os-directory is used because otherwise, on riscv64, the
-# library is installed under ${_libdir}/lp64d, which we don't want. Other
-# architectures don't have the same problem so they're unaffected.
+
 %configure --disable-static --disable-multi-os-directory
 %make_build
-
 %check
+
 %if %{without bootstrap}
 %make_build check
 %endif
-
 %install
 %make_install
-
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-
-# Determine generic arch target name for multilib wrapper
 basearch=%{_arch}
 %ifarch %{ix86}
 basearch=i386
 %endif
-
 mkdir -p $RPM_BUILD_ROOT%{_includedir}
 %ifarch %{multilib_arches}
-# Do header file switcheroo to avoid file conflicts on systems where you
-# can have both a 32- and 64-bit version of the library, and they each need
-# their own correct-but-different versions of the headers to be usable.
 for i in ffi ffitarget; do
   mv $RPM_BUILD_ROOT%{_includedir}/$i.h $RPM_BUILD_ROOT%{_includedir}/$i-${basearch}.h
 done
 install -m644 %{SOURCE1} $RPM_BUILD_ROOT%{_includedir}/ffi.h
 install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/ffitarget.h
 %endif
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libffi.so.*
-%{_libdir}/libffi.so.*
-
-%files devel
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/ffi*.h
-%{_libdir}/*.so
-%{_mandir}/man3/*.gz
-%{_infodir}/libffi.info.*
+%files -f %{oreon_filedir}/main.list
+%files -n libffi-devel -f %{oreon_filedir}/libffi-devel.list
 
 %changelog
+
 %autochangelog

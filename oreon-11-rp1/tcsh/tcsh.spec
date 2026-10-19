@@ -1,69 +1,28 @@
 %global source0_hash 4208cf4630fb64d91d81987f854f9570a5a0e8a001a92827def37d0ed8f37364
-
-# === GLOBAL MACROS ===========================================================
-
-# According to Fedora Package Guidelines, it is advised that packages that can
-# process untrusted input are build with position-independent code (PIC).
-#
-# Koji should override the compilation flags and add the -fPIC or -fPIE flags by
-# default. This is here just in case this wouldn't happen for some reason.
-# For more info: https://fedoraproject.org/wiki/Packaging:Guidelines#PIE
 %global _hardened_build 1
-
-# =============================================================================
-
 Name:             tcsh
-Summary:          An enhanced version of csh, the C shell
+Summary:        An enhanced version of csh, the C shell
 Version:          6.24.16
-Release:          1%{?dist}
+Release:        1%{?dist}
 License:          BSD-3-Clause
-
 URL:              http://www.tcsh.org/
-Source:        https://astron.com/pub/tcsh/%{name}-%{version}.tar.gz
-
+Source0:        https://astron.com/pub/tcsh/%{name}-%{version}.tar.gz
 Provides:         csh = %{version}
 Provides:         /bin/csh
 Provides:         /bin/tcsh
-
 Requires(post):   coreutils
 Requires(post):   grep
 Requires(postun): sed
-
-BuildRequires:    make
-BuildRequires:    gcc
-BuildRequires:    git
-BuildRequires:    autoconf
-BuildRequires:    gettext-devel
-BuildRequires:    libxcrypt-devel
-BuildRequires:    ncurses-devel
-
-# =============================================================================
-
-# NOTE: 'autosetup' macro (below) uses 'git' for applying the patches:
-#       ->> All the patches should be provided in 'git format-patch' format.
-#       ->> Auxiliary repository will be created during 'fedpkg prep', you
-#           can see all the applied patches there via 'git log'.
-
-# Upstream patches -- official upstream patches released by upstream since the
-# ----------------    last rebase that are necessary for any reason:
-
-
-# Downstream patches -- these should be always included when doing rebase:
-# ------------------
 Patch100: tcsh-6.24.07-manpage-memoryuse.patch
-
-
-# Downstream patches for RHEL -- patches that we keep only in RHEL for various
-# ---------------------------    reasons, but are not enabled in Fedora:
-%if %{defined rhel} || %{defined centos}
-Patch200: tcsh-6.20.00-tcsh-posix-status.patch
-%endif
-
-
-# Patches to be removed -- deprecated functionality which shall be removed at
-# ---------------------    some point in the future:
-
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  git
+BuildRequires:  libxcrypt-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+# /oreon:deps
 %description
 Tcsh is an enhanced but completely compatible version of csh, the C shell. Tcsh
 is a command language interpreter which can be used both as an interactive login
@@ -76,6 +35,7 @@ job control and a C language like syntax.
 # Call the 'autosetup' macro to prepare the environment, but do not patch the
 # source code yet -- we need to convert the 'Fixes' file first:
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -N -S git
 
@@ -97,16 +57,12 @@ git commit --all --amend --no-edit > /dev/null
 # ---------------
 
 %build
+
 %configure
 %make_build all
-
-# ---------------
-
 %check
+
 %make_build check
-
-# ---------------
-
 %install
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_mandir}/man1
@@ -114,9 +70,6 @@ install -p -m 755 tcsh     %{buildroot}%{_bindir}/tcsh
 install -p -m 644 tcsh.man %{buildroot}%{_mandir}/man1/tcsh.1
 ln -sf tcsh                %{buildroot}%{_bindir}/csh
 ln -sf tcsh.1              %{buildroot}%{_mandir}/man1/csh.1
-
-# NOTE: We have to construct tcsh.lang by ourselves, since upstream does not use
-#       standard naming/placing of localization files for the gettext...
 while read lang language; do
   dest="%{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES"
   if [[ -f "nls/$language.cat" ]]; then
@@ -138,12 +91,10 @@ pl pl
 ru russian
 uk ukrainian
 _EOF
-
-# ---------------
+%oreon_autofiles main
 
 %post
-# Add login shell entries to /etc/shells only when installing the package
-# for the first time (see 'man 5 SHELLS' for more info):
+
 if [[ "$1" -eq 1 ]]; then
   if [[ ! -f %{_sysconfdir}/shells ]]; then
     echo "/bin/csh"        >> %{_sysconfdir}/shells
@@ -157,29 +108,17 @@ if [[ "$1" -eq 1 ]]; then
     grep -q "^%{_bindir}/tcsh$" %{_sysconfdir}/shells || echo "%{_bindir}/tcsh" >> %{_sysconfdir}/shells
   fi
 fi
-
-# ---------------
-
 %postun
-# Remove the login shell lines from /etc/shells only when uninstalling:
+
 if [[ "$1" -eq 0 && -f %{_sysconfdir}/shells ]]; then
   sed -i -e '\!^/bin/csh$!d'        %{_sysconfdir}/shells
   sed -i -e '\!^/bin/tcsh$!d'       %{_sysconfdir}/shells
   sed -i -e '\!^%{_bindir}/csh$!d'  %{_sysconfdir}/shells
   sed -i -e '\!^%{_bindir}/tcsh$!d' %{_sysconfdir}/shells
 fi
-
-# === PACKAGING INSTRUCTIONS ==================================================
-
-%files -f %{name}.lang
-%doc FAQ Fixes README.md complete.tcsh
-%license COPYING
-%{_bindir}/tcsh
-%{_bindir}/csh
-%{_mandir}/man1/*.1*
-
-# =============================================================================
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.16-1
 - Prepare for Oreon 11 (RP1)

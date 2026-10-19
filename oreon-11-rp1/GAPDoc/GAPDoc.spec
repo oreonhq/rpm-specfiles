@@ -1,42 +1,34 @@
-%global source0_hash 74287a47e7d5927c7f4bff08aa2349d8b2fa695f7fb87f829b5fcae4cba11d39
+%global source0_hash eb760738ca43a2dc5d0a891f0308303e51943745157cc27b3dd8da9a45004681
 %{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
-
-# When bootstrapping a new architecture, there is no gap-pkg-io package yet,
-# since it requires this package to build.  This package can be built without
-# gap-pkg-io, but needs it for completeness.  Use the following procedure:
-# 1. Do a bootstrap build of this package
-# 2. Build gap-pkg-autodoc in bootstrap mode
-# 3. Build gap-pkg-io
-# 4. Do a normal build of this packages, which builds the documentation
-# 5. Build gap-pkg-autodoc in non-bootstrap mode
 %bcond bootstrap 0
-
-# The tests require gap-pkg-browse, which is not available in the bootstrap
-# process until well after we build the non-bootstrap GAPDoc.  Use this to
-# enable the tests later.
 %bcond test 0
-
 %global gap_pkgname GAPDoc
 %global gap_makedoc makedocrel.g
-
 Name:           %{gap_pkgname}
 Version:        1.6.10
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GAP documentation tool
-
 License:        GPL-2.0-or-later
 URL:            https://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc/
 VCS:            git:https://github.com/frankluebeck/GAPDoc.git
-Source:         %{url}%{name}-%{version}.tar.bz2
-
+Source0:        https://www.math.rwth-aachen.de/~Frank.Luebeck/%{name}/%{name}-%{version}.tar.bz2
 BuildArch:      noarch
 BuildSystem:    gap
 BuildOption(build): --packagedirs .. --bare -c 'LoadPackage("GAPDoc");'
 BuildOption(install): *.dtd lib styles tst version
 BuildOption(check): tst/testall.g
-
+Requires:       gap-core
+Requires:       libxml2
+%if %{without bootstrap}
+Requires:       gap-pkg-io
+%endif
+%if %{with test}
+%endif
+Provides:       gap-pkg-gapdoc = %{version}-%{release}
+# oreon:deps
 BuildRequires:  gap-devel
+BuildRequires:  gap-pkg-io-doc
 BuildRequires:  ghostscript
 BuildRequires:  libxml2
 BuildRequires:  tex(amssym.tex)
@@ -56,22 +48,7 @@ BuildRequires:  texlive-psnfss
 BuildRequires:  texlive-rsfs
 BuildRequires:  texlive-symbol
 BuildRequires:  texlive-times
-
-Requires:       gap-core
-# For xmllint
-Requires:       libxml2
-
-%if %{without bootstrap}
-BuildRequires:  gap-pkg-io-doc
-Requires:       gap-pkg-io
-%endif
-
-%if %{with test}
-BuildRequires:  gap-pkg-browse
-%endif
-
-Provides:       gap-pkg-gapdoc = %{version}-%{release}
-
+# /oreon:deps
 %description
 This package describes a document format for writing GAP documentation.
 
@@ -129,10 +106,7 @@ Requires:       texlive-psnfss
 Requires:       texlive-rsfs
 Requires:       texlive-symbol
 Requires:       texlive-times
-
-# Needed to fetch BibTeX entries from MathSciNet
 Suggests:       gap-pkg-io
-
 %description latex
 This package contains all of the LaTeX dependencies for GAPDoc.  GAP proper
 requires that the GAP portions of GAPDoc be installed; it refuses to start
@@ -141,38 +115,26 @@ the LaTeX dependencies is wasteful.  Install this package to pull in all of
 the necessary LaTeX dependencies for building GAP package documentation.
 
 %package doc
-# The content is GPL-2.0-or-later.  The remaining licenses cover the various
-# fonts embedded in PDFs.
-# AMS: OFL-1.1-RFN
-# CM: Knuth-CTAN
-# Nimbus: AGPL-3.0-only
-# StandardSymL: GPL-1.0-or-later
 License:        GPL-2.0-or-later AND OFL-1.1-RFN AND Knuth-CTAN AND AGPL-3.0-only AND GPL-1.0-or-later
 Summary:        GAPDoc documentation
 Requires:       %{name} = %{version}-%{release}
 Requires:       gap-online-help
-
 %if %{without bootstrap}
 Requires:       gap-pkg-io-doc
 %endif
-
 %description doc
 This package contains documentation for GAPDoc.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build -a
-# Remove build paths
-sed -i "s|$PWD/..|%{gap_libdir}|g" doc/*.html example/*.html
 
+sed -i "s|$PWD/..|%{gap_libdir}|g" doc/*.html example/*.html
 %install -a
 mkdir -p %{buildroot}%{gap_libdir}/pkg/%{gap_upname}/{3k+1,example}
 %gap_copy_docs -n %{gap_upname} -d 3k+1
 %gap_copy_docs -n %{gap_upname} -d example
-# Link, rather than copy, the style files
 for fil in %{gapdoc_files}; do
   for dir in 3k+1 doc example; do
     path=%{buildroot}%{gap_libdir}/pkg/%{gap_upname}/$dir/$fil
@@ -180,36 +142,22 @@ for fil in %{gapdoc_files}; do
     ln -s ../styles/$fil $path
   done
 done
+%oreon_autofiles GAPDoc-latex usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles GAPDoc-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with test}
 gap --packagesdirs .. << EOF
 LoadPackage( "Browse" );
 GAP_EXIT_CODE( Test( "tst/test.tst" ) );
 EOF
 %endif
-
-%files
-%doc CHANGES README.md
-%license GPL
-%dir %{gap_libdir}/pkg/%{gap_upname}/
-%{gap_libdir}/pkg/%{gap_upname}/*.dtd
-%{gap_libdir}/pkg/%{gap_upname}/*.g
-%{gap_libdir}/pkg/%{gap_upname}/lib/
-%{gap_libdir}/pkg/%{gap_upname}/styles/
-%{gap_libdir}/pkg/%{gap_upname}/tst/
-%{gap_libdir}/pkg/%{gap_upname}/version
-
-%files latex
-# This is a metapackage to pull in dependencies only
-
-%files doc
-%docdir %{gap_libdir}/pkg/%{gap_upname}/3k+1/
-%docdir %{gap_libdir}/pkg/%{gap_upname}/doc/
-%docdir %{gap_libdir}/pkg/%{gap_upname}/example/
-%{gap_libdir}/pkg/%{gap_upname}/3k+1/
-%{gap_libdir}/pkg/%{gap_upname}/doc/
-%{gap_libdir}/pkg/%{gap_upname}/example/
+%files -f %{oreon_filedir}/main.list
+%files -n GAPDoc-latex -f %{oreon_filedir}/GAPDoc-latex.list
+%files -n GAPDoc-doc -f %{oreon_filedir}/GAPDoc-doc.list
 
 %changelog
+
 %autochangelog

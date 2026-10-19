@@ -1,62 +1,63 @@
-%global source0_hash none
-
+%global source0_hash e141bae5f6572749dfbb283155743a068771a7cefbd02baf3952f90e64de88ce
 Name:           python-sklearn-nature-inspired-algorithms
 Version:        0.15.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Search using nature inspired algorithms over specified parameter values for an sklearn estimator.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/timzatko/Sklearn-Nature-Inspired-Algorithms
-Source:         %{pypi_source sklearn_nature_inspired_algorithms}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sklearn_nature_inspired_algorithms/sklearn_nature_inspired_algorithms-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 64
+Requires:       python3-sklearn-nature-inspired-algorithms = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-sklearn-nature-inspired-algorithms+dev
+Summary:        Metapackage for python3-sklearn-nature-inspired-algorithms dev extras
+Requires:       python3-sklearn-nature-inspired-algorithms = %{version}-%{release}
+Requires:       python3dist(flake8) >= 6.0
+Requires:       python3dist(coverage) >= 7.0
+Provides:       python3dist(sklearn-nature-inspired-algorithms[dev]) = %{version}-%{release}
 
+%description -n python3-sklearn-nature-inspired-algorithms+dev
+Metapackage for python3-sklearn-nature-inspired-algorithms dev extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sklearn-nature-inspired-algorithms' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-sklearn-nature-inspired-algorithms
-Summary:        %{summary}
-
-%description -n python3-sklearn-nature-inspired-algorithms %_description
+Summary:        Search using nature inspired algorithms over specified parameter values for an sklearn estimator.
+# oreon:reqs
+Requires:       python3dist(matplotlib) >= 3.9
+Requires:       python3dist(niapy) >= 2.7.0
+Requires:       python3dist(numpy) >= 1.26
+Requires:       python3dist(pandas) >= 2.2.2
+Requires:       python3dist(scikit-learn) >= 1.4.2
+Requires:       python3dist(scipy) >= 1.13
+Requires:       python3dist(seaborn) >= 0.13
+# /oreon:reqs
+%description -n python3-sklearn-nature-inspired-algorithms
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-sklearn-nature-inspired-algorithms dev
-
 
 %prep
-%autosetup -p1 -n sklearn_nature_inspired_algorithms-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sklearn_nature_inspired_algorithms-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sklearn-nature-inspired-algorithms usr/lib/python3*/site-packages/sklearn_nature_inspired_algorithms* usr/lib64/python3*/site-packages/sklearn_nature_inspired_algorithms* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sklearn_nature_inspired_algorithms* usr/lib64/python3*/site-packages/sklearn_nature_inspired_algorithms* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sklearn-nature-inspired-algorithms -f %{pyproject_files}
+%files
+%files -n python3-sklearn-nature-inspired-algorithms -f %{oreon_filedir}/python3-sklearn-nature-inspired-algorithms.list
 
 %changelog
+
 %autochangelog

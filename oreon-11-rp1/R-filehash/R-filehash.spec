@@ -1,19 +1,15 @@
 %global source0_hash 558b446ba354c6fa88f694e8d6d068f999d1e7b626164eb2aeacccbb0dee81b1
-
 Name:           R-filehash
 Version:        %R_rpm_version 2.4-6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Simple Key-Value Database
-
 License:        GPL-2.0-or-later
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=filehash&version=2.4-6#/filehash_2.4-6.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Implements a simple key-value style database where character string keys
 are associated with data values that are stored on the disk. A simple
@@ -27,22 +23,19 @@ incorporated by third parties for use in the 'filehash' framework.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

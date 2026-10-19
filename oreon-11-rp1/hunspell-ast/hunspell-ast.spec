@@ -1,45 +1,44 @@
 %global source0_hash e06b72747b1e1502ec9b7d0eb813ecf9045e8d760bc232438519572a58a87e0b
-
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-ast
-Summary: Asturian hunspell dictionaries
+Summary:        Asturian hunspell dictionaries
 Epoch: 1
 Version: 2.0
-Release: 18%{?dist}
+Release:        1%{?dist}
 URL: http://softastur.org/
 License: GPL-1.0-or-later OR LGPL-2.1-or-later
 BuildArch: noarch
-
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ast)
-
 Source0:        https://downloads.sourceforge.net/project/aoo-extensions/3932/1/asturianu.oxt
+# oreon:deps
 
+# /oreon:deps
 %description
 Asturian hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -T
 unzip -q %{SOURCE0}
 
 %build
-chmod -x dictionaries/*
 
+chmod -x dictionaries/*
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/ast.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ast_ES.aff
 cp -p dictionaries/ast.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ast_ES.dic
+%oreon_autofiles main
 
-%files
-%doc LICENSES-en.txt LICENCES-ast.txt
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:2.0-18
 - Import

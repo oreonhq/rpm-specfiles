@@ -1,5 +1,4 @@
 %global source0_hash 88efcb52da0b1983724d7daf33969229401f297911c5c3ddead2e34fda46cff6
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,43 +80,28 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           xmlunit
 Version:        2.13.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Provides classes to do asserts on xml
-# The whole package is ASL 2.0 except for xmlunit-legacy which is BSD
 License:        Apache-2.0
 URL:            https://www.xmlunit.org/
 Provides:       mvn(org.xmlunit:xmlunit-core) = %{version}
 Provides:       mvn(org.xmlunit:xmlunit-matchers) = %{version}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-# ./generate-tarball.sh
 Source0:        https://github.com/xmlunit/xmlunit/releases/download/v%{version}/%{name}-%{version}-src.tar.gz#/%{name}-%{version}.tar.gz
-# Remove bundled binaries which cannot be easily verified for licensing
 Patch:        0001-Disable-tests-requiring-network-access.patch
-# This also solves the problem of tests requiring network. The files that would
-# be fetched are identical to the local file
 Patch:        0003-Drop-support-for-JAXB.patch
 Patch:        0004-Port-to-assertj-core-3.patch
-
-BuildRequires:  jurand
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.assertj:assertj-core)
-BuildRequires:  mvn(org.hamcrest:hamcrest-core)
-BuildRequires:  mvn(org.hamcrest:hamcrest-library)
-BuildRequires:  mvn(org.mockito:mockito-core)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.13.0-8
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+BuildRequires:  jurand
+# /oreon:deps
 %description
 XMLUnit provides you with the tools to verify the XML you emit is the one you
 want to create. It provides helpers to validate against an XML Schema, assert
@@ -125,46 +109,40 @@ the values of XPath queries or compare XML documents against expected outcomes.
 
 %package assertj
 Summary:        Assertj for %{name}
-
 %description assertj
 This package provides %{summary}.
 
 %package core
 Summary:        Core package for %{name}
-
 %description core
 This package provides %{summary}.
 
 %package legacy
 Summary:        Legacy package for %{name}
 License:        BSD-3-Clause
-
 %description legacy
 This package provides %{summary}.
 
 %package matchers
 Summary:        Matchers for %{name}
-
 %description matchers
 This package provides %{summary}.
 
 %package placeholders
 Summary:        Placeholders for %{name}
-
 %description placeholders
 This package provides %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version}-src
-
 
 rm -r xmlunit-core/src/main/java/org/xmlunit/builder/javax_jaxb\
  xmlunit-core/src/main/java/org/xmlunit/builder/JaxbBuilderFactory.java\
  xmlunit-core/src/main/java/org/xmlunit/builder/JaxbBuilderFactoryLocator.java\
  xmlunit-core/src/test/java/org/xmlunit/builder/javax_jaxb\
 ;
-
 
 # Port to hamcrest 2.1, hamcrest dropped org.hamcrest.Factory
 find xmlunit-matchers -name '*.java' -exec sed -i '/^import org\.hamcrest\.Factory;$/d; /^\s*@org\.hamcrest\.Factory\s*$/d; /^\s*@Factory\s*$/d' {} +
@@ -186,25 +164,20 @@ find xmlunit-matchers -name '*.java' -exec sed -i '/^import org\.hamcrest\.Facto
 rm -rf xmlunit-core/src/{main,test}/java/org/xmlunit/builder/{jaxb/,JaxbBuilder.java,JaxbBuilderTest.java}
 
 %build
-%mvn_build -j -s -- -Dmaven.compile.source=1.8 -Dmaven.compile.target=1.8
 
+%mvn_build -j -s -- -Dmaven.compile.source=1.8 -Dmaven.compile.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-xmlunit-parent
-%doc README.md CONTRIBUTING.md RELEASE_NOTES.md
-%license LICENSE
-
-%files assertj -f .mfiles-xmlunit-assertj3
-
-%files core -f .mfiles-xmlunit-core
-
-%files legacy -f .mfiles-xmlunit-legacy
-
-%files matchers -f .mfiles-xmlunit-matchers
-
-%files placeholders -f .mfiles-xmlunit-placeholders
+%files -f %{oreon_filedir}/main.list
+%files -n xmlunit-assertj -f %{oreon_filedir}/xmlunit-assertj.list
+%files -n xmlunit-core -f %{oreon_filedir}/xmlunit-core.list
+%files -n xmlunit-legacy -f %{oreon_filedir}/xmlunit-legacy.list
+%files -n xmlunit-matchers -f %{oreon_filedir}/xmlunit-matchers.list
+%files -n xmlunit-placeholders -f %{oreon_filedir}/xmlunit-placeholders.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.10.0-1
 - Import

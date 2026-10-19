@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 5ec8f6f621725b4805a17760042a81094a7e66ec5b71353c85cbcd27000b6ea0
 Name:           python-colcon-ros-bundle
 Version:        0.1.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Plugin for colcon to bundle ros applications
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/colcon/colcon-bundle/
-Source:         %{pypi_source colcon-ros-bundle}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/colcon-ros-bundle/colcon-ros-bundle-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'colcon-ros-bundle' generated automatically by pyp2spec.}
-
 Patch0:         %{name}-0.1.0-unittest-mock.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-colcon-ros-bundle = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-colcon-ros-bundle
-Summary:        %{summary}
-
-%description -n python3-colcon-ros-bundle %_description
-
+Summary:        Plugin for colcon to bundle ros applications
+%description -n python3-colcon-ros-bundle
 
 %prep
-%autosetup -p1 -n colcon-ros-bundle-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir colcon-ros-bundle-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-colcon-ros-bundle usr/lib/python3*/site-packages/colcon_ros_bundle* usr/lib64/python3*/site-packages/colcon_ros_bundle* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/colcon_ros_bundle* usr/lib64/python3*/site-packages/colcon_ros_bundle* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-colcon-ros-bundle -f %{pyproject_files}
+%files
+%files -n python3-colcon-ros-bundle -f %{oreon_filedir}/python3-colcon-ros-bundle.list
 
 %changelog
+
 %autochangelog

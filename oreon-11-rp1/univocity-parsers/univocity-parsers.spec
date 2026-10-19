@@ -1,5 +1,4 @@
 %global source0_hash d9f377d6fb2e98afd2e83a544ee0762885816908cb3b909679bcc9ef4175dd35
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,30 +80,23 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           univocity-parsers
 Version:        2.9.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Collection of parsers for Java
 License:        Apache-2.0
 URL:            https://github.com/uniVocity/univocity-parsers
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/uniVocity/univocity-parsers/archive/v%{version}.tar.gz#/univocity-parsers-2.9.1.tar.gz
-
 Patch:          0001-Resolve-import-clash-with-OpenJDK-17.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.9.1-31
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 uniVocity-parsers is a suite of extremely fast and reliable parsers
 for Java.  It provides a consistent interface for handling different
@@ -112,6 +104,7 @@ file formats, and a solid framework for the development of new
 parsers.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -120,16 +113,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin :maven-javadoc-plugin
 
 %build
-# Tests require univocity-output-tester, which is not packaged yet.
-%mvn_build -j -f -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -j -f -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE-2.0.html
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.1-1
 - Import

@@ -1,63 +1,75 @@
 %global source0_hash 51cc11666391ab6f092070437ac747002ff46f3e4113a3622177ee6b488bfc53
-
 Name:           python-build
 Version:        1.6.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A simple, correct Python build frontend
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://build.pypa.io
-Source:         %{pypi_source build}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/build/build-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(flit-core) >= 3.11
+Requires:       python3-build = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-build+uv
+Summary:        Metapackage for python3-build uv extras
+Requires:       python3-build = %{version}-%{release}
+Requires:       python3dist(uv) >= 0.1.18
+Provides:       python3dist(build[uv]) = %{version}-%{release}
 
+%description -n python3-build+uv
+Metapackage for python3-build uv extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'build' generated automatically by pyp2spec.}
+%package -n       python3-build+keyring
+Summary:        Metapackage for python3-build keyring extras
+Requires:       python3-build = %{version}-%{release}
+Provides:       python3dist(build[keyring]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-build+keyring
+Metapackage for python3-build keyring extras.
+
+%package -n       python3-build+virtualenv
+Summary:        Metapackage for python3-build virtualenv extras
+Requires:       python3-build = %{version}-%{release}
+Requires:       python3dist(virtualenv) >= 20.36.1
+Provides:       python3dist(build[virtualenv]) = %{version}-%{release}
+
+%description -n python3-build+virtualenv
+Metapackage for python3-build virtualenv extras.
+
+%description
 
 %package -n     python3-build
-Summary:        %{summary}
-
-%description -n python3-build %_description
+Summary:        A simple, correct Python build frontend
+# oreon:reqs
+Requires:       python3dist(importlib-metadata) >= 4.6
+Requires:       python3dist(packaging) >= 24.0
+Requires:       python3dist(tomli) >= 1.1.0
+# /oreon:reqs
+%description -n python3-build
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-build keyring,uv,virtualenv
-
 
 %prep
-%autosetup -p1 -n build-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir build-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-build usr/lib/python3*/site-packages/build* usr/lib64/python3*/site-packages/build* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/build* usr/lib64/python3*/site-packages/build* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-build -f %{pyproject_files}
-%{_bindir}/pyproject-build
+%files
+%files -n python3-build -f %{oreon_filedir}/python3-build.list
 
 %changelog
+
 %autochangelog

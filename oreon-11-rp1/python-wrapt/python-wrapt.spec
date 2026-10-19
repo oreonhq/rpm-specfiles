@@ -1,62 +1,51 @@
-%global source0_hash none
-
+%global source0_hash fd6390aab9e8aa40c52eff3c180f098e8d9f5894b1fd4c4fd2c207067b33ed16
 Name:           python-wrapt
 Version:        2.4.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Module for decorators, wrappers and monkey patching.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://github.com/GrahamDumpleton/wrapt
-Source:         %{pypi_source wrapt}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/wrapt/wrapt-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
+BuildRequires:  python3dist(setuptools) >= 62.0
+Requires:       python3-wrapt = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-wrapt+dev
+Summary:        Metapackage for python3-wrapt dev extras
+Requires:       python3-wrapt = %{version}-%{release}
+Provides:       python3dist(wrapt[dev]) = %{version}-%{release}
 
+%description -n python3-wrapt+dev
+Metapackage for python3-wrapt dev extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'wrapt' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-wrapt
-Summary:        %{summary}
-
-%description -n python3-wrapt %_description
+Summary:        Module for decorators, wrappers and monkey patching.
+%description -n python3-wrapt
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-wrapt dev
-
 
 %prep
-%autosetup -p1 -n wrapt-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir wrapt-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-wrapt usr/lib/python3*/site-packages/wrapt* usr/lib64/python3*/site-packages/wrapt* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/wrapt* usr/lib64/python3*/site-packages/wrapt* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-wrapt -f %{pyproject_files}
+%files
+%files -n python3-wrapt -f %{oreon_filedir}/python3-wrapt.list
 
 %changelog
+
 %autochangelog

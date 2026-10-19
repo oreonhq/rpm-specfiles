@@ -1,19 +1,19 @@
+%global source1_hash 20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95
 %global source0_hash e1d07b372d9748eba715354bfd540ae2cb0e2c7e83ce630439420ab7df13f2e0
-
 Name:		lzma-sdk457
 Version:	4.57
-Release:	34%{?dist}
-Summary:	SDK for lzma compression
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        SDK for lzma compression
 License:	LicenseRef-Callaway-LGPLv2+
 URL:		http://sourceforge.net/projects/sevenzip/
-Source0:	http://downloads.sourceforge.net/sevenzip/lzma457.tar.bz2
+Source0:        http://downloads.sourceforge.net/sevenzip/lzma457.tar.bz2
 Source1:	http://www.gnu.org/licenses/lgpl-2.1.txt
 Patch0:		lzma-sdk-4.5.7-sharedlib.patch
 Patch1:		lzma-sdk-4.5.7-format-security-fix.patch
-
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 LZMA SDK provides the documentation, samples, header files, libraries,
 and tools you need to develop applications that use LZMA compression.
@@ -30,11 +30,11 @@ decompressing.
 %package devel
 Summary:	Development libraries and headers for %{name}
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development libraries and headers for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -n lzma457
@@ -75,9 +75,9 @@ Methods.txt; do
 done
 
 %build
+
 cd CPP/7zip/Compress/LZMA_Alone
 make -f makefile.gcc clean all CXX="g++ %{optflags} -fPIC" CXX_C="gcc %{optflags} -fPIC" LDFLAGS="%{?__global_ldflags}"
-
 %install
 mkdir -p %{buildroot}%{_libdir}
 install -m0755 CPP/7zip/Compress/LZMA_Alone/liblzmasdk457.so.4.5.7 %{buildroot}%{_libdir}
@@ -87,17 +87,12 @@ ln -s liblzmasdk457.so.4.5.7 liblzmasdk457.so
 popd
 mkdir -p %{buildroot}/%{_includedir}/lzma457/
 find -iname '*.h' | xargs -I {} install -m0644 -D {} %{buildroot}/%{_includedir}/lzma457/{}
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc lzma.txt history.txt LGPL.txt
-%{_libdir}/liblzmasdk457.so.*
-
-%files devel
-%doc 7z*.txt Methods.txt
-%{_includedir}/lzma457/
-%{_libdir}/liblzmasdk457.so
+%files -f %{oreon_filedir}/main.list
+%files -n lzma-sdk457-devel -f %{oreon_filedir}/lzma-sdk457-devel.list
 
 %changelog
+
 %autochangelog

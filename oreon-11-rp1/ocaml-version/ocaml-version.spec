@@ -1,28 +1,22 @@
 %global source0_hash 813e01f67a25dd4673158d39d9cf48d73c9261d8a41bf29172bc5b7a70c11746
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 %global giturl  https://github.com/ocurrent/ocaml-version
-
 Name:           ocaml-version
 Version:        4.1.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Manipulate, parse and generate OCaml compiler version strings
-
 License:        ISC
 URL:            https://ocurrent.github.io/ocaml-version/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  ocaml >= 4.07.0
+Source0:        %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  ocaml
 BuildRequires:  ocaml-alcotest-devel
-BuildRequires:  ocaml-dune >= 3.6
-
+BuildRequires:  ocaml-dune
+# /oreon:deps
 %description
 This library provides facilities to parse version numbers of the OCaml
 compiler, and enumerates the various official OCaml releases and configuration
@@ -40,30 +34,26 @@ functionality:
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%doc CHANGES.md README.md
-%license LICENSE.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-version-devel -f %{oreon_filedir}/ocaml-version-devel.list
 
 %changelog
+
 %autochangelog

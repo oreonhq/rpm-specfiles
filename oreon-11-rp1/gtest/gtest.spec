@@ -1,23 +1,19 @@
 %global source0_hash 6e3191c1455468b3fc35a417fb565c1c5071aee1b7e7f85e30cf48a98d37d8b5
-
 Summary:        Google C++ testing framework
 Name:           gtest
 Version:        1.18.0
-
 %global forgeurl https://github.com/google/googletest
 %forgemeta
-
 Release:        1%{?dist}
-# scripts/generator/* are Apache-2.0
 License:        BSD-3-Clause and Apache-2.0
 URL:            %forgeurl
 Source0:        https://github.com/google/googletest/archive/refs/tags/v%{version}.tar.gz#/gtest-%{version}.tar.gz
-
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  cmake
 BuildRequires:  python3-devel
-
+# /oreon:deps
 %description
 Framework for writing C++ tests on a variety of platforms (GNU/Linux,
 Mac OS X, Windows, Windows CE, and Symbian). Based on the xUnit
@@ -58,51 +54,31 @@ Requires:       gmock = %{version}-%{release}
 This package contains development files for gmock.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %forgeautosetup -p1
 
-
 %build
+
 %cmake -DBUILD_SHARED_LIBS=ON \
        -DPYTHON_EXECUTABLE=%{__python3} \
        -Dgtest_build_tests=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles gtest-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles gmock usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gmock-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license LICENSE
-%{_libdir}/libgtest.so.%{version}
-%{_libdir}/libgtest_main.so.%{version}
-
-%files -n gtest-devel
-%doc CONTRIBUTORS README.md
-%doc docs/
-%doc googletest/samples
-%{_includedir}/gtest/
-%{_libdir}/libgtest.so
-%{_libdir}/libgtest_main.so
-%{_libdir}/cmake/GTest/
-%{_libdir}/pkgconfig/gtest.pc
-%{_libdir}/pkgconfig/gtest_main.pc
-
-%files -n gmock
-%license LICENSE
-%{_libdir}/libgmock.so.%{version}
-%{_libdir}/libgmock_main.so.%{version}
-
-%files -n gmock-devel
-%doc CONTRIBUTORS README.md
-%doc docs/
-%{_includedir}/gmock/
-%{_libdir}/libgmock.so
-%{_libdir}/libgmock_main.so
-%{_libdir}/pkgconfig/gmock.pc
-%{_libdir}/pkgconfig/gmock_main.pc
+%files -f %{oreon_filedir}/main.list
+%files -n gtest-devel -f %{oreon_filedir}/gtest-devel.list
+%files -n gmock -f %{oreon_filedir}/gmock.list
+%files -n gmock-devel -f %{oreon_filedir}/gmock-devel.list
 
 %changelog
+
 %autochangelog

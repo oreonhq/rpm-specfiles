@@ -1,66 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 5654f8c5eaa0d4fa68b33e287a97765da6849bf6d51dcac874e73fbbddfb6134
 Name:           python-accelerate
 Version:        1.15.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Accelerate
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/huggingface/accelerate
-Source:         %{pypi_source accelerate}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/accelerate/accelerate-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'accelerate' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-accelerate = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-accelerate
-Summary:        %{summary}
-
-%description -n python3-accelerate %_description
+Summary:        Accelerate
+%description -n python3-accelerate
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-accelerate deepspeed,dev,docs,quality,rich,sagemaker,test-dev,test-fp8,test-prod,test-trackers,testing
-
 
 %prep
-%autosetup -p1 -n accelerate-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir accelerate-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-accelerate usr/lib/python3*/site-packages/accelerate* usr/lib64/python3*/site-packages/accelerate* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/accelerate* usr/lib64/python3*/site-packages/accelerate* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-accelerate -f %{pyproject_files}
-%{_bindir}/accelerate
-%{_bindir}/accelerate-config
-%{_bindir}/accelerate-estimate-memory
-%{_bindir}/accelerate-launch
-%{_bindir}/accelerate-merge-weights
+%files
+%files -n python3-accelerate -f %{oreon_filedir}/python3-accelerate.list
 
 %changelog
+
 %autochangelog

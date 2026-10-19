@@ -1,58 +1,42 @@
 %global source0_hash d03ceb89cb322a8fd706d4fb91940737b6642aa36998fe130a9bc96c985eff32
-
 Name:           python-attrs
 Version:        26.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Classes Without Boilerplate
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/python-attrs/attrs
-Source:         %{pypi_source attrs}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/attrs/attrs-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'attrs' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(hatch-fancy-pypi-readme) >= 23.2.0
+Requires:       python3-attrs = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-attrs
-Summary:        %{summary}
-
-%description -n python3-attrs %_description
-
+Summary:        Classes Without Boilerplate
+%description -n python3-attrs
 
 %prep
-%autosetup -p1 -n attrs-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir attrs-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-attrs usr/lib/python3*/site-packages/attrs* usr/lib64/python3*/site-packages/attrs* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/attrs* usr/lib64/python3*/site-packages/attrs* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-attrs -f %{pyproject_files}
+%files
+%files -n python3-attrs -f %{oreon_filedir}/python3-attrs.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.4.0-1
 - Prepare for Oreon 11 (RP1)

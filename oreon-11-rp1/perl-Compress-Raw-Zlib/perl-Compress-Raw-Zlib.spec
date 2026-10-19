@@ -1,75 +1,20 @@
 %global source0_hash c17d0fb139eba9b8ad6a1dc42942c812dae7dae96ed1337b3ca950542810d8fc
-
-# Run optional test
-%if ! (0%{?rhel})
-%bcond_without perl_Compress_Raw_Zlib_enables_optional_test
-%else
 %bcond_with perl_Compress_Raw_Zlib_enables_optional_test
-%endif
-
-
 Name:           perl-Compress-Raw-Zlib
 Version:        2.224
 Release:        1%{?dist}
 Summary:        Low-level interface to the zlib compression library
-# Zlib.xs:  (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Zlib
-# Others:   GPL-1.0-or-later OR Artistic-1.0-Perl
-## Not used to produce binary packages
-# zlib-src: Zlib
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Zlib
 URL:            https://metacpan.org/release/Compress-Raw-Zlib
 Source0:        https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Zlib-%{version}.tar.gz
-# Module Build
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::Constant)
-BuildRequires:  perl(ExtUtils::Install)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(File::Copy)
-BuildRequires:  perl(File::Spec::Functions)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(vars)
-BuildRequires:  zlib-devel >= 1.3
-# Module Runtime
-BuildRequires:  perl(bytes)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-BuildRequires:  perl(XSLoader)
-# Test Suite
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(List::Util)
-BuildRequires:  perl(threads::shared)
-# Dual-lived module needs rebuilding early in the boot process
 %if !%{defined perl_bootstrap}
-BuildRequires:  perl(Test::More)
 %endif
 %if %{with perl_Compress_Raw_Zlib_enables_optional_test}
-# Optional Tests
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(overload)
-# Dual-lived module needs rebuilding early in the boot process
 %if !%{defined perl_bootstrap}
-# Release tests are deleted
-BuildRequires:  perl(Test::NoWarnings)
 %endif
 %endif
-# Runtime
 Requires:       perl(XSLoader)
-
-# Don't "provide" private Perl libs
 %{?perl_default_filter}
-
-# Filter modules bundled for tests
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(CompTestUtils\\)
 %if %{defined perl_bootstrap}
 %global __requires_exclude %{__requires_exclude}|^perl\\(Test::Builder)\s*$
@@ -77,9 +22,36 @@ Requires:       perl(XSLoader)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Test::Simple)\s*$
 %endif
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
-
-
 Provides:       perl(Compress::Raw::Zlib)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::Constant)
+BuildRequires:  perl(ExtUtils::Install)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Spec::Functions)
+BuildRequires:  perl(List::Util)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(XSLoader)
+BuildRequires:  perl(bytes)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(threads::shared)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 The Compress::Raw::Zlib module provides a Perl interface to the zlib
 compression library, which is used by IO::Compress::Zlib.
@@ -89,20 +61,18 @@ Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
 %if %{with perl_Compress_Raw_Zlib_enables_optional_test}
-# Optional Tests
 Requires:       perl(File::Temp)
 Requires:       perl(overload)
-# Dual-lived module needs rebuilding early in the boot process
 %if !%{defined perl_bootstrap}
 Requires:       perl(Test::NoWarnings)
 %endif
 %endif
-
 %description tests
 Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Compress-Raw-Zlib-%{version}
 
@@ -123,6 +93,7 @@ for F in t/*.t; do
 done
 
 %build
+
 OLD_ZLIB=False
 BUILD_ZLIB=False 
 ZLIB_LIB=%{_libdir}
@@ -130,41 +101,32 @@ ZLIB_INCLUDE=%{_includedir}
 export BUILD_ZLIB OLD_ZLIB ZLIB_LIB ZLIB_INCLUDE
 perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}" NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 find %{buildroot} -type f -name '*.bs' -empty -delete
 %{_fixperms} -c %{buildroot}
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
-# Remove release tests
 rm %{buildroot}%{_libexecdir}/%{name}/t/99pod.t
 rm %{buildroot}%{_libexecdir}/%{name}/t/meta-*.t
 perl -i -pe "s{DIR => '.'}{DIR => '/tmp'}" %{buildroot}%{_libexecdir}/%{name}/t/compress/CompTestUtils.pm
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 unset PERL_CORE
 COMPRESS_ZLIB_RUN_MOST=1
 export COMPRESS_ZLIB_RUN_MOST
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 unset PERL_CORE
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test COMPRESS_ZLIB_RUN_MOST=1
-
-%files
-%doc Changes README SECURITY.md
-%{perl_vendorarch}/auto/Compress/
-%{perl_vendorarch}/Compress/
-%{_mandir}/man3/Compress::Raw::Zlib.3*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Compress-Raw-Zlib-tests -f %{oreon_filedir}/perl-Compress-Raw-Zlib-tests.list
 
 %changelog
+
 %autochangelog

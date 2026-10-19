@@ -1,33 +1,29 @@
-%global source0_hash 40d4e58c655cea46e34e62973fad71ccc8b852e639a57fe5b8824a73151344df
-
+%global source0_hash 56ecb380d74bf74caba193d9e8ad6b0c85ccf9eeb461bc9731c2b8636e1f1492
 Name:	 libunity
-Summary: Library for integrating with Unity and Plasma
+Summary:        Library for integrating with Unity and Plasma
 Version: 7.1.4
-Release: 44.20190319%{?dist}
-
-# most files LGPLv3, with a handful of GPLv3 (unity-sound-menu* sources in particular)
-# Automatically converted from old format: GPLv3 - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-3.0-only
 URL:	 https://launchpad.net/libunity
-# same sources as shipped in ubuntu packages
-Source0: https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libunity/%{version}+19.04.20190319-0ubuntu1/libunity_%{version}+19.04.20190319.orig.tar.gz
+Source0:        https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libunity/%{version}+19.04.20190319-0ubuntu1/libunity_%{version}+19.04.20190319.orig.tar.gz
 Patch0:  https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libunity/%{version}+19.04.20190319-0ubuntu1/libunity_%{version}+19.04.20190319-0ubuntu1.diff.gz
-
 Patch0001:  https://launchpadlibrarian.net/443817430/0001-Fix-FTB-with-recent-vala-requiring-non-public-abstra.patch
-# Patch for vala 0.53.2 portability
 Patch2:  libunity-7.1.4-vala-053.patch
-
-BuildRequires: automake libtool gnome-common
-BuildRequires: intltool
-BuildRequires: pkgconfig(dee-1.0)
-BuildRequires: pkgconfig(dbusmenu-glib-0.4)
-BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: pkgconfig(gobject-introspection-1.0)
-BuildRequires: pkgconfig(gtk+-3.0)
-BuildRequires: python3-devel python3
-BuildRequires: vala
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  gnome-common
+BuildRequires:  intltool
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig(dbusmenu-glib-0.4)
+BuildRequires:  pkgconfig(dee-1.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  python3
+BuildRequires:  python3-devel
+BuildRequires:  vala
+# /oreon:deps
 %description
 A library for instrumenting and integrating with all aspects of the Unity
 shell and providing some integration features with Plasma.
@@ -46,6 +42,7 @@ Requires: python3-gobject-base
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c
@@ -54,75 +51,33 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P2 -p1 -b .vala_053
 
 %build
+
 NOCONFIGURE=1 \
 ./autogen.sh
-
 PYTHON=%{__python3}
 export PYTHON
-
 %configure \
   --disable-schemas-compile \
   --disable-silent-rules \
   --disable-static
-             
 %make_build
-
 %install
 %make_install
-
-## unpackaged files
-# libtool, unused lib symlink
 rm -fv \
   %{buildroot}%{_libdir}/lib*.la \
   %{buildroot}%{_libdir}/libunity/*.{la,so}
- 
 %py_byte_compile %{__python3} %{buildroot}%{python3_sitearch}/gi/overrides/
-
 %ldconfig_post
+%oreon_autofiles python3-libunity usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %postun
+
 %{?ldconfig}
-%if 0%{?rhel} && 0%{?rhel} < 8
-if [ $1 -eq 0 ]; then
-glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
-fi
-
-%posttrans
-glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
-%endif
-
-%files
-%doc AUTHORS README
-%license COPYING*
-%{_bindir}/libunity-tool
-%{_bindir}/unity-scope-loader
-%{_libdir}/libunity.so.9*
-%{_libdir}/libunity-extras.so.9*
-%{_libdir}/girepository-1.0/Unity-7.0.typelib
-%{_libdir}/girepository-1.0/UnityExtras-7.0.typelib
-%dir %{_libdir}/libunity/
-%{_libdir}/libunity/libunity-protocol-private.so.*
-%{_datadir}/glib-2.0/schemas/com.canonical.Unity.Lenses.gschema.xml
-%{_datadir}/unity/
-%{_datadir}/unity-scopes/
-
-%files -n python3-libunity
-%{python3_sitearch}/gi/overrides/Unity.py*
-%{python3_sitearch}/gi/overrides/__pycache__/*
-
-%files devel
-%{_includedir}/unity/
-%{_libdir}/libunity.so
-%{_libdir}/libunity-extras.so
-%{_libdir}/pkgconfig/unity.pc
-%{_libdir}/pkgconfig/unity-extras.pc
-%{_libdir}/pkgconfig/unity-protocol-private.pc
-%{_datadir}/gir-1.0/Unity-7.0.gir
-%{_datadir}/gir-1.0/UnityExtras-7.0.gir
-%{_datadir}/vala/vapi/unity.*
-%{_datadir}/vala/vapi/unity-extras.*
-%{_datadir}/vala/vapi/unity-protocol.*
-%{_datadir}/vala/vapi/unity-trace.*
+%files -f %{oreon_filedir}/main.list
+%files -n libunity-devel -f %{oreon_filedir}/libunity-devel.list
+%files -n python3-libunity -f %{oreon_filedir}/python3-libunity.list
 
 %changelog
+
 %autochangelog

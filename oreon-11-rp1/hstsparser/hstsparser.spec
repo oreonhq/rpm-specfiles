@@ -1,53 +1,43 @@
-%global source0_hash 0bd2a82c635a7f94429de710135a7415de94e36e089f8b397186f0ed15ba74dc
-
+%global source0_hash 05e2478bea87cf41bd9cc49ee6a074c116458950ba07f9173b42f1cbc3400b1e
 Name:           hstsparser
 Version:        1.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        HSTS Digital Forensics parser
 License:        MIT
 URL:            https://github.com/thebeanogamer/hstsparser
-Source:         %{url}/archive/%{version}/hstsparser-%{version}.tar.gz
+Source0:        https://github.com/thebeanogamer/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-BuildRequires:  help2man
-
 %py_provides python3-hstsparser
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(poetry-core) >= 1.3
+Requires:       python3-hstsparser = %{version}-%{release}
+# /oreon:deps
 %description
 Parse Firefox and Chrome HSTS databases into Digital Forensics artifacts.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n hstsparser-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir hstsparser-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
-# Fix command name in manpage
+%pyproject_wheel
 ln -s hstsparser.py hstsparser
-# hstsparser finds the version number by checking the installed package
-# The package isn't installed during the RPM build, so we override the version number on the man page with the one from the RPM
 help2man -N ./hstsparser -o hstsparser.1 --version-string='%{version}'
 rm -f hstsparser
-
 %install
 %pyproject_install
-%pyproject_save_files hstsparser
 mkdir -p %{buildroot}%{_mandir}/man1/
 install -pm 0644 hstsparser.1 %{buildroot}%{_mandir}/man1/hstsparser.1
+%oreon_autofiles main
 
 %check
-%pyproject_check_import
 
-%files -f %{pyproject_files}
-%doc README.md
-%license LICENSE
-%{_bindir}/hstsparser
-%{_mandir}/man1/hstsparser.1*
+%pyproject_check_import
+%files
 
 %changelog
+
 %autochangelog

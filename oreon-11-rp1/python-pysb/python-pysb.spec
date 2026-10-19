@@ -1,55 +1,32 @@
 %global source0_hash 7e4c02cab220b90d626e0d771070739104d8824598804c848fbbfa8055740eb0
-
-# Documentation cannot be built on epel7, python-numpydoc is missing
 %bcond doc 0%{?fedora}
-
-# Use the same directory of the main package for subpackage licence and doc
 %global _docdir_fmt %{name}
-
 %global forgeurl https://github.com/pysb/pysb
-
 Name:           python-pysb
 Version:        1.16.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Rule-based modeling of biochemical systems as Python programs
 License:        BSD-2-Clause
 URL:            https://pysb.org/
 %forgemeta
-# https://github.com/pysb/pysb/issues/555
-Source:         %{forgesource}
-# Maintainers, please upstream
+Source0:        %{forgeurl}/archive/v%{version}/pysb-%{version}.tar.gz
 Patch:          python-pysb-rm-python-mock-usage.diff
-
 BuildArch:      noarch
-
+%if %{with doc}
+%endif
+# oreon:deps
+BuildRequires:  dvipng
 BuildRequires:  make
 BuildRequires:  perl-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-%if %{with doc}
-# For building documentation
-BuildRequires:  dvipng
-BuildRequires:  python3-sphinx
-BuildRequires:  tex(latex)
-BuildRequires:  tex(anyfontsize.sty)
-BuildRequires:  python3dist(numpydoc)
 BuildRequires:  python3-ipython-sphinx
-%endif
-
-%global _description %{expand:
-PySB is a framework for building mathematical models of biochemical
-systems as Python programs. PySB abstracts the complex process of
-creating equations describing interactions among multiple proteins or
-other biomolecules into a simple and intuitive domain specific
-programming language, which is internally translated into BioNetGen or
-Kappa rules and from there into systems of equations. PySB makes it
-straightforward to divide models into modules and to call libraries of
-reusable elements (macros) that encode standard biochemical actions.
-These features promote model transparency, reuse and accuracy. PySB
-also interoperates with standard scientific Python libraries such as
-NumPy, SciPy and SymPy enabling model simulation and analysis.}
-
-%description %_description
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-sphinx
+BuildRequires:  python3dist(numpydoc)
+BuildRequires:  tex(anyfontsize.sty)
+BuildRequires:  tex(latex)
+# /oreon:deps
+%description
 
 %package -n python3-pysb
 Summary: %summary
@@ -62,8 +39,7 @@ Requires:       python3-sympy
 Requires:       python3-pygraphviz
 Requires:       python3-networkx
 %{?python_provide:%python_provide python3-pysb}
-
-%description -n python3-pysb %_description
+%description -n python3-pysb
 
 %if %{with doc}
 %package doc
@@ -71,12 +47,12 @@ Summary:        HTML documentation for %{name}
 Requires:       python3-pysb = %{version}-%{release}
 Provides:       bundled(jquery)
 Obsoletes:      %{name}-docs <= 1.0.1
-
 %description doc
 This package contains HTML documentation for %{name}.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n pysb-%{version} -p1
@@ -91,31 +67,23 @@ sed -i -s "1 s|/usr/bin/env python|%{python3}|" pysb/examples/*.py pysb/tools/*.
 sed -r -i "s/'(sympy>=1.6),<1.12'/'\1'/; /'pynose'/d" setup.py
 
 %build
-%py3_build
 
-# Build documentation
+%py3_build
 %if %{with doc}
 make -C doc html
 rm doc/_build/html/.buildinfo
 %endif
-
 %install
 %py3_install
 chmod +x %{buildroot}/%{python3_sitelib}/pysb/examples/run_*.py
 chmod +x %{buildroot}/%{python3_sitelib}/pysb/tools/[a-z]*.py
+%oreon_autofiles python3-pysb usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n python3-pysb
-%license LICENSE.txt
-%doc README.rst
-%{python3_sitelib}/pysb/
-%{python3_sitelib}/pysb-%{version}-*.egg-info
-%{_bindir}/pysb_export
-
-%if %{with doc}
-%files doc
-%license LICENSE.txt
-%doc doc/_build/html
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n python3-pysb -f %{oreon_filedir}/python3-pysb.list
+%files -n python-pysb-doc -f %{oreon_filedir}/python-pysb-doc.list
 
 %changelog
+
 %autochangelog

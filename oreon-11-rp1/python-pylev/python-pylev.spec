@@ -1,56 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 9e77e941042ad3a4cc305dcdf2b2dec1aec2fbe3dd9015d2698ad02b173006d1
 Name:           python-pylev
 Version:        1.4.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A pure Python Levenshtein implementation that_s not freaking GPL_d.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            http://github.com/toastdriven/pylev
-Source:         %{pypi_source pylev}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pylev/pylev-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pylev' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 42
+Requires:       python3-pylev = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pylev
-Summary:        %{summary}
-
-%description -n python3-pylev %_description
-
+Summary:        A pure Python Levenshtein implementation that_s not freaking GPL_d.
+%description -n python3-pylev
 
 %prep
-%autosetup -p1 -n pylev-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pylev-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pylev usr/lib/python3*/site-packages/pylev* usr/lib64/python3*/site-packages/pylev* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pylev* usr/lib64/python3*/site-packages/pylev* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pylev -f %{pyproject_files}
+%files
+%files -n python3-pylev -f %{oreon_filedir}/python3-pylev.list
 
 %changelog
+
 %autochangelog

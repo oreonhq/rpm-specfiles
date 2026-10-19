@@ -1,27 +1,28 @@
-%global source0_hash 6658071d6f1044184d3973062a798187537ae1c3ddb4c31afd417df333316c10
-
+%global source2_hash 4de0d98110bfa86ccc76afc8f1397226c02aa6d6496a6d1153044395f5851741
+%global source1_hash 60e9df09546d7dc505819e4b87bbaf0e2421e6b46e0a91c90e7c0b947ce4a458
+%global source0_hash 1fb7de005d35ae0ac6ff8f8fc955d08a15b5c1a67e961b97ef987576af0db11a
 %global libsepolver 3.11-1
-
 Name:           secilc
 Version:        3.11
 Release:        1%{?dist}
 Summary:        The SELinux CIL Compiler
-
 License:        BSD-2-Clause
 URL:            https://github.com/SELinuxProject/selinux/wiki
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/secilc-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/secilc-%{version}.tar.gz.asc
 Source2:        https://github.com/perfinion.gpg
-# fedora-selinux/selinux: git format-patch -N 3.11 -- secilc
-# i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
-# Patch list start
-# Patch list end
 Requires:       libsepol >= %{libsepolver}
+# oreon:deps
+BuildRequires:  dblatex
+BuildRequires:  flex
 BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  libsepol-static >= %{libsepolver}, dblatex, flex, xmlto, pandoc-pdf, texlive-mdwtools
 BuildRequires:  gnupg2
-
+BuildRequires:  libsepol-static
+BuildRequires:  make
+BuildRequires:  pandoc-pdf
+BuildRequires:  texlive-mdwtools
+BuildRequires:  xmlto
+# /oreon:deps
 %description
 The SELinux CIL Compiler is a compiler that converts the CIL language as
 described on the CIL design wiki into a kernel binary policy file.
@@ -32,7 +33,6 @@ for more information about the goals and features on the CIL language.
 %package doc
 Summary:        Documentation for the SELinux CIL Compiler
 BuildArch:      noarch
-
 %description doc
 The SELinux CIL Compiler is a compiler that converts the CIL language as
 described on the CIL design wiki into a kernel binary policy file.
@@ -41,34 +41,26 @@ http://github.com/SELinuxProject/cil/wiki/
 for more information about the goals and features on the CIL language.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n secilc-%{version}
 
 %build
+
 %set_build_flags
 make %{?_smp_mflags} LIBSEPOL_STATIC=%{_libdir}/libsepol.a
 pushd docs
 make %{?_smp_mflags}
 popd
-
 %install
 make %{?_smp_mflags} DESTDIR="%{buildroot}" SBINDIR="%{buildroot}%{_sbindir}" LIBDIR="%{buildroot}%{_libdir}" install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_bindir}/secilc
-%{_bindir}/secil2conf
-%{_bindir}/secil2tree
-%{_mandir}/man8/secilc.8*
-%{_mandir}/man8/secil2conf.8*
-%{_mandir}/man8/secil2tree.8*
-%license LICENSE
-
-%files doc
-%doc docs/html
-%doc docs/pdf
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n secilc-doc -f %{oreon_filedir}/secilc-doc.list
 
 %changelog
+
 %autochangelog

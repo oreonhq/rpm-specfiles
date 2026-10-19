@@ -1,41 +1,36 @@
 %global source0_hash 5f848ca06f9f9d95d5ba63f5e6847806d794ea266ea6cb7c9a6931bcf14c1390
-
-Summary:	Recognizes file formats and extracts format-specific comments
+Summary:        Recognizes file formats and extracts format-specific comments
 Name:		perl-File-Comments
 Version:	0.08
-Release:	44%{?dist}
+Release:        1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Url:		https://metacpan.org/release/File-Comments
-Source0:	https://cpan.metacpan.org/modules/by-module/File/File-Comments-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/File/File-Comments-%{version}.tar.gz
 Patch0:		File-Comments-0.08-provides.patch
 BuildArch:	noarch
-# Module Build
-BuildRequires:	coreutils
-BuildRequires:	findutils
-BuildRequires:	make
-BuildRequires:	perl-generators
-BuildRequires:	perl-interpreter
-BuildRequires:	perl(ExtUtils::MakeMaker)
-# Module Runtime
-BuildRequires:	perl(File::Basename)
-BuildRequires:	perl(HTML::TokeParser) >= 2.28
-BuildRequires:	perl(HTML::TreeBuilder)
-BuildRequires:	perl(Log::Log4perl) >= 0.50
-BuildRequires:	perl(Module::Pluggable) >= 2.4
-BuildRequires:	perl(Pod::Parser) >= 1.14
-BuildRequires:	perl(PPI) >= 1.115
-BuildRequires:	perl(strict)
-BuildRequires:	perl(Sysadm::Install) >= 0.11
-BuildRequires:	perl(warnings)
-# Examples
-BuildRequires:	perl(Getopt::Std)
-# Test Suite
-BuildRequires:	perl(Test::More)
-# Dependencies
 Requires:	perl(HTML::TreeBuilder)
 Requires:	perl(Pod::Parser) >= 1.14
 Requires:	perl(PPI) >= 1.115
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  make
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(Getopt::Std)
+BuildRequires:  perl(HTML::TokeParser)
+BuildRequires:  perl(HTML::TreeBuilder)
+BuildRequires:  perl(Log::Log4perl)
+BuildRequires:  perl(Module::Pluggable)
+BuildRequires:  perl(PPI)
+BuildRequires:  perl(Pod::Parser)
+BuildRequires:  perl(Sysadm::Install)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 File::Comments guesses the type of a given file, determines the format
 used for comments, extracts all comments, and returns them as a
@@ -46,6 +41,7 @@ Currently supported are Perl scripts, C/C++ programs, Java, makefiles,
 JavaScript, Python and PHP.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n File-Comments-%{version}
@@ -58,31 +54,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P 0
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor
 make %{?_smp_mflags}
-
 %install
 make pure_install DESTDIR=%{buildroot}
 find %{buildroot} -type f -name .packlist -delete
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main
 
 %check
-make test TEST_VERBOSE=1
 
-%files
-%doc Changes README eg/
-%{perl_vendorlib}/File/
-%{_mandir}/man3/File::Comments.3*
-%{_mandir}/man3/File::Comments::Plugin.3*
-%{_mandir}/man3/File::Comments::Plugin::C.3*
-%{_mandir}/man3/File::Comments::Plugin::HTML.3*
-%{_mandir}/man3/File::Comments::Plugin::Java.3*
-%{_mandir}/man3/File::Comments::Plugin::JavaScript.3*
-%{_mandir}/man3/File::Comments::Plugin::Makefile.3*
-%{_mandir}/man3/File::Comments::Plugin::PHP.3*
-%{_mandir}/man3/File::Comments::Plugin::Perl.3*
-%{_mandir}/man3/File::Comments::Plugin::Python.3*
-%{_mandir}/man3/File::Comments::Plugin::Shell.3*
+make test TEST_VERBOSE=1
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

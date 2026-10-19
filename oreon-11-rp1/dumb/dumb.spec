@@ -1,8 +1,8 @@
+%global source1_hash 9e3fa1e0932e00e31f2314cefb3ea0343ee4f850b6a8e6a6a9627a35b2dc0dbd
 %global source0_hash 8d44fbc9e57f3bac9f761c3b12ce102d47d717f0dd846657fb988e0bb5d1ea33
-
 Name:           dumb
 Version:        0.9.3
-Release:        46%{?dist}
+Release:        1%{?dist}
 Summary:        IT, XM, S3M and MOD player library
 License:        zlib
 URL:            http://dumb.sourceforge.net/
@@ -13,9 +13,12 @@ Patch0:         dumb-0.9.3-CVE-2006-3668.patch
 Patch1:         dumb-0.9.3-license-clarification.patch
 Patch2:         dumb-0.9.3-weak-symbols.patch
 Patch3:         dumb-configure-c99.patch
-BuildRequires:  make gcc gcc-c++
+# oreon:deps
 BuildRequires:  allegro-devel
-
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 IT, XM, S3M and MOD player library. Mainly targeted for use with the allegro
 game programming library, but it can be used without allegro. Faithful to the
@@ -25,12 +28,12 @@ original trackers, especially IT.
 Summary: Development libraries and headers for dumb
 Requires: %{name} = %{version}
 Requires: allegro-devel
-
 %description devel
 The developmental files that must be installed in order to compile
 applications which use dumb.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -b 01
@@ -41,30 +44,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 cp %{SOURCE2} .
 
 %build
+
 %configure
-# Remove useless /usr/lib64 rpath on 64bit archs
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags} LIBS=-lm
-
 %install
 %make_install
-#clean out .la and static libs
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.a $RPM_BUILD_ROOT%{_libdir}/*.la
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc release.txt readme.txt
-%license licence.txt license-clarification.eml
-%{_bindir}/dumb*
-%{_libdir}/lib*-%{version}.so
-
-%files devel
-%doc docs/deprec.txt docs/dumb.txt docs/faq.txt docs/fnptr.txt docs/howto.txt docs/ptr.txt
-%{_includedir}/*.h
-%{_libdir}/libdumb.so
-%{_libdir}/libaldmb.so
+%files -f %{oreon_filedir}/main.list
+%files -n dumb-devel -f %{oreon_filedir}/dumb-devel.list
 
 %changelog
+
 %autochangelog

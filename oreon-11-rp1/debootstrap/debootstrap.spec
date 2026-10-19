@@ -1,26 +1,14 @@
 %global source0_hash 7cc8f9e386ed8dfd4b062a3b9527f0f45176dfa1b065e7db270f837956516b20
-
-# Read https://bugzilla.redhat.com/show_bug.cgi?id=1654765
-# mangling shebang in /usr/sbin/debootstrap from /bin/sh to /usr/bin/sh
 %undefine __brp_mangle_shebangs
-
-#global postfix nmu1
-
 Name:           debootstrap
 Version:        1.0.145
 Release:        1%{?dist}
 Summary:        Debian GNU/Linux bootstrapper
-
 License:        MIT
 URL:            https://wiki.debian.org/Debootstrap
-Source0:        https://ftp.debian.org/debian/pool/main/d/debootstrap/debootstrap_%{version}%{?postfix:+%{postfix}}.tar.gz
-
+Source0:        https://ftp.debian.org/debian/pool/main/d/%{name}/%{name}_%{version}.tar.gz
 Patch0:         sbin_move.patch
-
 BuildArch:      noarch
-
-BuildRequires:  fakeroot
-BuildRequires:  make
 Requires:       perl-interpreter
 Requires:       wget
 Requires:       tar
@@ -33,7 +21,10 @@ Recommends:     binutils
 Recommends:     gettext-runtime
 Recommends:     xz-utils
 Recommends:     zstd
-
+# oreon:deps
+BuildRequires:  fakeroot
+BuildRequires:  make
+# /oreon:deps
 %description
 debootstrap is used to create a Debian base system from scratch, without
 requiring the availability of dpkg or apt.  It does this by downloading
@@ -45,25 +36,18 @@ Debian GNU/Linux guest system.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}
-
+%global oreon_srcdir %{name}
+%oreon_prep
 %build
-# nothing to do
 
 %install
 fakeroot %make_install VERSION="%{version}-%{release}" SBINDIR="%{_sbindir}"
-
-# install manual page
 mkdir -p %{buildroot}%{_mandir}/man8
 install -p -m 0644 debootstrap.8 %{buildroot}%{_mandir}/man8
+%oreon_autofiles main
 
-%files
-%doc debian/changelog README
-%license debian/copyright
-%{_datadir}/debootstrap
-%{_sbindir}/debootstrap
-%{_mandir}/man8/debootstrap.8*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

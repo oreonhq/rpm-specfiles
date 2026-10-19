@@ -1,5 +1,4 @@
 %global source0_hash 47316b3574af9c7413e4f75c72f78a8551a8a1a39f126377c6cfde1dcbfe9828
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,38 +80,35 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           apache-commons-parent
 Version:        105
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Apache Commons Parent Pom
 License:        Apache-2.0
 URL:            https://commons.apache.org/commons-parent-pom.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/apache/commons-parent/archive/rel/commons-parent-%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Requires:       mvn(org.codehaus.mojo:build-helper-maven-plugin)
+Requires:       mvn(org.moditect:moditect-maven-plugin)
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(biz.aQute.bnd:biz.aQute.bndlib)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 BuildRequires:  mvn(org.apache:apache:pom:)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  mvn(org.moditect:moditect-maven-plugin)
-# Not generated automatically
-BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
-%endif
-Requires:       mvn(org.codehaus.mojo:build-helper-maven-plugin)
-Requires:       mvn(org.moditect:moditect-maven-plugin)
-
+# /oreon:deps
 %description
 The Project Object Model files for the apache-commons packages.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n commons-parent-rel-commons-parent-%{version}
 
@@ -139,14 +135,14 @@ for profile in animal-sniffer japicmp jacoco; do
 done
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md RELEASE-NOTES.txt
-%license LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

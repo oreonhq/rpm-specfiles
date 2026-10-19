@@ -1,26 +1,24 @@
 %global source0_hash 979efdd489114c10360dff9c7c8fdc287c126508e65790dfd0d0aa6fdf7d7c3b
-
 Name:           pisg
 Version:        0.73
 Release:        41%{?dist}
 Summary:        IRC Statistics generator
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://pisg.sourceforge.net/
 Source0:        http://prdownloads.sourceforge.net/pisg/%{name}-%{version}.tar.gz
-#use system dirs
 Patch0:         pisg-0.72-systemdirs.patch
 BuildArch:      noarch
-BuildRequires:      perl-generators
 Requires:       perl(Text::Iconv)
-
 %{?perl_default_filter}
-
+# oreon:deps
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 Pisg is an IRC statistics generator. It takes IRC log-files and turns
 them into nice looking stats.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -46,15 +44,10 @@ cp -rp layout %{buildroot}%{_datadir}/pisg/layout
 install -p -D -m644 modules/Pisg.pm %{buildroot}%{perl_vendorlib}/Pisg.pm
 cp -rp modules/Pisg %{buildroot}%{perl_vendorlib}/Pisg
 install -p -D -m644 docs/pisg.1 %{buildroot}%{_mandir}/man1/pisg.1
+%oreon_autofiles main
 
-%files
-%doc COPYING README docs/Changelog docs/CREDITS docs/pisg-doc.txt
-%doc scripts
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%{_mandir}/man1/%{name}.1*
-%{perl_vendorlib}/Pisg*
-%config(noreplace)%{_sysconfdir}/%{name}.cfg
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

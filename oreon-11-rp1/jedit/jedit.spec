@@ -1,22 +1,35 @@
 %global source0_hash 8e71e9fbd5e535e6164d57545f7490d3b351eac7cec6041bee14b4fc3baffdc5
-
 Name:           jedit
 Version:        5.7.0
-Release:        11%{?dist}
+Release:        1%{?dist}
 Summary:        Programmer's text editor
-
 License:        GPL-2.0-or-later AND GFDL-1.1-no-invariants-or-later AND (SPL-1.0 OR LGPL-2.1-only) AND LGPL-2.0-or-later
 URL:            http://www.jedit.org/
 Source0:        https://sourceforge.net/projects/jedit/files/jedit/%{version}/jedit%{version}source.tar.bz2
-
-BuildRequires:  javapackages-local-openjdk25 ant-openjdk25 apache-ivy ant-junit ivy-local junit bsf bsh ant-contrib ant-apache-bsf mockito-junit-jupiter hamcrest jsr-305 desktop-file-utils docbook-style-xsl xerces-j2 xalan-j2
 Requires:       java-25
 Requires:       javapackages-filesystem
 Requires:       which
-
 BuildArch: noarch
 ExclusiveArch: %{java_arches} noarch
-
+# oreon:deps
+BuildRequires:  ant-apache-bsf
+BuildRequires:  ant-contrib
+BuildRequires:  ant-junit
+BuildRequires:  ant-openjdk25
+BuildRequires:  apache-ivy
+BuildRequires:  bsf
+BuildRequires:  bsh
+BuildRequires:  desktop-file-utils
+BuildRequires:  docbook-style-xsl
+BuildRequires:  hamcrest
+BuildRequires:  ivy-local
+BuildRequires:  javapackages-local-openjdk25
+BuildRequires:  jsr-305
+BuildRequires:  junit
+BuildRequires:  mockito-junit-jupiter
+BuildRequires:  xalan-j2
+BuildRequires:  xerces-j2
+# /oreon:deps
 %description
 jEdit is an Open Source, cross platform text editor written in Java. It
 has an extensive feature set that includes syntax highlighting, auto indent,
@@ -27,6 +40,7 @@ Futhermore, jEdit is extremely customizable, and extensible, using either macros
 written in the BeanShell scripting language, or plugins written in Java.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n jEdit
@@ -58,39 +72,27 @@ rm -f ivysettings.xml
 sed -i '/<ivy:settings.*[/]>/d' build.xml
 
 %build
-ant -v -Divy.mode=local -Divy.jar.present=true build docs-html
 
+ant -v -Divy.mode=local -Divy.jar.present=true build docs-html
 %install
 mkdir -p %{buildroot}%{_javadir}
 cp -pR build/%{name}.jar %{buildroot}%{_javadir}/
-
 mkdir -p %{buildroot}%{_datadir}/%{name}
 cp -pR build/{doc,jars,keymaps,macros,modes,properties,startup} %{buildroot}%{_datadir}/%{name}
 ln -s ../java/%{name}.jar %{buildroot}%{_datadir}/%{name}/%{name}.jar
-
 mkdir -p %{buildroot}%{_bindir}
 cp -p package-files/linux/jedit %{buildroot}%{_bindir}/jedit
 sed -i 's;/usr/share/jEdit/@jar.filename@;%{_datadir}/%{name}/%{name}.jar;g' %{buildroot}%{_bindir}/jedit
 chmod +x %{buildroot}%{_bindir}/jedit
-
 mkdir -p %{buildroot}%{_mandir}/man1
 cp -p package-files/linux/jedit.1 %{buildroot}%{_mandir}/man1/jedit.1
 sed -i 's;@jedit.version@;%{version};g' %{buildroot}%{_mandir}/man1/jedit.1
-
 mkdir -p %{buildroot}%{_datadir}/applications
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications --set-icon=%{_datadir}/%{name}/doc/%{name}.png package-files/linux/deb/%{name}.desktop
+%oreon_autofiles main
 
-%files
-%{_javadir}/%{name}.jar
-%{_datadir}/%{name}
-%{_bindir}/%{name}
-%{_mandir}/man1/jedit.1*
-%{_datadir}/applications/jedit.desktop
-%doc doc/README.txt
-%license doc/COPYING.txt
-%license doc/COPYING.DOC.txt
-%license doc/COPYING.PLUGINS.txt
-%license doc/Apache.LICENSE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

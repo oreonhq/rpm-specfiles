@@ -1,41 +1,19 @@
 %global source0_hash c2c7b782659b23e844d7277070a94e396ff547bde438c084e3a3297e853567f4
 %global source1_hash 2ad745b42c0a52e539a6afe2c571e27ea7c5ce407f096ec2bfc3dad6795a4bcd
-
-# SPDX-License-Identifier: LGPL-2.1-or-later
-#
-# Copyright (C) 2021 Red Hat, Inc.
-
 Name:           cockpit-machines
 Version:        357
 Release:        1%{?dist}
 Summary:        Cockpit user interface for virtual machines
 License:        LGPL-2.1-or-later AND MIT
 URL:            https://github.com/cockpit-project/cockpit-machines
-
-# distributions which ship nodejs-esbuild can rebuild the bundle during package build
-%if 0%{?fedora} >= 42
-%define rebuild_bundle 1
-%endif
-
 Source0:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-node-%{version}.tar.xz
-
 BuildArch:      noarch
 %if 0%{?suse_version}
-BuildRequires:  appstream-glib
 %else
-BuildRequires:  libappstream-glib
-%endif
-BuildRequires:  make
-BuildRequires: gettext
-%if 0%{?rhel} && 0%{?rhel} <= 8
-BuildRequires: libappstream-glib-devel
 %endif
 %if %{defined rebuild_bundle}
-BuildRequires: /usr/bin/node
-BuildRequires: nodejs-esbuild
 %endif
-
 Requires: cockpit-bridge >= 215
 %if 0%{?suse_version}
 Requires: libvirt-daemon-qemu
@@ -46,30 +24,18 @@ Requires: libvirt-daemon-driver-nodedev
 Requires: libvirt-daemon-driver-storage-core
 Requires: libvirt-daemon-config-network
 Recommends: libvirt-daemon-driver-storage-disk
-%if 0%{?rhel}
-Requires: qemu-kvm
-Suggests: qemu-kvm-block-curl
-%else
-# smaller footprint on Fedora, as qemu-kvm is really expensive on a server
 Requires: qemu-kvm-core
 Recommends: qemu-block-curl
 Recommends: qemu-char-spice
 Recommends: qemu-device-usb-host
 Recommends: qemu-device-usb-redirect
-# HACK: https://bugzilla.redhat.com/show_bug.cgi?id=2170110
-%if 0%{?fedora} >= 38
-Requires: (qemu-audio-spice if qemu-char-spice)
-%endif
-%endif
 %endif
 Requires: libvirt-client
 Requires: libvirt-dbus >= 1.2.0
 Requires: virt-install >= 3.0.0
-# Optional components
 Recommends: libosinfo
 Recommends: python3-gobject-base
 Suggests: (qemu-virtiofsd or virtiofsd)
-
 Provides: bundled(npm(@novnc/novnc)) = 1.5.0
 Provides: bundled(npm(@patternfly/react-core)) = 6.4.1
 Provides: bundled(npm(@patternfly/react-icons)) = 6.4.0
@@ -89,11 +55,18 @@ Provides: bundled(npm(scheduler)) = 0.23.2
 Provides: bundled(npm(tabbable)) = 6.4.0
 Provides: bundled(npm(throttle-debounce)) = 5.0.2
 Provides: bundled(npm(tslib)) = 2.8.1
-
+# oreon:deps
+BuildRequires:  /usr/bin/node
+BuildRequires:  gettext
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  nodejs-esbuild
+# /oreon:deps
 %description
 Cockpit component for managing libvirt virtual machines.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}
@@ -102,25 +75,19 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %endif
 
 %build
+
 %if %{defined rebuild_bundle}
 rm -rf dist
-# HACK: node module packaging is broken in Fedora ≤ 43; should be in
-# common location, not major version specific one
 NODE_ENV=production NODE_PATH=/usr/lib/node_modules:$(echo /usr/lib/node_modules_*) ./build.js
 %else
-# Use pre-built bundle on distributions without nodejs-esbuild
 %endif
-
 %install
 %make_install PREFIX=/usr
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*
+%oreon_autofiles main
 
-%files
-%doc README.md
-%license LICENSE dist/index.js.LEGAL.txt dist/index.css.LEGAL.txt
-%{_datadir}/cockpit/*
-%{_datadir}/metainfo/*
+%files -f %{oreon_filedir}/main.list
 
-# The changelog is automatically generated and merged
 %changelog
+
 %autochangelog

@@ -1,22 +1,25 @@
 %global source0_hash c4442c15d4330f17a1f5194df08c576877af68412ab2521446a93bd5e24c931b
-
 %ifarch %{valgrind_arches}
 %global has_valgrind 1
 %endif
-
 Name:           gcr
 Version:        4.4.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A library for bits of crypto UI and parsing
-
-# gck/pkcs11n.h is MPL 1.1/GPL 2.0/LGPL 2.1
-# gck/pkcs11x.h is FSFULLRWD
-# ui/icons/render-icons.py is LGPL-3.0-or-later OR CC-BY-SA-3.0
-# docs/COPYING is GCR-docs
 License:        LGPL-2.1-or-later AND FSFULLRWD AND (LGPL-3.0-or-later OR CC-BY-SA-3.0) AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later) AND GCR-docs
 URL:            https://gitlab.gnome.org/GNOME/gcr
 Source0:        https://download.gnome.org/sources/%{name}/4.4/%{name}-%{version}.tar.xz
-
+%if 0%{?has_valgrind}
+%endif
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
+Requires: /usr/bin/gpg2
+Requires: /usr/bin/ssh-add
+Requires: /usr/bin/ssh-agent
+# oreon:deps
+BuildRequires:  /usr/bin/gpg2
+BuildRequires:  /usr/bin/ssh-add
+BuildRequires:  /usr/bin/ssh-agent
+BuildRequires:  /usr/bin/xsltproc
 BuildRequires:  gettext
 BuildRequires:  meson
 BuildRequires:  pkgconfig(gi-docgen)
@@ -30,19 +33,7 @@ BuildRequires:  pkgconfig(p11-kit-1)
 BuildRequires:  pkgconfig(systemd)
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  vala
-%if 0%{?has_valgrind}
-BuildRequires:  valgrind-devel
-%endif
-BuildRequires:  /usr/bin/gpg2
-BuildRequires:  /usr/bin/ssh-add
-BuildRequires:  /usr/bin/ssh-agent
-BuildRequires:  /usr/bin/xsltproc
-
-Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-Requires: /usr/bin/gpg2
-Requires: /usr/bin/ssh-add
-Requires: /usr/bin/ssh-agent
-
+# /oreon:deps
 %description
 gcr is a library for displaying certificates, and crypto UI, accessing
 key stores. It also provides a viewer for crypto files on the GNOME
@@ -52,87 +43,49 @@ gck is a library for accessing PKCS#11 modules like smart cards.
 
 %package        libs
 Summary:        gcr and gck libraries
-# Renamed in F37
 Obsoletes:      %{name}-base < 3.92.0-1
 Provides:       %{name}-base = %{version}-%{release}
 Provides:       %{name}-base%{?_isa} = %{version}-%{release}
-# Dropped in F37
 Obsoletes:      %{name}-gtk3 < 3.92.0-1
 Obsoletes:      %{name}-gtk4 < 3.92.0-1
-
 %description    libs
 The %{name}-libs package contains the gcr and gck shared libraries.
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-# Because web fonts from upstream are not bundled in the gi-docgen package,
-# packages containing documentation generated with gi-docgen should depend on
-# this metapackage to ensure the proper system fonts are present.
 Recommends:     gi-docgen-fonts
-# Dropped in F37
 Obsoletes:      %{name}-gtk3-devel < 3.92.0-1
 Obsoletes:      %{name}-gtk4-devel < 3.92.0-1
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson -Dcrypto=gnutls
 %meson_build
-
 %install
 %meson_install
 %find_lang gcr-4
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %post
+
 %systemd_user_post gcr-ssh-agent.service
-
 %preun
+
 %systemd_user_preun gcr-ssh-agent.service
-
 %postun
+
 %systemd_user_postun_with_restart gcr-ssh-agent.service
-
-%files
-%doc NEWS README.md
-%{_bindir}/gcr-viewer-gtk4
-%{_libexecdir}/gcr-ssh-agent
-%{_libexecdir}/gcr4-ssh-askpass
-%{_userunitdir}/gcr-ssh-agent.service
-%{_userunitdir}/gcr-ssh-agent.socket
-
-%files libs -f gcr-4.lang
-%license COPYING
-%dir %{_libdir}/girepository-1.0
-%{_libdir}/girepository-1.0/Gck-2.typelib
-%{_libdir}/girepository-1.0/Gcr-4.typelib
-%{_libdir}/libgck-2.so.2*
-%{_libdir}/libgcr-4.so.4*
-
-%files devel
-%{_includedir}/gck-2/
-%{_includedir}/gcr-4/
-%{_libdir}/libgck-2.so
-%{_libdir}/libgcr-4.so
-%{_libdir}/pkgconfig/gck-2.pc
-%{_libdir}/pkgconfig/gcr-4.pc
-%dir %{_datadir}/gir-1.0
-%{_datadir}/gir-1.0/Gck-2.gir
-%{_datadir}/gir-1.0/Gcr-4.gir
-%dir %{_datadir}/vala
-%dir %{_datadir}/vala/vapi
-%{_datadir}/vala/vapi/gck-2.deps
-%{_datadir}/vala/vapi/gck-2.vapi
-%{_datadir}/vala/vapi/gcr-4.deps
-%{_datadir}/vala/vapi/gcr-4.vapi
-%doc %{_datadir}/doc/gck-2/
-%doc %{_datadir}/doc/gcr-4/
+%files -f %{oreon_filedir}/main.list
+%files -n gcr-libs -f %{oreon_filedir}/gcr-libs.list
+%files -n gcr-devel -f %{oreon_filedir}/gcr-devel.list
 
 %changelog
+
 %autochangelog

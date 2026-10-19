@@ -1,19 +1,14 @@
-%global source0_hash 5a03bfeba39134773e0a98b1607521b5b70fba58173a20deb7e032cc7e949bcb
-
+%global source0_hash fa920ec229994e3d84399c3ef473d94f0dc6af36f11a4775d1e1b334b771a887
 %bcond_with man
-
-Summary: Generate and verify various DNS records such as SSHFP, TLSA and OPENPGPKEY
+Summary:        Generate and verify various DNS records such as SSHFP, TLSA and OPENPGPKEY
 Name: hash-slinger
 Version: 3.6
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 Url:  https://github.com/letoams/%{name}/
-Source:  %{url}archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/letoams/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 %if %{with man}
-# Only to regenerate the man page, which is shipped per default
-Buildrequires: xmlto
 %endif
-BuildRequires: python3-devel, make
 Requires: python3 >= 3.4
 Requires: python3-dns, python3-unbound
 Requires: openssh-clients >= 4, python3-gnupg >= 0.3.7
@@ -21,7 +16,10 @@ Requires: python3-cryptography
 BuildArch: noarch
 Obsoletes: sshfp < 2.0
 Provides: sshfp  = %{version}
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 This package contains various tools to generate special DNS records:
 
@@ -37,20 +35,16 @@ This package has incorporated the old 'sshfp' and 'swede' commands/packages
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-%make_build all
 
+%make_build all
 %install
 %make_install
+%oreon_autofiles main
 
-%files 
-%license COPYING
-%doc BUGS CHANGES README
-%{_bindir}/*
-%doc %{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

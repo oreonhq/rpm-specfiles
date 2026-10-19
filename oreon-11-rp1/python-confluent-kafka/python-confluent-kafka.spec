@@ -1,61 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 99d1223020e27854e75981333983c5120d64762268f8afcc805fbd62e7de49aa
 Name:           python-confluent-kafka
 Version:        2.15.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Confluent_s Python client for Apache Kafka
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/confluentinc/confluent-kafka-python
-Source:         %{pypi_source confluent_kafka}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/confluent_kafka/confluent_kafka-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'confluent-kafka' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 62
+Requires:       python3-confluent-kafka = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-confluent-kafka
-Summary:        %{summary}
-
-%description -n python3-confluent-kafka %_description
+Summary:        Confluent_s Python client for Apache Kafka
+%description -n python3-confluent-kafka
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-confluent-kafka all,avro,dev,docs,examples,json,json-fast,oauthbearer-aws,protobuf,rules,schema-registry,schemaregistry,soaktest,tests
-
 
 %prep
-%autosetup -p1 -n confluent_kafka-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir confluent_kafka-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-confluent-kafka usr/lib/python3*/site-packages/confluent_kafka* usr/lib64/python3*/site-packages/confluent_kafka* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/confluent_kafka* usr/lib64/python3*/site-packages/confluent_kafka* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-confluent-kafka -f %{pyproject_files}
+%files
+%files -n python3-confluent-kafka -f %{oreon_filedir}/python3-confluent-kafka.list
 
 %changelog
+
 %autochangelog

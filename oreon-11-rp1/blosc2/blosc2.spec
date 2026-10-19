@@ -1,26 +1,22 @@
 %global source0_hash ae3a348fd960f29180e8ee97b9fa3dad1a6a592098f2a3eac82979082a5932d5
-
 Name:           blosc2
 Version:        3.3.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        High performance compressor optimized for binary data
-
 License:        BSD-3-Clause
 URL:            https://www.blosc.org/
-Source:         https://github.com/Blosc/c-blosc2/archive/v%{version}/c-blosc2-%{version}.tar.gz
-
-
+Source0:        https://github.com/Blosc/c-blosc2/archive/v%{version}/c-blosc2-%{version}.tar.gz
 %define soversion 6
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc
-BuildRequires:  ninja-build
+BuildRequires:  libzstd-devel
 BuildRequires:  lz4-devel
+BuildRequires:  ninja-build
+BuildRequires:  xxhash-devel
 BuildRequires:  zlib-devel
 BuildRequires:  zlib-ng-devel
-BuildRequires:  libzstd-devel
-BuildRequires:  xxhash-devel
-
+# /oreon:deps
 %description
 Blosc is a high performance compressor optimized for binary data
 (i.e. floating-point numbers, integers, and booleans, although it can handle
@@ -37,11 +33,11 @@ format-compatible with C-Blosc1.
 %package devel
 Summary:        Development headers for %{name}
 Requires:       %{name}%{_isa} = %{version}-%{release}
-
 %description devel
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n c-blosc2-%{version} -p1
@@ -54,6 +50,7 @@ sed -r -i '/xxhash.c/d' plugins/codecs/ndlz/CMakeLists.txt
 rm -r internal-complibs/* internal-complibs
 
 %build
+
 OPTIONS=(
         -GNinja
         -DBUILD_STATIC:BOOL=OFF
@@ -63,50 +60,25 @@ OPTIONS=(
         -DPREFER_EXTERNAL_ZLIB:BOOL=ON
         -DPREFER_EXTERNAL_ZSTD:BOOL=ON
         -DDEACTIVATE_AVX2:BOOL=ON
-
-        # We need to pass the distro build flags here, otherwise they are ignored.
-        # Silence warnings about stupid programming errors.
         -DCMAKE_C_FLAGS:STRING="$CFLAGS -Wno-unused-variable"
         )
-
 %cmake "${OPTIONS[@]}"
 %cmake_build
-
 %install
 %cmake_install
-
-# Record the actual library SONAME in the build log
 objdump -p %{buildroot}%{_libdir}/libblosc2.so.%{soversion} | grep SONAME
+%oreon_autofiles blosc2-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-# Tests fail on s390x: https://github.com/Blosc/c-blosc2/issues/467
+
 %ifarch s390x
 %global ignore_result || :
 %endif
-
-# - tests fail with -j12: https://github.com/Blosc/c-blosc2/issues/432
-# - test_nthreads seems to deadlock on all architectures with 2.17.0
 %ctest -j1 -E 'test_nthreads|bitshuffle' %{?ignore_result}
-
-%files
-# API versioning hard. With CMake even harder.
-%{_libdir}/libblosc2.so.%{soversion}
-%{_libdir}/libblosc2.so.%{version}
-%license LICENSE.txt
-%doc ANNOUNCE.*
-%doc THANKS.*
-%doc RELEASE_NOTES.*
-%doc README*
-%doc FAQ.*
-
-%files devel
-%dir %{_includedir}/%{name}
-%{_includedir}/b2nd.h
-%{_includedir}/blosc2.h
-%{_includedir}/blosc2/*.h
-%{_libdir}/libblosc2.so
-%{_libdir}/pkgconfig/blosc2.pc
-%{_libdir}/cmake/Blosc2
+%files -f %{oreon_filedir}/main.list
+%files -n blosc2-devel -f %{oreon_filedir}/blosc2-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,27 +1,17 @@
 %global source0_hash none
 %global source1_hash f76459f98a870fba99f1a265b7c709ad7c0c01c23f6a5500c86c5b6f1fdddab9
-
-# SPDX-License-Identifier: MIT
-
 BuildArch: noarch
-BuildRequires: bdftopcf fonttosfnt
-BuildRequires: make
-
 %global fontname bitmap
 %global fontconf 66-%{fontname}
-
 Version: 0.3
-Release: 54%{?dist}
+Release:        54%{?dist}
 License: GPL-2.0-only AND MIT AND LicenseRef-Lucida
-
 %global foundry           Bitmap
-
 %global common_description %{expand:
 The bitmap-fonts package provides a number of bitmap fonts selected\
 from the xorg package designed for use locations such as\
 terminals.
 }
-
 %global fontfamily1       Lucida Typewriter
 %global fontsummary1      Selected CJK bitmap fonts for Anaconda
 %global fontlicense1      LicenseRef-Lucida
@@ -29,14 +19,12 @@ terminals.
 %global fontpkgheader1    %{expand:
 Provides: %{name}-cjk = %{version}-%{release}
 Conflicts: bitmap-lucida-typewriter-opentype-fonts
-
 }
 %global fonts1            lut*.pcf.gz
 %global fontconfs1        %{SOURCE17}
 %global fontdescription1  %{expand:
 %{common_description}
 }
-
 %global fontfamily2       Lucida Typewriter OpenType
 %global fontsummary2      Selected CJK bitmap fonts for Anaconda (OpenType version)
 %global fontlicense2      LicenseRef-Lucida
@@ -49,7 +37,6 @@ Conflicts: bitmap-lucida-typewriter-fonts
 %global fontdescription2  %{expand:
 %{common_description}
 }
-
 %global fontfamily3       Fangsongti
 %global fontsummary3      Selected CJK bitmap fonts for Anaconda
 %global fontlicense3      MIT
@@ -57,14 +44,12 @@ Conflicts: bitmap-lucida-typewriter-fonts
 %global fontpkgheader3    %{expand:
 Provides: %{name}-cjk = %{version}-%{release}
 Conflicts: bitmap-fangsongti-opentype-fonts
-
 }
 %global fonts3            fangsongti*.pcf.gz
 %global fontconfs3        %{SOURCE13}
 %global fontdescription3  %{expand:
 %{common_description}
 }
-
 %global fontfamily4       Fangsongti OpenType
 %global fontsummary4      Selected CJK bitmap fonts for Anaconda (OpenType version)
 %global fontlicense4      MIT
@@ -77,7 +62,6 @@ Conflicts: bitmap-fangsongti-fonts
 %global fontdescription4  %{expand:
 %{common_description}
 }
-
 %global fontfamily5       Console
 %global fontsummary5      Selected set of bitmap fonts
 %global fontlicense5      GPL-2.0-only
@@ -90,7 +74,6 @@ Conflicts: bitmap-console-opentype-fonts
 %global fontdescription5  %{expand:
 %{common_description}
 }
-
 %global fontfamily6       Console OpenType
 %global fontsummary6      Selected set of bitmap fonts (OpenType version)
 %global fontlicense6      GPL-2.0-only
@@ -103,7 +86,6 @@ Conflicts: bitmap-console-fonts
 %global fontdescription6  %{expand:
 %{common_description}
 }
-
 %global fontfamily7       Fixed
 %global fontsummary7      Selected set of bitmap fonts
 %global fontlicense7      GPL-2.0-only
@@ -116,7 +98,6 @@ Conflicts: bitmap-fixed-opentype-fonts
 %global fontdescription7  %{expand:
 %{common_description}
 }
-
 %global fontfamily8       Fixed OpenType
 %global fontsummary8      Selected set of bitmap fonts (OpenType version)
 %global fontlicense8      GPL-2.0-only
@@ -129,8 +110,6 @@ Conflicts: bitmap-fixed-fonts
 %global fontdescription8  %{expand:
 %{common_description}
 }
-
-
 Source0:        bitmap-fonts-%{version}.tar.bz2
 Source1:        fixfont-3.5.tar.bz2
 Source2:  LICENSE
@@ -143,9 +122,14 @@ Source15: 66-bitmap-fixed.conf
 Source16: 66-bitmap-fixed-opentype.conf
 Source17: 66-bitmap-lucida-typewriter.conf
 Source18: 66-bitmap-lucida-typewriter-opentype.conf
-
 Name:     bitmap-fonts
-Summary:  Selected set of bitmap fonts
+Summary:        Selected set of bitmap fonts
+# oreon:deps
+BuildRequires:  bdftopcf
+BuildRequires:  fonts-rpm-macros
+BuildRequires:  fonttosfnt
+BuildRequires:  make
+# /oreon:deps
 %description
 %wordwrap -v common_description
 
@@ -161,11 +145,8 @@ Requires: %{fontname}-console-fonts = %{version}-%{release}
 Requires: %{fontname}-fixed-fonts = %{version}-%{release}
 Requires: ucs-miscfixed-fonts
 Conflicts: %{fontname}-opentype-fonts-all
-
 %description -n %{fontname}-fonts-all %common_description
 Meta-package for installing all font families of bitmap.
-
-%files -n %{fontname}-fonts-all
 
 %package -n %{fontname}-opentype-fonts-all
 Summary:  Compatibility files of bitmap-font families (opentype version)
@@ -177,55 +158,53 @@ Requires: %{fontname}-console-opentype-fonts = %{version}-%{release}
 Requires: %{fontname}-fixed-opentype-fonts = %{version}-%{release}
 Requires: ucs-miscfixed-opentype-fonts
 Conflicts: %{fontname}-fonts-all
-
 %description -n %{fontname}-opentype-fonts-all %common_description
 Meta-package for installing all font families of opentype bitmap.
 
-%files -n %{fontname}-opentype-fonts-all
-
-
-%fontpkg -a
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -a 1
 cp -p %{SOURCE2} .
 cp -p %{SOURCE3} .
 
-
 %build
+
 make all
-
 make -C fixfont-3.5 all
-
-# Convert to OpenType Bitmap Font
-# rm [0-9]*.bdf fixfont-3.5/[0-9]*.bdf
-
 for bdf in `ls *.bdf`;
 do fonttosfnt -b -c -g 2 -m 2 -o ${bdf%%bdf}otb  $bdf;
 done
-
 pushd fixfont-3.5
 for bdf in `ls *.bdf`;
 do fonttosfnt -b -c -g 2 -m 2 -o ${bdf%%bdf}otb  $bdf;
 done
-# For console9x15.otb
 fonttosfnt -b -c -g 2 -m 2 -o console9x15.otb console9x15.pcf
 popd
-
 gzip *.pcf fixfont-3.5/*.pcf
-
 %fontbuild -a
-
 %install
 %fontinstall -a
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%fontcheck -a
 
+%fontcheck -a
 %fontfiles -a
+%files -f %{oreon_filedir}/main.list
+%files -n bitmap-fonts-all -f %{oreon_filedir}/bitmap-fonts-all.list
+%files -n bitmap-opentype-fonts-all -f %{oreon_filedir}/bitmap-opentype-fonts-all.list
+%files -n bitmap-lucida-typewriter-fonts -f %{oreon_filedir}/bitmap-lucida-typewriter-fonts.list
+%files -n bitmap-lucida-typewriter-opentype-fonts -f %{oreon_filedir}/bitmap-lucida-typewriter-opentype-fonts.list
+%files -n bitmap-fangsongti-fonts -f %{oreon_filedir}/bitmap-fangsongti-fonts.list
+%files -n bitmap-fangsongti-opentype-fonts -f %{oreon_filedir}/bitmap-fangsongti-opentype-fonts.list
+%files -n bitmap-console-fonts -f %{oreon_filedir}/bitmap-console-fonts.list
+%files -n bitmap-console-opentype-fonts -f %{oreon_filedir}/bitmap-console-opentype-fonts.list
+%files -n bitmap-fixed-fonts -f %{oreon_filedir}/bitmap-fixed-fonts.list
+%files -n bitmap-fixed-opentype-fonts -f %{oreon_filedir}/bitmap-fixed-opentype-fonts.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3-54
 - Import

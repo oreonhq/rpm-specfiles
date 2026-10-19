@@ -1,12 +1,9 @@
 %global source0_hash 24123f3e2beb2246790b5875b9cdd1109481cba4139d63ad824de8f33012041d
-
 %bcond source_code_pro %[ %{undefined rhel} || %{defined epel} ]
-
 Name:           gi-docgen
 Version:        2026.1
 Release:        1%{?dist}
 Summary:        Documentation tool for GObject-based libraries
-
 License:        %{shrink:
                 (Apache-2.0 OR GPL-3.0-or-later) AND
                 BSD-2-Clause AND
@@ -23,39 +20,19 @@ SourceLicense:  %{shrink:
                 }
 URL:            https://gitlab.gnome.org/GNOME/gi-docgen
 Source0:        https://gitlab.gnome.org/GNOME/gi-docgen/-/archive/%{version}/gi-docgen-%{version}.tar.bz2
-
 Patch:          0001-Downstream-only-use-local-packaged-fonts-instead-of-.patch
-
 BuildArch:      noarch
-
-BuildRequires:  pyproject-rpm-macros
-BuildRequires:  python3dist(pytest)
-
-BuildRequires:  font(redhatdisplay)
-BuildRequires:  font(redhatdisplayitalic)
-BuildRequires:  font(redhatdisplayblack)
-BuildRequires:  font(redhatdisplaymedium)
-BuildRequires:  font(redhatdisplaymediumitalic)
-BuildRequires:  font(redhatdisplayblack)
-BuildRequires:  font(redhatdisplayblackitalic)
-BuildRequires:  font(redhattext)
-BuildRequires:  font(redhattextitalic)
-BuildRequires:  font(redhattextmedium)
-BuildRequires:  font(redhattextmediumitalic)
 %if %{with source_code_pro}
-BuildRequires:  font(sourcecodepro)
-BuildRequires:  font(sourcecodeprosemibold)
 %else
-BuildRequires:  redhat-mono-vf-fonts
 %endif
-
-BuildRequires:  graphviz
 Requires:       graphviz
-
 Requires:       gi-docgen-fonts = %{version}-%{release}
-
 Provides:       bundled(js-fzy)
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-gi-docgen = %{version}-%{release}
+# /oreon:deps
 %description
 GI-DocGen is a document generator for GObject-based libraries. GObject is the
 base type system of the GNOME project. GI-Docgen reuses the introspection data
@@ -77,11 +54,9 @@ dist archives.
 You should not depend on a system-wide installation until GI-DocGen is declared
 stable.
 
-
 %package fonts
 Summary:        Metapackage providing fonts for gi-docgen output
 License:        Apache-2.0 OR GPL-3.0-or-later
-
 Requires:       font(redhatdisplay)
 Requires:       font(redhatdisplayitalic)
 Requires:       font(redhatdisplayblack)
@@ -99,45 +74,31 @@ Requires:       font(sourcecodeprosemibold)
 %else
 Requires:       redhat-mono-vf-fonts
 %endif
-
 %description fonts
 Because web fonts from upstream are not bundled in the gi-docgen package,
 documentation packages generated with gi-docgen must depend on this metapackage
 to ensure the proper system fonts are present.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n gi-docgen-%{version} -p1
 find . -type f \( -name '*.woff' -o -name '*.woff2' \) -print -delete
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files gidocgen
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %pyproject_check_import
 %pytest
-
-%files -f %{pyproject_files}
-%license LICENSES/ REUSE.toml
-%doc CHANGES.md
-%doc README.md
-%doc examples/
-
-%{_bindir}/gi-docgen
-%{_mandir}/man1/gi-docgen.1*
-%{_datadir}/pkgconfig/gi-docgen.pc
-
-
-%files fonts
-
+%files
+%files -n gi-docgen-fonts -f %{oreon_filedir}/gi-docgen-fonts.list
 
 %changelog
+
 %autochangelog

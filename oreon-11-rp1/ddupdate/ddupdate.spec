@@ -1,46 +1,34 @@
-%global source0_hash 3f5f3e9a28ffd7cf50bfc8e7f9ead54b5e54638e34e01f003340206373c4a443
-
+%global source0_hash d6890cde2973f214d5cf2e6a30bde470e1c611c50ef030560017bb8a63778aaf
 %global __python __python3
-
 %global gittag      0.7.1
-#global commit      eb302484417d85cbf497958ba2a651f738ad7420
-
 %global shortcommit %{?commit:%(c=%{commit}; echo ${c:0:7})}%{!?commit:%nil}
 %global shortdir    %{?gittag}%{?shortcommit}
 %global srcdir      %{?gittag}%{?commit}
-
-# mageia 6- fix:
 %{!?_userunitdir: %global _userunitdir /usr/lib/systemd/system}
-
-#Suse fix:
 %{!?python3_pkgversion:%global python3_pkgversion 3}
-
 Name:           ddupdate
 Version:        0.7.1
-Release:        19%{?dist}
+Release:        1%{?dist}
 Summary:        Tool updating DNS data for dynamic IP addresses
-
 Group:          Applications/System
 License:        MIT
 URL:            http://github.com/leamas/ddupdate
 BuildArch:      noarch
-Source0:        %{url}/archive/%{srcdir}/%{name}-%{shortdir}.tar.gz
+Source0:        http://github.com/leamas/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch1:         0001-ddupdate_netrc_to_keyring-ddupdate-netrc-to-keyring.patch
 Patch2:         0002-plugins-dtdns-Remove-service-seems-dead.patch
 Patch3:         0003-Manpages-update.patch
-
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  systemd
-BuildRequires:  /usr/bin/pkg-config
-
 Requires:       python%{python3_pkgversion}-keyring
 Requires:       python%{python3_pkgversion}-requests
 Requires:       /usr/sbin/ip
 Requires:       sudo
-
 %{?systemd_requires}
-
+# oreon:deps
+BuildRequires:  /usr/bin/pkg-config
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  systemd
+# /oreon:deps
 %description
 
 A tool to update dynamic IP addresses typically obtained using DHCP
@@ -58,6 +46,7 @@ ddupdate is distributed with systemd support to run at regular intervals,
 and with NetworkManager templates to run when interfaces goes up or down.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{srcdir}
@@ -65,27 +54,16 @@ sed -i '/ExecStart/s|/usr/local|/usr|' systemd/ddupdate.service
 sed -i 's|systemd_unitdir(),|"lib/systemd/user",|' setup.py
 
 %build
-%py3_build
 
+%py3_build
 %install
 export FINAL_PREFIX=/
 %py3_install
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/ddupdate/plugins
+%oreon_autofiles main
 
-%files
-%license LICENSE.txt
-%doc README.md NEWS CONTRIBUTE.md CONFIGURATION.md
-%{_bindir}/ddupdate
-%{_bindir}/ddupdate-config
-%{_bindir}/ddupdate-netrc-to-keyring
-%{_userunitdir}/ddupdate*
-%{_datadir}/ddupdate
-%{_datadir}/bash-completion/completions/ddupdate
-%{_mandir}/man8/ddupdate.8*
-%{_mandir}/man8/ddupdate-config.8*
-%{_mandir}/man8/ddupdate-netrc-to-keyring.8*
-%{_mandir}/man5/ddupdate.conf.5*
-%{python3_sitelib}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

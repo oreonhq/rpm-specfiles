@@ -1,29 +1,30 @@
 %global source0_hash 62b2278d0277c1dad122ae4a20f7a25857265904edbe0a264f9bf25b7fe50dd8
-
-Summary: NIS (or YP) client programs
+Summary:        NIS (or YP) client programs
 Name: yp-tools
 Version: 4.2.3
-Release: 22%{?dist}
+Release:        22%{?dist}
 License: GPL-2.0-only
-
 URL: https://www.thkukuk.de/nis/nis/yp-tools/
-Source:        https://github.com/thkukuk/yp-tools/archive/refs/tags/v%{version}.tar.gz#/yp-tools-4.2.3.tar.gz
-
+Source0:        https://github.com/thkukuk/yp-tools/archive/refs/tags/v%{version}.tar.gz#/yp-tools-4.2.3.tar.gz
 Patch1: yp-tools-2.12-hash.patch
 Patch2: yp-tools-2.12-crypt.patch
 Patch3: yp-tools-2.12-adjunct.patch
 Patch4: yp-tools-4.2.2-strict-prototypes.patch
 Patch5: yp-tools-4.2.3-yppasswd.patch
 Patch6: yp-tools-4.2.3-yppasswd-exclamation_mark.patch
-
-BuildRequires: make
-BuildRequires: libxcrypt-devel
-BuildRequires: autoconf, automake, gettext-devel, libtool, libtirpc-devel, libnsl2-devel
 Requires: ypbind >= 3:2.4-2
 Requires: glibc
-
 %global __filter_GLIBC_PRIVATE 1
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gettext-devel
+BuildRequires:  libnsl2-devel
+BuildRequires:  libtirpc-devel
+BuildRequires:  libtool
+BuildRequires:  libxcrypt-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 The Network Information Service (NIS) is a system which provides
 network information (login names, passwords, home directories, groupinformation) to all of the machines on a network.  NIS can enable
@@ -47,12 +48,11 @@ you'll need to install the ypserv package on one machine on the network.
 %package devel
 Summary: NIS (or YP) client programs
 Requires: yp-tools
-
 %description devel
 Install yp-tools-devel package for developing applications that use yp-tools
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{version} -p1
 
@@ -61,27 +61,17 @@ autoreconf -i -f -v
 %build
 
 export CFLAGS="$CFLAGS %{optflags} -Wno-cast-function-type"
-
-# If needed the yppasswd can be deprecated by --enable-call-passwd
 %configure --disable-domainname
-
 %make_build
-
 %install
 make DESTDIR="$RPM_BUILD_ROOT" INSTALL_PROGRAM=install install
-
 %find_lang %name
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%doc AUTHORS COPYING README ChangeLog NEWS etc/nsswitch.conf
-%doc THANKS
-%{_bindir}/*
-
-
-%{_mandir}/*/*
-%{_sbindir}/*
-/var/yp/nicknames
+%files -f %{oreon_filedir}/main.list
+%files -n yp-tools-devel -f %{oreon_filedir}/yp-tools-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2.3-22
 - Prepare for Oreon 11 (RP1)

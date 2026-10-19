@@ -1,64 +1,55 @@
-%global source0_hash none
-
+%global source0_hash 0552cbf2831a32a28994a13d29bca58a60e10ff6c0380e343ec6d1c2a0d232d8
 Name:           python-url-normalize
 Version:        3.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        URL normalization for Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/niksite/url-normalize
-Source:         %{pypi_source url_normalize}
-
+Source0:        https://files.pythonhosted.org/packages/source/u/url_normalize/url_normalize-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77
+Requires:       python3-url-normalize = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-url-normalize+dev
+Summary:        Metapackage for python3-url-normalize dev extras
+Requires:       python3-url-normalize = %{version}-%{release}
+Provides:       python3dist(url-normalize[dev]) = %{version}-%{release}
 
+%description -n python3-url-normalize+dev
+Metapackage for python3-url-normalize dev extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'url-normalize' generated automatically by pyp2spec.}
-
-
-%description %_description
+%description
 
 %package -n     python3-url-normalize
-Summary:        %{summary}
-
-%description -n python3-url-normalize %_description
+Summary:        URL normalization for Python
+# oreon:reqs
+Requires:       python3dist(idna) >= 3.3
+# /oreon:reqs
+%description -n python3-url-normalize
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-url-normalize dev
-
 
 %prep
-%autosetup -p1 -n url_normalize-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir url_normalize-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-url-normalize usr/lib/python3*/site-packages/url_normalize* usr/lib64/python3*/site-packages/url_normalize* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/url_normalize* usr/lib64/python3*/site-packages/url_normalize* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-url-normalize -f %{pyproject_files}
-%{_bindir}/url-normalize
+%files
+%files -n python3-url-normalize -f %{oreon_filedir}/python3-url-normalize.list
 
 %changelog
+
 %autochangelog

@@ -1,27 +1,24 @@
 %global source0_hash c9b79bfade6cc69fe0e341ecef932fcac8afd9fe94e8cbcfbd729feb54394e04
-
 Name:		krusader
 Version:	2.9.0
-Release:	4%{?dist}
-Summary:	An advanced twin-panel (commander-style) file-manager for KDE
-
+Release:        4%{?dist}
+Summary:        An advanced twin-panel (commander-style) file-manager for KDE
 License:	GPL-2.0-or-later
 URL:		https://www.krusader.org/
 Source0:        https://download.kde.org/stable/%{name}/%{version}/%{name}-%{version}.tar.xz
-
-BuildRequires:	bzip2-devel
-BuildRequires:	cmake
-BuildRequires:	desktop-file-utils
-BuildRequires:	extra-cmake-modules
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  cmake
 BuildRequires:  cmake(KF6Archive)
 BuildRequires:  cmake(KF6Bookmarks)
 BuildRequires:  cmake(KF6Codecs)
 BuildRequires:  cmake(KF6Completion)
-BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6DocTools)
 BuildRequires:  cmake(KF6GlobalAccel)
+BuildRequires:  cmake(KF6GuiAddons)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6IconThemes)
 BuildRequires:  cmake(KF6ItemViews)
@@ -29,21 +26,22 @@ BuildRequires:  cmake(KF6KIO)
 BuildRequires:  cmake(KF6Notifications)
 BuildRequires:  cmake(KF6Parts)
 BuildRequires:  cmake(KF6Solid)
+BuildRequires:  cmake(KF6StatusNotifierItem)
 BuildRequires:  cmake(KF6TextWidgets)
 BuildRequires:  cmake(KF6Wallet)
 BuildRequires:  cmake(KF6WidgetsAddons)
 BuildRequires:  cmake(KF6WindowSystem)
 BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6StatusNotifierItem)
-BuildRequires:	libacl-devel
-BuildRequires:	libappstream-glib
-BuildRequires:	libattr-devel
-BuildRequires:	ninja-build
-BuildRequires:	qt6-qtbase-devel
 BuildRequires:  cmake(Qt6Core5Compat)
-BuildRequires:	zlib-devel
-
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  libacl-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libattr-devel
+BuildRequires:  ninja-build
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Krusader is an advanced twin panel (commander style) file manager for KDE and
 other desktops in the *nix world, similar to Midnight or Total Commander.
@@ -57,36 +55,24 @@ friendly, fast and looks great on your desktop! You should give it a try.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake_kf6 -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --with-kde
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
-
-%files -f %{name}.lang
-%doc AUTHORS ChangeLog README README.md NEWS TODO
-%license LICENSES/*
-%{_bindir}/%{name}
-%{_datadir}/%{name}/
-%{_datadir}/applications/*.desktop
-%{_datadir}/doc/HTML/*/%{name}/
-%{_datadir}/icons/hicolor/*/apps/*.png
-%{_datadir}/kxmlgui5/%{name}/
-%{_libdir}/qt6/plugins/kf6/kio/kio*.so
-%{_mandir}/*/man1/%{name}.1*
-%{_mandir}/man1/%{name}.1*
-%{_metainfodir}/*.appdata.xml
-%{_sysconfdir}/xdg/kio_isorc
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 2.9.0-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

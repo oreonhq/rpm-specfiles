@@ -1,19 +1,15 @@
 %global source0_hash 035344bc587cd813a2a4f4dcb88a756e939dff32c5628a10639359af1e72fb36
-
 Name:           R-parallelly
 Version:        %R_rpm_version 1.46.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Enhancing the 'parallel' Package
-
 License:        LGPL-2.1-or-later
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=parallelly&version=%{version}#/parallelly_%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Utility functions that enhance the 'parallel' package and support the
 built-in parallel backends of the 'future' package.  For example,
@@ -27,24 +23,24 @@ job in setting up remote cluster workers without the need for configuring
 the firewall to do port-forwarding to your local computer.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -c
 rm -f parallelly/tests/test-makeNodePSOCK.R # ssh test
-
-%generate_buildrequires
-%R_buildrequires
 
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

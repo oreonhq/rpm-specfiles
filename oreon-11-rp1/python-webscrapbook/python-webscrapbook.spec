@@ -1,67 +1,61 @@
-%global source0_hash none
-
+%global source0_hash af0e5dac788d42e3c571cbbc4780bd8ab974fc44a1567514d64564e4f825559c
 Name:           python-webscrapbook
 Version:        2.10.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A backend toolkit for management of WebScrapBook collection.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/danny0838/PyWebScrapBook
-Source:         %{pypi_source webscrapbook}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/webscrapbook/webscrapbook-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'webscrapbook' generated automatically by pyp2spec.}
-
 Patch100:       python-webscrapbook-2.7.1-test-requirements.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-webscrapbook = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-webscrapbook+adhoc_ssl
+Summary:        Metapackage for python3-webscrapbook adhoc_ssl extras
+Requires:       python3-webscrapbook = %{version}-%{release}
+Provides:       python3dist(webscrapbook[adhoc_ssl]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-webscrapbook+adhoc_ssl
+Metapackage for python3-webscrapbook adhoc_ssl extras.
+
+%description
 
 %package -n     python3-webscrapbook
-Summary:        %{summary}
-
-%description -n python3-webscrapbook %_description
+Summary:        A backend toolkit for management of WebScrapBook collection.
+# oreon:reqs
+Requires:       python3dist(commonmark) >= 0.8
+Requires:       python3dist(flask) >= 2.0.0
+Requires:       python3dist(jinja2) >= 2.10.1
+Requires:       python3dist(lxml) >= 4.0
+Requires:       python3dist(werkzeug) >= 2.0.1
+Requires:       python3dist(zipremove) >= 0.9
+# /oreon:reqs
+%description -n python3-webscrapbook
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-webscrapbook adhoc-ssl
-
 
 %prep
-%autosetup -p1 -n webscrapbook-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir webscrapbook-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-webscrapbook usr/lib/python3*/site-packages/webscrapbook* usr/lib64/python3*/site-packages/webscrapbook* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/webscrapbook* usr/lib64/python3*/site-packages/webscrapbook* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-webscrapbook -f %{pyproject_files}
-%{_bindir}/webscrapbook
-%{_bindir}/wsb
-%{_bindir}/wsbview
+%files
+%files -n python3-webscrapbook -f %{oreon_filedir}/python3-webscrapbook.list
 
 %changelog
+
 %autochangelog

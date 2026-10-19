@@ -1,48 +1,40 @@
 %global source0_hash d3c4d257a560d544e9826b38bc81db676890c79ab9d7ac92b39c7a253d5ca733
-
 Name:           python-rfc3987
 Version:        1.3.8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Parsing and validation of URIs (RFC 3986) and IRIs (RFC 3987)
-
 License:        GPL-3.0-or-later
 URL:            https://codeberg.org/atufi/rfc3987
-Source:         %{pypi_source rfc3987}
-
-
+Source0:        https://files.pythonhosted.org/packages/source/r/rfc3987/rfc3987-%{version}.tar.gz
 BuildArch:      noarch
-
-%global _description %{expand:
-This module provides regular expressions according to RFC 3986 “Uniform
-Resource Identifier (URI): Generic Syntax”
-<https://datatracker.ietf.org/doc/html/rfc3986> and RFC 3987 “Internationalized
-Resource Identifiers (IRIs)” <https://datatracker.ietf.org/doc/html/rfc3987>,
-and utilities for composition and relative resolution of references.}
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-rfc3987 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-rfc3987
-Summary:        %{summary}
-
-%description -n python3-rfc3987 %{_description}
+Summary:        Parsing and validation of URIs (RFC 3986) and IRIs (RFC 3987)
+%description -n python3-rfc3987
 
 %install
 %pyproject_install
-# Remove shebang from non-executable library file.
-# https://codeberg.org/atufi/rfc3987/pulls/19
 sed -r -i '1{/^#!/d}' %{buildroot}%{python3_sitelib}/rfc3987.py
+%oreon_autofiles python3-rfc3987 usr/lib/python3*/site-packages/rfc3987* usr/lib64/python3*/site-packages/rfc3987* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/rfc3987* usr/lib64/python3*/site-packages/rfc3987* usr/bin/*
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %pyproject_wheel
-
 %check
-%{py3_test_envvars} %{python3} -m doctest -v rfc3987.py
 
-%files -n python3-rfc3987 -f %{pyproject_files}
-%doc README.txt
+%{py3_test_envvars} %{python3} -m doctest -v rfc3987.py
+%files
+%files -n python3-rfc3987 -f %{oreon_filedir}/python3-rfc3987.list
 
 %changelog
+
 %autochangelog

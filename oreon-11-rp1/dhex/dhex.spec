@@ -1,19 +1,18 @@
 %global source0_hash 52730bcd1cf16bd4dae0de42531be9a4057535ec61ca38c0804eb8246ea6c41b
-
-Summary: Ncurses based hexadecimal editor with a diff mode
+Summary:        Ncurses based hexadecimal editor with a diff mode
 Name: dhex
 Version: 0.69
-Release: 19%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        19%{?dist}
 License: GPL-2.0-or-later
 URL: http://www.dettus.net/dhex/
-Source: http://www.dettus.net/dhex/%{name}_%{version}.tar.gz
+Source0:        http://www.dettus.net/dhex/%{name}_%{version}.tar.gz
 Patch: dhex-0.69-build-fix.patch
-# Sent upstream
 Patch: dhex-0.69-gcc-15-fix.patch
-BuildRequires: gcc, ncurses-devel
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+# /oreon:deps
 %description
 DHEX is a more than just another hex editor: It includes a diff mode, which
 can be used to easily and conveniently compare two binary files. Since it is
@@ -23,22 +22,19 @@ changes in different iterations of files easily.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}_%{version}
-
+%global oreon_srcdir %{name}_%{version}
+%oreon_prep
 %build
-make %{?_smp_mflags} CFLAGS="%{optflags}" %{?__global_ldflags: LDFLAGS="%{__global_ldflags}"}
 
+make %{?_smp_mflags} CFLAGS="%{optflags}" %{?__global_ldflags: LDFLAGS="%{__global_ldflags}"}
 %install
 install -dD %{buildroot}%{_bindir} %{buildroot}%{_mandir}/man{1,5}
 make %{?_smp_mflags} DESTDIR=%{buildroot} BINDIR=%{_bindir} \
      MANDIR=%{_mandir} install
+%oreon_autofiles main
 
-%files
-%doc README.txt gpl.txt todo.txt
-
-%{_bindir}/*
-%{_mandir}/*/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

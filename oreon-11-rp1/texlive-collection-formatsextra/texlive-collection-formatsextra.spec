@@ -1,19 +1,15 @@
 %global source0_hash 69dc1da45c044aa6de1642235c56902b9d7458a40aba0f750c14cd2e61fa7ae7
-
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
 %global tl_version 2025
-
 Name:           texlive-collection-formatsextra
 Epoch:          12
 Version:        svn72250
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Additional formats
-
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-# Main collection source
 %global source2_hash 4d4715e0d5ea268134dfa5983765adee5d6abf73a5a730a3070461fd15e944e3
 %global source3_hash b7c8b332f89caec0c807a78efeb8a4cde8d7f3590dda99848453bd7b8b92ef0a
 %global source4_hash aa2fb338dddd4950df9b9477d54ce9f8cd198adeff49ba2c1274a1e3801c1945
@@ -28,12 +24,8 @@ BuildArch:      noarch
 %global source13_hash 01689e82d70003b6dc357b98d036a675f1974cf17c3136f66b7f78fa9b61a65e
 %global source14_hash 292ae4e691ecc117d9fc5b01ba4bf0b25dd0aca9ae866ecb147bc1ec28981334
 %global source15_hash 8666616492c62840256414974a565289d65bb599396946b27cad57b3af722ed6
-
 Source0:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/collection-formatsextra.tar.xz#/collection-formatsextra.or11.tar.xz
-
-# License texts
 Source1:        texlive-licenses.tar.xz
-
 Source2:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/antomega.tar.xz#/antomega.or11.tar.xz
 Source3:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/antomega.doc.tar.xz#/antomega.doc.or11.tar.xz
 Source4:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/lambda.tar.xz#/lambda.or11.tar.xz
@@ -48,7 +40,6 @@ Source12:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/psi
 Source13:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/psizzl.doc.tar.xz#/psizzl.doc.or11.tar.xz
 Source14:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/startex.tar.xz#/startex.or11.tar.xz
 Source15:        https://texlive.info/tlnet-archive/2026/08/29/tlnet/archive/startex.doc.tar.xz#/startex.doc.or11.tar.xz
-BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-aleph
 Requires:       texlive-antomega
@@ -69,7 +60,9 @@ Requires:       texlive-psizzl
 Requires:       texlive-startex
 Requires:       texlive-texsis
 Requires:       texlive-xmltex
-
+# oreon:deps
+BuildRequires:  texlive-base
+# /oreon:deps
 %description
 Collected TeX `formats', i.e., large-scale macro packages designed to be dumped
 into .fmt files -- excluding the most common ones, such as latex and context,
@@ -110,7 +103,6 @@ Provides:       tex(uni0370.def) = %{tl_version}
 Provides:       tex(uni0400.def) = %{tl_version}
 Provides:       tex(uni1f00.def) = %{tl_version}
 Provides:       tex(ut1enc-antomega.def) = %{tl_version}
-
 %description -n texlive-antomega
 A language support package for Omega/Lambda. This replaces the original omega
 package for use with Lambda, and provides extra facilities (including
@@ -133,7 +125,6 @@ Provides:       tex(odev.sty) = %{tl_version}
 Provides:       tex(ojapan.sty) = %{tl_version}
 Provides:       tex(omega.sty) = %{tl_version}
 Provides:       tex(ut1enc.def) = %{tl_version}
-
 %description -n texlive-lambda
 LaTeX for Omega and Aleph
 
@@ -145,7 +136,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       tex(mxedruli.sty) = %{tl_version}
 Provides:       tex(xucuri.sty) = %{tl_version}
-
 %description -n texlive-mxedruli
 Two Georgian fonts, in both Metafont and Type 1 formats, which cover the
 Mxedruli and the Xucuri alphabets.
@@ -161,7 +151,6 @@ Provides:       tex(grlccode.tex) = %{tl_version}
 Provides:       tex(lthyph.tex) = %{tl_version}
 Provides:       tex(omega.tex) = %{tl_version}
 Provides:       tex(srhyph.tex) = %{tl_version}
-
 %description -n texlive-omega
 A development of TeX, which deals in multi-octet Unicode characters, to enable
 native treatment of a wide range of languages without changing character-set.
@@ -178,7 +167,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       tex(otibet.sty) = %{tl_version}
 Provides:       tex(otibet.tex) = %{tl_version}
-
 %description -n texlive-otibet
 support for Tibetan using Omega
 
@@ -193,7 +181,6 @@ Requires:       tex(amssymb.sty)
 Requires:       tex(array.sty)
 Requires:       tex(bm.sty)
 Requires:       tex(color.sty)
-# Ignoring dependency on elfonts.sty - not part of TeX Live
 Requires:       tex(eucal.sty)
 Requires:       tex(fontenc.sty)
 Requires:       tex(graphicx.sty)
@@ -219,7 +206,6 @@ Provides:       tex(teixml.sty) = %{tl_version}
 Provides:       tex(teixmlslides.sty) = %{tl_version}
 Provides:       tex(ucharacters.sty) = %{tl_version}
 Provides:       tex(unicode.sty) = %{tl_version}
-
 %description -n texlive-passivetex
 Packages providing XML parsing, UTF-8 parsing, Unicode entities, and common
 formatting object definitions for jadetex.
@@ -232,7 +218,6 @@ Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       tex(mypsizzl.tex) = %{tl_version}
 Provides:       tex(psizzl.tex) = %{tl_version}
-
 %description -n texlive-psizzl
 PSIZZL is a TeX format for physics papers written at SLAC and used at several
 other places. It dates from rather early in the development of TeX82; as a
@@ -246,13 +231,13 @@ License:        LicenseRef-Fedora-Public-Domain
 Requires:       texlive-base
 Requires:       texlive-kpathsea
 Provides:       tex(startex.tex) = %{tl_version}
-
 %description -n texlive-startex
 A TeX format designed to help students write short reports and essays. It
 provides the user with a suitable set of commands for such a task. It is also
 more robust than plain TeX and LaTeX.
 
 %prep
+
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h_expected="%{source2_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h_expected="%{source3_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h_expected="%{source4_hash}"; if test ${#h_expected} -eq 128; then h=$(sha512sum "$f" | awk '{print $1}'); else h=$(sha256sum "$f" | awk '{print $1}'); fi; test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
@@ -273,11 +258,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 tar -xf %{SOURCE1}
 
 %build
-# Nothing to build
 
 %install
 mkdir -p %{buildroot}%{_texmf_main}
-
 tar -xf %{SOURCE2} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE3} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE4} -C %{buildroot}%{_texmf_main}
@@ -292,85 +275,27 @@ tar -xf %{SOURCE12} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE13} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE14} -C %{buildroot}%{_texmf_main}
 tar -xf %{SOURCE15} -C %{buildroot}%{_texmf_main}
-
-# Remove tlpobj files
 rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
+%oreon_autofiles texlive-antomega usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-lambda usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-mxedruli usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-omega usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-otibet usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-passivetex usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-psizzl usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles texlive-startex usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# Main collection metapackage (empty)
-%files
-
-%files -n texlive-antomega
-%license lppl1.3c.txt
-%{_texmf_main}/omega/ocp/antomega/
-%{_texmf_main}/omega/otp/antomega/
-%{_texmf_main}/tex/lambda/antomega/
-%doc %{_texmf_main}/doc/omega/antomega/
-
-%files -n texlive-lambda
-%license lppl1.3c.txt
-%{_texmf_main}/tex/lambda/base/
-%{_texmf_main}/tex/lambda/config/
-
-%files -n texlive-mxedruli
-%license lppl1.3c.txt
-%{_texmf_main}/fonts/afm/public/mxedruli/
-%{_texmf_main}/fonts/map/dvips/mxedruli/
-%{_texmf_main}/fonts/source/public/mxedruli/
-%{_texmf_main}/fonts/tfm/public/mxedruli/
-%{_texmf_main}/fonts/type1/public/mxedruli/
-%{_texmf_main}/tex/latex/mxedruli/
-%doc %{_texmf_main}/doc/fonts/mxedruli/
-
-%files -n texlive-omega
-%license gpl2.txt
-%{_texmf_main}/dvips/omega/
-%{_texmf_main}/fonts/afm/public/omega/
-%{_texmf_main}/fonts/map/dvips/omega/
-%{_texmf_main}/fonts/ofm/public/omega/
-%{_texmf_main}/fonts/ovf/public/omega/
-%{_texmf_main}/fonts/ovp/public/omega/
-%{_texmf_main}/fonts/tfm/public/omega/
-%{_texmf_main}/fonts/type1/public/omega/
-%{_texmf_main}/omega/ocp/char2uni/
-%{_texmf_main}/omega/ocp/misc/
-%{_texmf_main}/omega/ocp/omega/
-%{_texmf_main}/omega/ocp/uni2char/
-%{_texmf_main}/omega/otp/char2uni/
-%{_texmf_main}/omega/otp/misc/
-%{_texmf_main}/omega/otp/omega/
-%{_texmf_main}/omega/otp/uni2char/
-%{_texmf_main}/tex/generic/encodings/
-%{_texmf_main}/tex/generic/omegahyph/
-%{_texmf_main}/tex/plain/omega/
-%doc %{_texmf_main}/doc/omega/base/
-
-%files -n texlive-otibet
-%license lppl1.3c.txt
-%{_texmf_main}/fonts/ofm/public/otibet/
-%{_texmf_main}/fonts/ovf/public/otibet/
-%{_texmf_main}/fonts/ovp/public/otibet/
-%{_texmf_main}/fonts/source/public/otibet/
-%{_texmf_main}/fonts/tfm/public/otibet/
-%{_texmf_main}/omega/ocp/otibet/
-%{_texmf_main}/omega/otp/otibet/
-%{_texmf_main}/tex/latex/otibet/
-%doc %{_texmf_main}/doc/latex/otibet/
-
-%files -n texlive-passivetex
-%license mit.txt
-%{_texmf_main}/tex/xmltex/passivetex/
-
-%files -n texlive-psizzl
-%license lppl1.3c.txt
-%{_texmf_main}/tex/psizzl/base/
-%{_texmf_main}/tex/psizzl/config/
-%doc %{_texmf_main}/doc/otherformats/psizzl/
-
-%files -n texlive-startex
-%license pd.txt
-%{_texmf_main}/makeindex/startex/
-%{_texmf_main}/tex/startex/
-%doc %{_texmf_main}/doc/otherformats/startex/
+%files -f %{oreon_filedir}/main.list
+%files -n texlive-antomega -f %{oreon_filedir}/texlive-antomega.list
+%files -n texlive-lambda -f %{oreon_filedir}/texlive-lambda.list
+%files -n texlive-mxedruli -f %{oreon_filedir}/texlive-mxedruli.list
+%files -n texlive-omega -f %{oreon_filedir}/texlive-omega.list
+%files -n texlive-otibet -f %{oreon_filedir}/texlive-otibet.list
+%files -n texlive-passivetex -f %{oreon_filedir}/texlive-passivetex.list
+%files -n texlive-psizzl -f %{oreon_filedir}/texlive-psizzl.list
+%files -n texlive-startex -f %{oreon_filedir}/texlive-startex.list
 
 %changelog
+
 %autochangelog

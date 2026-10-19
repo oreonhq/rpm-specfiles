@@ -1,16 +1,15 @@
 %global source0_hash 7507ce92001c6f1faa4e7c57513d9fa14da90051e6c26a14f34aaa9801625df9
-
 Name:           frogr
 Version:        1.8.1
 Summary:        Flickr Remote Organizer for GNOME
 Summary(de):    Flickr-Verwaltung für GNOME
 Release:        1%{?dist}
-
-# Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only
 URL:            https://wiki.gnome.org/Apps/Frogr
 Source0:        https://download.gnome.org/sources/%{name}/1.8.1/%{name}-%{version}.tar.xz
-
+# oreon:deps
+BuildRequires:  /usr/bin/appstream-util
+BuildRequires:  /usr/bin/desktop-file-validate
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  itstool
@@ -23,9 +22,7 @@ BuildRequires:  pkgconfig(libexif)
 BuildRequires:  pkgconfig(libgcrypt)
 BuildRequires:  pkgconfig(libsoup-2.4)
 BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  /usr/bin/appstream-util
-BuildRequires:  /usr/bin/desktop-file-validate
-
+# /oreon:deps
 %description
 Frogr is a small application for the GNOME desktop that allows users
 to manage their accounts in the Flickr image hosting website. It
@@ -40,32 +37,22 @@ Setzen von Markierungen und Verwalten von Alben.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
 %find_lang %{name} --with-gnome
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.frogr.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/org.gnome.frogr.appdata.xml
-
-%files -f %{name}.lang
-%license COPYING
-%doc README NEWS AUTHORS THANKS MAINTAINERS TRANSLATORS
-%{_bindir}/frogr
-%{_datadir}/applications/org.gnome.frogr.desktop
-%{_datadir}/frogr/
-%{_datadir}/icons/hicolor/*/apps/org.gnome.frogr.png
-%{_datadir}/icons/hicolor/*/apps/org.gnome.frogr.svg
-%{_datadir}/icons/hicolor/scalable/apps/org.gnome.frogr-symbolic.svg
-%{_datadir}/metainfo/org.gnome.frogr.appdata.xml
-%{_mandir}/man1/frogr.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,32 +1,26 @@
 %global source0_hash 0e6c61aff150d19a0f89cb3e354ab36189e4bc23e28ab8bce03b6c6b6004f237
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 Name:           ocaml-bin-prot
 Version:        0.17.0
 Epoch:          1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Read and write OCaml values in a type-safe binary protocol
-
-# The project as a whole is MIT.
-# Code in the src subdirectory is BSD-3-Clause.
 License:        MIT AND BSD-3-Clause
 URL:            https://github.com/janestreet/bin_prot
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/bin_prot-%{version}.tar.gz
-
-BuildRequires:  ocaml >= 5.1.0
-BuildRequires:  ocaml-base-devel >= 0.17
-BuildRequires:  ocaml-dune >= 3.11.0
-BuildRequires:  ocaml-ppx-compare-devel >= 0.17
-BuildRequires:  ocaml-ppx-custom-printf-devel >= 0.17
-BuildRequires:  ocaml-ppx-fields-conv-devel >= 0.17
-BuildRequires:  ocaml-ppx-optcomp-devel >= 0.17
-BuildRequires:  ocaml-ppx-sexp-conv-devel >= 0.17
-BuildRequires:  ocaml-ppx-stable-witness-devel >= 0.17
-BuildRequires:  ocaml-ppx-variants-conv-devel >= 0.17
-
+Source0:        https://github.com/janestreet/bin_prot/archive/v%{version}/bin_prot-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-base-devel
+BuildRequires:  ocaml-dune
+BuildRequires:  ocaml-ppx-compare-devel
+BuildRequires:  ocaml-ppx-custom-printf-devel
+BuildRequires:  ocaml-ppx-fields-conv-devel
+BuildRequires:  ocaml-ppx-optcomp-devel
+BuildRequires:  ocaml-ppx-sexp-conv-devel
+BuildRequires:  ocaml-ppx-stable-witness-devel
+BuildRequires:  ocaml-ppx-variants-conv-devel
+# /oreon:deps
 %description
 This library contains functionality for reading and writing OCaml values in a
 type-safe binary protocol.  These functions are extremely efficient and
@@ -50,30 +44,27 @@ Requires:       ocaml-ppx-sexp-conv-devel%{?_isa}
 Requires:       ocaml-sexplib0-devel%{?_isa}
 Requires:       ocaml-ppx-stable-witness-devel%{?_isa}
 Requires:       ocaml-variantslib-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n bin_prot-%{version}
-
+%global oreon_srcdir bin_prot-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%doc CHANGES.md README.md
-%license COPYRIGHT.txt LICENSE.md LICENSE-Tywith.txt THIRD-PARTY.txt
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-bin-prot-devel -f %{oreon_filedir}/ocaml-bin-prot-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,86 @@
-%global source0_hash none
-
+%global source0_hash 20156f5a1ac4f8ce02656e39a61e82164a3d359796dc8026f75b062783d500e1
 Name:           python-contourpy
 Version:        1.4.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python library for calculating contours of 2D quadrilateral grids
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/contourpy/contourpy
-Source:         %{pypi_source contourpy}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/contourpy/contourpy-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
+BuildRequires:  python3dist(meson-python) >= 0.18.0
+BuildRequires:  python3dist(pybind11) >= 2.13.2
+Requires:       python3-contourpy = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-contourpy+docs
+Summary:        Metapackage for python3-contourpy docs extras
+Requires:       python3-contourpy = %{version}-%{release}
+Provides:       python3dist(contourpy[docs]) = %{version}-%{release}
 
+%description -n python3-contourpy+docs
+Metapackage for python3-contourpy docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'contourpy' generated automatically by pyp2spec.}
+%package -n       python3-contourpy+bokeh
+Summary:        Metapackage for python3-contourpy bokeh extras
+Requires:       python3-contourpy = %{version}-%{release}
+Provides:       python3dist(contourpy[bokeh]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-contourpy+bokeh
+Metapackage for python3-contourpy bokeh extras.
+
+%package -n       python3-contourpy+mypy
+Summary:        Metapackage for python3-contourpy mypy extras
+Requires:       python3-contourpy = %{version}-%{release}
+Requires:       python3dist(mypy) == 2.1.0
+Provides:       python3dist(contourpy[mypy]) = %{version}-%{release}
+
+%description -n python3-contourpy+mypy
+Metapackage for python3-contourpy mypy extras.
+
+%package -n       python3-contourpy+test
+Summary:        Metapackage for python3-contourpy test extras
+Requires:       python3-contourpy = %{version}-%{release}
+Provides:       python3dist(contourpy[test]) = %{version}-%{release}
+
+%description -n python3-contourpy+test
+Metapackage for python3-contourpy test extras.
+
+%package -n       python3-contourpy+test-no-images
+Summary:        Metapackage for python3-contourpy test-no-images extras
+Requires:       python3-contourpy = %{version}-%{release}
+Requires:       python3dist(pytest-rerunfailures) < 16
+Provides:       python3dist(contourpy[test-no-images]) = %{version}-%{release}
+
+%description -n python3-contourpy+test-no-images
+Metapackage for python3-contourpy test-no-images extras.
+
+%description
 
 %package -n     python3-contourpy
-Summary:        %{summary}
-
-%description -n python3-contourpy %_description
+Summary:        Python library for calculating contours of 2D quadrilateral grids
+# oreon:reqs
+Requires:       python3dist(numpy) >= 2.0
+# /oreon:reqs
+%description -n python3-contourpy
 
 %prep
-%autosetup -p1 -n contourpy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires -p
-
-
+%global oreon_srcdir contourpy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-contourpy usr/lib/python3*/site-packages/contourpy* usr/lib64/python3*/site-packages/contourpy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/contourpy* usr/lib64/python3*/site-packages/contourpy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-contourpy -f %{pyproject_files}
+%files
+%files -n python3-contourpy -f %{oreon_filedir}/python3-contourpy.list
 
 %changelog
+
 %autochangelog

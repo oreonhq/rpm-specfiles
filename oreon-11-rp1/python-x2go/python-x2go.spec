@@ -1,20 +1,18 @@
 %global source0_hash d1a8b4ebf66ab372dda74a90cbdc9bfd85be7219bdbea12abcb8a0569114e9f2
-
 Name:           python-x2go
 Version:        0.6.1.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Python module providing X2Go client API
-
 License:        AGPL-3.0-or-later
 URL:            https://www.x2go.org/
 Source0:        https://code.x2go.org/releases/source/%{name}/%{name}-%{version}.tar.gz
-# Rename SafeConfigParser to ConfigParser
 Patch0:         https://gitlab.x2go.org/x2go/client/libs/python-x2go/-/merge_requests/7.patch
-
 BuildArch:      noarch
-
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-x2go = %{version}-%{release}
+# /oreon:deps
 %description
 X2Go is a server based computing environment with:
    - session resuming
@@ -29,22 +27,18 @@ Python applications by providing a Python-based X2Go client API.
 
 %package        doc
 Summary:        Python X2Go client API documentation
-
 %description    doc
 This package contains the Python X2Go client API documentation.
 
 %package -n python%{python3_pkgversion}-x2go
 Summary:        Python module providing X2Go client API
 BuildRequires:  python%{python3_pkgversion}-devel
-# For doc build
 BuildRequires:  /usr/bin/sphinx-build-3
 BuildRequires:  python%{python3_pkgversion}-xlib
 Requires:       nxproxy
 Requires:       python%{python3_pkgversion}-requests
-# Prefered over json
 Requires:       python%{python3_pkgversion}-simplejson
 Requires:       python%{python3_pkgversion}-xlib
-
 %description -n python%{python3_pkgversion}-x2go
 X2Go is a server based computing environment with:
    - session resuming
@@ -59,25 +53,19 @@ Python applications by providing a Python-based X2Go client API.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%oreon_prep
 %build
+
 %pyproject_wheel
 make -C docs SPHINXBUILD=/usr/bin/sphinx-build-3 html
-
 %install
 %pyproject_install
-%pyproject_save_files -l x2go
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/lib/python3*/site-packages/x2go* usr/lib64/python3*/site-packages/x2go* usr/bin/*
 
-%files -n python%{python3_pkgversion}-x2go -f %{pyproject_files}
-%doc ChangeLog README* TODO
-
-%files doc
-%doc docs/build/html
+%files
+%files -n python-x2go-doc -f %{oreon_filedir}/python-x2go-doc.list
+%files -n python3-x2go -f %{oreon_filedir}/python3-x2go.list
 
 %changelog
+
 %autochangelog

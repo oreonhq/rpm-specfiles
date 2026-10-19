@@ -1,5 +1,4 @@
-%global source0_hash 3e2aad11ed25f53b6c128b5696638bdddbc2ff8ed099718ffa428bb2b865af05
-
+%global source0_hash 2fc18347d4d3f3aa08d3619e86fff9a789239a429a5106459f9226080338574c
 %bcond_without activation
 %bcond_without cglib
 %bcond_without dom4j
@@ -12,63 +11,54 @@
 %bcond_with woodstox
 %bcond_with xom
 %bcond_with xpp3
-
 Name:           xstream
 Version:        1.4.21
 Release:        1%{?dist}
 Summary:        Java XML serialization library
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://x-stream.github.io
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 Source0:        https://repo1.maven.org/maven2/com/thoughtworks/%{name}/%{name}-distribution/%{version}/%{name}-distribution-%{version}-src.zip
+%if %{with activation}
+%endif
+%if %{with cglib}
+%endif
+%if %{with dom4j}
+%endif
+%if %{with jdom}
+%endif
+%if %{with jdom2}
+%endif
+%if %{with jettison}
+%endif
+%if %{with joda-time}
+%endif
+%if %{with kxml2}
+%endif
+%if %{with stax}
+%endif
+%if %{with woodstox}
+%endif
+%if %{with xom}
+%endif
+%if %{with xpp3}
+%endif
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(cglib:cglib-nodep)
+BuildRequires:  mvn(dom4j:dom4j)
 BuildRequires:  mvn(io.github.x-stream:mxparser)
+BuildRequires:  mvn(jakarta.activation:jakarta.activation-api:1)
 BuildRequires:  mvn(jakarta.xml.bind:jakarta.xml.bind-api:2)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-enforcer-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
-%if %{with activation}
-BuildRequires:  mvn(jakarta.activation:jakarta.activation-api:1)
-%endif
-%if %{with cglib}
-BuildRequires:  mvn(cglib:cglib-nodep)
-%endif
-%if %{with dom4j}
-BuildRequires:  mvn(dom4j:dom4j)
-%endif
-%if %{with jdom}
 BuildRequires:  mvn(org.jdom:jdom)
-%endif
-%if %{with jdom2}
 BuildRequires:  mvn(org.jdom:jdom2)
-%endif
-%if %{with jettison}
-BuildRequires:  mvn(org.codehaus.jettison:jettison)
-%endif
-%if %{with joda-time}
-BuildRequires:  mvn(joda-time:joda-time)
-%endif
-%if %{with kxml2}
-BuildRequires:  mvn(net.sf.kxml:kxml2-min)
-%endif
-%if %{with stax}
-BuildRequires:  mvn(stax:stax)
-BuildRequires:  mvn(stax:stax-api)
-%endif
-%if %{with woodstox}
-BuildRequires:  mvn(org.codehaus.woodstox:wstx-asl)
-%endif
-%if %{with xom}
-BuildRequires:  mvn(xom:xom)
-%endif
-%if %{with xpp3}
-BuildRequires:  mvn(xpp3:xpp3_min)
-%endif
-
+# /oreon:deps
 %description
 XStream is a simple library to serialize objects to XML
 and back again. A high level facade is supplied that
@@ -97,6 +87,7 @@ Benchmark module for %{name}.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # -n: base directory name
@@ -205,17 +196,17 @@ rm xstream-benchmark/src/java/com/thoughtworks/xstream/tools/benchmark/products/
 %mvn_package :%{name}-parent __noinstall
 
 %build
-%mvn_build -s -f -- -Dversion.java.5=1.8 -Dversion.java.6=1.8 -Dversion.java.source=1.8 -Dversion.java.target=1.8
 
+%mvn_build -s -f -- -Dversion.java.5=1.8 -Dversion.java.6=1.8 -Dversion.java.source=1.8 -Dversion.java.target=1.8
 %install
 %mvn_install
+%license LICENSE.txt
+%doc README.txt
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n %{name} -f .mfiles-%{name}
-%license LICENSE.txt
-%doc README.txt
-%files -n %{name}-benchmark -f .mfiles-%{name}-benchmark
-%license LICENSE.txt
-%doc README.txt
+%files -f %{oreon_filedir}/main.list
+%files -n xstream-benchmark -f %{oreon_filedir}/xstream-benchmark.list
 
 %changelog
+
 %autochangelog

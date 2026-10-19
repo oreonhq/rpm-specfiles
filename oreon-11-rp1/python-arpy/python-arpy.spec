@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash e2ce13869a2df98b420adeaf7429b63796e8c000969d2dfe471854c0be3d9a54
 Name:           python-arpy
 Version:        2.4.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Library for accessing _ar_ files
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            ...
-Source:         %{pypi_source arpy}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/arpy/arpy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'arpy' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.0
+Requires:       python3-arpy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-arpy
-Summary:        %{summary}
-
-%description -n python3-arpy %_description
-
+Summary:        Library for accessing _ar_ files
+%description -n python3-arpy
 
 %prep
-%autosetup -p1 -n arpy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir arpy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-arpy usr/lib/python3*/site-packages/arpy* usr/lib64/python3*/site-packages/arpy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/arpy* usr/lib64/python3*/site-packages/arpy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-arpy -f %{pyproject_files}
+%files
+%files -n python3-arpy -f %{oreon_filedir}/python3-arpy.list
 
 %changelog
+
 %autochangelog

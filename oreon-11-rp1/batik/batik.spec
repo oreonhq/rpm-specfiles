@@ -1,20 +1,16 @@
 %global source0_hash 285caa875a814c2554961f3e5a8a4fde0322afd3894c9dcd9d3a49669cf68ea5
-
 %global classpath batik:xml-commons-apis:xml-commons-apis-ext:xmlgraphics-commons
-
 Name:           batik
 Version:        1.19
 Release:        3%{?dist}
 Summary:        Scalable Vector Graphics for Java
-# Automatically converted from old format: ASL 2.0 and W3C - review is highly recommended.
 License:        Apache-2.0 AND W3C
 URL:            https://xmlgraphics.apache.org/batik/
 Source0:        http://archive.apache.org/dist/xmlgraphics/batik/source/batik-src-%{version}.zip
 Source1:        %{name}-security.policy
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
@@ -24,7 +20,7 @@ BuildRequires:  mvn(org.apache.xmlgraphics:xmlgraphics-commons)
 BuildRequires:  mvn(xalan:xalan)
 BuildRequires:  mvn(xml-apis:xml-apis)
 BuildRequires:  mvn(xml-apis:xml-apis-ext)
-
+# /oreon:deps
 %description
 Batik is a Java(tm) technology based toolkit for applications that want
 to use images in the Scalable Vector Graphics (SVG) format for various
@@ -32,34 +28,25 @@ purposes, such as viewing, generation or manipulation.
 
 %package util
 Summary:        Batik utility library
-
 %description util
 Util component of the Apache Batik SVG manipulation and rendering library.
 
 %package css
 Summary:        Batik CSS engine
-
 %description css
 CSS component of the Apache Batik SVG manipulation and rendering library.
 
 %package        squiggle
 Summary:        Batik SVG browser
-# Explicit requires for javapackages-tools since squiggle-script
-# uses /usr/share/java-utils/java-functions
 Requires:       javapackages-tools
-# Requires AWT, so can't rely on java-headless alone
 Requires:       java-25
-
 %description    squiggle
 The Squiggle SVG Browser lets you view SVG file, zoom, pan and rotate
 in the content and select text items in the image and much more.
 
 %package        svgpp
 Summary:        Batik SVG pretty printer
-# Explicit requires for javapackages-tools since svgpp-script
-# uses /usr/share/java-utils/java-functions
 Requires:       javapackages-tools
-
 %description    svgpp
 The SVG Pretty Printer lets developers "pretty-up" their SVG files and
 get their tabulations and other cosmetic parameters in order. It can
@@ -67,10 +54,7 @@ also be used to modify the DOCTYPE declaration on SVG files.
 
 %package        ttf2svg
 Summary:        Batik SVG font converter
-# Explicit requires for javapackages-tools since ttf2svg-script
-# uses /usr/share/java-utils/java-functions
 Requires:       javapackages-tools
-
 %description    ttf2svg
 The SVG Font Converter lets developers convert character ranges from
 the True Type Font format to the SVG Font format to embed in SVG
@@ -79,10 +63,7 @@ rendered exactly the same on all systems.
 
 %package        rasterizer
 Summary:        Batik SVG rasterizer
-# Explicit requires for javapackages-tools since rasterizer-script
-# uses /usr/share/java-utils/java-functions
 Requires:       javapackages-tools
-
 %description    rasterizer
 The SVG Rasterizer is a utility that can convert SVG files to a raster
 format. The tool can convert individual files or sets of files, making
@@ -92,30 +73,24 @@ to be added easily.
 
 %package        slideshow
 Summary:        Batik SVG slideshow
-# Explicit requires for javapackages-tools since slideshow-script
-# uses /usr/share/java-utils/java-functions
 Requires:       javapackages-tools
-# Requires AWT, so can't rely on java-headless alone
 Requires:       java-25
-
 %description    slideshow
 Batik SVG slideshow.
 
 %package        javadoc
 Summary:        Javadoc for %{name}
-
 %description    javadoc
 Javadoc for %{name}.
 
 %package        demo
 Summary:        Samples for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description    demo
 Demonstrations and samples for %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
 
@@ -173,51 +148,40 @@ rm batik-bridge/src/main/java/org/apache/batik/bridge/WindowWrapper.java
 rm batik-script/src/main/java/org/apache/batik/script/jacl/JaclInterpreter.java
 
 %build
-%mvn_build
 
+%mvn_build
 %install
 %mvn_install
-
 %jpackage_script org.apache.batik.apps.svgbrowser.Main '' '' %{classpath}:rhino squiggle true
 %jpackage_script org.apache.batik.apps.svgpp.Main '' '' %{classpath} svgpp true
 %jpackage_script org.apache.batik.apps.ttf2svg.Main '' '' %{classpath} ttf2svg true
 %jpackage_script org.apache.batik.apps.rasterizer.Main '' '' %{classpath}:rhino rasterizer true
 %jpackage_script org.apache.batik.apps.slideshow.Main '' '' %{classpath} slideshow true
-
-# Demo
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}/
 cp -pr samples $RPM_BUILD_ROOT%{_datadir}/%{name}/
+%oreon_autofiles batik-util usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles batik-css usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles batik-squiggle usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles batik-svgpp usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles batik-ttf2svg usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles batik-rasterizer usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles batik-slideshow usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles batik-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles batik-demo usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-
-%files -f .mfiles
-%license LICENSE NOTICE
-%doc CHANGES MAINTAIN README
-
-%files css -f .mfiles-css
-%files util -f .mfiles-util
-
-%files squiggle -f .mfiles-squiggle
-%{_bindir}/squiggle
-
-%files svgpp -f .mfiles-svgpp
-%{_bindir}/svgpp
-
-%files ttf2svg -f .mfiles-ttf2svg
-%{_bindir}/ttf2svg
-
-%files rasterizer -f .mfiles-rasterizer
-%{_bindir}/rasterizer
-
-%files slideshow -f .mfiles-slideshow
-%{_bindir}/slideshow
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE NOTICE
-
-%files demo
-%{_datadir}/%{name}
-
+%files -f %{oreon_filedir}/main.list
+%files -n batik-util -f %{oreon_filedir}/batik-util.list
+%files -n batik-css -f %{oreon_filedir}/batik-css.list
+%files -n batik-squiggle -f %{oreon_filedir}/batik-squiggle.list
+%files -n batik-svgpp -f %{oreon_filedir}/batik-svgpp.list
+%files -n batik-ttf2svg -f %{oreon_filedir}/batik-ttf2svg.list
+%files -n batik-rasterizer -f %{oreon_filedir}/batik-rasterizer.list
+%files -n batik-slideshow -f %{oreon_filedir}/batik-slideshow.list
+%files -n batik-javadoc -f %{oreon_filedir}/batik-javadoc.list
+%files -n batik-demo -f %{oreon_filedir}/batik-demo.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.19-3
 - Prepare for Oreon 11 (RP1)

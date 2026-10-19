@@ -1,56 +1,44 @@
 %global source0_hash ea0944f2f5ec98d895bef6d503e6e4a376fea6383a6bc64c7670d46ff2218cad
-
-# Run optional test
-%if ! (0%{?rhel})
-%bcond_without perl_Eval_Closure_enables_optional_test
-%else
 %bcond_with perl_Eval_Closure_enables_optional_test
-%endif
-
 Name:           perl-Eval-Closure
 Version:        0.14
-Release:        27%{?dist}
+Release:        1%{?dist}
 Summary:        Safely and cleanly create closures via string eval
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Eval-Closure
 Source0:        https://cpan.metacpan.org/authors/id/D/DO/DOY/Eval-Closure-%{version}.tar.gz
 BuildArch:      noarch
-# Module Build
+%if %{with perl_Eval_Closure_enables_optional_test}
+%endif
+Requires:       perl(Devel::LexAlias) >= 0.05
+Requires:       perl(Perl::Tidy)
+Provides:       perl(Eval::Closure)
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker)
-# Module Runtime
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Devel::LexAlias) >= 0.05
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(overload)
-BuildRequires:  perl(Perl::Tidy)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(strict)
-# Test Suite
 BuildRequires:  perl(B)
-BuildRequires:  perl(blib)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Devel::LexAlias)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(IO::Handle)
 BuildRequires:  perl(IPC::Open3)
 BuildRequires:  perl(PadWalker)
+BuildRequires:  perl(Perl::Tidy)
+BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(Test::Fatal)
-BuildRequires:  perl(Test::More) >= 0.88
+BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Test::Requires)
+BuildRequires:  perl(blib)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-%if %{with perl_Eval_Closure_enables_optional_test}
-# Optional Tests
-BuildRequires:  perl(Test::Output)
-%endif
-# Dependencies
-Requires:       perl(Devel::LexAlias) >= 0.05
-Requires:       perl(Perl::Tidy)
-
-Provides:       perl(Eval::Closure)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 String eval is often used for dynamic code generation. For instance, Moose uses
 it heavily, to generate inlined versions of accessors and constructors, which
@@ -68,27 +56,26 @@ string to be evaled, so it must also be the same (or non-existent) if caching
 is to work properly).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Eval-Closure-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor
 make %{?_smp_mflags}
-
 %install
 make pure_install DESTDIR=%{buildroot}
 find %{buildroot} -type f -name .packlist -delete
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%license LICENSE
-%doc Changes README
-%{perl_vendorlib}/Eval/
-%{_mandir}/man3/Eval::Closure.3*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.14-27
 - Prepare for Oreon 11 (RP1)

@@ -1,64 +1,51 @@
-%global source0_hash f52475c5041dfd02cc4eed22ee94f12ec310c16a68fda9203dc54ffd5daa6e6f
-
+%global source0_hash 28ba4ac1c04f86eac09b79a163cb163a4c2b54442d9f7eccc04679062a581044
 %{?mingw_package_header}
-
 %global bin_version 4.0.0
-# first two digits of version
 %define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
-
 Name:           mingw-gtk4
 Version:        4.24.0
 Release:        1%{?dist}
 Summary:        MinGW Windows GTK+ library
-
 License:        LGPLv2+
 URL:            http://www.gtk.org
-Source:         https://download.gnome.org/sources/gtk/%{release_version}/gtk-%{version}.tar.xz
-
+Source0:        https://download.gnome.org/sources/gtk/%{release_version}/gtk-%{version}.tar.xz
 BuildArch:      noarch
-
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  meson
-BuildRequires:  ninja-build
-
-BuildRequires:  mingw32-filesystem >= 107
-BuildRequires:  mingw64-filesystem >= 107
-BuildRequires:  mingw32-gcc
-BuildRequires:  mingw64-gcc
-BuildRequires:  mingw32-binutils
-BuildRequires:  mingw64-binutils
-
-BuildRequires:  mingw32-cairo
-BuildRequires:  mingw64-cairo
-BuildRequires:  mingw32-gdk-pixbuf
-BuildRequires:  mingw64-gdk-pixbuf
-BuildRequires:  mingw32-gettext
-BuildRequires:  mingw64-gettext
-BuildRequires:  mingw32-graphene
-BuildRequires:  mingw64-graphene
-BuildRequires:  mingw32-gstreamer1-plugins-bad-free >= 1.26.3-3
-BuildRequires:  mingw64-gstreamer1-plugins-bad-free >= 1.26.3-3
-BuildRequires:  mingw64-graphene
-BuildRequires:  mingw32-glib2
-BuildRequires:  mingw64-glib2
-BuildRequires:  mingw32-libepoxy
-BuildRequires:  mingw64-libepoxy
-BuildRequires:  mingw32-win-iconv
-BuildRequires:  mingw64-win-iconv
-BuildRequires:  mingw32-pango
-BuildRequires:  mingw64-pango
-BuildRequires:  mingw32-pixman
-BuildRequires:  mingw64-pixman
-BuildRequires:  mingw32-zlib
-BuildRequires:  mingw64-zlib
-
-# Native one for msgfmt
 BuildRequires:  gettext
-# Native one for glib-genmarshal
 BuildRequires:  glib2-devel
-# Native one for gtk-update-icon-cache
 BuildRequires:  gtk-update-icon-cache
-
+BuildRequires:  meson
+BuildRequires:  mingw32-binutils
+BuildRequires:  mingw32-cairo
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc
+BuildRequires:  mingw32-gdk-pixbuf
+BuildRequires:  mingw32-gettext
+BuildRequires:  mingw32-glib2
+BuildRequires:  mingw32-graphene
+BuildRequires:  mingw32-gstreamer1-plugins-bad-free
+BuildRequires:  mingw32-libepoxy
+BuildRequires:  mingw32-pango
+BuildRequires:  mingw32-pixman
+BuildRequires:  mingw32-win-iconv
+BuildRequires:  mingw32-zlib
+BuildRequires:  mingw64-binutils
+BuildRequires:  mingw64-cairo
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc
+BuildRequires:  mingw64-gdk-pixbuf
+BuildRequires:  mingw64-gettext
+BuildRequires:  mingw64-glib2
+BuildRequires:  mingw64-graphene
+BuildRequires:  mingw64-gstreamer1-plugins-bad-free
+BuildRequires:  mingw64-libepoxy
+BuildRequires:  mingw64-pango
+BuildRequires:  mingw64-pixman
+BuildRequires:  mingw64-win-iconv
+BuildRequires:  mingw64-zlib
+BuildRequires:  ninja-build
+# /oreon:deps
 %description
 GTK+ is a multi-platform toolkit for creating graphical user
 interfaces. Offering a complete set of widgets, GTK+ is suitable for
@@ -70,9 +57,7 @@ This package contains the MinGW Windows cross compiled GTK+ 4 library.
 %package -n mingw32-gtk4
 Summary:        MinGW Windows GTK+ library
 Requires:       mingw32-adwaita-icon-theme
-# split out in a subpackage
 Requires:       mingw32-gtk4-update-icon-cache
-
 %description -n mingw32-gtk4
 GTK+ is a multi-platform toolkit for creating graphical user
 interfaces. Offering a complete set of widgets, GTK+ is suitable for
@@ -83,7 +68,6 @@ This package contains the MinGW Windows cross compiled GTK+ 4 library.
 
 %package -n mingw32-gtk4-update-icon-cache
 Summary: Icon theme caching utility
-
 %description -n mingw32-gtk4-update-icon-cache
 GTK+ can use the cache files created by gtk-update-icon-cache to avoid a lot of
 system call and disk seek overhead when the application starts. Since the
@@ -95,9 +79,7 @@ This package contains the MinGW Windows cross compiled gtk-update-icon-cache.
 %package -n mingw64-gtk4
 Summary:        MinGW Windows GTK+ library
 Requires:       mingw64-adwaita-icon-theme
-# split out in a subpackage
 Requires:       mingw64-gtk4-update-icon-cache
-
 %description -n mingw64-gtk4
 GTK+ is a multi-platform toolkit for creating graphical user
 interfaces. Offering a complete set of widgets, GTK+ is suitable for
@@ -108,7 +90,6 @@ This package contains the MinGW Windows cross compiled GTK+ 4 library.
 
 %package -n mingw64-gtk4-update-icon-cache
 Summary: Icon theme caching utility
-
 %description -n mingw64-gtk4-update-icon-cache
 GTK+ can use the cache files created by gtk-update-icon-cache to avoid a lot of
 system call and disk seek overhead when the application starts. Since the
@@ -121,93 +102,35 @@ This package contains the MinGW Windows cross compiled gtk-update-icon-cache.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n gtk-%{version}
-
+%global oreon_srcdir gtk-%{version}
+%oreon_prep
 %build
+
 %mingw_meson -Dintrospection=disabled -Dvulkan=disabled
 %mingw_ninja
-
 %install
 %mingw_ninja_install
-
-# Remove desktop files and corresponding icons as they aren't useful for win32
 rm -f %{buildroot}%{mingw32_datadir}/applications/*.desktop
 rm -f %{buildroot}%{mingw64_datadir}/applications/*.desktop
 rm -rf %{buildroot}%{mingw32_datadir}/icons/
 rm -rf %{buildroot}%{mingw64_datadir}/icons/
 rm -rf %{buildroot}%{mingw32_datadir}/metainfo/
 rm -rf %{buildroot}%{mingw64_datadir}/metainfo/
-
-# Bash-completion files aren't interesting for mingw
 rm -rf %{buildroot}%{mingw32_datadir}/bash-completion/
 rm -rf %{buildroot}%{mingw64_datadir}/bash-completion/
-
 %mingw_find_lang %{name} --all-name
+%oreon_autofiles mingw32-gtk4 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw32-gtk4-update-icon-cache usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-gtk4 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-gtk4-update-icon-cache usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n mingw32-gtk4 -f mingw32-%{name}.lang
-%license COPYING
-%{mingw32_bindir}/gtk4-demo-application.exe
-%{mingw32_bindir}/gtk4-demo.exe
-%{mingw32_bindir}/gtk4-widget-factory.exe
-%{mingw32_bindir}/gtk4-builder-tool.exe
-%{mingw32_bindir}/gtk4-encode-symbolic-svg.exe
-%{mingw32_bindir}/gtk4-icon-editor.exe
-%{mingw32_bindir}/gtk4-query-settings.exe
-%{mingw32_bindir}/gtk4-node-editor.exe
-%{mingw32_bindir}/gtk4-path-tool.exe
-%{mingw32_bindir}/gtk4-print-editor.exe
-%{mingw32_bindir}/gtk4-rendernode-tool.exe
-%{mingw32_bindir}/gtk4-image-tool.exe
-%{mingw32_bindir}/libgtk-4-1.dll
-%{mingw32_includedir}/gtk-4.0/
-%{mingw32_libdir}/libgtk-4.dll.a
-%{mingw32_libdir}/pkgconfig/gtk4.pc
-%{mingw32_libdir}/pkgconfig/gtk4-win32.pc
-%{mingw32_datadir}/gettext/
-%{mingw32_datadir}/glib-2.0/schemas/org.gtk.Demo4.gschema.xml
-%{mingw32_datadir}/glib-2.0/schemas/org.gtk.gtk4.Settings.ColorChooser.gschema.xml
-%{mingw32_datadir}/glib-2.0/schemas/org.gtk.gtk4.Settings.Debug.gschema.xml
-%{mingw32_datadir}/glib-2.0/schemas/org.gtk.gtk4.Settings.EmojiChooser.gschema.xml
-%{mingw32_datadir}/glib-2.0/schemas/org.gtk.gtk4.Settings.FileChooser.gschema.xml
-%{mingw32_datadir}/glib-2.0/schemas/org.gtk.gtk4.Inspector.gschema.xml
-%{mingw32_datadir}/gtk-4.0/
-
-%files -n mingw32-gtk4-update-icon-cache
-%license COPYING
-%{mingw32_bindir}/gtk4-update-icon-cache.exe
-
-%files -n mingw64-gtk4 -f mingw64-%{name}.lang
-%license COPYING
-%{mingw64_bindir}/gtk4-demo-application.exe
-%{mingw64_bindir}/gtk4-demo.exe
-%{mingw64_bindir}/gtk4-widget-factory.exe
-%{mingw64_bindir}/gtk4-builder-tool.exe
-%{mingw64_bindir}/gtk4-encode-symbolic-svg.exe
-%{mingw64_bindir}/gtk4-icon-editor.exe
-%{mingw64_bindir}/gtk4-query-settings.exe
-%{mingw64_bindir}/gtk4-node-editor.exe
-%{mingw64_bindir}/gtk4-path-tool.exe
-%{mingw64_bindir}/gtk4-print-editor.exe
-%{mingw64_bindir}/gtk4-rendernode-tool.exe
-%{mingw64_bindir}/gtk4-image-tool.exe
-%{mingw64_bindir}/libgtk-4-1.dll
-%{mingw64_includedir}/gtk-4.0/
-%{mingw64_libdir}/libgtk-4.dll.a
-%{mingw64_libdir}/pkgconfig/gtk4.pc
-%{mingw64_libdir}/pkgconfig/gtk4-win32.pc
-%{mingw64_datadir}/gettext/
-%{mingw64_datadir}/glib-2.0/schemas/org.gtk.Demo4.gschema.xml
-%{mingw64_datadir}/glib-2.0/schemas/org.gtk.gtk4.Settings.ColorChooser.gschema.xml
-%{mingw64_datadir}/glib-2.0/schemas/org.gtk.gtk4.Settings.Debug.gschema.xml
-%{mingw64_datadir}/glib-2.0/schemas/org.gtk.gtk4.Settings.EmojiChooser.gschema.xml
-%{mingw64_datadir}/glib-2.0/schemas/org.gtk.gtk4.Settings.FileChooser.gschema.xml
-%{mingw64_datadir}/glib-2.0/schemas/org.gtk.gtk4.Inspector.gschema.xml
-%{mingw64_datadir}/gtk-4.0/
-
-%files -n mingw64-gtk4-update-icon-cache
-%license COPYING
-%{mingw64_bindir}/gtk4-update-icon-cache.exe
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-gtk4 -f %{oreon_filedir}/mingw32-gtk4.list
+%files -n mingw32-gtk4-update-icon-cache -f %{oreon_filedir}/mingw32-gtk4-update-icon-cache.list
+%files -n mingw64-gtk4 -f %{oreon_filedir}/mingw64-gtk4.list
+%files -n mingw64-gtk4-update-icon-cache -f %{oreon_filedir}/mingw64-gtk4-update-icon-cache.list
 
 %changelog
+
 %autochangelog

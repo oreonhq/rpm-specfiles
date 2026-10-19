@@ -1,26 +1,22 @@
-%global source0_hash ad13d9797b046ce39d0c65a6f81d2aef2429734c21865a6a4c592c7c01f249dd
-
+%global source0_hash c08b2d87b2fb5edb4526c2a8a317eb1f2cff44807e4631a037ca9f9a1d455054
 %global libzen_version  0.4.41
-
 Name:           libmediainfo
 Version:        26.05
 Release:        1%{?dist}
 Summary:        Library for supplies technical and tag information about a video or audio file
-
 License:        BSD-2-Clause
 URL:            https://github.com/MediaArea/MediaInfo
 Source0:        http://mediaarea.net/download/source/%{name}/%{version}/%{name}_%{version}.tar.xz
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig(libzen) >= %{libzen_version}
-BuildRequires:  pkgconfig(zlib)
-BuildRequires:  doxygen
-BuildRequires:  pkgconfig(libcurl)
-BuildRequires:  pkgconfig(tinyxml2)
-
 Provides:       bundled(md5-plumb)
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  pkgconfig(libcurl)
+BuildRequires:  pkgconfig(libzen)
+BuildRequires:  pkgconfig(tinyxml2)
+BuildRequires:  pkgconfig(zlib)
+# /oreon:deps
 %description
 This package contains the shared library for MediaInfo.
 MediaInfo supplies technical and tag information about a video or
@@ -49,11 +45,11 @@ What format (container) does MediaInfo support?
 Summary:        Include files and mandatory libraries for development
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libzen-devel%{?_isa} >= %{libzen_version}
-
 %description    devel
 Include files and mandatory libraries for development.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n MediaInfoLib
@@ -68,42 +64,31 @@ rm -rf Project/MSCS20*
 rm -rf Source/ThirdParty/tinyxml2
 
 %build
+
 pushd Source/Doc/
     doxygen -u Doxyfile
     doxygen Doxyfile
 popd
 cp Source/Doc/*.html ./
-
 pushd Project/CMake
     %cmake
     %cmake_build
 popd
-
 %install
 pushd Project/CMake
     %cmake_install
 popd
-
 install -m 644 -p Source/MediaInfoDLL/MediaInfoDLL.cs %{buildroot}%{_includedir}/MediaInfoDLL
 install -m 644 -p Source/MediaInfoDLL/MediaInfoDLL.JNA.java %{buildroot}%{_includedir}/MediaInfoDLL
 install -m 644 -p Source/MediaInfoDLL/MediaInfoDLL.JNative.java %{buildroot}%{_includedir}/MediaInfoDLL
 install -m 644 -p Source/MediaInfoDLL/MediaInfoDLL.py %{buildroot}%{_includedir}/MediaInfoDLL
 install -m 644 -p Source/MediaInfoDLL/MediaInfoDLL3.py %{buildroot}%{_includedir}/MediaInfoDLL
-
 rm -f %{buildroot}%{_libdir}/%{name}.la
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc History.txt ReadMe.txt
-%license License.html
-%{_libdir}/%{name}.so.*
-
-%files    devel
-%doc Changes.txt Documentation.html Doc Source/Example
-%{_includedir}/MediaInfo
-%{_includedir}/MediaInfoDLL
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/*.pc
-%{_libdir}/cmake/mediainfolib/
+%files -f %{oreon_filedir}/main.list
+%files -n libmediainfo-devel -f %{oreon_filedir}/libmediainfo-devel.list
 
 %changelog
+
 %autochangelog

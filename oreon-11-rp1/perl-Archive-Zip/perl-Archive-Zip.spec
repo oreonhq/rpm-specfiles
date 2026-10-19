@@ -1,66 +1,54 @@
 %global source0_hash 984e185d785baf6129c6e75f8eb44411745ac00bf6122fb1c8e822a3861ec650
-
 Name:           perl-Archive-Zip
 Version:        1.68
-Release:        18%{?dist}
+Release:        1%{?dist}
 Summary:        Perl library for accessing Zip archives
-# lib/Archive/Zip/Member.pm:    (GPL-1.0-or-later OR Artistic-1.0-Perl) and Info-ZIP
-#                               (The _mapPermissionsToUnix() comments are
-#                               copied from Info-ZIP licensed unzip)
-# other files:                  GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        ( GPL-1.0-or-later OR Artistic-1.0-Perl ) AND Info-ZIP
 URL:            https://metacpan.org/release/Archive-Zip
 Source0:        https://cpan.metacpan.org/authors/id/P/PH/PHRED/Archive-Zip-%{version}.tar.gz
 BuildArch:      noarch
+Requires:       perl(Exporter)
+Requires:       perl(File::Spec) >= 0.80
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(File::Spec\\)$
+%global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
+%global __requires_exclude %{__requires_exclude}|^perl\\(common\\)
+Provides:       perl(Archive::Zip)
+# oreon:deps
 BuildRequires:  coreutils
-# For a Git binary patch
 BuildRequires:  git-core
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.4
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-# Run-time
-BuildRequires:  perl(:VERSION) >= 5.6
+BuildRequires:  perl(:VERSION)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Compress::Raw::Zlib)
-BuildRequires:  perl(constant)
+BuildRequires:  perl(Config)
 BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Encode)
 BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(File::Basename)
 BuildRequires:  perl(File::Copy)
 BuildRequires:  perl(File::Find)
 BuildRequires:  perl(File::Path)
-BuildRequires:  perl(File::Spec) >= 0.80
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Spec::Unix)
 BuildRequires:  perl(File::Temp)
 BuildRequires:  perl(FileHandle)
-BuildRequires:  perl(integer)
 BuildRequires:  perl(IO::File)
 BuildRequires:  perl(IO::Seekable)
+BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Time::Local)
-BuildRequires:  perl(vars)
-# Tests
-BuildRequires:  perl(File::Spec::Unix)
-# IO::Scalar not used
+BuildRequires:  perl(constant)
+BuildRequires:  perl(integer)
 BuildRequires:  perl(lib)
-BuildRequires:  perl(Test::More) >= 0.88
+BuildRequires:  perl(strict)
 BuildRequires:  perl(utf8)
+BuildRequires:  perl(vars)
 BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
 BuildRequires:  unzip
 BuildRequires:  zip
-Requires:       perl(Exporter)
-Requires:       perl(File::Spec) >= 0.80
-
-# Remove under-specified dependencies
-%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(File::Spec\\)$
-# Filter modules bundled for tests
-%global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
-%global __requires_exclude %{__requires_exclude}|^perl\\(common\\)
-
-Provides:       perl(Archive::Zip)
+# /oreon:deps
 %description
 The Archive::Zip module allows a Perl program to create, manipulate,
 read, and write Zip archive files.
@@ -79,12 +67,12 @@ Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
 Requires:       unzip
 Requires:       zip
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git -n Archive-Zip-%{version}
 for F in examples/*.pl; do
@@ -98,21 +86,16 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t examples %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Some tests write into temporary files/directories. The solution is to
-# copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -121,19 +104,16 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%doc Changes examples/
-%{_bindir}/crc32
-%{perl_vendorlib}/Archive/
-%{_mandir}/man3/Archive*.3*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Archive-Zip-tests -f %{oreon_filedir}/perl-Archive-Zip-tests.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.68-18
 - Import

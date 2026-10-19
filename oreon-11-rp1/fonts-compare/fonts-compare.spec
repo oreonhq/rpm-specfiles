@@ -1,19 +1,12 @@
-%global source0_hash 5c5eb1bfb35c2f7bf688852979e722a2aa42455b2a6c46623fcdbb6e6c5715da
-
+%global source0_hash ed7f06593e5335c5030a768941e0fc941f4d153410b4ee4fffab4551243f8bd4
 Name:           fonts-compare
 Version:        1.7.0
 Release:        1%{?dist}
 Summary:        Tool to compare fonts for a language
-
 License:        GPL-2.0-or-later
 URL:            https://github.com/sudipshil9862/fonts-compare
-Source0:        %{url}/archive/refs/tags/%{version}.tar.gz#/fonts-compare-%{version}.tar.gz
-
+Source0:        https://github.com/sudipshil9862/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch: noarch
-
-BuildRequires:  python3-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  freetype-devel 
 Requires: python3-gobject
 Requires: python3-langtable
 Requires: python3-langdetect
@@ -22,16 +15,18 @@ Requires: hicolor-icon-theme
 Requires: gtk4
 Requires: python3-freetype
 Requires: libadwaita
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  freetype-devel
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 Fonts-Compare is a tool that enables individuals
 to compare various fonts in a particular language.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
 
 %install
@@ -55,27 +50,13 @@ mkdir -p %{buildroot}/%{_datadir}/icons/hicolor/256x256/apps/
 install -D -m 644 logo/256x256/fonts-compare.png %{buildroot}/%{_datadir}/icons/hicolor/256x256/apps/
 mkdir -p %{buildroot}/usr/share/icons/hicolor/scalable/apps/
 install -D -m 644 logo/fonts-compare.svg %{buildroot}/%{_datadir}/icons/hicolor/scalable/apps/
+%oreon_autofiles main
 
 %check
-desktop-file-validate %{buildroot}%{_datadir}/applications/org.github.sudipshil9862.%{name}.desktop
 
-%files
-%doc README.md
-%license LICENSE
-%{_bindir}/%{name}
-%{_datadir}/%{name}/
-%{_datadir}/applications/org.github.sudipshil9862.%{name}.desktop
-%dir %{_datadir}/icons/hicolor/
-%dir %{_datadir}/icons/hicolor/16x16/
-%dir %{_datadir}/icons/hicolor/22x22/
-%dir %{_datadir}/icons/hicolor/32x32/
-%dir %{_datadir}/icons/hicolor/48x48/
-%dir %{_datadir}/icons/hicolor/64x64/
-%dir %{_datadir}/icons/hicolor/128x128/
-%dir %{_datadir}/icons/hicolor/256x256/
-%dir %{_datadir}/icons/hicolor/scalable/
-%dir %{_datadir}/icons/hicolor/scalable/apps/
-%{_datadir}/icons/hicolor/*/apps/%{name}.*
+desktop-file-validate %{buildroot}%{_datadir}/applications/org.github.sudipshil9862.%{name}.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

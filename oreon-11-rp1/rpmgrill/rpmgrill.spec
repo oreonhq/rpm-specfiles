@@ -1,46 +1,32 @@
 %global source0_hash feb442b0de206ee172d77ac4b333d195f9aa13f53fa29cbfb6b78b736456678a
-
 Name:           rpmgrill
 Version:        0.34
-Release:        21%{?dist}
+Release:        1%{?dist}
 Summary:        A utility for catching problems in koji builds
 License:        Artistic-2.0
 Source0:        https://github.com/default-to-open/%{name}/archive/%{version}.tar.gz
 URL:            https://github.com/default-to-open/rpmgrill
 BuildArch:      noarch
 Requires:       perl(Module::Pluggable)
-
-# For the antivirus plugin
 Requires: clamav
 Requires: data(clamav)
-
-# For checking desktop/icon files using /usr/bin/desktop-file-validate
 Requires: /usr/bin/desktop-file-validate
-
-# For LibGather, Rpath : need eu-readelf & associated tools
 Requires: elfutils
-
-# The SecurityPolicy plugin uses xsltproc to validate polkit files.
 Requires: /usr/bin/xsltproc
-
-# The SecurityPolicy plugin checks for vulnerabilities in Ruby gems;
-# the database is cached locally using git.
 Requires: git
-
-# The SecurityPolicy plugin uses strings
 Requires: binutils
-
-# Not strictly necessary for rpmgrill, but rpmgrill-fetch-build uses it
-# to download Fedora builds.
 Requires: koji
-
-# Test dependencies
+# oreon:deps
+BuildRequires:  /usr/bin/desktop-file-validate
+BuildRequires:  /usr/bin/xsltproc
+BuildRequires:  clamav
+BuildRequires:  clamav-data
 BuildRequires:  perl(CGI)
 BuildRequires:  perl(Digest::SHA1)
+BuildRequires:  perl(File::Copy::Recursive)
 BuildRequires:  perl(File::LibMagic)
 BuildRequires:  perl(File::Slurp)
 BuildRequires:  perl(File::Which)
-BuildRequires:  perl(File::Copy::Recursive)
 BuildRequires:  perl(HTML::Entities)
 BuildRequires:  perl(IPC::Run)
 BuildRequires:  perl(JSON::XS)
@@ -65,39 +51,30 @@ BuildRequires:  perl(YAML::Syck)
 BuildRequires:  perl(boolean)
 BuildRequires:  perl(open)
 BuildRequires:  perl-generators
-BuildRequires:  clamav
-BuildRequires:  clamav-data
-BuildRequires: /usr/bin/xsltproc
-BuildRequires: /usr/bin/desktop-file-validate
-
+# /oreon:deps
 %description
 rpmgrill runs a series of tests against a set of RPMs, reporting problems
 that may require a developer's attention.  For instance: unapplied patches,
 multilib incompatibilities.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}
 
 %build
+
 %{__perl} Build.PL --installdirs vendor
 ./Build
-
 %install
 ./Build pure_install --destdir %{buildroot}
-
 find %{buildroot} -type f -name .packlist -exec rm -f {} \;
-
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
-%files
-%doc README.asciidoc LICENSE AUTHORS
-%{perl_vendorlib}/*
-%{_bindir}/*
-%{_mandir}/man1/*
-%{_mandir}/man3/*
-%{_datadir}/%{name}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

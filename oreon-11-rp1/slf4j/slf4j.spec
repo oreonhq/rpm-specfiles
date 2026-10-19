@@ -1,6 +1,5 @@
 %global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
 %global source0_hash 843a728aace3c454e08bb1574c470a06551256e6f0389ced7bc520740d9667e9
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -82,62 +81,24 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
-# Copyright (c) 2000-2009, JPackage Project
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the
-#    distribution.
-# 3. Neither the name of the JPackage Project nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
 Name:           slf4j
 Version:        2.0.20
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Simple Logging Facade for Java
-# the log4j-over-slf4j and jcl-over-slf4j submodules are ASL 2.0, rest is MIT
 License:        MIT AND Apache-2.0
 URL:            https://www.slf4j.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/qos-ch/slf4j/archive/v_%{version}.tar.gz#/slf4j-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(commons-logging:commons-logging)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.0.19-13
 Obsoletes:      %{name}-manual < 2.0.19-13
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 The Simple Logging Facade for Java or (SLF4J) is intended to serve
 as a simple facade for various logging APIs allowing to the end-user
@@ -152,47 +113,41 @@ API implementation, e.g. Log4jLoggerAdapter or JDK14LoggerAdapter..
 
 %package jdk14
 Summary:        SLF4J JDK14 Binding
-
 %description jdk14
 SLF4J JDK14 Binding.
 
 %package jcl
 Summary:        SLF4J JCL Binding
-
 %description jcl
 SLF4J JCL Binding.
 
 %package -n jcl-over-%{name}
 Summary:        JCL 1.1.1 implemented over SLF4J
-
 %description -n jcl-over-%{name}
 JCL 1.1.1 implemented over SLF4J.
 
 %package -n jul-to-%{name}
 Summary:        JUL to SLF4J bridge
-
 %description -n jul-to-%{name}
 JUL to SLF4J bridge.
 
 %package -n log4j-over-%{name}
 Summary:        Log4j implemented over SLF4J
-
 %description -n log4j-over-%{name}
 Log4j implemented over SLF4J.
 
 %package migrator
 Summary:        SLF4J Migrator
-
 %description migrator
 SLF4J Migrator.
 
 %package sources
 Summary:        SLF4J Source JARs
-
 %description sources
 SLF4J Source JARs.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n slf4j-v_%{version}
 %mvn_compat_version : 2.0.17
@@ -239,28 +194,21 @@ find -name '*.css' -o -name '*.js' -o -name '*.txt' -exec sed -i 's/\r//' {} +
 %mvn_file ':slf4j-{*}' %{name}/slf4j-@1 %{name}/@1
 
 %build
-%mvn_build -j -f -s -- -Drequired.jdk.version=1.8
 
+%mvn_build -j -f -s -- -Drequired.jdk.version=1.8
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE.txt LICENSE-2.0.txt
-
-%files jdk14 -f .mfiles-slf4j-jdk14
-
-%files jcl -f .mfiles-slf4j-jcl
-
-%files -n jcl-over-%{name} -f .mfiles-jcl-over-slf4j
-
-%files -n jul-to-%{name} -f .mfiles-jul-to-slf4j
-
-%files -n log4j-over-%{name} -f .mfiles-log4j-over-slf4j
-
-%files migrator -f .mfiles-slf4j-migrator
-
-%files sources -f .mfiles-sources
-%license LICENSE.txt LICENSE-2.0.txt
+%files -f %{oreon_filedir}/main.list
+%files -n slf4j-jdk14 -f %{oreon_filedir}/slf4j-jdk14.list
+%files -n slf4j-jcl -f %{oreon_filedir}/slf4j-jcl.list
+%files -n jcl-over-slf4j -f %{oreon_filedir}/jcl-over-slf4j.list
+%files -n jul-to-slf4j -f %{oreon_filedir}/jul-to-slf4j.list
+%files -n log4j-over-slf4j -f %{oreon_filedir}/log4j-over-slf4j.list
+%files -n slf4j-migrator -f %{oreon_filedir}/slf4j-migrator.list
+%files -n slf4j-sources -f %{oreon_filedir}/slf4j-sources.list
 
 %changelog
+
 %autochangelog

@@ -1,47 +1,39 @@
 %global source0_hash 65a05310e3f16b930454aed7bed619edca8025ba96324c3e9b57dd508f1a014f
-
 %global srcname oauth2client
 %global sum Python client library for OAuth 2.0
-# Share doc between python- and python3-
 %global _docdir_fmt %{name}
-
 Name:           python-%{srcname}
 Version:        4.1.3
 Release:        33%{?dist}
-Summary:        %{sum}
-
+Summary:        Python client library for OAuth 2.0
 License:        Apache-2.0
 URL:            https://github.com/google/%{srcname}
 Source0:        https://github.com/google/%{srcname}/archive/v%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
 Patch0:         docs-build-fix.patch
 Patch1:         doc-fix.patch
 Patch2:         keyring-remove.patch
-
 BuildArch:      noarch
-#BuildRequires:  %%{_bindir}/tox
-BuildRequires:  python3-devel
-
-BuildRequires:  python3-setuptools
+# oreon:deps
 BuildRequires:  python3-devel
 BuildRequires:  python3-fasteners
-BuildRequires:  python3-pyasn1 >= 0.1.7
-BuildRequires:  python3-pyasn1-modules >= 0.0.5
+BuildRequires:  python3-pyasn1
+BuildRequires:  python3-pyasn1-modules
 BuildRequires:  python3-pytest
-
+BuildRequires:  python3-setuptools
+# /oreon:deps
 %description
 This is a python client module for accessing resources protected by OAuth 2.0
 
 %package -n python3-%{srcname}
 Summary:        %{sum}
 %{?python_provide:%python_provide python3-%{srcname}}
-
 Requires:       python3-pyOpenSSL
 Requires:       python3-fasteners
-
 %description -n python3-%{srcname}
 This is a python client module for accessing resources protected by OAuth 2.0
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{srcname}-%{version}
 %patch -P0 -p1 -b .doc
@@ -70,27 +62,20 @@ find docs tests -type f \( -name '*.py' -o -name '*.py.doc' \) -exec \
   xargs -r -t sed -r -i 's/^import mock$/from unittest &/'
 sed -r -i 's/\bmock.*//' tox.ini
 
-
 %build
-%py3_build
 
+%py3_build
 %install
 %py3_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-#tox -v --sitepackages -e py%%{python3_version_nodots}
 
-# We remove tests currently, we will ship them eventually
-# This is a bit of a hack until I package the test scripts in a separate package
 rm -r $(find %{_buildrootdir} -type d -name 'tests') || /bin/true
-
-
-%files -n python3-%{srcname}
-%license LICENSE 
-%doc CHANGELOG.md CONTRIBUTING.md README.md 
-%{python3_sitelib}/%{srcname}
-%{python3_sitelib}/%{srcname}*.egg-info
+%files -f %{oreon_filedir}/main.list
+%files -n python3-oauth2client -f %{oreon_filedir}/python3-oauth2client.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.3-33
 - Prepare for Oreon 11 (RP1)

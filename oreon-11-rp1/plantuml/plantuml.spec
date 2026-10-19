@@ -1,28 +1,22 @@
-%global source0_hash none
-
+%global source0_hash caa1dc0b2df3058c38b69de5878eb048a24a99346aeab663b7027e85cdc83467
 Name:           plantuml
 Version:        1.2026.8
-Release:        %autorelease
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Program to generate UML diagram from a text description
-
 License:        LGPL-3.0-or-later
 URL:            http://plantuml.com/
-Source:         https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+Requires:       java-25
+Requires:       javapackages-tools
+Requires:       graphviz
+# oreon:deps
 BuildRequires:  ant-openjdk25
 BuildRequires:  help2man
 BuildRequires:  javapackages-local-openjdk25
-
-Requires:       java-25
-# Explicit requires for javapackages-tools since plantuml script
-# uses /usr/share/java-utils/java-functions
-Requires:       javapackages-tools
-Requires:       graphviz
-
+# /oreon:deps
 %description
 PlantUML is a program allowing to draw UML diagrams, using a simple
 and human readable text description. It is extremely useful for code
@@ -38,33 +32,21 @@ PlantUML supports the following diagram types
   - state diagram
 
 %prep
-%autosetup
-
+%oreon_prep
 %build
-# Encoding needs to be set to UTF-8 for epel builds
-%if 0%{?rhel}
-export ANT_OPTS=-Dfile.encoding=UTF-8
-%endif
-ant
 
+ant
 %install
-# Set jar location
 %mvn_file net.sourceforge.%{name}:%{name} %{name}
-# Configure maven depmap
 %mvn_artifact net.sourceforge.%{name}:%{name}:%{version} %{name}.jar
 %mvn_install
-
 %jpackage_script net.sourceforge.plantuml.Run "" "" plantuml plantuml true
-
-# Build man page
 install -d "%{buildroot}%{_mandir}/man1"
 help2man --help-option='-h' --version-option='--version' --no-info --output='%{buildroot}%{_mandir}/man1/plantuml.1' "java -jar plantuml.jar"
+%oreon_autofiles main
 
-%files -f .mfiles
-%{_bindir}/plantuml
-%doc README.md
-%{_mandir}/man1/plantuml.1*
-%license COPYING plantuml-lgpl/lgpl-license.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

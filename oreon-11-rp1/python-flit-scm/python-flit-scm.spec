@@ -1,54 +1,48 @@
 %global source0_hash 961bd6fb24f31bba75333c234145fff88e6de0a90fc0f7e5e7c79deca69f6bb2
-
-%global _description %{expand:
-A PEP 518 build backend that uses setuptools_scm to generate a version file
-from your version control system, then flit_core to build the package.}
-
 Name:           python-flit-scm
 Version:        1.7.0
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        PEP 518 build backend that uses setuptools_scm and flit
-
 License:        MIT
 URL:            https://pypi.org/pypi/flit_scm
-Source0:        %{pypi_source flit_scm}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flit_scm/flit_scm-%{version}.tar.gz
 BuildArch:      noarch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(flit-core) >= 3.5
+BuildRequires:  python3dist(setuptools-scm) >= 6.4
+Requires:       python3-flit-scm = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-flit-scm
-Summary:        %{summary}
+Summary:        PEP 518 build backend that uses setuptools_scm and flit
 BuildRequires:  python3-devel
-
-%description -n python3-flit-scm %_description
+# oreon:reqs
+Requires:       python3dist(flit-core) >= 3.5
+Requires:       python3dist(setuptools-scm) >= 6.4
+# /oreon:reqs
+%description -n python3-flit-scm
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n flit_scm-%{version}
-
-# Comment out to remove /usr/bin/env shebangs
-# Can use something similar to correct/remove /usr/bin/python shebangs also
-# find . -type f -name "*.py" -exec sed -i '/^#![  ]*\/usr\/bin\/env.*$/ d' {} 2>/dev/null ';'
-
-# see pyproject-rpm-macros documentation for more forms
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir flit_scm-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files flit_scm
+%oreon_autofiles python3-flit-scm usr/lib/python3*/site-packages/flit_scm* usr/lib64/python3*/site-packages/flit_scm* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flit_scm* usr/lib64/python3*/site-packages/flit_scm* usr/bin/*
 
 %check
-%pyproject_check_import
 
-%files -n python3-flit-scm -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+%pyproject_check_import
+%files
+%files -n python3-flit-scm -f %{oreon_filedir}/python3-flit-scm.list
 
 %changelog
+
 %autochangelog

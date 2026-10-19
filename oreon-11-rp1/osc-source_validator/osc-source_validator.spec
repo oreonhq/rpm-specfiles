@@ -1,21 +1,15 @@
-%global source0_hash 693b753855ea9b781b177d27b7e13999700e558b4dabbda8ade6b147ccbdb9de
-
+%global source0_hash c15d397c0010ea72fcf3658978ee1a52c4ad275a1c56fc48be7986f53c264037
 %global obsroot /usr/lib/obs
 %global obssvcroot %{obsroot}/service
-
 %global srcname obs-service-source_validator
-
 Name:           osc-source_validator
 Version:        0.47
 Release:        1%{?dist}
 License:        GPL-2.0-or-later
 Summary:        OBS source service to validate sources
 URL:            https://github.com/openSUSE/obs-service-source_validator
-Source:         %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/openSUSE/%{srcname}/archive/%{version}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl(Build)
 Requires:       gnupg2
 Requires:       obs-build
 Requires:       osc
@@ -27,10 +21,12 @@ Requires:       perl(Date::Parse)
 Requires:       perl(Time::Zone)
 Requires:       perl(Time::Local)
 Requires:       perl(Time::localtime)
-
-# TODO: Rename this package...
 Provides:       %{srcname} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  perl(Build)
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 This is a source service for openSUSE Build Service.
 
@@ -39,22 +35,22 @@ to guarantee that all checks succeed also on the service side. This plugin can b
 used via project wide defined services.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{srcname}-%{version}
 
 %build
-# Nothing to do
 
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-%make_build test
 
-%files
-%license COPYING
-%{obssvcroot}/*
+%make_build test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,62 +1,68 @@
-%global source0_hash none
-
+%global source0_hash 72d15ef5cfc34c03468eb41e1b90adb9fd9347b0b589114bd23ead569a02ac1a
 Name:           python-aiomysql
 Version:        0.3.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        MySQL driver for asyncio.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/aio-libs/aiomysql
-Source:         %{pypi_source aiomysql}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aiomysql/aiomysql-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 80
+BuildRequires:  python3dist(setuptools-scm[toml]) < 10
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 7
+Requires:       python3-aiomysql = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-aiomysql+sa
+Summary:        Metapackage for python3-aiomysql sa extras
+Requires:       python3-aiomysql = %{version}-%{release}
+Requires:       python3dist(sqlalchemy) >= 1.3
+Requires:       python3dist(sqlalchemy) < 1.4
+Provides:       python3dist(aiomysql[sa]) = %{version}-%{release}
 
+%description -n python3-aiomysql+sa
+Metapackage for python3-aiomysql sa extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aiomysql' generated automatically by pyp2spec.}
+%package -n       python3-aiomysql+rsa
+Summary:        Metapackage for python3-aiomysql rsa extras
+Requires:       python3-aiomysql = %{version}-%{release}
+Requires:       python3dist(pymysql[rsa]) >= 1.0
+Provides:       python3dist(aiomysql[rsa]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-aiomysql+rsa
+Metapackage for python3-aiomysql rsa extras.
+
+%description
 
 %package -n     python3-aiomysql
-Summary:        %{summary}
-
-%description -n python3-aiomysql %_description
+Summary:        MySQL driver for asyncio.
+# oreon:reqs
+Requires:       python3dist(pymysql) >= 1.0
+# /oreon:reqs
+%description -n python3-aiomysql
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-aiomysql rsa,sa
-
 
 %prep
-%autosetup -p1 -n aiomysql-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aiomysql-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aiomysql usr/lib/python3*/site-packages/aiomysql* usr/lib64/python3*/site-packages/aiomysql* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aiomysql* usr/lib64/python3*/site-packages/aiomysql* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aiomysql -f %{pyproject_files}
+%files
+%files -n python3-aiomysql -f %{oreon_filedir}/python3-aiomysql.list
 
 %changelog
+
 %autochangelog

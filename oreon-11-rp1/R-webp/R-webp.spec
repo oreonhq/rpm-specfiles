@@ -1,20 +1,16 @@
 %global source0_hash 3addb4ad61f1297372391c2d8fbb81f78d9c080f31bcecc70739145b271aa23e
-
 Name:           R-webp
 Version:        %R_rpm_version 1.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A New Format for Lossless and Lossy Image Compression
-
 License:        MIT
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=webp&version=%{version}#/webp_%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
 BuildRequires:  libwebp-devel
-
+# /oreon:deps
 %description
 Lossless webp images are 26% smaller in size compared to PNG. Lossy webp
 images are 25-34% smaller in size compared to JPEG. This package reads and
@@ -23,22 +19,19 @@ conventions from the 'jpeg' and 'png' packages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples
 
-%files -f %{R_files}
+%R_check \--no-examples
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,42 +1,23 @@
-%global source0_hash c05668c7461e8440fce48c9f7a8966a6f9e0923421acd7c0357ece9b1d83f20e
-
-# TESTING NOTE: An OpenCL device is needed to run the tests.  Since the koji
-# builders may or may not have a GPU, we use the CPU-only POCL implementation.
-#
-# Except, as of pocl 3.1, the tests no longer pass.  We get this:
-#
-# The following tests FAILED:
-#	 10 - clblast_test_xamax (Subprocess aborted)
-#	 48 - clblast_test_xaxpybatched (Failed)
-#	 49 - clblast_test_xgemmbatched (Failed)
-#
-# Reverting to pocl 1.8 makes the tests pass.  We seem unable to run the tests
-# at all at this point.  Try again when pocl 4.0 is released.
-
-# https://koji.fedoraproject.org/koji/taskinfo?taskID=113330948
+%global source0_hash cac83330a6110214f2b7efc8e46062536f40ba96122f3b2a074a51497d8ca9e7
 %bcond check 1
 %bcond_with pocl
-
 Name:           clblast
 Version:        1.7.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tuned OpenCL BLAS routines
-
 License:        Apache-2.0
 URL:            https://cnugteren.github.io/clblast/clblast.html
 Source0:        https://github.com/CNugteren/CLBlast/archive/%{version}/%{name}-%{version}.tar.gz
-# Fix name clashes between macros in altivec.h and standard types on ppc64le
 Patch0:         %{name}-altivec.patch
-
+%if %{with pocl}
+%endif
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
-BuildRequires:  pkgconfig(flexiblas)
-%if %{with pocl}
-BuildRequires:  pocl-devel
-%endif
 BuildRequires:  ocl-icd-devel
-
+BuildRequires:  pkgconfig(flexiblas)
+# /oreon:deps
 %description
 CLBlast is a modern, lightweight, performant and tunable OpenCL BLAS
 library written in C++11.  It is designed to leverage the full
@@ -54,25 +35,23 @@ out-of-the-box performance is poor, please run the tuners first.
 Summary:        Headers and libraries for CLBlast
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ocl-icd-devel%{?_isa}
-
 %description devel
 Headers and libraries for developing applications that use CLBlast.
 
 %package clients
 Summary:        Clients for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description clients
 Clients to test and compare performance of %{name} for your OpenCL device.
 
 %package tuners
 Summary:        Tuners for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description tuners
 Programs to tune %{name} for your OpenCL device.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p0 -n CLBlast-%{version}
@@ -87,8 +66,7 @@ sed -i 's@cmake_minimum_required(VERSION 2.8.11@cmake_minimum_required(VERSION 3
 sed -i 's@cmake_minimum_required(VERSION 3.20@cmake_minimum_required(VERSION 3.5@' src/pyclblast/CMakeLists.txt
 
 %build
-# https://github.com/CNugteren/CLBlast/issues/529
-# add -Wno-error=format-security to CMAKE_CXX_FLAGS when building tests
+
 %cmake \
   -GNinja \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -100,35 +78,23 @@ sed -i 's@cmake_minimum_required(VERSION 3.20@cmake_minimum_required(VERSION 3.5
 %else
   -DTESTS=OFF \
 %endif
-
 %cmake_build
-
 %install
 %cmake_install
-
+%oreon_autofiles clblast-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles clblast-clients usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles clblast-tuners usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with check}
 %check
+
 %ctest
 %endif
-
-%files
-%license LICENSE
-%doc CHANGELOG README.md
-%{_libdir}/lib%{name}.so.1
-%{_libdir}/lib%{name}.so.%{version}
-
-%files devel
-%doc doc
-%{_includedir}/%{name}*.h
-%{_libdir}/lib{%name}.so
-%{_libdir}/cmake/CLBlast/
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files clients
-%{_bindir}/clblast_client*
-
-%files tuners
-%{_bindir}/clblast_tuner*
+%files -f %{oreon_filedir}/main.list
+%files -n clblast-devel -f %{oreon_filedir}/clblast-devel.list
+%files -n clblast-clients -f %{oreon_filedir}/clblast-clients.list
+%files -n clblast-tuners -f %{oreon_filedir}/clblast-tuners.list
 
 %changelog
+
 %autochangelog

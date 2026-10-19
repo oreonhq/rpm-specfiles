@@ -1,65 +1,48 @@
-%global source0_hash none
-
+%global source0_hash 4207162eff54223822c185da06c1ba8a34137a9602f3da5a528eedf3f78d0f2c
 %global srcname pydbus
-
 Name:           python-%{srcname}
 Version:        0.6.0
-Release:        34%{?dist}
+Release:        1%{?dist}
 Summary:        Pythonic DBus library
-
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://pypi.python.org/pypi/pydbus
-Source0:        https://files.pythonhosted.org/packages/source/%(n=%{srcname}; echo ${n:0:1})/%{srcname}/%{srcname}-%{version}.tar.gz
-
-# upstream fix, not yet in release
-# https://github.com/LEW21/pydbus/commit/ff792feb45bbdc0dd6a9ff7453825e34b6554865
+Source0:        https://files.pythonhosted.org/packages/source/p/%{srcname}/%{srcname}-%{version}.tar.gz
 Patch1:        0001-make-direction-attribute-conforming-to-introspect.dt.patch
-
-# patch submitted for upstream inclusion, not yet merged
-# https://github.com/LEW21/pydbus/pull/63
 Patch2:        0002-Support-asynchronous-calls-58.patch
-
-# patch submitted for upstream inclusion, not yet merged
-# https://github.com/LEW21/pydbus/pull/64
 Patch3:        0003-Support-transformation-between-D-Bus-errors-and-exce.patch
-
 BuildArch:      noarch
-
-%global _description \
-The pydbus module provides pythonic DBUS bindings.\
-It is based on PyGI, the Python GObject Introspection bindings,\
-which is the recommended way to use GLib from Python.
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+# /oreon:deps
+%description
 
 %package -n python3-%{srcname}
-Summary:        %{summary}
+Summary:        Pythonic DBus library
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 Requires:       python3-gobject-base
 %{?python_provide:%python_provide python3-%{srcname}}
-
-%description -n python3-%{srcname} %{_description}
+%description -n python3-%{srcname}
 
 Python 3 version.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{srcname}-%{version} -p1
 
 %build
-%py3_build
 
+%py3_build
 %install
 %py3_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n python3-%{srcname}
-%license LICENSE
-%doc README.rst
-%{python3_sitelib}/%{srcname}-*.egg-info/
-%{python3_sitelib}/%{srcname}/
+%files -f %{oreon_filedir}/main.list
+%files -n python3-pydbus -f %{oreon_filedir}/python3-pydbus.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.0-34
 - Import

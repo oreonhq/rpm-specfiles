@@ -1,21 +1,13 @@
-%global source0_hash none
-
+%global source0_hash bb4f547df20fc43fc19315cd0c96a447068abdc4095e7ae8b654a813e3422e93
 Name:           arc-kde
 Version:        20220908
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Port of the popular GTK theme Arc for the Plasma 5 desktop
-
 License:        GPL-3.0-only AND CC-BY-SA-4.0
 URL:            https://github.com/PapirusDevelopmentTeam/arc-kde
-Source0:        %url/archive/%{version}/%{name}-%{version}.tar.gz
-
-# https://github.com/PapirusDevelopmentTeam/arc-kde/pull/145
+Source0:        https://github.com/PapirusDevelopmentTeam/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         arc-kde-plasma-6-support.patch
-
 BuildArch:      noarch
-
-BuildRequires:  make
-
 Recommends:     %{name}-kvantum
 Recommends:     %{name}-decorations
 Recommends:     %{name}-konsole
@@ -23,7 +15,9 @@ Recommends:     %{name}-konversation
 Recommends:     %{name}-wallpapers
 Recommends:     %{name}-yakuake
 Recommends:     papirus-icon-theme
-
+# oreon:deps
+BuildRequires:  make
+# /oreon:deps
 %description
 This is a port of the popular GTK theme Arc for Plasma 5 desktop with a few 
 additions and extras.
@@ -46,7 +40,6 @@ Summary:    Arc-KDE Kvantum theme
 License:    GPL-3.0-only
 BuildArch:  noarch
 Requires:   kvantum
-
 %description kvantum
 This is a port of the popular GTK theme Arc for Plasma 5 desktop with a few 
 additions and extras.
@@ -57,7 +50,6 @@ This package contains the ArcDark ard ArcDarker Kvantum theme.
 Summary:    Arc-KDE Aurorae theme
 License:    GPL-3.0-only
 BuildArch:  noarch
-
 %description decorations
 This is a port of the popular GTK theme Arc for Plasma 5 desktop with a few 
 additions and extras.
@@ -68,7 +60,6 @@ This package contains the Aurorae window decorations.
 Summary:    Arc-KDE Konsole theme
 License:    GPL-3.0-only
 BuildArch:  noarch
-
 %description konsole
 This is a port of the popular GTK theme Arc for Plasma 5 desktop with a few 
 additions and extras.
@@ -79,7 +70,6 @@ This package contains the ArcDark Konsole theme.
 Summary:    Arc-KDE Konversation theme
 License:    GPL-3.0-only
 BuildArch:  noarch
-
 %description konversation
 This is a port of the popular GTK theme Arc for Plasma 5 desktop with a few 
 additions and extras.
@@ -90,7 +80,6 @@ This package contains the Konversation theme.
 Summary:    Arc-KDE wallpapers
 License:    CC-BY-SA-4.0
 BuildArch:  noarch
-
 %description wallpapers
 This is a port of the popular GTK theme Arc for Plasma 5 desktop with a few 
 additions and extras.
@@ -101,7 +90,6 @@ This package contains the Arc wallpapers.
 Summary:    Arc-KDE Yakuake theme
 License:    GPL-3.0-only
 BuildArch:  noarch
-
 %description yakuake
 This is a port of the popular GTK theme Arc for Plasma 5 desktop with a few 
 additions and extras.
@@ -109,54 +97,31 @@ additions and extras.
 This package contains the Yakuake theme.
 
 %prep
+
 %autosetup -p1
 
 cp wallpapers/Arc-Dark/LICENSE LICENSE-wallpapers
 
 %build
-# Nothing to build
 
 %install
 %make_install
+%oreon_autofiles arc-kde-kvantum usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles arc-kde-decorations usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles arc-kde-konsole usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles arc-kde-konversation usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles arc-kde-wallpapers usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles arc-kde-yakuake usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE LICENSE-wallpapers
-%doc AUTHORS README.md
-%{_datadir}/color-schemes/*.colors
-%{_datadir}/plasma/desktoptheme/Arc-Color
-%{_datadir}/plasma/desktoptheme/Arc-Dark
-%{_datadir}/plasma/look-and-feel/com.github.varlesh.*
-
-%files decorations
-%license LICENSE
-%{_datadir}/aurorae/themes/Arc
-%{_datadir}/aurorae/themes/Arc-Dark
-
-%files konsole
-%license LICENSE
-%{_datadir}/konsole/*.colorscheme
-
-%files konversation
-%license LICENSE
-%{_datadir}/konversation/themes/papirus
-%{_datadir}/konversation/themes/papirus-dark
-
-%files kvantum
-%license LICENSE
-%{_datadir}/Kvantum/Arc
-%{_datadir}/Kvantum/ArcDark
-%{_datadir}/Kvantum/ArcDarker
-
-%files wallpapers
-%license LICENSE-wallpapers
-%{_datadir}/wallpapers/Arc
-%{_datadir}/wallpapers/Arc-Dark
-%{_datadir}/wallpapers/Arc-Mountains
-
-%files yakuake
-%license LICENSE
-%{_datadir}/yakuake/skins/arc
-%{_datadir}/yakuake/skins/arc-dark
+%files -f %{oreon_filedir}/main.list
+%files -n arc-kde-kvantum -f %{oreon_filedir}/arc-kde-kvantum.list
+%files -n arc-kde-decorations -f %{oreon_filedir}/arc-kde-decorations.list
+%files -n arc-kde-konsole -f %{oreon_filedir}/arc-kde-konsole.list
+%files -n arc-kde-konversation -f %{oreon_filedir}/arc-kde-konversation.list
+%files -n arc-kde-wallpapers -f %{oreon_filedir}/arc-kde-wallpapers.list
+%files -n arc-kde-yakuake -f %{oreon_filedir}/arc-kde-yakuake.list
 
 %changelog
+
 %autochangelog

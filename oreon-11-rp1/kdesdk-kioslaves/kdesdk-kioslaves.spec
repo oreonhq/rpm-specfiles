@@ -1,72 +1,55 @@
 %global source0_hash bf2b24006229689a38be796d67590efa5677d6ee4439351919fd6071c30166f2
-
 %undefine __cmake_in_source_build
 %global base_name kdesdk-kio
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    kdesdk-kioslaves
-Summary: KDESDK KIOslaves
+Summary:        KDESDK KIOslaves
 Version: 26.08.0
-Release: 1%{?dist}
-
-# Automatically converted from old format: GPLv2 and GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-only AND GPL-2.0-or-later
 URL:     https://cgit.kde.org/%{name}.git
-
 %global revision %(echo %{version} | cut -d. -f3)
 %if %{revision} >= 50
 %global stable unstable
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/%{stable}/release-service/%{version}/src/kdesdk-kio-%{version}.tar.xz
-
-BuildRequires: perl-generators
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6KIO)
-
-# translations moved here
+Source0:        https://download.kde.org/stable/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
 Conflicts: kde-l10n < 17.03
-
 Conflicts:      kdesdk-common < 4.10.80
 Provides:       kdesdk-kioslave = %{version}-%{release}
 Obsoletes:      kdesdk-kioslave < 4.10.80
-
 Provides: kio5-perldoc = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 KDE SDK kioslaves:
 * perldoc KIOSlave
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{base_name}-%{version}
 
-
 %build
+
 %cmake_kf6 \
 	-DQT_MAJOR_VERSION=6
-
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang %{base_name} --all-name
+%oreon_autofiles main
 
-
-%files -f %{base_name}.lang
-%{_kf6_plugindir}/kio/perldoc.so
-%{_kf6_datadir}/kio_perldoc/
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog	
+
 * Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
 - Latest upstream release
 

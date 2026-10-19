@@ -1,20 +1,14 @@
 %global source0_hash 618de3d0b1122f73a9229177d2da1e5cd62e431190580cb915f2605849cbbbdc
-
 %bcond_without openmpi
 %bcond mpich %[!(0%{?rhel} >= 10)]
-
 Name:           osu-micro-benchmarks
 Version:        7.5.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        OSU Micro-Benchmarks for MPI
 License:        BSD-3-Clause
 URL:            https://mvapich.cse.ohio-state.edu/benchmarks/
 Source0:        https://mvapich.cse.ohio-state.edu/download/mvapich/%{name}-%{version}.tar.gz
-BuildRequires:  make gcc gcc-c++
-# openmpi already excludes ix86. And c/util/osu_util_validation.c uses __int128_t.
-# https://bugzilla.redhat.com/show_bug.cgi?id=2307721
 ExcludeArch:    %{ix86}
-
 %global desc OSU Micro-Benchmarks for MPI.\
 Point-to-Point MPI Benchmarks: Latency, multi-threaded latency, multi-pair\
 latency, multiple bandwidth / message rate test, bandwidth, bidirectional\
@@ -32,7 +26,13 @@ one-sided put bidirectional bandwidth, one-sided get latency, one-sided get\
 bandwidth, one-sided accumulate latency, compare and swap latency, fetch and\
 operate and get_accumulate latency for MVAPICH2 (MPI-2 and MPI-3).\
 Startup Benchmarks: osu_init, osu_hello
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  mpich-devel
+BuildRequires:  openmpi-devel
+# /oreon:deps
 %description
 %{desc}
 
@@ -70,10 +70,9 @@ This package is built for MPICH.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %global _configure ../configure
 do_build() {
 	mkdir build-$MPI_COMPILER
@@ -82,22 +81,18 @@ do_build() {
 	%make_build
 	popd
 }
-
 export CC=mpicc
 export CXX=mpicxx
-
 %if %{with openmpi}
 %{_openmpi_load}
 do_build
 %{_openmpi_unload}
 %endif
-
 %if %{with mpich}
 %{_mpich_load}
 do_build
 %{_mpich_unload}
 %endif
-
 %install
 do_install() {
 	pushd build-$MPI_COMPILER
@@ -107,32 +102,22 @@ do_install() {
 	find %{buildroot}/staging-$MPI_COMPILER -name 'osu_*' -type f -perm -111 \
 		-exec mv -t %{buildroot}$MPI_BIN/ {} +
 }
-
 %if %{with openmpi}
 %{_openmpi_load}
 do_install
 %{_openmpi_unload}
 %endif
-
 %if %{with mpich}
 %{_mpich_load}
 do_install
 %{_mpich_unload}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
-%files common
-%license COPYRIGHT
-%doc README CHANGES
-
-%if %{with openmpi}
-%files openmpi
-%{_libdir}/openmpi/bin/osu_*
-%endif
-
-%if %{with mpich}
-%files mpich
-%{_libdir}/mpich/bin/osu_*
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n osu-micro-benchmarks-common -f %{oreon_filedir}/osu-micro-benchmarks-common.list
+%files -n osu-micro-benchmarks-openmpi -f %{oreon_filedir}/osu-micro-benchmarks-openmpi.list
+%files -n osu-micro-benchmarks-mpich -f %{oreon_filedir}/osu-micro-benchmarks-mpich.list
 
 %changelog
+
 %autochangelog

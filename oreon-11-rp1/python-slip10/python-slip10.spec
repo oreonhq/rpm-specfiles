@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash d248d3df26f123f08474339c45f0f264254f74ae9a5657234a1d5eb91f0c4d54
 Name:           python-slip10
 Version:        1.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A reference implementation of the SLIP-0010 specification, which generalizes the BIP-0032 derivation scheme for private and public key pairs in hierarchical deterministic wallets for the curves secp256k1, NIST P-256, ed25519 and curve25519.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause AND MIT
 URL:            https://github.com/trezor/python-slip10
-Source:         %{pypi_source slip10}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/slip10/slip10-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'slip10' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-slip10 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-slip10
-Summary:        %{summary}
-
-%description -n python3-slip10 %_description
-
+Summary:        A reference implementation of the SLIP-0010 specification, which generalizes the BIP-0032 derivation scheme for private and public key pairs in hierarchical deterministic wallets for the curves secp256k1, NIST P-256, ed25519 and curve25519.
+%description -n python3-slip10
 
 %prep
-%autosetup -p1 -n slip10-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir slip10-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-slip10 usr/lib/python3*/site-packages/slip10* usr/lib64/python3*/site-packages/slip10* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/slip10* usr/lib64/python3*/site-packages/slip10* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-slip10 -f %{pyproject_files}
+%files
+%files -n python3-slip10 -f %{oreon_filedir}/python3-slip10.list
 
 %changelog
+
 %autochangelog

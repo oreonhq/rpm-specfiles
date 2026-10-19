@@ -1,47 +1,19 @@
-%global source0_hash 086c52dd98de17ffcc9f42310bf166a69718c829b413b9ea831fb296e2216a69
-
+%global source0_hash 92678f2b5e4ec2ca6df598ef6d3bbf57f0176ada2e4901f689d844f7744fe9c6
 %global libname SharpZipLib
-
-# mono is without any packagable debuginfo
 %global debug_package %{nil}
-
 %bcond_with brokentests
-
 Name:           sharpziplib
 Version:        1.4.2
 Release:        1%{?dist}
 Summary:        Zip, GZip, Tar and BZip2 library
-
-# - as stated on the homepage, license is aka GNU Classpath exception:
-# As a special exception, the copyright holders of this library give you permission
-# to link this library with independent modules to produce an executable, regardless
-# of the license terms of these independent modules, and to copy and distribute the
-# resulting executable under terms of your choice, provided that you also meet, for
-# each linked independent module, the terms and conditions of the license of that module. 
-# - some files are licensed explicitly with BSD:
-# + samples/cs/CreateZipFile/Main.cs
-# + samples/cs/FastZip/Main.cs
-# + samples/cs/minibzip2/Main.cs
-# + samples/cs/minigzip/Main.cs
-# + samples/cs/sz/sz.cs
-# + samples/cs/tar/Main.cs
-# + samples/cs/unzipfile/UnZipFile.cs
-# + samples/cs/zipfiletest/ZipFileTest.cs
-# + samples/vb/CreateZipFile/MainForm.vb
-# + samples/vb/minibzip2/Main.vb
-# + samples/vb/viewzipfile/Main.vb
-# - samples/HttpCompressionModule is licensed as zlib/libpng (=zlib)
-# Automatically converted from old format: GPLv2+ with exceptions and BSD and zlib - review is highly recommended.
 License:        LicenseRef-Callaway-GPLv2+-with-exceptions AND LicenseRef-Callaway-BSD AND Zlib
 URL:            http://icsharpcode.github.io/%{libname}
 Source0:        https://github.com/icsharpcode/%{name}/archive/v%{version}.tar.gz#/%{libname}-%{version}.tar.gz
-
 ExclusiveArch:  %{mono_arches}
-BuildRequires:  mono-devel
-
-# fix ownership of mono folders
 Requires:       mono-core
-
+# oreon:deps
+BuildRequires:  mono-devel
+# /oreon:deps
 %description
 SharpZipLib, formerly NZipLib is a Zip, GZip, Tar and BZip2 library
 written entirely in C# . It is implemented as an assembly (installable
@@ -50,11 +22,11 @@ in the GAC), and thus can easily be incorporated into other projects.
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qn%{libname}-%{version}
@@ -63,10 +35,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 mkdir bin
 cd src/ICSharpCode.SharpZipLib/
-
 cat > AssemblyInfo.cs << FINISH
 using System.Reflection;
-
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
@@ -75,7 +45,6 @@ using System.Reflection;
 [assembly: AssemblyDescription("C# Zip, GZip, Tar and BZip2 library for .NET")]
 [assembly: AssemblyCulture("")]
 FINISH
-
 mcs ./Lzw/LzwException.cs ./Lzw/LzwInputStream.cs ./Lzw/LzwConstants.cs ./Core/Exceptions/StreamDecodingException.cs \
     ./Core/Exceptions/SharpZipBaseException.cs ./Core/Exceptions/ValueOutOfRangeException.cs \
     ./Core/Exceptions/StreamUnsupportedException.cs ./Core/Exceptions/UnexpectedEndOfStreamException.cs \
@@ -104,34 +73,25 @@ mcs ./Lzw/LzwException.cs ./Lzw/LzwInputStream.cs ./Lzw/LzwConstants.cs ./Core/E
     -keyfile:../../assets/ICSharpCode.SharpZipLib.snk \
     -target:library -out:../../bin/ICSharpCode.SharpZipLib.dll
 cd -
-
 %install
 mkdir -p %{buildroot}/%{_monogacdir} %{buildroot}/%{_libdir}/pkgconfig
 gacutil -i bin/*.dll -f -package %{name} -root %{buildroot}/usr/lib
-
 cat > %{buildroot}/%{_libdir}/pkgconfig/%{name}.pc <<FINISH
 prefix=/usr
 exec_prefix=\${prefix}
 libdir=\${exec_prefix}/lib
-
 Name: sharpziplib
 Description: C# Zip, GZip, Tar and BZip2 library for .NET
 Version: %{version}
 Libs: -r:\${libdir}/mono/sharpziplib/ICSharpCode.SharpZipLib.dll
 FINISH
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
 
-%files
-%license LICENSE.txt
-%doc README.md
-# usage of wildcards cause of weird dll name
-%{_monogacdir}/*%{libname}
-%{_monodir}/%{name}/*%{libname}.dll
-%dir %{_monodir}/%{name}
-
-%files devel
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n sharpziplib-devel -f %{oreon_filedir}/sharpziplib-devel.list
 
 %changelog
+
 %autochangelog

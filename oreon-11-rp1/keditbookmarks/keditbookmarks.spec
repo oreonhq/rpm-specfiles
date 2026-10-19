@@ -1,44 +1,33 @@
 %global source0_hash 434d30601214b0645366448de9397e6f0e013bade3b49cb1af845f6a741c4dd0
-
 %global stable_kf6 stable
-
-
 Name:    keditbookmarks
-Summary: Bookmark organizer and editor
+Summary:        Bookmark organizer and editor
 Version: 26.04.3
-Release: 1%{?dist}
-
-# Documentation is GFDL, rest GPLv2 and GPLv3 (note: NOT any later version)
-# Automatically converted from old format: GPLv2 and GPLv3 and GFDL - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-only AND GPL-3.0-only AND LicenseRef-Callaway-GFDL
 URL:     https://www.kde.org/
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires: desktop-file-utils
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6Bookmarks)
-BuildRequires: cmake(KF6Codecs)
-BuildRequires: cmake(KF6ConfigWidgets)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6DocTools)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6IconThemes)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Parts)
-BuildRequires: cmake(KF6WidgetsAddons)
-BuildRequires: cmake(KF6WindowSystem)
-BuildRequires: cmake(KF6Crash)
-
-BuildRequires: cmake(Qt6Core)
-
 Requires:      %{name}-libs%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake(KF6Bookmarks)
+BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Parts)
+BuildRequires:  cmake(KF6WidgetsAddons)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 keditbookmarks is a bookmark organizer and editor.
-
 
 %package libs
 Summary:       Runtime libraries for %{name}
@@ -46,45 +35,27 @@ Requires:      %{name} = %{version}-%{release}
 %description libs
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html --with-man
-
-## unpackaged files
 rm -fv %{buildroot}%{_kf6_libdir}/libkbookmarkmodel_private.so
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-
-
-%files -f %{name}.lang
-%license COPYING*
-%{_kf6_bindir}/keditbookmarks
-%{_kf6_bindir}/kbookmarkmerger
-%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-%{_kf6_datadir}/config.kcfg/keditbookmarks.kcfg
-%{_kf6_datadir}/qlogging-categories6/%{name}*
-%{_mandir}/man1/kbookmarkmerger.1*
-
-%files libs
-%{_kf6_libdir}/libkbookmarkmodel_private.so.*
-
+%files -f %{oreon_filedir}/main.list
+%files -n keditbookmarks-libs -f %{oreon_filedir}/keditbookmarks-libs.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

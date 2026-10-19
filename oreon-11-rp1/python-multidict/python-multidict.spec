@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 5cd4637ce76312ba1e05eb9c5193fec231f64fee0944e135fa1e951242355b37
 Name:           python-multidict
 Version:        6.8.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        multidict implementation
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://matrix.to/#/#aio-libs:matrix.org
-Source:         %{pypi_source multidict}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/multidict/multidict-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'multidict' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 47
+Requires:       python3-multidict = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-multidict
-Summary:        %{summary}
-
-%description -n python3-multidict %_description
-
+Summary:        multidict implementation
+%description -n python3-multidict
 
 %prep
-%autosetup -p1 -n multidict-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir multidict-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-multidict usr/lib/python3*/site-packages/multidict* usr/lib64/python3*/site-packages/multidict* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/multidict* usr/lib64/python3*/site-packages/multidict* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-multidict -f %{pyproject_files}
+%files
+%files -n python3-multidict -f %{oreon_filedir}/python3-multidict.list
 
 %changelog
+
 %autochangelog

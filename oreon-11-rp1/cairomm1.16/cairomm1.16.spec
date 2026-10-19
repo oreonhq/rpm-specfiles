@@ -1,39 +1,14 @@
+%global source2_hash b1457513a743cff02a2d70908b127b1887dae88c9fe62db6299be3c7ccd55e4f
 %global source0_hash e0e996a979ee52c840dca3ee74f5d005e3259b94ddce58f255d3b6f47c8cb41d
-
 %global so_version 1
 %global apiver 1.16
-
-# “Let mm-common-get copy some files to untracked/”, i.e., replace scripts from
-# the tarball with those from mm-common. This is (potentially) required if
-# building an autotools-generated tarball with meson, or vice versa.
 %bcond maintainer_mode 1
-
 Name:           cairomm%{apiver}
 Summary:        C++ API for the cairo graphics library
 Version:        1.18.1
-Release:        %autorelease
-
+Release:        1%{?dist}
 URL:            https://www.cairographics.org
 License:        LGPL-2.0-or-later
-# The following files under other allowable licenses belong to the build system
-# and do not contribute to the licenses of the binary RPMs.
-#
-# FSFAP:
-#   build/ax_boost_base.m4
-#   build/ax_boost_test_exec_monitor.m4
-#   build/ax_boost_unit_test_framework.m4
-# GPL-2.0-or-later:
-#   untracked/docs/tagfile-to-devhelp2.xsl
-# LGPL-2.1-or-later:
-#   Makefile.am
-#   cairomm/Makefile.am
-#   configure.ac
-#   docs/Makefile.am
-# MIT:
-#   untracked/docs/reference/html/dynsections.js
-#   untracked/docs/reference/html/jquery.js
-#   untracked/docs/reference/html/menu.js
-#   untracked/docs/reference/html/menudata.js
 SourceLicense:  %{shrink:
                 %{license} AND
                 FSFAP AND
@@ -41,28 +16,22 @@ SourceLicense:  %{shrink:
                 LGPL-2.1-or-later AND
                 MIT
                 }
-
 %global src_base https://www.cairographics.org/releases
 Source0:        %{src_base}/cairomm-%{version}.tar.xz
-# No keyring with authorized GPG signing keys is published
-# (https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/331), but we
-# are able to verify the signature using the key for Kjell Ahlstedt from
-# https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/290.
 Source1:        %{src_base}/cairomm-%{version}.tar.xz.asc
 Source2:        https://gitlab.freedesktop.org/freedesktop/freedesktop/uploads/0ac64e9582659f70a719d59fb02cd037/gpg_key.pub
-
-# For %%{gpgverify} macro
-BuildRequires:  gpgverify
-
+%if %{with maintainer_mode}
+%endif
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  doxygen
 BuildRequires:  gcc-c++
+BuildRequires:  gpgverify
+BuildRequires:  graphviz
+BuildRequires:  libxslt
 BuildRequires:  meson
-
+BuildRequires:  mm-common
 BuildRequires:  pkgconfig(cairo)
-BuildRequires:  pkgconfig(sigc++-3.0)
-BuildRequires:  pkgconfig(fontconfig)
-
-# Everything mentioned in data/cairomm*.pc.in, except the Quartz and Win32
-# libraries that do not apply to this platform:
 BuildRequires:  pkgconfig(cairo-ft)
 BuildRequires:  pkgconfig(cairo-pdf)
 BuildRequires:  pkgconfig(cairo-png)
@@ -70,63 +39,37 @@ BuildRequires:  pkgconfig(cairo-ps)
 BuildRequires:  pkgconfig(cairo-svg)
 BuildRequires:  pkgconfig(cairo-xlib)
 BuildRequires:  pkgconfig(cairo-xlib-xrender)
-
-%if %{with maintainer_mode}
-# mm-common-get
-BuildRequires:  mm-common >= 1.0.4
-%endif
-
-BuildRequires:  doxygen
-# dot
-BuildRequires:  graphviz
-# xsltproc
-BuildRequires:  libxslt
+BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(mm-common-libstdc++)
-
-# For tests:
-BuildRequires:  boost-devel
-
+BuildRequires:  pkgconfig(sigc++-3.0)
+# /oreon:deps
 %description
 This library provides a C++ interface to cairo.
 
 The API/ABI version series is %{apiver}.
 
-
 %package        devel
 Summary:        Development files for cairomm%{apiver}
 Requires:       cairomm%{apiver}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The cairomm%{apiver}-devel package contains libraries and header files for
 developing applications that use cairomm%{apiver}.
 
 The API/ABI version series is %{apiver}.
 
-
 %package        doc
 Summary:        Documentation for cairomm%{apiver}
-
-# We unbundle Doxygen-inserted JavaScript assets from the HTML documentation
-# as much as possible, as prescribed in
-# https://src.fedoraproject.org/rpms/doxygen/blob/f42/f/README.rpm-packaging.
-#
-# Some files originating in Doxygen are still bundled or are generated from
-# templates specifically for this package; where these have explicitly
-# documented licenses, they are MIT.
 License:        %{license} AND MIT
-
 BuildArch:      noarch
-
 %{?doxygen_js_requires}
-
 %description    doc
 Documentation for cairomm%{apiver} can be viewed through the devhelp
 documentation browser.
 
 The API/ABI version series is %{apiver}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} \
     --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -139,7 +82,6 @@ rm -rf untracked/docs/reference/html
 rm untracked/docs/reference/cairomm-%{apiver}.tag \
    untracked/docs/reference/cairomm-%{apiver}.devhelp2
 
-
 %conf
 %meson \
   -Dmaintainer-mode=%{?with_maintainer_mode:true}%{?!with_maintainer_mode:false} \
@@ -149,43 +91,26 @@ rm untracked/docs/reference/cairomm-%{apiver}.tag \
   -Dboost-shared=true \
   -Dwarnings=max
 
-
 %build
+
 %meson_build
-
-
 %install
 %meson_install
-
 install -t %{buildroot}%{_docdir}/cairomm-%{apiver} -m 0644 -p \
     ChangeLog NEWS README.md
 cp -rp examples %{buildroot}%{_docdir}/cairomm-%{apiver}/
-
 %{doxygen_unbundle_buildroot}
-
+%oreon_autofiles cairomm1.16-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles cairomm1.16-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %meson_test
-
-
-%files
-%license COPYING
-%{_libdir}/libcairomm-%{apiver}.so.%{so_version}{,.*}
-
-
-%files devel
-%{_includedir}/cairomm-%{apiver}/
-%{_libdir}/libcairomm-%{apiver}.so
-%{_libdir}/pkgconfig/cairomm-%{apiver}.pc
-%{_libdir}/pkgconfig/cairomm-*-%{apiver}.pc
-%{_libdir}/cairomm-%{apiver}/
-
-
-%files doc
-%license COPYING
-%doc %{_docdir}/cairomm-%{apiver}/
-%doc %{_datadir}/devhelp/
-
+%files -f %{oreon_filedir}/main.list
+%files -n cairomm1.16-devel -f %{oreon_filedir}/cairomm1.16-devel.list
+%files -n cairomm1.16-doc -f %{oreon_filedir}/cairomm1.16-doc.list
 
 %changelog
+
 %autochangelog

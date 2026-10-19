@@ -1,73 +1,43 @@
-%global source0_hash none
-
+%global source0_hash b6346459a15f0cbab01a45a90c3d25caf980d4733d628b4cc1952b865125d053
 Name: python-routes
 Version: 2.5.1
-Release: %autorelease
-Summary: Routing Recognition and Generation Tools
-
-# tests/test_functional/test_recognition.py is BSD, not shipped in main RPM.
+Release:        1%{?dist}
+Summary:        Routing Recognition and Generation Tools
 License: MIT
 URL: https://github.com/bbangert/routes
-Source0: https://pypi.io/packages/source/R/Routes/Routes-%{version}.tar.gz
-
-# https://github.com/bbangert/routes/pull/107
+Source0:        https://pypi.io/packages/source/R/Routes/Routes-%{version}.tar.gz
 Patch0001: 0001-switch-from-nose-to-pytest.patch
-
 BuildArch: noarch
-
-BuildRequires: python3-devel
-# For tests
-BuildRequires: python3dist(pytest)
-BuildRequires: python3dist(webtest)
-BuildRequires: python3dist(webob)
-
-
-%global _description %{expand:
-Routes is a Python re-implementation of the Rails routes system for mapping
-URL's to Controllers/Actions and generating URL's. Routes makes it easy to
-create pretty and concise URLs that are RESTful with little effort.}
-
-
-%description %_description
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-routes = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-routes
-Summary: %{summary}
-
-
-%description -n python3-routes %_description
-
+Summary:        Routing Recognition and Generation Tools
+%description -n python3-routes
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n Routes-%{version}
-
-
+%global oreon_srcdir Routes-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
 %install
 %pyproject_install
-
-%pyproject_save_files -l routes
-
+%oreon_autofiles python3-routes usr/lib/python3*/site-packages/routes* usr/lib64/python3*/site-packages/routes* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/routes* usr/lib64/python3*/site-packages/routes* usr/bin/*
 
 %check
+
 PYTHONPATH=$(pwd) python3 -m pytest
-
-
-%files -n python3-routes -f %{pyproject_files}
-#%%license LICENSE.txt
-%doc README.rst CHANGELOG.rst docs
-
-
+%files
+%files -n python3-routes -f %{oreon_filedir}/python3-routes.list
 
 %changelog
+
 %autochangelog
 

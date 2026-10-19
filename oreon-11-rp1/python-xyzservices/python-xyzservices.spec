@@ -1,57 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 8d1a39bf6b192940cc5db5264eeefc1b20dd184f8b83b1303b078743744f5943
 Name:           python-xyzservices
 Version:        2026.9.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Source of XYZ tiles providers
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/geopandas/xyzservices
-Source:         %{pypi_source xyzservices}
-
+Source0:        https://files.pythonhosted.org/packages/source/x/xyzservices/xyzservices-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'xyzservices' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.2
+Requires:       python3-xyzservices = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-xyzservices
-Summary:        %{summary}
-
-%description -n python3-xyzservices %_description
-
+Summary:        Source of XYZ tiles providers
+%description -n python3-xyzservices
 
 %prep
-%autosetup -p1 -n xyzservices-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir xyzservices-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-xyzservices usr/lib/python3*/site-packages/xyzservices* usr/lib64/python3*/site-packages/xyzservices* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/xyzservices* usr/lib64/python3*/site-packages/xyzservices* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-xyzservices -f %{pyproject_files}
+%files
+%files -n python3-xyzservices -f %{oreon_filedir}/python3-xyzservices.list
 
 %changelog
+
 %autochangelog

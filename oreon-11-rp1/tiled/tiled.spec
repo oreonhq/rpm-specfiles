@@ -1,38 +1,28 @@
-%global source0_hash none
-
+%global source0_hash 3564bd1601b1b170dc894c7e66a2e5c61849b3fb8612e944c84fd97115cce248
 Name:           tiled
 Summary:        Tiled Map Editor
-
 Version:        1.12.2
 Release:        1%{?dist}
-
-# tiled itself is GPLv2+, libtiled and tmxviewer are BSD.
-#
-# Apart from the code, there are also some icons and other gfx,
-# subject to various CC licenses or GPL3+. See the AUTHORS file.
 License:        GPL-2.0-or-later AND BSD-2-Clause AND CC-BY-SA-3.0 AND GPL-3.0-or-later AND CC0-1.0
-
 URL:            https://www.mapeditor.org
 Source0:        https://github.com/mapeditor/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+ExcludeArch:    %{ix86}
+# oreon:deps
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
 BuildRequires:  libappstream-glib
 BuildRequires:  libzstd-devel
 BuildRequires:  make
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  python3-devel
 BuildRequires:  qbs
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  qt6-qtdeclarative-devel
-BuildRequires:  qt6-qttools-devel
 BuildRequires:  qt6-qtsvg-devel
-BuildRequires:  pkgconfig(Qt6Core)
-BuildRequires:  python3-devel
+BuildRequires:  qt6-qttools-devel
 BuildRequires:  zlib-devel
-
-# qbs.i386 is disabled in F39+
-ExcludeArch:    %{ix86}
-
+# /oreon:deps
 %description
 Tiled is a general purpose tile map editor. It is built to be easy to use,
 yet flexible enough to work with varying game engines, whether your game
@@ -59,7 +49,6 @@ A plugin for tiled which allows to write Python plugins.
 %define pluginwarning Warning: This plugin does not offer full compatibility with Tileds features.
 
 %package plugin-rpmap
-
 Summary:        MapTool plugin for Tiled
 License:        GPL-2.0-or-later
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -163,106 +152,44 @@ as Remixed Pixel Dungeon levels (.json).
 %{pluginwarning}
 
 %prep
+
 %autosetup -p1
 
 # Remove copy of zlib
 rm -rf src/zlib
 
 %build
+
 qbs setup-toolchains --detect
 qbs setup-qt --detect
-
 %global qbs_args config:release qbs.debugInformation:true qbs.installPrefix:"%{_prefix}" projects.Tiled.useRPaths:false projects.Tiled.installHeaders:true projects.Tiled.libDir:"%{_lib}"
 qbs build %{qbs_args}
-
 %install
 qbs install --no-build --install-root %{buildroot} %{qbs_args}
-
-# Clean build artefacts
 find -name ".uic" -or -name ".moc" -or -name ".rcc" -delete
-
-# locale files
 %find_lang %{name} --with-qt
-
-# Removed development file (this version does not install headers anyway)
-# rm %{buildroot}/%{_libdir}/lib%{name}.so
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.mapeditor.Tiled.desktop
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/org.mapeditor.Tiled.appdata.xml
-
 %ldconfig_scriptlets
-
-%files -f %{name}.lang
-%doc AUTHORS NEWS.md README.md COPYING LICENSE.GPL LICENSE.BSD
-%{_bindir}/%{name}
-%{_bindir}/terraingenerator
-%{_bindir}/tmxrasterizer
-%{_bindir}/tmxviewer
-%{_datadir}/icons/hicolor/*/apps/*%{name}*
-%{_datadir}/icons/hicolor/*/mimetypes/*%{name}*
-%{_datadir}/applications/org.mapeditor.Tiled.desktop
-%{_datadir}/metainfo/org.mapeditor.Tiled.appdata.xml
-%{_datadir}/mime/packages/org.mapeditor.Tiled.xml
-%dir %{_datadir}/%{name}/
-%dir %{_datadir}/%{name}/translations
-%{_libdir}/lib%{name}*
-
-%dir %{_libdir}/%{name}/
-%dir %{_libdir}/%{name}/plugins/
-
-# Core plugins
-%{_libdir}/%{name}/plugins/libcsv.so
-%{_libdir}/%{name}/plugins/libgmx.so
-%{_libdir}/%{name}/plugins/libjson.so
-%{_libdir}/%{name}/plugins/liblua.so
-%{_libdir}/%{name}/plugins/libjson1.so
-%{_libdir}/%{name}/plugins/libdefoldcollection.so
-
-%{_mandir}/man1/%{name}.1*
-%{_mandir}/man1/tmxrasterizer.1*
-%{_mandir}/man1/tmxviewer.1*
-%dir %{_datadir}/thumbnailers
-%{_datadir}/thumbnailers/%{name}.thumbnailer
-
-%files devel
-%{_includedir}/%{name}/
-
-%files plugin-rpmap
-%{_libdir}/%{name}/plugins/librpmap.so
-
-%files plugin-python
-%{_libdir}/%{name}/plugins/libpython.so
-
-%files plugin-tbin
-%{_libdir}/%{name}/plugins/libtbin.so
-
-%files plugin-droidcraft
-%{_libdir}/%{name}/plugins/libdroidcraft.so
-
-%files plugin-flare
-%{_libdir}/%{name}/plugins/libflare.so
-
-%files plugin-replica-island
-%{_libdir}/%{name}/plugins/libreplicaisland.so
-
-%files plugin-t-engine4
-%{_libdir}/%{name}/plugins/libtengine.so
-
-%files plugin-defold
-%{_libdir}/%{name}/plugins/libdefold.so
-
-%files plugin-gmx
-%{_libdir}/%{name}/plugins/libgmx.so
-
-%files plugin-yy
-%{_libdir}/%{name}/plugins/libyy.so
-
-%files plugin-tscn
-%{_libdir}/%{name}/plugins/libtscn.so
-
-%files plugin-rpd
-%{_libdir}/%{name}/plugins/librpd.so
+%files -f %{oreon_filedir}/main.list
+%files -n tiled-devel -f %{oreon_filedir}/tiled-devel.list
+%files -n tiled-plugin-python -f %{oreon_filedir}/tiled-plugin-python.list
+%files -n tiled-plugin-rpmap -f %{oreon_filedir}/tiled-plugin-rpmap.list
+%files -n tiled-plugin-tbin -f %{oreon_filedir}/tiled-plugin-tbin.list
+%files -n tiled-plugin-droidcraft -f %{oreon_filedir}/tiled-plugin-droidcraft.list
+%files -n tiled-plugin-flare -f %{oreon_filedir}/tiled-plugin-flare.list
+%files -n tiled-plugin-replica-island -f %{oreon_filedir}/tiled-plugin-replica-island.list
+%files -n tiled-plugin-t-engine4 -f %{oreon_filedir}/tiled-plugin-t-engine4.list
+%files -n tiled-plugin-defold -f %{oreon_filedir}/tiled-plugin-defold.list
+%files -n tiled-plugin-gmx -f %{oreon_filedir}/tiled-plugin-gmx.list
+%files -n tiled-plugin-yy -f %{oreon_filedir}/tiled-plugin-yy.list
+%files -n tiled-plugin-tscn -f %{oreon_filedir}/tiled-plugin-tscn.list
+%files -n tiled-plugin-rpd -f %{oreon_filedir}/tiled-plugin-rpd.list
 
 %changelog
+
 %autochangelog

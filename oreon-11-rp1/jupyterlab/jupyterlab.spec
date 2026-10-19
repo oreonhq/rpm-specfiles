@@ -1,76 +1,19 @@
-%global source0_hash none
-
-# Unset -s on python shebang - ensure that extensions installed with pip
-# to user locations are seen and properly loaded
+%global source0_hash 2e3db6e3a12495ebd188276e985bf5ac502fbde3d1e8628819920210008de498
 %undefine _py3_shebang_s
-
 Name:           jupyterlab
 Version:        4.6.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        JupyterLab computational environment
-# JupyterLab itself is BSD-3-Clause and
-# semver.py file is MIT.
-# The rest are licenses of bundled JS libs.
-#
-# [[[cog
-#    import cog
-#    from glob import glob
-#    from pathlib import Path
-#    import json
-#
-#    file = sorted(
-#        glob("jupyterlab-*-build/jupyterlab-*/jupyterlab/static/third-party-licenses.json")
-#        )[-1]
-#    text = Path(file).read_text()
-#    data = json.loads(text)
-#    licenses = set([p["licenseId"] for p in data["packages"]])
-#    for license in sorted(licenses):
-#        cog.outl(f"# {license}")
-# ]]]
-# 
-# (CC-BY-4.0 AND OFL-1.1 AND MIT)
-# (MPL-2.0 OR Apache-2.0)
-# 0BSD
-# Apache-2.0
-# BSD-2-Clause
-# BSD-3-Clause
-# EPL-2.0
-# ISC
-# MIT
-# Unlicense
-# [[[end]]]
 License:        0BSD AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND (CC-BY-4.0 AND OFL-1.1 AND MIT) AND EPL-2.0 AND ISC AND (MPL-2.0 OR Apache-2.0) AND MIT AND Unlicense
 URL:            https://jupyter.org
-Source0:        %{pypi_source}
-# TODO: propose upstream
+Source0:        https://files.pythonhosted.org/packages/source/j/jupyterlab/jupyterlab-%{version}.tar.gz
 Source1:        jupyterlab.metainfo.xml
-
 BuildArch:      noarch
-BuildRequires:  python3-devel
-# Needed for tests
-BuildRequires:  nodejs
-BuildRequires:  npm
-# For validating desktop entry and appdata
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-
 Requires: python-jupyter-filesystem
 Requires: hicolor-icon-theme
-
-# pip allows to install third-party
-# extensions into jupyterlab.
 Recommends: python3-pip
-
 %py_provides    python3-jupyterlab
 %py_provides    jupyter-lab
-
-# Bundled provides (uses data loaded above)
-#
-# [[[cog
-#    packages = [(p["name"], p["versionInfo"]) for p in data["packages"]]
-#    for name, version in sorted(packages):
-#        cog.outl(f"Provides:        bundled(npm({name})) = {version}")
-# ]]]
 Provides:        bundled(npm(@babel/runtime)) = 7.27.0
 Provides:        bundled(npm(@braintree/sanitize-url)) = 7.1.1
 Provides:        bundled(npm(@chevrotain/cst-dts-gen)) = 11.0.3
@@ -424,8 +367,11 @@ Provides:        bundled(npm(vscode-ws-jsonrpc)) = 1.0.2
 Provides:        bundled(npm(w3c-keyname)) = 2.2.6
 Provides:        bundled(npm(y-protocols)) = 1.0.5
 Provides:        bundled(npm(yjs)) = 13.5.49
-# [[[end]]]
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-jupyterlab = %{version}-%{release}
+# /oreon:deps
 %description
 JupyterLab is the next-generation user interface for Project Jupyter
 offering all the familiar building blocks of the classic Jupyter
@@ -433,6 +379,7 @@ Notebook (notebook, terminal, text editor, file browser, rich outputs, etc.)
 in a flexible and powerful user interface.
 
 %prep
+
 %autosetup -p1 -n jupyterlab-%{version}
 
 # pytest-tornasync is not available in Fedora
@@ -457,59 +404,32 @@ find ./ -name "*.json.orig" -delete
 # Remove shebang from yarn.js to drop runtime dependency on node
 sed -i "1d" jupyterlab/staging/yarn.js
 
-%generate_buildrequires
-%pyproject_buildrequires -x test
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files jupyterlab
-
-# jupyter-labhub requires jupyterhub, which is not available in Fedora
 rm %{buildroot}%{_bindir}/jupyter-labhub
-
-# Add %%license to some bundled LICENSE.txt files
 sed -i "s/\(.*\.LICEN[SC]E\.txt\)/%%license \1/" %{pyproject_files}
-
 install -m 0755 -p -d %{buildroot}%{_sysconfdir}/jupyter/jupyter_notebook_config.d
 install -m 0755 -p -d %{buildroot}%{_sysconfdir}/jupyter/jupyter_server_config.d
 mv -v %{buildroot}{%{_prefix},}%{_sysconfdir}/jupyter/jupyter_notebook_config.d/jupyterlab.json
 mv -v %{buildroot}{%{_prefix},}%{_sysconfdir}/jupyter/jupyter_server_config.d/jupyterlab.json
-
-# Replace identical files with a symlink
 pushd %{buildroot}%{python3_sitelib}/jupyterlab/tests/mock_packages
 ln -sf ../../extension/mock_package.py interop/consumer/jlab_mock_consumer.py
 popd
-
-# Install appdata
 mkdir -p %{buildroot}%{_metainfodir}
 install -m 0644 -p %{SOURCE1} %{buildroot}%{_metainfodir}/jupyterlab.metainfo.xml
+%oreon_autofiles main
 
 %check
-# Some tests fail because of missing tornasync and
-# some try to install dependencies from internet via npm.
-# test_load_extension is flaky.
-%pytest -k "not test_build and not test_check and not test_install_and_uninstall and not test_uninstall_core_extension and not test_load_extension"
 
+%pytest -k "not test_build and not test_check and not test_install_and_uninstall and not test_uninstall_core_extension and not test_load_extension"
 desktop-file-validate %{buildroot}%{_datadir}/applications/jupyterlab.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
-
-# Regression test for node shebang in executable files
 grep -E '!#.+node' $(find %{buildroot} -type f -executable) && exit 1 || true
-
-%files -f %{pyproject_files}
-%doc README.md
-%config(noreplace) %{_sysconfdir}/jupyter/jupyter_notebook_config.d/jupyterlab.json
-%config(noreplace) %{_sysconfdir}/jupyter/jupyter_server_config.d/jupyterlab.json
-%{_bindir}/jlpm
-%{_bindir}/jupyter-lab
-%{_bindir}/jupyter-labextension
-%{_datadir}/jupyter/lab
-%{_datadir}/applications/jupyterlab.desktop
-%{_datadir}/icons/hicolor/scalable/apps/jupyterlab.svg
-%{_metainfodir}/jupyterlab.metainfo.xml
+%files
 
 %changelog
+
 %autochangelog

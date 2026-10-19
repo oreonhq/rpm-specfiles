@@ -1,50 +1,51 @@
 %global source0_hash f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc
-
 Name:           python-sniffio
 Version:        1.3.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Sniff out which async library your code is running under
 License:        MIT OR Apache-2.0
 URL:            https://github.com/python-trio/sniffio
-Source:         %{pypi_source sniffio}
+Source0:        https://files.pythonhosted.org/packages/source/s/sniffio/sniffio-%{version}.tar.gz
 BuildArch:      noarch
-
 %global common_description %{expand:
 You're writing a library.  You've decided to be ambitious, and support multiple
 async I/O packages, like Trio, and asyncio, and ... You've written a bunch of
 clever code to handle all the differences.  But... how do you know which piece
 of clever code to run?  This is a tiny package whose only purpose is to let you
 detect which async library your code is running under.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 64
+BuildRequires:  python3dist(setuptools-scm) >= 6.4
+Requires:       python3-sniffio = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-sniffio
-Summary:        %{summary}
+Summary:        Sniff out which async library your code is running under
 BuildRequires:  python3-devel
 BuildRequires:  %{py3_dist pytest}
-
 %description -n python3-sniffio %{common_description}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n sniffio-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir sniffio-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files sniffio
+%oreon_autofiles python3-sniffio usr/lib/python3*/site-packages/sniffio* usr/lib64/python3*/site-packages/sniffio* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sniffio* usr/lib64/python3*/site-packages/sniffio* usr/bin/*
 
 %check
-%pytest --verbose
 
-%files -n python3-sniffio -f %{pyproject_files}
-%doc README.rst
+%pytest --verbose
+%files
+%files -n python3-sniffio -f %{oreon_filedir}/python3-sniffio.list
 
 %changelog
+
 %autochangelog

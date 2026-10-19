@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash d0d39f1bc07db5799241053cfb9fc254f2615b411235ef8e540367b847e31dc0
 Name:           python-tamilstring
 Version:        2.2.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        tamilstring helps to handle tamil unicode characters lot more easier
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://gitlab.com/boopalan-dev/tamilstring
-Source:         %{pypi_source tamilstring}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tamilstring/tamilstring-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'tamilstring' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-tamilstring = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-tamilstring
-Summary:        %{summary}
-
-%description -n python3-tamilstring %_description
-
+Summary:        tamilstring helps to handle tamil unicode characters lot more easier
+%description -n python3-tamilstring
 
 %prep
-%autosetup -p1 -n tamilstring-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir tamilstring-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-tamilstring usr/lib/python3*/site-packages/tamilstring* usr/lib64/python3*/site-packages/tamilstring* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tamilstring* usr/lib64/python3*/site-packages/tamilstring* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-tamilstring -f %{pyproject_files}
+%files
+%files -n python3-tamilstring -f %{oreon_filedir}/python3-tamilstring.list
 
 %changelog
+
 %autochangelog

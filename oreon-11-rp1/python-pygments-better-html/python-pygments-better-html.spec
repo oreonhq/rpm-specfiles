@@ -1,56 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 3821d9e2dcf402cd319edca6f893f3e8a399c42d096ab02a16155b8c3de4d888
 Name:           python-pygments-better-html
 Version:        0.1.6
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Better HTML formatter for Pygments.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/Kwpolska/pygments_better_html
-Source:         %{pypi_source pygments_better_html}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pygments_better_html/pygments_better_html-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pygments-better-html' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(flit-core) < 4
+BuildRequires:  python3dist(flit-core) >= 3.2
+Requires:       python3-pygments-better-html = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pygments-better-html
-Summary:        %{summary}
-
-%description -n python3-pygments-better-html %_description
-
+Summary:        Better HTML formatter for Pygments.
+# oreon:reqs
+Requires:       python3dist(pygments) >= 2.15.1
+# /oreon:reqs
+%description -n python3-pygments-better-html
 
 %prep
-%autosetup -p1 -n pygments_better_html-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pygments_better_html-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pygments-better-html usr/lib/python3*/site-packages/pygments_better_html* usr/lib64/python3*/site-packages/pygments_better_html* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pygments_better_html* usr/lib64/python3*/site-packages/pygments_better_html* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pygments-better-html -f %{pyproject_files}
+%files
+%files -n python3-pygments-better-html -f %{oreon_filedir}/python3-pygments-better-html.list
 
 %changelog
+
 %autochangelog

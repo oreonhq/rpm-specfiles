@@ -1,62 +1,111 @@
-%global source0_hash none
-
+%global source0_hash 781cfa9a42de8f33c52aff857fd0a04e483de4fd1c53eaaa9a6aeac62bad11de
 Name:           python-tablib
 Version:        3.10.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Format agnostic tabular data library _XLS, JSON, YAML, CSV, etc._
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://tablib.readthedocs.io
-Source:         %{pypi_source tablib}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tablib/tablib-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 58
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.2
+Requires:       python3-tablib = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-tablib+all
+Summary:        Metapackage for python3-tablib all extras
+Requires:       python3-tablib = %{version}-%{release}
+Requires:       python3dist(openpyxl) >= 2.6.0
+Provides:       python3dist(tablib[all]) = %{version}-%{release}
 
+%description -n python3-tablib+all
+Metapackage for python3-tablib all extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'tablib' generated automatically by pyp2spec.}
+%package -n       python3-tablib+cli
+Summary:        Metapackage for python3-tablib cli extras
+Requires:       python3-tablib = %{version}-%{release}
+Provides:       python3dist(tablib[cli]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-tablib+cli
+Metapackage for python3-tablib cli extras.
+
+%package -n       python3-tablib+html
+Summary:        Metapackage for python3-tablib html extras
+Requires:       python3-tablib = %{version}-%{release}
+Provides:       python3dist(tablib[html]) = %{version}-%{release}
+
+%description -n python3-tablib+html
+Metapackage for python3-tablib html extras.
+
+%package -n       python3-tablib+ods
+Summary:        Metapackage for python3-tablib ods extras
+Requires:       python3-tablib = %{version}-%{release}
+Provides:       python3dist(tablib[ods]) = %{version}-%{release}
+
+%description -n python3-tablib+ods
+Metapackage for python3-tablib ods extras.
+
+%package -n       python3-tablib+pandas
+Summary:        Metapackage for python3-tablib pandas extras
+Requires:       python3-tablib = %{version}-%{release}
+Provides:       python3dist(tablib[pandas]) = %{version}-%{release}
+
+%description -n python3-tablib+pandas
+Metapackage for python3-tablib pandas extras.
+
+%package -n       python3-tablib+xls
+Summary:        Metapackage for python3-tablib xls extras
+Requires:       python3-tablib = %{version}-%{release}
+Provides:       python3dist(tablib[xls]) = %{version}-%{release}
+
+%description -n python3-tablib+xls
+Metapackage for python3-tablib xls extras.
+
+%package -n       python3-tablib+xlsx
+Summary:        Metapackage for python3-tablib xlsx extras
+Requires:       python3-tablib = %{version}-%{release}
+Requires:       python3dist(openpyxl) >= 2.6.0
+Provides:       python3dist(tablib[xlsx]) = %{version}-%{release}
+
+%description -n python3-tablib+xlsx
+Metapackage for python3-tablib xlsx extras.
+
+%package -n       python3-tablib+yaml
+Summary:        Metapackage for python3-tablib yaml extras
+Requires:       python3-tablib = %{version}-%{release}
+Provides:       python3dist(tablib[yaml]) = %{version}-%{release}
+
+%description -n python3-tablib+yaml
+Metapackage for python3-tablib yaml extras.
+
+%description
 
 %package -n     python3-tablib
-Summary:        %{summary}
-
-%description -n python3-tablib %_description
+Summary:        Format agnostic tabular data library _XLS, JSON, YAML, CSV, etc._
+%description -n python3-tablib
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-tablib all,cli,html,ods,pandas,xls,xlsx,yaml
-
 
 %prep
-%autosetup -p1 -n tablib-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir tablib-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-tablib usr/lib/python3*/site-packages/tablib* usr/lib64/python3*/site-packages/tablib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tablib* usr/lib64/python3*/site-packages/tablib* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-tablib -f %{pyproject_files}
+%files
+%files -n python3-tablib -f %{oreon_filedir}/python3-tablib.list
 
 %changelog
+
 %autochangelog

@@ -1,58 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 2f9fbcea86e8dbf1a2d28954225547634a289db7201e7764516a5dce86c116de
 Name:           python-pecan
 Version:        1.8.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A WSGI object-dispatching web framework, designed to be lean and fast, with few dependencies.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            http://github.com/pecan/pecan
-Source:         %{pypi_source pecan}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pecan/pecan-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pecan' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pecan = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pecan
-Summary:        %{summary}
-
-%description -n python3-pecan %_description
-
+Summary:        A WSGI object-dispatching web framework, designed to be lean and fast, with few dependencies.
+%description -n python3-pecan
 
 %prep
-%autosetup -p1 -n pecan-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pecan-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pecan usr/lib/python3*/site-packages/pecan* usr/lib64/python3*/site-packages/pecan* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pecan* usr/lib64/python3*/site-packages/pecan* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pecan -f %{pyproject_files}
-%{_bindir}/gunicorn_pecan
-%{_bindir}/pecan
+%files
+%files -n python3-pecan -f %{oreon_filedir}/python3-pecan.list
 
 %changelog
+
 %autochangelog

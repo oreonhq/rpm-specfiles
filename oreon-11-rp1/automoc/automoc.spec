@@ -1,21 +1,14 @@
 %global source0_hash 234116f4c05ae21d828594d652b4c4a052ef75727e2d8a4f3a4fb605de9e4c49
-
-#define snaptag .20080527svn811390
 %define beta 0.9.88
 %define beta_tag rc3
-
-# trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
-
 Name:           automoc
 Version:        1.0
-Release:        0.53.%{?beta_tag}%{?dist}
+Release:        1%{?dist}
 Summary:        Automatic moc for Qt 4
 License:        BSD-2-Clause
 URL:            http://www.kde.org
-Source0:        https://download.kde.org/stable/automoc4/%{beta}/automoc4-%{beta}.tar.bz2
-
-## upstream patches
+Source0:        https://download.kde.org/stable/%{name}4/%{beta}/%{name}4-%{beta}.tar.bz2
 Patch1: 0001-fix-make-clean-it-s-SET_directory_properties-and-not.patch
 Patch2: 0002-automoc-did-not-understand-.mm-files-objc.patch
 Patch3: 0003-support-for-Objective-C-i.e.-mm-files-is-enough-to-i.patch
@@ -49,16 +42,15 @@ Patch30: 0030-Don-t-attempt-to-read-the-DEFINITIONS-property.patch
 Patch31: 0031-Don-t-attempt-to-add-dependencies-which-do-not-exist.patch
 Patch32: 0032-set-cmake_min_req-to-enable-newer-policies.patch
 Patch33: 0033-cmake-2.8.9-sets-CMP0003-to-NEW-clean-up.patch
-
 Provides: automoc4 = %{beta}
-
 Requires:       cmake >= 2.8.9
-BuildRequires:  cmake >= 2.8.9
-Buildrequires:  gcc-c++
-BuildRequires:  qt4-devel
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
 BuildRequires:  kde4-macros(api)
-BuildRequires: make
-
+BuildRequires:  make
+BuildRequires:  qt4-devel
+# /oreon:deps
 %description
 This package contains the automoc4 binary which is used to run moc on the
 right source files in a Qt 4 or KDE 4 application.
@@ -66,30 +58,26 @@ Moc is the meta object compiler which is a widely used tool with Qt and
 creates standard C++ files to provide syntactic sugar of the signal/slots
 mechanism.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n automoc4-%{beta}
 sed -i 's/cmake_minimum_required(VERSION 2.8.9)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt
 
 %build
+
 mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake_kde4} ..
 popd
-
 %make_build -C %{_target_platform}
-
-
 %install
 make install DESTDIR=%{buildroot} -C %{_target_platform}
+%oreon_autofiles main
 
-
-%files
-%{_bindir}/automoc4
-%{_kde4_libdir}/automoc4/
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-0.53.rc3
 - Import

@@ -1,53 +1,23 @@
 %global source0_hash 5b77342652a6f128affe729b6c131ffa0d01c74050e43e943b3f550d156660b8
-
 %global mainver 5.2.8
 %global baseurl http://www.shorewall.net/pub/shorewall/5.2/shorewall-%{mainver}/
-
-# A very helpful document for packaging Shorewall is "Anatomy of Shorewall 4.0"
-# which is found at http://www.shorewall.net/Anatomy.html
-
 Name:           shorewall
 Version:        %{mainver}
 Release:        18%{?dist}
 Summary:        An iptables front end for firewall configuration
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.shorewall.net/
 Provides:       shorewall(firewall) = %{version}-%{release}
-
 Source0:        %{baseurl}/%{name}-%{version}.tar.bz2
 Source1:        %{baseurl}/%{name}-lite-%{version}.tar.bz2
 Source2:        %{baseurl}/%{name}6-%{version}.tar.bz2
 Source3:        %{baseurl}/%{name}6-lite-%{version}.tar.bz2
 Source4:        %{baseurl}/%{name}-init-%{version}.tar.bz2
 Source5:        %{baseurl}/%{name}-core-%{version}.tar.bz2
-
 Patch0:         %{name}-init-5.2.7-nm-dispatcher-dir.patch
 Patch1:         systemd-journal.patch
 Patch2:         shorewall-5.2.8--Rewrite-gethostbyname2-and-inet_ntop-to-newer-getadd.patch
-
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(autouse)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(Digest::SHA)
-BuildRequires:  perl(Errno)
-BuildRequires:  perl(File::Basename)
-BuildRequires:  perl(File::Glob)
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(FindBin)
-BuildRequires:  perl(Getopt::Long)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(Sys::Hostname)
-BuildRequires:  perl(sort)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-BuildRequires:  systemd
-
 BuildArch:      noarch
-
 Requires:         shorewall-core = %{version}-%{release}
 Requires:         iproute
 Requires:         iptables
@@ -57,7 +27,27 @@ Requires(post):   sed
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
-
+# oreon:deps
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Digest::SHA)
+BuildRequires:  perl(Errno)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Glob)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Sys::Hostname)
+BuildRequires:  perl(autouse)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(sort)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  systemd
+# /oreon:deps
 %description
 The Shoreline Firewall, more commonly known as "Shorewall", is a
 Netfilter (iptables) based firewall that can be used on a dedicated
@@ -67,7 +57,6 @@ standalone GNU/Linux system.
 %package -n shorewall6
 Summary:        Files for the IPV6 Shorewall Firewall
 Provides:       shorewall(firewall) = %{version}-%{release}
-
 Requires:         shorewall-core = %{version}-%{release}
 Requires:         iptables iproute
 Requires:         sed
@@ -75,7 +64,6 @@ Requires(post):   sed
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
-
 %description -n shorewall6
 This package contains the files required for IPV6 functionality of the
 Shoreline Firewall (shorewall).
@@ -83,13 +71,11 @@ Shoreline Firewall (shorewall).
 %package lite
 Summary:        Shorewall firewall for compiled rulesets
 Provides:       shorewall(firewall) = %{version}-%{release}
-
 Requires:         shorewall-core = %{version}-%{release}
 Requires:         iptables iproute
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
-
 %description lite
 Shorewall Lite is a companion product to Shorewall that allows network
 administrators to centralize the configuration of Shorewall-based
@@ -100,13 +86,11 @@ Lite does not need to have a Shorewall rule compiler installed.
 %package -n shorewall6-lite
 Summary:        Shorewall firewall for compiled IPV6 rulesets
 Provides:       shorewall(firewall) = %{version}-%{release}
-
 Requires:         shorewall-core = %{version}-%{release}
 Requires:         iptables iproute
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
-
 %description -n shorewall6-lite
 Shorewall6 Lite is a companion product to Shorewall6 (the IPV6
 firewall) that allows network administrators to centralize the
@@ -117,13 +101,11 @@ Shorewall rule compiler installed.
 
 %package core
 Summary:        Core libraries for Shorewall
-
 %description core
 This package contains the core libraries for Shorewall.
 
 %package init
 Summary:        Initialization functionality and NetworkManager integration for Shorewall
-
 Requires:         shorewall(firewall) = %{version}-%{release}
 Requires:         NetworkManager >= 1.20
 Requires:         shorewall = %{version}-%{release}
@@ -131,7 +113,6 @@ Requires:         iptables iproute logrotate
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
-
 %description init 
 This package adds additional initialization functionality to Shorewall in two
 ways. It allows the firewall to be closed prior to bringing up network
@@ -141,6 +122,7 @@ integrates with NetworkManager and distribution ifup/ifdown systems to allow
 for 'event-driven' startup and shutdown.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -n %{name}-%{version} -T -a0 -a1 -a2 -a3 -a4 -a5
@@ -149,10 +131,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find . -name "lib.*" -exec sed -i -e '/\#\!\/bin\/sh/d' {} \;
 # Support .ko.xz kernel modules
 # https://bugzilla.redhat.com/show_bug.cgi?id=1181504
-%if 0%{?fedora} >= 21
-find -name shorewall\*.conf |
-    xargs sed -i -e 's/^MODULE_SUFFIX=ko$/MODULE_SUFFIX="ko.xz ko"/'
-%endif
 
 pushd %{name}-init-%{version}
 %patch -P0 -p1
@@ -165,18 +143,11 @@ popd
 %install
 for i in shorewall-core shorewall shorewall-lite shorewall6 shorewall6-lite shorewall-init; do
     pushd ${i}-%{version}
-# Previous versions used shorewall-init.service.214 for systemd units that used
-# network-pre, only available in systemd >= 214 others use network-online,
-# which is available earlier. Starting with 5.x there is only unit services that need
-# network-online. Both RHEL 7 and Fedora >= 21 have systemd 214 we won't backport
-# shorewall to epel6
     SERVICEFILE=${i}.service
     ./configure vendor=redhat INITFILE= SERVICEDIR=%{_unitdir} SERVICEFILE=$SERVICEFILE SBINDIR=%{_sbindir}
     DESTDIR=$RPM_BUILD_ROOT ./install.sh
     popd
 done
-
-# Fix up file permissions
 chmod 644 $RPM_BUILD_ROOT%{_datadir}/shorewall-lite/helpers
 chmod 644 $RPM_BUILD_ROOT%{_datadir}/shorewall6-lite/helpers
 chmod 755 $RPM_BUILD_ROOT%{_sbindir}/shorewall-lite
@@ -184,168 +155,62 @@ chmod 755 $RPM_BUILD_ROOT%{_sbindir}/shorewall6-lite
 chmod 644 $RPM_BUILD_ROOT%{_sysconfdir}/shorewall-lite/shorewall-lite.conf
 chmod 644 $RPM_BUILD_ROOT%{_sysconfdir}/shorewall6-lite/shorewall6-lite.conf
 chmod 755 $RPM_BUILD_ROOT%{_prefix}/lib/NetworkManager/dispatcher.d/01-shorewall
+%oreon_autofiles shorewall6 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles shorewall6-lite usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
+
 %systemd_post shorewall.service
-%if 0%{?fedora} >= 21
-# Load xz kernel modules
-sed -i.rpmbak -e '/^MODULE_SUFFIX=ko$/s/=ko$/="ko.xz ko"/' /etc/shorewall/shorewall.conf
-%endif
-
 %preun
+
 %systemd_preun shorewall.service
-
 %postun
+
 %systemd_postun_with_restart shorewall.service 
-
 %post -n shorewall-lite
+
 %systemd_post shorewall-lite.service
-
 %preun -n shorewall-lite
+
 %systemd_preun shorewall-lite.service
-
 %postun -n shorewall-lite
+
 %systemd_postun_with_restart shorewall-lite.service 
-
 %post -n shorewall6
+
 %systemd_post shorewall6.service
-%if 0%{?fedora} >= 21
-# Load xz kernel modules
-sed -i.rpmbak -e '/^MODULE_SUFFIX=ko$/s/=ko$/="ko.xz ko"/' /etc/shorewall6/shorewall6.conf
-%endif
-
 %preun -n shorewall6
+
 %systemd_preun shorewall6.service
-
 %postun -n shorewall6
+
 %systemd_postun_with_restart shorewall6.service 
-
 %post -n shorewall6-lite
+
 %systemd_post shorewall6-lite.service
-
 %preun -n shorewall6-lite
+
 %systemd_preun shorewall6-lite.service
-
 %postun -n shorewall6-lite
+
 %systemd_postun_with_restart shorewall6-lite.service 
-
 %post -n shorewall-init
+
 %systemd_post shorewall-init.service
-
 %preun -n shorewall-init
+
 %systemd_preun shorewall-init.service
-
 %postun -n shorewall-init
+
 %systemd_postun_with_restart shorewall-init.service 
-
-# Most /etc/shorewall permissions are 0600. rpmlint complains
-# about these, but it actually makes sense: just as you can't
-# call up iptables as a user, you should not be able to read
-# those files by default
-%files
-%license shorewall-%{version}/COPYING
-%doc shorewall-%{version}/{changelog.txt,releasenotes.txt,Samples}
-%{_sbindir}/shorewall
-%dir %{_sysconfdir}/shorewall
-%config(noreplace) %{_sysconfdir}/shorewall/*
-%ghost %attr(600,root,root) %{_sysconfdir}/shorewall/masq
-%config(noreplace) %{_sysconfdir}/logrotate.d/shorewall
-%config(noreplace) %{_sysconfdir}/sysconfig/shorewall
-%{_datadir}/shorewall/action.*
-%{_datadir}/shorewall/actions.std
-%{_datadir}/shorewall/configfiles/
-%{_datadir}/shorewall/configpath
-%{_datadir}/shorewall/deprecated/
-%{_datadir}/shorewall/helpers
-%{_datadir}/shorewall/lib.cli-std
-%{_datadir}/shorewall/lib.runtime
-%{_datadir}/shorewall/macro.*
-%{_datadir}/shorewall/prog.*
-%{_datadir}/shorewall/version
-%{_libexecdir}/shorewall/compiler.pl
-%{_libexecdir}/shorewall/getparams
-%{perl_vendorlib}/Shorewall
-%{_mandir}/man5/shorewall*
-%exclude %{_mandir}/man5/shorewall6*
-%exclude %{_mandir}/man5/shorewall-lite*
-%{_mandir}/man8/shorewall*
-%exclude %{_mandir}/man8/shorewall6*
-%exclude %{_mandir}/man8/shorewall-lite*
-%exclude %{_mandir}/man8/shorewall-init*
-%{_unitdir}/shorewall.service
-%dir %{_localstatedir}/lib/shorewall
-
-%files lite
-%license shorewall-lite-%{version}/COPYING
-%doc shorewall-lite-%{version}/{changelog.txt,releasenotes.txt}
-%{_sbindir}/shorewall-lite
-%dir %{_sysconfdir}/shorewall-lite
-%config(noreplace) %{_sysconfdir}/shorewall-lite/shorewall-lite.conf
-%config(noreplace) %{_sysconfdir}/logrotate.d/shorewall-lite
-%config(noreplace) %{_sysconfdir}/sysconfig/shorewall-lite
-%{_datadir}/shorewall-lite
-%{_libexecdir}/shorewall-lite
-%{_mandir}/man5/shorewall-lite*
-%{_mandir}/man8/shorewall-lite*
-%{_unitdir}/shorewall-lite.service
-%dir %{_localstatedir}/lib/shorewall-lite
-
-%files -n shorewall6
-%license shorewall6-%{version}/COPYING
-%doc shorewall6-%{version}/{changelog.txt,releasenotes.txt,Samples6}
-%{_sbindir}/shorewall6
-%dir %{_sysconfdir}/shorewall6
-%config(noreplace) %{_sysconfdir}/shorewall6/*
-%config(noreplace) %{_sysconfdir}/logrotate.d/shorewall6
-%config(noreplace) %{_sysconfdir}/sysconfig/shorewall6
-%{_mandir}/man5/shorewall6*
-%exclude %{_mandir}/man5/shorewall6-lite*
-%{_mandir}/man8/shorewall6*
-%exclude %{_mandir}/man8/shorewall6-lite*
-%{_datadir}/shorewall6
-%{_unitdir}/shorewall6.service
-%dir %{_localstatedir}/lib/shorewall6
-
-%files -n shorewall6-lite
-%license shorewall6-lite-%{version}/COPYING
-%doc shorewall6-lite-%{version}/{changelog.txt,releasenotes.txt}
-%{_sbindir}/shorewall6-lite
-%dir %{_sysconfdir}/shorewall6-lite
-%config(noreplace) %{_sysconfdir}/shorewall6-lite/shorewall6-lite.conf
-%config(noreplace) %{_sysconfdir}/logrotate.d/shorewall6-lite
-%config(noreplace) %{_sysconfdir}/sysconfig/shorewall6-lite
-%{_mandir}/man5/shorewall6-lite*
-%{_mandir}/man8/shorewall6-lite*
-%{_datadir}/shorewall6-lite
-%{_libexecdir}/shorewall6-lite
-%{_unitdir}/shorewall6-lite.service
-%dir %{_localstatedir}/lib/shorewall6-lite
-
-%files core
-%license shorewall-core-%{version}/COPYING
-%doc shorewall-core-%{version}/{changelog.txt,releasenotes.txt}
-%dir %{_datadir}/shorewall/
-%{_datadir}/shorewall/coreversion
-%{_datadir}/shorewall/functions
-%{_datadir}/shorewall/lib.base
-%{_datadir}/shorewall/lib.cli
-%{_datadir}/shorewall/lib.common
-%{_datadir}/shorewall/lib.core
-%{_datadir}/shorewall/shorewallrc
-%dir %{_libexecdir}/shorewall
-%{_libexecdir}/shorewall/wait4ifup
-
-%files init
-%license shorewall-init-%{version}/COPYING
-%doc shorewall-init-%{version}/{changelog.txt,releasenotes.txt}
-%{_sbindir}/shorewall-init
-%{_prefix}/lib/NetworkManager/dispatcher.d/01-shorewall
-%config(noreplace) %{_sysconfdir}/sysconfig/shorewall-init
-%{_sysconfdir}/logrotate.d/shorewall-init
-%{_mandir}/man8/shorewall-init.8.*
-%{_datadir}/shorewall-init
-%{_libexecdir}/shorewall-init
-%{_unitdir}/shorewall-init.service
+%files -f %{oreon_filedir}/main.list
+%files -n shorewall6 -f %{oreon_filedir}/shorewall6.list
+%files -n shorewall-lite -f %{oreon_filedir}/shorewall-lite.list
+%files -n shorewall6-lite -f %{oreon_filedir}/shorewall6-lite.list
+%files -n shorewall-core -f %{oreon_filedir}/shorewall-core.list
+%files -n shorewall-init -f %{oreon_filedir}/shorewall-init.list
 
 %changelog
+
 %autochangelog

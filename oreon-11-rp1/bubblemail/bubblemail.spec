@@ -1,24 +1,12 @@
-%global source0_hash f20c15dbfad81f0a19f8152316f79fbc607c9d2a144eff442801e241707f61b0
-
+%global source0_hash becf86cb6f0b914563813f512cbee6b32527b943c34cbba20e3e39bab55ddbc0
 Name:           bubblemail
 Version:        1.12
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Extensible mail notification service
-
 License:        GPL-2.0-only
 URL:            http://bubblemail.free.fr/
 Source0:        https://framagit.org/razer/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.bz2
-#temporary workaround until upstream moves away from setup.py install
 Patch0:         01.bubblemail-fix_missing_locales.patch
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-BuildRequires:  folks-devel
-BuildRequires:  gettext
-BuildRequires:  python3-devel
-BuildRequires:  python3-pillow
-BuildRequires:  python3-pyxdg
-BuildRequires:  vala
 Requires:       folks
 Requires:       gnome-keyring
 Requires:       hicolor-icon-theme
@@ -32,10 +20,11 @@ Requires:       python3-pyxdg
 Requires:       python3-pysocks
 Recommends:     gnome-online-accounts
 Recommends:     gnome-shell-extension-bubblemail
-
-%generate_buildrequires
-%pyproject_buildrequires -r
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-bubblemail = %{version}-%{release}
+# /oreon:deps
 %description
 Bubblemail is a D-Bus service providing a list of the new and unread user's mail
 from local mailboxes, pop, imap, and gnome online accounts. It includes a
@@ -43,6 +32,7 @@ libnotify frontend to create notifications and can be used by other frontends as
 well.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-v%{version}
@@ -51,34 +41,23 @@ sed -i '1{\@^#!/usr/bin/env python@d}' \
         bubblemail/plugins/userscriptplugin.py
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
 mv %{buildroot}%{python3_sitelib}/etc/ %{buildroot}/etc/
-%pyproject_save_files -l %{name}
 %find_lang %{name}
 cat %{name}.lang >> %{pyproject_files}
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet \
         %{buildroot}%{_metainfodir}/*.appdata.xml
 desktop-file-validate \
         %{buildroot}/%{_datadir}/applications/*.desktop
-
-%files -f %{pyproject_files}
-%license LICENSE.txt
-%doc AUTHORS CHANGELOG.md CONTRIBUTING.md README.md
-%{_mandir}/man1/%{name}.1*
-%{_mandir}/man1/%{name}d.1*
-%{_sysconfdir}/xdg/autostart/%{name}d.desktop
-%{_bindir}/%{name}
-%{_bindir}/%{name}-avatar-provider
-%{_bindir}/%{name}d
-%{_datadir}/applications/bubblemail.desktop
-%{_datadir}/%{name}/
-%{_datadir}/icons/hicolor/*/apps/%{name}.svg
-%{_metainfodir}/%{name}.appdata.xml
+%files
 
 %changelog
+
 %autochangelog

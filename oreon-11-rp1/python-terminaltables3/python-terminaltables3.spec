@@ -1,60 +1,46 @@
 %global source0_hash 44df92e82b45fadf4e6af8e3a77214cce455a4e1ee66c3f8c871988e1f58f776
-
-# need to debug test failures
 %bcond tests 0
-
 Name:           python-terminaltables3
 Version:        4.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Generate simple tables in terminals from a nested list of strings. Fork of terminaltables.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/matthewdeanmartin/terminaltables3
-# PyPI source does not contain tests
-#Source:         %%{pypi_source terminaltables3}
-Source:         %{url}/archive/v%{version}/terminaltables3-%{version}.tar.gz
-
+Source0:        https://github.com/matthewdeanmartin/terminaltables3/archive/v%{version}/terminaltables3-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'terminaltables3' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-terminaltables3 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-terminaltables3
-Summary:        %{summary}
-
-%description -n python3-terminaltables3 %_description
+Summary:        Generate simple tables in terminals from a nested list of strings. Fork of terminaltables.
+%description -n python3-terminaltables3
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n terminaltables3-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires -t
-
+%global oreon_srcdir terminaltables3-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -L terminaltables3
+%oreon_autofiles python3-terminaltables3 usr/lib/python3*/site-packages/terminaltables3* usr/lib64/python3*/site-packages/terminaltables3* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/terminaltables3* usr/lib64/python3*/site-packages/terminaltables3* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %if %{with tests}
 %pytest
 %endif
-
-%files -n python3-terminaltables3 -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md README.md
+%files
+%files -n python3-terminaltables3 -f %{oreon_filedir}/python3-terminaltables3.list
 
 %changelog
+
 %autochangelog

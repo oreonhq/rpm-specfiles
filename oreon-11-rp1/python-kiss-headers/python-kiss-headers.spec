@@ -1,57 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 63ce797b6d85763d4b0e9611bd62d30fe31b0c4edb601838e76a039e4a4cdb59
 Name:           python-kiss-headers
 Version:        2.5.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Object-oriented HTTP and IMAP _structured_ headers.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://jawah.github.io/kiss-headers
-Source:         %{pypi_source kiss_headers}
-
+Source0:        https://files.pythonhosted.org/packages/source/k/kiss_headers/kiss_headers-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'kiss-headers' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(hatchling) < 2
+BuildRequires:  python3dist(hatchling) >= 1.6.0
+Requires:       python3-kiss-headers = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-kiss-headers
-Summary:        %{summary}
-
-%description -n python3-kiss-headers %_description
-
+Summary:        Object-oriented HTTP and IMAP _structured_ headers.
+%description -n python3-kiss-headers
 
 %prep
-%autosetup -p1 -n kiss_headers-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir kiss_headers-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-kiss-headers usr/lib/python3*/site-packages/kiss_headers* usr/lib64/python3*/site-packages/kiss_headers* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/kiss_headers* usr/lib64/python3*/site-packages/kiss_headers* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-kiss-headers -f %{pyproject_files}
+%files
+%files -n python3-kiss-headers -f %{oreon_filedir}/python3-kiss-headers.list
 
 %changelog
+
 %autochangelog

@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 53f6f968276846716f0f37100a6d5c7308cfa1e0c714eb41287d5bb09345c40f
 Name:           python-jaconv
 Version:        0.5.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Pure-Python Japanese character interconverter for Hiragana, Katakana, Hankaku, Zenkaku and more
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ikegami-yukino/jaconv
-Source:         %{pypi_source jaconv}
-
+Source0:        https://files.pythonhosted.org/packages/source/j/jaconv/jaconv-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'jaconv' generated automatically by pyp2spec.}
-
 Patch0:         https://patch-diff.githubusercontent.com/raw/ikegami-yukino/jaconv/pull/36.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-jaconv = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-jaconv
-Summary:        %{summary}
-
-%description -n python3-jaconv %_description
-
+Summary:        Pure-Python Japanese character interconverter for Hiragana, Katakana, Hankaku, Zenkaku and more
+%description -n python3-jaconv
 
 %prep
-%autosetup -p1 -n jaconv-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir jaconv-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-jaconv usr/lib/python3*/site-packages/jaconv* usr/lib64/python3*/site-packages/jaconv* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/jaconv* usr/lib64/python3*/site-packages/jaconv* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-jaconv -f %{pyproject_files}
+%files
+%files -n python3-jaconv -f %{oreon_filedir}/python3-jaconv.list
 
 %changelog
+
 %autochangelog

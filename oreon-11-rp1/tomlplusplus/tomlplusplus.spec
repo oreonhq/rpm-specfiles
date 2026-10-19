@@ -1,27 +1,19 @@
 %global source0_hash 8517f65938a4faae9ccf8ebb36631a38c1cadfb5efa85d9a72e15b9e97d25155
-
 %bcond check 0
-
 Name:           tomlplusplus
 Version:        3.4.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Header-only TOML config file parser and serializer for C++17
 License:        MIT
 URL:            https://github.com/marzer/tomlplusplus
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-# only test C locale
+Source0:        https://github.com/marzer/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:         tomlplusplus-fix-test-locale.patch
-
+# oreon:deps
+BuildRequires:  catch-devel
+BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  meson
-BuildRequires:  cmake
-
-%if 0%{?fedora} || 0%{?rhel} >= 9
-BuildRequires:  catch2-devel
-%else
-BuildRequires:  catch-devel
-%endif
-
+# /oreon:deps
 %description
 toml++ is a TOML config parser and serializer for c++.
 
@@ -42,12 +34,12 @@ suite
 %package        devel
 Summary:        Development libraries and header files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -56,34 +48,25 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -r vendor/
 
 %build
+
 %meson \
     -Dbuild_examples=true \
     -Duse_vendored_libs=false \
 %if %{with check}
     -Dbuild_tests=true \
 %endif
-
 %meson_build
-
 %install
 %meson_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with check}
 %check
+
 %meson_test
 %endif
-
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libtomlplusplus.so.3*
-
-%files devel
-%{_includedir}/toml++/
-%dir %{_libdir}/cmake/tomlplusplus
-%{_libdir}/cmake/tomlplusplus/*.cmake
-%{_libdir}/libtomlplusplus.so
-%{_libdir}/pkgconfig/tomlplusplus.pc
+%files -f %{oreon_filedir}/main.list
+%files -n tomlplusplus-devel -f %{oreon_filedir}/tomlplusplus-devel.list
 
 %changelog
+
 %autochangelog

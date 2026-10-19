@@ -1,26 +1,24 @@
-%global source0_hash a1018644655ab187728d6a65149186b8517a6c8f1ea4d8416900c129eea58a36
-
+%global source0_hash dcb543c21486a61cb54073288d1c875035628110df74c77ed3c7a32bf3788625
 Name:           ibus-array
 Version:        0.3.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        The Array 30 input method for IBus input platform
 Summary(zh_TW): IBus行列30輸入法
 License:        GPL-2.0-or-later
 URL:            https://github.com/lexical/ibus-array
-Source0:        %{url}/archive/refs/tags/release-%{version}.tar.gz#/ibus-array-release-%{version}.tar.gz
-
+Source0:        https://github.com/lexical/%{name}/archive/refs/tags/release-%{version}.tar.gz#/%{name}-release-%{version}.tar.gz
 Patch0:         0001-remove-unused-python3-shebang.patch
-
-BuildRequires:  meson
-BuildRequires:  gcc
-BuildRequires:  pkgconf
-BuildRequires:  python3-devel
-BuildRequires:  gettext-devel
-BuildRequires:  pkgconfig(ibus-1.0)
-BuildRequires:  pkgconfig(sqlite3)
-BuildRequires:  pkgconfig(opencc)
 Requires:   ibus
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  meson
+BuildRequires:  pkgconf
+BuildRequires:  pkgconfig(ibus-1.0)
+BuildRequires:  pkgconfig(opencc)
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 Array 30 input method for IBus that uses the latest keymap table
 and follows the Array input method spec implementation.
@@ -31,24 +29,19 @@ IBus行列30輸入法，遵循行列輸入法規格書的定義，
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}-release-%{version}
-
+%global oreon_srcdir %{name}-release-%{version}
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc AUTHORS README ChangeLog
-%license COPYING
-%{_datadir}/ibus-array
-%{_libexecdir}/ibus-engine-array
-%{_libexecdir}/ibus-setup-array
-%{_datadir}/ibus/component/array.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

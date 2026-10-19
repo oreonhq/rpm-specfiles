@@ -1,18 +1,15 @@
 %global source0_hash fe69bd6c659d24ab30da3f091eb91cd1970026d431179b0724f13791e8ad9f9d
-
 Name:           clutter-gst3
 Version:        3.0.27
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GStreamer integration library for Clutter
-
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://developer.gnome.org/clutter-gst/stable/
 Source0:        https://download.gnome.org/sources/clutter-gst/3.0/clutter-gst-%{version}.tar.xz
-
 Patch0:         remove-rgbx-bgrx-support.patch
-
+# oreon:deps
 BuildRequires:  /usr/bin/chrpath
+BuildRequires:  make
 BuildRequires:  pkgconfig(clutter-1.0)
 BuildRequires:  pkgconfig(cogl-2.0-experimental)
 BuildRequires:  pkgconfig(gio-2.0)
@@ -25,9 +22,7 @@ BuildRequires:  pkgconfig(gstreamer-plugins-base-1.0)
 BuildRequires:  pkgconfig(gstreamer-tag-1.0)
 BuildRequires:  pkgconfig(gstreamer-video-1.0)
 BuildRequires:  pkgconfig(gudev-1.0)
-BuildRequires:  make
-
-
+# /oreon:deps
 %description
 Clutter is an open source software library for creating fast, visually
 rich and animated graphical user interfaces.
@@ -37,7 +32,6 @@ Clutter GStreamer enables the use of GStreamer with Clutter.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Clutter is an open source software library for creating fast, visually
 rich and animated graphical user interfaces.
@@ -47,39 +41,25 @@ Clutter GStreamer enables the use of GStreamer with Clutter.
 The %{name}-devel package contains libraries and header files for
 developing applications that use clutter-gst API version 3.0.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n clutter-gst-%{version}
-
-
+%global oreon_srcdir clutter-gst-%{version}
+%oreon_prep
 %build
+
 %configure
 make %{?_smp_mflags} V=1
-
-
 %install
 %make_install
-
 find %{buildroot} -name '*.la' -delete
-
 rm -rf %{buildroot}%{_libdir}/gstreamer-1.0/
+%oreon_autofiles clutter-gst3-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%doc AUTHORS NEWS README
-%license COPYING
-%{_libdir}/girepository-1.0/ClutterGst-3.0.typelib
-%{_libdir}/libclutter-gst-3.0.so.*
-
-%files devel
-%{_includedir}/clutter-gst-3.0/
-%{_libdir}/libclutter-gst-3.0.so
-%{_libdir}/pkgconfig/clutter-gst-3.0.pc
-%{_datadir}/gir-1.0/ClutterGst-3.0.gir
-%doc %{_datadir}/gtk-doc/
-
+%files -f %{oreon_filedir}/main.list
+%files -n clutter-gst3-devel -f %{oreon_filedir}/clutter-gst3-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.27-1
 - Prepare for Oreon 11 (RP1)

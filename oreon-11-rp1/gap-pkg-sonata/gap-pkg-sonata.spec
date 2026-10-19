@@ -1,32 +1,26 @@
 %global source0_hash 4f438b0f9bbca58235e6975366c50ba031a421785b33ec01f399d1f601d190e0
-
 %global gap_pkgname   sonata
 %global gap_skip_docs 1
 %global giturl        https://github.com/gap-packages/sonata
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        2.9.8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GAP package for systems of nearrings
-
 License:        GPL-2.0-or-later
 URL:            https://gap-packages.github.io/sonata/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/v%{version}/%{gap_upname}-%{version}.tar.gz
-
+Source0:        %{giturl}/releases/download/v%{version}/%{gap_pkgname}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    gap
 BuildOption(install): grp lib nr nri tst
 BuildOption(check): tst/testall.g
-
+Requires:       gap-core
+Suggests:       xgap
+# oreon:deps
 BuildRequires:  gap-devel
 BuildRequires:  parallel
 BuildRequires:  tth
-
-Requires:       gap-core
-
-Suggests:       xgap
-
+# /oreon:deps
 %description
 SONATA stands for "systems of nearrings and their applications".  It provides
 methods for the construction and the analysis of finite nearrings.  A left
@@ -63,19 +57,15 @@ finite nearrings.
    representation.
 
 %package doc
-# The content is GPL-2.0-or-later.  The remaining licenses cover the various
-# fonts embedded in PDFs.
-# AMS: OFL-1.1-RFN
-# CM: Knuth-CTAN
 License:        GPL-2.0-or-later AND OFL-1.1-RFN AND Knuth-CTAN
 Summary:        SONATA documentation
 Requires:       %{name} = %{version}-%{release}
 Requires:       gap-online-help
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{gap_upname}-%{version}
@@ -91,34 +81,21 @@ sed -e 's,\.\./\.\./\.\./\.\./etc/convert\.pl,%{gap_libdir}/etc/convert.pl,' \
     -i doc/make_doc
 
 %build
-# Build the documentation
+
 pushd doc
 ./make_doc
 popd
-
-# Compress large data files
 parallel %{?_smp_mflags} --no-notice gzip --best ::: nr/*.nr nri/*.nr
-
 %install -a
 mkdir -p %{buildroot}%{gap_libdir}/pkg/%{gap_upname}/doc/{ref,tut}
 %gap_copy_docs -d doc/ref
 %gap_copy_docs -d doc/tut
 cp -a doc/htm %{buildroot}%{gap_libdir}/pkg/%{gap_upname}/doc
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README
-%license LICENSE
-%dir %{gap_libdir}/pkg/%{gap_upname}/
-%{gap_libdir}/pkg/%{gap_upname}/*.g
-%{gap_libdir}/pkg/%{gap_upname}/grp/
-%{gap_libdir}/pkg/%{gap_upname}/lib/
-%{gap_libdir}/pkg/%{gap_upname}/nr/
-%{gap_libdir}/pkg/%{gap_upname}/nri/
-%{gap_libdir}/pkg/%{gap_upname}/tst/
-
-%files doc
-%docdir %{gap_libdir}/pkg/%{gap_upname}/doc/
-%{gap_libdir}/pkg/%{gap_upname}/doc/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-sonata-doc -f %{oreon_filedir}/gap-pkg-sonata-doc.list
 
 %changelog
+
 %autochangelog

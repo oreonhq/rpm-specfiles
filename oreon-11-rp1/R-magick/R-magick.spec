@@ -1,20 +1,16 @@
 %global source0_hash 477d717075651d2d508a66c313fd82b5e530b5ba7603b4a6cafa8c8e8cb6dfba
-
 Name:           R-magick
 Version:        %R_rpm_version 2.9.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Advanced Graphics and Image-Processing in R
-
 License:        MIT
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=magick&version=%{version}#/magick_%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
 BuildRequires:  pkgconfig(Magick++)
-
+# /oreon:deps
 %description
 Bindings to 'ImageMagick': the most comprehensive open-source image
 processing library available. Supports many common formats (png, jpeg,
@@ -28,24 +24,24 @@ device for creating in-memory graphics or drawing onto images using pixel
 coordinates.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -c
 rm -f magick/tests/spelling.R # dev stuff
-
-%generate_buildrequires
-%R_buildrequires
 
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples
 
-%files -f %{R_files}
+%R_check \--no-examples
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

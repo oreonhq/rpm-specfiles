@@ -1,16 +1,18 @@
-%global source0_hash b9f8035ca37b2d8f14cb4bb02fe40abe31f73bf175108031d8c3d8612d7f7a5b
-
+%global source0_hash bc28a133ce320df0dbcfbeea8a0205407fcb21aac7e881ca4b741d14f2d9f0b7
 Name:           photoqt
 Version:        5.4.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A fast Qt image viewer
-
-# GPL-2.0-or-later: main program
-# BSD-3-Clause: cplusplus/scripts/simplecrypt.*
 License:        GPL-2.0-or-later AND BSD-3-Clause
 URL:            http://photoqt.org/
-Source:         https://photoqt.org/downloads/source/%{name}-%{version}.tar.gz
-
+Source0:        https://photoqt.org/downloads/source/%{name}-%{version}.tar.gz
+Requires:       python3-chromecast
+Requires:       qt6-qtcharts
+Requires:       qt6-qtdeclarative
+Requires:       qt6-qtmultimedia
+Recommends:     kf6-kimageformats
+Recommends:     xcftools
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  cmake(Qt6)
 BuildRequires:  cmake(Qt6Multimedia)
@@ -33,42 +35,29 @@ BuildRequires:  pkgconfig(zlib)
 BuildRequires:  python3-chromecast
 BuildRequires:  python3-devel
 BuildRequires:  zxing-cpp-devel
-
-Requires:       python3-chromecast
-Requires:       qt6-qtcharts
-Requires:       qt6-qtdeclarative
-Requires:       qt6-qtmultimedia
-
-Recommends:     kf6-kimageformats
-Recommends:     xcftools
-
+# /oreon:deps
 %description
 PhotoQt is a fast and highly configurable image viewer with a simple and
 nice interface.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}-%{version} -p1
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake -DVIDEO_MPV=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.%{name}.PhotoQt.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/org.%{name}.PhotoQt.metainfo.xml
-
-%files
-%doc CHANGELOG README
-%license COPYING
-%{_bindir}/%{name}
-%{_datadir}/applications/org.%{name}.PhotoQt.desktop
-%{_datadir}/icons/hicolor/*/apps/org.%{name}.PhotoQt.png
-%{_datadir}/metainfo/org.%{name}.PhotoQt.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

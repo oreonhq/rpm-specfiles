@@ -1,62 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 0fbf6bf238890bbc2e32662aa25736769a29bf6d880328f310c910a327632614
 Name:           python-tcolorpy
 Version:        0.1.7
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        tcolopy is a Python library to apply true color for terminal text.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/thombashi/tcolorpy
-Source:         %{pypi_source tcolorpy}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tcolorpy/tcolorpy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'tcolorpy' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 64
+BuildRequires:  python3dist(setuptools-scm) >= 8
+Requires:       python3-tcolorpy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-tcolorpy
-Summary:        %{summary}
-
-%description -n python3-tcolorpy %_description
+Summary:        tcolopy is a Python library to apply true color for terminal text.
+%description -n python3-tcolorpy
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-tcolorpy test
-
 
 %prep
-%autosetup -p1 -n tcolorpy-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir tcolorpy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-tcolorpy usr/lib/python3*/site-packages/tcolorpy* usr/lib64/python3*/site-packages/tcolorpy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tcolorpy* usr/lib64/python3*/site-packages/tcolorpy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-tcolorpy -f %{pyproject_files}
+%files
+%files -n python3-tcolorpy -f %{oreon_filedir}/python3-tcolorpy.list
 
 %changelog
+
 %autochangelog

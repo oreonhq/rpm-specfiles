@@ -1,5 +1,4 @@
 %global source0_hash 62fb49ba0dd5e22b9c219501bb7f3ff6c002be10facc9b11edcdd7858f753658
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,32 +80,28 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           httpcomponents-project
 Version:        14
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Common POM file for HttpComponents
 License:        Apache-2.0
 URL:            https://hc.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-parent/%{version}/httpcomponents-parent-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache:apache:pom:)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Common Maven POM file for HttpComponents. This project should be
 required only for building dependant packages with Maven. Please don't
 use it as runtime requirement.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -118,14 +113,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_alias : :project
 
 %build
+
 %mvn_file  : %{name}
 %mvn_build -j
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

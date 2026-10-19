@@ -1,5 +1,4 @@
-%global source0_hash b4305ca1ff31d3492dd93770f302242c2bf536b440bca24b2580646b184a3733
-
+%global source0_hash b338c81c7012b546fcb84dbd0ca1b427537cfb8a3764edcd30a47c2bfa80f597
 Name:           args4j
 Version:        2.37
 Release:        1%{?dist}
@@ -7,21 +6,16 @@ Summary:        Java command line arguments parser
 License:        MIT
 URL:            https://args4j.kohsuke.org
 Source0:        https://github.com/kohsuke/%{name}/archive/%{name}-site-%{version}.tar.gz
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+Patch0: 0001-Remove-usage-of-internal-sun-class-removed-in-Java-9.patch
+Obsoletes: %{name}-tools < 2.37-13
+Obsoletes: %{name}-parent < 2.37-13
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-
-# Fix build on Java 11/17
-Patch0: 0001-Remove-usage-of-internal-sun-class-removed-in-Java-9.patch
-
-# Stopped shipping these unused subpackages in F34
-Obsoletes: %{name}-tools < 2.37-13
-Obsoletes: %{name}-parent < 2.37-13
-
+# /oreon:deps
 %description
 args4j is a small Java class library that makes it easy
 to parse command line options/arguments in your CUI application.
@@ -34,11 +28,11 @@ to parse command line options/arguments in your CUI application.
 
 %package javadoc
 Summary:        API documentation for %{name}
-
 %description javadoc
 This package contains the API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{name}-site-%{version}
@@ -70,16 +64,16 @@ find -name '*.jar' -exec rm -f '{}' \;
 %mvn_file ":{*}" %{name}/@1 @1
 
 %build
-%mvn_build -- -Dmaven.compiler.release=11
 
+%mvn_build -- -Dmaven.compiler.release=11
 %install
 %mvn_install
+%oreon_autofiles args4j-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license %{name}/LICENSE.txt
-
-%files javadoc -f .mfiles-javadoc
-%license %{name}/LICENSE.txt
+%files -f %{oreon_filedir}/main.list
+%files -n args4j-javadoc -f %{oreon_filedir}/args4j-javadoc.list
 
 %changelog
+
 %autochangelog

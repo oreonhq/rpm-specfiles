@@ -1,19 +1,15 @@
 %global source0_hash 244e55ca485805ae2fcae8621dec7bb35e9fcd0da707271eb5ef984b88605042
-
 Name:           R-IRanges
 Version:        %R_rpm_version 2.44.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Low-level containers for storing sets of integer ranges
-
-# See https://www.redhat.com/archives/fedora-r-devel-list/2009-April/msg00001.html
-# Automatically converted from old format: Artistic 2.0 and Copyright only - review is highly recommended.
 License:        Artistic-2.0 AND LicenseRef-Callaway-Copyright-only
 URL:            %{bioc_url}
-Source:         %{bioc_source}
-
-BuildRequires:  R-devel
+Source0:        https://bioconductor.org/packages/3.22/bioc/src/contrib/IRanges_2.44.0.tar.gz
 Obsoletes:      %{name}-devel <= 2.44.0
-
+# oreon:deps
+BuildRequires:  R-devel
+# /oreon:deps
 %description
 The IRanges class and its extensions are low-level containers
 for storing sets of integer ranges. A typical use of these containers
@@ -25,22 +21,19 @@ these regions.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples \--no-tests
 
-%files -f %{R_files}
+%R_check \--no-examples \--no-tests
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

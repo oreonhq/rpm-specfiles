@@ -1,36 +1,22 @@
 %global source0_hash 29a9359940e6ba775c9e1dccfd9eb7de68b799ef4182f4eaf7ba3baffaaf1c1b
-
 %global framework eventviews
-
 Name:    kf5-%{framework}
 Version: 23.08.5
-Release: 5%{?dist}
-Summary: KDE PIM library for displaying events and calendars
-
+Release:        1%{?dist}
+Summary:        KDE PIM library for displaying events and calendars
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/pim/%{framework}
-
 %global revision %(echo %{version} | cut -d. -f3)
 %if %{revision} >= 50
 %global stable unstable
 %else
 %global stable stable
 %endif
-Source0:        http://download.kde.org/%{stable}/release-service/%{version}/src/%{framework}-%{version}.tar.xz
-
-# handled by qt5-srpm-macros, which defines %%qt5_qtwebengine_arches
-# available only where kf5-calendarsupport is
+Source0:        http://download.kde.org/stable/release-service/%{version}/src/%{framework}-%{version}.tar.xz
 %{?qt5_qtwebengine_arches:ExclusiveArch: %{qt5_qtwebengine_arches}}
-
-BuildRequires:  extra-cmake-modules >= 5.23.0
-BuildRequires:  kf5-rpm-macros >= 5.23.0
-
-BuildRequires:  cmake(Qt5Test)
-BuildRequires:  cmake(Qt5UiTools)
-BuildRequires:  cmake(Qt5Widgets)
-
-BuildRequires:  cmake(KGantt)
-
+%global majmin_ver %{version}
+Obsoletes:      kdepim-libs < 7:16.04.0
+# oreon:deps
 BuildRequires:  cmake(KF5Akonadi)
 BuildRequires:  cmake(KF5AkonadiCalendar)
 BuildRequires:  cmake(KF5CalendarCore)
@@ -40,23 +26,24 @@ BuildRequires:  cmake(KF5Holidays)
 BuildRequires:  cmake(KF5I18n)
 BuildRequires:  cmake(KF5IdentityManagement)
 BuildRequires:  cmake(KF5Libkdepim)
-BuildRequires:  cmake(KPim5Mime)
-BuildRequires:  cmake(KPim5CalendarUtils)
 BuildRequires:  cmake(KF5TextEditTextToSpeech)
-
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
-%global majmin_ver %{version}
-BuildRequires:  kf5-akonadi-calendar-devel >= %{majmin_ver}
-BuildRequires:  kf5-akonadi-server-devel >= %{majmin_ver}
-BuildRequires:  kf5-calendarsupport-devel >= %{majmin_ver}
-BuildRequires:  kf5-kcalendarcore-devel >= %{majmin_ver}
-BuildRequires:  kf5-kcalendarutils-devel >= %{majmin_ver}
-BuildRequires:  kf5-kidentitymanagement-devel >= %{majmin_ver}
-BuildRequires:  kf5-kmime-devel >= %{majmin_ver}
-BuildRequires:  kf5-libkdepim-devel >= %{majmin_ver}
-
-Obsoletes:      kdepim-libs < 7:16.04.0
-
+BuildRequires:  cmake(KGantt)
+BuildRequires:  cmake(KPim5CalendarUtils)
+BuildRequires:  cmake(KPim5Mime)
+BuildRequires:  cmake(Qt5Test)
+BuildRequires:  cmake(Qt5UiTools)
+BuildRequires:  cmake(Qt5Widgets)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf5-akonadi-calendar-devel
+BuildRequires:  kf5-akonadi-server-devel
+BuildRequires:  kf5-calendarsupport-devel
+BuildRequires:  kf5-kcalendarcore-devel
+BuildRequires:  kf5-kcalendarutils-devel
+BuildRequires:  kf5-kidentitymanagement-devel
+BuildRequires:  kf5-kmime-devel
+BuildRequires:  kf5-libkdepim-devel
+BuildRequires:  kf5-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
@@ -73,6 +60,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{framework}-%{version}
@@ -83,27 +71,18 @@ sed -i "/TRANSLATION_DOMAIN/ s/libeventviews/libeventviews5/" src/CMakeLists.txt
 sed -i "s/libeventviews/libeventviews5/" src/Messages.sh
 
 %build
+
 %cmake_kf5
-
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%license LICENSES/*
-%{_kf5_datadir}/qlogging-categories5/*%{framework}.*
-%{_kf5_libdir}/libKPim5EventViews.so.*
-
-%files devel
-%{_kf5_archdatadir}/mkspecs/modules/qt_EventViews.pri
-%{_includedir}/KPim5/EventViews/
-%{_kf5_libdir}/cmake/KPim5EventViews/
-%{_kf5_libdir}/libKPim5EventViews.so
+%files -f %{oreon_filedir}/main.list
+%files -n kf5-eventviews-devel -f %{oreon_filedir}/kf5-eventviews-devel.list
 
 %changelog
+
 %autochangelog

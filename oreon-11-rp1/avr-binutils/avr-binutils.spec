@@ -1,39 +1,37 @@
-%global source0_hash none
-
+%global source0_hash 154ab23b60070e8f27013c22977f1129425d67d1e8acd6e13010e617811e4cff
 %define target avr
-
 Name:           %{target}-binutils
 Version:        2.47
 Release:        1%{?dist}
 Epoch:          1
-Summary:        Cross Compiling GNU binutils targeted at %{target}
+Summary:        Cross Compiling GNU binutils targeted at avr
 License:        GPL-2.0-or-later
 URL:            http://www.gnu.org/software/binutils/
 Source0:        https://ftp.gnu.org/pub/gnu/binutils/binutils-%{version}.tar.xz
 Source1:        README.fedora
-#add widespread options to avr-size: --format=avr -mcu=XX
 Patch1: http://distribute.atmel.no/tools/opensource/avr-gcc/binutils-2.20.1/30-binutils-2.20.1-avr-size.patch
 Patch2: avr-binutils-config.patch
-# from upstream, for == 2.47, rhbz#2400335
 Patch3:         binutils-2.45-cve-2025-11081.patch
-# from upstream, for == 2.47, rhbz#2400340
 Patch4:         binutils-2.45-cve-2025-11082.patch
-# from upstream, for == 2.47, rhbz#2400336
 Patch5:         binutils-2.45-cve-2025-11083.patch
-
-BuildRequires:  gawk texinfo gcc
-#for autoreconf:
-BuildRequires:  gettext-devel automake
-BuildRequires:  autoconf
-BuildRequires: make zlib-devel
 Provides: bundled(libiberty)
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gawk
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  make
+BuildRequires:  texinfo
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 This is a Cross Compiling version of GNU binutils, which can be used to
 assemble and link binaries for the %{target} platform, instead of for the
 native %{_arch} platform.
 
 %prep
+
 %setup -q -c
 pushd binutils-%{version}
 %patch -P1 -p2 -b .avr-size
@@ -65,31 +63,25 @@ CFLAGS="$RPM_OPT_FLAGS" ../binutils-%{version}/configure --prefix=%{_prefix} \
   --target=%{target} --disable-werror --disable-nls
 make %{?_smp_mflags}
 popd
-
 %check
+
 cd build
 %ifnarch s390x
 make check
 %endif
 echo "completed"
-
 %install
 rm -rf $RPM_BUILD_ROOT
 pushd build
 make install DESTDIR=$RPM_BUILD_ROOT
 popd
-# these are for win targets only
 rm -f $RPM_BUILD_ROOT%{_mandir}/man1/%{target}-{dlltool,windres}.1
-# we don't want these as we are a cross version
 rm -r $RPM_BUILD_ROOT%{_infodir}
 rm    $RPM_BUILD_ROOT%{_libdir}/lib*.a $RPM_BUILD_ROOT%{_libdir}/bfd-plugins/libdep* ||:
+%oreon_autofiles main
 
-%files
-%license binutils-%{version}/COPYING binutils-%{version}/COPYING.LIB
-%doc binutils-%{version}/README README.fedora
-%{_prefix}/%{target}
-%{_bindir}/%{target}-*
-%{_mandir}/man1/%{target}-*.1.gz
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

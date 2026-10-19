@@ -1,28 +1,25 @@
 %global source0_hash 3fcbd305e4abd34768c62050e18ca0986f7d9c5eca343fb98275418013065c0e
-
-Summary:	Library and frontend for decoding MPEG2/4 AAC
+Summary:        Library and frontend for decoding MPEG2/4 AAC
 Name:		faad2
 Epoch:		1
 Version:	2.11.2
-Release:	6%{?dist}
+Release:        1%{?dist}
 License:	GPL-2.0-or-later
 URL:		https://github.com/knik0/faad2/
-Source:        https://github.com/knik0/faad2/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires:	gcc-c++
-BuildRequires:	cmake
-BuildRequires:	libsysfs-devel
-
+Source0:        https://github.com/knik0/faad2/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Obsoletes:	%{name}-xmms < %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  libsysfs-devel
+# /oreon:deps
 %description
 FAAD 2 is a LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder, completely
 written from scratch.
 
 %package libs
 Summary:	Shared libraries of the FAAD 2 AAC decoder
-
 %description libs
 FAAD 2 is a LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder, completely
 written from scratch.
@@ -32,7 +29,6 @@ This package contains libfaad.
 %package devel
 Summary:	Development libraries of the FAAD 2 AAC decoder
 Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
-
 %description devel
 FAAD 2 is a LC, MAIN and LTP profile, MPEG2 and MPEG-4 AAC decoder, completely
 written from scratch.
@@ -41,36 +37,23 @@ This package contains development files and documentation for libfaad.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 install -m 0755 -d %{buildroot}%{_mandir}/man3
 install -D -m 644 docs/libfaad.3 -t %{buildroot}%{_mandir}/man3/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS ChangeLog README
-%{_bindir}/faad
-%{_mandir}/man1/faad.1*
-
-%files libs
-%license COPYING
-%{_libdir}/libfaad.so.2{,.*}
-%{_libdir}/libfaad_drm.so.2{,.*}
-
-%files devel
-%{_includedir}/faad.h
-%{_includedir}/neaacdec.h
-%{_libdir}/pkgconfig/faad2.pc
-%{_libdir}/libfaad.so
-%{_libdir}/libfaad_drm.so
-%{_mandir}/man3/libfaad.3*
+%files -f %{oreon_filedir}/main.list
+%files -n faad2-libs -f %{oreon_filedir}/faad2-libs.list
+%files -n faad2-devel -f %{oreon_filedir}/faad2-devel.list
 
 %changelog
+
 * Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1:2.11.2-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

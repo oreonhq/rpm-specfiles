@@ -1,66 +1,50 @@
 %global source0_hash 510aa6fbe06e5c830064756bc2f554c79378a97f1fec5ed629d044f944c40a36
-
 Name:           nss_nis
 Version:        3.4
 Release:        1%{?dist}
 Summary:        Name Service Switch (NSS) module using NIS
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 Url:            https://github.com/thkukuk/libnss_nis
-Source:        https://github.com/thkukuk/libnss_nis/archive/refs/tags/v%{version}.tar.gz#/nss_nis-%{version}.tar.gz
-
-# https://github.com/systemd/systemd/issues/7074
-# https://bugzilla.redhat.com/show_bug.cgi?id=1829572
+Source0:        https://github.com/thkukuk/libnss_nis/archive/refs/tags/v%{version}.tar.gz#/nss_nis-%{version}.tar.gz
 Source2:        nss_nis.conf
-
-BuildRequires: make
+Conflicts:      %{name} < %{version}-%{release}
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  libnsl2-devel
 BuildRequires:  libtirpc-devel
-BuildRequires:  autoconf, automake, libtool
+BuildRequires:  libtool
+BuildRequires:  make
 BuildRequires:  systemd
-
-# I'd recommend an explicit conflict with different versions of the package
-# to ensure that 64bit and 32bit packages are equal and compatible
-Conflicts:      %{name} < %{version}-%{release}
-
-
+# /oreon:deps
 %description
 The nss_nis Name Service Switch module uses the Network Information System (NIS)
 to obtain user, group, host name, and other data.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n libnss_nis-%{version}
 
 %build
 
 export CFLAGS="%{optflags}"
-
 autoreconf -fiv
-
 %configure --libdir=%{_libdir} --includedir=%{_includedir}
 %make_build
-
 %install
 %make_install
 rm  %{buildroot}/%{_libdir}/libnss_nis.{a,la}
 rm  %{buildroot}/%{_libdir}/libnss_nis.so
-
 install -D -m 644 %{SOURCE2} %{buildroot}/%{_unitdir}/systemd-logind.service.d/nss_nis.conf
 install -D -m 644 %{SOURCE2} %{buildroot}/%{_unitdir}/systemd-userdbd.service.d/nss_nis.conf
+%oreon_autofiles main
 
 %check
+
 make check
-
-%files
-%{_libdir}/libnss_nis.so.2
-%{_libdir}/libnss_nis.so.2.0.0
-%{_unitdir}/systemd-logind.service.d/*
-%{_unitdir}/systemd-userdbd.service.d/*
-
-%license COPYING
-%doc NEWS
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

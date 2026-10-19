@@ -1,25 +1,15 @@
 %global source0_hash 882158dea81c4ee6246239b840ec301aef0fbf0a1ae4b032b717f6e5542791cc
-
-# LTO (more specifically -ffat-lto-objects) breaks compilation
-# due to inconsistent decls in the header macros
-# CPPMICROSERVICES_IMPORT_BUNDLE & CPPMICROSERVICES_INITIALIZE_BUNDLE
-# and trying the obvious fix caused a ripple effect breaking other
-# areas
 %global _lto_cflags %nil
-
-#  usFrameworkTests fail with "Resource temporarily unavailable"
 %ifarch %{ix86}
 %global with_tests 0
 %else
 %global with_tests 1
 %endif
-
 Name: CppMicroServices
 Version: 3.8.9
-Release: %autorelease
-Summary: C++ components for building service-oriented applications
+Release:        1%{?dist}
+Summary:        C++ components for building service-oriented applications
 Url: http://cppmicroservices.org/
-
 License: %{shrink:
   Apache-2.0 AND
   %dnl third_party/tinyscheme
@@ -31,19 +21,7 @@ License: %{shrink:
   %dnl third_party/{rapidjson,optionparser,miniz}
   MIT
 }
-
-Source0: https://github.com/CppMicroServices/CppMicroServices/archive/refs/tags/v%{version}.tar.gz#/CppMicroServices-%{version}.tar.gz
-
-# Raised issue upstream to discuss possibility of officially
-# supporting more system libraries to eliminate carrying these
-# patches:
-#
-#   https://github.com/CppMicroServices/CppMicroServices/issues/1060
-#
-# Patches maintained in:
-#
-#  https://github.com/berrange/CppMicroServices/commits/dist-git-{version}
-#
+Source0:        https://github.com/CppMicroServices/CppMicroServices/archive/refs/tags/v%{version}.tar.gz#/CppMicroServices-%{version}.tar.gz
 Patch: 0001-Fully-use-system-boost.patch
 Patch: 0002-Use-system-jsoncpp-library.patch
 Patch: 0003-Use-system-spdlog-package.patch
@@ -54,38 +32,26 @@ Patch: 0007-Fix-inconsistent-public-private-class-name-usage.patch
 Patch: 0008-Disable-JSON-comment-test.patch
 Patch: 0009-Disable-use-of-Werror.patch
 Patch: 0010-Remove-use-of-docutils.error_reporting.patch
-
-# Regardless of the above issue wrt system libraries, the following
-# are likely to need carrying as bundled libraries indefinitely in
-# Fedora. See later comments in this spec where we remove all of
-# the 'third_party/' directory contents except for these four.
-#
-# Needs git snapshot which is not available in Fedora
 Provides: bundled(rapidjson) = 091de040edb3355dcf2f4a18c425aec51b906f08
-# Non-upstream modifications
 Provides: bundled(miniz) = 3.0.2
-# Non-upstream modifications
 Provides: bundled(optionparser) = 1.7
-# Not available in Fedora
 Provides: bundled(tinyscheme) = 1.41
-
-BuildRequires: gcc-c++
-BuildRequires: doxygen
-BuildRequires: cmake
-BuildRequires: boost-devel
-BuildRequires: jsoncpp-devel
-BuildRequires: rapidjson-devel
-BuildRequires: spdlog-devel
-BuildRequires: python3-sphinx
-BuildRequires: python3-sphinx_rtd_theme
-BuildRequires: python3-breathe
-%if %{with_tests}
-BuildRequires: gmock-devel
-BuildRequires: google-benchmark-devel
-BuildRequires: gtest-devel
-BuildRequires: lsof
-%endif
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  gmock-devel
+BuildRequires:  google-benchmark-devel
+BuildRequires:  gtest-devel
+BuildRequires:  jsoncpp-devel
+BuildRequires:  lsof
+BuildRequires:  python3-breathe
+BuildRequires:  python3-sphinx
+BuildRequires:  python3-sphinx_rtd_theme
+BuildRequires:  rapidjson-devel
+BuildRequires:  spdlog-devel
+# /oreon:deps
 %description
 The C++ Micro Services project is a collection of components for
 building modular and dynamic service-oriented applications. It
@@ -95,7 +61,6 @@ solutions.
 %package devel
 Summary: Development files for CppMicroServices
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The C++ Micro Services project is a collection of components for
 building modular and dynamic service-oriented applications. It
@@ -107,7 +72,6 @@ This provides the development headers and libraries.
 %package docs
 Summary: Development files for CppMicroServices
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description docs
 The C++ Micro Services project is a collection of components for
 building modular and dynamic service-oriented applications. It
@@ -117,6 +81,7 @@ solutions.
 This provides the library documentation
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -169,20 +134,12 @@ rm -rf third_party/spdlog
 #rm -rf third_party/tinyscheme
 
 %build
-# We set 'memcheck' command to /bin/true as running
-# tests under memcheck takes 1hr20 even on a fast
-# x86_64 machine. This is unreasonably long for
-# unit tests considering some architectures are
-# far slower
+
 %cmake \
   -DUS_USE_SYSTEM_BOOST:BOOL=ON \
-%if %{with_tests}
   -DUS_USE_SYSTEM_GTEST:BOOL=ON \
   -DUS_BUILD_TESTING:BOOL=ON \
   -DUS_MEMCHECK_COMMAND:PATH=/bin/true \
-%else
-  -DUS_BUILD_TESTING:BOOL=OFF \
-%endif
   -DUS_BUILD_DOC_HTML:BOOL=ON \
   -DUS_BUILD_DOC_MAN:BOOL=ON \
   -DLIBRARY_INSTALL_DIR=%{_libdir} \
@@ -194,57 +151,24 @@ rm -rf third_party/spdlog
   -DDOC_INSTALL_DIR=%{_datadir}/doc/cppmicroservices3 \
   -DMAN_INSTALL_DIR=%{_mandir}
 %cmake_build
-
 %install
 %cmake_install
-# Not needed for pre-packaged builds
 rm -f %{buildroot}/%{_bindir}/change_namespace
+%oreon_autofiles CppMicroServices-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles CppMicroServices-docs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%if %{with_tests}
+
 %cmake_build -t test || (
   echo "==================== TEST LOGS ===================="
   cat %{__cmake_builddir}/Testing/Temporary/LastTest.log;
   exit 1
 )
-%endif
-
-%files
-%license LICENSE
-# These three change ABI on pretty much every release. Use
-# full SONAME version to remind of need to rebuild deps
-%{_libdir}/libConfigurationAdmind.so.1.3.13
-%{_libdir}/libCppMicroServicesd.so.3.8.9
-%{_libdir}/libDeclarativeServicesd.so.1.5.16
-%{_libdir}/libLogServiced.so.1.0.0
-# NB: not a versioned library :-(
-%{_libdir}/libusAsyncWorkServiced.so
-# NB: not a versioned library :-(
-%{_libdir}/libusEMd.so
-# NB: not a versioned library :-(
-%{_libdir}/libusServiceComponentd.so
-
-%files devel
-%{_datadir}/cppmicroservices3
-%{_includedir}/cppmicroservices3
-%{_bindir}/SCRCodeGen3
-%{_bindir}/jsonschemavalidator
-%{_bindir}/usResourceCompiler3
-%{_libdir}/libConfigurationAdmind.so
-%{_libdir}/libCppMicroServicesd.so
-%{_libdir}/libDeclarativeServicesd.so
-%{_libdir}/libLogServiced.so
-%{_mandir}/man1/usResourceCompiler3.1*
-%{_mandir}/man3/cppmicroservices-asyncworkservice.3*
-%{_mandir}/man3/cppmicroservices-configadmin.3*
-%{_mandir}/man3/cppmicroservices-ds.3*
-%{_mandir}/man3/cppmicroservices-framework.3*
-%{_mandir}/man3/cppmicroservices-logservice.3*
-%{_mandir}/man3/cppmicroservices.3*
-%{_mandir}/man7/cppmicroservices.7*
-
-%files docs
-%{_datadir}/doc/cppmicroservices3
+%files -f %{oreon_filedir}/main.list
+%files -n CppMicroServices-devel -f %{oreon_filedir}/CppMicroServices-devel.list
+%files -n CppMicroServices-docs -f %{oreon_filedir}/CppMicroServices-docs.list
 
 %changelog
+
 %autochangelog

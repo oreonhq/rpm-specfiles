@@ -1,41 +1,28 @@
 %global source0_hash 2d66421c52ed32719a15cb039c368e063c4d85f670e3d142f5eb7415fb427985
-
-# This package is installed into an archful location, but contains no ELF
-# objects.
 %global debug_package %{nil}
-
-# TESTING NOTE: The testsuite must be run as part of the rocq build.  See
-# the rocq spec for details.
-
 %global stdlibdir %{ocamldir}/coq/user-contrib/Stdlib
 %global rocqver   9.1.1
 %global giturl    https://github.com/rocq-prover/stdlib
-
 Name:           rocq-stdlib
 Version:        9.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        The Rocq proof assistant standard library
-
 License:        LGPL-2.1-only
 URL:            https://rocq-prover.org/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/V%{version}/%{name}-%{version}.tar.gz
-
-# Rocq's plugin architecture requires cmxs files.
+Source0:        %{giturl}/archive/V%{version}/%{name}-%{version}.tar.gz
 ExclusiveArch:  %{ocaml_native_compiler}
-
-BuildRequires:  coq-core-compat = %{rocqver}
-BuildRequires:  rocq = %{rocqver}
-BuildRequires:  ocaml >= 4.09.0
-BuildRequires:  ocaml-dune >= 3.6.1
-BuildRequires:  ocaml-findlib
-
 Requires:       rocq-core%{?_isa} = %{rocqver}
-
 %global _desc %{expand:Rocq is a formal proof management system.  It provides a formal language
 to write mathematical definitions, executable algorithms and theorems together
 with an environment for semi-interactive development of machine-checked proofs.}
-
+# oreon:deps
+BuildRequires:  coq-core-compat
+BuildRequires:  ocaml
+BuildRequires:  ocaml-dune
+BuildRequires:  ocaml-findlib
+BuildRequires:  rocq
+# /oreon:deps
 %description
 %_desc
 
@@ -45,7 +32,6 @@ modules usually bound to the Stdlib.* namespace.
 %package        source
 Summary:        Source files of the Rocq proof assistant standard library
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    source
 %_desc
 
@@ -55,28 +41,18 @@ informational purposes.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n stdlib-%{version} -p1
-
+%global oreon_srcdir stdlib-%{version}
+%oreon_prep
 %build
-%dune_build -p rocq-stdlib
 
+%dune_build -p rocq-stdlib
 %install
 %dune_install -n rocq-stdlib
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .ofiles
-%doc README.md CONTRIBUTING.md
-%license LICENSE
-%exclude %{stdlibdir}/*.v
-%exclude %{stdlibdir}/*/*.v
-%exclude %{stdlibdir}/*/*/*.v
-%exclude %{stdlibdir}/*/*/*/*.v
-
-%files source
-%{stdlibdir}/*.v
-%{stdlibdir}/*/*.v
-%{stdlibdir}/*/*/*.v
-%{stdlibdir}/*/*/*/*.v
+%files -f %{oreon_filedir}/main.list
+%files -n rocq-stdlib-source -f %{oreon_filedir}/rocq-stdlib-source.list
 
 %changelog
+
 %autochangelog

@@ -1,13 +1,10 @@
 %global source0_hash 3be672407a7aef60b64ce4b39704b32816b0b28f61ebffd4fbd02c8012901e0d
-
 Name:           collada-dom
 Version:        2.5.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        COLLADA Document Object Model Library
-
 License:        MIT
 URL:            http://www.collada.org
-
 Source0:        https://github.com/rdiankov/collada-dom/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch0:         collada-dom.minizip-include.patch
 Patch1:         collada-dom.include-zlib.patch
@@ -15,7 +12,7 @@ Patch2:         collada-dom.cmake-version.patch
 Patch3:         collada-dom.cmake-drop-vars.patch
 Patch4:         collada-dom.gcc16.patch
 Patch5:         collada-dom.boost-filesystem.patch
-
+# oreon:deps
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  dos2unix
@@ -24,7 +21,7 @@ BuildRequires:  libxml2-devel
 BuildRequires:  minizip-ng-compat-devel
 BuildRequires:  uriparser-devel
 BuildRequires:  zlib-devel
-
+# /oreon:deps
 %description
 COLLADA is a royalty-free XML schema that enables digital asset exchange
 within the interactive 3D industry. The COLLADA Document Object Model
@@ -35,12 +32,12 @@ a C++ object representation of a COLLADA XML instance document.
 Summary:        Development files for %{name}
 Requires:       %{name} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{version}
@@ -50,24 +47,19 @@ dos2unix licenses/dom_license_e.txt
 dos2unix licenses/license_e.txt
 
 %build
+
 %cmake -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
 %cmake_build
-
 %install
 %cmake_install
-
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 mv $RPM_BUILD_ROOT%{_libdir}/cmake/collada_dom-* $RPM_BUILD_ROOT%{_libdir}/cmake/collada_dom
+%oreon_autofiles collada-dom-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.rst licenses/dom_license_e.txt licenses/license_e.txt
-%{_libdir}/*.so.*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-%{_libdir}/cmake/collada_dom/
+%files -f %{oreon_filedir}/main.list
+%files -n collada-dom-devel -f %{oreon_filedir}/collada-dom-devel.list
 
 %changelog
+
 %autochangelog

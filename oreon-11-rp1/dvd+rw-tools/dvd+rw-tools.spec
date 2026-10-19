@@ -1,14 +1,11 @@
 %global source0_hash f8d60f822e914128bcbc5f64fbe3ed131cbff9045dca7e12c5b77b26edde72ca
-
 Name:		dvd+rw-tools
 Version:	7.1
-Release:	46%{?dist}
-Summary:	Toolchain to master DVD+RW/+R media
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Toolchain to master DVD+RW/+R media
 License:	GPL-2.0-only
 URL:		http://fy.chalmers.se/~appro/linux/DVD+RW/
-
-Source:        https://deb.debian.org/debian/pool/main/d/dvd+rw-tools/dvd+rw-tools_%{version}.orig.tar.gz#/dvd+rw-tools-%{version}.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/d/dvd+rw-tools/dvd+rw-tools_%{version}.orig.tar.gz#/dvd+rw-tools-%{version}.tar.gz
 Source1:	index.html
 Patch1:		dvd+rw-tools-7.0.manpatch
 Patch2:		dvd+rw-tools-7.0-wexit.patch
@@ -22,17 +19,20 @@ Patch9:		dvd+rw-tools-7.1-format.patch
 Patch10:	dvd+rw-tools-7.1-bluray_srm+pow.patch
 Patch11:	dvd+rw-tools-7.1-bluray_pow_freespace.patch
 Patch12:	dvd+rw-tools-7.1-sysmacro-inc.patch
-
 Requires:	genisoimage
-BuildRequires:	gcc gcc-c++
-BuildRequires:	kernel-headers m4
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  kernel-headers
+BuildRequires:  m4
+BuildRequires:  make
+# /oreon:deps
 %description
 Collection of tools to master DVD+RW/+R media. For further
 information see http://fy.chalmers.se/~appro/linux/DVD+RW/.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 %patch -P1 -p1 -b .manpatch
@@ -51,21 +51,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 install -m 644 %{SOURCE1} index.html
 
 %build
+
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 export CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 export LDFLAGS="$RPM_LD_FLAGS"
 make WARN="-DDEFAULT_BUF_SIZE_MB=16 -DRLIMIT_MEMLOCK" %{?_smp_mflags}
-
 %install
-# make install DESTDIR= does not work here
 %makeinstall
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc index.html
-%{_bindir}/*
-%{_mandir}/man1/*.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1-46
 - Import

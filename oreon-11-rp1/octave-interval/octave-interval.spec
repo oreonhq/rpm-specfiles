@@ -1,25 +1,20 @@
-%global source0_hash 38e526427375713229ab3d86a5fe3f5a08550747d8420541706fdea9093fdce8
-
+%global source0_hash c0131b7add14bdeaa907c168ebcc987b6440f67cb56069849b24bcad2c0ad176
 %global octpkg interval
-
 Name:           octave-%{octpkg}
 Version:        3.2.2
 Release:        1%{?dist}
 Summary:        Interval arithmetic for Octave
-# The source code is GPLv3+ except src/crlibm/ which is LGPLv2+
-# Automatically converted from old format: GPLv3+ and LGPLv2+ - review is highly recommended.
 License:        GPL-3.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL:            https://octave.sourceforge.io/%{octpkg}/
 Source0:        https://downloads.sourceforge.net/octave/%{octpkg}-%{version}.tar.gz
-
-BuildRequires:  octave-devel >= 3.8.0
-BuildRequires:  mpfr-devel
-
 Requires:       octave(api) = %{octave_api}
 Requires:       mpfr >= 3.1.0
 Requires(post): octave
 Requires(postun): octave
-
+# oreon:deps
+BuildRequires:  mpfr-devel
+BuildRequires:  octave-devel
+# /oreon:deps
 %description
 The Octave-forge Interval package for real-valued interval arithmetic
 allows one to evaluate functions over subsets of their domain.  All
@@ -33,46 +28,32 @@ conforming to IEEE Std 1788-2015, IEEE standard for interval
 arithmetic.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qcT
 
 %build
-%octave_pkg_build -T
 
+%octave_pkg_build -T
 %install
 %octave_pkg_install
+%oreon_autofiles main
 
 %check
+
 %octave_pkg_check
-
 %post
-%octave_cmd pkg rebuild
 
+%octave_cmd pkg rebuild
 %preun
+
 %octave_pkg_preun
-
 %postun
-%octave_cmd pkg rebuild
 
-%files
-%{octpkglibdir}
-%dir %{octpkgdir}
-%{octpkgdir}/doc-cache
-%{octpkgdir}/*.m
-%{octpkgdir}/@infsup
-%{octpkgdir}/@infsupdec
-%{octpkgdir}/test
-%doc %{octpkgdir}/doc
-%dir %{octpkgdir}/packinfo
-%doc %{octpkgdir}/packinfo/doc-cache
-%license %{octpkgdir}/packinfo/COPYING
-%{octpkgdir}/packinfo/NEWS
-%{octpkgdir}/packinfo/CITATION
-%{octpkgdir}/packinfo/DESCRIPTION
-%{octpkgdir}/packinfo/INDEX
-%{octpkgdir}/packinfo/*.m
-%{_metainfodir}/octave-%{octpkg}.metainfo.xml
+%octave_cmd pkg rebuild
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

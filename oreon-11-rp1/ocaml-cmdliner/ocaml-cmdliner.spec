@@ -1,25 +1,20 @@
-%global source0_hash 4e547a631c36fbaadff60d3bd7724eb3f83ba274e92fb725950bae7868378582
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
+%global source0_hash 05b938d1def4f54c478178f1982822834510431ed98f2ac67cb4d90aa120d6b6
 ExcludeArch: %{ix86}
-
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 Name:           ocaml-cmdliner
 Version:        2.1.1
 Release:        1%{?dist}
 Summary:        Declarative definition of command line interfaces for OCaml
-
 License:        ISC
 URL:            https://erratique.ch/software/cmdliner
 VCS:            git:%{url}.git
-Source0:        %{url}/releases/cmdliner-%{version}.tbz
-
+Source0:        https://erratique.ch/software/cmdliner/releases/cmdliner-%{version}.tbz
+# oreon:deps
 BuildRequires:  ocaml
 BuildRequires:  ocaml-dune
-
+# /oreon:deps
 %description
 Cmdliner allows the declarative definition of command line
 interfaces for OCaml.
@@ -37,32 +32,27 @@ the ISC license.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n cmdliner-%{version}
-
+%global oreon_srcdir cmdliner-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%license LICENSE.md
-%doc README.md CHANGES.md
-
-%files devel -f .ofiles-devel
-%doc README.md CHANGES.md
-%license LICENSE.md
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-cmdliner-devel -f %{oreon_filedir}/ocaml-cmdliner-devel.list
 
 %changelog
+
 %autochangelog

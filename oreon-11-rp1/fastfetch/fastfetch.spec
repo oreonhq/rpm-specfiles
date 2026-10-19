@@ -1,49 +1,13 @@
 %global source0_hash d0e42faf307e39e7b531d632745a56e4eb558a6545f557280099c622562355ee
-
 Name:           fastfetch
 Version:        2.69.0
 Release:        1%{?dist}
 Summary:        Fast neofetch-like system information tool
-
 License:        MIT
 URL:            https://github.com/fastfetch-cli/fastfetch
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  cmake
-BuildRequires:  python3
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  hwdata-devel
-BuildRequires:  wayland-devel
-BuildRequires:  libXrandr-devel
-BuildRequires:  dconf-devel
-BuildRequires:  dbus-devel
-BuildRequires:  sqlite-devel
-BuildRequires:  ImageMagick-devel
-BuildRequires:  zlib-devel
-BuildRequires:  libglvnd-devel
-BuildRequires:  mesa-libGL-devel
-BuildRequires:  glib2-devel
-BuildRequires:  ocl-icd-devel
-BuildRequires:  rpm-devel
-BuildRequires:  libdrm-devel
-BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  elfutils-libelf-devel
-# not available on s390x
+Source0:        https://github.com/%{name}-cli/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 %if "%{_arch}" != "s390x"
-BuildRequires:  libddcutil-devel
 %endif
-# vulkan-loader not available in el8 on some arches
-%if 0%{?rhel} == 8
-  %if "%{_arch}" != "s390x" && "%{_arch}" != "ppc64le"
-BuildRequires:  vulkan-loader-devel
-  %endif
-%else
-BuildRequires:  vulkan-loader-devel
-%endif
-BuildRequires:  chafa-devel
-BuildRequires:  yyjson-devel
-
 Recommends:     hwdata
 Suggests:       libXrandr
 Suggests:       dconf
@@ -58,21 +22,39 @@ Suggests:       libddcutil
 Suggests:       libdrm
 Suggests:       pulseaudio-libs
 Suggests:       elfutils-libelf
-
-# The shell completion files were previously provided as separate subpackages
-# which depended on their respective shell.  That was necessary to avoid the
-# parent directories of the completion files from being unowned.  However, the
-# filesystem package now owns those directories, so the separate subpackages
-# are no longer necessary.
 Provides:       fastfetch-bash-completion = %{version}%{release}
 Provides:       fastfetch-zsh-completion = %{version}%{release}
 Provides:       fastfetch-fish-completion = %{version}%{release}
 Obsoletes:      fastfetch-bash-completion < 2.31.0-2
 Obsoletes:      fastfetch-zsh-completion < 2.31.0-2
 Obsoletes:      fastfetch-fish-completion < 2.31.0-2
-
 ExcludeArch:    %{ix86}
-
+# oreon:deps
+BuildRequires:  ImageMagick-devel
+BuildRequires:  chafa-devel
+BuildRequires:  cmake
+BuildRequires:  dbus-devel
+BuildRequires:  dconf-devel
+BuildRequires:  elfutils-libelf-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  glib2-devel
+BuildRequires:  hwdata-devel
+BuildRequires:  libXrandr-devel
+BuildRequires:  libddcutil-devel
+BuildRequires:  libdrm-devel
+BuildRequires:  libglvnd-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  ocl-icd-devel
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  python3
+BuildRequires:  rpm-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  vulkan-loader-devel
+BuildRequires:  wayland-devel
+BuildRequires:  yyjson-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 fastfetch is a neofetch-like tool for fetching system information and
 displaying them in a pretty way. It is written in c to achieve much better
@@ -81,28 +63,20 @@ mechanisms like multithreading and caching to finish as fast as possible.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -DBUILD_TESTS=ON -DENABLE_SYSTEM_YYJSON=ON -DBUILD_FLASHFETCH=OFF
 %cmake_build
-
 %check
-%ctest
 
+%ctest
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/%{name}
-%{_datadir}/%{name}/
-%{_mandir}/man1/fastfetch.1*
-%{_datadir}/bash-completion/completions/%{name}
-%{_datadir}/fish/vendor_completions.d/%{name}.fish
-%{_datadir}/zsh/site-functions/_%{name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

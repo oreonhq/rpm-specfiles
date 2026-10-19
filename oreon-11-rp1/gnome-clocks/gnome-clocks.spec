@@ -1,48 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 4bdf9c0481a83037da1d0fa26d2c2c6a80cb736458fd18fde14acaf7924874c6
 %global geoclue2_version 2.6.0
 %global gtk4_version 4.5
 %global libadwaita_version 1.5
-
 %global tarball_version %(echo %{version} | tr '~' '.')
 %global major_version %(echo %{tarball_version} | cut -d "." -f 1)
-
 Name:           gnome-clocks
 Version:        51.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Clock application designed for GNOME 3
-
-# Sources are under GPL-2.0-or-later, Appdata is under CC0-1.0 and help is
-# under CC-BY-SA-3.0.
 License:        GPL-2.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://wiki.gnome.org/Apps/Clocks
-Source0:        https://download.gnome.org/sources/gnome-clocks/%(echo %{version} | cut -d. -f1)/%{name}-%{tarball_version}.tar.xz
-BuildRequires:  meson
+Source0:        https://download.gnome.org/sources/%{name}/51/%{name}-%{version}.tar.xz
+Requires:       geoclue2-libs%{?_isa} >= %{geoclue2_version}
+Requires:       gtk4%{?_isa} >= %{gtk4_version}
+Requires:       libadwaita%{?_isa} >= %{libadwaita_version}
+# oreon:deps
+BuildRequires:  /usr/bin/oggenc
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  itstool
 BuildRequires:  libappstream-glib
-BuildRequires:  vala
-
+BuildRequires:  meson
 BuildRequires:  pkgconfig(geocode-glib-2.0)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gnome-desktop-4)
 BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  pkgconfig(gsound)
-BuildRequires:  pkgconfig(gtk4) >= %{gtk4_version}
+BuildRequires:  pkgconfig(gtk4)
 BuildRequires:  pkgconfig(gweather4)
-BuildRequires:  pkgconfig(libgeoclue-2.0) >= %{geoclue2_version}
-BuildRequires:  pkgconfig(libadwaita-1) >= %{libadwaita_version}
-BuildRequires:  /usr/bin/oggenc
-
-Requires:       geoclue2-libs%{?_isa} >= %{geoclue2_version}
-Requires:       gtk4%{?_isa} >= %{gtk4_version}
-Requires:       libadwaita%{?_isa} >= %{libadwaita_version}
-
+BuildRequires:  pkgconfig(libadwaita-1)
+BuildRequires:  pkgconfig(libgeoclue-2.0)
+BuildRequires:  vala
+# /oreon:deps
 %description
 Clock application designed for GNOME 3
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 # check for human errors
 if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
@@ -50,31 +44,20 @@ if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Er
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
 %find_lang gnome-clocks --with-gnome
+%oreon_autofiles main
 
 %check
-desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/org.gnome.clocks.desktop
 
-%files -f gnome-clocks.lang
-%doc AUTHORS.md NEWS README.md
-%license LICENSE.md
-%{_bindir}/gnome-clocks
-%{_datadir}/icons/hicolor/scalable/apps/org.gnome.clocks.svg
-%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.clocks-symbolic.svg
-%{_datadir}/applications/org.gnome.clocks.desktop
-%{_datadir}/dbus-1/services/org.gnome.clocks.service
-%{_datadir}/glib-2.0/schemas/org.gnome.clocks.gschema.xml
-%dir %{_datadir}/gnome-shell/
-%dir %{_datadir}/gnome-shell/search-providers/
-%{_datadir}/gnome-shell/search-providers/org.gnome.clocks.search-provider.ini
-%{_metainfodir}/org.gnome.clocks.metainfo.xml
-%{_datadir}/sounds/gnome/default/alarms/*.oga
+desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/org.gnome.clocks.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.0-1
 - Prepare for Oreon 11 (RP1)

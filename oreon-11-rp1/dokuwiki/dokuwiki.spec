@@ -1,42 +1,27 @@
 %global source0_hash 1d10e8dc8ad769b1c56a53a8703db9345070663e8386ee6bded77d4881d090f3
-
 Name:		dokuwiki
-Summary:	Standards compliant simple to use wiki
+Summary:        Standards compliant simple to use wiki
 License:	GPL-2.0-only
-
 %global		releasenum 2025-05-14b
 %global		releasetag %(rel="%{releasenum}"; echo "${rel//-/}")
 Version:	%{releasetag}
-Release:	4%{?dist}
-
+Release:        1%{?dist}
 %global php_min_version 7.4
-
 URL:		https://www.dokuwiki.org/dokuwiki
-Source0:	https://download.dokuwiki.org/src/%{name}/%{name}-%{releasenum}.tgz
-
-#Fedora specific patches to use Fedora packaged libraries
+Source0:        https://download.%{name}.org/src/%{name}/%{name}-%{releasenum}.tgz
 Patch1:		dokuwiki-rm-bundled-libs.patch
-
 BuildArch:	noarch
-
 %global smoke_test 1
 %define depends_on(v::) %{expand:
-BuildRequires: %{*}
-
 %if 0%{?smoke_test}
 Requires: %{*}
 %endif
 }
-
 %if 0%{?smoke_test}
-BuildRequires: php-cli >= %{php_min_version}
 %endif
-
 %depends_on php-gd >= %{php_min_version}
 %depends_on php-json >= %{php_min_version}
 %depends_on php-xml >= %{php_min_version}
-
-# Composer deps
 %depends_on php-composer(aziraphale/email-address-validator) >= 2.0.1
 %depends_on php-composer(kissifrot/php-ixr) >= 1.8.4
 %depends_on php-composer(geshi/geshi) >= 1.0.9.1
@@ -44,18 +29,31 @@ BuildRequires: php-cli >= %{php_min_version}
 %depends_on php-composer(paragonie/constant_time_encoding) >= 2.6.3
 %depends_on php-composer(php81_bc/strftime) >= 0.7.6
 %depends_on php-composer(phpseclib/phpseclib) >= 3.0.35
-# %%depends_on php-composer(simplepie/simplepie) >= 1.8.0
 %depends_on php-composer(splitbrain/lesserphp) >= 0.10.0
 %depends_on php-composer(splitbrain/php-archive) >= 1.3.1
 %depends_on php-composer(splitbrain/php-cli) >= 1.3.1
 %depends_on php-composer(splitbrain/php-jsstrip) >= 1.0.1
 %depends_on php-composer(splitbrain/slika) >= 1.0.6
-
-# Deps that require extra handling
-
-# Fedora's simplepie package was unfortunately broken for some time
 %depends_on php-simplepie >= 1.9.0-2
-
+# oreon:deps
+BuildRequires:  php-cli
+BuildRequires:  php-composer(aziraphale/email-address-validator)
+BuildRequires:  php-composer(geshi/geshi)
+BuildRequires:  php-composer(kissifrot/php-ixr)
+BuildRequires:  php-composer(openpsa/universalfeedcreator)
+BuildRequires:  php-composer(paragonie/constant_time_encoding)
+BuildRequires:  php-composer(php81_bc/strftime)
+BuildRequires:  php-composer(phpseclib/phpseclib)
+BuildRequires:  php-composer(splitbrain/lesserphp)
+BuildRequires:  php-composer(splitbrain/php-archive)
+BuildRequires:  php-composer(splitbrain/php-cli)
+BuildRequires:  php-composer(splitbrain/php-jsstrip)
+BuildRequires:  php-composer(splitbrain/slika)
+BuildRequires:  php-gd
+BuildRequires:  php-json
+BuildRequires:  php-simplepie
+BuildRequires:  php-xml
+# /oreon:deps
 %description
 DokuWiki is a standards compliant, simple to use Wiki, mainly aimed at creating
 documentation of any kind. It has a simple but powerful syntax which makes sure
@@ -70,11 +68,11 @@ Requires:	%name = %version-%release
 Requires:	%{_sbindir}/semanage
 Requires:	%{_sbindir}/restorecon
 BuildArch:	noarch
-
 %description selinux
 Configures DokuWiki to run in SELinux enabled environments.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{releasenum}
@@ -169,7 +167,6 @@ SELinux enabled environments
 EOF
 
 %build
-# nothing to do here
 
 %install
 install -d -p %{buildroot}%{_sysconfdir}/%{name}
@@ -190,7 +187,6 @@ cp -rp inc  %{buildroot}%{_datadir}/%{name}/
 cp -rp vendor  %{buildroot}%{_datadir}/%{name}/
 install -p -m0644 *.php %{buildroot}%{_datadir}/%{name}
 install -p -m0644 %{name}.httpd %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
-
 pushd %{buildroot}%{_sysconfdir}/%{name}
 for d in *.dist; do
 	d0=`basename $d .dist`
@@ -199,79 +195,39 @@ for d in *.dist; do
 	fi
 done
 popd
-
 pushd %{buildroot}%{_datadir}/%{name}
 	ln -sf ../../../etc/%name conf
 popd
-
-# Smoke test. Runs the index page script in CLI.
-# Should catch some missing or improperly patched dependencies.
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if 0%{?smoke_test}
 %check
+
 cat > %{buildroot}%{_datadir}/%{name}/conf/local.php <<'EOF'
 <?php
 $conf['savedir'] = "%{buildroot}%{_localstatedir}/lib/%{name}/data";
 EOF
-
 php %{buildroot}%{_datadir}/%{name}/index.php
-
 rm -f \
 	%{buildroot}%{_localstatedir}/lib/%{name}/data/index/page.idx \
 	%{buildroot}%{_datadir}/%{name}/conf/local.php
 %endif
-
 %post selinux
+
 semanage fcontext -a -t httpd_sys_rw_content_t '%{_sysconfdir}/%{name}(/.*)?' 2>/dev/null || :
 semanage fcontext -a -t httpd_sys_content_t '%{_datadir}/%{name}(/.*)?' 2>/dev/null || :
 semanage fcontext -a -t httpd_sys_rw_content_t '%{_datadir}/%{name}/lib/plugins(/.*)?' 2>/dev/null || :
 restorecon -R '%{_sysconfdir}/%{name}' || :
 restorecon -R '%{_datadir}/%{name}' || :
-
 %postun selinux
+
 if [ $1 -eq 0 ] ; then
 semanage fcontext -d -t httpd_sys_rw_content_t '%{_sysconfdir}/%{name}(/.*)?' 2>/dev/null || :
 semanage fcontext -d -t httpd_sys_content_t '%{_datadir}/%{name}(/.*)?' 2>/dev/null || :
 semanage fcontext -d -t httpd_sys_rw_content_t '%{_datadir}/%{name}/lib/plugins(/.*)?' 2>/dev/null || :
 fi
-
-%files
-%doc COPYING README VERSION mysql.conf.php.example
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
-%config(noreplace) %attr(0644,apache,apache) %{_sysconfdir}/%{name}/*
-%dir %attr(0755,apache,apache) %{_sysconfdir}/%{name}
-%attr(0755,apache,apache) %{_datadir}/%{name}/bin/*.php
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/conf
-%{_datadir}/%{name}/*.php
-%dir %{_datadir}/%{name}/lib
-%{_datadir}/%{name}/lib/exe
-%{_datadir}/%{name}/lib/images
-%{_datadir}/%{name}/lib/index.html
-%{_datadir}/%{name}/lib/scripts
-%{_datadir}/%{name}/lib/styles
-%{_datadir}/%{name}/lib/tpl
-%attr(0755,apache,apache) %dir %{_datadir}/%{name}/lib/plugins
-%{_datadir}/%{name}/lib/plugins/*
-%{_datadir}/%{name}/inc
-%{_datadir}/%{name}/vendor
-%dir %{_localstatedir}/lib/%{name}
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/attic
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/cache
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/index
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/locks
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/log
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/media
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/media_attic
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/media_meta
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/meta
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/pages
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/pages/wiki
-%attr(0755,apache,apache) %dir %{_localstatedir}/lib/%{name}/data/tmp
-%{_localstatedir}/lib/%{name}/data/pages/*/*
-
-%files selinux
-%doc DOKUWIKI-SELINUX.README
+%files -f %{oreon_filedir}/main.list
+%files -n dokuwiki-selinux -f %{oreon_filedir}/dokuwiki-selinux.list
 
 %changelog
+
 %autochangelog

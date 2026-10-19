@@ -1,31 +1,55 @@
-%global source0_hash 03eae5a9d105448796e6c0e192d402c266057e75790cf4f42c143dddf91313ce
-
-# Created by pyp2rpm-3.3.0
+%global source0_hash 628529ec4ce1f9a7ba2c145b2cf5e4eeca3015418e504b2e6fba70171b6b1b59
 %global pypi_name gitlab
-
 Name:           python-%{pypi_name}
 Version:        8.5.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Interact with GitLab API
-
-# Automatically converted from old format: LGPLv3 - review is highly recommended.
 License:        LGPL-3.0-only
 URL:            https://github.com/python-gitlab/python-gitlab
-Source0:        %{pypi_source python_gitlab}
+Source0:        https://files.pythonhosted.org/packages/source/p/python_gitlab/python_gitlab-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  python3-devel
-
-# drop the -doc package. To much effort to keep working
 Provides:  python-%{pypi_name}-doc = %{version}-%{release}
 Obsoletes: python-%{pypi_name}-doc <= 3.3.0
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0.0
+Requires:       python3-gitlab = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-gitlab+autocompletion
+Summary:        Metapackage for python3-gitlab autocompletion extras
+Requires:       python3-gitlab = %{version}-%{release}
+Requires:       python3dist(argcomplete) >= 1.10.0
+Requires:       python3dist(argcomplete) < 4
+Provides:       python3dist(gitlab[autocompletion]) = %{version}-%{release}
+
+%description -n python3-gitlab+autocompletion
+Metapackage for python3-gitlab autocompletion extras.
+
+%package -n       python3-gitlab+yaml
+Summary:        Metapackage for python3-gitlab yaml extras
+Requires:       python3-gitlab = %{version}-%{release}
+Requires:       python3dist(pyyaml) >= 6.0.1
+Provides:       python3dist(gitlab[yaml]) = %{version}-%{release}
+
+%description -n python3-gitlab+yaml
+Metapackage for python3-gitlab yaml extras.
+
+%package -n       python3-gitlab+graphql
+Summary:        Metapackage for python3-gitlab graphql extras
+Requires:       python3-gitlab = %{version}-%{release}
+Requires:       python3dist(gql[httpx]) >= 3.5.0
+Requires:       python3dist(gql[httpx]) < 5
+Provides:       python3dist(gitlab[graphql]) = %{version}-%{release}
+
+%description -n python3-gitlab+graphql
+Metapackage for python3-gitlab graphql extras.
 
 %description
 Interact with GitLab API
 
 %package -n     python3-%{pypi_name}
-Summary:        %{summary}
-
+Summary:        Interact with GitLab API
 %description -n python3-%{pypi_name}
 Interact with GitLab API
 
@@ -35,6 +59,7 @@ Summary:        Python gitlab documentation
 Documentation for gitlab
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n python_%{pypi_name}-%{version}
@@ -51,22 +76,20 @@ sed -i 's/pytest-github-actions-annotate-failures.*//' requirements-test.txt
 sed -i 's/pytest-cov.*//'                              requirements-test.txt
 sed -i 's/coverage.*//'                                requirements-test.txt
 
-%generate_buildrequires
-%pyproject_buildrequires -t
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files gitlab
+%oreon_autofiles main usr/lib/python3*/site-packages/gitlab* usr/lib64/python3*/site-packages/gitlab* usr/bin/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%tox
 
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%{_bindir}/gitlab
-%doc README.rst
+%tox
+%files
+%files -n python3-gitlab -f %{oreon_filedir}/python3-gitlab.list
+%files -n python-gitlab-doc -f %{oreon_filedir}/python-gitlab-doc.list
 
 %changelog
+
 %autochangelog

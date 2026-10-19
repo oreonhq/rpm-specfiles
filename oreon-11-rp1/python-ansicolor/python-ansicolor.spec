@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 6de60837fb322b9fb8c8863061504688520bd0aa62defab43dbf4f2c011dafda
 Name:           python-ansicolor
 Version:        0.3.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A library to produce ansi color output and colored highlighting and diffing
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/numerodix/ansicolor
-Source:         %{pypi_source ansicolor}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/ansicolor/ansicolor-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ansicolor' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-ansicolor = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ansicolor
-Summary:        %{summary}
-
-%description -n python3-ansicolor %_description
-
+Summary:        A library to produce ansi color output and colored highlighting and diffing
+%description -n python3-ansicolor
 
 %prep
-%autosetup -p1 -n ansicolor-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ansicolor-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ansicolor usr/lib/python3*/site-packages/ansicolor* usr/lib64/python3*/site-packages/ansicolor* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ansicolor* usr/lib64/python3*/site-packages/ansicolor* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ansicolor -f %{pyproject_files}
+%files
+%files -n python3-ansicolor -f %{oreon_filedir}/python3-ansicolor.list
 
 %changelog
+
 %autochangelog

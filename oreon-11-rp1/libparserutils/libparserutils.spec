@@ -1,20 +1,18 @@
 %global source0_hash 317ed5c718f17927b5721974bae5de32c3fd6d055db131ad31b4312a032ed139
-
 Name: libparserutils
 Version: 0.2.5
-Release: %autorelease
-Summary: A library for building efficient parsers
-
+Release:        1%{?dist}
+Summary:        A library for building efficient parsers
 License: MIT
 URL: http://www.netsurf-browser.org/projects/libparserutils/
-Source: http://download.netsurf-browser.org/libs/releases/%{name}-%{version}-src.tar.gz
-
-BuildRequires: doxygen
-BuildRequires: gcc
-BuildRequires: netsurf-buildsystem
-BuildRequires: pkgconfig(check)
-BuildRequires: make
-
+Source0:        http://download.netsurf-browser.org/libs/releases/%{name}-%{version}-src.tar.gz
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  netsurf-buildsystem
+BuildRequires:  pkgconfig(check)
+# /oreon:deps
 %description
 LibParserUtils is a library for building efficient parsers, written in
 C. It was developed as part of the NetSurf project.
@@ -33,7 +31,6 @@ Features:
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -41,7 +38,6 @@ developing applications that use %{name}.
 %package doc
 Summary: Documentation of %{name} API
 BuildArch: noarch
-
 %description doc
 The %{name}-doc package contains documentation files for %{name}.
 
@@ -49,6 +45,7 @@ The %{name}-doc package contains documentation files for %{name}.
 %global build_vars OPTCFLAGS='%{optflags}' OPTLDFLAGS="$RPM_LD_FLAGS"
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version} -p1
@@ -56,28 +53,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e s@-Werror@@ Makefile
 
 %build
+
 make %{?_smp_mflags} %{make_vars} %{build_vars}
 make %{?_smp_mflags} docs %{make_vars}
-
 %install
 make install DESTDIR=%{buildroot} %{make_vars}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
 %check
+
 make %{?_smp_mflags} test %{make_vars} %{build_vars}
-
-%files
-%doc README
-%license COPYING
-%{_libdir}/%{name}.so.*
-
-%files devel
-%{_includedir}/parserutils
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files doc
-%license COPYING
-%doc build/docs/html
+%files -f %{oreon_filedir}/main.list
+%files -n libparserutils-devel -f %{oreon_filedir}/libparserutils-devel.list
+%files -n libparserutils-doc -f %{oreon_filedir}/libparserutils-doc.list
 
 %changelog
+
 %autochangelog

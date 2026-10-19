@@ -1,59 +1,46 @@
-%global source0_hash none
-
+%global source0_hash 214c34c223d7e33ac966175365ef672d5133154784589416960333ce48a21265
 Name:           python-mkapi
 Version:        4.5.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        MkDocs plugin for automatic API documentation generation from Python docstrings
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/daizutabi/mkapi
-Source:         %{pypi_source mkapi}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mkapi/mkapi-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mkapi' generated automatically by pyp2spec.}
-
 Patch:          %{forgeurl}/commit/e0777398e7f5e285bf88fbd0b048f2eeb3d9ceaa.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-mkapi = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-mkapi
-Summary:        %{summary}
-
-%description -n python3-mkapi %_description
-
+Summary:        MkDocs plugin for automatic API documentation generation from Python docstrings
+# oreon:reqs
+Requires:       python3dist(astdoc) >= 1.3.0
+Requires:       python3dist(mkdocs) >= 1.6.0
+Requires:       python3dist(tomli) >= 1.1.0
+# /oreon:reqs
+%description -n python3-mkapi
 
 %prep
-%autosetup -p1 -n mkapi-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mkapi-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mkapi usr/lib/python3*/site-packages/mkapi* usr/lib64/python3*/site-packages/mkapi* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mkapi* usr/lib64/python3*/site-packages/mkapi* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mkapi -f %{pyproject_files}
+%files
+%files -n python3-mkapi -f %{oreon_filedir}/python3-mkapi.list
 
 %changelog
+
 %autochangelog

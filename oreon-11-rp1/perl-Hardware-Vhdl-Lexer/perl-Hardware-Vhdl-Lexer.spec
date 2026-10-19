@@ -1,39 +1,30 @@
 %global source0_hash d7ba36a9ea462e1acfddf2cb0531f225303a50dc0a144d06bd0130b23161e9c4
-
 Name:           perl-Hardware-Vhdl-Lexer
 Version:        1.00
-Release:        49%{?dist}
+Release:        1%{?dist}
 Summary:        Split VHDL code into lexical tokens
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
-
 URL:            https://metacpan.org/release/Hardware-Vhdl-Lexer
 Source0:        https://cpan.metacpan.org/authors/id/M/MY/MYKL/Hardware-Vhdl-Lexer-%{version}.tar.gz
-
 BuildArch:      noarch
-
+Requires:       perl(Readonly) >= 1.03
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Readonly\\)$
+# oreon:deps
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Class::Std)
-BuildRequires:  perl(Readonly) >= 1.03
-# Tests
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(Readonly)
 BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(Test::More)
-# Optional tests
-BuildRequires:  perl(Test::Pod) >= 1.14
-BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
-
-Requires:       perl(Readonly) >= 1.03
-
-# Filter under-specified dependencies
-%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Readonly\\)$
-
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(Test::Pod::Coverage)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Hardware::Vhdl::Lexer splits VHDL code into lexical tokens. To use it, you
 need to first create a lexer object, passing in something which will supply
@@ -43,6 +34,7 @@ token type code and the token (in list context). get_next_token returns
 undef when there are no more tokens to be read.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Hardware-Vhdl-Lexer-%{version}
@@ -65,20 +57,19 @@ touch -r lib/Hardware/Vhdl/Lexer.pm Lexer.pm;
 %{__mv} Lexer.pm lib/Hardware/Vhdl/Lexer.pm
 
 %build
+
 %{__perl} Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1
 make %{?_smp_mflags}
-
 %install
 make pure_install DESTDIR=$RPM_BUILD_ROOT
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%doc Changes README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

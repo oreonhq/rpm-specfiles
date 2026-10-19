@@ -1,5 +1,4 @@
-%global source0_hash afa7325ed5d602da29b3f5aa9f2f04af6331de72e659f0dde44186fda414927a
-
+%global source0_hash 15af5111ddbea7cd8b31ce7e4d7acdc18fe2afba2222b4ddbb585d30bfbe6b15
 Name:           jacoco
 Version:        0.8.15
 Release:        1%{?dist}
@@ -9,10 +8,9 @@ URL:            http://www.eclemma.org/jacoco/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 Source0:        https://github.com/jacoco/jacoco/archive/v%{version}/%{name}-%{version}.tar.gz
-# Adapt to maven-doxia 2.0.0
-# The deprecated org.codehaus.doxia.sink.Sink interface was removed
 Patch:          %{name}-maven-doxia-2.patch
-
+Requires:       javapackages-tools
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(args4j:args4j)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
@@ -27,10 +25,7 @@ BuildRequires:  mvn(org.ow2.asm:asm)
 BuildRequires:  mvn(org.ow2.asm:asm-analysis)
 BuildRequires:  mvn(org.ow2.asm:asm-commons)
 BuildRequires:  mvn(org.ow2.asm:asm-tree)
-
-# required by wrapper scripts
-Requires:       javapackages-tools
-
+# /oreon:deps
 %description
 JaCoCo is a free code coverage library for Java, 
 which has been created by the EclEmma team based on the lessons learned 
@@ -44,6 +39,7 @@ A Jacoco plugin for maven.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # -p1: strip one level dir in patch(es)
@@ -111,25 +107,18 @@ for x in `find | grep pom.xml$` ; do
 done
 
 %build
-%mvn_build -f -- -Dproject.build.sourceEncoding=UTF-8 -Dbuild.date=$(date +%Y/%m/%d)
 
+%mvn_build -f -- -Dproject.build.sourceEncoding=UTF-8 -Dbuild.date=$(date +%Y/%m/%d)
 %install
 %mvn_install
-
-# ant config
 mkdir -p %{buildroot}%{_sysconfdir}/ant.d
 echo %{name} %{name}/org.jacoco.ant objectweb-asm/asm > %{buildroot}%{_sysconfdir}/ant.d/%{name}
-
-# wrapper script
 %jpackage_script org.jacoco.cli.internal.Main "" "" jacoco/org.jacoco.cli:args4j:objectweb-asm:jacoco/org.jacoco.core:jacoco/org.jacoco.report jacococli true
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%config(noreplace) %{_sysconfdir}/ant.d/%{name}
-%doc README.md
-%license LICENSE.md
-%{_bindir}/jacococli
-
-%files maven-plugin -f .mfiles-maven-plugin
+%files -f %{oreon_filedir}/main.list
+%files -n jacoco-maven-plugin -f %{oreon_filedir}/jacoco-maven-plugin.list
 
 %changelog
+
 %autochangelog

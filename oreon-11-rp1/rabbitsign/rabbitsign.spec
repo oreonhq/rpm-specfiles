@@ -1,20 +1,17 @@
 %global source0_hash e83b56d296e5542bcd30f1a8051fe0a802a99606537c76e5e55684e47396b218
-
 Name:           rabbitsign
 Version:        2.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Digitally sign software for Texas Instruments calculators
-
-# src/md5.c is GPLv2+, the rest is GPLv3+
 License:        GPL-3.0-or-later AND GPL-2.0-or-later
 URL:            https://www.ticalc.org/archives/files/fileinfo/383/38392.html
 Source0:        https://www.ticalc.org/pub/unix/%{name}.tar.gz#/%{name}-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  gcc
-BuildRequires:  make
 BuildRequires:  gmp-devel
-
+BuildRequires:  make
+# /oreon:deps
 %description
 RabbitSign is a free implementation of the algorithms used to digitally sign
 software for the Texas Instruments TI-73, TI-83 Plus, TI-84 Plus, TI-89, TI-92
@@ -28,29 +25,24 @@ contents.  It also has the ability to re-sign applications that have been
 signed previously.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-make check
 
-%files
-%license COPYING
-%doc README
-%{_bindir}/packxxk
-%{_bindir}/rabbitsign
-%{_bindir}/rskeygen
-%{_mandir}/man1/packxxk.1*
-%{_mandir}/man1/rabbitsign.1*
-%{_mandir}/man1/rskeygen.1*
+make check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

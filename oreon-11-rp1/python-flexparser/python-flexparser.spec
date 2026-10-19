@@ -1,69 +1,50 @@
 %global source0_hash 266d98905595be2ccc5da964fe0a2c3526fbbffdc45b65b3146d75db992ef6b2
-
 Name:           python-flexparser
 Version:        0.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Parsing made fun … using typing
-
 License:        BSD-3-Clause
 URL:            https://github.com/hgrecco/flexparser
-Source:         %{pypi_source flexparser}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flexparser/flexparser-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  python3-devel
-
-# See requirements.test.txt. We list test dependencies manually since we do not
-# want pytest-cov
-# (https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters)
-# and the other pytest plugins are spurious
-# (https://github.com/hgrecco/flexparser/pull/10).
-BuildRequires:  %{py3_dist pytest}
-
 %global common_description %{expand:
 The idea is quite simple. You write a class for every type of content (called
 here ParsedStatement) you need to parse. Each class should have a from_string
 constructor. We used extensively the typing module to make the output structure
 easy to use and less error prone.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 3.4.3
+Requires:       python3-flexparser = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-flexparser
-Summary:        %{summary}
-
+Summary:        Parsing made fun … using typing
 %description -n python3-flexparser %{common_description}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n flexparser-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir flexparser-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l flexparser
-
-# Upstream probably doesn’t want to install flexparser.testsuite, but we don’t
-# know how to suggest a fix given “[BUG] options.packages.find.exclude not
-# taking effect when include_package_data = True”,
-# https://github.com/pypa/setuptools/issues/3260.
-#
-# Still, we don’t want to install the test suite, so we just remove the files
-# manually for now.
 rm -rvf '%{buildroot}%{python3_sitelib}/flexparser/testsuite'
 sed -r -i '/\/flexparser\/testsuite/d' %{pyproject_files}
+%oreon_autofiles python3-flexparser usr/lib/python3*/site-packages/flexparser* usr/lib64/python3*/site-packages/flexparser* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flexparser* usr/lib64/python3*/site-packages/flexparser* usr/bin/*
 
 %check
-%pytest
 
-%files -n python3-flexparser -f %{pyproject_files}
-%doc README.rst
-%doc CHANGES
+%pytest
+%files
+%files -n python3-flexparser -f %{oreon_filedir}/python3-flexparser.list
 
 %changelog
+
 %autochangelog

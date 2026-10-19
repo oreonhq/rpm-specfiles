@@ -1,18 +1,18 @@
-%global source0_hash 6c44ddcbe0e216559667b11ec836b74f33319d8f13c35f4b735f4734f79b6446
-
+%global source0_hash aa0a006c2dc6cb2de890a79971fbd5fda26a531a77addd1c6644c49e9f3ef4f5
 Name:           subnetcalc
 Version:        2.7.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        IPv4/IPv6 Subnet Calculator
 License:        GPL-3.0-or-later
 URL:            https://www.nntb.no/~dreibh/subnetcalc/
 Source0:        https://www.nntb.no/~dreibh/subnetcalc/download/%{name}-%{version}.tar.xz
-
-BuildRequires:  gcc gcc-c++
+# oreon:deps
 BuildRequires:  GeoIP-devel
 BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  gettext
-
+# /oreon:deps
 %description
 SubNetCalc is an IPv4/IPv6 subnet address calculator. For given IPv4 or IPv6 
 address and netmask or prefix length, it calculates network address, broadcast
@@ -23,23 +23,18 @@ interface ID, etc.).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc AUTHORS ChangeLog README.md
-%license COPYING
-%{_bindir}/subnetcalc
-%{_datadir}/bash-completion/completions/subnetcalc
-%{_mandir}/man1/subnetcalc.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

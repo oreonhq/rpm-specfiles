@@ -1,24 +1,19 @@
 %global source0_hash none
-
 Name:           mingw-nsiswrapper
 Version:        12
-Release:        9%{?dist}
+Release:        1%{?dist}
 Summary:        Helper program for making NSIS Windows installers
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://fedoraproject.org/wiki/MinGW
-
 Source0:        nsiswrapper.pl
 Source1:        README
 Source2:        COPYING
-
 BuildArch:      noarch
-
-BuildRequires:  perl-interpreter
+# oreon:deps
 BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
 BuildRequires:  perl-podlators
-
+# /oreon:deps
 %description
 NSISWrapper is a helper program for making Windows installers,
 particularly when you are cross-compiling from Unix.
@@ -32,7 +27,6 @@ Summary:        Helper program for making NSIS Windows installers
 Requires:       mingw32-binutils
 Requires:       mingw32-crt
 Requires:       mingw32-nsis
-
 %description -n mingw32-nsiswrapper
 NSISWrapper is a helper program for making Windows installers,
 particularly when you are cross-compiling from Unix.
@@ -42,33 +36,29 @@ installers.  This wrapper simply makes it easier to generate the
 installer script that NSIS needs.
 
 %prep
+
 # empty
 
 %build
-# empty
 
 %check
-perl -Tc %{SOURCE0}
 
+perl -Tc %{SOURCE0}
 %install
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 install -m 0755 %{SOURCE0} $RPM_BUILD_ROOT%{_bindir}/nsiswrapper
-
-# Install documentation (manually).
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}
 install -m 0644 %{SOURCE1} %{SOURCE2} \
   $RPM_BUILD_ROOT%{_docdir}/%{name}
-
-# Build the manpage from the source.
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 pod2man -c "NSIS" -r "%{name}-%{version}" %{SOURCE0} \
   > $RPM_BUILD_ROOT%{_mandir}/man1/nsiswrapper.1
+%oreon_autofiles mingw32-nsiswrapper usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n mingw32-nsiswrapper
-%doc %{_docdir}/%{name}/COPYING
-%doc %{_docdir}/%{name}/README
-%{_bindir}/nsiswrapper
-%{_mandir}/man1/nsiswrapper.1*
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-nsiswrapper -f %{oreon_filedir}/mingw32-nsiswrapper.list
 
 %changelog
+
 %autochangelog

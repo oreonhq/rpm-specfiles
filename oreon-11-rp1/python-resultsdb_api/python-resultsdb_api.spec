@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash f50197605b0f04ae92ee0945a106f1f31e4ab3ca87316de561e313bc3b1db1ed
 Name:           python-resultsdb-api
 Version:        2.1.6
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Library for simplifying the communication with ResultsDB
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://pagure.io/taskotron/resultsdb_api
-Source:         %{pypi_source resultsdb_api}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/resultsdb_api/resultsdb_api-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'resultsdb-api' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 40.6.0
+Requires:       python3-resultsdb-api = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-resultsdb-api
-Summary:        %{summary}
-
-%description -n python3-resultsdb-api %_description
-
+Summary:        Library for simplifying the communication with ResultsDB
+%description -n python3-resultsdb-api
 
 %prep
-%autosetup -p1 -n resultsdb_api-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir resultsdb_api-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-resultsdb-api usr/lib/python3*/site-packages/resultsdb_api* usr/lib64/python3*/site-packages/resultsdb_api* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/resultsdb_api* usr/lib64/python3*/site-packages/resultsdb_api* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-resultsdb-api -f %{pyproject_files}
+%files
+%files -n python3-resultsdb-api -f %{oreon_filedir}/python3-resultsdb-api.list
 
 %changelog
+
 %autochangelog

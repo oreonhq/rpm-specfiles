@@ -1,59 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 64f60f7a0d15c85876b76b5f79246ed8c27bf5f79e5753ec88287145884661ab
 Name:           python-ifcfg
 Version:        0.24
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python ifconfig wrapper for Unix/Linux/MacOSX + ipconfig for Windows
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ftao/python-ifcfg
-Source:         %{pypi_source ifcfg}
-
+Source0:        https://files.pythonhosted.org/packages/source/i/ifcfg/ifcfg-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ifcfg' generated automatically by pyp2spec.}
-
 Patch0:         %{name}-0.21-drop-nose.patch
 Patch1:         %{name}-rm-python-mock-usage.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-ifcfg = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ifcfg
-Summary:        %{summary}
-
-%description -n python3-ifcfg %_description
-
+Summary:        Python ifconfig wrapper for Unix/Linux/MacOSX + ipconfig for Windows
+%description -n python3-ifcfg
 
 %prep
-%autosetup -p1 -n ifcfg-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ifcfg-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ifcfg usr/lib/python3*/site-packages/ifcfg* usr/lib64/python3*/site-packages/ifcfg* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ifcfg* usr/lib64/python3*/site-packages/ifcfg* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ifcfg -f %{pyproject_files}
+%files
+%files -n python3-ifcfg -f %{oreon_filedir}/python3-ifcfg.list
 
 %changelog
+
 %autochangelog

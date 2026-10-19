@@ -1,41 +1,37 @@
 %global source0_hash 3c6daa671fecfbc35f92a9385b563d65f50dfc6bdc8b4805f9ef46c0d035a926
-
 Name:           perl-Bit-Vector
 Version:        7.4
-Release:        40%{?dist}
+Release:        1%{?dist}
 Summary:        Efficient bit vector, set of integers and "big int" math library
-# Outdated FSF address reported, rt#85827
-# Clarified by a private mail from the author:
 License:        ( GPL-2.0-or-later OR Artistic-1.0-Perl ) AND LGPL-2.0-or-later
 URL:            https://metacpan.org/release/Bit-Vector
 Source0:        https://cpan.metacpan.org/authors/id/S/ST/STBEY/Bit-Vector-%{version}.tar.gz
 Patch0:         0001-Fix-bool-detection.patch
+Requires:       perl(Carp::Clan) >= 5.3
+Requires:       perl(Storable) >= 2.21
+%{?perl_default_filter}
+%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(Bit::Vector\\)$
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Carp::Clan\\)\s*$
+Provides:       perl(Bit::Vector)
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Carp::Clan) >= 5.3
+BuildRequires:  perl(Carp::Clan)
 BuildRequires:  perl(Config)
 BuildRequires:  perl(DynaLoader)
 BuildRequires:  perl(Exporter)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Storable)
 BuildRequires:  perl(integer)
 BuildRequires:  perl(overload)
-BuildRequires:  perl(Storable) >= 2.21
 BuildRequires:  perl(strict)
 BuildRequires:  perl(vars)
-Requires:       perl(Carp::Clan) >= 5.3
-Requires:       perl(Storable) >= 2.21
-
-%{?perl_default_filter}
-
-%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(Bit::Vector\\)$
-%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Carp::Clan\\)\s*$
-
-Provides:       perl(Bit::Vector)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Bit::Vector is an efficient C library which allows you to handle bit
 vectors, sets (of integers), "big integer arithmetic" and boolean
@@ -49,12 +45,12 @@ widespread use of divide-and-conquer algorithms.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Bit-Vector-%{version} 
 %patch -P0 -p1
@@ -69,20 +65,17 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}" \
   NO_PERLLOCAL=1 NO_PACKLIST=1
 %{make_build}
-
 %install
 %{make_install}
 find %{buildroot} -type f -name '*.bs' -a -size 0 -delete
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
 DIR=$(mktemp -d)
 pushd "$DIR"
@@ -92,21 +85,16 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%license Artistic.txt GNU_GPL.txt GNU_LGPL.txt
-%doc CHANGES.txt CREDITS.txt README.txt examples/
-%{perl_vendorarch}/Bit/
-%{perl_vendorarch}/auto/Bit/
-%{_mandir}/man3/*.3*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Bit-Vector-tests -f %{oreon_filedir}/perl-Bit-Vector-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.4-40
 - Prepare for Oreon 11 (RP1)

@@ -1,62 +1,97 @@
-%global source0_hash none
-
+%global source0_hash cebb93773d334f778e023a7ee352a8d6e13ab1bd3b863a4d4a59dec897df43ac
 Name:           python-docker
 Version:        7.2.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Python library for the Docker Engine API.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/docker/docker-py
-Source:         %{pypi_source docker}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/docker/docker-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-docker = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-docker+ssh
+Summary:        Metapackage for python3-docker ssh extras
+Requires:       python3-docker = %{version}-%{release}
+Requires:       python3dist(paramiko) >= 2.4.3
+Provides:       python3dist(docker[ssh]) = %{version}-%{release}
 
+%description -n python3-docker+ssh
+Metapackage for python3-docker ssh extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'docker' generated automatically by pyp2spec.}
+%package -n       python3-docker+tls
+Summary:        Metapackage for python3-docker tls extras
+Requires:       python3-docker = %{version}-%{release}
+Provides:       python3dist(docker[tls]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-docker+tls
+Metapackage for python3-docker tls extras.
+
+%package -n       python3-docker+websockets
+Summary:        Metapackage for python3-docker websockets extras
+Requires:       python3-docker = %{version}-%{release}
+Requires:       python3dist(websocket-client) >= 1.3.0
+Provides:       python3dist(docker[websockets]) = %{version}-%{release}
+
+%description -n python3-docker+websockets
+Metapackage for python3-docker websockets extras.
+
+%package -n       python3-docker+docs
+Summary:        Metapackage for python3-docker docs extras
+Requires:       python3-docker = %{version}-%{release}
+Requires:       python3dist(myst-parser) == 0.18.0
+Requires:       python3dist(sphinx) == 5.1.1
+Provides:       python3dist(docker[docs]) = %{version}-%{release}
+
+%description -n python3-docker+docs
+Metapackage for python3-docker docs extras.
+
+%package -n       python3-docker+dev
+Summary:        Metapackage for python3-docker dev extras
+Requires:       python3-docker = %{version}-%{release}
+Requires:       python3dist(coverage) == 7.2.7
+Requires:       python3dist(pytest) == 7.4.2
+Requires:       python3dist(pytest-cov) == 4.1.0
+Requires:       python3dist(pytest-timeout) == 2.1.0
+Requires:       python3dist(ruff) == 0.1.8
+Provides:       python3dist(docker[dev]) = %{version}-%{release}
+
+%description -n python3-docker+dev
+Metapackage for python3-docker dev extras.
+
+%description
 
 %package -n     python3-docker
-Summary:        %{summary}
-
-%description -n python3-docker %_description
+Summary:        A Python library for the Docker Engine API.
+# oreon:reqs
+Requires:       python3dist(pywin32) >= 304
+Requires:       python3dist(requests) >= 2.26.0
+Requires:       python3dist(urllib3) >= 1.26.0
+# /oreon:reqs
+%description -n python3-docker
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-docker dev,docs,ssh,tls,websockets
-
 
 %prep
-%autosetup -p1 -n docker-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir docker-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-docker usr/lib/python3*/site-packages/docker* usr/lib64/python3*/site-packages/docker* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/docker* usr/lib64/python3*/site-packages/docker* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-docker -f %{pyproject_files}
+%files
+%files -n python3-docker -f %{oreon_filedir}/python3-docker.list
 
 %changelog
+
 %autochangelog

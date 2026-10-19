@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash a969a4516b194895de72c875ece355f17c0d272146f7fda346ef74f93cf4d5ba
 Name:           python-aenum
 Version:        3.1.17
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Advanced Enumerations _compatible with Python_s stdlib Enum_, NamedTuples, and NamedConstants
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ethanfurman/aenum
-Source:         %{pypi_source aenum}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aenum/aenum-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aenum' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-aenum = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-aenum
-Summary:        %{summary}
-
-%description -n python3-aenum %_description
-
+Summary:        Advanced Enumerations _compatible with Python_s stdlib Enum_, NamedTuples, and NamedConstants
+%description -n python3-aenum
 
 %prep
-%autosetup -p1 -n aenum-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aenum-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aenum usr/lib/python3*/site-packages/aenum* usr/lib64/python3*/site-packages/aenum* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aenum* usr/lib64/python3*/site-packages/aenum* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aenum -f %{pyproject_files}
+%files
+%files -n python3-aenum -f %{oreon_filedir}/python3-aenum.list
 
 %changelog
+
 %autochangelog

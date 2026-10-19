@@ -1,41 +1,27 @@
 %global source0_hash 9c6fc5859a203f0a6dd8ce2038fea85b7bac44b1baff5c4cf73643229fafa641
-
 Name:           pasystray
 Version:        0.8.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        PulseAudio system tray
 License:        LGPL-2.1-or-later
 URL:            https://github.com/christophgysin/pasystray
-
 Source0:        https://github.com/christophgysin/pasystray/archive/%{version}/%{name}-%{version}.tar.gz
-# Fix build with GCC 15
-# https://github.com/christophgysin/pasystray/pull/183
 Patch:          pasystray-0.8.2-gcc15.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=1471192
-# https://bugzilla.redhat.com/show_bug.cgi?id=2035305
 Patch:          pasystray-0.8.0-wayland.patch
-
-BuildRequires:  gcc
-BuildRequires:  make
+# oreon:deps
 BuildRequires:  automake
-BuildRequires:  pkgconfig(libpulse)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  pkgconfig(appindicator3-0.1)
 BuildRequires:  pkgconfig(avahi-client)
 BuildRequires:  pkgconfig(avahi-glib)
-BuildRequires:  pkgconfig(libnotify)
-BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(gtk+-3.0)
-BuildRequires:  pkgconfig(appindicator3-0.1)
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-
-%if 0%{?fedora}
-Recommends:     paman
-Recommends:     pavucontrol
-Recommends:     pavumeter
-#Recommends:     paprefs
-#Recommends:     pulseaudio-qpaeq
-%endif
-
+BuildRequires:  pkgconfig(libnotify)
+BuildRequires:  pkgconfig(libpulse)
+BuildRequires:  pkgconfig(x11)
+# /oreon:deps
 %description
 A replacement for the deprecated padevchooser.
 pasystray allows setting the default PulseAudio source/sink and moving streams
@@ -43,19 +29,15 @@ on the fly between sources/sinks without restarting the client applications.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 autoreconf -i
 %configure
 %make_build
-
 %install
 %make_install
-
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
-
 mkdir -p %{buildroot}%{_metainfodir}
 cat > %{buildroot}%{_metainfodir}/%{name}.metainfo.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -82,20 +64,11 @@ cat > %{buildroot}%{_metainfodir}/%{name}.metainfo.xml <<EOF
   </releases>
 </component>
 EOF
-
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
+%oreon_autofiles main
 
-%files
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%{_datadir}/pixmaps/%{name}.png
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_metainfodir}/%{name}.metainfo.xml
-%config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
-%{_mandir}/man1/%{name}.1*
-%license LICENSE
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

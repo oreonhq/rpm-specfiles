@@ -1,21 +1,15 @@
-%global source0_hash e3ac2b2533f2efd62110937e3124a3f9df17433a529f782481185b7e4c55570b
-
+%global source0_hash 389e57e143b19082c9ba8ede4849f3d5ead5c0f3908e4ee9e56849215995e724
 %bcond check 0
-# F43FailsToInstall: python3-pysaml2
-# https://bugzilla.redhat.com/show_bug.cgi?id=2372073
 %bcond saml2 0
-
 Name:       matrix-synapse
 Version:    1.161.0
-Release:    %autorelease
-Summary:    A Matrix reference homeserver written in Python using Twisted
+Release:        1%{?dist}
+Summary:        A Matrix reference homeserver written in Python using Twisted
 License:    AGPL-3.0-or-later
 URL:        https://github.com/element-hq/synapse
-
 %global upstream_tag v%{lua:return(rpm.expand("%{version}"):gsub("~",""))}
 %global archive_tag %{lua:return(rpm.expand("%{version}"):gsub("~",""))}
-
-Source0:    %{url}/archive/%{upstream_tag}/synapse-%{version}.tar.gz
+Source0:        https://github.com/element-hq/synapse/archive/v%{version}/synapse-%{version}.tar.gz
 Source1:    synapse.sysconfig
 Source2:    synapse.service
 Source3:    matrix-synapse.sysusers
@@ -23,24 +17,152 @@ Patch1:     0001-pyo3-Disable-abi3-feature.patch
 Patch2:     0002-Build-RustExtension-with-debug-symbols.patch
 Patch3:     0003-Remove-icu_segmenter.patch
 ExclusiveArch:  %{rust_arches}
-
 Recommends:     %{name}+postgres
 Recommends:     %{name}+systemd
 Recommends:     %{name}+user-search
-
-BuildRequires:  jq
-BuildRequires:  python3-devel
-BuildRequires:  cargo-rpm-macros >= 24
-BuildRequires:  /usr/bin/openssl
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  tomcli
 %if %{with saml2}
-BuildRequires:  python3-pysaml2
 %endif
-
 %if %{without saml2}
 Obsoletes:      %{name}+saml2 < 1.136.0-2
 %endif
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(maturin) < 2.0
+BuildRequires:  python3dist(maturin) >= 1.0
+Requires:       python3-matrix-synapse = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-matrix-synapse+matrix-synapse-ldap3
+Summary:        Metapackage for python3-matrix-synapse matrix-synapse-ldap3 extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(matrix-synapse-ldap3) >= 0.1
+Provides:       python3dist(matrix-synapse[matrix-synapse-ldap3]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+matrix-synapse-ldap3
+Metapackage for python3-matrix-synapse matrix-synapse-ldap3 extras.
+
+%package -n       python3-matrix-synapse+postgres
+Summary:        Metapackage for python3-matrix-synapse postgres extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(psycopg2) >= 2.8
+Requires:       python3dist(psycopg2cffi) >= 2.8
+Requires:       python3dist(psycopg2cffi-compat) == 1.1
+Provides:       python3dist(matrix-synapse[postgres]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+postgres
+Metapackage for python3-matrix-synapse postgres extras.
+
+%package -n       python3-matrix-synapse+saml2
+Summary:        Metapackage for python3-matrix-synapse saml2 extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(pysaml2) >= 4.5.0
+Requires:       python3dist(defusedxml) >= 0.7.1
+Requires:       python3dist(pytz) >= 2018.3
+Provides:       python3dist(matrix-synapse[saml2]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+saml2
+Metapackage for python3-matrix-synapse saml2 extras.
+
+%package -n       python3-matrix-synapse+oidc
+Summary:        Metapackage for python3-matrix-synapse oidc extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(authlib) >= 0.15.1
+Provides:       python3dist(matrix-synapse[oidc]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+oidc
+Metapackage for python3-matrix-synapse oidc extras.
+
+%package -n       python3-matrix-synapse+url-preview
+Summary:        Metapackage for python3-matrix-synapse url-preview extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(lxml) >= 4.6.3
+Provides:       python3dist(matrix-synapse[url-preview]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+url-preview
+Metapackage for python3-matrix-synapse url-preview extras.
+
+%package -n       python3-matrix-synapse+sentry
+Summary:        Metapackage for python3-matrix-synapse sentry extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(sentry-sdk) >= 0.7.2
+Provides:       python3dist(matrix-synapse[sentry]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+sentry
+Metapackage for python3-matrix-synapse sentry extras.
+
+%package -n       python3-matrix-synapse+opentracing
+Summary:        Metapackage for python3-matrix-synapse opentracing extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(jaeger-client) >= 4.2.0
+Requires:       python3dist(opentracing) >= 2.2.0
+Requires:       python3dist(thrift) >= 0.10
+Requires:       python3dist(tornado) >= 6.0
+Provides:       python3dist(matrix-synapse[opentracing]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+opentracing
+Metapackage for python3-matrix-synapse opentracing extras.
+
+%package -n       python3-matrix-synapse+jwt
+Summary:        Metapackage for python3-matrix-synapse jwt extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Provides:       python3dist(matrix-synapse[jwt]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+jwt
+Metapackage for python3-matrix-synapse jwt extras.
+
+%package -n       python3-matrix-synapse+redis
+Summary:        Metapackage for python3-matrix-synapse redis extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(txredisapi) >= 1.4.7
+Requires:       python3dist(hiredis) >= 0.3
+Provides:       python3dist(matrix-synapse[redis]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+redis
+Metapackage for python3-matrix-synapse redis extras.
+
+%package -n       python3-matrix-synapse+cache-memory
+Summary:        Metapackage for python3-matrix-synapse cache-memory extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(pympler) >= 1.0
+Provides:       python3dist(matrix-synapse[cache-memory]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+cache-memory
+Metapackage for python3-matrix-synapse cache-memory extras.
+
+%package -n       python3-matrix-synapse+test
+Summary:        Metapackage for python3-matrix-synapse test extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(parameterized) >= 0.9.0
+Requires:       python3dist(idna) >= 3.3
+Provides:       python3dist(matrix-synapse[test]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+test
+Metapackage for python3-matrix-synapse test extras.
+
+%package -n       python3-matrix-synapse+all
+Summary:        Metapackage for python3-matrix-synapse all extras
+Requires:       python3-matrix-synapse = %{version}-%{release}
+Requires:       python3dist(matrix-synapse-ldap3) >= 0.1
+Requires:       python3dist(psycopg2) >= 2.8
+Requires:       python3dist(psycopg2cffi) >= 2.8
+Requires:       python3dist(psycopg2cffi-compat) == 1.1
+Requires:       python3dist(pysaml2) >= 4.5.0
+Requires:       python3dist(authlib) >= 0.15.1
+Requires:       python3dist(lxml) >= 4.6.3
+Requires:       python3dist(sentry-sdk) >= 0.7.2
+Requires:       python3dist(jaeger-client) >= 4.2.0
+Requires:       python3dist(opentracing) >= 2.2.0
+Requires:       python3dist(txredisapi) >= 1.4.7
+Requires:       python3dist(hiredis) >= 0.3
+Requires:       python3dist(pympler) >= 1.0
+Requires:       python3dist(defusedxml) >= 0.7.1
+Requires:       python3dist(pytz) >= 2018.3
+Requires:       python3dist(thrift) >= 0.10
+Requires:       python3dist(tornado) >= 6.0
+Provides:       python3dist(matrix-synapse[all]) = %{version}-%{release}
+
+%description -n python3-matrix-synapse+all
+Metapackage for python3-matrix-synapse all extras.
 
 %description
 Matrix is an ambitious new ecosystem for open federated Instant Messaging and
@@ -50,9 +172,8 @@ to showcase the concept of Matrix and let folks see the spec in the context of
 a coded base and let you run your own homeserver and generally help bootstrap
 the ecosystem.
 
-%pyproject_extras_subpkg -n %{name} matrix-synapse-ldap3 postgres %{?with_saml2:saml2} oidc systemd url_preview sentry jwt cache_memory user-search
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n synapse-%{archive_tag}
@@ -65,36 +186,23 @@ echo "$(tomcli get pyproject.toml build-system.requires -F json |
   jq '.[] |= sub("(,<=.*).*"; "") | .[]' -r)" |
   xargs -r -x tomcli set pyproject.toml lists str build-system.requires
 
-%cargo_prep
-
-%generate_buildrequires
-cd rust
-%cargo_generate_buildrequires
-cd ..
-
-# Missing: opentracing,redis
-%pyproject_buildrequires -x test,matrix-synapse-ldap3,postgres%{?with_saml2:,saml2},oidc,systemd,url-preview,sentry,jwt,cache-memory,user-search
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
 %py3_shebang_fix %{buildroot}%{python3_sitearch}/synapse/_scripts
-%pyproject_save_files synapse
-
 install -p -D -T -m 0644 contrib/systemd/log_config.yaml %{buildroot}%{_sysconfdir}/synapse/log_config.yaml
 install -p -D -T -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/sysconfig/synapse
 install -p -D -T -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/synapse.service
 install -p -d -m 755 %{buildroot}%{_sharedstatedir}/synapse
 install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/%{name}.conf
-
+%oreon_autofiles main
 %if %{with check}
 %check
+
 set -o pipefail
 PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib}:$PWD trial-3 %{!?fc41:%_smp_mflags} tests | tee trial.stdout
-
-# Guard against new types of tests being skipped.
 WHITELIST="Requires hiredis
 Requires jaeger_client
 Requires Postgres
@@ -111,39 +219,18 @@ if [ ! -z "$SKIPPED" ]; then
   echo -e "Failing, because tests were skipped:\n$SKIPPED"
   exit 1
 fi
-
 %endif
-
 %post
+
 %systemd_post synapse.service
-
 %preun
+
 %systemd_preun synapse.service
-
 %postun
-%systemd_postun_with_restart synapse.service
 
-%files -f %{pyproject_files}
-%license LICENSE-AGPL-3.0
-%doc *.rst
-%config(noreplace) %{_sysconfdir}/sysconfig/synapse
-%{_bindir}/export_signing_key
-%{_bindir}/generate_config
-%{_bindir}/generate_log_config
-%{_bindir}/generate_signing_key
-%{_bindir}/hash_password
-%{_bindir}/register_new_matrix_user
-%{_bindir}/synapse_homeserver
-%{_bindir}/synapse_port_db
-%{_bindir}/synapse_review_recent_signups
-%{_bindir}/synapse_worker
-%{_bindir}/synctl
-%{_bindir}/update_synapse_database
-%{_unitdir}/synapse.service
-%attr(755,synapse,synapse) %dir %{_sharedstatedir}/synapse
-%attr(755,synapse,synapse) %dir %{_sysconfdir}/synapse
-%attr(644,synapse,synapse) %config(noreplace) %{_sysconfdir}/synapse/log_config.yaml
-%{_sysusersdir}/%{name}.conf
+%systemd_postun_with_restart synapse.service
+%files
 
 %changelog
+
 %autochangelog

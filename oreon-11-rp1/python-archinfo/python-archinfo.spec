@@ -1,62 +1,53 @@
-%global source0_hash none
-
+%global source0_hash 8e0006c77e42266f5bd719b7c1ad5116ed60f018c996bd11c1fe89363eb43e3c
 Name:           python-archinfo
 Version:        10.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Classes with architecture-specific information useful to other projects.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://api.angr.io/projects/archinfo/en/latest/
-Source:         %{pypi_source archinfo}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/archinfo/archinfo-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77.0.0
+Requires:       python3-archinfo = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-archinfo+pcode
+Summary:        Metapackage for python3-archinfo pcode extras
+Requires:       python3-archinfo = %{version}-%{release}
+Requires:       python3dist(pypcode) >= 4.0
+Provides:       python3dist(archinfo[pcode]) = %{version}-%{release}
 
+%description -n python3-archinfo+pcode
+Metapackage for python3-archinfo pcode extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'archinfo' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-archinfo
-Summary:        %{summary}
-
-%description -n python3-archinfo %_description
+Summary:        Classes with architecture-specific information useful to other projects.
+%description -n python3-archinfo
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-archinfo pcode
-
 
 %prep
-%autosetup -p1 -n archinfo-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir archinfo-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-archinfo usr/lib/python3*/site-packages/archinfo* usr/lib64/python3*/site-packages/archinfo* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/archinfo* usr/lib64/python3*/site-packages/archinfo* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-archinfo -f %{pyproject_files}
+%files
+%files -n python3-archinfo -f %{oreon_filedir}/python3-archinfo.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash a2ac998657e3f3b9ca928757b4906add2c05390c5fc14ed792bb9028d08547b1
 Name:           python-timeslot
 Version:        0.1.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Data type for representing time slots with a start and end.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/ErikBjare/timeslot
-Source:         %{pypi_source timeslot}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/timeslot/timeslot-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'timeslot' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-timeslot = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-timeslot
-Summary:        %{summary}
-
-%description -n python3-timeslot %_description
-
+Summary:        Data type for representing time slots with a start and end.
+%description -n python3-timeslot
 
 %prep
-%autosetup -p1 -n timeslot-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir timeslot-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-timeslot usr/lib/python3*/site-packages/timeslot* usr/lib64/python3*/site-packages/timeslot* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/timeslot* usr/lib64/python3*/site-packages/timeslot* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-timeslot -f %{pyproject_files}
+%files
+%files -n python3-timeslot -f %{oreon_filedir}/python3-timeslot.list
 
 %changelog
+
 %autochangelog

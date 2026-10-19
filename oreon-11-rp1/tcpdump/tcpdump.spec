@@ -1,36 +1,35 @@
+%global source2_hash ed5e161b26b612abc4fa3a09cf0ac33c55a6a1e7e561f0b2a090e6168464d799
 %global source0_hash 39675dfa06fb0e99be8da5d4a1784acbaab58ae0870231d956ff7870cb99eec1
 %global source1_hash 082967d6bf793499d3d655cea2149e07c0da97287f1877a6eab88d17cb703d0d
-
 %define tcpslice_dir tcpslice-1.8
-
-Summary: A network traffic monitoring tool
+Summary:        A network traffic monitoring tool
 Name: tcpdump
 Epoch: 14
 Version: 4.99.7
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND BSD-4-Clause-UC AND ISC AND NTP
 URL: http://www.tcpdump.org
-BuildRequires: make
-BuildRequires: automake openssl-devel libpcap-devel git-core gcc
-BuildRequires: systemd-rpm-macros
-
 Source0:        http://www.tcpdump.org/release/tcpdump-%{version}.tar.xz
 Source1:        https://www.tcpdump.org/release/tcpslice-1.8.tar.gz
 Source2:        http://www.tcpdump.org/release/tcpdump-%{version}.tar.xz.sig
 Source3: tcpdump-sysusers.conf
-
 Patch0002:      0002-Use-getnameinfo-instead-of-gethostbyaddr.patch
 Patch0003:      0003-Drop-root-priviledges-before-opening-first-savefile-.patch
 Patch0007:      0007-Introduce-nn-option.patch
 Patch0009:      0009-Change-n-flag-to-nn-in-TESTonce.patch
-
 %if "%{_sbindir}" == "%{_bindir}"
-# Compat symlinks for Requires in other packages.
-# We rely on filesystem to create the symlinks for us.
 Requires:       filesystem(unmerged-sbin-symlinks)
 Provides:       /usr/sbin/tcpdump
 %endif
-
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  git-core
+BuildRequires:  libpcap-devel
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Tcpdump is a command-line tool for monitoring network traffic.
 Tcpdump can capture and display the packet headers on a particular
@@ -42,53 +41,38 @@ Install tcpdump if you need a program to monitor network traffic.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%autosetup -a 1 -S git
-
+%oreon_prep
 %build
-export CFLAGS="$RPM_OPT_FLAGS $(getconf LFS_CFLAGS) -fno-strict-aliasing -DGUESS_TSO"
 
+export CFLAGS="$RPM_OPT_FLAGS $(getconf LFS_CFLAGS) -fno-strict-aliasing -DGUESS_TSO"
 pushd %{tcpslice_dir}
-# update config.{guess,sub}
 automake -a -f 2> /dev/null || :
 ./autogen.sh
 %configure
 %{make_build}
 popd
-
 %configure --with-crypto --with-user=tcpdump --without-smi
 %{make_build}
-
 %check
-make check
 
+make check
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{_libdir}
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man8
 mkdir -p ${RPM_BUILD_ROOT}%{_sbindir}
-
 pushd %{tcpslice_dir}
 install -m755 tcpslice ${RPM_BUILD_ROOT}%{_sbindir}
 install -m644 tcpslice.1 ${RPM_BUILD_ROOT}%{_mandir}/man8/tcpslice.8
 popd
-
 install -m755 tcpdump ${RPM_BUILD_ROOT}%{_sbindir}
 install -m644 tcpdump.1 ${RPM_BUILD_ROOT}%{_mandir}/man8/tcpdump.8
-
 install -p -D -m 0644 %{SOURCE3} ${RPM_BUILD_ROOT}%{_sysusersdir}/tcpdump.conf
-
-# fix section numbers
 sed -i 's/\(\.TH[a-zA-Z ]*\)[1-9]\(.*\)/\18\2/' \
 	${RPM_BUILD_ROOT}%{_mandir}/man8/*
+%oreon_autofiles main
 
-
-%files
-%license LICENSE
-%doc README.md CHANGES CREDITS
-%{_sbindir}/tcpdump
-%{_sbindir}/tcpslice
-%{_sysusersdir}/tcpdump.conf
-%{_mandir}/man8/tcpslice.8*
-%{_mandir}/man8/tcpdump.8*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

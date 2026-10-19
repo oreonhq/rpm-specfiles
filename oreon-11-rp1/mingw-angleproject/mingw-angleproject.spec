@@ -1,50 +1,25 @@
+%global source4_hash a56f1b5f1dacfcfcac75a4ab20c994b159ba236331c2b8b31b12890fbc19926f
+%global source3_hash 61ee9acf1060f78f99019c1fad894814466fe343e5389017057cfcf215a6f196
+%global source2_hash 24ebdb581f5a9fa353e505ea78001f619c3535946d27ec01c867390daddbc9c8
+%global source1_hash 2af8db2ca9e8dc8da8396105b8dd6b82e7901bc72cc2f48fc5cf69dea45409e8
 %global source0_hash 05c81167ea9e77ad6899b8464b3ce52526a647bf4cc503eb2ff92da48bcd3214
-
 %{?mingw_package_header}
-
-# The reference qt5-qtbase version: qt5 angle modifications from this qt5-qtbase version are used
 %global qtrefver 5.15.2
-
-# qt5-qtbase-5.15.2 uses ANGLE chromium/3280:
-# https://chromium.googlesource.com/angle/angle/+/chromium/3280
 %global commit 57ea533f79a7a30224ea641785cbd7a9485d33ed
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapshot_rev_short %(echo %snapshot_rev | cut -c1-6)
-
 Name:           mingw-angleproject
 Version:        3280
-Release:        16.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Almost Native Graphics Layer Engine
-
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://chromium.googlesource.com/angle/angle
 BuildArch:      noarch
-
-# commit=%%commit
-# shortcommit=$(echo ${commit:0:7})
-# git clone https://chromium.googlesource.com/angle/angle
-# (cd angle && git archive --format=tar --prefix=angle-$shortcommit/ $commit | gzip > ../angle-$shortcommit.tar.gz)
 Source0:        https://github.com/google/angle/archive/%{commit}.tar.gz#/angle-%{shortcommit}.tar.gz
-# Additional source files taken from Qt5
 Source1:        https://github.com/qt/qtbase/raw/v%{qtrefver}/src/3rdparty/angle/src/libGLESv2/libGLESv2_mingw32.def
 Source2:        https://github.com/qt/qtbase/raw/v%{qtrefver}/src/3rdparty/angle/src/libGLESv2/libGLESv2.def
 Source3:        https://github.com/qt/qtbase/raw/v%{qtrefver}/src/3rdparty/angle/src/libEGL/libEGL_mingw32.def
 Source4:        https://github.com/qt/qtbase/raw/v%{qtrefver}/src/3rdparty/angle/src/libEGL/libEGL.def
-
-BuildRequires:  gyp
-BuildRequires:  libtool
-BuildRequires:  make
-BuildRequires:  python3
-
-BuildRequires:  mingw32-filesystem >= 95
-BuildRequires:  mingw32-gcc-c++
-
-BuildRequires:  mingw64-filesystem >= 95
-BuildRequires:  mingw64-gcc-c++
-
-# Patches taken from Qt5
-# https://github.com/qt/qtbase/tree/v%%{qtrefver}/src/angle/patches
 Patch0:         0001-ANGLE-Use-pixel-sizes-in-the-XAML-swap-chain.patch
 Patch1:         0001-Fix-build-for-MinGW.patch
 Patch2:         0002-ANGLE-Add-support-for-querying-platform-device.patch
@@ -65,25 +40,22 @@ Patch16:        0015-ANGLE-Invalidate-client-window-area-when-resizing-sw.patch
 Patch17:        0016-ANGLE-Fix-severe-performance-regression.patch
 Patch18:        0017-ANGLE-Fix-resizing-of-windows-Take-2.patch
 Patch19:        0018-ANGLE-d3d11-Do-not-register-windows-message-hooks-fo.patch
-
-# Make sure an import library is created and the .def file is used when linking, add missing link libraries
 Patch100:       angle_libs.patch
-
-# Fix GLsizeiptr and GLintptr typedefs to match those defined in qopenglext.h
 Patch101:       angle_ptrdiff.patch
-
-# Ensure versioned python is invoked
 Patch102:       angle_python3.patch
-
-# Don't build vulkan support
 Patch103:       angle_novulkan.patch
-
-# Fix gcc11 build
 Patch104:       angle_gcc11.patch
-
-# Fix gcc13 build
 Patch105:       angle_gcc13.patch
-
+# oreon:deps
+BuildRequires:  gyp
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc-c++
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc-c++
+BuildRequires:  python3
+# /oreon:deps
 %description
 ANGLE is a conformant implementation of the OpenGL ES 2.0 specification that
 is hardware‐accelerated via Direct3D. ANGLE v1.0.772 was certified compliant
@@ -110,7 +82,6 @@ for native GLES2 platforms.
 # Win32
 %package -n mingw32-angleproject
 Summary:        Almost Native Graphics Layer Engine for Win32
-
 %description -n mingw32-angleproject
 ANGLE is a conformant implementation of the OpenGL ES 2.0 specification that
 is hardware‐accelerated via Direct3D. ANGLE v1.0.772 was certified compliant
@@ -135,14 +106,12 @@ for native GLES2 platforms.
 %package -n mingw32-angleproject-static
 Summary:       Static version of the mingw32-angleproject library
 Requires:      mingw32-angleproject = %{version}-%{release}
-
 %description -n mingw32-angleproject-static
 Static version of the mingw32-angleproject library.
 
 # Win64
 %package -n mingw64-angleproject
 Summary:        Almost Native Graphics Layer Engine for Win64
-
 %description -n mingw64-angleproject
 ANGLE is a conformant implementation of the OpenGL ES 2.0 specification that
 is hardware‐accelerated via Direct3D. ANGLE v1.0.772 was certified compliant
@@ -167,11 +136,11 @@ for native GLES2 platforms.
 %package -n mingw64-angleproject-static
 Summary:       Static version of the mingw32-angleproject library
 Requires:      mingw64-angleproject = %{version}-%{release}
-
 %description -n mingw64-angleproject-static
 Static version of the mingw64-angleproject library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n angle-%{commit}
@@ -214,16 +183,10 @@ echo "" > src/copy_compiler_dll.bat
 chmod +x src/copy_compiler_dll.bat
 
 %build
-# This project uses the gyp build system and various hacks are required to get this project built.
-# Therefore the regular Fedora MinGW RPM macros can't be used for this package.
 
-# The gyp build system always uses the environment variable RPM_OPT_FLAGS when it's set
-# For MinGW we don't want this, so unset this environment variable
 unset RPM_OPT_FLAGS
-
 COMMON_CXXFLAGS="-msse2 -DUNICODE -D_UNICODE -D_USE_MATH_DEFINES \
     -I../include -I../sysinclude -I../src -I../src/common/third_party/base"
-
 for target in win32 win64 ; do
     mkdir build_$target
     pushd build_$target
@@ -238,79 +201,44 @@ for target in win32 win64 ; do
             export CXXFLAGS="%{mingw64_cflags} $COMMON_CXXFLAGS"
             export LDFLAGS="%{mingw64_ldflags}"
         fi
-
         V=1 gyp --build=Release -D use_ozone=0 -D use_x11=0 -D OS=win -D TARGET=$target -D MSVS_VERSION='' --depth . -I ../gyp/common.gypi ../src/angle.gyp
     popd
 done
-
 %install
-# The gyp build system doesn't know how to install files
-# and gives libraries invalid filenames.. *sigh*
 install -Dpm 0755 build_win32/out/Release/src/libGLESv2.so %{buildroot}%{mingw32_bindir}/libGLESv2.dll
 install -Dpm 0755 build_win64/out/Release/src/libGLESv2.so %{buildroot}%{mingw64_bindir}/libGLESv2.dll
-
 install -Dpm 0755 build_win32/out/Release/src/libEGL.so %{buildroot}%{mingw32_bindir}/libEGL.dll
 install -Dpm 0755 build_win64/out/Release/src/libEGL.so %{buildroot}%{mingw64_bindir}/libEGL.dll
-
 install -Dpm 0644 build_win32/libGLESv2.dll.a %{buildroot}%{mingw32_libdir}/libGLESv2.dll.a
 install -Dpm 0644 build_win64/libGLESv2.dll.a %{buildroot}%{mingw64_libdir}/libGLESv2.dll.a
-
 install -Dpm 0644 build_win32/libEGL.dll.a %{buildroot}%{mingw32_libdir}/libEGL.dll.a
 install -Dpm 0644 build_win64/libEGL.dll.a %{buildroot}%{mingw64_libdir}/libEGL.dll.a
-
 install -Dpm 0644 build_win32/out/Release/src/libGLESv2_static.a %{buildroot}%{mingw32_libdir}/libGLESv2.a
 install -Dpm 0644 build_win64/out/Release/src/libGLESv2_static.a %{buildroot}%{mingw64_libdir}/libGLESv2.a
-
 install -Dpm 0644 build_win32/out/Release/src/libEGL_static.a %{buildroot}%{mingw32_libdir}/libEGL.a
 install -Dpm 0644 build_win64/out/Release/src/libEGL_static.a %{buildroot}%{mingw64_libdir}/libEGL.a
-
 mkdir -p %{buildroot}%{mingw32_includedir}
 cp -a include/* %{buildroot}%{mingw32_includedir}/
 rm -rf %{buildroot}%{mingw32_includedir}/{platform,export.h}
-
 mkdir -p %{buildroot}%{mingw64_includedir}
 cp -a include/* %{buildroot}%{mingw64_includedir}/
 rm -rf %{buildroot}%{mingw64_includedir}/{platform,export.h}
-
-# Drop khrplatform.h, it is shipped by mingw-headers
 rm -f %{buildroot}%{mingw32_includedir}/KHR/khrplatform.h
 rmdir %{buildroot}%{mingw32_includedir}/KHR/
 rm -f %{buildroot}%{mingw64_includedir}/KHR/khrplatform.h
 rmdir %{buildroot}%{mingw64_includedir}/KHR/
+%oreon_autofiles mingw32-angleproject usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw32-angleproject-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-angleproject usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-angleproject-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n mingw32-angleproject
-%license LICENSE
-%{mingw32_bindir}/libEGL.dll
-%{mingw32_bindir}/libGLESv2.dll
-%{mingw32_includedir}/EGL
-%{mingw32_includedir}/GLES2
-%{mingw32_includedir}/GLES3
-%{mingw32_includedir}/GLSLANG
-%{mingw32_includedir}/angle_gl.h
-%{mingw32_includedir}/angle_windowsstore.h
-%{mingw32_libdir}/libEGL.dll.a
-%{mingw32_libdir}/libGLESv2.dll.a
-
-%files -n mingw32-angleproject-static
-%{mingw32_libdir}/libEGL.a
-%{mingw32_libdir}/libGLESv2.a
-
-%files -n mingw64-angleproject
-%license LICENSE
-%{mingw64_bindir}/libEGL.dll
-%{mingw64_bindir}/libGLESv2.dll
-%{mingw64_includedir}/EGL
-%{mingw64_includedir}/GLES2
-%{mingw64_includedir}/GLES3
-%{mingw64_includedir}/GLSLANG
-%{mingw64_includedir}/angle_gl.h
-%{mingw64_includedir}/angle_windowsstore.h
-%{mingw64_libdir}/libEGL.dll.a
-%{mingw64_libdir}/libGLESv2.dll.a
-
-%files -n mingw64-angleproject-static
-%{mingw64_libdir}/libEGL.a
-%{mingw64_libdir}/libGLESv2.a
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-angleproject -f %{oreon_filedir}/mingw32-angleproject.list
+%files -n mingw32-angleproject-static -f %{oreon_filedir}/mingw32-angleproject-static.list
+%files -n mingw64-angleproject -f %{oreon_filedir}/mingw64-angleproject.list
+%files -n mingw64-angleproject-static -f %{oreon_filedir}/mingw64-angleproject-static.list
 
 %changelog
+
 %autochangelog

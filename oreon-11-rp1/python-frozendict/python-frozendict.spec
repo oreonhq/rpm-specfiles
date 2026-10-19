@@ -1,56 +1,39 @@
-%global source0_hash none
-
+%global source0_hash e478fb2a1391a56c8a6e10cc97c4a9002b410ecd1ac28c18d780661762e271bd
 Name:           python-frozendict
 Version:        2.4.7
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A simple immutable dictionary
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/Marco-Sulla/python-frozendict
-Source:         %{pypi_source frozendict}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/frozendict/frozendict-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'frozendict' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-frozendict = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-frozendict
-Summary:        %{summary}
-
-%description -n python3-frozendict %_description
-
+Summary:        A simple immutable dictionary
+%description -n python3-frozendict
 
 %prep
-%autosetup -p1 -n frozendict-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir frozendict-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-frozendict usr/lib/python3*/site-packages/frozendict* usr/lib64/python3*/site-packages/frozendict* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/frozendict* usr/lib64/python3*/site-packages/frozendict* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-frozendict -f %{pyproject_files}
+%files
+%files -n python3-frozendict -f %{oreon_filedir}/python3-frozendict.list
 
 %changelog
+
 %autochangelog

@@ -1,60 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 1956f73b6b99a85544de0abf56ae02f23e7f349a9b83698f0e8e6890c0aad6a4
 Name:           python-aodhclient
 Version:        3.12.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python client library for Aodh
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://docs.openstack.org/python-aodhclient
-Source:         %{pypi_source aodhclient}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aodhclient/aodhclient-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aodhclient' generated automatically by pyp2spec.}
-
 Patch0:           0001-Revert-Add-OSprofiler-support-for-Aodh-client.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(pbr) >= 6.0.0
+BuildRequires:  python3dist(setuptools) >= 64.0.0
+Requires:       python3-aodhclient = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-aodhclient
-Summary:        %{summary}
-
-%description -n python3-aodhclient %_description
-
+Summary:        Python client library for Aodh
+%description -n python3-aodhclient
 
 %prep
-%autosetup -p1 -n aodhclient-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aodhclient-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aodhclient usr/lib/python3*/site-packages/aodhclient* usr/lib64/python3*/site-packages/aodhclient* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aodhclient* usr/lib64/python3*/site-packages/aodhclient* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aodhclient -f %{pyproject_files}
-%{_bindir}/aodh
+%files
+%files -n python3-aodhclient -f %{oreon_filedir}/python3-aodhclient.list
 
 %changelog
+
 %autochangelog

@@ -1,44 +1,37 @@
-%global source0_hash none
-
+%global source0_hash 066b4c171fa7756b4c538a81e9926d4d7686cdbbe44fb5ab2c83e137a7493278
 Name:		endless-sky
 Version:	0.11.2
-Release:	1%{?dist}
-Summary:	Space exploration, trading, and combat game
-
-# Automatically converted from old format: GPLv3 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Space exploration, trading, and combat game
 License:	GPL-3.0-only
 URL:		https://%{name}.github.io
-Source0:	https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:	endless-sky-wrapper
-# Replace /usr/games with /usr/bin and /usr/share/games with /usr/share per
-# https://fedoraproject.org/wiki/SIGs/Games/Packaging.
-# Patch not submitted upstream. Upstream conforms to Debian packaging
-# standards where the use of /usr/games is acceptable.
 Patch0:		endless-sky-0.10.0-remove-games-path.patch
-
 Requires:	%{name}-data = %{version}-%{release}
-BuildRequires:	cmake
-BuildRequires:  ninja-build
-BuildRequires:	gcc-c++
-BuildRequires:	SDL2-devel
-BuildRequires:	openal-soft-devel
-BuildRequires:	glew-devel
-BuildRequires:	libpng-devel
-BuildRequires:	libjpeg-turbo-devel
-BuildRequires:	libappstream-glib
-BuildRequires:	desktop-file-utils
-BuildRequires:	libmad-devel
-BuildRequires:	libuuid-devel
-BuildRequires:  mesa-libGL-devel
+# oreon:deps
+BuildRequires:  SDL2-devel
 BuildRequires:  catch-devel
-BuildRequires:  libasan
-BuildRequires:  libubsan
-BuildRequires:  minizip-ng-compat-devel
+BuildRequires:  cmake
 BuildRequires:  cmake(flac)
-BuildRequires:  flac
-BuildRequires:  libavif-devel
 BuildRequires:  cmake(ogg)
-
+BuildRequires:  desktop-file-utils
+BuildRequires:  flac
+BuildRequires:  gcc-c++
+BuildRequires:  glew-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libasan
+BuildRequires:  libavif-devel
+BuildRequires:  libjpeg-turbo-devel
+BuildRequires:  libmad-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libubsan
+BuildRequires:  libuuid-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  minizip-ng-compat-devel
+BuildRequires:  ninja-build
+BuildRequires:  openal-soft-devel
+# /oreon:deps
 %description
 Explore other star systems. Earn money by trading, carrying passengers, or
 completing missions. Use your earnings to buy a better ship or to upgrade the
@@ -48,25 +41,21 @@ culture is more civilized than your own...
 
 %package data
 Summary:	Game data for %{name}
-# Sound and images appear to be a mix of Public Domain and CC-BY-SA licensing
-# See copyright for details.
 License:	Public Domain and CC-BY-SA
 BuildArch:	noarch
-
 %description data
 Images, sound, and game data for %{name}.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -DES_USE_VCPKG=OFF
 %cmake_build
-
 %check
+
 appstream-util validate-relax --nonet io.github.endless_sky.endless_sky.appdata.xml
 desktop-file-validate io.github.endless_sky.endless_sky.desktop
-
 %install
 %cmake_install
 mkdir -p %{buildroot}%{_bindir}
@@ -74,26 +63,11 @@ install redhat-linux-build/%{name}  %{buildroot}%{_bindir}/%{name}.bin
 install -m755 %{SOURCE1} %{buildroot}%{_bindir}/%{name}
 sed -i 's|/app|%{_prefix}|g' %{buildroot}%{_bindir}/%{name}
 rm -f %{buildroot}%{_datadir}/doc/endless-sky/license.txt
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README.md changelog copyright
-%license license.txt
-%{_bindir}/%{name}*
-%{_datadir}/icons/hicolor/16x16/apps/%{name}.png
-%{_datadir}/icons/hicolor/22x22/apps/%{name}.png
-%{_datadir}/icons/hicolor/24x24/apps/%{name}.png
-%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
-%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-%{_datadir}/icons/hicolor/256x256/apps/%{name}.png
-%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
-%{_datadir}/icons/hicolor/512x512/apps/%{name}.png
-%{_datadir}/applications/io.github.endless_sky.endless_sky.desktop
-%{_datadir}/metainfo/io.github.endless_sky.endless_sky.appdata.xml
-%{_mandir}/man6/%{name}.6.gz
-
-%files data
-%license copyright
-%{_datadir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n endless-sky-data -f %{oreon_filedir}/endless-sky-data.list
 
 %changelog
+
 %autochangelog

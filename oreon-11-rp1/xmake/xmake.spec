@@ -1,47 +1,37 @@
 %global source0_hash af9a5d49bb32a72b1056dd7780c5c1d665afb345a4a41fba3a90a76cba97176e
-
 %bcond_with luajit
-
 Name:       xmake
 Version:    3.0.6
-
 %global __requires_exclude_from ^%{_datadir}/%{name}/scripts/.+\\.ps1$
 %global forgeurl https://github.com/xmake-io/xmake
-
 %forgemeta
-
-Release:    %autorelease
-Summary:    A cross-platform build utility based on Lua
-
+Release:        1%{?dist}
+Summary:        A cross-platform build utility based on Lua
 License:    Apache-2.0
 URL:        https://xmake.io
-Source:     %forgesource
-
+Source0:        %{forgeurl}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:     0001-pkgconfig-fix-check.patch
 Patch1:     0001-system-include.patch
 Patch2:     0001-add-relwithdebinfo-build-mode.patch
 Patch3:     https://github.com/xmake-io/xmake/pull/7213.patch
-
-BuildRequires:  pkgconfig(ncurses)
-BuildRequires:  pkgconfig(readline)
-BuildRequires:  pkgconfig(liblz4)
-BuildRequires:  pkgconfig(libxxhash)
-BuildRequires:  pkgconfig(libtbox)
-BuildRequires:  pkgconfig(libsv)
 %if %{with luajit}
-BuildRequires:  pkgconfig(luajit)
 %else
-BuildRequires:  pkgconfig(lua) >= 5.4
 %endif
-
+Requires: %{name}-data = %{version}-%{release}
+# oreon:deps
 BuildRequires:  bash
-BuildRequires:  sed
-BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-
-Requires: %{name}-data = %{version}-%{release}
-
+BuildRequires:  make
+BuildRequires:  pkgconfig(liblz4)
+BuildRequires:  pkgconfig(libsv)
+BuildRequires:  pkgconfig(libtbox)
+BuildRequires:  pkgconfig(libxxhash)
+BuildRequires:  pkgconfig(lua)
+BuildRequires:  pkgconfig(ncurses)
+BuildRequires:  pkgconfig(readline)
+BuildRequires:  sed
+# /oreon:deps
 %description
 xmake is a lightweight cross-platform build utility based on Lua.
 
@@ -59,11 +49,11 @@ libraries.
 Summary:  Common data-files for %{name}
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
 %description data
 This package contains common data-files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
@@ -76,15 +66,14 @@ rm -rf core/src/{lua,luajit,lua-cjson,lz4,pdcurses,sv,tbox,xxhash}/*/
 sed -i '1 s|#!/bin/sh|#!/bin/bash|' %{_configure}
 
 %build
+
 %configure --external=yes --mode=relwithdebinfo \
 %if %{with luajit}
   --runtime=luajit
 %else
   --runtime=lua
 %endif
-
 %make_build
-
 %install
 mkdir -p %{buildroot}%{_mandir}/man1/
 install -Dpm0755 build/xmake \
@@ -101,23 +90,15 @@ install -Dpm0644 xmake/scripts/completions/register-completions.zsh \
         %{buildroot}%{zsh_completions_dir}/_%{name}
 cp -rp xmake \
         %{buildroot}%{_datadir}/%{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %{buildroot}%{_bindir}/%{name} --version
 %{buildroot}%{_bindir}/xrepo --version
-
-%files
-%doc README.md CHANGELOG.md
-%license LICENSE.md NOTICE.md
-%{_bindir}/%{name}
-%{_bindir}/xrepo
-%{bash_completions_dir}/%{name}
-%{zsh_completions_dir}/_%{name}
-%{fish_completions_dir}/%{name}.fish
-%{_mandir}/man1/*.1*
-
-%files data
-%{_datadir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n xmake-data -f %{oreon_filedir}/xmake-data.list
 
 %changelog
+
 %autochangelog

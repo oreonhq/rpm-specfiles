@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 5198817796896895b2537e97320490a02f3b4fe6ff3dae20d871d645ce1a31d2
 Name:           python-copr-common
 Version:        1.8
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Common python code used by Copr.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/fedora-copr/copr
-Source:         %{pypi_source copr_common}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/copr_common/copr_common-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'copr-common' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-copr-common = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-copr-common
-Summary:        %{summary}
-
-%description -n python3-copr-common %_description
-
+Summary:        Common python code used by Copr.
+%description -n python3-copr-common
 
 %prep
-%autosetup -p1 -n copr_common-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir copr_common-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-copr-common usr/lib/python3*/site-packages/copr_common* usr/lib64/python3*/site-packages/copr_common* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/copr_common* usr/lib64/python3*/site-packages/copr_common* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-copr-common -f %{pyproject_files}
+%files
+%files -n python3-copr-common -f %{oreon_filedir}/python3-copr-common.list
 
 %changelog
+
 %autochangelog

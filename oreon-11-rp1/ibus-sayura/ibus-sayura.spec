@@ -1,44 +1,32 @@
-%global source0_hash none
-
+%global source0_hash 288c61af202ebfc36c826812e7ba8bcc6d5a0cc4d46db05ad2c4da2df4913d6b
 Name:       ibus-sayura
 Version:    1.3.2
-Release:    35%{?dist}
-Summary:    The Sinhala engine for IBus input platform
+Release:        1%{?dist}
+Summary:        The Sinhala engine for IBus input platform
 License:    GPL-2.0-or-later
 URL:        https://pagure.io/ibus-sayura
 Source0:        https://github.com/pravins/ibus-sayura/archive/1.3.2.tar.gz#/ibus-sayura-%{version}.tar.gz
-# This is a test patch so not submitted to upstream yet
-# This patch is created by Mike Fabian
 Patch0:     fix-for-wayland-rhbz1724759.patch
-
-BuildRequires:  gettext-devel
-BuildRequires:  libtool
-BuildRequires:  pkgconfig
-BuildRequires:  ibus-devel
-BuildRequires: make
 Requires:   ibus
+# oreon:deps
+BuildRequires:  gettext-devel
+BuildRequires:  ibus-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig
+# /oreon:deps
 %description
 The Sayura engine for IBus platform. It provides Sinhala input method.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-%configure --disable-static
-# make -C po update-gmo
-make %{?_smp_mflags}
 
+%configure --disable-static
+make %{?_smp_mflags}
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
-
-# Register as an AppStream component to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/sayura.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -66,17 +54,12 @@ cat > $RPM_BUILD_ROOT%{_datadir}/appdata/sayura.appdata.xml <<EOF
   <update_contact><!-- upstream-contact_at_email.com --></update_contact>
 </component>
 EOF
-
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc AUTHORS README
-%{_libexecdir}/ibus-engine-sayura
-%{_datadir}/appdata/*.appdata.xml
-%{_datadir}/ibus-sayura
-%{_datadir}/ibus/component/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.2-35
 - Prepare for Oreon 11 (RP1)

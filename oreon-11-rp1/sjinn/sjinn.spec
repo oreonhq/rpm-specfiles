@@ -1,35 +1,20 @@
 %global source0_hash 0ba8aaf1ce4312f712b9a826151fcde94df7a8f83eaea335a4260c87e14a4123
-
 Name:           sjinn
 Version:        1.01
 Release:        35%{?dist}
 Summary:        Simple tool for sending & receiving data from RS-232 devices
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://sjinn.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-
-BuildRequires: make
-BuildRequires: gcc
-
-# installer should use 0644 permissions for man page
-# https://sourceforge.net/tracker/?func=detail&aid=3294964&group_id=26187&atid=386394
 Patch0:         sjinn-install-args.patch
-
-# Add DESTDIR as argument for install
-# https://sourceforge.net/tracker/?func=detail&aid=3294967&group_id=26187&atid=386394
 Patch1:         sjinn-install-DESTDIR.patch
-
-# Uncompress man pages
-# https://sourceforge.net/tracker/?func=detail&aid=3294981&group_id=26187&atid=386394
 Patch2:         sjinn-uncompress-man-pages.patch
-
-# Fix optstring for proper -r handling
-# https://sourceforge.net/tracker/?func=detail&aid=3324235&group_id=26187&atid=386394
 Patch3:         sjinn-optarg-r-fix.patch
 Patch4: sjinn-configure-c99.patch
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 S-Jinn is a free, lightweight, open-source Linux application written in
 C. It is a simple command-line tool designed for sending & receiving
@@ -76,6 +61,7 @@ Other S-Jinn features include the ability to:
       truncate lines, suppress trailing line feeds
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}
@@ -96,20 +82,17 @@ chmod -x INSTALL COPYING README EXAMPLES FAQS ChangeLog Makefile \
 sed -i 's/\r//' COPYING
 
 %build
+
 %configure
 make %{?_smp_mflags} CFLAGS="%{optflags}" prefix=%{_prefix}
-
 %install
 rm -rf %{buildroot}
 make INSTALL="install -cDp" DESTDIR=%{buildroot} prefix=%{_prefix} \
         mandir=%{_mandir}/man1 install
+%oreon_autofiles main
 
-%files
-%{_bindir}/rs232
-%{_bindir}/%{name}
-%{_mandir}/man1/*
-%license COPYING
-%doc README EXAMPLES FAQS ChangeLog scripts
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

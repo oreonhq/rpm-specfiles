@@ -1,25 +1,25 @@
-%global source0_hash 2588686c0972e1785829dc3bf436b543c317e6afa30a9b91d48013dd9c110e81
-
+%global source0_hash e889ac9c7e8a6bdfc31972bf1f1254b84882cb52931608bada62e8febbf0270b
 %{?mingw_package_header}
-
 %global origname sdl12-compat
-
 Name:           mingw-%{origname}
 Version:        1.2.76
 Release:        1%{?dist}
 Summary:        MinGW Windows port of SDL 1.2 runtime compatibility library using SDL 2.0
-# mp3 decoder code is MIT-0/PD
-# SDL_opengl.h is zlib and MIT
 License:        Zlib AND MIT AND (MIT-0 OR LicenseRef-Fedora-Public-Domain)
 URL:            https://github.com/libsdl-org/%{origname}
-Source0:        %{url}/archive/release-%{version}/%{origname}-%{version}.tar.gz
-
+Source0:        https://github.com/libsdl-org/%{origname}/archive/release-%{version}/%{origname}-%{version}.tar.gz
+BuildArch:      noarch
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  git-core
 BuildRequires:  make
-
-BuildArch:      noarch
-
+BuildRequires:  mingw32-SDL2
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc
+BuildRequires:  mingw64-SDL2
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc
+# /oreon:deps
 %description
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio device.
@@ -35,13 +35,10 @@ Summary:        MinGW 32-bit Windows port of SDL 1.2 compatibility library using
 BuildRequires:  mingw32-filesystem >= 95
 BuildRequires:  mingw32-gcc
 BuildRequires:  mingw32-SDL2
-# This replaces SDL
 Obsoletes:      mingw32-SDL < 1.2.15-19
 Conflicts:      mingw32-SDL < 1.2.50
 Provides:       mingw32-SDL = %{version}
-# This dlopens SDL2 (?!), so manually depend on it
 Requires:       mingw32-SDL2 >= 2.0.18
-
 %description -n mingw32-%{origname}
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio device.
@@ -58,13 +55,10 @@ Summary:        MinGW 64-bit Windows port of SDL 1.2 compatibility library using
 BuildRequires:  mingw64-filesystem >= 95
 BuildRequires:  mingw64-gcc
 BuildRequires:  mingw64-SDL2
-# This replaces SDL
 Obsoletes:      mingw64-SDL < 1.2.15-19
 Conflicts:      mingw64-SDL < 1.2.50
 Provides:       mingw64-SDL = %{version}
-# This dlopens SDL2 (?!), so manually depend on it
 Requires:       mingw64-SDL2 >= 2.0.18
-
 %description -n mingw64-%{origname}
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio device.
@@ -79,40 +73,25 @@ this layer.
 %{?mingw_debug_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{origname}-release-%{version} -S git_am
 
 %build
+
 %mingw_cmake
 %mingw_make_build
-
 %install
 %mingw_make_install
-
-# These exist in the native sdl12-compat package
 rm -rf %{buildroot}%{mingw32_datadir}/aclocal
 rm -rf %{buildroot}%{mingw64_datadir}/aclocal
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n mingw32-%{origname}
-%license LICENSE.txt
-%doc README.md BUGS.md COMPATIBILITY.md
-%{mingw32_bindir}/SDL.dll
-%{mingw32_bindir}/sdl-config
-%{mingw32_libdir}/libSDL.dll.a
-%{mingw32_libdir}/libSDLmain.a
-%{mingw32_libdir}/pkgconfig/sdl12_compat.pc
-%{mingw32_includedir}/SDL/
-
-%files -n mingw64-%{origname}
-%license LICENSE.txt
-%doc README.md BUGS.md COMPATIBILITY.md
-%{mingw64_bindir}/SDL.dll
-%{mingw64_bindir}/sdl-config
-%{mingw64_libdir}/libSDL.dll.a
-%{mingw64_libdir}/libSDLmain.a
-%{mingw64_libdir}/pkgconfig/sdl12_compat.pc
-%{mingw64_includedir}/SDL/
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-sdl12-compat -f %{oreon_filedir}/mingw32-sdl12-compat.list
+%files -n mingw64-sdl12-compat -f %{oreon_filedir}/mingw64-sdl12-compat.list
 
 %changelog
+
 %autochangelog

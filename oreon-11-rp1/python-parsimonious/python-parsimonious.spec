@@ -1,62 +1,56 @@
-%global source0_hash none
-
+%global source0_hash e080377d98957beec053580d38ae54fcdf7c470fb78670ba4bf8b5f9d5cad2a9
 Name:           python-parsimonious
 Version:        0.11.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        _Soon to be_ the fastest pure-Python PEG parser I could muster
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/erikrose/parsimonious
-Source:         %{pypi_source parsimonious}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/parsimonious/parsimonious-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.2.0
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 3.4.3
+Requires:       python3-parsimonious = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-parsimonious+testing
+Summary:        Metapackage for python3-parsimonious testing extras
+Requires:       python3-parsimonious = %{version}-%{release}
+Provides:       python3dist(parsimonious[testing]) = %{version}-%{release}
 
+%description -n python3-parsimonious+testing
+Metapackage for python3-parsimonious testing extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'parsimonious' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-parsimonious
-Summary:        %{summary}
-
-%description -n python3-parsimonious %_description
+Summary:        _Soon to be_ the fastest pure-Python PEG parser I could muster
+# oreon:reqs
+Requires:       python3dist(regex) >= 2022.3.15
+# /oreon:reqs
+%description -n python3-parsimonious
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-parsimonious testing
-
 
 %prep
-%autosetup -p1 -n parsimonious-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir parsimonious-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-parsimonious usr/lib/python3*/site-packages/parsimonious* usr/lib64/python3*/site-packages/parsimonious* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/parsimonious* usr/lib64/python3*/site-packages/parsimonious* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-parsimonious -f %{pyproject_files}
+%files
+%files -n python3-parsimonious -f %{oreon_filedir}/python3-parsimonious.list
 
 %changelog
+
 %autochangelog

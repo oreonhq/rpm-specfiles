@@ -1,38 +1,13 @@
-%global source0_hash none
-
+%global source0_hash b41df8771f60e3b96a1973ae566d7425c53a8339f18e54e31230218781da2fa9
 %global use_wayland 1
-
 Name:		enlightenment
 Version:	0.27.1
-Release:	3%{?dist}
-# Automatically converted from old format: BSD - review is highly recommended.
+Release:        1%{?dist}
 License:	LicenseRef-Callaway-BSD
-Summary:	Enlightenment window manager
+Summary:        Enlightenment window manager
 Url:		http://enlightenment.org
-Source0:	http://download.enlightenment.org/rel/apps/enlightenment/%{name}-%{version}.tar.xz
+Source0:        http://download.enlightenment.org/rel/apps/enlightenment/%{name}-%{version}.tar.xz
 Patch0:		enlightenment-0.25.0-fix-desktop-files.patch
-BuildRequires:	gcc, gcc-c++
-BuildRequires:	alsa-lib-devel
-BuildRequires:	bluez-libs-devel
-BuildRequires:	dbus-devel
-BuildRequires:	desktop-file-utils
-BuildRequires:	doxygen
-BuildRequires:	efl-devel >= 1.28.0
-%if %{use_wayland}
-BuildRequires:	wayland-protocols-devel
-BuildRequires:	wayland-devel
-BuildRequires:	xorg-x11-server-Xwayland
-%endif
-BuildRequires:	libdrm-devel
-BuildRequires:	libexif-devel
-BuildRequires:	libuuid-devel
-BuildRequires:	libXext-devel
-BuildRequires:	pam-devel
-BuildRequires:	systemd
-BuildRequires:	xcb-util-keysyms-devel
-BuildRequires:	pulseaudio-libs-devel
-BuildRequires:	ninja-build, meson
-BuildRequires:	xkeyboard-config-devel
 Requires:	%{name}-data = %{version}-%{release}
 Requires:	efl
 Requires:	redhat-menus
@@ -40,7 +15,30 @@ Provides:	firstboot(windowmanager) = enlightenment
 Requires(post):		systemd
 Requires(preun):	systemd
 Requires(postun):	systemd
-
+# oreon:deps
+BuildRequires:  alsa-lib-devel
+BuildRequires:  bluez-libs-devel
+BuildRequires:  dbus-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  doxygen
+BuildRequires:  efl-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libXext-devel
+BuildRequires:  libdrm-devel
+BuildRequires:  libexif-devel
+BuildRequires:  libuuid-devel
+BuildRequires:  meson
+BuildRequires:  ninja-build
+BuildRequires:  pam-devel
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  systemd
+BuildRequires:  wayland-devel
+BuildRequires:  wayland-protocols-devel
+BuildRequires:  xcb-util-keysyms-devel
+BuildRequires:  xkeyboard-config-devel
+BuildRequires:  xorg-x11-server-Xwayland
+# /oreon:deps
 %description
 Enlightenment window manager is a lean, fast, modular and very extensible window
 manager for X11 and Linux. It is classed as a "desktop shell" providing the
@@ -52,81 +50,48 @@ and doing other system tasks like suspending, reboots, managing files etc.
 Summary:	Enlightenment data files
 Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
-
 %description data
 Contains data files for Enlightenment
 
 %package devel
 Summary:	Enlightenment headers, documentation and test programs
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Headers, test programs and documentation for enlightenment.
 
 %prep
+
 %setup -q
 %patch -P0 -p1 -b .fixme
 
 %build
+
 %{meson} \
  -Dpam=true \
  -Dmount-eeze=true \
-%if %{use_wayland}
  -Dwl=true \
-%endif
  -Dsystemdunitdir=%{_userunitdir}
 %{meson_build}
-
 %install
 %{meson_install}
-
 find %{buildroot} -name '*.la' -delete
-
 %find_lang %{name}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %post
+
 %systemd_post enlightenment.service
-
 %postun
+
 %systemd_postun_with_restart enlightenment.service
-
 %preun
+
 %systemd_preun enlightenment.service
-
-%files
-%doc AUTHORS COPYING README.md TODO.md
-%dir %{_sysconfdir}/enlightenment
-%config %{_sysconfdir}/enlightenment/system.conf
-%{_sysconfdir}/xdg/menus/e-applications.menu
-%{_sysconfdir}/enlightenment/sysactions.conf
-%{_bindir}/emixer
-%{_bindir}/enlightenment
-%{_bindir}/enlightenment_askpass
-%{_bindir}/enlightenment_filemanager
-%{_bindir}/enlightenment_fprint
-%{_bindir}/enlightenment_imc
-%{_bindir}/enlightenment_open
-%{_bindir}/enlightenment_paledit
-%{_bindir}/enlightenment_remote
-%{_bindir}/enlightenment_start
-%{_libdir}/enlightenment
-%{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/icons/hicolor/*/places/*
-%{_datadir}/pixmaps/enlightenment-askpass.png
-%{_userunitdir}/enlightenment.service
-
-%files data -f %{name}.lang
-%if %{use_wayland}
-%{_datadir}/wayland-sessions/enlightenment-wayland.desktop
-%endif
-%{_datadir}/xsessions/enlightenment.desktop
-%{_datadir}/enlightenment
-%{_datadir}/applications/*.desktop
-
-%files devel
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/enlightenment
+%files -f %{oreon_filedir}/main.list
+%files -n enlightenment-data -f %{oreon_filedir}/enlightenment-data.list
+%files -n enlightenment-devel -f %{oreon_filedir}/enlightenment-devel.list
 
 %changelog
+
 %autochangelog

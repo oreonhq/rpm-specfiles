@@ -1,42 +1,35 @@
-%global source0_hash 29ed592d5ece35a3029004d8c46f3002f92970870a96c11e38baf7f1122b8b5f
-
+%global source0_hash e947048130f6300e8be86573af8f225b486884fac14fcfe01bd913b41fa73bd3
 Name:           xrefresh
 Version:        1.1.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Refresh all or part of an X screen
-
 License:        MIT
 URL:            https://www.x.org
-Source0:        %{url}/pub/individual/app/%{name}-%{version}.tar.xz
-
+Source0:        https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
+Obsoletes:      xorg-x11-server-utils < 7.7-40
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  pkgconfig(x11)
-BuildRequires:  pkgconfig(xorg-macros) >= 1.8
-
-Obsoletes:      xorg-x11-server-utils < 7.7-40
-
+BuildRequires:  pkgconfig(xorg-macros)
+# /oreon:deps
 %description
 xrefresh is a simple X program that causes all or part of your screen to be
 repainted.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %configure --disable-silent-rules
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc ChangeLog README.md
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

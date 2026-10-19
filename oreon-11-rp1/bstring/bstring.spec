@@ -1,26 +1,20 @@
-%global source0_hash 90db08fd33e9494aea3f00f9b71cdcf3114c65457ee35558e8274df6ebac43f3
-
+%global source0_hash caaa9770c763dfc31a34e86d4afe50a9d3b3e6c43f9b410fa4f3130192ea47f1
 Name:              bstring
 Version:           1.1.1
-Release:           1%{?dist}
-Summary:           A string abstraction data type for the C language
+Release:        1%{?dist}
+Summary:        A string abstraction data type for the C language
 License:           BSD-3-Clause OR GPL-2.0-only
 URL:               https://github.com/msteinert/bstring
-Source0:           %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
-
-# https://github.com/msteinert/bstring/pull/120
+Source0:        https://github.com/msteinert/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Patch0:            bstring-gpl-2-only-alternative.patch
-
-# Per i686 leaf package policy 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
-BuildRequires:     gcc
-BuildRequires:     meson
-BuildRequires:     doxygen
-BuildRequires:     check-devel
-BuildRequires:     sed
-
+# oreon:deps
+BuildRequires:  check-devel
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  meson
+BuildRequires:  sed
+# /oreon:deps
 %description
 The bstring library provides a string abstraction data type for the C language
 as a memory safe alternative to null terminated buffers.
@@ -43,7 +37,6 @@ Just use const bstring instead.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 This package contains libraries and header files for
 developing applications that use %{name}.
@@ -51,7 +44,6 @@ developing applications that use %{name}.
 %package doc
 Summary:        HTML Documentation for %{name}
 BuildArch:      noarch
-
 %description doc
 The bstring library provides a string abstraction data type for the C language
 as a memory safe alternative to null terminated buffers.
@@ -59,6 +51,7 @@ as a memory safe alternative to null terminated buffers.
 This package contains the HTML documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p 1
@@ -71,34 +64,24 @@ sed -i 's/strip_directory: false/strip_directory: true/' doc/meson.build
 sed -i "s|/ 'doc' /|/ 'help' / 'en' /|" doc/meson.build
 
 %build
+
 %meson \
         -Denable-docs=true  \
         -Denable-tests=true
-
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles bstring-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles bstring-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %meson_test
-
-%files
-%license COPYING COPYING-GPL-2
-%doc README.md SECURITY.md
-%{_libdir}/lib%{name}.so.1{,.*}
-
-%files devel
-%{_libdir}/lib%{name}.so
-%{_includedir}/bstraux.h
-%{_includedir}/bstrlib.h
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files doc
-%license COPYING COPYING-GPL-2
-%doc doc/*.md
-%dir  %{_datadir}/help/en
-%lang(en) %{_datadir}/help/en/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n bstring-devel -f %{oreon_filedir}/bstring-devel.list
+%files -n bstring-doc -f %{oreon_filedir}/bstring-doc.list
 
 %changelog
+
 %autochangelog

@@ -1,27 +1,15 @@
-%global source0_hash 48df37554ab970a101f9a2906eb25d63d4c355cdc60de34b0d2896792faa2a73
-
-# Test failures using GCC
+%global source0_hash 0bfbaaf3faf545048b81683b0eb5b333d041158282adee690437c8acf56654c7
 %global toolchain clang
-
-Summary:       Cryptographic library
+Summary:        Cryptographic library
 Name:          bee2
 Version:       2.2.4
-Release:       1%{?dist}
+Release:        1%{?dist}
 License:       GPL-3.0-only and GPL-3.0-or-later
 Url:           http://apmi.bsu.by/resources/tools.html
-Source0:       https://github.com/agievich/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: cmake
-BuildRequires: clang
-BuildRequires: coreutils
-BuildRequires: doxygen
-BuildRequires: gzip
-BuildRequires: sed
-
+Source0:        https://github.com/agievich/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 %global _descriptionlibs %{expand:
 Bee2 is a cryptographic library which implements cryptographic
 algorithm and protocols standardized in Belarus.
-
 Bee2 fully supports the following Belarusian cryptography standards
 (STB):
   STB 34.101.31 (belt): data encryption and integrity algorithms.
@@ -35,26 +23,29 @@ Bee2 fully supports the following Belarusian cryptography standards
 For more details see apmi.bsu.by/resources/std.html
 Bee2 partially supports cryptographic data formats defined in the
 following standards:
-
   STB 34.101.78 (bpki): a PKI profile.
-
 Additionally, Bee2 implements digital signature algorithms
 standardized in Russia and Ukraine.}
-
+# oreon:deps
+BuildRequires:  clang
+BuildRequires:  cmake
+BuildRequires:  coreutils
+BuildRequires:  doxygen
+BuildRequires:  gzip
+BuildRequires:  sed
+# /oreon:deps
 %description
 Bee2 is a cryptographic library which implements cryptographic
 algorithm and protocols standardized in Belarus.
 
 %package  libs
 Summary:  Libraries for applications that use bee2
-
 %description	libs
 %_descriptionlibs
 
 %package  devel
 Summary:  Files for development of applications which will use bee2
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description	devel
 %_descriptionlibs
 
@@ -62,7 +53,6 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Summary:  Command line interface to bee2 utilities
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 License:  GPL-3.0-only
-
 %description -n bee2cmd
 Command line interface to bee2 library offering utilities
 to print version and build information, has files,
@@ -72,6 +62,7 @@ rings, sign files and verify signatures and provide
 entropy sources.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n bee2-%{version}
@@ -82,6 +73,7 @@ sed -i 's/bee2_static/bee2/g' cmd/CMakeLists.txt
 sed -i 's/bee2_static/bee2/g' test/CMakeLists.txt
 
 %build
+
 LDFLAGS="${LDFLAGS} -pie"
 %cmake -DBUILD_DOC=ON\
        -DCMAKE_C_COMPILER=clang\
@@ -89,44 +81,27 @@ LDFLAGS="${LDFLAGS} -pie"
        -DBUILD_PIC=ON\
        -DCMAKE_BUILD_TYPE=RELEASE
 %cmake_build
-
 %install
 %cmake_install
-
-# Compress and install man pages
 for file in doc/man/man3/*.3; do
   gzip $file
 done
 mkdir -p %{buildroot}%{_mandir}/man3
 install -m 644 doc/man/man3/*.3.gz %{buildroot}%{_mandir}/man3/
-# Remove static library
 rm %{buildroot}%{_libdir}/libbee2_static.a
+%oreon_autofiles bee2-libs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bee2-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles bee2cmd usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files libs
-%license LICENSE.txt
-%doc AUTHORS.md README.md
-# Do not ship HTML documentation
-%exclude %{_datadir}/bee2
-%{_libdir}/libbee2.so.2.0
-%{_libdir}/libbee2.so.%{version}
-
-%files devel
-%dir %{_includedir}/bee2/
-%dir %{_includedir}/bee2/core
-%{_includedir}/bee2/core/*.h
-%dir %{_includedir}/bee2/crypto
-%{_includedir}/bee2/crypto/*.h
-%{_includedir}/bee2/*.h
-%dir %{_includedir}/bee2/math
-%{_includedir}/bee2/math/*.h
-%{_libdir}/libbee2.so
-%{_mandir}/man3/*.3.gz
-
-%files -n bee2cmd
-%{_bindir}/bee2cmd
+%files -f %{oreon_filedir}/main.list
+%files -n bee2-libs -f %{oreon_filedir}/bee2-libs.list
+%files -n bee2-devel -f %{oreon_filedir}/bee2-devel.list
+%files -n bee2cmd -f %{oreon_filedir}/bee2cmd.list
 
 %changelog
+
 %autochangelog

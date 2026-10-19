@@ -1,77 +1,52 @@
 %global source0_hash cf57e9c5cd7248fd74a59fc318e8554a6a2198756f4440fb577648a09659f38d
-
 %global stable_kf6 stable
-
-
 %global base_name kio-zeroconf
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    kdnssd
-Summary: KDE Network Monitor for DNS-SD services (Zeroconf)
+Summary:        KDE Network Monitor for DNS-SD services (Zeroconf)
 Version: 26.08.0
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-only
 URL:     https://invent.kde.org/network/%{base_name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
-
-# new upstream name in 4.12.95
 Provides: %{base_name} = %{version}-%{release}
-
-BuildRequires: gcc-c++
-BuildRequires: cmake
-BuildRequires: extra-cmake-modules
-BuildRequires: cmake(KF6DBusAddons)
-BuildRequires: cmake(KF6DNSSD)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(Qt6Core)
-
-BuildRequires: pkgconfig(avahi-compat-libdns_sd)
-
-# when split occurred
 Conflicts: kdenetwork-common < 7:4.10.80
 Obsoletes: kdenetwork-kdnssd < 7:4.10.80
 Conflicts: kdenetwork-common <= 22.04.3
 Obsoletes: kdenetwork-kdnssd <= 22.04.3
 Provides:  kdenetwork-kdnssd = 7:%{version}-%{release}
-
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6DNSSD)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  pkgconfig(avahi-compat-libdns_sd)
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{base_name}-%{version} -p1
 
-
 %build
+
 %cmake_kf6 -DBUILD_WITH_QT6=ON
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html
+%oreon_autofiles main
 
-
-%files -f %{name}.lang
-%license LICENSES/*
-%{_kf6_plugindir}/kded/dnssdwatcher.so
-%{_kf6_plugindir}/kio/zeroconf.so
-%{_kf6_datadir}/dbus-1/interfaces/org.kde.kdnssd.xml
-%dir %{_kf6_datadir}/remoteview/
-%{_kf6_datadir}/remoteview/zeroconf.desktop
-%{_kf6_metainfodir}/org.kde.kio_zeroconf.metainfo.xml
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
 - Latest upstream release
 

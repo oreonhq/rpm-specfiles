@@ -1,56 +1,31 @@
 %global source0_hash 535a89c8b12aebaacf9accb75d2f08d89cce8f4338e83716936977b03e14fb5d
-
-# There are no ELF objects in this package, so turn off debuginfo generation.
 %global debug_package %{nil}
-
 Name:           rx-ranges
 Version:        2.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Simpler ranges for C++17
-
 License:        MIT
 URL:            https://github.com/simonask/rx-ranges
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-## Post-release bug fixes
-# Make s_month_names constexpr
+Source0:        https://github.com/simonask/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:          %{url}/commit/27e5191.patch
-# Remove default-constructibility requirement from ChainRange
 Patch:          %{url}/commit/a9ab841.patch
-# Replace exception by assert
 Patch:          %{url}/commit/dc74040.patch
-# Help the compiler with empty_range() deduction guide
 Patch:          %{url}/commit/36b0614.patch
-# Include <limits> for std::numeric_limits
 Patch:          %{url}/pull/48.patch
-# Include <cmath> for std::sqrt
 Patch:          %{url}/pull/49.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-
-# Test dependencies
-BuildRequires:  boost-devel
-BuildRequires:  cmake(doctest)
-
 %global desc %{expand:This is a ranges-like library for C++17 that provides zero-overhead list
 comprehensions with a pipe-like syntax.
-
 Standard containers can be filtered, transformed, passed through various
 algorithms, optimizing to loops that would not be more efficient if written by
 hand.
-
 The goal is to provide the tools to write more readable loops, where the intent
 of the programmer is clearly communicated to the reader.  Mentally simulating
 loops is a common but error-prone part of reading other people's code, and
 indeed your own code from 3 months ago.
-
 The library makes heavy use of modern C++17 features, so a compliant C++17
 compiler is required.
-
 Features:
 - Arbitrary composability.
 - Constexpr-friendly.
@@ -74,7 +49,6 @@ Features:
 - Compiler support for all major compilers (GCC, Clang, MSVC).
 - Zero-overhead, compared to manually written loops in optimized builds.
 - Header-only, and single-header.
-
 Other than usability concerns, these are the main differences from C++20
 ranges:
 - Bidirectional ranges.  Ranges can only be consumed linearly in the forward
@@ -87,7 +61,12 @@ ranges:
   zero-overhead conversion to iterators is provided for compatibility with
   standard algorithms and the range-based for loop syntax.
 - Direct access to the data of underlying contiguous ranges (`data()` etc.).}
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(doctest)
+BuildRequires:  gcc-c++
+# /oreon:deps
 %description
 %desc
 
@@ -95,11 +74,11 @@ ranges:
 Summary:        Simpler ranges for C++17
 BuildArch:      noarch
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel
 %desc
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -108,15 +87,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cmake
 
 %build
-%cmake_build
 
+%cmake_build
 %install
-#%%cmake_install doesn't do anything
 mkdir -p %{buildroot}%{_includedir}
 cp -a include/rx %{buildroot}%{_includedir}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-#%%ctest doesn't do anything
+
 cd test
 CXXFLAGS='%{build_cxxflags} -I../include -DDOCTEST_CONFIG_IMPLEMENT_WITH_MAIN'
 g++ $CXXFLAGS %{build_ldflags} -o test_ranges test_ranges.cpp
@@ -124,11 +103,9 @@ g++ $CXXFLAGS %{build_ldflags} -o test_ranges test_ranges.cpp
 g++ $CXXFLAGS %{build_ldflags} -o calendar calendar.cpp
 ./calendar
 cd -
-
-%files devel
-%doc AUTHORS.md CHANGELOG.md README.md
-%license LICENSE
-%{_includedir}/rx/
+%files -f %{oreon_filedir}/main.list
+%files -n rx-ranges-devel -f %{oreon_filedir}/rx-ranges-devel.list
 
 %changelog
+
 %autochangelog

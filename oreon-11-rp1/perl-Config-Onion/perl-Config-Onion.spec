@@ -1,32 +1,30 @@
 %global source0_hash 327fddf68e138b2469e5a2bae37c733f87ca84caf61e1cfaa949be3d950da8af
-
 Name:           perl-Config-Onion
 Version:        1.007
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Layered configuration, because configs are like ogres
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/Config-Onion
 Source0:        https://www.cpan.org/modules/by-module/Config/Config-Onion-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time
-BuildRequires:  perl(base)
 BuildRequires:  perl(Config::Any)
 BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(FindBin)
 BuildRequires:  perl(Hash::Merge::Simple)
 BuildRequires:  perl(Moo)
-BuildRequires:  perl(YAML)
-# Tests
-BuildRequires:  perl(FindBin)
 BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(Test::More)
-
+BuildRequires:  perl(YAML)
+BuildRequires:  perl(base)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 All too often, configuration is not a universal or one-time thing, yet
 most configuration-handling treats it as such. Perhaps you can only load
@@ -36,26 +34,25 @@ preventing one from being able to override another. Config::Onion
 changes that.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Config-Onion-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%doc Changes README.mkdn
-%license LICENSE
-%{perl_vendorlib}/Config/*
-%{_mandir}/man3/Config::Onion*.3pm*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

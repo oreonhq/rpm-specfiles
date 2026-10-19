@@ -1,31 +1,18 @@
 %global source0_hash 5b4ab2c7753f64fd8d2ca82b553e367c3b5accbed5103ce6a455ab156f7fa08e
-
-%if 0%{?rhel}%{?el6}%{?el7}
-# see https://fedorahosted.org/fpc/ticket/395
-%global _monodir %{_prefix}/lib/mono
-%global _monogacdir %{_monodir}/gac
-%endif
-
 Name:	 	log4net
 URL:		http://logging.apache.org/log4net/
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:	Apache-2.0
 Version:	2.0.8
-Release:	24%{?dist}
-Summary:	A .NET framework for logging
-Source:		http://mirror.reverse.net/pub/apache/logging/log4net/source/%{name}-%{version}-src.zip
+Release:        1%{?dist}
+Summary:        A .NET framework for logging
+Source0:        http://mirror.reverse.net/pub/apache/logging/log4net/source/%{name}-%{version}-src.zip
 Patch0:		log4net-2.0.8-xmlconfigurator.patch
-
-BuildRequires:	dos2unix
-BuildRequires:	mono-data-sqlite
-BuildRequires:	mono-devel
-
-# Mono only available on these:
 ExclusiveArch: %mono_arches
-
-# %define debug_package %{nil}
-# This is a mono package
-
+# oreon:deps
+BuildRequires:  dos2unix
+BuildRequires:  mono-data-sqlite
+BuildRequires:  mono-devel
+# /oreon:deps
 %description
 log4net is a tool to help the programmer output log statements to a
 variety of output targets. log4net is a port of the excellent log4j
@@ -35,13 +22,13 @@ framework to the .NET runtime
 Summary:	A .NET framework for logging
 Requires:	%{name} = %{version}-%{release}
 Requires:	pkgconfig
-
 %description devel
 log4net is a tool to help the programmer output log statements to a
 variety of output targets. log4net is a port of the excellent log4j
 framework to the .NET runtime
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -65,33 +52,24 @@ sed -i -e 's!"..\\..\\..\\log4net.snk")]!"/etc/pki/mono/mono.snk")]!' src/Assemb
 sed -i -e 's!|| SSCLI)!|| SSCLI || MONO)!' src/AssemblyInfo.cs
 
 %build
-# ASF recommend using nant to build log4net
-xbuild /property:Configuration=Debug /property:DefineConstants=DEBUG,MONO,STRONG src/log4net.vs2010.csproj
 
+xbuild /property:Configuration=Debug /property:DefineConstants=DEBUG,MONO,STRONG src/log4net.vs2010.csproj
 %install
-# install pkgconfig file
 cat > %{name}.pc <<EOF
 Name: log4net
 Description: log4net - .Net logging framework
 Version: %{version}
 Libs: -r:%{_monodir}/log4net/log4net.dll
 EOF
-
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}/pkgconfig
 cp %{name}.pc $RPM_BUILD_ROOT/%{_libdir}/pkgconfig
 mkdir -p $RPM_BUILD_ROOT/%{_monogacdir}
-
-#gacutil -i bin/mono/*/release/log4net.dll -f -package log4net -root ${RPM_BUILD_ROOT}/%{_prefix}/lib
 gacutil -i build/bin/net/*/debug/log4net.dll -f -package log4net -root ${RPM_BUILD_ROOT}/%{_prefix}/lib
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_monogacdir}/log4net
-%{_monodir}/log4net
-%doc NOTICE README.txt
-%license LICENSE
-
-%files devel
-%{_libdir}/pkgconfig/log4net.pc
+%files -f %{oreon_filedir}/main.list
+%files -n log4net-devel -f %{oreon_filedir}/log4net-devel.list
 
 %changelog
+
 %autochangelog

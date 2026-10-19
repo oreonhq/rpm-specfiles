@@ -1,10 +1,8 @@
 %global source0_hash 3ad091a9659974247850477b227da06ff77ba09a07047ecf3bc2fbff9ceed714
-
 Name:           eegdev
 Version:        0.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Library to acquire data from various EEG recording devices
-
 License:        LGPL-3.0-or-later
 URL:            https://archiveweb.epfl.ch/cnbi.epfl.ch/index.html%3Fp=228.html
 Source0:        http://download.sourceforge.net/eegdev/%{name}-%{version}.tar.bz2
@@ -15,26 +13,23 @@ Patch3:         fix-bison-grammar-file.patch
 Patch4:         include-config_h.patch
 Patch5:         fix-unaligned-memory-access.patch
 Patch6:         work-around-flex-bug.patch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
-BuildRequires:  gcc
-BuildRequires:  automake autoconf libtool
-BuildRequires:  gnulib-devel
-BuildRequires:  bison flex
-# EEGfile backend
-BuildRequires:  xdffileio-devel
-# Biosemi backend
-BuildRequires:  libusbx-devel
-# Neurosky backend
-BuildRequires:  bluez-libs-devel
-# Tobi interface A backend
-BuildRequires:  expat-devel
-BuildRequires: make
 Recommends:     %{name}-plugins%{?_isa}
 Provides:       bundled(gnulib)
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  bluez-libs-devel
+BuildRequires:  expat-devel
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  gnulib-devel
+BuildRequires:  libtool
+BuildRequires:  libusbx-devel
+BuildRequires:  make
+BuildRequires:  xdffileio-devel
+# /oreon:deps
 %description
 eegdev is a library that provides a unified interface for accessing various EEG
 (and other biosignals) acquisition systems. This interface has been designed to
@@ -50,7 +45,6 @@ making writing new device backend an easy task.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -58,11 +52,11 @@ developing applications that use %{name}.
 %package        plugins
 Summary:        Plugins for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    plugins
 Plugins for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -74,6 +68,7 @@ rm -rf lib/*
 sed -i -e '/TESTS += sysneurosky/d' tests/Makefile.am
 
 %build
+
 ./autogen.sh
 %configure --enable-corelib-build \
   --with-xdf                      \
@@ -81,35 +76,19 @@ sed -i -e '/TESTS += sysneurosky/d' tests/Makefile.am
   --with-neurosky                 \
   --with-tia                      
 make %{?_smp_mflags}
-
 %install
 %make_install
-
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make check
-
 %ldconfig_scriptlets
-
-%files
-%license COPYING
-%doc AUTHORS NEWS
-%{_libdir}/lib%{name}.so.*
-%dir %{_libdir}/%{name}/
-%{_mandir}/man5/%{name}-open-options.5*
-
-%files devel
-%doc %{_docdir}/%{name}
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_includedir}/%{name}*.h
-%{_mandir}/man3/egd_*.3*
-
-%files plugins
-%{_libdir}/%{name}/*
-%exclude %{_mandir}/man5/%{name}-open-options.5*
-%{_mandir}/man5/%{name}-*.5*
+%files -f %{oreon_filedir}/main.list
+%files -n eegdev-devel -f %{oreon_filedir}/eegdev-devel.list
+%files -n eegdev-plugins -f %{oreon_filedir}/eegdev-plugins.list
 
 %changelog
+
 %autochangelog

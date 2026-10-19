@@ -1,39 +1,32 @@
 %global source0_hash d535b7954d64da1ac1305b1fadf98202769e3599376854b2ced90c382beac056
-
 Name:		perl-Sub-Exporter-Progressive
 Version:	0.001013
-Release:	28%{?dist}
-Summary:	Only use Sub::Exporter if you need it
+Release:        28%{?dist}
+Summary:        Only use Sub::Exporter if you need it
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Exporter-Progressive
 Source0:        https://cpan.metacpan.org/modules/by-module/Sub/Sub-Exporter-Progressive-%{version}.tar.gz
-
-
-
 BuildArch:	noarch
-# =============== Module Build ======================
-BuildRequires:	coreutils
-BuildRequires:	findutils
-BuildRequires:	make
-BuildRequires:	perl-generators
-BuildRequires:	perl-interpreter
-BuildRequires:	perl(ExtUtils::MakeMaker)
-# =============== Module Runtime ====================
-BuildRequires:	perl(Carp)
-BuildRequires:	perl(Exporter) >= 5.58
-BuildRequires:	perl(strict)
-BuildRequires:	perl(Sub::Exporter)
-BuildRequires:	perl(warnings)
-# =============== Test Suite ========================
-BuildRequires:	perl(constant)
-BuildRequires:	perl(lib)
-BuildRequires:	perl(Test::More) >= 0.88
-# =============== Module Dependencies ===============
 Requires:	perl(Carp)
 Requires:	perl(Exporter) >= 5.58
 Requires:	perl(Sub::Exporter)
-
 Provides:       perl(Sub::Exporter::Progressive)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  make
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Sub::Exporter)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Sub::Exporter is an incredibly powerful module, but with that power comes
 great responsibility, er- as well as some runtime penalties. This module is a
@@ -48,27 +41,26 @@ features like currying, this module will only ever use Sub::Exporter, so you
 might as well use it directly.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Sub-Exporter-Progressive-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor
 make %{?_smp_mflags}
-
 %install
 make pure_install DESTDIR=%{buildroot}
 find %{buildroot} -type f -name .packlist -delete
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%license LICENSE
-%doc Changes README
-%{perl_vendorlib}/Sub/
-%{_mandir}/man3/Sub::Exporter::Progressive.3*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.001013-28
 - Prepare for Oreon 11 (RP1)

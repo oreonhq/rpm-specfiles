@@ -1,5 +1,4 @@
 %global source0_hash 1f1fa9656cc46c438268d35145ef72446e817998623b96616ba66dc38e577961
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,37 +80,29 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           jakarta-servlet
 Version:        6.1.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Jakarta Servlet
-# most of the project is EPL-2.0 or GPLv2 w/exceptions,
-# but some files still have Apache-2.0 license headers:
-# https://github.com/eclipse-ee4j/servlet-api/issues/347
 License:        (EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0) AND Apache-2.0
 URL:            https://jakarta.ee/specifications/servlet/5.0/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/jakartaee/servlet/archive/%{version}-RELEASE/servlet-api-%{version}.tar.gz#/jakarta-servlet-%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 6.1.0-37
 Provides:       glassfish-servlet-api = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Jakarta Servlet defines a server-side API for handling HTTP requests
 and responses.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n servlet-%{version}-RELEASE
 
@@ -147,14 +138,14 @@ sed -i -e 's/jakarta\./javax./g' $(find api/src/main/java/javax -name *.java)
 %mvn_file :{*} %{name}/@1 glassfish-servlet-api
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.md NOTICE.md
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

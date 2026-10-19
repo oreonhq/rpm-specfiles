@@ -1,59 +1,32 @@
 %global source0_hash 997a1e0ec2b2165b4757c42f8948162eb534183946af52efc406885d97cb89fc
-
-%if 0%{?rhel} >= 8 || 0%{?fedora}
-%global use_subpackages 1
-%endif
-
 Name: sshguard
 Version: 2.5.1
-Release: %autorelease
-# The entire source code is BSD-3-Clause
-# except src/parser/attack_parser.{h,c} is GPL-3.0-or-later
-# except src/blocker/hash_32a.c & src/blocker/fnv.h which are Public Domain
-# the latter two get compiled in, the license is thus superseded
-# src/parser/* is compiled into its own binary %%{_libexecdir}/%%{name}/sshg_parser
+Release:        1%{?dist}
 License: BSD-3-Clause AND GPL-3.0-or-later AND LicenseRef-Fedora-Public-Domain
-Summary: Protects hosts from brute-force attacks against SSH and other services
+Summary:        Protects hosts from brute-force attacks against SSH and other services
 Url: http://www.sshguard.net
-Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Source1: %{name}.conf.in
 Source2: %{name}.whitelist
 Patch1: 0001-fix-backend-path-in-example.patch
-
-# fnv is a very small implementation of the fnv hash algorithm not worth splitting
-# into its own package. It has not seen updates since 2012, and upstream does not
-# distribute it as a stand-alone library
-# Public Domain license
 Provides: bundled(fnv) = 5.0.2
-# simclist is a small library not worth splitting into its own package, and has not
-# seen updates since 2011
-# BSD-3-Clause license
 Provides: bundled(simclist) = 1.4.4
-
 %if 0%{?use_subpackages}
-# Require a firewall backend
 Requires: %{name}-config = %{version}-%{release}
-# Autoinstall appropriate firewall backends
 Recommends: (%{name}-firewalld if firewalld)
 Recommends: (%{name}-iptables if iptables-services)
 Recommends: (%{name}-nftables if nftables)
 %endif
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: flex
-BuildRequires: byacc
 Requires: coreutils
 Requires: grep
-
 Requires: systemd
-# for systemd service installation support
-%if 0%{?fedora} > 29
-BuildRequires: systemd-rpm-macros
-%else
-BuildRequires: systemd
-%endif
-
+# oreon:deps
+BuildRequires:  byacc
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  systemd
+# /oreon:deps
 %description
 Sshguard protects hosts from brute-force attacks against SSH and other
 services. It aggregates system logs and blocks repeat offenders using one of
@@ -102,6 +75,7 @@ as the firewall backend.
 
 #-- PREP, BUILD & INSTALL -----------------------------------------------------#
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -119,9 +93,9 @@ sed -i -e "s|%%{_bindir}|%{_bindir}|g" \
        %{SOURCE1} %{SOURCE2}
 
 %build
+
 %{configure} --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} --sbindir=%{_sbindir} --libexecdir=%{_libexecdir}/%{name}
 %{make_build}
-
 %install
 %{make_install}
 install -p -d -m 0755 %{buildroot}%{_pkgdocdir}/
@@ -138,23 +112,19 @@ install -p -d -m 0755 %{buildroot}%{_unitdir}
 sed -i -e "/ExecStartPre=/d" examples/%{name}.service
 sed -i -e "s|ExecStart=/usr/local/sbin/sshguard|ExecStart=%{_sbindir}/%{name}|g" examples/%{name}.service
 install -p -m 0644 examples/%{name}.service %{buildroot}%{_unitdir}/
-
-# cleanup
-# *.plist is only relevant for MacOS systems
 rm examples/net.sshguard.plist
-# we already ship a service file
 rm examples/sshguard.service
+%oreon_autofiles main
 
 %check
+
 make check
-
-#-- SCRIPTLETS -----------------------------------------------------------------#
 %post
-%systemd_post %{name}.service
 
+%systemd_post %{name}.service
 %if 0%{?use_subpackages}
-# with iptables backend, sshguard does not auto-create its tables, so we do that here
 %post iptables
+
 if [[ $1 -eq 1 ]]; then
   iptables -N sshguard
   iptables -A INPUT -j sshguard
@@ -165,50 +135,14 @@ if [[ $1 -eq 1 ]]; then
 fi
 exit 0
 %endif
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
+
 %systemd_postun_with_restart %{name}.service
+%files -f %{oreon_filedir}/main.list
 
-#-- FILES ---------------------------------------------------------------------#
-%files
-%doc examples
-%doc README.rst
-%doc CONTRIBUTING.rst
-%license COPYING
-%{_sbindir}/%{name}
-%{_mandir}/man8/%{name}*
-%{_mandir}/man7/%{name}*
-%dir %{_sharedstatedir}/%{name}/
-%dir %{_libexecdir}/%{name}/
-%{_libexecdir}/%{name}/sshg-logtail
-%{_libexecdir}/%{name}/sshg-parser
-%{_libexecdir}/%{name}/sshg-blocker
-%{_libexecdir}/%{name}/sshg-fw-firewalld
-%{_libexecdir}/%{name}/sshg-fw-hosts
-%{_libexecdir}/%{name}/sshg-fw-ipfilter
-%{_libexecdir}/%{name}/sshg-fw-ipfw
-%{_libexecdir}/%{name}/sshg-fw-ipset
-%{_libexecdir}/%{name}/sshg-fw-iptables
-%{_libexecdir}/%{name}/sshg-fw-null
-%{_libexecdir}/%{name}/sshg-fw-pf
-%{_libexecdir}/%{name}/sshg-fw-nft-sets
-%{_unitdir}/%{name}.service
-%config(noreplace) %{_sysconfdir}/%{name}.whitelist
-
-%if 0%{?use_subpackages}
-%files iptables
-%config(noreplace) %{_sysconfdir}/%{name}.conf.iptables
-
-%files firewalld
-%config(noreplace) %{_sysconfdir}/%{name}.conf.firewalld
-
-%files nftables
-%config(noreplace) %{_sysconfdir}/%{name}.conf.nftables
-%endif
-
-#-- CHANGELOG -----------------------------------------------------------------#
 %changelog
+
 %autochangelog

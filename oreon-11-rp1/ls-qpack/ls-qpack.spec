@@ -1,23 +1,18 @@
-%global source0_hash db1a83102bb7d2d946a910cb11a9d69c1c5b9fd9a40249c22c411fb9c429fe16
-
+%global source0_hash 1c55c3ec956cdfcfa0b90b5e24dbeb41d35c83f8be823b3c0afb0c33967b6d4c
 Name:           ls-qpack
 Version:        2.7.0
 Release:        1%{?dist}
 Summary:        QPACK compression library for use with HTTP/3
-
 License:        MIT
 URL:            https://github.com/litespeedtech/ls-qpack
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/litespeedtech/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  chrpath
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  perl
 BuildRequires:  pkgconfig(libxxhash)
-# rpath is needed for tests, but should not be 
-# in installed binaries
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_removing_rpath
-BuildRequires:  chrpath
-
+# /oreon:deps
 %description
 ls-qpack is a full-featured, tested, and fast QPACK library. The QPACK
 encoder produces excellent compression results based on an innovative
@@ -41,11 +36,11 @@ supplied input byte-by-byte.
 Summary:   QPACK compression library for use with HTTP/3
 Requires:  %{name}%{?_isa} = %{version}-%{release}
 Requires:  xxhash-devel
-
 %description devel
 Development files for ls-qpack
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -58,7 +53,7 @@ sed -i 's/PRIVATE ls-qpack/PUBLIC ls-qpack/g' bin/CMakeLists.txt
 rm -r deps/xxhash
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380786)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export CFLAGS="%{optflags} -lm"
 export LDFLAGS="%{__global_ldflags} -lm"
@@ -67,7 +62,6 @@ export LDFLAGS="%{__global_ldflags} -lm"
        -DLSQPACK_BIN=ON \
        -DCMAKE_SKIP_INSTALL_RPATH=TRUE
 %cmake_build
-
 %install
 %cmake_install
 chrpath --delete $RPM_BUILD_ROOT%{_bindir}/encode-int
@@ -78,26 +72,14 @@ chmod 755 $RPM_BUILD_ROOT%{_bindir}/encode-int
 chmod 755 $RPM_BUILD_ROOT%{_bindir}/fuzz-decode
 chmod 755 $RPM_BUILD_ROOT%{_bindir}/interop-decode
 chmod 755 $RPM_BUILD_ROOT%{_bindir}/interop-encode
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/encode-int
-%{_bindir}/fuzz-decode
-%{_bindir}/interop-decode
-%{_bindir}/interop-encode
-%{_libdir}/libls-qpack.so.2
-%{_libdir}/libls-qpack.so.2.*
-
-%files devel
-%{_includedir}/lsqpack.h
-%{_includedir}/lsxpack_header.h
-%{_libdir}/pkgconfig/lsqpack.pc
-%{_libdir}/libls-qpack.so
-%{_libdir}/cmake/ls-qpack/
+%files -f %{oreon_filedir}/main.list
+%files -n ls-qpack-devel -f %{oreon_filedir}/ls-qpack-devel.list
 
 %changelog
+
 %autochangelog

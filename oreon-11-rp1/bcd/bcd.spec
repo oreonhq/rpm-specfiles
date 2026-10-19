@@ -1,59 +1,29 @@
-%global source0_hash none
-
+%global source0_hash 5d6ccfb4aae6111d60518d4194c673d7dc1b5b7ac56f89568b12cc2a906b1563
 %global commit0 d94c9fa77c11afe7d04670d92b3930c417e19f4b
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global date0 20180610
-
 Name:           bcd
 Version:        1.1
-Release:        21.%{?date0}git%{?shortcommit0}%{?dist}
+Release:        1%{?dist}
 Summary:        Bayesian Collaborative Denoiser for Monte-Carlo Rendering
-# BSD: main program
-# AGPLv3+: src/io/exr
-# Automatically converted from old format: BSD and AGPLv3+ - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND AGPL-3.0-or-later
 URL:            https://github.com/superboubek/bcd
-Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
-# Many patches are tight to upstream accepting building shared
-# and removing bundled dependencies
-# https://github.com/superboubek/bcd/issues/12
-# don't use bundled deps
+Source0:        https://github.com/superboubek/%{name}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
 Patch0:         bcd-nodeps.patch
-# Missing includes
-# https://github.com/superboubek/bcd/pull/11
 Patch1:         bcd-gcc.patch
-# Use system eigen3
-# Set std=c++14 for eigen3-5.0.0
 Patch2:         bcd-eigen3.patch
-# Turn into a shared library forging SONAME (no ABI stability expected)
 Patch3:         bcd-links.patch
-# Remove cuda arch - not supported in current nvcc
 Patch4:         bcd-cuda.patch
-# Use system json
 Patch5:         bcd-json.patch
-# TODO
-# BCD calls exit
-#https://github.com/superboubek/bcd/issues/13
-
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  make
-BuildRequires:  gcc-c++
-
-# As of OpenEXR 3 upstream has significantly reorganized the libraries
-# including splitting out imath as a standalone library (which this project may
-# or may not need). Please see
-# https://github.com/AcademySoftwareFoundation/Imath/blob/master/docs/PortingGuide2-3.md
-# for porting details and encourage upstream to support it. For now a 2.x
-# compat package is provided.
-%if 0%{?fedora} > 33
-BuildRequires:  cmake(OpenEXR) < 3
-%else
-BuildRequires:  OpenEXR-devel
-%endif
+BuildRequires:  cmake(OpenEXR)
 BuildRequires:  eigen3-devel
+BuildRequires:  gcc-c++
 BuildRequires:  json-devel
+BuildRequires:  make
 BuildRequires:  zlib-devel
-
+# /oreon:deps
 %description
 BCD allows to denoise images rendered with Monte Carlo path tracing and
 provided in the form of their samples statistics (average, distribution
@@ -82,7 +52,6 @@ denoising the accumulated values after rendering using the library.
 %package        cli
 Summary:        Tools for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    cli
 The %{name}-cli package contains libraries and header files for
 developing applications that use %{name}.
@@ -90,16 +59,16 @@ developing applications that use %{name}.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 %autosetup -p1 -n %{name}-%{commit0}
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380473)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export CXXFLAGS="%{optflags} $(pkgconf --cflags eigen3 OpenEXR) $(pkgconf --cflags --keep-system-cflags nlohmann_json)/nlohmann"
 export LDFLAGS="%{build_ldflags} $(pkgconf --libs eigen3 OpenEXR)"
@@ -110,32 +79,23 @@ export LDFLAGS="%{build_ldflags} $(pkgconf --libs eigen3 OpenEXR)"
    -DCUDA_USE_STATIC_CUDA_RUNTIME=OFF \
   } \
   %{!?_with_cuda:-DBCD_USE_CUDA=OFF}
-
 %cmake_build
-
 %install
 %cmake_install
-
 %if "%{_lib}" == "lib64"
 mv %{buildroot}%{_prefix}/lib \
   %{buildroot}%{_libdir}
 %endif
-
 mkdir -p %{buildroot}%{_includedir}
 cp -pr include/* %{buildroot}%{_includedir}
+%oreon_autofiles bcd-cli usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bcd-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE.txt
-%doc README.md
-%{_libdir}/*.so.0*
-
-%files cli
-%{_bindir}/bcd-cli
-%{_bindir}/bcd-raw-converter
-
-%files devel
-%{_includedir}/bcd
-%{_libdir}/*.so
+%files -f %{oreon_filedir}/main.list
+%files -n bcd-cli -f %{oreon_filedir}/bcd-cli.list
+%files -n bcd-devel -f %{oreon_filedir}/bcd-devel.list
 
 %changelog
+
 %autochangelog

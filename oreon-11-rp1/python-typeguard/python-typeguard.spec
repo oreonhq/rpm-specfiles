@@ -1,39 +1,28 @@
-%global source0_hash 97e071dea3507d41f10d6254ee41893c3e5e264570f0dc860a3dde95763dee97
-
-# Note that we *do* need mypy for some of the tests; it is not just a
-# “typechecking linter.” However, we can optionally skip those tests.
+%global source0_hash f2d45f36dd11f507f895aff2f8bd1bf4c58197cdbfa9cd72e9e5f09855dd2ba6
 %bcond mypy 1
-
 Name:           python-typeguard
 Version:        4.6.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Run-time type checker for Python
-
-# SPDX
 License:        MIT
 URL:            https://github.com/agronholm/typeguard
-Source:         %{url}/archive/%{version}/typeguard-%{version}.tar.gz
-
-
+Source0:        https://github.com/agronholm/typeguard/archive/%{version}/typeguard-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  tomcli
-
 %global common_description %{expand:
 This library provides run-time type checking for functions defined with PEP 484
 argument (and return) type annotations.}
-
+# oreon:deps
+BuildRequires:  tomcli
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-typeguard
-Summary:        %{summary}
-
-# Removed for F41:
+Summary:        Run-time type checker for Python
 Obsoletes:      python-typeguard-doc < 4.2.1-2
-
 %description -n python3-typeguard %{common_description}
 
 %prep
+
 %autosetup -p1
 # Downstream-only: do not treat warnings in tests as errors
 #
@@ -49,25 +38,24 @@ tomcli set pyproject.toml lists delitem dependency-groups.test 'coverage\b.*'
 tomcli set pyproject.toml lists delitem dependency-groups.test 'mypy\b.*'
 %endif
 
-%generate_buildrequires -p
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
-
 %build -p
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
+export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 %install
 %pyproject_install
+%oreon_autofiles python3-typeguard usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{without mypy}
 k="${k-}${k+ and }not test_negative"
 k="${k-}${k+ and }not test_positive"
 %endif
-
 %pytest -k "${k-}" -v -rs
-
-%files -n python3-typeguard -f %{pyproject_files}
-%doc README.rst
+%files -f %{oreon_filedir}/main.list
+%files -n python3-typeguard -f %{oreon_filedir}/python3-typeguard.list
 
 %changelog
+
 %autochangelog

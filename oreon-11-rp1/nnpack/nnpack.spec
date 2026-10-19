@@ -1,35 +1,29 @@
 %global source0_hash 3d8e1462a390dd0309924edbaefb15139d7135ee6be127cc82950b75bd9835bc
-
 %global commit0 70a77f485e8b934224f3a79efd8edcd84cd377b8
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global date0 20230202
 %global upstream_name NNPACK
-
 Summary:        Acceleration package for neural networks on multi-core CPUs
 Name:           nnpack
 License:        BSD-2-Clause
 Version:        1.0^git%{date0}.%{shortcommit0}
-Release:        %autorelease
-
+Release:        1%{?dist}
 ExclusiveArch:  x86_64
-
 URL:            https://github.com/Maratyszcza/%{name}
-Source0:        %{url}/archive/%{commit0}/%{upstream_name}-%{shortcommit0}.tar.gz
-# Need some version for the *.so, use the date yy.m.d
+Source0:        https://github.com/Maratyszcza/%{name}/archive/%{commit0}/%{upstream_name}-%{shortcommit0}.tar.gz
 Patch0:         0001-Add-soversion-to-nnpack.patch
-
-BuildRequires: cmake
-BuildRequires: cpuinfo-devel
-BuildRequires: FP16-devel
-BuildRequires: fxdiv-devel
-BuildRequires: gcc-c++
-BuildRequires: gtest-devel
-BuildRequires: psimd-devel
-BuildRequires: pthreadpool-devel
-
-BuildRequires: python3-devel
-BuildRequires: python3dist(peachpy)
-
+# oreon:deps
+BuildRequires:  FP16-devel
+BuildRequires:  cmake
+BuildRequires:  cpuinfo-devel
+BuildRequires:  fxdiv-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  psimd-devel
+BuildRequires:  pthreadpool-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(peachpy)
+# /oreon:deps
 %description
 NNPACK is an acceleration package for neural network computations. NNPACK
 aims to provide high-performance implementations of convnet layers for
@@ -43,11 +37,11 @@ Torch, and Darknet.
 %package devel
 Summary:        Libraries and headers for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{upstream_name}-%{commit0}
@@ -77,28 +71,19 @@ sed -i -e 's@TARGET_LINK_LIBRARIES(nnpack_reference_layers PUBLIC fp16)@#TARGET_
 sed -i -e 's@CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR)@CMAKE_MINIMUM_REQUIRED(VERSION 3.5 FATAL_ERROR)@' CMakeLists.txt
 
 %build
+
 %cmake \
     -DCMAKE_INSTALL_LIBDIR=%{_lib} \
     -DNNPACK_BUILD_TESTS=OFF \
     -DNNPACK_LIBARY_TYPE=shared
-
 %cmake_build
-
-# Buiding tests is broken
-# % check
-# % ctest
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/lib%{name}.so.*
-
-%files devel
-%{_includedir}/%{name}.h
-%{_libdir}/lib%{name}.so
+%files -f %{oreon_filedir}/main.list
+%files -n nnpack-devel -f %{oreon_filedir}/nnpack-devel.list
 
 %changelog
+
 %autochangelog

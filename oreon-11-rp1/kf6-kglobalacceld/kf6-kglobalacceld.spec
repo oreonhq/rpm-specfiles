@@ -1,96 +1,74 @@
 %global source0_hash 83e9a4e226e695fe1544cfa19a9659c5f1000be46c669fe3a9e299029c6c2abf
-
 %global stable_kf6 stable
-
-
 %global plasmaver %{version}
-
 Name:           kf6-kglobalacceld
 Version:        6.7.5
-Release: 1%{?dist}
+Release:        1%{?dist}
 Summary:        Plasma daemon for global keyboard shortcuts
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:            https://invent.kde.org/plasma/kglobalacceld
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/kglobalacceld-%{version}.tar.xz#/%{name}-%{version}.tar.xz
-
+Requires:       kf6-filesystem
+Requires:       kf6-kglobalacceld-libs%{?_isa} = %{version}-%{release}
+Provides:       kglobalacceld = %{version}-%{release}
+# oreon:deps
 BuildRequires:  cmake
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6GlobalAccel)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6Quick)
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  ninja-build
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6GlobalAccel)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(Qt6Quick)
-BuildRequires:  cmake(Qt6Qml)
-BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  pkgconfig(x11-xcb)
 BuildRequires:  pkgconfig(xcb)
 BuildRequires:  pkgconfig(xcb-keysyms)
 BuildRequires:  pkgconfig(xcb-xkb)
 BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  systemd-rpm-macros
-
-Requires:       kf6-filesystem
-Requires:       kf6-kglobalacceld-libs%{?_isa} = %{version}-%{release}
-Provides:       kglobalacceld = %{version}-%{release}
-
+# /oreon:deps
 %description
 Daemon and platform plugin for KGlobalAccel on Plasma 6.
 
-
 %package        libs
 Summary:        Shared library for KGlobalAccelD
-
 %description    libs
 Runtime library for the KGlobalAccelD D-Bus service and platform plugins.
-
 
 %package        devel
 Summary:        Development files for KGlobalAccelD
 Requires:       kf6-kglobalacceld-libs%{?_isa} = %{version}-%{release}
-
 %description    devel
 Headers and CMake config for libKGlobalAccelD.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n kglobalacceld-%{plasmaver} -p1
 
-
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%license LICENSES/*
-%{_sysconfdir}/xdg/autostart/kglobalacceld.desktop
-%{_kf6_datadir}/qlogging-categories6/kglobalacceld.categories
-%{_userunitdir}/plasma-kglobalaccel.service
-%{_kf6_qtplugindir}/org.kde.kglobalacceld.platforms/
-%{_libexecdir}/kglobalacceld
-
-%files libs
-%{_libdir}/libKGlobalAccelD.so.*
-
-%files devel
-%{_includedir}/KGlobalAccelD/
-%{_libdir}/cmake/KGlobalAccelD/
-
+%files -f %{oreon_filedir}/main.list
+%files -n kf6-kglobalacceld-libs -f %{oreon_filedir}/kf6-kglobalacceld-libs.list
+%files -n kf6-kglobalacceld-devel -f %{oreon_filedir}/kf6-kglobalacceld-devel.list
 
 %changelog
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Add Plasma kglobalacceld for kwin and session

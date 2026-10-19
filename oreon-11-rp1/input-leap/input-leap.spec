@@ -1,50 +1,45 @@
 %global source0_hash fbbf6e3f99abccfc3592939a039daf13f0e003dd33764c7c591d354b1a6c07eb
-
 %global rdnn_name io.github.input_leap.input-leap
-
 Name:		input-leap
 Version:	3.0.3
-Release:	%autorelease
-Summary:	Share mouse and keyboard between multiple computers over the network
-
+Release:        1%{?dist}
+Summary:        Share mouse and keyboard between multiple computers over the network
 License:	GPL-2.0-only
 URL:		https://github.com/%{name}/%{name}
-Source:		%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:	cmake >= 3.12
-BuildRequires:	desktop-file-utils
-BuildRequires:	gcc-c++
-BuildRequires:	gmock-devel
-BuildRequires:	gulrak-filesystem-devel
-BuildRequires:	gtest-devel
-BuildRequires:	libappstream-glib
-BuildRequires:	libcurl-devel
-BuildRequires:	openssl-devel
-BuildRequires:	cmake(Qt6Core)
-BuildRequires:	cmake(Qt6Core5Compat)
-BuildRequires:	cmake(Qt6Widgets)
-BuildRequires:	cmake(Qt6Network)
-BuildRequires:	cmake(Qt6LinguistTools)
-BuildRequires:	pkgconfig(avahi-compat-libdns_sd)
-BuildRequires:	pkgconfig(glib-2.0)
-BuildRequires:	pkgconfig(gio-2.0)
-BuildRequires:	pkgconfig(ice)
-BuildRequires:	pkgconfig(libei-1.0) >= 0.99.1
-BuildRequires:	pkgconfig(libportal) >= 0.8.0
-BuildRequires:	pkgconfig(sm)
-BuildRequires:	pkgconfig(x11)
-BuildRequires:	pkgconfig(xext)
-BuildRequires:	pkgconfig(xi)
-BuildRequires:	pkgconfig(xinerama)
-BuildRequires:	pkgconfig(xkbcommon)
-BuildRequires:	pkgconfig(xrandr)
-BuildRequires:	pkgconfig(xtst)
+Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Requires:	hicolor-icon-theme
-
-# https://github.com/input-leap/input-leap/issues/1414
 Provides:	barrier = %version-%release
 Obsoletes:	barrier <= 2.4.0
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6LinguistTools)
+BuildRequires:  cmake(Qt6Network)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  gmock-devel
+BuildRequires:  gtest-devel
+BuildRequires:  gulrak-filesystem-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libcurl-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig(avahi-compat-libdns_sd)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(ice)
+BuildRequires:  pkgconfig(libei-1.0)
+BuildRequires:  pkgconfig(libportal)
+BuildRequires:  pkgconfig(sm)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(xi)
+BuildRequires:  pkgconfig(xinerama)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  pkgconfig(xrandr)
+BuildRequires:  pkgconfig(xtst)
+# /oreon:deps
 %description
 Input Leap is software that mimics the functionality of a KVM switch, which
 historically would allow you to use a single keyboard and mouse to control
@@ -57,10 +52,9 @@ keypress to switch focus to a different system.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake \
 	-DINPUTLEAP_BUILD_LIBEI=ON \
 	-DINPUTLEAP_BUILD_TESTS=ON \
@@ -68,29 +62,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 	%{?flatpak:-DINPUTLEAP_DEPLOY_FLATPAK_SCRIPT=ON} \
 	%{nil}
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
+
 %ctest
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{rdnn_name}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{rdnn_name}.appdata.xml
-
-%files
-%license LICENSE
-%doc ChangeLog README.md doc/%{name}.conf.example*
-%if 0%{?flatpak}
-%{_bindir}/%{name}-flatpak
-%endif
-%{_bindir}/%{name}c
-%{_bindir}/%{name}s
-%{_bindir}/%{name}
-%{_datadir}/icons/hicolor/scalable/apps/%{rdnn_name}.svg
-%{_datadir}/applications/%{rdnn_name}.desktop
-%{_datadir}/metainfo/%{rdnn_name}.appdata.xml
-%{_mandir}/man1/%{name}c.1*
-%{_mandir}/man1/%{name}s.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,64 +1,45 @@
 %global source0_hash a4d7a05978ee37975c37743510c8991e2debce7ef83afb0a07c0c576fd4f16e8
-
 Name:           python-scikit-build-core
 Version:        1.0.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Build backend for CMake based projects
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/scikit-build/scikit-build-core
-Source:         %{pypi_source scikit_build_core}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/scikit_build_core/scikit_build_core-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'scikit-build-core' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(nanobind) >= 1.3.2
+BuildRequires:  python3dist(scikit-build-core) >= 0.4.3
+Requires:       python3-scikit-build-core = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-scikit-build-core
-Summary:        %{summary}
-
-%description -n python3-scikit-build-core %_description
+Summary:        Build backend for CMake based projects
+%description -n python3-scikit-build-core
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-scikit-build-core hatchling,setuptools,wheel-free-setuptools,wheels
-
 
 %prep
-%autosetup -p1 -n scikit_build_core-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir scikit_build_core-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-scikit-build-core usr/lib/python3*/site-packages/scikit_build_core* usr/lib64/python3*/site-packages/scikit_build_core* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/scikit_build_core* usr/lib64/python3*/site-packages/scikit_build_core* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-scikit-build-core -f %{pyproject_files}
-%{_bindir}/scikit-build
-%{_bindir}/scikit-build-core
+%files
+%files -n python3-scikit-build-core -f %{oreon_filedir}/python3-scikit-build-core.list
 
 %changelog
+
 %autochangelog

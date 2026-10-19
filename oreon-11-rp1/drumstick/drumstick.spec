@@ -1,37 +1,30 @@
-%global source0_hash ac5a07d5d6971e24f72d959044ff9bbb331141258b25f18c811b49f57172fcbd
-
+%global source0_hash 7d537aeca77486fc8f57a84af3df1bd0ddddb401a61935e8b4821542d160b677
 %global __provides_exclude_from ^%{_libdir}/%{name}/.*\\.so$
-
-Summary: C++/Qt6 wrapper around multiple MIDI interfaces
+Summary:        C++/Qt6 wrapper around multiple MIDI interfaces
 Name:    drumstick
 Version: 2.11.1
-Release: %autorelease
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-3.0-or-later
 URL:     https://drumstick.sourceforge.io/
-Source0: https://sourceforge.net/projects/drumstick/files/%{version}/drumstick-%{version}.tar.bz2
-
-BuildRequires: gcc-c++
-BuildRequires: cmake >= 3.9
-BuildRequires: alsa-lib-devel
-BuildRequires: desktop-file-utils
-BuildRequires: qt6-qtbase-devel >= 6.2
-BuildRequires: qt6-qtsvg-devel
-BuildRequires: fluidsynth-devel
-BuildRequires: pulseaudio-libs-devel
-BuildRequires: sonivox-devel >= 3.6.12
-BuildRequires: qt6-qttools-devel
-BuildRequires: qt6-qt5compat-devel
-# For building manpages
-BuildRequires: docbook-style-xsl
-BuildRequires: libxslt
-# For building API documents
-BuildRequires: doxygen
-
+Source0:        https://sourceforge.net/projects/drumstick/files/%{version}/drumstick-%{version}.tar.bz2
 Obsoletes: aseqmm < %{version}-%{release}
 Provides: aseqmm = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  alsa-lib-devel
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  docbook-style-xsl
+BuildRequires:  doxygen
+BuildRequires:  fluidsynth-devel
+BuildRequires:  gcc-c++
+BuildRequires:  libxslt
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  qt6-qt5compat-devel
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtsvg-devel
+BuildRequires:  qt6-qttools-devel
+BuildRequires:  sonivox-devel
+# /oreon:deps
 %description
 The drumstick library is a C++ wrapper around the ALSA library sequencer
 interface, using Qt objects, idioms and style. OSS, network and Fluidsynth
@@ -40,7 +33,6 @@ interfaces are also supported by this library.
 %package devel
 Summary: Developer files for %{name}
 Requires: %{name} = %{version}-%{release}
-# cmake(drumstick-alsa) requires FindALSA
 Requires: alsa-lib-devel
 Obsoletes: aseqmm-devel < %{version}-%{release}
 Provides: aseqmm-devel = %{version}-%{release}
@@ -81,93 +73,31 @@ Standard RIFF MIDI File dump program.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}-%{version}
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
-%cmake
 
+%cmake
 %cmake_build
 doxygen %{_vpath_builddir}/Doxyfile
-
 %install
 %cmake_install
 for i in $RPM_BUILD_ROOT%{_datadir}/applications/* ; do
   desktop-file-validate $i
 done
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Tests require an alsa system, which may not be available within the mock env
-#make %{?_smp_mflags} -C %{_vpath_builddir} test
 
 %ldconfig_scriptlets
-
-%files
-%doc AUTHORS ChangeLog COPYING TODO
-%{_libdir}/libdrumstick-file.so.2*
-%{_libdir}/libdrumstick-alsa.so.2*
-%{_libdir}/libdrumstick-rt.so.2*
-%{_libdir}/libdrumstick-widgets.so.2*
-%{_libdir}/drumstick2/
-%{_datadir}/mime/packages/%{name}.xml
-%{_datadir}/%{name}/
-%{_qt6_plugindir}/designer/libdrumstick-vpiano-plugin.so
-
-%files devel
-%doc doc/html/*
-%{_libdir}/libdrumstick-file.so
-%{_libdir}/libdrumstick-alsa.so
-%{_libdir}/libdrumstick-rt.so
-%{_libdir}/libdrumstick-widgets.so
-%{_libdir}/pkgconfig/drumstick-file.pc
-%{_libdir}/pkgconfig/drumstick-alsa.pc
-%{_libdir}/pkgconfig/drumstick-rt.pc
-%{_libdir}/pkgconfig/drumstick-widgets.pc
-%{_libdir}/cmake/%{name}/
-%{_datadir}/%{name}
-%{_includedir}/drumstick/
-%{_includedir}/drumstick.h
-
-%files examples
-%{_bindir}/drumstick-dumpmid
-%{_bindir}/drumstick-dumpsmf
-%{_bindir}/drumstick-dumpwrk
-%{_bindir}/drumstick-metronome
-%{_bindir}/drumstick-playsmf
-%{_bindir}/drumstick-sysinfo
-%{_datadir}/icons/hicolor/16x16/apps/drumstick.png
-%{_datadir}/icons/hicolor/32x32/apps/drumstick.png
-%{_datadir}/icons/hicolor/48x48/apps/drumstick.png
-%{_datadir}/icons/hicolor/64x64/apps/drumstick.png
-%{_datadir}/icons/hicolor/scalable/apps/drumstick.svgz
-%{_datadir}/man/man1/drumstick-dumpmid.1.gz
-%{_datadir}/man/man1/drumstick-dumpsmf.1.gz
-%{_datadir}/man/man1/drumstick-dumpwrk.1.gz
-%{_datadir}/man/man1/drumstick-metronome.1.gz
-%{_datadir}/man/man1/drumstick-playsmf.1.gz
-%{_datadir}/man/man1/drumstick-sysinfo.1.gz
-
-%files drumgrid
-%{_bindir}/drumstick-drumgrid
-%{_datadir}/applications/net.sourceforge.drumstick-drumgrid.desktop
-%{_datadir}/man/man1/drumstick-drumgrid.1.gz
-%{_datadir}/metainfo/net.sourceforge.drumstick-drumgrid.metainfo.xml
-
-%files guiplayer
-%{_bindir}/drumstick-guiplayer
-%{_datadir}/applications/net.sourceforge.drumstick-guiplayer.desktop
-%{_datadir}/man/man1/drumstick-guiplayer.1.gz
-%{_datadir}/metainfo/net.sourceforge.drumstick-guiplayer.metainfo.xml
-
-%files vpiano
-%{_bindir}/drumstick-vpiano
-%{_datadir}/applications/net.sourceforge.drumstick-vpiano.desktop
-%{_datadir}/man/man1/drumstick-vpiano.1.gz
-%{_datadir}/metainfo/net.sourceforge.drumstick-vpiano.metainfo.xml
-
-%files dumprmi
-%{_bindir}/drumstick-dumprmi
-%{_datadir}/man/man1/drumstick-dumprmi.1.gz
+%files -f %{oreon_filedir}/main.list
+%files -n drumstick-devel -f %{oreon_filedir}/drumstick-devel.list
+%files -n drumstick-examples -f %{oreon_filedir}/drumstick-examples.list
+%files -n drumstick-drumgrid -f %{oreon_filedir}/drumstick-drumgrid.list
+%files -n drumstick-guiplayer -f %{oreon_filedir}/drumstick-guiplayer.list
+%files -n drumstick-vpiano -f %{oreon_filedir}/drumstick-vpiano.list
+%files -n drumstick-dumprmi -f %{oreon_filedir}/drumstick-dumprmi.list
 
 %changelog
+
 %autochangelog

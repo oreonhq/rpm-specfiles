@@ -1,39 +1,29 @@
 %global source0_hash c0d1143bd9659a2996f25898912c0ba48bd0dba38c7bb4ae8ea406c257f6184e
-
-# Do we generate the data-files?
 %bcond_without mathinit
-
-# Are licenses packaged using %%license?
 %if 0%{?fedora} >= 21 || 0%{?rhel} >= 8 || 0%{?oreon} >= 11
 %bcond_without	license_dir
 %else
 %bcond_with	license_dir
 %endif
-
-# Setup _pkgdocdir if not defined already.
 %{!?_pkgdocdir:%global _pkgdocdir %{_docdir}/%{name}-%{version}}
-
 Name:           arprec
 Version:        2.2.20
 Release:        1%{?dist}
 Summary:        Software package for performing arbitrary precision arithmetic
-
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://crd.lbl.gov/~dhbailey/mpdist
-Source0:        %{url}/%{name}-%{version}.tar.gz
+Source0:        http://crd.lbl.gov/~dhbailey/mpdist/%{name}-%{version}.tar.gz
 Source1:        %{url}/BSD-LBNL-License.doc
-
 Patch0:         arprec-2.2.19-fix_istream_logic.patch
-
-BuildRequires:  gcc-c++
+# oreon:deps
 BuildRequires:  catdoc
 BuildRequires:  chrpath
+BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  qd-devel
-
+# /oreon:deps
 %description
 ARPREC is a software package for performing arbitrary precision
 arithmetic.  It consists of a revision and extension of Bailey's
@@ -75,21 +65,18 @@ techniques.  Features include:
 %package data
 Summary:        Data files for %{name}-tools
 BuildArch:      noarch
-
 %description data
 This package contains data-files used with %{name}-tools.
 
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package contains the development files and headers for %{name}.
 
 %package doc
 Summary:        Documentation files for %{name}
 BuildArch:      noarch
-
 %description doc
 This package contains the documentation and some brief examples.
 
@@ -97,7 +84,6 @@ This package contains the documentation and some brief examples.
 Summary:        Interactive high-precision arithmetic computing environment
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       %{name}-data    = %{version}-%{release}
-
 %description tools
 This is a complete interactive high-precision arithmetic computing
 environment.  One enters expressions in a Mathematica-style syntax,
@@ -111,6 +97,7 @@ integration (Gaussian, error function or tanh-sinh), and summation of
 series.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -cp 1
@@ -255,29 +242,16 @@ EOF
 popd
 
 %build
-pushd %{name}
 
-# Remove obsoleted autotools-macros from configure.ac for el6+.  Running
-# `autoupdate` and `autoreconf -fiv` is the recommended procedure to do so.
-# For further reference have a look at libtool's manual on gnu.org:
-# http://www.gnu.org/software/libtool/manual/html_node/LT_005fINIT.html
-#
-# During the el5-build we need to correct some timestamps, because they are
-# broken in upstream's pristine tarballs.  This is not needed for el6+,
-# because this will be taken care of by `autoupdate` and `autoreconf -fiv`.
+pushd %{name}
 %{_bindir}/autoupdate
 %{_bindir}/autoreconf -fiv
-
-# Invoke the `regular` build-procedure.
 %configure \
   --disable-static \
   --enable-qd \
   --enable-shared
 %make_build
-# Toolkit target needs single-threaded build.
 make toolkit
-
-# Substitute @var@ in .pc-template from %%prep
 %{__chmod} +x %{name}-config
 %{__sed} -i -e 's!@prefix@!%{_prefix}!g' \
   -e 's!@bindir@!%{_bindir}!g' \
@@ -300,8 +274,6 @@ make toolkit
   -e "s~@fmainlib@~$(./%{name}-config --fmainlib)~g" \
   %{name}.pc
 %{__chmod} -x %{name}-config
-
-# Pre-build the data-files for `mathtool`.
 pushd toolkit
 %if %{with mathinit}
 ./mathinit
@@ -309,41 +281,22 @@ pushd toolkit
 /bin/touch const.dat quadgs.dat quaderf.dat quadts.dat
 %endif
 popd
-
 popd
-
 %install
 pushd %{name}
-
 %make_install
-
-# Remove unneeded and obsolete stuff.  %%{name}-config will be replaced by the
-# new wrapper later.  The pre-installed docs will be picked as %%doc within
-# %%files.  The .la-dumpings from libtool are obsolete and not useful.
 %{__rm} -rf %{buildroot}%{_bindir}/%{name}-config \
   %{buildroot}%{_datadir}/* %{buildroot}%{_libdir}/*.la
-
-# Create needed dirs.
 %{__mkdir} -p %{buildroot}%{_datadir}/%{name} %{buildroot}%{_libdir}/pkgconfig
-
-# There's no install-target for `mathtool`, so it must be install `by hand`.
 for tool in toolkit/.libs/math*
 do
   %{__install} -pm 0755 ${tool} \
     %{buildroot}%{_bindir}/%{name}-`basename ${tool}`
 done
-
-# Install the custom arprec-config wrapper-script and the needed .pc-file.
 %{__install} -pm 0755 %{name}-config.rpmbuild %{buildroot}%{_bindir}/%{name}-config
 %{__install} -pm 0644 %{name}.pc %{buildroot}%{_libdir}/pkgconfig
-
-# Install the pre-build data-files for `mathtool`.
 %{__install} -pm 0644 toolkit/*.dat %{buildroot}%{_datadir}/%{name}
-
-# Kill rpath on all binaries within %%{_bindir}.
 %{_bindir}/chrpath -d %{buildroot}%{_bindir}/%{name}-math*
-
-# Install documentation and license.
 %{__mkdir} -p %{buildroot}%{_pkgdocdir}/{examples,toolkit}
 %{__install} -pm 0644 AUTHORS* BSD-LBNL-License* ChangeLog* \
   COPYING* NEWS* README* doc/* \
@@ -353,57 +306,15 @@ done
 %if %{with license}
 %{__rm} -rf BSD-LBNL-License* COPYING*
 %endif
-
 popd
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# On Fedora the IO-read test failes for some unknown reason.  On RHEL all
-# tests run fine.  The comment from upstream on bugreport with build.log:
-#
-# It looks like everything is working fine.  I don't know why it is failing
-# that one test.  Let me know if you have any problems in running your codes
-# -- I don't think you will.
-# DHB
+
 %make_build -C %{name} check
-
 %ldconfig_scriptlets
-
-%files
-%if %{with license}
-%license %{name}/BSD-LBNL-License* %{name}/COPYING*
-%else
-%doc %dir %{_pkgdocdir}
-%doc %{_pkgdocdir}/BSD-LBNL-License*
-%doc %{_pkgdocdir}/COPYING*
-%endif
-%{_libdir}/lib%{name}*.so.*
-
-%files data
-%if %{with license}
-%license %{_datadir}/licenses/%{name}
-%else
-%doc %dir %{_pkgdocdir}
-%doc %{_pkgdocdir}/BSD-LBNL-License*
-%doc %{_pkgdocdir}/COPYING*
-%endif
-%{_datadir}/%{name}
-
-%files devel
-%{_bindir}/%{name}-config
-%{_includedir}/*
-%{_libdir}/lib%{name}*.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files doc
-%if %{with license}
-%license %{_datadir}/licenses/%{name}
-%endif
-%doc %{_pkgdocdir}
-
-%files tools
-%doc %dir %{_pkgdocdir}
-%doc %{_pkgdocdir}/toolkit
-%{_bindir}/%{name}-math*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

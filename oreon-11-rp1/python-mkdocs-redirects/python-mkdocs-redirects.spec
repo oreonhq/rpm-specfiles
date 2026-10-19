@@ -1,57 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 5e980330999299729a2d6a125347d1af78023d68a23681a4de3053ce7dfe2e51
 Name:           python-mkdocs-redirects
 Version:        1.2.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A MkDocs plugin for dynamic page redirects to prevent broken links
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/ProperDocs/properdocs-redirects
-Source:         %{pypi_source mkdocs_redirects}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mkdocs_redirects/mkdocs_redirects-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mkdocs-redirects' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-mkdocs-redirects = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-mkdocs-redirects
-Summary:        %{summary}
-
-%description -n python3-mkdocs-redirects %_description
-
+Summary:        A MkDocs plugin for dynamic page redirects to prevent broken links
+# oreon:reqs
+Requires:       python3dist(mkdocs) <= 1.6.1
+Requires:       python3dist(mkdocs) >= 1.2
+Requires:       python3dist(properdocs) >= 1.6.5
+# /oreon:reqs
+%description -n python3-mkdocs-redirects
 
 %prep
-%autosetup -p1 -n mkdocs_redirects-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mkdocs_redirects-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mkdocs-redirects usr/lib/python3*/site-packages/mkdocs_redirects* usr/lib64/python3*/site-packages/mkdocs_redirects* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mkdocs_redirects* usr/lib64/python3*/site-packages/mkdocs_redirects* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mkdocs-redirects -f %{pyproject_files}
+%files
+%files -n python3-mkdocs-redirects -f %{oreon_filedir}/python3-mkdocs-redirects.list
 
 %changelog
+
 %autochangelog

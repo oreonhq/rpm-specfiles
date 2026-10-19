@@ -1,59 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 7343008c2228e89def7d4ce29ab98ee98822bf5db69018c09c90088929f7c104
 Name:           python-aiolimiter
 Version:        1.3.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        asyncio rate limiter, a leaky bucket implementation
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/mjpieters/aiolimiter
-Source:         %{pypi_source aiolimiter}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aiolimiter/aiolimiter-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aiolimiter' generated automatically by pyp2spec.}
-
 Patch: 0001-tests-Prefer-tomllib-where-available.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatchling) >= 1.27
+BuildRequires:  python3dist(uv-dynamic-versioning) >= 0.8
+Requires:       python3-aiolimiter = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-aiolimiter
-Summary:        %{summary}
-
-%description -n python3-aiolimiter %_description
-
+Summary:        asyncio rate limiter, a leaky bucket implementation
+%description -n python3-aiolimiter
 
 %prep
-%autosetup -p1 -n aiolimiter-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aiolimiter-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aiolimiter usr/lib/python3*/site-packages/aiolimiter* usr/lib64/python3*/site-packages/aiolimiter* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aiolimiter* usr/lib64/python3*/site-packages/aiolimiter* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aiolimiter -f %{pyproject_files}
+%files
+%files -n python3-aiolimiter -f %{oreon_filedir}/python3-aiolimiter.list
 
 %changelog
+
 %autochangelog

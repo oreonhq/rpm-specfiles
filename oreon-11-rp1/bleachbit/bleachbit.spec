@@ -1,44 +1,22 @@
-%global source0_hash 6d32db1200fd6e89f0fa822e01ce8eaac9749e84788970b0f562d77b271db629
-
-# EPEL7 changes for Python and metainfodir
-%if 0%{?rhel} && 0%{?rhel} < 8
-%global __python %{__python3}
-%global _metainfodir %{_datadir}/metainfo
-%endif
-
+%global source0_hash 5af7cec3ed77b38e2e9ef91201e69d75100664116669b04a053dfd788d996f12
 Name:		bleachbit
 Version:	6.0.4
-Release:	1%{?dist}
-Summary:	Remove sensitive data and free up disk space
-
+Release:        1%{?dist}
+Summary:        Remove sensitive data and free up disk space
 License:	GPL-3.0-or-later
 URL:		https://www.bleachbit.org/
-Source:		https://github.com/bleachbit/bleachbit/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/bleachbit/bleachbit/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:		no_update.patch
-# https://github.com/bleachbit/bleachbit/issues/950
 Patch1:		disable_policykit.patch
-
 BuildArch:	noarch
-
-BuildRequires:	desktop-file-utils
-BuildRequires:	gettext
-BuildRequires:	libappstream-glib
-BuildRequires:	make
-BuildRequires:	python3-devel
-%if 0%{?rhel}  &&  0%{?rhel} < 8
-BuildRequires:	python3-rpm-macros
-%endif
-BuildRequires:	pkgconfig(systemd)
-
 Requires:	gtk3
 Requires:	python3-chardet
-%if 0%{?rhel}  &&  0%{?rhel} < 8
-Requires:	python36-gobject
-%else
 Requires:	python3-gobject
-%endif
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-bleachbit = %{version}-%{release}
+# /oreon:deps
 %description
 Delete traces of your computer activity and other junk files to free
 disk space and maintain privacy.
@@ -54,6 +32,7 @@ files deleted by other applications, and cleaning Web browser profiles
 to make them run faster.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -69,36 +48,24 @@ find ./  -type f  -iname '*.py'  -exec sed --regexp-extended '1s|^#! ?/usr/bin/p
 # SafeConfigParser class removed from the configparser module in Python 3.12
 sed -i -e "s|SafeConfigParser|ConfigParser|" bleachbit/__init__.py
 
-%generate_buildrequires
-%pyproject_buildrequires -r
-
 %build
+
 %pyproject_wheel
-
 make -C po local
-# Remove Windows-specific functionality.
 %make_build delete_windows_files
-
 %install
 %make_install prefix=%{_prefix}
-
 desktop-file-install --dir=%{buildroot}/%{_datadir}/applications/ org.bleachbit.BleachBit.desktop
 install -Dp org.bleachbit.BleachBit.metainfo.xml %{buildroot}/%{_metainfodir}/
-
 %find_lang %{name}
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.bleachbit.BleachBit.desktop
 appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/org.bleachbit.BleachBit.metainfo.xml
-
-%files -f %{name}.lang
-%doc README* doc
-%license COPYING
-%{_bindir}/bleachbit
-%{_datadir}/applications/org.bleachbit.BleachBit.desktop
-%{_datadir}/bleachbit
-%{_datadir}/pixmaps/bleachbit.png
-%{_metainfodir}/org.bleachbit.BleachBit.metainfo.xml
+%files
 
 %changelog
+
 %autochangelog

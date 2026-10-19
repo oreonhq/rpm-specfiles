@@ -1,18 +1,16 @@
 %global source0_hash 596fa828d6425c47aa1a11418139cc572dae07a96c87eb1b9c70acf0c1836cd3
-
-Summary: A utility which maintains a system's symbolic links
+Summary:        A utility which maintains a system's symbolic links
 Name: symlinks
 URL: https://github.com/brandt/symlinks
 Version: 1.7
-Release: 14%{?dist}
+Release:        1%{?dist}
 License: Symlinks
-# ibiblio mirror dead; local tarball matches Fedora dist-git (SHA512 verified)
 Source0:        http://ibiblio.org/pub/Linux/utils/file/%{name}-%{version}.tar.gz
-# Taken from http://packages.debian.org/changelogs/pool/main/s/symlinks/symlinks_1.2-4.2/symlinks.copyright
 Source1: symlinks-LICENSE.txt
-BuildRequires: make
-BuildRequires: gcc
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 The symlinks utility performs maintenance on symbolic links.  Symlinks
 checks for symlink problems, including dangling symlinks which point
@@ -23,25 +21,25 @@ Install the symlinks package if you need a program for maintaining
 symlinks on your system.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 cp %{SOURCE1} .
 
 %build
-make CFLAGS="$RPM_OPT_FLAGS $(getconf LFS_CFLAGS) %{build_ldflags}" %{?_smp_mflags}
 
+make CFLAGS="$RPM_OPT_FLAGS $(getconf LFS_CFLAGS) %{build_ldflags}" %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 install -m 755 symlinks $RPM_BUILD_ROOT%{_bindir}
 install -m 644 symlinks.1 $RPM_BUILD_ROOT%{_mandir}/man1
+%oreon_autofiles main
 
-%files
-%doc symlinks-LICENSE.txt
-%{_bindir}/symlinks
-%{_mandir}/man1/symlinks.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7-14
 - Prepare for Oreon 11 (RP1)

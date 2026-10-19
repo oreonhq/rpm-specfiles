@@ -1,18 +1,7 @@
-%global source0_hash none
-
-# fedora/remirepo spec file for qelectrotech
-#
-# SPDX-FileCopyrightText:  Copyright 2009-2026 Remi Collet
-# SPDX-License-Identifier: CECILL-2.1
-# http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
-#
-# Please, preserve the changelog entries
-#
+%global source0_hash 2a658df42fa9f8be95bf6dafae2a53ab47962af8afb7043f78a018b7ca6b7310
 %undefine _package_note_file
-
 Name:        qelectrotech
-
-Summary:     An electric diagrams editor
+Summary:        An electric diagrams editor
 Summary(ar): مُحرّر مخططات كهربائية
 Summary(be): Elektrische schema editor
 Summary(ca): Editar esquemes elèctrics
@@ -28,39 +17,31 @@ Summary(nl): Elektrische schema editor
 Summary(pl): Edytor schematów elektrycznych
 Summary(pt): Um editor de esquemas eléctricos
 Summary(ru): Редактор электрических схем
-
 Epoch:       0
 Version:     0.100
-Release:     1%{?dist}
-
-# Prog is GPLv2 - Symbols/Elements are Creative Commons Attribution
+Release:        1%{?dist}
 License:    GPL-2.0-or-later
-
 Url:        http://qelectrotech.org/
-Source0:    https://github.com/qelectrotech/qelectrotech-source-mirror/releases/download/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:    make
-BuildRequires:    gcc
-BuildRequires:    gcc-c++
-BuildRequires:    desktop-file-utils
-BuildRequires:    pkgconfig(sqlite3)
-BuildRequires:    pkgconfig(Qt5Concurrent)
-BuildRequires:    pkgconfig(Qt5Core)
-BuildRequires:    pkgconfig(Qt5Gui)
-BuildRequires:    pkgconfig(Qt5Network)
-BuildRequires:    pkgconfig(Qt5PrintSupport)
-BuildRequires:    pkgconfig(Qt5Sql)
-BuildRequires:    pkgconfig(Qt5Svg)
-BuildRequires:    pkgconfig(Qt5Widgets)
-BuildRequires:    pkgconfig(Qt5Xml)
-BuildRequires:    cmake(KF5WidgetsAddons)
-BuildRequires:    cmake(KF5CoreAddons)
-
+Source0:        https://github.com/qelectrotech/qelectrotech-source-mirror/releases/download/%{version}/%{name}-%{version}.tar.gz
 Requires:         qelectrotech-symbols = %{epoch}:%{version}-%{release}
-%if 0%{?fedora}
-Recommends:       electronics-menu
-%endif
-
+# oreon:deps
+BuildRequires:  cmake(KF5CoreAddons)
+BuildRequires:  cmake(KF5WidgetsAddons)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  pkgconfig(Qt5Concurrent)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  pkgconfig(Qt5PrintSupport)
+BuildRequires:  pkgconfig(Qt5Sql)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt5Xml)
+BuildRequires:  pkgconfig(sqlite3)
+# /oreon:deps
 %description
 QElectroTech is a Qt application to design electric diagrams. It uses XML
 files for elements and diagrams, and includes both a diagram editor and an 
@@ -138,7 +119,6 @@ Summary(ru): Коллекция элементов для QElectroTech
 License:     CC-BY-3.0
 BuildArch:   noarch
 Requires:    qelectrotech = %{epoch}:%{version}-%{release}
-
 %description symbols
 Elements collection for QElectroTech.
 
@@ -179,6 +159,7 @@ Colecção de elementos para QElectroTech.
 Коллекция элементов для QElectroTech.
 
 %prep
+
 %setup -q
 
 sed -e s,/usr/local/,%{_prefix}/, \
@@ -191,48 +172,29 @@ sed -e s,/usr/local/,%{_prefix}/, \
   qelectrotech.pro
 
 %build
-make %{?_smp_mflags}
 
+make %{?_smp_mflags}
 %install
 rm -f *.lang
 INSTALL_ROOT=%{buildroot} make install
-
-# We only provides UTF-8 files
 rm -rf %{buildroot}/usr/doc/%{name} \
        %{buildroot}%{_datadir}/%{name}/examples \
        %{buildroot}%{_mandir}/fr.ISO8859-1 \
        %{buildroot}%{_mandir}/fr
-
 mv %{buildroot}%{_mandir}/fr.UTF-8 %{buildroot}%{_mandir}/fr
-
 desktop-file-install --vendor="" \
    --add-category=Electronics \
    --dir=%{buildroot}%{_datadir}/applications/ \
          %{buildroot}%{_datadir}/applications/*.desktop
-
-# QT translation provided by QT.
 rm -f %{buildroot}%{_datadir}/%{name}/lang/qt_*.qm
-
 %find_lang qet          --with-qt
 %find_lang qelectrotech --with-man
 cat qet.lang >>qelectrotech.lang
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%doc CREDIT examples
-%license LICENSE
-%{_bindir}/%{name}
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/*.desktop
-%{_datadir}/mime/packages/%{name}.xml
-%{_datadir}/icons/hicolor/*/*/*.png
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/lang
-%{_mandir}/man1/%{name}.*
-
-%files symbols
-%license ELEMENTS.LICENSE
-%{_datadir}/%{name}/elements
-%{_datadir}/%{name}/titleblocks
+%files -f %{oreon_filedir}/main.list
+%files -n qelectrotech-symbols -f %{oreon_filedir}/qelectrotech-symbols.list
 
 %changelog
+
 %autochangelog

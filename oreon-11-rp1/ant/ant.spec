@@ -1,35 +1,4 @@
 %global source0_hash 9c8b71ca430bc5135c4914d37c947ea6b8f044c81aae3adfffbe8fbac7b0e185
-
-# Copyright (c) 2000-2008, JPackage Project
-# All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#
-# 1. Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-# 2. Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the
-#    distribution.
-# 3. Neither the name of the JPackage Project nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -111,18 +80,15 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 %if %{without bootstrap}
 %bcond_with ant_minimal
 %else
 %bcond_without ant_minimal
 %endif
-
 %global ant_home %{_datadir}/ant
-
 Name:           ant
 Version:        1.10.18
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java build tool
 Summary(it):    Tool per la compilazione di programmi java
 Summary(fr):    Outil de compilation pour java
@@ -130,25 +96,25 @@ License:        Apache-2.0
 URL:            https://ant.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/ant/source/apache-ant-%{version}-src.tar.bz2
 Source2:        apache-ant-1.8.ant.conf
-# manpage
 Source3:        ant.asciidoc
-
 Patch:          %{name}-build.xml.patch
-
-BuildRequires:  rubygem-asciidoctor
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  javapackages-local-openjdk25
-BuildRequires:  ant-openjdk25 
-BuildRequires:  ant-junit
 %endif
-
 %if %{without ant_minimal}
+%endif
+Requires:       %{name}-lib = %{version}-%{release}
+Requires:       %{name}-jdk-binding
+Suggests:       %{name}-openjdk25 = %{version}-%{release}
+Obsoletes:      %{name}-javadoc < 1:1.10.18-21
+Obsoletes:      %{name}-openjdk21 < 1:1.10.18-38
+# oreon:deps
+BuildRequires:  ant-junit
+BuildRequires:  ant-openjdk25
+BuildRequires:  javapackages-local-openjdk25
+BuildRequires:  junit5
 BuildRequires:  mvn(antlr:antlr)
 BuildRequires:  mvn(bcel:bcel)
 BuildRequires:  mvn(bsf:bsf)
@@ -159,26 +125,15 @@ BuildRequires:  mvn(jakarta.mail:jakarta.mail-api)
 BuildRequires:  mvn(jdepend:jdepend)
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.commons:commons-logging::api:)
+BuildRequires:  mvn(org.hamcrest:hamcrest-core)
+BuildRequires:  mvn(org.hamcrest:hamcrest-library)
 BuildRequires:  mvn(org.tukaani:xz)
 BuildRequires:  mvn(oro:oro)
 BuildRequires:  mvn(regexp:regexp)
 BuildRequires:  mvn(xalan:xalan)
 BuildRequires:  mvn(xml-resolver:xml-resolver)
-BuildRequires:  mvn(org.hamcrest:hamcrest-core)
-BuildRequires:  mvn(org.hamcrest:hamcrest-library)
-
-BuildRequires:  junit5
-%endif
-
-Requires:       %{name}-lib = %{version}-%{release}
-Requires:       %{name}-jdk-binding
-Suggests:       %{name}-openjdk25 = %{version}-%{release}
-
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1:1.10.18-21
-# TODO Remove in Fedora 47
-Obsoletes:      %{name}-openjdk21 < 1:1.10.18-38
-
+BuildRequires:  rubygem-asciidoctor
+# /oreon:deps
 %description
 Apache Ant is a Java library and command-line tool whose mission is to
 drive processes described in build files as targets and extension
@@ -202,14 +157,12 @@ apache xml.
 
 %package lib
 Summary:        Core part of %{name}
-
 %description lib
 Core part of Apache Ant that can be used as a library.
 
 %package junit
 Summary:        Optional junit tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description junit
 Optional junit tasks for %{name}.
 
@@ -221,7 +174,6 @@ Taches junit optionelles pour %{name}.
 %package jmf
 Summary:        Optional jmf tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description jmf
 Optional jmf tasks for %{name}.
 
@@ -231,7 +183,6 @@ Taches jmf optionelles pour %{name}.
 %package swing
 Summary:        Optional swing tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description swing
 Optional swing tasks for %{name}.
 
@@ -241,7 +192,6 @@ Taches swing optionelles pour %{name}.
 %package antlr
 Summary:        Optional antlr tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description antlr
 Optional antlr tasks for %{name}.
 
@@ -251,7 +201,6 @@ Taches antlr optionelles pour %{name}.
 %package apache-bsf
 Summary:        Optional apache bsf tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description apache-bsf
 Optional apache bsf tasks for %{name}.
 
@@ -261,7 +210,6 @@ Taches apache bsf optionelles pour %{name}.
 %package apache-resolver
 Summary:        Optional apache resolver tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description apache-resolver
 Optional apache resolver tasks for %{name}.
 
@@ -271,7 +219,6 @@ Taches apache resolver optionelles pour %{name}.
 %package commons-logging
 Summary:        Optional commons logging tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description commons-logging
 Optional commons logging tasks for %{name}.
 
@@ -281,7 +228,6 @@ Taches commons logging optionelles pour %{name}.
 %package commons-net
 Summary:        Optional commons net tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description commons-net
 Optional commons net tasks for %{name}.
 
@@ -291,7 +237,6 @@ Taches commons net optionelles pour %{name}.
 %package apache-bcel
 Summary:        Optional apache bcel tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description apache-bcel
 Optional apache bcel tasks for %{name}.
 
@@ -301,7 +246,6 @@ Taches apache bcel optionelles pour %{name}.
 %package apache-oro
 Summary:        Optional apache oro tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description apache-oro
 Optional apache oro tasks for %{name}.
 
@@ -311,7 +255,6 @@ Taches apache oro optionelles pour %{name}.
 %package apache-regexp
 Summary:        Optional apache regexp tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description apache-regexp
 Optional apache regexp tasks for %{name}.
 
@@ -321,7 +264,6 @@ Taches apache regexp optionelles pour %{name}.
 %package apache-xalan2
 Summary:        Optional apache xalan2 tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description apache-xalan2
 Optional apache xalan2 tasks for %{name}.
 
@@ -331,14 +273,12 @@ Taches apache xalan2 optionelles pour %{name}.
 %package imageio
 Summary:        Optional imageio tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description imageio
 Optional imageio tasks for %{name}.
 
 %package jakartamail
 Summary:        Optional jakartamail tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description jakartamail
 Optional jakartamail tasks for %{name}.
 
@@ -348,7 +288,6 @@ Taches jakartamail optionelles pour %{name}.
 %package jdepend
 Summary:        Optional jdepend tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description jdepend
 Optional jdepend tasks for %{name}.
 
@@ -358,7 +297,6 @@ Taches jdepend optionelles pour %{name}.
 %package jsch
 Summary:        Optional jsch tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description jsch
 Optional jsch tasks for %{name}.
 
@@ -368,7 +306,6 @@ Taches jsch optionelles pour %{name}.
 %package junit5
 Summary:        Optional junit5 tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description junit5
 Optional junit5 tasks for %{name}.
 
@@ -378,24 +315,18 @@ Taches junit5 optionelles pour %{name}.
 %package testutil
 Summary:        Test utility classes for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description testutil
 Test utility tasks for %{name}.
 
 %package xz
 Summary:        Optional xz tasks for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description xz
 Optional xz tasks for %{name}.
 
 %package manual
 Summary:        Manual for %{name}
-# ant-manual contains file tutorial-tasks-filesets-properties.zip
-# which in turn contains src/Find.java and src/FindTest.java both
-# licensed under ASL 1.1. See rhbz#1055629
 License:        Apache-2.0 AND Apache-1.1
-
 %description manual
 Documentation for %{name}.
 
@@ -410,6 +341,7 @@ Documentation pour %{name}.
 # -----------------------------------------------------------------------------
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n apache-ant-%{version}
 
@@ -471,31 +403,21 @@ mv LICENSE.utf8 LICENSE
 %pom_change_dep commons-logging:commons-logging-api org.apache.commons:commons-logging::api: src/etc/poms/ant-commons-logging/pom.xml
 
 %build
+
 %if %{with ant_minimal}
 %{ant} jars
 %else
 %{ant} jars test-jar
 %endif
-
-# typeset the manpage
 asciidoctor -b manpage -D man %{SOURCE3}
-
-# remove empty jai and netrexx jars. Due to missing dependencies they contain only manifests.
 rm build/lib/ant-jai.jar build/lib/ant-netrexx.jar
-# log4j logging is deprecated
 rm build/lib/ant-apache-log4j.jar
-# dropped in favor of jakartamail
 rm build/lib/ant-javamail.jar
-
 %install
-# ANT_HOME and subdirs
 mkdir -p %{buildroot}%{ant_home}/{lib,etc,bin}
-
 %mvn_alias :ant org.apache.ant:ant-nodeps apache:ant ant:ant
 %mvn_alias :ant-launcher ant:ant-launcher
-
 %mvn_file ':{ant,ant-bootstrap,ant-launcher}' %{name}/@1 @1
-
 %if %{with ant_minimal}
 mv build/lib build/lib0
 mkdir build/lib/
@@ -505,74 +427,46 @@ mv build/lib0/ant-launcher.jar build/lib/
 mv build/lib0/ant-junit.jar build/lib/
 mv build/lib0/ant-junit4.jar build/lib/
 %endif
-
 for jar in build/lib/*.jar; do
-  # Make sure that installed JARs are not empty
   %jar tf ${jar} | grep -E -q '.*\.class'
-
   jarname=$(basename $jar .jar)
-
-  # jar aliases
   ln -sf ../../java/%{name}/${jarname}.jar %{buildroot}%{ant_home}/lib/${jarname}.jar
-
   pom=src/etc/poms/${jarname}/pom.xml
-
-  # bootstrap does not have a pom, generate one
   [ $jarname == ant-bootstrap ] && pom='org.apache.ant:ant-bootstrap:%{version}'
-
   %mvn_artifact ${pom} ${jar}
 done
-
-# ant-parent pom
 %mvn_artifact src/etc/poms/pom.xml
-
 %mvn_package :ant lib
 %mvn_package :ant-launcher lib
 %mvn_package :ant-bootstrap lib
 %mvn_package :ant-parent lib
 %mvn_package :ant-junit4 junit
-# catchall rule for the rest
 %mvn_package ':ant-{*}' @1
-
 %mvn_install
-
-# scripts: remove dos and os/2 scripts
 rm -f src/script/*.bat
 rm -f src/script/*.cmd
-
-# XSLs
 %if %{with ant_minimal}
 rm src/etc/jdepend-frames.xsl
 rm src/etc/jdepend.xsl
 rm src/etc/maudit-frames.xsl
 %endif
 cp -p src/etc/*.xsl %{buildroot}%{ant_home}/etc
-
-# install everything else
 mkdir -p %{buildroot}%{_bindir}
 cp -p src/script/ant %{buildroot}%{_bindir}/
 ln -sf %{_bindir}/ant %{buildroot}%{ant_home}/bin/
 cp -p src/script/antRun %{buildroot}%{ant_home}/bin/
-
-# default ant.conf
 mkdir -p %{buildroot}%{_sysconfdir}
 cp -p %{name}.conf %{buildroot}%{_sysconfdir}/%{name}.conf
-
-# OPT_JAR_LIST fragments
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}.d
 echo "junit hamcrest/core ant/ant-junit" > %{buildroot}%{_sysconfdir}/%{name}.d/junit
 echo "junit hamcrest/core ant/ant-junit4" > %{buildroot}%{_sysconfdir}/%{name}.d/junit4
-
-# JDK bindings
 install -d -m 755 %{buildroot}%{_javaconfdir}/
 ln -sf %{_jpbindingdir}/ant.conf %{buildroot}%{_javaconfdir}/ant.conf
 echo 'JAVA_HOME=%{_jvmdir}/jre-25-openjdk' > %{buildroot}%{_javaconfdir}/ant-openjdk25.conf
 %jp_binding --verbose --variant openjdk25 --ghost ant.conf --target %{_javaconfdir}/ant-openjdk25.conf --provides %{name}-jdk-binding --requires java-25-openjdk-headless --recommends java-25-openjdk-devel
 touch %{buildroot}%{_javaconfdir}/ant-unbound.conf
 %jp_binding --verbose --variant unbound --ghost ant.conf --target %{_javaconfdir}/ant-unbound.conf --provides %{name}-jdk-binding
-
 %if %{without ant_minimal}
-
 echo "ant/ant-jmf" > %{buildroot}%{_sysconfdir}/%{name}.d/jmf
 echo "ant/ant-swing" > %{buildroot}%{_sysconfdir}/%{name}.d/swing
 echo "antlr ant/ant-antlr" > %{buildroot}%{_sysconfdir}/%{name}.d/antlr
@@ -591,141 +485,59 @@ echo "jsch ant/ant-jsch" > %{buildroot}%{_sysconfdir}/%{name}.d/jsch
 echo "junit5 hamcrest/core junit opentest4j ant/ant-junitlauncher" > %{buildroot}%{_sysconfdir}/%{name}.d/junitlauncher
 echo "testutil ant/ant-testutil" > %{buildroot}%{_sysconfdir}/%{name}.d/testutil
 echo "xz-java ant/ant-xz" > %{buildroot}%{_sysconfdir}/%{name}.d/xz
-
 %endif
-
-# manpage
 install -d -m 755 %{buildroot}%{_mandir}/man1/
 install -p -m 644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
-
+%oreon_autofiles ant-lib usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-junit usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-jmf usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-swing usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-antlr usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-apache-bsf usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-apache-resolver usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-commons-logging usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-commons-net usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-apache-bcel usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-apache-oro usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-apache-regexp usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-apache-xalan2 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-imageio usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-jakartamail usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-jdepend usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-jsch usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-junit5 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-testutil usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-xz usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ant-manual usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{without ant_minimal}
 %check
+
 %{ant} -Doffline=true test
 %endif
-
-%files
-%doc KEYS README WHATSNEW
-%license LICENSE NOTICE
-%config %{_javaconfdir}/%{name}*.conf
-%config(noreplace) %{_sysconfdir}/%{name}.conf
-%attr(0755,root,root) %{_bindir}/ant
-%dir %{ant_home}/bin
-%{ant_home}/bin/ant
-%attr(0755,root,root) %{ant_home}/bin/antRun
-%{_mandir}/man1/%{name}.*
-%dir %{ant_home}/etc
-%{ant_home}/etc/ant-update.xsl
-%{ant_home}/etc/changelog.xsl
-%{ant_home}/etc/coverage-frames.xsl
-%{ant_home}/etc/mmetrics-frames.xsl
-%{ant_home}/etc/log.xsl
-%{ant_home}/etc/tagdiff.xsl
-%{ant_home}/etc/common2master.xsl
-%{ant_home}/etc/printFailingTests.xsl
-%dir %{_sysconfdir}/%{name}.d
-
-%files lib -f .mfiles-lib
-%dir %{ant_home}
-%dir %{ant_home}/lib
-%{ant_home}/lib/%{name}.jar
-%{ant_home}/lib/%{name}-launcher.jar
-%{ant_home}/lib/%{name}-bootstrap.jar
-
-%files junit -f .mfiles-junit
-%{ant_home}/lib/%{name}-junit.jar
-%{ant_home}/lib/%{name}-junit4.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/junit
-%config(noreplace) %{_sysconfdir}/%{name}.d/junit4
-%{ant_home}/etc/junit-frames.xsl
-%{ant_home}/etc/junit-noframes.xsl
-%{ant_home}/etc/junit-frames-xalan1.xsl
-%{ant_home}/etc/junit-frames-saxon.xsl
-%{ant_home}/etc/junit-noframes-saxon.xsl
-
-%if %{without ant_minimal}
-
-%files jmf -f .mfiles-jmf
-%{ant_home}/lib/%{name}-jmf.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/jmf
-
-%files swing -f .mfiles-swing
-%{ant_home}/lib/%{name}-swing.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/swing
-
-%files antlr -f .mfiles-antlr
-%{ant_home}/lib/%{name}-antlr.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/antlr
-
-%files apache-bsf -f .mfiles-apache-bsf
-%{ant_home}/lib/%{name}-apache-bsf.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/apache-bsf
-
-%files apache-resolver -f .mfiles-apache-resolver
-%{ant_home}/lib/%{name}-apache-resolver.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/apache-resolver
-
-%files commons-logging -f .mfiles-commons-logging
-%{ant_home}/lib/%{name}-commons-logging.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/commons-logging
-
-%files commons-net -f .mfiles-commons-net
-%{ant_home}/lib/%{name}-commons-net.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/commons-net
-
-%files apache-bcel -f .mfiles-apache-bcel
-%{ant_home}/lib/%{name}-apache-bcel.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/apache-bcel
-
-%files apache-oro -f .mfiles-apache-oro
-%{ant_home}/lib/%{name}-apache-oro.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/apache-oro
-%{ant_home}/etc/maudit-frames.xsl
-
-%files apache-regexp -f .mfiles-apache-regexp
-%{ant_home}/lib/%{name}-apache-regexp.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/apache-regexp
-
-%files apache-xalan2 -f .mfiles-apache-xalan2
-%{ant_home}/lib/%{name}-apache-xalan2.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/apache-xalan2
-
-%files imageio -f .mfiles-imageio
-%{ant_home}/lib/%{name}-imageio.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/imageio
-
-%files jakartamail -f .mfiles-jakartamail
-%{ant_home}/lib/%{name}-jakartamail.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/jakartamail
-
-%files jdepend -f .mfiles-jdepend
-%{ant_home}/lib/%{name}-jdepend.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/jdepend
-%{ant_home}/etc/jdepend.xsl
-%{ant_home}/etc/jdepend-frames.xsl
-
-%files jsch -f .mfiles-jsch
-%{ant_home}/lib/%{name}-jsch.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/jsch
-
-%files junit5 -f .mfiles-junitlauncher
-%{ant_home}/lib/%{name}-junitlauncher.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/junitlauncher
-
-%files testutil -f .mfiles-testutil
-%{ant_home}/lib/%{name}-testutil.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/testutil
-
-%files xz -f .mfiles-xz
-%{ant_home}/lib/%{name}-xz.jar
-%config(noreplace) %{_sysconfdir}/%{name}.d/xz
-
-%files manual
-%license LICENSE NOTICE
-%doc manual/*
-
-%endif
-
-# -----------------------------------------------------------------------------
+%files -f %{oreon_filedir}/main.list
+%files -n ant-lib -f %{oreon_filedir}/ant-lib.list
+%files -n ant-junit -f %{oreon_filedir}/ant-junit.list
+%files -n ant-jmf -f %{oreon_filedir}/ant-jmf.list
+%files -n ant-swing -f %{oreon_filedir}/ant-swing.list
+%files -n ant-antlr -f %{oreon_filedir}/ant-antlr.list
+%files -n ant-apache-bsf -f %{oreon_filedir}/ant-apache-bsf.list
+%files -n ant-apache-resolver -f %{oreon_filedir}/ant-apache-resolver.list
+%files -n ant-commons-logging -f %{oreon_filedir}/ant-commons-logging.list
+%files -n ant-commons-net -f %{oreon_filedir}/ant-commons-net.list
+%files -n ant-apache-bcel -f %{oreon_filedir}/ant-apache-bcel.list
+%files -n ant-apache-oro -f %{oreon_filedir}/ant-apache-oro.list
+%files -n ant-apache-regexp -f %{oreon_filedir}/ant-apache-regexp.list
+%files -n ant-apache-xalan2 -f %{oreon_filedir}/ant-apache-xalan2.list
+%files -n ant-imageio -f %{oreon_filedir}/ant-imageio.list
+%files -n ant-jakartamail -f %{oreon_filedir}/ant-jakartamail.list
+%files -n ant-jdepend -f %{oreon_filedir}/ant-jdepend.list
+%files -n ant-jsch -f %{oreon_filedir}/ant-jsch.list
+%files -n ant-junit5 -f %{oreon_filedir}/ant-junit5.list
+%files -n ant-testutil -f %{oreon_filedir}/ant-testutil.list
+%files -n ant-xz -f %{oreon_filedir}/ant-xz.list
+%files -n ant-manual -f %{oreon_filedir}/ant-manual.list
 
 %changelog
+
 %autochangelog

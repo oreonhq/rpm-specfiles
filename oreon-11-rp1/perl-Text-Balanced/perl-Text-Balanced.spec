@@ -1,5 +1,4 @@
 %global source0_hash 7c5d81bd8d6b2cddbf60cef66d7f9f6af417412e5eb24e87a5a197c311e330cf
-
 Name:           perl-Text-Balanced
 Version:        2.07
 Release:        2%{?dist}
@@ -8,33 +7,24 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-Balanced
 Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHAY/Text-Balanced-%{version}.tar.gz
 BuildArch:      noarch
+Conflicts:      perl < 4:5.22.0-347
+Provides:       perl(Text::Balanced)
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.8.1
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(overload)
-BuildRequires:  perl(vars)
-# Tests:
-BuildRequires:  perl(Test::More) >= 0.47
-# Perl::MinimumVersion 1.20 not used
-# Pod::Simple 3.07 not used
-# Test::CPAN::Changes not used
-# Test::CPAN::Meta 0.12 not used
-# Test::Perl::Critic not used
-# Test::MinimumVersion 0.101082 not used
-# Test::Pod 1.26 not used
-# Test::Pod::Coverage 0.08 not used
-Conflicts:      perl < 4:5.22.0-347
-
-Provides:       perl(Text::Balanced)
+# /oreon:deps
 %description
 These Perl subroutines may be used to extract a delimited substring, possibly
 after skipping a specified prefix string.
@@ -43,12 +33,12 @@ after skipping a specified prefix string.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Text-Balanced-%{version}
 
@@ -59,36 +49,29 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 rm %{buildroot}%{_libexecdir}/%{name}/t/9*
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 unset AUTHOR_TESTING
 make test
-
-%files
-%license LICENCE
-%doc Changes README
-%{perl_vendorlib}/Text*
-%{_mandir}/man3/Text::Balanced*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Text-Balanced-tests -f %{oreon_filedir}/perl-Text-Balanced-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.07-2
 - Prepare for Oreon 11 (RP1)

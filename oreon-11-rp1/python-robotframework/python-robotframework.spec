@@ -1,59 +1,40 @@
-%global source0_hash none
-
+%global source0_hash ff6233ff752a200ece4d0a6c59f6f9f7d0e96dcff0a7a3458296b997b812482e
 Name:           python-robotframework
 Version:        7.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Generic automation framework for acceptance testing and robotic process automation _RPA_
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/robotframework/robotframework
-Source:         %{pypi_source robotframework}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/robotframework/robotframework-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'robotframework' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-robotframework = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-robotframework
-Summary:        %{summary}
-
-%description -n python3-robotframework %_description
-
+Summary:        Generic automation framework for acceptance testing and robotic process automation _RPA_
+%description -n python3-robotframework
 
 %prep
-%autosetup -p1 -n robotframework-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir robotframework-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-robotframework usr/lib/python3*/site-packages/robotframework* usr/lib64/python3*/site-packages/robotframework* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/robotframework* usr/lib64/python3*/site-packages/robotframework* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-robotframework -f %{pyproject_files}
-%{_bindir}/libdoc
-%{_bindir}/rebot
-%{_bindir}/robot
+%files
+%files -n python3-robotframework -f %{oreon_filedir}/python3-robotframework.list
 
 %changelog
+
 %autochangelog

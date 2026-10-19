@@ -1,61 +1,58 @@
-%global source0_hash 478fab04fb7e2ee99a6e6c31675e395b45eff934681e23b9d34b0cd07d70f698
-
+%global source5_hash b28b62b0f730f7b36f02a9a4dbb1ff39b67407d4619f21aeaa11747046932230
+%global source4_hash 4659ae22e05c4e6f73d5c562d2ede2a4da576b75e88b0409cc9fd5f39a07e652
+%global source3_hash c65c7dd65d44e50123eaba63fec20d045f7c8a165417b11a0b137ab113a8d4b7
+%global source2_hash e2fc23425e60e5257668faaa9dad0132d318e35323a2921ceaf1a8e43a159851
+%global source1_hash 478fab04fb7e2ee99a6e6c31675e395b45eff934681e23b9d34b0cd07d70f698
+%global source0_hash 997be782f6d731db7ba015426e7baad3623dc7b62639fdd9a8f0e3c49efacb4f
 %bcond check 1
-
 Name:           avogadro2-libs
 Version:        1.103.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Avogadro2 libraries
-
-# BSD is main license
 License: BSD-3-Clause AND (Apache-2.0 AND MIT) AND CDDL-1.0
 URL:     https://two.avogadro.cc/
-Source0: https://github.com/OpenChemistry/avogadrolibs/archive/%{version}/avogadrolibs-%{version}.tar.gz
+Source0:        https://github.com/OpenChemistry/avogadrolibs/archive/%{version}/avogadrolibs-%{version}.tar.gz
 Source1: https://github.com/OpenChemistry/avogenerators/archive/%{version}/avogenerators-%{version}.tar.gz
-
-# External sources for data files
 Source2: https://github.com/OpenChemistry/molecules/archive/refs/tags/%{version}/molecules-%{version}.tar.gz
 Source3: https://github.com/OpenChemistry/crystals/archive/refs/tags/%{version}/crystals-%{version}.tar.gz
 Source4: https://github.com/OpenChemistry/fragments/archive/refs/tags/%{version}/fragments-%{version}.tar.gz
 Source5: https://github.com/OpenChemistry/avogadrodata/archive/refs/tags/%{version}/avogadrodata-%{version}.tar.gz
-
-BuildRequires:  boost-devel
-BuildRequires:  python3-devel
-BuildRequires:  python3-pybind11
-BuildRequires:  cmake
-BuildRequires:  cups-devel
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig(eigen3)
-BuildRequires:  pkgconfig(glew)
-BuildRequires:  pkgconfig(openbabel-3)
-BuildRequires:  openssl-devel >= 3.0
-BuildRequires:  pkgconfig(liblzma)
-BuildRequires:  pkgconfig(readline)
-BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(spglib)
-BuildRequires:  mesa-libGLU-devel
 %if %{with check}
-BuildRequires:  pkgconfig(gtest)
-%endif
-BuildRequires:  hdf5-devel
-BuildRequires:  mmtf-cpp-devel
-BuildRequires:  jsoncpp-devel
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  qt6-qttools-devel
-BuildRequires:  qt6-qtsvg-devel
-BuildRequires:  JKQtPlotter-devel
-%if 0%{?fedora}
-BuildRequires:  libarchive-devel >= 3.4.0
 %endif
 Provides: %{name}-static = 0:%{version}-%{release}
-
 %py_provides python3-%{name}
 %py_provides python3-avogadro
-
-# Do not download "fragments" files
 Patch0: avogadro2-libs-avoid_downloading.patch
-
+# oreon:deps
+BuildRequires:  JKQtPlotter-devel
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  cups-devel
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  graphviz
+BuildRequires:  hdf5-devel
+BuildRequires:  jsoncpp-devel
+BuildRequires:  libarchive-devel
+BuildRequires:  make
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  mmtf-cpp-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig(eigen3)
+BuildRequires:  pkgconfig(glew)
+BuildRequires:  pkgconfig(gtest)
+BuildRequires:  pkgconfig(liblzma)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(openbabel-3)
+BuildRequires:  pkgconfig(readline)
+BuildRequires:  pkgconfig(spglib)
+BuildRequires:  python3-devel
+BuildRequires:  python3-pybind11
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtsvg-devel
+BuildRequires:  qt6-qttools-devel
+# /oreon:deps
 %description
 Avogadro libraries provide 3D rendering, visualization, analysis
 and data processing useful in computational chemistry, molecular modeling,
@@ -70,9 +67,7 @@ Requires: libGL-devel%{?_isa}
 Requires: mesa-libGLU-devel%{?_isa}
 Requires: spglib-devel%{?_isa}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 Provides: libgwavi-static
-
 %description devel
 This package contains libraries and header files for developing
 applications that use %{name}.
@@ -86,6 +81,7 @@ BuildRequires: make
 HTML documentation of %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n avogadrolibs-%{version}
@@ -123,11 +119,7 @@ export CXXFLAGS="%{optflags} -DEIGEN_ALTIVEC_DISABLE_MMA"
  -DENABLE_GLSL:BOOL=ON \
  -DUSE_PYTHON:BOOL=ON  \
  -DPYTHON_WHEEL_BUILD:BOOL=ON \
-%if 0%{?fedora}
- -DUSE_LIBARCHIVE:BOOL=ON \
-%else
  -DUSE_LIBARCHIVE:BOOL=OFF \
-%endif
  -DENABLE_RPATH:BOOL=OFF \
  -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON \
 %if %{with check}
@@ -151,42 +143,26 @@ export CXXFLAGS="%{optflags} -DEIGEN_ALTIVEC_DISABLE_MMA"
  -DCMAKE_INSTALL_MANDIR:PATH=%{_mandir}/man1
 
 %build
+
 %cmake_build
 %cmake_build -t documentation
-
 %install
 %cmake_install
-
 %py3_shebang_fix %{buildroot}%{_libdir}/avogadro2/scripts
 rm -rf %{buildroot}%{_datadir}/doc
 mkdir -p %{buildroot}%{_pkgdocdir}
 cp -a %_vpath_builddir/docs/html %{buildroot}%{_pkgdocdir}/html/
+%oreon_autofiles avogadro2-libs-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles avogadro2-libs-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files
-%doc README.md thirdparty/libgwavi/README-libgwavi.md avogenerators/README-avogenerators.md
-%doc fragments/README-fragments.md
-%license LICENSE molecules/LICENSE-molecules fragments/LICENSE-fragments
-%{_libdir}/libAvogadro*.so.1
-%{_libdir}/libAvogadro*.so.%{version}
-%dir %{_libdir}/avogadro2
-%{_libdir}/avogadro2/scripts/
-%{_libdir}/avogadro2/libgwavi.a
-%{_libdir}/avogadro2/staticplugins/
-%{_datadir}/avogadro2/
-%{python3_sitearch}/avogadro/
-
-%files devel
-%{_includedir}/avogadro2/
-%{_libdir}/libAvogadro*.so
-%{_libdir}/cmake/avogadrolibs/
-
-%files doc
-%doc README.md
-%{_pkgdocdir}/html
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n avogadro2-libs-devel -f %{oreon_filedir}/avogadro2-libs-devel.list
+%files -n avogadro2-libs-doc -f %{oreon_filedir}/avogadro2-libs-doc.list
 
 %changelog
+
 %autochangelog

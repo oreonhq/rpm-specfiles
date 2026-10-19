@@ -1,65 +1,46 @@
-%global source0_hash d35c39eda47754fbd83f47d057ff7f626183e876ff8d4ee9a03b3f659828c848
-
+%global source1_hash 214c2ff76492bfc0bdc7eb18afdd4b62e5b64c34745852c6e0df8633788d1ae7
+%global source0_hash 05474ecef352e388fceeb2ab4d83ca08cef2246ac4b7c49043ba97ea09bd04fb
 %global sum GNU Scientific Library Interface for python
-
-# Put all the documentation in one place
 %global _docdir_fmt %{name}
-
-# A C++ header file is named with a .py extension
 %global _python_bytecompile_errors_terminate_build 0
-
 Name:           pygsl
 Version:        2.6.6
-Release:        %autorelease
-Summary:        %{sum}
-
+Release:        1%{?dist}
+Summary:        GNU Scientific Library Interface for python
 License:        GPL-2.0-or-later
 URL:            https://github.com/pygsl/pygsl
 VCS:            git:%{url}.git
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://www.gnu.org/software/gsl/doc/html/objects.inv
-# Link with flexiblas instead of gslcblas
 Patch:          %{name}-flexiblas.patch
-# Fix the multinomial rng test
-# See https://github.com/pygsl/pygsl/pull/58
 Patch:          %{name}-rng-test.patch
-# Fix FTBFS due to incompatible pointer types
 Patch:          %{name}-incompatible-pointer.patch
-# Fix warnings due to printf format mismatches
 Patch:          %{name}-format-mismatch.patch
-
-# Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
+# oreon:deps
+BuildRequires:  flexiblas-devel
 BuildRequires:  gcc
 BuildRequires:  gsl-devel
-BuildRequires:  flexiblas-devel
-BuildRequires:  %{py3_dist pytest}
+BuildRequires:  python3dist(pytest)
+BuildRequires:  python3dist(sphinx)
+BuildRequires:  python3dist(sphinx-rtd-theme)
 BuildRequires:  swig
-
-# Documentation dependencies
-BuildRequires:  %{py3_dist sphinx}
-BuildRequires:  %{py3_dist sphinx-rtd-theme}
-
+# /oreon:deps
 %description
 This project provides a python interface for the GNU scientific library (gsl).
 
 %package -n python3-pygsl
 Summary:       %{sum}
-# This can be removed when F44 reaches EOL
 Obsoletes:     pygsl < 2.4.0-2
 Provides:      pygsl = %{version}-%{release}
-
 %description -n python3-pygsl
 This project provides a python interface for the GNU scientific library (gsl).
 
 %package -n python3-pygsl-devel
 Summary:       Development files for pygsl
 Requires:      python3-pygsl = %{version}-%{release}
-# This can be removed when F44 reaches EOL
 Obsoletes:     pygsl-devel < 2.4.0-2
 Provides:      pygsl-devel = %{version}-%{release}
-
 %description -n python3-pygsl-devel
 Development files for pygsl.
 
@@ -67,11 +48,11 @@ Development files for pygsl.
 Summary:       Reference manual for pygsl
 License:       GFDL-1.1-no-invariants-or-later AND GPL-2.0-or-later
 BuildArch:     noarch
-
 %description doc
 Reference manual for pygsl.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -108,43 +89,33 @@ sed -e "s|\('http://www.gnu.org/software/gsl/doc/html/', \)None|\1'%{SOURCE1}'|"
 %py3_shebang_fix pygsl typemaps/c.py
 
 %build -p
-# Use flexiblas instead of gslcblas
-export GSL_CBLAS_LIB=-lflexiblas
 
+export GSL_CBLAS_LIB=-lflexiblas
 %install
 %pyproject_install
-# Fix permissions
 chmod 0755 %{buildroot}%{python3_sitearch}/pygsl/{_generic_solver,block,chebyshev,fit,gsl_function,integrate,interpolation,minimize,monte,multi{fit{,_nlin},minimize,roots},odeiv,qrng,roots,siman,spline,vector}.py
-
-# Move the header files where we want them
 mkdir %{buildroot}%{_includedir}
 mv %{buildroot}%{python3_sitearch}/Include \
    %{buildroot}%{_includedir}/python%{python3_version}
-
-# There are no byte-compiled files for non-python files with a py extension
 sed -i '\%%cfg/__pycache__%%d' %{pyproject_files}
-
-# Build the documentation once we have an installed tree to reference
 %{py3_test_envvars} sphinx-build -b html %{?_smp_mflags} doc html
 rst2html --no-datestamp CREDITS.rst CREDITS.html
 rst2html --no-datestamp README.rst README.html
 rst2html --no-datestamp TODO.rst TODO.html
 rm -fr html/.{buildinfo,doctrees}
+%oreon_autofiles python3-pygsl usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles python3-pygsl-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export FLEXIBLAS=netlib
 %pytest tests/
-
-%files -n python3-pygsl -f %{pyproject_files}
-%doc ChangeLog README.html CREDITS.html TODO.html
-%license COPYING
-
-%files -n python3-pygsl-devel
-%{_includedir}/python%{python3_version}/pygsl/
-
-%files doc
-%doc examples/ html/
-%license COPYING
+%files -f %{oreon_filedir}/main.list
+%files -n python3-pygsl -f %{oreon_filedir}/python3-pygsl.list
+%files -n python3-pygsl-devel -f %{oreon_filedir}/python3-pygsl-devel.list
+%files -n pygsl-doc -f %{oreon_filedir}/pygsl-doc.list
 
 %changelog
+
 %autochangelog

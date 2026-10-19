@@ -1,45 +1,34 @@
 %global source0_hash 2aae3628f4648f86959d7853e7e1f50ee96a7f1bb5497afb62b7deff6c350170
-
 %global qt_module qtvirtualkeyboard
-
-#global unstable 0
 %if 0%{?unstable}
 %global prerelease rc
 %endif
-
 %global examples 1
-
-Summary: Qt6 - VirtualKeyboard component
+Summary:        Qt6 - VirtualKeyboard component
 Name:    qt6-%{qt_module}
 Version: 6.12.0
-Release: %autorelease
-
+Release:        1%{?dist}
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt.io
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 %global  qt_version %(echo %{version} | cut -d~ -f1)
-
 %if 0%{?unstable}
 %else
-Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-s%{prerelease}-%{version}.tar.xz
 %endif
-
-## upstreamable patches
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: ninja-build
-BuildRequires: qt6-qtbase-devel >= %{version}
-BuildRequires: qt6-qtbase-private-devel
 %{?_qt6:Requires: %{_qt6}%{?_isa} = %{_qt6_version}}
-BuildRequires: qt6-qtdeclarative-devel >= %{version}
-BuildRequires: qt6-qtsvg-devel >= %{version}
-BuildRequires: pkgconfig(xkbcommon)
-BuildRequires: hunspell-devel
-
-# version unknown
 Provides: bundled(libpinyin)
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  hunspell-devel
+BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  qt6-qtdeclarative-devel
+BuildRequires:  qt6-qtsvg-devel
+# /oreon:deps
 %description
 The Qt Virtual Keyboard project provides an input framework and reference keyboard frontend
 for Qt 6.  Key features include:
@@ -71,74 +60,24 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}} -p1
 
-
 %build
+
 %cmake_qt6 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSES/*
-%{_qt6_archdatadir}/sbom/%{qt_module}-%{qt_version}.spdx
-%{_qt6_libdir}/libQt6HunspellInputMethod.so.6*
-%{_qt6_libdir}/libQt6VirtualKeyboard.so.6*
-%{_qt6_libdir}/libQt6VirtualKeyboardSettings.so.6*
-%{_qt6_libdir}/libQt6VirtualKeyboardQml.so.6*
-%{_qt6_plugindir}/platforminputcontexts/libqtvirtualkeyboardplugin.so
-%{_qt6_qmldir}/QtQuick/VirtualKeyboard/
-
-%files devel
-%{_qt6_headerdir}/QtHunspellInputMethod/
-%{_qt6_headerdir}/QtVirtualKeyboard/
-%{_qt6_headerdir}/QtVirtualKeyboardSettings/
-%{_qt6_headerdir}/QtVirtualKeyboardQml/
-%{_qt6_libdir}/libQt6HunspellInputMethod.prl
-%{_qt6_libdir}/libQt6HunspellInputMethod.so
-%{_qt6_libdir}/libQt6VirtualKeyboard.prl
-%{_qt6_libdir}/libQt6VirtualKeyboard.so
-%{_qt6_libdir}/libQt6VirtualKeyboardSettings.prl
-%{_qt6_libdir}/libQt6VirtualKeyboardSettings.so
-%{_qt6_libdir}/libQt6VirtualKeyboardQml.prl
-%{_qt6_libdir}/libQt6VirtualKeyboardQml.so
-%dir %{_qt6_libdir}/cmake/Qt6HunspellInputMethod/
-%dir %{_qt6_libdir}/cmake/Qt6HunspellInputMethodPrivate/
-%dir %{_qt6_libdir}/cmake/Qt6VirtualKeyboard/
-%dir %{_qt6_libdir}/cmake/Qt6VirtualKeyboardPrivate/
-%dir %{_qt6_libdir}/cmake/Qt6VirtualKeyboardQml
-%dir %{_qt6_libdir}/cmake/Qt6VirtualKeyboardQmlPrivate
-%dir %{_qt6_libdir}/cmake/Qt6VirtualKeyboardSettings/
-%dir %{_qt6_libdir}/cmake/Qt6VirtualKeyboardSettingsPrivate
-%{_qt6_libdir}/cmake/Qt6/*.cmake
-%{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/*.cmake
-%{_qt6_libdir}/cmake/Qt6Gui/*.cmake
-%{_qt6_libdir}/cmake/Qt6HunspellInputMethod/*.cmake
-%{_qt6_libdir}/cmake/Qt6HunspellInputMethodPrivate/*.cmake
-%{_qt6_libdir}/cmake/Qt6Qml/QmlPlugins/*.cmake
-%{_qt6_libdir}/cmake/Qt6VirtualKeyboard/*.cmake
-%{_qt6_libdir}/cmake/Qt6VirtualKeyboardPrivate/*.cmake
-%{_qt6_libdir}/cmake/Qt6VirtualKeyboardQml/*.cmake
-%{_qt6_libdir}/cmake/Qt6VirtualKeyboardQmlPrivate/*.cmake
-%{_qt6_libdir}/cmake/Qt6VirtualKeyboardSettings/*.cmake
-%{_qt6_libdir}/cmake/Qt6VirtualKeyboardSettingsPrivate/*.cmake
-%{_qt6_archdatadir}/mkspecs/modules/qt_lib_hunspellinputmethod*.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_lib_virtualkeyboard*.pri
-%{_qt6_libdir}/qt6/modules/*.json
-%{_qt6_libdir}/qt6/metatypes/qt6*_metatypes.json
-%{_qt6_libdir}/pkgconfig/*.pc
-
-%if 0%{?examples}
-%files examples
-%{_qt6_examplesdir}/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n qt6-qtvirtualkeyboard-devel -f %{oreon_filedir}/qt6-qtvirtualkeyboard-devel.list
+%files -n qt6-qtvirtualkeyboard-examples -f %{oreon_filedir}/qt6-qtvirtualkeyboard-examples.list
 
 %changelog
+
 %autochangelog

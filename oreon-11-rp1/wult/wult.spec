@@ -1,32 +1,21 @@
 %global source0_hash 8a25bdfc0f991701554e7982523780de78f2b4de5a55a2a378828c3299204d36
-
 Name:		wult
 Version:	1.12.48
-Release:	%autorelease
-Summary:	A tool for measuring C-state latency in Linux
-
+Release:        1%{?dist}
+Summary:        A tool for measuring C-state latency in Linux
 License:	BSD-3-Clause AND GPL-2.0-only
 Url:		https://github.com/intel/wult
-Source0:	%url/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# exclude backup kernel driver and duplications
+Source0:        https://github.com/intel/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:		exclude-dirs.patch
-
-# measuring C-state latency for Intel architectures  
 ExclusiveArch:	x86_64
-
-BuildRequires:	bpftool
-BuildRequires:	clang
-BuildRequires:	gcc
-BuildRequires:	make
-BuildRequires:	kernel-devel
-BuildRequires:	libbpf-devel
-BuildRequires:	python3-devel
-BuildRequires:	python3-pytest
 Requires:	pciutils
 Requires:	pepc
 Requires:	python3-%{name} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-wult = %{version}-%{release}
+# /oreon:deps
 %description
 The name Wult comes from "Wake Up Latency Tracer". Wult measures C-state
 latency by scheduling a delayed interrupt at a known time in the future, so it
@@ -38,50 +27,30 @@ Intel Ethernet adapters.
 %package -n python3-%{name}
 Summary:	Wult Python library
 BuildArch:	noarch
-
 %description -n python3-%{name}
 Wult Python libraries
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires -r
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %make_build -C helpers/ndl-helper
 %make_build -C helpers/wult-freq-helper
-
 %install
 %pyproject_install
-%pyproject_save_files wultlibs wulttools
-
 install -pDm755 helpers/ndl-helper/ndl-helper %{buildroot}%{_bindir}/ndl-helper
 install -pDm755 helpers/wult-freq-helper/wult-freq-helper %{buildroot}%{_bindir}/wult-freq-helper
+%oreon_autofiles main usr/lib/python3*/site-packages/wult* usr/lib64/python3*/site-packages/wult* usr/bin/*
 
 %check
+
 %pytest -v
-
 %files
-%doc README.md CHANGELOG.md
-%license LICENSE.md
-%{_bindir}/exercise-sut
-%{_bindir}/ndl
-%{_bindir}/ndl-helper
-%{_bindir}/pbe
-%{_bindir}/wult
-%{_bindir}/wult-freq-helper
-%{_datadir}/wult
-%{_mandir}/man1/exercise-sut*.1.gz
-%{_mandir}/man1/ndl-*1.gz
-%{_mandir}/man1/pbe-*1.gz
-%{_mandir}/man1/wult-*.1.gz
-
-%files -n python3-%{name} -f %{pyproject_files}
+%files -n python3-wult -f %{oreon_filedir}/python3-wult.list
 
 %changelog
+
 %autochangelog

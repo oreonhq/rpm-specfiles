@@ -1,60 +1,33 @@
 %global source0_hash dc08db0b568a3c72114a0004b6348628071e5ef077884c1a93138ba19de753d3
-
 %bcond check 0
-
 Name:           duplicity
 Version:        3.2.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Encrypted bandwidth-efficient backup using rsync algorithm
-
-# The entire source is GPL-2.0-or-later, except:
-#
-# MIT:
-#   - duplicity/backends/b2backend.py
-#   - duplicity/backends/pyrax_identity/hubic.py
-# GPL-3.0-or-later:
-#   - duplicity/backends/tahoebackend.py
-#
-# Additionally, the following are not installed and therefore do not contribute
-# to the license of the binary RPM:
-#
-# LGPL-2.1-or-later:
-#   - testing/unit/test_gpginterface.py:
 License:        GPL-2.0-or-later AND MIT AND GPL-3.0-or-later
 URL:            https://duplicity.gitlab.io/
-#Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Source0:        https://gitlab.com/duplicity/duplicity/-/archive/rel.%{version}/duplicity-rel.%{version}.tar.bz2
-
-# chg:test: Add test case for issue #683.
-# https://gitlab.com/duplicity/duplicity/-/commit/e6671cdf4ed8b21b4a8bd1973bd458f62792cd29
 Patch0:         e6671cdf4ed8b21b4a8bd1973bd458f62792cd29.patch
-
 Requires:       ca-certificates
 Requires:       gnupg >= 1.0.6
 Requires:       python3dist(pexpect)
 Requires:  python3dist(fasteners)
 Requires:       rsync
-
 Recommends:     ncftp >= 3.1.9
 Recommends:     openssh-clients
 Recommends:     python3dist(boto3)
 Recommends:     python3dist(dropbox)
 Recommends:     python3dist(paramiko)
-
-BuildRequires:  gcc
-BuildRequires:  gettext
-BuildRequires:  python3-devel
+# oreon:deps
 BuildRequires:  pyproject-rpm-macros
-BuildRequires:  librsync-devel >= 0.9.6
-BuildRequires:  python3dist(wheel)
-# dependencies for check
-BuildRequires:  gnupg >= 1.0.6
-BuildRequires:  python3dist(setuptools-scm)
-BuildRequires:  python3dist(fasteners)
-BuildRequires:  python3dist(pexpect)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pycodestyle)
-
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(build) >= 1.1
+BuildRequires:  python3dist(pip) >= 24.0
+BuildRequires:  python3dist(setuptools) >= 78.1.0
+BuildRequires:  python3dist(setuptools-gettext) >= 0.1.18
+BuildRequires:  python3dist(wheel) >= 0.42.0
+Requires:       python3-duplicity = %{version}-%{release}
+# /oreon:deps
 %description
 Duplicity incrementally backs up files and directory by encrypting
 tar-format volumes with GnuPG and uploading them to a remote (or
@@ -69,6 +42,7 @@ unix permissions, directories, symbolic links, fifos, device files,
 but not hard links.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-rel.%{version}
@@ -84,23 +58,15 @@ for i in atom boxsdk gdata-python3 gettext jottalib mediafire megatools pyrax py
   sed -i /"$i"/d requirements.txt
 done
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files duplicity
-
 mkdir -p %{buildroot}/%{_sysconfdir}/%{name}
 ln -sf %{_sysconfdir}/pki/tls/cert.pem \
        %{buildroot}/%{_sysconfdir}/%{name}/cacert.pem
-
 %find_lang %{name}
-
-# drop documentation
 rm -rf %{buildroot}%{_docdir}/duplicity-%{version}/AUTHORS.md
 rm -rf %{buildroot}%{_docdir}/duplicity-%{version}/CHANGELOG.md
 rm -rf %{buildroot}%{_docdir}/duplicity-%{version}/COPYING
@@ -109,22 +75,17 @@ rm -rf %{buildroot}%{_docdir}/duplicity-%{version}/README-LOG.md
 rm -rf %{buildroot}%{_docdir}/duplicity-%{version}/README-SNAP.md
 rm -rf %{buildroot}%{_docdir}/duplicity-%{version}/README-TESTING.md
 rm -rf %{buildroot}%{_docdir}/duplicity-%{version}/README-REPO.md
-
 %if %{with check}
-# https://gitlab.com/duplicity/duplicity/-/issues/820
 %ifnarch ppc64le
+%oreon_autofiles main
+
 %check
+
 %pytest -k 'not test_pylint and not test_black and not test_GzipWriteFile and not test_gpg_asym and not test_gpg_signing and not test_out_of_order_volume and not test_last_file_missing_at_end'
 %endif
 %endif
-
-%files -f %{name}.lang -f %{pyproject_files}
-# pyproject_files handles COPYING in dist-info; verify with “rpm -qL -p …”
-%doc AUTHORS.md CHANGELOG.md README.md
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}*
-%dir %{_sysconfdir}/%{name}
-%{_sysconfdir}/%{name}/cacert.pem
+%files
 
 %changelog
+
 %autochangelog

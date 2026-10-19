@@ -1,49 +1,43 @@
 %global source0_hash 4d0538454c636c763731f601db0ef5164e089fc6eb0988fe6bcd53e4b5d377da
-
 %global tarball xf86-input-synaptics
 %global moduledir %(pkg-config xorg-server --variable=moduledir )
 %global driverdir %{moduledir}/input
-
-#global gitdate 20160929
-#global gitversion 48632211
-
 Name:           xorg-x11-drv-synaptics
 Summary:        Xorg X11 Synaptics touchpad input driver
 Version:        1.10.0
-Release:        4%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release:        1%{?dist}
 URL:            http://www.x.org
-# SPDX
 License:        MIT
-
 %if 0%{?gitdate}
-Source0:        %{tarball}-%{gitdate}.tar.bz2
+Source0:        https://xorg.freedesktop.org/archive/individual/driver/%{tarball}-%{version}.tar.gz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://xorg.freedesktop.org/archive/individual/driver/%{tarball}-%{version}.tar.gz
 %endif
 Source3:        70-synaptics.conf
 Source4:        70-touchpad-quirks.rules
-
 ExcludeArch:    s390 s390x
-
-BuildRequires:  make
-BuildRequires:  git-core
-BuildRequires:  autoconf automake libtool pkgconfig
-BuildRequires:  xorg-x11-server-devel >= 1.10.99.902
-BuildRequires:  libX11-devel libXi-devel libXtst-devel
-BuildRequires:  xorg-x11-util-macros >= 1.8.0
-BuildRequires:  libevdev-devel
-BuildRequires:  systemd
-
 Requires:       Xorg %(xserver-sdk-abi-requires ansic)
 Requires:       Xorg %(xserver-sdk-abi-requires xinput)
 Requires:       libevdev
 Requires:       libXi libXtst
-
 Provides:       synaptics = %{version}-%{release}
 Obsoletes:      synaptics < 0.15.0
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  git-core
+BuildRequires:  libX11-devel
+BuildRequires:  libXi-devel
+BuildRequires:  libXtst-devel
+BuildRequires:  libevdev-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  systemd
+BuildRequires:  xorg-x11-server-devel
+BuildRequires:  xorg-x11-util-macros
+# /oreon:deps
 %description
 This package is a an empty package. For the legacy X.Org touchpad driver,
 please install xorg-x11-drv-synaptics legacy.
@@ -51,7 +45,6 @@ please install xorg-x11-drv-synaptics legacy.
 %package legacy
 Summary:        Xorg X11 synaptics input driver
 Requires:       pkgconfig
-
 %description legacy
 This is the Synaptics touchpad driver for the X.Org X server. The following
 touchpad models are supported:
@@ -91,6 +84,7 @@ Features:
       parameter settings without restarting the X server.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
@@ -109,63 +103,36 @@ git commit -a -q -m "%{version} baseline."
 git am -p1 %{patches} < /dev/null
 
 %build
+
 autoreconf -v --install --force || exit 1
 %configure --disable-static --disable-silent-rules
 make %{?_smp_mflags}
-
 %install
 %make_install
-
-# FIXME: Remove all libtool archives (*.la) from modules directory.  This
-# should be fixed in upstream Makefile.am or whatever.
 find $RPM_BUILD_ROOT -regex ".*\.la$" | xargs rm -f --
-
-# Remove upstream synaptics.conf as we've several special fixes in ours
 rm $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d/70-synaptics.conf
-
 install -d $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d
 install -m 0644 %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/X11/xorg.conf.d/70-synaptics.conf
-
 install -d $RPM_BUILD_ROOT%{_udevrulesdir}
 install -m 0644 %{SOURCE4} $RPM_BUILD_ROOT%{_udevrulesdir}/70-touchpad-quirks.rules
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %post
-udevadm control --reload-rules || :
 
+udevadm control --reload-rules || :
 %postun
+
 udevadm control --reload-rules || :
-
-# NOTE: xorg-x11-drv-synaptics is obsoleted by xorg-x11-drv-libinput.
-# The main package does not have any files anymore and thus does not
-# generate an rpm. xorg-x11-drv-libinput can thus easily obsolete < 1.9.0-3,
-# the synaptics files are now in xorg-x11-drv-legacy only.
-#
-# DO NOT CHANGE THIS.
-#
-%files legacy
-%doc README.md
-%license COPYING
-%{_datadir}/X11/xorg.conf.d/70-synaptics.conf
-%{driverdir}/synaptics_drv.so
-%{_bindir}/synclient
-%{_bindir}/syndaemon
-%{_mandir}/man4/synaptics.4*
-%{_mandir}/man1/synclient.1*
-%{_mandir}/man1/syndaemon.1*
-%{_udevrulesdir}/70-touchpad-quirks.rules
-
 %package devel
 Summary:        Xorg X11 synaptics input driver
 Requires:       pkgconfig
-
 %description devel
 Development files for the Synaptics TouchPad for X.Org.
 
-%files devel
-%license COPYING
-%{_libdir}/pkgconfig/xorg-synaptics.pc
-%dir %{_includedir}/xorg
-%{_includedir}/xorg/synaptics-properties.h
+%files -f %{oreon_filedir}/main.list
+%files -n xorg-x11-drv-synaptics-legacy -f %{oreon_filedir}/xorg-x11-drv-synaptics-legacy.list
+%files -n xorg-x11-drv-synaptics-devel -f %{oreon_filedir}/xorg-x11-drv-synaptics-devel.list
 
 %changelog
+
 %autochangelog

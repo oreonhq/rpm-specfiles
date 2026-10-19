@@ -1,43 +1,15 @@
-%global source0_hash f740164f50733729b2de8bf74734811125233dc47d2254cab5391f8263d6bcdd
-
-# Sadness, this directory is hardcoded everywhere
+%global source0_hash e0fb5df9805a2e217fea92c03c65f9f65f5f6884ac5f470e6c79254f41d6d498
 %global _libdir /usr/lib
-
-# SUSE guys use OBS to automatically handle release numbers,
-# when rebasing check what they are using on
-# https://download.opensuse.org/repositories/openSUSE:/Tools/Fedora_Rawhide/src/
-# update the obsrel to match the upstream release number
 %global obsrel 2.1
-
 Name:           obs-build
 Version:        20260910
-Release:        %{obsrel}.%{autorelease}
+Release:        1%{?dist}
 Summary:        A generic package build script
-
 License:        (GPL-2.0-only OR GPL-3.0-only) AND GPL-2.0-or-later
 URL:            https://github.com/openSUSE/obs-build
-
-# Tarball retrieved from
-# https://build.opensuse.org/package/show/openSUSE:Tools/build
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-# Potentially not upstreamable patches
-## Restore shebang to openstack-console script
+Source0:        https://github.com/openSUSE/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0501:      0501-Revert-Drop-shebang-line-from-openstack-console.patch
-
 BuildArch:      noarch
-
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  python3-devel
-BuildRequires:  /usr/bin/prove
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Digest::MD5)
-BuildRequires:  perl(Digest::SHA)
-BuildRequires:  perl(Date::Parse)
-BuildRequires:  perl(FindBin)
-BuildRequires:  (perl(YAML::PP) or perl(YAML::XS))
-BuildRequires:  perl(POSIX)
 Requires:       bash, perl-interpreter, binutils, tar
 Requires:       gzip, bzip2, xz, zstd
 Requires:       python3-websocket-client
@@ -58,13 +30,21 @@ Recommends:     perl(URI)
 Recommends:     perl(XML::Parser)
 Recommends:     perl(YAML::LibYAML)
 Requires:       perl(POSIX)
-
 Provides:       build = %{version}-%{release}
 Requires:       %{name}-mkbaselibs = %{version}-%{release}
-%if 0%{?fedora} || 0%{?rhel} >= 8
-Recommends:     %{name}-mkdrpms = %{version}-%{release}
-%endif
-
+# oreon:deps
+BuildRequires:  (perl(YAML::PP) or perl(YAML::XS))
+BuildRequires:  /usr/bin/prove
+BuildRequires:  make
+BuildRequires:  perl(Date::Parse)
+BuildRequires:  perl(Digest::MD5)
+BuildRequires:  perl(Digest::SHA)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(POSIX)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl-generators
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 This package provides a script for building packages in a chroot environment.
 It is commonly used with the Open Build Service as the engine for building
@@ -74,7 +54,6 @@ packages for a wide variety of distributions.
 Summary:        Tools to generate base library packages
 Provides:       build-mkbaselibs = %{version}-%{release}
 AutoReq:        no
-
 %description mkbaselibs
 This package contains the parts which may be installed in the inner build
 system for generating base library packages.
@@ -84,18 +63,14 @@ Summary:        Tools to generate DeltaRPMs
 Provides:       build-mkdrpms = %{version}-%{release}
 Requires:       deltarpm
 Requires:       %{name} = %{version}-%{release}
-
 %description mkdrpms
 This package contains the parts which may be installed in the inner build
 system for generating DeltaRPM packages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-# Nothing to do here
 
 %install
 %make_install
@@ -103,42 +78,21 @@ pushd %{buildroot}%{_libdir}/build/configs/
 touch default.conf
 test -e default.conf
 popd
-
-# Install man pages
 install -d -m 0755 %{buildroot}%{_mandir}/man1
 install -m 0644 build.1* %{buildroot}%{_mandir}/man1/
 install -m 0644 buildvc.1* %{buildroot}%{_mandir}/man1/
 install -m 0644 unrpm.1* %{buildroot}%{_mandir}/man1/
-
-# Fix Python shebang for openstack-console
 sed -e "s|#!/usr/bin/python|#!%{__python3}|" \
     -i %{buildroot}%{_libdir}/build/openstack-console
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %make_build test
-
-%files
-%license COPYING
-%doc README.md
-%{_bindir}/build
-%{_bindir}/buildvc
-%{_bindir}/unrpm
-%{_bindir}/pbuild
-%{_libdir}/build
-%{_mandir}/man1/build.1*
-%{_mandir}/man1/buildvc.1*
-%{_mandir}/man1/unrpm.1*
-%{_mandir}/man1/pbuild.1*
-%exclude %{_libdir}/build/mkbaselibs
-%exclude %{_libdir}/build/baselibs*
-%exclude %{_libdir}/build/mkdrpms
-
-%files mkbaselibs
-%{_libdir}/build/mkbaselibs
-%{_libdir}/build/baselibs*
-
-%files mkdrpms
-%{_libdir}/build/mkdrpms
+%files -f %{oreon_filedir}/main.list
+%files -n obs-build-mkbaselibs -f %{oreon_filedir}/obs-build-mkbaselibs.list
+%files -n obs-build-mkdrpms -f %{oreon_filedir}/obs-build-mkdrpms.list
 
 %changelog
+
 %autochangelog

@@ -1,62 +1,63 @@
-%global source0_hash none
-
+%global source0_hash 313f35e9fe6b9ddf72759b14dac25166fe5757c970403e4bbf87a70ab2be07df
 Name:           python-gmpy2
 Version:        2.3.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        gmpy2 interface to GMP, MPFR, and MPC for Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
 URL:            https://github.com/gmpy2/gmpy2
-Source:         %{pypi_source gmpy2}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/gmpy2/gmpy2-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
+BuildRequires:  python3dist(setuptools) < 80
+BuildRequires:  python3dist(setuptools) >= 77
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.0
+Requires:       python3-gmpy2 = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-gmpy2+docs
+Summary:        Metapackage for python3-gmpy2 docs extras
+Requires:       python3-gmpy2 = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 4
+Requires:       python3dist(sphinx-rtd-theme) >= 1
+Provides:       python3dist(gmpy2[docs]) = %{version}-%{release}
 
+%description -n python3-gmpy2+docs
+Metapackage for python3-gmpy2 docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'gmpy2' generated automatically by pyp2spec.}
+%package -n       python3-gmpy2+tests
+Summary:        Metapackage for python3-gmpy2 tests extras
+Requires:       python3-gmpy2 = %{version}-%{release}
+Provides:       python3dist(gmpy2[tests]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-gmpy2+tests
+Metapackage for python3-gmpy2 tests extras.
+
+%description
 
 %package -n     python3-gmpy2
-Summary:        %{summary}
-
-%description -n python3-gmpy2 %_description
+Summary:        gmpy2 interface to GMP, MPFR, and MPC for Python
+%description -n python3-gmpy2
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-gmpy2 docs,tests
-
 
 %prep
-%autosetup -p1 -n gmpy2-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir gmpy2-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-gmpy2 usr/lib/python3*/site-packages/gmpy2* usr/lib64/python3*/site-packages/gmpy2* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/gmpy2* usr/lib64/python3*/site-packages/gmpy2* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-gmpy2 -f %{pyproject_files}
+%files
+%files -n python3-gmpy2 -f %{oreon_filedir}/python3-gmpy2.list
 
 %changelog
+
 %autochangelog

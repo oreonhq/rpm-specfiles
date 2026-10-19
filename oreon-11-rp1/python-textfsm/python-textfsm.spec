@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 45c18ff2b7c90163dfdff7e20d3f482514cc7aac26bc2547744e79dfa761e458
 Name:           python-textfsm
 Version:        2.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python module for parsing semi-structured text into python tables.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/google/textfsm
-Source:         %{pypi_source textfsm}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/textfsm/textfsm-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'textfsm' generated automatically by pyp2spec.}
-
 Patch:          textfsm-1.1.3-no-future.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-textfsm = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-textfsm
-Summary:        %{summary}
-
-%description -n python3-textfsm %_description
-
+Summary:        Python module for parsing semi-structured text into python tables.
+%description -n python3-textfsm
 
 %prep
-%autosetup -p1 -n textfsm-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir textfsm-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-textfsm usr/lib/python3*/site-packages/textfsm* usr/lib64/python3*/site-packages/textfsm* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/textfsm* usr/lib64/python3*/site-packages/textfsm* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-textfsm -f %{pyproject_files}
-%{_bindir}/textfsm
+%files
+%files -n python3-textfsm -f %{oreon_filedir}/python3-textfsm.list
 
 %changelog
+
 %autochangelog

@@ -1,51 +1,37 @@
 %global source0_hash 6d17570ea2086dd6fbcac995465773a6f316e689089b7fb7ba0b34c2ec6f680d
 %global source1_hash 8e71a9f5b62956da6c409dda44b483f98c4a98ae72184f3aa4659ae5b3462e61
-
-
-Summary:      Real-time software synthesizer
+Summary:        Real-time software synthesizer
 Name:         fluidsynth
 Version:      2.6.0
-Release:      %autorelease
+Release:        1%{?dist}
 URL:          http://www.fluidsynth.org/
-Source0:      https://github.com/Fluidsynth/fluidsynth/archive/v%{version}/fluidsynth-%{version}.tar.gz
+Source0:        https://github.com/Fluidsynth/fluidsynth/archive/v%{version}/fluidsynth-%{version}.tar.gz
 Source1:      https://github.com/kthohr/gcem/archive/refs/tags/v1.18.0.tar.gz#/gcem-1.18.0.tar.gz
 License:      LGPL-2.1-or-later
 Requires:     fluidsynth-libs%{?_isa} = %{version}-%{release}
 Recommends:   fluid-soundfont-gm
-
-BuildRequires: alsa-lib-devel
 %if 0%{?el7}
-BuildRequires: cmake3
 %else
-BuildRequires: cmake
 %endif
-BuildRequires: dbus-devel
-BuildRequires: g++
-%if 0%{?fedora} || 0%{?rhel} >= 9
-BuildRequires:  pipewire-jack-audio-connection-kit-devel
-%else
+# oreon:deps
+BuildRequires:  alsa-lib-devel
+BuildRequires:  cmake
+BuildRequires:  dbus-devel
+BuildRequires:  doxygen
+BuildRequires:  g++
+BuildRequires:  graphviz
 BuildRequires:  jack-audio-connection-kit-devel
-%endif
-BuildRequires: ladspa-devel
-BuildRequires: libsndfile-devel
-BuildRequires: ncurses-devel
-BuildRequires: pkgconfig
-# Disabled for now:
-# http://sourceforge.net/apps/trac/fluidsynth/ticket/51
-# To enable portaudio support one also has to pass
-# -Denable-portaudio=on to cmake
-# BuildRequires: portaudio-devel
-BuildRequires: pulseaudio-libs-devel
-BuildRequires: pipewire-devel
-BuildRequires: libinstpatch-devel
-BuildRequires: readline-devel
-BuildRequires: graphviz
-BuildRequires: systemd-devel
-
-# For documentation:
-BuildRequires: doxygen
-BuildRequires: make
-
+BuildRequires:  ladspa-devel
+BuildRequires:  libinstpatch-devel
+BuildRequires:  libsndfile-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  pipewire-devel
+BuildRequires:  pkgconfig
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  readline-devel
+BuildRequires:  systemd-devel
+# /oreon:deps
 %description
 FluidSynth is a real-time software synthesizer based on the SoundFont 2 
 specifications. It is a "software synthesizer". FluidSynth can read MIDI events
@@ -56,7 +42,6 @@ called IIWU Synth).
 
 %package libs
 Summary:   Real-time software synthesizer run-time libraries
-
 %description libs
 FluidSynth is a real-time software synthesizer based on the SoundFont 2 
 specifications. It is a "software synthesizer". This package holds the run-time
@@ -66,13 +51,13 @@ shared libraries.
 Summary:   Real-time software synthesizer development files
 Requires:  fluidsynth-libs%{?_isa} = %{version}-%{release}
 Requires:  fluidsynth%{?_isa} = %{version}-%{release}
-
 %description devel
 FluidSynth is a real-time software synthesizer based on the SoundFont 2 
 specifications. It is a "software synthesizer". This package holds header files
 for building programs that link against fluidsynth.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
@@ -83,23 +68,17 @@ cp -r gcem-1.18.0/include gcem/
 
 %define enable_jack on
 %define fluidsynth_env %{_sysconfdir}/sysconfig/fluidsynth
-
 %if 0%{?el7}
 %{cmake3} -Denable-ladspa=on -Denable-jack=%{enable_jack} -DFLUID_DAEMON_ENV_FILE=%{fluidsynth_env}
 %else
 %{cmake} -Denable-ladspa=on -Denable-jack=%{enable_jack} -DFLUID_DAEMON_ENV_FILE=%{fluidsynth_env}
 %endif
-
-# build fluidsynth
 %if 0%{?el7}
 %{cmake3_build}
 %else
 %{cmake_build}
 %endif
-
-# build docs
 make doxygen -C doc
-
 %install
 %if 0%{?el7}
 %{cmake3_install}
@@ -109,28 +88,12 @@ make doxygen -C doc
 sed -i 's/^#SOUND_FONT/SOUND_FONT/' %{__cmake_builddir}/fluidsynth.conf
 install -Dm 644 %{__cmake_builddir}/fluidsynth.conf %{buildroot}%{fluidsynth_env}
 install -Dm 644 %{__cmake_builddir}/fluidsynth.service %{buildroot}%{_userunitdir}/fluidsynth.service
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_bindir}/fluid*
-%{_mandir}/man1/fluidsynth*
-%config(noreplace) %{fluidsynth_env}
-%attr(0644,root,root) %{_userunitdir}/fluidsynth.service
-
-%files libs
-%license LICENSE
-%doc AUTHORS README.md THANKS TODO
-%{_libdir}/libfluidsynth.so.3
-%{_libdir}/libfluidsynth.so.3.*
-
-%files devel
-%doc doc/*fluid*.txt doc/*.odt
-%doc ChangeLog.old
-%{_includedir}/fluidsynth.h
-%{_includedir}/fluidsynth/
-%{_libdir}/libfluidsynth.so
-%{_libdir}/pkgconfig/*
-%{_libdir}/cmake/fluidsynth/
-
+%files -f %{oreon_filedir}/main.list
+%files -n fluidsynth-libs -f %{oreon_filedir}/fluidsynth-libs.list
+%files -n fluidsynth-devel -f %{oreon_filedir}/fluidsynth-devel.list
 
 %changelog
+
 %autochangelog

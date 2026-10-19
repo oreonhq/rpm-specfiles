@@ -1,53 +1,37 @@
-%global source0_hash none
-
+%global source0_hash 2725d09f892a3a38e534429f47a321f58ecf6a3169caa42c915fb2cb7d46be0e
 Name:          android-tools
 Version:       37.0.0
-Release:       %autorelease
+Release:        1%{?dist}
 Epoch:         1
-Summary:       Android platform tools(adb, fastboot)
-
-# The entire source code is ASL 2.0 except boringssl which is BSD
-# Automatically converted from old format: ASL 2.0 and (ASL 2.0 and BSD) - review is highly recommended.
+Summary:        Android platform tools(adb, fastboot)
 License:       Apache-2.0 AND (Apache-2.0 AND LicenseRef-Callaway-BSD)
 URL:           http://developer.android.com/guide/developing/tools/
-
-#  Sources with all needed patches and cmakelists live there now: 
-Source0:       https://github.com/nmeum/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
-# https://github.com/nmeum/android-tools/issues/153
+Source0:        https://github.com/nmeum/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 Patch0:        0001-Fix-libusb-enumeration.patch
-# https://github.com/nmeum/android-tools/pull/172
 Patch1:        0002-extras-libjsonpb-Fix-incompatibility-with-protobuf-v30.patch
-# https://github.com/nmeum/android-tools/pull/190
 Patch2:        0003-Make-legacy-USB-driver-default-on-Linux.patch
-# https://github.com/nmeum/android-tools/pull/191
 Patch3:        0004-Add-missing-cstdint-includes-for-GCC-16-Fedora.patch
-
-BuildRequires: brotli-devel
-BuildRequires: cmake
-BuildRequires: fmt-devel
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: gtest-devel
-BuildRequires: libusbx-devel
-BuildRequires: libzstd-devel
-BuildRequires: lz4-devel
-BuildRequires: multilib-rpm-config
-BuildRequires: pcre2-devel
-BuildRequires: perl
-BuildRequires: protobuf-devel
-BuildRequires: systemd-rpm-macros
-
 Provides:      adb = %{epoch}:%{version}-%{release}
 Provides:      fastboot = %{epoch}:%{version}-%{release}
 Provides:      mke2fs.android = %{epoch}:%{version}-%{release}
-
-# Bundled bits
 Provides: bundled(boringssl)
-
-# Bundled boringssl doesn't support the big endian architectures rhbz 1431379
-# And dropped ppc64le support: https://github.com/google/boringssl/commit/7d2338d000eb1468a5bbf78e91854236e18fb9e4
 ExcludeArch: ppc ppc64 s390x ppc64le
-
+# oreon:deps
+BuildRequires:  brotli-devel
+BuildRequires:  cmake
+BuildRequires:  fmt-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  libusbx-devel
+BuildRequires:  libzstd-devel
+BuildRequires:  lz4-devel
+BuildRequires:  multilib-rpm-config
+BuildRequires:  pcre2-devel
+BuildRequires:  perl
+BuildRequires:  protobuf-devel
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 
 The Android Debug Bridge (ADB) is used to:
@@ -69,45 +53,17 @@ to read and write the flash partitions. It needs the same USB device
 setup between the host and the target phone as adb.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -DBUILD_SHARED_LIBS:BOOL=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-#ASL2.0 and BSD
-%{_bindir}/adb
-#ASL2.0
-%{_bindir}/avbtool
-%{_bindir}/mke2fs.android
-%{_bindir}/simg2img
-%{_bindir}/img2simg
-%{_bindir}/fastboot
-%{_bindir}/append2simg
-%{_bindir}/e2fsdroid
-%{_bindir}/ext2simg
-%{_bindir}/lpadd
-%{_bindir}/lpdump
-%{_bindir}/lpflash
-%{_bindir}/lpmake
-%{_bindir}/lpunpack
-%{_bindir}/make_f2fs
-%{_bindir}/mkbootimg
-%{_bindir}/mkdtboimg
-%{_bindir}/repack_bootimg
-%{_bindir}/sload_f2fs
-%{_bindir}/unpack_bootimg
-%{_datadir}/android-tools/completions/adb
-%{_datadir}/android-tools/completions/fastboot
-%{_datadir}/android-tools/mkbootimg/gki/generate_gki_certificate.py
-%{_datadir}/android-tools/mkbootimg/mkbootimg.py
-%{_datadir}/bash-completion/completions/adb
-%{_datadir}/bash-completion/completions/fastboot
-%{_mandir}/man1/adb.1.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

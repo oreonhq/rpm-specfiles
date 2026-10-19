@@ -1,5 +1,5 @@
+%global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
 %global source0_hash 62f6bbef4fb7c0084d455a582016b11ab839996537706c98c44367911fc56d4e
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,22 +81,21 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           modulemaker-maven-plugin
 Version:        1.11
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A plugin for creating module-info.class files
 License:        Apache-2.0
 URL:            https://github.com/raphw/modulemaker-maven-plugin
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/raphw/modulemaker-maven-plugin/archive/refs/tags/modulemaker-maven-plugin-%{version}.tar.gz#/modulemaker-maven-plugin-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.11-10
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.maven.plugin-tools:maven-plugin-annotations)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
@@ -105,15 +104,13 @@ BuildRequires:  mvn(org.apache.maven:maven-core)
 BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
 BuildRequires:  mvn(org.ow2.asm:asm)
 BuildRequires:  mvn(org.ow2.asm:asm-commons)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.11-10
-
+# /oreon:deps
 %description
 This plugin allows the creation of a module-info.class for projects on Java 6
 to Java 8 where a module-info.java file cannot be compiled.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n modulemaker-maven-plugin-modulemaker-maven-plugin-1.11
 %autosetup -p1 -n modulemaker-maven-plugin-modulemaker-maven-plugin-1.11
@@ -123,15 +120,15 @@ cp -p %{SOURCE1} .
 %pom_xpath_inject 'pom:dependency[pom:artifactId="maven-plugin-api"]' '<scope>provided</scope>'
 
 %build
-%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE-2.0.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11-1
 - Import

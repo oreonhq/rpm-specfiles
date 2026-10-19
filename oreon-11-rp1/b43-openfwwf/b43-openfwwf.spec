@@ -1,26 +1,27 @@
 %global source0_hash 9de03320083201080b2e94b81637ac07a159cf4e6f3481383e1a217e627bc0dc
-
 Name:		b43-openfwwf
 Version:	5.2
-Release:	%autorelease
-Summary:	Open firmware for some Broadcom 43xx series WLAN chips
+Release:        1%{?dist}
+Summary:        Open firmware for some Broadcom 43xx series WLAN chips
 License:	GPL-2.0-only
 URL:		http://netweb.ing.unibs.it/openfwwf/
-Source0:	http://netweb.ing.unibs.it/openfwwf/firmware/openfwwf-%{version}.tar.gz
+Source0:        http://netweb.ing.unibs.it/openfwwf/firmware/openfwwf-%{version}.tar.gz
 Source1:	README.openfwwf
 Source2:	openfwwf.conf
 BuildArch:	noarch
-BuildRequires:	b43-tools
-BuildRequires:	gcc-c++
-BuildRequires:	make
 Requires:	module-init-tools
 Requires:	udev
-
+# oreon:deps
+BuildRequires:  b43-tools
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 Open firmware for some Broadcom 43xx series WLAN chips.
 Currently supported models are 4306, 4311(rev1), 4318 and 4320.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n openfwwf-%{version}
@@ -29,20 +30,15 @@ install -p -m 0644 %{SOURCE1} .
 install -p -m 0644 %{SOURCE2} .
 
 %build
-%make_build
 
+%make_build
 %install
 make install PREFIX=%{buildroot}/lib/firmware/b43-open
 install -p -D -m 0644 openfwwf.conf %{buildroot}%{_prefix}/lib/modprobe.d/openfwwf.conf
+%oreon_autofiles main
 
-%files
-%license COPYING LICENSE
-%doc README.openfwwf
-%dir /lib/firmware/b43-open
-/lib/firmware/b43-open/b0g0bsinitvals5.fw
-/lib/firmware/b43-open/b0g0initvals5.fw
-/lib/firmware/b43-open/ucode5.fw
-%{_prefix}/lib/modprobe.d/openfwwf.conf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

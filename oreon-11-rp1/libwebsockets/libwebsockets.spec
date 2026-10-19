@@ -1,39 +1,26 @@
-%global source0_hash none
-
-# Absent libuv-devel on s390x at RHEL/CentOS 8
-%if 0%{?rhel} && 0%{?rhel} == 8 && "%{_arch}" == "s390x"
-%bcond_with libuv
-%else
+%global source0_hash b6ade658f4af3a823d0dc806ae5ef0623f0f4f5e2aeb895a0f77c4783840c30e
 %bcond_without libuv
-%endif
-
 Name:           libwebsockets
 Version:        4.5.8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Lightweight C library for Websockets
-
-# base64-decode.c and ssl-http2.c is under MIT license with FPC exception.
-# sha1-hollerbach is under BSD
-# https://fedorahosted.org/fpc/ticket/546
-# Test suite is licensed as Public domain (CC-zero)
 License:        LicenseRef-Callaway-LGPLv2 AND LicenseRef-Callaway-Public-Domain AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT AND Zlib
 URL:            http://libwebsockets.org
 Source0:        https://github.com/warmcat/libwebsockets/archive/v%{version}/%{name}-%{version}.tar.gz
-
+%if %{with libuv}
+%endif
+Provides:       bundled(sha1-hollerbach)
+Provides:       bundled(base64-decode)
+Provides:       bundled(ssl-http2)
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-g++
 BuildRequires:  glib2-devel
 BuildRequires:  libev-devel
-%if %{with libuv}
 BuildRequires:  libuv-devel
-%endif
 BuildRequires:  openssl-devel
 BuildRequires:  zlib-devel
-
-Provides:       bundled(sha1-hollerbach)
-Provides:       bundled(base64-decode)
-Provides:       bundled(ssl-http2)
-
+# /oreon:deps
 %description
 This is the libwebsockets C library for lightweight websocket clients and
 servers.
@@ -46,15 +33,14 @@ Requires:       libuv-devel
 %endif
 Requires:       libev-devel
 Requires:       openssl-devel
-
 %description devel
 This package contains the header files needed for developing
 %{name} applications.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 CFLAGS="$RPM_OPT_FLAGS -Wno-discarded-qualifiers"
 %cmake \
     -D LWS_WITH_HTTP2=ON \
@@ -90,35 +76,18 @@ CFLAGS="$RPM_OPT_FLAGS -Wno-discarded-qualifiers"
     -D LWS_WITHOUT_TEST_SERVER=ON \
     -D LWS_WITHOUT_TESTAPPS=ON \
     %nil
-
 %cmake_build
-
 %install
 %cmake_install
 find %{buildroot} -name '*.la' -delete
 find %{buildroot} -name '*.a' -delete
 find %{buildroot} -name '*_static.pc' -delete
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%doc README.md changelog
-%{_libdir}/%{name}.so.21
-%{_libdir}/%{name}-evlib_ev.so
-%{_libdir}/%{name}-evlib_glib.so
-%if %{with libuv}
-%{_libdir}/%{name}-evlib_uv.so
-%endif
-
-%files devel
-%license LICENSE
-%doc READMEs/README.coding.md READMEs/ changelog
-%{_includedir}/*.h
-%{_includedir}/%{name}/
-%{_libdir}/%{name}.so
-%{_libdir}/cmake/%{name}/
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libwebsockets-devel -f %{oreon_filedir}/libwebsockets-devel.list
 
 %changelog
+
 %autochangelog

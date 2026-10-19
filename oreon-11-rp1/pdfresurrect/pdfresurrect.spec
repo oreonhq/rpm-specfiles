@@ -1,18 +1,18 @@
-%global source0_hash a477df3704af4e044005bcaf07a7ce8d1d621a2ff571875a556f9f5b24e262ff
-
+%global source0_hash ebf0a3461c0c789cc26276b678371897a87ff968ec5cfe4e64618ed400a1082c
 Name:		pdfresurrect
 Version:	0.23
-Release:	%autorelease
-Summary:	PDF Analysis and Scrubbing Utility
+Release:        1%{?dist}
+Summary:        PDF Analysis and Scrubbing Utility
 License:	BSD-3-Clause
 URL:		https://github.com/enferex/%{name}
-Source0:	https://github.com/enferex/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/enferex/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch1:		pdfresurrect-0001-Don-t-reset-compiler-s-flags-during-checks.patch
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	gcc
-BuildRequires:	make
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 PDFResurrect is a tool aimed at analyzing PDF documents. The PDF format
 allows for previous document changes to be retained in a more recent
@@ -25,22 +25,18 @@ from previous versions that might not be intended for anyone else to read.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p 1
-
+%oreon_prep
 %build
+
 autoreconf -ivf
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc AUTHORS README
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

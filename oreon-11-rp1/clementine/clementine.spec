@@ -1,55 +1,24 @@
 %global source0_hash f63687b147632659efa1afbde8475738d68be7739b4aadc85d78301aec194220
-
 %global tag     1.4.1-58-gbae968a2f
-
 Name:           clementine
 Version:        1.4.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A music player and library organizer
-
-# Apache-2.0:
-#   - ext/libclementine-common/core/latch.cpp
-#   - ext/libclementine-common/core/latch.h
-#   - ext/libclementine-remote/remotecontrolmessages.proto
-#   - ext/libclementine-common/core/logging.cpp
-#   - ext/libclementine-common/core/logging.h
-#   - ext/libclementine-common/core/messagehandler.cpp
-#   - ext/libclementine-common/core/messagehandler.h
-#   - ext/libclementine-common/core/override.h
-#   - ext/libclementine-common/core/timeconstants.h
-# BSL-1.0: 3rdparty/utf8-cpp
-# GPL-2.0-or-later:
-#   - src/engines/gstengine.cpp
-#   - src/engines/gstengine.h
-#   - src/widgets/sliderwidget.cpp
-#   - src/widgets/sliderwidget.h
-# LGPL-2.0-or-later:
-#   - gst/moodbar/gstfastspectrum.cpp
-#   - gst/moodbar/gstfastspectrum.h
-# LGPL-2.1-only:
-#   - 3rdparty/taglib
-#   - src/widgets/stylehelper:
-# LGPL-2.1-only WITH Qt-LGPL-exception-1.1 OR GPL-3.0-only:
-#   - 3rdparty/qsqlite/clementinesqlcachedresult.cpp
-#   - 3rdparty/qsqlite/clementinesqlcachedresult.h
-#   - 3rdparty/qsqlite/qsql_sqlite.cpp
-#   - 3rdparty/qsqlite/qsql_sqlite.h
-#   - 3rdparty/qtiocompressor/qtiocompressor.cpp
-#   - 3rdparty/qtiocompressor/qtiocompressor.h
-# LGPL-2.1-only WITH Qt-LGPL-exception-1.1 OR LGPL-3.0-only WITH Qt-LGPL-exception-1.1:
-# but Qt-LGPL-exception-1.1 refers to nonexistent file so we can ignore this exception so it is:
-# LGPL-2.1-only OR LGPL-3.0-only
-#   - 3rdparty/qsqlite/smain.cpp
-#   - 3rdparty/qsqlite/smain.h
-# MIT: 3rdparty/qocoa
 License:        GPL-3.0-or-later AND GPL-2.0-or-later AND BSL-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND Apache-2.0 AND (LGPL-2.1-only WITH Qt-LGPL-exception-1.1 OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:            https://www.clementine-player.org/
 VCS:            https://github.com/clementine-player/Clementine
-Source:         %vcs/archive/%{tag}/%{name}-%{tag}.tar.gz
-
-# Use qt5 libraries (qtiocompressor)
+Source0:        https://github.com/%{name}-player/Clementine/archive/%{tag}/%{name}-%{tag}.tar.gz
 Patch:          0001-Use-QtIoCompressor-from-Qt5.patch
-
+%ifnarch s390 s390x
+%endif
+Requires:       gstreamer1-plugins-good
+Requires:       hicolor-icon-theme
+Provides:       bundled(qocoa)
+Provides:       bundled(qsqlite)
+Provides:       bundled(qtiocompressor)
+Provides:       bundled(utf8-cpp)
+# oreon:deps
+BuildRequires:  (pkgconfig(libcryptopp) or pkgconfig(cryptopp))
 BuildRequires:  boost-devel
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
@@ -74,8 +43,8 @@ BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(fftw3)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(gio-unix-2.0)
-BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(glew)
+BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(glu)
 BuildRequires:  pkgconfig(gmock)
 BuildRequires:  pkgconfig(gstreamer-1.0)
@@ -86,37 +55,25 @@ BuildRequires:  pkgconfig(gstreamer-tag-1.0)
 BuildRequires:  pkgconfig(gthread-2.0)
 BuildRequires:  pkgconfig(libcdio)
 BuildRequires:  pkgconfig(libchromaprint)
-BuildRequires:  (pkgconfig(libcryptopp) or pkgconfig(cryptopp))
+BuildRequires:  pkgconfig(libgpod-1.0)
+BuildRequires:  pkgconfig(libimobiledevice-1.0)
 BuildRequires:  pkgconfig(libmtp)
 BuildRequires:  pkgconfig(libmygpo-qt5)
 BuildRequires:  pkgconfig(libnotify)
 BuildRequires:  pkgconfig(libplist-2.0)
-BuildRequires:  pkgconfig(libprojectM) >= 2.0.1-7
+BuildRequires:  pkgconfig(libprojectM)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(libsparsehash)
 BuildRequires:  pkgconfig(libudf)
 BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(protobuf)
-BuildRequires:  pkgconfig(sqlite3) >= 3.7
-BuildRequires:  pkgconfig(taglib) >= 1.11
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  pkgconfig(taglib)
 BuildRequires:  pkgconfig(udisks)
 BuildRequires:  qt5-linguist
-#BuildRequires:  qtiocompressor-devel
-BuildRequires:  qtsingleapplication-qt5-devel >= 2.6.1-2
-BuildRequires:  qtsinglecoreapplication-qt5-devel >= 2.6.1-2
-%ifnarch s390 s390x
-BuildRequires:  pkgconfig(libgpod-1.0)
-BuildRequires:  pkgconfig(libimobiledevice-1.0)
-%endif
-
-Requires:       gstreamer1-plugins-good
-Requires:       hicolor-icon-theme
-
-Provides:       bundled(qocoa)
-Provides:       bundled(qsqlite)
-Provides:       bundled(qtiocompressor)
-Provides:       bundled(utf8-cpp)
-
+BuildRequires:  qtsingleapplication-qt5-devel
+BuildRequires:  qtsinglecoreapplication-qt5-devel
+# /oreon:deps
 %description
 Clementine is a modern music player and library organiser.
 It is inspired by Amarok 1.4, focusing on a fast and easy-to-use interface for
@@ -140,6 +97,7 @@ Features include:
   * Queue manager
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n Clementine-%{tag}
@@ -150,7 +108,7 @@ rm -rfv 3rdparty/*
 mv {qocoa,qsqlite,qtiocompressor,utf8-cpp}/ 3rdparty/
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380506)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake \
   -DBUILD_WERROR:BOOL=OFF \
@@ -163,23 +121,16 @@ export CMAKE_POLICY_VERSION_MINIMUM=3.5
   -DUSE_SYSTEM_QXT:BOOL=ON \
   -DUSE_SYSTEM_TAGLIB:BOOL=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.clementine_player.Clementine.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/org.clementine_player.Clementine.appdata.xml
-
-%files
-%license COPYING
-%doc Changelog README.md
-%{_bindir}/clementine
-%{_bindir}/clementine-tagreader
-%{_datadir}/applications/org.clementine_player.Clementine.desktop
-%{_datadir}/icons/hicolor/*/apps/org.clementine_player.Clementine.*
-%{_datadir}/kservices5/clementine-*.protocol
-%{_metainfodir}/org.clementine_player.Clementine.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

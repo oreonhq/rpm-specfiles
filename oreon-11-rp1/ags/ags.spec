@@ -1,67 +1,43 @@
-%global source0_hash a62c12aeca8c8acc5a6ac36c77a7ebb70af4696b2a1fa0b5ca8af6b2833e8e1a
-
+%global source0_hash 19cc4bdf222c5bf1c412d11f19f3fee07b310e21a9b731f42f1f71d6faf0e1a0
 %bcond_without openal
-
 %global fver v%{version}
-# avoid building bundled libraries as shared
 %undefine _cmake_shared_libs
-
 Name: ags
-Summary: Engine for creating and running videogames of adventure (quest) genre
+Summary:        Engine for creating and running videogames of adventure (quest) genre
 Version: 3.6.2.21
 URL:     http://www.adventuregamestudio.co.uk/site/ags/
-Release: 1%{?dist}
-Source0: https://github.com/adventuregamestudio/ags/archive/%{fver}/ags-%{fver}.tar.gz
+Release:        1%{?dist}
+Source0:        https://github.com/adventuregamestudio/%{name}/archive/%{fver}/%{name}-%{fver}.tar.gz
 Patch0: ags-use-system-libraries.patch
 Patch1: ags-build-tests-with-cxx17.patch
-# Most code is under Artistic-2.0, except:
-# Common/libsrc/aastr-0.1.1: LicenseRef-Fedora-UltraPermissive
-# Common/libsrc/alfont-2.0.9: FTL
-# Engine/libsrc/apeg-1.2.1: MPEG-SSG
-# Engine/libsrc/glad: Apache-2.0 AND MIT-Khronos-old
-# Engine/libsrc/libcda-0.5: Zlib
-# Plugins/agsblend/agsblend: MIT
-# Plugins/agspalrender/agspalrender/raycast.{cpp,h}: BSD-2-Clause
-# Plugins/AGSSpriteFont: CC0-1.0
-# libsrc/allegro: Giftware
 License: Artistic-2.0 AND LicenseRef-Fedora-UltraPermissive AND FTL AND MPEG-SSG AND Apache-2.0 AND MIT-Khronos-old AND Zlib AND MIT AND BSD-2-Clause AND CC0-1.0 AND Giftware
-# incorrect rendering with new FT: https://github.com/adventuregamestudio/ags/issues/1528
 Provides: bundled(freetype) = 2.1.3
 %if %{with openal}
-BuildRequires: openal-soft-devel
 %else
-# https://github.com/icculus/mojoAL (zlib)
 Provides: bundled(mojoal)
 %endif
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: glad
-BuildRequires: glm-devel
-BuildRequires: gtest-devel
-# for KHR/khrplatform.h
-BuildRequires: libglvnd-devel
-BuildRequires: libogg-devel
-BuildRequires: libtheora-devel
-BuildRequires: libvorbis-devel
-BuildRequires: make
-BuildRequires: cmake(miniz)
-BuildRequires: SDL2-devel
-BuildRequires: SDL2_sound-devel
-BuildRequires: tinyxml2-devel
-# https://web.archive.org/web/20050323070052/http://www.inp.nsk.su/~bukinm/dusty/aastr/ (Giftware)
-# dead upstream, might be possible to use aastr2:
-# https://www.allegro.cc/resource/Libraries/Graphics/AASTR2
 Provides: bundled(aastr) = 0.1.1
-# bundled alfont is patched
 Provides: bundled(alfont) = 2.0.9
-# bundled allegro is stripped and patched
 Provides: bundled(allegro) = 4.4.3
-# http://kcat.strangesoft.net/apeg.html (Public Domain)
 Provides: bundled(apeg) = 1.2.1
-# https://web.archive.org/web/20040104090747/http://www.alphalink.com.au/~tjaden/libcda/index.html (zlib)
-# dead upstream
 Provides: bundled(libcda) = 0.5
-
+# oreon:deps
+BuildRequires:  SDL2-devel
+BuildRequires:  SDL2_sound-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(miniz)
+BuildRequires:  gcc-c++
+BuildRequires:  glad
+BuildRequires:  glm-devel
+BuildRequires:  gtest-devel
+BuildRequires:  libglvnd-devel
+BuildRequires:  libogg-devel
+BuildRequires:  libtheora-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  make
+BuildRequires:  openal-soft-devel
+BuildRequires:  tinyxml2-devel
+# /oreon:deps
 %description
 Adventure Game Studio (AGS) - is the IDE and the engine meant for creating and
 running videogames of adventure (aka "quest") genre. It has potential, although
@@ -73,11 +49,11 @@ since continued to be developed by contributors.
 %package tools
 Summary: Tools for Adventure Game Studio engine game development
 Requires: %{name}%{_isa} = %{version}-%{release}
-
 %description tools
 This package contains the AGS engine game development tools.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -113,6 +89,7 @@ touch -r Changes.txt Changes.txt.utf-8 && \
 mv Changes.txt.utf-8 Changes.txt
 
 %build
+
 %cmake \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DAGS_BUILD_TOOLS=TRUE \
@@ -126,30 +103,18 @@ mv Changes.txt.utf-8 Changes.txt
     -DAGS_USE_LOCAL_TINYXML2=TRUE \
     -DAGS_USE_LOCAL_MINIZ=TRUE \
     -DAGS_USE_LOCAL_GTEST=TRUE \
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles ags-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files
-%license License.txt
-%doc Changes.txt Copyright.txt OPTIONS.md README.md
-%{_bindir}/ags
-
-%files tools
-%{_bindir}/agscc
-%{_bindir}/agf2dlgasc
-%{_bindir}/agfexport
-%{_bindir}/agspak
-%{_bindir}/agsunpak
-%{_bindir}/crm2ash
-%{_bindir}/crmpak
-%{_bindir}/trac
-%{_bindir}/ags
+%files -f %{oreon_filedir}/main.list
+%files -n ags-tools -f %{oreon_filedir}/ags-tools.list
 
 %changelog
+
 %autochangelog

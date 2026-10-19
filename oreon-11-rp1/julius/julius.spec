@@ -1,47 +1,41 @@
 %global source0_hash 74447d7adb3bd119adae7915ba9422b7da553556f979ac4ee53a262d94d47b47
-
 %global dkcommit 1ceb4de
-
-# julius has code that takes advantage of using func() to allow for different number/type of parameters
-# c23 no longer permits this, and instead of rewriting this, i'm just going to pretend it is 2017
 %global optflags %{optflags} -std=gnu17
-
 Name:		julius
 Version:	4.6
-Release:	10%{?dist}
-Summary:	Large vocabulary continuous speech recognition (LVCSR) decoder software
+Release:        1%{?dist}
+Summary:        Large vocabulary continuous speech recognition (LVCSR) decoder software
 License:	BSD-3-Clause AND MIT
 URL:		https://github.com/julius-speech/julius
-Source0:	https://github.com/julius-speech/julius/archive/v%{version}.tar.gz
-# Need to generate from git
-# BE SURE YOU HAVE git-lfs installed before doing a clone
-# git clone https://github.com/julius-speech/dictation-kit.git
-# cd dictation-kit
-# rm -rf bin src
-# cd ..
-# tar --exclude-vcs -cJf dictation-kit-%%{dkcommit}.tar.xz dictation-kit
+Source0:        https://github.com/julius-speech/julius/archive/v%{version}.tar.gz
 Source1:	dictation-kit-%{dkcommit}.tar.xz
 Patch0:		julius-4.6-DESTDIR.patch
 Patch1:		julius-4.5-sharedlibs.patch
 Patch2:		julius-4.5-cpuidfix.patch
 Patch3:		julius-ldflags.patch
-# https://github.com/julius-speech/julius/pull/187
 Patch4:		187.patch
 Patch5:		julius-4.6-configure-fixup.patch
-# The viz code depends on GTK1 and we don't want it
 Patch6:		julius-4.6-noviz.patch
 Patch7:		julius-configure-c99.patch
-# https://github.com/julius-speech/julius/pull/196
 Patch8:		julius-4.6-bigendian-cast-fix.patch
-
-BuildRequires:	perl-generators
-BuildRequires:	perl(Jcode), alsa-lib-devel, libsndfile-devel, pulseaudio-libs-devel, zlib-devel, readline-devel
-BuildRequires:	SDL2-devel
-BuildRequires:	bison, flex, nkf
-BuildRequires:	autoconf, automake, libtool, gettext-devel
-BuildRequires:	make
-# Requires:
-
+# oreon:deps
+BuildRequires:  SDL2-devel
+BuildRequires:  alsa-lib-devel
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  flex
+BuildRequires:  gettext-devel
+BuildRequires:  libsndfile-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  nkf
+BuildRequires:  perl(Jcode)
+BuildRequires:  perl-generators
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  readline-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 "Julius" is a high-performance, two-pass large vocabulary continuous speech
 recognition (LVCSR) decoder software for speech-related researchers and
@@ -59,7 +53,6 @@ as HTK, CMU-Cam SLM toolkit, etc.
 %package devel
 Requires:	julius = %{version}-%{release}
 Summary:	Development files and libraries for libjulius and libsent
-
 %description devel
 Development files and libraries	for libjulius and libsent.
 
@@ -68,12 +61,12 @@ BuildArch:	noarch
 Requires:	julius = %{version}-%{release}
 Summary:	Julius Japanese language model and acoustic models
 License:	LicenseRef-Julius-dictation-kit
-
 %description japanese-models
 A Japanese language model (20k-word trained by newspaper article) and acoustic
 models (Phonetic tied-mixture triphone / monophone) for use with Julius.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -a 1
@@ -97,77 +90,31 @@ autoreconf -ifv || :
 rm -rf msvc
 
 %build
-# OpenMP only seems to find all its functions on these architectures.
+
 %ifarch i686 x86_64
 %configure
 %else
 %configure --disable-openmp
 %endif
-# this fails
-# make %{?_smp_mflags}
 make
-
 %install
 mkdir -p %{buildroot}%{_libdir}/pkgconfig/
 make install DESTDIR=%{buildroot}
 chmod +x %{buildroot}%{_libdir}/*.so.*
-
 mkdir -p %{buildroot}%{_datadir}/julius/
 cp -a Sample.jconf %{buildroot}%{_datadir}/julius/
 pushd dictation-kit
 cp *conf %{buildroot}%{_datadir}/julius/
 cp -a model/ %{buildroot}%{_datadir}/julius/
 popd
-
-# rename to avoid conflict with Oracle Java
 mv %{buildroot}%{_bindir}/jcontrol %{buildroot}%{_bindir}/julius-jcontrol
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc Release.txt Release-ja.txt
-%license LICENSE
-%{_bindir}/accept_check
-%{_bindir}/adinrec
-%{_bindir}/adintool
-%{_bindir}/adintool-gui
-%{_bindir}/binlm2arpa
-%{_bindir}/dfa_determinize
-%{_bindir}/dfa_minimize
-%{_bindir}/generate
-%{_bindir}/generate-ngram
-%{_bindir}/gram2sapixml.pl
-%{_bindir}/jclient.pl
-%{_bindir}/julius-jcontrol
-%{_bindir}/julius
-%{_bindir}/mkbingram
-%{_bindir}/mkbinhmm
-%{_bindir}/mkbinhmmlist
-%{_bindir}/mkdfa.pl
-%{_bindir}/mkdfa.py
-%{_bindir}/mkfa
-%{_bindir}/mkgshmm
-%{_bindir}/mkss
-%{_bindir}/nextword
-%{_bindir}/yomi2voca.pl
-%{_libdir}/libjulius.so.*
-%{_libdir}/libsent.so.*
-# %%lang(ja) %%{_mandir}/ja/man1/*
-# %%{_mandir}/man1/*
-%dir %{_datadir}/julius/
-%{_datadir}/julius/*conf
-
-%files devel
-%{_bindir}/libjulius-config
-%{_bindir}/libsent-config
-%{_includedir}/julius/
-%{_includedir}/sent/
-%{_libdir}/libjulius.so
-%{_libdir}/libsent.so
-%{_libdir}/pkgconfig/*.pc
-
-%files japanese-models
-%{_datadir}/julius/model/
+%files -f %{oreon_filedir}/main.list
+%files -n julius-devel -f %{oreon_filedir}/julius-devel.list
+%files -n julius-japanese-models -f %{oreon_filedir}/julius-japanese-models.list
 
 %changelog
+
 %autochangelog

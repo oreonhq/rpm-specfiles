@@ -1,47 +1,30 @@
 %global source0_hash none
-
 Name:       intel-media-driver-free
 Version:    25.4.6
-Release:    %autorelease
-Summary:    The Intel Media Driver for VAAPI
+Release:        1%{?dist}
+Summary:        The Intel Media Driver for VAAPI
 License:    MIT and BSD
 URL:        https://github.com/intel/media-driver
-
-# Original source has non-free and/or patented files, use following on the original source!
-# $ python3 strip.py
-# ref. https://github.com/intel/media-driver/wiki/Media-Driver-Shaders-(EU-Kernels)#build-with-open-source-shaders
-
-#Source0:    %%{url}/archive/intel-media-%%{version}%%{?pre}.tar.gz
-Source0:    intel-media-%{version}-free.tar.gz
+Source0:        intel-media-%{version}-free.tar.gz
 Source1:    intel-media-driver.metainfo.xml
 Source2:    strip.py
-
-# This is an Intel only vaapi backend
 ExclusiveArch:  i686 x86_64
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-
-# AppStream metadata generation
 BuildRequires:  libappstream-glib
-
-# Enable once we start building free kernels
-#BuildRequires:  intel-igc-devel
-#BuildRequires:  intel-cm-compiler
-#BuildRequires:  intel-compute-runtime
-
-BuildRequires:  pkgconfig(libcmrt)
+BuildRequires:  libdrm-devel
+BuildRequires:  libpciaccess-devel
+BuildRequires:  libva-devel
+BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(igdgmm)
+BuildRequires:  pkgconfig(libcmrt)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  python-unversioned-command
 BuildRequires:  python3
 BuildRequires:  python3-devel
-BuildRequires:  python-unversioned-command
-BuildRequires:  libva-devel
-BuildRequires:  libpciaccess-devel
-BuildRequires:  libdrm-devel
-BuildRequires:  pkgconfig(x11)
-BuildRequires:  ninja-build
-
+# /oreon:deps
 %description
 The Intel Media Driver for VAAPI is a new VA-API (Video Acceleration API)
 user mode driver supporting hardware accelerated decoding, encoding,
@@ -50,7 +33,6 @@ https://01.org/intel-media-for-linux
 
 %package -n     libva-intel-media-driver
 Summary:        The Intel Media Driver for VAAPI.
-
 %description -n libva-intel-media-driver
 The Intel Media Driver for VAAPI is a new VA-API (Video Acceleration API)
 user mode driver supporting hardware accelerated decoding, encoding,
@@ -60,7 +42,6 @@ https://01.org/intel-media-for-linux
 %package -n     libigfxcmrt
 Summary:        Library to load own GPU kernels on render engine via Intel media driver.
 Requires:       libva-intel-media-driver%{?_isa} = %{version}-%{release}
-
 %description -n libigfxcmrt
 libigfxcmrt is a runtime library needed when user wants to execute their own GPU kernels on render engine.
 It calls Intel media driver to load the kernels and allocate the resources.
@@ -69,12 +50,12 @@ It provides a set of APIs for user to call directly from application.
 %package -n     libigfxcmrt-devel
 Summary:        Development files for libigfxcmrt
 Requires:       libigfxcmrt%{?_isa} = %{version}-%{release}
-
 %description -n libigfxcmrt-devel
 The libigfxcmrt-devel package contains libraries and header files for
 developing applications that use libigfxcmrt.
 
 %prep
+
 %autosetup -p1 -n media-driver-intel-media-%{version}%{?pre}
 # Fix license perm
 chmod -x LICENSE.md README.md CMakeLists.txt
@@ -83,6 +64,7 @@ chmod -x LICENSE.md README.md CMakeLists.txt
 rm -rv Tools/MediaDriverTools/UMDPerfProfiler/MediaPerfParser
 
 %build
+
 %ifarch %{ix86}
 export CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64"
 %endif
@@ -106,38 +88,22 @@ export CXXFLAGS="%{optflags} -D_FILE_OFFSET_BITS=64"
   -DAVC_Decode_Supported="no" \
   -DVVC_Decode_Supported="no" \
   -G Ninja
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Fix perm on library to be stripped
 chmod +x %{buildroot}%{_libdir}/dri/iHD_drv_video.so
-
-# install AppData and add modalias provides
 mkdir -p %{buildroot}%{_metainfodir}
 install -pm 0644 %{SOURCE1} %{buildroot}%{_metainfodir}/%{name}.metainfo.xml
+%oreon_autofiles libva-intel-media-driver usr/*/lib*.so.*
+%oreon_autofiles libigfxcmrt usr/*/lib*.so.*
+%oreon_autofiles libigfxcmrt-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/*/lib*.so.* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-# TODO - have pci based hw detection
-%if 0
-fn=%{buildroot}%{_metainfodir}/intel-media-driver.metainfo.xml
-%{SOURCE9} src/i965_pciids.h | xargs appstream-util add-provide ${fn} modalias
-%endif
-
-%files -n libva-intel-media-driver
-%doc README.md
-%license LICENSE.md
-%{_libdir}/dri/iHD_drv_video.so
-%{_metainfodir}/%{name}.metainfo.xml
-
-%files -n libigfxcmrt
-%{_libdir}/libigfxcmrt.so.*
-
-%files -n libigfxcmrt-devel
-%{_libdir}/libigfxcmrt.so
-%{_includedir}/igfxcmrt
-%{_libdir}/pkgconfig/igfxcmrt.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libva-intel-media-driver -f %{oreon_filedir}/libva-intel-media-driver.list
+%files -n libigfxcmrt -f %{oreon_filedir}/libigfxcmrt.list
+%files -n libigfxcmrt-devel -f %{oreon_filedir}/libigfxcmrt-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,54 +1,36 @@
-%global source0_hash e412e5531e4ae5b7221c5f8199b93b37e95beaae475008ef261927aef6058457
-
+%global source0_hash f26c813266548ec2a21fdd3436ad8a19dbefacd9f8deb886a7156f020aae5e21
 Name:           python-niapy
 Version:        2.7.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Micro framework for building nature-inspired algorithms
-
 License:        MIT
 URL:            https://github.com/NiaOrg/NiaPy
-Source:         %{url}/archive/v%{version}/NiaPy-%{version}.tar.gz
-
-# Tidy up some minutiae in the examples
-#
-# Remove executable permissions from examples/run_all.sh: it does not have a
-# shebang line, so having the execute bit set is useless.
-#
-# Convert examples/run_loa form CRLF line terminations (DOS/Windows style) to
-# UNIX-style, to match the other files in the project.
-#
-# https://github.com/NiaOrg/NiaPy/pull/742
+Source0:        https://github.com/NiaOrg/NiaPy/archive/v%{version}/NiaPy-%{version}.tar.gz
 Patch:          %{url}/pull/742.patch
-
-
 BuildArch:      noarch
-
-# setup.py: tests_require (also includes unwanted coverage/linting/etc. deps.)
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-BuildRequires:  %{py3_dist pytest}
-
-%global _description %{expand:
-Nature-inspired algorithms are a very popular tool for solving optimization
-problems. Numerous variants of nature-inspired algorithms have been developed
-since the beginning of their era. To prove their versatility, those were tested
-in various domains on various applications, especially when they are
-hybridized, modified or adapted. However, implementation of nature-inspired
-algorithms is sometimes a difficult, complex and tedious task. In order to
-break this wall, NiaPy is intended for simple and quick use, without spending
-time for implementing algorithms from scratch.}
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(uv-build) < 0.10.0
+BuildRequires:  python3dist(uv-build) >= 0.9.17
+Requires:       python3-niapy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-niapy
-Summary:        %{summary}
-
-# The -doc subpackage was merged into python3-niapy for simplicity.
+Summary:        Micro framework for building nature-inspired algorithms
 Provides:       python-niapy-doc = %{version}-%{release}
 Obsoletes:      python-niapy-doc < 2.5.2-10
-
-%description -n python3-niapy %_description
+# oreon:reqs
+Requires:       python3dist(matplotlib) >= 3.10.8
+Requires:       python3dist(numpy) >= 2.3.5
+Requires:       python3dist(openpyxl) >= 3.1.5
+Requires:       python3dist(pandas) >= 2.3.3
+# /oreon:reqs
+%description -n python3-niapy
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n NiaPy-%{version} -p1
@@ -59,23 +41,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -r -i -e 's/^python ?=/# &/' -e 's/([^#]+ ?= ?")\^/\1>=/' pyproject.toml
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-niapy usr/lib/python3*/site-packages/niapy* usr/lib64/python3*/site-packages/niapy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/niapy* usr/lib64/python3*/site-packages/niapy* usr/bin/*
 
 %check
-%pytest -ra -k "${k-}"
 
-%files -n python3-niapy -f %{pyproject_files}
-%license LICENSE
-%doc Algorithms.md
-%doc CHANGELOG.md
-%doc CITATION.cff
-%doc Problems.md
-%doc README.md
-%doc examples/
-%doc paper/
+%pytest -ra -k "${k-}"
+%files
+%files -n python3-niapy -f %{oreon_filedir}/python3-niapy.list
 
 %changelog
+
 %autochangelog

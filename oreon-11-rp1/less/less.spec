@@ -1,12 +1,9 @@
 %global source0_hash d1008fb78dcae1323ddab664bcb352a61f022b1b131bd8018548e021d975ec7a
 %global source1_hash 05220b4b4f1c6c56d3b4acf6998d79768dccd22c379639a6cf3589fbbd54ba1d
-
-Summary: A text file browser similar to more, but better
+Summary:        A text file browser similar to more, but better
 Name: less
 Version: 710
-Release: 1%{?dist}
-# less dual license GPL-3.0-only OR BSD-2-Clause
-# lesspipe GPL-2.0-or-later
+Release:        1%{?dist}
 License: (GPL-3.0-only OR BSD-2-Clause) AND GPL-2.0-or-later
 Source0:        https://ftp.gnu.org/gnu/less/%{name}-%{version}.tar.gz
 %global lesspipe_version 2.22
@@ -21,19 +18,19 @@ Patch9: less-458-less-filters-man.patch
 Patch11: less-458-old-bot-in-help.patch
 Patch13: less-436-help.patch
 URL: https://www.greenwoodsoftware.com/less/
-BuildRequires: ncurses-devel
-BuildRequires: autoconf automake libtool
-BuildRequires: make
-# for lesspipe make test
-BuildRequires: perl-Archive-Tar
-# for less-color's Perl dependencies
-BuildRequires: perl-generators
-# for lesspipe
 Recommends: (less-color = %{version}-%{release} if perl-interpreter)
 Recommends: unzip
 Recommends: html2text
 Recommends: 7zip
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  perl-Archive-Tar
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 The less utility is a text file browser that resembles more, but has
 more capabilities.  Less allows you to move backwards in the file as
@@ -45,17 +42,15 @@ You should install less because it is a basic utility for viewing text
 files, and you'll use it frequently.
 
 %package color
-# perl files GPL-1.0-or-later, the rest GPL-2.0-or-later
 License: GPL-2.0-or-later AND GPL-1.0-or-later
 Summary: Colorizers for less
 Requires: %{name} = %{version}-%{release}
 Conflicts: less < 685-5
-
 %description color
 Syntax highlighting modes for the less pager.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -a 1
@@ -71,48 +66,33 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 sed -i -e 's|"#!/usr/bin/env $selected_shell"|"#!$shellcmd"|' -e '/ZSH_/d' lesspipe-%{lesspipe_version}/configure
 
 %build
+
 rm -f ./configure
 autoreconf -fiv
 %configure
 %make_build CFLAGS="%{optflags} -D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64"
-
 pushd lesspipe-%{lesspipe_version}
 ./configure --prefix=%{_prefix} --shell=%{_bindir}/sh --bash-completion-dir=%{_datadir}/bash-completion/completions/
-# do not run make, it does nothing atm, but it reruns configure with wrong argumens
 popd
-
 %install
 %make_install
 mkdir -p $RPM_BUILD_ROOT/etc/profile.d
 install -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT/etc/profile.d
 install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT/etc/profile.d
-
 pushd lesspipe-%{lesspipe_version}
 %make_install
 rm -rf $RPM_BUILD_ROOT/usr/share/bash-completion/
 popd
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 pushd lesspipe-%{lesspipe_version}
-# we dont have all required components to pass full test, but it is still
-# useful to run for debug purposes
 make test ||:
 popd
-
-%files
-%doc README NEWS INSTALL
-%license LICENSE COPYING
-/etc/profile.d/*
-%{_bindir}/less
-%{_bindir}/lesscomplete
-%{_bindir}/lesspipe.sh
-%{_mandir}/man1/*
-%{_mandir}/man5/lesskey.5*
-
-%files color
-%{_bindir}/archive_color
-%{_bindir}/code2color
-%{_bindir}/vimcolor
+%files -f %{oreon_filedir}/main.list
+%files -n less-color -f %{oreon_filedir}/less-color.list
 
 %changelog
+
 %autochangelog

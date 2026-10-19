@@ -1,47 +1,41 @@
 %global source0_hash 21b03869abd963be14c1acd1df824a22ba3a1f8e2a3fd8bd6fe1e6997472886a
-
-# Perform optional tests
 %bcond_without perl_Math_Expression_Evaluator_enables_optional_test
-
 Name:           perl-Math-Expression-Evaluator
 Version:        0.3.2
-Release:        39%{?dist}
+Release:        1%{?dist}
 Summary:        Parses, compiles and evaluates mathematics expressions
-# lib/Math/Expression/Evaluator/Lexer.pm:   (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/Math-Expression-Evaluator
 Source0:        https://cpan.metacpan.org/authors/id/M/MO/MORITZ/Math-Expression-Evaluator-v%{version}.tar.gz
 BuildArch:      noarch
+%if %{with perl_Math_Expression_Evaluator_enables_optional_test}
+%endif
+# oreon:deps
 BuildRequires:  coreutils
-# for iconv tool
 BuildRequires:  glibc-common
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.6.1
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Run-time:
+BuildRequires:  perl(:VERSION)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Data::Dumper)
 BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(Math::Trig)
 BuildRequires:  perl(POSIX)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Tests:
 BuildRequires:  perl(Test::More)
-%if %{with perl_Math_Expression_Evaluator_enables_optional_test}
-# Optional tests:
 BuildRequires:  perl(Test::Pod)
 BuildRequires:  perl(Test::Pod::Coverage)
-%endif
-
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Math::Expression::Evaluator is a parser, compiler and interpreter for
 mathematical expressions. It can handle normal arithmetic (including
 powers wit ^ or **), built-in functions like sin() and variables.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Math-Expression-Evaluator-v%{version}
@@ -56,20 +50,19 @@ for F in t/01-pod.t t/02-pod-coverage.t; do
 %endif
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%doc Changes examples README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

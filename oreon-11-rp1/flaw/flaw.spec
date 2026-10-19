@@ -1,25 +1,29 @@
-%global source0_hash none
-
+%global source0_hash 424e53085ecdd60e43b557d1ec0ff73b050fe988bb1ede824c4bc5f9c68c4d77
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
-
 Name:		flaw
 Version:	1.3.2a
-Release:	36%{?dist}
-Summary:	Free top-down wizard battle game
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Free top-down wizard battle game
 License:	GPL-3.0-or-later
 URL:		http://flaw.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-#patch to build on aarch64, upstream notified to use autoconf 2.69
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:		flaw-aarch64.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:	SDL_image-devel SDL_mixer-devel SDL_ttf-devel SDL-devel gnu-free-serif-fonts 
-BuildRequires:	SDL_gfx-devel desktop-file-utils gnu-free-sans-fonts gettext intltool
-BuildRequires:	gcc
-BuildRequires: make
 Requires:	gnu-free-sans-fonts gnu-free-serif-fonts
-
+# oreon:deps
+BuildRequires:  SDL-devel
+BuildRequires:  SDL_gfx-devel
+BuildRequires:  SDL_image-devel
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  SDL_ttf-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  gnu-free-sans-fonts
+BuildRequires:  gnu-free-serif-fonts
+BuildRequires:  intltool
+BuildRequires:  make
+# /oreon:deps
 %description
 FLAW is a free top-down wizard battle game.
 It can be played by up to 5 players simultaneously. The goal of the game is to
@@ -29,6 +33,7 @@ and knocking your opponents down. In addition there are collectible magic gems
 that provide special abilities.
 
 %prep
+
 %autosetup
 
 # Fix spurious executable permissions
@@ -39,19 +44,11 @@ chmod 644 src/*.h
 sed -i -e '2d' data/flaw.desktop
 
 %build
+
 %configure --docdir=%{_pkgdocdir}
 %make_build
-
 %install
 %make_install
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -89,18 +86,12 @@ SentUpstream: 2014-09-24
   </screenshots>
 </application>
 EOF
-
 %find_lang %{name}
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%{_bindir}/flaw
-%{_datadir}/flaw
-%{_datadir}/pixmaps/flaw.png
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/flaw.desktop
-%exclude %{_pkgdocdir}/INSTALL
-%doc %{_pkgdocdir}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

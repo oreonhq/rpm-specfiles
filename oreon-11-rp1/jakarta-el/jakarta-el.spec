@@ -1,29 +1,22 @@
 %global source0_hash 39d020607371113c2cc2bf1545906017989d435700cd822091aab184eca8c422
-
 %global srcname el-ri
-
 Name:           jakarta-el
 Version:        4.0.2
 Release:        1%{?dist}
 Summary:        Jakarta Expression Language
-# Automatically converted from old format: EPL-2.0 or GPLv2 with exceptions - review is highly recommended.
 License:        EPL-2.0 OR LicenseRef-Callaway-GPLv2-with-exceptions
-
 URL:            https://github.com/eclipse-ee4j/el-ri
-Source0:        %{url}/archive/%{version}-RELEASE/%{srcname}-%{version}.tar.gz
-
+Source0:        https://github.com/eclipse-ee4j/%{srcname}/archive/%{version}-RELEASE/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+Provides:       glassfish-el = %{version}-%{release}
+Obsoletes:      glassfish-el < 3.0.1-1
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.apache.maven.surefire:surefire-junit47)
-
-# package renamed in fedora 33, remove in fedora 35
-Provides:       glassfish-el = %{version}-%{release}
-Obsoletes:      glassfish-el < 3.0.1-1
-
+# /oreon:deps
 %description
 Jakarta Expression Language provides a specification document, API,
 reference implementation and TCK that describes an expression language
@@ -33,11 +26,8 @@ This package contains the implementation.
 
 %package api
 Summary:        Jakarta Expression Language API
-
-# package renamed in fedora 33, remove in fedora 35
 Provides:       glassfish-el-api = %{version}-%{release}
 Obsoletes:      glassfish-el-api < 3.0.1-1
-
 %description api
 Jakarta Expression Language provides a specification document, API,
 reference implementation and TCK that describes an expression language
@@ -47,15 +37,13 @@ This package contains only the API.
 
 %package javadoc
 Summary:        Javadoc for %{name}
-
-# package renamed in fedora 33, remove in fedora 35
 Provides:       glassfish-el-javadoc = %{version}-%{release}
 Obsoletes:      glassfish-el-javadoc < 3.0.1-1
-
 %description javadoc
 This package contains javadoc for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{srcname}-%{version}-RELEASE
@@ -89,21 +77,16 @@ sed -i -e 's/jakarta\./javax./g' $(find api/src/main/java/javax -name *.java)
 %mvn_file :jakarta.el-api %{name}/jakarta.el-api glassfish-el-api
 
 %build
-%mvn_build -s
 
+%mvn_build -s
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-jakarta.el
-%license LICENSE.md NOTICE.md
-%doc README.md
-
-%files api -f .mfiles-jakarta.el-api
-%license LICENSE.md NOTICE.md
-%doc README.md
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE.md NOTICE.md
+%files -f %{oreon_filedir}/main.list
+%files -n jakarta-el-api -f %{oreon_filedir}/jakarta-el-api.list
+%files -n jakarta-el-javadoc -f %{oreon_filedir}/jakarta-el-javadoc.list
 
 %changelog
+
 %autochangelog

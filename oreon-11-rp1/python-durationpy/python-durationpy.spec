@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 181898e1ae282e288f0a2291829656bf1b6b3aadf30a97993b85db4943642905
 Name:           python-durationpy
 Version:        0.11
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Module for converting between datetime.timedelta and Go_s Duration strings.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/icholy/durationpy
-Source:         %{pypi_source durationpy}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/durationpy/durationpy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'durationpy' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-durationpy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-durationpy
-Summary:        %{summary}
-
-%description -n python3-durationpy %_description
-
+Summary:        Module for converting between datetime.timedelta and Go_s Duration strings.
+%description -n python3-durationpy
 
 %prep
-%autosetup -p1 -n durationpy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir durationpy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-durationpy usr/lib/python3*/site-packages/durationpy* usr/lib64/python3*/site-packages/durationpy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/durationpy* usr/lib64/python3*/site-packages/durationpy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-durationpy -f %{pyproject_files}
+%files
+%files -n python3-durationpy -f %{oreon_filedir}/python3-durationpy.list
 
 %changelog
+
 %autochangelog

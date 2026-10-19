@@ -1,81 +1,57 @@
+%global source1_hash 3f59c6aa20a06da4c1901d46c40ae0ac60601e3479b7f805749822e1b6d5463e
 %global source0_hash 6e549b0dacd28797153696e4ee27f8e19aee6f3711f94ee379b8fae8ecfd937a
-
 %global stable_kf6 stable
-
-
 Name:    kactivitymanagerd
-Summary: Plasma service to manage user's activities
+Summary:        Plasma service to manage user's activities
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  extra-cmake-modules
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(Qt6Core5Compat)
-
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6GlobalAccel)
-BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6GuiAddons)
-
-BuildRequires:  boost-devel
-
-# The kactivitymanagerd was split from KActivities in KF5 5.21,
-# but thanks to our clever packaging kf5-kactivities package
-# already contained only the kactivitymanagerd files
 Obsoletes:      kf5-kactivities < 5.21.0
-
-# older ones (previously in kf5-kactivities)
 Obsoletes:      kactivities < 4.90.0
 Provides:       kactivities%{?_isa} = %{version}-%{release}
 Provides:       kactivities = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6GlobalAccel)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang kactivities6 --with-qt
+%oreon_autofiles main
 
-
-%files -f kactivities6.lang
-%license LICENSES/*
-%doc README.md
-%{_kf6_datadir}/qlogging-categories6/kactivitymanagerd.categories
-%{_libexecdir}/kactivitymanagerd
-%{_kf6_libdir}/libkactivitymanagerd_plugin.so
-%{_kf6_datadir}/dbus-1/services/org.kde.ActivityManager.service
-%{_kf6_datadir}/krunner/dbusplugins/plasma-runnners-activities.desktop
-%{_userunitdir}/plasma-kactivitymanagerd.service
-%{_qt6_plugindir}/kactivitymanagerd1/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

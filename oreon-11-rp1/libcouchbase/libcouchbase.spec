@@ -1,32 +1,24 @@
-%global source0_hash 2c565850f05b71dd3876fa0dfcab71ec45488ec9d949a7460070930e016c378d
-
-Summary: Client and protocol library for the Couchbase project
+%global source0_hash 2d8a3d1a67e012cc562aa7cf6105def8e23a01930bc92459c43c119a13b3ebc8
+Summary:        Client and protocol library for the Couchbase project
 Name: libcouchbase
 Version: 3.3.19
-Release: 1%{?dist}
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+Release:        1%{?dist}
 License: Apache-2.0
-BuildRequires: gcc, gcc-c++
-BuildRequires: cmake >= 3.5.1
-BuildRequires: pkgconfig(libevent) >= 2
-BuildRequires: pkgconfig(libuv) >= 1
-BuildRequires: libev-devel >= 3
-BuildRequires: openssl-devel
-BuildRequires: make
 URL: https://docs.couchbase.com/c-sdk/current/project-docs/sdk-release-notes.html
-Source: https://packages.couchbase.com/clients/c/%{name}-%{version}.tar.gz
-%if ! (0%{?rhel} && 0%{?rhel} <= 7)
-Recommends: %{name}-libevent%{_isa} = %{version}-%{release}
-Suggests: %{name}-libev%{_isa} = %{version}-%{release}
-Suggests: %{name}-tools%{_isa} = %{version}-%{release}
-%endif
-
+Source0:        https://packages.couchbase.com/clients/c/%{name}-%{version}.tar.gz
 Patch0: %{name}-0001-enforce-system-crypto-policies.patch
-
-# exclude from "Provides" private IO plugins
 %{?filter_provides_in: %filter_provides_in %{name}/%{name}.*\.so$}
 %{?filter_setup}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libev-devel
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig(libevent)
+BuildRequires:  pkgconfig(libuv)
+# /oreon:deps
 %description
 This package provides the core for libcouchbase. It contains an IO
 implementation based on select(2). If preferred, you can install one
@@ -66,50 +58,33 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Development files for the Couchbase client Library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
 %cmake -DLCB_NO_MOCK=1 -DLCB_BUILD_DTRACE=0
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380712)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/*/lib*.so.* usr/*/lib*.so.* usr/*/lib*.so.* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 export CTEST_OUTPUT_ON_FAILURE=1
 %cmake_build --target alltests
 %ctest
-
 %ldconfig_scriptlets
-
-%files
-%{_libdir}/%{name}.so.*
-%doc README.markdown RELEASE_NOTES.markdown
-%license LICENSE
-%dir %{_libdir}/%{name}
-
-%files libevent
-%{_libdir}/%{name}/%{name}_libevent.so
-
-%files libev
-%{_libdir}/%{name}/%{name}_libev.so
-
-%files libuv
-%{_libdir}/%{name}/%{name}_libuv.so
-
-%files tools
-%{_bindir}/cbc*
-%{_mandir}/man1/cbc*.1*
-%{_mandir}/man4/cbcrc*.4*
-
-%files devel
-%{_includedir}/%{name}
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libcouchbase-libevent -f %{oreon_filedir}/libcouchbase-libevent.list
+%files -n libcouchbase-libev -f %{oreon_filedir}/libcouchbase-libev.list
+%files -n libcouchbase-libuv -f %{oreon_filedir}/libcouchbase-libuv.list
+%files -n libcouchbase-tools -f %{oreon_filedir}/libcouchbase-tools.list
+%files -n libcouchbase-devel -f %{oreon_filedir}/libcouchbase-devel.list
 
 %changelog
+
 %autochangelog

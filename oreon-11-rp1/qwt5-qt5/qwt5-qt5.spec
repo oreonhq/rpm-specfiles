@@ -1,34 +1,26 @@
 %global source0_hash be68ac957ef94de7bba310be3fa42989f3e9d0a3950a5a4c4419a6e8ad584244
-
-# Forked from https://sourceforge.net/projects/qwt/files/qwt/5.2.3/
-# This was the last, almost unannounced maintenance release of the 5.x branch,
-# see: https://sourceforge.net/p/qwt/mailman/message/30128542/
-# This fork contains several bugfixes and configuration file patches, to comply
-# with distribution-specific system paths.
-
-# Force out of source build
 %undefine __cmake_in_source_build
-
 %global commit0 a2b11e3f7c83dcba30a9bfac86a54ccb8305691d
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global commitdate 20210522
 %global owner gbm19
-
 Name:    qwt5-qt5
 Version: 5.2.3a
-Release: 23.%{commitdate}git%{shortcommit0}%{?dist}
-Summary: Qt Widgets for Technical Applications adapted to Qt5
-
+Release:        1%{?dist}
+Summary:        Qt Widgets for Technical Applications adapted to Qt5
 License: LGPL-2.1-or-later WITH Qwt-exception-1.0
 URL:     https://github.com/gbm19/qwt5-qt5
-Source:  https://github.com/%{owner}/%{name}/archive/master/%{name}-master.tar.gz
-
-BuildRequires: cmake
-BuildRequires: make
-BuildRequires: gcc-c++
-BuildRequires: pkgconfig(Qt5Gui) pkgconfig(Qt5Widgets) pkgconfig(Qt5PrintSupport)
-BuildRequires: pkgconfig(Qt5Svg) pkgconfig(Qt5Designer)
-
+Source0:        https://github.com/%{owner}/%{name}/archive/master/%{name}-master.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  pkgconfig(Qt5Designer)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5PrintSupport)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Widgets)
+# /oreon:deps
 %description
 The Qwt library contains GUI Components and utility classes which are primarily
 useful for programs with a technical background.
@@ -39,7 +31,6 @@ or ranges of type double.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains qt5 libraries and header files for
 developing applications that use %{name}.
@@ -48,11 +39,11 @@ developing applications that use %{name}.
 Summary: Extra Developer documentation for %{name}
 Requires: qt5-qtbase
 BuildArch: noarch
-
 %description doc
 %{summary} in HTML format.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qc -n %{name}-master
@@ -62,32 +53,20 @@ pushd %{name}-master
 for f in doc/man/man3/*.3; do mv $f ${f/%.3/.qt5.3}; done
 
 %build
+
 pushd %{name}-master
 %cmake
 %cmake_build
-
 %install
 pushd %{name}-master
 %cmake_install
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license %{name}-master/COPYING
-%doc %{name}-master/CHANGES
-%doc %{name}-master/README
-%{_qt5_libdir}/lib%{name}.so
-%{?_qt5_plugindir}/designer/libqwt5_designer_plugin.so
-
-%files devel
-%{_mandir}/man3/*
-%{_qt5_headerdir}/%{name}/
-%{_qt5_libdir}/lib%{name}.so
-%{_qt5_libdir}/pkgconfig/%{name}.pc
-
-%files doc
-%dir %{_qt5_docdir}/html/
-%{_qt5_docdir}/html/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n qwt5-qt5-devel -f %{oreon_filedir}/qwt5-qt5-devel.list
+%files -n qwt5-qt5-doc -f %{oreon_filedir}/qwt5-qt5-doc.list
 
 %changelog
+
 %autochangelog

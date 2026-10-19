@@ -1,26 +1,29 @@
-%global source0_hash b357cfa9f4f1ee47fd3d7397c855fd9431e67a08c4901f242f205e1010e36e16
-
+%global source0_hash 230c84d7792ed38003481eacb995845f205bc591a69883eae4acd028679e50f3
 Name: cfdg
 Version:  3.4.3
-Release:  1%{?dist}
-Summary: Context Free Design Grammar
-
+Release:        1%{?dist}
+Summary:        Context Free Design Grammar
 License: GPL-2.0-or-later
 URL: http://www.contextfreeart.org/
-
-Source0: http://www.contextfreeart.org/download/ContextFreeSource%{version}.tgz
+Source0:        http://www.contextfreeart.org/download/ContextFreeSource%{version}.tgz
 Patch0:  cfdg-nostrip.patch
-BuildRequires: gcc-c++ libatomic libicu-devel
-BuildRequires: libpng-devel bison flex
-BuildRequires: make
-BuildRequires: sed
-
+# oreon:deps
+BuildRequires:  bison
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  libatomic
+BuildRequires:  libicu-devel
+BuildRequires:  libpng-devel
+BuildRequires:  make
+BuildRequires:  sed
+# /oreon:deps
 %description
 Context Free is a program that generates images from written instructions 
 called a grammar. The program follows the instructions in a few seconds to 
 create images that can contain millions of shapes.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qcn ContextFreeSource%{version}
@@ -31,19 +34,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find -type f -print0 | xargs -0 sed -i 's/-march=native//g'
 
 %build
-#pushd ContextFreeSource%{version}
+
 OPTFLAGS=$RPM_OPT_FLAGS make %{?_smp_mflags}
-#popd
-
 %install
-#pushd ContextFreeSource%{version}
 install -D -m 755 cfdg %{buildroot}%{_bindir}/cfdg
-#popd
+%oreon_autofiles main
 
-%files
-%{_bindir}/cfdg
-%license LICENSE.txt
-%doc input/* README* ChangeLog
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

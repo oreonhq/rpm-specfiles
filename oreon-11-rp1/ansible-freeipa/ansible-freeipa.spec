@@ -1,33 +1,27 @@
 %global source0_hash 8b9bbb3366c9b0959006fc7813017c8219eb50817c399e55bc6c8edb4a2b4214
-
-# Turn off automatic python byte compilation because these are Ansible
-# roles and the files are transferred to the node and compiled there with
-# the python version used in the node
 %define __brp_python_bytecompile %{nil}
-
 %global python %{__python3}
-
 %global collection_namespace freeipa
 %global collection_name ansible_freeipa
 %global ansible_collections_dir %{_datadir}/ansible/collections/ansible_collections
-
-Summary: Roles and playbooks to deploy FreeIPA servers, replicas and clients
+Summary:        Roles and playbooks to deploy FreeIPA servers, replicas and clients
 Name: ansible-freeipa
 Version: 1.16.0
-Release: 3%{?dist}
+Release:        1%{?dist}
 URL: https://github.com/freeipa/ansible-freeipa
 License: GPL-3.0-or-later
-Source:        https://github.com/freeipa/ansible-freeipa/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/freeipa/ansible-freeipa/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch: noarch
 Requires: ansible-core >= 2.14.0
-BuildRequires: ansible-core >= 2.14.0
-BuildRequires: python
 Provides: ansible-collection-%{collection_namespace}-%{collection_name} = %{version}-%{release}
 Provides: ansible-freeipa-tests
 Obsoletes: ansible-freeipa-tests < 1.12.1-2
 Provides: ansible-freeipa-collection
 Obsoletes: ansible-freeipa-collection < 1.14.0
-
+# oreon:deps
+BuildRequires:  ansible-core
+BuildRequires:  python
+# /oreon:deps
 %description
 Ansible collection %{collection_namespace}.%{collection_name} providing
 roles to install and uninstall FreeIPA servers, replicas and clients, roles
@@ -121,8 +115,8 @@ is an issue for the processing in a simple playbook.
 Work is planned to have a new method to handle CSR for external signed CAs in
 a separate step before starting the server installation.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 # Do not create backup files with patches
@@ -143,24 +137,16 @@ do
     sed -i '{s@/usr/bin/env python*@%{python}@}' $i
 done
 
-
 %build
 
 %install
-# Create collection and install to %%{buildroot}%%{ansible_collections_dir}
-# ansible-galaxy collection install creates ansible_collections directory
-# automatically in given path, therefore /..
 utils/build-galaxy-release.sh -o "%{version}" -p %{buildroot}%{ansible_collections_dir}/.. %{collection_namespace} %{collection_name}
-
 cp %{buildroot}/%{ansible_collections_dir}/%{collection_namespace}/%{collection_name}/README.md .
+%oreon_autofiles main
 
-
-%files
-%license COPYING
-%doc README.md
-%dir %{ansible_collections_dir}/%{collection_namespace}
-%{ansible_collections_dir}/%{collection_namespace}/%{collection_name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.16.0-3
 - Prepare for Oreon 11 (RP1)

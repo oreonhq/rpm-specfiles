@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash bb700599c721f49a437bf6ee03b0f9cc729752646873985c94b4affaf88f113c
 Name:           python-twilio
 Version:        9.11.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Twilio API client and TwiML generator
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/twilio/twilio-python/
-Source:         %{pypi_source twilio}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/twilio/twilio-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'twilio' generated automatically by pyp2spec.}
-
 Patch0:         python-twilio-rm-python-mock-usage.diff
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-twilio = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-twilio
-Summary:        %{summary}
-
-%description -n python3-twilio %_description
-
+Summary:        Twilio API client and TwiML generator
+%description -n python3-twilio
 
 %prep
-%autosetup -p1 -n twilio-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir twilio-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-twilio usr/lib/python3*/site-packages/twilio* usr/lib64/python3*/site-packages/twilio* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/twilio* usr/lib64/python3*/site-packages/twilio* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-twilio -f %{pyproject_files}
+%files
+%files -n python3-twilio -f %{oreon_filedir}/python3-twilio.list
 
 %changelog
+
 %autochangelog

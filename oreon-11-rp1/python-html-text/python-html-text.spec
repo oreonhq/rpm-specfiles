@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 87fd194310a9f54be32c7b18a70180dfa72a6b4d01cca35ac813c4d2b2b2ed8b
 Name:           python-html-text
 Version:        0.7.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Extract text from HTML
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/zytedata/html-text
-Source:         %{pypi_source html_text}
-
+Source0:        https://files.pythonhosted.org/packages/source/h/html_text/html_text-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'html-text' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(hatchling) >= 1.27.0
+Requires:       python3-html-text = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-html-text
-Summary:        %{summary}
-
-%description -n python3-html-text %_description
-
+Summary:        Extract text from HTML
+%description -n python3-html-text
 
 %prep
-%autosetup -p1 -n html_text-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir html_text-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-html-text usr/lib/python3*/site-packages/html_text* usr/lib64/python3*/site-packages/html_text* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/html_text* usr/lib64/python3*/site-packages/html_text* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-html-text -f %{pyproject_files}
+%files
+%files -n python3-html-text -f %{oreon_filedir}/python3-html-text.list
 
 %changelog
+
 %autochangelog

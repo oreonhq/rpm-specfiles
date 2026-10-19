@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash e6a4953a76b51c0643d132bd92e00f40c337329b9af42ffe842a3dcfb5b3c40e
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,24 +80,21 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           maven-shared-incremental
 Version:        1.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven Incremental Build support utilities
 License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-shared-incremental/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
-# From upstream commit 1b5c81a7
 Patch:          0001-MSHARED-1374-Upgrade-parent-pom-to-41.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.1-53
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.maven.shared:maven-shared-components:pom:)
 BuildRequires:  mvn(org.apache.maven.shared:maven-shared-utils)
@@ -106,28 +102,27 @@ BuildRequires:  mvn(org.apache.maven:maven-core)
 BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.1-53
-
+# /oreon:deps
 %description
 Various utility classes and plexus components for supporting
 incremental build functionality in maven plugins.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 %pom_remove_dep :plexus-component-api
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1-1
 - Import

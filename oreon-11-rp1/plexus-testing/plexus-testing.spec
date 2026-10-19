@@ -1,5 +1,4 @@
 %global source0_hash 4274def676a736ed8933f16fbc767f2a60e67948abc1c8d5e363008c3c5a78f9
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,35 +82,26 @@ end
 %bcond_with bootstrap
 Name:           plexus-testing
 Version:        1.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plexus Testing
 License:        Apache-2.0
 URL:            https://github.com/codehaus-plexus/plexus-testing
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz#/plexus-testing-1.3.0.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(com.google.inject:guice)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-xml)
-BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
-BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
-BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
-BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1.3.0-12
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 The Plexus Testing contains the necessary classes to be able to test
 Plexus components.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n plexus-testing-plexus-testing-1.3.0
 %autosetup -p1 -n plexus-testing-plexus-testing-1.3.0
@@ -123,15 +113,15 @@ rm src/test/java/org/codehaus/plexus/testing/TestJakartaComponent.java
 rm src/test/java/org/codehaus/plexus/testing/PlexusTestJakartaTest.java
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-1
 - Prepare for Oreon 11 (RP1)

@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash a01f17369e79ca28651681cddf212770e646e6191954bad884ca3067316aae60
 Name:           python-mkdocs-git-committers-plugin-2
 Version:        2.5.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        An MkDocs plugin to create a list of contributors on the page. The git-committers plugin will seed the template context with a list of GitHub or GitLab committers and other useful GIT info such as last modified date
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/ojacques/mkdocs-git-committers-plugin-2/
-Source:         %{pypi_source mkdocs_git_committers_plugin_2}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mkdocs_git_committers_plugin_2/mkdocs_git_committers_plugin_2-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mkdocs-git-committers-plugin-2' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-mkdocs-git-committers-plugin-2 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-mkdocs-git-committers-plugin-2
-Summary:        %{summary}
-
-%description -n python3-mkdocs-git-committers-plugin-2 %_description
-
+Summary:        An MkDocs plugin to create a list of contributors on the page. The git-committers plugin will seed the template context with a list of GitHub or GitLab committers and other useful GIT info such as last modified date
+%description -n python3-mkdocs-git-committers-plugin-2
 
 %prep
-%autosetup -p1 -n mkdocs_git_committers_plugin_2-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mkdocs_git_committers_plugin_2-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mkdocs-git-committers-plugin-2 usr/lib/python3*/site-packages/mkdocs_git_committers_plugin_2* usr/lib64/python3*/site-packages/mkdocs_git_committers_plugin_2* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mkdocs_git_committers_plugin_2* usr/lib64/python3*/site-packages/mkdocs_git_committers_plugin_2* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mkdocs-git-committers-plugin-2 -f %{pyproject_files}
+%files
+%files -n python3-mkdocs-git-committers-plugin-2 -f %{oreon_filedir}/python3-mkdocs-git-committers-plugin-2.list
 
 %changelog
+
 %autochangelog

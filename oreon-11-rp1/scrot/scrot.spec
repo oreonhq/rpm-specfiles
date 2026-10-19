@@ -1,43 +1,44 @@
-%global source0_hash 45bed70abd74ffeeec08b75089ba44900291e9c86309bcce892ccc7ece8f1e61
-
+%global source0_hash 1b4b3acadfe07bf89234838675d1d23508a9a6810cb64584f1d9610103d6cdfa
 Name:           scrot
 Version:        2.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Command line screen capture utility
-
 License:        MIT
 URL:            https://github.com/resurrecting-open-source-projects/%{name}
-Source0:        %{URL}/releases/download/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc
+Source0:        https://github.com/resurrecting-open-source-projects/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  autoconf-archive
 BuildRequires:  automake
+BuildRequires:  gcc
 BuildRequires:  make
-BuildRequires:  pkgconfig(imlib2) pkgconfig(libbsd) pkgconfig(x11) pkgconfig(xext) pkgconfig(xcomposite) pkgconfig(xinerama)
-
+BuildRequires:  pkgconfig(imlib2)
+BuildRequires:  pkgconfig(libbsd)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xcomposite)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(xinerama)
+# /oreon:deps
 %description
 scrot is a simple command line screen capture utility.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
-autoreconf -if
 
+autoreconf -if
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%doc AUTHORS ChangeLog README.md scrot.png FAQ.md CONTRIBUTING.md TODO.md
-%license COPYING
-%{_bindir}/*
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

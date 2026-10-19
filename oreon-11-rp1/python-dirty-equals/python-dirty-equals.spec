@@ -1,54 +1,46 @@
 %global source0_hash f4ac74ee88f2d11e2fa0f65eb30ee4f07105c5f86f4dc92b09eb1138775027c3
-
-# Break a circular build dependency with python-pydantic
 %bcond bootstrap 0
-
 Name:           python-dirty-equals
 Version:        0.11
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Doing dirty (but extremely useful) things with equals
-
-# SPDX
 License:        MIT
 URL:            https://github.com/samuelcolvin/dirty-equals
-Source:         %{pypi_source dirty_equals}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/dirty_equals/dirty_equals-%{version}.tar.gz
 %if %{without bootstrap}
 %endif
-
 BuildArch:      noarch
-
-# See dependency-groups.dev in pyproject.toml, but there are coverage analysis
-# tools, linters, and other unwanted dependencies
-# (https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters)
-# mixed in, so we list the real test dependencies manually.
-BuildRequires:  %{py3_dist packaging} >= 25
-BuildRequires:  %{py3_dist pydantic} >= 2.10.6
-BuildRequires:  %{py3_dist pytest} >= 8.3.5
-# Not packaged: python-pytest-examples; would enable tests/test_docs.py
-# BuildRequires:  %%{py3_dist pytest-examples} >= 0.0.18
-# pytest-pretty is purely cosmetic
-
 %global common_description %{expand:
 The dirty-equals Python library (mis)uses the __eq__ method to make python code
 (generally unit tests) more declarative and therefore easier to read and write.
-
 You can use dirty-equals in whatever context you like, but it comes into its
 own when writing unit tests for applications where you’re commonly checking the
 response to API calls and the contents of a database.}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-dirty-equals = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-dirty-equals+pydantic
+Summary:        Metapackage for python3-dirty-equals pydantic extras
+Requires:       python3-dirty-equals = %{version}-%{release}
+Requires:       python3dist(pydantic) >= 2.4.2
+Provides:       python3dist(dirty-equals[pydantic]) = %{version}-%{release}
+
+%description -n python3-dirty-equals+pydantic
+Metapackage for python3-dirty-equals pydantic extras.
 
 %description %{common_description}
 
 %package -n python3-dirty-equals
-Summary:        %{summary}
-
+Summary:        Doing dirty (but extremely useful) things with equals
 %description -n python3-dirty-equals %{common_description}
 
 %if %{without bootstrap}
-%pyproject_extras_subpkg -n python3-dirty-equals pydantic
 %endif
 
 %prep
+
 %autosetup -p1
 # Erroring on DeprecationWarnings makes sense upstream, but is probably too
 # strict for distribution packaging.
@@ -60,32 +52,27 @@ Summary:        %{summary}
 sed -r -i 's/^filterwarnings = "error"$/# &/' pyproject.toml
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-dirty-equals usr/lib/python3*/site-packages/dirty_equals* usr/lib64/python3*/site-packages/dirty_equals* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/dirty_equals* usr/lib64/python3*/site-packages/dirty_equals* usr/bin/*
 
 %check
-# Tests in this module require pytest-examples; see %%prep for notes on this.
-ignore="${ignore-} --ignore=tests/test_docs.py"
 
+ignore="${ignore-} --ignore=tests/test_docs.py"
 %if %{with bootstrap}
-# Imports in this module require Pydantic.
 ignore="${ignore-} --ignore=tests/test_other.py"
 %endif
-
 %if v"0%{?python3_version}" >= v"3.14"
-# Two test regressions related to IP addresses in Python 3.14
-# https://github.com/samuelcolvin/dirty-equals/issues/112
 k="${k-}${k+ and }not test_is_ip_true[other1-dirty1]"
 k="${k-}${k+ and }not test_is_ip_true[other3-dirty3]"
 %endif
-
-# Some tests require TZ == UTC; see the “test” target in the Makefile
 TZ=UTC %pytest ${ignore-} -k "${k-}" -v
-
-%files -n python3-dirty-equals -f %{pyproject_files}
-%doc README.md
+%files
+%files -n python3-dirty-equals -f %{oreon_filedir}/python3-dirty-equals.list
 
 %changelog
+
 %autochangelog

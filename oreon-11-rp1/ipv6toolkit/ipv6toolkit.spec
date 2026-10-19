@@ -1,21 +1,16 @@
 %global source0_hash b6a1af3d3cf417a81dbb4cd99cf710d16a62338be4bfbbb14b8d1cb298849338
-
 Summary:        Security assessment and troubleshooting tools for IPv6 protocols
 Name:           ipv6toolkit
 Version:        2.2
-Release:        4%{?dist}
+Release:        1%{?dist}
 License:        GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later AND MPL-2.0
-# ipv6toolkit itself is GPL-3.0-or-later but uses other source codes, breakdown:
-# GFDL-1.3-no-invariants-or-later: manuals/*.[157]
-# MPL-2.0: data/public_suffix_list.dat
 URL:            https://www.si6networks.com/research/tools/ipv6toolkit/
 Source0:        https://github.com/fgont/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-BuildRequires:  make
+Requires:       curl
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  libpcap-devel
-BuildRequires:  perl-generators
-# Tests
-BuildRequires:  perl-interpreter
+BuildRequires:  make
 BuildRequires:  perl(Crypt::X509)
 BuildRequires:  perl(IPC::Open3)
 BuildRequires:  perl(MIME::Base64)
@@ -23,8 +18,9 @@ BuildRequires:  perl(Net::DNS)
 BuildRequires:  perl(Net::IP)
 BuildRequires:  perl(Socket)
 BuildRequires:  perl(constant)
-Requires:       curl
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The SI6 Networks IPv6 toolkit is a suite of IPv6 security assessment and
 troubleshooting tools. It can be used to assess the security of IPv6
@@ -34,71 +30,28 @@ comprises tools ranging from packet-crafting tools for sending arbitrary
 Neighbor Discovery packets to a comprehensive IPv6 network scanning tool.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 for file in *.TXT; do mv -f ${file} $(basename ${file} .TXT); done
 
 %build
+
 export CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_LD_FLAGS"
 %make_build PREFIX=%{_prefix}
-
 %install
 %make_install PREFIX=%{_prefix} MANPREFIX=%{_datadir} \
 %if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
   SBINPATH=$RPM_BUILD_ROOT%{_sbindir}
+%oreon_autofiles main
 %endif
-
 %check
+
 make unit_tests
-
-# Catch Perl syntax errors and new run-time Perl dependencies during build-time
 for tool in tools/*; do if grep -q -E '^#!/.*perl' ${tool}; then perl -c ${tool}; fi; done
-
-%files
-%license LICENSE
-%doc CHANGES CREDITS
-%config(noreplace) %{_sysconfdir}/%{name}.conf
-%{_bindir}/addr6
-%{_sbindir}/blackhole6
-%{_sbindir}/flow6
-%{_sbindir}/frag6
-%{_sbindir}/icmp6
-%{_sbindir}/jumbo6
-%{_sbindir}/messi
-%{_sbindir}/mldq6
-%{_sbindir}/na6
-%{_sbindir}/ni6
-%{_sbindir}/ns6
-%{_sbindir}/path6
-%{_sbindir}/ra6
-%{_sbindir}/rd6
-%{_sbindir}/rs6
-%{_sbindir}/scan6
-%{_sbindir}/script6
-%{_sbindir}/tcp6
-%{_sbindir}/udp6
-%{_datadir}/%{name}/
-%{_mandir}/man1/addr6.1*
-%{_mandir}/man1/blackhole6.1*
-%{_mandir}/man1/flow6.1*
-%{_mandir}/man1/frag6.1*
-%{_mandir}/man1/icmp6.1*
-%{_mandir}/man1/jumbo6.1*
-%{_mandir}/man1/mldq6.1*
-%{_mandir}/man1/na6.1*
-%{_mandir}/man1/ni6.1*
-%{_mandir}/man1/ns6.1*
-%{_mandir}/man1/path6.1*
-%{_mandir}/man1/ra6.1*
-%{_mandir}/man1/rd6.1*
-%{_mandir}/man1/rs6.1*
-%{_mandir}/man1/scan6.1*
-%{_mandir}/man1/script6.1*
-%{_mandir}/man1/tcp6.1*
-%{_mandir}/man1/udp6.1*
-%{_mandir}/man5/ipv6toolkit.conf.5*
-%{_mandir}/man7/ipv6toolkit.7*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

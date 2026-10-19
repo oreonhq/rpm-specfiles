@@ -1,17 +1,15 @@
 %global source0_hash db3a96dd2ba3c0ef6fc6b5176eba7b4d3eaa06b96fba3d8d0b13450c66763862
-
 Name:           R-gdata
 Version:        %R_rpm_version 3.0.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Various R Programming Tools for Data Manipulation
-
 License:        GPL-3.0-only
 URL:            %{cran_url}
-Source:         %{cran_source}
-
+Source0:        https://cran.r-project.org/package=gdata&version=%{version}#/gdata_%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Various R programming tools for data manipulation, including:
   - medical unit conversions,
@@ -32,22 +30,19 @@ Various R programming tools for data manipulation, including:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

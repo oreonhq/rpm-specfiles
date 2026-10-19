@@ -1,15 +1,14 @@
-%global source0_hash 8f684737a52a75c0a0c465ec26e6a5d0fdc1d495392ea83015aed84563f93e0f
-
+%global source0_hash 37e4143e4d362d7b93ba7a8d2c36a945fbcae82aef386512032200233b1750c8
 Name:           quake2
 Version:        8.70
 Release:        1%{?dist}
 Summary:        Quake II (Yamagi version)
-
 License:        GPL-2.0-or-later
 URL:            http://www.yamagi.org/quake2 
 Source0:        https://deponie.yamagi.org/quake2/quake2-%{version}.tar.xz
 Source1:        %{name}.desktop
-
+# oreon:deps
+BuildRequires:  SDL2-devel
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  libcurl-devel
@@ -18,9 +17,8 @@ BuildRequires:  libvorbis-devel
 BuildRequires:  make
 BuildRequires:  mesa-libGL-devel
 BuildRequires:  openal-soft-devel
-BuildRequires:  SDL2-devel
 BuildRequires:  zlib-devel
-
+# /oreon:deps
 %description
 This package contains the enhanced GPL YamagiQuake2 version of the Quake 2 
 engine.
@@ -77,23 +75,18 @@ of the extracted patch.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-# Use -std=gnu17 to work around build issues with C23 that gcc 15 defaults to
-%global optflags %optflags -std=gnu17
 
+%global optflags %optflags -std=gnu17
 %make_build \
     WITH_RPATH=no \
     WITH_SYSTEMWIDE=yes \
     WITH_SYSTEMDIR='%{_libdir}/games/%{name}'
-
 %install
 mkdir -p %{buildroot}%{_bindir}
 ln -rs %{_libdir}/games/%{name}/quake2 %{buildroot}%{_bindir}/quake2
 ln -rs %{_libdir}/games/%{name}/q2ded %{buildroot}%{_bindir}/q2ded
-
 install -D -p -m 755 release/quake2 \
     %{buildroot}%{_libdir}/games/%{name}/quake2
 install -D -p -m 755 release/q2ded \
@@ -117,17 +110,10 @@ install -D -p -m 644 stuff/icon/Quake2.svg \
 install -D -p -m 755 stuff/cdripper.sh \
     %{buildroot}%{_defaultdocdir}/%{name}/examples/cdripper.sh
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc CHANGELOG README.md
-%doc doc/*
-%{_bindir}/*
-%{_libdir}/games/*
-%{_datadir}/icons/hicolor/512x512/apps/*
-%{_datadir}/icons/hicolor/scalable/apps/*
-%{_datadir}/applications/* 
-%{_defaultdocdir}/%{name}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

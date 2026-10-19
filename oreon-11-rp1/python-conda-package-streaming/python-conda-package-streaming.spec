@@ -1,61 +1,64 @@
-%global source0_hash none
-
+%global source0_hash b2599426dee4a81bfe6aa40d5fb0a22ae5ff842a0a7f9df59f013bfbcd369f72
 Name:           python-conda-package-streaming
 Version:        0.13.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        An efficient library to read from new and old format .conda and .tar.bz2 conda packages.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://conda.github.io/conda-package-streaming/
-Source:         %{pypi_source conda_package_streaming}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/conda_package_streaming/conda_package_streaming-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(flit-core) < 4
+BuildRequires:  python3dist(flit-core) >= 3.2
+Requires:       python3-conda-package-streaming = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-conda-package-streaming+test
+Summary:        Metapackage for python3-conda-package-streaming test extras
+Requires:       python3-conda-package-streaming = %{version}-%{release}
+Requires:       python3dist(pytest) >= 7
+Requires:       python3dist(conda-package-handling) >= 2
+Provides:       python3dist(conda-package-streaming[test]) = %{version}-%{release}
 
+%description -n python3-conda-package-streaming+test
+Metapackage for python3-conda-package-streaming test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'conda-package-streaming' generated automatically by pyp2spec.}
+%package -n       python3-conda-package-streaming+docs
+Summary:        Metapackage for python3-conda-package-streaming docs extras
+Requires:       python3-conda-package-streaming = %{version}-%{release}
+Requires:       python3dist(mdit-py-plugins) >= 0.3.0
+Provides:       python3dist(conda-package-streaming[docs]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-conda-package-streaming+docs
+Metapackage for python3-conda-package-streaming docs extras.
+
+%description
 
 %package -n     python3-conda-package-streaming
-Summary:        %{summary}
-
-%description -n python3-conda-package-streaming %_description
+Summary:        An efficient library to read from new and old format .conda and .tar.bz2 conda packages.
+%description -n python3-conda-package-streaming
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-conda-package-streaming docs,test
-
 
 %prep
-%autosetup -p1 -n conda_package_streaming-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir conda_package_streaming-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-conda-package-streaming usr/lib/python3*/site-packages/conda_package_streaming* usr/lib64/python3*/site-packages/conda_package_streaming* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/conda_package_streaming* usr/lib64/python3*/site-packages/conda_package_streaming* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-conda-package-streaming -f %{pyproject_files}
+%files
+%files -n python3-conda-package-streaming -f %{oreon_filedir}/python3-conda-package-streaming.list
 
 %changelog
+
 %autochangelog

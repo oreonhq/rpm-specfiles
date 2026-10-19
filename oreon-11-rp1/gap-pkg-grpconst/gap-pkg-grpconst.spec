@@ -1,34 +1,29 @@
 %global source0_hash 683bf2e3245b3a83bdb189ccb20327eaec7ca4ac116ea9d45a39167be73dd9eb
-
 %global gap_pkgname grpconst
 %global giturl      https://github.com/gap-packages/grpconst
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        2.7.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Constructing groups of a given order
-
 License:        GPL-2.0-or-later
 URL:            https://gap-packages.github.io/grpconst/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/v%{version}/%{gap_upname}-%{version}.tar.gz
-
+Source0:        %{giturl}/releases/download/v%{version}/%{gap_pkgname}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    gap
 BuildOption(install): gap htm tst
 BuildOption(check): tst/testall.g
-
-BuildRequires:  gap-devel
+Requires:       gap-pkg-autpgrp
+Requires:       gap-pkg-irredsol
+Requires:       gap-pkg-smallgrp
+# oreon:deps
 BuildRequires:  GAPDoc-latex
+BuildRequires:  gap-devel
 BuildRequires:  gap-pkg-autpgrp
 BuildRequires:  gap-pkg-irredsol
 BuildRequires:  gap-pkg-smallgrp
 BuildRequires:  tth
-
-Requires:       gap-pkg-autpgrp
-Requires:       gap-pkg-irredsol
-Requires:       gap-pkg-smallgrp
-
+# /oreon:deps
 %description
 This package contains GAP implementations of three different approaches to
 constructing up to isomorphism all groups of a given order.
@@ -52,47 +47,30 @@ for nonsoluble G only, since for soluble groups the above methods are more
 efficient.
 
 %package doc
-# The content is GPL-2.0-or-later.  The remaining licenses cover the various
-# fonts embedded in PDFs.
-# AMS: OFL-1.1-RFN
-# CM: Knuth-CTAN
-# Nimbus: AGPL-3.0-only
-# StandardSymL: GPL-1.0-or-later
 License:        GPL-2.0-or-later AND OFL-1.1-RFN AND Knuth-CTAN AND GPL-1.0-or-later AND AGPL-3.0-only AND LicenseRef-Rsfs
 Summary:        GrpConst documentation
 Requires:       %{name} = %{version}-%{release}
 Requires:       gap-online-help
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{gap_upname}-%{version}
 
 %build
-# Link to main GAP documentation
+
 ln -s %{gap_libdir}/etc ../../etc
 ln -s %{gap_libdir}/doc ../../doc
 cd doc
 ./make_doc
 cd -
 rm -f ../../{doc,etc}
-
-%files
-%doc README
-%license LICENSE
-%dir %{gap_libdir}/pkg/%{gap_upname}/
-%{gap_libdir}/pkg/%{gap_upname}/*.g
-%{gap_libdir}/pkg/%{gap_upname}/gap/
-%{gap_libdir}/pkg/%{gap_upname}/tst/
-
-%files doc
-%docdir %{gap_libdir}/pkg/%{gap_upname}/doc/
-%docdir %{gap_libdir}/pkg/%{gap_upname}/htm/
-%{gap_libdir}/pkg/%{gap_upname}/doc/
-%{gap_libdir}/pkg/%{gap_upname}/htm/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-grpconst-doc -f %{oreon_filedir}/gap-pkg-grpconst-doc.list
 
 %changelog
+
 %autochangelog

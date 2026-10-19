@@ -1,23 +1,22 @@
 %global source0_hash 20222a84e3b4246c36b8a0b74834bb5674026ffdb8b9093a76aaf01560ad4815
-
 Name: libresample
 Version: 0.1.3
-Summary: A real-time library for audio sampling rate conversion
-Release: 48%{?dist}
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Summary:        A real-time library for audio sampling rate conversion
+Release:        1%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL: https://ccrma.stanford.edu/~jos/resample/Free_Resampling_Software.html
-Source0: http://ccrma.stanford.edu/~jos/gz/libresample-%{version}.tgz
+Source0:        http://ccrma.stanford.edu/~jos/gz/libresample-%{version}.tgz
 Source1: libresample.pc
 Patch1: libresample_shared-libs.patch
-BuildRequires: cmake >= 2.4
-BuildRequires: doxygen
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: libsndfile-devel
-BuildRequires: libsamplerate-devel
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libsamplerate-devel
+BuildRequires:  libsndfile-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 A real-time library for audio sampling rate conversion providing
 several useful features relative to resample-1.7 on which it is based:
@@ -45,11 +44,11 @@ several useful features relative to resample-1.7 on which it is based:
 %package devel
 Summary: Development files for libresample
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files for libresample.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -57,10 +56,9 @@ mkdir pkgconfig
 cp %{SOURCE1} pkgconfig/
 
 %build
+
 %configure
-
 %make_build VERBOSE=1
-
 %install
 mkdir -p %{buildroot}%{_bindir}/
 mkdir -p %{buildroot}%{_libdir}/pkgconfig/
@@ -70,24 +68,16 @@ cp libresample.so.0 %{buildroot}%{_libdir}/
 cp include/libresample.h %{buildroot}%{_includedir}/
 cp libresample.so %{buildroot}%{_libdir}/
 cp pkgconfig/libresample.pc %{buildroot}%{_libdir}/pkgconfig/
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 export LD_LIBRARY_PATH=.
 make tests
-
 %ldconfig_scriptlets
-
-%files
-%doc LICENSE.txt README.txt
-%{_bindir}/resample-sndfile
-%{_libdir}/libresample.so.0
-
-%files devel
-%doc README.txt
-%license LICENSE.txt
-%{_includedir}/libresample.h
-%{_libdir}/libresample.so
-%{_libdir}/pkgconfig/libresample.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libresample-devel -f %{oreon_filedir}/libresample-devel.list
 
 %changelog
+
 %autochangelog

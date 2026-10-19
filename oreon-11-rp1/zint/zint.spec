@@ -1,28 +1,25 @@
 %global source0_hash 37e767afada2403bb9ae49b93a19eb0a9e944a0c278d9f23522746b3d08a3c4b
-
 Name:      zint
 Version:   2.16.0
-Release:   1%{?dist}
-Summary:   Barcode generator library
+Release:        1%{?dist}
+Summary:        Barcode generator library
 License:   BSD-3-Clause AND GPL-3.0-or-later
 URL:       http://www.zint.org.uk
-Source:    http://downloads.sourceforge.net/%{name}/%{name}-%{version}-src.tar.gz
-
-# create shared libQZint instead of static one
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}-src.tar.gz
 Patch0:    %{name}-shared.patch
-
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: libpng-devel
-BuildRequires: zlib-devel
-BuildRequires: mesa-libGL-devel
-BuildRequires: qt5-qtbase-devel
-BuildRequires: qt5-qtsvg-devel
-BuildRequires: qt5-qttools-devel
-BuildRequires: qt5-qttools-static
-BuildRequires: desktop-file-utils
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libpng-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  qt5-qttools-devel
+BuildRequires:  qt5-qttools-static
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Zint is a C library for encoding data in several barcode variants. The
 bundled command-line utility provides a simple interface to the library.
@@ -41,7 +38,6 @@ Features of the library:
 Summary:       Library and header files for %{name}
 Requires:      %{name}%{?_isa} = %{version}-%{release}
 Requires:      cmake
-
 %description devel 
 C library and header files needed to develop applications that use 
 the Zint library. The API documentation can be found on the project website:
@@ -49,7 +45,6 @@ http://www.zint.org.uk/zintSite/Manual.aspx
 
 %package qt
 Summary:       Zint Barcode Studio
-
 %description qt
 Zint Barcode Studio is a Qt-based GUI which allows desktop users to generate 
 barcodes which can then be embedded in documents or HTML pages.
@@ -57,11 +52,11 @@ barcodes which can then be embedded in documents or HTML pages.
 %package qt-devel
 Summary:       Library and header files for %{name}-qt
 Requires:      %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description qt-devel 
 C library and header files needed to develop applications that use libQZint.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{version}-src
@@ -78,9 +73,9 @@ rm -f frontend/getopt*.*
 find -type f -exec chmod 644 {} \;
 
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 rm -rf %{buildroot}/%{_datadir}/apps
@@ -90,32 +85,15 @@ install -D -p -m 644 %{name}-qt.png %{buildroot}/usr/share/pixmaps/%{name}-qt.pn
 install -D -p -m 644 %{name}-qt.desktop %{buildroot}%{_datadir}/applications/%{name}-qt.desktop
 mv %{buildroot}%{_datadir}/%{name} %{buildroot}%{_datadir}/cmake/%{name}
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}-qt.desktop
-
 %ldconfig_scriptlets
 %ldconfig_scriptlets qt
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc docs/manual.txt README TODO
-%license LICENSE frontend/COPYING
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
-%{_libdir}/libzint.so.*
-
-%files devel
-%{_includedir}/%{name}.h
-%{_libdir}/libzint.so
-%{_datadir}/cmake/%{name}/
-%{_datadir}/cmake/Modules/*.cmake
-
-%files qt
-%{_bindir}/%{name}-qt
-%{_libdir}/libQZint.so.*
-%{_datadir}/applications/%{name}-qt.desktop
-%{_datadir}/pixmaps/%{name}-qt.png
-
-%files qt-devel
-%{_includedir}/qzint.h
-%{_libdir}/libQZint.so
+%files -f %{oreon_filedir}/main.list
+%files -n zint-devel -f %{oreon_filedir}/zint-devel.list
+%files -n zint-qt -f %{oreon_filedir}/zint-qt.list
+%files -n zint-qt-devel -f %{oreon_filedir}/zint-qt-devel.list
 
 %changelog
+
 %autochangelog

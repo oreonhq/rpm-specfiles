@@ -1,65 +1,47 @@
 %global source0_hash a6d7a12a57f24113789203413d40a4355ce4c0aff516384ecd2c548ce42f389b
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    ffmpegthumbs
 Version: 26.04.3
-Release: 1%{?dist}
-Summary: KDE ffmpegthumbnailer service
-
+Release:        1%{?dist}
+Summary:        KDE ffmpegthumbnailer service
 License: GPL-2.0-or-later
 URL:     https://apps.kde.org/%{name}/
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires: gcc-c++
-BuildRequires: cmake
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
-BuildRequires: extra-cmake-modules
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Gui)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Config)
-BuildRequires: ffmpeg-free-devel
-
 Provides: kffmpegthumbnailer = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  ffmpeg-free-devel
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6 -DQT_MAJOR_VERSION=6
 %cmake_build
-
-
 %install
 %cmake_install
-
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{name}.metainfo.xml
-
-
-%files
-%license LICENSES/GPL-2.0-or-later.txt
-%{_kf6_plugindir}/thumbcreator/ffmpegthumbs.so
-%{_kf6_datadir}/config.kcfg/ffmpegthumbnailersettings5.kcfg
-%{_kf6_datadir}/qlogging-categories6/ffmpegthumbs.categories
-%{_kf6_metainfodir}/org.kde.%{name}.metainfo.xml
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

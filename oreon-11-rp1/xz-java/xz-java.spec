@@ -1,5 +1,4 @@
 %global source0_hash d563ba12babaf977f02207c7e474ad41f8ca701efd35ff82abe26c54d66ab68d
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,27 +80,22 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           xz-java
 Version:        1.12
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java implementation of XZ data compression
 License:        LicenseRef-Public-Domain
 URL:            https://tukaani.org/xz/java.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://tukaani.org/xz/xz-java-%{version}.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  javapackages-local-openjdk25
-BuildRequires:  ant-openjdk25 
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1.12-25
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 A complete implementation of XZ data compression in Java.
 
@@ -111,6 +105,7 @@ decompression with limited random access support, raw streams (no .xz headers)
 for advanced users, including LZMA2 with preset dictionary.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -T -n xz-java-%{version}
 unzip -q %{SOURCE0}
@@ -118,19 +113,16 @@ unzip -q %{SOURCE0}
 %mvn_file : %{name} xz
 
 %build
-# During documentation generation the upstream build.xml tries to download
-# package-list from oracle.com. Create a dummy package-list to prevent that.
+
 mkdir -p extdoc && touch extdoc/package-list
-
 %ant -Dsourcever=8 maven
-
 %install
 %mvn_artifact build/maven/xz-%{version}.pom build/jar/xz.jar
-
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license COPYING
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

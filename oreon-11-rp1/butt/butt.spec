@@ -1,50 +1,37 @@
-%global source0_hash dd1202d87e47327fdee419785c23f1c69bfe1444fd46057b331b5c3aeb1c5f3b
-
+%global source0_hash d7b3a8bbbe011c337cf93c6a683071210cc39e0277f77482f94532becf126760
 %global rdnn de.danielnoethen.butt
-
 Name:           butt
 Version:        1.47.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Broadcast using this tool
-# Entire source code is GPL-2.0-or-later except:
-# src/opus_encode.cpp: GPL-2.0-or-later AND BSD-2-Clause
-# src/cJSON.{cpp,h}: MIT
 License:        GPL-2.0-or-later AND BSD-2-Clause AND MIT
 URL:            https://danielnoethen.de/butt/
-Source:         %{url}/release/%{version}/butt-%{version}.tar.gz
-
-# Minimal fixes to build with FLTK 1.4. Please send upstream.
+Source0:        https://danielnoethen.de/%{name}//release/%{version}/%{name}-%{version}.tar.gz
 Patch0:         butt-headers.patch
-
-BuildRequires:  gcc-c++
+Requires:       hicolor-icon-theme
+# oreon:deps
 BuildRequires:  autoconf
+BuildRequires:  desktop-file-utils
+BuildRequires:  fdk-aac-free-devel
+BuildRequires:  flac-devel
+BuildRequires:  fltk-devel
+BuildRequires:  gcc-c++
 BuildRequires:  gettext
 BuildRequires:  gettext-devel
-
-# https://danielnoethen.de/butt/manual.html#_install
-BuildRequires:  fltk-devel
-BuildRequires:  portaudio-devel
 BuildRequires:  lame-devel
-BuildRequires:  libvorbis-devel
-BuildRequires:  libogg-devel
-BuildRequires:  flac-devel
-BuildRequires:  opus-devel
-BuildRequires:  libsamplerate-devel
-BuildRequires:  fdk-aac-free-devel
-BuildRequires:  pkgconfig(dbus-1)
-BuildRequires:  libcurl-devel
-BuildRequires:  openssl-devel
-BuildRequires:  portmidi-devel
 BuildRequires:  libX11-devel
-
-# for desktop-file-validate command
-BuildRequires:  desktop-file-utils
-# for appstream-util command
 BuildRequires:  libappstream-glib
+BuildRequires:  libcurl-devel
+BuildRequires:  libogg-devel
+BuildRequires:  libsamplerate-devel
+BuildRequires:  libvorbis-devel
 BuildRequires:  make
-
-Requires:       hicolor-icon-theme
-
+BuildRequires:  openssl-devel
+BuildRequires:  opus-devel
+BuildRequires:  pkgconfig(dbus-1)
+BuildRequires:  portaudio-devel
+BuildRequires:  portmidi-devel
+# /oreon:deps
 %description
 butt (broadcast using this tool) is an easy to use, multi OS streaming tool.
 It supports ShoutCast and IceCast and runs on Linux, MacOS and Windows.  The
@@ -55,51 +42,34 @@ files.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p 1
-
+%oreon_prep
 %build
+
 autoreconf -ifv
 %configure
 %make_build
-
 %install
 %make_install
-
-# desktop file
 install -Dpm 0644 usr/share/applications/butt.desktop %{buildroot}%{_datadir}/applications/%{rdnn}.desktop
-
-# icons
 for size in 16 22 24 32 48 64 96 128 256 512; do
     path=icons/hicolor/${size}x${size}/apps/butt.png
     install -Dpm 0644 usr/share/$path %{buildroot}%{_datadir}/$path
 done
 install -Dpm 0644 usr/share/icons/hicolor/scalable/apps/butt.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/butt.svg
-
-# pixmaps
 for size in 16 32; do
     path=pixmaps/butt$size.xpm
     install -Dpm 0644 usr/share/$path %{buildroot}%{_datadir}/$path
 done
-
-# appdata
 install -Dpm 0644 usr/share/metainfo/%{rdnn}.metainfo.xml %{buildroot}%{_metainfodir}/%{rdnn}.metainfo.xml
-
-# locales
 %find_lang %{name}
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{rdnn}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{rdnn}.metainfo.xml
-
-%files -f %{name}.lang
-%license COPYING
-%doc AUTHORS ChangeLog NEWS README THANKS
-%{_bindir}/butt
-%{_datadir}/applications/%{rdnn}.desktop
-%{_datadir}/icons/hicolor/*/apps/butt.*
-%{_datadir}/pixmaps/butt*.xpm
-%{_metainfodir}/%{rdnn}.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

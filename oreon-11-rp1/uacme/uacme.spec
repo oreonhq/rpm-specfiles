@@ -1,25 +1,23 @@
-%global source0_hash 69170ef84891a0e3ccce50833ac90db75de26b2c8432050256c1bf4ec26c8ad7
-
+%global source0_hash de7588577f8298dcb0d42dfaa9452a918fa692c4e165060207ac22f72fb0425d
 Name:           uacme
 Version:        1.8.1 
 Release:        1%{?dist}
 Summary:        Lightweight SSL certificate verification and issue client
-
 License:        GPL-3.0-only
 URL:            https://github.com/ndilieto/uacme
-Source0:        %{url}/archive/upstream/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  asciidoc
-BuildRequires:  gnutls-devel
-BuildRequires:  libcurl-devel
-BuildRequires:  libev-devel
-BuildRequires:  which
+Source0:        https://github.com/ndilieto/%{name}/archive/upstream/%{version}/%{name}-%{version}.tar.gz
 Requires:       curl
 Requires:       gnutls
 Requires:       libev
-
+# oreon:deps
+BuildRequires:  asciidoc
+BuildRequires:  gcc
+BuildRequires:  gnutls-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libev-devel
+BuildRequires:  make
+BuildRequires:  which
+# /oreon:deps
 %description
 A lightweight client for the RFC8555 ACMEv2 protocol, 
 written in plain C with minimal dependencies. The 
@@ -30,6 +28,7 @@ facilities for other certificate management functions,
 such as certificate revocation.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-upstream-%{version}
@@ -37,6 +36,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -rvf libev
 
 %build
+
 %{set_build_flags}; \
 %{_configure} --host=%{_host} --build=%{_build} \
       --program-prefix=%{?_program_prefix} \
@@ -59,28 +59,16 @@ rm -rvf libev
       --without-openssl \
       --with-gnutls
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-# No tests defined, do a sanity check
-# uacme --version and ualpn --version 
 %check
+
 ${RPM_BUILD_ROOT}%{_bindir}/%{name} --version 2>&1 | grep 'uacme: version %version'
 ${RPM_BUILD_ROOT}%{_bindir}/ualpn --version 2>&1 | grep 'ualpn: version %version'
-
-%files
-%{_bindir}/%{name}
-%{_bindir}/ualpn
-%{_datadir}/%{name}/%{name}.sh
-%{_datadir}/%{name}/ualpn.sh
-%{_datadir}/%{name}/nsupdate.sh
-%{_mandir}/man1/%{name}.1*
-%{_mandir}/man1/ualpn.1*
-%{_docdir}/%{name}/%{name}.html
-%{_docdir}/%{name}/ualpn.html
-%license COPYING
-%doc AUTHORS ChangeLog NEWS README THANKS
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,61 +1,36 @@
 %global source0_hash 8965355f75cc77a1b2c9663d856707f9e1010f0fedc5982ee6e6758b62327e6e
-
-# remirepo/fedora spec file for php-sebastian-type4
-#
-# Copyright (c) 2019-2023 Remi Collet
-# License: CC-BY-SA-4.0
-# http://creativecommons.org/licenses/by-sa/4.0/
-#
-# Please, preserve the changelog entries
-#
-
 %bcond_without       tests
-
-# github
 %global gh_commit    462699a16464c3944eefc02ebdd77882bd3925bf
 %global gh_short     %(c=%{gh_commit}; echo ${c:0:7})
 %global gh_owner     sebastianbergmann
 %global gh_project   type
-# packagist
 %global pk_vendor    sebastian
 %global pk_project   %{gh_project}
 %global major        4
-# namespace
 %global php_home     %{_datadir}/php
 %global ns_vendor    SebastianBergmann
 %global ns_project   Type
-
 Name:           php-%{pk_vendor}-%{pk_project}%{major}
 Version:        4.0.0
 Release:        9%{?dist}
-Summary:        Collection of value objects that represent the types of the PHP type system, v%{major}
-
+Summary:        Collection of value objects that represent the types of the PHP type system, v4
 License:        BSD-3-Clause
 URL:            https://github.com/%{gh_owner}/%{gh_project}
 Source0:        %{name}-%{version}-%{gh_short}.tgz
 Source1:        makesrc.sh
-
 BuildArch:      noarch
-BuildRequires:  php(language) >= 8.1
-BuildRequires:  php-reflection
-# Autoloader
-BuildRequires:  php-fedora-autoloader-devel >= 1.0.0
 %if %{with tests}
-# from composer.json, "require-dev": {
-#        "phpunit/phpunit": "^10.0"
-BuildRequires:  phpunit10
 %endif
-
-# from composer.json, "require": {
-#        "php": ">=8.1",
 Requires:       php(language) >= 8.1
-# from phpcompatinfo report for version 4.0.0
 Requires:       php-reflection
-# Autoloader
 Requires:       php-composer(fedora/autoloader)
-
 Provides:       php-composer(%{pk_vendor}/%{pk_project}) = %{version}
-
+# oreon:deps
+BuildRequires:  php(language)
+BuildRequires:  php-fedora-autoloader-devel
+BuildRequires:  php-reflection
+BuildRequires:  phpunit10
+# /oreon:deps
 %description
 Collection of value objects that represent the types of the PHP type system.
 
@@ -64,22 +39,22 @@ This package provides version %{major} of %{pk_vendor}/%{pk_project} library.
 Autoloader: %{php_home}/%{ns_vendor}/%{ns_project}%{major}/autoload.php
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gh_project}-%{gh_commit}
 
 %build
-# Generate the Autoloader
+
 phpab --template fedora --output src/autoload.php src
-
-# For the test suite
 phpab --template fedora --output tests/autoload.php tests/_fixture/
-
 %install
 mkdir -p   %{buildroot}%{php_home}/%{ns_vendor}
 cp -pr src %{buildroot}%{php_home}/%{ns_vendor}/%{ns_project}%{major}
+%oreon_autofiles main
 
 %check
+
 %if %{with tests}
 mkdir vendor
 cat <<EOF | tee vendor/autoload.php
@@ -88,7 +63,6 @@ require_once 'tests/autoload.php';
 require_once 'tests/_fixture/callback_function.php';
 require_once 'tests/_fixture/functions_that_declare_return_types.php';
 EOF
-
 : Run upstream test suite
 ret=0
 for cmd in php php81 php82 php83; do
@@ -101,13 +75,8 @@ exit $ret
 %else
 : bootstrap build with test suite disabled
 %endif
-
-%files
-%license LICENSE
-%doc *.md
-%doc composer.json
-%dir %{php_home}/%{ns_vendor}
-     %{php_home}/%{ns_vendor}/%{ns_project}%{major}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

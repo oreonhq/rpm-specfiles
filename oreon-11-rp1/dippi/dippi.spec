@@ -1,40 +1,14 @@
 %global source0_hash 19324a62c3cc65fee85e3f893556c8e25fb94e4c006461328488d67cea1543bc
-
 %global appname com.cassidyjames.dippi
-
 Name:           dippi
 Summary:        Calculate display info like DPI and aspect ratio
 Version:        5.0.2
-Release:        %autorelease
-# The entire source is GPL-3.0-only, except:
-#   - data/metadata.metainfo.xml.in is CC0-1.0, allowed for content only
+Release:        1%{?dist}
 License:        GPL-3.0-or-later AND CC0-1.0
-
 URL:            https://github.com/cassidyjames/dippi
-Source:         %{url}/archive/%{version}/dippi-%{version}.tar.gz
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/cassidyjames/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
-BuildRequires:  blueprint-compiler
-BuildRequires:  desktop-file-utils
-BuildRequires:  gettext
-
-# Still required by guidelines for now
-# (https://pagure.io/packaging-committee/issue/1053):
-BuildRequires:  libappstream-glib
-# Matches what gnome-software and others use:
-BuildRequires:  appstream
-
-BuildRequires:  meson
-BuildRequires:  vala
-BuildRequires:  gcc
-
-BuildRequires:  pkgconfig(gtk4) >= 4.19.4
-BuildRequires:  pkgconfig(libadwaita-1) >= 1.8.1
-
 Requires:       hicolor-icon-theme
-
 Summary(en_AU): Calculate display info like DPI and aspect ratio
 Summary(en_CA): Calculate display info like DPI and aspect ratio
 Summary(en_GB): Calculate display info like DPI and aspect ratio
@@ -47,7 +21,18 @@ Summary(lt):    Apskaičiuoti tokią ekrano informaciją kaip taškus colyje (DP
 Summary(nl):    Bereken scherminformatie, zoals DPI en beeldverhouding
 Summary(pt):    Calcule informação do monitor como o DPI e a relação de aspeto
 Summary(tr):    DPI ve en boy oranı gibi ekran bilgilerini hesaplama
-
+# oreon:deps
+BuildRequires:  appstream
+BuildRequires:  blueprint-compiler
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  libappstream-glib
+BuildRequires:  meson
+BuildRequires:  pkgconfig(gtk4)
+BuildRequires:  pkgconfig(libadwaita-1)
+BuildRequires:  vala
+# /oreon:deps
 %description
 Analyze any display. Input a few simple details and figure out the
 aspect ratio, DPI, and other details of a particular display. Great for
@@ -340,6 +325,7 @@ Bir ekranın yoğunluğunu:
   • Çok Yüksek DPI
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -367,34 +353,23 @@ rename_lang mo ro_MD
 %meson
 
 %build
-%meson_build
 
+%meson_build
 %install
 %meson_install
-
 %find_lang %{appname}
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate \
     %{buildroot}/%{_datadir}/applications/%{appname}.desktop
-
-# Still required by guidelines for now
-# (https://pagure.io/packaging-committee/issue/1053):
 appstream-util validate-relax --nonet \
     %{buildroot}/%{_metainfodir}/%{appname}.metainfo.xml
-# Matches what gnome-software and others use:
 appstreamcli validate --no-net --explain \
     %{buildroot}/%{_metainfodir}/%{appname}.metainfo.xml
-
-%files -f %{appname}.lang
-%doc README.md
-%license COPYING
-
-%{_bindir}/%{appname}
-
-%{_datadir}/applications/%{appname}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{appname}*.svg
-%{_metainfodir}/%{appname}.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

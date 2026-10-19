@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 2d79c21660973acfe4cc8ef4dd18e44a863ae617c8e9c3ca431a2941fe5afb6b
 Name:           python-multiregex
 Version:        2.0.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Quickly match many regexes against a string. Provides 2-10x speedups over naïve regex matching.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/quantco/multiregex
-Source:         %{pypi_source multiregex}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/multiregex/multiregex-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'multiregex' generated automatically by pyp2spec.}
-
 Patch:          https://github.com/Quantco/multiregex/pull/100.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-multiregex = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-multiregex
-Summary:        %{summary}
-
-%description -n python3-multiregex %_description
-
+Summary:        Quickly match many regexes against a string. Provides 2-10x speedups over naïve regex matching.
+%description -n python3-multiregex
 
 %prep
-%autosetup -p1 -n multiregex-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir multiregex-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-multiregex usr/lib/python3*/site-packages/multiregex* usr/lib64/python3*/site-packages/multiregex* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/multiregex* usr/lib64/python3*/site-packages/multiregex* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-multiregex -f %{pyproject_files}
+%files
+%files -n python3-multiregex -f %{oreon_filedir}/python3-multiregex.list
 
 %changelog
+
 %autochangelog

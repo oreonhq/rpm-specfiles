@@ -1,62 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 35e2f9d7d39907be8d39ae2deb261b19848945903ae3dbb6577b187ead69e985
 Name:           python-ebooklib
 Version:        0.20
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Ebook library which can handle EPUB2/EPUB3 format
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        AGPL-3.0-or-later
 URL:            https://github.com/aerkalov/ebooklib
-Source:         %{pypi_source ebooklib}
-
+Source0:        https://files.pythonhosted.org/packages/source/e/ebooklib/ebooklib-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ebooklib' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-ebooklib = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ebooklib
-Summary:        %{summary}
-
-%description -n python3-ebooklib %_description
+Summary:        Ebook library which can handle EPUB2/EPUB3 format
+%description -n python3-ebooklib
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-ebooklib dev,docs,test
-
 
 %prep
-%autosetup -p1 -n ebooklib-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ebooklib-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ebooklib usr/lib/python3*/site-packages/ebooklib* usr/lib64/python3*/site-packages/ebooklib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ebooklib* usr/lib64/python3*/site-packages/ebooklib* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ebooklib -f %{pyproject_files}
+%files
+%files -n python3-ebooklib -f %{oreon_filedir}/python3-ebooklib.list
 
 %changelog
+
 %autochangelog

@@ -1,38 +1,14 @@
 %global source0_hash 3fa0a7c8ef959ad889aac0109e6bf74de2a54f7e3ab057f98e2dc4fb65eb1599
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
 %bcond_with gitcommit
 %if %{with gitcommit}
 %global commit0 2584e35062ad9c2edb68d93c464cf157bc57e3b0
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global date0 20250926
 %endif
-
 %global upstreamname MIOpen
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -50,13 +26,8 @@
 %else
 %global miopen_name miopen%{pkg_suffix}
 %endif
-
 %global toolchain rocm
-
-# hipcc does not support some clang flags
-# build_cxxflags does not honor CMAKE_BUILD_TYPE, strip out -g
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-g / /' -e 's/-mtls-dialect=gnu2//')
-
 %bcond_with debug
 %if 0%{?suse_version}
 %if %{without debug}
@@ -70,156 +41,94 @@
 %global build_type RelWithDebInfo
 %endif
 %endif
-
-# For testing
-# hardcoded use of gtest and dirs is not suitable for mock building
-# Testsuite is not in great shape, fails instead of skips ck tests
 %bcond_with test
 %if %{with test}
 %global build_test ON
 %else
 %global build_test OFF
 %endif
-
-# Change this to the gpu family you are testing on
 %bcond check 1
 %global gpu_test default
 %if %{with test}
 %if %{with check}
-# Do not build everything to do the test on one thing
 %global rocm_gpu_list %{gpu_test}
 %endif
 %endif
-
-# Needs to match rocblas
 %bcond_without tensile
-
-# Compression type and level for source/binary package payloads.
-#  "w7T0.xzdio"	xz level 7 using %%{getncpus} threads
 %global _source_payload w7T0.xzdio
 %global _binary_payload w7T0.xzdio
-
 %global gpu_list %{rocm_gpu_list_default}
 %global _gpu_list gfx1100
-
-# Use ninja if it is available
 %bcond_without ninja
-
 %if %{with ninja}
 %global cmake_generator -G Ninja
 %else
 %global cmake_generator %{nil}
 %endif
-
 Name:           %{miopen_name}
 %if %{with gitcommit}
 Version:        git%{date0}.%{shortcommit0}
 Release:        1%{?dist}
 %else
 Version:        %{rocm_version}
-Release:        6%{?dist}
+Release:        1%{?dist}
 %endif
 Summary:        AMD's Machine Intelligence Library
 License:        MIT AND BSD-2-Clause AND Apache-2.0 AND %{?fedora:LicenseRef-Fedora-Public-Domain}%{?suse_version:SUSE-Public-Domain}
-# The base license is MIT with a couple of exceptions
-# BSD-2-Clause
-#   driver/mloSoftmaxHost.hpp
-#   src/include/miopen/mlo_internal.hpp
-# Apache-2.0
-#   src/include/miopen/kernel_cache.hpp
-#   src/kernel_cache.cpp
-# Public Domain
-#   src/md5.cpp
-
 %if %{with gitcommit}
 Url:            https://github.com/ROCm/rocm-libraries
-Source0:        %{url}/archive/%{commit0}/rocm-libraries-%{shortcommit0}.tar.gz
+Source0:        https://github.com/ROCm/%{upstreamname}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{upstreamname}-%{version}.tar.gz
 %else
 Url:            https://github.com/ROCm/%{upstreamname}
-Source0:        %{url}/archive/rocm-%{version}.tar.gz#/%{upstreamname}-%{version}.tar.gz
 %endif
-
-# So we do not thrash memory
 Patch1:         0001-miopen-add-link-and-compile-pools.patch
-
-BuildRequires:  cmake
-BuildRequires:  pkgconfig(eigen3)
-BuildRequires:  gcc-c++
-%if 0%{?fedora} || 0%{?suse_version}
-BuildRequires:  fdupes
-%endif
-BuildRequires:  fplus-devel
-BuildRequires:  frugally-deep-devel
-BuildRequires:  half-devel
-BuildRequires:  pkgconfig(libzstd)
-BuildRequires:  pkgconfig(nlohmann_json)
-BuildRequires:  hipblas%{pkg_suffix}-devel
-BuildRequires:  rocblas%{pkg_suffix}-devel
-BuildRequires:  rocm-cmake%{pkg_suffix}
-BuildRequires:  rocm-comgr%{pkg_suffix}-devel
-BuildRequires:  rocm-compilersupport%{pkg_suffix}-macros
-BuildRequires:  rocm-hip%{pkg_suffix}-devel
-BuildRequires:  rocm-runtime%{pkg_suffix}-devel
-BuildRequires:  rocm-rpm-macros%{pkg_suffix}
-BuildRequires:  rocrand%{pkg_suffix}-devel
-BuildRequires:  roctracer%{pkg_suffix}-devel
-BuildRequires:  pkgconfig(sqlite3)
-BuildRequires:  zlib-devel
-
 %if 0%{?suse_version}
-BuildRequires:  libbz2-devel
-BuildRequires:  libzstd-devel-static
 %if 0%{?suse_version} < 1600
-BuildRequires:  libboost_filesystem1_75_0-devel
-BuildRequires:  libboost_system1_75_0-devel
 %else
-BuildRequires:  libboost_filesystem-devel
-BuildRequires:  libboost_system-devel
 %endif
 %else
-BuildRequires:  boost-devel
-BuildRequires:  pkgconfig(bzip2)
 %endif
-
 %if %{with test}
 %if 0%{?suse_version}
-BuildRequires:  gmock
-BuildRequires:  gtest
 %else
-BuildRequires:  gmock-devel
-BuildRequires:  gtest-devel
 %endif
 %endif
-
 %if %{with ninja}
-%if 0%{?fedora} || 0%{?rhel}
-BuildRequires:  ninja-build
-%endif
 %if 0%{?suse_version}
-BuildRequires:  ninja
 %define __builder ninja
 %endif
 %endif
-
 Provides:       miopen%{pkg_suffix} = %{version}-%{release}
-
-# Use ROCm devel at runtime
 Requires:       rocm-hip%{pkg_suffix}-devel
 Requires:       rocrand%{pkg_suffix}-devel
-# Also needs c++ to work
-# From pytorch-examples/word_language_model
-# MIOpen(HIP): Error [BuildHip] HIPRTC status = HIPRTC_ERROR_COMPILATION (6), source file: MIOpenDropoutHIP.cpp
-# MIOpen(HIP): Warning [BuildHip] In file included from /tmp/comgr-78a343/input/MIOpenDropoutHIP.cpp:32:
-# In file included from /tmp/comgr-78a343/include/miopen_rocrand.hpp:45:
-# In file included from /usr/include/rocrand/rocrand_xorwow.h:24:
-# /usr/include/rocrand/rocrand_common.h:39:10: fatal error: 'utility' file not found
-#   39 | #include <utility>
-#      |          ^~~~~~~~~
 Requires:       gcc-c++
-
-# Only x86_64 works right now:
 ExclusiveArch:  x86_64
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  fplus-devel
+BuildRequires:  frugally-deep-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gmock-devel
+BuildRequires:  gtest-devel
+BuildRequires:  half-devel
+BuildRequires:  hipblas-7.1-devel
+BuildRequires:  pkgconfig(bzip2)
+BuildRequires:  pkgconfig(eigen3)
+BuildRequires:  pkgconfig(libzstd)
+BuildRequires:  pkgconfig(nlohmann_json)
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  rocblas-7.1-devel
+BuildRequires:  rocm-cmake-7.1
+BuildRequires:  rocm-comgr-7.1-devel
+BuildRequires:  rocm-compilersupport-7.1-macros
+BuildRequires:  rocm-hip-7.1-devel
+BuildRequires:  rocm-rpm-macros-7.1
+BuildRequires:  rocm-runtime-7.1-devel
+BuildRequires:  rocrand-7.1-devel
+BuildRequires:  roctracer-7.1-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 AMD's library for high performance machine learning primitives.
 
@@ -227,7 +136,6 @@ AMD's library for high performance machine learning primitives.
 Summary: Libraries and headers for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       miopen%{pkg_suffix}-devel = %{version}-%{release}
-
 %description devel
 %{summary}
 
@@ -235,12 +143,12 @@ Provides:       miopen%{pkg_suffix}-devel = %{version}-%{release}
 %package test
 Summary:        Tests for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description test
 %{summary}
 %endif
 
 %prep
+
 %if %{with gitcommit}
 %setup -q -n rocm-libraries-%{commit0}
 cd projects/miopen
@@ -295,16 +203,14 @@ sed -i -e 's@opts.push_back("-fno-offload-uniform-block");@//opts.push_back("-fn
 sed -i -e 's@llvm/bin/clang@bin/clang@' src/hip/hip_build_utils.cpp
 
 %build
+
 %if %{with gitcommit}
 cd projects/miopen
 %endif
-
-# Real cores, No hyperthreading
 COMPILE_JOBS=`cat /proc/cpuinfo | grep -m 1 'cpu cores' | awk '{ print $4 }'`
 if [ ${COMPILE_JOBS}x = x ]; then
     COMPILE_JOBS=1
 fi
-# Take into account memmory usage per core, do not thrash real memory
 BUILD_MEM=4
 MEM_KB=0
 MEM_KB=`cat /proc/meminfo | grep MemTotal | awk '{ print $2 }'`
@@ -316,9 +222,7 @@ if [ "$COMPILE_JOBS_MEM" -lt "$COMPILE_JOBS" ]; then
 fi
 LINK_MEM=32
 LINK_JOBS=`eval "expr 1 + ${MEM_GB} / ${LINK_MEM}"`
-
 %{?suse_version:%{?build_cxxflags:CXXFLAGS="%{build_cxxflags}"}}
-
 %cmake %{cmake_generator} \
        -DCMAKE_C_COMPILER=%rocmllvm_bindir/amdclang \
        -DCMAKE_CXX_COMPILER=%rocmllvm_bindir/amdclang++ \
@@ -342,9 +246,7 @@ LINK_JOBS=`eval "expr 1 + ${MEM_GB} / ${LINK_MEM}"`
        -DMIOPEN_USE_HIPBLASLT=OFF \
        -DMIOPEN_USE_MLIR=OFF \
        -DMIOPEN_USE_COMPOSABLEKERNEL=OFF
-
 %cmake_build
-
 %if %{with test}
 %if 0%{?suse_version}
 %cmake_build tests
@@ -352,10 +254,10 @@ LINK_JOBS=`eval "expr 1 + ${MEM_GB} / ${LINK_MEM}"`
 %cmake_build -t tests
 %endif
 %endif
-
 %if %{with test}
 %if %{with check}
 %check
+
 find . -name 'libMIOpen.so.1'
 %if 0%{?suse_version}
 export LD_LIBRARY_PATH=${PWD}/%{__builddir}/lib:$LD_LIBRARY_PATH
@@ -365,45 +267,22 @@ export LD_LIBRARY_PATH=${PWD}/%{_vpath_builddir}/lib:$LD_LIBRARY_PATH
 %ctest
 %endif
 %endif
-
 %install
 %if %{with gitcommit}
 cd projects/miopen
 %endif
 %cmake_install
-
-# Extra license
 rm -f %{buildroot}%{pkg_prefix}/share/doc/miopen-hip/LICENSE.md
-
-%if 0%{?fedora} || 0%{?suse_version}
-%fdupes %{buildroot}%{pkg_prefix}
-%endif
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post -p /sbin/ldconfig
+
 %postun -p /sbin/ldconfig
 
-%files
-%if %{with gitcommit}
-%doc projects/miopen/README.md
-%license projects/miopen/LICENSE.md
-%else
-%doc README.md
-%license LICENSE.md
-%endif
-
-%{pkg_prefix}/%{pkg_libdir}/libMIOpen.so.1{,.*}
-%{pkg_prefix}/libexec/miopen/
-
-%files devel
-%{pkg_prefix}/share/miopen/
-%{pkg_prefix}/include/miopen/
-%{pkg_prefix}/%{pkg_libdir}/libMIOpen.so
-%{pkg_prefix}/%{pkg_libdir}/cmake/miopen/
-
-%if %{with test}
-%files test
-%{pkg_prefix}/bin/test*
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n miopen-7.1-devel -f %{oreon_filedir}/miopen-7.1-devel.list
+%files -n miopen-7.1-test -f %{oreon_filedir}/miopen-7.1-test.list
 
 %changelog
+
 %autochangelog

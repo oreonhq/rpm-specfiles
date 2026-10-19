@@ -1,19 +1,16 @@
 %global source0_hash 09ee253cfb11727aa0c8628d3c4190ce2955eea3f8ebf0242253473673e38596
-
 Name:           tcalc
 Version:        2.1
-Release:        25%{?dist}
+Release:        1%{?dist}
 Summary:        The terminal calculator
-
 License:        GPL-3.0-or-later
 URL:            http://sites.google.com/site/mohammedisam2000/home/projects
-Source:         %{url}/%{name}-%{version}.tar.gz
-
+Source0:        http://sites.google.com/site/mohammedisam2000/home/projects/%{name}-%{version}.tar.gz
 Patch0:         0000-fix-compilation-errors.patch
-
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  make
-
+# /oreon:deps
 %description
 The terminal calculator is a small and helpful program to help users of the
 GNU/Linux terminal do calculations simply and quickly. The formula to be
@@ -32,30 +29,21 @@ argument.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
-
-# Install info page
 install -m 0644 -p -D info/tcalc.info* %{buildroot}%{_infodir}/tcalc.info
-
-# Reshuffle docs and examples
 rm -r %{buildroot}%{_docdir}/%{name}
 mkdir examples
 mv test test2 examples/
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc README AUTHORS ChangeLog examples/
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
-%{_infodir}/%{name}.info*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

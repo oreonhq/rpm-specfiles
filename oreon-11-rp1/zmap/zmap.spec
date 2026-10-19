@@ -1,18 +1,17 @@
-%global source0_hash b5936bf5b5390fb50203140e81beac28866374371b1c68329cbbe932cc5ee1d3
-
+%global source0_hash be4521fdac10eddc9ba046399149064ca23d4630b7987301abdee9e0044b8d5c
 %global __cmake_in_source_build 1
 %bcond_with     pfring
 %bcond_without  debug
-
 Name:           zmap
 Version:        4.4.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Network scanner for Internet-wide network studies
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://zmap.io
 Source0:        https://github.com/%{name}/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch0:         zmap-bin-sbin-merge.patch
+# oreon:deps
+BuildRequires:  Judy-devel
 BuildRequires:  byacc
 BuildRequires:  cmake
 BuildRequires:  flex
@@ -20,10 +19,9 @@ BuildRequires:  gcc
 BuildRequires:  gengetopt
 BuildRequires:  gmp-devel
 BuildRequires:  json-c-devel
-BuildRequires:  Judy-devel
 BuildRequires:  libpcap-devel
 BuildRequires:  libunistring-devel
-
+# /oreon:deps
 %description
 ZMap is an open-source network scanner that enables researchers to easily 
 perform Internet-wide network studies. With a single machine and a well 
@@ -44,36 +42,22 @@ scanning.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p 0
-
+%oreon_prep
 %build
+
 %cmake -DENABLE_DEVELOPMENT=OFF           \
        -DENABLE_LOG_TRACE=OFF             \
        -DWITH_JSON=ON                     \
        -DWITH_PFRING=OFF
-
 %cmake_build
-
 chmod 644 -v examples/udp-probes/*
 find ./examples/ -type f -exec sed -i 's/\r$//' {} \+
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%doc AUTHORS CHANGELOG.md README.md examples/
-%license LICENSE
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/*
-%{_bindir}/zmap
-%{_bindir}/zblocklist
-%{_bindir}/ziterate
-%{_bindir}/ztee
-%{_mandir}/man1/zmap.1*
-%{_mandir}/man1/zblocklist.1*
-%{_mandir}/man1/ziterate.1*
-%{_mandir}/man1/ztee.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

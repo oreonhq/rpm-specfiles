@@ -1,26 +1,22 @@
 %global source0_hash 951edb0e00a118cd57d54349349d4898cfc18c6208a7c4d7f6e892eec1497c3b
-
-# -*-Mode: rpm-spec -*-
-
 Name:     lavalauncher
 Version:  2.1.1
-Release:  13%{?dist}
-Summary:  %{name} is a simple launcher for Wayland
-# Automatically converted from old format: GPLv3 - review is highly recommended.
+Release:        13%{?dist}
+Summary:        lavalauncher is a simple launcher for Wayland
 License:  GPL-3.0-only
 URL:      https://git.sr.ht/~leon_plickat/%{name}
-Source0:  %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires: gcc
-BuildRequires: cmake
-BuildRequires: cairo-devel
-BuildRequires: meson
-BuildRequires: pkgconfig(librsvg-2.0)
-BuildRequires: pkgconfig(xkbcommon)
-BuildRequires: scdoc
-BuildRequires: wayland-devel
-BuildRequires: wayland-protocols-devel
-
+Source0:        https://git.sr.ht/~leon_plickat/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cairo-devel
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  meson
+BuildRequires:  pkgconfig(librsvg-2.0)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  scdoc
+BuildRequires:  wayland-devel
+BuildRequires:  wayland-protocols-devel
+# /oreon:deps
 %description
 LavaLauncher is a simple launcher for Wayland.
 
@@ -56,24 +52,21 @@ currently does not respect subsurfaces ordering used by LavaLauncher),
 river and hikari.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -n %{name}-v%{version}
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
-%files
-%{_bindir}/%{name}
-
-%doc README.md
-%{_mandir}/man1/%{name}.1.*
-
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

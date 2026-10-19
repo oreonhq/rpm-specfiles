@@ -1,18 +1,19 @@
-%global source0_hash 9f97e4c808f656ce22739eec43a7c1741f645b7decef37d4fb048edb33e8caad
-
+%global source0_hash 24ad087f38031b2fe60bf22811b9550887afe1cfdea80672d6573387c3025583
 Name:           odfpy
 Version:        1.4.2
 Release:        1%{?dist}
 Summary:        Python library for manipulating OpenDocument files
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://github.com/eea/odfpy
 Source0:        https://github.com/eea/%{name}/archive/release-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch0:         odfpy-allow-py38-testing.patch
-
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  python3-defusedxml
+BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
+BuildRequires:  python3-setuptools
+# /oreon:deps
 %description
 Odfpy aims to be a complete API for OpenDocument in Python. Unlike
 other more convenient APIs, this one is essentially an abstraction
@@ -28,18 +29,14 @@ handle all ODF constructions, but could be improved in its
 understanding of data types.
 
 %package -n python3-%{name}
-Summary:        %{summary}
-
+Summary:        Python library for manipulating OpenDocument files
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-pytest
 BuildRequires:  python3-defusedxml
-
 %{?python_provide:%python_provide python3-%{name}}
-
 Provides:       odfpy = %{version}-%{release}
 Obsoletes:      odfpy < %{version}-%{release}
-
 %description -n python3-%{name}
 Odfpy aims to be a complete API for OpenDocument in Python. Unlike
 other more convenient APIs, this one is essentially an abstraction
@@ -58,7 +55,6 @@ This package provides Python 3 build of %{name}.
 
 %package doc
 Summary:        %{summary}
-
 %description doc
 Odfpy aims to be a complete API for OpenDocument in Python. Unlike
 other more convenient APIs, this one is essentially an abstraction
@@ -76,6 +72,7 @@ understanding of data types.
 This package provides documentation of %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-release-%{version}
@@ -83,24 +80,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find -type f -exec sed -i '1s=^#!/usr/bin/\(python\|env python\)[23]\?=#!%{__python3}=' {} +
 
 %build
-%py3_build
 
+%py3_build
 %install
 %py3_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 PYTHONPATH=%{_builddir}/%{name}-release-%{version} pytest
-
-%files -n python3-%{name}
-%license GPL-LICENSE-2.txt APACHE-LICENSE-2.0.txt
-%{_bindir}/*
-%{_mandir}/man1/*
-%{python3_sitelib}/*egg-info
-%{python3_sitelib}/odf
-
-%files doc
-%license GPL-LICENSE-2.txt APACHE-LICENSE-2.0.txt
-%doc doc examples contrib
+%files -f %{oreon_filedir}/main.list
+%files -n python3-odfpy -f %{oreon_filedir}/python3-odfpy.list
+%files -n odfpy-doc -f %{oreon_filedir}/odfpy-doc.list
 
 %changelog
+
 %autochangelog

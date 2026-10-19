@@ -1,24 +1,16 @@
+%global source0_hash ccceb68090754c60cbc09ebcd662a3224820fb4d1c9c3590ca45f8f14a98ab83
 Name:    qt5-doc
-Summary: Qt5 - Complete documentation
+Summary:        Qt5 - Complete documentation
 Version: 5.15.16
-Release: 4%{?dist}
+Release:        1%{?dist}
 BuildArch: noarch
-
-# Automatically converted from old format: GFDL - review is highly recommended.
 License: LicenseRef-Callaway-GFDL
-# The tarball for this docs are self generated through provided script on SOURCES generate-qt-doc.sh
 Url: http://qt-project.org/
-Source0: https://tarballs.oreonhq.com/qt-doc-opensource-src-%{version}.tar.xz
+Source0:        https://tarballs.oreonhq.com/qt-doc-opensource-src-%{version}.tar.xz
 Source10:        generate-qt-doc.sh
-
-# optimize build, skip unecessary steps
 %global debug_package   %{nil}
 %global __spec_install_post %{nil}
-
-BuildRequires: qt5-rpm-macros >= 5.5.0
-
 Obsoletes: qt5-qtcanvas3d-doc < 5.13
-
 Requires: qt5-qtbase-doc >= %{version}
 Requires: qt5-qt3d-doc >= %{version}
 Requires: qt5-qtcharts-doc >= %{version}
@@ -51,321 +43,174 @@ Requires: qt5-qtspeech-doc >= %{version}
 Requires: qt5-qtremoteobjects-doc >= %{version}
 Requires: qt5-qtcharts-doc >= %{version}
 Requires: qt5-qtpurchasing-doc >= %{version}
-
+# oreon:deps
+BuildRequires:  qt5-rpm-macros
+# /oreon:deps
 %description
 This is the meta package for all Qt library documentation
 
 # Empty files to produce qt5-doc package for easier installation of complete documentation
-%files
-
 %package -n qt5-qtbase-doc
 Summary: Documentation for qtbase
-
 %description -n qt5-qtbase-doc
 %{summary}.
 
-%files -n qt5-qtbase-doc
-%{_qt5_docdir}/qmake*
-%{_qt5_docdir}/qtconcurrent*
-%{_qt5_docdir}/qtcore*
-%{_qt5_docdir}/qtdbus*
-%{_qt5_docdir}/qtgui*
-%{_qt5_docdir}/qtnetwork*
-%{_qt5_docdir}/qtopengl*
-%{_qt5_docdir}/qtplatformheaders*
-%{_qt5_docdir}/qtprintsupport*
-%{_qt5_docdir}/qtsql*
-%{_qt5_docdir}/qtwidgets*
-%{_qt5_docdir}/qtxml*
-%{_qt5_docdir}/qttestlib*
-
 %package -n qt5-qt3d-doc
 Summary: Documentation for qt3d
-
 %description -n qt5-qt3d-doc
 %{summary}.
 
-%files -n qt5-qt3d-doc
-%{_qt5_docdir}/qt3d*
-
 %package -n qt5-qtcharts-doc
 Summary: Documentation for qtcharts
-
 %description -n qt5-qtcharts-doc
 %{summary}.
 
-%files -n qt5-qtcharts-doc
-%{_qt5_docdir}/qtcharts*
-%{_qt5_docdir}/qtlabs*
-
 %package -n qt5-qtconnectivity-doc
 Summary: Documentation for qtconnectivity
-
 %description -n qt5-qtconnectivity-doc
 %{summary}.
 
-%files -n qt5-qtconnectivity-doc
-%{_qt5_docdir}/qtbluetooth*
-%{_qt5_docdir}/qtnfc*
-
 %package -n qt5-qtdeclarative-doc
 Summary: Documentation for qtdeclarative
-
 %description -n qt5-qtdeclarative-doc
 %{summary}.
 
-%files -n qt5-qtdeclarative-doc
-%{_qt5_docdir}/qtqml*
-%{_qt5_docdir}/qtquick*
-
 %package -n qt5-qtgraphicaleffects-doc
 Summary: Documentation for qtgraphicaleffects
-
 %description -n qt5-qtgraphicaleffects-doc
 %{summary}.
 
-%files -n qt5-qtgraphicaleffects-doc
-%{_qt5_docdir}/qtgraphicaleffects*
-
 %package -n qt5-qtimageformats-doc
 Summary: Documentation for qtimageformats
-
 %description -n qt5-qtimageformats-doc
 %{summary}.
 
-%files -n qt5-qtimageformats-doc
-%{_qt5_docdir}/qtimageformats*
-
 %package -n qt5-qtmultimedia-doc
 Summary: Documentation for qtmultimedia
-
 %description -n qt5-qtmultimedia-doc
 %{summary}.
 
-%files -n qt5-qtmultimedia-doc
-%{_qt5_docdir}/qtmultimedia*
-
 %package -n qt5-qtquickcontrols2-doc
 Summary: Documentation for qtquickcontrols2
-
 %description -n qt5-qtquickcontrols2-doc
 %{summary}.
 
-%files -n qt5-qtquickcontrols2-doc
-%{_qt5_docdir}/qtquickcontrols/
-
 %package -n qt5-qtquickcontrols-doc
 Summary: Documentation for qtquickcontrols
-
 %description -n qt5-qtquickcontrols-doc
 %{summary}.
 
-%files -n qt5-qtquickcontrols-doc
-%{_qt5_docdir}/qtquickcontrols1/
-
 %package -n qt5-qtscript-doc
 Summary: Documentation for qtscript
-
 %description -n qt5-qtscript-doc
 %{summary}.
 
-%files -n qt5-qtscript-doc
-%{_qt5_docdir}/qtscript*
-
 %package -n qt5-qtscxml-doc
 Summary: Documentation for qtscxml
-
 %description -n qt5-qtscxml-doc
 %{summary}.
 
-%files -n qt5-qtscxml-doc
-%{_qt5_docdir}/qtscxml*
-
 %package -n qt5-qtsensors-doc
 Summary: Documentation for qtsensors
-
 %description -n qt5-qtsensors-doc
 %{summary}.
 
-%files -n qt5-qtsensors-doc
-%{_qt5_docdir}/qtsensors*
-
 %package -n qt5-qtserialbus-doc
 Summary: Documentation for qtserialbus
-
 %description -n qt5-qtserialbus-doc
 %{summary}.
 
-%files -n qt5-qtserialbus-doc
-%{_qt5_docdir}/qtserialbus*
-
 %package -n qt5-qtserialport-doc
 Summary: Documentation for qtserialport
-
 %description -n qt5-qtserialport-doc
 %{summary}.
 
-%files -n qt5-qtserialport-doc
-%{_qt5_docdir}/qtserialport*
-
 %package -n qt5-qtsvg-doc
 Summary: Documentation for qtsvg
-
 %description -n qt5-qtsvg-doc
 %{summary}.
 
-%files -n qt5-qtsvg-doc
-%{_qt5_docdir}/qtsvg*
-
 %package -n qt5-qttools-doc
 Summary: Documentation for qttools
-
 %description -n qt5-qttools-doc
 %{summary}.
 
-%files -n qt5-qttools-doc
-#{_qt5_docdir}/qdoc*
-%{_qt5_docdir}/qtassistant*
-%{_qt5_docdir}/qtdesigner*
-%{_qt5_docdir}/qthelp*
-%{_qt5_docdir}/qtlinguist*
-%{_qt5_docdir}/qtuitools*
-
 %package -n qt5-qtvirtualkeyboard-doc
 Summary: Documentation for qtvirtualkeyboard
-
 %description -n qt5-qtvirtualkeyboard-doc
 %{summary}.
 
-%files -n qt5-qtvirtualkeyboard-doc
-%{_qt5_docdir}/qtvirtualkeyboard*
-
 %package -n qt5-qtwebchannel-doc
 Summary: Documentation for qtwebchannel
-
 %description -n qt5-qtwebchannel-doc
 %{summary}.
 
-%files -n qt5-qtwebchannel-doc
-%{_qt5_docdir}/qtwebchannel*
-
 %package -n qt5-qtwebsockets-doc
 Summary: Documentation for qtwebsockets
-
 %description -n qt5-qtwebsockets-doc
 %{summary}.
 
-%files -n qt5-qtwebsockets-doc
-%{_qt5_docdir}/qtwebsockets*
-
 %package -n qt5-qtx11extras-doc
 Summary: Documentation for qtx11extras
-
 %description -n qt5-qtx11extras-doc
 %{summary}.
 
-%files -n qt5-qtx11extras-doc
-%{_qt5_docdir}/qtx11extras*
-
 %package -n qt5-qtspeech-doc
 Summary: Documentation for qtspeech
-
 %description -n qt5-qtspeech-doc
 %{summary}.
 
-%files -n qt5-qtspeech-doc
-%{_qt5_docdir}/qtspeech*
-
 %package -n qt5-qtremoteobjects-doc
 Summary: Documentation for qtremoteobjects
-
 %description -n qt5-qtremoteobjects-doc
 %{summary}.
 
-%files -n qt5-qtremoteobjects-doc
-%{_qt5_docdir}/qtremoteobjects*
-
 %package -n qt5-qtpurchasing-doc
 Summary: Documentation for qtpurchasing
-
 %description -n qt5-qtpurchasing-doc
 %{summary}.
 
-%files -n qt5-qtpurchasing-doc
-%{_qt5_docdir}/qtpurchasing*
-
 %package -n qt5-qtwayland-doc
 Summary: Documentation for qtwayland
-
 %description -n qt5-qtwayland-doc
 %{summary}.
 
-%files -n qt5-qtwayland-doc
-%{_qt5_docdir}/qtwayland*
-
 %package -n qt5-qtwebview-doc
 Summary: Documentation for qtwebview
-
 %description -n qt5-qtwebview-doc
 %{summary}.
 
-%files -n qt5-qtwebview-doc
-%{_qt5_docdir}/qtwebview*
-
 %package -n qt5-qtlocation-doc
 Summary: Documentation for qtlocation
-
 %description -n qt5-qtlocation-doc
 %{summary}.
 
-%files -n qt5-qtlocation-doc
-%{_qt5_docdir}/qtlocation*
-%{_qt5_docdir}/qtpositioning*
-
 %package -n qt5-qtxmlpatterns-doc
 Summary: Documentation for qtxmlpatterns
-
 %description -n qt5-qtxmlpatterns-doc
 %{summary}.
 
-%files -n qt5-qtxmlpatterns-doc
-%{_qt5_docdir}/qtxmlpatterns*
-
 %package -n qt5-qtdatavis3d-doc
 Summary: Documentation for qtdatavis3d
-
 %description -n qt5-qtdatavis3d-doc
 %{summary}.
 
-%files -n qt5-qtdatavis3d-doc
-%{_qt5_docdir}/qtdatavis3d*
-%{_qt5_docdir}/qtdatavisualization*
-
 %package -n qt5-qtgamepad-doc
 Summary: Documentation for qtgamepad
-
 %description -n qt5-qtgamepad-doc
 %{summary}.
 
-%files -n qt5-qtgamepad-doc
-%{_qt5_docdir}/qtgamepad*
-
-
 %prep
+
 # intentionally left blank
 # though could be used to initially unpack (rex)
 
-
 %build
-# intentionally left blank
-
 
 %install
 mkdir -p %{buildroot}
 cat %{SOURCE0} %{SOURCE1} > qt-doc-opensource-src-%{version}.tar.xz
 tar xf qt-doc-opensource-src-%{version}.tar.xz -C %{buildroot}
-
-## unpackaged files
 pushd %{buildroot}%{_qt5_docdir}
 rm -rfv \
   qdoc* \
@@ -374,10 +219,72 @@ rm -rfv \
   qtlottieanimation* \
   qtpdf* \
   qtwebengine*
-
 popd
+%oreon_autofiles qt5-qtbase-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qt3d-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtcharts-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtconnectivity-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtdeclarative-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtgraphicaleffects-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtimageformats-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtmultimedia-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtquickcontrols2-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtquickcontrols-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtscript-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtscxml-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtsensors-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtserialbus-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtserialport-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtsvg-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qttools-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtvirtualkeyboard-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtwebchannel-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtwebsockets-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtx11extras-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtspeech-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtremoteobjects-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtpurchasing-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtwayland-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtwebview-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtlocation-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtxmlpatterns-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtdatavis3d-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles qt5-qtgamepad-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
+%files -f %{oreon_filedir}/main.list
+%files -n qt5-qtbase-doc -f %{oreon_filedir}/qt5-qtbase-doc.list
+%files -n qt5-qt3d-doc -f %{oreon_filedir}/qt5-qt3d-doc.list
+%files -n qt5-qtcharts-doc -f %{oreon_filedir}/qt5-qtcharts-doc.list
+%files -n qt5-qtconnectivity-doc -f %{oreon_filedir}/qt5-qtconnectivity-doc.list
+%files -n qt5-qtdeclarative-doc -f %{oreon_filedir}/qt5-qtdeclarative-doc.list
+%files -n qt5-qtgraphicaleffects-doc -f %{oreon_filedir}/qt5-qtgraphicaleffects-doc.list
+%files -n qt5-qtimageformats-doc -f %{oreon_filedir}/qt5-qtimageformats-doc.list
+%files -n qt5-qtmultimedia-doc -f %{oreon_filedir}/qt5-qtmultimedia-doc.list
+%files -n qt5-qtquickcontrols2-doc -f %{oreon_filedir}/qt5-qtquickcontrols2-doc.list
+%files -n qt5-qtquickcontrols-doc -f %{oreon_filedir}/qt5-qtquickcontrols-doc.list
+%files -n qt5-qtscript-doc -f %{oreon_filedir}/qt5-qtscript-doc.list
+%files -n qt5-qtscxml-doc -f %{oreon_filedir}/qt5-qtscxml-doc.list
+%files -n qt5-qtsensors-doc -f %{oreon_filedir}/qt5-qtsensors-doc.list
+%files -n qt5-qtserialbus-doc -f %{oreon_filedir}/qt5-qtserialbus-doc.list
+%files -n qt5-qtserialport-doc -f %{oreon_filedir}/qt5-qtserialport-doc.list
+%files -n qt5-qtsvg-doc -f %{oreon_filedir}/qt5-qtsvg-doc.list
+%files -n qt5-qttools-doc -f %{oreon_filedir}/qt5-qttools-doc.list
+%files -n qt5-qtvirtualkeyboard-doc -f %{oreon_filedir}/qt5-qtvirtualkeyboard-doc.list
+%files -n qt5-qtwebchannel-doc -f %{oreon_filedir}/qt5-qtwebchannel-doc.list
+%files -n qt5-qtwebsockets-doc -f %{oreon_filedir}/qt5-qtwebsockets-doc.list
+%files -n qt5-qtx11extras-doc -f %{oreon_filedir}/qt5-qtx11extras-doc.list
+%files -n qt5-qtspeech-doc -f %{oreon_filedir}/qt5-qtspeech-doc.list
+%files -n qt5-qtremoteobjects-doc -f %{oreon_filedir}/qt5-qtremoteobjects-doc.list
+%files -n qt5-qtpurchasing-doc -f %{oreon_filedir}/qt5-qtpurchasing-doc.list
+%files -n qt5-qtwayland-doc -f %{oreon_filedir}/qt5-qtwayland-doc.list
+%files -n qt5-qtwebview-doc -f %{oreon_filedir}/qt5-qtwebview-doc.list
+%files -n qt5-qtlocation-doc -f %{oreon_filedir}/qt5-qtlocation-doc.list
+%files -n qt5-qtxmlpatterns-doc -f %{oreon_filedir}/qt5-qtxmlpatterns-doc.list
+%files -n qt5-qtdatavis3d-doc -f %{oreon_filedir}/qt5-qtdatavis3d-doc.list
+%files -n qt5-qtgamepad-doc -f %{oreon_filedir}/qt5-qtgamepad-doc.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.16-4
 - Import

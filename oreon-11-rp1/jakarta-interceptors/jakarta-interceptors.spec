@@ -1,30 +1,22 @@
-%global source0_hash 6d057e53450202e6c803175c8ed1e439ca6b3df242891298552248578390d590
-
+%global source0_hash 7f4ddfb21bdaa525183feba849bad537a884b27753ca13b24604100830f24811
 %global srcname interceptor-api
-
 Name:           jakarta-interceptors
 Version:        2.2.0
 Release:        1%{?dist}
 Summary:        Jakarta Interceptors
-# Automatically converted from old format: EPL-2.0 or GPLv2 with exceptions - review is highly recommended.
 License:        EPL-2.0 OR LicenseRef-Callaway-GPLv2-with-exceptions
-
 %global upstream_version %{version}-RELEASE
-
 URL:            https://github.com/eclipse-ee4j/interceptor-api
-Source0:        %{url}/archive/%{upstream_version}/%{srcname}-%{version}.tar.gz
-
+Source0:        https://github.com/eclipse-ee4j/%{srcname}/archive/%{upstream_version}/%{srcname}-%{version}.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+Provides:       geronimo-interceptor = %{version}-%{release}
+Obsoletes:      geronimo-interceptor < 1.0.1-25
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.glassfish.build:spec-version-maven-plugin)
-
-# package renamed in fedora 33, remove in fedora 35
-Provides:       geronimo-interceptor = %{version}-%{release}
-Obsoletes:      geronimo-interceptor < 1.0.1-25
-
+# /oreon:deps
 %description
 Jakarta Interceptors defines a means of interposing on business method
 invocations and specific events—such as lifecycle events and timeout
@@ -33,15 +25,13 @@ managed classes.
 
 %package javadoc
 Summary:        Javadoc for %{name}
-
-# package renamed in fedora 33, remove in fedora 35
 Provides:       geronimo-interceptor-javadoc = %{version}-%{release}
 Obsoletes:      geronimo-interceptor-javadoc < 1.0.1-25
-
 %description javadoc
 API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{srcname}-%{upstream_version} -p1
@@ -76,17 +66,15 @@ sed -i -e 's/jakarta\./javax./g' $(find api/src/main/java/javax -name *.java)
 %mvn_file : %{name}/jakarta.interceptor-api geronimo-interceptor
 
 %build
-%mvn_build
 
+%mvn_build
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE.md NOTICE.md
-%doc README.md
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE.md NOTICE.md
+%files -f %{oreon_filedir}/main.list
+%files -n jakarta-interceptors-javadoc -f %{oreon_filedir}/jakarta-interceptors-javadoc.list
 
 %changelog
+
 %autochangelog

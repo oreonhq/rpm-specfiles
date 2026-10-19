@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash b1135dedbc41c8010e2bc1f77ec9744c7faa42bce1a1c87416791449d6c87780
 Name:           python-easydict
 Version:        1.13
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Access dict values as attributes _works recursively_.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0
 URL:            https://github.com/makinacorpus/easydict
-Source:         %{pypi_source easydict}
-
+Source0:        https://files.pythonhosted.org/packages/source/e/easydict/easydict-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'easydict' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-easydict = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-easydict
-Summary:        %{summary}
-
-%description -n python3-easydict %_description
-
+Summary:        Access dict values as attributes _works recursively_.
+%description -n python3-easydict
 
 %prep
-%autosetup -p1 -n easydict-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir easydict-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-easydict usr/lib/python3*/site-packages/easydict* usr/lib64/python3*/site-packages/easydict* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/easydict* usr/lib64/python3*/site-packages/easydict* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-easydict -f %{pyproject_files}
+%files
+%files -n python3-easydict -f %{oreon_filedir}/python3-easydict.list
 
 %changelog
+
 %autochangelog

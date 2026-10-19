@@ -1,32 +1,29 @@
-%global source0_hash 2ec25100cd76c620deec2d61876db44091d80910a79bb783ebe336aeaa0eed74
-
+%global source0_hash b900ed9a92ef9b2548a6ac708ec81f724c59f2c089ed90f8e39a4e1287b28c1f
 %ifarch %{ix86} x86_64 ia64 ppc64le
 %bcond_without libquadmath
 %else
 %bcond_with libquadmath
 %endif
-
 Name: algol68g
-Summary: Algol 68 Genie compiler-interpreter
+Summary:        Algol 68 Genie compiler-interpreter
 Version: 3.13.3
-Release: 1%{?dist}
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-3.0-or-later
 URL: https://jmvdveer.home.xs4all.nl/en.algol-68-genie.html
-Source: https://jmvdveer.home.xs4all.nl/%{name}-%{version}.tar.gz
-BuildRequires: gcc
-BuildRequires: pkgconfig(ncurses)
-BuildRequires: pkgconfig(gsl)
-BuildRequires: pkgconfig(readline)
-BuildRequires: pkgconfig(gmp)
-BuildRequires: pkgconfig(libRmath)
-BuildRequires: pkgconfig(mpfr)
-BuildRequires: pkgconfig(libpq)
+Source0:        https://jmvdveer.home.xs4all.nl/%{name}-%{version}.tar.gz
 %if %{with libquadmath}
-BuildRequires: libquadmath-devel
 %endif
-BuildRequires: plotutils-devel
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  pkgconfig(gmp)
+BuildRequires:  pkgconfig(gsl)
+BuildRequires:  pkgconfig(libRmath)
+BuildRequires:  pkgconfig(libpq)
+BuildRequires:  pkgconfig(mpfr)
+BuildRequires:  pkgconfig(ncurses)
+BuildRequires:  pkgconfig(readline)
+BuildRequires:  plotutils-devel
+# /oreon:deps
 %description
 Algol 68 Genie (Algol68G) is an Algol 68 compiler-interpreter.
 It can be used for executing Algol 68 programs or scripts.
@@ -38,26 +35,20 @@ that has continuing responsibility for Algol 60 and Algol 68.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-%make_build check
 
-%files
-%{_bindir}/a68g
-%{_mandir}/man1/a68g.1*
-%license COPYING
-%doc AUTHORS NEWS README ChangeLog
-%exclude %{_includedir}
-%exclude %{_pkgdocdir}/COPYING
+%make_build check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

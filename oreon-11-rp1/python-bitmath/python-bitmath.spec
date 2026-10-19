@@ -1,60 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 56f2cda86b1f0aa6470f4aaa90f82ef029f0e16c31b66f0fdd9d67613bc5e9f0
 Name:           python-bitmath
 Version:        2.1.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Pythonic module for representing and manipulating file sizes with different prefix notations _file size unit conversion_
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://bitmath.readthedocs.io/en/latest/index.html
-Source:         %{pypi_source bitmath}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/bitmath/bitmath-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'bitmath' generated automatically by pyp2spec.}
-
 Patch:  python-bitmath-rm-python-mock-usage.diff
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-bitmath = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-bitmath
-Summary:        %{summary}
-
-%description -n python3-bitmath %_description
-
+Summary:        Pythonic module for representing and manipulating file sizes with different prefix notations _file size unit conversion_
+%description -n python3-bitmath
 
 %prep
-%autosetup -p1 -n bitmath-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir bitmath-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-bitmath usr/lib/python3*/site-packages/bitmath* usr/lib64/python3*/site-packages/bitmath* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/bitmath* usr/lib64/python3*/site-packages/bitmath* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-bitmath -f %{pyproject_files}
-%{_bindir}/bitmath
+%files
+%files -n python3-bitmath -f %{oreon_filedir}/python3-bitmath.list
 
 %changelog
+
 %autochangelog

@@ -1,32 +1,24 @@
 %global source0_hash 6e48f12430d4d1d65444a20ad6c77e10e9cfb7dbef2791ea1e473a3a13c1067d
-
 %global relnum 37
 %global Bg_Name F37
 %global bgname %(t="%{Bg_Name}";echo ${t,,})
-
-# Enable Extras
 %global with_extras 1
-
 Name:           %{bgname}-backgrounds
 Version:        %{relnum}.0.5
-Release:        8%{?dist}
-Summary:        Fedora %{relnum} default desktop background
-
+Release:        1%{?dist}
+Summary:        Fedora 37 default desktop background
 License:        CC-BY-SA-4.0
 URL:            https://fedoraproject.org/wiki/_Artwork
 Source0:        https://github.com/fedoradesign/backgrounds/releases/download/v%{version}/%{name}-%{version}.tar.xz
-
 BuildArch:      noarch
-
-# for %%_kde4_* macros
-BuildRequires:  kde4-filesystem
-BuildRequires:  make
-
 Requires:       %{name}-gnome = %{version}-%{release}
 Requires:       %{name}-kde = %{version}-%{release}
 Requires:       %{name}-xfce = %{version}-%{release}
 Requires:       %{name}-mate = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  kde4-filesystem
+BuildRequires:  make
+# /oreon:deps
 %description
 This package contains desktop backgrounds for the Fedora  %{relnum} default
 theme.  Pulls in themes for GNOME, KDE, Mate and Xfce desktops.
@@ -34,14 +26,12 @@ theme.  Pulls in themes for GNOME, KDE, Mate and Xfce desktops.
 %package        base
 Summary:        Base images for Fedora  %{relnum} default background
 License:        CC-BY-SA-4.0
-
 %description    base
 This package contains base images for Fedora  %{relnum} default background.
 
 %package        gnome
 Summary:        Fedora  %{relnum} default wallpaper for Gnome and Cinnamon
 Requires:       %{name}-base = %{version}-%{release}
-
 %description    gnome
 This package contains Gnome/Cinnamon desktop wallpaper for the
 Fedora  %{relnum} default theme.
@@ -50,7 +40,6 @@ Fedora  %{relnum} default theme.
 Summary:        Fedora  %{relnum} default wallpaper for KDE
 Requires:       %{name}-base = %{version}-%{release}
 Requires:       kde-filesystem
-
 %description    kde
 This package contains KDE desktop wallpaper for the Fedora  %{relnum}
 default them
@@ -58,26 +47,21 @@ default them
 %package        mate
 Summary:        Fedora %{relnum} default wallpaper for Mate
 Requires:       %{name}-base = %{version}-%{release}
-
 %description    mate
 This package contains Mate desktop wallpaper for the Fedora  %{relnum}
 default theme.
 
 %package        xfce
 Summary:        Fedora  %{relnum} default background for XFCE4
-
 Requires:       %{name}-base = %{version}-%{release}
 Requires:       xfdesktop
-
 %description    xfce
 This package contains XFCE4 desktop background for the Fedora  %{relnum}
 default theme.
 
-%if %{with_extras}
 %package        extras-base
 Summary:        Base images for  Extras Backgrounds
 License:        CC-BY-4.0 and CC-BY-SA-4.0 and CC0-1.0 and copyleft-next-0.3.1
-
 %description    extras-base
 This package contains base images for  supplemental
 wallpapers.
@@ -86,7 +70,6 @@ wallpapers.
 Summary:        Extra  Wallpapers for Gnome and Cinnamon
 License:        CC-BY-4.0 and CC-BY-SA-4.0 and CC0-1.0 and copyleft-next-0.3.1
 Requires:       %{name}-extras-base = %{version}-%{release}
-
 %description    extras-gnome
 This package contains  supplemental wallpapers for Gnome
 and Cinnamon
@@ -95,7 +78,6 @@ and Cinnamon
 Summary:        Extra  Wallpapers for Mate
 License:        CC-BY-4.0 and CC-BY-SA-4.0 and CC0-1.0 and copyleft-next-0.3.1
 Requires:       %{name}-extras-base = %{version}-%{release}
-
 %description    extras-mate
 This package contains  supplemental wallpapers for Mate
 
@@ -103,7 +85,6 @@ This package contains  supplemental wallpapers for Mate
 Summary:        Extra  Wallpapers for KDE
 License:        CC-BY-4.0 and CC-BY-SA-4.0 and CC0-1.0 and copyleft-next-0.3.1
 Requires:       %{name}-extras-base = %{version}-%{release}
-
 %description    extras-kde
 This package contains  supplemental wallpapers for Gnome
 
@@ -111,67 +92,32 @@ This package contains  supplemental wallpapers for Gnome
 Summary:        Extra  Wallpapers for XFCE
 License:        CC-BY-4.0 and CC-BY-SA-4.0 and CC0-1.0 and copyleft-next-0.3.1
 Requires:       %{name}-extras-base = %{version}-%{release}
-
 %description    extras-xfce
 This package contains  supplemental wallpapers for XFCE
-%endif
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}
-
+%global oreon_srcdir %{name}
+%oreon_prep
 %build
-%make_build
 
+%make_build
 %install
 %make_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc
-
-%files base
-%license COPYING Attribution
-%dir %{_datadir}/backgrounds/%{bgname}
-%dir %{_datadir}/backgrounds/%{bgname}/default
-%{_datadir}/backgrounds/%{bgname}/default/%{bgname}*.{png,webp,xml}
-
-%files kde
-%{_kde4_datadir}/wallpapers/%{Bg_Name}/
-%dir %{_datadir}/plasma/
-%dir %{_datadir}/plasma/desktoptheme/
-%{_datadir}/plasma/desktoptheme/%{Bg_Name}/
-
-%files gnome
-%{_datadir}/gnome-background-properties/%{bgname}.xml
-%dir %{_datadir}/gnome-background-properties/
-
-%files mate
-%{_datadir}/mate-background-properties/%{bgname}.xml
-%dir %{_datadir}/mate-background-properties/
-
-%files xfce
-%{_datadir}/xfce4/backdrops/%{bgname}.png
-%dir %{_datadir}/xfce4/
-%dir %{_datadir}/xfce4/backdrops/
-
-%if %{with_extras}
-%files extras-base
-%license COPYING
-%{_datadir}/backgrounds/%{bgname}/extras/
-
-%files extras-gnome
-%{_datadir}/gnome-background-properties/%{bgname}-extras.xml
-
-%files extras-kde
-%{_kde4_datadir}/wallpapers/%{Bg_Name}_*/
-
-%files extras-mate
-%{_datadir}/mate-background-properties/%{bgname}-extras.xml
-
-%files extras-xfce
-%{_datadir}/xfce4/backdrops/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n f37-backgrounds-base -f %{oreon_filedir}/f37-backgrounds-base.list
+%files -n f37-backgrounds-gnome -f %{oreon_filedir}/f37-backgrounds-gnome.list
+%files -n f37-backgrounds-kde -f %{oreon_filedir}/f37-backgrounds-kde.list
+%files -n f37-backgrounds-mate -f %{oreon_filedir}/f37-backgrounds-mate.list
+%files -n f37-backgrounds-xfce -f %{oreon_filedir}/f37-backgrounds-xfce.list
+%files -n f37-backgrounds-extras-base -f %{oreon_filedir}/f37-backgrounds-extras-base.list
+%files -n f37-backgrounds-extras-gnome -f %{oreon_filedir}/f37-backgrounds-extras-gnome.list
+%files -n f37-backgrounds-extras-mate -f %{oreon_filedir}/f37-backgrounds-extras-mate.list
+%files -n f37-backgrounds-extras-kde -f %{oreon_filedir}/f37-backgrounds-extras-kde.list
+%files -n f37-backgrounds-extras-xfce -f %{oreon_filedir}/f37-backgrounds-extras-xfce.list
 
 %changelog
+
 %autochangelog

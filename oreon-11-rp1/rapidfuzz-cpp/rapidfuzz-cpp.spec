@@ -1,27 +1,27 @@
 %global source0_hash fa0fbd40110df8134cf05bddbaa4e237dbc4fd915ab9a3029ff481a8d3e8b757
-
-# Header only library
 %global debug_package %{nil}
-
 %global forgeurl https://github.com/rapidfuzz/rapidfuzz-cpp
 Version: 3.3.4
 %forgemeta
-
 Name: rapidfuzz-cpp
-Release: %{autorelease}
+Release:        1%{?dist}
 License: MIT
-Summary: A fast string matching header-only library for C++
+Summary:        A fast string matching header-only library for C++
 URL: %{forgeurl}
-Source: %{forgesource}
-
+Source0:        %{forgeurl}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0: remove-march-native.patch
+# oreon:deps
+BuildRequires:  catch-devel
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+# /oreon:deps
+%description
 
-BuildRequires: cmake
-BuildRequires: doxygen
-BuildRequires: gcc-c++
-BuildRequires: catch-devel
-
-%global _description %{expand:
+%package devel
+Summary: Development files for the RapidFuzz C++ library
+Provides: %{name}-static = %{version}
+%description devel
 RapidFuzz is a fast string matching library for Python and C++, which is using
 the string similarity calculations from FuzzyWuzzy. However there are two
 aspects that set RapidFuzz apart from FuzzyWuzzy:
@@ -35,18 +35,10 @@ aspects that set RapidFuzz apart from FuzzyWuzzy:
    providing the same results.
 
 This is the C++ component of RapidFuzz, the Python library is available in the
-python-rapidfuzz package.}
-
-%description %_description
-
-%package devel
-Summary: Development files for the RapidFuzz C++ library
-Provides: %{name}-static = %{version}
-
-%description devel
-%_description
+python-rapidfuzz package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -62,27 +54,22 @@ echo "GENERATE_MAN           = YES" >> Doxyfile
 echo "GENERATE_HTML          = NO" >> Doxyfile
 
 %build
+
 %cmake -DRAPIDFUZZ_BUILD_TESTING=ON
 %cmake_build
-# Build the doxygen man doc
 doxygen
-
 %install
 %cmake_install
 mkdir -p %{buildroot}%{_mandir}/man3/
-# Only install rapidfuzz.3, which is named specifically for this package, and
-# not the generic "citelist.3".
 cp doxygen/man/man3/rapidfuzz.3 %{buildroot}/%{_mandir}/man3/
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-%ctest
 
-%files devel
-%license LICENSE
-%doc README.md CHANGELOG.md
-%{_mandir}/man3/rapidfuzz.3*
-%{_includedir}/rapidfuzz
-%{_libdir}/cmake/rapidfuzz
+%ctest
+%files -f %{oreon_filedir}/main.list
+%files -n rapidfuzz-cpp-devel -f %{oreon_filedir}/rapidfuzz-cpp-devel.list
 
 %changelog
+
 %autochangelog

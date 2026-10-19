@@ -1,20 +1,19 @@
 %global source0_hash b9c1a7c0996a305465135b90123b0c63adbb5fa7c47a24b3f347deb2696d417d
-
 Name:           bcrypt
 Version:        1.1
 Release:        40%{?dist}
 Summary:        File encryption utility
-
 License:        Zlib
 URL:            http://%{name}.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:         bcrypt-fencepost.patch
-BuildRequires:  zlib-devel gcc
-
-BuildRequires:  %{__perl}
-BuildRequires:  %{__make}
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  /usr/bin/make
+BuildRequires:  /usr/bin/perl
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Bcrypt is a cross platform file encryption utility. Encrypted files are
 portable across all supported operating systems and processors.
@@ -29,6 +28,7 @@ your computer. Bcrypt uses the blowfish encryption algorithm published by
 Bruce Schneier in 1993.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -38,16 +38,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{__perl} -pi.orig -e 's|\/man/man1|\/share/man/man1|g' Makefile
 
 %build
-%{__make} %{?_smp_mflags} CFLAGS="%{optflags}"
 
+%{__make} %{?_smp_mflags} CFLAGS="%{optflags}"
 %install
 %{__make} install PREFIX="%{buildroot}%{_prefix}"
+%oreon_autofiles main
 
-%files
-%doc README
-%license LICENSE
-%doc %{_mandir}/man1/bcrypt.1*
-%{_bindir}/bcrypt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

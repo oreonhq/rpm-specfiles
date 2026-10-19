@@ -1,57 +1,46 @@
-%global source0_hash none
-
+%global source0_hash cc4bd2158fd0dd80639142af06dc70c119bbfd6f79d53da4482e0b2c849af7ca
 Name:           python-azure-mgmt-storage
 Version:        25.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Microsoft Azure Storage Management Client Library for Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Azure/azure-sdk-for-python
-Source:         %{pypi_source azure_mgmt_storage}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/azure_mgmt_storage/azure_mgmt_storage-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'azure-mgmt-storage' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-azure-mgmt-storage = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-azure-mgmt-storage
-Summary:        %{summary}
-
-%description -n python3-azure-mgmt-storage %_description
-
+Summary:        Microsoft Azure Storage Management Client Library for Python
+# oreon:reqs
+Requires:       python3dist(azure-mgmt-core) >= 1.6.0
+Requires:       python3dist(isodate) >= 0.6.1
+Requires:       python3dist(typing-extensions) >= 4.6.0
+# /oreon:reqs
+%description -n python3-azure-mgmt-storage
 
 %prep
-%autosetup -p1 -n azure_mgmt_storage-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir azure_mgmt_storage-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-azure-mgmt-storage usr/lib/python3*/site-packages/azure_mgmt_storage* usr/lib64/python3*/site-packages/azure_mgmt_storage* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/azure_mgmt_storage* usr/lib64/python3*/site-packages/azure_mgmt_storage* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-azure-mgmt-storage -f %{pyproject_files}
+%files
+%files -n python3-azure-mgmt-storage -f %{oreon_filedir}/python3-azure-mgmt-storage.list
 
 %changelog
+
 %autochangelog

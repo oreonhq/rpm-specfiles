@@ -1,24 +1,18 @@
 %global source0_hash 1f5f9d084a99cfbb1c3bc6e30e81e536164e5a1bccfc27fae47a43b6dfb87007
-
 Name:		php-wikimedia-cdb
 Version:	3.0.0
-Release:	6%{?dist}
-Summary:	CDB functions for PHP
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        CDB functions for PHP
 License:	GPL-2.0-or-later
 URL:		http://www.mediawiki.org/wiki/CDB
-Source0:	https://github.com/wikimedia/cdb/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/wikimedia/cdb/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch:	noarch
-
-BuildRequires:	php-dba
-BuildRequires:	php-theseer-autoload
-
 Requires:	php(language) >= 7.4.0
-
 Provides:	php-composer(wikimedia/cdb) = %{version}
-
+# oreon:deps
+BuildRequires:  php-dba
+BuildRequires:  php-theseer-autoload
+# /oreon:deps
 %description
 CDB, short for "constant database", refers to a very fast and highly reliable
 database system which uses a simple file with key value pairs. This library
@@ -27,21 +21,21 @@ where dba_* functions are not present or are not compiled with CDB support,
 a pure-PHP implementation is provided for falling back.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n cdb-%{version}
 
 %build
-phpab --output src/autoload.php src
 
+phpab --output src/autoload.php src
 %install
 mkdir -pm 0755 %{buildroot}%{_datadir}/php/Cdb
 cp -rp src/* %{buildroot}%{_datadir}/php/Cdb
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc README.md
-%{_datadir}/php/Cdb
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

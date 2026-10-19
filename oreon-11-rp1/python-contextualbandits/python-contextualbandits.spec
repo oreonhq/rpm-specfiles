@@ -1,56 +1,42 @@
-%global source0_hash none
-
+%global source0_hash aabfd6a328926703d76e24f8913d8c7b4df4c04a487c2eb493a214999abdb8aa
 Name:           python-contextualbandits
 Version:        0.3.30
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python Implementations of Algorithms for Contextual Bandits
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/david-cortes/contextualbandits
-Source:         %{pypi_source contextualbandits}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/contextualbandits/contextualbandits-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'contextualbandits' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(cython) >= 3.1.0
+BuildRequires:  python3dist(numpy) >= 2.0.0
+Requires:       python3-contextualbandits = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-contextualbandits
-Summary:        %{summary}
-
-%description -n python3-contextualbandits %_description
-
+Summary:        Python Implementations of Algorithms for Contextual Bandits
+%description -n python3-contextualbandits
 
 %prep
-%autosetup -p1 -n contextualbandits-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir contextualbandits-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-contextualbandits usr/lib/python3*/site-packages/contextualbandits* usr/lib64/python3*/site-packages/contextualbandits* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/contextualbandits* usr/lib64/python3*/site-packages/contextualbandits* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-contextualbandits -f %{pyproject_files}
+%files
+%files -n python3-contextualbandits -f %{oreon_filedir}/python3-contextualbandits.list
 
 %changelog
+
 %autochangelog

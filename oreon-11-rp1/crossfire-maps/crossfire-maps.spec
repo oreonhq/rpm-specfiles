@@ -1,25 +1,23 @@
-%global source0_hash none
-
+%global source0_hash f6df5fd605dd3b83dce1aa730390443b09569e6fae93bef058cd8f52fedc17da
 Name:           crossfire-maps
 Version:        1.71.0
-Release:        23%{?dist}
+Release:        1%{?dist}
 Summary:        Map files for the crossfire server
-
-# All files GPL+ except python/misc/CFInsulter.py which is BSD
 License:        GPL-2.0-or-later
 URL:            http://crossfire.real-time.com
 Source0:        http://downloads.sourceforge.net/crossfire/crossfire-%{version}.maps.tar.bz2
 Patch0:		crossfire-maps-1.60.0-python.patch
 BuildArch:      noarch
-BuildRequires:      perl-generators
-# Requires for directory ownership
 Requires:       crossfire
 Obsoletes:      crossfire-maps-devel
-
+# oreon:deps
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 Map files for the crossfire server.
 
 %prep
+
 %setup -q -c -n %{name}-%{version}
 
 %patch -P0 -p0
@@ -52,17 +50,16 @@ chmod -x maps/brest/sow/sow
 %{__sed} -i 's/\r//' maps/templates/keep/keep_roof.tpl
 
 %build
-# Nothing to build!
 
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/crossfire
 cp -a maps $RPM_BUILD_ROOT%{_datadir}/crossfire/
 rm -f $RPM_BUILD_ROOT%{_datadir}/crossfire/maps/COPYING
+%oreon_autofiles main
 
-%files
-%doc maps/COPYING
-%{_datadir}/crossfire/maps
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

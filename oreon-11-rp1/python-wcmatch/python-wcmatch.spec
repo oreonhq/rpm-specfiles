@@ -1,57 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 1ea2b4fa678b8ca268253798d5963935df39132d47c3e241c0a0732224005e7d
 Name:           python-wcmatch
 Version:        11.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Wildcard/glob file name matcher.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/facelessuser/wcmatch
-Source:         %{pypi_source wcmatch}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/wcmatch/wcmatch-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'wcmatch' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(hatchling) >= 0.21.1
+Requires:       python3-wcmatch = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-wcmatch
-Summary:        %{summary}
-
-%description -n python3-wcmatch %_description
-
+Summary:        Wildcard/glob file name matcher.
+# oreon:reqs
+Requires:       python3dist(bracex) >= 3.0
+# /oreon:reqs
+%description -n python3-wcmatch
 
 %prep
-%autosetup -p1 -n wcmatch-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir wcmatch-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-wcmatch usr/lib/python3*/site-packages/wcmatch* usr/lib64/python3*/site-packages/wcmatch* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/wcmatch* usr/lib64/python3*/site-packages/wcmatch* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-wcmatch -f %{pyproject_files}
+%files
+%files -n python3-wcmatch -f %{oreon_filedir}/python3-wcmatch.list
 
 %changelog
+
 %autochangelog

@@ -1,64 +1,43 @@
-%global source0_hash none
-
+%global source0_hash ec862c06b3138f669f89c00338dd99da64f41cec4111c644681f6b496523f1f1
 Name:           python-molmass
 Version:        2026.8.15
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Molecular mass calculations
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/cgohlke/molmass
-Source:         %{pypi_source molmass}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/molmass/molmass-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'molmass' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-molmass = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-molmass
-Summary:        %{summary}
-
-%description -n python3-molmass %_description
+Summary:        Molecular mass calculations
+%description -n python3-molmass
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-molmass all,gui
-
 
 %prep
-%autosetup -p1 -n molmass-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir molmass-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-molmass usr/lib/python3*/site-packages/molmass* usr/lib64/python3*/site-packages/molmass* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/molmass* usr/lib64/python3*/site-packages/molmass* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-molmass -f %{pyproject_files}
-%{_bindir}/molmass
-%{_bindir}/molmass_web
+%files
+%files -n python3-molmass -f %{oreon_filedir}/python3-molmass.list
 
 %changelog
+
 %autochangelog

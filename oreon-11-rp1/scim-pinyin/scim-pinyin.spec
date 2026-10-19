@@ -1,32 +1,32 @@
 %global source0_hash 70727224a642c2f2c7739b82ebd0b4d6a6f444c9ad4311cf2a3c76230dd21d9e
-
 Name:       scim-pinyin
 Version:    1.4.18
-Release:    1%{?dist}
-Summary:    Smart Pinyin IMEngine for Smart Common Input Method platform
-
+Release:        1%{?dist}
+Summary:        Smart Pinyin IMEngine for Smart Common Input Method platform
 License:    GPL-2.0-only
 URL:        https://github.com/scim-im/scim-pinyin
-Source0:    http://dl.sourceforge.net/scim/%{name}-%{version}.tar.gz
-
-BuildRequires: make
-BuildRequires:  gcc-c++
-BuildRequires:  scim-devel, gtk2-devel, gettext, gettext-devel, autoconf, automake,libtool
+Source0:        http://dl.sourceforge.net/scim/%{name}-%{version}.tar.gz
 Requires:   scim
 Obsoletes:  iiimf-le-chinput <= 0.3, miniChinput <= 0.0.3
 Patch2:         scim-pinyin-showallkeys.patch
-# Patch3:         scim-pinyin-helper.patch
-# Patch4:         scim-pinyin-0.5.91-13.bz200702.patch
-# Patch5:         scim-pinyin-help-translate.patch
 Patch6:         scim-pinyin-0.5.91-save-in-temp.patch
-# Patch7:         scim-pinyin-0.5.91-fix-load.patch
 Patch8:         scim-pinyin-0.5.91-fix-ms-shuangpin.patch
-# Patch9:         scim-pinyin-0.5.91-gcc43.patch
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  gettext-devel
+BuildRequires:  gtk2-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  scim-devel
+# /oreon:deps
 %description
 Simplified Chinese Smart Pinyin IMEngine for SCIM.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -40,26 +40,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # %patch9 -p1 -b .9-gcc43
 
 %build
+
 ./bootstrap
 %configure --disable-static
 make -C po update-gmo
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 make DESTDIR=${RPM_BUILD_ROOT} install
-
 rm $RPM_BUILD_ROOT%{_libdir}/scim-1.0/*/{IMEngine,SetupUI}/*.la
 rm -f $RPM_BUILD_ROOT%{_libdir}/scim-1.0/*/Helper/*.la
-
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc AUTHORS COPYING README
-%{_libdir}/scim-1.0/*/IMEngine/pinyin.so
-%{_libdir}/scim-1.0/*/SetupUI/pinyin-imengine-setup.so
-%{_datadir}/scim/pinyin
-%{_datadir}/scim/icons/smart-pinyin.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

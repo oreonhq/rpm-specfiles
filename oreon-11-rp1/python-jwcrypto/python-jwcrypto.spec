@@ -1,58 +1,45 @@
 %global source0_hash a1e1570da5c2e35dbcd375ec1d2891a24de8eb35ee2c1fe8e91978efb72cfe90
-
 Name:           python-jwcrypto
 Version:        1.6.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Implementation of JOSE Web standards
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
 URL:            https://github.com/latchset/jwcrypto
-Source:         %{pypi_source jwcrypto}
-
+Source0:        https://files.pythonhosted.org/packages/source/j/jwcrypto/jwcrypto-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'jwcrypto' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-jwcrypto = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-jwcrypto
-Summary:        %{summary}
-
-%description -n python3-jwcrypto %_description
-
+Summary:        Implementation of JOSE Web standards
+# oreon:reqs
+Requires:       python3dist(cryptography) >= 49.0.0
+Requires:       python3dist(typing-extensions) >= 4.5.0
+# /oreon:reqs
+%description -n python3-jwcrypto
 
 %prep
-%autosetup -p1 -n jwcrypto-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir jwcrypto-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-jwcrypto usr/lib/python3*/site-packages/jwcrypto* usr/lib64/python3*/site-packages/jwcrypto* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/jwcrypto* usr/lib64/python3*/site-packages/jwcrypto* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-jwcrypto -f %{pyproject_files}
+%files
+%files -n python3-jwcrypto -f %{oreon_filedir}/python3-jwcrypto.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.2-1
 - Prepare for Oreon 11 (RP1)

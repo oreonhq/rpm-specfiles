@@ -1,27 +1,15 @@
 %global source0_hash 08e9a892bd80bdb1115213fb72dc29a7bf2ff108b378180586aa65f3cfd42e0f
-
 %global __cmake_in_source_build 1
-
-%if 0%{?fedora} >= 36
-# Leave undefined if not 1:
-%ifarch %{java_arches}
 %global JAVA 1
-%endif
-%else
-%global JAVA 1
-%endif
-
 %bcond docs %{undefined flatpak}
-
 Summary:        Real-time Midi I/O Library
 Name:           portmidi
 Version:        217
-Release:        %autorelease
+Release:        1%{?dist}
 License:        MIT
 URL:            http://portmedia.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/portmedia/%{name}-src-%{version}.zip
 Source1:        pmdefaults.desktop
-# Build fixes:
 Patch0:         portmidi-cmake.patch
 Patch1:         portmidi-no_date_footer.patch
 Patch2:         portmidi-217-format-security.patch
@@ -29,23 +17,23 @@ Patch3:         portmidi-no.c++.patch
 Patch4:         portmidi-cyrex-0.21.patch
 Patch5:         portmidi-c99.patch
 Patch6:         portmidi-PtTime.patch
-# Number no java patches 100 and above
 Patch100:       portmidi-no.java.patch
+%if %{with docs}
+%endif
+%if 0%{?JAVA}
+%endif
+# oreon:deps
 BuildRequires:  alsa-lib-devel
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
-BuildRequires:  python3-devel
-BuildRequires:  python3-Cython
-%if %{with docs}
 BuildRequires:  doxygen
-BuildRequires:  tex(latex)
-%endif
 BuildRequires:  gcc
-%if 0%{?JAVA}
-BuildRequires:  java-devel >= 1.7
+BuildRequires:  java-devel
 BuildRequires:  javapackages-tools
-%endif
-
+BuildRequires:  python3-Cython
+BuildRequires:  python3-devel
+BuildRequires:  tex(latex)
+# /oreon:deps
 %description
 PortMedia is a set of simple clean APIs and cross-platform library
 implementations for music and other media. PortMidi sub-project provides a
@@ -55,7 +43,6 @@ libraries.
 %package devel
 Summary:        Headers for developing programs that will use %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 PortMedia is a set of simple clean APIs and cross-platform library
 implementations for music and other media. PortMidi sub-project provides a
@@ -65,7 +52,6 @@ and the documentation of PortMidi libraries.
 %package -n python3-%{name}
 Summary:        Python 3 wrapper for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description -n python3-%{name}
 PortMedia is a set of simple clean APIs and cross-platform library
 implementations for music and other media. PortMidi sub-project provides a
@@ -78,7 +64,6 @@ Summary:          Tools to configure and use %{name}
 Requires:         hicolor-icon-theme
 Requires:         java >= 1.7
 Requires:         %{name}%{?_isa} = %{version}-%{release}
-
 %description tools
 PortMedia is a set of simple clean APIs and cross-platform library
 implementations for music and other media. PortMidi sub-project provides a
@@ -87,6 +72,7 @@ real-time MIDI input/output library. This package contains
 }some test applications.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name} -N
@@ -141,6 +127,7 @@ sed -i -e 's|^cmake_minimum_required.*$|cmake_minimum_required(VERSION 3.5...3.1
    CMakeLists.txt
 
 %build
+
 export JAVA_HOME=%{java_home}
 %cmake \
   -DCMAKE_SKIP_BUILD_RPATH=1 \
@@ -152,16 +139,10 @@ export JAVA_HOME=%{java_home}
      %{?_cmake_lib_suffix64} \
   %endif
   -B.
-# direct parallel make works, but cmake_build (using make) fails without -j1
-# "-j1" can be removed with ninja
 %cmake_build -j1
-
 %if %{with docs}
-# Build the doxygen documentation:
 doxygen
 %endif
-
-# Build python modules
 pushd pm_python/pyportmidi
    cython -2 _pyportmidi.pyx
    gcc %{optflags} -pthread -fPIC -c -o _pyportmidi.o -I../../pm_common \
@@ -169,82 +150,47 @@ pushd pm_python/pyportmidi
    gcc -shared -o _pyportmidi.so _pyportmidi.o -lportmidi $(python3-config --libs) \
        -L../../build/Release
 popd
-
 %install
 %cmake_install
-
-# Install the test applications:
 install -d %{buildroot}%{_libdir}/%{name}
 for app in latency midiclock midithread midithru mm qtest sysex test; do
    install -m 0755 build/Release/$app %{buildroot}%{_libdir}/%{name}/
 done
-
 %if 0%{?JAVA}
-# Fedora's jni library location is different
 mv %{buildroot}%{_libdir}/libpmjni.so \
    %{buildroot}%{_libdir}/%{name}/
 mv %{buildroot}%{_javadir}/pmdefaults.jar \
    %{buildroot}%{_libdir}/%{name}/
-
-# pmdefaults icon
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/
 install -pm 644 pm_java/pmdefaults/pmdefaults-icon.png \
    %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/
-
-# desktop file
 mkdir -p %{buildroot}%{_datadir}/applications/
 desktop-file-install \
    --dir=%{buildroot}%{_datadir}/applications \
    %{SOURCE1}
 %endif
-
-# Why don't they install this header file?
 install -pm 644 pm_common/pmutil.h %{buildroot}%{_includedir}/
-
-# Install python modules
 mkdir -p %{buildroot}%{python3_sitearch}/pyportmidi
 pushd pm_python/pyportmidi
    install -pm 755 _pyportmidi.so %{buildroot}%{python3_sitearch}/pyportmidi/
    install -pm 644 *.py %{buildroot}%{python3_sitearch}/pyportmidi/
 popd
-
-# we don't want to provide private python extension libs
 %{?filter_setup:
 %filter_provides_in %{python3_sitearch}/.*\.so$
 %filter_setup
 }
-
-# Remove duplicate library
 rm -f %{buildroot}%{_libdir}/libportmidi_s.so
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
-%files
-%doc CHANGELOG.txt
-%license license.txt
-%{_libdir}/lib*.so.*
-
-%files tools
-%doc pm_java/pmdefaults/README.txt pm_cl/*
-%{_libdir}/%{name}/
-%if 0%{?JAVA}
-%{_bindir}/pmdefaults
-%{_datadir}/icons/hicolor/128x128/apps/pmdefaults-icon.png
-%{_datadir}/applications/pmdefaults.desktop
-%endif
-
-%files -n python3-%{name}
-%{python3_sitearch}/pyportmidi/
-
-%files devel
-%doc README.txt
-%if %{with docs}
-%doc html
-%endif
-%{_includedir}/*
-%{_libdir}/lib*.so
+%files -f %{oreon_filedir}/main.list
+%files -n portmidi-devel -f %{oreon_filedir}/portmidi-devel.list
+%files -n python3-portmidi -f %{oreon_filedir}/python3-portmidi.list
+%files -n portmidi-tools -f %{oreon_filedir}/portmidi-tools.list
 
 %changelog
+
 %autochangelog

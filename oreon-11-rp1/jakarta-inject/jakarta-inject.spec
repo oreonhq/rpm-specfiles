@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash 51df7e4b118f67f37eb55128dfe475a55b702581609987b06908d744bc5ee33c
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,27 +80,22 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           jakarta-inject
 Version:        2.0.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Jakarta Dependency Injection
 License:        Apache-2.0
 URL:            https://jakarta.ee/specifications/dependency-injection/2.0/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/jakartaee/inject/archive/%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.0.1-6
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Jakarta Dependency Injection specifies a means for obtaining objects
 in such a way as to maximize reusability, testability and
@@ -111,6 +105,7 @@ This process, known as dependency injection, is beneficial
 to most nontrivial applications.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n inject-%{version}
@@ -119,14 +114,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin :maven-javadoc-plugin
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog
 

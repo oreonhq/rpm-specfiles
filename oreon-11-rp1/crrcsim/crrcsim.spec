@@ -1,49 +1,34 @@
 %global source0_hash abe59b35ebb4322f3c48e6aca57dbf27074282d4928d66c0caa40d7a97391698
-
 Name:          crrcsim
 Version:       0.9.13
-Release:       27%{?dist}
-Summary:       Model-Airplane Flight Simulation Program
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Model-Airplane Flight Simulation Program
 License:       GPL-2.0-only
 URL:           http://sourceforge.net/apps/mediawiki/crrcsim/
-Source0:       http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-# upstream report: http://preview.tinyurl.com/bnryakb
+Source0:        http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:        %{name}-0.9.13-support-for-platforms-without-sys-io.h.patch
-# aarch64 support added
-# upstream report: http://preview.tinyurl.com/cass62h
 Patch1:        %{name}-0.9.13-aarch64-support-added.patch
-# fix for https://bugzilla.redhat.com/show_bug.cgi?id=1307411
-# upstream report: https://sourceforge.net/p/crrcsim/bugs/35/
 Patch2:        %{name}-0.9.13-gcc-7-fixes.patch
-# hg export -r 1554 >crrcsim-0.9.13-issue-41.patch
-# fix fof rhbz#1575624
 Patch3:        %{name}-0.9.13-issue-41.patch
-# Fix compilation with CGAL >5.x
-# upstream report: https://sourceforge.net/p/crrcsim/bugs/44/
 Patch4:        %{name}-0.9.13-cgal-header-mode-only.patch
-
-# It is only meant for development purposes.
 %global build_with_cmake %{?_with_cmake:1}%{!?_with_cmake:0}
-
 %global the_desktop_file packages/Fedora/CRRCsim.desktop
 %global the_icon_file %{_datadir}/%{name}/icons/%{name}.png
-
 %if %{build_with_cmake}
-BuildRequires: cmake
 %endif
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: /usr/bin/git
-BuildRequires: portaudio-devel
-BuildRequires: SDL-devel
-BuildRequires: freeglut-devel
-BuildRequires: plib-devel
-BuildRequires: libjpeg-turbo-devel
-BuildRequires: CGAL-devel
-BuildRequires: desktop-file-utils
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  /usr/bin/git
+BuildRequires:  CGAL-devel
+BuildRequires:  SDL-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  freeglut-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libjpeg-turbo-devel
+BuildRequires:  make
+BuildRequires:  plib-devel
+BuildRequires:  portaudio-devel
+# /oreon:deps
 %description
 Crrcsim is a model-airplane flight simulation program.
 Using it, you can learn how to fly model aircraft, test new aircraft designs,
@@ -58,11 +43,11 @@ such as joystick, mouse, keyboard.
 %package doc
 Summary:       Documentation for %{name}
 BuildArch:     noarch
-
 %description doc
 Documentation for %{name} package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -S git
@@ -105,6 +90,7 @@ sed -i 's#\(.*m44_test.*\)#\#\1#g' src/mod_math/CMakeLists.txt
 %endif
 
 %build
+
 %if %{build_with_cmake}
  mkdir -p build
  pushd build
@@ -115,7 +101,6 @@ sed -i 's#\(.*m44_test.*\)#\#\1#g' src/mod_math/CMakeLists.txt
  %configure
  make %{?_smp_mflags}
 %endif
-
 %install
 make DESTDIR=%{buildroot} install
 desktop-file-install \
@@ -123,19 +108,9 @@ desktop-file-install \
     %{the_desktop_file}
 rm -f %{buildroot}%{_datadir}/%{name}/icons/%{name}.{ico,xpm}
 %find_lang %{name} --with-man
-
-# adding to installed docs in order to avoid using %%doc magic
 for f in AUTHORS COPYING HISTORY ; do
     cp -p $f %{buildroot}%{_docdir}/%{name}/${f}
 done
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/CRRCsim.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -167,21 +142,12 @@ SentUpstream: 2014-07-11
    -->
 </application>
 EOF
+%oreon_autofiles crrcsim-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%{_bindir}/crrcsim
-%{_datadir}/appdata/*.appdata.xml
-%{_datadir}/applications/CRRCsim.desktop
-%{_datadir}/%{name}/
-%{_mandir}/man1/%{name}.1*
-%dir %{_docdir}/%{name}/
-%{_docdir}/%{name}/AUTHORS
-%{_docdir}/%{name}/COPYING
-%{_docdir}/%{name}/HISTORY
-
-%files doc
-# all documentation in this package (including the license)
-%{_docdir}/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n crrcsim-doc -f %{oreon_filedir}/crrcsim-doc.list
 
 %changelog
+
 %autochangelog

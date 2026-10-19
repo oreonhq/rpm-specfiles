@@ -1,49 +1,43 @@
 %global source0_hash 53bbd339e6a11efca07c619a615c7c188a68bb2be849a1cb7efc3dd4d9ae85ae
-
-# Perform optional tests
 %bcond_without perl_Bytes_Random_Secure_enables_optional_test
-
 Name:           perl-Bytes-Random-Secure
 Version:        0.29
-Release:        32%{?dist}
+Release:        1%{?dist}
 Summary:        Perl extension to generate cryptographically-secure random bytes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Bytes-Random-Secure
 Source0:        https://cpan.metacpan.org/modules/by-module/Bytes/Bytes-Random-Secure-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.6
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Crypt::Random::Seed)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(Math::Random::ISAAC)
-BuildRequires:  perl(MIME::Base64)
-BuildRequires:  perl(MIME::QuotedPrint) >= 3.03
-BuildRequires:  perl(Scalar::Util) >= 1.21
-# Tests:
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(List::Util)
-BuildRequires:  perl(Test::More) >= 0.98
-BuildRequires:  perl(Time::HiRes)
 %if %{with perl_Bytes_Random_Secure_enables_optional_test}
-# Optional tests:
-BuildRequires:  perl(Statistics::Basic)
-BuildRequires:  perl(Test::Warn)
 %endif
 Requires:       perl(Scalar::Util) >= 1.21
 Requires:       perl(MIME::QuotedPrint) >= 3.03
-
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((MIME::QuotedPrint|Scalar::Util)\\)$
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Crypt::Random::Seed)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(List::Util)
+BuildRequires:  perl(MIME::Base64)
+BuildRequires:  perl(MIME::QuotedPrint)
+BuildRequires:  perl(Math::Random::ISAAC)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Statistics::Basic)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Warn)
+BuildRequires:  perl(Time::HiRes)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Bytes::Random::Secure provides two interfaces for obtaining crypto-quality
 random bytes. The simple interface is built around plain functions. For
@@ -62,12 +56,12 @@ Requires:       perl(MIME::QuotedPrint) >= 3.03
 Requires:       perl(Statistics::Basic)
 Requires:       perl(Test::Warn)
 %endif
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Bytes-Random-Secure-%{version}
@@ -88,36 +82,28 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
-# Inspects unrelated files
 rm %{buildroot}%{_libexecdir}/%{name}/t/00-boilerplate.t
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%doc Changes README examples
-%dir %{perl_vendorlib}/Bytes
-%dir %{perl_vendorlib}/Bytes/Random
-%{perl_vendorlib}/Bytes/Random/Secure.pm
-%{_mandir}/man3/Bytes::Random::Secure.*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Bytes-Random-Secure-tests -f %{oreon_filedir}/perl-Bytes-Random-Secure-tests.list
 
 %changelog
+
 %autochangelog

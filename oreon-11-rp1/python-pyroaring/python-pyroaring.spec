@@ -1,57 +1,39 @@
-%global source0_hash none
-
+%global source0_hash f02e4021397ae02a139defdc6813b9942ab163de90affddd4ce4efbac299f619
 Name:           python-pyroaring
 Version:        1.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Library for handling efficiently sorted integer sets.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Ezibenroc/PyRoaringBitMap
-Source:         %{pypi_source pyroaring}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyroaring/pyroaring-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyroaring' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pyroaring = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyroaring
-Summary:        %{summary}
-
-%description -n python3-pyroaring %_description
-
+Summary:        Library for handling efficiently sorted integer sets.
+%description -n python3-pyroaring
 
 %prep
-%autosetup -p1 -n pyroaring-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyroaring-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyroaring usr/lib/python3*/site-packages/pyroaring* usr/lib64/python3*/site-packages/pyroaring* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyroaring* usr/lib64/python3*/site-packages/pyroaring* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyroaring -f %{pyproject_files}
+%files
+%files -n python3-pyroaring -f %{oreon_filedir}/python3-pyroaring.list
 
 %changelog
+
 %autochangelog

@@ -1,38 +1,29 @@
 %global source0_hash 25c12d93d53988f3caf9965236ed379f167abde3ea4cc633b134ee6254d87ca1
-
-%if ! 0%{?rhel} || 0%{?rhel} > 8
-%bcond scons_quirk 0
-%else
 %bcond scons_quirk 1
-%endif
-
 %if %{without scons_quirk}
 %global scons scons
 %else
 %global scons scons-3
 %endif
-
 Summary:        Free firewire audio driver library
 Name:           libffado
 Version:        2.5.0
-Release:        %autorelease
-# Automatically converted from old format: GPLv2 or GPLv3 - review is highly recommended.
+Release:        1%{?dist}
 License:        GPL-2.0-only OR GPL-3.0-only
 URL:            http://www.ffado.org/
 Source0:        http://www.ffado.org/files/%{name}-%{version}.tgz
-# The trunk is tarballed as follows:
-# bash libffado-snapshot.sh 2088
-# The fetch script
 Source9:        libffado-snapshot.sh
 Patch0:         libffado-2.4.4-no-test-apps.patch
 Patch1:         libffado-2.4.4-icon-name.patch
 Patch2:         libffado-2.4.4-scons-quirk.patch
-
+%if %{without scons_quirk}
+%else
+%endif
+ExcludeArch:    s390 s390x
+# oreon:deps
 BuildRequires:  alsa-lib-devel
 BuildRequires:  dbus-c++-devel
 BuildRequires:  dbus-devel
-BuildRequires:  python3-dbus
-BuildRequires:  python3-rpm-macros
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  glibmm24-devel
@@ -43,18 +34,14 @@ BuildRequires:  libiec61883-devel
 BuildRequires:  libraw1394-devel
 BuildRequires:  libxml++-devel
 BuildRequires:  pkgconfig
-BuildRequires:  python3-qt5-devel
+BuildRequires:  python3-dbus
 BuildRequires:  python3-devel
-%if %{without scons_quirk}
-BuildRequires:  python3-scons >= 3.0.2
-%else
+BuildRequires:  python3-qt5-devel
+BuildRequires:  python3-rpm-macros
 BuildRequires:  python3-scons
-%endif
 BuildRequires:  python3dist(setuptools)
 BuildRequires:  rpm_macro(py3_shebang_fix)
-ExcludeArch:    s390 s390x
-
-
+# /oreon:deps
 %description
 The FFADO project aims to provide a generic, open-source solution for the
 support of FireWire based audio devices for the Linux platform. It is the
@@ -62,30 +49,23 @@ successor of the FreeBoB project.
 
 %package devel
 Summary:        Free firewire audio driver library development headers
-# Automatically converted from old format: GPLv2 or GPLv3 - review is highly recommended.
 License:        GPL-2.0-only OR GPL-3.0-only
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files needed to build applications against libffado.
 
 %package -n ffado
 Summary:        Free firewire audio driver library applications and utilities
-# support/tools/* is GPLv3
-# Some files in support/mixer-qt4/ffado are GPLv3+
-# The rest is GPLv2 or GPLv3
-# Automatically converted from old format: GPLv3 and GPLv3+ and (GPLv2 or GPLv3) - review is highly recommended.
 License:        GPL-3.0-only AND GPL-3.0-or-later AND ( GPL-2.0-only OR GPL-3.0-only )
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       dbus
 Requires:       python3-dbus
 Requires:       python3-qt5
-
 %description -n ffado
 Applications and utilities for use with libffado.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -N
@@ -102,6 +82,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     support/tools/*.py support/tools/SConscript
 
 %build
+
 export CFLAGS="%{optflags} -ffast-math"
 export CXXFLAGS="%{optflags} -ffast-math --std=gnu++11"
 export LDFLAGS="%{build_ldflags}"
@@ -118,47 +99,22 @@ export LDFLAGS="%{build_ldflags}"
       PYPKGDIR=%{python3_sitelib}/ffado/ \
       PYTHON_INTERPRETER=/usr/bin/python3 \
       BUILD_TESTS=1
-
 %install
-# Exporting flags so that the install does not trigger another build
 export CFLAGS="%{optflags} -ffast-math"
 export CXXFLAGS="%{optflags} -ffast-math --std=gnu++11"
 export LDFLAGS="%{build_ldflags}"
 %{scons} DESTDIR=%{buildroot} PREFIX=%{_prefix}\
       install
-
-# Install ffado-test RHBZ#805940
 install -m 755 tests/ffado-test %{buildroot}%{_bindir}
-
 %ldconfig_scriptlets
+%oreon_autofiles ffado usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE.*
-%doc AUTHORS ChangeLog README
-%{_libdir}/libffado.so.*
-%dir %{_datadir}/libffado/
-%{_datadir}/libffado/configuration
-%{_prefix}/lib/udev/rules.d/*
-%{_libdir}/libffado
-
-%files devel
-%doc doc/reference/html/
-%{_includedir}/libffado/
-%{_libdir}/pkgconfig/libffado.pc
-%{_libdir}/libffado.so
-
-%files -n ffado
-%{_mandir}/man1/ffado-*.1*
-%{_bindir}/*
-%{_datadir}/libffado/*.xml
-%{_datadir}/libffado/icons/
-%{_datadir}/dbus-1/services/org.ffado.Control.service
-%{_datadir}/applications/org.ffado.FfadoMixer.desktop
-%{_datadir}/icons/hicolor/64x64/apps/hi64-apps-ffado.png
-%{_datadir}/metainfo/org.ffado.FfadoMixer.metainfo.xml
-%{python3_sitelib}/ffado/
-
+%files -f %{oreon_filedir}/main.list
+%files -n libffado-devel -f %{oreon_filedir}/libffado-devel.list
+%files -n ffado -f %{oreon_filedir}/ffado.list
 
 %changelog
+
 %autochangelog
 

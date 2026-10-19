@@ -1,68 +1,63 @@
 %global source0_hash f8a096e0f54d2dbba2dbf606014ef1cbd00f191b3b47713c0e0d9b0b692a0cfb
-
-# Created by pyp2rpm-3.3.5
-
 Name:           pmbootstrap
 Version:        3.9.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A sophisticated chroot/build/flash tool to develop and install postmarketOS
-
 License:        GPL-3.0-only
 URL:            https://www.postmarketos.org
-# cannot use %%{pypi_source} due to
-# https://gitlab.com/postmarketOS/pmbootstrap/-/issues/2009
 Source0:        https://gitlab.postmarketos.org/postmarketOS/%{name}/-/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-# s390x is currently unsupported:
-# https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/blob/3.9.0/pmb/core/arch.py#L84
-# which is then used in
-# https://gitlab.postmarketos.org/postmarketOS/pmbootstrap/-/blob/3.9.0/pmb/core/arch.py#L309
 ExcludeArch:    s390x
-
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(argcomplete)
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(wheel)
-
-BuildRequires:  /usr/bin/openssl
-BuildRequires:  git
-BuildRequires:  kpartx
-BuildRequires:  /usr/bin/ps
-
 Requires:       openssl
 Requires:       git
 Requires:       kpartx
 Requires:       util-linux
 Requires:       /usr/bin/ps
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0.0
+Requires:       python3-pmbootstrap = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pmbootstrap+test
+Summary:        Metapackage for python3-pmbootstrap test extras
+Requires:       python3-pmbootstrap = %{version}-%{release}
+Provides:       python3dist(pmbootstrap[test]) = %{version}-%{release}
+
+%description -n python3-pmbootstrap+test
+Metapackage for python3-pmbootstrap test extras.
+
+%package -n       python3-pmbootstrap+completion
+Summary:        Metapackage for python3-pmbootstrap completion extras
+Requires:       python3-pmbootstrap = %{version}-%{release}
+Provides:       python3dist(pmbootstrap[completion]) = %{version}-%{release}
+
+%description -n python3-pmbootstrap+completion
+Metapackage for python3-pmbootstrap completion extras.
 
 %description
 Sophisticated chroot/build/flash tool to develop and install postmarketOS.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version}
 # Remove bundled egg-info
 rm -rf %{name}.egg-info
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l pmb
+%oreon_autofiles main
 
 %check
-%pytest -k "not pkgrepo_pmaports and not random_valid_deviceinfos"
 
-%files -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%{_bindir}/%{name}
+%pytest -k "not pkgrepo_pmaports and not random_valid_deviceinfos"
+%files
 
 %changelog
+
 %autochangelog

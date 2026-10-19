@@ -1,29 +1,27 @@
-%global source0_hash 78914a8e127d776f1cf71b095dc564ade60c1cf8d497f65f3390167a11a121bf
-
+%global source0_hash 728b522b3bb05580c26e374bfae2a262bf8007b3b2c7d4c9480e4363953270c7
 %bcond_without openmpi
 %bcond mpich %[!(0%{?rhel} >= 10)]
-
-Summary: Intel MPI benchmarks
+Summary:        Intel MPI benchmarks
 Name:    intel-mpi-benchmarks
 Version: 2021.11
-Release: %autorelease
+Release:        1%{?dist}
 License: BSD-3-Clause
 URL:     https://software.intel.com/en-us/articles/intel-mpi-benchmarks
-Source0: https://github.com/intel/mpi-benchmarks/archive/IMB-v%{version}.tar.gz
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: gcc-c++
-# https://bugzilla.redhat.com/show_bug.cgi?id=2303465
-# Not worth fixing. Open MPI is no longer built on ix86.
+Source0:        https://github.com/intel/mpi-benchmarks/archive/IMB-v%{version}.tar.gz
 ExcludeArch: %{ix86}
-
 %global desc The Intel MPI Benchmarks perform a set of MPI performance measurements for\
 point-to-point and global communication operations for a range of message\
 sizes. The generated benchmark data fully characterizes:\
  - Performance of a cluster system, including node performance, network\
    latency, and throughput\
  - Efficiency of the MPI implementation used
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  mpich-devel
+BuildRequires:  openmpi-devel
+# /oreon:deps
 %description
 %{desc}
 
@@ -37,7 +35,6 @@ This package contains the license of Intel MPI benchmarks.
 %package openmpi
 Summary: Intel MPI benchmarks compiled against openmpi
 BuildRequires: openmpi-devel
-# Require explicitly for dir ownership and to guarantee the pickup of the right runtime
 Requires: openmpi
 Requires: %{name}-license = %{version}-%{release}
 Obsoletes: mpitests-openmpi < 7.4
@@ -51,7 +48,6 @@ This package was built against the Open MPI implementation of MPI.
 %package mpich
 Summary: Intel MPI benchmarks compiled against mpich
 BuildRequires: mpich-devel
-# Require explicitly for dir ownership and to guarantee the pickup of the right runtime
 Requires: mpich
 Requires: %{name}-license = %{version}-%{release}
 Obsoletes: mpitests-mpich < 7.4
@@ -68,10 +64,10 @@ This package was built against the MPICH implementation of MPI.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n mpi-benchmarks-IMB-v%{version}
-
+%global oreon_srcdir mpi-benchmarks-IMB-v%{version}
+%oreon_prep
 %build
+
 do_build() {
   mkdir .$MPI_COMPILER
   cp -al * .$MPI_COMPILER
@@ -82,20 +78,16 @@ do_build() {
   make -f Makefile OPTFLAGS="%{optflags}" MPI_HOME="$MPI_HOME" all
   cd ..
 }
-
-# do N builds, one for each mpi stack
 %if %{with openmpi}
 %{_openmpi_load}
 do_build
 %{_openmpi_unload}
 %endif
-
 %if %{with mpich}
 %{_mpich_load}
 do_build
 %{_mpich_unload}
 %endif
-
 %install
 do_install() {
   mkdir -p %{buildroot}$MPI_BIN
@@ -105,32 +97,22 @@ do_install() {
   done
   cd ..
 }
-
-# do N installs, one for each mpi stack
 %if %{with openmpi}
 %{_openmpi_load}
 do_install
 %{_openmpi_unload}
 %endif
-
 %if %{with mpich}
 %{_mpich_load}
 do_install
 %{_mpich_unload}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
-%files license
-%license license/{,use-of-trademark-}license.txt
-
-%if %{with openmpi}
-%files openmpi
-%{_libdir}/openmpi/bin/IMB-{MPI1,EXT,IO,NBC,RMA,MT,P2P}
-%endif
-
-%if %{with mpich}
-%files mpich
-%{_libdir}/mpich/bin/IMB-{MPI1,EXT,IO,NBC,RMA,MT,P2P}
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n intel-mpi-benchmarks-license -f %{oreon_filedir}/intel-mpi-benchmarks-license.list
+%files -n intel-mpi-benchmarks-openmpi -f %{oreon_filedir}/intel-mpi-benchmarks-openmpi.list
+%files -n intel-mpi-benchmarks-mpich -f %{oreon_filedir}/intel-mpi-benchmarks-mpich.list
 
 %changelog
+
 %autochangelog

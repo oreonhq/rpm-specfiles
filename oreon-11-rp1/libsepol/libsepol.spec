@@ -1,29 +1,23 @@
 %global source0_hash 79f3d2c88f44b7eb5cf54d9792e03232297e17f97a179163f2750099a00f164d
 %global source1_hash ae72650075dd2e29bbf0ac35e3b07254f13c2c0acb19501cb2c6ade73c8f0319
 %global source2_hash caf7cb1981e2f5fa5952c2f3a11f9247221d16df4d9111ce15164a64675fc452
-
-Summary: SELinux binary policy manipulation library
+Summary:        SELinux binary policy manipulation library
 Name: libsepol
 Version: 3.11
-Release: %autorelease
+Release:        1%{?dist}
 License: LGPL-2.1-or-later
-Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsepol-%{version}.tar.gz
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsepol-%{version}.tar.gz
 Source1: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsepol-%{version}.tar.gz.asc
 Source2: https://github.com/bachradsusi.gpg
 URL: https://github.com/SELinuxProject/selinux/wiki
 VCS: git:https://github.com/SELinuxProject/selinux.git
-# $ git clone https://github.com/fedora-selinux/selinux.git
-# $ cd selinux
-# $ git format-patch -N libsepol-3.11 -- libsepol
-# $ i=1; for j in 0*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
-# Patch list start
-# Patch list end
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: flex
-BuildRequires: gnupg2
 Obsoletes: %{name}-compat = 3.1-4
-
+# oreon:deps
+BuildRequires:  flex
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  make
+# /oreon:deps
 %description
 Security-enhanced Linux is a feature of the Linux® kernel and a number
 of utilities with enhanced security functionality designed to add
@@ -43,7 +37,6 @@ on binary policies such as customizing policy boolean settings.
 %package devel
 Summary: Header files and libraries used to build policy manipulation tools
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The libsepol-devel package contains the libraries and header files
 needed for developing applications that manipulate binary policies. 
@@ -51,7 +44,6 @@ needed for developing applications that manipulate binary policies.
 %package static
 Summary: static libraries used to build policy manipulation tools
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 The libsepol-static package contains the static libraries and header files
 needed for developing applications that manipulate binary policies. 
@@ -59,11 +51,11 @@ needed for developing applications that manipulate binary policies.
 %package utils
 Summary: SELinux libsepol utilities
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description utils
 The libsepol-utils package contains the utilities
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -76,10 +68,10 @@ sed -i 's/fpic/fPIC/g' src/Makefile
 %endif
 
 %build
+
 %set_build_flags
 CFLAGS="$CFLAGS -fno-semantic-interposition"
 %make_build LIBDIR="%{_libdir}"
-
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{_libdir} 
 mkdir -p ${RPM_BUILD_ROOT}%{_includedir} 
@@ -89,33 +81,13 @@ mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man8
 %make_install LIBDIR="%{_libdir}" SHLIBDIR="%{_libdir}"
 rm -rf ${RPM_BUILD_ROOT}%{_mandir}/man8/gen*
 rm -rf ${RPM_BUILD_ROOT}%{_mandir}/ru/man8
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/*/lib*.so.*
 
-%files static
-%{_libdir}/libsepol.a
-
-%files devel
-%{_libdir}/libsepol.so
-%{_libdir}/pkgconfig/libsepol.pc
-%{_includedir}/sepol/*.h
-%{_mandir}/man3/*.3*
-%dir %{_includedir}/sepol
-%dir %{_includedir}/sepol/policydb
-%{_includedir}/sepol/policydb/*.h
-%dir %{_includedir}/sepol/cil
-%{_includedir}/sepol/cil/*.h
-
-%files
-%license LICENSE
-%{_libdir}/libsepol.so.2
-
-%files utils
-%{_bindir}/chkcon
-%{_bindir}/sepol_check_access
-%{_bindir}/sepol_compute_av
-%{_bindir}/sepol_compute_member
-%{_bindir}/sepol_compute_relabel
-%{_bindir}/sepol_validate_transition
-%{_mandir}/man8/chkcon.8*
+%files -f %{oreon_filedir}/main.list
+%files -n libsepol-devel -f %{oreon_filedir}/libsepol-devel.list
+%files -n libsepol-static -f %{oreon_filedir}/libsepol-static.list
+%files -n libsepol-utils -f %{oreon_filedir}/libsepol-utils.list
 
 %changelog
+
 %autochangelog

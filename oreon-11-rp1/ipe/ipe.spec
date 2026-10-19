@@ -1,47 +1,37 @@
 %global source0_hash 9228650edc48ad5deeab5d92272e242e906f90d292c90af132a3f20d9354735a
-
 %global majorversion 7.2
-
 Name:           ipe
 Version:        7.2.30
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Drawing editor for creating figures in PDF or PostScript formats
-# GPLv2, with an exception for the CGAL libraries.
-# Automatically converted from old format: GPLv2+ with exceptions - review is highly recommended.
 License:        LicenseRef-Callaway-GPLv2+-with-exceptions
 URL:            http://ipe.otfried.org/
 Source0:        https://github.com/otfried/%{name}/archive/refs/tags/v%{version}.tar.gz
 Source1:        %{name}.desktop
 Patch0:         %{name}-%{version}-gcc11.patch
-
-%if 0%{?fedora} >= 39
-ExcludeArch:    %{ix86}
-%endif
-
-BuildRequires:	gcc-c++
-BuildRequires:	desktop-file-utils
-BuildRequires:	pkgconfig
-BuildRequires:	qt6-qtbase-devel
-BuildRequires:	cairo-devel
-BuildRequires:	freetype-devel
-BuildRequires:	libpng-devel
-BuildRequires:	lua-devel
-BuildRequires:	curl-devel
-BuildRequires:	gsl-devel
-BuildRequires:	libjpeg-turbo-devel
-BuildRequires:	libspiro-devel
-BuildRequires:	qtspell-qt6-devel
-BuildRequires:	make
-
 Requires:       tex(latex)
 Requires:       urw-fonts
 Requires:       xdg-utils
 Requires:       qt5-qtsvg
-
 Provides:       ipe(api) = %{version}
 Provides:       ipetoipe = %{version}
 Provides:       ipetopng = %{version}
-
+# oreon:deps
+BuildRequires:  cairo-devel
+BuildRequires:  curl-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  freetype-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gsl-devel
+BuildRequires:  libjpeg-turbo-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libspiro-devel
+BuildRequires:  lua-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qtspell-qt6-devel
+# /oreon:deps
 %description
 Ipe is a drawing editor for creating figures in PDF or (encapsulated)
 Postscript format. It supports making small figures for inclusion into
@@ -64,6 +54,7 @@ Requires: %{name} = %{version}-%{release}
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -n %{name}-%{version} -q
@@ -73,8 +64,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find src -type f -exec chmod -x {} +
 
 %build
-export QTDIR=%{qtdir}
 
+export QTDIR=%{qtdir}
 pushd src
 %make_build LUA_CFLAGS="`pkg-config --cflags lua`" \
      LUA_LIBS="`pkg-config --libs lua`" \
@@ -83,7 +74,6 @@ pushd src
      IPELETDIR="%{_libdir}/%{name}/%{version}/ipelets" \
      IPECURL=1 IPEGSL=1
 popd 
-
 %install
 pushd src
 make INSTALL_ROOT=%{buildroot} install \
@@ -91,56 +81,13 @@ make INSTALL_ROOT=%{buildroot} install \
      IPELETDIR="%{_libdir}/%{name}/%{version}/ipelets" \
      INSTALL_PROGRAMS="install -m 0755"
 popd
-
-# Install desktop file
 desktop-file-install --dir %{buildroot}%{_datadir}/applications %{SOURCE1}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license doc/gpl.txt
-%{_bindir}/ipe
-%{_bindir}/ipe6upgrade
-%{_bindir}/ipecurl
-%{_bindir}/ipeextract
-%{_bindir}/iperender
-%{_bindir}/iperender-par
-%{_bindir}/ipescript
-%{_bindir}/ipetoipe
-%{_bindir}/ipepresenter
-
-%{_libdir}/libipe.so.%{version}
-%{_libdir}/libipeui.so.%{version}
-%{_libdir}/libipecairo.so.%{version}
-%{_libdir}/libipecanvas.so.%{version}
-%{_libdir}/libipelua.so.%{version}
-
-%dir %{_libdir}/ipe
-%{_libdir}/ipe/%{version}/ipelets/*
-
-%dir %{_datadir}/ipe
-%dir %{_datadir}/ipe/%{version}
-%{_datadir}/ipe/%{version}/icons
-%{_datadir}/ipe/%{version}/lua
-%{_datadir}/ipe/%{version}/styles
-
-%{_datadir}/applications/*%{name}*.desktop
-
-%{_mandir}/man1/ipe.1.gz
-%{_mandir}/man1/ipe6upgrade.1.gz
-%{_mandir}/man1/ipeextract.1.gz
-%{_mandir}/man1/iperender.1.gz
-%{_mandir}/man1/ipescript.1.gz
-%{_mandir}/man1/ipetoipe.1.gz
-
-%files devel
-%{_includedir}/*.h
-%{_libdir}/libipe.so
-%{_libdir}/libipeui.so
-%{_libdir}/libipecairo.so
-%{_libdir}/libipecanvas.so
-%{_libdir}/libipelua.so
-
-%files doc
-%{_datadir}/%{name}/%{version}
+%files -f %{oreon_filedir}/main.list
+%files -n ipe-devel -f %{oreon_filedir}/ipe-devel.list
+%files -n ipe-doc -f %{oreon_filedir}/ipe-doc.list
 
 %changelog
+
 %autochangelog

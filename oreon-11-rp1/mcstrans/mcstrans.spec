@@ -1,36 +1,34 @@
 %global source0_hash b7561929e50ec668b88b55377e64d0f71726a048236de2708a935f6c73962a7a
 %global source1_hash 2c52081e6753a2629c39962dfccad63dd8a1df4ebc88d246a5a63f56be3b74d6
 %global source2_hash caf7cb1981e2f5fa5952c2f3a11f9247221d16df4d9111ce15164a64675fc452
-
 %define libselinuxver 3.11-1
-
-Summary: SELinux Translation Daemon
+Summary:        SELinux Translation Daemon
 Name: mcstrans
 Version: 3.11
-Release: %autorelease
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 Url: https://github.com/SELinuxProject/selinux/wiki
 VCS: git:https://github.com/SELinuxProject/selinux.git
-Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz
 Source1: https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz.asc
 Source2: https://github.com/bachradsusi.gpg
 Source3: secolor.conf.8
-# fedora-selinux/selinux: git format-patch -N 3.11 -- mcstrans
-# i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
-# Patch list start
-# Patch list end
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: libselinux-devel >= %{version}
-BuildRequires: libcap-devel pcre2-devel libsepol-devel libsepol-static
-BuildRequires: systemd
-BuildRequires: gnupg2
 Requires: libselinux >= %{libselinuxver}
 Requires: pcre2
 %{?systemd_requires}
 Provides: setransd
 Provides: libsetrans
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  libcap-devel
+BuildRequires:  libselinux-devel
+BuildRequires:  libsepol-devel
+BuildRequires:  libsepol-static
+BuildRequires:  make
+BuildRequires:  pcre2-devel
+BuildRequires:  systemd
+# /oreon:deps
 %description
 Security-enhanced Linux is a feature of the Linux® kernel and a number
 of utilities with enhanced security functionality designed to add
@@ -46,6 +44,7 @@ mcstrans provides an translation daemon to translate SELinux categories
 from internal representations to user defined representation.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -53,54 +52,35 @@ test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "ore
 %autosetup -p 2 -n mcstrans-%{version}
 
 %build
+
 %set_build_flags
-
 %make_build LIBDIR="%{_libdir}"
-
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/%{_lib}
 mkdir -p %{buildroot}/%{_libdir}
 mkdir -p %{buildroot}%{_usr}/share/mcstrans
 mkdir -p %{buildroot}%{_sysconfdir}/selinux/mls/setrans.d
-
 %make_install LIBDIR="%{_libdir}" SHLIBDIR="%{_lib}" SBINDIR="%{_sbindir}"
 rm -f %{buildroot}%{_libdir}/*.a
 cp -r share/* %{buildroot}%{_usr}/share/mcstrans/
-# Systemd 
 mkdir -p %{buildroot}%{_unitdir}
 ln -s mcstrans.service %{buildroot}/%{_unitdir}/mcstransd.service
 rm -rf %{buildroot}/%{_sysconfdir}/rc.d/init.d/mcstrans
 install -m644 %{SOURCE3} %{buildroot}%{_mandir}/man8/
+%oreon_autofiles main
 
 %post 
+
 %systemd_post mcstransd.service
-
 %preun
+
 %systemd_preun mcstransd.service
-
 %postun 
+
 %systemd_postun mcstransd.service
-
-%files
-%{_mandir}/man8/mcs.8*
-%{_mandir}/man8/mcstransd.8*
-%{_mandir}/man5/setrans.conf.5*
-%{_mandir}/man8/secolor.conf.8*
-%{_sbindir}/mcstransd
-%{_unitdir}/mcstrans.service
-%{_unitdir}/mcstransd.service
-%dir %{_sysconfdir}/selinux/mls/setrans.d
-
-%dir %{_usr}/share/mcstrans
-
-%defattr(0644,root,root,0755)
-%dir %{_usr}/share/mcstrans/util
-%dir %{_usr}/share/mcstrans/examples
-%{_usr}/share/mcstrans/examples/*
-
-%defattr(0755,root,root,0755)
-%{_usr}/share/mcstrans/util/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

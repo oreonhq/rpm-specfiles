@@ -1,62 +1,43 @@
 %global source0_hash 2a7924c1dadf18b22a0eb8b06d1c7b01d5341707ec1641eb6fcc4fde0c3e8e5f
-
 Name:           python-colorlog
 Version:        6.12.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Add colours to the output of Python_s logging module.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/borntyping/python-colorlog
-Source:         %{pypi_source colorlog}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/colorlog/colorlog-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'colorlog' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-colorlog = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-colorlog
-Summary:        %{summary}
-
-%description -n python3-colorlog %_description
+Summary:        Add colours to the output of Python_s logging module.
+%description -n python3-colorlog
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-colorlog development
-
 
 %prep
-%autosetup -p1 -n colorlog-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir colorlog-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-colorlog usr/lib/python3*/site-packages/colorlog* usr/lib64/python3*/site-packages/colorlog* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/colorlog* usr/lib64/python3*/site-packages/colorlog* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-colorlog -f %{pyproject_files}
+%files
+%files -n python3-colorlog -f %{oreon_filedir}/python3-colorlog.list
 
 %changelog
+
 %autochangelog

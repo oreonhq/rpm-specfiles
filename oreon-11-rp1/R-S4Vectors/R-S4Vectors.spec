@@ -1,17 +1,15 @@
 %global source0_hash 5b54d27f1283a1e29b956a5eb0cad739e054fd3b067942f3beaf84d444b241ef
-
 Name:           R-S4Vectors
 Version:        %R_rpm_version 0.48.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        S4 implementation of vectors and lists
-
 License:        Artistic-2.0
 URL:            %{bioc_url}
-Source:         %{bioc_source}
-
-BuildRequires:  R-devel
+Source0:        https://bioconductor.org/packages/release/bioc/src/contrib/S4Vectors_%{version}.tar.gz
 Obsoletes:      %{name}-devel <= 0.48.0
-
+# oreon:deps
+BuildRequires:  R-devel
+# /oreon:deps
 %description
 The S4Vectors package defines the Vector and List virtual classes and a set of
 generic functions that extend the semantic of ordinary vectors and lists in R.
@@ -23,22 +21,19 @@ package and in other Bioconductor infrastructure packages).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples \--no-tests
 
-%files -f %{R_files}
+%R_check \--no-examples \--no-tests
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

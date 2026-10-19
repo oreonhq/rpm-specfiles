@@ -1,47 +1,14 @@
-%global source0_hash 253e2d606ba27167f261981499eaf4e4cbaa5fc82ca903b2f6b23f115cd424bc
-
-Summary: A set of commands for manipulating flat-text databases from the shell
+%global source0_hash 4137a4b5d5d4d02b59f676e25c0c68bdabf109e1837eb48d6f1634b054ebafd0
+Summary:        A set of commands for manipulating flat-text databases from the shell
 Name: perl-Fsdb
 Version: 3.17
 Epoch: 2
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-only
 URL: http://www.isi.edu/~johnh/SOFTWARE/FSDB/
-Source0: http://www.isi.edu/~johnh/SOFTWARE/FSDB/Fsdb-%{version}.tar.gz
+Source0:        http://www.isi.edu/~johnh/SOFTWARE/FSDB/Fsdb-%{version}.tar.gz
 BuildArch: noarch
-BuildRequires: make
-BuildRequires: perl
-BuildRequires: perl-generators
-BuildRequires: perl(Carp)
-BuildRequires: perl(Config)
-BuildRequires: perl(Exporter)
-BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: perl(File::Copy)
-BuildRequires: perl(Getopt::Long)
-BuildRequires: perl(IO::File)
-BuildRequires: perl(IO::Handle)
-BuildRequires: perl(IO::Uncompress::AnyUncompress)
-BuildRequires: perl(IPC::Cmd)
-BuildRequires: perl(Pod::Usage)
-BuildRequires: perl(Pod::Html)
-BuildRequires: perl(strict)
-BuildRequires: perl(Test::More)
-BuildRequires: perl(utf8)
-BuildRequires: perl(warnings)
-BuildRequires:  perl(XML::Simple)
-BuildRequires:  perl(YAML::XS)
-# following BRs are maybe not required?
-BuildRequires:  perl(IO::Compress::Bzip2)
-BuildRequires:  perl(IO::Compress::Gzip)
-BuildRequires:  perl(IO::Compress::Xz)
-# next two are needed to run test suites and are not autodetected
-BuildRequires:       perl(HTML::Parser)
-BuildRequires:       perl(Text::CSV_XS)
-# next two are needed to run build README, see https://bugzilla.redhat.com/show_bug.cgi?id=1163149
-BuildRequires: groff-base
-BuildRequires: perl-podlators
 Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-# next two are needed to run test suites and are not autodetected
 Requires:       perl(HTML::Parser)
 Requires:       perl(Text::CSV_XS)
 Requires:       perl(IO::Compress::Bzip2)
@@ -50,7 +17,36 @@ Requires:       perl(IO::Compress::Xz)
 Requires:  perl(IPC::Cmd)
 Requires:  perl(XML::Simple)
 Requires:  perl(YAML::XS)
-
+# oreon:deps
+BuildRequires:  groff-base
+BuildRequires:  make
+BuildRequires:  perl
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(HTML::Parser)
+BuildRequires:  perl(IO::Compress::Bzip2)
+BuildRequires:  perl(IO::Compress::Gzip)
+BuildRequires:  perl(IO::Compress::Xz)
+BuildRequires:  perl(IO::File)
+BuildRequires:  perl(IO::Handle)
+BuildRequires:  perl(IO::Uncompress::AnyUncompress)
+BuildRequires:  perl(IPC::Cmd)
+BuildRequires:  perl(Pod::Html)
+BuildRequires:  perl(Pod::Usage)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Text::CSV_XS)
+BuildRequires:  perl(XML::Simple)
+BuildRequires:  perl(YAML::XS)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-podlators
+# /oreon:deps
 %description
 FSDB is a package of commands for manipulating flat-ASCII databases from
 shell scripts.  FSDB is useful to process medium amounts of data (with
@@ -71,38 +67,28 @@ higher-level functions than one gets with raw perl or shell scripts.
 it is self-documenting, and is robust with good error and memory handling.)
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Fsdb-%{version}
 
 %build
+
 %{__perl} Makefile.PL INSTALLDIRS=vendor
 make %{?_smp_mflags}
-
 %install
-# buildroot removal left in for EPEL 5
 rm -rf $RPM_BUILD_ROOT
 make pure_install DESTDIR=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -type f -name .packlist -exec rm -f {} ';'
-# fix up g+s getting set on directories, and executables being 0555
-# (*I* think those are ok, but not rpmlint.)
 find $RPM_BUILD_ROOT -type d -exec chmod g-s {} ';'
-# find $RPM_BUILD_ROOT -executable -exec chmod 0755 {} ';'
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-# next line deprecated since rpm 4.4, I'm told.
-# -was-percent-defattr(-,root,root,-)
-# -was-percent-doc COPYING Fsdb.spec META.json MYMETA.json MYMETA.yml programize_module README README.html update_modules
-%doc README COPYING
-%{_bindir}/*
-%{perl_vendorlib}/Fsdb.pm
-%{perl_vendorlib}/Fsdb/
-%{_mandir}/man1/*.1*
-%{_mandir}/man3/*.3pm*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,63 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 8066e08bc4b8bb137788f03b11faf684937d11bb995a91b2db048e3e90e2e38a
 Name:           python-bluebell-akn
 Version:        5.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Transforms text to and from Akoma Ntoso
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
 URL:            https://github.com/laws-africa/bluebell
-Source:         %{pypi_source bluebell_akn}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/bluebell_akn/bluebell_akn-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'bluebell-akn' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(maturin) < 2
+BuildRequires:  python3dist(maturin) >= 1.8
+Requires:       python3-bluebell-akn = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-bluebell-akn
-Summary:        %{summary}
-
-%description -n python3-bluebell-akn %_description
+Summary:        Transforms text to and from Akoma Ntoso
+%description -n python3-bluebell-akn
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-bluebell-akn dev
-
 
 %prep
-%autosetup -p1 -n bluebell_akn-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir bluebell_akn-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-bluebell-akn usr/lib/python3*/site-packages/bluebell_akn* usr/lib64/python3*/site-packages/bluebell_akn* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/bluebell_akn* usr/lib64/python3*/site-packages/bluebell_akn* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-bluebell-akn -f %{pyproject_files}
-%{_bindir}/bluebell
+%files
+%files -n python3-bluebell-akn -f %{oreon_filedir}/python3-bluebell-akn.list
 
 %changelog
+
 %autochangelog

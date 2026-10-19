@@ -1,47 +1,32 @@
-%global source0_hash 34ff698c870c87e6e47a838eeaaae729fa73349139fc8db12211d2a22b78af6b
-
+%global source2_hash 0fe55175b96a8ea1c4b670cc3fe11d56b341e4eff81b161ea49958ae550be6ca
+%global source1_hash ba2415eb5511dd9f4e102db78000de8f27c66b021ad51668e3afa499a8869f87
+%global source0_hash 29a4457eb0ed35c902e6732d71f25e1d6c7fe7fa0eda0fb6c371ed6779b49fd6
 %bcond rebuild_mans 1
-
 Name:           wdiff
 Version:        1.2.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Compare files on a word per word basis
-
-# Entire source is GPL-3.0-or-later, except wdiff.texi and the documentation
-# built from it, including info, HTML, and PDF documentation, which is Latex2e.
 License:        GPL-3.0-or-later AND Latex2e
 URL:            https://www.gnu.org/software/wdiff/
 Source0:        https://ftp.gnu.org/gnu/wdiff/wdiff-%{version}.tar.gz
 Source1:        https://ftp.gnu.org/gnu/wdiff/wdiff-%{version}.tar.gz.sig
 Source2:        https://ftp.gnu.org/gnu/gnu-keyring.gpg
-
-# Fails to build with GCC 15 in default C23 mode
-# https://savannah.gnu.org/bugs/index.php?66692
-#
-# The redeclaration of strstr() is unnecessary since it is part of C89 and
-# later and we won’t need the gnulib replacement, so we patch out the
-# redeclaration rather than fixing its signature.
 Patch:          wdiff-1.2.2-c23.patch
-
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  automake
-BuildRequires:  autoconf
-BuildRequires:  libtool  
-
-BuildRequires:  gettext-devel
-BuildRequires:  ncurses-devel
-
-BuildRequires:  help2man
-BuildRequires:  texinfo  
-BuildRequires:  texinfo-tex
-BuildRequires:  tex(latex)
-
-BuildRequires:  gpgverify
-
-#https://fedorahosted.org/fpc/ticket/174
 Provides: bundled(gnulib) = 30.5.2012
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  gpgverify
+BuildRequires:  help2man
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  tex(latex)
+BuildRequires:  texinfo
+BuildRequires:  texinfo-tex
+# /oreon:deps
 %description
 The GNU wdiff program is a front end to diff for comparing files on a word per
 word basis. A word is anything between whitespace. This is useful for comparing
@@ -51,6 +36,7 @@ then executes diff on these files. It collects the diff output and uses it to
 produce a nicer display of word differences between the original files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -70,17 +56,14 @@ autoreconf -fiv
 %configure --enable-experimental="mdiff wdiff2 unify" 
 
 %build
-%make_build all
 
+%make_build all
 %if %{with rebuild_mans}
 rm -v man/mdiff.1 man/wdiff.1 man/wdiff2.1 man/unify.1
 %make_build -C man mdiff.1 wdiff.1 wdiff2.1 unify.1
 %endif
-
-# Make sure we rebuild the info page too.
 rm -v doc/wdiff.info
 %make_build -C doc info html pdf
-
 %install
 %make_install
 find '%{buildroot}' -type f -name '*gnulib.mo' -print -delete
@@ -96,28 +79,14 @@ install -t '%{buildroot}%{_pkgdocdir}' -p -m 0644 \
     THANKS \
     TODO
 cp -rp doc/wdiff.html %{buildroot}%{_pkgdocdir}/html
-
 %find_lang wdiff
+%oreon_autofiles main
 
 %check
+
 %make_build check
-
-%files -f wdiff.lang
-%license COPYING
-
-%{_bindir}/mdiff
-%{_bindir}/wdiff
-%{_bindir}/wdiff2
-%{_bindir}/unify
-
-%{_mandir}/man1/mdiff.1*
-%{_mandir}/man1/wdiff.1*
-%{_mandir}/man1/wdiff2.1*
-%{_mandir}/man1/unify.1*
-
-%{_infodir}/wdiff.info.*
-
-%{_pkgdocdir}/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

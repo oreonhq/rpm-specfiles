@@ -1,19 +1,19 @@
 %global source0_hash a249306e7c4a4f16b06f98e5f6bdfc851d08221e566620aee121313c2694758d
-
 %global srcname bpython
-
 Name:          bpython
-Summary:       Fancy curses interface to the Python interactive interpreter
+Summary:        Fancy curses interface to the Python interactive interpreter
 Version:       0.26
-Release:       3%{?dist}
+Release:        3%{?dist}
 URL:           http://www.bpython-interpreter.org/
 License:       MIT
-Source0:       https://github.com/bpython/bpython/archive/%{version}-release.tar.gz
+Source0:        https://github.com/bpython/bpython/archive/%{version}-release.tar.gz
 BuildArch:     noarch
-BuildRequires: desktop-file-utils
-BuildRequires: make
-BuildRequires: python3-devel
-BuildRequires: python3-sphinx
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 62.4.0
+Requires:       python3-bpython = %{version}-%{release}
+# /oreon:deps
 %description
 bpython is a fancy interface to the Python interpreter for Unix-like
 operating systems. It has the following features:
@@ -62,7 +62,6 @@ Summary:       Urwid interface to the Python 3 interactive interpreter
 Requires:      python3-bpython = %{version}-%{release}
 Requires:      python3dist(urwid)
 Requires:      python3dist(twisted)
-
 %description -n python3-bpython-urwid
 bpython is a fancy interface to the Python interpreter for Unix-like
 operating systems. It has the following features:
@@ -78,22 +77,16 @@ operating systems. It has the following features:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}-%{version}-release
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir %{name}-%{version}-release
+%oreon_prep
 %build
+
 %pyproject_wheel
 pushd doc/sphinx/
 make man
 popd
-
 %install
 %pyproject_install
-%pyproject_save_files -l %{srcname}
-
-# backwards compatibility links python3
 ln -s bpython %{buildroot}/%{_bindir}/bpython3
 ln -s bpython-curses %{buildroot}/%{_bindir}/bpython3-curses
 ln -s bpdb %{buildroot}%{_bindir}/bpdb3
@@ -102,28 +95,14 @@ install -m0644 -p -D doc/sphinx/build/man/bpython.1 \
     %{buildroot}%{_mandir}/man1/bpython.1
 install -m0644 -p -D doc/sphinx/build/man/bpython-config.5 \
     %{buildroot}%{_mandir}/man5/bpython-config.5
+%oreon_autofiles python3-bpython usr/lib/python3*/site-packages/bpython* usr/lib64/python3*/site-packages/bpython* usr/bin/*
+%oreon_autofiles python3-bpython-urwid usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/lib/python3*/site-packages/bpython* usr/lib64/python3*/site-packages/bpython* usr/bin/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n python3-bpython
-%license LICENSE
-%doc AUTHORS.rst CHANGELOG.rst README.rst
-%doc theme/light.theme theme/sample.theme theme/windows.theme
-%{_bindir}/bpdb
-%{_bindir}/bpython
-%{_bindir}/bpdb3
-%{_bindir}/bpython3
-%{_bindir}/bpython3-curses
-%{_bindir}/python3-bpython
-%{python3_sitelib}/bpython/
-%{python3_sitelib}/bpython-%{version}.dist-info/
-%{python3_sitelib}/bpdb/
-%{_mandir}/man1/bpython.1*
-%{_mandir}/man5/bpython-config.5*
-%{_datadir}/pixmaps/bpython.png
-%{_datadir}/metainfo/org.bpython-interpreter.bpython.metainfo.xml
-%{_datadir}/applications/org.bpython-interpreter.bpython.desktop
-
-%files -n python3-bpython-urwid
-%{_bindir}/bpython-urwid
+%files
+%files -n python3-bpython -f %{oreon_filedir}/python3-bpython.list
+%files -n python3-bpython-urwid -f %{oreon_filedir}/python3-bpython-urwid.list
 
 %changelog
+
 %autochangelog

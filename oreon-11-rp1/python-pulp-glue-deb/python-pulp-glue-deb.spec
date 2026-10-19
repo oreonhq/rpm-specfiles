@@ -1,57 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 5a0304326316beb4e66dc9af38d2ad6cc5340cd2784c9ade4247c11e5981f443
 Name:           python-pulp-glue-deb
 Version:        0.5.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Version agnostic glue library to talk to pulpcore_s REST API. _deb plugin_
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://github.com/pulp/pulp-cli-deb
-Source:         %{pypi_source pulp_glue_deb}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pulp_glue_deb/pulp_glue_deb-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pulp-glue-deb' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pulp-glue-deb = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pulp-glue-deb
-Summary:        %{summary}
-
-%description -n python3-pulp-glue-deb %_description
-
+Summary:        Version agnostic glue library to talk to pulpcore_s REST API. _deb plugin_
+# oreon:reqs
+Requires:       python3dist(pulp-glue) < 0.41
+Requires:       python3dist(pulp-glue) >= 0.23.2
+# /oreon:reqs
+%description -n python3-pulp-glue-deb
 
 %prep
-%autosetup -p1 -n pulp_glue_deb-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pulp_glue_deb-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pulp-glue-deb usr/lib/python3*/site-packages/pulp_glue_deb* usr/lib64/python3*/site-packages/pulp_glue_deb* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pulp_glue_deb* usr/lib64/python3*/site-packages/pulp_glue_deb* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pulp-glue-deb -f %{pyproject_files}
+%files
+%files -n python3-pulp-glue-deb -f %{oreon_filedir}/python3-pulp-glue-deb.list
 
 %changelog
+
 %autochangelog

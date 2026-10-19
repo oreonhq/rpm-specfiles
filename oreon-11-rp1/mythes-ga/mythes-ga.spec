@@ -1,26 +1,26 @@
 %global source0_hash 3558b4b7cae7836624036f17e28f3cdfe5b0f64e91d881ca63624324d6d367d8
-
 Name: mythes-ga
-Summary: Irish thesaurus
+Summary:        Irish thesaurus
 %global upstreamid 20071001
 Version: 0.%{upstreamid}
-Release: 37%{?dist}
-Source:        http://download.services.openoffice.org/contrib/dictionaries/thes_ga_IE_v2.zip
+Release:        1%{?dist}
+Source0:        http://download.services.openoffice.org/contrib/dictionaries/thes_ga_IE_v2.zip
 URL: https://cadhan.com/lsg/index-en.html
-BuildRequires: unzip
 License: GFDL-1.2-or-later
 BuildArch: noarch
 Requires: mythes
 Supplements: (mythes and langpacks-ga)
-
+# oreon:deps
+BuildRequires:  unzip
+# /oreon:deps
 %description
 Irish thesaurus.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c
-
+%oreon_prep
 %build
+
 for i in README_th_ga_IE_v2.txt; do
   if ! iconv -f utf-8 -t utf-8 -o /dev/null $i > /dev/null 2>&1; then
     iconv -f ISO-8859-1 -t UTF-8 $i > $i.new
@@ -31,16 +31,14 @@ for i in README_th_ga_IE_v2.txt; do
   touch -r $i $i.new
   mv -f $i.new $i
 done
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/mythes
 cp -p th_ga_IE_v2.* $RPM_BUILD_ROOT/%{_datadir}/mythes
+%oreon_autofiles main
 
-
-%files
-%doc README_th_ga_IE_v2.txt
-%{_datadir}/mythes/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20071001-37
 - Import

@@ -1,39 +1,35 @@
-%global source0_hash 366b325101ab1a9a4ee79fbdb8e3dd9e78bcc0a21c0f9b1966313aaed3d33502
-
+%global source0_hash f852093f9050022d699606eeabb38b24da5523d0212fab64dc4e4d3e46b56de1
 %global libzen_version  0.4.41
-
 Name:           mediainfo
 Version:        26.05
 Release:        1%{?dist}
 Summary:        Supplies technical and tag information about a video or audio file (CLI)
-
 License:        BSD-2-Clause
 URL:            http://mediaarea.net/MediaInfo
 Source0:        http://mediaarea.net/download/source/%{name}/%{version}/%{name}_%{version}.tar.xz
 Source1:        mediainfo-qt.desktop
 Source2:        mediainfo-qt.kde4.desktop
-
 ExclusiveArch:  %qt6_qtwebengine_arches
-
-BuildRequires:  make
-BuildRequires:  pkgconfig(libmediainfo) >= %{version}
-BuildRequires:  pkgconfig(libzen) >= %{libzen_version}
-BuildRequires:  wxWidgets-devel
-BuildRequires:  pkgconfig(zlib)
-BuildRequires:  libtool
-BuildRequires:  automake
-BuildRequires:  autoconf
-BuildRequires:  desktop-file-utils
+# oreon:deps
 BuildRequires:  ImageMagick
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  libappstream-glib
+BuildRequires:  libtool
+BuildRequires:  make
 BuildRequires:  perl(Pod::Man)
 BuildRequires:  pkgconfig(Qt6Core)
 BuildRequires:  pkgconfig(Qt6Gui)
 BuildRequires:  pkgconfig(Qt6Network)
-BuildRequires:  pkgconfig(Qt6Xml)
 BuildRequires:  pkgconfig(Qt6WebEngineWidgets)
+BuildRequires:  pkgconfig(Qt6Xml)
+BuildRequires:  pkgconfig(libmediainfo)
+BuildRequires:  pkgconfig(libzen)
+BuildRequires:  pkgconfig(zlib)
 BuildRequires:  qt6-linguist
-BuildRequires:  libappstream-glib
-
+BuildRequires:  wxWidgets-devel
+# /oreon:deps
 %description
 MediaInfo CLI (Command Line Interface).
 
@@ -61,7 +57,6 @@ Summary:    Supplies technical and tag information about a video or audio file (
 Requires:   libzen%{?_isa} >= %{libzen_version}
 Requires:   libmediainfo%{?_isa} >= %{version}
 Requires:   hicolor-icon-theme
-
 %description gui
 MediaInfo (Graphical User Interface).
 
@@ -88,7 +83,6 @@ What format (container) does MediaInfo support?
 Summary:    Supplies technical and tag information about a video or audio file (Qt GUI)
 Requires:   libzen%{?_isa} >= %{libzen_version}
 Requires:   libmediainfo%{?_isa} >= %{version}
-
 %description qt
 MediaInfo (Graphical User Interface).
 
@@ -112,6 +106,7 @@ What format (container) does MediaInfo support?
 * Subtitles: SRT, SSA, ASS, SAMI
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n MediaInfo
@@ -145,52 +140,38 @@ pushd Source/GUI/Qt/Qt_Translations_Updater
 popd
 
 %build
-# build CLI
+
 pushd Project/GNU/CLI
     %configure --enable-static=no
     %make_build
 popd
-
-# now build GUI
 pushd Project/GNU/GUI
     %configure --enable-static=no
     %make_build
 popd
-
-# now build Qt GUI
 pushd Project/QMake/GUI
     %{qmake_qt6}
     %make_build
 popd
-
-# generate manpages
 pushd debian
     for i in *.pod; do
         pod2man --center "User Commands" --release="MediaInfo %{version}" \
             $i >../${i/%pod/1}
     done
 popd
-
 %install
 pushd Project/GNU/CLI
     %make_install
 popd
-
 pushd Project/GNU/GUI
     %make_install
 popd
-
 pushd Project/QMake/GUI
-#     make install INSTALL_ROOT=%{buildroot}
     install -m 755 %{name}-qt %{buildroot}%{_bindir}
 popd
-
-# icon
 install -dm 755 %{buildroot}%{_datadir}/pixmaps
 install -m 644 -p Source/Resource/Image/MediaInfo.png \
     %{buildroot}%{_datadir}/pixmaps/%{name}.png
-
-# menu-entry
 install -dm 755 %{buildroot}%{_datadir}/applications
 desktop-file-install --dir="%{buildroot}%{_datadir}/applications" \
 Project/GNU/GUI/%{name}-gui.desktop
@@ -198,44 +179,20 @@ desktop-file-install --dir="%{buildroot}%{_datadir}/applications" %{SOURCE1}
 install -m 644 -p %{SOURCE2} %{buildroot}%{_datadir}/kservices5/ServiceMenus/%{name}-qt.desktop
 rm -rf %{buildroot}%{_datadir}/kde4
 rm %{buildroot}%{_datadir}/kservices5/ServiceMenus/%{name}-gui.desktop
-
 mkdir %{buildroot}%{_datadir}/appdata
 mv %{buildroot}%{_datadir}/metainfo/%{name}-gui.metainfo.xml %{buildroot}%{_datadir}/appdata/%{name}-gui.appdata.xml
 rm -rf %{buildroot}%{_datadir}/metainfo
-
-# manpages
 install -dm 755 %{buildroot}%{_mandir}/man1
 install -m 644 -p %{name}*.1 %{buildroot}%{_mandir}/man1/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
-
-%files
-%doc Release/ReadMe_CLI_Linux.txt History_CLI.txt
-%license License.html
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
-
-%files gui
-%doc Release/ReadMe_GUI_Linux.txt History_GUI.txt
-%{_bindir}/%{name}-gui
-%{_datadir}/applications/%{name}-gui.desktop
-%{_datadir}/pixmaps/*.png
-%{_datadir}/icons/hicolor/*/apps/*.png
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/pixmaps/%{name}.xpm
-%{_datadir}/apps/konqueror/servicemenus/%{name}-gui.desktop
-%{_datadir}/appdata/%{name}-gui.appdata.xml
-%{_mandir}/man1/%{name}-gui.1*
-
-%files qt
-%doc Release/ReadMe_GUI_Linux.txt History_GUI.txt
-%{_bindir}/%{name}-qt
-%{_datadir}/applications/%{name}-qt.desktop
-%{_datadir}/pixmaps/*.png
-%{_datadir}/icons/hicolor/*/apps/*.png
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/kservices5/ServiceMenus/%{name}-qt.desktop
+%files -f %{oreon_filedir}/main.list
+%files -n mediainfo-gui -f %{oreon_filedir}/mediainfo-gui.list
+%files -n mediainfo-qt -f %{oreon_filedir}/mediainfo-qt.list
 
 %changelog
+
 %autochangelog

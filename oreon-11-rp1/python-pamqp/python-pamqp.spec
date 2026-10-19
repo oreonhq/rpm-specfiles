@@ -1,62 +1,51 @@
-%global source0_hash none
-
+%global source0_hash 9dd13b828e346622793981f14a5df817fce5de998c746209d6c0154eb8403970
 Name:           python-pamqp
 Version:        4.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        RabbitMQ Focused AMQP low-level library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/gmr/pamqp
-Source:         %{pypi_source pamqp}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pamqp/pamqp-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-pamqp = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pamqp+codegen
+Summary:        Metapackage for python3-pamqp codegen extras
+Requires:       python3-pamqp = %{version}-%{release}
+Provides:       python3dist(pamqp[codegen]) = %{version}-%{release}
 
+%description -n python3-pamqp+codegen
+Metapackage for python3-pamqp codegen extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pamqp' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-pamqp
-Summary:        %{summary}
-
-%description -n python3-pamqp %_description
+Summary:        RabbitMQ Focused AMQP low-level library
+%description -n python3-pamqp
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pamqp codegen
-
 
 %prep
-%autosetup -p1 -n pamqp-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pamqp-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pamqp usr/lib/python3*/site-packages/pamqp* usr/lib64/python3*/site-packages/pamqp* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pamqp* usr/lib64/python3*/site-packages/pamqp* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pamqp -f %{pyproject_files}
+%files
+%files -n python3-pamqp -f %{oreon_filedir}/python3-pamqp.list
 
 %changelog
+
 %autochangelog

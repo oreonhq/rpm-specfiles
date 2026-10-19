@@ -1,31 +1,9 @@
-%global source0_hash de19d222d09e2171f47f8bbd6608e5648bd547c82543379bb8fb5ed2e379e141
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
+%global source1_hash de19d222d09e2171f47f8bbd6608e5648bd547c82543379bb8fb5ed2e379e141
+%global source0_hash 2a9dfafac9593d3093c3f5fc611682e712f08816414f210344ea7b719c085ff5
 %global rocm_release 7.1
 %global rocm_patch 1
 %global rocm_version %{rocm_release}.%{rocm_patch}
 %global upstreamname amdsmi
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -38,63 +16,40 @@
 %global pkg_suffix %{nil}
 %global pkg_module default
 %endif
-
-# Downloads its own googletest
-# Testing also depends on having AMD hardware cpu and/or gpu installed.
-# Not suitable for a general check
-#
-# Non root result for gfx1100 and this kernel 6.13.0-0.rc0.20241126git7eef7e306d3c.10.fc42.x86_64
-# 25 pass, 5 fail
-# No oops
 %bcond_with test
 %if %{with test}
 %global build_test ON
 %else
 %global build_test OFF
 %endif
-
 Name:       amdsmi%{pkg_suffix}
 Version:    %{rocm_version}
-Release:    5%{?dist}
-Summary:    AMD System Management Interface
-
+Release:        1%{?dist}
+Summary:        AMD System Management Interface
 License:    NCSA AND MIT AND BSD-3-Clause
 URL:        https://github.com/ROCm/%{upstreamname}
-Source0:    %{url}/archive/rocm-%{version}.tar.gz#/%{upstreamname}-%{version}.tar.gz
-# esmi_ib_library is not suitable for packaging
-# https://github.com/amd/esmi_ib_library/issues/13
-# This tag was choosen by the amdsmi project because 4.0+ introduced variables not
-# found in the upstream kernel.
+Source0:        https://github.com/ROCm/%{name}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{name}-%{version}.tar.gz
 %global esmi_ver 4.2
 Source1:    https://github.com/amd/esmi_ib_library/archive/refs/tags/esmi_pkg_ver-%{esmi_ver}.tar.gz
 Patch1:     0002-option-use-system-gtest.patch
 Patch2:     0003-test-client-includes-for-gcc-15.patch
-# SUSE 15.6 does not have filesystem
 Patch3:     0001-amdsmi-remove-unneeded-include-fileystem.patch
-# https://github.com/ROCm/amdsmi/pull/165
 Patch4:     0001-Fix-compilation-with-libdrm-2.4.130.patch
-
 ExclusiveArch: x86_64
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: kernel-devel
-BuildRequires: libdrm-devel
-BuildRequires: python3-devel
-
 %if %{with test}
 %if 0%{?suse_version}
-BuildRequires: gtest
 %else
-BuildRequires: gtest-devel
 %endif
 %endif
-
 Requires:      python3dist(pyyaml)
-
-# University of Illinois/NCSA Open Source License
 Provides: bundled(esmi_ib_library) = %{esmi_ver}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  kernel-devel
+BuildRequires:  libdrm-devel
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 The AMD System Management Interface Library, or AMD SMI library, is a C
 library for Linux that provides a user space interface for applications
@@ -103,7 +58,6 @@ to monitor and control AMD devices.
 %package devel
 Summary: Libraries and headers for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}
 
@@ -112,12 +66,12 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Summary:        Tests for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libdrm-devel
-
 %description test
 %{summary}
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{upstreamname}-rocm-%{version} -p1
@@ -154,6 +108,7 @@ sed -i '/#include <string.*/a#include <iomanip>' tests/amd_smi_test/test_common.
 sed -i 's@set(SHARE_INSTALL_PREFIX@#set(SHARE_INSTALL_PREFIX@' CMakeLists.txt
 
 %build
+
 %cmake \
     -DBUILD_KERNEL_ASM_DIR=/usr/include/asm \
     -DBUILD_TESTS=%build_test \
@@ -165,12 +120,9 @@ sed -i 's@set(SHARE_INSTALL_PREFIX@#set(SHARE_INSTALL_PREFIX@' CMakeLists.txt
     -DUSE_SYSTEM_GTEST=On \
 %endif
     %{nil}
-
 %cmake_build
-
 %install
 %cmake_install
-
 mkdir -p %{buildroot}/%{pkg_prefix}/lib/python%{python3_version}/site-packages
 if [ -d %{buildroot}%{pkg_prefix}/share/amd_smi/amdsmi ]; then
     mv %{buildroot}%{pkg_prefix}/share/amd_smi/amdsmi %{buildroot}/%{pkg_prefix}/lib/python%{python3_version}/site-packages
@@ -179,8 +131,6 @@ else
     mv %{buildroot}%{pkg_prefix}/share/amdsmi %{buildroot}/%{pkg_prefix}/lib/python%{python3_version}/site-packages
     mv %{buildroot}%{pkg_prefix}/share/pyproject.toml %{buildroot}/%{pkg_prefix}/lib/python%{python3_version}/site-packages/amdsmi/
 fi
-
-# Remove some things
 rm -rf %{buildroot}/%{pkg_prefix}/share/example
 rm -rf %{buildroot}/%{pkg_prefix}/share/amd_smi/example
 rm -rf %{buildroot}/%{pkg_prefix}/share/doc/amd_smi-asan/LICENSE.txt
@@ -191,46 +141,23 @@ rm -f %{buildroot}%{pkg_prefix}/share/_version.py
 rm -f %{buildroot}%{pkg_prefix}/share/amd_smi/_version.py
 rm -f %{buildroot}%{pkg_prefix}/share/setup.py
 rm -f %{buildroot}%{pkg_prefix}/share/amd_smi/setup.py
-
-# W: unstripped-binary-or-object /usr/lib/python3.13/site-packages/amdsmi/libamd_smi.so
-# Does an explict open, so can not just rm it
-# let's just strip it
 strip %{buildroot}/%{pkg_prefix}/lib/python%{python3_version}/site-packages/amdsmi/*.so
-# E: non-executable-script .../amdsmi_cli/amdsmi_cli_exceptions.py 644 /usr/bin/env python3
 chmod a+x %{buildroot}/%{pkg_prefix}/libexec/amdsmi_cli/amdsmi_*.py
-
 %if %{with test}
-# put the test files in a reasonable place
 mkdir %{buildroot}%{pkg_prefix}/share/amdsmi
 mv %{buildroot}%{pkg_prefix}/share/tests %{buildroot}%{pkg_prefix}/share/amdsmi/.
+%oreon_autofiles amdsmi-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %endif
-
 %if 0%{?suse_version}
 %post   -p /sbin/ldconfig
+
 %postun -p /sbin/ldconfig
+
 %endif
-
-%files
-%doc README.md
-%license LICENSE
-%license esmi_ib_library_License.txt 
-%{pkg_prefix}/%{pkg_libdir}/libamd_smi.so.*
-%{pkg_prefix}/%{pkg_libdir}/libgoamdsmi_shim64.so.*
-%{pkg_prefix}/bin/amd-smi
-%{pkg_prefix}/libexec/amdsmi_cli
-%{pkg_prefix}/lib/python%{python3_version}/site-packages/amdsmi
-
-%files devel
-%{pkg_prefix}/include/amd_smi/
-%{pkg_prefix}/include/*.h
-%{pkg_prefix}/%{pkg_libdir}/libamd_smi.so
-%{pkg_prefix}/%{pkg_libdir}/libgoamdsmi_shim64.so
-%{pkg_prefix}/%{pkg_libdir}/cmake/amd_smi/
-
-%if %{with test}
-%files test
-%{pkg_prefix}/share/amdsmi
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n amdsmi-devel -f %{oreon_filedir}/amdsmi-devel.list
 
 %changelog
+
 %autochangelog

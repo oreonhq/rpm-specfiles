@@ -1,23 +1,20 @@
 %global source0_hash 1695b1713341279b80cb51c7d3d793102c19793546bfff5b73e882f2e5dec9e8
-
 Name:		bio2jack
 Version:	0.9
-Release:	39%{?dist}
-# The license file says GPLv2+ but the source files say LGPLv2+.
-# The author of the software confirmed (via email) that it is 
-# actually LGPLv2+.
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Release:        39%{?dist}
 License:	LicenseRef-Callaway-LGPLv2+
-Summary:	A library for porting blocked io(OSS/ALSA) applications to jack
+Summary:        A library for porting blocked io(OSS/ALSA) applications to jack
 URL:		http://bio2jack.sourceforge.net/
-
-Source:		http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  gettext
-BuildRequires:	jack-audio-connection-kit-devel
-BuildRequires:	libsamplerate-devel
-BuildRequires:	libtool autoconf automake
-BuildRequires: make
-
+BuildRequires:  jack-audio-connection-kit-devel
+BuildRequires:  libsamplerate-devel
+BuildRequires:  libtool
+BuildRequires:  make
+# /oreon:deps
 %description
 Bio (blocked i/o) 2 jack is a library for enabling easy porting of blocked
 io(OSS/ALSA) applications to the jack sound server. This library allows the 
@@ -30,12 +27,12 @@ linked list of audio data buffers and the jack callback.
 Summary:	Development files for %{name}
 Requires:	jack-audio-connection-kit-devel
 Requires:	%{name} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}
@@ -47,27 +44,20 @@ rm -fr .libs *.o
 rm -f *.lo
 
 %build
+
 autoreconf -vif
 %configure --enable-static=no --enable-shared=yes
-
 make %{?_smp_mflags} V=1
-
 %install
 make install DESTDIR=%{buildroot}
-
-# Kill libtool archive
 find %{buildroot} -type f -name "*.la" -delete
-
 %ldconfig_scriptlets
+%oreon_autofiles bio2jack-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS ChangeLog README NEWS
-%{_libdir}/lib%{name}.so.*
-
-%files devel
-%{_bindir}/%{name}-config
-%{_includedir}/%{name}.h
-%{_libdir}/lib%{name}.so
+%files -f %{oreon_filedir}/main.list
+%files -n bio2jack-devel -f %{oreon_filedir}/bio2jack-devel.list
 
 %changelog
+
 %autochangelog

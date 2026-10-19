@@ -1,19 +1,15 @@
 %global source0_hash 72d4d585267ed7f03e1aa75087d96f4f8d49ee976c32d974c5ab1fef4d4f8305
-
 %global debug_package %{nil}
 %global monodir %{_prefix}/lib
 %global bootstrap 0
-
-Summary: NAnt is a build tool for Mono and .NET
+Summary:        NAnt is a build tool for Mono and .NET
 Name: nant
 Version: 0.92
-Release: 41%{?dist}
+Release:        1%{?dist}
 Epoch: 1
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 Url: http://nant.sourceforge.net/
-
-Source0: http://downloads.sourceforge.net/nant/%{name}-%{version}-src.tar.gz
+Source0:        http://downloads.sourceforge.net/nant/%{name}-%{version}-src.tar.gz
 Patch1: nant-0.92-no_ndoc.patch
 Patch2: nant-0.92-system_nunit.patch
 Patch3: nant-0.90-no_sharpcvslib.patch
@@ -23,32 +19,23 @@ Patch6: nant-0.92-no_netdumbster.patch
 Patch7: nant-fixmono42_scripttask.patch
 Patch8: nant-0.92-mono-4.5.patch
 Patch9: nant-0.92-mono-4.5-config.patch
-
-BuildRequires: make
-BuildRequires: mono-devel
-BuildRequires: nunit2-devel >= 2.6.4
 %if 0%{bootstrap}
-# Nothing here if we're bootstrapping
 %else
-BuildRequires: log4net-devel
 %endif
 Requires:      nunit2
-# Mono only available on these:
 ExclusiveArch: %mono_arches
-
-# nunit2 fails to build on armv7hl. Mono crashes. see bug 1923663
-# it is too much work to switch to nunit (version 3) at the moment.
 ExcludeArch:    armv7hl
-
 %if 0%{bootstrap}
-# In bootstrap mode, filter requires of the prebuilt DLLs. Some of these
-# require older mono runtime, creating broken rpm deps.
 %filter_requires_in %{_prefix}/lib/NAnt/
-# Also filter provides of the prebuilt DLLs
 %filter_provides_in %{_prefix}/lib/NAnt/
 %filter_setup
 %endif
-
+# oreon:deps
+BuildRequires:  log4net-devel
+BuildRequires:  make
+BuildRequires:  mono-devel
+BuildRequires:  nunit2-devel
+# /oreon:deps
 %description
 NAnt is a free .NET build tool. In theory it is kind of like make
 without make's wrinkles. In practice it's a lot like Ant.
@@ -56,18 +43,17 @@ without make's wrinkles. In practice it's a lot like Ant.
 %package docs
 Summary:	Documentation package for nant
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-
 %description docs
 Documentation for nant
 
 %package devel
 Summary:	Development file for nant
 Requires:	%{name} = %{epoch}:%{version}-%{release}
-
 %description devel
 Development file for %{name}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}
@@ -135,37 +121,26 @@ find . -name "*.sln" -print -exec sed -i 's/Format Version 10.00/Format Version 
 find . -name "*.csproj" -print -exec sed -i 's#ToolsVersion="3.5"#ToolsVersion="4.0"#g; s#<TargetFrameworkVersion>.*</TargetFrameworkVersion>##g; s#<PropertyGroup>#<PropertyGroup><TargetFrameworkVersion>v4.5</TargetFrameworkVersion>#g' {} \;
 
 %build
-make
 
+make
 %install
 make install prefix=%{_prefix} DESTDIR=%{buildroot}
 find examples -name \*.dll -o -name \*.exe|xargs rm -f
 rm -rf %{buildroot}%{_datadir}/NAnt/doc
 rm -rf %{buildroot}%{_prefix}/lib/doc/NAnt
-
-# Flush out the binary bits that we used to build, unless we're bootstrapping.
 %if 0%{bootstrap}
-# Do nothing
 %else
 rm -rf %{buildroot}%{_prefix}/lib/NAnt/bin/lib
 rm -rf %{buildroot}%{_prefix}/lib/NAnt/bin/log4net.dll
 %endif
-
 mkdir -p $RPM_BUILD_ROOT/%{_libdir}/pkgconfig
 test "%{_libdir}" = "%{_prefix}/lib" || mv $RPM_BUILD_ROOT/%{_prefix}/lib/pkgconfig/* $RPM_BUILD_ROOT/%{_libdir}/pkgconfig
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{!?_licensedir:%global license %%doc}
-%license COPYING.txt
-%doc README.txt doc/*.html
-%{_bindir}/nant
-%{monodir}/NAnt/
-
-%files docs
-%doc examples/* doc/help/*
-
-%files devel
-%{_libdir}/pkgconfig/nant.pc
+%files -f %{oreon_filedir}/main.list
+%files -n nant-docs -f %{oreon_filedir}/nant-docs.list
+%files -n nant-devel -f %{oreon_filedir}/nant-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,31 +1,12 @@
-%global source0_hash 1b308176c7f0dfb034be038970ecb6e1b860212377f7e71dacc7c7bf0e8c9ae3
-
+%global source0_hash 5a229f51180c756fda68d2adb764e1653fef1f4b5f05afa01b3163725f6adaac
 Name:           ulauncher
 Version:        5.16.2
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        Feature rich application Launcher for Linux
 BuildArch:      noarch
-
 License:        GPL-3.0-or-later
 URL:            https://github.com/Ulauncher/Ulauncher
-Source0:        %{url}/releases/download/%{version}/%{name}_%{version}.tar.gz
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  intltool
-BuildRequires:  keybinder3-devel
-BuildRequires:  python3-dbus
-BuildRequires:  python3-devel >= 3.6
-BuildRequires:  python3-distutils-extra
-# Need to call out setuptools since distutils-extra uses it, but doesn't list it as a requirement
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-gobject-devel >= 3.30
-BuildRequires:  python3-inotify
-BuildRequires:  python3-Levenshtein
-BuildRequires:  python3-pyxdg
-BuildRequires:  python3-websocket-client
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  python3dist(requests)
-BuildRequires:  pkgconfig(gtk+-3.0)
+Source0:        https://github.com/Ulauncher/Ulauncher/releases/download/%{version}/%{name}_%{version}.tar.gz
 Requires:       hicolor-icon-theme
 Requires:       keybinder3
 Requires:       webkit2gtk4.1
@@ -38,13 +19,30 @@ Requires:       python3-pyxdg
 Requires:       python3-websocket-client
 Requires:       wmctrl
 Recommends:     libappindicator-gtk3
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  intltool
+BuildRequires:  keybinder3-devel
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  python3-Levenshtein
+BuildRequires:  python3-dbus
+BuildRequires:  python3-devel
+BuildRequires:  python3-distutils-extra
+BuildRequires:  python3-gobject-devel
+BuildRequires:  python3-inotify
+BuildRequires:  python3-pyxdg
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-websocket-client
+BuildRequires:  python3dist(requests)
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Ulauncher is a fast application launcher for Linux. It's written in Python using
 GTK+, and features: App Search (fuzzy matching), Calculator, Extensions,
 Shortcuts, File browser mode and Custom Color Themes.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name} -p1
@@ -52,45 +50,26 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i "s|version=''|version='%{version}'|g" setup.py
 
 %build
-%py3_build
 
+%py3_build
 %install
 %py3_install
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
-
 %post
+
 %systemd_user_post %{name}.service
-
 %preun
+
 %systemd_user_preun %{name}.service
-
 %postun
-%systemd_user_postun_with_restart %{name}.service
 
-%files
-%license LICENSE
-%doc README.md AUTHORS
-%{_bindir}/%{name}
-%{_bindir}/%{name}-toggle
-%{_datadir}/%{name}/
-%{_datadir}/applications/*.desktop
-%dir %{_datadir}/icons/breeze/
-%dir %{_datadir}/icons/elementary/
-%dir %{_datadir}/icons/gnome/
-%dir %{_datadir}/icons/ubuntu-mono-dark/
-%dir %{_datadir}/icons/ubuntu-mono-light/
-%{_datadir}/icons/breeze/apps/48/%{name}-indicator.svg
-%{_datadir}/icons/elementary/scalable/apps/%{name}-indicator.svg
-%{_datadir}/icons/gnome/scalable/apps/%{name}-indicator.svg
-%{_datadir}/icons/gnome/scalable/apps/%{name}.svg
-%{_datadir}/icons/hicolor/*/apps/%{name}-indicator.svg
-%{_datadir}/icons/hicolor/*/apps/%{name}.svg
-%{_datadir}/icons/ubuntu-mono-*/scalable/apps/%{name}-indicator.svg
-%{_userunitdir}/%{name}.service
-%{python3_sitelib}/%{name}-*-py*.egg-info
-%{python3_sitelib}/%{name}/
+%systemd_user_postun_with_restart %{name}.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

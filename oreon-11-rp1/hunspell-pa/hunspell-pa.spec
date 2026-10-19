@@ -1,29 +1,28 @@
 %global source0_hash b3322235b821a3db6796a277c378f6c8d40614ca076673d9de34a8b3c35e3e73
-
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 %global dict_dirname hunspell 
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-pa
-Summary: Punjabi hunspell dictionaries
+Summary:        Punjabi hunspell dictionaries
 Version: 1.0.0
-Release: 29%{?dist}
+Release:        1%{?dist}
 Epoch: 1
 URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
 License: GPL-2.0-or-later
 BuildArch: noarch
-
 Requires: hunspell
 Supplements: (hunspell and langpacks-pa)
-
 Source0:        https://anishpatil.fedorapeople.org/pa_in.1.0.0.tar.gz
+# oreon:deps
 
+# /oreon:deps
 %description
 Punjabi hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -n pa_IN
 iconv -f ISO-8859-1 -t UTF-8 pa_IN/Copyright > pa_IN/Copyright.utf8
@@ -34,12 +33,11 @@ mv pa_IN/Copyright.utf8 pa_IN/Copyright
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p pa_IN/*.dic pa_IN/*.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+%oreon_autofiles main
 
-%files
-%doc pa_IN/README
-%license pa_IN/COPYING pa_IN/Copyright
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-29
 - Prepare for Oreon 11 (RP1)

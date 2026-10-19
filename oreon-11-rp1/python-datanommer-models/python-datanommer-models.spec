@@ -1,55 +1,42 @@
 %global source0_hash 36990209b94c2b834701cab243323044e6e77a2a9ea9f1ae86b039e4604d450f
-
 Name:           python-datanommer-models
 Version:        1.5.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        SQLAlchemy models for datanommer
-
 License:        GPL-3.0-or-later
 URL:            https://github.com/fedora-infra/datanommer
-Source:         %{pypi_source datanommer_models}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/datanommer_models/datanommer_models-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-# Test dependencies
-#BuildRequires:  python3dist(pytest)
-#BuildRequires:  python3dist(pytest-postgresql)
-
-%global _description %{expand:
-SQLAlchemy models for datanommer. }
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-datanommer-models = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-datanommer-models
-Summary:        %{summary}
-
-%description -n python3-datanommer-models %_description
+Summary:        SQLAlchemy models for datanommer
+%description -n python3-datanommer-models
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n datanommer_models-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir datanommer_models-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -L datanommer
+%oreon_autofiles python3-datanommer-models usr/lib/python3*/site-packages/datanommer_models* usr/lib64/python3*/site-packages/datanommer_models* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/datanommer_models* usr/lib64/python3*/site-packages/datanommer_models* usr/bin/*
 
-# The tests suites requires the messaging schema that are currently not packaged
-# in Fedora. We can try to make the %%pytest macro running later when they are available.
 %check
-%pyproject_check_import -t
 
-%files -n python3-datanommer-models -f %{pyproject_files}
-%doc README.*
-%doc NEWS.*
-%license LICENSE
+%pyproject_check_import -t
+%files
+%files -n python3-datanommer-models -f %{oreon_filedir}/python3-datanommer-models.list
 
 %changelog
+
 %autochangelog

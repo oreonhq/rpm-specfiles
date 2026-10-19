@@ -1,5 +1,4 @@
 %global source0_hash 713bdbe724dbb915ed50265ffe47e079a511980cb2427aa19076788bb64c3182
-
 Name:           perl-JSON
 Summary:        Parse and convert to JSON (JavaScript Object Notation)
 Version:        4.11
@@ -7,60 +6,51 @@ Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/JSON
 Source0:        https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-%{version}.tar.gz
-
-
-
 BuildArch:      noarch
-# Build
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(:VERSION) >= 5.5.30
-# Module
-BuildRequires:  perl(B)
-BuildRequires:  perl(bytes)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Encode)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(Math::BigFloat)
-BuildRequires:  perl(Math::BigInt)
-BuildRequires:  perl(overload)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# subs not used
-# Tests
-BuildRequires:  perl(charnames)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Tie::Array)
-BuildRequires:  perl(Tie::Hash)
-BuildRequires:  perl(Tie::IxHash)
-BuildRequires:  perl(utf8)
-BuildRequires:  perl(vars)
-# Optional tests
-BuildRequires:  perl(JSON::XS) >= 4.00
-BuildRequires:  perl(Types::Serialiser)
-# Dependencies
 Requires:       perl(B)
 Requires:       perl(Encode)
 Requires:       perl(Math::BigFloat)
 Requires:       perl(Math::BigInt)
 Suggests:       perl(Scalar::Util)
 Requires:       perl(warnings)
-
 %{?perl_default_filter}
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(JSON::(Backend::PP|backportPP::Boolean|Boolean|PP|PP::IncrParser)\\)
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(JSON::(backportPP|backportPP::Boolean)\\)
-
 Provides:       perl(JSON)
 Provides:       perl(JSON::Syck)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(B)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(JSON::XS)
+BuildRequires:  perl(Math::BigFloat)
+BuildRequires:  perl(Math::BigInt)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Tie::Array)
+BuildRequires:  perl(Tie::Hash)
+BuildRequires:  perl(Tie::IxHash)
+BuildRequires:  perl(Types::Serialiser)
+BuildRequires:  perl(bytes)
+BuildRequires:  perl(charnames)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module converts between JSON (JavaScript Object Notation) and Perl
 data structure into each other. For JSON, see http://www.crockford.com/JSON/.
@@ -71,12 +61,12 @@ Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       coreutils
 Requires:       perl-Test-Harness
 Requires:       perl(Tie::IxHash)
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n JSON-%{version}
 
@@ -90,17 +80,14 @@ for F in t/*.t; do
 done
 
 %build
+
 /usr/bin/perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
-# t/20_unknown.t writes to CWD
 DIR=$(mktemp -d)
 cp -a %{_libexecdir}/%{name}/t "$DIR"
 unset PERL_JSON_BACKEND PERL_JSON_DEBUG PERL_JSON_PP_USE_B
@@ -110,21 +97,17 @@ popd
 rm -r "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
-# Correct permissions
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 unset PERL_JSON_BACKEND PERL_JSON_DEBUG PERL_JSON_PP_USE_B
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 %{make_build} test
-
-%files
-%doc Changes README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-JSON-tests -f %{oreon_filedir}/perl-JSON-tests.list
 
 %changelog
+
 %autochangelog

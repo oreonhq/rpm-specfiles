@@ -1,38 +1,24 @@
 %global source0_hash 458fc35c5dfa5f32e44e52be592cd17486775bda2632ff10e98ec3c509dd78d8
-
 %global giturl  https://github.com/Pragmatists/JUnitParams
-
 Name:           JUnitParams
 Version:        1.1.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Parameterized Java tests
-
 License:        Apache-2.0
 URL:            https://pragmatists.github.io/JUnitParams/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/%{name}-%{version}.tar.gz
-## Post-release bug fixes
-# Release notes and Readme updated
+Source0:        %{giturl}/archive/%{name}-%{version}.tar.gz
 Patch:          %{giturl}/commit/c060976.patch
-# Add language identifiers to README.md for syntax highlighting
 Patch:          %{giturl}/commit/280ee05.patch
-# Show original exception thrown from test class constructor
 Patch:          %{giturl}/commit/6bab69a.patch
-# Better exception for missing parameters
 Patch:          %{giturl}/commit/f0772e7.patch
-# Better exception message for missing parameters
 Patch:          %{giturl}/commit/90d47a5.patch
-
-## Patches to fix testing with junit 4.13.  See:
-## - https://github.com/Pragmatists/JUnitParams/issues/172
-## - https://github.com/Pragmatists/JUnitParams/pull/182
-# Fix parsing of strings into BigDecimal values
 Patch:          %{name}-parse-bigdecimal.patch
-# Fix single method test filters
 Patch:          %{name}-single-method-filter.patch
-# Use hasMessageContaining instead of hasMessage
 Patch:          %{name}-has-message-containing.patch
-
+BuildArch:      noarch
+ExclusiveArch:  %{java_arches} noarch
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-compiler-plugin)
@@ -40,10 +26,7 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-jar-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-surefire-plugin)
 BuildRequires:  mvn(org.assertj:assertj-core)
-
-BuildArch:      noarch
-ExclusiveArch:  %{java_arches} noarch
-
+# /oreon:deps
 %description
 The JUnitParams project adds a new runner to JUnit and provides much easier
 and more readable parameterized tests for JUnit >= 4.12.
@@ -61,6 +44,7 @@ The main differences with the standard JUnit Parameterized runner are:
   it's only consecutive numbers of parameters)
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{name}-%{version} -p1
@@ -80,14 +64,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_xpath_set '//pom:target' 1.8
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md RELEASES.md
-%license LICENSE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

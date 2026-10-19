@@ -1,66 +1,49 @@
-%global source0_hash none
-
+%global source0_hash 5a24bc1b5f9e0f0d1c0b6ddd1111e84c15dac44a07e3c1d24e74dd9bb4fc22eb
 Name:           python-pyramid
 Version:        2.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        The Pyramid Web Framework, a Pylons project
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LicenseRef-Repoze-BSD-derived
 URL:            https://trypyramid.com
-Source:         %{pypi_source pyramid}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyramid/pyramid-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyramid' generated automatically by pyp2spec.}
-
 Patch:          https://github.com/Pylons/pyramid/pull/3762.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pyramid = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pyramid+testing
+Summary:        Metapackage for python3-pyramid testing extras
+Requires:       python3-pyramid = %{version}-%{release}
+Provides:       python3dist(pyramid[testing]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-pyramid+testing
+Metapackage for python3-pyramid testing extras.
+
+%description
 
 %package -n     python3-pyramid
-Summary:        %{summary}
-
-%description -n python3-pyramid %_description
-
+Summary:        The Pyramid Web Framework, a Pylons project
+%description -n python3-pyramid
 
 %prep
-%autosetup -p1 -n pyramid-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyramid-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyramid usr/lib/python3*/site-packages/pyramid* usr/lib64/python3*/site-packages/pyramid* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyramid* usr/lib64/python3*/site-packages/pyramid* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyramid -f %{pyproject_files}
-%{_bindir}/pdistreport
-%{_bindir}/prequest
-%{_bindir}/proutes
-%{_bindir}/pserve
-%{_bindir}/pshell
-%{_bindir}/ptweens
-%{_bindir}/pviews
+%files
+%files -n python3-pyramid -f %{oreon_filedir}/python3-pyramid.list
 
 %changelog
+
 %autochangelog

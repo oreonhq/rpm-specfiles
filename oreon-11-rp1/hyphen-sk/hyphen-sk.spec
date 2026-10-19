@@ -1,26 +1,26 @@
 %global source0_hash 488ad858c719e596f056537103ee6b21cfdd90e9b8619f65d9f9ed76ba2725b8
-
 Name: hyphen-sk
-Summary: Slovak hyphenation rules
+Summary:        Slovak hyphenation rules
 %global upstreamid 20031227
 Version: 0.%{upstreamid}
-Release: 36%{?dist}
-Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_sk_SK.zip
+Release:        1%{?dist}
+Source0:        http://download.services.openoffice.org/contrib/dictionaries/hyph_sk_SK.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: GPL-1.0-or-later
 BuildArch: noarch
-
 Requires: hyphen
 Supplements: (hyphen and langpacks-sk)
+# oreon:deps
 
+# /oreon:deps
 %description
 Slovak hyphenation rules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c
-
+%oreon_prep
 %build
+
 chmod -x *
 for i in README_hyph_sk_SK.txt; do
   if ! iconv -f utf-8 -t utf-8 -o /dev/null $i > /dev/null 2>&1; then
@@ -32,16 +32,14 @@ for i in README_hyph_sk_SK.txt; do
   touch -r $i $i.new
   mv -f $i.new $i
 done
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/hyphen
 cp -p *.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen
+%oreon_autofiles main
 
-
-%files
-%doc README_hyph_sk_SK.txt
-%{_datadir}/hyphen/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20031227-36
 - Import

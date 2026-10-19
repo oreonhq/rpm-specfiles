@@ -1,19 +1,15 @@
 %global source0_hash ec71499d33ef5d72b7fb3359b8320639e06e413abad61a070201178a254b153e
-
 Name:           R-colorspace
 Version:        %R_rpm_version 2.1-2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A Toolbox for Manipulating and Assessing Colors and Palettes
-
 License:        BSD-3-Clause
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=colorspace&version=2.1-2#/colorspace_2.1-2.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Carries out mapping between assorted color spaces including RGB, HSV, HLS,
 CIEXYZ, CIELUV, HCL (polar CIELUV), CIELAB, and polar CIELAB. Qualitative,
@@ -32,22 +28,19 @@ scientific paper: Zeileis et al. (2020, Journal of Statistical Software,
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples
 
-%files -f %{R_files}
+%R_check \--no-examples
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

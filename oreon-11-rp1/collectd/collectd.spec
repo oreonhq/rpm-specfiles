@@ -1,17 +1,13 @@
 %global source0_hash 5bae043042c19c31f77eb8464e56a01a5454e0b39fa07cf7ad0f1bfc9c3a09d6
-
 %global __provides_exclude_from ^%{_libdir}/collectd/.*\\.so$
 %undefine _strict_symbol_defs_build
-
-Summary: Statistics collection daemon for filling RRD files
+Summary:        Statistics collection daemon for filling RRD files
 Name: collectd
 Version: 5.12.0
-Release: 61%{?dist}
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-only
 URL: https://collectd.org/
-
-Source: https://github.com/collectd/collectd/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/collectd/collectd/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2
 Source1: collectd-httpd.conf
 Source2: collectd.service
 Source91: apache.conf
@@ -21,10 +17,6 @@ Source94: nginx.conf
 Source95: sensors.conf
 Source96: snmp.conf
 Source97: rrdtool.conf
-%if 0%{?fedora}
-Source98: onewire.conf
-%endif
-
 Patch0: %{name}-include-collectd.d.patch
 Patch1: %{name}-gcc11.patch
 Patch2: %{name}-remove-des-support-from-snmp-plugin.patch
@@ -32,18 +24,55 @@ Patch3: %{name}-py311-dont-include-longintrepr.patch
 Patch4: collectd-c99.patch
 Patch5: collectd-c99-2.patch
 Patch6: collectd-5.12.0-automake-1.18.patch
-
-BuildRequires: perl-devel
-BuildRequires: perl-generators
-BuildRequires: perl-interpreter
-BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: perl(ExtUtils::Embed)
-BuildRequires: libgcrypt-devel
-BuildRequires: libxcrypt-devel
 Requires(post):   systemd
 Requires(preun):  systemd
 Requires(postun): systemd
-
+# oreon:deps
+BuildRequires:  OpenIPMI-devel
+BuildRequires:  curl-devel
+BuildRequires:  gpsd-devel
+BuildRequires:  hiredis-devel
+BuildRequires:  iproute-static
+BuildRequires:  iptables-devel
+BuildRequires:  libatasmart-devel
+BuildRequires:  libdbi-devel
+BuildRequires:  libesmtp-devel
+BuildRequires:  libgcrypt-devel
+BuildRequires:  libmemcached-devel
+BuildRequires:  libmicrohttpd-devel
+BuildRequires:  libmnl-devel
+BuildRequires:  libmodbus-devel
+BuildRequires:  libnotify-devel
+BuildRequires:  liboping-devel
+BuildRequires:  libpcap-devel
+BuildRequires:  libpq-devel
+BuildRequires:  librabbitmq-devel
+BuildRequires:  librdkafka-devel
+BuildRequires:  libvirt-devel
+BuildRequires:  libxcrypt-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  lm_sensors-devel
+BuildRequires:  lua-devel
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  mongo-c-driver-devel
+BuildRequires:  mosquitto-devel
+BuildRequires:  net-snmp-devel
+BuildRequires:  nut-devel
+BuildRequires:  openldap-devel
+BuildRequires:  owfs-devel
+BuildRequires:  perl(ExtUtils::Embed)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  protobuf-c-devel
+BuildRequires:  python3-devel
+BuildRequires:  qpid-proton-c-devel
+BuildRequires:  riemann-c-client-devel
+BuildRequires:  rrdtool-devel
+BuildRequires:  systemd-devel
+BuildRequires:  varnish-libs-devel
+# /oreon:deps
 %description
 collectd is a daemon which collects system performance statistics periodically
 and provides mechanisms to store the values in a variety of ways,
@@ -61,7 +90,6 @@ or third party applications using an AMQP message broker.
 Summary:       Sends JSON-encoded data to an AMQP1 message intermediary
 BuildRequires: qpid-proton-c-devel
 Requires:      %{name}%{?_isa} = %{version}-%{release}
-
 %description amqp1
 Sends JSON-encoded data to an Advanced Message Queuing Protocol (AMQP)
 1.0 server, such as Qpid Dispatch Router or Apache Artemis Broker.
@@ -174,7 +202,6 @@ This plugin collects statistics about hugepage usage.
 
 %package infiniband
 Summary:       Collect metrics about infiniband ports
-
 %description infiniband
 Collect metrics about infiniband ports
 
@@ -236,7 +263,6 @@ appropriate notifications when machine check exceptions are detected.
 
 %package mdevents
 Summary:       Get events from RAID arrays in syslog
-
 %description mdevents
 This plugin, named mdevents, is responsible for gathering the events
 from RAID arrays that were written to syslog by mdadm utility (which
@@ -315,16 +341,6 @@ Requires:      %{name}%{?_isa} = %{version}-%{release}
 BuildRequires: nut-devel
 %description nut
 This plugin for collectd provides Network UPS Tools support.
-%endif
-
-%if 0%{?fedora}
-%package onewire
-Summary:       OneWire bus plugin for collectd
-Requires:      %{name}%{?_isa} = %{version}-%{release}
-BuildRequires: owfs-devel
-%description onewire
-The experimental OneWire plugin collects temperature information
-from sensors connected to the computer over the OneWire bus.
 %endif
 
 %package openldap
@@ -513,9 +529,7 @@ This plugin can send data to Sensu.
 Summary:       syslog output plugin for collectd
 Group:         System Environment/Daemons
 Requires:      %{name}%{?_isa} = %{version}-%{release}
-
 Provides: %{name}-write-syslog = %{version}-%{release}
-
 %description write_syslog
 This plugin can send data to syslog.
 
@@ -525,16 +539,6 @@ Requires:      %{name}%{?_isa} = %{version}-%{release}
 %description write_tsdb
 This plugin can send data to OpenTSDB.
 
-%if 0%{?fedora}
-%ifarch x86_64
-%package xencpu
-Summary:       xencpu plugin for collectd
-Requires:      %{name}%{?_isa} = %{version}-%{release}
-BuildRequires: xen-devel
-%description xencpu
-The xencpu plugin collects CPU statistics from Xen.
-%endif
-%endif
 
 %package zookeeper
 Summary:       Zookeeper plugin for collectd
@@ -543,6 +547,7 @@ Requires:      %{name}%{?_isa} = %{version}-%{release}
 This is a collectd plugin that reads data from Zookeeper's MNTR command.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -v -p1
@@ -551,6 +556,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 touch src/pinba.proto
 
 %build
+
 %configure \
     --disable-dependency-tracking \
     --enable-all-plugins \
@@ -620,38 +626,25 @@ touch src/pinba.proto
     --with-perl-bindings=INSTALLDIRS=vendor \
     --disable-werror \
     AR_FLAGS="-cr"
-
 make %{?_smp_mflags}
-
 %install
 rm -rf contrib/SpamAssassin
 make install DESTDIR="%{buildroot}"
-
 install -Dp -m0644 src/collectd.conf %{buildroot}%{_sysconfdir}/collectd.conf
 install -Dp -m0644 %{SOURCE2} %{buildroot}%{_unitdir}/collectd.service
 install -d -m0755 %{buildroot}%{_localstatedir}/lib/collectd/rrd
 install -d -m0755 %{buildroot}%{_datadir}/collectd/collection3/
 install -d -m0755 %{buildroot}%{_sysconfdir}/httpd/conf.d/
-
 find contrib/ -type f -exec chmod a-x {} \;
-
-# Remove Perl hidden .packlist files.
 find %{buildroot} -name .packlist -delete
-# Remove Perl temporary file perllocal.pod
 find %{buildroot} -name perllocal.pod -delete
-
-# copy web interface
 cp -ad contrib/collection3/* %{buildroot}%{_datadir}/collectd/collection3/
 cp -pv %{buildroot}%{_datadir}/collectd/collection3/etc/collection.conf %{buildroot}%{_sysconfdir}/collection.conf
 ln -rsf %{_sysconfdir}/collection.conf %{buildroot}%{_datadir}/collectd/collection3/etc/collection.conf
 cp -pv %{SOURCE1} %{buildroot}%{_sysconfdir}/httpd/conf.d/collectd.conf
 chmod +x %{buildroot}%{_datadir}/collectd/collection3/bin/*.cgi
-
-# Move the Perl examples to a separate directory.
 mkdir perl-examples
 find contrib -name '*.p[lm]' -exec mv {} perl-examples/ \;
-
-# Move config contribs
 mkdir -p %{buildroot}%{_sysconfdir}/collectd.d/
 cp %{SOURCE91} %{buildroot}%{_sysconfdir}/collectd.d/apache.conf
 cp %{SOURCE92} %{buildroot}%{_sysconfdir}/collectd.d/email.conf
@@ -660,16 +653,9 @@ cp %{SOURCE94} %{buildroot}%{_sysconfdir}/collectd.d/nginx.conf
 cp %{SOURCE95} %{buildroot}%{_sysconfdir}/collectd.d/sensors.conf
 cp %{SOURCE96} %{buildroot}%{_sysconfdir}/collectd.d/snmp.conf
 cp %{SOURCE97} %{buildroot}%{_sysconfdir}/collectd.d/rrdtool.conf
-%if 0%{?fedora}
-cp %{SOURCE98} %{buildroot}%{_sysconfdir}/collectd.d/onewire.conf
-%endif
-
 %ifnarch %{java_arches}
-# remove collectd-java.5 man page on non-java arches
 rm -f %{buildroot}%{_mandir}/man5/collectd-java.5*
 %endif
-
-# configs for subpackaged plugins
 %ifnarch s390 s390x
 for p in dns ipmi libvirt nut perl ping postgresql
 %else
@@ -680,399 +666,33 @@ cat > %{buildroot}%{_sysconfdir}/collectd.d/$p.conf <<EOF
 LoadPlugin $p
 EOF
 done
-
-# *.la files shouldn't be distributed.
 rm -f %{buildroot}/%{_libdir}/{collectd/,}*.la
-
 %ifnarch s390 s390x
-# checks fails in test_plugin_smart on s390
+%oreon_autofiles collectd-utils usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles libcollectdclient usr/*/lib*.so.*
+%oreon_autofiles libcollectdclient-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles perl-Collectd usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+
 %check
+
 make check
 %endif
-
 %post
+
 %systemd_post collectd.service
-
 %preun
+
 %systemd_preun collectd.service
-
 %postun
+
 %systemd_postun_with_restart collectd.service
-
-%files
-%license COPYING
-%doc AUTHORS ChangeLog README
-%config(noreplace) %{_sysconfdir}/collectd.conf
-%config(noreplace) %{_sysconfdir}/collectd.d/
-%exclude %{_sysconfdir}/collectd.d/apache.conf
-%exclude %{_sysconfdir}/collectd.d/dns.conf
-%exclude %{_sysconfdir}/collectd.d/email.conf
-%exclude %{_sysconfdir}/collectd.d/ipmi.conf
-%exclude %{_sysconfdir}/collectd.d/libvirt.conf
-%exclude %{_sysconfdir}/collectd.d/mysql.conf
-%exclude %{_sysconfdir}/collectd.d/nginx.conf
-%ifnarch s390 s390x
-%exclude %{_sysconfdir}/collectd.d/nut.conf
-%endif
-%if 0%{?fedora}
-%exclude %{_sysconfdir}/collectd.d/onewire.conf
-%endif
-%exclude %{_sysconfdir}/collectd.d/perl.conf
-%exclude %{_sysconfdir}/collectd.d/ping.conf
-%exclude %{_sysconfdir}/collectd.d/postgresql.conf
-%exclude %{_datadir}/collectd/postgresql_default.conf
-%exclude %{_sysconfdir}/collectd.d/rrdtool.conf
-%exclude %{_sysconfdir}/collectd.d/sensors.conf
-%exclude %{_sysconfdir}/collectd.d/snmp.conf
-
-%{_unitdir}/collectd.service
-%{_sbindir}/collectd
-%{_sbindir}/collectdmon
-%dir %{_localstatedir}/lib/collectd/
-
-%dir %{_libdir}/collectd
-
-%{_libdir}/collectd/aggregation.so
-%{_libdir}/collectd/apcups.so
-%{_libdir}/collectd/battery.so
-%{_libdir}/collectd/cgroups.so
-%{_libdir}/collectd/conntrack.so
-%{_libdir}/collectd/contextswitch.so
-%{_libdir}/collectd/cpu.so
-%{_libdir}/collectd/cpufreq.so
-%{_libdir}/collectd/cpusleep.so
-%{_libdir}/collectd/csv.so
-%{_libdir}/collectd/df.so
-%{_libdir}/collectd/entropy.so
-%{_libdir}/collectd/ethstat.so
-%{_libdir}/collectd/exec.so
-%{_libdir}/collectd/fhcount.so
-%{_libdir}/collectd/filecount.so
-%{_libdir}/collectd/fscache.so
-%{_libdir}/collectd/hddtemp.so
-%{_libdir}/collectd/interface.so
-%{_libdir}/collectd/ipc.so
-%{_libdir}/collectd/irq.so
-%{_libdir}/collectd/load.so
-%{_libdir}/collectd/logfile.so
-%{_libdir}/collectd/madwifi.so
-%{_libdir}/collectd/match_empty_counter.so
-%{_libdir}/collectd/match_hashed.so
-%{_libdir}/collectd/match_regex.so
-%{_libdir}/collectd/match_timediff.so
-%{_libdir}/collectd/match_value.so
-%{_libdir}/collectd/mbmon.so
-%{_libdir}/collectd/md.so
-%{_libdir}/collectd/memcached.so
-%{_libdir}/collectd/memory.so
-%{_libdir}/collectd/multimeter.so
-%{_libdir}/collectd/network.so
-%{_libdir}/collectd/nfs.so
-%{_libdir}/collectd/notify_nagios.so
-%{_libdir}/collectd/ntpd.so
-%{_libdir}/collectd/numa.so
-%{_libdir}/collectd/olsrd.so
-%{_libdir}/collectd/openvpn.so
-%{_libdir}/collectd/powerdns.so
-%ifnarch s390 s390x
-%{_libdir}/collectd/pcie_errors.so
-%endif
-%{_libdir}/collectd/processes.so
-%{_libdir}/collectd/protocols.so
-%{_libdir}/collectd/serial.so
-%{_libdir}/collectd/statsd.so
-%{_libdir}/collectd/swap.so
-%{_libdir}/collectd/syslog.so
-%{_libdir}/collectd/table.so
-%{_libdir}/collectd/tail.so
-%{_libdir}/collectd/tail_csv.so
-%{_libdir}/collectd/target_notification.so
-%{_libdir}/collectd/target_replace.so
-%{_libdir}/collectd/target_scale.so
-%{_libdir}/collectd/target_set.so
-%{_libdir}/collectd/target_v5upgrade.so
-%{_libdir}/collectd/tcpconns.so
-%{_libdir}/collectd/teamspeak2.so
-%{_libdir}/collectd/ted.so
-%{_libdir}/collectd/thermal.so
-%{_libdir}/collectd/threshold.so
-%{_libdir}/collectd/unixsock.so
-%{_libdir}/collectd/uptime.so
-%{_libdir}/collectd/users.so
-%{_libdir}/collectd/uuid.so
-%{_libdir}/collectd/vmem.so
-%{_libdir}/collectd/vserver.so
-%{_libdir}/collectd/wireless.so
-%{_libdir}/collectd/write_graphite.so
-%{_libdir}/collectd/write_log.so
-%{_libdir}/collectd/zfs_arc.so
-
-%dir %{_datadir}/collectd/
-%{_datadir}/collectd/types.db
-
-%doc %{_mandir}/man1/collectd.1*
-%doc %{_mandir}/man1/collectdmon.1*
-%doc %{_mandir}/man5/collectd.conf.5*
-%doc %{_mandir}/man5/collectd-exec.5*
-%doc %{_mandir}/man5/collectd-threshold.5*
-%doc %{_mandir}/man5/collectd-unixsock.5*
-%doc %{_mandir}/man5/types.db.5*
-
-%files -n libcollectdclient-devel
-%dir %{_includedir}/collectd/
-%{_includedir}/collectd/client.h
-%{_includedir}/collectd/lcc_features.h
-%{_includedir}/collectd/network.h
-%{_includedir}/collectd/network_buffer.h
-%{_includedir}/collectd/network_parse.h
-%{_includedir}/collectd/server.h
-%{_includedir}/collectd/types.h
-%{_libdir}/pkgconfig/libcollectdclient.pc
-%{_libdir}/libcollectdclient.so
-
-%files -n libcollectdclient
-%{_libdir}/libcollectdclient.so.1
-%{_libdir}/libcollectdclient.so.1.1.0
-
-%files -n collectd-utils
-%{_bindir}/collectd-nagios
-%{_bindir}/collectd-tg
-%{_bindir}/collectdctl
-%{_mandir}/man1/collectdctl.1*
-%{_mandir}/man1/collectd-nagios.1*
-%{_mandir}/man1/collectd-tg.1*
-
-%files amqp
-%{_libdir}/collectd/amqp.so
-
-%files amqp1
-%{_libdir}/collectd/amqp1.so
-
-%files apache
-%{_libdir}/collectd/apache.so
-%config(noreplace) %{_sysconfdir}/collectd.d/apache.conf
-
-%files ascent
-%{_libdir}/collectd/ascent.so
-
-%files bind
-%{_libdir}/collectd/bind.so
-
-%files chrony
-%{_libdir}/collectd/chrony.so
-
-%files curl
-%{_libdir}/collectd/curl.so
-
-%files curl_xml
-%{_libdir}/collectd/curl_xml.so
-
-%files disk
-%{_libdir}/collectd/disk.so
-
-%files dbi
-%{_libdir}/collectd/dbi.so
-
-%files dns
-%{_libdir}/collectd/dns.so
-%config(noreplace) %{_sysconfdir}/collectd.d/dns.conf
-
-%files drbd
-%{_libdir}/collectd/drbd.so
-
-%files email
-%{_libdir}/collectd/email.so
-%config(noreplace) %{_sysconfdir}/collectd.d/email.conf
-%doc %{_mandir}/man5/collectd-email.5*
-
-%ifarch %{java_arches}
-%files generic-jmx
-%{_datadir}/collectd/java/generic-jmx.jar
-%endif
-
-%files gps
-%{_libdir}/collectd/gps.so
-
-%files hugepages
-%{_libdir}/collectd/hugepages.so
-
-%files infiniband
-%{_libdir}/collectd/infiniband.so
-
-%files ipmi
-%{_libdir}/collectd/ipmi.so
-%config(noreplace) %{_sysconfdir}/collectd.d/ipmi.conf
-
-%files iptables
-%{_libdir}/collectd/iptables.so
-
-%files ipvs
-%{_libdir}/collectd/ipvs.so
-
-%ifarch %{java_arches}
-%files java
-%{_libdir}/collectd/java.so
-%dir %{_datadir}/collectd/java/
-%{_datadir}/collectd/java/collectd-api.jar
-%doc %{_mandir}/man5/collectd-java.5*
-%endif
-
-%files lua
-%{_mandir}/man5/collectd-lua*
-%{_libdir}/collectd/lua.so
-
-%files mcelog
-%{_libdir}/collectd/mcelog.so
-
-%files mdevents
-%{_libdir}/collectd/mdevents.so
-
-%files memcachec
-%{_libdir}/collectd/memcachec.so
-
-%files modbus
-%{_libdir}/collectd/modbus.so
-
-%files mqtt
-%{_libdir}/collectd/mqtt.so
-
-%files mysql
-%{_libdir}/collectd/mysql.so
-%config(noreplace) %{_sysconfdir}/collectd.d/mysql.conf
-
-%files netlink
-%{_libdir}/collectd/netlink.so
-
-%files nginx
-%{_libdir}/collectd/nginx.so
-%config(noreplace) %{_sysconfdir}/collectd.d/nginx.conf
-
-%files notify_desktop
-%{_libdir}/collectd/notify_desktop.so
-
-%files notify_email
-%{_libdir}/collectd/notify_email.so
-
-%ifnarch s390 s390x
-%files nut
-%{_libdir}/collectd/nut.so
-%config(noreplace) %{_sysconfdir}/collectd.d/nut.conf
-%endif
-
-%if 0%{?fedora}
-%files onewire
-%{_libdir}/collectd/onewire.so
-%config(noreplace) %{_sysconfdir}/collectd.d/onewire.conf
-%endif
-
-%files openldap
-%{_libdir}/collectd/openldap.so
-
-%files -n perl-Collectd
-%doc perl-examples/*
-%{_libdir}/collectd/perl.so
-%{perl_vendorlib}/Collectd.pm
-%{perl_vendorlib}/Collectd/
-%config(noreplace) %{_sysconfdir}/collectd.d/perl.conf
-%doc %{_mandir}/man5/collectd-perl.5*
-%doc %{_mandir}/man3/Collectd::Unixsock.3pm*
-
-%files pinba
-%{_libdir}/collectd/pinba.so
-
-%files ping
-%{_libdir}/collectd/ping.so
-%config(noreplace) %{_sysconfdir}/collectd.d/ping.conf
-
-%files postgresql
-%{_libdir}/collectd/postgresql.so
-%config(noreplace) %{_sysconfdir}/collectd.d/postgresql.conf
-%{_datadir}/collectd/postgresql_default.conf
-
-%files python
-%{_libdir}/collectd/python.so
-%doc %{_mandir}/man5/collectd-python.5*
-
-%files redis
-%{_libdir}/collectd/redis.so
-
-%files rrdcached
-%{_libdir}/collectd/rrdcached.so
-
-%files rrdtool
-%{_libdir}/collectd/rrdtool.so
-%config(noreplace) %{_sysconfdir}/collectd.d/rrdtool.conf
-
-%ifnarch ppc sparc sparc64
-%files sensors
-%{_libdir}/collectd/sensors.so
-%config(noreplace) %{_sysconfdir}/collectd.d/sensors.conf
-%endif
-
-%files smart
-%{_libdir}/collectd/smart.so
-
-%files snmp
-%{_libdir}/collectd/snmp.so
-%config(noreplace) %{_sysconfdir}/collectd.d/snmp.conf
-%doc %{_mandir}/man5/collectd-snmp.5*
-
-%files snmp_agent
-%{_libdir}/collectd/snmp_agent.so
-
-%files synproxy
-%{_libdir}/collectd/synproxy.so
-
-%files varnish
-%{_libdir}/collectd/varnish.so
-
-%ifnarch ppc sparc sparc64
-%files virt
-%{_libdir}/collectd/virt.so
-%config(noreplace) %{_sysconfdir}/collectd.d/libvirt.conf
-%endif
-
-%files web
-%{_datadir}/collectd/collection3/
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/collectd.conf
-%config(noreplace) %{_sysconfdir}/collection.conf
-
-%files write_http
-%{_libdir}/collectd/write_http.so
-
-%files write_kafka
-%{_libdir}/%{name}/write_kafka.so
-
-%files write_mongodb
-%{_libdir}/%{name}/write_mongodb.so
-
-%files write_prometheus
-%{_libdir}/collectd/write_prometheus.so
-
-%files write_redis
-%{_libdir}/collectd/write_redis.so
-
-%files write_riemann
-%{_libdir}/collectd/write_riemann.so
-
-%files write_sensu
-%{_libdir}/collectd/write_sensu.so
-
-%files write_syslog
-%{_libdir}/collectd/write_syslog.so
-
-%files write_tsdb
-%{_libdir}/collectd/write_tsdb.so
-
-%if 0%{?fedora}
-%ifarch x86_64
-%files xencpu
-%{_libdir}/collectd/xencpu.so
-%endif
-%endif
-
-%files zookeeper
-%{_libdir}/collectd/zookeeper.so
+%files -f %{oreon_filedir}/main.list
+%files -n collectd-utils -f %{oreon_filedir}/collectd-utils.list
+%files -n libcollectdclient -f %{oreon_filedir}/libcollectdclient.list
+%files -n libcollectdclient-devel -f %{oreon_filedir}/libcollectdclient-devel.list
+%files -n perl-Collectd -f %{oreon_filedir}/perl-Collectd.list
 
 %changelog
+
 %autochangelog

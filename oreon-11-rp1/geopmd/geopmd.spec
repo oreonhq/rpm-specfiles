@@ -1,41 +1,20 @@
 %global source0_hash 83079122c51f781a3be03dc6814be5da4715a02f7acadb1f27f85ad22b72e603
-
 %global prj_name geopmdpy
 %global desc %{expand: \
 The Global Extensible Open Power Manager (GEOPM) provides a framework to
 explore power and energy optimizations on platforms with heterogeneous mixes
 of computing hardware.
-
 Users can monitor their system's energy and power consumption, and safely
 optimize system hardware settings to achieve energy efficiency and/or
 performance objectives.}
-
 Name:		geopmd
 Version:	3.2.1
-Release:	%autorelease
-Summary:	GEOPM daemon
-
+Release:        1%{?dist}
+Summary:        GEOPM daemon
 License:	BSD-3-Clause
 URL:		https://geopm.github.io
-Source0:	https://github.com/geopm/geopm/archive/v%{version}/geopm-%{version}.tar.gz
-
+Source0:        https://github.com/geopm/geopm/archive/v%{version}/geopm-%{version}.tar.gz
 ExclusiveArch:	x86_64
-
-BuildRequires:	gcc
-BuildRequires:	grpc-plugins
-BuildRequires:	libgeopmd-devel >= 3.2.1
-BuildRequires:	python3-devel
-BuildRequires:	python3-setuptools
-BuildRequires:	python3-setuptools_scm
-BuildRequires:	python3-cffi
-BuildRequires:	python3-dasbus
-BuildRequires:	python3-docstring-parser
-BuildRequires:	python3-defusedxml
-BuildRequires:	python3-jsonschema
-BuildRequires:	python3-prometheus_client
-BuildRequires:	python3-psutil
-BuildRequires:	python3-pyyaml
-BuildRequires:	systemd-units
 Requires:	python3-cffi
 Requires:	python3-dasbus
 Requires:	python3-docstring-parser
@@ -48,17 +27,33 @@ Requires:	python3-pyyaml
 Requires:	python3-%{prj_name} = %{version}-%{release}
 Requires:	geopmd-cli
 Requires:	geopm-cli
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  grpc-plugins
+BuildRequires:  libgeopmd-devel
+BuildRequires:  python3-cffi
+BuildRequires:  python3-dasbus
+BuildRequires:  python3-defusedxml
+BuildRequires:  python3-devel
+BuildRequires:  python3-docstring-parser
+BuildRequires:  python3-jsonschema
+BuildRequires:  python3-prometheus_client
+BuildRequires:  python3-psutil
+BuildRequires:  python3-pyyaml
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-setuptools_scm
+BuildRequires:  systemd-units
+# /oreon:deps
 %description
 %{desc}
 
 %package -n python3-%{prj_name}
 Summary:        Python bindings for libgeopmd
-
 %description -n python3-%{prj_name}
 %{desc}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n geopm-%{version}
@@ -68,10 +63,10 @@ echo %{version} > %{prj_name}/VERSION
 popd
 
 %build
+
 pushd %{prj_name}
 %py3_build
 popd
-
 %install
 pushd %{prj_name}
 %py3_install
@@ -80,7 +75,6 @@ chmod 0700 %{buildroot}%{_sysconfdir}/geopm
 install -D -p -m 644 io.github.geopm.xml %{buildroot}%{_datadir}/dbus-1/interfaces/io.github.geopm.xml
 install -D -p -m 644 io.github.geopm.conf %{buildroot}%{_datadir}/dbus-1/system.d/io.github.geopm.conf
 install -D -p -m 644 geopm.service %{buildroot}%{_unitdir}/geopm.service
-
 protoc \
 	--python_out=geopmdpy \
 	--grpc_out geopmdpy \
@@ -88,30 +82,16 @@ protoc \
 	geopm_service.proto
 cp geopm_service.proto %{buildroot}%{python3_sitearch}/%{prj_name}
 popd
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 pushd %{prj_name}
 PYTHONPATH=%{buildroot}%{python3_sitearch} %{python3} -m unittest discover -p 'Test*.py' -v
 popd
-
-%files
-%license LICENSE-BSD-3-Clause
-%doc README.md
-%{_bindir}/geopmd
-%dir %{_sysconfdir}/geopm
-%{_datadir}/dbus-1/interfaces/io.github.geopm.xml
-%{_datadir}/dbus-1/system.d/io.github.geopm.conf
-%{_unitdir}/geopm.service
-
-%files -n python3-%{prj_name}
-%{_bindir}/geopmaccess
-%{_bindir}/geopmexporter
-%{_bindir}/geopmread
-%{_bindir}/geopmwrite
-%{_bindir}/geopmsession
-%{python3_sitearch}/_libgeopmd_py_cffi.abi3.so
-%{python3_sitearch}/%{prj_name}
-%{python3_sitearch}/%{prj_name}-*.egg-info
+%files -f %{oreon_filedir}/main.list
+%files -n python3-geopmdpy -f %{oreon_filedir}/python3-geopmdpy.list
 
 %changelog
+
 %autochangelog

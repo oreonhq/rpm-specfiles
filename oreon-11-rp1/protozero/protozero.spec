@@ -1,21 +1,23 @@
-%global source0_hash 6c7a896f1dc08435e8cd4f3780ff688cd0bfce6890599b755f6f3cb36398dc25
-
+%global source0_hash 68d1df951b4d8397355c8fc9ffed40d9c06282a877fe847403feac6edcee3ef1
 %global debug_package %{nil}
-
 Name:           protozero
 Version:        1.8.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Minimalistic protocol buffer decoder and encoder in C++
-
 License:        BSD-2-Clause
 URL:            https://github.com/mapbox/protozero
 Source0:        https://github.com/mapbox/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires:  cmake make gcc-c++
-BuildRequires:  doxygen graphviz
-BuildRequires:  protobuf-devel protobuf-lite-devel protobuf-compiler
+# oreon:deps
 BuildRequires:  catch2-devel
-
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  graphviz
+BuildRequires:  make
+BuildRequires:  protobuf-compiler
+BuildRequires:  protobuf-devel
+BuildRequires:  protobuf-lite-devel
+# /oreon:deps
 %description
 Minimalistic protocol buffer decoder and encoder in C++.
 
@@ -32,7 +34,6 @@ Protobufs protoc program.
 %package        devel
 Summary:        Development files for %{name}
 Provides:       %{name}-static = %{version}-%{release}
-
 %description    devel
 Minimalistic protocol buffer decoder and encoder in C++.
 
@@ -47,6 +48,7 @@ API available via the C++ API that can be generated via the Google
 Protobufs protoc program.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p 1 -n %{name}-%{version}
@@ -55,19 +57,19 @@ ln -sf /usr/include/catch2 test/catch
 mkdir build
 
 %build
+
 %cmake -DWERROR=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-%ctest
 
-%files devel
-%doc README.md doc/*.md %{__cmake_builddir}/doc/html
-%license LICENSE.md LICENSE.from_folly
-%{_includedir}/protozero
+%ctest
+%files -f %{oreon_filedir}/main.list
+%files -n protozero-devel -f %{oreon_filedir}/protozero-devel.list
 
 %changelog
+
 %autochangelog

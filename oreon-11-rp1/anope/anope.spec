@@ -1,7 +1,5 @@
-%global source0_hash fb9fba0d331aced342a8bb79a2c898633442d45f6f837f601f48d11a2784e68d
-
+%global source0_hash 1d23cfac659b4469aa0b64f0022a7c48150287049c33f60fde88b7e55b95726a
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}}
-
 %bcond_without  ldap
 %bcond_without  mysql
 %bcond_without  pcre2
@@ -9,16 +7,10 @@
 %bcond_without  sqlite
 %bcond_without  gnutls
 %bcond_without  openssl
-
 Summary:        IRC services designed for flexibility and ease of use
 Name:           anope
 Version:        2.1.27
 Release:        1%{?dist}
-# Anope itself is GPL-2.0-only but uses other source codes, breakdown:
-# BSD-3-Clause: include/pstdint.h and modules/encryption/enc_sha256.cpp
-# MIT: src/siphash.cpp
-# LicenseRef-Fedora-Public-Domain: modules/encryption/enc_bcrypt.cpp
-# LicenseRef-RSA: modules/encryption/enc_md5.cpp
 License:        GPL-2.0-only AND BSD-3-Clause AND MIT AND LicenseRef-Fedora-Public-Domain AND LicenseRef-RSA
 URL:            https://www.anope.org/
 Source0:        https://github.com/anope/anope/archive/%{version}/%{name}-%{version}.tar.gz
@@ -40,30 +32,25 @@ Source21:       anope-operserv.conf
 Patch0:         https://github.com/anope/anope/commit/87a8af0ad71a11c248ba94c9ba20668dcb0fe831.patch#/anope-2.1.4-paths1.patch
 Patch1:         https://github.com/anope/anope/commit/c08aaa86d1ada72ad6e185837f9c179693b60c22.patch#/anope-2.1.4-paths2.patch
 Patch2:         https://github.com/anope/anope/commit/5fdc6373275de9c0844c6507509c153ce69fa0c1.patch#/anope-2.1.4-paths3.patch
-BuildRequires:  cmake
-%if 0%{?rhel} && 0%{?rhel} < 8
-BuildRequires:  cmake3
-# Compiler with C++17 language, filesystem headers and linking support
-BuildRequires:  devtoolset-12-toolchain
-%endif
-%if 0%{?rhel} == 8
-# Compiler with C++17 filesystem headers and linking support
-BuildRequires:  gcc-toolset-12
-%endif
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  gettext
-BuildRequires:  systemd-rpm-macros
-%if 0%{?fedora} || 0%{?rhel} > 7
-Recommends:     %{_sbindir}/sendmail
-%else
 Requires:       %{_sbindir}/sendmail
-%endif
 Provides:       %{name}-redis = %{version}-%{release}
 Provides:       %{name}-redis%{?_isa} = %{version}-%{release}
 %{?systemd_requires}
 %{?sysusers_requires_compat}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  gnutls-devel
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  openldap-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pcre2-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  tre-devel
+# /oreon:deps
 %description
 Anope is a set of IRC services forked from Epona early 2003 to pick up where
 Epona had been abandoned. It offers various services clients to maintain an
@@ -75,7 +62,6 @@ well as less often used services clients like HelpServ, DevNull and Global.
 Summary:        LDAP modules for Anope IRC services
 BuildRequires:  openldap-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description ldap
 Anope is a set of IRC services designed for flexibility and ease of use.
 
@@ -88,15 +74,10 @@ membership, too.
 %if %{with mysql}
 %package mysql
 Summary:        MariaDB/MySQL modules for Anope IRC services
-%if 0%{?fedora} || 0%{?rhel} > 7
-BuildRequires:  mariadb-connector-c-devel
-%else
 BuildRequires:  mariadb-devel >= 5.5
-%endif
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       %{name}-mariadb = %{version}-%{release}
 Provides:       %{name}-mariadb%{?_isa} = %{version}-%{release}
-
 %description mysql
 Anope is a set of IRC services designed for flexibility and ease of use.
 
@@ -113,7 +94,6 @@ BuildRequires:  pcre2-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       %{name}-pcre = %{version}-%{release}
 Obsoletes:      %{name}-pcre < 2.0.12-1
-
 %description pcre2
 Anope is a set of IRC services designed for flexibility and ease of use.
 
@@ -126,7 +106,6 @@ the Perl Compatible Regular Expressions (PCRE) library in version 2.
 Summary:        TRE regular expression module Anope IRC services
 BuildRequires:  tre-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description tre
 Anope is a set of IRC services designed for flexibility and ease of use.
 
@@ -139,7 +118,6 @@ the TRE library.
 Summary:        SQLite module for Anope IRC services
 BuildRequires:  sqlite-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description sqlite
 Anope is a set of IRC services designed for flexibility and ease of use.
 
@@ -152,7 +130,6 @@ authenticating IRC users against a SQLite database using a custom query.
 Summary:        GnuTLS module for Anope IRC services
 BuildRequires:  gnutls-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description gnutls
 Anope is a set of IRC services designed for flexibility and ease of use.
 
@@ -163,13 +140,8 @@ uplink server(s) via SSL/TLS.
 %if %{with openssl}
 %package openssl
 Summary:        OpenSSL module for Anope IRC services
-%if 0%{?fedora} || 0%{?rhel} > 7
-BuildRequires:  openssl-devel
-%else
 BuildRequires:  openssl11-devel
-%endif
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description openssl
 Anope is a set of IRC services designed for flexibility and ease of use.
 
@@ -179,31 +151,13 @@ uplink server(s) via SSL/TLS.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-%if 0%{?rhel} && 0%{?rhel} < 8
-%global cmake %cmake3
-%global cmake_build %cmake3_build
-%global cmake_install %cmake3_install
 
 %if %{with mysql}
-EXTRA_LIBS+=";%{_libdir}/mysql"
 %endif
-
 %if %{with openssl}
-EXTRA_INCLUDE+=";%{_includedir}/openssl11"
-EXTRA_LIBS+=";%{_libdir}/openssl11"
 %endif
-
-. /opt/rh/devtoolset-12/enable
-%endif
-%if 0%{?rhel} == 8
-. /opt/rh/gcc-toolset-12/enable
-%endif
-
-# Build extra modules
 mv -f modules/extra/regex_posix.cpp modules/
 %{?with_ldap:mv -f modules/extra/ldap.cpp modules/}
 %{?with_mysql:mv -f modules/extra/mysql.cpp modules/}
@@ -212,7 +166,6 @@ mv -f modules/extra/regex_posix.cpp modules/
 %{?with_sqlite:mv -f modules/extra/sqlite.cpp modules/}
 %{?with_gnutls:mv -f modules/extra/ssl_gnutls.cpp modules/}
 %{?with_openssl:mv -f modules/extra/ssl_openssl.cpp modules/}
-
 %cmake \
   -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
   -DBIN_DIR:STRING=%{_sbindir} \
@@ -227,12 +180,9 @@ mv -f modules/extra/regex_posix.cpp modules/
   -DDEFUMASK:STRING=027 \
   -DEXTRA_INCLUDE=$EXTRA_INCLUDE \
   -DEXTRA_LIBS:STRING=$EXTRA_LIBS
-
 %cmake_build
-
 %install
 %cmake_install
-
 mkdir -p $RPM_BUILD_ROOT{%{_rundir}/%{name},%{_pkgdocdir}/examples}/
 mv -f $RPM_BUILD_ROOT{%{_sysconfdir}/%{name}/*.conf,%{_pkgdocdir}/examples/}
 install -D -p -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/%{name}.service
@@ -250,113 +200,41 @@ install -D -p -m 0640 %{SOURCE18} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/memoserv
 install -D -p -m 0640 %{SOURCE19} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/modules.conf
 install -D -p -m 0640 %{SOURCE20} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/nickserv.conf
 install -D -p -m 0640 %{SOURCE21} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/operserv.conf
-
-# Remove crontab script (pseudo init script) for anope
 rm -f $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/example.chk
-
-# Remove webcpanel, doesn't seem to be widely used
 rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/webcpanel.so
 rm -rf $RPM_BUILD_ROOT%{_localstatedir}/lib/%{name}/webcpanel/
-
-# Remove MySQL related modules when built without MySQL
 %{!?with_mysql:rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/{chanstats,cs_fantasy_stats,cs_fantasy_top,irc2sql}.so}
-
 %find_lang %{name}
+%oreon_autofiles anope-ldap usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anope-mysql usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anope-pcre2 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anope-tre usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anope-sqlite usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anope-gnutls usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles anope-openssl usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %pre
+
 %sysusers_create_compat %{SOURCE3}
-
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
+
 %systemd_postun_with_restart %{name}.service
-
-%files -f %{name}.lang
-%license docs/COPYING
-%doc docs/Changes docs/Changes.conf docs/DEFCON
-%doc docs/FAQ docs/MODULES docs/README docs/XMLRPC
-%doc %{_pkgdocdir}/examples/
-%dir %attr(0750,root,%{name}) %{_sysconfdir}/%{name}/
-%config(noreplace) %attr(0640,root,%{name}) %{_sysconfdir}/%{name}/*.conf
-%if %{with mysql}
-%exclude %{_sysconfdir}/%{name}/chanstats.conf
-%exclude %{_sysconfdir}/%{name}/irc2sql.conf
-%endif
-%config(noreplace) %attr(0640,root,%{name}) %{_sysconfdir}/%{name}/motd
-%{_unitdir}/%{name}.service
-%{_sysusersdir}/%{name}.conf
-%{_tmpfilesdir}/%{name}.conf
-%{_sbindir}/%{name}
-%dir %{_libdir}/%{name}/
-%{_libdir}/%{name}/*.so
-%if %{with ldap}
-%exclude %{_libdir}/%{name}/ldap.so
-%exclude %{_libdir}/%{name}/ldap_authentication.so
-%exclude %{_libdir}/%{name}/ldap_oper.so
-%endif
-%if %{with mysql}
-%exclude %{_libdir}/%{name}/mysql.so
-%exclude %{_libdir}/%{name}/chanstats.so
-%exclude %{_libdir}/%{name}/cs_fantasy_stats.so
-%exclude %{_libdir}/%{name}/cs_fantasy_top.so
-%exclude %{_libdir}/%{name}/irc2sql.so
-%endif
-%{?with_pcre2:%exclude %{_libdir}/%{name}/regex_pcre2.so}
-%{?with_tre:%exclude %{_libdir}/%{name}/regex_tre.so}
-%{?with_sqlite:%exclude %{_libdir}/%{name}/sqlite.so}
-%{?with_gnutls:%exclude %{_libdir}/%{name}/ssl_gnutls.so}
-%{?with_openssl:%exclude %{_libdir}/%{name}/ssl_openssl.so}
-%dir %attr(0750,%{name},%{name}) %{_localstatedir}/lib/%{name}/
-%dir %attr(0750,%{name},%{name}) %{_localstatedir}/lib/%{name}/backups/
-%dir %attr(0750,%{name},%{name}) %{_localstatedir}/log/%{name}/
-%dir %attr(0755,%{name},%{name}) %{_rundir}/%{name}/
-
-%if %{with ldap}
-%files ldap
-%{_libdir}/%{name}/ldap.so
-%{_libdir}/%{name}/ldap_authentication.so
-%{_libdir}/%{name}/ldap_oper.so
-%endif
-
-%if %{with mysql}
-%files mysql
-%config(noreplace) %attr(0640,root,%{name}) %{_sysconfdir}/%{name}/chanstats.conf
-%config(noreplace) %attr(0640,root,%{name}) %{_sysconfdir}/%{name}/irc2sql.conf
-%{_libdir}/%{name}/mysql.so
-%{_libdir}/%{name}/chanstats.so
-%{_libdir}/%{name}/cs_fantasy_stats.so
-%{_libdir}/%{name}/cs_fantasy_top.so
-%{_libdir}/%{name}/irc2sql.so
-%endif
-
-%if %{with pcre2}
-%files pcre2
-%{_libdir}/%{name}/regex_pcre2.so
-%endif
-
-%if %{with tre}
-%files tre
-%{_libdir}/%{name}/regex_tre.so
-%endif
-
-%if %{with sqlite}
-%files sqlite
-%{_libdir}/%{name}/sqlite.so
-%endif
-
-%if %{with gnutls}
-%files gnutls
-%{_libdir}/%{name}/ssl_gnutls.so
-%endif
-
-%if %{with openssl}
-%files openssl
-%{_libdir}/%{name}/ssl_openssl.so
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n anope-ldap -f %{oreon_filedir}/anope-ldap.list
+%files -n anope-mysql -f %{oreon_filedir}/anope-mysql.list
+%files -n anope-pcre2 -f %{oreon_filedir}/anope-pcre2.list
+%files -n anope-tre -f %{oreon_filedir}/anope-tre.list
+%files -n anope-sqlite -f %{oreon_filedir}/anope-sqlite.list
+%files -n anope-gnutls -f %{oreon_filedir}/anope-gnutls.list
+%files -n anope-openssl -f %{oreon_filedir}/anope-openssl.list
 
 %changelog
+
 %autochangelog

@@ -1,12 +1,5 @@
 %global source0_hash 0114ef39b65f49f8968283ab47719d7e88f98d7360fe3649be331c7f53d5832c
-
-# Run optional test
-%if ! (0%{?rhel})
-%bcond_without perl_Archive_Tar_enables_optional_test
-%else
 %bcond_with perl_Archive_Tar_enables_optional_test
-%endif
-
 Name:           perl-Archive-Tar
 Version:        3.12
 Release:        1%{?dist}
@@ -14,81 +7,64 @@ Summary:        A module for Perl manipulation of .tar files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Archive-Tar
 Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Archive-Tar-%{version}.tar.gz
-# Remove annoying sleep after warnings in the build script
 Patch0:         Archive-Tar-2.02-Do-not-sleep-in-Makefile.PL.patch
 BuildArch:      noarch
-# Most of the BRS are needed only for tests, compression support at run-time
-# is optional soft dependency.
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# File::Copy not used
-BuildRequires:  perl(Getopt::Std)
-BuildRequires:  perl(strict)
-# Run-time:
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(File::Basename)
-BuildRequires:  perl(File::Find)
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(File::Spec) >= 0.82
-BuildRequires:  perl(File::Spec::Unix)
-BuildRequires:  perl(Getopt::Long)
-BuildRequires:  perl(IO::File)
-BuildRequires:  perl(IO::Handle)
-BuildRequires:  perl(IO::Zlib) >= 1.01
-BuildRequires:  perl(Pod::Usage)
-# Time::Local not used on Linux
-BuildRequires:  perl(vars)
-BuildRequires:  perl(warnings)
-# Optional run-time:
-BuildRequires:  perl(IO::Compress::Bzip2) >= 2.015
 %if !%{defined perl_bootstrap}
-BuildRequires:  perl(IO::Compress::Xz)
 %endif
-# IO::String not used if perl supports useperlio which is true
-# Use Compress::Zlib's version for IO::Uncompress::Bunzip2
-BuildRequires:  perl(IO::Uncompress::Bunzip2) >= 2.015
 %if !%{defined perl_bootstrap}
-BuildRequires:  perl(IO::Uncompress::UnXz)
-BuildRequires:  perl(Text::Diff)
 %endif
-# Tests:
-BuildRequires:  perl(File::Copy)
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(FindBin)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Test::Harness) >= 2.26
-BuildRequires:  perl(Test::More)
-# Optional tests:
 %if %{with perl_Archive_Tar_enables_optional_test} && !%{defined perl_bootstrap}
-BuildRequires:  perl(IPC::Cmd)
-BuildRequires:  perl(Test::Pod) >= 0.95
 %endif
 Requires:       perl(IO::Zlib) >= 1.01
-# Optional run-time:
 Requires:       perl(IO::Compress::Bzip2) >= 2.015
 %if !%{defined perl_bootstrap}
 Requires:       perl(IO::Compress::Xz)
 %endif
-# IO::String not used if perl supports useperlio which is true
-# Use Compress::Zlib's version for IO::Uncompress::Bunzip2
 Requires:       perl(IO::Uncompress::Bunzip2) >= 2.015
 %if !%{defined perl_bootstrap}
 Requires:       perl(IO::Uncompress::UnXz)
 Requires:       perl(Text::Diff)
 %endif
-
-# Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(IO::Zlib\\)$
-
 Provides:       perl(Archive::Tar)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Find)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Spec::Unix)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(Getopt::Std)
+BuildRequires:  perl(IO::Compress::Bzip2)
+BuildRequires:  perl(IO::Compress::Xz)
+BuildRequires:  perl(IO::File)
+BuildRequires:  perl(IO::Handle)
+BuildRequires:  perl(IO::Uncompress::Bunzip2)
+BuildRequires:  perl(IO::Uncompress::UnXz)
+BuildRequires:  perl(IO::Zlib)
+BuildRequires:  perl(Pod::Usage)
+BuildRequires:  perl(Test::Harness)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Text::Diff)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Archive::Tar provides an object oriented mechanism for handling tar
 files.  It provides class methods for quick and easy files handling
@@ -102,12 +78,12 @@ Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl(ExtUtils::MakeMaker)
 Requires:       perl(IPC::Cmd)
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Archive-Tar-%{version}
 %patch -P0 -p1
@@ -119,14 +95,12 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 rm %{buildroot}%{_libexecdir}/%{name}/t/99_pod.t
@@ -135,10 +109,7 @@ for F in ptar ptardiff ptargrep; do
     ln -s %{_bindir}/"$F" %{buildroot}%{_libexecdir}/%{name}/bin
 done
 cat > %{buildroot}/%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Some tests write into temporary files/directories. The easiest solution
-# is to copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -147,19 +118,14 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}/%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files
-%doc CHANGES README
-%{_bindir}/ptar*
-%{perl_vendorlib}/Archive/
-%{_mandir}/man3/Archive::Tar*.3*
-%{_mandir}/man1/ptar*.1*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Archive-Tar-tests -f %{oreon_filedir}/perl-Archive-Tar-tests.list
 
 %changelog
+
 %autochangelog

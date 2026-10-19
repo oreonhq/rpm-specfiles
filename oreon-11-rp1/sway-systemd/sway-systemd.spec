@@ -1,20 +1,12 @@
 %global source0_hash 3ce12188a91bc704019c87dd8b5eda01b387e904468c69b36468992c2d8ab347
-
 Name:           sway-systemd
 Version:        0.4.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Systemd integration for Sway session
-
 License:        MIT
 URL:            https://github.com/alebastr/sway-systemd
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/alebastr/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  meson
-BuildRequires:  pkgconfig(systemd)
-BuildRequires:  systemd-rpm-macros
-
 Requires:       python3dist(dbus-next)
 Requires:       python3dist(i3ipc)
 Requires:       python3dist(psutil)
@@ -23,7 +15,11 @@ Requires:       python3dist(tenacity)
 Requires:       sway
 Requires:       systemd
 Recommends:     /usr/bin/dbus-update-activation-environment
-
+# oreon:deps
+BuildRequires:  meson
+BuildRequires:  pkgconfig(systemd)
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
@@ -37,31 +33,18 @@ This includes several areas of integration:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %meson \
     -Dautoload-configs='cgroups'
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc README.md
-%config(noreplace) %{_sysconfdir}/sway/config.d/10-systemd-session.conf
-%config(noreplace) %{_sysconfdir}/sway/config.d/10-systemd-cgroups.conf
-%{_datadir}/%{name}/*.conf
-%dir %{_libexecdir}/%{name}
-%{_libexecdir}/%{name}/assign-cgroups.py
-%{_libexecdir}/%{name}/locale1-xkb-config
-%{_libexecdir}/%{name}/session.sh
-%{_libexecdir}/%{name}/wait-sni-ready
-%{_userunitdir}/sway-session.target
-%{_userunitdir}/sway-session-shutdown.target
-%{_userunitdir}/sway-xdg-autostart.target
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

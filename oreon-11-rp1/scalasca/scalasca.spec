@@ -1,36 +1,17 @@
 %global source0_hash 17e72fd908be43879955e4ed49c2732d4dbda7d295fec2d8b3af7ddafe1202a0
-
-# Copyright (c) 2014, 2015  Dave Love, University of Liverpool
-# Copyright (c) 2018, 2019  Dave Love, University of Manchester
-# MIT licence, per Fedora policy.
-
-# fixme: appdata/desktop files?
-# fixme: make common package with non-MPI-specific contents
-
 %bcond_without mpich
-
 %define shortver %(awk -F. '{print $1 "." $2}' <<<%version)
-
 Name:		scalasca
 Version:	2.6.2
-Release:	3%{?dist}
-Summary:	Toolset for performance analysis of large-scale parallel applications
-
-# ScoutPatternParser and SilasConfigParser are Bison-generated
+Release:        1%{?dist}
+Summary:        Toolset for performance analysis of large-scale parallel applications
 License:	BSD-3-Clause AND GPL-3.0-or-later WITH Bison-exception-2.2
 URL:		http://www.scalasca.org/
-Source0:	http://apps.fz-juelich.de/scalasca/releases/scalasca/%shortver/dist/%name-%version.tar.gz
-#               https://apps.fz-juelich.de/scalasca/releases/scalasca/2.6/dist/scalasca-2.6.2.tar.gz
-BuildRequires: make
-BuildRequires:	otf2-devel >= 3.0, cube-libs-devel >= 4.8
-BuildRequires:	zlib-devel openmpi-devel chrpath gcc-c++
+Source0:        http://apps.fz-juelich.de/%{name}/releases/%{name}/2.6/dist/%{name}-%{version}.tar.gz
 %if %{with mpich}
-BuildRequires:	mpich-devel
 %endif
 Requires:	scorep-config
-# As for scorep
 ExcludeArch: s390 s390x armv7hl i686
-
 %global desc \
 Scalasca is a software tool that supports the performance optimization\
 of parallel programs by measuring and analyzing their runtime\
@@ -43,7 +24,16 @@ on the programming interfaces MPI and OpenMP, including hybrid\
 applications based on a combination of the two. The tool has been\
 specifically designed for use on large-scale systems, but is also well\
 suited for small- and medium-scale HPC platforms.
-
+# oreon:deps
+BuildRequires:  chrpath
+BuildRequires:  cube-libs-devel
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  mpich-devel
+BuildRequires:  openmpi-devel
+BuildRequires:  otf2-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 %desc
 
@@ -51,7 +41,6 @@ suited for small- and medium-scale HPC platforms.
 Summary:	Toolset for performance analysis of large-scale parallel applications - openmpi
 Requires:	openmpi%{?_isa}
 Requires:	scorep-openmpi-config
-
 %description openmpi
 %desc
 
@@ -61,7 +50,6 @@ Summary:	Toolset for performance analysis of large-scale parallel applications -
 BuildRequires:	openmpi3-devel
 Requires:	openmpi3%{?_isa}
 Requires:	scorep-openmpi3-config
-
 %description openmpi3
 %desc
 
@@ -73,7 +61,6 @@ This is the openmpi3 version.
 Summary:	Toolset for performance analysis of large-scale parallel applications - mpich
 Requires:	mpich%{?_isa}
 Requires:	scorep-mpich-config
-
 %description mpich
 %desc
 
@@ -83,11 +70,11 @@ This is the mpich version.
 %package doc
 Summary: Documentation for %name
 BuildArch: noarch
-
 %description doc
 Documentation for %name
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -95,6 +82,7 @@ mkdir openmpi mpich simple %{?el7:openmpi3}
 rm -r vendor/cubew vendor/otf2	# bundled libraries
 
 %build
+
 %global _configure ../configure
 %global do_build \
 %configure --with-otf2 --with-cube --enable-shared --libdir=$MPI_LIB \\\
@@ -127,7 +115,6 @@ pushd simple
 	   --docdir=%_pkgdocdir
 %make_build
 popd
-
 %install
 %make_install -C openmpi
 %{?el7:%make_install -C openmpi3}
@@ -135,62 +122,23 @@ popd
 %make_install -C mpich
 %endif
 %make_install -C simple
-
 find $RPM_BUILD_ROOT%_libdir \( -name \*.la -o -name \*.a \) -exec rm -f {} \;
 chrpath -d $RPM_BUILD_ROOT%_bindir/scout.{ser,omp}
 chrpath -d $RPM_BUILD_ROOT%_libdir/{openmpi,mpich}/bin/scout.{ser,omp}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %_openmpi_load
 cd openmpi
 OMPI_MCA_rmaps_base_oversubscribe=1 \
 make check VERBOSE=1
-
 %ldconfig_scriptlets
-
-%files
-%doc README
-%license COPYING
-%_datadir/%name
-%exclude %_libdir/*.so
-%_libdir/*.so.*
-%_bindir/*
-%_mandir/man1/*
-
-%files openmpi
-%doc README
-%license COPYING
-%_libdir/openmpi/share/%name
-%exclude %_libdir/openmpi/lib/*.so
-%_libdir/openmpi/lib/*.so.*
-%_libdir/openmpi/bin/*
-%_mandir/openmpi-*/man1/*
-
-%if 0%{?el7}
-%files openmpi3
-%doc README
-%license COPYING
-%_libdir/openmpi3/share/%name
-%exclude %_libdir/openmpi3/lib/*.so
-%_libdir/openmpi3/lib/*.so.*
-%_libdir/openmpi3/bin/*
-%_mandir/openmpi3-*/man1/*
-%endif
-
-%if %{with mpich}
-%files mpich
-%doc README
-%license COPYING
-%_libdir/mpich/share/%name
-%exclude %_libdir/mpich/lib/*.so
-%_libdir/mpich/lib/*.so.*
-%_libdir/mpich/bin/*
-%_mandir/mpich*/man1/*
-%endif
-
-%files doc
-%license COPYING
-%_pkgdocdir
+%files -f %{oreon_filedir}/main.list
+%files -n scalasca-openmpi -f %{oreon_filedir}/scalasca-openmpi.list
+%files -n scalasca-mpich -f %{oreon_filedir}/scalasca-mpich.list
+%files -n scalasca-doc -f %{oreon_filedir}/scalasca-doc.list
 
 %changelog
+
 %autochangelog

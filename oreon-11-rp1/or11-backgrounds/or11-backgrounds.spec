@@ -1,36 +1,25 @@
 %global source0_hash none
-
 %global relnum 11
 %global Bg_Name OR11
 %global bgname %(t="%{Bg_Name}";echo ${t,,})
-
-# Disable Extras subpackages by default (upstream extras Makefile is not validated for Oreon)
 %bcond          extras 0
-
 Name:           %{bgname}-backgrounds
 Version:        11.0.0
 Release:        2%{?dist}
-Summary:        Oreon %{relnum} default desktop background
-
+Summary:        Oreon 11 default desktop background
 License:        CC-BY-SA-4.0
 URL:            https://oreonhq.com
 Source0:        %{name}-%{version}.tar.xz
-
 BuildArch:      noarch
-
-BuildRequires:  kde-filesystem
-BuildRequires:  make
-
 Requires:       %{name}-budgie = %{version}-%{release}
 Requires:       %{name}-gnome = %{version}-%{release}
 Requires:       %{name}-kde = %{version}-%{release}
-%if 0%{?rhel} < 10
-Requires:       %{name}-xfce = %{version}-%{release}
-%endif
 Requires:       %{name}-mate = %{version}-%{release}
-
 Provides:       f44-backgrounds = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  kde-filesystem
+BuildRequires:  make
+# /oreon:deps
 %description
 This package contains desktop backgrounds for the Oreon %{relnum} default theme.
 It pulls in themes for GNOME, KDE, MATE, Budgie, and Xfce desktops.
@@ -42,7 +31,6 @@ still depend on those names can resolve against the Oreon wallpaper set.
 Summary:        Base images for Oreon %{relnum} default background
 License:        CC-BY-SA-4.0
 Provides:       f44-backgrounds-base = %{version}-%{release}
-
 %description    base
 This package contains base images for Oreon %{relnum} default background.
 
@@ -51,7 +39,6 @@ Summary:        Oreon %{relnum} default wallpaper for Budgie
 Requires:       %{name}-base = %{version}-%{release}
 Recommends:     %{name}-gnome = %{version}-%{release}
 Provides:       f44-backgrounds-budgie = %{version}-%{release}
-
 %description    budgie
 This package contains Budgie desktop wallpaper for the Oreon %{relnum} default theme.
 
@@ -59,7 +46,6 @@ This package contains Budgie desktop wallpaper for the Oreon %{relnum} default t
 Summary:        Oreon %{relnum} default wallpaper for Gnome and Cinnamon
 Requires:       %{name}-base = %{version}-%{release}
 Provides:       f44-backgrounds-gnome = %{version}-%{release}
-
 %description    gnome
 This package contains Gnome and Cinnamon desktop wallpaper for the Oreon %{relnum}
 default theme.
@@ -71,7 +57,6 @@ Requires:       kde-filesystem
 Requires:       oreon-wallpapers
 Provides:       f44-backgrounds-kde = %{version}-%{release}
 Provides:       system-backgrounds-kde = %{version}-%{release}
-
 %description    kde
 This package contains KDE desktop wallpaper for the Oreon %{relnum} default theme.
 
@@ -79,129 +64,66 @@ This package contains KDE desktop wallpaper for the Oreon %{relnum} default them
 Summary:        Oreon %{relnum} default wallpaper for Mate
 Requires:       %{name}-base = %{version}-%{release}
 Provides:       f44-backgrounds-mate = %{version}-%{release}
-
 %description    mate
 This package contains Mate desktop wallpaper for the Oreon %{relnum} default theme.
-
-%if 0%{?rhel} < 10
-%package        xfce
-Summary:        Oreon %{relnum} default background for XFCE4
-
-Requires:       %{name}-base = %{version}-%{release}
-Requires:       xfdesktop
-Provides:       f44-backgrounds-xfce = %{version}-%{release}
-
-%description    xfce
-This package contains XFCE4 desktop background for the Oreon %{relnum} default theme.
-%endif
 
 %if %{with extras}
 %package        extras-base
 Summary:        Base images for Extras Backgrounds
 License:        CC-BY-4.0 AND CC-BY-SA-4.0 AND CC0-1.0
-
 %description    extras-base
 This package contains base images for supplemental wallpapers.
 
 %package        extras-gnome
 Summary:        Extra Wallpapers for Gnome and Cinnamon
-
 Requires:       %{name}-extras-base = %{version}-%{release}
-
 %description    extras-gnome
 This package contains supplemental wallpapers for Gnome and Cinnamon.
 
 %package        extras-mate
 Summary:        Extra Wallpapers for Mate
-
 Requires:       %{name}-extras-base = %{version}-%{release}
-
 %description    extras-mate
 This package contains supplemental wallpapers for Mate.
 
 %package        extras-kde
 Summary:        Extra Wallpapers for KDE
-
 Requires:       %{name}-extras-base = %{version}-%{release}
-
 %description    extras-kde
 This package contains supplemental wallpapers for KDE.
 
 %package        extras-xfce
 Summary:        Extra Wallpapers for XFCE
-
 Requires:       %{name}-extras-base = %{version}-%{release}
-
 %description    extras-xfce
 This package contains supplemental wallpapers for XFCE.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
 
-
 %build
-%make_build %{?with_extras:SUBDIRS="default extras"}
 
+%make_build %{?with_extras:SUBDIRS="default extras"}
 %install
 %make_install %{?with_extras:SUBDIRS="default extras"}
 chmod 644 %{buildroot}%{_datadir}/wallpapers/%{Bg_Name}/metadata.json
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%if 0%{?rhel} >= 10
-rm -fr %{buildroot}%{_datadir}/xfce4
-%endif
-
-%files
-%doc
-
-%files base
-%license CC-BY-SA-4.0 Attribution
-%dir %{_datadir}/backgrounds/%{bgname}
-%dir %{_datadir}/backgrounds/%{bgname}/default
-%{_datadir}/backgrounds/%{bgname}/default/%{bgname}*.{png,xml}
-
-%files kde
-%{_datadir}/wallpapers/%{Bg_Name}/
-
-%files gnome
-%{_datadir}/gnome-background-properties/%{bgname}.xml
-%dir %{_datadir}/gnome-background-properties/
-
-%files budgie
-%{_datadir}/gnome-background-properties/%{bgname}-budgie.xml
-
-%files mate
-%{_datadir}/mate-background-properties/%{bgname}.xml
-%dir %{_datadir}/mate-background-properties/
-
-%if 0%{?rhel} < 10
-%files xfce
-%{_datadir}/xfce4/backdrops/%{bgname}*.png
-%if %{with extras}
-%exclude %{_datadir}/xfce4/backdrops/%{bgname}-extras*.png
-%endif
-%dir %{_datadir}/xfce4/
-%dir %{_datadir}/xfce4/backdrops/
-%endif
-
-%if %{with extras}
-%files extras-base
-%license CC-BY-SA-4.0 Attribution
-%{_datadir}/backgrounds/%{bgname}/extras/
-
-%files extras-gnome
-%{_datadir}/gnome-background-properties/%{bgname}-extras.xml
-
-%files extras-kde
-%{_datadir}/wallpapers/%{Bg_Name}_*/
-
-%files extras-mate
-%{_datadir}/mate-background-properties/%{bgname}-extras.xml
-
-%files extras-xfce
-%{_datadir}/xfce4/backdrops/%{bgname}-extras*.png
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n or11-backgrounds-base -f %{oreon_filedir}/or11-backgrounds-base.list
+%files -n or11-backgrounds-budgie -f %{oreon_filedir}/or11-backgrounds-budgie.list
+%files -n or11-backgrounds-gnome -f %{oreon_filedir}/or11-backgrounds-gnome.list
+%files -n or11-backgrounds-kde -f %{oreon_filedir}/or11-backgrounds-kde.list
+%files -n or11-backgrounds-mate -f %{oreon_filedir}/or11-backgrounds-mate.list
+%files -n or11-backgrounds-extras-base -f %{oreon_filedir}/or11-backgrounds-extras-base.list
+%files -n or11-backgrounds-extras-gnome -f %{oreon_filedir}/or11-backgrounds-extras-gnome.list
+%files -n or11-backgrounds-extras-mate -f %{oreon_filedir}/or11-backgrounds-extras-mate.list
+%files -n or11-backgrounds-extras-kde -f %{oreon_filedir}/or11-backgrounds-extras-kde.list
+%files -n or11-backgrounds-extras-xfce -f %{oreon_filedir}/or11-backgrounds-extras-xfce.list
 
 %changelog
+
 %autochangelog

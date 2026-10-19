@@ -1,46 +1,33 @@
 %global source0_hash d4a2b3aa0272d73ea0c4cd2140960177fa34ddc2030e59a48ecfb80c757572c3
-
 %if 0%{?fedora} < 34 && 0%{?rhel} < 9 && 0%{?oreon} < 11
 %global botan 1
 %endif
-
 %bcond_without qt5
 %bcond_without qt6
-
-#global doc 1
 %global tests 1
-
 Name:    qca
-Summary: Qt Cryptographic Architecture
+Summary:        Qt Cryptographic Architecture
 Version: 2.3.12
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: LGPL-2.1-only
 URL:     https://userbase.kde.org/QCA
 Source0:        https://download.kde.org/stable/qca/%{version}/qca-%{version}.tar.xz
-# Also generate pkgconfig file for qt6
 Patch0:  qca-qt6-pkgconfig.patch
-## upstream patches
-
-## upstreamable patches
-
-BuildRequires: cmake >= 2.8.12
-BuildRequires: gcc-c++
-BuildRequires: libgcrypt-devel
-BuildRequires: pkgconfig(libcrypto) pkgconfig(libssl)
-BuildRequires: pkgconfig(nss)
-BuildRequires: pkgconfig(libpkcs11-helper-1)
-BuildRequires: pkgconfig(libsasl2)
-
-
 %if 0%{?doc}
-# apidocs
-# may need to add some tex-related ones too -- rex
-BuildRequires: doxygen-latex
-BuildRequires: graphviz
 %endif
-
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  libgcrypt-devel
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  pkgconfig(Qt6Core5Compat)
+BuildRequires:  pkgconfig(libcrypto)
+BuildRequires:  pkgconfig(libpkcs11-helper-1)
+BuildRequires:  pkgconfig(libsasl2)
+BuildRequires:  pkgconfig(libssl)
+BuildRequires:  pkgconfig(nss)
+# /oreon:deps
 %description
 Taking a hint from the similarly-named Java Cryptography Architecture,
 QCA aims to provide a straightforward and cross-platform crypto API,
@@ -51,7 +38,6 @@ on any particular cryptographic library. This allows one to easily change
 or upgrade crypto implementations without even needing to recompile the
 application!
 
-
 %if %{with qt5}
 %package qt5
 Summary: Qt5 Cryptographic Architecture
@@ -59,7 +45,6 @@ BuildRequires: pkgconfig(Qt5Core)
 %if ! 0%{?botan}
 Obsoletes: qca-qt5-botan < %{version}-%{release}
 %endif
-# most runtime consumers seem to assume the ossl plugin be present
 Recommends: %{name}-qt5-ossl%{?_isa}
 %description qt5
 Taking a hint from the similarly-named Java Cryptography Architecture,
@@ -136,13 +121,11 @@ Requires: %{name}-qt5%{?_isa} = %{version}-%{release}
 %{summary}.
 %endif
 
-
 %if %{with qt6}
 %package qt6
 BuildRequires: pkgconfig(Qt6Core)
 BuildRequires: pkgconfig(Qt6Core5Compat)
 Summary: Qt6 Cryptographic Architecture
-# most runtime consumers seem to assume the ossl plugin be present
 Recommends: %{name}-qt6-ossl%{?_isa}
 %description qt6
 Taking a hint from the similarly-named Java Cryptography Architecture,
@@ -220,14 +203,11 @@ Requires: %{name}-qt6%{?_isa} = %{version}-%{release}
 
 %endif
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
-# https://fedoraproject.org/wiki/Changes/dropingOfCertPemFile
+
 export QC_CERTSTORE_PATH=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 cmake_opts="-Wno-dev \
   -DBUILD_TESTS:BOOL=%{?tests:ON}%{!?tests:OFF} \
@@ -243,11 +223,8 @@ cmake_opts="-Wno-dev \
   -DQCA_FEATURE_INSTALL_DIR:PATH=%{_qt5_archdatadir}/mkspecs/features \
   -DQCA_INCLUDE_INSTALL_DIR:PATH=%{_qt5_headerdir} \
   -DQCA_PRIVATE_INCLUDE_INSTALL_DIR:PATH=%{_qt5_headerdir}
-
 %cmake_build
 %endif
-
-
 %if %{with qt6}
 %define _vpath_builddir %{_target_platform}-qt6
 %cmake $cmake_opts \
@@ -257,178 +234,72 @@ cmake_opts="-Wno-dev \
   -DQCA_FEATURE_INSTALL_DIR:PATH=%{_qt6_archdatadir}/mkspecs/features \
   -DQCA_INCLUDE_INSTALL_DIR:PATH=%{_qt6_headerdir} \
   -DQCA_PRIVATE_INCLUDE_INSTALL_DIR:PATH=%{_qt6_headerdir}
-
 %cmake_build
 %endif
-
-
-
 %if 0%{?doc}
 %cmake_build --target doc
 %endif
-
-
 %install
 %define _vpath_builddir %{_target_platform}-qt5
 %cmake_install
-
 %if %{with qt6}
 %define _vpath_builddir %{_target_platform}-qt6
 %cmake_install
 %endif
-
-
 %if 0%{?doc}
-# no make install target for docs yet
 mkdir -p %{buildroot}%{_docdir}/qca
 cp -a %{_target_platform}/apidocs/html/ \
       %{buildroot}%{_docdir}/qca/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
-
 %check
+
 %if %{with qt5}
 %if 0%{?test}
 %define _vpath_builddir %{_target_platform}-qt5
 export CTEST_OUTPUT_ON_FAILURE=1
 export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
-# skip slow archs
 %ifnarch %{arm} ppc64 s390x
 test "$(pkg-config --modversion qca2-qt5)" = "%{version}"
 %ctest --timeout 180
 %endif
 %endif
 %endif
-
 %if %{with qt6}
 %if 0%{?test}
 %define _vpath_builddir %{_target_platform}-qt6
 export CTEST_OUTPUT_ON_FAILURE=1
 export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
-# skip slow archs
 %ifnarch %{arm} ppc64 s390x
 test "$(pkg-config --modversion qca2-qt6)" = "%{version}"
 %ctest --timeout 180
 %endif
 %endif
 %endif
-
-
 %if 0%{?doc}
-%files doc
-%{_docdir}/qca/html/
-%endif
-
-
-%if %{with qt5}
-%files qt5
-%doc README TODO
-%license COPYING
-%{_bindir}/mozcerts-qt5
-%{_bindir}/qcatool-qt5
-%{_mandir}/man1/qcatool-qt5.1*
-%{_qt5_libdir}/libqca-qt5.so.2*
-%dir %{_qt5_plugindir}/crypto/
-
-%files qt5-devel
-%{_qt5_headerdir}/QtCrypto
-%{_qt5_libdir}/libqca-qt5.so
-%{_libdir}/pkgconfig/qca2-qt5.pc
-%{_libdir}/cmake/Qca-qt5/
-%{_qt5_archdatadir}/mkspecs/features/crypto.prf
-
-%if 0%{?botan}
-%files qt5-botan
-%doc plugins/qca-botan/README
-%{_qt5_plugindir}/crypto/libqca-botan.so
-%endif
-
-%files qt5-cyrus-sasl
-%doc plugins/qca-gcrypt/README
-%{_qt5_plugindir}/crypto/libqca-cyrus-sasl.so
-
-%files qt5-gcrypt
-%{_qt5_plugindir}/crypto/libqca-gcrypt.so
-
-%files qt5-gnupg
-%doc plugins/qca-cyrus-sasl/README
-%{_qt5_plugindir}/crypto/libqca-gnupg.so
-
-%files qt5-logger
-%doc plugins/qca-logger/README
-%{_qt5_plugindir}/crypto/libqca-logger.so
-
-%files qt5-nss
-%doc plugins/qca-nss/README
-%{_qt5_plugindir}/crypto/libqca-nss.so
-
-%files qt5-ossl
-%doc plugins/qca-ossl/README
-%{_qt5_plugindir}/crypto/libqca-ossl.so
-
-%files qt5-pkcs11
-%doc plugins/qca-pkcs11/README
-%{_qt5_plugindir}/crypto/libqca-pkcs11.so
-
-%files qt5-softstore
-%doc plugins/qca-softstore/README
-%{_qt5_plugindir}/crypto/libqca-softstore.so
-%endif
-
-
-%if %{with qt6}
-%files qt6
-%doc README TODO
-%license COPYING
-%{_bindir}/mozcerts-qt6
-%{_bindir}/qcatool-qt6
-%{_mandir}/man1/qcatool-qt6.1*
-%{_qt6_libdir}/libqca-qt6.so.2*
-%dir %{_qt6_plugindir}/crypto/
-
-%files qt6-devel
-%{_qt6_headerdir}/QtCrypto
-%{_qt6_libdir}/libqca-qt6.so
-%{_libdir}/pkgconfig/qca2-qt6.pc
-%{_libdir}/cmake/Qca-qt6/
-
-%if 0%{?botan}
-%files qt6-botan
-%doc plugins/qca-botan/README
-%{_qt6_plugindir}/crypto/libqca-botan.so
-%endif
-
-%files qt6-cyrus-sasl
-%doc plugins/qca-gcrypt/README
-%{_qt6_plugindir}/crypto/libqca-cyrus-sasl.so
-
-%files qt6-gcrypt
-%{_qt6_plugindir}/crypto/libqca-gcrypt.so
-
-%files qt6-gnupg
-%doc plugins/qca-cyrus-sasl/README
-%{_qt6_plugindir}/crypto/libqca-gnupg.so
-
-%files qt6-logger
-%doc plugins/qca-logger/README
-%{_qt6_plugindir}/crypto/libqca-logger.so
-
-%files qt6-nss
-%doc plugins/qca-nss/README
-%{_qt6_plugindir}/crypto/libqca-nss.so
-
-%files qt6-ossl
-%doc plugins/qca-ossl/README
-%{_qt6_plugindir}/crypto/libqca-ossl.so
-
-%files qt6-pkcs11
-%doc plugins/qca-pkcs11/README
-%{_qt6_plugindir}/crypto/libqca-pkcs11.so
-
-%files qt6-softstore
-%doc plugins/qca-softstore/README
-%{_qt6_plugindir}/crypto/libqca-softstore.so
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n qca-qt5 -f %{oreon_filedir}/qca-qt5.list
+%files -n qca-qt5-devel -f %{oreon_filedir}/qca-qt5-devel.list
+%files -n qca-qt5-cyrus-sasl -f %{oreon_filedir}/qca-qt5-cyrus-sasl.list
+%files -n qca-qt5-gcrypt -f %{oreon_filedir}/qca-qt5-gcrypt.list
+%files -n qca-qt5-gnupg -f %{oreon_filedir}/qca-qt5-gnupg.list
+%files -n qca-qt5-logger -f %{oreon_filedir}/qca-qt5-logger.list
+%files -n qca-qt5-nss -f %{oreon_filedir}/qca-qt5-nss.list
+%files -n qca-qt5-ossl -f %{oreon_filedir}/qca-qt5-ossl.list
+%files -n qca-qt5-pkcs11 -f %{oreon_filedir}/qca-qt5-pkcs11.list
+%files -n qca-qt5-softstore -f %{oreon_filedir}/qca-qt5-softstore.list
+%files -n qca-qt6 -f %{oreon_filedir}/qca-qt6.list
+%files -n qca-qt6-devel -f %{oreon_filedir}/qca-qt6-devel.list
+%files -n qca-qt6-cyrus-sasl -f %{oreon_filedir}/qca-qt6-cyrus-sasl.list
+%files -n qca-qt6-gcrypt -f %{oreon_filedir}/qca-qt6-gcrypt.list
+%files -n qca-qt6-gnupg -f %{oreon_filedir}/qca-qt6-gnupg.list
+%files -n qca-qt6-logger -f %{oreon_filedir}/qca-qt6-logger.list
+%files -n qca-qt6-nss -f %{oreon_filedir}/qca-qt6-nss.list
+%files -n qca-qt6-ossl -f %{oreon_filedir}/qca-qt6-ossl.list
+%files -n qca-qt6-pkcs11 -f %{oreon_filedir}/qca-qt6-pkcs11.list
+%files -n qca-qt6-softstore -f %{oreon_filedir}/qca-qt6-softstore.list
 
 %changelog
+
 %autochangelog
+%endif

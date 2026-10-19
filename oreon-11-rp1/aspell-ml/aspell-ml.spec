@@ -1,32 +1,20 @@
 %global source0_hash e4cd551e558b6d26e4db58e051eeca3d893fc2c4e7fce90a022af247422096fd
-
 %global lang ml
 %global langrelease 1
-
 Name: aspell-%{lang}
 Version: 0.03
-Release: 36%{?dist}
-Summary: GNU Aspell Malayalam Dictionary Package
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        GNU Aspell Malayalam Dictionary Package
 License: GPL-3.0-or-later
 URL: http://aspell.net/
-Source0: https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}-%{langrelease}.tar.bz2
-
-# IMPORTANT
-# This package has been deprecated since Fedora 39
-# The reason behind this is that upstream has been inactive for more than 4 years
-# and there are other variants like hunspell or enchant which has active upstream
-# FESCo approval is located here: https://pagure.io/fesco/issue/3009
-# Change proposal is located here: https://fedoraproject.org/wiki/Changes/AspellDeprecation
+Source0:        https://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell6-%{lang}-%{version}-%{langrelease}.tar.bz2
 Provides:  deprecated()
-
-Buildrequires: aspell >= 12:0.60
-BuildRequires: make
 Requires: aspell >= 12:0.60
-
 %global debug_package %{nil}
-
+# oreon:deps
+BuildRequires:  aspell
+BuildRequires:  make
+# /oreon:deps
 %description
 GNU Aspell Malayalam Dictionary Package. Malayalam wordlist for this package is
 prepared by Santhosh Thottingal <santhosh00 at gmail dot com>,
@@ -44,21 +32,21 @@ Swathanthra Malayalam Computing
 #  --libdir, so this error is bogus.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n aspell6-%{lang}-%{version}-%{langrelease}
 
 %build
+
 ./configure 
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
+%oreon_autofiles main
 
-%files
-%doc Copyright README
-%license COPYING
-%{_libdir}/aspell-0.60/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,15 +1,20 @@
-%global source0_hash f5e9aea00f43b9f5fd777167a513034b3b403af46d42eeef4a73a490c79533e1
-
+%global source0_hash 8064cef025207d5c051398eba5936d31d716b28b0ed2638cea34cd4449153cf6
 Name:           tree-sitter-heex
 Version:        0.9.0
-Release:        %{autorelease}
+Release:        1%{?dist}
 License:        MIT
 URL:            https://github.com/phoenixframework/%{name}
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/phoenixframework/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildSystem:    tree_sitter
-BuildRequires:  tree-sitter-srpm-macros >= 0.1.1
-
 %{tree_sitter -l HEEx}
+# oreon:deps
+BuildRequires:  tree-sitter-srpm-macros
+# /oreon:deps
+%files -f %{oreon_filedir}/main.list
+%files -n libtree-sitter-heex -f %{oreon_filedir}/libtree-sitter-heex.list
+%files -n libtree-sitter-heex-devel -f %{oreon_filedir}/libtree-sitter-heex-devel.list
+%files -n python3-tree-sitter-heex -f %{oreon_filedir}/python3-tree-sitter-heex.list
 
 %changelog
+
 %autochangelog

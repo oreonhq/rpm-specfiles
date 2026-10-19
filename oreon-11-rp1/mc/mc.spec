@@ -1,37 +1,34 @@
 %global source0_hash cae149d42f844e5185d8c81d7db3913a8fa214c65f852200a9d896b468af164c
-
-# NOTE: disabled sftp (needs to be ported to use libssh instead of libssh2)
 %bcond gpm %[!(0%{?rhel} >= 10)]
 %bcond slang 1
-
-Summary:	User-friendly text console file manager and visual shell
+Summary:        User-friendly text console file manager and visual shell
 Name:		mc
 Epoch:		1
 Version: 	4.8.33
-Release:	3%{?dist}
+Release:        3%{?dist}
 License:	GPL-3.0-or-later
 URL:		https://midnight-commander.org/
-Source:        http://ftp.midnight-commander.org/mc-%{version}.tar.xz
+Source0:        http://ftp.midnight-commander.org/mc-%{version}.tar.xz
 Patch:		%{name}-spec.syntax.patch
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	gcc
-BuildRequires:	gettext-devel
 %if %{with gpm}
-BuildRequires:	gpm-devel
 %endif
-BuildRequires:	groff-base
-BuildRequires:	libtool
-BuildRequires:	make
-BuildRequires:	perl-generators
-BuildRequires:	pkgconfig
-BuildRequires:	pkgconfig(ext2fs)
-BuildRequires:	pkgconfig(glib-2.0)
-BuildRequires:	pkgconfig(gmodule-2.0)	>= 2.30
-#BuildRequires:	pkgconfig(libssh2)	>= 1.2.8
-BuildRequires:	%[%{?with_slang}?"pkgconfig(slang) >= 2.0":"ncurses-devel"]
 Suggests:	mc-python
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  gpm-devel
+BuildRequires:  groff-base
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  perl-generators
+BuildRequires:  pkgconfig
+BuildRequires:  pkgconfig(ext2fs)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gmodule-2.0)
+BuildRequires:  pkgconfig(slang)
+# /oreon:deps
 %description
 Midnight Commander is a visual shell much like a file manager, only with
 many more features. It is a text mode application, but it also includes
@@ -43,15 +40,14 @@ Summary:	Midnight Commander s3+ and UC1541 EXTFS backend scripts
 BuildArch:	noarch
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	python3-boto
-
 %description python
 Midnight Commander s3+ and UC1541 EXTFS backend scripts.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %__sed -i "s,PREV_MC_VERSION=\"unknown\",PREV_MC_VERSION=\"%{version}\"," version.sh
 %configure \
 	PYTHON=%__python3 \
@@ -70,34 +66,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 	--with-x \
 	%{nil}
 %make_build
-
 %install
 %make_install
-
 %__install contrib/mc.{sh,csh} -Dt %{buildroot}%{_sysconfdir}/profile.d
-
 %find_lang %{name} --with-man
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%license doc/COPYING
-%doc doc/FAQ doc/NEWS doc/README
-/etc/profile.d/*
-%dir %{_sysconfdir}/mc
-%config(noreplace) %{_sysconfdir}/mc/*
-%{_bindir}/*
-%dir %{_libexecdir}/mc
-%attr(755,root,root) %{_libexecdir}/mc/cons.saver
-%{_libexecdir}/mc/mc*
-%{_libexecdir}/mc/extfs.d
-%{_libexecdir}/mc/ext.d
-%{_libexecdir}/mc/shell
-%{_datadir}/mc
-%{_mandir}/man1/*
-%exclude %{_libexecdir}/mc/extfs.d/{s3+,uc1541}
-
-%files python
-%{_libexecdir}/mc/extfs.d/{s3+,uc1541}
+%files -f %{oreon_filedir}/main.list
+%files -n mc-python -f %{oreon_filedir}/mc-python.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.8.33-3
 - Prepare for Oreon 11 (RP1)

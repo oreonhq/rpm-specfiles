@@ -1,60 +1,42 @@
 %global source0_hash bd44c4c13e22dc69366e76d05b3d65629d07507a38e5ba42d60267756d73edcf
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    kdegraphics-thumbnailers
-Summary: Thumbnailers for various graphic types
+Summary:        Thumbnailers for various graphic types
 Version: 26.04.3
-Release: 1%{?dist}
-
-# most sources GPLv2+, dscparse.* GPL, gscreator.* LGPLv2+,
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://www.kde.org/applications/graphics/
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6Archive)
-BuildRequires: cmake(KExiv2Qt6)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(QMobipocket6)
-BuildRequires: cmake(Qt6Gui)
-BuildRequires: cmake(KDcrawQt6)
-
+# oreon:deps
+BuildRequires:  cmake(KDcrawQt6)
+BuildRequires:  cmake(KExiv2Qt6)
+BuildRequires:  cmake(KF6Archive)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(QMobipocket6)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
-
+%oreon_prep
 %build
+
 %cmake_kf6 \
 	-DQT_MAJOR_VERSION=6
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-
-%files
-%license COPYING*
-%{_kf6_metainfodir}/org.kde.kdegraphics-thumbnailers.metainfo.xml
-%{_kf6_qtplugindir}/kf6/thumbcreator/blenderthumbnail.so
-%{_kf6_qtplugindir}/kf6/thumbcreator/gsthumbnail.so
-%{_kf6_qtplugindir}/kf6/thumbcreator/mobithumbnail.so
-%{_kf6_qtplugindir}/kf6/thumbcreator/rawthumbnail.so
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

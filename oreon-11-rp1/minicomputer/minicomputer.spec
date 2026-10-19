@@ -1,31 +1,25 @@
 %global source0_hash b4d5f0be2b9af7ffcd2015d00c8e582959ce8e6d3b039f90f5551477b12d67e2
-
 Name:		minicomputer
 Version:	1.41
-Release:	43%{?dist}
-Summary:	Software Synthesizer
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        43%{?dist}
+Summary:        Software Synthesizer
 License:	GPL-3.0-or-later
 URL:		http://minicomputer.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/minicomputer/MinicomputerV%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/minicomputer/MinicomputerV%{version}.tar.gz
 Source1:	%{name}.desktop
-# DSO linking fix. Sent upstream by email.
 Patch0:		%{name}-linking.patch
-# GCC 4.7 fix
 Patch1:		%{name}-gcc47.patch
-# Build with Python 3
 Patch2:		%{name}-build-python3.patch
-
-BuildRequires:	gcc-c++
-BuildRequires:	alsa-lib-devel
-BuildRequires:	desktop-file-utils
-BuildRequires:	fltk1.3-devel
-BuildRequires:	jack-audio-connection-kit-devel
-BuildRequires:	liblo-devel
-BuildRequires:	/usr/bin/scons
-
 Requires:	hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  /usr/bin/scons
+BuildRequires:  alsa-lib-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  fltk1.3-devel
+BuildRequires:  gcc-c++
+BuildRequires:  jack-audio-connection-kit-devel
+BuildRequires:  liblo-devel
+# /oreon:deps
 %description
 Minicomputer is a standalone Linux software synthesizer for creating 
 experimental electronic sounds as its often used in but not limited to
@@ -34,6 +28,7 @@ monophonic but can produce up to 8 different sounds at the same time. It uses
 Jack as realtime audio infrastructure and can be controlled via Midi.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -n MinicomputerV%{version}
@@ -51,28 +46,23 @@ sed -i "s|\(^env.Append(CCFLAGS =\).*|\1 ['%{optflags} -Wno-incompatible-pointer
 sed -i "s|\(^guienv.Append(CPPFLAGS =\).*|\1 ['%{optflags} -Wno-incompatible-pointer-types'.split() ])|" SConstruct
 
 %build
-scons %{?_smp_mflags}
 
+scons %{?_smp_mflags}
 %install
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_bindir}
 install -pm 755 %{name}{,CPU} %{buildroot}%{_bindir}/
-
 mkdir -p %{buildroot}%{_datadir}/applications
 desktop-file-install				\
 --dir=%{buildroot}%{_datadir}/applications	\
 %{SOURCE1}
-
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
 install -pm 644 %{name}.xpm \
 	%{buildroot}%{_datadir}/icons/hicolor/32x32/apps
+%oreon_autofiles main
 
-%files
-%doc CHANGES README minicomputerManual.pdf factoryPresets
-%license COPYING
-%{_bindir}/%{name}*
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/32x32/apps/%{name}.xpm
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

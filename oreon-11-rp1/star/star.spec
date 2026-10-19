@@ -1,60 +1,37 @@
-%global source0_hash 4d66bf35a5bc2927248fac82266b56514fde07c1acda66f25b9c42ccff560a02
-
+%global source0_hash fd3db00278caecd94b3802e1f903bf235a7137511ac0a450b31d855e3a52917b
 %global ALTERNATIVES %{_bindir}/alternatives
 %global version_schily 2024-03-21
-
-# Use a specific order for building as libraries are linked to each other:
 %global components libschily libdeflt libmdigest libfind librmt rmt star
 Name:           star
 Version:        %(echo %version_schily | tr '-' '.')
-Release:        %autorelease 
+Release:        1%{?dist}
 Summary:        An archiving tool with ACL support
-
-# libschily: CDDL-1.0 AND BSD-3-Clause AND BSD-4-Clause
-# libdeflt: CDDL-1.0
-# libmdigest: BSD-2-Clause AND BSD-3-Clause AND LicenseRef-Public-Domain
-# libfind: CDDL-1.0
-# librmt: CDDL-1.0
-# rmt: CDDL-1.0
-# star: CDDL-1.0 AND BSD-3-Clause
-
 License:        CDDL-1.0 AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND LicenseRef-Public-Domain
 URL:            https://codeberg.org/schilytools/schilytools
-
 Source0:        https://codeberg.org/schilytools/schilytools/archive/2024-03-21.tar.gz#/schily-2024-03-21.tar.gz
-
-# Allow rmt to access all files.
-# ~> downstream
-# ~> #968980
 Patch1:         star-1.5.2-rmt-rh-access.patch
-# Use ssh rather than rsh by default
-# ~> downstream
-# ~> related to #968980
 Patch2:         star-2024.03.21-use-ssh-by-default.patch	
-# Fix some invalid manpage references (#624612)
 Patch3:         star-2024.03.21-manpagereferences.patch
-# Prevent buffer overflow for filenames with length of 100 characters (#556664)
-# Although I couldn't replicate it with 2024.03.21-4, candidate for removal
 Patch4:         star-2024.03.21-bufferoverflow.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  libattr-devel libacl-devel libselinux-devel libcap-devel
-BuildRequires:  make e2fsprogs-devel
-BuildRequires:  sed
-
-# drop i686 support ()
 ExcludeArch:    %{ix86}
-
 Provides:       star = %{version}-%{release}
 Obsoletes:      star <= 1.6
 Provides:       spax = %{version}-%{release}
 Obsoletes:      spax <= 1.6
 Provides:       scpio = %{version}-%{release}
 Obsoletes:      scpio <= 1.6
-
 Requires(post):  %{ALTERNATIVES}
 Requires(preun): %{ALTERNATIVES}
-
+# oreon:deps
+BuildRequires:  e2fsprogs-devel
+BuildRequires:  gcc-c++
+BuildRequires:  libacl-devel
+BuildRequires:  libattr-devel
+BuildRequires:  libcap-devel
+BuildRequires:  libselinux-devel
+BuildRequires:  make
+BuildRequires:  sed
+# /oreon:deps
 %description
 Star saves many files together into a single tape or disk archive,
 and can restore individual files from the archive. Star supports ACL.
@@ -64,7 +41,6 @@ Summary:        Provides certain programs with access to remote tape devices
 Provides:       rmt = %{version}-%{release}
 Epoch:          2
 Obsoletes:      rmt <= 1.6
-
 %description -n rmt
 The rmt utility provides remote access to tape devices for programs
 like dump (a filesystem backup program), restore (a program for
@@ -74,11 +50,11 @@ restoring files from a backup), and tar (an archiving program)
 Summary:        Libraries for %{name}
 Provides:       star-libs = %{version}-%{release}
 Obsoletes:      star-libs <= 2023.09.28-1
-
 %description libs
 This package provides the shared libraries for star.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n schilytools
 
@@ -98,6 +74,7 @@ sed -i 's/sbin/bin/' rmt/Makefile
 sed -i 's/$(SHELL)/$(SHELL) -c $(TEST_FLAGS)/' star/tests/Makefile
 
 %build
+
 make_command() {
   cd $i
   make %{_make_output_sync} -f Makefile \
@@ -111,12 +88,10 @@ make_command() {
       $*
    cd -
 }
-
 for i in %{components}; do
   make_command config
   make_command %{?_smp_mflags} all
 done
-
 %install
 for i in %{components}; do
   cd $i
@@ -131,21 +106,14 @@ for i in %{components}; do
       install
   cd -
 done
-
 mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}
 mkdir -p ${RPM_BUILD_ROOT}%{_pkgdocdir}
 ln -s %{_bindir}/rmt ${RPM_BUILD_ROOT}%{_sysconfdir}/rmt
-
-# Move libraries to the appropriate place on 64 bit arches
 if [ %{_libdir} != %{_prefix}/lib ]; then
     mkdir -p %{buildroot}%{_libdir}
     mv %{buildroot}%{_prefix}/lib/lib*.so.* %{buildroot}%{_libdir}
 fi
-
-# Make binaries executable
 chmod 755 %{buildroot}%{_libdir}/lib*.so* %{buildroot}%{_bindir}/*
-
-# XXX Nuke unpackaged files.
 ( cd ${RPM_BUILD_ROOT}
   rm -fv .%{_bindir}/mt
   rm -fv .%{_bindir}/smt
@@ -167,11 +135,13 @@ chmod 755 %{buildroot}%{_libdir}/lib*.so* %{buildroot}%{_bindir}/*
   rm -rfv .%{_libdir}/*.so
   rm -rfv .%{_docdir} #install documents directly in the files section
 )
-
 %global general_docs \
 %dir %{_pkgdocdir} \
+%oreon_autofiles rmt usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 for i in %{components}; do
   cd $i
   make -f Makefile \
@@ -183,65 +153,27 @@ for i in %{components}; do
       tests
   cd -
 done
-
-# "desired" alternative constants
 %global ALT_NAME                pax
 %global ALT_LINK                %{_bindir}/pax
 %global ALT_SL1_NAME            pax-man
 %global ALT_SL1_LINK            %{_mandir}/man1/pax.1.gz
-
-# "local" alternative constants
 %global ALT_PATH                %{_bindir}/spax
 %global ALT_SL1_PATH            %{_mandir}/man1/spax.1.gz
-
 %post
+
 %{ALTERNATIVES} \
     --install   %{ALT_LINK}     %{ALT_NAME}     %{ALT_PATH}     66 \
     --slave     %{ALT_SL1_LINK} %{ALT_SL1_NAME} %{ALT_SL1_PATH}
-
 %preun
+
 if [ $1 -eq 0 ]; then
-    # only on pure uninstall (not upgrade)
     %{ALTERNATIVES} --remove %{ALT_NAME} %{ALT_PATH}
 fi
-
-%files -n star
-%doc star/STARvsGNUTAR
-%doc star/README.*
-%doc star/README
-%{_bindir}/star
-%{_bindir}/ustar
-%{_bindir}/spax
-%{_bindir}/scpio
-%{_mandir}/man1/star.1*
-%{_mandir}/man1/ustar.1*
-%{_mandir}/man5/star.5*
-%doc %{_mandir}/man1/spax.1*
-%doc %{_mandir}/man1/scpio.1*
-%ghost %attr(0755,root,root) %verify(not md5 size mode mtime) %{ALT_LINK}
-%ghost %attr(0644,root,root) %verify(not md5 size mode mtime) %{ALT_SL1_LINK}
-
-%files -n rmt
-%general_docs
-%{_bindir}/rmt
-%{_mandir}/man1/rmt.1*
-%config(noreplace) %{_sysconfdir}/default/rmt
-# This symlink is used by cpio, star, spax, scpio,... thus it is needed. Even
-# if the cpio may be configured to use /bin/rmt rather than /etc/rmt, star (and
-# thus spax, ..) has the lookup path hardcoded to '/etc/rmt' (it means that even
-# non rpm based systems will try to look for /etc/rmt). And - the conclusion is
-# it does not make sense to fight against /etc/rmt symlink ATM (year 2013).
-%{_sysconfdir}/rmt
-
-%files libs
-%license COPYING GPL-2.0.txt LGPL-2.1.txt CDDL.Schily.txt AN-2024-03-21 CONTRIBUTORS
-%doc README
-%{_libdir}/libdeflt.so.1.0
-%{_libdir}/libfind.so.4.0
-%{_libdir}/libmdigest.so.1.0
-%{_libdir}/libschily.so.2.0
-%{_libdir}/librmt.so.1.0
+%files -f %{oreon_filedir}/main.list
+%files -n rmt -f %{oreon_filedir}/rmt.list
+%files -n star-libs -f %{oreon_filedir}/star-libs.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2024.03.21-1
 - Import

@@ -1,29 +1,26 @@
 %global source0_hash 702282028190dffa2078b00cca515b8e2ba889186a221df2226d2b6deb3ffaca
-
 Name:           nekovm
 Version:        2.4.1
 Release:        2%{?dist}
 Summary:        Neko embedded scripting language and virtual machine
-
-# https://haxe.org/foundation/open-source.html#neko-license
 License:        MIT AND LGPL-2.1-or-later
-
 URL:            https://nekovm.org/
 Source0:        https://github.com/HaxeFoundation/neko/archive/v2-4-1/neko-%{version}.tar.gz
-
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  ninja-build
-BuildRequires:  pkgconfig
-BuildRequires:  git
 BuildRequires:  gc-devel
-BuildRequires:  pcre2-devel
+BuildRequires:  gcc
+BuildRequires:  git
 BuildRequires:  gtk3-devel
-BuildRequires:  mariadb-connector-c-devel openssl-devel
-BuildRequires:  sqlite-devel >= 3
 BuildRequires:  httpd-devel
+BuildRequires:  mariadb-connector-c-devel
 BuildRequires:  mbedtls-devel
-
+BuildRequires:  ninja-build
+BuildRequires:  openssl-devel
+BuildRequires:  pcre2-devel
+BuildRequires:  pkgconfig
+BuildRequires:  sqlite-devel
+# /oreon:deps
 %description
 Neko is a high-level dynamically typed programming language which can
 also be used as an embedded scripting language. It has been designed
@@ -57,21 +54,20 @@ languages.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n neko-2-4-1
 %autopatch -p1
 
 %build
-# Avoid a compiler stack-overflow when building on 64 bit.
-ulimit -s unlimited
 
+ulimit -s unlimited
 %cmake . \
     -G Ninja \
     -DRELOCATABLE=OFF \
@@ -79,28 +75,16 @@ ulimit -s unlimited
     -DRUN_LDCONFIG=OFF \
     -DCMAKE_INSTALL_LIBDIR:PATH=%{_lib}
 %cmake_build
-
 %check
-%ninja_test -C "%{_vpath_builddir}"
 
+%ninja_test -C "%{_vpath_builddir}"
 %install
 %ninja_install -C "%{_vpath_builddir}"
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.md
-%license LICENSE
-%{_bindir}/neko
-%{_bindir}/nekoc
-%{_bindir}/nekoml
-%{_bindir}/nekotools
-%{_libdir}/libneko.so.*
-%{_libdir}/neko/
-
-%files devel
-%doc CHANGES
-%{_includedir}/*.h
-%{_libdir}/libneko.so
-%{_libdir}/cmake/*
+%files -f %{oreon_filedir}/main.list
+%files -n nekovm-devel -f %{oreon_filedir}/nekovm-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,27 +1,24 @@
-%global source0_hash 939bee91b5e20be4715035a903efbfd7759aeee1a823e590e8a0ab4826e9dedb
-
+%global source0_hash 09990f7e76f62245c42472c4d31ee65003666632fda87c4ce07d5321a32716d6
 Name: dmapd
 Version: 0.0.96
-Release: %autorelease
-Summary: A server that provides DAAP and DPAP shares
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        A server that provides DAAP and DPAP shares
 License: GPL-2.0-or-later
 URL: http://www.flyn.org/projects/dmapd/
-Source0: http://www.flyn.org/projects/%name/%{name}-%{version}.tar.gz
-
+Source0:        http://www.flyn.org/projects/%{name}/%{name}-%{version}.tar.gz
 %{?systemd_requires}
-BuildRequires: libdmapsharing4-devel >= 3.9.3
-BuildRequires: vips-devel >= 7.38
-BuildRequires: gstreamer1-devel
-BuildRequires: gstreamer1-plugins-base-devel
-BuildRequires: totem-pl-parser-devel
-BuildRequires: systemd
-BuildRequires: make
 Requires(post): systemd-units systemd-sysv
 Requires(preun): systemd-units
 Requires(postun): systemd-units
-
+# oreon:deps
+BuildRequires:  gstreamer1-devel
+BuildRequires:  gstreamer1-plugins-base-devel
+BuildRequires:  libdmapsharing4-devel
+BuildRequires:  make
+BuildRequires:  systemd
+BuildRequires:  totem-pl-parser-devel
+BuildRequires:  vips-devel
+# /oreon:deps
 %description 
 The dmapd project provides a GObject-based, Open Source implementation 
 of DMAP sharing with the following features:
@@ -47,6 +44,7 @@ to serve music, video and photograph libraries containing thousands of
 files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -57,13 +55,12 @@ u dmapd - 'dmapd Daemon' - -
 EOF
 
 %build
+
 %configure                                      \
 	--disable-static                        \
 	--disable-tests                         \
 	--with-systemdsystemunitdir=%{_unitdir} \
-
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=%{buildroot} INSTALL="install -p"
 rm -f %{buildroot}%{_libdir}/libdmapd.la
@@ -73,57 +70,36 @@ mkdir -p %{buildroot}%{_localstatedir}/cache/dmapd/DAAP
 mkdir -p %{buildroot}%{_localstatedir}/cache/dmapd/DPAP
 mkdir -p %{buildroot}%{_localstatedir}/run/dmapd
 install -D -p -m 644 distro/dmapd.conf %{buildroot}%{_sysconfdir}/dmapd.conf
-
 install -m0644 -D dmapd.sysusers.conf %{buildroot}%{_sysusersdir}/dmapd.conf
-
-%files 
-%{_libdir}/*.so.0
-%{_libdir}/*.so.%{version}
-%{_libdir}/dmapd
-%{_sbindir}/dmapd
-%{_bindir}/dmapd-transcode
-%{_bindir}/dmapd-hashgen
-%config(noreplace) %{_sysconfdir}/dmapd.conf
-%attr(0700,dmapd,root) %{_localstatedir}/cache/dmapd/
-%attr(0700,dmapd,root) %{_localstatedir}/run/dmapd
-%{_mandir}/*/*
-%{_unitdir}/dmapd.service
-%doc AUTHORS COPYING ChangeLog INSTALL NEWS README FAQ 
-%{_sysusersdir}/dmapd.conf
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %post
+
 /sbin/ldconfig
 %systemd_post dmapd.service
-
 %preun
-%systemd_preun dmapd.service
 
+%systemd_preun dmapd.service
 %postun
+
 /sbin/ldconfig
 %systemd_postun_with_restart dmapd.service
-
-# FIXME: Remove once Fedora 15 EOL'ed.
-# See http://fedoraproject.org/wiki/Packaging:ScriptletSnippets
 %triggerun -- dmapd < 0.0.37-2
+
 %{_bindir}/systemd-sysv-convert --save dmapd >/dev/null 2>&1 || :
 /bin/systemctl --no-reload enable dmapd.service >/dev/null 2>&1 || :
 /sbin/chkconfig --del dmapd >/dev/null 2>&1 || :
 /bin/systemctl try-restart dmapd.service >/dev/null 2>&1 || :
-
 %package devel
 Summary: Files needed to develop modules using dmapd's libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package provides the libraries, include files, and other 
 resources needed for developing modules using dmapd's API.
 
-%files devel
-%{_libdir}/pkgconfig/dmapd.pc
-%{_includedir}/dmapd-*/
-%{_libdir}/*.so
-%ghost %attr(0755,dmapd,dmapd) %dir %{_localstatedir}/run/dmapd
-%ghost %attr(0600,root,root) %{_localstatedir}/lock/subsys/dmapd
+%files -f %{oreon_filedir}/main.list
+%files -n dmapd-devel -f %{oreon_filedir}/dmapd-devel.list
 
 %changelog
+
 %autochangelog

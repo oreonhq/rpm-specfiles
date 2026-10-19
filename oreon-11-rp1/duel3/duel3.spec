@@ -1,14 +1,11 @@
+%global source1_hash 333dd7c003608d8d27b122464cc6798f99d3e7cf51c2b1133238c8c2079accb7
 %global source0_hash c519d77f2214cddeb0b89e68391ebc2355220c797b34a6eb7ff60e15e54e4ddb
-
 %global snapshot 20060225
 Name:           duel3
 Version:        0.1
-Release:        0.45.%{snapshot}%{?dist}
+Release:        1%{?dist}
 Summary:        One on one spaceship duel in a 2D arena
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
-# Upstream has vanished
-#URL:            http://ts-games.com/duel3.php
 Source0:        http://downloads.sourceforge.net/%{name}/Duel3_%{snapshot}_src.zip
 Source1:        http://downloads.sourceforge.net/%{name}/Duel3_%{snapshot}_bin.zip
 Source2:        %{name}.desktop
@@ -18,11 +15,15 @@ Patch0:         Duel3_20060225-fixes.patch
 Patch1:         Duel3_20060225-windowed-mode.patch
 Patch2:         Duel3_20060225-fix-buf-oflow.patch
 Patch3:         Duel3_20060225-extra-fix-buf-oflow.patch
-BuildRequires:  gcc-c++
-BuildRequires:  alleggl-devel dumb-devel libGLU-devel desktop-file-utils
-BuildRequires: make
 Requires:       hicolor-icon-theme opengl-games-utils
-
+# oreon:deps
+BuildRequires:  alleggl-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  dumb-devel
+BuildRequires:  gcc-c++
+BuildRequires:  libGLU-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 The sudden attack from the Martain Rim miners caught the Earth by surprise,
 there was no way the meager Earth Space Fleet could defend themselves. The
@@ -44,6 +45,7 @@ Take control of a Duel fighter, and test your skills against your opponents and
 the arena itself in fast-paced space combat.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -a 1 -n Duel3_%{snapshot}_src
@@ -58,18 +60,16 @@ iconv -f iso8859-1 -t utf-8 music-credits.txt > temp
 mv temp music-credits.txt
 
 %build
+
 pushd Source
 make %{?_smp_mflags} PREFIX=%{_prefix} \
   CFLAGS="-std=c++14 $RPM_OPT_FLAGS -fsigned-char -Wno-deprecated-declarations -Wno-non-virtual-dtor"
 popd
-
 %install
 pushd Source
 make install PREFIX=$RPM_BUILD_ROOT%{_prefix}
 popd
 ln -s opengl-game-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/%{name}-wrapper
-
-# below is the desktop file and icon stuff.
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -77,13 +77,10 @@ desktop-file-install \
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps
 install -p -m 644 %{SOURCE3} \
   $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps
+%oreon_autofiles main
 
-%files
-%doc Source/readme.txt license.txt music-credits.txt
-%{_bindir}/%{name}*
-%{_datadir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/64x64/apps/%{name}.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

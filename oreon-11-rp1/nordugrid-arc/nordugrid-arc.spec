@@ -1,44 +1,22 @@
 %global source0_hash 7422009cc9494a3d219a7b9dfc583029479df9d95741f119639ce2e405e3a8f9
-
 %global with_xrootd %{!?_without_xrootd:1}%{?_without_xrootd:0}
-
 %global with_pylint 0
-
 %global with_s3 1
-
-%if %{?fedora}%{!?fedora:0} >= 43 || %{?rhel}%{!?rhel:0} >= 10
-%global with_gfal 0
-%else
 %global with_gfal 1
-%endif
-
 %global with_xmlsec1 %{!?_without_xmlsec1:1}%{?_without_xmlsec1:0}
-
 %global with_ldns 1
-
 %global with_ldap_service 1
-
 %global pkgdir arc
-
-# bash-completion
 %global _bashcompdir %(pkg-config --variable=completionsdir bash-completion 2>/dev/null || echo %{_sysconfdir}/bash_completion.d)
-
 Name:		nordugrid-arc
 Version:	7.1.1
-Release:	4%{?dist}
-Summary:	Advanced Resource Connector Middleware
-#		Apache-2.0: most files
-#		MIT: src/external/cJSON/cJSON.c src/external/cJSON/cJSON.h
+Release:        1%{?dist}
+Summary:        Advanced Resource Connector Middleware
 License:	Apache-2.0 AND MIT
 URL:		https://www.nordugrid.org/
-Source:		https://download.nordugrid.org/packages/%{name}/releases/%{version}/src/%{name}-%{version}.tar.gz
-#		Support SWIG 4.4.0 (patch from William S Fulton)
-#		https://github.com/nordugrid/arc/pull/15
-#		https://source.coderefinery.org/nordugrid/arc/-/merge_requests/1964
+Source0:        https://download.nordugrid.org/packages/%{name}/releases/%{version}/src/%{name}-%{version}.tar.gz
 Patch0:		0001-Handle-Python-multi-phase-initialization-support-in-.patch
 Patch1:		0001-Fix-compilation-with-Python-3.15.patch
-
-#		Packages dropped without replacements
 Obsoletes:	%{name}-arcproxyalt < 6.0.0
 Obsoletes:	%{name}-java < 6.0.0
 Obsoletes:	%{name}-egiis < 6.0.0
@@ -61,73 +39,57 @@ Obsoletes:	%{name}-aris < 6.0.0
 %if ! %{with_gfal}
 Obsoletes:	%{name}-plugins-gfal < %{version}-%{release}
 %endif
-
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	libtool
-BuildRequires:	make
-BuildRequires:	gcc-c++
-BuildRequires:	cppunit-devel
-BuildRequires:	pkgconfig
-BuildRequires:	systemd-rpm-macros
-BuildRequires:	systemd-devel
-BuildRequires:	libuuid-devel
-BuildRequires:	gettext-devel
-BuildRequires:	python%{python3_pkgversion}-devel
-BuildRequires:	python%{python3_pkgversion}-pip
-BuildRequires:	python%{python3_pkgversion}-setuptools
-BuildRequires:	python%{python3_pkgversion}-wheel
-%if %{with_pylint}
-BuildRequires:	pylint
-%endif
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 10
-BuildRequires:	glibmm2.68-devel
-%else
-BuildRequires:	glibmm24-devel
-%endif
-BuildRequires:	libxml2-devel
-BuildRequires:	openssl
-BuildRequires:	openssl-devel
 %if %{with_xmlsec1}
-BuildRequires:	xmlsec1-devel >= 1.2.4
-BuildRequires:	xmlsec1-openssl-devel >= 1.2.4
 %endif
-BuildRequires:	nss-devel
-BuildRequires:	globus-common-devel
-BuildRequires:	globus-ftp-client-devel
-BuildRequires:	globus-ftp-control-devel
-BuildRequires:	globus-gssapi-gsi-devel >= 12.2
 %if %{with_xrootd}
-BuildRequires:	xrootd-client-devel >= 1:4.5.0
 %endif
-%if %{with_gfal}
-BuildRequires:	gfal2-devel
-%endif
-%if %{with_s3}
-BuildRequires:	libs3-devel
-%endif
-BuildRequires:	perl-generators
-# Needed for Boinc backend testing during make check
-BuildRequires:	perl(DBI)
-# Needed for infoprovider testing during make check
-BuildRequires:	perl(English)
-BuildRequires:	perl(JSON::XS)
-BuildRequires:	perl(Sys::Hostname)
-BuildRequires:	perl(XML::Simple)
-# Needed for LRMS testing during make check
-BuildRequires:	perl(Test::Harness)
-BuildRequires:	perl(Test::Simple)
-BuildRequires:	swig
-BuildRequires:	libtool-ltdl-devel
-BuildRequires:	sqlite-devel >= 3.6
-%if %{with_ldns}
-BuildRequires:	ldns-devel >= 1.6.8
-%endif
-BuildRequires:	pkgconfig(bash-completion)
-BuildRequires:	help2man
 Requires:	hostname
 Requires:	openssl
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  cppunit-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gettext-devel
+BuildRequires:  gfal2-devel
+BuildRequires:  glibmm24-devel
+BuildRequires:  globus-common-devel
+BuildRequires:  globus-ftp-client-devel
+BuildRequires:  globus-ftp-control-devel
+BuildRequires:  globus-gssapi-gsi-devel
+BuildRequires:  help2man
+BuildRequires:  ldns-devel
+BuildRequires:  libs3-devel
+BuildRequires:  libtool
+BuildRequires:  libtool-ltdl-devel
+BuildRequires:  libuuid-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  nss-devel
+BuildRequires:  openssl
+BuildRequires:  openssl-devel
+BuildRequires:  perl(DBI)
+BuildRequires:  perl(English)
+BuildRequires:  perl(JSON::XS)
+BuildRequires:  perl(Sys::Hostname)
+BuildRequires:  perl(Test::Harness)
+BuildRequires:  perl(Test::Simple)
+BuildRequires:  perl(XML::Simple)
+BuildRequires:  perl-generators
+BuildRequires:  pkgconfig
+BuildRequires:  pkgconfig(bash-completion)
+BuildRequires:  python3-devel
+BuildRequires:  python3-pip
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-wheel
+BuildRequires:  sqlite-devel
+BuildRequires:  swig
+BuildRequires:  systemd-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  xmlsec1-devel
+BuildRequires:  xmlsec1-openssl-devel
+BuildRequires:  xrootd-client-devel
+# /oreon:deps
 %description
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -143,7 +105,6 @@ complexity, from campus to national and global deployments.
 Summary:	ARC command line clients
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-plugins-needed = %{version}-%{release}
-
 %description client
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -157,7 +118,6 @@ transfers.
 Summary:	ARC Hosting Environment Daemon
 Requires:	%{name} = %{version}-%{release}
 %{?systemd_requires}
-
 %description hed
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -174,7 +134,6 @@ Requires:	%{name}-plugins-needed = %{version}-%{release}
 Requires:	%{name}-arcctl-service = %{version}-%{release}
 Requires:	logrotate
 %{?systemd_requires}
-
 %description datadelivery-service
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -182,7 +141,6 @@ Connector (ARC).
 
 This package contains the ARC data delivery service.
 
-%if %{with_ldap_service}
 %package infosys-ldap
 Summary:	ARC LDAP-based information services
 BuildArch:	noarch
@@ -198,7 +156,6 @@ Obsoletes:	%{name}-aris < 6.0.0
 %{?systemd_requires}
 Requires(post):		policycoreutils-python-utils
 Requires(postun):	policycoreutils-python-utils
-
 %description infosys-ldap
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -208,7 +165,6 @@ This package contains the ARC information services relying on BDII and
 LDAP technologies to publish ARC CE information according to various
 LDAP schemas. Please note that the information collectors are part of
 another package, the nordugrid-arc-arex.
-%endif
 
 %package monitor
 Summary:	ARC LDAP monitor web application
@@ -219,7 +175,6 @@ Requires:	php-gd
 Requires:	php-ldap
 Obsoletes:	%{name}-ldap-monitor < 6.0.0
 Obsoletes:	%{name}-ws-monitor < 6.0.0
-
 %description monitor
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -233,7 +188,6 @@ system and visualizes it.
 Summary:	ARC Control Tool
 Requires:	%{name} = %{version}-%{release}
 Requires:	python3-jwcrypto
-
 %description arcctl
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -246,7 +200,6 @@ modules suitable for both server and client side.
 Summary:	ARC Control Tool - service control modules
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-arcctl = %{version}-%{release}
-
 %description arcctl-service
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -269,13 +222,11 @@ Provides:	%{name}-cache-service = %{version}-%{release}
 Obsoletes:	%{name}-cache-service < 6.0.0
 Provides:	%{name}-candypond = %{version}-%{release}
 Obsoletes:	%{name}-candypond < 6.0.0
-
 Requires(post):		%{name}-arcctl = %{version}-%{release}
 Requires(preun):	%{name}-arcctl = %{version}-%{release}
 Requires(post):		hostname
 Requires(post):		openssl
 %{?systemd_requires}
-
 %description arex
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -293,9 +244,7 @@ publishing.
 Summary:	ARC Resource-coupled EXecution service - contributed LRMS backends
 BuildArch:	noarch
 Requires:	%{name}-arex = %{version}-%{release}
-#		Split from AREX package
 Obsoletes:	%{name}-arex < 7.0.0
-
 %description arex-lrms-contrib
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -310,7 +259,6 @@ Requires:	%{name}-arex = %{version}-%{release}
 Requires:	%{name}-arcctl = %{version}-%{release}
 Requires:	gnupg2
 Requires:	python3-dns
-
 %description community-rtes
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -326,7 +274,6 @@ Summary:	ARC base plugins
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-plugins-arcrest = %{version}-%{release}
 Obsoletes:	%{name}-plugins-arcrest < 7.0.0
-
 %description plugins-needed
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -339,7 +286,6 @@ and Data Manager Components (DMCs).
 Summary:	ARC Globus plugins (compat)
 Requires:	%{name}-plugins-gridftp = %{version}-%{release}
 Requires:	%{name}-plugins-lcas-lcmaps = %{version}-%{release}
-
 %description plugins-globus
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -355,7 +301,6 @@ the upcoming releases.
 %package plugins-globus-common
 Summary:	ARC Globus plugins common libraries
 Requires:	%{name} = %{version}-%{release}
-
 %description plugins-globus-common
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -369,7 +314,6 @@ components.
 Summary:	ARC Globus dependent DMCs
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-plugins-globus-common = %{version}-%{release}
-
 %description plugins-gridftp
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -383,7 +327,6 @@ Summary:	ARC LCAS/LCMAPS plugins
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-plugins-globus-common = %{version}-%{release}
 Requires:	globus-gssapi-gsi >= 12.2
-
 %description plugins-lcas-lcmaps
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -396,7 +339,6 @@ services for authorization and mapping.
 %package plugins-xrootd
 Summary:	ARC xrootd plugins
 Requires:	%{name} = %{version}-%{release}
-
 %description plugins-xrootd
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -406,11 +348,9 @@ ARC xrootd plugins. These allow access to data through the xrootd
 protocol.
 %endif
 
-%if %{with_gfal}
 %package plugins-gfal
 Summary:	ARC GFAL2 plugins
 Requires:	%{name} = %{version}-%{release}
-
 %description plugins-gfal
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -420,13 +360,10 @@ ARC plugins for GFAL2. This allows third-party transfer and adds
 support for several extra transfer protocols (rfio, dcap, gsidcap).
 Support for specific protocols is provided by separate 3rd-party GFAL2
 plugin packages.
-%endif
 
-%if %{with_s3}
 %package plugins-s3
 Summary:	ARC S3 plugins
 Requires:	%{name} = %{version}-%{release}
-
 %description plugins-s3
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -434,13 +371,11 @@ Connector (ARC).
 
 ARC plugins for S3. These allow access to data through the S3
 protocol.
-%endif
 
 %package plugins-internal
 Summary:	ARC internal plugin
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-arex = %{version}-%{release}
-
 %description plugins-internal
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -453,7 +388,6 @@ sites, to be used with a local installation of the ARC Control Tower.
 Summary:	ARC Python dependent plugin
 Requires:	%{name} = %{version}-%{release}
 Requires:	python%{python3_pkgversion}-%{name} = %{version}-%{release}
-
 %description plugins-python
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -464,14 +398,9 @@ ARC plugins dependent on Python.
 %package devel
 Summary:	ARC development files
 Requires:	%{name} = %{version}-%{release}
-%if %{?fedora}%{!?fedora:0} || %{?rhel}%{!?rhel:0} >= 10
-Requires:	glibmm2.68-devel
-%else
 Requires:	glibmm24-devel
-%endif
 Requires:	libxml2-devel
 Requires:	openssl-devel
-
 %description devel
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -483,7 +412,6 @@ Header files and libraries needed to develop applications using ARC.
 Summary:	ARC Python 3 wrapper
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{name}}
 Requires:	%{name} = %{version}-%{release}
-
 %description -n python%{python3_pkgversion}-%{name}
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -496,7 +424,6 @@ Summary:	ARC test tools
 Requires:	%{name} = %{version}-%{release}
 Requires:	%{name}-plugins-needed = %{version}-%{release}
 Obsoletes:	%{name}-misc-utils < 6.0.0
-
 %description test-utils
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -511,7 +438,6 @@ Summary:	ARCHERY administration tool
 BuildArch:	noarch
 Requires:	python3-dns
 Requires:	python3-ldap
-
 %description archery-manage
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -522,7 +448,6 @@ an ARCHERY DNS-embedded service endpoint registry.
 
 %package wn
 Summary:	ARC optional worker nodes components
-
 %description wn
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -535,7 +460,6 @@ management features on the worker nodes (WN).
 Summary:	ARC REST client
 %{?python_provide:%python_provide python%{python3_pkgversion}-arcrest}
 BuildArch:	noarch
-
 %description -n python%{python3_pkgversion}-arcrest
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -547,7 +471,6 @@ This package contains the ARC REST client.
 Summary:	ARC Prometheus exporter service
 BuildArch:	noarch
 Requires:	python3-prometheus_client
-
 %description arc-exporter
 NorduGrid is a collaboration aiming at development, maintenance and
 support of the middleware, known as the Advanced Resource
@@ -557,6 +480,7 @@ This package contains the Prometheus arc-exporter which collects and
 publishes metrics about jobs and datastaging on the ARC-CE.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -564,14 +488,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P1 -p1
 
 %build
+
 autoreconf -v -f -i
 %configure --disable-static \
-%if %{with_gfal}
      --enable-gfal \
-%endif
-%if %{with_s3}
      --enable-s3 \
-%endif
      --with-python=python3 \
 %if ! %{with_pylint}
      --disable-pylint \
@@ -590,47 +511,28 @@ autoreconf -v -f -i
 %endif
      --disable-doc \
      --docdir=%{_pkgdocdir}
-
 %make_build
-
 %check
-%make_build check
 
+%make_build check
 %install
 %make_install
-
-# Install Logrotate.
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
 install -p -m 644 debian/%{name}-arex.logrotate \
     %{buildroot}%{_sysconfdir}/logrotate.d/%{name}-arex
-%if %{with_ldap_service}
 install -p -m 644 debian/%{name}-infosys-ldap.logrotate \
     %{buildroot}%{_sysconfdir}/logrotate.d/%{name}-infosys-ldap
-%endif
 install -p -m 644 debian/%{name}-datadelivery-service.logrotate \
     %{buildroot}%{_sysconfdir}/logrotate.d/%{name}-datadelivery-service
-
 find %{buildroot} -type f -name \*.la -exec rm -fv '{}' ';'
-
-# libarcglobusutils is not part of the ARC api.
 find %{buildroot} -name libarcglobusutils.so -exec rm -fv '{}' ';'
-
 rm -f %{buildroot}%{python3_sitelib}/pyarcrest-*.*-info/direct_url.json
-
-# Create log directory
 mkdir -p %{buildroot}%{_localstatedir}/log/arc
-
-# Create spool directories for Jura
 mkdir -p %{buildroot}%{_localstatedir}/spool/arc
 mkdir -p %{buildroot}%{_localstatedir}/spool/arc/ssm
 mkdir -p %{buildroot}%{_localstatedir}/spool/arc/urs
-
-# create config directory
 mkdir -p %{buildroot}%{_sysconfdir}/arc.conf.d
-
 %find_lang %{name}
-
-# Remove examples and let RPM package them under /usr/share/doc using the doc macro
 rm -rf %{buildroot}%{_datadir}/%{pkgdir}/examples
 make -C src/libs/data-staging/examples	DESTDIR=$PWD/docdir/devel  pkgdatadir= install-exampleDATA
 make -C src/hed/libs/compute/examples	DESTDIR=$PWD/docdir/devel  pkgdatadir= install-exampleDATA
@@ -639,66 +541,59 @@ make -C src/hed/acc/PythonBroker	DESTDIR=$PWD/docdir/python pkgdatadir= install-
 make -C python/examples			DESTDIR=$PWD/docdir/devel  pkgdatadir= install-exampleDATA
 make -C src/tests/echo			DESTDIR=$PWD/docdir/hed	   pkgdatadir= install-exampleDATA
 make -C src/hed				DESTDIR=$PWD/docdir/hed	   pkgdatadir= install-profileDATA
-
-# client.conf needs special handling
 make -C src/clients DESTDIR=%{buildroot} install-exampleDATA
-
-# Link to client.conf from doc
 ln -s %{_datadir}/%{pkgdir}/examples/client.conf $PWD/docdir/client.conf
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post hed
+
 %systemd_post arched.service
-
 %preun hed
+
 %systemd_preun arched.service
-
 %postun hed
-%systemd_postun_with_restart arched.service
 
+%systemd_postun_with_restart arched.service
 %post arex
+
 %systemd_post arc-arex.service
 %systemd_post arc-arex-ws.service
-
-# out-of-package testing host certificate
 if [ $1 -eq 1 ]; then
   arcctl test-ca init
   arcctl test-ca hostcert
 fi
-
 %preun arex
+
 %systemd_preun arc-arex.service
 %systemd_preun arc-arex-ws.service
-
 if [ $1 -eq 0 ]; then
   arcctl test-ca cleanup
 fi
-
 %postun arex
+
 %systemd_postun_with_restart arc-arex.service
 %systemd_postun_with_restart arc-arex-ws.service
-
 %post datadelivery-service
+
 %systemd_post arc-datadelivery-service.service
-
 %preun datadelivery-service
+
 %systemd_preun arc-datadelivery-service.service
-
 %postun datadelivery-service
+
 %systemd_postun_with_restart arc-datadelivery-service.service
-
-%if %{with_ldap_service}
-
 %post infosys-ldap
+
 %systemd_post arc-infosys-ldap.service
 semanage port -a -t ldap_port_t -p tcp 2135 2>/dev/null || :
 semanage fcontext -a -t slapd_etc_t "/var/run/arc/infosys/bdii-slapd\.conf" 2>/dev/null || :
 semanage fcontext -a -t slapd_db_t "/var/lib/arc/bdii/db(/.*)?" 2>/dev/null || :
 semanage fcontext -a -t slapd_var_run_t "/var/run/arc/bdii/db(/.*)?" 2>/dev/null || :
-
 %preun infosys-ldap
-%systemd_preun arc-infosys-ldap.service
 
+%systemd_preun arc-infosys-ldap.service
 %postun infosys-ldap
+
 %systemd_postun_with_restart arc-infosys-ldap.service
 if [ $1 -eq 0 ]; then
   semanage port -d -t ldap_port_t -p tcp 2135 2>/dev/null || :
@@ -706,438 +601,46 @@ if [ $1 -eq 0 ]; then
   semanage fcontext -d -t slapd_db_t "/var/lib/arc/bdii/db(/.*)?" 2>/dev/null || :
   semanage fcontext -d -t slapd_var_run_t "/var/run/arc/bdii/db(/.*)?" 2>/dev/null || :
 fi
-
 %triggerun infosys-ldap -- bdii
-systemctl try-restart arc-infosys-ldap.service > /dev/null 2>&1 || :
 
+systemctl try-restart arc-infosys-ldap.service > /dev/null 2>&1 || :
 %triggerpostun infosys-ldap -- %{name}-ldap-infosys
-# Uninstalling the old %{name}-ldap-infosys will remove some selinux config
-# for %{name}-infosys-ldap - put them back in this triggerpostun script
+
 semanage port -a -t ldap_port_t -p tcp 2135 2>/dev/null || :
 semanage fcontext -a -t slapd_etc_t "/var/run/arc/infosys/bdii-slapd\.conf" 2>/dev/null || :
-
 %triggerpostun infosys-ldap -- %{name}-aris
-# Uninstalling the old %{name}-aris will remove some selinux config
-# for %{name}-infosys-ldap - put them back in this triggerpostun script
+
 semanage fcontext -a -t slapd_db_t "/var/lib/arc/bdii/db(/.*)?" 2>/dev/null || :
 semanage fcontext -a -t slapd_var_run_t "/var/run/arc/bdii/db(/.*)?" 2>/dev/null || :
-
-%endif
-
-%files -f %{name}.lang
-%doc src/doc/arc.conf.reference src/doc/arc.conf.DELETED
-%doc README AUTHORS
-%license LICENSE NOTICE
-%{_libdir}/libarccompute.so.*
-%{_libdir}/libarccommunication.so.*
-%{_libdir}/libarccommon.so.*
-%{_libdir}/libarccredential.so.*
-%{_libdir}/libarccredentialstore.so.*
-%{_libdir}/libarccrypto.so.*
-%{_libdir}/libarcdata.so.*
-%{_libdir}/libarcdatastaging.so.*
-%{_libdir}/libarcloader.so.*
-%{_libdir}/libarcmessage.so.*
-%{_libdir}/libarcsecurity.so.*
-%{_libdir}/libarcotokens.so.*
-%{_libdir}/libarcinfosys.so.*
-%{_libdir}/libarcwsaddressing.so.*
-%{_libdir}/libarcwssecurity.so.*
-%if %{with_xmlsec1}
-%{_libdir}/libarcxmlsec.so.*
-%endif
-%dir %{_libdir}/%{pkgdir}
-# We need to have libmodcrypto.so close to libarccrypto
-%{_libdir}/%{pkgdir}/libmodcrypto.so
-%{_libdir}/%{pkgdir}/libmodcrypto.apd
-# We need to have libmodcredential.so close to libarccredential
-%{_libdir}/%{pkgdir}/libmodcredential.so
-%{_libdir}/%{pkgdir}/libmodcredential.apd
-%{_libdir}/%{pkgdir}/arc-file-access
-%{_libdir}/%{pkgdir}/arc-hostname-resolver
-%{_libdir}/%{pkgdir}/DataStagingDelivery
-%{_libdir}/%{pkgdir}/arc-dmc
-%dir %{_libexecdir}/%{pkgdir}
-%{_libexecdir}/%{pkgdir}/arcconfig-parser
-%dir %{python3_sitearch}/%{pkgdir}
-%{python3_sitearch}/%{pkgdir}/__init__.py
-%{python3_sitearch}/%{pkgdir}/paths.py
-%{python3_sitearch}/%{pkgdir}/paths_dist.py
-%dir %{python3_sitearch}/%{pkgdir}/__pycache__
-%{python3_sitearch}/%{pkgdir}/__pycache__/__init__.*
-%{python3_sitearch}/%{pkgdir}/__pycache__/paths.*
-%{python3_sitearch}/%{pkgdir}/__pycache__/paths_dist.*
-%{python3_sitearch}/%{pkgdir}/utils
-%dir %{_datadir}/%{pkgdir}
-%{_datadir}/%{pkgdir}/arc.parser.defaults
-%dir %{_datadir}/%{pkgdir}/test-jobs
-%{_datadir}/%{pkgdir}/test-jobs/test-job-*
-%{_datadir}/%{pkgdir}/schema
-
-%files client
-%doc docdir/client.conf
-%{_bindir}/arccat
-%{_bindir}/arcclean
-%{_bindir}/arccp
-%{_bindir}/arcget
-%{_bindir}/arcinfo
-%{_bindir}/arckill
-%{_bindir}/arcls
-%{_bindir}/arcmkdir
-%{_bindir}/arcrename
-%{_bindir}/arcproxy
-%{_bindir}/arcrenew
-%{_bindir}/arcresume
-%{_bindir}/arcrm
-%{_bindir}/arcstat
-%{_bindir}/arcsub
-%{_bindir}/arcsync
-%{_bindir}/arctest
-%dir %{_datadir}/%{pkgdir}/examples
-%{_datadir}/%{pkgdir}/examples/client.conf
-%dir %{_sysconfdir}/%{pkgdir}
-%config(noreplace) %{_sysconfdir}/%{pkgdir}/client.conf
-%doc %{_mandir}/man1/arccat.1*
-%doc %{_mandir}/man1/arcclean.1*
-%doc %{_mandir}/man1/arccp.1*
-%doc %{_mandir}/man1/arcget.1*
-%doc %{_mandir}/man1/arcinfo.1*
-%doc %{_mandir}/man1/arckill.1*
-%doc %{_mandir}/man1/arcls.1*
-%doc %{_mandir}/man1/arcmkdir.1*
-%doc %{_mandir}/man1/arcrename.1*
-%doc %{_mandir}/man1/arcproxy.1*
-%doc %{_mandir}/man1/arcrenew.1*
-%doc %{_mandir}/man1/arcresume.1*
-%doc %{_mandir}/man1/arcrm.1*
-%doc %{_mandir}/man1/arcstat.1*
-%doc %{_mandir}/man1/arcsub.1*
-%doc %{_mandir}/man1/arcsync.1*
-%doc %{_mandir}/man1/arctest.1*
-%dir %{_bashcompdir}
-%{_bashcompdir}/arc-client-tools
-
-%files hed
-%doc docdir/hed/*
-%{_unitdir}/arched.service
-%{_sbindir}/arched
-%{_libdir}/%{pkgdir}/libecho.so
-%{_libdir}/%{pkgdir}/libecho.apd
-%{_datadir}/%{pkgdir}/arched-start
-%{_datadir}/%{pkgdir}/profiles
-%doc %{_mandir}/man8/arched.8*
-%doc %{_mandir}/man5/arc.conf.5*
-
-%files datadelivery-service
-%{_unitdir}/arc-datadelivery-service.service
-%{_libdir}/%{pkgdir}/libdatadeliveryservice.so
-%{_libdir}/%{pkgdir}/libdatadeliveryservice.apd
-%{_datadir}/%{pkgdir}/arc-datadelivery-service-start
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}-datadelivery-service
-
-%if %{with_ldap_service}
-%files infosys-ldap
-%{_unitdir}/arc-infosys-ldap.service
-%{_unitdir}/arc-infosys-ldap-slapd.service
-%{_datadir}/%{pkgdir}/create-bdii-config
-%{_datadir}/%{pkgdir}/create-slapd-config
-%{_datadir}/%{pkgdir}/ldap-schema
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}-infosys-ldap
-%endif
-
-%files monitor
-%{_datadir}/%{pkgdir}/monitor
-%doc %{_mandir}/man7/monitor.7*
-
-%files arcctl
-%{_sbindir}/arcctl
-%dir %{python3_sitearch}/%{pkgdir}/control
-%{python3_sitearch}/%{pkgdir}/control/__init__.py
-%{python3_sitearch}/%{pkgdir}/control/CertificateGenerator.py
-%{python3_sitearch}/%{pkgdir}/control/ControlCommon.py
-%{python3_sitearch}/%{pkgdir}/control/OSPackage.py
-%{python3_sitearch}/%{pkgdir}/control/TestCA.py
-%{python3_sitearch}/%{pkgdir}/control/TestJWT.py
-%{python3_sitearch}/%{pkgdir}/control/ThirdPartyDeployment.py
-%dir %{python3_sitearch}/%{pkgdir}/control/__pycache__
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/__init__.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/CertificateGenerator.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/ControlCommon.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/OSPackage.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/TestCA.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/TestJWT.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/ThirdPartyDeployment.*
-%doc %{_mandir}/man1/arcctl.1*
-
-%files arcctl-service
-%{python3_sitearch}/%{pkgdir}/control/Cleanup.py
-%{python3_sitearch}/%{pkgdir}/control/Config.py
-%{python3_sitearch}/%{pkgdir}/control/ServiceCommon.py
-%{python3_sitearch}/%{pkgdir}/control/Services.py
-%{python3_sitearch}/%{pkgdir}/control/OSService.py
-%{python3_sitearch}/%{pkgdir}/control/Validator.py
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/Cleanup.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/Config.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/ServiceCommon.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/Services.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/OSService.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/Validator.*
-
-%files arex
-%{_unitdir}/arc-arex.service
-%{_unitdir}/arc-arex-ws.service
-%{_libexecdir}/%{pkgdir}/arc-blahp-logger
-%{_libexecdir}/%{pkgdir}/cache-clean
-%{_libexecdir}/%{pkgdir}/cache-list
-%{_libexecdir}/%{pkgdir}/gm-jobs
-%{_libexecdir}/%{pkgdir}/gm-kick
-%{_libexecdir}/%{pkgdir}/inputcheck
-%{_libexecdir}/%{pkgdir}/jura-ng
-%{_libexecdir}/%{pkgdir}/smtp-send
-%{_libexecdir}/%{pkgdir}/smtp-send.sh
-%{_libdir}/%{pkgdir}/libarex.so
-%{_libdir}/%{pkgdir}/libarex.apd
-%{_libdir}/%{pkgdir}/libcandypond.so
-%{_libdir}/%{pkgdir}/libcandypond.apd
-%{_datadir}/%{pkgdir}/cancel-condor-job
-%{_datadir}/%{pkgdir}/cancel-fork-job
-%{_datadir}/%{pkgdir}/cancel-SLURM-job
-%{_datadir}/%{pkgdir}/scan-condor-job
-%{_datadir}/%{pkgdir}/scan-fork-job
-%{_datadir}/%{pkgdir}/scan-SLURM-job
-%{_datadir}/%{pkgdir}/submit-condor-job
-%{_datadir}/%{pkgdir}/submit-fork-job
-%{_datadir}/%{pkgdir}/submit-SLURM-job
-%{_datadir}/%{pkgdir}/CEinfo.pl
-%{_datadir}/%{pkgdir}/ARC0mod.pm
-%{_datadir}/%{pkgdir}/Condor.pm
-%{_datadir}/%{pkgdir}/Fork.pm
-%{_datadir}/%{pkgdir}/FORKmod.pm
-%{_datadir}/%{pkgdir}/SLURM.pm
-%{_datadir}/%{pkgdir}/SLURMmod.pm
-%{_datadir}/%{pkgdir}/XmlPrinter.pm
-%{_datadir}/%{pkgdir}/InfosysHelper.pm
-%{_datadir}/%{pkgdir}/LdifPrinter.pm
-%{_datadir}/%{pkgdir}/GLUE2xmlPrinter.pm
-%{_datadir}/%{pkgdir}/GLUE2ldifPrinter.pm
-%{_datadir}/%{pkgdir}/NGldifPrinter.pm
-%{_datadir}/%{pkgdir}/ARC0ClusterInfo.pm
-%{_datadir}/%{pkgdir}/ARC1ClusterInfo.pm
-%{_datadir}/%{pkgdir}/ConfigCentral.pm
-%{_datadir}/%{pkgdir}/GMJobsInfo.pm
-%{_datadir}/%{pkgdir}/HostInfo.pm
-%{_datadir}/%{pkgdir}/RTEInfo.pm
-%{_datadir}/%{pkgdir}/InfoChecker.pm
-%{_datadir}/%{pkgdir}/IniParser.pm
-%{_datadir}/%{pkgdir}/LRMSInfo.pm
-%{_datadir}/%{pkgdir}/Sysinfo.pm
-%{_datadir}/%{pkgdir}/LogUtils.pm
-%{_datadir}/%{pkgdir}/condor_env.pm
-%{_datadir}/%{pkgdir}/cancel_common.sh
-%{_datadir}/%{pkgdir}/configure-*-env.sh
-%{_datadir}/%{pkgdir}/submit_common.sh
-%{_datadir}/%{pkgdir}/scan_common.sh
-%{_datadir}/%{pkgdir}/lrms_common.sh
-%{_datadir}/%{pkgdir}/perferator
-%{_datadir}/%{pkgdir}/update-controldir
-%{_datadir}/%{pkgdir}/PerfData.pl
-%{_datadir}/%{pkgdir}/arc-arex-start
-%{_datadir}/%{pkgdir}/arc-arex-ws-start
-%dir %{_datadir}/%{pkgdir}/sql-schema
-%{_datadir}/%{pkgdir}/sql-schema/arex_accounting_db_schema_v2.sql
-%doc %{_mandir}/man1/cache-clean.1*
-%doc %{_mandir}/man1/cache-list.1*
-%doc %{_mandir}/man8/a-rex-backtrace-collect.8*
-%doc %{_mandir}/man8/arc-blahp-logger.8*
-%doc %{_mandir}/man8/gm-jobs.8*
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}-arex
-%dir %{_localstatedir}/log/arc
-%dir %{_localstatedir}/spool/arc
-%dir %{_localstatedir}/spool/arc/ssm
-%dir %{_localstatedir}/spool/arc/urs
-%{python3_sitearch}/%{pkgdir}/control/AccountingDB.py
-%{python3_sitearch}/%{pkgdir}/control/AccountingPublishing.py
-%{python3_sitearch}/%{pkgdir}/control/Accounting.py
-%{python3_sitearch}/%{pkgdir}/control/Cache.py
-%{python3_sitearch}/%{pkgdir}/control/DataStaging.py
-%{python3_sitearch}/%{pkgdir}/control/Jobs.py
-%{python3_sitearch}/%{pkgdir}/control/RunTimeEnvironment.py
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/AccountingDB.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/AccountingPublishing.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/Accounting.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/Cache.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/DataStaging.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/Jobs.*
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/RunTimeEnvironment.*
-%{_libexecdir}/%{pkgdir}/arccandypond
-%dir %{_datadir}/%{pkgdir}/rte
-%dir %{_datadir}/%{pkgdir}/rte/ENV
-%{_datadir}/%{pkgdir}/rte/ENV/LRMS-SCRATCH
-%{_datadir}/%{pkgdir}/rte/ENV/PROXY
-%{_datadir}/%{pkgdir}/rte/ENV/RTE
-%{_datadir}/%{pkgdir}/rte/ENV/CANDYPOND
-%{_datadir}/%{pkgdir}/rte/ENV/SINGULARITY
-%dir %{_datadir}/%{pkgdir}/rte/ENV/CONDOR
-%{_datadir}/%{pkgdir}/rte/ENV/CONDOR/DOCKER
-%{_sbindir}/a-rex-backtrace-collect
-%config(noreplace) %{_sysconfdir}/arc.conf
-%dir %{_sysconfdir}/arc.conf.d
-
-%files arex-lrms-contrib
-%{_datadir}/%{pkgdir}/cancel-boinc-job
-%{_datadir}/%{pkgdir}/cancel-ll-job
-%{_datadir}/%{pkgdir}/cancel-lsf-job
-%{_datadir}/%{pkgdir}/cancel-pbs-job
-%{_datadir}/%{pkgdir}/cancel-pbspro-job
-%{_datadir}/%{pkgdir}/cancel-sge-job
-%{_datadir}/%{pkgdir}/scan-boinc-job
-%{_datadir}/%{pkgdir}/scan-ll-job
-%{_datadir}/%{pkgdir}/scan-lsf-job
-%{_datadir}/%{pkgdir}/scan-pbs-job
-%{_datadir}/%{pkgdir}/scan-pbspro-job
-%{_datadir}/%{pkgdir}/scan-sge-job
-%{_datadir}/%{pkgdir}/submit-boinc-job
-%{_datadir}/%{pkgdir}/submit-ll-job
-%{_datadir}/%{pkgdir}/submit-lsf-job
-%{_datadir}/%{pkgdir}/submit-pbs-job
-%{_datadir}/%{pkgdir}/submit-pbspro-job
-%{_datadir}/%{pkgdir}/submit-sge-job
-%{_datadir}/%{pkgdir}/Boinc.pm
-%{_datadir}/%{pkgdir}/LL.pm
-%{_datadir}/%{pkgdir}/LSF.pm
-%{_datadir}/%{pkgdir}/PBS.pm
-%{_datadir}/%{pkgdir}/PBSPRO.pm
-%{_datadir}/%{pkgdir}/SGE.pm
-%{_datadir}/%{pkgdir}/SGEmod.pm
-
-%files community-rtes
-%{_datadir}/%{pkgdir}/community_rtes.sh
-%{python3_sitearch}/%{pkgdir}/control/CommunityRTE.py
-%{python3_sitearch}/%{pkgdir}/control/__pycache__/CommunityRTE.*
-
-%files plugins-needed
-%dir %{_libdir}/%{pkgdir}/test
-%{_libdir}/%{pkgdir}/test/libaccTEST.so
-%{_libdir}/%{pkgdir}/test/libaccTEST.apd
-%if %{with_ldns}
-%{_libdir}/%{pkgdir}/libaccARCHERY.so
-%endif
-%{_libdir}/%{pkgdir}/libaccARCREST.so
-%{_libdir}/%{pkgdir}/libaccBroker.so
-%{_libdir}/%{pkgdir}/libaccJobDescriptionParser.so
-%{_libdir}/%{pkgdir}/libarcshc.so
-%{_libdir}/%{pkgdir}/libarcshclegacy.so
-%{_libdir}/%{pkgdir}/libarcshcotokens.so
-%{_libdir}/%{pkgdir}/libdmcfile.so
-%{_libdir}/%{pkgdir}/libdmchttp.so
-%{_libdir}/%{pkgdir}/libdmcsrm.so
-%{_libdir}/%{pkgdir}/libdmcrucio.so
-%{_libdir}/%{pkgdir}/libidentitymap.so
-%{_libdir}/%{pkgdir}/libmcchttp.so
-%{_libdir}/%{pkgdir}/libmccmsgvalidator.so
-%{_libdir}/%{pkgdir}/libmccsoap.so
-%{_libdir}/%{pkgdir}/libmcctcp.so
-%{_libdir}/%{pkgdir}/libmcctls.so
-%if %{with_ldns}
-%{_libdir}/%{pkgdir}/libaccARCHERY.apd
-%endif
-%{_libdir}/%{pkgdir}/libaccARCREST.apd
-%{_libdir}/%{pkgdir}/libaccBroker.apd
-%{_libdir}/%{pkgdir}/libaccJobDescriptionParser.apd
-%{_libdir}/%{pkgdir}/libarcshc.apd
-%{_libdir}/%{pkgdir}/libarcshclegacy.apd
-%{_libdir}/%{pkgdir}/libarcshcotokens.apd
-%{_libdir}/%{pkgdir}/libdmcfile.apd
-%{_libdir}/%{pkgdir}/libdmchttp.apd
-%{_libdir}/%{pkgdir}/libdmcsrm.apd
-%{_libdir}/%{pkgdir}/libdmcrucio.apd
-%{_libdir}/%{pkgdir}/libidentitymap.apd
-%{_libdir}/%{pkgdir}/libmcchttp.apd
-%{_libdir}/%{pkgdir}/libmccmsgvalidator.apd
-%{_libdir}/%{pkgdir}/libmccsoap.apd
-%{_libdir}/%{pkgdir}/libmcctcp.apd
-%{_libdir}/%{pkgdir}/libmcctls.apd
-
-%files plugins-globus
-
-%files plugins-globus-common
-%{_libdir}/libarcglobusutils.so.*
-
-%files plugins-gridftp
-%{_libdir}/%{pkgdir}/arc-dmcgridftp
-%{_libdir}/%{pkgdir}/libdmcgridftpdeleg.so
-%{_libdir}/%{pkgdir}/libdmcgridftpdeleg.apd
-
-%files plugins-lcas-lcmaps
-%{_libexecdir}/%{pkgdir}/arc-lcas
-%{_libexecdir}/%{pkgdir}/arc-lcmaps
-
-%if %{with_xrootd}
-%files plugins-xrootd
-%dir %{_libdir}/%{pkgdir}/external
-%{_libdir}/%{pkgdir}/external/libdmcxrootd.so
-%{_libdir}/%{pkgdir}/external/libdmcxrootd.apd
-%{_libdir}/%{pkgdir}/libdmcxrootddeleg.so
-%{_libdir}/%{pkgdir}/libdmcxrootddeleg.apd
-%endif
-
-%if %{with_gfal}
-%files plugins-gfal
-%dir %{_libdir}/%{pkgdir}/external
-%{_libdir}/%{pkgdir}/external/libdmcgfal.so
-%{_libdir}/%{pkgdir}/external/libdmcgfal.apd
-%{_libdir}/%{pkgdir}/libdmcgfaldeleg.so
-%{_libdir}/%{pkgdir}/libdmcgfaldeleg.apd
-%endif
-
-%if %{with_s3}
-%files plugins-s3
-%{_libdir}/%{pkgdir}/libdmcs3.so
-%{_libdir}/%{pkgdir}/libdmcs3.apd
-%endif
-
-%files plugins-internal
-%{_libdir}/%{pkgdir}/libaccINTERNAL.so
-%{_libdir}/%{pkgdir}/libaccINTERNAL.apd
-
-%files plugins-python
-%doc docdir/python/*
-%{_libdir}/%{pkgdir}/libaccPythonBroker.so
-%{_libdir}/%{pkgdir}/libaccPythonBroker.apd
-%{_libdir}/%{pkgdir}/libpythonservice.so
-%{_libdir}/%{pkgdir}/libpythonservice.apd
-
-%files devel
-%doc docdir/devel/* src/hed/shc/arcpdp/*.xsd
-%{_includedir}/%{pkgdir}
-%{_libdir}/lib*.so
-%{_bindir}/wsdl2hed
-%doc %{_mandir}/man1/wsdl2hed.1*
-%{_bindir}/arcplugin
-%doc %{_mandir}/man1/arcplugin.1*
-
-%files -n python%{python3_pkgversion}-%{name}
-%{python3_sitearch}/_arc.*so
-%{python3_sitearch}/%{pkgdir}/[^_p]*.py
-%{python3_sitearch}/%{pkgdir}/__pycache__/[^_p]*.*
-
-%files test-utils
-%{_bindir}/arcperftest
-%doc %{_mandir}/man1/arcperftest.1*
-
-%files archery-manage
-%{_sbindir}/archery-manage
-
-%files wn
-%attr(4755,root,root) %{_bindir}/arc-job-cgroup
-
-%files -n python%{python3_pkgversion}-arcrest
-%{python3_sitelib}/pyarcrest
-%{python3_sitelib}/pyarcrest-*.*-info
-%{_bindir}/arcrest
-
-%files arc-exporter
-%{_sbindir}/arc-exporter
+%files -f %{oreon_filedir}/main.list
+%files -n nordugrid-arc-client -f %{oreon_filedir}/nordugrid-arc-client.list
+%files -n nordugrid-arc-hed -f %{oreon_filedir}/nordugrid-arc-hed.list
+%files -n nordugrid-arc-datadelivery-service -f %{oreon_filedir}/nordugrid-arc-datadelivery-service.list
+%files -n nordugrid-arc-infosys-ldap -f %{oreon_filedir}/nordugrid-arc-infosys-ldap.list
+%files -n nordugrid-arc-monitor -f %{oreon_filedir}/nordugrid-arc-monitor.list
+%files -n nordugrid-arc-arcctl -f %{oreon_filedir}/nordugrid-arc-arcctl.list
+%files -n nordugrid-arc-arcctl-service -f %{oreon_filedir}/nordugrid-arc-arcctl-service.list
+%files -n nordugrid-arc-arex -f %{oreon_filedir}/nordugrid-arc-arex.list
+%files -n nordugrid-arc-arex-lrms-contrib -f %{oreon_filedir}/nordugrid-arc-arex-lrms-contrib.list
+%files -n nordugrid-arc-community-rtes -f %{oreon_filedir}/nordugrid-arc-community-rtes.list
+%files -n nordugrid-arc-plugins-needed -f %{oreon_filedir}/nordugrid-arc-plugins-needed.list
+%files -n nordugrid-arc-plugins-globus -f %{oreon_filedir}/nordugrid-arc-plugins-globus.list
+%files -n nordugrid-arc-plugins-globus-common -f %{oreon_filedir}/nordugrid-arc-plugins-globus-common.list
+%files -n nordugrid-arc-plugins-gridftp -f %{oreon_filedir}/nordugrid-arc-plugins-gridftp.list
+%files -n nordugrid-arc-plugins-lcas-lcmaps -f %{oreon_filedir}/nordugrid-arc-plugins-lcas-lcmaps.list
+%files -n nordugrid-arc-plugins-xrootd -f %{oreon_filedir}/nordugrid-arc-plugins-xrootd.list
+%files -n nordugrid-arc-plugins-gfal -f %{oreon_filedir}/nordugrid-arc-plugins-gfal.list
+%files -n nordugrid-arc-plugins-s3 -f %{oreon_filedir}/nordugrid-arc-plugins-s3.list
+%files -n nordugrid-arc-plugins-internal -f %{oreon_filedir}/nordugrid-arc-plugins-internal.list
+%files -n nordugrid-arc-plugins-python -f %{oreon_filedir}/nordugrid-arc-plugins-python.list
+%files -n nordugrid-arc-devel -f %{oreon_filedir}/nordugrid-arc-devel.list
+%files -n python3-nordugrid-arc -f %{oreon_filedir}/python3-nordugrid-arc.list
+%files -n nordugrid-arc-test-utils -f %{oreon_filedir}/nordugrid-arc-test-utils.list
+%files -n nordugrid-arc-archery-manage -f %{oreon_filedir}/nordugrid-arc-archery-manage.list
+%files -n nordugrid-arc-wn -f %{oreon_filedir}/nordugrid-arc-wn.list
+%files -n python3-arcrest -f %{oreon_filedir}/python3-arcrest.list
+%files -n nordugrid-arc-arc-exporter -f %{oreon_filedir}/nordugrid-arc-arc-exporter.list
 
 %changelog
+
 %autochangelog

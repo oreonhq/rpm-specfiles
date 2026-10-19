@@ -1,63 +1,45 @@
-%global source0_hash none
-
+%global source0_hash b49b78cc7ec0b252bfbd74cef0187121b18e4f5a0c57e3b9c3d8fc15090af3b4
 Name:           python-tempora
 Version:        5.12.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        ...
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/jaraco/tempora
-Source:         %{pypi_source tempora}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tempora/tempora-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'tempora' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(flit-core) < 4
+BuildRequires:  python3dist(flit-core) >= 3.11
+Requires:       python3-tempora = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-tempora
-Summary:        %{summary}
-
-%description -n python3-tempora %_description
+Summary:        ...
+%description -n python3-tempora
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-tempora test
-
 
 %prep
-%autosetup -p1 -n tempora-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir tempora-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-tempora usr/lib/python3*/site-packages/tempora* usr/lib64/python3*/site-packages/tempora* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tempora* usr/lib64/python3*/site-packages/tempora* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-tempora -f %{pyproject_files}
-%{_bindir}/calc-prorate
+%files
+%files -n python3-tempora -f %{oreon_filedir}/python3-tempora.list
 
 %changelog
+
 %autochangelog

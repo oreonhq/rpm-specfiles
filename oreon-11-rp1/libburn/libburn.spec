@@ -1,25 +1,27 @@
+%global source2_hash 153b53c2bbefa5f5e748ff1d0dd6779e5f2c16b0052a4540a929d5d901f24202
+%global source1_hash 9ee6c463285d30bfc92acd9f7283e5b9988e36af58dda02ee8c2acc951710b83
 %global source0_hash 8e24dd99f5b7cafbecf0116d61b619ee89098e20263e6f47c793aaf4a98d6473
-
 %global pkgname libburn
-
-Summary:         Library for reading, mastering and writing optical discs
+Summary:        Library for reading, mastering and writing optical discs
 Name:            libburn
 Version:         1.5.8
-Release:         1%{?dist}
+Release:        1%{?dist}
 License:         GPL-2.0-or-later
 URL:             https://libburnia-project.org/
-Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.tar.gz
+Source0:        https://files.%{name}ia-project.org/releases/%{name}-%{version}.tar.gz
 Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.tar.gz.sig
 Source2:         https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
 Patch0:          libburn-0.6.16-multilib.patch
 Patch1:          libburn-1.5.4-rpath.patch
-BuildRequires:   gnupg2
-BuildRequires:   gcc, make, intltool, gettext
-%if 0%{?rhel} && "%{name}" != "%{pkgname}"
-BuildRequires:   autoconf, automake, libtool, pkgconfig
-%global variant 1
-%endif
-
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  gnupg2
+BuildRequires:  graphviz
+BuildRequires:  intltool
+BuildRequires:  make
+# /oreon:deps
 %description
 Libburn is a library by which preformatted data get onto optical media:
 CD, DVD and BD (Blu-Ray). It also offers a facility for reading data
@@ -33,7 +35,6 @@ need such a reload. The code of libburn is independent of cdrecord.
 %package         devel
 Summary:         Development files for %{name}
 Requires:        %{name}%{?_isa} = %{version}-%{release}, pkgconfig
-
 %description     devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -43,7 +44,6 @@ developing applications that use %{name}.
 Summary:         Documentation files for %{name}
 BuildArch:       noarch
 BuildRequires:   doxygen, graphviz
-
 %description doc
 Libburn is a library by which preformatted data get onto optical media:
 CD, DVD and BD (Blu-Ray). This package contains the API documentation
@@ -55,83 +55,45 @@ Summary:         Limited cdrecord compatibility wrapper to ease migration to %{n
 Requires:        %{name}%{?_isa} = %{version}-%{release}
 Requires(post):  %{?el8:/usr/sbin/}alternatives, coreutils
 Requires(preun): %{?el8:/usr/sbin/}alternatives
-
 %description -n cdrskin%{?variant}
 A limited cdrecord compatibility wrapper which allows to use some %{name}
 features from the command line.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n %{pkgname}-%{version}
 
 # Rename from libburn to libburn1 for EPEL
-%if 0%{?rhel} && "%{name}" != "%{pkgname}"
-sed -e 's@libburn_libburn@libburn_libburn1@g' \
-    -e 's@libburn/libburn.la@libburn/libburn1.la@g' \
-    -e 's@(includedir)/libburn@(includedir)/libburn1@g' \
-    -e 's@libburn-1.pc@libburn1-1.pc@g' -i Makefile.am
-sed -e 's@libburn-1.pc@libburn1-1.pc@g' -i configure.ac
-sed -e 's@burn@burn1@g' libburn-1.pc.in > libburn1-1.pc.in
-
-libtoolize --force
-autoreconf --force --install
-%endif
 
 %build
+
 %configure --disable-static
 %make_build
 %{!?_without_doc:doxygen doc/doxygen.conf}
-
 %install
 %make_install
-
-# Don't install any libtool .la files
 rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}.la
-
-# Clean up for later usage in documentation
 rm -rf $RPM_BUILD_ROOT%{_defaultdocdir}
-
-# RHEL ships a cdrskin package already
-%if 0%{?rhel} && "%{name}" != "%{pkgname}"
-mv -f $RPM_BUILD_ROOT%{_bindir}/cdrskin{,%{?variant}}
-mv -f $RPM_BUILD_ROOT%{_mandir}/man1/cdrskin{,%{?variant}}.1
-%endif
-
-# Prepare alternatives handling for cdrecord -> cdrskin
 touch $RPM_BUILD_ROOT{%{_bindir}/cdrecord,%{_mandir}/man1/cdrecord.1.gz}
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post -n cdrskin%{?variant}
+
 alternatives --install %{_bindir}/cdrecord cdrecord %{_bindir}/cdrskin%{?variant} 50 \
   --slave %{_mandir}/man1/cdrecord.1.gz cdrecord-cdrecordman %{_mandir}/man1/cdrskin%{?variant}.1.gz
-
 %preun -n cdrskin%{?variant}
+
 if [ $1 -eq 0 ]; then
   alternatives --remove cdrecord %{_bindir}/cdrskin%{?variant}
 fi
-
-%files
-%license COPYING
-%doc AUTHORS COPYRIGHT README
-%{_libdir}/%{name}*.so.*
-
-%files devel
-%{_includedir}/%{name}
-%{_libdir}/%{name}*.so
-%{_libdir}/pkgconfig/%{name}*.pc
-
-%if 0%{!?_without_doc:1}
-%files doc
-%doc doc/html/
-%endif
-
-%files -n cdrskin%{?variant}
-%ghost %{_bindir}/cdrecord
-%{_bindir}/cdrskin%{?variant}
-%ghost %{_mandir}/man1/cdrecord.1*
-%{_mandir}/man1/cdrskin%{?variant}.1*
+%files -f %{oreon_filedir}/main.list
+%files -n libburn-devel -f %{oreon_filedir}/libburn-devel.list
+%files -n libburn-doc -f %{oreon_filedir}/libburn-doc.list
+%files -n cdrskinbase -f %{oreon_filedir}/cdrskinbase.list
 
 %changelog
+
 %autochangelog

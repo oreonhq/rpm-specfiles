@@ -1,47 +1,34 @@
 %global source0_hash b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f
-
 Name:           python-html5lib
 Summary:        A python based HTML parser/tokenizer
 Version:        1.1
-Release:        %autorelease
+Release:        1%{?dist}
 Epoch:          1
 License:        MIT
 URL:            https://github.com/html5lib/html5lib-python
-Source:        https://files.pythonhosted.org/packages/source/h/html5lib/html5lib-1.1.tar.gz
-# Fix compatibility with pytest 6
+Source0:        https://files.pythonhosted.org/packages/source/h/html5lib/html5lib-1.1.tar.gz
 Patch:        https://github.com/html5lib/html5lib-python/pull/506.patch
-# Fix compatibility with pytest 7.4.0
 Patch:        https://github.com/html5lib/html5lib-python/pull/573.patch
-# Fix compatibility with Python 3.14+
 Patch:        https://github.com/html5lib/html5lib-python/pull/583.patch
-# Avoid ResourceWarning: Implicitly cleaning up <addinfourl ...>
 Patch:        https://github.com/html5lib/html5lib-python/pull/591.patch
-
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-# Test deps
-# Upstream uses requirements-test.txt but it has tox, coverage, mock, flake8 in it
-BuildRequires:  python3dist(pytest)
-BuildRequires:  python3dist(pytest-expect)
-
+Requires:       python3-html5lib = %{version}-%{release}
+# /oreon:deps
 %description
 A python based HTML parser/tokenizer based on the WHATWG HTML5 
 specification for maximum compatibility with major desktop web browsers.
 
-
 %package -n python3-html5lib
-Summary:        %{summary}
-
+Summary:        A python based HTML parser/tokenizer
 %description -n python3-html5lib
 A python based HTML parser/tokenizer based on the WHATWG HTML5 
 specification for maximum compatibility with major desktop web browsers.
 
-%pyproject_extras_subpkg -n python3-html5lib lxml genshi chardet all
-
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n html5lib-%{version}
 
@@ -49,27 +36,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # From https://github.com/html5lib/html5lib-python/pull/536
 sed -i 's/from mock import/from unittest.mock import/' html5lib/tests/test_meta.py
 
-
-%generate_buildrequires
-%pyproject_buildrequires -x all
-
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-%pyproject_save_files html5lib
-
+%oreon_autofiles python3-html5lib usr/lib/python3*/site-packages/html5lib* usr/lib64/python3*/site-packages/html5lib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/html5lib* usr/lib64/python3*/site-packages/html5lib* usr/bin/*
 
 %check
+
 %pytest
-
-
-%files -n python3-html5lib -f %{pyproject_files}
-%doc CHANGES.rst README.rst
-
+%files
+%files -n python3-html5lib -f %{oreon_filedir}/python3-html5lib.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1-1
 - Prepare for Oreon 11 (RP1)

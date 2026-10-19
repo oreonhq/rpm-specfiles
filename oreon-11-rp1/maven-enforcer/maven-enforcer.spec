@@ -1,6 +1,5 @@
 %global source0_hash 49907a9f2a1e12bebf9a8d56f511316a41f9aab79b763c8db0b19476fe0e4220
 %oreon_bootstrap
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -82,21 +81,20 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           maven-enforcer
 Version:        3.6.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven Enforcer
 License:        Apache-2.0
 URL:            https://maven.apache.org/enforcer
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/enforcer/enforcer/%{version}/enforcer-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.6.3-9
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.code.findbugs:jsr305)
 BuildRequires:  mvn(commons-codec:commons-codec)
@@ -121,29 +119,23 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-xml)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.6.3-9
-
+# /oreon:deps
 %description
 Enforcer is a build rule execution framework.
 
 %package api
 Summary:        Enforcer API
-
 %description api
 This component provides the generic interfaces needed to
 implement custom rules for the maven-enforcer-plugin.
 
 %package rules
 Summary:        Enforcer Rules
-
 %description rules
 This component contains the standard Enforcer Rules.
 
 %package plugin
 Summary:        Enforcer Plugin
-
 %description plugin
 The Enforcer plugin provides goals to control certain environmental
 constraints such as Maven version, JDK version and OS family along
@@ -151,13 +143,13 @@ with many more built-in rules and user created rules.
 
 %package extension
 Summary:        Maven Enforcer Extension
-
 %description extension
 The Enforcer Extension provides a way to globally define rules without
 making use of pom inheritence. This way you don't have to adjust the
 pom.xml, but you can enforce a set of rules.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n enforcer-%{version}
 find -name '*.java' -exec sed -i 's/\r//' {} +
@@ -167,23 +159,18 @@ find -name EvaluateBeanshell.java -delete
 %pom_remove_dep :bsh enforcer-rules
 
 %build
-# Use system version of maven-enforcer-plugin instead of reactor version
-%mvn_build -j -s -f -- -Dversion.maven-enforcer-plugin=SYSTEM
 
+%mvn_build -j -s -f -- -Dversion.maven-enforcer-plugin=SYSTEM
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-enforcer
-%license LICENSE NOTICE
-
-%files api -f .mfiles-enforcer-api
-%license LICENSE NOTICE
-
-%files rules -f .mfiles-enforcer-rules
-
-%files plugin -f .mfiles-maven-enforcer-plugin
-
-%files extension -f .mfiles-maven-enforcer-extension
+%files -f %{oreon_filedir}/main.list
+%files -n maven-enforcer-api -f %{oreon_filedir}/maven-enforcer-api.list
+%files -n maven-enforcer-rules -f %{oreon_filedir}/maven-enforcer-rules.list
+%files -n maven-enforcer-plugin -f %{oreon_filedir}/maven-enforcer-plugin.list
+%files -n maven-enforcer-extension -f %{oreon_filedir}/maven-enforcer-extension.list
 
 %changelog
+
 %autochangelog

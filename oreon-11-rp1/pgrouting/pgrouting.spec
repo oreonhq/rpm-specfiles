@@ -1,52 +1,41 @@
-%global source0_hash b8a5f0472934fdf7cda3fb4754d01945378d920cdaddc01f378617ddbb9c447f
-
+%global source0_hash 2faf31b178db969637c1f392ba3ba18fba8d5aed15bdc73fbb4a53a72c5d0f71
 Name:          pgrouting
 Version:       4.0.2
-Release:       1%{?dist}
-Summary:       Provides routing functionality to PostGIS / PostgreSQL
+Release:        1%{?dist}
+Summary:        Provides routing functionality to PostGIS / PostgreSQL
 License:       GPL-2.0-or-later AND BSL-1.0 AND MIT
 URL:           https://pgrouting.org
-Source:        https://github.com/pgRouting/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: perl-interpreter
-BuildRequires: perl-File-Find
-BuildRequires: perl-version
-BuildRequires: gcc-c++
-BuildRequires: boost-devel
-BuildRequires: postgresql-server-devel
-BuildRequires: boost-graph
-BuildRequires: cmake
-
+Source0:        https://github.com/pgRouting/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Requires:      postgresql-server
 Requires:      postgis
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  boost-graph
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  perl-File-Find
+BuildRequires:  perl-interpreter
+BuildRequires:  perl-version
+BuildRequires:  postgresql-server-devel
+# /oreon:deps
 %description
 pgRouting extends the PostGIS / PostgreSQL geospatial database to provide
 geospatial routing functionality.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}-%{version}
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake -DPOSTGRESQL_PG_CONFIG=%{_bindir}/pg_server_config
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%license BOOST_LICENSE_1_0.txt
-%license tools/licences/MIT_license.txt
-%license tools/licences/GNU_license.txt
-%license tools/licences/CCM_license.txt
-%doc CODE_OF_CONDUCT.md NEWS README.md CONTRIBUTING.md
-%{_libdir}/pgsql/libpgrouting-%{sub %version 1 3}.so
-%{_datadir}/pgsql/extension/pgrouting--*--%{version}.sql
-%{_datadir}/pgsql/extension/pgrouting--%{version}.sql
-%{_datadir}/pgsql/extension/pgrouting.control
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,58 +1,39 @@
-%global source0_hash none
-
+%global source0_hash 4250fab667cc41c55170028ab095a9d4a4ae66363f4bc0720771c20519702625
 Name:           python-apsw
 Version:        3.53.4.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Another Python SQLite Wrapper
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        any-OSI
 URL:            https://rogerbinns.github.io/apsw/changes.html
-Source:         %{pypi_source apsw}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/apsw/apsw-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'apsw' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-apsw = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-apsw
-Summary:        %{summary}
-
-%description -n python3-apsw %_description
-
+Summary:        Another Python SQLite Wrapper
+%description -n python3-apsw
 
 %prep
-%autosetup -p1 -n apsw-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir apsw-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-apsw usr/lib/python3*/site-packages/apsw* usr/lib64/python3*/site-packages/apsw* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/apsw* usr/lib64/python3*/site-packages/apsw* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-apsw -f %{pyproject_files}
-%{_bindir}/apsw
+%files
+%files -n python3-apsw -f %{oreon_filedir}/python3-apsw.list
 
 %changelog
+
 %autochangelog

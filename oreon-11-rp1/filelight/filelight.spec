@@ -1,87 +1,62 @@
 %global source0_hash b3fb2947253566bda42a15c111ccf1df0cff7003e90c29acfa05f50ac9bc03f6
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    filelight
-Summary: Graphical disk usage statistics
+Summary:        Graphical disk usage statistics
 Epoch:   1
 Version: 26.04.3
-Release: 1%{?dist}
-
-# KDE e.V. may determine that future GPL versions are accepted
+Release:        1%{?dist}
 License: GPL-2.0-only OR GPL-3.0-only
 URL:     https://utils.kde.org/projects/filelight
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6KIO)
-BuildRequires: cmake(KF6Declarative)
-BuildRequires: cmake(KF6DocTools)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KF6QQC2DesktopStyle)
-BuildRequires: cmake(KF6KirigamiAddons)
-BuildRequires: cmake(KF6Crash)
-
-BuildRequires: cmake(Qt6Gui)
-BuildRequires: cmake(Qt6Quick)
-BuildRequires: cmake(Qt6QuickControls2)
-BuildRequires: cmake(Qt6Widgets)
-
-# Runtime Deps
 Requires: kf6-qqc2-desktop-style
 Requires: kf6-kcoreaddons
 Requires: kf6-kirigami
 Requires: kf6-kirigami-addons
 Requires: kf6-kquickcharts
-
-
+# oreon:deps
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6Declarative)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6KirigamiAddons)
+BuildRequires:  cmake(KF6QQC2DesktopStyle)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6QuickControls2)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 Filelight allows you to quickly understand exactly where your diskspace
 is being used by graphically representing your file system.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang %{name} --all-name --with-html
-
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-
-
-%files -f %{name}.lang
-%license LICENSES/*
-%doc AUTHORS README*
-%{_kf6_datadir}/qlogging-categories6/%{name}*
-%{_kf6_bindir}/filelight
-%{_kf6_datadir}/applications/org.kde.filelight.desktop
-%{_kf6_metainfodir}/org.kde.filelight.appdata.xml
-%{_kf6_datadir}/icons/hicolor/*/*/*filelight.*
-%{_kf6_datadir}/kio/servicemenus/filelight.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 1:26.03.80-1
 - 26.03.80
 

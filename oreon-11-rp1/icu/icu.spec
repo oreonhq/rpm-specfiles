@@ -1,22 +1,19 @@
+%global source5_hash 0c1d62e7abae0ff77b7dd42b66ec0f0a446990f1c2fb7071dfd675bae41dc7ae
+%global source4_hash 2c711deae69718776883184f9c3c1f638e431e0a14bf922f84797b3c75023552
+%global source3_hash 30e086ba9b559f12fc854c7f2b60917985052799c182c260e75deee872b80d38
+%global source2_hash 2b85363878a45ed20218c951ac234f6ef4f1f7646f7d31554e74ca565691fa40
+%global source1_hash 9d8b3899096aeb83e4e21ef8a40fec9e03b28db18c48452efac882ce25a91e27
 %global source0_hash 3a2e7a47604ba702f345878308e6fefeca612ee895cf4a5f222e7955fabfe0c0
-
-#%%global debugtrace 1
-
-# Set to 0 when upgrading to a new ICU release that contains up-to-date timezone data.
-# (or update the timezone data update..).
 %global use_tzdata_update 0
-
 %define version_dash %{gsub %{version} %. -}
 %define version_underscore %{gsub %{version} %. _}
-
 Name:      icu
 Version:   78.3
-Release:   1%{?dist}
-Summary:   International Components for Unicode
-
+Release:        1%{?dist}
+Summary:        International Components for Unicode
 License:   Unicode-DFS-2016 AND BSD-2-Clause AND BSD-3-Clause AND NAIST-2003 AND LicenseRef-Fedora-Public-Domain
 URL:       http://site.icu-project.org/
-Source0:   https://github.com/unicode-org/icu/releases/download/release-%{version}/icu4c-%{version}-sources.tgz
+Source0:        https://github.com/unicode-org/icu/releases/download/release-%{version}/icu4c-%{version}-sources.tgz
 %if 0%{?use_tzdata_update}
 Source1:   https://github.com/unicode-org/icu/releases/download/release-%{version}/icu4c-%{version}-data.zip
 Source2:   https://raw.githubusercontent.com/unicode-org/icu-data/main/tzdata/icunew/2022b/44/metaZones.txt
@@ -24,24 +21,23 @@ Source3:   https://raw.githubusercontent.com/unicode-org/icu-data/main/tzdata/ic
 Source4:   https://raw.githubusercontent.com/unicode-org/icu-data/main/tzdata/icunew/2022b/44/windowsZones.txt
 Source5:   https://raw.githubusercontent.com/unicode-org/icu-data/main/tzdata/icunew/2022b/44/zoneinfo64.txt
 %endif
-
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: doxygen, autoconf, python3
-BuildRequires: make
 Requires: lib%{name}%{?_isa} = %{version}-%{release}
-
 Patch4: gennorm2-man.patch
 Patch5: icuinfo-man.patch
-# https://github.com/unicode-org/icu/pull/3496
 Patch6: 3496.patch
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  python3
+# /oreon:deps
 %description
 Tools and utilities for developing with icu.
 
 %package -n lib%{name}
 Summary: International Components for Unicode - libraries
-
 %description -n lib%{name}
 The International Components for Unicode (ICU) libraries provide
 robust and full-featured Unicode services on a wide variety of
@@ -58,22 +54,20 @@ customize the supplied services.
 Summary:  Development files for International Components for Unicode
 Requires: lib%{name}%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
-
 %description -n lib%{name}-devel
 Includes and definitions for developing with icu.
 
 %package -n lib%{name}-doc
 Summary: Documentation for International Components for Unicode
 BuildArch: noarch
-
 %description -n lib%{name}-doc
 %{summary}.
 
 %{!?endian: %global endian %(%{__python3} -c "import sys;print (0 if sys.byteorder=='big' else 1)")}
 # " this line just fixes syntax highlighting for vim that is confused by the above and continues literal
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n icu
 %if 0%{?use_tzdata_update}
@@ -85,42 +79,27 @@ popd
 %endif
 
 %build
+
 pushd source
 autoconf
 CFLAGS='%optflags -fno-strict-aliasing'
 CXXFLAGS='%optflags -fno-strict-aliasing'
-# Endian: BE=0 LE=1
 %if ! 0%{?endian}
 CPPFLAGS='-DU_IS_BIG_ENDIAN=1'
 %endif
-
-#rhbz856594 do not use --disable-renaming or cope with the mess
 OPTIONS='--with-data-packaging=library --disable-samples'
 %if 0%{?debugtrace}
 OPTIONS=$OPTIONS' --enable-debug --enable-tracing'
 %endif
 %configure $OPTIONS
-
-#rhbz#225896
 sed -i 's|-nodefaultlibs -nostdlib||' config/mh-linux
-#rhbz#813484
 sed -i 's| \$(docfilesdir)/installdox||' Makefile
-# There is no source/doc/html/search/ directory
 sed -i '/^\s\+\$(INSTALL_DATA) \$(docsrchfiles) \$(DESTDIR)\$(docdir)\/\$(docsubsrchdir)\s*$/d' Makefile
-# rhbz#856594 The configure --disable-renaming and possibly other options
-# result in icu/source/uconfig.h.prepend being created, include that content in
-# icu/source/common/unicode/uconfig.h to propagate to consumer packages.
 test -f uconfig.h.prepend && sed -e '/^#define __UCONFIG_H__/ r uconfig.h.prepend' -i common/unicode/uconfig.h
-
-# more verbosity for build.log
 sed -i -r 's|(PKGDATA_OPTS = )|\1-v |' data/Makefile
-
 %make_build
 %make_build doc
-
-
 %install
-#rm -rf source/doc
 %make_install %{?_smp_mflags} -C source
 chmod +x $RPM_BUILD_ROOT%{_libdir}/*.so.*
 (
@@ -128,84 +107,26 @@ chmod +x $RPM_BUILD_ROOT%{_libdir}/*.so.*
  mv icu-config icu-config-%{__isa_bits}
 )
 cat > $RPM_BUILD_ROOT%{_bindir}/icu-config <<'EOF'
-#!/bin/sh
 bits=$(getconf LONG_BIT 2>/dev/null || echo 64)
 exec "/usr/bin/icu-config-${bits}" "$@"
 EOF
 chmod 755 $RPM_BUILD_ROOT%{_bindir}/icu-config
-
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
 %check
-# test to ensure that -j(X>1) didn't "break" man pages. b.f.u #2357
+
 if grep -q @VERSION@ source/tools/*/*.8 source/tools/*/*.1 source/config/*.1; then
     exit 1
 fi
 %make_build -C source check
-
-# log available codes
 pushd source
 LD_LIBRARY_PATH=lib:stubdata:tools/ctestfw:$LD_LIBRARY_PATH bin/uconv -l
-
-
-%files
-%license license.html
-%exclude %{_datadir}/%{name}/*/LICENSE
-%{_bindir}/derb
-%{_bindir}/genbrk
-%{_bindir}/gencfu
-%{_bindir}/gencnval
-%{_bindir}/gendict
-%{_bindir}/genrb
-%{_bindir}/icuexportdata
-%{_bindir}/makeconv
-%{_bindir}/pkgdata
-%{_bindir}/uconv
-%{_sbindir}/escapesrc
-%{_sbindir}/genccode
-%{_sbindir}/gencmn
-%{_sbindir}/gennorm2
-%{_sbindir}/gensprep
-%{_sbindir}/icupkg
-%{_mandir}/man1/derb.1*
-%{_mandir}/man1/genbrk.1*
-%{_mandir}/man1/gencfu.1*
-%{_mandir}/man1/gencnval.1*
-%{_mandir}/man1/gendict.1*
-%{_mandir}/man1/genrb.1*
-%{_mandir}/man1/icuexportdata.1*
-%{_mandir}/man1/makeconv.1*
-%{_mandir}/man1/pkgdata.1*
-%{_mandir}/man1/uconv.1*
-%{_mandir}/man8/*.8*
-
-%files -n lib%{name}
-%license LICENSE
-%doc readme.html
-%{_libdir}/*.so.*
-
-%files -n lib%{name}-devel
-%license LICENSE
-%doc source/samples/
-%{_bindir}/%{name}-config*
-%{_bindir}/icuinfo
-%{_mandir}/man1/%{name}-config.1*
-%{_mandir}/man1/icuinfo.1*
-%{_includedir}/unicode
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-%{_libdir}/%{name}
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/%{version}
-%{_datadir}/%{name}/%{version}/install-sh
-%{_datadir}/%{name}/%{version}/mkinstalldirs
-%{_datadir}/%{name}/%{version}/config
-
-%files -n lib%{name}-doc
-%license LICENSE
-%doc readme.html
-%doc source/doc/html/*
-
+%files -f %{oreon_filedir}/main.list
+%files -n libicu -f %{oreon_filedir}/libicu.list
+%files -n libicu-devel -f %{oreon_filedir}/libicu-devel.list
+%files -n libicu-doc -f %{oreon_filedir}/libicu-doc.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 77.1-2
 - Prepare for Oreon 11 (RP1)

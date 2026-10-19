@@ -1,24 +1,20 @@
-%global source0_hash b1438c3cad13b6101edb31ce8d00ba4ed2f972754e85b90f763e04fa5143c6fc
-
+%global source0_hash ca3be808e3d0c785955f1613e6e860fc51b5db086b821b48707466da1a06392c
 %define _legacy_common_support 1
-
 Name:		bspwm
 Version:	0.9.12
-Release:	1%{?dist}
-Summary:	A tiling window manager based on binary space partitioning
-
-# Automatically converted from old format: BSD - review is highly recommended.
+Release:        1%{?dist}
+Summary:        A tiling window manager based on binary space partitioning
 License:	LicenseRef-Callaway-BSD
 URL:		https://github.com/baskerville/bspwm
-Source0:	%{url}/archive/%{version}.tar.gz
-
-BuildRequires:	gcc
-BuildRequires:	xcb-util-devel
-BuildRequires:	xcb-util-wm-devel
-BuildRequires:	xcb-util-keysyms-devel
-BuildRequires:	desktop-file-utils
-BuildRequires: make
-
+Source0:        https://github.com/baskerville/%{name}/archive/%{version}.tar.gz
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  xcb-util-devel
+BuildRequires:  xcb-util-keysyms-devel
+BuildRequires:  xcb-util-wm-devel
+# /oreon:deps
 %description
 bspwm is a tiling window manager that represents windows as the leaves of a
 full binary tree.
@@ -33,31 +29,24 @@ bspwm doesn't handle any keyboard or pointer inputs: a third party program
 bspc invocations.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 make VERBOSE=1 %{?_smp_mflags} CFLAGS="%{optflags}" \
 	LDFLAGS="%{?__global_ldflags}"
-
 %install
 %make_install PREFIX="%{_prefix}"
+%oreon_autofiles main
 
 %check
-desktop-file-validate %{buildroot}/%{_datadir}/xsessions/%{name}.desktop
 
-%files
-%license LICENSE
-%{_bindir}/%{name}
-%{_bindir}/bspc
-%{_docdir}/%{name}
-%{_mandir}/man1/%{name}.1.gz
-%{_mandir}/man1/bspc.1.gz
-%{_datadir}/bash-completion/completions/bspc
-%{_datadir}/zsh/site-functions/_bspc
-%{_datadir}/fish/vendor_completions.d/bspc.fish
-%{_datadir}/xsessions/%{name}.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/xsessions/%{name}.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

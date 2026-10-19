@@ -1,35 +1,23 @@
-%global source0_hash f00ce3ab61a8d8e429168ea4cc6dee55aa3b89d5621b38888a0003b2ca9fbd4f
-
+%global source0_hash 819e98bc7dad7cf7e67c9ddb592f44545c300de143fe30bc29ca1b422b55306a
 Name:           mpfi
 Version:        1.5.4
 Release:        11%{?dist}
 Summary:        An interval arithmetic library based on MPFR
-
-# Most files have an LGPL-2.1-or-later notice.  Exceptions:
-# src/clears.c: LGPL-3.0-or-later
-# src/inits.c: LGPL-3.0-or-later
-# src/inits2.c: LGPL-3.0-or-later
 License:        LGPL-3.0-or-later AND LGPL-2.1-or-later
 URL:            https://perso.ens-lyon.fr/nathalie.revol/software.html
 VCS:            git:https://gitlab.inria.fr/mpfi/mpfi.git
-Source:         https://perso.ens-lyon.fr/nathalie.revol/softwares/%{name}-%{version}.tar.xz
-# Fix possible use of initialized variables
+Source0:        https://perso.ens-lyon.fr/nathalie.revol/softwares/%{name}-%{version}.tar.xz
 Patch:          %{name}-uninit.patch
-# Fix mismatched type declarations
 Patch:          %{name}-mismatched-type.patch
-# Fix incorrect use of the address-of operator
 Patch:          %{name}-bad-ref.patch
-# Fix a missing #include in a test file
 Patch:          %{name}-test.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  gmp-devel
 BuildRequires:  make
 BuildRequires:  mpfr-devel
-BuildRequires:  gmp-devel
-
+# /oreon:deps
 %description
 MPFI is intended to be a portable library written in C for arbitrary precision
 interval arithmetic with intervals represented using MPFR reliable
@@ -47,16 +35,14 @@ Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       gmp-devel%{?_isa}
 Requires:       mpfr-devel%{?_isa}
-
-# This can be removed when F47 reaches EOL
 Obsoletes:      %{name}-static < 1.5.4-11
 Provides:       %{name}-static = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -75,31 +61,20 @@ sed -i 's/ -lmpfr -lgmp/\nLibs.private:&/' mpfi.pc.in
 %configure --disable-static
 
 %build
-%make_build
 
+%make_build
 %install
 %make_install
-
-# Remove dir file in the info directory
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
-
-# Remove license files from doc
 rm %{buildroot}%{_docdir}/mpfi/COPYING*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 make check
-
-%files
-%doc AUTHORS NEWS TODO
-%license COPYING COPYING.LESSER
-%{_libdir}/libmpfi.so.0{,.*}
-
-%files devel
-%{_includedir}/mpfi.h
-%{_includedir}/mpfi_io.h
-%{_infodir}/%{name}.info*
-%{_libdir}/libmpfi.so
-%{_libdir}/pkgconfig/mpfi.pc
+%files -f %{oreon_filedir}/main.list
+%files -n mpfi-devel -f %{oreon_filedir}/mpfi-devel.list
 
 %changelog
+
 %autochangelog

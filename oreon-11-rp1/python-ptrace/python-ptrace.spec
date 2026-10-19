@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 5c2c3179646480209616902a1cea7499755cf634adf228b039a50d6e5b5ca8b3
 Name:           python-ptrace
 Version:        1.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        C extension providing access to ptrace_2_
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            UNKNOWN
-Source:         %{pypi_source ptrace}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/ptrace/ptrace-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ptrace' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-ptrace = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ptrace
-Summary:        %{summary}
-
-%description -n python3-ptrace %_description
-
+Summary:        C extension providing access to ptrace_2_
+%description -n python3-ptrace
 
 %prep
-%autosetup -p1 -n ptrace-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ptrace-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ptrace usr/lib/python3*/site-packages/ptrace* usr/lib64/python3*/site-packages/ptrace* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ptrace* usr/lib64/python3*/site-packages/ptrace* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ptrace -f %{pyproject_files}
+%files
+%files -n python3-ptrace -f %{oreon_filedir}/python3-ptrace.list
 
 %changelog
+
 %autochangelog

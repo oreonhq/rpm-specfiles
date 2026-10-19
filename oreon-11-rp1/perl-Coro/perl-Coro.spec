@@ -1,64 +1,15 @@
 %global source0_hash 1928e48033540e11ebf5506986dd101af78d2421d210f96599223b15d51714c6
-
 %global cpan_version 6.57
 Name:           perl-Coro
 Version:        6.570
-Release:        25%{?dist}
+Release:        1%{?dist}
 Summary:        The only real threads in perl
-# Coro/libcoro:    GPL-2.0-or-later OR BSD-2-Clause
-# Rest of package: GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND (GPL-2.0-or-later OR BSD-2-Clause)
 URL:            https://metacpan.org/release/Coro
 Source0:        https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Coro-%{cpan_version}.tar.gz
 Patch0:         %{name}-5.25-ucontext-default.patch
-# Do not disable hardening
 Patch1:         Coro-6.512-Disable-disabling-FORTIFY_SOURCE.patch
-# https://rt.cpan.org/Public/Bug/Display.html?id=158609, https://bugzilla.redhat.com/show_bug.cgi?id=2379448
 Patch2:         Coro-6.57-c23.patch
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  gcc
-BuildRequires:  libecb-static
-BuildRequires:  make
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl(Canary::Stability)
-BuildRequires:  perl(Config)
-BuildRequires:  perl(EV) >= 4
-BuildRequires:  perl(EV::MakeMaker)
-BuildRequires:  perl(Event) >= 1.08
-BuildRequires:  perl(Event::MakeMaker) >= 6.76
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.52
-BuildRequires:  perl(strict)
-BuildRequires:  sed
-# Run-time:
-BuildRequires:  perl(AnyEvent) >= 7
-# AnyEvent::AIO >= 1 not used at tests
-# AnyEvent::BDB >= 1 not used at tests
-# AnyEvent::DNS not used at tests
-BuildRequires:  perl(AnyEvent::Socket)
-BuildRequires:  perl(AnyEvent::Util)
-BuildRequires:  perl(base)
-# BDB not used at tests
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(common::sense)
-BuildRequires:  perl(Errno)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(Guard) >= 0.5
-# IO::AIO >= 3.1 not used at tests
-BuildRequires:  perl(IO::Socket::INET)
-# Net::Config not used at tests
-# Net::FTP not used at tests
-# Net::HTTP not used at tests
-# Net::NNTP not used at tests
-BuildRequires:  perl(overload)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(Socket)
-BuildRequires:  perl(Storable) >= 2.15
-BuildRequires:  perl(warnings)
-BuildRequires:  perl(XSLoader)
-# Export correct required versions
 Requires:       perl(AnyEvent) >= 7
 Requires:       perl(AnyEvent::AIO) >= 1
 Requires:       perl(AnyEvent::BDB) >= 1
@@ -67,10 +18,7 @@ Requires:       perl(Event) >= 1.08
 Requires:       perl(Guard) >= 0.5
 Requires:       perl(Storable) >= 2.15
 Requires:       perl(warnings)
-
 %{?perl_default_filter}
-
-# Filter underspecified dependencies
 %global __requires_exclude %{?__requires_exclude:__requires_exclude|}^perl\\(AnyEvent\\)$
 %global __requires_exclude %__requires_exclude|^perl\\(AnyEvent\\) >= 4.800001$
 %global __requires_exclude %__requires_exclude|^perl\\(AnyEvent::AIO\\)$
@@ -80,8 +28,6 @@ Requires:       perl(warnings)
 %global __requires_exclude %__requires_exclude|^perl\\(Guard\\)$
 %global __requires_exclude %__requires_exclude|^perl\\(Storable\\)$
 %global __provides_exclude %{?__provides_exclude:__provides_exclude|}^perl\\(Coro\\)$
-
-
 Provides:       perl(Coro)
 Provides:       perl(Coro) = %{version}
 Provides:       perl(Coro::MakeMaker)
@@ -103,6 +49,41 @@ Provides:       perl(Coro::State)
 Provides:       perl(Coro::Storable)
 Provides:       perl(Coro::Timer)
 Provides:       perl(Coro::Util)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  gcc
+BuildRequires:  libecb-static
+BuildRequires:  make
+BuildRequires:  perl(AnyEvent)
+BuildRequires:  perl(AnyEvent::Socket)
+BuildRequires:  perl(AnyEvent::Util)
+BuildRequires:  perl(Canary::Stability)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(EV)
+BuildRequires:  perl(EV::MakeMaker)
+BuildRequires:  perl(Errno)
+BuildRequires:  perl(Event)
+BuildRequires:  perl(Event::MakeMaker)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Guard)
+BuildRequires:  perl(IO::Socket::INET)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Socket)
+BuildRequires:  perl(Storable)
+BuildRequires:  perl(XSLoader)
+BuildRequires:  perl(base)
+BuildRequires:  perl(common::sense)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  sed
+# /oreon:deps
 %description
 This module collection manages continuations in general, most often in the
 form of cooperative threads (also called coros, or simply "coro" in the
@@ -119,12 +100,12 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 BuildArch:      noarch
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Coro-%{cpan_version}
 
@@ -154,38 +135,28 @@ for F in t/*.t; do
 done
 
 %build
-# Interactive configuration. Use default values.
+
 perl Makefile.PL INSTALLDIRS=perl NO_PACKLIST=1 NO_PERLLOCAL=1 \
     OPTIMIZE="$RPM_OPT_FLAGS" </dev/null
 %{make_build}
-
 %install
 %{make_install}
 find %{buildroot} -type f -name '*.bs' -size 0 -delete
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %{make_build} test
-
-%files
-%license COPYING
-%doc Changes README README.linux-glibc
-%doc doc/* eg
-%{perl_archlib}/auto/Coro
-%{perl_archlib}/Coro
-%{perl_archlib}/Coro.pm
-%{_mandir}/man3/Coro*.3pm*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Coro-tests -f %{oreon_filedir}/perl-Coro-tests.list
 
 %changelog
+
 %autochangelog

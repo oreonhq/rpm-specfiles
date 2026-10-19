@@ -1,51 +1,32 @@
 %global source0_hash 8ca0c52746174603500f0adb6f2a215d69c9ca2aab2acb3caa06fb791d8d01bf
-
 %global sover           3
 %global aom_version     v%{version}
-
-%if 0%{?fedora} || 0%{?rhel} >= 9
-%ifarch x86_64
-%bcond_without vmaf
-%endif
-%if 0%{?fedora} > 40 || 0%{?rhel} > 9
-%bcond_with jpegxl
-%else
 %bcond_without jpegxl
-%endif
-%endif
-
 Name:       aom
 Version:    3.15.1
 Release:        1%{?dist}
-Summary:    Royalty-free next-generation video format
-
+Summary:        Royalty-free next-generation video format
 License:    BSD-3-Clause
 URL:        http://aomedia.org/
-Source:        https://storage.googleapis.com/aom-releases/lib%{name}-%{version}.tar.gz
-# Building static library breaks .cmake files if we don't ship it, so drop it
+Source0:        https://storage.googleapis.com/aom-releases/lib%{name}-%{version}.tar.gz
 Patch:      aom-nostatic.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  gcc
-BuildRequires:  cmake
-BuildRequires:  doxygen
-BuildRequires:  git-core
-# BuildRequires:  graphviz
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Getopt::Long)
-BuildRequires:  python3-devel
-BuildRequires:  nasm
 %if %{with jpegxl}
-BuildRequires:  pkgconfig(libjxl)
-BuildRequires:  pkgconfig(libhwy)
 %endif
 %if %{with vmaf}
-BuildRequires:  pkgconfig(libvmaf)
 %endif
-
 Provides:       av1 = %{version}-%{release}
 Requires:       libaom%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  git-core
+BuildRequires:  nasm
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl-interpreter
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 The Alliance for Open Media’s focus is to deliver a next-generation
 video format that is:
@@ -62,17 +43,14 @@ This package contains the reference encoder and decoder.
 
 %package -n libaom
 Summary:        Library files for aom
-
 %description -n libaom
 Library files for aom, the royalty-free next-generation
 video format.
 
 %package -n libaom-devel
 Summary:        Development files for aom
-# cmake files assume /usr/bin/aomdec is present
 Requires:       aom%{?_isa} = %{version}-%{release}
 Requires:       libaom%{?_isa} = %{version}-%{release}
-
 %description -n libaom-devel
 Development files for aom, the royalty-free next-generation
 video format.
@@ -80,12 +58,12 @@ video format.
 %package -n libaom-devel-docs
 Summary:        Documentation for libaom
 Requires:       libaom-devel%{?_isa} = %{version}-%{release}
-
 %description -n libaom-devel-docs
 Documentation for libaom, the royalty-free next-generation
 video format.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n lib%{name}-%{version}
 # Set GIT revision in version
@@ -94,6 +72,7 @@ sed -i 's@set(aom_version "")@set(aom_version "%{aom_version}")@' cmake/version.
 sed -i "s@GENERATE_LATEX         = YES@GENERATE_LATEX         = NO@" libs.doxy_template
 
 %build
+
 %cmake  -DENABLE_CCACHE=1 \
         -DCMAKE_SKIP_RPATH=1 \
         -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -110,28 +89,18 @@ sed -i "s@GENERATE_LATEX         = YES@GENERATE_LATEX         = NO@" libs.doxy_t
 %endif
         %{nil}
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles libaom usr/*/lib*.so.*
+%oreon_autofiles libaom-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles libaom-devel-docs usr/*/lib*.so.*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%doc AUTHORS CHANGELOG README.md
-%license LICENSE PATENTS
-%{_bindir}/aomdec
-%{_bindir}/aomenc
-
-%files -n libaom
-%license LICENSE PATENTS
-%{_libdir}/libaom.so.%{sover}*
-
-%files -n libaom-devel
-%{_includedir}/%{name}
-%{_libdir}/libaom.so
-%{_libdir}/cmake/AOM/
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files -n libaom-devel-docs
-%doc %{_vpath_builddir}/docs/html/
+%files -f %{oreon_filedir}/main.list
+%files -n libaom -f %{oreon_filedir}/libaom.list
+%files -n libaom-devel -f %{oreon_filedir}/libaom-devel.list
+%files -n libaom-devel-docs -f %{oreon_filedir}/libaom-devel-docs.list
 
 %changelog
+
 %autochangelog

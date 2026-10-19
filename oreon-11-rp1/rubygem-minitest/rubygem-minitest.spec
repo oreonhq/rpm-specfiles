@@ -1,22 +1,18 @@
 %global source0_hash db6e57956f6ecc6134683b4c87467d6dd792323c7f0eea7b93f66bd284adbc3d
-
-# Generated from minitest-1.4.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name minitest
-
 Name: rubygem-%{gem_name}
 Version: 6.0.2
-Release: 1%{?dist}
-Summary: minitest provides a complete suite of testing facilities
-# README.rdoc
-# SPDX confirmed
+Release:        1%{?dist}
+Summary:        minitest provides a complete suite of testing facilities
 License: MIT
 URL: https://github.com/seattlerb/minitest
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
-BuildRequires: ruby(release)
-BuildRequires: rubygems-devel
-BuildRequires: rubygem(hoe)
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  ruby(release)
+BuildRequires:  rubygem(hoe)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 minitest provides a complete suite of testing facilities supporting
 TDD, BDD, mocking, and benchmarking.
@@ -53,25 +49,24 @@ extract-method refactorings still apply.
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version}
 mv ../%{gem_name}-%{version}.gemspec .
 
 %build
+
 gem build %{gem_name}-%{version}.gemspec
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
-
 rm -f %{buildroot}%{gem_cache}
 pushd %{buildroot}%{gem_instdir}
 rm -rf \
@@ -81,27 +76,18 @@ rm -rf \
 	test/ \
 	%{nil}
 popd
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 LANG=C.UTF-8
 LC_ALL=C.utf8
 pushd .%{gem_instdir}
-
 ruby -Ilib:test -e 'Dir.glob "./test/minitest/test_*.rb", &method(:require)'
-
 popd
-
-%files
-%license %{gem_instdir}/README.rdoc
-%dir %{gem_instdir}
-%{gem_instdir}/bin
-%{gem_libdir}
-%{gem_spec}
-
-%files doc
-%doc %{gem_docdir}
-%doc %{gem_instdir}/History.rdoc
-%{gem_instdir}/design_rationale.rb
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-minitest-doc -f %{oreon_filedir}/rubygem-minitest-doc.list
 
 %changelog
+
 %autochangelog

@@ -1,34 +1,20 @@
-%global source0_hash efebf6970f6158ed002fdfe320d4ff4738e3a049b333a749da6cc464b3579860
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+%global source0_hash 525f6970eb818f822db75c1526b3122b1af078affa572dce303de37df5c7b088
 ExcludeArch:    %{ix86}
-
 %global build_type_safety_c 0
-
 Name:       wcstools
 Version:    3.9.7
-Release:    %autorelease
-Summary:    Software utilities to display and manipulate the WCS of a FITS image
+Release:        1%{?dist}
+Summary:        Software utilities to display and manipulate the WCS of a FITS image
 License:    GPL-2.0-or-later
 URL:        http://tdc-www.harvard.edu/wcstools
-Source0:    http://tdc-www.harvard.edu/software/wcstools/%{name}-%{version}.tar.gz
-
-BuildRequires:  make
-BuildRequires:  gcc
-
-# Patch adjusted from Debian to create shared lib and rename it to avoid
-# conflicts with Mark Calabretta's wcslib package.
+Source0:        http://tdc-www.harvard.edu/software/wcstools/%{name}-%{version}.tar.gz
 Patch:      wcstools-3.9.7_rename-libwcs-to-libwcstools.patch
-
-# Patch to rename some conflicting binaries
-# new names in accordance to Debian renaming
-# see also fedora#1450190
 Patch:      wcstools-3.9.7_rename-binaries.patch
-
-# Since there's no way to reach out upstream other than email
-# and I don't get replies, this patch tries to fix build with GCC15
 Patch:      fix_gcc15-c++23.patch
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 Wcstools is a set of software utilities, written in C, which create,
 display and manipulate the world coordinate system of a FITS or IRAF
@@ -38,10 +24,7 @@ search star catalogs and manipulate images.
 
 %package libs
 Summary:    Wcstools shared library
-# most files have LGPL-2.0-or-later header
-# COPYING is LGPL-2.1-only
 License:    LGPL-2.0-or-later AND LGPL-2.1-only
-
 %description libs
 Shared library necessary to run wcstools and programs based on libwcs.
 
@@ -53,6 +36,7 @@ Requires:   %{name}-libs%{_isa} = %{version}-%{release}
 This are the files needed to develop an application using wcstools.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -62,8 +46,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 grep -rl '59 Temple Place, Suite 330, Boston, MA  02111-1307  USA' --include=*.{c,h} | xargs -i@ sed -i 's/59 Temple Place, Suite 330, Boston, MA  02111-1307  USA/51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA./g' @
 
 %build
-%make_build
 
+%make_build
 %install
 %{__mkdir_p} %{buildroot}%{_libdir}
 %{__mkdir_p} %{buildroot}%{_bindir}
@@ -73,21 +57,12 @@ grep -rl '59 Temple Place, Suite 330, Boston, MA  02111-1307  USA' --include=*.{
 %{__cp} -a libwcs/*.so* %{buildroot}%{_libdir}
 %{__install} -p -m 644 libwcs/*.h %{buildroot}%{_includedir}/wcs
 %{__install} -p -m 644 man/man1/* %{buildroot}%{_mandir}/man1
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc NEWS Readme Programs
-%{_bindir}/*
-%{_mandir}/man1/*
-
-%files libs
-%license libwcs/COPYING
-%{_libdir}/*.so.1*
-
-%files devel
-%doc libwcs/NEWS
-%{_libdir}/*.so
-%{_includedir}/wcs
+%files -f %{oreon_filedir}/main.list
+%files -n wcstools-libs -f %{oreon_filedir}/wcstools-libs.list
+%files -n wcstools-devel -f %{oreon_filedir}/wcstools-devel.list
 
 %changelog
+
 %autochangelog

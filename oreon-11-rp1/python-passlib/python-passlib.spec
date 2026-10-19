@@ -1,57 +1,64 @@
 %global source0_hash 7830b9323d9ba96a841ad698a8dec1d43a2b0b7f1c855c76772e7972c1c6d959
-
 Name:           python-passlib
 Version:        1.9.3
 Release:        3%{?dist}
 Summary:        Comprehensive password hashing framework supporting over 20 schemes
-
-# license breakdown is described in LICENSE file
 License:        BSD-3-Clause AND Beerware AND UnixCrypt AND ISC
 URL:            https://github.com/notypecheck/passlib
-Source:         %pypi_source libpass
+Source0:        https://files.pythonhosted.org/packages/source/l/libpass/libpass-%{version}.tar.gz
 Patch:          passlib-bcrypt5-truncate.patch
-
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-passlib = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-passlib+argon2
+Summary:        Metapackage for python3-passlib argon2 extras
+Requires:       python3-passlib = %{version}-%{release}
+Requires:       python3dist(argon2-cffi) >= 18.2.0
+Provides:       python3dist(passlib[argon2]) = %{version}-%{release}
 
-# docs generation requires python-cloud-sptheme, which isn't packaged yet.
-# so we won't generate the docs yet.
-#BuildRequires: python2-sphinx >= 1.0
-#BuildRequires: python2-cloud-sptheme
+%description -n python3-passlib+argon2
+Metapackage for python3-passlib argon2 extras.
 
-%global _description %{expand:
-Passlib is a password hashing library for Python 2 & 3, which provides
-cross-platform implementations of over 20 password hashing algorithms,
-as well as a framework for managing existing password hashes. It is
-designed to be useful for a wide range of tasks, from verifying a hash
-found in /etc/shadow, to providing full-strength password hashing for
-multi-user application.}
+%package -n       python3-passlib+bcrypt
+Summary:        Metapackage for python3-passlib bcrypt extras
+Requires:       python3-passlib = %{version}-%{release}
+Requires:       python3dist(bcrypt) >= 3.1.0
+Provides:       python3dist(passlib[bcrypt]) = %{version}-%{release}
 
-%description %{_description}
+%description -n python3-passlib+bcrypt
+Metapackage for python3-passlib bcrypt extras.
+
+%package -n       python3-passlib+totp
+Summary:        Metapackage for python3-passlib totp extras
+Requires:       python3-passlib = %{version}-%{release}
+Requires:       python3dist(cryptography) >= 43.0.1
+Provides:       python3dist(passlib[totp]) = %{version}-%{release}
+
+%description -n python3-passlib+totp
+Metapackage for python3-passlib totp extras.
+
+%description
 
 %package -n python3-passlib
-Summary:        %{summary}
+Summary:        Comprehensive password hashing framework supporting over 20 schemes
 Provides:       python3dist(passlib) = %{version}
 Provides:       python3dist(libpass) = %{version}
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
-
-%description -n python3-passlib %{_description}
+%description -n python3-passlib
 
 # el9 missing argon2 https://bugzilla.redhat.com/show_bug.cgi?id=2089340
-%pyproject_extras_subpkg -n python3-passlib %{!?el9:argon2} bcrypt totp
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n libpass-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires -x bcrypt -x totp %{!?el9:-x argon2} 
-
+%global oreon_srcdir libpass-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-# This package was renamed from passlib to libpass and we want to provide the old distinfo
-# for packages that still need it.
 %global legacy_distinfo passlib-%{version}.dist-info
 mkdir %{legacy_distinfo}
 cat > %{legacy_distinfo}/METADATA << EOF
@@ -60,21 +67,19 @@ Name: passlib
 Version: %{version}
 EOF
 echo rpm > %{legacy_distinfo}/INSTALLER
-
 %install
 %pyproject_install
-%pyproject_save_files -l passlib
-
 cp -a %{legacy_distinfo} %{buildroot}%{python3_sitelib}
+%oreon_autofiles python3-passlib usr/lib/python3*/site-packages/passlib* usr/lib64/python3*/site-packages/passlib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/passlib* usr/lib64/python3*/site-packages/passlib* usr/bin/*
 
 %check
+
 %pytest
-
 %{py3_test_envvars} %{python3} -c 'import importlib.metadata as im; assert im.version("passlib") == im.version("libpass") == "%{version}"'
-
-%files -n python3-passlib -f %{pyproject_files}
-%doc README.md
-%{python3_sitelib}/%{legacy_distinfo}/
+%files
+%files -n python3-passlib -f %{oreon_filedir}/python3-passlib.list
 
 %changelog
+
 %autochangelog

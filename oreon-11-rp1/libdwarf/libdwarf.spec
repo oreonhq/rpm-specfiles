@@ -1,19 +1,19 @@
 %global source0_hash bde13d1c49be6f2467326a6e0b3919247471455d16eefc3c6be26c7d4baca36a
-
 Name:          libdwarf
 Epoch:         1
 Version:       2.3.3
-Release:       %autorelease
-Summary:       Library to access the DWARF Debugging file format 
-
+Release:        1%{?dist}
+Summary:        Library to access the DWARF Debugging file format
 License:       LGPL-2.1-only AND BSD-2-Clause-FreeBSD
 URL:           https://www.prevanders.net/dwarf.html
 Source0:        https://www.prevanders.net/%{name}-%{version}.tar.xz
-# Make default-library=both work on linux
 Patch:         libdwarf-both.patch
-
-BuildRequires: gcc gcc-c++ meson python3
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  meson
+BuildRequires:  python3
+# /oreon:deps
 %description
 Library to access the DWARF debugging file format which supports
 source level debugging of a number of procedural languages, such as C, C++,
@@ -23,7 +23,6 @@ and Fortran.  Please see http://www.dwarfstd.org for DWARF specification.
 Summary:       Library and header files of libdwarf
 License:       LGPL-2.1-only AND BSD-2-Clause-FreeBSD
 Requires:      %{name} = %{epoch}:%{version}-%{release}
-
 %description devel
 Development package containing library and header files of libdwarf.
 
@@ -31,7 +30,6 @@ Development package containing library and header files of libdwarf.
 Summary:       Static libdwarf library
 License:       LGPL-2.1-only AND BSD-2-Clause-FreeBSD
 Requires:      %{name}-devel = %{epoch}:%{version}-%{release}
-
 %description static
 Static libdwarf library.
 
@@ -39,60 +37,29 @@ Static libdwarf library.
 Summary:       Tools for accessing DWARF debugging information
 License:       GPL-2.0-only AND BSD-2-Clause-FreeBSD
 Requires:      %{name} = %{epoch}:%{version}-%{release}
-
 %description tools
 C++ version of dwarfdump (dwarfdump2) command-line utilities 
 to access DWARF debug information.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %meson -Ddwarfgen=true --default-library=both
 %meson_build
-
-
 %install
 %meson_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/*/lib*.so.*
 
 %check
+
 %meson_test
-
-
-%files
-%doc src/lib/libdwarf/ChangeLog src/lib/libdwarf/README
-%license src/lib/libdwarf/COPYING src/lib/libdwarf/LIBDWARFCOPYRIGHT src/lib/libdwarf/LGPL.txt
-%{_libdir}/libdwarf.so.2
-%{_libdir}/libdwarf.so.2.*
-%{_libdir}/libdwarfp.so.2
-%{_libdir}/libdwarfp.so.2.*
-
-
-%files static
-%{_libdir}/libdwarf.a
-%{_libdir}/libdwarfp.a
-
-
-%files devel
-%doc doc/*.pdf
-%{_includedir}/libdwarf-2
-%{_libdir}/libdwarf.so
-%{_libdir}/libdwarfp.so
-%{_libdir}/pkgconfig/libdwarf.pc
-
-
-%files tools
-%license src/bin/dwarfdump/COPYING src/bin/dwarfdump/DWARFDUMPCOPYRIGHT src/bin/dwarfdump/GPL.txt
-%{_bindir}/dwarfdump
-%{_bindir}/dwarfgen
-%{_datadir}/dwarfdump/dwarfdump.conf
-%{_mandir}/man1/dwarfdump.1.gz
-%{_mandir}/man1/dwarfgen.1.gz
-
+%files -f %{oreon_filedir}/main.list
+%files -n libdwarf-devel -f %{oreon_filedir}/libdwarf-devel.list
+%files -n libdwarf-static -f %{oreon_filedir}/libdwarf-static.list
+%files -n libdwarf-tools -f %{oreon_filedir}/libdwarf-tools.list
 
 %changelog
+
 %autochangelog

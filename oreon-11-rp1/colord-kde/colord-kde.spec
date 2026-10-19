@@ -1,78 +1,56 @@
 %global source0_hash f788b2702b7599a908a62dc871bfc9c150d40943307abdde3e76b4a0a86c2f24
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:           colord-kde
 Version:        26.04.3
 Release:        1%{?dist}
 Summary:        Colord support for KDE
-
 License:        CC0-1.0 AND LGPL-3.0-or-later
 URL:            https://invent.kde.org/graphics/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires:  extra-cmake-modules
-BuildRequires:  kf6-rpm-macros
-
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6DBus)
-BuildRequires:  cmake(Qt6Widgets)
-
+Requires:       colord
+Requires:       plasma-systemsettings
+Requires:       kf6-kirigami-addons
+# oreon:deps
 BuildRequires:  cmake(KF6ConfigWidgets)
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6DBusAddons)
 BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6ItemModels)
 BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  cmake(KF6WidgetsAddons)
 BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6ItemModels)
-
-BuildRequires:  pkgconfig(lcms2)
-BuildRequires:  libXrandr-devel
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  desktop-file-utils
-
-# colord is a dbus daemon
-Requires:       colord
-Requires:       plasma-systemsettings
-Requires:       kf6-kirigami-addons
-
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libXrandr-devel
+BuildRequires:  pkgconfig(lcms2)
+# /oreon:deps
 %description
 KDE support for colord including KDE Daemon module and System Settings module.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang colord-kde
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}/%{_kf6_datadir}/applications/{colordkdeiccimporter,kcm_colord}.desktop
-
-%files -f colord-kde.lang
-%license COPYING
-%doc MAINTAINERS TODO
-%{_kf6_bindir}/colord-kde-icc-importer
-%{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_colord.so
-%{_kf6_plugindir}/kded/colord.so
-%{_kf6_datadir}/applications/colordkdeiccimporter.desktop
-%{_kf6_datadir}/applications/kcm_colord.desktop
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

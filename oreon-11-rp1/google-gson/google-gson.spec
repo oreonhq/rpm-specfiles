@@ -1,5 +1,4 @@
 %global source0_hash 587b12eae125a916b9cef2217694def2a42715339f2f239bd8c00d2783a1da82
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,29 +80,23 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           google-gson
 Version:        2.14.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java lib for conversion of Java objects into JSON representation
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://github.com/google/gson
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/google/gson/archive/gson-parent-%{version}.tar.gz#/google-gson-%{version}.tar.gz
-
-BuildRequires:  jurand
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(javax.annotation:jsr250-api)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.14.0-3
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+BuildRequires:  jurand
+# /oreon:deps
 %description
 Gson is a Java library that can be used to convert a Java object into its
 JSON representation. It can also be used to convert a JSON string into an
@@ -111,6 +104,7 @@ equivalent Java object. Gson can work with arbitrary Java objects including
 pre-existing objects that you do not have source-code of.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n gson-gson-parent-%{version}
 
@@ -155,14 +149,14 @@ sed 's/${project.version}/%{version}/' gson/src/main/java-templates/com/google/g
 %pom_disable_module test-shrinker
 
 %build
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE
-%doc README.md CHANGELOG.md UserGuide.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,24 +1,18 @@
 %global source0_hash 1e0593116e1a229242255cf890f210cbe120e6f05e9d877faf8d85da675ade1a
-
 Name:           dateutils
 Version:        0.4.12
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Command-line date and time calculation, conversion, and comparison
-
 License:        BSD-3-Clause
 URL:            http://www.fresse.org/dateutils/
 Source0:        https://github.com/hroptatyr/dateutils/releases/download/v%{version}/%{name}-%{version}.tar.xz
-
-
-BuildRequires:  gcc
-BuildRequires: make
-# for tests
-BuildRequires: tzdata
-
-# Tests won't pass woth older tzdata!
 Requires: tzdata
 Conflicts: tzdata < tzdata-2022g
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  tzdata
+# /oreon:deps
 %description
 Tools which revolve around fiddling with dates and times on the command
 line, with a strong focus on use cases that arise when dealing with large
@@ -26,33 +20,22 @@ amounts of financial data.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-%configure --disable-silent-rules --without-old-links
-# see note in configure script for why we're passing CFLAGS explicitly here
-make %{?_smp_mflags} CFLAGS="$CFLAGS"
 
+%configure --disable-silent-rules --without-old-links
+make %{?_smp_mflags} CFLAGS="$CFLAGS"
 %install
 %make_install
-
 rm -f %{buildroot}%{_infodir}/dir
-# this is duplicated otherwise
 rm -f %{buildroot}%{_datadir}/doc/%{name}/LICENSE
+%oreon_autofiles main
 
 %check
-make check
 
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/*
-%{_mandir}/man1/*
-%{_infodir}/%{name}*
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/*.tzmcc
-%{_datadir}/%{name}/locale
+make check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

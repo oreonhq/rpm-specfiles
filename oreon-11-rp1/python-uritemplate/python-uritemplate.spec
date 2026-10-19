@@ -1,57 +1,41 @@
 %global source0_hash 480c2ed180878955863323eea31b0ede668795de182617fef9c6ca09e6ec9d0e
-
 Name:           python-uritemplate
 Version:        4.2.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Implementation of RFC 6570 URI Templates
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/python-hyper/uritemplate
-Source:         %{pypi_source uritemplate}
-
+Source0:        https://files.pythonhosted.org/packages/source/u/uritemplate/uritemplate-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'uritemplate' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-uritemplate = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-uritemplate
-Summary:        %{summary}
-
-%description -n python3-uritemplate %_description
-
+Summary:        Implementation of RFC 6570 URI Templates
+%description -n python3-uritemplate
 
 %prep
-%autosetup -p1 -n uritemplate-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir uritemplate-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-uritemplate usr/lib/python3*/site-packages/uritemplate* usr/lib64/python3*/site-packages/uritemplate* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/uritemplate* usr/lib64/python3*/site-packages/uritemplate* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-uritemplate -f %{pyproject_files}
+%files
+%files -n python3-uritemplate -f %{oreon_filedir}/python3-uritemplate.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.1-18
 - Prepare for Oreon 11 (RP1)

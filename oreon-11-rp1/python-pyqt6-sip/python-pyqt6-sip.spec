@@ -1,58 +1,41 @@
 %global source0_hash a7ad45c1e3cec3a2473d37ea9870b6c3baeccc560298623c8eb59265714c06e2
-
 Name:           python-pyqt6-sip
 Version:        13.12.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        The sip module support for PyQt6
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://github.com/Python-SIP/sip
-Source:         %{pypi_source pyqt6_sip}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyqt6_sip/pyqt6_sip-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyqt6-sip' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 75.8.1
+Requires:       python3-pyqt6-sip = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyqt6-sip
-Summary:        %{summary}
-
-%description -n python3-pyqt6-sip %_description
-
+Summary:        The sip module support for PyQt6
+%description -n python3-pyqt6-sip
 
 %prep
-%autosetup -p1 -n pyqt6_sip-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyqt6_sip-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyqt6-sip usr/lib/python3*/site-packages/pyqt6_sip* usr/lib64/python3*/site-packages/pyqt6_sip* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyqt6_sip* usr/lib64/python3*/site-packages/pyqt6_sip* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyqt6-sip -f %{pyproject_files}
+%files
+%files -n python3-pyqt6-sip -f %{oreon_filedir}/python3-pyqt6-sip.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13.11.0-2
 - Prepare for Oreon 11 (RP1)

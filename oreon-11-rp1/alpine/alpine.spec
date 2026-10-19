@@ -1,69 +1,34 @@
 %global source0_hash 32b46ab09759192b4c49f88a640d597aafe6696fc6e3478aec4aefe88ecc022a
-
-# Fedora review: http://bugzilla.redhat.com/249365
-
-# crasher workaround, http://bugzilla.redhat.com/1282092
 %undefine _hardened_build
-
-Summary: powerful, easy to use console email client
+Summary:        powerful, easy to use console email client
 Name: alpine
 Version: 2.26
-Release: %autorelease
-
+Release:        1%{?dist}
 License: Apache-2.0
 URL:     https://alpineapp.email/
-
-# alpine-2.26_new_patched.tar.xz was generated from the new upstream location
-# wget https://alpineapp.email/alpine/patches/alpine-2.26/alpine-2.26.tar.xz
-# mv alpine-2.26.tar.xz alpine_patched-2.26.tar.xz
-# alpine-2.26.tar.xz is slightly different between what Fedora has cached and
-# what is at the new upstream. The old location no longer exists
-# Clearly this shuffle should be removed as soon as a new release appears.
-# Source0: https://alpineapp.email/alpine/patches/alpine-2.26/alpine-2.26.tar.xz
-Source0: alpine-2.26_patched.tar.xz
+Source0:        alpine-2.26_patched.tar.xz
 Source1: README.fedora
-
 Patch1: alpine-2.24-useragent.patch
 Patch2: alpine-2.23-gcc10.patch
 Patch3: alpine-configure-c99.patch
-
-# Using "Conflicts" instead of Obsoletes because while alpine is substantially
-# compatible with pine the change to Unicode breaks important user
-# functionality such as non-ASCII encoded saved passwords. Additionally, there
-# are also many patches to pine floating around that for political/technical
-# reasons will not be integrated into alpine. (I'd like to stay out of it...
-# just search "Mark Crispin maildir" for the gory details.) Since licensing
-# prevents a Fedora pine package, I cannot predict what patches users might
-# have and so want to warn them instead of automatically replacing their pine
-# install with an alpine that could break their configuration. 
-# I understand this to be a special case of the "Optional Functionality"
-# description at http://fedoraproject.org/wiki/Packaging/Conflicts
 Conflicts: pine
-
 Provides: re-alpine = %{version}-%{release}
-
-#BuildRequires: automake libtool
-BuildRequires: gettext
-BuildRequires: hunspell
-## passing --with-npa=/usr/bin/inews
-#BuildRequires: inews
-BuildRequires: krb5-devel
-BuildRequires: ncurses-devel 
-BuildRequires: openldap-devel
-BuildRequires: openssl-devel
-BuildRequires: pam-devel
-BuildRequires: passwd
-# passing --with-smtp-msa=/usr/sbin/sendmail instead
-#BuildRequires: /usr/sbin/sendmail 
-
 Requires: hunspell
 Requires: mailcap
 Requires: /usr/sbin/sendmail
-
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: libxcrypt-devel
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  hunspell
+BuildRequires:  krb5-devel
+BuildRequires:  libxcrypt-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  openldap-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pam-devel
+BuildRequires:  passwd
+# /oreon:deps
 %description
 Alpine -- an Alternatively Licensed Program for Internet
 News & Email -- is a tool for reading, sending, and managing
@@ -82,6 +47,7 @@ routine library.
 GNU Build System's autotools.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n alpine-%{version}
@@ -92,13 +58,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 install -m644 -p %{SOURCE1} .
 
 %build
+
 touch imap/ip6
-
-# Add -std=gnu17 for now.
-# https://bugzilla.redhat.com/show_bug.cgi?id=2336274
 CFLAGS="%{optflags} -std=gnu17"
-
-# --without-tcl disables the TCL-based CGI "Web Alpine"
 %configure \
   --enable-debug=no \
   --without-tcl \
@@ -111,35 +73,17 @@ CFLAGS="%{optflags} -std=gnu17"
   --with-interactive-spellcheck=hunspell \
   --with-system-pinerc=%{_sysconfdir}/pine.conf \
   --with-system-fixed-pinerc=%{_sysconfdir}/pine.conf.fixed
-
-# Build single threaded, make is not creating directories in time.
 export RPM_BUILD_NCPUS=1
 %make_build
-
 %install
 %make_install
-
-# create/touch %ghost'd files
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}
 touch $RPM_BUILD_ROOT%{_sysconfdir}/pine.conf
 touch $RPM_BUILD_ROOT%{_sysconfdir}/pine.conf.fixed
+%oreon_autofiles main
 
-%files
-%doc README
-%doc README.fedora
-%license LICENSE
-%ghost %config(noreplace) %{_sysconfdir}/pine.conf
-%ghost %config(noreplace) %{_sysconfdir}/pine.conf.fixed
-%{_bindir}/alpine
-%{_bindir}/pico
-%{_bindir}/pilot
-%{_bindir}/rpload
-%{_bindir}/rpdump
-%{_mandir}/man1/alpine.1*
-%{_mandir}/man1/pico.1*
-%{_mandir}/man1/pilot.1*
-%{_mandir}/man1/rpload.1*
-%{_mandir}/man1/rpdump.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

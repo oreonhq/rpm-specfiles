@@ -1,58 +1,42 @@
-%global source0_hash none
-
+%global source0_hash d210dfbd34bda3c318dd10d1764a90dedb5d945b8734c3f5914a87140e642217
 Name:           python-pytest-steps
 Version:        1.8.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Create step-wise / incremental tests in pytest.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/smarie/python-pytest-steps
-Source:         %{pypi_source pytest-steps}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest-steps/pytest-steps-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pytest-steps' generated automatically by pyp2spec.}
-
 Patch:          pytest-steps-1.7.2-no-pytest-runner.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 39.2
+Requires:       python3-pytest-steps = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pytest-steps
-Summary:        %{summary}
-
-%description -n python3-pytest-steps %_description
-
+Summary:        Create step-wise / incremental tests in pytest.
+%description -n python3-pytest-steps
 
 %prep
-%autosetup -p1 -n pytest-steps-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pytest-steps-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pytest-steps usr/lib/python3*/site-packages/pytest_steps* usr/lib64/python3*/site-packages/pytest_steps* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_steps* usr/lib64/python3*/site-packages/pytest_steps* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pytest-steps -f %{pyproject_files}
+%files
+%files -n python3-pytest-steps -f %{oreon_filedir}/python3-pytest-steps.list
 
 %changelog
+
 %autochangelog

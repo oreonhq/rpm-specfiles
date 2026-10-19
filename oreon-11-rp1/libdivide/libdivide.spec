@@ -1,76 +1,48 @@
 %global source0_hash 077e8ce6c783d1b4402aa6d77f643f88f37feb80e9896c30e19a62cc0a3f5576
-
 %bcond ctest 1
-
 Name:           libdivide
 Version:        5.4.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Optimized integer division
-
 License:        Zlib OR BSL-1.0
 URL:            https://libdivide.com/
 %global forgeurl  https://github.com/ridiculousfish/libdivide
 VCS:            git:%{forgeurl}.git
-Source:         %{forgeurl}/archive/v%{version}/libdivide-%{version}.tar.gz
-
-# There are no ELF objects in this package, so turn off debuginfo generation.
+Source0:        %{forgeurl}/archive/v%{version}/%{name}-%{version}.tar.gz
 %global debug_package %{nil}
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-
-%global _description %{expand:
-This package contains a header-only C/C++ library for optimizing integer
-division. Integer division is one of the slowest instructions on most CPUs,
-e.g. on current x64 CPUs a 64-bit integer division has a latency of up to 90
-clock cycles whereas a multiplication has a latency of only 3 clock cycles.
-libdivide allows you to replace expensive integer division instructions by a
-sequence of shift, add and multiply instructions that will calculate the
-integer division much faster.
-
-On current CPUs you can get a speedup of up to 10x for 64-bit integer division
-and a speedup of up to to 5x for 32-bit integer division when using libdivide.
-libdivide also supports SSE2, AVX2 and AVX512 vector division which provides an
-even larger speedup.}
-
-%description %_description
-
+# /oreon:deps
+%description
 
 %package        devel
 Summary:        Development files for libdivide
-
-# Header-only library
 Provides:       libdivide-static = %{version}-%{release}
-
-%description    devel %_description
-
+%description    devel
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{version}
 # Disable -Werror
 sed --in-place 's/;-Werror//;/-Werror/d' CMakeLists.txt
 
 %build
+
 %cmake -DLIBDIVIDE_BUILD_TESTS:BOOL=%{?with_ctest:ON}%{?!with_ctest:OFF}
 %cmake_build
-
 %install
 %cmake_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with ctest}
 %check
+
 %ctest
 %endif
-
-%files devel
-%license LICENSE.txt
-%doc README.md
-%doc doc/
-
-%{_includedir}/libdivide.h
-%{_libdir}/cmake/libdivide/
-
+%files -f %{oreon_filedir}/main.list
+%files -n libdivide-devel -f %{oreon_filedir}/libdivide-devel.list
 
 %changelog
+
 %autochangelog

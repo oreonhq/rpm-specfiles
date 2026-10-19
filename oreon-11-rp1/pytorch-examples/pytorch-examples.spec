@@ -1,44 +1,17 @@
 %global source0_hash 78bd241a7e04b556ecef361ef4a1bd44835f1d6e729b74ccf58b16125323ac88
-
 %global commit0 e9a4e7510c89613a2fe75312fba1fb8c14b3b376
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global date0 20250727
-
 Name:           pytorch-examples
 Version:        0.0^git%{date0}.%{shortcommit0}
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        PyTorch Examples
-
 License:        BSD-3-Clause AND MIT
-# The main license is BSD-3-Clause
-# The few differences
-#
-# MIT
-# mnist_forward_forward/main.py
-# This code is based on the implementation of Mohammad Pezeshki available at
-# https://github.com/mohammadpz/pytorch_forward_forward and licensed under the MIT License.
-#
-# distributed/FSDP/utils/environment.py
-# Apache
-# Copyright (c) 2022 Meta Platforms, Inc. and its affiliates.
-# All rights reserved.
-#
-# This source code is licensed under the Apache-style license found in the
-# LICENSE file in the root directory of this source tree.
-#
-# Apache-style is not a real license, file this issue
-# https://github.com/pytorch/examples/issues/1378
-
 URL:            https://github.com/pytorch/examples
-Source0:        %{url}/archive/%{commit0}/examples-%{shortcommit0}.tar.gz
+Source0:        https://github.com/pytorch/examples/archive/%{commit0}/examples-%{shortcommit0}.tar.gz
 Patch1:         0001-Fix-license-in-environment.py.patch
-
-# Only samples
 BuildArch:      noarch
 ExclusiveArch:  aarch64 x86_64
-
-BuildRequires:  fdupes
-
 Requires:  python3dist(aiohttp)
 Requires:  python3dist(boto3)
 Requires:  python3dist(lmdb)
@@ -56,7 +29,9 @@ Requires:  python3dist(torchdata)
 Requires:  python3dist(torchtext)
 Requires:  python3dist(torchvision)
 Requires:  python3dist(tqdm)
-
+# oreon:deps
+BuildRequires:  fdupes
+# /oreon:deps
 %description
 pytorch-examples showcases examples of using PyTorch.  The goal
 is to have curated, short, few/no dependencies high quality examples
@@ -64,6 +39,7 @@ that are substantially different from each other that can be
 emulated in your existing work.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n examples-%{commit0}
@@ -99,20 +75,13 @@ chmod 755 docs/source/conf.py
 %install
 mkdir -p %{buildroot}%{_datadir}/%{name}
 cp -p -r . %{buildroot}%{_datadir}/%{name}
-
-# Extra docs
 rm %{buildroot}%{_datadir}/%{name}/README.md
 rm %{buildroot}%{_datadir}/%{name}/LICENSE
-
-# Take care of dupes
-# Causes these warnings
-# pytorch-examples.noarch: W: cross-directory-hard-link /usr/share/pytorch-examples/mnist_forward_forward/requirements.txt /usr/share/pytorch-examples/fx/requirements.txt
 %fdupes %{buildroot}%{_datadir}/%{name}
+%oreon_autofiles main
 
-%files
-%doc README.md
-%license LICENSE
-%{_datadir}/%{name}/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

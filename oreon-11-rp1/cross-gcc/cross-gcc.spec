@@ -1,11 +1,7 @@
 %global source0_hash none
-
-# workaround LTO related issue when stripping the target files (#1863378)
 %global __brp_strip_lto %{nil}
-
 %global cross cross
 %global rpmprefix %{nil}
-
 %global build_all		1
 %global build_aarch64		%{build_all}
 %global build_alpha		%{build_all}
@@ -36,84 +32,40 @@
 %global build_sparc64		%{build_all}
 %global build_x86_64		%{build_all}
 %global build_xtensa		%{build_all}
-
-# built compiler generates lots of ICEs
-# - none at this time
-
-# gcc considers obsolete
 %global build_cris		0
 %global build_m32r		0
 %global build_score		0
 %global build_sh		0
 %global build_sh64		0
-
-# gcc doesn't build
-# - none at this time
-
-# 32-bit packages we don't build as we can use the 64-bit package instead
 %global build_i386		0
 %global build_mips		0
 %global build_powerpc		0
 %global build_s390		0
 %global build_sh4		0
 %global build_sparc		0
-
-# gcc doesn't support
 %global build_metag		0
-
-# not available in binutils-2.22
 %global build_unicore32		0
-
 %global multilib_64_archs sparc64 ppc64 s390x x86_64
-
-# we won't build libgcc for these as it depends on C library or kernel headers
-# % global no_libgcc_targets	nios2*
 %global no_libgcc_targets	none
-
-###############################################################################
-#
-# The gcc versioning information.  In a sed command below, the specfile winds
-# pre-release version numbers in BASE-VER back to the last actually-released
-# number.
 %global DATE 20250808
 %global gitrev f833458d29b4fa40ffce6cf3b37ab9a30a864901
 %global gcc_version 15.2.1
 %global gcc_major 15
-
-# Note, cross_gcc_release must be integer, if you want to add suffixes
-# to %%{release}, append them after %%{cross_gcc_release} on Release:
-# line.  gcc_release is the Fedora gcc release that the patches were
-# taken from.
 %global gcc_release 2
 %global cross_gcc_release 1
 %global cross_binutils_version 2.43.1-1
 %global isl_version 0.16.1
 %global isl_libmajor 15
-
 %global _performance_build 1
-# Hardening slows the compiler way too much.
 %undefine _hardened_build
-
-Summary: Cross C compiler
+Summary:        Cross C compiler
 Name: %{cross}-gcc
 Version: %{gcc_version}
-Release: %{cross_gcc_release}%{?dist}
-# License tag value taken from the gcc package except the values related
-# to newlib which isn't present here
+Release:        1%{?dist}
 License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl
 URL: http://gcc.gnu.org
-BuildRequires: gcc-c++
-BuildRequires: isl-devel >= %{isl_version}
-
-# The source for this package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-# git clone --depth 1 git://gcc.gnu.org/git/gcc.git gcc-dir.tmp
-# git --git-dir=gcc-dir.tmp/.git fetch --depth 1 origin %%{gitrev}
-# git --git-dir=gcc-dir.tmp/.git archive --prefix=%%{name}-%%{version}-%%{DATE}/ %%{gitrev} | xz -9e > %%{name}-%%{version}-%%{DATE}.tar.xz
-# rm -rf gcc-dir.tmp
 %global srcdir gcc-%{version}-%{DATE}
-Source0: %{srcdir}.tar.xz
-
+Source0:        %{srcdir}.tar.xz
 Patch0: gcc15-hack.patch
 Patch2: gcc15-sparc-config-detection.patch
 Patch3: gcc15-libgomp-omp_h-multilib.patch
@@ -126,34 +78,63 @@ Patch9: gcc15-Wno-format-security.patch
 Patch10: gcc15-rh1574936.patch
 Patch11: gcc15-d-shared-libphobos.patch
 Patch12: gcc15-pr119006.patch
-
 Patch900: cross-gcc-intl-filename.patch
 Patch901: cross-gcc-format-config.patch
-
 %if 0%{?fedora} >= 29 || 0%{?rhel} > 7 || 0%{?oreon} >= 11
-BuildRequires: binutils >= 2.31
 %else
-BuildRequires: binutils >= 2.24
 %endif
-BuildRequires: zlib-devel, gettext, dejagnu, bison, flex, texinfo
-BuildRequires: %{cross}-binutils-common >= %{cross_binutils_version}
-
-# Make sure pthread.h doesn't contain __thread tokens
-# Make sure glibc supports stack protector
-# Make sure glibc supports DT_GNU_HASH
-BuildRequires: glibc-devel >= 2.4.90-13
-BuildRequires: elfutils-devel >= 0.147
-BuildRequires: elfutils-libelf-devel >= 0.147
-BuildRequires: gmp-devel >= 4.1.2-8, mpfr-devel >= 2.2.1, libmpc-devel >= 0.8.1
 Provides: bundled(libiberty)
-
+# oreon:deps
+BuildRequires:  binutils
+BuildRequires:  binutils-aarch64-linux-gnu
+BuildRequires:  binutils-alpha-linux-gnu
+BuildRequires:  binutils-arc-linux-gnu
+BuildRequires:  binutils-arm-linux-gnu
+BuildRequires:  binutils-avr32-linux-gnu
+BuildRequires:  binutils-bfin-linux-gnu
+BuildRequires:  binutils-bpf-unknown-none
+BuildRequires:  binutils-c6x-linux-gnu
+BuildRequires:  binutils-frv-linux-gnu
+BuildRequires:  binutils-h8300-linux-gnu
+BuildRequires:  binutils-hppa-linux-gnu
+BuildRequires:  binutils-hppa64-linux-gnu
+BuildRequires:  binutils-ia64-linux-gnu
+BuildRequires:  binutils-loongarch64-linux-gnu
+BuildRequires:  binutils-m68k-linux-gnu
+BuildRequires:  binutils-microblaze-linux-gnu
+BuildRequires:  binutils-mips64-linux-gnu
+BuildRequires:  binutils-mn10300-linux-gnu
+BuildRequires:  binutils-openrisc-linux-gnu
+BuildRequires:  binutils-powerpc64-linux-gnu
+BuildRequires:  binutils-powerpc64le-linux-gnu
+BuildRequires:  binutils-riscv32-linux-gnu
+BuildRequires:  binutils-riscv64-linux-gnu
+BuildRequires:  binutils-s390x-linux-gnu
+BuildRequires:  binutils-sparc64-linux-gnu
+BuildRequires:  binutils-x86_64-linux-gnu
+BuildRequires:  binutils-xtensa-linux-gnu
+BuildRequires:  bison
+BuildRequires:  cross-binutils-common
+BuildRequires:  dejagnu
+BuildRequires:  elfutils-devel
+BuildRequires:  elfutils-libelf-devel
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  glibc-devel
+BuildRequires:  gmp-devel
+BuildRequires:  isl-devel
+BuildRequires:  libmpc-devel
+BuildRequires:  mpfr-devel
+BuildRequires:  texinfo
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Cross-build GNU C compiler collection.
 
 %package -n %{cross}-gcc-common
 Summary: Cross-build GNU C compiler documentation and translation files
 BuildArch: noarch
-
 %description -n %{cross}-gcc-common
 Documentation, manual pages and translation files for cross-build GNU C
 compiler.
@@ -378,10 +359,7 @@ fi
 %build
 
 %global pkgbuilddir %{_builddir}/%{srcdir}
-
-# Undo the broken autoconf change in recent Fedora versions
 export CONFIG_SITE=NONE
-
 CC=gcc
 CXX=g++
 OPT_FLAGS="%{optflags}"
@@ -408,18 +386,12 @@ case "$OPT_FLAGS" in
       %{srcdir}/libgcc/Makefile.in
     ;;
 esac
-
-#
-# Configure the compiler
-#
 cd %{pkgbuilddir}
 function config_target () {
     echo "=== CONFIGURING $1"
-
     arch=$1
     prefix=$arch-
     build_dir=$1
-
     case $arch in
 	aarch64-*)	target=aarch64-linux-gnu;;
 	arc-*)		target=arc-linux-gnu;;
@@ -438,10 +410,7 @@ function config_target () {
 	x86-*)		target=x86_64-linux;;
 	*)		target=$arch;;
     esac
-
     echo $arch: target is $target
-    #export CFLAGS="$RPM_OPT_FLAGS"
-
     CONFIG_FLAGS=
     case $arch in
 	aarch64-*)
@@ -485,29 +454,22 @@ function config_target () {
 	    CONFIG_FLAGS="--with-arch_32=i686 --with-tune=generic --enable-cet"
 	    ;;
     esac
-
     case $arch in
 	alpha*|powerpc*|ppc*|s390*|sparc*)
 	    CONFIG_FLAGS="$CONFIG_FLAGS --with-long-double-128" ;;
     esac
-
     case $arch in
 	i[3456]86*|x86_64*|ppc*|ppc64*|s390*|arm*|aarch64*|mips*)
 	    CONFIG_FLAGS="$CONFIG_FLAGS --enable-gnu-indirect-function" ;;
     esac
-
 %ifnarch %{mips}
     case $arch in
 	mips*) ;;
 	*) CONFIG_FLAGS="$CONFIG_FLAGS --with-linker-hash-style=gnu" ;;
     esac
 %endif
-
     mkdir $build_dir
     cd $build_dir
-
-    # We could optimize the cross builds size by --enable-shared but the produced
-    # binaries may be less convenient in the embedded environment.
     CC="$CC" \
     CXX="$CXX" \
     CFLAGS="$OPT_FLAGS" \
@@ -581,31 +543,22 @@ function config_target () {
 	--with-system-zlib \
 	--without-headers \
 	$CONFIG_FLAGS
-%if 0
-	--libdir=%{_libdir} # we want stuff in /usr/lib/gcc/ not /usr/lib64/gcc
-%endif
-
     cd ..
 }
-
 for target in `cat target.list`
 do
     config_target $target
 done
-
 function build_target () {
     echo "=== BUILDING $1"
-
     arch=$1
     build_dir=$1
-
     BUILD_FLAGS=
     case $arch in
 	x86_64-*)
 	    BUILD_FLAGS="gcc_cv_libc_provides_ssp=yes gcc_cv_as_ix86_tlsldm=yes"
 	    ;;
     esac
-
     AR_FOR_TARGET=%{_bindir}/$arch-ar \
     AS_FOR_TARGET=%{_bindir}/$arch-as \
     DLLTOOL_FOR_TARGET=%{_bindir}/$arch-dlltool \
@@ -618,7 +571,6 @@ function build_target () {
     WINDRES_FOR_TARGET=%{_bindir}/$arch-windres \
     WINDMC_FOR_TARGET=%{_bindir}/$arch-windmc \
     make -C $build_dir %{_smp_mflags} tooldir=%{_prefix} $BUILD_FLAGS all-gcc
-
     echo "=== BUILDING LIBGCC $1"
     case $arch in
 	%{no_libgcc_targets})
@@ -627,36 +579,22 @@ function build_target () {
 	    make -C $build_dir tooldir=%{_prefix} all-target-libgcc
 	    ;;
     esac
-
 }
-
 for target in `cat target.list`
 do
     build_target $target
 done
-
-###############################################################################
-#
-# Installation
-#
-###############################################################################
 %install
 rm -rf %{buildroot}
-
 function install_bin () {
     echo "=== INSTALLING $1"
-
     arch=$1
     cpu=${1%%%%-*}
-
     case $arch in
 	%{no_libgcc_targets})	with_libgcc="";;
 	*)			with_libgcc="install-target-libgcc";;
     esac
-
     make -C $arch DESTDIR=%{buildroot} install-gcc ${with_libgcc}
-
-    # We want links for ppc and ppc64 also if we make powerpc, powerpc64 or  powerpc64le
     case $cpu in
 	powerpc*)
 	    cd %{buildroot}/usr/bin
@@ -668,45 +606,31 @@ function install_bin () {
 	    ;;
     esac
 }
-
 for target in `cat target.list`
 do
     mkdir -p %{buildroot}%{_prefix}/$target/sys-root
     install_bin $target
 done
-
 grep ^powerpc target.list | sed -e s/powerpc/ppc/ >symlink-target.list
-
-# For cross-gcc we drop the documentation.
 rm -rf %{buildroot}%{_infodir}
-
-# Remove binaries we will not be including, so that they don't end up in
-# gcc-debuginfo
 rm -f %{buildroot}%{_libdir}/{libffi*,libiberty.a}
 rm -f %{buildroot}%{_libexecdir}/gcc/*/%{gcc_major}/install-tools/{mkheaders,fixincl}
 rm -f %{buildroot}%{_prefix}/bin/*-gcc-%{gcc_major} || :
 rmdir  %{buildroot}%{_includedir}
-
 find %{buildroot}%{_datadir} -name gcc.mo |
 while read x
 do
     y=`dirname $x`
     mv $x $y/%{cross}-gcc.mo
 done
-
 %find_lang %{cross}-gcc
-
 gzip %{buildroot}%{_mandir}/man1/*.1
 rm %{buildroot}%{_mandir}/man7/*.7
 rmdir %{buildroot}%{_mandir}/man7
-
-# All the installed manual pages and translation files for each program are the
-# same, so symlink them to the common package
 cd %{buildroot}%{_mandir}/man1
 for i in %{cross}-cpp.1.gz %{cross}-gcc.1.gz %{cross}-g++.1.gz %{cross}-gcov.1.gz
 do
     j=${i#%{cross}-}
-
     for k in *-$j
     do
 	if [ $k != $i -a ! -L $k ]
@@ -716,21 +640,16 @@ do
 	fi
     done
 done
-
-# Add manpages the additional symlink-only targets
 %if %{build_powerpc}%{build_powerpc64}%{build_powerpc64le}
 for i in powerpc*
 do
     ln -s $i ppc${i#powerpc}
 done
 %endif
-
 cd -
-
 function install_lang () {
     arch=$1
     cpu=${arch%%%%-*}
-
     case $cpu in
 	avr32)		target_cpu=avr;;
 	bfin)		target_cpu=bfin;;
@@ -743,7 +662,6 @@ function install_lang () {
 	x86)		target_cpu=x86_64;;
 	*)		target_cpu=$cpu;;
     esac
-
     (
 	echo '%{_bindir}/'$arch'*-cpp'
 	echo '%{_bindir}/'$arch'*-gcc'
@@ -774,9 +692,7 @@ function install_lang () {
 		echo %{_prefix}/$arch/sys-root
 		;;
 	esac
-
     ) >files.$arch
-
     (
 	echo '%{_bindir}/'$arch'*-c++'
 	echo '%{_bindir}/'$arch'*-g++'
@@ -789,15 +705,12 @@ function install_lang () {
 	esac
     ) >files-c++.$arch
 }
-
 for target in `cat target.list symlink-target.list`
 do
     install_lang $target
 done
-
 %global __ar_no_strip $RPM_BUILD_DIR/%{srcdir}/ar-no-strip
 cat >%{__ar_no_strip} <<EOF
-#!/bin/bash
 f=\$2
 if [ \${f##*/} = libgcc.a -o \${f##*/} = libgcov.a ]
 then
@@ -809,66 +722,70 @@ EOF
 chmod +x %{__ar_no_strip}
 %undefine __strip
 %global __strip %{__ar_no_strip}
+%oreon_autofiles cross-gcc-common usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-aarch64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-alpha-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-arc-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-arm-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-avr32-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-bfin-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-bpf-unknown-none usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-c6x-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-frv-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-h8300-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-hppa-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-hppa64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-ia64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-loongarch64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-m68k-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-microblaze-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-mips64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-mn10300-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-openrisc-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-powerpc64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-powerpc64le-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-ppc64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-ppc64le-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-riscv32-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-riscv64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-s390x-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-sparc64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-x86_64-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gcc-xtensa-linux-gnu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-###############################################################################
-#
-# Filesets
-#
-###############################################################################
-%files -n %{cross}-gcc-common -f %{cross}-gcc.lang
-%doc %{srcdir}/COPYING*
-%doc %{srcdir}/README
-%{_mandir}/man1/%{cross}-*
-
-%global do_files() \
-%if %2 \
-%files -n %{rpmprefix}gcc-%1 -f files.%1 \
-%files -n %{rpmprefix}gcc-c++-%1 -f files-c++.%1 \
-%endif
-
-%do_files aarch64-linux-gnu	%{build_aarch64}
-%do_files alpha-linux-gnu	%{build_alpha}
-%do_files arc-linux-gnu		%{build_arc}
-%do_files arm-linux-gnu		%{build_arm}
-%do_files avr32-linux-gnu	%{build_avr32}
-%do_files bfin-linux-gnu	%{build_blackfin}
-%do_files bpf-unknown-none	%{build_bpf}
-%do_files c6x-linux-gnu		%{build_c6x}
-%do_files cris-linux-gnu	%{build_cris}
-%do_files frv-linux-gnu		%{build_frv}
-%do_files h8300-linux-gnu	%{build_h8300}
-%do_files hppa-linux-gnu	%{build_hppa}
-%do_files hppa64-linux-gnu	%{build_hppa64}
-%do_files i386-linux-gnu	%{build_i386}
-%do_files ia64-linux-gnu	%{build_ia64}
-%do_files loongarch64-linux-gnu	%{build_loongarch64}
-%do_files m32r-linux-gnu	%{build_m32r}
-%do_files m68k-linux-gnu	%{build_m68k}
-%do_files metag-linux-gnu	%{build_metag}
-%do_files microblaze-linux-gnu	%{build_microblaze}
-%do_files mips-linux-gnu	%{build_mips}
-%do_files mips64-linux-gnu	%{build_mips64}
-%do_files mn10300-linux-gnu	%{build_mn10300}
-%do_files openrisc-linux-gnu	%{build_openrisc}
-%do_files powerpc-linux-gnu	%{build_powerpc}
-%do_files powerpc64-linux-gnu	%{build_powerpc64}
-%do_files powerpc64le-linux-gnu	%{build_powerpc64le}
-%do_files ppc-linux-gnu		%{build_powerpc}
-%do_files ppc64-linux-gnu	%{build_powerpc64}
-%do_files ppc64le-linux-gnu	%{build_powerpc64le}
-%do_files riscv32-linux-gnu	%{build_riscv32}
-%do_files riscv64-linux-gnu	%{build_riscv64}
-%do_files s390-linux-gnu	%{build_s390}
-%do_files s390x-linux-gnu	%{build_s390x}
-%do_files score-linux-gnu	%{build_score}
-%do_files sh-linux-gnu		%{build_sh}
-%do_files sh4-linux-gnu		%{build_sh4}
-%do_files sh64-linux-gnu	%{build_sh64}
-%do_files sparc-linux-gnu	%{build_sparc}
-%do_files sparc64-linux-gnu	%{build_sparc64}
-%do_files unicore32-linux-gnu	%{build_unicore32}
-%do_files x86_64-linux-gnu	%{build_x86_64}
-%do_files xtensa-linux-gnu	%{build_xtensa}
+%files -f %{oreon_filedir}/main.list
+%files -n cross-gcc-common -f %{oreon_filedir}/cross-gcc-common.list
+%files -n gcc-aarch64-linux-gnu -f %{oreon_filedir}/gcc-aarch64-linux-gnu.list
+%files -n gcc-alpha-linux-gnu -f %{oreon_filedir}/gcc-alpha-linux-gnu.list
+%files -n gcc-arc-linux-gnu -f %{oreon_filedir}/gcc-arc-linux-gnu.list
+%files -n gcc-arm-linux-gnu -f %{oreon_filedir}/gcc-arm-linux-gnu.list
+%files -n gcc-avr32-linux-gnu -f %{oreon_filedir}/gcc-avr32-linux-gnu.list
+%files -n gcc-bfin-linux-gnu -f %{oreon_filedir}/gcc-bfin-linux-gnu.list
+%files -n gcc-bpf-unknown-none -f %{oreon_filedir}/gcc-bpf-unknown-none.list
+%files -n gcc-c6x-linux-gnu -f %{oreon_filedir}/gcc-c6x-linux-gnu.list
+%files -n gcc-frv-linux-gnu -f %{oreon_filedir}/gcc-frv-linux-gnu.list
+%files -n gcc-h8300-linux-gnu -f %{oreon_filedir}/gcc-h8300-linux-gnu.list
+%files -n gcc-hppa-linux-gnu -f %{oreon_filedir}/gcc-hppa-linux-gnu.list
+%files -n gcc-hppa64-linux-gnu -f %{oreon_filedir}/gcc-hppa64-linux-gnu.list
+%files -n gcc-ia64-linux-gnu -f %{oreon_filedir}/gcc-ia64-linux-gnu.list
+%files -n gcc-loongarch64-linux-gnu -f %{oreon_filedir}/gcc-loongarch64-linux-gnu.list
+%files -n gcc-m68k-linux-gnu -f %{oreon_filedir}/gcc-m68k-linux-gnu.list
+%files -n gcc-microblaze-linux-gnu -f %{oreon_filedir}/gcc-microblaze-linux-gnu.list
+%files -n gcc-mips64-linux-gnu -f %{oreon_filedir}/gcc-mips64-linux-gnu.list
+%files -n gcc-mn10300-linux-gnu -f %{oreon_filedir}/gcc-mn10300-linux-gnu.list
+%files -n gcc-openrisc-linux-gnu -f %{oreon_filedir}/gcc-openrisc-linux-gnu.list
+%files -n gcc-powerpc64-linux-gnu -f %{oreon_filedir}/gcc-powerpc64-linux-gnu.list
+%files -n gcc-powerpc64le-linux-gnu -f %{oreon_filedir}/gcc-powerpc64le-linux-gnu.list
+%files -n gcc-ppc64-linux-gnu -f %{oreon_filedir}/gcc-ppc64-linux-gnu.list
+%files -n gcc-ppc64le-linux-gnu -f %{oreon_filedir}/gcc-ppc64le-linux-gnu.list
+%files -n gcc-riscv32-linux-gnu -f %{oreon_filedir}/gcc-riscv32-linux-gnu.list
+%files -n gcc-riscv64-linux-gnu -f %{oreon_filedir}/gcc-riscv64-linux-gnu.list
+%files -n gcc-s390x-linux-gnu -f %{oreon_filedir}/gcc-s390x-linux-gnu.list
+%files -n gcc-sparc64-linux-gnu -f %{oreon_filedir}/gcc-sparc64-linux-gnu.list
+%files -n gcc-x86_64-linux-gnu -f %{oreon_filedir}/gcc-x86_64-linux-gnu.list
+%files -n gcc-xtensa-linux-gnu -f %{oreon_filedir}/gcc-xtensa-linux-gnu.list
 
 %changelog
+
 %autochangelog

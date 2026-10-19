@@ -1,72 +1,60 @@
-%global source0_hash cc8c217991240db7eb14189eee0dff88f20a89bac11958b48625fa512fe8d104
-
+%global source0_hash 43bddd6fa793b1694aa94d6129fe3e4a8d452d97a84ef5f2ff721c8047c75605
 %global module Ipopt
-
-## Define libraries' destination
 %global _incmpidir %{_includedir}/openmpi-%{_arch}
 %global _libmpidir %{_libdir}/openmpi/lib
 %global _binmpidir %{_libdir}/openmpi/bin
 %global _incmpichdir %{_includedir}/mpich-%{_arch}
 %global _libmpichdir %{_libdir}/mpich/lib
 %global _binmpichdir %{_libdir}/mpich/bin
-
-%if 0%{?fedora} >= 40
-%ifarch %{ix86}
-%global with_openmpi 0
-%else
 %global with_openmpi 1
-%endif
-%else
-%global with_openmpi 1
-%endif
 %global with_mpich 1
 %global with_mpicheck 1
 %global with_mpichcheck 1
-
 %if 0%{?oreon}
 %global with_openmpi 0
 %global with_mpich 0
 %global with_mpicheck 0
 %global with_mpichcheck 0
 %endif
-
 %global with_asl 1
 %global blaslib flexiblas
-
 Name:  coin-or-%{module}
-Summary: Interior Point OPTimizer
+Summary:        Interior Point OPTimizer
 Version: 3.14.20
-Release: %autorelease
+Release:        1%{?dist}
 License: EPL-2.0
 URL:  https://coin-or.github.io/%{module}/
-Source0: https://github.com/coin-or/Ipopt/archive/releases/%{version}/Ipopt-releases-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/coin-or/Ipopt/archive/releases/%{version}/Ipopt-releases-%{version}.tar.gz
 ExcludeArch:   %{ix86}
-
-BuildRequires: %{?dts}gcc, %{?dts}gcc-c++
-BuildRequires: %{?dts}gcc-gfortran
-BuildRequires: %{blaslib}-devel
-BuildRequires: doxygen
-BuildRequires: help2man
-BuildRequires: make
-BuildRequires: MUMPS-devel
-BuildRequires: metis-devel
 %if 0%{?with_asl}
-BuildRequires: asl-devel
 %endif
-BuildRequires: openssh-clients
-BuildRequires: pkgconfig
-BuildRequires: hwloc-devel
-BuildRequires: texlive-bibtex
-BuildRequires: texlive-latex-bin-bin
-BuildRequires: texlive-dvips
-%if 0%{?fedora}
-BuildRequires: tex(newunicodechar.sty)
-%endif
-
 Requires: %{name}-common = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  MUMPS-devel
+BuildRequires:  MUMPS-mpich-devel
+BuildRequires:  MUMPS-openmpi-devel
+BuildRequires:  asl-devel
+BuildRequires:  doxygen
+BuildRequires:  flexiblas-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gcc-gfortran
+BuildRequires:  help2man
+BuildRequires:  hwloc-devel
+BuildRequires:  make
+BuildRequires:  metis-devel
+BuildRequires:  mpich-devel
+BuildRequires:  openssh-clients
+BuildRequires:  pkgconfig
+BuildRequires:  pkgconfig(ompi)
+BuildRequires:  ptscotch-mpich-devel
+BuildRequires:  ptscotch-openmpi-devel
+BuildRequires:  scalapack-mpich-devel
+BuildRequires:  scalapack-openmpi-devel
+BuildRequires:  texlive-bibtex
+BuildRequires:  texlive-dvips
+BuildRequires:  texlive-latex-bin-bin
+# /oreon:deps
 %description
 Ipopt (Interior Point OPTimizer, pronounced eye-pea-Opt) is a software
 package for large-scale nonlinear optimization. It is designed to find
@@ -89,7 +77,6 @@ corresponding components of g_L and g_U to the same value.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -97,7 +84,6 @@ developing applications that use %{name}.
 %package        common
 Summary:        Documentation files for %{name}
 BuildArch:      noarch
-
 %description    common
 This package contains the HTML documentation,
 a PDF tutorial to use %{name} and related
@@ -145,6 +131,7 @@ use %{name}-mpich.
 ##########################################################
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qc
@@ -170,15 +157,9 @@ cp -a Ipopt-releases-%{version} %{module}-releases-mpich
 %if 0%{?el7}
 %{?dts:source /opt/rh/devtoolset-9/enable}
 %endif
-
-#######################################################
-## Build serial version
-
 cd Ipopt-releases-%{version}
-
 export LIBLAPACK=-l%{blaslib}
 export INCLAPACK=-I%{_includedir}/%{blaslib}
-
 OPT_CFLAGS="%{build_ldflags}"
 OPT_CXXFLAGS="%{build_cxxflags}"
 CPPFLAGS="-I%{_includedir}/MUMPS"
@@ -191,27 +172,17 @@ CXXLIBS="-L%{_libdir} -ldmumps $LIBLAPACK -lmetis -ldl"
  --with-asl-cflags=-I%{_includedir}/asl --with-asl-lflags="-lasl" \
 %endif
  --enable-shared --disable-java
-
 pushd doc
 sed -i '/LATEX_BATCHMOD/s/NO/YES/' Doxyfile
 doxygen -u
 popd
-
-# Get rid of undesirable hardcoded rpaths; workaround libtool reordering
-# -Wl,--as-needed after all the libraries.
 sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
     -e 's|CC="\(g..\)"|CC="\1 -Wl,--as-needed"|' \
     -i libtool
-
 %make_build V=1 all doc
 cd ..
-#######################################################
-
-#######################################################
-## Build MPI version
 %if 0%{?with_openmpi}
-
 cd %{module}-releases-openmpi
 %{_openmpi_load}
 export LIBLAPACK=-l%{blaslib}
@@ -221,17 +192,11 @@ OPT_CFLAGS="%{build_cflags} $INCLAPACK"
 LDFLAGS="%{build_ldflags}"
 CXXFLAGS="%{build_cxxflags} $INCLAPACK"
 OPT_CXXFLAGS="%{build_cxxflags} $INCLAPACK"
-%if 0%{?rhel}
-CPPFLAGS=" -pthread -I$MPI_INCLUDE"
-CXXLIBS=" -L$MPI_LIB -lmpi_mpifh -lmpi -lscalapack -ldmumps -lmumps_common -lptscotcherr -lptscotch -lptesmumps -ldl"
-%else
 CPPFLAGS="$(pkg-config --cflags ompi-fort)"
 CXXLIBS="$(pkg-config --libs ompi) $(pkg-config --libs ompi-fort) -lscalapack -ldmumps -lmumps_common -lptscotcherr -lptscotch -lptesmumps -ldl"
-%endif
 export CC=$MPI_BIN/mpicc
 export CXX=$MPI_BIN/mpic++
 export F77=$MPI_BIN/mpif77
-
 %configure --with-mumps-cflags=" -I$MPI_INCLUDE/MUMPS" \
  --with-mumps --with-mumps-lflags="-L$MPI_LIB -ldmumps -lmumps_common" --with-mumps-cflags="-I$MPI_INCLUDE/MUMPS" \
  --with-lapack --with-lapack-lflags=$LIBLAPACK --disable-java --enable-mpiinit \
@@ -246,24 +211,16 @@ export F77=$MPI_BIN/mpif77
             ADD_CXXFLAGS="-fopenmp" \
             CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" \
             LDFLAGS="$LDFLAGS" CXXLIBS="$CXXLIBS"
-
-# Get rid of undesirable hardcoded rpaths; workaround libtool reordering
-# -Wl,--as-needed after all the libraries.
  sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
      -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
      -e 's|CC="\(g..\)"|CC="\1 -Wl,--as-needed"|' \
      -i libtool
-
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MPI_LIB
 %make_build V=1 all
 %{_openmpi_unload}
 cd ..
 %endif
-
-#######################################################
-## Build MPICH version
 %if 0%{?with_mpich}
-
 cd %{module}-releases-mpich
 %{_mpich_load}
 export LIBLAPACK=-l%{blaslib}
@@ -278,7 +235,6 @@ CXXLIBS="$(pkg-config --libs mpich) -lscalapack -ldmumps -lmumps_common -lptscot
 export CC=$MPI_BIN/mpicc
 export CXX=$MPI_BIN/mpic++
 export F77=$MPI_BIN/mpif77
-
 %configure --with-mumps-cflags=" -I$MPI_INCLUDE/MUMPS" \
  --with-mumps --with-mumps-lflags="-L$MPI_LIB -ldmumps -lmumps_common" --with-mumps-cflags="-I$MPI_INCLUDE/MUMPS" \
  --with-lapack --with-lapack-lflags=$LIBLAPACK --disable-java --enable-mpiinit \
@@ -293,31 +249,22 @@ export F77=$MPI_BIN/mpif77
             ADD_CXXFLAGS="-fopenmp" \
             CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" \
             LDFLAGS="$LDFLAGS" CXXLIBS="$CXXLIBS"
-
-# Get rid of undesirable hardcoded rpaths; workaround libtool reordering
-# -Wl,--as-needed after all the libraries.
  sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
      -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
      -e 's|CC="\(g..\)"|CC="\1 -Wl,--as-needed"|' \
      -i libtool
-
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$MPI_LIB
 %make_build V=1 all
 %{_mpich_unload}
 cd ..
 %endif
-
 %install
-
-#######################################################
-## Install MPI version
 %if 0%{?with_openmpi}
 %{_openmpi_load}
 mkdir -p $RPM_BUILD_ROOT$MPI_LIB
 mkdir -p $RPM_BUILD_ROOT$MPI_BIN
 mkdir -p $RPM_BUILD_ROOT$MPI_INCLUDE
 mkdir -p %{module}-releases-openmpi/headers
-
 cd %{module}-releases-openmpi
  cp -p --no-dereference src/.libs/libipopt.so* \
        $RPM_BUILD_ROOT$MPI_LIB/
@@ -331,26 +278,18 @@ cd %{module}-releases-openmpi
  cp -p --no-dereference contrib/sIPOPT/AmplSolver/ipopt_sens \
        $RPM_BUILD_ROOT$MPI_BIN/
 %endif
-
  find -O3 src \( -name \*.h -o -name \*.hpp \) -exec cp -p {} headers \;
  cp -p contrib/sIPOPT/src/*.hpp src/Common/*.h headers
 cd ..
-
-##Copy MPI header files
 install -p -m 644 %{module}-releases-openmpi/headers/* $RPM_BUILD_ROOT$MPI_INCLUDE
 %{_openmpi_unload}
 %endif
-
-#######################################################
-#######################################################
-## Install MPICH version
 %if 0%{?with_mpich}
 %{_mpich_load}
 mkdir -p $RPM_BUILD_ROOT$MPI_LIB
 mkdir -p $RPM_BUILD_ROOT$MPI_BIN
 mkdir -p $RPM_BUILD_ROOT$MPI_INCLUDE
 mkdir -p %{module}-releases-mpich/headers
-
 cd %{module}-releases-mpich
  cp -p --no-dereference src/.libs/libipopt.so* \
        $RPM_BUILD_ROOT$MPI_LIB/
@@ -364,29 +303,18 @@ cd %{module}-releases-mpich
  cp -p --no-dereference contrib/sIPOPT/AmplSolver/ipopt_sens \
        $RPM_BUILD_ROOT$MPI_BIN/
 %endif
-
  find -O3 src \( -name \*.h -o -name \*.hpp \) -exec cp -p {} headers \;
  cp -p contrib/sIPOPT/src/*.hpp src/Common/*.h headers
 cd ..
-
-##Copy MPI header files
 install -p -m 644 %{module}-releases-mpich/headers/* $RPM_BUILD_ROOT$MPI_INCLUDE
 %{_mpich_unload}
 %endif
-
-#######################################################
-
-## Install serial version
-
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/pkgconfig
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 mkdir -p $RPM_BUILD_ROOT%{_includedir}/coin
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}
-
 mkdir -p Ipopt-releases-%{version}/headers
-
 cd Ipopt-releases-%{version}
- ##Copy libraries
  cp -p --no-dereference src/.libs/libipopt.so* \
        $RPM_BUILD_ROOT%{_libdir}/
  cp -p --no-dereference contrib/sIPOPT/src/.libs/libsipopt.so* \
@@ -402,37 +330,28 @@ cd Ipopt-releases-%{version}
  cp -p contrib/sIPOPT/AmplSolver/ipopt_sens \
        $RPM_BUILD_ROOT%{_bindir}/
 %endif
-
  find -O3 src \( -name \*.h -o -name \*.hpp \) -exec cp -p {} headers \;
  cp -p contrib/sIPOPT/src/*.hpp src/Common/*.h headers
 cd ..
-
-# Make man pages
 export LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir}
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 help2man -N $RPM_BUILD_ROOT%{_bindir}/ipopt > $RPM_BUILD_ROOT%{_mandir}/man1/ipopt.1
 cat > $RPM_BUILD_ROOT%{_mandir}/man1/ipopt_sens.1 << EOF
 .so man1/ipopt.1
 EOF
-
-##Copy header and documentation files
 install -p -m 644 Ipopt-releases-%{version}/headers/* $RPM_BUILD_ROOT%{_includedir}/coin/
-
-# Correct config.h due to manual install (#1295290)
 pushd $RPM_BUILD_ROOT%{_includedir}/coin/
     rm config.h config_default.h
-    # Use the generated config_ipopt.h
     sed -i 's/\(config_ipopt\)_default\(\.h\)/\1\2/' IpoptConfig.h
 popd
-
 cp -far Ipopt-releases-%{version}/doc/{html,*.tag} $RPM_BUILD_ROOT%{_docdir}/%{name}/
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-#######################################################
 %check
+
 cd Ipopt-releases-%{version}
 LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir} make test
 cd ..
-
 %if 0%{?with_openmpi}
 %if 0%{?with_mpicheck}
 cd %{module}-releases-openmpi
@@ -442,103 +361,26 @@ LD_LIBRARY_PATH=$RPM_BUILD_ROOT$MPI_LIB make test
 cd ..
 %endif
 %endif
-
 %if 0%{?with_mpich}
 %if 0%{?with_mpichcheck}
 cd %{module}-releases-mpich
-# Remove unknown -Lsystem/lib flag
 for i in `find . -type f \( -name "Makefile" \)`; do
  sed -e 's|-Lsystem/lib||g' -i $i
 done
-#
 %{_mpich_load}
 MPICH_INTERFACE_HOSTNAME=localhost LD_LIBRARY_PATH=$RPM_BUILD_ROOT$MPI_LIB make test
 %{_mpich_unload}
 cd ..
 %endif
 %endif
-
-%files
-%if 0%{?with_asl}
-%{_bindir}/ipopt
-%{_bindir}/ipopt_sens
-%endif
-%{_libdir}/libipopt.so.3
-%{_libdir}/libipopt.so.%{version}
-%{_libdir}/libsipopt.so.3
-%{_libdir}/libsipopt.so.%{version}
-%if 0%{?with_asl}
-%{_libdir}/libipoptamplinterface.so.3
-%{_libdir}/libipoptamplinterface.so.%{version}
-%endif
-%{_mandir}/man1/ipopt.1*
-%{_mandir}/man1/ipopt_sens.1*
-
-%files  devel
-%{_includedir}/coin/*
-%{_libdir}/libipopt.so
-%{_libdir}/libsipopt.so
-%{_libdir}/pkgconfig/ipopt.pc
-%if 0%{?with_asl}
-%{_libdir}/libipoptamplinterface.so
-%{_libdir}/pkgconfig/ipoptamplinterface.pc
-%endif
-
-#######################################################
-## Install MPI version
-%if 0%{?with_openmpi}
-
-%files openmpi
-%if 0%{?with_asl}
-%{_binmpidir}/ipopt
-%{_binmpidir}/ipopt_sens
-%endif
-%{_libmpidir}/libipopt.so.3
-%{_libmpidir}/libipopt.so.%{version}
-%{_libmpidir}/libsipopt.so.3
-%{_libmpidir}/libsipopt.so.%{version}
-%if 0%{?with_asl}
-%{_libmpidir}/libipoptamplinterface.so.3
-%{_libmpidir}/libipoptamplinterface.so.%{version}
-%endif
-
-%files openmpi-devel
-%{_libmpidir}/libipopt.so
-%{_libmpidir}/libsipopt.so
-%if 0%{?with_asl}
-%{_libmpidir}/libipoptamplinterface.so
-%endif
-%{_incmpidir}/*
-
-%endif
-%if 0%{?with_mpich}
-
-%files mpich
-%if 0%{?with_asl}
-%{_binmpichdir}/ipopt
-%{_binmpichdir}/ipopt_sens
-%endif
-%{_libmpichdir}/libipopt.so.3
-%{_libmpichdir}/libipopt.so.%{version}
-%{_libmpichdir}/libsipopt.so.3
-%{_libmpichdir}/libsipopt.so.%{version}
-%if 0%{?with_asl}
-%{_libmpichdir}/libipoptamplinterface.so.3
-%{_libmpichdir}/libipoptamplinterface.so.%{version}
-%endif
-
-%files mpich-devel
-%{_libmpichdir}/libipopt.so
-%{_libmpichdir}/libsipopt.so
-%if 0%{?with_asl}
-%{_libmpichdir}/libipoptamplinterface.so
-%endif
-%{_incmpichdir}/*
-%endif
-
-%files common
-%license Ipopt-releases-%{version}/LICENSE
-%{_docdir}/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n coin-or-Ipopt-devel -f %{oreon_filedir}/coin-or-Ipopt-devel.list
+%files -n coin-or-Ipopt-common -f %{oreon_filedir}/coin-or-Ipopt-common.list
+%files -n coin-or-Ipopt-openmpi -f %{oreon_filedir}/coin-or-Ipopt-openmpi.list
+%files -n coin-or-Ipopt-openmpi-devel -f %{oreon_filedir}/coin-or-Ipopt-openmpi-devel.list
+%files -n coin-or-Ipopt-mpich -f %{oreon_filedir}/coin-or-Ipopt-mpich.list
+%files -n coin-or-Ipopt-mpich-devel -f %{oreon_filedir}/coin-or-Ipopt-mpich-devel.list
 
 %changelog
+
 %autochangelog

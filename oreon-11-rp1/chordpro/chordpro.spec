@@ -1,15 +1,11 @@
-%global source0_hash 57c5e656f523bbb8250faedf3e5a138f2c5ada9daffa518e0bf05587c592140f
-
-# -*- rpm-spec -*-
-
+%global source0_hash 554dfc744b882d8fa05f300dd8d1a06c4c547a4d91edf8bd19ba0c65ce616f9c
 %global FullName App-Music-ChordPro
-
 Name: chordpro
-Summary: Print songbooks (lyrics + chords)
+Summary:        Print songbooks (lyrics + chords)
 License: Artistic-2.0
 Version: 6.101.0
-Release: %autorelease
-Source: https://cpan.metacpan.org/authors/id/J/JV/JV/%{FullName}-%{version}.tar.gz
+Release:        1%{?dist}
+Source0:        https://cpan.metacpan.org/authors/id/J/JV/JV/%{FullName}-%{version}.tar.gz
 Source1: README.ABC
 Source2: README.LilyPond
 Source3: README.WX
@@ -17,17 +13,10 @@ Patch1: chordpro-abc.patch
 Patch2: chordpro-fonts.patch
 Obsoletes: chordpro-abc == 6.050.4
 URL: https://www.chordpro.org
-
-# It's all plain perl, nothing architecture dependent.
 BuildArch: noarch
-
-# This package would provide many (perl) modules, but these are
-# not intended for general use.
 %global __provides_exclude_from /*\\.pm$
 %global __requires_exclude ChordPro|SVGPDF|JSON
-
 Requires: perl(:VERSION) >= 5.26.0
-
 Requires: perl(SVGPDF)                      >= 0.091
 Requires: gnu-free-fonts-common
 Requires: gnu-free-mono-fonts
@@ -54,54 +43,53 @@ Requires: perl(String::Interpolate::Named)  >= 1.06
 Requires: perl(Text::Layout)                >= 0.045
 Requires: perl(Unicode::Collate)
 Requires: perl(Unicode::Normalize)
-
-# BuildRequires for ChordPro.
-BuildRequires: desktop-file-utils
-BuildRequires: gnu-free-fonts-common
-BuildRequires: gnu-free-mono-fonts
-BuildRequires: gnu-free-sans-fonts
-BuildRequires: gnu-free-serif-fonts
-BuildRequires: libappstream-glib
-BuildRequires: make
-BuildRequires: perl(Carp)
-BuildRequires: perl(Data::Dumper)
-BuildRequires: perl(Data::Printer)               >= 1.001001
-BuildRequires: perl(Encode)
-BuildRequires: perl(ExtUtils::MakeMaker)         >= 7.24
-BuildRequires: perl(File::Copy)                  >= 2.32
-BuildRequires: perl(File::HomeDir)               >= 1.004
-BuildRequires: perl(File::LoadLines)             >= 1.021
-BuildRequires: perl(File::Spec)
-BuildRequires: perl(File::Temp)
-BuildRequires: perl(FindBin)
-BuildRequires: perl(Getopt::Long)
-BuildRequires: perl(HarfBuzz::Shaper)
-BuildRequires: perl(Hash::Util)
-BuildRequires: perl(Image::Info)                 >= 1.41
-BuildRequires: perl(JSON::PP)                    >= 2.27203
-BuildRequires: perl(JSON::XS)                    >= 4.03
-BuildRequires: perl(List::Util)                  >= 1.33
-BuildRequires: perl(Object::Pad)                 >= 0.78
-BuildRequires: perl(PDF::API2)                   >= 2.044
-BuildRequires: perl(Ref::Util)			 >= 0.204
-BuildRequires: perl(Scalar::Util)		 >= 1.63
-BuildRequires: perl(Storable)                    >= 3.08
-BuildRequires: perl(String::Interpolate::Named)  >= 1.03
-BuildRequires: perl(SVGPDF)                      >= 0.088
-BuildRequires: perl(Test::More)
-BuildRequires: perl(Text::Layout)                >= 0.043
-BuildRequires: perl(Unicode::Collate)
 Requires: perl(Unicode::Normalize)
-BuildRequires: perl(base)
-BuildRequires: perl(constant)
-BuildRequires: perl(lib)
-BuildRequires: perl(strict)
-BuildRequires: perl(utf8)
-BuildRequires: perl(warnings)
-BuildRequires: perl-generators
-BuildRequires: perl-interpreter
-BuildRequires: perl-libs
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gnu-free-fonts-common
+BuildRequires:  gnu-free-mono-fonts
+BuildRequires:  gnu-free-sans-fonts
+BuildRequires:  gnu-free-serif-fonts
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Data::Printer)
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::HomeDir)
+BuildRequires:  perl(File::LoadLines)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(HarfBuzz::Shaper)
+BuildRequires:  perl(Hash::Util)
+BuildRequires:  perl(Image::Info)
+BuildRequires:  perl(JSON::PP)
+BuildRequires:  perl(JSON::XS)
+BuildRequires:  perl(List::Util)
+BuildRequires:  perl(Object::Pad)
+BuildRequires:  perl(PDF::API2)
+BuildRequires:  perl(Ref::Util)
+BuildRequires:  perl(SVGPDF)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Storable)
+BuildRequires:  perl(String::Interpolate::Named)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Text::Layout)
+BuildRequires:  perl(Unicode::Collate)
+BuildRequires:  perl(base)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  perl-libs
+# /oreon:deps
 %description
 ChordPro will read a text file containing the lyrics of one or many
 songs plus chord information. ChordPro will then generate a
@@ -117,12 +105,9 @@ JavaScript::QuickJS.
 For more information about ChordPro, see https://www.chordpro.org.
 
 %package gui
-
 Summary: ChordPro graphical user interface
-
 Requires: %{name} = %{version}-%{release}
 Requires: perl(Wx) >= 0.99
-
 %description gui
 This package installs the requirements for the wxWidgets (GUI) version
 of ChordPro.
@@ -132,16 +117,14 @@ install an updated version of the perl Wx module. See
 https://github.com/sciurius/wxPerl for instructions.
 
 %package lilypond
-
 Summary: Support for ChordPro LilyPond embedding
-
 Requires: %{name} = %{version}-%{release}
 Requires: lilypond
-
 %description lilypond
 This packages installs the requirements for LilyPond support for ChordPro.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{FullName}-%{version}
@@ -173,43 +156,28 @@ rm lib/ChordPro/res/fonts/Free*.ttf
 
 %build
 
-# Main build.
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %check
+
 make test
-
 %install
-
-# Short names for our libraries.
 %global share %{_datadir}/%{name}-%{version}
-
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}
 echo "# Placeholder" > %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
 mkdir -p %{buildroot}%{share}/lib
 mkdir -p %{buildroot}%{_bindir}
-
-# Create lib dirs and copy files.
 find blib/lib -type f -name .exists -delete
 find blib/lib -type d -printf "mkdir %{buildroot}%{share}/lib/%%P\n" | sh -x
 find blib/lib ! -type d -printf "install -p -m 0644 %p %{buildroot}%{share}/lib/%%P\n" | sh -x
-
 for script in chordpro wxchordpro ttc
 do
-
-  # Create the main scripts.
   sed -e "s;for my .lib .*.;for my \$lib ( qw(%{share}/lib) ) {;" \
     < script/${script} >> %{buildroot}%{_bindir}/${script}
   chmod 0755 %{buildroot}%{_bindir}/${script}
-
-  # And its manual page.
   mkdir -p %{buildroot}%{_mandir}/man1
   pod2man blib/script/${script} > %{buildroot}%{_mandir}/man1/${script}.1
-
 done
-
-# Desktop file, icons, ...
 mkdir -p %{buildroot}%{_datadir}/pixmaps
 mkdir -p %{buildroot}%{_datadir}/mime/packages
 install -p -m 0664 \
@@ -219,65 +187,39 @@ install -p -m 0664 \
 desktop-file-install \
     --dir=%{buildroot}%{_datadir}/applications \
     lib/ChordPro/res/linux/org.%{name}.desktop
-
 mkdir -p %{buildroot}%{_metainfodir}
 cp -p lib/ChordPro/res/linux/org.%{name}.metainfo.xml \
     %{buildroot}%{_metainfodir}/org.%{name}.metainfo.xml
-
 %{_fixperms} %{buildroot}/*
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.%{name}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
-
-# End of install section.
-
-%files
-%doc Changes README.md README.ABC
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
-%{_bindir}/chordpro
-%{_bindir}/ttc
-%{share}/lib/ChordPro.pm
-%{share}/lib/ChordPro
-%exclude %{share}/lib/ChordPro/Wx.pm
-%exclude %{share}/lib/ChordPro/Wx
-%{_mandir}/man1/chordpro*
-%{_mandir}/man1/ttc*
-# Exclude Lilypond files.
-%exclude %{share}/lib/ChordPro/Delegate/Lilypond.pm
-
-%files gui
-%doc README.WX
-%{_bindir}/wxchordpro
-%{share}/lib/ChordPro/Wx.pm
-%{share}/lib/ChordPro/Wx
-%{_mandir}/man1/wxchordpro*
-%{_datadir}/applications/org.chordpro.desktop
-%{_datadir}/pixmaps/chordpro.png
-%{_datadir}/pixmaps/chordpro-doc.png
-%{_metainfodir}/org.chordpro.metainfo.xml
-
-%files lilypond
-%doc README.LilyPond
-%{share}/lib/ChordPro/Delegate/Lilypond.pm
+%oreon_autofiles chordpro-gui usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles chordpro-lilypond usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post gui
+
 xdg-desktop-menu install --novendor %{share}/lib/ChordPro/res/linux/org.chordpro.desktop
 xdg-icon-resource install --context mimetypes --size 256 %{share}/lib/ChordPro/res/icons/chordpro-doc.png x-chordpro-doc
 xdg-mime install --novendor %{share}/lib/ChordPro/res/linux/chordpro.xml
 update-desktop-database
 update-mime-database %{_datadir}/mime
 gtk-update-icon-cache %{_datadir}/icons/hicolor
-
 %postun
-[ $1 = 0 ] && rm -rf %{share}
 
+[ $1 = 0 ] && rm -rf %{share}
 %postun gui
+
 if [ $1 = 0 ]; then
 xdg-icon-resource uninstall --context mimetypes --size 256 x-chordpro-doc
 fi
 update-desktop-database
 update-mime-database %{_datadir}/mime
 gtk-update-icon-cache %{_datadir}/icons/hicolor
+%files -f %{oreon_filedir}/main.list
+%files -n chordpro-gui -f %{oreon_filedir}/chordpro-gui.list
+%files -n chordpro-lilypond -f %{oreon_filedir}/chordpro-lilypond.list
 
 %changelog
+
 %autochangelog

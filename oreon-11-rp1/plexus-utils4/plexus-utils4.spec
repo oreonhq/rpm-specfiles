@@ -1,5 +1,4 @@
 %global source0_hash 3da47a1ca309dde39198a5286efafe53ec995cbb038586a1ae3399b87b372645
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,34 +80,22 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           plexus-utils4
 Version:        4.1.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plexus Common Utilities
-# ASL 1.1: several files in src/main/java/org/codehaus/plexus/util/
-# ASL 2.0 and BSD:
-#      src/main/java/org/codehaus/plexus/util/cli/StreamConsumer.java
-#      src/main/java/org/codehaus/plexus/util/cli/StreamPumper.java
-#      src/main/java/org/codehaus/plexus/util/cli/Commandline.java
-# Public domain: src/main/java/org/codehaus/plexus/util/TypeFormat.java
-# rest is ASL 2.0
 License:        Apache-1.1 AND Apache-2.0 AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
 URL:            https://codehaus-plexus.github.io/plexus-utils/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/codehaus-plexus/plexus-utils/archive/plexus-utils-%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 4.1.0-3
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 The Plexus project seeks to create end-to-end developer tools for
 writing applications. At the core is the container, which can be
@@ -118,19 +105,21 @@ velocity, etc. Plexus also includes an application server which
 is like a J2EE application server, without all the baggage.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n plexus-utils-plexus-utils-%{version}
 %mvn_compat_version : 4.1.0 4.0.2 4.0.1
 
 %build
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license NOTICE.txt LICENSE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

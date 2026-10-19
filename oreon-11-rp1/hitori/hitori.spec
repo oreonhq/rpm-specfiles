@@ -1,25 +1,22 @@
 %global source0_hash 42270bd4f9525d180d3151bd7245335dc5cf248a984e02f68ff930da799e583b
-
 Name:		hitori
 Version:	44.0
-Release:	8%{?dist}
-Summary:	Logic puzzle game for GNOME
+Release:        1%{?dist}
+Summary:        Logic puzzle game for GNOME
 Summary(de):	Logikpuzzle für GNOME
-
-# The executable is licensed under GPLv3+, while the user manual is CC-BY-SA.
 License:	GPL-3.0-or-later and CC-BY-SA-3.0
 URL:		https://wiki.gnome.org/Apps/Hitori
-Source0:	https://download.gnome.org/sources/hitori/3.38/hitori-%{version}.tar.xz
-
+Source0:        https://download.gnome.org/sources/hitori/3.38/hitori-%{version}.tar.xz
+# oreon:deps
+BuildRequires:  /usr/bin/appstream-util
+BuildRequires:  /usr/bin/xmllint
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
-BuildRequires:	desktop-file-utils
-BuildRequires:	gettext
-BuildRequires:	pkgconfig(gtk+-3.0)
-BuildRequires:	itstool
-BuildRequires:	meson
-BuildRequires:	/usr/bin/appstream-util
-BuildRequires:	/usr/bin/xmllint
-
+BuildRequires:  gettext
+BuildRequires:  itstool
+BuildRequires:  meson
+BuildRequires:  pkgconfig(gtk+-3.0)
+# /oreon:deps
 %description
 A small application written to allow one to play the Hitori puzzle game,
 which is similar in theme to more popular puzzles such as Sudoku.
@@ -41,32 +38,26 @@ Lösung zu erleichtern. Mögliche Spielfeldgrößen reichen von 5x5 bis hin zu
 10x10 Feldern. 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
-
 %find_lang %{name} --with-gnome
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/org.gnome.Hitori.appdata.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Hitori.desktop
-
-%files -f %{name}.lang
-%license COPYING COPYING-DOCS
-%doc AUTHORS MAINTAINERS NEWS README.md
-%{_bindir}/hitori
-%{_datadir}/applications/org.gnome.Hitori.desktop
-%{_datadir}/glib-2.0/schemas/org.gnome.hitori.gschema.xml
-%{_datadir}/icons/hicolor/scalable/apps/org.gnome.Hitori.svg
-%{_datadir}/icons/hicolor/symbolic/apps/org.gnome.Hitori-symbolic.svg
-%{_metainfodir}/org.gnome.Hitori.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 58e2b27b7847f9e2a6edf10b47a8c8dd70a4705f45dccb7bf76aeadacf56ba01
 Name:           python-murmurhash
 Version:        1.0.15
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Cython bindings for MurmurHash
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/explosion/murmurhash
-Source:         %{pypi_source murmurhash}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/murmurhash/murmurhash-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'murmurhash' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(cython) >= 3.1
+Requires:       python3-murmurhash = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-murmurhash
-Summary:        %{summary}
-
-%description -n python3-murmurhash %_description
-
+Summary:        Cython bindings for MurmurHash
+%description -n python3-murmurhash
 
 %prep
-%autosetup -p1 -n murmurhash-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir murmurhash-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-murmurhash usr/lib/python3*/site-packages/murmurhash* usr/lib64/python3*/site-packages/murmurhash* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/murmurhash* usr/lib64/python3*/site-packages/murmurhash* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-murmurhash -f %{pyproject_files}
+%files
+%files -n python3-murmurhash -f %{oreon_filedir}/python3-murmurhash.list
 
 %changelog
+
 %autochangelog

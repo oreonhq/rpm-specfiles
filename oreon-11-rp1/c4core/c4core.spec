@@ -1,59 +1,23 @@
-%global source0_hash 474765eda86c07f26f99cdf62448a170398f6fd853a65debdd8180b66f6949ca
-
-# Upstream defaults to C++11, but recommends building c4core and rapidyaml with
-# the same standard; and rapidyaml is built as C++17 because gtest 1.17.0 or
-# later requires C++17 or later. See:
-# https://github.com/biojppm/rapidyaml/issues/465#issuecomment-2307668270
+%global source0_hash 3c27b58ac47dbefec0c98addcdf679f7e8a09c76372d8d57299e417eba3c9695
 %global cxx_std 17
-
 Name:           c4core
 Summary:        C++ core utilities
 Version:        0.6.0
-# This is the same as the version number. To prevent undetected soversion
-# bumps, we nevertheless express it separately.
 %global so_version 0.6.0
-Release:        %autorelease
-
+Release:        1%{?dist}
 URL:            https://github.com/biojppm/c4core
-# The entire source is MIT, except:
-#
-# BSL-1.0:
-#   - src/c4/ext/sg14/inplace_function.h
 SourceLicense:  MIT AND BSL-1.0
-# Additionally, the following dependencies contribute to the License of the
-# binary RPMs because they are header-only and are therefore treated as static
-# libraries:
-#   - debugbreak is BSD-2-Clause
-#   - fast-float (5.0+) is Apache-2.0 OR MIT OR BSL-1.0
-# The doctest-static BR is used only for tests and does not contribute to the
-# binary RPMs.
 License:        %{shrink:
                 MIT AND
                 BSL-1.0 AND
                 BSD-2-Clause AND
                 (Apache-2.0 OR MIT OR BSL-1.0)
                 }
-Source:         %{url}/archive/v%{version}/c4core-%{version}.tar.gz
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/biojppm/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  c4project
-# Our choice; the default make backend should work just as well
-BuildRequires:  ninja-build
-
-# For each header-only library, the guidelines require us to BR the -static
-# package for tracking.
-BuildRequires:  debugbreak-static
-BuildRequires:  fast_float-static
-BuildRequires:  doctest-static
-
 %global common_description %{expand:
 c4core is a library of low-level C++ utilities, written with low-latency
 projects in mind.
-
 Some of the utilities provided by c4core have already equivalent functionality
 in the C++ standard, but they are provided as the existing C++ equivalent may
 be insufficient (e.g., std::string_view), inefficient (e.g., std::string),
@@ -61,39 +25,28 @@ heavy (e.g. streams), or plainly unusable on some platforms/projects, (e.g.
 exceptions); some other utilities have equivalent under consideration for C++
 standardization; and yet some other utilities have (to the author’s knowledge)
 no equivalent under consideration.}
-
+# oreon:deps
+BuildRequires:  c4project
+BuildRequires:  cmake
+BuildRequires:  debugbreak-static
+BuildRequires:  doctest-static
+BuildRequires:  fast_float-static
+BuildRequires:  gcc-c++
+BuildRequires:  ninja-build
+# /oreon:deps
 %description %{common_description}
 
 %package devel
 Summary:        %{summary}
-
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
-# Each of these header-only libraries is made available under c4/ext/… in the
-# API of this package. Dependent packages that use them should really have
-# BuildRequires on the corresponding -static packages for header-only package
-# tracking.
 Requires:       debugbreak-devel
 Requires:       fast_float-devel
-
-# The bundled copy was forked from the original header-only library published
-# as a gist at
-# https://gist.github.com/Leandros/6dc334c22db135b033b57e9ee0311553 (see also
-# the blog post at https://arvid.io/2018/07/02/better-cxx-prng/). The original
-# was never versioned, but only one revision was ever published, so we can
-# infer the commit hash (6dc334c22db135b033b57e9ee0311553) from which the
-# bundled copy was forked and assign a snapshot version.
 Provides:       bundled(ag-random) = 0^20180702git6dc334c
-# One header is bundled from https://github.com/WG21-SG14/SG14/ (commit
-# 3aeb80676ff3e7a974678bd3fd826ffe55a0c4ab), which has never been versioned and
-# is not currently suitable to be packaged in its entirety—if nothing else, due
-# to unresolved licensing in some of its other source files that are not
-# bundled here, https://github.com/WG21-SG14/SG14/issues/163.
 Provides:       bundled(SG14) = 0^20190524git3a3b806
-
 %description devel %{common_description}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n c4core-%{version}
@@ -150,17 +103,10 @@ EOF
   -DC4CORE_BUILD_TESTS=ON
 
 %build
-%cmake_build
 
+%cmake_build
 %install
 %cmake_install
-# Fix wrong installation paths for multilib; it would be nontrivial to patch
-# the source to get this right in the first place. The installation path is
-# determined by the scripts in https://github.com/biojppm/cmake, packaged as
-# c4project.
-#
-# Installation directory on Linux 64bit OS
-# https://github.com/biojppm/rapidyaml/issues/256
 if [ '%{_libdir}' != '%{_prefix}/lib' ]
 then
   mkdir -p '%{buildroot}%{_libdir}'
@@ -170,37 +116,23 @@ then
   find %{buildroot}%{_libdir}/cmake/c4core -type f -name '*.cmake' -print0 |
     xargs -r -t -0 sed -r -i "s@/lib/@/$(basename '%{_libdir}')/@"
 fi
-
-# Some unbundled header-only libraries that appear in the API may have had
-# their symlinks dereferenced during installation. Make sure they aren’t
-# “re-bundled” as a result.
-
-# debugbreak
 ln -svf '%{_includedir}/debugbreak.h' \
     '%{buildroot}%{_includedir}/c4/ext/debugbreak/'
+%oreon_autofiles c4core-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-%cmake_build --target c4core-test-run-verbose
 
-# Verify that we did not accidentally bundle a real copy of fast_float
+%cmake_build --target c4core-test-run-verbose
 if grep -F 'FASTFLOAT_' \
     '%{buildroot}%{_includedir}/c4/ext/fast_float_all.h' >/dev/null
 then
   echo 'Unwanted bundling of fast_float was detected!' 1>&2
   exit 1
 fi
-
-%files
-%license LICENSE.txt LICENSE-BOOST.txt
-%doc README.md
-%doc ROADMAP.md
-%doc changelog/
-%{_libdir}/libc4core.so.%{so_version}
-
-%files devel
-%{_includedir}/c4/
-%{_libdir}/libc4core.so
-%{_libdir}/cmake/c4core/
+%files -f %{oreon_filedir}/main.list
+%files -n c4core-devel -f %{oreon_filedir}/c4core-devel.list
 
 %changelog
+
 %autochangelog

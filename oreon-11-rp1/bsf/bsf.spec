@@ -1,28 +1,24 @@
 %global source0_hash 5ab58cf5738c144f4d85a4a442c2f33be2c4c502dca6e29e0c570c2a51ae6ae9
-
 Name:           bsf
 Version:        2.4.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Bean Scripting Framework
 License:        Apache-2.0
 URL:            https://commons.apache.org/bsf/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/commons/bsf/source/bsf-src-%{version}.tar.gz
 Source1:        %{name}-pom.xml
-
 Patch:          build-file.patch
 Patch:          build.properties.patch
-
-BuildRequires:  javapackages-local-openjdk25
-BuildRequires:  ant-openjdk25 
+Obsoletes:      %{name}-javadoc < 2.4.0-63
+# oreon:deps
+BuildRequires:  ant-openjdk25
 BuildRequires:  apache-commons-logging
 BuildRequires:  apache-parent
+BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  xalan-j2
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.4.0-63
-
+# /oreon:deps
 %description
 Bean Scripting Framework (BSF) is a set of Java classes which provides
 scripting language support within Java applications, and access to Java
@@ -50,6 +46,7 @@ engines:
 * JudoScript
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 find -name \*.jar -delete
@@ -58,18 +55,17 @@ find -name \*.jar -delete
 %mvn_alias : org.apache.bsf:
 
 %build
+
 build-jar-repository -s lib apache-commons-logging xalan-j2
 %ant -Dsource.level=1.8 -Dant.build.javac.target=1.8 jar
-
 %mvn_artifact %{SOURCE1} build/lib/%{name}.jar
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
-%doc AUTHORS.txt CHANGES.txt README.txt TODO.txt RELEASE-NOTE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.0-1
 - Prepare for Oreon 11 (RP1)

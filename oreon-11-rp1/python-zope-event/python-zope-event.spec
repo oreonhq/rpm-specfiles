@@ -1,62 +1,62 @@
-%global source0_hash none
-
+%global source0_hash b97d5d6327067ee6b9dfcbdf606ade9ade70991e19c162e808ea39e5fcf0f8d3
 Name:           python-zope-event
 Version:        6.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Very basic event publishing system
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ZPL-2.1
 URL:            https://github.com/zopefoundation/zope.event
-Source:         %{pypi_source zope_event}
-
+Source0:        https://files.pythonhosted.org/packages/source/z/zope_event/zope_event-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) < 82
+BuildRequires:  python3dist(setuptools) >= 78.1.1
+Requires:       python3-zope-event = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-zope-event+docs
+Summary:        Metapackage for python3-zope-event docs extras
+Requires:       python3-zope-event = %{version}-%{release}
+Provides:       python3dist(zope-event[docs]) = %{version}-%{release}
 
+%description -n python3-zope-event+docs
+Metapackage for python3-zope-event docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'zope-event' generated automatically by pyp2spec.}
+%package -n       python3-zope-event+test
+Summary:        Metapackage for python3-zope-event test extras
+Requires:       python3-zope-event = %{version}-%{release}
+Requires:       python3dist(zope.testrunner) >= 6.4
+Provides:       python3dist(zope-event[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-zope-event+test
+Metapackage for python3-zope-event test extras.
+
+%description
 
 %package -n     python3-zope-event
-Summary:        %{summary}
-
-%description -n python3-zope-event %_description
+Summary:        Very basic event publishing system
+%description -n python3-zope-event
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-zope-event docs,test
-
 
 %prep
-%autosetup -p1 -n zope_event-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir zope_event-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-zope-event usr/lib/python3*/site-packages/zope_event* usr/lib64/python3*/site-packages/zope_event* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/zope_event* usr/lib64/python3*/site-packages/zope_event* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-zope-event -f %{pyproject_files}
+%files
+%files -n python3-zope-event -f %{oreon_filedir}/python3-zope-event.list
 
 %changelog
+
 %autochangelog

@@ -1,37 +1,29 @@
 %global source0_hash 96768244c349f3ff8d011391ed245d81ac3fdeaff4b6fe71b6265189c896e528
-
 %global pkgname sysusage
-
 Name:           sysusage
 Version:        5.7
 Release:        25%{?dist}
 Summary:        System monitoring based on Perl, rrdtool, and sysstat
 License:        GPL-3.0-or-later
 URL:            https://sysusage.darold.net/
-Source0:        https://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{pkgname}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}-httpd.conf
 Source2:        %{name}.cron
-BuildRequires: make
-BuildRequires:  perl-generators
-BuildRequires:  perl(ExtUtils::MakeMaker)
-# Need them during building to determine the path.
-%if 0%{?fedora} || 0%{?rhel} > 6
-BuildRequires:  hostname
-BuildRequires:  procps-ng
-%else
-BuildRequires:  net-tools
-BuildRequires:  procps
-%endif
-BuildRequires:  sysstat
 Requires:       %{name}-common = %{version}-%{release}
 Requires:       %{name}-rsysusage = %{version}-%{release}
 Requires:       crontabs
-# For ping plugin (plugin-sample2.pl)
 Requires:       perl(Time::HiRes)
 Requires:       rrdtool
 Requires:       sysstat
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  net-tools
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl-generators
+BuildRequires:  procps
+BuildRequires:  sysstat
+# /oreon:deps
 %description
 SysUsage continuously monitor your systems information and generate
 periodic graphical reports using rrdtool or JavaScript jqplot library.
@@ -62,7 +54,6 @@ especially like SysUsage for that.
 
 %package        common
 Summary:        Common files for %{name}
-
 %description    common
 This package provides common files shared between %{name}
 and the rsysusage package
@@ -71,7 +62,6 @@ and the rsysusage package
 Summary:        Apache configuration for %{name}
 Requires:       %{name} = %{version}-%{release}
 Requires:       httpd
-
 %description    httpd
 This package provides the Apache configuration for
 applications using an Alias to %{name}.
@@ -80,18 +70,19 @@ applications using an Alias to %{name}.
 Summary:        Remote utility for %{name}
 Requires:       %{name}-common = %{version}-%{release}
 Requires:       sysstat
-
 %description    rsysusage
 This package provides the tools needed to run %{name}
 on remote servers without needing to install sysusage
 and it's dependencies.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qn %{pkgname}-%{version}
 
 %build
+
 perl Makefile.PL \
     INSTALLDIRS=vendor \
     QUIET=1 \
@@ -104,43 +95,25 @@ perl Makefile.PL \
     MANDIR=%{_mandir}/man1 \
     DOCDIR=%{_pkgdocdir} \
     DESTDIR='$DESTDIR'
-
 make %{?_smp_mflags}
-
 %install
 export DESTDIR=%{buildroot}
 make install DESTDIR=%{buildroot}
-
 install -pDm644 %{S:1} \
     %{buildroot}%{_sysconfdir}/httpd/conf.d/%{name}.conf
 install -pDm644 %{S:2} \
     %{buildroot}%{_sysconfdir}/cron.d/%{name}
 install -pDm644 doc/%{name}.1 \
     %{buildroot}%{_mandir}/man1/%{name}.1
-
-# Remove redundant files.
 find %{buildroot} -name perllocal.pod -type f -delete
 find %{buildroot} -name .packlist -type f -delete
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc ChangeLog README TODO
-%config(noreplace) %{_sysconfdir}/cron.d/%{name}
-%{_bindir}/sysusage*
-%{_datadir}/%{name}
-%{_localstatedir}/www/%{name}
-%{_mandir}/man1/%{name}.1*
-
-%files common
-%license LICENSE
-%config(noreplace) %{_sysconfdir}/%{name}.cfg
-%dir %{_localstatedir}/lib/%{name}
-%{perl_vendorlib}/SysUsage
-
-%files httpd
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/%{name}.conf
-
-%files rsysusage
-%{_bindir}/rsysusage
+%files -f %{oreon_filedir}/main.list
+%files -n sysusage-common -f %{oreon_filedir}/sysusage-common.list
+%files -n sysusage-httpd -f %{oreon_filedir}/sysusage-httpd.list
+%files -n sysusage-rsysusage -f %{oreon_filedir}/sysusage-rsysusage.list
 
 %changelog
+
 %autochangelog

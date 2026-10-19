@@ -1,59 +1,43 @@
 %global source0_hash defda19b854fa0d3bd4f76ea4ddcba8abd7dcfcdd585a6690ade050744fc5f43
-
 Name:           python-pyproject-hooks
 Version:        1.3.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Wrappers to call pyproject.toml-based build backend hooks.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pypa/pyproject-hooks
-Source:         %{pypi_source pyproject_hooks}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyproject_hooks/pyproject_hooks-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyproject-hooks' generated automatically by pyp2spec.}
-
-
-%description %_description
+BuildRequires:  python3dist(flit-core) < 5
+BuildRequires:  python3dist(flit-core) >= 3.11
+Requires:       python3-pyproject-hooks = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyproject-hooks
-Summary:        %{summary}
-
-%description -n python3-pyproject-hooks %_description
-
+Summary:        Wrappers to call pyproject.toml-based build backend hooks.
+%description -n python3-pyproject-hooks
 
 %prep
-%autosetup -p1 -n pyproject_hooks-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyproject_hooks-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyproject-hooks usr/lib/python3*/site-packages/pyproject_hooks* usr/lib64/python3*/site-packages/pyproject_hooks* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyproject_hooks* usr/lib64/python3*/site-packages/pyproject_hooks* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyproject-hooks -f %{pyproject_files}
+%files
+%files -n python3-pyproject-hooks -f %{oreon_filedir}/python3-pyproject-hooks.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-1
 - Prepare for Oreon 11 (RP1)

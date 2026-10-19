@@ -1,29 +1,24 @@
 %global source0_hash 81c3d07cf15ce50441f43a82cefd0ac32767c535b5291bcc41bd2311d1337644
-
 Name:		srecord
 Version:	1.65.0
-Release:	7%{?dist}
-Summary:	Manipulate EPROM load files
+Release:        7%{?dist}
+Summary:        Manipulate EPROM load files
 License:	GPL-3.0-or-later AND LGPL-3.0-or-later
-# see also https://github.com/sierrafoxtrot/srecord
 URL:		http://srecord.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/srecord/srecord-%{version}-Source.tar.gz
-# https://github.com/sharkcz/srecord/tree/fedora-1.65
-# - switch to a shared library with a sane name
-# - don't install runtime deps
+Source0:        http://downloads.sourceforge.net/srecord/srecord-%{version}-Source.tar.gz
 Patch0:		srecord-1.65-fedora.patch
 Patch1:		srecord-1.65-fix-header.patch
-BuildRequires:	cmake
-BuildRequires:	gcc-c++
-BuildRequires:	git-core
-BuildRequires:	libgcrypt-devel
-# for building docs
-BuildRequires:	doxygen
-BuildRequires:	ghostscript
-BuildRequires:	groff
-BuildRequires:	netpbm-progs
-BuildRequires:	psutils
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  ghostscript
+BuildRequires:  git-core
+BuildRequires:  groff
+BuildRequires:  libgcrypt-devel
+BuildRequires:  netpbm-progs
+BuildRequires:  psutils
+# /oreon:deps
 %description
 The SRecord package is a collection of powerful tools for manipulating
 EPROM load files.
@@ -50,41 +45,29 @@ file formats.
 %package devel
 Summary:	Development headers and libraries for srecord
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development headers and libraries for developing applications against
 srecord.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}-%{version}-Source
-
+%global oreon_srcdir %{name}-%{version}-Source
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
-
-# the generated html docs are huge and unlikely to be used ...
 rm -rf %{buildroot}%{_defaultdocdir}/%{name}/htdocs
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license LICENSE
-%{_defaultdocdir}/%{name}/
-%{_bindir}/srec_*
-%{_libdir}/lib%{name}.so.%{version}
-%{_mandir}/man1/srec_*.1*
-%{_mandir}/man3/%{name}*.3*
-%{_mandir}/man5/srec_*.5*
-
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
+%files -f %{oreon_filedir}/main.list
+%files -n srecord-devel -f %{oreon_filedir}/srecord-devel.list
 
 %changelog
+
 %autochangelog

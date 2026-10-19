@@ -1,62 +1,55 @@
-%global source0_hash none
-
+%global source0_hash 6358c52882c96e66ac4a55eb3a72c7dd4a70763f8cc6fa4e70abde2656f4bf3b
 Name:           python-service-identity
 Version:        26.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Service identity verification for pyOpenSSL _ cryptography.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pyca/service-identity
-Source:         %{pypi_source service_identity}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/service_identity/service_identity-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-service-identity = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-service-identity+idna
+Summary:        Metapackage for python3-service-identity idna extras
+Requires:       python3-service-identity = %{version}-%{release}
+Provides:       python3dist(service-identity[idna]) = %{version}-%{release}
 
+%description -n python3-service-identity+idna
+Metapackage for python3-service-identity idna extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'service-identity' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-service-identity
-Summary:        %{summary}
-
-%description -n python3-service-identity %_description
+Summary:        Service identity verification for pyOpenSSL _ cryptography.
+# oreon:reqs
+Requires:       python3dist(attrs) >= 19.1.0
+Requires:       python3dist(cryptography) >= 47
+# /oreon:reqs
+%description -n python3-service-identity
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-service-identity idna
-
 
 %prep
-%autosetup -p1 -n service_identity-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir service_identity-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-service-identity usr/lib/python3*/site-packages/service_identity* usr/lib64/python3*/site-packages/service_identity* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/service_identity* usr/lib64/python3*/site-packages/service_identity* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-service-identity -f %{pyproject_files}
+%files
+%files -n python3-service-identity -f %{oreon_filedir}/python3-service-identity.list
 
 %changelog
+
 %autochangelog

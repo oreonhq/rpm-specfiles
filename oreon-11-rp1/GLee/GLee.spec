@@ -1,22 +1,18 @@
 %global source0_hash 3b58430172392ec75acdad5fd833ecf494c5518382bc27932f48d46dbb01cd29
-
 %global major 5
-
 Name:           GLee
 Version:        %{major}.4.0
 Release:        34%{?dist}
 Summary:        GL Easy Extension library
-
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://elf-stone.com/glee.php
 Source0:        http://www.elf-stone.com/downloads/%{name}/%{name}-%{version}-src.tar.gz
 Patch0:         GLee-configure-c99.patch
-
+# oreon:deps
 BuildRequires:  gcc-c++
+BuildRequires:  make
 BuildRequires:  mesa-libGL-devel
-BuildRequires: make
-
+# /oreon:deps
 %description
 GLee (GL Easy Extension library) is a free cross-platform extension loading
 library for OpenGL. It provides seamless support for OpenGL functions up
@@ -26,11 +22,11 @@ to version 3.0 and 399 extensions.
 Summary:        Development headers for %{name}
 Requires:       %{name} = %{version}-%{release}
 Requires:       mesa-libGL-devel
-
 %description devel
 Development headers for %{name}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -c %{name}-%{version}
@@ -46,26 +42,22 @@ sed -i 's|-shared|-shared -Wl,-soname,lib%{name}.so.%{major} -fPIC|g' Makefile.i
 sed -i 's|LIBNAME=.*|LIBNAME=lib%{name}.so.%{version}|g' Makefile.in
 
 %build
+
 %configure
 %make_build
-
 %install
 install -dm755 %{buildroot}%{_includedir}/GL
 install -dm755 %{buildroot}%{_libdir}
 make install INCLUDEDIR=%{buildroot}%{_includedir} \
              LIBDIR=%{buildroot}%{_libdir}
 ln -s lib%{name}.so.%{version} %{buildroot}%{_libdir}/lib%{name}.so
-
 %ldconfig_scriptlets
+%oreon_autofiles GLee-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_libdir}/lib%{name}.so.*
-%doc readme.txt
-
-%files devel
-%{_libdir}/lib%{name}.so
-%{_includedir}/GL/%{name}.h
-%doc extensionList.txt
+%files -f %{oreon_filedir}/main.list
+%files -n GLee-devel -f %{oreon_filedir}/GLee-devel.list
 
 %changelog
+
 %autochangelog

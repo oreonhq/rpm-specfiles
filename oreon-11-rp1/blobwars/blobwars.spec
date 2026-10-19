@@ -1,29 +1,27 @@
-%global source0_hash none
-
+%global source0_hash c406279f6cdf2aed3c6edb8d8be16efeda0217494acd525f39ee2bd3e77e4a99
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
-
 Name:           blobwars
 Version:        2.00
 Release:        20%{?dist}
 Summary:        Mission and Objective based 2D Platform Game
-# Code and gfx is all GPLv2+. Music is all CC-BY-SA. SFX are a mix, see readme
-# Automatically converted from old format: GPLv2+ and CC-BY-SA and CC-BY and BSD and Public Domain - review is highly recommended.
 License:        GPL-2.0-or-later AND LicenseRef-Callaway-CC-BY-SA AND LicenseRef-Callaway-CC-BY AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-Public-Domain
 URL:            http://www.parallelrealities.co.uk/p/blob-wars-metal-blob-solid.html
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:         blobwars-2.00-Werror.patch
 Patch1:         blobwars-2.00-dont-override-strlcat.patch
-BuildRequires:  desktop-file-utils
-BuildRequires:  gcc-c++ make
-BuildRequires:  gettext
+Requires:       hicolor-icon-theme
+# oreon:deps
 BuildRequires:  SDL2-devel
 BuildRequires:  SDL2_image-devel
 BuildRequires:  SDL2_mixer-devel
 BuildRequires:  SDL2_net-devel
 BuildRequires:  SDL2_ttf-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  make
 BuildRequires:  zlib-devel
-Requires:       hicolor-icon-theme
-
+# /oreon:deps
 %description
 Blob Wars : Metal Blob Solid. This is Episode I of the Blob Wars Saga.
 You must undertake the role of fearless Blob solider, Bob, as he infiltrates
@@ -31,6 +29,7 @@ various enemy installations and hideouts in an attempt to rescue as many
 MIAs as possible.
 
 %prep
+
 %autosetup -p1
 
 # fix permissions
@@ -50,21 +49,13 @@ sed -i -e 's|gzclose(pak)|gzclose((gzFile)pak)|;
            s|gzclose(fp)|gzclose((gzFile)fp)|' src/pak.cpp
 
 %build
-%make_build CFLAGS="$RPM_OPT_FLAGS" RELEASE=1 DOCDIR=%{_pkgdocdir}/
 
+%make_build CFLAGS="$RPM_OPT_FLAGS" RELEASE=1 DOCDIR=%{_pkgdocdir}/
 %install
 %make_install DOCDIR=%{_pkgdocdir}/
 %find_lang %{name}
 desktop-file-install --dir $RPM_BUILD_ROOT%{_datadir}/applications \
   $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -95,14 +86,10 @@ SentUpstream: 2014-09-18
    -->
 </application>
 EOF
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%{_pkgdocdir}
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{name}.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

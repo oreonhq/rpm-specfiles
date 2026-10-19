@@ -1,56 +1,39 @@
 %global source2_hash 4d5a9c73f97235eebe8c69f728aa2efcc8e1ee02282f972efdbbbd3a430be454
-
 %global source1_hash fbbda49685e97adbe9aca27bd43661505c140380b11ec6014c8b8aff096ef7de
-
 %global source0_hash b78a213b9160cded7ab93e7c47c003c618ebd49c6eca549d09a068e27a30a59d
-
 %global gem_name facter
-
 Name:           facter
 Version:        4.10.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Command and ruby library for gathering system information
-
 License:        Apache-2.0
 URL:            https://github.com/puppetlabs/facter
 Source0:        https://downloads.puppetlabs.com/%{name}/%{name}-%{version}.gem
-
 Source1:        https://downloads.puppetlabs.com/%{name}/%{name}-%{version}.gem.asc
-
 Source2:        https://downloads.puppetlabs.com/puppet-gpg-signing-key-20250406.pub
-
-
-BuildRequires:  gnupg2
-BuildRequires:  rubygems-devel
-BuildRequires:  ruby >= 2.5
 Requires:       ruby(release) >= 2.5
 Requires:       ruby(rubygems)
-
-# Add runtime deps for testing
-BuildRequires:  (rubygem(hocon) >= 1.3 with rubygem(hocon) < 2)
-BuildRequires:  (rubygem(thor) >= 1.0.1 with rubygem(thor) < 2)
-BuildRequires:  rubygem(sys-filesystem)
-BuildRequires:  rubygem(base64)
-
-# Binaries that Facter can call for complete facts
 %ifarch %ix86 x86_64 ia64
 Requires:       dmidecode
 Requires:       pciutils
 Requires:       virt-what
 %endif
 Requires:       net-tools
-
-# Soft dependency for the mountpoints fact
 Requires:       rubygem(sys-filesystem)
-# dependency for facter/util/resolvers
 Requires:       rubygem(base64)
-
 Provides:       ruby-%{name} = %{version}
 Obsoletes:      ruby-%{name} < 4
 Obsoletes:      %{name}-devel < 4
-
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  (rubygem(hocon) >= 1.3 with rubygem(hocon) < 2)
+BuildRequires:  (rubygem(thor) >= 1.0.1 with rubygem(thor) < 2)
+BuildRequires:  gnupg2
+BuildRequires:  ruby
+BuildRequires:  rubygem(base64)
+BuildRequires:  rubygem(sys-filesystem)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 Facter is a lightweight program that gathers basic node information about the
 hardware and operating system. Facter is especially useful for retrieving
@@ -66,11 +49,11 @@ key off the values returned by facts.
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -81,33 +64,24 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %gemspec_add_dep -g thor [">= 1.0.1", "< 2"]
 
 %build
+
 gem build ../%{gem_name}-%{version}.gemspec
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* %{buildroot}%{gem_dir}/
 rm %{buildroot}%{gem_instdir}/LICENSE
-
 mkdir -p %{buildroot}%{_bindir}
 cp -a .%{gem_instdir}/bin/facter %{buildroot}%{_bindir}
 rm -rf %{buildroot}/%{gem_instdir}/bin
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# No test suite can run since the spec files are not part of the gem
-# So try to run the executable and see if that works
+
 GEM_HOME="%{buildroot}%{gem_dir}" %{buildroot}%{_bindir}/facter
-
-%files
-%license LICENSE
-%dir %{gem_instdir}
-%{_bindir}/facter
-%{gem_libdir}
-%exclude %{gem_cache}
-%{gem_spec}
-
-%files doc
-%doc %{gem_docdir}
+%files -f %{oreon_filedir}/main.list
+%files -n facter-doc -f %{oreon_filedir}/facter-doc.list
 
 %changelog
+
 %autochangelog

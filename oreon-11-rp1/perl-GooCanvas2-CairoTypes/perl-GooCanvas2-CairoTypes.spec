@@ -1,37 +1,31 @@
 %global source0_hash ba806736ebcc9de3d8141a763a682bdeabb1cb8702bde299adfd574ace875052
-
 %global tarname GooCanvas2-CairoTypes
-
 Name:           perl-GooCanvas2-CairoTypes
 Version:        0.001
 Release:        21%{?dist}
 Summary:        Bridge between GooCanvas2 and Cairo types
-
-# lib/GooCanvas2/CairoTypes.pm file is "GPL+ or Artistic"
-# Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/GooCanvas2-CairoTypes
 Source0:        https://cpan.metacpan.org/authors/id/A/AS/ASOKOLOV/GooCanvas2-CairoTypes-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make
+BuildRequires:  perl(Cairo::Install::Files)
+BuildRequires:  perl(ExtUtils::Depends)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(ExtUtils::PkgConfig)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
 BuildRequires:  perl-Glib-devel
 BuildRequires:  perl-devel
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(ExtUtils::Depends)
-BuildRequires:  perl(ExtUtils::PkgConfig)
-BuildRequires:  perl(Cairo::Install::Files)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
 BuildRequires:  pkgconfig(goocanvas-2.0)
-
-# Tests:
-BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(Test::More)
-
+# /oreon:deps
 %description
 There is an issue in the interaction between GooCanvas, GObject
 Introspection, Cairo, and their Perl bindings, which causes some
@@ -52,28 +46,26 @@ need to bridge more types, pull requests
 <https://github.com/DarthGandalf/GooCanvas2-CairoTypes> are welcome!
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{tarname}-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 OPTIMIZE="$RPM_OPT_FLAGS"
 %{make_build}
-
 %install
 %{make_install}
 find %{buildroot} -type f -name '*.bs' -size 0 -delete
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%license LICENSE
-%doc README Changes
-%{perl_vendorarch}/auto/GooCanvas2/
-%{perl_vendorarch}/GooCanvas2*
-%{_mandir}/man3/GooCanvas2::CairoTypes.3pm.gz
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

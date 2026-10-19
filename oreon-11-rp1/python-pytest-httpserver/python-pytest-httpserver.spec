@@ -1,57 +1,44 @@
-%global source0_hash none
-
+%global source0_hash dc3d82e1fe00e491829d8939c549bf4bd9b39a260f87113c619b9d517c2f8ff1
 Name:           python-pytest-httpserver
 Version:        1.1.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        pytest-httpserver is a httpserver for pytest
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/csernazs/pytest-httpserver
-Source:         %{pypi_source pytest_httpserver}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_httpserver/pytest_httpserver-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pytest-httpserver' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-pytest-httpserver = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pytest-httpserver
-Summary:        %{summary}
-
-%description -n python3-pytest-httpserver %_description
-
+Summary:        pytest-httpserver is a httpserver for pytest
+# oreon:reqs
+Requires:       python3dist(werkzeug) >= 2.0.0
+# /oreon:reqs
+%description -n python3-pytest-httpserver
 
 %prep
-%autosetup -p1 -n pytest_httpserver-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pytest_httpserver-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pytest-httpserver usr/lib/python3*/site-packages/pytest_httpserver* usr/lib64/python3*/site-packages/pytest_httpserver* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_httpserver* usr/lib64/python3*/site-packages/pytest_httpserver* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pytest-httpserver -f %{pyproject_files}
+%files
+%files -n python3-pytest-httpserver -f %{oreon_filedir}/python3-pytest-httpserver.list
 
 %changelog
+
 %autochangelog

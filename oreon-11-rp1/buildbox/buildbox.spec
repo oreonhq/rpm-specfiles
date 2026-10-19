@@ -1,77 +1,53 @@
 %global source0_hash 6b3c79fbfb837333b279614a97dc5fc70fe13fb163b0b7c3508789a30fef1536
-
 Name:    buildbox
 Version: 1.4.27
-Release: %autorelease
-Summary: Building blocks to execute actions conforming to the Remote Execution API
-
+Release:        1%{?dist}
+Summary:        Building blocks to execute actions conforming to the Remote Execution API
 License: Apache-2.0
 URL:     https://buildgrid.gitlab.io/buildbox/buildbox-home/
-Source0: https://gitlab.com/BuildGrid/buildbox/buildbox/-/archive/%{version}/buildbox-%{version}.tar.bz2
-
-
+Source0:        https://gitlab.com/BuildGrid/buildbox/buildbox/-/archive/%{version}/buildbox-%{version}.tar.bz2
 ExcludeArch: %{ix86}
-
-BuildRequires: attr
-BuildRequires: cmake
-BuildRequires: fuse3
-BuildRequires: gcc-c++
-BuildRequires: git
-BuildRequires: net-tools
-BuildRequires: ninja-build
-BuildRequires: pkgconfig(benchmark)
-BuildRequires: pkgconfig(fuse3)
-BuildRequires: pkgconfig(gmock_main)
-BuildRequires: pkgconfig(grpc)
-BuildRequires: pkgconfig(gtest)
-BuildRequires: pkgconfig(libcares)
-BuildRequires: pkgconfig(libcurl)
-BuildRequires: pkgconfig(nlohmann_json)
-BuildRequires: pkgconfig(openssl)
-BuildRequires: pkgconfig(protobuf)
-BuildRequires: pkgconfig(tomlplusplus)
-BuildRequires: pkgconfig(uuid)
-
 Requires: bubblewrap
-
+# oreon:deps
+BuildRequires:  attr
+BuildRequires:  cmake
+BuildRequires:  fuse3
+BuildRequires:  gcc-c++
+BuildRequires:  git
+BuildRequires:  net-tools
+BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(benchmark)
+BuildRequires:  pkgconfig(fuse3)
+BuildRequires:  pkgconfig(gmock_main)
+BuildRequires:  pkgconfig(grpc)
+BuildRequires:  pkgconfig(gtest)
+BuildRequires:  pkgconfig(libcares)
+BuildRequires:  pkgconfig(libcurl)
+BuildRequires:  pkgconfig(nlohmann_json)
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  pkgconfig(protobuf)
+BuildRequires:  pkgconfig(tomlplusplus)
+BuildRequires:  pkgconfig(uuid)
+# /oreon:deps
 %description
 buildbox provides a set of building blocks to execute actions conforming to the
 Remote Execution API, also supporting the Remote Worker API.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -GNinja
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
-%ctest
 
-%files
-%license LICENSE
-%{_bindir}/buildbox-casd
-%{_bindir}/buildbox-casd-wrap
-%{_bindir}/buildbox-fuse
-%{_bindir}/buildbox-run
-%{_bindir}/buildbox-run-bubblewrap
-%{_bindir}/buildbox-run-hosttools
-%{_bindir}/buildbox-run-oci
-%{_bindir}/buildbox-run-userchroot
-%{_bindir}/buildbox-worker
-%{_bindir}/casdownload
-%{_bindir}/casupload
-%{_bindir}/casupload-oci
-%{_bindir}/logstreamreceiver
-%{_bindir}/logstreamtail
-%{_bindir}/outputstreamer
-%{_bindir}/recc
-%{_bindir}/rexplorer
-%{_bindir}/rumbad
-%{_bindir}/trexe
+%ctest
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

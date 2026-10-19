@@ -1,18 +1,14 @@
-%global source0_hash none
-
+%global source0_hash 7cf0b9239f414d9484495f2a57a28c1c99b3d7a7ae5767d10f0464809ae32e0b
 Name:           touchegg
 Version:        2.0.18
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Multi-touch gesture recognizer
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://github.com/JoseExposito/touchegg
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/JoseExposito/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         %{url}/commit/953c4227253d91c73f5ce46f89947262ebf45b18.patch#/cmake.patch
-
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
@@ -23,13 +19,13 @@ BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(libinput)
 BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(pugixml)
+BuildRequires:  pkgconfig(systemd)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(xrandr)
 BuildRequires:  pkgconfig(xtst)
-BuildRequires:  pkgconfig(systemd)
 BuildRequires:  systemd-rpm-macros
-
+# /oreon:deps
 %description
 Touchégg is an app that runs in the background and transform the gestures you
 make on your touchpad or touchscreen into visible actions in your desktop.
@@ -41,36 +37,29 @@ Many more actions and gestures are available and everything is easily
 configurable.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_sysconfdir}/xdg/autostart/%{name}.desktop
-
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
-# We cannot restart the service on update, because it breaks clients.
-# https://github.com/JoseExposito/touchegg/issues/453
-%systemd_postun %{name}.service
 
-%files
-%license COPYING COPYRIGHT
-%doc README.md CHANGELOG.md
-%config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
-%{_bindir}/%{name}
-%{_datadir}/%{name}/
-%{_unitdir}/%{name}.service
+%systemd_postun %{name}.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

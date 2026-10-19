@@ -1,28 +1,33 @@
+%global source2_hash f154a693df7d01290487b3bf4c045481cdde6bd310b9eeb37b7a533b03b3299a
+%global source1_hash 0e9107bf7fe492a1f1c52212b05ab3b442489887ffa1fafa1cd04c73c6ea33b7
 %global source0_hash c539f1a419b01772670d903ec0511722bf23a126a3b64df06767192f678a35e3
-
 %bcond cifs   0
 %bcond ftp    0
 %bcond hadoop 0
 %bcond mina   0
-
 Name:           apache-commons-vfs
 Version:        2.10.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Commons Virtual File System
 License:        Apache-2.0
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 URL:            https://commons.apache.org/proper/commons-vfs/
 VCS:            git:https://github.com/apache/commons-vfs.git
 Source0:        https://archive.apache.org/dist/commons/vfs/source/commons-vfs-%{version}-src.tar.gz
 Source1:        https://archive.apache.org/dist/commons/vfs/source/commons-vfs-%{version}-src.tar.gz.asc
 Source2:        https://downloads.apache.org/commons/KEYS
-
-# Migrate from the old commons-httpclient, which is no longer available in
-# Fedora, to the newer httpcomponents httpclient.
 Patch:          %{name}-httpclient.patch
-
+%if %{with hadoop}
+%endif
+%if %{with ftp}
+%endif
+%if %{with cifs}
+%endif
+%if %{with mina}
+%endif
+Provides:       %{name}2 = %{version}-%{release}
+# oreon:deps
 BuildRequires:  gnupg2
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.jcraft:jsch)
@@ -49,24 +54,7 @@ BuildRequires:  mvn(org.bouncycastle:bcprov-jdk16)
 BuildRequires:  mvn(org.mockito:mockito-core)
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-%if %{with hadoop}
-BuildRequires:  mvn(javax.ws.rs:jsr311-api)
-BuildRequires:  mvn(org.apache.hadoop:hadoop-common)
-BuildRequires:  mvn(org.apache.hadoop:hadoop-hdfs)
-BuildRequires:  mvn(org.apache.hadoop:hadoop-hdfs-client)
-%endif
-%if %{with ftp}
-BuildRequires:  mvn(org.apache.ftpserver:ftpserver-core)
-%endif
-%if %{with cifs}
-BuildRequires:  mvn(jcifs:jcifs)
-%endif
-%if %{with mina}
-BuildRequires:  mvn(org.apache.mina:mina-core)
-%endif
-
-Provides:       %{name}2 = %{version}-%{release}
-
+# /oreon:deps
 %description
 Commons VFS provides a single API for accessing various file systems.
 It presents a uniform view of the files from various sources, such as
@@ -89,26 +77,24 @@ Some of the features of Commons VFS are:
 Summary:       Development files for Commons VFS
 Requires:      %{name} = %{version}-%{release}
 Requires:      ant-openjdk25 
-
 %description   ant
 This package enables support for the Commons VFS ant tasks.
 
 %package       examples
 Summary:       Commons VFS Examples
 Requires:      %{name} = %{version}-%{release}
-
 %description   examples
 VFS is a Virtual File System library - Examples.
 
 %package       project
 Summary:       Commons VFS Parent POM
-
 %description   project
 Commons VFS Parent POM.
 
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --data=%{SOURCE0} --signature=%{SOURCE1} --keyring=%{SOURCE2}
@@ -183,26 +169,23 @@ rm -r commons-vfs2/src/{main,test}/java/org/apache/commons/vfs2/provider/ftps
 %mvn_alias :commons-vfs2-examples "org.apache.commons:commons-vfs-examples" "commons-vfs:commons-vfs-examples"
 
 %build
-%mvn_build -sf
 
+%mvn_build -sf
 %install
 %mvn_install
-
 mkdir -p %{buildroot}%{_sysconfdir}/ant.d
 echo "ant commons-logging commons-vfs" > commons-vfs
 install -p -m 644 commons-vfs %{buildroot}%{_sysconfdir}/ant.d/commons-vfs
+%oreon_autofiles apache-commons-vfs-ant usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles apache-commons-vfs-examples usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles apache-commons-vfs-project usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-commons-vfs2
-%doc README.md RELEASE-NOTES.txt
-%license LICENSE.txt NOTICE.txt
-
-%files examples -f .mfiles-commons-vfs2-examples
-
-%files project -f .mfiles-commons-vfs2-project
-%license LICENSE.txt NOTICE.txt
-
-%files ant
-%config(noreplace) %{_sysconfdir}/ant.d/commons-vfs
+%files -f %{oreon_filedir}/main.list
+%files -n apache-commons-vfs-ant -f %{oreon_filedir}/apache-commons-vfs-ant.list
+%files -n apache-commons-vfs-examples -f %{oreon_filedir}/apache-commons-vfs-examples.list
+%files -n apache-commons-vfs-project -f %{oreon_filedir}/apache-commons-vfs-project.list
 
 %changelog
+
 %autochangelog

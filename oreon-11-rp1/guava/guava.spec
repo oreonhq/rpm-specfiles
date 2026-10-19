@@ -1,5 +1,4 @@
 %global source0_hash d268bdf736d6d45ef381ce05c5715824324877e5f0bf56d9f4e34700ac978d04
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,36 +80,26 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           guava
 Version:        33.7.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Google Core Libraries for Java
-# Most of the code is under Apache-2.0
-# Few classes are under CC0-1.0 grep for creativecommons
 License:        Apache-2.0 AND CC0-1.0
 URL:            https://github.com/google/guava
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/google/guava/archive/refs/tags/v%{version}.tar.gz#/guava-%{version}.tar.gz
-
 Patch:          0001-Remove-unused-annotation-module-dependencies.patch
 Patch:          0002-Remove-NullMarked-filtering-and-annotation-collectio.patch
 Patch:          0003-Fix-invalid-Maven-attribute-values-in-compilerArgs.patch
-
-BuildRequires:  jurand
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(com.google.code.findbugs:jsr305)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 33.3.0-8
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+BuildRequires:  jurand
+# /oreon:deps
 %description
 Guava is a suite of core and expanded libraries that include
 utility classes, Google’s collections, io classes, and much
@@ -121,11 +110,11 @@ by downloading the appropriate module and its dependencies.
 
 %package testlib
 Summary:        The guava-testlib artifact
-
 %description testlib
 guava-testlib provides additional functionality for conveninent unit testing
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -178,18 +167,15 @@ sed -i /Xplugin:ErrorProne/d pom.xml
 %mvn_package "com.google.guava:guava-bom" __noinstall
 
 %build
-# Tests fail on Koji due to insufficient memory,
-# see https://bugzilla.redhat.com/show_bug.cgi?id=1332971
-%mvn_build -j -s -f
 
+%mvn_build -j -s -f
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-guava
-%doc CONTRIBUTORS README*
-%license LICENSE
-
-%files testlib -f .mfiles-guava-testlib
+%files -f %{oreon_filedir}/main.list
+%files -n guava-testlib -f %{oreon_filedir}/guava-testlib.list
 
 %changelog
+
 %autochangelog

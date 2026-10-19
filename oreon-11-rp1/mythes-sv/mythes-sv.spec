@@ -1,20 +1,22 @@
-%global source0_hash none
-
+%global source0_hash 58de0797f5dca60b7dd5e2355c381eb4ced72aff7a726861a2512ebc2e97ad55
 Name: mythes-sv
-Summary: Swedish thesaurus
+Summary:        Swedish thesaurus
 Version: 1.3
-Release: 32%{?dist}
-Source: https://downloads.sourceforge.net/project/aoo-extensions/934/4/swedishthesaurus.oxt
+Release:        1%{?dist}
+Source0:        https://downloads.sourceforge.net/project/aoo-extensions/934/4/swedishthesaurus.oxt
 URL: http://extensions.services.openoffice.org/project/SweThes
 License: MIT
 BuildArch: noarch
 Requires: mythes
 Supplements: (mythes and langpacks-sv)
+# oreon:deps
 
+# /oreon:deps
 %description
 Swedish thesaurus.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 
@@ -31,12 +33,11 @@ for lang in $sv_SE_aliases; do
         ln -s th_sv_SE_v2.idx "th_"$lang"_v2.idx"
 done
 popd
+%oreon_autofiles main
 
-
-%files
-%doc Info-en.txt
-%{_datadir}/mythes/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-32
 - Prepare for Oreon 11 (RP1)

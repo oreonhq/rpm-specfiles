@@ -1,54 +1,43 @@
 %global source0_hash 4aa759b2e055ef3c3fbeb9e92f7f0aacc1fd1f8602fdd2f122719793ee14414c
-
 %define		mainver	1.3
 %define		tarballver	20110227
 %define		minorver	date%{tarballver}
 %define		prerelease	1
-
 %define		baserelease	22
-
 %define		uprel		%(echo %{?minorver} | %{__sed} -e 's|^--*||' | %{__sed} -e 's|-|_|g' )
 %define		rel		%{?prerelease:0.}%{baserelease}%{?minorver:.%uprel}
-
 %define		skkdicdir	%{_datadir}/skk
 %define		skkcoding	EUC-JP
-
 Name:		cmigemo
 Version:	%{mainver}
-Release:	%{rel}%{?dist}
-Summary:	C interface of Ruby/Migemo Japanese incremental search tool
-
-# doc/LICENSE_MIT.txt	MIT
-# SKK-JISYO.L (from skkdic)	GPL-2.0-or-later
-# SPDX confirmed
+Release:        1%{?dist}
+Summary:        C interface of Ruby/Migemo Japanese incremental search tool
 License:	MIT AND GPL-2.0-or-later
 URL:		http://www.kaoriya.net/software/cmigemo
-#Source0:	http://www.kaoriya.net/dist/var/%{name}-%{mainver}%{?minorver}.tar.bz2
-Source0:	http://cmigemo.googlecode.com/files/cmigemo-default-src-%{tarballver}.zip
+Source0:        http://%{name}.googlecode.com/files/%{name}-default-src-%{tarballver}.zip
 Patch0:		cmigemo-20110227-ignore-random-string.patch
 Patch1:		cmigemo-1.3c-MIT-dont-escape.patch
 Patch2:		cmigemo-20110227-compile.patch
 Patch3:		cmigemo-20110227-keep-regex-with-brackets.patch
-
-BuildRequires:  gcc
-BuildRequires:  skkdic
+# oreon:deps
 BuildRequires:  /usr/bin/perl
+BuildRequires:  gcc
 BuildRequires:  make
-
+BuildRequires:  skkdic
+# /oreon:deps
 %description
 C/Migemo is a C interface of Ruby/Migemo, a Japanese incremental search tool
 by Romaji.
 
 %package	devel
 Summary:	Development files for cmigemo
-
 Requires:	%{name}%{?isa} = %{version}-%{release}
-
 %description	devel
 This package  contains libraries and header files for
 developing applications that use cmigemo.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -T %{name}-%{version} -a 0
@@ -99,36 +88,24 @@ cd cmigemo-default-src/
 %{__chmod} 0644 tools/*
 
 %build
+
 cd cmigemo-default-src/
 %{__chmod} u+x configure
 %configure
-
-# parallel make unsafe
 %{__make} gcc CC="gcc $RPM_OPT_FLAGS"
-
-# This is under GPL-2.0-or-later
 %{__cat} %{skkdicdir}/SKK-JISYO.L | gzip > dict/SKK-JISYO.L.gz
 %{__make} gcc-dict
 ( cd dict ; %{__make} utf-8 )
-
 %install
 pushd cmigemo-default-src/
-
 %{__make} gcc-install prefix=$RPM_BUILD_ROOT%{_prefix}
-
-# remove unneeded document
 %{__rm} -rf $RPM_BUILD_ROOT%{_prefix}/doc/
-
 popd
-
-# make documentation directory
 %{__rm} -rf doc_install
 %{__rm} -rf licenses
 %{__rm} -rf tools
-
 pushd cmigemo-default-src/
 cp -a tools ..
-
 %{__rm} -rf doc_install
 %{__mkdir} doc_install
 %{__mkdir} licenses
@@ -140,28 +117,15 @@ for f in *txt ; do \
 done
 cp -p LICENSE_MIT.txt ../licenses/
 cd ..
-
 mv doc_install ..
 mv licenses ..
 popd
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%defattr(-,root,root,-)
-%license licenses/*
-%doc doc_install/*
-%doc tools/
-
-%{_bindir}/%{name}
-%{_libdir}/libmigemo.so.1{,.*}
-
-%{_datadir}/cmigemo/
-
-%files	devel
-%defattr(-,root,root,-)
-%{_includedir}/migemo.h
-%{_libdir}/libmigemo.so
+%files -f %{oreon_filedir}/main.list
+%files -n cmigemo-devel -f %{oreon_filedir}/cmigemo-devel.list
 
 %changelog
+
 %autochangelog

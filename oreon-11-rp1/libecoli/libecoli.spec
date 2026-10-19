@@ -1,29 +1,22 @@
 %global source0_hash ec359850f4f338b607d05200d508736b14eaa30fca8aefdfde980a283afd789d
-
-# SPDX-License-Identifier: BSD-3-Clause
-# Copyright (c) 2024 Robin Jarry
-
 %global forgeurl https://github.com/rjarry/libecoli
-
 Name: libecoli
 Version: 0.11.7
-Summary: Extensible COmmand LIne library
+Summary:        Extensible COmmand LIne library
 License: BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
-
 %forgemeta
-
 URL: %{forgeurl}
-Release: %{autorelease}
-Source: %{forgesource}
-
-BuildRequires: gcc
-BuildRequires: meson
-BuildRequires: ninja-build
-BuildRequires: libedit-devel
-BuildRequires: pkgconf
-BuildRequires: doxygen
-BuildRequires: fdupes
-
+Release:        1%{?dist}
+Source0:        %{forgeurl}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  fdupes
+BuildRequires:  gcc
+BuildRequires:  libedit-devel
+BuildRequires:  meson
+BuildRequires:  ninja-build
+BuildRequires:  pkgconf
+# /oreon:deps
 %description
 libecoli stands for Extensible COmmand LIne library.
 
@@ -48,36 +41,30 @@ Main Features
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: libedit-devel
-
 %description devel
 This package contains development files for %{name}.
 
 %package doc
 BuildArch: noarch
 Summary: Documentation for %{name}
-
 %description doc
 This package contains the HTML documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgesetup
 
 %build
+
 %meson -Dexamples=disabled -Dyaml=disabled
 %meson_build
-
 %check
-%meson_test
 
+%meson_test
 %install
 %meson_install
-
-# Doxygen creates man links which are text files containing a reference to
-# another man page. Upstream tried to convert them to symlinks but meson
-# converts them back to regular files on install. Handle the conversion from
-# man "link" to symbolic link to avoid duplicated files in the rpm.
 for man in "%{buildroot}%{_mandir}"/*/*; do
 	read -r so link < "$man"
 	if [ "$so" = ".so" ]; then
@@ -87,25 +74,13 @@ for man in "%{buildroot}%{_mandir}"/*/*; do
 		fi
 	fi
 done
-
-# Replace duplicate files with hardlinks.
 %fdupes "%{buildroot}%{_datadir}/doc/libecoli"
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%doc README.md
-%license LICENSE
-%{_libdir}/%{name}.so.0*
-
-%files devel
-%{_mandir}/man3/*
-%{_includedir}/ecoli.h
-%{_includedir}/ecoli/*.h
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/libecoli.pc
-
-%files doc
-%license LICENSE
-%{_datadir}/doc/libecoli
+%files -f %{oreon_filedir}/main.list
+%files -n libecoli-devel -f %{oreon_filedir}/libecoli-devel.list
+%files -n libecoli-doc -f %{oreon_filedir}/libecoli-doc.list
 
 %changelog
+
 %autochangelog

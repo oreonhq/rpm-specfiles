@@ -1,22 +1,20 @@
 %global source0_hash 93ec471423b77973a2118eaec64c7a1c05ce37b5bff41760336ebd14fc819500
-
 Name:           launchy
 Version:        2.5
 Release:        45%{?dist}
 Summary:        Open Source Keystroke Launcher
-
 License:        GPL-1.0-or-later
 URL:            http://www.launchy.net
 Source0:        http://www.launchy.net/downloads/src/launchy-2.5.tar.gz
-
 Patch0:         %{name}-X11-lib.patch
 Patch1:         %{name}-xdg-icon-path.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  qt-devel boost-devel
+# oreon:deps
+BuildRequires:  boost-devel
 BuildRequires:  desktop-file-utils
-BuildRequires: make
-
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  qt-devel
+# /oreon:deps
 %description
 Launchy is a free cross-platform utility designed to help you forget about your
 start menu, the icons on your desktop, and even your file manager.
@@ -27,12 +25,12 @@ project files, folders, and bookmarks with just a few keystrokes!
 Summary:        Development files for %{name}
 Requires:       %{name} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description    devel
 The %{name}-devel package contains libraries and header files
 for developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -42,12 +40,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{__sed} -i 's/\r//' LICENSE.txt readme.txt
 
 %build
+
 %{_libdir}/qt4/bin/qmake "CONFIG+=debug" Launchy.pro
 make %{?_smp_mflags}
-
 %install
 %{__rm} -rf %{buildroot}
-# prefix is hardcoded in the makefile 
 install -Dpm 0755 debug/%{name} $RPM_BUILD_ROOT%{_bindir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins
 install -Dpm 0755 debug/plugins/*so $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins/
@@ -86,22 +83,13 @@ desktop-file-install   \
         --dir $RPM_BUILD_ROOT%{_datadir}/applications   \
         --remove-category Application \
         linux/%{name}.desktop
-
-# autostart is disabled by default
 echo "X-GNOME-Autostart-enabled=false" >> \
     $RPM_BUILD_ROOT%{_sysconfdir}/xdg/autostart/%{name}.desktop
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc LICENSE.txt readme.txt
-%{_bindir}/%{name}
-%{_libdir}/%{name}/
-%{_datadir}/%{name}/
-%{_datadir}/pixmaps/launchy_icon.png
-%{_datadir}/applications/%{name}.desktop
-%config(noreplace) %{_sysconfdir}/xdg/autostart/%{name}.desktop
-
-%files devel
-%{_includedir}/%{name}/*.h
+%files -f %{oreon_filedir}/main.list
+%files -n launchy-devel -f %{oreon_filedir}/launchy-devel.list
 
 %changelog
+
 %autochangelog

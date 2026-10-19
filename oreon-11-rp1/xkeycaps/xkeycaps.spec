@@ -1,23 +1,28 @@
-%global source0_hash none
-
-# FC-5+ version
-
+%global source0_hash 40da137109e0ef0b687a72b71a1ef0b3d08a10749fdda05fc16c52b4cbed763e
 Name:		xkeycaps
-Summary: 	Graphical front end to xmodmap
+Summary:        Graphical front end to xmodmap
 Version:	2.46
-Release:	41%{?dist}
+Release:        41%{?dist}
 License:	MIT
-Source0:	http://www.jwz.org/xkeycaps/%{name}-%{version}.tar.Z
+Source0:        http://www.jwz.org/xkeycaps/%{name}-%{version}.tar.Z
 Source1:	xkeycaps.desktop
 Source2:	xkeycaps.png
 URL:		http://www.jwz.org/xkeycaps/
-BuildRequires:	make
-BuildRequires:	gcc
-BuildRequires:	xorg-x11-xbitmaps, libICE-devel, libXmu-devel, libSM-devel
-BuildRequires:	libXaw-devel, imake, libXt-devel, xorg-x11-proto-devel
-BuildRequires:	desktop-file-utils, libXext-devel
 Requires:	xmodmap
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  imake
+BuildRequires:  libICE-devel
+BuildRequires:  libSM-devel
+BuildRequires:  libXaw-devel
+BuildRequires:  libXext-devel
+BuildRequires:  libXmu-devel
+BuildRequires:  libXt-devel
+BuildRequires:  make
+BuildRequires:  xorg-x11-proto-devel
+BuildRequires:  xorg-x11-xbitmaps
+# /oreon:deps
 %description
 xkeycaps is a graphical front-end to xmodmap. It opens a window that 
 looks like a keyboard; moving the mouse over a key shows what KeySyms 
@@ -28,13 +33,14 @@ mouse-based interface. This program can also write an input file for
 xmodmap to recreate your changes in future sessions.
 
 %prep
+
 %setup -q 
 
 %build
+
 xmkmf
 sed -i -e 's/^\(\s*CFLAGS\s*=.*\)/\1 $(RPM_OPT_FLAGS)/' Makefile
 make %{_smp_mflags}
-
 %install
 make DESTDIR=$RPM_BUILD_ROOT install INSTALL="install -p"
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
@@ -45,13 +51,10 @@ install -m0644 -p %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/pixmaps
 desktop-file-install                             \
         --dir ${RPM_BUILD_ROOT}%{_datadir}/applications         \
         %{SOURCE1}
+%oreon_autofiles main
 
-%files
-%doc README sgi-microsoft.txt
-%{_bindir}/xkeycaps
-%{_datadir}/applications/xkeycaps.desktop
-%{_datadir}/pixmaps/xkeycaps.png
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

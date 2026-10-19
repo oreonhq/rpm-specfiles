@@ -1,22 +1,23 @@
 %global source0_hash c4b6f504a6a8eb247bc60960bd65cbf9631c008449a1d71ac4c55e34be1c6011
-
 Name:          xssstate
 Version:       1.1
-Release:       27%{?dist}
-Summary:       A simple tool to retrieve the X screen saver state
+Release:        1%{?dist}
+Summary:        A simple tool to retrieve the X screen saver state
 License:       MIT
 URL:           http://tools.suckless.org/%{name}
-Source0:       http://dl.suckless.org/tools/%{name}-%{version}.tar.gz
-BuildRequires: coreutils
-BuildRequires: gcc
-BuildRequires: libXScrnSaver-devel
-BuildRequires: make
-BuildRequires: sed
-
+Source0:        http://dl.suckless.org/tools/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  gcc
+BuildRequires:  libXScrnSaver-devel
+BuildRequires:  make
+BuildRequires:  sed
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -28,15 +29,14 @@ sed -i 's|^\t@|\t|' Makefile
 chmod -x xsidle.sh
 
 %build
-make %{?_smp_mflags}
 
+make %{?_smp_mflags}
 %install
 make install DESTDIR=%{buildroot}
+%oreon_autofiles main
 
-%files
-%doc LICENSE README xsidle.sh
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

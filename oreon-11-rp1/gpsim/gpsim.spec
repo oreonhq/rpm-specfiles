@@ -1,24 +1,27 @@
 %global source0_hash c704d923ae771fabb7f63775a564dfefd7018a79c914671c4477854420b32e69
-
 Name:		gpsim
 Version:	0.32.1
-Release:	8%{?dist}
-Summary:	A simulator for Microchip (TM) PIC (TM) microcontrollers
+Release:        1%{?dist}
+Summary:        A simulator for Microchip (TM) PIC (TM) microcontrollers
 Summary(fr):	Un simulateur pour les microcontrôleurs PIC (TM) Microchip (TM)
-
-# Source code is GPLv2+ except src/, modules/ and eXdbm/ which are LGPLv2+
-# Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL:		http://gpsim.sourceforge.net/gpsim.html
-Source:		http://downloads.sourceforge.net/gpsim/gpsim-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/gpsim/gpsim-%{version}.tar.gz
 Source1:	gpsim.png
 Patch1:		%{name}-%{version}-lcd.patch
-
-BuildRequires:	gcc-c++
-BuildRequires:	gtk2-devel, flex, readline-devel, popt-devel
-BuildRequires:	autoconf gputils desktop-file-utils automake libtool
-BuildRequires:	make
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  gputils
+BuildRequires:  gtk2-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  popt-devel
+BuildRequires:  readline-devel
+# /oreon:deps
 %description
 gpsim is a simulator for Microchip (TM) PIC (TM) microcontrollers.
 It supports most devices in Microchip's 12-bit, 14bit, and 16-bit
@@ -37,7 +40,6 @@ de simulation des PIC.
 Summary:	Libraries and files headers for gpsim
 Summary(fr):	Bibliothèques et fichiers d'en-têtes pour gpsim
 Requires:	%{name} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package includes the static libraries, header files,
 and documentation for compiling programs that use the gpsim library.
@@ -48,6 +50,7 @@ d'en-têtes et la documentation nécessaires à la compilation des programmes
 qui utilisent la bibliothèque gpsim.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -60,9 +63,9 @@ rm -f AUTHORS.raw ChangeLog.raw
 autoconf
 
 %build
+
 %configure
 %{__make} %{?_smp_mflags}
-
 %install
 %{__rm} -rf %{buildroot}
 %{__make} install DESTDIR=%{buildroot}
@@ -78,26 +81,12 @@ install -Dm 0644 -p doc/metadata/%{name}.appdata.xml \
 desktop-file-install --vendor=""\
 	--dir=%{buildroot}/%{_datadir}/applications\
 	%{buildroot}%{_datadir}/applications/%{name}.desktop
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc ANNOUNCE AUTHORS COPYING ChangeLog HISTORY NEWS
-%doc README README.EXAMPLES README.MODULES TODO
-%doc doc/gpsim.lyx doc/gpsim.pdf
-%doc examples/
-%{_bindir}/*
-%{_libdir}/*.so.*
-%{_datadir}/pixmaps/gpsim.png
-%{_datadir}/applications/gpsim.desktop
-%{_datadir}/appdata/gpsim.appdata.xml
-
-%files devel
-%doc COPYING
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/gpsim.pc
-%exclude %{_libdir}/*.a
-%{_includedir}/*
+%files -f %{oreon_filedir}/main.list
+%files -n gpsim-devel -f %{oreon_filedir}/gpsim-devel.list
 
 %changelog
+
 %autochangelog

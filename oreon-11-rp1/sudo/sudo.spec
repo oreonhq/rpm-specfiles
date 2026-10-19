@@ -1,16 +1,9 @@
 %global source0_hash 4a38a1ab3adb1199257edc2a7c4a2bd714665eb605b04368843b06dada2cfcfb
-
-# comment out if no extra version
 %global extraver p2
-
-Summary: Allows restricted root access for specified users
+Summary:        Allows restricted root access for specified users
 Name: sudo
 Version: 1.9.17
-# remove -b 3 after rebase !!!
-# use "-p -e % {?extraver}" when beta
-# use "-e % {?extraver}"" when patch version
-# use nothing special when normal version
-Release: %autorelease -e %{?extraver}
+Release:        1%{?dist}
 License: ISC
 URL: https://www.sudo.ws
 Source0:        https://www.sudo.ws/dist/sudo-1.9.17p2.tar.gz
@@ -18,20 +11,23 @@ Source1: sudoers
 Requires: pam
 Recommends: system-default-editor
 Recommends: %{name}-python-plugin%{?_isa} = %{version}-%{release}
-
-BuildRequires: make
-BuildRequires: pam-devel
-BuildRequires: groff
-BuildRequires: openldap-devel
-BuildRequires: flex
-BuildRequires: bison
-BuildRequires: libtool
-BuildRequires: audit-libs-devel libcap-devel
-BuildRequires: libselinux-devel
-BuildRequires: systemd-rpm-macros
-BuildRequires: gettext
-BuildRequires: zlib-devel
-
+# oreon:deps
+BuildRequires:  audit-libs-devel
+BuildRequires:  bison
+BuildRequires:  flex
+BuildRequires:  gettext
+BuildRequires:  groff
+BuildRequires:  libcap-devel
+BuildRequires:  libselinux-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  openldap-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pam-devel
+BuildRequires:  python3-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Sudo (superuser do) allows a system administrator to give certain
 users (or groups of users) the ability to run some (or all) commands
@@ -46,18 +42,14 @@ on many different machines.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains header files developing sudo
 plugins that use %{name}.
-
 
 %package        logsrvd
 Summary:        High-performance log server for %{name}
 Requires:       %{name} = %{version}-%{release}
 BuildRequires:  openssl-devel
-
-
 %description    logsrvd
 %{name}-logsrvd is a high-performance log server that accepts event and I/O logs from sudo.
 It can be used to implement centralized logging of sudo logs.
@@ -66,19 +58,17 @@ It can be used to implement centralized logging of sudo logs.
 Summary:        Python plugin for %{name}
 Requires:       %{name} = %{version}-%{release}
 BuildRequires:  python3-devel
-
-
 %description    python-plugin
 %{name}-python-plugin allows using sudo plugins written in Python.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version}%{?extraver}
 
 %build
-# Remove bundled copy of zlib
-rm -rf zlib/
 
+rm -rf zlib/
 %configure \
         --prefix=%{_prefix} \
         --sbindir=%{_sbindir} \
@@ -104,54 +94,35 @@ rm -rf zlib/
         --enable-zlib=system \
         --with-linux-audit \
         --with-sssd
-#       --without-kerb5 \
-#       --without-kerb4
 %make_build
-
 %check
-%make_build check
 
+%make_build check
 %install
 %make_install install_uid=`id -u` install_gid=`id -g` sudoers_uid=`id -u` sudoers_gid=`id -g`
-
 chmod 755 $RPM_BUILD_ROOT%{_bindir}/* $RPM_BUILD_ROOT%{_sbindir}/*
 install -p -d -m 700 $RPM_BUILD_ROOT/var/db/sudo
 install -p -d -m 700 $RPM_BUILD_ROOT/var/db/sudo/lectured
 install -p -d -m 750 $RPM_BUILD_ROOT/etc/sudoers.d
 install -p -c -m 0440 %{SOURCE1} $RPM_BUILD_ROOT/etc/sudoers
-# Add sudo to protected packages. Old location for yum/dnf.
 mkdir -p $RPM_BUILD_ROOT/etc/dnf/protected.d/
 echo "sudo" >$RPM_BUILD_ROOT/etc/dnf/protected.d/sudo.conf
-# Add sudo to protected packages. New location for dnf5.
 mkdir -p $RPM_BUILD_ROOT/usr/share/dnf5/libdnf.conf.d/
 cat >$RPM_BUILD_ROOT/usr/share/dnf5/libdnf.conf.d/protect-sudo.conf <<EOF
 [main]
 protected_packages = sudo
 EOF
-
 chmod +x $RPM_BUILD_ROOT%{_libexecdir}/sudo/*.so # for stripping, reset in %%files
-
-# Don't package LICENSE as a doc
 rm -rf $RPM_BUILD_ROOT%{_pkgdocdir}/LICENSE
-
-# Remove examples; Examples can be found in man pages too.
 rm -rf $RPM_BUILD_ROOT%{_datadir}/examples/sudo
-
-#Remove all .la files
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
-
-# Remove sudoers.dist
 rm -f $RPM_BUILD_ROOT%{_sysconfdir}/sudoers.dist
-
 %find_lang sudo
 %find_lang sudoers
-
 cat sudo.lang sudoers.lang > sudo_all.lang
 rm sudo.lang sudoers.lang
-
 mkdir -p $RPM_BUILD_ROOT/etc/pam.d
 cat > $RPM_BUILD_ROOT/etc/pam.d/sudo << EOF
-#%%PAM-1.0
 auth       include      system-auth
 account    include      system-auth
 password   include      system-auth
@@ -159,78 +130,21 @@ session    optional     pam_keyinit.so revoke
 session    required     pam_limits.so
 session    include      system-auth
 EOF
-
 cat > $RPM_BUILD_ROOT/etc/pam.d/sudo-i << EOF
-#%%PAM-1.0
 auth       include      sudo
 account    include      sudo
 password   include      sudo
 session    optional     pam_keyinit.so force revoke
 session    include      sudo
 EOF
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-
-%files -f sudo_all.lang
-%attr(0440,root,root) %config(noreplace) /etc/sudoers
-%attr(0750,root,root) %dir /etc/sudoers.d/
-%config(noreplace) /etc/pam.d/sudo
-%config(noreplace) /etc/pam.d/sudo-i
-%attr(0644,root,root) %{_tmpfilesdir}/sudo.conf
-%attr(0644,root,root) %config(noreplace) /etc/dnf/protected.d/sudo.conf
-%attr(0640,root,root) %config(noreplace) /etc/sudo.conf
-%dir /usr/share/dnf5
-%dir /usr/share/dnf5/libdnf.conf.d
-/usr/share/dnf5/libdnf.conf.d/protect-sudo.conf
-%dir /var/db/sudo
-%dir /var/db/sudo/lectured
-%attr(4111,root,root) %{_bindir}/sudo
-%{_bindir}/sudoedit
-%attr(0111,root,root) %{_bindir}/sudoreplay
-%attr(0755,root,root) %{_sbindir}/visudo
-%{_bindir}/cvtsudoers
-%dir %{_libexecdir}/sudo
-%attr(0755,root,root) %{_libexecdir}/sudo/sesh
-%attr(0644,root,root) %{_libexecdir}/sudo/sudo_noexec.so
-%attr(0644,root,root) %{_libexecdir}/sudo/sudoers.so
-%attr(0644,root,root) %{_libexecdir}/sudo/audit_json.so
-%attr(0644,root,root) %{_libexecdir}/sudo/group_file.so
-%attr(0644,root,root) %{_libexecdir}/sudo/system_group.so
-%attr(0644,root,root) %{_libexecdir}/sudo/libsudo_util.so.?.?.?
-%{_libexecdir}/sudo/libsudo_util.so.?
-%{_libexecdir}/sudo/libsudo_util.so
-%{_mandir}/man5/sudoers.5*
-%{_mandir}/man5/sudoers.ldap.5*
-%{_mandir}/man5/sudo.conf.5*
-%{_mandir}/man8/sudo.8*
-%{_mandir}/man8/sudoedit.8*
-%{_mandir}/man8/sudoreplay.8*
-%{_mandir}/man8/visudo.8*
-%{_mandir}/man1/cvtsudoers.1.gz
-%{_mandir}/man5/sudoers_timestamp.5.gz
-%dir %{_pkgdocdir}/
-%{_pkgdocdir}/*
-%{!?_licensedir:%global license %%doc}
-%license LICENSE.md
-%exclude %{_pkgdocdir}/ChangeLog
-
-%files devel
-%doc plugins/sample/sample_plugin.c
-%{_includedir}/sudo_plugin.h
-%{_mandir}/man5/sudo_plugin.5*
-
-%files logsrvd
-%attr(0640,root,root) %config(noreplace) /etc/sudo_logsrvd.conf
-%attr(0755,root,root) %{_sbindir}/sudo_logsrvd
-%attr(0755,root,root) %{_sbindir}/sudo_sendlog
-%{_mandir}/man5/sudo_logsrv.proto.5.gz
-%{_mandir}/man5/sudo_logsrvd.conf.5.gz
-%{_mandir}/man8/sudo_logsrvd.8.gz
-%{_mandir}/man8/sudo_sendlog.8.gz
-
-%files python-plugin
-%{_mandir}/man5/sudo_plugin_python.5.gz
-%attr(0644,root,root) %{_libexecdir}/sudo/python_plugin.so
+%files -f %{oreon_filedir}/main.list
+%files -n sudo-devel -f %{oreon_filedir}/sudo-devel.list
+%files -n sudo-logsrvd -f %{oreon_filedir}/sudo-logsrvd.list
+%files -n sudo-python-plugin -f %{oreon_filedir}/sudo-python-plugin.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.17-1
 - Prepare for Oreon 11 (RP1)

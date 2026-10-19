@@ -1,9 +1,6 @@
-%global source0_hash none
-
+%global source0_hash 553867b135303dc4c25ab67c5f234d8e900a0e36e66e8484d99adc05fe1e8737
 %bcond barcode 0%{?fedora}
-
 Name:		mupdf
-
 %global libname libmupdf
 %global pypiname mupdf
 Version:	1.27.2
@@ -11,74 +8,37 @@ Version:	1.27.2
 %global sominor 2
 %global soname %{somajor}.%{sominor}
 %global pkgconfig %{_libdir}/pkgconfig
-# upstream prerelease versions tags need to be translated to Fedorian
 %global upversion %{version}
-# upper bound on python-clang version
 %global pyclang_version 21
-
-Release:	%autorelease
-Summary:	A lightweight PDF viewer and toolkit
+Release:        1%{?dist}
+Summary:        A lightweight PDF viewer and toolkit
 License:	AGPL-3.0-or-later
 URL:		http://mupdf.com/
-Source0:	http://mupdf.com/downloads/archive/%{name}-%{upversion}-source.tar.gz
+Source0:        http://%{name}.com/downloads/archive/%{name}-%{version}-source.tar.gz
 Source1:	%{name}.desktop
 Source2:	%{name}-gl.desktop
-
-# Upstream patches from master branch:
-# rhbz#2454361 and siblings
 Patch:		0001-Bug-708990-Avoid-overflow-src_stride-calculation-in-.patch
-# Fedora specific patches:
-# Do not bug me if Artifex relies on local fork
 Patch:		0001-Do-not-complain-to-your-friendly-local-distribution-.patch
-# Do not generate wrong form of dependencies
 Patch:		0001-setup.py-do-not-require-libclang-and-swig.patch
-# Do install shared libraries in the python tree
 Patch:		0001-setup.py-do-not-bundle-c-and-c-libs-in-wheel.patch
-# Suggested upstream:
-# Avoid core dump of python bindings with gcc15
-# https://github.com/ArtifexSoftware/mupdf/pull/55
 Patch:		0001-pdf_choice_widget_options2-avoid-core-dump-with-_GLI.patch
-# Do not apply CXXFLAGS to swig
-# https://github.com/ArtifexSoftware/mupdf/pull/56
 Patch:		0001-do-not-use-CXXFLAGS-with-swig.patch
-# Be more helpful with the new warning in 1.26.x
-# https://github.com/ArtifexSoftware/mupdf/pull/74
 Patch:		0001-pdf_font-report-font-name-in-warning.patch
-# Upstreamable:
 Patch:		0001-mupdfwrap_test-adjust-to-mupdf-1.27.x.patch
-
-BuildRequires:	gcc gcc-c++ make binutils desktop-file-utils coreutils pkgconfig
-BuildRequires:	openjpeg2-devel desktop-file-utils
-BuildRequires:	libjpeg-devel freetype-devel libXext-devel curl-devel
-BuildRequires:	harfbuzz-devel openssl-devel mesa-libEGL-devel
-BuildRequires:	mesa-libGL-devel mesa-libGLU-devel libXi-devel libXrandr-devel
-BuildRequires:	gumbo-parser-devel leptonica-devel tesseract-devel
-BuildRequires:	freeglut-devel
-BuildRequires:	jbig2dec-devel brotli-devel
-BuildRequires:	swig python3-devel
-# Use python3-clang(major) where available:
 %if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon} >= 11
-BuildRequires:	python3-clang(major) <= %{pyclang_version}
-# Else we assume latest clang works:
 %else
-BuildRequires:	python3-clang
 %endif
 %if %{with barcode}
-BuildRequires:	zxing-cpp-devel zint-devel
 %endif
-
 Requires:	%{name}-libs%{_isa} = %{version}-%{release}
-
-# We need to build against the Artifex fork of lcms2 so that we are thread safe
-# (see bug #1553915). Artifex make sure to rebase against upstream, who refuse
-# to integrate Artifex's changes. 
 Provides:	bundled(lcms2-devel) = lcms2.16^65.gf75fad7
-# muPDF needs the muJS sources for the build even if we build against the system
-# version so bundling them is the safer choice.
 Provides:	bundled(mujs-devel) = 1.3.9-9.ge892c9f
-# muPDF builds only against in-tree extract which is versioned along with ghostpdl.
 Provides:	bundled(extract) = 10.05
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-mupdf = %{version}-%{release}
+# /oreon:deps
 %description
 MuPDF is a lightweight PDF viewer and toolkit written in portable C.
 The renderer in MuPDF is tailored for high quality anti-aliased
@@ -97,21 +57,18 @@ searchable text, and rendering pages to image files is provided.
 %package devel
 Summary:	C Development files for %{name}
 Requires:	%{name}-libs%{_isa} = %{version}-%{release}
-
 %description devel
 The mupdf-devel package contains library and header files for developing
 C applications that use the mupdf library.
 
 %package libs
 Summary:	C Library files for %{name}
-
 %description libs
 The mupdf-libs package contains the mupdf C library files.
 
 %package cpp-devel
 Summary:	C++ Development files for %{name}
 Requires:	%{name}-cpp-libs%{_isa} = %{version}-%{release}
-
 %description cpp-devel
 The mupdf-cpp-devel package contains library and header files for developing
 C++ applications that use the mupdf library.
@@ -119,7 +76,6 @@ C++ applications that use the mupdf library.
 %package cpp-libs
 Summary:	C++ Library files for %{name}
 Requires:	%{name}-libs%{_isa} = %{version}-%{release}
-
 %description cpp-libs
 The mupdf-cpp-libs package contains the mupdf C++ library files.
 
@@ -127,11 +83,11 @@ The mupdf-cpp-libs package contains the mupdf C++ library files.
 Summary:	Python bindings for %{name}
 Requires:	%{name}-libs%{_isa} = %{version}-%{release}
 Requires:	%{name}-cpp-libs%{_isa} = %{version}-%{release}
-
 %description -n python3-%{pypiname}
 The python3-%{pypiname} package contains low level mupdf python bindings.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{upversion}-source
@@ -163,28 +119,20 @@ sed -i -e '/DZXING_EXPERIMENTAL_API/ d' Makelists
 sed -i -e 's/barcode=yes/barcode=no/' scripts/wrap/__main__.py
 %endif
 
-%generate_buildrequires
-%pyproject_buildrequires -R
-
 %build
+
 export XCFLAGS="%{build_cflags} -fPIC -DJBIG_NO_MEMENTO -DTOFU -DTOFU_CJK_EXT"
 export XCXXFLAGS="%{build_cxxflags} -fPIC -DJBIG_NO_MEMENTO -DTOFU -DTOFU_CJK_EXT"
-# In case we use python-clang compat add its version specific path.
 export PYTHONPATH=$(find /usr/%{_lib}/llvm*/ -name site-packages | head -1)
 make %{?_smp_mflags} shared c++
-# Use the same build directory which make uses:
 export MUPDF_SETUP_BUILD_DIR=build/shared-release%{?with_barcode:-barcode}
-# Use stable python directories:
 export MUPDF_SETUP_VERSION=%{version}
 %pyproject_wheel
-
-# Create pkgconfig file:
 cat > mupdf.pc << EOF
 prefix=%{_prefix}
 exec_prefix=%{_exec_prefix}
 libdir=%{_libdir}
 includedir=%{_includedir}
-
 Name: mupdf
 Description: Library for rendering PDF documents
 Requires.private: freetype2
@@ -193,12 +141,9 @@ Libs: -L${libdir} -lmupdf
 Libs.private: -lmujs -lgumbo -lopenjp2 -ljbig2dec -ljpeg -lz -lm
 Cflags: -I${includedir}
 EOF
-
 %install
 make DESTDIR=%{buildroot} install install-shared-c install-shared-c++ prefix=%{_prefix} libdir=%{_libdir} pydir=%{python3_sitearch} SO_INSTALL_MODE=755
 %pyproject_install
-%pyproject_save_files -L %{pypiname}
-# handle docs on our own
 rm -rf %{buildroot}/%{_docdir}
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE2}
@@ -210,42 +155,19 @@ install -p -m 0644 mupdf.pc %{buildroot}/%{pkgconfig}
 find %{buildroot}/%{_mandir} -type f -exec chmod 0644 {} \;
 find %{buildroot}/%{_includedir} -type f -exec chmod 0644 {} \;
 cd %{buildroot}/%{_bindir} && ln -s %{name}-x11 %{name}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/lib/python3*/site-packages/mupdf* usr/lib64/python3*/site-packages/mupdf* usr/bin/*
 
 %check
-# test import of python module and basic functionality
+
 LD_LIBRARY_PATH='%{buildroot}%{_libdir}' %{py3_test_envvars} %{python3} scripts/mupdfwrap_test.py thirdparty/lcms2/doc/*.pdf
-
 %files
-%license COPYING
-%doc README CHANGES docs/*
-%{_bindir}/*
-%{_datadir}/applications/mupdf*.desktop
-%{_datadir}/icons/hicolor/*/apps/*
-%{_mandir}/man1/*.1.gz
-
-%files devel
-%{_includedir}/%{name}
-%{_libdir}/%{libname}.so
-%{pkgconfig}/mupdf.pc
-
-%files libs
-%license COPYING
-%{_libdir}/%{libname}.so.%{soname}
-%{_libdir}/%{libname}.so.%{somajor}
-
-%files cpp-devel
-%{_includedir}/%{name}
-%{_libdir}/%{libname}cpp.so
-
-%files cpp-libs
-%license COPYING
-%{_libdir}/%{libname}cpp.so.%{soname}
-%{_libdir}/%{libname}cpp.so.%{somajor}
-
-%files -n python3-%{pypiname} -f %{pyproject_files}
-%license COPYING
-%{python3_sitearch}/_%{pypiname}.so
+%files -n mupdf-devel -f %{oreon_filedir}/mupdf-devel.list
+%files -n mupdf-libs -f %{oreon_filedir}/mupdf-libs.list
+%files -n mupdf-cpp-devel -f %{oreon_filedir}/mupdf-cpp-devel.list
+%files -n mupdf-cpp-libs -f %{oreon_filedir}/mupdf-cpp-libs.list
+%files -n python3-mupdf -f %{oreon_filedir}/python3-mupdf.list
 
 %changelog
+
 %autochangelog
 

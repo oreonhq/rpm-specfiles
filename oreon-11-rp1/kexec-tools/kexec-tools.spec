@@ -1,48 +1,20 @@
 %global source0_hash 8f81422a5fd2362cf6cb001b511e535565ed0f32c2f4451fb5eb68fed6710a5d
-
 Name: kexec-tools
 Version: 2.0.32
-Release: 3%{?dist}
+Release:        1%{?dist}
 URL: https://kernel.org/pub/linux/utils/kernel/kexec
 License: GPL-2.0-only
-Summary: The kexec/kdump userspace component
-
+Summary:        The kexec/kdump userspace component
 Source0:        https://kernel.org/pub/linux/utils/kernel/kexec/%{name}-%{version}.tar.xz
-
-BuildRequires: automake
-BuildRequires: autoconf
-BuildRequires: libtool
-BuildRequires: gcc
-BuildRequires: xz-devel
-BuildRequires: zlib-devel
-BuildRequires: libzstd-devel
-
-#START INSERT
-
-#
-# Patches 0 through 100 are meant for x86 kexec-tools enablement
-#
-
-#
-# Patches 101 through 200 are meant for x86_64 kexec-tools enablement
-#
-
-#
-# Patches 301 through 400 are meant for ppc64 kexec-tools enablement
-#
-
-#
-# Patches 401 through 500 are meant for s390 kexec-tools enablement
-#
-
-#
-# Patches 501 through 600 are meant for ARM kexec-tools enablement
-#
-
-#
-# Patches 601 onward are generic patches
-
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  libtool
+BuildRequires:  libzstd-devel
+BuildRequires:  xz-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 kexec-tools provides /sbin/kexec binary that facilitates a new
 kernel to boot using the kernel's kexec feature either on a
@@ -52,9 +24,9 @@ component of the kernel's kexec feature.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 autoreconf
 %configure \
 %ifarch ppc64
@@ -66,23 +38,15 @@ autoreconf
     --build=powerpc64le-redhat-linux-gnu \
 %endif
     --sbindir=%{_sbindir}
-
 %make_build
-
 %install
 %make_install
 rm -f %{buildroot}/%{_libdir}/kexec-tools/kexec_test
+%oreon_autofiles main
 
-
-%files
-%{_sbindir}/kexec
-%{_mandir}/man8/kexec.8*
-%{_sbindir}/vmcore-dmesg
-%{_mandir}/man8/vmcore-dmesg.8*
-%doc News
-%license COPYING
-%doc TODO
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.32-3
 - Prepare for Oreon 11 (RP1)

@@ -1,61 +1,73 @@
 %global source0_hash c6c0d2259945122819f171a32ecea2c349ead889ee28176caaf492143424be42
-
 %bcond_without  tests
-
 Name:           python-pytest-asyncio
 Version:        1.4.0
-Release:        %autorelease
+Release:        1%{?dist}
 BuildArch:      noarch
 Summary:        Pytest support for asyncio
 License:        Apache-2.0
 URL:            https://github.com/pytest-dev/pytest-asyncio
-Source:         %{pypi_source pytest_asyncio}
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_asyncio/pytest_asyncio-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.2
+Requires:       python3-pytest-asyncio = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pytest-asyncio+docs
+Summary:        Metapackage for python3-pytest-asyncio docs extras
+Requires:       python3-pytest-asyncio = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 5.3
+Requires:       python3dist(sphinx-rtd-theme) >= 1
+Requires:       python3dist(sphinx-tabs) >= 3.5
+Provides:       python3dist(pytest-asyncio[docs]) = %{version}-%{release}
 
-%global _description %{expand:
-pytest-asyncio is a pytest plugin.  It facilitates testing of code that uses the
-asyncio library.  Specifically, pytest-asyncio provides support for coroutines
-as test functions.  This allows users to await code inside their tests.}
+%description -n python3-pytest-asyncio+docs
+Metapackage for python3-pytest-asyncio docs extras.
 
+%package -n       python3-pytest-asyncio+testing
+Summary:        Metapackage for python3-pytest-asyncio testing extras
+Requires:       python3-pytest-asyncio = %{version}-%{release}
+Requires:       python3dist(coverage) >= 6.2
+Requires:       python3dist(hypothesis) >= 5.7.1
+Provides:       python3dist(pytest-asyncio[testing]) = %{version}-%{release}
 
-%description %{_description}
+%description -n python3-pytest-asyncio+testing
+Metapackage for python3-pytest-asyncio testing extras.
 
+%description
 
 %package -n python3-pytest-asyncio
-Summary:        %{summary}
-
-
-%description -n python3-pytest-asyncio %{_description}
-
+Summary:        Pytest support for asyncio
+# oreon:reqs
+Requires:       python3dist(backports-asyncio-runner) < 2
+Requires:       python3dist(backports-asyncio-runner) >= 1.1
+Requires:       python3dist(pytest) < 10
+Requires:       python3dist(pytest) >= 8.4
+Requires:       python3dist(typing-extensions) >= 4.12
+# /oreon:reqs
+%description -n python3-pytest-asyncio
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n pytest_asyncio-%{version}
 
 # disable code quality checks in "testing" extras
 sed -i '/"coverage>=6.2",/d' pyproject.toml
 
-
-%generate_buildrequires
-# upstream also has tox that invokes make that invokes pytest...
-# we install the [testing] extra and will invoke pytest directly instead
-%pyproject_buildrequires %{?with_tests:-x testing}
-
-
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-%pyproject_save_files -l pytest_asyncio
-
+%oreon_autofiles python3-pytest-asyncio usr/lib/python3*/site-packages/pytest_asyncio* usr/lib64/python3*/site-packages/pytest_asyncio* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_asyncio* usr/lib64/python3*/site-packages/pytest_asyncio* usr/bin/*
 
 %check
+
 %if %{with tests}
-# Some of the upstream tests are really picky about the number of warnings
-# emitted.  This can cause failures for us in rawhide with the latest versions
-# of pytest and pre-release versions of python, so we'll skip those tests.
 export PYTEST_ADDOPTS="-k '\
 not test_asyncio_mark_respects_parametrized_loop_policies and \
 not test_asyncio_mark_respects_the_loop_policy and \
@@ -73,11 +85,9 @@ not test_warns_when_scope_argument_is_present'"
 %else
 %pyproject_check_import
 %endif
-
-
-%files -n python3-pytest-asyncio -f %{pyproject_files}
-%doc README.rst
-
+%files
+%files -n python3-pytest-asyncio -f %{oreon_filedir}/python3-pytest-asyncio.list
 
 %changelog
+
 %autochangelog

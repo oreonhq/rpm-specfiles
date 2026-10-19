@@ -1,14 +1,10 @@
 %global source0_hash 61c913299b81a4671ff089aac821329f7db9bc111aa812993dd585798b700349
-
-Summary: The standard UNIX FTP (File Transfer Protocol) client
+Summary:        The standard UNIX FTP (File Transfer Protocol) client
 Name: ftp
 Version: 0.17
-Release: 100%{?dist}
+Release:        1%{?dist}
 License: BSD-4-Clause-UC
-# The Upstream of ftp is no longer active.
-# The source file for ftp is no longer available anywhere
-# else than in Fedora repos.
-Source0: https://ftp.debian.org/debian/pool/main/n/netkit-ftp/netkit-ftp_%{version}.orig.tar.gz#/netkit-ftp-%{version}.tar.gz
+Source0:        https://ftp.debian.org/debian/pool/main/n/netkit-ftp/netkit-ftp_%{version}.orig.tar.gz#/netkit-ftp-%{version}.tar.gz
 Patch1: netkit-ftp-0.17-pre20000412.pasv-security.patch
 Patch2: netkit-ftp-0.17-acct.patch
 Patch3: netkit-ftp.usagi-ipv6.patch
@@ -46,15 +42,15 @@ Patch34: netkit-ftp-0.17-token.patch
 Patch35: netkit-ftp-0.17-linelen-segfault.patch
 Patch36: netkit-ftp-0.17-out-of-memory.patch
 Patch37: netkit-ftp-0.17-gcc15.patch
-
-BuildRequires: glibc-devel
-BuildRequires: readline-devel
-BuildRequires: ncurses-devel
-BuildRequires: perl-interpreter
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: git-core
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  git-core
+BuildRequires:  glibc-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  perl-interpreter
+BuildRequires:  readline-devel
+# /oreon:deps
 %description
 The ftp package provides the standard UNIX command-line FTP (File
 Transfer Protocol) client.  FTP is a widely used protocol for
@@ -65,9 +61,10 @@ file transfers.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n netkit-ftp-%{version} -S git
-
+%global oreon_srcdir netkit-ftp-%{version}
+%oreon_prep
 %build
+
 sh configure --with-c-compiler=%{__cc} --enable-ipv6
 perl -pi -e '
     s,^CC=.*$,CC=cc,;
@@ -77,23 +74,17 @@ perl -pi -e '
     s,^MANDIR=.*$,MANDIR=%{_mandir},;
     s,^SBINDIR=.*$,SBINDIR=%{_sbindir},;
     ' MCONFIG
-
 %{make_build}
-
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man1
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man5
-
 make INSTALLROOT=${RPM_BUILD_ROOT} install
+%oreon_autofiles main
 
-%files
-%{_bindir}/ftp
-%{_bindir}/pftp
-%{_mandir}/man1/ftp.*
-%{_mandir}/man1/pftp.*
-%{_mandir}/man5/netrc.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.17-100
 - Import

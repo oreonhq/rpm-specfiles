@@ -1,39 +1,28 @@
-%global source0_hash ca9bda2bd82f010bfa00b2b074aeeb7ece8b857e3a299e0fc620ed37312fc06f
-
+%global source0_hash 68f50afa07f828e2b153ce9cc34b4c856e705ae5edc6f226ffeb2561fb56e182
 Name:           openapi-python-client
 Version:        0.29.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Generate modern Python clients from OpenAPI
-
 License:        MIT
 URL:            https://github.com/openapi-generators/openapi-python-client
-Source:         %{url}/archive/refs/tags/v%{version}/openapi-python-client-%{version}.tar.gz
+Source0:        https://github.com/openapi-generators/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
 Source1:        openapi-python-client.man1
-
-BuildRequires:  python3-devel
-BuildRequires:  python3-hatchling
-BuildRequires:  python3-mypy
-BuildRequires:  python3-pytest
-BuildRequires:  python3-pytest-mock
-
 BuildArch:      noarch
-
-%global _description %{expand:
-The openapi-python-client is a powerful tool designed to generate
-modern Python clients from OpenAPI 3.0+ documents supporting both
-synchronous and asynchronous HTTP requests. It automates the creation of
-Python classes and methods that correspond to the endpoints and schema
-defined in your OpenAPI specification, making it easier to interact with
-your API in a type-safe manner.}
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(poetry-core) < 3.0.0
+BuildRequires:  python3dist(poetry-core) >= 2.0.0
+Requires:       python3-openapi-python-client = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-%{name}
-Summary:        %{summary}
-
-%description -n python3-%{name} %{_description}
+Summary:        Generate modern Python clients from OpenAPI
+%description -n python3-%{name}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n openapi-python-client-%{version}
@@ -41,27 +30,26 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # https://bugzilla.redhat.com/show_bug.cgi?id=2405298
 sed -i 's/,<[0-9.]*"/"/g' pyproject.toml
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l openapi_python_client
 mkdir -p %{buildroot}%{_mandir}/man1
 cp %{SOURCE1} %{buildroot}%{_mandir}/man1/%{name}.1
 gzip %{buildroot}%{_mandir}/man1/%{name}.1
+%oreon_autofiles main usr/lib/python3*/site-packages/openapi_python_client* usr/lib64/python3*/site-packages/openapi_python_client* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %pytest tests
-
-%files -n %{name} -f %{pyproject_files}
 %attr(755,root,root) %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 %doc README.md CHANGELOG.md
+%files
+%files -n python3-openapi-python-client -f %{oreon_filedir}/python3-openapi-python-client.list
 
 %changelog
+
 %autochangelog

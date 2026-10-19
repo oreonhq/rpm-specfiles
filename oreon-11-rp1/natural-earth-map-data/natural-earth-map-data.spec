@@ -1,55 +1,39 @@
+%global source6_hash 2631b5b39b6d1acc56de75235109b5af2dbb4b0ac5a127b6f06185977247fd4b
 %global source0_hash ff59515375f1006dc5b6820734e553139be69c2abcd1c011dc81ea756c82cd85
-
 Name:           natural-earth-map-data
 Version:        5.1.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Free vector and raster map data at 1:10m, 1:50m, and 1:110m scales
-
 License:        LicenseRef-Fedora-Public-Domain
 URL:            https://www.naturalearthdata.com/
-# Repackaged the zip as tar.xz because it saves a significant amount (~100MB).
-# See repackage.sh.
-#Source0:        https://naciscdn.org/naturalearth/{version}/110m/physical/110m_physical.zip#/110m_physical-{version}.zip
 Source0:        110m_physical-%{version}.tar.xz
-#Source1:        https://naciscdn.org/naturalearth/{version}/110m/cultural/110m_cultural.zip#/110m_cultural-{version}.zip
 Source1:        110m_cultural-%{version}.tar.xz
-#Source2:        https://naciscdn.org/naturalearth/{version}/50m/physical/50m_physical.zip#/50m_physical-{version}.zip
 Source2:        50m_physical-%{version}.tar.xz
-#Source3:        https://naciscdn.org/naturalearth/{version}/50m/cultural/50m_cultural.zip#/50m_cultural-{version}.zip
 Source3:        50m_cultural-%{version}.tar.xz
-#Source4:        https://naciscdn.org/naturalearth/{version}/10m/physical/10m_physical.zip#/10m_physical-{version}.zip
 Source4:        10m_physical-%{version}.tar.xz
-#Source5:        https://naciscdn.org/naturalearth/{version}/10m/cultural/10m_cultural.zip#/10m_cultural-{version}.zip
 Source5:        10m_cultural-%{version}.tar.xz
 Source6:        https://github.com/nvkelso/natural-earth-vector/raw/master/LICENSE.md
 BuildArch:      noarch
+# oreon:deps
 
-%global _description \
-Natural Earth is a public domain map dataset available at 1:10m, 1:50m, and \
-1:110 million scales. Featuring tightly integrated vector and raster data, with \
-Natural Earth you can make a variety of visually pleasing, well-crafted maps \
-with cartography or GIS software.
-
-%description %{_description}
+# /oreon:deps
+%description
 
 %package        110m
 Summary:        Natural Earth map data - 110m resolution
-
-%description    110m %{_description}
+%description    110m
 
 This provides data at 1:110m resolution.
 
 %package        50m
 Summary:        Natural Earth map data - 50m resolution
-
-%description    50m %{_description}
+%description    50m
 
 This provides data at 1:50m resolution.
 
 %package        10m
 Summary:        Natural Earth map data - 10m resolution
-
-%description    10m %{_description}
+%description    10m
 
 This provides data at 1:10m resolution.
 
@@ -58,12 +42,12 @@ Summary:        Natural Earth map data - all resolutions
 Requires:       %{name}-110m
 Requires:       %{name}-50m
 Requires:       %{name}-10m
-
-%description    all %{_description}
+%description    all
 
 This provides data at all resolutions.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -c -T
@@ -100,36 +84,14 @@ for theme in physical cultural; do
         done
     done
 done
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files 110m
-%license LICENSE.md
-%dir %{_pkgdocdir}
-%{_pkgdocdir}/110m-*
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/physical/
-%{_datadir}/%{name}/physical/ne_110m_*
-%dir %{_datadir}/%{name}/cultural/
-%{_datadir}/%{name}/cultural/ne_110m_*
-
-%files 50m
-%license LICENSE.md
-%dir %{_pkgdocdir}
-%{_pkgdocdir}/50m-*
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/physical/
-%{_datadir}/%{name}/physical/ne_50m_*
-%dir %{_datadir}/%{name}/cultural/
-%{_datadir}/%{name}/cultural/ne_50m_*
-
-%files 10m
-%license LICENSE.md
-%dir %{_pkgdocdir}
-%{_pkgdocdir}/10m-*
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/physical/
-%{_datadir}/%{name}/physical/ne_10m_*
-%dir %{_datadir}/%{name}/cultural/
-%{_datadir}/%{name}/cultural/ne_10m_*
+%files -f %{oreon_filedir}/main.list
+%files -n natural-earth-map-data-110m -f %{oreon_filedir}/natural-earth-map-data-110m.list
+%files -n natural-earth-map-data-50m -f %{oreon_filedir}/natural-earth-map-data-50m.list
+%files -n natural-earth-map-data-10m -f %{oreon_filedir}/natural-earth-map-data-10m.list
+%files -n natural-earth-map-data-all -f %{oreon_filedir}/natural-earth-map-data-all.list
 
 %changelog
+
 %autochangelog

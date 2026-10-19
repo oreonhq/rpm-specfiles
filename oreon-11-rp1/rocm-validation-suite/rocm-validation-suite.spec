@@ -1,31 +1,9 @@
-%global source0_hash a0c0a78684da2d26ee883ccc632c8f51a4b00cfd3915707f9675cc8c0cf96483
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-
+%global source1_hash a0c0a78684da2d26ee883ccc632c8f51a4b00cfd3915707f9675cc8c0cf96483
+%global source0_hash ef2ef3a6468e9dc47061afa91d862870c08cbdb7a6c883880d11eb168427bba9
 %global upstreamname ROCmValidationSuite
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -40,73 +18,48 @@
 %global pkg_suffix %{nil}
 %global pkg_module default
 %endif
-
 %global toolchain rocm
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fcf-protection//' -e 's/-fcf-protection//' -e 's/-ffat-lto-objects//' -e 's/-flto=thin//' -e 's/-mtls-dialect=gnu2//')
-
 %global _lto_cflags %{nil}
-
 %bcond_with debug
 %if %{with debug}
 %global build_type DEBUG
 %else
 %global build_type RelWithDebInfo
 %endif
-
 Name:           rocm-validation-suite%{pkg_suffix}
 Version:        %{rocm_version}
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        ROCm Validation Suite (rvs)
-
 Url:            https://github.com/ROCm/ROCmValidationSuite
 License:        MIT AND NCSA
-# Only a few files are NCSA
-# mem.so/README.md
-# babel.so/include/rvs_memkernel.h
-# mem.so/include/rvs_memkernel.h
-# mem.so/include/rvs_memtest.h
-# mem.so/src/rvs_memtest.cpp
-# A comment from the README.md
-#  This is a fork of the original, yet long-time unmaintained project at https://sourceforge.net/projects/cudagpumemtest/
-# From inspection of cuda-memtest.tar.gz ver 1.1 the original copyright was kept
-#
-# Should be MIT
-# https://github.com/ROCm/ROCmValidationSuite/issues/986
-# cmake_modules/utils.cmake
-
-Source0:        %{url}/archive/rocm-%{version}.tar.gz#/%{upstreamname}-%{version}.tar.gz
-
-# From CMakeMXDataGeneratorDownload.cmake
+Source0:        https://github.com/ROCm/%{upstreamname}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{upstreamname}-%{version}.tar.gz
 %global mxdata_commit 12c016dc694139317feb2e23c59028fde70beaf4
 %global mxdata_scommit %(c=%{mxdata_commit}; echo ${c:0:7})
-# MIT
 Source1:        https://github.com/ROCm/mxDataGenerator/archive/%{mxdata_commit}/mxDataGenerator-%{mxdata_scommit}.tar.gz
-# https://github.com/ROCm/ROCmValidationSuite/issues/1023
 Patch1:         0001-rocm-validation-suite-do-not-download-mxDataGenerato.patch
-
-BuildRequires:  amdsmi%{pkg_suffix}-devel
+ExclusiveArch: x86_64
+# oreon:deps
+BuildRequires:  amdsmi-7.1-devel
 BuildRequires:  cmake
 BuildRequires:  fdupes
 BuildRequires:  gcc-c++
-BuildRequires:  hipblas-common%{pkg_suffix}-devel
-BuildRequires:  hipblaslt%{pkg_suffix}-devel
-BuildRequires:  hiprand%{pkg_suffix}-devel
+BuildRequires:  hipblas-common-7.1-devel
+BuildRequires:  hipblaslt-7.1-devel
+BuildRequires:  hiprand-7.1-devel
 BuildRequires:  ninja-build
 BuildRequires:  pciutils-devel
-BuildRequires:  rocblas%{pkg_suffix}-devel
-BuildRequires:  rocm-cmake%{pkg_suffix}
-BuildRequires:  rocm-comgr%{pkg_suffix}-devel
-BuildRequires:  rocm-compilersupport%{pkg_suffix}-macros
-BuildRequires:  rocm-hip%{pkg_suffix}-devel
-BuildRequires:  rocm-omp%{pkg_suffix}-devel
-BuildRequires:  rocm-rpm-macros%{pkg_suffix}
-BuildRequires:  rocm-runtime%{pkg_suffix}-devel
-BuildRequires:  rocm-smi%{pkg_suffix}-devel
+BuildRequires:  rocblas-7.1-devel
+BuildRequires:  rocm-cmake-7.1
+BuildRequires:  rocm-comgr-7.1-devel
+BuildRequires:  rocm-compilersupport-7.1-macros
+BuildRequires:  rocm-hip-7.1-devel
+BuildRequires:  rocm-omp-7.1-devel
+BuildRequires:  rocm-rpm-macros-7.1
+BuildRequires:  rocm-runtime-7.1-devel
+BuildRequires:  rocm-smi-7.1-devel
 BuildRequires:  yaml-cpp-devel
-
-ExclusiveArch: x86_64
-
+# /oreon:deps
 %description
 The ROCm Validation Suite (RVS) is a system validation and
 diagnostics tool for monitoring, stress testing, detecting
@@ -117,6 +70,7 @@ using the ROCm software stack on a compatible software and
 hardware platform.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{upstreamname}-rocm-%{version} -p1
@@ -176,6 +130,7 @@ sed -i -e 's@${YAML_CPP_INCLUDE_DIR}@${YAML_CPP_INCLUDE_DIR} "%{pkg_llvm_prefix}
 sed -i -e 's@${YAML_CPP_INCLUDE_DIR}@${YAML_CPP_INCLUDE_DIR} "%{pkg_llvm_prefix}/include" @' rvslib/CMakeLists.txt
 
 %build
+
 %cmake -G Ninja \
        -DAMDGPU_TARGETS=%{rocm_gpu_list_default} \
        -DCMAKE_BUILD_TYPE=%{build_type} \
@@ -186,21 +141,13 @@ sed -i -e 's@${YAML_CPP_INCLUDE_DIR}@${YAML_CPP_INCLUDE_DIR} "%{pkg_llvm_prefix}
        -DHIP_PLATFORM=amd \
        -DMXDATAGENERATOR_INC_DIR=${PWD}/mxDataGenerator/lib/include \
        -DRVS_BUILD_TESTS=FALSE
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Extra license
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rocm-validation-suite/LICENSE
-
-# No devel package, remove devel like things
 rm -rf %{buildroot}%{pkg_prefix}/include
 rm -rf %{buildroot}%{pkg_prefix}/%{pkg_libdir}/cmake
 rm %{buildroot}%{pkg_prefix}/%{pkg_libdir}/librvslib.so{,.0}
-
-# The libdir/rvs/*.so are dlopened, the version and symlinks are not needed
 L="libbabel libgm libgpup libgst libiet libmem libpbqt libpeqt libperf libpebb libpesm librcqt libsmqt libtst"
 for l in $L; do
     if [ -f $l.so ]; then
@@ -208,25 +155,11 @@ for l in $L; do
 	mv %{buildroot}%{pkg_prefix}/%{pkg_libdir}/rvs/$l.so.0.0.0 %{buildroot}%{pkg_prefix}/%{pkg_libdir}/rvs/$l.so
     fi
 done
-
-# rocm-validation-suite.x86_64: W: hidden-file-or-dir /usr/share/rocm-validation-suite/conf/.rvsmodules.config
-# Is needed, this command
-# rm %%{buildroot}%%{_datadir}/rocm-validation-suite/conf/.rvsmodules.config
-# Produces this runtime error
-# RVS-ERROR [CLI] file does not exist: /usr/bin/.rvsmodules.config
-
-# Clean up dupes
-# causes this problem
-# rocm-validation-suite.x86_64: W: cross-directory-hard-link /usr/share/rocm-validation-suite/conf/MI300X/gst_single.conf /usr/share/rocm-validation-suite/conf/MI300X-HF/gst_single.conf
 %fdupes %{buildroot}%{pkg_prefix}
+%oreon_autofiles main
 
-%files
-%license LICENSE mxDataGenerator/LICENSE.mxDataGenerator.md
-%doc README.md
-%{pkg_prefix}/bin/rvs
-%{pkg_prefix}/share/rocm-validation-suite/
-%{pkg_prefix}/%{pkg_libdir}/librvslib.so.0.0.0
-%{pkg_prefix}/%{pkg_libdir}/rvs/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

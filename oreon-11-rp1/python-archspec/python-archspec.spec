@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 2ea980955530499865225eff917b649b39fd014b53f8c6461b6348c1d8b866f1
 Name:           python-archspec
 Version:        0.2.6
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A library to query system architecture
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0 OR MIT
 URL:            https://github.com/archspec/archspec.git
-Source:         %{pypi_source archspec}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/archspec/archspec-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'archspec' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-archspec = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-archspec
-Summary:        %{summary}
-
-%description -n python3-archspec %_description
-
+Summary:        A library to query system architecture
+%description -n python3-archspec
 
 %prep
-%autosetup -p1 -n archspec-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir archspec-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-archspec usr/lib/python3*/site-packages/archspec* usr/lib64/python3*/site-packages/archspec* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/archspec* usr/lib64/python3*/site-packages/archspec* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-archspec -f %{pyproject_files}
-%{_bindir}/archspec
+%files
+%files -n python3-archspec -f %{oreon_filedir}/python3-archspec.list
 
 %changelog
+
 %autochangelog

@@ -1,59 +1,46 @@
-%global source0_hash none
-
+%global source0_hash 89f6f0706e53e2492c0baebb13961acfedb1fadadda1dbcb7159572d3037d307
 Name:           python-pulsectl-asyncio
 Version:        1.3.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Asyncio frontend for the pulsectl Python bindings of libpulse
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/mhthies/pulsectl-asyncio
-Source:         %{pypi_source pulsectl_asyncio}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pulsectl_asyncio/pulsectl_asyncio-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pulsectl-asyncio' generated automatically by pyp2spec.}
-
 Patch:          python-pulsectl-24.12.0.diff
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0.0
+Requires:       python3-pulsectl-asyncio = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pulsectl-asyncio
-Summary:        %{summary}
-
-%description -n python3-pulsectl-asyncio %_description
-
+Summary:        Asyncio frontend for the pulsectl Python bindings of libpulse
+# oreon:reqs
+Requires:       python3dist(pulsectl) <= 24.12.0
+Requires:       python3dist(pulsectl) >= 23.5.0
+# /oreon:reqs
+%description -n python3-pulsectl-asyncio
 
 %prep
-%autosetup -p1 -n pulsectl_asyncio-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pulsectl_asyncio-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pulsectl-asyncio usr/lib/python3*/site-packages/pulsectl_asyncio* usr/lib64/python3*/site-packages/pulsectl_asyncio* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pulsectl_asyncio* usr/lib64/python3*/site-packages/pulsectl_asyncio* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pulsectl-asyncio -f %{pyproject_files}
+%files
+%files -n python3-pulsectl-asyncio -f %{oreon_filedir}/python3-pulsectl-asyncio.list
 
 %changelog
+
 %autochangelog

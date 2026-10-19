@@ -1,57 +1,49 @@
-%global source0_hash none
-
+%global source0_hash 469af4b344a4d493a6402aa92eec87a6138e1dac444e9551c1af06991453954b
 Name:           python-mkdocs-git-revision-date-localized-plugin
 Version:        1.6.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Mkdocs plugin that enables displaying the localized date of the last git modification of a markdown file.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/timvink/mkdocs-git-revision-date-localized-plugin
-Source:         %{pypi_source mkdocs_git_revision_date_localized_plugin}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mkdocs_git_revision_date_localized_plugin/mkdocs_git_revision_date_localized_plugin-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mkdocs-git-revision-date-localized-plugin' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 70.0
+Requires:       python3-mkdocs-git-revision-date-localized-plugin = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-mkdocs-git-revision-date-localized-plugin
-Summary:        %{summary}
-
-%description -n python3-mkdocs-git-revision-date-localized-plugin %_description
-
+Summary:        Mkdocs plugin that enables displaying the localized date of the last git modification of a markdown file.
+# oreon:reqs
+Requires:       python3dist(babel) >= 2.7.0
+Requires:       python3dist(gitpython) >= 3.1.59
+Requires:       python3dist(mkdocs) < 2
+Requires:       python3dist(mkdocs) >= 1.4
+Requires:       python3dist(packaging) >= 20.0
+Requires:       python3dist(tzdata) >= 2023.3
+# /oreon:reqs
+%description -n python3-mkdocs-git-revision-date-localized-plugin
 
 %prep
-%autosetup -p1 -n mkdocs_git_revision_date_localized_plugin-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mkdocs_git_revision_date_localized_plugin-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mkdocs-git-revision-date-localized-plugin usr/lib/python3*/site-packages/mkdocs_git_revision_date_localized_plugin* usr/lib64/python3*/site-packages/mkdocs_git_revision_date_localized_plugin* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mkdocs_git_revision_date_localized_plugin* usr/lib64/python3*/site-packages/mkdocs_git_revision_date_localized_plugin* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mkdocs-git-revision-date-localized-plugin -f %{pyproject_files}
+%files
+%files -n python3-mkdocs-git-revision-date-localized-plugin -f %{oreon_filedir}/python3-mkdocs-git-revision-date-localized-plugin.list
 
 %changelog
+
 %autochangelog

@@ -1,27 +1,20 @@
 %global source0_hash 44ab0d1ee1caf0e537dd81c0325e40d40c67081627212cc0fdf02b8d9556906e
-
 %global gap_pkgname ferret
 %global giturl      https://github.com/gap-packages/ferret
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        1.0.17
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Backtracking search in permutation groups
-
-# YAPB++/simple_graph/gason is MIT
-# YAPB++/source/library/fnv_hash.hpp is Public Domain
-# However, none of those files are part of the final binary.
 License:        MPL-2.0
 URL:            https://gap-packages.github.io/ferret/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/v%{version}/%{gap_upname}-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        %{giturl}/releases/download/v%{version}/%{gap_pkgname}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
 BuildSystem:    gap
 BuildOption(install): bin lib tst
 BuildOption(check): tst/testall.g
-
+Requires:       gap-core%{?_isa}
+# oreon:deps
 BuildRequires:  gap-devel
 BuildRequires:  gap-pkg-atlasrep
 BuildRequires:  gap-pkg-autodoc
@@ -31,9 +24,7 @@ BuildRequires:  gap-pkg-tomlib
 BuildRequires:  gcc-c++
 BuildRequires:  libtool
 BuildRequires:  make
-
-Requires:       gap-core%{?_isa}
-
+# /oreon:deps
 %description
 Ferret is a reimplementation of parts of Jeffery Leon's Partition Backtrack
 framework in C++, with extensions including:
@@ -57,40 +48,26 @@ This package can be used by users in two ways:
   functionality of the package directly.
 
 %package doc
-# The content is MPL-2.0.  The remaining licenses cover the various fonts
-# embedded in PDFs.
-# CM: Knuth-CTAN
-# CM-Super: GPL-1.0-or-later
-# Nimbus: AGPL-3.0-only
 License:        MPL-2.0 AND Knuth-CTAN AND GPL-1.0-or-later AND AGPL-3.0-only
 Summary:        Ferret documentation
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{gap_upname}-%{version} -p1
 
 %build -p
+
 %configure --with-gaproot=%{gap_archdir}
 %make_build
-
-%files
-%doc README
-%license LICENSE
-%dir %{gap_archdir}/pkg/%{gap_upname}/
-%{gap_archdir}/pkg/%{gap_upname}/*.g
-%{gap_archdir}/pkg/%{gap_upname}/bin/
-%{gap_archdir}/pkg/%{gap_upname}/lib/
-%{gap_archdir}/pkg/%{gap_upname}/tst/
-
-%files doc
-%docdir %{gap_archdir}/pkg/%{gap_upname}/doc/
-%{gap_archdir}/pkg/%{gap_upname}/doc/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-ferret-doc -f %{oreon_filedir}/gap-pkg-ferret-doc.list
 
 %changelog
+
 %autochangelog

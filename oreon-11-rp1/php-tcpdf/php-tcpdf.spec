@@ -1,43 +1,22 @@
 %global source0_hash 5f205ba455dcdb4d2234a2f009c21c2757c8cb7bcf5be0e7e13fa097064328b1
-
-# remirepo/Fedora spec file for php-tcpdf
-#
-# SPDX-FileCopyrightText:  Copyright 2013-2026 Remi Collet
-# SPDX-License-Identifier: CECILL-2.1
-# http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
-#
-# Please, preserve the changelog entries
-#
-# see https://github.com/tecnickcom/TCPDF/releases
 %global gh_commit    e1e2ade18e574e963473f53271591edd8c0033ec
 %global gh_short     %(c=%{gh_commit}; echo ${c:0:7})
 %global gh_owner     tecnickcom
 %global gh_date      2026-03-03
 %global gh_project   TCPDF
 %global real_name    tcpdf
-
 Name:           php-tcpdf
 Summary:        PHP class for generating PDF documents and barcodes
 Version:        7.0.10
 Release:        1%{?dist}
-
 URL:            http://www.tcpdf.org
 License:        LGPL-3.0-or-later
-
-Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit}/%{name}-%{version}-%{?gh_short}.tar.gz
-# Disable opcache cahing for font metadata which may consume up to 90MB
+Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit}/%{name}-%{version}-%{gh_short}.tar.gz
 Source1:        %{name}.blacklist
-# See https://github.com/tecnickcom/TCPDF/commit/744c9ffa3be021782476c39cf97e242dbe504f7a#commitcomment-151792556
 Source2:        _blank.png
-
 BuildArch:      noarch
-BuildRequires:  php(language) >= 7.1
-BuildRequires:  php-cli
-BuildRequires:  php-fedora-autoloader-devel
-
 Requires:       php(language) >= 7.1
 Requires:       php-curl
-# From phpcompatinfo report form version 6.3.0
 Requires:       php-bcmath
 Requires:       php-gd
 Requires:       php-json
@@ -47,17 +26,24 @@ Requires:       php-posix
 Requires:       php-tidy
 Requires:       php-xml
 Requires:       php-zlib
-# mcrypt is optionnal and openssl is preferred
-# imagick is optionnal (and conflicts with gmagick)
 Recommends:     php-imagick
-# Autoloader
 Requires:       php-composer(fedora/autoloader)
-
-# Old name for compatibility
 Provides:       php-composer(tecnick.com/tcpdf) = %{version}
-# New name
 Provides:       php-composer(tecnickcom/tcpdf)  = %{version}
-
+# oreon:deps
+BuildRequires:  dejavu-lgc-sans-fonts
+BuildRequires:  dejavu-lgc-sans-mono-fonts
+BuildRequires:  dejavu-lgc-serif-fonts
+BuildRequires:  dejavu-sans-fonts
+BuildRequires:  dejavu-sans-mono-fonts
+BuildRequires:  dejavu-serif-fonts
+BuildRequires:  gnu-free-mono-fonts
+BuildRequires:  gnu-free-sans-fonts
+BuildRequires:  gnu-free-serif-fonts
+BuildRequires:  php(language)
+BuildRequires:  php-cli
+BuildRequires:  php-fedora-autoloader-devel
+# /oreon:deps
 %description
 PHP class for generating PDF documents.
 
@@ -107,7 +93,6 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       dejavu-lgc-sans-fonts
 Obsoletes:      %{name}-dejavu-lgc-sans-fonts < 6.11
 Provides:       %{name}-dejavu-lgc-sans-fonts = %{version}
-
 %description dejavu-lgc-sans
 This package allow to use system DejaVu LGC sans-serif variable-width
 font faces in TCPDF.
@@ -119,7 +104,6 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       dejavu-lgc-sans-mono-fonts
 Obsoletes:      %{name}-dejavu-lgc-sans-mono-fonts < 6.11
 Provides:       %{name}-dejavu-lgc-sans-mono-fonts = %{version}
-
 %description dejavu-lgc-sans-mono
 This package allow to use system DejaVu LGC sans-serif mono-spaced
 font faces in TCPDF.
@@ -131,7 +115,6 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       dejavu-lgc-serif-fonts
 Obsoletes:      %{name}-dejavu-lgc-serif-fonts < 6.11
 Provides:       %{name}-dejavu-lgc-serif-fonts = %{version}
-
 %description dejavu-lgc-serif
 This package allow to use system DejaVu LGC serif variable-width
 font faces in TCPDF.
@@ -143,7 +126,6 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       dejavu-sans-fonts
 Obsoletes:      %{name}-dejavu-sans-fonts < 6.11
 Provides:       %{name}-dejavu-sans-fonts = %{version}
-
 %description dejavu-sans
 This package allow to use system DejaVu sans-serif variable-width
 font faces in TCPDF.
@@ -155,7 +137,6 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       dejavu-sans-mono-fonts
 Obsoletes:      %{name}-dejavu-sans-mono-fonts < 6.11
 Provides:       %{name}-dejavu-sans-mono-fonts = %{version}
-
 %description dejavu-sans-mono
 This package allow to use system DejaVu sans-serif mono-spaced
 font faces in TCPDF.
@@ -167,7 +148,6 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       dejavu-serif-fonts
 Obsoletes:      %{name}-dejavu-serif-fonts < 6.11
 Provides:       %{name}-dejavu-serif-fonts = %{version}
-
 %description dejavu-serif
 This package allow to use system DejaVu serif variable-width
 font faces in TCPDF.
@@ -179,7 +159,6 @@ Requires:       gnu-free-mono-fonts
 Requires:       %{name} = %{version}-%{release}
 Obsoletes:      %{name}-gnu-free-mono-fonts < 6.11
 Provides:       %{name}-gnu-free-mono-fonts = %{version}
-
 %description gnu-free-mono
 This package allow to use system GNU FreeFonts mono-spaced font faces in TCPDF.
 
@@ -190,7 +169,6 @@ Requires:       gnu-free-sans-fonts
 Requires:       %{name} = %{version}-%{release}
 Obsoletes:      %{name}-gnu-free-sans-fonts < 6.11
 Provides:       %{name}-gnu-free-sans-fonts = %{version}
-
 %description gnu-free-sans
 This package allow to use system GNU FreeFont sans-serif font faces in TCPDF.
 
@@ -201,11 +179,11 @@ Requires:       gnu-free-serif-fonts
 Requires:       %{name} = %{version}-%{release}
 Obsoletes:      %{name}-gnu-free-serif-fonts < 6.11
 Provides:       %{name}-gnu-free-serif-fonts = %{version}
-
 %description gnu-free-serif
 This package allow to use system GNU FreeFont serif font faces in TCPDF.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gh_project}-%{gh_commit}
@@ -225,8 +203,8 @@ done
 ls fonts | sed -e 's|^|%{_datadir}/php/%{real_name}/fonts/|' >corefonts.lst
 
 %build
-: empty build section, nothing required
 
+: empty build section, nothing required
 %install
 : Library
 install -d     %{buildroot}%{_datadir}/php/%{real_name}
@@ -236,28 +214,22 @@ cp -a fonts    %{buildroot}%{_datadir}/php/%{real_name}/
 install -d     %{buildroot}%{_datadir}/php/%{real_name}/images
 install -m 0644 %{SOURCE2} \
                %{buildroot}%{_datadir}/php/%{real_name}/images/
-
 : Autoloader
 php -d memory_limit=2G\
   %{_bindir}/phpab \
     --template fedora \
     --output %{buildroot}%{_datadir}/php/%{real_name}/autoload.php \
     %{buildroot}%{_datadir}/php/%{real_name}
-
 : Configuration
 install -d     %{buildroot}%{_sysconfdir}/%{name}
 install -m 0644 config/*.php \
                %{buildroot}%{_sysconfdir}/%{name}
-
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/php.d/opcache-%{name}.blacklist
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/php-zts.d/opcache-%{name}.blacklist
-
 : Tools
 install -d %{buildroot}%{_bindir}
 install -m 0755 tools/%{real_name}_addfont.php \
            %{buildroot}%{_bindir}/%{real_name}_addfont
-
-# Fonts
 for ttf in \
     /usr/share/fonts/dejav*/*ttf \
     /usr/share/fonts/gnu-free/*ttf \
@@ -268,63 +240,31 @@ for ttf in \
     --link \
     --outpath %{buildroot}%{_datadir}/php/%{real_name}/fonts/
 done
-
 ls %{buildroot}%{_datadir}/php/%{real_name}/fonts/dejavuserif* |
     sed -e 's:^%{buildroot}::' | tee dejavu-serif.lst
-
 if [ -f %{buildroot}%{_datadir}/php/%{real_name}/fonts/dejavumathtexgyre ]; then
  ls %{buildroot}%{_datadir}/php/%{real_name}/fonts/dejavumathtexgyre* |
     sed -e 's:^%{buildroot}::' | tee -a dejavu-serif.lst
 fi
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 php -r 'require "%{buildroot}%{_datadir}/php/%{real_name}/autoload.php";
   printf("%{name} version %s\n", $ver=TCPDF_STATIC::getTCPDFVersion());
   exit ($ver === "%{version}" ? 0 : 1);
 '
-
-%files -f corefonts.lst
-%doc README.md CHANGELOG.TXT
-%doc composer.json
-%license LICENSE.TXT
-%{_bindir}/%{real_name}_addfont
-%dir %{_datadir}/php/%{real_name}
-%dir %{_datadir}/php/%{real_name}/fonts
-%{_datadir}/php/%{real_name}/include
-%{_datadir}/php/%{real_name}/images
-%{_datadir}/php/%{real_name}/*php
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/*
-%config(noreplace) %{_sysconfdir}/php.d/opcache-%{name}.blacklist
-%config(noreplace) %{_sysconfdir}/php-zts.d/opcache-%{name}.blacklist
-
-%files dejavu-lgc-sans
-%{_datadir}/php/%{real_name}/fonts/dejavulgcsans*
-%exclude %{_datadir}/php/%{real_name}/fonts/dejavulgcsansmono*
-
-%files dejavu-lgc-sans-mono
-%{_datadir}/php/%{real_name}/fonts/dejavulgcsansmono*
-
-%files dejavu-lgc-serif
-%{_datadir}/php/%{real_name}/fonts/dejavulgcserif*
-
-%files dejavu-sans
-%{_datadir}/php/%{real_name}/fonts/dejavusans*
-%exclude %{_datadir}/php/%{real_name}/fonts/dejavusansmono*
-
-%files dejavu-sans-mono
-%{_datadir}/php/%{real_name}/fonts/dejavusansmono*
-
-%files dejavu-serif -f dejavu-serif.lst
-
-%files gnu-free-mono
-%{_datadir}/php/%{real_name}/fonts/freemono*
-
-%files gnu-free-sans
-%{_datadir}/php/%{real_name}/fonts/freesans*
-
-%files gnu-free-serif
-%{_datadir}/php/%{real_name}/fonts/freeserif*
+%files -f %{oreon_filedir}/main.list
+%files -n php-tcpdf-dejavu-lgc-sans -f %{oreon_filedir}/php-tcpdf-dejavu-lgc-sans.list
+%files -n php-tcpdf-dejavu-lgc-sans-mono -f %{oreon_filedir}/php-tcpdf-dejavu-lgc-sans-mono.list
+%files -n php-tcpdf-dejavu-lgc-serif -f %{oreon_filedir}/php-tcpdf-dejavu-lgc-serif.list
+%files -n php-tcpdf-dejavu-sans -f %{oreon_filedir}/php-tcpdf-dejavu-sans.list
+%files -n php-tcpdf-dejavu-sans-mono -f %{oreon_filedir}/php-tcpdf-dejavu-sans-mono.list
+%files -n php-tcpdf-dejavu-serif -f %{oreon_filedir}/php-tcpdf-dejavu-serif.list
+%files -n php-tcpdf-gnu-free-mono -f %{oreon_filedir}/php-tcpdf-gnu-free-mono.list
+%files -n php-tcpdf-gnu-free-sans -f %{oreon_filedir}/php-tcpdf-gnu-free-sans.list
+%files -n php-tcpdf-gnu-free-serif -f %{oreon_filedir}/php-tcpdf-gnu-free-serif.list
 
 %changelog
+
 %autochangelog

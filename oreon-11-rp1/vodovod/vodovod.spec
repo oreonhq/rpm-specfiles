@@ -1,33 +1,30 @@
 %global source0_hash 1b788d3b0fd1ad508378ad6ab1ff55d517f98632a6c5afa57059f71ec07d9c32
-
 Name:		vodovod
 Version:	1.10r22
-Release:	29%{?dist}
-Summary:	A pipe connecting game
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        A pipe connecting game
 License:	GPL-2.0-or-later
 URL:		http://home.gna.org/vodovod/
-#Source:	http://download.gna.org/vodovod/%%{name}-%%{version}-src.tar.gz
-# svn export -r 22 svn://svn.gna.org/svn/vodovod/trunk vodovod
-# tar czvf vodovod-1.10r22-src.tar.gz vodovod
-Source:		%{name}-%{version}-src.tar.gz
+Source0:        %{name}-%{version}-src.tar.gz
 Patch0:		vodovod-1.10r22-locales.patch
 Patch1:		vodovod-1.10r22-format-string.patch
-
-BuildRequires: make
-BuildRequires:  gcc-c++
-BuildRequires:	desktop-file-utils SDL-devel SDL_image-devel SDL_mixer-devel
-BuildRequires:	SDL_ttf-devel gettext ImageMagick
-
-# Automate finding font file paths
 %global fonts font(dejavusansmono)
 Requires:	%{fonts}
-BuildRequires:  fontconfig %{fonts}
-
 Requires(post): coreutils
 Requires(postun): coreutils
-
+# oreon:deps
+BuildRequires:  ImageMagick
+BuildRequires:  SDL-devel
+BuildRequires:  SDL_image-devel
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  SDL_ttf-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  font(dejavusansmono)
+BuildRequires:  fontconfig
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  make
+# /oreon:deps
 %description
 A free cross-platform pipe connecting game. You get a limited number
 of pipes on each level and need to combine them to lead the water from
@@ -44,6 +41,7 @@ Každá úroveň začína s obmedzeným množstvom trubiek, ktoré musíte umies
 aby viedli vodu z domčeka v hornej časti obrazovky do nádrže v dolnej časti.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 #%%setup -q -n %%{name}-%%{version}-src
@@ -54,9 +52,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P1 -p1
 
 %build
+
 make PREFIX=%{_prefix} HIGHSCOREDIR=%{_localstatedir}/games \
 	%{?_smp_mflags} CXX="%{__cxx}" CXXFLAGS="%{optflags}"
-# .desktop file 
 cat <<EOF > %{name}.desktop
 [Desktop Entry]
 Name=Vodovod
@@ -72,30 +70,21 @@ Terminal=false
 Type=Application
 Categories=Game;LogicGame;
 EOF
-
 %install
 make PREFIX=%{_prefix} DESTDIR=%{buildroot} install
-# replace the bundled font usage with the one provided by font package
 ln -f -s $(fc-match -f "%{file}" "dejavusansmono") \
         %{buildroot}%{_datadir}/%{name}/data/font1.ttf
-# since the game sources do not come with the hiscore file, we have to create it
-# this will result in empty hiscore table, but it is not such a big deal
 mkdir -p %{buildroot}%{_localstatedir}/games
 touch %{buildroot}%{_localstatedir}/games/%{name}.sco
-# add icon and .desktop file
 mkdir -p -m 0755 %{buildroot}%{_datadir}/icons/hicolor/32x32/apps
 convert data/abicon.bmp %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/vodovod.xpm
 desktop-file-install  \
 	--dir=%{buildroot}%{_datadir}/applications %{name}.desktop
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc CHANGES COPYING html
-%attr(2755,root,games) %{_bindir}/%{name}
-%{_datadir}/%{name}/
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/32x32/apps/%{name}.xpm
-%config(noreplace) %attr (0664,root,games) %{_localstatedir}/games/%{name}.sco
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

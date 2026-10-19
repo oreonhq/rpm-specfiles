@@ -1,52 +1,32 @@
-%global source0_hash none
-
+%global source0_hash d4d9bd9d4ae59095597443fac663495315c7eb4330b872aa5f062df38ac69bf1
 %global source2_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
-
-
-
 Name:           virt-what
 Version:        1.27
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        Detect if we are running in a virtual machine
 License:        GPL-2.0-or-later
-
 URL:            https://libguestfs.org/
 Source0:        https://deb.debian.org/debian/pool/main/v/virt-what/virt-what_%{version}.orig.tar.gz#/%{name}-%{version}.tar.gz
-
-# Keyring used to verify tarball signature.
 Source2:       libguestfs.keyring
-
-# Maintainer script which helps with handling patches.
 Source3:        copy-patches.sh
-
-# Add detection of systemd-nspawn (upstream)
 Patch:          0001-virt-what-detect-systemd-nspawn.patch
-# Add detection of WSL2 (upstream)
 Patch:          0002-Add-support-for-WSL2.patch
-
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  git
-BuildRequires:  autoconf, automake, libtool
-BuildRequires:  /usr/bin/pod2man
-
-# Required to verify tarball signature.
-BuildRequires: gnupg2
-
-# Required at build time in order to do 'make check' (for getopt).
-BuildRequires:  util-linux
-
-# virt-what script uses dmidecode and getopt (from util-linux).
-# RPM cannot detect this so make the dependencies explicit here.
 %ifarch aarch64 %{ix86} x86_64
 Requires:       dmidecode
 %endif
 Requires:       util-linux
-
-# Runs the 'which' program to find the helper.
 Requires:       which
-
-
+# oreon:deps
+BuildRequires:  /usr/bin/pod2man
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  git
+BuildRequires:  gnupg2
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  util-linux
+# /oreon:deps
 %description
 virt-what is a shell script which can be used to detect if the program
 is running in a virtual machine.
@@ -98,38 +78,31 @@ Current types of virtualization detected:
  - xen-domU           Xen domU (paravirtualized guest domain)
  - xen-hvm            Xen guest fully virtualized (HVM)
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git
 
 # Always rebuild upstream autotools files.
 autoreconf -i
 
-
 %build
+
 %configure || { cat config.log; exit 1; }
 make
-
-
 %install
 %make_install
-
+%oreon_autofiles main
 
 %check
+
 if ! make -k check ; then
     find -name test-suite.log -exec cat {} \;
     exit 1
 fi
-
-%files
-%doc README COPYING
-%{_sbindir}/virt-what
-%{_sbindir}/virt-what-cvm
-%{_libexecdir}/virt-what-cpuid-helper
-%{_mandir}/man1/*.1*
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.27-5
 - Import

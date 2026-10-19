@@ -1,22 +1,52 @@
-%global source0_hash none
-
+%global source0_hash bb26ef560cea0ac5631b66bfb46eb3accd5a2ac943738be5d7854c70cc8c2393
 %{?!python3_pkgversion:%global python3_pkgversion 3}
-
 Name:           python-basis_set_exchange
 Version:        0.12
 Release:        1%{?dist}
 Summary:        A repository for quantum chemistry basis sets
 License:        BSD-3-Clause
 URL:            https://github.com/MolSSI-BSE/basis_set_exchange
-Source0:        %{pypi_source basis_set_exchange %{version}}
+Source0:        https://files.pythonhosted.org/packages/source/b/basis_set_exchange/basis_set_exchange-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-pip
-BuildRequires:  python%{python3_pkgversion}-pytest
-
 %{?python_enable_dependency_generator}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0
+BuildRequires:  python3dist(setuptools-scm) >= 8.0
+Requires:       python3-basis_set_exchange = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-basis_set_exchange+docs
+Summary:        Metapackage for python3-basis_set_exchange docs extras
+Requires:       python3-basis_set_exchange = %{version}-%{release}
+Provides:       python3dist(basis_set_exchange[docs]) = %{version}-%{release}
+
+%description -n python3-basis_set_exchange+docs
+Metapackage for python3-basis_set_exchange docs extras.
+
+%package -n       python3-basis_set_exchange+tests
+Summary:        Metapackage for python3-basis_set_exchange tests extras
+Requires:       python3-basis_set_exchange = %{version}-%{release}
+Provides:       python3dist(basis_set_exchange[tests]) = %{version}-%{release}
+
+%description -n python3-basis_set_exchange+tests
+Metapackage for python3-basis_set_exchange tests extras.
+
+%package -n       python3-basis_set_exchange+lint
+Summary:        Metapackage for python3-basis_set_exchange lint extras
+Requires:       python3-basis_set_exchange = %{version}-%{release}
+Provides:       python3dist(basis_set_exchange[lint]) = %{version}-%{release}
+
+%description -n python3-basis_set_exchange+lint
+Metapackage for python3-basis_set_exchange lint extras.
+
+%package -n       python3-basis_set_exchange+curate
+Summary:        Metapackage for python3-basis_set_exchange curate extras
+Requires:       python3-basis_set_exchange = %{version}-%{release}
+Provides:       python3dist(basis_set_exchange[curate]) = %{version}-%{release}
+
+%description -n python3-basis_set_exchange+curate
+Metapackage for python3-basis_set_exchange curate extras.
 
 %description
 This project is a library containing basis sets for use in quantum
@@ -61,14 +91,11 @@ following references:
   doi:10.1021/ci600510
 
 %package -n python%{python3_pkgversion}-basis_set_exchange
-Summary:        %{summary}
+Summary:        A repository for quantum chemistry basis sets
 %{?python_provide:%python_provide python3-basis_set_exchange}
-
 %if %{undefined python_enable_dependency_generator} && %{undefined python_disable_dependency_generator}
-# Put manual requires here:
 Requires:       python%{python3_pkgversion}-foo
 %endif
-
 %description -n python%{python3_pkgversion}-basis_set_exchange
 This project is a library containing basis sets for use in quantum
 chemistry calculations. In addition, this library has functionality
@@ -112,28 +139,24 @@ following references:
   doi:10.1021/ci600510j
 
 %prep
+
 %setup -q -n basis_set_exchange-%{version}
 # Remove spurious files
 find basis_set_exchange/data/ -name fix_template.py -delete
 find basis_set_exchange/data/ -name move.py -delete
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l basis_set_exchange
+%oreon_autofiles main usr/lib/python3*/site-packages/basis_set_exchange* usr/lib64/python3*/site-packages/basis_set_exchange* usr/bin/*
 
 %check
-%pytest
 
-%files -n python%{python3_pkgversion}-basis_set_exchange -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%{_bindir}/bse
-%{_bindir}/bsecurate
+%pytest
+%files
+%files -n python3-basis_set_exchange -f %{oreon_filedir}/python3-basis_set_exchange.list
 
 %changelog
+
 %autochangelog

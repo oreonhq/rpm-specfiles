@@ -1,62 +1,51 @@
-%global source0_hash none
-
+%global source0_hash 0168ebebd8ef2050d94876698204066d491d1b46c2408b588a898421d533d573
 Name:           python-pytest-spec
 Version:        6.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Library pytest-spec is a pytest plugin to display test execution output like a SPECIFICATION.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://github.com/pchomik/pytest-spec
-Source:         %{pypi_source pytest_spec}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_spec/pytest_spec-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-pytest-spec = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pytest-spec+test
+Summary:        Metapackage for python3-pytest-spec test extras
+Requires:       python3-pytest-spec = %{version}-%{release}
+Provides:       python3dist(pytest-spec[test]) = %{version}-%{release}
 
+%description -n python3-pytest-spec+test
+Metapackage for python3-pytest-spec test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pytest-spec' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-pytest-spec
-Summary:        %{summary}
-
-%description -n python3-pytest-spec %_description
+Summary:        Library pytest-spec is a pytest plugin to display test execution output like a SPECIFICATION.
+%description -n python3-pytest-spec
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pytest-spec test
-
 
 %prep
-%autosetup -p1 -n pytest_spec-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pytest_spec-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pytest-spec usr/lib/python3*/site-packages/pytest_spec* usr/lib64/python3*/site-packages/pytest_spec* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_spec* usr/lib64/python3*/site-packages/pytest_spec* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pytest-spec -f %{pyproject_files}
+%files
+%files -n python3-pytest-spec -f %{oreon_filedir}/python3-pytest-spec.list
 
 %changelog
+
 %autochangelog

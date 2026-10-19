@@ -1,59 +1,35 @@
 %global source0_hash cb65c6d2081e2700f44e03d808a0330344b483688934c87e53ba7b5728a3a04b
-
 %global goipath         github.com/caddyserver/caddy
-
 %if %{defined el8}
 %global gotest() go test -short -compiler gc -ldflags "${LDFLAGS:-}" %{?**};
 %else
 %global gotestflags %{gocompilerflags} -short
 %endif
-
 Name:           caddy
 Version:        2.11.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Web server with automatic HTTPS
 URL:            https://caddyserver.com
-
-# main source code is Apache-2.0
-# see comments above bundled provides for a breakdown of the rest
 License:        Apache-2.0 AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND CC0-1.0 AND ISC AND MIT AND MPL-2.0
-
-Source0:        https://%{goipath}/archive/v%{version}/caddy-%{version}.tar.gz
-
-
+Source0:        https://%{goipath}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        caddy-%{version}-vendor.tar.gz
 Source2:        create-vendor-tarball.sh
-
-# based on reference files upstream
-# https://github.com/caddyserver/dist
 Source10:       Caddyfile
 Source20:       caddy.service
 Source21:       caddy-api.service
 Source22:       caddy.sysusers
 Source30:       poweredby-white.png
 Source31:       poweredby-black.png
-
-# downstream only patch to disable commands that can alter the binary
 Patch1:         0001-Disable-commands-that-can-alter-the-binary.patch
-
 %if %{defined el8}
 ExclusiveArch:  %{golang_arches}
 %else
-BuildRequires:  go-rpm-macros
 ExclusiveArch:  %{golang_arches_future}
 %endif
-
-BuildRequires:  systemd-rpm-macros
 %{?systemd_requires}
 %{?sysusers_requires_compat}
-
 Requires:       system-logos-httpd
 Provides:       webserver
-
-# https://github.com/caddyserver/caddy/commit/05acc5131ed5c80acbd28ed8d907b166cd15b72c
-BuildRequires:  golang >= 1.25
-
-# Apache-2.0:
 Provides:       bundled(golang(cel.dev/expr)) = 0.24.0
 Provides:       bundled(golang(cloud.google.com/go/auth)) = 0.16.2
 Provides:       bundled(golang(cloud.google.com/go/auth/oauth2adapt)) = 0.2.8
@@ -101,12 +77,8 @@ Provides:       bundled(golang(google.golang.org/genproto/googleapis/api)) = 513
 Provides:       bundled(golang(google.golang.org/genproto/googleapis/rpc)) = 513f239
 Provides:       bundled(golang(google.golang.org/grpc)) = 1.73.0
 Provides:       bundled(golang(google.golang.org/grpc/cmd/protoc-gen-go-grpc)) = 1.5.1
-
-# BSD-2-Clause:
 Provides:       bundled(golang(github.com/pkg/errors)) = 0.9.1
 Provides:       bundled(golang(github.com/russross/blackfriday/v2)) = 2.1.0
-
-# BSD-3-Clause:
 Provides:       bundled(golang(dario.cat/mergo)) = 1.0.1
 Provides:       bundled(golang(github.com/antlr4-go/antlr/v4)) = 4.13.0
 Provides:       bundled(golang(github.com/cloudflare/circl)) = 1.6.1
@@ -135,14 +107,8 @@ Provides:       bundled(golang(golang.org/x/time)) = 0.12.0
 Provides:       bundled(golang(golang.org/x/tools)) = 0.34.0
 Provides:       bundled(golang(google.golang.org/api)) = 0.240.0
 Provides:       bundled(golang(google.golang.org/protobuf)) = 1.36.6
-
-# CC0-1.0:
 Provides:       bundled(golang(github.com/zeebo/blake3)) = 0.2.4
-
-# ISC:
 Provides:       bundled(golang(github.com/davecgh/go-spew)) = 1.1.1
-
-# MIT:
 Provides:       bundled(golang(github.com/BurntSushi/toml)) = 1.5.0
 Provides:       bundled(golang(github.com/KimMachineGun/automemlimit)) = 0.7.4
 Provides:       bundled(golang(github.com/Masterminds/semver/v3)) = 3.3.0
@@ -199,45 +165,32 @@ Provides:       bundled(golang(go.uber.org/multierr)) = 1.11.0
 Provides:       bundled(golang(go.uber.org/zap)) = 1.27.0
 Provides:       bundled(golang(go.uber.org/zap/exp)) = 0.3.0
 Provides:       bundled(golang(gopkg.in/natefinch/lumberjack.v2)) = 2.2.1
-
-# MPL-2.0:
 Provides:       bundled(golang(github.com/go-sql-driver/mysql)) = 1.8.1
-
-# Apache-2.0 AND BSD-2-Clause:
 Provides:       bundled(golang(go.step.sm/crypto)) = 0.67.0
 Provides:       bundled(golang(github.com/smallstep/cli-utils)) = 0.12.1
-
-# Apache-2.0 AND BSD-3-Clause:
 Provides:       bundled(golang(github.com/go-jose/go-jose/v3)) = 3.0.4
 Provides:       bundled(golang(github.com/go-jose/go-jose/v4)) = 4.0.5
 Provides:       bundled(golang(github.com/googleapis/gax-go/v2)) = 2.14.2
 Provides:       bundled(golang(github.com/mholt/acmez/v3)) = 3.1.2
 Provides:       bundled(golang(github.com/smallstep/certificates)) = 0.28.4
-
-# Apache-2.0 AND MIT:
 Provides:       bundled(golang(github.com/dgraph-io/ristretto)) = 0.2.0
 Provides:       bundled(golang(gopkg.in/yaml.v3)) = 3.0.1
-
-# BSD-1-Clause AND BSD-3-Clause:
 Provides:       bundled(golang(filippo.io/edwards25519)) = 1.1.0
-
-# BSD-2-Clause-Views AND BSD-3-Clause:
 Provides:       bundled(golang(howett.net/plist)) = 1.0.0
-
-# BSD-3-Clause AND MIT:
 Provides:       bundled(golang(github.com/smallstep/scep)) = 8cf1ca4
-
-# CC0-1.0 AND MIT:
 Provides:       bundled(golang(github.com/AndreasBriese/bbloom)) = 46b345b
-
-# Apache-2.0 AND BSD-3-Clause AND MIT:
 Provides:       bundled(golang(github.com/klauspost/compress)) = 1.18.0
 Provides:       bundled(golang(github.com/prometheus/client_golang)) = 1.23.0
-
+# oreon:deps
+BuildRequires:  go-rpm-macros
+BuildRequires:  golang
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Caddy is an extensible server platform that uses TLS by default.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p 1 -a 1
@@ -245,76 +198,49 @@ mkdir -p src/$(dirname %{goipath})
 ln -s $PWD src/%{goipath}
 
 %build
+
 %if %{defined el8}
 export GO111MODULE=off
 %endif
 export GOPATH=$PWD
 export LDFLAGS="-X %{goipath}.CustomVersion=v%{version}"
 %gobuild -o bin/caddy %{goipath}/cmd/caddy
-
 %install
-# command
 install -D -p -m 0755 -t %{buildroot}%{_bindir} bin/caddy
-
-# man pages
 ./bin/caddy manpage --directory %{buildroot}%{_mandir}/man8
-
-# config
 install -D -p -m 0644 -t %{buildroot}%{_sysconfdir}/caddy %{S:10}
 install -d -m 0755 %{buildroot}%{_sysconfdir}/caddy/Caddyfile.d
-
-# systemd units
 install -D -p -m 0644 -t %{buildroot}%{_unitdir} %{S:20} %{S:21}
-
-# sysusers
 install -D -p -m 0644 %{S:22} %{buildroot}%{_sysusersdir}/caddy.conf
-
-# data directory
 install -d -m 0750 %{buildroot}%{_sharedstatedir}/caddy
-
-# welcome page
-%if %{defined fedora}
-install -D -p -m 0644 %{S:30} %{buildroot}%{_datadir}/caddy/poweredby.png
-ln -s ../fedora-testpage/index.html %{buildroot}%{_datadir}/caddy/index.html
-%else
 install -D -p -m 0644 %{S:31} %{buildroot}%{_datadir}/caddy/poweredby.png
 ln -s ../testpage/index.html %{buildroot}%{_datadir}/caddy/index.html
-%endif
 install -d -m 0755 %{buildroot}%{_datadir}/caddy/icons
 ln -s ../../pixmaps/poweredby.png %{buildroot}%{_datadir}/caddy/icons/poweredby.png
-%if %{defined rhel} && 0%{?rhel} >= 9
-ln -s ../pixmaps/system-noindex-logo.png %{buildroot}%{_datadir}/caddy/system_noindex_logo.png
-%endif
-
-# shell completions
 install -d -m 0755 %{buildroot}%{bash_completions_dir}
 ./bin/caddy completion bash > %{buildroot}%{bash_completions_dir}/caddy
 install -d -m 0755 %{buildroot}%{zsh_completions_dir}
 ./bin/caddy completion zsh > %{buildroot}%{zsh_completions_dir}/_caddy
 install -d -m 0755 %{buildroot}%{fish_completions_dir}
 ./bin/caddy completion fish > %{buildroot}%{fish_completions_dir}/caddy.fish
+%oreon_autofiles main
 
 %check
-# ensure that the version was embedded correctly
-[[ "$(./bin/caddy version)" == "v%{version}" ]] || exit 1
 
-# run the upstream tests
+[[ "$(./bin/caddy version)" == "v%{version}" ]] || exit 1
 export GOPATH=$PWD
 cd src/%{goipath}
 %gotest ./...
-
 %pre
+
 %sysusers_create_compat %{S:22}
-
 %post
-%systemd_post caddy.service
 
+%systemd_post caddy.service
 if [ -x /usr/sbin/getsebool ]; then
-    # connect to ACME endpoint to request certificates
     setsebool -P httpd_can_network_connect on
 fi
 if [ -x /usr/sbin/semanage -a -x /usr/sbin/restorecon ]; then
-    # file contexts
     semanage fcontext --add --type httpd_exec_t        '%{_bindir}/caddy'               2> /dev/null || :
     semanage fcontext --add --type httpd_sys_content_t '%{_datadir}/caddy(/.*)?'        2> /dev/null || :
     semanage fcontext --add --type httpd_config_t      '%{_sysconfdir}/caddy(/.*)?'     2> /dev/null || :
@@ -322,61 +248,32 @@ if [ -x /usr/sbin/semanage -a -x /usr/sbin/restorecon ]; then
     restorecon -r %{_bindir}/caddy %{_datadir}/caddy %{_sysconfdir}/caddy %{_sharedstatedir}/caddy || :
 fi
 if [ -x /usr/sbin/semanage ]; then
-    # QUIC
     semanage port --add --type http_port_t --proto udp 80   2> /dev/null || :
     semanage port --add --type http_port_t --proto udp 443  2> /dev/null || :
-    # admin endpoint
     semanage port --add --type http_port_t --proto tcp 2019 2> /dev/null || :
 fi
-
 %preun
+
 %systemd_preun caddy.service
-
 %postun
-%systemd_postun_with_restart caddy.service
 
+%systemd_postun_with_restart caddy.service
 if [ $1 -eq 0 ]; then
     if [ -x /usr/sbin/getsebool ]; then
-        # connect to ACME endpoint to request certificates
         setsebool -P httpd_can_network_connect off
     fi
     if [ -x /usr/sbin/semanage ]; then
-        # file contexts
         semanage fcontext --delete --type httpd_exec_t        '%{_bindir}/caddy'               2> /dev/null || :
         semanage fcontext --delete --type httpd_sys_content_t '%{_datadir}/caddy(/.*)?'        2> /dev/null || :
         semanage fcontext --delete --type httpd_config_t      '%{_sysconfdir}/caddy(/.*)?'     2> /dev/null || :
         semanage fcontext --delete --type httpd_var_lib_t     '%{_sharedstatedir}/caddy(/.*)?' 2> /dev/null || :
-        # QUIC
         semanage port     --delete --type http_port_t --proto udp 80   2> /dev/null || :
         semanage port     --delete --type http_port_t --proto udp 443  2> /dev/null || :
-        # admin endpoint
         semanage port     --delete --type http_port_t --proto tcp 2019 2> /dev/null || :
     fi
 fi
-
-%files
-%license LICENSE
-%doc README.md AUTHORS
-%{_bindir}/caddy
-%{_mandir}/man8/caddy*.8*
-%{_datadir}/caddy
-%{_unitdir}/caddy.service
-%{_unitdir}/caddy-api.service
-%{_sysusersdir}/caddy.conf
-%dir %{_sysconfdir}/caddy
-%config(noreplace) %{_sysconfdir}/caddy/Caddyfile
-%dir %{_sysconfdir}/caddy/Caddyfile.d
-%attr(0750,caddy,caddy) %dir %{_sharedstatedir}/caddy
-%if %{defined el8}
-# this is normally owned by filesystem
-%dir %{_datadir}/zsh
-%dir %{_datadir}/zsh/site-functions
-%dir %{_datadir}/fish
-%dir %{_datadir}/fish/vendor_completions.d
-%endif
-%{bash_completions_dir}/caddy
-%{zsh_completions_dir}/_caddy
-%{fish_completions_dir}/caddy.fish
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

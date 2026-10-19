@@ -1,29 +1,24 @@
 %global source0_hash a75e6f757b975d3da662fe7ea2d985f358f31ad2dede1a222bb4aa403d0dbfd1
-
 Name:           libgringotts
 Version:        1.2.1
-Release:        44%{?dist}
+Release:        1%{?dist}
 Summary:        A backend for managing encrypted data files on the disk
 Summary(pl):    Zaplecze do zarządzania zaszyfrowanymi plikami danych na dysku
-
-# SPDX confirmed
 License:        GPL-2.0-or-later
 URL:            http://gringotts.shlomifish.org/
 Source0:        http://download.berlios.de/gringotts/%{name}-%{version}.tar.bz2
-# Patch for bzip2 algo size fix for big endian
 Patch0:         libgringotts-1.2.1-bzip2-algo-bigendian-sizefix.patch
-
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  bzip2-devel
+BuildRequires:  gcc
+BuildRequires:  libmcrypt-devel
 BuildRequires:  libtool
 BuildRequires:  make
-
-BuildRequires:  bzip2-devel
-BuildRequires:  libmcrypt-devel
 BuildRequires:  mhash-devel
 BuildRequires:  zlib-devel
-
+# /oreon:deps
 %description
 libGringotts is a small, easy-to-use, thread-safe C library
  originally developed for Gringotts; its purpose is to 
@@ -48,7 +43,6 @@ oraz by zapewnić użytkownikowi pełną kontrolę nad nimi.
 Summary:        Development files for libgringotts
 Summary(pl):    Pliki deweloperskie dla libgringotts
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The libgringotts-devel package contains libraries and header files for
 developing applications that use libgringotts.
@@ -58,6 +52,7 @@ Pakiet libgringotts-devel zawiera biblioteki i pliki nagłówków
 niezbędne do tworzenia aplikacji, które używają libgringotts.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -73,20 +68,17 @@ sed -i src/Makefile.am \
 autoreconf -fi
 
 %build
+
 %configure --disable-static
 %make_build
-
 %install
 %make_install
-
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
-# Clean up documentation directory
 rm -rf $RPM_BUILD_ROOT%{_docdir}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-# Some tests e.g. 8) Password quality test (strings) reads /dev/random
-# so tests may fail randomly.
-# Repeat tests several times to rescue such failure.
+
 test_status=1
 for times in $(seq 1 3) ; do
 	make check || continue
@@ -94,24 +86,10 @@ for times in $(seq 1 3) ; do
 	break
 done
 if test $test_status != 0 ; then exit 1 ; fi
-
 %ldconfig_scriptlets
-
-%files
-%license	COPYING
-%doc	AUTHORS
-%doc	ChangeLog
-%doc	NEWS
-%doc	README
-%doc	TODO
-
-%{_libdir}/%{name}.so.2{,.*}
-
-%files devel
-%doc	docs/manual.htm
-%{_includedir}/libgringotts.h
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libgringotts-devel -f %{oreon_filedir}/libgringotts-devel.list
 
 %changelog
+
 %autochangelog

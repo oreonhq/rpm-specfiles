@@ -1,5 +1,4 @@
 %global source0_hash 7cf46df5955a84fd8f0d7461a5e1b74f0637c99d9e4abb42ca2d53fe427e12c0
-
 %global forgeurl https://github.com/debrouxl/tilp_and_gfm
 %global commit 752aef4dc2b2fdd21a06cda03130375d8d4ad9b6
 %if 0%{?el7}
@@ -9,46 +8,39 @@
 %else
 %forgemeta
 %endif
-
 Name:           tilp_and_gfm
 Version:        1.19
 %if 0%{?el7}
-Release:        %autorelease -s %{date}git%{shortcommit}
+Release:        1%{?dist}
 %else
-Release:        %autorelease
+Release:        1%{?dist}
 %endif
 Summary:        Desktop applications to manage Texas Instruments calculators
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://lpg.ticalc.org/prj_tilp
 Source0:        %{forgesource}
-
-BuildRequires:  desktop-file-utils
 %if 0%{?el7}
-BuildRequires:  cmake3
 %else
-BuildRequires:  cmake
 %endif
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
-BuildRequires:  intltool
-BuildRequires:  libappstream-glib
-
 BuildRequires:  gettext-devel
 BuildRequires:  gtk2-devel
+BuildRequires:  intltool
+BuildRequires:  libappstream-glib
 BuildRequires:  libglade2-devel
 BuildRequires:  tilibs-devel
-
+# /oreon:deps
 %description
 TiLP and GFM are desktop applications to handle communications and file exchange
 with Texas Instruments calculators.
 
 %package -n     tilp
 Summary:        Texas Instruments handheld(s) <-> PC communication program
-# Replace retired packages in F35, remove once F37 is branched
 Obsoletes:      tilp2 < 1.18-14
 Provides:       tilp2 = %{version}-%{release}
-
 %description -n tilp
 TiLP is a Texas Instruments handhelds <-> PC communication program for Linux.
 It is able to use any type of link cable (Gray/Black/Silver/Direct Link) with
@@ -60,7 +52,6 @@ backup/restore contents, install FLASH applications, or upgrade the  OS.
 
 %package -n     gfm
 Summary:        Texas Instruments handheld(s) file manipulation program
-
 %description -n gfm
 The GFM is an application allowing for the manipulation of single/group/tigroup
 files from Texas Instruments handhelds. It can create a new file, open an
@@ -69,6 +60,7 @@ group files into a group/tigroup file, and ungroup a group/tigroup file into
 single files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %if 0%{?el7}
@@ -87,11 +79,9 @@ mv tilp/trunk/icons/COPYRIGHT tilp/trunk/COPYRIGHT.icons
 mv gfm/trunk/icons/COPYRIGHT gfm/trunk/COPYRIGHT.icons
 
 %build
-# Generate missing POT files
+
 pushd tilp/trunk/po && intltool-update --pot && popd
 pushd gfm/trunk/po && intltool-update --pot && popd
-
-# Build TiLP and GFM
 %if 0%{?el7}
 %cmake3
 %cmake3_build
@@ -99,7 +89,6 @@ pushd gfm/trunk/po && intltool-update --pot && popd
 %cmake
 %cmake_build
 %endif
-
 %install
 %if 0%{?el7}
 %cmake3_install
@@ -108,24 +97,16 @@ pushd gfm/trunk/po && intltool-update --pot && popd
 %endif
 %find_lang tilp2
 %find_lang GFM
-
-# Remove useless files
 rm -r %{buildroot}%{_datadir}/tilp2/desktop
 find %{buildroot} -name \*.bat -exec rm '{}' \;
 find %{buildroot} -name Makefile.am -exec rm '{}' \;
-
-# Fix binary name and add compatibility symlink
 mv %{buildroot}%{_bindir}/tilp2 %{buildroot}%{_bindir}/tilp
 ln -s tilp %{buildroot}%{_bindir}/tilp2
-
-# Install MIME types
 %if 0%{?el7}
 mkdir -p %{buildroot}%{_datadir}/mime/packages
 %endif
 install -Dpm0644 -t %{buildroot}%{_datadir}/mime/packages \
   tilp/trunk/desktop/tilp.xml
-
-# Install desktop files
 mkdir -p %{buildroot}/%{_datadir}/applications
 sed -e 's:@bindir@:%{_bindir}:' \
     -e 's:@pixmapsdir@:%{_datadir}/tilp2/pixmaps:' \
@@ -137,8 +118,6 @@ sed -e 's:@bindir@:%{_bindir}:' \
     < gfm/trunk/desktop/gfm.desktop.in \
     > %{buildroot}%{_datadir}/applications/gfm.desktop
 desktop-file-validate %{buildroot}/%{_datadir}/applications/gfm.desktop
-
-# Install appdata files
 %if 0%{?el7}
 mkdir -p %{buildroot}%{_metainfodir}
 %endif
@@ -147,26 +126,14 @@ install -Dpm0644 -t %{buildroot}%{_metainfodir} \
 install -Dpm0644 -t %{buildroot}%{_metainfodir} \
   gfm/trunk/desktop/gfm.appdata.xml
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
+%oreon_autofiles tilp usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gfm usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n tilp -f tilp2.lang
-%license tilp/trunk/COPYING tilp/trunk/COPYRIGHT.icons
-%doc tilp/trunk/AUTHORS tilp/trunk/ChangeLog tilp/trunk/README tilp/trunk/RELEASE
-%{_bindir}/tilp
-%{_bindir}/tilp2
-%{_mandir}/man1/tilp.1*
-%{_datadir}/tilp2
-%{_datadir}/mime/packages/tilp.xml
-%{_datadir}/applications/tilp.desktop
-%{_metainfodir}/tilp.appdata.xml
-
-%files -n gfm -f GFM.lang
-%license gfm/trunk/COPYING gfm/trunk/COPYRIGHT.icons
-%doc gfm/trunk/AUTHORS gfm/trunk/ChangeLog gfm/trunk/README
-%{_bindir}/gfm
-%{_mandir}/man1/gfm.1*
-%{_datadir}/gfm
-%{_datadir}/applications/gfm.desktop
-%{_metainfodir}/gfm.appdata.xml
+%files -f %{oreon_filedir}/main.list
+%files -n tilp -f %{oreon_filedir}/tilp.list
+%files -n gfm -f %{oreon_filedir}/gfm.list
 
 %changelog
+
 %autochangelog

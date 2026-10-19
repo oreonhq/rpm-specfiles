@@ -1,30 +1,29 @@
 %global source0_hash 135cbd1ebd5d00740131abaa2788aca492cf4ce0600ad304f8d87d014008a3c4
-
 %bcond_with     jp_minimal
-
 Name:           jackson-modules-base
 Version:        2.22.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Jackson modules: Base
 License:        Apache-2.0
-
 URL:            https://github.com/FasterXML/jackson-modules-base
 Source0:        https://github.com/FasterXML/jackson-modules-base/archive/refs/tags/jackson-modules-base-2.18.2-take-2.tar.gz#/jackson-modules-base-2.18.2-take-2.tar.gz
 Patch1:         0001-Expose-javax.security.auth-from-JDK-internals.patch
 Patch2:         0001-Replace-javax.activation-imports-with-jakarta.activa.patch
 Patch3:         0001-Use-jakarta.activation-namespace-in-jaxb-api.patch
-
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || (0%{?oreon} >= 11)
-BuildRequires:  maven-local
 %else
-BuildRequires:  maven-local-openjdk25
 %endif
-
+BuildArch:      noarch
+%if 0%{?fedora} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
+ExclusiveArch:  %{java_arches} noarch
+%endif
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(cglib:cglib)
-BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-annotations) >= %{version}
-BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-core) >= %{version}
-BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-databind) >= %{version}
-BuildRequires:  mvn(com.fasterxml.jackson:jackson-base:pom:) >= %{version}
+BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-annotations)
+BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-core)
+BuildRequires:  mvn(com.fasterxml.jackson.core:jackson-databind)
+BuildRequires:  mvn(com.fasterxml.jackson:jackson-base:pom:)
 BuildRequires:  mvn(com.google.code.maven-replacer-plugin:replacer)
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)
 BuildRequires:  mvn(jakarta.xml.bind:jakarta.xml.bind-api)
@@ -32,19 +31,13 @@ BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.mockito:mockito-all)
 BuildRequires:  mvn(org.ow2.asm:asm)
-
-BuildArch:      noarch
-%if 0%{?fedora} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
-ExclusiveArch:  %{java_arches} noarch
-%endif
-
+# /oreon:deps
 %description
 Jackson "base" modules: modules that build directly on databind,
 and are not data-type, data format, or JAX-RS provider modules.
 
 %package -n jackson-module-jaxb-annotations
 Summary: Support for using JAXB annotations as an alternative to "native" Jackson annotations
-
 %description -n jackson-module-jaxb-annotations
 This Jackson extension module provides support for using JAXB (javax.xml.bind)
 annotations as an alternative to native Jackson annotations. It is most often
@@ -52,6 +45,7 @@ used to make it easier to reuse existing data beans that used with JAXB
 framework to read and write XML.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n jackson-modules-base-jackson-modules-base-2.18.2-take-2
 %autosetup -n jackson-modules-base-jackson-modules-base-2.18.2-take-2 -p 1
@@ -103,18 +97,16 @@ rm osgi/src/test/java/com/fasterxml/jackson/module/osgi/InjectOsgiServiceTest.ja
 %mvn_file ":{*}" jackson-modules/@1
 
 %build
-%mvn_build -s -j
 
+%mvn_build -s -j
 %install
 %mvn_install
+%oreon_autofiles jackson-module-jaxb-annotations usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-jackson-modules-base
-%doc README.md release-notes
-%license LICENSE NOTICE
-
-%files -n jackson-module-jaxb-annotations -f .mfiles-jackson-module-jaxb-annotations
-%doc jaxb/README.md jaxb/release-notes
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
+%files -n jackson-module-jaxb-annotations -f %{oreon_filedir}/jackson-module-jaxb-annotations.list
 
 %changelog
+
 %autochangelog

@@ -1,19 +1,11 @@
 %global source0_hash 76e54ae93e96ee6ff68ed78760fdcc8621d133ff375fec43f10e19d5a1516857
-
-# Run time expensive tests
 %bcond_without long_tests
-# Run optional test
 %if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_IO_Compress_enables_optional_test
 %else
 %bcond_with perl_IO_Compress_enables_optional_test
 %endif
-
-# Dependency version if different to this package version
-#global depver 2.201
-
 %{?perl_default_filter}
-
 Name:           perl-IO-Compress
 Version:        2.224
 Release:        1%{?dist}
@@ -21,62 +13,14 @@ Summary:        Read and write compressed data
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Compress
 Source0:        https://cpan.metacpan.org/authors/id/P/PM/PMQS/IO-Compress-%{version}.tar.gz
-
-
-
 BuildArch:      noarch
-# Module Build
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(File::Copy)
-BuildRequires:  perl(File::Spec::Functions)
-# Module Runtime
-BuildRequires:  perl(bytes)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(Compress::Raw::Bzip2) >= %{?depver}%{!?depver:%{version}}
-BuildRequires:  perl(Compress::Raw::Zlib) >= %{?depver}%{!?depver:%{version}}
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Encode)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(Fcntl)
-BuildRequires:  perl(File::Glob)
-BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(IO::File)
-BuildRequires:  perl(IO::Handle)
-BuildRequires:  perl(List::Util)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Symbol)
-BuildRequires:  perl(Time::Local)
-BuildRequires:  perl(utf8)
-BuildRequires:  perl(warnings)
-# Test Suite
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(threads::shared)
 %if !%{defined perl_bootstrap}
-BuildRequires:  perl(Test::More)
 %endif
 %if %{with perl_IO_Compress_enables_optional_test}
-# Optional Tests
-BuildRequires:  perl(bytes)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(overload)
-# Dual-lived module needs building early in the boot process
 %if !%{defined perl_bootstrap}
-BuildRequires:  perl(Test::NoWarnings)
 %endif
 %endif
-# Runtime
 Requires:       perl(File::Glob)
-
-# This is wrapper for different Compress modules
 Obsoletes:      perl-Compress-Zlib < %{version}-%{release}
 Provides:       perl-Compress-Zlib = %{version}-%{release}
 Obsoletes:      perl-IO-Compress-Base < %{version}-%{release}
@@ -85,8 +29,6 @@ Obsoletes:      perl-IO-Compress-Bzip2 < %{version}-%{release}
 Provides:       perl-IO-Compress-Bzip2 = %{version}-%{release}
 Obsoletes:      perl-IO-Compress-Zlib < %{version}-%{release}
 Provides:       perl-IO-Compress-Zlib = %{version}-%{release}
-
-# Filter modules bundled for tests
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(CompTestUtils\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(.*\.pl)\s*$
 %if %{defined perl_bootstrap}
@@ -95,7 +37,6 @@ Provides:       perl-IO-Compress-Zlib = %{version}-%{release}
 %global __requires_exclude %{__requires_exclude}|^perl\\(Test::Simple)\s*$
 %endif
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
-
 Provides:       perl(IO::Compress::Base)
 Provides:       perl(IO::Compress::Base::Common)
 Provides:       perl(IO::Compress::Bzip2)
@@ -111,6 +52,44 @@ Provides:       perl(IO::Uncompress::Gunzip)
 Provides:       perl(IO::Uncompress::Inflate)
 Provides:       perl(IO::Uncompress::RawInflate)
 Provides:       perl(IO::Uncompress::Unzip)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  make
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Compress::Raw::Bzip2)
+BuildRequires:  perl(Compress::Raw::Zlib)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Fcntl)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Glob)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Spec::Functions)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(IO::File)
+BuildRequires:  perl(IO::Handle)
+BuildRequires:  perl(List::Util)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Symbol)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::NoWarnings)
+BuildRequires:  perl(Time::Local)
+BuildRequires:  perl(bytes)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(threads::shared)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This distribution provides a Perl interface to allow reading and writing of
 compressed data created with the zlib and bzip2 libraries.
@@ -129,12 +108,12 @@ included with the IO-Compress distribution:
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n IO-Compress-%{version}
 
@@ -159,24 +138,18 @@ for F in `find t -name *.t` `find t -name *.pl`; do
 done
 
 %build
+
 perl Makefile.PL NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install} INSTALLDIRS=perl
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a examples t %{buildroot}%{_libexecdir}/%{name}
-# Remove release tests
 rm %{buildroot}%{_libexecdir}/%{name}/t/999pod.t
 rm %{buildroot}%{_libexecdir}/%{name}/t/999meta-*.t
 perl -i -pe "s{\"./bin/\"}{\"%{_bindir}\"}" %{buildroot}%{_libexecdir}/%{name}/t/011-streamzip.t
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Lots of tests write into temporary files/directories. The easiest solution
-# is to copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -187,49 +160,18 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
-
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 unset PERL_CORE
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 export TEST_SKIP_VERSION_CHECK=1
-# Build using "--without long_tests" to avoid very long tests
-# (full suite can take nearly an hour on an i7 920)
 make test COMPRESS_ZLIB_RUN_%{?with_long_tests:ALL}%{!?with_long_tests:MOST}=1
-
-%files
-%doc Changes README examples/*
-%{_bindir}/streamzip
-%{_bindir}/zipdetails
-%{perl_privlib}/Compress/
-%{perl_privlib}/File/
-%dir %{perl_privlib}/IO/
-%dir %{perl_privlib}/IO/Compress/
-%doc %{perl_privlib}/IO/Compress/FAQ.pod
-%{perl_privlib}/IO/Compress.pm
-%{perl_privlib}/IO/Compress/Adapter/
-%{perl_privlib}/IO/Compress/Base/
-%{perl_privlib}/IO/Compress/Base.pm
-%{perl_privlib}/IO/Compress/Bzip2.pm
-%{perl_privlib}/IO/Compress/Deflate.pm
-%{perl_privlib}/IO/Compress/Gzip/
-%{perl_privlib}/IO/Compress/Gzip.pm
-%{perl_privlib}/IO/Compress/RawDeflate.pm
-%{perl_privlib}/IO/Compress/Zip/
-%{perl_privlib}/IO/Compress/Zip.pm
-%{perl_privlib}/IO/Compress/Zlib/
-%{perl_privlib}/IO/Uncompress/
-%{_mandir}/man1/streamzip.1*
-%{_mandir}/man1/zipdetails.1*
-%{_mandir}/man3/Compress::Zlib.3*
-%{_mandir}/man3/File::GlobMapper.3*
-%{_mandir}/man3/IO::Compress.3*
-%{_mandir}/man3/IO::Compress::*.3*
-%{_mandir}/man3/IO::Uncompress::*.3*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-IO-Compress-tests -f %{oreon_filedir}/perl-IO-Compress-tests.list
 
 %changelog
+
 %autochangelog

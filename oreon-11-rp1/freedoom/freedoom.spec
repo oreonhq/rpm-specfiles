@@ -1,13 +1,9 @@
-%global source0_hash none
-
+%global source0_hash 3f9b264f3e3ce503b4fb7f6bdcb1f419d93c7b546f4df3e874dd878db9688f59
 %global waddir  %{_datadir}/doom
-
 Name:           freedoom
-
 Version:        0.13.0
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        Doom styled first person shooter game
-
 License:        BSD-3-Clause
 URL:            https://freedoom.github.io/
 Source0:        https://github.com/freedoom/freedoom/releases/download/v%{version}/freedoom-%{version}.zip
@@ -16,11 +12,12 @@ Source2:        freedoom2.desktop
 Source3:        freedoom.png
 Source4:        freedoom1.appdata.xml
 Source5:        freedoom2.appdata.xml
-
 BuildArch:      noarch
-BuildRequires:  desktop-file-utils libappstream-glib
 Requires:       prboom hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 Freedoom: Phase 1 is a Doom styled first person shooter game using the
 Doom engine, featuring Four chapters, nine levels each, totalling 36
@@ -36,7 +33,6 @@ also known as plain Doom or Doom 1.
 %package -n     freedoom2
 Summary:        Doom2 styled first person shooter game
 Requires:       prboom hicolor-icon-theme
-
 %description -n freedoom2
 Freedoom: Phase 2 is a Doom2 styled first person shooter game using the
 Doom engine. Freedoom: Phase 2 has 32 levels in one long chapter,
@@ -49,10 +45,10 @@ allows most to be played without the original Doom datafiles.
 Freedoom: Phase 2 aims for compatibility with Doom II and Final Doom.
 
 %prep
+
 %setup -q
 
 %build
-# Game data files.  Nothing to build!
 
 %install
 mkdir -p %{buildroot}/%{waddir}
@@ -65,7 +61,6 @@ mkdir -p %{buildroot}%{_datadir}/appdata
 install -p -m 644 %{SOURCE4} %{SOURCE5} %{buildroot}%{_datadir}/appdata
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.xml
 ln -s /usr/share/doom/freedoom2.wad %{buildroot}%{waddir}/freedoom.wad
-# crete  cmdline launchers from desktop commands
 mkdir -p %{buildroot}/%{_bindir}
 echo "#!%{_bindir}/bash" > %{buildroot}/%{_bindir}/%{name}1
 echo "#!%{_bindir}/bash" > %{buildroot}/%{_bindir}/%{name}2
@@ -73,25 +68,12 @@ cat  %{SOURCE1} | grep "Exec" | sed "s/Exec.//" >> %{buildroot}/%{_bindir}/%{nam
 cat  %{SOURCE2} | grep "Exec" | sed "s/Exec.//" >> %{buildroot}/%{_bindir}/%{name}2
 chmod 755 %{buildroot}/%{_bindir}/%{name}1
 chmod 755 %{buildroot}/%{_bindir}/%{name}2
+%oreon_autofiles freedoom2 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README.html CREDITS.txt
-%license COPYING.txt
-%{waddir}/%{name}1.wad
-%{_datadir}/appdata/%{name}1.appdata.xml
-%{_datadir}/applications/%{name}1.desktop
-%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-%{_bindir}/%{name}1
-
-%files -n freedoom2
-%doc README.html CREDITS.txt
-%license COPYING.txt
-%{waddir}/%{name}.wad
-%{waddir}/%{name}2.wad
-%{_datadir}/appdata/%{name}2.appdata.xml
-%{_datadir}/applications/%{name}2.desktop
-%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-%{_bindir}/%{name}2
+%files -f %{oreon_filedir}/main.list
+%files -n freedoom2 -f %{oreon_filedir}/freedoom2.list
 
 %changelog
+
 %autochangelog

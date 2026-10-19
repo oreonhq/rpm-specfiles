@@ -1,21 +1,42 @@
+%global source2_hash 1e53a10e6b65c64ae0f5a241c8ef289c7578f1109d8a78512dff7de2b29117b3
+%global source1_hash 84814d6f283fbf8871176822c40ac95af11c3bbf7ab289ac385ba1269e274ecb
 %global source0_hash 92605d9a075cc6d2cf38a65464b39aba5079018c54bd7d9d25b935d5f009d4e9
-
 Name:           maven-doxia
 Epoch:          0
 Version:        2.1.0
 Release:        1%{?dist}
 Summary:        Content generation framework
 License:        Apache-2.0
-
 URL:            https://maven.apache.org/doxia/
 VCS:            git:https://github.com/apache/maven-doxia.git
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia/%{version}/doxia-%{version}-source-release.zip
 Source1:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia/%{version}/doxia-%{version}-source-release.zip.asc
 Source2:        https://downloads.apache.org/maven/KEYS
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+Obsoletes:      %{name}-logging-api < 1.13.0
+Provides:       %{name}-logging-api = %{version}-%{release}
+Obsoletes:      %{name}-module-confluence < 1.13.0
+Provides:       %{name}-module-confluence = %{version}-%{release}
+Obsoletes:      %{name}-module-docbook-simple < 1.13.0
+Provides:       %{name}-module-docbook-simple = %{version}-%{release}
+Obsoletes:      %{name}-module-fo < 1.13.0
+Provides:       %{name}-module-fo = %{version}-%{release}
+Obsoletes:      %{name}-module-latex < 1.13.0
+Provides:       %{name}-module-latex = %{version}-%{release}
+Obsoletes:      %{name}-module-rtf < 1.13.0
+Provides:       %{name}-module-rtf = %{version}-%{release}
+Obsoletes:      %{name}-module-twiki < 1.13.0
+Provides:       %{name}-module-twiki = %{version}-%{release}
+Obsoletes:      %{name}-module-xhtml < 1.13.0
+Provides:       %{name}-module-xhtml = %{version}-%{release}
+Obsoletes:      %{name}-tests < 1.13.0
+Provides:       %{name}-tests = %{version}-%{release}
+%global _desc %{expand:Doxia is a content generation framework which aims to provide its users with
+powerful techniques for generating static and dynamic content.  Doxia can be
+used to generate static sites in addition to being incorporated into dynamic
+content generation systems like blogs, wikis and content management systems.}
+# oreon:deps
 BuildRequires:  gpgverify
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.inject:guice)
@@ -38,10 +59,10 @@ BuildRequires:  mvn(commons-io:commons-io)
 BuildRequires:  mvn(javax.inject:javax.inject)
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
 BuildRequires:  mvn(org.apache.commons:commons-text)
-BuildRequires:  mvn(org.apache.maven:maven-parent:pom:)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-invoker-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-jar-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-surefire-plugin)
+BuildRequires:  mvn(org.apache.maven:maven-parent:pom:)
 BuildRequires:  mvn(org.apiguardian:apiguardian-api)
 BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-testing)
@@ -50,46 +71,20 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-xml)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.hamcrest:hamcrest-core)
 BuildRequires:  mvn(org.jetbrains:annotations)
-BuildRequires:  mvn(org.junit:junit-bom:pom:)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-params)
+BuildRequires:  mvn(org.junit:junit-bom:pom:)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
 BuildRequires:  mvn(org.xmlunit:xmlunit-core)
 BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
-
-# This can be removed when F45 reaches EOL
-Obsoletes:      %{name}-logging-api < 1.13.0
-Provides:       %{name}-logging-api = %{version}-%{release}
-Obsoletes:      %{name}-module-confluence < 1.13.0
-Provides:       %{name}-module-confluence = %{version}-%{release}
-Obsoletes:      %{name}-module-docbook-simple < 1.13.0
-Provides:       %{name}-module-docbook-simple = %{version}-%{release}
-Obsoletes:      %{name}-module-fo < 1.13.0
-Provides:       %{name}-module-fo = %{version}-%{release}
-Obsoletes:      %{name}-module-latex < 1.13.0
-Provides:       %{name}-module-latex = %{version}-%{release}
-Obsoletes:      %{name}-module-rtf < 1.13.0
-Provides:       %{name}-module-rtf = %{version}-%{release}
-Obsoletes:      %{name}-module-twiki < 1.13.0
-Provides:       %{name}-module-twiki = %{version}-%{release}
-Obsoletes:      %{name}-module-xhtml < 1.13.0
-Provides:       %{name}-module-xhtml = %{version}-%{release}
-Obsoletes:      %{name}-tests < 1.13.0
-Provides:       %{name}-tests = %{version}-%{release}
-
-%global _desc %{expand:Doxia is a content generation framework which aims to provide its users with
-powerful techniques for generating static and dynamic content.  Doxia can be
-used to generate static sites in addition to being incorporated into dynamic
-content generation systems like blogs, wikis and content management systems.}
-
+# /oreon:deps
 %description
 %_desc
 
 %package        core
 Summary:        Core classes and interfaces for %{name}
 Requires:       %{name}-sink-api = %{version}-%{release}
-
 %description    core
 %_desc
 
@@ -100,7 +95,6 @@ Summary:        Doxia modules for several markup languages
 Requires:       %{name} = %{version}-%{release}
 Requires:       %{name}-core = %{version}-%{release}
 Requires:       %{name}-sink-api = %{version}-%{release}
-
 %description    modules
 %_desc
 
@@ -110,7 +104,6 @@ This package provides doxia modules for several markup languages.
 Summary:        Almost Plain Text module for %{name}
 Requires:       %{name}-core = %{version}-%{release}
 Requires:       %{name}-sink-api = %{version}-%{release}
-
 %description    module-apt
 %_desc
 
@@ -121,7 +114,6 @@ documents.  APT format is supported both as source and target formats.
 Summary:        FML module for %{name}
 Requires:       %{name}-core = %{version}-%{release}
 Requires:       %{name}-sink-api = %{version}-%{release}
-
 %description    module-fml
 %_desc
 
@@ -133,7 +125,6 @@ Summary:        Markdown module for %{name}
 Requires:       %{name}-core = %{version}-%{release}
 Requires:       %{name}-module-xhtml5 = %{version}-%{release}
 Requires:       %{name}-sink-api = %{version}-%{release}
-
 %description    module-markdown
 %_desc
 
@@ -143,7 +134,6 @@ This package contains a doxia module for Markdown source documents.
 Summary:        Xdoc module for %{name}
 Requires:       %{name}-core = %{version}-%{release}
 Requires:       %{name}-sink-api = %{version}-%{release}
-
 %description    module-xdoc
 %_desc
 
@@ -154,7 +144,6 @@ format is supported both as source and target formats.
 Summary:        XHTML5 module for %{name}
 Requires:       %{name}-core = %{version}-%{release}
 Requires:       %{name}-sink-api = %{version}-%{release}
-
 %description    module-xhtml5
 %_desc
 
@@ -163,7 +152,6 @@ XHTML5 format is supported both as source and target formats.
 
 %package        sink-api
 Summary:        Sink API for %{name}
-
 %description    sink-api
 %_desc
 
@@ -172,7 +160,6 @@ document formats are accessed via this API.
 
 %package        test-docs
 Summary:        Test documents for %{name}
-
 %description    test-docs
 %_desc
 
@@ -180,16 +167,13 @@ This package contains several test documents to check syntax structures
 under Doxia.
 
 %package        javadoc
-# Apache-2.0: the content
-# MIT: jquery and jquery-ui
-# GPL-2.0-only: script.js, search.js, jquery-ui.overrides.css
 License:        Apache-2.0 AND MIT AND GPL-2.0-only WITH Classpath-exception-2.0
 Summary:        API documentation for %{name}
-
 %description    javadoc
 API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --data=%{SOURCE0} --signature=%{SOURCE1} --keyring=%{SOURCE2}
 %autosetup -p1 -n doxia-%{version}
@@ -217,26 +201,24 @@ done
 rm doxia-core/src/test/java/org/apache/maven/doxia/util/XmlValidatorTest.java
 
 %build
-%mvn_build -s
 
+%mvn_build -s
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-doxia
-%doc README.md
-%license LICENSE NOTICE
-%files core -f .mfiles-doxia-core
-%license LICENSE NOTICE
-%files module-apt -f .mfiles-doxia-module-apt
-%files module-fml -f .mfiles-doxia-module-fml
-%files module-markdown -f .mfiles-doxia-module-markdown
-%files modules -f .mfiles-doxia-modules
-%files module-xdoc -f .mfiles-doxia-module-xdoc
-%files module-xhtml5 -f .mfiles-doxia-module-xhtml5
-%files sink-api -f .mfiles-doxia-sink-api
-%files test-docs -f .mfiles-doxia-test-docs
-%files javadoc -f .mfiles-javadoc
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
+%files -n maven-doxia-core -f %{oreon_filedir}/maven-doxia-core.list
+%files -n maven-doxia-modules -f %{oreon_filedir}/maven-doxia-modules.list
+%files -n maven-doxia-module-apt -f %{oreon_filedir}/maven-doxia-module-apt.list
+%files -n maven-doxia-module-fml -f %{oreon_filedir}/maven-doxia-module-fml.list
+%files -n maven-doxia-module-markdown -f %{oreon_filedir}/maven-doxia-module-markdown.list
+%files -n maven-doxia-module-xdoc -f %{oreon_filedir}/maven-doxia-module-xdoc.list
+%files -n maven-doxia-module-xhtml5 -f %{oreon_filedir}/maven-doxia-module-xhtml5.list
+%files -n maven-doxia-sink-api -f %{oreon_filedir}/maven-doxia-sink-api.list
+%files -n maven-doxia-test-docs -f %{oreon_filedir}/maven-doxia-test-docs.list
+%files -n maven-doxia-javadoc -f %{oreon_filedir}/maven-doxia-javadoc.list
 
 %changelog
+
 %autochangelog

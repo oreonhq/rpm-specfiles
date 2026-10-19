@@ -1,64 +1,58 @@
-%global source0_hash none
-
+%global source0_hash 7724d8ff0ab5014c0704c92892ffd845cefc9e17a6cf4a06d9398e45502554fd
 Name:           python-numpoly
 Version:        1.3.9
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Polynomials as a numpy datatype
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://pypi.org/project/numpoly/
-Source:         %{pypi_source numpoly}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/numpoly/numpoly-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'numpoly' generated automatically by pyp2spec.}
-
 Patch:      %{forgeurl}/pull/127.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 40.9.0
+Requires:       python3-numpoly = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-numpoly+dev
+Summary:        Metapackage for python3-numpoly dev extras
+Requires:       python3-numpoly = %{version}-%{release}
+Requires:       python3dist(pydocstyle) == 3.0.0
+Provides:       python3dist(numpoly[dev]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-numpoly+dev
+Metapackage for python3-numpoly dev extras.
+
+%description
 
 %package -n     python3-numpoly
-Summary:        %{summary}
-
-%description -n python3-numpoly %_description
+Summary:        Polynomials as a numpy datatype
+# oreon:reqs
+Requires:       python3dist(numpy) >= 2.0.0
+Requires:       python3dist(setuptools) >= 40.9.0
+# /oreon:reqs
+%description -n python3-numpoly
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-numpoly dev
-
 
 %prep
-%autosetup -p1 -n numpoly-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir numpoly-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-numpoly usr/lib/python3*/site-packages/numpoly* usr/lib64/python3*/site-packages/numpoly* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/numpoly* usr/lib64/python3*/site-packages/numpoly* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-numpoly -f %{pyproject_files}
+%files
+%files -n python3-numpoly -f %{oreon_filedir}/python3-numpoly.list
 
 %changelog
+
 %autochangelog

@@ -1,37 +1,29 @@
 %global source0_hash 50c914c42406e1365169a37be475562baf28da47c45241a5f7c655c4c2640ada
-
 %global majorver 42
 %global releasever 42.0.0
 %global desc %{expand: \
 The Compute Library is a collection of low-level machine learning functions
 optimized for Arm Cortex-A, Arm Neoverse and Arm Mali GPUs architectures.
-
 The library provides superior performance to other open source alternatives
 and immediate support for new Arm technologies e.g. SVE2.}
-
 Name:		arm-compute-library
 Version:	53.3.1
-Release:	%autorelease
-Summary:	ARM compute library
-
+Release:        1%{?dist}
+Summary:        ARM compute library
 License:	MIT AND Apache-2.0
 URL:		https://github.com/arm-software/ComputeLibrary
-Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/arm-software/ComputeLibrary/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:	arm_compute.pc.in
 Source2:	arm_compute_graph.pc.in
-
 Patch0:		mathjax-doc.patch
 Patch1:		disable-doxygen-timestamp.patch
-
-BuildRequires:	doxygen
-BuildRequires:	gcc-c++
-BuildRequires:	python3-scons
-BuildRequires:	libglvnd-devel
-
-# arm-compute-library is not available on these architectures
-# https://github.com/ARM-software/ComputeLibrary?tab=readme-ov-file#supported-architecturestechnologies
 ExcludeArch:	i686 ppc64le s390x
-
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  libglvnd-devel
+BuildRequires:  python3-scons
+# /oreon:deps
 %description
 %{desc}
 	
@@ -42,7 +34,6 @@ Provides:	bundle(opencl-headers) = 3.0
 Provides:	bundle(stb_image-devel) = 2.19
 Provides:	bundle(half-devel) = 1.12.0
 Provides:	bundle(libnpy) = 0.1.0
-
 %description devel
 %{desc}
 
@@ -50,11 +41,11 @@ Provides:	bundle(libnpy) = 0.1.0
 Summary:	Documentations and examples for %{name}
 Requires:	%{name}-devel%{?_isa} = %{version}-%{release}
 Requires:	mathjax
-
 %description doc
 Contains documentations and examples for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n ComputeLibrary-%{version} 
@@ -68,6 +59,7 @@ sed -i '/#include <cstddef>.*/a#include <cstdint>' arm_compute/runtime/MemoryReg
 sed -i '1i #include <cstdint>' tests/framework/instruments/hwc_names.hpp
 
 %build
+
 scons %{?_smp_mflags} os=linux \
 	build=native \
 	install_dir=install \
@@ -84,11 +76,7 @@ scons %{?_smp_mflags} os=linux \
 	neon=0 arch=x86_64 \
 %endif
 	Werror=0 extra_cxx_flags="%{optflags}" extra_link_flags="%{build_ldflags}"
-
-# Build documentation
 doxygen docs/Doxyfile
-
-# pkgconfig files
 cat %{SOURCE1} | sed -e "s,%%prefix%%,%{_prefix},g" \
 	-e "s,%%exec_prefix%%,%{_prefix},g" \
 	-e "s,%%libdir%%,%{_libdir},g" \
@@ -101,7 +89,6 @@ cat %{SOURCE2} | sed -e "s,%%prefix%%,%{_prefix},g" \
 	-e "s,%%includedir%%,%{_includedir},g" \
 	-e "s,%%VERSION%%,%{version},g" \
 	> build/install/arm_compute_graph.pc
-
 %install
 mkdir -p %{buildroot}%{_includedir}/ArmCompute
 cp -a build/install/include/* %{buildroot}%{_includedir}/ArmCompute/
@@ -112,32 +99,18 @@ mkdir -p %{buildroot}%{_libdir}/pkgconfig
 install -m 0644 build/install/arm_compute.pc %{buildroot}%{_libdir}/pkgconfig
 install -m 0644 build/install/arm_compute_graph.pc %{buildroot}%{_libdir}/pkgconfig
 mkdir -p %{buildroot}%{_docdir}/%{name}
-cp -a build/docs/html %{buildroot}%{_docdir}/%{name} 
+cp -a build/docs/html %{buildroot}%{_docdir}/%{name}
+%oreon_autofiles arm-compute-library-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles arm-compute-library-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# CL_DEVICE_VERSION = Unavailable
-# ERROR: in generate_build_options src/core/CL/CLCompileContext.cpp:284: Non uniform workgroup size is not supported!!
-# by-passing the CL tests
+
 LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH ./build/tests/arm_compute_validation --filter='^(?!CL).*'
-
-%files
-%license LICENSE include/half/LICENSE.txt
-%doc README.md
-%{_libdir}/libarm_compute.so.%{releasever}
-%{_libdir}/libarm_compute.so.%{majorver}
-%{_libdir}/libarm_compute_graph.so.%{releasever}
-%{_libdir}/libarm_compute_graph.so.%{majorver}
-
-%files devel
-%doc CONTRIBUTING.md
-%{_includedir}/ArmCompute/*
-%{_libdir}/libarm_compute.so
-%{_libdir}/libarm_compute_graph.so
-%{_libdir}/pkgconfig/arm_compute.pc
-%{_libdir}/pkgconfig/arm_compute_graph.pc
-
-%files doc
-%{_docdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n arm-compute-library-devel -f %{oreon_filedir}/arm-compute-library-devel.list
+%files -n arm-compute-library-doc -f %{oreon_filedir}/arm-compute-library-doc.list
 
 %changelog
+
 %autochangelog

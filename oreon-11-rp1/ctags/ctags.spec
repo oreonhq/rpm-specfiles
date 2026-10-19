@@ -1,26 +1,24 @@
 %global source0_hash 2c63efe9e0e083dc50e6fdd8c5414781cc8873d8c8940cf553c01870ed962f8c
-
-Summary: A C programming language indexing and/or cross-reference tool
+Summary:        A C programming language indexing and/or cross-reference tool
 Name: ctags
 Version: 6.2.1
-Release: 3%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL: https://ctags.io/
 Source0:        https://github.com/universal-ctags/ctags/releases/download/v%{version}/universal-%{name}-%{version}.tar.gz
-
-BuildRequires: autoconf
-BuildRequires: automake
-BuildRequires: gcc
-BuildRequires: jansson-devel
-BuildRequires: libseccomp-devel
-BuildRequires: libxml2-devel
-BuildRequires: libyaml-devel
-BuildRequires: make
-BuildRequires: pkgconfig
-BuildRequires: python3-docutils
-
 Obsoletes: %{name}-etags <= 5.8
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  jansson-devel
+BuildRequires:  libseccomp-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  libyaml-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  python3-docutils
+# /oreon:deps
 %description
 Ctags generates an index (or tag) file of C language objects found in
 C source and header files.  The index makes it easy for text editors or
@@ -40,30 +38,22 @@ Install ctags if you are going to use your system for C programming.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n universal-%{name}-%{version}
-
+%global oreon_srcdir universal-%{name}-%{version}
+%oreon_prep
 %build
+
 ./autogen.sh
 %configure
-
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-#make check
 
-%files
-%license COPYING
-%doc README.md
-%{_bindir}/%{name}
-%{_bindir}/optscript
-%{_bindir}/readtags
-%{_mandir}/man1/*
-%{_mandir}/man5/*
-%{_mandir}/man7/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.2.1-3
 - Prepare for Oreon 11 (RP1)

@@ -1,23 +1,10 @@
 %global source0_hash 35cd03fc4193969b1cce01190340e5c129c1ba8f02242a9e6dff4b83be118759
-
-# TESTING NOTE: The tests require rocq-stdlib, thus introducing a circular
-# dependency.  Use this conditional to control testing.
-#
-# The tests don't work anyway, because we have to have an installed version of
-# rocq with rocq-devtools, which we don't otherwise want to build or install.
 %bcond test 0
-
 %global giturl  https://github.com/rocq-prover/rocq
-
 Name:           rocq
 Version:        9.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Proof management system
-
-# The project as a whole is LGPL-2.1-only.  Exceptions:
-# - clib/diff2.ml is MIT
-# - gramlib is BSD-3-Clause except:
-# - gramlib/stream.ml* is LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 License:        LGPL-2.1-only AND LGPL-2.1-only WITH OCaml-LGPL-linking-exception AND MIT AND BSD-3-Clause
 URL:            https://rocq-prover.org/
 VCS:            git:%{giturl}.git
@@ -25,49 +12,51 @@ Source0:        %{giturl}/archive/V%{version}/%{name}-%{version}.tar.gz
 Source1:        org.rocq-prover.rocqide.desktop
 Source2:        org.rocq-prover.rocqide.metainfo.xml
 Source3:        rocq.xml
-# Expose a dependency on the math library so rpm can see it
 Patch:          %{name}-mathlib.patch
-# [Backport] Fix documentation build (upstream commit 17e4fb9)
 Patch:          %{name}-no-generated-readme.patch
-
-# Rocq's plugin architecture requires cmxs files.  In addition, neither Java
-# nor OCaml is available on i386, but since i386 is not in
-# ocaml_native_compiler, we do not need to exclude it explicitly.
 ExclusiveArch:  %{ocaml_native_compiler}
-
+%if %{with test}
+%endif
+Requires:       %{name}-runtime%{_isa} = %{version}-%{release}
+Requires:       %{name}-core%{_isa} = %{version}-%{release}
+Requires:       csdp-tools
+Requires:       ocaml-findlib
+Recommends:     emacs-proofgeneral
+Recommends:     rocq-stdlib
+Recommends:     texlive-collection-latex
+Provides:       coq = %{version}-%{release}
+Obsoletes:      coq < 9.2.0
+%global _desc %{expand:Rocq is a formal proof management system.  It provides a formal language to
+write mathematical definitions, executable algorithms and theorems together
+with an environment for semi-interactive development of machine-checked proofs.}
+# oreon:deps
 BuildRequires:  adwaita-icon-theme
+BuildRequires:  antlr4
 BuildRequires:  csdp-tools
 BuildRequires:  desktop-file-utils
 BuildRequires:  findutils
 BuildRequires:  libappstream-glib
 BuildRequires:  make
-BuildRequires:  ocaml >= 4.14.0
-BuildRequires:  ocaml-cairo-devel >= 0.6.4
-BuildRequires:  ocaml-dune >= 3.8
-BuildRequires:  ocaml-findlib-devel >= 1.9.1
-BuildRequires:  ocaml-lablgtk3-sourceview3-devel >= 3.1.2
+BuildRequires:  ocaml
+BuildRequires:  ocaml-cairo-devel
+BuildRequires:  ocaml-dune
+BuildRequires:  ocaml-findlib-devel
+BuildRequires:  ocaml-lablgtk3-sourceview3-devel
 BuildRequires:  ocaml-ocamldoc
-BuildRequires:  ocaml-zarith-devel >= 1.11
-BuildRequires:  python3-devel
-
-%if %{with test}
 BuildRequires:  ocaml-ounit2-devel
-BuildRequires:  ocaml-yojson-devel >= 2.0
+BuildRequires:  ocaml-yojson-devel
+BuildRequires:  ocaml-zarith-devel
 BuildRequires:  ocaml-zip-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-sphinx-latex
+BuildRequires:  python3.15dist(antlr4-python3-runtime)
+BuildRequires:  python3.15dist(beautifulsoup4)
+BuildRequires:  python3.15dist(pexpect)
+BuildRequires:  python3.15dist(sphinx)
+BuildRequires:  python3.15dist(sphinx-rtd-theme)
+BuildRequires:  python3.15dist(sphinxcontrib-bibtex)
 BuildRequires:  rocq-stdlib
 BuildRequires:  rsync
-BuildRequires:  time
-%endif
-
-# For documentation
-BuildRequires:  antlr4 >= 4.7.1
-BuildRequires:  %{py3_dist antlr4-python3-runtime}
-BuildRequires:  %{py3_dist beautifulsoup4}
-BuildRequires:  %{py3_dist pexpect}
-BuildRequires:  %{py3_dist sphinx}
-BuildRequires:  %{py3_dist sphinxcontrib-bibtex}
-BuildRequires:  %{py3_dist sphinx-rtd-theme}
-BuildRequires:  python3-sphinx-latex
 BuildRequires:  tex(adjustbox.sty)
 BuildRequires:  tex(amssymb.sty)
 BuildRequires:  tex(array.sty)
@@ -80,24 +69,8 @@ BuildRequires:  tex(polyglossia.sty)
 BuildRequires:  tex(unicode-math.sty)
 BuildRequires:  tex(verbatim.sty)
 BuildRequires:  tex(xr.sty)
-
-Requires:       %{name}-runtime%{_isa} = %{version}-%{release}
-Requires:       %{name}-core%{_isa} = %{version}-%{release}
-Requires:       csdp-tools
-Requires:       ocaml-findlib
-
-Recommends:     emacs-proofgeneral
-Recommends:     rocq-stdlib
-Recommends:     texlive-collection-latex
-
-# This can be removed when F48 reaches EOL
-Provides:       coq = %{version}-%{release}
-Obsoletes:      coq < 9.2.0
-
-%global _desc %{expand:Rocq is a formal proof management system.  It provides a formal language to
-write mathematical definitions, executable algorithms and theorems together
-with an environment for semi-interactive development of machine-checked proofs.}
-
+BuildRequires:  time
+# /oreon:deps
 %description
 %_desc
 
@@ -110,10 +83,8 @@ theory) and teaching.
 %package        runtime
 Summary:        Core binaries and tools of the Rocq proof management system
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-# This can be removed when F48 reaches EOL
 Provides:       coq-core = %{version}-%{release}
 Obsoletes:      coq-core < 9.2.0
-
 %description    runtime
 %_desc
 
@@ -123,7 +94,6 @@ not the vernacular standard library.
 %package        runtime-devel
 Summary:        Development files for %{name}-runtime
 Requires:       %{name}-runtime%{?_isa} = %{version}-%{release}
-
 %description    runtime-devel
 %_desc
 
@@ -133,10 +103,8 @@ for developing applications that use %{name}-runtime.
 %package        core
 Summary:        The Rocq Prelude, and the Corelib and Ltac2 modules
 Requires:       %{name}-runtime%{?_isa} = %{version}-%{release}
-# This can be removed when F48 reaches EOL
 Provides:       coq = %{version}-%{release}
 Obsoletes:      coq < 9.2.0
-
 %description    core
 %_desc
 
@@ -147,7 +115,6 @@ Corelib.* and Ltac2.* namespaces.
 %package        core-source
 Summary:        Source files of the Rocq Prelude, and the Corelib and Ltac2 modules
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}
-
 %description    core-source
 %_desc
 
@@ -159,10 +126,8 @@ purposes.
 %package     -n coq-core-compat
 Summary:        Compatibility binaries for Coq after the Rocq renaming
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}
-# This can be removed when F48 reaches EOL
 Provides:       coq-core = %{version}-%{release}
 Obsoletes:      coq-core < 9.2.0
-
 %description -n coq-core-compat
 %_desc
 
@@ -172,10 +137,8 @@ through previous Coq commands like coqc coqtop,...
 %package        coqide-server
 Summary:        The coqidetop language server
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}
-# This can be removed when F48 reaches EOL
 Provides:       coq-coqide-server = %{version}-%{release}
 Obsoletes:      coq-coqide-server < 9.2.0
-
 %description    coqide-server
 %_desc
 
@@ -186,7 +149,6 @@ Rocq in a structured way.
 %package        coqide-server-devel
 Summary:        Development files for %{name}-coqide-server
 Requires:       %{name}-coqide-server%{?_isa} = %{version}-%{release}
-
 %description    coqide-server-devel
 %_desc
 
@@ -194,20 +156,15 @@ The %{name}-coqide-server-devel package contains libraries and signature files
 for developing applications that use %{name}-coqide-server.
 
 %package        rocqide
-# The project as a whole is LGPL-2.1-only.
-# LGPL-2.1-or-later: ide/rocqide/protocol/xml_{lexer,parser}*
 License:        LGPL-2.1-only AND LGPL-2.1-or-later
 Summary:        RocqIDE for the Rocq proof management system
 Requires:       %{name}-coqide-server%{?_isa} = %{version}-%{release}
 Requires:       adwaita-icon-theme
 Requires:       hicolor-icon-theme
 Requires:       xdg-utils
-# This can be removed when F48 reaches EOL
 Provides:       coq-coqide = %{version}-%{release}
 Obsoletes:      coq-coqide < 9.2.0
-
 Provides:       bundled(ocaml-xml-light)
-
 %description    rocqide
 %_desc
 
@@ -216,27 +173,13 @@ development of interactive proofs.
 
 %package        doc
 Summary:        Documentation for the Rocq proof management system
-# The documentation as a whole is OPUBL-1.0.
-# Some sphinx-installed files are LGPL-2.1-only.
-# Some sphinx-installed files are MIT.
-#
-# The OPUBL-1.0 license is not allowed for Fedora, but carries this usage note
-# (https://gitlab.com/fedora/legal/fedora-license-data/-/blob/main/data/OPUBL-1.0.toml):
-# "Allowed-for documentation if the copyright holder does not exercise any of
-# the “LICENSE OPTIONS” listed in Section VI".
-#
-# doc/LICENSE contains this note: "Options A and B are *not* elected."
-#
-# Therefore, this package falls under the Fedora exception.
 License:        OPUBL-1.0 AND LGPL-2.1-only AND MIT
 BuildArch:      noarch
 Requires:       font(fontawesome)
 Requires:       font(lato)
 Requires:       font(robotoslab)
-# This can be removed when F48 reaches EOL
 Provides:       coq-doc = %{version}-%{release}
 Obsoletes:      coq-doc < 9.2.0
-
 %description    doc
 %_desc
 
@@ -247,6 +190,7 @@ gives a more complete description of the whole system. Included are
 HTML versions of both and a PDF version of the Reference Manual.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -276,15 +220,11 @@ for f in $(grep -Frl '%{_bindir}/env'); do
 done
 
 %build
-%global rocqdocdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/rocq-%{version}}
 
-# Regenerate ANTLR files
+%global rocqdocdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/rocq-%{version}}
 cd doc/tools/coqrst/notations
 antlr4 -Dlanguage=Python3 -visitor -no-listener TacticNotations.g
 cd -
-
-# Set our configuration options
-# NOTE: Must still be installed in a dir named `coq'
 ./configure -prefix %{_prefix}                       \
             -libdir %{ocamldir}/coq                  \
             -configdir %{_sysconfdir}/xdg/%{name}    \
@@ -298,129 +238,64 @@ cd -
             -browser "xdg-open %s"                   \
             -bytecode-compiler yes                   \
             -native-compiler no
-# As of coq 8.17.0, the native compiler cannot be built with OCaml 5.x
-#%%ifarch %%{ocaml_native_compiler}
-#            -native-compiler yes
-#%%else
-#            -native-compiler no
-#%%endif
-
-# Build the binary artifacts
 make dunestrap VERBOSE=1 DUNEOPT="--verbose --profile=release"
 %dune_build %{!?_with_test:-p rocq-runtime,rocq-core,coq-core,coqide-server,rocqide}
-
-# Build the documentation
 export ROCQLIB=${PWD}/_build/install/default/lib/coq
 export SPHINXWARNOPT="-w$PWD/sphinx-warn.log"
 %dune_build @refman-html @refman-pdf @corelib-html
-
 %install
 %dune_install %{!?_with_test:rocq-runtime rocq-core coq-core coqide-server rocqide}
-
-# Install the LaTeX style file
 mkdir -p %{buildroot}%{_texmf_main}/tex/latex/misc
 mv %{buildroot}%{_datadir}/texmf/tex/latex/misc/coqdoc.sty \
    %{buildroot}%{_texmf_main}/tex/latex/misc
 rm -fr %{buildroot}%{_datadir}/texmf
-
-# FIXME: dune ignores the configdir argument to configure
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/%{name}
-
-# Prepare the documentation for installation
 find _build/default/doc -name .buildinfo -delete
-
-# Install the documentation
 rm -fr _build/default/doc/refman-html/.doctrees
 mkdir -p %{buildroot}%{rocqdocdir}/refman-pdf
 mv _build/default/doc/refman-pdf/rocq*.pdf %{buildroot}%{rocqdocdir}/refman-pdf/
 mv _build/default/doc/refman-html %{buildroot}%{rocqdocdir}/refman-html
 mv _build/default/doc/corelib/html %{buildroot}%{rocqdocdir}/corelib
 mv _build/default/doc/corelib/_index.html %{buildroot}%{rocqdocdir}/corelib/
-
-# Install desktop and file type icons
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/apps
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/256x256/mimetypes
 cp --preserve=timestamps ide/rocqide/coq.png \
    %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/rocq.png
 cp --preserve=timestamps ide/rocqide/coq.png \
    %{buildroot}%{_datadir}/icons/hicolor/256x256/mimetypes/rocqfile.png
-
-# Make a MIME type for .v files
 mkdir -p %{buildroot}%{_datadir}/mime/packages
 cp -p %{SOURCE3} %{buildroot}%{_datadir}/mime/packages
-
-# Install desktop file
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
-
-# Install AppData file
 mkdir -p %{buildroot}%{_metainfodir}
 install -pm 644 %{SOURCE2} %{buildroot}%{_metainfodir}
 appstream-util validate-relax --nonet \
   %{buildroot}%{_metainfodir}/org.rocq-prover.rocqide.metainfo.xml
-
-# Install the language bindings
-# NOTE: Must still be installed in a dir named `coq'
 mkdir -p %{buildroot}%{_datadir}/gtksourceview-3.0/language-specs
 for fil in coq.lang coq-ssreflect.lang; do
   ln -s ../../coq/$fil %{buildroot}%{_datadir}/gtksourceview-3.0/language-specs
 done
-
-# Install the style file
-# NOTE: Must still be installed in a dir named `coq'
 mkdir -p %{buildroot}%{_datadir}/gtksourceview-3.0/styles
 ln -s ../../coq/coq_style.xml %{buildroot}%{_datadir}/gtksourceview-3.0/styles
-
-# Byte compile the tools
 %py_byte_compile %{python3} %{buildroot}%{ocamldir}/coq-core/tools
-
-# Generate file lists
 %ocaml_files -s
-
+%oreon_autofiles coq-core-compat usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with test}
 %check
+
 %dune_check
 %endif
-
-%files
-# Empty metapackage
-
-%files runtime -f .ofiles-rocq-runtime
-%doc README.md
-%license LICENSE
-%{_texmf_main}/tex/latex/misc/
-
-%files runtime-devel -f .ofiles-rocq-runtime-devel
-
-%files core
-%{ocamldir}/rocq-core/
-%{ocamldir}/coq
-%exclude %{ocamldir}/coq/theories/*/*.v
-%exclude %{ocamldir}/coq/user-contrib/Ltac2/*/*.v
-
-%files core-source
-%{ocamldir}/coq/theories/*/*.v
-%{ocamldir}/coq/user-contrib/Ltac2/*/*.v
-
-%files -n coq-core-compat -f .ofiles-coq-core -f .ofiles-coq-core-devel
-
-%files coqide-server -f .ofiles-coqide-server
-
-%files coqide-server-devel -f .ofiles-coqide-server-devel
-
-%files rocqide -f .ofiles-rocqide -f .ofiles-rocqide-devel
-%doc ide/rocqide/FAQ
-%{_datadir}/icons/hicolor/256x256/apps/rocq.png
-%{_datadir}/icons/hicolor/256x256/mimetypes/rocqfile.png
-%{_metainfodir}/org.rocq-prover.rocqide.metainfo.xml
-%{_datadir}/applications/org.rocq-prover.rocqide.desktop
-%{_datadir}/gtksourceview-3.0/language-specs/coq*.lang
-%{_datadir}/gtksourceview-3.0/styles/coq_style.xml
-%{_datadir}/mime/packages/rocq.xml
-%{_sysconfdir}/xdg/rocq/
-
-%files doc
-%license doc/LICENSE
-%{rocqdocdir}
+%files -f %{oreon_filedir}/main.list
+%files -n rocq-runtime -f %{oreon_filedir}/rocq-runtime.list
+%files -n rocq-runtime-devel -f %{oreon_filedir}/rocq-runtime-devel.list
+%files -n rocq-core -f %{oreon_filedir}/rocq-core.list
+%files -n rocq-core-source -f %{oreon_filedir}/rocq-core-source.list
+%files -n coq-core-compat -f %{oreon_filedir}/coq-core-compat.list
+%files -n rocq-coqide-server -f %{oreon_filedir}/rocq-coqide-server.list
+%files -n rocq-coqide-server-devel -f %{oreon_filedir}/rocq-coqide-server-devel.list
+%files -n rocq-rocqide -f %{oreon_filedir}/rocq-rocqide.list
+%files -n rocq-doc -f %{oreon_filedir}/rocq-doc.list
 
 %changelog
+
 %autochangelog

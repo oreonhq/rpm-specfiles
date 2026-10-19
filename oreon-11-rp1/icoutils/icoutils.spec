@@ -1,32 +1,24 @@
-%global source0_hash none
-
+%global source0_hash 17abe02d043a253b68b47e3af69c9fc755b895db68fdc8811786125df564c6e0
 Name:           icoutils
 Version:        0.32.3
-Release:        20%{?dist}
+Release:        1%{?dist}
 Summary:        Utility for extracting and converting Microsoft icon and cursor files
-
 License:        GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            http://www.nongnu.org/icoutils/
 Source0:        https://nongnu.uib.no/%{name}/%{name}-%{version}.tar.bz2
-
-# Possible security fix, at minimum it's a DoS.
-# Upstream commit d72956a6de228c91d1fc48fd15448fadea9ab6cf
 Patch1:        0001-wrestool-Fix-get_resource_id_quoted-to-return-heap-a.patch
-# Fix build for GCC 15
 Patch2:        0002-gcc15.patch
-
+Supplements: (kio-extras and wine-core)
+Provides:       bundled(gnulib)
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gcc
-BuildRequires:  gettext 
+BuildRequires:  gettext
 BuildRequires:  libpng-devel
-BuildRequires:  perl-generators
 BuildRequires:  make
-
-Supplements: (kio-extras and wine-core)
-
-Provides:       bundled(gnulib)
-
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 The icoutils are a set of programs for extracting and converting images in
 Microsoft Windows icon and cursor files. These files usually have the
@@ -34,6 +26,7 @@ extension .ico or .cur, but they can also be embedded in executables or
 libraries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
@@ -49,25 +42,17 @@ for f in AUTHORS NEWS; do
 done
 
 %build
+
 %configure
 make %{?_smp_mflags}
-
-
 %install
 make install DESTDIR=%{buildroot}
 %find_lang %{name}
+%oreon_autofiles main
 
-
-%files -f %{name}.lang
-%license COPYING
-%doc README AUTHORS NEWS TODO ChangeLog
-%{_bindir}/extresso
-%{_bindir}/genresscript
-%{_bindir}/icotool
-%{_bindir}/wrestool
-%{_mandir}/man1/*.1*
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.32.3-20
 - Import

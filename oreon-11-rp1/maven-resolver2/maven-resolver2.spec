@@ -1,5 +1,4 @@
 %global source0_hash 1b80cefcddd86eb423ed5a233a92c4d610b7c8e448f96c2850ae1ab35bee2975
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,49 +80,25 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond bootstrap 0
-
 Name:           maven-resolver2
 Epoch:          1
 Version:        2.0.23
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Apache Maven Artifact Resolver library
 License:        Apache-2.0
 URL:            https://maven.apache.org/resolver/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/maven/resolver/maven-resolver-%{version}-source-release.zip
-
 Patch:          0001-Remove-use-of-deprecated-SHA-1-and-MD5-algorithms.patch
 Patch:          0002-Make-I-O-errors-during-test-cleanup-non-fatal.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(com.google.code.gson:gson)
-BuildRequires:  mvn(com.google.inject:guice)
-BuildRequires:  mvn(commons-codec:commons-codec)
-BuildRequires:  mvn(javax.inject:javax.inject)
-BuildRequires:  mvn(org.apache.httpcomponents:httpclient)
-BuildRequires:  mvn(org.apache.httpcomponents:httpcore)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
-BuildRequires:  mvn(org.apache.maven.wagon:wagon-provider-api)
-BuildRequires:  mvn(org.apache.maven:maven-model-builder:4.0.0-rc-4)
-BuildRequires:  mvn(org.apache.maven:maven-parent:pom:)
-BuildRequires:  mvn(org.apache.maven:maven-resolver-provider:4.0.0-rc-4)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-classworlds)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils:4.0.2)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-xml)
-BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
-BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.plexus)
-BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
-BuildRequires:  mvn(org.slf4j:jcl-over-slf4j:2.0.17)
-BuildRequires:  mvn(org.slf4j:slf4j-api:2.0.17)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1:2.0.5-5
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 Apache Maven Artifact Resolver is a library for working with artifact
 repositories and dependency resolution. Maven Artifact Resolver deals with the
@@ -131,6 +106,7 @@ specification of local repository, remote repository, developer workspaces,
 artifact transports and artifact resolution.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n maven-resolver-%{version}
@@ -166,13 +142,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_compat_version : 2.0.23 2.0.9
 
 %build
-%mvn_build -j -f -j -- -Dmaven4Version=4.0.0-rc-4
 
+%mvn_build -j -f -j -- -Dmaven4Version=4.0.0-rc-4
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,63 +1,41 @@
-%global source0_hash none
-
+%global source0_hash fe8b7b67c6c728f017f09b8a6c877c3e3ecbc1344e41c44c7c3405c8c01778fc
 Name:           python-linuxdoc
 Version:        20260504
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Sphinx-doc extensions _ tools to extract documentation from C/C++ source file comments.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        AGPL-3.0-or-later
 URL:            https://github.com/return42/linuxdoc
-Source:         %{pypi_source linuxdoc}
-
+Source0:        https://files.pythonhosted.org/packages/source/l/linuxdoc/linuxdoc-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'linuxdoc' generated automatically by pyp2spec.}
-
 Patch:          Fix-compatibility-with-docutils-0.22.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-linuxdoc = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-linuxdoc
-Summary:        %{summary}
-
-%description -n python3-linuxdoc %_description
-
+Summary:        Sphinx-doc extensions _ tools to extract documentation from C/C++ source file comments.
+%description -n python3-linuxdoc
 
 %prep
-%autosetup -p1 -n linuxdoc-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir linuxdoc-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-linuxdoc usr/lib/python3*/site-packages/linuxdoc* usr/lib64/python3*/site-packages/linuxdoc* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/linuxdoc* usr/lib64/python3*/site-packages/linuxdoc* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-linuxdoc -f %{pyproject_files}
-%{_bindir}/linuxdoc.autodoc
-%{_bindir}/linuxdoc.grepdoc
-%{_bindir}/linuxdoc.lintdoc
-%{_bindir}/linuxdoc.rest
+%files
+%files -n python3-linuxdoc -f %{oreon_filedir}/python3-linuxdoc.list
 
 %changelog
+
 %autochangelog

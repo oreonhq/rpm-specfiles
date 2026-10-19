@@ -1,19 +1,17 @@
 %global source0_hash 9a4032202fc0d2b0858f41b167389a9cfe52ac24ec282e6479b90765319de113
-
 Name:           mailcap
 Version:        2.1.54
 Release:        10%{?dist}
 Summary:        Helper application and MIME type associations for file types
-
 License:        LicenseRef-Fedora-Public-Domain AND MIT AND metamail
 URL:            https://pagure.io/mailcap
 Source0:        mailcap-%{version}.tar.xz
-BuildRequires: make
-BuildRequires:  perl-interpreter
-# the test script is written in python
-BuildRequires:  python3
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  perl-interpreter
+BuildRequires:  python3
+# /oreon:deps
 %description
 The mailcap file is used by the metamail program.  Metamail reads the
 mailcap file to determine how it should display non-text or multimedia
@@ -30,42 +28,30 @@ by several applications e.g. to determine MIME types for filenames.
 Summary:        MIME type mappings for nginx
 License:        LicenseRef-Fedora-Public-Domain
 Requires:       nginx-filesystem
-
 %description -n nginx-mimetypes
 MIME type mappings for nginx.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
-
 %build
+
 %make_build
-
-
 %install
 rm -rf $RPM_BUILD_ROOT
 %make_install sysconfdir=%{_sysconfdir} mandir=%{_mandir}
-
+%oreon_autofiles nginx-mimetypes usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make check
-
-
-%files
-%license COPYING
-%doc NEWS
-%config(noreplace) %{_sysconfdir}/mailcap
-%config(noreplace) %{_sysconfdir}/mime.types
-%{_mandir}/man5/mailcap.*
-
-%files -n nginx-mimetypes
-%license COPYING
-%doc NEWS
-%config(noreplace) %{_sysconfdir}/nginx/mime.types
-
+%files -f %{oreon_filedir}/main.list
+%files -n nginx-mimetypes -f %{oreon_filedir}/nginx-mimetypes.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.54-10
 - Prepare for Oreon 11 (RP1)

@@ -1,26 +1,21 @@
 %global source0_hash 82f6b9e3a40632555e92e506e2ca8a5b1deed5d57f61362e803d0e2a9c509c8b
-
 %global upstream_version 3.4
-
 Name:           ongres-scram
 Version:        %(echo %{upstream_version} | sed 's/-/~/g')
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Salted Challenge Response Authentication Mechanism (SCRAM) - Java Implementation
 License:        BSD-2-Clause
 URL:            https://github.com/ongres/scram
-Source0:        https://github.com/ongres/scram/archive/refs/tags/%{upstream_version}.tar.gz#/scram-%{upstream_version}.tar.gz
+Source0:        https://github.com/ongres/scram/archive/refs/tags/%{version}.tar.gz#/scram-%{version}.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+Obsoletes:      %{name}-javadoc < 3.1-3
+# oreon:deps
 BuildRequires:  jurand
-
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.ongres.stringprep:saslprep)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
-
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.1-3
-
+# /oreon:deps
 %description
 This is a Java implementation of SCRAM (Salted Challenge Response
 Authentication Mechanism) which is part of the family of Simple
@@ -29,11 +24,11 @@ mechanisms. It is described as part of RFC 5802 and RFC7677.
 
 %package client
 Summary:        Client for %{name}
-
 %description client
 This package contains the client for %{name}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n "scram-%{upstream_version}"
 find \( -name '*.jar' -o -name '*.class' \) -delete
@@ -57,16 +52,15 @@ find \( -name '*.jar' -o -name '*.class' \) -delete
 ' scram-parent
 
 %build
-%mvn_build -j -s
 
+%mvn_build -j -s
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-scram-common
-%license LICENSE
-
-%files client -f .mfiles-scram-client
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n ongres-scram-client -f %{oreon_filedir}/ongres-scram-client.list
 
 %changelog
+
 %autochangelog

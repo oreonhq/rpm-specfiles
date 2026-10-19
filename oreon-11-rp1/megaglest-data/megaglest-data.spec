@@ -1,20 +1,19 @@
-%global source0_hash none
-
+%global source0_hash 99775601eae78e2c626bca76a6e9359491e13685541e36bee0d3207f81152e5e
 Name:		megaglest-data
 Version:	3.13.0
-Release:	19%{?dist}
-Summary:	Mega Glest data files
-# Automatically converted from old format: CC-BY-SA - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Mega Glest data files
 License:	LicenseRef-Callaway-CC-BY-SA
 Url:		http://megaglest.org/
 Source0:        https://github.com/MegaGlest/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:	noarch
+Obsoletes:	glest-data <= 3.2.2
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:	cmake
-BuildRequires:	desktop-file-utils
-Obsoletes:	glest-data <= 3.2.2
-
+# /oreon:deps
 %description
 MegaGlest is an entertaining free (freeware and free software) and
 open source cross-platform 3D real-time strategy (RTS) game, where
@@ -26,16 +25,15 @@ A lot of additional game data can be downloaded from within the
 game at no cost.
 
 %prep
-%autosetup -n %{name}-%{version}
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380904)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 mkdir -p %{_vpath_builddir}
 %cmake \
   -DMEGAGLEST_ICON_INSTALL_PATH=%{_datadir}/icons
 %cmake_build
-
 %install
 %cmake_install
 rm -fr %{buildroot}/%{_datadir}/megaglest/docs
@@ -48,22 +46,11 @@ for file in megaglest megaglest_editor megaglest_g3dviewer
 do
   desktop-file-validate %{buildroot}/%{_datadir}/applications/$file.desktop
 done
-
-# remove Debian style menu file
 rm %{buildroot}/%{_datadir}/menu/megaglest
+%oreon_autofiles main
 
-%files
-%doc docs/*
-%{_datadir}/appdata/*.appdata.xml
-%{_datadir}/applications/megaglest*.desktop
-%{_datadir}/icons/megaglest.*
-%dir %{_datadir}/megaglest
-%{_datadir}/megaglest/data/
-%{_datadir}/megaglest/maps/
-%{_datadir}/megaglest/scenarios/
-%{_datadir}/megaglest/techs/
-%{_datadir}/megaglest/tilesets/
-%{_datadir}/megaglest/tutorials/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,33 +1,22 @@
 %global source0_hash fc1decfd710acdc10db898b594bfbe7d1107f1cbef2aefebe9e1780e40ff23d4
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
-# The binary is OCaml bytecode
 %global debug_package %{nil}
-
 Name:           ocaml-obuild
 Version:        0.3.0
 Summary:        Simple package build system for OCaml
-
 %forgemeta
-
 Release:        1%{?dist}
 License:        BSD-2-Clause
 URL:            https://github.com/ocaml-obuild/obuild
 VCS:            git:%{url}.git
-Source0:        %{url}/archive/obuild-v%{version}.tar.gz
-
-# Fix a partial function application
-# https://github.com/ocaml-obuild/obuild/issues/187
+Source0:        https://github.com/%{name}/obuild/archive/obuild-v%{version}.tar.gz
 Patch0:         %{name}-partial.patch
-
+Requires:       ocaml-findlib%{?_isa}
+# oreon:deps
+BuildRequires:  help2man
 BuildRequires:  ocaml
 BuildRequires:  ocaml-findlib
-BuildRequires:  help2man
-
-Requires:       ocaml-findlib%{?_isa}
-
+# /oreon:deps
 %description
 A parallel, incremental and declarative build system for OCaml.
 
@@ -42,17 +31,14 @@ way of working, adapting parts where necessary to fully support OCaml.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n obuild-obuild-v%{version}
-
+%global oreon_srcdir obuild-obuild-v%{version}
+%oreon_prep
 %build
-./bootstrap
 
+./bootstrap
 %install
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
 cp "dist/build/obuild/obuild" "dist/build/obuild-simple/obuild-simple" "$RPM_BUILD_ROOT%{_bindir}"
-
-# generate manpages
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 help2man \
     --output "$RPM_BUILD_ROOT%{_mandir}/man1/obuild.1" \
@@ -68,12 +54,10 @@ help2man \
     --no-discard-stderr \
     --no-info \
     dist/build/obuild-simple/obuild-simple
+%oreon_autofiles main
 
-%files
-%doc README.md OBUILD_SPEC.md DESIGN.md
-%license LICENSE
-%{_bindir}/obuild*
-%{_mandir}/man1/obuild*.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

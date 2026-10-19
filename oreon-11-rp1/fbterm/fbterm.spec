@@ -1,35 +1,27 @@
 %global source0_hash 720f600817217257aa4c822e67814495dcb6c8d6326cdde5fe3ba1e457d9915d
-
 %global udevdir %(pkg-config --variable=udevdir udev)
-
 Name:       fbterm
 Version:    1.8
-Release:    1%{?dist}
+Release:        1%{?dist}
 License:    GPL-2.0-or-later
 URL:        http://code.google.com/p/fbterm/
-Source0:    https://github.com/fujiwarat/fbterm/releases/download/v%{version}/%{name}-%{version}.tar.gz
-
-#Patch0:    %%{name}-1.2-kernel-header.patch
-#Patch1:    %%{name}-1.3-setcap.patch
-#Patch2:    %%{name}-1.4-iminput.patch
-#Patch3:    %%{name}-1.6-rpmpack.patch
-#Patch4:    %%{name}-1.6-el5.patch
+Source0:        https://github.com/fujiwarat/fbterm/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch5:     %{name}-1.7-u16-build.patch
-
-Summary:    A frame-buffer terminal emulator
+Summary:        A frame-buffer terminal emulator
 Summary(zh_CN): 运行在帧缓冲的快速终端仿真器
 Summary(zh_TW): 運行在frame-buffer的快速終端模擬機
-
-BuildRequires: autoconf, automake
-BuildRequires: fontconfig-devel gpm-devel
-BuildRequires: gcc-c++
-BuildRequires: pkgconfig(udev)
-BuildRequires: make
 Requires: fontconfig
-# ncurses-term has /usr/share/terminfo/f/fbterm
 Requires: ncurses-term
 Obsoletes: fbterm-udevrules < %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  fontconfig-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gpm-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig(udev)
+# /oreon:deps
 %description
 FbTerm is a fast terminal emulator for Linux with frame-buffer device. 
 Features include: 
@@ -47,18 +39,8 @@ Features include:
 - copy/past selected text between windows with mouse when gpm server 
   is running
 
-%if 0%{?fedora} >= 9
-%package udevrules
-Summary:    udev rules that grant regular user access
-Requires:   udev
-
-%description udevrules
-Regular users might use some applications that require access to frame-buffer device.
-For example, ibus-fbterm requires access to /dev/fb0.
-This sub-package enables regular user for such access.
-%endif
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -73,28 +55,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P5 -p1 -b .u16
 
 %build
+
 autoreconf -iv
 %configure --disable-static --disable-rpath
 make %{?_smp_mflags}
-
 %install
 %__rm -rf %{buildroot}
 %__make DESTDIR=%{buildroot} install
 %__chmod 755 %{buildroot}/%{_bindir}/%{name}
+%oreon_autofiles main
 
-%if 0%{?fedora} >= 9
-%post
-setcap 'cap_sys_tty_config+ep' %{_bindir}/%{name}
-%endif
-
-%files 
-%doc AUTHORS ChangeLog COPYING README
-%if 0%{?fedora} >= 9
-%{_bindir}/%{name}
-%else
-%attr(4755,root,root) %{_bindir}/%{name}
-%endif
-%{_mandir}/man1/%{name}.1.gz
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

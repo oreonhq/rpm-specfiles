@@ -1,57 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 70ec0b03a474fd5c29ce2d2050e15546e91f4e7d5f709d209ad45d091deaa2f6
 Name:           python-mirakuru
 Version:        3.0.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Process executor _not only_ for tests.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-3.0-or-later
 URL:            https://github.com/dbfixtures/mirakuru
-Source:         %{pypi_source mirakuru}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mirakuru/mirakuru-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mirakuru' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(uv-build) >= 0.11
+Requires:       python3-mirakuru = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-mirakuru
-Summary:        %{summary}
-
-%description -n python3-mirakuru %_description
-
+Summary:        Process executor _not only_ for tests.
+# oreon:reqs
+Requires:       python3dist(psutil) >= 4.0.0
+# /oreon:reqs
+%description -n python3-mirakuru
 
 %prep
-%autosetup -p1 -n mirakuru-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mirakuru-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mirakuru usr/lib/python3*/site-packages/mirakuru* usr/lib64/python3*/site-packages/mirakuru* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mirakuru* usr/lib64/python3*/site-packages/mirakuru* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mirakuru -f %{pyproject_files}
+%files
+%files -n python3-mirakuru -f %{oreon_filedir}/python3-mirakuru.list
 
 %changelog
+
 %autochangelog

@@ -1,34 +1,34 @@
-%global source0_hash e21ed4812c29c5e4fe8e0efc774fe99ce8bb517b615b9e0f21340d3eb7e1e8d5
-
+%global source0_hash 1ce331d92a6775a7470d07ae17f29035e512b86b5243a6d5022a22f1f8a42ff6
 %global upstream_name beaker
-# No sphinxcontrib-httpdomain rpm on EPEL10
 %bcond docs %[ 0%{?fedora} || 0%{?rhel} < 10 ]
-
 Name:           %{upstream_name}
 Version:        29.3
 Release:        1%{?dist}
 Summary:        Full-stack software and hardware integration testing system
 License:        GPL-2.0-or-later
 URL:            https://beaker-project.org/
-
-# To generate git snapshot, see beaker-snapshot.sh
-Source0:        https://beaker-project.org/releases/%{upstream_name}-%{version}.tar.xz
-
+Source0:        https://%{name}-project.org/releases/%{name}-%{version}.tar.xz
 BuildArch:      noarch
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-pytest
-BuildRequires:  python3-devel
 %if %{with docs}
+%endif
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  pkgconfig(bash-completion)
+BuildRequires:  python3-devel
 BuildRequires:  python3-docutils
+BuildRequires:  python3-gssapi
+BuildRequires:  python3-libxml2
+BuildRequires:  python3-lxml
+BuildRequires:  python3-prettytable
+BuildRequires:  python3-pytest
+BuildRequires:  python3-setuptools
 BuildRequires:  python3-sphinx
 BuildRequires:  python3-sphinxcontrib-httpdomain
-%endif
-
+# /oreon:deps
 %package common
 Summary:        Common components for Beaker packages
 Provides:       %{name} = %{version}-%{release}
 Obsoletes:      %{name} < 0.17.0-1
-
 %package client
 Summary:        Command-line client for interacting with Beaker
 Requires:       %{name}-common = %{version}-%{release}
@@ -46,9 +46,7 @@ Requires:       python3-requests
 Requires:       python3-libxml2
 Requires:       python3-prettytable
 Requires:       python3-jinja2
-# beaker-wizard was moved from rhts-devel to here in 4.52
 Conflicts:      rhts-devel < 4.52
-
 %description
 Beaker is a full stack software and hardware integration testing system, with
 the ability to manage a globally distributed network of test labs.
@@ -61,6 +59,7 @@ The bkr client is a command-line tool for interacting with Beaker servers. You
 can use it to submit Beaker jobs, fetch results, and perform many other tasks.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{upstream_name}-%{version}
@@ -75,48 +74,28 @@ sed -i '/SUBDIRS.*:=/s/\s*documentation\s*/ /g' Makefile
 rm -r Server IntegrationTests LabController #documentation/server-api
 
 %build
+
 export BKR_PY3=1
 make
-
 %install
 export BKR_PY3=1
 DESTDIR=%{buildroot} make install
-
 rm -rf %{buildroot}%{_datadir}/beaker-integration-tests/
 rm -rf %{buildroot}%{python3_sitelib}/bkr/inttest
 rm -rf %{buildroot}%{python3_sitelib}/beaker_integration_tests*
-# These are for lab-controller stuff, which depends on server
 rm -rf %{buildroot}%{_mandir}/man8/
+%oreon_autofiles beaker-common usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles beaker-client usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export BKR_PY3=1
-#make check
-# Running the checks generates some .pyc files - burn them!
 find %{buildroot} -name '__pycache__' | xargs rm -rf
-
-%files common
-%doc README.md
-%license COPYING
-%dir %{python3_sitelib}/bkr/
-%{python3_sitelib}/bkr/__init__.py*
-%{python3_sitelib}/bkr/common/
-%{python3_sitelib}/bkr/log.py*
-%{python3_sitelib}/%{name}_common-%{version}-py%{python3_version}.egg-info/
-
-%files client
-%dir %{_sysconfdir}/%{name}
-%doc Client/client.conf.example
-%{python3_sitelib}/bkr/client/
-%{python3_sitelib}/%{name}_client-%{version}-py%{python3_version}-nspkg.pth
-%{python3_sitelib}/%{name}_client-%{version}-py%{python3_version}.egg-info/
-%{_bindir}/%{name}-wizard
-%{_bindir}/bkr
-%if %{with docs}
-%{_mandir}/man1/beaker-wizard.1.gz
-%{_mandir}/man1/bkr.1.gz
-%{_mandir}/man1/bkr-*.1.gz
-%endif
-%{_datadir}/bash-completion
+%files -f %{oreon_filedir}/main.list
+%files -n beaker-common -f %{oreon_filedir}/beaker-common.list
+%files -n beaker-client -f %{oreon_filedir}/beaker-client.list
 
 %changelog
+
 %autochangelog

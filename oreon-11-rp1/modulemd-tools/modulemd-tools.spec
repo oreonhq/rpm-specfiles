@@ -1,30 +1,13 @@
 %global source0_hash ad756d2efd6ac85f464e2d071a0f0e9a213972f6a0a247b9bf44b064b39f67f5
-
 Name: modulemd-tools
 Version: 0.16
-Release: 1%{?dist}
-Summary: Collection of tools for modular (in terms of Fedora Modularity origin) content creators
+Release:        1%{?dist}
+Summary:        Collection of tools for modular (in terms of Fedora Modularity origin) content creators
 License: MIT
 BuildArch: noarch
-
 URL: https://github.com/rpm-software-management/modulemd-tools
 Source0:        https://github.com/rpm-software-management/modulemd-tools/archive/refs/tags/modulemd-tools-%{version}-1.tar.gz#/modulemd-tools-%{version}.tar.gz
 Patch0: 0001-createrepo_mod-fix-failing-tests-on-F39-because-of-n.patch
-
-BuildRequires: createrepo_c
-BuildRequires: argparse-manpage
-BuildRequires: python3-devel
-BuildRequires: python3-pip
-BuildRequires: python3-setuptools
-BuildRequires: python3-wheel
-BuildRequires: python3-libmodulemd >= 2.9.3
-BuildRequires: python3-dnf
-BuildRequires: python3-hawkey
-BuildRequires: python3-createrepo_c
-BuildRequires: python3-pyyaml
-BuildRequires: python3-pytest
-BuildRequires: python3-koji
-
 Requires: createrepo_c
 Requires: python3-dnf
 Requires: python3-hawkey
@@ -32,8 +15,21 @@ Requires: python3-createrepo_c
 Requires: python3-pyyaml
 Requires: python3-libmodulemd >= 2.9.3
 Requires: python3-koji
-
-
+# oreon:deps
+BuildRequires:  argparse-manpage
+BuildRequires:  createrepo_c
+BuildRequires:  python3-createrepo_c
+BuildRequires:  python3-devel
+BuildRequires:  python3-dnf
+BuildRequires:  python3-hawkey
+BuildRequires:  python3-koji
+BuildRequires:  python3-libmodulemd
+BuildRequires:  python3-pip
+BuildRequires:  python3-pytest
+BuildRequires:  python3-pyyaml
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-wheel
+# /oreon:deps
 %description
 Tools provided by this package:
 
@@ -60,53 +56,27 @@ modulemd-generate-macros - Generate module-build-macros SRPM package, which is
 
 bld2repo - Simple tool for dowloading build required RPMs of a modular build from koji.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -n modulemd-tools-modulemd-tools-%{version}-1 -q
 %patch 0 -p1
 
-
 %build
+
 %py3_build
-
 PYTHONPATH=: ./man/generate-manpages.sh
-
-
 %install
 %py3_install
-
 install -d %{buildroot}%{_mandir}/man1
 cp man/*.1 %{buildroot}%{_mandir}/man1/
-
+%oreon_autofiles main
 
 %check
+
 %{python3} -m pytest -vv
-
-
-%files
-%doc README.md
-%license LICENSE
-
-%{python3_sitelib}/modulemd_tools
-%{python3_sitelib}/modulemd_tools-*.egg-info/
-
-%{_bindir}/repo2module
-%{_bindir}/dir2module
-%{_bindir}/createrepo_mod
-%{_bindir}/modulemd-add-platform
-%{_bindir}/modulemd-merge
-%{_bindir}/modulemd-generate-macros
-%{_bindir}/bld2repo
-
-%{_mandir}/man1/repo2module.1*
-%{_mandir}/man1/dir2module.1*
-%{_mandir}/man1/createrepo_mod.1*
-%{_mandir}/man1/modulemd-add-platform.1*
-%{_mandir}/man1/modulemd-merge.1*
-%{_mandir}/man1/modulemd-generate-macros.1.*
-%{_mandir}/man1/bld2repo.1.*
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

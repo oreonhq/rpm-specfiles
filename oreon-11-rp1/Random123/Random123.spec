@@ -1,29 +1,22 @@
 %global source0_hash effafd8656b18030b2a5b995cd3650c51a7c45052e6e1c21e48b9fa7a59d926e
-
 %global debug_package %{nil}
-
 Name:       Random123
 Version:    1.14.0
-Release:    %autorelease
-Summary:    Library of random number generators
-
+Release:        1%{?dist}
+Summary:        Library of random number generators
 License:    BSD-3-Clause
 URL:        https://github.com/DEShawResearch/random123/
-Source0:    %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/DEShawResearch/random123//archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:      0001-add-missing-headers.patch
-# https://github.com/DEShawResearch/random123/pull/12
 Patch:      enable-riscv.patch
-
-# gccfeatures.h mentions what arches are supported
-# these aren't on the list
 ExcludeArch:    mips64r2 mips32r2 s390
-
-BuildRequires:  make
+# oreon:deps
 BuildRequires:  doxygen
-# For tests
-BuildRequires:  gcc gcc-c++
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
 BuildRequires:  patch
-
+# /oreon:deps
 %description
 Random123 is a library of "counter-based" random number generators (CBRNGs), in
 which the Nth random number can be obtained by applying a stateless mixing
@@ -45,44 +38,41 @@ applications.
 %package devel
 Summary:   Development files for %{name}
 Provides:  %{name} = %{version}-%{release}
-
 %description devel
 Development files for %{name}.
 
 %package doc
 Summary:    Documentation for %{name}
-
 %description doc
 Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n random123-%{version} -S patch -p1
-
+%global oreon_srcdir random123-%{version}
+%oreon_prep
 %build
-# Header only library
+
 pushd docs
     doxygen Doxyfile
 popd
-
 %install
 mkdir -p -m 0755 $RPM_BUILD_ROOT/%{_includedir}/%{name}/
 cp -a include/Random123/*  $RPM_BUILD_ROOT/%{_includedir}/%{name}/
+%oreon_autofiles Random123-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles Random123-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 pushd tests
     cp GNUmakefile Makefile
     %set_build_flags
     make
 popd
-
-%files devel
-%license LICENSE
-%{_includedir}/%{name}/
-
-%files doc
-%doc examples
+%files -f %{oreon_filedir}/main.list
+%files -n Random123-devel -f %{oreon_filedir}/Random123-devel.list
+%files -n Random123-doc -f %{oreon_filedir}/Random123-doc.list
 
 %changelog
+
 %autochangelog

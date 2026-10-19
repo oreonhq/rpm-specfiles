@@ -1,116 +1,73 @@
+%global source2_hash 03ea9543de5dfff32bbbc57b5a5b9674386b6478368716f03857385763b7e27d
+%global source1_hash 05aa7eb6ee209b3c3c8f65cab268ea984d955e8f9307037845f5c40b264b5964
 %global source0_hash 920c7926453379d367c6c8bb01ff867c03e44e8a7a6a5655d5eaa3d692618ca1
-
-%global _description %{expand:
-Arbor is a high-performance library for Computational Neuroscience simulations.
-
-Some key features include:
-
-- Asynchronous spike exchange that overlaps compute and communication.
-- Efficient sampling of voltage and current on all back ends.
-- Efficient implementation of all features on GPU.
-- Reporting of memory and energy consumption (when available on platform).
-- An API for addition of new cell types, e.g. LIF and Poisson spike generators.
-- Validation tests against numeric/analytic models and NEURON.
-
-Documentation is available at https://arbor.readthedocs.io/en/latest/
-}
-
-# Best to start with the serial version when debugging build failures
 %bcond mpich 1
 %bcond openmpi 1
-
 %bcond tests 1
-
-# Python unit tests in MPI environment fail in a non-deterministic way.
-# Using pytest _as is_ doesn't work either and `-m unittest` does not
-# allow filtering tests as `pytest -k` does.
-# For now we don't run the Python MPI tests.
 %bcond mpi_py_unittest 0
-
 %global forgeurl            https://github.com/arbor-sim/arbor
-
 Name:           arbor
 Version:        0.9.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Multi-compartment neural network simulation library
-
 %forgemeta
-
 URL:            %forgeurl
-Source0:        %forgesource
-# script to run examples
+Source0:        %{forgeurl}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://raw.githubusercontent.com/arbor-sim/arbor/master/scripts/run_python_examples.sh
 Source2:        https://raw.githubusercontent.com/arbor-sim/arbor/master/scripts/run_cpp_examples.sh
 License:        BSD-3-Clause
-
 Patch:          0001-Quote-various-cmake-var-values.patch
-# Tests are failing to compile due to some missing includes
 Patch:          fix-missing-includes.patch
-# Fix a few typos that cause failure to compile with GCC 15
-#
-# These were eventually included in
-# 76120d16c00ae67128c3c69421ab712f985f3445, along with many other changes.
 Patch:          0001-Fix-a-few-typos-that-cause-failure-to-compile-with-G.patch
-# Remove the hard-coded pybind11 version check so that we can build with
-# pybind11 3.0; this is part of https://github.com/arbor-sim/arbor/pull/2481.
 Patch:          arbor-0.9.0-pybind11-3.0.patch
-
-# Random123 does not support:
-#   mips64r2 mips32r2 s390
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    mips64r2 mips32r2 s390x %{ix86}
-
+%if %{with tests}
+%endif
+Requires:       %{py3_dist numpy}
+%py_provides python3-arbor
+# oreon:deps
+BuildRequires:  Random123-devel
 BuildRequires:  cmake
-BuildRequires:  make
 BuildRequires:  fmt-devel
 BuildRequires:  gcc-c++
 BuildRequires:  git-core
-BuildRequires:  gtest-devel
 BuildRequires:  google-benchmark-devel
+BuildRequires:  gtest-devel
 BuildRequires:  json-devel
 BuildRequires:  libunwind-devel
+BuildRequires:  make
+BuildRequires:  mpich-devel
+BuildRequires:  openmpi-devel
+BuildRequires:  pugixml-devel
 BuildRequires:  pybind11-devel
 BuildRequires:  python3-devel
+BuildRequires:  python3-mpi4py-mpich
+BuildRequires:  python3-mpi4py-openmpi
 BuildRequires:  python3-setuptools
-BuildRequires:  Random123-devel
+BuildRequires:  python3-sphinx
+BuildRequires:  python3-sphinx_rtd_theme
+BuildRequires:  python3-svgwrite
+BuildRequires:  python3dist(numpy)
+BuildRequires:  python3dist(pandas)
+BuildRequires:  python3dist(seaborn)
+BuildRequires:  rpm-mpi-hooks
 BuildRequires:  tclap-devel
-BuildRequires:  pugixml-devel
-
-# For validation, but we don't have these BRs
-# BuildRequires:  julia julia-sundials julia-unitful julia-JSON
-
-%if %{with tests}
-BuildRequires:  %{py3_dist numpy}
-BuildRequires:  %{py3_dist pandas}
-BuildRequires:  %{py3_dist seaborn}
-%endif
-
-# Required by arbor
-Requires:       %{py3_dist numpy}
-
-# Provide Python meta data for packages requiring arbor
-%py_provides python3-arbor
-
-%description %{_description}
+# /oreon:deps
+%description
 
 %package devel
 Summary:    Development files for arbor
 Requires:   arbor%{?_isa} = %{version}-%{release}
 Provides:   arbor-static = %{version}-%{release}
-
-%description devel %{_description}
+%description devel
 
 %package doc
-# Does not require the main package, since it may be installed by people using
-# the MPI builds
 Summary:        Documentation for arbor
 BuildRequires:  python3-sphinx
 BuildRequires:  python3-sphinx_rtd_theme
 BuildRequires:  python3-svgwrite
-
 BuildArch:      noarch
-
-%description doc %{_description}
+%description doc
 
 %if %{with mpich}
 %package mpich
@@ -118,21 +75,18 @@ Summary:        MPICH build for arbor
 BuildRequires:  mpich-devel
 BuildRequires:  rpm-mpi-hooks
 BuildRequires:  python3-mpi4py-mpich
-
 Requires:       mpich
 Requires:       python3-mpich
 Requires:       python3-mpi4py-mpich
 Requires:       %{py3_dist numpy}
 Provides:       python3-arbor-mpich = %{version}-%{release}
-
-%description mpich %{_description}
+%description mpich
 
 %package mpich-devel
 Summary:    Development files for arbor-mpich
 Requires:   arbor-mpich%{?_isa} = %{version}-%{release}
 Provides:   arbor-mpich-static = %{version}-%{release}
-
-%description mpich-devel %{_description}
+%description mpich-devel
 %endif
 
 %if %{with openmpi}
@@ -141,24 +95,22 @@ Summary:        OpenMPI build for arbor
 BuildRequires:  openmpi-devel
 BuildRequires:  rpm-mpi-hooks
 BuildRequires:  python3-mpi4py-openmpi
-
 Requires:       openmpi
 Requires:       python3-openmpi
 Requires:       python3-mpi4py-openmpi
 Requires:       %{py3_dist numpy}
 Provides:       python3-arbor-openmpi = %{version}-%{release}
-
-%description openmpi %{_description}
+%description openmpi
 
 %package openmpi-devel
 Summary:    Development files for arbor-openmpi
 Requires:   arbor-openmpi%{?_isa} = %{version}-%{release}
 Provides:   arbor-openmpi-static = %{version}-%{release}
-
-%description openmpi-devel %{_description}
+%description openmpi-devel
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
@@ -211,8 +163,7 @@ mkdir build-serial
 %endif
 
 %build
-# Best to use && so that if anything in the chain fails, the build also fails
-# straight away
+
 %global do_cmake_config %{expand: \
 echo
 echo "*** BUILDING arbor-%{version}$MPI_COMPILE_TYPE ***"
@@ -246,14 +197,7 @@ pushd build$MPI_COMPILE_TYPE  &&
         -DLIB_SUFFIX=""  .. &&
 %endif
 popd || exit -1;
-
-# Upstream only supports static libraries
-# https://github.com/arbor-sim/arbor/issues/916
-# -DBUILD_SHARED_LIBS:BOOL=ON \\\
-# Missing BRs
-# -DARB_BUILD_VALIDATION_DATA:BOOL=ON \\\
 }
-
 %global do_make_build %{expand: \
     %make_build -C build$MPI_COMPILE_TYPE || exit -1
     %make_build -C build$MPI_COMPILE_TYPE examples || exit -1
@@ -261,8 +205,6 @@ popd || exit -1;
     %make_build -C build$MPI_COMPILE_TYPE tests || exit -1
 %endif
 }
-
-# Build serial version, dummy arguments
 %set_build_flags
 export CC=gcc
 export CXX=g++
@@ -275,11 +217,6 @@ export MPI_COMPILE_TYPE="-serial"
 export MPI_PYTHON3_SITEARCH=%{python3_sitearch}
 %{do_cmake_config}
 %{do_make_build}
-
-# skip building sphinx docs because they bundle js/fonts and it's very hard to
-# unbundle
-
-# Build mpich version
 %if %{with mpich}
 %{_mpich_load}
 %set_build_flags
@@ -291,11 +228,8 @@ export MPI_YES=ON
 export MPI_COMPILE_TYPE="-mpich"
 %{do_cmake_config}
 %{do_make_build}
-
 %{_mpich_unload}
 %endif
-
-# Build OpenMPI version
 %if %{with openmpi}
 %{_openmpi_load}
 %set_build_flags
@@ -304,42 +238,31 @@ export CXX=mpicxx
 export FC=mpif90
 export F77=mpif77
 export MPI_YES=ON
-# Python 3
 export MPI_COMPILE_TYPE="-openmpi"
 %{do_cmake_config}
 %{do_make_build}
-
 %{_openmpi_unload}
 %endif
-
 %install
-# Install everything
 %global do_install %{expand: \
 echo
 echo "*** INSTALLING arbor-%{version}$MPI_COMPILE_TYPE ***"
 echo
     %make_install -C build$MPI_COMPILE_TYPE || exit -1
 }
-
-# install serial version
 export MPI_SUFFIX=""
 export MPI_HOME=%{_prefix}
 export MPI_BIN=%{_bindir}
 export MPI_YES=OFF
 export MPI_COMPILE_TYPE="-serial"
 %{do_install}
-
-# Install MPICH version
 %if %{with mpich}
 %{_mpich_load}
 export MPI_COMPILE_TYPE="-mpich"
 %{do_install}
-
-# Place in correct mpi libdir
 %if "%{_lib}" == "lib64"
     mv -v $RPM_BUILD_ROOT/%{_libdir}/mpich/lib64 $RPM_BUILD_ROOT/$MPI_LIB/
 %endif
-
 pushd $RPM_BUILD_ROOT/$MPI_BIN
     mv -v modcc{,$MPI_SUFFIX} -v
     mv -v arbor-build-catalogue{,$MPI_SUFFIX} -v
@@ -347,36 +270,26 @@ pushd $RPM_BUILD_ROOT/$MPI_BIN
 popd
 %{_mpich_unload}
 %endif
-
-# Install OpenMPI version
 %if %{with openmpi}
 %{_openmpi_load}
 export MPI_COMPILE_TYPE="-openmpi"
 %{do_install}
-
-# Correct location
 %if "%{_lib}" == "lib64"
     mv -v $RPM_BUILD_ROOT/%{_libdir}/openmpi/lib64 $RPM_BUILD_ROOT/$MPI_LIB/
 %endif
-
 pushd $RPM_BUILD_ROOT/$MPI_BIN
     mv -v modcc{,$MPI_SUFFIX} -v
     mv -v arbor-build-catalogue{,$MPI_SUFFIX} -v
     mv -v lmorpho{,$MPI_SUFFIX} -v
 popd
 %{_openmpi_unload}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %endif
-
-# https://github.com/arbor-sim/arbor/blob/master/.github/workflows/test-matrix.yml
 %if %{with tests}
 %check
 
-# Taken from upstream's GitHub workflow
 %global mpirun mpirun -n %{_smp_build_ncpus}
-
-# these tests segfault, filter out
 gtest_filter="${gtest_filter--}${gtest_filter+:}*diffusion*"
-
 pushd build-serial
     %{py3_test_envvars} %{python3} -m unittest discover -v -s ../python
     ./bin/unit ${gtest_filter+--gtest_filter=}${gtest_filter-}
@@ -384,8 +297,6 @@ pushd build-serial
     cp ../scripts/run_cpp_examples.sh .
     ./run_cpp_examples.sh
 popd
-
-# MPICH
 %if %{with mpich}
 %{_mpich_load}
 pushd build-mpich
@@ -399,8 +310,6 @@ popd
 %{py3_test_envvars} ./scripts/run_python_examples.sh  "%{mpirun}"
 %{_mpich_unload}
 %endif
-
-# OpenMPI
 %if %{with openmpi}
 %{_openmpi_load}
 pushd build-openmpi
@@ -415,68 +324,8 @@ popd
 %{_openmpi_unload}
 %endif
 %endif
-
-%files
-%license LICENSE ext/tinyopt/LICENSE-tinyopt
-%doc README.md
-%{_bindir}/modcc
-%{_bindir}/arbor-build-catalogue
-%{_bindir}/lmorpho
-%{python3_sitearch}/arbor
-%{_datadir}/arbor
-
-%files devel
-%{_includedir}/arborio
-%{_includedir}/arbor
-%{_includedir}/arborenv
-%{_libdir}/cmake/arbor
-%{_libdir}/libarbor.a
-%{_libdir}/libarborio.a
-%{_libdir}/libarborenv.a
-
-%files doc
-%license LICENSE
-%doc example/
-
-%if %{with mpich}
-%files mpich
-%doc README.md
-%license LICENSE ext/tinyopt/LICENSE-tinyopt
-%{_libdir}/mpich/bin/modcc_mpich
-%{_libdir}/mpich/bin/arbor-build-catalogue_mpich
-%{_libdir}/mpich/bin/lmorpho_mpich
-%{python3_sitearch}/mpich/arbor
-%{_libdir}/mpich/share/arbor
-
-%files mpich-devel
-%{_libdir}/mpich/include/arbor
-%{_libdir}/mpich/include/arborio
-%{_libdir}/mpich/include/arborenv
-%{_libdir}/mpich/lib/cmake/arbor
-%{_libdir}/mpich/lib/libarbor.a
-%{_libdir}/mpich/lib/libarborio.a
-%{_libdir}/mpich/lib/libarborenv.a
-%endif
-
-%if %{with openmpi}
-%files openmpi
-%doc README.md
-%license LICENSE ext/tinyopt/LICENSE-tinyopt
-%{_libdir}/openmpi/bin/modcc_openmpi
-%{_libdir}/openmpi/bin/arbor-build-catalogue_openmpi
-%{_libdir}/openmpi/bin/lmorpho_openmpi
-%{python3_sitearch}/openmpi/arbor
-%{_libdir}/openmpi/share/arbor
-
-%files openmpi-devel
-%{_libdir}/openmpi/include/arbor
-%{_libdir}/openmpi/include/arborio
-%{_libdir}/openmpi/include/arborenv
-%{_libdir}/openmpi/lib/cmake/arbor
-%{_libdir}/openmpi/lib/libarbor.a
-%{_libdir}/openmpi/lib/libarborio.a
-%{_libdir}/openmpi/lib/libarborenv.a
-%endif
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

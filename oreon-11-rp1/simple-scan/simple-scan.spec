@@ -1,74 +1,62 @@
-%global source0_hash a27e0412b36fb7c03b810532d220eb7a606898c06131fb1757af4745587abcbb
-
+%global source0_hash 51fa063f82af0e17436948290caea0964edb04c581186d360ea3ac45973d4203
 %global         desktop_id org.gnome.SimpleScan
-
 Name:           simple-scan
 Version:        50.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Simple scanning utility
-# Sources are under GPLv3+, icon and help are under CC-BY-SA.
 License:        GPL-3.0-or-later AND CC-BY-SA-3.0
 URL:            https://gitlab.gnome.org/GNOME/simple-scan
-
 %global         gittag %{version}
-Source0:        %{url}/-/archive/%{gittag}/%{name}-%{gittag}.tar.gz
-
+Source0:        https://gitlab.gnome.org/GNOME/%{name}/-/archive/%{version}/%{name}-%{version}.tar.gz
+%if ! 0%{?flatpak}
+%endif
+Requires:       xdg-utils
+# oreon:deps
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext
 BuildRequires:  itstool
 BuildRequires:  libappstream-glib
-BuildRequires:  meson >= 0.46
+BuildRequires:  meson
 BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(colord)
 BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
-BuildRequires:  pkgconfig(glib-2.0) >= 2.38
+BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gmodule-export-2.0)
 BuildRequires:  pkgconfig(gthread-2.0)
-BuildRequires:  pkgconfig(gtk4) >= 4.10.0
-BuildRequires:  pkgconfig(gusb) >= 0.2.7
-BuildRequires:  pkgconfig(libadwaita-1) >= 1.2.0
+BuildRequires:  pkgconfig(gtk4)
+BuildRequires:  pkgconfig(gusb)
+BuildRequires:  pkgconfig(libadwaita-1)
 BuildRequires:  pkgconfig(libwebp)
 BuildRequires:  pkgconfig(libwebpmux)
+BuildRequires:  pkgconfig(packagekit-glib2)
 BuildRequires:  pkgconfig(sane-backends)
 BuildRequires:  pkgconfig(zlib)
-
-%if ! 0%{?flatpak}
-BuildRequires:  pkgconfig(packagekit-glib2) >= 1.1.5
-%endif
-
-Requires:       xdg-utils
-
+# /oreon:deps
 %description
 Simple Scan is an easy-to-use application, designed to let users connect their
 scanner and quickly have the image/document in an appropriate format.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{gittag}
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
 %find_lang %{name} --with-man --with-gnome
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{desktop_id}.metainfo.xml
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{desktop_id}.desktop
-
-%files -f %{name}.lang
-%doc NEWS README.md
-%license COPYING
-%{_bindir}/%{name}
-%{_datadir}/applications/%{desktop_id}.desktop
-%{_datadir}/glib-2.0/schemas/%{desktop_id}.gschema.xml
-%{_datadir}/icons/hicolor/scalable/apps/%{desktop_id}.svg
-%{_datadir}/icons/hicolor/symbolic/apps/%{desktop_id}-symbolic.svg
-%{_mandir}/man1/%{name}.1*
-%{_metainfodir}/%{desktop_id}.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

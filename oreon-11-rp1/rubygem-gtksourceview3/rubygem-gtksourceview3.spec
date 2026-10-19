@@ -1,37 +1,26 @@
 %global source0_hash 13371dd58cda5137f31ed690c3b79320e1101f9da4234d8115ff4bc078b63e2e
-
 %global	gem_name	gtksourceview3
-
 %undefine        _changelog_trimtime
-
 Name:		rubygem-%{gem_name}
 Version:	4.3.5
-Release:	1%{?dist}
-
-Summary:	Ruby binding of gtksourceview-3.x
-# SPDX confirmed
-# LGPL-2.1-or-later: gemspec
+Release:        1%{?dist}
+Summary:        Ruby binding of gtksourceview-3.x
 License:	LGPL-2.1-or-later
-
 URL:		http://ruby-gnome2.sourceforge.jp/
-Source0:	https://rubygems.org/gems/%{gem_name}-%{version}.gem
-# https://raw.githubusercontent.com/ruby-gnome2/ruby-gnome2/master/COPYING.LIB
-# renamed to avoid namespace collision on sourcedir
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1:	COPYING.LIB.gtksourceview3
-
-BuildRequires:	ruby-devel
-BuildRequires:	rubygems-devel 
-BuildRequires:	rubygem-cairo-devel
-BuildRequires:	rubygem-glib2-devel
-BuildRequires:	rubygem-gtk3-devel
-BuildRequires:	pkgconfig(gtksourceview-3.0)
-BuildRequires:	rubygem(test-unit)
-BuildRequires:	%{_bindir}/xvfb-run
-
 Requires:	gtksourceview3
-
 BuildArch:		noarch
-
+# oreon:deps
+BuildRequires:  //bin/xvfb-run
+BuildRequires:  pkgconfig(gtksourceview-3.0)
+BuildRequires:  ruby-devel
+BuildRequires:  rubygem(test-unit)
+BuildRequires:  rubygem-cairo-devel
+BuildRequires:  rubygem-glib2-devel
+BuildRequires:  rubygem-gtk3-devel
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 Ruby/GtkSourceView3 is a Ruby binding of gtksourceview-3.x.
 
@@ -39,11 +28,11 @@ Ruby/GtkSourceView3 is a Ruby binding of gtksourceview-3.x.
 Summary:	Documentation for %{name}
 Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
-
 %description	doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version}
@@ -66,16 +55,14 @@ sed -i -e 's|test/glib-test-init|glib-test-init|' \
 	test/run-test.rb
 
 %build
+
 gem build %{gem_name}-%{version}.gemspec
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
 	%{buildroot}%{gem_dir}/
-
 install -cpm 644 %{SOURCE1} %{buildroot}%{gem_instdir}/COPYING.LIB
-
 pushd %{buildroot}%{gem_instdir}
 rm -rf \
 	Rakefile \
@@ -84,17 +71,16 @@ rm -rf \
 	test/ \
 	dependency-check/ \
 	%{nil}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-pushd .%{gem_instdir}
 
+pushd .%{gem_instdir}
 rm -rf tmp
 mkdir tmp
 touch tmp/gtk-test-utils.rb
-
 RANDR_OPTS=""
 RANDR_OPTS="-extension RANDR"
-
 sed -i test/run-test.rb \
 	-e '\@exit Test::Unit::AutoRunner@s|,[ \t]*File\.join(.*"test")||'
 sed -i test/run-test.rb \
@@ -104,22 +90,10 @@ sed -i test/run-test.rb \
 xvfb-run \
 	-s "-screen 0 640x480x24 $RANDR_OPTS" \
 	ruby -Ilib:ext/%{gem_name}:tmp:test ./test/run-test.rb
-
 popd
-
-%files
-%dir	%{gem_instdir}
-%doc	%{gem_instdir}/[A-Z]*
-%exclude	%{gem_instdir}/Rakefile
-
-%{gem_libdir}/
-
-%exclude %{gem_cache}
-%exclude	%{gem_instdir}/*gemspec
-%{gem_spec}
-
-%files doc
-%doc	%{gem_docdir}
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-gtksourceview3-doc -f %{oreon_filedir}/rubygem-gtksourceview3-doc.list
 
 %changelog
+
 %autochangelog

@@ -1,75 +1,65 @@
-%global source0_hash 2eab894f21b53d452a94fb0f42dac63191950a0173de532cd37baa45477c2f9d
-
-# Work around a circular dependency on snakemake and on
-# python-snakemake-storage-plugin-http.
+%global source0_hash 424b1a8a9d74bb7b26a02df346b853c613eebc7d59b7475eeb2b933ac78b3150
 %bcond bootstrap 0
-# We can’t run tests that access the network in koji, but this build
-# conditional allows us to try them in local mock builds for added confidence:
-#   fedpkg mockbuild --enable-network --with network_tests
 %bcond network_tests 0
-
 Name:           python-snakemake-interface-storage-plugins
 Version:        4.4.1
-Release:        %autorelease
+Release:        1%{?dist}
 Epoch:          1
 Summary:        Stable interface for interactions between Snakemake and its storage plugins
-
-# SPDX
 License:        MIT
 URL:            https://github.com/snakemake/snakemake-interface-storage-plugins
-# We use the GitHub archive instead of the PyPI sdist to get CHANGELOG.md and
-# the tests.
-Source:         %{url}/archive/v%{version}/snakemake-interface-storage-plugins-%{version}.tar.gz
-
+Source0:        https://github.com/snakemake/snakemake-interface-storage-plugins/archive/v%{version}/snakemake-interface-storage-plugins-%{version}.tar.gz
 %if %{with bootstrap}
-# Some things can’t be imported because we don’t have snakemake.
 %endif
-
 BuildArch:      noarch
-
 %if %{without bootstrap}
-# See: [tool.poetry.dev-dependencies] in pyproject.toml
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  snakemake >= 9
-BuildRequires:  %{py3_dist snakemake-storage-plugin-http}
 %endif
-
 %global common_description %{expand:
 This package provides a stable interface for interactions between Snakemake and
 its storage plugins.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-snakemake-interface-storage-plugins = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-snakemake-interface-storage-plugins
-Summary:        %{summary}
-
+Summary:        Stable interface for interactions between Snakemake and its storage plugins
+# oreon:reqs
+Requires:       python3dist(humanfriendly) < 11
+Requires:       python3dist(humanfriendly) >= 10.0
+Requires:       python3dist(snakemake-interface-common) >= 1.12.0
+Requires:       python3dist(tenacity) < 10.0
+Requires:       python3dist(tenacity) >= 9.1.4
+Requires:       python3dist(throttler) >= 1.2.2
+Requires:       python3dist(wrapt) >= 1.15.0
+# /oreon:reqs
 %description -n python3-snakemake-interface-storage-plugins %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-snakemake-interface-storage-plugins usr/lib/python3*/site-packages/snakemake_interface_storage_plugins* usr/lib64/python3*/site-packages/snakemake_interface_storage_plugins* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/snakemake_interface_storage_plugins* usr/lib64/python3*/site-packages/snakemake_interface_storage_plugins* usr/bin/*
 
 %check
+
 %if %{without bootstrap}
 %if %{without network_tests}
-# The following tests require network access:
 k="${k-}${k+ and }not (TestTestStorageBase and test_storage)"
 k="${k-}${k+ and }not (TestTestStorageBase and test_storage_not_existing)"
 k="${k-}${k+ and }not (TestTestStorageBase and test_inventory)"
 %endif
-
 %pytest -k "${k-}" -v tests/tests.py
 %endif
-
-%files -n python3-snakemake-interface-storage-plugins -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md
-%doc README.md
+%files
+%files -n python3-snakemake-interface-storage-plugins -f %{oreon_filedir}/python3-snakemake-interface-storage-plugins.list
 
 %changelog
+
 %autochangelog

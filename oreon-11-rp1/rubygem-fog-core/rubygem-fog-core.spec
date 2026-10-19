@@ -1,31 +1,27 @@
-%global source0_hash deac56ed65a2679c2f9375bed1fe9212e4632f2a22710446b3d5f6b0c794bbd2
-
-# Generated from fog-core-1.22.0.gem by gem2rpm -*- rpm-spec -*-
+%global source1_hash 45799fc4f79b4d0479508332433e44700775588619da4659d4069877087c146e
+%global source0_hash 3fe08aa83a23cddce42f4ba412040c08f890d7ff04c175c0ee59119371245be6
 %global gem_name fog-core
-
 Name: rubygem-%{gem_name}
 Version: 2.6.0
-Release: 5%{?dist}
-Summary: Shared classes and tests for fog providers and services
+Release:        5%{?dist}
+Summary:        Shared classes and tests for fog providers and services
 License: MIT
 URL: https://github.com/fog/fog-core
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
-# git clone https://github.com/fog/fog-core.git && cd fog-core
-# git archive -v -o fog-core-2.6.0-spec.tar.gz v2.6.0 spec/
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1: https://github.com/fog/fog-core/archive/refs/tags/v2.6.0.tar.gz
-# Fix compatibility with minitest 6
 Patch0:  %{gem_name}-2.6.0-minitest6.patch
-BuildRequires: ruby(release)
-BuildRequires: rubygems-devel
-BuildRequires: ruby
-BuildRequires: rubygem(excon)
-BuildRequires: rubygem(formatador)
-BuildRequires: rubygem(mime-types)
-BuildRequires: rubygem(minitest)
-BuildRequires: rubygem(minitest-mock)
-BuildRequires: rubygem(minitest-stub-const)
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  ruby
+BuildRequires:  ruby(release)
+BuildRequires:  rubygem(excon)
+BuildRequires:  rubygem(formatador)
+BuildRequires:  rubygem(mime-types)
+BuildRequires:  rubygem(minitest)
+BuildRequires:  rubygem(minitest-mock)
+BuildRequires:  rubygem(minitest-stub-const)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 Shared classes and tests for fog providers and services.
 
@@ -33,11 +29,11 @@ Shared classes and tests for fog providers and services.
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version} -b 1
@@ -53,42 +49,24 @@ cd %{_builddir}
 %gemspec_add_dep -g excon [">= 0.100.0", "< 2"]
 
 %build
-# Create the gem as gem install only works on a gem file
+
 gem build ../%{gem_name}-%{version}.gemspec
-
-# %%gem_install compiles any C extensions and installs the gem into ./%%gem_dir
-# by default, so that we can move it into the buildroot in %%install
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 pushd .%{gem_instdir}
 ln -s %{builddir}/spec spec
-
 ruby -Ispec -e 'Dir.glob "./spec/**/*_spec.rb", &method(:require)'
 popd
-
-%files
-%dir %{gem_instdir}
-%exclude %{gem_instdir}/.*
-%license %{gem_instdir}/LICENSE.md
-%{gem_libdir}
-%exclude %{gem_cache}
-%{gem_spec}
-
-%files doc
-%doc %{gem_docdir}
-%doc %{gem_instdir}/CONTRIBUT*
-%{gem_instdir}/Gemfile
-%doc %{gem_instdir}/README.md
-%{gem_instdir}/Rakefile
-%doc %{gem_instdir}/SECURITY.md
-%doc %{gem_instdir}/changelog.md
-%{gem_instdir}/fog-core.gemspec
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-fog-core-doc -f %{oreon_filedir}/rubygem-fog-core-doc.list
 
 %changelog
+
 %autochangelog

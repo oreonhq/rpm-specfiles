@@ -1,31 +1,8 @@
-%global source0_hash none
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
+%global source0_hash 65d815f4957b27c1f994d4d905a107536fe90ffa4c229c015c241687f11fe2c0
 %global upstreamname rpp
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -38,64 +15,41 @@
 %global pkg_suffix %{nil}
 %global pkg_module default
 %endif
-
 %global toolchain rocm
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-mtls-dialect=gnu2//')
-
-# Compression type and level for source/binary package payloads.
-#  "w7T0.xzdio"	xz level 7 using %%{getncpus} threads
 %global _source_payload w7T0.xzdio
 %global _binary_payload w7T0.xzdio
-
-# The default list in the project does not cover our expected targets
 %global gpu_list "gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx942;gfx950;gfx1010;gfx1012;gfx1030;gfx1100;gfx1101;gfx1102;gfx1103;gfx1150;gfx1151;gfx1152;gfx1153;gfx1200;gfx1201"
 %global _gpu_list gfx1100
-
 %bcond_with debug
 %if %{with debug}
 %global build_type DEBUG
 %else
 %global build_type RelWithDebInfo
 %endif
-
-# Testing does not work well, it requires local hw.
 %bcond_with test
-
 Name:           rocm-rpp%{pkg_suffix}
 Version:        %{rocm_version}
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        ROCm Performace Primatives for computer vision
 Url:            https://github.com/ROCm/%{upstreamname}
 License:        MIT AND Apache-2.0 AND LicenseRef-Fedora-Public-Domain
-# The main license is MIT
-# A couple of files have Apache-2.0
-#   src/include/common/rpp/kernel_cache.hpp
-#   src/modules/kernel_cache.cpp
-# A Public Domain
-#   src/modules/md5.cpp
-
-Source0:        %{url}/archive/rocm-%{rocm_version}.tar.gz#/%{upstreamname}-%{rocm_version}.tar.gz
-
+Source0:        https://github.com/ROCm/%{upstreamname}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{upstreamname}-%{version}.tar.gz
+ExclusiveArch:  x86_64
+# oreon:deps
 BuildRequires:  chrpath
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  half-devel
 BuildRequires:  ninja-build
-%if 0%{?fedora}
-BuildRequires:  opencv-devel
-%endif
-BuildRequires:  rocm-cmake%{pkg_suffix}
-BuildRequires:  rocm-comgr%{pkg_suffix}-devel
-BuildRequires:  rocm-compilersupport%{pkg_suffix}-macros
-BuildRequires:  rocm-omp%{pkg_suffix}-devel
-BuildRequires:  rocm-hip%{pkg_suffix}-devel
-BuildRequires:  rocm-runtime%{pkg_suffix}-devel
-BuildRequires:  rocm-rpm-macros%{pkg_suffix}
-
-# Only x86_64 works right now:
-ExclusiveArch:  x86_64
-
+BuildRequires:  rocm-cmake-7.1
+BuildRequires:  rocm-comgr-7.1-devel
+BuildRequires:  rocm-compilersupport-7.1-macros
+BuildRequires:  rocm-hip-7.1-devel
+BuildRequires:  rocm-omp-7.1-devel
+BuildRequires:  rocm-rpm-macros-7.1
+BuildRequires:  rocm-runtime-7.1-devel
+# /oreon:deps
 %description
 AMD ROCm Performance Primitives (RPP) library is a comprehensive,
 high-performance computer vision library for AMD processors that
@@ -104,7 +58,6 @@ have HIP, OpenCL, or CPU backends.
 %package devel
 Summary:        Libraries and headers for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}
 
@@ -112,12 +65,12 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %package test
 Summary:        Tests for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description test
 %{summary}
 %endif
 
 %prep
+
 %autosetup -p1 -n %{upstreamname}-rocm-%{version}
 
 # hip compiler
@@ -168,35 +121,20 @@ sed -i -e 's|@PACKAGE_LIB_INSTALL_DIR@|%{pkg_prefix}/%{pkg_libdir}|' cmake_modul
     -DROCM_PATH=%{pkg_prefix} \
     -DHIP_PATH=%{pkg_prefix} \
     -DCMAKE_INSTALL_LIBDIR=%{pkg_prefix}/%{pkg_libdir}
-
 %cmake_build
-
 %install
 %cmake_install
-
-# ERROR   0020: file '/usr/lib64/librpp.so.1.9.1' contains a runpath referencing '..' of an absolute path [/usr/lib64/rocm/llvm/bin/../lib]
 chrpath -r %{rocmllvm_libdir} %{buildroot}%{pkg_prefix}/%{pkg_libdir}/librpp.so.2.*.*
-
-# Extra licenses
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rpp-asan/FFTS_LICENSE
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rpp-asan/LICENSE
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rpp/FFTS_LICENSE
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rpp/LICENSE
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE
-%{pkg_prefix}/%{pkg_libdir}/librpp.so.2{,.*}
-
-%files devel
-%doc README.md
-%{pkg_prefix}/include/rpp/
-%{pkg_prefix}/%{pkg_libdir}/librpp.so
-%{pkg_prefix}/%{pkg_libdir}/cmake/rpp/
-
-%if %{with test}
-%files test
-%{pkg_prefix}/share/rpp/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n rocm-rpp-7.1-devel -f %{oreon_filedir}/rocm-rpp-7.1-devel.list
+%files -n rocm-rpp-7.1-test -f %{oreon_filedir}/rocm-rpp-7.1-test.list
 
 %changelog
+
 %autochangelog

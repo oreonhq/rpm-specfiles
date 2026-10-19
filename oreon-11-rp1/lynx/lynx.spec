@@ -1,56 +1,36 @@
 %global source0_hash 174b7f2866a60f3247ba75f5c7dbb10b124aede4a1359312de15f3bfebd2050f
 %global source1_hash 6c12f9bfeef6e7df055b27ea546c7adddaa9c53831b76e633ac771196671bb0f
 %global source2_hash eec7eccb51a27ae633784d1b1ef42eb775130c782ea51a6c47fa7a901484d6db
-
-#%%global devrel dev.12
 %global devrel %{nil}
-
-Summary: A text-based Web browser
+Summary:        A text-based Web browser
 Name: lynx
 Version: 2.9.3
-#Release: %%{devrel}.1%%{?dist}
-Release: %autorelease
+Release:        1%{?dist}
 License: GPL-2.0-only
-
-Source0: https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2
+Source0:        https://invisible-island.net/archives/%{name}/tarballs/%{name}%{version}.tar.bz2
 Source1: https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2.asc
 Source2: https://invisible-island.net/public/dickey@invisible-island.net-rsa3072.asc
-
 URL: https://lynx.invisible-island.net/
-
-# RH specific tweaks - directory layout, utf-8 by default, misc. configuration
 Patch0: lynx-2.8.9-redhat.patch
-
-# patch preparing upstream sources for rpmbuild, in particular for parallel make
 Patch1: lynx-2.8.9-build.patch
-
-# prompt user before executing command via a lynxcgi link even in advanced mode,
-# as the actual URL may not be shown but hidden behind an HTTP redirect and set
-# TRUSTED_LYNXCGI:none in lynx.cfg to disable all lynxcgi URLs by default
-# [CVE-2008-4690]
 Patch2: lynx-CVE-2008-4690.patch
-
 Provides: webclient
 Provides: text-www-browser
-BuildRequires: brotli-devel
-BuildRequires: bzip2-devel
-BuildRequires: dos2unix
-BuildRequires: gcc
-BuildRequires: gettext
-BuildRequires: gnupg2
-BuildRequires: libidn2-devel
-BuildRequires: make
-BuildRequires: ncurses-devel
-BuildRequires: openssl-devel
-BuildRequires: unzip
-BuildRequires: zip
-BuildRequires: zlib-devel
-
-# provides /usr/share/doc/HTML/en-US/index.html used as STARTFILE on RHEL
-%if 0%{?rhel} && !0%{?eln}
-Requires: redhat-indexhtml
-%endif
-
+# oreon:deps
+BuildRequires:  brotli-devel
+BuildRequires:  bzip2-devel
+BuildRequires:  dos2unix
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  gnupg2
+BuildRequires:  libidn2-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  openssl-devel
+BuildRequires:  unzip
+BuildRequires:  zip
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Lynx is a text-based Web browser. Lynx does not display any images,
 but it does support frames, tables, and most other HTML tags. One
@@ -58,6 +38,7 @@ advantage Lynx has over graphical browsers is speed; Lynx starts and
 exits quickly and swiftly displays web pages.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -66,26 +47,9 @@ test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "ore
 
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 sed -e "s,^HELPFILE:.*,HELPFILE:file://localhost%{_pkgdocdir}/lynx_help/lynx_help_main.html,g" -i lynx.cfg
-%if 0%{?rhel} && !0%{?eln}
-sed -e 's,^STARTFILE:.*,STARTFILE:file:/usr/share/doc/HTML/en-US/index.html,' -i lynx.cfg
-%endif
 
 %build
-# These options are specified explicitly below but are also defaults in 2.9.0:
-#   --enable-addrlist-page
-#   --enable-cjk
-#   --enable-file-upload
-#   --enable-japanese-utf8
-#   --enable-justify-elts
-#   --enable-locale-charset
-#   --enable-persistent-cookies
-#   --enable-prettysrc
-#   --enable-read-eta
-#   --enable-scrollbar
-#   --enable-source-cache
-#   --with-brotli
-#   --with-bzlib
-#   --with-zlib
+
 %configure --libdir=/etc            \
     --disable-font-switch           \
     --disable-rpath-hack            \
@@ -119,36 +83,21 @@ sed -e 's,^STARTFILE:.*,STARTFILE:file:/usr/share/doc/HTML/en-US/index.html,' -i
     --with-bzlib                    \
     --with-zlib                     \
     ac_cv_path_RLOGIN=/usr/bin/rlogin
-
 %make_build
-
 %install
 chmod -x samples/mailto-form.pl
 %make_install
-
-# remove unneeded files
 rm -f docs/{OS-390.announce,README.jp}
 rm -f samples/*.bat
-
-# convert line endings
 dos2unix samples/lynx-demo.cfg
 dos2unix samples/midnight.lss
-
 cat >$RPM_BUILD_ROOT%{_sysconfdir}/lynx-site.cfg <<EOF
-# Place any local lynx configuration options (proxies etc.) here.
 EOF
-
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc docs README samples
-%doc test lynx.hlp lynx_help
-%{_bindir}/lynx
-%{_mandir}/man1/lynx.1.*
-%config(noreplace) %{_sysconfdir}/lynx.cfg
-%config(noreplace) %{_sysconfdir}/lynx.lss
-%config(noreplace,missingok) %{_sysconfdir}/lynx-site.cfg
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

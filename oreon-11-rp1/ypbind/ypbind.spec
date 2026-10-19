@@ -1,45 +1,38 @@
 %global source0_hash 3d20741ba04d9d421a5462555177e1b88aefd279b4f882b0f0083077a557f51f
-
-Summary: The NIS daemon which binds NIS clients to an NIS domain
+Summary:        The NIS daemon which binds NIS clients to an NIS domain
 Name: ypbind
 Epoch: 3
 Version: 2.7.2
-Release: 17%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-only
 Url: https://www.thkukuk.de/nis/nis/ypbind-mt/
-
 Source0:        https://github.com/thkukuk/ypbind-mt/archive/v%{version}.tar.gz#/ypbind-mt-%{version}.tar.gz
-#Source1: ypbind.init
 Source2: nis.sh
 Source3: ypbind.service
 Source4: ypbind-pre-setdomain
 Source5: ypbind-post-waitbind
-
-# Fedora-specific patch. Renaming 'ypbind' package to proper
-# 'ypbind-mt' would allow us to drop it.
 Patch1: ypbind-1.11-gettextdomain.patch
-# Not sent to upstream.
 Patch2: ypbind-2.5-helpman.patch
-
-# This is for /bin/systemctl
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 Requires: rpcbind
 Requires: yp-tools >= 4.2.2-2
-# New nss_nis package in F25+
 Requires: nss_nis
-BuildRequires: make
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  dbus-glib-devel
+BuildRequires:  docbook-style-xsl
 BuildRequires:  gcc
-BuildRequires: dbus-glib-devel, docbook-style-xsl
-BuildRequires: systemd
-BuildRequires: systemd-devel
-BuildRequires: autoconf, automake
-BuildRequires: gettext-devel
-BuildRequires: libtirpc-devel
-BuildRequires: libnsl2-devel
-BuildRequires: libxslt
-
+BuildRequires:  gettext-devel
+BuildRequires:  libnsl2-devel
+BuildRequires:  libtirpc-devel
+BuildRequires:  libxslt
+BuildRequires:  make
+BuildRequires:  systemd
+BuildRequires:  systemd-devel
+# /oreon:deps
 %description
 The Network Information Service (NIS) is a system that provides
 network information (login names, passwords, home directories, group
@@ -58,27 +51,24 @@ Install the ypbind package on any machines running NIS client programs
 also need to install the ypserv package to a machine on your network.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n ypbind-mt-%{version}
 
 autoreconf -fiv
 
 %build
+
 %ifarch s390 s390x
 export CFLAGS="$RPM_OPT_FLAGS -fPIC"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fpic"
 %endif
 export LDFLAGS="$LDFLAGS -pie -Wl,-z,relro,-z,now"
-
-#export CFLAGS="$CFLAGS -H"
-
 %configure
 %make_build
-
 %install
 %make_install
-
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/yp/binding
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/dhcp/dhclient.d
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
@@ -88,29 +78,21 @@ install -m 755 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/dhcp/dhclient.d/nis.sh
 install -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_unitdir}/ypbind.service
 install -m 755 %{SOURCE4} $RPM_BUILD_ROOT%{_libexecdir}/ypbind-pre-setdomain
 install -m 755 %{SOURCE5} $RPM_BUILD_ROOT%{_libexecdir}/ypbind-post-waitbind
-
 %{find_lang} %{name}
+%oreon_autofiles main
 
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
-%systemd_postun_with_restart %{name}.service
 
-%files -f %{name}.lang
-%{_sbindir}/*
-%{_mandir}/*/*
-%{_libexecdir}/*
-%{_unitdir}/*
-%{_sysconfdir}/dhcp/dhclient.d/*
-%config(noreplace) %{_sysconfdir}/yp.conf
-%dir %{_localstatedir}/yp/binding
-%doc README NEWS
-%license COPYING
+%systemd_postun_with_restart %{name}.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.7.2-17
 - Prepare for Oreon 11 (RP1)

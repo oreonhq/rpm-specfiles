@@ -1,14 +1,8 @@
-%global source0_hash 837e2f74583658a5c4c339761a73f9434f33ef9ced3e30c64da7562165c2801b
-
+%global source0_hash f1fb4649ce7d14e935133088dec97cda27eb37ce7cc710385f81dca556fe8c9f
 %global srcname rpy
 %global sum Python interface to the R language
 %global rmaj   4
-%if (0%{?fedora} && 0%{?fedora} >= 42)
-%global rmin   5
-%else
 %global rmin   4
-%endif
-
 %define add_rver() %{lua:
   local dep  = rpm.expand("%1")
   local rmaj = rpm.expand("%{rmaj}")
@@ -16,39 +10,85 @@
   print(dep .. " >= " .. rmaj .. "." .. rmin .. ", ")
   print(dep .. " < " .. rmaj .. "." .. rmin + 1)
 }
-
 Name:          rpy
 Version:       3.6.7
-Release:       1%{?dist}
-Summary:       %{sum}
+Release:        1%{?dist}
+Summary:        Python interface to the R language
 License:       GPL-2.0-or-later
 Url:           https://pypi.python.org/pypi/rpy2
-Source:        https://files.pythonhosted.org/packages/source/r/%{srcname}2/%{srcname}2-%{version}.tar.gz
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://files.pythonhosted.org/packages/source/r/%{name}2/%{name}2-%{version}.tar.gz
 ExcludeArch: %{ix86}
-
-BuildRequires: gcc
-BuildRequires: %add_rver R-devel
-BuildRequires: python3-devel
-BuildRequires: readline-devel
-BuildRequires: python3dist(pytest)
-
 Requires:      python3-%{srcname} = %{version}-%{release}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cffi) >= 1.15.0
+BuildRequires:  python3dist(setuptools) >= 61
+Requires:       python3-rpy = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-rpy+doc
+Summary:        Metapackage for python3-rpy doc extras
+Requires:       python3-rpy = %{version}-%{release}
+Provides:       python3dist(rpy[doc]) = %{version}-%{release}
 
-%global _description %{expand:
-RPy provides a robust Python interface to the R
-programming language.  It can manage all kinds of R objects and can
-execute arbitrary R functions. All the errors from the R language are
-converted to Python exceptions.}
+%description -n python3-rpy+doc
+Metapackage for python3-rpy doc extras.
 
-%description %_description
+%package -n       python3-rpy+test_minimal
+Summary:        Metapackage for python3-rpy test_minimal extras
+Requires:       python3-rpy = %{version}-%{release}
+Requires:       python3dist(pytest) >= 8
+Provides:       python3dist(rpy[test_minimal]) = %{version}-%{release}
+
+%description -n python3-rpy+test_minimal
+Metapackage for python3-rpy test_minimal extras.
+
+%package -n       python3-rpy+test
+Summary:        Metapackage for python3-rpy test extras
+Requires:       python3-rpy = %{version}-%{release}
+Provides:       python3dist(rpy[test]) = %{version}-%{release}
+
+%description -n python3-rpy+test
+Metapackage for python3-rpy test extras.
+
+%package -n       python3-rpy+numpy
+Summary:        Metapackage for python3-rpy numpy extras
+Requires:       python3-rpy = %{version}-%{release}
+Provides:       python3dist(rpy[numpy]) = %{version}-%{release}
+
+%description -n python3-rpy+numpy
+Metapackage for python3-rpy numpy extras.
+
+%package -n       python3-rpy+pandas
+Summary:        Metapackage for python3-rpy pandas extras
+Requires:       python3-rpy = %{version}-%{release}
+Provides:       python3dist(rpy[pandas]) = %{version}-%{release}
+
+%description -n python3-rpy+pandas
+Metapackage for python3-rpy pandas extras.
+
+%package -n       python3-rpy+types
+Summary:        Metapackage for python3-rpy types extras
+Requires:       python3-rpy = %{version}-%{release}
+Provides:       python3dist(rpy[types]) = %{version}-%{release}
+
+%description -n python3-rpy+types
+Metapackage for python3-rpy types extras.
+
+%package -n       python3-rpy+all
+Summary:        Metapackage for python3-rpy all extras
+Requires:       python3-rpy = %{version}-%{release}
+Provides:       python3dist(rpy[all]) = %{version}-%{release}
+
+%description -n python3-rpy+all
+Metapackage for python3-rpy all extras.
+
+%description
 
 %package -n python3-%{srcname}
 Summary:       %{sum}
 Requires:      %add_rver R-core
-
-%description -n python3-%{srcname} %_description
+%description -n python3-%{srcname}
 
 # Pandas will drop i686
 # https://bugzilla.redhat.com/show_bug.cgi?id=2263999
@@ -60,29 +100,24 @@ Requires:      %add_rver R-core
 %{pyproject_extras_subpkg -n python%{python3_pkgversion}-%{srcname} %{extras}}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{srcname}2-%{version}
 
-%generate_buildrequires
-%pyproject_buildrequires -r
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files %{srcname}2 '_rinterface_cffi_*'
+%oreon_autofiles main usr/lib/python3*/site-packages/rpy* usr/lib64/python3*/site-packages/rpy* usr/bin/*
 
 %check
-# cd %{srcname}2
+
 %pytest
-
 %files
-
-%files -n python3-%{srcname} -f %{pyproject_files}
-%doc AUTHORS NEWS PKG-INFO
-%license gpl-2.0.txt
+%files -n python3-rpy -f %{oreon_filedir}/python3-rpy.list
 
 %changelog
+
 %autochangelog

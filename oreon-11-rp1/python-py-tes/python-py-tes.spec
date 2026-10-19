@@ -1,59 +1,44 @@
-%global source0_hash 6aa566d4b6a5bcf16c980be59197ed0f90943a0724239eba108258a400e1b8cc
-
+%global source0_hash c889ec9ca460a81ec485316ecf93fe9814330914b3391bfe6f4286e1c4302949
 Name:           python-py-tes
 Version:        1.1.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Python SDK for the GA4GH Task Execution API
-
-# SPDX
 License:        MIT
 URL:            https://github.com/ohsu-comp-bio/py-tes
-# The PyPI sdist is missing the LICENSE and the tests, so we must use the
-# GitHub source archive.
-Source:         %{url}/archive/%{version}/py-tes-%{version}.tar.gz
-
-
+Source0:        https://github.com/ohsu-comp-bio/py-tes/archive/%{version}/py-tes-%{version}.tar.gz
 BuildArch:      noarch
-
-# Most of the dependencies in tests/requirements.txt pertain to linting and
-# coverage analysis. (Plus, the package wants to use the deprecated nose
-# package as the test runner.) Rather than working around all of these, it is
-# simpler to BR and invoke pytest manually.
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist requests_mock} >= 1.3
-
 %global common_description %{expand:
 This is a library for interacting with servers implementing the GA4GH Task
 Execution Schema (https://github.com/ga4gh/task-execution-schemas).}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-py-tes = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-py-tes
-Summary:        %{summary}
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
+Summary:        Python SDK for the GA4GH Task Execution API
 %py_provides python3-tes
-
 %description -n python3-py-tes %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-py-tes usr/lib/python3*/site-packages/py_tes* usr/lib64/python3*/site-packages/py_tes* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/py_tes* usr/lib64/python3*/site-packages/py_tes* usr/bin/*
 
 %check
-# Integration tests require a running server
+
 ignore="${ignore-} --ignore=tests/integration"
-
 %pytest ${ignore-} -v
-
-%files -n python3-py-tes -f %{pyproject_files}
-%doc README.md
+%files
+%files -n python3-py-tes -f %{oreon_filedir}/python3-py-tes.list
 
 %changelog
+
 %autochangelog

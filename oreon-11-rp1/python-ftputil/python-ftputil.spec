@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash d882ba51c5035cf8a8fb33240836075606d7629e456ac4bd0e80c0da381eef6d
 Name:           python-ftputil
 Version:        5.2.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        High-level FTP client library _virtual file system and more_
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://ftputil.sschwarzer.net/
-Source:         %{pypi_source ftputil}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/ftputil/ftputil-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ftputil' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-ftputil = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ftputil
-Summary:        %{summary}
-
-%description -n python3-ftputil %_description
-
+Summary:        High-level FTP client library _virtual file system and more_
+%description -n python3-ftputil
 
 %prep
-%autosetup -p1 -n ftputil-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ftputil-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ftputil usr/lib/python3*/site-packages/ftputil* usr/lib64/python3*/site-packages/ftputil* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ftputil* usr/lib64/python3*/site-packages/ftputil* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ftputil -f %{pyproject_files}
+%files
+%files -n python3-ftputil -f %{oreon_filedir}/python3-ftputil.list
 
 %changelog
+
 %autochangelog

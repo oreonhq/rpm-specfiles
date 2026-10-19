@@ -1,6 +1,5 @@
 %global source0_hash fe6c97481298767213cfc2e9a1da29fdd8018d481ff4cb9cf0283099654f20d4
 %global unitdir /usr/lib/systemd/system
-
 Summary:        Open source IPsec-based VPN solution
 Name:           strongswan
 Version:        6.1.0
@@ -8,20 +7,19 @@ Release:        1%{?dist}
 License:        GPL-2.0-only
 URL:            https://www.strongswan.org/
 Source0:        https://download.strongswan.org/strongswan-%{version}.tar.bz2
-
-BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(gio-2.0)
-BuildRequires:  pkgconfig(libnm)
-BuildRequires:  openssl-devel
-BuildRequires:  systemd-devel
-BuildRequires:  curl-devel
-
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-
+# oreon:deps
+BuildRequires:  curl-devel
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(libnm)
+BuildRequires:  systemd-devel
+# /oreon:deps
 %description
 strongSwan is an OpenSource IPsec-based VPN solution for Linux, licensed
 under the GPLv2. It supports both the IKEv1 and IKEv2 protocols, and can be
@@ -36,17 +34,18 @@ being the userland IPsec stack consumed by NetworkManager-l2tp.
 Summary:        NetworkManager backend for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       dbus
-
 %description charon-nm
 charon-nm lets NetworkManager / plasma-nm drive strongSwan for native
 IKEv2 VPN connections.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 sed -i '/WARN_CFLAGS="$WARN_CFLAGS -Wno-format"/d' configure
 
 %build
+
 %configure \
         --disable-static \
         --enable-nm \
@@ -65,56 +64,28 @@ sed -i '/WARN_CFLAGS="$WARN_CFLAGS -Wno-format"/d' configure
         --enable-curl \
         --with-systemdsystemunitdir=%{unitdir}
 %make_build
-
 %install
 %make_install
 find %{buildroot} -name '*.la' -delete
 rm -rf %{buildroot}%{_localstatedir}/run
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
+
 %systemd_post strongswan.service
 %systemd_post strongswan-starter.service
-
 %preun
+
 %systemd_preun strongswan.service
 %systemd_preun strongswan-starter.service
-
 %postun
+
 %systemd_postun_with_restart strongswan.service
 %systemd_postun_with_restart strongswan-starter.service
-
-%files
-%license COPYING
-%doc NEWS README
-%{_sbindir}/ipsec
-%{_sbindir}/swanctl
-%{_sbindir}/charon-systemd
-%{_bindir}/pki
-%{_libexecdir}/ipsec/
-%exclude %{_libexecdir}/ipsec/charon-nm
-%{_libdir}/ipsec/
-%config(noreplace) %{_sysconfdir}/strongswan.conf
-%{_sysconfdir}/strongswan.d/
-%exclude %{_sysconfdir}/strongswan.d/charon-nm
-%config(noreplace) %{_sysconfdir}/ipsec.conf
-%config(noreplace) %{_sysconfdir}/ipsec.secrets
-%dir %{_sysconfdir}/ipsec.d
-%{_sysconfdir}/ipsec.d/
-%config(noreplace) %{_sysconfdir}/swanctl/
-%{_datadir}/strongswan/
-%{unitdir}/strongswan.service
-%{unitdir}/strongswan-starter.service
-%{_mandir}/man1/pki*
-%{_mandir}/man5/*
-%{_mandir}/man8/*
-
-%files charon-nm
-%{_libexecdir}/ipsec/charon-nm
-%{_datadir}/dbus-1/system.d/nm-strongswan-service.conf
-%dir %{_sysconfdir}/strongswan.d/charon-nm
-%{_sysconfdir}/strongswan.d/charon-nm/
+%files -f %{oreon_filedir}/main.list
+%files -n strongswan-charon-nm -f %{oreon_filedir}/strongswan-charon-nm.list
 
 %changelog
+
 %autochangelog

@@ -1,19 +1,17 @@
 %global source0_hash 1e23686b8887ebe461786c059d848b412188c635929071955d134041b07996a7
-
 Name:           netsed
 Version:        1.4
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        Tool to modify network packets
-
 License:        GPL-2.0-or-later
 URL:            http://silicone.homelinux.org/projects/netsed/
 Source0:        http://silicone.homelinux.org/release/%{name}/%{name}-%{version}.tar.gz
-
-BuildRequires:  make
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  doxygen
+BuildRequires:  gcc
 BuildRequires:  graphviz
-
+BuildRequires:  make
+# /oreon:deps
 %description
 NetSED is small and handful utility designed to alter the contents of
 packets forwarded through your network in real time. It is really useful
@@ -29,20 +27,21 @@ for network hackers in following applications:
   etc - choose whatever you want to.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 make %{?_smp_mflags} CFLAGS="%{optflags}"
 make doc
-
 %install
 install -Dp -m 0755 %{name} %{buildroot}%{_bindir}/%{name}
+%oreon_autofiles main
 
-%files
-%doc LICENSE NEWS README TODO html/
-%{_bindir}/%{name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

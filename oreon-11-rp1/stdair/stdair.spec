@@ -1,27 +1,38 @@
 %global source0_hash 193cd0f5659d707bb028bc73c797dbd680abb3ea2259da6a134aa54277693b37
-
-#
 Name:           stdair
 Version:        1.00.26
-Release:        %autorelease
-
+Release:        1%{?dist}
 Summary:        C++ Standard Airline IT Object Library
-
 License:        LGPL-2.1-or-later
 URL:            https://github.com/airsim/%{name}
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
+Source0:        https://github.com/airsim/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  boost-devel
-BuildRequires:  soci-mysql-devel
-BuildRequires:  soci-sqlite3-devel
-BuildRequires:  soci-postgresql-devel
-BuildRequires:  sqlite-devel
-BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  ghostscript
 BuildRequires:  libpq-devel
+BuildRequires:  mariadb-connector-c-devel
 BuildRequires:  pkgconfig(readline)
-
+BuildRequires:  soci-mysql-devel
+BuildRequires:  soci-postgresql-devel
+BuildRequires:  soci-sqlite3-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  tex(latex)
+BuildRequires:  texlive-adjustbox
+BuildRequires:  texlive-epstopdf
+BuildRequires:  texlive-hanging
+BuildRequires:  texlive-ltablex
+BuildRequires:  texlive-multirow
+BuildRequires:  texlive-newunicodechar
+BuildRequires:  texlive-ninecolors
+BuildRequires:  texlive-stackengine
+BuildRequires:  texlive-tabularray
+BuildRequires:  texlive-ulem
+BuildRequires:  texlive-wasysym
+BuildRequires:  texlive-xltabular
+# /oreon:deps
 %description
 %{name} aims at providing a clean API, and the corresponding C++
 implementation, for the basis of Airline IT and travel distribution
@@ -38,7 +49,6 @@ modeling, mainly for simulation purpose.
 Summary:        Header files, libraries and development helper tools for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description    devel
 This package contains the header files, shared libraries and
 development helper tools for %{name}. If you would like to develop
@@ -46,7 +56,6 @@ programs using %{name}, you will need to install %{name}-devel.
 
 %package        data
 Summary:        Sample data sets for the Airline/Travel Market simulator (AirSim/TvlSim)
-
 %description    data
 This package contains sample data sets for the components of
 the Airline/Travel Market simulator (AirSim/TvlSim):
@@ -64,7 +73,6 @@ BuildRequires:  texlive-epstopdf texlive-ltablex texlive-xltabular
 BuildRequires:  texlive-tabularray texlive-multirow texlive-hanging
 BuildRequires:  texlive-adjustbox texlive-stackengine texlive-ulem
 BuildRequires:  texlive-wasysym texlive-newunicodechar texlive-ninecolors
-
 %description    doc
 This package contains HTML pages, as well as a PDF reference manual,
 for %{name}. All that documentation is generated thanks to Doxygen
@@ -73,81 +81,26 @@ online (https://github.com/airsim/%{name}).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
-
-# Fix some permissions
 find %{buildroot}%{_libexecdir}/%{name} -type f -name '*.sh' -exec chmod +x {} \;
-
-# Remove the Doxygen installer
 rm -f %{buildroot}/%{_docdir}/%{name}/html/installdox
-
-# Remove additional documentation files (those files are already available
-# in the project top directory)
 rm -f %{buildroot}%{_docdir}/%{name}/{NEWS,README.md,AUTHORS}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files
-%doc ChangeLog AUTHORS NEWS README.md
-%license COPYING
-%{_bindir}/%{name}
-%{_libdir}/lib%{name}.so.*
-%{_libdir}/lib%{name}uicl.so.*
-%{_mandir}/man1/%{name}.1.*
-
-%files data
-%license COPYING
-%dir %{_libexecdir}/%{name}
-%{_libexecdir}/%{name}/*.sh
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/db
-%dir %{_datadir}/%{name}/db/data
-%dir %{_datadir}/%{name}/samples
-%dir %{_datadir}/%{name}/samples/rds01
-%dir %{_datadir}/%{name}/samples/HybridForecasting
-%dir %{_datadir}/%{name}/samples/IBP_study
-%dir %{_datadir}/%{name}/samples/NewQFF
-%dir %{_datadir}/%{name}/samples/NewQFF/instance01
-%dir %{_datadir}/%{name}/samples/NewQFF/instance02
-%dir %{_datadir}/%{name}/samples/OldQFF
-%dir %{_datadir}/%{name}/samples/OldQFF/instance01
-%dir %{_datadir}/%{name}/samples/OldQFF/instance02
-%dir %{_datadir}/%{name}/samples/QForecasting
-%{_datadir}/%{name}/db/data/*.sql
-%{_datadir}/%{name}/db/data/*.csv
-%{_datadir}/%{name}/samples/*.csv
-%{_datadir}/%{name}/samples/rds01/*.csv
-%{_datadir}/%{name}/samples/HybridForecasting/*.csv
-%{_datadir}/%{name}/samples/IBP_study/*.csv
-%{_datadir}/%{name}/samples/NewQFF/instance01/*.csv
-%{_datadir}/%{name}/samples/NewQFF/instance02/*.csv
-%{_datadir}/%{name}/samples/OldQFF/instance01/*.csv
-%{_datadir}/%{name}/samples/OldQFF/instance02/*.csv
-%{_datadir}/%{name}/samples/QForecasting/*.csv
-
-%files devel
-%{_includedir}/%{name}/
-%{_bindir}/%{name}-config
-%{_libdir}/lib%{name}.so
-%{_libdir}/lib%{name}uicl.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/cmake/%{name}/
-%{_datadir}/aclocal/%{name}.m4
-%{_mandir}/man1/%{name}-config.1.*
-%{_mandir}/man3/%{name}-library.3.*
-
-%files doc
-%doc %{_docdir}/%{name}/
-%license COPYING
+%files -f %{oreon_filedir}/main.list
+%files -n stdair-devel -f %{oreon_filedir}/stdair-devel.list
+%files -n stdair-data -f %{oreon_filedir}/stdair-data.list
+%files -n stdair-doc -f %{oreon_filedir}/stdair-doc.list
 
 %changelog
+
 %autochangelog

@@ -1,55 +1,39 @@
 %global source0_hash a805b2b019184710ff53d0496f9f0ce6dcca420c141a0f4f6fcc02131581d759
-
 %global with_tests 1
-
 Name:          cogl
 Version:       1.22.8
-Release:       17%{?dist}
-Summary:       A library for using 3D graphics hardware to draw pretty pictures
-
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        A library for using 3D graphics hardware to draw pretty pictures
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://www.clutter-project.org/
 Source0:        http://download.gnome.org/sources/cogl/1.22/cogl-%{version}.tar.xz
-
-# Vaguely related to https://bugzilla.gnome.org/show_bug.cgi?id=772419
-# but on the 1.22 branch, and the static inline in the header is gross
-# ajax promises he'll clean this up.
 Patch0: 0001-egl-Use-eglGetPlatformDisplay-not-eglGetDisplay.patch
-
-# "GL_ARB_shader_texture_lod" is used to do lod biased texturing. It
-# make achieve faster blurring of images instead of using large blur radius.
 Patch1: 0002-add-GL_ARB_shader_texture_lod-support.patch
-
-# "copy_sub_image" is used to implement feature similar with kwin blur
-# effect by being abel to copy partial of framebuffer contents as texture
-# and do post blurring.
 Patch2: 0003-texture-support-copy_sub_image.patch
-
-BuildRequires: chrpath
-BuildRequires: pkgconfig(cairo)
-BuildRequires: mesa-libEGL-devel
-BuildRequires: pkgconfig(gbm)
-BuildRequires: pkgconfig(gdk-pixbuf-2.0)
-BuildRequires: pkgconfig(gl)
-BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: pkgconfig(gobject-introspection-1.0)
-BuildRequires: pkgconfig(gtk-doc)
-BuildRequires: pkgconfig(libdrm)
-BuildRequires: pkgconfig(pango)
-BuildRequires: pkgconfig(xcomposite)
-BuildRequires: pkgconfig(xdamage)
-BuildRequires: pkgconfig(xext)
-BuildRequires: pkgconfig(xfixes)
-BuildRequires: pkgconfig(xrandr)
-
-BuildRequires: pkgconfig(wayland-server)
-BuildRequires: pkgconfig(wayland-client)
-BuildRequires: pkgconfig(wayland-cursor)
-BuildRequires: pkgconfig(wayland-egl)
-BuildRequires: pkgconfig(xkbcommon)
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  chrpath
+BuildRequires:  make
+BuildRequires:  mesa-libEGL-devel
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(gbm)
+BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(gtk-doc)
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(pango)
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-cursor)
+BuildRequires:  pkgconfig(wayland-egl)
+BuildRequires:  pkgconfig(wayland-server)
+BuildRequires:  pkgconfig(xcomposite)
+BuildRequires:  pkgconfig(xdamage)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(xfixes)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  pkgconfig(xrandr)
+# /oreon:deps
 %description
 Cogl is a small open source library for using 3D graphics hardware to draw
 pretty pictures. The API departs from the flat state machine style of
@@ -70,7 +54,6 @@ options we are interested in for the future.
 %package devel
 Summary:       %{name} development environment
 Requires:      %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Header files and libraries for building and developing apps with %{name}.
 
@@ -78,7 +61,6 @@ Header files and libraries for building and developing apps with %{name}.
 Summary:       Documentation for %{name}
 Requires:      %{name} = %{version}-%{release}
 BuildArch:     noarch
-
 %description   doc
 This package contains documentation for %{name}.
 
@@ -86,16 +68,15 @@ This package contains documentation for %{name}.
 %package       tests
 Requires:      %{name} = %{version}-%{release}
 Summary:       Tests for %{name}
-
 %description   tests
 This package contains the installable tests for %{name}.
 %endif
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
+
 CFLAGS="$RPM_OPT_FLAGS -fPIC -std=gnu17"
 %configure \
   --enable-cairo=yes \
@@ -109,51 +90,28 @@ CFLAGS="$RPM_OPT_FLAGS -fPIC -std=gnu17"
   --enable-wayland-egl-server \
   --enable-xlib-egl-platform \
   %{?with_tests:--enable-installed-tests}
-
 make %{?_smp_mflags} V=1
-
 %install
 %make_install
-
-#Remove libtool archives.
 find %{buildroot} -name '*.la' -delete
-
-# This gets installed by mistake
 rm %{buildroot}%{_datadir}/cogl/examples-data/crate.jpg
-
-# Remove lib64 rpaths
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcogl-path.so
 chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libcogl-pango.so
-
 %find_lang %{name}
+%oreon_autofiles cogl-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles cogl-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles cogl-tests usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# make check
 
 %ldconfig_scriptlets
-
-%files -f %{name}.lang
-%license COPYING
-%doc NEWS README
-%{_libdir}/libcogl*.so.20*
-%{_libdir}/girepository-1.0/Cogl*.typelib
-
-%files devel
-%{_includedir}/cogl
-%{_libdir}/libcogl*.so
-%{_libdir}/pkgconfig/*.pc
-%{_datadir}/gir-1.0/Cogl*.gir
-
-%files doc
-%{_datadir}/gtk-doc/html/cogl
-%{_datadir}/gtk-doc/html/cogl-2.0-experimental
-
-%if 0%{?with_tests}
-%files tests
-%{_datadir}/installed-tests/%{name}
-%{_libexecdir}/installed-tests/%{name}
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n cogl-devel -f %{oreon_filedir}/cogl-devel.list
+%files -n cogl-doc -f %{oreon_filedir}/cogl-doc.list
+%files -n cogl-tests -f %{oreon_filedir}/cogl-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.22.8-17
 - Prepare for Oreon 11 (RP1)

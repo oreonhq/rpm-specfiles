@@ -1,22 +1,20 @@
 %global source0_hash 8d1c00c1018f96b4b97655482e57dcb0ce42ae2f1d349cd6d4191e7848d9ffe9
-
 %global abi 1
-
-Summary:	An OpenGL to PostScript printing library
+Summary:        An OpenGL to PostScript printing library
 Summary(pl):	Biblioteka drukowania z OpenGL-a do PostScriptu
 Name:		gl2ps
 Version:	1.4.2
-Release:	16%{?dist}
+Release:        16%{?dist}
 License:	LGPL-2.0-or-later OR GL2PS
-Source0:	http://www.geuz.org/gl2ps/src/%{name}-%{version}.tgz
-# bump min cmake version requirement to work with cmake 4.0
+Source0:        http://www.geuz.org/gl2ps/src/%{name}-%{version}.tgz
 Patch0:		gl2ps-cmake4.patch
 URL:		http://www.geuz.org/gl2ps/
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:	libGL-devel
+BuildRequires:  gcc
+BuildRequires:  libGL-devel
 BuildRequires:  libpng-devel
-
+# /oreon:deps
 %description
 GL2PS is a C library providing high quality vector output for any
 OpenGL application. The main difference between GL2PS and other
@@ -56,7 +54,6 @@ Summary:	Header files for GL2PS library
 Summary(pl):	Pliki nagłówkowe biblioteki GL2PS
 Requires:	%{name}%{_isa} = %{version}-%{release}
 Requires:	libGL-devel
-
 %description devel
 Header files for GL2PS library.
 
@@ -65,28 +62,20 @@ Pliki nagłówkowe biblioteki GL2PS.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake -DLIB_SUFFIX=$(echo %{_lib} | sed 's/^lib//')
 %cmake_build
-
 %install
 %cmake_install
-
 rm -r %{buildroot}%{_docdir}/gl2ps
 rm %{buildroot}%{_libdir}/libgl2ps.a
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING.GL2PS COPYING.LGPL
-%doc README.txt
-%{_libdir}/libgl2ps.so.%{abi}*
-
-%files devel
-%doc gl2ps.pdf gl2psTest*.c
-%{_libdir}/libgl2ps.so
-%{_includedir}/gl2ps.h
+%files -f %{oreon_filedir}/main.list
+%files -n gl2ps-devel -f %{oreon_filedir}/gl2ps-devel.list
 
 %changelog
+
 %autochangelog

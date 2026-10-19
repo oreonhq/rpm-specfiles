@@ -1,58 +1,46 @@
-%global source0_hash none
-
+%global source0_hash 18548d0c9912c45775d0a6e0ef7f0246c601cc71a576fbb5c7296566c7c03db5
 Name:           python-conda-sphinx-theme
 Version:        0.4.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Conda theme for Sphinx
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/conda-incubator/conda-sphinx-theme/
-Source:         %{pypi_source conda_sphinx_theme}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/conda_sphinx_theme/conda_sphinx_theme-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'conda-sphinx-theme' generated automatically by pyp2spec.}
-
 Patch:          python-conda-sphinx-theme-fonts.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 64
+BuildRequires:  python3dist(setuptools-scm) >= 8
+Requires:       python3-conda-sphinx-theme = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-conda-sphinx-theme
-Summary:        %{summary}
-
-%description -n python3-conda-sphinx-theme %_description
-
+Summary:        Conda theme for Sphinx
+# oreon:reqs
+Requires:       python3dist(pydata-sphinx-theme) >= 0.15
+# /oreon:reqs
+%description -n python3-conda-sphinx-theme
 
 %prep
-%autosetup -p1 -n conda_sphinx_theme-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir conda_sphinx_theme-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-conda-sphinx-theme usr/lib/python3*/site-packages/conda_sphinx_theme* usr/lib64/python3*/site-packages/conda_sphinx_theme* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/conda_sphinx_theme* usr/lib64/python3*/site-packages/conda_sphinx_theme* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-conda-sphinx-theme -f %{pyproject_files}
+%files
+%files -n python3-conda-sphinx-theme -f %{oreon_filedir}/python3-conda-sphinx-theme.list
 
 %changelog
+
 %autochangelog

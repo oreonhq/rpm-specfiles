@@ -1,20 +1,18 @@
 %global source0_hash 555d5d83539d29d75cf655d1fb5077fe86204ce784cc5704ac8d475c71fd61b3
-
 %global sum Standalone version of Django's feedgenerator module
-
 Name:       python-feedgenerator
 Version:    2.2.1
-Release:    %autorelease
-Summary:    %{sum}
-
+Release:        1%{?dist}
+Summary:        Standalone version of Django's feedgenerator module
 License:    BSD-3-Clause
 URL:        https://github.com/getpelican/feedgenerator
-Source0:    %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/getpelican/feedgenerator/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:  noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-
+Requires:       python3-feedgenerator = %{version}-%{release}
+# /oreon:deps
 %description
 FeedGenerator is a standalone version of Django’s feedgenerator module. It has
 evolved over time, including an update for Py3K and numerous other
@@ -22,13 +20,13 @@ enhancements.
 
 %package -n python3-feedgenerator
 Summary:        %{sum}
-
 %description -n python3-feedgenerator
 FeedGenerator is a standalone version of Django’s feedgenerator module. It has
 evolved over time, including an update for Py3K and numerous other
 enhancements.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n feedgenerator-%{version}
@@ -42,21 +40,20 @@ do
     sed -i -e 's/from . import six/import six/' -e 's/from .six \(import .*$\)/from six \1/'  $f
 done
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files feedgenerator
+%oreon_autofiles python3-feedgenerator usr/lib/python3*/site-packages/feedgenerator* usr/lib64/python3*/site-packages/feedgenerator* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/feedgenerator* usr/lib64/python3*/site-packages/feedgenerator* usr/bin/*
 
 %check
-%pytest
 
-%files -n python3-feedgenerator -f %{pyproject_files}
-%doc README.md
+%pytest
+%files
+%files -n python3-feedgenerator -f %{oreon_filedir}/python3-feedgenerator.list
 
 %changelog
+
 %autochangelog

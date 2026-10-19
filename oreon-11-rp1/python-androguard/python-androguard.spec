@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 1e117ee4574366a2d7376b8c858433ad724b0a29e4036d9f1a9fda4372180267
 Name:           python-androguard
 Version:        4.1.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Androguard is a full python tool to play with Android files.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/androguard/androguard
-Source:         %{pypi_source androguard}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/androguard/androguard-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'androguard' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-androguard = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-androguard
-Summary:        %{summary}
-
-%description -n python3-androguard %_description
-
+Summary:        Androguard is a full python tool to play with Android files.
+%description -n python3-androguard
 
 %prep
-%autosetup -p1 -n androguard-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir androguard-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-androguard usr/lib/python3*/site-packages/androguard* usr/lib64/python3*/site-packages/androguard* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/androguard* usr/lib64/python3*/site-packages/androguard* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-androguard -f %{pyproject_files}
-%{_bindir}/androguard
+%files
+%files -n python3-androguard -f %{oreon_filedir}/python3-androguard.list
 
 %changelog
+
 %autochangelog

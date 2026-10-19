@@ -1,25 +1,15 @@
+%global source1_hash c13f165204651375c4d91fc1905234119e46686d4ac166b63e2a1ca6e4bfad19
 %global source0_hash 20af39d9450d495468c56a50930810d82137f7ccd3a710592e02b6f620758f55
-
 %global stable_kf6 stable
-
-
 Name:    kpipewire
-Summary: Set of convenient classes to use PipeWire in Qt projects
+Summary:        Set of convenient classes to use PipeWire in Qt projects
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only
 URL:     https://invent.kde.org/plasma/%{name}
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 Patch0:  %{name}-ffmpeg8.patch
-
-# Compile Tools
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-
-# Fedora
-BuildRequires:  kf6-rpm-macros
 Requires:       kf6-filesystem
 Requires:       libavcodec-free%{?_isa}
 Requires:       libavformat-free%{?_isa}
@@ -27,19 +17,18 @@ Requires:       libavutil-free%{?_isa}
 Requires:       libavfilter-free%{?_isa}
 Requires:       libswscale-free%{?_isa}
 Requires:       pipewire-libs%{?_isa}
-
-# KDE Frameworks
-BuildRequires:  extra-cmake-modules
-BuildRequires:  mesa-libEGL-devel
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6I18n)
-
-# Misc
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
 BuildRequires:  libdrm-devel
 BuildRequires:  libepoxy-devel
+BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libgbm-devel
 BuildRequires:  pipewire-devel
-BuildRequires:  wayland-devel
 BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(libavfilter)
 BuildRequires:  pkgconfig(libavformat)
@@ -47,16 +36,13 @@ BuildRequires:  pkgconfig(libavutil)
 BuildRequires:  pkgconfig(libswscale)
 BuildRequires:  pkgconfig(libva)
 BuildRequires:  pkgconfig(libva-drm)
-
-# Plasma
 BuildRequires:  plasma-wayland-protocols-devel
-
-# Qt
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  qt6-qtdeclarative-devel
 BuildRequires:  qt6-qtwayland-devel
-
+BuildRequires:  wayland-devel
+# /oreon:deps
 %description
 It is developed in C++ and it's main use target is QML components.
 As it's what's been useful, this framework focuses on graphical PipeWire
@@ -71,53 +57,33 @@ into a file.
 
 %package        devel
 Summary:        Development files for %{name}
-# This requires pipewire headers to be installed
 Requires:       pipewire-devel
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       kpipewire-devel = %{version}-%{release}
 Provides:       kpipewire-devel%{?_isa} = %{version}-%{release}
 Obsoletes:      kpipewire-devel <= 1:5.2.0
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{version}
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --with-qt --all-name
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%license LICENSES/*
-%{_libdir}/libKPipeWire.so.6
-%{_libdir}/libKPipeWire.so.%{version}
-%{_libdir}/libKPipeWireRecord.so.6
-%{_libdir}/libKPipeWireRecord.so.%{version}
-%{_libdir}/libKPipeWireDmaBuf.so.6
-%{_libdir}/libKPipeWireDmaBuf.so.%{version}
-%{_qt6_qmldir}/org/kde/pipewire/*
-%{_kf6_datadir}/qlogging-categories6/*.categories
-
-%files devel
-%{_libdir}/libKPipeWire.so
-%{_libdir}/libKPipeWireRecord.so
-%{_libdir}/libKPipeWireDmaBuf.so
-%dir %{_includedir}/KPipeWire
-%{_includedir}/KPipeWire/*
-%dir %{_libdir}/cmake/KPipeWire
-%{_libdir}/cmake/KPipeWire/*.cmake
+%files -f %{oreon_filedir}/main.list
+%files -n kpipewire-devel -f %{oreon_filedir}/kpipewire-devel.list
 
 %changelog
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Require ffmpeg-free libs and pipewire-libs at runtime
 

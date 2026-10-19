@@ -1,19 +1,17 @@
 %global source0_hash 1273b956706eaacb35d928b682610189d9aaf5d1c0a17a37b516a6794e4ef748
-
 Name:		dt
 Version:	26
-Release:	1%{?dist}
-Summary:	Generic data test program
+Release:        1%{?dist}
+Summary:        Generic data test program
 License:	MIT
 URL:		https://github.com/RobinTMiller/dt
-
 %global git_tag dt.v%{version}
-Source0:	%{URL}/archive/%{git_tag}/%{name}-%{git_tag}.tar.gz
-
-BuildRequires:	gcc
-BuildRequires:	libuuid-devel
-BuildRequires:	make
-
+Source0:        https://github.com/RobinTMiller/%{name}/archive/%{git_tag}/%{name}-%{git_tag}.tar.gz
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  libuuid-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 dt is a generic data test program used to verify proper operation of
 peripherals, file systems, device drivers, or any data stream supported by the
@@ -37,11 +35,13 @@ scripts and config data are installed in %{_datadir}/%{name}.
 
 %global __requires_exclude_from ^%{_datadir}/%{name}/.*$
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{git_tag}
 
 %build
+
 mkdir tmp
 cd tmp
 %make_build \
@@ -50,7 +50,6 @@ cd tmp
 	OS=linux \
 	VPATH=.. \
 	-f ../Makefile.linux
-
 %install
 install -d -m755 $RPM_BUILD_ROOT%{_bindir}
 install -d -m755 $RPM_BUILD_ROOT%{_mandir}/man8
@@ -61,14 +60,10 @@ install -m644 Documentation/dt.man $RPM_BUILD_ROOT%{_mandir}/man8/%{name}.8
 install -m755 Scripts/dt? $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -m644 data/pattern_* $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -m644 html/* $RPM_BUILD_ROOT%{_defaultdocdir}/%{name}/html
+%oreon_autofiles main
 
-%files
-%{!?_licensedir:%global license %%doc}
-%license LICENSE
-%doc Documentation/dt-UsersGuide.txt Documentation/ReleaseNotes-dt*.txt html
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%{_mandir}/man8/%{name}.*.gz
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

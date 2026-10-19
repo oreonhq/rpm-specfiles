@@ -1,20 +1,19 @@
 %global source0_hash 820bd9e32be5b1a4422744c19b371616ace70f48f00768b8afe373f9ded1516b
-
 Name:           gnucap
 Version:        0.35
 Release:        45%{?dist}
 Summary:        The Gnu Circuit Analysis Package
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.gnu.org/software/gnucap/
 Source0:        http://www.gnucap.org/devel/gnucap-%{version}.tar.gz
 Patch0:         gnucap-0.34-debian.patch
 Patch1:         gnucap-0.35-gcc43.patch
 Patch2:         gnucap-0.35-gcc6.patch
+# oreon:deps
 BuildRequires:  gcc-c++
+BuildRequires:  make
 BuildRequires:  readline-devel
-BuildRequires: make
-
+# /oreon:deps
 %description
 The primary component is a general purpose circuit simulator. It performs
 nonlinear dc and transient analyses, fourier analysis, and ac analysis. Spice
@@ -25,6 +24,7 @@ true mixed-mode simulation. Most of the code is in place for future support of
 event driven analog simulation, and true multi-rate simulation.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -35,23 +35,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's/-ltermcap/-lncurses/g' configure
 
 %build
+
 %configure
 make %{?_smp_mflags}
-
 %install
 %make_install
-
-# for %%doc
 rm -r $RPM_BUILD_ROOT%{_datadir}/%{name}
 mv doc/acs-tutorial doc/gnucap-tutorial
 rm examples/Makefile*
+%oreon_autofiles main
 
-%files
-%doc doc/history doc/relnotes.* doc/gnucap-tutorial doc/whatisit
-%doc man/gnucap-man.pdf examples
-%license doc/COPYING
-%{_bindir}/%{name}*
-%{_mandir}/man1/%{name}.1.gz
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

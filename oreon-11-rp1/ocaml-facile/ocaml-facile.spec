@@ -1,36 +1,24 @@
 %global source0_hash 5712a00802c525d19fb59b7800ffd9d3f7ca08ee9cd295b3905b64676ce5194b
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
 %global giturl https://github.com/Emmanuel-PLF/facile
-
 Name:          ocaml-facile
 Version:       1.1.4
-Release:       18%{?dist}
-Summary:       OCaml library for constraint programming
+Release:        18%{?dist}
+Summary:        OCaml library for constraint programming
 Summary(fr):   Librairie OCaml de programmation par contraintes
 License:       LGPL-2.1-or-later
-
 URL:           http://facile.recherche.enac.fr/
 VCS:           git:%{giturl}.git
-Source0:       %{giturl}/releases/download/%{version}/facile-%{version}.tbz
-
-# Build with dune and adapt to recent OCaml changes
-# https://github.com/Emmanuel-PLF/facile/pull/2
-# The PR does not apply cleanly, so the patch has been modified manually
+Source0:        %{giturl}/releases/download/%{version}/facile-%{version}.tbz
 Patch0:        %{name}-use-dune.patch
-
-# Build with debuginfo and fix an underlinked library
 Patch1:        %{name}-debug.patch
-
-BuildRequires: ocaml >= 4.03.0
-BuildRequires: ocaml-dune
-
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-dune
+# /oreon:deps
 %description
 FaCiLe is a constraint programming library on integer and integer set finite
 domains written in OCaml. It offers all usual facilities to create and
@@ -70,30 +58,27 @@ l'aide du même langage puissant et efficace.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n facile-%{version} -p1
-
+%global oreon_srcdir facile-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%doc CHANGES.md README.md
-%license LICENSE.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-facile-devel -f %{oreon_filedir}/ocaml-facile-devel.list
 
 %changelog
+
 %autochangelog

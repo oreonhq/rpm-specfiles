@@ -1,61 +1,55 @@
-%global source0_hash none
-
+%global source0_hash 7b00c73f8670f35d4edb0293dcd81b980528bee72fd662b182aaba27ae570b93
 Name:           python-wtforms
 Version:        3.2.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Form validation and rendering for Python web development.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/pallets-eco/wtforms/
-Source:         %{pypi_source wtforms}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/wtforms/wtforms-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-wtforms = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-wtforms+email
+Summary:        Metapackage for python3-wtforms email extras
+Requires:       python3-wtforms = %{version}-%{release}
+Requires:       python3dist(email-validator) >= 2.0
+Provides:       python3dist(wtforms[email]) = %{version}-%{release}
 
+%description -n python3-wtforms+email
+Metapackage for python3-wtforms email extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'wtforms' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-wtforms
-Summary:        %{summary}
-
-%description -n python3-wtforms %_description
+Summary:        Form validation and rendering for Python web development.
+# oreon:reqs
+Requires:       python3dist(markupsafe) >= 1.1.1
+# /oreon:reqs
+%description -n python3-wtforms
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-wtforms email
-
 
 %prep
-%autosetup -p1 -n wtforms-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir wtforms-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-wtforms usr/lib/python3*/site-packages/wtforms* usr/lib64/python3*/site-packages/wtforms* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/wtforms* usr/lib64/python3*/site-packages/wtforms* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-wtforms -f %{pyproject_files}
+%files
+%files -n python3-wtforms -f %{oreon_filedir}/python3-wtforms.list
 
 %changelog
+
 %autochangelog

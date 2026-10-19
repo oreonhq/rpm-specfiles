@@ -1,57 +1,46 @@
-%global source0_hash none
-
+%global source0_hash 399677f56348e9107d7a97a7e47db6723c7d2c617fedbea6881eda7b8eed995b
 Name:           python-azure-appconfiguration
 Version:        1.9.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Microsoft Corporation Azure App Configuration Data Client Library for Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Azure/azure-sdk-for-python
-Source:         %{pypi_source azure_appconfiguration}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/azure_appconfiguration/azure_appconfiguration-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'azure-appconfiguration' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-azure-appconfiguration = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-azure-appconfiguration
-Summary:        %{summary}
-
-%description -n python3-azure-appconfiguration %_description
-
+Summary:        Microsoft Corporation Azure App Configuration Data Client Library for Python
+# oreon:reqs
+Requires:       python3dist(azure-core) >= 1.37.0
+Requires:       python3dist(isodate) >= 0.6.1
+Requires:       python3dist(typing-extensions) >= 4.6.0
+# /oreon:reqs
+%description -n python3-azure-appconfiguration
 
 %prep
-%autosetup -p1 -n azure_appconfiguration-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir azure_appconfiguration-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-azure-appconfiguration usr/lib/python3*/site-packages/azure_appconfiguration* usr/lib64/python3*/site-packages/azure_appconfiguration* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/azure_appconfiguration* usr/lib64/python3*/site-packages/azure_appconfiguration* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-azure-appconfiguration -f %{pyproject_files}
+%files
+%files -n python3-azure-appconfiguration -f %{oreon_filedir}/python3-azure-appconfiguration.list
 
 %changelog
+
 %autochangelog

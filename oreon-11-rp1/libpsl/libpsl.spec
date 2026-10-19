@@ -1,12 +1,13 @@
 %global source0_hash 93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be
-
 Name:           libpsl
 Version:        0.23.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C library for the Publix Suffix List
 License:        MIT
 URL:            https://rockdaboot.github.io/libpsl
 Source0:        https://github.com/rockdaboot/libpsl/releases/download/%{version}/libpsl-%{version}.tar.gz
+Requires:       publicsuffix-list-dafsa
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  gettext-devel
 BuildRequires:  glib2-devel
@@ -18,8 +19,7 @@ BuildRequires:  libxslt
 BuildRequires:  make
 BuildRequires:  publicsuffix-list
 BuildRequires:  python3-devel
-Requires:       publicsuffix-list-dafsa
-
+# /oreon:deps
 %description
 libpsl is a C library to handle the Public Suffix List. A "public suffix" is a
 domain name under which Internet users can directly register own names.
@@ -47,14 +47,12 @@ Libpsl...
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       publicsuffix-list
-
 %description    devel
 This package contains libraries and header files for
 developing applications that use %{name}.
 
 %package -n     psl
 Summary:        Commandline utility to explore the Public Suffix List
-
 %description -n psl
 This package contains a commandline utility to explore the Public Suffix List,
 for example it checks if domains are public suffixes, checks if cookie-domain
@@ -63,38 +61,21 @@ is acceptable for domains and so on.
 %package -n     psl-make-dafsa
 Summary:        Compiles the Public Suffix List into DAFSA form
 BuildArch:      noarch
-
 %description -n psl-make-dafsa
 This script produces C/C++ code or an architecture-independent binary object
 which represents a Deterministic Acyclic Finite State Automaton (DAFSA)
 from a plain text Public Suffix List.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 rm -frv list
 ln -sv %{_datadir}/publicsuffix list
 %py3_shebang_fix src/psl-make-dafsa
 
-
 %build
-# Tarballs from github have 2 versions, one is raw files from repo, and
-# the other one from CDN contains pre-generated autotools files.
-# But makefile hack is not upstreamed yet so we continue reconfiguring these.
-# [ -f configure ] || autoreconf -fiv
-# autoreconf -fiv
 
-# libicu does allow support for a newer IDN specification (IDN 2008) than
-# libidn 1.x (IDN 2003). However, libpsl mostly relies on an internally
-# compiled list, which is generated at buildtime and the testsuite thereof
-# requires either libidn or libicu only at buildtime; the runtime
-# requirement is only for loading external lists, which IIUC neither curl
-# nor wget support. libidn2 supports IDN 2008 as well, and is *much* smaller
-# than libicu.
-#
-# curl (as of 7.51.0-1.fc25) and wget (as of 1.19-1.fc26) now depend on libidn2.
-# Therefore, we use libidn2 at runtime to help minimize core dependencies.
 %configure --disable-silent-rules \
            --disable-static       \
            --enable-man           \
@@ -104,46 +85,24 @@ ln -sv %{_datadir}/publicsuffix list
            --with-psl-distfile=%{_datadir}/publicsuffix/public_suffix_list.dafsa  \
            --with-psl-file=%{_datadir}/publicsuffix/effective_tld_names.dat       \
            --with-psl-testfile=%{_datadir}/publicsuffix/test_psl.txt
-
-# avoid using rpath
 sed -i libtool \
     -e 's|^\(runpath_var=\).*$|\1|' \
     -e 's|^\(hardcode_libdir_flag_spec=\).*$|\1|'
-
 %make_build
-
-
 %install
 %make_install
-
+%oreon_autofiles psl usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles psl-make-dafsa usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make check || cat tests/test-suite.log
-
-
-%files
-%license COPYING
-%{_libdir}/libpsl.so.5
-%{_libdir}/libpsl.so.5.*
-
-%files devel
-%doc AUTHORS NEWS
-%{_datadir}/gtk-doc/html/libpsl/
-%{_includedir}/libpsl.h
-%{_libdir}/libpsl.so
-%{_libdir}/pkgconfig/libpsl.pc
-%{_mandir}/man3/libpsl.3*
-
-%files -n psl
-%doc AUTHORS NEWS
-%license COPYING
-%{_bindir}/psl
-%{_mandir}/man1/psl.1*
-
-%files -n psl-make-dafsa
-%license COPYING
-%{_bindir}/psl-make-dafsa
-%{_mandir}/man1/psl-make-dafsa.1*
+%files -f %{oreon_filedir}/main.list
+%files -n libpsl-devel -f %{oreon_filedir}/libpsl-devel.list
+%files -n psl -f %{oreon_filedir}/psl.list
+%files -n psl-make-dafsa -f %{oreon_filedir}/psl-make-dafsa.list
 
 %changelog
+
 %autochangelog

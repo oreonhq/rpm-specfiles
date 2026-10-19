@@ -1,3 +1,4 @@
+%global source0_hash 64d756bf4f17df3a316315d4fe27d9abc7a3c7e80394faa2a6b77ee681e72010
 Name:           oreon-defense
 Version:        1.0.15
 Release:        1%{?dist}
@@ -5,24 +6,11 @@ Summary:        Oreon security system with real-time protection
 License:        GPL-3.0-or-later
 URL:            https://oreonhq.com
 Source0:        https://tarballs.oreonhq.com/%{name}-%{version}.tar.gz
-
-BuildRequires:  cmake >= 3.16
-BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  openssl-devel
-BuildRequires:  yaml-cpp-devel
-BuildRequires:  json-devel
-BuildRequires:  clamav-devel
-BuildRequires:  libcurl-devel
-BuildRequires:  systemd-rpm-macros
-
 Requires:       qt6-qtbase
 Requires:       qt6-qtbase-gui
 Requires:       openssl-libs
 Requires:       yaml-cpp
 Requires:       clamav-lib
-# signatures: freshclam updates, or the packaged database
 Requires:       (clamav-update or clamav-data)
 Requires:       libcurl
 Requires:       nftables
@@ -31,17 +19,27 @@ Requires:       systemd
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-
+# oreon:deps
+BuildRequires:  clamav-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  json-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  yaml-cpp-devel
+# /oreon:deps
 %description
 Straightforward protection and visibility with real-time alerts.
 
 %prep
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake -DOREON_BUILD_TESTS=OFF -DCMAKE_INSTALL_SYSCONFDIR=%{_sysconfdir}
 %cmake_build
-
 %install
 %cmake_install
 install -D -m 0755 scripts/trigger-scan.sh %{buildroot}%{_libexecdir}/oreon-defense/trigger-scan.sh
@@ -64,13 +62,14 @@ Hidden=false
 NoDisplay=true
 EOF
 mkdir -p %{buildroot}%{_localstatedir}/lib/oreon-defense/quarantine
+%oreon_autofiles main
 
 %post
+
 %systemd_post oreon-defense.service
 %systemd_post oreon-defense-scan.timer
 if [ -x /usr/bin/systemctl ]; then
   systemctl daemon-reload >/dev/null 2>&1 || :
-  # keep ClamAV signatures fresh when freshclam is installed
   if systemctl cat clamav-freshclam.service >/dev/null 2>&1; then
     systemctl enable --now clamav-freshclam.service >/dev/null 2>&1 || :
   fi
@@ -84,35 +83,16 @@ fi
 if [ -x /usr/bin/gtk-update-icon-cache ]; then
   gtk-update-icon-cache -f %{_datadir}/icons/hicolor >/dev/null 2>&1 || :
 fi
-
 %preun
+
 %systemd_preun oreon-defense.service
 %systemd_preun oreon-defense-scan.timer
-
 %postun
+
 %systemd_postun_with_restart oreon-defense.service
 %systemd_postun oreon-defense-scan.timer
-
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/oreon-defense
-%{_bindir}/oreon-defense-daemon
-%{_libexecdir}/oreon-defense/trigger-scan.sh
-%{_libexecdir}/oreon-defense/test_installed_detection.sh
-%{_libexecdir}/oreon-defense/verify_detection.sh
-%{_datadir}/applications/oreon-defense.desktop
-%{_sysconfdir}/xdg/autostart/oreon-defense-autostart.desktop
-%{_datadir}/oreon-defense/
-%{_datadir}/icons/hicolor/*/apps/oreon-defense.*
-%{_datadir}/polkit-1/actions/org.oreon.defense.policy
-%{_datadir}/dbus-1/system.d/org.oreon.Defense1.conf
-%{_unitdir}/oreon-defense.service
-%{_unitdir}/oreon-defense-scan.service
-%{_unitdir}/oreon-defense-scan.timer
-%config(noreplace) %{_sysconfdir}/oreon-defense/config.json
-%dir %attr(0700,root,root) %{_localstatedir}/lib/oreon-defense
-%dir %attr(0700,root,root) %{_localstatedir}/lib/oreon-defense/quarantine
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

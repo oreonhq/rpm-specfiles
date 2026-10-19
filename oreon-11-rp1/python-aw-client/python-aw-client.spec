@@ -1,58 +1,40 @@
-%global source0_hash none
-
+%global source0_hash d6b0aeae82ded2dc0469b29109068d01ddf9e4195a5b7b8055849173b5edff7e
 Name:           python-aw-client
 Version:        0.5.15
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Client library for ActivityWatch
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MPL-2.0
 URL:            https://github.com/ActivityWatch/aw-client/
-Source:         %{pypi_source aw_client}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aw_client/aw_client-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aw-client' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-aw-client = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-aw-client
-Summary:        %{summary}
-
-%description -n python3-aw-client %_description
-
+Summary:        Client library for ActivityWatch
+%description -n python3-aw-client
 
 %prep
-%autosetup -p1 -n aw_client-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aw_client-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aw-client usr/lib/python3*/site-packages/aw_client* usr/lib64/python3*/site-packages/aw_client* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aw_client* usr/lib64/python3*/site-packages/aw_client* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aw-client -f %{pyproject_files}
-%{_bindir}/aw-client
+%files
+%files -n python3-aw-client -f %{oreon_filedir}/python3-aw-client.list
 
 %changelog
+
 %autochangelog

@@ -1,58 +1,47 @@
-%global source0_hash 1ff2663aa1669eb89115a38e2d4067c21bb847e7006f72bf979a1a91b8bc2304
-
+%global source0_hash 766d9b40616dbcf5cc920e9db26dd915de999cfab75768ff05b3ebf9c389acb2
 Name:           python-editables
 Version:        0.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Editable installations
-
-# SPDX
 License:        MIT
 URL:            https://github.com/pfmoore/editables
-# PyPI source distributions lack tests; use the GitHub archive
-Source:         %{url}/archive/%{version}/editables-%{version}.tar.gz
-
-
+Source0:        https://github.com/pfmoore/editables/archive/%{version}/editables-%{version}.tar.gz
 BuildArch:      noarch
-
-# Most of the dependencies, and all of the pytest options, in tox.ini are for
-# coverage analysis and for installation with pip/virtualenv. Rather than
-# working around all of these, it is simpler not to use tox for dependency
-# generation or testing.
-BuildRequires:  python3dist(pytest)
-
 %global common_description %{expand:
 A Python library for creating “editable wheels”
-
 This library supports the building of wheels which, when installed, will expose
 packages in a local directory on sys.path in “editable mode”. In other words,
 changes to the package source will be reflected in the package visible to
 Python, without needing a reinstall.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(flit-core) >= 3.3
+Requires:       python3-editables = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-editables
-Summary:        %{summary}
-
-# Dropped in F41; this upgrade path may be removed after F43
+Summary:        Editable installations
 Obsoletes:      python-editables-doc < 0.6-5
-
 %description -n python3-editables %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-editables usr/lib/python3*/site-packages/editables* usr/lib64/python3*/site-packages/editables* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/editables* usr/lib64/python3*/site-packages/editables* usr/bin/*
 
 %check
-%pytest
 
-%files -n python3-editables -f %{pyproject_files}
-%doc CHANGELOG.md
-%doc README.md
+%pytest
+%files
+%files -n python3-editables -f %{oreon_filedir}/python3-editables.list
 
 %changelog
+
 %autochangelog

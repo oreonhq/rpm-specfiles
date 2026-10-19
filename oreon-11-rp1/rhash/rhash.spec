@@ -1,17 +1,15 @@
 %global source0_hash 9f6019cfeeae8ace7067ad22da4e4f857bb2cfa6c2deaa2258f55b2227ec937a
-
 Name:           rhash
 Version:        1.4.6
 Release:        1%{?dist}
 Summary:        Great utility for computing hash sums
-
 License:        MIT
 URL:            https://github.com/rhash/RHash
 Source0:        https://github.com/rhash/RHash/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc
-
+BuildRequires:  make
+# /oreon:deps
 %description
 RHash is a console utility for calculation  and verification of magnet links
 and a wide range of hash sums like  CRC32,  MD4, MD5,  SHA1, SHA256, SHA512,
@@ -29,11 +27,9 @@ Features:
  * Ability to process directories recursively.
  * Portability: the program works the same on Linux, *BSD or Windows.
 
-
 %package        devel
 Summary:        Development files for lib%{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 LibRHash is a professional,  portable,  thread-safe  C library for computing
 a wide variety of hash sums, such as  CRC32, MD4, MD5, SHA1, SHA256, SHA512,
@@ -51,43 +47,31 @@ Features:
 The %{name}-devel package contains libraries and header files for
 developing applications that use lib%{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n RHash-%{version}
 sed -i -e '/^INSTALL_SHARED/s/644/755/' librhash/Makefile
 
-
 %build
+
 INSTALL_INCDIR=%{_includedir} ./configure --sysconfdir=%{_sysconfdir} --exec-prefix=%{_prefix} --mandir=%{_mandir} --libdir=%{_libdir}
 %ifarch x86_64 %{ix86}
 %make_build OPTFLAGS="%{optflags} -msse4.1" OPTLDFLAGS="-g %{?__global_ldflags}" build
 %else
 %make_build OPTFLAGS="%{optflags}" OPTLDFLAGS="-g %{?__global_ldflags}" build
 %endif
-
-
 %install
 %make_install
 make DESTDIR=%{buildroot} -C librhash install-so-link install-lib-headers
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 make test-shared
-
-
-%files
-%license COPYING
-%doc ChangeLog README.md
-%config(noreplace) %{_sysconfdir}/rhashrc
-%{_bindir}/*
-%{_libdir}/*.so.1*
-%{_mandir}/man1/*.1*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/*.so
-
+%files -f %{oreon_filedir}/main.list
+%files -n rhash-devel -f %{oreon_filedir}/rhash-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,15 +1,11 @@
 %global source0_hash 98cf67df6debf9668a61745aa84c09bcab362e5d33f5b944ec5155d44d2aacb2
-
 %global nhgamedir /usr/games/nethack
 %global nhdatadir /var/games/nethack
-
 %global fontname nethack-bitmap
-
 Name:           nethack
 Version:        3.6.7
-Release:        9%{?dist}
+Release:        1%{?dist}
 Summary:        A rogue-like single player dungeon exploration game
-
 License:        NGPL
 URL:            https://nethack.org
 Source0:        https://www.nethack.org/download/3.6.7/nethack-367-src.tgz
@@ -22,16 +18,23 @@ Patch4:         hackdir.patch
 Patch5:         %{name}-%{version}-xpm.patch
 Patch6:         modern_c.patch
 Requires:       %{fontname}-fonts-core
-
-BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  ncurses-devel
-BuildRequires:  bison, flex, desktop-file-utils
-BuildRequires:  bdftopcf, mkfontdir, libX11-devel, libXaw-devel, libXext-devel
-BuildRequires:  libXmu-devel, libXpm-devel, libXt-devel
-BuildRequires:  fontpackages-devel
+# oreon:deps
 BuildRequires:  bdftopcf
-
+BuildRequires:  bison
+BuildRequires:  desktop-file-utils
+BuildRequires:  flex
+BuildRequires:  fontpackages-devel
+BuildRequires:  gcc
+BuildRequires:  libX11-devel
+BuildRequires:  libXaw-devel
+BuildRequires:  libXext-devel
+BuildRequires:  libXmu-devel
+BuildRequires:  libXpm-devel
+BuildRequires:  libXt-devel
+BuildRequires:  make
+BuildRequires:  mkfontdir
+BuildRequires:  ncurses-devel
+# /oreon:deps
 %description
 NetHack is a single player dungeon exploration game that runs on a
 wide variety of computer systems, with a variety of graphical and text
@@ -51,7 +54,6 @@ characters: you can pick your race, your role, and your gender.
 Summary:        Bitmap fonts for Nethack
 BuildArch:      noarch
 Requires:       fontpackages-filesystem
-
 %description -n %{fontname}-fonts
 Bitmap fonts for Nethack.
 
@@ -63,11 +65,11 @@ Requires(post):  %{fontname}-fonts
 Requires(post):  mkfontdir
 Requires(post):	 coreutils
 Requires(preun): coreutils
-
 %description -n %{fontname}-fonts-core
 X11 core fonts configuration for %{fontname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -n nethack-3.6.7
@@ -105,8 +107,8 @@ sh sys/unix/setup.sh sys/unix/hints/linux
         src/Makefile util/Makefile
 
 %build
-make all
 
+make all
 %install
 rm -rf $RPM_BUILD_ROOT
 %make_install \
@@ -117,71 +119,40 @@ rm -rf $RPM_BUILD_ROOT
         SHELLDIR=$RPM_BUILD_ROOT%{_bindir} \
         CHOWN=/bin/true \
         CHGRP=/bin/true
-
 install -d -m 0755 $RPM_BUILD_ROOT%{_mandir}/man6
 make -C doc MANDIR=$RPM_BUILD_ROOT%{_mandir}/man6 manpages
-
 install -D -p -m 0644 win/X11/nh_icon.xpm \
         $RPM_BUILD_ROOT%{_datadir}/pixmaps/nethack.xpm
-
 desktop-file-install \
         --dir $RPM_BUILD_ROOT%{_datadir}/applications \
         --add-category Game \
         --add-category RolePlaying \
         %{SOURCE1}
-
-# Install the fonts for the X11 interface
 cd win/X11
 bdftopcf -o nh10.pcf nh10.bdf
 bdftopcf -o ibm.pcf ibm.bdf
 install -m 0755 -d $RPM_BUILD_ROOT%{_fontdir}
 install -m 0644 -p *.pcf $RPM_BUILD_ROOT%{_fontdir}
-
 %{__sed} -i -e 's:^!\(NetHack.tile_file.*\):\1:' \
         $RPM_BUILD_ROOT%{nhgamedir}/NetHack.ad
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post -n %{fontname}-fonts-core
+
 mkfontdir %{_fontdir}
 if [ ! -L /etc/X11/fontpath.d/nethack ] ; then
     ln -s %{_fontdir} /etc/X11/fontpath.d/nethack
 fi
-
 %preun -n %{fontname}-fonts-core
+
 if [ $1 -eq 0 ] ; then 
     rm /etc/X11/fontpath.d/nethack
     rm %{_fontdir}/fonts.dir
 fi;
-
-%files
-%doc doc/*.txt README dat/license dat/history
-%doc dat/opthelp dat/wizhelp
-%{_mandir}/man6/*
-%{_datadir}/pixmaps/nethack.xpm
-%{_datadir}/applications/nethack.desktop
-%{_bindir}/nethack
-%{nhgamedir}
-%defattr(0664,root,games)
-%config(noreplace) %{nhdatadir}/record
-%config(noreplace) %{nhdatadir}/perm
-%config(noreplace) %{nhdatadir}/logfile
-%config(noreplace) %{nhdatadir}/xlogfile
-%attr(0775,root,games) %dir %{nhdatadir}
-%attr(0775,root,games) %dir %{nhdatadir}/save
-%attr(2755,root,games) %{nhgamedir}/nethack
-%config(noreplace) %{nhgamedir}/nhdat
-%config(noreplace) %{nhgamedir}/sysconf
-%config(noreplace) %{nhgamedir}/NetHack.ad
-%config(noreplace) %{nhgamedir}/license
-%config(noreplace) %{nhgamedir}/pet_mark.xbm
-%config(noreplace) %attr(0555,root,games) %{nhgamedir}/recover
-%config(noreplace) %{nhgamedir}/rip.xpm
-%config(noreplace) %{nhgamedir}/pilemark.xbm
-%config(noreplace) %{nhgamedir}/symbols
-%config(noreplace) %{nhgamedir}/x11tiles
-
-%_font_pkg -n bitmap *.pcf
-
-%files -n %{fontname}-fonts-core
+%files -f %{oreon_filedir}/main.list
+%files -n nethack-bitmap-fonts -f %{oreon_filedir}/nethack-bitmap-fonts.list
+%files -n nethack-bitmap-fonts-core -f %{oreon_filedir}/nethack-bitmap-fonts-core.list
 
 %changelog
+
 %autochangelog

@@ -1,48 +1,44 @@
 %global source0_hash b25ea2c4a0e4c9e6ab06d3cc6b1cc1e10f5486f27dfd0ef2e064e6569769aa9c
-
 Name:           perl-Crypt-SMIME
 Version:        0.31
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        S/MIME message signing, verification, encryption and decryption
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-SMIME
 Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIKAGE/Crypt-SMIME-%{version}.tar.gz
-
+%{?perl_default_subpackage_tests}
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  gcc
 BuildRequires:  make
-BuildRequires:  openssl-devel
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::CChecker)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time
-BuildRequires:  perl(XSLoader)
-# Tests
 BuildRequires:  openssl
+BuildRequires:  openssl-devel
 BuildRequires:  perl(Config)
+BuildRequires:  perl(ExtUtils::CChecker)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(ExtUtils::PkgConfig)
 BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(File::Temp)
 BuildRequires:  perl(Taint::Util)
 BuildRequires:  perl(Test::Exception)
-BuildRequires:  perl(Test::Pod::Coverage)
-BuildRequires:  perl(Test::Pod)
-BuildRequires:  perl(Test::Taint)
 BuildRequires:  perl(Test::More)
-
-#Add a test sub package.
-%{?perl_default_subpackage_tests}
-
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(Test::Pod::Coverage)
+BuildRequires:  perl(Test::Taint)
+BuildRequires:  perl(XSLoader)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module provides a class for handling S/MIME messages. It can sign,
 verify, encrypt and decrypt messages. It requires libcrypto
 (http://www.openssl.org) to work.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Crypt-SMIME-%{version}
@@ -51,22 +47,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 printf '\\.list$\n^\\.package_note\n' >> MANIFEST.SKIP
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags}" \
   NO_PACKLIST=1 NO_PERLLOCAL=1
 %make_build
-
 %install
 %make_install
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%doc Changes README
-%{perl_vendorarch}/auto/Crypt/
-%{perl_vendorarch}/Crypt/
-%{_mandir}/man3/SMIME*3pm*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

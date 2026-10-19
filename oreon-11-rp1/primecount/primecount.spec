@@ -1,28 +1,22 @@
-%global source0_hash eda5d4b867ce95accfc74135f595a238fcd60f19cfc997f4950a5c74fbdd3ac1
-
+%global source0_hash 5a19eccca337da9e1cc629f2a223890af08987bc21771b9e860e28d823006be3
 Name:           primecount
 Version:        8.7
 Release:        1%{?dist}
 Summary:        Fast prime counting function implementation
-
-# BSD-2-Clause: the project as a whole
-# Zlib OR BSL-1.0: due to including libdivide headers
 License:        BSD-2-Clause AND (Zlib OR BSL-1.0)
 URL:            https://github.com/kimwalisch/%{name}/
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/kimwalisch/%{name}//archive/v%{version}/%{name}-%{version}.tar.gz
+%ifarch %{ix86} x86_64 ia64 ppc64le
+%endif
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
+# oreon:deps
 BuildRequires:  asciidoc
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  libdivide-static
-%ifarch %{ix86} x86_64 ia64 ppc64le
-BuildRequires:  libquadmath-devel
-%endif
 BuildRequires:  make
 BuildRequires:  primesieve-devel
-
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
+# /oreon:deps
 %description
 Primecount is a command-line program and C++ library that counts the
 primes below an integer x<=10**31 using highly optimized implementations
@@ -42,7 +36,6 @@ nth_prime(10**24) (https://oeis.org/A006988).
 %package        libs
 Summary:        C++ library for fast prime counting
 %ldconfig_scriptlets
-
 %description    libs
 This package contains a C++ library for counting primes below an
 integer.  See the primecount package for a command line interface.
@@ -50,12 +43,12 @@ integer.  See the primecount package for a command line interface.
 %package        devel
 Summary:        Headers and library links for libprimecount
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description    devel
 This package contains files necessary to develop applications that use
 libprimecount.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -65,13 +58,7 @@ rm -f include/libdivide.h
 ln -s %{_includedir}/libdivide.h include/libdivide.h
 
 %build
-# WITH_FLOAT128 should be ON only for architectures:
-# - with a __float128 type that is different from long double
-# - with libquadmath
-# As of GCC 12:
-# - All x86/x86_64 CPUs have __float128; it is different from long double
-# - ppc64le has __float128; it is the same as long double
-# - No other architecture has libquadmath
+
 %ifarch %{ix86} x86_64
 export CFLAGS='%{build_cflags} -DLIBDIVIDE_SSE2'
 export CXXFLAGS='%{build_cxxflags} -DLIBDIVIDE_SSE2'
@@ -85,30 +72,17 @@ export CXXFLAGS='%{build_cxxflags} -DLIBDIVIDE_SSE2'
 %endif
        -DBUILD_TESTS=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%doc README.md
-%{_bindir}/primecount
-%{_mandir}/man1/primecount.1*
-
-%files          libs
-%license COPYING
-%{_libdir}/libprimecount.so.8*
-
-%files          devel
-%doc ChangeLog doc/*.pdf doc/*.md
-%{_includedir}/primecount.h
-%{_includedir}/primecount.hpp
-%{_libdir}/libprimecount.so
-%dir %{_libdir}/cmake/primecount
-%{_libdir}/cmake/primecount/*.cmake
-%{_libdir}/pkgconfig/primecount.pc
+%files -f %{oreon_filedir}/main.list
+%files -n primecount-libs -f %{oreon_filedir}/primecount-libs.list
+%files -n primecount-devel -f %{oreon_filedir}/primecount-devel.list
 
 %changelog
+
 %autochangelog

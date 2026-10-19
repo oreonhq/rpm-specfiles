@@ -1,14 +1,12 @@
 %global source0_hash 287cc2fde0de092919366af757d85e7b3a0248eb1b395344726e97955a77d8ae
-
 Name:           libmanette
 Version:        0.2.13
 Release:        2%{?dist}
 Summary:        Game controller library
-
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/libmanette
 Source0:        https://download.gnome.org/sources/libmanette/0.2/libmanette-%{version}.tar.xz
-
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  meson
 BuildRequires:  pkgconfig(gio-2.0)
@@ -19,7 +17,7 @@ BuildRequires:  pkgconfig(gudev-1.0)
 BuildRequires:  pkgconfig(hidapi-hidraw)
 BuildRequires:  pkgconfig(libevdev)
 BuildRequires:  vala
-
+# /oreon:deps
 %description
 libmanette is a small GObject library giving you simple access to game
 controllers.
@@ -36,36 +34,24 @@ popular SDL mapping string format.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc NEWS README.md
-%{_libdir}/girepository-1.0/
-%{_libdir}/libmanette-0.2.so.0*
-
-%files devel
-%{_bindir}/manette-test
-%{_includedir}/libmanette/
-%{_libdir}/libmanette-0.2.so
-%{_libdir}/pkgconfig/manette-0.2.pc
-%{_datadir}/gir-1.0/
-%{_datadir}/vala/
+%files -f %{oreon_filedir}/main.list
+%files -n libmanette-devel -f %{oreon_filedir}/libmanette-devel.list
 
 %changelog
+
 %autochangelog

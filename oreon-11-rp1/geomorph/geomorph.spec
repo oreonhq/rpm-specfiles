@@ -1,5 +1,4 @@
-%global source0_hash 8e268182d8651fb2066587c4ea54dbccc152703b1584f9224f3201d25210b6d4
-
+%global source0_hash 2ec33e57cb75d830a4da75f706dc275c72faf03b2422c841d5845c8adefde904
 Name:           geomorph
 Version:        0.63
 Release:        1%{?dist}
@@ -29,20 +28,16 @@ Patch15:        geomorph-remove-gettext-at-compile-time.patch
 Patch16:        geomorph-arg-not-used.patch
 Patch17:        geomorph-incompatible-pointer-types.patch
 Patch18:        geomorph-no-common.patch
-#Patch20:        geomorph-update-autotools.patch
 Patch30:        geomorph-crater_struct_free.patch
-
+Requires:       povray
+# oreon:deps
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  gtkglext-devel
-BuildRequires:  mesa-libGLU-devel
-BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
-BuildRequires: make
-#BuildRequires:  /usr/bin/autoreconf
-#BuildRequires:  gettext-devel
-#BuildRequires:  automake
-Requires:       povray
-
+BuildRequires:  make
+BuildRequires:  mesa-libGLU-devel
+# /oreon:deps
 %description
 Geomorph is a height field generator and editor for the Linux operating system.
 A height field is a kind of topographic map.  It is a 2D projection of a 
@@ -52,6 +47,7 @@ landscape.  The resulting 2D image can be processed with a tool like Povray
 for rendering the landscape.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qn %{name}-%{version}
@@ -102,43 +98,32 @@ do
 done
 
 %build
+
 %configure \
     --disable-rpath
-
 pushd scenes
 %{__cc} ${RPM_OPT_FLAGS} -Wl,-z,relro,-z,now -o colmap colmap.c
 popd
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR="%{buildroot}"
 %find_lang %{name}
 mv %{buildroot}%{_datadir}/geomorph/%{version}/scenes/colmap %{buildroot}%{_bindir}/
 %{__rm} -f %{buildroot}%{_datadir}/geomorph/%{version}/scenes/colmap.c
-# Create directories
 %{__mkdir_p} %{buildroot}%{_datadir}/icons
 %{__mkdir_p} %{buildroot}%{_datadir}/applications
 %{__mkdir_p} %{buildroot}%{_datadir}/appdata
-# Copy new desktop file
 desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE1}
-# Copy icon file
 %{__cp} %{SOURCE3} %{buildroot}%{_datadir}/icons
 %{__cp} GeoMorph.xpm %{buildroot}%{_datadir}/icons
-# Copy appdata
 %{__cp} %{SOURCE2} %{buildroot}%{_datadir}/appdata
+%oreon_autofiles main
 
 %check
-appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/*.appdata.xml
 
-%files -f %{name}.lang
-%doc ABOUT-NLS AFAIRE AUTHORS ChangeLog FAQ FAQ-fr LISEZMOI NEWS README TODO geomorphrc_de geomorphrc_en geomorphrc_fr
-%{_bindir}/geomorph
-%{_bindir}/colmap
-%{_datadir}/geomorph
-%{_datadir}/applications/geomorph.desktop
-%{_datadir}/icons/geomorph.png
-%{_datadir}/icons/GeoMorph.xpm
-%{_datadir}/appdata/geomorph.appdata.xml
+appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/*.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

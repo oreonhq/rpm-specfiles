@@ -1,28 +1,18 @@
-%global source0_hash none
+%global source0_hash 6fc049d9c22d706e4ed673bec233947cedd7297dd4e4fbe7108c7730f3d7f860
 %global source81_hash 20679b9fa26ed7951647fc8f6b5a5520e555ee2a7a52f531a19027bd10c5c13e
 %global source82_hash 63eb9e0344bbd2b72796a2a6ddc5a8d09e3fff7d8834e0b7f796714eb0be80c2
 %global source83_hash 237070dcc1c6a09c0fc8ee51d29d50044999595c0019e0a50c739adacb85857f
 %global source84_hash 6a2a8154bcb97e58158c5986af346fa4ff5ff73c0aed4d1f760c718c6faf278b
 %global source85_hash 5b84d87b208e99c497d36727ec12d89a642b163c5dd5e65d67ae4c761d73bbc5
-
 %global fontname bpg
 %global fontconf 64-%{fontname}.conf
 %global common_ver 20120413
-
 %global common_desc BPG Fonts are a set of GPL licensed Georgian Unicode fonts.
-
 Name:		%{fontname}-fonts
-Summary: 	Georgian Unicode fonts
+Summary:        Georgian Unicode fonts
 Version:	%{common_ver}
-Release:	31%{?dist}
-# Font exception
-# See: http://groups.google.com/group/bpg-fonts/web/gpl-gnu-license
-# No version of the GPL is specified.
+Release:        31%{?dist}
 License:	GPL-2.0-or-later WITH Font-exception-2.0
-# Source was found here:
-# http://bpgfonts.wordpress.com/category/gpl-gnu/
-# But the link is annoying:
-# http://www.box.com/s/1f344f181567cb897395
 Source0:        https://deb.debian.org/debian/pool/main/f/fonts-bpg-georgian/fonts-bpg-georgian_2012.orig.tar.xz
 Source1:	%{name}-algeti-fontconfig.conf
 Source2:	%{name}-chveulebrivi-fontconfig.conf
@@ -39,13 +29,7 @@ Source12:	%{name}-sans-modern-fontconfig.conf
 Source13:	%{name}-sans-regular-fontconfig.conf
 Source14:	%{name}-serif-fontconfig.conf
 Source15:	%{name}-serif-modern-fontconfig.conf
-# The source for this one is buried in javascript garbage:
-# http://cid-2b325d7bf5367fe3.skydrive.live.com/self.aspx/Fonts%20%E1%83%A4%E1%83%9D%E1%83%9C%E1%83%A2%E1%83%94%E1%83%91%E1%83%98/GPL%20|0%20GNU%20Fonts/BPG|_Excelsior|_GPL|0GNU.zip
-# Also, I renamed it to remove the &
-# Now part of the main fontset zip.
-# Source16:	BPG_Excelsior_GPL_and_GNU.zip
 Source17:	%{name}-excelsior-fontconfig.conf
-# New fonts in 2012
 Source18:	%{name}-classic-fontconfig.conf
 Source19:	%{name}-excelsior-caps-fontconfig.conf
 Source20:	%{name}-excelsior-condenced-fontconfig.conf
@@ -60,7 +44,6 @@ Source28:	%{name}-nateli-condenced-fontconfig.conf
 Source29:	%{name}-ucnobi-fontconfig.conf
 Source30:	%{name}-dedaena-block-fontconfig.conf
 Source31:	%{name}-dejavu-sans-fontconfig.conf
-# Appdata Metainfo
 Source51:       %{fontname}-algeti.metainfo.xml
 Source52:       %{fontname}-chveulebrivi.metainfo.xml
 Source53:       %{fontname}-classic.metainfo.xml
@@ -91,7 +74,6 @@ Source77:       %{fontname}-sans-regular.metainfo.xml
 Source78:       %{fontname}-serif.metainfo.xml
 Source79:       %{fontname}-serif-modern.metainfo.xml
 Source80:       %{fontname}-ucnobi.metainfo.xml
-# 2017 DejaVu Unicode updates
 Source81:       https://app.box.com/index.php?rm=box_download_shared_file&shared_name=7z4lqt5ef4tpoo5l2n9ekhsd85lt66o4&file_id=f_258185331031#/BPG-2017-DejaVuSans.zip
 Source82:       https://app.box.com/index.php?rm=box_download_shared_file&shared_name=n6sfue34zdbszdjba4cmkpm8c2r9fqpm&file_id=f_258204195560#/BPG-2017-DejaVuSansCondensed.zip
 Source83:       https://app.box.com/index.php?rm=box_download_shared_file&shared_name=etsb9maks30e9j2mf6qm97c2it8nmfos&file_id=f_258125844848#/BPG-2017-DejaVuSansMono.zip
@@ -101,22 +83,19 @@ Source86:       %{fontname}-dejavu-sans-mono.metainfo.xml
 Source87:       %{name}-dejavu-sans-mono-fontconfig.conf
 Source88:       %{fontname}-dejavu-serif.metainfo.xml
 Source89:       %{name}-dejavu-serif-fontconfig.conf
-
-# Docs
 Source100:        README
 Source101:        gpl-3.0.txt
-
 URL:		http://groups.google.com/group/bpg-fonts
-BuildRequires:	fontpackages-devel
 BuildArch:	noarch
-
+# oreon:deps
+BuildRequires:  fontpackages-devel
+# /oreon:deps
 %description
 %common_desc
 
 %package common
 Summary:	Common files for BPG Georgian fonts (documentation...)
 Requires:	fontpackages-filesystem
-
 %description common
 %common_desc
 
@@ -126,7 +105,6 @@ This package consists of files used by other BPG font packages.
 Summary:	Algeti Family of BPG Georgian Fonts
 Version:	2.005
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-algeti-fonts
 %common_desc
 
@@ -139,7 +117,6 @@ This package contains the Algeti font family.
 Summary:	Chveulebrivi family of BPG Georgian fonts
 Version:	3.002
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-chveulebrivi-fonts
 %common_desc
 
@@ -152,7 +129,6 @@ This package contains the Chveulebrivi font family.
 Summary:	Classic family of BPG Georgian fonts
 Version:	8.500
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-classic-fonts
 %common_desc
 
@@ -165,7 +141,6 @@ This package contains the Classic font family.
 Summary:	Courier family of BPG Georgian fonts
 Version:	4.002
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-courier-fonts
 %common_desc
 
@@ -178,7 +153,6 @@ This package contains the Courier font family.
 Summary:	Courier S family of BPG Georgian fonts
 Version:	4.000
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-courier-s-fonts
 %common_desc
 
@@ -191,7 +165,6 @@ This package contains the Courier S font family.
 Summary:	DedaEna Block family of BPG Georgian fonts
 Version:	3.005
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-dedaena-block-fonts
 %common_desc
 
@@ -205,7 +178,6 @@ Summary:	DejaVu Sans with BPG Georgian changes
 Version:	2017.2.005
 License:	Bitstream-Vera
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-dejavu-sans-fonts
 %common_desc
 
@@ -220,7 +192,6 @@ Summary:	DejaVu Sans Mono with BPG Georgian changes
 Version:	2017.3.003
 License:	Bitstream-Vera
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-dejavu-sans-mono-fonts
 %common_desc
 
@@ -235,7 +206,6 @@ Summary:	DejaVu Serif with BPG Georgian changes
 Version:	2017.2.37
 License:	Bitstream-Vera
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-dejavu-serif-fonts
 %common_desc
 
@@ -245,12 +215,10 @@ changes.
 %_font_pkg -n dejavu-serif -f %{fontconf}-bpg-dejavu-serif.conf BPG_DejaVu_Serif_*.ttf BPG_DejaVu_SerifCondensed_*.ttf
 %{_datadir}/appdata/%{fontname}-dejavu-serif.metainfo.xml
 
-
 %package -n %{fontname}-elite-fonts
 Summary:	Elite family of BPG Georgian fonts
 Version:	3.000
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-elite-fonts
 %common_desc
 
@@ -264,7 +232,6 @@ Summary:	Excelsior family of BPG Georgian fonts
 Version:	2.03
 Requires:	%{name}-common = %{common_ver}-%{release}
 License:	Bitstream-Vera
-
 %description -n %{fontname}-excelsior-fonts
 %common_desc
 
@@ -278,7 +245,6 @@ Summary:	Excelsior Caps family of BPG Georgian fonts
 Version:	2.003
 Requires:	%{name}-common = %{common_ver}-%{release}
 License:	Bitstream-Vera
-
 %description -n %{fontname}-excelsior-caps-fonts
 %common_desc
 
@@ -292,7 +258,6 @@ Summary:	Excelsior Condenced family of BPG Georgian fonts
 Version:	2.003
 Requires:	%{name}-common = %{common_ver}-%{release}
 License:	Bitstream-Vera
-
 %description -n %{fontname}-excelsior-condenced-fonts
 %common_desc
 
@@ -305,7 +270,6 @@ This package contains the Excelsior Condenced font family.
 Summary:	Glaho family of BPG Georgian fonts
 Version:	9.000
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-glaho-fonts
 %common_desc
 
@@ -317,7 +281,6 @@ This package contains the Glaho font family.
 Summary:	Gorda family of BPG Georgian fonts
 Version:	2.003
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-gorda-fonts
 %common_desc
 
@@ -330,7 +293,6 @@ This package contains the Gorda font family.
 Summary:	Ingiri family of BPG Georgian fonts
 Version:	4.000
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-ingiri-fonts
 %common_desc
 
@@ -343,7 +305,6 @@ This package contains the Ingiri font family.
 Summary:	Irubaqidze family of BPG Georgian fonts
 Version:	1.000
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-irubaqidze-fonts
 %common_desc
 
@@ -363,7 +324,6 @@ replica of this casted type.
 Summary:	Mikhail Stephan family of BPG Georgian fonts
 Version:	2.500
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-mikhail-stephan-fonts
 %common_desc
 
@@ -380,7 +340,6 @@ in Tbilisi by Hungarian Master Michael Stefan Hungaro-Valakhian.
 Summary:	Mrgvlovani family of BPG Georgian fonts
 Version:	1.002
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-mrgvlovani-fonts
 %common_desc
 
@@ -393,7 +352,6 @@ This package contains the Mrgvlovani font family.
 Summary:	Mrgvlovani Caps family of BPG Georgian fonts
 Version:	1.002
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n	%{fontname}-mrgvlovani-caps-fonts
 %common_desc
 
@@ -406,7 +364,6 @@ This package contains the Mrgvlovani Caps font family.
 Summary:	Nateli family of BPG Georgian fonts
 Version:	2.003
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-nateli-fonts
 %common_desc
 
@@ -419,7 +376,6 @@ This package contains the Nateli font family.
 Summary:	Nateli Caps family of BPG Georgian fonts
 Version:	2.003
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-nateli-caps-fonts
 %common_desc
 
@@ -432,7 +388,6 @@ This package contains the Nateli Caps font family.
 Summary:	Nateli Condenced family of BPG Georgian fonts
 Version:	2.003
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-nateli-condenced-fonts
 %common_desc
 
@@ -445,7 +400,6 @@ This package contains the Nateli Condenced font family.
 Summary:	Nino Medium family of BPG Georgian fonts
 Version:	4.005
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n	%{fontname}-nino-medium-fonts
 %common_desc
 
@@ -458,7 +412,6 @@ This package contains the Nino Medium font family.
 Summary:	Nino Medium Cond family of BPG Georgian fonts
 Version:	4.005
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-nino-medium-cond-fonts
 %common_desc
 
@@ -471,7 +424,6 @@ This package contains the Nino Medium Cond font family.
 Summary:	Sans family of BPG Georgian fonts
 Version:	1.005
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-sans-fonts
 %common_desc
 
@@ -484,7 +436,6 @@ This package contains the Sans font family.
 Summary:	Sans Medium family of BPG Georgian fonts
 Version:	1.005
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-sans-medium-fonts
 %common_desc
 
@@ -498,7 +449,6 @@ Summary:	Sans Modern family of BPG Georgian fonts
 Version:	2.025
 License:	Bitstream-Vera
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n	%{fontname}-sans-modern-fonts
 %common_desc
 
@@ -511,7 +461,6 @@ This package contains the Sans Modern font family.
 Summary:	Sans Regular family of BPG Georgian fonts
 Version:	1.005
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-sans-regular-fonts
 %common_desc
 
@@ -524,7 +473,6 @@ This package contains the Sans Regular font family.
 Summary:	Serif family of BPG Georgian fonts
 Version:	1.005
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-serif-fonts
 %common_desc
 
@@ -538,7 +486,6 @@ Summary:	Serif Modern family of BPG Georgian fonts
 Version:	2.028
 License:	Bitstream-Vera
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-serif-modern-fonts
 %common_desc
 
@@ -551,7 +498,6 @@ This package contains the Serif Modern font family.
 Summary:	Ucnobi family of BPG Georgian fonts
 Version:	3.300
 Requires:	%{name}-common = %{common_ver}-%{release}
-
 %description -n %{fontname}-ucnobi-fonts
 %common_desc
 
@@ -561,6 +507,7 @@ This package contains the Ucnobi font family.
 %{_datadir}/appdata/%{fontname}-ucnobi.metainfo.xml
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source81_hash}" = "none" || { f="%{SOURCE81}"; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source81_hash}" || { echo "oreon: Source81 hash mismatch" >&2; exit 1; }; }
 test "%{source82_hash}" = "none" || { f="%{SOURCE82}"; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source82_hash}" || { echo "oreon: Source82 hash mismatch" >&2; exit 1; }; }
@@ -643,7 +590,6 @@ install	-m 0644 -p %{SOURCE30} %{buildroot}%{_fontconfig_templatedir}/%{fontconf
 install -m 0644 -p %{SOURCE31} %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-bpg-dejavu-sans.conf
 install -m 0644 -p %{SOURCE87} %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-bpg-dejavu-sans-mono.conf
 install -m 0644 -p %{SOURCE89} %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-bpg-dejavu-serif.conf
-
 for fontconf in %{fontconf}-algeti.conf %{fontconf}-chveulebrivi.conf %{fontconf}-courier.conf %{fontconf}-courier-s.conf\
 		%{fontconf}-elite.conf %{fontconf}-glaho.conf %{fontconf}-ingiri.conf %{fontconf}-nino-medium.conf\
 		%{fontconf}-nino-medium-cond.conf %{fontconf}-sans.conf %{fontconf}-sans-medium.conf %{fontconf}-sans-modern.conf\
@@ -655,8 +601,6 @@ for fontconf in %{fontconf}-algeti.conf %{fontconf}-chveulebrivi.conf %{fontconf
 do
 	ln -s %{_fontconfig_templatedir}/$fontconf %{buildroot}%{_fontconfig_confdir}/$fontconf
 done
-
-# Add AppStream metadata
 install -Dm 0644 -p %{SOURCE51} \
         %{buildroot}%{_datadir}/appdata/%{fontname}-algeti.metainfo.xml
 install -Dm 0644 -p %{SOURCE52} \
@@ -721,10 +665,77 @@ install -Dm 0644 -p %{SOURCE86} \
 	%{buildroot}%{_datadir}/appdata/%{fontname}-dejavu-sans-mono.metainfo.xml
 install -Dm 0644 -p %{SOURCE88} \
 	%{buildroot}%{_datadir}/appdata/%{fontname}-dejavu-serif.metainfo.xml
+%oreon_autofiles bpg-fonts-common usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-algeti-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-chveulebrivi-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-classic-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-courier-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-courier-s-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-dedaena-block-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-dejavu-sans-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-dejavu-sans-mono-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-dejavu-serif-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-elite-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-excelsior-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-excelsior-caps-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-excelsior-condenced-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-glaho-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-gorda-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-ingiri-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-irubaqidze-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-mikhail-stephan-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-mrgvlovani-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-mrgvlovani-caps-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-nateli-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-nateli-caps-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-nateli-condenced-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-nino-medium-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-nino-medium-cond-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-sans-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-sans-medium-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-sans-modern-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-sans-regular-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-serif-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-serif-modern-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bpg-ucnobi-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files common
-%doc Docs/*
+%files -f %{oreon_filedir}/main.list
+%files -n bpg-fonts-common -f %{oreon_filedir}/bpg-fonts-common.list
+%files -n bpg-algeti-fonts -f %{oreon_filedir}/bpg-algeti-fonts.list
+%files -n bpg-chveulebrivi-fonts -f %{oreon_filedir}/bpg-chveulebrivi-fonts.list
+%files -n bpg-classic-fonts -f %{oreon_filedir}/bpg-classic-fonts.list
+%files -n bpg-courier-fonts -f %{oreon_filedir}/bpg-courier-fonts.list
+%files -n bpg-courier-s-fonts -f %{oreon_filedir}/bpg-courier-s-fonts.list
+%files -n bpg-dedaena-block-fonts -f %{oreon_filedir}/bpg-dedaena-block-fonts.list
+%files -n bpg-dejavu-sans-fonts -f %{oreon_filedir}/bpg-dejavu-sans-fonts.list
+%files -n bpg-dejavu-sans-mono-fonts -f %{oreon_filedir}/bpg-dejavu-sans-mono-fonts.list
+%files -n bpg-dejavu-serif-fonts -f %{oreon_filedir}/bpg-dejavu-serif-fonts.list
+%files -n bpg-elite-fonts -f %{oreon_filedir}/bpg-elite-fonts.list
+%files -n bpg-excelsior-fonts -f %{oreon_filedir}/bpg-excelsior-fonts.list
+%files -n bpg-excelsior-caps-fonts -f %{oreon_filedir}/bpg-excelsior-caps-fonts.list
+%files -n bpg-excelsior-condenced-fonts -f %{oreon_filedir}/bpg-excelsior-condenced-fonts.list
+%files -n bpg-glaho-fonts -f %{oreon_filedir}/bpg-glaho-fonts.list
+%files -n bpg-gorda-fonts -f %{oreon_filedir}/bpg-gorda-fonts.list
+%files -n bpg-ingiri-fonts -f %{oreon_filedir}/bpg-ingiri-fonts.list
+%files -n bpg-irubaqidze-fonts -f %{oreon_filedir}/bpg-irubaqidze-fonts.list
+%files -n bpg-mikhail-stephan-fonts -f %{oreon_filedir}/bpg-mikhail-stephan-fonts.list
+%files -n bpg-mrgvlovani-fonts -f %{oreon_filedir}/bpg-mrgvlovani-fonts.list
+%files -n bpg-mrgvlovani-caps-fonts -f %{oreon_filedir}/bpg-mrgvlovani-caps-fonts.list
+%files -n bpg-nateli-fonts -f %{oreon_filedir}/bpg-nateli-fonts.list
+%files -n bpg-nateli-caps-fonts -f %{oreon_filedir}/bpg-nateli-caps-fonts.list
+%files -n bpg-nateli-condenced-fonts -f %{oreon_filedir}/bpg-nateli-condenced-fonts.list
+%files -n bpg-nino-medium-fonts -f %{oreon_filedir}/bpg-nino-medium-fonts.list
+%files -n bpg-nino-medium-cond-fonts -f %{oreon_filedir}/bpg-nino-medium-cond-fonts.list
+%files -n bpg-sans-fonts -f %{oreon_filedir}/bpg-sans-fonts.list
+%files -n bpg-sans-medium-fonts -f %{oreon_filedir}/bpg-sans-medium-fonts.list
+%files -n bpg-sans-modern-fonts -f %{oreon_filedir}/bpg-sans-modern-fonts.list
+%files -n bpg-sans-regular-fonts -f %{oreon_filedir}/bpg-sans-regular-fonts.list
+%files -n bpg-serif-fonts -f %{oreon_filedir}/bpg-serif-fonts.list
+%files -n bpg-serif-modern-fonts -f %{oreon_filedir}/bpg-serif-modern-fonts.list
+%files -n bpg-ucnobi-fonts -f %{oreon_filedir}/bpg-ucnobi-fonts.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20120413-31
 - Import

@@ -1,110 +1,33 @@
+%global source1_hash e4a5f9b2a6ac72f0e695801fddff1c30a1b8b2a57cf72d8b661805ee2b5cd8f2
 %global source0_hash 3f55cd3670f1ff1a439d5a40071870b9e4ca2be8877a0eb80e24783cb532b380
-
 %global source2_key_fpr 15D41BC02EB807D405EFFAF6C9183BEA0288CDEE
-
-
-
 Name:           teckit
 Version:        2.5.13
 Release:        2%{?dist}
 Summary:        Encoding conversion library and mapping compiler
-# COPYING:                      links to license/LICENSING.txt
-# license/License_CPLv05.txt:   CPL-1.0 text, "0.5" version in the license
-#                               title is irrelevant
-#                               <https://gitlab.com/fedora/legal/fedora-license-data/-/issues/160>
-# license/License_LGPLv21.txt:  LGPL-2.1 text
-# license/LICENSING.txt:        license declarations
-# SFconv/UtfCodec.cpp:      LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-2.0 (bundled Graphite2)
-# SFconv/UtfCodec.h:        LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-2.0 (bundled Graphite2)
-#                           MPL version clarified at <https://github.com/silnrsi/graphite/issues/58>,
-# source/Engine.cpp:        LGPL-2.1-or-later OR CPL-1.0, CPL-1.0 identifier already
-#                           encompases "or later" choice
-#                           <https://gitlab.com/fedora/legal/fedora-license-data/-/issues/160>
-# source/TECkit_Format.h:   LGPL-2.1-or-later OR CPL-0.5-or-later
-## Not in any binary package
-# debian-src/copyright: LGPL-2.0-or-later
-# perl_binaries:        precompiled source/Perl
-# repackage.sh:         GPL-2.0-or-later
-# SFconv/SFconv_ver.rc: LGPL-2.1-or-later OR CPL-0.5-or-later
-# source/Compiler_ver.rc:   LGPL-2.1-or-later OR CPL-0.5-or-later
-# source/Sample-tools/TECkit_Compile_ver.rc:    LGPL-2.1-or-later OR CPL-0.5-or-later
-# source/Sample-tools/TxtConv_ver.rc:           LGPL-2.1-or-later OR CPL-0.5-or-later
-# source/Sample-tools/version_defs.h:           LGPL-2.1-or-later OR CPL-0.5-or-later
-# source/teckitjni/COPYING:     GPL-2.0 text
-# source/teckitjni/java/org/sil/scripts/teckit/TecKitJni.java:  LGPL-2.1-or-later OR CPL-0.5-or-later
-# source/teckitjni/ltmain.sh:   GPL-2.0-or-later WITH Autoconf-exception-generic
-# source/teckitjni/missing:     GPL-2.0-or-later WITH Autoconf-exception-generic
-# source/teckitjni/src/teckitjniTest.cpp:   GPL-2.0-or-later
-# source/teckitjni/templates/cpp:           GPL-2.0-or-later
-# source/teckitjni/templates/h:             GPL-2.0-or-later
-# source/version_defs.h:        LGPL-2.1-or-later OR CPL-0.5-or-later
-# test/NormalizationTest.txt:   Unicode-3.0
-## Unbundled
-# SFconv/expat/xmlparse/hashtable.c:    MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlparse/hashtable.h:    MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlparse/Makefile.in:    NPL-1.1
-# SFconv/expat/xmlparse/makefile.win:   NPL-1.1
-# SFconv/expat/xmlparse/xmlparse.c:     MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlparse/xmlparse.h:     MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmltok/iasciitab.h:      MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmltok/Makefile.in:      NPL-1.1
-# SFconv/expat/xmltok/makefile.win:     NPL-1.1
-# SFconv/expat/xmltok/utf8tab.h:        MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmltok/xmldef.h:         MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmltok/xmlrole.h:        MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmltok/xmltok.h:         MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmltok/xmltok_impl.c:    MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmltok/xmltok_impl.h:    MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/codepage.c:        MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/codepage.h:        MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/filemap.h:         MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/readfilemap.c:     MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/unixfilemap.c:     MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/win32filemap.c:    MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/xmlfile.c:         MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/xmlfile.h:         MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/xmltchar.h:        MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# SFconv/expat/xmlwf/xmlwf.c:           MPL-1.1 OR GPL-1.0-or-later (bundled expat)
-# zlib-1.2.3:           "sse copyright notice in zlib.h"
-# zlib-1.2.13/contrib/ada/*.adb:        "see zlib.ads"
-# zlib-1.2.13/contrib/ada/zlib.ads:     GPL-2.0-or-later WITH GNAT-exception
-# zlib-1.2.13/contrib/blast/blast.c:    "see blast.h"
-# zlib-1.2.13/contrib/blast/blast.h:    Zlib
-# zlib-1.2.13/contrib/dotzlib:  BSL-1.0
-# zlib-1.2.13/contrib/gcc_gvmat64/gvmat64.S:    Zlib
-# zlib-1.2.13/doc/rfc1950.txt:  ??? permissive
-# zlib-1.2.13/zlib.h:    Zlib
-## Removed when repackaging
-# mac-installer/Resources/License.rtf:  "non-commercial"
-#                                       <https://github.com/silnrsi/teckit/issues/34>
 License:        (LGPL-2.1-or-later OR CPL-1.0) AND (LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-2.0)
 SourceLicense:  %{license} AND LGPL-2.0-or-later AND GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND Unicode-3.0 AND (MPL-1.1 OR GPL-1.0-or-later) AND NPL-1.1 AND GPL-2.0-or-later WITH GNAT-exception AND Zlib AND BSL-1.0
 URL:            https://software.sil.org/teckit/
-# Archive repackaged with ./repackage.sh tool because of a bad license
-# <https://github.com/silnrsi/teckit/issues/34>.
 Source0:        https://github.com/silnrsi/teckit/releases/download/v%{version}/teckit-%{version}.tar.xz
 Source1:        https://github.com/silnrsi/teckit/releases/download/v%{version}/teckit-%{version}.tar.xz.asc
-# Exported from ppisar's keyring
 Source2:        gpgkey-15D41BC02EB807D405EFFAF6C9183BEA0288CDEE.gpg
 Source3:        repackage.sh
-BuildRequires:  autoconf >= 2.69
-BuildRequires:  automake >= 1.11
+Provides:       bundels(graphite2)
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  coreutils
 BuildRequires:  expat-devel
-# gcc is not needed, the only source/NormalizationData.c is included into
-# a C++ source/Engine.cpp compilation unit.
 BuildRequires:  gcc-c++
-BuildRequires:  gpgverify
 BuildRequires:  gnupg2
+BuildRequires:  gpgverify
 BuildRequires:  libtool
 BuildRequires:  make
-BuildRequires:  zlib-devel
-# Tests:
-BuildRequires:  perl-interpreter
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-Provides:       bundels(graphite2)
-
+BuildRequires:  perl-interpreter
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 TECkit is a low-level toolkit intended to be used by other applications that
 need to perform encoding conversions (e.g., when importing legacy data into
@@ -118,12 +41,12 @@ a human-readable mapping description (a simple text file).
 Summary:        Developmental files for TECkit library
 License:        LGPL-2.1-or-later OR CPL-1.0
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Header files, pkg-config module, and documentation for developing application
 that use TECkit, a character encoding and mapping, library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %gpgverify -k2 -s1 -d0
@@ -140,7 +63,7 @@ rm -r zlib-*/*.{c,h} SFconv/expat
 rm -r perl_binaries
 
 %build
-# Regenerate a build script
+
 autoreconf -fi
 %configure \
     --disable-debug \
@@ -153,37 +76,18 @@ autoreconf -fi
     --with-system-zlib \
     --disable-tetex-build
 %{make_build}
-
 %install
 %{make_install}
 rm -f %{buildroot}%{_libdir}/*.la
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %{make_build} check
-
-%files
-# COPYING is unhelpful
-%license license/*
-# ChangeLog is unhelpful
-%doc AUTHORS NEWS README
-%{_bindir}/sfconv
-%{_bindir}/teckit_compile
-%{_bindir}/txtconv
-%{_libdir}/libTECkit.so.0
-%{_libdir}/libTECkit.so.0.*
-%{_libdir}/libTECkit_Compiler.so.0
-%{_libdir}/libTECkit_Compiler.so.0.*
-%{_mandir}/man1/sfconv.*
-%{_mandir}/man1/teckit_compile.*
-%{_mandir}/man1/txtconv.*
-
-%files devel
-%doc docs/*.pdf
-%{_includedir}/teckit
-%{_libdir}/libTECkit.so
-%{_libdir}/libTECkit_Compiler.so
-%{_libdir}/pkgconfig/teckit.pc
+%files -f %{oreon_filedir}/main.list
+%files -n teckit-devel -f %{oreon_filedir}/teckit-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.13-2
 - Import

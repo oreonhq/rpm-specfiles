@@ -1,20 +1,18 @@
 %global source0_hash 1eb415c4756210e278675225ff1d6b2659e09f832b567aa35d807a94a311c3f4
-
-# RHEL does not include pyjwt, blinker needed for extras
 %bcond extras %{undefined rhel}
-
 Name:               python-oauthlib
 Version:            4.0.0
-Release:            1%{?dist}
-Summary:            An implementation of the OAuth request-signing logic
-
+Release:        1%{?dist}
+Summary:        An implementation of the OAuth request-signing logic
 License:            BSD-3-Clause
 URL:                https://github.com/oauthlib/oauthlib
-
 Source0:        https://github.com/oauthlib/oauthlib/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 BuildArch:          noarch
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-oauthlib = %{version}-%{release}
+# /oreon:deps
 %description
 OAuthLib is a generic utility which implements the logic of OAuth without
 assuming a specific HTTP request object or web framework. Use it to graft
@@ -24,11 +22,9 @@ library, write a thin veneer on top of OAuthLib and get OAuth support for
 very little effort.
 
 %package -n python3-oauthlib
-Summary:            %{summary}
-
+Summary:        An implementation of the OAuth request-signing logic
 BuildRequires:      python3-devel
 BuildRequires:      python3-pytest
-
 %description -n python3-oauthlib
 OAuthLib is a generic utility which implements the logic of OAuth without
 assuming a specific HTTP request object or web framework. Use it to graft
@@ -38,26 +34,22 @@ library, write a thin veneer on top of OAuthLib and get OAuth support for
 very little effort.
 
 %if %{with extras}
-%pyproject_extras_subpkg -n python3-oauthlib rsa,signedtoken,signals
 %endif
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n oauthlib-%{version} -p1
-
-%generate_buildrequires
-%pyproject_buildrequires %{?with_extras:-x rsa,signedtoken,signals}
-
+%global oreon_srcdir oauthlib-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files oauthlib
+%oreon_autofiles python3-oauthlib usr/lib/python3*/site-packages/oauthlib* usr/lib64/python3*/site-packages/oauthlib* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/oauthlib* usr/lib64/python3*/site-packages/oauthlib* usr/bin/*
 
 %check
-# enable SHA-1 signatures for RSA tests
-# also see https://github.com/pyca/cryptography/pull/6931 and rhbz#2060343
+
 export OPENSSL_ENABLE_SHA1_SIGNATURES=yes
 %if %{without extras}
 echo 'import pytest; __getattr__ = lambda _: pytest.skip("this test needs jwt")' > jwt.py
@@ -73,9 +65,9 @@ echo 'import pytest; __getattr__ = lambda _: pytest.skip("this test needs jwt")'
   --ignore tests/oauth2/rfc6749/test_parameters.py \
 %endif
   %{nil}
-
-%files -n python3-oauthlib -f %{pyproject_files}
-%doc README.rst
+%files
+%files -n python3-oauthlib -f %{oreon_filedir}/python3-oauthlib.list
 
 %changelog
+
 %autochangelog

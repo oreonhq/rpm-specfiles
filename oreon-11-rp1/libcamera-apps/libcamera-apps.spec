@@ -1,38 +1,33 @@
-%global source0_hash b2d01e832f5debe3327726b15ef9094bfd1b1f2d47dfa3655436ef48526edfe8
-
+%global source0_hash 0df9674449f4a807d3728b60578ec0a980a370eb531119b048580b60d0c22f43
 Name:    libcamera-apps
 Version: 1.13.0
-Release: 1%{?dist}
-Summary: A small suite of libcamera-based apps
+Release:        1%{?dist}
+Summary:        A small suite of libcamera-based apps
 License: BSD
 URL:     https://github.com/raspberrypi/rpicam-apps
-Source0: %{url}/archive/v%{version}.tar.gz#/rpicam-apps-%{version}.tar.gz
-
+Source0:        https://github.com/raspberrypi/rpicam-apps/archive/v%{version}.tar.gz#/rpicam-apps-%{version}.tar.gz
 Patch1: 0001-rpi-namespace.patch
-
 ExcludeArch:   %{power64} s390x
-BuildRequires: meson
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: boost-devel
-BuildRequires: git-core
-BuildRequires: libcamera-devel
-BuildRequires: libdrm-devel
-BuildRequires: libepoxy-devel
-BuildRequires: libexif-devel
-BuildRequires: libjpeg-turbo-devel
-BuildRequires: libpng-devel
-BuildRequires: libtiff-devel
-BuildRequires: libX11-devel
-BuildRequires: qt6-qtbase-devel
-# FFMPEG deps
-BuildRequires: libavcodec-free-devel
-BuildRequires: libavdevice-free-devel
-BuildRequires: libavutil-free-devel
-BuildRequires: libswresample-free-devel
-# Will review OpenCV support in the future
-# BuildRequires: opencv-devel
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  git-core
+BuildRequires:  libX11-devel
+BuildRequires:  libavcodec-free-devel
+BuildRequires:  libavdevice-free-devel
+BuildRequires:  libavutil-free-devel
+BuildRequires:  libcamera-devel
+BuildRequires:  libdrm-devel
+BuildRequires:  libepoxy-devel
+BuildRequires:  libexif-devel
+BuildRequires:  libjpeg-turbo-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libswresample-free-devel
+BuildRequires:  libtiff-devel
+BuildRequires:  meson
+BuildRequires:  qt6-qtbase-devel
+# /oreon:deps
 %description
 This is a small suite of libcamera-based apps that aim to copy the functionality
 of the existing "raspicam" apps.
@@ -40,15 +35,13 @@ of the existing "raspicam" apps.
 %package devel
 Summary:        libcamera-apps library development files
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Headers for developing against libcamera-apps.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n rpicam-apps-%{version}
-
+%global oreon_srcdir rpicam-apps-%{version}
+%oreon_prep
 %build
 
 %meson \
@@ -64,26 +57,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -Ddisable_rpi_features=true \
 %endif
     %{nil}
-
 %meson_build
-
 %install
 %meson_install
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license license.txt
-%{_bindir}/camera-bug-report
-%{_bindir}/rpicam-*
-%{_libdir}/librpicam_app.so.*
-%{_libdir}/rpicam-apps-*/
-%{_datadir}/rpi-camera-assets/
-
-%files devel
-%{_libdir}/librpicam_app.so
-%{_libdir}/pkgconfig/rpicam_app.pc
-%{_includedir}/rpicam-apps/
+%files -f %{oreon_filedir}/main.list
+%files -n libcamera-apps-devel -f %{oreon_filedir}/libcamera-apps-devel.list
 
 %changelog
+
 %autochangelog

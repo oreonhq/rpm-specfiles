@@ -1,45 +1,11 @@
 %global source0_hash a2f0c9180a210bf7ffe126c9cb81099cf337da1a7120ddb4cbe4894eb7b7d022
-
-%if 0%{?fedora} >= 40
-%ifarch %{ix86}
-%bcond_with openmpi
-%else
 %bcond_without openmpi
-%endif
-%else
-%bcond_without openmpi
-%endif
-
-# openmpi3 only exists in RHEL7
-# and not on ppc ppc64
-%if 0%{?rhel} == 7
-%ifarch ppc ppc64
   %bcond_with openmpi3
-%else
-  %bcond_without openmpi3
-%endif
-%else
-  %bcond_with openmpi3
-%endif
-
-%if 0%{?rhel} && 0%{?rhel} < 7
-%ifarch ppc ppc64 s390 s390x
-  # No mpich in RHEL < 7 for these arches
-  %bcond_with mpich
-%else
   %bcond_without mpich
-%endif
-%else
-  # Enable mpich on RHEL >= 7 and on Fedora
-  %bcond_without mpich
-%endif
-
 %bcond_without optimized_blas
-
 %if "%{?_lib}" == "lib64"
 %global _cmake_lib_suffix64 -DLIB_SUFFIX=64
 %endif
-
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
 %global blaslib flexiblas
 %if %{with optimized_blas}
@@ -55,38 +21,32 @@
 %global blasflags -DLAPACK_LIBRARIES=-llapack -DBLAS_LIBRARIES=-lblas
 %endif
 %endif
-
-Summary: A subset of LAPACK routines redesigned for heterogeneous computing
+Summary:        A subset of LAPACK routines redesigned for heterogeneous computing
 Name: scalapack
 Version: 2.2.2
-Release: 6%{?dist}
+Release:        1%{?dist}
 License: BSD-3-Clause-Open-MPI
 URL: http://www.netlib.org/scalapack/
-Source0: https://github.com/Reference-ScaLAPACK/scalapack/archive/v%{version}.tar.gz
-BuildRequires: cmake
+Source0:        https://github.com/Reference-ScaLAPACK/scalapack/archive/v%{version}.tar.gz
 %if %{with optimized_blas}
-BuildRequires: %{blaslib}-devel
 %else
-BuildRequires: lapack-devel
-BuildRequires: blas-devel
 %endif
-BuildRequires: gcc-gfortran, glibc-devel
 %if %{with mpich}
-%if 0%{?rhel} && 0%{?rhel} <= 7
-BuildRequires: mpich-devel
-%else
-BuildRequires: mpich-devel-static
-%endif
 %endif
 %if %{with openmpi}
-BuildRequires: openmpi-devel
 %endif
 %if %{with openmpi3}
-BuildRequires: openmpi3-devel
 %endif
 Patch1: scalapack-2.2.2-fix-libsuffix.patch
 Patch2: scalapack-2.2.2-fix-cmake-minimum.patch
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  flexiblas-devel
+BuildRequires:  gcc-gfortran
+BuildRequires:  glibc-devel
+BuildRequires:  mpich-devel-static
+BuildRequires:  openmpi-devel
+# /oreon:deps
 %description
 The ScaLAPACK (or Scalable LAPACK) library includes a subset 
 of LAPACK routines redesigned for distributed memory MIMD 
@@ -115,10 +75,8 @@ routines resemble their LAPACK equivalents as much as possible.
 
 %package common
 Summary: Common files for scalapack
-# The blacs symbols live in libscalapack
 Provides: blacs-common = %{version}-%{release}
 Obsoletes: blacs-common <= 2.0.2
-
 %description common
 The ScaLAPACK (or Scalable LAPACK) library includes a subset
 of LAPACK routines redesigned for distributed memory MIMD
@@ -156,13 +114,10 @@ Requires: %{name}-common = %{version}-%{release}
 Requires: mpich
 Provides: %{name}-mpich2 = %{version}-%{release}
 Obsoletes: %{name}-mpich2 < 1.7.5-19
-# This is a lie, but something needs to obsolete it.
 Provides: %{name}-lam = %{version}-%{release}
 Obsoletes: %{name}-lam <= 1.7.5-7
-# The blacs symbols live in libscalapack
 Provides: blacs-mpich = %{version}-%{release}
 Obsoletes: blacs-mpich <= 2.0.2
-
 %description mpich
 The ScaLAPACK (or Scalable LAPACK) library includes a subset
 of LAPACK routines redesigned for distributed memory MIMD
@@ -199,10 +154,8 @@ Provides: %{name}-lam-devel = %{version}-%{release}
 Obsoletes: %{name}-lam-devel <= 1.7.5-7
 Provides: %{name}-mpich2-devel = %{version}-%{release}
 Obsoletes: %{name}-mpich2-devel < 1.7.5-19
-# The blacs symbols live in libscalapack
 Provides: blacs-mpich-devel = %{version}-%{release}
 Obsoletes: blacs-mpich-devel <= 2.0.2
-
 %description mpich-devel
 This package contains development libraries for ScaLAPACK, compiled against mpich.
 
@@ -213,10 +166,8 @@ Obsoletes: %{name}-lam-static <= 1.7.5-7
 Requires: %{name}-mpich-devel = %{version}-%{release}
 Provides: %{name}-mpich2-static = %{version}-%{release}
 Obsoletes: %{name}-mpich2-static < 1.7.5-19
-# The blacs symbols live in libscalapack
 Provides: blacs-mpich-static = %{version}-%{release}
 Obsoletes: blacs-mpich-static <= 2.0.2
-
 %description mpich-static
 This package contains static libraries for ScaLAPACK, compiled against mpich.
 
@@ -227,10 +178,8 @@ This package contains static libraries for ScaLAPACK, compiled against mpich.
 Summary: ScaLAPACK libraries compiled against openmpi
 Requires: %{name}-common = %{version}-%{release}
 Requires: openmpi
-# The blacs symbols live in libscalapack
 Provides: blacs-openmpi = %{version}-%{release}
 Obsoletes: blacs-openmpi <= 2.0.2
-
 %description openmpi
 The ScaLAPACK (or Scalable LAPACK) library includes a subset
 of LAPACK routines redesigned for distributed memory MIMD
@@ -263,20 +212,16 @@ This package contains ScaLAPACK libraries compiled with openmpi.
 Summary: Development libraries for ScaLAPACK (openmpi)
 Requires: %{name}-openmpi = %{version}-%{release}
 Requires: openmpi-devel
-# The blacs symbols live in libscalapack
 Provides: blacs-openmpi-devel = %{version}-%{release}
 Obsoletes: blacs-openmpi-devel <= 2.0.2
-
 %description openmpi-devel
 This package contains development libraries for ScaLAPACK, compiled against openmpi.
 
 %package openmpi-static
 Summary: Static libraries for ScaLAPACK (openmpi)
 Requires: %{name}-openmpi-devel = %{version}-%{release}
-# The blacs symbols live in libscalapack
 Provides: blacs-openmpi-static = %{version}-%{release}
 Obsoletes: blacs-openmpi-static <= 2.0.2
-
 %description openmpi-static
 This package contains static libraries for ScaLAPACK, compiled against openmpi.
 %endif
@@ -286,10 +231,8 @@ This package contains static libraries for ScaLAPACK, compiled against openmpi.
 Summary: ScaLAPACK libraries compiled against openmpi3
 Requires: %{name}-common = %{version}-%{release}
 Requires: openmpi3
-# The blacs symbols live in libscalapack
 Provides: blacs-openmpi3 = %{version}-%{release}
 Obsoletes: blacs-openmpi3 <= 2.0.2
-
 %description openmpi3
 The ScaLAPACK (or Scalable LAPACK) library includes a subset
 of LAPACK routines redesigned for distributed memory MIMD
@@ -322,25 +265,22 @@ This package contains ScaLAPACK libraries compiled with openmpi3.
 Summary: Development libraries for ScaLAPACK (openmpi3)
 Requires: %{name}-openmpi3 = %{version}-%{release}
 Requires: openmpi3-devel
-# The blacs symbols live in libscalapack
 Provides: blacs-openmpi3-devel = %{version}-%{release}
 Obsoletes: blacs-openmpi3-devel <= 2.0.2
-
 %description openmpi3-devel
 This package contains development libraries for ScaLAPACK, compiled against openmpi3.
 
 %package openmpi3-static
 Summary: Static libraries for ScaLAPACK (openmpi3)
 Requires: %{name}-openmpi3-devel = %{version}-%{release}
-# The blacs symbols live in libscalapack
 Provides: blacs-openmpi3-static = %{version}-%{release}
 Obsoletes: blacs-openmpi3-static <= 2.0.2
-
 %description openmpi3-static
 This package contains static libraries for ScaLAPACK, compiled against openmpi3.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -n %{name}-%{version}
@@ -355,6 +295,7 @@ for i in %{?with_mpich:mpich} %{?with_openmpi:openmpi} %{?with_openmpi3:openmpi3
 done
 
 %build
+
 %global build_type_safety_c 0
 CC="$CC -std=gnu89"
 %global build_fflags %(echo %build_fflags -fallow-argument-mismatch| sed 's|-Werror=format-security||g')
@@ -372,35 +313,27 @@ cd %{name}-%{version}-$MPI_COMPILER_NAME ; \
 %cmake_build ;\
 %endif \
 cd ..
-
 %if %{with mpich}
-# Build mpich version
 export MPI_COMPILER_NAME=mpich
 %{_mpich_load}
 %dobuild
 %{_mpich_unload}
 %endif
-
 %if %{with openmpi}
-# Build OpenMPI version
 export MPI_COMPILER_NAME=openmpi
 %{_openmpi_load}
 %dobuild
 %{_openmpi_unload}
 %endif
-
 %if %{with openmpi3}
-# Build OpenMPI3 version
 export MPI_COMPILER_NAME=openmpi3
 %{_openmpi3_load}
 %dobuild
 %{_openmpi3_unload}
 %endif
-
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{_libdir}/cmake
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
-
 for i in %{?with_mpich:mpich} %{?with_openmpi:openmpi} %{?with_openmpi3:openmpi3}; do
   mkdir -p %{buildroot}%{_libdir}/$i/lib/
   pushd %{name}-%{version}-$i
@@ -408,94 +341,46 @@ for i in %{?with_mpich:mpich} %{?with_openmpi:openmpi} %{?with_openmpi3:openmpi3
   cp -f %{_vpath_builddir}/lib/libscalapack.a %{buildroot}%{_libdir}/$i/lib/
   popd
   mkdir -p %{buildroot}%{_includedir}/$i-%{_arch}/
-  # This file is independent of the MPI compiler used, but it is poorly named
-  # So we'll put it in %{_includedir}/blacs/
   mkdir -p %{buildroot}%{_includedir}/blacs/
   install -p %{name}-%{version}-$i/BLACS/SRC/Bdef.h %{buildroot}%{_includedir}/blacs/
-
   for f in *.so*; do
     mv %{buildroot}%{_libdir}/$f %{buildroot}%{_libdir}/$i/lib/
   done
   mv %{buildroot}%{_libdir}/pkgconfig %{buildroot}%{_libdir}/$i/lib/
 done
-
-# Copy docs
 cd %{name}-%{version}
 cp -f README ../
-
-# Fixup .pc files
 %if %{with openmpi}
 sed -i 's|mpi|ompi|g' %{buildroot}%{_libdir}/openmpi/lib/pkgconfig/scalapack.pc
 sed -i 's|L%{_libdir}|L${libdir}|' %{buildroot}%{_libdir}/openmpi/lib/pkgconfig/scalapack.pc
 sed -i 's|prefix=/usr|prefix=/usr/%{_lib}/openmpi|' %{buildroot}%{_libdir}/openmpi/lib/pkgconfig/scalapack.pc
 sed -i 's|libdir=%{_libdir}|libdir=${prefix}/lib|' %{buildroot}%{_libdir}/openmpi/lib/pkgconfig/scalapack.pc
 %endif
-
 %if %{with mpich}
 sed -i 's|mpi|mpich|g' %{buildroot}%{_libdir}/mpich/lib/pkgconfig/scalapack.pc
 sed -i 's|L%{_libdir}|L${libdir}|' %{buildroot}%{_libdir}/mpich/lib/pkgconfig/scalapack.pc
 sed -i 's|libdir=%{_libdir}|libdir=%{_libdir}/mpich/lib|' %{buildroot}%{_libdir}/mpich/lib/pkgconfig/scalapack.pc
 %endif
-
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon} >= 11
-# The above conditional allows us to do this only for flexiblas. openblas doesn't have a pc.
 %if %{with optimized_blas}
 %if %{with openmpi}
 sed -i 's|lapack blas|flexiblas|g' %{buildroot}%{_libdir}/openmpi/lib/pkgconfig/scalapack.pc
 %endif
 %if %{with mpich}
 sed -i 's|lapack blas|flexiblas|g' %{buildroot}%{_libdir}/mpich/lib/pkgconfig/scalapack.pc
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-#openblas3 doesn't exist for modern fedora or rhel >= 9.
 %endif
 %endif
-
-%files common
-%doc README
-%{_includedir}/blacs/
-%{_libdir}/cmake/%{name}-%{version}/
-
-%if %{with mpich}
-%files mpich
-%{_libdir}/mpich/lib/libscalapack.so.2.2
-%{_libdir}/mpich/lib/libscalapack.so.2.2.2
-
-%files mpich-devel
-%{_includedir}/mpich-%{_arch}/
-%{_libdir}/mpich/lib/libscalapack.so
-%{_libdir}/mpich/lib/pkgconfig/scalapack.pc
-
-%files mpich-static
-%{_libdir}/mpich/lib/libscalapack.a
-%endif
-
-%if %{with openmpi}
-%files openmpi
-%{_libdir}/openmpi/lib/libscalapack.so.2.2
-%{_libdir}/openmpi/lib/libscalapack.so.2.2.2
-
-%files openmpi-devel
-%{_includedir}/openmpi-%{_arch}/
-%{_libdir}/openmpi/lib/libscalapack.so
-%{_libdir}/openmpi/lib/pkgconfig/scalapack.pc
-
-%files openmpi-static
-%{_libdir}/openmpi/lib/libscalapack.a
-%endif
-
-%if %{with openmpi3}
-%files openmpi3
-%{_libdir}/openmpi3/lib/libscalapack.so.2.2
-%{_libdir}/openmpi3/lib/libscalapack.so.2.2.2
-
-%files openmpi3-devel
-%{_includedir}/openmpi3-%{_arch}/
-%{_libdir}/openmpi3/lib/libscalapack.so
-%{_libdir}/openmpi3/lib/pkgconfig/scalapack.pc
-
-%files openmpi3-static
-%{_libdir}/openmpi3/lib/libscalapack.a
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n scalapack-common -f %{oreon_filedir}/scalapack-common.list
+%files -n scalapack-mpich -f %{oreon_filedir}/scalapack-mpich.list
+%files -n scalapack-mpich-devel -f %{oreon_filedir}/scalapack-mpich-devel.list
+%files -n scalapack-mpich-static -f %{oreon_filedir}/scalapack-mpich-static.list
+%files -n scalapack-openmpi -f %{oreon_filedir}/scalapack-openmpi.list
+%files -n scalapack-openmpi-devel -f %{oreon_filedir}/scalapack-openmpi-devel.list
+%files -n scalapack-openmpi-static -f %{oreon_filedir}/scalapack-openmpi-static.list
 
 %changelog
+
 %autochangelog

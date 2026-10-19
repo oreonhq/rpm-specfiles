@@ -1,24 +1,21 @@
 %global source0_hash 75bdfeaa17e4af168fae2c262867b2992087aef39d8580965cb90d37a7d093c2
-
 %global gem_name mustache
-
 Name: rubygem-%{gem_name}
 Version: 1.1.3
-Release: 1%{?dist}
-Summary: Mustache is a framework-agnostic way to render logic-free views
+Release:        1%{?dist}
+Summary:        Mustache is a framework-agnostic way to render logic-free views
 License: MIT
 URL: https://github.com/mustache/mustache
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
-# Fix test race condition.
-# https://github.com/mustache/mustache/pull/258
 Patch0: rubygem-mustache-1.1.1-Fix-test-race-condition.patch
-BuildRequires: ruby(release)
-BuildRequires: rubygems-devel
-BuildRequires: ruby
-BuildRequires: rubygem(minitest)
-BuildRequires: rubygem(ostruct)
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  ruby
+BuildRequires:  ruby(release)
+BuildRequires:  rubygem(minitest)
+BuildRequires:  rubygem(ostruct)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 Inspired by ctemplate, Mustache is a framework-agnostic way to render
 logic-free views.
@@ -32,78 +29,48 @@ consisting of ERB or HAML with random helpers and arbitrary logic,
 your views are broken into two parts: a Ruby class and an HTML
 template.
 
-
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version}
 
 %patch 0 -p1
 
 %build
-# Create the gem as gem install only works on a gem file
+
 gem build ../%{gem_name}-%{version}.gemspec
-
-# %%gem_install compiles any C extensions and installs the gem into ./%%gem_dir
-# by default, so that we can move it into the buildroot in %%install
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
-
-
 mkdir -p %{buildroot}%{_bindir}
 cp -a .%{_bindir}/* \
         %{buildroot}%{_bindir}/
-
 find %{buildroot}%{gem_instdir}/bin -type f | xargs chmod a+x
-
-# Install man pages
 mkdir -p %{buildroot}%{_mandir}/man5
 cp -a .%{gem_instdir}/man/mustache.5 %{buildroot}%{_mandir}/man5
 mkdir -p %{buildroot}%{_mandir}/man1
 cp -a .%{gem_instdir}/man/mustache.1 %{buildroot}%{_mandir}/man1
-
-# Install documentation
 cp -a .%{gem_instdir}/man/*.html .
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-pushd .%{gem_instdir}
-# Code coverage is not really interesting for Fedora.
-sed -i '/simplecov/,/^end$/ s/^/#/' test/helper.rb
 
-# UTF8 environment has to be set.
-# https://github.com/mustache/mustache/issues/208
+pushd .%{gem_instdir}
+sed -i '/simplecov/,/^end$/ s/^/#/' test/helper.rb
 LANG=C.UTF-8 ruby -Ilib -e 'Dir.glob "./test/**/*_test.rb", &method(:require)'
 popd
-
-%files
-%dir %{gem_instdir}
-%doc *.html
-%{_bindir}/mustache
-%license %{gem_instdir}/LICENSE
-%{gem_instdir}/bin
-%{gem_libdir}
-%exclude %{gem_instdir}/man
-%doc %{_mandir}/man1/*
-%doc %{_mandir}/man5/*
-%exclude %{gem_cache}
-%{gem_spec}
-
-%files doc
-%doc %{gem_docdir}
-%doc %{gem_instdir}/README.md
-%{gem_instdir}/Rakefile
-%{gem_instdir}/test
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-mustache-doc -f %{oreon_filedir}/rubygem-mustache-doc.list
 
 %changelog
+
 %autochangelog

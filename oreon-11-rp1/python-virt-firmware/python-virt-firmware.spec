@@ -1,78 +1,44 @@
 %global source0_hash abdcfc74b8656173f762655a8d4d44f551342ac9574f1e7afa5cfc7bcd950e65
-
 Name:           python-virt-firmware
 Version:        26.9
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        tools for virtual machine firmware volumes
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://gitlab.com/kraxel/virt-firmware
-Source:         %{pypi_source virt_firmware}
-
+Source0:        https://files.pythonhosted.org/packages/source/v/virt_firmware/virt_firmware-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'virt-firmware' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-virt-firmware = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-virt-firmware
-Summary:        %{summary}
-
-%description -n python3-virt-firmware %_description
+Summary:        tools for virtual machine firmware volumes
+%description -n python3-virt-firmware
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-virt-firmware crc32c
-
 
 %prep
-%autosetup -p1 -n virt_firmware-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir virt_firmware-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-virt-firmware usr/lib/python3*/site-packages/virt_firmware* usr/lib64/python3*/site-packages/virt_firmware* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/virt_firmware* usr/lib64/python3*/site-packages/virt_firmware* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-virt-firmware -f %{pyproject_files}
-%{_bindir}/host-efi-vars
-%{_bindir}/kernel-bootcfg
-%{_bindir}/migrate-vars
-%{_bindir}/pe-addsigs
-%{_bindir}/pe-dumpinfo
-%{_bindir}/pe-inspect
-%{_bindir}/pe-listsigs
-%{_bindir}/uefi-boot-menu
-%{_bindir}/uki-addons
-%{_bindir}/virt-cloud-boot
-%{_bindir}/virt-cloud-fetch
-%{_bindir}/virt-fw-dump
-%{_bindir}/virt-fw-measure
-%{_bindir}/virt-fw-sigdb
-%{_bindir}/virt-fw-vars
-%{_bindir}/virt-kvm-caps
+%files
+%files -n python3-virt-firmware -f %{oreon_filedir}/python3-virt-firmware.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.2-1
 - Prepare for Oreon 11 (RP1)

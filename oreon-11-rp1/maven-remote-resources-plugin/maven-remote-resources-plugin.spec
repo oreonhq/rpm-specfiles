@@ -1,6 +1,5 @@
 %global source0_hash 26a4e8f8118e641efdf285864c1ea5d6d7dca1b18f4dd36a033a78c168b2950e
 %oreon_bootstrap
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,18 +83,18 @@ end
 %bcond_with bootstrap
 Name:           maven-remote-resources-plugin
 Version:        3.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven Remote Resources Plugin
 License:        Apache-2.0
 URL:            https://maven.apache.org/plugins/maven-remote-resources-plugin/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.3.0-18
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-io:commons-io)
 BuildRequires:  mvn(junit:junit)
@@ -120,10 +119,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.eclipse.aether:aether-api)
 BuildRequires:  mvn(org.eclipse.aether:aether-util)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.3.0-18
-
+# /oreon:deps
 %description
 Process resources packaged in JARs that have been deployed to
 a remote repository. The primary use case being satisfied is
@@ -134,16 +130,16 @@ license and notice files for each release.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

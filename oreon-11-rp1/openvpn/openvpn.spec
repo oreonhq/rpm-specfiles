@@ -1,86 +1,58 @@
-%global source0_hash none
-
+%global source1_hash 83dabc8aa835fe3a697296a1323cbd39280995298231435bc957ff777cbe1b61
+%global source0_hash 13702526f687c18b2540c1a3f2e189187baaa65211edcf7ff6772fa69f0536cf
 %global source10_key_fpr F554A3687412CFFEBDEFE0A312F5F7B42F2B01E7
-
 %define _hardened_build 1
-
-# LTO needs to be disabled to avoid issues on Fedora 34+ and
-# EL-9 when linking the unit-test, which utilizes --wrap in
-# the link process
-%if 0%{?rhel} > 8 || 0%{?fedora} > 34
-%global _lto_cflags %{nil}
-%endif
-
 %bcond_without dco
-
-# pkcs11-helper on RHEL9 (v1.27.0) comes with a buggy pkcs11.h, so skip it
-%if 0%{?rhel} == 9
-%bcond_with pkcs11
-%else
 %bcond_without pkcs11
-%endif
-
-# Build conditionals
-# tests_long - Enabled by default, enables long running tests in %%check
 %bcond_without tests_long
-
 Name:              openvpn
 Version:           2.6.19
-Release:           2%{?dist}
-Summary:           A full-featured TLS VPN solution
+Release:        2%{?dist}
+Summary:        A full-featured TLS VPN solution
 URL:               https://community.openvpn.net/
 Source0:        https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.gz
 Source1:        https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.gz.asc
 Source2:           roadwarrior-server.conf
 Source3:           roadwarrior-client.conf
-# Upstream signing key
 Source10:          gpgkey-F554A3687412CFFEBDEFE0A312F5F7B42F2B01E7.gpg
 Source11:          openvpn.rpmlintrc
 Patch1:            0001-Change-the-default-cipher-to-AES-256-GCM-for-server-.patch
 Patch2:            fedora-crypto-policy-compliance.patch
 Patch50:           openvpn-2.4-change-tmpfiles-permissions.patch
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:           GPL-2.0-only
-BuildRequires:     gnupg2
-BuildRequires:     gcc
-BuildRequires:     automake
-BuildRequires:     autoconf
-BuildRequires:     autoconf-archive
-BuildRequires:     libcap-ng-devel
-BuildRequires:     libtool
-BuildRequires:     gettext
-BuildRequires:     lzo-devel
-BuildRequires:     lz4-devel
-BuildRequires:     make
-BuildRequires:     openssl-devel
 %if %{with dco}
-BuildRequires:     libnl3-devel
 %endif
 %if %{with pkcs11}
-BuildRequires:     pkcs11-helper-devel >= 1.11
 %endif
-BuildRequires:     pam-devel
-BuildRequires:     libselinux-devel
-BuildRequires:     libcmocka-devel
-BuildRequires:     systemd
-BuildRequires:     systemd-devel
-
 %{?systemd_requires}
 Requires(post):    /usr/bin/awk
-
 %if %{with dco}
 Recommends:        kmod-ovpn-dco >= 0.2
 %endif
-
-BuildRequires:  python3-docutils
-
-# For the perl_default_filter macro
-BuildRequires:     perl-macros
-
-# Filter out the perl(Authen::PAM) dependency.
-# No perl dependency is really needed at all.
 %{?perl_default_filter}
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  autoconf-archive
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  gnupg2
+BuildRequires:  libcap-ng-devel
+BuildRequires:  libcmocka-devel
+BuildRequires:  libnl3-devel
+BuildRequires:  libselinux-devel
+BuildRequires:  libtool
+BuildRequires:  lz4-devel
+BuildRequires:  lzo-devel
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  pam-devel
+BuildRequires:  perl-macros
+BuildRequires:  pkcs11-helper-devel
+BuildRequires:  python3-docutils
+BuildRequires:  systemd
+BuildRequires:  systemd-devel
+# /oreon:deps
 %description
 OpenVPN is a robust and highly flexible tunneling application that uses all
 of the encryption, authentication, and certification features of the
@@ -90,7 +62,6 @@ for compression.
 
 %package devel
 Summary:           Development headers and examples for OpenVPN plug-ins
-
 %description devel
 OpenVPN can be extended through the --plugin option, which provides
 possibilities to add specialized authentication, user accounting,
@@ -99,6 +70,7 @@ written in C and provides a more low-level and information rich access
 to similar features as the various script-hooks.
 
 %prep
+
 %(test -z "%{source10_key_fpr}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source10_key_fpr}" || { echo "oreon: Source10 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE10}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 gpgv2 --quiet --keyring %{SOURCE10} %{SOURCE1} %{SOURCE0}
@@ -114,6 +86,7 @@ u openvpn - 'OpenVPN' /etc/openvpn -
 EOF
 
 %build
+
 %configure \
     --enable-silent-rules \
     --with-crypto-library=openssl \
@@ -126,25 +99,18 @@ EOF
     --docdir=%{_pkgdocdir} \
     SYSTEMD_UNIT_DIR=%{_unitdir} \
     TMPFILES_DIR=%{_tmpfilesdir}
-
 %{__make} %{?_smp_mflags}
-
-
 %check
-# Test Crypto:
+
 ./src/openvpn/openvpn --genkey --secret key
 ./src/openvpn/openvpn --cipher aes-128-cbc --test-crypto --secret key
 ./src/openvpn/openvpn --cipher aes-256-cbc --test-crypto --secret key
 ./src/openvpn/openvpn --cipher aes-128-gcm --test-crypto --secret key
 ./src/openvpn/openvpn --cipher aes-256-gcm --test-crypto --secret key
-
-# Some of the unit tests does not run on RHEL-7
 pushd tests/unit_tests
 %{__make} %{?_smp_mflags} check
 popd
-
 %if %{with tests_long}
-# Randomize ports for tests to avoid conflicts on the build servers.
 cport=$[ 50000 + ($RANDOM % 15534) ]
 sport=$[ $cport + 1 ]
 sed -e 's/^\(rport\) .*$/\1 '$sport'/' \
@@ -155,92 +121,55 @@ sed -e 's/^\(rport\) .*$/\1 '$cport'/' \
     -e 's/^\(lport\) .*$/\1 '$sport'/' \
     < sample/sample-config-files/loopback-server \
     > %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u})-loopback-server
-
 pushd sample
-# Test SSL/TLS negotiations (runs for 2 minutes):
 ../src/openvpn/openvpn --config \
     %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u})-loopback-client &
 ../src/openvpn/openvpn --config \
     %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u})-loopback-server
 wait
 popd
-
 rm -f %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u})-loopback-client \
     %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u})-loopback-server
 %endif
-
 %install
 %{__make} install DESTDIR=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -name '*.la' | xargs rm -f
 mkdir -p -m 0750 $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/client $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/server
 cp %{SOURCE2} %{SOURCE3} sample/sample-config-files/
-
-# Create some directories the OpenVPN package should own
 mkdir -m 0750 -p $RPM_BUILD_ROOT%{_rundir}/%{name}-{client,server}
 mkdir -m 0770 -p $RPM_BUILD_ROOT%{_sharedstatedir}/%{name}
-
-# Package installs into %%{_pkgdocdir} directly
-# Add various additional files
 cp -a AUTHORS ChangeLog contrib sample distro/systemd/README.systemd $RPM_BUILD_ROOT%{_pkgdocdir}
-
-# Fix incorrect she-bang on a python script
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_interpreter_invocation
 sed -e "s|^#!/usr/bin/env.*python3$|#!%{python3} -%{py3_shebang_flags}|" \
     -i $RPM_BUILD_ROOT%{_pkgdocdir}/contrib/extract-crl/extractcrl.py
-
-# Remove some files which does not really belong here
 rm -f  $RPM_BUILD_ROOT%{_pkgdocdir}/sample/Makefile{,.in,.am}
 rm -f  $RPM_BUILD_ROOT%{_pkgdocdir}/contrib/multilevel-init.patch
 rm -rf $RPM_BUILD_ROOT%{_pkgdocdir}/sample/sample-keys
-
 install -m0644 -D openvpn.sysusers.conf %{buildroot}%{_sysusersdir}/openvpn.conf
-
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %post
+
 for srv in `systemctl | awk '/openvpn-client@.*\.service/{print $1} /openvpn-server@.*\.service/{print $1}'`;
 do
     %systemd_post $srv
 done
-
 %preun
+
 for srv in `systemctl | awk '/openvpn-client@.*\.service/{print $1} /openvpn-server@.*\.service/{print $1}'`;
 do
     %systemd_preun $srv
 done
-
 %postun
+
 for srv in `systemctl | awk '/openvpn-client@.*\.service/{print $1} /openvpn-server@.*\.service/{print $1}'`;
 do
     %systemd_postun_with_restart $srv
 done
-
-%files
-%{_pkgdocdir}
-%exclude %{_pkgdocdir}/README.mbedtls
-%exclude %{_pkgdocdir}/sample/sample-plugins
-%{_mandir}/man8/%{name}.8*
-%{_mandir}/man5/%{name}-*.5*
-%{_sbindir}/%{name}
-%{_libdir}/%{name}/
-%{_unitdir}/%{name}-client@.service
-%{_unitdir}/%{name}-server@.service
-%{_tmpfilesdir}/%{name}.conf
-%config %dir %{_sysconfdir}/%{name}/
-%config %dir %attr(-,-,openvpn) %{_sysconfdir}/%{name}/client
-%config %dir %attr(-,-,openvpn) %{_sysconfdir}/%{name}/server
-%attr(0770,openvpn,openvpn) %{_sharedstatedir}/%{name}
-%dir %attr(0750,-,openvpn) %{_rundir}/openvpn-client
-%dir %attr(0750,-,openvpn) %{_rundir}/openvpn-server
-%{_sysusersdir}/openvpn.conf
-
-%files devel
-%{_pkgdocdir}/sample/sample-plugins
-%{_includedir}/openvpn-plugin.h
-%{_includedir}/openvpn-msg.h
-
+%files -f %{oreon_filedir}/main.list
+%files -n openvpn-devel -f %{oreon_filedir}/openvpn-devel.list
 
 %changelog
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.19-2
 - Import from Fedora 43 dist-git branch f43 same sources patches as 2.6.19-1
 

@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash eb42e2d9674e470935d98474b8502e675894cc8489362d8419fdd957319f2b3e
 Name:           python-pykmip
 Version:        0.11.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        KMIP library
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/OpenKMIP/PyKMIP
-Source:         %{pypi_source pykmip}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pykmip/pykmip-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pykmip' generated automatically by pyp2spec.}
-
 Patch0:         enum34.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pykmip = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pykmip
-Summary:        %{summary}
-
-%description -n python3-pykmip %_description
-
+Summary:        KMIP library
+%description -n python3-pykmip
 
 %prep
-%autosetup -p1 -n pykmip-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pykmip-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pykmip usr/lib/python3*/site-packages/pykmip* usr/lib64/python3*/site-packages/pykmip* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pykmip* usr/lib64/python3*/site-packages/pykmip* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pykmip -f %{pyproject_files}
-%{_bindir}/pykmip-server
+%files
+%files -n python3-pykmip -f %{oreon_filedir}/python3-pykmip.list
 
 %changelog
+
 %autochangelog

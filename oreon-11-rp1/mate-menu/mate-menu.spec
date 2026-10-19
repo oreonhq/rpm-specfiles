@@ -1,30 +1,16 @@
 %global source0_hash 36aa865b72664b8cc90d9c1c429fd3c44e2c198369aae4eaaa87228a5add075c
-
 %global debug_package %{nil}
 %global _name   mate_menu
-
 Name:           mate-menu
 Version:        22.04.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Advanced Menu for the MATE Desktop
-# mate_menu/keybinding.py use MIT license and the rest is under GPLv2+
-# Automatically converted from old format: GPLv2+ and MIT - review is highly recommended.
 License:        GPL-2.0-or-later AND LicenseRef-Callaway-MIT
 BuildArch:      noarch
 Url:            https://github.com/ubuntu-mate/%{name}
-# downloading the tarball
-# spectool -g mate-menu.spec
-Source0:        %url/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/ubuntu-mate/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch1:         mate-menu_adjust-package-manager.patch
 Patch2:         mate-menu_default-applications.patch
-
-BuildRequires:  gobject-introspection-devel
-BuildRequires:  intltool
-BuildRequires:  python3-devel
-BuildRequires:  python3-distutils-extra
-BuildRequires:  desktop-file-utils
-
 Requires:       mate-menus
 Requires:       mozo
 Requires:       python3-configobj
@@ -35,7 +21,11 @@ Requires:       python3-setproctitle
 Requires:       python3-unidecode
 Requires:       beesu
 Requires:       mate-panel
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-mate-menu = %{version}-%{release}
+# /oreon:deps
 %description
 An advanced menu for MATE. Supports filtering, favorites,
 auto-session, and many other features.
@@ -44,6 +34,7 @@ been ported to other distributions that ship the MATE Desktop
 Environment.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -54,41 +45,23 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # xdg-su isn't available in fedora
 sed -i 's/xdg-su/beesu/g' %{_name}/execute.py
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-
-# Manually invoke the python byte compile macro for each path that needs byte
-# compilation.
 %py_byte_compile %{python3} %{buildroot}%{_usr}/lib/%{name}/*.py
-
-# avoid rpmlint invalid-lc-messages-dir and incorrect-locale-subdir errors
 rm -rf %{buildroot}%{_datadir}/locale/ber
 rm -rf %{buildroot}%{_datadir}/locale/es_419/LC_MESSAGES/mate-menu.mo
 rm -rf %{buildroot}%{_datadir}/locale/es_419/LC_MESSAGES/mate-menu.mo
 rm -rf %{buildroot}%{_datadir}/locale/nah/LC_MESSAGES/mate-menu.mo
 rm -rf %{buildroot}%{_datadir}/locale/zh-Hans/LC_MESSAGES/mate-menu.mo
 rm -rf %{buildroot}%{_datadir}/locale/zh-Hans/
-
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc README.md
-%license COPYING
-%{_bindir}/%{name}
-%{_usr}/lib/%{name}/
-%{python3_sitelib}/%{_name}/
-%{python3_sitelib}/%{_name}-*.dist-info/
-%{_datadir}/%{name}/
-%{_datadir}/glib-2.0/schemas/org.mate.mate-menu*.gschema.xml
-%{_datadir}/mate-panel/applets/org.mate.panel.MateMenuApplet.mate-panel-applet
-%{_datadir}/dbus-1/services/org.mate.panel.applet.MateMenuAppletFactory.service
-%{_mandir}/man1/mate-menu.1.*
+%files
 
 %changelog
+
 %autochangelog

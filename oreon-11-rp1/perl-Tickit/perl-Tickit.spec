@@ -1,5 +1,4 @@
 %global source0_hash 889b21b011c83ad365e44ef4687a6d2724948fbbbdc85294d6951bc750e2f8d9
-
 Name:           perl-Tickit
 Version:        0.74
 Release:        9%{?dist}
@@ -7,45 +6,40 @@ Summary:        Perl bindings for Tickit
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tickit
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Tickit-%{version}.tar.gz
-
+Requires:       perl(XSLoader)
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make
-BuildRequires:  pkgconfig(tickit)
-
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl(base)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Config)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(Exporter) >= 5.57
-BuildRequires:  perl(integer)
+BuildRequires:  perl(Errno)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::CBuilder)
 BuildRequires:  perl(IO::Handle)
 BuildRequires:  perl(List::Util)
 BuildRequires:  perl(Module::Build::Using::PkgConfig)
-BuildRequires:  perl(overload)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Struct::Dumb) >= 0.04
-BuildRequires:  perl(Test::Builder)
-BuildRequires:  perl(Time::HiRes)
-BuildRequires:  perl(warnings)
-BuildRequires:  perl(XSLoader)
-BuildRequires:  perl(ExtUtils::CBuilder)
-# Provided by generator
-#BuildRequires:  perl(Module::Build)
-# Tests
-BuildRequires:  perl(Errno)
 BuildRequires:  perl(POSIX)
-BuildRequires:  perl(Test::Builder::Tester)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Struct::Dumb)
 BuildRequires:  perl(Test2::V0)
+BuildRequires:  perl(Test::Builder)
+BuildRequires:  perl(Test::Builder::Tester)
+BuildRequires:  perl(Time::HiRes)
+BuildRequires:  perl(XSLoader)
+BuildRequires:  perl(base)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(integer)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
 BuildRequires:  perl(utf8)
-# Runtime
-Requires:       perl(XSLoader)
-
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  pkgconfig(tickit)
+# /oreon:deps
 %description
 Tickit is a high-level toolkit for creating full-screen terminal-based
 interactive programs. It allows programs to be written in an abstracted
@@ -61,12 +55,12 @@ Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl(Test::Harness)
 Requires:       perl(constant)
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Tickit-%{version}
@@ -78,37 +72,29 @@ for F in t/*.t; do
 done
 
 %build
+
 %{__perl} Build.PL --installdirs=vendor --optimize="%{optflags}"
 ./Build
-
 %install
 ./Build install --destdir=%{buildroot} --create_packlist=0
 find %{buildroot} -type f -name '*.bs' -size 0 -delete
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 rm %{buildroot}%{_libexecdir}/%{name}/t/99pod.t
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Default mock terminal (vt100) does not support param_ich
+
 export TERM=xterm
 ./Build test
-
-%files
-%doc Changes examples README
-%license LICENSE
-%{perl_vendorarch}/auto/*
-%{perl_vendorarch}/Tickit*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Tickit-tests -f %{oreon_filedir}/perl-Tickit-tests.list
 
 %changelog
+
 %autochangelog

@@ -1,33 +1,33 @@
 %global source0_hash a76d1339e97f7fb4f3ca5b51845c0f7951641a4b360c4e472ed0c87db89ee1ce
-
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-mg
-Summary: Malagasy hunspell dictionaries
+Summary:        Malagasy hunspell dictionaries
 %global upstreamid 20050109
 Version: 0.%{upstreamid}
-Release: 37%{?dist}
+Release:        1%{?dist}
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch
-
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-mg)
-
 Source0:        https://github.com/openela-main/hunspell-mg/raw/el9/SOURCES/mg_MG.zip
+# oreon:deps
 
+# /oreon:deps
 %description
 Malagasy hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -n hunspell-mg
 
 %build
+
 for i in README_mg_MG.txt; do
   if ! iconv -f utf-8 -t utf-8 -o /dev/null $i > /dev/null 2>&1; then
     iconv -f ISO-8859-1 -t UTF-8 $i > $i.new
@@ -38,12 +38,10 @@ for i in README_mg_MG.txt; do
   touch -r $i $i.new
   mv -f $i.new $i
 done
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p mg_MG.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/plt.aff
 cp -p mg_MG.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/plt.dic
-
 pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
 plt_aliases="mg"
 for lang in $plt_aliases; do
@@ -51,11 +49,11 @@ for lang in $plt_aliases; do
         ln -s plt.dic $lang.dic
 done
 popd
+%oreon_autofiles main
 
-%files
-%doc README_mg_MG.txt
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20050109-37
 - Import

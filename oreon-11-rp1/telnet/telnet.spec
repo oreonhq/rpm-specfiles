@@ -1,16 +1,13 @@
 %global source0_hash 9c80d5c7838361a328fb6b60016d503def9ce53ad3c589f3b08ff71a2bb88e00
 %global source2_hash fef13d44c600f7c8defc57b8b82d6edd312a39c960eebdbbeda6d01716e77a51
-
 %global _hardened_build 1
-
-Summary: The client program for the Telnet remote login protocol
+Summary:        The client program for the Telnet remote login protocol
 Name: telnet
 Version: 0.17
-Release: 96%{?dist}
+Release:        1%{?dist}
 Epoch: 1
 License: BSD-3-Clause AND BSD-4-Clause AND BSD-4-Clause-UC
 Source0:        https://repository.timesys.com/buildsources/n/netkit-telnet/netkit-telnet-%{version}/netkit-telnet-%{version}.tar.gz
-# openbsd client telnet snapshot, vendored next to spec
 Source2:        telnet-client.tar.gz
 Source4: telnet.wmconfig
 Source5: telnet@.service
@@ -45,11 +42,14 @@ Patch32: telnet-log-address.patch
 Patch33: telnet-0.17-overflow-exploit.patch
 Patch34: telnet-0.17-pty-retry.patch
 Patch35: telnet-c99.patch
-
-BuildRequires: make
-BuildRequires: ncurses-devel systemd gcc gcc-c++
-BuildRequires: perl-interpreter
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  perl-interpreter
+BuildRequires:  systemd
+# /oreon:deps
 %description
 Telnet is a popular protocol for logging into remote systems over the
 Internet. The package provides a command line Telnet client
@@ -60,7 +60,6 @@ Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
 Summary: The server program for the Telnet remote login protocol
-
 %description server
 Telnet is a popular protocol for logging into remote systems over the
 Internet. The package includes a daemon that supports Telnet remote
@@ -68,6 +67,7 @@ logins into the host machine. The daemon is disabled by default.
 You may enable the daemon by editing /etc/xinetd.d/telnet
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %setup -q -n netkit-telnet-%{version}
@@ -108,14 +108,13 @@ mv telnet telnet-NETKIT
 %patch -P35 -p1 -b .c99
 
 %build
+
 %ifarch s390 s390x
     export CC_FLAGS="$RPM_OPT_FLAGS -fPIE"
 %else
     export CC_FLAGS="$RPM_OPT_FLAGS -fpie"
 %endif
-
 export LD_FLAGS="$RPM_LD_FLAGS -z now -pie"
-
 sh configure --with-c-compiler=%{__cc} 
 perl -pi -e '
     s,-O2,\$(CC_FLAGS),;
@@ -124,49 +123,36 @@ perl -pi -e '
     s,^MANDIR=.*$,MANDIR=%{_mandir},;
     s,^SBINDIR=.*$,SBINDIR=%{_sbindir},;
     ' MCONFIG
-
-# remove stripping
 perl -pi -e 's|install[ ]+-s|install|g' \
     ./telnet/GNUmakefile \
     ./telnetd/Makefile \
     ./telnetlogin/Makefile \
     ./telnet-NETKIT/Makefile
-
 %{make_build}
-
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
 mkdir -p ${RPM_BUILD_ROOT}%{_sbindir}
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man1
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man5
 mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man8
-
 make INSTALLROOT=${RPM_BUILD_ROOT} install
-
 install -D -p -m644 %SOURCE5 ${RPM_BUILD_ROOT}%{_unitdir}/telnet@.service
 install -D -p -m644 %SOURCE6 ${RPM_BUILD_ROOT}%{_unitdir}/telnet.socket
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post server
+
 %systemd_post telnet.socket
-
 %preun server
+
 %systemd_preun telnet.socket
-
 %postun server
+
 %systemd_postun_with_restart telnet.socket
-
-%files
-%doc README
-%{_bindir}/telnet
-%{_mandir}/man1/telnet.1*
-
-%files server
-%{_unitdir}/*
-%{_sbindir}/in.telnetd
-%{_mandir}/man5/issue.net.5*
-%{_mandir}/man8/in.telnetd.8*
-%{_mandir}/man8/telnetd.8*
+%files -f %{oreon_filedir}/main.list
+%files -n telnet-server -f %{oreon_filedir}/telnet-server.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.17-96
 - Prepare for Oreon 11 (RP1)

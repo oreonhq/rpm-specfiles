@@ -1,58 +1,41 @@
 %global source0_hash 472c87d80f36026ae83c6ddd0f1d05d4e510134ed462851fd5f754c8c3cbb88d
-
 Name:           python-jmespath
 Version:        1.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        JSON Matching Expressions
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jmespath/jmespath.py
-Source:         %{pypi_source jmespath}
-
+Source0:        https://files.pythonhosted.org/packages/source/j/jmespath/jmespath-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'jmespath' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-jmespath = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-jmespath
-Summary:        %{summary}
-
-%description -n python3-jmespath %_description
-
+Summary:        JSON Matching Expressions
+%description -n python3-jmespath
 
 %prep
-%autosetup -p1 -n jmespath-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir jmespath-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-jmespath usr/lib/python3*/site-packages/jmespath* usr/lib64/python3*/site-packages/jmespath* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/jmespath* usr/lib64/python3*/site-packages/jmespath* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-jmespath -f %{pyproject_files}
+%files
+%files -n python3-jmespath -f %{oreon_filedir}/python3-jmespath.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.1-14
 - Prepare for Oreon 11 (RP1)

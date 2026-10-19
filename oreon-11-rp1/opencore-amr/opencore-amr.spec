@@ -1,63 +1,49 @@
 %global source0_hash 483eb4061088e2b34b358e47540b5d495a96cd468e361050fae615b1809dc4a1
-
 %global sovermajor 0
-
 Name:           opencore-amr
 Version:        0.1.6
-Release:        11%{?dist}
+Release:        1%{?dist}
 Summary:        OpenCORE Adaptive Multi Rate Narrowband and Wideband speech lib
 License:        Apache-2.0
 URL:            http://sourceforge.net/projects/opencore-amr/
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:         opencore-amr-0.1.3-fix_pc.patch
-
+# oreon:deps
 BuildRequires:  gcc-c++
 BuildRequires:  make
-
+# /oreon:deps
 %description
 Library of OpenCORE Framework implementation of Adaptive Multi Rate Narrowband
 and Wideband speech codec.
 
-
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 mv opencore/README opencore/README.opencore
 
-
 %build
+
 %configure --disable-static
 %make_build
-
-
 %install
 %make_install
 rm $RPM_BUILD_ROOT%{_libdir}/libopencore-amr??.la
-
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%doc README opencore/ChangeLog opencore/NOTICE opencore/README.opencore
-%license LICENSE
-%{_libdir}/libopencore-amr??.so.%{sovermajor}{,.*}
-
-%files devel
-%{_includedir}/opencore-amr??
-%{_libdir}/libopencore-amr??.so
-%{_libdir}/pkgconfig/opencore-amr??.pc
+%files -f %{oreon_filedir}/main.list
+%files -n opencore-amr-devel -f %{oreon_filedir}/opencore-amr-devel.list
 
 %changelog
+
 * Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.1.6-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

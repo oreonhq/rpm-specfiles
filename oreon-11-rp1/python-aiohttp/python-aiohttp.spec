@@ -1,62 +1,68 @@
-%global source0_hash none
-
+%global source0_hash 9491196535a88924a60afd5b5f434b5b203b6cc616250878dbdb223a8f7844bc
 Name:           python-aiohttp
 Version:        3.14.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Async http client/server framework _asyncio_
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0 AND MIT
 URL:            https://github.com/aio-libs/aiohttp
-Source:         %{pypi_source aiohttp}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aiohttp/aiohttp-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
+BuildRequires:  python3dist(setuptools) >= 67.0
+Requires:       python3-aiohttp = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-aiohttp+speedups
+Summary:        Metapackage for python3-aiohttp speedups extras
+Requires:       python3-aiohttp = %{version}-%{release}
+Requires:       python3dist(aiodns) >= 3.3.0
+Requires:       python3dist(brotli) >= 1.2
+Requires:       python3dist(brotlicffi) >= 1.2
+Provides:       python3dist(aiohttp[speedups]) = %{version}-%{release}
 
+%description -n python3-aiohttp+speedups
+Metapackage for python3-aiohttp speedups extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aiohttp' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-aiohttp
-Summary:        %{summary}
-
-%description -n python3-aiohttp %_description
+Summary:        Async http client/server framework _asyncio_
+# oreon:reqs
+Requires:       python3dist(aiohappyeyeballs) >= 2.5.0
+Requires:       python3dist(aiosignal) >= 1.4.0
+Requires:       python3dist(async-timeout) < 6.0
+Requires:       python3dist(async-timeout) >= 4.0
+Requires:       python3dist(attrs) >= 17.3.0
+Requires:       python3dist(frozenlist) >= 1.1.1
+Requires:       python3dist(multidict) < 7.0
+Requires:       python3dist(multidict) >= 4.5
+Requires:       python3dist(propcache) >= 0.2.0
+Requires:       python3dist(typing-extensions) >= 4.4
+Requires:       python3dist(yarl) < 2.0
+Requires:       python3dist(yarl) >= 1.17.0
+# /oreon:reqs
+%description -n python3-aiohttp
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-aiohttp speedups
-
 
 %prep
-%autosetup -p1 -n aiohttp-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aiohttp-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aiohttp usr/lib/python3*/site-packages/aiohttp* usr/lib64/python3*/site-packages/aiohttp* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aiohttp* usr/lib64/python3*/site-packages/aiohttp* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aiohttp -f %{pyproject_files}
+%files
+%files -n python3-aiohttp -f %{oreon_filedir}/python3-aiohttp.list
 
 %changelog
+
 %autochangelog

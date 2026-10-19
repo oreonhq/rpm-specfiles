@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash abf52b8d2898299ff837f90ed9824cc40d70745700b440374d6f375a86a5e831
 Name:           python-calcephpy
 Version:        5.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python interface for the CALCEPH Library
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://calceph.imcce.fr/
-Source:         %{pypi_source calcephpy}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/calcephpy/calcephpy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'calcephpy' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-calcephpy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-calcephpy
-Summary:        %{summary}
-
-%description -n python3-calcephpy %_description
-
+Summary:        Python interface for the CALCEPH Library
+%description -n python3-calcephpy
 
 %prep
-%autosetup -p1 -n calcephpy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir calcephpy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-calcephpy usr/lib/python3*/site-packages/calcephpy* usr/lib64/python3*/site-packages/calcephpy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/calcephpy* usr/lib64/python3*/site-packages/calcephpy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-calcephpy -f %{pyproject_files}
+%files
+%files -n python3-calcephpy -f %{oreon_filedir}/python3-calcephpy.list
 
 %changelog
+
 %autochangelog

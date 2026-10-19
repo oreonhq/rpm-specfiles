@@ -1,34 +1,26 @@
-%global source0_hash b2d4600909e5bece5ad63818dfb30bb19fd2ac9f52847b1a7a74ad4040718105
-
-#%%define __cmake_in_source_build 1
-
-#%%global commit 35a0b465cebb577389644ca5149c4569b3c2990d
-#%%global shortcommit %%(c=%%{commit}; echo ${c:0:7})
-
+%global source0_hash e38c9721cd5c835ec1d461ab55c9dabcacea8c42eb37aeb782be7b138c91c6eb
 Name:           herbstluftwm
 Version:        0.9.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A manual tiling window manager
 License:        BSD-2-Clause
 URL:            http://herbstluftwm.org
-#Source0:        https://github.com/%%{name}/%%{name}/archive/%%{commit}/%%{name}-%%{shortcommit}.tar.gz
 Source0:        http://herbstluftwm.org/tarballs/%{name}-%{version}.tar.gz
 Patch0:         0.9.6-cstdint-gcc15.patch
-
+Requires:       xsetroot
+# oreon:deps
+BuildRequires:  asciidoc
+BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
+BuildRequires:  make
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xfixes)
+BuildRequires:  pkgconfig(xft)
 BuildRequires:  pkgconfig(xinerama)
 BuildRequires:  pkgconfig(xrandr)
-BuildRequires:  pkgconfig(xft)
-BuildRequires:  pkgconfig(xfixes)
-BuildRequires:  cmake
-BuildRequires:  make
-BuildRequires:  asciidoc
-
-Requires:       xsetroot
-
+# /oreon:deps
 %description
 herbstluftwm is a manual tiling window manager for X11 using Xlib and Glib.
 Its main features can be described with:
@@ -46,7 +38,6 @@ Summary:        Herbstluftwm zsh completion support
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 Requires:       zsh
-
 %description    zsh
 This package provides zsh completion script of %{name}.
 
@@ -55,57 +46,34 @@ Summary:        Herbstluftwm fish completion support
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 Requires:       fish
-
 %description    fish
 This package provides fish completion script of %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-#%%autosetup -p1 -n %%{name}-%%{commit}
-%autosetup -p1
-
+%oreon_prep
 %build
-# Set the proper build flags
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
-
-# Change the shebangs of the upstream files to be proper
 for f in "%{buildroot}%{_pkgdocdir}/examples/*.sh"
 do
     sed -i -e "s|#!/usr/bin/env bash|#!/usr/bin/bash|" $f
 done
-
 for f in "%{buildroot}%{_sysconfdir}/xdg/%{name}/*"
 do
     sed -i -e "s|#!/usr/bin/env bash|#!/usr/bin/bash|" $f
 done
-
-# Remove unnecessary and/or redundant files
 rm %{buildroot}%{_pkgdocdir}/LICENSE
 rm -r %{buildroot}%{_pkgdocdir}/html
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE
-%doc AUTHORS MIGRATION NEWS
-%doc doc/*.{html,txt}
-%{_sysconfdir}/xdg/%{name}
-%{_bindir}/*
-%{_datadir}/bash-completion/completions/herbstclient
-%{_datadir}/xsessions/%{name}.desktop
-%{_mandir}/man1/*
-%{_mandir}/man7/*
-%{_pkgdocdir}/examples/
-%{_pkgdocdir}/hlwm-doc.json
-
-%files zsh
-%{_datadir}/zsh/site-functions/_herbstclient
-
-%files fish
-%{_datadir}/fish/vendor_completions.d/herbstclient.fish
+%files -f %{oreon_filedir}/main.list
+%files -n herbstluftwm-zsh -f %{oreon_filedir}/herbstluftwm-zsh.list
+%files -n herbstluftwm-fish -f %{oreon_filedir}/herbstluftwm-fish.list
 
 %changelog
+
 %autochangelog

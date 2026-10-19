@@ -1,8 +1,6 @@
 %global source0_hash 8df5e03b547aa380902fabf4c12134b4d5f2b1ed662be797347276d664ef21e2
-
 %global ename  dash-to-panel
 %global extdir %{_datadir}/gnome-shell/extensions/dash-to-panel@jderose9.github.com
-
 Name:           gnome-shell-extension-%{ename}
 Version:        74
 Release:        1%{?dist}
@@ -11,11 +9,12 @@ License:        GPL-2.0-or-later
 URL:            https://github.com/home-sweet-gnome/dash-to-panel
 Source0:        https://github.com/home-sweet-gnome/dash-to-panel/archive/refs/tags/v%{version}.tar.gz#/gnome-shell-extension-dash-to-panel-%{version}.tar.gz
 BuildArch:      noarch
+Requires:       gnome-shell >= 45~rc
+# oreon:deps
+BuildRequires:  /usr/bin/glib-compile-schemas
 BuildRequires:  gettext
 BuildRequires:  make
-BuildRequires:  %{_bindir}/glib-compile-schemas
-Requires:       gnome-shell >= 45~rc
-
+# /oreon:deps
 %description
 Dash to Panel is an icon taskbar for Gnome Shell. This extension moves the dash
 into the gnome main panel so that the application launchers and system tray are
@@ -24,24 +23,22 @@ combined into a single panel, similar to that found in KDE Plasma and Windows
 applications.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{ename}-%{version} -p1
 
 %build
-%make_build VERSION=%{version}
 
+%make_build VERSION=%{version}
 %install
 %make_install VERSION=%{version}
 rm -v %{buildroot}%{extdir}/{COPYING,README.md}
-
 %find_lang %{ename}
+%oreon_autofiles main
 
-%files -f %{ename}.lang
-%license COPYING
-%doc README.md
-%{extdir}/
-%{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.%{ename}.gschema.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 72-2
 - Prepare for Oreon 11 (RP1)

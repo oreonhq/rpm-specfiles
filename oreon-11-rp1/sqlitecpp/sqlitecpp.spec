@@ -1,25 +1,21 @@
 %global source0_hash 33bd4372d83bc43117928ee842be64d05e7807f511b5195f85d30015cad9cac6
-
 %global richname SQLiteCpp
-
 Name: sqlitecpp
 Version: 3.3.3
-Release: %autorelease
-
+Release:        1%{?dist}
 License: MIT
-Summary: Smart and easy to use C++ SQLite3 wrapper
+Summary:        Smart and easy to use C++ SQLite3 wrapper
 URL: https://github.com/SRombauts/%{richname}
-Source0: %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: gmock-devel
-BuildRequires: gtest-devel
-BuildRequires: sqlite-devel
-
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: ninja-build
-
+Source0:        https://github.com/SRombauts/%{richname}/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gmock-devel
+BuildRequires:  gtest-devel
+BuildRequires:  ninja-build
+BuildRequires:  sqlite-devel
+# /oreon:deps
 %description
 SQLiteC++ (SQLiteCpp) is a smart and easy to use C++ SQLite3 wrapper.
 
@@ -29,11 +25,11 @@ with a few intuitive and well documented C++ classes.
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description devel
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{richname}-%{version} -p1
@@ -45,6 +41,7 @@ sed -e "s,\r,," -i README.md
 rm -rf {sqlite3,googletest}
 
 %build
+
 %cmake -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DSQLITECPP_BUILD_TESTS:BOOL=ON \
@@ -52,23 +49,16 @@ rm -rf {sqlite3,googletest}
     -DSQLITECPP_INTERNAL_SQLITE:BOOL=OFF \
     -DSQLITECPP_RUN_CPPLINT:BOOL=OFF
 %cmake_build
-
 %check
-%ctest
 
+%ctest
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.md CHANGELOG.md
-%license LICENSE.txt
-%{_libdir}/lib%{richname}.so.0*
-
-%files devel
-%{_includedir}/%{richname}
-%{_libdir}/cmake/%{richname}
-%{_libdir}/lib%{richname}.so
-%{_datadir}/%{richname}
+%files -f %{oreon_filedir}/main.list
+%files -n sqlitecpp-devel -f %{oreon_filedir}/sqlitecpp-devel.list
 
 %changelog
+
 %autochangelog

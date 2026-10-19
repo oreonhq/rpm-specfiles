@@ -1,44 +1,36 @@
 %global source0_hash 0a5aa5953ab65cf790681e6c0452e318ad57d80ac27f575f84918c603aa47406
-
-# Perform optional tests
 %bcond_without perl_DBD_Mock_enabled_optional_test
-
 Name:           perl-DBD-Mock
 Version:        1.59
-Release:        15%{?dist}
+Release:        1%{?dist}
 Summary:        Mock database driver for testing
-# Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DBD-Mock
 Source0:        https://cpan.metacpan.org/authors/id/J/JL/JLCOOPER/DBD-Mock-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.8.1
-BuildRequires:  perl(Config)
-BuildRequires:  perl(Module::Build::Tiny) >= 0.035
-BuildRequires:  perl(strict)
-# Run-time
-BuildRequires:  perl(constant)
-BuildRequires:  perl(DBI) >= 1.3
-BuildRequires:  perl(List::Util) >= 1.27
-BuildRequires:  perl(warnings)
-# Tests
-BuildRequires:  perl(Test::Exception) >= 0.31
-BuildRequires:  perl(Test::More) >= 0.47
 %if %{with perl_DBD_Mock_enabled_optional_test}
-# Optional tests
-BuildRequires:  perl(Test::Pod) >= 1.14
-BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
 %endif
 Requires:       perl(DBI) >= 1.3
 Requires:       perl(List::Util) >= 1.27
-
-# Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((DBI|List::Util|Test::Exception|Test::More)\\)$
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(DBI)
+BuildRequires:  perl(List::Util)
+BuildRequires:  perl(Module::Build::Tiny)
+BuildRequires:  perl(Test::Exception)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(Test::Pod::Coverage)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Testing with databases can be tricky. If you are developing a system married
 to a single database then you can make some assumptions about your environment
@@ -60,12 +52,12 @@ Requires:       perl(Test::More) >= 0.47
 %if %{with perl_DBD_Mock_enabled_optional_test}
 Requires:       perl(Test::Pod::Coverage) >= 1.04
 %endif
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n DBD-Mock-%{version}
@@ -79,41 +71,34 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Build.PL --installdirs=vendor
 ./Build
-
 %install
 find blib/libdoc -type f -empty -delete
 ./Build install --destdir=%{buildroot} --create_packlist=0
-# Install tests
 mkdir -p %{buildroot}/%{_libexecdir}/%{name}
 cp -a t %{buildroot}/%{_libexecdir}/%{name}
 %if %{with perl_DBD_Mock_enabled_optional_test}
 rm %{buildroot}/%{_libexecdir}/%{name}/t/998_pod.t
 %endif
 cat > %{buildroot}/%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 set -e
 unset REPORT_TEST_ENVIRONMENT
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}/%{_libexecdir}/%{name}/test
-# Correct permissions
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 unset REPORT_TEST_ENVIRONMENT
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 ./Build test
-
-%files
-%license LICENSE
-%doc Changes CONTRIBUTING.md README.md
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-DBD-Mock-tests -f %{oreon_filedir}/perl-DBD-Mock-tests.list
 
 %changelog
+
 %autochangelog

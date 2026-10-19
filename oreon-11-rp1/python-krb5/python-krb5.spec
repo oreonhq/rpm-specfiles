@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 8f4711a0ab11ee43fda567371ef6d9487afdbd4f156ca093e8fb306f4cc685ae
 Name:           python-krb5
 Version:        0.10.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Kerberos API bindings for Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jborean93/pykrb5
-Source:         %{pypi_source krb5}
-
+Source0:        https://files.pythonhosted.org/packages/source/k/krb5/krb5-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'krb5' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(cython) == 3.3.0
+BuildRequires:  python3dist(setuptools) >= 42.0.0
+Requires:       python3-krb5 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-krb5
-Summary:        %{summary}
-
-%description -n python3-krb5 %_description
-
+Summary:        Kerberos API bindings for Python
+%description -n python3-krb5
 
 %prep
-%autosetup -p1 -n krb5-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir krb5-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-krb5 usr/lib/python3*/site-packages/krb5* usr/lib64/python3*/site-packages/krb5* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/krb5* usr/lib64/python3*/site-packages/krb5* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-krb5 -f %{pyproject_files}
+%files
+%files -n python3-krb5 -f %{oreon_filedir}/python3-krb5.list
 
 %changelog
+
 %autochangelog

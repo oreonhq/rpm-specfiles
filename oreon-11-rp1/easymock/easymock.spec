@@ -1,5 +1,4 @@
 %global source0_hash 323603483db8574eeda542c19e8257562e185be31d7f3454b4770d0bd2fca8b6
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,24 +80,23 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           easymock
 Version:        5.7.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Easy mock objects
 License:        Apache-2.0
 URL:            https://www.easymock.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-# ./generate-tarball.sh
 Source0:        https://github.com/easymock/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/easymock-%{version}.tar.gz
-# Remove bundled binaries which cannot be easily verified for licensing
-# Forwarded: https://github.com/easymock/easymock/pull/807
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+%if %{without bootstrap}
+%endif
+Obsoletes:      %{name}-javadoc < 4.3-23
+Provides:       %{name}3 = %{version}-%{release}
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(net.bytebuddy:byte-buddy)
@@ -106,21 +104,14 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-remote-resources-plugin)
 BuildRequires:  mvn(org.apache.maven.surefire:surefire-junit-platform)
 BuildRequires:  mvn(org.apache.maven.surefire:surefire-testng)
+BuildRequires:  mvn(org.apache:apache-jar-resource-bundle)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
 BuildRequires:  mvn(org.junit.vintage:junit-vintage-engine)
 BuildRequires:  mvn(org.objenesis:objenesis)
 BuildRequires:  mvn(org.ow2.asm:asm)
 BuildRequires:  mvn(org.testng:testng)
-%endif
-%if %{without bootstrap}
-# xmvn-builddep misses this:
-BuildRequires:  mvn(org.apache:apache-jar-resource-bundle)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 4.3-23
-Provides:       %{name}3 = %{version}-%{release}
-
+# /oreon:deps
 %description
 EasyMock provides Mock Objects for interfaces in JUnit tests by generating
 them on the fly using Java's proxy mechanism. Due to EasyMock's unique style
@@ -128,9 +119,9 @@ of recording expectations, most refactorings will not affect the Mock Objects.
 So EasyMock is a perfect fit for Test-Driven Development.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{name}-%{version}
-
 
 %pom_remove_plugin -r :maven-javadoc-plugin
 %pom_remove_plugin -r :maven-source-plugin
@@ -178,13 +169,14 @@ rm core/src/test/java/org/easymock/tests2/ClassExtensionHelperTest.java
     <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED</argLine></configuration>"
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license core/LICENSE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

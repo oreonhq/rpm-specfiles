@@ -1,57 +1,50 @@
-%global source0_hash none
-
+%global source0_hash ca7bb7bc8c6ff441fbf53921b5537668000e38d56e28d763a1b73975c66c6138
 Name:           python-cookiecutter
 Version:        2.7.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A command-line utility that creates projects from project templates, e.g. creating a Python package project from a Python package project template.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/cookiecutter/cookiecutter
-Source:         %{pypi_source cookiecutter}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/cookiecutter/cookiecutter-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'cookiecutter' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-cookiecutter = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-cookiecutter
-Summary:        %{summary}
-
-%description -n python3-cookiecutter %_description
-
+Summary:        A command-line utility that creates projects from project templates, e.g. creating a Python package project from a Python package project template.
+# oreon:reqs
+Requires:       python3dist(binaryornot) >= 0.4.4
+Requires:       python3dist(click) < 9.0.0
+Requires:       python3dist(click) >= 7.0
+Requires:       python3dist(jinja2) < 4.0.0
+Requires:       python3dist(jinja2) >= 2.7
+Requires:       python3dist(python-slugify) >= 4.0.0
+Requires:       python3dist(pyyaml) >= 5.3.1
+Requires:       python3dist(requests) >= 2.23.0
+# /oreon:reqs
+%description -n python3-cookiecutter
 
 %prep
-%autosetup -p1 -n cookiecutter-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir cookiecutter-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-cookiecutter usr/lib/python3*/site-packages/cookiecutter* usr/lib64/python3*/site-packages/cookiecutter* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cookiecutter* usr/lib64/python3*/site-packages/cookiecutter* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-cookiecutter -f %{pyproject_files}
-%{_bindir}/cookiecutter
+%files
+%files -n python3-cookiecutter -f %{oreon_filedir}/python3-cookiecutter.list
 
 %changelog
+
 %autochangelog

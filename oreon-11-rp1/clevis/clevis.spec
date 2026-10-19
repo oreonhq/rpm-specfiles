@@ -1,47 +1,12 @@
 %global source0_hash 466e9e87fddeb2531259cacd8e19de23cef7c6992ee835a643dad585fc45018f
-
 Name:           clevis
 Version:        23
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Automated decryption framework
-
 License:        GPL-3.0-or-later
 URL:            https://github.com/latchset/%{name}
 Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1:        clevis.sysusers
-
-
-BuildRequires:  git-core
-BuildRequires:  gcc
-BuildRequires:  meson
-BuildRequires:  asciidoc
-BuildRequires:  ninja-build
-BuildRequires:  bash-completion
-BuildRequires:  bash-completion-devel
-
-BuildRequires:  libjose-devel >= 8
-BuildRequires:  libluksmeta-devel >= 8
-BuildRequires:  audit-libs-devel
-BuildRequires:  libudisks2-devel
-BuildRequires:  openssl-devel
-
-BuildRequires:  tpm2-tools >= 4.0.0
-BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig
-BuildRequires:  systemd
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  dracut
-BuildRequires:  tang >= 6
-BuildRequires:  curl
-BuildRequires:  luksmeta
-BuildRequires:  openssl
-BuildRequires:  diffutils
-BuildRequires:  cryptsetup
-BuildRequires:  jq
-BuildRequires:  pcsc-lite
-BuildRequires:  opensc
-
-
 Requires:       tpm2-tools >= 4.0.0
 Requires:       coreutils
 Requires:       jose >= 8
@@ -49,7 +14,35 @@ Requires:       curl
 Requires:       jq
 Requires(post): systemd
 Requires:       clevis-pin-tpm2
-
+# oreon:deps
+BuildRequires:  asciidoc
+BuildRequires:  audit-libs-devel
+BuildRequires:  bash-completion
+BuildRequires:  bash-completion-devel
+BuildRequires:  cryptsetup
+BuildRequires:  curl
+BuildRequires:  desktop-file-utils
+BuildRequires:  diffutils
+BuildRequires:  dracut
+BuildRequires:  gcc
+BuildRequires:  git-core
+BuildRequires:  jq
+BuildRequires:  libjose-devel
+BuildRequires:  libluksmeta-devel
+BuildRequires:  libudisks2-devel
+BuildRequires:  luksmeta
+BuildRequires:  meson
+BuildRequires:  ninja-build
+BuildRequires:  opensc
+BuildRequires:  openssl
+BuildRequires:  openssl-devel
+BuildRequires:  pcsc-lite
+BuildRequires:  pkgconfig
+BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  tang
+BuildRequires:  tpm2-tools
+# /oreon:deps
 %description
 Clevis is a framework for automated decryption. It allows you to encrypt
 data using sophisticated unlocking policies which enable decryption to
@@ -66,7 +59,6 @@ Summary:        LUKS integration for clevis
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       cryptsetup
 Requires:       luksmeta >= 8
-
 %description luks
 LUKS integration for clevis. This package allows you to bind a LUKS
 volume to a clevis unlocking policy. For automated unlocking, an unlocker
@@ -75,20 +67,7 @@ will also be required. See, for example, clevis-dracut and clevis-udisks2.
 %package systemd
 Summary:        systemd integration for clevis
 Requires:       %{name}-luks%{?_isa} = %{version}-%{release}
-%if 0%{?fedora} > 27
-Requires:       systemd%{?_isa} >= 235-3
-%else
-%if 0%{?fedora} == 27
-Requires:       systemd%{?_isa} >= 234-9
-%else
-%if 0%{?fedora} == 26
-Requires:       systemd%{?_isa} >= 233-7
-%else
 Requires:       systemd%{?_isa} >= 236
-%endif
-%endif
-%endif
-
 %description systemd
 Automatically unlocks LUKS _netdev block devices from /etc/crypttab.
 
@@ -96,14 +75,12 @@ Automatically unlocks LUKS _netdev block devices from /etc/crypttab.
 Summary:        Dracut integration for clevis
 Requires:       %{name}-systemd%{?_isa} = %{version}-%{release}
 Requires:       dracut-network
-
 %description dracut
 Automatically unlocks LUKS block devices in early boot.
 
 %package udisks2
 Summary:        UDisks2/Storaged integration for clevis
 Requires:       %{name}-luks%{?_isa} = %{version}-%{release}
-
 %description udisks2
 Automatically unlocks LUKS block devices in desktop environments that
 use UDisks2 or storaged (like GNOME).
@@ -117,107 +94,41 @@ Requires:       pcsc-lite
 Requires:       opensc
 Requires:       socat
 Requires:       openssl
-
 %description pin-pkcs11
 Automatically unlocks LUKS block devices through a PKCS#11 device.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git
-
+%oreon_prep
 %build
+
 %meson -Duser=clevis -Dgroup=clevis
 %meson_build
-
 %install
 %meson_install
 install -p -D -m 0644 %{SOURCE1} %{buildroot}%{_sysusersdir}/clevis.conf
+%oreon_autofiles clevis-luks usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles clevis-systemd usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles clevis-dracut usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles clevis-udisks2 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles clevis-pin-pkcs11 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate \
   %{buildroot}/%{_sysconfdir}/xdg/autostart/%{name}-luks-udisks2.desktop
 %meson_test
-
-%files
-%license COPYING
-%{_datadir}/bash-completion/
-%{_bindir}/%{name}-decrypt-tang
-%{_bindir}/%{name}-decrypt-tpm2
-%{_bindir}/%{name}-decrypt-sss
-%{_bindir}/%{name}-decrypt-null
-%{_bindir}/%{name}-decrypt
-%{_bindir}/%{name}-encrypt-tang
-%{_bindir}/%{name}-encrypt-tpm2
-%{_bindir}/%{name}-encrypt-sss
-%{_bindir}/%{name}-encrypt-null
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}-encrypt-tang.1*
-%{_mandir}/man1/%{name}-encrypt-tpm2.1*
-%{_mandir}/man1/%{name}-encrypt-sss.1*
-%{_mandir}/man1/%{name}-decrypt.1*
-%{_mandir}/man1/%{name}.1*
-%{_sysusersdir}/clevis.conf
-
-%files luks
-%{_mandir}/man7/%{name}-luks-unlockers.7*
-%{_mandir}/man1/%{name}-luks-unlock.1*
-%{_mandir}/man1/%{name}-luks-unbind.1*
-%{_mandir}/man1/%{name}-luks-bind.1*
-%{_mandir}/man1/%{name}-luks-list.1.*
-%{_mandir}/man1/%{name}-luks-edit.1.*
-%{_mandir}/man1/%{name}-luks-regen.1.*
-%{_mandir}/man1/%{name}-luks-report.1.*
-%{_mandir}/man1/%{name}-luks-pass.1.*
-%{_bindir}/%{name}-luks-unlock
-%{_bindir}/%{name}-luks-unbind
-%{_bindir}/%{name}-luks-bind
-%{_bindir}/%{name}-luks-common-functions
-%{_bindir}/%{name}-luks-list
-%{_bindir}/%{name}-luks-edit
-%{_bindir}/%{name}-luks-regen
-%{_bindir}/%{name}-luks-report
-%{_bindir}/%{name}-luks-pass
-
-%files systemd
-%{_libexecdir}/%{name}-luks-askpass
-%{_libexecdir}/%{name}-luks-unlocker
-%{_unitdir}/%{name}-luks-askpass.path
-%{_unitdir}/%{name}-luks-askpass.service
-
-%files dracut
-%dir %{_prefix}/lib/dracut/modules.d/60%{name}
-%{_prefix}/lib/dracut/modules.d/60%{name}/clevis-hook.sh
-%{_prefix}/lib/dracut/modules.d/60%{name}/module-setup.sh
-%dir %{_prefix}/lib/dracut/modules.d/60%{name}-pin-null
-%{_prefix}/lib/dracut/modules.d/60%{name}-pin-null/module-setup.sh
-%dir %{_prefix}/lib/dracut/modules.d/60%{name}-pin-sss
-%{_prefix}/lib/dracut/modules.d/60%{name}-pin-sss/module-setup.sh
-%dir %{_prefix}/lib/dracut/modules.d/60%{name}-pin-tang
-%{_prefix}/lib/dracut/modules.d/60%{name}-pin-tang/module-setup.sh
-%dir %{_prefix}/lib/dracut/modules.d/60%{name}-pin-tpm2
-%{_prefix}/lib/dracut/modules.d/60%{name}-pin-tpm2/module-setup.sh
-
-%files udisks2
-%{_sysconfdir}/xdg/autostart/%{name}-luks-udisks2.desktop
-%attr(4755, root, root) %{_libexecdir}/%{name}-luks-udisks2
-
-%files pin-pkcs11
-%{_libexecdir}/%{name}-luks-pkcs11-askpass
-%{_libexecdir}/%{name}-luks-pkcs11-askpin
-%{_bindir}/%{name}-decrypt-pkcs11
-%{_bindir}/%{name}-encrypt-pkcs11
-%{_bindir}/%{name}-pkcs11-afunix-socket-unlock
-%{_bindir}/%{name}-pkcs11-common
-%{_unitdir}/%{name}-luks-pkcs11-askpass.service
-%{_unitdir}/%{name}-luks-pkcs11-askpass.socket
-%{_mandir}/man1/%{name}-encrypt-pkcs11.1*
-%dir %{_prefix}/lib/dracut/modules.d/60%{name}-pin-pkcs11
-%{_prefix}/lib/dracut/modules.d/60%{name}-pin-pkcs11/module-setup.sh
-%{_prefix}/lib/dracut/modules.d/60%{name}-pin-pkcs11/%{name}-pkcs11-hook.sh
-%{_prefix}/lib/dracut/modules.d/60%{name}-pin-pkcs11/%{name}-pkcs11-prehook.sh
-
 %post systemd
+
 systemctl preset %{name}-luks-askpass.path >/dev/null 2>&1 || :
+%files -f %{oreon_filedir}/main.list
+%files -n clevis-luks -f %{oreon_filedir}/clevis-luks.list
+%files -n clevis-systemd -f %{oreon_filedir}/clevis-systemd.list
+%files -n clevis-dracut -f %{oreon_filedir}/clevis-dracut.list
+%files -n clevis-udisks2 -f %{oreon_filedir}/clevis-udisks2.list
+%files -n clevis-pin-pkcs11 -f %{oreon_filedir}/clevis-pin-pkcs11.list
 
 %changelog
+
 %autochangelog

@@ -1,63 +1,56 @@
-%global source0_hash none
-
+%global source0_hash 27485fd687c678894fb193e8f9f5116651a0bfc19dccea164d7d5df83b4e9a82
 Name:           python-array-api-strict
 Version:        2.6.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A strict, minimal implementation of the Python array API standard.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://data-apis.org/array-api-strict/
-Source:         %{pypi_source array_api_strict}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/array_api_strict/array_api_strict-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'array-api-strict' generated automatically by pyp2spec.}
-
 Patch:          Fix-test_iter-with-Python-3.14-beta-1.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) <= 75
+BuildRequires:  python3dist(setuptools) >= 61.0
+BuildRequires:  python3dist(setuptools-scm) < 10
+BuildRequires:  python3dist(setuptools-scm) > 8
+Requires:       python3-array-api-strict = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-array-api-strict+test
+Summary:        Metapackage for python3-array-api-strict test extras
+Requires:       python3-array-api-strict = %{version}-%{release}
+Provides:       python3dist(array-api-strict[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-array-api-strict+test
+Metapackage for python3-array-api-strict test extras.
+
+%description
 
 %package -n     python3-array-api-strict
-Summary:        %{summary}
-
-%description -n python3-array-api-strict %_description
+Summary:        A strict, minimal implementation of the Python array API standard.
+%description -n python3-array-api-strict
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-array-api-strict test
-
 
 %prep
-%autosetup -p1 -n array_api_strict-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir array_api_strict-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-array-api-strict usr/lib/python3*/site-packages/array_api_strict* usr/lib64/python3*/site-packages/array_api_strict* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/array_api_strict* usr/lib64/python3*/site-packages/array_api_strict* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-array-api-strict -f %{pyproject_files}
+%files
+%files -n python3-array-api-strict -f %{oreon_filedir}/python3-array-api-strict.list
 
 %changelog
+
 %autochangelog

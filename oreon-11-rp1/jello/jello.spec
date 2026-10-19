@@ -1,19 +1,17 @@
 %global source0_hash ef6c8906270a82f062bfbd5dd5af1b14c7d6e4c77aa436cae483e28be6942383
-
 Name:           jello
 Version:        1.6.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Query JSON at the command line with Python syntax
-
-# SPDX
 License:        MIT
 URL:            https://github.com/kellyjonbrazil/jello
-# GitHub archive contains tests; PyPI sdist does not.
-Source:         %{url}/archive/v%{version}/jello-%{version}.tar.gz
-
+Source0:        https://github.com/kellyjonbrazil/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-jello = %{version}-%{release}
+# /oreon:deps
 %description
 Query, filter, and transform JSON and JSON Lines at the command line with
 Python syntax.
@@ -21,23 +19,18 @@ Python syntax.
 %install
 %pyproject_install
 install -t '%{buildroot}%{_mandir}/man1' -D -p -m 0644 man/*
+%oreon_autofiles main
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %pyproject_wheel
-
 %check
+
 %{py3_test_envvars} ./runtests.sh
-
-%files -f %{pyproject_files}
-%doc ADVANCED_USAGE.md
-%doc CHANGELOG
-%doc README.md
-
-%{_bindir}/jello
-%{_mandir}/man1/jello.1*
+%files
 
 %changelog
+
 %autochangelog

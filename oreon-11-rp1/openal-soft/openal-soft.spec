@@ -1,91 +1,32 @@
 %global source0_hash 1dbaac44e7579d5bc8847ca8db4b2e8b9fd3961041f35ee20def4958301e1089
-
 Name:           openal-soft
 Version:        1.25.2
 Release:        1%{?dist}
 Summary:        Software implementation of the OpenAL 3D audio API
-
-# LGPL-2.0-or-later: Main library
-# BSD-3-Clause:
-#  - alc/effects/compressor.cpp
-#  - alc/effects/vmorpher.cpp
-# CC-BY-NC-SA-3.0 : -> NOT FREE
-#  - utils/SCUT_KEMAR.def
-# GPL-2.0-or-later:
-#  - utils/sofa-info.cpp
-#  - utils/sofa-support.cpp
-#  - utils/makemhr/loaddef.cpp
-#  - utils/makemhr/loadsofa.cpp
-#  - utils/makemhr/makemhr.cpp
-# Apache-2.0:
-#  - alc/backends/opensl.cpp
-# (LGPL-2.0-or-later AND BSD-3-Clause):
-#  - alc/alu.cpp
-# NCL:
-#  - common/pffft.cpp
-#  - common/pffft.h
-# MIT:
-#  - common/filesystem.cpp
-#  - common/filesystem.h
-#  - common/ghc_filesystem.h
-#  - core/bs2b.cpp
-#  - core/bs2b.h
-#  - core/rtkit.cpp
-#  - core/rtkit.h
-#  - examples/
-#  - utils/openal-info.c
-#  - utils/uhjdecoder.cpp
-#  - utils/uhjencoder.cpp
-#  - support/docopt.py
-#  - support/printable.py
-# LicenseRef-Fedora-Public-Domain
-#  - core/cubic_tables.cpp
-# source of claim:
-# These gaussian filter tables are inspired by the gaussian-like filter found
-# in the SNES. This is based on the public domain code developed by Near, with
-# the help of Ryphecha and nocash, from the nesdev.org forums.
-# 
-# https://forums.nesdev.org/viewtopic.php?p=251534#p251534>
-# Archival:
-#  - https://archive.is/wViJG
-# Close license review regarding datasets:
-# https://gitlab.com/fedora/legal/fedora-license-data/-/issues/629
-# https://gitlab.com/fedora/legal/fedora-license-data/-/issues/635
-# https://gitlab.com/fedora/legal/fedora-license-data/-/issues/636
-# https://gitlab.com/fedora/legal/fedora-license-data/-/issues/638
 License:        LGPL-2.0-or-later AND BSD-3-Clause AND GPL-2.0-or-later AND Apache-2.0 AND (LGPL-2.0-or-later AND BSD-3-Clause) AND (MIT WITH fmt-exception) AND NCL AND MIT AND LicenseRef-Fedora-Public-Domain
 URL:            https://openal-soft.org/
 VCS:            https://github.com/kcat/openal-soft
-# Source without non free datasets (Fedora f43 lookaside; same as SRPM)
-Source:        https://openal-soft.org/openal-releases/openal-soft-%{version}.tar.bz2
-Source:         make_tarball.sh
-# Patch to unbundle fmt
+Source0:        https://openal-soft.org/openal-releases/openal-soft-%{version}.tar.bz2
 Patch:          0001-Unbundle-fmt.diff
-
-# Implicit dependencies for the unbundling script: curl, rpm-build, tar.
+%if 0%{?fedora} || 0%{?oreon} >= 11 || (0%{?rhel} > 0 && 0%{?rhel} >= 9)
+%endif
+%if (0%{?fedora} || (0%{?rhel} > 0 && 0%{?rhel} <= 9)) && 0%{?oreon} < 11
+%endif
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(fmt)
 BuildRequires:  pkgconfig(jack)
 BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libpipewire-0.3)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(sdl2)
 BuildRequires:  pkgconfig(sndfile)
-%if 0%{?fedora}
-BuildRequires:  pkgconfig(libavcodec)
-BuildRequires:  pkgconfig(libmysofa)
-BuildRequires:  pkgconfig(portaudio-2.0)
-%endif
-%if 0%{?fedora} || 0%{?oreon} >= 11 || (0%{?rhel} > 0 && 0%{?rhel} >= 9)
-BuildRequires:  pkgconfig(libpipewire-0.3)
-%endif
-%if (0%{?fedora} || (0%{?rhel} > 0 && 0%{?rhel} <= 9)) && 0%{?oreon} < 11
-BuildRequires:  pkgconfig(Qt5Widgets)
-%endif
-
+# /oreon:deps
 %description
 OpenAL Soft is an LGPL-licensed, cross-platform, software implementation of the 
 OpenAL 3D audio API. It's forked from the open-sourced Windows version available 
@@ -99,7 +40,6 @@ also facilitates streaming audio, multi-channel buffers, and audio capture.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description    devel 
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -107,7 +47,6 @@ developing applications that use %{name}.
 %package        examples
 Summary:        Sample applications for OpenAl Soft
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description	examples
 Sample applications for OpenAl Soft.
 
@@ -115,19 +54,20 @@ Sample applications for OpenAl Soft.
 %package        qt
 Summary:        Qt frontend for configuring OpenAL Soft
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description    qt
 The %{name}-qt package contains alsoft-config, a Qt-based tool
 for configuring OpenAL features.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 rm -rf fmt-*/
 rm -f utils/*.def
 
 %build
+
 %cmake -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DALSOFT_CPUEXT_NEON:BOOL=OFF \
@@ -138,52 +78,18 @@ rm -f utils/*.def
     -DALSOFT_INSTALL_HRTF_DATA:BOOL=ON \
     -DALSOFT_INSTALL_UTILS:BOOL=ON
 %cmake_build
-
 %install
 %cmake_install
-
 install -Dpm644 alsoftrc.sample %{buildroot}%{_sysconfdir}/openal/alsoft.conf
-# Don't pin the pulseaudio stream to a specific output device
 sed -i 's/#allow-moves = false/allow-moves = true/' \
   %{buildroot}%{_sysconfdir}/openal/alsoft.conf
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license BSD-3Clause COPYING LICENSE-pffft
-%doc README.md ChangeLog
-%dir %{_sysconfdir}/openal
-%config(noreplace) %{_sysconfdir}/openal/alsoft.conf
-%{_bindir}/openal-info
-%{_datadir}/openal
-%exclude %{_datadir}/openal/alsoftrc.sample
-%exclude %{_datadir}/openal/presets/presets.txt
-%{_libdir}/libopenal.so.1*
-
-%files devel
-%if 0%{?fedora}
-%{_bindir}/makemhr
-%endif
-%{_includedir}/AL
-%{_libdir}/cmake/OpenAL
-%{_libdir}/libopenal.so
-%{_libdir}/pkgconfig/openal.pc
-
-%files examples
-%{_bindir}/aldebug
-%{_bindir}/aldirect
-%{_bindir}/alhrtf
-%{_bindir}/allafplay
-%{_bindir}/allatency
-%{_bindir}/almultireverb
-%{_bindir}/alplay
-%{_bindir}/alrecord
-%{_bindir}/alreverb
-%{_bindir}/alstream
-%{_bindir}/altonegen
-
-%if (0%{?fedora} || (0%{?rhel} > 0 && 0%{?rhel} <= 9)) && 0%{?oreon} < 11
-%files qt
-%{_bindir}/alsoft-config
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n openal-soft-devel -f %{oreon_filedir}/openal-soft-devel.list
+%files -n openal-soft-examples -f %{oreon_filedir}/openal-soft-examples.list
+%files -n openal-soft-qt -f %{oreon_filedir}/openal-soft-qt.list
 
 %changelog
+
 %autochangelog

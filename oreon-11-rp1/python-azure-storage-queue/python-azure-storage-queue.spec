@@ -1,62 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 6eb108a88554be371feb2eba9715fa0e3f7baca7b3f00c19ec417fc7ce5b3834
 Name:           python-azure-storage-queue
 Version:        12.17.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Microsoft Azure Azure Queue Storage Client Library for Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/storage/azure-storage-queue
-Source:         %{pypi_source azure_storage_queue}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/azure_storage_queue/azure_storage_queue-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'azure-storage-queue' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-azure-storage-queue = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-azure-storage-queue
-Summary:        %{summary}
-
-%description -n python3-azure-storage-queue %_description
+Summary:        Microsoft Azure Azure Queue Storage Client Library for Python
+%description -n python3-azure-storage-queue
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-azure-storage-queue aio
-
 
 %prep
-%autosetup -p1 -n azure_storage_queue-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir azure_storage_queue-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-azure-storage-queue usr/lib/python3*/site-packages/azure_storage_queue* usr/lib64/python3*/site-packages/azure_storage_queue* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/azure_storage_queue* usr/lib64/python3*/site-packages/azure_storage_queue* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-azure-storage-queue -f %{pyproject_files}
+%files
+%files -n python3-azure-storage-queue -f %{oreon_filedir}/python3-azure-storage-queue.list
 
 %changelog
+
 %autochangelog

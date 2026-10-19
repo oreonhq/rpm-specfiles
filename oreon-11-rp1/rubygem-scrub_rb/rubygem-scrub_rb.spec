@@ -1,26 +1,17 @@
 %global source0_hash 7d346064704379f9e793f926680b01901e99e3898bcd24635427f081f8188f37
-
 %global	gem_name	scrub_rb
-
 Name:		rubygem-%{gem_name}
 Version:	1.0.1
-Release:	23%{?dist}
-Summary:	Pure-ruby polyfill of MRI 2.1 String#scrub
-
+Release:        23%{?dist}
+Summary:        Pure-ruby polyfill of MRI 2.1 String#scrub
 License:	MIT
 URL:		https://github.com/jrochkind/scrub_rb
-Source0:	https://rubygems.org/gems/%{gem_name}-%{version}.gem
-
-BuildRequires:	rubygems-devel
-BuildRequires:	rubygem(minitest) < 5
-%if 0%{?fedora} < 21
-Requires:	ruby(release)
-Requires:	ruby(rubygems)
-Provides:	rubygem(%{gem_name}) = %{version}
-%endif
-
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 BuildArch:	noarch
-
+# oreon:deps
+BuildRequires:  rubygem(minitest)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 This gem provides a pure-ruby implementation of 
 `String#scrub` and `#scrub!`, monkey-patched into
@@ -30,11 +21,11 @@ String, that should work on any ruby platform.
 Summary:	Documentation for %{name}
 Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 gem unpack %{SOURCE0}
@@ -44,16 +35,13 @@ gem unpack %{SOURCE0}
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
 
 %build
+
 gem build %{gem_name}.gemspec
-
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
 	%{buildroot}%{gem_dir}/
-
-# Cleanups
 pushd %{buildroot}%{gem_instdir}
 rm -rf \
 	.gitignore .travis.yml \
@@ -63,38 +51,19 @@ rm -rf \
 	benchmark/ \
 	test/
 popd
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-pushd .%{gem_instdir}
 
+pushd .%{gem_instdir}
 sed -i -e "2i gem 'minitest', '~> 4'" \
 	test/*_test.rb
-
-# As written on borrowed_string_scrub_test.rb
 ruby -Ilib:. -e \
 	"Dir.glob('test/*_test.rb').each {|f| require f}" \
-%if 0%{?fedora} >= 21
-	|| \
-ruby -Ilib:. -e \
-	"Dir.glob('test/*_test.rb').each \
-	{|f| require f unless /borrowed_string_scrub_test/ =~ f}"
-%else
-
-%endif
-
 popd
-
-%files
-%dir	%{gem_instdir}
-%doc	%{gem_instdir}/README.md
-%license	%{gem_instdir}/LICENSE.txt
-
-%{gem_libdir}
-%{gem_spec}
-%exclude	%{gem_cache}
-
-%files doc
-%doc	%{gem_docdir}
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-scrub_rb-doc -f %{oreon_filedir}/rubygem-scrub_rb-doc.list
 
 %changelog
+
 %autochangelog

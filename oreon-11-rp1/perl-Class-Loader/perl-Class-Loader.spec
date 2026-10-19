@@ -1,30 +1,25 @@
 %global source0_hash 4fef2076ead60423454ff1f4e82859a9a9b9942b5fb8eee0c98b9c63c9f2b8e7
-
-Summary:	Load modules and create objects on demand
+Summary:        Load modules and create objects on demand
 Name:		perl-Class-Loader
 Version:	2.03
-Release:	53%{?dist}
+Release:        53%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Class-Loader
-Source0:	https://cpan.metacpan.org/modules/by-module/Class/Class-Loader-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Loader-%{version}.tar.gz
 BuildArch:	noarch
-# Build
-BuildRequires:	coreutils
-BuildRequires:	findutils
-BuildRequires:	make
-BuildRequires:	perl-generators
-BuildRequires:	perl-interpreter
-BuildRequires:	perl(ExtUtils::MakeMaker)
-BuildRequires:	sed
-# Module
-BuildRequires:	perl(Data::Dumper)
-BuildRequires:	perl(vars)
-# Test Suite
-BuildRequires:	perl(lib)
-BuildRequires:	perl(Test)
-# Dependencies
-# (none)
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  make
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(vars)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  sed
+# /oreon:deps
 %description
 Certain applications like to defer the decision to use a particular module till
 runtime. This is possible in perl, and is a useful trick in situations where
@@ -40,6 +35,7 @@ provides a way to map modules' names and associated metadata with symbolic
 names that can be used in place of module names at _load().
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Class-Loader-%{version}
@@ -48,22 +44,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e '/^#! *\/usr\/bin\/perl /d' lib/Class/*.pm
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor
 make %{?_smp_mflags}
-
 %install
 make pure_install DESTDIR=%{buildroot}
 find %{buildroot} -type f -name .packlist -delete
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%license ARTISTIC
-%doc Changes
-%{perl_vendorlib}/Class/
-%{_mandir}/man3/Class::Loader.3*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

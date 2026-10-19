@@ -1,63 +1,53 @@
 %global source0_hash 5821a7933f075fb47563417c0e92e0b7c031158b4c9a6a7e56163479b658b368
-
 %bcond_without tests
-
 %global pypi_name dotmap
-
-%global _description %{expand:
-DotMap is a dot-access dict subclass that has dynamic hierarchy
-creation (autovivification), can be initialized with keys, easily
-initializes from dict, easily converts to dict, is ordered by insertion.
-The key feature is exactly what you want: dot-access.}
-
 Name:           python-%{pypi_name}
 Version:        1.3.30
-Release:        16%{?dist}
+Release:        1%{?dist}
 Summary:        Dot access dictionary with dynamic hierarchy creation and ordered iteration
-
 License:        MIT
 URL:            https://github.com/drgrib/%{pypi_name}
-Source0:        %{pypi_source dotmap}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/dotmap/dotmap-%{version}.tar.gz
 BuildArch:      noarch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-dotmap = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-%{pypi_name}
-Summary:        %{summary}
-
+Summary:        Dot access dictionary with dynamic hierarchy creation and ordered iteration
 BuildRequires:  make
 BuildRequires:  python3-devel
-
 %if %{with tests}
 BuildRequires:  python3dist(pytest)
 %endif
-
-%description -n python3-%{pypi_name} %_description
+%description -n python3-%{pypi_name}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{pypi_name}-%{version}
 
-%generate_buildrequires
-%pyproject_buildrequires -r
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files dotmap
+%oreon_autofiles main usr/lib/python3*/site-packages/dotmap* usr/lib64/python3*/site-packages/dotmap* usr/bin/*
 
 %check
+
 %if %{with tests}
 python3 -m unittest
 %endif
-
-%files -n python3-dotmap -f %{pyproject_files}
 %license LICENSE.txt
 %doc README.md
+%files
+%files -n python3-dotmap -f %{oreon_filedir}/python3-dotmap.list
 
 %changelog
+
 %autochangelog

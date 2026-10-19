@@ -1,32 +1,24 @@
-%global source0_hash none
-
+%global source0_hash f9c69e86d290295467451b01d7838d85005ba613644a6fe8a3f85a7c6a03cd4c
 Name:           torcs
 Version:        1.3.9
 Release:        1%{?dist}
 Summary:        The Open Racing Car Simulator
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://torcs.org/
 Source0:        http://downloads.sf.net/torcs/torcs-%{version}.tar.bz2
 Source1:        torcs.png
-
-#Patch0:         torcs-1.3.8-isnan.patch
-#Patch1:         torcs-1.3.8-nullptr.patch
 Patch1:         torcs-1.3.8-abort-crash.patch
 Patch2:         format-argument.patch
 Patch3:         torcs-freeglut.patch
-
-BuildRequires: make
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
+Requires:       hicolor-icon-theme
+Requires:       torcs-data = %{version}
+# oreon:deps
 BuildRequires:  desktop-file-utils
 BuildRequires:  freealut-devel
 BuildRequires:  freeglut-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  libGL-devel
-BuildRequires:  libjpeg-devel
-BuildRequires:  libpng-devel
-BuildRequires:  libvorbis-devel
 BuildRequires:  libXext-devel
 BuildRequires:  libXi-devel
 BuildRequires:  libXmu-devel
@@ -34,48 +26,39 @@ BuildRequires:  libXrandr-devel
 BuildRequires:  libXrender-devel
 BuildRequires:  libXt-devel
 BuildRequires:  libXxf86vm-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  make
 BuildRequires:  openal-soft-devel
 BuildRequires:  plib-devel
 BuildRequires:  zlib-devel
-
-Requires:       hicolor-icon-theme
-Requires:       torcs-data = %{version}
-
+# /oreon:deps
 %description
 TORCS is a 3D racing cars simulator using OpenGL.  The goal is to have
 programmed robots drivers racing against each others.  You can also drive
 yourself with either a wheel, keyboard or mouse.
 
 %prep
+
 %autosetup -p1
 
 # Prevent useless executable files in the debuginfo package (as of 1.3.1)
 chmod -x src/libs/learning/policy.*
 
 %build
+
 %configure
 make
-
 %install
 %make_install
-
-# Icon for the desktop file
 install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/torcs.png
-
 mkdir -p %{buildroot}%{_datadir}/applications
 desktop-file-install \
     --remove-category Application \
     --add-category Simulation \
     --dir %{buildroot}%{_datadir}/applications \
     torcs.desktop
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/torcs.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -147,21 +130,11 @@ SentUpstream: 2014-05-22
   <url type="homepage">http://torcs.sourceforge.net/</url>
 </application>
 EOF
-
-# We need this for proper automatic stripping to take place (still in 1.3.0)
 find %{buildroot}%{_libdir}/torcs/ -name '*.so' | xargs %{__chmod} +x
+%oreon_autofiles main
 
-%files
-# Directory default mode of 0755 is MANDATORY, since installed dirs are 0777
-%defattr(-,root,root,0755)
-%license COPYING
-%doc README
-%{_bindir}/*
-%{_libdir}/torcs/
-%{_datadir}/appdata/torcs.appdata.xml
-%{_datadir}/applications/torcs.desktop
-%{_datadir}/games/torcs/
-%{_datadir}/icons/hicolor/48x48/apps/torcs.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,45 +1,37 @@
-%global source0_hash 90c0b9227cdf09c7634f5c4759fe57d2a70602587d8ecc41fe8ac36445a3bb4b
-
+%global source0_hash 1192a29a8ab7c8d7c371ead7866912ce5716ec8d6aefb8ca7b1a186fb97a1beb
 %bcond check 0
-
 Name:           python-git-changelog
 Version:        2.9.7
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Automatic Changelog generator using Jinja2 templates
 License:        ISC
 URL:            https://github.com/pawamoy/git-changelog
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/pawamoy/git-changelog/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 %if %{with check}
-BuildRequires:  python3dist(pytest)
-# griffe not packaged
-BuildRequires:  python3dist(griffe)
-# mkdocstrings not packaged
-BuildRequires:  python3dist(mkdocstrings)
-BuildRequires:  python3dist(pytest-gitconfig)
 %endif
-BuildRequires:  git-core
-
-%global _description %{expand:
-git-changelog parses your commit messages to extract useful data that is then
-rendered using Jinja2 templates, for example to a changelog file formatted in
-Markdown.
-
-Each Git tag will be treated as a version of your project. Each version contains
-a set of commits, and will be an entry in your changelog. Commits in each
-version will be grouped by sections, depending on the commit coonvention you
-follow.}
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-git-changelog = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-git-changelog
 Requires:       git-core
-Summary:        %{summary}
-
-%description -n python3-git-changelog %_description
+Summary:        Automatic Changelog generator using Jinja2 templates
+# oreon:reqs
+Requires:       python3dist(jinja2) >= 3.0
+Requires:       python3dist(packaging) >= 26.0
+Requires:       python3dist(platformdirs) >= 4.4
+Requires:       python3dist(semver) >= 3.0
+Requires:       python3dist(tomli) >= 2.0
+Requires:       python3dist(typing-extensions) >= 4.9
+# /oreon:reqs
+%description -n python3-git-changelog
 
 %prep
+
 %autosetup -n git-changelog-%{version} -S git
 sed -i 's/Jinja2>=[0-9]\+\.[0-9]\+/Jinja2/' pyproject.toml
 sed -i 's/platformdirs>=[0-9]\+\.[0-9]\+/platformdirs/' pyproject.toml
@@ -47,19 +39,20 @@ git tag %{version}
 
 %if %{with check}
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-git-changelog usr/lib/python3*/site-packages/git_changelog* usr/lib64/python3*/site-packages/git_changelog* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/git_changelog* usr/lib64/python3*/site-packages/git_changelog* usr/bin/*
 
 %check
+
 %pytest
 %endif
-
-%files -n python3-git-changelog -f %{pyproject_files}
-%doc README.md
-%license LICENSE
-%{_bindir}/git-changelog
+%files
+%files -n python3-git-changelog -f %{oreon_filedir}/python3-git-changelog.list
 
 %changelog
+
 %autochangelog

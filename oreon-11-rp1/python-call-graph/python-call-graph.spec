@@ -1,58 +1,43 @@
 %global source0_hash 24d49b1f348b6d85ab5ee886b240d38b983574e995bf38c18bbbe4c01865d950
-
 Name:           python-call-graph
 Version:        2.1.6
-Release:        %autorelease
-Summary:        Visualises the flow of your Python application 
-
+Release:        1%{?dist}
+Summary:        Visualises the flow of your Python application
 License:        GPL-2.0-only
 URL:            https://github.com/lewiscowles1986/py-call-graph/
-Source:         %{pypi_source python-call-graph}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/python-call-graph/python-call-graph-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-%global _description %{expand:
-This is a fork of the original, updated to work with Python 3.5 - 3.11 \
-and from 2.1.4 3.8 - 3.13 \
-See https://lewiscowles1986.github.io/py-call-graph/ for more information.}
-
-%description %_description
+Requires:       python3-call-graph = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-python-call-graph
-Summary:        %{summary}
-
-%description -n python3-python-call-graph %_description
-
-%pyproject_extras_subpkg -n python3-python-call-graph ipython,memory-psutil
+Summary:        Visualises the flow of your Python application
+%description -n python3-python-call-graph
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n python-call-graph-%{version}
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir python-call-graph-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files pycallgraph
-
 mkdir -p %{buildroot}%{_mandir}/man1/
 cp -pr man/pycallgraph.1 %{buildroot}%{_mandir}/man1/
+%oreon_autofiles python3-python-call-graph usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%pyproject_check_import
-# tests require calls module, which is not in Fedora and appears dormant upstream
 
-%files -n python3-python-call-graph -f %{pyproject_files}
-%{_bindir}/pycallgraph
-%{_mandir}/man1/pycallgraph.1*
+%pyproject_check_import
+%files
+%files -n python3-python-call-graph -f %{oreon_filedir}/python3-python-call-graph.list
 
 %changelog
+
 %autochangelog

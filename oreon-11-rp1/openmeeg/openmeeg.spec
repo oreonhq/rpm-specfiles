@@ -1,72 +1,41 @@
 %global source0_hash 29485a732e3555425889cfd28474fccd2b3e76b51bb694fc83d86ca052e70884
-
-# rhbz#2104109
 %bcond_with vtk
-#
-
 %bcond_without python
 %bcond_without hdf5
 %bcond_without matio
 %bcond_with cgal
 %bcond_without doc
 %bcond check 0
-
-# openmeeg is not correctly working on PPC64
-# https://github.com/openmeeg/openmeeg/issues/795
 %ifarch %{power64} 
 %bcond_without openblas
 %else
 %bcond_with openblas
 %endif
-
 %bcond_with debug
-
-# This package fails its testsuite with LTO.  Disable LTO for now
 %define _lto_cflags %{nil}
-
-## https://github.com/openmeeg/openmeeg/issues/346
 ExcludeArch: s390x
-
-#%%global relsuf rc4
-
 Name:    openmeeg
 Version: 2.5.16
-Release: %autorelease
-Summary: Low-frequency bio-electromagnetism solving forward problems in the field of EEG and MEG
+Release:        1%{?dist}
+Summary:        Low-frequency bio-electromagnetism solving forward problems in the field of EEG and MEG
 License: CeCILL-B
 URL:     http://openmeeg.github.io/
-Source0: https://github.com/%{name}/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:  %{name}-use_builtin_find_blas_lapack.patch
 Patch1:  %{name}-fix-cmake4.patch
-
-BuildRequires: make
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: gnuplot
-BuildRequires: graphviz
-BuildRequires: expat-devel
 %if %{with openblas}
-BuildRequires: openblas-devel
 %else
-BuildRequires: flexiblas-devel
 %endif
 %{?fedora:BuildRequires: gifticlib-devel}
 %{?fedora:BuildRequires: nifticlib-devel}
-BuildRequires: zlib-devel
 %if %{with hdf5}
-BuildRequires: hdf5-devel
 %endif
 %if %{with matio}
-BuildRequires: matio-devel
 %endif
 %if %{with vtk}
-BuildRequires: vtk-devel
 %endif
 %if %{with cgal}
-BuildRequires: CGAL-devel
 %endif
-
-# CGAL causes 'memory exhausted' error
 %global openmeeg_cmake_options \\\
 %if %{with debug} \
         -DCMAKE_BUILD_TYPE=Debug \\\
@@ -121,7 +90,28 @@ BuildRequires: CGAL-devel
 %else \
         -DBLAS_flexiblas_LIBRARY:FILEPATH=%{_libdir}/libflexiblas.so \\\
 %endif
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  expat-devel
+BuildRequires:  flexiblas-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gifticlib-devel
+BuildRequires:  gnuplot
+BuildRequires:  graphviz
+BuildRequires:  hdf5-devel
+BuildRequires:  make
+BuildRequires:  matio-devel
+BuildRequires:  nifticlib-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-numpy
+BuildRequires:  python3-pytest
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-setuptools_scm
+BuildRequires:  python3-wheel
+BuildRequires:  swig
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 The OpenMEEG software is a C++ package for solving the forward
 problems of electroencephalography (EEG) and magnetoencephalography (MEG).
@@ -161,6 +151,7 @@ BuildArch:      noarch
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -N -n %{name}-%{version}
@@ -171,25 +162,24 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P 1 -p1 -b .backup
 
 %build
+
 %if %{with debug}
 export CXXFLAGS="-O0 -g -fPIC"
 export CFLAGS="-O0 -g -fPIC"
 %endif
-
-# Force setuptools_scm to set dynamic version of Python OpenMEEG
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-
 %if %{with openblas}
 export CXXFLAGS="%{optflags} -I%{_includedir}/openblas"
 %endif
 %cmake %{openmeeg_cmake_options}
 %cmake_build
-
 %install
 %cmake_install
-
+%oreon_autofiles python3-openmeeg usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with check}
 %check
+
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 export PYTHONPATH=%{buildroot}%{python3_sitearch}/%{name}
 %if %{with debug}
@@ -200,29 +190,11 @@ export OPENMEEG_DATA_PATH=%{_builddir}/%{name}-%{version}/data
 %ctest
 %endif
 %endif
-
-%files
-%license LICENSE.txt
-%{_bindir}/om*
-%{_libdir}/libOpenMEEG*.so.1
-%{_libdir}/libOpenMEEG*.so.1.1.0
-
-%files devel
-%doc coding_guidelines.txt
-%{_libdir}/libOpenMEEG*.so
-%{_includedir}/%{name}/
-
-%if %{with python}
-%files -n python3-openmeeg
-%{python3_sitearch}/%{name}/
-%{python3_sitearch}/%{name}-%{version}.dist-info/
-%endif
-
-%if %{with doc}
-%files doc
-%license LICENSE.txt
-%{_docdir}/OpenMEEG/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n openmeeg-devel -f %{oreon_filedir}/openmeeg-devel.list
+%files -n python3-openmeeg -f %{oreon_filedir}/python3-openmeeg.list
+%files -n openmeeg-doc -f %{oreon_filedir}/openmeeg-doc.list
 
 %changelog
+
 %autochangelog

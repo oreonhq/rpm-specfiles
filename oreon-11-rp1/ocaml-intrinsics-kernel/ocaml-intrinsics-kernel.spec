@@ -1,23 +1,18 @@
-%global source0_hash c988b7769a59749631c3c98ba5edd1d2fe91f5dc380b5e0593c073c92f4bee01
-
+%global source0_hash a91df2e5038b7d5cc8cccbc2b3fd21fcc5acfffcf4e67792ccb4198c32d18562
 Name:           ocaml-intrinsics-kernel
 Version:        0.17.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        OCaml interface to CPU intrinsics
-
 License:        MIT
 URL:            https://github.com/janestreet/ocaml_intrinsics_kernel
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/ocaml_intrinsics_kernel-%{version}.tar.gz
-# Use the popcnt instruction only if the running CPU supports it
+Source0:        https://github.com/janestreet/ocaml_intrinsics_kernel/archive/v%{version}/ocaml_intrinsics_kernel-%{version}.tar.gz
 Patch:          %{name}-popcnt.patch
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch:    %{ix86}
-
-BuildRequires:  ocaml >= 5.1.0
-BuildRequires:  ocaml-dune >= 3.11.0
-
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-dune
+# /oreon:deps
 %description
 The ocaml_intrinsics_kernel library provides an OCaml interface to operations
 that have dedicated hardware instructions on some micro-architectures.
@@ -31,30 +26,27 @@ ocaml_intrinsics_kernel can be used by programs compiled to javascript.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n ocaml_intrinsics_kernel-%{version} -p1
-
+%global oreon_srcdir ocaml_intrinsics_kernel-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %dune_check
-
-%files -f .ofiles
-%doc README.md
-%license LICENSE.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-intrinsics-kernel-devel -f %{oreon_filedir}/ocaml-intrinsics-kernel-devel.list
 
 %changelog
+
 %autochangelog

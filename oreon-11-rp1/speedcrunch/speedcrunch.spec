@@ -1,43 +1,33 @@
 %global source0_hash 974cd4d940ea5bf412b1b81ca10193dd111a530dc54115b9ce7966a67b24bb3d
-
 %global appname org.speedcrunch.SpeedCrunch
 %global commit 3c1b4c18ccb275eb2891f9d8ff36a9205c0f566b
 %global date 20241202
-
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global tarballcommit %(c=%{commit}; echo ${c:0:12})
-
 Name:           speedcrunch
 Version:        0.12^%{date}git%{shortcommit}
-Release:        %autorelease
-
+Release:        1%{?dist}
 License:        GPL-2.0-or-later
 Summary:        A fast power user calculator
 URL:            https://bitbucket.org/heldercorreia/%{name}
-Source0:        %{url}/get/%{commit}.tar.bz2#/%{name}-%{tarballcommit}.tar.bz2
-
-# https://bugs.gentoo.org/953885
+Source0:        https://bitbucket.org/heldercorreia/%{name}/get/%{commit}.tar.bz2#/%{name}-%{tarballcommit}.tar.bz2
 Patch100:       %{name}-0.12-qhash.patch
 Patch101:       %{name}-0.12-qsignalmapper.patch
-# fixed id, name in qhp keywords section
 Patch102:       %{name}-0.12-manual.patch
-# workaround missing taskbar icon
 Patch103:       %{name}-0.12-icon.patch
-
+Requires:       hicolor-icon-theme
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6Help)
 BuildRequires:  cmake(Qt6Widgets)
-
-BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
 BuildRequires:  libappstream-glib
 BuildRequires:  librsvg2-tools
 BuildRequires:  ninja-build
 BuildRequires:  sed
-
-Requires:       hicolor-icon-theme
-
+# /oreon:deps
 %description
 SpeedCrunch is a fast, high precision and powerful desktop calculator.
 Among its distinctive features are a scrollable display, up to 50 decimal
@@ -45,6 +35,7 @@ precisions, unlimited variable storage, intelligent automatic completion
 full keyboard-friendly and more than 15 built-in math function.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n heldercorreia-%{name}-%{tarballcommit} -p1
@@ -59,19 +50,15 @@ for lang in en_US de_DE fr_FR es_ES; do
 done
 
 %build
+
 %cmake \
     -S src \
     -G Ninja \
     -DCMAKE_BUILD_TYPE=Release
 %cmake_build
-
 %install
 %cmake_install
-
-# Install SVG icon
 install -D -m 0644 -p gfx/%{name}.svg %{buildroot}/%{_datadir}/icons/hicolor/scalable/apps/%{appname}.svg
-
-# Create icons on the fly
 for size in 16 22 24 32 48 64 128 256; do
     dest=%{buildroot}%{_datadir}/icons/hicolor/${size}x${size}/apps
     mkdir -p ${dest}
@@ -79,19 +66,14 @@ for size in 16 22 24 32 48 64 128 256; do
     chmod 0644 ${dest}/%{appname}.png
     touch -r gfx/%{name}.svg ${dest}/%{appname}.png
 done
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{appname}.metainfo.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{appname}.desktop
-
-%files
-%license pkg/COPYING.rtf
-%doc README.md
-%{_bindir}/%{name}
-%{_datadir}/applications/%{appname}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{appname}.*
-%{_datadir}/pixmaps/%{appname}.png
-%{_metainfodir}/%{appname}.metainfo.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,62 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 51a9c5f7b2f8e636f04c6cada605d9b6a3bf1348fdf945a3d8869b19bba0ee08
 Name:           python-pydantic
 Version:        2.13.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Data validation using Python type hints
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pydantic/pydantic
-Source:         %{pypi_source pydantic}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pydantic/pydantic-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pydantic' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pydantic = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pydantic
-Summary:        %{summary}
-
-%description -n python3-pydantic %_description
+Summary:        Data validation using Python type hints
+%description -n python3-pydantic
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pydantic email,timezone
-
 
 %prep
-%autosetup -p1 -n pydantic-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pydantic-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pydantic usr/lib/python3*/site-packages/pydantic* usr/lib64/python3*/site-packages/pydantic* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pydantic* usr/lib64/python3*/site-packages/pydantic* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pydantic -f %{pyproject_files}
+%files
+%files -n python3-pydantic -f %{oreon_filedir}/python3-pydantic.list
 
 %changelog
+
 %autochangelog

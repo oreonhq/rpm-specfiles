@@ -1,42 +1,16 @@
 %global source0_hash 76ddbf406e9d9b772ec73af2bf925b38b290b4390cc4064720a08d4b4bca0aa9
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
-
-# there is no debug package
 %global debug_package %{nil}
-
 Name:           half
 Version:        2.2.1
 Release:        1%{?dist}
 Summary:        A C++ half-precision floating point type
 License:        MIT
-
 URL:            http://sourceforge.net/projects/half
-Source0:        %{url}/files/%{name}/%{version}/%{name}-%{version}.zip
+Source0:        http://sourceforge.net/projects/%{name}/files/%{name}/%{version}/%{name}-%{version}.zip
 BuildArch:      noarch
-
+# oreon:deps
 BuildRequires:  unzip
-
+# /oreon:deps
 %description
 This is a C++ header-only library to provide an IEEE-754 conformant
 half-precision floating point type along with corresponding arithmetic
@@ -49,7 +23,6 @@ possible, but stays completely C++98-compatible when neccessary.
 %package devel
 Summary:        A C++ half-precision floating point type
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel
 This is a C++ header-only library to provide an IEEE-754 conformant
 half-precision floating point type along with corresponding arithmetic
@@ -60,6 +33,7 @@ possible. It automatically uses and provides C++11 features when
 possible, but stays completely C++98-compatible when neccessary.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 rm -rf %{name}-%{version}
@@ -74,16 +48,14 @@ sed -i "s|\r||g" README.txt
 cd %{name}-%{version}
 mkdir -p %{buildroot}%{_includedir}
 install -m 644 include/half.hpp %{buildroot}%{_includedir}
-
 mkdir -p %{buildroot}%{_docdir}/%{name}/
 install -m 644 LICENSE.txt %{buildroot}%{_docdir}/%{name}/
 install -m 644 README.txt %{buildroot}%{_docdir}/%{name}/
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files devel
-%dir %{_docdir}/%{name}
-%doc %{_docdir}/%{name}/README.txt
-%license %{_docdir}/%{name}/LICENSE.txt
-%{_includedir}/half.hpp
+%files -f %{oreon_filedir}/main.list
+%files -n half-devel -f %{oreon_filedir}/half-devel.list
 
 %changelog
+
 %autochangelog

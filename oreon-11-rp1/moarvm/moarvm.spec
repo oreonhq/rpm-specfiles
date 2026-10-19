@@ -1,24 +1,22 @@
-%global source0_hash 23291b5fa7557c80d4ad3254d8e8bd51b3380989a1575b3d264dbe72a1cad1c0
-
+%global source0_hash 805154e842baeb0a56194ed98c66a6fc94546a6dab8b3ffb982ebe97d7080a7a
 Name:           moarvm
 Version:        2026.08
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Metamodel On A Runtime Virtual Machine
 License:        Artistic-2.0
 URL:            https://github.com/MoarVM/MoarVM
-Source:         %{url}/releases/download/%{version}/MoarVM-%{version}.tar.gz
-# https://github.com/MoarVM/MoarVM/issues/1980
+Source0:        https://github.com/MoarVM/MoarVM/releases/download/%{version}/MoarVM-%{version}.tar.gz
 Patch0: https://paste.sr.ht/blob/3a4c7f855827e70b97d2a7741aeb2eb02b40196d#/0001-Fix-building-MoarVM-with-a-system-provided-libuv.patch
-
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  perl
 BuildRequires:  libffi-devel
 BuildRequires:  libtommath-devel
 BuildRequires:  libuv-devel
 BuildRequires:  libzstd-devel
+BuildRequires:  make
 BuildRequires:  mimalloc-devel
-
+BuildRequires:  perl
+# /oreon:deps
 %description
 MoarVM (short for Metamodel On A Runtime Virtual Machine) is a runtime built
 for the 6model object system. It is primarily aimed at running NQP and Rakudo,
@@ -33,12 +31,12 @@ Requires:       mimalloc-devel
 Requires:       libffi-devel
 Requires:       libtommath-devel
 Requires:       libzstd-devel
-
 %description devel
 This package contains development files for developing applications that use
 %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n MoarVM-%{version}
@@ -47,31 +45,22 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -rf 3rdparty/{libuv,libatomicops,dyncall,libtommath,mimalloc}/
 
 %build
+
 %{__perl} Configure.pl --prefix=%{_prefix} --libdir=%{_libdir} \
   --has-libuv \
   --has-libffi \
   --c11-atomics \
   --has-libtommath \
   --has-mimalloc
-
 %make_build
-
 %install
 %make_install
-
 chmod 755 %{buildroot}%{_libdir}/libmoar.so
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%doc CREDITS docs
-%{_bindir}/moar
-%{_libdir}/libmoar.so
-%{_datadir}/nqp/
-%{_libdir}/libmoar.so-gdb.py
-
-%files devel
-%{_includedir}/moar/
-%{_datadir}/pkgconfig/moar.pc
+%files -f %{oreon_filedir}/main.list
+%files -n moarvm-devel -f %{oreon_filedir}/moarvm-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 5fb04d7d93c7c4eedaf6086f2e1881e8f7d8b4ece66a274e89123fd5a90aa7e2
 Name:           python-pagure-messages
 Version:        1.3.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A schema package for messages sent by pagure
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://pagure.io/pagure
-Source:         %{pypi_source pagure_messages}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pagure_messages/pagure_messages-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pagure-messages' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pagure-messages = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pagure-messages
-Summary:        %{summary}
-
-%description -n python3-pagure-messages %_description
-
+Summary:        A schema package for messages sent by pagure
+%description -n python3-pagure-messages
 
 %prep
-%autosetup -p1 -n pagure_messages-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pagure_messages-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pagure-messages usr/lib/python3*/site-packages/pagure_messages* usr/lib64/python3*/site-packages/pagure_messages* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pagure_messages* usr/lib64/python3*/site-packages/pagure_messages* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pagure-messages -f %{pyproject_files}
+%files
+%files -n python3-pagure-messages -f %{oreon_filedir}/python3-pagure-messages.list
 
 %changelog
+
 %autochangelog

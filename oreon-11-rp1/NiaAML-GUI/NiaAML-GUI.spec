@@ -1,42 +1,28 @@
 %global source0_hash ff96c5ef827c0df1630529ee68630ce6a80e64ee8b26c82fa745d55d42673cf5
-
 Name:           NiaAML-GUI
 Version:        0.4.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GUI for NiaAML Python package
-
-# SPDX
 License:        MIT
 URL:            https://github.com/firefly-cpp/NiaAML-GUI
-# Also distributed via PyPI (https://pypi.org/project/niaaml-gui/) but without
-# tests and other auxiliary files.
-Source:         %{url}/archive/%{version}/NiaAML-GUI-%{version}.tar.gz
-
-
+Source0:        https://github.com/firefly-cpp/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
- 
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-
-# pyproject.toml: [tool.poetry.dev-dependencies]
-# pytest = "^7.4.3"
-# Version specification loosened to allow newer versions
-BuildRequires:  python3dist(pytest) >= 7.4.3
-
 Requires:       hicolor-icon-theme
-
 %global app_id io.github.firefly-cpp.niaaml_gui
-
 %global common_description %{expand:
 This is a basic graphical user interface intended for users of the NiaAML
 Python package.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-NiaAML-GUI = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %prep
+
 %autosetup -p1
 # Do not upper-bound the version of Python!
 # https://github.com/firefly-cpp/NiaAML-GUI/commit/d0084e6d2f05c6af848678db731c41a49c1a2a22#commitcomment-146060179
@@ -51,28 +37,18 @@ install -t '%{buildroot}%{_metainfodir}' -p -m 0644 -D \
     AppData/%{app_id}.metainfo.xml
 install -t '%{buildroot}%{_datadir}/icons/hicolor/256x256/apps' -p -m 0644 -D \
     AppData/niaaml-gui.png
+%oreon_autofiles main
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %check
+
 appstream-util validate-relax --nonet \
     '%{buildroot}%{_metainfodir}/%{app_id}.metainfo.xml'
-
 %pytest
-
-%files -f %{pyproject_files}
-%license LICENSE
-%doc CITATION.cff
-%doc README.md
-
-%{_bindir}/NiaAML-GUI
-# There is no need for a man page, since this is a pure GUI application with no
-# useful command-line options.
-
-%{_datadir}/applications/%{app_id}.desktop
-%{_metainfodir}/%{app_id}.metainfo.xml
-%{_datadir}/icons/hicolor/256x256/apps/niaaml-gui.png
+%files
 
 %changelog
+
 %autochangelog

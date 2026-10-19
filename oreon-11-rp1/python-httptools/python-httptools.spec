@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 6b2a32f18d97e16e90827d7a819ffa8dbd8cc245fc4e1fa9d1095b54ef4bd999
 Name:           python-httptools
 Version:        0.8.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A collection of framework independent HTTP protocol utils.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/MagicStack/httptools
-Source:         %{pypi_source httptools}
-
+Source0:        https://files.pythonhosted.org/packages/source/h/httptools/httptools-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'httptools' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) <= 82.0.1
+BuildRequires:  python3dist(setuptools) >= 80.9.0
+Requires:       python3-httptools = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-httptools
-Summary:        %{summary}
-
-%description -n python3-httptools %_description
-
+Summary:        A collection of framework independent HTTP protocol utils.
+%description -n python3-httptools
 
 %prep
-%autosetup -p1 -n httptools-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir httptools-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-httptools usr/lib/python3*/site-packages/httptools* usr/lib64/python3*/site-packages/httptools* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/httptools* usr/lib64/python3*/site-packages/httptools* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-httptools -f %{pyproject_files}
+%files
+%files -n python3-httptools -f %{oreon_filedir}/python3-httptools.list
 
 %changelog
+
 %autochangelog

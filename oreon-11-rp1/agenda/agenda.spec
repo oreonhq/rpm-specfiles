@@ -1,63 +1,26 @@
 %global source0_hash 55e81dfd60a2fb85285a510d2cda1984b6a7d7bd15816c71e7326f0cd6bdb5bd
-
 %global app_id com.github.dahenson.agenda
-
 Name:           agenda
 Summary:        A simple, slick, speedy and no-nonsense task manager
 Version:        1.2.1
-Release:        %autorelease
-
-# The entire source is GPL-3.0-or-later, except:
-#   - data/Agenda.css is GPL-2.0-or-later; it is not installed directly, but is
-#     incorporated in the executable as a “resource”
-#   - data/com.github.dahenson.agenda.appdata.xml.in is CC0-1.0, which is
-#     allowed for content only
+Release:        1%{?dist}
 License:        GPL-3.0-or-later AND GPL-2.0-or-later AND CC0-1.0
-# Additionally, the following do not affect the License because they are not
-# part of the binary RPM:
-#
-#   - test/TestCase.vala is LGPL-2.0-or-later
 SourceLicense:  %{license} AND LGPL-2.0-or-later
 URL:            https://github.com/dahenson/agenda
-Source:         %{url}/archive/%{version}/agenda-%{version}.tar.gz
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/dahenson/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  gettext
-
-# Still required by guidelines for now
-# (https://pagure.io/packaging-committee/issue/1053):
-BuildRequires:  libappstream-glib
-# Matches what gnome-software and others use:
-BuildRequires:  appstream
-
-BuildRequires:  hardlink
-
-BuildRequires:  meson
-BuildRequires:  vala
-BuildRequires:  gcc
-
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  pkgconfig(granite)
-BuildRequires:  pkgconfig(gtk+-3.0)
-
 Requires:       hicolor-icon-theme
-
 Summary(ca):    Un gestor de tasques fàcil d’utilitzar
 Summary(de):    Ein einfacher, handlicher, schneller und nützlicher Aufgaben Verwalter
 Summary(es):    Un administrador de tareas simple, pulido, rápido y sin complicaciones
 Summary(fr):    Un gestionnaire de tâches simple, rapide et élégant
 Summary(gl):    Un xestor de tarefas pulido, sinxelo, rápido e sen complicacións
 Summary(it):    Un promemoria semplice, elegante, veloce e senza fronzoli
-# This translation is for the alternative summary, “Get things done”
 Summary(ja):    タスクを完了しましょう
 Summary(ka):    მარტივი, მოხერხებული, სწრაფი დავალებების მმართველი ყოველგვარი უაზრობების გარეშე
 Summary(ko):    간단하고 미려한 일정 관리자
 Summary(lt):    Paprasta, vikri, greita, dalykiška užduočių tvarkytuvė
 Summary(ms):    Pengurus tugas yang ringkas dan pantas
-# This translation is for the alternative summary, “Get things done”
 Summary(nl):    Rond taken af
 Summary(pl):    Prosty, gładki, szybki i niebezsensowny menedżer zadań
 Summary(pt):    Um gestor de tarefas simples, liso, rápido e sem falhas
@@ -66,7 +29,19 @@ Summary(sr):    Једноставан, гладак, брз и без које�
 Summary(tr):    Basit, şık, hızlı ve zırvalıksız görev yöneticisi
 Summary(ur):    ﺎﯿﮐ ﺱﺍﺩہ، ہﻮﺸﯾﺍﺭ، ﻑﻭﺮﯾ ﺍﻭﺭ ﺲﯾﺩﺍہ ﺱﺍﺩہ ٹﺎﺴﮐ ﻢﯿﻨﯿﺟﺭ
 Summary(zh_CN): 简单流畅、快速不脑残的任务规划管理器
-
+# oreon:deps
+BuildRequires:  appstream
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  hardlink
+BuildRequires:  libappstream-glib
+BuildRequires:  meson
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(granite)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  vala
+# /oreon:deps
 %description
 A task manager to help you keep track of the tasks that matter most.
 
@@ -145,6 +120,7 @@ Funcionalidades principais:
   • Fechar com a tecla Esc
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -153,40 +129,24 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %meson
 
 %build
-%meson_build
 
+%meson_build
 %install
 %meson_install
-
 %find_lang %{app_id}
-
-# Upstream installs the same SVG icon in many size-specific directories like
-# /usr/share/icons/hicolor/64x64@2/; we can save space by hardlinking these
-# together.
 hardlink -c -v '%{buildroot}%{_datadir}/icons/hicolor'
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate \
     %{buildroot}/%{_datadir}/applications/%{app_id}.desktop
-
-# Still required by guidelines for now
-# (https://pagure.io/packaging-committee/issue/1053):
 appstream-util validate-relax --nonet \
     %{buildroot}/%{_metainfodir}/%{app_id}.appdata.xml
-# Matches what gnome-software and others use:
 appstreamcli validate --no-net --explain \
     %{buildroot}/%{_metainfodir}/%{app_id}.appdata.xml
-
-%files -f %{app_id}.lang
-%doc README.md
-%license LICENSE
-
-%{_bindir}/%{app_id}
-
-%{_datadir}/applications/%{app_id}.desktop
-%{_datadir}/glib-2.0/schemas/%{app_id}.gschema.xml
-%{_datadir}/icons/hicolor/*/apps/%{app_id}.svg
-%{_metainfodir}/%{app_id}.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

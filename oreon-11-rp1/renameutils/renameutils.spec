@@ -1,27 +1,21 @@
 %global source0_hash cbd2f002027ccf5a923135c3f529c6d17fabbca7d85506a394ca37694a9eb4a3
-
 Name:           renameutils
 Version:        0.12.0
-Release:        31%{?dist}
+Release:        1%{?dist}
 Summary:        A set of programs to make renaming and copying of files easier
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            http://www.nongnu.org/renameutils
 Source0:        http://savannah.nongnu.org/download/%{name}/%{name}-%{version}.tar.gz
 Patch0:         renameutils-0.12.0-install-typo.patch
-# Based on patch from Debian. Also updates declarations.
-# https://salsa.debian.org/debian/renameutils/-/blob/8d33a6d7ad3eafe997c8dcff5a17493e7f698a36/debian/patches/gcc15-fixes.patch
 Patch1:         renameutils-0.12.0-gcc15-fixes.patch
-
-BuildRequires: make
-BuildRequires:  gcc
-BuildRequires:  autoconf
-BuildRequires:  readline-devel
-BuildRequires:  gettext
-# Bundled library exception: https://fedorahosted.org/fpc/ticket/174
 Provides:       bundled(gnulib) = 20120423
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  make
+BuildRequires:  readline-devel
+# /oreon:deps
 %description
 The file renaming utilities (renameutils for short) are a set of
 programs designed to make renaming of files faster and less
@@ -48,6 +42,7 @@ representing space) from file names. Some programs such as w3m tend to
 keep those characters encoded in saved files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -55,18 +50,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P1 -p1 -b .gcc15-fixes
 
 %build
+
 %configure
 make %{?_smp_mflags}
-
 %install
 %make_install INSTALL="install -p"
 %find_lang %{name}
 %find_lang %{name}-gnulib
+%oreon_autofiles main
 
-%files -f %{name}.lang -f %{name}-gnulib.lang
-%doc README TODO COPYING NEWS AUTHORS
-%{_bindir}/*
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

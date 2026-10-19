@@ -1,35 +1,29 @@
 %global source0_hash 6b8ec3d57acb36dfff55da62268814325be49cb7e0a255ba198e42f28305fc72
-
 Name:           perl-Data-Constraint
 Version:        1.205
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        Prototypical value checking
 License:        Artistic-2.0
-
 URL:            https://metacpan.org/dist/Data-Constraint
 Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRIANDFOY/Data-Constraint-%{version}.tar.gz
-
 BuildArch:      noarch
-
+Provides:       perl(Data::Constraint)
+# oreon:deps
+BuildRequires:  /usr/bin/make
+BuildRequires:  /usr/bin/perl
 BuildRequires:  coreutils
-BuildRequires:  %{__make}
-BuildRequires:  %{__perl}
-
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-generators
-BuildRequires:  perl(:VERSION) >= 5.8
-
+BuildRequires:  perl(:VERSION)
 BuildRequires:  perl(Class::Prototyped)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(File::Spec::Functions)
-BuildRequires:  perl(Test::More) >= 1
+BuildRequires:  perl(Test::More)
 BuildRequires:  perl(base)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
-
-
-Provides:       perl(Data::Constraint)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 A constraint is some sort of condition on a datum. This module checks one
 condition against one value at a time, and I call the thing that checks
@@ -40,6 +34,7 @@ constraint figure out what to do with it. I want something that says "yes"
 or "no" (and I discuss why this needs a fancy module later).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Data-Constraint-%{version}
 
@@ -47,21 +42,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 chmod -x lib/Data/Constraint.pm
 
 %build
+
 %{__perl} Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-%{__make} test
 
-%files
-%license LICENSE
-%doc Changes
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
+%{__make} test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

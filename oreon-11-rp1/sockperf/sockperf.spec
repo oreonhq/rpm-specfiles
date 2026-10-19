@@ -1,20 +1,19 @@
 %global source0_hash 5373385e78921ba7156e03629daa0a2243b388d4c2b0c8ff99218d2a3e3be7a1
-
 Name:           sockperf
 Version:        3.10
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Network benchmarking utility for testing latency and throughput
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://github.com/Mellanox/%{name}
 Source0:        https://github.com/Mellanox/%{name}/archive/%{version}.tar.gz
-
-BuildRequires:  make
-BuildRequires:  gcc-c++
-BuildRequires:  autoconf automake
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
 BuildRequires:  doxygen
+BuildRequires:  gcc-c++
 BuildRequires:  libtool
-
+BuildRequires:  make
+# /oreon:deps
 %description
 sockperf is a network benchmarking utility over socket API that was designed
 for testing performance (latency and throughput) of high-performance systems
@@ -45,34 +44,19 @@ following:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 ./autogen.sh
-# Upstream wants and defaults to "-O3 --param inline-unit-growth=200".
-# The Fedora optflags would override the former, so let's put it back.
-# Avner wrote:
-# > I reached that in the past after fine tuning the performance of sockperf.
-# > We used sockperf for measuring latency of extremely fast networks.
-# > Sometimes at sub microsecond resolution. This parameter helps us keeping
-# > the entire fast path of the application as "one big function" with no
-# > calls to other functions because it helps the compiler to respect all our
-# > "inline" directive for other functions that we call (while still keeping
-# > the "one big function" at a reasonable size for good performance at run
-# > time).
 export CXXFLAGS='%{optflags} -O3'
 %configure --enable-doc
-# --enable-tool --enable-test
 make %{?_smp_mflags}
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%{_bindir}/sockperf
-%{_mandir}/man3/sockperf.3.*
-%{_pkgdocdir}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

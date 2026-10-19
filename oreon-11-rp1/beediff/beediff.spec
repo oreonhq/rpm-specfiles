@@ -1,18 +1,18 @@
-%global source0_hash c733071a1884dea3eecc582d7006bb7c165563489ba65dc85bdfb58e2ab11bc8
-
-Summary:       Visual tool for comparing and merging files
+%global source0_hash 6dc9c7fc93bb488bb0520a6c780a8d3c0fb5486a4711aca49b4c53fac7393023
+Summary:        Visual tool for comparing and merging files
 Name:          beediff
 Version:       1.9
-Release:       40%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        40%{?dist}
 License:       GPL-2.0-or-later
 URL:           http://www.beesoft.org/index.php?id=beediff
-Source0:       http://www.beesoft.org/download/beediff_%{version}_src.tar.gz
+Source0:        http://www.beesoft.org/download/beediff_%{version}_src.tar.gz
 Source1:       beediff.desktop
-BuildRequires: qt4-devel
-BuildRequires: desktop-file-utils
-BuildRequires: make
 Requires:      diffutils
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  make
+BuildRequires:  qt4-devel
+# /oreon:deps
 %description
 This package provides a visual application (beediff) for comparing and
 merging files. User have a possibility to work with two text
@@ -23,25 +23,24 @@ appropriate positions. Program is user friendly, very simply and
 efficient.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}
 sed -i -e 's|^QMAKE_CXXFLAGS_RELEASE.*|QMAKE_CXXFLAGS_RELEASE = %{optflags}|' beediff.pro
 
 %build
+
 %{qmake_qt4}
 make %{?_smp_mflags}
-
 %install
 install -D -m 0755 beediff %{buildroot}%{_bindir}/beediff
 install -D -p -m 0644 img/beediff.png %{buildroot}%{_datadir}/pixmaps/beediff.png
 desktop-file-install --dir %{buildroot}%{_datadir}/applications %{SOURCE1}
+%oreon_autofiles main
 
-%files
-%doc licence.txt ChangeLog.txt
-%{_bindir}/beediff
-%{_datadir}/pixmaps/beediff.png
-%{_datadir}/applications/beediff.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

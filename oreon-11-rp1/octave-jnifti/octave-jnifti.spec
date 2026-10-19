@@ -1,23 +1,20 @@
 %global source0_hash 6ad2896ed9ab9ee3f1bb90c069534120caf437e1fb24afe6517c64d56d650f53
-
 %global octpkg jnifti
-
 Name:           octave-%{octpkg}
 Version:        0.5
 Release:        19%{?dist}
 Summary:        Fast NIfTI-1/2 reader and NIfTI-to-JNIfTI converter for MATLAB/Octave
-# Automatically converted from old format: GPLv3+ or ASL 2.0 - review is highly recommended.
 License:        GPL-3.0-or-later OR Apache-2.0
 URL:            https://github.com/fangq/jnifti
 Source0:        https://github.com/fangq/%{octpkg}/archive/v%{version}/%{octpkg}-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  octave-devel
-
 Requires:       octave
 Requires(post): octave
 Requires(postun): octave
 Recommends:     octave-jsonlab
-
+# oreon:deps
+BuildRequires:  octave-devel
+# /oreon:deps
 %description
 JNIfTI Toolbox is a fully functional NIfTI-1/2 reader/writer that supports both
 MATLAB and GNU Octave, and is capable of reading/writing both non-compressed
@@ -33,11 +30,11 @@ making the data much easier to manipulate and share.
 Summary:        Example datasets and scripts for the JNIfTI toolbox
 BuildArch:      noarch
 Requires:       octave octave-%{octpkg}
-
 %description -n %{octpkg}-demos
 This package contains the demo script and sample datasets for octave-%{octpkg}. 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{octpkg}-%{version}
@@ -91,31 +88,24 @@ mkdir -p inst/
 mv *.m inst/
 
 %build
-%octave_pkg_build
 
+%octave_pkg_build
 %install
 %octave_pkg_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
-%octave_cmd pkg rebuild
 
+%octave_cmd pkg rebuild
 %preun
+
 %octave_pkg_preun
-
 %postun
+
 %octave_cmd pkg rebuild
-
-%files
-%license LICENSE_GPLv3.txt LICENSE_Apache-2.0.txt
-%doc README.md
-%dir %{octpkgdir}
-%{octpkgdir}/*.m
-%doc %{octpkgdir}/doc-cache
-%{octpkgdir}/packinfo
-
-%files -n %{octpkg}-demos
-%license LICENSE_GPLv3.txt LICENSE_Apache-2.0.txt
-%doc samples
+%files -f %{oreon_filedir}/main.list
+%files -n jnifti-demos -f %{oreon_filedir}/jnifti-demos.list
 
 %changelog
+
 %autochangelog

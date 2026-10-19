@@ -1,61 +1,42 @@
-%global source0_hash none
-
+%global source0_hash af4775747e11e05ffe13d3ba463d92f67f1f3d1a9e4f46ba33a44ea22b0c9644
 Name:           python-traits
 Version:        7.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Observable typed attributes for Python classes
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/enthought/traits
-Source:         %{pypi_source traits}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/traits/traits-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'traits' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-traits = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-traits
-Summary:        %{summary}
-
-%description -n python3-traits %_description
+Summary:        Observable typed attributes for Python classes
+%description -n python3-traits
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-traits docs,examples,test
-
 
 %prep
-%autosetup -p1 -n traits-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir traits-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-traits usr/lib/python3*/site-packages/traits* usr/lib64/python3*/site-packages/traits* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/traits* usr/lib64/python3*/site-packages/traits* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-traits -f %{pyproject_files}
+%files
+%files -n python3-traits -f %{oreon_filedir}/python3-traits.list
 
 %changelog
+
 %autochangelog

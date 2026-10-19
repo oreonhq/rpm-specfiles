@@ -1,62 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 3f106a9fbc73e39dd266c9712432087de78a6d644084c7c241d6a25c3169115b
 Name:           python-textual
 Version:        8.2.8
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Modern Text User Interface framework
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Textualize/textual
-Source:         %{pypi_source textual}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/textual/textual-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'textual' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.2.0
+Requires:       python3-textual = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-textual
-Summary:        %{summary}
-
-%description -n python3-textual %_description
+Summary:        Modern Text User Interface framework
+%description -n python3-textual
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-textual syntax
-
 
 %prep
-%autosetup -p1 -n textual-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir textual-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-textual usr/lib/python3*/site-packages/textual* usr/lib64/python3*/site-packages/textual* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/textual* usr/lib64/python3*/site-packages/textual* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-textual -f %{pyproject_files}
+%files
+%files -n python3-textual -f %{oreon_filedir}/python3-textual.list
 
 %changelog
+
 %autochangelog

@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 84f2076c1ff85cea1c8b8f5c66e8c41e5d61834d923cb3e6df4392a3b237a12d
 Name:           python-flufl-i18n
 Version:        6.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A high level API for internationalizing Python libraries and applications
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://flufli18n.readthedocs.io
-Source:         %{pypi_source flufl_i18n}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flufl_i18n/flufl_i18n-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'flufl-i18n' generated automatically by pyp2spec.}
-
 Patch:          flufl_i18n-no-covtest.diff
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-flufl-i18n = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-flufl-i18n
-Summary:        %{summary}
-
-%description -n python3-flufl-i18n %_description
-
+Summary:        A high level API for internationalizing Python libraries and applications
+%description -n python3-flufl-i18n
 
 %prep
-%autosetup -p1 -n flufl_i18n-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir flufl_i18n-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-flufl-i18n usr/lib/python3*/site-packages/flufl_i18n* usr/lib64/python3*/site-packages/flufl_i18n* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flufl_i18n* usr/lib64/python3*/site-packages/flufl_i18n* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-flufl-i18n -f %{pyproject_files}
+%files
+%files -n python3-flufl-i18n -f %{oreon_filedir}/python3-flufl-i18n.list
 
 %changelog
+
 %autochangelog

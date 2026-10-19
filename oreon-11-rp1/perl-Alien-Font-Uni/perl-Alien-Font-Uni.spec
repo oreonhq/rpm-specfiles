@@ -1,52 +1,28 @@
 %global source0_hash 582821b8e2169d3d92332f1637f18cbb2fa4cc0d4376e20e3e1b94fc837b274f
-
 Name:           perl-Alien-Font-Uni
 Version:        0.3
-Release:        8%{?dist}
+Release:        1%{?dist}
 Summary:        Access to Unifont TrueType file
-# lib/Alien/Font/Uni.pm:    GPL-1.0-or-later OR Artistic-1.0-Perl (OFL-1.1
-#                           refers to font files)
-# LICENSE:      GPL-1.0-or-later OR Artistic-1.0-Perl
-# README:       GPL-1.0-or-later OR Artistic-1.0-Perl
-## Not used and not in any binary package
-# dist.ini:     GPL-1.0-or-later OR Artistic-1.0-Perl
-## Unbundled
-# share/OFL1.1.txt:             OFL-1.1 license text
-# share/unifont-15.0.01.ttf:    OFL-1.1 OR GPL-2.0-or-later WITH Font-exception-2.0
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/Alien-Font-Uni
 Source0:        https://cpan.metacpan.org/authors/id/L/LI/LICHTKIND/Alien-Font-Uni-%{version}.tar.gz
-# Use a system font, not suitable for an upstream
 Patch0:         Alien-Font-Uni-0.3-Use-system-font.patch
 BuildArch:      noarch
+Requires:       unifont-ttf-fonts
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Test::More\\)$
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(version)
+BuildRequires:  perl(warnings)
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.8.0
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
-%if 0%{?fedora} < 38
-BuildRequires:  font(unifont)
-%else
-# font(unifont) is provided by two packages, pick TrueType one by an RPM name
 BuildRequires:  unifont-ttf-fonts
-%endif
-BuildRequires:  perl(version) >= 0.77
-# Tests:
-BuildRequires:  perl(Test::More) >= 1.3
-%if 0%{?fedora} < 38
-Requires:       font(unifont)
-%else
-# font(unifont) is provided by two packages, pick TrueType one by an RPM name
-Requires:       unifont-ttf-fonts
-%endif
-
-# Remove underspecified dependencies
-%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(Test::More\\)$
-
+# /oreon:deps
 %description
 This module was created as an optional dependency of Chart to have access to
 a Unicode-complete scaleable font file. Thus only the Unifont TrueType font
@@ -57,12 +33,12 @@ Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
 Requires:       perl(Test::More) >= 1.3
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n Alien-Font-Uni-%{version}
@@ -72,35 +48,27 @@ rm -r share
 chmod +x t/*.t
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%license LICENSE
-%doc Changes CONTRIBUTING README
-%dir %{perl_vendorlib}/Alien
-%dir %{perl_vendorlib}/Alien/Font
-%{perl_vendorlib}/Alien/Font/Uni.pm
-%{_mandir}/man3/Alien::Font::Uni.*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Alien-Font-Uni-tests -f %{oreon_filedir}/perl-Alien-Font-Uni-tests.list
 
 %changelog
+
 %autochangelog

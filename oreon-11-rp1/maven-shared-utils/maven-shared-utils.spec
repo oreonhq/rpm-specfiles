@@ -1,5 +1,4 @@
 %global source0_hash 37b232565be970fcfb94a10a4b7b57353db49bc8f004028ea70be2358e614463
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,20 +82,19 @@ end
 %bcond_with bootstrap
 Name:           maven-shared-utils
 Version:        3.5.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven shared utility classes
 License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-shared-utils
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
 Patch:          0001-Avoid-setting-POSIX-attributes-for-symbolic-links.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.4.2-22
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.code.findbugs:jsr305)
 BuildRequires:  mvn(commons-io:commons-io)
@@ -106,10 +104,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.fusesource.jansi:jansi)
 BuildRequires:  mvn(org.hamcrest:hamcrest-core)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.4.2-22
-
+# /oreon:deps
 %description
 This project aims to be a functional replacement for plexus-utils in Maven.
 
@@ -118,22 +113,23 @@ improvements: lots of methods got cleaned up, generics got added and we dropped
 a lot of unused code.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 find -name '*.java' -exec sed -i 's/\r//' {} +
 
-
 rm src/test/java/org/apache/maven/shared/utils/CaseTest.java
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

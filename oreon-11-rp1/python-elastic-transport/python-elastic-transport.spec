@@ -1,61 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 366f4614f4544c5fb5d780c82f57af8f30492b44a68ed20750390aa81e20c2ea
 Name:           python-elastic-transport
 Version:        9.4.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Transport classes and utilities shared among Python Elastic client libraries
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/elastic/elastic-transport-python
-Source:         %{pypi_source elastic_transport}
-
+Source0:        https://files.pythonhosted.org/packages/source/e/elastic_transport/elastic_transport-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'elastic-transport' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-elastic-transport = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-elastic-transport
-Summary:        %{summary}
-
-%description -n python3-elastic-transport %_description
+Summary:        Transport classes and utilities shared among Python Elastic client libraries
+%description -n python3-elastic-transport
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-elastic-transport develop
-
 
 %prep
-%autosetup -p1 -n elastic_transport-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir elastic_transport-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-elastic-transport usr/lib/python3*/site-packages/elastic_transport* usr/lib64/python3*/site-packages/elastic_transport* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/elastic_transport* usr/lib64/python3*/site-packages/elastic_transport* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-elastic-transport -f %{pyproject_files}
+%files
+%files -n python3-elastic-transport -f %{oreon_filedir}/python3-elastic-transport.list
 
 %changelog
+
 %autochangelog

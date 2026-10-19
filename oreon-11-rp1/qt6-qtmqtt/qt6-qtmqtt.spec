@@ -1,40 +1,31 @@
 %global source0_hash 55b2ac2938c6057aebd1df5366860d277ebda445f960111fba0998fedeced700
-
 %global qt_module qtmqtt
-
-#global unstable 0
 %if 0%{?unstable}
 %global tar_prerelease rc1
 %global prerelease rc
 %endif
-
 %global examples 1
-
-Summary: Qt6 - Mqtt module
+Summary:        Qt6 - Mqtt module
 Name:    qt6-%{qt_module}
 Version: 6.12.0
-Release: %autorelease
-
+Release:        1%{?dist}
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 %global  qt_version %(echo %{version} | cut -d~ -f1)
-
 %if 0%{?unstable}
-Source0: https://github.com/qt/%{qt_module}/archive/refs/tags/v%{qt_version-%{tar_prerelease}}/%{qt_module}-%{qt_version}-%{tar_prerelease}.tar.gz
+Source0:        https://github.com/qt/%{qt_module}/a%{prerelease}hive/refs/tags/v%{version}/%{qt_module}-%{version}.tar.gz
 %else
-Source0: https://github.com/qt/%{qt_module}/archive/refs/tags/v%{version}/%{qt_module}-%{version}.tar.gz
 %endif
-
-BuildRequires:  cmake >= 3.16
+%{?_qt6:Requires: %{_qt6}%{?_isa} = %{_qt6_version}}
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
 BuildRequires:  qt6-qtbase-devel
-BuildRequires:  qt6-rpm-macros
 BuildRequires:  qt6-qtbase-private-devel
-#libQt6Core.so.6(Qt_6_PRIVATE_API)(64bit)
-%{?_qt6:Requires: %{_qt6}%{?_isa} = %{_qt6_version}}
-
+BuildRequires:  qt6-rpm-macros
+# /oreon:deps
 %description
 MQTT is a machine-to-machine (M2M) protocol utilizing the publish-and-subscribe
 paradigm, and provides a channel with minimal communication overhead.
@@ -55,43 +46,25 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %{summary}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{qt_module}-%{qt_version}%{?unstable:-%{tar_prerelease}} -p1
 
 %build
+
 %cmake_qt6 \
         -DQT_BUILD_EXAMPLES=%{?examples:ON}%{!?examples:OFF} \
         -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSES/*
-%{_qt6_archdatadir}/sbom/%{qt_module}-%{qt_version}.spdx
-%{_qt6_libdir}/libQt6Mqtt.so.6*
-
-%files devel
-%{_qt6_libdir}/libQt6Mqtt.prl
-%{_qt6_libdir}/libQt6Mqtt.so
-%{_qt6_libdir}/pkgconfig/Qt6Mqtt.pc
-%{_qt6_archdatadir}/mkspecs/modules/*.pri
-%{_qt6_headerdir}/QtMqtt/*
-%{_qt6_libdir}/qt6/modules/*.json
-%{_qt6_libdir}/qt6/metatypes/qt6*_metatypes.json
-%dir %{_qt6_libdir}/cmake/Qt6Mqtt/
-%dir %{_qt6_libdir}/cmake/Qt6MqttPrivate/
-%{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/QtMqttTestsConfig.cmake
-%{_qt6_libdir}/cmake/Qt6Mqtt/*.cmake
-%{_qt6_libdir}/cmake/Qt6MqttPrivate/*.cmake
-
-%dir %{_qt6_headerdir}/QtMqtt
-
-%files examples
-%{_qt6_examplesdir}
+%files -f %{oreon_filedir}/main.list
+%files -n qt6-qtmqtt-devel -f %{oreon_filedir}/qt6-qtmqtt-devel.list
+%files -n qt6-qtmqtt-examples -f %{oreon_filedir}/qt6-qtmqtt-examples.list
 
 %changelog
+
 %autochangelog

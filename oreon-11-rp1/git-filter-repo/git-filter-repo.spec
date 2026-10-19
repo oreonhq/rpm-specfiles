@@ -1,32 +1,24 @@
 %global source0_hash 4662cbe5918196a9f1b5b3e1211a32e61cff1812419c21df4f47c5439f09e902
-
 %global gitexecdir %{_libexecdir}/git-core
-
 Name:           git-filter-repo
 Version:        2.47.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Quickly rewrite git repository history (git-filter-branch replacement)
 License:        GPL-2.0-only OR MIT
 Group:          Development/Tools/Version Control
 Url:            https://github.com/newren/git-filter-repo
-#
 Source0:        https://github.com/newren/git-filter-repo/releases/download/v%{version}/%{name}-%{version}.tar.xz
-#
 Patch0:         git-filter-repo-metadata.patch
-# Don't crash on multi-line config values
 Patch1:         4697eeb37b7c3c30b0492e344f6b89f7139cef26.patch
-#
 BuildArch:      noarch
-#
-BuildRequires:  git-core >= 2.26.0
-BuildRequires:  python3-rpm-macros
-BuildRequires:  python3-devel
-# test deps
-BuildRequires:  perl-interpreter
-BuildRequires:  rsync
-#
 Requires:       git-core >= 2.26.0
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61
+BuildRequires:  python3dist(setuptools-scm) >= 8.0
+Requires:       python3-git-filter-repo = %{version}-%{release}
+# /oreon:deps
 %description
 git filter-repo is a versatile tool for rewriting history, which includes
 capabilities not found anywhere else. It roughly falls into the same space of
@@ -35,6 +27,7 @@ performance, with far more capabilities, and with a design that scales
 usability-wise beyond trivial rewriting cases.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -57,33 +50,23 @@ sed -Ei 's,(a href=")(git),\1%{_docdir}/git/\2,g' Documentation/html/git-filter-
 # TODO FIXME https://github.com/newren/git-filter-repo/issues/673
 rm -f t/t9394-filter-repo-sanity-checks-and-bigger-repo-setup.sh
 
-%generate_buildrequires
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires
-
 %build
+
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
-
 %install
 %pyproject_install
-%pyproject_save_files -l git_filter_repo
-
-# Move to right directory, looks like you can't specify the bindir
 install -d -m 0755 %{buildroot}%{gitexecdir}
 mv %{buildroot}%{_bindir}/git-filter-repo %{buildroot}%{gitexecdir}
-
 install -d -m 0755 %{buildroot}%{_mandir}/man1
 install -m 0644 Documentation/man1/git-filter-repo.1 %{buildroot}%{_mandir}/man1/git-filter-repo.1
+%oreon_autofiles main
 
 %check
-t/run_tests
 
-%files -f %{pyproject_files}
-%license COPYING
-%doc README.md Documentation/*.md Documentation/html/*.html contrib/filter-repo-demos
-%{gitexecdir}/git-filter-repo
-%{_mandir}/man1/git-filter-repo.1*
+t/run_tests
+%files
 
 %changelog
+
 %autochangelog

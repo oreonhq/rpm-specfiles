@@ -1,62 +1,43 @@
-%global source0_hash none
-
+%global source0_hash f052dbdcbc42dd5a0c04b22829a3af98c1f29e4675cc6d88db24250a3f7f8ec7
 Name:           python-node-semver
 Version:        0.9.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        port of node-semver
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        mit
 URL:            https://github.com/podhmo/python-node-semver
-Source:         %{pypi_source node_semver}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/node_semver/node_semver-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'node-semver' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-node-semver = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-node-semver
-Summary:        %{summary}
-
-%description -n python3-node-semver %_description
+Summary:        port of node-semver
+%description -n python3-node-semver
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-node-semver docs,testing
-
 
 %prep
-%autosetup -p1 -n node_semver-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir node_semver-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-node-semver usr/lib/python3*/site-packages/node_semver* usr/lib64/python3*/site-packages/node_semver* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/node_semver* usr/lib64/python3*/site-packages/node_semver* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-node-semver -f %{pyproject_files}
+%files
+%files -n python3-node-semver -f %{oreon_filedir}/python3-node-semver.list
 
 %changelog
+
 %autochangelog

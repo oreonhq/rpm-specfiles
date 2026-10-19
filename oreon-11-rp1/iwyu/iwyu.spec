@@ -1,49 +1,33 @@
-%global source0_hash 2e8381368ec0a6ecb770834bce00fc62efa09a2b2f9710ed569acbb823ead9cc
-
+%global source0_hash ca3f157a5e6bf293cfb2fea585b103ec87245d02eaee0b6ab832665e740016eb
 %global appname include-what-you-use
 %global toolchain clang
 %global llvm_ver 21
-
 %global __cc_clang clang-%{llvm_ver}
 %global __cxx_clang clang++-%{llvm_ver}
 %global __cpp_clang clang-cpp-%{llvm_ver}
-
-# Opt out of https://fedoraproject.org/wiki/Changes/fno-omit-frame-pointer
-# https://bugzilla.redhat.com/show_bug.cgi?id=2215937
-# https://github.com/include-what-you-use/include-what-you-use/issues/1264
 %undefine _include_frame_pointers
-
 Name: iwyu
 Version: 0.26
-Release: %autorelease
-
+Release:        1%{?dist}
 License: NCSA
-Summary: C/C++ source files #include analyzer based on clang
+Summary:        C/C++ source files #include analyzer based on clang
 URL: https://github.com/%{appname}/%{appname}
-Source0: %{url}/archive/%{version}/%{appname}-%{version}.tar.gz
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-%if 0%{?fedora} && 0%{?fedora} >= 42
-ExcludeArch: %{ix86}
-%endif
-
-BuildRequires: clang(major) = %{llvm_ver}
-BuildRequires: clang-devel(major) = %{llvm_ver}
-BuildRequires: compiler-rt(major) = %{llvm_ver}
-BuildRequires: llvm-devel(major) = %{llvm_ver}
-BuildRequires: llvm-static(major) = %{llvm_ver}
-
-BuildRequires: libcxx-devel
-BuildRequires: ncurses-devel
-BuildRequires: python3-devel
-BuildRequires: zlib-devel
-
-BuildRequires: cmake
-BuildRequires: ninja-build
-
+Source0:        https://github.com/%{appname}/%{appname}/archive/%{version}/%{appname}-%{version}.tar.gz
 Provides: %{appname} = %{?epoch:%{epoch}:}%{version}-%{release}
 Provides: %{appname}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
+# oreon:deps
+BuildRequires:  clang(major)
+BuildRequires:  clang-devel(major)
+BuildRequires:  cmake
+BuildRequires:  compiler-rt(major)
+BuildRequires:  libcxx-devel
+BuildRequires:  llvm-devel(major)
+BuildRequires:  llvm-static(major)
+BuildRequires:  ncurses-devel
+BuildRequires:  ninja-build
+BuildRequires:  python3-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 "Include what you use" means this: for every symbol (type, function, variable,
 or macro) that you use in foo.cc (or foo.cpp), either foo.cc or foo.h should
@@ -59,32 +43,28 @@ becomes easy to automatically track and update dependencies in the source
 code.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{appname}-%{version} -p1
 %py3_shebang_fix *.py
 
 %build
+
 %cmake -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_PREFIX_PATH='%{_libdir}/llvm%{llvm_ver}/%{_lib}/cmake/clang;%{_libdir}/llvm%{llvm_ver}/%{_lib}/cmake/llvm' \
     -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
-%ctest --exclude-regex "(cxx.test_(badinc|ms_inline_asm|precomputed_tpl_args)|driver.test_offload_openmp)"
 
-%files
-%doc docs/* README.md
-%license LICENSE.TXT
-%{_bindir}/%{appname}
-%{_bindir}/fix_includes.py
-%{_bindir}/iwyu_tool.py
-%{_datadir}/%{appname}/
-%{_mandir}/man1/%{appname}.1*
+%ctest --exclude-regex "(cxx.test_(badinc|ms_inline_asm|precomputed_tpl_args)|driver.test_offload_openmp)"
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

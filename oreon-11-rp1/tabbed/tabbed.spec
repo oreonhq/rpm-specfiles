@@ -1,25 +1,18 @@
-%global source0_hash 6e8682230a213d7dabf8a79306bd3ce023875b2295a9097db427d65c1c68f322
-
-# XXX: Drop once f36 goes EOL
-%if 0%{?fedora} == 036
-%undefine _package_note_file
-%endif
-
+%global source0_hash 0acf87457b7419e66fbfa3a9cec95ffb46d254c6b88b5e4bb7cc18c3a92008a8
 Name:           tabbed
 Version:        0.9
 Release:        1%{?dist}
 Summary:        Simple Xembed container manager
-
 %global         _tabbedsourcedir %{_usrsrc}/tabbed-user-%{version}-%{release}
-
 License:        MIT
 URL:            http://tools.suckless.org/tabbed
 Source0:        http://dl.suckless.org/tools/%{name}-%{version}.tar.gz
 Source1:        %{name}-user
 Source2:        %{name}-user.1
-# Upstream tarball doesn't include the xembed manpage in 0.6; taken from
-# the git repository (fixed in 910e67db).
 Source3:        xembed.1
+Requires(post): %{_sbindir}/update-alternatives
+Requires(postun): %{_sbindir}/update-alternatives
+# oreon:deps
 BuildRequires:  binutils
 BuildRequires:  coreutils
 BuildRequires:  fontconfig-devel
@@ -28,9 +21,7 @@ BuildRequires:  libX11-devel
 BuildRequires:  libXft-devel
 BuildRequires:  make
 BuildRequires:  sed
-Requires(post): %{_sbindir}/update-alternatives
-Requires(postun): %{_sbindir}/update-alternatives
-
+# /oreon:deps
 %description
 A simple generic fronted to XEmbed aware applications.
 
@@ -51,12 +42,12 @@ Requires:       redhat-rpm-config
 Requires:       sed
 Requires(post): %{_sbindir}/update-alternatives
 Requires(postun): %{_sbindir}/update-alternatives
-
 %description user
 Tabbed source files and a launcher/builder wrapper script for
 customized configurations.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -71,8 +62,8 @@ sed -e 's|/usr/local|%{_prefix}|g' \
 sed -i 's!^\(\t\+\)@!\1!' Makefile 
 
 %build
-make %{?_smp_mflags}
 
+make %{?_smp_mflags}
 %install
 make install DESTDIR=%{buildroot}
 mv %{buildroot}%{_bindir}/%{name}{,-fedora}
@@ -89,41 +80,32 @@ mkdir -p %{buildroot}%{_tabbedsourcedir}
 install -m644 arg.h config.def.h config.mk Makefile tabbed.c xembed.c \
      %{buildroot}%{_tabbedsourcedir}
 touch %{buildroot}%{_bindir}/%{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %pre
-[ -L %{_bindir}/%{name} ] || rm -f %{_bindir}/%{name}
 
+[ -L %{_bindir}/%{name} ] || rm -f %{_bindir}/%{name}
 %post
+
 %{_sbindir}/update-alternatives --install %{_bindir}/%{name} %{name} \
     %{_bindir}/%{name}-fedora 10
-
 %postun
+
 if [ $1 -eq 0 ] ; then
     %{_sbindir}/update-alternatives --remove %{name} %{_bindir}/%{name}-fedora
 fi
-
 %post user
+
 %{_sbindir}/update-alternatives --install %{_bindir}/%{name} %{name} \
     %{_bindir}/%{name}-user 20
-
 %postun user
+
 if [ $1 -eq 0 ] ; then
     %{_sbindir}/update-alternatives --remove %{name} %{_bindir}/%{name}-user
 fi
-
-%files
-%doc LICENSE README
-%ghost %{_bindir}/%{name}
-%{_bindir}/%{name}-fedora
-%{_bindir}/xembed
-%{_mandir}/man1/%{name}.*
-%{_mandir}/man1/xembed.*
-
-%files user
-%ghost %{_bindir}/%{name}
-%{_bindir}/%{name}-user
-%{_mandir}/man1/%{name}-user.*
-%{_tabbedsourcedir}
+%files -f %{oreon_filedir}/main.list
+%files -n tabbed-user -f %{oreon_filedir}/tabbed-user.list
 
 %changelog
+
 %autochangelog

@@ -1,22 +1,20 @@
 %global source0_hash 0bb12d64aee5e467c31af61a53fb828ff7aa59c54a82ca85eeede4c5690bfa66
-
 %global source_name	usb-modeswitch-data
-
 Name:		usb_modeswitch-data
 Version:	20251207
-Release:	1%{?dist}
-Summary:	USB Modeswitch gets mobile broadband cards in operational mode
+Release:        1%{?dist}
+Summary:        USB Modeswitch gets mobile broadband cards in operational mode
 Summary(de):	USB Modeswitch aktiviert UMTS-Karten
 License:	GPL-2.0-or-later
 URL:		http://www.draisberghof.de/usb_modeswitch/
 Source0:        http://www.draisberghof.de/usb_modeswitch/%{source_name}-%{version}.tar.bz2
 BuildArch:	noarch
-BuildRequires: make
-BuildRequires:	systemd
 Requires:	systemd
 Requires:	usb_modeswitch >= 2.4.0
-
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  systemd
+# /oreon:deps
 %description
 USB Modeswitch brings up your datacard into operational mode. When plugged
 in they identify themselves as cdrom and present some non-Linux compatible
@@ -35,8 +33,8 @@ Vodafone, Option, ZTE und Novatell werden unterstützt.
 Dieses Paket enthält die Dateien für usb_modeswitch benötigt 
 um zu funktionieren.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{source_name}-%{version}
 
@@ -46,18 +44,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 make install \
 	DESTDIR=$RPM_BUILD_ROOT \
 	RULESDIR=$RPM_BUILD_ROOT%{_udevrulesdir}
+%oreon_autofiles main
 
 %post 
-%udev_rules_update
 
+%udev_rules_update
 %postun
-%udev_rules_update
 
-%files
-%{_udevrulesdir}/40-usb_modeswitch.rules
-%{_datadir}/usb_modeswitch
-%license COPYING
-%doc ChangeLog README REFERENCE
+%udev_rules_update
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

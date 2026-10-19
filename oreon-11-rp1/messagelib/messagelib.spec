@@ -1,85 +1,73 @@
 %global stable_kf6 stable
 %global source0_hash 45b6e7c933bc63688ebfa643a75c7f0b8d827577a977b597931d9af9bbbcc1cf
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    messagelib
 Version: 26.04.3
-Release: 2%{?dist}
-Summary: KDE Message libraries
-
+Release:        1%{?dist}
+Summary:        KDE Message libraries
 License: BSD-3-Clause AND BSL-1.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/pim/%{name}/
-
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-# handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}
-
+Obsoletes:      kf5-messagelib < 24.01.80
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  extra-cmake-modules
-BuildRequires:  openssl-devel
-
-BuildRequires:  cmake(Qt6Gui)
-BuildRequires:  cmake(Qt6Test)
-BuildRequires:  cmake(Qt6Widgets)
-BuildRequires:  cmake(Qt6Network)
-BuildRequires:  cmake(Qt6PrintSupport)
-BuildRequires:  cmake(Qt6WebEngineWidgets)
-BuildRequires:  cmake(Qt6Core5Compat)
-BuildRequires:  cmake(Qca-qt6)
-
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Codecs)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6NewStuff)
 BuildRequires:  cmake(Gpgmepp)
-BuildRequires:  cmake(QGpgmeQt6)
 BuildRequires:  cmake(KF6Archive)
+BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6ColorScheme)
 BuildRequires:  cmake(KF6Completion)
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6Contacts)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6IconThemes)
 BuildRequires:  cmake(KF6ItemViews)
 BuildRequires:  cmake(KF6JobWidgets)
 BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6NewStuff)
+BuildRequires:  cmake(KF6Notifications)
 BuildRequires:  cmake(KF6Service)
 BuildRequires:  cmake(KF6Sonnet)
+BuildRequires:  cmake(KF6SyntaxHighlighting)
+BuildRequires:  cmake(KF6TextAddonsWidgets)
+BuildRequires:  cmake(KF6TextAutoCorrectionWidgets)
+BuildRequires:  cmake(KF6TextCustomEditor)
+BuildRequires:  cmake(KF6TextEditTextToSpeech)
+BuildRequires:  cmake(KF6TextTemplate)
+BuildRequires:  cmake(KF6TextUtils)
 BuildRequires:  cmake(KF6TextWidgets)
 BuildRequires:  cmake(KF6WidgetsAddons)
 BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6SyntaxHighlighting)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6ColorScheme)
-BuildRequires:  cmake(KF6TextTemplate)
-
 BuildRequires:  cmake(KPim6Akonadi)
-BuildRequires:  cmake(KPim6AkonadiMime)
 BuildRequires:  cmake(KPim6AkonadiContactWidgets)
+BuildRequires:  cmake(KPim6AkonadiMime)
+BuildRequires:  cmake(KPim6AkonadiSearch)
 BuildRequires:  cmake(KPim6GrantleeTheme)
 BuildRequires:  cmake(KPim6Gravatar)
 BuildRequires:  cmake(KPim6IdentityManagementWidgets)
+BuildRequires:  cmake(KPim6Libkdepim)
 BuildRequires:  cmake(KPim6Libkleo)
 BuildRequires:  cmake(KPim6MailTransport)
 BuildRequires:  cmake(KPim6Mbox)
 BuildRequires:  cmake(KPim6Mime)
 BuildRequires:  cmake(KPim6PimCommonAkonadi)
 BuildRequires:  cmake(KPim6TextEdit)
-BuildRequires:  cmake(KPim6Libkdepim)
-BuildRequires:  cmake(KF6TextEditTextToSpeech)
-BuildRequires:  cmake(KF6TextAutoCorrectionWidgets)
-BuildRequires:  cmake(KF6TextUtils)
-BuildRequires:  cmake(KF6TextCustomEditor)
-BuildRequires:  cmake(KF6TextAddonsWidgets)
-BuildRequires:  cmake(KPim6AkonadiSearch)
-
-Obsoletes:      kf5-messagelib < 24.01.80
-
+BuildRequires:  cmake(QGpgmeQt6)
+BuildRequires:  cmake(Qca-qt6)
+BuildRequires:  cmake(Qt6Core5Compat)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Network)
+BuildRequires:  cmake(Qt6PrintSupport)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  cmake(Qt6WebEngineWidgets)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  openssl-devel
+# /oreon:deps
 %description
 %{summary}.
 
@@ -105,72 +93,22 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}-%{version} -p1
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang %{name} --all-name --with-html
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%license LICENSES/*
-%{_kf6_datadir}/config.kcfg/customtemplates_kfg.kcfg
-%{_kf6_datadir}/config.kcfg/templatesconfiguration_kfg.kcfg
-%{_kf6_datadir}/knotifications6/messageviewer.notifyrc
-%{_kf6_datadir}/knsrcfiles/messageviewer_header_themes.knsrc
-%{_kf6_datadir}/libmessageviewer/
-%{_kf6_datadir}/messagelist/
-%{_kf6_datadir}/messageviewer/
-%{_kf6_datadir}/qlogging-categories6/*%{name}.*
-%{_kf6_libdir}/libKPim6MessageComposer.so.*
-%{_kf6_libdir}/libKPim6MessageCore.so.*
-%{_kf6_libdir}/libKPim6MessageList.so.*
-%{_kf6_libdir}/libKPim6MessageViewer.so.*
-%{_kf6_libdir}/libKPim6MimeTreeParser.so.*
-%{_kf6_libdir}/libKPim6TemplateParser.so.*
-%{_kf6_libdir}/libKPim6WebEngineViewer.so.*
-%{_kf6_qtplugindir}/pim6/messageviewer/kf6/ktexttemplate/messageviewer_ktexttemplate_extension.so
-%{_kf6_qtplugindir}/pim6/messageviewer/headerstyle/messageviewer_defaultgrantleeheaderstyleplugin.so
-%dir %{_kf6_datadir}/org.kde.syntax-highlighting/
-%{_kf6_datadir}/org.kde.syntax-highlighting/syntax/kmail-template.xml
-
-%files devel
-%{_includedir}/KPim6/MessageComposer/
-%{_kf6_libdir}/cmake/KPim6MessageComposer/
-%{_kf6_libdir}/libKPim6MessageComposer.so
-
-%{_includedir}/KPim6/MessageCore/
-%{_kf6_libdir}/cmake/KPim6MessageCore/
-%{_kf6_libdir}/libKPim6MessageCore.so
-
-%{_includedir}/KPim6/MessageList/
-%{_kf6_libdir}/cmake/KPim6MessageList/
-%{_kf6_libdir}/libKPim6MessageList.so
-
-%{_includedir}/KPim6/MessageViewer/
-%{_kf6_libdir}/cmake/KPim6MessageViewer/
-%{_kf6_libdir}/libKPim6MessageViewer.so
-
-%{_includedir}/KPim6/MimeTreeParser/
-%{_kf6_libdir}/cmake/KPim6MimeTreeParser/
-%{_kf6_libdir}/libKPim6MimeTreeParser.so
-
-%{_includedir}/KPim6/TemplateParser/
-%{_kf6_libdir}/cmake/KPim6TemplateParser/
-%{_kf6_libdir}/libKPim6TemplateParser.so
-
-%{_includedir}/KPim6/WebEngineViewer/
-%{_kf6_libdir}/cmake/KPim6WebEngineViewer/
-%{_kf6_libdir}/libKPim6WebEngineViewer.so
-
-%files doc
+%files -f %{oreon_filedir}/main.list
+%files -n messagelib-devel -f %{oreon_filedir}/messagelib-devel.list
+%files -n messagelib-doc -f %{oreon_filedir}/messagelib-doc.list
 
 %changelog
+
 %autochangelog
 

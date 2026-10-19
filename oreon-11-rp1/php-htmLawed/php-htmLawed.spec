@@ -1,31 +1,19 @@
 %global source0_hash fa1f809ac99ddc48fbdddad2b2775ec53dfe728ad459f98f39d27d75205abaf6
-
-# remirepo/fedora spec file for php-htmLawed
-#
-# Copyright (c) 2012-2019 Remi Collet
-# License: CC-BY-SA
-# http://creativecommons.org/licenses/by-sa/4.0/
-#
-# Please, preserve the changelog entries
-#
 %global libname    htmLawed
 %global libversion 1242
-
 Name:           php-%{libname}
 Version:        1.2.4.2
-Release:        17%{?dist}
+Release:        1%{?dist}
 Summary:        PHP code to purify and filter HTML
-# Automatically converted from old format: LGPLv3 and GPLv2+ - review is highly recommended.
 License:        LGPL-3.0-only AND GPL-2.0-or-later
 URL:            http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/
-
 Source0:        http://www.bioinformatics.org/phplabware/downloads/%{libname}%{libversion}.zip
-
 BuildArch:      noarch
-
 Requires:       php-ctype
 Requires:       php-pcre
+# oreon:deps
 
+# /oreon:deps
 %description
 PHP code to purify and filter HTML
 
@@ -45,6 +33,7 @@ PHP code to purify and filter HTML
   web-pages, reduce spam, remove XSS code, etc.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qc
@@ -52,17 +41,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 chmod -x *
 
 %build
-# nothing to build
 
 %install
 install -d %{buildroot}%{_datadir}/php/%{libname}
 install -pm 0644 %{libname}.php %{buildroot}%{_datadir}/php/%{libname}
+%oreon_autofiles main
 
-%files
-%{!?_licensedir:%global license %%doc}
-%license LICENSE*
-%doc *README* *TESTCASE* htmLawedTest.php
-%{_datadir}/php/%{libname}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

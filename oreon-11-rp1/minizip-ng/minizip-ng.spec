@@ -1,40 +1,28 @@
 %global source0_hash 71af7b9799856d8b03619df3949e9c1be9703f8de0795af71399ba283cb27aac
-
 %bcond_without compat
-
 %global compat_soname libminizip.so.1
-
-# Compatible with the following minizip-compat version.
 %global minizip_ver 1.2.13
-# Obsoletes minizip versions less than.
 %global minizip_obsoletes 1.3
-# Old minizip-ng version before it was renamed to minizip-ng-compat
 %global minizip_ng_ver 3.0.7
-# Obsolete version of old minizip-ng
 %global minizip_ng_obsoletes 3.0.7-5
-
 Name:           minizip-ng
 Version:        4.2.2
 Release:        1%{?dist}
 Summary:        Minizip-ng contrib in zlib-ng with the latest bug fixes and advanced features
-
 License:        Zlib
 URL:            https://github.com/nmoinvaz/%{name}
 Source0:        https://github.com/nmoinvaz/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch0:         minizip-ng-4.0.7-openssl_no_engine.patch
-
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
 BuildRequires:  git-core
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: libbsd-devel
-BuildRequires: zlib-devel
-BuildRequires: bzip2-devel
-BuildRequires: libzstd-devel
-BuildRequires: xz-devel
-%if ! (0%{?rhel} >= 10)
-BuildRequires: openssl-devel-engine
-%endif
-
+BuildRequires:  libbsd-devel
+BuildRequires:  libzstd-devel
+BuildRequires:  xz-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Minizip-ng zlib-ng contribution that includes:
 * AES encryption
@@ -42,12 +30,10 @@ Minizip-ng zlib-ng contribution that includes:
 * PKWARE disk splitting
 It also has the latest bug fixes that having been found all over the internet.
 
-
 %package devel
 Summary:    Development files for %{name}
 Requires:   %{name}%{?_isa} = %{version}-%{release}
 Requires:   zlib-devel
-
 %description devel
 Development files for %{name} library.
 
@@ -58,15 +44,10 @@ Summary:       Minizip implementation provided by %{name}
 Provides:      minizip = %{minizip_ver}
 Provides:      minizip-compat%{?_isa} = %{minizip_ver}
 Obsoletes:     minizip-compat < %{minizip_obsoletes}
-# We need to Provide and Obsolete the old minizip-ng package before it was rename to minizip-ng-compat
 Provides:      minizip-ng = %{minizip_ng_ver}
 Obsoletes:     minizip-ng < %{minizip_ng_obsoletes}
-
-# This part is mandatory for the renaming process
-# It can be removed in Fedora 42
 Provides: minizip <= %{version}-%{release}
 Obsoletes: minizip < 3.0.3
-
 %description   compat
 minizip-ng is a minizip replacement that provides optimizations for "next generation"
 systems.
@@ -79,37 +60,24 @@ Requires:      %{name}-compat%{?_isa} = %{version}-%{release}
 Provides:      minizip-compat-devel = %{minizip_ver}
 Provides:      minizip-compat-devel%{?_isa} = %{minizip_ver}
 Obsoletes:     minizip-compat-devel < %{minizip_obsoletes}
-# We need to Provide and Obsolete the old minizip-ng package before it was rename to minizip-ng-compat
 Provides:      minizip-ng-devel = %{minizip_ng_ver}
 Obsoletes:     minizip-ng-devel < %{minizip_ng_obsoletes}
-
-# This part is mandatory for the renaming process
-# It can be removed in Fedora 42
 Provides: minizip-devel <= %{version}-%{release}
 Obsoletes: minizip-devel < 3.0.3
-
 %description   compat-devel
 The %{name}-compat-devel package contains libraries and header files for
 developing application that use minizip.
 
 %endif
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p 1 -n %{name}-%{version}
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
 
 cat <<_EOF_
-###########################################################################
-#
-# Build the default minizip-ng library
-#
-###########################################################################
 _EOF_
-
 %global __cmake_builddir %{_vpath_builddir}
 %cmake \
   -DMZ_BUILD_TESTS:BOOL=OFF \
@@ -118,18 +86,10 @@ _EOF_
   -DCMAKE_INSTALL_LIBDIR=%{_libdir} \
   -DMZ_FORCE_FETCH_LIBS:BOOL=OFF \
   -DMZ_COMPAT:BOOL=OFF
-
 %cmake_build
-
 %if %{with compat}
 cat <<_EOF_
-###########################################################################
-#
-# Build the compat mode library
-#
-###########################################################################
 _EOF_
-
 %global __cmake_builddir %{_vpath_builddir}-compat
 %cmake \
   -DMZ_BUILD_TESTS:BOOL=OFF \
@@ -138,52 +98,21 @@ _EOF_
   -DCMAKE_INSTALL_LIBDIR=%{_libdir} \
   -DMZ_FORCE_FETCH_LIBS:BOOL=OFF \
   -DMZ_COMPAT:BOOL=ON
-
 %cmake_build
 %endif
-
 %install
 %global __cmake_builddir %{_vpath_builddir}
 %cmake_install
-
 %if %{with compat}
 %global __cmake_builddir %{_vpath_builddir}-compat
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %endif
-
-
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libminizip-ng.so.4
-%{_libdir}/libminizip-ng.so.4{,.*}
-
-
-%files devel
-%{_libdir}/libminizip-ng.so
-%{_libdir}/pkgconfig/minizip-ng.pc
-%{_libdir}/cmake/minizip-ng/
-%{_includedir}/minizip-ng/mz*.h
-
-
-# Compat files
-%if %{with compat}
-
-%files compat
-%{_libdir}/%{compat_soname}
-%{_libdir}/libminizip.so.4{,.*}
-
-%files compat-devel
-%{_libdir}/libminizip.so
-%{_libdir}/pkgconfig/minizip.pc
-%{_libdir}/cmake/minizip/
-%{_includedir}/minizip/mz*.h
-%{_includedir}/minizip/unzip.h
-%{_includedir}/minizip/zip.h
-%{_includedir}/minizip/ioapi.h
-
-%endif
-
+%files -f %{oreon_filedir}/main.list
+%files -n minizip-ng-devel -f %{oreon_filedir}/minizip-ng-devel.list
+%files -n minizip-ng-compat -f %{oreon_filedir}/minizip-ng-compat.list
+%files -n minizip-ng-compat-devel -f %{oreon_filedir}/minizip-ng-compat-devel.list
 
 %changelog
+
 %autochangelog

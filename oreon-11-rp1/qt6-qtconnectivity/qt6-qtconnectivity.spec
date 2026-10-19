@@ -1,45 +1,35 @@
 %global source0_hash ed51f7f02c1f437fcf8a42940c7a84f6c0908c0ec7a4f5a5304fe68f47521954
-
 %global qt_module qtconnectivity
-
-#global unstable 0
 %if 0%{?unstable}
 %global prerelease rc
 %endif
-
 %global examples 1
-
-Summary: Qt6 - Connectivity components
+Summary:        Qt6 - Connectivity components
 Name:    qt6-%{qt_module}
 Version: 6.12.0
-Release: %autorelease
-
-# See LICENSE.GPL3, respectively, for exception details
+Release:        1%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt.io
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 %global  qt_version %(echo %{version} | cut -d~ -f1)
-
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0:        https://download.qt.io/a%{prerelease}hive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-s%{prerelease}-%{version}.tar.xz
 %endif
-
-# filter qml provides
 %global __provides_exclude_from ^%{_qt6_archdatadir}/qml/.*\\.so$
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: ninja-build
-BuildRequires: qt6-rpm-macros
-BuildRequires: qt6-qtbase-devel >= %{version}
-BuildRequires: qt6-qtbase-private-devel >= %{version}
 %{?_qt6:Requires: %{_qt6}%{?_isa} = %{_qt6_version}}
-BuildRequires: qt6-qtdeclarative-devel >= %{version}
-BuildRequires: pkgconfig(bluez)
-BuildRequires: pkgconfig(xkbcommon) >= 0.4.1
-BuildRequires: openssl-devel
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  ninja-build
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig(bluez)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  qt6-qtdeclarative-devel
+BuildRequires:  qt6-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
@@ -59,23 +49,18 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}} -p1
 
-
 %build
+
 %cmake_qt6 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-
 %cmake_build
-
-
 %install
 %cmake_install
-
-## .prl/.la file love
-# nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
 pushd %{buildroot}%{_qt6_libdir}
 for prl_file in libQt6*.prl ; do
   sed -i -e "/^QMAKE_PRL_BUILD_DIR/d" ${prl_file}
@@ -85,49 +70,13 @@ for prl_file in libQt6*.prl ; do
   fi
 done
 popd
-
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSES/GPL* LICENSES/LGPL*
-%{_qt6_archdatadir}/sbom/%{qt_module}-%{qt_version}.spdx
-%{_qt6_libexecdir}/sdpscanner
-%{_qt6_libdir}/libQt6Bluetooth.so.6*
-%{_qt6_libdir}/libQt6Nfc.so.6*
-
-%files devel
-%{_qt6_headerdir}/QtBluetooth/
-%{_qt6_headerdir}/QtConnectivity/
-%{_qt6_libdir}/libQt6Bluetooth.so
-%{_qt6_libdir}/libQt6Bluetooth.prl
-%{_qt6_headerdir}/QtNfc/
-%{_qt6_libdir}/libQt6Nfc.so
-%{_qt6_libdir}/libQt6Nfc.prl
-%dir %{_qt6_libdir}/cmake/Qt6Bluetooth/
-%dir %{_qt6_libdir}/cmake/Qt6BluetoothPrivate
-%dir %{_qt6_libdir}/cmake/Qt6Connectivity
-%dir %{_qt6_libdir}/cmake/Qt6NfcPrivate
-%dir %{_qt6_libdir}/cmake/Qt6Nfc/
-%{_qt6_libdir}/cmake/Qt6/FindBlueZ.cmake
-%{_qt6_libdir}/cmake/Qt6/FindPCSCLITE.cmake
-%{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/*.cmake
-%{_qt6_libdir}/cmake/Qt6Bluetooth/*.cmake
-%{_qt6_libdir}/cmake/Qt6BluetoothPrivate/*.cmake
-%{_qt6_libdir}/cmake/Qt6Connectivity/*.cmake
-%{_qt6_libdir}/cmake/Qt6NfcPrivate/*.cmake
-%{_qt6_libdir}/cmake/Qt6Nfc/*.cmake
-%{_qt6_archdatadir}/mkspecs/modules/qt_lib_bluetooth*.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_lib_connectivity_private.pri
-%{_qt6_archdatadir}/mkspecs/modules/qt_lib_nfc*.pri
-%{_qt6_libdir}/qt6/modules/*.json
-%{_qt6_libdir}/qt6/metatypes/qt6*_metatypes.json
-%{_qt6_libdir}/pkgconfig/*.pc
-
-%if 0%{?examples}
-%files examples
-%{_qt6_examplesdir}/
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n qt6-qtconnectivity-devel -f %{oreon_filedir}/qt6-qtconnectivity-devel.list
+%files -n qt6-qtconnectivity-examples -f %{oreon_filedir}/qt6-qtconnectivity-examples.list
 
 %changelog
+
 %autochangelog

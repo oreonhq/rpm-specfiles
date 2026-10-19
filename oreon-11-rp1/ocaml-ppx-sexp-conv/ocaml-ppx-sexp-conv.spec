@@ -1,36 +1,28 @@
 %global source0_hash b850556d05203aa6d97fcbe4be75abc9679b161be059e474c0d934bc0e12fe86
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %ifnarch %{ocaml_native_compiler}
 %global debug_package %{nil}
 %endif
-
-# This package is now a transitive dependency of ocaml-ppx-inline-test, so using
-# it to test this package creates a circular dependency.
 %bcond test 0
-
 Name:           ocaml-ppx-sexp-conv
 Version:        0.17.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Generate S-expression conversion functions from type definitions
 License:        MIT
 URL:            https://github.com/janestreet/ppx_sexp_conv
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/ppx_sexp_conv-%{version}.tar.gz
-
-BuildRequires:  ocaml >= 5.1.0
-BuildRequires:  ocaml-base-devel >= 0.17
-BuildRequires:  ocaml-dune >= 3.11.0
-BuildRequires:  ocaml-ppxlib-devel >= 0.36.0
-BuildRequires:  ocaml-ppxlib-jane-devel >= 0.17
-BuildRequires:  ocaml-sexplib0-devel >= 0.17
-
+Source0:        https://github.com/janestreet/ppx_sexp_conv/archive/v%{version}/ppx_sexp_conv-%{version}.tar.gz
 %if %{with test}
-BuildRequires:  ocaml-ppx-inline-test-devel
 %endif
-
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-base-devel
+BuildRequires:  ocaml-dune
+BuildRequires:  ocaml-ppx-inline-test-devel
+BuildRequires:  ocaml-ppxlib-devel
+BuildRequires:  ocaml-ppxlib-jane-devel
+BuildRequires:  ocaml-sexplib0-devel
+# /oreon:deps
 %description
 Ppx_sexp_conv is a PPX syntax extension that generates code for converting
 OCaml types to and from s-expressions, as defined in the sexplib0 library.
@@ -42,32 +34,28 @@ Requires:       ocaml-base-devel%{?_isa}
 Requires:       ocaml-ppxlib-devel%{?_isa}
 Requires:       ocaml-ppxlib-jane-devel%{?_isa}
 Requires:       ocaml-sexplib0-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files
 for developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n ppx_sexp_conv-%{version}
-
+%global oreon_srcdir ppx_sexp_conv-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with test}
 %check
+
 %dune_check
 %endif
-
-%files -f .ofiles
-%doc CHANGES.md README.org
-%license LICENSE.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-ppx-sexp-conv-devel -f %{oreon_filedir}/ocaml-ppx-sexp-conv-devel.list
 
 %changelog
+
 %autochangelog

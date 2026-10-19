@@ -1,62 +1,40 @@
 %global source0_hash 6940ccd06f435b44a0d27864359eda9c8c3e4c5ceaf8f43cf994280796f3296c
-
 Name:           python-drgn
 Version:        0.2.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Programmable debugger
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-2.1-or-later
 URL:            https://github.com/osandov/drgn/issues
-Source:         %{pypi_source drgn}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/drgn/drgn-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-BuildRequires:  elfutils-devel
-BuildRequires:  libzstd-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'drgn' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-drgn = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-drgn
-Summary:        %{summary}
-
-%description -n python3-drgn %_description
-
+Summary:        Programmable debugger
+%description -n python3-drgn
 
 %prep
-%autosetup -p1 -n drgn-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir drgn-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-drgn usr/lib/python3*/site-packages/drgn* usr/lib64/python3*/site-packages/drgn* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/drgn* usr/lib64/python3*/site-packages/drgn* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-drgn -f %{pyproject_files}
-%{_bindir}/drgn
-%{_bindir}/drgn-crash
+%files
+%files -n python3-drgn -f %{oreon_filedir}/python3-drgn.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.0-1
 - Prepare for Oreon 11 (RP1)

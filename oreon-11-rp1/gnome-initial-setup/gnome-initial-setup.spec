@@ -1,28 +1,31 @@
-%global source0_hash none
-
+%global source0_hash 22a1b61fccf9e4da9f925452984e458d85b34323f4399125cd36854f5eb66cc4
 %global nm_version 1.2
 %global nma_version 1.0
 %global glib_required_version 2.64
 %global gtk_required_version 4.17
 %global geoclue_version 2.6.0
 %global gnome_desktop_version 44.0-7
-
 %global tarball_version %(echo %{version} | tr '~' '.')
-
-%if 0%{?rhel}
-%bcond_with webkitgtk
-%else
 %bcond_without webkitgtk
-%endif
-
 Name:           gnome-initial-setup
 Version:        51.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Bootstrapping your OS
-
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Design/OS/InitialSetup
-Source0:        https://download.gnome.org/sources/%{name}/%(echo %{version} | cut -d. -f1)/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/51/%{name}-%{version}.tar.xz
+%if %{with webkitgtk}
+%endif
+Requires: gdm
+Requires: geoclue2-libs%{?_isa} >= %{geoclue_version}
+Requires: glib2%{?_isa} >= %{glib_required_version}
+Requires: gnome-desktop4%{?_isa} >= %{gnome_desktop_version}
+Requires: polkit-js-engine
+Requires: /usr/bin/tecla
+Requires(pre): shadow-utils
+Provides: user(%name)
+ExcludeArch: %{ix86}
+# oreon:deps
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -30,57 +33,41 @@ BuildRequires:  pkgconfig(accountsservice)
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gdm)
 BuildRequires:  pkgconfig(geocode-glib-2.0)
-BuildRequires:  pkgconfig(gio-2.0) >= %{glib_required_version}
-BuildRequires:  pkgconfig(gio-unix-2.0) >= %{glib_required_version}
-BuildRequires:  pkgconfig(glib-2.0) >= %{glib_required_version}
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gio-unix-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gnome-desktop-4)
 BuildRequires:  pkgconfig(gsettings-desktop-schemas)
 BuildRequires:  pkgconfig(gstreamer-1.0)
-BuildRequires:  pkgconfig(gtk4) >= %{gtk_required_version}
+BuildRequires:  pkgconfig(gtk4)
 BuildRequires:  pkgconfig(gweather4)
 BuildRequires:  pkgconfig(ibus-1.0)
 BuildRequires:  pkgconfig(iso-codes)
 BuildRequires:  pkgconfig(json-glib-1.0)
 BuildRequires:  pkgconfig(krb5)
 BuildRequires:  pkgconfig(libadwaita-1)
-BuildRequires:  pkgconfig(libgeoclue-2.0) >= %{geoclue_version}
-BuildRequires:  pkgconfig(libnma-gtk4) >= %{nma_version}
-BuildRequires:  pkgconfig(libnm) >= %{nm_version}
+BuildRequires:  pkgconfig(libgeoclue-2.0)
+BuildRequires:  pkgconfig(libnm)
+BuildRequires:  pkgconfig(libnma-gtk4)
 BuildRequires:  pkgconfig(libsecret-1)
 BuildRequires:  pkgconfig(pango)
 BuildRequires:  pkgconfig(polkit-gobject-1)
 BuildRequires:  pkgconfig(pwquality)
 BuildRequires:  pkgconfig(rest-1.0)
-%if %{with webkitgtk}
 BuildRequires:  pkgconfig(webkitgtk-6.0)
-%endif
-
-# gnome-initial-setup is being run by gdm
-Requires: gdm
-Requires: geoclue2-libs%{?_isa} >= %{geoclue_version}
-Requires: glib2%{?_isa} >= %{glib_required_version}
-Requires: gnome-desktop4%{?_isa} >= %{gnome_desktop_version}
-# we install a rules file
-Requires: polkit-js-engine
-Requires: /usr/bin/tecla
-
-Requires(pre): shadow-utils
-
-Provides: user(%name)
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch: %{ix86}
-
+# /oreon:deps
 %description
 GNOME Initial Setup is an alternative to firstboot, providing
 a good setup experience to welcome you to your system, and walks
 you through configuring it. It is integrated with gdm.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build
+
 %meson \
   -Dparental_controls=disabled \
 %if !%{with webkitgtk}
@@ -88,36 +75,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %endif
   %{nil}
 %meson_build
-
 %install
 %meson_install
-
 mkdir -p %{buildroot}%{_datadir}/gnome-initial-setup
-
-
 %find_lang %{name}
+%oreon_autofiles main
 
 %pre
-# we do not use sysusers yet because we need /var/lib/gnome-initial-setup
-# to be owned by the gnome-initial-setup user. please do not convert
-# to sysusers without making sure this is handled, maybe by tmpfiles
-useradd -rM -d /run/gnome-initial-setup/ -s /sbin/nologin %{name} &>/dev/null || :
 
-%files -f %{name}.lang
-%license COPYING
-%doc NEWS README.md
-%{_libexecdir}/gnome-initial-setup
-%{_libexecdir}/gnome-initial-setup-copy-worker
-%{_datadir}/applications/gnome-initial-setup.desktop
-%{_datadir}/dconf/profile/gnome-initial-setup
-%dir %{_datadir}/gnome-initial-setup
-%{_datadir}/gnome-initial-setup/initial-setup-dconf-defaults
-%{_datadir}/gnome-session/sessions/gnome-initial-setup.session
-%{_datadir}/gnome-shell/modes/initial-setup.json
-%{_datadir}/polkit-1/rules.d/20-gnome-initial-setup.rules
-%{_sysusersdir}/gnome-initial-setup.conf
-%{_userunitdir}/*
+useradd -rM -d /run/gnome-initial-setup/ -s /sbin/nologin %{name} &>/dev/null || :
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50~rc-1
 - Prepare for Oreon 11 (RP1)

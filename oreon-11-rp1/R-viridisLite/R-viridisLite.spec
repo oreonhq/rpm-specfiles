@@ -1,17 +1,15 @@
 %global source0_hash 893f111d31deccd2cc959bc9db7ba2ce9020a2dd1b9c1c009587e449c4cce1a1
-
 Name:           R-viridisLite
 Version:        %R_rpm_version 0.4.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Colorblind-Friendly Color Maps (Lite Version)
-
 License:        MIT
 URL:            %{cran_url}
-Source:         %{cran_source}
-
+Source0:        https://cran.r-project.org/package=viridisLite&version=%{version}#/viridisLite_%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Color maps designed to improve graph readability for readers with common
 forms of color blindness and/or color vision deficiency. The color maps are
@@ -23,22 +21,19 @@ color and fill scales and can be found at
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples
 
-%files -f %{R_files}
+%R_check \--no-examples
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

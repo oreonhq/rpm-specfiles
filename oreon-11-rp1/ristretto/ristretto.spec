@@ -1,34 +1,29 @@
-%global source0_hash a84ef8cb80638681d9b9ef09cddff86a5d7a0e028603b4a601cf0ff6c2869ce8
-
-# Review at https://bugzilla.redhat.com/show_bug.cgi?id=351531
-
+%global source0_hash 502cf1577de14b38132dc89e56884c5e10f86f6a028d8dde379a8839110fda55
 %global majorversion 0.14
 %global xfceversion 4.18
-
 Name:           ristretto
 Version:        0.14.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Image-viewer for the Xfce desktop environment
 Summary(de):    Bildbetrachter für die Xfce Desktop-Umgebung
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://goodies.xfce.org/projects/applications/ristretto/
 Source0:        http://archive.xfce.org/src/apps/%{name}/%{majorversion}/%{name}-%{version}.tar.xz
-#VCS: git:git://git.xfce.org/apps/ristretto
-
-BuildRequires:  meson
-BuildRequires:  gcc-c++
-BuildRequires:  dbus-glib-devel >= 0.34
-BuildRequires:  gtk2-devel >= 2.20.0
-BuildRequires:  exo-devel >= 0.12.0
-BuildRequires:  libexif-devel >= 0.6.0
-BuildRequires:  libxfce4ui-devel >= %{xfceversion}
-BuildRequires:  xfconf-devel >= %{xfceversion}
-BuildRequires:  desktop-file-utils, gettext, intltool
-BuildRequires:  libappstream-glib
 Requires:       tumbler
-
+# oreon:deps
+BuildRequires:  dbus-glib-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  exo-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  gtk2-devel
+BuildRequires:  intltool
+BuildRequires:  libappstream-glib
+BuildRequires:  libexif-devel
+BuildRequires:  libxfce4ui-devel
+BuildRequires:  meson
+BuildRequires:  xfconf-devel
+# /oreon:deps
 %description
 Ristretto is a fast and lightweight image-viewer for the Xfce desktop 
 environment.
@@ -39,18 +34,14 @@ Desktop-Umgebung.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
-
 %find_lang %{name}
-
 desktop-file-install \
         --dir %{buildroot}%{_datadir}/applications \
         --add-mime-type=image/x-bmp \
@@ -60,16 +51,11 @@ desktop-file-install \
         --add-mime-type=image/xpm \
         --delete-original \
         %{buildroot}%{_datadir}/applications/org.xfce.%{name}.desktop
-
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc AUTHORS NEWS
-%{_bindir}/%{name}
-%{_datadir}/applications/*%{name}.desktop
-%{_datadir}/icons/hicolor/*/*/*
-%{_metainfodir}/*.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

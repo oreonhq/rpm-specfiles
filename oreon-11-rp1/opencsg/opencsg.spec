@@ -1,25 +1,17 @@
 %global source0_hash 5ac5df73b1ad3340dd6705ff90e009f1a946bb9536c21c2263a6f974265664c0
-
 Name:           opencsg
 Version:        1.8.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Library for Constructive Solid Geometry using OpenGL
-# Most source code is GPL-2.0-or-later.
-# src/glad/include/KHR/khrplatform.h is MIT-Khronos-old.
-# src/glad/include/glad/gl.h and src/glad/src/gl.cpp are (WTFPL OR CC0-1.0) AND Apache-2.0.
-# However, since CC0-1.0 is not allowed for code in Fedora, we reduce that to WTFPL AND Apache-2.0.
-# https://docs.fedoraproject.org/en-US/legal/license-field/#_special_rules_for_or_expressions
 License:        GPL-2.0-or-later AND MIT-Khronos-old AND WTFPL AND Apache-2.0
 URL:            https://www.opencsg.org/
-Source:         https://www.opencsg.org/OpenCSG-%{version}.tar.gz
-
+Source0:        https://www.opencsg.org/OpenCSG-%{version}.tar.gz
+ExcludeArch:    %{ix86}
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  freeglut-devel
 BuildRequires:  gcc-c++
-BuildRequires:  cmake
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-
+# /oreon:deps
 %description
 OpenCSG is a library that does image-based CSG rendering using OpenGL.
 
@@ -41,18 +33,17 @@ Goldfeather algorithm and the SCS algorithm, both of them in several variants.
 %package devel
 Summary: OpenCSG development files
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files for OpenCSG.
 
 %package doc
 Summary: OpenCSG documentation
 BuildArch: noarch
-
 %description doc
 Documentation for OpenCSG.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n OpenCSG-%{version}
@@ -63,25 +54,17 @@ touch -r changelog.txt changelog.txt.new && \
 mv changelog.txt.new changelog.txt
 
 %build
+
 %cmake -DBUILD_EXAMPLE=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README.md
-%license copying.txt
-%{_libdir}/libopencsg.so.1
-%{_libdir}/libopencsg.so.%{version}
-
-%files devel
-%{_includedir}/opencsg.h
-%{_libdir}/libopencsg.so
-
-%files doc
-%doc changelog.txt doc
-%license copying.txt
+%files -f %{oreon_filedir}/main.list
+%files -n opencsg-devel -f %{oreon_filedir}/opencsg-devel.list
+%files -n opencsg-doc -f %{oreon_filedir}/opencsg-doc.list
 
 %changelog
+
 %autochangelog

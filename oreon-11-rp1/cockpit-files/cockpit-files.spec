@@ -1,39 +1,20 @@
 %global source0_hash cb4a7746b240148716e18d9fea42a5a4602155377a609765efc993651e691802
 %global source1_hash 050e9acf1844695345603e4c1bdabf422eb6371aeea15c3f4561653ddc92f429
-
 Name: cockpit-files
 Version: 45
-Release: 1%{?dist}
-Summary: A filesystem browser for Cockpit
+Release:        1%{?dist}
+Summary:        A filesystem browser for Cockpit
 License: LGPL-2.1-or-later
-
-# distributions which ship nodejs-esbuild can rebuild the bundle during package build
-%if 0%{?fedora} >= 42
-%define rebuild_bundle 1
-%endif
-
 Source0:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-node-%{version}.tar.xz
-
 BuildArch: noarch
-BuildRequires: make
 %if 0%{?suse_version}
-# Suse's package has a different name
-BuildRequires:  appstream-glib
 %else
-BuildRequires:  libappstream-glib
 %endif
-BuildRequires: gettext
 %if %{defined rebuild_bundle}
-BuildRequires: /usr/bin/node
-BuildRequires: nodejs-esbuild
 %endif
-
 Requires: cockpit-bridge >= 318
-
-# Replace the older cockpit-navigator provided by 45Drives
 Obsoletes: cockpit-navigator < 0.5.11
-
 Provides: bundled(npm(@patternfly/patternfly)) = 6.4.0
 Provides: bundled(npm(@patternfly/react-core)) = 6.4.1
 Provides: bundled(npm(@patternfly/react-icons)) = 6.4.0
@@ -50,11 +31,18 @@ Provides: bundled(npm(scheduler)) = 0.23.2
 Provides: bundled(npm(tabbable)) = 6.4.0
 Provides: bundled(npm(throttle-debounce)) = 5.0.2
 Provides: bundled(npm(tslib)) = 2.8.1
-
+# oreon:deps
+BuildRequires:  /usr/bin/node
+BuildRequires:  gettext
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  nodejs-esbuild
+# /oreon:deps
 %description
 A filesystem browser for Cockpit
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}
@@ -63,32 +51,22 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %endif
 
 %build
+
 %if %{defined rebuild_bundle}
 rm -rf dist
-# HACK: node module packaging is broken in Fedora ≤ 43; should be in
-# common location, not major version specific one
 NODE_ENV=production NODE_PATH=/usr/lib/node_modules:$(echo /usr/lib/node_modules_*) ./build.js
 %else
-# Use pre-built bundle on distributions without nodejs-esbuild
 %endif
-
 %install
 %make_install PREFIX=/usr
-
-# drop source maps, they are large and just for debugging
 find %{buildroot}%{_datadir}/cockpit/ -name '*.map' | xargs --no-run-if-empty rm --verbose
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*
-
-# this can't be meaningfully tested during package build; tests happen through
-# FMF (see plans/all.fmf) during package gating
-
-%files
-%doc README.md
-%license LICENSE dist/index.js.LEGAL.txt
-%{_datadir}/cockpit/*
-%{_datadir}/metainfo/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

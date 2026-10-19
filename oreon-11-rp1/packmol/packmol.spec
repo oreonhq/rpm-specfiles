@@ -1,18 +1,17 @@
-%global source0_hash b22451ae0963572dc2dbcdf15b7ee4cdd0f91a24402cb3deab00325375491583
-
+%global source2_hash b22451ae0963572dc2dbcdf15b7ee4cdd0f91a24402cb3deab00325375491583
+%global source0_hash b26af58d407b1c8d786aa6c2bb6bfa40d741aaa0424db51300fdd6fd66dd4813
 Name:		packmol
 Version:	21.2.3
-Release:	1%{?dist}
-Summary:	Packing optimization for molecular dynamics simulations
+Release:        1%{?dist}
+Summary:        Packing optimization for molecular dynamics simulations
 License:	MIT
 URL:		https://m3g.github.io/packmol
-Source0:	https://github.com/m3g/packmol/archive/v%{version}/packmol-%{version}.tar.gz
-# Example files
+Source0:        https://github.com/m3g/packmol/archive/v%{version}/packmol-%{version}.tar.gz
 Source2:        https://m3g.github.io/packmol/examples/examples.tar.gz
-
-BuildRequires:	cmake
-BuildRequires:	gcc-gfortran
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-gfortran
+# /oreon:deps
 %description
 Packmol creates an initial point for molecular dynamics simulations by
 packing molecules in defined regions of space. The packing guarantees
@@ -32,6 +31,7 @@ The package is compatible with input files of PDB, TINKER, XYZ and
 MOLDY formats.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -39,17 +39,18 @@ find . -name \*.o -delete
 tar zxvf %{SOURCE2}
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2381351)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 export FC=gfortran
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 install -D -p -m 755 solvate.tcl %{buildroot}%{_bindir}/packmol_solvate
+%oreon_autofiles main
 
 %check
+
 cd examples
 for f in interface.inp; do
     out=$(basename $f .inp).out
@@ -60,12 +61,8 @@ for f in interface.inp; do
 	exit
     fi
 done
-
-%files
-%doc AUTHORS
-%license LICENSE
-%{_bindir}/packmol
-%{_bindir}/packmol_solvate
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,43 +1,36 @@
 %global source0_hash 31932ce8b33f2905472a987dc1984b9d8a7d338083a066021349587cc5f1cfea
-
 %global forgeurl https://github.com/yhirose/cpp-httplib
 %undefine __cmake_in_source_build
-
 %bcond_without tests
 %bcond_with    online
-# Compiled version in shared library.
-# Does not have any so-version, therefore not default
 %bcond_with compile
-
 %if %{without compile}
 %undefine __cmake_in_source_build
 %global debug_package %{nil}
 %endif
-
 Name:           cpp-httplib
 Version:        0.58.0
 %global tag v%{version}
 %forgemeta
-Release:        %autorelease
-
+Release:        1%{?dist}
 Summary:        A C++11 single-file header-only cross platform HTTP/HTTPS library
 License:        MIT
 URL:            https://github.com/yhirose/cpp-httplib
 VCS:            git:%{forgeurl}
-Source0:        %forgesource
-
-BuildRequires:  redhat-rpm-config
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  libcurl-devel
-BuildRequires:  openssl-devel
-BuildRequires:  zlib-devel
-BuildRequires:  brotli-devel
+Source0:        %{forgeurl}/archive/%{tag}/%{name}-%{version}.tar.gz
 %if %{with tests}
-BuildRequires:  openssl
-BuildRequires:  gtest-devel
 %endif
-
+# oreon:deps
+BuildRequires:  brotli-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  openssl
+BuildRequires:  openssl-devel
+BuildRequires:  redhat-rpm-config
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 A C++11 single-file header-only cross platform HTTP/HTTPS library.
 
@@ -53,7 +46,6 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %else
 Provides:       %{name}-static = %{version}-%{release}
 %endif
-
 %description devel
 A C++11 single-file header-only cross platform HTTP/HTTPS library.
 
@@ -65,11 +57,13 @@ If you are looking for a 'non-blocking' library, this is not the one that you wa
 Development files only.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
 
 %build
+
 %cmake \
 %if %{with compile}
     -DBUILD_SHARED_LIBS=ON -DHTTPLIB_COMPILE=ON \
@@ -77,48 +71,31 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if %{with tests}
     -DHTTPLIB_TEST=ON \
 %endif
-#
 %cmake_build
-
 %install
 %cmake_install
 rm -r $RPM_BUILD_ROOT%{_docdir}/httplib
 rm -r $RPM_BUILD_ROOT%{_licensedir}/httplib
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %if %{with tests}
-# multiple threads fails many tests
 %if %{with online}
   %ctest --parallel 1
 %else
   %ifnarch %{ix86}
-    # ContentStream is unstable, https://bugzilla.redhat.com/show_bug.cgi?id=2433965
     %ctest --parallel 1 --exclude-regex '^MaxTimeoutTest.ContentStream|_Online$'
   %else
-    # https://bugzilla.redhat.com/show_bug.cgi?id=2446435
     %ctest --parallel 1 --exclude-regex '^ETagTest.LastModifiedAndIfModifiedSince|^ETagTest.IfRangeWithDate|^WebSocketIntegrationTest.LargeMessage|^WebSocketIntegrationTest.MaxPayloadAtLimit|^MaxTimeoutTest.ContentStream|_Online$'
   %endif
 %endif
 %endif
-
 %if %{with compile}
-%files
-%license LICENSE
-%doc README.md
-# TODO: should use so-versioned library here, but upstream
-# prefers header-only mode.
-%{_libdir}/libhttplib.so.*
-%endif
-
-%files devel
-%if %{without compile}
-%license LICENSE
-%doc README.md
-%else
-%{_libdir}/libhttplib.so
-%endif
-%{_includedir}/httplib.h
-%{_libdir}/cmake/httplib
+%files -f %{oreon_filedir}/main.list
+%files -n cpp-httplib-devel -f %{oreon_filedir}/cpp-httplib-devel.list
 
 %changelog
+
 %autochangelog
+%endif

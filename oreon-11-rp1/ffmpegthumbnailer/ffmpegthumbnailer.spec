@@ -1,29 +1,26 @@
 %global source0_hash 0691647dc054179c358794c643a0968f796d23c015d02283e6ce2cf4173d2e0a
-
 %global forgeurl https://github.com/dirkvdb/ffmpegthumbnailer
 Version:        2.3.1
 %global tag v%{version}
 %forgemeta
-
 Name:           ffmpegthumbnailer
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Lightweight video thumbnailer that can be used by file managers
 License:        GPL-2.0-or-later
 URL:            %{forgeurl}
-Source0:        %{forgesource}
-
-BuildRequires:  gcc-c++
+Source0:        %{forgeurl}/archive/%{tag}/%{name}-%{version}.tar.gz
+Requires:       %{name}-libs%{?isa} = %{version}-%{release}
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libavfilter)
 BuildRequires:  pkgconfig(libavformat)
 BuildRequires:  pkgconfig(libavutil)
-BuildRequires:  pkgconfig(libavfilter)
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libpng)
-
-Requires:       %{name}-libs%{?isa} = %{version}-%{release}
-
+# /oreon:deps
 %description
 FFmpegthumbnailer is a lightweight video thumbnailer that can be used by file
 managers to create thumbnails for your video files. The thumbnailer uses ffmpeg
@@ -32,50 +29,38 @@ configuration flags of ffmpeg.
 
 %package        libs
 Summary:        Library for %{name}
-
 %description    libs
 This package contains the library for %{name}.
 
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}-libs%{?isa} = %{version}-%{release}
-
 %description    devel
 This package contains the development files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
 
 %build
+
 %cmake \
     -DENABLE_GIO=ON \
     -DENABLE_THUMBNAILER=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license COPYING
-%doc README
-%{_bindir}/ffmpegthumbnailer
-%{_mandir}/man1/ffmpegthumbnailer.1*
-%dir %{_datadir}/thumbnailers
-%{_datadir}/thumbnailers/ffmpegthumbnailer.thumbnailer
-
-%files libs
-%license COPYING
-%{_libdir}/libffmpegthumbnailer.so.4*
-
-%files devel
-%{_includedir}/libffmpegthumbnailer/
-%{_libdir}/libffmpegthumbnailer.so
-%{_libdir}/pkgconfig/libffmpegthumbnailer.pc
+%files -f %{oreon_filedir}/main.list
+%files -n ffmpegthumbnailer-libs -f %{oreon_filedir}/ffmpegthumbnailer-libs.list
+%files -n ffmpegthumbnailer-devel -f %{oreon_filedir}/ffmpegthumbnailer-devel.list
 
 %changelog
+
 %autochangelog

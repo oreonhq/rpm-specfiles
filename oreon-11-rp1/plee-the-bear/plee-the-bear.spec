@@ -1,40 +1,38 @@
-%global source0_hash none
-
+%global source0_hash 1353f37d392966e58cb976ad031af4e4aecfd032d6994d22fb08af0a219417bc
 Name:           plee-the-bear
 Version:        0.7.1
 Release:        23%{?dist}
 Summary:        2D platform game
-# Code and artwork respectively
-# Automatically converted from old format: GPLv3 and CC-BY-SA - review is highly recommended.
 License:        GPL-3.0-only AND LicenseRef-Callaway-CC-BY-SA
 URL:            https://github.com/j-jorge/plee-the-bear/
 Source0:        https://github.com/j-jorge/plee-the-bear/archive/%{version}.tar.gz
 Patch3:         ptb-docbook2man.patch
-BuildRequires:  gcc-c++
+ExcludeArch:    %{power64}
+# oreon:deps
+BuildRequires:  SDL2-devel
+BuildRequires:  SDL2_mixer-devel
 BuildRequires:  bear-factory-devel
-BuildRequires:  docbook-utils
 BuildRequires:  boost-devel
+BuildRequires:  chrpath
+BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
-BuildRequires:  libclaw-devel >= 1.7.0
-BuildRequires:  SDL2_mixer-devel SDL2-devel
+BuildRequires:  docbook-utils
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  libclaw-devel
 BuildRequires:  libjpeg-devel
 BuildRequires:  libpng-devel
-BuildRequires:  gettext
-BuildRequires:  cmake
-BuildRequires:  chrpath
-# Build is totally broken on ppc64
-ExcludeArch:    %{power64}
-
+# /oreon:deps
 %description
 Plee the Bear is a 2D platform game in the spirit of 1990s console games.
 
 %prep
+
 %setup -q -n %{name}-%{version}
 %autopatch -p1
 
 %build
-# plee the bear uses some private libs which it builds as unversioned .so files
-# we put them in a private-libdir, and use a wrapper to set LD_LIBRARY_PATH
+
 %cmake \
         -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
         -DCMAKE_BUILD_TYPE=release \
@@ -46,45 +44,24 @@ Plee the Bear is a 2D platform game in the spirit of 1990s console games.
         -DBEAR_ENGINE_INSTALL_LIBRARY_DIR=%{_lib} \
         -DBEAR_ROOT_DIRECTORY=%{_includedir}/bear-factory
 %cmake_build
-
 %install
 %cmake_install
-
-# Translations
 %find_lang %{name}
-
-# Move binary to libexec, install wrapper to set LD_LIBRARY_PATH
 mkdir -p $RPM_BUILD_ROOT%{_libexecdir}
 mv $RPM_BUILD_ROOT%{_bindir}/%{name} $RPM_BUILD_ROOT%{_libexecdir}
 cat > $RPM_BUILD_ROOT%{_bindir}/%{name} <<EOF
-#!/bin/sh
-# export LD_LIBRARY_PATH=%{_libdir}/%{name}
 exec %{_libexecdir}/%{name} "$@"
 EOF
 chmod +x $RPM_BUILD_ROOT%{_bindir}/%{name}
-
-# conflicts with bear
 rm -rf $RPM_BUILD_ROOT%{_datadir}/bear-factory/item-description
 rm -rf $RPM_BUILD_ROOT%{_datadir}/bear-factory/images
 rm `find $RPM_BUILD_ROOT%{_datadir}/%{name} -name "*.sh"`
 rm -rf $RPM_BUILD_ROOT%{_datadir}/pixmaps
-
-# Menu entries
 desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
-
-# Nuke the rpaths.
 for i in $RPM_BUILD_ROOT%{_libdir}/*.so \
          $RPM_BUILD_ROOT%{_libexecdir}/%{name}; do
          chrpath --delete $i
 done
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -109,21 +86,11 @@ SentUpstream: 2014-09-25
   </screenshots>
 </application>
 EOF
-
 %ldconfig_scriptlets
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license LICENSE license/GPL license/CCPL
-%doc README.md
-%{_bindir}/%{name}
-%{_libdir}/lib*.so
-%{_libexecdir}/%{name}
-%{_datadir}/%{name}
-%{_datadir}/bear-factory/%{name}
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*/apps/ptb.png
-%{_mandir}/man6/%{name}.6*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,79 +1,56 @@
 %global source0_hash 3c59f233d0b10686a85aed0c994011cec68626da0128dea90b5c4fdc1746cfc3
-
-# Perform optional test
 %bcond_without perl_HTML_FormatExternal_enables_optional_test
-# Enable a formatter using ELinks
 %bcond_without perl_HTML_FormatExternal_enables_elinks
-# Enable a formatter using html2text
 %bcond_without perl_HTML_FormatExternal_enables_html2text
-# Enable a formatter using Links
 %bcond_without perl_HTML_FormatExternal_enables_links
-# Enable a formatter using Lynx
 %bcond_without perl_HTML_FormatExternal_enables_lynx
-# Enable a formatter using Netrik
-# netrik executable not yet packaged
 %bcond_with perl_HTML_FormatExternal_enables_netrik
-# Enable a formatter using Vilistextum
-# vilistextum executable not yet packaged
 %bcond_with perl_HTML_FormatExternal_enables_vilistextum
-# Enable a formatter using w3m
 %bcond_without perl_HTML_FormatExternal_enables_w3m
-# Enable a formatter using Zen
-# zen executable not yet packaged
 %bcond_with perl_HTML_FormatExternal_enables_zen
-
 Name:           perl-HTML-FormatExternal
 Version:        26
 Release:        21%{?dist}
 Summary:        HTML to text formatting using external programs
-# debian/rules:     GPLv3+
-# debian/copyright: GPLv3+
-# README:           GPLv3+
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://metacpan.org/release/HTML-FormatExternal
 Source0:        https://cpan.metacpan.org/authors/id/K/KR/KRYDE/HTML-FormatExternal-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.6
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(constant::defer)
-BuildRequires:  perl(Encode)
-BuildRequires:  perl(File::Copy)
-BuildRequires:  perl(File::Spec) >= 0.80
-BuildRequires:  perl(File::Temp) >= 0.18
-BuildRequires:  perl(IPC::Run)
-BuildRequires:  perl(URI::file) >= 0.08
-# Tests:
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(FindBin)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(vars)
 %if %{with perl_HTML_FormatExternal_enables_optional_test}
-# Optional tests:
-# Devel::FindRef removed from a distribution (bug #1231234)
-BuildRequires:  perl(Devel::StackTrace)
-BuildRequires:  perl(HTML::TreeBuilder)
-BuildRequires:  perl(Taint::Util)
 %endif
 Requires:       perl(Encode)
 Requires:       perl(File::Copy)
 Requires:       perl(File::Temp) >= 0.18
-
-# Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\(URI::file\\)$
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(Devel::StackTrace)
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(HTML::TreeBuilder)
+BuildRequires:  perl(IPC::Run)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Taint::Util)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(URI::file)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(constant::defer)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This is a common base for formatter modules which turn HTML into plain text
 by dumping it through the respective external programs. Available modules are:
@@ -165,78 +142,31 @@ This Perl module turns HTML into plain text using the Zen program.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n HTML-FormatExternal-%{version}
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# t/taint.t requires enabled taint mode
+
 export HARNESS_PERL_SWITCHES=-T
 make test
-
-%files
-%license COPYING
-%doc Changes examples README
-%{perl_vendorlib}/*
-%exclude %{perl_vendorlib}/HTML/FormatText/*
-%{_mandir}/man3/*
-%exclude %{_mandir}/man3/HTML::FormatText::*
-
-%if %{with perl_HTML_FormatExternal_enables_elinks}
-%files Elinks
-%{perl_vendorlib}/HTML/FormatText/Elinks.pm
-%{_mandir}/man3/HTML::FormatText::Elinks.*
-%endif
-
-%if %{with perl_HTML_FormatExternal_enables_html2text}
-%files Html2text
-%{perl_vendorlib}/HTML/FormatText/Html2text.pm
-%{_mandir}/man3/HTML::FormatText::Html2text.*
-%endif
-
-%if %{with perl_HTML_FormatExternal_enables_links}
-%files Links
-%{perl_vendorlib}/HTML/FormatText/Links.pm
-%{_mandir}/man3/HTML::FormatText::Links.*
-%endif
-
-%if %{with perl_HTML_FormatExternal_enables_lynx}
-%files Lynx
-%{perl_vendorlib}/HTML/FormatText/Lynx.pm
-%{_mandir}/man3/HTML::FormatText::Lynx.*
-%endif
-
-%if %{with perl_HTML_FormatExternal_enables_netrik}
-%files Netrik
-%{perl_vendorlib}/HTML/FormatText/Netrik.pm
-%{_mandir}/man3/HTML::FormatText::Netrik.*
-%endif
-
-%if %{with perl_HTML_FormatExternal_enables_vilistextum}
-%files Vilistextum
-%{perl_vendorlib}/HTML/FormatText/Vilistextum.pm
-%{_mandir}/man3/HTML::FormatText::Vilistextum.*
-%endif
-
-%if %{with perl_HTML_FormatExternal_enables_w3m}
-%files W3m
-%{perl_vendorlib}/HTML/FormatText/W3m.pm
-%{_mandir}/man3/HTML::FormatText::W3m.*
-%endif
-
-%if %{with perl_HTML_FormatExternal_enables_zen}
-%files Zen
-%{perl_vendorlib}/HTML/FormatText/Zen.pm
-%{_mandir}/man3/HTML::FormatText::Zen.*
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n perl-HTML-FormatExternal-Elinks -f %{oreon_filedir}/perl-HTML-FormatExternal-Elinks.list
+%files -n perl-HTML-FormatExternal-Html2text -f %{oreon_filedir}/perl-HTML-FormatExternal-Html2text.list
+%files -n perl-HTML-FormatExternal-Links -f %{oreon_filedir}/perl-HTML-FormatExternal-Links.list
+%files -n perl-HTML-FormatExternal-Lynx -f %{oreon_filedir}/perl-HTML-FormatExternal-Lynx.list
+%files -n perl-HTML-FormatExternal-W3m -f %{oreon_filedir}/perl-HTML-FormatExternal-W3m.list
 
 %changelog
+
 %autochangelog

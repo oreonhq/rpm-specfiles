@@ -1,46 +1,36 @@
-%global source0_hash 862ee0d5fed8c7c8dff87e7b0dbc0985e6ab5f71901785a2dec656457d8c665b
-
+%global source1_hash 862ee0d5fed8c7c8dff87e7b0dbc0985e6ab5f71901785a2dec656457d8c665b
+%global source0_hash ef4944134f6c39d0937f265391db2d08bca33cd3a2f0ee9133e1eb55f1cc657c
 %global dxbc_spirv_commit 31b74bfb99c39ddaaaf6490cfce30046c38913e4
-
 Name:           dxvk-native
 Version:        3.1.1
 Release:        1%{?dist}
 Summary:        Vulkan-based D3D8~D3D11 implementation for Linux
-# dxvk-native and dxbc-spirv
 SourceLicense:  Zlib and MIT
 License:        Zlib
 URL:            https://github.com/doitsujin/dxvk
-Source0:        %{url}/archive/v%{version}/dxvk-%{version}.tar.gz
-# Needs to be packaged separately eventually, used at build-time
+Source0:        https://github.com/doitsujin/dxvk/archive/v%{version}/dxvk-%{version}.tar.gz
 Source1:        https://github.com/doitsujin/dxbc-spirv/archive/%{dxbc_spirv_commit}/dxbc-spirv-%{dxbc_spirv_commit}.tar.gz
-
-# Fix glfw3 meson request
 Patch0101:      https://github.com/doitsujin/dxvk/pull/5491.patch
 Patch0102:      https://github.com/doitsujin/dxvk/pull/5494.patch
-
-# Allow building with libdisplay-info 0.3.0
 Patch1001:      dxvk-libdisplay-info-0.3.0.patch
-
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  meson >= 0.58
-BuildRequires:  glslang
-BuildRequires:  pkgconfig(sdl3)
-BuildRequires:  pkgconfig(sdl2)
-BuildRequires:  pkgconfig(glfw3)
-BuildRequires:  vulkan-loader-devel
-BuildRequires:  spirv-headers-devel
-BuildRequires:  mingw64-headers
-BuildRequires:  pkgconfig(libdisplay-info)
-
 Requires:       vulkan-loader%{?_isa}
 Requires:       SDL3%{?_isa}
 Requires:       SDL2%{?_isa}
 Requires:       glfw%{?_isa}
-
-# Requires x86-specific headers for now...
 ExclusiveArch:  %{ix86} %{x86_64}
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  glslang
+BuildRequires:  meson
+BuildRequires:  mingw64-headers
+BuildRequires:  pkgconfig(glfw3)
+BuildRequires:  pkgconfig(libdisplay-info)
+BuildRequires:  pkgconfig(sdl2)
+BuildRequires:  pkgconfig(sdl3)
+BuildRequires:  spirv-headers-devel
+BuildRequires:  vulkan-loader-devel
+# /oreon:deps
 %description
 DXVK Native is a port of DXVK to Linux which allows it
 to be used natively without Wine.
@@ -56,12 +46,12 @@ Requires:       SDL3-devel%{?_isa}
 Requires:       SDL2-devel%{?_isa}
 Requires:       glfw-devel%{?_isa}
 Requires:       vulkan-loader-devel%{?_isa}
-
 %description devel
 This package provides the development libraries and other
 files for building applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n dxvk-%{version} -p1
@@ -137,29 +127,16 @@ cp %{mingw64_includedir}/dxvahd.h include/native/directx
 cp %{mingw64_includedir}/_mingw_unicode.h include/native/directx
 
 %build
+
 %meson -Dbuild_id=true
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libdxvk_d3d8.so.0*
-%{_libdir}/libdxvk_d3d9.so.0*
-%{_libdir}/libdxvk_d3d10core.so.0*
-%{_libdir}/libdxvk_d3d11.so.0*
-%{_libdir}/libdxvk_dxgi.so.0*
-
-%files devel
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/dxvk/
-%{_libdir}/libdxvk_d3d8.so
-%{_libdir}/libdxvk_d3d9.so
-%{_libdir}/libdxvk_d3d10core.so
-%{_libdir}/libdxvk_d3d11.so
-%{_libdir}/libdxvk_dxgi.so
+%files -f %{oreon_filedir}/main.list
+%files -n dxvk-native-devel -f %{oreon_filedir}/dxvk-native-devel.list
 
 %changelog
+
 %autochangelog

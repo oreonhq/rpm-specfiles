@@ -1,33 +1,27 @@
 %global source0_hash 5c51a634ffccca95eb2d95855bcc937b057f9a14bd79ee4db6e65583bd576da3
-
 Name:           perl-NNTPClient
 Version:        0.37
-Release:        28%{?dist}
+Release:        1%{?dist}
 Summary:        Perl 5 module to talk to NNTP (RFC977) server
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/NNTPClient
 Source0:        https://cpan.metacpan.org/authors/id/R/RV/RVA/NNTPClient-%{version}.tar.gz
-# Skip unportable tests whose command is not supported by a server,
-# CPAN RT#118794
 Patch0:         NNTPClient-0.37-Skip-tests-with-unportable-commands.patch
-# Skip network tests by default, CPAN RT#118799, inn segfaults (bug #1395717)
 Patch1:         NNTPClient-0.37-Perform-network-tests-only-if-EXTENDED_TESTING-1.patch
 BuildArch:      noarch
+%{?perl_default_filter}
+# oreon:deps
 BuildRequires:  findutils
 BuildRequires:  make
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-generators
-BuildRequires:  perl(ExtUtils::MakeMaker)
-# Run-time:
-BuildRequires:  perl(:VERSION) >= 5.2.0
+BuildRequires:  perl(:VERSION)
 BuildRequires:  perl(Carp)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(Socket)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(vars)
-
-# Do not scan documentation for dependencies
-%{?perl_default_filter}
-
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module implements a client interface to NNTP, enabling a Perl 5
 application to talk to NNTP servers. It uses the Object Oriented
@@ -37,12 +31,12 @@ Programming interface.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n NNTPClient-%{version}
 %patch -P0 -p1
@@ -51,33 +45,28 @@ perl -i -MConfig -ple 'print $Config{startperl} if $. == 1 && !s{\A#!\s*perl}{$C
 chmod +x "test.pl"
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 mkdir -p %{buildroot}%{_libexecdir}/%{name}/t
 cp -a test.pl %{buildroot}%{_libexecdir}/%{name}/t/test.t
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files
-%doc demos README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-NNTPClient-tests -f %{oreon_filedir}/perl-NNTPClient-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.37-28
 - Prepare for Oreon 11 (RP1)

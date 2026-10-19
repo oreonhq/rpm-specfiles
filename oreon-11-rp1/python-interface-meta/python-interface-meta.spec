@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 902bd9a95a12f195f15753a1080075d4eca7a2cb934fac7ac03c9e362b50796a
 Name:           python-interface-meta
 Version:        2.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        _interface_meta_ provides a convenient way to expose an extensible API with enforced method signatures and consistent documentation.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/matthewwardrop/interface_meta
-Source:         %{pypi_source interface_meta}
-
+Source0:        https://files.pythonhosted.org/packages/source/i/interface_meta/interface_meta-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'interface-meta' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-interface-meta = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-interface-meta
-Summary:        %{summary}
-
-%description -n python3-interface-meta %_description
-
+Summary:        _interface_meta_ provides a convenient way to expose an extensible API with enforced method signatures and consistent documentation.
+%description -n python3-interface-meta
 
 %prep
-%autosetup -p1 -n interface_meta-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir interface_meta-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-interface-meta usr/lib/python3*/site-packages/interface_meta* usr/lib64/python3*/site-packages/interface_meta* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/interface_meta* usr/lib64/python3*/site-packages/interface_meta* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-interface-meta -f %{pyproject_files}
+%files
+%files -n python3-interface-meta -f %{oreon_filedir}/python3-interface-meta.list
 
 %changelog
+
 %autochangelog

@@ -1,31 +1,27 @@
-%global source0_hash none
-
+%global source0_hash fcc06e4a2ff2c5c1bd937670acdb079140f3ce0efdf00578eb6559a20ebb26d3
 %global		ver	0771
-
 Name:		ultimatestunts
 Version:	0.7.7
-Release:	30%{?dist}
-Summary:	Remake of the famous DOS-game Stunts
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Remake of the famous DOS-game Stunts
 License:	GPL-2.0-or-later
 URL:		http://www.ultimatestunts.nl
-Source0:	http://downloads.sf.net/%{name}/%{name}-srcdata-%{ver}.tar.gz
+Source0:        http://downloads.sf.net/%{name}/%{name}-srcdata-%{ver}.tar.gz
 Source1:	%{name}.desktop
 Patch0:		ultimatestunts-0761-make.patch
 Patch1:		ultimatestunts-0751-locale.patch
 Patch2:		ultimatestunts-0761-unistd.patch
-
-BuildRequires: make
+# oreon:deps
+BuildRequires:  SDL_image-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  dos2unix
+BuildRequires:  freealut-devel
+BuildRequires:  freeglut-devel
 BuildRequires:  gcc-c++
-BuildRequires:	dos2unix
-BuildRequires:	freealut-devel
-BuildRequires:	SDL_image-devel
-BuildRequires:	freeglut-devel
-BuildRequires:	libXi-devel
-BuildRequires:	libvorbis-devel
-BuildRequires:	desktop-file-utils
-
+BuildRequires:  libXi-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 UltimateStunts is a remake of the famous DOS-game Stunts. It was a 3D racing
 game, with simple CGA/EGA/VGA graphics and no texture or smooth shading, but
@@ -37,6 +33,7 @@ Linux), and on windows. It also provides more modern features, like openGL
 graphics, 3D sound and internet multiplaying.
 
 %prep
+
 %setup -q -n %{name}-srcdata-%{ver}
 %patch -P0 -p0 -b .make
 %patch -P1 -p0 -b .locale
@@ -80,28 +77,22 @@ popd
 rm -f %{name}.conf
 
 %build
+
 %configure
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=$RPM_BUILD_ROOT \
 	usdatadir=$RPM_BUILD_ROOT%{_datadir}/%{name} \
 	localedir=%{_datadir}/locale
-
 rm -rf $RPM_BUILD_ROOT%{_datadir}/%{name}/lang
-
 %find_lang %{name}
-
 desktop-file-install \
 	--dir $RPM_BUILD_ROOT%{_datadir}/applications \
 	%{SOURCE1}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc COPYING doc/*
-%{_bindir}/ustunts*
-%config(noreplace) %{_sysconfdir}/%{name}.conf
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/%{name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

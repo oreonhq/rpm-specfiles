@@ -1,23 +1,21 @@
 %global source0_hash c8f6bcd2116551f2c5776f8c0c6dc83e17ae6f1eb5b564e0bfd97b5d65bd7e0e
-
 %global debug_package %{nil}
-
 Name:           nunit
 Version:        4.6.1
 Release:        1%{?dist}
 Summary:        Unit test framework for CLI
-# Automatically converted from old format: MIT with advertising - review is highly recommended.
 License:        LicenseRef-Callaway-MIT-with-advertising
 Url:            http://www.nunit.org/
 Source0:        https://github.com/nunit/nunit/archive/%{version}.tar.gz
 Source1:        nunit.pc
 Source2:        nunitlite-runner.sh
-BuildRequires:  mono-devel
 ExclusiveArch:  %{mono_arches}
 Provides:       mono-nunit = 4.0.2-5
 Obsoletes:      mono-nunit < 4.0.2-6
 Obsoletes:      nunit-runner <= 2.6.4-10
-
+# oreon:deps
+BuildRequires:  mono-devel
+# /oreon:deps
 %description
 NUnit is a unit testing framework for all .NET languages. It serves the
 same purpose as JUnit does in the Java world. It supports test
@@ -33,33 +31,28 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
 Provides:       mono-nunit-devel = 4.0.2-5
 Obsoletes:      mono-nunit-devel < 4.0.2-6
-
 %description devel
 Development files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qn nunit-%{version}
 
 %build
 
-# Remove prebuilt binaries
 find . -name "*.dll" -print -delete
-
 %{?exp_env}
 %{?env_options}
-
 xbuild /property:Configuration=Release src/NUnitFramework/framework/nunit.framework-4.5.csproj
 xbuild /property:Configuration=Release src/NUnitFramework/nunitlite/nunitlite-4.5.csproj
 xbuild /property:Configuration=Release src/NUnitFramework/nunitlite-runner/nunitlite-runner-4.5.csproj
 xbuild /property:Configuration=Release src/NUnitFramework/mock-assembly/mock-assembly-4.5.csproj
-
 xbuild /property:Configuration=Release src/NUnitFramework/slow-tests/slow-nunit-tests-4.5.csproj
 xbuild /property:Configuration=Release src/NUnitFramework/testdata/nunit.testdata-4.5.csproj
 xbuild /property:Configuration=Release src/NUnitFramework/tests/nunit.framework.tests-4.5.csproj
 xbuild /property:Configuration=Release src/NUnitFramework/nunitlite.tests/nunitlite.tests-4.5.csproj
-
 %install
 %{?env_options}
 %{__mkdir_p} %{buildroot}%{_monodir}/nunit
@@ -75,15 +68,11 @@ find %{_builddir}/%{?buildsubdir}/bin -name \*.exe -exec %{__install} \-m0755 "{
 for i in nunit.framework.dll nunit.framework.tests.dll nunitlite.dll nunit.testdata.dll; do
     gacutil -i %{buildroot}%{_monodir}/nunit/$i -package nunit -root %{buildroot}%{_monodir}/../
 done
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE.txt
-%{_bindir}/nunitlite-runner
-%{_monogacdir}/nunit*
-%{_monodir}/nunit/
-
-%files devel
-%{_libdir}/pkgconfig/nunit.pc
+%files -f %{oreon_filedir}/main.list
+%files -n nunit-devel -f %{oreon_filedir}/nunit-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,37 +1,33 @@
-%global source0_hash 3b30d5a1183b829590cc020d8ab87f22d288e98dc3fdf12feb7159536beaa950
-
+%global source0_hash 51b2d92515950c959dbf24f6fc33336db8c0526c2a50fee4ca598a18a6114a49
 Name:           oksh
 Version:        7.9
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Portable OpenBSD ksh, based on the Public Domain Korn Shell
-
-# The main license is "public domain", with some support files
-# being under ISC and BSD-3-Clause license.
 License:        LicenseRef-Fedora-Public-Domain AND ISC AND BSD-3-Clause
 URL:            https://github.com/ibara/%{name}
 Source0:        https://github.com/ibara/%{name}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  pkgconfig(ncursesw)
-
+# /oreon:deps
 %description
 Portable OpenBSD ksh, based on the Public Domain Korn Shell.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %configure --no-strip
 %make_build
-
 %install
 %make_install
 install -D -p -m 0644 ksh.kshrc %{buildroot}%{_sysconfdir}/ksh.kshrc
+%oreon_autofiles main
 
 %post
+
 if [ "$1" = 1 ]; then
     if [ ! -f %{_sysconfdir}/shells ] ; then
         echo "%{_bindir}/%{name}" > %{_sysconfdir}/shells
@@ -41,19 +37,14 @@ if [ "$1" = 1 ]; then
         grep -q "^/bin/%{name}$" %{_sysconfdir}/shells || echo "/bin/%{name}" >> %{_sysconfdir}/shells
     fi
 fi
-
 %postun
+
 if [ "$1" = 0 ] && [ -f %{_sysconfdir}/shells ] ; then
     sed -i '\!^%{_bindir}/%{name}$!d' %{_sysconfdir}/shells
     sed -i '\!^/bin/%{name}$!d' %{_sysconfdir}/shells
 fi
-
-%files
-%license LEGAL
-%doc NOTES README.md README.pdksh CONTRIBUTORS
-%{_bindir}/oksh
-%{_mandir}/man1/%{name}.1.*
-%config(noreplace) %{_sysconfdir}/ksh.kshrc
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

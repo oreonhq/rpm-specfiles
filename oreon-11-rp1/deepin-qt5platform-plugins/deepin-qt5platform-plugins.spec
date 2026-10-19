@@ -1,67 +1,62 @@
 %global source0_hash 8e6baf053d47df8b51b55739b72433fb0310c0e46e96589574c0266eed990968
-
 %global repo qt5platform-plugins
 %global __provides_exclude_from ^%{_qt5_plugindir}/.*\\.so$
-
 Name:           deepin-qt5platform-plugins
 Version:        6.7.49
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Qt platform integration plugins for Deepin Desktop Environment
 License:        LGPL-3.0-or-later
 URL:            https://github.com/linuxdeepin/dde-qtplatform-plugins
-Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  extra-cmake-modules
-
-BuildRequires:  cmake(Qt5Core)
-BuildRequires:  cmake(Qt5Gui)
-BuildRequires:  cmake(Qt5Widgets)
-BuildRequires:  cmake(Qt5XcbQpa)
-BuildRequires:  cmake(Qt5X11Extras)
-BuildRequires:  cmake(Qt5EdidSupport)
-BuildRequires:  cmake(Qt5XkbCommonSupport)
-
-BuildRequires:  pkgconfig(x11-xcb)
-BuildRequires:  pkgconfig(xi)
-BuildRequires:  pkgconfig(xcb-renderutil)
-BuildRequires:  pkgconfig(sm)
-BuildRequires:  pkgconfig(ice)
-BuildRequires:  pkgconfig(xcb-render)
-BuildRequires:  pkgconfig(dbus-1)
-BuildRequires:  pkgconfig(xcb)
-BuildRequires:  pkgconfig(xcb-image)
-BuildRequires:  pkgconfig(xcb-icccm)
-BuildRequires:  pkgconfig(xcb-sync)
-BuildRequires:  pkgconfig(xcb-xfixes)
-BuildRequires:  pkgconfig(xcb-shm)
-BuildRequires:  pkgconfig(xcb-randr)
-BuildRequires:  pkgconfig(xcb-shape)
-BuildRequires:  pkgconfig(xcb-keysyms)
-BuildRequires:  pkgconfig(xcb-xkb)
-BuildRequires:  pkgconfig(xcb-composite)
-BuildRequires:  pkgconfig(xkbcommon-x11)
-BuildRequires:  pkgconfig(xcb-damage)
-BuildRequires:  pkgconfig(xcb-xinerama)
-BuildRequires:  pkgconfig(mtdev)
-BuildRequires:  pkgconfig(egl)
-BuildRequires:  pkgconfig(cairo)
-BuildRequires:  pkgconfig(xkbcommon)
-
-BuildRequires:  qt5-qtbase-static
-BuildRequires:  qt5-qtbase-private-devel
+Source0:        https://github.com/linuxdeepin/dde-qtplatform-plugins/archive/%{version}/%{repo}-%{version}.tar.gz
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
-
 Provides:       deepin-qt5dxcb-plugin = %{version}-%{release}
 Provides:       deepin-qt5dxcb-plugin%{?_isa} = %{version}-%{release}
 Obsoletes:      deepin-qt5dxcb-plugin < 5.0.21
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt5Core)
+BuildRequires:  cmake(Qt5EdidSupport)
+BuildRequires:  cmake(Qt5Gui)
+BuildRequires:  cmake(Qt5Widgets)
+BuildRequires:  cmake(Qt5X11Extras)
+BuildRequires:  cmake(Qt5XcbQpa)
+BuildRequires:  cmake(Qt5XkbCommonSupport)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(dbus-1)
+BuildRequires:  pkgconfig(egl)
+BuildRequires:  pkgconfig(ice)
+BuildRequires:  pkgconfig(mtdev)
+BuildRequires:  pkgconfig(sm)
+BuildRequires:  pkgconfig(x11-xcb)
+BuildRequires:  pkgconfig(xcb)
+BuildRequires:  pkgconfig(xcb-composite)
+BuildRequires:  pkgconfig(xcb-damage)
+BuildRequires:  pkgconfig(xcb-icccm)
+BuildRequires:  pkgconfig(xcb-image)
+BuildRequires:  pkgconfig(xcb-keysyms)
+BuildRequires:  pkgconfig(xcb-randr)
+BuildRequires:  pkgconfig(xcb-render)
+BuildRequires:  pkgconfig(xcb-renderutil)
+BuildRequires:  pkgconfig(xcb-shape)
+BuildRequires:  pkgconfig(xcb-shm)
+BuildRequires:  pkgconfig(xcb-sync)
+BuildRequires:  pkgconfig(xcb-xfixes)
+BuildRequires:  pkgconfig(xcb-xinerama)
+BuildRequires:  pkgconfig(xcb-xkb)
+BuildRequires:  pkgconfig(xi)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  pkgconfig(xkbcommon-x11)
+BuildRequires:  qt5-qtbase-private-devel
+BuildRequires:  qt5-qtbase-static
+# /oreon:deps
 %description
 qt5platform-plugins is the Qt platform integration plugin for Deepin Desktop
 Environment.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n dde-qtplatform-plugins-%{version}
@@ -74,18 +69,17 @@ sed -i '/wayland/d' CMakeLists.txt
 rm -r xcb/{libqt5xcbqpa-dev,libqt6xcbqpa-dev}
 
 %build
+
 %cmake \
     -DQT_XCB_PRIVATE_HEADERS=%{_qt5_headerdir}/QtXcb \
     -DBUILD_TESTING=OFF
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%doc CHANGELOG.md README.md
-%license LICENSE
-%{_qt5_plugindir}/platforms/libdxcb.so
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

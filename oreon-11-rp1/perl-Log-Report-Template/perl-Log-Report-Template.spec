@@ -1,5 +1,4 @@
 %global source0_hash f81d766c3f728057be0e8fbe249c4e123dcf9a557ae300cd80187791acdae2db
-
 Name:           perl-Log-Report-Template
 Version:        1.04
 Release:        1%{?dist}
@@ -8,41 +7,37 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/dist/Log-Report-Template
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKOV/Log-Report-Template-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.16
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time:
-BuildRequires:  perl(base)
-BuildRequires:  perl(File::Find)
-BuildRequires:  perl(Log::Report) >= 1.42
-BuildRequires:  perl(Log::Report::Domain)
-# Log::Report::Extract version from Log::Report::Lexicon in META.json
-BuildRequires:  perl(Log::Report::Extract)
-BuildRequires:  perl(Log::Report::Message)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(String::Print) >= 0.91
-BuildRequires:  perl(Template) >= 2.26
-BuildRequires:  perl(Template::Filters)
-# Tests
-BuildRequires:  perl(constant)
-BuildRequires:  perl(File::Basename)
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Log::Report::Lexicon::POT)
-BuildRequires:  perl(Test::More) >= 1
 Requires:       perl(Log::Report) >= 1.42
 Requires:       perl(String::Print) >= 0.91
 Requires:       perl(Template) >= 2.26
-
-# Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Log::Report|String::Print|Template|Test::More)\\)$
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Find)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(Log::Report)
+BuildRequires:  perl(Log::Report::Domain)
+BuildRequires:  perl(Log::Report::Extract)
+BuildRequires:  perl(Log::Report::Lexicon::POT)
+BuildRequires:  perl(Log::Report::Message)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(String::Print)
+BuildRequires:  perl(Template)
+BuildRequires:  perl(Template::Filters)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(base)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module extends Template, which is the core of Template Toolkit. The main
 addition is support for translations via the translation framework offered by
@@ -55,12 +50,12 @@ Requires:       coreutils
 Requires:       perl-Test-Harness
 Requires:       perl(Log::Report) >= 1.42
 Requires:       perl(Test::More) >= 1
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Log-Report-Template-%{version}
@@ -71,19 +66,16 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# t/41double.t reads and writes into t/lexicons/first.utf-8.po
 DIR=$(mktemp -d)
 cp -a %{_libexecdir}/%{name}/* "$DIR"
 pushd "$DIR"
@@ -92,23 +84,15 @@ popd
 rm -r "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%doc ChangeLog README.md
-%dir %{perl_vendorlib}/Log
-%dir %{perl_vendorlib}/Log/Report
-%{perl_vendorlib}/Log/Report/Template
-%{perl_vendorlib}/Log/Report/Template.pm
-%{perl_vendorlib}/Log/Report/Template.pod
-%{_mandir}/man3/Log::Report::Template.*
-%{_mandir}/man3/Log::Report::Template::*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Log-Report-Template-tests -f %{oreon_filedir}/perl-Log-Report-Template-tests.list
 
 %changelog
+
 %autochangelog

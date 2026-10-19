@@ -1,11 +1,10 @@
 %global source0_hash 97a339ce2fb0a446767ee550786e6914fa2e8cdbad39a402e48368cd0d6b5763
-
-Summary: Fast, compact editor based on the S-Lang screen library
+Summary:        Fast, compact editor based on the S-Lang screen library
 Name: jed
 Version: 0.99.19
-Release: 36%{?dist}
+Release:        1%{?dist}
 License: GPL-1.0-or-later
-Source0: ftp://space.mit.edu/pub/davis/jed/v0.99/jed-0.99-19.tar.bz2
+Source0:        ftp://space.mit.edu/pub/davis/jed/v0.99/jed-0.99-19.tar.bz2
 Patch1: jed-0.99.12-xkeys.patch
 URL: http://www.jedsoft.org/jed/
 Patch2: jed-etc.patch
@@ -14,10 +13,14 @@ Patch4: jed-selinux.patch
 Patch5: jed-verror.patch
 Source1: selinux.c
 Requires: slang-slsh
+# oreon:deps
+BuildRequires:  autoconf
 BuildRequires:  gcc
-BuildRequires: slang-devel >= 2.0, autoconf, libselinux-devel, procps
-BuildRequires: make
-
+BuildRequires:  libselinux-devel
+BuildRequires:  make
+BuildRequires:  procps
+BuildRequires:  slang-devel
+# /oreon:deps
 %description
 Jed is a fast, compact editor based on the S-lang screen library.  Jed
 features include emulation of the Emacs, EDT, WordStar and Brief
@@ -30,6 +33,7 @@ you haven't used any text editors before and you're still deciding
 what you'd like to use.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n jed-0.99-19
@@ -50,31 +54,23 @@ mv configure ..
 cd ..
 
 %build
+
 export JED_ROOT="%{_datadir}/jed"
 %configure
 make
-
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-
 JED_ROOT=$RPM_BUILD_ROOT%{_datadir}/jed $RPM_BUILD_ROOT%{_bindir}/jed -batch -n -l preparse.sl </dev/null
-
-# wait till jed finishes
 while ps -C jed > /dev/null; do sleep 1; done
-
 rm -f $RPM_BUILD_ROOT%{_mandir}/man*/rgrep*
-
 rm -rf $RPM_BUILD_ROOT%{_datadir}/jed/doc/{txt,manual,README}
 rm -rf $RPM_BUILD_ROOT%{_datadir}/jed/bin $RPM_BUILD_ROOT%{_datadir}/jed/info
-
 sed -i "s|JED_ROOT|%{_datadir}/jed|g" $RPM_BUILD_ROOT/%{_mandir}/man1/jed.1
+%oreon_autofiles main
 
-%files
-%doc COPYING COPYRIGHT doc INSTALL INSTALL.unx README changes.txt
-%{_bindir}/*
-%{_mandir}/man1/jed.*
-%{_datadir}/jed
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 7979f7eaeac696cea51c25fe31e33a4bc06ec7952de0ecad593cfa8a7f38d783
 Name:           python-gelidum
 Version:        0.10.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Freeze your objects in python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/diegojromerolopez/gelidum
-Source:         %{pypi_source gelidum}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/gelidum/gelidum-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'gelidum' generated automatically by pyp2spec.}
-
 Patch:          build-system.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-gelidum = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-gelidum
-Summary:        %{summary}
-
-%description -n python3-gelidum %_description
-
+Summary:        Freeze your objects in python
+%description -n python3-gelidum
 
 %prep
-%autosetup -p1 -n gelidum-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir gelidum-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-gelidum usr/lib/python3*/site-packages/gelidum* usr/lib64/python3*/site-packages/gelidum* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/gelidum* usr/lib64/python3*/site-packages/gelidum* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-gelidum -f %{pyproject_files}
+%files
+%files -n python3-gelidum -f %{oreon_filedir}/python3-gelidum.list
 
 %changelog
+
 %autochangelog

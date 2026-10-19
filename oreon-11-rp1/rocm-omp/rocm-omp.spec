@@ -1,32 +1,7 @@
-%global source0_hash none
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
-
-# Upstream tags are based on rocm releases:
+%global source0_hash d76a16db4a56914383029e241823f7bc2a3d645f2967dd22230f11c11cfe189e
 %global rocm_release 7.1
 %global rocm_patch 1
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global bundle_prefix %{_libdir}/rocm/rocm-%{rocm_release}/llvm
@@ -41,68 +16,55 @@
 %global pkg_suffix %{nil}
 %global pkg_module default
 %endif
-
-# What LLVM is upstream using (use LLVM_VERSION_MAJOR from llvm/CMakeLists.txt):
 %global llvm_maj_ver 20
 %global upstreamname llvm-project
-
 %global toolchain clang
-
 %global llvm_triple %{_target_platform}
-
 %bcond_with debug
 %if %{with debug}
 %global build_type DEBUG
 %else
 %global build_type RelWithDebInfo
 %endif
-
 Name:           rocm-omp%{pkg_suffix}
 Version:        %{rocm_version}
 Release:        3%{?dist}
 Summary:        ROCm OpenMP
-
 Url:            https://github.com/ROCm/%{upstreamname}
 License:        Apache-2.0 WITH LLVM-exception OR NCSA AND MIT
-Source0:        %{url}/archive/rocm-%{rocm_version}.tar.gz#/rocm-omp-%{rocm_version}.tar.gz
-
+Source0:        https://github.com/ROCm/%{upstreamname}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{name}.%{rocm_patch}.tar.gz
+Requires:       rocm-llvm%{pkg_suffix}-filesystem
+ExclusiveArch:  x86_64
+%global targets_to_build "X86;AMDGPU"
+# oreon:deps
 BuildRequires:  binutils-devel
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
-%if 0%{?fedora} || 0%{?suse_version}
-BuildRequires:  fdupes
-%endif
 BuildRequires:  libffi-devel
 BuildRequires:  libzstd-devel
 BuildRequires:  perl
-BuildRequires:  rocm-compilersupport%{pkg_suffix}-macros
-BuildRequires:  rocm-device-libs%{pkg_suffix}
-BuildRequires:  rocm-runtime%{pkg_suffix}-devel
+BuildRequires:  rocm-compilersupport-7.1-macros
+BuildRequires:  rocm-device-libs-7.1
+BuildRequires:  rocm-runtime-7.1-devel
 BuildRequires:  zlib-devel
-
-Requires:       rocm-llvm%{pkg_suffix}-filesystem
-
-ExclusiveArch:  x86_64
-%global targets_to_build "X86;AMDGPU"
-
+# /oreon:deps
 %description
 %{summary}
 
 %package devel
 Summary:        Libraries and headers for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}
 
 %package static
 Summary:        Static Libraries for %{name}
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 %{summary}
 
 %prep
+
 %autosetup -p1 -n %{upstreamname}-rocm-%{rocm_version}
 
 # rm llvm-project bits we do not need
@@ -164,7 +126,6 @@ rm -rf {bolt,clang,compiler-rt,flang,libc,libclc,libcxx,libcxxabi,libunwind,lld,
  -DLLVM_BUILD_TOOLS=ON \\\
  -DLLVM_BUILD_UTILS=ON \\\
  -DMLIR_BUILD_MLIR_C_DYLIB=ON
-
 cd openmp
 %cmake %{llvmrocm_cmake_config} \
        -DBUILD_SHARED=ON \
@@ -197,41 +158,18 @@ cd openmp
        -DLIBOMP_ARCHER_SUPPORT=OFF \
        -DOPENMP_STANDALONE_BUILD=ON \
        -DOPENMP_LLVM_TOOLS_DIR=%{rocmllvm_bindir}
-
 %cmake_build
-
 %install
-
 cd openmp
 %cmake_install
-
-#Clean up dupes:
-%if 0%{?fedora} || 0%{?suse_version}
-%fdupes %{buildroot}%{pkg_prefix}
-%endif
-
 rm -rf %{buildroot}%{bundle_prefix}/lib/omptest
 rm -rf %{buildroot}%{bundle_prefix}/lib/cmake/omptest
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# 6.4 remove everything, may not need the main package
-#  bin/llvm-omp*
-#  bin/prep-libomptarget-bc
-#  lib/libomp*.so.*
-%files
-
-# 6.4 removed :
-#  lib/clang/%%{llvm_maj_ver}/include/hostexec.h
-#  lib/disable_dynamic_devmem.ll
-#  lib/libdevice/
-#  lib/*.bc
-%files devel
-%{bundle_prefix}/include/omp*.h
-%{bundle_prefix}/lib/cmake/openmp/
-%{bundle_prefix}/lib/libomp*.so
-
-# 6.4 removed everything, , may not need this subpackage
-#  lib/libomptarget.devicertl.a
-%files static
+%files -f %{oreon_filedir}/main.list
+%files -n rocm-omp-7.1-devel -f %{oreon_filedir}/rocm-omp-7.1-devel.list
+%files -n rocm-omp-7.1-static -f %{oreon_filedir}/rocm-omp-7.1-static.list
 
 %changelog
+
 %autochangelog

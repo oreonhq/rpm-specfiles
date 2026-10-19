@@ -1,18 +1,15 @@
-%global source0_hash 9a93b325a59e776a157316e194b97090047e22ac120be8d37f347c4034564bc2
-
+%global source0_hash 20429c231052c04e10a740770c136846344fd3bdfe14b5448629764cf20a98bc
 Name:           jmock
 Version:        2.13.1
 Release:        1%{?dist}
 Summary:        Java library for testing code with mock objects
-# Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.jmock.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/jmock-developers/jmock-library/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         0001-Port-to-jakarta.xml.ws-4.0.0.patch
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(cglib:cglib)
 BuildRequires:  mvn(com.google.auto.service:auto-service)
@@ -23,6 +20,7 @@ BuildRequires:  mvn(net.bytebuddy:byte-buddy)
 BuildRequires:  mvn(org.apache-extras.beanshell:bsh)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-enforcer-plugin)
+BuildRequires:  mvn(org.apache.maven.surefire:surefire-junit-platform)
 BuildRequires:  mvn(org.codehaus.mojo:exec-maven-plugin)
 BuildRequires:  mvn(org.hamcrest:hamcrest)
 BuildRequires:  mvn(org.hamcrest:hamcrest-library)
@@ -32,10 +30,7 @@ BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-params)
 BuildRequires:  mvn(org.junit.platform:junit-platform-launcher)
 BuildRequires:  mvn(org.objenesis:objenesis)
 BuildRequires:  mvn(org.ow2.asm:asm)
-
-# required for some unit tests
-BuildRequires:  mvn(org.apache.maven.surefire:surefire-junit-platform)
-
+# /oreon:deps
 %description
 Mock objects help you design and test the interactions between the objects in
 your programs.
@@ -86,6 +81,7 @@ Source for JAR files used in jMock Core tests.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 # -p1: strip one level directory in patch
@@ -108,22 +104,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_package :jmock-parent __noinstall
 
 %build
-%mvn_build -s -- -Dmaven.test.failure.ignore=true
 
+%mvn_build -s -- -Dmaven.test.failure.ignore=true
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files           -f .mfiles-%{name}
-%doc README*
-%license LICENSE.txt
-%files example   -f .mfiles-%{name}-example
-%files imposters -f .mfiles-%{name}-imposters
-%files junit3    -f .mfiles-%{name}-junit3
-%files junit4    -f .mfiles-%{name}-junit4
-%files junit5    -f .mfiles-%{name}-junit5
-%files legacy    -f .mfiles-%{name}-legacy
-%files testjar   -f .mfiles-%{name}-testjar
-%license LICENSE.txt
+%files -f %{oreon_filedir}/main.list
+%files -n jmock-example -f %{oreon_filedir}/jmock-example.list
+%files -n jmock-imposters -f %{oreon_filedir}/jmock-imposters.list
+%files -n jmock-junit3 -f %{oreon_filedir}/jmock-junit3.list
+%files -n jmock-junit4 -f %{oreon_filedir}/jmock-junit4.list
+%files -n jmock-junit5 -f %{oreon_filedir}/jmock-junit5.list
+%files -n jmock-legacy -f %{oreon_filedir}/jmock-legacy.list
+%files -n jmock-testjar -f %{oreon_filedir}/jmock-testjar.list
 
 %changelog
+
 %autochangelog

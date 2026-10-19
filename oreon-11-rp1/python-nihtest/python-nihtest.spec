@@ -1,61 +1,42 @@
 %global source0_hash 9307197235c107f24a569a2847ee02ebd771a395d8d081dac9aab0f7b9139a75
-
 Name:           python-nihtest
 Version:        1.11.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A testing tool for command line utilities.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/nih-at/nihtest
-Source:         %{pypi_source nihtest}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/nihtest/nihtest-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'nihtest' generated automatically by pyp2spec.}
-
 Patch:          run_tests_using_cmake_and_ctest.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-nihtest = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-nihtest
-Summary:        %{summary}
-
-%description -n python3-nihtest %_description
-
+Summary:        A testing tool for command line utilities.
+%description -n python3-nihtest
 
 %prep
-%autosetup -p1 -n nihtest-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir nihtest-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-nihtest usr/lib/python3*/site-packages/nihtest* usr/lib64/python3*/site-packages/nihtest* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/nihtest* usr/lib64/python3*/site-packages/nihtest* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-nihtest -f %{pyproject_files}
-%{_bindir}/nihtest
+%files
+%files -n python3-nihtest -f %{oreon_filedir}/python3-nihtest.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.1-1
 - Prepare for Oreon 11 (RP1)

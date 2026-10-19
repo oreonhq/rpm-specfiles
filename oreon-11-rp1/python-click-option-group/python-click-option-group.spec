@@ -1,62 +1,78 @@
-%global source0_hash none
-
+%global source0_hash f94ed2bc4cf69052e0f29592bd1e771a1789bd7bfc482dd0bc482134aff95823
 Name:           python-click-option-group
 Version:        0.5.9
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Option groups missing in Click
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/click-contrib/click-option-group
-Source:         %{pypi_source click_option_group}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/click_option_group/click_option_group-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-click-option-group = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-click-option-group+test
+Summary:        Metapackage for python3-click-option-group test extras
+Requires:       python3-click-option-group = %{version}-%{release}
+Provides:       python3dist(click-option-group[test]) = %{version}-%{release}
 
+%description -n python3-click-option-group+test
+Metapackage for python3-click-option-group test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'click-option-group' generated automatically by pyp2spec.}
+%package -n       python3-click-option-group+test-cov
+Summary:        Metapackage for python3-click-option-group test-cov extras
+Requires:       python3-click-option-group = %{version}-%{release}
+Provides:       python3dist(click-option-group[test-cov]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-click-option-group+test-cov
+Metapackage for python3-click-option-group test-cov extras.
+
+%package -n       python3-click-option-group+dev
+Summary:        Metapackage for python3-click-option-group dev extras
+Requires:       python3-click-option-group = %{version}-%{release}
+Provides:       python3dist(click-option-group[dev]) = %{version}-%{release}
+
+%description -n python3-click-option-group+dev
+Metapackage for python3-click-option-group dev extras.
+
+%package -n       python3-click-option-group+docs
+Summary:        Metapackage for python3-click-option-group docs extras
+Requires:       python3-click-option-group = %{version}-%{release}
+Provides:       python3dist(click-option-group[docs]) = %{version}-%{release}
+
+%description -n python3-click-option-group+docs
+Metapackage for python3-click-option-group docs extras.
+
+%description
 
 %package -n     python3-click-option-group
-Summary:        %{summary}
-
-%description -n python3-click-option-group %_description
+Summary:        Option groups missing in Click
+# oreon:reqs
+Requires:       python3dist(click) >= 7.0
+# /oreon:reqs
+%description -n python3-click-option-group
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-click-option-group dev,docs,test,test-cov
-
 
 %prep
-%autosetup -p1 -n click_option_group-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir click_option_group-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-click-option-group usr/lib/python3*/site-packages/click_option_group* usr/lib64/python3*/site-packages/click_option_group* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/click_option_group* usr/lib64/python3*/site-packages/click_option_group* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-click-option-group -f %{pyproject_files}
+%files
+%files -n python3-click-option-group -f %{oreon_filedir}/python3-click-option-group.list
 
 %changelog
+
 %autochangelog

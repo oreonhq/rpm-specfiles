@@ -1,33 +1,31 @@
-%global source0_hash 6879a20acdcaea0f8b3b7d7219562514ce48ab50f5f5da3c530082d71137bcbb
-
-Summary:       Multichannel audio level meter
+%global source0_hash 1f37d1c4783bb9381ff865a98ed98369b03e280b5629f6bb4a1c5f864bf4becc
+Summary:        Multichannel audio level meter
 Name:          jmeters
 Version:       0.4.5
-Release:       1%{?dist}
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        1%{?dist}
 License:       GPL-2.0-only
 URL:           http://kokkinizita.linuxaudio.org/linuxaudio/
-Source0:       http://kokkinizita.linuxaudio.org/linuxaudio/downloads/%{name}-%{version}.tar.bz2
-
-BuildRequires: clthreads-devel
-BuildRequires: clxclient-devel
-BuildRequires: gcc-c++
-#BuildRequires: clalsadrv-devel
-BuildRequires: jack-audio-connection-kit-devel
-BuildRequires: alsa-lib-devel
-BuildRequires: libsndfile-devel
-BuildRequires: libpng-devel
-BuildRequires: libX11-devel
-BuildRequires: libXft-devel
-BuildRequires: cairo-devel
-BuildRequires: make
-
+Source0:        http://kokkinizita.linuxaudio.org/linuxaudio/downloads/%{name}-%{version}.tar.bz2
+# oreon:deps
+BuildRequires:  alsa-lib-devel
+BuildRequires:  cairo-devel
+BuildRequires:  clthreads-devel
+BuildRequires:  clxclient-devel
+BuildRequires:  gcc-c++
+BuildRequires:  jack-audio-connection-kit-devel
+BuildRequires:  libX11-devel
+BuildRequires:  libXft-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libsndfile-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 Jmeters is a Jack multichannel audio level meter app.
 It looks very similar to meterbridge since it uses the
 same pixmaps.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -37,19 +35,17 @@ sed -i -e 's|-O3|%{optflags}|' \
   -e 's|-m64||' source/Makefile
 
 %build
+
 cd source
 make PREFIX=%{_prefix} LDFLAGS="$RPM_LD_FLAGS -lpthread " CFLAGS="%{optflags}"
-
 %install
 cd source
 mkdir -p %{buildroot}%{_bindir}
 make PREFIX=%{buildroot}%{_prefix} install
+%oreon_autofiles main
 
-%files
-%doc README AUTHORS
-%license COPYING
-%{_bindir}/%{name}
-%{_datadir}/%{name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

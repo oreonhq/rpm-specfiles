@@ -1,47 +1,35 @@
 %global source0_hash 0fabd8c4ac04998e825a1d0b4691bc9a0022c2bd925fec5f5ed33341b2cda21f
-
 %global commit  eaf6872f6ad490a4355c5c46279ddb81a9a15f92
 %global shortcommit %(c=%{commit}; echo ${c:0:12})
 %global commitdate 20130718
-
 %global soname 0.7.0
-
 Name:           libqxt-qt5
 Version:        0.7.0
-Release:        0.41.%{commitdate}git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Extended version of the original Qt extension library
-# Automatically converted from old format: BSD and (CPL or LGPLv2) - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND (CPL-1.0 OR LicenseRef-Callaway-LGPLv2)
 URL:            https://bitbucket.org/libqxt/libqxt/wiki/Home
 Source0:        https://bitbucket.org/libqxt/libqxt/get/%{commit}.tar.gz#/%{name}-%{shortcommit}.tar.gz
-# Fix DSO linking
 Patch0:         libqxt-linking.patch
-# Fix build with GCC 6
 Patch1:         libqxt-gcc6.patch
 Patch2:         libqxt-header-fix.patch
-#Debian patches
 Patch3:         libqxt-use-system-qdoc3.patch
 Patch4:         libqxt-fix-compiler-flags.patch
 Patch5:         libqxt-qt5-libname.patch
 Patch6:         libqxt-qt5-moc-pre-processing-order.patch
-
-BuildRequires:  pkgconfig(avahi-compat-libdns_sd)
-BuildRequires:  pkgconfig(avahi-core)
-BuildRequires:  pkgconfig(libssh2)
+# oreon:deps
 BuildRequires:  libdb-devel
-BuildRequires:  pkgconfig(xrandr)
-# match what openssl version qt5-qtbase uses
-%if 0%{?fedora} == 26
-BuildRequires:  compat-openssl10-devel
-%else
+BuildRequires:  make
 BuildRequires:  openssl-devel
-%endif
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Designer)
 BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(avahi-compat-libdns_sd)
+BuildRequires:  pkgconfig(avahi-core)
+BuildRequires:  pkgconfig(libssh2)
+BuildRequires:  pkgconfig(xrandr)
 BuildRequires:  qt5-qtbase-private-devel
-BuildRequires: make
-
+# /oreon:deps
 %description
 LibQxt, an extension library for Qt5, provides a suite of cross-platform
 utility classes to add functionality not readily available in the Qt toolkit.
@@ -52,7 +40,6 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       pkgconfig(avahi-compat-libdns_sd)
 Requires:       pkgconfig(avahi-core)
 Requires:       libdb-devel
-
 %description    devel
 This package contains qt5 libraries and header files for developing applications
 that use LibQxt.
@@ -60,12 +47,12 @@ that use LibQxt.
 %package        doc
 Summary:        Documentation files for %{name}
 BuildArch:      noarch
-
 %description    doc
 The %{name}-doc package contains html documentation
 that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qc -n libqxt-libqxt-%{shortcommit}
@@ -100,7 +87,7 @@ sed -i '/RPATH/d' src/qxtlibs.pri
 popd
 
 %build
-############### QT5 ######################
+
 pushd qt5
 ./configure -verbose                      \
  -I $(pkg-config --variable=includedir avahi-compat-libdns_sd) \
@@ -111,69 +98,37 @@ pushd qt5
  -headerdir %{_qt5_headerdir}             \
  -docdir %{_datadir}/doc/libqxt-qt5-doc/html \
  -debug
-# manually running qmake here may end up being fragile, if so,
-# introducing a qmake wrapper is the next best thing -- rex
 %{qmake_qt5} -r %{_qt5_qmake_flags} \
  QMAKE_LFLAGS="${RPM_LD_FLAGS} -Wl,--as-needed"
 %make_build
 %make_build docs
 popd
-
 %install
-############### QT5 ######################
 pushd qt5
-
-# We are installing these to the proper location
 rm -fr %{buildroot}%{_prefix}/doc/
-
-# Fix pkgconfig includedir qt5 path
 sed -i -e 's|includedir=${prefix}/include/QxtNetwork|includedir=${prefix}/include/qt5/QxtNetwork|' lib/pkgconfig/QxtNetwork-qt5.pc
 sed -i -e 's|includedir=${prefix}/include/QxtSql|includedir=${prefix}/include/qt5/QxtSql|' lib/pkgconfig/QxtSql-qt5.pc
 sed -i -e 's|includedir=${prefix}/include/QxtWeb|includedir=${prefix}/include/qt5/QxtWeb|' lib/pkgconfig/QxtWeb-qt5.pc
 sed -i -e 's|includedir=${prefix}/include/QxtCore|includedir=${prefix}/include/qt5/QxtCore|' lib/pkgconfig/QxtCore-qt5.pc
 sed -i -e 's|includedir=${prefix}/include/QxtZeroconf|includedir=${prefix}/include/qt5/QxtZeroconf|' lib/pkgconfig/QxtZeroconf-qt5.pc
 sed -i -e 's|includedir=${prefix}/include/QxtWidgets|includedir=${prefix}/include/qt5/QxtWidgets|' lib/pkgconfig/QxtWidgets-qt5.pc
-
-# Fix pkgconfig files install dependencies
 sed -i -e 's|Requires: QtCore|Requires: Qt5Core|' lib/pkgconfig/QxtCore-qt5.pc
 sed -i -e 's|Requires: QxtCore QtNetwork|Requires: QxtCore-qt5 Qt5Network|' lib/pkgconfig/QxtNetwork-qt5.pc
 sed -i -e 's|Requires: QxtCore QtSql|Requires: QxtCore-qt5 Qt5Sql|' lib/pkgconfig/QxtSql-qt5.pc
 sed -i -e 's|Requires: QxtCore QxtNetwork|Requires: QxtCore-qt5 QxtNetwork-qt5|' lib/pkgconfig/QxtWeb-qt5.pc
 sed -i -e 's|Requires: QtCore QxtCore QtGui|Requires: Qt5Core QxtCore-qt5 Qt5Gui|' lib/pkgconfig/QxtWidgets-qt5.pc
 sed -i -e 's|Requires: QxtCore QxtNetwork|Requires: QxtCore-qt5 QxtNetwork-qt5|' lib/pkgconfig/QxtZeroconf-qt5.pc
-
 make install --ignore-errors INSTALL_ROOT=%{buildroot}
-
  %if 0%{?flatpak}
- # qtbase is part of runtime in /usr, this is built in /app
  mv %{buildroot}/usr/%{_lib}/qt5 %{buildroot}%{_libdir}
  %endif
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%doc qt5/AUTHORS qt5/CHANGES qt5/README
-%license qt5/COPYING qt5/*.txt
-%{_bindir}/qxtjsonrpc
-%{_qt5_libdir}/*.so.*
-
-%files devel
-%{_qt5_headerdir}/QxtCore/
-%{_qt5_headerdir}/QxtNetwork/
-%{_qt5_headerdir}/QxtSql/
-%{_qt5_headerdir}/QxtWeb/
-%{_qt5_headerdir}/QxtWidgets/
-%{_qt5_headerdir}/QxtZeroconf/
-%{_qt5_libdir}/*.so
-%{_qt5_plugindir}/designer/*.so
-%{_qt5_libdir}/libQxt*.prl
-%{_qt5_libdir}/pkgconfig/*.pc
-%{_qt5_libdir}/qt5/mkspecs/features/qxt*.prf
-%dir %{_qt5_libdir}/qt5/plugins/designer/pkgconfig
-%{_qt5_libdir}/qt5/plugins/designer/pkgconfig/QxtDesignerPlugins-qt5.pc
-
-%files doc
-%doc qt5/examples/ qt5/doc/html/
-%{_datadir}/doc/libqxt-qt5-doc/html/
+%files -f %{oreon_filedir}/main.list
+%files -n libqxt-qt5-devel -f %{oreon_filedir}/libqxt-qt5-devel.list
+%files -n libqxt-qt5-doc -f %{oreon_filedir}/libqxt-qt5-doc.list
 
 %changelog
+
 %autochangelog

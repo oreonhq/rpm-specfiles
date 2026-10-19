@@ -1,40 +1,32 @@
 %global source0_hash badaae3c472e07f8df1d85a5ed32c48394b25c75f0a9892ac3fe7e4db3098a91
-
-# Force out of source build
 %undefine __cmake_in_source_build
-
 %global appname io.github.antimicrox.antimicrox
-
 Name:         antimicrox
 Version:      3.6.1
-Release:      1%{?dist}
-Summary:      Graphical program used to map keyboard buttons and mouse controls to a gamepad
-
+Release:        1%{?dist}
+Summary:        Graphical program used to map keyboard buttons and mouse controls to a gamepad
 License:  GPL-3.0-or-later AND Zlib AND LGPL-3.0-or-later AND LGPL-2.1-or-later
 URL:      https://github.com/AntiMicroX/%{name}
-
 %global archivename %{name}-%{version}
-
-Source0:        %{url}/archive/%{version}/%{archivename}.tar.gz
-BuildRequires:  gcc-c++
+Source0:        https://github.com/AntiMicroX/%{name}/archive/%{version}/%{archivename}.tar.gz
+Requires:       systemd-udev
+# oreon:deps
+BuildRequires:  SDL2-devel
 BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
 BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  itstool
 BuildRequires:  libX11-devel
 BuildRequires:  libXi-devel
 BuildRequires:  libXtst-devel
+BuildRequires:  libappstream-glib
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qttools-devel
 BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  SDL2-devel
-BuildRequires:  itstool
-BuildRequires:  gettext
-# For desktop file & AppData
-BuildRequires:  libappstream-glib
-BuildRequires:  desktop-file-utils
 BuildRequires:  systemd
-
-Requires:       systemd-udev
-
+# /oreon:deps
 %description
 %{name} is a graphical program used to map keyboard keys and mouse controls
 to a gamepad. This program is useful for playing PC games using a gamepad that
@@ -42,44 +34,32 @@ do not have any form of built-in gamepad support. %{name} is a fork of
 AntiMicro which was inspired by QJoyPad but has additional features.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -n %{archivename} -q
 
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang %{name} --with-qt
+%oreon_autofiles main
 
 %post
-%udev_rules_update
 
+%udev_rules_update
 %postun
+
 %udev_rules_update
-
-%files -f %{name}.lang
-# Redundant
-%exclude %{_datadir}/%{name}/CHANGELOG.md
-%exclude %dir %{_datadir}/%{name}/translations
-%exclude %{_datadir}/%{name}/translations/*
-%doc CHANGELOG.md README.md
-%{_bindir}/%{name}
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/*
-%{_datadir}/applications/%{appname}.desktop
-%{_datadir}/icons/*/*/apps/*
-%{_metainfodir}/%{appname}.appdata.xml
-%{_datadir}/mime/packages/%{appname}.xml
-%{_mandir}/man1/%{name}.1*
-%{_udevrulesdir}/60-antimicrox-uinput.rules
-
 %check
+
 %{_bindir}/desktop-file-validate %{buildroot}/%{_datadir}/applications/%{appname}.desktop
 %{_bindir}/appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{appname}.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

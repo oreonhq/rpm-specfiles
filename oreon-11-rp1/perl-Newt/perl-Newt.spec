@@ -1,11 +1,10 @@
 %global source0_hash 35e78461b24ea7544d030fe71c82b6f633ea56f9bf0fa924ea61e1497863821f
-
-Summary: Perl bindings for the Newt library
+Summary:        Perl bindings for the Newt library
 Name: perl-Newt
 Version: 1.08
-Release: 76%{?dist}
+Release:        1%{?dist}
 URL: https://metacpan.org/release/Newt-1.08
-Source: https://cpan.metacpan.org/authors/id/A/AM/AMEDINA/Newt-1.08.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AM/AMEDINA/Newt-1.08.tar.gz
 Patch0: newt-perl-1.08-debian.patch
 Patch1: newt-perl-1.08-typemap.patch
 Patch2: newt-perl-1.08-fix.patch
@@ -16,21 +15,23 @@ Patch6: perl-Newt-1.08-export.patch
 Patch7: perl-Newt-1.08-pod.patch
 Patch8: perl-Newt-1.08-formdestroy.patch
 Patch9: perl-Newt-1.08-fix_pointer_type.patch
-BuildRequires: make
-BuildRequires:  gcc
-BuildRequires: newt-devel, perl-devel
-BuildRequires: perl-generators
-BuildRequires: perl(ExtUtils::MakeMaker)
 Obsoletes: newt-perl < 1.08-15
 Provides: newt-perl = %{version}-%{release}
-# Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License: GPL-1.0-or-later OR Artistic-1.0-Perl
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  newt-devel
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 This package provides Perl bindings for the Newt widget
 library, which provides a color text mode user interface.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Newt-%{version}
@@ -47,23 +48,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -rf newtlib
 
 %build
+
 perl Makefile.PL PREFIX=%{_prefix} INSTALLDIRS=vendor OPTIMIZE="$RPM_OPT_FLAGS"
 make
-
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-
 find $RPM_BUILD_ROOT \( -name perllocal.pod -o -name .packlist \) -exec rm -v {} \;
 find $RPM_BUILD_ROOT -type f -name '*.bs' -a -size 0 -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null ';'
 chmod -R u+w $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
-%files
-%doc ChangeLog README
-%{perl_vendorarch}/Newt.pm
-%{perl_vendorarch}/auto/Newt
-%{_mandir}/man3/Newt*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

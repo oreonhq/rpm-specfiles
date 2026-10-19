@@ -1,18 +1,14 @@
 %global source0_hash 49c789c21305bed13d90d7500877b50d62db1e8e4d6f7715178e556319ddbda9
-
 %global projectname       scheherazade
 BuildArch: noarch
-
 Version:    4.500
-Release:    1%{?dist}
+Release:        1%{?dist}
 URL:        https://software.sil.org/%{projectname}/
-
 %global foundry           SIL
 %global fontlicense       OFL-1.1
 %global fontlicenses      OFL.txt
 %global fontdocs          FONTLOG.txt README.txt OFL-FAQ.txt documentation/*
 %global fontdocsex        %{fontlicenses}
-
 %global fontfamily1        Scheherazade New
 %global fontsummary1       An Arabic script unicode font
 %global fontpkgheader1    %{expand:
@@ -26,35 +22,39 @@ Scheherazade, named after the heroine of the classic Arabian Nights tale, is
 designed in a similar style to traditional typefaces such as Monotype Naskh,
 extended to cover the full Unicode Arabic repertoire.
 }
-
 Source0:        https://software.sil.org/downloads/r/scheherazade/ScheherazadeNew-%{version}.zip
 Source1:    65-sil-scheherazade-new-fonts.conf
-
 Name:       sil-scheherazade-fonts
-Summary:    An Arabic script unicode font 
+Summary:        An Arabic script unicode font
 License:    OFL-1.1
+# oreon:deps
 
+# /oreon:deps
 %description
 %wordwrap -v common_description
 
 %fontpkg -a
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n ScheherazadeNew-%{version}
 rm -rf documentation/source documentation/pdf
 %linuxtext FONTLOG.txt OFL.txt OFL-FAQ.txt README.txt documentation/DOCUMENTATION.txt documentation/assets/css/*
 
 %build
-%fontbuild -a
 
+%fontbuild -a
 %install
 %fontinstall -a
+%oreon_autofiles main
 
 %check
-%fontcheck -a
 
+%fontcheck -a
 %fontfiles -a
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

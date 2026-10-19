@@ -1,14 +1,10 @@
 %global source0_hash ea85207d11f38d0da8980163eb7bbfd03ce4636c40a8d25112559bb1d381bbca
-
 %global sdl3_minver 3.4.0
-
-# Features disabled for RHEL
 %if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_with static
 %else
 %bcond_without static
 %endif
-
 Name:           sdl2-compat
 Version:        2.32.72
 Release:        1%{?dist}
@@ -17,32 +13,23 @@ Summary:        SDL 2.0 runtime compatibility library using SDL 3.0
 License:        Zlib
 URL:            https://github.com/libsdl-org/sdl2-compat
 Source0:        https://github.com/libsdl-org/sdl2-compat/archive/refs/tags/release-2.32.72.tar.gz#/sdl2-compat-2.32.72.tar.gz
-# Multilib aware-header stub
 Source1:        SDL2_config.h
 Source2:        SDL2_revision.h
-
-# Backports from upstream (0001~0500)
-
-# Proposed patches (0501~1000)
-
-# Fedora specific patches (1001+)
 Patch1001:      sdl2-compat-sdlconfig-multilib.patch
-
-BuildRequires:  cmake
-BuildRequires:  gcc
-BuildRequires:  git-core
-BuildRequires:  make
-BuildRequires:  SDL3-devel >= %{sdl3_minver}
-BuildRequires:  mesa-libGL-devel
-BuildRequires:  mesa-libGLU-devel
-# This replaces SDL2
 Obsoletes:      SDL2 < 2.30.11-2
 Conflicts:      SDL2 < 2.32.50~
 Provides:       SDL2 = %{version}
 Provides:       SDL2%{?_isa} = %{version}
-# This dlopens SDL3 (?!), so manually depend on it
 Requires:       SDL3%{?_isa} >= %{sdl3_minver}
-
+# oreon:deps
+BuildRequires:  SDL3-devel
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  git-core
+BuildRequires:  make
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLU-devel
+# /oreon:deps
 %description
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio device.
@@ -55,27 +42,20 @@ this layer.
 
 %package devel
 Summary:        Files to develop SDL 2.0 applications using SDL 3.0
-# License of SDL-2.0 headers
 License:        Zlib and Apache-2.0 and MIT and BSD-3-Clause
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-# This replaces SDL2-devel
 Obsoletes:      SDL2-devel < 2.30.11-2
 Conflicts:      SDL2-devel < 2.32.50~
 Provides:       SDL2-devel = %{version}
 Provides:       SDL2-devel%{?_isa} = %{version}
 %if ! %{with static}
-# We don't provide the static library, but we want to replace SDL2-static anyway
 Obsoletes:      SDL2-static < 2.30.11-2
 Conflicts:      SDL2-static < 2.30.50~
 %endif
-# Add deps required to compile SDL apps
-## For SDL_opengl.h
 Requires:       pkgconfig(gl)
 Requires:       pkgconfig(glu)
-## For SDL_syswm.h
 Requires:       pkgconfig(x11)
 Requires:       pkgconfig(xproto)
-
 %description devel
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio device.
@@ -86,17 +66,14 @@ programs written against SDL 2.0, but it uses SDL 3.0 behind the scenes.
 If you are writing new code, please target SDL 3.0 directly and do not use
 this layer.
 
-
 %if %{with static}
 %package static
 Summary:        Static library to develop SDL 2.0 applications using SDL 3.0
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
-# This replaces SDL2-static
 Obsoletes:      SDL2-static < 2.30.11-2
 Conflicts:      SDL2-static < 2.32.50~
 Provides:       SDL2-static = %{version}
 Provides:       SDL2-static%{?_isa} = %{version}
-
 %description static
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio device.
@@ -113,62 +90,28 @@ this layer.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-release-%{version} -S git_am
-
-
+%global oreon_srcdir %{name}-release-%{version}
+%oreon_prep
 %build
+
 %cmake %{?with_static:-DSDL2COMPAT_STATIC=ON}
 %cmake_build
-
-
 %install
 %cmake_install
-
-# Rename SDL_config.h to SDL_config-<arch>.h to avoid file conflicts on
-# multilib systems and install SDL_config.h wrapper
 mv %{buildroot}%{_includedir}/SDL2/SDL_config.h %{buildroot}%{_includedir}/SDL2/SDL_config-%{_arch}.h
 install -p -m 644 %{SOURCE1} %{buildroot}%{_includedir}/SDL2/SDL_config.h
-
-# Rename SDL_revision.h to SDL_revision-<arch>.h to avoid file conflicts on
-# multilib systems and install SDL_revision.h wrapper
-# TODO: Figure out how in the hell the SDL_REVISION changes between architectures on the same SRPM.
 mv %{buildroot}%{_includedir}/SDL2/SDL_revision.h %{buildroot}%{_includedir}/SDL2/SDL_revision-%{_arch}.h
 install -p -m 644 %{SOURCE2} %{buildroot}%{_includedir}/SDL2/SDL_revision.h
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-
-%files
-%license LICENSE.txt
-%doc README.md BUGS.md COMPATIBILITY.md
-%{_libdir}/libSDL2-2.0.so.*
-
-%files devel
-%{_bindir}/sdl2-config
-%{_datadir}/aclocal/sdl2.m4
-%{_includedir}/SDL2/
-%dir %{_libdir}/cmake/SDL2
-%{_libdir}/cmake/SDL2/sdl2-config*.cmake
-%{_libdir}/cmake/SDL2/SDL2Config*.cmake
-%{_libdir}/cmake/SDL2/SDL2Targets*.cmake
-%{_libdir}/cmake/SDL2/SDL2mainTargets*.cmake
-%{_libdir}/libSDL2-2.0.so
-%{_libdir}/libSDL2.so
-%{_libdir}/pkgconfig/sdl2-compat.pc
-%{_libdir}/libSDL2main.a
-%{_libdir}/libSDL2_test.a
-%{_libdir}/cmake/SDL2/SDL2_testTargets*.cmake
-
-
-%if %{with static}
-%files static
-%{_libdir}/libSDL2.a
-%{_libdir}/cmake/SDL2/SDL2-staticTargets*.cmake
-%endif
-
+%files -f %{oreon_filedir}/main.list
+%files -n sdl2-compat-devel -f %{oreon_filedir}/sdl2-compat-devel.list
+%files -n sdl2-compat-static -f %{oreon_filedir}/sdl2-compat-static.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.32.68-1
 - Import

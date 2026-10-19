@@ -1,23 +1,17 @@
 %global source0_hash 8683d2286d663a46412c12a0c789e755e7fd77088fb3bc0342bb71667f05a3ee
-
 Name:		clustal-omega
 Version:	1.2.4
-Release:	25%{?dist}
-Summary:	Clustal Omega is a command-line multiple sequence alignment tool
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        25%{?dist}
+Summary:        Clustal Omega is a command-line multiple sequence alignment tool
 License:	GPL-2.0-or-later
 URL:		http://www.clustal.org/omega/clustal-omega-1.2.0.tar.gz
-Source0:	http://www.clustal.org/omega/%{name}-%{version}.tar.gz
-
-BuildRequires:	gcc-c++
-BuildRequires:	argtable-devel
-BuildRequires: make
-
-# bundled library exception provided by FPC
-# https://fedorahosted.org/fpc/ticket/399
+Source0:        http://www.clustal.org/omega/%{name}-%{version}.tar.gz
 Provides:	bundled(squid) = 1.9
-
+# oreon:deps
+BuildRequires:  argtable-devel
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 Clustal Omega is a command-line multiple sequence alignment tool.
 The tool is widely used in molecular biology for multiple alignment of
@@ -27,11 +21,11 @@ in the clustal tools for the sequence alignment.
 %package devel
 Summary:	Development files for Clustal Omega
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development package for Clustal Omega
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -45,22 +39,18 @@ sed -i 's/\${AM_CXXFLAGS} -O3/${AM_CXXFLAGS}/g' configure
 sed -i '/inline float log/d' src/hhalign/util-C.h
 
 %build
+
 export CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" LDFLAGS="%{optflags}"
 %configure --disable-static
 make V=1 %{?_smp_mflags}
-
 %install
 %make_install
-# removing libtool generated static libs
 rm -f %{buildroot}%{_libdir}/libclustalo.la %{buildroot}%{_libdir}/libclustalo.a
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc COPYING README
-%{_bindir}/clustalo
-
-%files devel
-%{_libdir}/pkgconfig/clustalo.pc
-%{_includedir}/clustalo/
+%files -f %{oreon_filedir}/main.list
+%files -n clustal-omega-devel -f %{oreon_filedir}/clustal-omega-devel.list
 
 %changelog
+
 %autochangelog

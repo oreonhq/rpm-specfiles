@@ -1,159 +1,102 @@
-%global source0_hash none
-
+%global source0_hash 246473fc6432bb17b47216851970e2fddef5d07de4235be3717a0917671b91ba
 %global buildid    300
 %global octpkg  COPASI
-
 %global with_python  1
-
-# Disabled bindings
 %global with_java    0
 %global with_octave  0
 %global with_perl    0
 %global with_r       0
 %global with_mono    0
-#
-
 %global with_raptor  0
-
-# Use QWT6? (Experimental)
 %global with_qwt6    0
-
 %if 0%{?with_octave}
-# Exclude .oct files from provides
 %global __provides_exclude_from ^%{octpkglibdir}/.*\\.oct$
 %global octave_ver %(octave-config -p VERSION || echo 0)
 %endif
-
 %global _docdir_fmt %{name}
-
 %global blaslib flexiblas
 %global lapacklib flexiblas
-
 ExcludeArch:   %{ix86}
-
 Name:  COPASI
-Summary: Biochemical network simulator
+Summary:        Biochemical network simulator
 Version: 4.46.%{buildid}
-Release: %autorelease
-
-## Artistic 2.0 is main license
-## GPLv2+ is related to a Mixed Source Licensing Scenario
-# with 'copasi/randomGenerator/Cmt19937.cpp' file
-## GPLv3+ is related to a Mixed Source Licensing Scenario
-# with 'copasi/function/CEvaluationParser_yacc.cpp' file
-## BSD is related to a Mixed Source Licensing Scenario
-# with 'copasi/randomGenerator/Cmt19937.cpp' file
-## Any files with different licenses are not involved
+Release:        1%{?dist}
 License: Artistic-2.0 AND GPL-3.0-or-later AND BSD-3-Clause
 URL:   http://copasi.org/
-Source0: https://github.com/copasi/COPASI/archive/Build-%{buildid}/%{name}-Build-%{buildid}.tar.gz
+Source0:        https://github.com/copasi/%{name}/archive/Build-300/%{name}-Build-300.tar.gz
 Source1: %{name}.appdata.xml
-
 %if 0%{?with_qwt6}
-BuildRequires: qwt-qt6-devel
-BuildRequires: qt6-qtbase-devel
-BuildRequires: qcustomplot-qt6-devel
-BuildRequires: libmml-qt6-devel
-BuildRequires: qt6-qtdatavis3d-devel
-BuildRequires: qt6-qt5compat-devel
 %else
-BuildRequires: qwt-qt5-devel
-BuildRequires: qwtplot3d-qt5-devel >= 0.3.1a-4
-BuildRequires: qt5-qtbase-devel
-BuildRequires: qt5-qtwebkit-devel
-BuildRequires: qt5-qtdatavis3d-devel
-BuildRequires: qcustomplot-qt5-devel
-BuildRequires: libmml-qt5-devel
 %endif
-BuildRequires: cups-devel
-BuildRequires: freeglut-devel
-BuildRequires: libsbml-devel
-BuildRequires: libsedml-devel >= 2:2.0.19-0.1
-BuildRequires: libnuml-devel
-BuildRequires: libnuml-static
-BuildRequires: libCombine-devel
-BuildRequires: zipper-devel
-BuildRequires: libsbw-devel
-BuildRequires: mesa-libGL-devel
-BuildRequires: mesa-libGLU-devel
-BuildRequires: cppunit-devel
-BuildRequires: libcurl-devel
-BuildRequires: libxslt-devel
-BuildRequires: pkgconf-pkg-config
-BuildRequires: %{blaslib}-devel
-BuildRequires: crossguid2-devel >= 0:0.2.2
-BuildRequires: desktop-file-utils
-BuildRequires: swig
-BuildRequires: expat-devel
-BuildRequires: f2c
-BuildRequires: flex
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: bison
-BuildRequires: bzip2-devel
-BuildRequires: ImageMagick
-BuildRequires: libappstream-glib
-BuildRequires: minizip-devel
 %if 0%{?with_raptor}
-BuildRequires: raptor2-devel
 %endif
 %ifarch x86_64
-BuildRequires: nativejit-devel
 %endif
 %ifnarch s390x
-BuildRequires: google-cpu_features-devel
 %endif
-
 Requires: %{name}-data = %{version}-%{release}
 Requires: libsedml%{?_isa} >= 1:0.4.3-3
-
 Obsoletes: R-%{octpkg} < 0:4.25.213-1
 Obsoletes: perl-%{octpkg} < 0:4.25.213-1
 Obsoletes: %{name}-sharp < 0:4.25.213-1
-
-# This patch sets libraries' installation paths
 Patch0: %{name}-fix_install_libpaths.patch
-
-# This patch sets paths to find QWT5, QTMML, SBW files on Fedora
 Patch1: %{name}-find_QWT5-QTMML-SBW.patch
-
-# This patch sets paths to find QWT6, QTMML, SBW files on Fedora
 Patch3: %{name}-find_QWT6-QTMML-SBW.patch
-
-# This patch sets paths to find QTPLOT3D-QT6 files on Fedora
 Patch2: %{name}-set_QWTPLOT3D_QT6.patch
-
-# This patch sets paths to find QTPLOT3D-QT5 files on Fedora
 Patch5: %{name}-set_QWTPLOT3D_QT5.patch
-
-# This patch sets paths to find libCombine files on Fedora
 Patch6: %{name}-libCombine_paths.patch
-
-# This patch sets paths to find libcroosguid2 files on Fedora
 Patch7: %{name}-find_crossguid2.patch
-
-# This patch sets paths to find libsedml files on Fedora
 Patch9: %{name}-find_libsedml.patch
-
-# This patch sets paths to find libsbw files on Fedora
 Patch10: %{name}-find_sbw.patch
-
-# rhbz#1896407
 Patch11: %{name}-porting_to_python310.patch
-
-# qwt-6.2 compatibility
 Patch13: %{name}-qwt62.patch
-
-# This patch fixes a missing header request
 Patch14: %{name}-4.41.283-fix_missing_header.patch
-
-# This patch sets path to find qcustomplot libraries on Fedora
 Patch15: %{name}-find_qcp_libs.patch
 Patch16: %{name}-find_qcp_qt6_libs.patch
-
 Patch17: %{name}-find_libsbml.patch
-
+# oreon:deps
+BuildRequires:  ImageMagick
+BuildRequires:  bison
+BuildRequires:  bzip2-devel
+BuildRequires:  cmake
+BuildRequires:  cppunit-devel
+BuildRequires:  crossguid2-devel
+BuildRequires:  cups-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  expat-devel
+BuildRequires:  f2c
+BuildRequires:  flex
+BuildRequires:  flexiblas-devel
+BuildRequires:  freeglut-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  google-cpu_features-devel
+BuildRequires:  libCombine-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libcurl-devel
+BuildRequires:  libmml-qt5-devel
+BuildRequires:  libnuml-devel
+BuildRequires:  libnuml-static
+BuildRequires:  libsbml-devel
+BuildRequires:  libsbw-devel
+BuildRequires:  libsedml-devel
+BuildRequires:  libxslt-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  minizip-devel
+BuildRequires:  nativejit-devel
+BuildRequires:  pkgconf-pkg-config
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  qcustomplot-qt5-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtdatavis3d-devel
+BuildRequires:  qt5-qtwebkit-devel
+BuildRequires:  qwt-qt5-devel
+BuildRequires:  qwtplot3d-qt5-devel
+BuildRequires:  swig
+BuildRequires:  zipper-devel
+# /oreon:deps
 %description
 COPASI is a software application for simulation and analysis of biochemical
 networks and their dynamics.
@@ -171,7 +114,6 @@ animations of network diagrams.
 Summary: The COPASI graphical user interface
 Requires: %{name}-data = %{version}-%{release}
 Requires: %{name}-doc = %{version}-%{release}
-
 %description gui
 COPASI is a software application for simulation and analysis of biochemical
 networks and their dynamics.
@@ -255,7 +197,6 @@ Summary: %{name} Mono Bindings
 BuildRequires: xerces-c-devel, libxml2-devel, expat-devel
 BuildRequires: mono-core
 BuildRequires: make
-
 %description sharp
 This package provides the libraries to 
 develop applications with COPASI C# bindings.
@@ -268,6 +209,7 @@ BuildArch: noarch
 COPASI HTML documentation and examples.
 
 %prep
+
 %autosetup -n %{name}-Build-%{buildid} -N
 
 # This an old and obsolete license file
@@ -335,6 +277,7 @@ sed -i.bak '/double pow_dd(doublereal *,/d' copasi/odepack++/CRadau5.cpp
 sed -i.bak '/C_FLOAT64 d_lg10(C_FLOAT64 *);/d' copasi/optimization/CPraxis.cpp
 
 %build
+
 export CXXFLAGS="%{build_cxxflags} -I$PWD/copasi/lapack -I$PWD/copasi/CopasiSBW -I%{_includedir}/%{blaslib} %{__global_ldflags}"
 export LDFLAGS="%{__global_ldflags} -lbz2"
 %cmake \
@@ -422,18 +365,12 @@ export LDFLAGS="%{__global_ldflags} -lbz2"
 %else
  -DWITH_DATAVISUALIZATION_NAMESPACES:BOOL=ON
 %endif
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Remove directory of examples
 %if 0%{?with_python}
 rm -rf  $RPM_BUILD_ROOT%{python3_sitearch}/copasi/examples
 %endif
-
-# For R library only
 %if 0%{?with_r}
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/R/library
 %{_bindir}/R CMD INSTALL -l $RPM_BUILD_ROOT%{_libdir}/R/library build/copasi/bindings/R/%{name}_*.tar.gz
@@ -441,16 +378,11 @@ test -d %{octpkg}/src && (cd %{octpkg}/src; rm -f *.o *.so)
 rm -rf $RPM_BUILD_ROOT%{_libdir}/R/library/%{octpkg}/R.css
 chmod a+x $RPM_BUILD_ROOT%{_libdir}/R/library/%{octpkg}/libs/COPASI.so
 %endif
-
 %if 0%{?with_octave}
 mkdir -p $RPM_BUILD_ROOT%{octpkgdir}/packinfo
 install -pm 644 copasi/ArtisticLicense.txt $RPM_BUILD_ROOT%{octpkgdir}/packinfo
 %endif
-
-# Install .xpm icon files
 install -pm 644 copasi/UI/icons/Copasi48-Alpha.xpm $RPM_BUILD_ROOT%{_datadir}/icons/copasi/icons
-
-# Make a .desktop file
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 cat > $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop <<EOF
 [Desktop Entry]
@@ -463,73 +395,24 @@ Terminal=false
 Type=Application
 Categories=Science;
 EOF
-
-# Install appdata file
 mkdir -p $RPM_BUILD_ROOT%{_metainfodir}
 install -pm 644 %{SOURCE1} $RPM_BUILD_ROOT%{_metainfodir}/
+%oreon_autofiles COPASI-gui usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles COPASI-data usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles python3-COPASI usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles COPASI-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/%{name}.desktop
 appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/*.appdata.xml
-
-%files
-%{_bindir}/CopasiSE
-
-%files gui
-%{_bindir}/CopasiUI
-%{_bindir}/CopasiSBW
-%{_datadir}/icons/copasi/
-%{_datadir}/applications/%{name}.desktop
-%{_metainfodir}/*.appdata.xml
-
-%files data
-%license copasi/ArtisticLicense.txt
-%{_datadir}/copasi/
-%exclude %{_datadir}/copasi/doc/
-
-%if 0%{?with_python}
-%files -n python3-%{octpkg}
-%license copasi/ArtisticLicense.txt
-%{python3_sitearch}/copasi/
-%{python3_sitearch}/*.pth
-%endif
-
-%if 0%{?with_java}
-%files -n java-%{octpkg}
-%license copasi/ArtisticLicense.txt
-%{_javadir}/*.jar
-%{_javadir}/copasi/
-%{_libdir}/copasi/
-%endif
-
-%if 0%{?with_octave}
-%files -n octave-%{octpkg}
-%dir %{octpkgdir}
-%{octpkgdir}/packinfo/ArtisticLicense.txt
-%{octpkglibdir}/
-%endif
-
-%if 0%{?with_perl}
-%files -n perl-%{octpkg}
-%license copasi/ArtisticLicense.txt
-%{perl_vendorarch}/auto/COPASI/
-%endif
-
-%if 0%{?with_r}
-%files -n R-%{octpkg}
-%license copasi/ArtisticLicense.txt
-%{_libdir}/R/library/%{octpkg}/
-%endif
-
-%if 0%{?with_mono}
-%files sharp
-%license copasi/ArtisticLicense.txt
-%{_prefix}/lib/mono/copasicsP/
-%endif
-
-%files doc
-%license copasi/ArtisticLicense.txt
-%{_datadir}/copasi/doc/
+%files -f %{oreon_filedir}/main.list
+%files -n COPASI-gui -f %{oreon_filedir}/COPASI-gui.list
+%files -n COPASI-data -f %{oreon_filedir}/COPASI-data.list
+%files -n python3-COPASI -f %{oreon_filedir}/python3-COPASI.list
+%files -n COPASI-doc -f %{oreon_filedir}/COPASI-doc.list
 
 %changelog
+
 %autochangelog

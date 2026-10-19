@@ -1,57 +1,41 @@
 %global source0_hash 5823209b0d43af322ce698c689380d7c15ca31fa8e6e3be8459f27031bef0af5
-
 Name:           python-wcwidth
 Version:        0.9.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Measures the displayed width of unicode strings in a terminal
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jquast/wcwidth
-Source:         %{pypi_source wcwidth}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/wcwidth/wcwidth-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'wcwidth' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61
+Requires:       python3-wcwidth = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-wcwidth
-Summary:        %{summary}
-
-%description -n python3-wcwidth %_description
-
+Summary:        Measures the displayed width of unicode strings in a terminal
+%description -n python3-wcwidth
 
 %prep
-%autosetup -p1 -n wcwidth-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir wcwidth-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-wcwidth usr/lib/python3*/site-packages/wcwidth* usr/lib64/python3*/site-packages/wcwidth* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/wcwidth* usr/lib64/python3*/site-packages/wcwidth* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-wcwidth -f %{pyproject_files}
+%files
+%files -n python3-wcwidth -f %{oreon_filedir}/python3-wcwidth.list
 
 %changelog
+
 %autochangelog

@@ -1,5 +1,4 @@
-%global source0_hash 42269b012d8d7d32788c2fa8686fab518ce9c30a2eb4a93fcab719f7d9b28d8d
-
+%global source0_hash 0adb2195139fdc1b5596480e2ed62c87b48d10043147da986053ec41eafb5848
 Name:           lxqt-admin
 Summary:        LXQt system administration tool
 Version:        2.4.0
@@ -7,18 +6,18 @@ Release:        1%{?dist}
 License:        LGPL-2.1-only
 URL:            https://lxqt-project.org/
 Source0:        https://github.com/lxqt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  desktop-file-utils
-BuildRequires:  cmake(lxqt)
-BuildRequires:  cmake(Qt6LinguistTools)
-BuildRequires:  pkgconfig(polkit-qt6-1)
-BuildRequires:  pkgconfig(glib-2.0)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  perl
-
 Requires:       polkit
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(Qt6LinguistTools)
+BuildRequires:  cmake(lxqt)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  perl
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(polkit-qt6-1)
+# /oreon:deps
 %description
 This package provides tools to adjust settings of the operating system
 LXQt is running on. Both can be launched from GUI "Configuration Center".
@@ -35,13 +34,11 @@ This package provides translations for the lxqt-admin package.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 for admfile in user time; do
@@ -53,23 +50,11 @@ desktop-file-edit \
 done
 %find_lang lxqt-admin-time --with-qt
 %find_lang lxqt-admin-user --with-qt
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license COPYING
-%doc AUTHORS README.md
-%{_bindir}/%{name}*
-%{_datadir}/applications/%{name}*.desktop
-%{_datadir}/polkit-1/actions/*.policy
-
-%files l10n -f lxqt-admin-user.lang -f lxqt-admin-time.lang
-%license COPYING
-%doc AUTHORS README.md
-%dir %{_datadir}/lxqt/translations/lxqt-admin-user
-%dir %{_datadir}/lxqt/translations/lxqt-admin-time
-%{_datadir}/lxqt/translations/lxqt-admin-user/lxqt-admin-user_arn.qm
-%{_datadir}/lxqt/translations/lxqt-admin-user/lxqt-admin-user_ast.qm
-%{_datadir}/lxqt/translations/lxqt-admin-time/lxqt-admin-time_arn.qm
-%{_datadir}/lxqt/translations/lxqt-admin-time/lxqt-admin-time_ast.qm
+%files -f %{oreon_filedir}/main.list
+%files -n lxqt-admin-l10n -f %{oreon_filedir}/lxqt-admin-l10n.list
 
 %changelog
+
 %autochangelog

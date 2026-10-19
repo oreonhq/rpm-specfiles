@@ -1,23 +1,26 @@
 %global source0_hash 672bd7d10aee4606171afb864f3570b83340f6a33e2c186dc0512f7145ffdf6a
-
-Summary:       Library of functions for manipulating TIFF format image files
+Summary:        Library of functions for manipulating TIFF format image files
 Name:          libtiff
 Version:       4.7.2
-Release:       1%{?dist}
+Release:        1%{?dist}
 License:       libtiff
 URL:           http://www.simplesystems.org/libtiff/
-
-Source:        http://download.osgeo.org/libtiff/tiff-%{version}.tar.gz
-
-BuildRequires: gcc, gcc-c++
-BuildRequires: zlib-devel libjpeg-devel jbigkit-devel libzstd-devel libwebp-devel liblerc-devel
-BuildRequires: libtool automake autoconf pkgconfig
-%if 0%{?fedora} == 40
-# Add old libtiff to work with packages not built with new libtiff.so.6
-BuildRequires: libtiff
-%endif
-BuildRequires: make
-
+Source0:        http://download.osgeo.org/libtiff/tiff-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  jbigkit-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  liblerc-devel
+BuildRequires:  libtool
+BuildRequires:  libwebp-devel
+BuildRequires:  libzstd-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 The libtiff package contains a library of functions for manipulating
 TIFF (Tagged Image File Format) image format files.  TIFF is a widely
@@ -31,7 +34,6 @@ format image files.
 Summary:       Development tools for programs which will use the libtiff library
 Requires:      %{name}%{?_isa} = %{version}-%{release}
 Requires:      pkgconfig
-
 %description devel
 This package contains the header files and documentation necessary for
 developing programs which will manipulate TIFF format image files
@@ -44,7 +46,6 @@ install the libtiff package.
 %package static
 Summary:     Static TIFF image format file library
 Requires:    %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 The libtiff-static package contains the statically linkable version of libtiff.
 Linking to static libraries is discouraged for most applications, but it is
@@ -53,12 +54,12 @@ necessary for some boot packages.
 %package tools
 Summary:    Command-line utility programs for manipulating TIFF files
 Requires:   %{name}%{?_isa} = %{version}-%{release}
-
 %description tools
 This package contains command-line programs for manipulating TIFF format
 image files using the libtiff library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n tiff-%{version} -N
 
@@ -72,30 +73,20 @@ autoconf
 autoheader
 
 %build
+
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 %configure --enable-ld-version-script --enable-tools-unsupported
 %make_build
-
 %install
 %make_install
-
-# remove what we didn't want installed
 rm $RPM_BUILD_ROOT%{_libdir}/*.la
 rm -rf $RPM_BUILD_ROOT%{_datadir}/doc/
-
-# no libGL dependency, please
 rm -f $RPM_BUILD_ROOT%{_bindir}/tiffgt
-
-# no sgi2tiff or tiffsv, either
 rm -f $RPM_BUILD_ROOT%{_bindir}/sgi2tiff
 rm -f $RPM_BUILD_ROOT%{_bindir}/tiffsv
-
 rm -f $RPM_BUILD_ROOT%{_mandir}/man1/tiffgt.1
 rm -f $RPM_BUILD_ROOT%{_mandir}/man1/sgi2tiff.1
 rm -f $RPM_BUILD_ROOT%{_mandir}/man1/tiffsv.1
-
-# multilib header hack
-# we only apply this to known Red Hat multilib arches, per bug #233091
 case `uname -m` in
   i?86 | ppc | s390 | sparc )
     wordsize="32"
@@ -107,68 +98,29 @@ case `uname -m` in
     wordsize=""
     ;;
 esac
-
 if test -n "$wordsize"
 then
   mv $RPM_BUILD_ROOT%{_includedir}/tiffconf.h \
      $RPM_BUILD_ROOT%{_includedir}/tiffconf-$wordsize.h
-
   cat >$RPM_BUILD_ROOT%{_includedir}/tiffconf.h <<EOF
-#ifndef TIFFCONF_H_MULTILIB
-#define TIFFCONF_H_MULTILIB
-
-#include <bits/wordsize.h>
-
-# if __WORDSIZE == 32
-# include "tiffconf-32.h"
-#elif __WORDSIZE == 64
-# include "tiffconf-64.h"
-#else
-# error "unexpected value for __WORDSIZE macro"
-# endif
-
-# endif
 EOF
-
 fi
-
-%if 0%{?fedora} == 40
-# Copy old soname %%{_libdir}/libtiff.so.5
-# Copy old soname %%{_libdir}/libtiffxx.so.5
-cp %{_libdir}/libtiff.so.5* $RPM_BUILD_ROOT%{_libdir}
-cp %{_libdir}/libtiffxx.so.5* $RPM_BUILD_ROOT%{_libdir}
-%endif
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/*/lib*.so.*
 
 %check
+
 export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
 if ! make check
 then
   cat test/test-suite.log
   false
 fi
-
-%files
-%license LICENSE.md
-%doc README.md RELEASE-DATE VERSION
-%{_libdir}/libtiff.so.*
-%{_libdir}/libtiffxx.so.*
-
-%files devel
-%doc TODO ChangeLog
-%{_includedir}/*
-%{_libdir}/libtiff.so
-%{_libdir}/libtiffxx.so
-%{_libdir}/pkgconfig/libtiff*.pc
-%{_mandir}/man3/*
-
-%files static
-%{_libdir}/*.a
-
-%files tools
-%{_bindir}/*
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
+%files -n libtiff-devel -f %{oreon_filedir}/libtiff-devel.list
+%files -n libtiff-static -f %{oreon_filedir}/libtiff-static.list
+%files -n libtiff-tools -f %{oreon_filedir}/libtiff-tools.list
 
 %changelog
+
 %autochangelog

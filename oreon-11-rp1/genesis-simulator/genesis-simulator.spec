@@ -1,50 +1,31 @@
-%global source0_hash none
-
-# Upstream has been informed of incorrect FSF addresses
-# https://github.com/genesis-sim/genesis-2.4/issues/4
-
-# Fails with LTO enabled
+%global source0_hash ff74209a8a11c918e173f6854b52d6fbd5291d2ebf66d4284408a9b390721d0a
 %global _lto_cflags %{nil}
-
 %global _package_note_file "%{_builddir}/%{realname}-%{version}-%{commit}/genesis/.package_note-%{name}-%{version}-%{release}.%{_arch}.ld"
-
 %global commit 7b0a66b71ba98d5b7802c32ed856b75b8334fb05
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 %global realname genesis
 %global instdir %{_datadir}/%{name}
-
 Name:       %{realname}-simulator
-Summary:    A general purpose simulation platform
+Summary:        A general purpose simulation platform
 Version:    2.4
-Release:    29.20210608git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Url:        http://www.genesis-sim.org/GENESIS/
-Source0:    https://github.com/genesis-sim/%{realname}-%{version}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-# fix left over COPT
+Source0:        https://github.com/%{realname}-sim/%{realname}-%{version}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Patch0:     0001-use-CFLAGS_IN-instead-of-COPT.patch
-# pass RNG_CFLAGS variable to ensure they're also built with fpic etc.
 Patch1:     0002-feat-pass-RNG_CFLAGS.patch
-
-# GPL and LGPL: Genesis
-# MIT: param library
-# Public Domain: Scripts
 License:    GPL-2.0-or-later AND LGPL-2.0-or-later AND MIT AND LicenseRef-Fedora-Public-Domain
-
-BuildRequires: git-core
-BuildRequires: gcc
-BuildRequires: bison
-BuildRequires: flex
-%if %{fedora} > 33
-BuildRequires: libfl-devel
-%else
-BuildRequires: flex-static
-%endif
-BuildRequires: ncurses-devel
-BuildRequires: libX11-devel
-BuildRequires: libXt-devel
-BuildRequires: netcdf-devel
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  bison
+BuildRequires:  flex
+BuildRequires:  flex-static
+BuildRequires:  gcc
+BuildRequires:  git-core
+BuildRequires:  libX11-devel
+BuildRequires:  libXt-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  netcdf-devel
+# /oreon:deps
 %description
 GENESIS (short for GEneral NEural SImulation System) is a general
 purpose simulation platform that was developed to support the
@@ -77,6 +58,7 @@ Summary: Documentation for %{name}
 %endif
 
 %prep
+
 %autosetup -n %{realname}-%{version}-%{commit}/genesis -S git -p2
 
 # Correct spurious perms
@@ -138,57 +120,32 @@ NETCDFOBJ = \
 EOF
 
 %build
-# Kill parallel make, parallel make break build in ramdom ways
-make -C src genesis
 
+make -C src genesis
 %install
 make -C src install INSTALLDIR=%{buildroot}%{_libdir}/genesis
 rm -r %{buildroot}%{_libdir}/genesis/{src,man}
 rm -v %{buildroot}%{_libdir}/genesis/.*simrc
 chmod -x %{buildroot}%{_libdir}/genesis/startup/*
-
 mkdir -p %{buildroot}%{_bindir}
 mv %{buildroot}%{_libdir}/genesis/genesis %{buildroot}%{_bindir}/
-
 mkdir -p %{buildroot}%{_includedir}
 mv %{buildroot}%{_libdir}/genesis/include %{buildroot}%{_includedir}/genesis
-
 mv %{buildroot}%{_libdir}/genesis/bin/convert %{buildroot}%{_bindir}/genesis-convert
 install -D man/man1/convert.1 %{buildroot}%{_mandir}/man1/genesis-convert.1
 cp src/libsh %{buildroot}%{_libdir}/genesis/lib
-
 find %{buildroot}%{_libdir}/genesis/startup/ -name '*simrc' -exec \
     sed -i -e 's|%{buildroot}||g' -e 's|GENESIS_HELP .*|GENESIS_HELP  %{_docdir}/%{name}-doc/Doc/|' {} \;
-
-# Fix permission for man
 chmod -x %{buildroot}%{_mandir}/man1/%{realname}-convert.1*
-
-# Remove docs from libdir
 rm -rf %{buildroot}%{_libdir}/%{realname}/Doc
 rm -rf %{buildroot}%{_libdir}/%{realname}/Hyperdoc
 rm -rf %{buildroot}%{_libdir}/%{realname}/Tutorials
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# add emacs mode
-
-%files
-%{_bindir}/%{realname}
-%{_bindir}/%{realname}-convert
-%license GPLicense LGPLicense
-%doc AUTHORS COPYRIGHT CONTACTING.GENESIS ChangeLog
-%exclude %{_libdir}/%{realname}/lib
-%exclude %{_libdir}/%{realname}/*make
-%{_libdir}/%{realname}
-%{_mandir}/man1/*
-
-%files devel
-%license GPLicense LGPLicense
-%{_includedir}/%{realname}/
-%{_libdir}/%{realname}/lib
-%{_libdir}/%{realname}/*make
-
-%files doc
-%license GPLicense LGPLicense
-%doc Doc Hyperdoc Tutorials
+%files -f %{oreon_filedir}/main.list
+%files -n genesis-simulator-devel -f %{oreon_filedir}/genesis-simulator-devel.list
+%files -n genesis-simulator-doc -f %{oreon_filedir}/genesis-simulator-doc.list
 
 %changelog
+
 %autochangelog

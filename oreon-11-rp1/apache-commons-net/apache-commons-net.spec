@@ -1,18 +1,20 @@
+%global source2_hash f154a693df7d01290487b3bf4c045481cdde6bd310b9eeb37b7a533b03b3299a
+%global source1_hash 9b85c56b3d762b7bd52744987cd4ab5313a4f1f3c01cecfdf827f23782584ac9
 %global source0_hash 9dd1e9ae1dc236ee8ad92754cb7666be9ad333335717d75a46a4b2f71155fdef
-
 Name:           apache-commons-net
 Version:        3.13.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Internet protocol suite Java library
 License:        Apache-2.0
 URL:            https://commons.apache.org/proper/commons-net/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/commons/net/source/commons-net-%{version}-src.tar.gz
 Source1:        https://downloads.apache.org/commons/net/source/commons-net-%{version}-src.tar.gz.asc
 Source2:        https://downloads.apache.org/commons/KEYS
-
+Obsoletes:      %{name}-javadoc < 3.11.1-11
+# oreon:deps
+BuildRequires:  gnupg2
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-io:commons-io)
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
@@ -23,11 +25,7 @@ BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-engine)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-params)
 BuildRequires:  mvn(org.junit.vintage:junit-vintage-engine)
-# for signature verification
-BuildRequires:  gnupg2
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3.11.1-11
-
+# /oreon:deps
 %description
 This is an Internet protocol suite Java library originally developed by
 ORO, Inc.  This version supports Finger, Whois, TFTP, Telnet, POP3, FTP,
@@ -36,6 +34,7 @@ as BSD R command support. The purpose of the library is to provide
 fundamental protocol access, not higher-level abstractions.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n commons-net-%{version}-src
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -80,14 +79,14 @@ src/test/java/org/apache/commons/net/time/TimeUDPClientTest.java \
 %mvn_alias : org.apache.commons:commons-net
 
 %build
-%mvn_build -j -- -Dcommons.osgi.symbolicName=org.apache.commons.net
 
+%mvn_build -j -- -Dcommons.osgi.symbolicName=org.apache.commons.net
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md RELEASE-NOTES.txt
-%license LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,38 +1,15 @@
-%global source0_hash e783f672e49de7c5a237a0cea905ed51012da55c04fbacab397161976efc8472
-
-# Use the system Catch2? We need 2.x and cannot straightforwarly port to 3.x
-# (and upstream will not migrate to 3.x because they need to test C++11
-# support, https://github.com/gulrak/filesystem/issues/165). If a Catch2 2.x
-# compat package is no longer available, we can use the bundled single-header
-# copy. This would be:
-#    Provides:       bundled(catch2) = 2.13.7
-# except that it is only used to build test executables, and nothing from the
-# bundled Catch2 library is included in any of the binary RPMs.
+%global source0_hash f4a098ed48e3b25b87b2be84cde58c884177af6b4ce27666ed2dbfe907b24418
 %bcond system_catch2 1
-
 Name:           gulrak-filesystem
 Version:        1.5.16
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Implementation of C++17 std::filesystem for C++11/14/17/20
-
-# SPDX
 License:        MIT
 URL:            https://github.com/gulrak/filesystem
-Source:         %{url}/archive/v%{version}/filesystem-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  make
-
+Source0:        https://github.com/gulrak/filesystem/archive/v%{version}/filesystem-%{version}.tar.gz
 %if %{with system_catch2}
-# Consider migrating to Catch2 v3
-# https://github.com/gulrak/filesystem/issues/165
-BuildRequires:  pkgconfig(catch2) < 3
 %endif
-
-# No compiled binaries are installed, so this would be empty.
 %global debug_package %{nil}
-
 %global common_description %{expand:
 This is a header-only single-file std::filesystem compatible helper library,
 based on the C++17 and C++20 specs, but implemented for C++11, C++14, C++17 or
@@ -47,21 +24,24 @@ Emscripten and QNX is not backed up by automated testing but PRs and bug
 reports are welcome for those too. It is of course in its own namespace
 ghc::filesystem to not interfere with a regular std::filesystem should you use
 it in a mixed C++17 environment (which is possible).}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  pkgconfig(catch2)
+# /oreon:deps
 %description %{common_description}
 
 %package devel
 Summary:        Development files for %{name}
-
-# Header-only library
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel %{common_description}
 
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n filesystem-%{version}
@@ -77,21 +57,18 @@ sed -r -i 's|[[:blank:]]+catch\.hpp||' test/CMakeLists.txt
 %cmake
 
 %build
-%cmake_build
 
+%cmake_build
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files devel
-%license LICENSE
-%doc README.md
-%doc examples/
-
-%{_includedir}/ghc/
-%{_libdir}/cmake/ghc_filesystem/
+%files -f %{oreon_filedir}/main.list
+%files -n gulrak-filesystem-devel -f %{oreon_filedir}/gulrak-filesystem-devel.list
 
 %changelog
+
 %autochangelog

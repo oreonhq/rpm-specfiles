@@ -1,24 +1,21 @@
-%global source0_hash eb79eaa817997efe4c827abe8600d0b6c635c01bc7252f57cf3c87ec36b091b8
-
+%global source0_hash 4553c482b54c571872e37d5b16edf52b7e809776d4a8536b7f501a598f1c7463
 Name:           sdorfehs
 Version:        1.7
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A tiling window manager
-
 License:        GPL-2.0-or-later
 URL:            https://github.com/jcs/sdorfehs
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/jcs/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  make
-BuildRequires:  sed
-
 BuildRequires:  libX11-devel
 BuildRequires:  libXft-devel
 BuildRequires:  libXrandr-devel
 BuildRequires:  libXres-devel
 BuildRequires:  libXtst-devel
-
+BuildRequires:  make
+BuildRequires:  sed
+# /oreon:deps
 %description
 sdorfehs (pronounced "starfish") is a tiling window manager descended from
 ratpoison (which itself is modeled after GNU Screen).
@@ -33,6 +30,7 @@ then allows a number of bindings accessible with just a single keystroke or any
 other combination.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -40,18 +38,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -e 's/install -s/install -p/' -i Makefile
 
 %build
+
 %set_build_flags
 %make_build
-
 %install
 export PREFIX="%{_prefix}"
 %make_install MANDIR="%{buildroot}%{_mandir}/man1"
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc README.md
-%{_bindir}/sdorfehs
-%{_mandir}/man1/sdorfehs.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

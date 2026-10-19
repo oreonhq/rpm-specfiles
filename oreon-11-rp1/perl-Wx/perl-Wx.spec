@@ -1,64 +1,19 @@
 %global source0_hash 1cfdb6535a0f4676e6f1aab2c9d8e16d577be3eb3b7cc04c8074d685e6651b70
-
-#
-# Rebuild option:
-#
-#   --with testsuite         - run the test suite (requires X)
-#
-
-# NOTE: On every new version, we need to manually regenerate the list of XS Provides
-# cd Wx-*
-# for i in `grep -r "PACKAGE=" * | cut -d " " -f 2 | sed 's|PACKAGE=|perl(|g' | grep "Wx::" | sort -n |uniq`; do printf "Provides: $i)\\n"; done &> provides.txt
-# grep -orP '%name{Wx::[^}]*}\s+class' |grep -v "3pm" | cut -d : -f 2- | sed 's|%name{|Provides: perl(|g' | sed 's|} class|)|g' |uniq &>> provides.txt
-# cat provides.txt | uniq | sort -n
-
 Name:           perl-Wx
 Version:        0.9932
-Release:        43%{?dist}
+Release:        1%{?dist}
 Summary:        Interface to the wxWidgets cross-platform GUI toolkit
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Wx
 Source0:        https://cpan.metacpan.org/authors/id/M/MD/MDOOTSON/Wx-%{version}.tar.gz
-# Work around BOM_UTF8 clash between wxGTK and Perl. Should be fixed in newer
-# wxGTK, CPAN RT#121464, <http://trac.wxwidgets.org/ticket/13599>.
 Patch0:         Wx-0.9932-Undefine-BOM_UTF8.patch
 Patch1:         gtk3.patch
 Patch2:         wxWidgets_3.2_MakeMaker.patch
 Patch3:         wxWidgets_3.2_port.patch
-BuildRequires:  make
-BuildRequires:  wxGTK-devel
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  gcc-c++
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl(Alien::wxWidgets) >= 0.25
-BuildRequires:  perl(blib)
-BuildRequires:  perl(Config)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.21
-BuildRequires:  perl(ExtUtils::ParseXS) >= 2.2203
-BuildRequires:  perl(ExtUtils::XSpp::Cmd)
-BuildRequires:  perl(Fatal)
-BuildRequires:  perl(FindBin)
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Module::Info)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Test::More), perl(Test::Harness)
-BuildRequires:  perl(Test::Pod)
-BuildRequires:  perl(YAML) >= 0.35
-BuildRequires:  dos2unix
-
-# this package requires the same version of perl(Alien::wxWidgets::Config::gtk_XXX) it was built with
-# see https://bugzilla.redhat.com/2232294 for details.
-# oh, we crossing the streams here, hold on.
 %global alien_versioned_require %(rpm -q perl-Alien-wxWidgets --provides |grep gtk)
-
 %if "%{alien_versioned_require}" != ""
 Requires: %{alien_versioned_require}
 %endif
-
-# Manual provides from XS
 Provides: perl(Wx::AboutDialogInfo)
 Provides: perl(Wx::AcceleratorEntry)
 Provides: perl(Wx::AcceleratorTable)
@@ -393,7 +348,6 @@ Provides: perl(Wx::OwnerDrawnComboBox)
 Provides: perl(Wx::PageSetupDialog)
 Provides: perl(Wx::PageSetupDialogData)
 Provides: perl(Wx::PaintDC)
-# Provides: perl(Wx::PaintEvent)
 Provides: perl(Wx::Palette)
 Provides: perl(Wx::Panel)
 Provides: perl(Wx::PasswordEntryDialog)
@@ -674,7 +628,32 @@ Provides: perl(Wx::XmlResourceHandler)
 Provides: perl(Wx::XmlSubclassFactory)
 Provides: perl(Wx::XPMHandler)
 Provides: perl(Wx::ZipFSHandler)
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  dos2unix
+BuildRequires:  findutils
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  perl(Alien::wxWidgets)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(ExtUtils::ParseXS)
+BuildRequires:  perl(ExtUtils::XSpp::Cmd)
+BuildRequires:  perl(Fatal)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Module::Info)
+BuildRequires:  perl(Test::Harness)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(YAML)
+BuildRequires:  perl(blib)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  wxGTK-devel
+# /oreon:deps
 %description
 The Wx module is a wrapper for the wxWidgets (formerly known as
 wxWindows) GUI toolkit.
@@ -683,6 +662,7 @@ This module comes with extensive documentation in HTML format;
 you can download it from http://wxperl.sourceforge.net/.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Wx-%{version}
@@ -701,17 +681,6 @@ find . -type f -name "*.pm" -o -name "*.h" -o -name "*.cpp" |
     xargs chmod -c a-x
 
 # OLD
-%if 0
-%filter_provides_in %{perl_vendorarch}/.*\\.so$ 
-%filter_provides_in -P %{perl_archlib}/(?!CORE/libperl).*\\.so$ 
-%filter_from_provides /perl(UNIVERSAL)/d; /perl(DB)/d 
-%filter_from_provides /perl(Wx)$/d
-%filter_from_provides /perl(MY)$/d
-%filter_from_provides /perl(Parse::Yapp::Driver)/d
-%filter_provides_in %{_docdir} 
-%filter_requires_in %{_docdir} 
-%filter_setup 
-%endif
 
 # NEW
 %global __provides_exclude_from ^(%{perl_vendorarch}/.*\\.so)$
@@ -719,31 +688,26 @@ find . -type f -name "*.pm" -o -name "*.h" -o -name "*.cpp" |
 %{?perl_default_filter}
 
 %build
+
 perl Makefile.PL --wx-unicode \
   --wx-version=`wx-config --version | cut -d . -f 1-2` \
   --wx-toolkit=gtk \
   INSTALLDIRS=vendor \
   OPTIMIZE="$RPM_OPT_FLAGS -Wno-unused-variable -Wno-unused-but-set-variable -Wno-unused-local-typedefs"
 make %{?_smp_mflags}
-
 %install
 make install PERL_INSTALL_ROOT=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -type f -name .packlist -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -type f -name '*.bs' -empty -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -depth -type d -exec rmdir {} 2>/dev/null ';'
 chmod -R u+w $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-%{?_with_testsuite:make test}
 
-%files
-%doc Changes README.txt docs/todo.txt wxpl.ico wxpl.xpm
-%doc samples/
-%{_bindir}/*
-%{perl_vendorarch}/Wx*
-%{perl_vendorarch}/auto/Wx/
-%{_mandir}/man1/*.1*
-%{_mandir}/man3/*.3pm*
+%{?_with_testsuite:make test}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

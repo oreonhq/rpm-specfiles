@@ -1,9 +1,6 @@
+%global source1_hash 1a02a3ff7a8f4604c3d69838e703acfe40d668dae58f148a9341ba72a878e160
 %global source0_hash 4f696fb57c90a827c20aadb2d4f9058bbff10f7f043bd0d4c3f58791143b1cd7
-
-# Generated from webmock-1.7.6.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name webmock
-
-# Disable HTTP clients integration tests we don't have in Fedora.
 %bcond_with    async_http
 %bcond_without curb
 %bcond_without em_http_request
@@ -14,31 +11,15 @@
 %bcond_without net_http
 %bcond_with    patron
 %bcond_with    typhoeus
-
 Name: rubygem-%{gem_name}
 Version: 3.26.1
-Release: %autorelease
-Summary: Library for stubbing HTTP requests in Ruby
+Release:        1%{?dist}
+Summary:        Library for stubbing HTTP requests in Ruby
 License: MIT
 URL: https://github.com/bblimke/webmock
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
-# git clone https://github.com/bblimke/webmock.git && cd webmock
-# git archive -v -o webmock-3.26.1-tests.tar.gz v3.26.1 minitest/ spec/ test/
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1: https://github.com/bblimke/webmock/archive/refs/tags/v3.26.1.tar.gz
-# Revert dependency on rspec-retry, because it is not available in Fedora
 Patch0: rubygem-webmock-3.23.1-Revert-Retry-timed-out-real-requests-when-running-we.patch
-BuildRequires: ruby(release)
-BuildRequires: rubygems-devel
-BuildRequires: ruby
-BuildRequires: rubygem(addressable)
-BuildRequires: rubygem(crack)
-BuildRequires: rubygem(hashdiff)
-BuildRequires: rubygem(minitest)
-BuildRequires: rubygem(rack)
-BuildRequires: rubygem(rspec)
-BuildRequires: rubygem(test-unit)
-BuildRequires: rubygem(webrick)
-
 %{?with_async_http:BuildRequires: rubygem(async-http)}
 %{?with_curb:BuildRequires: rubygem(curb)}
 %{?with_em_http_request:BuildRequires: rubygem(em-http-request)}
@@ -49,21 +30,36 @@ BuildRequires: rubygem(webrick)
 %{?with_patron:BuildRequires: rubygem(patron)}
 %{?with_typhoeus:BuildRequires: rubygem(typhoeus)}
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  ruby
+BuildRequires:  ruby(release)
+BuildRequires:  rubygem(addressable)
+BuildRequires:  rubygem(crack)
+BuildRequires:  rubygem(curb)
+BuildRequires:  rubygem(em-http-request)
+BuildRequires:  rubygem(excon)
+BuildRequires:  rubygem(hashdiff)
+BuildRequires:  rubygem(httpclient)
+BuildRequires:  rubygem(minitest)
+BuildRequires:  rubygem(rack)
+BuildRequires:  rubygem(rspec)
+BuildRequires:  rubygem(test-unit)
+BuildRequires:  rubygem(webrick)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 WebMock allows stubbing HTTP requests and setting expectations on HTTP
 requests.
-
 
 %package doc
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{gem_name}-%{version} -b 1
 find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec -o -name specs \) -exec cp -a {} %{_builddir}/ \;
@@ -76,26 +72,23 @@ find %{_builddir} -mindepth 2 -type d \( -name test -o -name tests -o -name spec
 )
 
 %build
+
 gem build ../%{gem_name}-%{version}.gemspec
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# Run the test suite
 %check
-( cd .%{gem_instdir}
 
+( cd .%{gem_instdir}
 ln -s %{builddir}/minitest minitest
 ln -s %{builddir}/spec spec
 ln -s %{builddir}/test test
-
 ruby -e 'Dir.glob "./minitest/**/*.rb", &method(:require)'
 ruby -e 'Dir.glob "./test/**/test_*.rb", &method(:require)'
-
-# Create list of dependencies to ignore based on bcond flags.
 ignore_list=(
 %{with_async_http_client}
 %{with_curb}
@@ -112,20 +105,11 @@ ignore_list=($(echo ${ignore_list[*]} | \
   sed 's/1//g' | \
   sed -r 's/%\{with_([^{]*)\}/\1/g'
 ))
-
-# Remove unavailable dependencies based on ignore_list.
 for i in ${ignore_list[*]}; do
   sed -i "/$i/ s/^/#/" spec/spec_helper.rb
 done
-
-# and we don't care about code quality, that's upstream business.
 rspec spec --exclude-pattern 'spec/{quality_spec.rb,acceptance/**/*}'
-
-# The Curb test suite fails without this export since 3.25.2 🤷
-# https://github.com/bblimke/webmock/issues/1118
 export HTTP_STATUS_SERVICE=http://httpstatus
-
-# Run acceptance test for each http client independently.
 for t in spec/acceptance/*/; do
   acceptance_test=$(basename ${t})
   if [[ " ${ignore_list[*]} " =~ " ${acceptance_test} " ]]; then
@@ -134,20 +118,10 @@ for t in spec/acceptance/*/; do
   fi
   rspec ${t}
 done
-
 )
-
-%files
-%dir %{gem_instdir}
-%license %{gem_instdir}/LICENSE
-%{gem_libdir}
-%exclude %{gem_cache}
-%{gem_spec}
-
-%files doc
-%doc %{gem_docdir}
-%doc %{gem_instdir}/CHANGELOG.md
-%doc %{gem_instdir}/README.md
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-webmock-doc -f %{oreon_filedir}/rubygem-webmock-doc.list
 
 %changelog
+
 %autochangelog

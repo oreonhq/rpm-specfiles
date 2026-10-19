@@ -1,64 +1,58 @@
-%global source0_hash none
-
+%global source0_hash 721b86b77fca33a735598292022ac6feef99747bf48f52defdada6b572acd5af
 Name:           python-eventlet
 Version:        0.41.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Highly concurrent networking library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/eventlet/eventlet
-Source:         %{pypi_source eventlet}
-
+Source0:        https://files.pythonhosted.org/packages/source/e/eventlet/eventlet-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'eventlet' generated automatically by pyp2spec.}
-
 Patch0: 0001-Update-pyzmq-and-psycopg2-binary-versions.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatch-vcs) >= 0.3
+BuildRequires:  python3dist(hatchling) >= 1.12.2
+Requires:       python3-eventlet = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-eventlet+dev
+Summary:        Metapackage for python3-eventlet dev extras
+Requires:       python3-eventlet = %{version}-%{release}
+Provides:       python3dist(eventlet[dev]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-eventlet+dev
+Metapackage for python3-eventlet dev extras.
+
+%description
 
 %package -n     python3-eventlet
-Summary:        %{summary}
-
-%description -n python3-eventlet %_description
+Summary:        Highly concurrent networking library
+# oreon:reqs
+Requires:       python3dist(dnspython) >= 1.15.0
+Requires:       python3dist(greenlet) >= 1.0
+# /oreon:reqs
+%description -n python3-eventlet
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-eventlet dev
-
 
 %prep
-%autosetup -p1 -n eventlet-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir eventlet-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-eventlet usr/lib/python3*/site-packages/eventlet* usr/lib64/python3*/site-packages/eventlet* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/eventlet* usr/lib64/python3*/site-packages/eventlet* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-eventlet -f %{pyproject_files}
+%files
+%files -n python3-eventlet -f %{oreon_filedir}/python3-eventlet.list
 
 %changelog
+
 %autochangelog

@@ -1,37 +1,8 @@
 %global source0_hash 178947fc2f995b38497a74172adee64fdeb8b7ec18f2a5934d037641ba265d26
-
 Name:           python-fastuuid
 Version:        0.14.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Python bindings to Rust's UUID library
-
-# main package is BSD-3-Clause
-# from LICENSE.dependencies
-# Apache-2.0 OR MIT: atomic v0.6.1 
-# Apache-2.0 OR MIT: uuid v1.19.0
-# BSD-2-Clause OR Apache-2.0 OR MIT: zerocopy v0.8.31
-# BSD-3-Clause: sha1_smol v1.0.1
-# BSD3: fastuuid v0.14.0
-# MIT OR Apache-2.0: block-buffer v0.10.4
-# MIT OR Apache-2.0: cfg-if v1.0.4
-# MIT OR Apache-2.0: crypto-common v0.1.7
-# MIT OR Apache-2.0: digest v0.10.7
-# MIT OR Apache-2.0: getrandom v0.2.16
-# MIT OR Apache-2.0: getrandom v0.3.4
-# MIT OR Apache-2.0: libc v0.2.180
-# MIT OR Apache-2.0: md-5 v0.10.6
-# MIT OR Apache-2.0: once_cell v1.21.3
-# MIT OR Apache-2.0: ppv-lite86 v0.2.21
-# MIT OR Apache-2.0: pyo3 v0.26.0
-# MIT OR Apache-2.0: pyo3-ffi v0.26.0
-# MIT OR Apache-2.0: rand v0.8.5
-# MIT OR Apache-2.0: rand_chacha v0.3.1
-# MIT OR Apache-2.0: rand_core v0.6.4
-# MIT OR Apache-2.0: typenum v1.19.0
-# MIT OR Apache-2.0: unindent v0.2.4
-# MIT: generic-array v0.14.9
-# MIT: memoffset v0.9.1
-# Zlib OR Apache-2.0 OR MIT: bytemuck v1.24.0
 License:        %{shrink:
         BSD-3-Clause AND
         (Apache-2.0 OR MIT) AND
@@ -41,50 +12,39 @@ License:        %{shrink:
         MIT AND
         (Zlib OR Apache-2.0 OR MIT)
 }
-
 URL:            https://github.com/thedrow/fastuuid/
-Source:         %{pypi_source fastuuid}
-
-
+Source0:        https://files.pythonhosted.org/packages/source/f/fastuuid/fastuuid-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  cargo-rpm-macros
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-FastUUID is a library which provides CPython bindings to Rust's UUID library.
-
-The provided API is exactly as Python's builtin UUID class. The supported UUID
-versions are v1, v3, v4, v5, and v7.}
-
-%description %_description
+BuildRequires:  python3dist(maturin) < 2.0
+BuildRequires:  python3dist(maturin) >= 1.0
+Requires:       python3-fastuuid = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-fastuuid
-Summary:        %{summary}
-
-%description -n python3-fastuuid %_description
-
-%generate_buildrequires -a
-%cargo_generate_buildrequires
+Summary:        Python bindings to Rust's UUID library
+%description -n python3-fastuuid
 
 %prep
-%autosetup -p1
-%cargo_prep
-
+%oreon_prep
 %build
+
 %pyproject_wheel
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
-
 %install
 %pyproject_install
+%oreon_autofiles python3-fastuuid usr/lib/python3*/site-packages/fastuuid* usr/lib64/python3*/site-packages/fastuuid* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/fastuuid* usr/lib64/python3*/site-packages/fastuuid* usr/bin/*
 
 %check
-%pyproject_check_import
 
-%files -n python3-fastuuid -f %{pyproject_files}
-%license LICENSE
-%license LICENSE.dependencies
-%doc README.rst
+%pyproject_check_import
+%files
+%files -n python3-fastuuid -f %{oreon_filedir}/python3-fastuuid.list
 
 %changelog
+
 %autochangelog

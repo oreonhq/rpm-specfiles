@@ -1,18 +1,16 @@
 %global source0_hash 87860fe529cfe7c08f2b08caa5953e21039827b8e4837ac0f324e5f6c2223942
-
 Name: libmaa
 Version: 1.5.1
-Release: 5%{?dist}
-Summary: Library that implements some basic data structures and algorithms
+Release:        5%{?dist}
+Summary:        Library that implements some basic data structures and algorithms
 URL: https://github.com/cheusov/libmaa
 License: MIT
-
-Source0: https://github.com/cheusov/libmaa/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: mk-configure
-BuildRequires: gcc
-BuildRequires: pkgconfig(zlib)
-
+Source0:        https://github.com/cheusov/libmaa/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  mk-configure
+BuildRequires:  pkgconfig(zlib)
+# /oreon:deps
 %description
 This library implements some basic data structures and algorithms such
 as command line arguments handling, base26 and base64 routines, bits
@@ -24,7 +22,6 @@ source code management routines and timer support.
 %package devel
 Summary: Development files for libmaa
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files (Headers, etc) for libmaa.
 
@@ -34,29 +31,23 @@ Development files (Headers, etc) for libmaa.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %{env}
 %mkcmake
-
 %install
 %{env}
 %mkcmake install DESTDIR=%{buildroot}
 chmod +x %{buildroot}/%{_libdir}/*.so.*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %mkcmake test
-
-%files
-%license doc/LICENSE
-%doc README doc/NEWS
-%{_libdir}/libmaa.so.4{,.*}
-
-%files devel
-%{_includedir}/maa*
-%{_libdir}/libmaa.so
+%files -f %{oreon_filedir}/main.list
+%files -n libmaa-devel -f %{oreon_filedir}/libmaa-devel.list
 
 %changelog
+
 %autochangelog

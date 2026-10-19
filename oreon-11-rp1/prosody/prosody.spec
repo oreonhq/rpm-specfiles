@@ -1,17 +1,16 @@
-%global source0_hash 06d524155d399be30640d58b4fba976b2917c157d3e3b833d29bd7698a0fe082
-
+%global source2_hash 9306a72fa3248175eaaaabb2630d7054634c7e913c25235a99f5e388ca518862
+%global source1_hash 2586f1b7406984f45f709aff9970f992d256920b3acff036b223d25efef20421
+%global source0_hash ec696f9cf562c3af4a04b07d3fb36a1cedcc4e69a392fddcfc524bc67d93050f
 %{!?lua_version: %global lua_version %{lua: print(string.sub(_VERSION, 5))}}
-
 %global sslcert    %{_sysconfdir}/pki/%{name}/localhost.crt
 %global sslkey     %{_sysconfdir}/pki/%{name}/localhost.key
-
-Summary:           Flexible communications server for Jabber/XMPP
+Summary:        Flexible communications server for Jabber/XMPP
 Name:              prosody
 Version:           13.0.6
-Release:           1%{?dist}
+Release:        1%{?dist}
 License:           MIT
 URL:               https://prosody.im/
-Source0:           https://prosody.im/downloads/source/%{name}-%{version}.tar.gz
+Source0:        https://prosody.im/downloads/source/%{name}-%{version}.tar.gz
 Source1:           https://prosody.im/downloads/source/%{name}-%{version}.tar.gz.asc
 Source2:           https://keys.openpgp.org/vks/v1/by-fingerprint/32A9EDDE3609931EB98CEAC315907E8E7BDD6BFE
 Source3:           prosody.service
@@ -21,18 +20,6 @@ Source6:           prosody.sysusersd
 Source7:           prosody-localhost.cfg.lua
 Source8:           prosody-example.com.cfg.lua
 Patch0:            prosody-13.0.0-config.patch
-BuildRequires:     gnupg2
-BuildRequires:     gcc
-BuildRequires:     make
-BuildRequires:     libicu-devel
-%if 0%{?fedora} || 0%{?rhel} >= 9
-BuildRequires:     openssl-devel >= 3.0.0
-%else
-BuildRequires:     openssl3-devel
-%endif
-BuildRequires:     lua
-BuildRequires:     lua-devel
-BuildRequires:     systemd-rpm-macros
 Requires:          %{_bindir}/openssl
 Requires(post):    %{_bindir}/openssl
 Requires:          lua(abi) = %{lua_version}
@@ -44,16 +31,23 @@ Recommends:        lua-unbound
 Recommends:        lua-readline
 %{?systemd_requires}
 %{?sysusers_requires_compat}
-
-# Testsuite in %%check
-BuildRequires:     lua-filesystem
-BuildRequires:     lua-expat
-BuildRequires:     lua-socket
-BuildRequires:     lua-sec
-BuildRequires:     lua-unbound
-BuildRequires:     %{_bindir}/openssl
-BuildRequires:     %{_sbindir}/ss
-
+# oreon:deps
+BuildRequires:  //bin/openssl
+BuildRequires:  //bin/ss
+BuildRequires:  gcc
+BuildRequires:  gnupg2
+BuildRequires:  libicu-devel
+BuildRequires:  lua
+BuildRequires:  lua-devel
+BuildRequires:  lua-expat
+BuildRequires:  lua-filesystem
+BuildRequires:  lua-sec
+BuildRequires:  lua-socket
+BuildRequires:  lua-unbound
+BuildRequires:  make
+BuildRequires:  openssl3-devel
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Prosody is a flexible communications server for Jabber/XMPP written in Lua.
 It aims to be easy to use, and light on resources. For developers it aims
@@ -61,6 +55,7 @@ to be easy to extend and give a flexible system on which to rapidly develop
 added functionality, or prototype new protocols.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -73,6 +68,7 @@ sed -e '/^[[:space:]]*cafile = "/d' -i core/certmanager.lua
 %endif
 
 %build
+
 ./configure \
   --prefix=%{_prefix} \
   --libdir=%{_libdir} \
@@ -81,53 +77,35 @@ sed -e '/^[[:space:]]*cafile = "/d' -i core/certmanager.lua
   --add-ldflags="$RPM_LD_FLAGS %{?el8:$(pkg-config --libs-only-L openssl3)}" \
   --no-example-certs
 %make_build
-
-# Make prosody-migrator
 %make_build -C tools/migration
-
 %install
 mkdir -p $RPM_BUILD_ROOT{%{_sysconfdir}/pki,%{_localstatedir}/{lib,log}/%{name}}/
 %make_install
-
-# Install prosody-migrator
 %make_install -C tools/migration
-
-# Install ejabberd2prosody
 install -p -m 0755 tools/ejabberd2prosody.lua $RPM_BUILD_ROOT%{_bindir}/ejabberd2prosody
 sed -e 's@;../?.lua@;%{_libdir}/%{name}/util/?.lua;%{_libdir}/%{name}/?.lua;@' \
   -i $RPM_BUILD_ROOT%{_bindir}/ejabberd2prosody
 touch -c -r tools/ejabberd2prosody.lua $RPM_BUILD_ROOT%{_bindir}/ejabberd2prosody
 install -p -m 0644 tools/erlparse.lua $RPM_BUILD_ROOT%{_libdir}/%{name}/util/
-
-# Move certificates directory and symlink it
 mv -f $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/certs/ $RPM_BUILD_ROOT%{_sysconfdir}/pki/%{name}/
 ln -s ../pki/%{name}/ $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/certs
-
-# Install systemd unit files and tmpfiles
 install -D -p -m 0644 %{SOURCE3} $RPM_BUILD_ROOT%{_unitdir}/%{name}.service
 install -D -p -m 0644 %{SOURCE4} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/%{name}
 install -D -p -m 0644 %{SOURCE5} $RPM_BUILD_ROOT%{_tmpfilesdir}/%{name}.conf
 install -D -p -m 0644 %{SOURCE6} $RPM_BUILD_ROOT%{_sysusersdir}/%{name}.conf
 mkdir -p $RPM_BUILD_ROOT/run/%{name}/
-
-# Keep configuration file timestamp
 touch -c -r prosody.cfg.lua.dist.config $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/prosody.cfg.lua
-
-# Install virtual host configuration
 install -D -p -m 0644 %{SOURCE7} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/conf.d/localhost.cfg.lua
 install -D -p -m 0644 %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/conf.d/example.com.cfg.lua
-
-# Fix permissions for rpmlint
 chmod 0755 $RPM_BUILD_ROOT%{_libdir}/%{name}/util/*.so
-
-# Fix incorrect end-of-line encoding
 for file in doc/stanza.txt doc/session.txt doc/roster_format.txt; do
   sed -e 's/\r//g' ${file} > ${file}.eol
   touch -c -r ${file} ${file}.eol; mv -f ${file}.eol ${file}
 done
+%oreon_autofiles main
 
 %check
-# Prepare test environment
+
 mkdir -p tests/data/
 cp -prf $RPM_BUILD_ROOT%{_sysconfdir}/%{name}/{*.cfg.lua,conf.d/} certs/ tests/
 sed -e '/^log = {/,/}/d' -e '/^\(certificates\|pidfile\) =/d' -i tests/%{name}.cfg.lua  # Avoid 'duplicate option' warnings
@@ -143,8 +121,6 @@ export LUA_PATH="$RPM_BUILD_ROOT%{_libdir}/%{name}/?.lua;;"
 export LUA_CPATH="$RPM_BUILD_ROOT%{_libdir}/%{name}/?.so;;"
 export PROSODY_CFGDIR="$PWD/tests"
 export PROSODY_DATADIR="$PWD/tests/data"
-
-# Run some common commands
 ./%{name}ctl about
 ./%{name}ctl start
 ./%{name}ctl status
@@ -156,60 +132,35 @@ ls -l tests/data/localhost/{accounts,account_roles}/tux.dat
 echo -e 'Penguin\nPenguin' | ./%{name}ctl passwd tux@localhost
 ./%{name}ctl deluser tux@localhost
 ./%{name}ctl stop
-
 %pre
+
 %sysusers_create_compat %{SOURCE6}
-
 %post
-%systemd_post %{name}.service
 
+%systemd_post %{name}.service
 if [ ! -f %{sslkey} ]; then
   umask 077
   %{_bindir}/openssl genrsa 4096 > %{sslkey} 2> /dev/null
   chown root:%{name} %{sslkey}
   chmod 640 %{sslkey}
 fi
-
 if [ ! -f %{sslcert} ]; then
   FQDN=`hostname 2> /dev/null`
   if [ "x${FQDN}" = "x" ]; then
     FQDN=localhost.localdomain
   fi
-
   %{_bindir}/openssl req -new -key %{sslkey} -x509 -sha256 -days 365 -set_serial $RANDOM -out %{sslcert} \
     -subj "/C=--/ST=SomeState/L=SomeCity/O=SomeOrganization/OU=SomeOrganizationalUnit/CN=${FQDN}/emailAddress=root@${FQDN}"
   chmod 0644 %{sslcert}
 fi
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
-%systemd_postun_with_restart %{name}.service
 
-%files
-%license COPYING
-%doc AUTHORS CHANGES HACKERS README doc/*
-%{_bindir}/%{name}
-%{_bindir}/%{name}ctl
-%{_bindir}/%{name}-migrator
-%{_bindir}/ejabberd2prosody
-%{_libdir}/%{name}/
-%dir %attr(0750,root,%{name}) %{_sysconfdir}/pki/%{name}/
-%config(noreplace) %attr(0640,root,%{name}) %{_sysconfdir}/pki/%{name}/*
-%dir %attr(0750,root,%{name}) %{_sysconfdir}/%{name}/
-%config(noreplace) %attr(0640,root,%{name}) %{_sysconfdir}/%{name}/*.cfg.lua
-%dir %attr(0750,root,%{name}) %{_sysconfdir}/%{name}/conf.d/
-%config(noreplace) %attr(0640,root,%{name}) %{_sysconfdir}/%{name}/conf.d/*.cfg.lua
-%{_sysconfdir}/%{name}/certs
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%{_unitdir}/%{name}.service
-%{_sysusersdir}/%{name}.conf
-%{_tmpfilesdir}/%{name}.conf
-%dir %attr(0755,%{name},%{name}) /run/%{name}/
-%dir %attr(0750,%{name},%{name}) %{_localstatedir}/lib/%{name}/
-%dir %attr(0750,%{name},%{name}) %{_localstatedir}/log/%{name}/
-%{_mandir}/man1/%{name}ctl.1*
+%systemd_postun_with_restart %{name}.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

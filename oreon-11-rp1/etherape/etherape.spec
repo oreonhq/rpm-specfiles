@@ -1,51 +1,45 @@
-%global source0_hash 49c90df3bb880d3c60dfac4444ca8fc5d68ba8f36b820ed5f877381c9a07175c
-
+%global source0_hash e94c5502b40a7b228c0aca6d31afdec9010bc7fd101ba648a6269c1015e7206b
 Name:           etherape
 Version:        0.9.22
 Release:        1%{?dist}
 Summary:        Graphical network monitor for Unix
-
 License:        GPL-2.0-or-later
 URL:            http://etherape.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/sourceforge/etherape/%{name}-%{version}.tar.gz
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
-BuildRequires:  libpcap-devel, goocanvas2-devel, popt-devel
-BuildRequires:  gettext, desktop-file-utils, itstool
+BuildRequires:  gettext
 BuildRequires:  gnome-doc-utils
-BuildRequires: make
-
+BuildRequires:  goocanvas2-devel
+BuildRequires:  itstool
+BuildRequires:  libpcap-devel
+BuildRequires:  make
+BuildRequires:  popt-devel
+# /oreon:deps
 %description
 EtherApe is a graphical network monitor modeled after etherman. 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 export CFLAGS="$CFLAGS -std=gnu17"
 %configure
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
-
 %find_lang %{name}
 desktop-file-install --dir ${RPM_BUILD_ROOT}%{_datadir}/applications \
     ${RPM_BUILD_ROOT}%{_datadir}/applications/etherape.desktop
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc ABOUT-NLS AUTHORS ChangeLog FAQ NEWS README README.bugs TODO
-
-%{_bindir}/etherape
-%dir %{_datadir}/%{name}
-%{_datadir}/help/C/%{name}/
-%{_datadir}/%{name}/
-%{_datadir}/applications/etherape.desktop
-%{_datadir}/pixmaps/etherape.png
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

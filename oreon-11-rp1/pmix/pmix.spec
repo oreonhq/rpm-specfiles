@@ -1,5 +1,4 @@
 %global source0_hash bb9021c8e100a376f5070ecca727f83a29b5f652dfe381793b88daa79a3b98a2
-
 Name:           pmix
 Version:        6.1.0
 Release:        1%{?dist}
@@ -7,7 +6,8 @@ Summary:        Process Management Interface Exascale (PMIx)
 License:        BSD-3-Clause
 URL:            https://pmix.org/
 Source0:        https://github.com/openpmix/openpmix/releases/download/v%{version}/%{name}-%{version}.tar.bz2
-
+ExcludeArch:    %{ix86}
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  flex
@@ -19,9 +19,7 @@ BuildRequires:  make
 BuildRequires:  munge-devel
 BuildRequires:  perl-interpreter
 BuildRequires:  zlib-devel
-
-ExcludeArch:    %{ix86}
-
+# /oreon:deps
 %description
 The Process Management Interface (PMI) has been used for quite some time as
 a means of exchanging wireup information needed for interprocess
@@ -61,6 +59,7 @@ based starters (e.g., mpirun).
 * pevent - inject an event into the system
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -68,6 +67,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find src -name \*.l -print -exec touch --no-create {} \;
 
 %build
+
 export CFLAGS="%{build_cflags} -Wno-unused-function -Wno-attributes"
 %configure \
     --prefix=%{_prefix} \
@@ -79,45 +79,21 @@ export CFLAGS="%{build_cflags} -Wno-unused-function -Wno-attributes"
     --enable-ipv6 \
     --enable-shared \
     --with-munge
-
 %make_build
-
 %check
-%make_build check
 
+%make_build check
 %install
 %make_install
-
-# remove libtool archives
 find %{buildroot} -name '*.la' | xargs rm -f
-
 %ldconfig_scriptlets
 %ldconfig_scriptlets devel
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE
-%doc README.md
-%dir %{_datadir}/%{name}
-%dir %{_libdir}/%{name}
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}/*.conf
-%{_datadir}/%{name}/*.txt
-%{_libdir}/libpmix.so.2*
-%{_libdir}/%{name}/*.so
-%{_mandir}/man1/*.1*
-%{_mandir}/man5/*.5*
-
-%files devel
-%{_datadir}/%{name}/*.supp
-%{_includedir}/pmix*.h
-%{_includedir}/pmix/
-%{_libdir}/libpmix.so
-%{_libdir}/pkgconfig/*.pc
-%{_docdir}/%{name}/
-%{_mandir}/man3/*.3*
-
-%files tools
-%{_bindir}/*
+%files -f %{oreon_filedir}/main.list
+%files -n pmix-devel -f %{oreon_filedir}/pmix-devel.list
+%files -n pmix-tools -f %{oreon_filedir}/pmix-tools.list
 
 %changelog
+
 %autochangelog

@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash d896b5df877c9ca5eeddbf0e5994124694d6cb535aba698fb23344c7025155a1
 Name:           python-multitasking
 Version:        0.0.13
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Non-blocking Python methods using decorators
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ranaroussi/multitasking
-Source:         %{pypi_source multitasking}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/multitasking/multitasking-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'multitasking' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-multitasking = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-multitasking
-Summary:        %{summary}
-
-%description -n python3-multitasking %_description
-
+Summary:        Non-blocking Python methods using decorators
+%description -n python3-multitasking
 
 %prep
-%autosetup -p1 -n multitasking-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir multitasking-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-multitasking usr/lib/python3*/site-packages/multitasking* usr/lib64/python3*/site-packages/multitasking* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/multitasking* usr/lib64/python3*/site-packages/multitasking* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-multitasking -f %{pyproject_files}
+%files
+%files -n python3-multitasking -f %{oreon_filedir}/python3-multitasking.list
 
 %changelog
+
 %autochangelog

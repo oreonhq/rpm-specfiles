@@ -1,57 +1,44 @@
 %global source0_hash 8cdaf5b7f3f4f39557ae05ed8b0852136b43a04ab686db7d39255b206233677a
-
 Name:           python-astroid
 Version:        4.3.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        An abstract syntax tree for Python with inference support.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        LGPL-2.1-or-later
 URL:            https://github.com/pylint-dev/astroid
-Source:         %{pypi_source astroid}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/astroid/astroid-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'astroid' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 77
+Requires:       python3-astroid = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-astroid
-Summary:        %{summary}
-
-%description -n python3-astroid %_description
-
+Summary:        An abstract syntax tree for Python with inference support.
+# oreon:reqs
+Requires:       python3dist(typing-extensions) >= 4
+# /oreon:reqs
+%description -n python3-astroid
 
 %prep
-%autosetup -p1 -n astroid-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir astroid-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-astroid usr/lib/python3*/site-packages/astroid* usr/lib64/python3*/site-packages/astroid* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/astroid* usr/lib64/python3*/site-packages/astroid* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-astroid -f %{pyproject_files}
+%files
+%files -n python3-astroid -f %{oreon_filedir}/python3-astroid.list
 
 %changelog
+
 %autochangelog

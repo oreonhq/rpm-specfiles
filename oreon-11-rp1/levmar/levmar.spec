@@ -1,33 +1,25 @@
 %global source0_hash 3bf4ef1ea4475ded5315e8d8fc992a725f2e7940a74ca3b0f9029d9e6e94bad7
-
-# SOlib major and minor version
 %global major 2
 %global minor 6
-
 %bcond flexiblas 1
-
 Name:		levmar
 Version:	2.6
-Release:	%autorelease
-Summary:	Levenberg-Marquardt nonlinear least squares algorithm
+Release:        1%{?dist}
+Summary:        Levenberg-Marquardt nonlinear least squares algorithm
 URL:		https://www.ics.forth.gr/~lourakis/levmar/
-
-Source:		https://www.ics.forth.gr/~lourakis/levmar/levmar-%{version}.tgz
-
-# Patch to fix compilation of the shared library and compile the demo program
+Source0:        https://www.ics.forth.gr/~lourakis/levmar/levmar-%{version}.tgz
 Patch:		levmar-cmake-shared.patch
-
 License:	GPL-2.0-or-later
-BuildRequires:	gcc
-BuildRequires:	cmake
-BuildRequires:	dos2unix
-BuildRequires:	chrpath
 %if %{with flexiblas}
-BuildRequires:	flexiblas-devel
 %else
-BuildRequires:	blas-devel, lapack-devel
 %endif
-
+# oreon:deps
+BuildRequires:  chrpath
+BuildRequires:  cmake
+BuildRequires:  dos2unix
+BuildRequires:  flexiblas-devel
+BuildRequires:  gcc
+# /oreon:deps
 %description
 levmar is a native ANSI C implementation of the Levenberg-Marquardt
 optimization algorithm.  Both unconstrained and constrained (under linear
@@ -44,11 +36,11 @@ becomes a Gauss-Newton method.
 %package devel
 Summary:	Development files for levmar library, and demo program
 Requires:	levmar = %{version}-%{release}
-
 %description devel
 Development files for the levmar library, and demo program.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -59,9 +51,9 @@ sed -i 's/lapack;blas/flexiblas;flexiblas/g' CMakeLists.txt
 %endif
 
 %build
+
 %cmake -DLINSOLVERS_RETAIN_MEMORY:BOOL=OFF -DNEED_F2C:BOOL=OFF
 %cmake_build
-
 %install
 install -D -p -m 755 "%{_vpath_builddir}/liblevmar.so.%{major}.%{minor}" "%{buildroot}%{_libdir}/liblevmar.so.%{major}.%{minor}"
 install -D -p -m 644 levmar.h "%{buildroot}%{_includedir}/levmar.h"
@@ -69,19 +61,14 @@ install -D -p -m 755 "%{_vpath_builddir}/lmdemo" "%{buildroot}%{_bindir}/lmdemo"
 ln -s "liblevmar.so.%{major}.%{minor}" "%{buildroot}%{_libdir}/liblevmar.so.%{major}"
 ln -s "liblevmar.so.%{major}.%{minor}" "%{buildroot}%{_libdir}/liblevmar.so"
 chrpath --delete "%{buildroot}%{_bindir}/lmdemo"
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %{_vpath_builddir}/lmdemo
-
-%files
-%doc README.txt LICENSE
-%{_libdir}/liblevmar.so.%{major}.%{minor}
-%{_libdir}/liblevmar.so.%{major}
-
-%files devel
-%{_includedir}/levmar.h
-%{_libdir}/liblevmar.so
-%{_bindir}/lmdemo
+%files -f %{oreon_filedir}/main.list
+%files -n levmar-devel -f %{oreon_filedir}/levmar-devel.list
 
 %changelog
+
 %autochangelog

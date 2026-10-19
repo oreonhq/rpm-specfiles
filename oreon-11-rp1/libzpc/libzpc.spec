@@ -1,27 +1,20 @@
 %global source0_hash 272692bb8324bf3a3a2e63e67fc040a64e4860aeea34353c040a281d70bec9f6
-
 Name:		libzpc
 Version:	1.5.0
-Release:	%autorelease
-Summary:	Open Source library for the IBM Z Protected-key crypto feature
-
+Release:        1%{?dist}
+Summary:        Open Source library for the IBM Z Protected-key crypto feature
 License:	MIT
 Url:		https://github.com/opencryptoki/libzpc
-Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/opencryptoki/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 ExclusiveArch:	s390x
-BuildRequires:	cmake
-BuildRequires:	gcc
-BuildRequires:	g++
-BuildRequires:	make
-BuildRequires:	json-c-devel
-
-#Additional prerequisites for building the test program: libjson-c devel 
-#Additional prereqs for building the html and latex doc: doxygen >= 1.8.17, latex, bibtex
-
-# Be explicit about the soversion in order to avoid unintentional changes.
 %global soversion 1
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  g++
+BuildRequires:  gcc
+BuildRequires:  json-c-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 The IBM Z Protected-key Crypto library libzpc is an open-source library
 targeting the 64-bit Linux on IBM Z (s390x) platform. It provides interfaces
@@ -33,44 +26,27 @@ main memory at any time.
 %package	devel
 Summary:	Development files for %{name}
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description	devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup %{name}-%{version}
-
-# The following options can be passed to cmake:
-#   -DCMAKE_INSTALL_PREFIX=<path> : 
-#        Change the install prefix from `/usr/local/` to `<path>`.
-#   -DCMAKE_BUILD_TYPE=<type> : Choose predefined build options. 
-#        The choices for `<type>` are `Debug`, `Release`, `RelWithDebInfo`, 
-#        and `MinSizeRel`.
-#   -DBUILD_SHARED_LIBS=ON : Build a shared object (instead of an archive).
-#   -DBUILD_TEST=ON : Build the test program.
-#   -DBUILD_DOC=ON : Build the html and latex doc.
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%doc README.md CHANGES.md
-%license LICENSE
-%{_libdir}/%{name}.so.%{soversion}*
-
-%files devel
-%{_includedir}/zpc/
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/%{name}.so
+%files -f %{oreon_filedir}/main.list
+%files -n libzpc-devel -f %{oreon_filedir}/libzpc-devel.list
 
 %changelog
+
 %autochangelog

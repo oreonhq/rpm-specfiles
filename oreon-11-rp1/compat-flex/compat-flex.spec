@@ -1,12 +1,11 @@
-%global source0_hash df53d6b73cb695c24e5edb7c846f5f684513743dedcd73d9e5199303d65686dc
-
-Summary: Legacy version of flex, a tool for creating scanners
+%global source0_hash 13b26e8a742b17cddc96574dc23f4af252fea27f54ed43045079f2b30ff0d5f1
+Summary:        Legacy version of flex, a tool for creating scanners
 Name: compat-flex
 Version: 2.5.4a
-Release: 33%{?dist}
+Release:        1%{?dist}
 License: BSD
 URL: http://www.gnu.org/software/flex/
-Source: http://downloads.sourceforge.net/flex/flex-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/flex/flex-%{version}.tar.bz2
 Source2: README.fedora
 Patch0: flex-2.5.4a-skel.patch
 Patch1: flex-2.5.4-glibc22.patch
@@ -20,10 +19,14 @@ Patch8: flex-2.5.4a2-shapwarn.patch
 Patch9: flex-2.5.4a2-iniscan.patch
 Patch10: flex-2.5.4a-Makefile.in.patch
 Patch11: flex-2.5.4a-texinfo-section.patch
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  byacc
 BuildRequires:  gcc
-BuildRequires: autoconf byacc texinfo info
-BuildRequires: make
-
+BuildRequires:  info
+BuildRequires:  make
+BuildRequires:  texinfo
+# /oreon:deps
 %description
 
 This is legacy version of flex, a program that generates scanners.
@@ -40,6 +43,7 @@ You should install flex if you are going to use your system for
 application development.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n flex-2.5.4
@@ -58,12 +62,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 cp %{SOURCE2} .
 
 %build
+
 autoconf
 %configure
 sed -i '/^START-INFO-DIR-ENTRY/,/^END-INFO-DIR-ENTRY/s/[Ff]lex/&-%{version}/g' ./MISC/texinfo/flex.texi
 make FLEX=flex-%{version}
 makeinfo MISC/texinfo/flex.texi -o MISC/texinfo/flex-%{version}.info
-
 %install
 rm -rf $RPM_BUILD_ROOT
 %{makeinstall} FLEX=flex-%{version} libdir=$RPM_BUILD_ROOT/%{_libdir}/flex-%{version} mandir=$RPM_BUILD_ROOT/%{_mandir}/man1
@@ -71,19 +75,15 @@ rm -rf $RPM_BUILD_ROOT
 install -m 644 MISC/texinfo/flex-%{version}.info $RPM_BUILD_ROOT/%{_infodir}/flex-%{version}.info
 mv ${RPM_BUILD_ROOT}/%{_includedir}/FlexLexer.h ${RPM_BUILD_ROOT}/%{_includedir}/flex-%{version}/FlexLexer.h
 ln -s flex-%{version}.1 ${RPM_BUILD_ROOT}/%{_mandir}/man1/flex-%{version}++.1
+%oreon_autofiles main
 
 %check
+
 echo ============TESTING===============
 make FLEX=flex-%{version} bigcheck
 echo ============END TESTING===========
-
-%files
-%doc COPYING NEWS README README.fedora
-%{_bindir}/*
-%{_mandir}/man1/*
-%{_libdir}/flex-%{version}
-%{_includedir}/flex-%{version}
-%{_infodir}/flex-%{version}.info*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

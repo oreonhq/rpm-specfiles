@@ -1,32 +1,26 @@
 %global source0_hash 946b05c75e877de8aea71b5bf0af74f79b392064793fda7322e4895073e7cf6a
-
 %global gap_pkgname crypting
 %global giturl      https://github.com/gap-packages/crypting
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        0.10.7
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Hashes and Crypto in GAP
-
 License:        BSD-3-Clause
 URL:            https://gap-packages.github.io/crypting/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/v%{version}/%{gap_upname}-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        %{giturl}/releases/download/v%{version}/%{gap_pkgname}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
 BuildSystem:    gap
 BuildOption(install): bin gap tst
 BuildOption(check): tst/testall.g
-
+Requires:       gap-core%{?_isa}
+# oreon:deps
 BuildRequires:  gap-devel
 BuildRequires:  gap-pkg-autodoc
 BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  make
-
-Requires:       gap-core%{?_isa}
-
+# /oreon:deps
 %description
 This package implements some cryptographic primitives.  At the moment this is
 a custom implementation of SHA256 and HMAC, which is needed to sign messages
@@ -36,42 +30,27 @@ Bindings to a full crypto library are a possibility for the future, and
 pull-requests (after discussion) are appreciated.
 
 %package doc
-# The content is BSD-3-Clause.  The remaining licenses cover the various fonts
-# embedded in PDFs.
-# CM: Knuth-CTAN
-# CM-Super: GPL-1.0-or-later
-# Nimbus: AGPL-3.0-only
 License:        BSD-3-Clause AND Knuth-CTAN AND GPL-1.0-or-later AND AGPL-3.0-only
 BuildArch:      noarch
 Summary:        Crypting documentation
 Requires:       %{name} = %{version}-%{release}
 Requires:       gap-online-help
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{gap_upname}-%{version}
 
 %build -p
-# This is NOT an autoconf-generated configure script.  Do NOT use %%configure.
+
 ./configure %{gap_archdir}
 %make_build
-
-%files
-%doc README.md
-%license COPYRIGHT.md LICENSE
-%dir %{gap_archdir}/pkg/%{gap_upname}/
-%{gap_archdir}/pkg/%{gap_upname}/*.g
-%{gap_archdir}/pkg/%{gap_upname}/bin/
-%{gap_archdir}/pkg/%{gap_upname}/gap/
-%{gap_archdir}/pkg/%{gap_upname}/tst/
-
-%files doc
-%docdir %{gap_archdir}/pkg/%{gap_upname}/doc/
-%{gap_archdir}/pkg/%{gap_upname}/doc/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-crypting-doc -f %{oreon_filedir}/gap-pkg-crypting-doc.list
 
 %changelog
+
 %autochangelog

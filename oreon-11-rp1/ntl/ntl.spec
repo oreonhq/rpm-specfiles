@@ -1,32 +1,22 @@
 %global source0_hash bc0ef9aceb075a6a0673ac8d8f47d5f8458c72fe806e4468fbd5d3daff056182
-
 Name:           ntl
 Version:        11.6.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        High-performance algorithms for vectors, matrices, and polynomials
-
-# LGPL-2.1-or-later: the project as a whole
-# BSD-2-Clause: src/FFT.cpp
 License:        LGPL-2.1-or-later AND BSD-2-Clause
 URL:            https://libntl.org/
 VCS:            git:https://github.com/libntl/ntl.git
-
-Source:         https://libntl.org/%{name}-%{version}.tar.gz
-# Detect CPU at load time, optionally use PCLMUL, AVX, FMA, and AVX2 features.
-# This patch was sent upstream, but upstream prefers that the entire library
-# be built for a specific CPU, which we cannot do in Fedora.
+Source0:        https://libntl.org/%{name}-%{version}.tar.gz
 Patch:          %{name}-loadtime-cpu.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  gcc-c++
 BuildRequires:  gf2x-devel
 BuildRequires:  gmp-devel
 BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  perl-interpreter
-
+# /oreon:deps
 %description
 NTL is a high-performance, portable C++ library providing data structures and
 algorithms for arbitrary length integers; for vectors, matrices, and
@@ -48,11 +38,11 @@ NTL provides high quality implementations of state-of-the-art algorithms for:
 %package devel 
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel 
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -61,7 +51,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm src/GetTime0.cpp
 
 %build
-# TODO: Once we can assume z15, add TUNE=linux-s390x to the flags for s390x
+
 cd src
 ./configure \
   CXX="${CXX-g++}" \
@@ -83,10 +73,7 @@ cd src
   SHARED=on \
   SYS_PREFIX=%{_prefix}
 cd -
-
-# not smp-safe
 make -C src V=1
-
 %install
 make -C src install \
   DESTDIR=%{buildroot} \
@@ -94,24 +81,16 @@ make -C src install \
   DOCDIR=%{_docdir} \
   INCLUDEDIR=%{_includedir} \
   LIBDIR=%{_libdir} 
-
-# Unpackaged files
 rm -rfv %{buildroot}%{_docdir}/NTL
 rm -fv  %{buildroot}%{_libdir}/libntl.a
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 make -C src check
-
-%files
-%doc README
-%license doc/copying.txt
-%{_libdir}/libntl.so.45{,.*}
-
-%files devel 
-%doc doc/*
-%{_includedir}/NTL/
-%{_libdir}/libntl.so
-%{_libdir}/pkgconfig/ntl.pc
+%files -f %{oreon_filedir}/main.list
+%files -n ntl-devel -f %{oreon_filedir}/ntl-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,5 +1,4 @@
 %global source0_hash aa701e2e31e3d5d8433222caedac1c7e6ecd30ffd4e926ce64cc9df775ac4c98
-
 %bcond_with audacious
 %bcond_without curl
 %bcond_without ibm
@@ -22,25 +21,13 @@
 %endif
 %bcond_without xdbe
 %bcond_without xinerama
-
 Name:           conky
 Version:        1.25.1
 Release:        1%{?dist}
 Summary:        A system monitor for X
-
 License:        GPL-3.0-or-later AND LGPL-2.1-or-later AND MIT-open-group AND BSD-3-Clause
 URL:            https://github.com/brndnmtthws/conky
 Source0:        https://github.com/brndnmtthws/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-BuildRequires:  gperf
-BuildRequires:  libXft-devel
-BuildRequires:  libXt-devel
-BuildRequires:  libXdamage-devel
-BuildRequires:  libXext-devel
-BuildRequires:  lua-devel
 %{?with_audacious:BuildRequires: audacious-devel < 3.5 dbus-glib-devel}
 %{?with_curl:BuildRequires: curl-devel}
 %{?with_imlib:BuildRequires: imlib2-devel}
@@ -54,16 +41,38 @@ BuildRequires:  lua-devel
 %{?with_weather_xoap:BuildRequires: libxml2-devel}
 %{?with_wlan:BuildRequires: wireless-tools-devel}
 %{?with_xinerama:BuildRequires: libXinerama-devel}
-BuildRequires:  pandoc
-BuildRequires:  python3-pyyaml python3-jinja2
-BuildRequires:  cmake git
+# oreon:deps
+BuildRequires:  cairo-devel
+BuildRequires:  cmake
+BuildRequires:  curl-devel
 BuildRequires:  desktop-file-utils
-
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  git
+BuildRequires:  gperf
+BuildRequires:  imlib2-devel
+BuildRequires:  libXdamage-devel
+BuildRequires:  libXext-devel
+BuildRequires:  libXft-devel
+BuildRequires:  libXinerama-devel
+BuildRequires:  libXt-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  lua-devel
+BuildRequires:  ncurses-devel
+BuildRequires:  pandoc
+BuildRequires:  pango-devel
+BuildRequires:  python3-jinja2
+BuildRequires:  python3-pyyaml
+BuildRequires:  tolua++-devel
+BuildRequires:  wayland-devel
+BuildRequires:  wayland-protocols-devel
+# /oreon:deps
 %description
 A system monitor for X originally based on the torsmo code. but more kickass.
 It just keeps on given'er. Yeah.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -76,6 +85,7 @@ for i in AUTHORS; do
 done
 
 %build
+
 %cmake \
                             -DBUILD_DOCS=ON \
                             -DBUILD_BUILTIN_CONFIG=OFF \
@@ -99,9 +109,7 @@ done
     %{?with_xdbe:           -DBUILD_XDBE=ON} \
     %{?!with_xinerama:      -DBUILD_XINERAMA=OFF} \
     ;
-
 %cmake_build
-
 %install
 %cmake_install
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/conky
@@ -109,21 +117,13 @@ install -m644 -p data/conky.conf $RPM_BUILD_ROOT%{_sysconfdir}/conky
 rm -rf $RPM_BUILD_ROOT%{_docdir}/conky-*
 rm -f $RPM_BUILD_ROOT%{_libdir}/libtcp-portmon.a
 rm -f $RPM_BUILD_ROOT/usr/lib/libconky_core.a
+%oreon_autofiles main
 
 %check
-desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/conky.desktop
 
-%files
-%doc AUTHORS COPYING README.md extras/*
-%dir %{_sysconfdir}/conky
-%config %{_sysconfdir}/conky/conky.conf
-%{_bindir}/conky
-%if %{with lua_cairo} || %{with lua_imlib}
-%{_libdir}/conky
-%endif
-%{_datadir}/applications/conky.desktop
-%{_datadir}/icons/hicolor/*/apps/conky*
-%{_mandir}/man1/conky.1*
+desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/conky.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

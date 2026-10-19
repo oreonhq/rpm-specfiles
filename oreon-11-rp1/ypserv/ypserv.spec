@@ -1,29 +1,22 @@
 %global source0_hash 8c9d72ddd6d38aa48545c4b486932e3f7008354131ae1be27db863dfd7b11aaf
-
-Summary: The NIS (Network Information Service) server
-
+Summary:        The NIS (Network Information Service) server
 Name: ypserv
 Version: 4.2
-Release: 16%{?dist}
+Release:        16%{?dist}
 License: GPL-2.0-only
 URL: https://www.thkukuk.de/nis/nis/ypserv/
-
 Source0:        https://github.com/thkukuk/%{name}/archive/refs/tags/v%{version}.tar.gz#/ypserv-4.2.tar.gz
-
 Source1: ypserv.service
 Source2: yppasswdd.service
 Source3: ypxfrd.service
 Source4: rpc.yppasswdd.env
 Source5: yppasswdd-pre-setdomain
-
 Requires: gawk, make, portmap, bash >= 2.0
 Requires: tokyocabinet
-# requirement for domainname
 Requires(pre): hostname
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-
 Patch0: ypserv-2.5-redhat.patch
 Patch2: ypserv-2.5-nfsnobody2.patch
 Patch3: ypserv-2.13-ypxfr-zeroresp.patch
@@ -37,20 +30,21 @@ Patch12: ypserv-4.0-headers.patch
 Patch14: ypserv-4.0-selinux-context.patch
 Patch15: ypserv-4.2-implicit-int.patch
 Patch16: ypserv-4.2-uninitialized-int.patch
-
-BuildRequires: make
-BuildRequires: libxcrypt-devel
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  docbook-style-xsl
 BuildRequires:  gcc
-BuildRequires: tokyocabinet-devel
-BuildRequires: systemd
-BuildRequires: autoconf, automake
-BuildRequires: systemd-devel
-BuildRequires: libnsl2-devel
-BuildRequires: libtirpc-devel
-BuildRequires: docbook-style-xsl
-BuildRequires: libxslt
-BuildRequires: libselinux-devel
-
+BuildRequires:  libnsl2-devel
+BuildRequires:  libselinux-devel
+BuildRequires:  libtirpc-devel
+BuildRequires:  libxcrypt-devel
+BuildRequires:  libxslt
+BuildRequires:  make
+BuildRequires:  systemd
+BuildRequires:  systemd-devel
+BuildRequires:  tokyocabinet-devel
+# /oreon:deps
 %description
 The Network Information Service (NIS) is a system that provides
 network information (login names, passwords, home directories, group
@@ -68,6 +62,7 @@ need to install the yp-tools and ypbind packages on any NIS client
 machines.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{version} -p1
 
@@ -80,16 +75,14 @@ rm etc/ypserv.conf.5
 autoreconf -i
 
 %build
+
 cp etc/README etc/README.etc
 %ifarch s390 s390x
 export CFLAGS="$RPM_OPT_FLAGS -fPIC"
 %else
 export CFLAGS="$RPM_OPT_FLAGS -fpic"
 %endif
-
-# Fix gcc12 issues (#2047138)
 export CFLAGS="$CFLAGS -Wno-format-overflow"
-
 %configure \
     --enable-checkroot \
     --enable-fqdn \
@@ -97,9 +90,7 @@ export CFLAGS="$CFLAGS -Wno-format-overflow"
     --with-dbmliborder=tokyocabinet \
     --localstatedir=%{_localstatedir} \
     --with-selinux
-
 make
-
 %install
 %make_install
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
@@ -110,66 +101,31 @@ install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_unitdir}/ypserv.service
 install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_unitdir}/yppasswdd.service
 install -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_unitdir}/ypxfrd.service
 install -m 755 %{SOURCE5} $RPM_BUILD_ROOT%{_libexecdir}/yppasswdd-pre-setdomain
-
 mkdir -p $RPM_BUILD_ROOT/etc/sysconfig
 cat >$RPM_BUILD_ROOT/etc/sysconfig/yppasswdd <<EOF
-# The passwd and shadow files are located under the specified
-# directory path. rpc.yppasswdd will use these files, not /etc/passwd
-# and /etc/shadow.
-#ETCDIR=/etc
-
-# This option tells rpc.yppasswdd to use a different source file
-# instead of /etc/passwd
-# You can't mix usage of this with ETCDIR
-#PASSWDFILE=/etc/passwd
-
-# This option tells rpc.yppasswdd to use a different source file
-# instead of /etc/passwd.
-# You can't mix usage of this with ETCDIR
-#SHADOWFILE=/etc/shadow
-
-# Additional arguments passed to yppasswd
 YPPASSWDD_ARGS=
 EOF
-
-# We need to pass all environment variables set in /etc/sysconfig/yppasswdd
-# only if they are not empty. However, this simple logic is not supported
-# by systemd. The script rpc.yppasswdd.env wraps the main binary and
-# prepares YPPASSWDD_ARGS variable to include all necessary variables
-# (ETCDIR, PASSWDFILE and SHADOWFILE). The script ensures, that the
-# rpc.yppasswdd arguments are not used when the appropriate environment
-# variables are empty.
 install -m 755 %{SOURCE4} $RPM_BUILD_ROOT%{_libexecdir}/rpc.yppasswdd.env
+%oreon_autofiles main
 
 %post
+
 %systemd_post ypserv.service
 %systemd_post ypxfrd.service
 %systemd_post yppasswdd.service
-
 %preun
+
 %systemd_preun ypserv.service
 %systemd_preun ypxfrd.service
 %systemd_preun yppasswdd.service
-
 %postun
+
 %systemd_postun_with_restart ypserv.service
 %systemd_postun_with_restart ypxfrd.service
 %systemd_postun_with_restart yppasswdd.service
-
-%files
-%doc AUTHORS README INSTALL ChangeLog TODO NEWS COPYING
-%doc etc/ypserv.conf etc/securenets etc/README.etc
-%doc etc/netgroup etc/locale etc/netmasks etc/timezone
-%config(noreplace) %{_sysconfdir}/ypserv.conf
-%config(noreplace) %{_sysconfdir}/sysconfig/yppasswdd
-%config(noreplace) /var/yp/*
-%{_unitdir}/*
-%{_libexecdir}/*
-%{_libdir}/yp/*
-%{_sbindir}/*
-%{_mandir}/*/*
-%{_includedir}/rpcsvc
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2-16
 - Prepare for Oreon 11 (RP1)

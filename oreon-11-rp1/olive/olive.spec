@@ -1,6 +1,6 @@
-%global source0_hash 853730be80666e2820268a379232b897cfff4a9d1b031bbff401da94e2a72389
-
-#For git snapshots, set to 0 to use release instead:
+%global source2_hash 246897a365febf2748628c25e3d8bfc4c69d93cadfd85ef17ee9096241799769
+%global source1_hash 853730be80666e2820268a379232b897cfff4a9d1b031bbff401da94e2a72389
+%global source0_hash 39b6ffab20848c91a97de32c9c5a2f35d58bffaff0fc61e4a09365170d953736
 %global usesnapshot 1
 %if 0%{?usesnapshot}
 %global commit 8ac191ceb64476b50cd8e16dce7c971fb791af95
@@ -13,43 +13,40 @@
 %endif
 %global unique_name org.olivevideoeditor.Olive
 %global appl_name application-vnd.olive-project
-
 Name:           olive
 %if 0%{?usesnapshot}
 Version:        0.2.0^%{gitdate}git%{shortcommit}
 %else
 Version:        0.2.0
 %endif
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        A free non-linear video editor
-# app/widget/flowlayout/flowlayout.*: BSD-3-Clause
-# ext/KDDockWidgets/LICENSE.txt: GPL-2.0-only OR GPL-3.0-only
 License:        GPL-3.0-or-later AND BSD-3-Clause AND ( GPL-2.0-only OR GPL-3.0-only )
 Url:            https://www.olivevideoeditor.org
 %if 0%{?usesnapshot}
-Source0:        https://github.com/olive-editor/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        https://github.com/%{name}-editor/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Source1:        https://github.com/olive-editor/core/archive/%{core_commit}/libolivecore-%{core_shortcommit}.tar.gz
 Source2:        https://github.com/olive-editor/KDDockWidgets/archive/%{kddw_commit}/KDDockWidgets-%{kddw_shortcommit}.tar.gz
-# https://github.com/olive-editor/olive/issues/2200
 Patch0:         %{name}-qt6.patch
-# https://github.com/olive-editor/olive/pull/2294
 Patch1:         %{name}-ocio-2.3.patch
-# fix build with FFmpeg 7.0+
-# https://github.com/olive-editor/olive/issues/2325
 Patch2:         %{name}-ffmpeg-7.patch
-# fix build with OpenImageIO 3.0+
-# https://github.com/olive-editor/olive/issues/2392
 Patch3:         %{name}-oiio-3.0.patch
-# fix build with FFmpeg 8.0+
 Patch4:         %{name}-ffmpeg-8.patch
 Patch5:         0001-fix-qt6-arg-format.patch
 Patch6:         0002-fix-qt6-arg-sampleformat.patch
 %else
-Source0:        https://github.com/olive-editor/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %endif
-
 Patch10:        olive-fix-build-against-qt-6-10.patch
-
+%ifarch aarch64
+%endif
+Requires:       hicolor-icon-theme
+Provides:       bundled(KDDockWidgets) = 1.6.95
+Provides:       bundled(libolivecore) = 1.0.0
+ExcludeArch:    i686
+# oreon:deps
+BuildRequires:  OpenColorIO-devel
+BuildRequires:  OpenEXR-devel
+BuildRequires:  OpenImageIO-devel
 BuildRequires:  cmake
 BuildRequires:  cmake(Qt6Concurrent)
 BuildRequires:  cmake(Qt6Core)
@@ -62,30 +59,17 @@ BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc-c++
 BuildRequires:  libappstream-glib
-BuildRequires:  OpenColorIO-devel
-BuildRequires:  OpenEXR-devel
-BuildRequires:  OpenImageIO-devel
-BuildRequires:  pkgconfig(opengl)
 BuildRequires:  pkgconfig(libavcodec)
-BuildRequires:  pkgconfig(libavformat)
 BuildRequires:  pkgconfig(libavfilter)
+BuildRequires:  pkgconfig(libavformat)
 BuildRequires:  pkgconfig(libavutil)
 BuildRequires:  pkgconfig(libswresample)
 BuildRequires:  pkgconfig(libswscale)
+BuildRequires:  pkgconfig(opengl)
 BuildRequires:  portaudio-devel
 BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  qt6-qttranslations
-%ifarch aarch64
-BuildRequires:  sse2neon-static
-%endif
-Requires:       hicolor-icon-theme
-# ext/KDDockWidgets
-Provides:       bundled(KDDockWidgets) = 1.6.95
-# ext/core
-Provides:       bundled(libolivecore) = 1.0.0
-# OpenImageIO and OpenColorIO are missing on i686
-ExcludeArch:    i686
-
+# /oreon:deps
 %description
 %{name} is a free non-linear video editor with completely configurable render
 pipeline and open source codebase designed to provide users with as much
@@ -101,6 +85,7 @@ much more freedom in what can be created, and requires far fewer steps to
 achieve the same results.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %if 0%{?usesnapshot}
@@ -123,6 +108,7 @@ rm -v ext/core/include/olive/core/util/sse2neon.h
 %endif
 
 %build
+
 %cmake \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
   -DBUILD_QT6=ON \
@@ -131,26 +117,18 @@ rm -v ext/core/include/olive/core/util/sse2neon.h
   -DKDDockWidgets_EXAMPLES=OFF \
   -DOLIVECORE_BUILD_TESTS=ON \
   -DUSE_WERROR=OFF \
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/%{unique_name}.appdata.xml
 %ctest
-
-%files
-%doc README.md
-%license LICENSE
-%{_bindir}/%{name}-editor
-%{_datadir}/applications/%{unique_name}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{unique_name}.png
-%{_datadir}/icons/hicolor/*/mimetypes/%{appl_name}.png
-%{_metainfodir}/%{unique_name}.appdata.xml
-%{_datadir}/mime/packages/%{unique_name}.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

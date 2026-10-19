@@ -1,76 +1,42 @@
 %global source0_hash 5778fa1afaf0b36fe6a79989fc4374b0b3ece8a5e46a7ab195440209ccd67b1b
-
 %global giturl  https://github.com/antoinemine/apron
-
 Name:           apron
 Version:        0.9.15
 Summary:        Numerical abstract domain library
-Release:        %autorelease
-
-# The entire package is LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception,
-# with the following exceptions:
-# GPL-2.0-or-later:
-# - apronxx/apxx_ppl*.hh
-# - examples/*
-# - newpolka/mf_qsort.c
-# - ppl/*
-# - products/*
-# - test/*
-# GPL-3.0-only
-# - pplite/*
-# This means that libpolkaMPQ.so.*, libpolkaRll.so.*, and libap_ppl.so.* are
-# GPL-2.0-or-later, and the other libraries are all LGPL-2.1-or-later WITH
-# OCaml-LGPL-linking-exception.
+Release:        1%{?dist}
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception AND GPL-2.0-or-later AND GPL-3.0-only
 URL:            https://antoinemine.github.io/Apron/doc/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
-# This patch has not been sent upstream as it is GCC-specific.  Certain
-# symbols are defined in both libpolkaMPQ and libpolkaRll, with different
-# implementations.  This patch makes references to those symbols in
-# libap_pkgrid be weak references, since that library can be combined with
-# either of the 2 implementations.
+Source0:        %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:         %{name}-weak.patch
-# Fix the OCaml build on bytecode-only architectures
 Patch1:         %{name}-ocaml-bytecode.patch
-# Update CSDP support for CSDP 6.2.0
 Patch2:         %{name}-csdp.patch
-# Since the jgmp library is not installed in a normal search path, add an rpath
-# to the japron library so it can find jgmp
 Patch3:         %{name}-japron-link.patch
-# Fix a japron hasVar bug
-# https://github.com/antoinemine/apron/issues/94
-# https://github.com/antoinemine/apron/pull/95
 Patch4:         %{name}-hasvar.patch
-# Add a missing flint #include
 Patch5:         %{name}-flint.patch
-# Prevent segfaults in the OCaml garbage collector
-# https://github.com/antoinemine/apron/pull/112
 Patch6:         %{name}-ocaml-gc.patch
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch:    %{ix86}
-
+%ifarch %{java_arches}
+%endif
+%global sover %(cut -d. -f 1 <<< %{version})
+%global __ocaml_requires_opts -i Coeff -i Dim -i Interval -i Lincons0 -i Linexpr0 -i Scalar -i Tcons0 -i Texpr0
+# oreon:deps
 BuildRequires:  csdp-devel
 BuildRequires:  doxygen-latex
 BuildRequires:  flint-devel
 BuildRequires:  gcc-c++
 BuildRequires:  ghostscript-tools-dvipdf
 BuildRequires:  glpk-devel
-%ifarch %{java_arches}
-BuildRequires:  java-25-devel
-BuildRequires:  javapackages-local-openjdk25
-%endif
 BuildRequires:  make
 BuildRequires:  mpfr-devel
-BuildRequires:  ppl-devel
-BuildRequires:  pplite-devel
 BuildRequires:  ocaml
 BuildRequires:  ocaml-camlidl-devel
 BuildRequires:  ocaml-findlib
 BuildRequires:  ocaml-mlgmpidl-devel
 BuildRequires:  ocaml-ocamldoc
 BuildRequires:  perl-interpreter
+BuildRequires:  ppl-devel
+BuildRequires:  pplite-devel
 BuildRequires:  tex(adjustbox.sty)
 BuildRequires:  tex(etoc.sty)
 BuildRequires:  tex(fullpage.sty)
@@ -81,12 +47,7 @@ BuildRequires:  tex(stackengine.sty)
 BuildRequires:  tex(tabu.sty)
 BuildRequires:  tex(ulem.sty)
 BuildRequires:  texinfo-tex
-
-%global sover %(cut -d. -f 1 <<< %{version})
-
-# Do not Require symbols we do not Provide
-%global __ocaml_requires_opts -i Coeff -i Dim -i Interval -i Lincons0 -i Linexpr0 -i Scalar -i Tcons0 -i Texpr0
-
+# /oreon:deps
 %description
 The APRON library is dedicated to the static analysis of the numerical
 variables of a program by Abstract Interpretation.  The aim of such an
@@ -104,7 +65,6 @@ Requires:       glpk-devel%{?_isa}
 Requires:       gmp-devel%{?_isa}
 Requires:       mpfr-devel%{?_isa}
 Provides:       bundled(js-jquery)
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for developing
 applications that use %{name}.
@@ -113,7 +73,6 @@ applications that use %{name}.
 Summary:        Ocaml interface to APRON
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description -n ocaml-%{name}
 Ocaml interface to the APRON library.
 
@@ -122,7 +81,6 @@ Summary:        Development files for the Ocaml interface to APRON
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 Requires:       ocaml-%{name}%{?_isa} = %{version}-%{release}
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description -n ocaml-%{name}-devel
 Development files for the Ocaml interface to the APRON library.
 
@@ -132,12 +90,12 @@ Summary:        Java interface to APRON
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       javapackages-filesystem
-
 %description -n japron
 Java interface to the APRON library.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -N -n %{name}-%{version}
@@ -173,7 +131,7 @@ sed -i '/shared/s/\$(CXX)/$(CXX_APRON_DYLIB)/' apronxx/Makefile
 sed -i '/HTML_TIMESTAMP/s/= YES/= NO/' apronxx/doc/Doxyfile
 
 %build
-# This is NOT an autoconf-generated script.  Do not use %%configure
+
 export CPPFLAGS='-D_GNU_SOURCE -I%{_includedir}/csdp'
 export CFLAGS='%{build_cflags} -fsigned-char'
 export CXXFLAGS='%{build_cxxflags} -fsigned-char'
@@ -185,55 +143,31 @@ export JAVA_TOOL_OPTIONS='-Dfile.encoding=UTF8'
 %else
 ./configure -prefix %{_prefix} -pplite-prefix %{_prefix} -no-strip
 %endif
-
-# Put back a flag that the configure script strips out
 sed -i 's/-Wall/& -Werror=format-security/' Makefile.config
-
-# Generate dependency lists
 touch apron/depend
 make -C apron depend
-
-# Parallel builds fail intermittently
 make
 make doc
-
-# for some reason this is no longer built in `make doc`
 make -C mlapronidl mlapronidl.pdf
-
 %install
-# Install the ocaml bits into the buildroot
 sed -i 's, install ,&-destdir %{buildroot}%{ocamldir} -ldconf ignore ,' \
     Makefile
-
-# Install
 mkdir -p %{buildroot}%{ocamldir}/stublibs
 mkdir -p %{buildroot}%{_jnidir}
 %ifarch %{java_arches}
 make install INSTALL="install -p" APRON_PREFIX=%{buildroot}%{_prefix} \
   JAVA_PREFIX=%{buildroot}%{_jnidir}
-
-# Move the JNI shared objects
 mv %{buildroot}%{_libdir}/libj*.so %{buildroot}%{_jnidir}
 %else
 make install INSTALL="install -p" APRON_PREFIX=%{buildroot}%{_prefix}
 %endif
-
-# We don't really want the test binaries
 rm -fr %{buildroot}%{_bindir}
-
-# Move the header files into a subdirectory
 mkdir %{buildroot}%{_includedir}/%{name}
 mv %{buildroot}%{_includedir}/*.h %{buildroot}%{_includedir}/apronxx \
    %{buildroot}%{_includedir}/oct %{buildroot}%{_includedir}/%{name}
-
-# Remove extraneous executable bits
 find %{buildroot}%{_includedir} \( -name \*.h -o -name \*.hh \) \
      -perm /0111 -execdir chmod a-x {} +
-
-# Erase the static libraries
 rm -f %{buildroot}%{_libdir}/*.a
-
-# Fix up the shared library names
 pushd %{buildroot}%{_libdir}
 for f in lib*.so; do
   mv $f $f.%{version}
@@ -241,60 +175,26 @@ for f in lib*.so; do
   ln -s $f.%{version} $f.%{sover}
 done
 popd
-
-# Don't have two sets of documentation both named html
 mkdir doc
 mv apron/html doc/apron
 mv apronxx/doc/html doc/apronxx
+%oreon_autofiles apron-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles ocaml-apron usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ocaml-apron-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 make -C test APRON_INCLUDE=%{buildroot}%{_includedir}/%{name} \
   APRON_LIB=%{buildroot}%{ocamldir}/%{name} \
   CAMLIDL_PREFIX=%{buildroot}%{_libdir}
 test/ctest1
-
-%files
-%doc AUTHORS Changes README.md apron/apron.pdf
-%license COPYING
-%{_libdir}/lib*.so.0{,.*}
-
-%files devel
-%doc doc/apron doc/apronxx
-%{_libdir}/lib*.so
-%{_includedir}/%{name}/
-%{_includedir}/avo/
-%{_includedir}/fpp/
-
-%files -n ocaml-%{name}
-%doc mlapronidl/mlapronidl.pdf
-%dir %{ocamldir}/%{name}/
-%{ocamldir}/%{name}/META
-%{ocamldir}/%{name}/*.cma
-%{ocamldir}/%{name}/*.cmi
-%ifarch %{ocaml_native_compiler}
-%{ocamldir}/%{name}/*.cmxs
-%endif
-%{ocamldir}/stublibs/dll*
-
-%files -n ocaml-%{name}-devel
-%doc mlapronidl/html/*
-%{ocamldir}/%{name}/*.a
-%ifarch %{ocaml_native_compiler}
-%{ocamldir}/%{name}/*.cmxa
-%{ocamldir}/%{name}/*.cmx
-%endif
-%{ocamldir}/%{name}/*.h
-%{ocamldir}/%{name}/*.idl
-%{ocamldir}/%{name}/*.mli
-
-%ifarch %{java_arches}
-%files -n japron
-%doc japron/README
-%license japron/COPYING
-%{_jnidir}/*.jar
-%{_jnidir}/*.so
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n apron-devel -f %{oreon_filedir}/apron-devel.list
+%files -n ocaml-apron -f %{oreon_filedir}/ocaml-apron.list
+%files -n ocaml-apron-devel -f %{oreon_filedir}/ocaml-apron-devel.list
 
 %changelog
+
 %autochangelog

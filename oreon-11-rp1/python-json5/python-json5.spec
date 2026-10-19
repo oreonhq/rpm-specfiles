@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 7424d1f1eb1d56da6e3d70643f53619862b4ce81440bdb8ecfd6f875e5ba4a71
 Name:           python-json5
 Version:        0.15.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Python implementation of the JSON5 data format.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/dpranke/pyjson5
-Source:         %{pypi_source json5}
-
+Source0:        https://files.pythonhosted.org/packages/source/j/json5/json5-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'json5' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61
+Requires:       python3-json5 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-json5
-Summary:        %{summary}
-
-%description -n python3-json5 %_description
-
+Summary:        A Python implementation of the JSON5 data format.
+%description -n python3-json5
 
 %prep
-%autosetup -p1 -n json5-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir json5-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-json5 usr/lib/python3*/site-packages/json5* usr/lib64/python3*/site-packages/json5* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/json5* usr/lib64/python3*/site-packages/json5* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-json5 -f %{pyproject_files}
-%{_bindir}/pyjson5
+%files
+%files -n python3-json5 -f %{oreon_filedir}/python3-json5.list
 
 %changelog
+
 %autochangelog

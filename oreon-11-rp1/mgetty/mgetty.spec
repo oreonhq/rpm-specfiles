@@ -1,17 +1,13 @@
 %global source0_hash c8a72f5ca4142e30627ad16725c40692fb09e6284514392b95ac02062cac9a89
-
 %define SENDFAX_UID 78
-
-# PIE is broken on s390 (#868839, #872148)
 %ifnarch s390 s390x
 %global _hardened_build 1
 %endif
-
-Summary: A getty replacement for use with data and fax modems
+Summary:        A getty replacement for use with data and fax modems
 Name: mgetty
 Version: 1.2.1
-Release: 27%{?dist}
-Source: ftp://mgetty.greenie.net/pub/mgetty/source/1.2/mgetty-%{version}.tar.gz
+Release:        1%{?dist}
+Source0:        ftp://mgetty.greenie.net/pub/mgetty/source/1.2/mgetty-%{version}.tar.gz
 Source1: ftp://mgetty.greenie.net/pub/mgetty/source/1.2/mgetty-%{version}.tar.gz.asc
 Source2: logrotate.mgetty
 Source3: logrotate.sendfax
@@ -19,7 +15,6 @@ Source4: logrotate.vgetty
 Source5: logrotate.vm
 Source6: vgetty@.service
 Source7: mgetty@.service
-
 Patch0: mgetty-1.2.1-config.patch
 Patch1: mgetty-1.2.1-policy.patch
 Patch2: mgetty-1.2.1-system-gsm.patch
@@ -39,13 +34,9 @@ Patch19: mgetty-1.1.33-167830_tty_access.patch
 Patch20: mgetty-1.2.1-167830.patch
 Patch21: mgetty-1.2.1-turn.patch
 Patch22: mgetty-1.2.1-time_range.patch
-# man pages corrections
 Patch23: mgetty-1.2.1-handle_spaces.patch
-# updates info about starting vgetty tgrough systemd
 Patch24: mgetty-1.1.36-man.patch
 Patch25: mgetty-1.1.36-sd.patch
-# patch updates makefiles, it removes hardcoded -s parameter of /usr/bin/install
-# thus .debug files for all binaries will be generated properly
 Patch26: mgetty-1.1.36-makefiles.patch
 Patch27: mgetty-1.2.1-lockdev.patch
 Patch28: mgetty-1.2.1-hardening.patch
@@ -53,37 +44,37 @@ Patch29: mgetty-sys_nerr-removed.patch
 Patch30: mgetty-manpage-typos.patch
 Patch31: mgetty-c99.patch
 Patch32: mgetty-gcc15-stdc23.patch
-
 License: GPL-2.0-or-later
-BuildRequires: libX11-devel, libXext-devel, perl-generators, texinfo-tex, texlive-dvips, lockdev-devel, systemd, gsm-devel
-# gcc is no longer in buildroot by default
-BuildRequires: gcc
-# make is no longer in buildroot by default
-BuildRequires: make
-# needed for rpm macros in scriptlets
-BuildRequires: systemd-rpm-macros
-
 Requires: coreutils, /usr/sbin/sendmail, uucp
 Requires(post): systemd
 Requires(postun): systemd
 URL: http://mgetty.greenie.net/
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gsm-devel
+BuildRequires:  libX11-devel
+BuildRequires:  libXext-devel
+BuildRequires:  lockdev-devel
+BuildRequires:  make
+BuildRequires:  perl-generators
+BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  texinfo-tex
+BuildRequires:  texlive-dvips
+# /oreon:deps
 %package sendfax
 Summary: Provides support for sending faxes over a modem
 Requires: mgetty = %{version}
 Requires: coreutils
 Requires: netpbm-progs
 Conflicts: hylafax+
-
 %package voice
 Summary: A program for using your modem and mgetty as an answering machine
 Requires: mgetty = %{version}
 Requires(post): systemd
 Requires(postun): systemd
-
 %package viewfax
 Summary: An X Window System fax viewer
-
 %description
 The mgetty package contains a "smart" getty which allows logins over a
 serial line (i.e., through a modem). If you're using a Class 2 or 2.0
@@ -120,6 +111,7 @@ Viewfax displays the fax files received using mgetty in an X11 window.
 Viewfax is capable of zooming in and out on the displayed fax.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -161,233 +153,78 @@ u fax %SENDFAX_UID 'mgetty fax spool user' /var/spool/fax -
 EOF
 
 %build
+
 %define makeflags CFLAGS="$RPM_OPT_FLAGS -Wall -DAUTO_PPP -D_FILE_OFFSET_BITS=64 -DHAVE_LOCKDEV -fno-strict-aliasing" LIBS="-llockdev" prefix=%{_prefix} spool=%{_var}/spool BINDIR=%{_bindir} SBINDIR=%{_sbindir} LIBDIR=%{_libdir}/mgetty+sendfax HELPDIR=%{_libdir}/mgetty+sendfax CONFDIR=%{_sysconfdir}/mgetty+sendfax MANDIR=%{_mandir} MAN1DIR=%{_mandir}/man1 MAN4DIR=%{_mandir}/man4 MAN5DIR=%{_mandir}/man5 MAN8DIR=%{_mandir}/man8 INFODIR=%{_infodir} ECHO='"echo -e"' INSTALL=%{__install}
 make %{makeflags}
 make -C voice %{makeflags}
 make -C tools %{makeflags}
-
 pushd frontends/X11/viewfax
 make OPT="$RPM_OPT_FLAGS" CONFDIR=%{_sysconfdir}/mgetty+sendfax
 popd
-
 %install
 mkdir -p %{buildroot}{%{_bindir},%{_infodir},%{_libdir}/mgetty+sendfax}
 mkdir -p %{buildroot}{%{_mandir},%{_sbindir},/var/spool}
 mkdir -p %{buildroot}%{_sysconfdir}/mgetty+sendfax
-
 %define instflags CFLAGS="$RPM_OPT_FLAGS -Wall -DAUTO_PPP" prefix=%{buildroot}%{_prefix} spool=%{buildroot}%{_var}/spool BINDIR=%{buildroot}%{_bindir} SBINDIR=%{buildroot}%{_sbindir} LIBDIR=%{buildroot}%{_libdir}/mgetty+sendfax HELPDIR=%{buildroot}%{_libdir}/mgetty+sendfax CONFDIR=%{buildroot}%{_sysconfdir}/mgetty+sendfax MANDIR=%{buildroot}%{_mandir} MAN1DIR=%{buildroot}%{_mandir}/man1 MAN4DIR=%{buildroot}%{_mandir}/man4 MAN5DIR=%{buildroot}%{_mandir}/man5 MAN8DIR=%{buildroot}%{_mandir}/man8 INFODIR=%{buildroot}%{_infodir} ECHO='echo -e' INSTALL=%{__install}
-
 make install %instflags
-# the non-standard executable permissions are used due to security
 install -m700 callback/callback %{buildroot}%{_sbindir}
-# helper tests internally usage of suid - this is an intention
 install -m4711 callback/ct %{buildroot}%{_bindir}
-
-# this conflicts with efax
 mv %{buildroot}%{_mandir}/man1/fax.1 %{buildroot}%{_mandir}/man1/mgetty_fax.1
-
-# tools
 make -C tools install %instflags
-
-# voice mail extensions
 mkdir -p %{buildroot}%{_var}/spool/voice/{messages,incoming}
 make -C voice install %instflags
-# the non-standard permissions are used due to security
 install -m 600 -c voice/voice.conf-dist %{buildroot}%{_sysconfdir}/mgetty+sendfax/voice.conf
-
-# don't ship documentation that is executable...
 find samples -type f -exec chmod 644 {} \;
-
 make -C frontends/X11/viewfax install %instflags MANDIR=%{buildroot}%{_mandir}/man1
-
-# install logrotate control files
 mkdir -p %{buildroot}%{_sysconfdir}/logrotate.d
-
-# install unit file template for vgetty
 mkdir -p %{buildroot}%{_unitdir}
-
 install -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/mgetty
 install -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/sendfax
 install -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/logrotate.d/vgetty
 install -m 0644 %{SOURCE5} %{buildroot}%{_sysconfdir}/logrotate.d/vm
 install -m 0644 %{SOURCE6} %{buildroot}%{_unitdir}/
 install -m 0644 %{SOURCE7} %{buildroot}%{_unitdir}/
-# install faxrunqd.service
 install -m 0644 distro/faxrunqd.service %{buildroot}%{_unitdir}/
-
-# remove file droppings from buildroot
 rm -f %{buildroot}%{_bindir}/cutbl
-
-# remove file conflict with netpbm:
 rm -f %{buildroot}%{_bindir}/g3topbm
-
 install -m0644 -D mgetty.sysusers.conf %{buildroot}%{_sysusersdir}/mgetty.conf
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
+
 %systemd_post mgetty@.service
-
 %preun
-%systemd_preun mgetty@.service
 
+%systemd_preun mgetty@.service
 %postun
+
 %systemd_postun_with_restart mgetty@.service
 exit 0
-
 %post sendfax
+
 %systemd_post faxrunqd.service
-
 %preun sendfax
-%systemd_preun faxrunqd.service
 
+%systemd_preun faxrunqd.service
 %postun sendfax
+
 %systemd_postun_with_restart faxrunqd.service
 exit 0
-
 %post voice
+
 %systemd_post vgetty@.service
-
 %preun voice
-%systemd_postun vgetty@.service
 
+%systemd_postun vgetty@.service
 %postun voice
+
 %systemd_postun_with_restart vgetty@.service
 exit 0
-
-%files
-%doc BUGS ChangeLog README.1st Recommend THANKS doc/modems.db samples
-%license COPYING
-%{_bindir}/g3cat
-%{_bindir}/g32pbm
-%{_sbindir}/mgetty
-%{_sbindir}/callback
-%{_mandir}/man1/g32pbm.1*
-%{_mandir}/man1/g3cat.1*
-%{_mandir}/man4/mgettydefs.4*
-%{_mandir}/man8/mgetty.8*
-%{_mandir}/man8/callback.8*
-%{_infodir}/mgetty.info*
-%dir %{_sysconfdir}/mgetty+sendfax
-%config(noreplace) %{_sysconfdir}/mgetty+sendfax/login.config
-%config(noreplace) %{_sysconfdir}/mgetty+sendfax/mgetty.config
-%config(noreplace) %{_sysconfdir}/mgetty+sendfax/dialin.config
-%config(noreplace) %{_sysconfdir}/logrotate.d/mgetty
-%{_unitdir}/mgetty@.service
-
-%files sendfax
-%dir %{_var}/spool/fax
-%attr(0755,fax,root) %dir %{_var}/spool/fax/incoming
-%attr(0755,fax,root) %dir %{_var}/spool/fax/outgoing
-%attr(0755,root,root) %{_bindir}/ct
-%{_bindir}/faxq
-%{_bindir}/faxrm
-%{_bindir}/faxrunq
-%{_bindir}/faxspool
-%{_bindir}/kvg
-%{_bindir}/newslock
-%{_bindir}/pbm2g3
-%{_bindir}/sff2g3
-%{_sbindir}/faxrunqd
-%{_sbindir}/sendfax
-%dir %{_libdir}/mgetty+sendfax
-%{_libdir}/mgetty+sendfax/cour25.pbm
-%{_libdir}/mgetty+sendfax/cour25n.pbm
-# helper tests internally usage of suid - this is an intention
-%attr(04711,fax,root) %{_libdir}/mgetty+sendfax/faxq-helper
-%{_mandir}/man1/pbm2g3.1*
-%{_mandir}/man1/mgetty_fax.1*
-%{_mandir}/man1/faxspool.1*
-%{_mandir}/man1/faxrunq.1*
-%{_mandir}/man1/faxq.1*
-%{_mandir}/man1/faxrm.1*
-%{_mandir}/man1/coverpg.1*
-%{_mandir}/man1/sff2g3.1*
-%{_mandir}/man5/faxqueue.5*
-%{_mandir}/man8/faxq-helper.8*
-%{_mandir}/man8/faxrunqd.8*
-%{_mandir}/man8/sendfax.8*
-%dir %{_sysconfdir}/mgetty+sendfax
-%config(noreplace) %{_sysconfdir}/mgetty+sendfax/sendfax.config
-%config(noreplace) %{_sysconfdir}/mgetty+sendfax/faxrunq.config
-# sample config file doesn't use noreplace option to be installed always latest ver.
-%config %{_sysconfdir}/mgetty+sendfax/faxspool.rules.sample
-%config(noreplace) %{_sysconfdir}/mgetty+sendfax/faxheader
-# logrotate file name uses only sub-package name
-%config(noreplace) %{_sysconfdir}/logrotate.d/sendfax
-# faxrunqd unit file
-%{_unitdir}/faxrunqd.service
-%{_sysusersdir}/mgetty.conf
-
-%files voice
-%doc voice/doc/* voice/Announce voice/ChangeLog voice/Readme
-%dir %{_var}/spool/voice
-%dir %{_var}/spool/voice/incoming
-%dir %{_var}/spool/voice/messages
-%{_sbindir}/vgetty
-%{_bindir}/vm
-%{_bindir}/pvfamp
-%{_bindir}/pvfcut
-%{_bindir}/pvfecho
-%{_bindir}/pvffft
-%{_bindir}/pvffile
-%{_bindir}/pvffilter
-%{_bindir}/pvfmix
-%{_bindir}/pvfnoise
-%{_bindir}/pvfreverse
-%{_bindir}/pvfsine
-%{_bindir}/pvfspeed
-%{_bindir}/rmdfile
-%{_bindir}/pvftormd
-%{_bindir}/rmdtopvf
-%{_bindir}/pvftovoc
-%{_bindir}/voctopvf
-%{_bindir}/pvftolin
-%{_bindir}/lintopvf
-%{_bindir}/pvftobasic
-%{_bindir}/basictopvf
-%{_bindir}/pvftoau
-%{_bindir}/autopvf
-%{_bindir}/pvftowav
-%{_bindir}/wavtopvf
-%{_mandir}/man1/zplay.1*
-%{_mandir}/man1/pvf.1*
-%{_mandir}/man1/pvfamp.1*
-%{_mandir}/man1/pvfcut.1*
-%{_mandir}/man1/pvfecho.1*
-%{_mandir}/man1/pvffile.1*
-%{_mandir}/man1/pvffft.1*
-%{_mandir}/man1/pvfmix.1*
-%{_mandir}/man1/pvfreverse.1*
-%{_mandir}/man1/pvfsine.1*
-%{_mandir}/man1/pvfspeed.1*
-%{_mandir}/man1/pvftormd.1*
-%{_mandir}/man1/pvffilter.1*
-%{_mandir}/man1/pvfnoise.1*
-%{_mandir}/man1/rmdtopvf.1*
-%{_mandir}/man1/rmdfile.1*
-%{_mandir}/man1/pvftovoc.1*
-%{_mandir}/man1/voctopvf.1*
-%{_mandir}/man1/pvftolin.1*
-%{_mandir}/man1/lintopvf.1*
-%{_mandir}/man1/pvftobasic.1*
-%{_mandir}/man1/basictopvf.1*
-%{_mandir}/man1/pvftoau.1*
-%{_mandir}/man1/autopvf.1*
-%{_mandir}/man1/pvftowav.1*
-%{_mandir}/man1/wavtopvf.1*
-%{_mandir}/man8/vgetty.8*
-%dir %{_sysconfdir}/mgetty+sendfax
-%config(noreplace) %{_sysconfdir}/mgetty+sendfax/voice.conf
-# logrotate file name uses only sub-package name
-%config(noreplace) %{_sysconfdir}/logrotate.d/vgetty
-%config(noreplace) %{_sysconfdir}/logrotate.d/vm
-%{_unitdir}/vgetty@.service
-
-%files viewfax
-%doc frontends/X11/viewfax/C* frontends/X11/viewfax/README
-%{_bindir}/viewfax
-%dir %{_libdir}/mgetty+sendfax
-%{_libdir}/mgetty+sendfax/viewfax.tif
-%{_mandir}/man1/viewfax.1*
+%files -f %{oreon_filedir}/main.list
+%files -n mgetty-sendfax -f %{oreon_filedir}/mgetty-sendfax.list
+%files -n mgetty-voice -f %{oreon_filedir}/mgetty-voice.list
+%files -n mgetty-viewfax -f %{oreon_filedir}/mgetty-viewfax.list
 
 %changelog
+
 %autochangelog

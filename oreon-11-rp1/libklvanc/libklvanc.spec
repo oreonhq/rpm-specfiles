@@ -1,20 +1,18 @@
-%global source0_hash none
-
+%global source0_hash 5076ca48455a4ef4ead2cd880ba189b21937a9ad8fd458adfc133d7bb1c948c3
 Name:           libklvanc
 Version:        1.6.0
 Release:        4%{?dist}
 Summary:        VANC Processing Framework
 License:        LGPL-2.1
 URL:            https://github.com/stoth68000/libklvanc
-
 Source0:        https://github.com/stoth68000/%{name}/archive/vid.obe.%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  doxygen
 BuildRequires:  gcc
 BuildRequires:  libtool
-
+# /oreon:deps
 %description
 Libklvanc is a library which can be used for parsing/generation of Vertical
 Ancillary Data (VANC) commonly found in the Serial Digital Interface (SDI) wire
@@ -45,39 +43,28 @@ SDI cards.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-%autosetup -n %{name}-vid.obe.%{version}
-
+%global oreon_srcdir %{name}-vid.obe.%{version}
+%oreon_prep
 %build
+
 autoreconf -vif
 %configure --disable-static
-
 %make_build
-
 doxygen doxygen/%{name}.doxyconf
-
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/%{name}.la
-
-# Drop sample application
 rm -fr %{buildroot}%{_bindir}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license lgpl-2.1.txt
-%doc README.md
-%{_libdir}/%{name}.so.0.0.0
-%{_libdir}/%{name}.so.0
-
-%files devel
-%doc html
-%{_includedir}/%{name}
-%{_libdir}/%{name}.so
+%files -f %{oreon_filedir}/main.list
+%files -n libklvanc-devel -f %{oreon_filedir}/libklvanc-devel.list
 
 %changelog
+
 %autochangelog

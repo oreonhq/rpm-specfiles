@@ -1,36 +1,19 @@
+%global source11_hash 85f1aeae37ab76b35972d3ddd64c4338cf36cca0b5ba3b93e39335259796cd86
+%global source10_hash c46b8691d41944b220a7aed3b728e18d2da47ab9d25025ae62f21266caef9b49
 %global source0_hash c46b8691d41944b220a7aed3b728e18d2da47ab9d25025ae62f21266caef9b49
-
-#
-# Rebuild switch:
-#  --with integrationtests	enable integration tests (not fully maintained, likely to fail)
-#
-
-# Switch from libmemcached to libmemcached-awesome from Fedora 35 onwards
-%if (0%{?rhel} && 0%{?rhel} <= 8) || (0%{?fedora} && 0%{?fedora} <= 34)
-%global libmemcached_pkg libmemcached
-%else
 %global libmemcached_pkg libmemcached-awesome
-%endif
-
-# Do a hardened build where possible
 %global _hardened_build 1
-
-# Dynamic modules contain references to symbols in main dæmon, so we need to disable linker checks for undefined symbols
 %undefine _strict_symbol_defs_build
-
-#global prever rc4
 %global baserelease 3
 %global mod_proxy_version 0.9.5
 %global mod_vroot_version 0.9.12
-
-Summary:		Flexible, stable and highly-configurable FTP server
+Summary:        Flexible, stable and highly-configurable FTP server
 Name:			proftpd
 Version:		1.3.9d
-Release:		%{?prever:0.}%{baserelease}%{?prever:.%{prever}}%{?dist}
+Release:        1%{?dist}
 License:		GPL-2.0-or-later
 URL:			http://www.proftpd.org/
-
-Source0:		ftp://ftp.proftpd.org/distrib/source/proftpd-%{version}%{?prever}.tar.gz
+Source0:        ftp://ftp.%{name}.org/distrib/source/%{name}-%{version}.tar.gz
 Source1:		proftpd.conf
 Source2:		modules.conf
 Source3:		mod_tls.conf
@@ -41,71 +24,47 @@ Source8:		proftpd-welcome.msg
 Source9:		proftpd.sysconfig
 Source10:		http://github.com/Castaglia/proftpd-mod_vroot/archive/v%{mod_vroot_version}.tar.gz
 Source11:		http://github.com/Castaglia/proftpd-mod_proxy/archive/v%{mod_proxy_version}.tar.gz
-
 Patch1:			proftpd-1.3.8-shellbang.patch
 Patch2:			mod_proxy-certificate.patch
 Patch3:			proftpd-1.3.4rc1-mod_vroot-test.patch
-
-BuildRequires:		coreutils
-BuildRequires:		gcc
-BuildRequires:		gettext
-BuildRequires:		libacl-devel
-BuildRequires:		libcap-devel
-BuildRequires:		libidn2-devel
-BuildRequires:		%{libmemcached_pkg}-devel >= 0.41
-BuildRequires:		libpq-devel
-BuildRequires:		libsodium-devel >= 1.0
-BuildRequires:		libxcrypt-devel
-BuildRequires:		logrotate
-BuildRequires:		make
-BuildRequires:		mariadb-connector-c-devel
-BuildRequires:		ncurses-devel
-BuildRequires:		openldap-devel
-BuildRequires:		openssl-devel
-BuildRequires:		pam-devel
-BuildRequires:		pcre2-devel >= 10.30
-BuildRequires:		perl-generators
-BuildRequires:		perl-interpreter
-BuildRequires:		pkgconfig
-BuildRequires:		sed
-BuildRequires:		sqlite-devel >= 3.8.5
-BuildRequires:		systemd-rpm-macros
-BuildRequires:		tar
-BuildRequires:		zlib-devel
-
-# Test suite requirements
-BuildRequires:		check-devel
-%if 0%{?fedora} > 34 || 0%{?rhel} > 8
-BuildRequires:		glibc-gconv-extra
-%endif
 %if 0%{?_with_integrationtests:1}
-BuildRequires:		perl(Compress::Zlib)
-BuildRequires:		perl(Digest::MD5)
-BuildRequires:		perl(HTTP::Request)
-BuildRequires:		perl(IO::Socket::SSL)
-BuildRequires:		perl(LWP::UserAgent)
-BuildRequires:		perl(Net::FTPSSL)
-BuildRequires:		perl(Net::SSLeay)
-BuildRequires:		perl(Net::Telnet)
-BuildRequires:		perl(Sys::HostAddr)
-BuildRequires:		perl(Test::Harness)
-BuildRequires:		perl(Test::Unit) >= 0.25
-BuildRequires:		perl(Time::HiRes)
 %endif
-
-# Need systemd for ownership of /usr/lib/tmpfiles.d directory
 Requires:		systemd
-
-# Logs should be rotated periodically
 Requires:		logrotate
-
-# Scriptlet dependencies
 Requires(preun):	coreutils, findutils
-BuildRequires:		systemd
 %{?systemd_requires}
-
 Provides:		ftpserver
-
+# oreon:deps
+BuildRequires:  check-devel
+BuildRequires:  coreutils
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  libacl-devel
+BuildRequires:  libcap-devel
+BuildRequires:  libidn2-devel
+BuildRequires:  libmemcached-awesome-devel
+BuildRequires:  libpq-devel
+BuildRequires:  libsodium-devel
+BuildRequires:  libxcrypt-devel
+BuildRequires:  logrotate
+BuildRequires:  make
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  ncurses-devel
+BuildRequires:  openldap-devel
+BuildRequires:  openssl-devel
+BuildRequires:  pam-devel
+BuildRequires:  pcre2-devel
+BuildRequires:  perl(Crypt::Cracklib)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  pkgconfig
+BuildRequires:  sed
+BuildRequires:  sqlite-devel
+BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  tar
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 ProFTPD is an enhanced FTP server with a focus toward simplicity, security,
 and ease of configuration. It features a very Apache-like configuration
@@ -119,8 +78,6 @@ needed scripts to have it run by systemd instead are included.
 %package devel
 Summary:	ProFTPD - Tools and header files for developers
 Requires:	%{name} = %{version}-%{release}
-# devel package requires the same devel packages as were build-required
-# for the main package
 Requires:	gcc, libtool
 Requires:	libacl-devel
 Requires:	libcap-devel
@@ -136,42 +93,36 @@ Requires:	pcre2-devel >= 10.30
 Requires:	pkgconfig
 Requires:	sqlite-devel
 Requires:	zlib-devel
-
 %description devel
 This package is required to build additional modules for ProFTPD.
 
 %package ldap
 Summary:	Module to add LDAP support to the ProFTPD FTP server
 Requires:	%{name} = %{version}-%{release}
-
 %description ldap
 Module to add LDAP support to the ProFTPD FTP server.
 
 %package mysql
 Summary:	Module to add MySQL support to the ProFTPD FTP server
 Requires:	%{name} = %{version}-%{release}
-
 %description mysql
 Module to add MySQL support to the ProFTPD FTP server.
 
 %package postgresql
 Summary:	Module to add PostgreSQL support to the ProFTPD FTP server
 Requires:	%{name} = %{version}-%{release}
-
 %description postgresql
 Module to add PostgreSQL support to the ProFTPD FTP server.
 
 %package proxy
 Summary:	Module to add proxying support to the ProFTPD FTP server
 Requires:	%{name} = %{version}-%{release}
-
 %description proxy
 Module to add proxying support to the ProFTPD FTP server.
 
 %package sqlite
 Summary:	Module to add SQLite support to the ProFTPD FTP server
 Requires:	%{name} = %{version}-%{release}
-
 %description sqlite
 Module to add SQLite support to the ProFTPD FTP server.
 
@@ -179,10 +130,8 @@ Module to add SQLite support to the ProFTPD FTP server.
 Summary:	ProFTPD - Additional utilities
 Requires:	%{name} = %{version}-%{release}
 Requires:	perl-interpreter
-# ftpasswd --use-cracklib requires Crypt::Cracklib
 BuildRequires:	perl(Crypt::Cracklib)
 Requires:	perl(Crypt::Cracklib)
-
 %description utils
 This package contains additional utilities for monitoring and configuring the
 ProFTPD server:
@@ -195,6 +144,7 @@ ProFTPD server:
 * ftpwho: show the current process information for each FTP session
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}%{?prever}
@@ -242,7 +192,7 @@ chmod -c -x include/hanson-tpl.h lib/hanson-tpl.c
 find doc/ contrib/ -name '*.orig' -delete
 
 %build
-# Modules to be built as DSO's (excluding mod_ifsession, always specified last)
+
 SMOD1=mod_sql:mod_sql_passwd:mod_sql_mysql:mod_sql_postgres:mod_sql_sqlite
 SMOD2=mod_quotatab:mod_quotatab_file:mod_quotatab_ldap:mod_quotatab_radius:mod_quotatab_sql
 SMOD3=mod_ldap:mod_ban:mod_ctrls_admin:mod_facl:mod_load:mod_vroot
@@ -250,7 +200,6 @@ SMOD4=mod_radius:mod_ratio:mod_rewrite:mod_site_misc:mod_exec:mod_shaper
 SMOD5=mod_wrap2:mod_wrap2_file:mod_wrap2_sql:mod_copy:mod_deflate:mod_ifversion:mod_qos
 SMOD6=mod_sftp:mod_sftp_pam:mod_sftp_sql:mod_tls_shmcache:mod_tls_memcache
 SMOD7=mod_proxy:mod_unique_id
-
 %configure \
 			--libexecdir="%{_libexecdir}/proftpd" \
 			--localstatedir="/run/proftpd" \
@@ -273,7 +222,6 @@ SMOD7=mod_proxy:mod_unique_id
 			--with-modules=mod_readme:mod_auth_pam:mod_tls \
 			--with-shared=${SMOD1}:${SMOD2}:${SMOD3}:${SMOD4}:${SMOD5}:${SMOD6}:${SMOD7}:mod_ifsession
 %{make_build}
-
 %install
 %{make_install} INSTALL_USER=`id -un` INSTALL_GROUP=`id -gn`
 mkdir -p %{buildroot}%{_sysconfdir}/proftpd/conf.d
@@ -297,38 +245,29 @@ install -D -p -m 644 %{SOURCE8}		%{buildroot}%{_localstatedir}/ftp/welcome.msg
 install -D -p -m 644 %{SOURCE9}		%{buildroot}%{_sysconfdir}/sysconfig/proftpd
 mkdir -p %{buildroot}%{_localstatedir}/{ftp/{pub,uploads},log/proftpd}
 touch %{buildroot}%{_sysconfdir}/ftpusers
-
-# We'll be using the system certificate database, not the one provided by mod_proxy
 rm %{buildroot}%{_sysconfdir}/cacerts.pem
-
-# Make sure /run/proftpd exists at boot time for systems where it's on tmpfs (#656675)
 install -d -m 755 %{buildroot}%{_prefix}/lib/tmpfiles.d
 install -p -m 644 contrib/dist/rpm/proftpd-tmpfs.conf \
 					%{buildroot}%{_prefix}/lib/tmpfiles.d/proftpd.conf
-
-# Find translations
 %find_lang proftpd
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Integration tests not fully maintained - stick to API tests only by default
+
 %if 0%{?_with_integrationtests:1}
 ln ftpdctl tests/
 make check
 %else
-# API tests should always be OK
 if ! make -C tests api-tests; then
-	# Diagnostics to report upstream
 	cat tests/api-tests.log
 	./proftpd -V
-	# Fail the build
 	false
 fi
 %endif
-
 %post
+
 %systemd_post proftpd.service
 if [ $1 -eq 1 ]; then
-	# Initial installation
 	IFS=":"; cat /etc/passwd | \
 	while { read username nu nu gid nu nu nu nu; }; do \
 		if [ $gid -lt 100 -a "$username" != "ftp" ]; then
@@ -336,133 +275,25 @@ if [ $1 -eq 1 ]; then
 		fi
 	done
 fi
-
 %preun
+
 %systemd_preun proftpd.service
 if [ $1 -eq 0 ]; then
-	# Package removal, not upgrade
 	find /run/proftpd -depth -mindepth 1 |
 		xargs rm -rf &>/dev/null || :
 fi
-
 %postun
+
 %systemd_postun_with_restart proftpd.service
-
-%files -f proftpd.lang
-%license COPYING
-%doc CREDITS ChangeLog NEWS README.md
-%doc contrib/README.contrib contrib/README.ratio
-%doc doc/* sample-configurations/
-%dir %{_localstatedir}/ftp/
-%dir %{_localstatedir}/ftp/pub/
-%dir /run/proftpd/
-%dir %{_sysconfdir}/logrotate.d/
-%dir %{_sysconfdir}/proftpd/
-%dir %{_sysconfdir}/proftpd/conf.d/
-%config(noreplace) %{_localstatedir}/ftp/welcome.msg
-%config(noreplace) %{_sysconfdir}/blacklist.dat
-%config(noreplace) %{_sysconfdir}/dhparams.pem
-%config(noreplace) %{_sysconfdir}/ftpusers
-%config(noreplace) %{_sysconfdir}/logrotate.d/proftpd
-%config(noreplace) %{_sysconfdir}/pam.d/proftpd
-%config(noreplace) %{_sysconfdir}/proftpd.conf
-%config(noreplace) %{_sysconfdir}/proftpd/anonftp.conf
-%config(noreplace) %{_sysconfdir}/proftpd/modules.conf
-%config(noreplace) %{_sysconfdir}/proftpd/mod_ban.conf
-%config(noreplace) %{_sysconfdir}/proftpd/mod_qos.conf
-%config(noreplace) %{_sysconfdir}/proftpd/mod_tls.conf
-%config(noreplace) %{_sysconfdir}/sysconfig/proftpd
-%{_unitdir}/proftpd.service
-%{_unitdir}/proftpd.socket
-%{_unitdir}/proftpd@.service
-%{_prefix}/lib/tmpfiles.d/proftpd.conf
-%{_bindir}/ftpdctl
-%{_sbindir}/ftpscrub
-%{_sbindir}/ftpshut
-%{_sbindir}/in.proftpd
-%{_sbindir}/proftpd
-%{_mandir}/man5/proftpd.conf.5*
-%{_mandir}/man5/xferlog.5*
-%{_mandir}/man8/ftpdctl.8*
-%{_mandir}/man8/ftpscrub.8*
-%{_mandir}/man8/ftpshut.8*
-%{_mandir}/man8/proftpd.8*
-%dir %{_libexecdir}/proftpd/
-%{_libexecdir}/proftpd/mod_ban.so
-%{_libexecdir}/proftpd/mod_ctrls_admin.so
-%{_libexecdir}/proftpd/mod_copy.so
-%{_libexecdir}/proftpd/mod_deflate.so
-%{_libexecdir}/proftpd/mod_exec.so
-%{_libexecdir}/proftpd/mod_facl.so
-%{_libexecdir}/proftpd/mod_ifsession.so
-%{_libexecdir}/proftpd/mod_ifversion.so
-%{_libexecdir}/proftpd/mod_load.so
-%{_libexecdir}/proftpd/mod_qos.so
-%{_libexecdir}/proftpd/mod_quotatab.so
-%{_libexecdir}/proftpd/mod_quotatab_file.so
-%{_libexecdir}/proftpd/mod_quotatab_radius.so
-%{_libexecdir}/proftpd/mod_quotatab_sql.so
-%{_libexecdir}/proftpd/mod_radius.so
-%{_libexecdir}/proftpd/mod_ratio.so
-%{_libexecdir}/proftpd/mod_rewrite.so
-%{_libexecdir}/proftpd/mod_sftp.so
-%{_libexecdir}/proftpd/mod_sftp_pam.so
-%{_libexecdir}/proftpd/mod_sftp_sql.so
-%{_libexecdir}/proftpd/mod_shaper.so
-%{_libexecdir}/proftpd/mod_site_misc.so
-%{_libexecdir}/proftpd/mod_sql.so
-%{_libexecdir}/proftpd/mod_sql_passwd.so
-%{_libexecdir}/proftpd/mod_tls_memcache.so
-%{_libexecdir}/proftpd/mod_tls_shmcache.so
-%{_libexecdir}/proftpd/mod_unique_id.so
-%{_libexecdir}/proftpd/mod_vroot.so
-%{_libexecdir}/proftpd/mod_wrap2.so
-%{_libexecdir}/proftpd/mod_wrap2_file.so
-%{_libexecdir}/proftpd/mod_wrap2_sql.so
-%exclude %{_libexecdir}/proftpd/*.a
-%if 0%{?fedora} < 36 && 0%{?rhel} < 10 && 0%{?oreon} < 11
-%exclude %{_libexecdir}/proftpd/*.la
-%endif
-%attr(331, ftp, ftp) %dir %{_localstatedir}/ftp/uploads/
-%attr(750, root, root) %dir %{_localstatedir}/log/proftpd/
-
-%files devel
-%{_bindir}/prxs
-%{_includedir}/proftpd/
-%{_libdir}/pkgconfig/proftpd.pc
-
-%files ldap
-%doc contrib/mod_quotatab_ldap.ldif contrib/mod_quotatab_ldap.schema
-%{_libexecdir}/proftpd/mod_ldap.so
-%{_libexecdir}/proftpd/mod_quotatab_ldap.so
-
-%files mysql
-%{_libexecdir}/proftpd/mod_sql_mysql.so
-
-%files postgresql
-%{_libexecdir}/proftpd/mod_sql_postgres.so
-
-%files proxy
-%doc contrib/mod_proxy/README.md
-%{_libexecdir}/proftpd/mod_proxy.so
-
-%files sqlite
-%{_libexecdir}/proftpd/mod_sql_sqlite.so
-
-%files utils
-%doc contrib/xferstats.holger-preiss
-%{_bindir}/ftpasswd
-%{_bindir}/ftpcount
-%{_bindir}/ftpmail
-%{_bindir}/ftpquota
-%{_bindir}/ftptop
-%{_bindir}/ftpwho
-%{_mandir}/man1/ftpasswd.1*
-%{_mandir}/man1/ftpcount.1*
-%{_mandir}/man1/ftpmail.1*
-%{_mandir}/man1/ftpquota.1*
-%{_mandir}/man1/ftptop.1*
-%{_mandir}/man1/ftpwho.1*
+%files -f %{oreon_filedir}/main.list
+%files -n proftpd-devel -f %{oreon_filedir}/proftpd-devel.list
+%files -n proftpd-ldap -f %{oreon_filedir}/proftpd-ldap.list
+%files -n proftpd-mysql -f %{oreon_filedir}/proftpd-mysql.list
+%files -n proftpd-postgresql -f %{oreon_filedir}/proftpd-postgresql.list
+%files -n proftpd-proxy -f %{oreon_filedir}/proftpd-proxy.list
+%files -n proftpd-sqlite -f %{oreon_filedir}/proftpd-sqlite.list
+%files -n proftpd-utils -f %{oreon_filedir}/proftpd-utils.list
 
 %changelog
+
 %autochangelog

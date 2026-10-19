@@ -1,27 +1,20 @@
 %global source0_hash 3b749138229e7808d0009a97e2ac47815ad5278df6879a9cc64351a7921ba06f
-
-# Warning:
-# Anyone editing this spec file please make sure the same spec file
-# works on other fedora and epel releases, which are supported by this software.
-# No quick Rawhide-only fixes will be allowed.
-
 %global upstream_name FoX
-
 Name:		FoXlibf
 Version:	4.1.2
-Release:	29%{?dist}
-Summary:	A Fortran XML Library
-# Automatically converted from old format: zlib and BSD - review is highly recommended.
+Release:        29%{?dist}
+Summary:        A Fortran XML Library
 License:	Zlib AND LicenseRef-Callaway-BSD
 URL:		http://www1.gly.bris.ac.uk/~walker/FoX/
-Source0:	http://www1.gly.bris.ac.uk/~walker/FoX/source/%{upstream_name}-%{version}.tar.gz
+Source0:        http://www1.gly.bris.ac.uk/~walker/%{upstream_name}/source/%{upstream_name}-%{version}.tar.gz
 Patch0:		FoX-4.1.2-DESTDIR.patch
 Patch1:		FoX-4.1.2-system-paths.patch
 Patch2:		FoX-4.1.2-sharedlibs.patch
 Patch3:		FoX-4.1.2-dompp.patch
-BuildRequires:	gcc-gfortran
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  gcc-gfortran
+BuildRequires:  make
+# /oreon:deps
 %description
 FoX is an XML library written in Fortran 95. It allows software developers to
 read, write and modify XML documents from Fortran applications without the 
@@ -30,18 +23,17 @@ complications of dealing with multiple language development.
 %package devel
 Requires:	%{name}%{?_isa} = %{version}-%{release}
 Summary:	Development files for FoX
-
 %description devel
 Development files for FoX.
 
 %package static
 Requires:	%{name}%{?_isa} = %{version}-%{release}
 Summary:	Static libraries for FoX
-
 %description static
 Static libraries for FoX.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qn %{upstream_name}-%{version}
@@ -57,10 +49,10 @@ sed -i "s|libFoX_dom|libFoX_dompp|g" dompp/makefile
 %patch -P3 -p1 -b .dompp
 
 %build
+
 export FCFLAGS="%{optflags} %{?_fmoddir: -I%_fmoddir} -fPIC"
 %configure
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=%{buildroot}
 pushd %{buildroot}%{_libdir}
@@ -69,22 +61,13 @@ for i in libFoX_common libFoX_dom libFoX_dompp libFoX_fsys libFoX_sax libFoX_uti
 	ln -s $i.so.0.0.0 $i.so
 done
 chmod -x %{buildroot}%{_libdir}/*.a
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README.FoX.txt
-%{!?_licensedir:%global license %%doc}
-%license LICENSE
-%{_libdir}/libFoX*.so.*
-
-%files devel
-%{_bindir}/FoX-config
-%{_includedir}/FoX/
-%{_libdir}/libFoX*.so
-
-%files static
-%{_libdir}/libFoX*.a
+%files -f %{oreon_filedir}/main.list
+%files -n FoXlibf-devel -f %{oreon_filedir}/FoXlibf-devel.list
+%files -n FoXlibf-static -f %{oreon_filedir}/FoXlibf-static.list
 
 %changelog
+
 %autochangelog

@@ -1,96 +1,31 @@
 %global source0_hash 66aeac6127418be5e471ead3744648c766bd01482825c5b66652675f2bc86a8f
-
 %global cpan_version_major 0.42
 %global cpan_version_minor 34
 %global cpan_version %{cpan_version_major}%{?cpan_version_minor}
-
-# Run optional tests
 %if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Module_Build_enables_optional_test
 %else
 %bcond_with perl_Module_Build_enables_optional_test
 %endif
-
 Name:           perl-Module-Build
 Epoch:          2
 Version:        %{cpan_version_major}%{?cpan_version_minor:.%cpan_version_minor}
-Release:        10%{?dist}
+Release:        1%{?dist}
 Summary:        Build and install Perl modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Build
 Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/Module-Build-0.4234.tar.gz
-
-# Handle missing ExtUtils::CBuilder as a missing compiler, bug #1547165.
 Patch1:         Module-Build-0.4231-Do-not-die-on-missing-ExtUtils-CBuilder-in-have_c_co.patch
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Archive::Tar)
-BuildRequires:  perl(AutoSplit)
-BuildRequires:  perl(base)
-BuildRequires:  perl(blib)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(Config)
-BuildRequires:  perl(CPAN::Meta) >= 2.142060
-BuildRequires:  perl(CPAN::Meta::Converter) >= 2.141170
-BuildRequires:  perl(CPAN::Meta::Merge)
-BuildRequires:  perl(CPAN::Meta::YAML) >= 0.003
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(DynaLoader)
-BuildRequires:  perl(Exporter)
-BuildRequires:  perl(ExtUtils::CBuilder) >= 0.27
-BuildRequires:  perl(ExtUtils::Install) >= 0.3
-BuildRequires:  perl(ExtUtils::Installed)
-BuildRequires:  perl(ExtUtils::Manifest) >= 1.54
-BuildRequires:  perl(ExtUtils::Mkbootstrap)
-BuildRequires:  perl(ExtUtils::Packlist)
-BuildRequires:  perl(ExtUtils::ParseXS) >= 2.21
-BuildRequires:  perl(File::Basename)
-BuildRequires:  perl(File::Compare)
-BuildRequires:  perl(File::Copy)
-BuildRequires:  perl(File::Find)
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(File::Spec) >= 0.82
-BuildRequires:  perl(File::Spec::Functions)
-BuildRequires:  perl(File::Temp) >= 0.15
-BuildRequires:  perl(Getopt::Long)
-BuildRequires:  perl(inc::latest)
-BuildRequires:  perl(lib)
-# perl(Module::Build) is loaded from ./lib
-BuildRequires:  perl(Module::Metadata) >= 1.000002
-BuildRequires:  perl(Parse::CPAN::Meta) >= 1.4401
-BuildRequires:  perl(Perl::OSType) >= 1
-BuildRequires:  perl(strict)
-# Optional tests:
 %if !%{defined perl_bootstrap}
 %if %{with perl_Module_Build_enables_optional_test}
-BuildRequires:  perl(Archive::Zip)
-BuildRequires:  perl(File::ShareDir) >= 1.00
-BuildRequires:  perl(PAR::Dist)
 %if 0%{?fedora}  || 0%{?rhel} < 7 || (0%{?oreon} >= 11)
-BuildRequires:  perl(Pod::Readme)
 %endif
 %endif
 %endif
-BuildRequires:  perl(TAP::Harness)
-BuildRequires:  perl(TAP::Harness::Env)
-BuildRequires:  perl(Test::Harness) >= 3.29
-BuildRequires:  perl(Test::More) >= 0.49
-BuildRequires:  perl(Text::ParseWords)
-BuildRequires:  perl(utf8)
-BuildRequires:  perl(vars)
-BuildRequires:  perl(version) >= 0.87
-BuildRequires:  perl(warnings)
 Requires:       perl(CPAN::Meta) >= 2.142060
 Requires:       perl(CPAN::Meta::Converter) >= 2.141170
 Requires:       perl(CPAN::Meta::Merge)
-# Do not hard-require ExtUtils::CBuilder to allow installing Module::Build
-# without gcc, bug #1547165. Module::Build users have to require
-# ExtUtils::CBuilder explicitly according to "XS Extensions" section in
-# Module::Build::Authoring POD.
 Recommends:     perl(ExtUtils::CBuilder) >= 0.27
 Requires:       perl(ExtUtils::Install) >= 0.3
 Requires:       perl(ExtUtils::Manifest) >= 1.54
@@ -98,42 +33,81 @@ Requires:       perl(ExtUtils::Mkbootstrap)
 Requires:       perl(ExtUtils::ParseXS) >= 2.21
 Requires:       perl(inc::latest)
 Requires:       perl(Module::Metadata) >= 1.000002
-# Keep PAR support optional (PAR::Dist)
 Requires:       perl(Perl::OSType) >= 1
 Requires:       perl(TAP::Harness::Env)
 Requires:       perl(Test::Harness)
 %if !%{defined perl_bootstrap}
-# Optional run-time needed for Software::License license identifier,
-# bug #1152319
 Requires:       perl(Software::License)
 %endif
-# Optional run-time needed for generating documentation from POD:
 Requires:       perl(Pod::Html)
 Requires:       perl(Pod::Man) >= 2.17
 Requires:       perl(Pod::Text)
-# Run-time for generated Build scripts from Build.PLs:
-# Those are already found by dependency generator. Just make sure they
-# present.
-# Cwd
-# File::Basename
-# File::Spec
-# strict
-
 %{?perl_default_filter}
-# Remove under-specified dependencies
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\((ExtUtils::Install|File::Spec|Module::Build|Module::Metadata|Perl::OSType)\\)$
 %global __requires_exclude %__requires_exclude|^perl\\(CPAN::Meta::YAML\\) >= 0.002$
-
-# Filter modules bundled for tests
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %{__requires_exclude}|^perl\\(DistGen\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(MBTest\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Simple\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Software::License.*\\)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Tie::CPHash\\)
-
 Provides:       perl(Module::Build)
 Provides:       perl(Module::Build::Compat)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  perl(Archive::Tar)
+BuildRequires:  perl(Archive::Zip)
+BuildRequires:  perl(AutoSplit)
+BuildRequires:  perl(CPAN::Meta)
+BuildRequires:  perl(CPAN::Meta::Converter)
+BuildRequires:  perl(CPAN::Meta::Merge)
+BuildRequires:  perl(CPAN::Meta::YAML)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(DynaLoader)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(ExtUtils::CBuilder)
+BuildRequires:  perl(ExtUtils::Install)
+BuildRequires:  perl(ExtUtils::Installed)
+BuildRequires:  perl(ExtUtils::Manifest)
+BuildRequires:  perl(ExtUtils::Mkbootstrap)
+BuildRequires:  perl(ExtUtils::Packlist)
+BuildRequires:  perl(ExtUtils::ParseXS)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Compare)
+BuildRequires:  perl(File::Copy)
+BuildRequires:  perl(File::Find)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::ShareDir)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Spec::Functions)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(Module::Metadata)
+BuildRequires:  perl(PAR::Dist)
+BuildRequires:  perl(Parse::CPAN::Meta)
+BuildRequires:  perl(Perl::OSType)
+BuildRequires:  perl(Pod::Readme)
+BuildRequires:  perl(TAP::Harness)
+BuildRequires:  perl(TAP::Harness::Env)
+BuildRequires:  perl(Test::Harness)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Text::ParseWords)
+BuildRequires:  perl(base)
+BuildRequires:  perl(blib)
+BuildRequires:  perl(inc::latest)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(version)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Module::Build is a system for building, testing, and installing Perl
 modules. It is meant to be an alternative to ExtUtils::MakeMaker.
@@ -149,7 +123,6 @@ works fine on perl 5.005 if you can install a few additional modules.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-# Optional tests:
 %if !%{defined perl_bootstrap}
 %if %{with perl_Module_Build_enables_optional_test}
 Requires:       perl(Archive::Zip)
@@ -161,12 +134,12 @@ Requires:       perl(TAP::Harness)
 Requires:       perl(TAP::Harness::Env)
 Requires:       perl(Text::ParseWords)
 Requires:       perl(version) >= 0.87
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n Module-Build-%{cpan_version}
 
@@ -177,23 +150,19 @@ for F in `find t -name *.t -o -name *.pl`; do
 done
 
 %build
+
 perl Build.PL --installdirs=vendor
 ./Build
-
 %install
 ./Build install --destdir=%{buildroot} --create_packlist=0
 %{_fixperms} -c %{buildroot}
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t _build %{buildroot}%{_libexecdir}/%{name}
 perl -pi -e 's#%{buildroot}##' %{buildroot}%{_libexecdir}/%{name}/_build/runtime_params
 rm %{buildroot}%{_libexecdir}/%{name}/_build/magicnum
 mkdir -p %{buildroot}%{_libexecdir}/%{name}/bin
 ln -s %{_bindir}/config_data %{buildroot}%{_libexecdir}/%{name}/bin
-# Requires copy of modules in test directory
 rm %{buildroot}%{_libexecdir}/%{name}/t/00-compile.t
-# Remove using of blib
 for F in `find %{buildroot}%{_libexecdir}/%{name}/t -name *.t -o -name *.pm`; do
     perl -pi -e "s/^\s*blib_load\('([^']+)'\);/use \1;/" $F
     perl -pi -e "s/^blib_load '([^']+)';/use \1;/" $F
@@ -201,10 +170,7 @@ done
 perl -pi -e "s{'-Mblib', }{'-I'.\\N{U+0024}tmp.'/Simple/blib/lib', '-I'.\\N{U+0024}tmp.'/Simple/blib/arch', }x" \
     %{buildroot}%{_libexecdir}/%{name}/t/xs.t
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Some tests write into temporary files/directories. The easiest solution
-# is to copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -213,22 +179,16 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 rm t/signature.t
 LANG=C TEST_SIGNATURE=1 MB_TEST_EXPERIMENTAL=1 ./Build test
-
-%files
-%license LICENSE
-%doc Changes contrib/ README
-%{_bindir}/config_data
-%{perl_vendorlib}/Module/
-%{_mandir}/man1/config_data.1*
-%{_mandir}/man3/Module::Build*.3*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Module-Build-tests -f %{oreon_filedir}/perl-Module-Build-tests.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:0.42.34-10
 - Import

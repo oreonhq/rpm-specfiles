@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash 41c24d187f67aaaf4745fab78fd1da66de7f37dd82581dbbbc9ba89645ba0166
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,32 +80,29 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           osgi-core
 Version:        8.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        OSGi Core API
 License:        Apache-2.0
 URL:            https://www.osgi.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://docs.osgi.org/download/r8/osgi.core-%{version}.jar
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 8.0.0-34
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.osgi:osgi.annotation)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 8.0.0-34
-
+# /oreon:deps
 %description
 OSGi Core, Interfaces and Classes for use in compiling bundles.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -T -n osgi-core-8.0.0
 jar xf %{SOURCE0}
@@ -144,15 +140,15 @@ mv META-INF/maven/org.osgi/osgi.core/pom.xml .
 %mvn_alias : org.osgi:org.osgi.core
 
 %build
-%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE
-%doc about.html
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.0.0-1
 - Import

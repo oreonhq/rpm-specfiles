@@ -1,36 +1,25 @@
-%global source0_hash 725a3768a1e23ab8648b4df9d470aed38eb1635af3cbc8d0b64fef077236f4ce
-
+%global source0_hash a3c40c6471928383f4abfcb2e8f24012a1f562be2f17b8d672145d5986681a92
 %{?mingw_package_header}
-
-# Breaks build as native ldflags end up in the cross command line
 %undefine _auto_set_build_flags
-
 Name:           mingw-gsm
 Version:        1.0.24
 Release:        1%{?dist}
 Summary:        Shared libraries for GSM speech compressor
-
 License:        MIT
 URL:            http://www.quut.com/gsm/
-Source:         http://www.quut.com/gsm/gsm-%{version}.tar.gz
-# patches from gsm package
+Source0:        http://www.quut.com/gsm/gsm-%{version}.tar.gz
 Patch1:         gsm-warnings.patch
 Patch2:         gsm-64bit.patch
-# patch for MinGW (build dll, .exe suffix)
-# (stdin/out in tools not supported for now)
 Patch3:         gsm-mingw.patch
-
 BuildArch:      noarch
-
-BuildRequires: make
-BuildRequires:  mingw32-filesystem >= 95
-BuildRequires:  mingw32-gcc
-
-BuildRequires:  mingw64-filesystem >= 95
-BuildRequires:  mingw64-gcc
-
 %global srcver 1.0-pl16
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc
+# /oreon:deps
 %description
 Contains runtime shared libraries for libgsm, an implementation of
 the European GSM 06.10 provisional standard for full-rate speech
@@ -51,8 +40,7 @@ on most SPARCstations.  The implementation has been verified against the
 ETSI standard test patterns.
 
 %package -n mingw32-gsm
-Summary:        %{summary}
-
+Summary:        Shared libraries for GSM speech compressor
 %description -n mingw32-gsm
 Contains runtime shared libraries, header files, and development libraries for
 libgsm, an implementation of the European GSM 06.10 provisional standard for
@@ -77,7 +65,6 @@ This package is MinGW compiled gsm library for the Win32 target.
 %package -n mingw32-gsm-tools
 Summary:        GSM speech compressor tools
 Requires:       mingw32-gsm = %{version}-%{release}
-
 %description -n mingw32-gsm-tools
 Contains command line utilities for libgsm, an implementation of
 the European GSM 06.10 provisional standard for full-rate speech
@@ -87,8 +74,7 @@ excitation/long term prediction) coding at 13 kbit/s.
 This package are MinGW compiled gsm tools for the Win32 target.
 
 %package -n mingw64-gsm
-Summary:        %{summary}
-
+Summary:        GSM speech compressor tools
 %description -n mingw64-gsm
 Contains runtime shared libraries for libgsm, an implementation of
 the European GSM 06.10 provisional standard for full-rate speech
@@ -113,7 +99,6 @@ This package is MinGW compiled gsm library for the Win64 target.
 %package -n mingw64-gsm-tools
 Summary:        Tools for Free Lossless Audio Codec
 Requires:       mingw64-gsm = %{version}-%{release}
-
 %description -n mingw64-gsm-tools
 Contains command line utilities for libgsm, an implementation of
 the European GSM 06.10 provisional standard for full-rate speech
@@ -125,6 +110,7 @@ This package are MinGW compiled gsm tools for the Win64 target.
 %{?mingw_debug_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qc
@@ -135,9 +121,9 @@ pushd gsm-%{srcver}
 popd
 
 %build
+
 cp -a gsm-%{srcver} build_win32
 cp -a gsm-%{srcver} build_win64
-
 pushd build_win32
 make %{?_smp_mflags} all \
   CC=%mingw32_cc \
@@ -146,7 +132,6 @@ make %{?_smp_mflags} all \
   RPM_CFLAGS="%{mingw32_cflags}" \
   RPM_LDFLAGS="%{mingw32_ldflags}"
 popd
-
 pushd build_win64
 make %{?_smp_mflags} all \
   CC=%mingw64_cc \
@@ -155,7 +140,6 @@ make %{?_smp_mflags} all \
   RPM_CFLAGS="%{mingw64_cflags}" \
   RPM_LDFLAGS="%{mingw64_ldflags}"
 popd
-
 %install
 pushd build_win32
 mkdir -p \
@@ -164,7 +148,6 @@ mkdir -p \
   %{buildroot}%{mingw32_mandir}/man3 \
   %{buildroot}%{mingw32_includedir}/gsm \
   %{buildroot}%{mingw32_libdir}
-
 make install \
   CC=%mingw32_cc \
   AR=%mingw32_ar \
@@ -176,11 +159,8 @@ make install \
   GSM_INSTALL_MAN=%{buildroot}%{mingw32_mandir}/man3 \
   TOAST_INSTALL_BIN=%{buildroot}%{mingw32_bindir} \
   TOAST_INSTALL_MAN=%{buildroot}%{mingw32_mandir}/man1
-
-# some apps look for this in /usr/include
 ln -s gsm/gsm.h %{buildroot}%{mingw32_includedir}
 popd
-
 pushd build_win64
 mkdir -p \
   %{buildroot}%{mingw64_bindir} \
@@ -188,7 +168,6 @@ mkdir -p \
   %{buildroot}%{mingw64_mandir}/man3 \
   %{buildroot}%{mingw64_includedir}/gsm \
   %{buildroot}%{mingw64_libdir}
-
 make install \
   CC=%mingw64_cc \
   AR=%mingw64_ar \
@@ -200,40 +179,20 @@ make install \
   GSM_INSTALL_MAN=%{buildroot}%{mingw64_mandir}/man3 \
   TOAST_INSTALL_BIN=%{buildroot}%{mingw64_bindir} \
   TOAST_INSTALL_MAN=%{buildroot}%{mingw64_mandir}/man1
-
-# some apps look for this in /usr/include
 ln -s gsm/gsm.h %{buildroot}%{mingw64_includedir}
 popd
+%oreon_autofiles mingw32-gsm usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw32-gsm-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-gsm usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-gsm-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n mingw32-gsm
-%license gsm-%{srcver}/COPYRIGHT
-%doc gsm-%{srcver}/ChangeLog
-%doc gsm-%{srcver}/README
-%dir %{mingw32_includedir}/gsm
-%exclude %{mingw32_mandir}
-%exclude %{mingw32_libdir}/libgsm.a
-%{mingw32_bindir}/libgsm-1.dll
-%{mingw32_libdir}/libgsm.dll.a
-%{mingw32_includedir}/gsm.h
-%{mingw32_includedir}/gsm/gsm.h
-
-%files -n mingw32-gsm-tools
-%{mingw32_bindir}/*.exe
-
-%files -n mingw64-gsm
-%license gsm-%{srcver}/COPYRIGHT
-%doc gsm-%{srcver}/ChangeLog
-%doc gsm-%{srcver}/README
-%dir %{mingw64_includedir}/gsm
-%exclude %{mingw64_mandir}
-%exclude %{mingw64_libdir}/libgsm.a
-%{mingw64_bindir}/libgsm-1.dll
-%{mingw64_libdir}/libgsm.dll.a
-%{mingw64_includedir}/gsm.h
-%{mingw64_includedir}/gsm/gsm.h
-
-%files -n mingw64-gsm-tools
-%{mingw64_bindir}/*.exe
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-gsm -f %{oreon_filedir}/mingw32-gsm.list
+%files -n mingw32-gsm-tools -f %{oreon_filedir}/mingw32-gsm-tools.list
+%files -n mingw64-gsm -f %{oreon_filedir}/mingw64-gsm.list
+%files -n mingw64-gsm-tools -f %{oreon_filedir}/mingw64-gsm-tools.list
 
 %changelog
+
 %autochangelog

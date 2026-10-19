@@ -1,51 +1,17 @@
 %global source0_hash c835b640a40ce357e1b83666aabd95edffa24ddddd49b8daff63adb851cdab74
-
-# =============================================================================
-
 Name:             poppler-data
-Summary:          Encoding files for use with poppler
+Summary:        Encoding files for use with poppler
 Version:          0.4.12
-Release:          1%{?dist}
-
-# NOTE: The licensing details are explained in COPYING file in source archive.
-# Makefile is HPND-sell-variant but is not included in binary package
+Release:        1%{?dist}
 License:          (GPL-2.0-only OR GPL-3.0-only) AND BSD-3-Clause
-
 URL:              https://poppler.freedesktop.org/
-Source:        https://poppler.freedesktop.org/poppler-data-%{version}.tar.gz
-
+Source0:        https://poppler.freedesktop.org/poppler-data-%{version}.tar.gz
 BuildArch:        noarch
-BuildRequires: make
-BuildRequires:    git
-
-# =============================================================================
-
-# NOTE: 'autosetup' macro (below) uses 'git' for applying the patches:
-#       ->> All the patches should be provided in 'git format-patch' format.
-#       ->> Auxiliary repository will be created during 'fedpkg prep', you
-#           can see all the applied patches there via 'git log'.
-
-# Upstream patches -- official upstream patches released by upstream since the
-# ----------------    last rebase that are necessary for any reason:
-#Patch000: example000.patch
-
-
-# Downstream patches -- these should be always included when doing rebase:
-# ------------------
-#Patch100: example100.patch
-
-
-# Downstream patches for RHEL -- patches that we keep only in RHEL for various
-# ---------------------------    reasons, but are not enabled in Fedora:
-%if %{defined rhel} || %{defined centos}
-#Patch200: example200.patch
-%endif
-
-
-# Patches to be removed -- deprecated functionality which shall be removed at
-# ---------------------    some point in the future:
-
-
+# oreon:deps
+BuildRequires:  git
+BuildRequires:  make
+BuildRequires:  pkgconfig
+# /oreon:deps
 %description
 This package consists of encoding files for use with poppler. The encoding
 files are optional and poppler will automatically read them if they are present.
@@ -57,10 +23,8 @@ and Cyrrilic characters properly.
 
 %package          devel
 Summary:          Devel files for %{name}
-
 Requires:         %{name} = %{version}-%{release}
 BuildRequires:    pkgconfig
-
 %description devel
 This sub-package currently contains only pkgconfig file, which can be used with
 pkgconfig utility allowing your software to be build with poppler-data.
@@ -69,24 +33,16 @@ pkgconfig utility allowing your software to be build with poppler-data.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git
-
-# NOTE: Nothing to do here - we are packaging the content only.
+%oreon_prep
 %build
 
 %install
 %make_install prefix=%{_prefix}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-# === PACKAGING INSTRUCTIONS ==================================================
-
-%files
-%license COPYING COPYING.adobe COPYING.gpl2
-%{_datadir}/poppler/
-
-%files devel
-%{_datadir}/pkgconfig/poppler-data.pc
-
-# =============================================================================
+%files -f %{oreon_filedir}/main.list
+%files -n poppler-data-devel -f %{oreon_filedir}/poppler-data-devel.list
 
 %changelog
+
 %autochangelog

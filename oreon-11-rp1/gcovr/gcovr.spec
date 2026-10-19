@@ -1,35 +1,39 @@
 %global source0_hash d8fa0bb17df5cbb2d95df95aad8abf5f48885f2b5820e97a3584273789613321
-
 %{?python_enable_dependency_generator}
-
 %bcond_without  docs
-
 Name:           gcovr
 Version:        8.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A code coverage report generator using GNU gcov
-
 License:        BSD-3-Clause
 URL:            https://gcovr.com/
 Source0:        https://github.com/gcovr/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  python3-devel
-BuildRequires:  %{py3_dist colorlog}
 %if %{with docs}
-BuildRequires:  %{py3_dist lxml}
-BuildRequires:  %{py3_dist Jinja2}
-BuildRequires:  %{py3_dist Sphinx}
-BuildRequires:  %{py3_dist sphinx_rtd_theme}
-BuildRequires:  %{py3_dist sphinxcontrib-autoprogram} >= 0.1.5
 %endif
-BuildRequires: make
-
-# for gcov
 Requires:       gcc
 Requires:       %{py3_dist Jinja2}
 Requires:       %{py3_dist colorlog}
-
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatch-fancy-pypi-readme) == 25.1.0
+BuildRequires:  python3dist(hatch-vcs) == 0.5.0
+BuildRequires:  python3dist(hatchling) == 1.27.0
+Requires:       python3-gcovr = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-gcovr+dev
+Summary:        Metapackage for python3-gcovr dev extras
+Requires:       python3-gcovr = %{version}-%{release}
+Requires:       python3dist(pygments) == 2.19.2
+Requires:       python3dist(pyinstaller) >= 6.16.0
+Requires:       python3dist(pylint) < 4.0.0
+Requires:       python3dist(ruff) >= 0.13.2
+Requires:       python3dist(tomli) >= 1.1.0
+Provides:       python3dist(gcovr[dev]) = %{version}-%{release}
+
+%description -n python3-gcovr+dev
+Metapackage for python3-gcovr dev extras.
 
 %description
 Gcovr provides a utility for managing the use of the GNU gcov utility
@@ -45,12 +49,12 @@ generates an HTML-formatted report.
 %if %{with docs}
 %package        doc
 Summary:        Documentation of gcovr
-
 %description    doc
 Documentation of gcovr.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -58,61 +62,30 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # Relax the strict version requirements.
 sed -i -e "s/hatchling==1.27.0/hatchling/" -e "s/hatch-vcs==0.5.0/hatch-vcs/" -e "s/hatch-fancy-pypi-readme==25.1.0/hatch-fancy-pypi-readme/" pyproject.toml
 
-%generate_buildrequires
-# Let hatch-vcs/setuptools_scm determine version outside of SCM
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%pyproject_buildrequires
-
 %build
-# Let hatch-vcs/setuptools_scm determine version outside of SCM
+
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
 %pyproject_wheel
-
-# can't run tests, require unpackaged dependencies
 %dnl %check
 %dnl %pytest
-
 %install
 %pyproject_install
-%pyproject_save_files gcovr
-
 %if %{with docs}
-# the documentation can only be build **after** gcovr is installed
-# => need to set PATH, PYTHONPATH so that the installed binary & package are
-# found
-# also set PYTHON so that the sphinx Makefile picks up python3 instead of
-# python2
 export PYTHONPATH=%{buildroot}%{python3_sitelib}
 export PATH=%{buildroot}%{_bindir}:$PATH
 export PYTHON=python3
-
 pushd .
 cd doc
-
-# Manpage
 sphinx-build -M man source build %{?fedora:-W}
 install -D -p -m 0644 build/man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
-
-# html doc
 sphinx-build -M html source build %{?fedora:-W}
 rm build/html/.buildinfo
-
 popd
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
 %files
-%license LICENSE.txt
-%doc README.rst CHANGELOG.rst
-%{_bindir}/gcovr
-%{python3_sitelib}/gcovr*
-%if %{with docs}
-%{_mandir}/man1/%{name}.1*
-%endif
-
-%if %{with docs}
-%files doc
-%doc doc/build/html/*
-%endif
+%files -n gcovr-doc -f %{oreon_filedir}/gcovr-doc.list
 
 %changelog
+
 %autochangelog

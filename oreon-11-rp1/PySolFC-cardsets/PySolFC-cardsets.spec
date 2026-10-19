@@ -1,8 +1,7 @@
-%global source0_hash 4e1f53ebc517dc069d273f2248ecd43eb88a048098dbee97343091e8f43937d4
-
+%global source1_hash 4e1f53ebc517dc069d273f2248ecd43eb88a048098dbee97343091e8f43937d4
+%global source0_hash 0ed537636ebef3751d9bf5df41a51cb50220a8b17739c2e811c2bbadc2aeaca6
 %define mainversion 2.0
 %define extra 0.2.0
-
 Name:           PySolFC-cardsets
 Version:        3.1
 Release:        1%{?dist}
@@ -12,13 +11,15 @@ URL:            https://pysolfc.sourceforge.io/
 Source0:        https://github.com/shlomif/PySolFC-Cardsets/archive/%{version}/PySolFC-Cardsets-%{version}.tar.gz
 Source1:        https://github.com/shlomif/PySol-Extra-Mahjongg-Cardsets/archive/%{extra}/PySol-Extra-Mahjongg-Cardsets-%{extra}.tar.gz
 BuildArch:      noarch
-
 Requires:       PySolFC >= %{mainversion}
+# oreon:deps
 
+# /oreon:deps
 %description
 This package contains extras cardsets for PySolFC.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n PySolFC-Cardsets-%{version} -a1
@@ -27,7 +28,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 install -d -m755 $RPM_BUILD_ROOT%{_datadir}/PySolFC
-# remove cardsets included in PySolFC package (PySolFC-Cardsets--Minimal-3.0.0)
 rm -rf cardset-2000 cardset-blaren-7x7 cardset-crystal-mahjongg cardset-dashavatara-ganjifa \
        cardset-dashavatara-ganjifa-xl cardset-dojouji-3x3 \ cardset-dondorf \
        cardset-gnome-mahjongg-1 cardset-hanafuda-200-years cardset-hexadeck \ cardset-hokusai-6x6 \
@@ -37,14 +37,13 @@ rm -rf cardset-2000 cardset-blaren-7x7 cardset-crystal-mahjongg cardset-dashavat
        cardset-next-matrix cardset-oxymoron cardset-players-trumps-10x10 cardset-simple-ishido \
        cardset-simple-ishido-xl cardset-standard cardset-the-card-players-9x9 cardset-tuxedo \
        cardset-uni-mahjongg cardset-victoria-falls-5x5 cardset-vienna-2k
-
 cp -a cardset-* $RPM_BUILD_ROOT%{_datadir}/PySolFC
 cp -a PySol-Extra-Mahjongg-Cardsets-0.2.0/Lost-Mahjongg-Cardsets/cardset-* $RPM_BUILD_ROOT%{_datadir}/PySolFC
-
 find $RPM_BUILD_ROOT%{_datadir}/PySolFC -type f -name 'COPYRIGHT' -exec chmod 0644 '{}' \;
+%oreon_autofiles main
 
-%files
-%{_datadir}/PySolFC/cardset-*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

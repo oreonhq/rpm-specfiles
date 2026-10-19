@@ -1,41 +1,35 @@
-%global source0_hash 3517bf9ddb10bfe4cc6ed7876c3f22ab5583ebc5039f6bdeac5e0da750ed99d3
-
+%global source0_hash a5c0c10734ba1faa238564821ed04724cee6c8206064c65abc42b58488af54b9
 %{?mingw_package_header}
-
 %global name1 drmingw
-
 Name:           mingw-%{name1}
 Version:        0.9.13
 Release:        1%{?dist}
 Summary:        Just-in-Time (JIT) debugger for MinGW
-
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://github.com/jrfonseca/%{name1}
 Source0:        https://github.com/jrfonseca/drmingw/archive/refs/tags/%{version}.tar.gz
-# use system instead of bundled zlib
 Patch0:         drmingw-unbundlezlib.patch
-
-BuildRequires:  make
-BuildRequires:  mingw32-filesystem
-BuildRequires:  mingw64-filesystem
-BuildRequires:  mingw32-gcc
-BuildRequires:  mingw64-gcc
-BuildRequires:  mingw32-gcc-c++
-BuildRequires:  mingw64-gcc-c++
-BuildRequires:  mingw32-binutils
-BuildRequires:  mingw64-binutils
-BuildRequires:  mingw32-libsigc++20
-BuildRequires:  mingw64-libsigc++20
-BuildRequires:  mingw32-glibmm24
-BuildRequires:  mingw64-glibmm24
-BuildRequires:  mingw32-wpcap
-BuildRequires:  mingw64-wpcap
-BuildRequires:  mingw32-zlib
-BuildRequires:  mingw64-zlib
-BuildRequires:  cmake
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  make
+BuildRequires:  mingw32-binutils
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc
+BuildRequires:  mingw32-gcc-c++
+BuildRequires:  mingw32-glibmm24
+BuildRequires:  mingw32-libsigc++20
+BuildRequires:  mingw32-wpcap
+BuildRequires:  mingw32-zlib
+BuildRequires:  mingw64-binutils
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc
+BuildRequires:  mingw64-gcc-c++
+BuildRequires:  mingw64-glibmm24
+BuildRequires:  mingw64-libsigc++20
+BuildRequires:  mingw64-wpcap
+BuildRequires:  mingw64-zlib
+# /oreon:deps
 %description
 Dr. Mingw is a Just-in-Time (JIT) debugger. When the application
 throws an unhandled exception, Dr. Mingw attaches itself to the
@@ -53,7 +47,6 @@ provided as DLLs so it can be embedded on your applications/tools.
 # Win32
 %package -n mingw32-%{name1}
 Summary:        Just-in-Time (JIT) debugger for MinGW
-
 %description -n mingw32-%{name1}
 Dr. Mingw is a Just-in-Time (JIT) debugger. When the application
 throws an unhandled exception, Dr. Mingw attaches itself to the
@@ -71,7 +64,6 @@ provided as DLLs so it can be embedded on your applications/tools.
 %package -n mingw32-%{name1}-devel
 Summary:        Development files for %{name}
 Requires:       mingw32-%{name1} = %{version}-%{release}
-
 %description -n mingw32-%{name1}-devel
 The mingw32-%{name1}-devel package contains libraries and header files for
 developing applications that use mingw32-%{name1}.
@@ -79,7 +71,6 @@ developing applications that use mingw32-%{name1}.
 # Win64
 %package -n mingw64-%{name1}
 Summary:        Just-in-Time (JIT) debugger for MinGW
-
 %description -n mingw64-%{name1}
 Dr. Mingw is a Just-in-Time (JIT) debugger. When the application
 throws an unhandled exception, Dr. Mingw attaches itself to the
@@ -97,7 +88,6 @@ provided as DLLs so it can be embedded on your applications/tools.
 %package -n mingw64-%{name1}-devel
 Summary:        Development files for %{name}
 Requires:       mingw64-%{name1} = %{version}-%{release}
-
 %description -n mingw64-%{name1}-devel
 The mingw64-%{name1}-devel package contains libraries and header files for
 developing applications that use mingw64-%{name1}.
@@ -105,16 +95,16 @@ developing applications that use mingw64-%{name1}.
 %{?mingw_debug_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name1}-%{version} -p1
 
 %build
-# TODO: Please submit an issue to upstream (rhbz#2380902)
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %{mingw_cmake}
 %{mingw_make} %{?_smp_mflags}
-
 %install
 install -d $RPM_BUILD_ROOT%{mingw32_bindir}
 install -d $RPM_BUILD_ROOT%{mingw32_libdir}
@@ -140,36 +130,14 @@ install -p build_win64/lib/libexchndl.a $RPM_BUILD_ROOT%{mingw64_libdir}
 install -p build_win64/lib/libmgwhelp.a $RPM_BUILD_ROOT%{mingw64_libdir}
 install -p include/exchndl.h $RPM_BUILD_ROOT%{mingw64_includedir}
 chmod a-x $RPM_BUILD_ROOT%{mingw64_libdir}/* $RPM_BUILD_ROOT%{mingw64_includedir}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-# Win32
-%files -n mingw32-%{name1}
-%license LICENSE.txt
-%doc README.md TODO.md
-%{mingw32_bindir}/addr2line.exe
-%{mingw32_bindir}/catchsegv.exe
-%{mingw32_bindir}/drmingw.exe
-%{mingw32_bindir}/exchndl.dll
-%{mingw32_bindir}/mgwhelp.dll
-
-%files -n mingw32-%{name1}-devel
-%{mingw32_libdir}/libexchndl.a
-%{mingw32_libdir}/libmgwhelp.a
-%{mingw32_includedir}/exchndl.h
-
-# Win64
-%files -n mingw64-%{name1}
-%license LICENSE.txt
-%doc README.md TODO.md
-%{mingw64_bindir}/addr2line.exe
-%{mingw64_bindir}/catchsegv.exe
-%{mingw64_bindir}/drmingw.exe
-%{mingw64_bindir}/exchndl.dll
-%{mingw64_bindir}/mgwhelp.dll
-
-%files -n mingw64-%{name1}-devel
-%{mingw64_libdir}/libexchndl.a
-%{mingw64_libdir}/libmgwhelp.a
-%{mingw64_includedir}/exchndl.h
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-drmingw -f %{oreon_filedir}/mingw32-drmingw.list
+%files -n mingw32-drmingw-devel -f %{oreon_filedir}/mingw32-drmingw-devel.list
+%files -n mingw64-drmingw -f %{oreon_filedir}/mingw64-drmingw.list
+%files -n mingw64-drmingw-devel -f %{oreon_filedir}/mingw64-drmingw-devel.list
 
 %changelog
+
 %autochangelog

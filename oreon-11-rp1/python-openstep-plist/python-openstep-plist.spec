@@ -1,33 +1,30 @@
 %global source0_hash 2a0d70ff7a03cce64a727062b64bb2f5c9af9fd4a636aaa4339b6aaa2cf65195
-
 Name:           python-openstep-plist
 Version:        0.5.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        ASCII plist parser written in Cython
-
-# The entire source is MIT, except vendor/msinttypes/stdint.h, which is
-# BSD-3-Clause, but which is removed in %%prep and does not contribute to the
-# licenses of the binary RPMs.
 License:        MIT
 SourceLicense:  %{license} AND BSD-3-Clause
 URL:            https://github.com/fonttools/openstep-plist
-Source:         %{pypi_source openstep_plist}
-
-
-BuildRequires:  gcc-c++
-
+Source0:        https://files.pythonhosted.org/packages/source/o/openstep_plist/openstep_plist-%{version}.tar.gz
 %global common_description %{expand:
 A parser for the "old style" OpenStep property list format (also known as ASCII
 plist), written in Cython.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython) >= 0.28.5
+BuildRequires:  python3dist(setuptools) < 72.2.0
+Requires:       python3-openstep-plist = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-openstep-plist
-Summary:        %{summary}
-
+Summary:        ASCII plist parser written in Cython
 %description -n python3-openstep-plist %{common_description}
 
 %prep
+
 %autosetup -p1
 # Remove Cythonized C++ sources:
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_using_cython
@@ -43,16 +40,19 @@ sed -r -i '1{/^#!/d}' src/openstep_plist/__main__.py
 rm -rv vendor/
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-openstep-plist usr/lib/python3*/site-packages/openstep_plist* usr/lib64/python3*/site-packages/openstep_plist* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/openstep_plist* usr/lib64/python3*/site-packages/openstep_plist* usr/bin/*
 
 %check
-%tox -e %{default_toxenv}-nocov -- -- -v
 
-%files -n python3-openstep-plist -f %{pyproject_files}
-%doc README.md
+%tox -e %{default_toxenv}-nocov -- -- -v
+%files
+%files -n python3-openstep-plist -f %{oreon_filedir}/python3-openstep-plist.list
 
 %changelog
+
 %autochangelog

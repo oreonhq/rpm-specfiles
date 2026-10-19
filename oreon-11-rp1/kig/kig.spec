@@ -1,116 +1,77 @@
 %global source0_hash e357e5e890bd95a1a44d0d5be8ba8eec8745e018dd4e5291f778b962d1f15ee0
-
 %global _python3_include %(%{__python3} -c "import sysconfig; print(sysconfig.get_path('include'))")
 %global _python3_lib %{_libdir}/libpython%{python3_version}.so
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    kig
-Summary: Interactive Geometry 
+Summary:        Interactive Geometry
 Version: 26.04.3
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: BSD-3-Clause AND GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-or-later
 URL:     https://invent.kde.org/education/%{name}
-
 %global kf5_dl_bug %(echo %{version} | cut -d. -f3)
 %if 0%{?kf5_dl_bug} >= 50
 %global kf5_dl_stable unstable
 %else
 %global kf5_dl_stable stable
 %endif
-
-Source0:        https://download.kde.org/%{kf5_dl_stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-## upstreamable patches
-
-## upstream patches
-
-BuildRequires: boost-devel
-BuildRequires: boost-python3
-BuildRequires: python3
-BuildRequires: python3-rpm-macros
-BuildRequires: python3-devel
-# Added below for https://bugzilla.redhat.com/show_bug.cgi?id=2154864
-BuildRequires: (python3-setuptools if python3-devel >= 3.12)
-
-BuildRequires: desktop-file-utils
-BuildRequires: gettext
-BuildRequires: libappstream-glib
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-
-BuildRequires: cmake(KF6Parts)
-BuildRequires: cmake(KF6DocTools)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6TextEditor)
-BuildRequires: cmake(KF6IconThemes)
-BuildRequires: cmake(KF6ConfigWidgets)
-BuildRequires: cmake(KF6Archive)
-BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KF6Crash)
-BuildRequires: cmake(KF6CoreAddons)
-
-BuildRequires: cmake(Qt6Svg)
-BuildRequires: cmake(Qt6PrintSupport)
-
-# when split occurred
+Source0:        https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 Conflicts: kdeedu-math < 4.7.0-10
-
+# oreon:deps
+BuildRequires:  (python3-setuptools if python3-devel >= 3.12)
+BuildRequires:  boost-devel
+BuildRequires:  boost-python3
+BuildRequires:  cmake(KF6Archive)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6Parts)
+BuildRequires:  cmake(KF6TextEditor)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(Qt6PrintSupport)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gettext
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  python3
+BuildRequires:  python3-devel
+BuildRequires:  python3-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 %py3_shebang_fix pykig/pykig.py
 
-
 %build
+
 %cmake_kf6 \
   -DPYTHON_EXECUTABLE:PATH=%{__python3} \
   -DPYTHON_INCLUDE_DIR=%{_python3_include} \
   -DPYTHON_LIBRARY=%{_python3_lib} \
   -DBoostPython_INCLUDE_DIRS="%{_python3_include};%{_includedir}/boost" \
-%if 0%{?fedora} || 0%{?rhel} >= 9
   -DBoostPython_LIBRARIES="%{_python3_lib};%{_libdir}/libboost_python%{python3_version_nodots}.so"
-%else
-  -DBoostPython_LIBRARIES="%{_python3_lib};%{_libdir}/libboost_python%{python3_version_nodots}.so"
-%endif
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html --with-man
-
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-
-
-%files -f %{name}.lang
-%license LICENSES/*
-%{_kf6_bindir}/%{name}*
-%{_kf6_bindir}/pykig.*
-%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-%{_kf6_datadir}/icons/hicolor/*/apps/%{name}.*
-%{_kf6_datadir}/icons/hicolor/*/mimetypes/application-x-%{name}.*
-%{_kf6_datadir}/%{name}/
-%{_kf6_plugindir}/parts/kigpart.so
-%{_kf6_datadir}/katepart5/syntax/python-kig.xml
-%{_kf6_datadir}/metainfo/org.kde.%{name}.metainfo.xml
-%{_mandir}/man1/kig.1*
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

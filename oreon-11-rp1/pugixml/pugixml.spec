@@ -1,5 +1,4 @@
-#global prerel rc
-
+%global source0_hash 357bcab8877dc9943f355d3a72daba1b053238ba955f50fa81586afb65090219
 Name:           pugixml
 Version:        1.16
 Release:        1%{?dist}
@@ -7,11 +6,11 @@ Summary:        A light-weight C++ XML processing library
 License:        MIT
 URL:            https://pugixml.org/
 VCS:            git:https://github.com/zeux/%{name}.git
-
-Source:         https://github.com/zeux/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  cmake gcc-c++
-
+Source0:        https://github.com/zeux/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+# /oreon:deps
 %description
 pugixml is a light-weight C++ XML processing library.
 It features:
@@ -22,11 +21,9 @@ It features:
 - Full Unicode support with Unicode interface variants and automatic encoding
   conversions
 
-
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files for package %{name}
 
@@ -34,44 +31,28 @@ Development files for package %{name}
 Summary:        Documentation for %{name}
 Requires:       %{name} = %{version}-%{release}
 BuildArch:      noarch
-
 %description doc
 Documentation for %{name}
 
-
 %prep
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake -DPUGIXML_BUILD_TESTS:BOOL=ON
 %cmake_build
-
-
 %install
 %cmake_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-
-%files
-%doc readme.txt
-%license LICENSE.md
-%{_libdir}/libpugixml.so.1*
-
-%files devel
-%{_libdir}/libpugixml.so
-%{_libdir}/cmake/pugixml/
-%{_libdir}/pkgconfig/pugixml.pc
-%{_includedir}/*.hpp
-
-%files doc
-%doc docs/*
-
+%files -f %{oreon_filedir}/main.list
+%files -n pugixml-devel -f %{oreon_filedir}/pugixml-devel.list
+%files -n pugixml-doc -f %{oreon_filedir}/pugixml-doc.list
 
 %changelog
+
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.15-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

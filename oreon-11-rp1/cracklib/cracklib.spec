@@ -1,32 +1,27 @@
+%global source1_hash 1d9dd4d8eed30520d83c0f331ac8ddad5b0c78b9fe8a4f456edbba7b6f871250
 %global source0_hash 877b823198eb29aa1778b16a70cad05f7b54b164b3bf7ab656fc326c393f4c85
-
-# Reflects the values hard-coded in various Makefile.am's in the source tree.
 %define dictdir %{_datadir}/cracklib
 %define dictpath %{dictdir}/pw_dict
-
-Summary: A password-checking library
+Summary:        A password-checking library
 Name: cracklib
 Version: 2.10.3
-Release: 1%{?dist}
+Release:        1%{?dist}
 URL: https://github.com/cracklib/cracklib
 License: LGPL-2.1-or-later
-
 Source0:        https://github.com/cracklib/cracklib/releases/download/v%{version}/cracklib-%{version}.tar.gz
 Source1:        https://github.com/cracklib/cracklib/releases/download/v%{version}/cracklib-words-%{version}.gz
-# From attachment to https://bugzilla.redhat.com/show_bug.cgi?id=627449
 Source2: cracklib.default.zh_CN.po
-# No upstream source; supplement for words missing from cracklib-words (from EL9 SRPM lineage)
 Source3: missing-words.gz
-
-
-BuildRequires: gcc
-BuildRequires: words, gettext
-BuildRequires: gettext-autopoint
-BuildRequires: zlib-devel
 Conflicts: cracklib-dicts < 2.8
-# The cracklib-format script calls gzip, but without a specific path.
 Requires: gzip
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  gettext-autopoint
+BuildRequires:  make
+BuildRequires:  words
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 CrackLib tests passwords to determine whether they match certain
 security-oriented characteristics, with the purpose of stopping users
@@ -48,7 +43,6 @@ CrackLib, you will also want to install the cracklib-dicts package.
 %package devel
 Summary: Development files needed for building applications which use cracklib
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The cracklib-devel package contains the header files and libraries needed
 for compiling applications which use cracklib.
@@ -58,7 +52,6 @@ Summary: The standard CrackLib dictionaries
 BuildRequires: words >= 2-13
 BuildRequires: make
 Requires: cracklib = %{version}-%{release}
-
 %description dicts
 The cracklib-dicts package includes the CrackLib dictionaries.
 CrackLib will need to use the dictionary appropriate to your system,
@@ -68,6 +61,7 @@ contains the utilities necessary for the creation of new dictionaries.
 If you are installing CrackLib, you should also install cracklib-dicts.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p 1 
 
@@ -82,14 +76,13 @@ done
 chmod +x util/cracklib-format
 
 %build
-# Use the dictionary from the build to test
+
 sed -i 's,util/cracklib-check <,util/cracklib-check $(DESTDIR)/$(DEFAULT_CRACKLIB_DICT) <,' Makefile.in
 %configure --with-pic \
  --without-python \
  --with-default-dict=%{dictpath} --disable-static
 make -C po update-gmo
 make
-
 %install
 %make_install 'pythondir=${pyexecdir}'
 ./util/cracklib-format cracklib-dicts/* | \
@@ -99,10 +92,7 @@ make
 rm -f %{buildroot}%{dictdir}/cracklib-small
 sed s,/usr/lib/cracklib_dict,%{dictpath},g lib/crack.h > %{buildroot}%{_includedir}/crack.h
 ln -s cracklib-format %{buildroot}%{_sbindir}/mkdict
-# packer link removed as it clashes with hashicorp's packer binary.
-#ln -s cracklib-packer %%{buildroot}/%%{_sbindir}/packer
 touch %{buildroot}/top
-
 toprelpath=..
 touch %{buildroot}/top
 while ! test -f %{buildroot}%{_libdir}/$toprelpath/top ; do
@@ -116,7 +106,6 @@ ln -s $toprelpath%{dictpath}.pwi %{buildroot}%{_libdir}/cracklib_dict.pwi
 fi
 rm -f %{buildroot}%{_libdir}/python*/site-packages/_cracklib*.*a
 rm -f %{buildroot}%{_libdir}/libcrack.la
-
 mkdir -p %{buildroot}%{_mandir}/man{3,8}
 install -p -m644 doc/*.3 %{buildroot}%{_mandir}/man3/
 install -p -m644 doc/*.8 %{buildroot}%{_mandir}/man8/
@@ -126,33 +115,19 @@ fi
 if ! test -s %{buildroot}%{_mandir}/man8/cracklib-unpacker.8 ; then
     echo .so man8/cracklib-format.8 > %{buildroot}%{_mandir}/man8/cracklib-unpacker.8
 fi
-
 %find_lang %{name}
+%oreon_autofiles cracklib-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles cracklib-dicts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test DESTDIR=%{buildroot}
-
 %ldconfig_scriptlets
-
-%files -f %{name}.lang
-%doc README README-WORDS NEWS README-LICENSE AUTHORS
-%license COPYING.LIB
-%{_libdir}/libcrack.so.*
-%dir %{_datadir}/cracklib
-%{_datadir}/cracklib/cracklib.magic
-%{_sbindir}/*cracklib*
-%{_mandir}/man8/*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/libcrack.so
-%{_mandir}/man3/*
-
-%files dicts
-%{_datadir}/cracklib/pw_dict.*
-%{_datadir}/cracklib/cracklib-small.*
-%{_libdir}/cracklib_dict.*
-%{_sbindir}/mkdict
+%files -f %{oreon_filedir}/main.list
+%files -n cracklib-devel -f %{oreon_filedir}/cracklib-devel.list
+%files -n cracklib-dicts -f %{oreon_filedir}/cracklib-dicts.list
 
 %changelog
+
 %autochangelog

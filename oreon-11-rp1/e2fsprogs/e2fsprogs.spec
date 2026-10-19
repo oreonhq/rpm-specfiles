@@ -1,35 +1,18 @@
+%global source1_hash ff826cf86828bf3ed8a7fcbe3e5c0c171f8ebfc5f46c43b27adc1ffc2c6a7b9c
 %global source0_hash fd5bf388cbdbe006a3d3b318d983b2948382440acc85a87f1e7d108653e8db0b
-
-Summary: Utilities for managing ext2, ext3, and ext4 file systems
+Summary:        Utilities for managing ext2, ext3, and ext4 file systems
 Name: e2fsprogs
 Version: 1.47.4
-Release: 1%{?dist}
-
-# License tags based on COPYING file distinctions for various components
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        1%{?dist}
 License: GPL-2.0-only
 Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
 Source1:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.sign
-# GPG key fetched from https://thunk.org/tytso/tytso-key.asc
-# which was linked from https://thunk.org/tytso/
-# Also verified fingerprint matches on https://www.kernel.org/doc/wot/tytso.html
-# note that the GPG key linked off his MIT page is likely old, and is *not* the
-# same as the above key ( http://web.mit.edu/tytso/www/home.html )
 Source2: tytso-key.asc
-
 Url: http://e2fsprogs.sourceforge.net/
 Requires: e2fsprogs-libs%{?_isa} = %{version}-%{release}
 Requires: libcom_err%{?_isa} = %{version}-%{release}
 Requires: libss = %{version}-%{release}
-
-# e4fsprogs was a parallel ext4-capable package in RHEL5.x
-%if 0%{?rhel} > 0
-Obsoletes: e4fsprogs < %{version}-%{release}
-Provides: e4fsprogs = %{version}-%{release}
-%endif
-
 %if "%{_sbindir}" == "%{_bindir}"
-# We rely on filesystem to create the compat symlinks for us
 Requires: filesystem(unmerged-sbin-symlinks)
 Provides: /usr/sbin/mke2fs
 Provides: /usr/sbin/fsck.ext2
@@ -39,22 +22,23 @@ Provides: /usr/sbin/mkfs.ext2
 Provides: /usr/sbin/mkfs.ext3
 Provides: /usr/sbin/mkfs.ext4
 %endif
-
-BuildRequires: pkgconfig, texinfo, libselinux-devel, gcc
-BuildRequires: fuse3-devel
-BuildRequires: libsepol-devel
-BuildRequires: libblkid-devel
-BuildRequires: libuuid-devel
-BuildRequires: gettext
-BuildRequires: multilib-rpm-config
-BuildRequires: systemd
-BuildRequires: make
-
-# For gpg verifying the source tarball
-BuildRequires: gnupg2 xz
-
 Patch 0:	0001-remove-local-PATH.patch
-
+# oreon:deps
+BuildRequires:  fuse3-devel
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  gnupg2
+BuildRequires:  libblkid-devel
+BuildRequires:  libselinux-devel
+BuildRequires:  libsepol-devel
+BuildRequires:  libuuid-devel
+BuildRequires:  make
+BuildRequires:  multilib-rpm-config
+BuildRequires:  pkgconfig
+BuildRequires:  systemd
+BuildRequires:  texinfo
+BuildRequires:  xz
+# /oreon:deps
 %description
 The e2fsprogs package contains a number of utilities for creating,
 checking, modifying, and correcting any inconsistencies in second,
@@ -74,7 +58,6 @@ performance of an ext2, ext3, or ext4 file system.
 Summary: Ext2/3/4 file system specific shared libraries
 License: GPL-2.0-only AND LGPL-2.0-only
 Requires: libcom_err%{?_isa} = %{version}-%{release}
-
 %description libs
 E2fsprogs-libs contains libe2p and libext2fs, the libraries of the
 e2fsprogs package.
@@ -85,7 +68,6 @@ from user space.
 %package static
 Summary: Ext2/3/4 file system specific static libraries
 License: GPL-2.0-only AND LGPL-2.0-only
-
 %description static
 E2fsprogs-static contains all static libraries built from e2fsprogs,
 including libext2fs, libcom_err, libe2p, and libss.
@@ -100,7 +82,6 @@ Requires: e2fsprogs-libs%{?_isa} = %{version}-%{release}
 Requires: libcom_err-devel%{?_isa} = %{version}-%{release}
 Requires: gawk
 Requires: pkgconfig
-
 %description devel
 E2fsprogs-devel contains the libraries and header files needed to
 develop second, third and fourth extended (ext2/ext3/ext4)
@@ -113,7 +94,6 @@ also want to install e2fsprogs.
 %package -n libcom_err
 Summary: Common error description library
 License: MIT
-
 %description -n libcom_err
 This is the common error description library, part of e2fsprogs.
 
@@ -124,7 +104,6 @@ Summary: Common error description library
 License: MIT
 Requires: libcom_err%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
-
 %description -n libcom_err-devel
 This is the common error description development library and headers,
 part of e2fsprogs.  It contains the compile_et command, used
@@ -137,7 +116,6 @@ libcom_err is an attempt to present a common error-handling mechanism.
 Summary: Command line interface parsing library
 License: MIT
 Requires: libcom_err%{?_isa} = %{version}-%{release}
-
 %description -n libss
 This is libss, a command line interface parsing library, part of e2fsprogs.
 
@@ -152,7 +130,6 @@ Summary: Command line interface parsing library
 License: MIT
 Requires: libss%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
-
 %description -n libss-devel
 This is the command line interface parsing (libss) development library
 and headers, part of e2fsprogs.  It contains the mk_cmds command, which
@@ -168,7 +145,6 @@ Requires: systemd
 Requires: util-linux
 Requires: lvm2
 Requires: e2fsprogs%{?_isa} = %{version}-%{release}
-
 %description -n e2scrub
 This package includes e2scrub script that can check ext[234] file system
 metadata consistency while the file system is online. It also containes a
@@ -180,6 +156,7 @@ which means that it can only be done on file systems that are on a lvm
 managed device with some free space available in respective volume group.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %setup -q
@@ -191,166 +168,43 @@ rm -rf tests/m_rootdir_acl
 %global _udevdir %{_prefix}/lib/udev/rules.d
 
 %build
+
 %configure CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" \
 	   --enable-elf-shlibs --enable-nls --disable-uuidd --disable-fsck \
 	   --disable-e2initrd-helper --disable-libblkid --disable-libuuid \
 	   --enable-quota --with-root-prefix=/usr --with-crond-dir=no
 %make_build
-
 %install
 rm -rf %{buildroot}
 export PATH=/sbin:$PATH
 %make_install install-libs \
 	root_sbindir=%{_sbindir} root_libdir=%{_libdir}
-
-# Replace arch-dependent header file with arch-independent stub (when needed).
 %multilib_fix_c_header --file %{_includedir}/ext2fs/ext2_types.h
-
-# Hack for now, otherwise strip fails.
 chmod +w %{buildroot}%{_libdir}/*.a
-
 %find_lang %{name}
+%oreon_autofiles libcom_err usr/*/lib*.so.*
+%oreon_autofiles libcom_err-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles libss usr/*/lib*.so.*
+%oreon_autofiles libss-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles e2scrub usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make PRINT_FAILED=yes fullcheck
-
 %ldconfig_scriptlets libs
-
 %ldconfig_scriptlets -n libcom_err
-
 %ldconfig_scriptlets -n libss
-
-%files -f %{name}.lang
-%doc README
-%{!?_licensedir:%global license %%doc}
-
-%config(noreplace) %{_sysconfdir}/mke2fs.conf
-
-%{_sbindir}/badblocks
-%{_sbindir}/debugfs
-%{_sbindir}/dumpe2fs
-%{_sbindir}/e2fsck
-%{_sbindir}/e2image
-%{_sbindir}/e2label
-%{_sbindir}/e2mmpstatus
-%{_sbindir}/e2undo
-%{_sbindir}/e4crypt
-%{_sbindir}/fsck.ext2
-%{_sbindir}/fsck.ext3
-%{_sbindir}/fsck.ext4
-%{_sbindir}/logsave
-%{_sbindir}/mke2fs
-%{_sbindir}/mkfs.ext2
-%{_sbindir}/mkfs.ext3
-%{_sbindir}/mkfs.ext4
-%{_sbindir}/resize2fs
-%{_sbindir}/tune2fs
-%{_sbindir}/filefrag
-%{_sbindir}/e2freefrag
-%{_sbindir}/e4defrag
-%{_sbindir}/mklost+found
-
-%{_bindir}/chattr
-%{_bindir}/lsattr
-%{_bindir}/fuse2fs
-%{_mandir}/man1/chattr.1*
-%{_mandir}/man1/fuse2fs.1*
-%{_mandir}/man1/lsattr.1*
-
-%{_mandir}/man5/ext2.5*
-%{_mandir}/man5/ext3.5*
-%{_mandir}/man5/ext4.5*
-%{_mandir}/man5/e2fsck.conf.5*
-%{_mandir}/man5/mke2fs.conf.5*
-
-%{_mandir}/man8/badblocks.8*
-%{_mandir}/man8/debugfs.8*
-%{_mandir}/man8/dumpe2fs.8*
-%{_mandir}/man8/e2fsck.8*
-%{_mandir}/man8/e4crypt.8*
-%{_mandir}/man8/filefrag.8*
-%{_mandir}/man8/e2freefrag.8*
-%{_mandir}/man8/e4defrag.8*
-%{_mandir}/man8/fsck.ext2.8*
-%{_mandir}/man8/fsck.ext3.8*
-%{_mandir}/man8/fsck.ext4.8*
-%{_mandir}/man8/e2image.8*
-%{_mandir}/man8/e2label.8*
-%{_mandir}/man8/e2mmpstatus.8*
-%{_mandir}/man8/e2undo.8*
-%{_mandir}/man8/logsave.8*
-%{_mandir}/man8/mke2fs.8*
-%{_mandir}/man8/mkfs.ext2.8*
-%{_mandir}/man8/mkfs.ext3.8*
-%{_mandir}/man8/mkfs.ext4.8*
-%{_mandir}/man8/mklost+found.8*
-%{_mandir}/man8/resize2fs.8*
-%{_mandir}/man8/tune2fs.8*
-
-%{_udevrulesdir}/64-ext4.rules
-
-%files libs
-%{!?_licensedir:%global license %%doc}
-%license NOTICE
-%{_libdir}/libe2p.so.*
-%{_libdir}/libext2fs.so.*
-
-%files static
-%{!?_licensedir:%global license %%doc}
-%license NOTICE
-%{_libdir}/*.a
-
-%files devel
-%{_infodir}/libext2fs.info*
-%{_libdir}/libe2p.so
-%{_libdir}/libext2fs.so
-%{_libdir}/pkgconfig/e2p.pc
-%{_libdir}/pkgconfig/ext2fs.pc
-
-%{_includedir}/e2p
-%{_includedir}/ext2fs
-
-%files -n libcom_err
-%{!?_licensedir:%global license %%doc}
-%license NOTICE
-%{_libdir}/libcom_err.so.*
-
-%files -n libcom_err-devel
-%{_bindir}/compile_et
-%{_libdir}/libcom_err.so
-%{_datadir}/et
-%{_includedir}/et
-%{_includedir}/com_err.h
-%{_mandir}/man1/compile_et.1*
-%{_mandir}/man3/com_err.3*
-%{_libdir}/pkgconfig/com_err.pc
-
-%files -n libss
-%{!?_licensedir:%global license %%doc}
-%license NOTICE
-%{_libdir}/libss.so.*
-
-%files -n libss-devel
-%{_bindir}/mk_cmds
-%{_libdir}/libss.so
-%{_datadir}/ss
-%{_includedir}/ss
-%{_mandir}/man1/mk_cmds.1*
-%{_libdir}/pkgconfig/ss.pc
-
-%files -n e2scrub
-%config(noreplace) %{_sysconfdir}/e2scrub.conf
-%{_sbindir}/e2scrub
-%{_sbindir}/e2scrub_all
-%{_mandir}/man8/e2scrub.8*
-%{_mandir}/man8/e2scrub_all.8*
-%{_libexecdir}/e2fsprogs/e2scrub_fail
-%{_unitdir}/e2scrub@.service
-%{_unitdir}/e2scrub_all.service
-%{_unitdir}/e2scrub_all.timer
-%{_unitdir}/e2scrub_fail@.service
-%{_unitdir}/e2scrub_reap.service
-%{_udevdir}/96-e2scrub.rules
+%files -f %{oreon_filedir}/main.list
+%files -n e2fsprogs-libs -f %{oreon_filedir}/e2fsprogs-libs.list
+%files -n e2fsprogs-static -f %{oreon_filedir}/e2fsprogs-static.list
+%files -n e2fsprogs-devel -f %{oreon_filedir}/e2fsprogs-devel.list
+%files -n libcom_err -f %{oreon_filedir}/libcom_err.list
+%files -n libcom_err-devel -f %{oreon_filedir}/libcom_err-devel.list
+%files -n libss -f %{oreon_filedir}/libss.list
+%files -n libss-devel -f %{oreon_filedir}/libss-devel.list
+%files -n e2scrub -f %{oreon_filedir}/e2scrub.list
 
 %changelog
+
 %autochangelog

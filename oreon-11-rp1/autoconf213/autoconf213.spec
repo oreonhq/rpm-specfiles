@@ -1,13 +1,11 @@
-%global source0_hash none
-
-Summary:    A GNU tool for automatically configuring source code
+%global source0_hash f0611136bee505811e9ca11ca7ac188ef5323a8e2ef19cffd3edb3cf08fd791e
+Summary:        A GNU tool for automatically configuring source code
 Name:       autoconf213
 Version:    2.13
-Release:    60%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License:    GPL-2.0-or-later
 URL:        http://www.gnu.org/software/autoconf/
-Source:        https://mirrors.kernel.org/gnu/autoconf/autoconf-%{version}.tar.gz
+Source0:        https://mirrors.kernel.org/gnu/autoconf/autoconf-%{version}.tar.gz
 Patch0:     autoconf-2.12-race.patch
 Patch1:     autoconf-2.13-mawk.patch
 Patch2:     autoconf-2.13-notmp.patch
@@ -21,10 +19,16 @@ Patch10:    autoconf213-destdir.patch
 Patch11:    autoconf213-info.patch
 Patch12:    autoconf213-testsuite.patch
 Requires:   gawk, m4 >= 1.1, coreutils
-Buildrequires:   texinfo, m4 >= 1.1, perl, gawk, dejagnu, flex
-BuildRequires: make
 BuildArch:  noarch
-
+# oreon:deps
+BuildRequires:  dejagnu
+BuildRequires:  flex
+BuildRequires:  gawk
+BuildRequires:  m4
+BuildRequires:  make
+BuildRequires:  perl
+BuildRequires:  texinfo
+# /oreon:deps
 %description
 GNU's Autoconf is a tool for configuring source code and Makefiles.
 Using Autoconf, programmers can create portable and configurable
@@ -42,6 +46,7 @@ Autoconf is only required for the generation of the scripts, not their
 use.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n autoconf-%{version}
 %patch -P0 -p1
@@ -60,25 +65,18 @@ mv autoconf.texi autoconf213.texi
 rm -f autoconf.info
 
 %build
+
 %configure --program-suffix=-%{version}
 make
-
 %install
 rm -rf ${RPM_BUILD_ROOT}
-#makeinstall
 make install DESTDIR=$RPM_BUILD_ROOT
-
 rm ${RPM_BUILD_ROOT}/%{_bindir}/autoscan-%{version}
-
-# We don't want to include the standards.info stuff in the package,
-# because it comes from binutils...
 rm -f ${RPM_BUILD_ROOT}%{_infodir}/standards*
+%oreon_autofiles main
 
 %check
-# autoconf expects a compiler that supports C89-only features.  The
-# test suite necessarily ignores the CC variable, so put wrapper
-# scripts in front of PATH.  Rewrite the c89 wrapper script so that it
-# invokes /usr/bin/gcc, to avoid an infinite loop.
+
 mkdir compiler-overrides
 PATH="`pwd`/compiler-overrides:$PATH"
 sed 's,^exec gcc,exec %{_bindir}/gcc,' < %{_bindir}/c89 \
@@ -88,13 +86,9 @@ ln -s c89 compiler-overrides/cc
 ln -s c89 compiler-overrides/gcc
 ls -l compiler-overrides/
 make check
-
-%files
-%{_bindir}/*
-%{_infodir}/*.info*
-%{_datadir}/autoconf-%{version}/
-%doc AUTHORS COPYING NEWS README TODO
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.13-60
 - Import

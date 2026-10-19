@@ -1,56 +1,45 @@
 %global source0_hash 6bbd5ee155f1958f0dab37a756b2175dc3debb2013c7d76115f4b062c431eb1f
-
 %global bouncycastleJdk 18
 %global bouncycastleVer 1.86
-
 Epoch:          1
 Name:           apache-sshd
 Version:        2.20.0
 Release:        1%{?dist}
 Summary:        Apache SSHD
-
-# One file has ISC licensing:
-#   sshd-common/src/main/java/org/apache/sshd/common/config/keys/loader/openssh/kdf/BCrypt.java
-# Automatically converted from old format: ASL 2.0 and ISC - review is highly recommended.
 License:        Apache-2.0 AND ISC
 URL:            http://mina.apache.org/sshd-project
-
 Source0:        https://archive.apache.org/dist/mina/sshd/%{version}/apache-sshd-%{version}-src.tar.gz
-
-
-# Avoid optional dep on tomcat native APR library
 Patch0:         0001-Avoid-optional-dependency-on-native-tomcat-APR-libra.patch
-
+BuildArch:      noarch
+ExclusiveArch:  %{java_arches} noarch
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(net.i2p.crypto:eddsa)
-BuildRequires:  mvn(org.apache:apache:pom:)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.maven:maven-archiver)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-clean-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
-BuildRequires:  mvn(org.bouncycastle:bcpg-jdk%{bouncycastleJdk}on)
-BuildRequires:  mvn(org.bouncycastle:bcpkix-jdk%{bouncycastleJdk}on)
+BuildRequires:  mvn(org.apache.maven:maven-archiver)
+BuildRequires:  mvn(org.apache:apache:pom:)
+BuildRequires:  mvn(org.bouncycastle:bcpg-jdk18on)
+BuildRequires:  mvn(org.bouncycastle:bcpkix-jdk18on)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-archiver)
 BuildRequires:  mvn(org.slf4j:jcl-over-slf4j)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-
-BuildArch:      noarch
-ExclusiveArch:  %{java_arches} noarch
-
+# /oreon:deps
 %description
 Apache SSHD is a 100% pure java library to support the SSH protocols on both
 the client and server side.
 
 %package        javadoc
 Summary:        API documentation for %{name}
-
 %description    javadoc
 This package provides %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -91,18 +80,16 @@ rm -rv sshd-core/src/main/java/org/apache/sshd/agent/unix
 sed "s;<bouncycastle.version>.*;<bouncycastle.version>%{bouncycastleVer}</bouncycastle.version>;g" -i pom.xml
 
 %build
-# Can't run tests, they require ch.ethz.ganymed:ganymed-ssh2
-%mvn_build -f -- -Dworkspace.root.dir=$(pwd)
 
+%mvn_build -f -- -Dworkspace.root.dir=$(pwd)
 %install
 %mvn_install
+%oreon_autofiles apache-sshd-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc CHANGES.md
-%license LICENSE.txt NOTICE.txt assembly/src/main/legal/licenses/jbcrypt.txt
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE.txt NOTICE.txt assembly/src/main/legal/licenses/jbcrypt.txt
+%files -f %{oreon_filedir}/main.list
+%files -n apache-sshd-javadoc -f %{oreon_filedir}/apache-sshd-javadoc.list
 
 %changelog
+
 %autochangelog

@@ -1,75 +1,61 @@
 %global source0_hash 8acf6eaa0fa5ffacd8f296d942a2bd4a9ac07964fa8d69fd00b5db072c1d7023
-
 %global stable_kf6 stable
-
-
 Name:          plasma-camera
 Version: 26.08.0
-Release: 1%{?dist}
+Release:        1%{?dist}
 License:       BSD-3-Clause AND GPL-2.0-or-later AND CC0-1.0 AND GPL-3.0-or-later
-Summary:       Camera application for Plasma Mobile
+Summary:        Camera application for Plasma Mobile
 URL:           https://invent.kde.org/plasma-mobile/plasma-camera
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-# libcamera does not currently build on these architectures
 ExcludeArch: s390x ppc64le
-
-BuildRequires: extra-cmake-modules
-BuildRequires: gcc-c++
-BuildRequires: kf6-rpm-macros
-BuildRequires: desktop-file-utils
-BuildRequires: libappstream-glib
-
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Quick)
-BuildRequires: cmake(Qt6Test)
-BuildRequires: cmake(Qt6Gui)
-BuildRequires: cmake(Qt6Svg)
-BuildRequires: cmake(Qt6QuickControls2)
-BuildRequires: cmake(Qt6Widgets)
-BuildRequires: cmake(Qt6Sensors)
-BuildRequires: cmake(Qt6Multimedia)
-
-BuildRequires: cmake(KF6Kirigami)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6Config)
-
-BuildRequires: pkgconfig(libcamera)
-BuildRequires: pkgconfig(exiv2)
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6Kirigami)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Multimedia)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6QuickControls2)
+BuildRequires:  cmake(Qt6Sensors)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(exiv2)
+BuildRequires:  pkgconfig(libcamera)
+# /oreon:deps
 %description
 %{summary}.
 It supports different resolutions, different white balance modes and
 switching between different camera devices.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{version}
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang %{name} --with-man --with-qt --all-name
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.plasma.camera.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
-
-%files -f %{name}.lang
-%license LICENSES/*
-%{_bindir}/plasma-camera
-%{_kf6_datadir}/applications/org.kde.plasma.camera.desktop
-%{_metainfodir}/org.kde.plasma.camera.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 26.08.0-1
 - Latest upstream release
 

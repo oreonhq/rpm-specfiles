@@ -1,27 +1,25 @@
 %global source0_hash 656966868b7146c4776a0c051ab6385517bf753fa7e3463a95775c0b526c2afc
-
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
-
-Summary: ModSecurity Core Ruleset
+Summary:        ModSecurity Core Ruleset
 Name: mod_security_crs
 Version: 4.15.0
-Release: 3%{?dist}
+Release:        1%{?dist}
 License: Apache-2.0
 URL: https://coreruleset.org/
-Source:        https://github.com/coreruleset/coreruleset/archive/refs/tags/v%{version}.tar.gz#/mod_security_crs-4.15.0.tar.gz
+Source0:        https://github.com/coreruleset/coreruleset/archive/refs/tags/v%{version}.tar.gz#/mod_security_crs-4.15.0.tar.gz
 BuildArch: noarch
 Requires: mod_security >= 2.9.6
 Obsoletes: mod_security_crs-extras < 3.0.0
+# oreon:deps
 
-# Patch0: mod_security_crs-XXX.patch
-
+# /oreon:deps
 %description
 This package provides the base rules for mod_security.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -S gendiff -n coreruleset-%{version}
-
+%global oreon_srcdir coreruleset-%{version}
+%oreon_prep
 %build
 
 %install
@@ -30,18 +28,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{__install} -d %{buildroot}%{_sysconfdir}/httpd/modsecurity.d/plugins
 %{__install} -d %{buildroot}%{_datarootdir}/mod_modsecurity_crs/rules
 %{__install} -d %{buildroot}%{_datarootdir}/mod_modsecurity_crs/plugins
-
 %{__mv} rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf.example %{buildroot}%{_sysconfdir}/httpd/modsecurity.d/activated_rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
 %{__mv} rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf.example %{buildroot}%{_sysconfdir}/httpd/modsecurity.d/activated_rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
-
 %{__install} -m0644 rules/*.conf %{buildroot}%{_datarootdir}/mod_modsecurity_crs/rules/
 %{__install} -m0644 rules/*.data %{buildroot}%{_datarootdir}/mod_modsecurity_crs/rules/
 %{__install} -m0644 plugins/* %{buildroot}%{_sysconfdir}/httpd/modsecurity.d/plugins/
 %{__mv} crs-setup.conf.example %{buildroot}%{_sysconfdir}/httpd/modsecurity.d/crs-setup.conf
+%oreon_autofiles main
 
 %post
+
 if [ $1 == 1 ]; then
-     # activate base_rules
      for f in `ls %{_datarootdir}/mod_modsecurity_crs/rules/` ; do 
          %{__ln_s} %{_datarootdir}/mod_modsecurity_crs/rules/$f %{_sysconfdir}/httpd/modsecurity.d/activated_rules/$f; 
      done
@@ -51,8 +48,8 @@ if [ $1 == 1 ]; then
      %{__sed} -i '/Include modsecurity\.d\/local_rules\/\*\.conf/a\    Include modsecurity.d\/plugins\/*-after.conf' %{_httpd_confdir}/mod_security.conf
 fi
 exit 0
-
 %preun
+
 if [ $1 == 0 ]; then
      %{__sed} -i -E '/Include(Optional)? modsecurity\.d\/plugins/d' %{_httpd_confdir}/mod_security.conf
      for f in `ls %{_datarootdir}/mod_modsecurity_crs/rules/` ; do 
@@ -60,16 +57,9 @@ if [ $1 == 0 ]; then
      done
 fi
 exit 0
-
-%files
-%license LICENSE
-%doc CHANGES.md README.md
-%{_datarootdir}/mod_modsecurity_crs
-%{_sysconfdir}/httpd/modsecurity.d/plugins
-%config(noreplace) %{_sysconfdir}/httpd/modsecurity.d/activated_rules/*
-%config(noreplace) %{_sysconfdir}/httpd/modsecurity.d/crs-setup.conf
-%config(noreplace) %{_sysconfdir}/httpd/modsecurity.d/plugins/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.15.0-3
 - Prepare for Oreon 11 (RP1)

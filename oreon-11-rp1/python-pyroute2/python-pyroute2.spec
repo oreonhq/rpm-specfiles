@@ -1,67 +1,69 @@
-%global source0_hash none
-
+%global source0_hash 6bc5e2ea9a372ded682b4ede4028ba00236bd6e35b42d833f39a96b219ef1db2
 Name:           python-pyroute2
 Version:        0.9.6
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python Netlink library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later OR Apache-2.0
 URL:            https://github.com/svinota/pyroute2
-Source:         %{pypi_source pyroute2}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyroute2/pyroute2-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-pyroute2 = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pyroute2+dev
+Summary:        Metapackage for python3-pyroute2 dev extras
+Requires:       python3-pyroute2 = %{version}-%{release}
+Requires:       python3dist(pytest-asyncio) == 0.26.0
+Provides:       python3dist(pyroute2[dev]) = %{version}-%{release}
 
+%description -n python3-pyroute2+dev
+Metapackage for python3-pyroute2 dev extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyroute2' generated automatically by pyp2spec.}
+%package -n       python3-pyroute2+docs
+Summary:        Metapackage for python3-pyroute2 docs extras
+Requires:       python3-pyroute2 = %{version}-%{release}
+Requires:       python3dist(pytest-asyncio) == 0.26.0
+Provides:       python3dist(pyroute2[docs]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-pyroute2+docs
+Metapackage for python3-pyroute2 docs extras.
+
+%package -n       python3-pyroute2+repo
+Summary:        Metapackage for python3-pyroute2 repo extras
+Requires:       python3-pyroute2 = %{version}-%{release}
+Provides:       python3dist(pyroute2[repo]) = %{version}-%{release}
+
+%description -n python3-pyroute2+repo
+Metapackage for python3-pyroute2 repo extras.
+
+%description
 
 %package -n     python3-pyroute2
-Summary:        %{summary}
-
-%description -n python3-pyroute2 %_description
+Summary:        Python Netlink library
+%description -n python3-pyroute2
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pyroute2 dev,docs,repo
-
 
 %prep
-%autosetup -p1 -n pyroute2-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyroute2-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyroute2 usr/lib/python3*/site-packages/pyroute2* usr/lib64/python3*/site-packages/pyroute2* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyroute2* usr/lib64/python3*/site-packages/pyroute2* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyroute2 -f %{pyproject_files}
-%{_bindir}/dhcp-server-detector
-%{_bindir}/pyroute2-decoder
-%{_bindir}/pyroute2-dhcp-client
-%{_bindir}/pyroute2-test-platform
-%{_bindir}/ss2
+%files
+%files -n python3-pyroute2 -f %{oreon_filedir}/python3-pyroute2.list
 
 %changelog
+
 %autochangelog

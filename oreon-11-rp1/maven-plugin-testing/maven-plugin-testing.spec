@@ -1,5 +1,4 @@
 %global source0_hash 9dbcd4e71090416b5cf3d038faa2d8e830eaef34ee14a2bc6d5d69f56ab8856d
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,64 +82,46 @@ end
 %bcond_with bootstrap
 Name:           maven-plugin-testing
 Version:        3.5.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven Plugin Testing
 License:        Apache-2.0
 URL:            https://maven.apache.org/plugin-testing/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugin-testing/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
-# From upstream commit 43b8eaaf
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(commons-io:commons-io)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.maven:maven-aether-provider)
-BuildRequires:  mvn(org.apache.maven:maven-compat)
-BuildRequires:  mvn(org.apache.maven:maven-core)
-BuildRequires:  mvn(org.apache.maven:maven-model)
-BuildRequires:  mvn(org.apache.maven:maven-parent:pom:)
-BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-archiver)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 3.5.1-55
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 The Maven Plugin Testing contains the necessary modules
 to be able to test Maven Plugins.
 
 %package harness
 Summary:        Maven Plugin Testing Mechanism
-
 %description harness
 The Maven Plugin Testing Harness provides mechanisms to manage tests on Mojo.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
-
-
-
 
 %mvn_alias : org.apache.maven.shared:
 
 %build
-%mvn_build -j -s -- -Dmaven.compiler.target=8
 
+%mvn_build -j -s -- -Dmaven.compiler.target=8
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles-%{name}
-%license LICENSE NOTICE
-
-%files harness -f .mfiles-%{name}-harness
+%files -f %{oreon_filedir}/main.list
+%files -n maven-plugin-testing-harness -f %{oreon_filedir}/maven-plugin-testing-harness.list
 
 %changelog
+
 %autochangelog

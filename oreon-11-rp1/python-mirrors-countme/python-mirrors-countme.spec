@@ -1,61 +1,40 @@
-%global source0_hash none
-
+%global source0_hash f2a01c8c3009ec635476af431991f6c1c785d6a5f53eb1da2f3646f455cc89a6
 Name:           python-mirrors-countme
 Version:        0.1.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Parse access logs and count hosts for DNF mirrors
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-3.0-or-later
 URL:            http://github.com/fedora-infra/mirrors-countme
-Source:         %{pypi_source mirrors_countme}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mirrors_countme/mirrors_countme-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mirrors-countme' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-mirrors-countme = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-mirrors-countme
-Summary:        %{summary}
-
-%description -n python3-mirrors-countme %_description
-
+Summary:        Parse access logs and count hosts for DNF mirrors
+%description -n python3-mirrors-countme
 
 %prep
-%autosetup -p1 -n mirrors_countme-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mirrors_countme-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mirrors-countme usr/lib/python3*/site-packages/mirrors_countme* usr/lib64/python3*/site-packages/mirrors_countme* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mirrors_countme* usr/lib64/python3*/site-packages/mirrors_countme* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mirrors-countme -f %{pyproject_files}
-%{_bindir}/countme-delete-totals
-%{_bindir}/countme-parse-access-log
-%{_bindir}/countme-totals
-%{_bindir}/countme-trim-raw
+%files
+%files -n python3-mirrors-countme -f %{oreon_filedir}/python3-mirrors-countme.list
 
 %changelog
+
 %autochangelog

@@ -1,30 +1,25 @@
-%global source0_hash a6377cfe47cbdc69db1e009e0f788e437e7ab53845a00b336864d2e77d687682
-
+%global source2_hash e4978c5484d0d1ce5c218d11ba2acc304e4c5b3116078e1cd262e694baf3bedc
+%global source0_hash 5f07a947b0e7d4d83e3663717028b201707ed264afb6fb19f5ebf9b16c21eadc
 Name:           kefir
 Version:        0.5.1
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        An implementation of C17 language compiler from scratch
-
-# Entire project is under GPL-3.0-only
-# Runtime components are under BSD-3-Clause
 License:        GPL-3.0-only AND BSD-3-Clause
 URL:            https://kefir.protopopov.lv
-Source0:        %{url}/releases/kefir-%{version}.tar.gz
+Source0:        https://%{name}.protopopov.lv/releases/%{name}-%{version}.tar.gz
 Source1:        %{url}/releases/kefir-%{version}.tar.gz.asc
 Source2:        https://www.protopopov.lv/static/files/jprotopopov.gpg 
-
+ExclusiveArch:  x86_64
+# oreon:deps
 BuildRequires:  binutils
 BuildRequires:  gcc
 BuildRequires:  gnupg2
 BuildRequires:  groff
+BuildRequires:  libatomic
 BuildRequires:  m4
 BuildRequires:  make
 BuildRequires:  mandoc
-# Needed for tests
-BuildRequires:  libatomic
-# Only compiles for x86_64
-ExclusiveArch:  x86_64
-
+# /oreon:deps
 %description
 an implementation of C17 language compiler from scratch. No existing open
 source compiler infrastructure is being reused. The main priority is
@@ -44,12 +39,14 @@ information in DWARF5 format for GNU As. Position-independent code generation
 is supported. Kefir features cc-compatible command line interface.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -c -n %{name}-%{version}
 
 %build
+
 LC_ALL=C.UTF-8 %make_build all \
     PROFILE=reldebug \
     CC=gcc \
@@ -57,34 +54,19 @@ LC_ALL=C.UTF-8 %make_build all \
     prefix=%{_prefix} \
     libdir=%{_libdir} \
     sysconfdir=%{_sysconfdir}
-
 %install
 %make_install \
     prefix=%{_prefix} \
     libdir=%{_libdir} \
     sysconfdir=%{_sysconfdir}
-
 rm -fr %{buildroot}%{_datadir}/licenses
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%license COPYING
-%doc CHANGELOG
-%doc README.md
-%{_bindir}/kefir
-%{_bindir}/kefir-cc
-%{_bindir}/kefir-cc1
-%{_bindir}/kefir-detect-host-env
-%{_mandir}/man1/kefir.1.*
-%{_mandir}/man1/kefir-cc1.1.*
-%{_mandir}/man1/kefir-detect-host-env.1.*
-%{_sysconfdir}/kefir.local
-%{_includedir}/kefir
-%{_libdir}/libkefir.so
-%{_libdir}/libkefir.so.0.0
-%{_libdir}/libkefir.a
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

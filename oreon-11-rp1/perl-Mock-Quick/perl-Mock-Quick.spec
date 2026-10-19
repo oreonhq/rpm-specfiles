@@ -1,34 +1,29 @@
 %global source0_hash ff786008bf8c022064ececd3b7ed89c76b35e8d1eac6cf472a9f51771c1c9f2c
-
 Name:		perl-Mock-Quick
 Version:	1.111
-Release:	27%{?dist}
-Summary:	Quickly mock objects and classes, side-effect free
+Release:        1%{?dist}
+Summary:        Quickly mock objects and classes, side-effect free
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Mock-Quick
-Source0:	http://cpan.metacpan.org/authors/id/E/EX/EXODIST/Mock-Quick-%{version}.tar.gz
+Source0:        http://cpan.metacpan.org/authors/id/E/EX/EXODIST/Mock-Quick-%{version}.tar.gz
 BuildArch:	noarch
-# Module Build
-BuildRequires:	coreutils
-BuildRequires:	perl-generators
-BuildRequires:	perl-interpreter
-BuildRequires:	perl(Module::Build) >= 0.42
-# Module Runtime
-BuildRequires:	perl(base)
-BuildRequires:	perl(Carp)
-BuildRequires:	perl(Exporter)
-BuildRequires:	perl(Exporter::Declare) >= 0.103
-BuildRequires:	perl(Scalar::Util)
-BuildRequires:	perl(strict)
-BuildRequires:	perl(warnings)
-# Test Suite
-BuildRequires:	perl(Fennec::Lite) >= 0.004
-BuildRequires:	perl(Path::Class)
-BuildRequires:	perl(Test::Exception) >= 0.29
-BuildRequires:	perl(Test::More) >= 0.88
-# Dependencies
-# (none)
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Exporter)
+BuildRequires:  perl(Exporter::Declare)
+BuildRequires:  perl(Fennec::Lite)
+BuildRequires:  perl(Module::Build)
+BuildRequires:  perl(Path::Class)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(Test::Exception)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(base)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Mock-Quick is here to solve the current problems with Mocking libraries.
 
@@ -50,32 +45,25 @@ original class methods. Best of all, this is a localized tool: when your
 control object falls out of scope, the original class is restored.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Mock-Quick-%{version}
 
 %build
+
 perl Build.PL --installdirs=vendor
 ./Build
-
 %install
 ./Build install --destdir=%{buildroot} --create_packlist=0
 %{_fixperms} -c %{buildroot}
+%oreon_autofiles main
 
 %check
-./Build test
 
-%files
-%doc Changes README
-%{perl_vendorlib}/Mock/
-%{perl_vendorlib}/Object/
-%{_mandir}/man3/Mock::Quick.3*
-%{_mandir}/man3/Mock::Quick::Class.3*
-%{_mandir}/man3/Mock::Quick::Method.3*
-%{_mandir}/man3/Mock::Quick::Object.3*
-%{_mandir}/man3/Mock::Quick::Object::Control.3*
-%{_mandir}/man3/Mock::Quick::Util.3*
-%{_mandir}/man3/Object::Quick.3*
+./Build test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

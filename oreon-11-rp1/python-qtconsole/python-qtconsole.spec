@@ -1,61 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 27b485b9161925924c1d8e78e66bb342e6e3bc49bf675d0a67b49bad9c291521
 Name:           python-qtconsole
 Version:        5.7.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Jupyter Qt console
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            http://jupyter.org
-Source:         %{pypi_source qtconsole}
-
+Source0:        https://files.pythonhosted.org/packages/source/q/qtconsole/qtconsole-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'qtconsole' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-qtconsole = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-qtconsole
-Summary:        %{summary}
-
-%description -n python3-qtconsole %_description
+Summary:        Jupyter Qt console
+%description -n python3-qtconsole
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-qtconsole doc,test
-
 
 %prep
-%autosetup -p1 -n qtconsole-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir qtconsole-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-qtconsole usr/lib/python3*/site-packages/qtconsole* usr/lib64/python3*/site-packages/qtconsole* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/qtconsole* usr/lib64/python3*/site-packages/qtconsole* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-qtconsole -f %{pyproject_files}
+%files
+%files -n python3-qtconsole -f %{oreon_filedir}/python3-qtconsole.list
 
 %changelog
+
 %autochangelog

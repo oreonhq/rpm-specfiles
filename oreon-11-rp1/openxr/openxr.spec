@@ -1,8 +1,6 @@
 %global source0_hash a3b97a36f11abe256a7ea1668a0a468aac9b738e94bea6b468f0ae31ad537a46
-
 %global         pkgname        OpenXR-SDK-Source
 %global         libmajor 1
-
 Name:           openxr
 Version:        1.1.63
 Release:        1%{?dist}
@@ -10,49 +8,47 @@ Summary:        Cross-platform VR/AR runtime and API
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/%{pkgname}
 Source0:        https://github.com/KhronosGroup/%{pkgname}/archive/refs/tags/release-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(egl)
-BuildRequires:  pkgconfig(glslang)
 BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(glslang)
 BuildRequires:  pkgconfig(glu)
 BuildRequires:  pkgconfig(jsoncpp)
 BuildRequires:  pkgconfig(shaderc)
 BuildRequires:  pkgconfig(vulkan)
 BuildRequires:  pkgconfig(wayland-client)
-BuildRequires:  pkgconfig(xxf86vm)
+BuildRequires:  pkgconfig(xcb)
+BuildRequires:  pkgconfig(xcb-dri2)
+BuildRequires:  pkgconfig(xcb-glx)
 BuildRequires:  pkgconfig(xcb-icccm)
 BuildRequires:  pkgconfig(xcb-keysyms)
-BuildRequires:  pkgconfig(xcb)
-BuildRequires:  pkgconfig(xcb-glx)
 BuildRequires:  pkgconfig(xcb-randr)
-BuildRequires:  pkgconfig(xcb-dri2)
 BuildRequires:  pkgconfig(xrandr)
+BuildRequires:  pkgconfig(xxf86vm)
 BuildRequires:  python3dist(jinja2)
-
+# /oreon:deps
 %description
 OpenXR provides a vendor-neutral API for XR hardware.
 
 %package libs
 Summary:        OpenXR runtime loader library
-
 %description libs
 Shared library implementing the OpenXR loader.
 
 %package devel
 Summary:        Headers and development files of the OpenXR library
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description devel
 Headers and development files for OpenXR.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{pkgname}-release-%{version}
-%generate_buildrequires
-
 %build
+
 %cmake \
     -DBUILD_ALL_EXTENSIONS=ON \
     -DBUILD_LOADER=ON \
@@ -63,30 +59,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     -DFILESYSTEM_USE_STD=ON \
     -DGLSLANG_VALIDATOR=$(which glslangValidator)
 %cmake_build
-
 %install
 %cmake_install
 rm -f %{buildroot}%{_docdir}/%{name}/LICENSE
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license LICENSE
-%doc CHANGELOG.SDK.md README.md
-%{_bindir}/*
-%{_datadir}/%{name}
-%{_mandir}/man1/*.1*
-
-%files libs
-%{_libdir}/lib%{name}_loader.so.%{libmajor}{,.*}
-
-%files devel
-%doc README.md
-%{_includedir}/%{name}
-%{_libdir}/cmake/%{name}
-%{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*.pc
+%files -f %{oreon_filedir}/main.list
+%files -n openxr-libs -f %{oreon_filedir}/openxr-libs.list
+%files -n openxr-devel -f %{oreon_filedir}/openxr-devel.list
 
 %changelog
+
 %autochangelog

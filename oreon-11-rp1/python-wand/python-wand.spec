@@ -1,62 +1,62 @@
-%global source0_hash none
-
+%global source0_hash 0387fd08848d00cadd1d885fcb19a17dd4250df2029e5338b6b668b7fed64b5b
 Name:           python-wand
 Version:        0.7.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Ctypes-based simple MagickWand API binding for Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://docs.wand-py.org
-Source:         %{pypi_source wand}
-
+Source0:        https://files.pythonhosted.org/packages/source/w/wand/wand-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77.0
+Requires:       python3-wand = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-wand+test
+Summary:        Metapackage for python3-wand test extras
+Requires:       python3-wand = %{version}-%{release}
+Requires:       python3dist(pytest) >= 7.2.0
+Provides:       python3dist(wand[test]) = %{version}-%{release}
 
+%description -n python3-wand+test
+Metapackage for python3-wand test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'wand' generated automatically by pyp2spec.}
+%package -n       python3-wand+doc
+Summary:        Metapackage for python3-wand doc extras
+Requires:       python3-wand = %{version}-%{release}
+Requires:       python3dist(sphinx) >= 7.2.6
+Provides:       python3dist(wand[doc]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-wand+doc
+Metapackage for python3-wand doc extras.
+
+%description
 
 %package -n     python3-wand
-Summary:        %{summary}
-
-%description -n python3-wand %_description
+Summary:        Ctypes-based simple MagickWand API binding for Python
+%description -n python3-wand
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-wand doc,test
-
 
 %prep
-%autosetup -p1 -n wand-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir wand-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-wand usr/lib/python3*/site-packages/wand* usr/lib64/python3*/site-packages/wand* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/wand* usr/lib64/python3*/site-packages/wand* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-wand -f %{pyproject_files}
+%files
+%files -n python3-wand -f %{oreon_filedir}/python3-wand.list
 
 %changelog
+
 %autochangelog

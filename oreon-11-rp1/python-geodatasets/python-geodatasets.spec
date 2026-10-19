@@ -1,56 +1,42 @@
-%global source0_hash none
-
+%global source0_hash c55358e118af956605781ae4fe5dccf26c63dc89408b3298726d21b879c9b2b1
 Name:           python-geodatasets
 Version:        2026.5.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Spatial data examples
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/geopandas/geodatasets
-Source:         %{pypi_source geodatasets}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/geodatasets/geodatasets-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'geodatasets' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61.0
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 6.2
+Requires:       python3-geodatasets = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-geodatasets
-Summary:        %{summary}
-
-%description -n python3-geodatasets %_description
-
+Summary:        Spatial data examples
+%description -n python3-geodatasets
 
 %prep
-%autosetup -p1 -n geodatasets-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir geodatasets-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-geodatasets usr/lib/python3*/site-packages/geodatasets* usr/lib64/python3*/site-packages/geodatasets* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/geodatasets* usr/lib64/python3*/site-packages/geodatasets* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-geodatasets -f %{pyproject_files}
+%files
+%files -n python3-geodatasets -f %{oreon_filedir}/python3-geodatasets.list
 
 %changelog
+
 %autochangelog

@@ -1,42 +1,31 @@
 %global source0_hash 1b02bba0ca346cce46d6d7dac57115c31cdf95b3d79369594f142afbdcdc0503
-
-# molequeue currently supports Qt5 only
-
 %global gitcommit 0a35627edc490a79ac8bb17f1ed5c3d993074b91
 %global gitdate 20241024
 %global shortcommit %(c=%{gitcommit}; echo ${c:0:7})
-
 Name:    molequeue
-Summary: Desktop integration of high performance computing resources
+Summary:        Desktop integration of high performance computing resources
 Version: 0.9.0
-Release: %autorelease -s %{gitdate}git%{shortcommit}
+Release:        1%{?dist}
 License: BSD-3-Clause
 URL:     https://github.com/OpenChemistry/%{name}
-Source0: https://github.com/OpenChemistry/%{name}/archive/%{gitcommit}/%{name}-%{gitcommit}.tar.gz
-
-## Main building
-BuildRequires: make
-BuildRequires: cmake
-BuildRequires: qt5-qtbase-devel, qt5-rpm-macros
-BuildRequires: qt5-qtwebkit-devel
-%if 0%{?fedora}
-BuildRequires: qjson-qt5-devel
-%endif
-BuildRequires: qt5-qttools-devel
-BuildRequires: qt5-qtscript-devel
-BuildRequires: qt5-qtsvg-devel
-BuildRequires: qt5-qtxmlpatterns-devel
-BuildRequires: desktop-file-utils
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: doxygen
-BuildRequires: python3-devel
-%if 0%{?rhel}
-BuildRequires: epel-rpm-macros
-%endif
-
+Source0:        https://github.com/OpenChemistry/%{name}/archive/%{gitcommit}/%{name}-%{gitcommit}.tar.gz
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  desktop-file-utils
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  python3-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtscript-devel
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  qt5-qttools-devel
+BuildRequires:  qt5-qtwebkit-devel
+BuildRequires:  qt5-qtxmlpatterns-devel
+BuildRequires:  qt5-rpm-macros
+# /oreon:deps
 %description
 MoleQueue is an open-source, cross-platform, system-tray resident desktop
 application for abstracting, managing, and coordinating the execution of tasks
@@ -56,7 +45,6 @@ Some highlights:
 
 %package libs
 Summary: Shared and private libraries of %{name}
-
 %description libs
 Shared and private libraries of %{name}.
 
@@ -64,7 +52,6 @@ Shared and private libraries of %{name}.
 Summary:  Development files of %{name}
 Requires: qt5-qtbase-devel
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description devel
 This package contains libraries and header files for developing
 applications that use %{name}.
@@ -76,15 +63,13 @@ BuildArch: noarch
 HTML documentation of %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{gitcommit}
 
-%if 0%{?fedora}
-rm -rf thirdparty/qt5json
-%endif
-
 %build
+
 %cmake -Wno-dev \
  -DENABLE_RPATH:BOOL=OFF \
  -DCMAKE_SKIP_INSTALL_RPATH:BOOL=YES \
@@ -95,16 +80,12 @@ rm -rf thirdparty/qt5json
  -DPYTHON_EXECUTABLE:FILEPATH=%{__python3} \
  -DCMAKE_BUILD_TYPE:STRING=Release
 %cmake_build
-
 pushd %{__cmake_builddir}/docs
 doxygen
 popd
-
 %install
 %cmake_install
-
 rm -rf %{buildroot}%{_datadir}/doc
-
 cat >%{name}.desktop <<EOF
 [Desktop Entry]
 Name=MoleQueue
@@ -114,28 +95,15 @@ Terminal=false
 Type=Application
 Icon=%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 EOF
-
 install -Dpm0644 molequeue/app/icons/%{name}.png %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
 desktop-file-install %{name}.desktop --dir %{buildroot}%{_datadir}/applications
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/32x32/apps/%{name}.png
-
-%files libs
-%doc README.md
-%license LICENSE
-%{_libdir}/libMoleQueue*.so
-%{_libdir}/%{name}/
-
-%files devel
-%{_libdir}/cmake/%{name}/
-%{_includedir}/%{name}/
-
-%files doc
-%doc README.md %{__cmake_builddir}/docs/html
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n molequeue-libs -f %{oreon_filedir}/molequeue-libs.list
+%files -n molequeue-devel -f %{oreon_filedir}/molequeue-devel.list
+%files -n molequeue-doc -f %{oreon_filedir}/molequeue-doc.list
 
 %changelog
+
 %autochangelog

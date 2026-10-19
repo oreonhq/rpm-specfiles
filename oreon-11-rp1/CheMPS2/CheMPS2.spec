@@ -1,24 +1,19 @@
-%global source0_hash ccd4c0d9432759d97690bf37a0333440f93513960c62d1f75842f090406a224d
-
+%global source0_hash eef1b92d74ac07fde58c043f64e8cac02b5400c209c44dcbb51641f86e0c7c83
 Name:           CheMPS2
 Version:        1.8.12
 Release:        1%{?dist}
 Summary:        A spin-adapted implementation of DMRG for ab initio quantum chemistry
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://github.com/SebWouters/CheMPS2
 Source0:        https://github.com/SebWouters/CheMPS2/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# Allow to build for CMake 4.0, adapted from https://github.com/SebWouters/CheMPS2/pull/85.patch
 Patch0:         CheMPS-1.8.9-cmake4.patch
-
-BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig(flexiblas)
+# oreon:deps
 BuildRequires:  cmake
+BuildRequires:  gcc-c++
 BuildRequires:  hdf5-devel
+BuildRequires:  pkgconfig(flexiblas)
 BuildRequires:  zlib-devel
-
+# /oreon:deps
 %description    
 The CheMPS2 library provides a free open-source spin-adapted 
 implementation of the density matrix renormalization group (DMRG) for ab initio 
@@ -33,43 +28,35 @@ the gradient and Hessian for orbital rotations or nuclear displacements.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-# For directory ownership
 Requires:       cmake
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 %patch -P 0 -p 1 -b .cmake4
 
 %build
+
 export CXXFLAGS="%{optflags} -Wl,--as-needed"
 %cmake -DMKL=OFF -DLAPACK_LIBRARIES="-lflexiblas" -DENABLE_XHOST=OFF -DSHARED_ONLY=ON
 %cmake_build
-
 %install
 %cmake_install
 install -D -p -m 644 chemps2.1 %{buildroot}%{_mandir}/man1/chemps2.1
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 find %{buildroot} -name '*.a' -exec rm -f {} ';'
-
 %ldconfig_scriptlets
+%oreon_autofiles CheMPS2-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.md CHANGELOG.md FILES.md
-%license LICENSE
-%{_libdir}/libchemps2.so.*
-%{_bindir}/chemps2
-%{_mandir}/man1/chemps2.1.*
-
-%files devel
-%{_datadir}/cmake/CheMPS2/
-%{_includedir}/chemps2/
-%{_libdir}/libchemps2.so
+%files -f %{oreon_filedir}/main.list
+%files -n CheMPS2-devel -f %{oreon_filedir}/CheMPS2-devel.list
 
 %changelog
+
 %autochangelog

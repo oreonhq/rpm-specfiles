@@ -1,24 +1,21 @@
 %global source0_hash a0b2ba91caf68ec4ee7705d5063bc542ac8aea4d421451103245c69d272bf19f
-
 Name:           qdirstat
 Version:        2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Qt-based directory statistics
-
 License:        GPL-2.0-only
 URL:            https://github.com/shundhammer/qdirstat
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  make
-BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig(Qt6Widgets)
-BuildRequires:  pkgconfig(Qt6Core5Compat)
-BuildRequires:  pkgconfig(zlib)
-BuildRequires:  libappstream-glib
-BuildRequires:  desktop-file-utils
-
+Source0:        https://github.com/shundhammer/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Requires:       hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  make
+BuildRequires:  pkgconfig(Qt6Core5Compat)
+BuildRequires:  pkgconfig(Qt6Widgets)
+BuildRequires:  pkgconfig(zlib)
+# /oreon:deps
 %description
 QDirStat is a graphical application to show where your disk space has gone and
 to help you to clean it up.
@@ -37,32 +34,24 @@ container.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n %{name}-%{version}
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %qmake_qt6
 %make_build
-
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 install -Dp -m 644 metainfo/io.github.shundhammer.qdirstat.metainfo.xml \
     %{buildroot}%{_datadir}/metainfo/io.github.shundhammer.qdirstat.metainfo.xml
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainfo.xml
-
-%files
-%license LICENSE
-%{_docdir}/%{name}/
-%{_bindir}/qdirstat
-%{_bindir}/qdirstat-cache-writer
-%{_mandir}/man1/qdirstat-cache-writer.1.*
-%{_mandir}/man1/qdirstat.1.*
-%{_datadir}/metainfo/io.github.shundhammer.qdirstat.metainfo.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

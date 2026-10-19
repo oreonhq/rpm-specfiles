@@ -1,45 +1,16 @@
 %global source0_hash ad4d7cdae84fad530bb0df99df80f66bbaeec3263153e4950c43a3a5b90cdbd2
-
-# Upstream doesn't make releases.  We have to check the code out of git.
 %global commit0 8e401543d3ecf65e3a3631c7a271793a4d356cb0
 %global shortcommit0 %%(c=%%{commit0}; echo ${c:0:7})
 %global snapdate 20260304
-
-# This is a fork of github.com/berkeley-abc/abc.git maintained by YosysHQ
 %global prjname abc
-
-# WARNING: When updating to a newer snapshot, because upstream doesn't do
-# shared library versioning, run abipkgdiff (from libabigail) against the
-# old and new binary and debuginfo packages to detect abi changes that would
-# require bumping the shared library version, e.g.,
-#   abipkgdiff --d1 abc-libs-debuginfo-<old>.rpm \
-#              --d1 abc-debuginfo-<old>.rpm \
-#              --d2 abc-libs-debuginfo-<new>.rpm \
-#              --d2 abc-debuginfo-<new>.rpm \
-#              --devel1 abc-devel-<old>.rpm \
-#              --devel2 abc-devel-<new>.rpm \
-#              abc-libs-<old>.rpm abc-libs-<new>.rpm
-# If the shared library version is bumped, remember to rebuild dependent
-# packages, finding them using e.g.
-#   repoquery --whatrequires abc-libs
-# This should be done for each branch in which abc-libs will be updated.
-
 Name:           yosyshq-%{prjname}
 Version:        0.63
-Release:        1.%{snapdate}git%{shortcommit0}%{?dist}
+Release:        1%{?dist}
 Summary:        Sequential logic synthesis and formal verification
-# The ABC code itself is MIT-Modern-Variant.
-# The bundled CUDD code is BSD-3-Clause.
-# The bundled glucose code is MIT.
-# The bundled minisat code is MIT.
-# The bundled satoko code is BSD-2-Clause
 License:        MIT-Modern-Variant AND MIT AND BSD-2-Clause AND BSD-3-Clause
 URL:            http://github.com/YosysHQ/%{prjname}
-Source0:        https://github.com/YosysHQ/%{prjname}/archive/%{commit0}/%{prjname}-%{shortcommit0}.tar.gz
-# Man page created by Jerry James using upstream text; hence, it is covered by
-# the same copyright and license as the code.
+Source0:        https://github.com/YosysHQ/%{prjname}/archive/%{commit0}/%{prjname}-8e40154.tar.gz
 Source1:        %{prjname}.1
-# Fedora-specific patches:
 Patch1:         0001-fedora-do-not-use-bundled-libraries.patch
 Patch2:         0002-fedora-build-shared-instead-of-static-library.patch
 Patch3:         0003-fedora-fix-minor-header-issue.patch
@@ -47,23 +18,18 @@ Patch4:         0004-fedora-set-soname-on-the-library.patch
 Patch5:         0005-fedora-fix-sprintf-calls-that-may-overflow-their-buf.patch
 Patch6:         0006-fedora-fix-out-of-bounds-array-access-in-gia-code-be.patch
 Patch7:         0007-fedora-weaken-overzealous-assert.patch
-
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
+Provides:       %{prjname} = 1.01-40.%{version}.%{release}
+Obsoletes:      %{prjname} < 1.01-41
+ExcludeArch: %{ix86}
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  pkgconfig(bzip2)
 BuildRequires:  pkgconfig(readline)
 BuildRequires:  pkgconfig(zlib)
-
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
-Provides:       %{prjname} = 1.01-40.%{version}.%{release}
-Obsoletes:      %{prjname} < 1.01-41
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval :
-# upstream abc commit 0ff43a1 (Command "aigsim".) added breaking change
-ExcludeArch: %{ix86}
-
+# /oreon:deps
 %description
 ABC is a growing software system for synthesis and verification of
 binary sequential logic circuits appearing in synchronous hardware
@@ -80,34 +46,25 @@ their needs as if it were a toolbox rather than a complete tool.
 
 %package libs
 Summary:        Library for sequential synthesis and verification
-# ABC includes a bundled and modified version of CUDD 2.4.2.  The CUDD package
-# is no longer available from Fedora since the disappearance of the upstream
-# web site (and the last released version was 3.0.0).
 Provides:       bundled(cudd) = 2.4.2
-# ABC includes a bundled and modified version of glucose (which version?)
 Provides:       bundled(glucose)
-# ABC includes a bundled and modified version of minisat (which version?).
 Provides:       bundled(minisat2)
-# ABC includes a bundled and modified version of satoko (which version?).
 Provides:       bundled(satoko)
-
 Provides:       %{prjname}-libs = 1.01-40.%{version}.%{release}
 Obsoletes:      %{prjname}-libs < 1.01-41
-
 %description libs
 This package contains the core functionality of ABC as a shared library.
 
 %package devel
 Summary:        Headers and libraries for developing with ABC
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 Provides:       %{prjname}-devel = 1.01-40.%{version}.%{release}
 Obsoletes:      %{prjname}-devel < 1.01-41
-
 %description devel
 Headers and libraries for developing applications that use ABC.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{prjname}-%{commit0}
@@ -123,6 +80,7 @@ touch -r %{SOURCE1} %{prjname}.1
 sed -i 's/ -O//' Makefile
 
 %build
+
 export CFLAGS='%{build_cflags} -DNDEBUG'
 export CXXFLAGS='%{build_cxxflags} -DNDEBUG'
 %ifarch s390x
@@ -135,43 +93,26 @@ export ABC_USE_STDINT_H=1
 	-DCMAKE_SKIP_INSTALL_RPATH:BOOL=YES \
 	-DABC_SKIP_TESTS:BOOL=yes
 %cmake_build
-
 %install
-# %%cmake_install does not install anything.  Install by hand.
-
-# Install the binary
 cd %{_vpath_builddir}
 mkdir -p %{buildroot}%{_bindir}
 install -p -m 0755 %{prjname} %{buildroot}%{_bindir}
-
-# Install the library
 mkdir -p %{buildroot}%{_libdir}
 cp -pd lib%{prjname}.so* %{buildroot}%{_libdir}
 cd -
-
-# Install the header files
 cd src
 mkdir -p %{buildroot}%{_includedir}/%{prjname}
 tar -cf - $(find -O3 . -name \*.h) | \
   (cd %{buildroot}%{_includedir}/%{prjname}; tar -xf -)
 cd -
-
-# Install the man page
 mkdir -p %{buildroot}%{_mandir}/man1
 install -p -m 0644 %{prjname}.1 %{buildroot}%{_mandir}/man1
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc README.md readmeaig
-%{_bindir}/%{prjname}
-%{_mandir}/man1/%{prjname}*
-
-%files libs
-%license copyright.txt
-%{_libdir}/lib%{prjname}.so.0*
-
-%files devel
-%{_includedir}/%{prjname}/
-%{_libdir}/lib%{prjname}.so
+%files -f %{oreon_filedir}/main.list
+%files -n yosyshq-abc-libs -f %{oreon_filedir}/yosyshq-abc-libs.list
+%files -n yosyshq-abc-devel -f %{oreon_filedir}/yosyshq-abc-devel.list
 
 %changelog
+
 %autochangelog

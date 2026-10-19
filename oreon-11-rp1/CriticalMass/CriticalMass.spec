@@ -1,10 +1,8 @@
-%global source0_hash 31edda1a1f4b713f4c8132d8e437aa3f01911945f1094a371a9f0687c406d7e4
-
+%global source0_hash c0957dc7894e1ccbe412cb4784f04b9b261b16252ef154ae66bd4d32aff57e15
 Name:           CriticalMass
 Version:        1.5
 Release:        42%{?dist}
 Summary:        SDL/OpenGL space shoot'em up game also known as critter
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://criticalmass.sourceforge.net/critter.php
 Source0:        http://downloads.sourceforge.net/criticalmass/%{name}-%{version}.tar.bz2
@@ -15,14 +13,19 @@ Patch2:         CriticalMass-1.5-gcc47.patch
 Patch3:         CriticalMass-1.5-cflags.patch
 Patch4:         CriticalMass-1.5-gcc6.patch
 Patch5:         CriticalMass-1.5-ftbfs.patch
-BuildRequires:  gcc-c++
-BuildRequires:  SDL_image-devel SDL_mixer-devel libpng-devel curl-devel
-BuildRequires:  tinyxml-devel desktop-file-utils libtool
-BuildRequires: make
 Requires:       hicolor-icon-theme opengl-games-utils
-# Also known as critter, so make "yum install critter" work
 Provides:       critter = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  SDL_image-devel
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  curl-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libpng-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  tinyxml-devel
+# /oreon:deps
 %description
 Critical Mass (aka Critter) is an SDL/OpenGL space shoot'em up game. Your
 world has been infested by an aggressive army of space critters. Overrun and
@@ -31,6 +34,7 @@ a last effort to recapture some of the "goodies", you have been placed into
 a tiny spacecraft and sent after them.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -39,30 +43,18 @@ touch NEWS README AUTHORS ChangeLog
 autoreconf -ivf
 
 %build
+
 %configure
 make %{?_smp_mflags}
-
 %install
 %make_install
 ln -s opengl-game-wrapper.sh $RPM_BUILD_ROOT%{_bindir}/critter-wrapper
-
-# remove unwanted utility
 rm $RPM_BUILD_ROOT%{_bindir}/Packer
-
-# below is the desktop file and icon stuff.
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install --dir $RPM_BUILD_ROOT%{_datadir}/applications %{SOURCE1}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps
 install -p -m 644 critter.png \
   $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/256x256/apps
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -95,16 +87,10 @@ SentUpstream: 2014-09-17
    -->
 </application>
 EOF
+%oreon_autofiles main
 
-%files
-%doc Readme.html TODO
-%license COPYING
-%{_bindir}/critter*
-%{_datadir}/Critical_Mass
-%{_mandir}/man6/critter.6*
-%{_datadir}/appdata/*%{name}.appdata.xml
-%{_datadir}/applications/*%{name}.desktop
-%{_datadir}/icons/hicolor/256x256/apps/critter.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,23 +1,21 @@
-%global source0_hash 0da7c9772a2186dab1fba6bf6c777afe7424f40beacadf1b117d5cc825fe2db3
-
+%global source0_hash 0ec19b755dbda6c540e9e60b7235d801f26f40c2f211ddfb729b756218bcc873
 Name:           gambit-c
 Version:        4.9.8
 Release:        1%{?dist}
 Summary:        Scheme programming system
-
 License:        Apache-2.0 OR LGPL-2.1-only
 URL:            http://gambitscheme.org/
 %global _dirname gambit-v%(echo %{version} | sed -e 's/\\./_/g')-devel
 Source0:        https://github.com/gambit/gambit/archive/v%{version}/gambit-%{version}.tar.gz
 Source1:        gambit-init.el
 Patch0:         gambc-v4_2_8-modtime.patch
-
-BuildRequires:  gcc
-BuildRequires:  emacs
-BuildRequires:  make
 Requires:       gcc
 Requires:       emacs-filesystem >= %{_emacs_version}
-
+# oreon:deps
+BuildRequires:  emacs
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 Gambit-C includes a Scheme interpreter and a Scheme compiler which can
 be used to build standalone executables.  Because the compiler
@@ -31,12 +29,9 @@ numbers), and complex numbers.
 
 %package        doc
 Summary:        Documentation for %{name}
-
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
-# switch to noarch
 Obsoletes:      gambit-c-doc < %{version}-%{release}
-
 %description    doc
 Gambit-C includes a Scheme interpreter and a Scheme compiler which can
 be used to build standalone executables.  Because the compiler
@@ -46,6 +41,7 @@ with a decent C compiler.
 This package contains the Gambit-C user manual in HTML and PDF formats.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n gambit-%{version} -p1
@@ -58,11 +54,6 @@ chmod -x lib/*.{c,h}
 
 %build
 
-%if 0%{?rhel}
-%if 0%{?rhel} <= 7
-%global disable_gcc_opts 1
-%endif
-%endif
 %ifnarch ppc64le
 %configure --enable-trust-c-tco \
            --enable-dynamic-clib \
@@ -75,15 +66,11 @@ chmod -x lib/*.{c,h}
            --bindir=%{_libdir}/%{name}/bin \
            --libdir=%{_libdir}/%{name}
 %endif
-
 make %{?_smp_mflags}
-	   
-# Compile emacs module
 (cd misc && %{_emacs_bytecompile} gambit.el)
-
 %check
-make check
 
+make check
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
@@ -92,39 +79,19 @@ do
   ln -sf ../%{_lib}/%{name}/bin/$i $RPM_BUILD_ROOT%{_bindir}/$i
 done
 cat > $RPM_BUILD_ROOT%{_bindir}/gsix <<EOF
-#!/bin/sh
 %{_libdir}/%{name}/bin/six $@
 EOF
 chmod +x $RPM_BUILD_ROOT%{_bindir}/gsix
-
-# Remove duplicate docs
 rm -rf $RPM_BUILD_ROOT%{_prefix}/doc
-
-# Emacs mode files
 mkdir -p $RPM_BUILD_ROOT%{_emacs_sitestartdir}
 cp -p misc/gambit.elc $RPM_BUILD_ROOT%{_emacs_sitelispdir}
 cp -p %{SOURCE1} $RPM_BUILD_ROOT%{_emacs_sitestartdir}
-
-# Link static libs
 (cd $RPM_BUILD_ROOT%{_libdir} && ln -s %{name}/*.a .)
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LGPL.txt LICENSE-2.0.txt
-%doc README
-%{_bindir}/*
-%{_includedir}/*.h
-%{_mandir}/man1/gsi.*
-%{_libdir}/%{name}
-%{_libdir}/*.a
-%{_emacs_sitelispdir}/*.el
-%{_emacs_sitelispdir}/*.elc
-%{_emacs_sitestartdir}/gambit-init.el
-
-%files doc
-%doc doc/gambit.html doc/gambit.pdf
-# don't package examples until makefiles are fixed
-# examples
-%{_infodir}/*
+%files -f %{oreon_filedir}/main.list
+%files -n gambit-c-doc -f %{oreon_filedir}/gambit-c-doc.list
 
 %changelog
+
 %autochangelog

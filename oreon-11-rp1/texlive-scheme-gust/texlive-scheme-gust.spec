@@ -1,17 +1,13 @@
 %global source0_hash none
-
 %global tl_version 2025
-
 Name:           texlive-scheme-gust
 Epoch:          12
 Version:        svn59755
-Release:        3%{?dist}
+Release:        1%{?dist}
 Summary:        GUST TeX Live scheme
-
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-amslatex-primer
 Requires:       texlive-amstex
@@ -45,19 +41,21 @@ Requires:       texlive-seminar
 Requires:       texlive-tds
 Requires:       texlive-tex4ht
 Requires:       texlive-texdoc
-
+# oreon:deps
+BuildRequires:  texlive-base
+# /oreon:deps
 %description
 This is the GUST TeX Live scheme: it is a set of files sufficient to typeset
 Polish plain TeX, LaTeX and ConTeXt documents in PostScript or PDF.
 
 %build
-# Nothing to build
 
 %install
-# Nothing to install
 
-# Main scheme metapackage (empty)
-%files
+%oreon_autofiles main
+
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

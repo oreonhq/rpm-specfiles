@@ -1,37 +1,23 @@
 %global source0_hash 8b1279458c32580f17116bcd0af87ec583279bfa00276248f180118cdc823e3e
-
 Name:           msv
 Version:        2022.7
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Multi-Schema Validator Toolkit
-# License breakdown
-# Apache-1.1
-# * xsdlib/src/main/java/com/sun/msv/datatype/regexp - All files except for InternalImpl.java
-# BSD-3-Clause-Sun
-# * pom.xml
-# * xsdlib/src/main/java/com/sun/msv/datatype/regexp/InternalImpl.java
-# BSD-3-Clause-Sun implied by docs/xsdlib/license.txt of the original tarball
-# * xsdlib/src/main/java/com/sun/msv/datatype/xsd/CommandLineTester.java
-# * xsdlib/src/main/resources/com/sun/msv/datatype/xsd/Messages.properties
-# * xsdlib/src/main/resources/com/sun/msv/datatype/xsd/Messages_ja.properties
-# BSD-3-Clause - All other .java files
 License:        Apache-1.1 AND BSD-3-Clause AND BSD-3-Clause-Sun
 URL:            https://xmlark.github.io/msv/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/xmlark/msv/archive/refs/tags/msv-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch:          0001-Disable-Apache-XercesImpl.patch
-
+Obsoletes:      %{name}-javadoc < 2022.7-15
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 BuildRequires:  mvn(org.jdom:jdom2)
 BuildRequires:  mvn(relaxngDatatype:relaxngDatatype)
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2022.7-15
-
+# /oreon:deps
 %description
 The Multi Schema Validation toolkit is a Java based toolkit consisting of 8
 different submodules. The core module is the Multi-Schema XML Validator (MSV)
@@ -41,12 +27,12 @@ subset of XML Schema Part 1.
 
 %package xsdlib
 Summary:        Java implementation of W3C’s XML Schema Part 2
-
 %description xsdlib
 MSV XML Datatypes Library, Java implementation of W3C’s XML Schema Part 2, is
 intended for use with applications that incorporate XML Schema Part 2.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{name}-%{version}
 
@@ -68,14 +54,16 @@ rm xsdlib/src/main/java/com/sun/msv/datatype/xsd/regex/XercesImpl.java
 %mvn_package net.java.dev.msv:msv __noinstall
 
 %build
-%mvn_build -j -s
 
+%mvn_build -j -s
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files xsdlib -f .mfiles-xsdlib
-%doc README.md
+%files -f %{oreon_filedir}/main.list
+%files -n msv-xsdlib -f %{oreon_filedir}/msv-xsdlib.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2022.7-1
 - Import

@@ -1,26 +1,18 @@
 %global source0_hash 77dbc13ca82d9c87ddb4581dd49559d45b63096433d3dadea08b7f31b360a5ba
-
-# Force out of source build
 %undefine __cmake_in_source_build
-
 %global modulename %{name}-c++
-
 Name:           capnproto
 Version:        1.5.0
 Release:        1%{?dist}
 Summary:        A data interchange format and capability-based RPC system
-
 License:        MIT
 URL:            https://capnproto.org
-Source0:        https://capnproto.org/%{modulename}-%{version}.tar.gz
-
-# We need C++
-BuildRequires:  gcc-c++
-BuildRequires:  cmake >= 3.10
-
-# Ensure that we use matching version of libraries
+Source0:        https://%{name}.org/%{modulename}-%{version}.tar.gz
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+# /oreon:deps
 %description
 Cap’n Proto is an insanely fast data interchange format
 and capability-based RPC system. Think JSON, except binary.
@@ -32,7 +24,6 @@ encoder/decoder tools.
 
 %package        libs
 Summary:        Libraries for %{name}
-
 %description    libs
 The %{name}-libs package contains the libraries for using %{name}
 in applications.
@@ -40,16 +31,14 @@ in applications.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{modulename}-%{version} -p2
-
 
 %conf
 # The tests are randomly failing due to poor sparsing support in the build system
@@ -58,36 +47,23 @@ export CXXFLAGS="%{build_cxxflags} -DHOLES_NOT_SUPPORTED=1"
 
 %cmake -DBUILD_TESTING=ON
 
-
 %build
+
 %cmake_build
-
-
 %check
+
 %ctest
-
-
 %install
 %cmake_install
 find %{buildroot} -name '*.la' -delete
+%oreon_autofiles capnproto-libs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles capnproto-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%{_bindir}/capnp
-%{_bindir}/capnpc
-%{_bindir}/capnpc-c++
-%{_bindir}/capnpc-capnp
-
-%files libs
-%license LICENSE.txt
-%{_libdir}/*.so.*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-%{_libdir}/cmake/CapnProto/
-
+%files -f %{oreon_filedir}/main.list
+%files -n capnproto-libs -f %{oreon_filedir}/capnproto-libs.list
+%files -n capnproto-devel -f %{oreon_filedir}/capnproto-devel.list
 
 %changelog
+
 %autochangelog

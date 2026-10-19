@@ -1,5 +1,4 @@
 %global source0_hash f19a908655f6f9227dc09c62b13b01eb815e9c5476ca8644fa0519da0723bcb4
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,30 +80,26 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond bootstrap 0
-
 Name:           plexus-cipher
 Version:        3.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plexus encryption/decryption component
 License:        Apache-2.0
 URL:            https://github.com/codehaus-plexus/plexus-cipher
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/codehaus-plexus/plexus-cipher/archive/refs/tags/plexus-cipher-%{version}.tar.gz#/plexus-cipher-%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3.0.0-28
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(javax.inject:javax.inject)
 BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 BuildRequires:  mvn(org.eclipse.sisu:org.eclipse.sisu.inject)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
-%endif
-
-Obsoletes:      %{name}-javadoc < 3.0.0-28
-
+# /oreon:deps
 %description
 Plexus Cipher is a Java-based library from the Plexus project,
 primarily used by Apache Maven to encrypt and decrypt sensitive data
@@ -114,6 +109,7 @@ of plain-text secrets when accessing Maven repositories or other
 protected services.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n plexus-cipher-plexus-cipher-%{version}
 
@@ -121,15 +117,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_alias : org.sonatype.plexus:plexus-cipher
 
 %build
+
 %pom_xpath_remove 'pom:plugin[pom:artifactId="maven-compiler-plugin"]/pom:configuration' 2>/dev/null || :
 %mvn_build -j -- -Dmaven.compiler.release=8
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0-1
 - Import

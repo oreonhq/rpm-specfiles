@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 93abf22cf9a62b915f724e433bde702995ac274865425fd4a76d1d9b5828da1a
 Name:           python-types-psutil
 Version:        7.2.2.20260906
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Typing stubs for psutil
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://github.com/python/typeshed
-Source:         %{pypi_source types_psutil}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/types_psutil/types_psutil-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'types-psutil' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 82.0.1
+Requires:       python3-types-psutil = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-types-psutil
-Summary:        %{summary}
-
-%description -n python3-types-psutil %_description
-
+Summary:        Typing stubs for psutil
+%description -n python3-types-psutil
 
 %prep
-%autosetup -p1 -n types_psutil-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir types_psutil-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-types-psutil usr/lib/python3*/site-packages/types_psutil* usr/lib64/python3*/site-packages/types_psutil* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/types_psutil* usr/lib64/python3*/site-packages/types_psutil* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-types-psutil -f %{pyproject_files}
+%files
+%files -n python3-types-psutil -f %{oreon_filedir}/python3-types-psutil.list
 
 %changelog
+
 %autochangelog

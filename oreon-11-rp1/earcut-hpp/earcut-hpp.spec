@@ -1,7 +1,5 @@
 %global source0_hash 70c00e90811950b2c3d973ecfd46010680b946f7952306ffa2785c0368fe2db0
-
 %global debug_package %{nil}
-
 Name:           earcut-hpp
 Summary:        Fast, header-only polygon triangulation
 Version:        3.2.4
@@ -10,13 +8,12 @@ License:        ISC
 SourceLicense:  %{license} AND SGI-B-2.0
 URL:            https://github.com/mapbox/earcut.hpp
 Source0:        https://github.com/mapbox/earcut.hpp/archive/v%{version}/earcut.hpp-%{version}.tar.gz
-
-
-BuildRequires:  git-core
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
+BuildRequires:  git-core
 BuildRequires:  pkgconfig(opengl)
-
+# /oreon:deps
 %description
 A C++ port of earcut.js, a fast, header-only polygon triangulation library.
 
@@ -24,17 +21,18 @@ A C++ port of earcut.js, a fast, header-only polygon triangulation library.
 Summary:        %{summary}
 BuildArch:      noarch
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel
 Header files for earcut-hpp.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n earcut.hpp-%{version}
 sed --regexp-extended --in-place \
     's/(setprecision\()6(\))/\116\2/' test/test.cpp
 
 %build
+
 export CXXFLAGS="${CXXFLAGS-} -ffp-contract=off"
 %cmake \
   -DEARCUT_BUILD_TESTS:BOOL=OFF \
@@ -43,20 +41,18 @@ export CXXFLAGS="${CXXFLAGS-} -ffp-contract=off"
   -DEARCUT_WARNING_IS_ERROR:BOOL=OFF \
   -DFETCHCONTENT_FULLY_DISCONNECTED:BOOL=ON
 %cmake_build
-
 %install
 install -D --preserve-timestamps --mode=0644 \
     --target-directory='%{buildroot}%{_includedir}/mapbox' \
     include/mapbox/earcut.hpp
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-true
 
-%files devel
-%license LICENSE
-%doc CHANGELOG.md README.md
-%dir %{_includedir}/mapbox
-%{_includedir}/mapbox/earcut.hpp
+true
+%files -f %{oreon_filedir}/main.list
+%files -n earcut-hpp-devel -f %{oreon_filedir}/earcut-hpp-devel.list
 
 %changelog
+
 %autochangelog

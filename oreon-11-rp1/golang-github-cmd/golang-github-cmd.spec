@@ -1,51 +1,43 @@
 %global source0_hash c97faf3326cb3eb00f562e5b32c4031c1acc4d70e09971c6a153fbd973fb10ff
-
 %bcond check 0
-
-# https://github.com/go-cmd/cmd
 %global debug_package %{nil}
-
 %global goipath         github.com/go-cmd/cmd
 Version:                1.4.3
-
 %gometa
-
 %global common_description %{expand:
 This package is a small but very useful wrapper around os/exec.Cmd for Linux
 and macOS that makes it safe and simple to run external commands in highly
 concurrent, asynchronous, real-time applications.}
-
 %global golicenses      LICENSE
 %global godocs          README.md
-
 Name:           %{goname}
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Go library wrapper around os/exec.Cmd
-
 License:        MIT
 URL:            %{gourl}
-Source0:        %{gosource}
-
+Source0:        https://%{goipath}/archive/v%{version}/cmd-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  go-rpm-macros
 BuildRequires:  golang(github.com/go-test/deep)
-
+# /oreon:deps
 %description %{common_description}
 
-%gopkg
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %goprep
 
 %install
 %gopkginstall
-
+%oreon_autofiles main
 %if %{with check}
 %check
+
 %gocheck
 %endif
-
-%gopkgfiles
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

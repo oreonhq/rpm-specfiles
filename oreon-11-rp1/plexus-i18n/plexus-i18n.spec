@@ -1,17 +1,14 @@
-%global source0_hash none
-
+%global source0_hash bdfd72c4b0711cf210593b50c39fbf0c1f4738fa74988a0f03260919c4027f7e
 Name:           plexus-i18n
 Version:        1.0
-Release:        0.37.b10.4%{?dist}
+Release:        1%{?dist}
 Summary:        Plexus I18N Component
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://github.com/codehaus-plexus/plexus-i18n
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-# svn export http://svn.codehaus.org/plexus/plexus-components/tags/plexus-i18n-1.0-beta-10/
-# tar cjf plexus-i18n-1.0-beta-10-src.tar.bz2 plexus-i18n-1.0-beta-10/
 Source0:        https://github.com/codehaus-plexus/plexus-i18n/archive/refs/tags/plexus-i18n-1.0-beta-10.tar.gz#/plexus-i18n-1.0-beta-10-src.tar.bz2
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.inject:guice)
 BuildRequires:  mvn(junit:junit)
@@ -19,7 +16,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-components:pom:)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-container-default)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-
+# /oreon:deps
 %description
 The Plexus project seeks to create end-to-end developer tools for 
 writing applications. At the core is the container, which can be 
@@ -31,6 +28,7 @@ is like a J2EE application server, without all the baggage.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n plexus-i18n-plexus-i18n-1.0-beta-10
 # plexus maven plugin is deprecated
@@ -46,13 +44,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_xpath_remove 'pom:plugin[pom:artifactId="maven-compiler-plugin"]/pom:configuration'
 
 %build
-%mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-0.37.b10.4
 - Import

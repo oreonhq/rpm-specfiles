@@ -1,57 +1,39 @@
-%global source0_hash none
-
+%global source0_hash eac05393b8cf0cd19b61b9fa0bb0c494f25d0add709f60f891d1ab01bdd3a382
 Name:           python-pygmtools
 Version:        0.6.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        pygmtools provides graph matching solvers in Python API and supports numpy and pytorch backends. pygmtools also provides dataset API for standard graph matching benchmarks.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MulanPSL-2.0
 URL:            https://pygmtools.readthedocs.io/
-Source:         %{pypi_source pygmtools}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pygmtools/pygmtools-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pygmtools' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-pygmtools = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pygmtools
-Summary:        %{summary}
-
-%description -n python3-pygmtools %_description
-
+Summary:        pygmtools provides graph matching solvers in Python API and supports numpy and pytorch backends. pygmtools also provides dataset API for standard graph matching benchmarks.
+%description -n python3-pygmtools
 
 %prep
-%autosetup -p1 -n pygmtools-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pygmtools-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pygmtools usr/lib/python3*/site-packages/pygmtools* usr/lib64/python3*/site-packages/pygmtools* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pygmtools* usr/lib64/python3*/site-packages/pygmtools* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pygmtools -f %{pyproject_files}
+%files
+%files -n python3-pygmtools -f %{oreon_filedir}/python3-pygmtools.list
 
 %changelog
+
 %autochangelog

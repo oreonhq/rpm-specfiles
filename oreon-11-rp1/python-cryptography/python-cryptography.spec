@@ -1,62 +1,60 @@
 %global source0_hash 7b46165bb56eb4704e2eaaf86f3c940d19154535d9b0ca7d6d590b04060e00d5
-
 Name:           python-cryptography
 Version:        50.0.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        cryptography is a package which provides cryptographic recipes and primitives to Python developers.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0 OR BSD-3-Clause
 URL:            https://github.com/pyca/cryptography
-Source:         %{pypi_source cryptography}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/cryptography/cryptography-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
+BuildRequires:  python3dist(cffi) >= 2.0.0
+BuildRequires:  python3dist(cffi) >= 2.1
+BuildRequires:  python3dist(maturin) < 2
+BuildRequires:  python3dist(maturin) >= 1.14.1
+BuildRequires:  python3dist(setuptools)
+Requires:       python3-cryptography = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-cryptography+ssh
+Summary:        Metapackage for python3-cryptography ssh extras
+Requires:       python3-cryptography = %{version}-%{release}
+Requires:       python3dist(bcrypt) >= 3.1.5
+Provides:       python3dist(cryptography[ssh]) = %{version}-%{release}
 
+%description -n python3-cryptography+ssh
+Metapackage for python3-cryptography ssh extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'cryptography' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-cryptography
-Summary:        %{summary}
-
-%description -n python3-cryptography %_description
+Summary:        cryptography is a package which provides cryptographic recipes and primitives to Python developers.
+# oreon:reqs
+Requires:       python3dist(cffi) >= 2.0.0
+Requires:       python3dist(typing-extensions) >= 4.13.2
+# /oreon:reqs
+%description -n python3-cryptography
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-cryptography ssh
-
 
 %prep
-%autosetup -p1 -n cryptography-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir cryptography-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-cryptography usr/lib/python3*/site-packages/cryptography* usr/lib64/python3*/site-packages/cryptography* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cryptography* usr/lib64/python3*/site-packages/cryptography* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-cryptography -f %{pyproject_files}
+%files
+%files -n python3-cryptography -f %{oreon_filedir}/python3-cryptography.list
 
 %changelog
+
 %autochangelog

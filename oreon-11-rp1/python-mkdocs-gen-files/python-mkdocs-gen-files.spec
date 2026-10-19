@@ -1,57 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 57d7ff2229e23d077e46d14a33db6d37c8823f6ce1a503c874c1764a71679763
 Name:           python-mkdocs-gen-files
 Version:        0.6.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        MkDocs plugin to programmatically generate documentation pages during the build
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/oprypin/mkdocs-gen-files
-Source:         %{pypi_source mkdocs_gen_files}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/mkdocs_gen_files/mkdocs_gen_files-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'mkdocs-gen-files' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-mkdocs-gen-files = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-mkdocs-gen-files
-Summary:        %{summary}
-
-%description -n python3-mkdocs-gen-files %_description
-
+Summary:        MkDocs plugin to programmatically generate documentation pages during the build
+# oreon:reqs
+Requires:       python3dist(mkdocs) <= 1.6.1
+Requires:       python3dist(mkdocs) >= 1.4.1
+Requires:       python3dist(properdocs) >= 1.6.5
+# /oreon:reqs
+%description -n python3-mkdocs-gen-files
 
 %prep
-%autosetup -p1 -n mkdocs_gen_files-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir mkdocs_gen_files-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-mkdocs-gen-files usr/lib/python3*/site-packages/mkdocs_gen_files* usr/lib64/python3*/site-packages/mkdocs_gen_files* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/mkdocs_gen_files* usr/lib64/python3*/site-packages/mkdocs_gen_files* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-mkdocs-gen-files -f %{pyproject_files}
+%files
+%files -n python3-mkdocs-gen-files -f %{oreon_filedir}/python3-mkdocs-gen-files.list
 
 %changelog
+
 %autochangelog

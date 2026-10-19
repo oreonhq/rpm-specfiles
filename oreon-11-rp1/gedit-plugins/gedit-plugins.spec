@@ -1,34 +1,26 @@
 %global source0_hash ef9d0c2a50b6b7f90aa2342d64c9fed5fcea43388ffaf2e514d9ab0e6f88dc1d
-
-# Filter provides for plugin .so files
 %global __provides_exclude_from ^%{_libdir}/gedit/plugins/
-
 %global tarball_version %(echo %{version} | tr '~' '.')
-
 Name:           gedit-plugins
 Version:        50.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plugins for gedit
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://gedit-text-editor.org/
-Source:        https://gitlab.gnome.org/World/gedit/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
-
-BuildRequires:  gcc
-BuildRequires:  gettext
-BuildRequires:  libappstream-glib
-BuildRequires:  meson
-BuildRequires:  yelp-tools
-BuildRequires:  pkgconfig(gedit) >= 50
-BuildRequires:  pkgconfig(libpeas-1.0)
-
-# this is a metapackage dragging in all the plugins
+Source0:        https://gitlab.gnome.org/World/gedit/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 Requires:       gedit-plugin-bookmarks
 Requires:       gedit-plugin-drawspaces
 Requires:       gedit-plugin-smartspaces
 Requires:       gedit-plugin-wordcompletion
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  libappstream-glib
+BuildRequires:  meson
+BuildRequires:  pkgconfig(gedit)
+BuildRequires:  pkgconfig(libpeas-1.0)
+BuildRequires:  yelp-tools
+# /oreon:deps
 %description
 A collection of plugins for gedit.
 
@@ -63,48 +55,31 @@ Requires:       %{name}-data = %{version}-%{release}
 The gedit wordcompletion plugin.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
-
 %find_lang %{name} --with-gnome
 %find_lang gedit --with-gnome
+%oreon_autofiles gedit-plugin-bookmarks usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gedit-plugin-drawspaces usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gedit-plugin-smartspaces usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gedit-plugin-wordcompletion usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# Empty files section for the metapackage to make sure it's created
-%files
-
-%files data -f %{name}.lang -f gedit.lang
-%license COPYING
-%doc README.md NEWS
-%dir %{_libdir}/gedit/plugins/
-
-%files -n gedit-plugin-bookmarks
-%{_libdir}/gedit/plugins/bookmarks.plugin
-%{_libdir}/gedit/plugins/libbookmarks.so
-%{_metainfodir}/gedit-bookmarks.metainfo.xml
-
-%files -n gedit-plugin-drawspaces
-%{_datadir}/glib-2.0/schemas/org.gnome.gedit.plugins.drawspaces.gschema.xml
-%{_libdir}/gedit/plugins/drawspaces.plugin
-%{_libdir}/gedit/plugins/libdrawspaces.so
-%{_metainfodir}/gedit-drawspaces.metainfo.xml
-
-%files -n gedit-plugin-smartspaces
-%{_libdir}/gedit/plugins/libsmartspaces.so
-%{_libdir}/gedit/plugins/smartspaces.plugin
-%{_metainfodir}/gedit-smartspaces.metainfo.xml
-
-%files -n gedit-plugin-wordcompletion
-%{_datadir}/glib-2.0/schemas/org.gnome.gedit.plugins.wordcompletion.gschema.xml
-%{_libdir}/gedit/plugins/libwordcompletion.so
-%{_libdir}/gedit/plugins/wordcompletion.plugin
-%{_metainfodir}/gedit-wordcompletion.metainfo.xml
+%files -f %{oreon_filedir}/main.list
+%files -n gedit-plugins-data -f %{oreon_filedir}/gedit-plugins-data.list
+%files -n gedit-plugin-bookmarks -f %{oreon_filedir}/gedit-plugin-bookmarks.list
+%files -n gedit-plugin-drawspaces -f %{oreon_filedir}/gedit-plugin-drawspaces.list
+%files -n gedit-plugin-smartspaces -f %{oreon_filedir}/gedit-plugin-smartspaces.list
+%files -n gedit-plugin-wordcompletion -f %{oreon_filedir}/gedit-plugin-wordcompletion.list
 
 %changelog
+
 %autochangelog

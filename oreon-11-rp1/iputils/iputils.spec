@@ -1,42 +1,34 @@
+%global source5_hash edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6
 %global source0_hash 19e680c9eef8c079da4da37040b5f5453763205b4edfb1e2c114de77908927e4
 %global source1_hash 7917bf34de80a2492eb225adf9168c83a4854ac8a008ed0fd5b3fd147ccd3041
-
 %global _hardened_build 1
-
-Summary: Network monitoring tools including ping
+Summary:        Network monitoring tools including ping
 Name: iputils
 Version: 20250605
-Release: 8%{?dist}
-# some parts are under the original BSD (ping.c)
-# some are under GPLv2+ (tracepath.c)
+Release:        1%{?dist}
 License: BSD-4-Clause-UC AND GPL-2.0-or-later
 URL: https://github.com/iputils/iputils
-
 Source0:        https://github.com/iputils/iputils/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# Debian source is ifenslave-2.6 (not ifenslave); NixOS and old pool used:
-#   pool/main/i/ifenslave-2.6/ifenslave-2.6_1.1.0.orig.tar.gz
-# Immutable snapshot (same file as historic deb.debian.org).
 Source1: https://snapshot.debian.org/archive/debian/20070312T000000Z/pool/main/i/ifenslave-2.6/ifenslave-2.6_1.1.0.orig.tar.gz
-# Taken from ping.c on 2014-07-12
 Source4: bsd.txt
 Source5: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
-
 Patch100: iputils-ifenslave.patch
-
-BuildRequires: gcc
-BuildRequires: meson
-BuildRequires: gettext
-BuildRequires: glibc-kernheaders >= 2.4-8.19
-BuildRequires: libidn2-devel
-BuildRequires: libcap-devel
-BuildRequires: libxslt docbook5-style-xsl
-BuildRequires: systemd
-BuildRequires: iproute
 %{?systemd_ordering}
 Provides: /bin/ping
 Provides: /bin/ping6
 Provides: /sbin/arping
-
+# oreon:deps
+BuildRequires:  docbook5-style-xsl
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  glibc-kernheaders
+BuildRequires:  iproute
+BuildRequires:  libcap-devel
+BuildRequires:  libidn2-devel
+BuildRequires:  libxslt
+BuildRequires:  meson
+BuildRequires:  systemd
+# /oreon:deps
 %description
 The iputils package contains basic utilities for monitoring a network,
 including ping. The ping command sends a series of ICMP protocol
@@ -44,6 +36,7 @@ ECHO_REQUEST packets to a specified network host to discover whether
 the target machine is alive and receiving network traffic.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
@@ -91,14 +84,13 @@ perl -i -pe 's/^(\s*)strcpy\s*\(\s*ifr\.ifr_name\s*,\s*ifname\s*\)\s*;\s*$/$1mem
 perl -i -pe 's/fprintf\(\s*stderr\s*,\s*usage_msg\s*\);/fprintf(stderr, "%s", usage_msg);/g; s/printf\(\s*usage_msg\s*\);/printf("%s", usage_msg);/g; s/printf\(\s*help_msg\s*\);/printf("%s", help_msg);/g; s/printf\(\s*version\s*\);/printf("%s", version);/g' ifenslave.c
 
 %build
+
 %meson
 %meson_build
 gcc $RPM_OPT_FLAGS $CFLAGS $RPM_LD_FLAGS $LDFLAGS ifenslave.c -o ifenslave
-
 %install
 %meson_install
 %find_lang %{name}
-
 mkdir -p ${RPM_BUILD_ROOT}%{_sbindir}
 ln -sf --relative ${RPM_BUILD_ROOT}%{_bindir}/ping ${RPM_BUILD_ROOT}%{_sbindir}/ping6
 ln -sf --relative ${RPM_BUILD_ROOT}%{_bindir}/tracepath ${RPM_BUILD_ROOT}%{_sbindir}/tracepath6
@@ -107,36 +99,16 @@ ln -sf --relative ${RPM_BUILD_ROOT}%{_bindir}/ping ${RPM_BUILD_ROOT}%{_sbindir}/
 ln -sf --relative ${RPM_BUILD_ROOT}%{_bindir}/tracepath ${RPM_BUILD_ROOT}%{_sbindir}/
 ln -sf --relative ${RPM_BUILD_ROOT}%{_bindir}/arping ${RPM_BUILD_ROOT}%{_sbindir}/
 %endif
-
 echo ".so man8/ping.8" > ${RPM_BUILD_ROOT}%{_mandir}/man8/ping6.8
 echo ".so man8/tracepath.8" > ${RPM_BUILD_ROOT}%{_mandir}/man8/tracepath6.8
 install -cp ifenslave ${RPM_BUILD_ROOT}%{_sbindir}/
 install -cp ifenslave.8 ${RPM_BUILD_ROOT}%{_mandir}/man8/
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc README.bonding
-%license bsd.txt gpl-2.0.txt
-%attr(0755,root,root) %caps(cap_net_raw=p) %{_bindir}/clockdiff
-%attr(0755,root,root) %caps(cap_net_raw=p) %{_bindir}/arping
-%attr(0755,root,root) %{_bindir}/ping
-%{_sbindir}/ifenslave
-%{_bindir}/tracepath
-%{_sbindir}/ping6
-%{_sbindir}/tracepath6
-%if "%{_sbindir}" != "%{_bindir}"
-%{_sbindir}/ping
-%{_sbindir}/tracepath
-%{_sbindir}/arping
-%endif
-%attr(644,root,root) %{_mandir}/man8/clockdiff.8*
-%attr(644,root,root) %{_mandir}/man8/arping.8*
-%attr(644,root,root) %{_mandir}/man8/ping.8*
-%{_mandir}/man8/ping6.8*
-%attr(644,root,root) %{_mandir}/man8/tracepath.8*
-%{_mandir}/man8/tracepath6.8*
-%attr(644,root,root) %{_mandir}/man8/ifenslave.8*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-8
 - Drop Patch101, apply CWE-170 strncpy fix with perl (unified patch kept failing on whitespace)
 

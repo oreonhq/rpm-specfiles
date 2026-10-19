@@ -1,5 +1,4 @@
 %global source0_hash 9a8e6d731e06edb10a35e2221aeea7f539b3ff4d5b90538bf119726e72644ff4
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,35 +83,33 @@ end
 Name:           apache-commons-io
 Epoch:          1
 Version:        2.22.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Utilities to assist with developing IO functionality
 License:        Apache-2.0
 URL:            https://commons.apache.org/proper/commons-io/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/commons/io/source/commons-io-%{version}-src.tar.gz
-
-BuildRequires:  jurand
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1:2.16.1-13
+# oreon:deps
+BuildRequires:  jurand
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
 BuildRequires:  mvn(org.apache.commons:commons-parent:pom:)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
 BuildRequires:  mvn(org.mockito:mockito-core)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1:2.16.1-13
-
+# /oreon:deps
 %description
 Commons-IO contains utility classes, stream implementations,
 file filters, and endian classes. It is a library of utilities
 to assist with developing IO functionality.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n commons-io-%{version}-src
 
@@ -133,24 +130,14 @@ rm src/test/java/org/apache/commons/io/input/ReversedLinesFileReaderParamFileTes
 rm src/test/java/org/apache/commons/io/file/PathUtilsContentEqualsTest.java
 
 %build
-# See "-DcommonsIoVersion" in maven-surefire for the tested version
 
-# The following tests fail on tmpfs/nfs:
-#  * PathUtilsDeleteDirectoryTest.testDeleteDirectory1FileSize0OverrideReadOnly:80->testDeleteDirectory1FileSize0:68 » FileSystem
-#  * PathUtilsDeleteFileTest.testDeleteReadOnlyFileDirectory1FileSize1:114 » FileSystem
-#  * PathUtilsDeleteFileTest.testSetReadOnlyFileDirectory1FileSize1:134 » FileSystem
-#  * PathUtilsDeleteTest.testDeleteDirectory1FileSize0OverrideReadonly:97->testDeleteDirectory1FileSize0:69 » FileSystem
-#  * PathUtilsDeleteTest.testDeleteDirectory1FileSize1OverrideReadOnly:145->testDeleteDirectory1FileSize1:117 » FileSystem
-
-# moditect profile generates module-info.class
 %mvn_build -j -f -- -Dcommons.osgi.symbolicName=org.apache.commons.io
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
-%doc RELEASE-NOTES.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

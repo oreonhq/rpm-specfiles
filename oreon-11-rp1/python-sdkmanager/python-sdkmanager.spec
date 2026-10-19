@@ -1,62 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 49063acd70f37826ae2e88a78fe774d394b0a56cbc538649f40369834e356c67
 Name:           python-sdkmanager
 Version:        0.7.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Android SDK Manager
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        AGPL-3.0-or-later
 URL:            https://gitlab.com/fdroid/sdkmanager
-Source:         %{pypi_source sdkmanager}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sdkmanager/sdkmanager-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sdkmanager' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-sdkmanager = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-sdkmanager
-Summary:        %{summary}
-
-%description -n python3-sdkmanager %_description
+Summary:        Android SDK Manager
+%description -n python3-sdkmanager
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-sdkmanager test
-
 
 %prep
-%autosetup -p1 -n sdkmanager-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sdkmanager-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sdkmanager usr/lib/python3*/site-packages/sdkmanager* usr/lib64/python3*/site-packages/sdkmanager* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sdkmanager* usr/lib64/python3*/site-packages/sdkmanager* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sdkmanager -f %{pyproject_files}
+%files
+%files -n python3-sdkmanager -f %{oreon_filedir}/python3-sdkmanager.list
 
 %changelog
+
 %autochangelog

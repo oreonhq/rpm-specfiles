@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 075af8afabae6362482d254e5ac3ffa595d1766117b684e53d9c25c2e937e139
 Name:           python-urlgrabber
 Version:        4.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A high-level cross-protocol url-grabber
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            http://urlgrabber.baseurl.org/
-Source:         %{pypi_source urlgrabber}
-
+Source0:        https://files.pythonhosted.org/packages/source/u/urlgrabber/urlgrabber-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'urlgrabber' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-urlgrabber = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-urlgrabber
-Summary:        %{summary}
-
-%description -n python3-urlgrabber %_description
-
+Summary:        A high-level cross-protocol url-grabber
+%description -n python3-urlgrabber
 
 %prep
-%autosetup -p1 -n urlgrabber-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir urlgrabber-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-urlgrabber usr/lib/python3*/site-packages/urlgrabber* usr/lib64/python3*/site-packages/urlgrabber* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/urlgrabber* usr/lib64/python3*/site-packages/urlgrabber* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-urlgrabber -f %{pyproject_files}
+%files
+%files -n python3-urlgrabber -f %{oreon_filedir}/python3-urlgrabber.list
 
 %changelog
+
 %autochangelog

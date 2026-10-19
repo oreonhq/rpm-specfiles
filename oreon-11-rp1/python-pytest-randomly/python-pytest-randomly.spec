@@ -1,57 +1,45 @@
 %global source0_hash e9c575a5873ef168ddbe340ed9e97ce9edb4492ccc821e4b2ac6bb1f0ed515d2
-
 Name:           python-pytest-randomly
 Version:        5.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Pytest plugin to randomly order tests and control random.seed.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/pytest-dev/pytest-randomly
-Source:         %{pypi_source pytest_randomly}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest_randomly/pytest_randomly-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pytest-randomly' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(uv-build) < 0.13
+BuildRequires:  python3dist(uv-build) >= 0.12.1
+Requires:       python3-pytest-randomly = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pytest-randomly
-Summary:        %{summary}
-
-%description -n python3-pytest-randomly %_description
-
+Summary:        Pytest plugin to randomly order tests and control random.seed.
+# oreon:reqs
+Requires:       python3dist(pytest) >= 8
+# /oreon:reqs
+%description -n python3-pytest-randomly
 
 %prep
-%autosetup -p1 -n pytest_randomly-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pytest_randomly-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pytest-randomly usr/lib/python3*/site-packages/pytest_randomly* usr/lib64/python3*/site-packages/pytest_randomly* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pytest_randomly* usr/lib64/python3*/site-packages/pytest_randomly* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pytest-randomly -f %{pyproject_files}
+%files
+%files -n python3-pytest-randomly -f %{oreon_filedir}/python3-pytest-randomly.list
 
 %changelog
+
 %autochangelog

@@ -1,24 +1,22 @@
 %global source0_hash 15d838c4f3375332fd95554619179b69e4ec91418a3a5296e7c631b7ed19e7ca
-
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
-
 Name: xmlstarlet
 Version: 1.6.1
-Release: 29%{?dist}
-Summary: Command Line XML Toolkit
+Release:        1%{?dist}
+Summary:        Command Line XML Toolkit
 License: MIT
 URL: http://xmlstar.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/xmlstar/%{name}-%{version}.tar.gz
-# https://sourceforge.net/p/xmlstar/bugs/109/
 Patch0: xmlstarlet-1.6.1-nogit.patch
-# http://sourceforge.net/tracker/?func=detail&aid=3266898&group_id=66612&atid=515106
-
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: xmlto automake autoconf libxslt-devel
-BuildRequires: libxml2-devel >= 2.6.23
-
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  libxml2-devel
+BuildRequires:  libxslt-devel
+BuildRequires:  make
+BuildRequires:  xmlto
+# /oreon:deps
 %description
 XMLStarlet is a set of command line utilities which can be used
 to transform, query, validate, and edit XML documents and files
@@ -28,33 +26,23 @@ commands.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 autoreconf -i
 %configure --disable-static-libs --with-libxml-include-prefix=%{_includedir}/libxml2 --docdir=%{_pkgdocdir} # --libdir=%{_libdir}
 %make_build
-
-
 %install
 %make_install
-# Avoid name kludging in autotools
 mv %{buildroot}%{_bindir}/xml %{buildroot}%{_bindir}/xmlstarlet
-
+%oreon_autofiles main
 
 %check
+
 make check
-
-
-
-%files
-%doc AUTHORS ChangeLog NEWS README Copyright TODO
-%doc %{_pkgdocdir}/*
-%{_mandir}/man1/xmlstarlet.1*
-%{_bindir}/xmlstarlet
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.1-29
 - Prepare for Oreon 11 (RP1)

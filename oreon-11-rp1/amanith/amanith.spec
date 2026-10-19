@@ -1,20 +1,11 @@
 %global source0_hash 2e92dde6e56abef0f5146fd61ad0310e176d25578673353afe4def99c6bdaa1a
-
 Name:          amanith
 Version:       0.3
-Release:       60%{?dist}
-Summary:       Crossplatform framework for 2d/3d vector graphics
-# Automatically converted from old format: QPL - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Crossplatform framework for 2d/3d vector graphics
 License:       QPL-1.0
 URL:           http://www.amanith.org
-# Upstream no longer offers this code
-# It originally came from: http://www.amanith.org/download/files/amanith_03.tar.gz
-Source0:       amanith_03.tar.gz
-BuildRequires:  gcc-c++
-BuildRequires: qt3-devel, freetype-devel, libjpeg-devel, libpng-devel, zlib-devel
-BuildRequires: libXmu-devel, glew-devel, mesa-libGLU-devel
-BuildRequires: mesa-libGL-devel, pkgconfig
-BuildRequires: make
+Source0:        amanith_03.tar.gz
 Patch0:        amanith-0.3-nothirdpartystatic.patch
 Patch1:        amanith-0.3-system-glew.patch
 Patch3:        amanith-0.3-gcc-C++fix.patch
@@ -27,7 +18,20 @@ Patch9:        amanith-0.3-gcc44.patch
 Patch10:       amanith-0.3-fix-DSO.patch
 Patch11:       amanith-0.3-gcc-constructor-fix.patch
 Patch12:       amanith-0.3-libpng15-fix.patch
-
+# oreon:deps
+BuildRequires:  freetype-devel
+BuildRequires:  gcc-c++
+BuildRequires:  glew-devel
+BuildRequires:  libXmu-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  make
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  pkgconfig
+BuildRequires:  qt3-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Amanith is an OpenSource C++ CrossPlatform framework designed for 2d & 3d 
 vector graphics.  All the framework is heavily based on a light plug-in 
@@ -37,11 +41,11 @@ system.
 Summary:       Development files for amanith
 Requires:      glew-devel
 Requires:      %{name} = %{version}-%{release}
-
 %description devel
 Development libraries and headers for developing programs that use amanith.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}
@@ -78,32 +82,26 @@ for i in FAQ CHANGELOG INSTALL README LICENSE.QPL; do
 done
 
 %build
+
 export AMANITHDIR=$(pwd)
 export LD_LIBRARY_PATH=$AMANITHDIR/lib:$LD_LIBRARY_PATH
 source %{_sysconfdir}/profile.d/qt.sh
 qmake amanith.pro
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT%{_libdir}
 mkdir -p $RPM_BUILD_ROOT%{_includedir}
-
-# We're using cp instead of install because the symlinks are already
-# created correctly.
 cp -a lib/*.so* $RPM_BUILD_ROOT%{_libdir}
 cp -a plugins/*.so* $RPM_BUILD_ROOT%{_libdir}
 cp -a include/amanith $RPM_BUILD_ROOT%{_includedir}
-
 %ldconfig_scriptlets
+%oreon_autofiles amanith-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc CHANGELOG FAQ LICENSE.QPL README doc/*
-%{_libdir}/*.so.*
-
-%files devel
-%{_libdir}/*.so
-%{_includedir}/amanith/
+%files -f %{oreon_filedir}/main.list
+%files -n amanith-devel -f %{oreon_filedir}/amanith-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,5 +1,4 @@
 %global source0_hash 50828b8fa26d107bcc2bd134328f83c905b9f5e124846bdf239daf0eed34973d
-
 Name:           monsterz
 Version:        0.7.1
 Release:        40%{?dist}
@@ -12,15 +11,16 @@ Patch0:         %{name}-0.7.1-userpmopts.patch
 Patch1:         %{name}-0.7.1-64bitfix.patch
 Patch2:         %{name}-0.7.1-blit-crash.patch
 Patch3:         %{name}-0.7.1-py3.patch
-BuildRequires: make
-BuildRequires:  gcc
-BuildRequires:  desktop-file-utils
-BuildRequires:  python3-devel
 Requires:       python3-pygame
 Requires:       hicolor-icon-theme
 Provides:       %{name}-data = %{version}-%{release}
 Obsoletes:      %{name}-data < 0.7.1
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  python3-devel
+# /oreon:deps
 %description
 Monsterz is a little arcade puzzle game, similar to the famous Bejeweled or
 Zookeeper. The goal of the game is to create rows of similar monsters, either
@@ -30,6 +30,7 @@ alignments are cleared, pieces fall from the top of the screen to fill the
 board again. Chain reactions earn you even more points.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -40,9 +41,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %py3_shebang_fix .
 
 %build
-make %{?_smp_mflags} prefix=%{_usr} datadir=%{_datadir} pkgdatadir=%{_datadir}/%{name} CFLAGS="%{optflags}"
 
-# Build desktop icon
+make %{?_smp_mflags} prefix=%{_usr} datadir=%{_datadir} pkgdatadir=%{_datadir}/%{name} CFLAGS="%{optflags}"
 cat >%{name}.desktop <<EOF
 [Desktop Entry]
 Encoding=UTF-8
@@ -55,10 +55,7 @@ Terminal=false
 Type=Application
 Categories=Game;StrategyGame;
 EOF
-
 %install
-# Bypass make install as it requires root priviledges and the SRPM
-# may not necessarily be built as root
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_datadir}/{applications,icons/hicolor/64x64/apps}
 mkdir -p %{buildroot}%{_datadir}/%{name}/{graphics,sound}
@@ -67,23 +64,15 @@ install -pm0755 %{name} %{buildroot}%{_bindir}
 install -pm0755 %{name}.py %{buildroot}%{_datadir}/%{name}
 cp -a graphics/* %{buildroot}%{_datadir}/%{name}/graphics
 cp -a sound/* %{buildroot}%{_datadir}/%{name}/sound
-
 install -pm0664 %{SOURCE1} %{buildroot}%{_var}/games/%{name}
-
 desktop-file-install \
                      --dir %{buildroot}%{_datadir}/applications \
                      %{name}.desktop
-
 install -pm0644 graphics/icon.png %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/%{name}.png
+%oreon_autofiles main
 
-%files
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/64x64/apps/%{name}.png
-%{_datadir}/%{name}
-%attr(2755,root,games) %{_bindir}/%{name}
-%attr(-,root,games) %config(noreplace) %{_var}/games/%{name}
-%license COPYING
-%doc AUTHORS README TODO
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

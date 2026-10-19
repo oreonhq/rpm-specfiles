@@ -1,26 +1,22 @@
-%global source0_hash ece3eabdf1c5df18bd91f8f210131444de8360b8c9a7f3926f76a6b5f14fc376
-
+%global source0_hash 73fb4a25473ecf0f6c6d3536cb55e1d7297937744767294dd5cf9a519bc87e17
 %global repo dde-account-faces
-
 Name:           deepin-account-faces
 Version:        1.0.19
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Account faces for Linux Deepin
-# migrated to SPDX
 License:        GPL-3.0-or-later
 URL:            https://github.com/linuxdeepin/dde-account-faces
-Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-
+Source0:        https://github.com/linuxdeepin/%{repo}/archive/%{version}/%{repo}-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  make
-
 Requires:       accountsservice
-
+# oreon:deps
+BuildRequires:  make
+# /oreon:deps
 %description
 Account faces for Linux Deepin
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{repo}-%{version}
@@ -29,9 +25,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%{_sharedstatedir}/AccountsService/icons/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

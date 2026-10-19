@@ -1,17 +1,16 @@
 %global source0_hash e86f9f6f1f9fb0b8b67578b52364e35f84390b3e50f17ab983cf35431b41cb59
-
 Name:       fapg
 Version:    0.45
-Release:    %autorelease
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License:    GPL-2.0-or-later
-Summary:    Fast Audio Playlist Generator
+Summary:        Fast Audio Playlist Generator
 URL:        http://royale.zerezo.com/fapg/
-Source:     http://royale.zerezo.com/fapg/%{name}-%{version}.tar.gz
-BuildRequires: uriparser-devel
-BuildRequires: gcc
-BuildRequires: make
-
+Source0:        http://royale.zerezo.com/fapg/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  uriparser-devel
+# /oreon:deps
 %description
 FAPG means Fast Audio Playlist Generator.
 It is a tool to generate list of audio files (Wav, MP3, Ogg, etc)
@@ -28,24 +27,20 @@ all the known formats.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %configure
 %make_build
-
 %check
-make check
 
+make check
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%doc AUTHORS ChangeLog README
-%license COPYING
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

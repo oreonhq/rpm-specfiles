@@ -1,65 +1,49 @@
+%global source1_hash 3b24cf37b20fde815684fe78a713c289b07cf6503f246c92c19f704d9598b18f
 %global source0_hash 788f0698c904112cc33bf6f8fb446b2e4fd7231d38c0955cbc3baa50d375d1ee
-
 %global stable_kf6 stable
-
-
 Name:    qqc2-breeze-style
 Version:        6.7.5
-Release: 1%{?dist}
-Summary: QtQuickControls2 breeze style
-
+Release:        1%{?dist}
+Summary:        QtQuickControls2 breeze style
 License: CC0-1.0 and GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-## upstream patches
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: extra-cmake-modules
-BuildRequires: kf6-rpm-macros
-
-BuildRequires: cmake(KF6ColorScheme)
-BuildRequires: cmake(KF6Config)
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6GuiAddons)
-BuildRequires: cmake(KF6IconThemes)
-BuildRequires: cmake(KF6KirigamiPlatform)
-BuildRequires: cmake(KF6QuickCharts)
-
+Requires:       kf6-kquickcharts
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6KirigamiPlatform)
+BuildRequires:  cmake(KF6QuickCharts)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel
-
-Requires:       kf6-kquickcharts
-
-
+# /oreon:deps
 %description
 This is a pure Qt Quick/Kirigami Qt Quick Controls style.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-
-%files 
-%doc README.md
-%license LICENSES/*.txt
-%{_kf6_plugindir}/kirigami/platform/org.kde.breeze.so
-%{_qt6_qmldir}/org/kde/breeze/
-%{_kf6_libdir}/cmake/QQC2BreezeStyle/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Thu Apr 16 2026 Jan Grulich <jgrulich@redhat.com> - 6.6.4-2
 - Rebuild (qt6)
 

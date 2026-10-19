@@ -1,46 +1,35 @@
 %global source0_hash 5f012e77601c299d51388d0fce3a824ec9fa77c71f10bb741158e0c8a34c9e29
-
 %global fontname 	mgopen
 %global fontconf        61-%{fontname}
 %global archivename     MgOpen
 %global upstream_date   20050515
-
-# Common description
 %global common_desc The MgOpen fonts are a font family that includes Latin and Greek glyphs.\
 The fonts have been released under a liberal license, similar to the\
 license covering the Bitstream Vera fonts.
-
-# Compat description
 %global compat_desc \
 This package only exists to help transition pre Fedora 11 MgOpen font users to\
 the new package split. It will be removed after one distribution release cycle,\
 please do not reference it or depend on it in any way.\
 \
 It can be safely uninstalled.
-
 Name:      %{fontname}-fonts
 Version:   0.%{upstream_date}
-Release:   47%{?dist}
-Summary:   Truetype greek fonts
-
-# Automatically converted from old format: MgOpen - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Truetype greek fonts
 License:   LicenseRef-MgOpen
 URL:       http://www.ellak.gr/fonts/mgopen/
-Source0:   %{archivename}-%{upstream_date}.tar.gz
-# Upstream tarball is not versioned http://www.ellak.gr/fonts/mgopen/files/%{archivename}.tar.gz
+Source0:        %{archivename}-%{upstream_date}.tar.gz
 Source1:   %{archivename}-%{upstream_date}-doc.tar.gz
-# Tarball of the documentation on the site http://www.ellak.gr/fonts/mgopen/
-# The LICENCE file is an excerpt from the html page
 Source2:   %{fontname}-fontconfig.tar.gz
-# Tarball of fontconfig files for each font
 Source3:   %{fontname}.metainfo.xml
 Source4:   %{fontname}-canonica.metainfo.xml
 Source5:   %{fontname}-cosmetica.metainfo.xml
 Source6:   %{fontname}-modata.metainfo.xml
 Source7:   %{fontname}-moderna.metainfo.xml
-
 BuildArch: noarch
-BuildRequires: fontpackages-devel
+# oreon:deps
+BuildRequires:  fontpackages-devel
+# /oreon:deps
 %description
 %common_desc
 
@@ -105,6 +94,7 @@ typeface which is based on the design of Helvetica.
 %{_datadir}/appdata/%{fontname}-moderna.metainfo.xml
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c -a1 -a2 -n %{archivename}-%{version}
@@ -116,10 +106,8 @@ iconv -f ISO-8859-1 -t UTF-8 LICENCE > LICENCE.tmp; mv LICENCE.tmp LICENCE
 rm -rf %{buildroot}
 install -m 0755 -d %{buildroot}%{_fontdir}
 install -m 0644 -p *.ttf  %{buildroot}%{_fontdir}
-
 install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
                    %{buildroot}%{_fontconfig_confdir}
-
 install -m 0644 -p fontconfig/%{fontname}-canonica.conf \
 	 %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-canonica.conf
 install -m 0644 -p fontconfig/%{fontname}-cosmetica.conf \
@@ -128,7 +116,6 @@ install -m 0644 -p fontconfig/%{fontname}-modata.conf \
          %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-modata.conf
 install -m 0644 -p fontconfig/%{fontname}-moderna.conf \
          %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-moderna.conf
-
 for fconf in %{fontconf}-canonica.conf \
                 %{fontconf}-cosmetica.conf \
                 %{fontconf}-modata.conf \
@@ -136,8 +123,6 @@ for fconf in %{fontconf}-canonica.conf \
   ln -s %{_fontconfig_templatedir}/$fconf \
         %{buildroot}%{_fontconfig_confdir}/$fontconf
 done
-
-# Add AppStream metadata
 install -Dm 0644 -p %{SOURCE3} \
         %{buildroot}%{_datadir}/appdata/%{fontname}.metainfo.xml
 install -Dm 0644 -p %{SOURCE4} \
@@ -148,12 +133,16 @@ install -Dm 0644 -p %{SOURCE6} \
         %{buildroot}%{_datadir}/appdata/%{fontname}-modata.metainfo.xml
 install -Dm 0644 -p %{SOURCE6} \
         %{buildroot}%{_datadir}/appdata/%{fontname}-moderna.metainfo.xml
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files common
-%doc LICENCE mgopen.html _files/
-%{_datadir}/appdata/%{fontname}.metainfo.xml
-
-%files compat
+%files -f %{oreon_filedir}/main.list
+%files -n mgopen-fonts-common -f %{oreon_filedir}/mgopen-fonts-common.list
+%files -n mgopen-fonts-compat -f %{oreon_filedir}/mgopen-fonts-compat.list
+%files -n mgopen-canonica-fonts -f %{oreon_filedir}/mgopen-canonica-fonts.list
+%files -n mgopen-cosmetica-fonts -f %{oreon_filedir}/mgopen-cosmetica-fonts.list
+%files -n mgopen-modata-fonts -f %{oreon_filedir}/mgopen-modata-fonts.list
+%files -n mgopen-moderna-fonts -f %{oreon_filedir}/mgopen-moderna-fonts.list
 
 %changelog
+
 %autochangelog

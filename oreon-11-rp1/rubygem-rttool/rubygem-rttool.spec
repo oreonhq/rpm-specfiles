@@ -1,35 +1,26 @@
 %global source0_hash 4db7e95300d4b3ff7ad42e063a66497c45c19fa28f877fb8a9256ce9e211f460
-
-# Generated from rttool-1.0.3.0.gem by gem2rpm -*- rpm-spec -*-
 %global	gem_name	rttool
-
 Name:		rubygem-%{gem_name}
 Version:	1.0.3.0
-Release:	28%{?dist}
-
-Summary:	Converter from RT into various formats
-# See rttool.en.rd
-# SPDX confirmed
+Release:        28%{?dist}
+Summary:        Converter from RT into various formats
 License:	Ruby OR GPL-2.0-only
-# raa is dead
-#URL:		http://raa.ruby-lang.org/project/rttool/
 URL:		https://github.com/genki/rttool
-Source0:	https://rubygems.org/gems/%{gem_name}-%{version}.gem
-
-BuildRequires:	ruby(release)
-BuildRequires:	rubygems-devel
-BuildRequires:	rubygem(minitest)
-BuildRequires:	rubygem(nkf)
-BuildRequires:	rubygem(test-unit)
-BuildRequires:	rubygem(rdtool)
-BuildRequires:	rubygem(racc)
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Requires:	rubygem(racc)
 Requires:	ruby(release)
 Requires:	ruby(rubygems)
-
 BuildArch:	noarch
 Provides:	rubygem(%{gem_name}) = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  ruby(release)
+BuildRequires:  rubygem(minitest)
+BuildRequires:  rubygem(nkf)
+BuildRequires:  rubygem(racc)
+BuildRequires:  rubygem(rdtool)
+BuildRequires:  rubygem(test-unit)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 RT is a simple and human-readable table format.
 RTtool is a converter from RT into various formats.
@@ -39,11 +30,11 @@ RT can be incorporated into RD.
 Summary:	Documentation for %{name}
 Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
-
 %description doc
 Documentation for %{name}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n  %{gem_name}-%{version}
@@ -64,49 +55,30 @@ sed -i \
 	lib/rt/*.rb
 
 %build
+
 gem build %{gem_name}-%{version}.gemspec
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -pa .%{gem_dir}/* \
 	%{buildroot}%{gem_dir}/
-
 mkdir -p %{buildroot}%{_bindir}
 cp -pa .%{_bindir}/* \
 	%{buildroot}%{_bindir}/
-
 find %{buildroot}%{gem_instdir}/bin -type f | xargs chmod a+x
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 pushd .%{gem_instdir}
 chmod 0755 bin/rt2
-
 export RUBYOPT="-I$(pwd)/lib"
 export PATH=$(pwd)/bin:$PATH
 ruby -Ilib:. -e 'gem "minitest" ; Dir.glob("test/test*.rb").each {|f| require f}'
-
 popd
-
-%files
-%dir	%{gem_instdir}
-%doc	%{gem_instdir}/ChangeLog
-%license	%{gem_instdir}/GPL
-%doc %{gem_instdir}/rttool.*.html
-%license	%{gem_instdir}/rttool.*.rd
-
-%{_bindir}/rdrt2
-%{_bindir}/rt2
-%{gem_instdir}/bin
-
-%{gem_libdir}
-%exclude	%{gem_cache}
-%{gem_spec}
-
-%files doc
-%doc %{gem_docdir}
-%{gem_instdir}/examples/
-%exclude	%{gem_instdir}/test/
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-rttool-doc -f %{oreon_filedir}/rubygem-rttool-doc.list
 
 %changelog
+
 %autochangelog

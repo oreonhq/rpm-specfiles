@@ -1,61 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 58e4c4a1c94fdc29973e7ec714858f36356f105af4da136e7373ab734356976d
 Name:           python-etcd
 Version:        2.0.8
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Python etcd client that just works.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/dsoprea/PythonEtcdClient
-Source:         %{pypi_source etcd}
-
+Source0:        https://files.pythonhosted.org/packages/source/e/etcd/etcd-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'etcd' generated automatically by pyp2spec.}
-
 Patch:          %{url}/pull/288.patch
 Patch:          %{url}/pull/289.patch
 Patch:          %{url}/pull/290.patch
 Patch:          %{url}/pull/294.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-etcd = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-etcd
-Summary:        %{summary}
-
-%description -n python3-etcd %_description
-
+Summary:        A Python etcd client that just works.
+%description -n python3-etcd
 
 %prep
-%autosetup -p1 -n etcd-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir etcd-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-etcd usr/lib/python3*/site-packages/etcd* usr/lib64/python3*/site-packages/etcd* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/etcd* usr/lib64/python3*/site-packages/etcd* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-etcd -f %{pyproject_files}
+%files
+%files -n python3-etcd -f %{oreon_filedir}/python3-etcd.list
 
 %changelog
+
 %autochangelog

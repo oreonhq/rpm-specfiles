@@ -1,5 +1,10 @@
+%global source8_hash 8068baa4d2eac692e6e898f9590f155a6546bab3f00c1695e4232d8e05b625f2
+%global source7_hash a751aafdce030cdfa8bd5c5a0d0d5f7f46c19661f5c000cb5d5fccf5e735504c
+%global source6_hash 105df064761b806e74cf6b0a44146450ac2329bbecca9797ad49d58c43927594
+%global source5_hash 40ef8b7eb6be1533f63388b63cf496b613bf85296faead47f9bb51bf33e7a4d2
+%global source4_hash a0a4f3aa7db910542aadfc3f2109a8ad7631b7540e4f278e09de9af6a50c1065
+%global source3_hash 703f10258b738b950e229c4760f60751e8d9f25cb3b5e3fc42480beafb91fef1
 %global source0_hash b1b880e68a07bab6e9c303ed429b85b7830b71efecf731e8530262d426aedf01
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,28 +86,20 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 %if %{without bootstrap} && %{undefined rhel} || (0%{?oreon} >= 11)
 %bcond_without bnd_maven_plugin
 %else
 %bcond_with bnd_maven_plugin
 %endif
-
 Name:           aqute-bnd
 Version:        6.3.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        BND Tool
-# Part of jpm is under BSD, but jpm is not included in binary RPM
 License:        Apache-2.0 OR EPL-2.0
 URL:            https://bnd.bndtools.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/bndtools/bnd/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# removes bundled jars from upstream tarball
-# run as:
-# ./generate-tarball.sh
-# Auxiliary parent pom, packager-written
 Source2:        aggregator.pom
 Source3:        https://repo1.maven.org/maven2/biz/aQute/bnd/aQute.libg/%{version}/aQute.libg-%{version}.pom
 Source4:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd/%{version}/biz.aQute.bnd-%{version}.pom
@@ -110,26 +107,19 @@ Source5:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bndlib/%{
 Source6:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.annotation/%{version}/biz.aQute.bnd.annotation-%{version}.pom
 Source7:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.ant/%{version}/biz.aQute.bnd.ant-%{version}.pom
 Source8:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.util/%{version}/biz.aQute.bnd.util-%{version}.pom
-
 Patch:          0001-Disable-removed-commands.patch
 Patch:          0002-Port-to-OSGI-7.0.0.patch
 Patch:          0003-Remove-unmet-dependencies.patch
 Patch:          0004-Port-to-OpenJDK-21.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.ant:ant)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
-BuildRequires:  mvn(org.junit:junit-bom:pom:)
-BuildRequires:  mvn(org.osgi:osgi.annotation)
-BuildRequires:  mvn(org.osgi:osgi.cmpn)
-BuildRequires:  mvn(org.osgi:osgi.core)
-BuildRequires:  mvn(org.slf4j:slf4j-api)
-BuildRequires:  mvn(org.slf4j:slf4j-simple)
 %endif
 %if %{with bnd_maven_plugin}
+%endif
+Obsoletes:      %{name}-javadoc < 6.3.1-23
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(org.apache.ant:ant)
 BuildRequires:  mvn(org.apache.maven.plugin-tools:maven-plugin-annotations)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
@@ -138,13 +128,16 @@ BuildRequires:  mvn(org.apache.maven:maven-artifact)
 BuildRequires:  mvn(org.apache.maven:maven-compat)
 BuildRequires:  mvn(org.apache.maven:maven-core)
 BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
+BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 BuildRequires:  mvn(org.eclipse.aether:aether-api)
+BuildRequires:  mvn(org.junit:junit-bom:pom:)
+BuildRequires:  mvn(org.osgi:osgi.annotation)
+BuildRequires:  mvn(org.osgi:osgi.cmpn)
+BuildRequires:  mvn(org.osgi:osgi.core)
+BuildRequires:  mvn(org.slf4j:slf4j-api)
+BuildRequires:  mvn(org.slf4j:slf4j-simple)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
-%endif
-
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 6.3.1-23
-
+# /oreon:deps
 %description
 The bnd tool helps you create and diagnose OSGi bundles.
 The key functions are:
@@ -160,19 +153,18 @@ The tool is capable of acting as:
 
 %package -n aqute-bndlib
 Summary:        BND library
-
 %description -n aqute-bndlib
 %{summary}.
 
 %if %{with bnd_maven_plugin}
 %package -n bnd-maven-plugin
 Summary:        BND Maven plugin
-
 %description -n bnd-maven-plugin
 %{summary}.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n bnd-%{version}
 
@@ -289,28 +281,22 @@ popd
 %endif
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
-
 install -d -m 755 %{buildroot}%{_sysconfdir}/ant.d
 echo "aqute-bnd slf4j/api slf4j/simple osgi-annotation osgi-core osgi-compendium" >%{buildroot}%{_sysconfdir}/ant.d/%{name}
-
 %jpackage_script aQute.bnd.main.bnd "" "" aqute-bnd:slf4j/slf4j-api:slf4j/slf4j-simple:osgi-annotation:osgi-core:osgi-compendium bnd 1
+%oreon_autofiles aqute-bndlib usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bnd-maven-plugin usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license LICENSE
-%{_bindir}/bnd
-%config(noreplace) %{_sysconfdir}/ant.d/*
-
-%files -n aqute-bndlib -f .mfiles-bndlib
-%license LICENSE
-
-%if %{with bnd_maven_plugin}
-%files -n bnd-maven-plugin -f .mfiles-maven
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n aqute-bndlib -f %{oreon_filedir}/aqute-bndlib.list
+%files -n bnd-maven-plugin -f %{oreon_filedir}/bnd-maven-plugin.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.3.1-1
 - Import

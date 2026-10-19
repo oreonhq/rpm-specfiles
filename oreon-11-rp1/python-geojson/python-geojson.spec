@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 92e83b9cb378a450b42f1207bb9b2a031f9fc89185f335153c44369b8b8b71fd
 Name:           python-geojson
 Version:        3.3.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python bindings and utilities for GeoJSON
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/jazzband/geojson
-Source:         %{pypi_source geojson}
-
+Source0:        https://files.pythonhosted.org/packages/source/g/geojson/geojson-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'geojson' generated automatically by pyp2spec.}
-
 Patch0:     remove-check.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-geojson = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-geojson
-Summary:        %{summary}
-
-%description -n python3-geojson %_description
-
+Summary:        Python bindings and utilities for GeoJSON
+%description -n python3-geojson
 
 %prep
-%autosetup -p1 -n geojson-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir geojson-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-geojson usr/lib/python3*/site-packages/geojson* usr/lib64/python3*/site-packages/geojson* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/geojson* usr/lib64/python3*/site-packages/geojson* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-geojson -f %{pyproject_files}
+%files
+%files -n python3-geojson -f %{oreon_filedir}/python3-geojson.list
 
 %changelog
+
 %autochangelog

@@ -1,5 +1,4 @@
 %global source0_hash 41e4feb68c5435b2a417e05a4a26107d5b0d54946b6ed3b55ca8dfca3d214337
-
 Name:           perl-QWizard
 Version:        3.15
 Release:        48%{?dist}
@@ -8,44 +7,21 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/QWizard
 Source0:        https://cpan.metacpan.org/authors/id/H/HA/HARDAKER/QWizard-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Run-time:
-# Only ./Storage modules have tests, thus many run-time dependencies are not
-# used at tests.
-# AutoLoader
-BuildRequires:  perl(CGI)
-# CGI::Cookie
-# Chart::Lines
-# Config
-# Data::Dumper
-# Exporter
-# File::Temp
-# Glib
-# Gtk2
-# IO::File
-# MIME::Base64
-# POSIX
-BuildRequires:  perl(strict)
-# Term::ReadLine
-# Tk
-# Tk::Balloon
-# Tk::FileSelect
-# Tk::Pane
-# Tk::PNG
-# Tk::Table
-# Tk::Tree
-# Tests:
-BuildRequires:  perl(Test::More)
 Requires:       perl(Chart::Lines)
 Requires:       perl(MIME::Base64)
 Requires:       perl(Tk::Balloon)
 Requires:       perl(Tk::PNG)
 Requires:       perl(Tk::Tree)
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(CGI)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(strict)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The QWizard module allows script authors to concentrate on the
 content of the forms they want their users to fill in without
@@ -70,12 +46,12 @@ BuildArch:      noarch
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       coreutils
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n QWizard-%{version}
@@ -87,19 +63,16 @@ chmod a-x examples/*.pl
 chmod a+x Storage/t/tests.pl
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a Storage/t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# t/file.t writes to CWD
 DIR=$(mktemp -d)
 cp -a %{_libexecdir}/%{name}/* "$DIR"
 pushd "$DIR"
@@ -108,26 +81,15 @@ popd
 rm -r "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Not parallel-safe: Storage/t/file.t creates a file and Storage/t/read-file.t
-# reads it.
+
 export HARNESS_OPTIONS=j1
 make test
-
-%files
-%doc examples README
-%dir %{perl_vendorlib}/auto
-%{perl_vendorlib}/auto/QWizard
-%{perl_vendorlib}/QWizard
-%{perl_vendorlib}/QWizard.pm
-%{perl_vendorlib}/QWizard_Widgets.pod
-%{_mandir}/man3/QWizard.*
-%{_mandir}/man3/QWizard::*
-%{_mandir}/man3/QWizard_Widgets.*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-QWizard-tests -f %{oreon_filedir}/perl-QWizard-tests.list
 
 %changelog
+
 %autochangelog

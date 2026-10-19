@@ -1,73 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 095a980a1976adff48c3de1f73d75efe9b39da7214dc7c891a2363240716a9e7
 Name:           python-minikerberos
 Version:        0.4.9
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Kerberos manipulation library in pure Python
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/skelsec/minikerberos
-Source:         %{pypi_source minikerberos}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/minikerberos/minikerberos-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'minikerberos' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61.0.0
+Requires:       python3-minikerberos = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-minikerberos
-Summary:        %{summary}
-
-%description -n python3-minikerberos %_description
-
+Summary:        Kerberos manipulation library in pure Python
+%description -n python3-minikerberos
 
 %prep
-%autosetup -p1 -n minikerberos-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir minikerberos-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-minikerberos usr/lib/python3*/site-packages/minikerberos* usr/lib64/python3*/site-packages/minikerberos* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/minikerberos* usr/lib64/python3*/site-packages/minikerberos* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-minikerberos -f %{pyproject_files}
-%{_bindir}/minikerberos-asreproast
-%{_bindir}/minikerberos-ccache2kirbi
-%{_bindir}/minikerberos-ccacheedit
-%{_bindir}/minikerberos-ccacheroast
-%{_bindir}/minikerberos-cve202233647
-%{_bindir}/minikerberos-cve202233679
-%{_bindir}/minikerberos-getntpkinit
-%{_bindir}/minikerberos-gets4u2proxy
-%{_bindir}/minikerberos-gets4u2self
-%{_bindir}/minikerberos-gettgs
-%{_bindir}/minikerberos-gettgt
-%{_bindir}/minikerberos-kerb23hashdecrypt
-%{_bindir}/minikerberos-kerberoast
-%{_bindir}/minikerberos-keylist
-%{_bindir}/minikerberos-kirbi2ccache
-%{_bindir}/minikerberos-pw
+%files
+%files -n python3-minikerberos -f %{oreon_filedir}/python3-minikerberos.list
 
 %changelog
+
 %autochangelog

@@ -1,29 +1,15 @@
 %global source0_hash 8c7f690002ea22c139f3a64394aef2e816e00ca47fd971af7d54a66087356dd2
-
-# Force out of source build
 %undefine __cmake_in_source_build
-
-# base pkg default to SQLITE now, install -mysql if you want that instead
 %global database_backend SQLITE
-
-# trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
-
-Summary: PIM Storage Service Libraries
+Summary:        PIM Storage Service Libraries
 Name:    akonadi
 Version: 1.13.0
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: LGPL-2.0-or-later
 URL:     http://community.kde.org/KDE_PIM/Akonadi 
-Source0: http://download.kde.org/stable/akonadi/src/akonadi-%{version}.tar.bz2
-
-## downstream patches
+Source0:        http://download.kde.org/stable/akonadi/src/akonadi-%{version}.tar.bz2
 Patch100: akonadi-1.13.0-libs_only.patch
-
-## upstreamable patches
-
-## upstream patches (1.13 branch)
 Patch1: 0001-FindSqlite-Use-CMAKE_FLAGS-the-right-way-in-try_comp.patch
 Patch2: 0002-Do-not-enter-the-test-directories-if-AKONADI_BUILD_T.patch
 Patch3: 0003-STORE-Allow-modifying-items-tags-via-Tag-RID-or-GID.patch
@@ -54,16 +40,17 @@ Patch27: 0027-Minor-improvements-in-StatisticsCache-as-suggested-b.patch
 Patch28: 0028-Extend-imapparser-benchmark-and-keep-static-data-aro.patch
 Patch29: 0029-Reduce-the-amount-of-allocations-by-preallocating-a-.patch
 Patch30: 0030-Preallocate-a-capacity-of-16-for-the-returned-list.patch
-
-BuildRequires: automoc4
-BuildRequires: boost-devel
-BuildRequires: cmake >= 2.8.8
-BuildRequires: gcc-c++
-# for xsltproc
-BuildRequires: libxslt
-BuildRequires: pkgconfig(QtDBus) pkgconfig(QtSql) pkgconfig(QtXml)
-BuildRequires: pkgconfig(shared-mime-info)
-
+# oreon:deps
+BuildRequires:  automoc4
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  libxslt
+BuildRequires:  pkgconfig(QtDBus)
+BuildRequires:  pkgconfig(QtSql)
+BuildRequires:  pkgconfig(QtXml)
+BuildRequires:  pkgconfig(shared-mime-info)
+# /oreon:deps
 %description
 %{summary}.
 
@@ -76,36 +63,26 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n akonadi-%{version}
-
+%global oreon_srcdir akonadi-%{version}
+%oreon_prep
 %build
+
 %cmake -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
-
 %install
 %cmake_install
-
-## unpackaged files
 rm -fv %{buildroot}%{_datadir}/mime/packages/akonadi-mime.xml
+%oreon_autofiles akonadi-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
 test "$(pkg-config --modversion akonadi)" = "%{version}"
-
 %ldconfig_scriptlets
-
-%files
-%doc AUTHORS
-%license lgpl-license
-%{_libdir}/libakonadiprotocolinternals.so.1*
-
-%files devel
-%{_includedir}/akonadi/
-%{_libdir}/pkgconfig/akonadi.pc
-%{_libdir}/libakonadiprotocolinternals.so
-%{_libdir}/cmake/Akonadi/
-%{_datadir}/dbus-1/interfaces/org.freedesktop.Akonadi.*.xml
+%files -f %{oreon_filedir}/main.list
+%files -n akonadi-devel -f %{oreon_filedir}/akonadi-devel.list
 
 %changelog
+
 %autochangelog

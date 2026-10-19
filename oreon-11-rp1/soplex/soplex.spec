@@ -1,54 +1,22 @@
 %global source0_hash f989f650e0d489f4e84037af2a50b1d0928f62ab79179ef566111d9197c2b6c8
-
-# Architectures that have libquadmath
 %ifarch %{x86_64} %{power64}
 %global quadmath 1
 %else
 %global quadmath 0
 %endif
-
 %global giturl  https://github.com/scipopt/soplex
-
 Name:           soplex
 Version:        8.0.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Sequential object-oriented simplex
-
-# Apache-2.0: the project as a whole
-# MIT: the bundled fmt project
 License:        Apache-2.0 AND MIT
 URL:            https://soplex.zib.de/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
-# Elevate the shared library from second-class status to first-class
+Source0:        %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:          %{name}-shared.patch
-# Unbundle zstr
 Patch:          %{name}-unbundle-zstr.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
-BuildRequires:  boost-devel
-BuildRequires:  cmake
-BuildRequires:  cmake(papilo)
-BuildRequires:  cmake(tbb)
-BuildRequires:  gcc-c++
-BuildRequires:  gcc-gfortran
-%if %{quadmath}
-BuildRequires:  libquadmath-devel
-%endif
-BuildRequires:  ninja-build
-BuildRequires:  pkgconfig(gmp)
-BuildRequires:  pkgconfig(mpfr)
-BuildRequires:  zstr-static
-
-# Documentation
-BuildRequires:  doxygen
-BuildRequires:  php-cli
-BuildRequires:  python3
-
 Requires:       libsoplex%{?_isa} = %{version}-%{release}
-
 %global _desc %{expand:
 SoPlex is an optimization package for solving linear programming problems
 (LPs) based on an advanced implementation of the primal and dual revised
@@ -56,7 +24,6 @@ simplex algorithm.  It provides special support for the exact solution of LPs
 with rational input data.  It can be used as a standalone solver reading MPS
 or LP format files via a command line interface as well as embedded into other
 programs via a C++ class library.  The main features of SoPlex are:
-
 - presolving, scaling, exploitation of sparsity, hot-starting from any regular
   basis,
 - column- and row-oriented form of the simplex algorithm,
@@ -66,11 +33,24 @@ programs via a C++ class library.  The main features of SoPlex are:
 - an LP iterative refinement procedure to compute high-precision solution, and
 - routines for an exact rational LU factorization and continued fraction
   approximations in order to compute exact solutions.
-
 SoPlex has been used in numerous research and industry projects and is the
 standard LP solver linked to the mixed-integer nonlinear programming and
 constraint integer programming solver SCIP.}
-
+# oreon:deps
+BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(papilo)
+BuildRequires:  cmake(tbb)
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  gcc-gfortran
+BuildRequires:  ninja-build
+BuildRequires:  php-cli
+BuildRequires:  pkgconfig(gmp)
+BuildRequires:  pkgconfig(mpfr)
+BuildRequires:  python3
+BuildRequires:  zstr-static
+# /oreon:deps
 %description
 %_desc
 
@@ -78,10 +58,7 @@ This package contains a command-line tool to access SoPlex functionality.
 
 %package -n     libsoplex
 Summary:        Library for sequential object-oriented simplex
-
-# The bundled version of fmt is incompatible with version 10 in Rawhide.
 Provides:       bundled(fmt) = 7.1.3
-
 %description -n libsoplex
 %_desc
 
@@ -94,28 +71,21 @@ Requires:       libsoplex%{?_isa} = %{version}-%{release}
 Requires:       boost-devel%{?_isa}
 Requires:       gmp-devel%{?_isa}
 Requires:       libpapilo-devel%{?_isa}
-%if %{quadmath}
-Requires:       libquadmath-devel%{?_isa}
-%endif
 Requires:       mpfr-devel%{?_isa}
 Requires:       zstr-devel
-
 %description -n libsoplex-devel
 This package contains headers and library links for developing applications
 that use libsoplex.
 
 %package -n     libsoplex-doc
-# The content is licensed with Apache-2.0.  The other licenses are due to files
-# added by doxygen.  Most such files are licensed with GPL-1.0-or-later, but
-# the JavaScript files are licensed with MIT.
 License:        Apache-2.0 AND GPL-1.0-or-later AND MIT
 Summary:        API documentation for libsoplex
 BuildArch:      noarch
-
 %description -n libsoplex-doc
 API documentation for libsoplex.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -132,13 +102,12 @@ sed -i '/HTML_TIMESTAMP/s/YES/NO/' doc/soplex.dxy
 rm -fr src/soplex/external/zstr
 
 %build
+
 %cmake \
   -DMPFR:BOOL=ON \
   -DPAPILO:BOOL=ON \
   -DQUADMATH:BOOL=%{?quadmath:ON}%{!?quadmath:OFF}
 %cmake_build
-
-# Build documentation
 cd doc
 ../%{_vpath_builddir}/bin/soplex --saveset=parameters.set
 cd inc
@@ -147,37 +116,25 @@ php localfaq.php > faq.inc
 cd ..
 doxygen soplex.dxy
 cd ..
-
 %install
 %cmake_install
-
-# We install license files elsewhere
 rm -fr %{buildroot}%{_defaultlicensedir}
-
-# Fix the papilo dependency
 sed -i 's/papilo;/papilo-core;/' \
     %{buildroot}%{_libdir}/cmake/soplex/soplex-targets.cmake
+%oreon_autofiles libsoplex usr/*/lib*.so.*
+%oreon_autofiles libsoplex-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles libsoplex-doc usr/*/lib*.so.*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
 %check
+
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %ctest
-
-%files
-%{_bindir}/soplex
-
-%files -n libsoplex
-%doc CHANGELOG README.md
-%license LICENSE src/soplex/external/fmt/LICENSE.rst
-%{_libdir}/libsoplex.so.8.0{,.*}
-
-%files -n libsoplex-devel
-%{_includedir}/soplex*
-%{_libdir}/libsoplex.so
-%{_libdir}/cmake/soplex/
-
-%files -n libsoplex-doc
-%doc doc/html
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n libsoplex -f %{oreon_filedir}/libsoplex.list
+%files -n libsoplex-devel -f %{oreon_filedir}/libsoplex-devel.list
+%files -n libsoplex-doc -f %{oreon_filedir}/libsoplex-doc.list
 
 %changelog
+
 %autochangelog

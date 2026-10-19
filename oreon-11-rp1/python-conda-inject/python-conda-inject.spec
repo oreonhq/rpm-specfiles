@@ -1,30 +1,25 @@
 %global source0_hash 3259eeda320a65015ed9978adb54ab21dd831c03d0c08255c2e2fe068df204f0
-
 Name:           python-conda-inject
 Version:        1.3.2
-Release:        %autorelease
-Summary:        Inject a conda environment into the current python environment 
-
-# SPDX
+Release:        1%{?dist}
+Summary:        Inject a conda environment into the current python environment
 License:        MIT
 URL:            https://github.com/koesterlab/conda-inject
-# We use the GitHub archive instead of the PyPI sdist to get CHANGELOG.md; this
-# also gives us the tests, but we are unable to run them.
-Source:         %{url}/archive/v%{version}/conda-inject-%{version}.tar.gz
-
-
+Source0:        https://github.com/koesterlab/conda-inject/archive/v%{version}/conda-inject-%{version}.tar.gz
 BuildArch:      noarch
-
 %global common_description %{expand:
 Helper functions for injecting a conda environment into the current python
 environment. This happens by modifying sys.path, without actually changing the
 current python environment.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-conda-inject = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-conda-inject
-Summary:        %{summary}
-
+Summary:        Inject a conda environment into the current python environment
 %description -n python3-conda-inject %{common_description}
 
 # Currently, all tests require network access. Furthermore, of the three
@@ -34,18 +29,18 @@ Summary:        %{summary}
 # --enable-network unless we patch them to use a different package manager.
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-conda-inject usr/lib/python3*/site-packages/conda_inject* usr/lib64/python3*/site-packages/conda_inject* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/conda_inject* usr/lib64/python3*/site-packages/conda_inject* usr/bin/*
 
-%files -n python3-conda-inject -f %{pyproject_files}
-%license LICENSE
-%doc CHANGELOG.md
-%doc README.md
+%files
+%files -n python3-conda-inject -f %{oreon_filedir}/python3-conda-inject.list
 
 %changelog
+
 %autochangelog

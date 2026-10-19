@@ -1,36 +1,31 @@
-%global source0_hash none
-
-Summary: A predictive text input system
+%global source0_hash da113cd8f03c9ccac173566e27b66531f429b6a39e1e4b79b6927d9d81184176
+Summary:        A predictive text input system
 Name: dasher
 Version: 5.0.0
-Release: 0.28.beta%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL: http://www.inference.phy.cam.ac.uk/dasher/
-Source0: https://github.com/ipomoena/dasher/archive/DASHER_5_0_0_beta.tar.gz
-
-# https://github.com/ipomoena/dasher/pull/97
+Source0:        https://github.com/ipomoena/dasher/archive/DASHER_5_0_0_beta.tar.gz
 Patch0: dasher-5.0.0-sys-stat.patch
-
-# https://github.com/dasher-project/dasher/pull/169
 Patch1: gnome-doc-utils-depr.patch
-
-# https://gitlab.gnome.org/GNOME/dasher/-/merge_requests/3
 Patch2: 0001-Remove-extern-C-warpper-around-atspi-glib-headers-in.patch
-
-BuildRequires: at-spi2-core-devel
-BuildRequires: desktop-file-utils
-BuildRequires: expat-devel
-BuildRequires: gcc gcc-c++
-BuildRequires: libXtst-devel
-BuildRequires: gettext
-BuildRequires: gtk2-devel
-BuildRequires: intltool
-BuildRequires: yelp-tools
-
-BuildRequires: gnome-common
-BuildRequires: automake autoconf libtool
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  at-spi2-core-devel
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  expat-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  gnome-common
+BuildRequires:  gtk2-devel
+BuildRequires:  intltool
+BuildRequires:  libXtst-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  yelp-tools
+# /oreon:deps
 %description
 Dasher is an information-efficient text-entry interface, driven by natural
 continuous pointing gestures. Dasher is a competitive text-entry system
@@ -40,6 +35,7 @@ a computer without hands (i.e. by head-mouse or by eyetracker), or on
 palmtops or wearable computers.
 
 %prep
+
 %setup -q -n dasher-DASHER_5_0_0_beta
 %autopatch -p1
 echo "5.0.0" > .tarball-version
@@ -47,25 +43,17 @@ rm  m4/glib-gettext.m4
 NOCONFIGURE=1 ./autogen.sh
 
 %build
+
 %configure --disable-japanese
-
 make %{?_smp_mflags}
-
 %install
 %make_install
 desktop-file-validate %{buildroot}/%{_datadir}/applications/dasher.desktop
-
 %find_lang %{name} --all-name --with-gnome
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc AUTHORS README NEWS
-%license COPYING
-%{_bindir}/dasher
-%{_datadir}/applications/dasher.desktop
-%{_datadir}/dasher
-%{_datadir}/icons/hicolor/*/apps/dasher.*
-
-%{_mandir}/*/dasher.1.gz
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

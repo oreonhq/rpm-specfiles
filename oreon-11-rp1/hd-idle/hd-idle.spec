@@ -1,10 +1,8 @@
 %global source0_hash 4efefe79d145b50e055582730d9d685e485da3df3dad90fef030036d52aa3a0c
-
 Name:           hd-idle
 Version:        1.05
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Spin down idle [USB] hard disks
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            http://hd-idle.sourceforge.net
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tgz
@@ -12,10 +10,11 @@ Source1:        %{name}.service
 Source2:        %{name}.default
 Patch0:         %{name}-systemd-nodaemon.diff
 Patch1:         %{name}-fix-sbin.diff
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  systemd
-
+# /oreon:deps
 %description
 hd-idle is a utility program for spinning-down external disks after a period
 of idle time. Since most external IDE disk enclosures don't support setting
@@ -38,39 +37,35 @@ indicating the disk has been stopped. Without such a patch, real SCSI disks
 won't start again and you can as well pull the plug.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name} -p1
 sed -i 's/install -D -g root -o root/install -D/' Makefile
 
 %build
+
 %set_build_flags
 %make_build
-
 %install
 %make_install
-# Remove executable bit from manual page
 find "%{buildroot}%{_mandir}" -executable -type f -exec chmod -x {} \;
 install -dpm 0755 %{buildroot}%{_unitdir}
 install -Dpm 0644 %{SOURCE1} %{buildroot}%{_unitdir}
 install -Dpm 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+%oreon_autofiles main
 
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
-%systemd_postun_with_restart %{name}.service
 
-%files
-%license LICENSE
-%doc README
-%{_sbindir}/%{name}
-%{_mandir}/man1/%{name}.1*
-%{_unitdir}/*.service
-%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%systemd_postun_with_restart %{name}.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

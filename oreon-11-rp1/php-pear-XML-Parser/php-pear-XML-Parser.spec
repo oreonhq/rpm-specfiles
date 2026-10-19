@@ -1,43 +1,26 @@
 %global source0_hash d78f47fc0de35dc05a203a77f54c0ea03db1f48592c345dde8b4893fb64980eb
-
-# remirepo/fedora spec file for php-pear-XML-Parser
-#
-# Copyright (c) 2006-2019 Remi Collet
-# License: CC-BY-SA
-# http://creativecommons.org/licenses/by-sa/4.0/
-#
-# Please, preserve the changelog entries
-#
 %{!?__pear: %global __pear %{_bindir}/pear}
 %global pear_name   XML_Parser
 %global with_tests  %{?_with_tests:1}%{!?_with_tests:0}
-
 Name:         php-pear-XML-Parser
 Version:      1.3.8
-Release:      17%{?dist}
-Summary:      XML parsing class based on PHP's bundled expat
+Release:        1%{?dist}
+Summary:        XML parsing class based on PHP's bundled expat
 Summary(fr):  Une classe d'analyse XML utilisant l'extension expat de PHP
-# Automatically converted from old format: BSD - review is highly recommended.
 License:      LicenseRef-Callaway-BSD
-
 URL:          http://pear.php.net/package/XML_Parser
-Source0:      http://pear.php.net/get/%{pear_name}-%{version}.tgz
-
+Source0:        http://pear.php.net/get/%{pear_name}-%{version}.tgz
 BuildArch:        noarch
-BuildRequires:    php-pear
 %if %{with_tests}
-# For tests
-BuildRequires:    php-mbstring
-BuildRequires:    php-pear(XML_RSS)
 %endif
-
 Requires(post):   %{__pear}
 Requires(postun): %{__pear}
 Requires:         php-pear(PEAR) >= 1.4.9
-
 Provides:         php-pear(%{pear_name}) = %{version}
 Provides:         php-composer(pear/xml_parser) = %{version}
-
+# oreon:deps
+BuildRequires:  php-pear
+# /oreon:deps
 %description
 This is an XML parser based on PHPs built-in xml extension.
 It supports two basic modes of operation: "func" and "event".  
@@ -66,6 +49,7 @@ l'analyseur du gestionnaire d'objets, il n'est donc plus nécessaire d'étendre
 XML_Parser pour analyser un document.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -c
@@ -75,25 +59,19 @@ cd %{pear_name}-%{version}
 mv ../package.xml %{name}.xml
 
 %build
-# Empty build section
 
 %install
 cd %{pear_name}-%{version}
-
 %{__pear} install --nodeps --packagingroot %{buildroot} %{name}.xml
-
-# Clean up unnecessary files
 rm -rf %{buildroot}%{pear_metadir}/.??*
-
-# Install XML package description
 install -Dpm 644 %{name}.xml %{buildroot}%{pear_xmldir}/%{name}.xml
-
-# Fic documentation
 for file in  %{buildroot}%{pear_docdir}/%{pear_name}/examples/*; do
   sed -i -e 's/\r//' $file
 done
+%oreon_autofiles main
 
 %check
+
 %if %{with_tests}
 cd %{pear_name}-%{version}
 %{__pear} \
@@ -102,21 +80,16 @@ cd %{pear_name}-%{version}
    tests | tee ../testslog
 grep "FAILED TESTS" ../testslog && exit 1
 %endif
-
 %post
-%{__pear} install --nodeps --soft --force --register-only %{pear_xmldir}/%{name}.xml >/dev/null || :
 
+%{__pear} install --nodeps --soft --force --register-only %{pear_xmldir}/%{name}.xml >/dev/null || :
 %postun
+
 if [ "$1" -eq "0" ]; then
     %{__pear} uninstall --nodeps --ignore-errors --register-only %{pear_name} >/dev/null || :
 fi
-
-%files
-%doc %{pear_docdir}/%{pear_name}
-%{pear_phpdir}/XML/Parser
-%{pear_phpdir}/XML/Parser.php
-%{pear_testdir}/%{pear_name}
-%{pear_xmldir}/%{name}.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

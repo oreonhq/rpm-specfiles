@@ -1,33 +1,26 @@
 %global source0_hash 3027664caaa475e07e4dbcc9e67b6c7f8ddc86f2858f7c4fee89e964e0c9a7de
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
-# Break a circular dependency on ocaml-ppx-jane
 %bcond test 0
-
 Name:           ocaml-ppx-expect
 Version:        0.17.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Framework for writing tests in OCaml
-
 License:        MIT
 URL:            https://github.com/janestreet/ppx_expect
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/ppx_expect-%{version}.tar.gz
-
-BuildRequires:  ocaml >= 5.1.0
-BuildRequires:  ocaml-base-devel >= 0.17
-BuildRequires:  ocaml-dune >= 3.11.0
-BuildRequires:  ocaml-ppx-here-devel >= 0.17
-BuildRequires:  ocaml-ppx-inline-test-devel >= 0.17
-BuildRequires:  ocaml-ppxlib-devel >= 0.36.0
-BuildRequires:  ocaml-stdio-devel >= 0.17
-
+Source0:        https://github.com/janestreet/ppx_expect/archive/v%{version}/ppx_expect-%{version}.tar.gz
 %if %{with test}
-BuildRequires:  ocaml-ppx-jane-devel
 %endif
-
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-base-devel
+BuildRequires:  ocaml-dune
+BuildRequires:  ocaml-ppx-here-devel
+BuildRequires:  ocaml-ppx-inline-test-devel
+BuildRequires:  ocaml-ppx-jane-devel
+BuildRequires:  ocaml-ppxlib-devel
+BuildRequires:  ocaml-stdio-devel
+# /oreon:deps
 %description
 Ppx_expect is a framework for writing tests in OCaml, similar to Cram
 (https://bitheap.org/cram/).  Ppx_expect mimics the existing inline tests
@@ -47,32 +40,28 @@ Requires:       ocaml-ppx-here-devel%{?_isa}
 Requires:       ocaml-ppx-inline-test-devel%{?_isa}
 Requires:       ocaml-ppxlib-devel%{?_isa}
 Requires:       ocaml-stdio-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n ppx_expect-%{version}
-
+%global oreon_srcdir ppx_expect-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with test}
 %check
+
 %dune_check
 %endif
-
-%files -f .ofiles
-%doc CHANGES.md README.mdx
-%license LICENSE.md
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-ppx-expect-devel -f %{oreon_filedir}/ocaml-ppx-expect-devel.list
 
 %changelog
+
 %autochangelog

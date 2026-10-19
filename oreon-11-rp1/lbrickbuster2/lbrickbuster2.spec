@@ -1,29 +1,28 @@
-%global source0_hash 541d1b1769b7072534b4eb791278e3bfa2df00aa9c685637203055ae383886f9
-
-# we ship lbreakout2 under a different name because of trademark concerns
+%global source0_hash 9104d6175553da3442dc6a5fc407a669e2f5aff3eedc5d30409eb003b7a78d6f
 %define realname lbreakout2
-
 Name:           lbrickbuster2
 Version:        2.6.5
 Release:        26%{?dist}
 Summary:        Brickbuster arcade game
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://lgames.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/lgames/%{realname}-%{version}.tar.gz
-# replacement art changing the logos from lbreakout2 to lbrickbuster2
 Source1:        %{name}-art.tar.gz
 Patch0:         lbrickbuster2-rebrand-images.patch  
 Patch1:         lbrickbuster2-default-fullscreen.patch
 Patch2:         lbrickbuster2-fix-fortify-source.patch
-BuildRequires:  gcc make
-BuildRequires:  SDL_mixer-devel libpng-devel ImageMagick desktop-file-utils
-BuildRequires:  gettext
 Requires:       hicolor-icon-theme
-# obsolete non rebranded freshrpms version
 Obsoletes:      lbreakout2 <= %{version}-%{release}
 Provides:       lbreakout2 = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  ImageMagick
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  libpng-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 The successor to LBrickBuster offers you a new challenge in more than 50 levels
 with loads of new bonuses (goldshower, joker, explosive balls, bonus magnet
@@ -33,6 +32,7 @@ are still hungry for more after that you can create your own levelsets with
 the integrated level editor.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -a 1 -n %{realname}-%{version}
@@ -61,16 +61,14 @@ touch -r ChangeLog ChangeLog.tmp
 mv ChangeLog.tmp ChangeLog
 
 %build
+
 %configure --localstatedir=%{_var}/games --with-docdir=%{_defaultdocdir}
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 install -p -m 644 AUTHORS ChangeLog README TODO \
   $RPM_BUILD_ROOT%{_defaultdocdir}/%{name}
 %find_lang %{name}
-
-# Install desktop entry, fix icon location
 rm $RPM_BUILD_ROOT%{_datadir}/icons/lbrickbuster48.gif
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/32x32/apps
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps
@@ -89,14 +87,6 @@ convert lbrickbuster48.gif \
     $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
 touch -r lbrickbuster48.gif \
     $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -121,17 +111,10 @@ SentUpstream: 2014-09-24
   </screenshots>
 </application>
 EOF
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc %{_defaultdocdir}/%{name}
-%license COPYING
-%attr(2755, root, games) %{_bindir}/%{name}
-%{_bindir}/%{name}server
-%{_datadir}/%{name}
-%{_datadir}/icons/hicolor/*/apps/%{name}.png
-%{_datadir}/appdata/*%{name}.appdata.xml
-%{_datadir}/applications/*%{name}.desktop
-%verify(not md5 size mtime) %config(noreplace) %attr(664, games, games) %{_var}/games/%{name}.hscr
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

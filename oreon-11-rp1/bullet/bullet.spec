@@ -1,37 +1,28 @@
 %global _docdir_fmt %{name}
-
 %global source0_hash 05826c104b842bcdd1339b86894cb44c84ac2525ac296689d34b38a14bbba0dd
-
 Name: bullet
 Version: 3.08
-Release: 19%{?dist}
-Summary: 3D Collision Detection and Rigid Body Dynamics Library
-# Automatically converted from old format: zlib and MIT and BSD and Boost - review is highly recommended.
+Release:        19%{?dist}
+Summary:        3D Collision Detection and Rigid Body Dynamics Library
 License: Zlib AND LicenseRef-Callaway-MIT AND LicenseRef-Callaway-BSD AND BSL-1.0
 URL: http://www.bulletphysics.com
-
-Source0: https://github.com/bulletphysics/bullet3/archive/refs/tags/%{version}.tar.gz#/%{name}3-%{version}.tar.gz
-
-# Build against system tinyxml
+Source0:        https://github.com/bulletphysics/bullet3/archive/refs/tags/%{version}.tar.gz#/%{name}3-%{version}.tar.gz
 Patch0: %{name}-3.08-tinyxml2.patch
-
-# Fix C++ One Definition Rule violation
 Patch1: %{name}-3.08-fix-c++-one-definition-rule-violation.patch
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  dos2unix
+BuildRequires:  doxygen
+BuildRequires:  freeglut-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires: cmake
-BuildRequires: dos2unix
-BuildRequires: doxygen
-BuildRequires: freeglut-devel
-BuildRequires: libICE-devel
-BuildRequires: tinyxml2-devel
-BuildRequires: libglvnd-devel
-
+BuildRequires:  libICE-devel
+BuildRequires:  libglvnd-devel
+BuildRequires:  tinyxml2-devel
+# /oreon:deps
 %description
 Bullet is a 3D Collision Detection and Rigid Body Dynamics Library for games
 and animation.
-
 
 %package devel
 Summary: Development files for %{name}
@@ -40,38 +31,29 @@ Requires: cmake
 %description devel
 Development headers and libraries for %{name}.
 
-
 %package devel-doc
 Summary: Documentation for developing programs that will use %{name}-devel
-# Automatically converted from old format: zlib and LGPLv2+ - review is highly recommended.
 License: Zlib AND LicenseRef-Callaway-LGPLv2+
 Requires: %{name}-extras%{?_isa} = %{version}-%{release}
-
 %description devel-doc
 Documentation (PDF) for developing programs that will use %{name}-devel.
 
-
 %package extras
 Summary: Extra libraries for %{name}
-# Automatically converted from old format: zlib and LGPLv2+ - review is highly recommended.
 License: Zlib AND LicenseRef-Callaway-LGPLv2+
-
 %description extras
 Extra libraries for %{name}.
 
-
 %package extras-devel
 Summary: Development files for %{name} extras
-# Automatically converted from old format: zlib and LGPLv2+ - review is highly recommended.
 License: Zlib AND LicenseRef-Callaway-LGPLv2+
 Requires: %{name}-extras%{?_isa} = %{version}-%{release}
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description extras-devel
 Development headers and libraries for %{name} extra libraries.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}3-%{version}
 rm -rf build3/*.bat build3/*.exe build3/xcode* build3/*osx* build3/premake* data examples/ThirdPartyLibs
@@ -93,6 +75,7 @@ chmod -x src/BulletDynamics/ConstraintSolver/btSliderConstraint.h
 chmod -x src/BulletDynamics/ConstraintSolver/btSliderConstraint.cpp
 
 %build
+
 %cmake \
   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DINSTALL_LIBS=ON \
@@ -106,93 +89,24 @@ chmod -x src/BulletDynamics/ConstraintSolver/btSliderConstraint.cpp
   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
   -DOpenGL_GL_PREFERENCE=GLVND \
   -DINCLUDE_INSTALL_DIR=%{_includedir}/bullet/
-
 %cmake_build
-
 doxygen Doxyfile
-
 %install
 %cmake_install
-
-
 %ldconfig_scriptlets
-
 %ldconfig_scriptlets extras
+%oreon_autofiles bullet-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles bullet-devel-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bullet-extras usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles bullet-extras-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%license LICENSE.txt
-%doc README.md AUTHORS.txt VERSION
-%{_libdir}/libBullet3Collision.so.*
-%{_libdir}/libBullet3Common.so.*
-%{_libdir}/libBullet3Dynamics.so.*
-%{_libdir}/libBullet3Geometry.so.*
-%{_libdir}/libBullet3OpenCL_clew.so.*
-%{_libdir}/libBulletCollision.so.*
-%{_libdir}/libBulletDynamics.so.*
-%{_libdir}/libBulletInverseDynamics.so.*
-%{_libdir}/libBulletSoftBody.so.*
-%{_libdir}/libLinearMath.so.*
-
-%files devel
-%dir %{_includedir}/%{name}
-%{_includedir}/%{name}/*.h
-%{_includedir}/%{name}/Bullet3Collision
-%{_includedir}/%{name}/Bullet3Common
-%{_includedir}/%{name}/Bullet3Dynamics
-%{_includedir}/%{name}/Bullet3Geometry
-%{_includedir}/%{name}/Bullet3OpenCL
-%{_includedir}/%{name}/BulletCollision
-%{_includedir}/%{name}/BulletDynamics
-%{_includedir}/%{name}/BulletInverseDynamics
-%{_includedir}/%{name}/BulletSoftBody
-%{_includedir}/%{name}/InverseDynamics
-%{_includedir}/%{name}/LinearMath
-%{_libdir}/libBullet3Collision.so
-%{_libdir}/libBullet3Common.so
-%{_libdir}/libBullet3Dynamics.so
-%{_libdir}/libBullet3Geometry.so
-%{_libdir}/libBullet3OpenCL_clew.so
-%{_libdir}/libBulletCollision.so
-%{_libdir}/libBulletDynamics.so
-%{_libdir}/libBulletInverseDynamics.so
-%{_libdir}/libBulletSoftBody.so
-%{_libdir}/libLinearMath.so
-%{_libdir}/pkgconfig/bullet.pc
-%{_libdir}/cmake/%{name}
-
-%files devel-doc
-%doc docs/Bullet_User_Manual.pdf
-%doc docs/BulletQuickstart.pdf
-%doc docs/GPU_rigidbody_using_OpenCL.pdf
-%doc html
-
-%files extras
-%{_libdir}/libConvexDecomposition.so.*
-%{_libdir}/libGIMPACTUtils.so.*
-%{_libdir}/libHACD.so.*
-%{_libdir}/libBulletFileLoader.so.*
-%{_libdir}/libBullet2FileLoader.so.*
-%{_libdir}/libBulletInverseDynamicsUtils.so.*
-%{_libdir}/libBulletWorldImporter.so.*
-%{_libdir}/libBulletXmlWorldImporter.so.*
-
-%files extras-devel
-%{_includedir}/%{name}/ConvexDecomposition
-%{_includedir}/%{name}/GIMPACTUtils
-%{_includedir}/%{name}/HACD
-%{_includedir}/%{name}/BulletFileLoader
-%{_includedir}/%{name}/Bullet2FileLoader
-%{_includedir}/%{name}/BulletWorldImporter
-%{_includedir}/%{name}/BulletXmlWorldImporter
-%{_libdir}/libConvexDecomposition.so
-%{_libdir}/libGIMPACTUtils.so
-%{_libdir}/libHACD.so
-%{_libdir}/libBulletFileLoader.so
-%{_libdir}/libBullet2FileLoader.so
-%{_libdir}/libBulletInverseDynamicsUtils.so
-%{_libdir}/libBulletWorldImporter.so
-%{_libdir}/libBulletXmlWorldImporter.so
+%files -f %{oreon_filedir}/main.list
+%files -n bullet-devel -f %{oreon_filedir}/bullet-devel.list
+%files -n bullet-devel-doc -f %{oreon_filedir}/bullet-devel-doc.list
+%files -n bullet-extras -f %{oreon_filedir}/bullet-extras.list
+%files -n bullet-extras-devel -f %{oreon_filedir}/bullet-extras-devel.list
 
 %changelog
+
 %autochangelog

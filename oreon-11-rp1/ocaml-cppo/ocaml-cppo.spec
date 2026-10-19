@@ -1,25 +1,20 @@
 %global source0_hash 6e62a8ee0217c9cc38d5860110eb18eb8d89c05c420353d298e1431fe8bac00f
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 %global giturl  https://github.com/ocaml-community/cppo
-
 Name:           ocaml-cppo
 Version:        1.8.0
-Release:        7%{?dist}
+Release:        1%{?dist}
 Summary:        Equivalent of the C preprocessor for OCaml programs
-
 License:        BSD-3-Clause
 URL:            https://ocaml-community.github.io/cppo/
 VCS:            git:%{giturl}.git
 Source0:        https://github.com/ocaml-community/cppo/archive/refs/tags/v1.8.0.tar.gz#/cppo-1.8.0.tar.gz
-
-BuildRequires:  ocaml >= 4.02.3
+# oreon:deps
+BuildRequires:  ocaml
 BuildRequires:  ocaml-dune
 BuildRequires:  ocaml-findlib
 BuildRequires:  ocaml-ocamlbuild
-
+# /oreon:deps
 %description
 Cppo is an equivalent of the C preprocessor targeted at the OCaml
 language and its variants.
@@ -34,48 +29,33 @@ The implementation of cppo relies on the standard library of OCaml and
 on the standard parsing tools Ocamllex and Ocamlyacc, which contribute
 to the robustness of cppo across OCaml versions.
 
-
 %package ocamlbuild
 Summary:        Preprocessing plugin for ocamlbuild
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ocaml-ocamlbuild%{?_isa}
-# There is no devel subpackage because this package IS for development purposes
-
-
 %description ocamlbuild
 This package contains a plugin for ocamlbuild that enables calling cppo
 at build time.  To use it, call ocamlbuild with the argument
 `-plugin-tag package(cppo_ocamlbuild)`.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n cppo-%{version}
-
-
+%global oreon_srcdir cppo-%{version}
+%oreon_prep
 %build
+
 %dune_build
-
-
 %install
 %dune_install
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %dune_check
-
-
-%files
-%license LICENSE.md
-%doc Changes.md README.md
-%{_bindir}/cppo
-%{_libdir}/ocaml/cppo
-
-
-%files ocamlbuild
-%{_libdir}/ocaml/cppo_ocamlbuild/
-
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-cppo-ocamlbuild -f %{oreon_filedir}/ocaml-cppo-ocamlbuild.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.0-7
 - Prepare for Oreon 11 (RP1)

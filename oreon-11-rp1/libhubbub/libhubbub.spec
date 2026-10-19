@@ -1,23 +1,21 @@
 %global source0_hash 8ac1e6f5f3d48c05141d59391719534290c59cd029efc249eb4fdbac102cd5a5
-
 Name: libhubbub
 Version: 0.3.8
-Release: %autorelease
-Summary: An HTML5 compliant parsing library
-
+Release:        1%{?dist}
+Summary:        An HTML5 compliant parsing library
 License: MIT
 URL: http://www.netsurf-browser.org/projects/hubbub/
-Source: http://download.netsurf-browser.org/libs/releases/%{name}-%{version}-src.tar.gz
-
-BuildRequires: doxygen
-BuildRequires: gcc
-BuildRequires: gperf
-BuildRequires: netsurf-buildsystem
-BuildRequires: pkgconfig(check)
-BuildRequires: pkgconfig(json-c)
-BuildRequires: pkgconfig(libparserutils)
-BuildRequires: make
-
+Source0:        http://download.netsurf-browser.org/libs/releases/%{name}-%{version}-src.tar.gz
+# oreon:deps
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gperf
+BuildRequires:  make
+BuildRequires:  netsurf-buildsystem
+BuildRequires:  pkgconfig(check)
+BuildRequires:  pkgconfig(json-c)
+BuildRequires:  pkgconfig(libparserutils)
+# /oreon:deps
 %description
 Hubbub is an HTML5 compliant parsing library, written in C. It was
 developed as part of the NetSurf project.
@@ -38,7 +36,6 @@ Features:
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -46,7 +43,6 @@ developing applications that use %{name}.
 %package doc
 Summary: Documentation of %{name} API
 BuildArch: noarch
-
 %description doc
 The %{name}-doc package contains documentation files for %{name}.
 
@@ -54,6 +50,7 @@ The %{name}-doc package contains documentation files for %{name}.
 %global build_vars OPTCFLAGS='%{optflags}' OPTLDFLAGS="$RPM_LD_FLAGS"
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version} -p1
@@ -61,29 +58,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e s@-Werror@@ Makefile
 
 %build
+
 make %{?_smp_mflags} %{make_vars} %{build_vars}
 make %{?_smp_mflags} docs %{make_vars}
-
 %install
 make install DESTDIR=%{buildroot} %{make_vars}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
 %check
+
 make %{?_smp_mflags} test %{make_vars} %{build_vars}
-
-%files
-%doc README
-%license COPYING
-%{_libdir}/%{name}.so.*
-
-%files devel
-%{_includedir}/hubbub
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files doc
-%license COPYING
-%doc docs/Architecture docs/Macros docs/Todo docs/Treebuilder docs/Updated
-%doc docs/html
+%files -f %{oreon_filedir}/main.list
+%files -n libhubbub-devel -f %{oreon_filedir}/libhubbub-devel.list
+%files -n libhubbub-doc -f %{oreon_filedir}/libhubbub-doc.list
 
 %changelog
+
 %autochangelog

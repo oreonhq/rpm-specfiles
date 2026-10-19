@@ -1,18 +1,16 @@
 %global source0_hash 9cf4727526d988cee62705f29f53c21765838302713ed6e6c0b29ac117c66af5
-
 Name:           jdupes
 Version:        1.30.0
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Duplicate file finder and an enhanced fork of 'fdupes'
-
 License:        MIT
 URL:            https://codeberg.org/jbruchon/jdupes
 Source0:        https://codeberg.org/jbruchon/jdupes/archive/jdupes-v%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  libjodycode-devel
 BuildRequires:  make
-BuildRequires:  libjodycode-devel >= 4.0.1
-
+# /oreon:deps
 %description
 jdupes is a program for identifying and taking actions upon duplicate
 files.
@@ -27,20 +25,17 @@ prompting the user."
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name} -p1
-
+%global oreon_srcdir %{name}
+%oreon_prep
 %build
-%make_build CFLAGS="%{optflags} -DENABLE_DEDUPE -DHARDEN" PREFIX="%{_prefix}" MAN_BASE_DIR="%{_mandir}"
 
+%make_build CFLAGS="%{optflags} -DENABLE_DEDUPE -DHARDEN" PREFIX="%{_prefix}" MAN_BASE_DIR="%{_mandir}"
 %install
 %make_install PREFIX="%{_prefix}" MAN_BASE_DIR="%{_mandir}"
+%oreon_autofiles main
 
-%files
-%license LICENSE.txt
-%doc CHANGES.txt INSTALL.txt ISSUES.txt README.md README.stupid_dupes
-%{_bindir}/jdupes
-%{_mandir}/man1/jdupes.1.gz
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

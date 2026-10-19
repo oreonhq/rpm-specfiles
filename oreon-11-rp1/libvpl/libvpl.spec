@@ -1,8 +1,6 @@
 %global source0_hash 4de3e2faf1e8307fb282e4a43f443191810f6a6b0a484fffa7995ba1c814c6ec
-
 %global mfx_major 2
 %global mfx_minor 16
-
 Name:           libvpl
 Epoch:          1
 Version:        2.17.0
@@ -10,28 +8,23 @@ Release:        1%{?dist}
 Summary:        Intel Video Processing Library
 License:        MIT
 URL:            https://intel.github.io/libvpl/latest/index.html
-# Dispatcher and samples build on aarch64 too (no ExclusiveArch). Workers that
-# only care about x86_64 can still skip via repo compose.
-
 Source0:        https://github.com/intel/libvpl/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig(libdrm) >= 2.4.91
-BuildRequires:  pkgconfig(libva) >= 1.2
-BuildRequires:  pkgconfig(libva-drm) >= 1.2
-BuildRequires:  pkgconfig(libva-x11) >= 1.10.0
-BuildRequires:  pkgconfig(pciaccess)
-BuildRequires:  pkgconfig(wayland-client)
-BuildRequires:  pkgconfig(wayland-protocols) >= 1.15
-BuildRequires:  pkgconfig(x11)
-
 Recommends:     intel-mediasdk
 Recommends:     intel-vpl-gpu-rt
-
 Obsoletes:      oneVPL <= 2023.4.0
 Provides:       oneVPL%{?_isa} == %{?epoch:%{epoch}:}%{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(libva)
+BuildRequires:  pkgconfig(libva-drm)
+BuildRequires:  pkgconfig(libva-x11)
+BuildRequires:  pkgconfig(pciaccess)
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-protocols)
+BuildRequires:  pkgconfig(x11)
+# /oreon:deps
 %description
 The oneAPI Video Processing Library (oneVPL) provides a single video processing
 API for encode, decode, and video processing that works across a wide range of
@@ -47,10 +40,8 @@ implementations:
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 Obsoletes:      oneVPL-devel <= 2023.4.0
 Provides:       oneVPL-devel%{?_isa} == %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
@@ -58,47 +49,30 @@ applications that use %{name}.
 %package        samples
 Summary:        Sample programs and source code for %{name}
 Requires:       %{name}-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 Obsoletes:      oneVPL-samples <= 2023.4.0
 Provides:       oneVPL-samples%{?_isa} == %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description    samples
 This package contains sample programs and applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n libvpl-%{version}
-
+%global oreon_srcdir libvpl-%{version}
+%oreon_prep
 %build
+
 %cmake \
 -DCMAKE_INSTALL_SYSCONFDIR=%{_sysconfdir} \
 -DBUILD_EXAMPLES=ON
 %cmake_build
-
 %install
 %cmake_install
-
-# Let RPM pick up documents in the files section
 rm -fr %{buildroot}%{_datadir}/vpl/licensing
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-%files
-%license LICENSE
-%doc README.md CONTRIBUTING.md third-party-programs.txt
-%dir %{_sysconfdir}/vpl
-%{_sysconfdir}/vpl/vars.sh
-%{_libdir}/libvpl.so.*
-
-%files devel
-%{_includedir}/vpl
-%dir %{_libdir}/cmake/vpl
-%{_libdir}/cmake/vpl/VPLConfig.cmake
-%{_libdir}/cmake/vpl/VPLConfigVersion.cmake
-%{_libdir}/libvpl.so
-%{_libdir}/pkgconfig/vpl.pc
-
-%files samples
-%dir %{_datadir}/vpl
-%{_datadir}/vpl/examples
+%files -f %{oreon_filedir}/main.list
+%files -n libvpl-devel -f %{oreon_filedir}/libvpl-devel.list
+%files -n libvpl-samples -f %{oreon_filedir}/libvpl-samples.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 06d37247c6985739b707b8b39b6b83e06e8af783b2531e31965501ba983985f9
 Name:           python-sgp4
 Version:        2.27
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        The C++ SGP4 routine that, given an Earth satellite TLE, computes its position.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/brandon-rhodes/python-sgp4
-Source:         %{pypi_source sgp4}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sgp4/sgp4-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sgp4' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 38.6.0
+BuildRequires:  python3dist(setuptools) >= 77.0.1
+Requires:       python3-sgp4 = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-sgp4
-Summary:        %{summary}
-
-%description -n python3-sgp4 %_description
-
+Summary:        The C++ SGP4 routine that, given an Earth satellite TLE, computes its position.
+%description -n python3-sgp4
 
 %prep
-%autosetup -p1 -n sgp4-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sgp4-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sgp4 usr/lib/python3*/site-packages/sgp4* usr/lib64/python3*/site-packages/sgp4* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sgp4* usr/lib64/python3*/site-packages/sgp4* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sgp4 -f %{pyproject_files}
+%files
+%files -n python3-sgp4 -f %{oreon_filedir}/python3-sgp4.list
 
 %changelog
+
 %autochangelog

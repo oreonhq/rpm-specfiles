@@ -1,29 +1,28 @@
-%global source0_hash none
-
+%global source0_hash 0d2962a37c51b7317c9c5cf2b49c7977c3ddfc7e598556ebcd17e06c44587c53
 %undefine __cmake_in_source_build
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    ktuberling
-Summary: Picture game for children
+Summary:        Picture game for children
 Version: 25.12.3
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: GPL-2.0-or-later AND GFDL-1.2-or-later
 URL:     https://invent.kde.org/games/%{name}/
-
 %global revision %(echo %{version} | cut -d. -f3)
 %if %{revision} >= 50
 %global stable unstable
 %else
 %global stable stable
 %endif
-Source0: http://download.kde.org/%{stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
+Source0:        http://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
+%global majmin_ver %(echo %{version} | cut -d. -f1,2)
+# oreon:deps
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(Qt6Multimedia)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6Svg)
 BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-kconfig-devel
 BuildRequires:  kf6-kconfigwidgets-devel
@@ -39,19 +38,11 @@ BuildRequires:  kf6-knotifyconfig-devel
 BuildRequires:  kf6-kwidgetsaddons-devel
 BuildRequires:  kf6-kxmlgui-devel
 BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6Crash)
-BuildRequires:  cmake(KF6DocTools)
-
-%global majmin_ver %(echo %{version} | cut -d. -f1,2)
-BuildRequires:  libkdegames-devel >= %{majmin_ver}
-
+BuildRequires:  libappstream-glib
+BuildRequires:  libkdegames-devel
+BuildRequires:  pkgconfig(Qt6QuickWidgets)
 BuildRequires:  pkgconfig(phonon4qt6)
-
-BuildRequires:  cmake(Qt6Multimedia)
-BuildRequires:  cmake(Qt6Qml)
-BuildRequires:  cmake(Qt6Quick) pkgconfig(Qt6QuickWidgets)
-BuildRequires:  cmake(Qt6Svg)
-
+# /oreon:deps
 %description
 KTuberling a simple constructor game suitable for children and adults
 alike. The idea of the game is based around a once popular doll making
@@ -60,30 +51,22 @@ look more like a tiny person. KTuberling however, goes much further in
 terms of content and adds a surprising variety of different themes.
 
 %prep
-%autosetup
-
+%oreon_prep
 %build
+
 %{cmake_kf6}
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-
-%files -f %{name}.lang
-%{_kf6_bindir}/%{name}
-%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
-%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-%{_kf6_datadir}/icons/hicolor/*/*/*
-%{_kf6_datadir}/%{name}/
-#{_kf6_datadir}/kconf_update/%{name}*
-#{_kf6_datadir}/knotifications6/%{name}.notifyrc
-%{_kf6_datadir}/qlogging-categories6/%{name}*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

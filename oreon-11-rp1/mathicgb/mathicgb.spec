@@ -1,27 +1,22 @@
-%global source0_hash 4f2185dd52897e4242908358493cbe6d4d5cae9dbb6f82a95c0a700c755a90f7
-
+%global source0_hash c2d29521e26fa6024c1be85c5f8273324e2e3bed874327c0b07652986a7ede89
 Name:           mathicgb
 Version:        1.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Groebner basis computations
-
 License:        GPL-2.0-or-later
 URL:            https://github.com/Macaulay2/mathicgb
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/Macaulay2/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
+# oreon:deps
 BuildRequires:  gcc-c++
 BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  pkgconfig(gtest)
 BuildRequires:  pkgconfig(mathic)
 BuildRequires:  pkgconfig(tbb)
-
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
+# /oreon:deps
 %description
 Mathicgb is a program for computing Groebner basis and signature Groebner
 bases.  Mathicgb is based on the fast data structures from mathic.
@@ -29,17 +24,16 @@ bases.  Mathicgb is based on the fast data structures from mathic.
 %package devel
 Summary:        Development files for mathicgb
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description devel
 Files for developing applications that use mathicgb.
 
 %package libs
 Summary:        Mathicgb libraries
-
 %description libs
 Library interface to mathicgb.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -57,40 +51,27 @@ sed -i 's/broune/Macaulay2/' build/autotools/mathicgb.pc.in
 autoreconf -fi
 
 %build
+
 export GTEST_PATH=%{_prefix}
 %configure --disable-static --enable-shared --with-gtest=yes
-
-# Get rid of undesirable hardcoded rpaths; workaround libtool reordering
-# -Wl,--as-needed after all the libraries.
 sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
     -e 's|CC=.g..|& -Wl,--as-needed|' \
     -i libtool
 sed -i 's|g++$|& -Wl,--as-needed|' Makefile
-
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export LD_LIBRARY_PATH=$PWD/.libs
 make check
-
-%files
-%doc README.md doc/description.txt doc/slides.pdf
-%license gpl-2.0.txt gpl-3.0.txt
-%{_bindir}/mgb
-%{_mandir}/man1/mgb.1*
-
-%files devel
-%{_includedir}/%{name}.h
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files libs
-%{_libdir}/lib%{name}.so.0{,.*}
+%files -f %{oreon_filedir}/main.list
+%files -n mathicgb-devel -f %{oreon_filedir}/mathicgb-devel.list
+%files -n mathicgb-libs -f %{oreon_filedir}/mathicgb-libs.list
 
 %changelog
+
 %autochangelog

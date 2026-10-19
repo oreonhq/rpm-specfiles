@@ -1,65 +1,62 @@
 %global source0_hash 610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c
-
 Name:           python-pygments
 Version:        2.21.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Pygments is a syntax highlighting package written in Python.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-2-Clause
 URL:            https://pygments.org
-Source:         %{pypi_source pygments}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pygments/pygments-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(hatchling) >= 1.27
+Requires:       python3-pygments = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pygments+plugins
+Summary:        Metapackage for python3-pygments plugins extras
+Requires:       python3-pygments = %{version}-%{release}
+Provides:       python3dist(pygments[plugins]) = %{version}-%{release}
 
+%description -n python3-pygments+plugins
+Metapackage for python3-pygments plugins extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pygments' generated automatically by pyp2spec.}
+%package -n       python3-pygments+windows-terminal
+Summary:        Metapackage for python3-pygments windows-terminal extras
+Requires:       python3-pygments = %{version}-%{release}
+Requires:       python3dist(colorama) >= 0.4.6
+Provides:       python3dist(pygments[windows-terminal]) = %{version}-%{release}
 
+%description -n python3-pygments+windows-terminal
+Metapackage for python3-pygments windows-terminal extras.
 
-%description %_description
+%description
 
 %package -n     python3-pygments
-Summary:        %{summary}
-
-%description -n python3-pygments %_description
+Summary:        Pygments is a syntax highlighting package written in Python.
+%description -n python3-pygments
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pygments plugins,windows-terminal
-
 
 %prep
-%autosetup -p1 -n pygments-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pygments-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pygments usr/lib/python3*/site-packages/pygments* usr/lib64/python3*/site-packages/pygments* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pygments* usr/lib64/python3*/site-packages/pygments* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pygments -f %{pyproject_files}
-%{_bindir}/pygmentize
+%files
+%files -n python3-pygments -f %{oreon_filedir}/python3-pygments.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.19.1-1
 - Prepare for Oreon 11 (RP1)

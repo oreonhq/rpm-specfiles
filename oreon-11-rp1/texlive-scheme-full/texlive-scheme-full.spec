@@ -1,17 +1,13 @@
 %global source0_hash none
-
 %global tl_version 2025
-
 Name:           texlive-scheme-full
 Epoch:          12
 Version:        svn54074
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        full scheme (everything)
-
 License:        LPPL-1.3c
 URL:            http://tug.org/texlive/
 BuildArch:      noarch
-BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-collection-basic
 Requires:       texlive-collection-bibtexextra
@@ -53,19 +49,21 @@ Requires:       texlive-collection-pstricks
 Requires:       texlive-collection-publishers
 Requires:       texlive-collection-texworks
 Requires:       texlive-collection-xetex
-
+# oreon:deps
+BuildRequires:  texlive-base
+# /oreon:deps
 %description
 full scheme (everything) This is the full TeX Live scheme: it installs
 everything available.
 
 %build
-# Nothing to build
 
 %install
-# Nothing to install
 
-# Main scheme metapackage (empty)
-%files
+%oreon_autofiles main
+
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

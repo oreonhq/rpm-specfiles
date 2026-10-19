@@ -1,22 +1,18 @@
 %global source0_hash c50a44e33eba551526ff553c0af0bdd3f3a219d8ed60f11fcd9d7b30cd028af1
-
 Name:           libtexprintf
 Version:        1.25
 Release:        7%{?dist}
 Summary:        Formatted Output with tex-like syntax support
-
 License:        GPL-3.0-only
 URL:            https://github.com/bartp5/libtexprintf
-Source:         %{url}/archive/v%{version}/%{name}-v%{version}.tar.gz
-# Ensure printf command has a format specifier
-# https://github.com/bartp5/libtexprintf/pull/24
+Source0:        https://github.com/bartp5/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
 Patch:          clean-printf.patch
-
+# oreon:deps
 BuildRequires:  automake
 BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  make
-
+# /oreon:deps
 %description
 The utftex program and underlying libtexprintf library provide tools to
 pretty print math in mono-space fonts, using a tex-like syntax. It
@@ -34,14 +30,12 @@ JuliaMono.
 %package devel
 Summary: Development headers for libtexprintf
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files for libtexprintf including header file.
 
 %package tools
 Summary: The utftex and utfinfo binaries
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description tools
 utftex is a command line utility to format math.
 utfstringinfo is a command line utility to analyze UTF8-strings.
@@ -49,7 +43,6 @@ utfstringinfo is a command line utility to analyze UTF8-strings.
 %package static
 Summary: Static libtexprintf library
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 
 Provides static libtexprintf library for use in compiling
@@ -57,42 +50,24 @@ applications that need it.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 autoreconf -i
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/*/lib*.so.*
 
 %check
+
 make check
-
-%files
-%doc README.md
-%doc NEWS
-%doc AUTHORS
-%doc ChangeLog
-%license COPYING
-%{_libdir}/libtexprintf.so.1.0.0
-%{_libdir}/libtexprintf.so.1
-%{_mandir}/man3/texprintf.3*
-
-%files static
-%{_libdir}/libtexprintf.a
-
-%files tools
-%{_bindir}/utfstringinfo
-%{_bindir}/utftex
-%{_mandir}/man1/utfstringinfo.1*
-%{_mandir}/man1/utftex.1*
-
-%files devel
-%{_includedir}/texprintf.h
-%{_libdir}/libtexprintf.so
+%files -f %{oreon_filedir}/main.list
+%files -n libtexprintf-devel -f %{oreon_filedir}/libtexprintf-devel.list
+%files -n libtexprintf-tools -f %{oreon_filedir}/libtexprintf-tools.list
+%files -n libtexprintf-static -f %{oreon_filedir}/libtexprintf-static.list
 
 %changelog
+
 %autochangelog

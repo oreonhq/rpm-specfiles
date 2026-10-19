@@ -1,5 +1,4 @@
 %global source0_hash 9188bc218a7a9586f41766ba79453fa26e2cc01304b74b2a9e80974f63f4c31c
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,35 +80,27 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           jakarta-mail1
 Version:        1.6.7
-Release:        9%{?dist}
+Release:        1%{?dist}
 Summary:        Jakarta Mail API
 License:        EPL-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0
 URL:            https://github.com/eclipse-ee4j/mail
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/eclipse-ee4j/mail/archive/%{version}/mail-%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(com.sun.activation:jakarta.activation)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 %endif
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 The Jakarta Mail API provides a platform-independent and
 protocol-independent framework to build mail and messaging applications.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n mail-api-%{version}
@@ -150,18 +141,14 @@ sed -i "/-Werror/d" mail/pom.xml
     javax.mail:javax.mail-api
 
 %build
-# skip javadoc build for compat package
-# skip tests due to lack of support for modular projects
-# https://bugzilla.redhat.com/show_bug.cgi?id=2033020
-# define the variable ${main.basedir} to avoid using directory-maven-plugin
-%mvn_build -j -f -- -Dmain.basedir=${PWD}
 
+%mvn_build -j -f -- -Dmain.basedir=${PWD}
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.md NOTICE.md
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

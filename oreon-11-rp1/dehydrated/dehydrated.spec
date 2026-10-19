@@ -1,12 +1,13 @@
-%global source0_hash 4d28a0598230b276b316070ce16be7d9ab984f3bdef482acf0bc24fcdcc0d0b0
-
-Summary: Client for signing certificates with an ACME server
+%global source2_hash 6d9d82dc540fae86070db378668e7fd216a2cc978670a0450c35940b1e1484b6
+%global source1_hash 22284bcdb8952303cd67c93ec28c50fc92adfdbb01ed4a7e3cd1477e9cc6f530
+%global source0_hash 7ea5a75bfcdf04bbb6ef88d03f89dec8101a2d3ea1dd467d8c42cbb0339ed5cb
+Summary:        Client for signing certificates with an ACME server
 Name: dehydrated
 Version: 0.7.2
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: MIT
 URL: https://github.com/dehydrated-io/dehydrated
-Source0: https://github.com/dehydrated-io/dehydrated/releases/download/v%{version}/dehydrated-%{version}.tar.gz
+Source0:        https://github.com/dehydrated-io/dehydrated/releases/download/v%{version}/dehydrated-%{version}.tar.gz
 Source1: https://github.com/dehydrated-io/dehydrated/releases/download/v%{version}/dehydrated-%{version}.tar.gz.asc
 Source2: https://keys.openpgp.org/vks/v1/by-fingerprint/3C2F2605E078A1E18F4793909C4DBE6CF438F333
 Source3: dehydrated.tmpfiles
@@ -14,31 +15,24 @@ Source4: dehydrated.timer
 Source5: dehydrated.service
 Source6: 50-dehydrated.preset
 Source7: dehydrated-cron
-
 Patch0: dehydrated-autowash.patch
 Patch1: dehydrated-improve-trap-handling.patch
 Patch2: dehydrated-hook.sh-defaults.patch
-
 BuildArch: noarch
-BuildRequires: gnupg2
-BuildRequires: systemd-rpm-macros
 %{?systemd_requires}
 Requires: coreutils
 Requires: curl
 Requires: diffutils
 Requires: gawk
 Requires: grep
-%if 0%{?fedora} || 0%{?rhel} >= 9
-# Usually provided by s-nail, historically by mailx
-Requires: /usr/bin/mailx
-%else
-# s-nail (EPEL 8) provides /usr/bin/mailx, mailx (RHEL 8) provides /bin/mailx
 Requires: (/usr/bin/mailx or /bin/mailx)
-%endif
 Requires: openssl
 Requires: sed
 Requires: util-linux
-
+# oreon:deps
+BuildRequires:  gnupg2
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 This is a client for signing certificates with an ACME-server (currently
 only provided by Let's Encrypt) implemented as a relatively simple bash-
@@ -53,6 +47,7 @@ Current features:
 - Certificate revocation
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -62,8 +57,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P2 -p1
 
 %build
-: nothing to do
 
+: nothing to do
 %install
 mkdir -p %{buildroot}%{_rundir}/dehydrated
 mkdir -p %{buildroot}%{_sysconfdir}/dehydrated/accounts
@@ -96,15 +91,15 @@ sed -i.orig -e 's|^\#!/usr/bin/env bash|#!/bin/bash|' \
     dehydrated
 touch --reference=dehydrated.orig dehydrated && \
     rm dehydrated.orig
-
 install -D -p -m 0755 dehydrated %{buildroot}%{_bindir}/dehydrated
 install -D -p -m 0644 docs/man/dehydrated.1 \
     %{buildroot}%{_mandir}/man1/dehydrated.1
 rm -rf docs/man/
-# remove execute bits from documentation
 chmod a-x docs/examples/hook.sh
+%oreon_autofiles main
 
 %post
+
 %systemd_post dehydrated.timer dehydrated.service
 if [ $1 -eq 1 ]; then
     systemctl start dehydrated.timer >/dev/null 2>&1 || :
@@ -118,40 +113,19 @@ if [ ! -e %{_sysconfdir}/dehydrated/domains.txt ]; then
     touch %{_sysconfdir}/dehydrated/domains.txt
 fi
 umask ${umask} || :
-
 %preun
-%systemd_preun dehydrated.timer dehydrated.service
 
+%systemd_preun dehydrated.timer dehydrated.service
 %postun
+
 %systemd_postun_with_restart dehydrated.timer
 %systemd_postun dehydrated.service
-
 %triggerun -- dehydrated <= 0.7.0-2
+
 systemctl preset dehydrated.timer dehydrated.service >/dev/null 2>&1 || :
 systemctl start dehydrated.timer >/dev/null 2>&1 || :
-
-%files
-%doc README.md CHANGELOG docs/*
-%license LICENSE
-%{_presetdir}/50-dehydrated.preset
-%{_unitdir}/dehydrated.service
-%{_unitdir}/dehydrated.timer
-%{_tmpfilesdir}/dehydrated.conf
-%{_libexecdir}/dehydrated-cron
-%attr(0750,root,root) %dir %{_sysconfdir}/dehydrated
-%attr(0640,root,root) %config(noreplace) %{_sysconfdir}/dehydrated/config
-%attr(0750,root,root) %config(noreplace) %{_sysconfdir}/dehydrated/hook.sh
-%attr(0750,root,root) %dir %{_sysconfdir}/dehydrated/accounts
-%attr(0750,root,root) %dir %{_sysconfdir}/dehydrated/archive
-%attr(0750,root,root) %dir %{_sysconfdir}/dehydrated/certs
-%attr(0750,root,root) %dir %{_sysconfdir}/dehydrated/conf.d
-%attr(0640,root,root) %ghost %{_sysconfdir}/dehydrated/conf.d/local.sh
-%attr(0640,root,root) %ghost %{_sysconfdir}/dehydrated/domains.txt
-%attr(0750,root,root) %dir %{_sysconfdir}/dehydrated/domains.txt.d
-%attr(0750,root,root) %dir %{_sysconfdir}/dehydrated/hook.d
-%attr(0750,root,root) %dir %{_rundir}/dehydrated
-%{_bindir}/dehydrated
-%{_mandir}/man1/dehydrated.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,64 +1,61 @@
-%global source0_hash none
-
+%global source0_hash e900e7b59a4781f63d9e935e88f6ec50c4d60be3f4adf9c63b51ed39d578fe08
 Name:           python-avro
 Version:        1.12.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Avro is a serialization and RPC framework.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://avro.apache.org/
-Source:         %{pypi_source avro}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/avro/avro-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'avro' generated automatically by pyp2spec.}
-
 Patch0:         0001-remove-ipc-tests-as-they-require-internet-connection.diff
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 78.1.0
+Requires:       python3-avro = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-avro+snappy
+Summary:        Metapackage for python3-avro snappy extras
+Requires:       python3-avro = %{version}-%{release}
+Provides:       python3dist(avro[snappy]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-avro+snappy
+Metapackage for python3-avro snappy extras.
+
+%package -n       python3-avro+zstandard
+Summary:        Metapackage for python3-avro zstandard extras
+Requires:       python3-avro = %{version}-%{release}
+Provides:       python3dist(avro[zstandard]) = %{version}-%{release}
+
+%description -n python3-avro+zstandard
+Metapackage for python3-avro zstandard extras.
+
+%description
 
 %package -n     python3-avro
-Summary:        %{summary}
-
-%description -n python3-avro %_description
+Summary:        Avro is a serialization and RPC framework.
+%description -n python3-avro
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-avro snappy,zstandard
-
 
 %prep
-%autosetup -p1 -n avro-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir avro-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-avro usr/lib/python3*/site-packages/avro* usr/lib64/python3*/site-packages/avro* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/avro* usr/lib64/python3*/site-packages/avro* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-avro -f %{pyproject_files}
-%{_bindir}/avro
+%files
+%files -n python3-avro -f %{oreon_filedir}/python3-avro.list
 
 %changelog
+
 %autochangelog

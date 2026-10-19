@@ -1,43 +1,37 @@
 %global source0_hash df347ed5ec399e8f30cd3add5ea52bb2c2fcf04b3e6c00da0e43eac839a6282f
-
 %global debug_package %{nil}
-
 Name:           plasma-mobile-sounds
 Version: 0.1
-Release: 1%{?dist}
-# Automatically converted from old format: CC-BY-SA and CC0 and CC-BY - review is highly recommended.
+Release:        1%{?dist}
 License:        LicenseRef-Callaway-CC-BY-SA AND CC0-1.0 AND LicenseRef-Callaway-CC-BY
 Summary:        Plasma Mobile Sound Theme
 Url:            https://invent.kde.org/plasma-mobile/plasma-mobile-sounds
 Source0:        https://invent.kde.org/plasma-mobile/plasma-mobile-sounds/-/archive/v0.1/plasma-mobile-sounds-v0.1.tar.gz#/plasma-mobile-sounds-0.1.tar.gz
-
-# Use cmake datadir
-# https://invent.kde.org/plasma-mobile/plasma-mobile-sounds/-/merge_requests/2
 Patch1:         0001-Use-cmake-datadir.patch
-
 BuildArch: noarch
-
-BuildRequires: cmake
-BuildRequires: kf6-rpm-macros
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n plasma-mobile-sounds-v0.1
-
+%global oreon_srcdir plasma-mobile-sounds-v0.1
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main
 
-%files
-%{_datadir}/sounds/plasma-mobile
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

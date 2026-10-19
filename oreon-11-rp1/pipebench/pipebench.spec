@@ -1,27 +1,23 @@
 %global source0_hash ca764003446222ad9dbd33bbc7d94cdb96fa72608705299b6cc8734cd3562211
-
 Name:		pipebench
 Version:	0.40
-Release:	36%{?dist}
-Summary:	Measures the speed of STDIN/STDOUT communication
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        36%{?dist}
+Summary:        Measures the speed of STDIN/STDOUT communication
 License:	GPL-2.0-or-later
 URL:		http://www.habets.pp.se/synscan/programs.php?prog=%{name}
-
-Source0:	http://www.habets.pp.se/synscan/files/%{name}-%{version}.tar.gz
-
-## From: http://www.gnu.org/licenses/gpl-2.0.txt
+Source0:        http://www.habets.pp.se/synscan/files/%{name}-%{version}.tar.gz
 Source1:	%{name}-GPLv2.txt
 Patch0: pipebench-c99.patch
-
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 Measures the speed of a pipe, by sitting in the middle passing the data along
 to the next process. See the included README for example usage.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -38,18 +34,16 @@ sed -i Makefile \
 	-e 's:/usr/local/man/man1/:$(DESTDIR)%{_mandir}/man1:'
 
 %build
-make %{?_smp_mflags} CFLAGS="%{optflags}"
 
+make %{?_smp_mflags} CFLAGS="%{optflags}"
 %install
-## Create the necessary filesystem skeleton.
 mkdir -m 755 -p %{buildroot}%{_bindir}
 mkdir -p %{buildroot}%{_mandir}/man1
 make install DESTDIR=%{buildroot}
+%oreon_autofiles main
 
-%files
-%doc LICENSE README
-%{_bindir}/%{name}
-%{_mandir}/man?/%{name}.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

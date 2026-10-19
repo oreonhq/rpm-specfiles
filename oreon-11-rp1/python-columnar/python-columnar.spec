@@ -1,30 +1,29 @@
 %global source0_hash c3cb57273333b2ff9cfaafc86f09307419330c97faa88dcfe23df05e6fbb9c72
-
 %global pypi_name columnar
 %global pypi_version 1.4.1
-
 Name:           python-%{pypi_name}
 Version:        %{pypi_version}
 Release:        7%{?dist}
 Summary:        A tool for printing data in a columnar format
-
 License:        MIT
 URL:            https://pypi.org/project/columnar/
-Source0:        %{pypi_source Columnar}
+Source0:        https://files.pythonhosted.org/packages/source/C/Columnar/Columnar-%{version}.tar.gz
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
+Requires:       python3-columnar = %{version}-%{release}
+# /oreon:deps
 %description
 A library for creating columnar output strings using data as input.
 
 %package -n     python3-%{pypi_name}
-Summary:        %{summary}
-
+Summary:        A tool for printing data in a columnar format
 %description -n python3-%{pypi_name}
 A library for creating columnar output strings using data as input.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n Columnar-%{pypi_version}
@@ -46,22 +45,20 @@ table = columnar(data, headers, no_borders=True)
 print(table)
 EOF
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files %{pypi_name}
+%oreon_autofiles main usr/lib/python3*/site-packages/columnar* usr/lib64/python3*/site-packages/columnar* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %py3_test_envvars %python3 testfile.py
-
-%files -n python3-%{pypi_name} -f %{pyproject_files}
-%doc README.md
+%files
+%files -n python3-columnar -f %{oreon_filedir}/python3-columnar.list
 
 %changelog
+
 %autochangelog

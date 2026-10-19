@@ -1,5 +1,4 @@
 %global source0_hash 3267bb3074e934df202af2ee0868575484108581e6f3cb006af1da35395e88b4
-
 Name:           pyxdg
 Version:        0.28
 Release:        1%{?dist}
@@ -7,31 +6,27 @@ Summary:        Python library to access freedesktop.org standards
 License:        LGPL-2.0-only
 URL:            http://freedesktop.org/Software/pyxdg
 Source0:        https://files.pythonhosted.org/packages/source/p/pyxdg/pyxdg-0.28.tar.gz
-# https://cgit.freedesktop.org/xdg/pyxdg/commit/?id=275865e620471c194560824232be632c9cb61600
 Patch0:         pyxdg-replace-imp-with-importlib.patch
-# https://cgit.freedesktop.org/xdg/pyxdg/commit/?id=9291d419017263c922869d79ac1fe8d423e5f929
 Patch1:         pyxdg-handle-python-3.14-ast.Str-changes.patch
-# https://cgit.freedesktop.org/xdg/pyxdg/commit/?id=63033ac306aa26d32e1439417e59ae8f8a4c9820
 Patch2:         pyxdg-handle-python-3.15-deprecations.patch
-
 BuildArch:      noarch
-# These are needed for the tests.
-BuildRequires:  python3-pytest
-BuildRequires:  hicolor-icon-theme
-BuildRequires:  shared-mime-info
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pyxdg = %{version}-%{release}
+# /oreon:deps
 %description
 PyXDG is a python library to access freedesktop.org standards.
 
 %package -n python%{python3_pkgversion}-pyxdg
 Summary:        Python3 library to access freedesktop.org standards
 %{?python_provide:%python_provide python%{python3_pkgversion}-pyxdg}
-
 %description -n python%{python3_pkgversion}-pyxdg
 PyXDG is a python library to access freedesktop.org standards. This
 package contains a Python 3 version of PyXDG.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 %patch -P0 -p1 -b .replace-imp-with-importlib
@@ -44,24 +39,21 @@ pushd test/example
 ln -s png_file png_symlink
 popd
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l xdg
+%oreon_autofiles main usr/lib/python3*/site-packages/pyxdg* usr/lib64/python3*/site-packages/pyxdg* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %pytest test/test_*.py
-
-%files -n python%{python3_pkgversion}-pyxdg -f %{pyproject_files}
-%license COPYING
-%doc AUTHORS ChangeLog README TODO
+%files
+%files -n python3-pyxdg -f %{oreon_filedir}/python3-pyxdg.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.28-1
 - Prepare for Oreon 11 (RP1)

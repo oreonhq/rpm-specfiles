@@ -1,27 +1,20 @@
 %global source0_hash ba075a43aa6ead51940e892ecffa4d0b8b40c241e4e2bc4bd9bd26b61fde23bd
-
-# -*-Mode: rpm-spec-mode; -*-
-
 %undefine __cmake_in_source_build
-
 %global debug_package %{nil}
-
 Name:     ydotool
 Version:  1.0.4
-Release:  8%{?dist}
-Summary:  Generic command-line automation tool (no X!)
-# Automatically converted from old format: AGPLv3
+Release:        1%{?dist}
+Summary:        Generic command-line automation tool (no X!)
 License:  AGPL-3.0-only
 URL:      https://github.com/ReimuNotMoe/%{name}
-
-Source0:  %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: scdoc
-BuildRequires: systemd-rpm-macros
-
+Source0:        https://github.com/ReimuNotMoe/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  scdoc
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 
 Performs some of the functions of xdotool(1) without requiring X11 -
@@ -33,15 +26,15 @@ N.B. it is strongly recommended to start the ydotoold daemon with:
 - systemctl start ydotool
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 %cmake -DBUILD_SHARED_LIBS:BOOL=OFF
-
 make -C %{_vpath_builddir} -j `nproc`
-
 %install
 mkdir -p %{buildroot}/%{_bindir}
 strip */%{name}
@@ -54,23 +47,19 @@ mkdir -p %{buildroot}/%{_mandir}/man1
 mkdir -p %{buildroot}/%{_mandir}/man8
 scdoc < manpage/%{name}.1.scd > %{buildroot}/%{_mandir}/man1/%{name}.1
 scdoc < manpage/%{name}d.8.scd > %{buildroot}/%{_mandir}/man8/%{name}d.8
+%oreon_autofiles main
 
 %post
+
 %systemd_post %{name}.service
-
 %preun
+
 %systemd_preun %{name}.service
-
 %postun
-%systemd_postun_with_restart %{name}.service
 
-%files
-%{_unitdir}/%{name}.service
-%{_bindir}/%{name}*
-%license LICENSE
-%doc README.md
-%{_mandir}/man1/%{name}.1.*
-%{_mandir}/man8/%{name}d.8.*
+%systemd_postun_with_restart %{name}.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

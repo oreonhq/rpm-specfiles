@@ -1,57 +1,46 @@
-%global source0_hash none
-
+%global source0_hash 324cba7513cd4187ee92b2eef21f071714e45be062458c8b157bd7e0c81103e3
 Name:           python-rich-click
 Version:        1.9.9
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Format click help output nicely with rich
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ewels/rich-click
-Source:         %{pypi_source rich_click}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/rich_click/rich_click-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'rich-click' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 45
+Requires:       python3-rich-click = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-rich-click
-Summary:        %{summary}
-
-%description -n python3-rich-click %_description
-
+Summary:        Format click help output nicely with rich
+# oreon:reqs
+Requires:       python3dist(click) >= 8
+Requires:       python3dist(rich) >= 12
+Requires:       python3dist(typing-extensions) >= 4
+# /oreon:reqs
+%description -n python3-rich-click
 
 %prep
-%autosetup -p1 -n rich_click-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir rich_click-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-rich-click usr/lib/python3*/site-packages/rich_click* usr/lib64/python3*/site-packages/rich_click* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/rich_click* usr/lib64/python3*/site-packages/rich_click* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-rich-click -f %{pyproject_files}
-%{_bindir}/rich-click
+%files
+%files -n python3-rich-click -f %{oreon_filedir}/python3-rich-click.list
 
 %changelog
+
 %autochangelog

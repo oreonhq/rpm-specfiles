@@ -1,14 +1,9 @@
-%global source0_hash b6edbf0217844f3f11230b6c360a406936aed4fd54c5b007ff680c16b5ef6f9c
-
-# Force out of source build
+%global source0_hash 4fb43dd668abde917900842e5075ace571b3c604139aff543cd4f6b50f411e3b
 %undefine __cmake_in_source_build
-
 %global with_sysfs 1
 %global with_opcua 0
 %global with_paho 1
 %global with_modbus 1
-
-# LuaJIT is only available on i686, x86_64, and aarch64
 %ifarch i686 x86_64 aarch64
 %global with_lua 0
 %global with_luajit 1
@@ -16,41 +11,33 @@
 %global with_lua 1
 %global with_luajit 0
 %endif
-
 Name:     4diac-forte
 Version:  2.0.1
-Release:  14%{?dist}
-Summary:  IEC 61499 runtime environment
+Release:        14%{?dist}
+Summary:        IEC 61499 runtime environment
 License:  EPL-2.0
 URL:      http://eclipse.org/4diac
-Source0:  https://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git/snapshot/org.eclipse.4diac.forte-%{version}.tar.gz
-
-BuildRequires: cmake
-BuildRequires: make
-BuildRequires: gcc-c++
-BuildRequires: systemd
+Source0:        https://git.eclipse.org/c/4diac/org.eclipse.4diac.forte.git/snapshot/org.eclipse.4diac.forte-%{version}.tar.gz
 %{?systemd_requires}
-
 %if 0%{?with_opcua}
-BuildRequires: open62541-devel >= 1.0
 %endif
-
 %if 0%{?with_lua}
-BuildRequires: lua-devel >= 5.1
 %endif
-
 %if 0%{?with_luajit}
-BuildRequires: luajit-devel >= 2.1.0
 %endif
-
 %if 0%{?with_paho}
-BuildRequires: paho-c-devel >= 1.3.9
 %endif
-
 %if 0%{?with_modbus}
-BuildRequires: libmodbus-devel >= 3.1.6
 %endif
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  libmodbus-devel
+BuildRequires:  luajit-devel
+BuildRequires:  make
+BuildRequires:  paho-c-devel
+BuildRequires:  systemd
+# /oreon:deps
 %description
 The 4DIAC runtime environment (4DIAC-RTE, FORTE) is a small portable
 implementation of an IEC 61499 runtime environment targeting small
@@ -59,11 +46,13 @@ online-reconfiguration of its applications and the real-time capable
 execution of all function block types provided by the IEC 61499 standard.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n org.eclipse.4diac.forte-%{version}
 
 %build
+
 %cmake -DFORTE_ARCHITECTURE=Posix \
        -DFORTE_COM_ETH=ON \
        -DFORTE_COM_FBDK=ON \
@@ -91,32 +80,26 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
        -DFORTE_USE_LUATYPES=LuaJIT -DLUAJIT_INCLUDE_DIR=%{_includedir}/luajit-2.1 -DLUAJIT_LIBRARY=%{_libdir}/libluajit-5.1.so \
 %endif
        -DFORTE_TESTS=OFF
-
 %cmake_build
-
 %install
 mkdir -p %{buildroot}%{_unitdir}
 install -p systemd/4diac-forte.service %{buildroot}%{_unitdir}
-
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 install -p systemd/4diac-forte-sysconfig %{buildroot}%{_sysconfdir}/sysconfig/4diac-forte
-
 %cmake_install
+%oreon_autofiles main
 
 %post
+
 %systemd_post 4diac-forte.service
-
 %preun
+
 %systemd_preun 4diac-forte.service
-
 %postun
-%systemd_postun_with_restart 4diac-forte.service
 
-%files
-%license epl-2.0.html
-%{_bindir}/forte
-%{_unitdir}/4diac-forte.service
-%config(noreplace) %{_sysconfdir}/sysconfig/4diac-forte
+%systemd_postun_with_restart 4diac-forte.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,54 +1,46 @@
 %global source0_hash 4b2921931b95c4a5ba81d690f8dc3107a0a1fab04470c146251faf6d6ed1a151
-
 Name:           python-cart
 Version:        1.2.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Compressed and RC4 Transport for Python
-
 License:        MIT
 URL:            https://github.com/CybercentreCanada/cart
-Source:         https://github.com/CybercentreCanada/cart/archive/v%{version}/cart-%{version}.tar.gz
+Source0:        https://github.com/CybercentreCanada/cart/archive/v%{version}/cart-%{version}.tar.gz
 Patch1:         python-cart-1.2.2-cryptodomex.patch
-
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-%global _description %{expand:
-This package provides Python support for CaRT (Compressed and RC4
-Transport). The CaRT file format is used to store/transfer malware
-and its associated metadata. It neuters the malware so it cannot be
-executed and encrypts it so anti-virus software cannot flag the CaRT
-file as malware.}
-
-%description %_description
+Requires:       python3-cart = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-cart
-Summary:        %{summary}
-
-%description -n python3-cart %_description
+Summary:        Compressed and RC4 Transport for Python
+%description -n python3-cart
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n cart-%{version}
 sed -i '/#!\/usr\/bin\/env python/d' cart/cart.py
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l cart
+%oreon_autofiles python3-cart usr/lib/python3*/site-packages/cart* usr/lib64/python3*/site-packages/cart* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cart* usr/lib64/python3*/site-packages/cart* usr/bin/*
 
 %check
+
 %pyproject_check_import
 %{py3_test_envvars} %{python3} -m unittest
-
-%files -n python3-cart -f %{pyproject_files}
-%{_bindir}/cart
+%files
+%files -n python3-cart -f %{oreon_filedir}/python3-cart.list
 
 %changelog
+
 %autochangelog

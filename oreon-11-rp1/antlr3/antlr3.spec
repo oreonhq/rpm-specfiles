@@ -1,49 +1,42 @@
+%global source16_hash 100f793ba27f8b4e4204edb46171ebf36e54e0f94cfc02527fea07a0bb1fceb7
+%global source15_hash 88fbda4b912596b9f56e8e12e580cc954bacfb51776ecfddd3e18fc1cf56dc4c
+%global source14_hash b45e82655aa5a48f33d13a43e4345426b156335b35e24b5aea12db5823c16a16
+%global source13_hash f66ce72e965e5301cb0f020e54d2ba6ad76feb91b3cbfc30dbbf00c06a6df6d7
+%global source12_hash 09ca961a122ab9d5d1ce991fd40120e9ec9c111e028bcaa2ae504b61f896d1d0
+%global source11_hash 7ce07334cc00d76370cf3731dc3676701816f9b0c98c4babd11df8df79824329
+%global source10_hash 962555d234024ba737989bf0c1d9f868b322891e4bbb52b4240aae112cb4a480
+%global source9_hash 7ef52a4e25ea2472a0ae62ae1d5ccaa7ef23be188289ad225fcb8a452a1b738d
+%global source8_hash a7b54c6afbc51b7b970438a7e64d55591a1538b087bdeb4ddcc3036de36de664
+%global source7_hash e076e8ba2d2f8802a82d889fb244e7ac552afa95ff879deb3ae991a2babc0689
+%global source6_hash a9b240744ac20f97972da42ead1a8b6df465c2000d5bb9ba297b1e1e74f0fe26
+%global source5_hash 3c0890dec71174eb3ba3d404ca9e341901ff6b0421808b00713b0dbb1306c17c
+%global source4_hash 58caabc40c9f74b0b5993fd868e0f64a50c0759094e6a251aaafad98edfc7a3b
+%global source3_hash d00121f847deddacc29e6a515c4d47c69d81c21e07ed30f589c11f85fdb8207b
+%global source2_hash 29bfb0d6a4531644378b68d2c11a51450949bd640fd40e15f169efbeb8afa425
+%global source1_hash 34702dcbb6d52877aaaede6de4a685bc57e4680f7e029f8aa97906042ba90e27
 %global source0_hash 34702dcbb6d52877aaaede6de4a685bc57e4680f7e029f8aa97906042ba90e27
-
 %global antlr_version 3.5.3
 %global javascript_runtime_version 3.1
 %global baserelease 18
-
-# This package needs itself to build.  Use this to bootstrap on a new system.
 %bcond bootstrap 0
-
-# Component versions to use when bootstrapping
 %global antlr2_version 2.7.7
 %global bootstrap_version 3.5
 %global ST4ver1 4.0.7
 %global ST4ver2 4.0.8
 %global stringtemplatever 3.2.1
-
 %global giturl  https://github.com/antlr/antlr3
-
 Summary:        ANother Tool for Language Recognition
 Name:           antlr3
 Epoch:          1
 Version:        %{antlr_version}
-Release:        %{baserelease}%{?dist}
-# Sources are BSD-3-Clause with the following exceptions:
-# BSD-3-Clause OR GPL-1.0-or-later OR Artistic-1.0-Perl:
-#   runtime/Perl5/Build.PL, runtime/Perl5/lib/ANTLR/Runtime.pm
-# Apache-2.0: antlr-ant/main/antlr3-task/antlr3-src/org/apache/tools/ant/antlr/ANTLR3.java
-# MIT: runtime/CSharp2/Sources/Antlr3.Runtime/Antlr.Runtime.JavaExtensions/Check.cs
-# FSFAP: runtime/C/INSTALL
-# LicenseRef-Fedora-Public-Domain: runtime/Python/xmlrunner.py
-# LicenseRef-Unicode-legacy-source-code (not allowed in Fedora):
-#    runtime/C/include/antlr3convertutf.h
-#    runtime/C/src/antlr3convertutf.c
-#    runtime/Cpp/include/antlr3convertutf.hpp
-# Unknown: runtime/CSharp2/LICENSE.TXT and runtime/Delphi/LICENSE.TXT add a
-#   copyleft clause to BSD-3-Clause.  SPDX has no name for it.  We don't ship
-#   anything derived from C# or Delphi files in the binary RPM.
+Release:        1%{?dist}
 License:        BSD-3-Clause
 SourceLicense:  %{license} AND (BSD-3-Clause OR GPL-1.0-or-later OR Artistic-1.0-Perl) AND Apache-2.0 AND MIT AND FSFAP AND LicenseRef-Fedora-Public-Domain
 URL:            https://www.antlr3.org/
 VCS:            git:%{giturl}.git
-
-Source0:        %{giturl}/archive/%{antlr_version}/%{name}-%{antlr_version}.tar.gz
+Source0:        %{giturl}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        http://www.antlr3.org/download/antlr-javascript-runtime-%{javascript_runtime_version}.zip
 %if %{with bootstrap}
-# Get prebuilt versions to bootstrap
 Source2:        https://repo1.maven.org/maven2/org/antlr/ST4/%{ST4ver1}/ST4-%{ST4ver1}.jar
 Source3:        https://repo1.maven.org/maven2/org/antlr/ST4/%{ST4ver1}/ST4-%{ST4ver1}.pom
 Source4:        https://repo1.maven.org/maven2/org/antlr/ST4/%{ST4ver2}/ST4-%{ST4ver2}.jar
@@ -60,46 +53,19 @@ Source14:       https://repo1.maven.org/maven2/org/antlr/stringtemplate/%{string
 Source15:       https://repo1.maven.org/maven2/antlr/antlr/%{antlr2_version}/antlr-%{antlr2_version}.jar
 Source16:       https://repo1.maven.org/maven2/antlr/antlr/%{antlr2_version}/antlr-%{antlr2_version}.pom
 %endif
-
 Patch:          0001-java8-fix.patch
-# Generate OSGi metadata
 Patch:          osgi-manifest.patch
-# Increase the default conversion timeout to avoid build failures when complex
-# grammars are processed on slow architectures.  Patch from Debian.
 Patch:          0002-conversion-timeout.patch
-# Fix problems with the C template.  Patch from Debian.
 Patch:          0003-fix-c-template.patch
-# Keep Token.EOF_TOKEN for backwards compatibility.  Patch from Debian.
 Patch:          0004-eof-token.patch
-# Make parsers reproducible.  Patch from Debian.
 Patch:          0005-reproducible-parsers.patch
-# Fix for C++20
 Patch:          0006-antlr3memory.hpp-fix-for-C-20-mode.patch
-# Compile for target 1.8 to fix build with JDK 11
 Patch:          0007-update-java-target.patch
-# Fix source for tighter gcc template checks
 Patch:          0008-unconst-cyclicdfa-gcc-14.patch
-
-BuildRequires:  ant-openjdk25 
-BuildRequires:  make
-BuildRequires:  maven-local-openjdk25
 %if %{without bootstrap}
-BuildRequires:  mvn(org.antlr:antlr)
-BuildRequires:  mvn(org.antlr:antlr3-maven-plugin)
-BuildRequires:  mvn(org.antlr:ST4)
-BuildRequires:  mvn(org.antlr:stringtemplate)
 %endif
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
-BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-compiler-api)
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-# This can be removed when F48 reaches EOL
-# The C/C++ backend contains files with the not-allowed
-# LicenseRef-Unicode-legacy-source-code license
 Obsoletes:      %{name}-C < 3.5.3-18
 Obsoletes:      %{name}-C-devel < 3.5.3-18
 Obsoletes:      %{name}-C++-devel < 3.5.3-18
@@ -108,7 +74,19 @@ Provides:       %{name}-C = %{version}-%{release}
 Provides:       %{name}-C-devel = %{version}-%{release}
 Provides:       %{name}-C++-devel = %{version}-%{release}
 Provides:       %{name}-C-docs = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  ant-openjdk25
+BuildRequires:  make
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(org.antlr:ST4)
+BuildRequires:  mvn(org.antlr:antlr)
+BuildRequires:  mvn(org.antlr:antlr3-maven-plugin)
+BuildRequires:  mvn(org.antlr:stringtemplate)
+BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
+BuildRequires:  mvn(org.apache.maven:maven-plugin-api)
+BuildRequires:  mvn(org.codehaus.plexus:plexus-compiler-api)
+# /oreon:deps
 %description
 ANother Tool for Language Recognition, is a language tool that provides a
 framework for constructing recognizers, interpreters, compilers, and
@@ -121,10 +99,7 @@ License:        BSD-3-Clause AND Apache-2.0
 Provides:       %{name} = %{epoch}:%{antlr_version}-%{release}
 Obsoletes:      %{name} < %{epoch}:%{antlr_version}-%{release}
 Requires:       %{name}-java = %{epoch}:%{antlr_version}-%{release}
-# Explicit requires for javapackages-tools since antlr3-script
-# uses /usr/share/java-utils/java-functions
 Requires:       javapackages-tools
-
 %description    tool
 ANother Tool for Language Recognition, is a language tool that provides a
 framework for constructing recognizers, interpreters, compilers, and
@@ -133,13 +108,11 @@ target languages.
 
 %package        java
 Summary:        Java run-time support for ANTLR-generated parsers
-
 %description    java
 Java run-time support for ANTLR-generated parsers
 
 %package        javadoc
 Summary:        API documentation for %{name}
-
 %description    javadoc
 %{summary}.
 
@@ -147,11 +120,11 @@ Summary:        API documentation for %{name}
 Summary:        Javascript run-time support for ANTLR-generated parsers
 Version:        %{javascript_runtime_version}
 Release:        %{antlr_version}.%{baserelease}%{?dist}
-
 %description    javascript
 Javascript run-time support for ANTLR-generated parsers
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n antlr3-%{antlr_version} -a 1
@@ -210,9 +183,8 @@ cp -p %{SOURCE15} %{SOURCE16} .m2/antlr/antlr/%{antlr2_version}
 %endif
 
 %build
-%mvn_build -f
 
-# build ant task
+%mvn_build -f
 pushd antlr-ant/main/antlr3-task/
 export CLASSPATH=$(build-classpath ant)
 javac -encoding ISO-8859-1 -source 1.8 -target 1.8 \
@@ -221,43 +193,31 @@ jar cvf ant-antlr3.jar \
   -C antlr3-src org/apache/tools/ant/antlr/antlib.xml \
   -C antlr3-src org/apache/tools/ant/antlr/ANTLR3.class
 popd
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/antlr
-
 %mvn_install
-
-# install ant task
 install -m 644 antlr-ant/main/antlr3-task/ant-antlr3.jar -D $RPM_BUILD_ROOT%{_javadir}/ant/ant-antlr3.jar
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/ant.d
 cat > $RPM_BUILD_ROOT%{_sysconfdir}/ant.d/ant-antlr3 << EOF
 ant/ant-antlr3 antlr3
 EOF
-
-# install wrapper script
 %jpackage_script org.antlr.Tool '' '' 'stringtemplate4/ST4.jar:antlr3.jar:antlr3-runtime.jar' antlr3 true
-
-# install javascript runtime
 pushd antlr-javascript-runtime-%{javascript_runtime_version}
 install -pm 644 *.js $RPM_BUILD_ROOT%{_datadir}/antlr/
 popd
+%oreon_autofiles antlr3-tool usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles antlr3-java usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles antlr3-javadoc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles antlr3-javascript usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files tool -f .mfiles-tool
-%doc README.txt tool/{LICENSE.txt,CHANGES.txt}
-%{_bindir}/antlr3
-%{_javadir}/ant/ant-antlr3.jar
-%config(noreplace) %{_sysconfdir}/ant.d/ant-antlr3
-
-%files java -f .mfiles-java
-%doc tool/LICENSE.txt
-
-%files javascript
-%doc tool/LICENSE.txt
-%{_datadir}/antlr/
-
-%files javadoc -f .mfiles-javadoc
-%doc tool/LICENSE.txt
+%files -f %{oreon_filedir}/main.list
+%files -n antlr3-tool -f %{oreon_filedir}/antlr3-tool.list
+%files -n antlr3-java -f %{oreon_filedir}/antlr3-java.list
+%files -n antlr3-javadoc -f %{oreon_filedir}/antlr3-javadoc.list
+%files -n antlr3-javascript -f %{oreon_filedir}/antlr3-javascript.list
 
 %changelog
+
 %autochangelog

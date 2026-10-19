@@ -1,82 +1,60 @@
+%global source1_hash 4fc8d88b3f12d6a170e04406888c8e53e56e6ab62353cea7c4710bef7898967d
 %global source0_hash 34125cd31e559d4d0fef49bb33a6ffc1803112a17495ae1bfbcf5e8beda464c4
-
 %global stable_kf6 stable
-
-
 Name:    plasma-disks
-Summary: Hard disk health monitoring for KDE Plasma
+Summary:        Hard disk health monitoring for KDE Plasma
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-only AND GPL-3.0-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-BuildRequires:  gcc-c++
-BuildRequires:  make
-
-BuildRequires:  extra-cmake-modules
+Requires:       smartmontools
+# oreon:deps
 BuildRequires:  cmake(KF6Auth)
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  kf6-kauth-devel
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6DBusAddons)
 BuildRequires:  cmake(KF6Declarative)
 BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  cmake(KF6KIO)
 BuildRequires:  cmake(KF6Notifications)
 BuildRequires:  cmake(KF6Service)
 BuildRequires:  cmake(KF6Solid)
-BuildRequires:  cmake(KF6KCMUtils)
-
-BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Core)
-
-BuildRequires:  smartmontools
-Requires:       smartmontools
+BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  desktop-file-utils
-
-%if 0%{?fedora} > 39
-# as per https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-ExcludeArch:    %{ix86}
-%endif
-
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-kauth-devel
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  make
+BuildRequires:  smartmontools
+# /oreon:deps
 %description
 Plasma Disks monitors S.M.A.R.T. data of disks and alerts the user when
 signs of imminent failure appear.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --all-name
+%oreon_autofiles main
 
 %check
-desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_disks.desktop
 
-%files -f %{name}.lang
-%license LICENSES/*.txt
-%{_libexecdir}/kf6/kauth/kded-smart-helper
-%{_qt6_plugindir}/plasma/kcms/kinfocenter/kcm_disks.so
-%{_kf6_plugindir}/kded/smart.so
-%{_kf6_datadir}/applications/kcm_disks.desktop
-%{_kf6_datadir}/dbus-1/system-services/org.kde.kded.smart.service
-%{_kf6_datadir}/dbus-1/system.d/org.kde.kded.smart.conf
-%{_kf6_datadir}/knotifications6/org.kde.kded.smart.notifyrc
-%{_kf6_datadir}/metainfo/org.kde.plasma.disks.metainfo.xml
-%{_kf6_datadir}/polkit-1/actions/org.kde.kded.smart.policy
+desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_disks.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

@@ -1,60 +1,43 @@
 %global source0_hash 0a9ebc8d4e2f3e8a22848c5258033035bec17a3012ac3fea16dbaa764489eb71
-
 Name:           python-trove-classifiers
 Version:        2026.9.21.13
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Canonical source for classifiers on PyPI _pypi.org_.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/pypa/trove-classifiers
-Source:         %{pypi_source trove_classifiers}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/trove_classifiers/trove_classifiers-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'trove-classifiers' generated automatically by pyp2spec.}
-
 Patch:          Move-to-PEP-621-declarative-metadata.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-trove-classifiers = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-trove-classifiers
-Summary:        %{summary}
-
-%description -n python3-trove-classifiers %_description
-
+Summary:        Canonical source for classifiers on PyPI _pypi.org_.
+%description -n python3-trove-classifiers
 
 %prep
+
 %autosetup -p1 -n trove_classifiers-%{version}
 sed -i 's/@@VERSION@@/%{version}/' pyproject.toml
 
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-trove-classifiers usr/lib/python3*/site-packages/trove_classifiers* usr/lib64/python3*/site-packages/trove_classifiers* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/trove_classifiers* usr/lib64/python3*/site-packages/trove_classifiers* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-trove-classifiers -f %{pyproject_files}
-%{_bindir}/trove-classifiers
+%files
+%files -n python3-trove-classifiers -f %{oreon_filedir}/python3-trove-classifiers.list
 
 %changelog
+
 %autochangelog

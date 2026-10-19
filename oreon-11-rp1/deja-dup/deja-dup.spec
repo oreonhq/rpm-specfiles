@@ -1,41 +1,47 @@
-%global source0_hash e2e46a022c89392d193b81fdded1775b9bdb944b040696690b460f02e30025da
-
+%global source0_hash 956664cff547757a64127395a47f7e30b0c764b8265eeef253ede4ca47a7be88
 Name:           deja-dup
 Version:        50.2
 Release:        1%{?dist}
 Summary:        Simple backup tool and frontend for duplicity
-
 License:        GPL-3.0-or-later
 URL:            https://gitlab.gnome.org/World/deja-dup
 Source0:        https://gitlab.gnome.org/World/deja-dup/-/archive/%{version}/deja-dup-%{version}.tar.bz2
-
-BuildRequires:  meson
-BuildRequires:  gettext desktop-file-utils intltool
-BuildRequires:  yelp-tools pango-devel cairo-devel
-BuildRequires:  libvala-devel vala
-BuildRequires:  libtool glib2-devel libnotify-devel
-BuildRequires:  libpeas-devel
-BuildRequires:  libsecret-devel
-BuildRequires:  gtk4-devel > 4.5
-BuildRequires:  itstool
-BuildRequires:  libappstream-glib
-BuildRequires:  gnome-online-accounts-devel
-BuildRequires:  libgpg-error-devel
-BuildRequires:  dbus-daemon
-BuildRequires:  json-glib-devel libsoup3-devel
-BuildRequires:  libhandy1-devel
-BuildRequires:  libadwaita-devel
 %if %{undefined flatpak}
-BuildRequires:  PackageKit-glib-devel
 %endif
-BuildRequires:  blueprint-compiler
 Requires:       duplicity >= 0.6.23
 Requires:       python3-gobject-base
 Requires:       rclone
 Requires:       fuse
 Recommends:     gvfs-fuse
 Recommends:     restic
-
+# oreon:deps
+BuildRequires:  PackageKit-glib-devel
+BuildRequires:  blueprint-compiler
+BuildRequires:  cairo-devel
+BuildRequires:  dbus-daemon
+BuildRequires:  desktop-file-utils
+BuildRequires:  gettext
+BuildRequires:  glib2-devel
+BuildRequires:  gnome-online-accounts-devel
+BuildRequires:  gtk4-devel
+BuildRequires:  intltool
+BuildRequires:  itstool
+BuildRequires:  json-glib-devel
+BuildRequires:  libadwaita-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libgpg-error-devel
+BuildRequires:  libhandy1-devel
+BuildRequires:  libnotify-devel
+BuildRequires:  libpeas-devel
+BuildRequires:  libsecret-devel
+BuildRequires:  libsoup3-devel
+BuildRequires:  libtool
+BuildRequires:  libvala-devel
+BuildRequires:  meson
+BuildRequires:  pango-devel
+BuildRequires:  vala
+BuildRequires:  yelp-tools
+# /oreon:deps
 %description
 Déjà Dup is a simple backup tool. It hides the complexity of doing backups the
 'right way' (encrypted, off-site, and regular) and uses duplicity as the
@@ -50,38 +56,22 @@ Features:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson -Denable_restic=true %{?flatpak:-Dpackagekit=disabled}
 %meson_build
-
 %install
 %meson_install
 rm -f %{buildroot}/%{_libdir}/deja-dup/*.la
-
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.gnome.DejaDup.desktop
 desktop-file-validate %{buildroot}/%{_sysconfdir}/xdg/autostart/org.gnome.DejaDup.Monitor.desktop
-
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*.metainfo.xml
-
 %find_lang %{name} --with-gnome
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license LICENSES/
-%doc NEWS.md README.md
-%{_bindir}/deja-dup
-%{_mandir}/man1/deja-dup.1*
-%{_datadir}/glib-2.0/schemas/org.gnome.DejaDup.gschema.xml
-%{_sysconfdir}/xdg/autostart/org.gnome.DejaDup.Monitor.desktop
-%{_libdir}/deja-dup/
-%{_libexecdir}/deja-dup/
-%{_datadir}/applications/*.desktop
-%{_datadir}/icons/hicolor/*/apps/org.gnome.DejaDup*
-%{_datadir}/dbus-1/services/org.gnome.DejaDup.service
-%{_datadir}/metainfo/org.gnome.DejaDup.metainfo.xml
-%{_datadir}/help/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

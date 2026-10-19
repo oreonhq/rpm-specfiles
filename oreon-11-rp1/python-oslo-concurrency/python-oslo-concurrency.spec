@@ -1,63 +1,53 @@
-%global source0_hash none
-
+%global source0_hash 8dcd3a6e931fc24d53832e887a124e3872e44e1af015cab47783bc67ad5b85e7
 Name:           python-oslo-concurrency
 Version:        7.6.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Oslo Concurrency library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://docs.openstack.org/oslo.concurrency
-Source:         %{pypi_source oslo_concurrency}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/oslo_concurrency/oslo_concurrency-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(pbr) >= 6.1.1
+Requires:       python3-oslo-concurrency = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-oslo-concurrency+eventlet
+Summary:        Metapackage for python3-oslo-concurrency eventlet extras
+Requires:       python3-oslo-concurrency = %{version}-%{release}
+Requires:       python3dist(eventlet) >= 0.35.2
+Provides:       python3dist(oslo-concurrency[eventlet]) = %{version}-%{release}
 
+%description -n python3-oslo-concurrency+eventlet
+Metapackage for python3-oslo-concurrency eventlet extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'oslo-concurrency' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-oslo-concurrency
-Summary:        %{summary}
-
-%description -n python3-oslo-concurrency %_description
+Summary:        Oslo Concurrency library
+%description -n python3-oslo-concurrency
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-oslo-concurrency eventlet
-
 
 %prep
-%autosetup -p1 -n oslo_concurrency-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir oslo_concurrency-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-oslo-concurrency usr/lib/python3*/site-packages/oslo_concurrency* usr/lib64/python3*/site-packages/oslo_concurrency* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/oslo_concurrency* usr/lib64/python3*/site-packages/oslo_concurrency* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-oslo-concurrency -f %{pyproject_files}
-%{_bindir}/lockutils-wrapper
+%files
+%files -n python3-oslo-concurrency -f %{oreon_filedir}/python3-oslo-concurrency.list
 
 %changelog
+
 %autochangelog

@@ -1,10 +1,7 @@
 %global source0_hash 2b645287340ba5a631d268b551dc2d72bd73ac33335962dd36dcdb6d8366921d
 %global source1_hash 7727b0498851e5b6a6fcd734eb667a8a231897e2c86a357aec51cc0664813060
-
 %global sover 16
-# Same commit as cmake/Modules/LocalLibargparse.cmake in this libavif release
 %global libargparse_commit ee74d1b53bd680748af14e737378de57e2a0a954
-
 Name:           libavif
 Version:        1.4.2
 Release:        1%{?dist}
@@ -12,9 +9,8 @@ Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
 Source0:        https://github.com/AOMediaCodec/libavif/archive/v%{version}/%{name}-%{version}.tar.gz
-# Vendored libargparse tarball (commit pinned in cmake/Modules/LocalLibargparse.cmake) so we never use FetchContent/git in mock
 Source1:        https://github.com/kmurray/libargparse/archive/ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz#/libargparse-ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz
-
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -26,27 +22,23 @@ BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(libsharpyuv)
 BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(zlib)
-
+# /oreon:deps
 %description
 libavif is a portable C implementation of the AV1 Image File Format.
-
 
 %package        devel
 Summary:        Development files for libavif
 Requires:       libavif%{?_isa} = %{version}-%{release}
-
 %description    devel
 Headers, pkg-config, and CMake metadata for libavif.
 
-
 %package        tools
 Summary:        AVIF encoder and decoder command line tools
-
 %description    tools
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
@@ -54,14 +46,12 @@ mkdir -p ext
 tar -xzf %{SOURCE1} -C ext
 mv "ext/libargparse-%{libargparse_commit}" ext/libargparse
 
-
 %build
-# Produce ext/libargparse/build/libargparse.a so LocalLibargparse.cmake skips FetchContent (no git, no network)
+
 %{__cmake} -GNinja -S ext/libargparse -B ext/libargparse/build \
   -DBUILD_SHARED_LIBS=OFF \
   -DCMAKE_BUILD_TYPE=Release
 %{__cmake} --build ext/libargparse/build %{?_smp_build_ncpus:--parallel %{_smp_build_ncpus}} --target libargparse
-
 %cmake \
   -GNinja \
   -DAVIF_CODEC_AOM=SYSTEM \
@@ -73,27 +63,15 @@ mv "ext/libargparse-%{libargparse_commit}" ext/libargparse
   -DAVIF_BUILD_GDK_PIXBUF=OFF \
   -DCMAKE_BUILD_TYPE=Release
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
-
-%files
-%{_libdir}/libavif.so.%{sover}*
-
-%files devel
-%{_includedir}/avif
-%{_libdir}/libavif.so
-%{_libdir}/cmake/libavif
-%{_libdir}/pkgconfig/libavif.pc
-
-%files tools
-%{_bindir}/avifdec
-%{_bindir}/avifenc
-%{_bindir}/avifgainmaputil
-
+%files -f %{oreon_filedir}/main.list
+%files -n libavif-devel -f %{oreon_filedir}/libavif-devel.list
+%files -n libavif-tools -f %{oreon_filedir}/libavif-tools.list
 
 %changelog
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-2
 - Add libavif for AVIF codecs in Qt and browsers

@@ -1,36 +1,32 @@
 %global source0_hash 5d594d4257352c93785024c63aa0a7b73d912ceca9611cd975ce83aab021a97d
-
 Summary:        Tools to test taintedness
 Name:           perl-Test-Taint
 Version:        1.08
-Release:        23%{?dist}
+Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Taint
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PETDANCE/Test-Taint-%{version}.tar.gz
-
+%{?perl_default_filter}
+Provides:       perl(Test::Taint)
+# oreon:deps
+BuildRequires:  //bin/perl
+BuildRequires:  /usr/bin/make
 BuildRequires:  gcc
-BuildRequires:  %{__perl}
-BuildRequires:  %{__make}
-
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  perl(base)
-BuildRequires:  perl(constant)
-BuildRequires:  perl(overload)
 BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(Test::Builder)
 BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Test::Pod) >= 1.14
-BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(Test::Pod::Coverage)
 BuildRequires:  perl(Tie::Array)
 BuildRequires:  perl(Tie::Hash)
 BuildRequires:  perl(Tie::Scalar)
-
-
-%{?perl_default_filter}
-
-Provides:       perl(Test::Taint)
+BuildRequires:  perl(base)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(overload)
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 Tainted data is data that comes from an unsafe source, such as the command
 line, or, in the case of web apps, any GET or POST transactions. Read the 
@@ -43,26 +39,25 @@ easy ways to check and report on the taintedness of your data, in standard
 Test::More style.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Test-Taint-%{version}
 
 %build
+
 %{__perl} Makefile.PL INSTALLDIRS=vendor OPTIMIZE="${RPM_OPT_FLAGS}" NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 chmod -R u+w $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-%{__make} test
 
-%files
-%doc Changes
-%{perl_vendorarch}/Test
-%{perl_vendorarch}/auto/Test
-%{_mandir}/man3/*
+%{__make} test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.08-23
 - Prepare for Oreon 11 (RP1)

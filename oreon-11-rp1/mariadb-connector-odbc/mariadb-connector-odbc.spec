@@ -1,22 +1,18 @@
 %global source0_hash 5062f491f7189ba32352a9834777886dfbc64a107bb0e2e50921dd6ae2bd18ad
-
-# For deep debugging we need to build binaries with extra debug info
 %bcond debug 0
-
-
-
 Name:           mariadb-connector-odbc
 Version:        3.2.9
-Release:        1%{?with_debug:.debug}%{?dist}
+Release:        1%{?dist}
 Summary:        The MariaDB Native Client library (ODBC driver)
 License:        LGPL-2.1-or-later
-Source:        https://archive.mariadb.org/connector-odbc-%{version}/%{name}-%{version}-src.tar.gz
+Source0:        https://archive.mariadb.org/connector-odbc-%{version}/%{name}-%{version}-src.tar.gz
 Url:            https://mariadb.org/en/
-# Online documentation can be found at: https://mariadb.com/kb/en/library/mariadb-connector-odbc/
-
-BuildRequires:  cmake unixODBC-devel gcc-c++
-BuildRequires:  mariadb-connector-c-devel >= 3.4.5
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  mariadb-connector-c-devel
+BuildRequires:  unixODBC-devel
+# /oreon:deps
 %description
 MariaDB Connector/ODBC is a standardized, LGPL licensed database driver using
 the industry standard Open Database Connectivity (ODBC) API. It supports ODBC
@@ -26,18 +22,16 @@ and it supports both Unicode and ANSI modes.
 %package        devel
 Summary:        Development files for the %{name}
 Requires:       %{name} = %{version}-%{release}
-
 %description    devel
 Header files for %{name} that make developing projects with
 this connector easier.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}-src
 
 sed -i -e "s|/usr/include/mariadb|$(pkg-config --variable=includedir libmariadb)|" CMakeLists.txt
-
 
 %build
 
@@ -56,35 +50,16 @@ sed -i -e "s|/usr/include/mariadb|$(pkg-config --variable=includedir libmariadb)
        \
        -DCMAKE_SKIP_RPATH=YES \
        -DCMAKE_SKIP_INSTALL_RPATH=YES
-
 cmake -B %_vpath_builddir -N -LAH
-
 %cmake_build
-
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-
-%files
-%license COPYING
-%doc     README
-
-# This is unixODBC plugin. It resides directly in %%{_libdir} to be consistent with the rest of unixODBC plugins. Since it is plugin, it doesn´t need to be versioned.
-%{_libdir}/libmaodbc.so
-
-# Example configuration file for UnixODBC
-%{_pkgdocdir}/maodbc.ini
-
-%files    devel
-%dir %{_includedir}/mariadb/
-%{_includedir}/mariadb/sqlmariadb.h
-
-# Pkgconfig
-%{_libdir}/pkgconfig/libmaodbc.pc
+%files -f %{oreon_filedir}/main.list
+%files -n mariadb-connector-odbc-devel -f %{oreon_filedir}/mariadb-connector-odbc-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.8-2
 - Import

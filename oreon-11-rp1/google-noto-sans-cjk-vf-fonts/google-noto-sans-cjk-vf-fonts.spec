@@ -1,41 +1,29 @@
 %global source0_hash d5e33aebad9f8a0c0896a4a29199ef85ca966134db164426c74e83e6f13c43cd
-
-# SPDX-License-Identifier: MIT
-
 Epoch:   1
 Version: 2.004
-Release: 11%{?dist}
+Release:        11%{?dist}
 URL:     https://github.com/googlefonts/noto-cjk
-
 %global foundry           Google
 %global fontlicense       OFL-1.1
 %global fontlicenses      LICENSE
-
 %global common_description %{expand:
 Noto CJK fonts, supporting Simplified Chinese, Traditional Chinese, \
 Japanese, and Korean. The supported scripts are Han, Hiragana, Katakana, \
 Hangul, and Bopomofo. Latin, Greek, Cyrllic, and various symbols are also \
 supported for compatibility with CJK standards.
 }
-
 %global obsoletes_epoch_version_release 0:20201206-8
-
 %global obsoletes_pkg()\
 %define subpkgname %1\
 Obsoletes:      %{subpkgname} < %{obsoletes_epoch_version_release}\
 Provides:       %{subpkgname} = %{epoch}:%{version}-%{release}\
-
-
 %global fontfamily0       Noto Sans CJK VF
 %global fontsummary0      Google Noto Sans CJK Variable Fonts
 %global fontpkgheader0    %{expand:
 Recommends: google-noto-sans-mono-cjk-vf-fonts = %{epoch}:%{version}-%{release}
-
-
 %obsoletes_pkg google-noto-cjk-fonts
 %obsoletes_pkg google-noto-cjk-fonts-common
 %obsoletes_pkg google-noto-sans-cjk-ttc-fonts
-
 %obsoletes_pkg google-noto-sans-cjk-sc-fonts
 %obsoletes_pkg google-noto-sans-cjk-tc-fonts
 %obsoletes_pkg google-noto-sans-cjk-hk-fonts
@@ -46,9 +34,7 @@ Recommends: google-noto-sans-mono-cjk-vf-fonts = %{epoch}:%{version}-%{release}
 %global fontconfs0        %{SOURCE10} 65-0-%{fontpkgname0}.conf
 %global fontdescription0  %{expand:
 %{common_description}
-
 The google-noto-sans-cjk-vf-fonts package contains Google Noto Sans CJK Variable fonts.}
-
 %global fontfamily1       Noto Sans Mono CJK VF
 %global fontsummary1      Google Noto Sans Mono CJK Variable Fonts
 %global fontpkgheader1    %{expand:
@@ -62,17 +48,17 @@ The google-noto-sans-cjk-vf-fonts package contains Google Noto Sans CJK Variable
 %global fontconfs1        %{SOURCE11} 65-0-%{fontpkgname1}.conf
 %global fontdescription1  %{expand:
 %{common_description}
-
 The google-noto-sans-mono-cjk-vf-fonts package contains Google Noto Sans Mono CJK Variable fonts.}
-
 Source0:        https://github.com/googlefonts/noto-cjk/releases/download/Sans%{version}/01_NotoSansCJK-OTF-VF.zip
 Source1:  genfontconf.py
 Source10: 65-%{fontpkgname0}.conf
 Source11: 65-%{fontpkgname1}.conf
-
 %fontpkg -a
-
+# oreon:deps
+BuildRequires:  fonts-rpm-macros
+# /oreon:deps
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -c
 
@@ -88,7 +74,6 @@ python3 genfontconf.py "ja" "sans-serif" "Noto Sans CJK JP" \
         "zh-hk:zh-mo:yue" "sans-serif" "Noto Sans CJK HK" \
     | xmllint --format - |tee 65-0-google-noto-sans-cjk-vf-fonts.conf
 
-
 python3 genfontconf.py "ja" "monospace" "Noto Sans Mono CJK JP" \
         "ko" "monospace" "Noto Sans Mono CJK KR" \
         "zh-cn:zh-sg" "monospace" "Noto Sans Mono CJK SC" \
@@ -97,16 +82,22 @@ python3 genfontconf.py "ja" "monospace" "Noto Sans Mono CJK JP" \
     | xmllint --format - |tee 65-0-google-noto-sans-mono-cjk-vf-fonts.conf
 
 %build
-%fontbuild -a
 
+%fontbuild -a
 %install
 %fontinstall -a
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%fontcheck -a
 
+%fontcheck -a
 %fontfiles -a
+%files -f %{oreon_filedir}/main.list
+%files -n google-go-fonts -f %{oreon_filedir}/google-go-fonts.list
+%files -n adf-gillius-2-fonts -f %{oreon_filedir}/adf-gillius-2-fonts.list
+%files -n google-go-smallcaps-fonts -f %{oreon_filedir}/google-go-smallcaps-fonts.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.004-11
 - Prepare for Oreon 11 (RP1)

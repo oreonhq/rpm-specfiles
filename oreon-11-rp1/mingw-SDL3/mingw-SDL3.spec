@@ -1,34 +1,26 @@
 %global source0_hash 7322236cd12090c3eb40b9728be4d49c76f66ad17d04369584d4ecad5cf77c68
-
 %{?mingw_package_header}
-
 Name:           mingw-SDL3
 Version:        3.4.16
 Release:        1%{?dist}
 Summary:        MinGW Windows port of SDL3 cross-platform multimedia library
-
 License:        Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
 URL:            http://www.libsdl.org/
 Source0:        http://www.libsdl.org/release/SDL3-%{version}.tar.gz
-
 BuildArch:      noarch
-
+%ifarch %{ix86}
+%endif
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  make
 BuildRequires:  dos2unix
-
-BuildRequires:  mingw32-filesystem >= 95
+BuildRequires:  make
+BuildRequires:  mingw32-filesystem
 BuildRequires:  mingw32-gcc
 BuildRequires:  mingw32-gcc-c++
-
-BuildRequires:  mingw64-filesystem >= 95
+BuildRequires:  mingw64-filesystem
 BuildRequires:  mingw64-gcc
 BuildRequires:  mingw64-gcc-c++
-
-%ifarch %{ix86}
-BuildRequires: nasm
-%endif
-
+# /oreon:deps
 %description
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio
@@ -37,9 +29,7 @@ device.
 # Win32
 %package -n mingw32-SDL3
 Summary:        MinGW32 Windows port of SDL cross-platform multimedia library
-# Long ago forked hidraw customized for SDL
 Provides:       bundled(hidraw)
-
 %description -n mingw32-SDL3
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio
@@ -49,7 +39,6 @@ device.
 %package -n mingw32-SDL3-static
 Summary:        MinGW32 Windows port of SDL cross-platform multimedia library
 Requires:       mingw32-SDL3 = %{version}-%{release}
-
 %description -n mingw32-SDL3-static
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio
@@ -58,9 +47,7 @@ device.
 # Win64
 %package -n mingw64-SDL3
 Summary:        MinGW64 Windows port of SDL cross-platform multimedia library
-# Long ago forked hidraw customized for SDL
 Provides:       bundled(hidraw)
-
 %description -n mingw64-SDL3
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio
@@ -70,7 +57,6 @@ device.
 %package -n mingw64-SDL3-static
 Summary:        MinGW64 Windows port of SDL cross-platform multimedia library
 Requires:       mingw64-SDL3 = %{version}-%{release}
-
 %description -n mingw64-SDL3-static
 Simple DirectMedia Layer (SDL) is a cross-platform multimedia library
 designed to provide fast access to the graphics frame buffer and audio
@@ -80,50 +66,28 @@ device.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n SDL3-%{version}
-
+%global oreon_srcdir SDL3-%{version}
+%oreon_prep
 %build
+
 %mingw_cmake -DSDL_STATIC=ON -DSDL_STATIC_PIC=ON -DSDL_VENDOR_INFO="%{?dist_vendor} %{version}-%{release}"
 %mingw_make_build
-
 %install
 %mingw_make_install
-
 rm -rf %{buildroot}%{mingw32_datadir}/licenses
 rm -rf %{buildroot}%{mingw64_datadir}/licenses
+%oreon_autofiles mingw32-SDL3 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw32-SDL3-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-SDL3 usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-SDL3-static usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# Win32
-%files -n mingw32-SDL3
-%license LICENSE.txt
-%{mingw32_bindir}/SDL3.dll
-%{mingw32_libdir}/libSDL3.dll.a
-%{mingw32_libdir}/libSDL3_test.a
-%{mingw32_libdir}/cmake/SDL3/
-%exclude %{mingw32_libdir}/cmake/SDL3/*static*
-%{mingw32_libdir}/pkgconfig/sdl3.pc
-%{mingw32_includedir}/SDL3
-
-# Win32 (static)
-%files -n mingw32-SDL3-static
-%{mingw32_libdir}/libSDL3.a
-%{mingw32_libdir}/cmake/SDL3/*static*
-
-# Win64
-%files -n mingw64-SDL3
-%license LICENSE.txt
-%{mingw64_bindir}/SDL3.dll
-%{mingw64_libdir}/libSDL3.dll.a
-%{mingw64_libdir}/libSDL3_test.a
-%{mingw64_libdir}/cmake/SDL3/
-%exclude %{mingw64_libdir}/cmake/SDL3/*static*
-%{mingw64_libdir}/pkgconfig/sdl3.pc
-%{mingw64_includedir}/SDL3
-
-# Win64 (static)
-%files -n mingw64-SDL3-static
-%{mingw64_libdir}/libSDL3.a
-%{mingw64_libdir}/cmake/SDL3/*static*
+%files -f %{oreon_filedir}/main.list
+%files -n mingw32-SDL3 -f %{oreon_filedir}/mingw32-SDL3.list
+%files -n mingw32-SDL3-static -f %{oreon_filedir}/mingw32-SDL3-static.list
+%files -n mingw64-SDL3 -f %{oreon_filedir}/mingw64-SDL3.list
+%files -n mingw64-SDL3-static -f %{oreon_filedir}/mingw64-SDL3-static.list
 
 %changelog
+
 %autochangelog

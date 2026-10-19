@@ -1,5 +1,4 @@
 %global source0_hash cd583e6facadcf5a945acaff86b3256db9683f315d7cbee3be51a51fbf568a01
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,30 +80,23 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           jsoup
 Version:        1.23.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java library for working with real-world HTML
 License:        MIT
 URL:            https://jsoup.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-# ./generate-tarball.sh
 Source0:        https://github.com/jhy/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jsoup-%{version}.tar.gz
-# The sources contain non-free scraped web pages as test data
-BuildRequires:  jurand
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1.18.1-11
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+BuildRequires:  jurand
+# /oreon:deps
 %description
 jsoup is a Java library for working with real-world HTML. It provides a very
 convenient API for fetching URLs and extracting and manipulating data, using the
@@ -123,6 +115,7 @@ pristine and validating, to invalid tag-soup; jsoup will create a sensible parse
 tree.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{name}-%{version}
 
@@ -143,14 +136,14 @@ sed -i /org.jspecify/d src/main/java*/module-info.java
   -p org[.]jspecify[.]annotations[.] \
 
 %build
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md CHANGES.md
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

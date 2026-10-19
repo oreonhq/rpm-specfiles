@@ -1,59 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 27a5c770d068c110d9ed9323f24f1543e83b2f300a687b7891c1a6d56b697b5b
 Name:           python-toolz
 Version:        1.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        List processing tools and functional utilities
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/pytoolz/toolz
-Source:         %{pypi_source toolz}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/toolz/toolz-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'toolz' generated automatically by pyp2spec.}
-
 Patch:          %{url}/pull/592.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77
+BuildRequires:  python3dist(setuptools-git-versioning) >= 2.0
+Requires:       python3-toolz = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-toolz
-Summary:        %{summary}
-
-%description -n python3-toolz %_description
-
+Summary:        List processing tools and functional utilities
+%description -n python3-toolz
 
 %prep
-%autosetup -p1 -n toolz-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir toolz-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-toolz usr/lib/python3*/site-packages/toolz* usr/lib64/python3*/site-packages/toolz* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/toolz* usr/lib64/python3*/site-packages/toolz* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-toolz -f %{pyproject_files}
+%files
+%files -n python3-toolz -f %{oreon_filedir}/python3-toolz.list
 
 %changelog
+
 %autochangelog

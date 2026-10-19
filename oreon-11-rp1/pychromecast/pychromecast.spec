@@ -1,23 +1,21 @@
 %global source0_hash ce9f966c4d555165a1b30e6c5879794760248535e31498a190ca20111d40a4d8
-
 Name:           pychromecast
 Version:        14.0.10
 Release:        1%{?dist}
 Summary:        Python library to communicate with the Google Chromecast
-
 License:        MIT
 URL:            https://github.com/home-assistant-libs/pychromecast
 Source0:        https://github.com/home-assistant-libs/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 BuildArch: noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-
-# runtime requires to at least perform an import test in %%check
-BuildRequires:  python3-casttube
-BuildRequires:  python3-protobuf
-BuildRequires:  python3-zeroconf
-
+BuildRequires:  python3dist(setuptools) < 83.0
+BuildRequires:  python3dist(setuptools) >= 65.6
+BuildRequires:  python3dist(wheel) < 0.47.0
+BuildRequires:  python3dist(wheel) >= 0.37.1
+Requires:       python3-pychromecast = %{version}-%{release}
+# /oreon:deps
 %description
 Library for Python 3 to communicate with the Google Chromecast. It
 currently supports:
@@ -33,7 +31,6 @@ currently supports:
 %package -n python3-chromecast
 Summary:  Library for Python 3 to communicate with the Google Chromecast
 %{?python_provide:%python_provide python3-chromecast}
-
 %description -n python3-chromecast
 Library for Python 3 to communicate with the Google Chromecast. It
 currently supports:
@@ -48,24 +45,21 @@ currently supports:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files pychromecast
+%oreon_autofiles python3-chromecast usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%py3_check_import pychromecast
 
-%files -n python3-chromecast -f %{pyproject_files}
-%license LICENSE
+%py3_check_import pychromecast
+%files
+%files -n python3-chromecast -f %{oreon_filedir}/python3-chromecast.list
 
 %changelog
+
 %autochangelog

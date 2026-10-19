@@ -1,52 +1,42 @@
 %global source0_hash 6c2c21d3932c4c4905ecd6fb0b21b265ba9dc45fd35e538e2795f3b09aae2c5f
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    akonadi-calendar
 Version: 26.08.0
-Release: 1%{?dist}
-Summary: The Akonadi Calendar Library
-
+Release:        1%{?dist}
+Summary:        The Akonadi Calendar Library
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:     https://invent.kde.org/pim/%{name}
-
 Source0:        https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-# handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}
-
-BuildRequires:  extra-cmake-modules
+Obsoletes:      kf5-akonadi-calendar < 24.01.80-1
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(QGpgmeQt6)
-
-BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(KF6CalendarCore)
+BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
 BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Notifications)
+BuildRequires:  cmake(KF6TextTemplate)
 BuildRequires:  cmake(KF6WidgetsAddons)
 BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Codecs)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6Notifications)
-BuildRequires:  cmake(KF6CalendarCore)
-
-BuildRequires:  cmake(KPim6Libkdepim)
-BuildRequires:  cmake(KPim6Mime)
-BuildRequires:  cmake(KPim6IdentityManagementCore)
-BuildRequires:  cmake(KPim6CalendarUtils)
-BuildRequires:  cmake(KPim6MessageCore)
-BuildRequires:  cmake(KPim6MessageComposer)
-BuildRequires:  cmake(KPim6Libkleo)
 BuildRequires:  cmake(KPim6Akonadi)
 BuildRequires:  cmake(KPim6AkonadiContactCore)
 BuildRequires:  cmake(KPim6AkonadiMime)
+BuildRequires:  cmake(KPim6CalendarUtils)
+BuildRequires:  cmake(KPim6IdentityManagementCore)
+BuildRequires:  cmake(KPim6Libkdepim)
+BuildRequires:  cmake(KPim6Libkleo)
 BuildRequires:  cmake(KPim6MailTransport)
-BuildRequires:  cmake(KF6TextTemplate)
-BuildRequires:  cmake(KF6Crash)
-
-Obsoletes:      kf5-akonadi-calendar < 24.01.80-1
-
+BuildRequires:  cmake(KPim6MessageComposer)
+BuildRequires:  cmake(KPim6MessageCore)
+BuildRequires:  cmake(KPim6Mime)
+BuildRequires:  cmake(QGpgmeQt6)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 %{summary}.
 
@@ -68,6 +58,7 @@ BuildArch:      noarch
 Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version} -p1
@@ -77,43 +68,20 @@ find ./po -type f -name libakonadi-calendar5.po -execdir mv {} libakonadi-calend
 find ./po -type f -name libakonadi-calendar5-serializer.po -execdir mv {} libakonadi-calendar6-serializer.po \;
 
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --all-name --with-html
+%oreon_autofiles akonadi-calendar-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles akonadi-calendar-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%license LICENSES/*
-%{_kf6_bindir}/kalendarac
-%{_kf6_datadir}/akonadi/plugins/serializer/
-%{_kf6_datadir}/dbus-1/services/org.kde.kalendarac.service
-%{_kf6_datadir}/knotifications6/kalendarac.notifyrc
-%{_kf6_datadir}/qlogging-categories6/*%{name}.*
-%{_kf6_datadir}/qlogging-categories6/org_kde_kalendarac.categories
-%{_kf6_libdir}/libKPim6AkonadiCalendar.so.*
-%{_kf6_qtplugindir}/akonadi_serializer_kcalcore.so
-%{_kf6_qtplugindir}/kf6/org.kde.kcalendarcore.calendars/libakonadicalendarplugin.so
-%{_kf6_sysconfdir}/xdg/autostart/org.kde.kalendarac.desktop
-%{_kf6_libdir}/libKPim6AkonadiCalendarCore.so.*
-
-%files devel
-%{_includedir}/KPim6/AkonadiCalendar/Akonadi/
-%{_includedir}/KPim6/AkonadiCalendar/akonadi-calendar_version.h
-%{_includedir}/KPim6/AkonadiCalendar/akonadi/
-%{_includedir}/KPim6/AkonadiCalendarCore/Akonadi
-%{_includedir}/KPim6/AkonadiCalendarCore/akonadi-calendar-core_version.h
-%{_includedir}/KPim6/AkonadiCalendarCore/akonadi/akonadi-calendar-core_export.h
-%{_includedir}/KPim6/AkonadiCalendarCore/akonadi/freebusyproviderbase.h
-%{_kf6_libdir}/cmake/KPim6AkonadiCalendar/
-%{_kf6_libdir}/cmake/KPim6AkonadiCalendarCore/
-%{_kf6_libdir}/libKPim6AkonadiCalendarCore.so
-%{_kf6_libdir}/libKPim6AkonadiCalendar.so
-%{_qt6_docdir}/*.tags
-
-%files doc
-%{_qt6_docdir}/*.qch
+%files -f %{oreon_filedir}/main.list
+%files -n akonadi-calendar-devel -f %{oreon_filedir}/akonadi-calendar-devel.list
+%files -n akonadi-calendar-doc -f %{oreon_filedir}/akonadi-calendar-doc.list
 
 %changelog
+
 %autochangelog

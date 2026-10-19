@@ -1,26 +1,24 @@
-%global source0_hash none
-
+%global source0_hash cf112a1fb02f5b1c0fce5cab11ea8243852c139e669c44014125874b14b7dfaa
 Name: libmng
 Version: 2.0.3
-Release: 25%{?dist}
+Release:        1%{?dist}
 URL: http://www.libmng.com/
-Summary: Library for Multiple-image Network Graphics support
-# This is a common zlib variant.
+Summary:        Library for Multiple-image Network Graphics support
 License: Zlib
 Source0:        https://download.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
-BuildRequires: zlib-devel
-BuildRequires: libjpeg-turbo-devel
-BuildRequires: lcms2-devel
-BuildRequires: libtool
-BuildRequires: autoconf
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  lcms2-devel
+BuildRequires:  libjpeg-turbo-devel
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  zlib-devel
+# /oreon:deps
 %package devel
 Summary: Development files for the Multiple-image Network Graphics library
 Requires: %{name} = %{version}-%{release}
 Requires: zlib-devel
 Requires: libjpeg-devel
-
 %description
 LibMNG is a library for accessing graphics in MNG (Multi-image Network
 Graphics) and JNG (JPEG Network Graphics) formats.  MNG graphics are
@@ -33,37 +31,28 @@ libmng-devel package contains files needed for developing or compiling
 applications which use MNG graphics.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build
-#cp makefiles/configure.in .
+
 cp makefiles/Makefile.am .
-#sed -i '/AM_C_PROTOTYPES/d' configure.in
 autoreconf -if
 %configure --enable-shared --disable-static --with-zlib --with-jpeg \
 	--with-gnu-ld --with-lcms2
 make %{?_smp_mflags}
-
 %install
 rm -rf $RPM_BUILD_ROOT
 make DESTDIR=$RPM_BUILD_ROOT install
 rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc CHANGES LICENSE README*
-%{_libdir}/*.so.*
-
-%files devel
-%doc doc/*
-%{_libdir}/*.so
-%{_includedir}/*
-%{_mandir}/man3/*
-%{_mandir}/man5/*
-%{_libdir}/pkgconfig/libmng.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libmng-devel -f %{oreon_filedir}/libmng-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.3-25
 - Prepare for Oreon 11 (RP1)

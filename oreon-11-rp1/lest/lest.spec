@@ -1,40 +1,32 @@
 %global source0_hash ff31a4ded6589387d029d7d10ec1d787420adf1ccdb2ec96ab2da92b4d5993a7
-
 Name:           lest
 Version:        1.37.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tiny C++11 test framework
-
 License:        BSL-1.0
 URL:            https://github.com/martinmoene/lest
-Source:         %{url}/archive/v%{version}/lest-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-
-# No compiled binaries are installed, so this would be empty.
+Source0:        https://github.com/martinmoene/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 %global debug_package %{nil}
-
 %global common_description %{expand:
 A modern, C++11-native, single-file header-only, tiny framework for unit-tests,
 TDD and BDD (includes C++98 variant).}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+# /oreon:deps
 %description %{common_description}
 
 %package devel
 Summary:        Development files for %{name}
-
 BuildArch:      noarch
-
-# Header-only library
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel %{common_description}
 
 The %{name}-devel package contains header files for developing applications
 that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n lest-%{version} -p1
@@ -49,21 +41,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %cmake -DLEST_BUILD_EXAMPLE:BOOL=OFF
 
 %build
-%cmake_build
 
+%cmake_build
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files devel
-%license LICENSE.txt
-%doc CHANGES.txt
-%doc README.md
-%doc example/
-
-%{_includedir}/lest/
+%files -f %{oreon_filedir}/main.list
+%files -n lest-devel -f %{oreon_filedir}/lest-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,59 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 920cb30369c79fde1088c2060d555ea5f8a50fdc80a9265832fd5bf195cf147f
 Name:           python-ephem
 Version:        4.2.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Compute positions of the planets and stars
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/brandon-rhodes/pyephem
-Source:         %{pypi_source ephem}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ephem' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/e/ephem/ephem-%{version}.tar.gz
 Patch0:         ephem_bsymbolic.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-ephem = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ephem
-Summary:        %{summary}
-
-%description -n python3-ephem %_description
-
+Summary:        Compute positions of the planets and stars
+%description -n python3-ephem
 
 %prep
-%autosetup -p1 -n ephem-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ephem-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ephem usr/lib/python3*/site-packages/ephem* usr/lib64/python3*/site-packages/ephem* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ephem* usr/lib64/python3*/site-packages/ephem* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ephem -f %{pyproject_files}
+%files
+%files -n python3-ephem -f %{oreon_filedir}/python3-ephem.list
 
 %changelog
+
 %autochangelog

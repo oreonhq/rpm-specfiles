@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 579554887ffd189226774b87570f4a76db75cf0efcbaffcacd5e98b8ee877f61
 Name:           python-cerberus
 Version:        1.3.8
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Lightweight, extensible schema and data validation tool for Pythondictionaries.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        ISC
 URL:            https://github.com/pyeve/cerberus
-Source:         %{pypi_source cerberus}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/cerberus/cerberus-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'cerberus' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-cerberus = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-cerberus
-Summary:        %{summary}
-
-%description -n python3-cerberus %_description
-
+Summary:        Lightweight, extensible schema and data validation tool for Pythondictionaries.
+%description -n python3-cerberus
 
 %prep
-%autosetup -p1 -n cerberus-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir cerberus-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-cerberus usr/lib/python3*/site-packages/cerberus* usr/lib64/python3*/site-packages/cerberus* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cerberus* usr/lib64/python3*/site-packages/cerberus* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-cerberus -f %{pyproject_files}
+%files
+%files -n python3-cerberus -f %{oreon_filedir}/python3-cerberus.list
 
 %changelog
+
 %autochangelog

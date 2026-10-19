@@ -1,76 +1,45 @@
-%global source0_hash 4ff36bb787f7da968a920d657a615d601615a3dc0780d31f7bbdb3ff995748ae
+%global source0_hash a367fc74cbcfe9bedc626fff79ce6c5c3ea404c04414f80746cb3ab36acfbb71
 %{?!oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %oreon_bootstrap
-
-# Automated testing is difficult, since we really want to visually inspect
-# the results of the tests.  I have not been able to find a useful automated
-# test for this package, so the maintainer should always run this before
-# pushing a new version:
-#
-# gap -l '%%{gap_archdir};' <<< 'Test("tst/test.tst");'
-#
-# That test is more useful if the altasrep package is also installed.
-
 %global gap_pkgname    browse
 %global gap_upname     Browse
 %global gap_makedoc    makedocrel.g
 %global gap_skip_check 1
-
-# When bootstrapping a new architecture, there is no gap-pkg-atlasrep or
-# gap-pkg-ctbllib package yet.  Those packages are needed only for testing this
-# one, but require this package to function at all.  Therefore, do the
-# following:
-# 1. Build this package in bootstrap mode.
-# 2. Build gap-pkg-atlasrep in bootstrap mode.
-# 3. Build gap-pkg-tomlib.
-# 4. Build gap-pkg-ctbllib in bootstrap mode.
-# 5. Build gap-pkg-atlasrep in non-bootstrap mode.
-# 6. Build this package in non-bootstrap mode.
-# 7. Build gap-pkg-ctbllib in non-bootstrap mode.
 %bcond bootstrap 0
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        1.8.23
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GAP browser for 2-dimensional arrays of data
-
 License:        GPL-3.0-or-later
 URL:            https://www.math.rwth-aachen.de/~Browse/
-Source:         %{url}/%{gap_upname}-%{version}.tar.bz2
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://www.math.rwth-aachen.de/~%{gap_upname}//%{gap_upname}-%{version}.tar.bz2
 ExcludeArch:    %{ix86}
 BuildSystem:    gap
 BuildOption(build): --packagedirs ..
 BuildOption(install): app bibl bin lib tst version
 BuildOption(check): tst/testall.g
-
-BuildRequires:  gap-devel
+%if %{without bootstrap}
+%endif
+Requires:       gap-core%{?_isa}
+Recommends:     gap-pkg-atlasrep
+Recommends:     gap-pkg-io%{?_isa}
+Recommends:     gap-pkg-tomlib
+%global __provides_exclude_from ncurses\\.so
+# oreon:deps
 BuildRequires:  GAPDoc-doc
 BuildRequires:  GAPDoc-latex
+BuildRequires:  gap-devel
+BuildRequires:  gap-pkg-atlasrep-doc
+BuildRequires:  gap-pkg-ctbllib-doc
 BuildRequires:  gap-pkg-io-doc
+BuildRequires:  gap-pkg-tomlib
 BuildRequires:  gcc
 BuildRequires:  ghostscript
 BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  netpbm-progs
 BuildRequires:  pkgconfig(ncurses)
-
-%if %{without bootstrap}
-BuildRequires:  gap-pkg-atlasrep-doc
-BuildRequires:  gap-pkg-ctbllib-doc
-BuildRequires:  gap-pkg-tomlib
-%endif
-
-Requires:       gap-core%{?_isa}
-
-Recommends:     gap-pkg-atlasrep
-Recommends:     gap-pkg-io%{?_isa}
-Recommends:     gap-pkg-tomlib
-
-# Don't Provide the ncurses glue
-%global __provides_exclude_from ncurses\\.so
-
+# /oreon:deps
 %description
 The motivation for this package was to develop functions for an interactive
 display of two-dimensional arrays of data, for example character tables.  They
@@ -98,27 +67,21 @@ applications:
   games, and an interface for demos.
 
 %package doc
-# The content is GPL-3.0-or-later.  The remaining licenses cover the various
-# fonts embedded in PDFs.
-# CM: Knuth-CTAN
-# CM-Super: GPL-1.0-or-later
-# Nimbus: AGPL-3.0-only
 License:        GPL-3.0-or-later AND Knuth-CTAN AND GPL-1.0-or-later AND AGPL-3.0-only
 Summary:        Gap browser documentation
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
 Requires:       GAPDoc-doc
 Requires:       gap-pkg-io-doc
-
 %if %{without bootstrap}
 Requires:       gap-pkg-atlasrep-doc
 Requires:       gap-pkg-ctbllib-doc
 %endif
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{gap_upname}-%{version}
@@ -128,30 +91,16 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i '1i#!/bin/sh' bibl/getnewestbibfile
 
 %build -p
-# This is NOT an autoconf-generated configure script
+
 ./configure %{gap_archdir}
 %make_build
-
 %build -a
+
 rm tst/*~
-# Fix links
 sed -i "s,$PWD/\.\./pkg,..,g" doc/*.html
-
-%files
-%doc CHANGES README.md
-%license GPL
-%dir %{gap_archdir}/pkg/%{gap_upname}/
-%{gap_archdir}/pkg/%{gap_upname}/*.g
-%{gap_archdir}/pkg/%{gap_upname}/app/
-%{gap_archdir}/pkg/%{gap_upname}/bibl/
-%{gap_archdir}/pkg/%{gap_upname}/bin/
-%{gap_archdir}/pkg/%{gap_upname}/lib/
-%{gap_archdir}/pkg/%{gap_upname}/tst/
-%{gap_archdir}/pkg/%{gap_upname}/version
-
-%files doc
-%docdir %{gap_archdir}/pkg/%{gap_upname}/doc/
-%{gap_archdir}/pkg/%{gap_upname}/doc/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-browse-doc -f %{oreon_filedir}/gap-pkg-browse-doc.list
 
 %changelog
+
 %autochangelog

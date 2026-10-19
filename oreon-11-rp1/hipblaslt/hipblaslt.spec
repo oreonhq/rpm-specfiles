@@ -1,43 +1,18 @@
-%global source0_hash a8424ad3b0affd4c57ed26f0f3d8a29604f0e1f2ef2089f497f614b1c94c7236
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
+%global source0_hash 05d73038b1b4f66f3df4eb595b7cb0c8935f7aa18d0e07dbe5cc740a4b691898
 %if 0%{!?suse_version:1}
 %define python_exec python3
 %define python_expand python3
 %endif
-
 %bcond_with gitcommit
 %if %{with gitcommit}
 %global commit0 2584e35062ad9c2edb68d93c464cf157bc57e3b0
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 %global date0 20250926
 %endif
-
 %global upstreamname hipblaslt
 %global rocm_release 7.1
 %global rocm_patch 1
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -55,194 +30,113 @@
 %else
 %global hipblaslt_name hipblaslt%{pkg_suffix}
 %endif
-
 %global toolchain rocm
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-mtls-dialect=gnu2//')
-
-# Fortran is only used in testing
-# clang and gfortran fedora toolchain args do not mix
 %global build_fflags %{nil}
-
-# Reduce link memory pressure
 %global _lto_cflags %{nil}
-
-# may run out of memory for both compile and link
-# Calculate a good -j number below
 %global _smp_mflags %{nil}
-
-# gfx90a: 10343 pass, 152 fail
 %bcond_with test
-# Disable rpatch checks for a local build
 %if %{with test}
 %global __brp_check_rpaths %{nil}
 %global build_test ON
 %else
 %global build_test OFF
 %endif
-
 %global tensile_version 4.33.0
-# The upstream hipBLASTLt project has a hard fork of the python-tensile package
-# The rocBLAS uses.  The two versions are incompatible.  It appears that the
-# fork happened around version 4.33.0.  Unfortunately hipBLASLt can no longer be
-# build without using this fork.
-# https://github.com/ROCm/hipBLASLt/issues/535
-# The problem with the fork has been raised here.
-# https://github.com/ROCm/hipBLASLt/issues/908
-
-# Compression type and level for source/binary package payloads.
-#  "w7T0.xzdio"	xz level 7 using %%{getncpus} threads
 %global _source_payload w7T0.xzdio
 %global _binary_payload w7T0.xzdio
-
-# hipblaslt does not support our default set
 %global gpu_list %{rocm_gpu_list_hipblaslt}
-# For testing
 %global _gpu_list "gfx1100"
-
-# Use ninja if it is available
-# Ninja is available on suse but obs times out with ninja build, make doesn't
-%if 0%{?fedora}
-%bcond_without ninja
-%else
 %bcond_with ninja
-%endif
-
 %if %{with ninja}
 %global cmake_generator -G Ninja
 %else
 %global cmake_generator %{nil}
 %endif
-
-# Request for python-nanobind on EPEL
-# https://bugzilla.redhat.com/show_bug.cgi?id=2402409
-%if 0%{?fedora}
-%bcond_without nanobind
-%else
 %bcond_with nanobind
-%endif
-
 Name:           %{hipblaslt_name}
 %if %{with gitcommit}
 Version:        git%{date0}.%{shortcommit0}
-Release:        2%{?dist}
+Release:        1%{?dist}
 %else
 Version:        %{rocm_version}
-Release:        7%{?dist}
+Release:        1%{?dist}
 %endif
 Summary:        ROCm general matrix operations beyond BLAS
 License:        MIT AND BSD-3-Clause
 URL:            https://github.com/ROCm/rocm-libraries
-
 %if %{with gitcommit}
-Source0:        %{url}/archive/%{commit0}/rocm-libraries-%{shortcommit0}.tar.gz
+Source0:        https://github.com/ROCm/%{toolchain}-%{pkg_libdir}raries/releases/download/%{pkg_module}.%{rocm_patch}/%{name}.tar.gz#/%{name}-%{version}.tar.gz
 %else
-Source0:        %{url}/releases/download/rocm-%{version}/%{upstreamname}.tar.gz#/%{upstreamname}-%{version}.tar.gz
 %endif
-
 %global nanobind_version 2.9.2
 %global nanobind_giturl https://github.com/wjakob/nanobind
 Source1:        %{nanobind_giturl}/archive/v%{nanobind_version}/nanobind-%{nanobind_version}.tar.gz
 %global robinmap_version 1.3.0
 %global robinmap_giturl https://github.com/Tessil/robin-map
 Source2:        %{robinmap_giturl}/archive/v%{robinmap_version}/robin-map-%{robinmap_version}.tar.gz
-
-# yappi was removed from fedora
-# yappi is used in tensilelite to generate profiling data, we are not using that in the build
 Patch1:         0001-hipblaslt-tensilelite-remove-yappi-dependency.patch
-# change hard coded vendor paths to fedoras
 Patch2:         0001-hipblaslt-tensilelite-use-fedora-paths.patch
-# https://github.com/ROCm/rocm-libraries/issues/2422
 Patch3:         0001-hipblaslt-find-origami-package.patch
-# do not try to fetch, point to the nanobind tarball
 Patch4:         0001-hipblaslt-tensilelite-use-nanobind-tarball.patch
-# compile and link jobpools
 Patch5:         0001-hipblaslt-cmake-compile-and-link-pools.patch
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
 %if 0%{?suse_version}
-BuildRequires:  gcc-fortran
 %else
-BuildRequires:  gcc-gfortran
 %endif
-BuildRequires:  hipblas%{pkg_suffix}-devel
-BuildRequires:  hipcc%{pkg_suffix}
-BuildRequires:  libzstd-devel
-BuildRequires:  rocblas%{pkg_suffix}-devel
-BuildRequires:  rocminfo%{pkg_suffix}
-BuildRequires:  rocm-cmake%{pkg_suffix}
-BuildRequires:  rocm-comgr%{pkg_suffix}-devel
-BuildRequires:  rocm-compilersupport%{pkg_suffix}-macros
-BuildRequires:  rocm-hip%{pkg_suffix}-devel
-BuildRequires:  rocm-llvm%{pkg_suffix}-devel
-BuildRequires:  rocm-origami%{pkg_suffix}-devel
-BuildRequires:  rocm-runtime%{pkg_suffix}-devel
-BuildRequires:  rocm-rpm-macros%{pkg_suffix}
-BuildRequires:  rocm-smi%{pkg_suffix}-devel
-BuildRequires:  zlib-devel
-
-# For tensilelite
 %if 0%{?suse_version}
-BuildRequires:  python-rpm-macros
-BuildRequires:  %{python_module joblib}
-BuildRequires:  %{python_module msgpack}
-BuildRequires:  %{python_module PyYAML}
-BuildRequires:  %{python_module setuptools}
-BuildRequires:  msgpack-cxx-devel
 %global tensile_verbose 2
-BuildRequires:  %{python_module dataclasses if %python-base < 3.11}
-BuildRequires:  %{python_module ujson}
-BuildRequires:  %{python_module distro}
-BuildRequires:  %{python_module simplejson}
 %else
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(setuptools)
-BuildRequires:  python3dist(pyyaml)
 %if %{with nanobind}
-BuildRequires:  python3dist(nanobind)
 %endif
 %global tensile_verbose 1
-BuildRequires:  python3dist(joblib)
-# https://github.com/ROCm/hipBLASLt/issues/1734
-BuildRequires:  python3dist(msgpack)
-BuildRequires:  msgpack-devel
 %endif
-
 %if %{with test}
-BuildRequires:  blis-devel
-BuildRequires:  lapack-devel
 %if 0%{?suse_version}
-BuildRequires:  gmock
-BuildRequires:  gtest
 %else
-BuildRequires:  gmock-devel
-BuildRequires:  gtest-devel
 %endif
 %endif
-
 %if %{with ninja}
-%if 0%{?fedora}
-BuildRequires:  ninja-build
-%endif
 %if 0%{?suse_version}
-BuildRequires:  ninja
 %define __builder ninja
 %endif
 %endif
-
 Provides:       hipblaslt%{pkg_suffix} = %{version}-%{release}
 Provides:       bundled(python-tensile) = %{tensile_version}
-
 %if %{without nanobind}
-# BSD-3-Clause
 Provides:       bundled(nanobind) = %{nanobind_version}
 Provides:       bundled(robin-map) = %{robinmap_version}
 %endif
-
-# Only x86_64 works right now:
 ExclusiveArch:  x86_64
-
+# oreon:deps
+BuildRequires:  blis-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gcc-gfortran
+BuildRequires:  gmock-devel
+BuildRequires:  gtest-devel
+BuildRequires:  hipblas-devel
+BuildRequires:  hipcc
+BuildRequires:  lapack-devel
+BuildRequires:  libzstd-devel
+BuildRequires:  msgpack-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(joblib)
+BuildRequires:  python3dist(msgpack)
+BuildRequires:  python3dist(pyyaml)
+BuildRequires:  python3dist(setuptools)
+BuildRequires:  rocblas-devel
+BuildRequires:  rocm-cmake
+BuildRequires:  rocm-comgr-devel
+BuildRequires:  rocm-compilersupport-macros
+BuildRequires:  rocm-hip-devel
+BuildRequires:  rocm-llvm-devel
+BuildRequires:  rocm-origami-devel
+BuildRequires:  rocm-rpm-macros
+BuildRequires:  rocm-runtime-devel
+BuildRequires:  rocm-smi-devel
+BuildRequires:  rocminfo
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 hipBLASLt is a library that provides general matrix-matrix
 operations. It has a flexible API that extends functionalities
@@ -254,7 +148,6 @@ algorithmic implementations and heuristics.
 Summary:        Libraries and headers for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       hipblaslt%{pkg_suffix}-devel = %{version}-%{release}
-
 %description devel
 %{summary}
 
@@ -262,12 +155,12 @@ Provides:       hipblaslt%{pkg_suffix}-devel = %{version}-%{release}
 %package test
 Summary:        Tests for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description test
 %{summary}
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %if %{with gitcommit}
@@ -337,18 +230,14 @@ sed -i -e '/#include <omp.h>/d'   clients/common/src/cblas_interface.cpp
 sed -i -e 's@find_package(Git REQUIRED)@#find_package(Git REQUIRED)@' cmake/dependencies.cmake
 
 %build
+
 %if %{with gitcommit}
 cd projects/hipblaslt
 %endif
-
-# Do a manual install instead of cmake's virtualenv
 cd tensilelite
 TL=$PWD
-
 %python_exec setup.py install --root $TL
 cd ..
-
-# Should not have to do this
 export PATH=%{pkg_prefix}/bin:$PATH
 CLANG_PATH=`hipconfig --hipclangpath`
 ROCM_CLANG=${CLANG_PATH}/clang
@@ -356,8 +245,6 @@ RESOURCE_DIR=`${ROCM_CLANG} -print-resource-dir`
 export DEVICE_LIB_PATH=${RESOURCE_DIR}/amdgcn/bitcode
 export TENSILE_ROCM_ASSEMBLER_PATH=${CLANG_PATH}/clang++
 export TENSILE_ROCM_OFFLOAD_BUNDLER_PATH=${CLANG_PATH}/clang-offload-bundler
-
-# Look for the just built tensilelite
 export PATH=${TL}/%{_bindir}:$PATH
 %if 0%{?suse_version}
 %{python_expand} export PYTHONPATH=${TL}%{python_sitelib}:$PYTHONPATH
@@ -366,27 +253,19 @@ export PATH=${TL}/%{_bindir}:$PATH
 export PYTHONPATH=${TL}%{python3_sitelib}:$PYTHONPATH
 export Tensile_DIR=${TL}%{python3_sitelib}/Tensile
 %endif
-# Uncomment and see if the path is sane
-# TensileGetPath
-
 cat /proc/cpuinfo
 cat /proc/meminfo
 lscpu
-
-# Real cores, No hyperthreading
 COMPILE_JOBS=`lscpu | grep 'Core(s)' | awk '{ print $4 }'`
 if [ ${COMPILE_JOBS}x = x ]; then
     COMPILE_JOBS=1
 fi
-# Try again..
 if [ ${COMPILE_JOBS} = 1 ]; then
     COMPILE_JOBS=`lscpu | grep '^CPU(s)' | awk '{ print $2 }'`
     if [ ${COMPILE_JOBS}x = x ]; then
         COMPILE_JOBS=4
     fi
 fi
-
-# Take into account memmory usage per core, do not thrash real memory
 BUILD_MEM=8
 MEM_KB=0
 MEM_KB=`cat /proc/meminfo | grep MemTotal | awk '{ print $2 }'`
@@ -402,7 +281,6 @@ JOBS=${COMPILE_JOBS}
 if [ "$LINK_JOBS" -lt "$JOBS" ]; then
     JOBS=$LINK_JOBS
 fi
-
 %cmake %{cmake_generator} \
        -DGPU_TARGETS=%{gpu_list} \
        -DBLIS_INCLUDE_DIR=%{_includedir}/blis \
@@ -430,46 +308,23 @@ fi
        -DHIPBLASLT_PARALLEL_COMPILE_JOBS=${COMPILE_JOBS} \
        -DHIPBLASLT_PARALLEL_LINK_JOBS=${LINK_JOBS} \
        %{nil}
-
 %cmake_build
-
 %install
 %if %{with gitcommit}
 cd projects/hipblaslt
 %endif
-
 %cmake_install
-
-# Extra license
 rm -f %{buildroot}%{pkg_prefix}/share/doc/hipblaslt/LICENSE.md
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post  -p /sbin/ldconfig
+
 %postun -p /sbin/ldconfig
 
-%files
-%if %{with gitcommit}
-%doc projects/hipblaslt/README.md
-%license projects/hipblaslt/LICENSE.md
-%else
-%doc README.md
-%license LICENSE.md
-%endif
-
-%{pkg_prefix}/%{pkg_libdir}/libhipblaslt.so.*
-%{pkg_prefix}/%{pkg_libdir}/hipblaslt/
-
-%files devel
-%{pkg_prefix}/include/hipblaslt/
-%{pkg_prefix}/include/hipblaslt-export.h
-%{pkg_prefix}/include/hipblaslt-version.h
-%{pkg_prefix}/%{pkg_libdir}/cmake/hipblaslt/
-%{pkg_prefix}/%{pkg_libdir}/libhipblaslt.so
-
-%if %{with test}
-%files test
-%{pkg_prefix}/bin/hipblaslt*
-%{pkg_prefix}/bin/sequence.yaml
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n hipblaslt-devel -f %{oreon_filedir}/hipblaslt-devel.list
+%files -n hipblaslt-test -f %{oreon_filedir}/hipblaslt-test.list
 
 %changelog
+
 %autochangelog

@@ -1,50 +1,41 @@
 %global source0_hash 4840dc5c793bfeea4864371f21a341dcf6592047755f558c1c2814c0724b4119
-
 Name:           python-argparse-dataclass
 Version:        2.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Declarative CLIs with argparse and dataclasses
-
-# SPDX
 License:        MIT
 URL:            https://github.com/mivade/argparse_dataclass
-# We use the GitHub archive instead of the PyPI sdist to get CHANGELOG.md and
-# the tests.
-Source:         %{url}/archive/%{version}/argparse_dataclass-%{version}.tar.gz
-
+Source0:        https://github.com/mivade/argparse_dataclass/archive/%{version}/argparse_dataclass-%{version}.tar.gz
 BuildArch:      noarch
-
-
-# The dev extra and the requirements_dev.txt file both have too many linters
-# and other unwanted dependencies; it makes more sense to BR what we need for
-# testing manually.
-BuildRequires:  %{py3_dist pytest}
-
 %global common_description %{expand:
 %{summary}.}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-argparse-dataclass = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-argparse-dataclass
-Summary:        %{summary}
-
+Summary:        Declarative CLIs with argparse and dataclasses
 %description -n python3-argparse-dataclass %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-argparse-dataclass usr/lib/python3*/site-packages/argparse_dataclass* usr/lib64/python3*/site-packages/argparse_dataclass* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/argparse_dataclass* usr/lib64/python3*/site-packages/argparse_dataclass* usr/bin/*
 
 %check
-%pytest --doctest-modules -v
 
-%files -n python3-argparse-dataclass -f %{pyproject_files}
-%doc CHANGELOG.md
-%doc README.rst
+%pytest --doctest-modules -v
+%files
+%files -n python3-argparse-dataclass -f %{oreon_filedir}/python3-argparse-dataclass.list
 
 %changelog
+
 %autochangelog

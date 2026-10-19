@@ -1,67 +1,55 @@
-%global source0_hash none
-%global source1_hash none
-%global source2_hash none
-%global source3_hash none
-%global source4_hash none
-%global source5_hash none
-%global source6_hash none
-%global source7_hash none
-%global source8_hash none
-%global source9_hash none
-%global source10_hash none
-%global source11_hash none
-%global source12_hash none
-%global source13_hash none
-%global source14_hash none
-%global source15_hash none
-%global source16_hash none
-%global source17_hash none
-%global source18_hash none
-%global source19_hash none
-%global source20_hash none
-%global source21_hash none
-%global source22_hash none
-%global source23_hash none
-%global source24_hash none
-%global source25_hash none
-%global source26_hash none
-%global source27_hash none
-%global source28_hash none
-%global source29_hash none
-%global source30_hash none
-%global source31_hash none
-%global source32_hash none
-%global source33_hash none
-%global source34_hash none
-%global source35_hash none
-%global source36_hash none
-%global source37_hash none
-%global source38_hash none
-
+%global source0_hash 11e7d26dfab2916826d480087b6607845865306a0dd9a14a9f03efc9b34948c9
+%global source1_hash d2cea8a5c2309b7c5e6c7ce9a9d229300f9ba0faba17f4bfff1d250314d62ba6
+%global source2_hash 0d593851ac15f72fb72372b429639e545f64e2e4e4922ec8d839f2a484b0b82c
+%global source3_hash 08d0156e2635eaf049e283f09e42289a2f52b175b3b66ff7b2e789a486fd8b73
+%global source4_hash 6fdc66f29ff970f5951f3666634baf24e3b5f416412b9b2daf726749ccc21461
+%global source5_hash d72b467ca2772816677e3fe7c0617e2660eda1c7d5a5302f1d570671b93c8fad
+%global source6_hash 0690c63f2f237a020ae7b3dc5971e73e7382d964b35100a47fbe956175ae3328
+%global source7_hash 31fdc6a6e0c298ced7c9ae2e7673606646a437c4e0e4a84fc325612b55b860da
+%global source8_hash 7b345e162066c1bb4e96194ecf1a4fcd5841ba0fa0cb15e3c0f7b2c6a43a6e41
+%global source9_hash 152d02181b91bc75ba1f436ce312e54bfbae46a8c92b7cc9e5570c14f2e76ccd
+%global source10_hash bfe42e159b052300deb713f5bedabb43ba81f4b568cb93e67e884de371646a3a
+%global source11_hash 0e75a82edeffa0ce059391ab2e55eb7c85909f0f82c896763b433596321905b5
+%global source12_hash 319f05e498e27912cd4b664abbe9f6e9d9ef90749a24c7699b45af8641e174aa
+%global source13_hash 382d7aeee7e5e4c7c9442e612255ead6e9258ee7fe9392e9ba7e7b4fbd9bc1c1
+%global source14_hash dd42a732aa0dd0c06f20bd472f17ab88c7017df7a1640b9f27f9d2a508897dfa
+%global source15_hash 9fa45957dca844d87210876309120359ecdff16b3e4c91e9f5ea682c3248b5d6
+%global source16_hash 5883322d1d44af4fd19667205bd595a3f62f2be553da2398a4787ea95128d59e
+%global source17_hash e4e92f17908fc1d6e346ed99dd715e21ae59d05fe0366296c0a98b0980287052
+%global source18_hash 8e27a68a3b5f6d674ed7b9578f6ed4180bae2af7b53e755d4e3ad6b9e0e6be1f
+%global source19_hash 7a60bfae1477048d82342af82013702cae26ba7a32df80b01f0f043b1af416b6
+%global source20_hash eb1a090a5053f3d3a19ae5178d9ee490e419e6e1ba8238ce9e4932424b075e3b
+%global source21_hash b715e1e8d2a3f97beb263c3d8662b62f669aa04c74cdccfab1606e7027096b9a
+%global source22_hash fcd3a58a83c7832cecaeb91221ebc931a2f64946add9859515384107955b48bb
+%global source23_hash 3a667da724b3cc55d21df2577c7b16e4227e809d00c4276166735e216d05f107
+%global source24_hash 446b63fc4b8a4a7ed892df465c5389e9337356946a8f6969411854adb28cd543
+%global source25_hash c3a7c1b1de464e5adf17a7de0b0bf7563377c51cc423ac74ad3f1361e0daf207
+%global source26_hash 7a03e97d2eb4494400e3255e8b74e34aac40d1388d440d74a09682a390d9b182
+%global source27_hash 845e8392829db281b05bd9005143501c01b3e563a61d970aad7b50a7be3e79a5
+%global source28_hash dd6f32dccea09e24b67230cbf8a130b4b9ce949f7be71265d32af6f8dd237272
+%global source29_hash bc8e7bf19325565ca53847e9704a73891855abaf605190898492588a0da8c884
+%global source30_hash d6138e016e0db03d3e95b2b816a7c5e7ffbf889ceca5686f7c401717e0484b55
+%global source31_hash e6e79d183c43321ab74fed1517136d7c72792bfd6dd5cd40ce050b6e152e20b7
+%global source32_hash 61b7a07589ed839f9f1334a7e4c433dfa851a40aaa906592cf04ec3ae0b1a27d
+%global source33_hash 027caab293e49093a29e3027378646fbd8d843cae719636d5383d64cb4c2dc09
+%global source34_hash a5fd1aecb8596d2876f71cf58f85d9db193a187c8fc718554ce2bf38cbc514f3
+%global source35_hash fbd997c55e0758d355c448e8c5f9cbce3e96cd2ec8b822aabce3e8c9426b44ab
+%global source36_hash 1e2057c7dd308693c9730e208608c1c4728185dfdbd8edd0b424f844339933b1
+%global source37_hash 9648c365853e0e4b06c977b9353b0a1b3308e4cd1b3677e7209e4af7387d1768
+%global source38_hash 38bf328d1fc1eab54459097ac45381794bc0fb536b9d4cf40086b8d34d745c75
 %define buildall 0
-
 %global _changelog_trimtime %(date +%s -d "1 year ago")
-
-# build -flags subpkg
-#define flags 1
-
-Summary: Internationalization support for KDE3
+Summary:        Internationalization support for KDE3
 Name: kde-i18n
 Epoch: 1
 Version: 3.5.10
-Release: 46%{?dist}
-
-# GFDL, with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-# Automatically converted from old format: GFDL - review is highly recommended.
+Release:        1%{?dist}
 License: LicenseRef-Callaway-GFDL 
 Url: http://www.kde.org
 BuildArch: noarch
-
-# Speed build options
 %define debug_package %{nil}
 %define __spec_install_post %{nil}
 AutoReq: no
-
 Source0:        https://download.kde.org/Attic/%{version}/src/%{name}/%{name}-ar-%{version}.tar.bz2
 Source1:        https://download.kde.org/Attic/%{version}/src/%{name}/%{name}-bg-%{version}.tar.bz2
 Source2:        https://download.kde.org/Attic/%{version}/src/%{name}/%{name}-bn-%{version}.tar.bz2
@@ -102,14 +90,13 @@ Source36:        https://download.kde.org/Attic/%{version}/src/%{name}/%{name}-z
 Source37:        https://download.kde.org/Attic/%{version}/src/%{name}/%{name}-lt-%{version}.tar.bz2
 Source38:        https://download.kde.org/Attic/%{version}/src/%{name}/%{name}-ko-%{version}.tar.bz2
 Source1000: subdirs-kde-i18n
-
-BuildRequires: findutils
-BuildRequires: gettext
-BuildRequires: kdelibs3-devel
-BuildRequires: make
-
 Requires: kde-filesystem
-
+# oreon:deps
+BuildRequires:  findutils
+BuildRequires:  gettext
+BuildRequires:  kdelibs3-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 %{summary}.
 
@@ -602,8 +589,8 @@ Requires: %{name} = %{epoch}:%{version}-%{release}
 %description Chinese-Big5
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -649,22 +636,18 @@ for i in $(cat %{SOURCE1000}) ; do
   tar jxf %{_sourcedir}/%{name}-$i-%{version}.tar.bz2
 done
 
-
 %build
+
 for i in $(cat %{SOURCE1000}) ; do
   pushd %{name}-$i-%{version}
 %configure
   %make_build
   popd
 done
-
-
 %install
 for i in $(cat %{SOURCE1000}) ; do
   %make_install -C %{name}-$i-%{version} datadir=%{_datadir}
 done
-
-# make symlinks relative
 pushd %{buildroot}%{_docdir}/HTML
 for lang in *; do
   if [ -d $lang ]; then
@@ -675,42 +658,29 @@ for lang in *; do
         ln -sf ../../../docs/common $i
       fi
     done
-
     for i in */*; do
       if [ -d $i -a -L $i/common ]; then
         rm -f $i/common
         ln -sf ../../docs/common $i
       fi
     done
-
     for i in *; do
       if [ -d $i -a -L $i/common ]; then
         rm -f $i/common
         ln -sf ../docs/common $i
       fi
     done
-
     popd
   fi
 done
 popd   
-
 rm -rf %{buildroot}%{_docdir}/kinfocenter
-
-# remove zero-length file
 for i in $(find %{buildroot}%{_docdir}/HTML -size 0) ; do
    rm -f $i
 done
-
 %if ! 0%{?flags}
-# See http://fedoraproject.org/wiki/Languages
    rm -f %{buildroot}%{_datadir}/locale/*/flag.png
 %endif
-
-# FIXME: This blacklist is exceedingly long and does not cover files which don't
-# conflict, yet are still obsolete. We should switch to a whitelist approach.
-
-# remove .mo and entry.desktop files which conflict with KDE 4 kde-l10n
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/amor.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/ark.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/audiocd_encoder_lame.mo
@@ -1113,13 +1083,6 @@ rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/umbrello.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/useraccount.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdgantt.mo
 rm -f %{buildroot}%{_datadir}/locale/*/entry.desktop
-
-# keep these ones because we're shipping KDE 3 kdewebdev (because of Quanta)
-# rm -f %%{buildroot}%%{_datadir}/locale/*/LC_MESSAGES/kfilereplace.mo
-# rm -f %%{buildroot}%%{_datadir}/locale/*/LC_MESSAGES/kimagemapeditor.mo
-# rm -f %%{buildroot}%%{_datadir}/locale/*/LC_MESSAGES/klinkstatus.mo
-
-# remove docs which conflict with KDE 4 kde-l10n
 rm -rf %{buildroot}%{_docdir}/HTML/*/amor
 rm -rf %{buildroot}%{_docdir}/HTML/*/ark
 rm -rf %{buildroot}%{_docdir}/HTML/*/blinken
@@ -1237,14 +1200,6 @@ rm -rf %{buildroot}%{_docdir}/HTML/*/plasma
 rm -rf %{buildroot}%{_docdir}/HTML/*/sonnet
 rm -rf %{buildroot}%{_docdir}/HTML/*/superkaramba
 rm -rf %{buildroot}%{_docdir}/HTML/*/umbrello
-
-# keep these ones because we're shipping KDE 3 kdewebdev (because of Quanta)
-# rm -rf %%{buildroot}%%{_docdir}/HTML/*/kfilereplace
-# rm -rf %%{buildroot}%%{_docdir}/HTML/*/kimagemapeditor
-# rm -rf %%{buildroot}%%{_docdir}/HTML/*/klinkreplace
-# rm -rf %%{buildroot}%%{_docdir}/HTML/*/xsldbg
-
-# remove .mo files which conflict with KDE 4 extragear
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kcoloredit.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kiconedit.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kaudiocreator.mo
@@ -1271,8 +1226,6 @@ rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/webarchiver.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/ksig.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kpovmodeler.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kuickshow.mo
-
-# remove docs which conflict with KDE 4 extragear
 rm -rf %{buildroot}%{_docdir}/HTML/*/kcoloredit
 rm -rf %{buildroot}%{_docdir}/HTML/*/kiconedit
 rm -rf %{buildroot}%{_docdir}/HTML/*/kaudiocreator
@@ -1281,11 +1234,7 @@ rm -rf %{buildroot}%{_docdir}/HTML/*/konq-plugins
 rm -rf %{buildroot}%{_docdir}/HTML/*/ksig
 rm -rf %{buildroot}%{_docdir}/HTML/*/kpovmodeler
 rm -rf %{buildroot}%{_docdir}/HTML/*/kuickshow
-
-# remove obsolete KDE 3 application data translations
 rm -rf %{buildroot}%{_datadir}/apps
-
-# on F10+, also get rid of kdepim stuff
 rm -rf %{buildroot}%{_docdir}/HTML/*/akregator
 rm -rf %{buildroot}%{_docdir}/HTML/*/kaddressbook
 rm -rf %{buildroot}%{_docdir}/HTML/*/kalarm
@@ -1302,7 +1251,6 @@ rm -rf %{buildroot}%{_docdir}/HTML/*/kpilot
 rm -rf %{buildroot}%{_docdir}/HTML/*/ktnef
 rm -rf %{buildroot}%{_docdir}/HTML/*/kwatchgnupg
 rm -rf %{buildroot}%{_docdir}/HTML/*/multisynk
-
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/akregator.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kabc_slox.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kaddressbook.mo
@@ -1343,385 +1291,81 @@ rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/libkleopatra.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/libkpgp.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/libksieve.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/libkicker.mo
-
-
-%files
-# This space intentionally left blank
-
-%if 0%{?flags}
-%files flags
-%{_datadir}/locale/*/*.png
-%endif
-
-%if %{buildall}
-%files Afrikaans
-%lang(af) %{_datadir}/locale/af/LC_MESSAGES/*
-%lang(af) %{_datadir}/locale/af/charset
-%lang(af) %{_docdir}/HTML/af/
-%endif
-
-%files Arabic 
-%lang(ar) %{_datadir}/locale/ar/LC_MESSAGES/*
-%lang(ar) %{_datadir}/locale/ar/charset
-
-%if %{buildall}
-%files Azerbaijani
-%lang(az) %{_datadir}/locale/az/LC_MESSAGES/*
-%lang(az) %{_datadir}/locale/az/charset
-%endif
-
-%if %{buildall}
-%files Belarusian
-%lang(be) %{_datadir}/locale/be/LC_MESSAGES/*
-%lang(be) %{_datadir}/locale/be/charset
-%endif
-
-%files Bulgarian
-%lang(bg) %{_datadir}/locale/bg/LC_MESSAGES/*
-%lang(bg) %{_datadir}/locale/bg/charset
-
-%files Bengali
-%lang(bn) %{_datadir}/locale/bn/LC_MESSAGES/*
-%lang(bn) %{_datadir}/locale/bn/charset
-
-%if %{buildall}
-%files Tibetan
-%lang(bo) %{_datadir}/locale/bo/LC_MESSAGES/*
-%lang(bo) %{_datadir}/locale/bo/charset
-%endif
-
-%if %{buildall}
-%files Breton
-%lang(br) %{_datadir}/locale/br/LC_MESSAGES/*
-%lang(br) %{_datadir}/locale/br/charset
-%endif
-
-%if %{buildall}
-%files Bosnian
-%lang(bs) %{_datadir}/locale/bs/LC_MESSAGES/*
-%lang(bs) %{_datadir}/locale/bs/charset
-%endif
-
-%files Catalan
-%lang(ca) %{_datadir}/locale/ca/LC_MESSAGES/*
-%lang(ca) %{_datadir}/locale/ca/charset
-%lang(ca) %{_docdir}/HTML/ca/
-
-%files Czech
-%lang(cs) %{_datadir}/locale/cs/LC_MESSAGES/*
-%lang(cs) %{_datadir}/locale/cs/charset
-%lang(cs) %{_docdir}/HTML/cs/
-
-%if %{buildall}
-%files Welsh
-%lang(cy) %{_datadir}/locale/cy/LC_MESSAGES/*
-%lang(cy) %{_datadir}/locale/cy/charset
-%endif
-
-%files Danish
-%lang(da) %{_datadir}/locale/da/LC_MESSAGES/*
-%lang(da) %{_datadir}/locale/da/charset
-%lang(da) %{_datadir}/locale/da/da.compendium
-%lang(da) %{_docdir}/HTML/da/
-
-%files German
-%lang(de) %{_datadir}/locale/de/LC_MESSAGES/*
-%lang(de) %{_datadir}/locale/de/charset
-%lang(de) %{_docdir}/HTML/de/
-
-%files Greek
-%lang(el) %{_datadir}/locale/el/LC_MESSAGES/*
-%lang(el) %{_datadir}/locale/el/charset
-
-%files British
-%lang(en_GB) %{_datadir}/locale/en_GB/LC_MESSAGES/*
-%lang(en_GB) %{_datadir}/locale/en_GB/charset
-%lang(en_GB) %{_docdir}/HTML/en_GB/
-
-%if %{buildall}
-%files Esperanto
-%lang(eo) %{_datadir}/locale/eo/LC_MESSAGES/*
-%lang(eo) %{_datadir}/locale/eo/charset
-%endif
-
-%files Spanish
-%lang(es) %{_datadir}/locale/es/LC_MESSAGES/*
-%lang(es) %{_datadir}/locale/es/charset
-%lang(es) %{_docdir}/HTML/es/
-
-%files Estonian
-%lang(et) %{_datadir}/locale/et/LC_MESSAGES/*
-%lang(et) %{_datadir}/locale/et/charset
-%lang(et) %{_docdir}/HTML/et/
-
-%if %{buildall}
-%files Basque
-%lang(eu) %{_datadir}/locale/eu/LC_MESSAGES/*
-%lang(eu) %{_datadir}/locale/eu/charset
-%endif
-
-%if %{buildall}
-%files Farsi
-%lang(fa) %{_datadir}/locale/fa/LC_MESSAGES/*
-%lang(fa) %{_datadir}/locale/fa/charset
-%endif
-
-%files Finnish
-%lang(fi) %{_datadir}/locale/fi/LC_MESSAGES/*
-%lang(fi) %{_datadir}/locale/fi/charset
-%lang(fi) %{_docdir}/HTML/fi/
-
-%if %{buildall}
-%files Faroese
-%lang(fo) %{_datadir}/locale/fo/LC_MESSAGES/*
-%lang(fo) %{_datadir}/locale/fo/charset
-%endif
-
-%files French
-%lang(fr) %{_datadir}/locale/fr/LC_MESSAGES/*
-%lang(fr) %{_datadir}/locale/fr/charset
-%lang(fr) %{_datadir}/locale/fr/nbsp_gui_fr.txt
-%lang(fr) %{_datadir}/locale/fr/relecture_*
-%lang(fr) %{_docdir}/HTML/fr/
-
-%if %{buildall}
-%files Frisian
-%lang(fy) %{_datadir}/locale/fy/LC_MESSAGES/*
-%lang(fy) %{_datadir}/locale/fy/charset
-%endif
-
-%if %{buildall}
-%files Irish
-%lang(ga) %{_datadir}/locale/ga/LC_MESSAGES/*
-%lang(ga) %{_datadir}/locale/ga/charset
-
-%files Galician
-%lang(gl) %{_datadir}/locale/gl/LC_MESSAGES/*
-%lang(gl) %{_datadir}/locale/gl/charset
-%endif
-
-%files Hebrew
-%lang(he) %{_datadir}/locale/he/LC_MESSAGES/*
-%lang(he) %{_datadir}/locale/he/charset
-%lang(he) %{_docdir}/HTML/he/
-
-%files Hindi
-%lang(hi) %{_datadir}/locale/hi/LC_MESSAGES/*
-%lang(hi) %{_datadir}/locale/hi/charset
-
-%if %{buildall}
-%files Croatian
-%lang(hr) %{_datadir}/locale/hr/LC_MESSAGES/*
-%lang(hr) %{_datadir}/locale/hr/charset
-%lang(hr) %{_docdir}/HTML/hr/
-%endif
-
-%files Hungarian
-%lang(hu) %{_datadir}/locale/hu/LC_MESSAGES/*
-%lang(hu) %{_datadir}/locale/hu/charset
-%lang(hu) %{_docdir}/HTML/hu/
-
-%if %{buildall}
-%files Indonesian
-%lang(id) %{_datadir}/locale/id/LC_MESSAGES/*
-%lang(id) %{_datadir}/locale/id/charset
-%lang(id) %{_docdir}/HTML/id/
-%endif
-
-%files Icelandic
-%lang(is) %{_datadir}/locale/is/LC_MESSAGES/*
-%lang(is) %{_datadir}/locale/is/charset
-
-%files Italian
-%lang(it) %{_datadir}/locale/it/LC_MESSAGES/*
-%lang(it) %{_datadir}/locale/it/charset
-%lang(it) %{_docdir}/HTML/it/
-
-%files Japanese
-%lang(ja) %{_datadir}/locale/ja/LC_MESSAGES/*
-%lang(ja) %{_datadir}/locale/ja/charset
-%lang(ja) %{_docdir}/HTML/ja/
-
-%files Korean
-%lang(ko) %{_datadir}/locale/ko/LC_MESSAGES/*
-%lang(ko) %{_datadir}/locale/ko/charset
-%lang(ko) %{_docdir}/HTML/ko/
-
-%if %{buildall}
-%files Kurdish
-%lang(ku) %{_datadir}/locale/ku/LC_MESSAGES/*
-%lang(ku) %{_datadir}/locale/ku/charset
-%lang(ku) %{_docdir}/HTML/ku/
-%endif
-
-%if %{buildall}
-%files Lao
-%lang(lo) %{_datadir}/locale/lo/LC_MESSAGES/*
-%lang(lo) %{_datadir}/locale/lo/charset
-%lang(lo) %{_docdir}/HTML/lo/
-%endif
-
-%files Lithuanian
-%lang(lt) %{_datadir}/locale/lt/LC_MESSAGES/*
-%lang(lt) %{_datadir}/locale/lt/charset
-
-%if %{buildall}
-%files Latvian
-%lang(lv) %{_datadir}/locale/lv/LC_MESSAGES/*
-%lang(lv) %{_datadir}/locale/lv/charset
-%endif
-
-%if %{buildall}
-%files Maori
-%lang(mi) %{_datadir}/locale/mi/LC_MESSAGES/*
-%lang(mi) %{_datadir}/locale/mi/charset
-%endif
-
-%if %{buildall}
-%files Macedonian
-%lang(mk) %{_datadir}/locale/mk/LC_MESSAGES/*
-%lang(mk) %{_datadir}/locale/mk/charset
-%endif
-
-%if %{buildall}
-%files Maltese
-%lang(mt) %{_datadir}/locale/mt/LC_MESSAGES/*
-%lang(mt) %{_datadir}/locale/mt/charset
-%endif
-
-%files Dutch
-%lang(nl) %{_datadir}/locale/nl/LC_MESSAGES/*
-%lang(nl) %{_datadir}/locale/nl/charset
-%lang(nl) %{_docdir}/HTML/nl/
-
-%files Norwegian
-%lang(nb) %{_datadir}/locale/nb/LC_MESSAGES/*
-%lang(nb) %{_datadir}/locale/nb/charset
-%lang(nb) %{_datadir}/locale/nb/README
-#%lang(nb) %%{_docdir}/HTML/nb/
-
-%files Norwegian-Nynorsk
-%lang(nn) %{_datadir}/locale/nn/LC_MESSAGES/*
-%lang(nn) %{_datadir}/locale/nn/charset
-#%lang(nn) %%{_docdir}/HTML/nn/
-
-%if %{buildall}
-%files Occitan
-%lang(oc) %{_datadir}/locale/oc/LC_MESSAGES/*
-%lang(oc) %{_datadir}/locale/oc/charset
-%endif
-
-%files Punjabi
-%lang(pa) %{_datadir}/locale/pa/LC_MESSAGES/*
-%lang(pa) %{_datadir}/locale/pa/charset
-
-%files Polish
-%lang(pl) %{_datadir}/locale/pl/LC_MESSAGES/*
-%lang(pl) %{_datadir}/locale/pl/charset
-%lang(pl) %{_docdir}/HTML/pl/
-
-%files Portuguese
-%lang(pt) %{_datadir}/locale/pt/LC_MESSAGES/*
-%lang(pt) %{_datadir}/locale/pt/charset
-%lang(pt) %{_docdir}/HTML/pt/
-
-%files Brazil
-%lang(pt_BR) %{_datadir}/locale/pt_BR/LC_MESSAGES/*
-%lang(pt_BR) %{_datadir}/locale/pt_BR/charset
-%lang(pt_BR) %{_docdir}/HTML/pt_BR/
-
-%files Romanian
-%lang(ro) %{_datadir}/locale/ro/LC_MESSAGES/*
-%lang(ro) %{_datadir}/locale/ro/charset
-%lang(ro) %{_docdir}/HTML/ro/
-
-%files Russian
-%lang(ru) %{_datadir}/locale/ru/LC_MESSAGES/*
-%lang(ru) %{_datadir}/locale/ru/charset
-%lang(ru) %{_docdir}/HTML/ru/
-
-%files Slovak
-%lang(sk) %{_datadir}/locale/sk/LC_MESSAGES/*
-%lang(sk) %{_datadir}/locale/sk/charset
-%lang(sk) %{_docdir}/HTML/sk/
-
-%files Slovenian
-%lang(sl) %{_datadir}/locale/sl/LC_MESSAGES/*
-%lang(sl) %{_datadir}/locale/sl/charset
-%lang(sl) %{_docdir}/HTML/sl/
-
-%files Serbian
-%lang(sr) %{_datadir}/locale/sr/LC_MESSAGES/*
-%lang(sr) %{_datadir}/locale/sr/charset
-%lang(sr) %{_docdir}/HTML/sr/
-
-%files Swedish
-%lang(sv) %{_datadir}/locale/sv/LC_MESSAGES/*
-%lang(sv) %{_datadir}/locale/sv/charset
-%lang(sv) %{_docdir}/HTML/sv/
-
-%files Tamil
-%lang(ta) %{_datadir}/locale/ta/LC_MESSAGES/*
-%lang(ta) %{_datadir}/locale/ta/charset
-
-%if %{buildall}
-%files Tajik
-%lang(tg) %{_datadir}/locale/tg/LC_MESSAGES/*
-%lang(tg) %{_datadir}/locale/tg/charset
-%endif
-
-%if %{buildall}
-%files Thai
-%lang(th) %{_datadir}/locale/th/LC_MESSAGES/*
-%lang(th) %{_datadir}/locale/th/charset
-%endif
-
-%files Turkish
-%lang(tr) %{_datadir}/locale/tr/LC_MESSAGES/*
-%lang(tr) %{_datadir}/locale/tr/charset
-%lang(tr) %{_docdir}/HTML/tr/
-
-%files Ukrainian
-%lang(uk) %{_docdir}/HTML/uk/
-%lang(uk) %{_datadir}/locale/uk/LC_MESSAGES/*
-%lang(uk) %{_datadir}/locale/uk/charset
-
-%if %{buildall}
-%files Venda
-%lang(ven) %{_datadir}/locale/ven/LC_MESSAGES/*
-%lang(ven) %{_datadir}/locale/ven/charset
-%endif
-
-%if %{buildall}
-%files Vietnamese
-%lang(vi) %{_datadir}/locale/vi/LC_MESSAGES/*
-%lang(vi) %{_datadir}/locale/vi/charset
-%endif
-
-%if %{buildall}
-%files Walloon
-%lang(wa) %{_datadir}/locale/wa/LC_MESSAGES/*
-%lang(wa) %{_datadir}/locale/wa/charset
-%endif
-
-%if %{buildall}
-%files Xhosa
-%lang(xh) %{_datadir}/locale/xh/LC_MESSAGES/*
-%lang(xh) %{_datadir}/locale/xh/charset
-%lang(xh) %{_docdir}/HTML/xh/
-%endif
-
-%files Chinese
-%lang(zh_CN) %{_datadir}/locale/zh_CN/LC_MESSAGES/*
-%lang(zh_CN) %{_datadir}/locale/zh_CN/charset
-%lang(zh_CN) %{_docdir}/HTML/zh_CN/
-
-%files Chinese-Big5
-%lang(zh_TW) %{_datadir}/locale/zh_TW/LC_MESSAGES/*
-%lang(zh_TW) %{_datadir}/locale/zh_TW/charset
-%lang(zh_TW) %{_docdir}/HTML/zh_TW/
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+
+%files -f %{oreon_filedir}/main.list
+%files -n kde-i18n-flags -f %{oreon_filedir}/kde-i18n-flags.list
+%files -n kde-i18n-Afrikaans -f %{oreon_filedir}/kde-i18n-Afrikaans.list
+%files -n kde-i18n-Arabic -f %{oreon_filedir}/kde-i18n-Arabic.list
+%files -n kde-i18n-Azerbaijani -f %{oreon_filedir}/kde-i18n-Azerbaijani.list
+%files -n kde-i18n-Belarusian -f %{oreon_filedir}/kde-i18n-Belarusian.list
+%files -n kde-i18n-Bulgarian -f %{oreon_filedir}/kde-i18n-Bulgarian.list
+%files -n kde-i18n-Bengali -f %{oreon_filedir}/kde-i18n-Bengali.list
+%files -n kde-i18n-Tibetan -f %{oreon_filedir}/kde-i18n-Tibetan.list
+%files -n kde-i18n-Breton -f %{oreon_filedir}/kde-i18n-Breton.list
+%files -n kde-i18n-Bosnian -f %{oreon_filedir}/kde-i18n-Bosnian.list
+%files -n kde-i18n-Catalan -f %{oreon_filedir}/kde-i18n-Catalan.list
+%files -n kde-i18n-Czech -f %{oreon_filedir}/kde-i18n-Czech.list
+%files -n kde-i18n-Cymraeg -f %{oreon_filedir}/kde-i18n-Cymraeg.list
+%files -n kde-i18n-Welsh -f %{oreon_filedir}/kde-i18n-Welsh.list
+%files -n kde-i18n-Danish -f %{oreon_filedir}/kde-i18n-Danish.list
+%files -n kde-i18n-German -f %{oreon_filedir}/kde-i18n-German.list
+%files -n kde-i18n-Greek -f %{oreon_filedir}/kde-i18n-Greek.list
+%files -n kde-i18n-British -f %{oreon_filedir}/kde-i18n-British.list
+%files -n kde-i18n-Esperanto -f %{oreon_filedir}/kde-i18n-Esperanto.list
+%files -n kde-i18n-Spanish -f %{oreon_filedir}/kde-i18n-Spanish.list
+%files -n kde-i18n-Estonian -f %{oreon_filedir}/kde-i18n-Estonian.list
+%files -n kde-i18n-Basque -f %{oreon_filedir}/kde-i18n-Basque.list
+%files -n kde-i18n-Farsi -f %{oreon_filedir}/kde-i18n-Farsi.list
+%files -n kde-i18n-Finnish -f %{oreon_filedir}/kde-i18n-Finnish.list
+%files -n kde-i18n-Faroese -f %{oreon_filedir}/kde-i18n-Faroese.list
+%files -n kde-i18n-French -f %{oreon_filedir}/kde-i18n-French.list
+%files -n kde-i18n-Frisian -f %{oreon_filedir}/kde-i18n-Frisian.list
+%files -n kde-i18n-Irish -f %{oreon_filedir}/kde-i18n-Irish.list
+%files -n kde-i18n-Galician -f %{oreon_filedir}/kde-i18n-Galician.list
+%files -n kde-i18n-Hebrew -f %{oreon_filedir}/kde-i18n-Hebrew.list
+%files -n kde-i18n-Hindi -f %{oreon_filedir}/kde-i18n-Hindi.list
+%files -n kde-i18n-Croatian -f %{oreon_filedir}/kde-i18n-Croatian.list
+%files -n kde-i18n-Hungarian -f %{oreon_filedir}/kde-i18n-Hungarian.list
+%files -n kde-i18n-Indonesian -f %{oreon_filedir}/kde-i18n-Indonesian.list
+%files -n kde-i18n-Icelandic -f %{oreon_filedir}/kde-i18n-Icelandic.list
+%files -n kde-i18n-Italian -f %{oreon_filedir}/kde-i18n-Italian.list
+%files -n kde-i18n-Japanese -f %{oreon_filedir}/kde-i18n-Japanese.list
+%files -n kde-i18n-Korean -f %{oreon_filedir}/kde-i18n-Korean.list
+%files -n kde-i18n-Kurdish -f %{oreon_filedir}/kde-i18n-Kurdish.list
+%files -n kde-i18n-Lao -f %{oreon_filedir}/kde-i18n-Lao.list
+%files -n kde-i18n-Lithuanian -f %{oreon_filedir}/kde-i18n-Lithuanian.list
+%files -n kde-i18n-Latvian -f %{oreon_filedir}/kde-i18n-Latvian.list
+%files -n kde-i18n-Maori -f %{oreon_filedir}/kde-i18n-Maori.list
+%files -n kde-i18n-Macedonian -f %{oreon_filedir}/kde-i18n-Macedonian.list
+%files -n kde-i18n-Maltese -f %{oreon_filedir}/kde-i18n-Maltese.list
+%files -n kde-i18n-Dutch -f %{oreon_filedir}/kde-i18n-Dutch.list
+%files -n kde-i18n-Norwegian -f %{oreon_filedir}/kde-i18n-Norwegian.list
+%files -n kde-i18n-Norwegian-Nynorsk -f %{oreon_filedir}/kde-i18n-Norwegian-Nynorsk.list
+%files -n kde-i18n-Occitan -f %{oreon_filedir}/kde-i18n-Occitan.list
+%files -n kde-i18n-Polish -f %{oreon_filedir}/kde-i18n-Polish.list
+%files -n kde-i18n-Portuguese -f %{oreon_filedir}/kde-i18n-Portuguese.list
+%files -n kde-i18n-Punjabi -f %{oreon_filedir}/kde-i18n-Punjabi.list
+%files -n kde-i18n-Brazil -f %{oreon_filedir}/kde-i18n-Brazil.list
+%files -n kde-i18n-Romanian -f %{oreon_filedir}/kde-i18n-Romanian.list
+%files -n kde-i18n-Russian -f %{oreon_filedir}/kde-i18n-Russian.list
+%files -n kde-i18n-Slovak -f %{oreon_filedir}/kde-i18n-Slovak.list
+%files -n kde-i18n-Slovenian -f %{oreon_filedir}/kde-i18n-Slovenian.list
+%files -n kde-i18n-Serbian -f %{oreon_filedir}/kde-i18n-Serbian.list
+%files -n kde-i18n-Swedish -f %{oreon_filedir}/kde-i18n-Swedish.list
+%files -n kde-i18n-Tamil -f %{oreon_filedir}/kde-i18n-Tamil.list
+%files -n kde-i18n-Tajik -f %{oreon_filedir}/kde-i18n-Tajik.list
+%files -n kde-i18n-Thai -f %{oreon_filedir}/kde-i18n-Thai.list
+%files -n kde-i18n-Turkish -f %{oreon_filedir}/kde-i18n-Turkish.list
+%files -n kde-i18n-Ukrainian -f %{oreon_filedir}/kde-i18n-Ukrainian.list
+%files -n kde-i18n-Venda -f %{oreon_filedir}/kde-i18n-Venda.list
+%files -n kde-i18n-Vietnamese -f %{oreon_filedir}/kde-i18n-Vietnamese.list
+%files -n kde-i18n-Walloon -f %{oreon_filedir}/kde-i18n-Walloon.list
+%files -n kde-i18n-Xhosa -f %{oreon_filedir}/kde-i18n-Xhosa.list
+%files -n kde-i18n-Chinese -f %{oreon_filedir}/kde-i18n-Chinese.list
+%files -n kde-i18n-Chinese-Big5 -f %{oreon_filedir}/kde-i18n-Chinese-Big5.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.5.10-46
 - Import

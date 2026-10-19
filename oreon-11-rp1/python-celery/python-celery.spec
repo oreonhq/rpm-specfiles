@@ -1,63 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 177006bd2054b882e9f01be59abd8529e88879ef50d7918a7050c5a9f4e12912
 Name:           python-celery
 Version:        5.6.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Distributed Task Queue.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://docs.celeryq.dev/en/stable/
-Source:         %{pypi_source celery}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/celery/celery-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'celery' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-celery = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-celery
-Summary:        %{summary}
-
-%description -n python3-celery %_description
+Summary:        Distributed Task Queue.
+%description -n python3-celery
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-celery arangodb,auth,azureblockblob,brotli,cassandra,consul,cosmosdbsql,couchbase,couchdb,django,dynamodb,elasticsearch,eventlet,gcs,gevent,librabbitmq,memcache,mongodb,msgpack,pydantic,pymemcache,pyro,pytest,redis,s3,slmq,solar,sqlalchemy,sqs,tblib,yaml,zookeeper,zstd
-
 
 %prep
-%autosetup -p1 -n celery-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir celery-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-celery usr/lib/python3*/site-packages/celery* usr/lib64/python3*/site-packages/celery* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/celery* usr/lib64/python3*/site-packages/celery* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-celery -f %{pyproject_files}
-%{_bindir}/celery
+%files
+%files -n python3-celery -f %{oreon_filedir}/python3-celery.list
 
 %changelog
+
 %autochangelog

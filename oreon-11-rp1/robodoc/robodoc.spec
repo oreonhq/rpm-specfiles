@@ -1,23 +1,19 @@
 %global source0_hash a1061f306ed9600a7551dbc72fcac1c7ae16f3f73d63554f2e854f5c5d3ff267
-
-#	Perl files are only documentation examples.
-
 %global __perl_provides		%{nil}
 %global __perl_requires		%{nil}
-
 Name:		robodoc
 Version:	4.99.44
-Release:	13%{?dist}
-Summary:	Extract documentation from source code
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Extract documentation from source code
 License:	GPL-3.0-or-later
-Source0:	http://rfsber.home.xs4all.nl/Robo/archives/%{name}-%{version}.tar.gz
+Source0:        http://rfsber.home.xs4all.nl/Robo/archives/%{name}-%{version}.tar.gz
 Patch1:		robodoc-4.99.43-silentwarnings.patch
 URL:		http://rfsber.home.xs4all.nl/Robo/
-BuildRequires: make
-BuildRequires:	gcc
-BuildRequires:	perl-generators
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
   ROBODoc is a documentation tool (based on the AutoDocs program written
 a long time ago by Commodore). It extracts specially formatted comment
@@ -38,6 +34,7 @@ comments/remarks.
 
 #-------------------------------------------------------------------------------
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 #-------------------------------------------------------------------------------
@@ -48,36 +45,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 #-------------------------------------------------------------------------------
 %build
-#-------------------------------------------------------------------------------
 
 %configure docdir="%{_docdir}/robodoc"
 make CFLAGS="${RPM_OPT_FLAGS}" %{?_smp_mflags}
-
-#	Changelog is ISO8859. Convert it to UTF-8.
-
 iconv -f ISO8859-1 -t UTF-8 -o ChangeLog.utf8 ChangeLog
 touch -r ChangeLog ChangeLog.utf8
 mv ChangeLog.utf8 ChangeLog
-
-#-------------------------------------------------------------------------------
 %install
-#-------------------------------------------------------------------------------
-
 make DESTDIR="${RPM_BUILD_ROOT}" INSTALL="install -p" install
-
-#	Get rid of the installed documentation
-
 rm -rf "${RPM_BUILD_ROOT}%{_docdir}/robodoc"
+%oreon_autofiles main
 
-#-------------------------------------------------------------------------------
-%files
-#-------------------------------------------------------------------------------
+%files -f %{oreon_filedir}/main.list
 
-%doc AUTHORS Change* COPYING README Docs/manual.css Docs/manual.html
-%doc Examples
-%{_bindir}/*
-%{_mandir}/man1/*
-
-#-------------------------------------------------------------------------------
 %changelog
+
 %autochangelog

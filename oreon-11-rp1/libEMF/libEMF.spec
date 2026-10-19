@@ -1,20 +1,17 @@
 %global source0_hash 05662a657c86ece56e21d7804f2c217c82f4dc535c5ad1d61c03b1fe43b0c188
-
-Summary:	A library for generating Enhanced Metafiles
+Summary:        A library for generating Enhanced Metafiles
 Summary(pl):	Biblioteka do generowania plików w formacie Enhanced Metafile
 Name:		libEMF
 Version:	1.0.14
-Release:	1%{?dist}
-# include/libEMF/emf.h: LGPL-2.1-or-later
-# libemf/libemf.{cpp,h}: LGPL-2.1-or-later
-# src/printemf.c: GPL-2.0-or-later
+Release:        1%{?dist}
 License:	LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:		http://libemf.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/project/libemf/libemf/%{version}/libemf-%{version}.tar.gz
 Patch:		add-riscv64-support.patch
-BuildRequires:	gcc-c++
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 libEMF is a library for generating Enhanced Metafiles on systems which
 don't natively support the ECMA-234 Graphics Device Interface
@@ -34,7 +31,6 @@ Summary:	libEMF header files
 Summary(pl):	Pliki nagłówkowe libEMF
 Requires:	%{name}%{_isa} = %{version}-%{release}
 Requires:	libstdc++-devel
-
 %description devel
 libEMF header files.
 
@@ -43,33 +39,26 @@ Pliki nagłówkowe libEMF.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n libemf-%{version} -p1
-
+%global oreon_srcdir libemf-%{version}
+%oreon_prep
 %build
+
 %configure \
 	--disable-static \
 	--enable-editing
-
 %make_build
-
 %install
 export CPPROG="cp -p"
 %make_install
 rm %{buildroot}%{_libdir}/libEMF.la
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %make_build check
-
-%files
-%license COPYING COPYING.LIB
-%doc AUTHORS ChangeLog NEWS README
-%{_bindir}/printemf
-%{_libdir}/libEMF.so.1*
-
-%files devel
-%doc doc/html/*
-%{_libdir}/libEMF.so
-%{_includedir}/libEMF
+%files -f %{oreon_filedir}/main.list
+%files -n libEMF-devel -f %{oreon_filedir}/libEMF-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,59 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 2d5c1ed0f9fa60f200ba821ac5731fbc26ce7d2e0d023a3392b74c3590eafae5
 Name:           python-managesieve
 Version:        0.8.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        RFC-5804 Manage Sieve client library for remotely managing Sieve scripts
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        PSF-2.0 AND GPL-3.0-only
 URL:            https://gitlab.com/htgoebel/managesieve/
-Source:         %{pypi_source managesieve}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/managesieve/managesieve-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'managesieve' generated automatically by pyp2spec.}
-
 Patch:          fix_ssl_wrap_socket_error.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 39.2.0
+Requires:       python3-managesieve = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-managesieve
-Summary:        %{summary}
-
-%description -n python3-managesieve %_description
-
+Summary:        RFC-5804 Manage Sieve client library for remotely managing Sieve scripts
+%description -n python3-managesieve
 
 %prep
-%autosetup -p1 -n managesieve-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir managesieve-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-managesieve usr/lib/python3*/site-packages/managesieve* usr/lib64/python3*/site-packages/managesieve* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/managesieve* usr/lib64/python3*/site-packages/managesieve* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-managesieve -f %{pyproject_files}
+%files
+%files -n python3-managesieve -f %{oreon_filedir}/python3-managesieve.list
 
 %changelog
+
 %autochangelog

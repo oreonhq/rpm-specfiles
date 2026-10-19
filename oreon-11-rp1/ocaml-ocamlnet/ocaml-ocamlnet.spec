@@ -1,56 +1,37 @@
 %global source0_hash f98ed19979848f1949b1b001e30ac132b254d0f4a705150c6dcf9094bbec9cee
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
 Name:           ocaml-ocamlnet
 Version:        4.1.9
-Release:        30%{?dist}
+Release:        1%{?dist}
 Summary:        Network protocols for OCaml
 License:        BSD-3-Clause
-
 URL:            http://projects.camlcity.org/projects/ocamlnet.html
 VCS:            git:https://gitlab.com/gerdstolpmann/lib-ocamlnet3.git
 Source0:        http://download.camlcity.org/download/ocamlnet-%{version}.tar.gz
-
-# Patches are here:
-# https://gitlab.com/rwmjones/lib-ocamlnet3/-/commits/ocaml-5.4
-
-# Avoid implicit int return types in C code in configure
-# https://gitlab.com/gerdstolpmann/lib-ocamlnet3/-/merge_requests/23
 Patch:          0001-configure-Avoid-implicit-ints.patch
-
-# Build ocamlrpcgen as native code.  Sent upstream 2021-01-14.
 Patch:          0002-Build-ocamlrpcgen-as-native-code.patch
-
-# Make library linkage explicit
 Patch:          0003-Make-library-linkage-explicit.patch
-
-# Various fixes for OCaml 5
-# https://gitlab.com/gerdstolpmann/lib-ocamlnet3/-/issues/29
 Patch:          0004-started-porting-to-OCaml-5.patch
 Patch:          0005-more-build-fixes-for-OCaml-5.patch
 Patch:          0006-Further-OCaml-5-changes.patch
 Patch:          0007-netsys_c.h-Don-t-redefine-caml_ba_element_size.patch
 Patch:          0008-configure-Assume-we-have-the-Bytes-type-immutable-st.patch
-
-BuildRequires:  make
-BuildRequires:  ocaml >= 4.07.0
-BuildRequires:  ocaml-ocamldoc
-BuildRequires:  ocaml-findlib
-BuildRequires:  ocaml-camlp-streams-devel
-BuildRequires:  ocaml-lablgtk-devel
-BuildRequires:  ocaml-labltk-devel
-BuildRequires:  ocaml-pcre-devel
-BuildRequires:  ocaml-zip-devel
+%global __ocaml_requires_opts -i Asttypes -i Build_path_prefix_map -i Cmi_format -i Env -i Format_doc -i Ident -i Identifiable -i Load_path -i Location -i Longident -i Misc -i Oprint -i Outcometree -i Parsetree -i Path -i Primitive -i Shape -i Subst -i Toploop -i Type_immediacy -i Types -i Unit_info -i Warnings
+# oreon:deps
 BuildRequires:  gnutls-devel
 BuildRequires:  krb5-devel
+BuildRequires:  make
 BuildRequires:  ncurses-devel
+BuildRequires:  ocaml
+BuildRequires:  ocaml-camlp-streams-devel
+BuildRequires:  ocaml-findlib
+BuildRequires:  ocaml-lablgtk-devel
+BuildRequires:  ocaml-labltk-devel
+BuildRequires:  ocaml-ocamldoc
+BuildRequires:  ocaml-pcre-devel
+BuildRequires:  ocaml-zip-devel
 BuildRequires:  tcl-devel
-
-# Do not require ocaml-compiler-libs at runtime
-%global __ocaml_requires_opts -i Asttypes -i Build_path_prefix_map -i Cmi_format -i Env -i Format_doc -i Ident -i Identifiable -i Load_path -i Location -i Longident -i Misc -i Oprint -i Outcometree -i Parsetree -i Path -i Primitive -i Shape -i Subst -i Toploop -i Type_immediacy -i Types -i Unit_info -i Warnings
-
+# /oreon:deps
 %description
 Ocamlnet is an ongoing effort to collect modules, classes and
 functions that are useful to implement network protocols. Since
@@ -98,7 +79,6 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ocaml-lablgtk-devel%{?_isa}
 Requires:       ocaml-pcre-devel%{?_isa}
 Requires:       ocaml-zip-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
@@ -107,7 +87,6 @@ developing applications that use %{name}.
 Summary:        Ocamlnet HTTP daemon
 License:        GPL-2.0-or-later
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    nethttpd
 Nethttpd is a web server component (HTTP server implementation). It
 can be used for web applications without using an extra web server, or
@@ -118,12 +97,12 @@ Summary:        Development files for %{name}-nethttpd
 License:        GPL-2.0-or-later
 Requires:       %{name}-nethttpd%{?_isa} = %{version}-%{release}
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description    nethttpd-devel
 The %{name}-nethttpd-devel package contains libraries and signature
 files for developing applications that use %{name}-nethttpd.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -N -n ocamlnet-%{version}
@@ -149,9 +128,8 @@ sed -i 's,ocamlc -safe-string >/dev/null 2>/dev/null,true,' configure
 sed -i 's,ocamlc -opaque >/dev/null 2>/dev/null,true,' configure
 
 %build
-# Parallel builds don't work:
-unset MAKEFLAGS
 
+unset MAKEFLAGS
 ./configure \
   -bindir %{_bindir} \
   -datadir %{_datadir}/%{name} \
@@ -163,95 +141,27 @@ unset MAKEFLAGS
   -enable-nethttpd \
   -enable-tcl \
   -enable-zip
-
 %ifarch %{ocaml_native_compiler}
-# This is a hack caused by the ocamlrpcgen patch.  Because "make all"
-# no longer builds ocamlrpcgen (it is now built by "make opt") but
-# some other parts of the build depend on this program, we have to run
-# make opt first and ignore the result.  Hopefully we'll get a better
-# result when upstream integrate the patch.  RWMJ 2021-01.
 make opt ||:
 %endif
-
 make all
-
 %ifarch %{ocaml_native_compiler}
 make opt
 %endif
-
 %install
 export DESTDIR=$RPM_BUILD_ROOT
 export OCAMLFIND_DESTDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml
 mkdir -p $OCAMLFIND_DESTDIR
 mkdir -p $OCAMLFIND_DESTDIR/stublibs
 %make_install
-
-# rpc-generator/dummy.mli is empty and according to Gerd Stolpmann can
-# be deleted safely.  This avoids an rpmlint warning.
 rm -f $RPM_BUILD_ROOT%{_libdir}/ocaml/rpc-generator/dummy.mli
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc ChangeLog RELNOTES
-%{_libdir}/ocaml/equeue
-%{_libdir}/ocaml/equeue-gtk2
-%{_libdir}/ocaml/equeue-tcl
-%{_libdir}/ocaml/netcamlbox
-%{_libdir}/ocaml/netcgi2
-%{_libdir}/ocaml/netcgi2-plex
-%{_libdir}/ocaml/netclient
-%{_libdir}/ocaml/netgss-system
-%{_libdir}/ocaml/netmulticore
-%{_libdir}/ocaml/netplex
-%{_libdir}/ocaml/netshm
-%{_libdir}/ocaml/netstring
-%{_libdir}/ocaml/netstring-pcre
-%{_libdir}/ocaml/netsys
-%{_libdir}/ocaml/nettls-gnutls
-%{_libdir}/ocaml/netunidata
-%{_libdir}/ocaml/netzip
-%{_libdir}/ocaml/rpc
-%{_libdir}/ocaml/rpc-auth-local
-%{_libdir}/ocaml/rpc-generator
-%{_libdir}/ocaml/shell
-%ifarch %{ocaml_native_compiler}
-%exclude %{_libdir}/ocaml/*/*.a
-%exclude %{_libdir}/ocaml/*/*.cmxa
-%exclude %{_libdir}/ocaml/*/*.cmx
-%exclude %{_libdir}/ocaml/*/*.o
-%endif
-%exclude %{_libdir}/ocaml/*/*.mli
-%{_libdir}/ocaml/stublibs/*.so
-%{_libdir}/ocaml/stublibs/*.so.owner
-%{_datadir}/%{name}/
-%{_bindir}/netplex-admin
-%{_bindir}/ocamlrpcgen
-
-%files devel
-%doc ChangeLog RELNOTES
-%ifarch %{ocaml_native_compiler}
-%{_libdir}/ocaml/*/*.a
-%{_libdir}/ocaml/*/*.cmxa
-%{_libdir}/ocaml/*/*.cmx
-%{_libdir}/ocaml/*/*.o
-%endif
-%{_libdir}/ocaml/*/*.mli
-
-%files nethttpd
-%doc ChangeLog RELNOTES
-%{_libdir}/ocaml/nethttpd
-%ifarch %{ocaml_native_compiler}
-%exclude %{_libdir}/ocaml/*/*.a
-%exclude %{_libdir}/ocaml/*/*.cmxa
-%endif
-%exclude %{_libdir}/ocaml/*/*.mli
-
-%files nethttpd-devel
-%doc ChangeLog RELNOTES
-%ifarch %{ocaml_native_compiler}
-%{_libdir}/ocaml/*/*.a
-%{_libdir}/ocaml/*/*.cmxa
-%endif
-%{_libdir}/ocaml/*/*.mli
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-ocamlnet-devel -f %{oreon_filedir}/ocaml-ocamlnet-devel.list
+%files -n ocaml-ocamlnet-nethttpd -f %{oreon_filedir}/ocaml-ocamlnet-nethttpd.list
+%files -n ocaml-ocamlnet-nethttpd-devel -f %{oreon_filedir}/ocaml-ocamlnet-nethttpd-devel.list
 
 %changelog
+
 %autochangelog

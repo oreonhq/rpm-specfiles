@@ -1,63 +1,53 @@
-%global source0_hash none
-
+%global source0_hash 6d94c9f834dd9e44514162799d344d815a3a4faec913717a9ecbfa5be1bb8e61
 Name:           python-xmltodict
 Version:        1.0.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Makes working with XML feel like you are working with JSON
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/martinblech/xmltodict
-Source:         %{pypi_source xmltodict}
-
+Source0:        https://files.pythonhosted.org/packages/source/x/xmltodict/xmltodict-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-xmltodict = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-xmltodict+test
+Summary:        Metapackage for python3-xmltodict test extras
+Requires:       python3-xmltodict = %{version}-%{release}
+Provides:       python3dist(xmltodict[test]) = %{version}-%{release}
 
+%description -n python3-xmltodict+test
+Metapackage for python3-xmltodict test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'xmltodict' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-xmltodict
-Summary:        %{summary}
-
-%description -n python3-xmltodict %_description
+Summary:        Makes working with XML feel like you are working with JSON
+%description -n python3-xmltodict
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-xmltodict test
-
 
 %prep
-%autosetup -p1 -n xmltodict-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir xmltodict-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-xmltodict usr/lib/python3*/site-packages/xmltodict* usr/lib64/python3*/site-packages/xmltodict* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/xmltodict* usr/lib64/python3*/site-packages/xmltodict* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-xmltodict -f %{pyproject_files}
+%files
+%files -n python3-xmltodict -f %{oreon_filedir}/python3-xmltodict.list
 
 %changelog
+
 %autochangelog
 

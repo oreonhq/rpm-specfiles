@@ -1,42 +1,34 @@
-%global source0_hash none
-
+%global source0_hash effb7beed3985099ce2315a959c639b4973aac8210f61e354475a84105944f3d
 %global irrxml_version 1.8.5
 %global irrlicht_version 1.8.5
-
 Name:		irrlicht
-Summary: 	A high performance realtime 3D engine
+Summary:        A high performance realtime 3D engine
 Version:	%{irrlicht_version}
-Release:	11%{?dist}
+Release:        1%{?dist}
 License:	zlib
-Source0:	http://downloads.sourceforge.net/irrlicht/%{name}-%{irrlicht_version}.zip
-# Various fixes, optflags, system libraries/headers
-# http://irrlicht.sourceforge.net/phpBB2/viewtopic.php?t=24076&highlight=
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.zip
 Patch0:		irrlicht-1.8-optflags.patch
-# Get the code compiling
 Patch1:		irrlicht-1.8-glext.patch
-# Use system libaesgm
 Patch2:		irrlicht18-libaesgm.patch
-# Use improved fastatof from assimp
-# Upstream applied a modified version of most of this.
-# Patch3:	irrlicht18-fastatof-improvements-typefixes.patch
-# Make libIrrXML.so
 Patch4:		irrlicht-1.8-irrXML-shared-library.patch
-# Fix issue with definition of LOCALE_DECIMAL_POINTS
 Patch5:		irrlicht-1.8-fix-locale-decimal-points.patch
-# Fix build with Mesa 10
 Patch6:		irrlicht-1.8.1-mesa10.patch
-# Use RPM_LD_FLAGS
 Patch7:		irrlicht-1.8.4-ldflags.patch
-
 URL:		http://irrlicht.sourceforge.net/
-BuildRequires:  gcc-c++
-BuildRequires:	libXxf86vm-devel, mesa-libGL-devel, mesa-libGLU-devel
-BuildRequires:	libjpeg-devel, zlib-devel, libaesgm-devel
-BuildRequires:	libpng-devel, bzip2-devel
-BuildRequires: make
 Provides:	irrlicht18 = %{version}-%{release}
 Obsoletes:	irrlicht18 <= 1.8-0.4.svn3629%{?dist}
-
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  gcc-c++
+BuildRequires:  libXxf86vm-devel
+BuildRequires:  libaesgm-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  make
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 The Irrlicht Engine is an open source high performance realtime 3D engine 
 written and usable in C++ and also available for .NET languages. It is 
@@ -52,7 +44,6 @@ Requires:	libjpeg-devel, zlib-devel, libpng-devel
 Requires:	irrXML-devel%{?_isa} = %{irrxml_version}
 Provides:	irrlicht18-devel = %{version}-%{release}
 Obsoletes:	irrlicht18-devel <= 1.8-0.4.svn3629%{?dist}
-
 %description devel
 Development headers and libraries for irrlicht.
 
@@ -61,7 +52,6 @@ Summary:	Simple and fast XML parser for C++
 Version:	%{irrxml_version}
 Provides:	irrXML18 = %{irrxml_version}-%{release}
 Obsoletes:	irrXML18 <= 1.8-0.4.svn3629%{?dist}
-
 %description -n irrXML
 irrXML is a simple and fast open source xml parser for C++.
 
@@ -71,11 +61,11 @@ Version:	%{irrxml_version}
 Requires:	irrXML%{?_isa} = %{irrxml_version}-%{release}
 Provides:	irrXML18-devel = %{irrxml_version}-%{release}
 Obsoletes:	irrXML18-devel <= 1.8-0.4.svn3629%{?dist}
-
 %description -n irrXML-devel
 Development headers and libraries for irrXML.
 
 %prep
+
 %setup -q
 %patch -P0 -p1 -b .optflags
 %patch -P1 -p1 -b .glext
@@ -105,9 +95,9 @@ done
 sed -i -e '/_IRR_MATERIAL_MAX_TEXTURES_/s/4/8/' include/IrrCompileConfig.h
 
 %build
+
 cd source/Irrlicht
 %make_build sharedlib
-
 %install
 mkdir -p %{buildroot}%{_libdir}
 mkdir -p %{buildroot}%{_includedir}/%{name}
@@ -117,39 +107,17 @@ pushd %{buildroot}%{_libdir}
 ln -s libIrrlicht.so.%{irrlicht_version} libIrrlicht.so.1
 ln -s libIrrXML.so.%{irrlicht_version} libIrrXML.so.1
 popd
-
 %ldconfig_scriptlets
-
 %ldconfig_scriptlets -n irrXML
+%oreon_autofiles irrXML usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles irrXML-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc readme.txt
-%{_libdir}/libIrrlicht.so.*
-
-%files devel
-%doc doc/upgrade-guide.txt
-%{_includedir}/%{name}/
-%exclude %{_includedir}/%{name}/fast_atof.h
-%exclude %{_includedir}/%{name}/heapsort.h
-%exclude %{_includedir}/%{name}/irrArray.h
-%exclude %{_includedir}/%{name}/irrString.h
-%exclude %{_includedir}/%{name}/irrTypes.h
-%exclude %{_includedir}/%{name}/irrXML.h
-%{_libdir}/libIrrlicht.so
-
-%files -n irrXML
-%doc readme.txt
-%{_libdir}/libIrrXML.so.*
-
-%files -n irrXML-devel
-%dir %{_includedir}/%{name}/
-%{_includedir}/%{name}/fast_atof.h
-%{_includedir}/%{name}/heapsort.h
-%{_includedir}/%{name}/irrArray.h
-%{_includedir}/%{name}/irrString.h
-%{_includedir}/%{name}/irrTypes.h
-%{_includedir}/%{name}/irrXML.h
-%{_libdir}/libIrrXML.so
+%files -f %{oreon_filedir}/main.list
+%files -n irrlicht-devel -f %{oreon_filedir}/irrlicht-devel.list
+%files -n irrXML -f %{oreon_filedir}/irrXML.list
+%files -n irrXML-devel -f %{oreon_filedir}/irrXML-devel.list
 
 %changelog
+
 %autochangelog

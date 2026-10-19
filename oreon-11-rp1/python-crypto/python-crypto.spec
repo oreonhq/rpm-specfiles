@@ -1,13 +1,11 @@
 %global source0_hash f2ce1e989b272cfcb677616763e0a2e7ec659effa67a88aa92b3a65528f60a3c
-
-Summary:	Unmaintained cryptography library for Python
+Summary:        Unmaintained cryptography library for Python
 Name:		python-crypto
 Version:	2.6.1
-Release:	60%{?dist}
-# Mostly LicenseRef-Fedora-Public-Domain apart from parts of HMAC.py and setup.py, which are PSF-2.0
+Release:        60%{?dist}
 License:	LicenseRef-Fedora-Public-Domain AND PSF-2.0
 URL:		http://www.pycrypto.org/
-Source0:	http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto/pycrypto-%{version}.tar.gz
+Source0:        http://ftp.dlitz.net/pub/dlitz/crypto/pycrypto/pycrypto-%{version}.tar.gz
 Patch0:		python-crypto-2.4-optflags.patch
 Patch1:		python-crypto-2.4-fix-pubkey-size-divisions.patch
 Patch2:		pycrypto-2.6.1-CVE-2013-7459.patch
@@ -23,13 +21,11 @@ Patch11:	python-crypto-2.6.1-no-distutils.patch
 Patch12:	python-crypto-2.6.1-SyntaxWarning.patch
 Patch13:	python-crypto-2.6.1-python3.12.patch
 Patch14:	python-crypto-2.6.1-python3.13.patch
-BuildRequires:	coreutils
-BuildRequires:	findutils
-BuildRequires:	gcc
-BuildRequires:	gmp-devel >= 4.1
-BuildRequires:	libtomcrypt-devel >= 1.16
-BuildRequires:	python3-devel
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-crypto = %{version}-%{release}
+# /oreon:deps
 %description
 PyCrypto is a collection of both secure hash functions (such as MD5 and
 SHA), and various encryption algorithms (AES, DES, RSA, ElGamal, etc.).
@@ -39,7 +35,6 @@ or PyCryptodome software instead.
 
 %package -n python3-crypto
 Summary:	Unmaintained cryptography library for Python
-
 %description -n python3-crypto
 PyCrypto is a collection of both secure hash functions (such as MD5 and
 SHA), and various encryption algorithms (AES, DES, RSA, ElGamal, etc.).
@@ -48,6 +43,7 @@ This software is no longer maintained upstream. Please use the Cryptography
 or PyCryptodome software instead.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -n pycrypto-%{version} -q
@@ -114,31 +110,23 @@ rm -rf src/libtom
 # Fix Python 3.13 compatibility
 %patch -P 14
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
+
 %global optflags %{optflags} -fno-strict-aliasing
 %pyproject_wheel
-
 %install
 %pyproject_install
-
-# Remove group write permissions on shared objects
 find %{buildroot}%{python3_sitearch} -name '*.so' -exec chmod -c g-w {} \;
+%oreon_autofiles python3-crypto usr/lib/python3*/site-packages/crypto* usr/lib64/python3*/site-packages/crypto* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/crypto* usr/lib64/python3*/site-packages/crypto* usr/bin/*
 
 %check
-# Main test suite
+
 %{py3_test_envvars} %{python3} lib/Crypto/SelfTest/__init__.py
-
-# Benchmark
 %{py3_test_envvars} %{python3} pct-speedtest.py
-
-%files -n python3-crypto
-%license COPYRIGHT LEGAL/
-%doc README TODO ACKS ChangeLog Doc/
-%{python3_sitearch}/Crypto/
-%{python3_sitearch}/pycrypto-%{version}.dist-info/
+%files
+%files -n python3-crypto -f %{oreon_filedir}/python3-crypto.list
 
 %changelog
+
 %autochangelog

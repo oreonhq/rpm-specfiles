@@ -1,59 +1,43 @@
 %global source0_hash 2f9803154806ebae8a40b33ef2c691806a472857adc90303eaa32482bd8c19ed
-
 Name:           python-inkex
 Version:        1.4.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python extensions for Inkscape core, separated out from main repository.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://gitlab.com/inkscape/extensions
-Source:         %{pypi_source inkex}
+Source0:        https://files.pythonhosted.org/packages/source/i/inkex/inkex-%{version}.tar.gz
 Patch:          fix-pyproject-lxml-constraint.patch
 Patch:          fix-pyproject-scour-constraint.patch
-
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'inkex' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-inkex = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-inkex
-Summary:        %{summary}
-
-%description -n python3-inkex %_description
-
+Summary:        Python extensions for Inkscape core, separated out from main repository.
+%description -n python3-inkex
 
 %prep
-%autosetup -p1 -n inkex-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir inkex-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-inkex usr/lib/python3*/site-packages/inkex* usr/lib64/python3*/site-packages/inkex* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/inkex* usr/lib64/python3*/site-packages/inkex* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-inkex -f %{pyproject_files}
+%files
+%files -n python3-inkex -f %{oreon_filedir}/python3-inkex.list
 
 %changelog
+
 %autochangelog

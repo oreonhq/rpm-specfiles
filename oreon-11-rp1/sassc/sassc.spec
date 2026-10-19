@@ -1,63 +1,49 @@
-%global source0_hash none
-%global source1_hash none
-
+%global source0_hash 608dc9002b45a91d11ed59e352469ecc05e4f58fc1259fc9a9f5b8f0f8348a03
+%global source1_hash 1c84cad4624980259f00e2f9f8cc42c9b716986511ab6251fbb1547f612818f8
 %global testspec_version 3.6.3
 %define with_tests 0
-
 Name:           sassc
 Version:        3.6.2
-Release:        13%{?dist}
+Release:        1%{?dist}
 Summary:        Wrapper around libsass to compile CSS stylesheet
-
 License:        MIT
 URL:            http://github.com/sass/sassc
 Source0:        https://github.com/sass/sassc/archive/refs/tags/3.6.2.tar.gz#/sassc-3.6.2.tar.gz
-# Test suite spec. According to this comment from an upstream dev, we should
-# not use the release tags on the test spec:
-# https://github.com/sass/libsass/issues/2258#issuecomment-268196004
-# https://github.com/sass/sass-spec/archive/master.zip
-# https://github.com/sass/sass-spec/archive/v%%{testspec_version}.tar.gz
 Source1:        https://github.com/sass/sass-spec/archive/refs/tags/libsass-%{testspec_version}.tar.gz#/sass-spec-libsass-%{testspec_version}.tar.gz
-
+%if %{with_tests}
+%if 0%{?epel} && 0%{?epel} <= 7
+%else
+%endif
+%endif
+# oreon:deps
 BuildRequires:  automake
+BuildRequires:  gcc-c++
+BuildRequires:  libsass-devel
 BuildRequires:  libtool
 BuildRequires:  make
-BuildRequires:  libsass-devel >= %{version}
-BuildRequires:  gcc-c++
-%if %{with_tests}
-# For the test suite
-BuildRequires:  ruby
-%if 0%{?epel} && 0%{?epel} <= 7
-BuildRequires:  rubygem-minitest5
-%else
-BuildRequires:  rubygem-hrx
-BuildRequires:  rubygem-minitest
-%endif
-%endif
-
+# /oreon:deps
 %description
 SassC is a wrapper around libsass used to generate a useful command-line
 application that can be installed and packaged for several operating systems.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -a 1 -n sassc-3.6.2
 mv sass-spec-libsass-%{testspec_version} sass-spec
 autoreconf -fiv
 
-
 %build
+
 %configure
 %make_build 
-
-
 %install
 %make_install
-
+%oreon_autofiles main
 %if %{with_tests}
 %check
+
 rm sass-spec/spec/basic/12_pseudo_classes_and_elements.hrx
 rm sass-spec/spec/basic/44_bem_selectors.hrx
 rm sass-spec/spec/extend-tests/018_test_id_unification.hrx
@@ -72,13 +58,9 @@ rm sass-spec/spec/extend-tests/087_test_negation_unification.hrx
 rm sass-spec/spec/libsass-closed-issues/issue_2520.hrx
 ruby sass-spec/sass-spec.rb -c ./%{name} --impl libsass sass-spec/spec
 %endif
-
-%files
-%license LICENSE
-%doc Readme.md
-%{_bindir}/%{name}
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.2-13
 - Import

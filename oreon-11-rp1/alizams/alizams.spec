@@ -1,51 +1,43 @@
 %global source0_hash 8fe607fc5e234d1d89f87c04f9cab7fb256e43a71f9f7bc893a70eeca5f713ac
-
 %global forgeurl https://github.com/AlizaMedicalImaging/AlizaMS
-
 Name:    alizams
 Version: 1.10.3
-
 %forgemeta
-
-Release: %autorelease
-Summary: Aliza MS DICOM Viewer
-# Automatically converted from old format: GPLv3 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Aliza MS DICOM Viewer
 License: GPL-3.0-only
 URL:     %{forgeurl}
-Source0: %{forgesource}
-
-BuildRequires:  cmake
-BuildRequires:  gcc
-BuildRequires:  g++
-BuildRequires:  libuuid-devel
-BuildRequires:  zlib-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  vxl-devel
-BuildRequires:  openjpeg2-devel >= 2.0
-BuildRequires:  CharLS-devel
-BuildRequires:  cmake(LIBMINC)
-BuildRequires:  cmake(ITK)
-BuildRequires:  cmake(gdcm)
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-BuildRequires:  bullet-devel
-BuildRequires:  lcms2-devel
-
+Source0:        %{forgeurl}/archive/v%{version}/AlizaMS-%{version}.tar.gz
 Requires:       hicolor-icon-theme
 Requires:       qt5-qtsvg
-
 Provides:       bundled(vectormath)
 Provides:       bundled(colorspace)
-
-# https://github.com/AlizaMedicalImaging/AlizaMS/issues/2
 ExcludeArch:      %{power64} %{ix86} s390x
-
+# oreon:deps
+BuildRequires:  CharLS-devel
+BuildRequires:  bullet-devel
+BuildRequires:  cmake
+BuildRequires:  cmake(ITK)
+BuildRequires:  cmake(LIBMINC)
+BuildRequires:  cmake(gdcm)
+BuildRequires:  desktop-file-utils
+BuildRequires:  g++
+BuildRequires:  gcc
+BuildRequires:  lcms2-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libuuid-devel
+BuildRequires:  openjpeg2-devel
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  vxl-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 A 2D and 3D DICOM viewer with many tools and very fast directory
 scanner and DICOMDIR support. It can consistently remove personal
 information from DICOM files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
@@ -67,6 +59,7 @@ rm -fr b/
 rm -fr CG/glew/
 
 %build
+
 %cmake \
   -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
   -DALIZA_QT_VERSION:STRING=5 \
@@ -81,26 +74,18 @@ rm -fr CG/glew/
   -DALIZA_DISABLE_SIMDMATH:BOOL=ON \
 %endif
 %cmake_build -v
-
 %install
 %cmake_install
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate \
   %{buildroot}%{_datadir}/applications/%{name}.desktop
 appstream-util validate-relax --nonet \
   %{buildroot}%{_datadir}/metainfo/%{name}.metainfo.xml
-
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/metainfo/%{name}.metainfo.xml
-%{_datadir}/icons/hicolor/*/apps/%{name}.png
-%{_datadir}/icons/hicolor/*/apps/%{name}.svg
-%{_datadir}/%{name}
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,29 +1,19 @@
 %global source0_hash 4162c7fa29ad50a3d0c24606da06da7e6d1fac25c08a74ce556143b4367293ca
-
-# NOTE: The documentation is no longer built because Fedora does not have
-# hugo-book or doxygen-awesome-css.
-
-# TODO: Unbundle backward-cpp, catch2, magic_enum, and rx-ranges.
-
 %global giturl  https://github.com/libsemigroups/libsemigroups
-
 Name:           libsemigroups
 Version:        3.6.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C++ library for semigroups and monoids
-
-# libsemigroups itself is GPL-3.0-or-later.
-# TextFlow is BSL-1.0.
-# magic_enum and rx-ranges are MIT.
-# All other licenses are due to use of eigen3.
 License:        GPL-3.0-or-later AND BSL-1.0 AND MIT AND MPL-2.0 AND BSD-3-Clause AND Apache-2.0
 URL:            https://libsemigroups.readthedocs.io/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+%ifarch %{arm64}
+%endif
+Obsoletes:      %{name}-doc < 3.0.0
+Provides:       %{name}-doc = %{version}-%{release}
+# oreon:deps
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  libtool
@@ -31,16 +21,7 @@ BuildRequires:  make
 BuildRequires:  perl(open)
 BuildRequires:  pkgconfig(eigen3)
 BuildRequires:  pkgconfig(fmt)
-
-# HPCombi cannot yet be used on x86_64.  See below.
-%ifarch %{arm64}
-BuildRequires:  pkgconfig(hpcombi)
-%endif
-
-# This can be removed when F48 reaches EOL
-Obsoletes:      %{name}-doc < 3.0.0
-Provides:       %{name}-doc = %{version}-%{release}
-
+# /oreon:deps
 %description
 Libsemigroups is a C++ library for semigroups and monoids; it is partly based
 on "Algorithms for computing finite semigroups", "Expository Slides", and
@@ -92,11 +73,11 @@ Libsemigroups also has some advantages over Semigroupe 2.01:
 %package devel
 Summary:        Headers files for developing with %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Header files for developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -135,29 +116,20 @@ sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -i libtool
 
 %build
-%make_build
 
+%make_build
 %install
 %make_install
-
-# Do not bundle the eigen3 headers
 rm -fr %{buildroot}%{_includedir}/libsemigroups/Eigen
-
-# Do not bundle the fmt headers
 rm -fr %{buildroot}%{_includedir}/libsemigroups/fmt
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 LD_LIBRARY_PATH=$PWD/.libs make check
-
-%files
-%doc README.md
-%license LICENSE
-%{_libdir}/%{name}.so.3{,.*}
-
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libsemigroups-devel -f %{oreon_filedir}/libsemigroups-devel.list
 
 %changelog
+
 %autochangelog

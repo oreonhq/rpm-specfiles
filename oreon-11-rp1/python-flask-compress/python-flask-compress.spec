@@ -1,59 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 802954fb3af048cf4ca2a3b414393bf2b98466ae8067e6654ea0aa34ba34aff5
 Name:           python-flask-compress
 Version:        1.25
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Compress responses in your Flask app with gzip, deflate, brotli or zstandard.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/colour-science/flask-compress
-Source:         %{pypi_source flask_compress}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flask_compress/flask_compress-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'flask-compress' generated automatically by pyp2spec.}
-
 Patch0:         flask-compress_setuptools-scm.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 42
+BuildRequires:  python3dist(setuptools-scm[toml]) < 8
+Requires:       python3-flask-compress = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-flask-compress
-Summary:        %{summary}
-
-%description -n python3-flask-compress %_description
-
+Summary:        Compress responses in your Flask app with gzip, deflate, brotli or zstandard.
+%description -n python3-flask-compress
 
 %prep
-%autosetup -p1 -n flask_compress-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir flask_compress-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-flask-compress usr/lib/python3*/site-packages/flask_compress* usr/lib64/python3*/site-packages/flask_compress* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flask_compress* usr/lib64/python3*/site-packages/flask_compress* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-flask-compress -f %{pyproject_files}
+%files
+%files -n python3-flask-compress -f %{oreon_filedir}/python3-flask-compress.list
 
 %changelog
+
 %autochangelog

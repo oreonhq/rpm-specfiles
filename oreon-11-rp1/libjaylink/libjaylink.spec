@@ -1,22 +1,19 @@
 %global source0_hash 235b12d161b29d813026704f335536a6a916646ea2058302e4ca45ca2cd81325
-
 Name:           libjaylink
 Version:        0.5.0
 Release:        1%{?dist}
 Summary:        Library for SEGGER J-Link and compatible devices
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://gitlab.zapb.de/libjaylink/libjaylink
 Source0:        https://gitlab.zapb.de/%{name}/%{name}/-/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc
-BuildRequires:  pkgconfig(libusb-1.0)
-BuildRequires:  libtool
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
-BuildRequires: make
-
+BuildRequires:  gcc
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig(libusb-1.0)
+# /oreon:deps
 %description
 libjaylink is a shared library written in C to access SEGGER J-Link
 and compatible devices.
@@ -24,45 +21,31 @@ and compatible devices.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
-
+%oreon_prep
 %build
+
 ./autogen.sh
 %configure --disable-static
 %make_build
-
-
 %install
 rm -rf $RPM_BUILD_ROOT
 %make_install
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 %__mkdir -p $RPM_BUILD_ROOT/usr/lib/udev/rules.d/
 %__sed -e 's/MODE="660", GROUP="plugdev", //g' contrib/60-libjaylink.rules > $RPM_BUILD_ROOT/usr/lib/udev/rules.d/60-libjaylink.rules
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license COPYING
-%doc README.md NEWS
-%{_libdir}/*.so.*
-%{_prefix}/lib/udev/rules.d/*
-
-%files devel
-%doc HACKING
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*
+%files -f %{oreon_filedir}/main.list
+%files -n libjaylink-devel -f %{oreon_filedir}/libjaylink-devel.list
 
 %changelog
+
 %autochangelog
 

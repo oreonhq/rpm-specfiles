@@ -1,35 +1,30 @@
 %global source0_hash fae9b99117700cc87cf8fdc8b8ec69bfd1d835ab88c5d140f0526a95ac54b9ed
-
 Name:           perl-Inline-Files
 Version:        0.71
-Release:        21%{?dist}
+Release:        1%{?dist}
 Summary:        Allows for multiple inline files in a single Perl file
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Inline-Files
 Source0:        https://cpan.metacpan.org/authors/id/A/AM/AMBS/Inline-Files-%{version}.tar.gz
 BuildArch:      noarch
-# Build
+Requires:       perl(Data::Dumper)
+Provides:       perl(Inline::Files)
+# oreon:deps
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-# Runtime
+BuildRequires:  perl(CPAN::Meta::YAML)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Cwd)
-# Data::Dumper not used at test time
-BuildRequires:  perl(Filter::Util::Call)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(vars)
-# Tests only
-# For parsing of t/testrules.yml
-BuildRequires:  perl(CPAN::Meta::YAML)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(File::Copy)
-BuildRequires:  perl(lib)
+BuildRequires:  perl(Filter::Util::Call)
 BuildRequires:  perl(Test)
 BuildRequires:  perl(Test::More)
-Requires:       perl(Data::Dumper)
-
-Provides:       perl(Inline::Files)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Inline::Files generalizes the notion of the `__DATA__' marker and the
 associated `<DATA>' file handle, to an arbitrary number of markers and
@@ -41,12 +36,12 @@ Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       coreutils
 Requires:       perl-Test-Harness
 Requires:       perl(CPAN::Meta::YAML)
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Inline-Files-%{version}
 chmod -R a-x demo/* README Changes lib/Inline/Files.pm \
@@ -58,19 +53,16 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cp -a tests %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Test t/rules-dbm.t write into CWD
 DIR=$(mktemp -d)
 cp -a %{_libexecdir}/%{name}/* "$DIR"
 pushd "$DIR"
@@ -80,17 +72,14 @@ rm -r "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files
-%doc Changes README demo/
-%{perl_vendorlib}/*
-%{_mandir}/man3/*.3*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Inline-Files-tests -f %{oreon_filedir}/perl-Inline-Files-tests.list
 
 %changelog
+
 %autochangelog

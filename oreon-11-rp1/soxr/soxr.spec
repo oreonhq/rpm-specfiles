@@ -1,76 +1,53 @@
 %global source0_hash b111c15fdc8c029989330ff559184198c161100a59312f5dc19ddeb9b5a15889
-
 %global __cmake_in_source_build 1
-
 Name:           soxr
 Version:        0.1.3
 Release:        22%{?dist}
 Summary:        The SoX Resampler library
-
 License:        LGPL-2.1-or-later
 URL:            https://sourceforge.net/p/soxr/wiki/Home/ 
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}-Source.tar.xz
-
-# Don't use non-standard CMake variables
-# https://bugzilla.redhat.com/show_bug.cgi?id=2381660
 Patch0:         soxr-cmake.patch
-
-BuildRequires:  cmake gcc
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+# /oreon:deps
 %description
 The SoX Resampler library `libsoxr' performs one-dimensional sample-rate
 conversion -- it may be used, for example, to resample PCM-encoded audio.
 
-
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version}-Source
-
-
+%global oreon_srcdir %{name}-%{version}-Source
+%oreon_prep
 %build
+
 export LDFLAGS="-Wl,--as-needed"
 %cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DWITH_CR32S=FALSE \
        -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_build
-
-
 %install
 %cmake_install
-
-# Remove docs and use the rpmbuild macro instead
 rm -rf %{buildroot}%{_docdir}/*
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
 %ldconfig_scriptlets
-
-
-%files
-%doc NEWS README
-%license LICENCE
-%{_libdir}/*.so.*
-
-%files devel
-%doc examples
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/soxr-lsr.pc
-%{_libdir}/pkgconfig/soxr.pc
-
+%files -f %{oreon_filedir}/main.list
+%files -n soxr-devel -f %{oreon_filedir}/soxr-devel.list
 
 %changelog
+
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.1.3-21
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

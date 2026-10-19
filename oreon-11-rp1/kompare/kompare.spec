@@ -1,48 +1,36 @@
 %global source0_hash fc1299b3cfcad81ec8488a5ea25f189fe7cf727ef91242972cc04e6635d52005
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    kompare
-Summary: Diff tool
+Summary:        Diff tool
 Version: 26.04.3
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://apps.kde.org/kompare/
-
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  gcc-c++
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  extra-cmake-modules
-BuildRequires:  libappstream-glib
-
-BuildRequires:  cmake(Qt6Core)
-BuildRequires:  cmake(Qt6PrintSupport)
-BuildRequires:  cmake(Qt6Widgets)
-
-BuildRequires:  cmake(KF6CoreAddons)
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
+Provides:       mergetool
+# oreon:deps
 BuildRequires:  cmake(KF6Codecs)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6IconThemes)
 BuildRequires:  cmake(KF6JobWidgets)
-BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6Parts)
 BuildRequires:  cmake(KF6TextEditor)
 BuildRequires:  cmake(KF6WidgetsAddons)
-BuildRequires:  cmake(KF6I18n)
-
 BuildRequires:  cmake(KompareDiff2)
-
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
-Provides:       mergetool
-
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6PrintSupport)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 Tool to visualize changes between two versions of a file
 
@@ -60,51 +48,28 @@ Requires:  qt6-qtbase-devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kompare.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.kompare.appdata.xml
-
-
-%files -f %{name}.lang
-%doc README
-%license LICENSES/*
-%{_bindir}/kompare
-%{_datadir}/applications/org.kde.kompare.desktop
-%{_datadir}/icons/hicolor/*/apps/kompare.*
-%{_datadir}/kio/servicemenus/kompare.desktop
-%{_kf6_datadir}/qlogging-categories6/kompare.categories
-%{_kf6_metainfodir}/org.kde.kompare.appdata.xml
-
-%files libs
-%{_libdir}/libkomparedialogpages.so.*
-%{_libdir}/libkompareinterface.so.*
-%{_kf6_plugindir}/parts/komparenavtreepart.so
-%{_kf6_plugindir}/parts/komparepart.so
-
-%files devel
-%{_includedir}/kompare/
-%{_libdir}/libkompareinterface.so
-
+%files -f %{oreon_filedir}/main.list
+%files -n kompare-libs -f %{oreon_filedir}/kompare-libs.list
+%files -n kompare-devel -f %{oreon_filedir}/kompare-devel.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

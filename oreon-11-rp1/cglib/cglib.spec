@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash 0c16a5d9d94e96690df19ec649a17b39eecfdb87504dcfc05a44bf5e910a6d1f
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -82,39 +81,33 @@ end
 }
 %bcond_with bootstrap
 %global tarball_name RELEASE_%(echo '%{version}' | tr . _)
-
 Name:           cglib
 Version:        3_3_0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Code Generation Library for Java
-# ASM MethodVisitor is based on ASM code and therefore
-# BSD-licensed. Everything else is ASL 2.0.
 License:        Apache-2.0 AND BSD-3-Clause
 URL:            https://github.com/cglib/cglib
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-Source0:        https://github.com/cglib/cglib/archive/%{tarball_name}.tar.gz#/cglib-3.3.0.tar.gz
-
+Source0:        https://github.com/%{name}/%{name}/archive/RELEASE_%{version}.tar.gz#/%{name}-3.3.0.tar.gz
 Patch:          0001-Remove-unused-import.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 3_3_0-38
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.ant:ant)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.ow2.asm:asm)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 3_3_0-38
-
+# /oreon:deps
 %description
 cglib is a powerful, high performance and quality code generation library
 for Java. It is used to extend Java classes and implements interfaces
 at run-time.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n cglib-RELEASE_3_3_0
 %autosetup -p1 -n cglib-RELEASE_3_3_0
@@ -146,16 +139,15 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_alias :cglib "net.sf.cglib:cglib" "cglib:cglib-full" "cglib:cglib-nodep" "org.sonatype.sisu.inject:cglib"
 
 %build
-# 5 tests fail with OpenJDK 11
-# Forwarded upstream: https://github.com/cglib/cglib/issues/119
-%mvn_build -j -f -- -Djava.version.source=1.8 -Djava.version.target=1.8
 
+%mvn_build -j -f -- -Djava.version.source=1.8 -Djava.version.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.0-1
 - Import

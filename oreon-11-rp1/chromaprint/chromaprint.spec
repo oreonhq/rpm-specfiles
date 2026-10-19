@@ -1,34 +1,22 @@
 %global source0_hash 3368805af0ee47b9df74df10b5001a44569e01df2844dab520031720dde9ad23
-
-# The presence of this macro ensures the disttag changes
-# when set in side tags
 %bcond_with bootstrap
-
-%if 0%{?rhel} && 0%{?rhel} < 9
-%bcond_with ffmpeg
-%else
 %bcond ffmpeg %{?_with_bootstrap:0}%{!?_with_bootstrap:1}
-%endif
-# Globing of libraries is against the packging guidelines
 %global sover 1
-
-
 Name:           chromaprint
 Version:        1.6.1
 Release:        1%{?dist}
 Summary:        Library implementing the AcoustID fingerprinting
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.acoustid.org/chromaprint
-Source:        https://github.com/acoustid/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/acoustid/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  cmake
+BuildRequires:  ffmpeg-free-devel
+BuildRequires:  fftw-devel
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  fftw-devel >= 3
 BuildRequires:  ninja-build
-
+# /oreon:deps
 %description
 Chromaprint library is the core component of the AcoustID project. It's a
 client-side library that implements a custom algorithm for extracting
@@ -42,7 +30,6 @@ License for binaries is GPLv2+ but source code is MIT + LGPLv2+
 %package -n libchromaprint
 Summary:        Library implementing the AcoustID fingerprinting
 Obsoletes:      python-chromaprint < 0.6-3
-
 %description -n libchromaprint
 Chromaprint library is the core component of the AcoustID project. It's a
 client-side library that implements a custom algorithm for extracting
@@ -56,7 +43,6 @@ License for binaries is GPLv2+ but source code is MIT + LGPLv2+
 %package -n libchromaprint-devel
 Summary:        Headers for developing programs that will use %{name}
 Requires:       libchromaprint%{?_isa} = %{version}-%{release}
-
 %description -n libchromaprint-devel
 This package contains the headers that programmers will need to develop
 applications which will use %{name}.
@@ -69,7 +55,6 @@ found in the main header file.
 Summary:        Chromaprint audio fingerprinting tools
 BuildRequires:  ffmpeg-free-devel
 Requires:       libchromaprint%{?_isa} = %{version}-%{release}
-
 %description tools
 Chromaprint library is the core component of the AcoustID project. It's a
 client-side library that implements a custom algorithm for extracting
@@ -83,41 +68,30 @@ License for binaries is GPLv2+ but source code is MIT + LGPLv2+
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-# examples and cli tools require ffmpeg, so turn off.
+
 %cmake -GNinja \
         -DCMAKE_BUILD_TYPE=Release \
         -DBUILD_TESTS=ON \
         -DBUILD_TOOLS=%{?with_ffmpeg:ON}%{!?with_ffmpeg:OFF}
-
 %cmake_build
-
 %install
 %cmake_install
-
 rm  -f %{buildroot}%{_libdir}/lib*.la
+%oreon_autofiles libchromaprint usr/*/lib*.so.*
+%oreon_autofiles libchromaprint-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles chromaprint-tools usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-%files -n libchromaprint
-%doc NEWS.txt README.md
-%license LICENSE.md
-%{_libdir}/lib*.so.%{sover}*
-
-%files -n libchromaprint-devel
-%{_includedir}/chromaprint.h
-%{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*.pc
-%dir %{_libdir}/cmake/Chromaprint/
-%{_libdir}/cmake/Chromaprint/*.cmake
-
-%if %{with ffmpeg}
-%files tools
-%{_bindir}/fpcalc
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n libchromaprint -f %{oreon_filedir}/libchromaprint.list
+%files -n libchromaprint-devel -f %{oreon_filedir}/libchromaprint-devel.list
+%files -n chromaprint-tools -f %{oreon_filedir}/chromaprint-tools.list
 
 %changelog
+
 %autochangelog

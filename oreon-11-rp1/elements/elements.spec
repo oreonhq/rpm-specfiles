@@ -1,55 +1,42 @@
-%global source0_hash 75f453e1189007353ca5404cb84a2a1d64cef71d789a556a760820e33f625678
-
+%global source0_hash 61f973f8044730b0eba3ae560f4457da5453fddf061129c9a93a1b13ca83cc8c
 Summary:        A C++/Python build framework
 Name:           elements
 Version:        6.3.7
-Release:        %autorelease
+Release:        1%{?dist}
 License:        LGPL-3.0-or-later
 Source0:        https://github.com/astrorama/Elements/archive/%{version}/%{name}-%{version}.tar.gz
-# Elements use this file to link the documentation to cppreference.com
-# It is downloaded from:
-# https://upload.cppreference.com/w/File:cppreference-doxygen-web.tag.xml
 Source1:        cppreference-doxygen-web.tag.xml
 URL:            https://github.com/degauden/Elements.git
-# Remove Example programs and scripts, otherwise they will be installed
 Patch0:         0000-Remove-examples.patch
-# Disable the compilation of PDF documentation
 Patch2:         0001-Disable-PDF-documentation.patch
-# distutils have been removed
 Patch3:         0002-Do-not-rely-on-distutils.patch
-# boost::filesystem::is_regular no longer exists
 Patch4:         elements-boost_filesystem.patch
-
-BuildRequires: CCfits-devel
-BuildRequires: boost-devel >= 1.53
-BuildRequires: cfitsio-devel
-BuildRequires: cppunit-devel
-BuildRequires: fftw-devel
-BuildRequires: gmock-devel
-BuildRequires: gtest-devel
-BuildRequires: log4cpp-devel >= 1.1
-BuildRequires: swig
-BuildRequires: wcslib-devel
-# Required for the generation of the documentation
-BuildRequires: doxygen
-BuildRequires: graphviz
-
-BuildRequires: gcc-c++ > 4.7
-BuildRequires: python3
-BuildRequires: python3-pytest
-BuildRequires: python3-devel
-BuildRequires: python3-sphinx
-BuildRequires: cmake >= 2.8.5
-
 Requires: cmake-filesystem%{?_isa}
-
 %global cmakedir %{_libdir}/cmake/ElementsProject
-
 %global makedir %{_datadir}/Elements/make
 %global confdir %{_datadir}/conf
 %global auxdir %{_datadir}/auxdir
 %global docdir %{_docdir}/Elements
-
+# oreon:deps
+BuildRequires:  CCfits-devel
+BuildRequires:  boost-devel
+BuildRequires:  cfitsio-devel
+BuildRequires:  cmake
+BuildRequires:  cppunit-devel
+BuildRequires:  doxygen
+BuildRequires:  fftw-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gmock-devel
+BuildRequires:  graphviz
+BuildRequires:  gtest-devel
+BuildRequires:  log4cpp-devel
+BuildRequires:  python3
+BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
+BuildRequires:  python3-sphinx
+BuildRequires:  swig
+BuildRequires:  wcslib-devel
+# /oreon:deps
 %description
 Elements is a C++/Python build framework. It helps to organize
 the software into modules which are gathered into projects.
@@ -57,7 +44,6 @@ the software into modules which are gathered into projects.
 %package devel
 Summary: The development part of the %{name} package
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The development part of the %{name} package.
 
@@ -65,29 +51,24 @@ The development part of the %{name} package.
 Summary: Documentation for package %{name}
 License: LGPLv3+ and CC-BY-SA
 BuildArch: noarch
-
 %description doc
 Documentation for package %{name}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n Elements-%{version} -p1
-
+%global oreon_srcdir Elements-%{version}
+%oreon_prep
 %build
+
 export VERBOSE=1
-# Build
 %cmake -DELEMENTS_BUILD_TESTS=ON -DINSTALL_TESTS=OFF -DSQUEEZED_INSTALL:BOOL=ON -DINSTALL_DOC:BOOL=ON \
     -DUSE_SPHINX=OFF --no-warn-unused-cli \
     -DPYTHON_EXPLICIT_VERSION=3 -DCMAKE_POLICY_DEFAULT_CMP0148=OLD \
     -DCMAKE_LIB_INSTALL_SUFFIX=%{_lib} -DUSE_VERSIONED_LIBRARIES=ON \
     -DUSE_ENV_FLAGS=ON
-# Copy cppreference-doxygen-web.tag.xml into the build directory
 mkdir -p "%{_vpath_builddir}/doc/doxygen"
 cp -v "%{SOURCE1}" "%{_vpath_builddir}/doc/doxygen"
-
 %cmake_build
-
 %install
 export VERBOSE=1
 %cmake_install
@@ -95,89 +76,16 @@ rm -rfv "%{buildroot}/%{confdir}/ElementsServices/testdata"
 rm -fv "%{buildroot}/%{_bindir}/"*_test
 rm -fv "%{buildroot}/%{_includedir}/"*BoostTest_export.h
 rm -fv "%{buildroot}/%{_libdir}/"*BoostTest.so*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export ELEMENTS_CONF_PATH="%{_builddir}/ElementsKernel/auxdir/"
 %ctest
-
-%files
-%{confdir}/
-%dir %{cmakedir}
-%{cmakedir}/ElementsEnvironment.xml
-
-%{_libdir}/libElementsKernel.so.%{version}
-%{_libdir}/libElementsServices.so.%{version}
-
-%{_bindir}/CreateElementsProject
-%{_bindir}/AddElementsModule
-%{_bindir}/AddCppClass
-%{_bindir}/AddCppProgram
-%{_bindir}/AddPythonProgram
-%{_bindir}/AddScript
-%{_bindir}/AddPythonModule
-%{_bindir}/RemoveCppClass
-%{_bindir}/RemoveCppProgram
-%{_bindir}/RemovePythonProgram
-%{_bindir}/RemovePythonModule
-%{_bindir}/ElementsNameCheck
-%{_bindir}/GetElementsFiles
-
-%{python3_sitearch}/ELEMENTS_VERSION.py
-%{python3_sitearch}/ELEMENTS_INSTALL.py
-%{python3_sitearch}/__pycache__/ELEMENTS_*.pyc
-
-%{python3_sitearch}/ElementsKernel/
-%{python3_sitearch}/ElementsServices/
-
-%dir %{auxdir}
-%{auxdir}/ElementsKernel/
-
-%files devel
-%{_libdir}/libElementsKernel.so
-%{_libdir}/libElementsServices.so
-%{_includedir}/ELEMENTS_VERSION.h
-%{_includedir}/ELEMENTS_INSTALL.h
-%{_includedir}/ElementsKernel_export.h
-%{_includedir}/ElementsServices_export.h
-%{_includedir}/ElementsKernel/
-%{_includedir}/ElementsServices/
-
-%{cmakedir}/ElementsBuildEnvironment.xml
-%{cmakedir}/ElementsBuildFlags.cmake
-%{cmakedir}/ElementsCheck.cmake
-%{cmakedir}/ElementsConfig.cmake
-%{cmakedir}/ElementsConfigVersion.cmake
-%{cmakedir}/ElementsCoverage.cmake
-%{cmakedir}/ElementsDefaults.cmake
-%{cmakedir}/ElementsDocumentation.cmake
-%{cmakedir}/ElementsExports-relwithdebinfo.cmake
-%{cmakedir}/ElementsExports.cmake
-%{cmakedir}/ElementsGenerateBindings.cmake
-%{cmakedir}/ElementsInfo.cmake
-%{cmakedir}/ElementsKernelExport.cmake
-%{cmakedir}/ElementsLocations.cmake
-%{cmakedir}/ElementsPlatformConfig.cmake
-%{cmakedir}/ElementsProjectConfig.cmake
-%{cmakedir}/ElementsServicesExport.cmake
-%{cmakedir}/ElementsToolChain.cmake
-%{cmakedir}/ElementsToolChainMacros.cmake
-%{cmakedir}/ElementsUninstall.cmake
-%{cmakedir}/ElementsUtils.cmake
-%{cmakedir}/GetGitRevisionDescription.cmake
-%{cmakedir}/HelloWorld.cmake
-%{cmakedir}/SGSPlatform.cmake
-%{cmakedir}/auxdir
-%{cmakedir}/check
-%{cmakedir}/doc
-%{cmakedir}/modules
-%{cmakedir}/scripts
-%{cmakedir}/tests
-
-%{makedir}
-
-%files doc
-%license LICENSE.md
-%{docdir}
+%files -f %{oreon_filedir}/main.list
+%files -n elements-devel -f %{oreon_filedir}/elements-devel.list
+%files -n elements-doc -f %{oreon_filedir}/elements-doc.list
 
 %changelog
+
 %autochangelog

@@ -1,18 +1,19 @@
 %global source0_hash f06bcab72736ee9d55689033b8198a178562354128cf38edb2afc2e67e3fd931
-
 %global giturl  https://github.com/unicode-org/icu
-
 Name:           icu4j
 Version:        78.3
-Release:        %autorelease
+Release:        1%{?dist}
 Epoch:          1
 Summary:        International Components for Unicode for Java
 License:        Unicode-3.0
 URL:            https://icu.unicode.org/
 VCS:            git:%{giturl}.git
-
-Source:        https://github.com/unicode-org/icu/archive/refs/tags/release-78.3.tar.gz#/icu4j-78.3.tar.gz
-
+Source0:        https://github.com/unicode-org/icu/archive/refs/tags/release-78.3.tar.gz#/icu4j-78.3.tar.gz
+BuildArch:      noarch
+ExclusiveArch:  %{java_arches} noarch
+Obsoletes:      %{name}-localespi < 78
+Provides:       %{name}-localespi = 1:%{version}-%{release}
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.code.gson:gson)
 BuildRequires:  mvn(junit:junit)
@@ -30,14 +31,7 @@ BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:exec-maven-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-io)
 BuildRequires:  mvn(pl.pragmatists:JUnitParams)
-
-BuildArch:      noarch
-ExclusiveArch:  %{java_arches} noarch
-
-# This can be removed when F47 reaches EOL
-Obsoletes:      %{name}-localespi < 78
-Provides:       %{name}-localespi = 1:%{version}-%{release}
-
+# /oreon:deps
 %description
 The International Components for Unicode (ICU) library provides robust and
 full-featured Unicode services on a wide variety of platforms. ICU supports
@@ -56,27 +50,23 @@ internationalization API design.
 %package        charset
 Summary:        Charset converter library of %{name}
 Requires:       %{name} = 1:%{version}-%{release}
-
 %description    charset
 Charset converter library of %{name}.
 
 %package        parent
 Summary:        Parent POM for %{name}
-
 %description    parent
 Parent POM for %{name}.
 
 %package        javadoc
-# Unicode-3.0: the content
-# MIT: jquery
 License:        Unicode-3.0 AND MIT
 Summary:        API documentation for %{name}
 Provides:       bundled(js-jquery)
-
 %description    javadoc
 API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n icu-release-%{version}
 
@@ -105,32 +95,26 @@ cd icu4j
 cd -
 
 %build
+
 cd icu4j
 %mvn_build -s
 cd -
-
 %install
 cd icu4j
 %mvn_install
 cd -
-
-# We do not want the dev and test component jars
 rm %{buildroot}%{_javadir}/icu4j/{common_tests,framework}.jar
 rm %{buildroot}%{_datadir}/maven-metadata/icu4j-{common_tests,framework}.xml
 rm %{buildroot}%{_mavenpomdir}/icu4j/{common_tests,framework}.pom
 sed -i '/%dir/d' icu4j/.mfiles-{c,f,l,r,t}* icu4j/.mfiles-icu4j-charset
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f icu4j/.mfiles-icu4j -f icu4j/.mfiles-collate -f icu4j/.mfiles-core -f icu4j/.mfiles-currdata -f icu4j/.mfiles-langdata -f icu4j/.mfiles-regiondata -f icu4j/.mfiles-tools_taglets -f icu4j/.mfiles-translit
-%license LICENSE
-%doc icu4j/readme.html icu4j/APIChangeReport.html
-
-%files charset -f icu4j/.mfiles-icu4j-charset
-
-%files parent -f icu4j/.mfiles-icu4j-root
-
-%files javadoc -f icu4j/.mfiles-javadoc
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
+%files -n icu4j-charset -f %{oreon_filedir}/icu4j-charset.list
+%files -n icu4j-parent -f %{oreon_filedir}/icu4j-parent.list
+%files -n icu4j-javadoc -f %{oreon_filedir}/icu4j-javadoc.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 78.3-1
 - Prepare for Oreon 11 (RP1)

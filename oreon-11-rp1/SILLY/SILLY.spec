@@ -1,5 +1,5 @@
-%global source0_hash 6f017c31cf5d42f194a16d4f291f7f2937be1687dbd47e46bd9b76ab89ff0d88
-
+%global source1_hash 6f017c31cf5d42f194a16d4f291f7f2937be1687dbd47e46bd9b76ab89ff0d88
+%global source0_hash afa064f70433008ec9837fb601c8d73e73db07856e4566f8bee010758c5304ac
 Name:           SILLY
 Version:        0.1.0
 Release:        44%{?dist}
@@ -9,13 +9,14 @@ URL:            http://www.cegui.org.uk
 Source0:        http://downloads.sourceforge.net/crayzedsgui/%{name}-%{version}.tar.gz
 Source1:        http://downloads.sourceforge.net/crayzedsgui/%{name}-DOCS-%{version}.tar.gz
 Patch0:         SILLY-0.1.0-libpng15.patch
-BuildRequires: make
-BuildRequires:  gcc-c++
-BuildRequires:  gcc
+# oreon:deps
 BuildRequires:  doxygen
-BuildRequires:  libpng-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  libjpeg-devel
-
+BuildRequires:  libpng-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 The Simple Image Loading LibrarY is a companion library of the CEGUI project.
 It provides a simple and easy to use library for image loading.
@@ -28,11 +29,11 @@ PNG (Portable Network Graphics)
 %package devel
 Summary:        Development files for SILLY
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files for SILLY
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -a1
@@ -56,35 +57,22 @@ sed -i 's|\(GENERATE_HTML[ \t][ \t]*= \)YES|\1NO|' Doxyfile
 iconv -f iso8859-1 AUTHORS -t utf8 > AUTHORS.conv && /bin/mv -f AUTHORS.conv AUTHORS
 
 %build
+
 %configure --disable-static --with-pic
 make %{?_smp_mflags}
-
-#Build developer documentation
 doxygen
-
 %install
 make install DESTDIR=%{buildroot} INSTALL="install -p"
-
-#Install man pages
 mkdir -p %{buildroot}%{_mandir}/man3
 cp -a doc/man/man3/* %{buildroot}%{_mandir}/man3
-
-#Fix so that RPM's strip works (only strips files marked executable)
 chmod 0755 %{buildroot}%{_libdir}/*.so.*
-
 %ldconfig_scriptlets
+%oreon_autofiles SILLY-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_libdir}/*.so.*
-%exclude %{_libdir}/*.la
-%doc AUTHORS ChangeLog COPYING
-
-%files devel
-%{_includedir}/%{name}
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_mandir}/man3/*
-%doc %{name}-%{version}/doc/html
+%files -f %{oreon_filedir}/main.list
+%files -n SILLY-devel -f %{oreon_filedir}/SILLY-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,15 +1,15 @@
-%global source0_hash none
-
+%global source0_hash f2a8a7b7365bdd17269aa1d412966a871528eefa9b2a7409815832a702ff7dcb
 Name:           dcw-gmt
 Version:        2.2.0
-Release:        7%{?dist}
+Release:        1%{?dist}
 Summary:        Digital Chart of the World (DCW) for GMT
-
 License:        LGPL-3.0-or-later
 URL:            https://github.com/GenericMappingTools/dcw-gmt
 Source0:        https://github.com/GenericMappingTools/dcw-gmt/releases/download/%{version}/dcw-gmt-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 
+# /oreon:deps
 %description
 DCW-GMT is an enhancement to the original 1:1,000,000 scale vector basemap of
 the world available from the Princeton University Digital Map and Geospatial
@@ -18,6 +18,7 @@ http://data.geocomm.com/readme/dcw/dcw.html.  To read and process the data you
 should install GMT, the Generic Mapping Tools.
 
 %prep
+
 %setup -q
 
 # Nothing to build
@@ -25,11 +26,10 @@ should install GMT, the Generic Mapping Tools.
 %install
 mkdir -p %{buildroot}/%{_datadir}/%{name}
 cp -a *.nc *.txt %{buildroot}/%{_datadir}/%{name}/
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc README.md
-%{_datadir}/%{name}/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

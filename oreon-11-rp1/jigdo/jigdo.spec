@@ -1,49 +1,34 @@
+%global source2_hash 81aab9440549501014c9f3546f68bd2e3e56774c782c530d298eb899f82b800b
 %global source0_hash 36f286d93fa6b6bf7885f4899c997894d21da3a62176592ac162d9c6a8644f9e
-
 Name:          jigdo
 Version:       0.8.2
-Release:       %autorelease
-Summary:       Ease distribution of large files over the Internet
-
-# Exception is permission to link with OpenSSL
+Release:        1%{?dist}
+Summary:        Ease distribution of large files over the Internet
 License:       GPL-2.0-only WITH x11vnc-openssl-exception
 URL:           https://www.einval.com/~steve/software/jigdo/
-Source0:       %{url}download/%{name}-%{version}.tar.xz
+Source0:        https://www.einval.com/~steve/software/%{name}/download/%{name}-%{version}.tar.xz
 Source1:       %{url}download/%{name}-%{version}.tar.xz.sig
 Source2:       https://www.einval.com/~steve/pgp/587979573442684E.asc
 Source3:       jigdo.desktop
-# fix doc SGML sources e.g. for missing end tags
 Patch:         %{name}-0.8.1-fix-docs.patch
-
-BuildRequires: bzip2-devel
-BuildRequires: curl-devel
-BuildRequires: docbook-utils
-BuildRequires: gawk
-BuildRequires: gcc-c++
-BuildRequires: gettext
-BuildRequires: gnupg2
-BuildRequires: libdb-devel
-BuildRequires: make
-BuildRequires: wget
-BuildRequires: zlib-devel
 Requires:      wget
-
-%global _description %{expand:
-Jigsaw Download (for short jigdo) is a scheme developed primarily to make it
-easy to distribute huge filesystem images (e.g. CD (ISO9660) or DVD (UDF)
-images) over the internet, but it could also be used for other data which is
-awkward to handle due to its size, like audio/video files or large software
-packages.
-
-jigdo tries to ensure that the large file is downloaded in small parts which can
-be stored on different servers. People who want to download the image do so by
-telling the jigdo download tool to process one ".jigdo" file; using it, jigdo
-downloads the parts and reassembles the image. jigdo-file is used to prepare the
-files for download.}
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  curl-devel
+BuildRequires:  docbook-utils
+BuildRequires:  gawk
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  gnupg2
+BuildRequires:  libdb-devel
+BuildRequires:  make
+BuildRequires:  wget
+BuildRequires:  zlib-devel
+# /oreon:deps
+%description
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -53,25 +38,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i '/.*echo "$C.*FLAGS"/d' configure
 
 %build
+
 export LDFLAGS="$LDFLAGS -lpthread"
 %configure --with-libdb=-ldb
-# make_build
 make # not SMP safe
-
 %install
 %make_install
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc changelog README THANKS doc/*.html doc/TechDetails.txt doc/README-bindist.txt
-%{_bindir}/jigdo-file
-%{_bindir}/jigdo-lite
-%{_bindir}/jigdo-mirror
-%{_datadir}/%{name}
-%{_mandir}/man1/jigdo-file.1*
-%{_mandir}/man1/jigdo-lite.1*
-%{_mandir}/man1/jigdo-mirror.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

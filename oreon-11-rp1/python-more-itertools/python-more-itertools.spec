@@ -1,58 +1,43 @@
 %global source0_hash 48e8f4d9e7e5878571ecf6f2b4e57634f93cd474cc8cfbd2376f2d11b396e30d
-
 Name:           python-more-itertools
 Version:        11.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        More routines for operating on iterables, beyond itertools
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/more-itertools/more-itertools
-Source:         %{pypi_source more_itertools}
-
+Source0:        https://files.pythonhosted.org/packages/source/m/more_itertools/more_itertools-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'more-itertools' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(flit-core) < 4
+BuildRequires:  python3dist(flit-core) >= 3.12
+Requires:       python3-more-itertools = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-more-itertools
-Summary:        %{summary}
-
-%description -n python3-more-itertools %_description
-
+Summary:        More routines for operating on iterables, beyond itertools
+%description -n python3-more-itertools
 
 %prep
-%autosetup -p1 -n more_itertools-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir more_itertools-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-more-itertools usr/lib/python3*/site-packages/more_itertools* usr/lib64/python3*/site-packages/more_itertools* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/more_itertools* usr/lib64/python3*/site-packages/more_itertools* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-more-itertools -f %{pyproject_files}
+%files
+%files -n python3-more-itertools -f %{oreon_filedir}/python3-more-itertools.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.5.0-1
 - Prepare for Oreon 11 (RP1)

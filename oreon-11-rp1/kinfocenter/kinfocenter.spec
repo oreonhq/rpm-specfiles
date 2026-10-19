@@ -1,64 +1,19 @@
+%global source1_hash 63e9b9bbcf89f193970a604239237d1435e9b5a0e56864b67e6d07ecbe3183fb
 %global source0_hash e3aeb4b6f7237fddff4e68f4d7d715772cc47bd0ac376febe24ae3d717680416
-
 %global stable_kf6 stable
-
-
 ExcludeArch: %{ix86}
-
 Name:    kinfocenter
 Version:        6.7.5
-Release: 1%{?dist}
-Summary: KDE Info Center
-
+Release:        1%{?dist}
+Summary:        KDE Info Center
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-BuildRequires:  qt6-qtbase-devel
-
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  extra-cmake-modules
-BuildRequires:  pkgconfig(libdrm)
-BuildRequires:  cmake(KF6Auth)
-
-BuildRequires:  cmake(KF6Completion)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6KCMUtils)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  cmake(KF6Solid)
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6Declarative)
-BuildRequires:  cmake(KF6Package)
-BuildRequires:  cmake(KF6DocTools)
-BuildRequires:  mesa-libGL-devel
-BuildRequires:  mesa-libGLES-devel
-BuildRequires:  mesa-libEGL-devel
-BuildRequires:  mesa-libGLU-devel
-BuildRequires:  libX11-devel
-BuildRequires:  pciutils-devel
-BuildRequires:  pkgconfig(libusb-1.0)
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
-BuildRequires:  pkgconfig(libudev)
 %ifnarch s390 s390x
-BuildRequires:  libraw1394-devel
 %endif
-
-BuildRequires: cmake(KF6Kirigami2)
 Requires: kf6-kirigami2%{?_isa}
-
-# runtime query of usb.ids, oui.txt
 Requires: hwdata
-
-# Runtime dependencies
 Requires: plasma-systemsettings
 Requires: wayland-utils
 %ifarch %{ix86} x86_64 aarch64
@@ -72,54 +27,66 @@ Requires: aha
 Requires: clinfo
 Requires: pulseaudio-utils
 Requires: libdisplay-info-tools
-
-# When kinfocenter was split out from kde-workspace
 Conflicts:      kde-workspace < 4.11.15-3
-
+# oreon:deps
+BuildRequires:  cmake(KF6Auth)
+BuildRequires:  cmake(KF6Completion)
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Declarative)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Kirigami2)
+BuildRequires:  cmake(KF6Package)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KF6Solid)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libX11-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libraw1394-devel
+BuildRequires:  mesa-libEGL-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLES-devel
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  pciutils-devel
+BuildRequires:  pkgconfig(libdrm)
+BuildRequires:  pkgconfig(libudev)
+BuildRequires:  pkgconfig(libusb-1.0)
+BuildRequires:  qt6-qtbase-devel
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
 chmod a-x %{buildroot}%{_datadir}/applications/org.kde.kinfocenter.desktop 2>/dev/null || :
 chmod a-x %{buildroot}%{_datadir}/applications/kcm_about-distro.desktop 2>/dev/null || :
 %find_lang %{name} --all-name --with-html
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kinfocenter.desktop
 desktop-file-validate %{buildroot}%{_datadir}/applications/kcm_about-distro.desktop
-# commented out until upstream fixes a duplicate entries problem
-#appstream-util validate-relax --nonet %%{buildroot}%%{_metainfodir}/*.appdata.xml
-
-%files -f %{name}.lang
-%{_bindir}/kinfocenter
-%{_kf6_libdir}/libKInfoCenterInternal.so
-%{_kf6_qtplugindir}/plasma/kcms/*.so
-%{_kf6_qtplugindir}/plasma/kcms/kinfocenter/*.so
-%{_datadir}/metainfo/org.kde.kinfocenter.appdata.xml
-%{_datadir}/applications/org.kde.kinfocenter.desktop
-%{_datadir}/applications/kcm_about-distro.desktop
-%{_kf6_datadir}/dbus-1/system-services/org.kde.kinfocenter.dmidecode.service
-%{_kf6_datadir}/dbus-1/system.d/org.kde.kinfocenter.dmidecode.conf
-%{_libexecdir}/kinfocenter-opengl-helper
-%{_kf6_datadir}/kinfocenter/
-%{_kf6_datadir}/polkit-1/actions/org.kde.kinfocenter.dmidecode.policy
-%{_qt6_archdatadir}/qml/org/kde/kinfocenter/
-%{_kf6_libexecdir}/kauth/kinfocenter-dmidecode-helper
-%{_libexecdir}/kinfocenter-vulkan-helper
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

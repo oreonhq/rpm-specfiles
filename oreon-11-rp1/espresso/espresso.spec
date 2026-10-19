@@ -1,52 +1,49 @@
-%global source0_hash 325cfbcf0c0296a6dd26f3b088801b7ebb8d6f109c0565c11d2d8c4af3253bff
-
+%global source3_hash 325cfbcf0c0296a6dd26f3b088801b7ebb8d6f109c0565c11d2d8c4af3253bff
+%global source2_hash 3d46532144ea9a3f36429a65cccb7562d1244f1389dd8aff0d253708d1ec9838
+%global source1_hash d297b462e9ad2107ee968439266855b97aafaef39ef0b82f72129630116db059
+%global source0_hash 92b314c39e7715a9a8c347269bf2ffb8c85c23d6dfcadd3d81a7e04b67d89589
 Name:           espresso
 Version:        5.0.1
 Release:        1%{?dist}
 Summary:        Extensible Simulation Package for Research on Soft matter
-# segfault on s390x: https://github.com/espressomd/espresso/issues/3753
-# segfault on armv7hl: https://src.fedoraproject.org/rpms/espresso/pull-request/4
 ExcludeArch:    s390x i686 armv7hl
-
 License:        GPL-3.0-or-later
 URL:            https://espressomd.org
 Source0:        https://github.com/espressomd/espresso/archive/%{version}.tar.gz#/espresso-%{version}.tar.gz
 Source1:        https://i10git.cs.fau.de/walberla/walberla/-/archive/3247aa73.tar.gz#/waberla-3247aa73.tar.gz
 Source2:        https://github.com/ECP-copa/Cabana/archive/0.7.0.tar.gz#/Cabana-0.7.0.tar.gz
 Source3:        https://github.com/highfive-devs/highfive/archive/v3.3.0.tar.gz#/highfive-v3.3.0.tar.gz
-
-BuildRequires:  gcc-c++
-BuildRequires:  cmake >= 4.0.0
-BuildRequires:  ninja-build >= 1.12.1
-BuildRequires:  /usr/bin/cython
 %global cython /usr/bin/cython
-BuildRequires:  fftw-devel
-BuildRequires:  python%{python3_pkgversion}-numpy
-BuildRequires:  python%{python3_pkgversion}-scipy
-BuildRequires:  python%{python3_pkgversion}-six
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-packaging
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  boost-devel
-BuildRequires:  hdf5-devel
-BuildRequires:  gsl-devel
-BuildRequires:  NLopt-devel
-BuildRequires:  boost-devel
-BuildRequires:  kokkos-devel
-BuildRequires:  mpich-devel
-BuildRequires:  boost-mpich-devel
-BuildRequires:  heffte-mpich-devel
-BuildRequires:  hdf5-mpich-devel
-BuildRequires:  openmpi-devel
-BuildRequires:  boost-openmpi-devel
-BuildRequires:  heffte-openmpi-devel
-BuildRequires:  hdf5-openmpi-devel
-BuildRequires:  python%{python3_pkgversion}-h5py
-
 Requires:       python%{python3_pkgversion}-numpy
 Requires:       %{name}-common = %{version}-%{release}
 Obsoletes:      %{name}-devel < %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  /usr/bin/cython
+BuildRequires:  NLopt-devel
+BuildRequires:  boost-devel
+BuildRequires:  boost-mpich-devel
+BuildRequires:  boost-openmpi-devel
+BuildRequires:  cmake
+BuildRequires:  fftw-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gsl-devel
+BuildRequires:  hdf5-devel
+BuildRequires:  hdf5-mpich-devel
+BuildRequires:  hdf5-openmpi-devel
+BuildRequires:  heffte-mpich-devel
+BuildRequires:  heffte-openmpi-devel
+BuildRequires:  kokkos-devel
+BuildRequires:  mpich-devel
+BuildRequires:  ninja-build
+BuildRequires:  openmpi-devel
+BuildRequires:  python3-devel
+BuildRequires:  python3-h5py
+BuildRequires:  python3-numpy
+BuildRequires:  python3-packaging
+BuildRequires:  python3-scipy
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-six
+# /oreon:deps
 %description
 ESPResSo can perform Molecular Dynamics simulations of bead-spring models
 in various ensembles ((N,V,E), (N,V,T), and (N,p,T)).
@@ -104,6 +101,7 @@ ESPResSo contains a number of advanced algorithms, e.g.
 This package contains %{name} compiled against MPICH2.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -117,6 +115,7 @@ sed -ri "s|GIT_REPOSITORY +https://github.com/highfive-devs/highfive.git|URL $(r
 sed -ri "s|GIT_REPOSITORY +https://i10git.cs.fau.de/walberla/walberla.git|URL $(realpath walberla-*/)|" CMakeLists.txt
 
 %build
+
 %global defopts \\\
  -G Ninja \\\
  -D ESPRESSO_BUILD_WITH_PYTHON=ON \\\
@@ -137,13 +136,8 @@ sed -ri "s|GIT_REPOSITORY +https://i10git.cs.fau.de/walberla/walberla.git|URL $(
  -D ESPRESSO_BUILD_WITH_STOKESIAN_DYNAMICS=OFF \\\
  -D ESPRESSO_MODULE_INSTALL_PATH=${MPI_PYTHON3_SITEARCH} \\\
  -D CYTHON_EXECUTABLE=%{cython}
-
-# use a separate build subfolder for each MPI vendor
 %global _vpath_builddir ${mpi:-serial}
-
-# https://github.com/espressomd/espresso/issues/3396
 %global _lto_cflags %{nil}
-
 for mpi in mpich openmpi ; do
    module load mpi/${mpi}-%{_arch}
    old_LDFLAGS="${LDFLAGS}"
@@ -155,7 +149,6 @@ for mpi in mpich openmpi ; do
    export LDFLAGS="${old_LDFLAGS}"
    module unload mpi/${mpi}-%{_arch}
 done
-
 %install
 for mpi in mpich openmpi ; do
    module load mpi/${mpi}-%{_arch}
@@ -169,8 +162,10 @@ for mpi in mpich openmpi ; do
    rm -rf %{buildroot}/${MPI_PYTHON3_SITEARCH}/object_in_fluid
    module unload mpi/${mpi}-%{_arch}
 done
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export CTEST_OUTPUT_ON_FAILURE=1
 for mpi in mpich openmpi ; do
    module load mpi/${mpi}-%{_arch}
@@ -179,16 +174,11 @@ for mpi in mpich openmpi ; do
    %cmake_build --target check_python_skip_long
    module unload mpi/${mpi}-%{_arch}
 done
-
-%files common
-%doc Readme.md AUTHORS CITATION.cff CHANGELOG.md
-%license COPYING
-
-%files -n python%{python3_pkgversion}-%{name}-openmpi
-%{python3_sitearch}/openmpi/%{name}md/
-
-%files -n python%{python3_pkgversion}-%{name}-mpich
-%{python3_sitearch}/mpich/%{name}md/
+%files -f %{oreon_filedir}/main.list
+%files -n espresso-common -f %{oreon_filedir}/espresso-common.list
+%files -n python3-espresso-openmpi -f %{oreon_filedir}/python3-espresso-openmpi.list
+%files -n python3-espresso-mpich -f %{oreon_filedir}/python3-espresso-mpich.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash af46e4dc089be55050896d133643e2bdc6070fbfe78a039691ff08948af88c38
 Name:           python-fontconfig
 Version:        0.6.3
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python bindings for Fontconfig library
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-3.0
 URL:            https://github.com/Vayn/python-fontconfig
-Source:         %{pypi_source python_fontconfig}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/python_fontconfig/python_fontconfig-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'python-fontconfig' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-fontconfig = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-python-fontconfig
-Summary:        %{summary}
-
-%description -n python3-python-fontconfig %_description
-
+Summary:        Python bindings for Fontconfig library
+%description -n python3-python-fontconfig
 
 %prep
-%autosetup -p1 -n python_fontconfig-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir python_fontconfig-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-python-fontconfig usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-python-fontconfig -f %{pyproject_files}
+%files
+%files -n python3-python-fontconfig -f %{oreon_filedir}/python3-python-fontconfig.list
 
 %changelog
+
 %autochangelog

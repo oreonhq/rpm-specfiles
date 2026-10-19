@@ -1,45 +1,36 @@
-%global source0_hash 1c4bb10185a67592164eb870c717b8bdd03f290c8d68f9a8c658335ff5ac8b91
-
+%global source0_hash 98528f8a0ac07f1e226efaa8ead438247df8efcb8fee4e056a937ab82a305490
 Name:    testssl
 Version: 3.2.4
-Release: %autorelease
-
-Summary: Testing TLS/SSL encryption
+Release:        1%{?dist}
+Summary:        Testing TLS/SSL encryption
 License: GPL-2.0-only
 URL:     https://testssl.sh/
-Source0: https://github.com/drwetter/testssl.sh/archive/refs/tags/v%{version}.tar.gz
-
+Source0:        https://github.com/drwetter/testssl.sh/archive/refs/tags/v%{version}.tar.gz
 BuildArch: noarch
-
-BuildRequires: coreutils
-BuildRequires: sed
-
 Requires: bash
-# dig, host, nslookup
 Requires: bind-utils
-# /etc/pki/tls
 Requires: ca-certificates
 Requires: coreutils
 Requires: gawk
-# locale
 Requires: glibc-common
 Requires: grep
 Requires: hostname
-# tput
 Requires: ncurses
 Requires: openssl >= 1
-# ps
 Requires: procps-ng
 Requires: sed
-# hexdump, kill
 Requires: util-linux
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  sed
+# /oreon:deps
 %description
 testssl.sh is a free command line tool which checks a server's service on any
 port for the support of TLS/SSL ciphers, protocols as well as recent
 cryptographic flaws and more.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}.sh-%{version}
@@ -54,21 +45,16 @@ sed --in-place '0,/.SH "COPYRIGHT"/s#testssl\\.sh#testssl#g' doc/%{name}.1
 
 %install
 install -D --preserve-timestamps %{name}.sh %{buildroot}%{_bindir}/%{name}
-
 for file in ca_hashes.txt cipher-mapping.txt client-simulation.txt common-primes.txt tls_data.txt README.md
 do
         install -D --preserve-timestamps --mode=0644 etc/${file} %{buildroot}%{_datadir}/%{name}/etc/${file}
 done
-
 install -d %{buildroot}%{_mandir}/man1
 install -m 644 doc/%{name}.1 %{buildroot}%{_mandir}/man1/
+%oreon_autofiles main
 
-%files
-%doc CHANGELOG.md Readme.md
-%license LICENSE
-%{_bindir}/*
-%{_datadir}/%{name}
-%{_mandir}/man1/testssl.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

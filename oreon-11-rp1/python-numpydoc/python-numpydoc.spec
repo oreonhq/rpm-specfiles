@@ -1,57 +1,46 @@
-%global source0_hash none
-
+%global source0_hash 26db0adaac8087e98da05c86b11198defd962aef7c21f4dffd2703c8c6eb4187
 Name:           python-numpydoc
 Version:        1.11.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Sphinx extension to support docstrings in Numpy format
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://numpydoc.readthedocs.io
-Source:         %{pypi_source numpydoc}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/numpydoc/numpydoc-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'numpydoc' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 64
+BuildRequires:  python3dist(setuptools-scm) >= 8
+Requires:       python3-numpydoc = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-numpydoc
-Summary:        %{summary}
-
-%description -n python3-numpydoc %_description
-
+Summary:        Sphinx extension to support docstrings in Numpy format
+# oreon:reqs
+Requires:       python3dist(sphinx) >= 6
+Requires:       python3dist(tomli) >= 1.1.0
+# /oreon:reqs
+%description -n python3-numpydoc
 
 %prep
-%autosetup -p1 -n numpydoc-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir numpydoc-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-numpydoc usr/lib/python3*/site-packages/numpydoc* usr/lib64/python3*/site-packages/numpydoc* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/numpydoc* usr/lib64/python3*/site-packages/numpydoc* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-numpydoc -f %{pyproject_files}
-%{_bindir}/numpydoc
+%files
+%files -n python3-numpydoc -f %{oreon_filedir}/python3-numpydoc.list
 
 %changelog
+
 %autochangelog

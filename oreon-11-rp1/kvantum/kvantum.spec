@@ -1,53 +1,47 @@
+%global source2_hash 7d0bd6933af334b2a61f9e25496f6be2f34c26a881619819e0cfc7e3db691682
 %global source0_hash 7aa9099345e48048ebdad768f583944ac042f87b216fa0b26a169c7e05425047
-
 %global _vpath_srcdir Kvantum
 %bcond  qt5           1
-
 Name:           kvantum
 Version:        1.1.8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        SVG-based theme engine for Qt, KDE and LXQt
-
 License:        GPL-3.0-or-later
 URL:            https://github.com/tsujan/Kvantum
-Source0:        %{url}/releases/download/V%{version}/Kvantum-%{version}.tar.xz
+Source0:        https://github.com/tsujan/%{_vpath_srcdir}/releases/download/V%{version}/%{_vpath_srcdir}-%{version}.tar.xz
 Source1:        %{url}/releases/download/V%{version}/Kvantum-%{version}.tar.xz.asc
 Source2:        https://github.com/tsujan.gpg
-
-BuildRequires:  gcc-c++
+%if %{with qt5}
+%endif
+Requires:       hicolor-icon-theme
+Requires:       %{name}-data = %{version}-%{release}
+Requires:       qt6qml(org.kde.desktop)
+%if %{with qt5}
+Recommends:     (%{name}-qt5 if qt5-qtbase-gui)
+%endif
+Provides:  kvantum-qt6 = %{version}-%{release}
+Obsoletes: kvantum-qt6 < 1.1.0
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  make
+BuildRequires:  cmake(KF5WindowSystem)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
 BuildRequires:  gnupg2
-BuildRequires:  pkgconfig(x11)
-BuildRequires:  pkgconfig(xext)
+BuildRequires:  kde-filesystem
+BuildRequires:  make
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Designer)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(Qt6Core)
 BuildRequires:  pkgconfig(Qt6Gui)
 BuildRequires:  pkgconfig(Qt6Linguist)
 BuildRequires:  pkgconfig(Qt6Svg)
 BuildRequires:  pkgconfig(Qt6Widgets)
-BuildRequires:  cmake(KF6WindowSystem)
-%if %{with qt5}
-BuildRequires:  pkgconfig(Qt5)
-BuildRequires:  pkgconfig(Qt5Designer)
-BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  cmake(KF5WindowSystem)
-%endif
-BuildRequires:  desktop-file-utils
-BuildRequires:  kde-filesystem
-
-Requires:       hicolor-icon-theme
-Requires:       %{name}-data = %{version}-%{release}
-Requires:       qt6qml(org.kde.desktop)
-
-%if %{with qt5}
-Recommends:     (%{name}-qt5 if qt5-qtbase-gui)
-%endif
-
-# Qt6 is default since 1.1.0
-Provides:  kvantum-qt6 = %{version}-%{release}
-Obsoletes: kvantum-qt6 < 1.1.0
-
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xext)
+# /oreon:deps
 %description
 Kvantum is an SVG-based theme engine for Qt, tuned to KDE and LXQt, with an
 emphasis on elegance, usability and practicality.
@@ -67,7 +61,6 @@ be selected and activated by using Kvantum Manager.
 %package qt5
 Summary:   SVG-based theme engine for Qt5
 Requires:  %{name}-data = %{version}-%{release}
-
 %description qt5
 Kvantum is an SVG-based theme engine for Qt, tuned to KDE and LXQt, with an
 emphasis on elegance, usability and practicality.
@@ -78,7 +71,6 @@ This package contains the Qt5 integration plugin.
 %package data
 Summary:    SVG-based theme engine for Qt5, KDE and LXQt
 BuildArch:  noarch
-
 %description data
 Kvantum is an SVG-based theme engine for Qt, tuned to KDE and LXQt, with an
 emphasis on elegance, usability and practicality.
@@ -86,63 +78,39 @@ emphasis on elegance, usability and practicality.
 This package contains the data needed Kvantum.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -n Kvantum-%{version}
 
 %build
+
 %if %{with qt5}
 %global _vpath_builddir %{_target_platform}-qt5
 %cmake -DENABLE_QT5:BOOL=ON
 %cmake_build
 %endif
-
 %global _vpath_builddir %{_target_platform}-qt6
 %cmake \
     -DENABLE_QT5:BOOL=OFF \
-%if 0%{?fedora} < 40
-    -DWITHOUT_KF=ON
-%endif
 %cmake_build
-
 %install
 %if %{with qt5}
 %global _vpath_builddir %{_target_platform}-qt5
 %cmake_install
 %endif
-
 %global _vpath_builddir %{_target_platform}-qt6
 %cmake_install
-
-# desktop-file-validate doesn't recognize LXQt
 sed -i "s|LXQt|X-LXQt|" %{buildroot}%{_datadir}/applications/kvantummanager.desktop
 desktop-file-validate %{buildroot}%{_datadir}/applications/kvantummanager.desktop
-
 %find_lang %{name} --all-name --with-qt
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%license Kvantum/COPYING
-%doc Kvantum/ChangeLog Kvantum/NEWS Kvantum/README.md
-%{_bindir}/kvantummanager
-%{_bindir}/kvantumpreview
-%{_qt6_plugindir}/styles/libkvantum.so
-%{_datadir}/applications/kvantummanager.desktop
-%{_datadir}/icons/hicolor/scalable/apps/kvantum.svg
-%dir %{_datadir}/kvantumpreview
-%dir %{_datadir}/kvantumpreview/translations
-%dir %{_datadir}/kvantummanager
-%dir %{_datadir}/kvantummanager/translations
-
-%if %{with qt5}
-%files qt5
-%{_qt5_plugindir}/styles/libkvantum.so
-%endif
-
-%files data
-%license Kvantum/COPYING
-%{_datadir}/Kvantum/
-%{_datadir}/color-schemes/Kv*.colors
+%files -f %{oreon_filedir}/main.list
+%files -n kvantum-qt5 -f %{oreon_filedir}/kvantum-qt5.list
+%files -n kvantum-data -f %{oreon_filedir}/kvantum-data.list
 
 %changelog
+
 %autochangelog

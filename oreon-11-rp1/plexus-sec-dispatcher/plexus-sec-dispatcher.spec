@@ -1,5 +1,5 @@
+%global source1_hash cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30
 %global source0_hash 21ab7548945f3d6a2cb599fe198575f11ea18841a85d5bbe3d62fa6f9183d39a
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,33 +83,31 @@ end
 %bcond_with bootstrap
 Name:           plexus-sec-dispatcher
 Version:        4.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plexus Security Dispatcher Component
 License:        Apache-2.0
 URL:            https://github.com/codehaus-plexus/plexus-sec-dispatcher
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/codehaus-plexus/plexus-sec-dispatcher/archive/refs/tags/plexus-sec-dispatcher-2.0.tar.gz#/plexus-sec-dispatcher-2.0.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 4.2.0-33
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.codehaus.modello:modello-maven-plugin)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.sonatype.plexus:plexus-cipher)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 4.2.0-33
-
+# /oreon:deps
 %description
 Plexus Security Dispatcher Component
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n plexus-sec-dispatcher-plexus-sec-dispatcher-2.0
 
@@ -124,14 +122,15 @@ cp %{SOURCE1} .
 %mvn_alias org.codehaus.plexus: org.sonatype.plexus:
 
 %build
-%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -j -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE-2.0.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0-1
 - Prepare for Oreon 11 (RP1)

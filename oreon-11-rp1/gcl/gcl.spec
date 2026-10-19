@@ -1,47 +1,14 @@
+%global source2_hash 0fe55175b96a8ea1c4b670cc3fe11d56b341e4eff81b161ea49958ae550be6ca
+%global source1_hash 286315e100071058b7cb779e222cc7f27b5eb6aa2ea76d45ece1502ac8e08402
 %global source0_hash 79d0bb65b82df81c078bc55c4cda3fe4d766d87e3bfe10fde0b2f728204e1015
-
-# Address randomization breaks gcl's memory management scheme
 %undefine _hardened_build
-
-# The package notes feature leads to failed builds for everything that depends
-# on GCL.  Turn it off until somebody figures out how to make it work without
-# polluting linker flags.
 %undefine _package_note_file
-
-# FASL file loads fail with an unexpected EOF error without this.  I do not yet
-# know why.
 %global __brp_strip_lto %{_bindir}/true
-
-# Use of LTO leads to strange segfaults, reason as yet unknown.
 %global _lto_cflags %{nil}
-
 Name:           gcl
 Version:        2.7.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GNU Common Lisp
-
-# LGPL-2.0-or-later:
-# - cmpnew
-# - gcl-tk/guis.c
-# - gcl-tk/tkinfo.lsp
-# - gcl-tk/tkl.lsp
-# - gmp4 (not used)
-# - h
-# - lsp (except as noted below)
-# - o (except as noted below)
-# GPL-1.0-or-later:
-# - o/firstfile.c
-# - o/lastfile.c
-# - o/ntheap.h (not used on Linux)
-# - o/unexec*
-# - xgcl-2
-# MIT-Modern-Variant:
-# - gcl-tk/tkAppInit.c
-# - gcl-tk/tkMain.c
-# - gcl-tk/tkXAppInit.c
-# - gcl-tk/tkXshell.c
-# LOOP:
-# - lsp/gcl_loop.lsp
 License:        LGPL-2.0-or-later AND GPL-1.0-or-later AND MIT-Modern-Variant AND LOOP
 URL:            https://www.gnu.org/software/gcl/
 VCS:            git:https://git.savannah.gnu.org/git/gcl.git
@@ -49,35 +16,22 @@ Source0:        https://ftp.gnu.org/gnu/gcl/%{name}-%{version}.tar.gz
 Source1:        https://ftp.gnu.org/gnu/gcl/%{name}-%{version}.tar.gz.sig
 Source2:        https://ftp.gnu.org/gnu/gnu-keyring.gpg
 Source3:        gcl.el
-
-# Upstream builds point releases for Debian, and uploads the patches directly
-# to the Debian Patch Tracker, but does not spin new tarballs.  These are the
-# upstream patches from https://sources.debian.org/patches/gcl/.
 %global patchdir %{version}-18
-# Errata from a gcl mailing list post
 Patch:          %{name}-2.7.1-errata.patch
-
-### Fedora patches
-
-# This patch was last sent upstream on 29 Dec 2008.  It updates one source file
-# from LaTeX 2.09 to LaTeX 2e, thereby eliminating LaTeX warnings about running
-# in compatibility mode.
 Patch:          %{name}-2.6.11-latex.patch
-# This patch was last sent upstream on 29 Dec 2008.  It adapts to texinfo 5.0.
 Patch:          %{name}-2.7.1-texinfo.patch
-# This patch was last sent upstream on 29 Dec 2008.  It fixes a large number of
-# compile- and run-time problems with the Emacs interface code.
 Patch:          %{name}-2.7.1-elisp.patch
-# This patch was last sent upstream on 13 Oct 2009.  Add a format attribute.
 Patch:          %{name}-2.7.1-format.patch
-# Fix a clash with the system definition of bsearch.
 Patch:          %{name}-2.7.1-bsearch.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
+Requires:       gcc
+Requires:       libtirpc-devel%{?_isa}
+Requires:       util-linux%{?_isa}
+Requires:       which%{?_isa}
+# oreon:deps
 BuildRequires:  binutils-devel
 BuildRequires:  bzip2
+BuildRequires:  emacs-nw
 BuildRequires:  gcc
 BuildRequires:  gmp-devel
 BuildRequires:  gpgverify
@@ -88,16 +42,10 @@ BuildRequires:  pkgconfig(tcl)
 BuildRequires:  pkgconfig(tk)
 BuildRequires:  pkgconfig(xaw7)
 BuildRequires:  tex(latex)
-BuildRequires:  texlive-ec
 BuildRequires:  texinfo
 BuildRequires:  texinfo-tex
-BuildRequires:  emacs-nw
-
-Requires:       gcc
-Requires:       libtirpc-devel%{?_isa}
-Requires:       util-linux%{?_isa}
-Requires:       which%{?_isa}
-
+BuildRequires:  texlive-ec
+# /oreon:deps
 %description
 GCL is a Common Lisp currently compliant with the ANSI standard.  Lisp
 compilation produces native code through the intermediary of the system's C
@@ -110,11 +58,11 @@ Summary:        Emacs mode for interacting with GCL
 Requires:       %{name} = %{version}-%{release}
 Requires:       emacs(bin) %{?_emacs_version:>= %{_emacs_version}}
 BuildArch:      noarch
-
 %description emacs
 Emacs mode for interacting with GCL
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --data=%{SOURCE0} --signature=%{SOURCE1} --keyring=%{SOURCE2}
@@ -149,6 +97,7 @@ sed -i 's,output_mach=`.*`,output_mach=s390_64,' configure
 %endif
 
 %build
+
 %configure \
   --disable-dependency-tracking \
   --enable-readline \
@@ -157,33 +106,21 @@ sed -i 's,output_mach=`.*`,output_mach=s390_64,' configure
   --enable-tkconfig=%{_libdir} \
   --enable-xdr \
   --enable-xgcl
-# Parallel builds often lead to resource exhaustion
 make
-
-# Build gcl.info, which is needed for DESCRIBE to work properly
 rm info/gcl.info
 make -C info gcl.info
-
-# dwdoc needs two extra LaTeX runs to resolve references
 cd xgcl-2
 pdflatex dwdoc.tex
 pdflatex dwdoc.tex
 cd -
-
 %install
 %make_install
-
-# Get rid of the parts that we don't want
 rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 rm -rf $RPM_BUILD_ROOT%{_datadir}/doc
 rm -rf $RPM_BUILD_ROOT%{_datadir}/emacs
 rm -rf $RPM_BUILD_ROOT%{_prefix}/lib/gcl-*/info
-
-# Install the man page
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 cp -pf man/man1/* $RPM_BUILD_ROOT%{_mandir}/man1
-
-# Install and compile the Emacs code
 mkdir -p $RPM_BUILD_ROOT%{_emacs_sitelispdir}/gcl
 cp -pfr elisp/* $RPM_BUILD_ROOT%{_emacs_sitelispdir}/gcl
 rm -f $RPM_BUILD_ROOT%{_emacs_sitelispdir}/gcl/makefile
@@ -193,33 +130,18 @@ sed -e "s|%LISP_DIR%|%{_emacs_sitelispdir}|" %{SOURCE3} > $RPM_BUILD_ROOT%{_emac
 pushd $RPM_BUILD_ROOT%{_emacs_sitelispdir}/gcl
 %{_emacs_bytecompile} *.el
 popd
-
-# Help the debuginfo generator
 ln -s ../h/cmpinclude.h cmpnew/cmpinclude.h
 ln -s ../h/cmpinclude.h lsp/cmpinclude.h
 ln -s ../h/cmpinclude.h xgcl-2/cmpinclude.h
-
-# Fix permissions
 chmod 0755 %{buildroot}%{_libdir}/gcl-%{version}/unixport/libboot.so
-
-# The image has garbage strings containing RPM_BUILD_ROOT
 export QA_SKIP_BUILD_ROOT=1
-
 %clean
 rm -f /tmp/gazonk_* /tmp/gcl_*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_bindir}/gcl
-%{_libdir}/gcl-%{version}/
-%{_infodir}/*
-%{_mandir}/man*/*
-%doc ChangeLog README
-%license COPYING
-
-%files emacs
-%doc elisp/readme
-%{_emacs_sitelispdir}/gcl/
-%{_emacs_sitestartdir}/*
+%files -f %{oreon_filedir}/main.list
+%files -n gcl-emacs -f %{oreon_filedir}/gcl-emacs.list
 
 %changelog
+
 %autochangelog

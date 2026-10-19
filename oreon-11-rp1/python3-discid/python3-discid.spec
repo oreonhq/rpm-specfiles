@@ -1,46 +1,38 @@
-%global source0_hash 9dbb07ea0d6a0b4fb607004be66e540df1a518c5431cc1e9ea542582abd7711f
-
+%global source0_hash 1e8e004220cba22651be124335a66f6bb30f458870e3dc4b7cac5eb2629c8016
 Name:    python3-discid
 Version: 1.4.2
-Release: %autorelease
-Summary: Libdiscid Python bindings
+Release:        1%{?dist}
+Summary:        Libdiscid Python bindings
 URL:     https://github.com/metabrainz/python-discid
 License: LGPL-3.0-or-later
-
-Source0: %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/metabrainz/python-discid/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch: noarch
-
-BuildRequires: libdiscid
-BuildRequires: python3-devel
-BuildRequires: python3dist(pytest)
-
 Requires: libdiscid
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 77.0.3
+Requires:       python3-python3-discid = %{version}-%{release}
+# /oreon:deps
 %description
 Python-discid implements Python bindings for MusicBrainz libdiscid.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n python-discid-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir python-discid-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files discid
+%oreon_autofiles main
 
 %check
-%pytest
 
-%files -f %{pyproject_files}
-%license COPYING COPYING.LESSER
-%doc README.rst CHANGES.rst
+%pytest
+%files
 
 %changelog
+
 %autochangelog

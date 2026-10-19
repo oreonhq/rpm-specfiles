@@ -1,34 +1,34 @@
+%global source1_hash e1d7444d5909b5ee85d70b5b8f3841cce58d84266227365301a777c33ea62f62
 %global source0_hash c98ede2d06f02c12d272dbb69da63d1f7160751d551664e190a8bb6a9138a206
-
-Summary:	Tool to translate x86-64 CPU Machine Check Exception data
+Summary:        Tool to translate x86-64 CPU Machine Check Exception data
 Name:		mcelog
 Version:	212
-Release:	%autorelease
+Release:        1%{?dist}
 Epoch:		3
 License:	GPL-2.0-only
 URL:		https://github.com/andikleen/mcelog
 Source0:        https://github.com/andikleen/mcelog/archive/refs/tags/v%{version}.tar.gz#/mcelog-%{version}.tar.gz
-# note that this source OVERRIDES the one on the tarball above!
 Source1:        https://github.com/andikleen/mcelog/raw/master/mcelog.conf
 ExclusiveArch:	i686 x86_64
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires: systemd
-
+BuildRequires:  make
+BuildRequires:  systemd
+# /oreon:deps
 %description
 mcelog is a utility that collects and decodes Machine Check Exception data
 on x86-32 and x86-64 systems.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n mcelog-%{version}
-
+%global oreon_srcdir mcelog-%{version}
+%oreon_prep
 %build
-%make_build CFLAGS="$RPM_OPT_FLAGS -fpie -pie"
 
+%make_build CFLAGS="$RPM_OPT_FLAGS -fpie -pie"
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_mandir}/man{5,8}
 mkdir -p $RPM_BUILD_ROOT/%{_sysconfdir}/mcelog
@@ -44,23 +44,19 @@ install -p -m755 triggers/socket-memory-error-trigger $RPM_BUILD_ROOT/%{_sysconf
 install -p -m644 mcelog.service $RPM_BUILD_ROOT%{_unitdir}/mcelog.service
 install -p -m644 mcelog*.8 $RPM_BUILD_ROOT/%{_mandir}/man8/
 install -p -m644 mcelog*.5 $RPM_BUILD_ROOT/%{_mandir}/man5/
+%oreon_autofiles main
 
 %post
+
 %systemd_post mcelog.service
-
 %preun
+
 %systemd_preun mcelog.service
-
 %postun
-%systemd_postun_with_restart mcelog.service
 
-%files
-%{_sbindir}/mcelog
-%dir %{_sysconfdir}/mcelog
-%{_sysconfdir}/mcelog/triggers
-%config(noreplace) %{_sysconfdir}/mcelog/mcelog.conf
-%{_unitdir}/mcelog.service
-%{_mandir}/*/*
+%systemd_postun_with_restart mcelog.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

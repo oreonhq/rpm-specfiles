@@ -1,36 +1,26 @@
 %global source0_hash 8e97eb3e2fa690a6c75206b42426858518275d7ce9ce0cccf042754f19e52a22
-
 Name:           jackson-core
 Version:        2.22.3
 Release:        1%{?dist}
 Summary:        Core part of Jackson
 License:        Apache-2.0
-
 URL:            https://github.com/FasterXML/jackson-core
 Source0:        https://github.com/FasterXML/jackson-core/archive/refs/tags/jackson-core-%{version}.tar.gz#/jackson-core-%{version}.tar.gz
 Patch1:         0001-Remove-ch.randelshofer.fastdoubleparser.patch
-
-%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
-BuildRequires:  maven-local
-%else
-BuildRequires:  maven-local-openjdk25
-%endif
-
-BuildRequires:  mvn(com.fasterxml.jackson:jackson-base:pom:) >= %{version}
-BuildRequires:  mvn(com.google.code.maven-replacer-plugin:replacer)
-Buildrequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-
 BuildArch:      noarch
-%if 0%{?fedora} || 0%{?rhel} >= 10
-ExclusiveArch:  %{java_arches} noarch
-%endif
-
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(com.fasterxml.jackson:jackson-base:pom:)
+BuildRequires:  mvn(com.google.code.maven-replacer-plugin:replacer)
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
+# /oreon:deps
 %description
 Core part of Jackson that defines Streaming API as well
 as basic shared abstractions.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{name}-%{version} -p 1
 
@@ -49,14 +39,14 @@ sed -i 's/\r//' LICENSE jackson-core-NOTICE
 %mvn_file : %{name}
 
 %build
-%mvn_build -f -j
 
+%mvn_build -f -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc README.md release-notes/*
-%license LICENSE jackson-core-NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 1643dee7365f7831d1d3971b389b7c255641a7aced75f0681f71574e380046cf
 Name:           python-sphinx-press-theme
 Version:        0.9.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Sphinx-doc theme based on Vuepress
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/schettino72/sphinx_press_theme
-Source:         %{pypi_source sphinx_press_theme}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sphinx_press_theme/sphinx_press_theme-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sphinx-press-theme' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-sphinx-press-theme = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-sphinx-press-theme
-Summary:        %{summary}
-
-%description -n python3-sphinx-press-theme %_description
-
+Summary:        A Sphinx-doc theme based on Vuepress
+%description -n python3-sphinx-press-theme
 
 %prep
-%autosetup -p1 -n sphinx_press_theme-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sphinx_press_theme-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sphinx-press-theme usr/lib/python3*/site-packages/sphinx_press_theme* usr/lib64/python3*/site-packages/sphinx_press_theme* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sphinx_press_theme* usr/lib64/python3*/site-packages/sphinx_press_theme* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sphinx-press-theme -f %{pyproject_files}
+%files
+%files -n python3-sphinx-press-theme -f %{oreon_filedir}/python3-sphinx-press-theme.list
 
 %changelog
+
 %autochangelog

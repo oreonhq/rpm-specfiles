@@ -1,21 +1,19 @@
 %global source0_hash 39b097ad28157c05adca393e12a44dfb19fc511f9ab325eec6aa8b394e320c25
-
-# Generated from cucumber-messages-14.0.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name cucumber-messages
-
 Name: rubygem-%{gem_name}
 Version: 17.1.0
-Release: 11%{?dist}
-Summary: Protocol Buffer messages for Cucumber's inter-process communication.
+Release:        1%{?dist}
+Summary:        Protocol Buffer messages for Cucumber's inter-process communication.
 License: MIT
 URL: https://github.com/cucumber/messages-ruby#readme
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
-BuildRequires: ruby(release)
-BuildRequires: rubygems-devel
-BuildRequires: ruby >= 2.3
-BuildRequires: rubygem(rspec)
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 BuildArch: noarch
-
+# oreon:deps
+BuildRequires:  ruby
+BuildRequires:  ruby(release)
+BuildRequires:  rubygem(rspec)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 Protocol Buffer messages for Cucumber's inter-process communication.
 
@@ -23,41 +21,33 @@ Protocol Buffer messages for Cucumber's inter-process communication.
 Summary: Documentation for %{name}
 Requires: %{name} = %{version}-%{release}
 BuildArch: noarch
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{gem_name}-%{version}
 
 %build
+
 gem build ../%{gem_name}-%{version}.gemspec
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 pushd .%{gem_instdir}
 rspec spec
 popd
-
-%files
-%dir %{gem_instdir}
-%license %{gem_instdir}/LICENSE
-%{gem_instdir}/VERSION
-%{gem_libdir}
-%exclude %{gem_cache}
-%{gem_spec}
-
-%files doc
-%doc %{gem_docdir}
-%doc %{gem_instdir}/README.md
-%{gem_instdir}/spec
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-cucumber-messages-doc -f %{oreon_filedir}/rubygem-cucumber-messages-doc.list
 
 %changelog
+
 %autochangelog

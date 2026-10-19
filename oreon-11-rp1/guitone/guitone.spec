@@ -1,24 +1,21 @@
 %global source0_hash 3c30640374cf0c824e869d2ed22cdb4e9afa9251ac0db988c38e3a788ddf72df
-
 %global rctag rc5
-
 Name:		guitone
 Version:	1.0
-Release:	0.39%{?rctag:.%rctag}%{?dist}
-Summary:	A frontend for Monotone
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        A frontend for Monotone
 License:	GPL-3.0-or-later
 URL:		http://guitone.thomaskeller.biz/
-Source:		%{url}releases/%{version}%{?rctag:%rctag}/%{name}-%{version}%{?rctag:%rctag}.tgz
+Source0:        http://%{name}.thomaskeller.biz/releases/%{version}%{rctag}/%{name}-%{version}%{rctag}.tgz
 Patch0:		guitone-1.0rc5-cpp11.patch
 Patch1:		guitone-1.0rc5-format-security.patch
-# License is GPLv3+.  This forces us to build against qt >= 4.3.4.
-BuildRequires:	qt4-devel >= 4.3.4
-BuildRequires:	gcc-c++
-BuildRequires:	make
-BuildRequires:	desktop-file-utils
 Requires:	monotone >= 0.99.1
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  qt4-devel
+# /oreon:deps
 %description 
 Guitone is a Qt-based, cross-platform graphical user interface for the
 distributed version control system monotone. It aims towards a full
@@ -38,6 +35,7 @@ Functionality provided by guitone:
 and much more.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}%{?rctag:%rctag}
@@ -57,25 +55,16 @@ Categories=Application;Development;
 EOF
 
 %build
+
 %{qmake_qt4} LRELEASE=lrelease-qt4 -config release guitone.pro
 make %{?_smp_mflags}
-
 %install
 install -m 755 -D -p bin/guitone %{buildroot}%{_bindir}/guitone
 install -m 644 -D -p res/icons/guitone.png %{buildroot}%{_datadir}/pixmaps/guitone.png
-
 desktop-file-install \
   --dir %{buildroot}%{_datadir}/applications \
   --vendor="" \
   %{name}.desktop
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -110,17 +99,10 @@ SentUpstream: 2014-09-18
    -->
 </application>
 EOF
+%oreon_autofiles main
 
-# the tests subdir currently contains only a stub of a testsuite, and
-# upstream told us not to use it yet, so no 'check' section.
-
-%files
-%doc NEWS README README.driver
-%license COPYING
-%{_bindir}/guitone
-%{_datadir}/pixmaps/guitone.png
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/guitone.desktop
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

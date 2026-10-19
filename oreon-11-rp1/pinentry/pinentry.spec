@@ -1,51 +1,43 @@
+%global source2_hash 6f57d0e17fefd2238bd037aebf03efa960641629dd61dd9d47f122a829f6e375
+%global source1_hash fe7be7d1c2eb75b1d80cdc1e157974b5bd438b5c67f3000c88c0278f3964acba
 %global source0_hash c2970f16d6afb66ecddfca767d743936c86239bff936eed7fd7597a678414b63
-
-%if 0%{?fedora} && 0%{?fedora} < 39 || 0%{?rhel} && 0%{?rhel} < 10
-%bcond_without gtk2
-%endif
-
-%if 0%{?fedora}
-%bcond_without kf6
-%endif
-
-
 Name:    pinentry
 Version: 1.3.3
-Release: 1%{?dist}
-Summary: Collection of simple PIN or passphrase entry dialogs
-
+Release:        1%{?dist}
+Summary:        Collection of simple PIN or passphrase entry dialogs
 License: GPL-2.0-or-later
 URL:     https://www.gnupg.org/
 Source0:        https://gnupg.org/ftp/gcrypt/pinentry/%{name}-%{version}.tar.bz2
 Source1:        https://gnupg.org/ftp/gcrypt/pinentry/%{name}-%{version}.tar.bz2.sig
 Source2: https://gnupg.org/signature_key.asc
-
 Patch1: pinentry-1.1.1-coverity.patch
-
-# borrowed from opensuse
 Source10: pinentry-wrapper
-
-BuildRequires: autoconf automake gettext-devel
-BuildRequires: make
-BuildRequires: gcc
-BuildRequires: libcap-devel
-BuildRequires: ncurses-devel
-BuildRequires: libgpg-error-devel
-BuildRequires: libassuan-devel
-BuildRequires: pkgconfig(gcr-4)
-BuildRequires: pkgconfig(libsecret-1)
 %if %{with gtk2}
-BuildRequires: pkgconfig(gtk+-2.0)
 %endif
-BuildRequires: pkgconfig(Qt6Core) pkgconfig(Qt6Gui) pkgconfig(Qt6Widgets)
 %if %{with kf6}
-BuildRequires: pkgconfig(KF6WindowSystem) pkgconfig(KF6GuiAddons)
 %endif
-BuildRequires: desktop-file-utils
-BuildRequires: gnupg2
-
 Provides: %{name}-curses = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  gnupg2
+BuildRequires:  libassuan-devel
+BuildRequires:  libcap-devel
+BuildRequires:  libgpg-error-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  pkgconfig(KF6GuiAddons)
+BuildRequires:  pkgconfig(KF6WindowSystem)
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  pkgconfig(Qt6Gui)
+BuildRequires:  pkgconfig(Qt6Widgets)
+BuildRequires:  pkgconfig(gcr-4)
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(libsecret-1)
+# /oreon:deps
 %description
 Pinentry is a collection of simple PIN or passphrase entry dialogs which
 utilize the Assuan protocol as described by the aegypten project; see
@@ -83,7 +75,6 @@ Obsoletes: pinentry-qt4 < 0.8.0-2
 Obsoletes: pinentry-qt5 < 1.2.1-7
 Provides:  pinentry-qt6 = %{version}-%{release}
 %if ! %{with gtk2}
-# Special case to handle replacement of "default" pinentry implementation
 Obsoletes: %{name}-gtk < %{version}-%{release}
 %endif
 %description qt
@@ -111,12 +102,13 @@ http://www.gnupg.org/aegypten/ for details.
 This package contains the tty version of the PIN entry dialog.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
-
 %build
+
 export ACLOCAL_PATH=/usr/share/gettext/m4/
 autoreconf -fiv
 %configure \
@@ -135,58 +127,27 @@ autoreconf -fiv
   --enable-pinentry-emacs \
   --enable-pinentry-tty \
   --enable-libsecret
-
 %make_build
-
-
 %install
 %make_install
-
-# Symlink for Backward compatibility
 %if %{with gtk2}
 ln -s pinentry-gtk-2 $RPM_BUILD_ROOT%{_bindir}/pinentry-gtk
 %endif
 ln -s pinentry-qt $RPM_BUILD_ROOT%{_bindir}/pinentry-qt4
 ln -s pinentry-qt $RPM_BUILD_ROOT%{_bindir}/pinentry-qt5
-
 install -p -m755 -D %{SOURCE10} $RPM_BUILD_ROOT%{_bindir}/pinentry
-
-# unpackaged files
 rm -fv $RPM_BUILD_ROOT%{_infodir}/dir
-
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.gnupg.pinentry-qt.desktop
 install -d %{buildroot}%{_datadir}/pixmaps
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license COPYING
-%doc AUTHORS ChangeLog NEWS README THANKS TODO
-%{_bindir}/pinentry-curses
-%{_bindir}/pinentry
-%{_infodir}/pinentry.info*
-
-%files gnome3
-%{_bindir}/pinentry-gnome3
-
-%if %{with gtk2}
-%files gtk
-%{_bindir}/pinentry-gtk-2
-# symlink for backward compatibility
-%{_bindir}/pinentry-gtk
-%endif
-
-%files qt
-%{_bindir}/pinentry-qt
-# symlinks for backward compatibility
-%{_bindir}/pinentry-qt4
-%{_bindir}/pinentry-qt5
-%{_datadir}/applications/org.gnupg.pinentry-qt.desktop
-%{_datadir}/pixmaps/pinentry.png
-
-%files emacs
-%{_bindir}/pinentry-emacs
-
-%files tty
-%{_bindir}/pinentry-tty
+%files -f %{oreon_filedir}/main.list
+%files -n pinentry-gnome3 -f %{oreon_filedir}/pinentry-gnome3.list
+%files -n pinentry-gtk -f %{oreon_filedir}/pinentry-gtk.list
+%files -n pinentry-qt -f %{oreon_filedir}/pinentry-qt.list
+%files -n pinentry-emacs -f %{oreon_filedir}/pinentry-emacs.list
+%files -n pinentry-tty -f %{oreon_filedir}/pinentry-tty.list
 
 %changelog
+
 %autochangelog

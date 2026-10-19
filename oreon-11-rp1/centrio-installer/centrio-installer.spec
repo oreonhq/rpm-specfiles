@@ -1,5 +1,4 @@
-%global source0_hash none
-
+%global source0_hash 9c236f1935e533653952203482bc8fa30548ddf2afeb25d1cbce10a089850ac6
 Name:           centrio-installer
 Version:        2.0
 Release:        30%{?dist}
@@ -11,17 +10,17 @@ Source0:        https://tarballs.oreonhq.com/centrio-%{version}.tar.xz
 Source1:        liveinst.desktop
 Source2:        centrio-live-sudoers
 Requires:       python3-pyside6 qt6-qtbase qt6-qtwayland python3-blockdev libblockdev-lvm
+# oreon:deps
 BuildRequires:  python3-devel
-
+# /oreon:deps
 %description
 Centrio is the Oreon installer. It runs in the live session.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n centrio-%{version}
-
+%global oreon_srcdir centrio-%{version}
+%oreon_prep
 %build
-# No compile step for pure Python
 
 %install
 %{__mkdir_p} %{buildroot}%{_datadir}/centrio
@@ -30,23 +29,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %{__mkdir_p} %{buildroot}%{_datadir}/centrio/locale
 %{__mkdir_p} %{buildroot}%{_datadir}/applications
 %{__mkdir_p} %{buildroot}%{_sysconfdir}/sudoers.d
-
 install -p -m 0440 %{SOURCE2} %{buildroot}%{_sysconfdir}/sudoers.d/99-centrio-live
-
 install -p -m 0644 %{_builddir}/centrio-%{version}/src/*.py %{buildroot}%{_datadir}/centrio/
 install -p -m 0644 %{_builddir}/centrio-%{version}/src/ui/*.py %{buildroot}%{_datadir}/centrio/ui/
 install -p -m 0644 %{_builddir}/centrio-%{version}/icons/*.svg %{buildroot}%{_datadir}/centrio/icons/ 2>/dev/null || true
 cp -a %{_builddir}/centrio-%{version}/locale/* %{buildroot}%{_datadir}/centrio/locale/ 2>/dev/null || true
-
 install -p -m 0644 %{SOURCE1} %{buildroot}%{_datadir}/applications/
+%oreon_autofiles main
 
 %check
-test -f %{_builddir}/centrio-%{version}/src/main.py
 
-%files
-%{_sysconfdir}/sudoers.d/99-centrio-live
-%{_datadir}/centrio/
-%{_datadir}/applications/liveinst.desktop
+test -f %{_builddir}/centrio-%{version}/src/main.py
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,15 +1,10 @@
 %global source0_hash b1dfff122fa0faf74e1fdb9ef9d417a9a9d0745e2913287ce2c0a6c0027a946c
-
 %bcond check 1
-
 Name:           phrog
 Version:        0.50.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Mobile-friendly greeter for greetd
-# phrog itself is licensed under GPL-3.0.
-# (plus some test-only assets that are CC-BY-SA-4.0)
 SourceLicense:  GPL-3.0-only AND CC-BY-SA-4.0
-# The License tag reflects statically linked, vendored Rust dependencies:
 License:        %{shrink:
     ((MIT OR Apache-2.0) AND Unicode-3.0) AND
     (Apache-2.0 OR BSL-1.0) AND
@@ -21,33 +16,24 @@ License:        %{shrink:
     (MIT OR Apache-2.0 OR LGPL-2.1-or-later) AND
     (Unlicense OR MIT)
 }
-# (taken from cargo_license_summary output and placed above)
 URL:            https://github.com/samcday/phrog
-Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
-# To regenerate vendor tarball:
-# dir="$(mktemp -d)"; version="$(cat phrog.spec| grep ^Version: | awk '{print $2}')"; tar -C $dir --strip-components=1 -xvf phrog-$version.tar.gz && (cd $dir && cargo vendor --locked --versioned-dirs $dir/vendor) && tar -C $dir -cvzf vendor-$version.tar.gz vendor/
-Source:         vendor-%{version}.tar.gz
-
+Source0:        https://github.com/samcday/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-# https://bugzilla.redhat.com/show_bug.cgi?id=2426735
 ExcludeArch:    ppc64le
-# phrog is intended for mobile devices, s390x is a mainframe arch
 ExcludeArch:    s390x
-
-BuildRequires:  cargo-rpm-macros >= 25
-
 %if %{with check}
-# for dbus-run-session
-BuildRequires:  dbus-daemon
-# for desktop-file-validate
-BuildRequires:  desktop-file-utils
-# for xvfb-run
-BuildRequires:  xorg-x11-server-Xvfb
-# first-run test
-BuildRequires:  foot
 %endif
-
+Requires:       accountsservice
+Requires:       gnome-session
+Requires:       greetd
+Requires:       phoc
+Requires:       phosh-osk = 1.0
+# oreon:deps
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  dbus-daemon
+BuildRequires:  desktop-file-utils
+BuildRequires:  foot
 BuildRequires:  pkgconfig(atk)
 BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(cairo-gobject)
@@ -56,28 +42,22 @@ BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(libhandy-1)
 BuildRequires:  pkgconfig(libphosh-0.45)
-
-Requires:       accountsservice
-Requires:       gnome-session
-Requires:       greetd
-Requires:       phoc
-Requires:       phosh-osk = 1.0
-
+BuildRequires:  rustc
+BuildRequires:  xorg-x11-server-Xvfb
+# /oreon:deps
 %description
 Phrog uses Phosh and greetd to provide a graphical login manager.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -a1
-%cargo_prep -v vendor
-
+%autosetup -p1
+%oreon_vendor_cargo
 %build
+
 %cargo_build
 %cargo_vendor_manifest
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
-
 %install
 install -Dpm 0644 data/mobi.phosh.Phrog.service -t %{buildroot}%{_userunitdir}/
 install -Dpm 0644 data/mobi.phosh.Phrog.target -t %{buildroot}%{_userunitdir}/
@@ -91,47 +71,28 @@ install -Dpm 0755 data/phrog-greetd-session -t %{buildroot}%{_libexecdir}/
 install -d %{buildroot}%{_datadir}/phrog/autostart
 install -d %{buildroot}%{_sysconfdir}/phrog/autostart
 install -Dpm 0755 target/rpm/phrog -t %{buildroot}%{_bindir}/
-
+%oreon_autofiles main
 %if %{with check}
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/mobi.phosh.Phrog.desktop
-# tests need a writable XDG_RUNTIME_DIR
 export XDG_RUNTIME_DIR=/tmp/runtime-dir
 mkdir -p ${XDG_RUNTIME_DIR}
 chmod 0700 ${XDG_RUNTIME_DIR}
 export G_MESSAGES_DEBUG=all
 %{shrink:dbus-run-session xvfb-run -a -s -noreset phoc -S -E "%cargo_test"}
 %endif
-
 %post
+
 %systemd_post phrog.service
-
 %preun
+
 %systemd_preun phrog.service
-
 %postun
-%systemd_postun_with_restart phrog.service
 
-%files
-%license LICENSE
-%license LICENSE.dependencies
-%license cargo-vendor.txt
-%doc README.md
-%{_bindir}/phrog
-%{_datadir}/applications/mobi.phosh.Phrog.desktop
-%{_datadir}/glib-2.0/schemas/mobi.phosh.phrog.gschema.xml
-%{_datadir}/gnome-session/sessions/phrog.session
-%dir %{_datadir}/phrog
-%dir %{_datadir}/phrog/autostart
-%{_libexecdir}/phrog-greetd-session
-%dir %{_sysconfdir}/phrog
-%dir %{_sysconfdir}/phrog/autostart
-%config(noreplace) %{_sysconfdir}/phrog/greetd-config.toml
-%{_unitdir}/phrog.service
-%dir %{_userunitdir}/gnome-session@phrog.target.d
-%{_userunitdir}/gnome-session@phrog.target.d/session.conf
-%{_userunitdir}/mobi.phosh.Phrog.service
-%{_userunitdir}/mobi.phosh.Phrog.target
+%systemd_postun_with_restart phrog.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,8 +1,9 @@
-%global source0_hash none
-
+%global source11_hash 034d19c9b6950a1a363b67d1a3c34c5d9831d815eb09ed10281205943abbcb72
+%global source10_hash d360c4b095bc3b34d03d9a366b21c12052c3f9e9c57e86b17c8b2c038baa4719
+%global source0_hash c96282de8bc2ac5781df58c6adbce4265376e36190af50d7528f51dc739b6d7d
 Name:           openarena
 Version:        0.8.8
-Release:        36%{?dist}
+Release:        1%{?dist}
 Summary:        Open source first person shooter
 License:        GPL-2.0-only AND CC0-1.0
 URL:            http://openarena.ws/
@@ -10,28 +11,27 @@ Source0:        http://download.tuxfamily.org/openarena/rel/081/oa081.zip
 Source10:       http://download.tuxfamily.org/openarena/rel/085/oa085p.zip
 Source11:       http://download.tuxfamily.org/openarena/rel/088/oa088p.zip
 Source2:        %{name}.sh
-# From https://github.com/flathub/ws.openarena.OpenArena/blob/master/ws.openarena.OpenArena.png
 Source3:        ws.openarena.OpenArena.png
 Source4:        %{name}.desktop
 Source5:        %{name}.appdata.xml
-
-# We need 1.36-11 or newer for the new standalone game and protocol cvars
 Requires:       quake3 >= 1.36-11
 Requires:       hicolor-icon-theme
 Requires:       opengl-games-utils
 Requires:       rsync
-BuildRequires:  ImageMagick
-BuildRequires:  desktop-file-utils
-BuildRequires:  libappstream-glib
 Provides:       openarena-data = %{version}-%{release}
 Obsoletes:      openarena-data < 0.7.1-4
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  ImageMagick
+BuildRequires:  desktop-file-utils
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 OpenArena is an open-source content package for Quake III Arena licensed under
 the GPL, effectively creating a free stand-alone game.
 
 %prep
+
 %setup -q -c
 unzip -qq -o %{SOURCE10}
 unzip -qq -o %{SOURCE11}
@@ -42,14 +42,13 @@ for file in CHANGES COPYING CREDITS README readme_088.txt; do
 done
 
 %build
-echo We build nothing
 
+echo We build nothing
 %install
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/%{name}
 mkdir -p $RPM_BUILD_ROOT%{_metainfodir}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps
 mkdir -p $RPM_BUILD_ROOT%{_bindir}
-
 cp -pr %{name}-0.8.1/baseoa $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -p -m755 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}/%{name}
 sed -i -e 's|/usr|%{_prefix}|' $RPM_BUILD_ROOT%{_bindir}/%{name}
@@ -58,19 +57,13 @@ cp -p %{SOURCE3} $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/128x128/apps/openarena
 chmod 644 $RPM_BUILD_ROOT%{_datadir}/%{name}/baseoa/*
 desktop-file-install --dir=$RPM_BUILD_ROOT%{_datadir}/applications %{SOURCE4}
 desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/*
-
 mkdir -p $RPM_BUILD_ROOT%{_metainfodir}
 install -pm 644 %{SOURCE5} $RPM_BUILD_ROOT%{_metainfodir}/
 appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/*.appdata.xml
+%oreon_autofiles main
 
-%files
-%doc doc/CREDITS doc/README doc/CHANGES doc/*.txt
-%license doc/COPYING
-%{_bindir}/%{name}*
-%{_datadir}/%{name}
-%{_metainfodir}/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

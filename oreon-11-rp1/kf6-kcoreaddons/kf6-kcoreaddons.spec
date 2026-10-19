@@ -1,45 +1,39 @@
+%global source1_hash 35eb80ccf3f3e1fefe1a19971d86f839c04e01c898f9cb71c8f73d25f20395a8
 %global source0_hash cc68fe15beb0fca2036cff8742f468c1345406bf99793fffacbf8f2a3f89bc4b
-
 %global		framework kcoreaddons
-
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.30
-
-
 Name:		kf6-%{framework}
 Version:	6.30.0
 Release:        1%{?dist}
-Summary:	KDE Frameworks 6 Tier 1 addon with various classes on top of QtCore
+Summary:        KDE Frameworks 6 Tier 1 addon with various classes on top of QtCore
 License:	BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND MPL-1.1 AND LGPL-2.0-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-2.1-only WITH Qt-LGPL-exception-1.1
 URL:		https://invent.kde.org/frameworks/%{framework}
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
-
+Requires:       kf6-filesystem
+# oreon:deps
+BuildRequires:  clang-devel
 BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  make
-BuildRequires:  extra-cmake-modules >= %{version}
-BuildRequires:  kf6-rpm-macros
+BuildRequires:  cmake(PySide6)
 BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6DBusTools)
+BuildRequires:  cmake(Qt6LinguistTools)
 BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  cmake(Qt6QmlTools)
-BuildRequires:  cmake(Qt6LinguistTools)
-BuildRequires:  systemd-devel
+BuildRequires:  cmake(Shiboken6)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  make
 BuildRequires:  pkgconfig(mount)
-
-# required for pyside6 python bindings
-BuildRequires:  python3-devel
 BuildRequires:  python3-build
+BuildRequires:  python3-devel
+BuildRequires:  python3-pyside6-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-wheel
-BuildRequires:  clang-devel
-BuildRequires:  cmake(Shiboken6)
-BuildRequires:  cmake(PySide6)
-BuildRequires:  python3-pyside6-devel >= 6.11.1-25
-
-Requires:       kf6-filesystem
-
+BuildRequires:  systemd-devel
+# /oreon:deps
 %description
 KCoreAddons provides classes built on top of QtCore to perform various tasks
 such as manipulating mime types, autosaving files, creating backup files,
@@ -59,12 +53,13 @@ Requires:   qt6-qtbase-devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{framework}-%{version} -p1
 
 %build
+
 %cmake_kf6
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
@@ -72,32 +67,12 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %find_lang_kf6 kcoreaddons6_qt
 %find_lang_kf6 kde6_xml_mimetypes
 cat *.lang > all.lang
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f all.lang
-%doc README.md
-%{_kf6_datadir}/mime/packages/kde6.xml
-%{_kf6_datadir}/qlogging-categories6/%{framework}.*
-%{_kf6_libdir}/libKF6CoreAddons.so.*
-%{_kf6_libdir}/qt6/qml/org/kde/coreaddons/libkcoreaddonsplugin.so
-%{_kf6_libdir}/qt6/qml/org/kde/coreaddons/qmldir
-%{_datadir}/kf6/jsonschema/kpluginmetadata.schema.json
-%{_libdir}/qt6/qml/org/kde/coreaddons/kcoreaddonsplugin.qmltypes
-%{_libdir}/qt6/qml/org/kde/coreaddons/kde-qmlmodule.version
-%{_qt6_metatypesdir}/qt6kf6coreaddons_metatypes.json
-
-%files -n python3-%{name}
-%{python3_sitearch}/KCoreAddons.cpython-%{python3_version_nodots}*.so
-
-%files devel
-%{_kf6_includedir}/KCoreAddons/
-%dir %{_includedir}/PySide6/KCoreAddons/
-%{_includedir}/PySide6/KCoreAddons/kcoreaddons_python.h
-%dir %{_kf6_datadir}/PySide6/typesystems/
-%{_kf6_datadir}/PySide6/typesystems/typesystem_kcoreaddons.xml
-%{_kf6_libdir}/cmake/KF6CoreAddons/
-%{_kf6_libdir}/pkgconfig/KF6CoreAddons.pc
-%{_kf6_libdir}/libKF6CoreAddons.so
-
+%files -f %{oreon_filedir}/main.list
+%files -n python3-kf6-kcoreaddons -f %{oreon_filedir}/python3-kf6-kcoreaddons.list
+%files -n kf6-kcoreaddons-devel -f %{oreon_filedir}/kf6-kcoreaddons-devel.list
 
 %changelog
+
 %autochangelog

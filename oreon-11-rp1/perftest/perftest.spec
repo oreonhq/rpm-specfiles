@@ -1,22 +1,22 @@
 %global source0_hash 4623884eae876583011732a4cdcecf62c47fb294ddc70359594a002e072eeb7b
-
 Name:           perftest
 Summary:        IB Performance Tests
 Version:        26.04.17
-Release:        %autorelease
+Release:        1%{?dist}
 License:        GPL-2.0-only OR BSD-2-Clause
-Source:		https://github.com/linux-rdma/perftest/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/linux-rdma/perftest/releases/download/%{version}/%{name}-%{version}.tar.gz
 Url:            https://github.com/linux-rdma/perftest
-
-BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  libibverbs-devel >= 1.2.0
-BuildRequires:  librdmacm-devel >= 1.0.21
-BuildRequires:  libibumad-devel >= 1.3.10.2
-BuildRequires:  autoconf pciutils-devel
 Obsoletes:      openib-perftest < 1.3
 ExcludeArch:    s390 %{arm} %{ix86}
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  gcc
+BuildRequires:  libibumad-devel
+BuildRequires:  libibverbs-devel
+BuildRequires:  librdmacm-devel
+BuildRequires:  make
+BuildRequires:  pciutils-devel
+# /oreon:deps
 %description
 Perftest is a collection of simple test programs designed to utilize 
 RDMA communications and provide performance numbers over those RDMA
@@ -24,23 +24,23 @@ connections.  It does not work on normal TCP/IP networks, only on
 RDMA networks.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 find src -type f -iname '*.[ch]' -exec chmod a-x '{}' ';'
 
 %build
+
 %configure
 %make_build
-
 %install
 for file in ib_{atomic,read,send,write}_{lat,bw} raw_ethernet_{lat,bw}; do
 	install -D -m 0755 $file %{buildroot}%{_bindir}/$file
 done
+%oreon_autofiles main
 
-%files
-%doc README
-%license COPYING
-%_bindir/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

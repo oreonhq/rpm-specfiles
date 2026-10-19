@@ -1,23 +1,9 @@
-%global source0_hash c14065a30765f2b4b5277010ee66689fefcea2ade113728c160a6f4f3181706d
-
-# Ubuntu calls their own software netplan.io in the archive due to name conflicts
+%global source0_hash 9fc5fba9e8247b9d4ec8fc132d37a60ebe49dc5bdd653645c6719886890a746c
 %global ubuntu_name netplan.io
-
-# If this isn't defined, define it
 %{?!_systemdgeneratordir:%global _systemdgeneratordir /usr/lib/systemd/system-generators}
-
-# Netplan library soversion major
 %global libsomajor 1
-
-# networkd is not available everywhere
-%if 0%{?rhel} && ! 0%{?epel}
-%bcond_with networkd_support
-%else
 %bcond_without networkd_support
-%endif
-
 %bcond_with tests
-
 Name:           netplan
 Version:        1.2.2
 Release:        1%{?dist}
@@ -25,61 +11,43 @@ Summary:        Network configuration tool using YAML
 License:        GPL-3.0-only
 URL:            http://netplan.io/
 Source0:        https://github.com/canonical/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-
-# Downstream only
 Patch1001:      netplan-fallback-renderer.patch
-# https://github.com/canonical/netplan/pull/555
-# probably won't be necessary in > 1.2.2
 Patch1002:      status_fail_cleanly.patch
-
+%if %{with tests}
+%endif
+Requires:       python3dist(netifaces)
+Requires:       python3dist(pyyaml)
+Requires:       %{_sbindir}/ip
+Requires:       dbus-common
+Requires:       %{name}-default-backend
+Suggests:       %{name}-default-backend-NetworkManager
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
+Requires:       python3-%{name}%{?_isa} = %{version}-%{release}
+Provides:       %{ubuntu_name} = %{version}-%{release}
+Provides:       %{ubuntu_name}%{?_isa} = %{version}-%{release}
+# oreon:deps
+BuildRequires:  //bin/ip
+BuildRequires:  //bin/pandoc
 BuildRequires:  gcc
+BuildRequires:  libcmocka-devel
 BuildRequires:  meson
 BuildRequires:  pkgconfig(bash-completion)
-BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(systemd)
-BuildRequires:  pkgconfig(yaml-0.1)
 BuildRequires:  pkgconfig(uuid)
+BuildRequires:  pkgconfig(yaml-0.1)
 BuildRequires:  python3-devel
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  %{_bindir}/pandoc
 BuildRequires:  python3dist(cffi)
-%if %{with tests}
-# For tests
-BuildRequires:  %{_sbindir}/ip
-BuildRequires:  libcmocka-devel
 BuildRequires:  python3dist(coverage)
-BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(netifaces)
 BuildRequires:  python3dist(pycodestyle)
 BuildRequires:  python3dist(pyflakes)
+BuildRequires:  python3dist(pytest)
 BuildRequires:  python3dist(pyyaml)
-%endif
-
-# /usr/sbin/netplan is a Python 3 script that requires netifaces and PyYAML
-Requires:       python3dist(netifaces)
-Requires:       python3dist(pyyaml)
-# 'ip' command is used in netplan apply subcommand
-Requires:       %{_sbindir}/ip
-# netplan ships dbus files
-Requires:       dbus-common
-
-# Netplan requires a backend for configuration
-Requires:       %{name}-default-backend
-# Prefer NetworkManager
-Suggests:       %{name}-default-backend-NetworkManager
-
-# Netplan requires its core libraries
-Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
-# Python bindings are in their own package but are required for CLI
-Requires:       python3-%{name}%{?_isa} = %{version}-%{release}
-
-# Provide the package name that Ubuntu uses for it too...
-Provides:       %{ubuntu_name} = %{version}-%{release}
-Provides:       %{ubuntu_name}%{?_isa} = %{version}-%{release}
-
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 netplan reads network configuration from /etc/netplan/*.yaml which are written by administrators,
 installers, cloud image instantiations, or other OS deployments. During early boot, it generates
@@ -88,27 +56,8 @@ networking daemon.
 
 Currently supported backends are NetworkManager and systemd-networkd.
 
-%files
-%license COPYING
-%doc %{_docdir}/%{name}/
-%{_sbindir}/%{name}
-%{_datadir}/%{name}/
-%{_datadir}/dbus-1/system-services/io.%{name}.Netplan.service
-%{_datadir}/dbus-1/system.d/io.%{name}.Netplan.conf
-%{_systemdgeneratordir}/%{name}
-%{_mandir}/man5/%{name}.5*
-%{_mandir}/man8/%{name}*.8*
-%dir %{_sysconfdir}/%{name}
-%dir %{_libexecdir}/%{name}
-%{_libexecdir}/%{name}/generate
-%{_libexecdir}/%{name}/%{name}-dbus
-%{_datadir}/bash-completion/completions/%{name}
-
-# ------------------------------------------------------------------------------------------------
-
 %package libs
 Summary:        Network configuration tool using YAML (core library)
-
 %description libs
 netplan reads network configuration from /etc/netplan/*.yaml which are written by administrators,
 installers, cloud image instantiations, or other OS deployments. During early boot, it generates
@@ -117,16 +66,9 @@ networking daemon.
 
 This package provides Netplan's core libraries.
 
-%files libs
-%license COPYING
-%{_libdir}/lib%{name}.so.%{libsomajor}{,.*}
-
-# ------------------------------------------------------------------------------------------------
-
 %package devel
 Summary:        Network configuration tool using YAML (development files)
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description devel
 netplan reads network configuration from /etc/netplan/*.yaml which are written by administrators,
 installers, cloud image instantiations, or other OS deployments. During early boot, it generates
@@ -135,31 +77,16 @@ networking daemon.
 
 This package provides development headers and libraries for building applications using Netplan.
 
-%files devel
-%{_includedir}/%{name}/
-%{_libdir}/lib%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-# ------------------------------------------------------------------------------------------------
-
 %package default-backend-NetworkManager
 Summary:        Network configuration tool using YAML (NetworkManager backend)
 Requires:       %{name} = %{version}-%{release}
-# Netplan requires NetworkManager for configuration
 Requires:       NetworkManager
-# Disable NetworkManager's autoconfiguration
 Requires:       NetworkManager-config-server
-
-# Generally, if linux-firmware-whence is installed, we want Wi-Fi capabilities
 Recommends:     (NetworkManager-wifi if linux-firmware-whence)
 Suggests:       NetworkManager-wifi
-
-# One and only one default backend permitted
 Conflicts:      %{name}-default-backend
 Provides:       %{name}-default-backend
-
 BuildArch:      noarch
-
 %description default-backend-NetworkManager
 netplan reads network configuration from /etc/netplan/*.yaml which are written by administrators,
 installers, cloud image instantiations, or other OS deployments. During early boot, it generates
@@ -168,17 +95,10 @@ networking daemon.
 
 This package configures Netplan to use NetworkManager as its backend.
 
-%files default-backend-NetworkManager
-%attr(600,root,root) %{_prefix}/lib/%{name}/00-network-manager-all.yaml
-
-# ------------------------------------------------------------------------------------------------
-
 %package -n python3-%{name}
 Summary:        Python bindings for lib%{name}
-
 Requires:       python3-cffi
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description -n python3-%{name}
 Declarative network configuration Python bindings
 Netplan reads YAML network configuration files which are written
@@ -191,28 +111,15 @@ Currently supported backends are networkd and NetworkManager.
 
 This package provides a CFFI based Python bindings to libnetplan.
 
-%files -n python3-%{name}
-%{python3_sitearch}/%{name}/
-
-# ------------------------------------------------------------------------------------------------
-
-%if %{with networkd_support}
 %package default-backend-networkd
 Summary:        Network configuration tool using YAML (systemd-networkd backend)
 Requires:       %{name} = %{version}-%{release}
-# Netplan requires systemd-networkd for configuration
 Requires:       systemd-networkd
-
-# Generally, if linux-firmware-whence is installed, we want Wi-Fi capabilities
 Recommends:     (wpa_supplicant if linux-firmware-whence)
 Suggests:       wpa_supplicant
-
-# One and only one default backend permitted
 Conflicts:      %{name}-default-backend
 Provides:       %{name}-default-backend
-
 BuildArch:      noarch
-
 %description default-backend-networkd
 netplan reads network configuration from /etc/netplan/*.yaml which are written by administrators,
 installers, cloud image instantiations, or other OS deployments. During early boot, it generates
@@ -221,13 +128,8 @@ networking daemon.
 
 This package configures Netplan to use systemd-networkd as its backend.
 
-%files default-backend-networkd
-%{_prefix}/lib/%{name}/00-netplan-default-renderer-networkd.yaml
-%endif
-
-# ------------------------------------------------------------------------------------------------
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -240,26 +142,19 @@ sed -i -e "/    test('legacy-tests',/,+3d" \
 	meson.build
 
 %build
+
 %if %{with tests}
 %meson
 %else
 %meson -Dtesting=false
 %endif
 %meson_build
-
 %install
 %meson_install
-
-# Pre-create the config directory
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}
-
-# Create the lib dir for default config
 mkdir -p %{buildroot}%{_prefix}/lib/%{name}
-
 mv -n %{buildroot}/%{python3_sitelib}/%{name}/* %{buildroot}/%{python3_sitearch}/%{name}/
 rm -f %{python3_sitelib}/%{name}/
-
-# Generate Netplan default renderer configuration
 cat > %{buildroot}%{_prefix}/lib/%{name}/00-network-manager-all.yaml <<EOF
 network:
   version: 2
@@ -271,12 +166,20 @@ network:
   version: 2
   renderer: networkd
 EOF
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
 %if %{with tests}
 %check
+
 %meson_test
 %endif
+%files -f %{oreon_filedir}/main.list
+%files -n netplan-libs -f %{oreon_filedir}/netplan-libs.list
+%files -n netplan-devel -f %{oreon_filedir}/netplan-devel.list
+%files -n netplan-default-backend-NetworkManager -f %{oreon_filedir}/netplan-default-backend-NetworkManager.list
+%files -n python3-netplan -f %{oreon_filedir}/python3-netplan.list
+%files -n netplan-default-backend-networkd -f %{oreon_filedir}/netplan-default-backend-networkd.list
 
 %changelog
+
 %autochangelog

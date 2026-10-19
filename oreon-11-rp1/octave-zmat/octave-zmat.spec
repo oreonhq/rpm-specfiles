@@ -1,23 +1,22 @@
 %global source0_hash b2f63f229274437a043c9454f18e82c46d8bcaefdf943305f4e9fcb7eec1a634
-
 %global octpkg zmat
-
 Name:           octave-%{octpkg}
 Version:        0.9.8
 Release:        19%{?dist}
 Summary:        A portable data compression/decompression toolbox for MATLAB/Octave
-# Automatically converted from old format: GPLv3+ or BSD - review is highly recommended.
 License:        GPL-3.0-or-later OR LicenseRef-Callaway-BSD
 URL:            https://github.com/fangq/zmat
-Source0:        https://github.com/fangq/zmat/archive/v%{version}/%{octpkg}-%{version}.tar.gz
+Source0:        https://github.com/fangq/%{octpkg}/archive/v%{version}/%{octpkg}-%{version}.tar.gz
 Patch0:         zmat-0.9.8-Octave7.patch
-BuildRequires:  make
-BuildRequires:  octave-devel zlib gcc-c++
-
 Requires:       octave zlib
 Requires(post): octave
 Requires(postun): octave
-
+# oreon:deps
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  octave-devel
+BuildRequires:  zlib
+# /oreon:deps
 %description
 ZMat is a portable mex function to enable zlib/gzip/lzma/lzip/lz4/lz4hc 
 based data compression/decompression and base64 encoding/decoding support 
@@ -28,6 +27,7 @@ slowest but has the highest compression ratio; zlib/gzip have the best
 balance between speed and compression time.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{octpkg}-%{version} -S patch -p1
@@ -63,6 +63,7 @@ mkdir -p inst/
 mv *.m inst/
 
 %build
+
 cd src
 make clean
 make oct CFLAGS="%{optflags}"
@@ -70,34 +71,21 @@ cd ../
 mv *.mex inst/
 rm -rf src
 %octave_pkg_build
-
-%if 0%{?fedora} <=30
-   %global octave_tar_suffix any-none
-%endif
-
 %install
 %octave_pkg_install
+%oreon_autofiles main
 
 %post
-%octave_cmd pkg rebuild
 
+%octave_cmd pkg rebuild
 %preun
+
 %octave_pkg_preun
-
 %postun
-%octave_cmd pkg rebuild
 
-%files
-%license LICENSE.txt
-%doc example
-%doc README.rst
-%doc AUTHORS.txt
-%doc ChangeLog.txt
-%dir %{octpkgdir}
-%{octpkgdir}/*.m
-%{octpkgdir}/*.mex
-%doc %{octpkgdir}/doc-cache
-%{octpkgdir}/packinfo
+%octave_cmd pkg rebuild
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

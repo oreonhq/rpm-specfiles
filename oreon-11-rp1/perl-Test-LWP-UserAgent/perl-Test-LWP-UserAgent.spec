@@ -1,5 +1,4 @@
 %global source0_hash 05327530d346b80a61a6e943fbd749986bdca89211a4eb301c08c2d179314e11
-
 Name:           perl-Test-LWP-UserAgent
 Version:        0.036
 Release:        12%{?dist}
@@ -8,52 +7,48 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-LWP-UserAgent
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Test-LWP-UserAgent-%{version}.tar.gz
 BuildArch:      noarch
+%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(MyApp::Client\\)
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(MyApp::Client\\)
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
 BuildRequires:  perl(CPAN::Meta::Requirements)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(Module::Metadata)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Runtime
 BuildRequires:  perl(Carp)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(HTTP::Date)
+BuildRequires:  perl(HTTP::Message::PSGI)
 BuildRequires:  perl(HTTP::Request)
+BuildRequires:  perl(HTTP::Request::Common)
 BuildRequires:  perl(HTTP::Response)
 BuildRequires:  perl(HTTP::Status)
+BuildRequires:  perl(JSON::MaybeXS)
 BuildRequires:  perl(LWP::UserAgent)
-BuildRequires:  perl(namespace::clean) >= 0.19
-BuildRequires:  perl(parent)
+BuildRequires:  perl(Module::Metadata)
+BuildRequires:  perl(Module::Runtime::Conflicts)
+BuildRequires:  perl(Moose)
+BuildRequires:  perl(Moose::Conflicts)
+BuildRequires:  perl(Path::Tiny)
 BuildRequires:  perl(Safe::Isa)
 BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(Storable)
+BuildRequires:  perl(Test::Deep)
+BuildRequires:  perl(Test::Fatal)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Needs)
+BuildRequires:  perl(Test::Warnings)
 BuildRequires:  perl(Try::Tiny)
 BuildRequires:  perl(URI)
-# Tests
-BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(HTTP::Message::PSGI)
-BuildRequires:  perl(HTTP::Request::Common)
 BuildRequires:  perl(if)
-BuildRequires:  perl(JSON::MaybeXS)
 BuildRequires:  perl(lib)
-BuildRequires:  perl(Moose)
+BuildRequires:  perl(namespace::clean)
 BuildRequires:  perl(overload)
-BuildRequires:  perl(Path::Tiny)
-BuildRequires:  perl(Test::Deep) >= 0.110
-BuildRequires:  perl(Test::Fatal)
-BuildRequires:  perl(Test::More) >= 0.88
-BuildRequires:  perl(Test::Needs)
-BuildRequires:  perl(Test::Warnings) >= 0.009
-# Optional tests
-BuildRequires:  perl(Module::Runtime::Conflicts)
-BuildRequires:  perl(Moose::Conflicts)
-# Test::RequiresInternet - Optional for tests
-
-%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(MyApp::Client\\)
-%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(MyApp::Client\\)
-
+BuildRequires:  perl(parent)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 This module is a subclass of LWP::UserAgent which overrides a few key low-
 level methods that are concerned with actually sending your request over
@@ -68,12 +63,12 @@ Requires:       perl(HTTP::Message::PSGI)
 Requires:       perl(Module::Runtime::Conflicts)
 Requires:       perl(Moose::Conflicts)
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Test-LWP-UserAgent-%{version}
@@ -85,35 +80,28 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 mkdir %{buildroot}%{_libexecdir}/%{name}/examples
 cp -a examples/MyApp %{buildroot}%{_libexecdir}/%{name}/examples
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 NO_NETWORK_TESTING=1 make test
-
-%files
-%license LICENCE
-%doc Changes CONTRIBUTING docs examples README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Test-LWP-UserAgent-tests -f %{oreon_filedir}/perl-Test-LWP-UserAgent-tests.list
 
 %changelog
+
 %autochangelog

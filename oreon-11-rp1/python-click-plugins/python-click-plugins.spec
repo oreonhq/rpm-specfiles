@@ -1,57 +1,46 @@
 %global source0_hash d7af3984a99d243c131aa1a828331e7630f4a88a9741fd05c927b204bcf92261
-
 Name:           python-click-plugins
 Version:        1.1.1.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Click extension to register CLI commands via setuptools
-
 License:        BSD-3-Clause
 URL:            https://github.com/click-contrib/click-plugins
-Source:         %{pypi_source click_plugins}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/click_plugins/click_plugins-%{version}.tar.gz
 BuildArch:      noarch
-
-# Fix tests with click >= 8.2
-# This patch is a minimal backported version from upstream 2.0 to 1.1.1.2
-# https://github.com/click-contrib/click-plugins/commit/29e66eb05a5911e333501bd21466f02e6b697892
 Patch:          fix-click-8.2-tests.patch
-
-%global _description %{expand:
-An extension module for click to register external CLI commands via setuptools
-entry-points.}
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-click-plugins = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-click-plugins
-Summary:        %{summary}
+Summary:        Click extension to register CLI commands via setuptools
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
-
 Provides: deprecated()
-
-%description -n python3-click-plugins %{_description}
+%description -n python3-click-plugins
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n click_plugins-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir click_plugins-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files -l click_plugins
+%oreon_autofiles python3-click-plugins usr/lib/python3*/site-packages/click_plugins* usr/lib64/python3*/site-packages/click_plugins* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/click_plugins* usr/lib64/python3*/site-packages/click_plugins* usr/bin/*
 
 %check
+
 export LANG=C.UTF-8
 %{pytest} -ra
-
-%files -n python3-click-plugins -f %{pyproject_files}
-%doc README.rst
+%files
+%files -n python3-click-plugins -f %{oreon_filedir}/python3-click-plugins.list
 
 %changelog
+
 %autochangelog

@@ -1,5 +1,4 @@
 %global source0_hash 8a21d8e3756d041580dfb91afe8070f7988e52a766ab6fba41bbcac7f96f4b6c
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -82,30 +81,22 @@ end
 }
 %bcond_with bootstrap
 %global srcname JCTools
-
 Name:           jctools
 Version:        4.0.7
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java Concurrency Tools for the JVM
 License:        Apache-2.0
 URL:            https://github.com/JCTools/JCTools
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/JCTools/JCTools/archive/v4.0.5/JCTools-4.0.5.tar.gz#/jctools-4.0.5.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(com.google.guava:guava-testlib)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.hamcrest:hamcrest-all)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 4.0.2-15
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 This project aims to offer some concurrent data structures
 currently missing from the JDK:
@@ -119,6 +110,7 @@ currently missing from the JDK:
 ° Executor
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n JCTools-4.0.5
 
@@ -158,16 +150,15 @@ rm -r jctools-core/src/test/java/org/jctools/maps/linearizability_test/
 %mvn_package :jctools-parent __noinstall
 
 %build
-# Tests time out in Koji
-%mvn_build -j -s -f
 
+%mvn_build -j -s -f
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles-jctools-core
-%doc README.md
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.5-1
 - Import

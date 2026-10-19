@@ -1,26 +1,20 @@
 %global source0_hash 99f7118355a691efac23f443fcf3cf44cad37074eca1b7bac1fddc24660802d1
-
 Name:           ccluster
 Version:        1.1.8
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Cluster the roots of a univariate polynomial
-
 %global majver  %{gsub %version ^(%d*)%..*$ %1}
-
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rimbach/Ccluster
 VCS:            git:%{url}.git
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-# Public definition of type "number" breaks the Singular build
+Source0:        https://github.com/rimbach/Ccluster/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:          %{name}-number.patch
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  flint-devel
 BuildRequires:  gcc
 BuildRequires:  make
-
+# /oreon:deps
 %description
 Ccluster is a C library implementing an algorithm for local clustering of the
 complex roots of a univariate polynomial whose coefficients are complex
@@ -45,12 +39,12 @@ you use it in your research.
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       flint-devel%{?_isa}
-
 %description    devel
 This package contains header files and library links for developing
 applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n Ccluster-%{version} -p1
@@ -68,23 +62,20 @@ sed -i "s|-shared|& %{build_ldflags} -Wl,-h,libccluster.so.%{majver}|" Makefile.
     --with-mpfr=%{_prefix}
 
 %build
-%make_build library bins AT= QUIET_CC= QUIET_AR=
 
+%make_build library bins AT= QUIET_CC= QUIET_AR=
 %install
 %make_install LIBDIR=%{_lib}
+%oreon_autofiles ccluster-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 PATH=$PATH:$PWD/test
 %make_build testMignotte testMandelbrot
-
-%files
-%doc README.md README
-%license LICENSE
-%{_libdir}/libccluster.so.1{,.*}
-
-%files devel
-%{_includedir}/ccluster/
-%{_libdir}/libccluster.so
+%files -f %{oreon_filedir}/main.list
+%files -n ccluster-devel -f %{oreon_filedir}/ccluster-devel.list
 
 %changelog
+
 %autochangelog

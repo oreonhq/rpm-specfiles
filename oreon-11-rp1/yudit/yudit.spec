@@ -1,28 +1,15 @@
 %global source0_hash a188234d6127357684f52c3d6c6a4b9d8f5abd0f7db672566bf444ef7a7ce557
-
 Name: yudit
 Version: 3.1.0
-Release: %autorelease
+Release:        1%{?dist}
 License: GPL-2.0-only AND GPL-2.0-or-later 
 URL: https://www.yudit.org
-Source0: https://yudit.org/download/%{name}-%{version}.tar.gz
-Summary: Unicode Text Editor
-BuildRequires: pkgconfig(freetype2)
-BuildRequires: gcc-c++
-BuildRequires: pkgconfig(libjpeg)
-BuildRequires: pkgconfig(xproto)
-BuildRequires: pkgconfig(x11)
-BuildRequires: dos2unix
-BuildRequires: desktop-file-utils
-BuildRequires: cups-client
-BuildRequires: gettext 
-BuildRequires: libappstream-glib
+Source0:        https://yudit.org/download/%{name}-%{version}.tar.gz
+Summary:        Unicode Text Editor
 Requires: yudit-data
 Requires:yudit-fonts  
 Recommends: yudit-doc
-
 %global desc %{expand:
-
 Yudit is a Unicode text editor for the X Window System. It can do True Type
 font rendering, printing, transliterated keyboard input and handwriting
 recognition with no dependencies on external engines. Its conversion utilities
@@ -30,6 +17,18 @@ can convert text between various encodings. Keyboard input maps can also
 act like text converters. There is no need for a preinstalled
 multi-lingual environment.Menus are translated into many languages.
 }
+# oreon:deps
+BuildRequires:  cups-client
+BuildRequires:  desktop-file-utils
+BuildRequires:  dos2unix
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(freetype2)
+BuildRequires:  pkgconfig(libjpeg)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xproto)
+# /oreon:deps
 %description %desc
 
 %package data
@@ -47,6 +46,7 @@ License: GPL-2.0-only AND GFDL-1.1-no-invariants-or-later
 This package is additional documentation component of Yudit.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -60,11 +60,10 @@ sed -i '/install-sh/s/ -s//' Makefile.conf.in
 %configure
 
 %build 
-%make_build
 
+%make_build
 %install
 %make_install 
-#%%exclude %{_datadir}/yudit/fonts
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/yudit/
 touch $RPM_BUILD_ROOT%{_sysconfdir}/yudit/yudit.conf
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/scalable/apps
@@ -129,31 +128,12 @@ appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/org.yudit.y
 mkdir -p $RPM_BUILD_ROOT%{_fontdir}/yudit/fonts
 mv $RPM_BUILD_ROOT%{_datadir}/yudit/fonts/* $RPM_BUILD_ROOT%{_fontdir}/yudit/fonts
 %find_lang %{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%{_bindir}/uniconv
-%{_bindir}/uniprint 
-%{_bindir}/yudit
-%{_datadir}/yudit/config/
-%{_bindir}/mytool
-%{_mandir}/man1/*
-%dir %{_sysconfdir}/yudit/
-%config(noreplace) %{_sysconfdir}/yudit/*
-%license COPYING.TXT   
+%files -f %{oreon_filedir}/main.list
+%files -n yudit-data -f %{oreon_filedir}/yudit-data.list
+%files -n yudit-doc -f %{oreon_filedir}/yudit-doc.list
 
-%files data
-%dir %{_datadir}/yudit
-%{_datadir}/yudit/data
-%{_datadir}/yudit/syntax
- %{_datadir}/applications/org.yudit.yudit.desktop
-%{_datadir}/icons/hicolor/scalable/apps/yudit.svg
-%{_datadir}/icons/hicolor/48x48/apps//yudit.png
-%{_metainfodir}/org.yudit.yudit.metainfo.xml
-
-%files doc 
-%{_datadir}/yudit/src 
-%{_datadir}/yudit/doc 
-%license doc/cs/COPYING-DOCS
-%doc doc/cs/README-DOCS.TXT
 %changelog
+
 %autochangelog

@@ -1,63 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 9d0f6bb522237ed7f111ed59c9e8baea7d1e75813587b6773babd43bda35db9f
 Name:           python-pyahocorasick
 Version:        2.3.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        pyahocorasick is a fast and memory efficient library for exact or approximate multi-pattern string search.  With the __ahocorasick.Automaton__ class, you can find multiple key string occurrences at once in some input text.  You can use it as a plain dict-like Trie or convert a Trie to an automaton for efficient Aho-Corasick search. And pickle to disk for easy reuse of large automatons. Implemented in C and tested on Python 3.6+. Works on Linux, macOS and Windows. BSD-3-Cause license.
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            http://github.com/WojciechMula/pyahocorasick
-Source:         %{pypi_source pyahocorasick}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'pyahocorasick' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/pyahocorasick/pyahocorasick-%{version}.tar.gz
 Patch:          https://github.com/WojciechMula/pyahocorasick/pull/193.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pyahocorasick = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-pyahocorasick
-Summary:        %{summary}
-
-%description -n python3-pyahocorasick %_description
+Summary:        pyahocorasick is a fast and memory efficient library for exact or approximate multi-pattern string search.  With the __ahocorasick.Automaton__ class, you can find multiple key string occurrences at once in some input text.  You can use it as a plain dict-like Trie or convert a Trie to an automaton for efficient Aho-Corasick search. And pickle to disk for easy reuse of large automatons. Implemented in C and tested on Python 3.6+. Works on Linux, macOS and Windows. BSD-3-Cause license.
+%description -n python3-pyahocorasick
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-pyahocorasick testing
-
 
 %prep
-%autosetup -p1 -n pyahocorasick-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir pyahocorasick-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-pyahocorasick usr/lib/python3*/site-packages/pyahocorasick* usr/lib64/python3*/site-packages/pyahocorasick* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyahocorasick* usr/lib64/python3*/site-packages/pyahocorasick* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-pyahocorasick -f %{pyproject_files}
+%files
+%files -n python3-pyahocorasick -f %{oreon_filedir}/python3-pyahocorasick.list
 
 %changelog
+
 %autochangelog

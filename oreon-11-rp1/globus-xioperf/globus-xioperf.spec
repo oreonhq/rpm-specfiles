@@ -1,21 +1,19 @@
 %global source0_hash 0b86b9fe5f2541a3b3c8c6ec7b080aea86ae5b456846910aa0c121c98048b2e5
-
 Name:		globus-xioperf
 %global _name %(tr - _ <<< %{name})
 Version:	6.2.20251212
-Release:	1%{?dist}
-Summary:	Grid Community Toolkit - XIO Performance Tool
-
+Release:        1%{?dist}
+Summary:        Grid Community Toolkit - XIO Performance Tool
 License:	Apache-2.0
 URL:		https://github.com/gridcf/gct/
-Source:		https://repo.gridcf.org/gct6/sources/%{_name}-%{version}.tar.gz
+Source0:        https://repo.gridcf.org/gct6/sources/%{_name}-%{version}.tar.gz
 Source8:	README
-
-BuildRequires:	make
-BuildRequires:	gcc
-BuildRequires:	globus-common-devel >= 15
-BuildRequires:	globus-xio-devel >= 3
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  globus-common-devel
+BuildRequires:  globus-xio-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 The Grid Community Toolkit (GCT) is an open source software toolkit used for
 building grid systems and applications. It is a fork of the Globus Toolkit
@@ -27,38 +25,28 @@ The %{name} package contains:
 XIO Performance Tool
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{_name}-%{version}
 
 %build
-# Reduce overlinking
-export LDFLAGS="-Wl,--as-needed -Wl,-z,defs %{?__global_ldflags}"
 
+export LDFLAGS="-Wl,--as-needed -Wl,-z,defs %{?__global_ldflags}"
 %configure --disable-static \
 	   --includedir=%{_includedir}/globus \
 	   --libexecdir=%{_datadir}/globus \
 	   --docdir=%{_pkgdocdir}
-
-# Reduce overlinking
 sed 's!CC \(.*-shared\) !CC \\\${wl}--as-needed \1 !' -i libtool
-
 %make_build
-
 %install
 %make_install
-
-# Install README file
 install -m 644 -p %{SOURCE8} %{buildroot}%{_pkgdocdir}/README
-
-# Remove license file from pkgdocdir
 rm %{buildroot}%{_pkgdocdir}/GLOBUS_LICENSE
+%oreon_autofiles main
 
-%files
-%{_bindir}/globus-xioperf
-%dir %{_pkgdocdir}
-%doc %{_pkgdocdir}/README
-%license GLOBUS_LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

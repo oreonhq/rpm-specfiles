@@ -1,22 +1,23 @@
 %global source0_hash 8916feaa99cb954f963f2cba8dd2dffe57cacf7f284daf00eab071aad6fe2ab3
-
-Summary: A multi-platform helper library for other libraries
+Summary:        A multi-platform helper library for other libraries
 Name: gwenhywfar
 Version: 5.14.1
-Release: 2%{?dist}
-
+Release:        1%{?dist}
 URL: https://www.aquamaniac.de/rdm/projects/gwenhywfar
-# Download is PHP form at http://www.aquamaniac.de/sites/download/packages.php
-Source: https://www.aquamaniac.de/rdm/attachments/download/630/%{name}-%{version}.tar.gz
+Source0:        https://www.aquamaniac.de/rdm/attachments/download/630/%{name}-%{version}.tar.gz
 License: LGPL-2.1-or-later
-
-BuildRequires: cmake gcc gcc-c++
-BuildRequires: gnutls-devel gettext libgcrypt-devel openssl-devel
-BuildRequires: gtk3-devel >= 3.14.0
-BuildRequires: cmake(Qt6Core)
-
 Requires: ca-certificates
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  gnutls-devel
+BuildRequires:  gtk3-devel
+BuildRequires:  libgcrypt-devel
+BuildRequires:  openssl-devel
+# /oreon:deps
 %description
 This is Gwenhywfar, a multi-platform helper library for networking and
 security applications and libraries. It is heavily used by libchipcard
@@ -72,18 +73,15 @@ Obsoletes: %{name}-gui-qt5-devel <= %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n %{name}-%{version}
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 export CFLAGS="$CFLAGS -std=gnu17"
 export CXXFLAGS="$CXXFLAGS -std=gnu++17"
-# avoid detection/use of stuff like x86_64-redhat-linux-gnu-pkg-config -- rdieter
 export PKG_CONFIG=/usr/bin/pkg-config
-# help configure find qt5 lrelease/lupdate
 export QT6_HOST_BINS=$($PKG_CONFIG --variable=host_bins Qt6Core)
 export PATH=$PATH:$QT6_HOST_BINS
-
 %configure \
   --disable-static\
   --enable-system-certs \
@@ -92,76 +90,27 @@ export PATH=$PATH:$QT6_HOST_BINS
   --with-qt6-qmake=$QT6_HOST_BINS/qmake \
   --with-qt6-moc=$QT6_HOST_BINS/moc \
   --with-qt6-uic=$QT6_HOST_BINS/uic \
-
-# kill rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-
 %make_build
-
 %install
 %make_install
-
-# use system ca-certificates
 rm -f  %{buildroot}%{_datadir}/%{name}/ca-bundle.crt
 ln -sf %{_sysconfdir}/pki/tls/certs/ca-bundle.crt \
        %{buildroot}%{_datadir}/%{name}/ca-bundle.crt
 rm -fv %{buildroot}%{_libdir}/lib*.la
-
 %find_lang %{name}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%doc AUTHORS README ChangeLog
-%license COPYING
-%{_bindir}/gct-tool
-%{_libdir}/libgwenhywfar.so.79*
-%{_libdir}/gwenhywfar/
-%dir %{_datadir}/gwenhywfar/
-%{_datadir}/gwenhywfar/dialogs
-# symlink
-%{_datadir}/gwenhywfar/ca-bundle.crt
-
-%files devel
-%{_bindir}/gsa
-%{_bindir}/gwenhywfar-config
-%{_bindir}/mklistdoc
-%{_bindir}/typemaker*
-%{_bindir}/xmlmerge
-%{_bindir}/gwbuild
-%dir %{_includedir}/gwenhywfar5/
-%{_includedir}/gwenhywfar5/gwenhywfar/
-%{_libdir}/libgwenhywfar.so
-%{_libdir}/cmake/gwenhywfar-*/
-%{_datadir}/aclocal/gwenhywfar.m4
-%{_datadir}/%{name}/typemaker*
-%{_libdir}/pkgconfig/gwenhywfar.pc
-%{_datadir}/gwenbuild/templates
-%{_datadir}/%{name}/gwenbuild
-
-%files gui-gtk3
-%{_libdir}/libgwengui-gtk3.so.79*
-
-%files gui-gtk3-devel
-%{_libdir}/libgwengui-gtk3.so
-%{_libdir}/pkgconfig/gwengui-gtk3.pc
-%{_includedir}/gwenhywfar5/gwen-gui-gtk3/
-
-%files gui-cpp
-%{_libdir}/libgwengui-cpp.so.79*
-%{_includedir}/gwenhywfar5/gwen-gui-cpp/
-
-%files gui-cpp-devel
-%{_libdir}/libgwengui-cpp.so
-%{_libdir}/cmake/gwengui-cpp-*/
-
-%files gui-qt6
-%{_libdir}/libgwengui-qt6.so.79*
-
-%files gui-qt6-devel
-%{_libdir}/libgwengui-qt6.so
-%{_libdir}/cmake/gwengui-qt6-*/
-%{_libdir}/pkgconfig/gwengui-qt6.pc
-%{_includedir}/gwenhywfar5/gwen-gui-qt5/
+%files -f %{oreon_filedir}/main.list
+%files -n gwenhywfar-devel -f %{oreon_filedir}/gwenhywfar-devel.list
+%files -n gwenhywfar-gui-gtk3 -f %{oreon_filedir}/gwenhywfar-gui-gtk3.list
+%files -n gwenhywfar-gui-gtk3-devel -f %{oreon_filedir}/gwenhywfar-gui-gtk3-devel.list
+%files -n gwenhywfar-gui-cpp -f %{oreon_filedir}/gwenhywfar-gui-cpp.list
+%files -n gwenhywfar-gui-cpp-devel -f %{oreon_filedir}/gwenhywfar-gui-cpp-devel.list
+%files -n gwenhywfar-gui-qt6 -f %{oreon_filedir}/gwenhywfar-gui-qt6.list
+%files -n gwenhywfar-gui-qt6-devel -f %{oreon_filedir}/gwenhywfar-gui-qt6-devel.list
 
 %changelog
+
 %autochangelog

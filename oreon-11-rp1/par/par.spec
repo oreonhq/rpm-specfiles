@@ -1,15 +1,15 @@
-%global source0_hash d2158edddb923ea23ac309086598fe99b84bd9f0fc7cc1a73cb0383dbfb3c88a
-
+%global source0_hash c809c620eb82b589553ac54b9898c8da55196d262339d13c046f2be44ac47804
 Name:          par
 Version:       1.53.0
-Release:       18%{?dist}
-Summary:       Paragraph reformatter, vaguely like fmt, but more elaborate
+Release:        1%{?dist}
+Summary:        Paragraph reformatter, vaguely like fmt, but more elaborate
 License:       LicenseRef-Par
 URL:           http://www.nicemice.net/par/
-Source0:       http://www.nicemice.net/par/Par-1.53.0.tar.gz
-BuildRequires: gcc
-BuildRequires: make
-
+Source0:        http://www.nicemice.net/par/Par-1.53.0.tar.gz
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 par is a filter which copies its input to its output, changing all
 white characters (except newlines) to spaces, and reformatting each
@@ -28,23 +28,23 @@ If there are suffixes, spaces are inserted before them so that they
 all end in the same column.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Par-1.53.0
 
 %build
-%make_build -f protoMakefile CC="gcc -c $RPM_OPT_FLAGS"
 
+%make_build -f protoMakefile CC="gcc -c $RPM_OPT_FLAGS"
 %install
 install -d %{buildroot}/%{_bindir}
 install -d %{buildroot}/%{_mandir}/man1
 install par %{buildroot}/%{_bindir}
 install -m 644 par.1 %{buildroot}/%{_mandir}/man1
+%oreon_autofiles main
 
-%files
-%{_bindir}/par
-%{_mandir}/man1/par.1*
-%doc par.doc releasenotes
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,46 +1,24 @@
 %global source0_hash 6a5dd68af93a11ba6eb35c971fa220bf253cebf63b1f54cbe697b30fae9c7c72
-
 Name:           pygame
 Version:        2.6.1
-Release:        9%{?dist}
+Release:        1%{?dist}
 Summary:        Python modules for writing games
-
 License:        LGPL-2.0-or-later
 URL:            http://www.pygame.org
 Source0:        https://github.com/%{name}/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-numpy
-BuildRequires:  python%{python3_pkgversion}-Cython
-BuildRequires:  SDL2_ttf-devel
-BuildRequires:  SDL2_image-devel
-BuildRequires:  SDL2_mixer-devel
-BuildRequires:  SDL2-devel
-BuildRequires:  freetype-devel
-BuildRequires:  libpng-devel
-BuildRequires:  libjpeg-devel
-BuildRequires:  libX11-devel
-BuildRequires:  portmidi-devel
-BuildRequires:  gcc
-
-# https://github.com/pygame/pygame/issues/4716
 Patch:          pygame-2.6.1-python-3.15-fix.patch
-
-%global _description\
-Pygame is a set of Python modules designed for writing games. It is\
-written on top of the excellent SDL library. This allows you to create\
-fully featured games and multimedia programs in the python language.\
-Pygame is highly portable and runs on nearly every platform and\
-operating system.
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pygame = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package devel
 Summary:        Files needed for developing programs which use pygame
 Requires:       python%{python3_pkgversion}-%{name} = %{version}-%{release}
 Requires:       SDL2_ttf-devel SDL2_mixer-devel
 Requires:       python3-devel
-
 %description devel
 This package contains headers required to build applications that use
 pygame.
@@ -49,7 +27,6 @@ pygame.
 Summary:        Python3 modules for writing games
 Requires:       gnu-free-sans-fonts
 Recommends:     python%{python3_pkgversion}-numpy
-
 %description -n python%{python3_pkgversion}-pygame
 Pygame is a set of Python modules designed for writing games. It is
 written on top of the excellent SDL library. This allows you to create
@@ -58,6 +35,7 @@ Pygame is highly portable and runs on nearly every platform and
 operating system.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -81,40 +59,25 @@ rm -f src_c/ffmovie.[ch]
 # https://github.com/pygame/pygame/issues/4469
 sed -i "s/distutils.ccompiler.spawn/distutils.spawn.spawn/" setup.py
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-# Suppress runtime warning about disabled avx2 support, make support for
-# systems without explicit.
+
 export PYGAME_DETECT_AVX2=0
 %pyproject_wheel -C--global-option=cython
-
 %install
 %pyproject_install
-%pyproject_save_files %{name} '%{name}*'
-
-#use system font.
 rm -f $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/freesansbold.ttf
 ln -s /usr/share/fonts/gnu-free/FreeSansBold.ttf $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/freesansbold.ttf
-
-# Fix permissions
 chmod 755 $RPM_BUILD_ROOT%{python3_sitearch}/%{name}/*.so
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/lib/python3*/site-packages/pygame* usr/lib64/python3*/site-packages/pygame* usr/bin/*
 
 %check
-# base_test fails in mock, unable to find soundcard
+
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/base_test.py || :
 PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/rect_test.py
-#image_test now fails in mock, unable to find video device.
-#PYTHONPATH="$RPM_BUILD_ROOT%{python3_sitearch}" %{__python3} test/image_test.py
- 
-%files -n python%{python3_pkgversion}-pygame -f %{pyproject_files}
-%doc docs/ README* WHATSNEW*
-
-%files devel
-%doc examples/
-%dir %{_includedir}/python*/%{name}
-%{_includedir}/python*/%{name}/
+%files
+%files -n pygame-devel -f %{oreon_filedir}/pygame-devel.list
+%files -n python3-pygame -f %{oreon_filedir}/python3-pygame.list
 
 %changelog
+
 %autochangelog

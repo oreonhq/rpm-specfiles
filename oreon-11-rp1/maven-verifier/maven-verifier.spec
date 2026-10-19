@@ -1,5 +1,4 @@
 %global source0_hash f3f90b7672698e66583e86e676771fd339bd84a51514e818a064a6defa903bf1
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -82,21 +81,20 @@ end
 }
 %bcond_with bootstrap
 %global upstream_version 2.0.0-M1
-
 Name:           maven-verifier
 Version:        2.0.0~M1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Apache Maven Verifier Component
 License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-verifier
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{upstream_version}/%{name}-%{upstream_version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 2.0.0~M1-18
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-connector-basic)
 BuildRequires:  mvn(org.apache.maven.resolver:maven-resolver-transport-http)
@@ -107,14 +105,12 @@ BuildRequires:  mvn(org.apache.maven:maven-embedder)
 BuildRequires:  mvn(org.hamcrest:hamcrest-core)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter)
 BuildRequires:  mvn(org.slf4j:slf4j-simple)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 2.0.0~M1-18
-
+# /oreon:deps
 %description
 Provides a test harness for Maven integration tests.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n maven-verifier-2.0.0-M1
 %autosetup -p1 -n maven-verifier-2.0.0-M1
@@ -127,14 +123,15 @@ rm src/test/java/org/apache/maven/shared/verifier/VerifierTest.java
 rm src/test/java/org/apache/maven/shared/verifier/Embedded3xLauncherTest.java
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.0~M1-1
 - Import

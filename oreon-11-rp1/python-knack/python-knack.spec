@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 2ddd32fd6343ec9b6ed0da729b212362d0e6b1208c0162633c90cb6f94a05877
 Name:           python-knack
 Version:        0.14.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A Command-Line Interface framework
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/microsoft/knack
-Source:         %{pypi_source knack}
-
+Source0:        https://files.pythonhosted.org/packages/source/k/knack/knack-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'knack' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-knack = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-knack
-Summary:        %{summary}
-
-%description -n python3-knack %_description
-
+Summary:        A Command-Line Interface framework
+%description -n python3-knack
 
 %prep
-%autosetup -p1 -n knack-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir knack-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-knack usr/lib/python3*/site-packages/knack* usr/lib64/python3*/site-packages/knack* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/knack* usr/lib64/python3*/site-packages/knack* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-knack -f %{pyproject_files}
+%files
+%files -n python3-knack -f %{oreon_filedir}/python3-knack.list
 
 %changelog
+
 %autochangelog

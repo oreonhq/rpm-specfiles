@@ -1,17 +1,15 @@
 %global source0_hash 5c3907b0ac9d3252cbbc5cb9ebe93f0c2b602df67376d9050c09146871822293
-
 Name:           smem
 Version:        1.5
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Report application memory usage in a meaningful way
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.selenic.com/smem/
 Source0:        https://selenic.com/repo/smem/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch0: 	smem-1.5-python3path.patch
+# oreon:deps
 BuildRequires:  gcc
-
+# /oreon:deps
 %description
 smem is a tool that can give numerous reports on memory usage on Linux
 systems. Unlike existing tools, smem can report proportional set size (PSS),
@@ -26,21 +24,17 @@ a realistic measure.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-gcc %{build_cflags} %{build_ldflags} -o smemcap smemcap.c
 
+gcc %{build_cflags} %{build_ldflags} -o smemcap smemcap.c
 %install
 install -Dpm0755 -t %{buildroot}%{_bindir} smem smemcap
 install -Dpm0644 -t %{buildroot}%{_mandir}/man8 smem.8
+%oreon_autofiles main
 
-%files
-%license COPYING
-%{_bindir}/smem
-%{_bindir}/smemcap
-%{_mandir}/man8/smem.8*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

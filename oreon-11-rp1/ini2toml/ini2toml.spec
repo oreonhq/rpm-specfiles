@@ -1,31 +1,24 @@
-%global source0_hash bc53259cc2c6af79cd768bc23f5e10f06dd40225770b9bf5b4d37601fedd411e
-
+%global source0_hash d619139b1b9a92a92a56cd2f24a4fb31bf10a1b75c2968d8fe8f0ed3af5d64ce
 Name:           ini2toml
 Version:        0.15
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Automatic conversion of .ini/.cfg files to TOML equivalents
-
 License:        MPL-2.0
 URL:            https://github.com/abravalheri/ini2toml/
-Source0:        %{pypi_source ini2toml}
-
+Source0:        https://files.pythonhosted.org/packages/source/i/ini2toml/ini2toml-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-# Provide the python3-* namespace as the package
-# can also be used as a library.
 %py_provides python3-ini2toml
-
-%global _description %{expand:
-The original purpose of this project is to help migrating setup.cfg files to PEP 621, but by extension it can also be used to convert any compatible .ini/.cfg file to TOML.
-
-Please notice, the provided .ini/.cfg files should follow the same syntax supported by Python’s ConfigParser library (here referred to as INI syntax) and more specifically abide by ConfigUpdater restrictions (e.g., no interpolation or repeated fields).}
-
-%description %_description
-
-%pyproject_extras_subpkg -n ini2toml full lite
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 46.1.0
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 5
+Requires:       python3-ini2toml = %{version}-%{release}
+# /oreon:deps
+%description
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n ini2toml-%{version}
@@ -37,26 +30,19 @@ sed -Ei '/(-|pytest)-cov(-report)?/d' setup.cfg
 # Tests requiring it are excluded in %%check
 sed -i '/validate-pyproject/d' setup.cfg
 
-%generate_buildrequires
-%pyproject_buildrequires -x full,lite,testing
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files ini2toml
+%oreon_autofiles main
 
 %check
+
 %pyproject_check_import
-
-# the test_examples.py requires the validate-pyproject package which is not packaged yet
-# tests/test_cli.py::test_auto_formatting requires python-fmt which is not packaged yet
 %pytest -vv --ignore tests/test_examples.py --deselect tests/test_cli.py::test_auto_formatting
-
-%files -f %{pyproject_files}
-%doc README.rst
-%{_bindir}/ini2toml
+%files
 
 %changelog
+
 %autochangelog

@@ -1,5 +1,4 @@
 %global source0_hash 215cbb2ec3e9b41c5f5d817be4553c94cc3014bed257dcdf9d969014530d92b4
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,18 +82,18 @@ end
 %bcond_with bootstrap
 Name:           extra-enforcer-rules
 Version:        1.12.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Extra rules for maven-enforcer-plugin
 License:        Apache-2.0
 URL:            https://github.com/mojohaus/extra-enforcer-rules
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/extra-enforcer-rules/%{version}/extra-enforcer-rules-%{version}-source-release.zip
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.8.0-11
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-codec:commons-codec)
 BuildRequires:  mvn(junit:junit)
@@ -105,16 +104,14 @@ BuildRequires:  mvn(org.apache.maven:maven-core)
 BuildRequires:  mvn(org.codehaus.mojo:mojo-parent:pom:)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.mockito:mockito-core)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.8.0-11
-
+# /oreon:deps
 %description
 Apache's Maven Enforcer Plugin is used to apply and enforce rules on Maven
 projects. The Enforcer plugin ships with a set of standard rules. This project
 provides extra rules which are not part of the standard rule set.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -122,14 +119,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %pom_remove_plugin :maven-invoker-plugin
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

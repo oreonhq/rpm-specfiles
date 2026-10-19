@@ -1,57 +1,22 @@
 %global source0_hash 290ed9a97b05c7935b048e6d2a356035871fca98ad72c01c5961726adf85c83c
-
-# Add support for IPv6
 %{bcond_without perl_Net_HTTP_enables_ipv6}
-# Do not run network tests accessing Internet
 %{bcond_with perl_Net_HTTP_enables_network_test}
-# Add support for TLS/SSL
 %{bcond_without perl_Net_HTTP_enables_ssl}
-
 Name:           perl-Net-HTTP
 Version:        6.24
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Low-level HTTP connection (client)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-HTTP
 Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/Net-HTTP-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.6.2
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(Getopt::Long)
-BuildRequires:  perl(strict)
-# Run-time:
-BuildRequires:  perl(base)
-BuildRequires:  perl(Carp)
-BuildRequires:  perl(Compress::Raw::Zlib)
-# Prefer IO::Socket::IP over IO::Socket::INET
 %if %{with perl_Net_HTTP_enables_ipv6}
-BuildRequires:  perl(IO::Socket::IP)
 %else
-BuildRequires:  perl(IO::Socket)
 %endif
 %if %{with perl_Net_HTTP_enables_ssl}
-# IO::Socket::SSL or Net::SSL
-BuildRequires:  perl(IO::Socket::SSL) >= 2.012
 %endif
-BuildRequires:  perl(IO::Uncompress::Gunzip)
-BuildRequires:  perl(Symbol)
-BuildRequires:  perl(URI)
-BuildRequires:  perl(warnings)
-# Tests only:
-BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(File::Spec)
-BuildRequires:  perl(IO::Select)
-BuildRequires:  perl(IO::Socket::INET)
-BuildRequires:  perl(Socket)
-BuildRequires:  perl(Test::More)
 Requires:       perl(Compress::Raw::Zlib)
 Requires:       perl(IO::Uncompress::Gunzip)
-# Prefer IO::Socket::IP over IO::Socket::INET
 %if %{with perl_Net_HTTP_enables_ipv6}
 Requires:       perl(IO::Socket::IP)
 %else
@@ -62,9 +27,34 @@ Requires:       perl(Symbol)
 Requires:       perl(IO::Socket::SSL) >= 2.012
 %endif
 Conflicts:      perl-libwww-perl < 6
-
 Provides:       perl(Net::HTTP)
 Provides:       perl(Net::HTTPS)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(:VERSION)
+BuildRequires:  perl(Carp)
+BuildRequires:  perl(Compress::Raw::Zlib)
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Data::Dumper)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(IO::Select)
+BuildRequires:  perl(IO::Socket::INET)
+BuildRequires:  perl(IO::Socket::IP)
+BuildRequires:  perl(IO::Socket::SSL)
+BuildRequires:  perl(IO::Uncompress::Gunzip)
+BuildRequires:  perl(Socket)
+BuildRequires:  perl(Symbol)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(URI)
+BuildRequires:  perl(base)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The Net::HTTP class is a low-level HTTP client. An instance of the
 Net::HTTP class represents a connection to an HTTP server. The HTTP
@@ -80,12 +70,12 @@ Requires:       perl-Test-Harness
 Requires:  perl(IO::Socket::SSL) >= 2.012
 %endif
 %endif
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Net-HTTP-%{version}
 %if %{without perl_Net_HTTP_enables_network_test}
@@ -99,35 +89,29 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 set -e
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%license LICENSE
-%doc Changes CONTRIBUTORS README.md
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Net-HTTP-tests -f %{oreon_filedir}/perl-Net-HTTP-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24-2
 - Prepare for Oreon 11 (RP1)

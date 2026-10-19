@@ -1,29 +1,22 @@
 %global source0_hash 23b220f14bbaa21858b6f8e18169499389835b6693e73a877f8e0d788f4499af
-
 %global stable_kf6 stable
-
 Name:    libkdcraw
-Summary: A C++ interface around LibRaw library
+Summary:        A C++ interface around LibRaw library
 Version: 25.12.3
-Release: 5%{?dist}
-
+Release:        5%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later
 URL:     https://invent.kde.org/graphics/%{name}
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-
-## upstream patches
-
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: gettext
-BuildRequires: kf6-rpm-macros
-BuildRequires: extra-cmake-modules
-BuildRequires: cmake(Qt6Gui)
-BuildRequires: pkgconfig(libraw) >= 0.22
-
 Requires: kf6-filesystem
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  pkgconfig(libraw)
+# /oreon:deps
 %description
 Libkdcraw is a C++ interface around LibRaw library used to decode RAW
 picture files. More information about LibRaw can be found at
@@ -36,36 +29,22 @@ Requires: cmake(Qt6Gui)
 %description devel
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6 \
 	-DQT_MAJOR_VERSION=6
-
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files
-%doc AUTHORS
-%license LICENSES/*
-%{_kf6_libdir}/libKDcrawQt6.so.*
-%{_kf6_datadir}/qlogging-categories6/*
-
-%files devel
-%{_kf6_libdir}/libKDcrawQt6.so
-%{_includedir}/KDcrawQt6/
-%{_kf6_libdir}/cmake/KDcrawQt6/
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-4
 - Rebuild
 

@@ -1,59 +1,54 @@
-%global source0_hash none
-
+%global source0_hash c9d91274e5f55835e12b524adf1f231739ea811a8866d810e5bb42ba87cd8eda
 Name:           python-selenium
 Version:        4.49.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Official Python bindings for Selenium WebDriver
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://www.selenium.dev
-Source:         %{pypi_source selenium}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/selenium/selenium-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'selenium' generated automatically by pyp2spec.}
-
 Patch1:        selenium-use-without-bundled-libs.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-selenium = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-selenium
-Summary:        %{summary}
-
-%description -n python3-selenium %_description
-
+Summary:        Official Python bindings for Selenium WebDriver
+# oreon:reqs
+Requires:       python3dist(certifi) >= 2026.2.25
+Requires:       python3dist(trio) < 1.0
+Requires:       python3dist(trio) >= 0.31.0
+Requires:       python3dist(trio-websocket) < 1.0
+Requires:       python3dist(trio-websocket) >= 0.12.2
+Requires:       python3dist(typing-extensions) < 5.0
+Requires:       python3dist(typing-extensions) >= 4.15.0
+Requires:       python3dist(urllib3[socks]) < 3.0
+Requires:       python3dist(urllib3[socks]) >= 2.6.3
+Requires:       python3dist(websocket-client) < 2.0
+Requires:       python3dist(websocket-client) >= 1.8.0
+# /oreon:reqs
+%description -n python3-selenium
 
 %prep
-%autosetup -p1 -n selenium-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir selenium-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-selenium usr/lib/python3*/site-packages/selenium* usr/lib64/python3*/site-packages/selenium* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/selenium* usr/lib64/python3*/site-packages/selenium* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-selenium -f %{pyproject_files}
+%files
+%files -n python3-selenium -f %{oreon_filedir}/python3-selenium.list
 
 %changelog
+
 %autochangelog

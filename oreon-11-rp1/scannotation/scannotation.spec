@@ -1,32 +1,23 @@
 %global source0_hash 16d8be64fed9932f0438c05e6ad2ff733da10542577a7f6ec6e13c4f81dbdb0e
-
 %global namedreltag .Final
 %global namedversion %{version}%{?namedreltag}
 %global alphatag r12
-
 Name:          scannotation
 Version:       1.0.3
-Release:       0.39.%{alphatag}%{?dist}
-Summary:       A Java annotation scanner
-# Automatically converted from old format: ASL 2.0 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        A Java annotation scanner
 License:       Apache-2.0
 URL:           http://scannotation.sourceforge.net
-# Also available here https://github.com/jharting/scannotation
-# How we created tarball:
-# svn export -r 12  https://scannotation.svn.sourceforge.net/svnroot/scannotation scannotation-1.0.3.Final
-# tar -caJf scannotation-1.0.3.Final.tar.xz scannotation-1.0.3.Final
-Source0:       %{name}-%{namedversion}.tar.xz
-# Adding License file
+Source0:        %{name}-%{version}%{namedreltag}.tar.xz
 Source1:       License.txt
-
 BuildArch:     noarch
 ExclusiveArch:  %{java_arches} noarch
-
-BuildRequires: maven-local-openjdk25
-BuildRequires: mvn(javassist:javassist)
-BuildRequires: mvn(javax.servlet:javax.servlet-api)
-BuildRequires: mvn(junit:junit)
-
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(javassist:javassist)
+BuildRequires:  mvn(javax.servlet:javax.servlet-api)
+BuildRequires:  mvn(junit:junit)
+# /oreon:deps
 %description
 Scannotation is a Java library that creates an annotation database 
 from a set of .class files.This database is really just a set of maps that index
@@ -39,11 +30,11 @@ scans them without loading each and every class within those archives
 
 %package javadoc
 Summary:       Javadoc for %{name}
-
 %description javadoc
 This package contains the API documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{namedversion}
@@ -62,16 +53,15 @@ cp -p %SOURCE1 .
 %mvn_file org.%{name}:%{name} %{name}
 
 %build
-%mvn_build -- -Dproject.build.sourceEncoding=UTF-8 -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -- -Dproject.build.sourceEncoding=UTF-8 -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%license License.txt
-
-%files javadoc -f .mfiles-javadoc
-%license License.txt
+%files -f %{oreon_filedir}/main.list
+%files -n scannotation-javadoc -f %{oreon_filedir}/scannotation-javadoc.list
 
 %changelog
+
 %autochangelog

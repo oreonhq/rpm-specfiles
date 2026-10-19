@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash b25c9aa590848a8c5a0ec70846280e9939df9102c25ed82c8e8d62ac38dac091
 Name:           python-perky
 Version:        0.10
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A simple, Pythonic file format.  Provides load, loads, dump, and
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/larryhastings/perky/
-Source:         %{pypi_source perky}
-
+Source0:        https://files.pythonhosted.org/packages/source/p/perky/perky-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'perky' generated automatically by pyp2spec.}
-
 Patch:          use-flit_core-instead-of-flit-to-build-wheel.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-perky = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-perky
-Summary:        %{summary}
-
-%description -n python3-perky %_description
-
+Summary:        A simple, Pythonic file format.  Provides load, loads, dump, and
+%description -n python3-perky
 
 %prep
-%autosetup -p1 -n perky-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir perky-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-perky usr/lib/python3*/site-packages/perky* usr/lib64/python3*/site-packages/perky* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/perky* usr/lib64/python3*/site-packages/perky* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-perky -f %{pyproject_files}
+%files
+%files -n python3-perky -f %{oreon_filedir}/python3-perky.list
 
 %changelog
+
 %autochangelog

@@ -1,60 +1,44 @@
 %global source0_hash 91c6da10b5bb6f2e9e25345829fb8278c78af019f6fc40887ad49b060483b1d7
-
 Name:           python-docopt-ng
 Version:        0.9.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Humane command line arguments parser
 License:        MIT
 URL:            https://github.com/jazzband/docopt-ng
-Source:         %{pypi_source docopt_ng}
+Source0:        https://files.pythonhosted.org/packages/source/d/docopt_ng/docopt_ng-%{version}.tar.gz
 BuildArch:      noarch
-
-%global _description %{expand:
-docopt-ng helps you create beautiful command-line interfaces.  The option
-parser is generated based on the docstring that is passed to docopt function.
-docopt parses the usage pattern ("Usage: ...") and option descriptions (lines
-starting with dash "-") and ensures that the program invocation matches the
-usage pattern; it parses options, arguments and commands based on that.  The
-basic idea is that a good help message has all necessary information in it to
-make a parser.}
-
-%description %{_description}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-docopt-ng = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-docopt-ng
-Summary:        %{summary}
+Summary:        Humane command line arguments parser
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
-
-# This software is a fork of the original docopt.  The fork switched from a
-# python module (docopt.py) to a python package (docopt/__init__.py), so
-# technically the rpm packages could be co-installable.  However, they are not
-# co-usable, because python code can only import one or the other.  For this
-# reason, we will go ahead and conflict with other rpm package.
 Conflicts:      python3-docopt
-
-%description -n python3-docopt-ng %{_description}
+%description -n python3-docopt-ng
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n docopt_ng-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir docopt_ng-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files docopt
+%oreon_autofiles python3-docopt-ng usr/lib/python3*/site-packages/docopt_ng* usr/lib64/python3*/site-packages/docopt_ng* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/docopt_ng* usr/lib64/python3*/site-packages/docopt_ng* usr/bin/*
 
 %check
-%pytest
 
-%files -n python3-docopt-ng -f %{pyproject_files}
-%license LICENSE-MIT
-%doc README.md
+%pytest
+%files
+%files -n python3-docopt-ng -f %{oreon_filedir}/python3-docopt-ng.list
 
 %changelog
+
 %autochangelog

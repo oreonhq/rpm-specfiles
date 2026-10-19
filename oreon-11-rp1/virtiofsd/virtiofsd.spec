@@ -1,32 +1,17 @@
 %global source0_hash 162e60c45fbfeaf1d3f8407d788d4b5a0a718f49f469ccd3c7140480716d7677
 %global source1_hash none
-
 Name:           virtiofsd
 Version:        1.13.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Virtio-fs vhost-user device daemon (Rust version)
-
 License:        Apache-2.0 AND BSD-3-Clause
 URL:            https://gitlab.com/virtio-fs/virtiofsd
-# To create/dowload the source files (i.e., crate and vendor files),
-# set the version in the spec and then:
-#     make
-# if you need to get a different version:
-#     make VERSION=<version>
-#
 Source0:        https://static.crates.io/crates/%{name}/%{name}-%{version}.crate
-
 ExclusiveArch:  %{rust_arches}
-# Some of our deps (i.e. vm-memory) are not available on 32 bits targets.
 ExcludeArch:    i686
-
 %if 0%{?rhel} || (0%{?oreon} >= 11)
-BuildRequires:  rust-toolset
 %else
-BuildRequires:  rust-packaging >= 21
 %endif
-BuildRequires:  libcap-ng-devel
-BuildRequires:  libseccomp-devel
 %if 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:       qemu-kvm-common
 %else
@@ -39,7 +24,13 @@ Conflicts:      qemu-virtiofsd
 Obsoletes:      qemu-virtiofsd <= 2:8.0.0-1
 Provides:       qemu-virtiofsd = 2:7.2.1-1
 %endif
-
+# oreon:deps
+BuildRequires:  cargo
+BuildRequires:  cargo-rpm-macros
+BuildRequires:  libcap-ng-devel
+BuildRequires:  libseccomp-devel
+BuildRequires:  rustc
+# /oreon:deps
 %description
 %{summary}.
 
@@ -49,28 +40,23 @@ test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "ore
 %autosetup -n %{name}-%{version_no_tilde} -p1
 cargo vendor
 find vendor/ -name '*.a' -delete
-%cargo_prep -v vendor
 rm -f Cargo.lock
-
+%oreon_vendor_cargo
 %build
+
 %cargo_build
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
 %cargo_vendor_manifest
-
 %install
 mkdir -p %{buildroot}%{_libexecdir}
 install -D -p -m 0755 target/release/virtiofsd %{buildroot}%{_libexecdir}/virtiofsd
 install -D -p -m 0644 50-virtiofsd.json %{buildroot}%{_datadir}/qemu/vhost-user/50-virtiofsd.json
+%oreon_autofiles main
 
-%files
-%license LICENSE-APACHE LICENSE-BSD-3-Clause
-%license LICENSE.dependencies
-%license cargo-vendor.txt
-%doc README.md
-%{_libexecdir}/virtiofsd
-%{_datadir}/qemu/vhost-user/50-virtiofsd.json
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.13.3-1
 - Import

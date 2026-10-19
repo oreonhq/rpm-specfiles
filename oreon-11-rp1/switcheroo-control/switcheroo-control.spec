@@ -1,87 +1,65 @@
 %global source0_hash dddcb43c58acb334b529387da8f3abfee57346099dce8f438a167f5ebc34a9da
-
 Name:           switcheroo-control
 Version:        3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        D-Bus service to check the availability of dual-GPU
-
 License:        GPL-3.0-only
 URL:            https://gitlab.freedesktop.org/hadess/switcheroo-control/
-# URL from https://gitlab.freedesktop.org/hadess/switcheroo-control/-/releases
 Source0:        https://gitlab.freedesktop.org/hadess/switcheroo-control/-/releases/3.0/downloads/switcheroo-control-3.0.tar.xz
-
-BuildRequires:  gcc
-BuildRequires:  pkgconfig(gudev-1.0)
-BuildRequires:  pkgconfig(gio-2.0)
-BuildRequires:  gtk-doc
-BuildRequires:  meson
-BuildRequires:  systemd
-BuildRequires:  libdrm-devel
-BuildRequires:  kernel-headers
-BuildRequires:  python3-dbusmock
-BuildRequires:  umockdev
-
 %{?systemd_requires}
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gtk-doc
+BuildRequires:  kernel-headers
+BuildRequires:  libdrm-devel
+BuildRequires:  meson
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gudev-1.0)
+BuildRequires:  python3-dbusmock
+BuildRequires:  systemd
+BuildRequires:  umockdev
+# /oreon:deps
 %description
 D-Bus service to check the availability of dual-GPU.
 
 %package docs
 Summary:        Documentation for %{name}
 BuildArch:      noarch
-
 %description docs
 
 This package contains the documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
-
+%oreon_prep
 %build
+
 %meson -Dgtk_doc=true
 %meson_build
-
-
 %install
 %meson_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
+
 if [ $1 -eq 2 ] && [ -x /usr/bin/systemctl ] ; then
     /usr/bin/systemctl daemon-reload
 fi
 %systemd_post switcheroo-control.service
 %udev_hwdb_update
 %udev_rules_update
-
 %preun
-%systemd_preun switcheroo-control.service
 
+%systemd_preun switcheroo-control.service
 %postun
+
 %systemd_postun_with_restart switcheroo-control.service
 %udev_hwdb_update
 %udev_rules_update
-
-%files
-%license COPYING
-%doc NEWS README.md
-%{_bindir}/switcherooctl
-%{_datadir}/dbus-1/system.d/net.hadess.SwitcherooControl.conf
-%{_unitdir}/switcheroo-control.service
-%{_libexecdir}/switcheroo-control
-%{_libexecdir}/switcheroo-control-check-discrete-amdgpu
-%{_libexecdir}/switcheroo-control-check-discrete-nouveau
-%{_libexecdir}/switcheroo-control-check-discrete-xe
-%{_udevhwdbdir}/30-pci-intel-gpu.hwdb
-%{_udevrulesdir}/30-discrete-gpu.rules
-%{_mandir}/man1/switcherooctl.1*
-
-%files docs
-%dir %{_datadir}/gtk-doc/
-%dir %{_datadir}/gtk-doc/html/
-%{_datadir}/gtk-doc/html/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n switcheroo-control-docs -f %{oreon_filedir}/switcheroo-control-docs.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0-1
 - Prepare for Oreon 11 (RP1)

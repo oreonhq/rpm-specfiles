@@ -1,45 +1,42 @@
-%global source0_hash cd7fe3415d4d58685a94fdedd308e9994a37f012828940cfb603461de7f2c6ad
-
+%global source7_hash 3c56c41c4e84201ed8fd198900001cd8fc67887ba83c54b09e23b9de6bb2976f
+%global source6_hash 9383b3505f454d4970e26c9760da58f175fc10196f8a5923d84c001d5e0fab7a
+%global source5_hash e54b5646c0e1bdef3e123391f163e0452326575c7a670ce8e73aeee8fb6bf227
+%global source4_hash 4b0b57ce37f7bb3a2c2fc76eec93d060830d2c92155bf2a6baa43d61ad05499e
+%global source2_hash b09f93a85ccb01e2eef8cf044e41308957e9acb7ccb419588a3df9fd975de9e8
+%global source0_hash ecd5e632a417b1d79e23180bf0073c8d8f849180ebb9138e5fa71ec8bfe15fdd
 %global zig_pixman_ver 0.3.0
 %global zig_wayland_ver 0.4.0
 %global zig_wlroots_ver 0.19.3
 %global zig_xkbcommon_ver 0.3.0
-
 Name:           river-classic
 Version:        0.3.17
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Dynamic tiling Wayland compositor
-
-# river: GPL-3.0-only
-# deps/zig-pixman: MIT
-# deps/zig-wayland: MIT
-# deps/zig-wlroots: MIT
-# deps/zig-xkbcommon: MIT
-# protocol/river-control-unstable-v1.xml: ISC
-# protocol/river-layout-v3.xml: ISC
-# protocol/river-status-unstable-v1.xml: ISC
-# protocol/wlr-layer-shell-unstable-v1.xml: HPND-sell-variant
-# protocol/wlr-output-power-management-unstable-v1.xml: MIT
 License:        GPL-3.0-only AND HPND-sell-variant AND ISC AND MIT
 URL:            https://codeberg.org/river/river-classic
-Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://codeberg.org/river/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz.sig
-# Isaac Freund <mail@isaacfreund.com>
 Source2:        https://isaacfreund.com/public_key.txt#/gpgkey-86DED400DDFD7A11.gpg
 Source3:        %{name}.desktop
 Source4:        https://codeberg.org/ifreund/zig-pixman/archive/v%{zig_pixman_ver}.tar.gz#/zig-pixman-%{zig_pixman_ver}.tar.gz
 Source5:        https://codeberg.org/ifreund/zig-wayland/archive/v%{zig_wayland_ver}.tar.gz#/zig-wayland-%{zig_wayland_ver}.tar.gz
 Source6:        https://codeberg.org/ifreund/zig-wlroots/archive/v%{zig_wlroots_ver}.tar.gz#/zig-wlroots-%{zig_wlroots_ver}.tar.gz
 Source7:        https://codeberg.org/ifreund/zig-xkbcommon/archive/v%{zig_xkbcommon_ver}.tar.gz#/zig-xkbcommon-%{zig_xkbcommon_ver}.tar.gz
-
 ExclusiveArch:  %{zig_arches}
-
+Provides:       bundled(zig-pixman) = %{zig_pixman_ver}
+Provides:       bundled(zig-wayland) = %{zig_wayland_ver}
+Provides:       bundled(zig-wlroots) = %{zig_wlroots_ver}
+Provides:       bundled(zig-xkbcommon) = %{zig_xkbcommon_ver}
+Conflicts:      river
+Obsoletes:      river < 0.4.0
+Provides:       river = %{version}-%{release}
+Recommends:     mesa-dri-drivers
+Recommends:     polkit
+Recommends:     xorg-x11-server-Xwayland
+# oreon:deps
+BuildRequires:  (zig >= 0.15.2 with zig < 0.16)
 BuildRequires:  gcc
 BuildRequires:  gnupg2
-BuildRequires:  scdoc
-BuildRequires:  (zig >= 0.15.2 with zig < 0.16)
-BuildRequires:  zig-rpm-macros
-
 BuildRequires:  pkgconfig(libevdev)
 BuildRequires:  pkgconfig(libinput)
 BuildRequires:  pkgconfig(pixman-1)
@@ -47,26 +44,9 @@ BuildRequires:  pkgconfig(wayland-protocols)
 BuildRequires:  pkgconfig(wayland-server)
 BuildRequires:  pkgconfig(wlroots-0.19)
 BuildRequires:  pkgconfig(xkbcommon)
-
-# Right now there is no established way of managing Zig dependencies systemwide
-# so for the time being they are bundled as part of the project.
-Provides:       bundled(zig-pixman) = %{zig_pixman_ver}
-Provides:       bundled(zig-wayland) = %{zig_wayland_ver}
-Provides:       bundled(zig-wlroots) = %{zig_wlroots_ver}
-Provides:       bundled(zig-xkbcommon) = %{zig_xkbcommon_ver}
-
-# Migration path for river < 0.4.0
-Conflicts:      river
-Obsoletes:      river < 0.4.0
-Provides:       river = %{version}-%{release}
-
-# Lack of graphical drivers may hurt the common use case
-Recommends:     mesa-dri-drivers
-# Logind needs polkit to create a graphical session
-Recommends:     polkit
-# Compatibility layer for X11 applications
-Recommends:     xorg-x11-server-Xwayland
-
+BuildRequires:  scdoc
+BuildRequires:  zig-rpm-macros
+# /oreon:deps
 %description
 river-classic is a dynamic tiling Wayland compositor with flexible
 runtime configuration.
@@ -87,11 +67,11 @@ Design goals:
 %package        protocols-devel
 Summary:        Protocol files for the river wayland compositor
 License:        ISC
-
 %description    protocols-devel
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -103,41 +83,24 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %zig_fetch zig-xkbcommon
 
 %build
+
 %zig_build \
     -Dpie  \
     -Dxwayland
-
 %install
 %zig_install \
     -Dpie    \
     -Dxwayland
 install -D -m755 -pv example/init %{buildroot}%{_datadir}/river/init.example
 install -D -m644 -pv %{SOURCE3} %{buildroot}%{_datadir}/wayland-sessions/river.desktop
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %zig_test
-
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/river
-%{_bindir}/riverctl
-%{_bindir}/rivertile
-%{_mandir}/man1/river.1*
-%{_mandir}/man1/riverctl.1*
-%{_mandir}/man1/rivertile.1*
-%dir %{_datadir}/river
-%{_datadir}/river/init.example
-%{_datadir}/wayland-sessions/river.desktop
-# shell completions
-%{bash_completions_dir}/riverctl
-%{fish_completions_dir}/riverctl.fish
-%{zsh_completions_dir}/_riverctl
-
-%files protocols-devel
-%{_datadir}/pkgconfig/river-protocols.pc
-%dir %{_datadir}/river-protocols
-%{_datadir}/river-protocols/*.xml
+%files -f %{oreon_filedir}/main.list
+%files -n river-classic-protocols-devel -f %{oreon_filedir}/river-classic-protocols-devel.list
 
 %changelog
+
 %autochangelog

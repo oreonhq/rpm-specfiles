@@ -1,22 +1,18 @@
 %global source0_hash 4392cbf7f97d335b61f7a70257faead2d45a3beeb76249d75a41e9ed82e4456d
-
 Name:           R-systemfonts
 Version:        %R_rpm_version 1.3.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        System Native Font Finding
-
 License:        MIT
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=systemfonts&version=%{version}#/systemfonts_%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+Obsoletes:      %{name}-devel <= 1.3.1
+# oreon:deps
 BuildRequires:  R-devel
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(freetype2)
-Obsoletes:      %{name}-devel <= 1.3.1
-
+# /oreon:deps
 %description
 Provides system native access to the font catalogue. As font handling
 varies between systems it is difficult to correctly locate installed fonts
@@ -28,22 +24,19 @@ access from R.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check
 
-%files -f %{R_files}
+%R_check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

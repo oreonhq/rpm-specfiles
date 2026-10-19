@@ -1,8 +1,7 @@
 %global source0_hash 8de6607df116b86e2efddfe3740fc5eef002674e551668e5dde23e21b469b06c
-
 Name:           wemux
 Version:        3.2.0
-Release:        24%{?dist}
+Release:        1%{?dist}
 Summary:        Multi-user terminal multiplexing utility
 License:        MIT
 URL:            https://github.com/zolrath/wemux
@@ -11,7 +10,9 @@ Patch0:         0001-Added-ability-to-specify-groups-of-users-who-are-hos.patch
 Patch1:         0002-Modified-user-group-detection-to-use-regex.patch
 BuildArch:      noarch
 Requires:       tmux
+# oreon:deps
 
+# /oreon:deps
 %description
 Wemux enhances tmux to make multi-user terminal multiplexing both easier and
 more powerful. It allows users to host a wemux server and have clients join
@@ -30,6 +31,7 @@ It features multi-server support as well as user listing
 and notifications when users attach/detach.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -39,17 +41,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i 's|/usr/local||g;s|#!/usr/bin/env bash|#!/bin/bash|g' wemux
 
 %build
-# Nothing here.
 
 %install
 install -pDm755 %{name} %{buildroot}%{_bindir}/%{name}
 install -pDm644 %{name}.conf.example %{buildroot}%{_sysconfdir}/%{name}.conf
+%oreon_autofiles main
 
-%files
-%doc README.md
-%license MIT-LICENSE
-%{_bindir}/%{name}
-%config(noreplace) %{_sysconfdir}/%{name}.conf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

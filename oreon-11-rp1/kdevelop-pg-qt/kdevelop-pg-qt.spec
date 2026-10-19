@@ -1,5 +1,4 @@
 %global source0_hash acbeb61c82f5d7aa2ddcfa18e3bee5e2559106970bd6d146d46c95f8d027bb86
-
 Name:           kdevelop-pg-qt
 Summary:        A parser generator
 Version:        2.4.0
@@ -7,17 +6,15 @@ Release:        1%{?dist}
 License:        LGPL-2.0-only AND GPL-3.0-or-later AND CC0-1.0 AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH Bison-exception-2.2) AND BSD-3-Clause
 URL:            http://techbase.kde.org/Development/KDevelop-PG-Qt_Introduction
 Source0:        https://download.kde.org/stable/kdevelop-pg-qt/%{version}/src/%{name}-%{version}.tar.xz
-
+# oreon:deps
 BuildRequires:  bison
-BuildRequires:  flex
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  extra-cmake-modules
-BuildRequires:  cmake(Qt6Core)
-
-# For AutoReq cmake-filesystem
 BuildRequires:  cmake
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  flex
 BuildRequires:  gcc-c++
-
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 KDevelop-PG-Qt is a parser generator written in readable source-code and
 generating readable source-code. Its syntax was inspired by AntLR. It
@@ -27,36 +24,26 @@ is ideal to be used in Qt-/KDE-based applications like KDevelop.
 %package devel
 Summary:  Developer files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n %{name}-%{version}
-
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files 
-%doc AUTHORS README
-%license LICENSES/*
-%{_bindir}/kdev-pg-qt
-
-%files devel
-%{_includedir}/KDevelopPGQt/
-%{_libdir}/cmake/KDevelop-PG-Qt/
-%{_libdir}/cmake/KDevelopPGQt/
+%files -f %{oreon_filedir}/main.list
+%files -n kdevelop-pg-qt-devel -f %{oreon_filedir}/kdevelop-pg-qt-devel.list
 
 %changelog
+
 * Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 2.4.0-1
 - Latest upstream release
 

@@ -1,62 +1,47 @@
+%global source1_hash 7ccaadbd840128793612e7c872ca85c18580d1a488df33163c0193f1e48f489e
 %global source0_hash 6c41ce2cb79d2b85d4fbe5a3a61c09e40c70e5a869ae6f0352c7e1cb3b44606b
-
 %global stable_kf6 stable
-
-
 Name:    kscreenlocker
 Version:        6.7.5
-Release: 1%{?dist}
-Summary: Library and components for secure lock screen architecture
-
+Release:        1%{?dist}
+Summary:        Library and components for secure lock screen architecture
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-# help upgrades, split from plasma-workspace since 5.5
 Conflicts: plasma-workspace < 5.5
-
-## upstream patches
-
-BuildRequires: cmake(LayerShellQt)
-
-BuildRequires:  perl-generators
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  qt6-qtbase-private-devel
-BuildRequires:  cmake(Qt6Quick)
-
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  extra-cmake-modules
-BuildRequires:  cmake(KF6WindowSystem)
-BuildRequires:  libxcb-devel
-
+# oreon:deps
 BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6GlobalAccel)
+BuildRequires:  cmake(KF6GuiAddons)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6IdleTime)
 BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6KirigamiPlatform)
 BuildRequires:  cmake(KF6Notifications)
 BuildRequires:  cmake(KF6Screen)
 BuildRequires:  cmake(KF6Solid)
 BuildRequires:  cmake(KF6Svg)
+BuildRequires:  cmake(KF6WindowSystem)
 BuildRequires:  cmake(KF6XmlGui)
-BuildRequires:  cmake(KF6GuiAddons)
-BuildRequires:  cmake(KF6KirigamiPlatform)
-
+BuildRequires:  cmake(LayerShellQt)
+BuildRequires:  cmake(PlasmaQuick)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
 BuildRequires:  libX11-devel
+BuildRequires:  libXcursor-devel
+BuildRequires:  libxcb-devel
+BuildRequires:  pam-devel
+BuildRequires:  perl-generators
+BuildRequires:  pkgconfig(xi)
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  wayland-devel
 BuildRequires:  xcb-util-devel
 BuildRequires:  xcb-util-keysyms-devel
-BuildRequires:  wayland-devel
-BuildRequires:  pkgconfig(xi)
-
-# Plasma
-BuildRequires:  cmake(PlasmaQuick)
-
-BuildRequires:  libXcursor-devel
-BuildRequires:  pam-devel
-
+# /oreon:deps
 %description
 %{summary}.
 
@@ -67,43 +52,23 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --with-qt --all-name
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-
-%files -f %{name}.lang
-%license COPYING
-%{_kf6_libdir}/libKScreenLocker.so.*
-%{_kf6_datadir}/knotifications6/*.notifyrc
-%{_libexecdir}/kscreenlocker_greet
-%dir %{_kf6_datadir}/ksmserver/
-%{_kf6_datadir}/ksmserver/screenlocker/
-%{_kf6_datadir}/applications/kcm_screenlocker.desktop
-%{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_screenlocker.so
-%{_kf6_datadir}/qlogging-categories6/kscreenlocker.categories
-
-%files devel
-%{_kf6_libdir}/libKScreenLocker.so
-%{_kf6_libdir}/cmake/ScreenSaverDBusInterface/
-%{_kf6_libdir}/cmake/KScreenLocker/
-%{_includedir}/KScreenLocker/
-%{_datadir}/dbus-1/interfaces/*.xml
-
+%files -f %{oreon_filedir}/main.list
+%files -n kscreenlocker-devel -f %{oreon_filedir}/kscreenlocker-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

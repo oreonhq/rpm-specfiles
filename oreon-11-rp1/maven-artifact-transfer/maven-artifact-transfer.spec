@@ -1,5 +1,4 @@
 %global source0_hash e65f0a33059442f259fa4a924412ff050268d6272239be2bcc4c49aae7a48776
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,47 +83,29 @@ end
 Name:           maven-artifact-transfer
 Epoch:          1
 Version:        0.13.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Apache Maven Artifact Transfer
 License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-artifact-transfer
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
-
 Patch:          0001-Compatibility-with-Maven-3.0.3-and-later.patch
 Patch:          0002-Remove-support-for-maven-3.0.X.patch
 Patch:          0003-Port-to-maven-3.8.1.patch
-# From upstream commit 75a99b21
 Patch:          0004-Bump-maven-shared-components-from-34-to-37.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(commons-codec:commons-codec)
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.maven.shared:maven-common-artifact-filters)
-BuildRequires:  mvn(org.apache.maven.shared:maven-shared-components:pom:)
-BuildRequires:  mvn(org.apache.maven:maven-artifact)
-BuildRequires:  mvn(org.apache.maven:maven-core)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-component-annotations)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-BuildRequires:  mvn(org.eclipse.aether:aether-api)
-BuildRequires:  mvn(org.eclipse.aether:aether-impl)
-BuildRequires:  mvn(org.eclipse.aether:aether-util)
-BuildRequires:  mvn(org.mockito:mockito-core)
-BuildRequires:  mvn(org.slf4j:slf4j-api)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1:0.13.1-34
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 An API to either install or deploy artifacts with Maven 3.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 find -name '*.java' -exec sed -i 's/\r//' {} +
@@ -138,14 +119,15 @@ find -name '*.java' -exec sed -i 's/\r//' {} +
 find -name Maven30\*.java -delete
 
 %build
-%mvn_build -j -- -DjavaVersion=8
 
+%mvn_build -j -- -DjavaVersion=8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.13.1-1
 - Prepare for Oreon 11 (RP1)

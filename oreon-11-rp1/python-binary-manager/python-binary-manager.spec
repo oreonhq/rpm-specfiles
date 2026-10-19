@@ -1,58 +1,45 @@
-%global source0_hash none
-
+%global source0_hash 9651010615285b98d31107a86930a364df32e8a8fe3c6354481ddc2a9803d3ac
 Name:           python-binary-manager
 Version:        0.0.7
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Binman firmware-packaging tool
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        GPL-2.0-or-later
 URL:            https://docs.u-boot.org/en/latest/develop/package/index.html
-Source:         %{pypi_source binary_manager}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/binary_manager/binary_manager-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'binary-manager' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-binary-manager = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-binary-manager
-Summary:        %{summary}
-
-%description -n python3-binary-manager %_description
-
+Summary:        Binman firmware-packaging tool
+# oreon:reqs
+Requires:       python3dist(dtoc) >= 0.0.6
+Requires:       python3dist(u-boot-pylib) >= 0.0.6
+# /oreon:reqs
+%description -n python3-binary-manager
 
 %prep
-%autosetup -p1 -n binary_manager-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir binary_manager-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-binary-manager usr/lib/python3*/site-packages/binary_manager* usr/lib64/python3*/site-packages/binary_manager* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/binary_manager* usr/lib64/python3*/site-packages/binary_manager* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-binary-manager -f %{pyproject_files}
-%{_bindir}/binman
+%files
+%files -n python3-binary-manager -f %{oreon_filedir}/python3-binary-manager.list
 
 %changelog
+
 %autochangelog

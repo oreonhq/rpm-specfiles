@@ -1,28 +1,17 @@
 %global stable_kf6 stable
 %global source0_hash 00c0ce7efdbfdb8db338fe78802ee8997199f305c61c37a5f58aa5986cb2940d
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:           kbackup
 Version:        25.12.3
 Release:        1%{?dist}
 Summary:        Back up your data in a simple, user friendly way
 Summary(fr):    Sauvegarder vos données de manière simple et conviviale
 Summary(ru):    Простое, дружественное к пользователю резервное копирование
-
 License:        GPL-2.0-or-later
 Url:            https://github.com/KDE/kbackup
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires:  desktop-file-utils
-BuildRequires:  extra-cmake-modules
-BuildRequires:  gcc-c++
-BuildRequires:  gettext
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  libappstream-glib
-BuildRequires:  libarchive-devel
-
+Requires:       hicolor-icon-theme
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  cmake(KF6Archive)
 BuildRequires:  cmake(KF6DocTools)
@@ -37,9 +26,14 @@ BuildRequires:  cmake(KF6XmlGui)
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6Core5Compat)
 BuildRequires:  cmake(Qt6Widgets)
-
-Requires:       hicolor-icon-theme
-
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  gettext
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  libarchive-devel
+# /oreon:deps
 %description
 KBackup is a program that lets you back up any directories or files,
 whereby it uses an easy to use directory tree to select the things to back up.
@@ -66,33 +60,22 @@ KBackup позволяет делать резервное копировани�
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake_kf6
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang %{name} --with-html --with-man --all-name
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/org.kde.%{name}.appdata.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.%{name}.desktop
-
-%files -f %{name}.lang
-%doc AUTHORS ChangeLog README TODO
-%license COPYING
-%{_bindir}/%{name}
-%{_datadir}/applications/org.kde.%{name}.desktop
-%{_datadir}/icons/hicolor/*/actions/*.png
-%{_datadir}/icons/hicolor/*/apps/*.png
-%{_datadir}/icons/hicolor/*/mimetypes/*.png
-%{_metainfodir}/org.kde.%{name}.appdata.xml
-%{_datadir}/mime/packages/%{name}.xml
-%{_mandir}/man1/%{name}.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,64 +1,51 @@
-%global source0_hash none
-
+%global source0_hash 78abcf413091bc7c1e4e8c10fbbb438d1ac0b5a87436c5b972c3e8253871b6fb
 Name:           python-tables
 Version:        3.11.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Hierarchical datasets for Python
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            http://www.pytables.org
-Source:         %{pypi_source tables}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'tables' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tables/tables-%{version}.tar.gz
 Patch1:         0001-Skip-tests-that-fail-on-s390x.patch
 Patch2:         0001-Skip-failing-test.patch
 Patch3:         test_basics.diff
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(blosc2) >= 2.3.0
+BuildRequires:  python3dist(cython) >= 3.1
+BuildRequires:  python3dist(numpy) >= 2
+BuildRequires:  python3dist(setuptools) >= 61.0.0
+Requires:       python3-tables = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-tables
-Summary:        %{summary}
-
-%description -n python3-tables %_description
-
+Summary:        Hierarchical datasets for Python
+# oreon:reqs
+Requires:       python3dist(blosc2) >= 2.3.0
+Requires:       python3dist(numexpr) >= 2.6.2
+Requires:       python3dist(numpy) >= 1.20.0
+# /oreon:reqs
+%description -n python3-tables
 
 %prep
-%autosetup -p1 -n tables-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir tables-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-tables usr/lib/python3*/site-packages/tables* usr/lib64/python3*/site-packages/tables* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tables* usr/lib64/python3*/site-packages/tables* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-tables -f %{pyproject_files}
-%{_bindir}/pt2to3
-%{_bindir}/ptdump
-%{_bindir}/ptrepack
-%{_bindir}/pttree
+%files
+%files -n python3-tables -f %{oreon_filedir}/python3-tables.list
 
 %changelog
+
 %autochangelog

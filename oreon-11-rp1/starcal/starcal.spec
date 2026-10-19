@@ -1,34 +1,32 @@
-%global source0_hash 41a7da3767957727e33543a12b04b8f7ce1550f6925cd60ab43cd64f6c23493f
-
+%global source0_hash 880a960f1895afe42162c9d8e469a2caed4217e45463570f7771cdcb39151d60
 %global pkg_name %{name}3
-
 Name:           starcal
 Version:        3.2.5
 Release:        1%{?dist}
 Summary:        A full-featured international calendar written in Python
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            http://ilius.github.io/starcal/
 Source0:        https://github.com/ilius/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 Requires:       python3-gobject python3-httplib2 python3-psutil python3-cairo
 Requires:       python3-dateutil python3-cachetools python3-requests
 Requires:       libappindicator-gtk3
-
 Recommends:     gtksourceview4 python3-igraph python3-pygit2
 Suggests:       lxqt-openssh-askpass ntpdate
-
 BuildArch:      noarch
-BuildRequires:  python3-devel desktop-file-utils gettext git
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gettext
+BuildRequires:  git
+BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
-
+# /oreon:deps
 %description
 StarCalendar is a full-featured international calendar written in Python,
 that supports Jalai(Iranian), Hijri(Islamic), and Indian National calendars,
 as well as common English(Gregorian) calendar
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -S git -n %{name}-%{version}
@@ -42,29 +40,20 @@ find -name "*.py" -exec sh -c 'if ! grep "^#\!" {} &> /dev/null;  then \
 
 %install
 echo | ./distro/base/install.sh %{buildroot} --for-pkg --prefix=%{_prefix}
-
-# cleanups
 rm -rf %{buildroot}%{_datadir}/doc/
 rm -rf      \
   %{buildroot}%{_datadir}/%{pkg_name}/{*install*,README.md,donate} \
   %{buildroot}%{_datadir}/%{pkg_name}/locale.d
-
 desktop-file-install     \
   --delete-original \
   --remove-category=Utility --set-icon=%{pkg_name}2 \
   --dir=%{buildroot}/%{_datadir}/applications \
   %{buildroot}/%{_datadir}/applications/%{pkg_name}.desktop
-
 %find_lang %{pkg_name}
+%oreon_autofiles main
 
-%files -f %{pkg_name}.lang
-%doc authors donate README.md
-%license LICENSE
-%{_bindir}/*
-%{_datadir}/%{pkg_name}
-%{_datadir}/applications/*
-%{_datadir}/pixmaps/*
-%{_datadir}/icons/hicolor/*/apps/%{pkg_name}*.png
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

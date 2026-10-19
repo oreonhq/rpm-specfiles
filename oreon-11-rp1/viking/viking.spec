@@ -1,58 +1,51 @@
 %global source0_hash 5677f1c162cb2dd967f2ef3a089aa23da8fea59262dd65eb6dabcd8a9fe86525
-
 Name:           viking
-
 %global forgeurl https://github.com/viking-gps/viking
 %global version0 1.11
 %global tag0 viking-%version0
 %forgemeta
 Version:        %forgeversion
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        GPS data editor and analyzer
-
 License:        GPL-2.0-or-later
 URL:            %forgeurl
-
-Source0:        %forgesource
-
-# Fails to build on s390x, not needed for multilib
+Source0:        %{forgeurl}/archive/%{name}-%{version0}/%{name}-%{name}-%{version0}.tar.gz
 ExcludeArch:    s390x %{ix86}
-
-BuildRequires:  autoconf
-BuildRequires:  make
-BuildRequires:  gcc-c++
-BuildRequires:  intltool
-BuildRequires:  expat-devel
-BuildRequires:  gdk-pixbuf2-devel
-BuildRequires:  gpsd-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  libcurl-devel
-BuildRequires:  gtk-doc
-BuildRequires:  gnome-doc-utils
-BuildRequires:  libexif-devel
-BuildRequires:  bzip2-devel
-BuildRequires:  file-devel
-BuildRequires:  libgexiv2-devel
-BuildRequires:  sqlite-devel
-BuildRequires:  docbook-utils
-BuildRequires:  docbook-style-xsl
-BuildRequires:  mapnik-devel
-BuildRequires:  rarian-compat
-BuildRequires:  geoclue2-devel
-BuildRequires:  liboauth-devel
-BuildRequires:  nettle-devel
-BuildRequires:  libzip-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  gettext
-BuildRequires:  json-glib-devel
-BuildRequires:  yelp-tools
-BuildRequires:  xxd
-BuildRequires:  libnova-devel
-
 Requires:       hicolor-icon-theme
 Requires:       gpsbabel
 Requires:       expect
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  bzip2-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  docbook-style-xsl
+BuildRequires:  docbook-utils
+BuildRequires:  expat-devel
+BuildRequires:  file-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gdk-pixbuf2-devel
+BuildRequires:  geoclue2-devel
+BuildRequires:  gettext
+BuildRequires:  gnome-doc-utils
+BuildRequires:  gpsd-devel
+BuildRequires:  gtk-doc
+BuildRequires:  gtk3-devel
+BuildRequires:  intltool
+BuildRequires:  json-glib-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  libexif-devel
+BuildRequires:  libgexiv2-devel
+BuildRequires:  libnova-devel
+BuildRequires:  liboauth-devel
+BuildRequires:  libzip-devel
+BuildRequires:  make
+BuildRequires:  mapnik-devel
+BuildRequires:  nettle-devel
+BuildRequires:  rarian-compat
+BuildRequires:  sqlite-devel
+BuildRequires:  xxd
+BuildRequires:  yelp-tools
+# /oreon:deps
 %description
 Viking is a free/open source program to manage GPS data. You can import, plot
 and create tracks, routes and waypoints, show OSM, Bing Aerial and other maps,
@@ -60,6 +53,7 @@ geotag images, create routes using OSRM, see real-time GPS position, make maps
 using Mapnik, control items, etc.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup
@@ -70,9 +64,9 @@ iconv -f ISO-8859-1 -t UTF-8 -o TODO timestamp
 touch -r timestamp TODO
 
 %build
+
 %configure
 %make_build CFLAGS="${RPM_OPT_FLAGS} -fcommon"
-
 %install
 %make_install
 find %{buildroot} -name '*.a' -exec rm -f {} ';'
@@ -82,18 +76,13 @@ desktop-file-install \
     --dir=%{buildroot}%{_datadir}/applications \
     %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %find_lang %{name} --with-gnome
+%oreon_autofiles main
 
 %check
-make test
 
-%files -f %{name}.lang
-%license COPYING
-%doc AUTHORS ChangeLog* NEWS README TODO
-%{_bindir}/%{name}*
-%{_datadir}/%{name}/
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*x*/apps/%{name}.png
-%{_mandir}/man1/%{name}.1*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

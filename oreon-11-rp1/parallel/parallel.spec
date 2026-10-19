@@ -1,34 +1,27 @@
+%global source1_hash 9037bc91c67d173a2250f13b38e4a2ca4ed0e93e82a882af52b0531a9b077632
 %global source0_hash 1d38a7258796015a92a5a6eee293340b924e4ff68e4e8e845b8bdbb5f4f7d9e8
-
 Name:           parallel
 Summary:        Shell tool for executing jobs in parallel
 Version:        20260822
-Release:        %autorelease
-# Automatically converted from old format: GFDL and GPLv3+ - review is highly recommended.
+Release:        1%{?dist}
 License:        LicenseRef-Callaway-GFDL AND GPL-3.0-or-later
 URL:            https://www.gnu.org/software/parallel/
 Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.bz2
 Source1:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.bz2.sig
 Source2:        cda01a4208c4f74506107e7bd1ab451688888888.asc
 BuildArch:      noarch
+%define __requires_exclude sh$
+Conflicts:      moreutils-parallel
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
+BuildRequires:  gnupg2
 BuildRequires:  make
+BuildRequires:  perl(FileHandle)
 BuildRequires:  perl-generators
 BuildRequires:  perl-podlators
-BuildRequires:  perl(FileHandle)
 BuildRequires:  sed
-# for gpg verification
-BuildRequires: gnupg2
-
-%define __requires_exclude sh$
-
-# Due to a naming conflict, both packages cannot be installed in parallel
-# To prevent user confusion, GNU parallel is installed in a compatibility
-# mode to be commandline compatible to moreutils' parallel.
-# This mode can be turned off system wide or on a per-user base.
-Conflicts:      moreutils-parallel
-
+# /oreon:deps
 %description
 GNU Parallel is a shell tool for executing jobs in parallel using one or more
 machines. A job is typically a single command or a small script that has to be
@@ -48,6 +41,7 @@ GNU Parallel is command-line-compatible with moreutils' parallel, but offers
 additional features.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -57,36 +51,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i '1s:/env :/:' src/env_parallel.*
 
 %build
+
 autoreconf -ivf
 %configure
 %make_build
-
 %install
 %make_install
 rm -vrf %{buildroot}%{_pkgdocdir}
+%oreon_autofiles main
 
-%files
-%license LICENSES/GPL-3.0-or-later.txt LICENSES/GFDL-1.3-or-later.txt
-%doc README NEWS
-%{_bindir}/parallel
-%{_bindir}/parcat
-%{_bindir}/parset
-%{_bindir}/parsort
-%{_mandir}/man1/parallel.1*
-%{_mandir}/man1/parcat.1*
-%{_mandir}/man1/parset.1*
-%{_mandir}/man1/parsort.1*
-%{_mandir}/man7/parallel*
-%{_bindir}/env_parallel*
-%{_mandir}/man1/env_parallel.1*
-%{_bindir}/sem
-%{_mandir}/man1/sem.1*
-%{_bindir}/sql
-%{_mandir}/man1/sql.1*
-%{_bindir}/niceload
-%{_mandir}/man1/niceload.1*
-%{bash_completions_dir}/parallel
-%{zsh_completions_dir}/_parallel
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,46 +1,30 @@
 %global source0_hash f0cc16810effb5e21e559a15895525a9e4179765c5ab44f9140afd18e8ce7b8e
-
-###############################################################################
-# Definitions
-###############################################################################
 %global fixed_desc() \
 The combination of fixed-fullwidth M+ %2 for Japanese and fixed-halfwidth \
 %1 %2 %3 for alphabets. They are 5 weights from Thin to Bold.   
-
 %global proportional_desc() \
 The combination of fixed-fullwidth M+ %2 for Japanese and proportional  \
 %1 %2 %3 for alphabets. They are 7 weights from Thin to Black.         
-
 %global common_desc() \
 The Mplus fonts are 7 families of fonts, of which 4 are combinations \
 of proportional font families,variations of fixed-fullwidth fonts, \
 variations of fixed-halfwidth fonts and each have between 5 - 7 \
 different weights.
-
 %global summary_p M+ P is aimed as sophisticated and relaxed design
-
 %global summary_c M+ C is optimized to be proportioned and has two variations
-
 %global summary_m M+ M emphasize the balance of natural letterform and high legibility
-
 %global fontname mplus
-
-###############################################################################
-# Header
-###############################################################################
-
 Name:       %{fontname}-fonts
 Version:    056
-Release:    25%{?dist}
-Summary:    The Mplus fonts is a superfamily of fonts designed by Coji Morishita
-
+Release:        1%{?dist}
+Summary:        The Mplus fonts is a superfamily of fonts designed by Coji Morishita
 License:    mplus
 URL:        http://%{fontname}-fonts.sourceforge.jp/%{fontname}-outline-fonts/index-en.html
-Source0:    http://dl.sourceforge.jp/%{fontname}-fonts/6650/%{fontname}-TESTFLIGHT-%{version}.tar.xz
-
+Source0:        http://dl.sourceforge.jp/%{name}/6650/%{fontname}-TESTFLIGHT-%{version}.tar.xz
 BuildArch: noarch  
-BuildRequires:   fontpackages-devel  
-
+# oreon:deps
+BuildRequires:  fontpackages-devel
+# /oreon:deps
 %description
 %common_desc
 
@@ -51,7 +35,6 @@ BuildRequires:   fontpackages-devel
 %package common
 Summary:  Mplus, common files (documentation…)
 Requires: fontpackages-filesystem
-
 %description common
 %common_desc
 
@@ -61,7 +44,6 @@ This package consists of files used by other %{name} packages.
 %package -n %{fontname}-1p-fonts
 Summary: %summary_p
 Requires: %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-1p-fonts
 %proportional_desc M+ 1P Type-1
 
@@ -72,7 +54,6 @@ Requires: %{name}-common = %{version}-%{release}
 %package -n %{fontname}-2p-fonts
 Summary: %summary_p
 Requires: %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-2p-fonts
 %proportional_desc M+ 2P Type-2
 
@@ -83,7 +64,6 @@ Requires: %{name}-common = %{version}-%{release}
 %package -n %{fontname}-1c-fonts
 Summary: %summary_c
 Requires: %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-1c-fonts
 %proportional_desc M+ 1C Type-1
 
@@ -94,7 +74,6 @@ Requires: %{name}-common = %{version}-%{release}
 %package -n %{fontname}-2c-fonts
 Summary: %summary_c
 Requires: %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-2c-fonts
 %proportional_desc M+ 2C Type-2
 
@@ -105,7 +84,6 @@ Requires: %{name}-common = %{version}-%{release}
 %package -n %{fontname}-1m-fonts
 Summary: %summary_m
 Requires: %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-1m-fonts
 %fixed_desc M+ 1M Type-1
 
@@ -116,7 +94,6 @@ Requires: %{name}-common = %{version}-%{release}
 %package -n %{fontname}-2m-fonts
 Summary: %summary_m
 Requires: %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-2m-fonts
 %fixed_desc M+ 2M Type-2
 
@@ -127,7 +104,6 @@ Requires: %{name}-common = %{version}-%{release}
 %package -n %{fontname}-1mn-fonts
 Summary: %summary_m
 Requires: %{name}-common = %{version}-%{release}
-
 %description -n %{fontname}-1mn-fonts
 %fixed_desc M+ 1MN Type-1
 
@@ -138,6 +114,7 @@ Requires: %{name}-common = %{version}-%{release}
 # Files
 ###############################################################################
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{fontname}-TESTFLIGHT-%{version}
@@ -145,8 +122,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %build
 
 %install
-
-# Add AppStream metadata
 mkdir -p %{buildroot}%{_datadir}/appdata
 cat > %{buildroot}%{_datadir}/appdata/%{fontname}-1c.metainfo.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -218,12 +193,20 @@ cat > %{buildroot}%{_datadir}/appdata/%{fontname}-2m.metainfo.xml <<EOF
   <summary>A font which emphasizes the balance of natural letterform with high legibility</summary>
 </component>
 EOF
-
 install -m 0755 -d %{buildroot}%{_fontdir}
 install -m 0644 -p *.ttf %{buildroot}%{_fontdir}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files common
-%doc LICENSE_{E,J} README_{E,J}
+%files -f %{oreon_filedir}/main.list
+%files -n mplus-fonts-common -f %{oreon_filedir}/mplus-fonts-common.list
+%files -n mplus-1p-fonts -f %{oreon_filedir}/mplus-1p-fonts.list
+%files -n mplus-2p-fonts -f %{oreon_filedir}/mplus-2p-fonts.list
+%files -n mplus-1c-fonts -f %{oreon_filedir}/mplus-1c-fonts.list
+%files -n mplus-2c-fonts -f %{oreon_filedir}/mplus-2c-fonts.list
+%files -n mplus-1m-fonts -f %{oreon_filedir}/mplus-1m-fonts.list
+%files -n mplus-2m-fonts -f %{oreon_filedir}/mplus-2m-fonts.list
+%files -n mplus-1mn-fonts -f %{oreon_filedir}/mplus-1mn-fonts.list
 
 %changelog
+
 %autochangelog

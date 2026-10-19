@@ -1,28 +1,23 @@
 %global source0_hash 8e26add6e637b5b536876a293a84db8edce8563aef3c3755f26d66d323dee3df
-
-# SSG build system and tests count with build directory name `build`.
-# For more details see:
-# 
 %global _vpath_builddir build
-
 Name:		scap-security-guide
 Version:	0.1.82
-Release:	1%{?dist}
-Summary:	Security guidance and baselines in SCAP formats
+Release:        1%{?dist}
+Summary:        Security guidance and baselines in SCAP formats
 License:	BSD-3-Clause
 URL:		https://github.com/ComplianceAsCode/content/
 Source0:        https://github.com/ComplianceAsCode/content/releases/download/v%{version}/scap-security-guide-%{version}.tar.bz2
 BuildArch:	noarch
-
-BuildRequires:	libxslt
-BuildRequires:	openscap-scanner >= 1.2.5
-BuildRequires:	cmake >= 2.8
-BuildRequires:	python%{python3_pkgversion}
-BuildRequires:	python%{python3_pkgversion}-jinja2
-BuildRequires:	python%{python3_pkgversion}-PyYAML
-BuildRequires:	python%{python3_pkgversion}-setuptools
 Requires:	xml-common, openscap-scanner >= 1.2.5
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  libxslt
+BuildRequires:  openscap-scanner
+BuildRequires:  python3
+BuildRequires:  python3-PyYAML
+BuildRequires:  python3-jinja2
+BuildRequires:  python3-setuptools
+# /oreon:deps
 %description
 The scap-security-guide project provides a guide for configuration of the
 system from the final system's security point of view. The guidance is specified
@@ -38,7 +33,6 @@ further information.
 %package	doc
 Summary:	HTML formatted security guides generated from XCCDF benchmarks
 Requires:	%{name} = %{version}-%{release}
-
 %description	doc
 The %{name}-doc package contains HTML formatted documents containing
 hardening guidances that have been generated from XCCDF benchmarks
@@ -49,12 +43,12 @@ present in %{name} package.
 Summary:	Ansible playbooks per each rule.
 Group:		System Environment/Base
 Requires:	%{name} = %{version}-%{release}
-
 %description	rule-playbooks
 The %{name}-rule-playbooks package contains individual ansible playbooks per rule.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -63,9 +57,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %if 0%{?oreon} >= 11
 %define cmake_defines_specific -DSSG_PRODUCT_DEFAULT:BOOLEAN=FALSE -DSSG_PRODUCT_FEDORA:BOOLEAN=TRUE -DSSG_ANSIBLE_PLAYBOOKS_PER_RULE_ENABLED:BOOL=ON
 %else
-%if 0%{?rhel} && ! %{defined eln}
-%define cmake_defines_specific -DSSG_PRODUCT_DEFAULT:BOOLEAN=FALSE -DSSG_PRODUCT_RHEL%{rhel}:BOOLEAN=TRUE -DSSG_SCIENTIFIC_LINUX_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_CENTOS_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_ANSIBLE_PLAYBOOKS_PER_RULE_ENABLED:BOOL=ON
-%endif
 %endif
 %if 0%{?centos}
 %define cmake_defines_specific -DSSG_PRODUCT_DEFAULT:BOOLEAN=FALSE -DSSG_PRODUCT_RHEL%{centos}:BOOLEAN=TRUE -DSSG_SCIENTIFIC_LINUX_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_CENTOS_DERIVATIVES_ENABLED:BOOL=ON
@@ -73,35 +64,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 mkdir -p build
 %build
+
 %cmake %{cmake_defines_common} %{cmake_defines_specific}
 %cmake_build
-
 %install
 %cmake_install
 rm %{buildroot}/%{_docdir}/%{name}/README.md
 rm %{buildroot}/%{_docdir}/%{name}/Contributors.md
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_datadir}/xml/scap/ssg/content
-%{_datadir}/%{name}/kickstart
-%{_datadir}/%{name}/ansible/*.yml
-%{_datadir}/%{name}/tailoring
-%lang(en) %{_mandir}/man8/scap-security-guide.8.*
-%doc %{_docdir}/%{name}/LICENSE
-%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || (0%{?oreon} >= 11)
-%exclude %{_datadir}/%{name}/ansible/rule_playbooks
-%endif
-
-%files doc
-%doc %{_docdir}/%{name}/guides/*.html
-%doc %{_docdir}/%{name}/tables/*.html
-
-%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || (0%{?oreon} >= 11)
-%files rule-playbooks
-%defattr(-,root,root,-)
-%{_datadir}/%{name}/ansible/rule_playbooks
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n scap-security-guide-doc -f %{oreon_filedir}/scap-security-guide-doc.list
+%files -n scap-security-guide-rule-playbooks -f %{oreon_filedir}/scap-security-guide-rule-playbooks.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.80-2
 - Import

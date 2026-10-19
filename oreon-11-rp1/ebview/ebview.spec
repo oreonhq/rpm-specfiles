@@ -1,53 +1,35 @@
 %global source0_hash 93ba6b55923f9f6a43722025ac0239ff17b5533d8dfa375cc4af3ba4beaed024
-
 Name:		ebview
 Version:	0.3.6.2
-Release:	42%{?dist}
-Summary:	EPWING CD-ROM dictionary viewer
-
-# data/about.en.in	GPL-2.0-or-later
-# intl/		LGPL-2.1-or-later unused
-# SPDX confirmed
+Release:        1%{?dist}
+Summary:        EPWING CD-ROM dictionary viewer
 License:	GPL-2.0-or-later
-%if 0
-URL:		http://ebview.sourceforge.net/
-Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
-%else
 URL:		http://packages.qa.debian.org/e/ebview.html
-Source0:	http://ftp.de.debian.org/debian/pool/main/e/ebview/ebview_%{version}.orig.tar.gz
-%endif
-# Support -Werror=format-security
+Source0:        http://ftp.de.debian.org/debian/pool/main/e/ebview/ebview_%{version}.orig.tar.gz
 Patch0:	ebview-0.3.6.2-format-security.patch
-# Fix wrong inline
 Patch1:	ebview-0.3.6.2-wrong-inline.patch
 Source1:	%{name}.desktop
-# Use pango instead of pangox-compat
 Patch101:	https://sources.debian.org/data/main/e/ebview/0.3.6.2-2/debian/patches/dont-use-pangox.patch
-# And link to libX11
 Patch102:	https://sources.debian.org/data/main/e/ebview/0.3.6.2-2/debian/patches/link-ebview.diff
-# Port to c99, -Werror=implicit-int -Werror=implicit-function-declaration
 Patch103:	ebview-0.3.6.2-c99.patch
-# Port to c23
 Patch104:	ebview-0.3.6.2-c23.patch
-
-BuildRequires:	gcc
-BuildRequires:	eb-devel
-BuildRequires:	desktop-file-utils
-BuildRequires:	gettext
-BuildRequires:	pkgconfig(gtk+-2.0)
-BuildRequires:	pkgconfig(pango)
-
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	libtool
-BuildRequires:	make
-
-#Requires:	VLGothic-fonts
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  eb-devel
+BuildRequires:  gcc
+BuildRequires:  gettext
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(pango)
+# /oreon:deps
 %description
 EBView is a EPWING dictionary browser.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -96,41 +78,28 @@ iconv -f ISO-8859-1 -t UTF-8 doc/en/index.html > doc/en/index.html.tmp && \
 rm -f intl/*.{c,h}
 
 %build
+
 %configure \
 	--with-eb-conf=%{_libdir}/eb.conf
 %make_build -k
-
 %install
 %{__rm} -rf $RPM_BUILD_ROOT
-
-# Actually %%makeinstall...
 %{__make} install \
 	INSTALL="%{__install} -c -p" \
 	bindir=$RPM_BUILD_ROOT%{_bindir}  \
 	datadir=$RPM_BUILD_ROOT%{_datadir} \
 	gnulocaledir=$RPM_BUILD_ROOT%{_datadir}/locale
-
 desktop-file-install \
 	--dir $RPM_BUILD_ROOT%{_datadir}/applications \
 	%{SOURCE1}
 %{__mkdir_p} $RPM_BUILD_ROOT%{_datadir}/pixmaps
 %{__install} -cpm 644 pixmaps/%{name}.xpm \
 	$RPM_BUILD_ROOT%{_datadir}/pixmaps/
-
 %{find_lang} %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%doc AUTHORS
-%license COPYING
-%doc ChangeLog
-%doc NEWS
-%doc README
-
-%{_bindir}/%{name}
-%{_datadir}/%{name}/
-
-%{_datadir}/applications/*%{name}.desktop
-%{_datadir}/pixmaps/%{name}.xpm
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

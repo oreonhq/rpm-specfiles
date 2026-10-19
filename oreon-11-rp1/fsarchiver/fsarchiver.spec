@@ -1,30 +1,27 @@
-%global source0_hash f7cd059e70fc57e888db282c622ec050c0dcdbaacc65e3c1eb163cd9d92d810d
-
+%global source0_hash ade1d9d3c7de815c0b40b54e24e39b53d4a3b0add69d47f23b36fc2fd8f21843
 Name:		fsarchiver
 Version:	0.8.9
-Release:	1%{?dist}
-Summary:	Safe and flexible file-system backup/deployment tool
-
-# Automatically converted from old format: GPLv2 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Safe and flexible file-system backup/deployment tool
 License:	GPL-2.0-only
 URL:		http://www.fsarchiver.org
-Source0:	https://github.com/fdupoux/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/fdupoux/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  e2fsprogs
+BuildRequires:  e2fsprogs-devel
 BuildRequires:  gcc
-BuildRequires:	e2fsprogs-devel => 1.41.4
-BuildRequires:	libuuid-devel
-BuildRequires:	libblkid-devel
-BuildRequires:	e2fsprogs
-BuildRequires:	libattr-devel
-BuildRequires:	libgcrypt-devel
-BuildRequires:	zlib-devel
-BuildRequires:	bzip2-devel
-BuildRequires:	lzo-devel
-BuildRequires:	xz-devel
-BuildRequires:	lz4-devel
-BuildRequires:	libzstd-devel
-BuildRequires: make
-
+BuildRequires:  libattr-devel
+BuildRequires:  libblkid-devel
+BuildRequires:  libgcrypt-devel
+BuildRequires:  libuuid-devel
+BuildRequires:  libzstd-devel
+BuildRequires:  lz4-devel
+BuildRequires:  lzo-devel
+BuildRequires:  make
+BuildRequires:  xz-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 FSArchiver is a system tool that allows you to save the contents of a 
 file-system to a compressed archive file. The file-system can be restored 
@@ -36,21 +33,17 @@ is corrupt, you just lose the current file, not the whole archive.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %configure
 %{make_build}
-
 %install
 %{make_install}
+%oreon_autofiles main
 
-%files
-%doc README THANKS NEWS
-%license COPYING
-%{_sbindir}/%{name}
-%{_mandir}/man8/%{name}*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

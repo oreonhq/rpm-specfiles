@@ -1,31 +1,9 @@
+%global source1_hash 00e4a87e87b7e7612f519a41e491f16623b12423620006f59f5688bfd8d13b08
 %global source0_hash 29f050480d9efe9a8bd55e274f1d571a1c6001cd1db9f8648a1888f73e4ea2ef
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
 %global upstreamname rocprofiler-register
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -38,51 +16,36 @@
 %global pkg_suffix %{nil}
 %global pkg_module default
 %endif
-
 %global glog_version 0.7.1
-
 %bcond check 1
 %if %{with check}
 %global build_test ON
 %else
 %global build_test OFF
 %endif
-
 %bcond_with debug
 %if %{with debug}
 %global build_type DEBUG
 %else
 %global build_type RelWithDebInfo
 %endif
-
-# Compression type and level for source/binary package payloads.
-#  "w7T0.xzdio" xz level 7 using %%{getncpus} threads
 %global _source_payload w7T0.xzdio
 %global _binary_payload w7T0.xzdio
-
 Name:           rocprofiler-register%{pkg_suffix}
 Version:        %{rocm_version}
-Release:        4%{?dist}
+Release:        1%{?dist}
 Summary:        A rocprofiler helper library
 License:        MIT AND BSD-3-Clause
-
-# Only x86_64 works right now:
 ExclusiveArch:  x86_64
-
 Url:            https://github.com/ROCm/%{upstreamname}
-Source0:        %{url}/archive/rocm-%{rocm_version}.tar.gz#/%{upstreamname}-%{rocm_version}.tar.gz
+Source0:        https://github.com/ROCm/%{upstreamname}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{name}.%{rocm_patch}.tar.gz
 Source1:        https://github.com/google/glog/archive/refs/tags/v%{glog_version}.tar.gz
-
+Provides:       bundled(glog) = %{glog_version}
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  fmt-devel
 BuildRequires:  gcc-c++
-
-# BSD-3-Clause
-# rocprofile needs a newer glog
-# glog looks like a dead project, notifiy the upstream they should move off of it.
-# https://github.com/ROCm/rocprofiler-sdk/issues/87
-Provides:       bundled(glog) = %{glog_version}
-
+# /oreon:deps
 %description
 The rocprofiler-register library is a helper library that coordinates
 the modification of the intercept API table(s) of the HSA/HIP/ROCTx
@@ -108,11 +71,11 @@ timing), etc.
 %package devel
 Summary:        The development package for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{upstreamname}-rocm-%{version}
@@ -136,37 +99,28 @@ cd -
 cp -p external/glog/COPYING COPYING.glog
 
 %build
+
 %cmake \
     -DCMAKE_BUILD_TYPE=%{build_type} \
     -DCMAKE_INSTALL_LIBDIR=%{pkg_libdir} \
     -DCMAKE_INSTALL_PREFIX=%{pkg_prefix} \
     -DROCPROFILER_REGISTER_BUILD_TESTS=%{build_test} \
     -DROCPROFILER_REGISTER_BUILD_FMT=OFF
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Do not install the test source etc
 rm -rf %{buildroot}%{pkg_prefix}/share/rocprofiler-register
 rm -rf %{buildroot}%{pkg_prefix}/share/modulefiles
 rm -rf %{buildroot}%{pkg_prefix}/share/doc/rocprofiler-register/LICENSE.md
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with check}
 %check
+
 %ctest
 %endif
-
-%files
-%license LICENSE.md COPYING.glog
-%{pkg_prefix}/%{pkg_libdir}/librocprofiler-register.so.0{,.*}
-
-%files devel
-%doc README.md
-%{pkg_prefix}/include/rocprofiler-register/
-%{pkg_prefix}/%{pkg_libdir}/librocprofiler-register.so
-%{pkg_prefix}/%{pkg_libdir}/cmake/rocprofiler-register/
+%files -f %{oreon_filedir}/main.list
+%files -n rocprofiler-register-7.1-devel -f %{oreon_filedir}/rocprofiler-register-7.1-devel.list
 
 %changelog
+
 %autochangelog

@@ -1,28 +1,23 @@
 %global source0_hash d13725a9eadcc289160b88e96492965d19d968c80111ecd79a0b5953fa815966
-
 %global gap_pkgname autpgrp
 %global giturl      https://github.com/gap-packages/autpgrp
-
 Name:           gap-pkg-%{gap_pkgname}
 Version:        1.13.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Compute the automorphism group of a p-Group in GAP
-
 License:        GPL-2.0-or-later
 URL:            https://gap-packages.github.io/autpgrp/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/v%{version}/%{gap_upname}-%{version}.tar.gz
-
+Source0:        %{giturl}/releases/download/v%{version}/%{gap_pkgname}-%{version}.tar.gz
 BuildArch:      noarch
 BuildSystem:    gap
 BuildOption(install): gap htm tst
 BuildOption(check): tst/testall.g
-
+Requires:       gap-core
+# oreon:deps
 BuildRequires:  gap-devel
 BuildRequires:  tth
-
-Requires:       gap-core
-
+# /oreon:deps
 %description
 The AutPGrp package introduces a new function to compute the automorphism
 group of a finite p-group.  The underlying algorithm is a refinement of the
@@ -37,20 +32,15 @@ uses the small groups library in certain cases and hence our algorithm is more
 effective if the small groups library is installed.
 
 %package doc
-# The content is GPL-2.0-or-later.  The remaining licenses cover the various
-# fonts embedded in PDFs.
-# AMS: OFL-1.1-RFN
-# CM: Knuth-CTAN
-# Nimbus: AGPL-3.0-only
 License:        GPL-2.0-or-later AND OFL-1.1-RFN AND Knuth-CTAN AND AGPL-3.0-only
 Summary:        Automorphism group documentation
 Requires:       %{name} = %{version}-%{release}
 Requires:       gap-online-help
-
 %description doc
 This package contains documentation for gap-pkg-%{gap_pkgname}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{gap_upname}-%{version}
@@ -61,27 +51,16 @@ rm -f doc/gapmacro.tex
 ln -s %{gap_libdir}/doc/gapmacro.tex doc
 
 %build
-# Link to main GAP documentation
+
 ln -s %{gap_libdir}/etc ../../etc
 ln -s %{gap_libdir}/doc ../../doc
 pushd doc
 ./make_doc
 popd
 rm -f ../../{doc,etc}
-
-%files
-%doc README CHANGES.md
-%license LICENSE
-%dir %{gap_libdir}/pkg/%{gap_upname}/
-%{gap_libdir}/pkg/%{gap_upname}/*.g
-%{gap_libdir}/pkg/%{gap_upname}/gap/
-%{gap_libdir}/pkg/%{gap_upname}/tst/
-
-%files doc
-%docdir %{gap_libdir}/pkg/%{gap_upname}/doc/
-%docdir %{gap_libdir}/pkg/%{gap_upname}/htm/
-%{gap_libdir}/pkg/%{gap_upname}/doc/
-%{gap_libdir}/pkg/%{gap_upname}/htm/
+%files -f %{oreon_filedir}/main.list
+%files -n gap-pkg-autpgrp-doc -f %{oreon_filedir}/gap-pkg-autpgrp-doc.list
 
 %changelog
+
 %autochangelog

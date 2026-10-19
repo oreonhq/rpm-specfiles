@@ -1,65 +1,50 @@
 %global source0_hash 3a9bd870b9de5a4a3d1421287dc9f73a462c7c4fa045ceca65e32598bddeb98c
-
-# Plasma has migrated to KF6 as of F40/EL10, this is still on KF5
 %bcond konqplugin %[!(0%{?fedora} >= 40 || 0%{?rhel} >= 10)]
-
 %global forgeurl https://github.com/KDE/choqok/
 %global commit de3801bb52f4d4ee3ad3cbaa7f8704d0013881f3
-
 Name:    choqok
 Version: 1.7.0
-Summary: KDE Micro-Blogging Client
+Summary:        KDE Micro-Blogging Client
 License: GPL-3.0-only
-
 %{forgemeta}
-
-Release: %autorelease
+Release:        1%{?dist}
 URL:     %{forgeurl}
-Source0: %{forgesource}
+Source0:        %{forgeurl}archive/%{commit}/%{name}-%{commit}.tar.gz
 Source1: %{name}.rpmlintrc
-
-BuildRequires: desktop-file-utils
-BuildRequires: gettext
-BuildRequires: libappstream-glib
-
-BuildRequires: pkgconfig(Qt5Core)
-BuildRequires: pkgconfig(Qt5DBus)
-BuildRequires: pkgconfig(Qt5Network)
-BuildRequires: pkgconfig(Qt5Widgets)
-
-BuildRequires: extra-cmake-modules
-BuildRequires: kf5-rpm-macros
-BuildRequires: cmake(KF5ConfigWidgets)
-BuildRequires: cmake(KF5CoreAddons)
-BuildRequires: cmake(KF5DocTools)
-BuildRequires: cmake(KF5I18n)
-BuildRequires: cmake(KF5Emoticons)
-BuildRequires: cmake(KF5GlobalAccel)
-BuildRequires: cmake(KF5GuiAddons)
-BuildRequires: cmake(KF5KCMUtils)
-BuildRequires: cmake(KF5KIO)
-BuildRequires: cmake(KF5Notifications)
-BuildRequires: cmake(KF5NotifyConfig)
-BuildRequires: cmake(KF5Sonnet)
-BuildRequires: cmake(KF5TextWidgets)
-BuildRequires: cmake(KF5Wallet)
-BuildRequires: cmake(KF5WidgetsAddons)
-BuildRequires: cmake(KF5XmlGui)
-
-BuildRequires: cmake(Qca-qt5)
-BuildRequires: qt5-qtnetworkauth-devel
-BuildRequires: kf5-purpose-devel
-BuildRequires: extra-cmake-modules
-
-# optional features
-BuildRequires: cmake(KF5Attica)
 %if %{with konqplugin}
-BuildRequires: cmake(KF5Parts)
-BuildRequires: cmake(KF5WebKit)
 %endif
-
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake(KF5Attica)
+BuildRequires:  cmake(KF5ConfigWidgets)
+BuildRequires:  cmake(KF5CoreAddons)
+BuildRequires:  cmake(KF5DocTools)
+BuildRequires:  cmake(KF5Emoticons)
+BuildRequires:  cmake(KF5GlobalAccel)
+BuildRequires:  cmake(KF5GuiAddons)
+BuildRequires:  cmake(KF5I18n)
+BuildRequires:  cmake(KF5KCMUtils)
+BuildRequires:  cmake(KF5KIO)
+BuildRequires:  cmake(KF5Notifications)
+BuildRequires:  cmake(KF5NotifyConfig)
+BuildRequires:  cmake(KF5Sonnet)
+BuildRequires:  cmake(KF5TextWidgets)
+BuildRequires:  cmake(KF5Wallet)
+BuildRequires:  cmake(KF5WidgetsAddons)
+BuildRequires:  cmake(KF5XmlGui)
+BuildRequires:  cmake(Qca-qt5)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gettext
+BuildRequires:  kf5-purpose-devel
+BuildRequires:  kf5-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  qt5-qtnetworkauth-devel
+# /oreon:deps
 %description
 A Free/Open Source micro-blogging client for K Desktop Environment.
 The name comes from an ancient Persian word, which means Sparrow!
@@ -80,60 +65,29 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 %{summary}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{forgesetup}
 %autosetup -p1 -n %{archivename}
 
 %build
+
 %{cmake_kf5}
 %cmake_build
-
 %install
 %cmake_install
-
 %find_lang %{name} --with-html
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf5_metainfodir}/org.kde.choqok.appdata.xml
 desktop-file-validate %{buildroot}%{_kf5_datadir}/applications/org.kde.choqok.desktop
-
-%files -f %{name}.lang
-%doc README AUTHORS changelog
-%{_kf5_bindir}/choqok
-%{_kf5_qtplugindir}/choqok_*.so
-%{_kf5_qtplugindir}/kcm_choqok_*.so
-%{_kf5_datadir}/icons/hicolor/*/*/*
-%{_kf5_datadir}/applications/org.kde.choqok.desktop
-%{_kf5_metainfodir}/org.kde.choqok.appdata.xml
-%{_datadir}/dbus-1/services/org.kde.choqok.service
-%{_kf5_datadir}/config.kcfg/*.kcfg
-%{_kf5_datadir}/kservices5/choqok_*.desktop
-%{_kf5_datadir}/choqok/
-%{_kf5_datadir}/knotifications5/choqok.notifyrc
-%{_kf5_datadir}/kxmlgui5/*choqok*/
-%{_kf5_datadir}/qlogging-categories5/choqok.categories
-%{_kf5_plugindir}/purpose/choqokplugin.so
-%if %{with konqplugin}
-%{_kf5_plugindir}/parts/konqchoqokplugin.so
-%{_kf5_datadir}/kservices5/ServiceMenus/choqok_*.desktop
-%{_kf5_datadir}/kservices5/konqchoqok.desktop
-%endif
-%{_kf5_datadir}/kservicetypes5/choqok*.desktop
-
-%ldconfig_scriptlets libs
-
-%files libs
-%{_kf5_libdir}/libchoqok.so.*
-%{_kf5_libdir}/libgnusocialapihelper.so.*
-%{_kf5_libdir}/libtwitterapihelper.so.*
-
-%files devel
-%{_includedir}/choqok/
-%{_kf5_libdir}/libchoqok.so
-%{_kf5_datadir}/cmake/modules/FindChoqok.cmake
-%{_kf5_libdir}/libgnusocialapihelper.so
-%{_kf5_libdir}/libtwitterapihelper.so
+%files -f %{oreon_filedir}/main.list
+%files -n choqok-libs -f %{oreon_filedir}/choqok-libs.list
+%files -n choqok-devel -f %{oreon_filedir}/choqok-devel.list
 
 %changelog
+
 %autochangelog

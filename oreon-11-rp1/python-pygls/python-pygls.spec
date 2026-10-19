@@ -1,46 +1,53 @@
-%global source0_hash d90856373a80bc5bc6490541a22953649e730149a2970e08a86c20ac24a5ac90
-
+%global source0_hash 69714019ef1deb7fb38bf3dcd1d6e93dcddf5eef239830d10ed581eb7511f35d
 Name:           python-pygls
 Version:        2.1.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A pythonic generic language server
-
 License:        Apache-2.0
 URL:            https://github.com/openlawlibrary/pygls
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-
+Source0:        https://github.com/openlawlibrary/pygls/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3-pytest
-BuildRequires:  %{py3_dist pytest_asyncio}
+Requires:       python3-pygls = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pygls+ws
+Summary:        Metapackage for python3-pygls ws extras
+Requires:       python3-pygls = %{version}-%{release}
+Requires:       python3dist(websockets) >= 13.0
+Provides:       python3dist(pygls[ws]) = %{version}-%{release}
 
-%global _description %{expand:
-pygls (pronounced like "pie glass") is a pythonic generic implementation of the
-Language Server Protocol for use as a foundation for writing your own Language
-Servers in just a few lines of code.}
+%description -n python3-pygls+ws
+Metapackage for python3-pygls ws extras.
 
-%description %_description
+%description
 
 %package -n     python3-pygls
-Summary:        %{summary}
-
-%description -n python3-pygls %_description
+Summary:        A pythonic generic language server
+# oreon:reqs
+Requires:       python3dist(attrs) >= 24.3.0
+Requires:       python3dist(cattrs) >= 23.1.2
+Requires:       python3dist(lsprotocol) == 2025.0.0
+# /oreon:reqs
+%description -n python3-pygls
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-pygls usr/lib/python3*/site-packages/pygls* usr/lib64/python3*/site-packages/pygls* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pygls* usr/lib64/python3*/site-packages/pygls* usr/bin/*
 
 %check
-%pytest -rs
 
-%files -n python3-pygls -f %{pyproject_files}
-%license LICENSE.txt
+%pytest -rs
+%files
+%files -n python3-pygls -f %{oreon_filedir}/python3-pygls.list
 
 %changelog
+
 %autochangelog

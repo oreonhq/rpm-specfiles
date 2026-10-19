@@ -1,32 +1,28 @@
 %global source0_hash e2038a6feeadcd6d4dfd7d7ab000bec91f32617720632829f5658916cd3cb17a
-
 %undefine _auto_set_build_flags
-
 %global srcver  0.25.2
 %global pkgsrc  %{srcver}%{?srcpre:-%{srcpre}}
-
 Name:           harec
 Version:        %{srcver}%{?srcpre:~%{srcpre}}
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Hare bootstrap compiler
-
 License:        GPL-3.0-only
 URL:            https://git.sr.ht/~sircmpwn/harec
-Source0:        %{url}/archive/%{pkgsrc}.tar.gz
-
-BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  qbe
+Source0:        https://git.sr.ht/~sircmpwn/%{name}/archive/%{version}.tar.gz
 Requires:       qbe
-
 ExclusiveArch:  %hare_arches
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  qbe
+# /oreon:deps
 %description
 This is a Hare compiler written in C11 for POSIX-compatible systems.
 It is intended as a bootstrap compiler and using the Hare standard
 library is recommended for production use.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{pkgsrc}
@@ -68,18 +64,17 @@ VERSION = %{version}-%{release}
 EOF
 
 %build
-%make_build
 
+%make_build
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-%make_build check
 
-%files
-%license COPYING
-%doc README.md docs/*.txt
-%{_bindir}/harec
+%make_build check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

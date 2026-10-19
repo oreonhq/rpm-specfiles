@@ -1,25 +1,22 @@
 %global source0_hash c6205afb214288cd8ef53f1ea1243ba9388c84b55c929f0b9e6cee7757c6efac
-
 Name:           jline2
 Version:        2.14.6
-Release:        17%{?dist}
+Release:        1%{?dist}
 Summary:        Java library for handling console input
 License:        BSD-3-Clause
 URL:            http://jline.github.io/jline2/
 Provides:       mvn(jline:jline) = %{version}
-
 Source0:        https://github.com/jline/jline2/archive/jline-%{version}.tar.gz
-
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 BuildRequires:  mvn(org.easymock:easymock)
 BuildRequires:  mvn(org.fusesource.jansi:jansi:1)
-
+# /oreon:deps
 %description
 JLine is a Java library for handling console input.  It is similar in
 functionality to BSD editline and GNU readline.  People familiar with
@@ -30,6 +27,7 @@ familiar.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n jline2-jline-%{version}
@@ -74,15 +72,15 @@ find -name TerminalFactoryTest.java -delete
 </plugin>"
 
 %build
-%mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 
+%mvn_build -- -Dmaven.compiler.source=1.8 -Dmaven.compiler.target=1.8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc CHANGELOG.md README.md
-%license LICENSE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog
 

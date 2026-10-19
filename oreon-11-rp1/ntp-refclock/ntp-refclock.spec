@@ -1,26 +1,25 @@
+%global source1_hash cf84c5f3fb1a295284942624d823fffa634144e096cfc4f9969ac98ef5f468e5
 %global source0_hash f93043ba4ca22f7d495cf86f6311923b67d5e153607dc7634a8b12409de1b114
-
 %global ntp_version 4.2.8p18
-
 Name:		ntp-refclock
 Version:	0.7
-Release:	3%{?dist}
-Summary:	Drivers for hardware reference clocks
+Release:        3%{?dist}
+Summary:        Drivers for hardware reference clocks
 License:	BSD-2-Clause AND NTP AND BSD-3-Clause AND BSD-4-Clause AND Beerware
 URL:		https://github.com/mlichvar/ntp-refclock
-Source0:	https://github.com/mlichvar/ntp-refclock/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/mlichvar/ntp-refclock/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:	https://downloads.nwtime.org/ntp/4.2.8/ntp-%{ntp_version}.tar.gz
 Patch0:		ntp-refclock-configure-c99.patch
 Patch1:		ntp-refclock-md5cast.patch
-
-BuildRequires:	gcc make systemd pps-tools-devel
-
 Requires:	udev
 %{?systemd_requires}
-
-# The drivers and some code they need are from ntp
 Provides:	bundled(ntp) = %{ntp_version}
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  pps-tools-devel
+BuildRequires:  systemd
+# /oreon:deps
 %description
 ntp-refclock is a wrapper for reference clock drivers included in the ntpd
 daemon, which enables other NTP implementations to use the supported hardware
@@ -32,6 +31,7 @@ reference clock and sending the measurements to another process controlling
 the system clock.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -a 1
@@ -59,10 +59,9 @@ u ntp-refclock - 'Reference clock driver' - -
 EOF
 
 %build
+
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fno-strict-overflow"
-
 pushd ntp
-
 %configure \
 	--enable-all-clocks \
 	--enable-parse-clocks \
@@ -71,28 +70,21 @@ pushd ntp
 	--without-crypto \
 	--without-threads \
 	--without-sntp
-
 sed -i 's/-Werror=format-security//g' sntp/libopts/Makefile
-
-# Build only objects that may be linked with ntp-refclock
 %make_build -C libntp
 %make_build -C libparse
 %make_build -C sntp/libopts
 %make_build -C ntpd
-
 popd
-
 %make_build \
 	CFLAGS="$RPM_OPT_FLAGS" \
 	LDFLAGS="$RPM_LD_FLAGS" \
 	DEFAULT_USER=%{name} \
 	DEFAULT_ROOTDIR=/usr/share/empty
-
 %install
 %make_install \
 	sbindir=$RPM_BUILD_ROOT%{_sbindir} \
 	mandir=$RPM_BUILD_ROOT%{_mandir}
-
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/{sysconfig,udev/rules.d}
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
 install -m 644 -p examples/ntp-refclock.sysconfig \
@@ -105,25 +97,19 @@ install -m 644 -p examples/pps-ldattach@.service \
 	$RPM_BUILD_ROOT%{_unitdir}/pps-ldattach@.service
 install -m 644 -D ntp-refclock.sysusers.conf \
 	$RPM_BUILD_ROOT%{_sysusersdir}/ntp-refclock.conf
+%oreon_autofiles main
 
 %post
+
 %systemd_post ntp-refclock.service
-
 %preun
+
 %systemd_preun ntp-refclock.service
-
 %postun
-%systemd_postun_with_restart ntp-refclock.service
 
-%files
-%license COPYRIGHT*
-%doc README NEWS ntp/html/drivers
-%config(noreplace) %{_sysconfdir}/sysconfig/ntp-refclock
-%config(noreplace) %{_sysconfdir}/udev/rules.d/80-ntp-refclock.rules
-%{_sbindir}/%{name}
-%{_mandir}/man8/%{name}.8*
-%{_unitdir}/*.service
-%{_sysusersdir}/ntp-refclock.conf
+%systemd_postun_with_restart ntp-refclock.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

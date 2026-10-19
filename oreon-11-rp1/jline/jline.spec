@@ -1,5 +1,4 @@
 %global source0_hash b999d69cde60dc151d98f5fdb7dc58502456f982ec9f1441306237dde3160cf8
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,35 +80,19 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond bootstrap 0
-
 Name:           jline
 Version:        4.4.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java library for handling console input
 License:        BSD-3-Clause AND Apache-2.0
 URL:            https://github.com/jline/jline3
 ExclusiveArch:  %{java_arches}
-
 Source0:        https://github.com/jline/jline3/archive/refs/tags/%{version}.tar.gz#/jline-%{version}.tar.gz
-
-# Fedora/RHEL specific: JNI shared objects MUST be placed in %%{_prefix}/lib/%%{name}
 Patch:          0001-Load-native-library-form-usr-lib-jline.patch
-# Patch out unwanted optional dependency on universalchardet
 Patch:          0002-Remove-optional-dependency-on-universalchardet.patch
-
-BuildRequires:  gcc
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(com.google.code.findbugs:jsr305)
-BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-dependency-plugin)
-BuildRequires:  mvn(org.easymock:easymock)
-BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
-BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-params)
 %endif
-# TODO remove in Fedora 46
 Obsoletes:      %{name}-builtins < 3.29.0
 Obsoletes:      %{name}-console < 3.29.0
 Obsoletes:      %{name}-javadoc < 3.29.0
@@ -122,7 +105,10 @@ Obsoletes:      %{name}-style < 3.29.0
 Obsoletes:      %{name}-terminal < 3.29.0
 Obsoletes:      %{name}-terminal-jansi < 3.29.0
 Obsoletes:      %{name}-terminal-jna < 3.29.0
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 JLine is a Java library for handling console input.  It is similar in
 functionality to BSD editline and GNU readline but with additional
@@ -132,6 +118,7 @@ and tcsh) will find most of the command editing features of JLine to be
 familiar.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 # GitHub archive of tag %%{version} unpacks as jline3-%%{version}.
 %autosetup -p1 -n jline3-%{version}
@@ -173,23 +160,19 @@ rm builtins/src/test/java/org/jline/builtins/SyntaxHighlighterJimFsTest.java
 %pom_remove_dep :picocli-codegen native
 
 %build
-# Build a native object
+
 gcc -Wall %{build_cflags} -fPIC -fvisibility=hidden -shared -I native/src/main/native \
   -I %{_jvmdir}/java/include -I %{_jvmdir}/java/include/linux %{build_ldflags} \
   -o libjlinenative.so native/src/main/native/{jlinenative,clibrary}.c
-
-# Build the Java artifacts
 %mvn_build -j -- -P\!bundle -Dlibrary.jline.path=$PWD
-
 %install
 %mvn_install
 install -d -m 755 %{buildroot}%{_prefix}/lib/%{name}/
 install -p -m 755 libjlinenative.so %{buildroot}%{_prefix}/lib/%{name}/
+%oreon_autofiles main
 
-%files -f .mfiles
-%{_prefix}/lib/%{name}
-%doc README.md
-%license LICENSE.txt LICENSE-APACHE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

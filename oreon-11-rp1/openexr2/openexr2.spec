@@ -1,35 +1,31 @@
+%global source3_hash 9b764cbb7bab0842638ce8ab668d8cbf317444e94a194cc1c0bcda4d063ba953
+%global source2_hash 5d9b2550db3ccaa1cae24348d08402b36c02d225fa154e745630c43464fa9935
+%global source1_hash 0ca2bf0732a3799ca8add88a73592aafd7bbb5b93f53ec56529036b894411fce
 %global source0_hash db261a7fcc046ec6634e4c5696a2fc2ce8b55f50aac6abe034308f54c8495f55
-
 %global sover 25
 %global imfsover 26
 %global srcname openexr
 %global pkgname %{srcname}2
-
 Name:           %{pkgname}
 Version:        2.5.8
 Release:        12%{?dist}
 Summary:        Provides the specification and reference implementation of the EXR file format
-
 License:        BSD-3-Clause
 URL:            https://www.openexr.com/
-Source0:        https://github.com/AcademySoftwareFoundation/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz#/openexr2-2.5.8.tar.gz
-# Backport updated binary files for the tests.
+Source0:        https://github.com/AcademySoftwareFoundation/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        https://github.com/AcademySoftwareFoundation/%{srcname}/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.interleaved.exr
 Source2:        https://github.com/AcademySoftwareFoundation/%{srcname}/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.planar.exr
 Source3:        https://github.com/AcademySoftwareFoundation/%{srcname}/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.tiled.exr
-
 Patch0:         openexr-gcc11.patch
 Patch1:         openexr2-cstdint.patch
-# Backport of commit 25a11d9a34fcf3c70f7f32680bdbe910a84d85d5 to v2.5.8.
-# The binary files got removed from the patch as they are not supported by the
-# patch command.
 Patch2:         0001-use-NO_COMPRESSION-in-OpenEXTest-testBackwardCompati.patch
-
-BuildRequires:  cmake
-BuildRequires:  gcc gcc-c++
+# oreon:deps
 BuildRequires:  boost-devel
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  zlib-devel
-
+# /oreon:deps
 %description
 OpenEXR is an open-source high-dynamic-range floating-point image file format
 for high-quality image processing and storage. This document presents a brief
@@ -38,10 +34,8 @@ overview of OpenEXR and explains concepts that are specific to this format.
 NOTE: This is a compatibility package for projects that don't yet support
 OpenEXR 3.0.
 
-
 %package libs
 Summary:        OpenEXR Libraries
-
 %description libs
 OpenEXR is an open-source high-dynamic-range floating-point image file format
 for high-quality image processing and storage. This document presents a brief
@@ -83,71 +77,39 @@ graphics applications, including the “half” 16-bit floating-point type.
 NOTE: This is a compatibility package for projects that don't yet support
 OpenEXR 3.0.
 
-
 %package devel
 Conflicts:      openexr-devel
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-
 Summary:        Development files for %{name}
-
 %description devel
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{srcname}-%{version}
 mv %{SOURCE1} %{SOURCE2} %{SOURCE3} OpenEXR/IlmImfTest/
 
-
 %build
+
 %cmake -DPYILMBASE_ENABLE=OFF \
        -DOPENEXR_BUILD_UTILS=OFF 
 %cmake_build
-
-
 %install
 %cmake_install
-
-# Remove extraneous documentation since this is a compat package.
 rm -rf %{buildroot}%{_docdir}/OpenEXR/
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-# Test 4 currently fails on aarch64 and sometimes times out on armv7hl
-# https://github.com/AcademySoftwareFoundation/openexr/issues/876
+
 %ifnarch armv7hl aarch64 s390x i686 ppc64le riscv64
 %ctest
 %endif
-
-
-%files libs
-%doc CHANGES.md CONTRIBUTING.md GOVERNANCE.md SECURITY.md CODE_OF_CONDUCT.md CONTRIBUTORS.md README.md
-%license LICENSE.md
-%{_libdir}/libHalf-2_5.so.%{sover}{,.*}
-%{_libdir}/libIex-2_5.so.%{sover}{,.*}
-%{_libdir}/libIexMath-2_5.so.%{sover}{,.*}
-%{_libdir}/libIlmImf-2_5.so.%{imfsover}{,.*}
-%{_libdir}/libIlmImfUtil-2_5.so.%{imfsover}{,.*}
-%{_libdir}/libIlmThread-2_5.so.%{sover}{,.*}
-%{_libdir}/libImath-2_5.so.%{sover}{,.*}
-
-
-%files devel
-%{_includedir}/OpenEXR/
-%{_libdir}/libHalf{,-2_5}.so
-%{_libdir}/libIex{,-2_5}.so
-%{_libdir}/libIexMath{,-2_5}.so
-%{_libdir}/libIlmImf{,-2_5}.so
-%{_libdir}/libIlmImfUtil{,-2_5}.so
-%{_libdir}/libIlmThread{,-2_5}.so
-%{_libdir}/libImath{,-2_5}.so
-%{_libdir}/cmake/IlmBase/
-%{_libdir}/pkgconfig/IlmBase.pc
-%{_libdir}/cmake/OpenEXR/
-%{_libdir}/pkgconfig/OpenEXR.pc
-
+%files -f %{oreon_filedir}/main.list
+%files -n openexr2-libs -f %{oreon_filedir}/openexr2-libs.list
+%files -n openexr2-devel -f %{oreon_filedir}/openexr2-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.8-12
 - Import

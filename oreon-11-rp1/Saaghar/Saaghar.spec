@@ -1,21 +1,21 @@
-%global source0_hash d14402f93d3c808fba91ff0d54fe2e536912f40cf9cab365368e722890210b55
-
+%global source1_hash a4be795e6c7d3a88b99f2f5d79711bf5860db7cd5f033cc37b0e0ae614671c49
+%global source0_hash 62ed14604aaf35f906735ba73d4b55df9f9d000d36603e4edbe50c7c2a76e898
 Name:           Saaghar
 Version:        3.0.0
 Release:        25%{?dist}
 Summary:        A Cross-Platform Persian Poetry Software
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            http://pozh.org/saaghar/
 Source0:        https://github.com/srazi/Saaghar/releases/download/v%{version}/Saaghar-%{version}.tar.gz
-# Fedora specific: do not install doc files
 Patch0:         %{name}-installfix.patch
-
-BuildRequires: make
-BuildRequires:  gcc-c++ qt-devel desktop-file-utils phonon-devel
 Recommends:     %{name}-data
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  phonon-devel
+BuildRequires:  qt-devel
+# /oreon:deps
 %description
 Saaghar is a cross-platform Persian poetry software. It uses 
 http://ganjoor.net database. It has lots of features:
@@ -32,11 +32,11 @@ Release:        24.%{release}
 Summary:        Database for %{name}
 BuildArch:      noarch
 Source1:        http://downloads.sourceforge.net/saaghar/%{name}-data-%{version}.xz
-
 %description    data
 This package contains the database for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}
@@ -47,28 +47,19 @@ sed -i.dosfix "s/\r//g" data/Saaghar.desktop
 rm -rf data/fonts/
 
 %build
+
 %{qmake_qt4} -config release
 make %{?_smp_mflags}
-
 %install
 make install INSTALL_ROOT=%{buildroot}
 install -Dp -m 0644 data/ganjoor.s3db %{buildroot}%{_datadir}/saaghar/
-
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
+%oreon_autofiles Saaghar-data usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS GPLv3 CHANGELOG README.md TODO LICENSE
-%{_bindir}/*
-%{_datadir}/pixmaps/*
-%{_datadir}/applications/*
-%{_datadir}/saaghar/themes
-%{_datadir}/saaghar/*.pdf
-%{_datadir}/saaghar/*.qm
-%{_datadir}/saaghar/*.gdb
-%dir %{_datadir}/saaghar
-
-%files data
-%{_datadir}/saaghar/ganjoor.s3db
+%files -f %{oreon_filedir}/main.list
+%files -n Saaghar-data -f %{oreon_filedir}/Saaghar-data.list
 
 %changelog
+
 %autochangelog

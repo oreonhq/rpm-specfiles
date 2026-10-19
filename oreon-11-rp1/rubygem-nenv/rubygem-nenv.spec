@@ -1,40 +1,22 @@
-%global source0_hash 82701b0618968649bf76a1c45e3dfdf8a859bc89bbced849f84b42887204e783
-
+%global source0_hash d9de6d8fb7072228463bf61843159419c969edb34b3cef51832b516ae7972765
 %global gem_name nenv
-
-# tests require rspec >= 3.1
-%if 0%{?rhel} && 0%{?rhel} <= 7
-%global with_tests 0
-%else
 %global with_tests 1
-%endif
-
 Name:           rubygem-%{gem_name}
 Version:        0.3.0
 Release:        19%{?dist}
 Summary:        Convenience wrapper for Ruby's ENV
-
 License:        MIT
 URL:            https://github.com/e2/nenv
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
-# git clone https://github.com/e2/nenv && cd nenv
-# git checkout v0.3.0
-# tar -czf rubygem-nenv-0.3.0-specs.tgz spec/
 Source1:        %{name}-%{version}-specs.tgz
-
 BuildArch:      noarch
-BuildRequires:  rubygems-devel
 %if 0%{?with_tests}
+%endif
+# oreon:deps
 BuildRequires:  rubygem(coveralls)
-BuildRequires:  rubygem(rspec) => 3.1
-BuildRequires:  rubygem(rspec) < 4
-%endif
-%if 0%{?rhel} && 0%{?rhel} <= 7
-Requires:       ruby(release)
-Requires:       ruby(rubygems)
-Provides:       rubygem(%{gem_name}) = %{version}
-%endif
-
+BuildRequires:  rubygem(rspec)
+BuildRequires:  rubygems-devel
+# /oreon:deps
 %description
 Using ENV is like using raw SQL statements in your code. We all know how that
 ends...
@@ -43,11 +25,11 @@ ends...
 Summary:        Documentation for %{name}
 BuildArch:      noarch
 Requires:       %{name} = %{version}-%{release}
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 gem unpack %{SOURCE0}
@@ -57,16 +39,17 @@ gem unpack %{SOURCE0}
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
 
 %build
+
 gem build %{gem_name}.gemspec
-
 %gem_install
-
 %install
 mkdir -p %{buildroot}%{gem_dir}
 cp -a .%{gem_dir}/* \
         %{buildroot}%{gem_dir}/
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if 0%{?with_tests}
 cp -pr spec/ .%{gem_instdir}
 pushd .%{gem_instdir}
@@ -74,19 +57,9 @@ rspec -r spec_helper
 rm -rf spec
 popd
 %endif
-
-%files
-%dir %{gem_instdir}/
-%license %{gem_instdir}/LICENSE.txt
-%doc %{gem_instdir}/README.md
-%{gem_libdir}/
-%{gem_spec}
-%exclude %{gem_instdir}/.gitignore
-%exclude %{gem_instdir}/%{gem_name}.gemspec
-%exclude %{gem_cache}
-
-%files doc
-%doc %{gem_docdir}/
+%files -f %{oreon_filedir}/main.list
+%files -n rubygem-nenv-doc -f %{oreon_filedir}/rubygem-nenv-doc.list
 
 %changelog
+
 %autochangelog

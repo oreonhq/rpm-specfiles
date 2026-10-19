@@ -1,62 +1,54 @@
-%global source0_hash none
-
+%global source0_hash fe8609a5a77fa8ba8399ac15921cb2cc041c2ef458d5522ff6eb143ec3e37e2d
 Name:           python-lion-pytorch
 Version:        0.2.5
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Lion Optimizer - Pytorch
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://pypi.org/project/lion-pytorch/
-Source:         %{pypi_source lion_pytorch}
-
+Source0:        https://files.pythonhosted.org/packages/source/l/lion_pytorch/lion_pytorch-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+Requires:       python3-lion-pytorch = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-lion-pytorch+test
+Summary:        Metapackage for python3-lion-pytorch test extras
+Requires:       python3-lion-pytorch = %{version}-%{release}
+Provides:       python3dist(lion-pytorch[test]) = %{version}-%{release}
 
+%description -n python3-lion-pytorch+test
+Metapackage for python3-lion-pytorch test extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'lion-pytorch' generated automatically by pyp2spec.}
-
-%description %_description
+%description
 
 %package -n     python3-lion-pytorch
-Summary:        %{summary}
-
-%description -n python3-lion-pytorch %_description
+Summary:        Lion Optimizer - Pytorch
+# oreon:reqs
+Requires:       python3dist(torch) >= 1.6
+# /oreon:reqs
+%description -n python3-lion-pytorch
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-lion-pytorch test
-
 
 %prep
-%autosetup -p1 -n lion_pytorch-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir lion_pytorch-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-lion-pytorch usr/lib/python3*/site-packages/lion_pytorch* usr/lib64/python3*/site-packages/lion_pytorch* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/lion_pytorch* usr/lib64/python3*/site-packages/lion_pytorch* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-lion-pytorch -f %{pyproject_files}
+%files
+%files -n python3-lion-pytorch -f %{oreon_filedir}/python3-lion-pytorch.list
 
 %changelog
+
 %autochangelog

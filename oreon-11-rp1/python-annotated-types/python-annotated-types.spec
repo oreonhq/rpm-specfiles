@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 13b2beaad985e05e2d6407ee4c4f35590b11f8d693a258a561055cac8f64cab7
 Name:           python-annotated-types
 Version:        0.8.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Reusable constraint types to use with typing.Annotated
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/annotated-types/annotated-types
-Source:         %{pypi_source annotated_types}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/annotated_types/annotated_types-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'annotated-types' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-annotated-types = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-annotated-types
-Summary:        %{summary}
-
-%description -n python3-annotated-types %_description
-
+Summary:        Reusable constraint types to use with typing.Annotated
+%description -n python3-annotated-types
 
 %prep
-%autosetup -p1 -n annotated_types-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir annotated_types-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-annotated-types usr/lib/python3*/site-packages/annotated_types* usr/lib64/python3*/site-packages/annotated_types* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/annotated_types* usr/lib64/python3*/site-packages/annotated_types* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-annotated-types -f %{pyproject_files}
+%files
+%files -n python3-annotated-types -f %{oreon_filedir}/python3-annotated-types.list
 
 %changelog
+
 %autochangelog

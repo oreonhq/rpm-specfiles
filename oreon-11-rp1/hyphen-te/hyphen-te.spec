@@ -1,21 +1,23 @@
 %global source0_hash 68334d08ce32846509687c34c5650e83817050dd13371fdb43104402c58aa6b5
-
 Name: hyphen-te
-Summary: Telugu hyphenation rules
+Summary:        Telugu hyphenation rules
 Epoch: 1
 Version: 0.7.0
-Release: 29%{?dist}
-Source:        http://download.savannah.gnu.org/releases/smc/hyphenation/patterns/%{name}-%{version}.tar.bz2
+Release:        1%{?dist}
+Source0:        http://download.savannah.gnu.org/releases/smc/hyphenation/patterns/%{name}-%{version}.tar.bz2
 URL: http://wiki.smc.org.in
 License: LGPL-3.0-or-later
 BuildArch: noarch
 Requires: hyphen
 Supplements: (hyphen and langpacks-te)
+# oreon:deps
 
+# /oreon:deps
 %description
 Telugu hyphenation rules.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
@@ -24,11 +26,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 mkdir -p %{buildroot}/%{_datadir}/hyphen
 install -m644 -p *.dic %{buildroot}/%{_datadir}/hyphen
+%oreon_autofiles main
 
-%files
-%doc README COPYING ChangeLog
-%{_datadir}/hyphen/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.0-29
 - Prepare for Oreon 11 (RP1)

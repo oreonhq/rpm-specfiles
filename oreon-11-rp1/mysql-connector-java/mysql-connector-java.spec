@@ -1,30 +1,26 @@
 %global source0_hash 16a797591f7da065e736a2300d523171a5c49ff057d5166b2adb48734d68d5cb
-
 Name:           mysql-connector-java
 Epoch:          1
 Version:        8.0.30
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Official JDBC driver for MySQL
 License:        GPL-2.0-only
 URL:            https://dev.mysql.com/downloads/connector/j/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-# Generated with generate-tarball.sh
 Source0:        %{name}-%{version}-nojars.tar.xz
 Source1:        generate-tarball.sh
-
 Patch:          0001-Remove-coverage-test.patch
 Patch:          0002-Remove-authentication-plugin.patch
 Patch:          0003-Remove-StatementsTest.patch
 Patch:          0004-Port-to-Java-21.patch
-
-BuildRequires:  javapackages-local-openjdk25
+# oreon:deps
 BuildRequires:  ant-junit5
+BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  javassist
 BuildRequires:  protobuf-java
 BuildRequires:  slf4j
-
+# /oreon:deps
 %description
 MySQL Connector/J is a native Java driver that converts JDBC (Java Database
 Connectivity) calls into the network protocol used by the MySQL database.
@@ -35,6 +31,7 @@ IV JDBC driver and has a complete JDBC feature set that supports the
 capabilities of MySQL.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -50,19 +47,18 @@ rm src/test/java/testsuite/regression/DataSourceRegressionTest.java
 rm src/test/java/testsuite/simple/StatementsTest.java
 
 %build
+
 ant -Dcom.mysql.cj.build.jdk=%{java_home} \
     -Dcom.mysql.cj.extra.libs=%{_javadir} \
     test dist
-
 %install
-# Install the Maven build information
 %mvn_file mysql:mysql-connector-java %{name}
 %mvn_artifact src/build/misc/pom.xml build/%{name}-%{version}-SNAPSHOT/%{name}-%{version}-SNAPSHOT.jar
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc CHANGES README README.md
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

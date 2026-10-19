@@ -1,5 +1,4 @@
 %global source0_hash 5aeb9b50110405d479349e806cfb2deb0f8f1ee137883b9ea0e040a35d0961a3
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,18 +82,18 @@ end
 %bcond_with bootstrap
 Name:           plexus-resources
 Version:        1.4.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Plexus Resource Manager
 License:        Apache-2.0 AND MIT
 URL:            https://github.com/codehaus-plexus/plexus-resources
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/codehaus-plexus/plexus-resources/archive/refs/tags/plexus-resources-%{version}.tar.gz#/plexus-resources-%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.4.0-13
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(javax.inject:javax.inject)
 BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
@@ -102,10 +101,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-xml)
 BuildRequires:  mvn(org.codehaus.plexus:plexus:pom:)
 BuildRequires:  mvn(org.eclipse.sisu:sisu-maven-plugin)
 BuildRequires:  mvn(org.slf4j:slf4j-api)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.4.0-13
-
+# /oreon:deps
 %description
 The Plexus project seeks to create end-to-end developer tools for
 writing applications. At the core is the container, which can be
@@ -116,16 +112,18 @@ is like a J2EE application server, without all the baggage.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n plexus-resources-plexus-resources-%{version}
-
+%global oreon_srcdir plexus-resources-plexus-resources-%{version}
+%oreon_prep
 %build
+
 %mvn_file  : plexus/resources
 %mvn_build -j -f
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

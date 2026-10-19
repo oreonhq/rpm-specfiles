@@ -1,36 +1,28 @@
 %global source0_hash 49d0fc50ab931816f6bfc1ac68f8d74b760450eebdb5374e803ee36550f26774
-
-# libssh2 is not available on RHEL
-%if 0%{?rhel}
-%bcond_with libssh2
-%else
 %bcond_without libssh2
-%endif
-
 Name:           libgit2_1.8
 Version:        1.8.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C implementation of the Git core methods as a library with a solid API
-# Automatically converted from old format: GPLv2 with exceptions - review is highly recommended.
 License:        LicenseRef-Callaway-GPLv2-with-exceptions
 URL:            https://libgit2.org/
 Source0:        https://github.com/libgit2/libgit2/archive/refs/tags/v%{version}.tar.gz#/libgit2-%{version}.tar.gz
-
+%if %{with libssh2}
+%endif
+Provides:       bundled(libxdiff)
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  gcc
-BuildRequires:  cmake >= 3.5.1
-BuildRequires:  ninja-build
-BuildRequires:  llhttp-devel
 BuildRequires:  krb5-devel
 BuildRequires:  libcurl-devel
-%if %{with libssh2}
 BuildRequires:  libssh2-devel
-%endif
+BuildRequires:  llhttp-devel
+BuildRequires:  ninja-build
 BuildRequires:  openssl-devel
 BuildRequires:  pcre2-devel
 BuildRequires:  python3
 BuildRequires:  zlib-devel
-Provides:       bundled(libxdiff)
-
+# /oreon:deps
 %description
 libgit2 is a portable, pure C implementation of the Git core methods
 provided as a re-entrant linkable library with a solid API, allowing
@@ -40,16 +32,14 @@ with bindings.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-# This compat -devel package provides an older version of libgit2-devel
 Provides:       libgit2-devel = %{?epoch:%{epoch}:}%{version}-%{release}
-# These devel packages are not installable in parallel
 Conflicts:      pkgconfig(libgit2)
-
 %description    devel
 This package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n libgit2-%{version}
@@ -66,6 +56,7 @@ find . -maxdepth 1 -not -name xdiff -exec rm -rf {} ';'
 popd
 
 %build
+
 %cmake \
   -GNinja \
   -DCMAKE_BUILD_TYPE=RelWithDebInfo \
@@ -82,23 +73,16 @@ popd
 %endif
   %{nil}
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license COPYING
-%{_libdir}/libgit2.so.1.8*
-
-%files devel
-%doc AUTHORS docs examples README.md
-%{_libdir}/libgit2.so
-%{_libdir}/pkgconfig/libgit2.pc
-%{_includedir}/git2.h
-%{_includedir}/git2/
+%files -f %{oreon_filedir}/main.list
+%files -n libgit2_1.8-devel -f %{oreon_filedir}/libgit2_1.8-devel.list
 
 %changelog
+
 %autochangelog

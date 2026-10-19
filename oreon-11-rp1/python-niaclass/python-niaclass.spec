@@ -1,62 +1,36 @@
 %global source0_hash a57c3db2fbc89729745e2f68a386dc9ed5bd56e026b64b75838db1a1168623bb
-
 %bcond tests 1
-# Sphinx-generated HTML documentation is not suitable for packaging; see
-# https://bugzilla.redhat.com/show_bug.cgi?id=2006555 for discussion.
-#
-# We can generate PDF documentation as a substitute.
 %bcond doc_pdf 1
-
-%global _description %{expand:
-NiaClass is a framework for solving classification tasks using nature-inspired
-algorithms. The framework is written fully in Python. Its goal is to find the
-best possible set of classification rules for the input data using the NiaPy
-framework, which is a popular Python collection of nature-inspired algorithms.
-The NiaClass classifier support numerical and categorical features.}
-
 Name:           python-niaclass
 Version:        0.2.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Python framework for building classifiers using nature-inspired algorithms
-
-# SPDX
 License:        MIT
 URL:            https://github.com/firefly-cpp/NiaClass
-Source:         %{url}/archive/%{version}/NiaClass-%{version}.tar.gz
-
+Source0:        https://github.com/firefly-cpp/NiaClass/archive/%{version}/NiaClass-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  python3-devel
-
-# See [tool.poetry.dev-dependencies] in pyproject.toml; it mixes documentation,
-# testing, and other dev dependencies such as linters, formatters, and
-# coverage-analysis tools, so we must track these dependencies manually.
 %if %{with doc_pdf}
-BuildRequires:  make
-BuildRequires:  %{py3_dist sphinx}
-BuildRequires:  python3-sphinx-latex
-BuildRequires:  latexmk
-# The HTML theme is imported in conf.py even for LaTeX builds.
-BuildRequires:  %{py3_dist sphinx-rtd-theme}
 %endif
 %if %{with tests}
-BuildRequires:  %{py3_dist pytest}
 %endif
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-niaclass = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-niaclass
-Summary:        %{summary}
-
-%description -n python3-niaclass %_description
+Summary:        Python framework for building classifiers using nature-inspired algorithms
+%description -n python3-niaclass
 
 %package doc
 Summary:        Documentation and examples for python-niaclass
-
 %description doc
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n NiaClass-%{version}
@@ -67,43 +41,29 @@ sed -r -i 's/( = ")\^/\1>=/' pyproject.toml
 # version.
 sed -r -i 's/^(python = "[^"]+),[[:blank:]]*<[^"]+"/\1"/' pyproject.toml
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %if %{with doc_pdf}
 PYTHONPATH="${PWD}" %make_build -C docs latex \
     SPHINXOPTS='-j%{?_smp_build_ncpus}'
 %make_build -C docs/_build/latex LATEXMKOPTS='-quiet'
 %endif
-
 %install
 %pyproject_install
-%pyproject_save_files niaclass
+%oreon_autofiles python3-niaclass usr/lib/python3*/site-packages/niaclass* usr/lib64/python3*/site-packages/niaclass* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/niaclass* usr/lib64/python3*/site-packages/niaclass* usr/bin/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %pyproject_check_import
 %if %{with tests}
 %pytest
 %endif
-
-%files -n python3-niaclass -f %{pyproject_files}
-%license LICENSE
-%doc README.md
-%doc CHANGELOG.md
-%doc CITATION.cff
-
-%files doc
-%license LICENSE
-%doc CITATION.cff
-
-%doc examples/
-
-%if %{with doc_pdf}
-%doc docs/_build/latex/niaclass.pdf
-%endif
+%files
+%files -n python3-niaclass -f %{oreon_filedir}/python3-niaclass.list
+%files -n python-niaclass-doc -f %{oreon_filedir}/python-niaclass-doc.list
 
 %changelog
+
 %autochangelog

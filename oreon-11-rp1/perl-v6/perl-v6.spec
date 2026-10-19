@@ -1,32 +1,13 @@
 %global source0_hash f835eb72887b76692ca463936eab41d62a6b4de01a1674adf80b4e7f896ac2f4
-
-# Inhibit python compilation
 %global __python %{nil}
-
 Name:           perl-v6
 Version:        0.047
-Release:        28%{?dist}
+Release:        1%{?dist}
 Summary:        Perl 6 implementation
-# Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/v6
 Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/v6-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  coreutils
-BuildRequires:  findutils
-BuildRequires:  make
-BuildRequires:  perl-interpreter
-BuildRequires:  perl-generators
-BuildRequires:  perl(ExtUtils::MakeMaker)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Run-time
-BuildRequires:  perl(Encode)
-BuildRequires:  perl(Filter::Util::Call)
-BuildRequires:  perl(overload)
-BuildRequires:  perl(Scalar::Util)
-BuildRequires:  perl(utf8)
-# YAML::Syck not used at tests
 Requires:       perl(YAML::Syck)
 Provides:       perl(Perlito6::AST) = %{version}
 Provides:       perl(Perlito6::Emitter::Token) = %{version}
@@ -43,8 +24,6 @@ Provides:       perl(Perlito6::Perl5::Runtime) = %{version}
 Provides:       perl(Perlito6::Python::Emitter) = %{version}
 Provides:       perl(Perlito6::Ruby::Emitter) = %{version}
 Provides:       perl(Perlito6::Runtime) = %{version}
-
-# Do not export private modules
 %global __provides_exclude %{!?__provides_exclude:^$}
 %global __provides_exclude %__provides_exclude|^perl\\(Apply\\)
 %global __provides_exclude %__provides_exclude|^perl\\(ARRAY\\)
@@ -100,17 +79,28 @@ Provides:       perl(Perlito6::Runtime) = %{version}
 %global __provides_exclude %__provides_exclude|^perl\\(Var\\)
 %global __provides_exclude %__provides_exclude|^perl\\(When\\)
 %global __provides_exclude %__provides_exclude|^perl\\(While\\)
-
-# Do not generate requires from Perlito/Python/Prelude.pm, because it
-# contains "use v6" and generators process it as Perl version 6.0 instead
-# of a Perl module
 %global __requires_exclude_from %{?__requires_exclude_from:__requires_exclude_from|}^$
 %global __requires_exclude_from %__requires_exclude_from|^%{perl_vendorlib}/Perlito6/Python/Prelude.pm
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  make
+BuildRequires:  perl(Encode)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Filter::Util::Call)
+BuildRequires:  perl(Scalar::Util)
+BuildRequires:  perl(overload)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The v6 module is a front-end to the "Perlito" compiler.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n v6-%{version}
@@ -118,22 +108,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find -type f -exec chmod -x {} +
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor
 make %{?_smp_mflags}
-
 %install
 make pure_install DESTDIR=$RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT -type f -name .packlist -delete
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%doc ChangeLog README
-%{_bindir}/*
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

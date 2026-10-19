@@ -1,20 +1,13 @@
 %global source0_hash 83f00d2b83bc9badd18add6e9c650c41f2aeb6483eb19013dbdae21e4d7bf81d
-
 %global qt_module qtwayland
-
-Summary: Qt5 - Wayland platform support and QtCompositor module
+Summary:        Qt5 - Wayland platform support and QtCompositor module
 Name:    qt5-%{qt_module}
 Version: 5.15.18
-Release: 2%{?dist}
-
+Release:        1%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
 %global majmin %(echo %{version} | cut -d. -f1-2)
-Source0: https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
-## Upstream patches
-## repo: https://invent.kde.org/qt/qt/qtwayland
-## branch: kde/5.15
-## git format-patch v5.15.18-lts-lgpl
+Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
 Patch1:  0001-Client-Announce-an-output-after-receiving-more-compl.patch
 Patch2:  0002-Fix-issue-with-repeated-window-size-changes.patch
 Patch3:  0003-Client-Connect-drags-being-accepted-to-updating-the-.patch
@@ -70,41 +63,31 @@ Patch52: 0052-tests-Fix-tst_xdgshell-minMaxSize.patch
 Patch53: 0053-Client-Remove-some-surface-commits.patch
 Patch54: 0054-Client-Avoid-locking-resizing-in-QWaylandShmBackingS.patch
 Patch55: 0055-bradient-Use-QWaylandWindow-actual-window-title.patch
-
-
-# Use QAdwaitaDecorations by default
 Patch100: qtwayland-use-adwaita-decorations-by-default.patch
 Patch101: qtwayland-decoration-support-backports-from-qt6.patch
 Patch102: qtwayland-client-fix-window-margin-calculation.patch
-
-# Upstreamable patches
-
-
-# filter qml provides
 %global __provides_exclude_from ^%{_qt5_archdatadir}/qml/.*\\.so$
-
-BuildRequires: make
-BuildRequires:  qt5-qtbase-devel >= %{version}
-BuildRequires:  qt5-qtbase-static
-BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
-BuildRequires:  qt5-qtdeclarative-devel
-
-BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  pkgconfig(wayland-scanner)
-BuildRequires:  pkgconfig(wayland-server)
+# oreon:deps
+BuildRequires:  libXext-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig(egl)
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(libinput)
+BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-cursor)
 BuildRequires:  pkgconfig(wayland-egl)
-BuildRequires:  pkgconfig(egl)
-BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(wayland-scanner)
+BuildRequires:  pkgconfig(wayland-server)
 BuildRequires:  pkgconfig(xcomposite)
+BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  pkgconfig(xrender)
-BuildRequires:  pkgconfig(libudev)
-BuildRequires:  pkgconfig(libinput)
-
-BuildRequires:  libXext-devel
-
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtbase-private-devel
+BuildRequires:  qt5-qtbase-static
+BuildRequires:  qt5-qtdeclarative-devel
+# /oreon:deps
 %description
 %{summary}.
 
@@ -121,23 +104,17 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description examples
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{qt_module}-everywhere-src-%{version} -p1
 
-
 %build
+
 %{qmake_qt5}
-
 %make_build
-
-
 %install
 make install INSTALL_ROOT=%{buildroot}
-
-## .prl/.la file love
-# nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
 pushd %{buildroot}%{_qt5_libdir}
 for prl_file in libQt5*.prl ; do
   sed -i -e "/^QMAKE_PRL_BUILD_DIR/d" ${prl_file}
@@ -147,44 +124,14 @@ for prl_file in libQt5*.prl ; do
   fi
 done
 popd
-
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README
-%license LICENSE.*
-%{_qt5_libdir}/libQt5WaylandCompositor.so.5*
-%{_qt5_libdir}/libQt5WaylandClient.so.5*
-%{_qt5_plugindir}/wayland-decoration-client/
-%{_qt5_plugindir}/wayland-graphics-integration-server
-%{_qt5_plugindir}/wayland-graphics-integration-client
-%{_qt5_plugindir}/wayland-shell-integration
-%{_qt5_plugindir}/platforms/libqwayland-egl.so
-%{_qt5_plugindir}/platforms/libqwayland-generic.so
-%{_qt5_plugindir}/platforms/libqwayland-xcomposite-egl.so
-%{_qt5_plugindir}/platforms/libqwayland-xcomposite-glx.so
-%{_qt5_qmldir}/QtWayland/
-
-%files devel
-%{_qt5_bindir}/qtwaylandscanner
-%{_qt5_headerdir}/QtWaylandCompositor/
-%{_qt5_headerdir}/QtWaylandClient/
-%{_qt5_libdir}/libQt5WaylandCompositor.so
-%{_qt5_libdir}/libQt5WaylandClient.so
-%{_qt5_libdir}/libQt5WaylandCompositor.prl
-%{_qt5_libdir}/libQt5WaylandClient.prl
-%{_qt5_libdir}/cmake/Qt5WaylandCompositor/Qt5WaylandCompositorConfig*.cmake
-%{_qt5_libdir}/pkgconfig/*.pc
-%{_qt5_archdatadir}/mkspecs/modules/*.pri
-%{_qt5_libdir}/cmake/Qt5WaylandCompositor/
-%{_qt5_libdir}/cmake/Qt5Gui/Qt5Gui_*.cmake
-%{_qt5_libdir}/cmake/Qt5WaylandClient/
-
-%files examples
-%{_qt5_examplesdir}/wayland/
-
+%files -f %{oreon_filedir}/main.list
+%files -n qt5-qtwayland-devel -f %{oreon_filedir}/qt5-qtwayland-devel.list
+%files -n qt5-qtwayland-examples -f %{oreon_filedir}/qt5-qtwayland-examples.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
 - Import

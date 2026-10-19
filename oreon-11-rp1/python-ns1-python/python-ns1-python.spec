@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash cd3db956d1503542e6cd21237d6f61ebbf6888545ebedb8ea2265905fc90aa1a
 Name:           python-ns1-python
 Version:        0.29.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python SDK for the NS1 DNS platform
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/ns1/ns1-python
-Source:         %{pypi_source ns1_python}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/ns1_python/ns1_python-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ns1-python' generated automatically by pyp2spec.}
-
 Patch0001:      https://github.com/ns1/ns1-python/pull/75.patch#/0001-Fixup-compatibility-with-Python-3.10.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-ns1-python = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ns1-python
-Summary:        %{summary}
-
-%description -n python3-ns1-python %_description
-
+Summary:        Python SDK for the NS1 DNS platform
+%description -n python3-ns1-python
 
 %prep
-%autosetup -p1 -n ns1_python-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ns1_python-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ns1-python usr/lib/python3*/site-packages/ns1_python* usr/lib64/python3*/site-packages/ns1_python* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ns1_python* usr/lib64/python3*/site-packages/ns1_python* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ns1-python -f %{pyproject_files}
+%files
+%files -n python3-ns1-python -f %{oreon_filedir}/python3-ns1-python.list
 
 %changelog
+
 %autochangelog

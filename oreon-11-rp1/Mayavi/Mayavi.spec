@@ -1,39 +1,34 @@
-%global source0_hash eb7f46952d4786008ed4f272172bec475fcdcb988f5e1c5405daea9d41955cef
-
-#global commit db518f882c19b04c72d1be26f6a43bd0e611ee18
+%global source0_hash f2e6d990c47e0cda6c795242a5e612e4c5291bbef4a0e42b4e7d65d83c01be3c
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           Mayavi
 Version:        4.9.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Scientific data 3-dimensional visualizer
-# Automatically converted from old format: BSD and EPL and LGPLv2+ and LGPLv2 and LGPLv3 - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-EPL AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-LGPLv2 AND LGPL-3.0-only
 URL:            http://code.enthought.com/projects/mayavi/
 Source0:        https://github.com/enthought/mayavi/archive/%{version}/mayavi-%{version}.tar.gz
 Source1:        mayavi2.desktop
+Requires:       python%{python3_pkgversion}-mayavi
+ExcludeArch:    %{ix86}
+# oreon:deps
+BuildRequires:  /usr/bin/sphinx-build
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  make
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-Cython
-BuildRequires:  python%{python3_pkgversion}-setuptools
-# For tests
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-pytest-xvfb
-BuildRequires:  python%{python3_pkgversion}-apptools+gui
-BuildRequires:  python%{python3_pkgversion}-apptools+preferences
-BuildRequires:  python%{python3_pkgversion}-qt5
-BuildRequires:  python%{python3_pkgversion}-traits
-BuildRequires:  python%{python3_pkgversion}-traitsui
-BuildRequires:  python%{python3_pkgversion}-numpy
-BuildRequires:  python%{python3_pkgversion}-vtk
-# For HTML docs
-BuildRequires:  /usr/bin/sphinx-build
-Requires:       python%{python3_pkgversion}-mayavi
-BuildRequires:  desktop-file-utils 
+BuildRequires:  python3-Cython
+BuildRequires:  python3-apptools+gui
+BuildRequires:  python3-apptools+preferences
+BuildRequires:  python3-devel
+BuildRequires:  python3-numpy
+BuildRequires:  python3-pytest
+BuildRequires:  python3-pytest-xvfb
+BuildRequires:  python3-qt5
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-traits
+BuildRequires:  python3-traitsui
+BuildRequires:  python3-vtk
 BuildRequires:  xwayland-run
-ExcludeArch:    %{ix86}
-
+# /oreon:deps
 %description
 The Mayavi project includes two related packages for 3-dimensional 
 visualization:
@@ -57,17 +52,16 @@ Requires:       python%{python3_pkgversion}-apptools+preferences
 Requires:       python%{python3_pkgversion}-traitsui
 Requires:       python%{python3_pkgversion}-envisage
 Requires:       python%{python3_pkgversion}-pyface-qt
-
 %description -n python%{python3_pkgversion}-mayavi
 Python 3 mayavi module
 
 %package doc
 Summary:        Documentation for %{name}
-
 %description doc
 Documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n mayavi-%{version}
@@ -108,55 +102,34 @@ find examples -type f -exec chmod 0644 {} ";"
 chmod 0644 mayavi/tests/data/cellsnd.ascii.inp
 
 %build
-# Recythonize the sources
+
 find -name '*.pyx' -exec cython --verbose {} \;
-
 %py3_build
-# Need xwfb-run for html doc building
 SPHINXBUILD=/usr/bin/sphinx-build xwfb-run -- %{__python3} setup.py build_docs
-
 %install
 %py3_install
-
-# fix wrong-file-end-of-line-encoding
 for file in docs/build/mayavi/html/_downloads/wx_mayavi*.py; do
  sed "s|\r||g" $file > $file.new && \
  touch -r $file $file.new && \
  mv $file.new $file
 done
-
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1/
 cp -p docs/mayavi2.man $RPM_BUILD_ROOT/%{_mandir}/man1/mayavi2.1
-
 desktop-file-install --dir=${RPM_BUILD_ROOT}%{_datadir}/applications %{SOURCE1}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/
 install -p -m 644 ./docs/source/mayavi/images/mayavi2-48x48.png \
  $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/48x48/apps/mayavi2.png
+%oreon_autofiles python3-mayavi usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles Mayavi-doc usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# https://github.com/enthought/mayavi/issues/1349
+
 %pytest -v --deselect mayavi/tests/test_garbage_collection.py::TestMayaviGarbageCollection::test_mlab_scene_model_with_gui mayavi
-
-%files
-%license *LICENSE*
-%doc README-tvtk.txt docs/*.txt
-%{_bindir}/mayavi2
-%{_bindir}/tvtk_doc
-%{_mandir}/man1/mayavi2.1.*
-%{_datadir}/applications/mayavi2.desktop
-%{_datadir}/icons/hicolor/48x48/apps/mayavi2.png
-
-%files -n python%{python3_pkgversion}-mayavi
-%license *LICENSE*
-%doc docs/*.txt README-tvtk.txt
-%dir %{python3_sitearch}/mayavi
-%{python3_sitearch}/mayavi/[_a-gi-z]*
-%{python3_sitearch}/mayavi*.egg-info
-%{python3_sitearch}/tvtk/
-
-%files doc
-%license *LICENSE*
-%doc README-tvtk.txt docs/*.txt docs/build/mayavi docs/build/tvtk examples/
+%files -f %{oreon_filedir}/main.list
+%files -n python3-mayavi -f %{oreon_filedir}/python3-mayavi.list
+%files -n Mayavi-doc -f %{oreon_filedir}/Mayavi-doc.list
 
 %changelog
+
 %autochangelog

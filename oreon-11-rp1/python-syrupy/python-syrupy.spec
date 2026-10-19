@@ -1,57 +1,43 @@
-%global source0_hash none
-
+%global source0_hash 7e584a8df4ede6dd3c1c44a77f9edc46186b6767a73dea6f0083044946839a59
 Name:           python-syrupy
 Version:        6.1.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Pytest Snapshot Test Utility
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/syrupy-project/syrupy
-Source:         %{pypi_source syrupy}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/syrupy/syrupy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'syrupy' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-syrupy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-syrupy
-Summary:        %{summary}
-
-%description -n python3-syrupy %_description
-
+Summary:        Pytest Snapshot Test Utility
+# oreon:reqs
+Requires:       python3dist(pytest) (>= 8.0.0)
+# /oreon:reqs
+%description -n python3-syrupy
 
 %prep
-%autosetup -p1 -n syrupy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir syrupy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-syrupy usr/lib/python3*/site-packages/syrupy* usr/lib64/python3*/site-packages/syrupy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/syrupy* usr/lib64/python3*/site-packages/syrupy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-syrupy -f %{pyproject_files}
+%files
+%files -n python3-syrupy -f %{oreon_filedir}/python3-syrupy.list
 
 %changelog
+
 %autochangelog

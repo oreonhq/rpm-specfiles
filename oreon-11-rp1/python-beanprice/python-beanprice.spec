@@ -1,57 +1,47 @@
-%global source0_hash none
-
+%global source0_hash d90d26641f7baed8443cdfdb5545c38f8d01f97604ed4ad4173b023598982b13
 Name:           python-beanprice
 Version:        2.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Price quotes fetcher for Beancount
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/beancount/beanprice
-Source:         %{pypi_source beanprice}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/beanprice/beanprice-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'beanprice' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-beanprice = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-beanprice
-Summary:        %{summary}
-
-%description -n python3-beanprice %_description
-
+Summary:        Price quotes fetcher for Beancount
+# oreon:reqs
+Requires:       python3dist(beancount) >= 3.0.0
+Requires:       python3dist(curl-cffi) >= 0.6.5
+Requires:       python3dist(diskcache) >= 5.6.3
+Requires:       python3dist(python-dateutil) >= 2.6.0
+Requires:       python3dist(requests) >= 2.0
+# /oreon:reqs
+%description -n python3-beanprice
 
 %prep
-%autosetup -p1 -n beanprice-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir beanprice-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-beanprice usr/lib/python3*/site-packages/beanprice* usr/lib64/python3*/site-packages/beanprice* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/beanprice* usr/lib64/python3*/site-packages/beanprice* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-beanprice -f %{pyproject_files}
-%{_bindir}/bean-price
+%files
+%files -n python3-beanprice -f %{oreon_filedir}/python3-beanprice.list
 
 %changelog
+
 %autochangelog

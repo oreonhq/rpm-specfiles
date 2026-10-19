@@ -1,41 +1,23 @@
+%global source1_hash c652982a71c85df8cc60f19bfd1cc4b951d76809d6c3ddda8fd012fd8b6bdedc
 %global source0_hash 519e639da18762dc084ee214ad57d1c8c425cd480f222b754a3593def6f0f473
-
-Summary: Port Scan Attack Detector (psad) watches for suspect traffic
+Summary:        Port Scan Attack Detector (psad) watches for suspect traffic
 Name: psad
 Version: 2.4.6
-Release: 24%{?dist}
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        24%{?dist}
 License: GPL-2.0-or-later
 URL: https://www.cipherdyne.org/psad/
-Source0: https://www.cipherdyne.org/psad/download/psad-%{version}.tar.bz2
+Source0:        https://www.cipherdyne.org/psad/download/psad-%{version}.tar.bz2
 Source1: https://www.cipherdyne.org/psad/download/psad-%{version}.tar.bz2.asc
-# curl -O https://www.cipherdyne.org/signing_key ; gpg --import ./signing_key
-# gpg --export --export-options export-minimal 4D6644A9DA036904BDA2CB90E6C9E3350D3E7410 > 4D6644A9DA036904BDA2CB90E6C9E3350D3E7410.gpg
 Source2: 4D6644A9DA036904BDA2CB90E6C9E3350D3E7410.gpg
 Source4: psad-tmpfiles.conf
-# patch to:
-# * allow specifying Fedora CFLAGS
-# * use system whois
-# * set some sensible defaults in /etc/psad/psad.conf
 Patch0: psad-fedora.patch
-# https://github.com/mrash/psad/issues/53
 Patch1: psad-issue53.patch
 BuildArch: noarch
-BuildRequires: %{_bindir}/gpgv2
-BuildRequires: perl-generators
-BuildRequires: systemd-rpm-macros
-# works with system one, but doesn't crash or break without it
-%if 0%{?fedora}
-Recommends: %{_bindir}/whois
-Recommends: %{_sbindir}/sendmail
-Recommends: /bin/mail
-%endif
 Requires: %{_bindir}/killall
 Requires: /bin/ps
 Requires: gzip
 Requires: iproute
 Requires: iptables
-# The automatic dependency generator doesn't find these
 Requires: perl(Bit::Vector)
 Requires: perl(Carp::Clan)
 Requires: perl(Date::Calc)
@@ -47,7 +29,11 @@ Requires: perl(Unix::Syslog)
 Requires(post): policycoreutils >= 2.4
 Requires(post): %{_sbindir}/semodule
 Requires(postun): %{_sbindir}/semodule
-
+# oreon:deps
+BuildRequires:  /usr/bin/gpgv2
+BuildRequires:  perl-generators
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 Port Scan Attack Detector (psad) is a lightweight
 system daemon written in Perl designed to work with Linux
@@ -68,6 +54,7 @@ alert on snort signatures that are logged via fwsnort
 iptables string match module to detect application layer signatures.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
@@ -78,8 +65,8 @@ gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 rm -r deps/{Bit-Vector,Carp-Clan,Date-Calc,IPTables-ChainMgr,IPTables-Parse,NetAddr-IP,Storable,Unix-Syslog,whois}
 
 %build
-echo Nothing to build.
 
+echo Nothing to build.
 %install
 install  -dm755 %{buildroot}{%{_mandir}/man{1,8},%{_sbindir},%{_sysconfdir}/%{name}}
 install  -pm755 -t %{buildroot}%{_sbindir} psad
@@ -97,22 +84,18 @@ install  -pm644 -t %{buildroot}%{_sysconfdir}/%{name} \
  psad.conf \
  signatures \
  snort_rule_dl \
-
 install -pm644 -t %{buildroot}%{_mandir}/man8 doc/{fwcheck_psad,psad}.8
 install -pm644 -t %{buildroot}%{_mandir}/man1 doc/nf2csv.1
-
 cp -pr deps/snort_rules %{buildroot}%{_sysconfdir}/%{name}
-
 install -Dpm644 init-scripts/systemd/psad.service %{buildroot}%{_unitdir}/psad.service
 install -Dpm644 %{S:4} %{buildroot}%{_tmpfilesdir}/psad.conf
-
-# upstream's installer creates those as root-accessible only
 install  -dm700 %{buildroot}/{var/{lib,log},run}/%{name}
 touch %{buildroot}/var/lib/%{name}/psadfifo
 touch %{buildroot}/run/%{name}/psad.cmd
+%oreon_autofiles main
 
 %post
-# missing from current SELinux policy (Fedora: #1174309, RHEL7: #1389191)
+
 TMPDIR=$(%{_bindir}/mktemp -d)
 cat >> $TMPDIR/psad-rpm.cil << __EOF__
 (allow firewalld_t psad_t(dbus (send_msg)))
@@ -155,47 +138,17 @@ __EOF__
 rm -rf $TMPDIR
 %systemd_post psad.service
 exit 0
-
 %preun
-%systemd_preun psad.service
 
+%systemd_preun psad.service
 %postun
+
 %systemd_postun_with_restart psad.service
 if [ $1 -eq 0 ]; then
   %{_sbindir}/semodule -r psad-rpm > /dev/null || :
 fi
-
-%files
-%license LICENSE
-%doc doc/BENCHMARK ChangeLog CREDITS doc/FW_EXAMPLE_RULES README.md doc/README.SYSLOG doc/SCAN_LOG
-%{_bindir}/nf2csv
-%{_sbindir}/fwcheck_psad
-%{_sbindir}/psad
-%{_mandir}/man1/nf2csv.1*
-%{_mandir}/man8/fwcheck_psad.8*
-%{_mandir}/man8/psad.8*
-%{_tmpfilesdir}/psad.conf
-%{_unitdir}/psad.service
-%dir %{_sysconfdir}/%{name}
-%dir %{_sysconfdir}/logrotate.d
-%config(noreplace) %{_sysconfdir}/logrotate.d/psad
-%config(noreplace) %{_sysconfdir}/%{name}/psad.conf
-%config(noreplace) %{_sysconfdir}/%{name}/signatures
-%config(noreplace) %{_sysconfdir}/%{name}/auto_dl
-%config(noreplace) %{_sysconfdir}/%{name}/ip_options
-%config(noreplace) %{_sysconfdir}/%{name}/snort_rule_dl
-%config(noreplace) %{_sysconfdir}/%{name}/posf
-%config(noreplace) %{_sysconfdir}/%{name}/pf.os
-%config(noreplace) %{_sysconfdir}/%{name}/icmp_types
-%config(noreplace) %{_sysconfdir}/%{name}/icmp6_types
-%config(noreplace) %{_sysconfdir}/%{name}/protocols
-%dir %{_sysconfdir}/%{name}/snort_rules
-%config(noreplace) %{_sysconfdir}/%{name}/snort_rules/*
-%dir /var/lib/%{name}
-%ghost %attr(0700,root,root) /var/lib/%{name}/psadfifo
-%dir /var/log/%{name}
-%ghost %dir /run/%{name}
-%ghost %attr(0700,root,root) /run/%{name}/psad.cmd
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

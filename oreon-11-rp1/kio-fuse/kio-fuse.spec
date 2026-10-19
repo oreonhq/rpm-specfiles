@@ -1,98 +1,72 @@
+%global source1_hash 58b237371bd80cb0619e98c910ea24a21914559eb6680d5370b6f26eb850188d
 %global source0_hash adf6aa7ce055c0987e716a93ac01f3c0a97c1280421443cd6b21e0e71d763d14
-
 %global source2_key_fpr 21EC3FD75D26B39E820BE6FBD27C2C1AF21D8BAD
-
-
-
 %global         min_qt_version 5.12
 %global         min_kf_version 5.66
-
-# uncomment to enable bootstrap mode
-#global bootstrap 1
-
 %if !0%{?bootstrap}
 %global tests 1
 %endif
-
 Name:           kio-fuse
 Version:        5.1.1
 Release:        1%{?dist}
 Summary:        KIO FUSE
-
 License:        GPL-3.0-or-later
 URL:            https://invent.kde.org/system/kio-fuse
 Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz.sig
 Source2:        gpgkey-21EC3FD75D26B39E820BE6FBD27C2C1AF21D8BAD.gpg
-
-## upstream fixes
-
-BuildRequires:  cmake
-BuildRequires:  gnupg2
-BuildRequires:  gcc-c++
-BuildRequires:  systemd
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  extra-cmake-modules  >= %{min_kf_version}
-
-BuildRequires:  pkgconfig(fuse3)
-
-BuildRequires:  cmake(Qt6Core)       >= %{min_qt_version}
-BuildRequires:  cmake(Qt6Test)       >= %{min_qt_version}
-
-BuildRequires:  cmake(KF6KIO)        >= %{min_kf_version}
-BuildRequires:  cmake(KF6CoreAddons) >= %{min_kf_version}
-
 %if 0%{?tests}
-BuildRequires:  dbus-x11
-BuildRequires:  kio-extras
-BuildRequires:  fuse3
 %endif
-
 Requires:       systemd
 Requires:       dbus-common
 Requires:       fuse3-libs%{?_isa}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  dbus-x11
+BuildRequires:  extra-cmake-modules
+BuildRequires:  fuse3
+BuildRequires:  gcc-c++
+BuildRequires:  gnupg2
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  kio-extras
+BuildRequires:  pkgconfig(fuse3)
+BuildRequires:  systemd
+# /oreon:deps
 %description
 KioFuse works by acting as a bridge between KDE's KIO filesystem design and
 FUSE.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" 2>/dev/null | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
-
 %build
+
 %cmake_kf6 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF} \
 	-DQT_MAJOR_VERSION=6
-
 %cmake_build
-
-
 %install
 %cmake_install
-
+%oreon_autofiles main
 
 %check
+
 %if 0%{?tests}
 export CTEST_OUTPUT_ON_FAILURE=1
 dbus-launch --exit-with-session \
 %ctest --timeout 30 ||:
 %endif
-
-
-%files
-%license LICENSES/GPL-3.0-or-later.txt
-%doc README.md DESIGN.md
-%{_libexecdir}/kio-fuse
-%{_userunitdir}/kio-fuse.service
-%{_kf6_datadir}/dbus-1/services/org.kde.KIOFuse.service
-%{_tmpfilesdir}/%{name}-tmpfiles.conf
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Fri Sep 04 2026 Brandon Lester <boostyconnect@oreonproject.org> - 5.1.1-1
 - Latest upstream release
 

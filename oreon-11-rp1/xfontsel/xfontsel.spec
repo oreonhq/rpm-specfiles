@@ -1,33 +1,9 @@
-%global source0_hash 7a4b86658a7701253ed0fe8a66471e54e4cacbba66d7278f1759d3b3a33a02c9
-
+%global source0_hash 78ff018757c7b22137cf5d3526ef5e9388bc0cdead1f00daf2c898e2e274553f
 Name:           xfontsel
 Version:        1.1.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Tool to list X11 core protocol fonts
-
-# The entire source is X11, except the following files that are not installed
-# or belong to the build system and therefore do not contribute to the license
-# of the binary RPMs…
 License:        X11
-# FSFAP-no-warranty-disclaimer
-#   - INSTALL
-# FSFUL AND HPND-sell-variant:
-# (HPND-sell-variant is because it is derived from configure.ac)
-#   - configure
-# FSFULLR:
-#   - aclocal.m4
-# FSFULLR AND HPND-sell-variant:
-#   - Makefile.in
-# GPL-2.0-or-later WITH Autoconf-exception-generic:
-#   - compile
-#   - depcomp
-#   - missing
-# GPL-3.0-or-later WITH Autoconf-exception-generic:
-#   - config.guess
-#   - config.sub
-# HPND-sell-variant:
-#   - Makefile.am
-#   - configure.ac
 SourceLicense:  %{shrink:
                 %{license} AND
                 FSFAP-no-warranty-disclaimer AND
@@ -38,46 +14,29 @@ SourceLicense:  %{shrink:
                 HPND-sell-variant
                 }
 URL:            https://www.x.org
-Source0:        %{url}/pub/individual/app/xfontsel-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
 Source1:        %{url}/pub/individual/app/xfontsel-%{version}.tar.xz.sig
-# Keyring created on 2021-02-23 with:
-#   workdir="$(mktemp --directory)"
-#   gpg2 --with-fingerprint xfontsel-1.0.6.tar.bz2.sig 2>&1 |
-#     awk '$2 == "using" { print "0x" $NF }' |
-#     xargs gpg2 --homedir="${workdir}" \
-#         --keyserver=hkp://pool.sks-keyservers.net --recv-keys
-#   gpg2 --homedir="${workdir}" --export --export-options export-minimal \
-#       > xfontsel.gpg
-#   rm -rf "${workdir}"
-# Inspect keys using:
-#   gpg2 --list-keys --no-default-keyring --keyring ./xfontsel.gpg
-# Since the SKS Keyserver Network is no longer online, you can reproduce by
-# substituting:
-#   --keyserver=hkps://keys.openpgp.org
 Source2:        xfontsel.gpg
-
-BuildRequires:  gpgverify
-
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
-
 BuildRequires:  gcc
-BuildRequires:  make
-
 BuildRequires:  gettext
-
+BuildRequires:  gpgverify
+BuildRequires:  make
 BuildRequires:  pkgconfig(x11)
-BuildRequires:  pkgconfig(xmu)
-BuildRequires:  pkgconfig(xt)
 BuildRequires:  pkgconfig(xaw7)
-BuildRequires:  pkgconfig(xorg-macros) >= 1.8
-
+BuildRequires:  pkgconfig(xmu)
+BuildRequires:  pkgconfig(xorg-macros)
+BuildRequires:  pkgconfig(xt)
+# /oreon:deps
 %description
 The xfontsel application provides a simple way to display the X11 core protocol
 fonts known to your X server, examine samples of each, and retrieve the X
 Logical Font Description (“XLFD”) full name for a font.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -88,20 +47,14 @@ autoreconf --force --install --verbose
 %configure
 
 %build
-%make_build
 
+%make_build
 %install
 %make_install
+%oreon_autofiles main
 
-# Upstream provides no tests.
-
-%files
-%license COPYING
-%doc ChangeLog
-%doc README.md
-%{_bindir}/xfontsel
-%{_mandir}/man1/xfontsel.1*
-%{_datadir}/X11/app-defaults/XFontSel
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

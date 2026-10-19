@@ -1,26 +1,22 @@
 %global source0_hash 5f8242a011b85477749127b7e94e874035c431c2fa6df817e5603ed891604beb
-
-# Force out of source build
 %undefine __cmake_in_source_build
-
 Name:           rclone-browser
 Version:        1.8.0
 Release:        15%{?dist}
 Summary:        Simple cross platform GUI for rclone
-
 License:        Unlicense
 URL:            https://github.com/kapitainsky/RcloneBrowser
-Source0:        %url/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc-c++
+Source0:        https://github.com/kapitainsky/RcloneBrowser/archive/%{version}/%{name}-%{version}.tar.gz
+Requires:       rclone
+# oreon:deps
 BuildRequires:  cmake
 BuildRequires:  cmake(Qt5)
 BuildRequires:  cmake(Qt5Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
 BuildRequires:  hicolor-icon-theme
 BuildRequires:  libappstream-glib
-BuildRequires:  desktop-file-utils
-Requires:       rclone
-
+# /oreon:deps
 %description
 Simple cross platfrom GUI for rclone command line tool.
 
@@ -47,6 +43,7 @@ Features:
    name), rclone and .rclone.conf path now can be relative to executable
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n RcloneBrowser-%{version}
@@ -54,24 +51,20 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i "s|-Werror ||" src/CMakeLists.txt
 
 %build
+
 %cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo
 %cmake_build
-
 %install
 %cmake_install
 install -Dpm 0644 assets/rclone-browser.appdata.xml %{buildroot}%{_metainfodir}/%{name}.appdata.xml
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/%{name}.appdata.xml
-
-%files
-%license LICENSE
-%doc CHANGELOG.md README.md
-%{_bindir}/%{name}
-%{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/applications/%{name}.desktop
-%{_metainfodir}/%{name}.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

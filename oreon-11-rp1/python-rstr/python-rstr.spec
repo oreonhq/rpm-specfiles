@@ -1,56 +1,42 @@
-%global source0_hash none
-
+%global source0_hash c4a564d4dfb4472d931d145c43d1cf1ad78c24592142e7755b8866179eeac012
 Name:           python-rstr
 Version:        3.2.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Generate random strings in Python
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/leapfrogonline/rstr
-Source:         %{pypi_source rstr}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/rstr/rstr-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'rstr' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61.2
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 3.4.3
+Requires:       python3-rstr = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-rstr
-Summary:        %{summary}
-
-%description -n python3-rstr %_description
-
+Summary:        Generate random strings in Python
+%description -n python3-rstr
 
 %prep
-%autosetup -p1 -n rstr-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir rstr-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-rstr usr/lib/python3*/site-packages/rstr* usr/lib64/python3*/site-packages/rstr* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/rstr* usr/lib64/python3*/site-packages/rstr* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-rstr -f %{pyproject_files}
+%files
+%files -n python3-rstr -f %{oreon_filedir}/python3-rstr.list
 
 %changelog
+
 %autochangelog

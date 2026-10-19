@@ -1,57 +1,46 @@
 %global source0_hash 692708cd047c7a552f2f85fe2ee32f19c7d5be5bf695d0288e8cadf50289db06
-
-# Review at https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=215241
-
 %global minor_version 0.6
 %global thunar_version 4.20.0
 %global xfceversion 4.20
-
 Name:           thunar-archive-plugin
 Version:        0.6.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Archive plugin for the Thunar file manager
-
-# Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://goodies.xfce.org/projects/thunar-plugins/%{name}
 Source0:        http://archive.xfce.org/src/thunar-plugins/%{name}/%{minor_version}/%{name}-%{version}.tar.xz
-#VCS:           git:git://git.xfce.org/thunar-plugins/thunar-archive-plugin
-
-BuildRequires:  make
-BuildRequires:  gcc-c++
-BuildRequires:  exo >= 0.12.0
-BuildRequires:  libxfce4util-devel >= %{xfceversion}
-BuildRequires:  Thunar-devel >= %{thunar_version}
-BuildRequires:  libxml2-devel
-BuildRequires:  meson
 Requires:       Thunar >= %{thunar_version}
-
+# oreon:deps
+BuildRequires:  Thunar-devel
+BuildRequires:  exo
+BuildRequires:  gcc-c++
+BuildRequires:  libxfce4util-devel
+BuildRequires:  libxml2-devel
+BuildRequires:  make
+BuildRequires:  meson
+# /oreon:deps
 %description
 The Thunar Archive Plugin allows you to create and extract archive files using 
 the file context menus in the Thunar file manager. Starting with version 0.2.0, 
 the plugin provides a generic scripting interface for archive managers. 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
-
 %find_lang %{name}
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license COPYING
-%doc AUTHORS THANKS NEWS
-%doc scripts/template.tap
-%{_libdir}/thunarx-*/thunar-archive-plugin.so
-%{_libexecdir}/thunar-archive-plugin/
-%{_datadir}/icons/hicolor/*/*/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

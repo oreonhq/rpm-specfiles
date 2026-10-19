@@ -1,133 +1,69 @@
 %global source0_hash a8407a5897a2e425ea1aa955ecf88485dd2fd417919de275b27c781a5d0637a5
-
 Name:           libaccounts-glib
 Version:        1.27
 Release:        1%{?dist}
 Summary:        Accounts framework for Linux and POSIX based platforms
-# Automatically converted from old format: LGPLv2 - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2
-
-# workaround for GitLab bug that puts commit hash into tarball root directory name
-# https://gitlab.com/gitlab-org/gitlab/-/issues/214535
 %global ver_str VERSION_%{version}
-
 URL:            https://gitlab.com/accounts-sso/libaccounts-glib
 Source0:        https://gitlab.com/accounts-sso/libaccounts-glib/-/archive/VERSION_1.27/libaccounts-glib-VERSION_1.27.tar.gz
-
+Requires:       python3-gobject
+%global build_type_safety_c 2
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  meson >= 0.48.0
+BuildRequires:  gtk-doc
+BuildRequires:  meson
+BuildRequires:  pkgconfig(check)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gio-unix-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gobject-2.0)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  python3-devel
 BuildRequires:  python3-gobject
 BuildRequires:  vala
-
-BuildRequires:  pkgconfig(gio-2.0) >= 2.26
-BuildRequires:  pkgconfig(gio-unix-2.0)
-BuildRequires:  pkgconfig(glib-2.0) >= 2.26
-BuildRequires:  pkgconfig(gobject-2.0) >= 2.35.1
-BuildRequires:  pkgconfig(gobject-introspection-1.0)
-BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(sqlite3) >= 3.7.0
-
-# dependencies for building docs
-BuildRequires:  gtk-doc
-
-# dependencies for tests
-BuildRequires:  pkgconfig(check)
-
-# package contains python3-gobject overrides
-Requires:       python3-gobject
-
-# Reduce the type safety as a workaround for build failures in Fedora 40+
-# https://bugzilla.redhat.com/2261300
-%global build_type_safety_c 2
-
+# /oreon:deps
 %description
 %{summary}.
-
 
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %package docs
 Summary:        Documentation for %{name}
 BuildArch:      noarch
-
 %description docs
 The %{name}-docs package contains documentation for %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-%{ver_str} -p1
 
-
 %build
+
 %meson
 %meson_build
-
-
 %install
 %meson_install
-
-# create data directories
 mkdir -p %{buildroot}%{_datadir}/accounts/{applications,providers,services,service_types}
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.*
 
 %check
-# some tests fail without either dbus-test-runner (not packaged) or X11 session
+
 %meson_test || :
-
-
-%files
-%license COPYING
-%doc README.md NEWS
-
-%{_bindir}/ag-backup
-%{_bindir}/ag-tool
-
-%{_libdir}/libaccounts-glib.so.0
-%{_libdir}/libaccounts-glib.so.%{version}
-%{_libdir}/girepository-1.0/Accounts-1.0.typelib
-
-%dir %{_datadir}/xml/accounts/schema/dtd
-%{_datadir}/xml/accounts/schema/dtd/accounts-*.dtd
-
-%dir %{_datadir}/xml/
-%dir %{_datadir}/xml/accounts/
-%dir %{_datadir}/xml/accounts/schema/
-%dir %{_datadir}/accounts/
-%dir %{_datadir}/accounts/applications/
-%dir %{_datadir}/accounts/providers/
-%dir %{_datadir}/accounts/services/
-%dir %{_datadir}/accounts/service_types/
-
-%{python3_sitearch}/gi/overrides/__pycache__/*
-
-
-%files devel
-%{_includedir}/libaccounts-glib/
-
-%{_libdir}/libaccounts-glib.so
-%{_libdir}/pkgconfig/libaccounts-glib.pc
-
-%{_datadir}/dbus-1/interfaces/*.xml
-%{_datadir}/gettext/its/accounts-*.{its,loc}
-%{_datadir}/gir-1.0/Accounts-1.0.gir
-%{_datadir}/vala/vapi/libaccounts-glib.deps
-%{_datadir}/vala/vapi/libaccounts-glib.vapi
-
-
-%files docs
-%doc %{_datadir}/gtk-doc/html/libaccounts-glib/
-
+%files -f %{oreon_filedir}/main.list
+%files -n libaccounts-glib-devel -f %{oreon_filedir}/libaccounts-glib-devel.list
+%files -n libaccounts-glib-docs -f %{oreon_filedir}/libaccounts-glib-docs.list
 
 %changelog
+
 * Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.25-24
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

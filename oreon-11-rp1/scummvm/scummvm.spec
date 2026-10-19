@@ -1,51 +1,53 @@
-%global source0_hash none
-
-# Filter provides of private plugins.
-%if 0%{?fedora} || 0%{?rhel} >= 7
-%global __provides_exclude_from ^%{_libdir}/%{name}/.*\\.so$
-%else
+%global source0_hash f646fbd8767cceec8752b03361d84ace55835714a53fc3a8f2f6d991d312ac77
 %{?filter_setup:
 %filter_provides_in %{_libdir}/%{name}/.*\.so$
 %filter_setup
 }
-%endif
-
-# Url to upstream GitHub repo.
 %global git_url https://github.com/%{name}/%{name}
-
 %global org_name org.scummvm.scummvm
-
 Name:		scummvm
 Version:	2.9.1
-Release:	3%{?dist}
-Summary:	Interpreter for several adventure games
-# OFL only used by font files (distributed as fonts.dat)
+Release:        1%{?dist}
+Summary:        Interpreter for several adventure games
 License:	GPL-3.0-or-later AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-BSD AND LicenseRef-Callaway-OFL and LicenseRef-Callaway-MIT and ISC and Catharon AND Apache-2.0 AND BSL-1.0
 URL:		https://www.scummvm.org/
-Source0:	https://www.scummvm.org/frs/%{name}/%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://www.scummvm.org/frs/%{name}/%{version}/%{name}-%{version}.tar.bz2
 Patch0005:	scummvm-2.1.1-ftbfs-use-bfd-linker-on-x86.patch
-
-BuildRequires:	make
-BuildRequires:	libappstream-glib speech-dispatcher-devel alsa-lib-devel
-BuildRequires:	SDL2-devel libvorbis-devel flac-devel zlib-devel
-BuildRequires:	fluidsynth-devel desktop-file-utils libtheora-devel
-BuildRequires:	libpng-devel freetype-devel libjpeg-devel libmad-devel
-BuildRequires:	readline-devel libcurl-devel libmpeg2-devel gtk3-devel
-BuildRequires:	gcc-c++ giflib-devel glew-devel
-BuildRequires:	libmikmod-devel libvpx-devel sonivox-devel
-BuildRequires:	pipewire-jack-audio-connection-kit
-
 %ifarch %{ix86}
-BuildRequires:	nasm
 %endif
 Requires:	hicolor-icon-theme
 Requires:	%{name}-data = %{version}-%{release}
-
 Provides:	bundled(mt32emu) = 2.5.1
-# Lua is bundled twice: modified version 5.1 and 3.1
 Provides:	bundled(lua)
 Provides:	bundled(ags)
-
+# oreon:deps
+BuildRequires:  SDL2-devel
+BuildRequires:  alsa-lib-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  flac-devel
+BuildRequires:  fluidsynth-devel
+BuildRequires:  freetype-devel
+BuildRequires:  gcc-c++
+BuildRequires:  giflib-devel
+BuildRequires:  glew-devel
+BuildRequires:  gtk3-devel
+BuildRequires:  libappstream-glib
+BuildRequires:  libcurl-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libmad-devel
+BuildRequires:  libmikmod-devel
+BuildRequires:  libmpeg2-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libtheora-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  libvpx-devel
+BuildRequires:  make
+BuildRequires:  pipewire-jack-audio-connection-kit
+BuildRequires:  readline-devel
+BuildRequires:  sonivox-devel
+BuildRequires:  speech-dispatcher-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 ScummVM is a program which allows you to run certain classic graphical
 point-and-click adventure games, provided you already have their
@@ -67,32 +69,18 @@ http://scummvm.org/compatibility/%{version}/
 Summary:	Data files for %{name}
 Requires:	%{name} = %{version}-%{release}
 BuildArch:	noarch
-
 %description data
 This package contains the data files for %{name}.
 
 %prep
-%autosetup -p 1
-
+%oreon_prep
 %build
-# LTO combined with -Wl,--gdb-index and the Gold linker sometimes triggers
-# occasional faults in the Gold linker.  We have already decided to deprecate
-# the Gold linker so it does not seem worth the effort to reproduce, reduce,
-# analyze # and report the heisenbug in Gold.
-# Disable LTO
-%define _lto_cflags %{nil}
 
-# workaround FTBFS on i386
+%define _lto_cflags %{nil}
 %ifarch %{ix86}
 export LDFLAGS="-fuse-ld=bfd"
 %endif
-
-# The configure script shall ignore the parameter for the --host option
-#passed by %%configure.
 export CONFIGURE_NO_HOST=true
-
-# The disables are so that these don't accidently get build in when rebuilding
-# on a system with the necesarry deps installed.
 %configure					\
 	--datadir=%{_datadir}/%{name}		\
 	--default-dynamic			\
@@ -107,17 +95,12 @@ export CONFIGURE_NO_HOST=true
 	--enable-mpeg2				\
 	--with-freetype2-prefix=%{_prefix}
 %make_build
-
 %check
-# Check the AppData add-on to comply with guidelines.
-appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/*.xml
 
+appstream-util validate-relax --nonet %{buildroot}/%{_metainfodir}/*.xml
 %install
 %make_install
-# Remove doc files we want to include with %%doc
 rm -rf $RPM_BUILD_ROOT%{_datadir}/doc/%{name}/
-
-# below is the desktop file and icon stuff.
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install \
 	--dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -125,23 +108,12 @@ desktop-file-install \
 	--set-key=StartupWMClass --set-value="scummvm" \
 	--add-category=Emulator \
 	dists/%{org_name}.desktop
-
-# Plugins should be executable.
 find $RPM_BUILD_ROOT%{_libdir} -type f -name '*.so' | xargs chmod -Rc 0755
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license COPYING LICENSES/COPYING.*
-%doc AUTHORS README.md NEWS.md TODO doc/{cz,da,de,es,fr,it,no-nb,QuickStart,se}
-%{_bindir}/%{name}
-%{_libdir}/%{name}/
-%{_mandir}/man6/%{name}.6*
-%{_datadir}/applications/%{org_name}.desktop
-%{_datadir}/icons/hicolor/*/apps/%{org_name}.svg
-%{_datadir}/pixmaps/%{org_name}.xpm
-%{_metainfodir}/%{org_name}.metainfo.xml
-
-%files data
-%{_datadir}/%{name}/
+%files -f %{oreon_filedir}/main.list
+%files -n scummvm-data -f %{oreon_filedir}/scummvm-data.list
 
 %changelog
+
 %autochangelog

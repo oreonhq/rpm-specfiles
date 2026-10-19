@@ -1,57 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 936d55daa684f474364c098611c933626f8d6c7d67065c5b7ae0c477b508b07f
 Name:           python-ollama
 Version:        0.6.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        The official Python client for Ollama.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://ollama.com
-Source:         %{pypi_source ollama}
-
+Source0:        https://files.pythonhosted.org/packages/source/o/ollama/ollama-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'ollama' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-ollama = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-ollama
-Summary:        %{summary}
-
-%description -n python3-ollama %_description
-
+Summary:        The official Python client for Ollama.
+# oreon:reqs
+Requires:       python3dist(httpx) >= 0.27
+Requires:       python3dist(pydantic) >= 2.9
+# /oreon:reqs
+%description -n python3-ollama
 
 %prep
-%autosetup -p1 -n ollama-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir ollama-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-ollama usr/lib/python3*/site-packages/ollama* usr/lib64/python3*/site-packages/ollama* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/ollama* usr/lib64/python3*/site-packages/ollama* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-ollama -f %{pyproject_files}
+%files
+%files -n python3-ollama -f %{oreon_filedir}/python3-ollama.list
 
 %changelog
+
 %autochangelog

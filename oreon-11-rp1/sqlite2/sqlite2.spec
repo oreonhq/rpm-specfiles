@@ -1,18 +1,10 @@
 %global source0_hash 3f35ebfb67867fb5b583a03e480f900206af637efe7179b32294a6a0cf806f37
-
 %{!?tcl_version: %global tcl_version %((echo 0; echo 'puts $tcl_version' | tclsh8) | tail -1)}
 %{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
-
-# This package is old and only kept for compatibility.
-# There is no real benefit to modernizing the code to support C23.
 %global optflags %{optflags} -std=gnu17
-
-# Same logic for not updating to TCL9.
-
 Name:           sqlite2
 Version:        2.8.17
-Release:        48%{?dist}
-
+Release:        1%{?dist}
 Summary:        Embeddable SQL engine in a C library
 License:        blessing AND LicenseRef-Fedora-Public-Domain
 URL:            http://www.sqlite.org/
@@ -38,12 +30,14 @@ Patch18:        sqlite-2.8.17-fix-unsigned-FTBFS.patch
 Patch19:        sqlite-2.8.17-gcc10.patch
 Patch20:        sqlite2-configure-c99.patch
 Patch21:        sqlite2-lemon-c99.patch
-
-BuildRequires: make
-BuildRequires:  gcc-c++
-BuildRequires:  ncurses-devel, readline-devel, tcl8-devel
 Obsoletes:      sqlite < 3
-
+# oreon:deps
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  readline-devel
+BuildRequires:  tcl8-devel
+# /oreon:deps
 %description
 SQLite is a small, fast, embeddable SQL database engine that supports
 most of SQL92, including transactions with atomic commit and rollback,
@@ -56,7 +50,6 @@ available.
 Summary:        Development files for SQLite
 Requires:       %{name}%{?_isa} = %{version}-%{release}, pkgconfig
 Obsoletes:      sqlite-devel < 3
-
 %description    devel
 SQLite is a small, fast, embeddable SQL database engine that supports
 most of SQL92, including transactions with atomic commit and rollback,
@@ -66,14 +59,9 @@ applications using sqlite.
 
 %package        tcl
 Summary:        Tcl bindings for sqlite
-%if 0%{?rhel}%{?fedora} > 5
-Requires:       tcl(abi) = %{tcl_version}
-%else
 Requires:       tcl%{?_isa} >= %{tcl_version}
-%endif
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Obsoletes:      sqlite-tcl < 3
-
 %description    tcl
 SQLite is a small, fast, embeddable SQL database engine that supports
 most of SQL92, including transactions with atomic commit and rollback,
@@ -81,6 +69,7 @@ subqueries, compound queries, triggers, and views.
 This package contains tcl bindings for sqlite.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n sqlite-%{version}
@@ -114,47 +103,34 @@ sed -i.lib 's!@exec_prefix@/lib!%{_libdir}!g' Makefile.in
 sed -i 's!tclsh !tclsh8 !g' Makefile.in
 
 %build
+
 CFLAGS="$RPM_OPT_FLAGS -DNDEBUG=1"
 %configure --enable-utf8 --disable-static --disable-rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make
 make tclsqlite libtclsqlite.la doc
-
 %check
-#obs. make test doesn't like root
-LD_LIBRARY_PATH=./.libs make test
 
+LD_LIBRARY_PATH=./.libs make test
 %install
 rm -rf $RPM_BUILD_ROOT
 DIRECTORY=$RPM_BUILD_ROOT%{_libdir}/sqlite-%{version}
 install -d $DIRECTORY
 echo 'package ifneeded sqlite 2 [list load [file join $dir libtclsqlite.so]]' > $DIRECTORY/pkgIndex.tcl
-
 %makeinstall
 install -D -m 0644 sqlite.1 $RPM_BUILD_ROOT%{_mandir}/man1/sqlite.1
 mkdir -p $RPM_BUILD_ROOT%{tcl_sitearch}
 mv -f $DIRECTORY $RPM_BUILD_ROOT%{tcl_sitearch}/sqlite2
-
 find $RPM_BUILD_ROOT -type f -name "*.la" -exec rm -f {} ';'
 rm -f $RPM_BUILD_ROOT%{_bindir}/tclsqlite
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%{_bindir}/sql*
-%{_libdir}/libsql*.so.*
-%{_mandir}/man1/*
-
-%files devel
-%doc README doc/*
-%{_libdir}/libsql*.so
-%{_includedir}/*
-%{_libdir}/pkgconfig/*
-
-%files tcl
-%doc doc/tclsqlite.html
-%{tcl_sitearch}/sqlite2/
+%files -f %{oreon_filedir}/main.list
+%files -n sqlite2-devel -f %{oreon_filedir}/sqlite2-devel.list
+%files -n sqlite2-tcl -f %{oreon_filedir}/sqlite2-tcl.list
 
 %changelog
+
 %autochangelog

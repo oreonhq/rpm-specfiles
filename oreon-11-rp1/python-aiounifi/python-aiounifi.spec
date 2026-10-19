@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 7bce04c21c87c4eeca1db585cc2897c36f39ab66da52413b276e6d103dd8b76a
 Name:           python-aiounifi
 Version:        27
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        An asynchronous Python library for communicating with Unifi Controller API
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/Kane610/aiounifi
-Source:         %{pypi_source aiounifi}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/aiounifi/aiounifi-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'aiounifi' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-aiounifi = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-aiounifi
-Summary:        %{summary}
-
-%description -n python3-aiounifi %_description
-
+Summary:        An asynchronous Python library for communicating with Unifi Controller API
+%description -n python3-aiounifi
 
 %prep
-%autosetup -p1 -n aiounifi-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir aiounifi-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-aiounifi usr/lib/python3*/site-packages/aiounifi* usr/lib64/python3*/site-packages/aiounifi* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/aiounifi* usr/lib64/python3*/site-packages/aiounifi* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-aiounifi -f %{pyproject_files}
+%files
+%files -n python3-aiounifi -f %{oreon_filedir}/python3-aiounifi.list
 
 %changelog
+
 %autochangelog

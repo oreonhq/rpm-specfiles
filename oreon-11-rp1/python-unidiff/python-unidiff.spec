@@ -1,60 +1,42 @@
-%global source0_hash none
-
+%global source0_hash d9425bc516390c54743a1045b2c1c97f02d245a913a241dd499f958adb2df998
 Name:           python-unidiff
 Version:        1.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Unified diff parsing/metadata extraction library.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/matiasb/python-unidiff
-Source:         %{pypi_source unidiff}
-
+Source0:        https://files.pythonhosted.org/packages/source/u/unidiff/unidiff-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'unidiff' generated automatically by pyp2spec.}
-
 Patch1: 0001-use-setuptools-console_scripts-for-usr-bin-unidiff.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-unidiff = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-unidiff
-Summary:        %{summary}
-
-%description -n python3-unidiff %_description
-
+Summary:        Unified diff parsing/metadata extraction library.
+%description -n python3-unidiff
 
 %prep
-%autosetup -p1 -n unidiff-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir unidiff-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-unidiff usr/lib/python3*/site-packages/unidiff* usr/lib64/python3*/site-packages/unidiff* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/unidiff* usr/lib64/python3*/site-packages/unidiff* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-unidiff -f %{pyproject_files}
-%{_bindir}/unidiff
+%files
+%files -n python3-unidiff -f %{oreon_filedir}/python3-unidiff.list
 
 %changelog
+
 %autochangelog

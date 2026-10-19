@@ -1,26 +1,20 @@
 %global source0_hash f3d111cc677b2e8e3926363a0a2815a1635c5507674eaf08862e0a5773ee2ae5
-
 Name:          nom-tam-fits
 Version:       1.15.2
-Release:       %autorelease
-Summary:       Java library for reading and writing FITS files
+Release:        1%{?dist}
+Summary:        Java library for reading and writing FITS files
 License:       LicenseRef-Fedora-Public-Domain
 URL:           http://nom-tam-fits.github.io/nom-tam-fits/
-Source0:       https://github.com/nom-tam-fits/nom-tam-fits/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/nom-tam-fits/nom-tam-fits/archive/%{name}-%{version}.tar.gz
 Patch0:        0001-Skip-tests-if-we-cannot-download-images.patch
-
-BuildRequires: maven-local-openjdk25
-BuildRequires: mvn(junit:junit)
-BuildRequires: mvn(org.apache.commons:commons-compress)
-BuildRequires: mvn(org.codehaus.mojo:exec-maven-plugin)
-
-# retired in Fedora:
-# BuildRequires: mvn(org.openjdk.jmh:jmh-core)
-# BuildRequires: mvn(org.openjdk.jmh:jmh-generator-annprocess)
-
 BuildArch:     noarch
 ExclusiveArch:  %{java_arches} noarch
-
+# oreon:deps
+BuildRequires:  maven-local-openjdk25
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.commons:commons-compress)
+BuildRequires:  mvn(org.codehaus.mojo:exec-maven-plugin)
+# /oreon:deps
 %description
 FITS (Flexible Image Transport System) is the standard data format in
 astronomy used for the transport, analysis, and archival storage of
@@ -31,11 +25,11 @@ All basic FITS formats and GZIP compressed files are supported.
 
 %package javadoc
 Summary:       Javadoc for %{name}
-
 %description javadoc
 This package contains javadoc for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{name}-%{version} -p1
@@ -125,17 +119,15 @@ sed -i 's/.*SuppressFBWarnings.*//' $(fgrep -lr SuppressFBWarnings src/main/java
 %mvn_file :%{name} %{name} fits
 
 %build
-%mvn_build
 
+%mvn_build
 %install
 %mvn_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f .mfiles
-%doc target/NOTE.* README.md
-%license src/license/publicdomain/license.txt
-
-%files javadoc -f .mfiles-javadoc
-%license src/license/publicdomain/license.txt
+%files -f %{oreon_filedir}/main.list
+%files -n nom-tam-fits-javadoc -f %{oreon_filedir}/nom-tam-fits-javadoc.list
 
 %changelog
+
 %autochangelog

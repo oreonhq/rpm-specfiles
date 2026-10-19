@@ -1,28 +1,11 @@
 %global source0_hash 440848dffa209beb8a04e41cc352762e44f8e91342b2a43aab6af9b30713c2f6
-
 %bcond java %{undefined rhel}
-
-# tests won't work with low default RLIMIT_NOFILE=10240 on mock builder
 %bcond_with check
-
 Summary:        Protocol Buffers - Google's data interchange format
 Name:           protobuf
-# The versioning scheme is unusual. Each release is tagged vA.B, but different
-# components have their own major version numbers in front of that. For
-# example, the tags v25.1, v3.25.2, and v4.25.2 all reference the same git
-# hash. The base package and compiler version is 25.1, the SONAME version is
-# 25, and the language bindings are all versioned either 3.25.1 or 4.25.1. The
-# version numbers of the different components are helpfully enumerated in the
-# file version.json in the root of the source tree.
-#
-# NOTE: perl-Alien-ProtoBuf has an exact-version dependency on the version of
-# protobuf with which it was built; it therefore needs to be rebuilt even for
-# “patch” updates of protobuf.
 Version:        33.5
 %global so_version 33
 Release:        8%{?dist}
-
-# See version.json:
 %global version_protoc %{version}
 %global version_cpp 6.%{version}
 %global version_csharp 3.%{version}
@@ -31,46 +14,25 @@ Release:        8%{?dist}
 %global version_objectivec 4.%{version}
 %global version_php 4.%{version}
 %global version_ruby 4.%{version}
-
-# The entire source is BSD-3-Clause, except:
-#   MIT:
-#     - third_party/utf8_range/
-#       https://github.com/protocolbuffers/protobuf/issues/16457
 License:        BSD-3-Clause AND MIT
 URL:            https://github.com/protocolbuffers/protobuf
-Source0:        %{url}/archive/v%{version}/protobuf-%{version}.tar.gz
+Source0:        https://github.com/protocolbuffers/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        ftdetect-proto.vim
 Source2:        protobuf-init.el
-# Man page hand-written for Fedora in groff_man(7) format based on “protoc
-# --help” output.
 Source4:        protoc.1
-
-# Disable tests that are failing on 32bit systems
-# While this is only *needed* on 32-bit (%%{ix86}), all of the changes in the
-# patch are guarded by preprocessor conditionals that only evaluate true on
-# 32-bit x86, so there is no harm in applying it unconditionally.
-# Patch:          disable-tests-on-32-bit-systems.patch
-# Remove lambdas from TypeRegistryTest.java
-# Patch:          protobuf-3.25.1-java-TypeRegistryTest-no-lambda.patch
-# Use system gtest/gmock
 Patch:          protobuf-6.31.1-system-gtest.patch
-
-# https://github.com/protocolbuffers/protobuf/pull/25363
 Patch:          protobuf-6.35.5-upb-fix-big-endian.patch
-
-BuildRequires:  cmake
-BuildRequires:  ninja-build
-BuildRequires:  gcc-c++
-
-BuildRequires:  emacs
-BuildRequires:  zlib-devel
-BuildRequires:  cmake(absl)
-# These are also brought in indirectly via abseil-cpp-devel/abseil-cpp-testing.
-BuildRequires:  cmake(GTest)
-BuildRequires:  gmock-devel
-
 Requires:       protobuf-cpp%{?_isa} = %{version_cpp}-%{release}
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(GTest)
+BuildRequires:  cmake(absl)
+BuildRequires:  emacs
+BuildRequires:  gcc-c++
+BuildRequires:  gmock-devel
+BuildRequires:  ninja-build
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 Protocol Buffers are a way of encoding structured data in an efficient yet
 extensible format. Google uses Protocol Buffers for almost all of its internal
@@ -84,67 +46,39 @@ of data streams and using a variety of languages. You can even update your data
 structure without breaking deployed programs that are compiled against the
 "old" format.
 
-
 %package cpp
 Summary:        Protocol Buffers C++ libraries
 Version:        %{version_cpp}
-
-# We document the contents of third_party/utf8_range/ as a bundled library, as
-# it was historically a separate library. However, it is now maintained as part
-# of protobuf, so unbundling is not appropriate. The version number is taken
-# from third_party/utf8_range/cmake/utf8_range.pc.cmake. We assume any arched
-# subpackage may include this library.
 Provides:       bundled(utf8_range) = 1.0
-
 %description cpp
 This package contains the C++ libraries for Protocol Buffers.
 
 See also protobuf-lite.
 
-
 %package compiler
 Summary:        Protocol Buffers compiler
 Version:        %{version_protoc}
-
 Requires:       protobuf-cpp%{?_isa} = %{version_cpp}-%{release}
-
-# See notes above the corresponding line in the base package:
 Provides:       bundled(utf8_range) = 1.0
-# Conflict on /usr/bin/protoc, /usr/share/man/man1/protoc.1.gz
 Conflicts:      protobuf3-compiler
-
 %description compiler
 This package contains Protocol Buffers compiler for all programming languages.
-
 
 %package devel
 Summary:        Protocol Buffers C++ development headers and libraries
 Version:        %{version_cpp}
-
 Requires:       protobuf-cpp%{?_isa} = %{version_cpp}-%{release}
 Requires:       protobuf-compiler%{?_isa} = %{version_protoc}-%{release}
 Requires:       protobuf-lite%{?_isa} = %{version_cpp}-%{release}
 Requires:       zlib-devel
-
 Provides:       protobuf-lite-devel = %{version_cpp}-%{release}
-# See notes above the corresponding line in the base package:
 Provides:       bundled(utf8_range) = 1.0
-# From upb/README.md:
-#
-# While upb offers a C API, the C API & ABI **are not stable**. For this
-# reason, upb is not generally offered as a C library for direct consumption,
-# and there are no releases.
 Provides:       upb-static
-
 Obsoletes:      protobuf-lite-devel < 3.25.1-4
 Obsoletes:      protobuf-lite-static < 3.19.6-4
 Obsoletes:      protobuf-static < 3.19.6-4
-
-# Conflict on 111 paths: all /usr/include/google/protobuf/ headers + /usr/lib64/libprotobuf.so, /usr/lib64/libprotoc.so, /usr/lib64/pkgconfig/protobuf.pc
 Conflicts:      protobuf3-devel
-# Conflict on /usr/lib64/libprotobuf-lite.so, /usr/lib64/pkgconfig/protobuf-lite.pc
 Conflicts:      protobuf3-lite-devel
-
 %description devel
 This package contains Protocol Buffers compiler for all languages and C++
 headers and libraries. It contains the headers and libraries for both
@@ -153,11 +87,8 @@ libprotobuf and libprotobuf-lite.
 %package static
 Summary:        Protocol Buffers C++ development static libraries
 Version:        %{version_cpp}
-
 Requires:       protobuf-devel%{?_isa} = %{version_cpp}-%{release}
-
 Provides:       protobuf-lite-static
-
 %description static
 This package contains Protocol Buffers compiler for all languages and C++
 static libraries. It contains the headers and libraries for both libprotobuf
@@ -166,10 +97,7 @@ and libprotobuf-lite.
 %package lite
 Summary:        Protocol Buffers LITE_RUNTIME libraries
 Version:        %{version_cpp}
-
-# See notes above the corresponding line in the base package:
 Provides:       bundled(utf8_range) = 1.0
-
 %description lite
 Protocol Buffers built with optimize_for = LITE_RUNTIME.
 
@@ -179,23 +107,15 @@ lacks descriptors, reflection, and some other features.
 
 See also protobuf-cpp.
 
-
 %package vim
 Summary:        Vim syntax highlighting for Google Protocol Buffers descriptions
-# Since it is noarch, this subpackage provably does not contain anything from
-# the MIT-licensed utf8_range library.
 License:        BSD-3-Clause
-
 BuildArch:      noarch
-
 Requires:       vim-filesystem
 Conflicts:      protobuf3-vim
-
-
 %description vim
 This package contains syntax highlighting for Google Protocol Buffers
 descriptions in Vim editor
-
 
 %if %{with java}
 %ifarch %{java_arches}
@@ -203,12 +123,8 @@ descriptions in Vim editor
 %package java
 Summary:        Java Protocol Buffers runtime library
 Version:        %{version_java}
-# Since it is noarch, this subpackage provably does not contain anything from
-# the MIT-licensed utf8_range library.
 License:        BSD-3-Clause
-
 BuildArch:      noarch
-
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.code.findbugs:jsr305)
 BuildRequires:  mvn(com.google.code.gson:gson)
@@ -223,102 +139,66 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-surefire-plugin)
 BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 BuildRequires:  mvn(org.mockito:mockito-core)
-
-# The protobuf-compiler subpackage does not have to be installed, but if it is,
-# its version needs to match.
 Requires:       (protobuf-compiler = %{version_protoc}-%{release} if protobuf-compiler)
-
 %description java
 This package contains Java Protocol Buffers runtime library.
-
 
 %package javalite
 Summary:        Java Protocol Buffers lite runtime library
 Version:        %{version_java}
-# Since it is noarch, this subpackage provably does not contain anything from
-# the MIT-licensed utf8_range library.
 License:        BSD-3-Clause
-
 BuildArch:      noarch
-
 %description javalite
 This package contains Java Protocol Buffers lite runtime library.
-
 
 %package java-util
 Summary:        Utilities for Protocol Buffers
 Version:        %{version_java}
-# Since it is noarch, this subpackage provably does not contain anything from
-# the MIT-licensed utf8_range library.
 License:        BSD-3-Clause
-
 BuildArch:      noarch
-
 %description java-util
 Utilities to work with protos. It contains JSON support as well as utilities to
 work with proto3 well-known types.
 
-
 %package javadoc
 Summary:        Javadoc for protobuf-java
 Version:        %{version_java}
-# Since it is noarch, this subpackage provably does not contain anything from
-# the MIT-licensed utf8_range library.
 License:        BSD-3-Clause
-
 BuildArch:      noarch
-
 %description javadoc
 This package contains the API documentation for protobuf-java.
-
 
 %package parent
 Summary:        Protocol Buffer Parent POM
 Version:        %{version_java}
-# Since it is noarch, this subpackage provably does not contain anything from
-# the MIT-licensed utf8_range library.
 License:        BSD-3-Clause
-
 BuildArch:      noarch
-
 %description parent
 Protocol Buffer Parent POM.
-
 
 %package bom
 Summary:        Protocol Buffer BOM POM
 Version:        %{version_java}
-# Since it is noarch, this subpackage provably does not contain anything from
-# the MIT-licensed utf8_range library.
 License:        BSD-3-Clause
-
 BuildArch:      noarch
-
 %description bom
 Protocol Buffer BOM POM.
 
 %endif
 %endif
 
-
 %package emacs
 Summary:        Emacs mode for Google Protocol Buffers descriptions
-# Since it is noarch, this subpackage provably does not contain anything from
-# the MIT-licensed utf8_range library.
 License:        BSD-3-Clause
-
 BuildArch:      noarch
-
 Requires:       emacs-filesystem >= %{_emacs_version}
 Conflicts:      protobuf3-emacs
-
-
 %description emacs
 This package contains syntax highlighting for Google Protocol Buffers
 descriptions in the Emacs editor.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -358,23 +238,12 @@ sed -r -i 's@/protoc</protoc>@/%{_vpath_builddir}&@' java/pom.xml
 find examples -type f -name '*.rb' -exec sed -r -i \
     '1{s@^(#!)([[blank:]]*/.*/env[[:blank:]]+)(ruby)@\1/usr/bin@}' '{}' '+'
 
-
 %build
+
 iconv -f iso8859-1 -t utf-8 CONTRIBUTORS.txt > CONTRIBUTORS.txt.utf8
 mv CONTRIBUTORS.txt.utf8 CONTRIBUTORS.txt
-
 export PTHREAD_LIBS="-lpthread"
-# -Wno-error=type-limits:
-#     https://bugzilla.redhat.com/show_bug.cgi?id=1838470
-#     https://github.com/protocolbuffers/protobuf/issues/7514
-#     https://gcc.gnu.org/bugzilla/show_bug.cgi?id=95148
 export CXXFLAGS="${CXXFLAGS} -Wno-error=type-limits"
-
-# TODO: utf_range builds as static and if you let it install, it will install cmake and .pc files
-# We could disable it from installing, but the protobuf pkg-config still wants it as a dependency.
-# I think for now, we just need to package the static bits. :/
-# See: https://github.com/protocolbuffers/protobuf/issues/14958
-
 %cmake \
     -Dprotobuf_ABSL_PROVIDER=package \
     -Dprotobuf_USE_EXTERNAL_GOOGLETEST:BOOL=ON \
@@ -382,7 +251,6 @@ export CXXFLAGS="${CXXFLAGS} -Wno-error=type-limits"
     -Dprotobuf_MSVC_STATIC_RUNTIME=OFF \
     -GNinja
 %cmake_build
-
 %global original_vpath_builddir %{_vpath_builddir}
 %global _vpath_builddir %{_vpath_builddir}-static
 %cmake \
@@ -394,13 +262,11 @@ export CXXFLAGS="${CXXFLAGS} -Wno-error=type-limits"
     -GNinja
 %cmake_build
 %global _vpath_builddir %{original_vpath_builddir}
-
 %if %{with java}
 %ifarch %{java_arches}
 %ifarch %{ix86} s390x
 export MAVEN_OPTS=-Xmx1024m
 %endif
-# Fedora doesn't have bazel, so generate sources manually
 srcdir=$PWD/src
 java_srcdir=$PWD/java/core/src/main/resources
 dependencies="<dependency>
@@ -495,162 +361,47 @@ cd java/util
         pom_template.xml > pom.xml
     awk -v dep="${dependencies_util}" -i inplace '{gsub(/\{dependencies\}/,dep)}1' pom.xml
 cd -
-
 %mvn_build -s -f -- -f java/pom.xml
 %endif
 %endif
-
 %{_emacs_bytecompile} editors/protobuf-mode.el
-
-
 %install
 %global _vpath_builddir %{_vpath_builddir}-static
 %cmake_install
 %global _vpath_builddir %{original_vpath_builddir}
 %cmake_install
 find %{buildroot} -type f -name "*.la" -exec rm -f {} +
-
-# protoc.1 man page
 install -p -m 0644 -D -t '%{buildroot}%{_mandir}/man1' '%{SOURCE4}'
-
 install -p -m 644 -D %{SOURCE1} %{buildroot}%{_datadir}/vim/vimfiles/ftdetect/proto.vim
 install -p -m 644 -D editors/proto.vim %{buildroot}%{_datadir}/vim/vimfiles/syntax/proto.vim
-
 %if %{with java}
 %ifarch %{java_arches}
 %mvn_install
 %endif
 %endif
-
 mkdir -p %{buildroot}%{_emacs_sitelispdir}/protobuf
 install -p -m 0644 editors/protobuf-mode.el %{buildroot}%{_emacs_sitelispdir}/protobuf
 install -p -m 0644 editors/protobuf-mode.elc %{buildroot}%{_emacs_sitelispdir}/protobuf
 mkdir -p %{buildroot}%{_emacs_sitestartdir}
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_emacs_sitestartdir}
-
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with check}
 %ctest
 %endif
-
-
-%files
-# The base package is now a metapackage in order to allow the C++ libraries to
-# have their own version number.
-
-
-%files cpp
-%license LICENSE
-%doc CONTRIBUTORS.txt
-%doc README.md
-
-%{_libdir}/libprotobuf.so.%{so_version}{,.*}
-%{_libdir}/libutf8_range.so.%{so_version}{,.*}
-%{_libdir}/libutf8_validity.so.%{so_version}{,.*}
-
-%files compiler
-# symlink
-%{_bindir}/protoc
-# for base package version 25.1, this is protoc-25.1.0
-%{_bindir}/protoc-%{version_protoc}*
-%{_mandir}/man1/protoc.1*
-
-%{_bindir}/protoc-gen-upb
-%{_bindir}/protoc-gen-upb-%{version_protoc}*
-%{_bindir}/protoc-gen-upbdefs
-%{_bindir}/protoc-gen-upbdefs-%{version_protoc}*
-%{_bindir}/protoc-gen-upb_minitable
-%{_bindir}/protoc-gen-upb_minitable-%{version_protoc}*
-
-%{_libdir}/libprotoc.so.%{so_version}{,.*}
-
-
-%files devel
-%doc examples/Makefile
-%doc examples/README.md
-%doc examples/add_person.cc
-%doc examples/addressbook.proto
-%doc examples/list_people.cc
-
-# "Namespace" directory shared with other Google packages
-%dir %{_includedir}/google/
-%{_includedir}/google/protobuf/
-
-%{_includedir}/upb/
-%{_libdir}/pkgconfig/upb.pc
-%{_libdir}/libupb.a
-
-%{_libdir}/cmake/protobuf/
-%{_libdir}/pkgconfig/protobuf.pc
-%{_libdir}/pkgconfig/protobuf-lite.pc
-%{_libdir}/libprotobuf-lite.so
-%{_libdir}/libprotobuf.so
-%{_libdir}/libprotoc.so
-
-%{_includedir}/utf8_range.h
-%{_includedir}/utf8_validity.h
-%{_libdir}/cmake/utf8_range/
-%{_libdir}/pkgconfig/utf8_range.pc
-%{_libdir}/libutf8_range.so
-%{_libdir}/libutf8_validity.so
-
-%files static
-%{_libdir}/libprotobuf-lite.a
-%{_libdir}/libprotobuf.a
-%{_libdir}/libprotoc.a
-
-%files emacs
-%license LICENSE
-%{_emacs_sitelispdir}/protobuf/
-%{_emacs_sitestartdir}/protobuf-init.el
-
-
-%files lite
-%license LICENSE
-%{_libdir}/libprotobuf-lite.so.%{so_version}{,.*}
-
-
-%files vim
-%license LICENSE
-%{_datadir}/vim/vimfiles/ftdetect/proto.vim
-%{_datadir}/vim/vimfiles/syntax/proto.vim
-
-
-%if %{with java}
-%ifarch %{java_arches}
-
-%files java -f .mfiles-protobuf-java
-%license LICENSE
-%doc examples/AddPerson.java
-%doc examples/ListPeople.java
-%doc java/README.md
-
-
-%files java-util -f .mfiles-protobuf-java-util
-%license LICENSE
-
-
-%files javadoc -f .mfiles-javadoc
-%license LICENSE
-
-
-%files parent -f .mfiles-protobuf-parent
-%license LICENSE
-
-
-%files bom -f .mfiles-protobuf-bom
-%license LICENSE
-
-
-%files javalite -f .mfiles-protobuf-javalite
-%license LICENSE
-
-%endif
-%endif
-
+%files -f %{oreon_filedir}/main.list
+%files -n protobuf-cpp -f %{oreon_filedir}/protobuf-cpp.list
+%files -n protobuf-compiler -f %{oreon_filedir}/protobuf-compiler.list
+%files -n protobuf-devel -f %{oreon_filedir}/protobuf-devel.list
+%files -n protobuf-static -f %{oreon_filedir}/protobuf-static.list
+%files -n protobuf-lite -f %{oreon_filedir}/protobuf-lite.list
+%files -n protobuf-vim -f %{oreon_filedir}/protobuf-vim.list
+%files -n protobuf-emacs -f %{oreon_filedir}/protobuf-emacs.list
 
 %changelog
+
 * Fri Sep 25 2026 Benjamin A. Beasley <code@musicinmybrain.net> - 33.5-8
 - Rebuilt for abseil-cpp 20260817.0
 

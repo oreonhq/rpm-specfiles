@@ -1,12 +1,5 @@
 %global source0_hash fbf91007f30565f3920e106055fd0d4287981d5e7dad8b35323ce4b733f15a7b
-
-# Run optional test
-%if ! (0%{?rhel})
-%bcond_without perl_Module_Install_enables_optional_test
-%else
 %bcond_with perl_Module_Install_enables_optional_test
-%endif
-
 Name:           perl-Module-Install
 Version:        1.21
 Release:        8%{?dist}
@@ -14,104 +7,35 @@ Summary:        Standalone, extensible Perl module installer
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Module-Install-%{version}.tar.gz
-# Fix a crash when looking up 5.010 Perl core modules, CPAN RT#71565, proposed
-# to upstream <https://github.com/Perl-Toolchain-Gang/Module-Install/pull/64>
 Patch0:         Module-Install-1.19-Fix-Perl-version-lookup-with-Module-CoreList.patch
 BuildArch:      noarch
-# Build
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(lib)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(warnings)
-# Runtime
-# XXX: BuildRequires:  perl(Archive::Zip) >= 1.37
-# XXX: BuildRequires:  perl(Carp)
-# XXX: BuildRequires:  perl(CPAN)
-# XXX: BuildRequires:  perl(CPANPLUS::Backend)
-BuildRequires:  perl(Config)
-BuildRequires:  perl(Cwd)
-BuildRequires:  perl(Devel::PPPort) >= 3.16
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(ExtUtils::Manifest)
-BuildRequires:  perl(ExtUtils::MM_Unix)
-# XXX: BuildRequires:  perl(ExtUtils::MM_Cygwin)
-# XXX: BuildRequires:  perl(ExtUtils::MM_Win32)
-BuildRequires:  perl(Fcntl)
-BuildRequires:  perl(File::Basename)
-BuildRequires:  perl(File::Find)
-# XXX: BuildRequires:  perl(File::HomeDir) >= 1
-BuildRequires:  perl(File::Path)
-BuildRequires:  perl(File::Remove) >= 1.42
-BuildRequires:  perl(File::Spec) >= 3.28
-BuildRequires:  perl(File::Temp)
-BuildRequires:  perl(FileHandle)
-BuildRequires:  perl(FindBin)
-# XXX: BuildRequires:  perl(JSON) >= 2.9
-# XXX: BuildRequires:  perl(LWP::Simple) >= 6.00
-# XXX: BuildRequires:  perl(Module::Build) >= 0.29
-BuildRequires:  perl(Module::CoreList) >= 2.17
-BuildRequires:  perl(Module::ScanDeps) >= 1.09
-# XXX: BuildRequires:  perl(Net::FTP)
-# XXX: BuildRequires:  perl(PAR::Dist) >= 0.29
-BuildRequires:  perl(Parse::CPAN::Meta) >= 1.4413
-# XXX: BuildRequires:  perl(Socket)
-BuildRequires:  perl(vars)
-BuildRequires:  perl(YAML::Tiny) >= 1.38
-# Tests only
-BuildRequires:  perl(autodie)
-BuildRequires:  perl(ExtUtils::MM)
-BuildRequires:  perl(Symbol)
-BuildRequires:  perl(Test::More)
-# Optional tests only
 %if %{with perl_Module_Install_enables_optional_test} && 0%{!?perl_bootstrap:1}
-BuildRequires:  perl(Module::Install::AuthorTests)
-BuildRequires:  perl(Module::Install::ExtraTests) >= 0.007
 %endif
-BuildRequires:  perl(utf8)
 Requires:       perl(Archive::Zip) >= 1.37
 Requires:       perl(Carp)
 Requires:       perl(CPAN)
-# CPANPLUS is preferred over CPAN, but it's in a build cycle
-# (perl-Module-Install → perl-CPANPLUS → perl-DBIx-Simple → perl-SQL-Abstract
-# → perl-Module-Install), not necessary if all dependencies are retrived
-# from an RPM repository, and upstream still considered as an option. Thus do
-# not hard require the CPANPLUS.
 Recommends:     perl(CPANPLUS::Backend)
 Requires:       perl(Devel::PPPort) >= 3.16
 Requires:       perl(ExtUtils::MakeMaker) >= 6.59
-# Unused: Requires:       perl(ExtUtils::MM_Cygwin)
 Requires:       perl(ExtUtils::MM_Unix)
-# Unused: Requires:       perl(ExtUtils::MM_Win32)
-# Unneeded: Requires:       perl(File::HomeDir) >= 1
 Requires:       perl(File::Remove) >= 1.42
 Requires:       perl(File::Spec) >= 3.28
 Requires:       perl(File::Temp)
 Requires:       perl(FileHandle)
 Requires:       perl(FindBin)
-# Optional: Requires:       perl(JSON) >= 2.9
-# Optional: Requires:       perl(LWP::Simple) >= 6.00
 Requires:       perl(Module::Build) >= 0.29
 Requires:       perl(Module::CoreList) >= 2.17
 Requires:       perl(Module::ScanDeps) >= 1.09
-# Optional: Requires:       perl(Net::FTP)
-# Optional: Requires:       perl(PAR::Dist) >= 0.29
 Requires:       perl(Parse::CPAN::Meta) >= 1.4413
 Requires:       perl(Socket)
 Requires:       perl(YAML::Tiny) >= 1.38
-
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Devel::PPPort\\)$
 %global __requires_exclude %__requires_exclude|^perl\\(ExtUtils::MakeMaker\\)$
 %global __requires_exclude %__requires_exclude|^perl\\(File::Remove\\)$
 %global __requires_exclude %__requires_exclude|^perl\\(File::Spec\\)$
 %global __requires_exclude %__requires_exclude|^perl\\(YAML::Tiny\\)$
-
-# Filter modules bundled for tests
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{_libexecdir}
 %global __requires_exclude %__requires_exclude|^perl\\(MyTest\\)$
-
 Provides:       perl(Module::Install)
 Provides:       perl(Module::Install::AutoInstall)
 Provides:       perl(Module::Install::Base)
@@ -123,6 +47,40 @@ Provides:       perl(Module::Install::WriteAll)
 Provides:       perl(Module::Install::Include)
 Provides:       perl(inc::Module::Install)
 Provides:       perl(Module::Install::Include)
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(Config)
+BuildRequires:  perl(Cwd)
+BuildRequires:  perl(Devel::PPPort)
+BuildRequires:  perl(ExtUtils::MM)
+BuildRequires:  perl(ExtUtils::MM_Unix)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(ExtUtils::Manifest)
+BuildRequires:  perl(Fcntl)
+BuildRequires:  perl(File::Basename)
+BuildRequires:  perl(File::Find)
+BuildRequires:  perl(File::Path)
+BuildRequires:  perl(File::Remove)
+BuildRequires:  perl(File::Spec)
+BuildRequires:  perl(File::Temp)
+BuildRequires:  perl(FileHandle)
+BuildRequires:  perl(FindBin)
+BuildRequires:  perl(Module::CoreList)
+BuildRequires:  perl(Module::ScanDeps)
+BuildRequires:  perl(Parse::CPAN::Meta)
+BuildRequires:  perl(Symbol)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(YAML::Tiny)
+BuildRequires:  perl(autodie)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(utf8)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 Module::Install is a package for writing installers for CPAN (or CPAN-like)
 distributions that are clean, simple, minimalist, act in a strictly correct
@@ -138,12 +96,12 @@ Requires:       perl(Module::Install::AuthorTests)
 Requires:       perl(Module::Install::ExtraTests) >= 0.007
 %endif
 Requires:       perl(utf8)
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Module-Install-%{version}
 %patch -P0 -p1
@@ -154,22 +112,17 @@ for F in `find t -name *.t`; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 rm -f %{buildroot}/blib/lib/auto/share/dist/Module-Install/dist_file.txt
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/bash
 set -e
-# Some tests write into temporary files/directories. The easiest solution
-# is to copy the tests into a writable directory and execute them from there.
 DIR=$(mktemp -d)
 pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
@@ -178,21 +131,16 @@ popd
 rm -rf "$DIR"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%doc Changes README
-%{perl_vendorlib}/Module*
-%{perl_vendorlib}/inc*
-%{_mandir}/man3/Module::*
-%{_mandir}/man3/inc::*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Module-Install-tests -f %{oreon_filedir}/perl-Module-Install-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.21-8
 - Prepare for Oreon 11 (RP1)

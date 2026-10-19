@@ -1,33 +1,22 @@
-%global source0_hash 78fc3711db14bf863040ae98f7bdca08f41623ebeaf7efaea7dd49a38b5f054c
-
-# Tests fail to build with
-# LLVM ERROR: Cannot select: intrinsic %%llvm.objc.clang.arc.use
-# https://bugs.llvm.org/show_bug.cgi?id=49717
+%global source0_hash 5ead2276b42a534ac40437ce53b2231320b985539dc325453d93874be8d92869
 %bcond_with tests
-
 %global toolchain clang
-
 Name:           libobjc2
 Version:        2.3
 Release:        1%{?dist}
 Summary:        GNUstep Objective-C runtime library
-# Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            https://github.com/gnustep/libobjc2
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# Don't use CXXFLAGS when compiling eh_trampoline.cc
+Source0:        https://github.com/gnustep/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:         %{url}/commit/365e53632e8be41e49f21ee47a63e41be424a237.patch
-
-BuildRequires:  sed
-BuildRequires:  cmake
-BuildRequires:  clang >= 7.0.1
-BuildRequires:  libdispatch-devel >= 1.3
-BuildRequires:  robin-map-devel
-
-# libdispatch is not available on these architectures
 ExcludeArch:    armv7hl i686 ppc64le s390x
-
+# oreon:deps
+BuildRequires:  clang
+BuildRequires:  cmake
+BuildRequires:  libdispatch-devel
+BuildRequires:  robin-map-devel
+BuildRequires:  sed
+# /oreon:deps
 %description
 The GNUstep Objective-C runtime is designed as a drop-in replacement for the
 GCC runtime. It supports both a legacy and a modern ABI, allowing code compiled
@@ -56,11 +45,11 @@ Both ABIs support the following feature above and beyond the GCC runtime:
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package contains development files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -72,36 +61,26 @@ ln -s %{_includedir}/tsl third_party/robin-map/include/
 sed -e 's/-O0//g' -i CMakeLists.txt Test/CMakeLists.txt
 
 %build
+
 %cmake \
 %if %{with tests}
 %else
   -DTESTS=OFF \
 %endif
   -DCMAKE_INSTALL_LIBDIR=%{_lib}
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Workaround for https://github.com/gnustep/libobjc2/issues/199
 mv %{buildroot}%{_includedir}/Block.h %{buildroot}%{_includedir}/Block-libobjc.h
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with tests}
 %check
+
 %ctest
 %endif
-
-%files
-%license COPYING
-%doc README.md ANNOUNCE.%{version}
-%{_libdir}/libobjc.so.*
-
-%files devel
-%{_includedir}/*.h
-%{_includedir}/objc
-%{_libdir}/libobjc.so
-%{_libdir}/pkgconfig/libobjc.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libobjc2-devel -f %{oreon_filedir}/libobjc2-devel.list
 
 %changelog
+
 %autochangelog

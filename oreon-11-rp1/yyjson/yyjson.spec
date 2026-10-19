@@ -1,21 +1,19 @@
 %global source0_hash 34e0f62a2bc11ab20d601e8ca1cc2b2079503aa45119a19133d89d19b94a0fae
-
 %global forgeurl https://github.com/ibireme/yyjson
 Version:        0.13.0
 %global tag %{version}
 %forgemeta
-
 Name:           yyjson
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A high performance JSON library written in ANSI C
 License:        MIT
 URL:            %{forgeurl}
-Source0:        %{forgesource}
-
-BuildRequires:  gcc-c++
+Source0:        %{forgeurl}/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  cmake
+BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
-
+# /oreon:deps
 %description
 A high performance JSON library written in ANSI C.
 
@@ -36,11 +34,11 @@ and JSON Merge Patch.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 This package contains development files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
@@ -49,28 +47,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i '/-Werror/d' CMakeLists.txt
 
 %build
+
 %cmake \
     -GNinja \
     -DYYJSON_BUILD_TESTS=ON \
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest
-
-%files
-%license LICENSE
-%doc README.md
-%{_libdir}/libyyjson.so.0*
-
-%files devel
-%{_includedir}/yyjson.h
-%{_libdir}/libyyjson.so
-%{_libdir}/cmake/yyjson/
-%{_libdir}/pkgconfig/yyjson.pc
+%files -f %{oreon_filedir}/main.list
+%files -n yyjson-devel -f %{oreon_filedir}/yyjson-devel.list
 
 %changelog
+
 %autochangelog

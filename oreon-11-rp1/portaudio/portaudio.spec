@@ -1,32 +1,24 @@
 %global source0_hash 5af29ba58bbdbb7bbcefaaecc77ec8fc413f0db6f4c4e286c40c3e1b83174fa0
-
 Name:           portaudio
 Version:        19.7.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Free, cross platform, open-source, audio I/O library
 License:        MIT
 URL:            http://www.portaudio.com/
-
 VCS:            https://github.com/PortAudio/portaudio
-Source:         %{VCS}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/PortAudio/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch:          portaudio-pkgconfig-alsa.patch
-# Add some extra API needed by audacity
-# http://audacity.googlecode.com/svn/audacity-src/trunk/lib-src/portmixer/portaudio.patch
 Patch:          portaudio-audacity.patch
-
+# oreon:deps
 BuildRequires:  alsa-lib-devel
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
+BuildRequires:  jack-audio-connection-kit-devel
 BuildRequires:  libtool
 BuildRequires:  make
-%if 0%{?fedora} || 0%{?rhel} >= 9
-BuildRequires:  pipewire-jack-audio-connection-kit-devel
-%else
-BuildRequires:  jack-audio-connection-kit-devel
-%endif
-
+# /oreon:deps
 %description
 PortAudio is a portable audio I/O library designed for cross-platform
 support of audio. It uses a callback mechanism to request audio processing.
@@ -36,7 +28,6 @@ and will be converted to the native format internally.
 %package devel
 Summary:        Development files for the portaudio audio I/O library
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description devel
 PortAudio is a portable audio I/O library designed for cross-platform
 support of audio. It uses a callback mechanism to request audio processing.
@@ -47,6 +38,7 @@ This package contains files required to build applications that will use the
 portaudio library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{version}
@@ -56,34 +48,19 @@ autoreconf -fiv
 autoreconf -fiv
 
 %build
+
 %configure --disable-static --enable-cxx
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' bindings/cpp/libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' bindings/cpp/libtool
-# no -j# because building with -j# is broken
 make
-# Build html devel documentation
 doxygen
-
 %install
 %make_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE.txt
-%doc README.md
-%{_libdir}/libportaudio.so.2*
-%{_libdir}/libportaudiocpp.so.0*
-
-%files devel
-%doc doc/html/*
-%{_includedir}/portaudiocpp/
-%{_includedir}/portaudio.h
-%{_includedir}/pa_jack.h
-%{_includedir}/pa_linux_alsa.h
-%{_includedir}/pa_unix_oss.h
-%{_libdir}/libportaudio.so
-%{_libdir}/libportaudiocpp.so
-%{_libdir}/pkgconfig/portaudio-2.0.pc
-%{_libdir}/pkgconfig/portaudiocpp.pc
+%files -f %{oreon_filedir}/main.list
+%files -n portaudio-devel -f %{oreon_filedir}/portaudio-devel.list
 
 %changelog
+
 %autochangelog

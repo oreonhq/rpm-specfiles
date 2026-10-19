@@ -1,5 +1,4 @@
 %global source0_hash e39a859241c671f7fce8b82e1af5f461addbd2df73dffdf858bc4647d8594edc
-
 Name:           perl-Nmap-Parser
 Version:        1.37
 Release:        22%{?dist}
@@ -8,29 +7,25 @@ License:        MIT
 URL:            https://metacpan.org/release/Nmap-Parser
 Source0:        https://cpan.metacpan.org/authors/id/A/AP/APERSAUD/Nmap-Parser-%{version}.tar.gz
 BuildArch:      noarch
+Requires:       perl(XML::Twig) >= 3.16
+%{?perl_default_filter}
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(XML::Twig\\)$
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  sed
-# Run-time:
-BuildRequires:  perl(strict)
-BuildRequires:  perl(vars)
-# Storable 2 used nowhere
-BuildRequires:  perl(XML::Twig) >= 3.16
-# Tests:
-BuildRequires:  perl(blib)
-BuildRequires:  perl(constant)
 BuildRequires:  perl(Cwd)
+BuildRequires:  perl(ExtUtils::MakeMaker)
 BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(Test::More)
-Requires:       perl(XML::Twig) >= 3.16
-
-%{?perl_default_filter}
-# Remove under-specified dependencies
-%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(XML::Twig\\)$
-
+BuildRequires:  perl(XML::Twig)
+BuildRequires:  perl(blib)
+BuildRequires:  perl(constant)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(vars)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  sed
+# /oreon:deps
 %description
 This module implements a interface to the information contained in an
 nmap scan. It is implemented by parsing the XML scan data that is
@@ -39,6 +34,7 @@ create fast and robust security scripts that utilize the powerful port
 scanning abilities of nmap.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n Nmap-Parser-%{version}
@@ -47,21 +43,19 @@ perl -pi -e 's/\r//' tools/pdev.pl
 chmod 0644 tools/pdev.pl
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-make test
 
-%files
-%license LICENSE
-%doc Changes.md README.md tools
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

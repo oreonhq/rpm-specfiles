@@ -1,41 +1,33 @@
 %global source0_hash a1c8fdf4915fa82dcc2499d28aafaa3718b1b6a058077989abf9a8f7f7f264e6
-
 Name:           perl-CGI-Prototype
 Version:        0.9054
 Release:        42%{?dist}
 Summary:        Create a CGI application by subclassing
-# Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CGI-Prototype
 Source0:        https://cpan.metacpan.org/authors/id/M/ME/MERLYN/CGI-Prototype-%{version}.tar.gz
 BuildArch:      noarch
-
-# core
-BuildRequires:  coreutils
-BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(Test::More)
-# cpan
-BuildRequires:  perl(base)
-BuildRequires:  perl(CGI)
-BuildRequires:  perl(Class::Prototyped)
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Template)
-BuildRequires:  perl(warnings)
-# test
-BuildRequires:  perl(lib)
-BuildRequires:  perl(Test::Pod)
-BuildRequires:  perl(Test::Pod::Coverage)
-
-# use base masks these...
 Requires:       perl(CGI)
 Requires:       perl(Template)
-
 %{?perl_default_filter}
 %global __provides_exclude %{?__provides_exclude:%__provides_exclude|}perl\\(My::
-
+# oreon:deps
+BuildRequires:  coreutils
+BuildRequires:  make
+BuildRequires:  perl(CGI)
+BuildRequires:  perl(Class::Prototyped)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(Template)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Pod)
+BuildRequires:  perl(Test::Pod::Coverage)
+BuildRequires:  perl(base)
+BuildRequires:  perl(lib)
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 The core of every CGI application seems to be roughly the same:
 
@@ -55,6 +47,7 @@ separation of responsibilities, and "CGI::Prototype" a sort of "archetypal"
 controller.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n CGI-Prototype-%{version}
@@ -64,24 +57,19 @@ perl -pi -e 's|^#! ?perl|#!/usr/bin/perl|' t/*.t t/cprove
 chmod -c -x t/cprove
 
 %build
+
 %{__perl} Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
-
 %{_fixperms} %{buildroot}/*
+%oreon_autofiles main
 
 %check
-# note the "skipped: CGI::Prototype::Mecha not found" is expected; this module
-# is a runtime requirement of that module, resulting in a
-# plugin-before-the-base-module sorta deal.
-make test
 
-%files
-%doc Changes README TODO t/
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
+make test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

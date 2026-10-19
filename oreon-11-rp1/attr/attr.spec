@@ -1,35 +1,24 @@
+%global source1_hash 2af9e7ab3f24f1b4c0ec753a788c6ba588460d80f1ef852df23e1dfa2575e0ec
 %global source0_hash 6c8a2148a7b85043b68492bce43316b0e2e214fc4e628c7ede078e76e216330b
-
 %global source2_key_fpr 259B3792B3D6D319212CC4DCD5BF9FEB0313653A
-
-Summary: Utilities for managing filesystem extended attributes
+Summary:        Utilities for managing filesystem extended attributes
 Name: attr
 Version: 2.6.0
-Release: 1%{?dist}
+Release:        1%{?dist}
 Source0:        https://download.savannah.nongnu.org/releases/attr/attr-%{version}.tar.xz
 Source1:        https://download.savannah.nongnu.org/releases/attr/attr-%{version}.tar.xz.sig
-# Retreived from https://savannah.nongnu.org/people/viewgpg.php?user_id=15000
-# Source2: agruen-key.gpg
-# Retrieved from https://savannah.nongnu.org/people/viewgpg.php?user_id=42032
 Source2: agruen-key.gpg
-
-# xattr.conf: remove entries for NFSv4 ACLs namespaces (#1031423)
-# https://lists.nongnu.org/archive/html/acl-devel/2019-03/msg00000.html
-# https://lists.nongnu.org/archive/html/acl-devel/2019-03/msg00001.html
-# https://lists.nongnu.org/archive/html/acl-devel/2019-05/msg00000.html
 Patch3:  0003-attr-2.4.48-xattr-conf-nfs4-acls.patch
-
 License: GPL-2.0-or-later
 URL: https://savannah.nongnu.org/projects/attr
-BuildRequires: gettext
-BuildRequires: libtool
-BuildRequires: make
-BuildRequires: gnupg2
 Requires: libattr%{?_isa} = %{version}-%{release}
-
-# needed for %%check
-BuildRequires: perl(FileHandle)
-
+# oreon:deps
+BuildRequires:  gettext
+BuildRequires:  gnupg2
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  perl(FileHandle)
+# /oreon:deps
 %description
 A set of tools for manipulating extended attributes on filesystem
 objects, in particular getfattr(1) and setfattr(1).
@@ -40,7 +29,6 @@ with the SGI IRIX tool of the same name.
 Summary: Dynamic library for extended attribute support
 License: LGPL-2.1-or-later
 Conflicts: filesystem < 3
-
 %description -n libattr
 This package contains the libattr.so dynamic library which contains
 the extended attribute system calls and library functions.
@@ -49,13 +37,8 @@ the extended attribute system calls and library functions.
 Summary: Files needed for building programs with libattr
 License: LGPL-2.1-or-later
 Requires: libattr%{?_isa} = %{version}-%{release}
-
-# for <sys/xattr.h> which <attr/xattr.h> is symlinked to
 Requires: glibc-headers
-
-# provides {,f,l}{get,list,remove,set}xattr.2 man pages
 Recommends: man-pages
-
 %description -n libattr-devel
 This package contains header files and documentation needed to
 develop programs which make use of extended attributes.
@@ -72,6 +55,7 @@ which make use of extended attributes.  If you install libattr-devel,
 you'll also want to install attr.
 
 %prep
+
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
@@ -81,54 +65,34 @@ sed -e 's|test/root/getfattr.test||' \
     -i test/Makemodule.am Makefile.in
 
 %build
+
 %configure
 %make_build -C po ka.gmo
 %make_build
-
 %check
+
 if ./setfattr -n user.name -v value .; then
     make check || exit $?
 else
     echo '*** xattrs are probably not supported by the file system,' \
          'the test-suite will NOT run ***'
 fi
-
 %install
 %make_install
-
-# get rid of libattr.a and libattr.la
 rm -f $RPM_BUILD_ROOT%{_libdir}/libattr.{l,}a
-
-# drop already installed documentation, we will use an RPM macro to install it
 rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}*
-
-# temporarily provide attr/xattr.h symlink until users are migrated (#1601482)
 ln -fs ../sys/xattr.h $RPM_BUILD_ROOT%{_includedir}/attr/xattr.h
-
 %find_lang %{name}
-
 %ldconfig_scriptlets -n libattr
+%oreon_autofiles libattr usr/*/lib*.so.*
+%oreon_autofiles libattr-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%doc doc/CHANGES
-%license doc/COPYING*
-%{_bindir}/attr
-%{_bindir}/getfattr
-%{_bindir}/setfattr
-%{_mandir}/man1/attr.1*
-%{_mandir}/man1/getfattr.1*
-%{_mandir}/man1/setfattr.1*
-
-%files -n libattr-devel
-%{_libdir}/libattr.so
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/attr
-%{_mandir}/man3/attr_*.3.*
-
-%files -n libattr
-%{_libdir}/libattr.so.*
-%config(noreplace) %{_sysconfdir}/xattr.conf
+%files -f %{oreon_filedir}/main.list
+%files -n libattr -f %{oreon_filedir}/libattr.list
+%files -n libattr-devel -f %{oreon_filedir}/libattr-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.2-8
 - Prepare for Oreon 11 (RP1)

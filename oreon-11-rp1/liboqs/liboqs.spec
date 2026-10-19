@@ -1,40 +1,31 @@
-%global source0_hash none
-
+%global source0_hash df999915204eb1eba311d89e83d1edd3a514d5a07374745d6a9e5b2dd0d59c08
 %global oqs_version 0.12.0
 Name:       liboqs
 Version:    %{oqs_version}
-Release:    6%{?dist}
-Summary:    liboqs is an open source C library for quantum-safe cryptographic algorithms.
-
-#liboqs uses MIT license by itself but includes several files licensed under different terms.
-#src/common/crypto/sha3/xkcp_low/.../KeccakP-1600-AVX2.s : BSD-like CRYPTOGAMS license
-#src/common/rand/rand_nist.c: See file
-#see https://github.com/open-quantum-safe/liboqs/blob/main/README.md#license for more details
+Release:        1%{?dist}
+Summary:        liboqs is an open source C library for quantum-safe cryptographic algorithms.
 License:    MIT AND Apache-2.0 AND BSD-3-Clause AND (BSD-3-Clause OR GPL-1.0-or-later) AND CC0-1.0 AND Unlicense
 URL:        https://github.com/open-quantum-safe/liboqs.git
-Source:        https://github.com/open-quantum-safe/liboqs/archive/refs/tags/%{version}.tar.gz#/liboqs-%{version}.tar.gz
+Source0:        https://github.com/open-quantum-safe/liboqs/archive/refs/tags/%{version}.tar.gz#/liboqs-%{version}.tar.gz
 Patch1:	    liboqs-0.12.0-acvp_patch.patch
 Patch2:	    liboqs-0.10.0-std-stricter.patch
-# https://github.com/open-quantum-safe/liboqs/pull/2043
 Patch3:	    liboqs-0.12.0-openssl-memfuncs.patch
-
-BuildRequires: ninja-build
-BuildRequires: cmake
-BuildRequires: gcc
-BuildRequires: openssl-devel
-BuildRequires: python3-pytest
 %if %{undefined rhel} || (0%{?oreon} >= 11)
-BuildRequires: python3-pytest-xdist
 %endif
-BuildRequires: unzip
-BuildRequires: xsltproc
-#BuildRequires: doxygen
-BuildRequires: graphviz
-BuildRequires: python3-yaml
 %ifarch %{valgrind_arches}
-BuildRequires: valgrind
 %endif
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  graphviz
+BuildRequires:  ninja-build
+BuildRequires:  openssl-devel
+BuildRequires:  python3-pytest
+BuildRequires:  python3-pytest-xdist
+BuildRequires:  python3-yaml
+BuildRequires:  unzip
+BuildRequires:  xsltproc
+# /oreon:deps
 %description
 liboqs provides:
  - a collection of open source implementations of quantum-safe key encapsulation mechanism (KEM) and digital signature algorithms; the full list can be found below
@@ -45,11 +36,11 @@ liboqs is part of the Open Quantum Safe (OQS) project led by Douglas Stebila and
 %package devel
 Summary:          Development libraries for liboqs
 Requires:         liboqs%{?_isa} = %{version}-%{release}
-
 %description devel
 Header and Library files for doing development with liboqs.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -T -b 0 -q -n liboqs-%{oqs_version}
 %autopatch -p1
@@ -69,14 +60,13 @@ sed -e '/COMMAND.*pytest/s|$| --ignore tests/test_code_conventions.py|' \
     -i tests/CMakeLists.txt
 
 %build
+
 %cmake -GNinja -DBUILD_SHARED_LIBS=ON -DOQS_USE_AES_OPENSSL=ON -DOQS_USE_AES_INSTRUCTIONS=OFF -DOQS_DIST_BUILD=ON -DOQS_ALGS_ENABLED=NIST_2024 -DOQS_USE_SHA3_OPENSSL=ON -DOQS_DLOPEN_OPENSSL=ON -DCMAKE_BUILD_TYPE=Debug -LAH ..
 %cmake_build
-#ninja gen_docs
-
 %check
+
 cd "%{_vpath_builddir}"
 ninja run_tests
-
 %install
 %cmake_install
 for i in liboqsTargets.cmake liboqsTargets-debug.cmake
@@ -85,26 +75,12 @@ do
   sed -e "s;$RPM_BUILD_ROOT;;g" /tmp/$i   > $RPM_BUILD_ROOT/%{_libdir}/cmake/liboqs/$i
   rm /tmp/$i
 done
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%license LICENSE.txt
-%{_libdir}/liboqs.so.%{oqs_version}
-%{_libdir}/liboqs.so.7
-
-%files devel
-%{_libdir}/liboqs.so
-%dir %{_includedir}/oqs
-%{_includedir}/oqs/*
-%dir %{_libdir}/cmake/liboqs
-%{_libdir}/cmake/liboqs/liboqsTargets.cmake
-%{_libdir}/cmake/liboqs/liboqsTargets-debug.cmake
-%{_libdir}/cmake/liboqs/liboqsConfig.cmake
-%{_libdir}/cmake/liboqs/liboqsConfigVersion.cmake
-%{_libdir}/pkgconfig/liboqs.pc
-#%dir %%{_datadir}/doc/oqs
-#%doc %%{_datadir}/doc/oqs/html/*
-#%doc %%{_datadir}/doc/oqs/xml/*
+%files -f %{oreon_filedir}/main.list
+%files -n liboqs-devel -f %{oreon_filedir}/liboqs-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.12.0-6
 - Import

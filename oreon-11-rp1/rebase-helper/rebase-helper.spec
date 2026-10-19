@@ -1,29 +1,24 @@
-%global source0_hash e976bf0348464d9781ebef8b7381d00cd9354503bda355176f3d2f8b85ba0dcd
-
+%global source0_hash d31a3841912ba6aefa12fa56e63d2d795133534717c78244cdfe95e9cbff8a39
 Name:           rebase-helper
 Version:        0.29.7
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        The tool that helps you to rebase your package to the latest version
-
 License:        GPL-2.0-or-later
 URL:            https://github.com/rebase-helper/rebase-helper
-Source0:        %{pypi_source rebasehelper}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/rebasehelper/rebasehelper-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  make
-BuildRequires:  python%{python3_pkgversion}-devel
-
-BuildRequires:  pandoc
-BuildRequires:  python%{python3_pkgversion}-sphinx
-BuildRequires:  python%{python3_pkgversion}-sphinx_rtd_theme
-
 Recommends:     licensecheck
 Recommends:     rpmlint
 Recommends:     libabigail
 Recommends:     pkgdiff >= 1.6.3
 Recommends:     rpminspect-data-fedora
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 45
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 7
+Requires:       python3-rebase-helper = %{version}-%{release}
+# /oreon:deps
 %description
 rebase-helper is a tool which helps package maintainers to rebase their
 packages to latest upstream versions.
@@ -31,6 +26,7 @@ There are several steps that need to be done when rebasing a package.
 The goal of rebase-helper is to automate most of these steps.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n rebasehelper-%{version}
@@ -39,43 +35,25 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 # support in setuptools_scm
 sed -i 's/setuptools_scm\[toml\]>=7/setuptools_scm[toml]/' pyproject.toml
 
-%generate_buildrequires
-%pyproject_buildrequires -x testing
-
 %build
+
 %pyproject_wheel
-
-# generate man page
 make PYTHONPATH=$(pwd)/build/lib SPHINXBUILD=sphinx-build-3 man
-
-# generate bash completion script
 make PYTHON=%{python3} PYTHONPATH=$(pwd) completion
-
-# generate sample configuration file
 make PYTHON=%{python3} PYTHONPATH=$(pwd) sample_config
-
 %install
 %pyproject_install
-%pyproject_save_files rebasehelper
-
-# install man page
 mkdir -p %{buildroot}%{_datadir}/man/man1/
 install -p -m 0644 docs/build/man/%{name}.1 %{buildroot}%{_datadir}/man/man1
-
-# install bash completion
 mkdir -p %{buildroot}%{_datadir}/bash-completion/completions/
 install -p -m 0644 %{name}.bash %{buildroot}%{_datadir}/bash-completion/completions/%{name}
+%oreon_autofiles main
 
 %check
-%pytest
 
-%files -f %{pyproject_files}
-%doc README.md
-%doc CHANGELOG.md
-%doc %{name}.cfg
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1*
-%{_datadir}/bash-completion/completions/%{name}
+%pytest
+%files
 
 %changelog
+
 %autochangelog

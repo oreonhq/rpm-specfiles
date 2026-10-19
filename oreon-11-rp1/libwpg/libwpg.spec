@@ -1,28 +1,25 @@
 %global source0_hash b55fda9440d1e070630eb2487d8b8697cf412c214a27caee9df69cec7c004de3
-
 %global apiversion 0.3
-
 Name:           libwpg
 Version:        0.3.4
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A library for import of WordPerfect Graphics images
-
 License:        LGPL-2.1-or-later OR MPL-2.0
 URL:            http://libwpg.sourceforge.net/
 Source0:        http://download.sourceforge.net/libwpg/%{name}-%{version}.tar.xz
-
+# oreon:deps
 BuildRequires:  boost-devel
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  help2man
-BuildRequires:  perl-generators
+BuildRequires:  make
 BuildRequires:  perl(Getopt::Std)
+BuildRequires:  perl-generators
 BuildRequires:  pkgconfig(librevenge-0.0)
 BuildRequires:  pkgconfig(librevenge-generators-0.0)
 BuildRequires:  pkgconfig(librevenge-stream-0.0)
 BuildRequires:  pkgconfig(libwpd-0.10)
-BuildRequires:  make
-
+# /oreon:deps
 %description
 %{name} is a library for import of images in WPG
 (WordPerfect Graphics) format. WPG is the format used among others in
@@ -31,7 +28,6 @@ Corel software, such as WordPerfect and Presentations.
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -39,41 +35,34 @@ developing applications that use %{name}.
 %package doc
 Summary: Documentation of %{name} API
 BuildArch: noarch
-
 %description doc
 The %{name}-doc package contains API documentation for %{name}.
 
 %package tools
 Summary:        Tools to convert WordPerfect Graphics images to other formats
-# wpg2svgbatch.pl says "GPL", without specifying version, and points to
-# http://www.gnu.org/copyleft/gpl.html . I assume this means "any
-# version".
 License:        (LGPLv2+ or MPLv2.0) and GPL+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description tools
 Tools to convert WordPerfect Graphics images to other formats. Supported
 are: SVG, raw.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build
+
 %configure --disable-static --disable-silent-rules
 sed -i \
     -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
     libtool
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
-# we install API docs directly from build
 rm -rf %{buildroot}/%{_docdir}/%{name}
-
-# generate and install man pages
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 for tool in wpg2raw wpg2svg; do
     help2man -N -S '%{name} %{version}' -o ${tool}.1 %{buildroot}%{_bindir}/${tool}
@@ -83,31 +72,15 @@ help2man -N -S '%{name} %{version}' -n 'batch convert WordPerfect Graphics files
     -o wpg2svgbatch.pl.1 ./src/conv/svg/wpg2svgbatch.pl
 install -m 0755 -d %{buildroot}/%{_mandir}/man1
 install -m 0644 wpg2*.1 %{buildroot}/%{_mandir}/man1
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/*/lib*.so.*
 
-%files
-%doc AUTHORS NEWS
-%license COPYING.LGPL COPYING.MPL
-%{_libdir}/%{name}-%{apiversion}.so.*
-
-%files devel
-%{_includedir}/%{name}-%{apiversion}
-%{_libdir}/%{name}-%{apiversion}.so
-%{_libdir}/pkgconfig/%{name}-%{apiversion}.pc
-
-%files doc
-%license COPYING.LGPL COPYING.MPL
-%doc docs/doxygen/html
-
-%files tools
-%{_bindir}/wpg2raw
-%{_bindir}/wpg2svg
-%{_bindir}/wpg2svgbatch.pl
-%{_mandir}/man1/wpg2raw.1*
-%{_mandir}/man1/wpg2svg.1*
-%{_mandir}/man1/wpg2svgbatch.pl.1*
+%files -f %{oreon_filedir}/main.list
+%files -n libwpg-devel -f %{oreon_filedir}/libwpg-devel.list
+%files -n libwpg-doc -f %{oreon_filedir}/libwpg-doc.list
+%files -n libwpg-tools -f %{oreon_filedir}/libwpg-tools.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.4-1
 - Prepare for Oreon 11 (RP1)

@@ -1,111 +1,70 @@
 %global source0_hash ccbb8cdd1db56ecd4ece5dbabae0118ab2c46b5b3439c94f3cec467798ce956d
-
 %global apiver 0.4
-
-%if !0%{?fedora}%{?rhel} || 0%{?fedora} >= 44
-%bcond use_system_libnsgif 1
-%else
 %bcond use_system_libnsgif 0
-%endif
-
-%if 0%{?rhel}
-%bcond lensfun 0
-%else
 %bcond lensfun 1
-%endif
-
-# Whether or not docs should be built
 %bcond docs 1
-
 Name:           gegl04
 Version:        0.4.72
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Graph based image processing framework
-
-# The binary is under the GPL, while the libs are under LGPL.
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.gegl.org/
 Source0:        http://download.gimp.org/pub/gegl/%{apiver}/gegl-%{version}.tar.xz
-
+%if %{with lensfun}
+%endif
+%if %{with use_system_libnsgif}
+%endif
+Provides:       bundled(poly2tri-c)
+%if %{without use_system_libnsgif}
+Provides:       bundled(libnsgif) = 1.0.0
+%endif
+Recommends: %{name}-matting-levin%{?_isa}
+# oreon:deps
+BuildRequires:  asciidoc
 BuildRequires:  chrpath
 BuildRequires:  enscript
 BuildRequires:  gcc-c++
-BuildRequires:  gettext-devel >= 0.19.8
-BuildRequires:  gobject-introspection-devel >= 1.32.0
+BuildRequires:  gettext-devel
+BuildRequires:  gobject-introspection-devel
 BuildRequires:  gtk-doc
 BuildRequires:  libspiro-devel
 BuildRequires:  meson
 BuildRequires:  perl-interpreter
+BuildRequires:  pkgconfig(babl-0.1)
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(exiv2)
+BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
+BuildRequires:  pkgconfig(gexiv2)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(jasper)
+BuildRequires:  pkgconfig(json-glib-1.0)
+BuildRequires:  pkgconfig(lcms2)
+BuildRequires:  pkgconfig(lensfun)
+BuildRequires:  pkgconfig(libpng)
+BuildRequires:  pkgconfig(libraw)
+BuildRequires:  pkgconfig(librsvg-2.0)
+BuildRequires:  pkgconfig(libtiff-4)
+BuildRequires:  pkgconfig(libv4l2)
+BuildRequires:  pkgconfig(libwebp)
+BuildRequires:  pkgconfig(lua)
+BuildRequires:  pkgconfig(pango)
+BuildRequires:  pkgconfig(pangocairo)
+BuildRequires:  pkgconfig(pygobject-3.0)
+BuildRequires:  pkgconfig(sdl2)
+BuildRequires:  pkgconfig(vapigen)
 BuildRequires:  ruby
 BuildRequires:  suitesparse-devel
 BuildRequires:  vala
-BuildRequires:  asciidoc
-
-BuildRequires:  pkgconfig(babl-0.1) >= 0.1.116
-BuildRequires:  pkgconfig(cairo) >= 1.12.2
-BuildRequires:  pkgconfig(exiv2) >= 0.25
-BuildRequires:  pkgconfig(gdk-pixbuf-2.0) >= 2.32.0
-BuildRequires:  pkgconfig(gexiv2)
-BuildRequires:  pkgconfig(glib-2.0) >= 2.44.0
-BuildRequires:  pkgconfig(jasper) >= 1.900.1
-BuildRequires:  pkgconfig(json-glib-1.0)
-BuildRequires:  pkgconfig(lcms2) >= 2.8
-%if %{with lensfun}
-BuildRequires:  pkgconfig(lensfun) >= 0.2.5
-%endif
-%if %{with use_system_libnsgif}
-BuildRequires:  pkgconfig(libnsgif) >= 1.0.0
-%endif
-BuildRequires:  pkgconfig(libraw) >= 0.15.4
-BuildRequires:  pkgconfig(libpng) >= 1.6.0
-BuildRequires:  pkgconfig(librsvg-2.0) >= 2.40.6
-BuildRequires:  pkgconfig(libv4l2) >= 1.0.1
-BuildRequires:  pkgconfig(libwebp) >= 0.5.0
-BuildRequires:  pkgconfig(lua) >= 5.1.0
-
-%if ! 0%{?rhel}
-%ifarch aarch64 %{ix86} x86_64
-BuildRequires:  pkgconfig(luajit) >= 2.0.4
-%endif
-BuildRequires:  pkgconfig(OpenEXR) >= 2.5.4
-%endif
-
-BuildRequires:  pkgconfig(pango) >= 1.38.0
-BuildRequires:  pkgconfig(pangocairo) >= 1.38.0
-BuildRequires:  pkgconfig(pygobject-3.0) >= 3.2
-BuildRequires:  pkgconfig(sdl2) >= 2.0.5
-BuildRequires:  pkgconfig(vapigen) >= 0.20.0
-BuildRequires:  pkgconfig(libtiff-4) >= 4.0.0
-
-# operations/common/magick-load.c has a fallback image loader which uses /usr/bin/convert
-# However, this code path has no error handling, so no application should rely on it; and
-# there is a general trend to migrate away from ImageMagick.
-# Requires:       /usr/bin/convert
-
-# gegl contains a stripped down version of poly2tri-c, a C+glib port of
-# poly2tri, a 2D constrained Delaunay triangulation library.
-# Version information:
-#     CURRENT REVISION: b27c5b79df2ffa4e2cb37f9e5536831f16afb11b
-#     CACHED ON: August 11th, 2012
-Provides:       bundled(poly2tri-c)
-%if %{without use_system_libnsgif}
-# This is only available in F44+.
-Provides:       bundled(libnsgif) = 1.0.0
-%endif
-# This is optional as it's large and can cause issues with some HW.
-Recommends: %{name}-matting-levin%{?_isa}
-
+# /oreon:deps
 %description
 GEGL (Generic Graphics Library) is a graph based image processing framework.
 GEGLs original design was made to scratch GIMP's itches for a new
 compositing and processing core. This core is being designed to have
 minimal dependencies and a simple well defined API.
 
-
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use GEGL API version %{apiver}.
@@ -113,7 +72,6 @@ developing applications that use GEGL API version %{apiver}.
 %package        matting-levin
 Summary:        Matting Levin foreground select plugin for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    matting-levin
 The Matting Levin foreground select plugin for %{name}.
 
@@ -121,89 +79,45 @@ The Matting Levin foreground select plugin for %{name}.
 %package        devel-docs
 Summary:        Documentation files for developing with %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel-docs
 The %{name}-devel-docs package contains documentation files for developing
 applications that use GEGL API version %{apiver}.
 %endif
 
-
 %package        tools
 Summary:        Command line tools for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    tools
 The %{name}-tools package contains tools for the command line that use the
 GEGL library.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n gegl-%{version}
 %if %{with use_system_libnsgif}
 rm -rf subprojects/libnsgif
 %endif
 
-
 %build
+
 %meson --auto-features=auto %{!?with_docs:-Ddocs=false -Dgtk-doc=false}%{?with_docs:-Ddocs=true -Dgtk-doc=true}
 %meson_build
-
-
 %install
 %meson_install
-
-# Remove rpaths
 chrpath --delete %{buildroot}%{_bindir}/*
 chrpath --delete %{buildroot}%{_libdir}/*.so*
 chrpath --delete %{buildroot}%{_libdir}/gegl-%{apiver}/*.so
-
 %find_lang gegl-%{apiver}
-
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-
-%files -f gegl-%{apiver}.lang
-%license COPYING.LESSER
-%{_libdir}/gegl-%{apiver}/
-%{_libdir}/libgegl-%{apiver}.so.*
-%{_libdir}/libgegl-npd-%{apiver}.so
-%{_libdir}/libgegl-sc-%{apiver}.so
-%{_libdir}/girepository-1.0/Gegl-%{apiver}.typelib
-%exclude %{_libdir}/gegl-%{apiver}/matting-levin.so
-
-%if ! 0%{?rhel}
-%ifarch aarch64 %{ix86} x86_64
-%dir %{_datadir}/gegl-%{apiver}/
-%{_datadir}/gegl-%{apiver}/lua/
-%endif
-%endif
-
-%files matting-levin
-%{_libdir}/gegl-%{apiver}/matting-levin.so
-
-%files devel
-%{_includedir}/gegl-%{apiver}/
-%{_libdir}/libgegl-%{apiver}.so
-%{_libdir}/pkgconfig/gegl-%{apiver}.pc
-%{_libdir}/pkgconfig/gegl-sc-%{apiver}.pc
-%dir %{_datadir}/gir-1.0
-%{_datadir}/gir-1.0/Gegl-%{apiver}.gir
-%dir %{_datadir}/vala
-%dir %{_datadir}/vala/vapi
-%{_datadir}/vala/vapi/gegl-%{apiver}.deps
-%{_datadir}/vala/vapi/gegl-%{apiver}.vapi
-
-%if %{with docs}
-%files devel-docs
-%doc %{_datadir}/gtk-doc/
-%endif
-
-%files tools
-%license COPYING
-%{_bindir}/*
-
+%files -f %{oreon_filedir}/main.list
+%files -n gegl04-devel -f %{oreon_filedir}/gegl04-devel.list
+%files -n gegl04-matting-levin -f %{oreon_filedir}/gegl04-matting-levin.list
+%files -n gegl04-devel-docs -f %{oreon_filedir}/gegl04-devel-docs.list
+%files -n gegl04-tools -f %{oreon_filedir}/gegl04-tools.list
 
 %changelog
+
 %autochangelog

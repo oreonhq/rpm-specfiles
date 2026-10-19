@@ -1,29 +1,22 @@
-%global source0_hash none
-
+%global source0_hash c804836942c1cb363e71bb42d32cd78f4e8c32b11b712715dae191b9cd372040
 %global qt_module qtsensors
-
-Summary: Qt5 - Sensors component
+Summary:        Qt5 - Sensors component
 Name:    qt5-%{qt_module}
 Version: 5.15.18
-Release: 2%{?dist}
-
-# See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details
+Release:        2%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io/
 %global majmin %(echo %{version} | cut -d. -f1-2)
 Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
-# filter qml/plugin provides
 %global __provides_exclude_from ^(%{_qt5_archdatadir}/qml/.*\\.so|%{_qt5_plugindir}/.*\\.so)$
-
-BuildRequires: make
-BuildRequires: qt5-qtbase-devel >= %{version}
-BuildRequires: qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
-BuildRequires: qt5-qtdeclarative-devel
-
-# provides a plugin that can use iio-sensor-proxy
 Recommends: iio-sensor-proxy
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtbase-private-devel
+BuildRequires:  qt5-qtdeclarative-devel
+# /oreon:deps
 %description
 The Qt Sensors API provides access to sensor hardware via QML and C++
 interfaces.  The Qt Sensors API also provides a motion gesture recognition
@@ -42,23 +35,17 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %description examples
 %{summary}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{qt_module}-everywhere-src-%{version}
 
-
 %build
+
 %{qmake_qt5}
-
 %make_build
-
-
 %install
 make install INSTALL_ROOT=%{buildroot}
-
-## .prl/.la file love
-# nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
 pushd %{buildroot}%{_qt5_libdir}
 for prl_file in libQt5*.prl ; do
   sed -i -e "/^QMAKE_PRL_BUILD_DIR/d" ${prl_file}
@@ -68,31 +55,14 @@ for prl_file in libQt5*.prl ; do
   fi
 done
 popd
-
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE.*
-%{_qt5_libdir}/libQt5Sensors.so.5*
-%{_qt5_plugindir}/sensorgestures/
-%{_qt5_plugindir}/sensors/
-%{_qt5_archdatadir}/qml/QtSensors/
-%dir %{_qt5_libdir}/cmake/Qt5Sensors/
-%{_qt5_libdir}/cmake/Qt5Sensors/Qt5Sensors_*Plugin.cmake
-
-%files devel
-%{_qt5_headerdir}/QtSensors/
-%{_qt5_libdir}/libQt5Sensors.so
-%{_qt5_libdir}/libQt5Sensors.prl
-%{_qt5_libdir}/cmake/Qt5Sensors/Qt5SensorsConfig*.cmake
-%{_qt5_libdir}/pkgconfig/Qt5Sensors.pc
-%{_qt5_archdatadir}/mkspecs/modules/qt_lib_sensors*.pri
-
-%files examples
-%{_qt5_examplesdir}/
-
+%files -f %{oreon_filedir}/main.list
+%files -n qt5-qtsensors-devel -f %{oreon_filedir}/qt5-qtsensors-devel.list
+%files -n qt5-qtsensors-examples -f %{oreon_filedir}/qt5-qtsensors-examples.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
 - Import

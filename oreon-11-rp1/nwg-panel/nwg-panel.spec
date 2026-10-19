@@ -1,40 +1,34 @@
 %global source0_hash 72026a4217296d7fa06a85063d171a5d0a2f52bc3687228dc12c5f275ce51b22
-
 %global forgeurl https://github.com/nwg-piotr/%{name}
 %global sys_name nwg_panel
-
 Name:       nwg-panel
 Version:    0.10.15
 %forgemeta
-Release:    %autorelease
-Summary:    GTK3-based panel for sway and Hyprland Wayland compositors
+Release:        1%{?dist}
+Summary:        GTK3-based panel for sway and Hyprland Wayland compositors
 BuildArch:  noarch
-
 License:    MIT
 URL:        %{forgeurl}
-Source0:    %{forgesource}
-
-BuildRequires: desktop-file-utils
-BuildRequires: python3-devel >= 3.4
-BuildRequires: python3-setuptools
-BuildRequires: systemd-rpm-macros
-
+Source0:        %{forgeurl}/archive/v%{version}/%{name}-%{version}.tar.gz
 Requires:   gtk-layer-shell
 Requires:   gtk3
 Requires:   python3-gobject
 Requires:   python3-i3ipc
 Requires:   python3-dasbus
 Requires:   wlr-randr
-
 Recommends: /usr/bin/pactl
 Recommends: brightnessctl
 Recommends: playerctl
 Recommends: python3-netifaces
 Recommends: python3-psutil
 Recommends: python3-pybluez
-
 Supplements: hyprland
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 This application is a part of the nwg-shell project.
 
@@ -50,59 +44,46 @@ Basis system controls are available in the Controls module, and whatever else
 you may need, there's an executor for that.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %forgeautosetup -p1
 
 %build
-%py3_build
 
+%py3_build
 %install
 %py3_install
-
-# Remove shebang from Python libraries
 for lib in %{buildroot}%{python3_sitelib}/%{sys_name}/{/,modules}/*.py; do
  sed '1{\@^#!/usr/bin/env python@d}' $lib > $lib.new &&
  touch -r $lib $lib.new &&
  mv $lib.new $lib
 done
-
-# Remove shebang from Python libraries
 for lib in %{buildroot}%{python3_sitelib}/%{sys_name}/*.py; do
  sed '1{\@^#!/usr/bin/python@d}' $lib > $lib.new &&
  touch -r $lib $lib.new &&
  mv $lib.new $lib
 done
-
 install -Dpm 0644 %{name}.svg -t %{buildroot}%{_datadir}/pixmaps/
 install -Dpm 0644 nwg-shell.svg -t %{buildroot}%{_datadir}/pixmaps/
 install -Dpm 0755 %{name}-config.desktop -t %{buildroot}%{_datadir}/applications/
 install -Dpm 0644 %{name}.service -t %{buildroot}%{_userunitdir}/
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
-
 %post
+
 %systemd_user_post %{name}.service
-
 %preun
+
 %systemd_user_preun %{name}.service
-
 %postun
-%systemd_user_postun_with_restart %{name}.service
 
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/%{name}
-%{_bindir}/%{name}-config
-%{_bindir}/nwg-dwl-interface
-%{_bindir}/nwg-processes
-%{_datadir}/applications/*.desktop
-%{_datadir}/pixmaps/*.svg
-%{_userunitdir}/%{name}.service
-%{python3_sitelib}/%{sys_name}-%{version}-py%{python3_version}.egg-info/
-%{python3_sitelib}/%{sys_name}/
+%systemd_user_postun_with_restart %{name}.service
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

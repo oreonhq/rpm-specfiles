@@ -1,26 +1,30 @@
+%global source2_hash eec7eccb51a27ae633784d1b1ef42eb775130c782ea51a6c47fa7a901484d6db
+%global source1_hash 67546d9b3fda4ed6e23acbc116b690e5033b1ef4f53a24908d638ef6402561a8
 %global source0_hash 355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11
-
 %bcond compat_libs %[!(0%{?rhel} >= 10) || %{defined eln}]
 %bcond gpm %[!(0%{?rhel} >= 10)]
-
-Summary: Ncurses support utilities
+Summary:        Ncurses support utilities
 Name: ncurses
 Version: 6.6
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: MIT-open-group
 URL: https://invisible-island.net/ncurses/ncurses.html
 Source0:        https://invisible-mirror.net/archives/ncurses/ncurses-%{version}.tar.gz
 Source1:        https://invisible-mirror.net/archives/ncurses/ncurses-%{version}.tar.gz.asc
 Source2: https://invisible-island.net/public/dickey@invisible-island.net-rsa3072.asc
-
 Patch8: ncurses-config.patch
 Patch9: ncurses-libs.patch
 Patch11: ncurses-urxvt.patch
-BuildRequires: gcc gcc-c++ gnupg2 make pkgconfig
 %{?with_gpm:BuildRequires: gpm-devel}
-
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gnupg2
+BuildRequires:  gpm-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
+# /oreon:deps
 %description
 The curses library routines are a terminal-independent method of
 updating character screens with reasonable optimization.  The ncurses
@@ -34,7 +38,6 @@ tool captoinfo.
 %package libs
 Summary: Ncurses libraries
 Requires: %{name}-base = %{version}-%{release}
-
 %description libs
 The curses library routines are a terminal-independent method of
 updating character screens with reasonable optimization.  The ncurses
@@ -47,7 +50,6 @@ This package contains the ncurses libraries.
 %package compat-libs
 Summary: Ncurses compatibility libraries
 Requires: %{name}-base = %{version}-%{release}
-
 %description compat-libs
 The curses library routines are a terminal-independent method of
 updating character screens with reasonable optimization.  The ncurses
@@ -61,7 +63,6 @@ compatibility.
 %package c++-libs
 Summary: Ncurses C++ bindings
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description c++-libs
 The curses library routines are a terminal-independent method of
 updating character screens with reasonable optimization.  The ncurses
@@ -73,7 +74,6 @@ This package contains C++ bindings of the ncurses ABI version 6 libraries.
 %package base
 Summary: Descriptions of common terminals
 BuildArch: noarch
-
 %description base
 This package contains descriptions of common terminals. Other terminal
 descriptions are included in the ncurses-term package.
@@ -82,7 +82,6 @@ descriptions are included in the ncurses-term package.
 Summary: Terminal descriptions
 Requires: %{name}-base = %{version}-%{release}
 BuildArch: noarch
-
 %description term
 This package contains additional terminal descriptions not found in
 the ncurses-base package.
@@ -92,7 +91,6 @@ Summary: Development files for the ncurses library
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Requires: %{name}-c++-libs%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
-
 %description devel
 The header files and libraries for developing applications that use
 the ncurses terminal handling library.
@@ -103,11 +101,11 @@ which will use ncurses.
 %package static
 Summary: Static libraries for the ncurses library
 Requires: %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 The ncurses-static package includes static libraries of the ncurses library.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}
 
@@ -118,6 +116,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P11 -p1 -b .urxvt
 
 %build
+
 common_options="\
     --enable-colorfgbg \
     --enable-hard-tabs \
@@ -139,29 +138,23 @@ common_options="\
 %{!?with_gpm:--without-gpm} \
     --without-ada"
 abi5_options="--with-chtype=long"
-
 for abi in %{?with_compat_libs:5} 6; do
     for char in narrowc widec; do
         mkdir $char$abi
         pushd $char$abi
         ln -s ../configure .
-
         [ $abi = 6 -a $char = widec ] && progs=yes || progs=no
-
         %configure $(
             echo $common_options --with-abi-version=$abi
             [ $abi = 5 ] && echo $abi5_options
             [ $char = widec ] && echo --enable-widec || echo --disable-widec
             [ $progs = yes ] || echo --without-progs
         )
-
         %make_build libs
         [ $progs = yes ] && %make_build -C progs
-
         popd
     done
 done
-
 %install
 %if %{with compat_libs}
 make -C narrowc5 DESTDIR=$RPM_BUILD_ROOT install.libs
@@ -171,15 +164,10 @@ make -C widec5 DESTDIR=$RPM_BUILD_ROOT install.libs
 make -C narrowc6 DESTDIR=$RPM_BUILD_ROOT install.libs
 rm ${RPM_BUILD_ROOT}%{_libdir}/lib{tic,tinfo}.so.6*
 make -C widec6 DESTDIR=$RPM_BUILD_ROOT install.{libs,progs,data,includes,man}
-
 chmod 755 ${RPM_BUILD_ROOT}%{_libdir}/lib*.so.*.*
 chmod 644 ${RPM_BUILD_ROOT}%{_libdir}/lib*.a
-
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/terminfo
-
 baseterms=
-
-# prepare -base and -term file lists
 for termname in \
     alacritty ansi dumb foot\* linux vt100 vt100-nav vt102 vt220 vt52 \
     Eterm\* aterm bterm cons25 cygwin eterm\* gnome gnome-256color hurd jfbterm \
@@ -204,88 +192,39 @@ do
     echo "%dir $(dirname $t)"
     echo $t
 done 2> /dev/null | sort -u | comm -2 -3 - terms.base > terms.term
-
-# can't replace directory with symlink (rpm bug), symlink all headers
 mkdir $RPM_BUILD_ROOT%{_includedir}/ncurses{,w}
 for l in $RPM_BUILD_ROOT%{_includedir}/*.h; do
     ln -s ../$(basename $l) $RPM_BUILD_ROOT%{_includedir}/ncurses
     ln -s ../$(basename $l) $RPM_BUILD_ROOT%{_includedir}/ncursesw
 done
-
-# don't require -ltinfo when linking with --no-add-needed
 for l in $RPM_BUILD_ROOT%{_libdir}/libncurses{,w}.so; do
     soname=$(basename $(readlink $l))
     rm -f $l
     echo "INPUT($soname -ltinfo)" > $l
 done
-
 rm -f $RPM_BUILD_ROOT%{_libdir}/libcurses{,w}.so
 echo "INPUT(-lncurses)" > $RPM_BUILD_ROOT%{_libdir}/libcurses.so
 echo "INPUT(-lncursesw)" > $RPM_BUILD_ROOT%{_libdir}/libcursesw.so
-
 echo "INPUT(-ltinfo)" > $RPM_BUILD_ROOT%{_libdir}/libtermcap.so
-
 rm -f $RPM_BUILD_ROOT%{_bindir}/ncurses*5-config
 rm -f $RPM_BUILD_ROOT{%{_libdir},/usr/lib}/terminfo
 rm -f $RPM_BUILD_ROOT%{_libdir}/pkgconfig/*_g.pc
-
 xz NEWS
-
 %ldconfig_scriptlets libs
-
 %ldconfig_scriptlets c++-libs
-
 %if %{with compat_libs}
 %ldconfig_scriptlets compat-libs
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
-%files
-%doc ANNOUNCE AUTHORS NEWS.xz README TO-DO
-%{_bindir}/[cirt]*
-%{_mandir}/man1/[cirt]*
-%{_mandir}/man5/*
-%{_mandir}/man7/*
-
-%files libs
-%exclude %{_libdir}/libncurses++*.so.6*
-%{_libdir}/lib*.so.6*
-
-%if %{with compat_libs}
-%files compat-libs
-%{_libdir}/lib*.so.5*
-%endif
-
-%files c++-libs
-%{_libdir}/libncurses++*.so.6*
-
-%files base -f terms.base
-%license COPYING
-%doc README
-%dir %{_sysconfdir}/terminfo
-%{_datadir}/tabset
-%dir %{_datadir}/terminfo
-
-%files term -f terms.term
-
-%files devel
-%doc doc/html/hackguide.html
-%doc doc/html/ncurses-intro.html
-%doc c++/README*
-%doc misc/ncurses.supp
-%{_bindir}/ncurses*-config
-%{_libdir}/lib*.so
-%{_libdir}/pkgconfig/*.pc
-%dir %{_includedir}/ncurses
-%dir %{_includedir}/ncursesw
-%{_includedir}/ncurses/*.h
-%{_includedir}/ncursesw/*.h
-%{_includedir}/*.h
-%{_mandir}/man1/ncurses*-config*
-%{_mandir}/man3/*
-
-%files static
-%{_libdir}/lib*.a
+%files -f %{oreon_filedir}/main.list
+%files -n ncurses-libs -f %{oreon_filedir}/ncurses-libs.list
+%files -n ncurses-compat-libs -f %{oreon_filedir}/ncurses-compat-libs.list
+%files -n ncurses-base -f %{oreon_filedir}/ncurses-base.list
+%files -n ncurses-term -f %{oreon_filedir}/ncurses-term.list
+%files -n ncurses-devel -f %{oreon_filedir}/ncurses-devel.list
+%files -n ncurses-static -f %{oreon_filedir}/ncurses-static.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6-1
 - Prepare for Oreon 11 (RP1)

@@ -1,18 +1,15 @@
-%global source0_hash none
-
+%global source0_hash 6e937f3650afab4aac198f348b89b1ca42edceb17fb6bb0918f642143ccfd15e
 Name:           liblockfile
 Version:        1.17
 Release:        12%{?dist}
 Summary:        This implements a number of functions found in -lmail on SysV systems
-
-# regarding license please see file COPYRIGHT
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            http://packages.qa.debian.org/libl/liblockfile.html
 Source0:        https://deb.debian.org/debian/pool/main/libl/liblockfile/liblockfile_%{version}.orig.tar.gz
-
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 This library implements a number of functions found in -lmail on SysV
 systems. These functions are designed to lock the standard mailboxes in
@@ -24,13 +21,12 @@ manage and remove generic lockfiles.
 %package devel
 Summary: Development files for %{name}
 Requires: %{name} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{VERSION}
 
@@ -52,33 +48,19 @@ sed -i \
     -e '/-DLOCKPROG/s,\$(DESTDIR),,' Makefile.in
 
 %build
+
 %configure --enable-shared --with-mailgroup
 %make_build
-
 %install
 %make_install
-
 ldconfig -N -n %{buildroot}/%{_libdir}
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%attr(2755,root,mail) %{_bindir}/dotlockfile
-%{_libdir}/liblockfile.so.1.0
-%{_libdir}/liblockfile.so.1
-%{_mandir}/man1/dotlockfile.1*
-%doc README COPYRIGHT Changelog
-
-
-%files devel
-%{_libdir}/liblockfile.so
-%{_includedir}/maillock.h
-%{_includedir}/lockfile.h
-%{_libdir}/liblockfile.a
-%{_mandir}/man3/lockfile_create.3*
-%{_mandir}/man3/maillock.3*
-
+%files -f %{oreon_filedir}/main.list
+%files -n liblockfile-devel -f %{oreon_filedir}/liblockfile-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.17-12
 - Import

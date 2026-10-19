@@ -1,58 +1,41 @@
-%global source0_hash none
-
+%global source0_hash d8022641b9ec8ecf2c5ecbe9f47e5a70e0b87c4b5ae921b92cb02a638e0acd08
 Name:           python-lupa
 Version:        2.8
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python wrapper around Lua and LuaJIT
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/scoder/lupa
-Source:         %{pypi_source lupa}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'lupa' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/l/lupa/lupa-%{version}.tar.gz
 Patch:          lupa-default-to-no-bundle.diff
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython) >= 3.2.4
+Requires:       python3-lupa = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-lupa
-Summary:        %{summary}
-
-%description -n python3-lupa %_description
-
+Summary:        Python wrapper around Lua and LuaJIT
+%description -n python3-lupa
 
 %prep
-%autosetup -p1 -n lupa-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir lupa-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-lupa usr/lib/python3*/site-packages/lupa* usr/lib64/python3*/site-packages/lupa* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/lupa* usr/lib64/python3*/site-packages/lupa* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-lupa -f %{pyproject_files}
+%files
+%files -n python3-lupa -f %{oreon_filedir}/python3-lupa.list
 
 %changelog
+
 %autochangelog

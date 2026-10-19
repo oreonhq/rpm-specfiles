@@ -1,47 +1,35 @@
-%global source0_hash ef08f258cb3e0885c5884ad43fb6cff0e9c327ed33024d79d03555f99c583744
-
-# We ship a .pc file but don't want to have a dep on pkg-config. We
-# strip the automatically generated dep here and instead co-own the
-# directory.
+%global source1_hash 1cbe58067e624bd62feb88f9263e773f88f36ca30021e96765e4265547da379a
+%global source0_hash 1090f680958a73dc1f443a1eb919bd2ad77b3caff38e92e9737dec100c647bc9
 %global __requires_exclude pkg-config
-
 %global libmajor 15
 %global libminor 0
-
-# Use the same directory of the main package for subpackage licence and docs
 %global _docdir_fmt %{name}
-
 Name:           pacman
 Version:        7.1.0
-Release:        %autorelease
+Release:        1%{?dist}
 Source0:        https://gitlab.archlinux.org/pacman/pacman/-/archive/v%{version}/pacman-v%{version}.tar.gz
 Source1:        https://www.archlinux.org/mirrorlist/all
 URL:            https://gitlab.archlinux.org/pacman/pacman
 License:        GPL-2.0-or-later
 Summary:        Package manager for the Arch distribution
-
-BuildRequires:  gcc
-BuildRequires:  meson
-BuildRequires:  m4
-BuildRequires:  bsdtar
-BuildRequires:  gettext-devel
-BuildRequires:  asciidoc
-BuildRequires:  doxygen
-BuildRequires:  libarchive-devel
-BuildRequires:  gpgme-devel
-BuildRequires:  openssl-devel
-BuildRequires:  libcurl-devel
-BuildRequires:  perl-generators
 Requires:       %{name}-filesystem = %{version}-%{release}
 Requires:       bsdtar
 Recommends:     arch-install-scripts
-
-# makepkg-template is an optional script that aims to make maintaining multiple
-# PKGBUILDs easier. As we don't expect anybody to use this from a Fedora system
-# and this script ends up adding a bunch of perl dependencies, we exclude it
-# from the dependency generators.
 %global __requires_exclude_from ^%{_bindir}/makepkg-template$
-
+# oreon:deps
+BuildRequires:  asciidoc
+BuildRequires:  bsdtar
+BuildRequires:  doxygen
+BuildRequires:  gcc
+BuildRequires:  gettext-devel
+BuildRequires:  gpgme-devel
+BuildRequires:  libarchive-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  m4
+BuildRequires:  meson
+BuildRequires:  openssl-devel
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 Pacman is the package manager used by the Arch distribution. It can
 be used to install Arch into a container or to recover an Arch
@@ -59,7 +47,6 @@ packages.
 
 %package -n libalpm
 Summary: Arch Linux Package Management library
-
 %description -n libalpm
 This library is the backend behind Pacman — the package manager used
 by the Arch distribution. It uses simple compressed files as a package
@@ -68,7 +55,6 @@ format, and maintains a text-based package database.
 %package -n libalpm-devel
 Summary: Development headers for libalpm
 Requires: libalpm%{_isa} = %{version}-%{release}
-
 %description -n libalpm-devel
 This package contains the public headers necessary to use libalpm.
 
@@ -76,12 +62,12 @@ This package contains the public headers necessary to use libalpm.
 Summary: Pacman filesystem layout
 License: LicenseRef-Fedora-Public-Domain
 BuildArch: noarch
-
 %description filesystem
 This package provides some directories used by pacman and related
 packages.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n pacman-v%{version}
@@ -91,83 +77,36 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -r 's+^#(Server = https://(mirrors.kernel.org|mirror.rackspace.com)/)+\1+' <%{SOURCE1} >mirrorlist
 
 %build
+
 CONFIGURE_OPTS=(
         -Ddoxygen=enabled
 )
-
 %meson "${CONFIGURE_OPTS[@]}"
 %meson_build
-
 %install
 %meson_install
-
 %find_lang pacman
 %find_lang pacman-scripts
 %find_lang libalpm
 cat pacman-scripts.lang >>pacman.lang
-
 install -Dm0644 mirrorlist %{buildroot}%{_sysconfdir}/pacman.d/mirrorlist
-
 cat >>%{buildroot}%{_sysconfdir}/pacman.conf <<EOF
 [core]
 SigLevel = Required DatabaseOptional
 Include = %{_sysconfdir}/pacman.d/mirrorlist
-
 [extra]
 SigLevel = Required DatabaseOptional
 Include = %{_sysconfdir}/pacman.d/mirrorlist
 EOF
+%oreon_autofiles libalpm usr/*/lib*.so.*
+%oreon_autofiles libalpm-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f pacman.lang
-%{_bindir}/makepkg
-%{_bindir}/makepkg-template
-%{_bindir}/pacman
-%{_bindir}/pacman-conf
-%{_bindir}/pacman-db-upgrade
-%{_bindir}/pacman-key
-%{_bindir}/repo-add
-%{_bindir}/repo-elephant
-%{_bindir}/repo-remove
-%{_bindir}/testpkg
-%{_bindir}/vercmp
-%config(noreplace) %{_sysconfdir}/makepkg.conf
-%config(noreplace) %{_sysconfdir}/makepkg.conf.d/fortran.conf
-%config(noreplace) %{_sysconfdir}/makepkg.conf.d/rust.conf
-%config(noreplace) %{_sysconfdir}/pacman.conf
-%config(noreplace) %{_sysconfdir}/pacman.d/mirrorlist
-%{_datarootdir}/makepkg/
-%dir %{_sharedstatedir}/pacman
-%dir %{_localstatedir}/cache/pacman
-%dir %{_localstatedir}/cache/pacman/pkg
-%{_datadir}/pacman/*
-%{_datadir}/pkgconfig/libmakepkg.pc
-# https://bugzilla.redhat.com/show_bug.cgi?id=1819867
-%exclude %{_datadir}/bash-completion/completions/makepkg
-%{_datadir}/bash-completion/completions/*
-%{_datadir}/zsh/site-functions/_pacman
-%{_mandir}/man1/*
-%{_mandir}/man5/*
-%{_mandir}/man8/*
-%license COPYING
-%doc NEWS
-
-%files -n libalpm -f libalpm.lang
-%{_libdir}/libalpm.so.%{libmajor}.%{libminor}.*
-%{_libdir}/libalpm.so.%{libmajor}
-%license COPYING
-
-%files -n libalpm-devel
-%{_includedir}/alpm_list.h
-%{_includedir}/alpm.h
-%{_libdir}/pkgconfig/libalpm.pc
-%{_libdir}/libalpm.so
-%{_mandir}/man3/*
-%license COPYING
-%doc HACKING
-
-%files filesystem
-%dir %{_sysconfdir}/pacman.d
-%dir %{_datadir}/pacman
+%files -f %{oreon_filedir}/main.list
+%files -n libalpm -f %{oreon_filedir}/libalpm.list
+%files -n libalpm-devel -f %{oreon_filedir}/libalpm-devel.list
+%files -n pacman-filesystem -f %{oreon_filedir}/pacman-filesystem.list
 
 %changelog
+
 %autochangelog

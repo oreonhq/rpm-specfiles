@@ -1,22 +1,24 @@
-%global source0_hash 4ddd5975e79d7a0f8d126039f1b923a371b1a43e0e0687e1537a37d6d6d5cc7c
-
+%global source0_hash af961e4e8122b9e1fa325ae20c98f0a17b2087e2c777832ae6e47025ec921331
 Name:       clingo
 Version:    5.8.2
-Release:    %autorelease
-Summary:    A grounder and solver for logic programs
-
+Release:        1%{?dist}
+Summary:        A grounder and solver for logic programs
 License:    MIT
 URL:        https://potassco.org/clingo/
-Source0:    https://github.com/potassco/clingo/archive/v%{version}/%{name}-%{version}.tar.gz
-# Disable gcc warning no-class-memaccess, which is intended use in this case
+Source0:        https://github.com/potassco/clingo/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:     clingo.clasp-disable-class-memaccess-warning.patch
-
-BuildRequires: bison
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: python3-setuptools
-BuildRequires: re2c
-
+# oreon:deps
+BuildRequires:  bison
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  lua-devel
+BuildRequires:  make
+BuildRequires:  python3
+BuildRequires:  python3-cffi
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  re2c
+# /oreon:deps
 %description
 Clingo is part of the Potassco project for Answer Set Programming
 (ASP). ASP offers a simple and powerful modeling language to describe
@@ -27,7 +29,6 @@ to the given problem.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -36,7 +37,6 @@ developing applications that use %{name}.
 Summary:        Lua bindings for Clingo
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  lua-devel
-
 %description -n lua-%{name}
 Lua bindings for Clingo, a grounder and solver for logic programs.
 
@@ -50,7 +50,6 @@ BuildRequires:  python3, python3-devel
 BuildRequires:  python3-cffi
 BuildRequires:  make
 %{?python_provide:%python_provide python3-%{name}}
-
 %description -n python3-%{name}
 This module provides functions and classes to work with ground terms and to
 control the instantiation process. In clingo builts, additional functions to
@@ -65,10 +64,9 @@ binaries are available at: http://potassco.org/
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %cmake \
   -DCLINGO_MANAGE_RPATH:BOOL=OFF \
   -DBUILD_SHARED_LIBS:BOOL=OFF \
@@ -77,28 +75,19 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
   -DCLINGO_BUILD_SHARED:BOOL=ON \
   -DCLINGO_BUILD_WITH_PYTHON:BOOL=ON \
   -DLUACLINGO_INSTALL_DIR:PATH=%{lua_libdir}
-
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles clingo-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles lua-clingo usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles python3-clingo usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README.md INSTALL.md
-%license LICENSE.md
-%{_libdir}/libclingo.so.4*
-%{_bindir}/*
-
-%files devel
-%{_includedir}/*
-%{_libdir}/*.so
-%{_libdir}/cmake/Clingo
-
-%files -n lua-%{name}
-%{lua_libdir}/%{name}.so
-
-%files -n python3-%{name}
-%{python3_sitearch}/%{name}*
+%files -f %{oreon_filedir}/main.list
+%files -n clingo-devel -f %{oreon_filedir}/clingo-devel.list
+%files -n lua-clingo -f %{oreon_filedir}/lua-clingo.list
+%files -n python3-clingo -f %{oreon_filedir}/python3-clingo.list
 
 %changelog
+
 %autochangelog

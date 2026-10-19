@@ -1,45 +1,44 @@
 %global source0_hash aba4679a5b1f2bf62482eba6e8814a94de7ffc86de5f8587ba199fcc61b4a04f
-
 Name:		allegro5
 Version:	5.2.11.3
-Release:	1%{?dist}
-Summary:	A game programming library
+Release:        1%{?dist}
+Summary:        A game programming library
 License:	zlib
 URL:		http://liballeg.org/
-Source0:	https://github.com/liballeg/allegro5/releases/download/%{version}/allegro-%{version}.tar.gz
-BuildRequires:	gcc
-BuildRequires:	gcc-c++
-BuildRequires:	alsa-lib-devel
-BuildRequires:	cmake
-BuildRequires:	dumb-devel
-BuildRequires:	enet-devel
-BuildRequires:	flac-devel
-BuildRequires:	freeimage-devel
-BuildRequires:	freetype-devel
-BuildRequires:	gtk3-devel
-BuildRequires:	libICE-devel
-BuildRequires:	libjpeg-devel
-BuildRequires:	libopenmpt-devel
-BuildRequires:	libpng-devel
-BuildRequires:	libtheora-devel
-BuildRequires:	libvorbis-devel
-BuildRequires:	libwebp-devel
-BuildRequires:	libXcursor-devel
-BuildRequires:	libXext-devel
-BuildRequires:	libXxf86vm-devel
-BuildRequires:	libXrandr-devel
-BuildRequires:	libXinerama-devel
-BuildRequires:	libXpm-devel
-BuildRequires:	mesa-libGL-devel
-BuildRequires:	mesa-libGLU-devel
-BuildRequires:	openal-soft-devel
-BuildRequires:	physfs-devel
-BuildRequires:	pulseaudio-libs-devel
-BuildRequires:	opus-devel
-BuildRequires:	opusfile-devel
-
+Source0:        https://github.com/liballeg/allegro5/releases/download/%{version}/allegro-%{version}.tar.gz
 %global so_version %(c="%{version}"; echo "${c%.*}")
-
+# oreon:deps
+BuildRequires:  alsa-lib-devel
+BuildRequires:  cmake
+BuildRequires:  dumb-devel
+BuildRequires:  enet-devel
+BuildRequires:  flac-devel
+BuildRequires:  freeimage-devel
+BuildRequires:  freetype-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gtk3-devel
+BuildRequires:  libICE-devel
+BuildRequires:  libXcursor-devel
+BuildRequires:  libXext-devel
+BuildRequires:  libXinerama-devel
+BuildRequires:  libXpm-devel
+BuildRequires:  libXrandr-devel
+BuildRequires:  libXxf86vm-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libopenmpt-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libtheora-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  libwebp-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  openal-soft-devel
+BuildRequires:  opus-devel
+BuildRequires:  opusfile-devel
+BuildRequires:  physfs-devel
+BuildRequires:  pulseaudio-libs-devel
+# /oreon:deps
 %description
 Allegro is a cross-platform library intended for use in computer games
 and other types of multimedia programming. Allegro 5 is the latest major
@@ -163,146 +162,61 @@ addon.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n allegro-%{version}
-
+%global oreon_srcdir allegro-%{version}
+%oreon_prep
 %build
-# TODO: Remove in the next version
-# https://github.com/liballeg/allegro5/pull/1632
+
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake -DWANT_DOCS=OFF
 %cmake_build
-
 %install
 %cmake_install
-
 mkdir %buildroot/%{_sysconfdir}
 install -p -m 644 allegro5.cfg %buildroot/%{_sysconfdir}/allegro5rc
-# install man pages
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man3
 install -p -m 644 docs/man/*.3 $RPM_BUILD_ROOT%{_mandir}/man3
-
 %ldconfig_scriptlets
-
 %ldconfig_scriptlets addon-acodec
-
 %ldconfig_scriptlets addon-audio
-
 %ldconfig_scriptlets addon-dialog
-
 %ldconfig_scriptlets addon-image
-
 %ldconfig_scriptlets addon-physfs
-
 %ldconfig_scriptlets addon-ttf
-
 %ldconfig_scriptlets addon-video
+%oreon_autofiles allegro5-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles allegro5-addon-acodec usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles allegro5-addon-acodec-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles allegro5-addon-audio usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles allegro5-addon-audio-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles allegro5-addon-dialog usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles allegro5-addon-dialog-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles allegro5-addon-image usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles allegro5-addon-image-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles allegro5-addon-physfs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles allegro5-addon-physfs-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles allegro5-addon-ttf usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles allegro5-addon-ttf-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles allegro5-addon-video usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles allegro5-addon-video-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%config(noreplace) %{_sysconfdir}/allegro5rc
-%doc CHANGES-5.?.txt CONTRIBUTORS.txt README.txt
-%license LICENSE.txt
-%{_libdir}/liballegro.so.5.2
-%{_libdir}/liballegro.so.%{so_version}
-%{_libdir}/liballegro_color.so.5.2
-%{_libdir}/liballegro_color.so.%{so_version}
-%{_libdir}/liballegro_font.so.5.2
-%{_libdir}/liballegro_font.so.%{so_version}
-%{_libdir}/liballegro_main.so.5.2
-%{_libdir}/liballegro_main.so.%{so_version}
-%{_libdir}/liballegro_memfile.so.5.2
-%{_libdir}/liballegro_memfile.so.%{so_version}
-%{_libdir}/liballegro_primitives.so.5.2
-%{_libdir}/liballegro_primitives.so.%{so_version}
-
-%files devel
-%doc docs/html/refman
-%{_includedir}/allegro5
-%exclude %{_includedir}/allegro5/allegro_acodec.h
-%exclude %{_includedir}/allegro5/allegro_audio.h
-%exclude %{_includedir}/allegro5/allegro_native_dialog.h
-%exclude %{_includedir}/allegro5/allegro_image.h
-%exclude %{_includedir}/allegro5/allegro_physfs.h
-%exclude %{_includedir}/allegro5/allegro_ttf.h
-%exclude %{_includedir}/allegro5/allegro_vidio.h
-%{_libdir}/liballegro.so
-%{_libdir}/liballegro_color.so
-%{_libdir}/liballegro_font.so
-%{_libdir}/liballegro_main.so
-%{_libdir}/liballegro_memfile.so
-%{_libdir}/liballegro_primitives.so
-%{_libdir}/cmake/allegro/
-%{_libdir}/pkgconfig/allegro-5*.pc
-%{_libdir}/pkgconfig/allegro_color-5*.pc
-%{_libdir}/pkgconfig/allegro_font-5*.pc
-%{_libdir}/pkgconfig/allegro_main-5*.pc
-%{_libdir}/pkgconfig/allegro_memfile-5*.pc
-%{_libdir}/pkgconfig/allegro_primitives-5*.pc
-%{_mandir}/man3/ALLEGRO_*.3*
-%{_mandir}/man3/al_*.3*
-
-%files addon-acodec
-%{_libdir}/liballegro_acodec.so.5.2
-%{_libdir}/liballegro_acodec.so.%{so_version}
-
-%files addon-acodec-devel
-%{_includedir}/allegro5/allegro_acodec.h
-%{_libdir}/liballegro_acodec.so
-%{_libdir}/pkgconfig/allegro_acodec-5*.pc
-
-%files addon-audio
-%{_libdir}/liballegro_audio.so.5.2
-%{_libdir}/liballegro_audio.so.%{so_version}
-
-%files addon-audio-devel
-%{_includedir}/allegro5/allegro_audio.h
-%{_libdir}/liballegro_audio.so
-%{_libdir}/pkgconfig/allegro_audio-5*.pc
-
-%files addon-dialog
-%{_libdir}/liballegro_dialog.so.5.2
-%{_libdir}/liballegro_dialog.so.%{so_version}
-
-%files addon-dialog-devel
-%{_includedir}/allegro5/allegro_native_dialog.h
-%{_libdir}/liballegro_dialog.so
-%{_libdir}/pkgconfig/allegro_dialog-5*.pc
-
-%files addon-image
-%{_libdir}/liballegro_image.so.5.2
-%{_libdir}/liballegro_image.so.%{so_version}
-
-%files addon-image-devel
-%{_includedir}/allegro5/allegro_image.h
-%{_libdir}/liballegro_image.so
-%{_libdir}/pkgconfig/allegro_image-5*.pc
-
-%files addon-physfs
-%{_libdir}/liballegro_physfs.so.5.2
-%{_libdir}/liballegro_physfs.so.%{so_version}
-
-%files addon-physfs-devel
-%{_includedir}/allegro5/allegro_physfs.h
-%{_libdir}/liballegro_physfs.so
-%{_libdir}/pkgconfig/allegro_physfs-5*.pc
-
-%files addon-ttf
-%{_libdir}/liballegro_ttf.so.5.2
-%{_libdir}/liballegro_ttf.so.%{so_version}
-
-%files addon-ttf-devel
-%{_includedir}/allegro5/allegro_ttf.h
-%{_libdir}/liballegro_ttf.so
-%{_libdir}/pkgconfig/allegro_ttf-5*.pc
-
-%files addon-video
-%{_libdir}/liballegro_video.so.5.2
-%{_libdir}/liballegro_video.so.%{so_version}
-
-%files addon-video-devel
-%{_includedir}/allegro5/allegro_video.h
-%{_libdir}/liballegro_video.so
-%{_libdir}/pkgconfig/allegro_video-5*.pc
+%files -f %{oreon_filedir}/main.list
+%files -n allegro5-devel -f %{oreon_filedir}/allegro5-devel.list
+%files -n allegro5-addon-acodec -f %{oreon_filedir}/allegro5-addon-acodec.list
+%files -n allegro5-addon-acodec-devel -f %{oreon_filedir}/allegro5-addon-acodec-devel.list
+%files -n allegro5-addon-audio -f %{oreon_filedir}/allegro5-addon-audio.list
+%files -n allegro5-addon-audio-devel -f %{oreon_filedir}/allegro5-addon-audio-devel.list
+%files -n allegro5-addon-dialog -f %{oreon_filedir}/allegro5-addon-dialog.list
+%files -n allegro5-addon-dialog-devel -f %{oreon_filedir}/allegro5-addon-dialog-devel.list
+%files -n allegro5-addon-image -f %{oreon_filedir}/allegro5-addon-image.list
+%files -n allegro5-addon-image-devel -f %{oreon_filedir}/allegro5-addon-image-devel.list
+%files -n allegro5-addon-physfs -f %{oreon_filedir}/allegro5-addon-physfs.list
+%files -n allegro5-addon-physfs-devel -f %{oreon_filedir}/allegro5-addon-physfs-devel.list
+%files -n allegro5-addon-ttf -f %{oreon_filedir}/allegro5-addon-ttf.list
+%files -n allegro5-addon-ttf-devel -f %{oreon_filedir}/allegro5-addon-ttf-devel.list
+%files -n allegro5-addon-video -f %{oreon_filedir}/allegro5-addon-video.list
+%files -n allegro5-addon-video-devel -f %{oreon_filedir}/allegro5-addon-video-devel.list
 
 %changelog
+
 %autochangelog

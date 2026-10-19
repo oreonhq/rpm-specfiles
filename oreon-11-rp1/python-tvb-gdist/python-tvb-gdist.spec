@@ -1,56 +1,39 @@
-%global source0_hash none
-
+%global source0_hash 9f8843d4fd4a945979e3f26a87da895022d45145775228fa706a43caa8965df8
 Name:           python-tvb-gdist
 Version:        2.9.2
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Compute geodesic distances
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/the-virtual-brain/tvb-gdist
-Source:         %{pypi_source tvb_gdist}
-
+Source0:        https://files.pythonhosted.org/packages/source/t/tvb_gdist/tvb_gdist-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'tvb-gdist' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-tvb-gdist = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-tvb-gdist
-Summary:        %{summary}
-
-%description -n python3-tvb-gdist %_description
-
+Summary:        Compute geodesic distances
+%description -n python3-tvb-gdist
 
 %prep
-%autosetup -p1 -n tvb_gdist-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir tvb_gdist-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-tvb-gdist usr/lib/python3*/site-packages/tvb_gdist* usr/lib64/python3*/site-packages/tvb_gdist* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/tvb_gdist* usr/lib64/python3*/site-packages/tvb_gdist* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-tvb-gdist -f %{pyproject_files}
+%files
+%files -n python3-tvb-gdist -f %{oreon_filedir}/python3-tvb-gdist.list
 
 %changelog
+
 %autochangelog

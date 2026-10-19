@@ -1,28 +1,26 @@
-%global source0_hash 76eb98b560e56b6a68b091e7ca2a4623d99f0b6106b181a7cc9e951352467004
-
+%global source1_hash 57405f3327356c279411ac3849aacced2df9da451554df6754ba51d84019092e
+%global source0_hash d6f236fcafe16611b88c468502665dd5e9c73aa18eae0666e8ca9062ef5a471e
 Name:           qps
 Version:        2.13.0
 Release:        1%{?dist}
 Summary:        Qt process viewer and manager
-
 License:        GPL-2.0-or-later
 URL:            https://lxqt-project.org/
 Source0:        https://github.com/lxqt/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://github.com/lxqt/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz.asc
-
+Requires:       hicolor-icon-theme
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  desktop-file-utils
-BuildRequires:  gcc-c++
-BuildRequires:  libappstream-glib
 BuildRequires:  cmake(KF6WindowSystem)
 BuildRequires:  cmake(Qt6LinguistTools)
 BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libappstream-glib
+BuildRequires:  perl
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(lxqt)
-BuildRequires:  perl
-
-Requires:       hicolor-icon-theme
-
+# /oreon:deps
 %description
 Qps is a visual process manager, an X11 version of "top" or "ps" that
 displays processes in a window and lets you sort and manipulate them.
@@ -49,31 +47,22 @@ Qps can:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %cmake
 %cmake_build
-
 %install
 %cmake_install
 %find_lang %{name} --with-qt
+%oreon_autofiles main
 
 %check
+
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/org.lxqt.Qps.appdata.xml
-
-%files -f %{name}.lang
-%license COPYING
-%doc CHANGELOG README.md
-%{_bindir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/48x48/apps/%{name}.png
-%{_metainfodir}/org.lxqt.Qps.appdata.xml
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/translations
-%{_mandir}/man1/%{name}.1.gz
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

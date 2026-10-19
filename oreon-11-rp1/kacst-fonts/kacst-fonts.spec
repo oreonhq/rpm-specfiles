@@ -1,19 +1,15 @@
 %global source0_hash 796149ab64dfe5da6334bda280e3bb4bad07a627246dcb24a844bdda24843fd3
-
 %define fontname kacst
 %define fontdir %{_datadir}/fonts/%{fontname}
 %define	fontconf	67-%{fontname}
-
-# Common description
 %define common_desc \
 This package contains fonts for the display of Arabic \
 from the King Abdulaziz City for Science & Technology(kacst).
-
 Name: %{fontname}-fonts
 Version: 2.0
-Release: 37%{?dist}
+Release:        1%{?dist}
 License: GPL-2.0-only
-Source:        https://downloads.sourceforge.net/sourceforge/arabeyes/%{fontname}_fonts_%{version}.tar.bz2
+Source0:        https://downloads.sourceforge.net/sourceforge/arabeyes/%{fontname}_fonts_%{version}.tar.bz2
 Source1: %{fontconf}-art.conf
 Source2: %{fontconf}-book.conf
 Source3: %{fontconf}-decorative.conf
@@ -44,21 +40,20 @@ Source27: %{fontname}-qurn.metainfo.xml
 Source28: %{fontname}-screen.metainfo.xml
 Source29: %{fontname}-title.metainfo.xml
 Source30: %{fontname}-titlel.metainfo.xml
-
 BuildArch: noarch
-BuildRequires:	dos2unix
-BuildRequires:	fontpackages-devel > 1.13
 Obsoletes: fonts-arabic <= 2.1-2
-Summary: Fonts for arabic from arabeyes project 
+Summary:        Fonts for arabic from arabeyes project
 URL: http://www.arabeyes.org/resources.php	
- 
+# oreon:deps
+BuildRequires:  dos2unix
+BuildRequires:  fontpackages-devel
+# /oreon:deps
 %description
 %common_desc
 
 %package common
 Summary:  Common files for kacst-fonts
 Requires: fontpackages-filesystem
-
 %description common
 %common_desc
 
@@ -73,7 +68,6 @@ This package contains book type fonts for the display of Arabic
 %_font_pkg -n book -f  %{fontconf}-book* KacstBook.ttf
 %{_datadir}/appdata/%{fontname}-book.metainfo.xml
 
-
 %package -n %{fontname}-digital-fonts
 Summary: Fonts for arabic from arabeyes project 
 Requires: %{name}-common = %{version}-%{release}
@@ -84,7 +78,6 @@ This package contains digital type fonts for the display of Arabic
 
 %_font_pkg -n digital -f %{fontconf}-digital* KacstDigital.ttf
 %{_datadir}/appdata/%{fontname}-digital.metainfo.xml
-
 
 %package -n %{fontname}-letter-fonts
 Summary: Fonts for arabic from arabeyes project 
@@ -108,7 +101,6 @@ This package contains office type fonts for the display of Arabic
 %_font_pkg -n office -f %{fontconf}-office* KacstOffice.ttf
 %{_datadir}/appdata/%{fontname}-office.metainfo.xml
 
-
 %package -n %{fontname}-pen-fonts
 Summary: Fonts for arabic from arabeyes project 
 Requires: %{name}-common = %{version}-%{release}
@@ -119,7 +111,6 @@ This package contains pen type fonts for the display of Arabic
 
 %_font_pkg -n pen -f %{fontconf}-pen* kacstPen.ttf
 %{_datadir}/appdata/%{fontname}-pen.metainfo.xml
-
 
 %package -n %{fontname}-qurn-fonts
 Summary: Fonts for arabic from arabeyes project 
@@ -231,24 +222,21 @@ This package contains title type fonts for the display of Arabic
 %_font_pkg -n title -f %{fontconf}-title.conf KacstTitle.ttf
 %{_datadir}/appdata/%{fontname}-title.metainfo.xml
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n KacstArabicFonts-%{version}
 find . -not -name \*.ttf -type f -exec dos2unix -k {} \;
 
 %build
-echo "Nothing to do in Build."
 
+echo "Nothing to do in Build."
 %install
 rm -rf %{buildroot} 
-
 install -m 0755 -d %{buildroot}%{fontdir}
 install -m 0644 -p *.ttf %{buildroot}%{fontdir}
-
 install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
 		%{buildroot}%{_fontconfig_confdir}
-
 install -m 0644 -p %{SOURCE1} \
 	%{buildroot}%{_fontconfig_templatedir}/%{fontconf}-art.conf
 install -m 0644 -p %{SOURCE2} \
@@ -279,7 +267,6 @@ install -m 0644 -p %{SOURCE14} \
 	%{buildroot}%{_fontconfig_templatedir}/%{fontconf}-title.conf
 install -m 0644 -p %{SOURCE15} \
 	%{buildroot}%{_fontconfig_templatedir}/%{fontconf}-titlel.conf
-
 for fconf in %{fontconf}-art.conf \
 		%{fontconf}-book.conf \
 		%{fontconf}-decorative.conf \
@@ -298,8 +285,6 @@ for fconf in %{fontconf}-art.conf \
   ln -s %{_fontconfig_templatedir}/$fconf \
 	%{buildroot}%{_fontconfig_confdir}/$fconf
 done
-
-# Add AppStream metadata
 install -Dm 0644 -p %{SOURCE16} \
         %{buildroot}%{_datadir}/appdata/%{fontname}-art.metainfo.xml
 install -Dm 0644 -p %{SOURCE17} \
@@ -330,12 +315,27 @@ install -Dm 0644 -p %{SOURCE29} \
         %{buildroot}%{_datadir}/appdata/%{fontname}-title.metainfo.xml
 install -Dm 0644 -p %{SOURCE30} \
         %{buildroot}%{_datadir}/appdata/%{fontname}-titlel.metainfo.xml
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-
-%files common
-%doc Copyright LICENSE README
-%dir %{fontdir}
+%files -f %{oreon_filedir}/main.list
+%files -n kacst-fonts-common -f %{oreon_filedir}/kacst-fonts-common.list
+%files -n kacst-book-fonts -f %{oreon_filedir}/kacst-book-fonts.list
+%files -n kacst-digital-fonts -f %{oreon_filedir}/kacst-digital-fonts.list
+%files -n kacst-letter-fonts -f %{oreon_filedir}/kacst-letter-fonts.list
+%files -n kacst-office-fonts -f %{oreon_filedir}/kacst-office-fonts.list
+%files -n kacst-pen-fonts -f %{oreon_filedir}/kacst-pen-fonts.list
+%files -n kacst-qurn-fonts -f %{oreon_filedir}/kacst-qurn-fonts.list
+%files -n kacst-titlel-fonts -f %{oreon_filedir}/kacst-titlel-fonts.list
+%files -n kacst-art-fonts -f %{oreon_filedir}/kacst-art-fonts.list
+%files -n kacst-decorative-fonts -f %{oreon_filedir}/kacst-decorative-fonts.list
+%files -n kacst-farsi-fonts -f %{oreon_filedir}/kacst-farsi-fonts.list
+%files -n kacst-naskh-fonts -f %{oreon_filedir}/kacst-naskh-fonts.list
+%files -n kacst-one-fonts -f %{oreon_filedir}/kacst-one-fonts.list
+%files -n kacst-poster-fonts -f %{oreon_filedir}/kacst-poster-fonts.list
+%files -n kacst-screen-fonts -f %{oreon_filedir}/kacst-screen-fonts.list
+%files -n kacst-title-fonts -f %{oreon_filedir}/kacst-title-fonts.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0-37
 - Prepare for Oreon 11 (RP1)

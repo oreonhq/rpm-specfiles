@@ -1,61 +1,62 @@
-%global source0_hash none
-
+%global source0_hash bb15c21a01b577ab5fac73da61b154dd6fcd377f3af02e522077b4ae11feed37
 Name:           python-lazr-delegates
 Version:        4.0.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Easily write objects that delegate behavior
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://launchpad.net/lazr.delegates
-Source:         %{pypi_source lazr_delegates}
-
+Source0:        https://files.pythonhosted.org/packages/source/l/lazr_delegates/lazr_delegates-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-lazr-delegates = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-lazr-delegates+docs
+Summary:        Metapackage for python3-lazr-delegates docs extras
+Requires:       python3-lazr-delegates = %{version}-%{release}
+Provides:       python3dist(lazr-delegates[docs]) = %{version}-%{release}
 
+%description -n python3-lazr-delegates+docs
+Metapackage for python3-lazr-delegates docs extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'lazr-delegates' generated automatically by pyp2spec.}
+%package -n       python3-lazr-delegates+test
+Summary:        Metapackage for python3-lazr-delegates test extras
+Requires:       python3-lazr-delegates = %{version}-%{release}
+Requires:       python3dist(zope.testing) >= 4.6.0
+Requires:       python3dist(zope.testrunner) >= 6.6.1
+Provides:       python3dist(lazr-delegates[test]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-lazr-delegates+test
+Metapackage for python3-lazr-delegates test extras.
+
+%description
 
 %package -n     python3-lazr-delegates
-Summary:        %{summary}
-
-%description -n python3-lazr-delegates %_description
+Summary:        Easily write objects that delegate behavior
+%description -n python3-lazr-delegates
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-lazr-delegates docs,test
-
 
 %prep
-%autosetup -p1 -n lazr_delegates-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir lazr_delegates-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-lazr-delegates usr/lib/python3*/site-packages/lazr_delegates* usr/lib64/python3*/site-packages/lazr_delegates* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/lazr_delegates* usr/lib64/python3*/site-packages/lazr_delegates* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-lazr-delegates -f %{pyproject_files}
+%files
+%files -n python3-lazr-delegates -f %{oreon_filedir}/python3-lazr-delegates.list
 
 %changelog
+
 %autochangelog

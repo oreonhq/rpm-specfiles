@@ -1,34 +1,24 @@
 %global source0_hash 8cf3898b945c2f44eeb52ffce57b91104e89752f7b01345c975fdfbbaa7c38c6
-
 Name:           python-fastrlock
 Version:        0.8.3
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Fast, re-entrant optimistic lock implemented in Cython
-
 License:        MIT
 URL:            https://github.com/scoder/fastrlock
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  gcc
+Source0:        https://github.com/scoder/fastrlock/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(cython)
-BuildRequires:  python3dist(pytest)
-
-%global _description %{expand:
-This is a C-level implementation of a fast, re-entrant, optimistic
-lock for CPython. It is a drop-in replacement for threading.RLock.
-FastRLock is implemented in Cython and also provides a C-API for
-direct use from Cython code via from fastrlock cimport rlock or
-from cython.cimports.fastrlock import rlock.}
-
-%description %_description
+Requires:       python3-fastrlock = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-fastrlock
-Summary:        %{summary}
-
-%description -n python3-fastrlock %_description
+Summary:        Fast, re-entrant optimistic lock implemented in Cython
+%description -n python3-fastrlock
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n fastrlock-%{version}
@@ -40,28 +30,22 @@ rm appveyor_env.cmd
 sed -i -e 's@Cython>=3.0.11, <3.1@Cython>=3.0.11, <3.3@' requirements.txt
 grep Cython requirements.txt
 
-%generate_buildrequires
-%pyproject_buildrequires
-
 %build
-%pyproject_wheel -C=--global-option=--with-cython
 
+%pyproject_wheel -C=--global-option=--with-cython
 %install
 %pyproject_install
-%pyproject_save_files -l fastrlock
+%oreon_autofiles python3-fastrlock usr/lib/python3*/site-packages/fastrlock* usr/lib64/python3*/site-packages/fastrlock* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/fastrlock* usr/lib64/python3*/site-packages/fastrlock* usr/bin/*
 
 %check
-%pyproject_check_import
 
-# The tests are imported from $pwd/fastrlock and the extension module is not there.
-# To avoid that, we rename the package temporarily.
-# Upstream builds the extension module in place via tox to avoid this problem.
-# However, that leads to https://bugzilla.redhat.com/2417962
+%pyproject_check_import
 mv fastrlock fastrlock_
 %pytest
-
-%files -n python3-fastrlock -f %{pyproject_files}
-%doc README.rst
+%files
+%files -n python3-fastrlock -f %{oreon_filedir}/python3-fastrlock.list
 
 %changelog
+
 %autochangelog

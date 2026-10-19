@@ -1,20 +1,17 @@
-%global source0_hash 89bae1a05731f4aaafb04066ea0186e181117b74fcfbf89d686cf205459220b7
-
+%global source0_hash bcfe0eabdccc806e53a10130fed6fb02373720ddeb670eecc5cc84d041d79880
 Name:       git-extras
 Version:    7.5.0
-Release:    1%{?dist}
-Summary:    Little git extras
-
+Release:        1%{?dist}
+Summary:        Little git extras
 License:    MIT
 URL:        https://github.com/tj/%{name}
-Source0:    %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/tj/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:  noarch
-
-BuildRequires: sed
-BuildRequires: make
 Requires:   git
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  sed
+# /oreon:deps
 %description
 %{name} adds the following extra-commands to git:
 
@@ -28,6 +25,7 @@ For more information about the extra-commands, see the included
 README.md, HTML, mark-down or man-pages.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -49,13 +47,10 @@ EOF
 mkdir -p html md
 install -pm 0644 man/*.html html
 install -pm 0644 man/*.md md
+%oreon_autofiles main
 
-%files
-%doc AUTHORS Commands.md History.md Readme.md html/ md/
-%license LICENSE
-%config(noreplace) %{bash_completions_dir}
-%{_bindir}/*
-%{_mandir}/man*/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

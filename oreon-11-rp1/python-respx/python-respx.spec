@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 242dcc6ce6b5b9bf621f5870c82a63997e8e82bc7c947f9ffe272b8f3dd5a780
 Name:           python-respx
 Version:        0.23.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A utility for mocking out the Python HTTPX and HTTP Core libraries.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/lundberg/respx
-Source:         %{pypi_source respx}
-
+Source0:        https://files.pythonhosted.org/packages/source/r/respx/respx-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'respx' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-respx = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-respx
-Summary:        %{summary}
-
-%description -n python3-respx %_description
-
+Summary:        A utility for mocking out the Python HTTPX and HTTP Core libraries.
+%description -n python3-respx
 
 %prep
-%autosetup -p1 -n respx-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir respx-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-respx usr/lib/python3*/site-packages/respx* usr/lib64/python3*/site-packages/respx* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/respx* usr/lib64/python3*/site-packages/respx* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-respx -f %{pyproject_files}
+%files
+%files -n python3-respx -f %{oreon_filedir}/python3-respx.list
 
 %changelog
+
 %autochangelog

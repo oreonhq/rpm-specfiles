@@ -1,34 +1,26 @@
 %global source0_hash 2d2601a82d2d3b7e143a3c8d43ef616671391034bc46891a9816b79cf2d3e7a8
-
 %global commitdate 20241222
 %global commit 24b5e7a8b27f42fa16b96fc70aade9106cf7102f
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 %global debug_package %{nil}
-
 Name:		rapidjson
 Version:	1.1.0^%{commitdate}git%{shortcommit}
-Release:	%autorelease
-Summary:	Fast JSON parser and generator for C++
-
-# Most files are MIT, rapidjson/msinttypes/{stdint,inttypes}.h are BSD
+Release:        1%{?dist}
+Summary:        Fast JSON parser and generator for C++
 License:	MIT AND BSD-3-Clause
 URL:		https://rapidjson.org/
-Source0:        https://github.com/Tencent/rapidjson/archive/refs/tags/%{commit}.tar.gz#/%{name}-%{commit}.tar.gz
-# https://github.com/Tencent/rapidjson/pull/2340
+Source0:        https://github.com/Tencent/%{name}/archive/refs/tags/%{commit}.tar.gz#/%{name}-%{commit}.tar.gz
 Patch:          0001-CMake-improvements.patch
-# https://github.com/Tencent/rapidjson/pull/2337
 Patch:          0002-CMakeLists-fix-add_custom_command-warning.patch
-
-BuildRequires:	cmake
-BuildRequires:	make
-BuildRequires:	gcc-c++
-BuildRequires:	gtest-devel
 %ifarch %{valgrind_arches}
-BuildRequires:	valgrind
 %endif
-BuildRequires:	doxygen
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 RapidJSON is a fast JSON parser and generator for C++.  It was		
 inspired by RapidXml.							
@@ -56,25 +48,21 @@ inspired by RapidXml.
 JSON(JavaScript Object Notation) is a light-weight data exchange	
 format.  RapidJSON should be in fully compliance with RFC4627/ECMA-404.
 
-
 %package devel
 Summary:        %{summary}
 Provides:	%{name}%{?_isa} = %{version}-%{release}
 Provides:	%{name}-static = %{version}-%{release}
-
 %description devel
 %{description}
-
 
 %package doc
 Summary:	Documentation-files for %{name}
 BuildArch:	noarch
-
 %description doc
 This package contains the documentation-files for %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p 1 -n %{name}-%{commit}
 
@@ -93,41 +81,28 @@ done
 find . -type f -name CMakeLists.txt -print0 | \
   xargs -0r sed -i -e "s/-march=native/ /g" -e "s/-Werror//g"
 
-
 %build
+
 %cmake \
     -DDOC_INSTALL_DIR:PATH=%{_pkgdocdir} \
     -DRAPIDJSON_BUILD_CXX11:BOOL=OFF \
     -DGTESTSRC_FOUND:BOOL=ON \
     -DGTEST_SOURCE_DIR:PATH=.
 %cmake_build
-
-
 %install
 %cmake_install
 install -pm 644 CHANGELOG.md readme*.md %{buildroot}%{_pkgdocdir}/
 find %{buildroot} -type f -name 'CMake*.txt' -delete
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %ctest
-
-
-%files devel
-%license license.txt
-%dir %{_pkgdocdir}
-%{_pkgdocdir}/CHANGELOG.md
-%{_pkgdocdir}/readme*.md
-%{_libdir}/cmake/RapidJSON/
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/%{name}/
-
-
-%files doc
-%license license.txt
-%{_pkgdocdir}/
-
+%files -f %{oreon_filedir}/main.list
+%files -n rapidjson-devel -f %{oreon_filedir}/rapidjson-devel.list
+%files -n rapidjson-doc -f %{oreon_filedir}/rapidjson-doc.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0^%{commitdate}git%{shortcommit}-1
 - Prepare for Oreon 11 (RP1)

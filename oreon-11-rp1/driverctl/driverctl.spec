@@ -1,22 +1,18 @@
 %global source0_hash c98b05b52f4d83626fecfa141f34b5f7eb042ff51a8722d2275a2b6bd036bb5c
-
 Name:		driverctl
 Version:	0.121
-Release:	%autorelease
-Summary:	Device driver control utility
-
+Release:        1%{?dist}
+Summary:        Device driver control utility
 License:	LGPL-2.1-or-later
 URL:		https://gitlab.com/driverctl/driverctl
 BuildArch:	noarch
-
 Source0:        https://gitlab.com/driverctl/driverctl/-/archive/%{version}/driverctl-%{version}.tar.gz
-
-# for udev macros
-BuildRequires: systemd
-BuildRequires: make
 Requires(post,postun): %{_sbindir}/udevadm
 Requires: coreutils udev
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  systemd
+# /oreon:deps
 %description
 driverctl is a tool for manipulating and inspecting the system
 device driver choices.
@@ -37,29 +33,23 @@ created by driverctl are persistent across system reboots
 by default.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %install
 %make_install PREFIX=%{_prefix} SBINDIR=%{_sbindir}
-
-%files
-%license COPYING
-%doc README TODO
-%{_sbindir}/driverctl
-%{_udevrulesdir}/*.rules
-%{_udevrulesdir}/../vfio_name
-%{_unitdir}/driverctl@.service
-%dir %{_sysconfdir}/driverctl.d
-%{_datadir}/bash-completion/
-%{_mandir}/man8/driverctl.8*
+%oreon_autofiles main
 
 %post
-%udev_rules_update
 
-%postun
 %udev_rules_update
+%postun
+
+%udev_rules_update
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.121-1
 - Prepare for Oreon 11 (RP1)

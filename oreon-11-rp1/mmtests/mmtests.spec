@@ -1,30 +1,13 @@
 %global source0_hash 0707312d52a981be8dde2087ee389bbb9419953711b7a9a47c18088f58cc48b6
-
 Name:           mmtests
 Version:        0.27
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Configurable test framework
-
 License:        GPL-2.0-only
 URL:            https://github.com/gormanm/mmtests
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-Source:         %{name}.rpmlintrc
-
+Source0:        https://github.com/gormanm/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-# /usr/bin/cpupower not available
 ExcludeArch:    s390x
-
-# for py3_shebang_fix
-%if 0%{?rhel} && 0%{?rhel} <= 9
-# for pathfix.py, used in older releases
-BuildRequires:  python3-devel
-%else
-# pathfix.py removed in Python >= 3.12
-# https://fedoraproject.org/wiki/Changes/Python3.12#pathfix.py_tool_will_be_removed
-BuildRequires:  python3
-%endif
-BuildRequires:  python3-rpm-macros
-# dependencies documented in run-mmtests.sh
 Requires:       autoconf
 Requires:       automake
 Requires:       libtool
@@ -57,18 +40,20 @@ Requires:       which
 Requires:       xfsprogs
 Requires:       xfsprogs-devel
 Requires:       xz
-# not in EL9
 Recommends:     btrfs-progs
-# dependencies documented in README.md
 Recommends:     perl(List::BinarySearch)
 Recommends:     perl(Math::Gradient)
-
+# oreon:deps
+BuildRequires:  python3
+BuildRequires:  python3-rpm-macros
+# /oreon:deps
 %description
 MMTests is a configurable test suite that runs a number of common workloads
 of interest to developers. It is possible to add monitors for the workload
 and it provides reporting tools for comparing different test runs.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -82,11 +67,10 @@ cp -pr \
   bin bin-virt configs drivers monitors shellpack_src shellpacks \
   stap-scripts config host_config *.sh \
   %{buildroot}%{_libexecdir}/MMTests
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc README.md docs
-%{_libexecdir}/MMTests
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

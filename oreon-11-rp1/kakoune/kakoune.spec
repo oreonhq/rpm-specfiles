@@ -1,22 +1,19 @@
-%global source0_hash e065dbb715bfe6b0abdaeee775243115748bd540a346d0212fdca6c20c13d340
-
+%global source0_hash 7ef778bd199e05977841e6f69aad2bee6cd58fb23b0e4bc265d012d42de17580
 %bcond_without tests
-
 Name:           kakoune
 Version:        2026.05.21
 Release:        1%{?dist}
 Summary:        mawww's experiment for a better code editor
-
 License:        Unlicense
 URL:            https://kakoune.org/
 Source0:        https://github.com/mawww/kakoune/archive/v%{version}/%{name}-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  asciidoc
-BuildRequires:  gcc-c++ >= 10.3
+BuildRequires:  gcc-c++
 BuildRequires:  glibc-langpack-en
 BuildRequires:  make
-BuildRequires:  pkgconfig(ncurses) >= 5.3
-
+BuildRequires:  pkgconfig(ncurses)
+# /oreon:deps
 %description
 Kakoune is a code editor that implements Vi’s "keystrokes as a text editing
 language" model. As it is also a modal editor, it is somewhat similar to the Vim
@@ -36,6 +33,7 @@ when extending selections, where the anchor character stays fixed and the cursor
 moves around.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -44,29 +42,24 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i '/CXXFLAGS-debug-no = -O3 -g3/d' Makefile
 
 %build
+
 %set_build_flags
 %make_build
-
 %install
 %make_install \
     PREFIX=%{_prefix} \
     version=%{version} \
     docdir=%{buildroot}%{_docdir}/%{name} \
     %{nil}
-
+%oreon_autofiles main
 %if %{with tests}
 %check
+
 %set_build_flags
 LANG=en_US.utf8 %make_build test
 %endif
-
-%files
-%license UNLICENSE
-%doc README.asciidoc CONTRIBUTING VIMTOKAK doc/pages/changelog.asciidoc
-%{_bindir}/kak
-%{_datadir}/kak/
-%{_libexecdir}/kak/
-%{_mandir}/man1/*.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,17 +1,15 @@
 %global source0_hash none
-
 Name:      langpacks
 Version:   4.3
-Release:   1%{?dist}
-Summary:   Langpacks meta-package
-
+Release:        1%{?dist}
+Summary:        Langpacks meta-package
 License:   GPL-2.0-or-later
 BuildArch: noarch
-BuildRequires: python3 fontconfig
-
-# to split up the AppStream file
-BuildRequires: libappstream-glib >= 0.5.10
-
+# oreon:deps
+BuildRequires:  fontconfig
+BuildRequires:  libappstream-glib
+BuildRequires:  python3
+# /oreon:deps
 %description
 Langpack meta-package to provide individual langpacks packages.
 
@@ -1350,357 +1348,31 @@ local function defcorepkg(lang, fontlang, langname, inputmethod)
 Summary: %{_langname} langpacks core meta-package
 Requires: default-fonts-%{_fontlang}
 %{?_req}
-
 %description core-%{_lang}
 This package provides %{_langname} core langpacks packages.
 
-%files core-%{_lang}
-%{_datadir}/metainfo/org.fedoraproject.LangPack-Core-%{_lang}.metainfo.xml
-
-]]
-  inputmethod = (not(inputmethod) and "" or inputmethod)
-  rpm.define("_lang " .. lang)
-  rpm.define("_fontlang " .. string.gsub(fontlang, "-", "_"))
-  rpm.define("_langname " .. langname)
-  if inputmethod ~= "" then
-    rpm.define("_req " .. "Requires: (" .. inputmethod .. " if service(graphical-login))\n")
-  end
-  print(rpm.expand(templ))
-  rpm.undefine("_lang")
-  rpm.undefine("_fontlang")
-  rpm.undefine("_langname")
-  rpm.undefine("_req")
-end
-
---
---Package template for fonts metapackage like default-fonts-*
---
-local function _deffontpkg(pkgname, summary1, summary2, deps, files)
-  local templ = [[
 %package -n %{_pkgname}
 Summary:    Metapackage to install %{_summary1} for %{_summary2}
 %{?_req}
-
 %description -n %{_pkgname}
 This package provides %{_summary1} package set(s) for %{_summary2}
 
-%files -n %{_pkgname}
-%{_files}
-
-]]
-  local f = table.concat(files, "\n")
-  rpm.define("_pkgname " .. pkgname)
-  rpm.define("_summary1 " .. summary1)
-  rpm.define("_summary2 " .. summary2)
-  rpm.define("_files %{expand:" .. f .. "}")
-  if req ~= "" then
-    rpm.define("_req %{expand:" .. deps .. "}")
-  end
-  print(rpm.expand(templ))
-  rpm.undefine("_files")
-  rpm.undefine("_summary1")
-  rpm.undefine("_summary2")
-  rpm.undefine("_pkgname")
-  rpm.undefine("_req")
-end
-
-local function deffontpkg(pkgname, summary1, summary2, deps)
-  _deffontpkg(pkgname, summary1, summary2, deps,
-              {"%{_datadir}/metainfo/org.fedoraproject.%{_pkgname}.metainfo.xml"})
-end
-
-local function defsansfontpkg(cat, summary, target_langs, deps)
-  local req = ""
-  local files = {"%{_datadir}/metainfo/org.fedoraproject.default-fonts-" .. cat .. "-sans.metainfo.xml"}
-  for i = 1, #target_langs do
-    -- Add Provides: font(:lang=LL) and Obsoletes/Provides: default-fonts-LL
-    req = append_obsolete(append_fontprov(req, target_langs[i]), "default-fonts-" .. target_langs[i])
-    req = append_obsolete(req, "langpacks-core-font-" .. target_langs[i])
-    table.insert(files, "%{_datadir}/metainfo/org.fedoraproject.default-fonts-" .. target_langs[i] .. ".metainfo.xml")
-  end
-  _deffontpkg("default-fonts-" .. cat .. "-sans", "default sans-serif fonts", summary, build_deps(req, "Requires", drop_duplicate(deps)), files)
-end
-
---
---Package template for langpacks-<lang>
---
-local function defmetapkg(lang, fontlang, langname, deps)
-  local templ = [[
 %package %{_lang}
 Summary: %{_langname} langpacks meta-package
 Requires: %{name}-core-%{_lang}
 Requires: %{name}-fonts-%{_fontlang}
 %{?_req}
-
 %description %{_lang}
 This package provides %{_langname} langpacks meta-package.
-
-%files %{_lang}
-%{_datadir}/metainfo/org.fedoraproject.LangPack-%{_lang}.metainfo.xml
-
-]]
-  rpm.define("_lang " .. lang)
-  rpm.define("_fontlang " .. string.gsub(fontlang, "-", "_"))
-  rpm.define("_langname " .. langname)
-  if deps ~= "" then
-    rpm.define("_req %{expand:" .. deps .. "}")
-  end
-  print(rpm.expand(templ))
-  rpm.undefine("_lang")
-  rpm.undefine("_fontlang")
-  rpm.undefine("_langname")
-  rpm.undefine("_req")
-end
-
---
---AppStream template
---
-local function defappstream_open(fname)
-  return "cat <<_EOL_>" .. fname .. "\\\n" .. [[
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
-<components origin=\"langpacks\">\
-]]
-end
-
-local function defappstream_close(f)
-  local s = f .. [[</components>\
-_EOL_
-]]
-  return s
-end
-
-local function defappstream_body(f, component, id, lang, fclang, name, summary, desc)
-  if lang ~= fclang and fclang ~= "" then
-    return f
-  end
-  local _id = (lang == "" and id or id .. "-" .. lang)
-  local _summary = (lang == "" and summary or summary .. " for " .. name)
-  local s = f .. [[
-  <component type=\"]] .. component .. [[\">\
-    <metadata_license>CC0-1.0</metadata_license>\
-    <id>org.fedoraproject.]] .. _id .. [[</id>\
-    <name>]] .. name .. [[</name>\
-    <summary>]] .. _summary .. [[</summary>\
-    <description>\
-      <p>\
-        ]] .. desc .. [[\
-      </p>\
-    </description>\
-  </component>\
-]]
-  return s
-end
-
-local function defappstream_metabody(f, id, name)
-  f = defappstream_body(f, "font", "default-fonts-" .. id, "sans", "", name, "sans-serif default font", "sans-serif font package to install default font for " .. name .. " languages.")
-  f = defappstream_body(f, "font", "default-fonts-" .. id, "serif", "", name, "serif default font", "serif font package to install default font for " .. name .. " languages.")
-  f = defappstream_body(f, "font", "default-fonts-" .. id, "mono", "", name, "monospace default font", "monospace font package to install default font for " .. name .. " languages.")
-  return f
-end
-
-local function defappstream(table)
-  local slpc = defappstream_open("org.fedoraproject.LangPacks-Core.xml")
-  local slp = defappstream_open("org.fedoraproject.LangPacks.xml")
-  local sdf = defappstream_open("org.fedoraproject.default-fonts.xml")
-  local slf = defappstream_open("org.fedoraproject.langpacks-fonts.xml")
-
-  --
-  -- default-fonts
-  --
-  sdf = defappstream_body(sdf, "font", "default-fonts", "", "", "default-fonts", "All default fonts for all the languages", "Meta-package to install all the default fonts for all the languages.")
-  --
-  -- default-fonts-core
-  --
-  sdf = defappstream_body(sdf, "font", "default-fonts", "core", "", "Latin", "All variants default fonts", "sans-serif/serif/monospace/emoji/math font packages to install default fonts for Latin.")
-  sdf = defappstream_metabody(sdf, "core", "Latin")
-  sdf = defappstream_body(sdf, "font", "default-fonts-core", "emoji", "", "Emoji", "default font", "emoji font package to install default font.")
-  sdf = defappstream_body(sdf, "font", "default-fonts-core", "math", "", "Math", "default font", "math font package to install default font.")
-  --
-  -- default-fonts-other
-  --
-  sdf = defappstream_body(sdf, "font", "default-fonts", "other", "", "non-CJK", "All variants default fonts", "sans-serif/serif/monospace font packages to install default fonts for non-CJK languages.")
-  sdf = defappstream_metabody(sdf, "other", "non-CJK")
-  --
-  -- default-fonts-cjk
-  --
-  sdf = defappstream_body(sdf, "font", "default-fonts", "cjk", "", "Chinese/Japanese/Korean", "All variants default fonts", "sans-serif/serif/monospace font packages to install default fonts for CJK languages.")
-  sdf = defappstream_metabody(sdf, "cjk", "Chinese/Japanese/Korean")
-
-  for i = 1, #table do
-    slpc = defappstream_body(slpc, "localization", "LangPack-Core", table[i]["lang"], table[i]["lang"], table[i]["langname"], "Core Localization support", "Core Meta-package to install default font, glibc locale and input-method if available.")
-    slp = defappstream_body(slp, "localization", "LangPack", table[i]["lang"], table[i]["lang"], table[i]["langname"], "Localization support", "Meta-package to install available langpacks for the language available for the installed packages.")
-    sdf = defappstream_body(sdf, "font", "default-fonts", table[i]["lang"], table[i]["fclang"], table[i]["langname"], "Localization Font support", "Core font package to install default font.")
-    slf = defappstream_body(slf, "font", "langpacks-fonts", table[i]["lang"], table[i]["fclang"], table[i]["langname"], "Localization Font support", "Meta-package to install extra font.")
-  end
-
-  rpm.define("langpacks_metainfo_lpc " .. defappstream_close(slpc))
-  rpm.define("langpacks_metainfo_lp " .. defappstream_close(slp))
-  rpm.define("langpacks_metainfo_df " .. defappstream_close(sdf))
-  rpm.define("langpacks_metainfo_lf " .. defappstream_close(slf))
-end
-
-local other_deps = { sans={}, serif={}, mono={} }
-local cjk_deps = { sans={}, serif={}, mono={} }
-local face = { "sans", "serif", "mono" }
-local core_langs = {}
-local core_deps = {}
-local cjk_langs = {}
-local cjk_sans_deps = {}
-
-for i = 1, #langpacks_package_list do
-  -- dependency list for default-fonts-<lang>
-  local default_deps = {}
-  -- dependency list for langpacks-fonts-<lang>
-  local extra_deps = {}
-  local lang = langpacks_package_list[i]["lang"]
-  rpm.define("langcode " .. lang .. "\n")
-  local orth = rpm.expand("%(python3 -c \"import ctypes,sys; fc=ctypes.CDLL('libfontconfig.so.1'); fc.FcLangNormalize.argtypes=[ctypes.c_char_p]; fc.FcLangNormalize.restype=ctypes.c_char_p; print(fc.FcLangNormalize(sys.argv[1].encode('utf-8')).decode())\" %{langcode})")
-  rpm.undefine("langcode")
-  local lowerorth = string.lower(orth)
-  local normlang = string.gsub(string.lower(lang), "_", "-")
-  local langname = langpacks_package_list[i]["langname"]
-  local im = (tonumber(rpm.expand("0%{?fedora}")) ~= 0 and langpacks_package_list[i]["fedora_inputmethod"] ~= nil and langpacks_package_list[i]["fedora_inputmethod"] or langpacks_package_list[i]["inputmethod"])
-  local fclang = (langpacks_package_list[i]["fclang"] == "" and string.gsub(lang, "_", "-") or langpacks_package_list[i]["fclang"])
-  local prov = ""
-
-  if orth ~= "" then
-    --Try to validate orth in table
-    if fclang ~= orth then
-      print(rpm.expand("%{error:fclang value is invalid for " .. lang .. "}"))
-    end
-  end
-
-  if langpacks_package_list[i]["default"] ~= nil then
-    local has_default = false
-    local default_face = langpacks_package_list[i]["default"]["face"] and langpacks_package_list[i]["default"]["face"] or "sans"
-    for j = 1, #face do
-      local current = {langpacks_package_list[i]["default"][face[j]]}
-      if current[1] ~= "" then
-        has_default = true
-      end
-    end
-    for j = 1, #face do
-      local current = (has_default and {langpacks_package_list[i]["default"][face[j]]} or (is_cjk(lang) and core_font_package_list["cjk"][face[j]] or core_font_package_list["default"][face[j]]))
-
-      -- Only install a font which is set by "face" or "sans" if not, for default-fonts-<language code>
-      if face[j] == default_face then
-        for k = 1, #current do
-          table.insert(default_deps, current[k])
-        end
-        -- Make sure default-fonts-<language code> pulled in by langpacks-fonts-<language code>
-        table.insert(extra_deps, "default-fonts-" .. string.gsub(fclang, "-", "_") .. " = %{version}-%{release}")
-        -- Provide font(:lang=) deps for default face only
-        prov = append_fontprov("", lowerorth)
-
-        if is_nonlatin(lang) then
-          if is_cjk(lang) then
-            table.insert(cjk_deps[face[j]], "default-fonts-" .. string.gsub(fclang, "-", "_") .. " = %{version}-%{release}")
-          else
-            table.insert(other_deps[face[j]], "default-fonts-" .. string.gsub(fclang, "-", "_") .. " = %{version}-%{release}")
-          end
-        end
-      else
-        for k = 1, #current do
-          table.insert(extra_deps, current[k])
-
-          if is_cjk(lang) then
-            table.insert(cjk_deps[face[j]], current[k])
-          else
-            table.insert(other_deps[face[j]], current[k])
-          end
-        end
-      end
-    end
-
-    default_deps = build_deps(prov, "Requires", drop_duplicate(default_deps))
-    extra_deps = build_deps("", "Requires", drop_duplicate(extra_deps))
-  end
-  if (tonumber(rpm.expand("0%{?fedora}")) ~= 0 and langpacks_package_list[i]["recommends"] ~= nil) then
-    extra_deps = build_deps(extra_deps, "Recommends", drop_duplicate(langpacks_package_list[i]["recommends"]))
-  end
-
-  --Generate extra font package only when lang is recognized by fontconfig
-  if lowerorth == normlang then
-    -- Integrate default-fonts-<language code> into default-fonts-core-sans
-    -- if it is a latin language and no default fonts is set
-    if not is_nonlatin(lang) then
-      if has_default then
-        -- We may need to take care of them separately.
-        table.insert(core_deps, "default-fonts-" .. lang .. " = %{version}-%{release}")
-      else
-        table.insert(core_langs, lang)
-      end
-    else
-      if is_cjk(lang) then
-        if has_default then
-          -- We may need to take care of them separately.
-          table.insert(cjk_sans_deps, "default-fonts-" .. lang .. " = %{version}-%{release}")
-          deffontpkg("default-fonts-" .. lang, "default fonts", langname, append_obsolete(default_deps, "langpacks-core-font-" .. lang))
-        else
-          table.insert(cjk_langs, lang)
-        end
-      else
-        deffontpkg("default-fonts-" .. lang, "default fonts", langname, append_obsolete(default_deps, "langpacks-core-font-" .. lang))
-      end
-    end
-    deffontpkg("langpacks-fonts-" .. lang, "extra fonts", langname, append_obsolete(extra_deps, "default-fonts-extra-" .. lang))
-  end
-  defcorepkg(lang, fclang, langname, im)
-
-  --Generate langpacks-* meta packages
-  local metadeps = (tonumber(rpm.expand("0%{?fedora}")) ~= 0 and langpacks_package_list[i]["meta"]["fedora_requires"] ~= nil and langpacks_package_list[i]["meta"]["fedora_requires"] or langpacks_package_list[i]["meta"]["requires"])
-  local metarecd = (tonumber(rpm.expand("0%{?fedora}")) ~= 0 and langpacks_package_list[i]["meta"]["fedora_recommends"] ~= nil and langpacks_package_list[i]["meta"]["fedora_recommends"] or langpacks_package_list[i]["meta"]["recommends"])
-  local deps = build_deps("", "Requires", drop_duplicate(metadeps))
-  deps = build_deps(deps, "Recommends", drop_duplicate(metarecd))
-  defmetapkg(lang, fclang, langname, deps)
-end
-
---Generate AppStream files
-defappstream(langpacks_package_list)
-
---Special care of cjk-sans to reduce extra sub-packages and dependencies like core-sans
-for i = 1, #core_font_package_list["cjk"]["sans"] do
-  table.insert(cjk_sans_deps, core_font_package_list["cjk"]["sans"][i])
-end
-defsansfontpkg("cjk", "CJK languages", cjk_langs, cjk_sans_deps)
-
-for i = 1, #face do
-  deffontpkg("default-fonts-other-" .. face[i], "default " .. face[i] .. " fonts", "non-CJK languages", build_deps("", "Requires", drop_duplicate(other_deps[face[i]])))
-  if face[i] ~= "sans" then
-    deffontpkg("default-fonts-cjk-" .. face[i], "default " .. face[i] .. " fonts", "CJK languages", build_deps("", "Requires", drop_duplicate(cjk_deps[face[i]])))
-  end
-end
-
---core font packages except sans - core-sans may want to have special deps to default-fonts-<language code>
-for i = 1, #core_font_package_list["default"]["sans"] do
-  table.insert(core_deps, core_font_package_list["default"]["sans"][i])
-end
-defsansfontpkg("core", "Western characters", core_langs, core_deps)
-
-local coreface = { "serif", "mono", "emoji", "math" }
-for i = 1, #coreface do
-  local sum1 = "default " .. coreface[i] .. " fonts"
-  local sum2 = "Western characters"
-  if coreface[i] == "emoji" or coreface[i] == "math" then
-    sum1 = "default fonts"
-    sum2 = coreface[i]:gsub("^%l", string.upper)
-  end
-  deffontpkg("default-fonts-core-" .. coreface[i], sum1, sum2, build_deps("", "Requires", drop_duplicate(core_font_package_list["default"][coreface[i]])))
-end
-} # %%{lua:}
 
 %package -n default-fonts
 Summary: Meta package to install all the default fonts
 Requires: default-fonts-core = %{version}-%{release}
 Requires: default-fonts-cjk = %{version}-%{release}
 Requires: default-fonts-other = %{version}-%{release}
-
 %description -n default-fonts
 This package provides easier way to install all the default fonts meta packages
 for all the languages.
-
-%files -n default-fonts
-%{_datadir}/metainfo/org.fedoraproject.default-fonts.metainfo.xml
 
 %package -n default-fonts-core
 Summary: Meta package to install sans/serif/mono/emoji/math default fonts meta packages for Western characters
@@ -1709,61 +1381,430 @@ Requires: default-fonts-core-serif = %{version}-%{release}
 Requires: default-fonts-core-mono = %{version}-%{release}
 Requires: default-fonts-core-emoji = %{version}-%{release}
 Requires: default-fonts-core-math = %{version}-%{release}
-
 %description -n default-fonts-core
 This package provides easier way to install all variants of default fonts
 meta packages for Western characters.
-
-%files -n default-fonts-core
-%{_datadir}/metainfo/org.fedoraproject.default-fonts-core.metainfo.xml
 
 %package -n default-fonts-cjk
 Summary: Meta package to install sans/serif/mono/emoji/math default fonts meta packages for CJK
 Requires: default-fonts-cjk-sans = %{version}-%{release}
 Requires: default-fonts-cjk-serif = %{version}-%{release}
 Requires: default-fonts-cjk-mono = %{version}-%{release}
-
 %description -n default-fonts-cjk
 This package provides easier way to install all variants of default fonts
 meta packages for CJK languages.
-
-%files -n default-fonts-cjk
-%{_datadir}/metainfo/org.fedoraproject.default-fonts-cjk.metainfo.xml
 
 %package -n default-fonts-other
 Summary: Meta package to install sans/serif/mono/emoji/math default fonts meta packages for non-CJK
 Requires: default-fonts-other-sans = %{version}-%{release}
 Requires: default-fonts-other-serif = %{version}-%{release}
 Requires: default-fonts-other-mono = %{version}-%{release}
-
 %description -n default-fonts-other
 This package provides easier way to install all variants of default fonts
 meta packages for non-CJK languages.
 
-%files -n default-fonts-other
-%{_datadir}/metainfo/org.fedoraproject.default-fonts-other.metainfo.xml
-
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 # nothing to prep
 
 %build
+
 %{langpacks_metainfo_lpc}
 %{langpacks_metainfo_lp}
 %{langpacks_metainfo_df}
 %{langpacks_metainfo_lf}
-
-
 %install
-# Explode the metainfo files into the subpackages so they get added to the
-# distro-specific AppStream metadata
 mkdir -p %{buildroot}/usr/share/metainfo
 DESTDIR=%{buildroot} appstream-util split-appstream org.fedoraproject.LangPacks-Core.xml
 DESTDIR=%{buildroot} appstream-util split-appstream org.fedoraproject.LangPacks.xml
 DESTDIR=%{buildroot} appstream-util split-appstream org.fedoraproject.default-fonts.xml
 DESTDIR=%{buildroot} appstream-util split-appstream org.fedoraproject.langpacks-fonts.xml
+%oreon_autofiles default-fonts usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles default-fonts-core usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles default-fonts-cjk usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles default-fonts-other usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+
+%files -f %{oreon_filedir}/main.list
+%files -n langpacks-fonts-af -f %{oreon_filedir}/langpacks-fonts-af.list
+%files -n langpacks-core-af -f %{oreon_filedir}/langpacks-core-af.list
+%files -n langpacks-af -f %{oreon_filedir}/langpacks-af.list
+%files -n default-fonts-am -f %{oreon_filedir}/default-fonts-am.list
+%files -n langpacks-fonts-am -f %{oreon_filedir}/langpacks-fonts-am.list
+%files -n langpacks-core-am -f %{oreon_filedir}/langpacks-core-am.list
+%files -n langpacks-am -f %{oreon_filedir}/langpacks-am.list
+%files -n default-fonts-ar -f %{oreon_filedir}/default-fonts-ar.list
+%files -n langpacks-fonts-ar -f %{oreon_filedir}/langpacks-fonts-ar.list
+%files -n langpacks-core-ar -f %{oreon_filedir}/langpacks-core-ar.list
+%files -n langpacks-ar -f %{oreon_filedir}/langpacks-ar.list
+%files -n default-fonts-as -f %{oreon_filedir}/default-fonts-as.list
+%files -n langpacks-fonts-as -f %{oreon_filedir}/langpacks-fonts-as.list
+%files -n langpacks-core-as -f %{oreon_filedir}/langpacks-core-as.list
+%files -n langpacks-as -f %{oreon_filedir}/langpacks-as.list
+%files -n default-fonts-ast -f %{oreon_filedir}/default-fonts-ast.list
+%files -n langpacks-fonts-ast -f %{oreon_filedir}/langpacks-fonts-ast.list
+%files -n langpacks-core-ast -f %{oreon_filedir}/langpacks-core-ast.list
+%files -n langpacks-ast -f %{oreon_filedir}/langpacks-ast.list
+%files -n default-fonts-be -f %{oreon_filedir}/default-fonts-be.list
+%files -n langpacks-fonts-be -f %{oreon_filedir}/langpacks-fonts-be.list
+%files -n langpacks-core-be -f %{oreon_filedir}/langpacks-core-be.list
+%files -n langpacks-be -f %{oreon_filedir}/langpacks-be.list
+%files -n default-fonts-bg -f %{oreon_filedir}/default-fonts-bg.list
+%files -n langpacks-fonts-bg -f %{oreon_filedir}/langpacks-fonts-bg.list
+%files -n langpacks-core-bg -f %{oreon_filedir}/langpacks-core-bg.list
+%files -n langpacks-bg -f %{oreon_filedir}/langpacks-bg.list
+%files -n default-fonts-bn -f %{oreon_filedir}/default-fonts-bn.list
+%files -n langpacks-fonts-bn -f %{oreon_filedir}/langpacks-fonts-bn.list
+%files -n langpacks-core-bn -f %{oreon_filedir}/langpacks-core-bn.list
+%files -n langpacks-bn -f %{oreon_filedir}/langpacks-bn.list
+%files -n default-fonts-bo -f %{oreon_filedir}/default-fonts-bo.list
+%files -n langpacks-fonts-bo -f %{oreon_filedir}/langpacks-fonts-bo.list
+%files -n langpacks-core-bo -f %{oreon_filedir}/langpacks-core-bo.list
+%files -n langpacks-bo -f %{oreon_filedir}/langpacks-bo.list
+%files -n default-fonts-br -f %{oreon_filedir}/default-fonts-br.list
+%files -n langpacks-fonts-br -f %{oreon_filedir}/langpacks-fonts-br.list
+%files -n langpacks-core-br -f %{oreon_filedir}/langpacks-core-br.list
+%files -n langpacks-br -f %{oreon_filedir}/langpacks-br.list
+%files -n langpacks-fonts-bs -f %{oreon_filedir}/langpacks-fonts-bs.list
+%files -n langpacks-core-bs -f %{oreon_filedir}/langpacks-core-bs.list
+%files -n langpacks-bs -f %{oreon_filedir}/langpacks-bs.list
+%files -n langpacks-fonts-ca -f %{oreon_filedir}/langpacks-fonts-ca.list
+%files -n langpacks-core-ca -f %{oreon_filedir}/langpacks-core-ca.list
+%files -n langpacks-ca -f %{oreon_filedir}/langpacks-ca.list
+%files -n default-fonts-chr -f %{oreon_filedir}/default-fonts-chr.list
+%files -n langpacks-fonts-chr -f %{oreon_filedir}/langpacks-fonts-chr.list
+%files -n langpacks-core-chr -f %{oreon_filedir}/langpacks-core-chr.list
+%files -n langpacks-chr -f %{oreon_filedir}/langpacks-chr.list
+%files -n langpacks-fonts-cs -f %{oreon_filedir}/langpacks-fonts-cs.list
+%files -n langpacks-core-cs -f %{oreon_filedir}/langpacks-core-cs.list
+%files -n langpacks-cs -f %{oreon_filedir}/langpacks-cs.list
+%files -n langpacks-fonts-cy -f %{oreon_filedir}/langpacks-fonts-cy.list
+%files -n langpacks-core-cy -f %{oreon_filedir}/langpacks-core-cy.list
+%files -n langpacks-cy -f %{oreon_filedir}/langpacks-cy.list
+%files -n langpacks-fonts-da -f %{oreon_filedir}/langpacks-fonts-da.list
+%files -n langpacks-core-da -f %{oreon_filedir}/langpacks-core-da.list
+%files -n langpacks-da -f %{oreon_filedir}/langpacks-da.list
+%files -n langpacks-fonts-de -f %{oreon_filedir}/langpacks-fonts-de.list
+%files -n langpacks-core-de -f %{oreon_filedir}/langpacks-core-de.list
+%files -n langpacks-de -f %{oreon_filedir}/langpacks-de.list
+%files -n default-fonts-dv -f %{oreon_filedir}/default-fonts-dv.list
+%files -n langpacks-fonts-dv -f %{oreon_filedir}/langpacks-fonts-dv.list
+%files -n langpacks-core-dv -f %{oreon_filedir}/langpacks-core-dv.list
+%files -n langpacks-dv -f %{oreon_filedir}/langpacks-dv.list
+%files -n default-fonts-dz -f %{oreon_filedir}/default-fonts-dz.list
+%files -n langpacks-fonts-dz -f %{oreon_filedir}/langpacks-fonts-dz.list
+%files -n langpacks-core-dz -f %{oreon_filedir}/langpacks-core-dz.list
+%files -n langpacks-dz -f %{oreon_filedir}/langpacks-dz.list
+%files -n default-fonts-el -f %{oreon_filedir}/default-fonts-el.list
+%files -n langpacks-fonts-el -f %{oreon_filedir}/langpacks-fonts-el.list
+%files -n langpacks-core-el -f %{oreon_filedir}/langpacks-core-el.list
+%files -n langpacks-el -f %{oreon_filedir}/langpacks-el.list
+%files -n langpacks-fonts-en -f %{oreon_filedir}/langpacks-fonts-en.list
+%files -n langpacks-core-en -f %{oreon_filedir}/langpacks-core-en.list
+%files -n langpacks-en -f %{oreon_filedir}/langpacks-en.list
+%files -n langpacks-core-en_GB -f %{oreon_filedir}/langpacks-core-en_GB.list
+%files -n langpacks-en_GB -f %{oreon_filedir}/langpacks-en_GB.list
+%files -n default-fonts-eo -f %{oreon_filedir}/default-fonts-eo.list
+%files -n langpacks-fonts-eo -f %{oreon_filedir}/langpacks-fonts-eo.list
+%files -n langpacks-core-eo -f %{oreon_filedir}/langpacks-core-eo.list
+%files -n langpacks-eo -f %{oreon_filedir}/langpacks-eo.list
+%files -n langpacks-fonts-es -f %{oreon_filedir}/langpacks-fonts-es.list
+%files -n langpacks-core-es -f %{oreon_filedir}/langpacks-core-es.list
+%files -n langpacks-es -f %{oreon_filedir}/langpacks-es.list
+%files -n langpacks-fonts-et -f %{oreon_filedir}/langpacks-fonts-et.list
+%files -n langpacks-core-et -f %{oreon_filedir}/langpacks-core-et.list
+%files -n langpacks-et -f %{oreon_filedir}/langpacks-et.list
+%files -n default-fonts-eu -f %{oreon_filedir}/default-fonts-eu.list
+%files -n langpacks-fonts-eu -f %{oreon_filedir}/langpacks-fonts-eu.list
+%files -n langpacks-core-eu -f %{oreon_filedir}/langpacks-core-eu.list
+%files -n langpacks-eu -f %{oreon_filedir}/langpacks-eu.list
+%files -n default-fonts-fa -f %{oreon_filedir}/default-fonts-fa.list
+%files -n langpacks-fonts-fa -f %{oreon_filedir}/langpacks-fonts-fa.list
+%files -n langpacks-core-fa -f %{oreon_filedir}/langpacks-core-fa.list
+%files -n langpacks-fa -f %{oreon_filedir}/langpacks-fa.list
+%files -n langpacks-fonts-fi -f %{oreon_filedir}/langpacks-fonts-fi.list
+%files -n langpacks-core-fi -f %{oreon_filedir}/langpacks-core-fi.list
+%files -n langpacks-fi -f %{oreon_filedir}/langpacks-fi.list
+%files -n langpacks-fonts-fr -f %{oreon_filedir}/langpacks-fonts-fr.list
+%files -n langpacks-core-fr -f %{oreon_filedir}/langpacks-core-fr.list
+%files -n langpacks-fr -f %{oreon_filedir}/langpacks-fr.list
+%files -n langpacks-fonts-ga -f %{oreon_filedir}/langpacks-fonts-ga.list
+%files -n langpacks-core-ga -f %{oreon_filedir}/langpacks-core-ga.list
+%files -n langpacks-ga -f %{oreon_filedir}/langpacks-ga.list
+%files -n langpacks-fonts-gl -f %{oreon_filedir}/langpacks-fonts-gl.list
+%files -n langpacks-core-gl -f %{oreon_filedir}/langpacks-core-gl.list
+%files -n langpacks-gl -f %{oreon_filedir}/langpacks-gl.list
+%files -n default-fonts-got -f %{oreon_filedir}/default-fonts-got.list
+%files -n langpacks-fonts-got -f %{oreon_filedir}/langpacks-fonts-got.list
+%files -n langpacks-core-got -f %{oreon_filedir}/langpacks-core-got.list
+%files -n langpacks-got -f %{oreon_filedir}/langpacks-got.list
+%files -n default-fonts-gu -f %{oreon_filedir}/default-fonts-gu.list
+%files -n langpacks-fonts-gu -f %{oreon_filedir}/langpacks-fonts-gu.list
+%files -n langpacks-core-gu -f %{oreon_filedir}/langpacks-core-gu.list
+%files -n langpacks-gu -f %{oreon_filedir}/langpacks-gu.list
+%files -n default-fonts-he -f %{oreon_filedir}/default-fonts-he.list
+%files -n langpacks-fonts-he -f %{oreon_filedir}/langpacks-fonts-he.list
+%files -n langpacks-core-he -f %{oreon_filedir}/langpacks-core-he.list
+%files -n langpacks-he -f %{oreon_filedir}/langpacks-he.list
+%files -n default-fonts-hi -f %{oreon_filedir}/default-fonts-hi.list
+%files -n langpacks-fonts-hi -f %{oreon_filedir}/langpacks-fonts-hi.list
+%files -n langpacks-core-hi -f %{oreon_filedir}/langpacks-core-hi.list
+%files -n langpacks-hi -f %{oreon_filedir}/langpacks-hi.list
+%files -n langpacks-fonts-hr -f %{oreon_filedir}/langpacks-fonts-hr.list
+%files -n langpacks-core-hr -f %{oreon_filedir}/langpacks-core-hr.list
+%files -n langpacks-hr -f %{oreon_filedir}/langpacks-hr.list
+%files -n langpacks-fonts-hu -f %{oreon_filedir}/langpacks-fonts-hu.list
+%files -n langpacks-core-hu -f %{oreon_filedir}/langpacks-core-hu.list
+%files -n langpacks-hu -f %{oreon_filedir}/langpacks-hu.list
+%files -n default-fonts-hy -f %{oreon_filedir}/default-fonts-hy.list
+%files -n langpacks-fonts-hy -f %{oreon_filedir}/langpacks-fonts-hy.list
+%files -n langpacks-core-hy -f %{oreon_filedir}/langpacks-core-hy.list
+%files -n langpacks-hy -f %{oreon_filedir}/langpacks-hy.list
+%files -n default-fonts-ia -f %{oreon_filedir}/default-fonts-ia.list
+%files -n langpacks-fonts-ia -f %{oreon_filedir}/langpacks-fonts-ia.list
+%files -n langpacks-core-ia -f %{oreon_filedir}/langpacks-core-ia.list
+%files -n langpacks-ia -f %{oreon_filedir}/langpacks-ia.list
+%files -n langpacks-fonts-id -f %{oreon_filedir}/langpacks-fonts-id.list
+%files -n langpacks-core-id -f %{oreon_filedir}/langpacks-core-id.list
+%files -n langpacks-id -f %{oreon_filedir}/langpacks-id.list
+%files -n default-fonts-ii -f %{oreon_filedir}/default-fonts-ii.list
+%files -n langpacks-fonts-ii -f %{oreon_filedir}/langpacks-fonts-ii.list
+%files -n langpacks-core-ii -f %{oreon_filedir}/langpacks-core-ii.list
+%files -n langpacks-ii -f %{oreon_filedir}/langpacks-ii.list
+%files -n langpacks-fonts-is -f %{oreon_filedir}/langpacks-fonts-is.list
+%files -n langpacks-core-is -f %{oreon_filedir}/langpacks-core-is.list
+%files -n langpacks-is -f %{oreon_filedir}/langpacks-is.list
+%files -n langpacks-fonts-it -f %{oreon_filedir}/langpacks-fonts-it.list
+%files -n langpacks-core-it -f %{oreon_filedir}/langpacks-core-it.list
+%files -n langpacks-it -f %{oreon_filedir}/langpacks-it.list
+%files -n default-fonts-iu -f %{oreon_filedir}/default-fonts-iu.list
+%files -n langpacks-fonts-iu -f %{oreon_filedir}/langpacks-fonts-iu.list
+%files -n langpacks-core-iu -f %{oreon_filedir}/langpacks-core-iu.list
+%files -n langpacks-iu -f %{oreon_filedir}/langpacks-iu.list
+%files -n langpacks-fonts-ja -f %{oreon_filedir}/langpacks-fonts-ja.list
+%files -n langpacks-core-ja -f %{oreon_filedir}/langpacks-core-ja.list
+%files -n langpacks-ja -f %{oreon_filedir}/langpacks-ja.list
+%files -n default-fonts-kab -f %{oreon_filedir}/default-fonts-kab.list
+%files -n langpacks-fonts-kab -f %{oreon_filedir}/langpacks-fonts-kab.list
+%files -n langpacks-core-kab -f %{oreon_filedir}/langpacks-core-kab.list
+%files -n langpacks-kab -f %{oreon_filedir}/langpacks-kab.list
+%files -n default-fonts-ka -f %{oreon_filedir}/default-fonts-ka.list
+%files -n langpacks-fonts-ka -f %{oreon_filedir}/langpacks-fonts-ka.list
+%files -n langpacks-core-ka -f %{oreon_filedir}/langpacks-core-ka.list
+%files -n langpacks-ka -f %{oreon_filedir}/langpacks-ka.list
+%files -n langpacks-fonts-kk -f %{oreon_filedir}/langpacks-fonts-kk.list
+%files -n langpacks-core-kk -f %{oreon_filedir}/langpacks-core-kk.list
+%files -n langpacks-kk -f %{oreon_filedir}/langpacks-kk.list
+%files -n default-fonts-km -f %{oreon_filedir}/default-fonts-km.list
+%files -n langpacks-fonts-km -f %{oreon_filedir}/langpacks-fonts-km.list
+%files -n langpacks-core-km -f %{oreon_filedir}/langpacks-core-km.list
+%files -n langpacks-km -f %{oreon_filedir}/langpacks-km.list
+%files -n default-fonts-kn -f %{oreon_filedir}/default-fonts-kn.list
+%files -n langpacks-fonts-kn -f %{oreon_filedir}/langpacks-fonts-kn.list
+%files -n langpacks-core-kn -f %{oreon_filedir}/langpacks-core-kn.list
+%files -n langpacks-kn -f %{oreon_filedir}/langpacks-kn.list
+%files -n langpacks-fonts-ko -f %{oreon_filedir}/langpacks-fonts-ko.list
+%files -n langpacks-core-ko -f %{oreon_filedir}/langpacks-core-ko.list
+%files -n langpacks-ko -f %{oreon_filedir}/langpacks-ko.list
+%files -n default-fonts-ku -f %{oreon_filedir}/default-fonts-ku.list
+%files -n langpacks-fonts-ku -f %{oreon_filedir}/langpacks-fonts-ku.list
+%files -n langpacks-core-ku -f %{oreon_filedir}/langpacks-core-ku.list
+%files -n langpacks-ku -f %{oreon_filedir}/langpacks-ku.list
+%files -n default-fonts-lo -f %{oreon_filedir}/default-fonts-lo.list
+%files -n langpacks-fonts-lo -f %{oreon_filedir}/langpacks-fonts-lo.list
+%files -n langpacks-core-lo -f %{oreon_filedir}/langpacks-core-lo.list
+%files -n langpacks-lo -f %{oreon_filedir}/langpacks-lo.list
+%files -n langpacks-fonts-lt -f %{oreon_filedir}/langpacks-fonts-lt.list
+%files -n langpacks-core-lt -f %{oreon_filedir}/langpacks-core-lt.list
+%files -n langpacks-lt -f %{oreon_filedir}/langpacks-lt.list
+%files -n langpacks-fonts-lv -f %{oreon_filedir}/langpacks-fonts-lv.list
+%files -n langpacks-core-lv -f %{oreon_filedir}/langpacks-core-lv.list
+%files -n langpacks-lv -f %{oreon_filedir}/langpacks-lv.list
+%files -n default-fonts-mai -f %{oreon_filedir}/default-fonts-mai.list
+%files -n langpacks-fonts-mai -f %{oreon_filedir}/langpacks-fonts-mai.list
+%files -n langpacks-core-mai -f %{oreon_filedir}/langpacks-core-mai.list
+%files -n langpacks-mai -f %{oreon_filedir}/langpacks-mai.list
+%files -n langpacks-fonts-mk -f %{oreon_filedir}/langpacks-fonts-mk.list
+%files -n langpacks-core-mk -f %{oreon_filedir}/langpacks-core-mk.list
+%files -n langpacks-mk -f %{oreon_filedir}/langpacks-mk.list
+%files -n default-fonts-ml -f %{oreon_filedir}/default-fonts-ml.list
+%files -n langpacks-fonts-ml -f %{oreon_filedir}/langpacks-fonts-ml.list
+%files -n langpacks-core-ml -f %{oreon_filedir}/langpacks-core-ml.list
+%files -n langpacks-ml -f %{oreon_filedir}/langpacks-ml.list
+%files -n default-fonts-mni -f %{oreon_filedir}/default-fonts-mni.list
+%files -n langpacks-fonts-mni -f %{oreon_filedir}/langpacks-fonts-mni.list
+%files -n langpacks-core-mni -f %{oreon_filedir}/langpacks-core-mni.list
+%files -n langpacks-mni -f %{oreon_filedir}/langpacks-mni.list
+%files -n default-fonts-mr -f %{oreon_filedir}/default-fonts-mr.list
+%files -n langpacks-fonts-mr -f %{oreon_filedir}/langpacks-fonts-mr.list
+%files -n langpacks-core-mr -f %{oreon_filedir}/langpacks-core-mr.list
+%files -n langpacks-mr -f %{oreon_filedir}/langpacks-mr.list
+%files -n langpacks-fonts-ms -f %{oreon_filedir}/langpacks-fonts-ms.list
+%files -n langpacks-core-ms -f %{oreon_filedir}/langpacks-core-ms.list
+%files -n langpacks-ms -f %{oreon_filedir}/langpacks-ms.list
+%files -n default-fonts-my -f %{oreon_filedir}/default-fonts-my.list
+%files -n langpacks-fonts-my -f %{oreon_filedir}/langpacks-fonts-my.list
+%files -n langpacks-core-my -f %{oreon_filedir}/langpacks-core-my.list
+%files -n langpacks-my -f %{oreon_filedir}/langpacks-my.list
+%files -n default-fonts-nb -f %{oreon_filedir}/default-fonts-nb.list
+%files -n langpacks-fonts-nb -f %{oreon_filedir}/langpacks-fonts-nb.list
+%files -n langpacks-core-nb -f %{oreon_filedir}/langpacks-core-nb.list
+%files -n langpacks-nb -f %{oreon_filedir}/langpacks-nb.list
+%files -n default-fonts-ne -f %{oreon_filedir}/default-fonts-ne.list
+%files -n langpacks-fonts-ne -f %{oreon_filedir}/langpacks-fonts-ne.list
+%files -n langpacks-core-ne -f %{oreon_filedir}/langpacks-core-ne.list
+%files -n langpacks-ne -f %{oreon_filedir}/langpacks-ne.list
+%files -n langpacks-fonts-nl -f %{oreon_filedir}/langpacks-fonts-nl.list
+%files -n langpacks-core-nl -f %{oreon_filedir}/langpacks-core-nl.list
+%files -n langpacks-nl -f %{oreon_filedir}/langpacks-nl.list
+%files -n default-fonts-nn -f %{oreon_filedir}/default-fonts-nn.list
+%files -n langpacks-fonts-nn -f %{oreon_filedir}/langpacks-fonts-nn.list
+%files -n langpacks-core-nn -f %{oreon_filedir}/langpacks-core-nn.list
+%files -n langpacks-nn -f %{oreon_filedir}/langpacks-nn.list
+%files -n default-fonts-nqo -f %{oreon_filedir}/default-fonts-nqo.list
+%files -n langpacks-fonts-nqo -f %{oreon_filedir}/langpacks-fonts-nqo.list
+%files -n langpacks-core-nqo -f %{oreon_filedir}/langpacks-core-nqo.list
+%files -n langpacks-nqo -f %{oreon_filedir}/langpacks-nqo.list
+%files -n default-fonts-nr -f %{oreon_filedir}/default-fonts-nr.list
+%files -n langpacks-fonts-nr -f %{oreon_filedir}/langpacks-fonts-nr.list
+%files -n langpacks-core-nr -f %{oreon_filedir}/langpacks-core-nr.list
+%files -n langpacks-nr -f %{oreon_filedir}/langpacks-nr.list
+%files -n default-fonts-nso -f %{oreon_filedir}/default-fonts-nso.list
+%files -n langpacks-fonts-nso -f %{oreon_filedir}/langpacks-fonts-nso.list
+%files -n langpacks-core-nso -f %{oreon_filedir}/langpacks-core-nso.list
+%files -n langpacks-nso -f %{oreon_filedir}/langpacks-nso.list
+%files -n default-fonts-or -f %{oreon_filedir}/default-fonts-or.list
+%files -n langpacks-fonts-or -f %{oreon_filedir}/langpacks-fonts-or.list
+%files -n langpacks-core-or -f %{oreon_filedir}/langpacks-core-or.list
+%files -n langpacks-or -f %{oreon_filedir}/langpacks-or.list
+%files -n default-fonts-pa -f %{oreon_filedir}/default-fonts-pa.list
+%files -n langpacks-fonts-pa -f %{oreon_filedir}/langpacks-fonts-pa.list
+%files -n langpacks-core-pa -f %{oreon_filedir}/langpacks-core-pa.list
+%files -n langpacks-pa -f %{oreon_filedir}/langpacks-pa.list
+%files -n langpacks-fonts-pl -f %{oreon_filedir}/langpacks-fonts-pl.list
+%files -n langpacks-core-pl -f %{oreon_filedir}/langpacks-core-pl.list
+%files -n langpacks-pl -f %{oreon_filedir}/langpacks-pl.list
+%files -n langpacks-core-pt_BR -f %{oreon_filedir}/langpacks-core-pt_BR.list
+%files -n langpacks-pt_BR -f %{oreon_filedir}/langpacks-pt_BR.list
+%files -n langpacks-fonts-pt -f %{oreon_filedir}/langpacks-fonts-pt.list
+%files -n langpacks-core-pt -f %{oreon_filedir}/langpacks-core-pt.list
+%files -n langpacks-pt -f %{oreon_filedir}/langpacks-pt.list
+%files -n langpacks-fonts-ro -f %{oreon_filedir}/langpacks-fonts-ro.list
+%files -n langpacks-core-ro -f %{oreon_filedir}/langpacks-core-ro.list
+%files -n langpacks-ro -f %{oreon_filedir}/langpacks-ro.list
+%files -n default-fonts-ru -f %{oreon_filedir}/default-fonts-ru.list
+%files -n langpacks-fonts-ru -f %{oreon_filedir}/langpacks-fonts-ru.list
+%files -n langpacks-core-ru -f %{oreon_filedir}/langpacks-core-ru.list
+%files -n langpacks-ru -f %{oreon_filedir}/langpacks-ru.list
+%files -n default-fonts-sat -f %{oreon_filedir}/default-fonts-sat.list
+%files -n langpacks-fonts-sat -f %{oreon_filedir}/langpacks-fonts-sat.list
+%files -n langpacks-core-sat -f %{oreon_filedir}/langpacks-core-sat.list
+%files -n langpacks-sat -f %{oreon_filedir}/langpacks-sat.list
+%files -n default-fonts-si -f %{oreon_filedir}/default-fonts-si.list
+%files -n langpacks-fonts-si -f %{oreon_filedir}/langpacks-fonts-si.list
+%files -n langpacks-core-si -f %{oreon_filedir}/langpacks-core-si.list
+%files -n langpacks-si -f %{oreon_filedir}/langpacks-si.list
+%files -n langpacks-fonts-sk -f %{oreon_filedir}/langpacks-fonts-sk.list
+%files -n langpacks-core-sk -f %{oreon_filedir}/langpacks-core-sk.list
+%files -n langpacks-sk -f %{oreon_filedir}/langpacks-sk.list
+%files -n langpacks-fonts-sl -f %{oreon_filedir}/langpacks-fonts-sl.list
+%files -n langpacks-core-sl -f %{oreon_filedir}/langpacks-core-sl.list
+%files -n langpacks-sl -f %{oreon_filedir}/langpacks-sl.list
+%files -n langpacks-fonts-sq -f %{oreon_filedir}/langpacks-fonts-sq.list
+%files -n langpacks-core-sq -f %{oreon_filedir}/langpacks-core-sq.list
+%files -n langpacks-sq -f %{oreon_filedir}/langpacks-sq.list
+%files -n langpacks-fonts-sr -f %{oreon_filedir}/langpacks-fonts-sr.list
+%files -n langpacks-core-sr -f %{oreon_filedir}/langpacks-core-sr.list
+%files -n langpacks-sr -f %{oreon_filedir}/langpacks-sr.list
+%files -n default-fonts-ss -f %{oreon_filedir}/default-fonts-ss.list
+%files -n langpacks-fonts-ss -f %{oreon_filedir}/langpacks-fonts-ss.list
+%files -n langpacks-core-ss -f %{oreon_filedir}/langpacks-core-ss.list
+%files -n langpacks-ss -f %{oreon_filedir}/langpacks-ss.list
+%files -n langpacks-fonts-sv -f %{oreon_filedir}/langpacks-fonts-sv.list
+%files -n langpacks-core-sv -f %{oreon_filedir}/langpacks-core-sv.list
+%files -n langpacks-sv -f %{oreon_filedir}/langpacks-sv.list
+%files -n default-fonts-syr -f %{oreon_filedir}/default-fonts-syr.list
+%files -n langpacks-fonts-syr -f %{oreon_filedir}/langpacks-fonts-syr.list
+%files -n langpacks-core-syr -f %{oreon_filedir}/langpacks-core-syr.list
+%files -n langpacks-syr -f %{oreon_filedir}/langpacks-syr.list
+%files -n default-fonts-ta -f %{oreon_filedir}/default-fonts-ta.list
+%files -n langpacks-fonts-ta -f %{oreon_filedir}/langpacks-fonts-ta.list
+%files -n langpacks-core-ta -f %{oreon_filedir}/langpacks-core-ta.list
+%files -n langpacks-ta -f %{oreon_filedir}/langpacks-ta.list
+%files -n default-fonts-te -f %{oreon_filedir}/default-fonts-te.list
+%files -n langpacks-fonts-te -f %{oreon_filedir}/langpacks-fonts-te.list
+%files -n langpacks-core-te -f %{oreon_filedir}/langpacks-core-te.list
+%files -n langpacks-te -f %{oreon_filedir}/langpacks-te.list
+%files -n default-fonts-th -f %{oreon_filedir}/default-fonts-th.list
+%files -n langpacks-fonts-th -f %{oreon_filedir}/langpacks-fonts-th.list
+%files -n langpacks-core-th -f %{oreon_filedir}/langpacks-core-th.list
+%files -n langpacks-th -f %{oreon_filedir}/langpacks-th.list
+%files -n default-fonts-tn -f %{oreon_filedir}/default-fonts-tn.list
+%files -n langpacks-fonts-tn -f %{oreon_filedir}/langpacks-fonts-tn.list
+%files -n langpacks-core-tn -f %{oreon_filedir}/langpacks-core-tn.list
+%files -n langpacks-tn -f %{oreon_filedir}/langpacks-tn.list
+%files -n langpacks-fonts-tr -f %{oreon_filedir}/langpacks-fonts-tr.list
+%files -n langpacks-core-tr -f %{oreon_filedir}/langpacks-core-tr.list
+%files -n langpacks-tr -f %{oreon_filedir}/langpacks-tr.list
+%files -n default-fonts-ts -f %{oreon_filedir}/default-fonts-ts.list
+%files -n langpacks-fonts-ts -f %{oreon_filedir}/langpacks-fonts-ts.list
+%files -n langpacks-core-ts -f %{oreon_filedir}/langpacks-core-ts.list
+%files -n langpacks-ts -f %{oreon_filedir}/langpacks-ts.list
+%files -n default-fonts-uk -f %{oreon_filedir}/default-fonts-uk.list
+%files -n langpacks-fonts-uk -f %{oreon_filedir}/langpacks-fonts-uk.list
+%files -n langpacks-core-uk -f %{oreon_filedir}/langpacks-core-uk.list
+%files -n langpacks-uk -f %{oreon_filedir}/langpacks-uk.list
+%files -n default-fonts-ur -f %{oreon_filedir}/default-fonts-ur.list
+%files -n langpacks-fonts-ur -f %{oreon_filedir}/langpacks-fonts-ur.list
+%files -n langpacks-core-ur -f %{oreon_filedir}/langpacks-core-ur.list
+%files -n langpacks-ur -f %{oreon_filedir}/langpacks-ur.list
+%files -n default-fonts-ve -f %{oreon_filedir}/default-fonts-ve.list
+%files -n langpacks-fonts-ve -f %{oreon_filedir}/langpacks-fonts-ve.list
+%files -n langpacks-core-ve -f %{oreon_filedir}/langpacks-core-ve.list
+%files -n langpacks-ve -f %{oreon_filedir}/langpacks-ve.list
+%files -n default-fonts-vi -f %{oreon_filedir}/default-fonts-vi.list
+%files -n langpacks-fonts-vi -f %{oreon_filedir}/langpacks-fonts-vi.list
+%files -n langpacks-core-vi -f %{oreon_filedir}/langpacks-core-vi.list
+%files -n langpacks-vi -f %{oreon_filedir}/langpacks-vi.list
+%files -n default-fonts-xh -f %{oreon_filedir}/default-fonts-xh.list
+%files -n langpacks-fonts-xh -f %{oreon_filedir}/langpacks-fonts-xh.list
+%files -n langpacks-core-xh -f %{oreon_filedir}/langpacks-core-xh.list
+%files -n langpacks-xh -f %{oreon_filedir}/langpacks-xh.list
+%files -n default-fonts-yi -f %{oreon_filedir}/default-fonts-yi.list
+%files -n langpacks-fonts-yi -f %{oreon_filedir}/langpacks-fonts-yi.list
+%files -n langpacks-core-yi -f %{oreon_filedir}/langpacks-core-yi.list
+%files -n langpacks-yi -f %{oreon_filedir}/langpacks-yi.list
+%files -n langpacks-fonts-zh_CN -f %{oreon_filedir}/langpacks-fonts-zh_CN.list
+%files -n langpacks-core-zh_CN -f %{oreon_filedir}/langpacks-core-zh_CN.list
+%files -n langpacks-zh_CN -f %{oreon_filedir}/langpacks-zh_CN.list
+%files -n langpacks-fonts-zh_HK -f %{oreon_filedir}/langpacks-fonts-zh_HK.list
+%files -n langpacks-core-zh_HK -f %{oreon_filedir}/langpacks-core-zh_HK.list
+%files -n langpacks-zh_HK -f %{oreon_filedir}/langpacks-zh_HK.list
+%files -n langpacks-fonts-zh_TW -f %{oreon_filedir}/langpacks-fonts-zh_TW.list
+%files -n langpacks-core-zh_TW -f %{oreon_filedir}/langpacks-core-zh_TW.list
+%files -n langpacks-zh_TW -f %{oreon_filedir}/langpacks-zh_TW.list
+%files -n default-fonts-zu -f %{oreon_filedir}/default-fonts-zu.list
+%files -n langpacks-fonts-zu -f %{oreon_filedir}/langpacks-fonts-zu.list
+%files -n langpacks-core-zu -f %{oreon_filedir}/langpacks-core-zu.list
+%files -n langpacks-zu -f %{oreon_filedir}/langpacks-zu.list
+%files -n default-fonts-cjk-sans -f %{oreon_filedir}/default-fonts-cjk-sans.list
+%files -n default-fonts-other-sans -f %{oreon_filedir}/default-fonts-other-sans.list
+%files -n default-fonts-other-serif -f %{oreon_filedir}/default-fonts-other-serif.list
+%files -n default-fonts-cjk-serif -f %{oreon_filedir}/default-fonts-cjk-serif.list
+%files -n default-fonts-other-mono -f %{oreon_filedir}/default-fonts-other-mono.list
+%files -n default-fonts-cjk-mono -f %{oreon_filedir}/default-fonts-cjk-mono.list
+%files -n default-fonts-core-sans -f %{oreon_filedir}/default-fonts-core-sans.list
+%files -n default-fonts-core-serif -f %{oreon_filedir}/default-fonts-core-serif.list
+%files -n default-fonts-core-mono -f %{oreon_filedir}/default-fonts-core-mono.list
+%files -n default-fonts-core-emoji -f %{oreon_filedir}/default-fonts-core-emoji.list
+%files -n default-fonts-core-math -f %{oreon_filedir}/default-fonts-core-math.list
+%files -n default-fonts -f %{oreon_filedir}/default-fonts.list
+%files -n default-fonts-core -f %{oreon_filedir}/default-fonts-core.list
+%files -n default-fonts-cjk -f %{oreon_filedir}/default-fonts-cjk.list
+%files -n default-fonts-other -f %{oreon_filedir}/default-fonts-other.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.3-1
 - Prepare for Oreon 11 (RP1)

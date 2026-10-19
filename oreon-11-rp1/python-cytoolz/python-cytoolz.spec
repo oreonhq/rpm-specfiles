@@ -1,64 +1,66 @@
-%global source0_hash none
-
+%global source0_hash 13a7bf254c3c0d28b12e2290b82aed0f0977a4c2a2bf84854fcdc7796a29f3b0
 Name:           python-cytoolz
 Version:        1.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Cython implementation of Toolz: High performance functional utilities
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        BSD-3-Clause
 URL:            https://github.com/pytoolz/cytoolz
-Source:         %{pypi_source cytoolz}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'cytoolz' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/c/cytoolz/cytoolz-%{version}.tar.gz
 Patch:          python-cytoolz-0001-Test-against-Python-3.14-dev-on-CI-592.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython) >= 0.29
+BuildRequires:  python3dist(setuptools) >= 77
+BuildRequires:  python3dist(setuptools-git-versioning) >= 2.0
+Requires:       python3-cytoolz = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-cytoolz+cython
+Summary:        Metapackage for python3-cytoolz cython extras
+Requires:       python3-cytoolz = %{version}-%{release}
+Requires:       python3dist(cython) >= 0.29
+Provides:       python3dist(cytoolz[cython]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-cytoolz+cython
+Metapackage for python3-cytoolz cython extras.
+
+%package -n       python3-cytoolz+test
+Summary:        Metapackage for python3-cytoolz test extras
+Requires:       python3-cytoolz = %{version}-%{release}
+Provides:       python3dist(cytoolz[test]) = %{version}-%{release}
+
+%description -n python3-cytoolz+test
+Metapackage for python3-cytoolz test extras.
+
+%description
 
 %package -n     python3-cytoolz
-Summary:        %{summary}
-
-%description -n python3-cytoolz %_description
+Summary:        Cython implementation of Toolz: High performance functional utilities
+# oreon:reqs
+Requires:       python3dist(toolz) >= 0.8.0
+# /oreon:reqs
+%description -n python3-cytoolz
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-cytoolz cython,test
-
 
 %prep
-%autosetup -p1 -n cytoolz-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir cytoolz-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-cytoolz usr/lib/python3*/site-packages/cytoolz* usr/lib64/python3*/site-packages/cytoolz* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/cytoolz* usr/lib64/python3*/site-packages/cytoolz* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-cytoolz -f %{pyproject_files}
+%files
+%files -n python3-cytoolz -f %{oreon_filedir}/python3-cytoolz.list
 
 %changelog
+
 %autochangelog

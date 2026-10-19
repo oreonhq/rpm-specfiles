@@ -1,28 +1,16 @@
-%global source0_hash 0834e54c0d5293950412729cabf16ada3076a804eacba8f1aacc5381dfe3a96a
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+%global source0_hash 9318ef65f555ee3d893176349a4219f1f1260ce24d4100aeb667a546f61fc183
 ExcludeArch: %{ix86}
-
-# 390x arch:
-# Error in test case: 150_tag_config_invalid_tags.txt (top: actual; bottom:
-# expected)
 %ifnarch s390x
-%if 0%{?fedora} >= 39 || 0%{?el8}
-%bcond_without tests
 %endif
-%endif
-
 %global cfgfile %{_datadir}/%{name}/%{name}
-
 Name:           boxes
 Version:        2.3.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Command line ASCII boxes unlimited!
-
 License:        GPL-3.0-only
 URL:            http://boxes.thomasjensen.com
 Source0:        https://github.com/ascii-%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
+# oreon:deps
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  gcc
@@ -30,13 +18,9 @@ BuildRequires:  git-core
 BuildRequires:  libunistring-devel
 BuildRequires:  make
 BuildRequires:  pcre2-devel
-BuildRequires:  vim-common
 BuildRequires:  pkgconfig(ncurses)
-
-%if 0%{?fedora} || 0%{?rhel} >= 8
-Recommends:     %{name}-vim = %{version}-%{release}
-%endif
-
+BuildRequires:  vim-common
+# /oreon:deps
 %description
 Boxes is a command line program which draws, removes, and repairs ASCII art
 boxes. It operates as a text filter. The generated boxes may even be removed
@@ -51,20 +35,17 @@ text, you can use boxes in scripts to dynamically add boxes around stuff.
 
 %package        vim
 BuildArch:      noarch
-
 Summary:        Vim plugin for %{name}
 Requires:       %{name} = %{version}-%{release}
 Requires:       vim-enhanced
-
 %description    vim
 Vim plugin for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %set_build_flags
 %make_build \
     CFLAGS_ADDTL='%{optflags}' \
@@ -72,32 +53,26 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
     LDFLAGS_ADDTL='%{build_ldflags}' \
     debug \
     %{nil}
-
 %if %{with tests}
 %check
-# https://github.com/ascii-boxes/boxes/issues/124
+
 export TERM=xterm-color
 %if 0%{?el8}
 export LANG=en_US.UTF-8
 %endif
 %make_build test
 %endif
-
 %install
 install -Dp -m 0755 out/%{name}     %{buildroot}%{_bindir}/%{name}
 install -Dp -m 0644 %{name}-config  %{buildroot}%{cfgfile}
 install -Dp -m 0644 doc/%{name}.1   %{buildroot}%{_mandir}/man1/%{name}.1
 install -Dp -m 0644 %{name}.vim     %{buildroot}%{_datadir}/vim/vimfiles/syntax/%{name}.vim
+%oreon_autofiles boxes-vim usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/%{name}
-%{_datadir}/%{name}/
-%{_mandir}/man1/*.1*
-
-%files vim
-%{_datadir}/vim/vimfiles/syntax/%{name}.vim
+%files -f %{oreon_filedir}/main.list
+%files -n boxes-vim -f %{oreon_filedir}/boxes-vim.list
 
 %changelog
+
 %autochangelog

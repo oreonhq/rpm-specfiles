@@ -1,5 +1,4 @@
 %global source0_hash 0a02ce2bc8256632beae9564cd52c79a9e6da4cd69f389381294f4855b645fe5
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -86,35 +85,25 @@ end
 %else
 %bcond_with bnd_maven_plugin
 %endif
-
 Name:           javaparser
 Version:        3.28.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java 1 to 13 Parser and Abstract Syntax Tree for Java
 License:        LGPL-2.0-or-later OR Apache-2.0
 URL:            https://javaparser.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/javaparser/javaparser/archive/%{name}-parent-%{version}.tar.gz#/javaparser-%{version}.tar.gz
-
 Patch:          0001-Port-to-OpenJDK-21.patch
-
 %if %{with bnd_maven_plugin}
-BuildRequires:  mvn(biz.aQute.bnd:bnd-maven-plugin)
 %endif
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(javax.annotation:javax.annotation-api)
-BuildRequires:  mvn(net.java.dev.javacc:javacc)
-BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
-BuildRequires:  mvn(org.codehaus.mojo:javacc-maven-plugin)
 %endif
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 3.26.3-4
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+# /oreon:deps
 %description
 This package contains a Java 1 to 13 Parser with AST generation and
 visitor support. The AST records the source code structure, javadoc
@@ -122,6 +111,7 @@ and comments. It is also possible to change the AST nodes or create new
 ones to modify the source code.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n javaparser-javaparser-parent-%{version}
 
@@ -176,14 +166,14 @@ sed -i \
 %pom_disable_module javaparser-core-serialization
 
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc readme.md changelog.md
-%license LICENSE LICENSE.APACHE LICENSE.GPL LICENSE.LGPL
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,13 +1,9 @@
 %global source0_hash 453fc075cc01aeac980ecdf3064874a69c357d46c60457bc42fb979a9567a0ba
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
 Name:    blinken 
-Summary: Memory Enhancement Game 
+Summary:        Memory Enhancement Game
 Version: 26.04.3
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://apps.kde.org/blinken/
 %global kf5_dl_bug %(echo %{version} | cut -d. -f3)
@@ -16,75 +12,52 @@ URL:     https://apps.kde.org/blinken/
 %else
 %global kf5_dl_stable stable
 %endif
-
-Source:        https://download.kde.org/%{kf5_dl_stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
-
-BuildRequires: desktop-file-utils
-BuildRequires: extra-cmake-modules
-BuildRequires: gettext
-BuildRequires: kf6-rpm-macros
-BuildRequires: libappstream-glib
-
-BuildRequires: cmake(Qt6Core)
-BuildRequires: cmake(Qt6Widgets)
-BuildRequires: cmake(Qt6Svg)
-BuildRequires: cmake(Qt6Multimedia)
-
-BuildRequires: cmake(KF6CoreAddons)
-BuildRequires: cmake(KF6I18n)
-BuildRequires: cmake(KF6XmlGui)
-BuildRequires: cmake(KF6GuiAddons)
-BuildRequires: cmake(KF6DocTools)
-BuildRequires: cmake(KF6DBusAddons)
-BuildRequires: cmake(KF6Crash)
-
-BuildRequires: cmake(Phonon4Qt6)
-
+Source0:        https://download.kde.org/stable/release-service/%{version}/src/%{name}-%{version}.tar.xz
 Requires: hicolor-icon-theme
 Requires: sj-stevehand-fonts
-
+# oreon:deps
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6Crash)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6DocTools)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  cmake(Phonon4Qt6)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6Multimedia)
+BuildRequires:  cmake(Qt6Svg)
+BuildRequires:  cmake(Qt6Widgets)
+BuildRequires:  desktop-file-utils
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gettext
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+# /oreon:deps
 %description
 %{summary}.
 
-
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
-
+%oreon_prep
 %build
+
 %cmake_kf6
-
 %cmake_build
-
-
 %install
 %cmake_install
-
 %find_lang %{name} --all-name --with-html --with-qt
-
-## unpackaged files
-# omit bundled steve font
 rm -fv %{buildroot}%{_kf6_datadir}/blinken/fonts/steve.ttf
-
+%oreon_autofiles main
 
 %check
+
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-
-
-%files -f %{name}.lang
-%doc AUTHORS 
-%license LICENSES/*
-%{_kf6_bindir}/%{name}
-%{_kf6_datadir}/applications/org.kde.%{name}.desktop
-%{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
-%{_kf6_datadir}/icons/hicolor/*/*/*
-%{_kf6_datadir}/%{name}/
-%{_kf6_datadir}/config.kcfg/%{name}.kcfg
-
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

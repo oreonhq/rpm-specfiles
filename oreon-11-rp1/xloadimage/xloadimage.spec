@@ -1,13 +1,10 @@
 %global source0_hash 400bc7d84dcfb3265a7a1ce51819679dc3adaeda231514bd89b0f932b78ff5c4
-
 Name:		xloadimage
-Summary: 	Image viewer and processor
+Summary:        Image viewer and processor
 Version:	4.1
-Release:	42%{?dist}
+Release:        42%{?dist}
 License:	MIT
-Source0:	ftp://ftp.x.org/R5contrib/%{name}.%{version}.tar.gz
-# Patches with number prefix come from Debian
-# Many thanks to all those who have done work on this package over the years
+Source0:        ftp://ftp.x.org/R5contrib/%{name}.%{version}.tar.gz
 Patch0:		01_libjpeg-support.dpatch
 Patch1:		02_png-support.dpatch
 Patch2:		03_security-strfoo.dpatch
@@ -40,19 +37,16 @@ Patch28:	27_shrink-should-not-zoom-upwards.patch
 Patch29:	28_correct-scaling-fullscreen.patch
 Patch30:	29_fix-manpage-hyphens.patch
 Patch31:	32_fix-spelling.patch
-# There is no real upstream for xloadimage anymore, so this work probably stays here forever.
 Patch32:	xloadimage-4.1-c23.patch
 URL:		http://www.frostbytes.com/~jimf/xloadimage.html
-%if 0%{?fedora} >= 18
-BuildRequires:  gcc
-BuildRequires:	libtiff-devel >= 4.0
-%else
-BuildRequires:	libtiff-devel
-%endif
-BuildRequires:	make
-BuildRequires:	libX11-devel, libpng-devel, libjpeg-devel
-BuildRequires:	libICE-devel
-
+# oreon:deps
+BuildRequires:  libICE-devel
+BuildRequires:  libX11-devel
+BuildRequires:  libjpeg-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libtiff-devel
+BuildRequires:  make
+# /oreon:deps
 %description
 Xloadimage is a utility which will view many different types of images 
 under X11, load images onto the root window, or dump processed images 
@@ -67,6 +61,7 @@ and image merging. When applicable, these options are done automatically
 dithered automatically). 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}.%{version}
@@ -92,9 +87,6 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P19 -p1
 %patch -P20 -p1
 %patch -P21 -p1 -b .png-pkg-config
-%if 0%{?fedora} >= 18
-%patch -P22 -p1 -b .tiff4
-%endif
 %patch -P23 -p1 -b .png15
 %patch -P24 -p1 -b .fix-mem-leak
 %patch -P25 -p1 -b .sub-second-delay
@@ -109,39 +101,28 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 chmod +x configure
 
 %build
+
 %configure
 make %{?_smp_mflags}
-
 %install
-# First, the binaries:
 mkdir -p %{buildroot}%{_bindir}
 install -m 0755 uufilter %{buildroot}%{_bindir}
 install -m 0755 xloadimage %{buildroot}%{_bindir}
-# Next, the symlinks
 pushd %{buildroot}%{_bindir}
 ln -s xloadimage xsetbg
 ln -s xloadimage xview
 popd
-# The configuration file
 mkdir -p %{buildroot}%{_sysconfdir}/X11/
 install -m 0644 xloadimagerc %{buildroot}%{_sysconfdir}/X11/Xloadimage
-# Now, the man pages
 mkdir -p %{buildroot}%{_mandir}/man1/
 install -m 0644 xloadimage.man %{buildroot}%{_mandir}/man1/xloadimage.1x
 install	-m 0644 uufilter.man %{buildroot}%{_mandir}/man1/uufilter.1x
-# And some copies for the symlinks (we can't really make symlinks here because of how rpm 
-# compresses man pages)
 cp -a %{buildroot}%{_mandir}/man1/xloadimage.1x %{buildroot}%{_mandir}/man1/xsetbg.1x
 cp -a %{buildroot}%{_mandir}/man1/xloadimage.1x %{buildroot}%{_mandir}/man1/xview.1x
+%oreon_autofiles main
 
-%files
-%doc README mit.cpyrght
-%{_bindir}/uufilter
-%{_bindir}/xloadimage
-%{_bindir}/xsetbg
-%{_bindir}/xview
-%config(noreplace) %{_sysconfdir}/X11/Xloadimage
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

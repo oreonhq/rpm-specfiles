@@ -1,50 +1,23 @@
 %global source0_hash cad0d6e2c6fd27ea71299efdfa19954ad098fa9e54c6a232161bd25786c492e6
 %global source1_hash 93d71c9a5c087ec863be19cbb7ee9f78cb0379a9dcf49839edee520447e6b1a2
-
-# https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_3
 %global sub_version                     1.0
 %global require_ibus_version            1.5.3
 %global have_default_layout             1
 %global have_bridge_hotkey              1
 %global with_python3                    1
-
-%if (0%{?fedora} > 33 || 0%{?rhel} > 8)
-%bcond_without kasumi_unicode
-%else
 %bcond_with    kasumi_unicode
-%endif
-
 %if %with_python3
-# for bytecompile in %%{_datadir}/ibus-anthy
 %global __python %{__python3}
 %endif
-
 Name:           ibus-anthy
 Version:        1.5.18
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        The Anthy engine for IBus input platform
 License:        GPL-2.0-or-later
 URL:            https://github.com/ibus/ibus/wiki
 Source0:        https://github.com/ibus/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/ibus/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz.sum#/%{name}.tar.gz.sum
-
-# Upstreamed patches.
-# Patch0:         %%{name}-HEAD.patch
 Patch1:         %{name}-1938129-default-hiragana.patch
-
-BuildRequires:  anthy-unicode-devel
-BuildRequires:  desktop-file-utils
-BuildRequires:  gettext-devel
-BuildRequires:  git
-BuildRequires:  glib2-devel
-BuildRequires:  gobject-introspection-devel
-BuildRequires:  ibus 
-BuildRequires:  libtool
-BuildRequires:  pkgconfig
-BuildRequires:  python3-devel
-BuildRequires:  python3-gobject
-BuildRequires:  /usr/bin/appstream-util
-
 Requires:       ibus >= %{require_ibus_version}
 %if %{with kasumi_unicode}
 Requires:       kasumi-unicode
@@ -53,7 +26,21 @@ Requires:       kasumi
 %endif
 Requires:       anthy-unicode
 Requires:       %{name}-python = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  /usr/bin/appstream-util
+BuildRequires:  anthy-unicode-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gettext-devel
+BuildRequires:  git
+BuildRequires:  glib2-devel
+BuildRequires:  gobject-introspection-devel
+BuildRequires:  ibus
+BuildRequires:  libtool
+BuildRequires:  pkgconfig
+BuildRequires:  python3-devel
+BuildRequires:  python3-gobject
+BuildRequires:  python3-pycotap
+# /oreon:deps
 %description
 The Anthy engine for IBus platform. It provides Japanese input method from
 a library of the Anthy.
@@ -65,7 +52,6 @@ Requires:       %{name} = %{version}-%{release}
 Requires:       gtk3
 Requires:       python3-cairo
 Requires:       python3-gobject
-
 %description python
 This package contains the Anthy Python files for IBus
 
@@ -74,7 +60,6 @@ Summary:        Development tools for IBus
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       glib2-devel
 Requires:       anthy-unicode-devel
-
 %description devel
 The ibus-anthy-devel package contains .so file and .gir files
 for developers.
@@ -84,13 +69,12 @@ Summary:        Tests for the %{name} package
 BuildRequires:  python3-pycotap
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       python3-pycotap
-
 %description tests
 The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 SAVED_SUM=$(grep sha512sum %SOURCE1 | awk '{print $2}')
@@ -101,7 +85,7 @@ fi
 %autosetup -S git
 
 %build
-#autoreconf -f -i -v
+
 autoreconf -f -i -v
 %configure \
 %if %have_default_layout
@@ -116,55 +100,27 @@ autoreconf -f -i -v
   --with-on-off-keys="'Zenkaku_Hankaku', 'Ctrl+space', 'Ctrl+J'" \
   --enable-installed-tests \
   --disable-static
-# make -C po update-gmo
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL='install -p'
 rm -f $RPM_BUILD_ROOT%{_libdir}/libanthygobject-%{sub_version}.la
-
-
 %find_lang %{name}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 desktop-file-validate \
     $RPM_BUILD_ROOT%{_datadir}/applications/ibus-setup-anthy.desktop
 appstream-util validate-relax --nonet $RPM_BUILD_ROOT%{_metainfodir}/*.xml
 export LANG=C.UTF-8
 locale
 make -C data check
-
 %ldconfig_scriptlets libs
-
-
-%files -f %{name}.lang
-%doc AUTHORS COPYING README
-# dir {python2_sitearch}/ibus
-%{_libdir}/libanthygobject-%{sub_version}.so.*
-%{_libdir}/girepository-1.0/Anthy*.typelib
-%{_datadir}/glib-2.0/schemas/org.freedesktop.ibus.engine.anthy.gschema.xml
-%dir %{_datadir}/ibus-anthy
-%{_datadir}/applications/ibus-setup-anthy.desktop
-%{_datadir}/ibus-anthy/dicts
-%{_datadir}/icons/hicolor/scalable/apps/ibus-anthy.svg 
-
-%files python
-%{_libexecdir}/ibus-*-anthy
-%{_datadir}/ibus-anthy/engine
-%{_datadir}/ibus-anthy/setup
-%{_datadir}/ibus/component/*
-%{_metainfodir}/*.xml
-
-%files devel
-%{_datadir}/gir-1.0/Anthy*.gir
-%{_includedir}/ibus-anthy-%{sub_version}
-%{_libdir}/libanthygobject-%{sub_version}.so
-
-%files tests
-%dir %{_libexecdir}/installed-tests
-%{_libexecdir}/installed-tests/%{name}
-%dir %{_datadir}/installed-tests
-%{_datadir}/installed-tests/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n ibus-anthy-python -f %{oreon_filedir}/ibus-anthy-python.list
+%files -n ibus-anthy-devel -f %{oreon_filedir}/ibus-anthy-devel.list
+%files -n ibus-anthy-tests -f %{oreon_filedir}/ibus-anthy-tests.list
 
 %changelog
+
 %autochangelog

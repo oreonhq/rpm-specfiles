@@ -1,49 +1,47 @@
 %global source0_hash 943f1478cbf324e2fce4596bdf8232f7a6375bb484b786a1d05d7f88d31d8bb0
-
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-mi
-Summary: Maori hunspell dictionaries
+Summary:        Maori hunspell dictionaries
 %global upstreamid 20080630
 Version: 0.%{upstreamid}
-Release: 35%{?dist}
+Release:        1%{?dist}
 URL: https://wiki.openoffice.org/wiki/Dictionaries
 License: GPL-3.0-or-later
 BuildArch: noarch
-
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-mi)
-
 Source0:        https://github.com/openela-main/hunspell-mi/raw/el9/SOURCES/mi_NZ.zip
+# oreon:deps
 
+# /oreon:deps
 %description
 Maori hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -n hunspell-mi-%{version}
 
 %build
+
 for i in README_mi_NZ.txt; do
   tr -d '\r' < $i > $i.new
   touch -r $i $i.new
   mv -f $i.new $i
 done
-
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p mi_NZ.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/mi_NZ.aff
 cp -p mi_NZ.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/mi_NZ.dic
+%oreon_autofiles main
 
-%files
-%doc README_mi_NZ.txt
-%license LICENSE_mi_NZ.txt
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20080630-35
 - Import

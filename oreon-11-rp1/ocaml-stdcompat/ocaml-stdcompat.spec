@@ -1,23 +1,18 @@
 %global source0_hash 45227d0205049addb74190a4eb41132179a42611bb92741efacf30371c481e6e
-
 Name:           ocaml-stdcompat
 Version:        21.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Compatibility module for the OCaml standard library
-
 License:        LGPL-2.1-or-later
 URL:            https://github.com/ocamllibs/stdcompat
 VCS:            git:%{url}.git
-Source:         %{url}/archive/%{version}/stdcompat-%{version}.tar.gz
-# Temporary patch to support OCaml 5.4
+Source0:        https://github.com/ocamllibs/stdcompat/archive/%{version}/stdcompat-%{version}.tar.gz
 Patch:          %{name}-ocaml5.4.patch
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch:    %{ix86}
-
-BuildRequires:  ocaml >= 4.11
-BuildRequires:  ocaml-dune >= 2.0
-
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-dune
+# /oreon:deps
 %description
 Stdcompat is a compatibility layer allowing programs to use some recent
 additions to the OCaml standard library while preserving the ability to be
@@ -37,33 +32,29 @@ implementation.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and signature files for
 developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n stdcompat-%{version} -p1
-
+%global oreon_srcdir stdcompat-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
-
 %ifarch %{ocaml_native_compiler}
-# The tests assume that ocamlopt is available
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+
 %check
+
 %dune_check
 %endif
-
-%files -f .ofiles
-%doc AUTHORS CHANGES.md README.md
-%license COPYING
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-stdcompat-devel -f %{oreon_filedir}/ocaml-stdcompat-devel.list
 
 %changelog
+
 %autochangelog

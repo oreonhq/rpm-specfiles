@@ -1,41 +1,26 @@
 %global source0_hash c4d10a1b665db893adc0c0aaee7ecd81b2b47c877d5cea0b40216707cbf327e4
 %global source1_hash fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7
 %global source2_hash f0ecb95e832a6adfde3e0cc7ec24b6b4e3471b3fc658125c8e57f981cb495689
-
-# SPDX-License-Identifier: MIT
 %if 0%{?rhel} > 10 || (0%{?oreon} >= 11)
 %bcond build_from_src 0
 %else
 %bcond build_from_src 1
 %endif
-
 BuildArch: noarch
-
 %global forgeurl    https://github.com/dejavu-fonts/dejavu-fonts
 Version: 2_37
 %global tag         %{lua:t=string.gsub(rpm.expand("version %{version}"), "[%p%s]+", "_");print(t)}
 %forgemeta
-
 %if %{with build_from_src}
 %global source_name dejavu-fonts
-BuildRequires: fontforge
-BuildRequires: perl-interpreter
-BuildRequires: perl(Font::TTF)
-BuildRequires: unicode-ucd
-BuildRequires: make
 %else
 %global source_name dejavu-fonts-ttf
 %global forgesetupargs -n %{source_name}-%{version}
 %endif
-
-Release: 1%{?dist}
-# original bitstream glyphs are Bitstream Vera
-# glyphs modifications by dejavu project are Public Domain
-# glyphs imported from Arev fonts are under BitStream Vera compatible license
+Release:        1%{?dist}
 License: Bitstream-Vera AND LicenseRef-Public-Domain
 URL:     https://dejavu-fonts.github.io/
-
-Source0:  %{forgeurl}/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
+Source0:        %{forgeurl}/archive/version_%{version}/%{name}-version_%{version}.tar.gz
 Source1:  %{forgeurl}/releases/download/%{tag}/dejavu-fonts-ttf-%{version}.tar.bz2
 Source2:  %{forgeurl}/releases/download/%{tag}/dejavu-lgc-fonts-ttf-%{version}.tar.bz2
 Source11: 57-dejavu-sans-fonts.xml
@@ -47,16 +32,19 @@ Source16: 58-dejavu-lgc-sans-mono-fonts.xml
 Patch0:   dejavu-fonts-ttf-urn-dtd.patch
 Patch1:   dejavu-lgc-fonts-ttf-urn-dtd.patch
 Patch2:   dejavu-fonts-urn-dtd.patch
-
 Name:     dejavu-fonts
-Summary:  The DejaVu font families
+Summary:        The DejaVu font families
+# oreon:deps
+BuildRequires:  fontforge
+BuildRequires:  make
+BuildRequires:  perl(Font::TTF)
+BuildRequires:  perl-interpreter
+BuildRequires:  unicode-ucd
+# /oreon:deps
 %description
 %wordwrap -v common_description
 
 %fontpkg -a
-
-
-
 
 %global common_description %{expand:
 The DejaVu font set is based on the “Bitstream Vera” fonts, release 1.10. Its
@@ -203,7 +191,6 @@ This package consists of the DejaVu sans-serif mono-space font faces, with
 Unicode coverage restricted to Latin, Greek and Cyrillic.
 }
 
-
 %fontmetapkg -z 1,2,3
 
 %global lgcmetasummary All the font packages, generated from %{source_name}, Latin-Greek-Cyrillic subset
@@ -223,6 +210,7 @@ This package provides optional documentation files shipped with
 %{source_name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -236,6 +224,7 @@ test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "ore
 %endif
 
 %build
+
 %if %{with build_from_src}
 make %{?_smp_mflags} VERSION=%{version} FC-LANG="" \
      BLOCKS=/usr/share/unicode/ucd/Blocks.txt \
@@ -244,25 +233,23 @@ make %{?_smp_mflags} VERSION=%{version} FC-LANG="" \
 xz -9 *.txt
 %endif
 %fontbuild -a
-
 %install
 %fontinstall -a
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with build_from_src}
 make check
 %endif
 %fontcheck -a
-
 %fontfiles -a
-
-%files doc
-%defattr(644, root, root, 0755)
-%license LICENSE
-%if %{with build_from_src}
-%doc *.txt.xz
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n dejavu-fonts-all -f %{oreon_filedir}/dejavu-fonts-all.list
+%files -n dejavu-lgc-fonts-all -f %{oreon_filedir}/dejavu-lgc-fonts-all.list
+%files -n dejavu-fonts-doc -f %{oreon_filedir}/dejavu-fonts-doc.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.37-29
 - Import

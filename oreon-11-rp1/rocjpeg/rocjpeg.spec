@@ -1,32 +1,8 @@
 %global source0_hash 26ea59dd772c57ae5476a6ba3799bf86981694fbba9b87af882ed76c1b89c639
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
 %global upstreamname rocJPEG
-
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %bcond_with compat
 %if %{with compat}
 %global pkg_libdir lib
@@ -44,106 +20,76 @@
 %else
 %global rocjpeg_name rocjpeg%{pkg_suffix}
 %endif
-
 %global toolchain rocm
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-mtls-dialect=gnu2//')
-
-# Requires actual HW, so disabled by default.
-# Testing is not well behaved.
 %bcond check 1
-
-# Compression type and level for source/binary package payloads.
-#  "w7T0.xzdio"	xz level 7 using %%{getncpus} threads
 %global _source_payload w7T0.xzdio
 %global _binary_payload w7T0.xzdio
-
-# Use ninja if it is available
-%if 0%{?fedora} || 0%{?suse_version}
-%bcond_without ninja
-%else
 %bcond_with ninja
-%endif
-
 %if %{with ninja}
 %global cmake_generator -G Ninja
 %else
 %global cmake_generator %{nil}
 %endif
-
 Name:           %{rocjpeg_name}
 Version:        %{rocm_version}
-Release:        5%{?dist}
+Release:        1%{?dist}
 Summary:        A high-performance jpeg decode library for AMD’s GPUs
-
 Url:            https://github.com/ROCm/rocJPEG
 License:        MIT
-Source0:        %{url}/archive/rocm-%{version}.tar.gz#/%{upstreamname}-%{version}.tar.gz
-
-BuildRequires:  cmake
-BuildRequires:  gcc-c++
-BuildRequires:  libdrm-devel
-BuildRequires:  libva-devel
-BuildRequires:  rocm-cmake%{pkg_suffix}
-BuildRequires:  rocm-comgr%{pkg_suffix}-devel
-BuildRequires:  rocm-compilersupport%{pkg_suffix}-macros
-BuildRequires:  rocm-hip%{pkg_suffix}-devel
-BuildRequires:  rocm-runtime%{pkg_suffix}-devel
-BuildRequires:  rocm-rpm-macros%{pkg_suffix}
-
+Source0:        https://github.com/ROCm/%{upstreamname}/archive/%{pkg_module}.%{rocm_patch}.tar.gz#/%{upstreamname}-%{version}.tar.gz
 %if %{with check}
 %if 0%{?suse_version}
-BuildRequires:  ffmpeg
-BuildRequires:  libavcodec-devel
-BuildRequires:  libavformat-devel
-BuildRequires:  Mesa-libva
 %else 
-BuildRequires:  ffmpeg-free
-BuildRequires:  libavcodec-free-devel
-BuildRequires:  libavformat-free-devel
-BuildRequires:  mesa-va-drivers
 %endif
-BuildRequires:  rocprofiler-register%{pkg_suffix}-devel
 %endif
-
 %if %{with ninja}
-%if 0%{?fedora}
-BuildRequires:  ninja-build
-%endif
 %if 0%{?suse_version}
-BuildRequires:  ninja
 %define __builder ninja
 %endif
 %endif
-
-# Rocjpeg isn't useful without AMD's mesa va drivers:
 %if 0%{?suse_version}
 Requires:     Mesa-libva
 %else
 Requires:     mesa-va-drivers
 %endif
 Provides:     rocjpeg%{pkg_suffix} = %{version}-%{release}
-
-# Only x86_64 works right now:
 ExclusiveArch:  x86_64
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  ffmpeg-free
+BuildRequires:  gcc-c++
+BuildRequires:  libavcodec-free-devel
+BuildRequires:  libavformat-free-devel
+BuildRequires:  libdrm-devel
+BuildRequires:  libva-devel
+BuildRequires:  mesa-va-drivers
+BuildRequires:  rocm-cmake-7.1
+BuildRequires:  rocm-comgr-7.1-devel
+BuildRequires:  rocm-compilersupport-7.1-macros
+BuildRequires:  rocm-hip-7.1-devel
+BuildRequires:  rocm-rpm-macros-7.1
+BuildRequires:  rocm-runtime-7.1-devel
+BuildRequires:  rocprofiler-register-7.1-devel
+# /oreon:deps
 %description
 rocJPEG is a high performance JPEG decode SDK for AMD GPUs. Using
 the rocJPEG API, you can access the JPEG decoding features available
 on your GPU.
 
 %post -p /sbin/ldconfig
+
 %postun -p /sbin/ldconfig
 
 %package devel
 Summary: The development package for %{name}
 Requires:     %{name}%{?_isa} = %{version}-%{release}
 Provides:     rocjpeg%{pkg_suffix}-devel = %{version}-%{release}
-
 %description devel
 The rocJPEG development package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{upstreamname}-rocm-%{version}
@@ -182,12 +128,9 @@ sed -i -e 's@${LINK_LIBRARY_LIST} ${LIBVA_DRM_LIBRARY}@${LINK_LIBRARY_LIST} ${LI
     -DCMAKE_CXX_COMPILER=%rocmllvm_bindir/amdclang++ \
     -DCMAKE_INSTALL_LIBDIR=%{pkg_libdir} \
     -DCMAKE_INSTALL_PREFIX=%{pkg_prefix}
-
 %cmake_build
-
 %install
 %cmake_install
-
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rocjpeg/LICENSE
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rocjpeg-asan/LICENSE
 rm -f %{buildroot}%{pkg_prefix}/share/doc/rocjpeg-dev/LICENSE
@@ -196,22 +139,15 @@ rm -f %{buildroot}%{pkg_prefix}/share/doc/packages/rocjpeg/LICENSE
 rm -f %{buildroot}%{pkg_prefix}/share/doc/packages/rocjpeg-dev/LICENSE
 rm -f %{buildroot}%{pkg_prefix}/share/doc/packages/rocjpeg-test/LICENSE
 rm -f %{buildroot}%{pkg_prefix}/share/doc/packages/rocjpeg-asan/LICENSE
-
-# Need to install first
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with check}
 %check
+
 %ctest
 %endif
-
-%files
-%license LICENSE
-%{pkg_prefix}/%{pkg_libdir}/librocjpeg.so.1{,.*}
-
-%files devel
-%{pkg_prefix}/%{pkg_libdir}/librocjpeg.so
-%{pkg_prefix}/%{pkg_libdir}/cmake/rocjpeg/
-%{pkg_prefix}/include/rocjpeg/
-%{pkg_prefix}/share/rocjpeg/
+%files -f %{oreon_filedir}/main.list
+%files -n rocjpeg-7.1-devel -f %{oreon_filedir}/rocjpeg-7.1-devel.list
 
 %changelog
+
 %autochangelog

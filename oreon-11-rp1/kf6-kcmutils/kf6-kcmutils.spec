@@ -1,44 +1,38 @@
+%global source1_hash 505cab954264d296a2725f8f1d623bcc7b8d5556b06c3b356cbd78e363a6f20f
 %global source0_hash 0159f80d030ac250b0b353113a55c013ed7e38cb0b678df44d2f0d0b2aca944c
-
 %global framework kcmutils
-
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.30
-
-
 Name:    kf6-%{framework}
 Version: 6.30.0
 Release:        1%{?dist}
-Summary: KDE Frameworks 6 Tier 3 addon with extra API to write KConfigModules
-
+Summary:        KDE Frameworks 6 Tier 3 addon with extra API to write KConfigModules
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}
-
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
-
-BuildRequires:  extra-cmake-modules >= %{version}
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  cmake(KF6CoreAddons) >= %{version}
-BuildRequires:  cmake(KF6I18n) >= %{version}
-BuildRequires:  cmake(KF6IconThemes) >= %{version}
-BuildRequires:  cmake(KF6ItemViews) >= %{version}
-BuildRequires:  cmake(KF6Package) >= %{version}
-BuildRequires:  cmake(KF6XmlGui) >= %{version}
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6KIO) >= %{version}
-BuildRequires:  cmake(KF6GuiAddons) >= %{version}
-BuildRequires:  cmake(KF6WindowSystem) >= %{version}
-BuildRequires:  cmake(KF6ColorScheme) >= %{version}
-BuildRequires:  pkgconfig(xkbcommon)
-BuildRequires:  cmake(KF6Kirigami) >= %{version}
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  qt6-qtdeclarative-devel
-
 Requires: kf6-filesystem
 Requires: qt6qml(org.kde.kirigami)
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  cmake(KF6ColorScheme)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6GuiAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6ItemViews)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6Kirigami)
+BuildRequires:  cmake(KF6Package)
+BuildRequires:  cmake(KF6WindowSystem)
+BuildRequires:  cmake(KF6XmlGui)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtdeclarative-devel
+# /oreon:deps
 %description
 KCMUtils provides various classes to work with KCModules. KCModules can be
 created with the KConfigWidgets framework.
@@ -53,42 +47,24 @@ Requires:       cmake(Qt6Qml)
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{framework}-%{version} -p1
 
 %build
+
 %cmake_kf6
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %find_lang %{name} --all-name
-# create/own dirs
 mkdir -p %{buildroot}%{_kf6_qtplugindir}/kcms
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%doc README.md
-%license LICENSES/*.txt
-%{_kf6_bindir}/kcmshell6
-%{_kf6_datadir}/qlogging-categories6/%{framework}.*
-%{_kf6_libdir}/libKF6KCMUtils.so.*
-%{_kf6_libdir}/libKF6KCMUtilsCore.so.*
-%{_kf6_qmldir}/org/kde/kcmutils/
-%{_kf6_qtplugindir}/kcms/
-%{_libdir}/libKF6KCMUtilsQuick.so.6
-%{_libdir}/libKF6KCMUtilsQuick.so.%{version}
-
-%files devel
-%{_kf6_includedir}/KCMUtils/
-%{_kf6_includedir}/KCMUtilsCore/
-%{_kf6_libdir}/libKF6KCMUtils.so
-%{_libdir}/libKF6KCMUtilsQuick.so
-%{_kf6_libdir}/libKF6KCMUtilsCore.so
-%{_kf6_libdir}/cmake/KF6KCMUtils/
-%{_kf6_libexecdir}/kcmdesktopfilegenerator
-%{_kf6_includedir}/KCMUtilsQuick
-
+%files -f %{oreon_filedir}/main.list
+%files -n kf6-kcmutils-devel -f %{oreon_filedir}/kf6-kcmutils-devel.list
 
 %changelog
+
 %autochangelog

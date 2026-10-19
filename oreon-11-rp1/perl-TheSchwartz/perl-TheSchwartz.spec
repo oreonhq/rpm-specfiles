@@ -1,5 +1,4 @@
 %global source0_hash 9b26135e908a3ae50173741d1a2536f4dc90d0cc942ed4c2a43c048d15cd3a7f
-
 Name:           perl-TheSchwartz
 Version:        1.18
 Release:        4%{?dist}
@@ -8,7 +7,8 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/TheSchwartz
 Source0:        https://cpan.metacpan.org/authors/id/A/AK/AKIYM/TheSchwartz-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  perl-generators
+%{?perl_default_filter}
+# oreon:deps
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(Class::Accessor::Fast)
 BuildRequires:  perl(DBI)
@@ -38,37 +38,33 @@ BuildRequires:  perl(lib)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(vars)
 BuildRequires:  perl(warnings)
-
-%{?perl_default_filter}
-
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 TheSchwartz is a reliable job queue system. Your application can put jobs
 into the system and your worker processes can pull jobs from the queue
 atomically to perform. Failed jobs can be left in the queue to retry later.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n TheSchwartz-%{version}
 
 %build
+
 /usr/bin/perl Build.PL --installdirs=vendor
 ./Build
-
 %install
 ./Build install --destdir=$RPM_BUILD_ROOT --create_packlist=0
 %{_fixperms} $RPM_BUILD_ROOT/*
+%oreon_autofiles main
 
 %check
-./Build test
 
-%files
-%doc Changes doc README.md
-%license LICENSE
-%{perl_vendorlib}/*
-%{_mandir}/man1/*
-%{_mandir}/man3/*
-%{_bindir}/schwartzmon
+./Build test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

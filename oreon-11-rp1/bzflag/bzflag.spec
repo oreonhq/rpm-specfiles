@@ -1,35 +1,34 @@
-%global source0_hash 5dd3a4a92ba934e620954123aebb4bf05ad20cf3ff744fd4e1e8c723bc5cabcd
-
-Summary: 3D multi-player tank battle game
+%global source0_hash bb78b750e7bce7aa7c11bd35906bb08a49acc7c50bf29629af380eecd153894d
+Summary:        3D multi-player tank battle game
 Name: bzflag
 Version: 2.4.30
-Release: 1%{?dist}
-# Automatically converted from old format: LGPLv2 - review is highly recommended.
+Release:        1%{?dist}
 License: LicenseRef-Callaway-LGPLv2
 URL: http://bzflag.org
-Source0: https://download.bzflag.org/bzflag/source/%{version}/bzflag-%{version}.tar.bz2
+Source0:        https://download.bzflag.org/bzflag/source/%{version}/bzflag-%{version}.tar.bz2
 Source1: bzflag.desktop
 Source2: bzflag.sysconfig
 Source3: bzflag.service
-BuildRequires: libXxf86vm-devel
-BuildRequires: libXext-devel
-BuildRequires: libSM-devel
-BuildRequires: libICE-devel
-BuildRequires: libX11-devel
-BuildRequires: libGLU-devel
-BuildRequires: make
-BuildRequires: glew-devel
-BuildRequires: gcc-c++
-BuildRequires: desktop-file-utils
-BuildRequires: SDL2-devel
-BuildRequires: ncurses-devel
-BuildRequires: libcurl-devel
-BuildRequires: c-ares-devel
-BuildRequires: zlib-devel
-BuildRequires: sed
-BuildRequires: systemd
 Requires: opengl-games-utils
-
+# oreon:deps
+BuildRequires:  SDL2-devel
+BuildRequires:  c-ares-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  glew-devel
+BuildRequires:  libGLU-devel
+BuildRequires:  libICE-devel
+BuildRequires:  libSM-devel
+BuildRequires:  libX11-devel
+BuildRequires:  libXext-devel
+BuildRequires:  libXxf86vm-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  sed
+BuildRequires:  systemd
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 BZFlag is a 3D multi-player tank battle game  that  allows users to play
 against each other in a networked environment.  There are five teams: red,
@@ -43,11 +42,11 @@ There are two main styles of play: capture-the-flag and free-for-all.
 Summary: Sample maps for bzflag
 Requires: %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 BuildArch: noarch
-
 %description maps-sample
 This package contains sample world maps for bzflag.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{version}
@@ -58,7 +57,7 @@ u bzflag - 'BZFlag game server' %{_datadir}/bzflag -
 EOF
 
 %build
-# Use PIE because bzflag/bzfs are networked server applications
+
 CFLAGS='-fPIC %{optflags} -fno-strict-aliasing' \
 CXXFLAGS='-fPIC %{optflags} -fno-strict-aliasing' \
 LDFLAGS='-pie' \
@@ -67,7 +66,6 @@ SDL_CFLAGS='-I%{_prefix}/include/SDL -D_GNU_SOURCE=1 -D_REENTRANT' \
     --prefix=%{_prefix} --exec-prefix=%{_prefix} \
     --with-sdl-prefix=%{_prefix} --with-sdl-exec-prefix=%{_prefix}
 %make_build
-
 %install
 %make_install
 install -D -m 644 package/rpm/bzflag-m.xpm \
@@ -78,20 +76,10 @@ mkdir -p %{buildroot}%{_datadir}/bzflag/maps
 install -m 644 misc/maps/*.bzw %{buildroot}%{_datadir}/bzflag/maps
 rm -f %{buildroot}%{_libdir}/bzflag/*.la
 rm -f %{buildroot}%{_datadir}/bzflag/bzflag.desktop
-
 ln -snf opengl-game-wrapper.sh %{buildroot}%{_bindir}/bzflag-wrapper
 sed 's:^Exec=\(.*\)$:Exec=\1-wrapper:g' < %{SOURCE1} > bzflag.desktop
-
 mkdir -p %{buildroot}%{_datadir}/applications
 desktop-file-install --dir %{buildroot}%{_datadir}/applications bzflag.desktop
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -117,42 +105,24 @@ SentUpstream: 2014-09-24
   </screenshots>
 </application>
 EOF
-
 install -Dp -m 0644 %{SOURCE2} %{buildroot}%{_sysconfdir}/sysconfig/bzflag
 install -Dp -m 0644 %{SOURCE3} %{buildroot}%{_unitdir}/bzflag.service
 install -D -m0644 bzflag.sysusers.conf %{buildroot}%{_sysusersdir}/bzflag.conf
+%oreon_autofiles bzflag-maps-sample usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %post
+
 %systemd_post bzflag.service
-
 %preun
+
 %systemd_preun bzflag.service
-
 %postun
+
 %systemd_postun_with_restart bzflag.service
-
-%files
-%license COPYING
-%doc AUTHORS ChangeLog README README.Linux
-%{_bindir}/bzadmin
-%{_bindir}/bzflag
-%{_bindir}/bzflag-wrapper
-%{_bindir}/bzfs
-%dir %{_libdir}/bzflag
-%{_libdir}/bzflag/*.so
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/bzflag
-%exclude %{_datadir}/bzflag/maps/*
-%{_datadir}/pixmaps/bzflag.xpm
-%{_datadir}/pixmaps/bzflag.svg
-%{_mandir}/man*/*
-%{_sysconfdir}/sysconfig/bzflag
-%{_unitdir}/bzflag.service
-%{_sysusersdir}/bzflag.conf
-
-%files maps-sample
-%{_datadir}/bzflag/maps/*
+%files -f %{oreon_filedir}/main.list
+%files -n bzflag-maps-sample -f %{oreon_filedir}/bzflag-maps-sample.list
 
 %changelog
+
 %autochangelog

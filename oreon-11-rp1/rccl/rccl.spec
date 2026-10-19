@@ -1,51 +1,22 @@
 %global source0_hash 50ba486bc8a466a68bff9d6c9d7b3ebf8de9426906720fa44023b5390602b3b8
-
-#
-# Copyright Fedora Project Authors.
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to
-# deal in the Software without restriction, including without limitation the
-# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
-# sell copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-#
 %if 0%{?suse_version}
 %global rccl_name librccl1
 %else
 %global rccl_name rccl
 %endif
-
 %global upstreamname RCCL
 %global rocm_release 7.1
 %global rocm_patch 0
 %global rocm_version %{rocm_release}.%{rocm_patch}
-
 %global toolchain rocm
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-flto=thin//' -e 's/-mtls-dialect=gnu2//')
-
 %global _lto_cflags %{nil}
-
 %bcond_with debug
 %if %{with debug}
 %global build_type DEBUG
 %else
 %global build_type RelWithDebInfo
 %endif
-
-# downloads tests, use mock --enable-network
 %bcond_with test
 %if %{with test}
 %global build_test ON
@@ -53,64 +24,41 @@
 %else
 %global build_test OFF
 %endif
-
 %bcond_with export
 %if %{with export}
 %global build_compile_db ON
 %else
 %global build_compile_db OFF
 %endif
-
-# rccl is not supported on gfx1103
-# On 6.1.1
-# lld: error: ld-temp.o <inline asm>:1:25: specified hardware register is not supported on this GPU
-#        s_getreg_b32 s1, hwreg(HW_REG_HW_ID)
-#
-# On 6.2
-# Problems reported with gfx10, removing gfx10 and default (gfx10 and gfx11) from build list
-#
-
 Name:           %{rccl_name}
 Version:        %{rocm_version}
 Release:        1%{?dist}
 Summary:        ROCm Communication Collectives Library
-
 Url:            https://github.com/ROCm/rccl
 License:        BSD-3-Clause AND MIT AND Apache-2.0
-# From License.txt the main license is BSD 3
-# Modifications from Microsoft is MIT
-# The NVIDIA based header files below are Apache-2.0
-#  src/include/nvtx3/nv*.h and similar
-# The URL for NVIDIA in the License.txt https://github.com/NVIDIA/NVTX is Apache-2.0
-
-Source0:        %{url}/archive/rocm-%{rocm_version}.tar.gz#/%{upstreamname}-%{rocm_version}.tar.gz
-
+Source0:        https://github.com/ROCm/%{name}/archive/%{toolchain}-%{version}.tar.gz#/%{upstreamname}-%{version}.tar.gz
+%if %{with test}
+%if 0%{?suse_version}
+%else
+%endif
+%endif
+Requires:       %{name}-data = %{version}-%{release}
+Provides:       rccl = %{version}-%{release}
+ExclusiveArch:  x86_64
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  hipify
-BuildRequires:  gcc-c++
 BuildRequires:  fmt-devel
+BuildRequires:  gcc-c++
+BuildRequires:  gtest-devel
+BuildRequires:  hipify
 BuildRequires:  rocm-cmake
 BuildRequires:  rocm-comgr-devel
 BuildRequires:  rocm-core-devel
 BuildRequires:  rocm-hip-devel
-BuildRequires:  rocm-runtime-devel
 BuildRequires:  rocm-rpm-macros
+BuildRequires:  rocm-runtime-devel
 BuildRequires:  rocm-smi-devel
-
-%if %{with test}
-%if 0%{?suse_version}
-BuildRequires:  gtest
-%else
-BuildRequires:  gtest-devel
-%endif
-%endif
-
-Requires:       %{name}-data = %{version}-%{release}
-Provides:       rccl = %{version}-%{release}
-
-# Only x86_64 works right now:
-ExclusiveArch:  x86_64
-
+# /oreon:deps
 %description
 RCCL (pronounced "Rickle") is a stand-alone library of standard
 collective communication routines for GPUs, implementing all-reduce,
@@ -129,20 +77,19 @@ best performance, small operations can be either batched into
 larger operations or aggregated through the API.
 
 %post -p /sbin/ldconfig
+
 %postun -p /sbin/ldconfig
 
 %package devel
 Summary:        Headers and libraries for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Provides:       rccl-devel = %{version}-%{release}
-
 %description devel
 Headers and libraries for %{name}
 
 %package data
 Summary:        Data for %{name}
 BuildArch:      noarch
-
 %description data
 Data for %{name}
 
@@ -150,12 +97,12 @@ Data for %{name}
 %package test
 Summary:        Tests for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description test
 %{summary}
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n rccl-rocm-%{version}
@@ -223,6 +170,7 @@ sed -i -e "s@rccl PRIVATE -parallel-jobs=12@rccl PRIVATE -parallel-jobs=${COMPIL
 sed -i -e "s@-parallel-jobs=\${num_linker_jobs}@-parallel-jobs=${LINK_JOBS}@" CMakeLists.txt
 
 %build
+
 %cmake \
     -DAMDGPU_TARGETS=%{rocm_gpu_list_rccl} \
     -DBUILD_FILE_REORG_BACKWARD_COMPATIBILITY=OFF \
@@ -239,38 +187,17 @@ sed -i -e "s@-parallel-jobs=\${num_linker_jobs}@-parallel-jobs=${LINK_JOBS}@" CM
     -DRCCL_ROCPROFILER_REGISTER=OFF \
     -DROCM_PATH=%{_prefix} \
     -DROCM_SYMLINK_LIBS=OFF
-
 %cmake_build
-
 %install
 %cmake_install
-
 rm -f %{buildroot}%{_prefix}/share/doc/rccl/LICENSE.txt
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license LICENSE.txt
-%{_libdir}/librccl.so.*
-%{_bindir}/rcclras
-
-%files data
-%dir %{_datadir}/rccl
-%dir %{_datadir}/rccl/msccl-algorithms
-%dir %{_datadir}/rccl/msccl-unit-test-algorithms
-%{_datadir}/rccl/msccl-algorithms/*.xml
-%{_datadir}/rccl/msccl-unit-test-algorithms/*.xml
-
-%files devel
-%doc README.md
-%dir %{_includedir}/rccl
-%dir %{_libdir}/cmake/rccl
-%{_includedir}/rccl/*
-%{_libdir}/cmake/rccl/*.cmake
-%{_libdir}/librccl.so
-
-%if %{with test}
-%files test
-%{_bindir}/rccl-UnitTests
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n rccl-devel -f %{oreon_filedir}/rccl-devel.list
+%files -n rccl-data -f %{oreon_filedir}/rccl-data.list
+%files -n rccl-test -f %{oreon_filedir}/rccl-test.list
 
 %changelog
+
 %autochangelog

@@ -1,40 +1,34 @@
 %global source0_hash a30a5ebead35cc78e5f337571df8c5de2bdd9141426034c74b17e4d3db15f024
-
 Name:           i3lock
 Version:        2.16
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Simple X display locker like slock
 License:        MIT
 URL:            https://i3wm.org/%{name}
-Source0:        %{URL}/%{name}-%{version}.tar.xz
+Source0:        https://i3wm.org/%{name}/%{name}-%{version}.tar.xz
 Source1:        %{URL}/%{name}-%{version}.tar.xz.asc
-# Michael Stapelberg's GPG key:
 Source2:        gpgkey-424E14D703E7C6D43D9D6F364E7160ED4AC8EE1D.gpg
-
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  meson >= 0.45
-# from meson.build
-BuildRequires:  pkg-config
-BuildRequires:  pkgconfig(xcb)
-BuildRequires:  pkgconfig(xcb-xkb)
-BuildRequires:  pkgconfig(xcb-xinerama)
-BuildRequires:  pkgconfig(xcb-randr)
-BuildRequires:  pkgconfig(xcb-image)
-BuildRequires:  pkgconfig(xcb-event)
-BuildRequires:  pkgconfig(xcb-util)
-BuildRequires:  pkgconfig(xcb-atom)
-BuildRequires:  pkgconfig(xcb-xrm)
-BuildRequires:  pkgconfig(xkbcommon) >= 0.5.0
-BuildRequires:  pkgconfig(xkbcommon-x11) >= 0.5.0
-BuildRequires:  pkgconfig(cairo) >= 1.14.4
-# these don't provide pkg-config files
-BuildRequires:  libev-devel
-BuildRequires:  pam-devel
-
-# gpg verification
 BuildRequires:  gnupg2
+BuildRequires:  libev-devel
 BuildRequires:  make
-
+BuildRequires:  meson
+BuildRequires:  pam-devel
+BuildRequires:  pkg-config
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(xcb)
+BuildRequires:  pkgconfig(xcb-atom)
+BuildRequires:  pkgconfig(xcb-event)
+BuildRequires:  pkgconfig(xcb-image)
+BuildRequires:  pkgconfig(xcb-randr)
+BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  pkgconfig(xcb-xinerama)
+BuildRequires:  pkgconfig(xcb-xkb)
+BuildRequires:  pkgconfig(xcb-xrm)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  pkgconfig(xkbcommon-x11)
+# /oreon:deps
 %description
 i3lock is a simple screen locker like slock. After starting it, you will see a
 white screen (you can configure the color/an image). You can return to your
@@ -55,24 +49,22 @@ Many little improvements have been made to i3lock over time:
   uses the bsd_auth(3) framework.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
-%files
-%doc CHANGELOG README*
-%license LICENSE
-%{_bindir}/%{name}
-%{_sysconfdir}/pam.d/%{name}
-%{_mandir}/man1/i3lock.1*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

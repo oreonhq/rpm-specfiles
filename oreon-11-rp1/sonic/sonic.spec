@@ -1,22 +1,19 @@
 %global source0_hash 469a66b6b54bb825efdc4cbaef1bbd45f87ddc6ce9f73ce7b1060f26b33ec6a9
-
 %global  commit       ba331411f17702e01f6c2d7016eefebaa695871f
 %global  shortcommit  %{sub %{commit} 1 7}
 %global  commitdate   20210316
-
 Name:           sonic
 Version:        0.2.0^%{commitdate}git%{shortcommit}
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        Library to speed up or slow down speech
-
 License:        Apache-2.0
 URL:            https://github.com/waywardgeek/sonic
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-
+Source0:        https://github.com/waywardgeek/%{name}/archive/%{commit}/%{name}-ba33141.tar.gz
+Requires: libsonic%{?_isa} = %{version}-%{release}
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  make
-Requires: libsonic%{?_isa} = %{version}-%{release}
-
+# /oreon:deps
 %description
 Sonic is a simple algorithm for speeding up or slowing down speech.  However,
 it's optimized for speed ups of over 2X, unlike previous algorithms for changing
@@ -30,48 +27,40 @@ experience of listening to an audio book on an Android phone.
 
 %package -n libsonic
 Summary: Library package
-
 %description -n libsonic
 Sonic shared library package.
 
 %package -n libsonic-devel
 Summary:  Development files for sonic
 Requires: libsonic%{?_isa} = %{version}-%{release}
-
 %description -n libsonic-devel
 Development files and libraries for sonic.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n sonic-%{commit}
 sed -i 's|LIBDIR=$(PREFIX)/lib|LIBDIR=%{_libdir}|g' Makefile
 
 %build
-%make_build
 
+%make_build
 %install
 %make_install
 install -pDm0644 sonic.1 %{buildroot}%{_mandir}/man1/sonic.1
-# Do not package static library
 rm %{buildroot}/%{_libdir}/libsonic.a
+%oreon_autofiles libsonic usr/*/lib*.so.*
+%oreon_autofiles libsonic-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 make check
-
-%files
-%{_bindir}/sonic
-%{_mandir}/man1/sonic.1*
-
-%files -n libsonic
-%license COPYING
-%doc README
-%{_libdir}/libsonic.so.0.3.0
-%{_libdir}/libsonic.so.0
-
-%files -n libsonic-devel
-%{_includedir}/sonic.h
-%{_libdir}/libsonic.so
+%files -f %{oreon_filedir}/main.list
+%files -n libsonic -f %{oreon_filedir}/libsonic.list
+%files -n libsonic-devel -f %{oreon_filedir}/libsonic-devel.list
 
 %changelog
+
 %autochangelog

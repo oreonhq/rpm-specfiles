@@ -1,18 +1,21 @@
-%global source0_hash none
-
-# Default to clang unless building with GCC explicitly
+%global source0_hash 671c79bdff2d97aead3897da1a6b67a163af8c4e329350d07cf3e63d592955ff
 %bcond          gcc 0
-
 Name:           ispc
 Version:        1.31.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C-based SPMD programming language compiler
 License:        BSD-3-Clause
 URL:            https://ispc.github.io/
 Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-# Build dependencies
+%if %{with gcc}
+%endif
+%ifarch x86_64
+Recommends:     %{name}-gpu%{?_isa}
+%endif
+ExclusiveArch:  x86_64 aarch64
+# oreon:deps
 BuildRequires:  bison
+BuildRequires:  clang-devel
 BuildRequires:  cmake
 BuildRequires:  flex
 BuildRequires:  help2man
@@ -20,19 +23,7 @@ BuildRequires:  llvm-devel
 BuildRequires:  make
 BuildRequires:  pkgconfig(python3)
 BuildRequires:  pkgconfig(tbb)
-BuildRequires:  clang-devel
-%if %{with gcc}
-BuildRequires:  gcc-c++
-%endif
-%ifarch x86_64
-BuildRequires:  (glibc32 or glibc-devel(%__isa_name-32))
-BuildRequires:  pkgconfig(level-zero)
-Recommends:     %{name}-gpu%{?_isa}
-%endif
-
-# Supported architectures
-ExclusiveArch:  x86_64 aarch64
-
+# /oreon:deps
 %description
 A compiler for a variant of the C programming language with extensions for
 "single program, multiple data" (SPMD) programming.
@@ -41,7 +32,6 @@ A compiler for a variant of the C programming language with extensions for
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development headers and CMake configuration for %{name}.
 
@@ -50,7 +40,6 @@ Development headers and CMake configuration for %{name}.
 %package gpu
 Summary:        GPU runtime for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description gpu
 GPU runtime libraries for %{name}, required for running ISPC programs on GPUs.
 %endif
@@ -59,11 +48,11 @@ GPU runtime libraries for %{name}, required for running ISPC programs on GPUs.
 %package static
 Summary:        Static libraries for %{name}
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
-
 %description static
 Static libraries for developing programs with %{name}.
 
 %prep
+
 %autosetup -p1 -n %{name}-%{version}
 
 # Remove GCC-only warning suppression
@@ -73,6 +62,7 @@ sed -i 's|-Wno-c99-extensions -Wno-deprecated-register||g' CMakeLists.txt
 %py3_shebang_fix .
 
 %build
+
 %cmake \
     -DCMAKE_BUILD_TYPE=Release \
 %if %{with gcc}
@@ -91,11 +81,8 @@ sed -i 's|-Wno-c99-extensions -Wno-deprecated-register||g' CMakeLists.txt
 %endif
     -DLLVM_ENABLE_ASSERTIONS=OFF
 %cmake_build
-
 %install
 %cmake_install
-
-# Generate and install man pages.
 install -d '%{buildroot}%{_mandir}/man1'
 for cmd in %{buildroot}%{_bindir}/*
 do
@@ -105,46 +92,15 @@ do
       --output="%{buildroot}%{_mandir}/man1/$(basename "${cmd}").1" \
       "${cmd}"
 done
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 PATH="${PATH}:%{buildroot}%{_bindir}" %{python3} scripts/run_tests.py
-
-%files
-%license LICENSE.txt
-%doc docs/ReleaseNotes.txt
-%{_bindir}/check_isa
-%{_bindir}/%{name}
-%{_libdir}/lib%{name}.so.{1,%{version}}
-%{_libdir}/lib%{name}rt.so.{1,%{version}}
-%{_libdir}/lib%{name}rt_device_cpu.so.{1,%{version}}
-%{_mandir}/man1/check_isa.1.gz
-%{_mandir}/man1/%{name}.1.gz
-
-%files devel
-%doc docs/ReleaseNotes.txt
-%{_includedir}/intrinsics/
-%{_includedir}/%{name}/
-%{_includedir}/%{name}rt/
-%{_includedir}/stdlib/
-%{_libdir}/cmake/%{name}/
-%{_libdir}/cmake/%{name}rt-%{version}/
-%{_libdir}/lib%{name}.so
-%{_libdir}/lib%{name}rt.so
-%{_libdir}/lib%{name}rt_device_cpu.so
-%ifarch x86_64
-%{_libdir}/lib%{name}rt_device_gpu.so
-%endif
-
-%ifarch x86_64
-%files gpu
-%doc docs/ReleaseNotes.txt
-%{_libdir}/lib%{name}rt_device_gpu.so.{1,%{version}}
-%endif
-
-%files static
-%license LICENSE.txt
-%doc docs/ReleaseNotes.txt
-%{_libdir}/lib%{name}rt_static.a
+%files -f %{oreon_filedir}/main.list
+%files -n ispc-devel -f %{oreon_filedir}/ispc-devel.list
+%files -n ispc-static -f %{oreon_filedir}/ispc-static.list
 
 %changelog
+
 %autochangelog

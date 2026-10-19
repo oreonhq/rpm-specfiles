@@ -1,43 +1,27 @@
 %global source0_hash 453bdfa47fcd638cbb11072d1397ccffb602efbd9531f34d2d8d28da5184ebd6
-
 %global dbver_rel 20240504
-# When you change dbver_snap, rebuild also foomatic against this build to pick up new IEEE 1284 Device IDs.
-# The postscriptdriver tags get put onto foomatic, because that's there the actual CUPS driver lives.
 %global dbver_snap 20260531
-
-Summary: Database of printers and printer drivers
+Summary:        Database of printers and printer drivers
 Name: foomatic-db
 Version: %{dbver_rel}
-Release: 1.%{dbver_snap}%{?dist}
-# GPL-2.0-or-later non-PPD files and some PPDs
-# MIT for ppds
+Release:        1%{?dist}
 License: GPL-2.0-or-later AND MIT
 Requires: %{name}-filesystem = %{version}-%{release}
 Requires: %{name}-ppds = %{version}-%{release}
-
-Source0:        https://github.com/OpenPrinting/foomatic-db/archive/refs/heads/master.tar.gz#/foomatic-db-%{dbver_rel}-%{dbver_snap}.tar.gz
-
+Source0:        https://github.com/OpenPrinting/%{name}/archive/refs/heads/master.tar.gz#/%{name}-%{version}-%{dbver_snap}.tar.gz
 Patch1:        foomatic-db-device-ids.patch
 Patch2:        foomatic-db-invalid.patch
-
 Url: http://www.openprinting.org
 BuildArch: noarch
-
-# Make sure we get postscriptdriver tags.
-BuildRequires: python3-cups
-
-# Build requires cups so that configure knows where to put PPDs.
-BuildRequires: cups
-# uses make
-BuildRequires: make
-
-# Build requires for perl
-BuildRequires: perl-interpreter
-
-# we needed sed for prep phase - removing perl from ppds
-BuildRequires: sed
-BuildRequires: autoconf automake
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  cups
+BuildRequires:  make
+BuildRequires:  perl-interpreter
+BuildRequires:  python3-cups
+BuildRequires:  sed
+# /oreon:deps
 %description
 This is the database of printers, printer drivers, and driver options
 for Foomatic.
@@ -46,22 +30,20 @@ The site https://www.openprinting.org/ is based on this database.
 
 %package filesystem
 Summary: Directory layout for the foomatic package
-
 %description filesystem
 Directory layout for the foomatic package.
 
 %package ppds
 Summary: PPDs from printer manufacturers
-# We ship a symlink in a directory owned by cups
 BuildRequires: cups
 Requires: cups
 Requires: sed
 Requires: %{name}-filesystem = %{version}-%{release}
-
 %description ppds
 PPDs from printer manufacturers.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n foomatic-db-master
 
@@ -138,51 +120,26 @@ popd
 find db/source/PPD -type f -name '*.ppd' -exec sed -i 's,perl -p,sed,g' {} +
 
 %build
+
 autoreconf -fi
 %configure
 %make_build
-
-
 %install
 make	DESTDIR=%buildroot PREFIX=%{_prefix} \
 	install
-
-# Remove ghostscript UPP drivers that are gone in 7.07
 rm -f %{buildroot}%{_datadir}/foomatic/db/source/driver/{bjc6000a1,PM760p,PM820p,s400a1,sharp,Stc670pl,Stc670p,Stc680p,Stc760p,Stc777p,Stp720p,Stp870p}.upp.xml
-
 find %{buildroot}%{_datadir}/foomatic/db/source/ -type f | xargs -d '\n' chmod 0644
-
 mkdir %{buildroot}%{_datadir}/foomatic/db/source/PPD/Custom
-
 rm -f	%{buildroot}%{_datadir}/foomatic/db/source/PPD/Kyocera/*.htm \
 	%{buildroot}%{_datadir}/cups/model/3-distribution
-
-# Convert absolute symlink to relative.
 rm -f %{buildroot}%{_datadir}/cups/model/foomatic-db-ppds
 ln -sf ../../foomatic/db/source/PPD %{buildroot}%{_datadir}/cups/model/foomatic-db-ppds
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files filesystem
-%dir %{_datadir}/foomatic/
-%dir %{_datadir}/foomatic/db/
-%dir %{_datadir}/foomatic/db/source/
-%dir %{_datadir}/foomatic/db/source/driver/
-%dir %{_datadir}/foomatic/db/source/opt/
-%dir %{_datadir}/foomatic/db/source/printer/
-%dir %{_datadir}/foomatic/db/source/PPD/
-
-%files
-%doc db/source/PPD/Kyocera/*.htm
-%doc README
-%{_datadir}/foomatic/db/oldprinterids
-%{_datadir}/foomatic/db/source/printer/*
-%{_datadir}/foomatic/db/source/driver/*
-%{_datadir}/foomatic/db/source/opt/*
-%{_datadir}/foomatic/xmlschema
-
-%files ppds
-%doc COPYING
-%{_datadir}/foomatic/db/source/PPD/*
-%{_datadir}/cups/model/foomatic-db-ppds
+%files -f %{oreon_filedir}/main.list
+%files -n foomatic-db-filesystem -f %{oreon_filedir}/foomatic-db-filesystem.list
+%files -n foomatic-db-ppds -f %{oreon_filedir}/foomatic-db-ppds.list
 
 %changelog
+
 %autochangelog

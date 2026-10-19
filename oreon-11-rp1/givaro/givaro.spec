@@ -1,53 +1,11 @@
 %global source0_hash feefb7445842ceb756f8bb13900d975b530551e488a2ae174bda7b636251de43
-
-# Use packaged autotools to re-generate the configure script?
 %bcond autoreconf 1
-
 Name:           givaro
 Version:        4.2.2
 %global so_version 9
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        C++ library for arithmetic and algebraic computations
-
-# The entire source is CECILL-B except for src/kernel/recint/reclonglong.h,
-# which is LGPL-3.0-or-later, and various Autotools build-system files, which
-# do not contribute to the licenses of the binary RPMs.
 License:        CECILL-B AND LGPL-3.0-or-later
-# FSFAP-no-warranty-disclaimer:
-#   - macros/ax_cxx_compile_stdcxx_11.m4
-# FSFUL AND FSFULLR AND GPL-2.0-or-later WITH Libtool-exception:
-#   - macros/libtool.m4
-# FSFUL AND GPL-2.0-or-later WITH Libtool-exception AND CECILL-B:
-#   (CECILL-B from configure.ac)
-#   - configure
-# FSFULLR:
-#   - aclocal.m4
-#   - macros/ltoptions.m4
-#   - macros/ltsugar.m4
-#   - macros/ltversion.m4
-#   - macros/lt~obsolete.m4
-# FSFULLR AND CECILL-B:
-#   (CECILL-B from each corresponding Makefile.am)
-#   - macros/Makefile.in
-#   - examples/FiniteField/Makefile.in
-#   - examples/Integer/Makefile.in
-#   - examples/Matrix/Makefile.in
-#   - examples/Polynomial/Makefile.in
-#   - examples/Rational/Makefile.in
-#   - examples/RecInt/Makefile.in
-# GPL-2.0-or-later WITH Autoconf-exception-generic:
-#   - build-aux/ar-lib
-#   - build-aux/compile
-#   - build-aux/depcomp
-#   - build-aux/missing
-#   - build-aux/test-driver
-# GPL-2.0-or-later WITH Libtool-exception:
-#   - build-aux/ltmain.sh
-# GPL-3.0-or-later WITH Autoconf-exception-generic:
-#   - build-aux/config.guess
-#   - build-aux/config.sub
-# X11:
-#   - build-aux/install-sh
 SourceLicense:  %{shrink:
                 %{license} AND
                 FSFAP-no-warranty-disclaimer AND
@@ -60,22 +18,18 @@ SourceLicense:  %{shrink:
 URL:            https://casys.gricad-pages.univ-grenoble-alpes.fr/givaro/
 %global forgeurl https://github.com/linbox-team/givaro
 VCS:            git:%{forgeurl}.git
-Source:         %{forgeurl}/releases/download/v%{version}/givaro-%{version}.tar.gz
-
-# See https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        %{forgeurl}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
 %if %{with autoreconf}
+%endif
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
-BuildRequires:  libtool
-%endif
-
-BuildRequires:  make
 BuildRequires:  gcc-c++
-
 BuildRequires:  gmp-devel
-
+BuildRequires:  libtool
+BuildRequires:  make
+# /oreon:deps
 %description
 Givaro is a C++ library for arithmetic and algebraic computations. Its main
 features are implementations of the basic arithmetic of many mathematical
@@ -88,11 +42,8 @@ multivariate).
 
 %package        devel
 Summary:        Files useful for givaro development
-
 Requires:       givaro%{?_isa} = %{version}-%{release}
-
 Obsoletes:      givaro-devel-doc < 4.1.1-15
-
 %description    devel
 The libraries and header files for using givaro for development.
 
@@ -106,13 +57,12 @@ The libraries and header files for using givaro for development.
 #   allocate, which leads to a segfault.
 %package        static
 Summary:        Static library for givaro
-
 Requires:       givaro-devel%{?_isa} = %{version}-%{release}
-
 %description    static
 A static library for givaro.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -136,44 +86,20 @@ sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
     -i libtool
 
 %build
-%make_build
 
+%make_build
 %install
 %make_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export LD_LIBRARY_PATH="${PWD}/src/.libs"
 %make_build check
-
-%files
-%license COPYING
-%license COPYRIGHT
-%license Licence_CeCILL-B_V1-en.txt
-%license Licence_CeCILL-B_V1-fr.txt
-
-%doc AUTHORS
-%doc ChangeLog
-%doc README.md
-
-%{_libdir}/libgivaro.so.%{so_version}{,.*}
-
-%files devel
-%{_bindir}/givaro-config
-
-%dir %{_datadir}/givaro
-%{_datadir}/givaro/givaro-makefile
-
-%{_includedir}/givaro/
-%{_includedir}/gmp++/
-%{_includedir}/recint/
-%{_includedir}/givaro-config.h
-
-%{_libdir}/libgivaro.so
-
-%{_libdir}/pkgconfig/givaro.pc
-
-%files static
-%{_libdir}/libgivaro.a
+%files -f %{oreon_filedir}/main.list
+%files -n givaro-devel -f %{oreon_filedir}/givaro-devel.list
+%files -n givaro-static -f %{oreon_filedir}/givaro-static.list
 
 %changelog
+
 %autochangelog

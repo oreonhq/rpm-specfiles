@@ -1,40 +1,32 @@
-%global source0_hash be8b3c04fd8a3ef177790895c1a9d11851b0109f1cf1bbbea80904fe6bb6c996
-
-# https://gcc.gnu.org/gcc-10/porting_to.html#common
-# https://github.com/ve7fet/linuxax25/issues/7
+%global source0_hash d823006bd8485d4497efc96b91eb8e8f7fb3a49f15e162782d84a48c6c9383ed
 %define _legacy_common_support 1
-
 Name:		ax25-tools
 Version:	1.0.4
-Release:	17%{?dist}
-Summary:	Tools used to configure an ax.25 enabled computer
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Tools used to configure an ax.25 enabled computer
 License:	GPL-2.0-or-later
 URL:		http://www.linux-ax25.org/wiki/LinuxAX25
-
-# Official upstream is not active, moving to supported fork.
-# https://github.com/ve7fet/linuxax25
 Source0:        https://github.com/ve7fet/linuxax25/archive/ax25tools-%{version}.tar.gz
 Source1:	smdiag.desktop
 Source2:	xfhdlcchpar.desktop
 Source3:	xfhdlcsd.desktop
 Source4:	xfsmdiag.desktop
 Source5:	xfsmmixer.desktop
-#Temporary Icon
 Source6:	%{name}.png
-
-BuildRequires:	automake gcc gcc-c++
-BuildRequires:	libax25-devel
-BuildRequires:	ncurses-devel
-BuildRequires:	libXt-devel
-BuildRequires:	libXi-devel
-BuildRequires:	fltk1.3-devel
-BuildRequires:	libX11-devel
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  desktop-file-utils
+BuildRequires:  fltk1.3-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  libX11-devel
+BuildRequires:  libXi-devel
+BuildRequires:  libXt-devel
+BuildRequires:  libax25-devel
+BuildRequires:  make
 BuildRequires:  mesa-libGL-devel
-BuildRequires:	desktop-file-utils
-BuildRequires: make
-
+BuildRequires:  ncurses-devel
+# /oreon:deps
 %description
 ax25-tools is a collection of tools that are used to configure an ax.25 enabled
 computer. They will configure interfaces and assign callsigns to ports as well
@@ -81,7 +73,6 @@ line programs; the GUI programs are contained in ax25-tools-x package.
 %package x
 Summary:	X tools used to configure an AX.25 enabled computer
 Requires:	%{name}%{?_isa} = %{version}-%{release}
-
 %description x
 ax25-tools-x is a collection of tools that are used to configure an ax.25 enabled
 computer.  This package contains the GUI programs to configure Baycom modem
@@ -96,7 +87,6 @@ and sound modem.
 %package docs
 Summary:	Documentation for ax25-tools and ax25-tools-x
 BuildArch:      noarch
-
 %description docs
 ax25-tools is a collection of tools that are used to configure an ax.25 enabled
 computer.  This package contains the GUI programs to configure Baycom modem
@@ -105,18 +95,15 @@ ax25-tools-x
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1 -n ax25tools-%{version}
-
+%global oreon_srcdir ax25tools-%{version}
+%oreon_prep
 %build
+
 ./autogen.sh
 %configure --with-xutils
 make %{?_smp_mflags} CFLAGS="%{optflags}"
-
 %install
 %make_install
-
-# no upstream .desktop or icon yet so we'll use a temporary one
 mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/pixmaps/
 cp %{SOURCE6} ${RPM_BUILD_ROOT}%{_datadir}/pixmaps/%{name}.png
 mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/applications
@@ -130,45 +117,15 @@ desktop-file-install	\
 	--dir=${RPM_BUILD_ROOT}%{_datadir}/applications %{SOURCE4}
 desktop-file-install	\
 	--dir=${RPM_BUILD_ROOT}%{_datadir}/applications %{SOURCE5}
-
-#don't include these twice
 rm -rf $RPM_BUILD_ROOT%{_docdir}/ax25tools
+%oreon_autofiles ax25-tools-x usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles ax25-tools-docs usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc AUTHORS ChangeLog
-%doc doc/README*
-%license COPYING
-%{_bindir}/*
-%{_sbindir}/*
-%{_localstatedir}/ax25/mheard/
-%config(noreplace) %{_sysconfdir}/ax25/ax25.profile
-%config(noreplace) %{_sysconfdir}/ax25/ax25d.conf
-%config(noreplace) %{_sysconfdir}/ax25/axports
-%config(noreplace) %{_sysconfdir}/ax25/axspawn.conf
-%config(noreplace) %{_sysconfdir}/ax25/nrbroadcast
-%config(noreplace) %{_sysconfdir}/ax25/nrports
-%config(noreplace) %{_sysconfdir}/ax25/rip98d.conf
-%config(noreplace) %{_sysconfdir}/ax25/rsports
-%config(noreplace) %{_sysconfdir}/ax25/rxecho.conf
-%config(noreplace) %{_sysconfdir}/ax25/ttylinkd.conf
-%exclude %{_bindir}/smdiag
-%exclude %{_sbindir}/xfhdlcchpar
-%exclude %{_sbindir}/xfhdlcst
-%exclude %{_sbindir}/xfsmdiag
-%exclude %{_sbindir}/xfsmmixer
-
-%files x
-%{_bindir}/smdiag
-%{_sbindir}/xfhdlcchpar
-%{_sbindir}/xfhdlcst
-%{_sbindir}/xfsmdiag
-%{_sbindir}/xfsmmixer
-%{_datadir}/pixmaps/%{name}.png
-%{_datadir}/applications/*.desktop
-
-%files docs
-%doc COPYING
-%{_mandir}/man?/*
+%files -f %{oreon_filedir}/main.list
+%files -n ax25-tools-x -f %{oreon_filedir}/ax25-tools-x.list
+%files -n ax25-tools-docs -f %{oreon_filedir}/ax25-tools-docs.list
 
 %changelog
+
 %autochangelog

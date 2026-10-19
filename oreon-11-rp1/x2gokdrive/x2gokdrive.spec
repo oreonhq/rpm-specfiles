@@ -1,124 +1,104 @@
 %global source0_hash 44780b7af02c0091be83efb9ccdb201588c1ec96fa382e22a70e681b95328ef2
-
 Name:           x2gokdrive
 Version:        0.0.0.3
 Release:        5%{?dist}
 Summary:        KDrive graphical server backend for X2GoServer
-
-# Per debian/copyright, only the testscripts folder is GPLv2
 License:        GPL-3.0-or-later
-
 URL:            https://www.x2go.org
 Source0:        https://code.x2go.org/releases/source/%{name}/%{name}-%{version}.tar.gz
-# Upstream copyright file
-# https://code.x2go.org/gitweb?p=x2gokdrive.git;a=blob_plain;f=debian/copyright;h=88c3411550b8f79d29f1b9a7a3c20996126375db;hb=HEAD
 Source1:        copyright
 Source2:        xorg.conf
 ExcludeArch:    %{ix86}
-
-# Required specifically for x2gokdrive
-BuildRequires:  xorg-x11-server-source
-BuildRequires:  pkgconfig(libjpeg)
-BuildRequires:  libpng-devel
-BuildRequires:  quilt
-
-# XCB bits for Xephyr
-# Copied/synced with debian/control.
-BuildRequires:  pkgconfig(xcb) >= 1
-BuildRequires:  pkgconfig(xcb-xkb)
-BuildRequires:  pkgconfig(xcb-shape)
-BuildRequires:  pkgconfig(xcb-render)
-BuildRequires:  pkgconfig(xcb-renderutil)
-BuildRequires:  pkgconfig(xcb-util)
-BuildRequires:  pkgconfig(xcb-image)
-BuildRequires:  pkgconfig(xcb-icccm)
-BuildRequires:  pkgconfig(xcb-shm)
-BuildRequires:  pkgconfig(xcb-keysyms)
-BuildRequires:  pkgconfig(xcb-randr)
-BuildRequires:  pkgconfig(xcb-xv)
-BuildRequires:  pkgconfig(xcb-glx)
-BuildRequires:  pkgconfig(xcb-xf86dri)
-
-# Dependencies for xorg-x11-server.
-BuildRequires:  gcc-c++
-BuildRequires:  automake
+%if 0%{?el8}
+%endif
+%if !(0%{?el8} && "%{_arch}" == "s390x")
+%endif
+# oreon:deps
+BuildRequires:  Xvfb
 BuildRequires:  autoconf
-BuildRequires:  libtool
-BuildRequires:  gettext-devel
+BuildRequires:  automake
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  font-util
+BuildRequires:  gcc-c++
+BuildRequires:  gettext-devel
 BuildRequires:  imake
-BuildRequires:  pkgconfig(xproto)
+BuildRequires:  libgcrypt-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libtool
+BuildRequires:  pam-devel
+BuildRequires:  pkgconfig(audit)
+BuildRequires:  pkgconfig(auparse)
+BuildRequires:  pkgconfig(bigreqsproto)
+BuildRequires:  pkgconfig(compositeproto)
 BuildRequires:  pkgconfig(damageproto)
+BuildRequires:  pkgconfig(dri)
 BuildRequires:  pkgconfig(fixesproto)
 BuildRequires:  pkgconfig(fontsproto)
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(glproto)
 BuildRequires:  pkgconfig(kbproto)
-BuildRequires:  pkgconfig(xineramaproto)
+BuildRequires:  pkgconfig(libjpeg)
+BuildRequires:  pkgconfig(libunwind)
+BuildRequires:  pkgconfig(nettle)
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  pkgconfig(pciaccess)
+BuildRequires:  pkgconfig(pixman-1)
+BuildRequires:  pkgconfig(presentproto)
 BuildRequires:  pkgconfig(randrproto)
 BuildRequires:  pkgconfig(recordproto)
 BuildRequires:  pkgconfig(renderproto)
 BuildRequires:  pkgconfig(resourceproto)
 BuildRequires:  pkgconfig(scrnsaverproto)
 BuildRequires:  pkgconfig(videoproto)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xau)
+BuildRequires:  pkgconfig(xaw7)
+BuildRequires:  pkgconfig(xcb)
+BuildRequires:  pkgconfig(xcb-glx)
+BuildRequires:  pkgconfig(xcb-icccm)
+BuildRequires:  pkgconfig(xcb-image)
+BuildRequires:  pkgconfig(xcb-keysyms)
+BuildRequires:  pkgconfig(xcb-randr)
+BuildRequires:  pkgconfig(xcb-render)
+BuildRequires:  pkgconfig(xcb-renderutil)
+BuildRequires:  pkgconfig(xcb-shape)
+BuildRequires:  pkgconfig(xcb-shm)
+BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  pkgconfig(xcb-xf86dri)
+BuildRequires:  pkgconfig(xcb-xkb)
+BuildRequires:  pkgconfig(xcb-xv)
 BuildRequires:  pkgconfig(xcmiscproto)
+BuildRequires:  pkgconfig(xdmcp)
+BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xextproto)
 BuildRequires:  pkgconfig(xf86bigfontproto)
 BuildRequires:  pkgconfig(xf86dgaproto)
 BuildRequires:  pkgconfig(xf86vidmodeproto)
-BuildRequires:  pkgconfig(presentproto)
-BuildRequires:  pkgconfig(bigreqsproto)
-BuildRequires:  pkgconfig(compositeproto)
-BuildRequires:  pkgconfig(glproto)
-BuildRequires:  pkgconfig(xtrans)
-BuildRequires:  pkgconfig(xau)
-BuildRequires:  pkgconfig(xdmcp)
-BuildRequires:  pkgconfig(xfont2)
-BuildRequires:  pkgconfig(xkbfile)
-BuildRequires:  pkgconfig(pixman-1)
-BuildRequires:  pkgconfig(pciaccess)
-BuildRequires:  libgcrypt-devel
-BuildRequires:  pkgconfig(nettle)
-BuildRequires:  pam-devel
-# We probably won't need some libudev-devel equivalent because we disable that
-# feature anyway.
-# Same goes for pkgconfig(libselinux).
-BuildRequires:  pkgconfig(audit)
-BuildRequires:  pkgconfig(auparse)
-# Same goes for pkgconfig(libdrm).
-BuildRequires:  pkgconfig(dri)
-%if 0%{?el8}
-BuildRequires:  pkgconfig(fontutil)
-%endif
-BuildRequires:  pkgconfig(gl)
-# No libunwind on RHEL8 s390x
-%if !(0%{?el8} && "%{_arch}" == "s390x")
-BuildRequires:  pkgconfig(libunwind)
-%endif
-BuildRequires:  pkgconfig(xmuu)
-BuildRequires:  pkgconfig(xext)
-BuildRequires:  pkgconfig(x11)
-BuildRequires:  pkgconfig(xrender)
-BuildRequires:  pkgconfig(xi)
-BuildRequires:  pkgconfig(xpm)
-BuildRequires:  pkgconfig(xaw7)
-BuildRequires:  pkgconfig(xt)
-BuildRequires:  pkgconfig(xmu)
-BuildRequires:  pkgconfig(xtst)
-BuildRequires:  pkgconfig(xres)
 BuildRequires:  pkgconfig(xfixes)
-BuildRequires:  pkgconfig(xv)
+BuildRequires:  pkgconfig(xfont2)
+BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(xinerama)
-# RPM-specific... probably?
+BuildRequires:  pkgconfig(xineramaproto)
+BuildRequires:  pkgconfig(xkbfile)
+BuildRequires:  pkgconfig(xmu)
+BuildRequires:  pkgconfig(xmuu)
 BuildRequires:  pkgconfig(xorg-macros)
-BuildRequires:  pkgconfig(openssl)
+BuildRequires:  pkgconfig(xpm)
+BuildRequires:  pkgconfig(xproto)
+BuildRequires:  pkgconfig(xrender)
+BuildRequires:  pkgconfig(xres)
 BuildRequires:  pkgconfig(xshmfence)
-#For tests
+BuildRequires:  pkgconfig(xt)
+BuildRequires:  pkgconfig(xtrans)
+BuildRequires:  pkgconfig(xtst)
+BuildRequires:  pkgconfig(xv)
+BuildRequires:  quilt
+BuildRequires:  x2gokdriveclient
 BuildRequires:  xauth
 BuildRequires:  xkbcomp
-BuildRequires:  Xvfb
-BuildRequires:  x2gokdriveclient
-
+BuildRequires:  xorg-x11-server-source
+# /oreon:deps
 %description
 X2Go is a server based computing environment with
    - session resuming
@@ -146,14 +126,8 @@ More information about X2Go can be found at:
 %package -n xorg-x11-server-x2gokdrive
 Summary:        KDrive graphical server backend for X2GoServer
 Requires:       xorg-x11-server-common >= 1.18.4
-%if 0%{?fedora} || 0%{?rhel} > 8
-Recommends:     mesa-dri-drivers
-Recommends:     x2goserver >= 4.1.0.4
-%else
 Requires:       mesa-dri-drivers
 Requires:       x2goserver >= 4.1.0.4
-%endif
-
 %description -n xorg-x11-server-x2gokdrive
 X2Go is a server based computing environment with
    - session resuming
@@ -180,6 +154,7 @@ More information about X2Go can be found at:
 <URL:https://wiki.x2go.org>
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -213,18 +188,13 @@ if [ -d "../patches.xorg/${XORG_UPSTREAM_VERSION}/missing" ]; then
 fi
 
 %build
+
 export CFLAGS="$RPM_OPT_FLAGS -fPIC"
 export CXXFLAGS="$CFLAGS"
-
 pushd 'BUILD'
-# Clean up old configure files that might have had the executable bit set.
-# Will be regenerated later on.
 rm -f 'configure' 'config.'{sub,guess} 'depcomp' 'install-sh' 'compile' 'ltmain.sh' 'missing' 'ylwrap'
 autoreconf -fvi
-# The RPM macro for the linker flags does not exist on EPEL
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro}
-# disable-static is so we don't get libfoo.a for modules.  now if only we could
-# kill the .las.
 %configure \
         --libexecdir='%{_prefix}/lib/xorg' \
         --with-module-dir='%{_prefix}/lib/xorg/modules' \
@@ -303,36 +273,29 @@ autoreconf -fvi
         LDFLAGS='%{__global_ldflags}'
 %make_build
 popd
-
 %install
 pushd 'BUILD'
 %make_install
 popd
+%oreon_autofiles xorg-x11-server-x2gokdrive usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# This doesn't really seem to work - maybe someday upstream will have a better test
+
 export PATH=%{buildroot}%{_bindir}:$PATH
 export QT_DEBUG_PLUGINS=1
 xvfb-run -f ~/.Xauthority testscripts/run-x2gokdriveclient-to-x2gokdrive-on-localhost
 sleep 5
 cat $HOME/.x2go/S-9/session
 cat $HOME/.x2go/C-9/session
-# kill any remaining processes
 for pid in $HOME/.x2go/[CS]-9/pid
 do
   [ -f $pid ] && kill $(cat $pid)
 done
 exit 0
-
-%files -n xorg-x11-server-x2gokdrive
-%license copyright
-%{_bindir}/x2gokdrive
-# Exclude protocol.txt, it's shipped by xorg-x11-server(-common) and we don't
-# want to conflict with that package.
-%exclude %{_libexecdir}/protocol.txt
-%exclude %{_mandir}/man1/Xserver.1.gz
-%exclude %{_var}/lib/xkb/
-%doc %{_mandir}/man1/x2gokdrive.1.gz
+%files -f %{oreon_filedir}/main.list
+%files -n xorg-x11-server-x2gokdrive -f %{oreon_filedir}/xorg-x11-server-x2gokdrive.list
 
 %changelog
+
 %autochangelog

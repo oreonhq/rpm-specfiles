@@ -1,45 +1,24 @@
 %global source0_hash 2b2786e870106e22e17123b8cd6fa900ee7a72f6fbefbf8bd57aaee909c95089
-
-# All tests require Internet access
-# to test in mock use:  --enable-network --with check
-# to test in a privileged environment use:
-#   --with check --with privileged_tests
 %bcond_with     check
 %bcond_with     privileged_tests
-
 Name:           ansible-bender
 Version:        0.10.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Build container images using Ansible playbooks
-
 License:        MIT
 URL:            https://github.com/ansible-community/ansible-bender
-Source0:        %{pypi_source}
-
+Source0:        https://files.pythonhosted.org/packages/source/a/ansible-bender/ansible-bender-%{version}.tar.gz
 BuildArch:      noarch
-
-BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  python%{python3_pkgversion}-pip
-BuildRequires:  python%{python3_pkgversion}-setuptools
-BuildRequires:  python%{python3_pkgversion}-setuptools_scm
 %if %{with check}
-# These are required for tests:
-BuildRequires:  python%{python3_pkgversion}-pyyaml
-BuildRequires:  python%{python3_pkgversion}-tabulate
-BuildRequires:  python%{python3_pkgversion}-jsonschema
-BuildRequires:  python%{python3_pkgversion}-pytest
-BuildRequires:  python%{python3_pkgversion}-flexmock
-BuildRequires:  python%{python3_pkgversion}-pytest-xdist
-BuildRequires:  python%{python3_pkgversion}-libselinux
-BuildRequires:  ansible-core
-BuildRequires:  podman
-BuildRequires:  buildah
-BuildRequires:  git
 %endif
 Requires:       (ansible-core or ansible)
 Suggests:       ansible-core
 Requires:       buildah
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-ansible-bender = %{version}-%{release}
+# /oreon:deps
 %description
 This is a tool which bends containers using Ansible playbooks and
 turns them into container images. It has a pluggable builder selection
@@ -52,17 +31,16 @@ tl;dr Ansible is the frontend, buildah is the backend.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-
+%oreon_autofiles main
 %if %{with check}
 %check
+
 %pytest \
   -v \
   --disable-pytest-warnings \
@@ -73,13 +51,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
   tests/unit
 %endif
 %endif
-
 %files
-%{python3_sitelib}/ansible_bender-*.dist-info/
-%{python3_sitelib}/ansible_bender/
-%{_bindir}/ansible-bender
-%license LICENSE
-%doc docs/* README.md
 
 %changelog
+
 %autochangelog

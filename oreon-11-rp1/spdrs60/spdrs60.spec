@@ -1,23 +1,20 @@
 %global source0_hash f141f6e88f35e7e429542950171db17e1f61ec660baaf1f50dae45e837eef08c
-
-Summary:	SRCP based locking table for digital model railroads
+Summary:        SRCP based locking table for digital model railroads
 Name:		spdrs60
 Version:	0.6.5
-Release:	9%{?dist}
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
 License:	GPL-2.0-or-later
 URL:		http://spdrs60.sourceforge.net/
-Source:		http://sourceforge.net/projects/spdrs60/files/spdrs60/%{version}/spdrs60-%{version}.tar.bz2
-
-BuildRequires:	gcc-c++
-BuildRequires:	make
-BuildRequires:	desktop-file-utils
-BuildRequires:	docbook-style-dsssl
-BuildRequires:	qt5-qtbase-devel
-BuildRequires:	qt5-qttools-devel
-BuildRequires:	openjade
-
+Source0:        http://sourceforge.net/projects/spdrs60/files/spdrs60/%{version}/spdrs60-%{version}.tar.bz2
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  docbook-style-dsssl
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  openjade
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qttools-devel
+# /oreon:deps
 %description
 Graphical program to comfortably control a digital model railroad.
 Visual appearance and usage comply to the SpDr of the German national
@@ -29,11 +26,11 @@ of the model.
 Summary:	Documentation for %{name}
 BuildArch:	noarch
 Requires:	%{name} = %{version}-%{release}
-
 %description	doc
 This package contains documentation for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -43,13 +40,12 @@ for file in ./AUTHORS ./NEWS; do
 done
 
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
 %find_lang %{name} --with-man --all-name
-
 cp -p spdrs60.redhat.desktop spdrs60.desktop
 desktop-file-install \
 	--remove-key='Encoding' \
@@ -59,20 +55,11 @@ desktop-file-install \
 	--delete-original \
 	--dir='%{buildroot}%{_datadir}/applications' \
 	spdrs60.desktop
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%doc AUTHORS README TODO NEWS ChangeLog spdrs60.lsm
-%license COPYING
-%{_bindir}/%{name}
-%{_bindir}/centralclock
-%{_datadir}/%{name}
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/pixmaps/%{name}*
-%{_mandir}/man1/*.1*
-
-%files doc
-%docdir %{_docdir}/%{name}/html
-%{_docdir}/%{name}/html
+%files -f %{oreon_filedir}/main.list
+%files -n spdrs60-doc -f %{oreon_filedir}/spdrs60-doc.list
 
 %changelog
+
 %autochangelog

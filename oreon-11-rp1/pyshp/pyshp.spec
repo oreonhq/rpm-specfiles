@@ -1,24 +1,13 @@
-%global source0_hash c4db990421bebd9a530d0193ba6b4effbe1b71619ee6ac31c23e4a855a738f0e
-
+%global source0_hash 2f48423ff717240740e17b9c1f900fc3a41c80a0579a4a0eabeea81ccf563bdc
 Name:           pyshp
 Version:        3.1.6
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Pure Python read/write support for ESRI Shapefile format
-
-# SPDX
 License:        MIT
-# See Source10-Source25.
 SourceLicense:  %{license} AND LicenseRef-Fedora-Public-Domain AND ODbl-1.0
 URL:            https://github.com/GeospatialPython/pyshp
-Source0:        %{url}/archive/%{version}/pyshp-%{version}.tar.gz
-
-# Shapefiles for doctests. These are not packaged in the binary RPMs, so do not
-# contribute to the License. They are LicenseRef-Fedora-Public-Domain
-# (https://github.com/nvkelso/natural-earth-vector/blob/master/LICENSE.md; see
-# also http://www.naturalearthdata.com/about/terms-of-use/). Upstream tests
-# fetch these from the network.
+Source0:        https://github.com/GeospatialPython/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 %global ne_url https://github.com/nvkelso/natural-earth-vector
-# Upstream uses “master”
 %global ne_commit ca96624a56bd078437bca8184e78163e5039ad19
 Source10:       %{ne_url}/raw/%{ne_commit}/10m_cultural/ne_10m_admin_1_states_provinces.cpg
 Source11:       %{ne_url}/raw/%{ne_commit}/10m_cultural/ne_10m_admin_1_states_provinces.dbf
@@ -30,19 +19,10 @@ Source21:       %{ne_url}/raw/%{ne_commit}/110m_cultural/ne_110m_admin_0_tiny_co
 Source22:       %{ne_url}/raw/%{ne_commit}/110m_cultural/ne_110m_admin_0_tiny_countries.prj
 Source23:       %{ne_url}/raw/%{ne_commit}/110m_cultural/ne_110m_admin_0_tiny_countries.shp
 Source24:       %{ne_url}/raw/%{ne_commit}/110m_cultural/ne_110m_admin_0_tiny_countries.shx
-# This is an OpenStreetMap extract originally obtained from
-# https://download.geofabrik.de/, so it is ODbl-1.0; see
-# https://www.openstreetmap.org/copyright/.
 %global data_url https://github.com/JamesParrott/PyShp_test_shapefile
-# Upstream uses “main”
 %global data_commit 2583dba70d0892fc787e1a837df07c3ea8e69950
 Source25:       %{data_url}/raw/%{data_commit}/gis_osm_natural_a_free_1.zip
-
-# We do not package the “stubs” extra because we do not need or wish to package
-# python-pyshp-stubs.
-
 BuildArch:      noarch
-
 %global common_description %{expand:
 The Python Shapefile Library (PyShp) provides read and write support for the
 Esri Shapefile format. The Shapefile format is a popular Geographic Information
@@ -55,21 +35,31 @@ is also required. This format is documented on the web as the “XBase File
 Format Description” and is a simple file-based database format created in the
 1960’s. For more on this specification see:
 http://www.clicketyclick.dk/databases/xbase/format/index.html
-
 Both the Esri and XBase file-formats are very simple in design and memory
 efficient which is part of the reason the shapefile format remains popular
 despite the numerous ways to store and exchange GIS data available today.}
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-pyshp = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-pyshp+stubs
+Summary:        Metapackage for python3-pyshp stubs extras
+Requires:       python3-pyshp = %{version}-%{release}
+Provides:       python3dist(pyshp[stubs]) = %{version}-%{release}
+
+%description -n python3-pyshp+stubs
+Metapackage for python3-pyshp stubs extras.
 
 %description %{common_description}
 
 %package -n python3-pyshp
-Summary:        %{summary}
-
+Summary:        Pure Python read/write support for ESRI Shapefile format
 %py_provides python3-shapefile
-
 %description -n python3-pyshp %{common_description}
 
 %prep
+
 %autosetup -p1
 mkdir -p _testdata
 ln '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}' '%{SOURCE13}' '%{SOURCE14}' \
@@ -77,27 +67,26 @@ ln '%{SOURCE10}' '%{SOURCE11}' '%{SOURCE12}' '%{SOURCE13}' '%{SOURCE14}' \
     '%{SOURCE25}' _testdata/
 
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-pyshp usr/lib/python3*/site-packages/pyshp* usr/lib64/python3*/site-packages/pyshp* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pyshp* usr/lib64/python3*/site-packages/pyshp* usr/bin/*
 
 %check
-# Serve the test data locally; see the “Network tests” section in README.md
+
 pushd _testdata
 %{python3} -m http.server 8000 &
 SERVER_PID="$!"
 trap "kill '${SERVER_PID}'" INT TERM EXIT
 popd
 export REPLACE_REMOTE_URLS_WITH_LOCALHOST='yes'
-
 %pytest -v
-# Doctests
 %{py3_test_envvars} %{python3} test_shapefile.py
-
-%files -n python3-pyshp -f %{pyproject_files}
-%doc changelog.txt
-%doc README.md
+%files
+%files -n python3-pyshp -f %{oreon_filedir}/python3-pyshp.list
 
 %changelog
+
 %autochangelog

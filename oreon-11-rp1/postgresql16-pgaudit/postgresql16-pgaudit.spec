@@ -1,34 +1,32 @@
 %global source0_hash 0ad5f8493079999d30511cf2e04fdc93f271ff4e9623def6797de81e09f767e8
-
 %{!?postgresql_default:%global postgresql_default 0}
-
 %global majorname pgaudit
 %global pgversion 16
 Name:		postgresql%{pgversion}-%{majorname}
 Version:	17.1rc1
-Release:	1%{?dist}
-Summary:	PostgreSQL Audit Extension
-
+Release:        1%{?dist}
+Summary:        PostgreSQL Audit Extension
 License:	PostgreSQL
 URL:		http://pgaudit.org
-
 Source0:        https://github.com/%{majorname}/%{majorname}/archive/refs/tags/%{version}.tar.gz#/%{majorname}-%{version}.tar.gz
-
 %if %?postgresql_default
 %global pkgname %{majorname}
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  postgresql16-server-devel
+# /oreon:deps
 %package -n %{pkgname}
 Summary: PostgreSQL Audit Extension
 %else
 %global pkgname %name
 %endif
-
 BuildRequires: make
 BuildRequires:	gcc
 BuildRequires:	postgresql16-server-devel
 BuildRequires:	openssl-devel
-
 Requires(pre): postgresql16-server
-
 %global precise_version %{?epoch:%epoch:}%version-%release
 Provides: %{pkgname} = %precise_version
 %if %?postgresql_default
@@ -38,7 +36,6 @@ Provides: postgresql-%{majorname} = %precise_version
 Provides: %{pkgname}%{?_isa} = %precise_version
 Provides: %{majorname}-any
 Conflicts: %{majorname}-any
-
 %description
 The PostgreSQL Audit extension (pgaudit) provides detailed session
 and/or object audit logging via the standard PostgreSQL logging
@@ -70,30 +67,21 @@ trail or audit log. The term audit log is used in this documentation.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{majorname}-%{version}
 
-
 %build
+
 %make_build USE_PGXS=1 PG_CONFIG=/usr/bin/pg_server_config
-
-
 %install
 %make_install USE_PGXS=1 PG_CONFIG=/usr/bin/pg_server_config
-
-
-%files -n %{pkgname}
-%doc README.md
-%license LICENSE
-%{_libdir}/pgsql/%{majorname}.so
-%if 0%{?postgresql_server_llvmjit}
-%{_libdir}/pgsql/bitcode/%{majorname}.index.bc
-%{_libdir}/pgsql/bitcode/%{majorname}/%{majorname}.bc
-%endif
-%{_datadir}/pgsql/extension/%{majorname}--1*.sql
-%{_datadir}/pgsql/extension/%{majorname}.control
-
+%oreon_autofiles main
+%if %?postgresql_default
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.0-9
 - Import
+%endif

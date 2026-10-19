@@ -1,30 +1,27 @@
-%global source0_hash 0243b7c36b5f9e930c62778acd52deb188deeca704a5e195337018435d9e7bb5
-
+%global source0_hash 1df2549f25a84f9237620fbf0c9cba65080e49c76025bd50ce530cfd00f3eab5
 Name:           genius
 Version:        1.0.29
 Release:        1%{?dist}
 Summary:        An arbitrary precision integer and multiple precision floatingpoint calculator
-
-# Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://www.jirka.org/genius.html
 Source0:        https://download.gnome.org/sources/genius/1.0/genius-%{version}.tar.xz
-
-BuildRequires:  gcc
-BuildRequires:  vte291-devel
-BuildRequires:  readline-devel
-BuildRequires:  gmp-devel
-BuildRequires:  mpfr-devel
-BuildRequires:  popt
-BuildRequires:  pkgconfig
-BuildRequires:  intltool
-BuildRequires:  gtk3-devel
-BuildRequires:  gtksourceview4-devel
+# oreon:deps
 BuildRequires:  desktop-file-utils
 BuildRequires:  flex
+BuildRequires:  gcc
 BuildRequires:  gettext
-BuildRequires: make
-
+BuildRequires:  gmp-devel
+BuildRequires:  gtk3-devel
+BuildRequires:  gtksourceview4-devel
+BuildRequires:  intltool
+BuildRequires:  make
+BuildRequires:  mpfr-devel
+BuildRequires:  pkgconfig
+BuildRequires:  popt
+BuildRequires:  readline-devel
+BuildRequires:  vte291-devel
+# /oreon:deps
 %description
 Genius is a calculator program similar in some aspects to BC, Matlab
 or Maple. GEL is the name of its extension language, in fact, a large
@@ -33,18 +30,17 @@ part of the standard genius functions are written in GEL itself.
 %package devel
 Summary:        Development files for Genius
 Requires:       %{name} = %{version}-%{release}
-
 %description devel
 Development files for Genius.
 
 %package -n gnome-genius
 Summary:        GNOME frontend for Genius
 Requires:       %{name} = %{version}-%{release}
-
 %description -n gnome-genius
 GNOME frontend for Genius.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -52,9 +48,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 find -name \*.c | xargs chmod 0644
 
 %build
+
 %configure --disable-update-mimedb
 %make_build
-
 %install
 %make_install
 rm -rf $RPM_BUILD_ROOT%{_libdir}
@@ -69,27 +65,14 @@ desktop-file-install \
     --dir $RPM_BUILD_ROOT%{_datadir}/applications \
     --delete-original \
     $RPM_BUILD_ROOT%{_datadir}/applications/gnome-genius.desktop
-
 %find_lang %{name}
+%oreon_autofiles gnome-genius usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f %{name}.lang
-%doc AUTHORS ChangeLog NEWS README TODO
-%license COPYING
-%exclude %{_datadir}/genius/gtksourceview
-%{_bindir}/genius
-%{_datadir}/genius
-
-%files devel
-%{_includedir}/genius
-
-%files -n gnome-genius
-%{_bindir}/gnome-genius
-%{_libexecdir}/*
-%{_datadir}/genius/gtksourceview
-%{_datadir}/icons/hicolor/*/*/*.png
-%{_datadir}/icons/hicolor/scalable/*/gnome-genius.svg
-%{_datadir}/mime/packages/*
-%{_datadir}/applications/*
+%files -f %{oreon_filedir}/main.list
+%files -n genius-devel -f %{oreon_filedir}/genius-devel.list
+%files -n gnome-genius -f %{oreon_filedir}/gnome-genius.list
 
 %changelog
+
 %autochangelog

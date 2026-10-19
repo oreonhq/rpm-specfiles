@@ -1,19 +1,16 @@
 %global source0_hash 467b9e30fd0979ee301065e70f637d525c28193449e1b13fbcb1b1fab3ad224f
-
 Name:           http-parser
 Version:        2.9.4
-Release:        16%{?dist}
+Release:        1%{?dist}
 Summary:        HTTP request/response parser for C
-
 License:        MIT
 URL:            https://github.com/nodejs/http-parser
 Source0:        https://github.com/nodejs/http-parser/archive/refs/tags/v2.9.4.tar.gz#/http-parser-2.9.4.tar.gz
-# https://github.com/nodejs/http-parser/pull/483
 Patch0001:      0001-url-treat-empty-port-as-default.patch
-
-BuildRequires:  meson
+# oreon:deps
 BuildRequires:  gcc
-
+BuildRequires:  meson
+# /oreon:deps
 %description
 This is a parser for HTTP messages written in C. It parses both requests and
 responses. The parser is designed to be used in performance HTTP applications.
@@ -25,11 +22,11 @@ connection).
 %package devel
 Summary:        Development headers and libraries for http-parser
 Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
-
 %description devel
 Development headers and libraries for http-parser.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 %ifarch %{arm}
@@ -55,28 +52,21 @@ endforeach
 EOF
 
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %meson_test
-
 %ldconfig_scriptlets
-
-%files
-%license LICENSE-MIT
-%doc AUTHORS README.md
-%{_libdir}/libhttp_parser.so.*
-%{_libdir}/libhttp_parser_strict.so.*
-
-%files devel
-%{_includedir}/http_parser.h
-%{_libdir}/libhttp_parser.so
-%{_libdir}/libhttp_parser_strict.so
+%files -f %{oreon_filedir}/main.list
+%files -n http-parser-devel -f %{oreon_filedir}/http-parser-devel.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.4-16
 - Prepare for Oreon 11 (RP1)

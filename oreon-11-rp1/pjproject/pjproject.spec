@@ -1,17 +1,11 @@
 %global source0_hash 32a5ab5bfbb9752cb6a46627e4c410e61939c8dbbd833ac858473cfbd9fb9d7d
-
 Name:    pjproject
-Summary: Libraries for building embedded/non-embedded VoIP applications
+Summary:        Libraries for building embedded/non-embedded VoIP applications
 Version: 2.13.1
-Release: 8%{?dist}
-# main source code is GPL-2.0-or-later
-# third_party/srtp is BSD-3-Clause
-# third_party/webrtc is BSD-3-Clause
+Release:        8%{?dist}
 License: GPL-2.0-or-later AND BSD-3-Clause
 URL:     http://www.pjsip.org
-
-Source: https://github.com/pjsip/pjproject/archive/%{version}/%{name}-%{version}.tar.gz
-
+Source0:        https://github.com/pjsip/pjproject/archive/%{version}/%{name}-%{version}.tar.gz
 Patch: 0001-Tell-the-build-system-not-to-use-most-of-the-third_party-directory.patch
 Patch: 0002-Add-a-config_site.h-file.patch
 Patch: 0003-Fix-ARMv7-endianness.patch
@@ -20,31 +14,24 @@ Patch: 0005-Add-ppc64-detection.patch
 Patch: 0006-Add-s390-detection.patch
 Patch: 0007-Don-t-use-SSE2-if-it-is-not-available.patch
 Patch: 0008-Add-riscv-support.patch
-
-BuildRequires: make
-BuildRequires: autoconf
-BuildRequires: alsa-lib-devel
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: gsm-devel
-BuildRequires: libsrtp-devel
-BuildRequires: libuuid-devel
-BuildRequires: openssl-devel
-BuildRequires: pkgconfig
-BuildRequires: portaudio-devel
-BuildRequires: speex-devel
-BuildRequires: speexdsp-devel
-BuildRequires: libyuv-devel
-
-# See third_party/webrtc/README.chromium
-# (version shipped in Fedora (webrtc-audio-processing) is incompatible)
 Provides: bundled(webrtc) = 90
-
-# See third_party/srtp/VERSION
-# (libsrtp-2.3.0 shipped in Fedora seems incompatible,
-# results in Error initializing SRTP library: cipher failure [status=259807])
 Provides: bundled(srtp) = 2.1.0
-
+# oreon:deps
+BuildRequires:  alsa-lib-devel
+BuildRequires:  autoconf
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  gsm-devel
+BuildRequires:  libsrtp-devel
+BuildRequires:  libuuid-devel
+BuildRequires:  libyuv-devel
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig
+BuildRequires:  portaudio-devel
+BuildRequires:  speex-devel
+BuildRequires:  speexdsp-devel
+# /oreon:deps
 %description
 This package provides the Open Source, comprehensive, high performance,
 small footprint multimedia communication libraries written in C
@@ -60,7 +47,6 @@ It contains:
 %package devel
 Summary: Development files to use pjproject
 Requires: %{name} = %{version}-%{release}
-
 %description devel
 Header information for:
 - PJSIP - Open Source SIP Stack
@@ -72,13 +58,13 @@ Header information for:
 %package -n pjsua
 Summary: command line SIP user agent
 Requires: %{name} = %{version}-%{release}
-
 %description -n pjsua
 pjsua is an open source command line SIP user agent (softphone)
 that is used as the reference implementation for PJSIP, PJNATH, and PJMEDIA.
 Despite its simple command line appearance, it does pack many features!
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{version}
@@ -118,15 +104,9 @@ rm -rf third_party/build/speex
 rm -rf third_party/build/yuv
 
 %build
-# Regenerate aconfigure for Patch8
+
 autoconf aconfigure.ac > aconfigure
-
-# We're building without audio or video support, as Asterisk isn't using
-# that functionality, and it made it easier to ensure that we don't
-# bundle any unnecessary libraries.  Please contact me if your project
-# needs this support, and I'll re-enable it
 export CFLAGS="-DPJ_HAS_IPV6=1 -DNDEBUG ${ARCHFLAGS} %{optflags}"
-
 %configure --enable-shared        \
            --with-external-gsm    \
            --with-external-pa     \
@@ -139,46 +119,19 @@ export CFLAGS="-DPJ_HAS_IPV6=1 -DNDEBUG ${ARCHFLAGS} %{optflags}"
            --disable-v4l2         \
            --disable-ilbc-codec   \
            --disable-g7221-codec  
-
-#make %{?_smp_mflags} dep
-#make %{?_smp_mflags}
 make -j1 dep
 make -j1
-
 %install
 %make_install
-
 install -p -D -m 0755 pjsip-apps/bin/pjsua-* %{buildroot}%{_bindir}/pjsua
-
-# Remove the static libraries, as they aren't wanted
 find %{buildroot} -type f -name "*.a" -delete
+%oreon_autofiles pjsua usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc README.txt README-RTEMS INSTALL.txt
-%license COPYING
-%{_libdir}/lib*.so.*
-
-%files devel
-%{_libdir}/lib*.so
-%{_includedir}/pj++/
-%{_includedir}/pj/
-%{_includedir}/pjlib-util/
-%{_includedir}/pjmedia-audiodev/
-%{_includedir}/pjmedia-codec/
-%{_includedir}/pjmedia-videodev/
-%{_includedir}/pjmedia/
-%{_includedir}/pjnath/
-%{_includedir}/pjsip-simple/
-%{_includedir}/pjsip-ua/
-%{_includedir}/pjsip/
-%{_includedir}/pjsua-lib/
-%{_includedir}/pjsua2/
-%{_includedir}/*.h
-%{_includedir}/*.hpp
-%{_libdir}/pkgconfig/libpjproject.pc
-
-%files -n pjsua
-%{_bindir}/pjsua
+%files -f %{oreon_filedir}/main.list
+%files -n pjproject-devel -f %{oreon_filedir}/pjproject-devel.list
+%files -n pjsua -f %{oreon_filedir}/pjsua.list
 
 %changelog
+
 %autochangelog

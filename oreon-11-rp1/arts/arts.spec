@@ -1,83 +1,55 @@
 %global source0_hash 92e23839eb4042d2a15cf59614824cadc0a23e92fa139c50d5e3bd4989a8cc39
-
 %define multilib_arches %{ix86} x86_64 ppc ppc64 s390 s390x sparcv9 sparc64
-# This package ships .la files
 %global __brp_remove_la_files %nil
-# Disable LTO because it breaks ALSA versioned symbol use, crashing (#1910437)
 %global _lto_cflags %nil
-
 Name:    arts
-Summary: aRts (analog realtime synthesizer) - the KDE sound system 
+Summary:        aRts (analog realtime synthesizer) - the KDE sound system
 Epoch:   8
 Version: 1.5.10
-Release: 68%{?dist}
-
+Release:        1%{?dist}
 License: LGPL-2.0-or-later
 Url: http://www.kde.org
-Source0: ftp://ftp.kde.org/pub/kde/stable/3.5.10/src/%{name}-%{version}.tar.bz2
+Source0:        ftp://ftp.kde.org/pub/kde/stable/3.5.10/src/%{name}-%{version}.tar.bz2
 Source1: gslconfig-wrapper.h
-
 Patch1: arts-1.1.4-debug.patch
 Patch2: arts-1.3.92-glib2.patch
 Patch5: arts-1.3.1-alsa.patch
 Patch6: arts-1.5.8-glibc.patch
 Patch8: arts-1.5.2-multilib.patch
-# don't pop up a dialog on CPU overload (#361891)
 Patch9: arts-1.5.10-cpu-overload-quiet.patch
-# don't call snd_pcm_close(NULL), triggers assertion failure in ALSA (#558570)
 Patch10: arts-1.5.10-assertion-failure.patch
-# fix detection of ALSA 1.1 (and future 1.x) in configure.in.in
 Patch11: arts-1.5.10-alsa11.patch
-# kde#93359
 Patch50: arts-1.5.4-dlopenext.patch
 Patch51: kde-3.5-libtool-shlibext.patch
 Patch52: arts-1.5.8-glibc-libio.patch
 Patch53: arts-autoconf-2.7x.patch
 Patch54: arts-c99.patch
 Patch55: kde3-autoconf-2.72.patch
-
-# upstream patches
-
-# security patches
-# CVE-2009-3736 libtool: libltdl may load and execute code from a library in the current directory 
 Patch200: libltdl-CVE-2009-3736.patch
-# CVE-2015-7543 arts,kdelibs3: Use of mktemp(3) allows attacker to hijack the IPC
-# backport upstream fix (the lnusertemp.c change) from kdelibs 4:
-# http://commits.kde.org/kdelibs/cc5515ed7ce8884c9b18169158ba29ab2f7a3db7
-# upstream fix by Joseph Wenninger, rediffed for aRts by Kevin Kofler
 Patch201: arts-1.5.10-CVE-2015-7543.patch
-
-# fixes to common KDE 3 autotools machinery
-# tweak autoconfigury so that it builds with autoconf 2.64 or 2.65
 Patch300: kde3-acinclude.patch
-# remove flawed and obsolete automake version check in admin/cvs.sh
 Patch301: kde3-automake-version.patch
-# fix build failure with automake 1.13: add the --add-missing --copy flags
-# also add --force-missing to get aarch64 support (#925029/#925627)
 Patch302: kde3-automake-add-missing.patch
-# fix aarch64 FTBFS due to libtool not liking the file output on *.so files
 Patch303: kde3-libtool-aarch64.patch
 Patch304: args-1.5.8-configure.patch
-
-# Don't use __FILE__ like a string literal
 Patch305: file-literal.patch
-
-# used in artsdsp
 Requires: which
-
+# oreon:deps
+BuildRequires:  alsa-lib-devel
+BuildRequires:  audiofile-devel
+BuildRequires:  automake
+BuildRequires:  chrpath
+BuildRequires:  findutils
 BuildRequires:  gcc-c++
-BuildRequires: qt3-devel >= 3.3.8
-BuildRequires: alsa-lib-devel
-BuildRequires: audiofile-devel
-BuildRequires: automake libtool
-BuildRequires: findutils sed
-BuildRequires: glib2-devel
-BuildRequires: libvorbis-devel
-BuildRequires: pkgconfig
-BuildRequires: chrpath
-BuildRequires: libmad-devel
-BuildRequires: make
-
+BuildRequires:  glib2-devel
+BuildRequires:  libmad-devel
+BuildRequires:  libtool
+BuildRequires:  libvorbis-devel
+BuildRequires:  make
+BuildRequires:  pkgconfig
+BuildRequires:  qt3-devel
+BuildRequires:  sed
+# /oreon:deps
 %description
 arts (analog real-time synthesizer) is the sound system of KDE 3.
 
@@ -100,6 +72,7 @@ Requires: glib2-devel
 Install %{name}-devel if you intend to write applications using aRts.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -131,10 +104,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 make -f admin/Makefile.common cvs
 
 %build
+
 unset QTDIR && . /etc/profile.d/qt.sh
-
 export CXXFLAGS="%{optflags} -Wno-error=narrowing --std=gnu++17"
-
 %configure \
   --includedir=%{_includedir}/kde \
   --disable-rpath \
@@ -143,29 +115,16 @@ export CXXFLAGS="%{optflags} -Wno-error=narrowing --std=gnu++17"
   --enable-new-ldflags \
   --with-alsa \
   --enable-final
-
-# kill rpath harder, inspired by https://fedoraproject.org/wiki/Packaging:Guidelines?rd=Packaging/Guidelines#Removing_Rpath
-# other more standard variants didnt work or caused other problems
 sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' libtool
-
-## hack for artsdsp (see http://bugzilla.redhat.com/329671)
-#make %{?_smp_mflags} -k || \
-#  sed -i -e "s|-Wp,-D_FORTIFY_SOURCE=2||" artsc/Makefile && \
 %make_build
-
 %install
 export PATH=`pwd`:$PATH
-
 %make_install
-
 %ifarch %{multilib_arches}
-# Ugly hack to allow parallel installation of 32-bit and 64-bit arts-devel
   mv  %{buildroot}%{_includedir}/kde/arts/gsl/gslconfig.h \
       %{buildroot}%{_includedir}/kde/arts/gsl/gslconfig-%{_arch}.h
   install -p -m644 %{SOURCE1}  %{buildroot}%{_includedir}/kde/arts/gsl/gslconfig.h
 %endif
-
-## remove references to optional external libraries in .la files (#178733)
 find $RPM_BUILD_ROOT%{_libdir} -name "*.la" | xargs \
  sed -i \
  -e "s|-lmad||g" \
@@ -187,38 +146,16 @@ find $RPM_BUILD_ROOT%{_libdir} -name "*.la" | xargs \
  -e "s@-lboost_filesystem@@g" \
  -e "s@-lboost_regex@@g" \
  -e "s@-ljack@@g"
+%oreon_autofiles arts-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-## Verify rpath, or lack thereof
+
 test -z "$(chrpath --list %{buildroot}%{_bindir}/artsd 2>/dev/null | grep RPATH=)"
-
 %ldconfig_scriptlets
-
-%files
-%license COPYING.LIB
-%dir %{_libdir}/mcop
-%dir %{_libdir}/mcop/Arts
-%{_libdir}/mcop/Arts/*
-%{_libdir}/mcop/*.mcopclass
-%{_libdir}/mcop/*.mcoptype
-%{_libdir}/lib*.so.*
-%{_libdir}/lib*.la
-%{_bindir}/artscat
-%{_bindir}/artsd
-%{_bindir}/artsdsp
-%{_bindir}/artsplay
-%{_bindir}/artsrec
-%{_bindir}/artsshell
-%{_bindir}/artswrapper
-
-%files devel
-%{_bindir}/mcopidl
-%dir %{_includedir}/kde
-%{_includedir}/kde/arts/
-%{_includedir}/kde/artsc/
-%{_bindir}/artsc-config
-%{_libdir}/pkgconfig/artsc.pc
-%{_libdir}/lib*.so
+%files -f %{oreon_filedir}/main.list
+%files -n arts-devel -f %{oreon_filedir}/arts-devel.list
 
 %changelog
+
 %autochangelog

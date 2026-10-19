@@ -1,28 +1,22 @@
 %global source0_hash fcaffb946bc60583369cb040d533a4ac18075a6d474d49a2a5ff4bf87e2e9a10
-
 Name:    lite-xl
 Version: 2.1.8
-
-Release: %autorelease
-
+Release:        1%{?dist}
 %forgemeta
-
-Summary: A lightweight text editor written in Lua, adapted from lite
+Summary:        A lightweight text editor written in Lua, adapted from lite
 License: MIT and OFL
 URL:     https://lite-xl.com/
-Source:  https://github.com/lite-xl/lite-xl/archive/refs/tags/v%{version}.tar.gz
-
-BuildRequires: gcc
-BuildRequires: meson
-BuildRequires: (pkgconfig(lua) >= 5.4 with pkgconfig(lua) < 5.5)
-BuildRequires: pkgconfig(libpcre2-8)
-BuildRequires: pkgconfig(freetype2)
-BuildRequires: pkgconfig(sdl3)
-BuildRequires: desktop-file-utils
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://github.com/lite-xl/lite-xl/archive/refs/tags/v%{version}.tar.gz
 ExcludeArch: %{ix86}
-
+# oreon:deps
+BuildRequires:  (pkgconfig(lua) >= 5.4 with pkgconfig(lua) < 5.5)
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc
+BuildRequires:  meson
+BuildRequires:  pkgconfig(freetype2)
+BuildRequires:  pkgconfig(libpcre2-8)
+BuildRequires:  pkgconfig(sdl3)
+# /oreon:deps
 %description
 A lightweight, simple, fast, feature-filled, and extremely
 extensible text editor written in C, and Lua, adapted from lite.
@@ -35,30 +29,22 @@ improve the quality of font rendering, and reduce CPU usage.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-# %forgesetup 
-%autosetup -n lite-xl-%{version} -p1
-
+%global oreon_srcdir lite-xl-%{version}
+%oreon_prep
 %build
+
 %meson -Darch_tuple=%{_arch}-linux -Duse_system_lua=true
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles main
 
 %check
+
 %meson_test
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.lite_xl.lite_xl.desktop
-
-%files
-%license LICENSE
-%license %{_docdir}/%{name}/licenses.md
-%doc README.md changelog.md
-%{_bindir}/%{name}
-%{_datadir}/%{name}
-%{_datadir}/icons/hicolor
-%{_datadir}/applications/org.lite_xl.lite_xl.desktop
-%{_datadir}/metainfo/org.lite_xl.lite_xl.appdata.xml
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

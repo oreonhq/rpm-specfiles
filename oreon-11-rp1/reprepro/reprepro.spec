@@ -1,32 +1,26 @@
-%global source0_hash 5b028f79183659d441d1b340deb88341a7f29335ae7370eff4b3c094fbe90bc4
-
+%global source0_hash 10b72d436cc33d2519efc14b2e9745b8a2c24bb93c2a01c1010c6fe0ea37111c
 Name:       reprepro
 Version:    5.5.1
-Release:    1%{?dist}
-Summary:    Tool to handle local repositories of Debian packages
-# filecntl.c, md5.c, md5.h are Public Domain
-# dpkgversions.c is GPLv2+
-# docs/sftp.py is MIT
-# Rest is GPLv2
-# Automatically converted from old format: GPLv2 and GPLv2+ and MIT - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Tool to handle local repositories of Debian packages
 License:    GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-Callaway-MIT
 URL:        https://salsa.debian.org/debian/reprepro
-Source0:    https://salsa.debian.org/debian/reprepro/-/archive/%{name}-%{version}/%{name}-%{name}-%{version}.tar.gz
-BuildRequires: make
-BuildRequires:  gcc
-BuildRequires:  automake
+Source0:        https://salsa.debian.org/debian/reprepro/-/archive/%{name}-%{version}/%{name}-%{name}-%{version}.tar.gz
 %if 0%{?el6}
-BuildRequires: db4-devel
 %else
-BuildRequires: libdb-devel
 %endif
-BuildRequires: zlib-devel
-BuildRequires: gpgme-devel
-BuildRequires: bzip2-devel
-BuildRequires: libarchive-devel
-BuildRequires: xz-devel
-BuildRequires: libzstd-devel
-
+# oreon:deps
+BuildRequires:  automake
+BuildRequires:  bzip2-devel
+BuildRequires:  gcc
+BuildRequires:  gpgme-devel
+BuildRequires:  libarchive-devel
+BuildRequires:  libdb-devel
+BuildRequires:  libzstd-devel
+BuildRequires:  make
+BuildRequires:  xz-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 reprepro is a tool to manage a repository of Debian packages (.deb).  It
 stores files either being injected manually or downloaded from some other
@@ -36,6 +30,7 @@ Checking signatures of mirrored repositories and creating signatures of the
 generated Package indexes is supported.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{name}-%{version}
@@ -49,42 +44,22 @@ for f in docs/outstore.py docs/outsftphook.py; do
 done
 
 %build
+
 ./autogen.sh
 %configure
 make %{?_smp_mflags}
-
 %install
 %make_install
-
 pushd docs
-
-# Shell completion files
 mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
 mv reprepro.bash_completion %{buildroot}%{_datadir}/bash-completion/completions/reprepro
 mkdir -p %{buildroot}%{_datadir}/zsh/site-functions/
 mv reprepro.zsh_completion %{buildroot}%{_datadir}/zsh/site-functions/_reprepro
-
 rm Makefile{,.am,.in} changestool.1 rredtool.1 reprepro.1
+%oreon_autofiles main
 
-# Note: Upstream sources contain tests/test.sh, but Fedora lacks some
-# dependencies to run this.
-
-%files
-%{!?_licensedir:%global license %%doc}
-%license COPYING
-%doc docs/ AUTHORS README NEWS
-%{_mandir}/man1/changestool.1*
-%{_mandir}/man1/reprepro.1*
-%{_mandir}/man1/rredtool.1*
-%{_bindir}/changestool
-%{_bindir}/reprepro
-%{_bindir}/rredtool
-%dir %{_datadir}/bash-completion
-%dir %{_datadir}/bash-completion/completions
-%{_datadir}/bash-completion/completions/reprepro
-%dir %{_datadir}/zsh
-%dir %{_datadir}/zsh/site-functions
-%{_datadir}/zsh/site-functions/_reprepro
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

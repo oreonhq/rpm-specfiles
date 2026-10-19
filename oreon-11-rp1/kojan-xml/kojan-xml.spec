@@ -1,5 +1,4 @@
 %global source0_hash b8b4f0a995611f852964944bb63c00b3bf15e46e1fa9b99ad9b57110604dbbb6
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -81,29 +80,25 @@ if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
 end
 }
 %bcond_with bootstrap
-
 Name:           kojan-xml
 Version:        1.0.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java library for modeling data in XML format
 License:        Apache-2.0
 URL:            https://github.com/mizdebsk/kojan-xml
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://github.com/mizdebsk/kojan-xml/archive/refs/tags/1.0.1.tar.gz#/%{name}-%{version}.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.0.1-6
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(io.kojan:kojan-parent:pom:)
 BuildRequires:  mvn(org.junit.jupiter:junit-jupiter-api)
 BuildRequires:  mvn(org.xmlunit:xmlunit-assertj3)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.0.1-6
-
+# /oreon:deps
 %description
 The Kojan XML library is used to model data according to the
 entity–relationship (ER) model and write and read data in XML
@@ -113,18 +108,16 @@ data in XML format.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
-%mvn_build -j
 
+%mvn_build -j
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

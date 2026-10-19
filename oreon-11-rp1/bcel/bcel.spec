@@ -1,23 +1,20 @@
 %global source0_hash 95694033a5a130350ac9401cf85ceb02579fd63ba1a7edfca4c9ed933fe0a564
-
 Name:           bcel
 Version:        6.13.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Byte Code Engineering Library
 License:        Apache-2.0
 URL:            https://commons.apache.org/proper/commons-bcel/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        http://archive.apache.org/dist/commons/bcel/source/bcel-%{version}-src.tar.gz
-
+Obsoletes:      %{name}-javadoc < 6.8.1-14
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
 BuildRequires:  mvn(org.apache.commons:commons-parent:pom:)
 BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 6.8.1-14
-
+# /oreon:deps
 %description
 The Byte Code Engineering Library (formerly known as JavaClass) is
 intended to give users a convenient possibility to analyze, create, and
@@ -35,6 +32,7 @@ optimizers, obsfuscators and analysis tools, the most popular probably
 being the Xalan XSLT processor at Apache.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n bcel-%{version}-src
 
@@ -46,14 +44,14 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %mvn_file : %{name}
 
 %build
-%mvn_build -j -f
 
+%mvn_build -j -f
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc RELEASE-NOTES.txt
-%license LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

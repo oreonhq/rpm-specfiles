@@ -1,57 +1,41 @@
 %global source0_hash 9cf49f5cb3db81a2db0459c7ddaa824edc0533ba233dc64b062b8f2f022d55d7
-
 %global base_version 1.32
-
-# Run optional test
-%if ! (0%{?rhel})
-%bcond_without perl_Locale_Maketext_enables_optional_test
-%else
 %bcond_with perl_Locale_Maketext_enables_optional_test
-%endif
-
 Name:           perl-Locale-Maketext
 Version:        1.33
-Release:        522%{?dist}
+Release:        1%{?dist}
 Summary:        Framework for localization
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Locale-Maketext
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Locale-Maketext-1.32.tar.gz
-# Unbundled from perl 5.37.11
 Patch0:         Locale-Maketext-1.32-Upgrade-to-1.33.patch
 BuildArch:      noarch
+%if %{with perl_Locale_Maketext_enables_optional_test} && !%{defined perl_bootstrap}
+%endif
+Requires:       perl(I18N::LangTags) >= 0.31
+Requires:       perl(warnings)
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(I18N::LangTags\\)$
+Provides:       perl(Locale::Maketext::Simple)
+# oreon:deps
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  make
-BuildRequires:  perl-generators
-BuildRequires:  perl-interpreter
-BuildRequires:  perl(Config)
-BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
-BuildRequires:  perl(strict)
-# Run-time:
 BuildRequires:  perl(Carp)
-BuildRequires:  perl(I18N::LangTags) >= 0.31
+BuildRequires:  perl(Config)
+BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(I18N::LangTags)
 BuildRequires:  perl(I18N::LangTags::Detect)
-BuildRequires:  perl(integer)
-# utf8 is used only if it has already been loaded
-BuildRequires:  perl(vars)
-BuildRequires:  perl(warnings)
-# Tests:
-BuildRequires:  perl(parent)
 BuildRequires:  perl(Scalar::Util)
 BuildRequires:  perl(Test::More)
+BuildRequires:  perl(integer)
+BuildRequires:  perl(parent)
+BuildRequires:  perl(strict)
 BuildRequires:  perl(utf8)
-# Optional tests:
-%if %{with perl_Locale_Maketext_enables_optional_test} && !%{defined perl_bootstrap}
-BuildRequires:  perl(Test::Pod) >= 1.14
-%endif
-Requires:       perl(I18N::LangTags) >= 0.31
-# utf8 is used only if it has already been loaded
-Requires:       perl(warnings)
-
-# Filter under-specified dependencies
-%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(I18N::LangTags\\)$
-
-Provides:       perl(Locale::Maketext::Simple)
+BuildRequires:  perl(vars)
+BuildRequires:  perl(warnings)
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+# /oreon:deps
 %description
 It is a common feature of applications (whether run directly, or via the Web)
 for them to be "localized" -- i.e., for them to present an English interface
@@ -65,12 +49,12 @@ producing localized applications.
 Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       perl-Test-Harness
-
 %description tests
 Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n Locale-Maketext-%{base_version}
 %patch -P0 -p1
@@ -84,34 +68,28 @@ for F in t/*.t; do
 done
 
 %build
+
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{make_build}
-
 %install
 %{make_install}
 %{_fixperms} %{buildroot}/*
-
-# Install tests
 mkdir -p %{buildroot}%{_libexecdir}/%{name}
 cp -a t %{buildroot}%{_libexecdir}/%{name}
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
-#!/bin/sh
 cd %{_libexecdir}/%{name} && exec prove -I . -j "$(getconf _NPROCESSORS_ONLN)"
 EOF
 chmod +x %{buildroot}%{_libexecdir}/%{name}/test
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print $1} else {print 1}' -- '%{?_smp_mflags}')
 make test
-
-%files
-%doc ChangeLog README
-%{perl_vendorlib}/*
-%{_mandir}/man3/*
-
-%files tests
-%{_libexecdir}/%{name}
+%files -f %{oreon_filedir}/main.list
+%files -n perl-Locale-Maketext-tests -f %{oreon_filedir}/perl-Locale-Maketext-tests.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.33-522
 - Prepare for Oreon 11 (RP1)

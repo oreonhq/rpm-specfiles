@@ -1,88 +1,66 @@
+%global source1_hash 809145e8e725d5736dc359b4c83ae53128b7b3334ef940013be732c5883098a1
 %global source0_hash 2a25bb2bd75c9d92894d3e75a19b2bcb01adaa937980579f9422e8c1df84dda5
-
 %global stable_kf6 stable
-
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
-
-# Parallel C++/LTO jobs can OOM smaller aarch64 builders
 %ifarch aarch64 s390x
 %global _smp_mflags -j1
 %global _lto_cflags %{nil}
 %endif
-
 Name:    plasma-vault
-Summary: Plasma Vault offers strong encryption features in a user-friendly way
+Summary:        Plasma Vault offers strong encryption features in a user-friendly way
 Version:        6.7.5
-Release: 1%{?dist}
-
+Release:        1%{?dist}
 License: CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
-
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
-
-# Upstream changes
-
-BuildRequires:  extra-cmake-modules
-BuildRequires:  cmake(KF6Service)
-BuildRequires:  kf6-rpm-macros
-BuildRequires:  cmake(KF6CoreAddons)
-BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6ConfigWidgets)
-BuildRequires:  cmake(KF6DBusAddons)
-BuildRequires:  cmake(KF6KIO)
-BuildRequires:  cmake(KF6I18n)
-BuildRequires:  cmake(KF6IconThemes)
-BuildRequires:  cmake(KF6NetworkManagerQt)
-BuildRequires:  cmake(KF6ItemModels)
-BuildRequires:  cmake(KSysGuard)
-BuildRequires:  cmake(KF6KirigamiPlatform)
-
-# Plasma
-
-BuildRequires:  cmake(Plasma)
-BuildRequires:  cmake(PlasmaActivities)
-
-# Qt
-BuildRequires:  cmake(Qt6Quick)
-
-## Runtime backends
 Recommends: cryfs
 Recommends: fuse-encfs
 Requires: gocryptfs
-
+# oreon:deps
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6ConfigWidgets)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(KF6IconThemes)
+BuildRequires:  cmake(KF6ItemModels)
+BuildRequires:  cmake(KF6KIO)
+BuildRequires:  cmake(KF6KirigamiPlatform)
+BuildRequires:  cmake(KF6NetworkManagerQt)
+BuildRequires:  cmake(KF6Service)
+BuildRequires:  cmake(KSysGuard)
+BuildRequires:  cmake(Plasma)
+BuildRequires:  cmake(PlasmaActivities)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+# /oreon:deps
 %description
 Plasma Vault allows to lock and encrypt sets of documents and hide them from
 prying eyes even when the user is logged in.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version} -p1
-
+%global oreon_srcdir %{name}-%{version}
+%oreon_prep
 %build
+
 %ifarch aarch64 s390x
 %cmake_kf6 -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF
 %else
 %cmake_kf6
 %endif
 %cmake_build
-
-
 %install
 %cmake_install
 %find_lang %{name} --all-name
+%oreon_autofiles main
 
-%files -f %{name}.lang
-%license LICENSES/*
-%{_kf6_plugindir}/kded/plasmavault.so
-%dir %{_qt6_plugindir}/plasma/applets/
-%{_qt6_plugindir}/plasma/applets/org.kde.plasma.vault.so
-%{_qt6_plugindir}/kf6/kfileitemaction/plasmavaultfileitemaction.so
-%{_kf6_datadir}/plasma/plasmoids/org.kde.plasma.vault/
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

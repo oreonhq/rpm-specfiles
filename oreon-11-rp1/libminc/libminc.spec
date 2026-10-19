@@ -1,29 +1,24 @@
 %global source0_hash 57d807e86a353a93024a8849f5e21e2abea4f09f0be934e1f538bdc2b02f8885
-
 %global upver release-%{version}
-
 Name:           libminc
 Version:        2.5.0
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        Core library and API of the MINC toolkit
-
-# spdx
 License:        MIT
 URL:            https://github.com/BIC-MNI/libminc
-Source0:        https://github.com/BIC-MNI/libminc/archive/%{upver}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/BIC-MNI/%{name}/archive/%{upver}/%{name}-%{version}.tar.gz
 Patch0:         0001-install-cmake-files-in-private-directory.patch
-# Fix building with GCC15 as C23
-# https://github.com/BIC-MNI/libminc/pull/129
 Patch1:         %{url}/pull/129.patch
-
-BuildRequires:  git-core
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  gcc gcc-c++
-BuildRequires:  zlib-devel
-BuildRequires:  nifticlib-devel
-BuildRequires:  netcdf-devel
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  git-core
 BuildRequires:  hdf5-devel
-
+BuildRequires:  netcdf-devel
+BuildRequires:  nifticlib-devel
+BuildRequires:  zlib-devel
+# /oreon:deps
 %description
 The MINC file format is a highly flexible medical image file format
 built on the HDF5 generalized data format. The format is
@@ -43,12 +38,12 @@ Requires:       netcdf-devel%{?_isa}
 Requires:       zlib-devel%{?_isa}
 Requires:       hdf5-devel%{?_isa}
 Requires:       cmake%{?_isa}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{upver} -S git
@@ -57,29 +52,23 @@ sed -i -e '/SET (LIBMINC_INSTALL_INCLUDE_DIR/s/include/include\/%{name}/' CMakeL
 sed -i -e '/CMAKE_INSTALL_RPATH/d' CMakeLists.txt
 
 %build
+
 %cmake ../ \
 -DLIBMINC_BUILD_SHARED_LIBS=ON \
 -DLIBMINC_USE_SYSTEM_NIFTI=ON \
 -DLIBMINC_MINC1_SUPPORT=ON \
 -DLIBMINC_BUILD_EZMINC=ON
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 %ctest || :
-
-%files
-%license COPYING
-%doc README README.release doc/ NEWS ChangeLog AUTHORS
-%{_libdir}/%{name}*.so.*
-
-%files devel
-%doc volume_io/example/*.c ezminc/examples/*.cpp ezminc/examples/Example_CMakeLists.txt
-%{_includedir}/%{name}/
-%{_libdir}/cmake/LIBMINC/
-%{_libdir}/%{name}*.so
+%files -f %{oreon_filedir}/main.list
+%files -n libminc-devel -f %{oreon_filedir}/libminc-devel.list
 
 %changelog
+
 %autochangelog

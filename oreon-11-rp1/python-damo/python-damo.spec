@@ -1,57 +1,41 @@
-%global source0_hash none
-
+%global source0_hash ddb1a700281fff96a96190a152764cf006eca0239ad5f348f38c4e0e718a57d7
 Name:           python-damo
 Version:        3.4.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        DAMON user-space tool
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/damonitor/damo/issues
-Source:         %{pypi_source damo}
-
+Source0:        https://files.pythonhosted.org/packages/source/d/damo/damo-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'damo' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 42
+Requires:       python3-damo = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-damo
-Summary:        %{summary}
-
-%description -n python3-damo %_description
-
+Summary:        DAMON user-space tool
+%description -n python3-damo
 
 %prep
-%autosetup -p1 -n damo-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir damo-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-damo usr/lib/python3*/site-packages/damo* usr/lib64/python3*/site-packages/damo* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/damo* usr/lib64/python3*/site-packages/damo* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-damo -f %{pyproject_files}
-%{_bindir}/damo
+%files
+%files -n python3-damo -f %{oreon_filedir}/python3-damo.list
 
 %changelog
+
 %autochangelog

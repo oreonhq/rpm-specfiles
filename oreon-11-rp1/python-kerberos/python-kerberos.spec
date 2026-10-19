@@ -1,59 +1,41 @@
-%global source0_hash none
-
+%global source0_hash cdd046142a4e0060f96a00eb13d82a5d9ebc0f2d7934393ed559bac773460a2c
 Name:           python-kerberos
 Version:        1.3.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Kerberos high-level interface
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/apple/ccs-pykerberos
-Source:         %{pypi_source kerberos}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'kerberos' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/k/kerberos/kerberos-%{version}.tar.gz
 Patch1:         PY_SSIZE_T_CLEAN.patch
 Patch2:         include_unistd.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-kerberos = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-kerberos
-Summary:        %{summary}
-
-%description -n python3-kerberos %_description
-
+Summary:        Kerberos high-level interface
+%description -n python3-kerberos
 
 %prep
-%autosetup -p1 -n kerberos-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir kerberos-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-kerberos usr/lib/python3*/site-packages/kerberos* usr/lib64/python3*/site-packages/kerberos* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/kerberos* usr/lib64/python3*/site-packages/kerberos* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-kerberos -f %{pyproject_files}
+%files
+%files -n python3-kerberos -f %{oreon_filedir}/python3-kerberos.list
 
 %changelog
+
 %autochangelog

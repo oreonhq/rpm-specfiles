@@ -1,22 +1,18 @@
-%global source0_hash d4eed0579782c2efaa0818de2f20f13b276eb3d4b4b3d63347c7317d84e29531
-
+%global source0_hash b4b6865e7f65ee5b9c254a69128bf10e93b38bc27f5bc5b973fef300217fc725
 %global octpkg image
-
 Name:           octave-%{octpkg}
 Version:        2.20.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Image processing for Octave
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://octave.sourceforge.net/image/
 Source0:        http://downloads.sourceforge.net/octave/%{octpkg}-%{version}.tar.gz
-
-BuildRequires:  octave-devel >= 6:4.0.0
-
 Requires:       octave(api) = %{octave_api}
 Requires(post): octave
 Requires(postun): octave
-
+# oreon:deps
+BuildRequires:  octave-devel
+# /oreon:deps
 %description
 The Octave-forge Image package provides functions for processing images.
 The package also provides functions for feature extraction, image
@@ -24,41 +20,33 @@ statistics, spatial and geometric transformations, morphological
 operations, linear filtering, and much more.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -qcT
 
 %build
-#export CXXFLAGS="%{optflags} -fPIC"
+
 export XTRA_CXXFLAGS="-fPIC"
 %octave_pkg_build -T
-
 %install
 %octave_pkg_install
+%oreon_autofiles main
 
 %check
+
 %octave_pkg_check
-
 %post
-%octave_cmd pkg rebuild
 
+%octave_cmd pkg rebuild
 %preun
+
 %octave_pkg_preun
-
 %postun
-%octave_cmd pkg rebuild
 
-%files
-%{octpkglibdir}
-%dir %{octpkgdir}
-%doc %{octpkgdir}/doc-cache
-%{octpkgdir}/*.m
-%{octpkgdir}/packinfo
-%{octpkgdir}/private/
-%{octpkgdir}/@imref2d/
-%{octpkgdir}/@imref3d/
-%{octpkgdir}/@strel/
-%{_metainfodir}/io.sourceforge.octave.%{octpkg}.metainfo.xml
+%octave_cmd pkg rebuild
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

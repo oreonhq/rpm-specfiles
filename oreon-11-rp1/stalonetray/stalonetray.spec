@@ -1,52 +1,46 @@
-%global source0_hash 17cd2bf2212355473007c456eb2df9774b54ed08277fd141d6cc59512c873240
-
+%global source0_hash aee903c391446c46f2d1f0a33aef815b55d1bfe8043ba283e5df01c829b481a8
 Name:           stalonetray
 Version:        1.5.0
 Release:        1%{?dist}
 Summary:        A stand alone notification area
-
-# License is only mentioned in COPYING
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://d3adb5.github.io/%{name}
 Source0:        https://github.com/d3adb5/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires: make
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  docbook-xsl
 BuildRequires:  gcc
 BuildRequires:  libX11-devel
-
-# Needed until upstream generates proper tarballs.
-BuildRequires: autoconf automake docbook-xsl xsltproc
-
+BuildRequires:  make
+BuildRequires:  xsltproc
+# /oreon:deps
 %description
 The stalonetray is a STAnd-aLONE system TRAY (notification area).
 It has minimal build and run-time dependencies: the Xlib only. The XEMBED
 support is planned. Stalonetray runs under virtually any window manager.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
 
 %build
-# https://github.com/kolbusa/stalonetray/issues/35
+
 aclocal
 autoheader
 autoconf
 automake --add-missing
 %configure
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=%{buildroot} INSTALL="install -p"
 install -D -m644 stalonetrayrc.sample %{buildroot}%{_sysconfdir}/stalonetrayrc
+%oreon_autofiles main
 
-%files
-%doc AUTHORS BUGS COPYING NEWS README.md TODO
-%doc stalonetrayrc.sample stalonetray.html stalonetray.xml
-%{_sysconfdir}/stalonetrayrc
-%{_bindir}/stalonetray
-%{_mandir}/man1/stalonetray.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

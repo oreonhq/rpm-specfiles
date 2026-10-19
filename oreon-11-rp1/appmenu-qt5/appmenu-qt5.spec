@@ -1,26 +1,21 @@
 %global source0_hash e69a5e1c5626921a52951d19ce52d435ead0745951c1bff8b96516e1e20af80e
-
 Name:       appmenu-qt5
 Version:    0.3.0+16.10.20160628.1.orig.orig
-Release:    1%{?dist}
-Summary:    Support for global DBus-exported application menu in Qt5
-
-# Automatically converted from old format: LGPLv3 - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Support for global DBus-exported application menu in Qt5
 License:    LGPL-3.0-only
 URL:        https://launchpad.net/%{name}
-Source0:    http://archive.ubuntu.com/ubuntu/pool/main/a/%{name}/%{name}_%{version}.orig.tar.gz
-
+Source0:        http://archive.ubuntu.com/ubuntu/pool/main/a/%{name}/%{name}_%{version}.orig.tar.gz
 Patch1:     appmenu-qt5-0.3.0-fix-qt-compatibility.patch
-
+# oreon:deps
 BuildRequires:  dbusmenu-qt5-devel
 BuildRequires:  gtk2-devel
+BuildRequires:  make
 BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtbase-static
 BuildRequires:  qt5-qtbase-private-devel
-
+BuildRequires:  qt5-qtbase-static
 BuildRequires:  systemd-devel
-BuildRequires: make
-
+# /oreon:deps
 %description
 This is a different, Qt5-compatible approach of the existing appmenu-qt
 (https://launchpad.net/appmenu-qt).
@@ -33,16 +28,14 @@ enable system-wide, see README.fedora *BEFORE* for further information.
 
 %package profile.d
 Summary:    Profile.d-config for %{name}
-
 BuildArch:  noarch
-
 Requires:   %{name}		== %{version}-%{release}
 Requires:   setup
-
 %description profile.d
 This package contains profile.d-config-files for %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -c -p1
@@ -75,24 +68,19 @@ file located in %%doc into the appropriate autostart.
 EOF
 
 %build
+
 pushd %{_target_platform}
 %{qmake_qt5} CONFIG+=enable-by-default ../appmenu.pro
 %make_build
 popd
-
 %install
 %make_install INSTALL_ROOT=%{buildroot} -C %{_target_platform}
 %{__install} -pm 0644 data/%{name}.csh %{buildroot}%{_sysconfdir}/profile.d
-# for some reason a cmake config gets pulled into the install
 rm -fr %{buildroot}%{_libdir}/cmake
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%license COPYING
-%doc data/%{name}.csh data/%{name}.sh README README.fedora
-%{_libdir}/qt5/plugins/platformthemes/lib%{name}.so
-
-%files profile.d
-%{_sysconfdir}/profile.d/%{name}.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

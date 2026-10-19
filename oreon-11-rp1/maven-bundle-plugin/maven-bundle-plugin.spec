@@ -1,6 +1,5 @@
 %global source0_hash efc5445e9f2713920b76359295fcc34538ebe73e2b5fd5906c06068b32d89bbb
 %oreon_bootstrap
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -84,46 +83,29 @@ end
 %bcond_with bootstrap
 Name:           maven-bundle-plugin
 Version:        6.2.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven Bundle Plugin
 License:        Apache-2.0
 URL:            https://felix.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://repo1.maven.org/maven2/org/apache/felix/maven-bundle-plugin/%{version}/maven-bundle-plugin-%{version}-source-release.tar.gz
-
 Patch:          0001-Fix-incorrect-parent-relativePath.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
-BuildRequires:  maven-local-openjdk25
-BuildRequires:  mvn(biz.aQute.bnd:biz.aQute.bndlib)
-BuildRequires:  mvn(org.apache.felix:felix-parent:pom:)
-BuildRequires:  mvn(org.apache.felix:org.apache.felix.utils)
-BuildRequires:  mvn(org.apache.maven.plugin-tools:maven-plugin-annotations)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-plugin-plugin)
-BuildRequires:  mvn(org.apache.maven.shared:maven-dependency-tree)
-BuildRequires:  mvn(org.apache.maven:maven-archiver)
-BuildRequires:  mvn(org.apache.maven:maven-artifact)
-BuildRequires:  mvn(org.apache.maven:maven-compat)
-BuildRequires:  mvn(org.apache.maven:maven-core)
-BuildRequires:  mvn(org.apache.maven:maven-model)
-BuildRequires:  mvn(org.codehaus.plexus:plexus-utils)
-BuildRequires:  mvn(org.slf4j:slf4j-api)
-BuildRequires:  mvn(org.sonatype.plexus:plexus-build-api)
 %endif
-BuildRequires:  mvn(org.apache.felix:org.apache.felix.metatype)
-# TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 6.1.2-20
-
+# oreon:deps
+BuildRequires:  javapackages-bootstrap
+BuildRequires:  mvn(org.apache.felix:org.apache.felix.metatype)
+# /oreon:deps
 %description
 Provides a maven plugin that supports creating an OSGi bundle
 from the contents of the compilation classpath along with its
 resources and dependencies. Plus a zillion other features.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
@@ -140,19 +122,17 @@ rm -f src/main/java/org/apache/felix/bundleplugin/baseline/BaselineReport.java
 %pom_remove_dep :doxia-site-renderer
 %pom_remove_dep :maven-reporting-api
 
-
 %pom_remove_plugin :maven-invoker-plugin
 
 %build
-# Tests depend on bundled JARs
-# source and target set explicitly for xmvn-javadoc-plugin
-%mvn_build -j -f -- -Dmaven.compiler.target=8
 
+%mvn_build -j -f -- -Dmaven.compiler.target=8
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

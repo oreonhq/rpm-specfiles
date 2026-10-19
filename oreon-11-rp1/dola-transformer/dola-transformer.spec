@@ -1,23 +1,21 @@
 %global source0_hash 7b749d719987a78905d3d490d8df9b50d2a62e41447e973626756dda343c7f50
-
 %bcond bootstrap 0
-
 Name:           dola-transformer
 Version:        1.0.2
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Maven 4 extension for dynamic POM transformation
 License:        Apache-2.0
 URL:            https://github.com/mizdebsk/dola-transformer
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
-Source:         https://github.com/mizdebsk/dola-transformer/releases/download/%{version}/dola-transformer-%{version}.tar.zst
-
+Source0:        https://github.com/mizdebsk/dola-transformer/releases/download/%{version}/dola-transformer-%{version}.tar.zst
 BuildSystem:    maven
 BuildOption:    usesJavapackagesBootstrap
 BuildOption:    xmvnToolchain "openjdk25"
 BuildOption:    buildRequireVersion "org.apache.maven:" "4.0.0-rc-4"
+# oreon:deps
 
+# /oreon:deps
 %description
 Dola Transformer is an extension for Apache Maven 4 that enables
 dynamic, in-memory transformation of project models (POMs) without
@@ -30,9 +28,8 @@ not limited to XML.  This makes it especially useful in environments
 where custom Maven builds are needed without manually editing POM
 files.
 
-%files -f .mfiles
-%license LICENSE NOTICE
-%doc README.md
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

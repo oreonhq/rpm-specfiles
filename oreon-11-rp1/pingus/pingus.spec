@@ -1,5 +1,4 @@
 %global source0_hash 759c1253075d1e72691bc1e770b24cdd51917041fd1857c1daf85b65a6686460
-
 Name:           pingus
 Version:        0.7.6
 Release:        53%{?dist}
@@ -15,11 +14,18 @@ Patch3:         pingus-0.7.6-boost-169.patch
 Patch4:         pingus-0.7.6-python3.patch
 Patch5:         pingus-gcc13.patch
 Patch6:         includes.patch
-BuildRequires: make
-BuildRequires:  SDL_mixer-devel SDL_image-devel boost-devel libpng-devel
-BuildRequires:  physfs-devel python3-scons desktop-file-utils gcc-c++
 Requires:       hicolor-icon-theme
-
+# oreon:deps
+BuildRequires:  SDL_image-devel
+BuildRequires:  SDL_mixer-devel
+BuildRequires:  boost-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
+BuildRequires:  libpng-devel
+BuildRequires:  make
+BuildRequires:  physfs-devel
+BuildRequires:  python3-scons
+# /oreon:deps
 %description
 You take command in the game of a bunch of small penguins
 and have to guide them around in levels. Since the penguins
@@ -29,6 +35,7 @@ direction. The goal of each level is to reach the exit, for which multiple
 combination of commands are necessary. The game is presented in a 2D site view.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -42,15 +49,13 @@ iconv -f ISO8859-2 -t UTF8 AUTHORS > AUTHORS.tmp
 mv AUTHORS.tmp AUTHORS
 
 %build
-scons CCFLAGS="$RPM_OPT_FLAGS -std=gnu++17" LINKFLAGS="$RPM_LD_FLAGS"
 
+scons CCFLAGS="$RPM_OPT_FLAGS -std=gnu++17" LINKFLAGS="$RPM_LD_FLAGS"
 %install
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man6
 make install PREFIX=%{_prefix} DESTDIR=$RPM_BUILD_ROOT
 install -p -m 644 doc/man/%{name}.6 $RPM_BUILD_ROOT%{_mandir}/man6/
 rm -rf $RPM_BUILD_ROOT%{_mandir}/man1/
-
-# below is the desktop file and icon stuff.
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applications
 desktop-file-install \
   --dir $RPM_BUILD_ROOT%{_datadir}/applications \
@@ -58,14 +63,6 @@ desktop-file-install \
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps
 install -p -m 644 %{SOURCE2} \
   $RPM_BUILD_ROOT%{_datadir}/icons/hicolor/64x64/apps
-
-# Register as an application to be visible in the software center
-#
-# NOTE: It would be *awesome* if this file was maintained by the upstream
-# project, translated and installed into the right place during `make install`.
-#
-# See http://www.freedesktop.org/software/appstream/docs/ for more details.
-#
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
 cat > $RPM_BUILD_ROOT%{_datadir}/appdata/%{name}.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -97,17 +94,10 @@ SentUpstream: 2014-09-25
   <launchable type="desktop-id">pingus.desktop</launchable>
 </application>
 EOF
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc AUTHORS NEWS README TODO
-%{_bindir}/%{name}
-%{_bindir}/%{name}.bin
-%{_datadir}/%{name}
-%{_datadir}/appdata/%{name}.appdata.xml
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/64x64/apps/%{name}.png
-%{_mandir}/man6/%{name}.6*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

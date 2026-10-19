@@ -1,19 +1,17 @@
 %global source0_hash 9b2aa1dd6d6645f8e992b3697fdbd87f0c0e1da5721fa54ed29b484d13160c5c
-
 Name: libwapcaplet
 Version: 0.4.3
-Release: %autorelease
-Summary: A string internment library
-
+Release:        1%{?dist}
+Summary:        A string internment library
 License: MIT
 URL: http://www.netsurf-browser.org/projects/libwapcaplet/
-Source: http://download.netsurf-browser.org/libs/releases/%{name}-%{version}-src.tar.gz
-
-BuildRequires: gcc
-BuildRequires: netsurf-buildsystem
-BuildRequires: pkgconfig(check)
-BuildRequires: make
-
+Source0:        http://download.netsurf-browser.org/libs/releases/%{name}-%{version}-src.tar.gz
+# oreon:deps
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  netsurf-buildsystem
+BuildRequires:  pkgconfig(check)
+# /oreon:deps
 %description
 LibWapcaplet is a string internment library, written in C. It provides
 reference counted string interment and rapid string comparison
@@ -24,7 +22,6 @@ details, see the readme.
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
@@ -33,6 +30,7 @@ developing applications that use %{name}.
 %global build_vars OPTCFLAGS='%{optflags}' OPTLDFLAGS="$RPM_LD_FLAGS"
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{version} -p1
@@ -40,23 +38,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e s@-Werror@@ Makefile
 
 %build
-make %{?_smp_mflags} %{make_vars} %{build_vars}
 
+make %{?_smp_mflags} %{make_vars} %{build_vars}
 %install
 make install DESTDIR=%{buildroot} %{make_vars}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 make %{?_smp_mflags} test %{make_vars}
-
-%files
-%doc README
-%license COPYING
-%{_libdir}/%{name}.so.*
-
-%files devel
-%{_includedir}/%{name}
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/%{name}.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libwapcaplet-devel -f %{oreon_filedir}/libwapcaplet-devel.list
 
 %changelog
+
 %autochangelog

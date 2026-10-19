@@ -1,29 +1,30 @@
-%global source0_hash none
-
+%global source0_hash bbe626feb5c81c1b7e7d3199d558bc5c560b2d4aef377d0e4b4227ae3c7176e6
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-gv
-Summary: Manx hunspell dictionaries
+Summary:        Manx hunspell dictionaries
 %global upstreamid 20040505
 Version: 0.%{upstreamid}
-Release: 37%{?dist}
-Source0: https://mirrors.kernel.org/gnu/aspell/dict/gv/aspell-gv-0.50-0.tar.bz2#/aspell6-gv-0.50-0.tar.bz2
+Release:        1%{?dist}
+Source0:        https://mirrors.kernel.org/gnu/aspell/dict/gv/aspell-gv-0.50-0.tar.bz2#/aspell6-gv-0.50-0.tar.bz2
 URL: https://ftp.gnu.org/gnu/aspell/dict/gv
 License: GPL-1.0-or-later
 BuildArch: noarch
-BuildRequires: aspell hunspell hunspell-devel
-
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-gv)
-
+# oreon:deps
+BuildRequires:  aspell
+BuildRequires:  hunspell
+BuildRequires:  hunspell-devel
+# /oreon:deps
 %description
 Manx hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n aspell-gv-0.50-0
 export LANG=C.UTF-8
@@ -36,11 +37,11 @@ wordlist2hunspell manx.wordlist gv_GB
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p gv_GB.dic gv_GB.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+%oreon_autofiles main
 
-%files
-%doc COPYING Copyright README Crawler.txt
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20040505-37
 - Import

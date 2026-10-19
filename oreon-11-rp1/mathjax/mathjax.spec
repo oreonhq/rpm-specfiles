@@ -1,19 +1,16 @@
-%global source0_hash none
-
+%global source0_hash f487c39d2913f371eb42dab078559a902da69acca38a9ebec7640a6581535ba3
 Name:       mathjax
 Version:    4.1.3
-Release:    %autorelease
-Summary:    JavaScript library to render math in the browser
+Release:        1%{?dist}
+Summary:        JavaScript library to render math in the browser
 License:    Apache-2.0
 URL:        http://mathjax.org
-Source0:    https://github.com/mathjax/MathJax/archive/%{version}.tar.gz#/mathjax-%{version}.tar.gz
-
+Source0:        https://github.com/mathjax/MathJax/archive/%{version}.tar.gz#/mathjax-%{version}.tar.gz
 BuildArch:  noarch
-
-BuildRequires:   web-assets-devel
-
 Requires:        web-assets-filesystem
-
+# oreon:deps
+BuildRequires:  web-assets-devel
+# /oreon:deps
 %description
 MathJax is an open-source JavaScript display engine for LaTeX, MathML,
 and AsciiMath notation that works in all modern browsers. It requires no
@@ -24,6 +21,7 @@ naturally and easily. Supports LaTeX, MathML, and AsciiMath notation
 in HTML pages.
 
 %prep
+
 %setup -q -n MathJax-%{version}
 find . -name .htaccess -print -delete
 
@@ -38,11 +36,10 @@ cp -pr a11y/ adaptors/ input/ output/ sre/ ui/ \
     tex-mml-svg.js tex-mml-svg-nofont.js tex-svg.js tex-svg-nofont.js \
     mml-chtml.js mml-chtml-nofont.js mml-svg.js mml-svg-nofont.js \
     %{buildroot}%{_jsdir}/mathjax/
+%oreon_autofiles main
 
-%files
-%{_jsdir}/mathjax
-%doc README.md
-%license LICENSE
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

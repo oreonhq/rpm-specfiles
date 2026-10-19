@@ -1,11 +1,8 @@
 %global source0_hash 10ab96fdc90b20aaa70b66006f7c0b52c75c7c71d543486ef9acc2697a55d341
-
 %global fontname redhat
 %global fontconf 64-%{fontname}
 %global asfontname com.redhat.%{fontname}
-
 %global projname RedHatFont
-
 %global desc \
 Red Hat Typeface is a fresh take on the geometric sans genre, \
 taking inspiration from a range of American sans serifs \
@@ -25,15 +22,12 @@ The three families can be used together seamlessly at a range of sizes. \
  \
 The fonts were originally commissioned by Paula Scher / Pentagram \
 and designed by Jeremy Mickel / MCKL for the new Red Hat identity.
-
 Name:           %{fontname}-fonts
 Version:        5.0.0
 Release:        1%{?dist}
 Summary:        Red Hat Typeface fonts
-# Only the metainfo files are CC-BY-SA
 License:        OFL-1.1-RFN AND CC-BY-SA-4.0
 URL:            https://github.com/RedHatOfficial/%{projname}
-
 Source0:        https://github.com/RedHatOfficial/RedHatFont/archive/refs/tags/5.0.0.tar.gz#/RedHatFont-4.1.0.tar.gz
 Source1:        %{fontconf}-display-fontconfig.conf
 Source2:        %{fontconf}-text-fontconfig.conf
@@ -41,18 +35,16 @@ Source3:        %{fontconf}-mono-fontconfig.conf
 Source4:        %{fontconf}-display-vf-fontconfig.conf
 Source5:        %{fontconf}-text-vf-fontconfig.conf
 Source6:        %{fontconf}-mono-vf-fontconfig.conf
-
 BuildArch:      noarch
-BuildRequires:  %{_bindir}/appstream-util
+# oreon:deps
+BuildRequires:  //bin/appstream-util
 BuildRequires:  fontpackages-devel
-
+# /oreon:deps
 %description %{desc}
-
 
 %package -n %{fontname}-display-fonts
 Summary:        Red Hat Display fonts
 Requires:       fontpackages-filesystem
-
 %description -n %{fontname}-display-fonts %{desc}
 
 This package provides the Display fonts variant.
@@ -60,7 +52,6 @@ This package provides the Display fonts variant.
 %package -n %{fontname}-text-fonts
 Summary:        Red Hat Text fonts
 Requires:       fontpackages-filesystem
-
 %description -n %{fontname}-text-fonts %{desc}
 
 This package provides the Text fonts variant.
@@ -68,7 +59,6 @@ This package provides the Text fonts variant.
 %package -n %{fontname}-mono-fonts
 Summary:        Red Hat Mono fonts
 Requires:       fontpackages-filesystem
-
 %description -n %{fontname}-mono-fonts %{desc}
 
 This package provides the Monospace fonts variant.
@@ -77,7 +67,6 @@ This package provides the Monospace fonts variant.
 Summary:        The variable font of Red Hat Display fonts
 Requires:       fontpackages-filesystem
 Provides:	font(redhatdisplayvf)
-
 %description -n %{fontname}-display-vf-fonts %{desc}
 
 This package provides the variable font version of the Display fonts variant.
@@ -86,7 +75,6 @@ This package provides the variable font version of the Display fonts variant.
 Summary:        The variable font of Red Hat Text fonts
 Requires:       fontpackages-filesystem
 Provides:	font(redhattextvf)
-
 %description -n %{fontname}-text-vf-fonts %{desc}
 
 This package provides the variable font version of the Text fonts variant.
@@ -95,105 +83,87 @@ This package provides the variable font version of the Text fonts variant.
 Summary:        The Variable font of Red Hat Mono fonts
 Requires:       fontpackages-filesystem
 Provides:	font(redhatmonovf)
-
 %description -n %{fontname}-mono-vf-fonts %{desc}
 
 This package provides the variable font version of the Monospace fonts variant.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{projname}-%{version} -p1
 
-
 %build
-# Nothing to build
 
 %install
-
-# Install fonts
 install -m 0755 -d %{buildroot}%{_fontdir}
 install -m 0755 -d %{buildroot}%{_fontdir}-vf
-## Mono
 install -m 0644 -p fonts/Mono/RedHatMono/otf/*.otf %{buildroot}%{_fontdir}
-## Mono VF
 install -m 0644 -p fonts/Mono/RedHatMono/variable/*.ttf %{buildroot}%{_fontdir}-vf
-## Display/Text
 install -m 0644 -p fonts/Proportional/*/otf/*.otf %{buildroot}%{_fontdir}
-## Display/Text VF
 install -m 0644 -p fonts/Proportional/*/variable/*.ttf %{buildroot}%{_fontdir}-vf
-
-# Drop duplicate
 rm -f %{buildroot}%{_fontdir}-vf/*VF*.ttf
-# workaround to address crash issue/unexpected italic rendering with variable fonts
 rm -f %{buildroot}%{_fontdir}-vf/*-Italic*.ttf
-
-# Install fontconfig data
 install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
                    %{buildroot}%{_fontconfig_confdir}
-
 install -m 0644 -p %{SOURCE1} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-display.conf
 install -m 0644 -p %{SOURCE2} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-text.conf
 install -m 0644 -p %{SOURCE3} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-mono.conf
-
 install -m 0644 -p %{SOURCE4} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-display-vf.conf
 install -m 0644 -p %{SOURCE5} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-text-vf.conf
 install -m 0644 -p %{SOURCE6} \
         %{buildroot}%{_fontconfig_templatedir}/%{fontconf}-mono-vf.conf
-
 for fconf in %{fontconf}-display %{fontconf}-text %{fontconf}-mono; do
   ln -s %{_fontconfig_templatedir}/${fconf}.conf %{buildroot}%{_fontconfig_confdir}/${fconf}.conf
   ln -s %{_fontconfig_templatedir}/${fconf}-vf.conf %{buildroot}%{_fontconfig_confdir}/${fconf}-vf.conf
 done
-
-# Install AppStream metadata
 install -m 0755 -d %{buildroot}%{_datadir}/metainfo
 for f in metainfo/*.metainfo.xml; do
     sed -e 's/\(com\.redhat\..*\)</\1-vf</' $f > ${f/.metainfo.xml/-vf.metainfo.xml}
     touch -r $f ${f/.metainfo.xml/-vf.metainfo.xml}
 done
 install -m 0644 -p metainfo/*.metainfo.xml %{buildroot}%{_datadir}/metainfo
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-# Validate AppStream metadata
+
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/*.metainfo.xml
-
-
 %_font_pkg -n display -f %{fontconf}-display.conf RedHatDisplay*.otf
 %license LICENSE metainfo/LICENSE-METAINFO
 %doc README.md CHANGELOG.md *.png
 %{_datadir}/metainfo/%{asfontname}-display.metainfo.xml
-
 %_font_pkg -n text -f %{fontconf}-text.conf RedHatText*.otf
 %license LICENSE metainfo/LICENSE-METAINFO
 %doc README.md CHANGELOG.md *.png
 %{_datadir}/metainfo/%{asfontname}-text.metainfo.xml
-
 %_font_pkg -n mono -f %{fontconf}-mono.conf RedHatMono*.otf
 %license LICENSE metainfo/LICENSE-METAINFO
 %doc README.md CHANGELOG.md *.png
 %{_datadir}/metainfo/%{asfontname}-mono.metainfo.xml
-
 %global _fontdir %{_fontdir}-vf
-
 %license LICENSE metainfo/LICENSE-METAINFO
 %doc README.md CHANGELOG.md *.png
 %{_datadir}/metainfo/%{asfontname}-display-vf.metainfo.xml
-
 %_font_pkg -n text-vf -f %{fontconf}-text-vf.conf RedHatText*.ttf
 %license LICENSE metainfo/LICENSE-METAINFO
 %doc README.md CHANGELOG.md *.png
 %{_datadir}/metainfo/%{asfontname}-text-vf.metainfo.xml
-
 %_font_pkg -n mono-vf -f %{fontconf}-mono-vf.conf RedHatMono*.ttf
 %license LICENSE metainfo/LICENSE-METAINFO
 %doc README.md CHANGELOG.md *.png
 %{_datadir}/metainfo/%{asfontname}-mono-vf.metainfo.xml
-
+%files -f %{oreon_filedir}/main.list
+%files -n redhat-display-fonts -f %{oreon_filedir}/redhat-display-fonts.list
+%files -n redhat-text-fonts -f %{oreon_filedir}/redhat-text-fonts.list
+%files -n redhat-mono-fonts -f %{oreon_filedir}/redhat-mono-fonts.list
+%files -n redhat-display-vf-fonts -f %{oreon_filedir}/redhat-display-vf-fonts.list
+%files -n redhat-text-vf-fonts -f %{oreon_filedir}/redhat-text-vf-fonts.list
+%files -n redhat-mono-vf-fonts -f %{oreon_filedir}/redhat-mono-vf-fonts.list
 
 %changelog
+
 %autochangelog

@@ -1,51 +1,37 @@
-%global source0_hash 055b781d6ac7b109eccd6c8be9f27f8bb60f92f1001ded84d2619f9e349894a7
-
+%global source0_hash e7fb0f4266219d614de89530c7eea686dd9362897000ed0e541891ea817f2072
 Name:           VirtualGL
 Version:        3.1.5
 Release:        1%{?dist}
 Summary:        A toolkit for displaying OpenGL applications to thin clients
-
-# Automatically converted from old format: wxWindows - review is highly recommended.
 License:        LGPL-2.0-or-later WITH WxWindows-exception-3.1
 URL:            https://www.virtualgl.org
 Source0:        https://github.com/VirtualGL/virtualgl/archive/%{version}/VirtualGL-%{version}.tar.gz
-# fix for bz923961
 Patch1:         %{name}-redhatpathsfix.patch
-# fix for bz1088475
 Patch2:         %{name}-redhatlibexecpathsfix.patch
-# Do not rely on hostname package
 Patch4:         %{name}-hostname.patch
-
-%if 0%{?rhel} == 7
-BuildRequires:  cmake3
-%else
+Requires:       fltk
+Provides:       bumblebee-bridge
+# oreon:deps
 BuildRequires:  cmake
-%endif
 BuildRequires:  fltk-devel
-BuildRequires:  turbojpeg-devel
-BuildRequires:  mesa-libGLU-devel
+BuildRequires:  fltk-fluid
 BuildRequires:  gcc-c++
 BuildRequires:  glibc-devel
+BuildRequires:  mesa-libGLU-devel
 BuildRequires:  pkgconfig
-# no need OpenCL-Headers, ocl-icd seems enough
-#BuildRequires:  pkgconfig(OpenCL-Headers)
-BuildRequires:  pkgconfig(ocl-icd)
 BuildRequires:  pkgconfig(egl)
 BuildRequires:  pkgconfig(gl)
 BuildRequires:  pkgconfig(glproto)
 BuildRequires:  pkgconfig(glu)
+BuildRequires:  pkgconfig(ocl-icd)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(x11-xcb)
 BuildRequires:  pkgconfig(xcb-keysyms)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xv)
-%if 0%{?fedora:1} || 0%{?rhel} <= 7
-BuildRequires:  fltk-fluid
-%endif
-Requires:       fltk
-Provides:       bumblebee-bridge
-
+BuildRequires:  turbojpeg-devel
+# /oreon:deps
 %description
 VirtualGL is a toolkit that allows most Unix/Linux OpenGL applications to be
 remotely displayed with hardware 3D acceleration to thin clients, regardless
@@ -81,11 +67,11 @@ Requires:   %{name}%{?_isa} = %{version}-%{release}
 Requires:   turbojpeg-devel%{?_isa}
 Requires:   mesa-libGLU-devel%{?_isa}
 Requires:   libXv-devel%{?_isa}
-
 %description devel
 Development headers and libraries for VirtualGL.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n virtualgl-%{version}
@@ -94,11 +80,8 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -r server/fltk
 
 %build
-%if 0%{?rhel} == 7
-cmake3 \
-%else
+
 %cmake \
-%endif
          -DVGL_SYSTEMFLTK=1 \
          -DVGL_FAKEXCB=1 \
          -DVGL_BUILDSTATIC=0 \
@@ -112,68 +95,26 @@ cmake3 \
          -DCMAKE_INSTALL_DOCDIR=%{_docdir}/%{name} \
          -DCMAKE_INSTALL_BINDIR=%{_bindir} \
          -DCMAKE_LIBRARY_PATH=%{_libdir}
-
-%if 0%{?rhel} == 7
-make %{?_smp_mflags}
-%else
 %cmake_build
-%endif
-
 %install
-%if 0%{?rhel} == 7
-make install DESTDIR=$RPM_BUILD_ROOT
-%else
 %cmake_install
-%endif
-# glxinfo conflicts with command from glx-utils so lets do what Arch does
-# and rename the command
 mv %{buildroot}/%{_bindir}/glxinfo %{buildroot}/%{_bindir}/vglxinfo
-# eglinfo conflics with the command from egl-utils, rename eglinfo to veglinfo
 mv %{buildroot}/%{_bindir}/eglinfo %{buildroot}/%{_bindir}/veglinfo
-
 mkdir -p %{buildroot}%{_libdir}/fakelib/
 ln -rsf %{_libdir}/VirtualGL/librrfaker.so %{buildroot}%{_libdir}/fakelib/libGL.so
-# fix for bz1088475
 mkdir %{buildroot}%{_libexecdir}
 %if 0%{?__isa_bits} == 64
 mv %{buildroot}%{_bindir}/.vglrun.vars64 %{buildroot}%{_libexecdir}/vglrun.vars64
 %else
 mv %{buildroot}%{_bindir}/.vglrun.vars32 %{buildroot}%{_libexecdir}/vglrun.vars32
 %endif
-
 %ldconfig_scriptlets
+%oreon_autofiles VirtualGL-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%{_docdir}/%{name}/
-%{_bindir}/tcbench
-%{_bindir}/nettest
-%{_bindir}/cpustat
-%{_bindir}/veglinfo
-%{_bindir}/eglxinfo
-%{_bindir}/vglclient
-%{_bindir}/vglconfig
-%{_bindir}/vglconnect
-%{_bindir}/vglgenkey
-%{_bindir}/vgllogin
-%{_bindir}/vglserver_config
-%{_bindir}/vglrun
-%{_bindir}/vglxinfo
-%{_bindir}/glreadtest
-%if 0%{?__isa_bits} == 64
-%{_bindir}/eglxspheres64
-%{_bindir}/glxspheres64
-%{_libexecdir}/vglrun.vars64
-%else
-%{_bindir}/eglxspheres
-%{_bindir}/glxspheres
-%{_libexecdir}/vglrun.vars32
-%endif
-%{_libdir}/VirtualGL/
-%{_libdir}/fakelib/
-
-%files devel
-%{_includedir}/rrtransport.h
-%{_includedir}/rr.h
+%files -f %{oreon_filedir}/main.list
+%files -n VirtualGL-devel -f %{oreon_filedir}/VirtualGL-devel.list
 
 %changelog
+
 %autochangelog

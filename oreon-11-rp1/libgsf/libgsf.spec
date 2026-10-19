@@ -1,47 +1,35 @@
 %global source0_hash 83e12c36a099a8a7019bf425e2c24af66eeb2ef5874251e694431a07d9805dae
-
 %global with_mingw 0
-
-%if 0%{?fedora} && !0%{?flatpak}
-%global with_mingw 1
-%endif
-
 Name: libgsf
 Version: 1.14.60
-Release: 1%{?dist}
-Summary: GNOME Structured File library
-
+Release:        1%{?dist}
+Summary:        GNOME Structured File library
 License: LGPL-2.1-only
 URL:     https://gitlab.gnome.org/GNOME/libgsf/
-Source:        https://download.gnome.org/sources/%{name}/1.14/%{name}-%{version}.tar.xz
-
-BuildRequires: bzip2-devel
-BuildRequires: chrpath
-BuildRequires: gettext
-BuildRequires: intltool
-BuildRequires: make
-BuildRequires: pkgconfig(gdk-pixbuf-2.0)
-BuildRequires: pkgconfig(gio-2.0)
-BuildRequires: pkgconfig(gobject-introspection-1.0)
-BuildRequires: pkgconfig(libxml-2.0)
-
+Source0:        https://download.gnome.org/sources/%{name}/1.14/%{name}-%{version}.tar.xz
 Obsoletes: libgsf-gnome < 1.14.22
 Obsoletes: libgsf-python < 1.14.26
-
-%if %{with_mingw}
-BuildRequires: mingw32-filesystem >= 95
-BuildRequires: mingw32-gcc-c++
-BuildRequires: mingw64-filesystem >= 95
-BuildRequires: mingw64-gcc-c++
-
-BuildRequires: mingw64-bzip2
-BuildRequires: mingw32-bzip2
-BuildRequires: mingw64-glib2
-BuildRequires: mingw32-glib2
-BuildRequires: mingw64-libxml2
-BuildRequires: mingw32-libxml2
-%endif
-
+# oreon:deps
+BuildRequires:  bzip2-devel
+BuildRequires:  chrpath
+BuildRequires:  gettext
+BuildRequires:  intltool
+BuildRequires:  make
+BuildRequires:  mingw32-bzip2
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc-c++
+BuildRequires:  mingw32-glib2
+BuildRequires:  mingw32-libxml2
+BuildRequires:  mingw64-bzip2
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc-c++
+BuildRequires:  mingw64-glib2
+BuildRequires:  mingw64-libxml2
+BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(libxml-2.0)
+# /oreon:deps
 %description
 A library for reading and writing structured files (e.g. MS OLE and Zip)
 
@@ -50,130 +38,61 @@ Summary: Support files necessary to compile applications with libgsf
 Requires: libgsf = %{version}-%{release}, glib2-devel, libxml2-devel
 Requires: pkgconfig
 Obsoletes: libgsf-gnome-devel < 1.14.22
-
 %description devel
 Libraries, headers, and support files necessary to compile applications using
 libgsf.
 
-%if %{with_mingw}
 %package -n mingw32-libgsf
 Summary: MinGW GNOME Structured File library
 BuildArch: noarch
-
 %description -n mingw32-libgsf
 A library for reading and writing structured files (e.g. MS OLE and Zip)
 
 %package -n mingw64-libgsf
 Summary: MinGW GNOME Structured File library
 BuildArch: noarch
-
 %description -n mingw64-libgsf
 A library for reading and writing structured files (e.g. MS OLE and Zip)
 
 %{?mingw_debug_package}
-%endif
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
-
+%oreon_prep
 %build
-%global _configure ../configure
 
+%global _configure ../configure
 mkdir -p build/doc && pushd build
 ln -s ../../doc/html doc # some day meson... libgsf!4
 %configure --disable-gtk-doc --disable-static --enable-introspection=yes \
 %if 0%{?flatpak}
 --with-typelib_dir=%{_libdir}/girepository-1.0 --with-gir-dir=%{_datadir}/gir-1.0
 %endif
-
 %make_build
 popd
-
-%if %{with_mingw}
 %mingw_configure --disable-static
 %mingw_make_build
-%endif
-
 %install
 export GCONF_DISABLE_MAKEFILE_SCHEMA_INSTALL=1
 pushd build
 %make_install
 popd
-
 %find_lang %{name}
-
-%if %{with_mingw}
 %mingw_make_install
 %mingw_debug_install_post
 %mingw_find_lang %{name} --all-name
-%endif
-
-# Remove lib rpaths
 chrpath --delete %{buildroot}%{_bindir}/gsf*
-
-# Remove .la files
 find %{buildroot} -name '*.la' -delete -print
-
 %ldconfig_scriptlets
+%oreon_autofiles mingw32-libgsf usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles mingw64-libgsf usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -f libgsf.lang
-%doc AUTHORS README
-%license COPYING
-%{_libdir}/libgsf-1.so.*
-%{_libdir}/girepository-1.0/Gsf-1.typelib
-%{_bindir}/gsf-office-thumbnailer
-%{_mandir}/man1/gsf-office-thumbnailer.1*
-%dir %{_datadir}/thumbnailers
-%{_datadir}/thumbnailers/gsf-office.thumbnailer
-
-%files devel
-%{_bindir}/gsf
-%{_bindir}/gsf-vba-dump
-%{_libdir}/libgsf-1.so
-%{_libdir}/pkgconfig/libgsf-1.pc
-%dir %{_includedir}/libgsf-1
-%{_includedir}/libgsf-1/gsf
-%{_datadir}/gtk-doc/html/gsf
-%{_datadir}/gir-1.0/Gsf-1.gir
-%{_mandir}/man1/gsf.1*
-%{_mandir}/man1/gsf-vba-dump.1*
-
-%if %{with_mingw}
-%files -n mingw32-libgsf -f mingw32-libgsf.lang
-%license COPYING
-%{mingw32_bindir}/gsf.exe
-%{mingw32_bindir}/gsf-vba-dump.exe
-%{mingw32_bindir}/gsf-office-thumbnailer.exe
-%{mingw32_bindir}/libgsf-1-114.dll
-%{mingw32_bindir}/libgsf-win32-1-114.dll
-%{mingw32_libdir}/libgsf-1.dll.a
-%{mingw32_libdir}/libgsf-win32-1.dll.a
-%{mingw32_libdir}/pkgconfig/libgsf-1.pc
-%{mingw32_libdir}/pkgconfig/libgsf-win32-1.pc
-%{mingw32_includedir}/libgsf-1/
-%{mingw32_mandir}/man1/gsf.1*
-%{mingw32_mandir}/man1/gsf-vba-dump.1*
-%{mingw32_mandir}/man1/gsf-office-thumbnailer.1*
-%{mingw32_datadir}/thumbnailers/gsf-office.thumbnailer
-
-%files -n mingw64-libgsf -f mingw64-libgsf.lang
-%license COPYING
-%{mingw64_bindir}/gsf.exe
-%{mingw64_bindir}/gsf-vba-dump.exe
-%{mingw64_bindir}/gsf-office-thumbnailer.exe
-%{mingw64_bindir}/libgsf-1-114.dll
-%{mingw64_bindir}/libgsf-win32-1-114.dll
-%{mingw64_libdir}/libgsf-1.dll.a
-%{mingw64_libdir}/libgsf-win32-1.dll.a
-%{mingw64_libdir}/pkgconfig/libgsf-1.pc
-%{mingw64_libdir}/pkgconfig/libgsf-win32-1.pc
-%{mingw64_includedir}/libgsf-1/
-%{mingw64_mandir}/man1/gsf.1*
-%{mingw64_mandir}/man1/gsf-vba-dump.1*
-%{mingw64_mandir}/man1/gsf-office-thumbnailer.1*
-%{mingw64_datadir}/thumbnailers/gsf-office.thumbnailer
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n libgsf-devel -f %{oreon_filedir}/libgsf-devel.list
+%files -n mingw32-libgsf -f %{oreon_filedir}/mingw32-libgsf.list
+%files -n mingw64-libgsf -f %{oreon_filedir}/mingw64-libgsf.list
 
 %changelog
+
 %autochangelog

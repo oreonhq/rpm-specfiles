@@ -1,5 +1,4 @@
-%global source0_hash 376033a2f4e6cf96b89130c12196e1c20ffe99300347593bec233aa472d74891
-
+%global source0_hash e8a68f2c86f99e34c86acf7325fe6d19c8175935f2521314552dce63be22f164
 Name:           multiwatch
 Version:        1.0.1
 Release:        1%{?dist}
@@ -7,15 +6,13 @@ Summary:        Forks and watches multiple instances of a program in the same co
 License:        MIT
 URL:            https://redmine.lighttpd.net/projects/multiwatch/wiki
 Source0:        https://download.lighttpd.net/multiwatch/releases-1.x/multiwatch-%{version}.tar.xz
-
-# https://git.lighttpd.net/lighttpd/multiwatch/commit/bdd50b7910ebfd04f70e39cb688e3a4851505ac4.patch
 Patch0:         multiwatch-1.0.0-fix_signal.patch
-
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  glib2-devel
 BuildRequires:  libev-devel
-
+BuildRequires:  make
+# /oreon:deps
 %description
 Multiwatch forks multiple instance of one application and keeps them running.
 It is made to be used with spawn-fcgi, so all forks share the same fastcgi
@@ -25,21 +22,17 @@ instances.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%license COPYING
-%doc README
-%{_bindir}/multiwatch
-%{_mandir}/man1/multiwatch.1.*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

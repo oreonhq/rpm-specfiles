@@ -1,23 +1,17 @@
 %global source0_hash 6045283b98e004a683b13a636409ba691401d2ae9e5122d244c151972e923341
-
 Name:           remind
 Version:        06.03.03
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Sophisticated calendar and alarm program
-
-# GPL-2.0-only: main software
-# GPL-2.0-only AND LicenseRef-Fedora-Public-Domain:
-#  - src/moon.c
-# LicenseRef-Fedora-Public-Domain:
-# - src/md5.c
 License:        GPL-2.0-only AND BSD-2-Clause AND (GPL-2.0-only AND LicenseRef-Fedora-Public-Domain) AND LicenseRef-Fedora-Public-Domain
 URL:            https://dianne.skoll.ca/projects/remind/
-Source:         %url/download/%{name}-%{version}.tar.gz
-Source:         %url/download/%{name}-%{version}.tar.gz.sig
-Source:         685A5A5E511D30E2.gpg
-# stolen from Debian
+Source0:        https://dianne.skoll.ca/projects/%{name}//download/%{name}-%{version}.tar.gz
 Patch:          use-system-libjsonparser.diff
-
+Recommends:     remind-tools
+Recommends:     remind-gui
+Recommends:     remind-doc
+# oreon:deps
+BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  gnupg2
 BuildRequires:  make
@@ -28,12 +22,8 @@ BuildRequires:  perl(Pango)
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 BuildRequires:  pkgconfig(json-parser)
-BuildRequires:  desktop-file-utils
 BuildRequires:  tzdata
-Recommends:     remind-tools
-Recommends:     remind-gui
-Recommends:     remind-doc
-
+# /oreon:deps
 %description
 Remind is a sophisticated calendar and alarm program. It includes the following
 features:
@@ -51,7 +41,6 @@ features:
 Summary:        Documentation for remind, a sophisticated calendar and alarm program
 License:        GPL-2.0-only
 BuildArch:      noarch
-
 %description    doc
 Documentation and information on how to use remind
 
@@ -65,27 +54,18 @@ Requires:       tcl
 Requires:       tcllib
 Requires:       tk >= 8.0
 Suggests:       google-noto-fonts
-
 %description    gui
 Tkremind provides a GUI which allows viewing a calendar and adding or editing
 reminders without learning the syntax of Remind.
 
 %package        tools
 Summary:        Additional tools for remind
-# GPL-2.0-or-later:
-#  - contrib/ical2rem.pl
-#  - contrib/rem2ics-0.93/rem2ics.spec
-#  - contrib/remind-conf-mode/remind-conf-mode.el
-# GPL-2.0-or-later AND GPL-2.0-only:
-#  - contrib/rem2ics-0.93/rem2ics
-# GPL-3.0-only:
-#  - contrib/remind-conf-mode/gpl.txt
 License:        GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only
-
 %description    tools
 Tools to convert the remind output to ps, pdf or html as well as example files.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -98,47 +78,22 @@ rm src/json.h
 rm src/json.c
 
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
-
 desktop-file-validate %{buildroot}%{_datadir}/applications/tkremind.desktop
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 make test
-
-%files
-%doc README.md
-%license COPYRIGHT
-%attr(0755,-,-) %{_bindir}/%{name}
-%{_bindir}/rem
-%{_datadir}/remind/
-%{_mandir}/man1/rem.1*
-%{_mandir}/man1/%{name}.1*
-
-%files doc
-%doc README.md docs/
-%doc www/ examples/ contrib/
-
-%files tools
-%license COPYRIGHT
-%attr(0755,-,-) %{_bindir}/rem2html
-%attr(0755,-,-) %{_bindir}/rem2pdf
-%attr(0755,-,-) %{_bindir}/rem2ps
-%{perl_vendorlib}/*
-%{_mandir}/man1/rem2html.1*
-%{_mandir}/man1/rem2pdf.1*
-%{_mandir}/man1/rem2ps.1*
-%{_mandir}/man3/Remind::PDF.3pm*
-%{_mandir}/man3/Remind::PDF::Entry.3pm*
-
-%files gui
-%attr(0755,-,-) %{_bindir}/tkremind
-%{_mandir}/man1/tkremind.1*
-%{_datadir}/applications/tkremind.desktop
-%{_datadir}/pixmaps/tkremind.png
+%files -f %{oreon_filedir}/main.list
+%files -n remind-doc -f %{oreon_filedir}/remind-doc.list
+%files -n remind-gui -f %{oreon_filedir}/remind-gui.list
+%files -n remind-tools -f %{oreon_filedir}/remind-tools.list
 
 %changelog
+
 %autochangelog

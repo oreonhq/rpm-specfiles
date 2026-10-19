@@ -1,12 +1,11 @@
+%global source2_hash 4b1aa7498f622711688ce6f6ee5b8c84dc60563b6b38c546ed16ec1695c02295
+%global source1_hash b279b55fee925c05c069a48efa6ae55d4163b0ec946757a43adf4b35cee86bcf
 %global source0_hash 7a1c4056af114ef7ed61f3665a614ce7085a442d5712a85a5bbebf84b217d29c
-
 %bcond_without httpclient
 %bcond_without oro
 %bcond_without vfs
 %bcond_without sftp
-
 %global jarname ivy
-
 Name:           apache-%{jarname}
 Version:        2.6.0
 Release:        1%{?dist}
@@ -15,45 +14,34 @@ License:        Apache-2.0
 URL:            https://ant.apache.org/ivy
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/ant/%{jarname}/%{version}/%{name}-%{version}-src.tar.gz
 Source1:        https://archive.apache.org/dist/ant/%{jarname}/%{version}/%{name}-%{version}-src.tar.gz.asc
 Source2:        https://archive.apache.org/dist/ant/KEYS
-
-# Non-upstreamable.  Add /etc/ivy/ivysettings.xml at the end list of
-# settings files Ivy tries to load.  This file will be used only as
-# last resort, when no other setting files exist.
 Source3:         00-global-settings.patch
-# java.util.jar.Pack200 was removed in modern JDKs, do not compile against it
-
-BuildRequires:  gnupg2
-BuildRequires:  ant
-BuildRequires:  ivy-local
-BuildRequires:  dos2unix
-BuildRequires:  mvn(org.apache.ant:ant)
-BuildRequires:  mvn(org.bouncycastle:bcpg-jdk18on)
-BuildRequires:  mvn(org.bouncycastle:bcprov-jdk18on)
-
 %if %{with httpclient}
-BuildRequires:  mvn(org.apache.httpcomponents:httpclient)
 %endif
-
 %if %{with oro}
-BuildRequires:  mvn(oro:oro)
 %endif
-
 %if %{with vfs}
-BuildRequires:  mvn(org.apache.commons:commons-vfs2)
 %endif
-
 %if %{with sftp}
+%endif
+Provides:       ivy = %{version}-%{release}
+# oreon:deps
+BuildRequires:  ant
+BuildRequires:  dos2unix
+BuildRequires:  gnupg2
+BuildRequires:  ivy-local
 BuildRequires:  mvn(com.jcraft:jsch)
 BuildRequires:  mvn(com.jcraft:jsch.agentproxy.connector-factory)
 BuildRequires:  mvn(com.jcraft:jsch.agentproxy.jsch)
-%endif
-
-Provides:       ivy = %{version}-%{release}
-
+BuildRequires:  mvn(org.apache.ant:ant)
+BuildRequires:  mvn(org.apache.commons:commons-vfs2)
+BuildRequires:  mvn(org.apache.httpcomponents:httpclient)
+BuildRequires:  mvn(org.bouncycastle:bcpg-jdk18on)
+BuildRequires:  mvn(org.bouncycastle:bcprov-jdk18on)
+BuildRequires:  mvn(oro:oro)
+# /oreon:deps
 %description
 Apache Ivy is a tool for managing (recording, tracking, resolving and
 reporting) project dependencies.  It is designed as process agnostic and is
@@ -65,6 +53,7 @@ reporting and publication.
 %{?javadoc_package}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
@@ -140,25 +129,21 @@ rm -rf asciidoc
 %pom_xpath_set ivy:publish/@resolver xmvn build.xml
 
 %build
-# create custom ant configuration
+
 mkdir -p ~/.ant
 cp /etc/ant.conf ~/.ant
 sed -i '$a JAVA_HOME=/usr/lib/jvm/java-21-openjdk' ~/.ant/ant.conf
-
 ant -Divy.mode=local \
     -f build-release.xml \
     release-version jar javadoc publish-local
-
 %install
 %mvn_install -J build/reports/api
-# create ant deps
 mkdir -p %{buildroot}%{_sysconfdir}/ant.d
 echo "apache-ivy/ivy" > %{buildroot}%{_sysconfdir}/ant.d/%{name}
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE NOTICE
-%doc README.adoc
-%{_sysconfdir}/ant.d/%{name}
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

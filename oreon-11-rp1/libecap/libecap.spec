@@ -1,18 +1,17 @@
-%global source0_hash none
-
+%global source0_hash 7c166d997a079110dcc55e9b81eb70b4d73c08b2bcb986fa81bbf78bb62ec8f4
 Name:       libecap
 Version:    1.0.1
-Release:    21%{?dist}
-Summary:    Squid interface for embedded adaptation modules
+Release:        1%{?dist}
+Summary:        Squid interface for embedded adaptation modules
 License:    BSD-2-Clause
 URL:        http://www.e-cap.org/
 Source0:        https://www.e-cap.org/archive/%{name}-%{version}.tar.gz
 Source1:    autoconf.h
-
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 eCAP is a software interface that allows a network application, such as an 
 HTTP proxy or an ICAP server, to outsource content analysis and adaptation to 
@@ -33,40 +32,30 @@ replaced with function calls to an adaptation module.
 %package devel
 Summary:    Libraries and header files for the libecap library
 Requires:   %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 This package provides the libraries, include files, and other
 resources needed for developing libecap applications.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
-
+%oreon_prep
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/libecap.a
 rm -f %{buildroot}%{_libdir}/libecap.la
-
-# Rename libecap/common/autoconf.h to libecap/common/autoconf-<arch>.h to avoid file conflicts on
-# multilib systems and install autoconf.h wrapper
 mv %{buildroot}%{_includedir}/%{name}/common/autoconf.h %{buildroot}%{_includedir}/%{name}/common/autoconf-%{_arch}.h
 install -pm644 %{SOURCE1} %{buildroot}%{_includedir}/%{name}/common/autoconf.h
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc LICENSE CREDITS NOTICE README
-%{_libdir}/libecap.so.*
-
-%files devel
-%{_libdir}/libecap.so
-%{_libdir}/pkgconfig/libecap.pc
-%{_includedir}/libecap
+%files -f %{oreon_filedir}/main.list
+%files -n libecap-devel -f %{oreon_filedir}/libecap-devel.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.1-21
 - Import

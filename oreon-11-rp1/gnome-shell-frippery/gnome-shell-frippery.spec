@@ -1,19 +1,17 @@
-%global source0_hash 1ca2af0d13fb5b38ae7466cd8323ec38b162b45fbd11a2df4a310b5693fe1576
-
+%global source0_hash 627bae4ed1e4b093356a6cd6b03121dc766de2dd93db798b124d37b1b2a69e25
 %global extdir %{_datadir}/gnome-shell/extensions
 %global gschemadir %{_datadir}/glib-2.0/schemas
-
 Name:           gnome-shell-frippery
 Version:        50.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Extensions to provide a user experience more like that of GNOME 2
-
 License:        GPL-2.0-or-later
 URL:            http://frippery.org/extensions
-Source:         %{url}/%{name}-%{version}.tgz
-
+Source0:        http://frippery.org/extensions/%{name}-%{version}.tgz
 BuildArch:      noarch
+# oreon:deps
 
+# /oreon:deps
 %description
 This package contains some GNOME Shell extensions to provide a user experience
 more like that of GNOME 2.
@@ -48,6 +46,7 @@ the panel. Right clicking on the icons invokes a menu that lets one perform
 various operations on the application.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -c %{name}-%{version} -p1
@@ -60,37 +59,23 @@ mv .local/share/gnome-shell/gnome-shell-frippery/* .
 %install
 mkdir -p %{buildroot}%{extdir}
 cp -PR extensions/* %{buildroot}%{extdir}
-
-# Install glib2 schema in the proper location
 mkdir -p %{buildroot}%{gschemadir}
 cp -P extensions/*/schemas/*.gschema.xml %{buildroot}%{gschemadir}
 rm -r %{buildroot}%{extdir}/*/schemas
-
 %find_lang frippery-applications-menu
 %find_lang frippery-bottom-panel
+%oreon_autofiles gnome-shell-extension-frippery-applications-menu usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gnome-shell-extension-frippery-bottom-panel usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gnome-shell-extension-frippery-move-clock usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles gnome-shell-extension-frippery-panel-favorites usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files -n gnome-shell-extension-frippery-applications-menu -f frippery-applications-menu.lang
-%doc README CHANGELOG
-%license COPYING
-%{extdir}/Applications_Menu@rmy.pobox.com
-%{gschemadir}/org.frippery.applications-menu.gschema.xml
-
-%files -n gnome-shell-extension-frippery-bottom-panel -f frippery-bottom-panel.lang
-%doc README CHANGELOG
-%license COPYING
-%{extdir}/Bottom_Panel@rmy.pobox.com
-%{gschemadir}/org.frippery.bottom-panel.gschema.xml
-
-%files -n gnome-shell-extension-frippery-move-clock
-%doc README CHANGELOG
-%license COPYING
-%{extdir}/Move_Clock@rmy.pobox.com
-
-%files -n gnome-shell-extension-frippery-panel-favorites
-%doc README CHANGELOG
-%license COPYING
-%{extdir}/Panel_Favorites@rmy.pobox.com
-%{gschemadir}/org.frippery.panel-favorites.gschema.xml
+%files -f %{oreon_filedir}/main.list
+%files -n gnome-shell-extension-frippery-applications-menu -f %{oreon_filedir}/gnome-shell-extension-frippery-applications-menu.list
+%files -n gnome-shell-extension-frippery-bottom-panel -f %{oreon_filedir}/gnome-shell-extension-frippery-bottom-panel.list
+%files -n gnome-shell-extension-frippery-move-clock -f %{oreon_filedir}/gnome-shell-extension-frippery-move-clock.list
+%files -n gnome-shell-extension-frippery-panel-favorites -f %{oreon_filedir}/gnome-shell-extension-frippery-panel-favorites.list
 
 %changelog
+
 %autochangelog

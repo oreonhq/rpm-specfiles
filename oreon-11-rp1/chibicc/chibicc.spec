@@ -1,24 +1,21 @@
 %global source0_hash cadb44e82354002000f6d2bbf41d3155f47a9b3e9abd50a309fdcd9b5ef791e0
-
 %global commit 90d1f7f199cc55b13c7fdb5839d1409806633fdb
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global date 20201207
 Name:           chibicc
 Version:        0.0^%{date}.%{shortcommit}
-Release:        %{autorelease}
+Release:        1%{?dist}
 Summary:        A small C compiler
-
 License:        MIT
 URL:            https://github.com/rui314/chibicc
-Source:         %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-
+Source0:        https://github.com/rui314/%{name}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+ExclusiveArch:  x86_64
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  glibc-devel
 BuildRequires:  glibc-static
 BuildRequires:  make
-# Other architectures are not supported
-ExclusiveArch:  x86_64
-
+# /oreon:deps
 %description
 chibicc is yet another small C compiler that implements most C11 features.
 Even though it still probably falls into the "toy compilers" category just
@@ -36,30 +33,27 @@ open-source license after publishing the book. If I don't charge for the source
 code, it doesn't make much sense to me to keep it private.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{commit}
 sed -i 's/CFLAGS=-std=c11/CFLAGS+=-std=c11/g' Makefile
 
 %build
-%make_build
 
+%make_build
 %install
 install -D -p -m 755 chibicc %{buildroot}%{_bindir}/chibicc
 mkdir -p %{buildroot}%{_includedir}/chibicc
 install -p -m 644 include/*.h %{buildroot}%{_includedir}/chibicc/
 install -p -m 644 chibicc.h %{buildroot}%{_includedir}/
+%oreon_autofiles main
 
 %check
-make test-all
 
-%files
-%license LICENSE
-%doc README.md
-%{_bindir}/chibicc
-%{_includedir}/chibicc.h
-%dir %{_includedir}/chibicc
-%{_includedir}/chibicc/*.h
+make test-all
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

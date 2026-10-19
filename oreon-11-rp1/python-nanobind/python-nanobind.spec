@@ -1,56 +1,41 @@
-%global source0_hash none
-
+%global source0_hash f7f0a889c8fb80deaacb95e918d88e05148850a32d2b8eda28446291b2bf7c35
 Name:           python-nanobind
 Version:        3.0.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        nanobind: tiny and efficient C++/Python bindings
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/wjakob/nanobind
-Source:         %{pypi_source nanobind}
-
+Source0:        https://files.pythonhosted.org/packages/source/n/nanobind/nanobind-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'nanobind' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(scikit-build-core) >= 0.10
+Requires:       python3-nanobind = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-nanobind
-Summary:        %{summary}
-
-%description -n python3-nanobind %_description
-
+Summary:        nanobind: tiny and efficient C++/Python bindings
+%description -n python3-nanobind
 
 %prep
-%autosetup -p1 -n nanobind-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir nanobind-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-nanobind usr/lib/python3*/site-packages/nanobind* usr/lib64/python3*/site-packages/nanobind* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/nanobind* usr/lib64/python3*/site-packages/nanobind* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-nanobind -f %{pyproject_files}
+%files
+%files -n python3-nanobind -f %{oreon_filedir}/python3-nanobind.list
 
 %changelog
+
 %autochangelog

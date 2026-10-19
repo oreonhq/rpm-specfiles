@@ -1,36 +1,27 @@
 %global source0_hash 5c90d6ebd0ea1c3dfaa070950a5ea2ee5e119e3d101217f12fc4ba197efd0f05
-
-# Header-only library
 %global debug_package %{nil}
-
 %global commit 36459f42a84207330eae706c47e6fab712e6a149
 %global shortcommit %%(c=%{commit}; echo ${c:0:7})
-
-Summary:  A toolkit for programming parallel shared memory algorithms 
+Summary:        A toolkit for programming parallel shared memory algorithms
 Name:     parlaylib
 License:  MIT
-#Version obtained from cmake config, but no tags upstream
 Version:  2.3.1^20230215git%{shortcommit}
-Release:  %autorelease
-
+Release:        1%{?dist}
 URL:      https://github.com/cmuparlay/parlaylib
-Source0:  %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-# Do not download gtest, put cmake files in lib directory
+Source0:        https://github.com/cmuparlay/%{name}/archive/%{commit}/%{name}-36459f4.tar.gz
 Patch0:   nodownload.patch
-# Tests fail on architectures other than x86_64
-# https://github.com/cmuparlay/parlaylib/issues/46
 ExcludeArch:  aarch64 s390x arm-hfp ppc64le i686
-
-BuildRequires:  cmake
+# oreon:deps
 BuildRequires:  clang-tools-extra-devel
+BuildRequires:  cmake
 BuildRequires:  gcc-c++
-BuildRequires:  gtest-devel
 BuildRequires:  gmock-devel
-BuildRequires:  llvm
+BuildRequires:  gtest-devel
 BuildRequires:  libstdc++-devel
+BuildRequires:  llvm
 BuildRequires:  re2-devel
-
-%global _description %{expand:
+# /oreon:deps
+%description
 ParlayLib is a header only C++ library for developing efficient parallel
 algorithms and software on shared-memory multicore machines. It provides
 additional tools and primitives that go beyond what is available in the
@@ -38,25 +29,36 @@ C++ standard library, and simplifies the task of programming provably
 efficient and scalable parallel algorithms. It consists of a sequence
 data type (analogous to std::vector), many parallel routines and
 algorithms, a work-stealing scheduler to support nested parallelism,
-and a scalable memory allocator.}
-
-%description
-%_description
+and a scalable memory allocator.
 
 %package devel
 Summary:        A toolkit for programming parallel shared memory algorithms
 Provides:       %{name}-static = %{version}-%{release}
 %description devel
-%_description
+ParlayLib is a header only C++ library for developing efficient parallel
+algorithms and software on shared-memory multicore machines. It provides
+additional tools and primitives that go beyond what is available in the
+C++ standard library, and simplifies the task of programming provably
+efficient and scalable parallel algorithms. It consists of a sequence
+data type (analogous to std::vector), many parallel routines and
+algorithms, a work-stealing scheduler to support nested parallelism,
+and a scalable memory allocator.
 
 %package examples
 Summary:    Examples for programming parallel shared memory algorithms
 BuildArch:  noarch
-
 %description examples
-%_description
+ParlayLib is a header only C++ library for developing efficient parallel
+algorithms and software on shared-memory multicore machines. It provides
+additional tools and primitives that go beyond what is available in the
+C++ standard library, and simplifies the task of programming provably
+efficient and scalable parallel algorithms. It consists of a sequence
+data type (analogous to std::vector), many parallel routines and
+algorithms, a work-stealing scheduler to support nested parallelism,
+and a scalable memory allocator.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{name}-%{commit}
@@ -73,36 +75,17 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
        -DPARLAY_EXAMPLES=ON \
        -DCMAKE_INSTALL_DATAROOTDIR=%{_libdir}/cmake
 %cmake_build
-
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+
 %check
 
 %ctest --timeout 7200
-
-%files devel
-%doc README.md
-%license LICENSE
-%dir %{_libdir}/cmake/parlay
-%{_libdir}/cmake/parlay/*.cmake
-%dir %{_includedir}/parlay
-%{_includedir}/parlay/*.h
-%dir %{_includedir}/parlay/internal
-%{_includedir}/parlay/internal/*.h
-%dir %{_includedir}/parlay/internal/concurrency
-%{_includedir}/parlay/internal/concurrency/*.h
-%dir %{_includedir}/parlay/internal/delayed
-%{_includedir}/parlay/internal/delayed/*.h
-%dir %{_includedir}/parlay/internal/posix
-%{_includedir}/parlay/internal/posix/*.h
-%dir %{_includedir}/parlay/internal/scheduler_plugins
-%{_includedir}/parlay/internal/scheduler_plugins/*.h
-%dir %{_includedir}/parlay/internal/windows
-%{_includedir}/parlay/internal/windows/*.h
-
-%files examples
-%license LICENSE
-%doc examples/
+%files -f %{oreon_filedir}/main.list
+%files -n parlaylib-devel -f %{oreon_filedir}/parlaylib-devel.list
+%files -n parlaylib-examples -f %{oreon_filedir}/parlaylib-examples.list
 
 %changelog
+
 %autochangelog

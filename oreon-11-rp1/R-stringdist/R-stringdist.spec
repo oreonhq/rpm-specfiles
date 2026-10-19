@@ -1,20 +1,16 @@
 %global source0_hash 5c4db4437dc9ca8d543fe319da1aacbec70425704d3d9a057585a9ea26f61b6d
-
 Name:           R-stringdist
 Version:        %R_rpm_version 0.9.17
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Approximate String Matching, Fuzzy Text Search, and String Distance Functions
-
 License:        GPL-3.0-only
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=stringdist&version=%{version}#/stringdist_%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
-BuildRequires:  R-devel
 Obsoletes:      %{name}-devel <= 0.9.15
-
+# oreon:deps
+BuildRequires:  R-devel
+# /oreon:deps
 %description
 Implements an approximate string matching version of R's native 'match'
 function. Also offers fuzzy text search based on various string distance
@@ -29,22 +25,19 @@ Reference: MPJ van der Loo (2014) <doi:10.32614/RJ-2014-011>.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples
 
-%files -f %{R_files}
+%R_check \--no-examples
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

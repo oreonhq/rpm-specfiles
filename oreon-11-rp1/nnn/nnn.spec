@@ -1,19 +1,17 @@
-%global source0_hash cb31dd220f74d15744e3fcbf402a99a426301b207babc6ffe7a6e33a06b1bd0c
-
+%global source0_hash 79ee69f3ced7c0778d207df76b4d4d680636975ccda002eeb19d0917fcba3d36
 Name:       nnn
 Version:    5.3
-Release:    %autorelease
-Summary:    The missing terminal file browser for X
-
+Release:        1%{?dist}
+Summary:        The missing terminal file browser for X
 License:    BSD-2-Clause
 URL:        https://github.com/jarun/nnn
-Source0:    %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-
-BuildRequires:  make
+Source0:        https://github.com/jarun/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  gcc
+BuildRequires:  make
 BuildRequires:  pkgconfig(ncursesw)
 BuildRequires:  readline-devel
-
+# /oreon:deps
 %description
 nnn is probably the fastest and most resource-sensitive (with all
 its capabilities) file browser you have ever used. It's extremely flexible
@@ -38,6 +36,7 @@ Cool things you can do with nnn:
  - change directory on exit
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n %{name}-%{version}
@@ -45,9 +44,9 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i "s|^install: all|install:|" Makefile
 
 %build
+
 %set_build_flags
 %make_build STRIP=/bin/true
-
 %install
 %make_install PREFIX=%{_prefix}
 install -Dpm0644 -t %{buildroot}%{_datadir}/bash-completion/completions \
@@ -56,19 +55,10 @@ install -Dpm0644 -t %{buildroot}%{_datadir}/fish/vendor_functions.d \
   misc/auto-completion/fish/nnn.fish
 install -Dpm0644 -t %{buildroot}%{_datadir}/zsh/site-functions \
   misc/auto-completion/zsh/_nnn
+%oreon_autofiles main
 
-%files
-%doc CHANGELOG README.md
-%license LICENSE
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1.*
-%dir %{_datadir}/bash-completion
-%dir %{_datadir}/bash-completion/completions
-%{_datadir}/bash-completion/completions/nnn-completion.bash
-%dir %{_datadir}/fish/vendor_functions.d
-%{_datadir}/fish/vendor_functions.d/nnn.fish
-%dir %{_datadir}/zsh/site-functions
-%{_datadir}/zsh/site-functions/_nnn
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

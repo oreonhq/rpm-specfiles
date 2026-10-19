@@ -1,17 +1,15 @@
 %global source0_hash f84c0b38d8fdbb6aa45fa81b9b21ee96f2c5891a5d37c77643977d06a66be302
-
 Name:           R-gplots
 Version:        %R_rpm_version 3.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Various R Programming Tools for Plotting Data
-
 License:        GPL-2.0-only
 URL:            %{cran_url}
-Source:         %{cran_source}
-
+Source0:        https://cran.r-project.org/package=gplots&version=%{version}#/gplots_%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
 BuildRequires:  R-devel
-
+# /oreon:deps
 %description
 Various R programming tools for plotting data, including:
 - calculating and plotting locally smoothed summary function,
@@ -31,22 +29,19 @@ Various R programming tools for plotting data, including:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples
 
-%files -f %{R_files}
+%R_check \--no-examples
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

@@ -1,30 +1,27 @@
+%global source1_hash d7e6791bc951442e4cee33b27d600c026774c842e47d50d46e498b9799b6d1cc
 %global source0_hash 5426207a485680f8e1764ba405bb38c39a4e0c8306bc8271910f1b819a336ced
-
 Name:           pam_mount
 Version:        2.22
 Release:        1%{?dist}
 Summary:        A PAM module that can mount volumes for a user session
-
-# The library and binaries are LGPLv2.1+ with these Exceptions:
-# "pmvarrun" and "mount.crypt" programs, especially their .c file are under GPLv2+
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            https://inai.de/projects/pam_mount/
 Source0:        https://inai.de/files/pam_mount/%{name}-%{version}.tar.xz
 Source1:        https://inai.de/files/pam_mount/%{name}-%{version}.tar.asc
-# GPG key from official website: https://inai.de/about/
 Source2:        gpgkey-BCA0C5C309CAC569E74A921CF76EFE5D0C223A8F.asc
-
-# AM_PROG_LIBTOOL is obsolete
 Patch0:         pam_mount-2.16-LTINIT.patch
-
-# For source verification with gpgv
+Requires:       libHX%{?_isa} >= 3.12.1
+Requires:       hxtools
+Requires:       pam%{?_isa}
+Requires:       libcryptmount%{?_isa} = %{version}-%{release}
+# oreon:deps
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  cryptsetup-devel
 BuildRequires:  gcc
 BuildRequires:  gpg
-BuildRequires:  libHX-devel >= 3.12.1
-BuildRequires:  libmount-devel >= 2.22
+BuildRequires:  libHX-devel
+BuildRequires:  libmount-devel
 BuildRequires:  libtool
 BuildRequires:  libxml2-devel
 BuildRequires:  make
@@ -34,12 +31,7 @@ BuildRequires:  pam-devel
 BuildRequires:  pcre2-devel
 BuildRequires:  perl-interpreter
 BuildRequires:  xz
-
-Requires:       libHX%{?_isa} >= 3.12.1
-Requires:       hxtools
-Requires:       pam%{?_isa}
-Requires:       libcryptmount%{?_isa} = %{version}-%{release}
-
+# /oreon:deps
 %description
 This module is aimed at environments with central file servers that a user
 wishes to mount on login and unmount on logout, such as (semi-)diskless
@@ -68,6 +60,7 @@ this). Do not assume  a  system  is  secure  without  carefully  considering
 potential threats.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 rm -f %{SOURCE2}.gpg ; gpg --dearmor %{SOURCE2}
@@ -77,48 +70,17 @@ xzcat %{SOURCE0} | gpgv --quiet --keyring %{SOURCE2}.gpg %{SOURCE1} -
 ./autogen.sh
 
 %build
+
 %configure                     \
   --with-dtd                   \
   --with-slibdir=%{_libdir}    \
   --with-ssbindir=%{_sbindir}
 %make_build
-
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/libcryptmount.la
-
 %ldconfig_scriptlets
-
-%files
-%doc doc/faq.txt doc/options.txt doc/todo.txt
-# generated from manpage, no need to package it twice:
-#doc/pam_mount.txt
-%doc config/pam_mount.conf.xml
-%license COPYING LICENSE.GPL2 LICENSE.GPL3 LICENSE.LGPL2 LICENSE.LGPL3
-%config(noreplace) %{_sysconfdir}/security/pam_mount.conf.xml
-%{_libdir}/security/pam_mount.so
-%{_sbindir}/pmvarrun
-%{_sbindir}/pmt-ehd
-%{_sbindir}/mount.crypt
-%{_sbindir}/umount.crypt
-%{_sbindir}/mount.crypt_LUKS
-%{_sbindir}/umount.crypt_LUKS
-%{_sbindir}/mount.crypto_LUKS
-%{_sbindir}/umount.crypto_LUKS
-%{_mandir}/man5/pam_mount.conf.5*
-%{_mandir}/man8/mount.crypt.8*
-%{_mandir}/man8/mount.crypt_LUKS.8*
-%{_mandir}/man8/mount.crypto_LUKS.8*
-%{_mandir}/man8/pam_mount.8*
-%{_mandir}/man8/pmt-ehd.8*
-%{_mandir}/man8/pmvarrun.8*
-%{_mandir}/man8/umount.crypt.8*
-%{_mandir}/man8/umount.crypt_LUKS.8*
-%{_mandir}/man8/umount.crypto_LUKS.8*
-%ghost %{_localstatedir}/run/pam_mount
-%dir %{_datadir}/xml/pam_mount/
-%dir %{_datadir}/xml/pam_mount/dtd/
-%{_datadir}/xml/pam_mount/dtd/pam_mount.conf.xml.dtd
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %package -n libcryptmount
 Summary: Library to mount crypto images and handle key files
@@ -128,11 +90,6 @@ crypto image (file) available as a mountable block device, including
 supplemental key file decryption, loop device setup and crypto device
 setup. It supports pam_mount style plain EHD2/OpenSSL images and LUKS
 and transparent use of the OS's crypto layer.
-%files -n libcryptmount
-%{_libdir}/libcryptmount.so
-%{_libdir}/libcryptmount.so.0
-%{_libdir}/libcryptmount.so.0.0.0
-
 %package -n libcryptmount-devel
 Summary: Development files for libcryptmount
 Requires: libcryptmount = %{version}
@@ -142,9 +99,10 @@ crypto image (file) available as a mountable block device, including
 supplemental key file decryption, loop device setup and crypto device
 setup. It supports pam_mount style plain EHD2/OpenSSL images and LUKS
 and transparent use of the OS's crypto layer.
-%files -n libcryptmount-devel
-%{_includedir}/libcryptmount.h
-%{_libdir}/pkgconfig/libcryptmount.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libcryptmount -f %{oreon_filedir}/libcryptmount.list
+%files -n libcryptmount-devel -f %{oreon_filedir}/libcryptmount-devel.list
 
 %changelog
+
 %autochangelog

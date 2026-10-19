@@ -1,46 +1,17 @@
 %global source0_hash c6b1b3550881e57ebe530cc6cffefc87cd9bf49c30b37b894065a9f810875e46
-
 Name:           python-Rtree
 Version:        1.4.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        R-Tree spatial index for Python GIS
-
-# the base package is arched to flush out any arch-dependent bugs by ensuring
-# the tests are run on every architecture. The binary package is still
-# pure-Python and correctly noarch. Since there is no compiled code, there is
-# no debuginfo to generate.
 %global debug_package %{nil}
-
-# SPDX
 License:        MIT
 URL:            https://github.com/Toblerity/rtree
-Source:         %{pypi_source rtree}
-
-# Treat as pure Python since libspatialindex is not bundled
-#
-# Since we are not bundling libspatialindex as upstream does for PyPI wheel
-# distribution, do not force setuptools to treat the package as binary/arched
-# (which would cause it to be installed in %%python3_sitearch, and would mean
-# this package could not properly be noarch).
-#
-# Since upstream does want to bundle libspatialindex, this is a downstream-only
-# patch.
-#
-# https://bugzilla.redhat.com/show_bug.cgi?id=2050010
+Source0:        https://files.pythonhosted.org/packages/source/r/rtree/rtree-%{version}.tar.gz
 Patch:          0001-Treat-as-pure-Python-since-libspatialindex-is-not-bu.patch
-
-
-BuildRequires:  spatialindex-devel
-
-# For testing:
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist numpy}
-
 %global common_description %{expand:
 Rtree is a ctypes Python wrapper of libspatialindex that provides a number of
 advanced spatial indexing features for the spatially curious Python user. These
 features include:
-
   • Nearest neighbor search
   • Intersection search
   • Multi-dimensional indexes
@@ -50,32 +21,36 @@ features include:
   • Disk serialization
   • Custom storage implementation (to implement spatial indexing in ZODB, for
     example)}
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 61
+Requires:       python3-Rtree = %{version}-%{release}
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-rtree
-Summary:        %{summary}
-
+Summary:        R-Tree spatial index for Python GIS
 BuildArch:      noarch
-
 Requires:       spatialindex
-
 %description -n python3-rtree %{common_description}
 
 %prep
-%autosetup -p1
-
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
+%oreon_autofiles python3-rtree usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%pytest --doctest-modules tests rtree
 
-%files -n python3-rtree -f %{pyproject_files}
-%doc README.md
+%pytest --doctest-modules tests rtree
+%files
+%files -n python3-rtree -f %{oreon_filedir}/python3-rtree.list
 
 %changelog
+
 %autochangelog

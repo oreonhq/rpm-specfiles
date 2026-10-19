@@ -1,5 +1,4 @@
 %global source0_hash 5c870fa454221b24c81d10a28031a9183d55f2baab92c160ecc985e51a387662
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,22 +82,21 @@ end
 %bcond_with bootstrap
 Name:           apache-commons-compress
 Version:        1.28.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java API for working with compressed files and archivers
 License:        Apache-2.0
 URL:            https://commons.apache.org/proper/commons-compress/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        https://archive.apache.org/dist/commons/compress/source/commons-compress-%{version}-src.tar.gz
-
 Patch:          0001-Remove-Brotli-compressor.patch
 Patch:          0002-Remove-ZSTD-compressor.patch
 Patch:          0003-Remove-Pack200-compressor.patch
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.27.1-7
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-codec:commons-codec)
 BuildRequires:  mvn(commons-io:commons-io)
@@ -109,10 +107,7 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-antrun-plugin)
 BuildRequires:  mvn(org.osgi:org.osgi.core)
 BuildRequires:  mvn(org.ow2.asm:asm)
 BuildRequires:  mvn(org.tukaani:xz)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.27.1-7
-
+# /oreon:deps
 %description
 The Apache Commons Compress library defines an API for working with
 ar, cpio, Unix dump, tar, zip, gzip, XZ, Pack200 and bzip2 files.
@@ -120,6 +115,7 @@ In version 1.14 read-only support for Brotli decompression has been added,
 but it has been removed form this package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n commons-compress-%{version}-src
 
@@ -148,18 +144,18 @@ rm src/test/java/org/apache/commons/compress/java/util/jar/Pack200Test.java
 rm src/test/java/org/apache/commons/compress/archivers/tar/TarMemoryFileSystemTest.java
 
 %build
+
 %mvn_file  : commons-compress %{name}
 %mvn_alias : commons:
-# XXX failing tests, need to investigate why
 %mvn_build -j -f -- -Dcommons.osgi.symbolicName=org.apache.commons.compress
-
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%license LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.0-3
 - bump release (retry failed build)
 

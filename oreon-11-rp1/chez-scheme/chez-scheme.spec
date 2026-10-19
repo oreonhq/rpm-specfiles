@@ -1,39 +1,24 @@
 %global source0_hash d237d9874c6e8b0ccf7758daa8286a6e825528b13ce3b2bca56eb1f73cddbc2c
-
-%if %{defined rhel} && "0%{?rhel}" < "10"
-# Empty /builddir/build/BUILD/csv10.0.0/debugsourcefiles.list
-%global debug_package %{nil}
-%endif
-
 Name:           chez-scheme
 Summary:        Scheme incremental optimizing compiler
-# need to rebuild dependents when bumping version: idris2 schemesh
-# (`fedora-repoquery --koji rawhide --whatrequires chez-scheme`)
 Version:        10.3.0
-Release:        %autorelease
+Release:        1%{?dist}
 URL:            https://cisco.github.io/ChezScheme
-# zlib and lz4 source are removed in prep
-# $ licensecheck -r . | grep -v UNKNOWN | grep -v Apache
-# ./nanopass/Copyright: MIT License
-# ./stex/ReadMe: MIT License (unused)
-# ./zuo/configure: FSF Unlimited License [generated file]
 License:        Apache-2.0 AND MIT
 Source0:        https://github.com/cisco/ChezScheme/releases/download/v%{version}/csv%{version}.tar.gz
-# https://github.com/cisco/ChezScheme/issues/956
 Patch0:         https://github.com/cisco/ChezScheme/pull/989.patch
 Patch1:         https://github.com/cisco/ChezScheme/pull/990.patch
-
+%ifarch ppc64le s390x
+%endif
+Provides:       bundled(nanopass)
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  libX11-devel
-%ifarch ppc64le s390x
-BuildRequires:  libffi-devel
-%endif
 BuildRequires:  lz4-devel
 BuildRequires:  make
 BuildRequires:  ncurses-devel
 BuildRequires:  zlib-devel
-Provides:       bundled(nanopass)
-
+# /oreon:deps
 %description
 Chez Scheme is both a programming language and an implementation of
 that language, with supporting tools and documentation.
@@ -81,7 +66,6 @@ expression editing.
 Summary:        Chez-Scheme examples files
 Requires:       %{name} = %{version}-%{release}
 BuildArch:      noarch
-
 %description examples
 The package provides the examples files from Chez-Scheme.
 
@@ -93,11 +77,11 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libffi-devel
 %endif
 Provides:       %{name}-static = %{version}-%{release}
-
 %description devel
 The package provides extra development files for Chez-Scheme.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n csv%{version} -p1
@@ -105,6 +89,7 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 rm -r lz4 zlib
 
 %build
+
 case %{_arch} in
      x86_64) MACHINE=-m=ta6le ;;
      i386) MACHINE=-m=ti3le ;;
@@ -113,39 +98,23 @@ case %{_arch} in
      ppc64le) MACHINE="-m=tpb64l --enable-libffi" ;;
      s390x) MACHINE="-m=tpb64b --enable-libffi" ;;
 esac
-
 ./configure --installbin=%{_bindir} --installlib=%{_libdir} --installman=%{_mandir} --temproot=%{buildroot} --threads $MACHINE ZLIB=-lz LZ4=-llz4
 make ZUO_JOBS=$RPM_BUILD_NCPUS
-
 %install
 %make_install
-
 chmod u+w %{buildroot}%{_libdir}/csv%{version}/*/{main.o,petite,scheme,scheme-script,lib*.a}
-
 rm -rf %{buildroot}%{_libdir}/csv%{version}/examples
+%oreon_autofiles chez-scheme-examples usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles chez-scheme-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 make ZUO_JOBS=$RPM_BUILD_NCPUS test-some-fast
-
-%files
-%license LICENSE nanopass/Copyright
-%doc *.md
-%{_bindir}/petite
-%{_bindir}/scheme
-%{_bindir}/scheme-script
-%{_libdir}/csv%{version}
-%exclude %{_libdir}/csv%{version}/*/libkernel.a
-%exclude %{_libdir}/csv%{version}/*/main.o
-%exclude %{_libdir}/csv%{version}/*/scheme.h
-%{_mandir}/man1/*.1.*
-
-%files examples
-%doc examples/*
-
-%files devel
-%{_libdir}/csv%{version}/*/libkernel.a
-%{_libdir}/csv%{version}/*/main.o
-%{_libdir}/csv%{version}/*/scheme.h
+%files -f %{oreon_filedir}/main.list
+%files -n chez-scheme-examples -f %{oreon_filedir}/chez-scheme-examples.list
+%files -n chez-scheme-devel -f %{oreon_filedir}/chez-scheme-devel.list
 
 %changelog
+
 %autochangelog

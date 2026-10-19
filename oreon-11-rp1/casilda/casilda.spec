@@ -1,19 +1,14 @@
 %global source0_hash 2dcc9b8b73f92ac6149a991d458dd22a5384bb0396d20af6feda6b66a39f9096
-
 Name:           casilda
 Version:        1.6.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Wayland compositor for GTK4
-
-# The entire source is LGPL-2.1-only, except src/casilda.h and
-# src/casilda-version.h.in, which are LGPL-2.1-or-later.
 License:        LGPL-2.1-only AND LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/jpu/casilda
-Source:         %{url}/-/archive/%{version}/casilda-%{version}.tar.gz
-
+Source0:        https://gitlab.gnome.org/jpu/%{name}/-/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon:deps
 BuildRequires:  gcc
 BuildRequires:  meson
-    
 BuildRequires:  pkgconfig(epoxy)
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(gtk4)
@@ -25,7 +20,7 @@ BuildRequires:  pkgconfig(wlroots-0.18)
 BuildRequires:  pkgconfig(x11-xcb)
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  pkgconfig(xkbcommon-x11)
-
+# /oreon:deps
 %description
 A simple Wayland compositor widget for Gtk 4 which can be used to embed other
 processes windows in your Gtk 4 application.
@@ -37,40 +32,26 @@ Santa Fe, Argentina.
 %package devel
 Summary: Wayland compositor for GTK4
 Requires: %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 Development files for Casilda.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p 1
-
+%oreon_prep
 %build
+
 %meson
 %meson_build
-
 %install
 %meson_install
+%oreon_autofiles casilda-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
-# Nothing yet
 
-%files
-%license COPYING
-%doc README.md
-%dir %{_libdir}/girepository-1.0
-%{_libdir}/girepository-1.0/Casilda-1.0.typelib
-%{_libdir}/libcasilda-1.0.so.1
-%{_libdir}/libcasilda-1.0.so.1.0
-
-%files devel
-%dir %{_includedir}/casilda
-%{_includedir}/casilda/*.h
-%{_libdir}/libcasilda-1.0.so
-%{_libdir}/pkgconfig/casilda-1.0.pc
-%dir %{_datadir}/gir-1.0
-%{_datadir}/gir-1.0/Casilda-1.0.gir
+%files -f %{oreon_filedir}/main.list
+%files -n casilda-devel -f %{oreon_filedir}/casilda-devel.list
 
 %changelog
+
 %autochangelog

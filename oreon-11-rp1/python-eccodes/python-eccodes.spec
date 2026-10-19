@@ -1,60 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 7ea659eb15044f6ac809636ca1712cd026cdbfad5a189f4c55d86a8711ab1a9d
 Name:           python-eccodes
 Version:        2.48.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Python interface to the ecCodes GRIB and BUFR decoder/encoder
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/ecmwf/eccodes-python
-Source:         %{pypi_source eccodes}
-
-BuildRequires:  python3-devel
-BuildRequires:  gcc
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'eccodes' generated automatically by pyp2spec.}
-
+Source0:        https://files.pythonhosted.org/packages/source/e/eccodes/eccodes-%{version}.tar.gz
 Patch1:         python-eccodes-setup.patch
 Patch2:         python-eccodes-sphinx-config.patch
 Patch3:         python-eccodes-disable-findlibs.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+Requires:       python3-eccodes = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-eccodes
-Summary:        %{summary}
-
-%description -n python3-eccodes %_description
-
+Summary:        Python interface to the ecCodes GRIB and BUFR decoder/encoder
+%description -n python3-eccodes
 
 %prep
-%autosetup -p1 -n eccodes-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir eccodes-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-eccodes usr/lib/python3*/site-packages/eccodes* usr/lib64/python3*/site-packages/eccodes* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/eccodes* usr/lib64/python3*/site-packages/eccodes* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-eccodes -f %{pyproject_files}
+%files
+%files -n python3-eccodes -f %{oreon_filedir}/python3-eccodes.list
 
 %changelog
+
 %autochangelog

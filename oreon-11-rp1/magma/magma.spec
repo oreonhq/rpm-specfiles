@@ -1,79 +1,46 @@
-%global source0_hash c9307e3e10dd89cb0b8d00653e78291a868aef2c1a1c56956325600cc38f7284
-
-# rocm toolchain uses the hipcc wrapper of clang
+%global source0_hash 26347adbccbe7a6693d6b3f3c0ab5620037eb3a62b5ef69d05e40289472a82a4
 %global toolchain rocm
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-mtls-dialect=gnu2//' -e 's/-flto=thin//' )
-# lto problems
-# ld.lld: error: CMakeFiles/magma.dir/control/libmagma.so.2.9.0.lto.constants.cpp.o:(.rodata.magma_diag_const+0x4): relocation R_X86_64_PC32 out of range: 5412144436 is not in [-2147483648, 2147483647]; r
 %global _lto_cflags %nil
-
-# Need to have a GPU in the build machine to test.
-# To speed up testing, only gfx1201 is built
 %bcond_with test
 %if %{with test}
 %global gpu_list gfx1201
 %else
 %global gpu_list %{rocm_gpu_list_default}
 %endif
-
 %bcond_with debug
 %if %{with debug}
 %global build_type DEBUG
 %else
 %global build_type RelWithDebInfo
 %endif
-
 Name:           magma
 Version:        2.10.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Matrix Algebra on GPU and Multi-core Architectures
 Url:            https://icl.utk.edu/magma/
 License:        BSD-3-Clause AND MIT
-# From the license check
-# The main license is BSD-3-Clause
-#   COPYRIGHT
-# Then ICS, with file copied from OPEN BSD
-#   control/strlcpy.cpp
-# Then MIT, with a file copied from hipify
-# hipify is used but not delivered
-#   tools/hipify-perl
-# Reported GPL but not used, other similar files for cuda
-#   results/v1.5.0/cuda7.0-k40c/setup.txt
-
 Source0:        https://github.com/icl-utk-edu/%{name}/archive/v%{version}.tar.gz
-
-# For versioning the *.so's
-# https://bitbucket.org/icl/magma/issues/77/versioning-so
 Patch0:         0001-Prepare-magma-cmake-for-fedora.patch
-
-# https://github.com/jeffdaily/magma/commit/1b966b72402e3f37ebd462f3d7e019e669e510ff
 Patch1:         0001-magma-ROCm-7-changes.patch
-
+Provides:       bundled(hipify) = 3.4.0
+ExclusiveArch:  x86_64
+# oreon:deps
 BuildRequires:  cmake
-BuildRequires:  gcc-c++
 BuildRequires:  flexiblas-devel
+BuildRequires:  gcc-c++
 BuildRequires:  hipblas-devel
 BuildRequires:  hipsparse-devel
 BuildRequires:  ninja-build
 BuildRequires:  python3
 BuildRequires:  rocm-cmake
-BuildRequires:  rocm-compilersupport-macros
 BuildRequires:  rocm-comgr-devel
+BuildRequires:  rocm-compilersupport-macros
 BuildRequires:  rocm-core-devel
 BuildRequires:  rocm-hip-devel
-BuildRequires:  rocm-runtime-devel
 BuildRequires:  rocm-rpm-macros
-
-# MIT
-# Just the hipify-perl file is taken and it is very old
-# This is older than any release of https://github.com/ROCm/HIPIFY.git
-# So setting to earliest release -1
-Provides:       bundled(hipify) = 3.4.0
-
-# ROCm is only on x86_64:
-ExclusiveArch:  x86_64
-
+BuildRequires:  rocm-runtime-devel
+# /oreon:deps
 %description
 Matrix Algebra on GPU and Multi-core Architectures (MAGMA) is a collection
 of next-generation linear algebra libraries for heterogeneous computing.
@@ -98,11 +65,11 @@ packages have been included since MAGMA 1.6.
 %package devel
 Summary:        Libraries and headers for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 %{summary}
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -155,7 +122,6 @@ sed -i -e 's@-DROCM_VERSION@--offload-compress -DROCM_VERSION@' CMakeLists.txt
 
 export HIP_PATH=`hipconfig -p`
 export ROCM_PATH=`hipconfig -R`
-
 echo "BACKEND = hip"                          > make.inc
 echo "FORT = false"                          >> make.inc
 %if %{with test}
@@ -163,9 +129,7 @@ echo "GPU_TARGET = gfx1201" >> make.inc
 %else
 echo "GPU_TARGET = gfx900;gfx906:xnack-;gfx908:xnack-;gfx90a:xnack+;gfx90a:xnack-;gfx942;gfx950;gfx1010;gfx1012;gfx1030;gfx1031;gfx1035;gfx1100;gfx1101;gfx1102;gfx1103;gfx1150;gfx1151;gfx1152;gfx1153;gfx1200;gfx1201" >> make.inc
 %endif
-
 make generate
-
 %cmake -G Ninja \
        -DBLA_VENDOR=FlexiBLAS \
        -DCMAKE_BUILD_TYPE=%{build_type} \
@@ -174,50 +138,18 @@ make generate
        -DCMAKE_INSTALL_LIBDIR=%_libdir \
        -DMAGMA_ENABLE_HIP=ON \
        -DUSE_FORTRAN=OFF
-
 %cmake_build
-
 %install
 %cmake_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 %if %{with test}
 %check
-# Results should be something like
-# % MAGMA 2.10.0 svn 32-bit magma_int_t, 64-bit pointer.
-# % HIP runtime 70051831, driver 70051831. MAGMA not compiled with OpenMP. 
-# % device 0: AMD Radeon Graphics, 2420.0 MHz clock, 16304.0 MiB memory, gcn arch gfx1201
-# % Sat Oct  4 08:05:46 2025
-# % Usage: redhat-linux-build/testing/testing_sgemm [options] [-h|--help]
-#
-# % If running lapack (option --lapack), MAGMA and HIPBLAS error are both computed
-# % relative to CPU BLAS result. Else, MAGMA error is computed relative to HIPBLAS result.
-#
-# % transA = No transpose, transB = No transpose
-# %   M     N     K   MAGMA Gflop/s (ms)  HIPBLAS Gflop/s (ms)   CPU Gflop/s (ms)  MAGMA error  HIPBLAS error
-# %========================================================================================================
-# 1088  1088  1088   1778.70 (   1.45)     146.15 (  17.63)     ---   (  ---  )    1.25e-08        ---    ok
-# 2112  2112  2112   10940.92 (   1.72)    10784.16 (   1.75)     ---   (  ---  )    1.19e-08        ---    ok
-# 3136  3136  3136   10919.38 (   5.65)    11215.23 (   5.50)     ---   (  ---  )    1.34e-08        ---    ok
-# 4160  4160  4160   11144.04 (  12.92)    12124.94 (  11.87)     ---   (  ---  )    1.13e-08        ---    ok
-# 5184  5184  5184   12999.31 (  21.43)    14869.66 (  18.74)     ---   (  ---  )    1.29e-08        ---    ok
-# 6208  6208  6208   13411.76 (  35.68)    14849.32 (  32.22)     ---   (  ---  )    1.07e-08        ---    ok
-# 7232  7232  7232   13335.70 (  56.73)    14755.09 (  51.27)     ---   (  ---  )    8.81e-09        ---    ok
-# 8256  8256  8256   13441.97 (  83.73)    14693.99 (  76.59)     ---   (  ---  )    8.36e-09        ---    ok
-# 9280  9280  9280   13347.32 ( 119.75)    14706.62 ( 108.68)     ---   (  ---  )    1.13e-08        ---    ok
-# 10304 10304 10304   13291.48 ( 164.62)    14655.85 ( 149.29)     ---   (  ---  )    1.04e-08        ---    ok
+
 %{_vpath_builddir}/testing/testing_sgemm
 %endif
-
-%files
-%license COPYRIGHT
-%{_libdir}/libmagma.so.2{,.*}
-%{_libdir}/libmagma_sparse.so.2{,.*}
-
-%files devel
-%{_includedir}/*.h
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/libmagma.so
-%{_libdir}/libmagma_sparse.so
+%files -f %{oreon_filedir}/main.list
+%files -n magma-devel -f %{oreon_filedir}/magma-devel.list
 
 %changelog
+
 %autochangelog

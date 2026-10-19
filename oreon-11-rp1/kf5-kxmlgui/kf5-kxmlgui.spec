@@ -1,42 +1,35 @@
 %global source0_hash 636566a2530db0011c09de7f98ba83a53591e6cbdc43a2bb63ff125b991c7a40
-
 %undefine __cmake_in_source_build
 %global framework kxmlgui
-
 Name:    kf5-%{framework}
 Version: 5.116.0
-Release: 7%{?dist}
-Summary: KDE Frameworks 5 Tier 3 solution for user-configurable main windows
-
+Release:        1%{?dist}
+Summary:        KDE Frameworks 5 Tier 3 solution for user-configurable main windows
 License: BSD-2-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}
-
 %global majmin 5.116
 %global stable stable
-Source0:        https://download.kde.org/stable/frameworks/5.116/%{framework}-%{version}.tar.xz
-
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-attica-devel >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kconfigwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kcoreaddons-devel >= %{majmin}
-BuildRequires:  kf5-kglobalaccel-devel >= %{majmin}
-BuildRequires:  kf5-kguiaddons-devel >= %{majmin}
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kiconthemes-devel >= %{majmin}
-BuildRequires:  kf5-kitemviews-devel >= %{majmin}
-BuildRequires:  kf5-ktextwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kwidgetsaddons-devel >= %{majmin}
-BuildRequires:  kf5-kwindowsystem-devel >= %{majmin}
+Source0:        https://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+# oreon:deps
+BuildRequires:  cmake(Qt5UiPlugin)
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf5-attica-devel
+BuildRequires:  kf5-kconfig-devel
+BuildRequires:  kf5-kconfigwidgets-devel
+BuildRequires:  kf5-kcoreaddons-devel
+BuildRequires:  kf5-kglobalaccel-devel
+BuildRequires:  kf5-kguiaddons-devel
+BuildRequires:  kf5-ki18n-devel
+BuildRequires:  kf5-kiconthemes-devel
+BuildRequires:  kf5-kitemviews-devel
+BuildRequires:  kf5-ktextwidgets-devel
+BuildRequires:  kf5-kwidgetsaddons-devel
+BuildRequires:  kf5-kwindowsystem-devel
 BuildRequires:  kf5-rpm-macros
-
 BuildRequires:  libX11-devel
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtbase-private-devel
-
-BuildRequires:  cmake(Qt5UiPlugin)
-
+# /oreon:deps
 %description
 KDE Frameworks 5 Tier 3 solution for user-configurable main windows.
 
@@ -51,42 +44,25 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{framework}-%{version} -p1
 
 %build
+
 %cmake_kf5
-
 %cmake_build
-
 %install
 %cmake_install
-
-# Own the kxmlgui directory
 mkdir -p %{buildroot}%{_kf5_datadir}/kxmlgui5/
-
 %find_lang %{name} --all-name
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f %{name}.lang
-%doc README.md
-%license LICENSES/*.txt
-%dir %{_kf5_sysconfdir}/xdg/ui/
-%config %{_kf5_sysconfdir}/xdg/ui/ui_standards.rc
-%{_kf5_datadir}/qlogging-categories5/%{framework}.*
-%{_kf5_libdir}/libKF5XmlGui.so.*
-%{_kf5_libexecdir}/ksendbugmail
-%dir %{_kf5_datadir}/kxmlgui5/
-%{_kf5_qtplugindir}/designer/*5widgets.so
-
-%files devel
-
-%{_kf5_includedir}/KXmlGui/
-%{_kf5_libdir}/libKF5XmlGui.so
-%{_kf5_libdir}/cmake/KF5XmlGui/
-%{_kf5_archdatadir}/mkspecs/modules/qt_KXmlGui.pri
+%files -f %{oreon_filedir}/main.list
+%files -n kf5-kxmlgui-devel -f %{oreon_filedir}/kf5-kxmlgui-devel.list
 
 %changelog
+
 %autochangelog

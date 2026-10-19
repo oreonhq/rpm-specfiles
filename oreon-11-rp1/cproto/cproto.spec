@@ -1,16 +1,17 @@
-%global source0_hash 0bd1d8be8ff0a4ca43f947f95750d34f64eda93c9e2ca79100fd60140b7c6331
-
-Summary: Generates function prototypes and variable declarations from C code
+%global source0_hash beb121e08c0d47b5bd719071c32a77edcc31dff992a84e3d9a59c0f7ec9fadd3
+Summary:        Generates function prototypes and variable declarations from C code
 Name: cproto
 Version: 4.8a
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: LicenseRef-Fedora-Public-Domain
-Source: https://invisible-island.net/archives/cproto/cproto-%{version}.tgz
+Source0:        https://invisible-island.net/archives/cproto/cproto-%{version}.tgz
 URL: http://invisible-island.net/
-BuildRequires: gcc-c++
-BuildRequires: byacc, flex
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  byacc
+BuildRequires:  flex
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 Cproto generates function prototypes and variable declarations from C
 source code. Cproto can also convert function definitions between the
@@ -22,23 +23,20 @@ definitions as much as other prototype generators.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
 %check
-%make_build check
 
-%files
-%doc AUTHORS CHANGES MANIFEST README
-%{_bindir}/cproto
-%{_mandir}/man1/cproto.1*
+%make_build check
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

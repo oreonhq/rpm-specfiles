@@ -1,5 +1,4 @@
 %global source0_hash 463faa78f53fbf88f18dd2e9852c33a341f6fc310483bfff973a25c33375c43e
-
 Name:           tslib
 Version:        1.24
 Release:        2%{?dist}
@@ -7,10 +6,13 @@ Summary:        Touchscreen Access Library
 License:        LGPL-2.1-only
 URL:            https://github.com/kergoth/tslib
 Source0:        https://github.com/kergoth/tslib/releases/download/%{version}/tslib-%{version}.tar.bz2
-BuildRequires:  make
-BuildRequires:  libtool, autoconf, automake
+# oreon:deps
 BuildRequires:  SDL2-devel
-
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  make
+# /oreon:deps
 %description
 The idea of tslib is to have a core library that provides standardised
 services, and a set of plugins to manage the conversion and filtering as
@@ -27,44 +29,31 @@ first.
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       pkgconfig
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{name}-%{version}
 ./autogen.sh
 
 %build
+
 %configure --disable-static --with-sdl2
 make %{?_smp_mflags}
-
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
-
 %ldconfig_scriptlets
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS ChangeLog README
-%license COPYING
-%config(noreplace) %{_sysconfdir}/ts.conf
-%{_bindir}/ts*
-%{_libdir}/*.so.*
-%dir %{_libdir}/ts
-%{_libdir}/ts/*.so
-%{_mandir}/man1/*
-%{_mandir}/man3/*
-%{_mandir}/man5/*
-
-%files devel
-%{_includedir}/tslib.h
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/tslib.pc
+%files -f %{oreon_filedir}/main.list
+%files -n tslib-devel -f %{oreon_filedir}/tslib-devel.list
 
 %changelog
+
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.24-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

@@ -1,31 +1,20 @@
 %global source0_hash 96b8019f118dea3db86bec120c710163509901c2ddd018dc6eabb5c8a32f05b1
-
-# OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
-
-# NOTE: There is no %%check section, because the tests require administrator
-# privileges so that non-default values can be written to:
-# - /proc/sys/kernel/core_pattern
-# - /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
-
 Name:           ocaml-monolith
 Version:        20250922
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Framework for strong random testing of OCaml libraries
-
 License:        LGPL-3.0-or-later
 URL:            https://gitlab.inria.fr/fpottier/monolith
 VCS:            git:%{url}.git
-Source:         %{url}/-/archive/%{version}/monolith-%{version}.tar.bz2
-
-# The ocaml-afl-persistent package is currently only built for x86_64
+Source0:        https://gitlab.inria.fr/fpottier/monolith/-/archive/%{version}/monolith-%{version}.tar.bz2
 ExclusiveArch:  %{x86_64}
-
-BuildRequires:  ocaml >= 4.12
-BuildRequires:  ocaml-afl-persistent-devel >= 1.3
-BuildRequires:  ocaml-dune >= 3.11
-BuildRequires:  ocaml-pprint-devel >= 20200410
-
+# oreon:deps
+BuildRequires:  ocaml
+BuildRequires:  ocaml-afl-persistent-devel
+BuildRequires:  ocaml-dune
+BuildRequires:  ocaml-pprint-devel
+# /oreon:deps
 %description
 Monolith offers facilities for testing an OCaml library (for instance, a data
 structure implementation) by comparing it against a reference implementation.
@@ -55,27 +44,24 @@ Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ocaml-afl-persistent-devel%{?_isa}
 Requires:       ocaml-pprint-devel%{?_isa}
-
 %description    devel
 The %{name}-devel package contains libraries and signature
 files for developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n monolith-%{version}
-
+%global oreon_srcdir monolith-%{version}
+%oreon_prep
 %build
-%dune_build
 
+%dune_build
 %install
 %dune_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files -f .ofiles
-%doc AUTHORS.md CHANGES.md README.md
-%license LICENSE
-
-%files devel -f .ofiles-devel
+%files -f %{oreon_filedir}/main.list
+%files -n ocaml-monolith-devel -f %{oreon_filedir}/ocaml-monolith-devel.list
 
 %changelog
+
 %autochangelog

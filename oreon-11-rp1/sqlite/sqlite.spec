@@ -1,53 +1,47 @@
 %global source0_hash d18fa15aec74d8c17e1463f861095adc01b5ad190256acb4f91d22f0368d232b
 %global source1_hash a1d0f5de57485d062796ed7e67daff0758b50d00001a0f233a2c15aaf40bbdc8
 %global source2_hash 0e9483900e92cd5de8fd48d16bf9200145a61f7fd5be542a5ac81d8a9516eb9c
-
-# bcond default logic is nicely backwards...
 %bcond_without tcl
 %bcond_without tools
 %bcond_with static
 %bcond_without check
-
 %define majorver 3
 %define realver 3530400
 %define docver 3530400
 %define rpmver 3.53.4
 %define year 2026
-
-Summary: Library that implements an embeddable SQL database engine
+Summary:        Library that implements an embeddable SQL database engine
 Name: sqlite
 Version: %{rpmver}
-Release: 1%{?dist}
+Release:        1%{?dist}
 License: blessing
 URL: http://www.sqlite.org/
-
-Source0:        https://www.sqlite.org/%{year}/sqlite-src-%{realver}.zip
+Source0:        https://www.%{name}.org/%{year}/%{name}-src-%{realver}.zip
 Source1:        https://www.sqlite.org/%{year}/sqlite-doc-%{docver}.zip
 Source2:        https://www.sqlite.org/%{year}/sqlite-autoconf-%{realver}.tar.gz
-# Support a system-wide lemon template
 Patch1: sqlite-3.6.23-lemon-system-template.patch
 Patch2: sqlite-3.49.0-fix-lemon-missing-cflags.patch
-
-BuildRequires: make
-BuildRequires: gcc gcc-c++
-BuildRequires: ncurses-devel readline-devel glibc-devel
-BuildRequires: autoconf
-BuildRequires: /usr/bin/tclsh
-BuildRequires: zlib-ng-compat-devel
-BuildRequires: chrpath
 %if %{with tcl}
-BuildRequires: tcl-devel
 %{!?tcl_version: %global tcl_version 9.0}
 %{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
 %endif
-
 Requires: %{name}-libs = %{version}-%{release}
 Provides: %{name}3 = %{version}-%{release}
-
-# Ensure updates from pre-split work on multi-lib systems
 Obsoletes: %{name} < 3.11.0-1
 Conflicts: %{name} < 3.11.0-1
-
+# oreon:deps
+BuildRequires:  /usr/bin/tclsh
+BuildRequires:  autoconf
+BuildRequires:  chrpath
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  glibc-devel
+BuildRequires:  make
+BuildRequires:  ncurses-devel
+BuildRequires:  readline-devel
+BuildRequires:  tcl-devel
+BuildRequires:  zlib-ng-compat-devel
+# /oreon:deps
 %description
 SQLite is a C library that implements an SQL database engine. A large
 subset of SQL92 is supported. A complete database is stored in a
@@ -85,12 +79,10 @@ so some extensions are enabled by default in SQLite shell, but not in the system
 libraries. Only the aforementioned extensions are available in the libraries:
 FTS3, FTS4, FTS5, R*Tree
 
-
 %package devel
 Summary: Development tools for the sqlite3 embeddable SQL database engine
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
-
 %description devel
 This package contains the header files and development documentation 
 for %{name}. If you like to develop programs using %{name}, you will need 
@@ -98,18 +90,14 @@ to install %{name}-devel.
 
 %package libs
 Summary: Shared library for the sqlite3 embeddable SQL database engine.
-
-# Ensure updates from pre-split work on multi-lib systems
 Obsoletes: %{name} < 3.11.0-1
 Conflicts: %{name} < 3.11.0-1
-
 %description libs
 This package contains the shared library for %{name}.
 
 %package doc
 Summary: Documentation for sqlite
 BuildArch: noarch
-
 %description doc
 This package contains most of the static HTML files that comprise the
 www.sqlite.org website, including all of the SQL Syntax and the 
@@ -117,7 +105,6 @@ C/C++ interface specs and other miscellaneous documentation.
 
 %package -n lemon
 Summary: A parser generator
-
 %description -n lemon
 Lemon is an LALR(1) parser generator for C or C++. It does the same
 job as bison and yacc. But lemon is not another bison or yacc
@@ -129,10 +116,8 @@ that can be used to eliminate resource leaks, making is suitable for
 use in long-running programs such as graphical user interfaces or
 embedded controllers.
 
-
 %package debug
 Summary: SQLite shell configured for development and debugging purposes
-
 %description debug
 This version of SQLite shell contains features that are useful for
 debugging purposes. These features are not present in a normal SQLite shell
@@ -141,12 +126,10 @@ because some have negative impact on a non-developer user experience.
 Current list of modification from normal SQLite shell (in sqlite package):
 - Ability to enable .scanstats for metrics regarding query speeds
 
-
 %if %{with tools}
 %package tools
 Summary: %{name} tools
 Group: Development/Tools
-
 %description tools
 %{name} related tools. Contains sqldiff and sqlite3_rsync.
 - sqldiff: The sqldiff binary is a command-line utility program
@@ -160,7 +143,6 @@ Group: Development/Tools
 Summary: Tcl module for the sqlite3 embeddable SQL database engine
 Requires: %{name} = %{version}-%{release}
 Requires: tcl(abi) = %{tcl_version}
-
 %description tcl
 This package contains the tcl modules for %{name}.
 
@@ -168,12 +150,12 @@ This package contains the tcl modules for %{name}.
 Summary: An analysis program for sqlite3 database files
 Requires: %{name} = %{version}-%{release}
 Requires: tcl(abi) = %{tcl_version}
-
 %description analyzer
 This package contains the analysis program for %{name}.
 %endif
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
@@ -197,8 +179,7 @@ rm -f %{name}-doc-%{docver}/sqlite.css~ || :
 #autoconf # Rerun with new autoconf to add support for aarm64
 
 %build
-# First build executable for debug subpackage
-# following CFLAGS are not possible to set via the configure script
+
 export CFLAGS="$RPM_OPT_FLAGS $RPM_LD_FLAGS \
                -DSQLITE_ENABLE_COLUMN_METADATA=1 \
                -DSQLITE_DISABLE_DIRSYNC=1 \
@@ -210,7 +191,6 @@ export CFLAGS="$RPM_OPT_FLAGS $RPM_LD_FLAGS \
                -DSQLITE_ENABLE_SESSION \
                -DSQLITE_ENABLE_PREUPDATE_HOOK \
                -Wall -fno-strict-aliasing"
-
 %configure %{!?with_tcl:--disable-tcl} \
            --enable-rtree \
            --enable-fts3 \
@@ -220,14 +200,9 @@ export CFLAGS="$RPM_OPT_FLAGS $RPM_LD_FLAGS \
            --enable-load-extension \
            --soname=legacy \
            --disable-static
-
 %make_build
-
 mv sqlite3 sqlite3-debug
-
 make clean
-
-# Now rebuild rest of the packages normally
 export CFLAGS="$RPM_OPT_FLAGS $RPM_LD_FLAGS \
                -DSQLITE_ENABLE_COLUMN_METADATA=1 \
                -DSQLITE_DISABLE_DIRSYNC=1 \
@@ -238,7 +213,6 @@ export CFLAGS="$RPM_OPT_FLAGS $RPM_LD_FLAGS \
                -DSQLITE_ENABLE_SESSION \
                -DSQLITE_ENABLE_PREUPDATE_HOOK \
                -Wall -fno-strict-aliasing"
-
 %configure %{!?with_tcl:--disable-tcl} \
            --enable-rtree \
            --enable-fts3 \
@@ -248,119 +222,65 @@ export CFLAGS="$RPM_OPT_FLAGS $RPM_LD_FLAGS \
            --enable-load-extension \
            --soname=legacy \
            --disable-static
-
 %make_build
-
-# Build sqlite3_analyzer
-# depends on tcl
 %if %{with tcl}
 %make_build sqlite3_analyzer
 %endif
-
-# Build tools
 %if %{with tools}
 %make_build sqldiff
 %make_build sqlite3_rsync
 %endif
-
 %install
 mkdir -p ${RPM_BUILD_ROOT}%{tcl_sitearch}
 %make_install
-
 install -D -m0644 sqlite3.1 $RPM_BUILD_ROOT/%{_mandir}/man1/sqlite3.1
 install -D -m0755 lemon $RPM_BUILD_ROOT/%{_bindir}/lemon
 install -D -m0644 tool/lempar.c $RPM_BUILD_ROOT/%{_datadir}/lemon/lempar.c
 install -D -m0755 sqlite3-debug $RPM_BUILD_ROOT/%{_bindir}/sqlite3-debug
-
 %if %{with tcl}
-# fix up permissions to enable dep extraction
 install -d $RPM_BUILD_ROOT%{tcl_sitearch}
 mv $RPM_BUILD_ROOT%{_datadir}/tcl%{tcl_version}/sqlite* $RPM_BUILD_ROOT%{tcl_sitearch}/
 chmod 0755 ${RPM_BUILD_ROOT}/%{tcl_sitearch}/sqlite*/*.so
-# Install sqlite3_analyzer
 install -D -m0755 sqlite3_analyzer $RPM_BUILD_ROOT/%{_bindir}/sqlite3_analyzer
 %endif
-
-# Install tools
 %if %{with tools}
 install -D -m0755 sqldiff $RPM_BUILD_ROOT/%{_bindir}/sqldiff
 install -D -m0755 sqlite3_rsync $RPM_BUILD_ROOT/%{_bindir}/sqlite3_rsync
 %endif
-
 %if ! %{with static}
 rm -f $RPM_BUILD_ROOT/%{_libdir}/*.{la,a}
 %endif
-
-# This is needed since rpath removal using sed won't work for tcl library for some reason
 chrpath --delete $RPM_BUILD_ROOT/%{tcl_sitearch}/sqlite*/*.so
 chrpath --delete $RPM_BUILD_ROOT/%{_libdir}/*.so.%{version}
-
 chrpath --delete $RPM_BUILD_ROOT/%{_bindir}/sqlite3
 chrpath --delete $RPM_BUILD_ROOT/%{_bindir}/sqlite3-debug
 chrpath --delete $RPM_BUILD_ROOT/%{_bindir}/sqldiff
 chrpath --delete $RPM_BUILD_ROOT/%{_bindir}/sqlite3_rsync
 chrpath --delete $RPM_BUILD_ROOT/%{_bindir}/sqlite3_analyzer
-
+%oreon_autofiles lemon usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %if %{with check}
 %check
-# XXX shell tests are broken due to loading system libsqlite3, work around...
+
 export LD_LIBRARY_PATH=`pwd`/.libs
 export MALLOC_CHECK_=3
-
-# csv01 hangs on all non-intel archs i've tried
 %ifarch x86_64 %{ix86}
 %else
 rm test/csv01.test
 %endif
-
 make test
 %endif
-# ends %%{with check} if
-
 %ldconfig_scriptlets libs
-
-%files
-%{_bindir}/sqlite3
-%{_mandir}/man?/*
-
-%files libs
-%license LICENSE.md
-%doc README.md
-%{_libdir}/*.so.%{version}
-%{_libdir}/*.so.0
-
-%files devel
-%{_includedir}/*.h
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-%if %{with static}
-%{_libdir}/*.a
-%exclude %{_libdir}/*.la
-%endif
-
-%files doc
-%doc %{name}-doc-%{docver}/*
-
-%files -n lemon
-%{_bindir}/lemon
-%{_datadir}/lemon
-
-%files debug
-%{_bindir}/sqlite3-debug
-
-%if %{with tcl}
-%files tcl
-%{tcl_sitearch}/sqlite*
-
-%if %{with tools}
-%files tools
-%{_bindir}/sqldiff
-%{_bindir}/sqlite3_rsync
-%endif
-
-%files analyzer
-%{_bindir}/sqlite3_analyzer
-%endif
+%files -f %{oreon_filedir}/main.list
+%files -n sqlite-devel -f %{oreon_filedir}/sqlite-devel.list
+%files -n sqlite-libs -f %{oreon_filedir}/sqlite-libs.list
+%files -n sqlite-doc -f %{oreon_filedir}/sqlite-doc.list
+%files -n lemon -f %{oreon_filedir}/lemon.list
+%files -n sqlite-debug -f %{oreon_filedir}/sqlite-debug.list
+%files -n sqlite-tools -f %{oreon_filedir}/sqlite-tools.list
+%files -n sqlite-tcl -f %{oreon_filedir}/sqlite-tcl.list
+%files -n sqlite-analyzer -f %{oreon_filedir}/sqlite-analyzer.list
 
 %changelog
+
 %autochangelog

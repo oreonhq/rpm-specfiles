@@ -1,25 +1,19 @@
 %global source0_hash 319c9460ddc4bb412842e793c789f9dd5ee718c6d5a069d9ef2d36c19e4cfd8a
-
 %global project_name QtPBFImagePlugin
-
 %global __provides_exclude_from ^%{_qt5_plugindir}/.*\\.so$
-
 Name:           qt5-qtpbfimageformat
 Version:        5.2
 Release:        1%{?dist}
 Summary:        Qt image plugin for displaying Mapbox vector tiles
-
-# Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only
 URL:            https://github.com/tumic0/QtPBFImagePlugin/
-
 Source0:        https://github.com/tumic0/%{project_name}/archive/%{version}/%{project_name}-%{version}.tar.gz
-
-BuildRequires: make
+# oreon:deps
 BuildRequires:  gcc-c++
-BuildRequires:  qt5-qtbase-devel
+BuildRequires:  make
 BuildRequires:  protobuf-lite-devel
-
+BuildRequires:  qt5-qtbase-devel
+# /oreon:deps
 %description
 QtPBFImagePlugin is a Qt image plugin that enables applications capable
 of displaying raster MBTiles maps or raster XYZ online maps to also display
@@ -37,21 +31,21 @@ of the plugin.
 are supported by the plugin.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n %{project_name}-%{version}
 
 %build
+
 %{qmake_qt5} pbfplugin.pro
 %make_build
-
 %install
 make install INSTALL_ROOT=%{buildroot}
+%oreon_autofiles main
 
-%files
-%license LICENSE
-%doc README.md
-%{_qt5_plugindir}/imageformats/libpbf.so
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

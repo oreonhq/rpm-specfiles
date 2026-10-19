@@ -1,57 +1,43 @@
-%global source0_hash none
-
+%global source0_hash f1303ef2eec81262a4b708c3e858afe58d7c75ad91c1c05266eda7673369859a
 Name:           python-kiwisolver
 Version:        1.5.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A fast implementation of the Cassowary constraint solver
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/nucleic/kiwi
-Source:         %{pypi_source kiwisolver}
-
+Source0:        https://files.pythonhosted.org/packages/source/k/kiwisolver/kiwisolver-%{version}.tar.gz
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'kiwisolver' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(cppy) >= 1.3.0
+BuildRequires:  python3dist(setuptools) <= 72.1.0
+BuildRequires:  python3dist(setuptools) >= 61.2
+BuildRequires:  python3dist(setuptools-scm[toml]) >= 3.4.3
+Requires:       python3-kiwisolver = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-kiwisolver
-Summary:        %{summary}
-
-%description -n python3-kiwisolver %_description
-
+Summary:        A fast implementation of the Cassowary constraint solver
+%description -n python3-kiwisolver
 
 %prep
-%autosetup -p1 -n kiwisolver-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir kiwisolver-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-kiwisolver usr/lib/python3*/site-packages/kiwisolver* usr/lib64/python3*/site-packages/kiwisolver* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/kiwisolver* usr/lib64/python3*/site-packages/kiwisolver* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-kiwisolver -f %{pyproject_files}
+%files
+%files -n python3-kiwisolver -f %{oreon_filedir}/python3-kiwisolver.list
 
 %changelog
+
 %autochangelog

@@ -1,49 +1,48 @@
-%global source0_hash none
-
-#The debug build is disabled by default, please use # --with debug to override
+%global source1_hash 88c6c4af84f08dcb8e025f50d41d08eca741fa72d104e81228e109820a3d43f8
+%global source0_hash ef05eb7521c841e7571b57cdd67bb729fb60ea76725a8fe27e74d805bbab9580
 %bcond_with debug
-
 %global baseversion 286
-
 %undefine _auto_set_build_flags
-
 Name:           mame
 Version:        0.%{baseversion}
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Multiple Arcade Machine Emulator
-
-#From COPYING:
-#MAME as a whole is made available under the terms of the GNU General
-#Public License.  Individual source files may be made available under
-#less restrictive licenses, as noted in their respective header
-#comments.
-
 License:        GPL-2.0-or-later
 URL:            http://mamedev.org/
-Source0:        https://github.com/mamedev/%{name}/archive/%{name}0%{baseversion}/%{name}-%{name}0%{baseversion}.tar.gz
+Source0:        https://github.com/%{name}dev/%{name}/archive/%{name}0%{baseversion}/%{name}-%{name}0%{baseversion}.tar.gz
 Source1:        https://mamedev.org/releases/whatsnew_0%{baseversion}.txt
 Patch0:         %{name}-fortify.patch
 Patch1:         0001-Hack-allowing-bgfx-to-initialise-in-absence-of-dx9-s.patch
-
-# %%{arm}:
-# https://bugzilla.redhat.com/show_bug.cgi?id=1627625
-# %%{ix86}
-# https://bugzilla.redhat.com/show_bug.cgi?id=1884122
 ExcludeArch:    %{arm} %{ix86}
-
+Requires:       %{name}-data = %{version}-%{release}
+Provides:       bundled(asmjit) = 1.20
+Provides:       bundled(bgfx)
+Provides:       bundled(bimg)
+Provides:       bundled(bx)
+Provides:       bundled(linenoise)
+Provides:       bundled(lsqlite3)
+Provides:       bundled(lua) = 5.4.7
+Provides:       bundled(luafilesystem)
+Provides:       bundled(lua-linenoise)
+Provides:       bundled(lua-zlib)
+Provides:       bundled(lzma-sdk) = 23.01
+Provides:       bundled(minimp3)
+Provides:       bundled(softfloat)
+# oreon:deps
+BuildRequires:  SDL3_ttf-devel
 BuildRequires:  asio-static
 BuildRequires:  expat-devel
 BuildRequires:  flac-devel
-BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  gcc-c++
 BuildRequires:  glm-devel
 BuildRequires:  jack-audio-connection-kit
-BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  libXi-devel
 BuildRequires:  libXinerama-devel
+BuildRequires:  libjpeg-turbo-devel
 BuildRequires:  libzstd-devel
-BuildRequires:  lua-devel >= 5.3.0
+BuildRequires:  lua-devel
 BuildRequires:  make
+BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(libpipewire-0.3)
 BuildRequires:  portaudio-devel
 BuildRequires:  portmidi-devel
@@ -53,33 +52,10 @@ BuildRequires:  python3-sphinx_rtd_theme
 BuildRequires:  python3-sphinxcontrib-rsvgconverter
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  rapidjson-devel
-BuildRequires:  SDL3_ttf-devel
 BuildRequires:  sqlite-devel
 BuildRequires:  utf8proc-devel
 BuildRequires:  zlib-devel
-Requires:       %{name}-data = %{version}-%{release}
-
-Provides:       bundled(asmjit) = 1.20
-#bx and bgfx are not made to be linked to dynamically as per http://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=104437
-Provides:       bundled(bgfx)
-Provides:       bundled(bimg)
-Provides:       bundled(bx)
-#fedora contains linenoise package but it is not compatible
-Provides:       bundled(linenoise)
-#Below have no fedora packages ATM and are very tiny
-Provides:       bundled(lsqlite3)
-#check if lua can be unbundled
-Provides:       bundled(lua) = 5.4.7
-Provides:       bundled(luafilesystem)
-Provides:       bundled(lua-linenoise)
-Provides:       bundled(lua-zlib)
-#lzma is not made to be linked dynamically
-Provides:       bundled(lzma-sdk) = 23.01
-#minimp3 is just two header files
-Provides:       bundled(minimp3)
-#softfloat is not made to be linked dynamically
-Provides:       bundled(softfloat)
-
+# /oreon:deps
 %description
 MAME stands for Multiple Arcade Machine Emulator.  When used in conjunction
 with an arcade game's data files (ROMs), MAME will more or less faithfully
@@ -101,37 +77,31 @@ emulating the games faithfully.
 %package tools
 Summary:        Additional tools for MAME
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description tools
 %{summary}.
 
 %package data
 Summary:        Data files used by MAME
-
 BuildArch:      noarch
-
 %description data
 %{summary}.
 
 %package data-software-lists
 Summary:        Software lists used by MAME
 Requires:       %{name}-data = %{version}-%{release}
-
 BuildArch:      noarch
-
 %description data-software-lists
 %{summary}. These are split from the main -data
 subpackage due to relatively large size.
 
 %package doc
 Summary:        Documentation for MAME
-
 BuildArch:      noarch
-
 %description doc
 HTML documentation for MAME.
 
 %prep
+
 %autosetup -n %{name}-%{name}0%{baseversion} -p1
 
 #remove system libs or document themes to ensure system ones are used
@@ -193,28 +163,10 @@ sed -i "s@-Wall -Wextra -Os \$(MPARAM)@$RPM_OPT_FLAGS@" 3rdparty/genie/build/gma
 sed -i "s@-s -rdynamic@$RPM_LD_FLAGS -rdynamic@" 3rdparty/genie/build/gmake.linux/genie.make
 
 %build
-#standard -g caused problems with OOM or relocation overflows
+
 RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed "s@-g@-g1@")
-#disable -D_GLIBCXX_ASSERTIONS as it causes issues and friction with upstream
-#1st issue
-#https://bugzilla.redhat.com/show_bug.cgi?id=1927012
-#https://github.com/mamedev/mame/issues/7760
-#2nd issue
-#https://github.com/mamedev/mame/issues/7967
-#3rd issue
-#https://bugzilla.redhat.com/show_bug.cgi?id=1970764
-#https://github.com/mamedev/mame/issues/8186
-#4th issue
-#https://bugzilla.redhat.com/show_bug.cgi?id=2035572
-#FPC guidelines exception request
-#https://pagure.io/packaging-committee/issue/1075
 RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed "s@ -Wp,-D_GLIBCXX_ASSERTIONS@@")
-
-#mame fails to build with LTO enabled
-#according to upstream LTO would not help much anyway:
-#https://github.com/mamedev/mame/issues/7046
 %define _lto_cflags %{nil}
-
 %make_build \
 %if %{with debug}
     DEBUG=1 \
@@ -243,15 +195,11 @@ RPM_OPT_FLAGS=$(echo $RPM_OPT_FLAGS | sed "s@ -Wp,-D_GLIBCXX_ASSERTIONS@@")
     TOOLS=1 \
     LDOPTS="$RPM_LD_FLAGS" \
     OPT_FLAGS="$RPM_OPT_FLAGS"
-
 pushd docs
     %make_build html
 popd
-
 %install
 rm -rf $RPM_BUILD_ROOT
-
-# create directories
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 for folder in cfg comments diff inp
 do
@@ -265,7 +213,6 @@ for folder in roms
 do
     install -d $RPM_BUILD_ROOT%{_sysconfdir}/skel/.local/share/%{name}/$folder
 done
-
 install -d $RPM_BUILD_ROOT%{_bindir}
 for folder in artwork bgfx chds cheats ctrlr effects fonts hash language \
     plugins keymaps roms samples shader
@@ -274,8 +221,6 @@ do
 done
 install -d $RPM_BUILD_ROOT%{_mandir}/man1
 install -d $RPM_BUILD_ROOT%{_mandir}/man6
-
-# install files
 install -pm 644 %{name}.ini $RPM_BUILD_ROOT%{_sysconfdir}/%{name}
 %if %{with debug}
 install -pm 755 %{name}d $RPM_BUILD_ROOT%{_bindir}/%{name}d
@@ -301,7 +246,6 @@ install -pm 644 keymaps/* $RPM_BUILD_ROOT%{_datadir}/%{name}/keymaps
 pushd language
     find -type d -exec install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/language/{} \;
     find -type f -name \*.mo -exec install -pm 644 {} $RPM_BUILD_ROOT%{_datadir}/%{name}/language/{} \;
-    # flag the translation files as %%lang
     grep -r --include=*.po \"Language: | sed -r 's@(.*)/strings\.po:"Language: ([[:alpha:]]{2}(_[[:alpha:]]{2})?)\\n"@%lang(\2) %{_datadir}/%{name}/language/\1@' > ../%{name}.lang
 popd
 pushd plugins
@@ -316,76 +260,20 @@ install -pm 644 castool.1 chdman.1 imgtool.1 floptool.1 jedutil.1 ldresample.1 \
     ldverify.1 romcmp.1 $RPM_BUILD_ROOT%{_mandir}/man1
 install -pm 644 mame.6 $RPM_BUILD_ROOT%{_mandir}/man6
 popd
-
-#make sure only html documentation is installed
 rm -f docs/.buildinfo
 rm -rf docs/build/html/_sources
-
 find $RPM_BUILD_ROOT%{_datadir}/%{name} -name LICENSE -exec rm {} \;
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 ./%{name} -validate
-
-%files
-%config(noreplace) %{_sysconfdir}/%{name}/%{name}.ini
-%dir %{_sysconfdir}/%{name}
-%{_sysconfdir}/skel/.config/%{name}
-%{_sysconfdir}/skel/.local/state/%{name}
-%{_sysconfdir}/skel/.local/share/%{name}
-%if %{with debug}
-%{_bindir}/%{name}d
-%else
-%{_bindir}/%{name}
-%endif
-%{_mandir}/man6/mame.6*
-
-%files tools
-%{_bindir}/castool
-%{_bindir}/chdman
-%{_bindir}/floptool
-%{_bindir}/imgtool
-%{_bindir}/jedutil
-%{_bindir}/ldresample
-%{_bindir}/ldverify
-%{_bindir}/nltool
-%{_bindir}/nlwav
-%{_bindir}/pngcmp
-%{_bindir}/%{name}-regrep
-%{_bindir}/romcmp
-%{_bindir}/%{name}-split
-%{_bindir}/%{name}-srcclean
-%{_bindir}/unidasm
-%{_mandir}/man1/castool.1*
-%{_mandir}/man1/chdman.1*
-%{_mandir}/man1/floptool.1*
-%{_mandir}/man1/imgtool.1*
-%{_mandir}/man1/jedutil.1*
-%{_mandir}/man1/ldresample.1*
-%{_mandir}/man1/ldverify.1*
-%{_mandir}/man1/romcmp.1*
-
-%files data -f %{name}.lang
-%doc README.md whatsnew*.txt
-%license COPYING docs/legal/*
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/artwork
-%{_datadir}/%{name}/bgfx
-%{_datadir}/%{name}/chds
-%{_datadir}/%{name}/cheats
-%{_datadir}/%{name}/effects
-%{_datadir}/%{name}/fonts
-%{_datadir}/%{name}/keymaps
-%dir %{_datadir}/%{name}/language
-%{_datadir}/%{name}/plugins
-%{_datadir}/%{name}/roms
-%{_datadir}/%{name}/samples
-%{_datadir}/%{name}/shader
-
-%files data-software-lists
-%{_datadir}/%{name}/hash
-
-%files doc
-%doc docs/build/html/*
+%files -f %{oreon_filedir}/main.list
+%files -n mame-tools -f %{oreon_filedir}/mame-tools.list
+%files -n mame-data -f %{oreon_filedir}/mame-data.list
+%files -n mame-data-software-lists -f %{oreon_filedir}/mame-data-software-lists.list
+%files -n mame-doc -f %{oreon_filedir}/mame-doc.list
 
 %changelog
+
 %autochangelog

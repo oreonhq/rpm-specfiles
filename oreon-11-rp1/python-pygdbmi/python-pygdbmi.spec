@@ -1,59 +1,41 @@
 %global source0_hash 5c52a37211d55eeeaf5c06eacc8e8d49e9dacfd36a526d3534b4a5d5f5ee94d9
-
 Name:           python-pygdbmi
 Version:        0.11.0.0
-Release:        %autorelease
-Summary:        Get Structured Output from GDB's Machine Interface 
+Release:        1%{?dist}
+Summary:        Get Structured Output from GDB's Machine Interface
 License:        MIT
 URL:            https://github.com/cs01/pygdbmi
-Source0:        %{url}/archive/v%{version}/%{name}-v%{version}.tar.gz
-
+Source0:        https://github.com/cs01/pygdbmi/archive/v%{version}/%{name}-v%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
+# oreon:deps
 BuildRequires:  pyproject-rpm-macros
-BuildRequires:  pytest
-BuildRequires:  make
-BuildRequires:  gcc-c++
-BuildRequires:  gdb
-
-%global _description \
-GDB/MI is a line based machine oriented \
-text interface to GDB and is activated by \
-specifying using the --interpreter command \
-line option (see Mode Options). It is\
-specifically intended to support the development\
-of systems which use the debugger as just one\
-small component of a larger system.
-
-%description %{_description}
+BuildRequires:  python3-devel
+Requires:       python3-pygdbmi = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n python3-pygdbmi
-Summary:        %{summary}
-
-%description -n python3-pygdbmi %{_description}
+Summary:        Get Structured Output from GDB's Machine Interface
+%description -n python3-pygdbmi
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -n pygdbmi-%{version}
-
-%generate_buildrequires
-%pyproject_buildrequires
-
+%global oreon_srcdir pygdbmi-%{version}
+%oreon_prep
 %build
-%pyproject_wheel
 
+%pyproject_wheel
 %install
 %pyproject_install
-%pyproject_save_files pygdbmi
+%oreon_autofiles python3-pygdbmi usr/lib/python3*/site-packages/pygdbmi* usr/lib64/python3*/site-packages/pygdbmi* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/pygdbmi* usr/lib64/python3*/site-packages/pygdbmi* usr/bin/*
 
 %check
-# tests/test_gdbcontroller.py fails: https://bugzilla.redhat.com/2291356
-%pytest --ignore tests/test_gdbcontroller.py
 
-%files -n python3-pygdbmi -f %{pyproject_files}
-%doc README.md
-%license LICENSE
+%pytest --ignore tests/test_gdbcontroller.py
+%files
+%files -n python3-pygdbmi -f %{oreon_filedir}/python3-pygdbmi.list
 
 %changelog
+
 %autochangelog

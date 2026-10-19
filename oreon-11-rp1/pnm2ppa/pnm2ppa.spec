@@ -1,40 +1,25 @@
 %global source0_hash 1c50ea2c97b232f5bee6ac3fab408d64b6f1380f1e289ac278778a7e368e7379
 Name: pnm2ppa
-Summary: Drivers for printing to HP PPA printers
+Summary:        Drivers for printing to HP PPA printers
 Epoch: 1
 Version: 1.13
-Release: 8%{?dist}
+Release:        1%{?dist}
 URL: http://sourceforge.net/projects/pnm2ppa 
 Source0:        https://downloads.sourceforge.net/pnm2ppa/pnm2ppa-1.13.tar.gz
-# Use RPM_OPT_FLAGS.
 Patch2: pnm2ppa-redhat.patch
-# Don't return a local variable out of scope (bug #704568).
 Patch3: pnm2ppa-coverity-return-local.patch
-# FTBFS with GCC10
 Patch4: pnm2ppa-gcc10.patch
-# add ldflags to Makefile
 Patch5: pnm2ppa-ldflags.patch
-# match NOPRINTER enum with its position in global printer table
-# fixes crash on aarch64
 Patch6: pnm2ppa-aarch-help-crash.patch
-# GCC 15 defaults to C23
 Patch7: pnm2ppa-c23.patch
-# pbm2ppa, pnm2ppa - GPL-2.0-or-later
-# pdq/* - GPL-2.0, but not shipped, thus not mentioned in license tag
 License: GPL-2.0-or-later
-
-# for autoreconf
-BuildRequires: autoconf
-# for autoreconf
-BuildRequires: automake
-# gcc is no longer in buildroot by default
-BuildRequires: gcc
-# uses make
-BuildRequires: make
-
-# foomatic is needed for using the filters in CUPS
 Requires: foomatic
-
+# oreon:deps
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  make
+# /oreon:deps
 %description
 Pnm2ppa is a color driver for HP PPA host-based printers such as the
 HP710C, 712C, 720C, 722C, 820Cse, 820Cxi, 1000Cse, and 1000Cxi.
@@ -44,6 +29,7 @@ printer in PPA format.
 Install pnm2ppa if you need to print to a PPA printer.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
@@ -63,12 +49,10 @@ done
 autoreconf -vfi
 
 %build
-# set redhat build flags
+
 %set_build_flags
 %configure
 %make_build
-
-
 %install
 install -d %{buildroot}%{_bindir}
 install -d %{buildroot}%{_sysconfdir}
@@ -77,24 +61,12 @@ make INSTALLDIR=%{buildroot}%{_bindir} CONFDIR=%{buildroot}%{_sysconfdir} DESTDI
     MANDIR=%{buildroot}%{_mandir}/man1 install
 install -p -m 0755 utils/Linux/detect_ppa %{buildroot}%{_bindir}
 install -p -m 0755 utils/Linux/test_ppa %{buildroot}%{_bindir}
-
 chmod 644 docs/en/LICENSE
+%oreon_autofiles main
 
-
-%files 
-%license docs/en/LICENSE
-%doc docs/en/CREDITS docs/en/INSTALL docs/en/README
-%doc docs/en/RELEASE-NOTES docs/en/TODO
-%doc docs/en/INSTALL.REDHAT.txt docs/en/COLOR.txt docs/en/CALIBRATION.txt
-%doc docs/en/INSTALL.REDHAT.html docs/en/COLOR.html docs/en/CALIBRATION.html
-%doc test.ps
-%{_bindir}/pnm2ppa
-%{_bindir}/calibrate_ppa
-%{_bindir}/test_ppa
-%{_bindir}/detect_ppa
-%{_mandir}/man1/pnm2ppa.1*
-%config(noreplace) %{_sysconfdir}/pnm2ppa.conf
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:1.13-8
 - Import

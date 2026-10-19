@@ -1,57 +1,42 @@
-%global source0_hash none
-
+%global source0_hash 141a3d6b6cd8616ded72a949a2e7ba8b95e811e58f1118fa1ddeb8c61c3b6364
 Name:           python-sphinx-pytest
 Version:        0.3.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Helpful pytest fixtures for sphinx extensions.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/sphinx-extensions2/sphinx-pytest
-Source:         %{pypi_source sphinx_pytest}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/sphinx_pytest/sphinx_pytest-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'sphinx-pytest' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(flit-core) < 4
+BuildRequires:  python3dist(flit-core) >= 3.2
+Requires:       python3-sphinx-pytest = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-sphinx-pytest
-Summary:        %{summary}
-
-%description -n python3-sphinx-pytest %_description
-
+Summary:        Helpful pytest fixtures for sphinx extensions.
+%description -n python3-sphinx-pytest
 
 %prep
-%autosetup -p1 -n sphinx_pytest-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir sphinx_pytest-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-sphinx-pytest usr/lib/python3*/site-packages/sphinx_pytest* usr/lib64/python3*/site-packages/sphinx_pytest* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/sphinx_pytest* usr/lib64/python3*/site-packages/sphinx_pytest* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-sphinx-pytest -f %{pyproject_files}
+%files
+%files -n python3-sphinx-pytest -f %{oreon_filedir}/python3-sphinx-pytest.list
 
 %changelog
+
 %autochangelog

@@ -1,147 +1,101 @@
-%global source0_hash none
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
-# all packages requiring libindi are now disabled on i686
+%global source0_hash 025bf3d5e4edebae86851d3a5d66ba4596a2c3a49f861f7c49d99b421dadf102
 ExcludeArch:    %{ix86}
-
-# Define boolean to quickly set option and dependencies for
-# building QT5/6 client
 %global build_qt_client 1
-
-# Define boolean to quickly set option and dependencies for
-# building with system libraries
-# RHEL < 10 doesn't have httplib and json
-%if 0%{?fedora} || (0%{?rhel} && 0%{?rhel} >= 10)
-%bcond_without system_libs
-%else
 %bcond_with system_libs
-%endif
-
-# Define boolean to quickly set option and dependencies for
-# unit tests
 %global build_tests 1
-
-# Disable warnings for ppc64le to avoid build failure
 %ifarch ppc64le
 %global fix_warnings OFF
 %else
 %global fix_warnings ON
 %endif
-
 Name:       libindi
 Version:    2.2.4.2
-Release:    %autorelease
-Summary:    Instrument Neutral Distributed Interface
-
-# See COPYRIGHT file for a description of the licenses and files covered
-# 'LicenseRef-NASA-FV-License-Agreement' (CFITSIO) headers found in:
-# - /libs/fpack/fpack.h
-# - /libs/fpack/fpackutil.c
+Release:        1%{?dist}
+Summary:        Instrument Neutral Distributed Interface
 License:    GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later and BSD-3-Clause AND ISC AND MIT AND CFITSIO
-
 URL:        http://www.indilib.org
-Source0:    https://github.com/indilib/indi/archive/v%{version}/indi-%{version}.tar.gz
-
-BuildRequires: cmake
-BuildRequires: libev-devel
-BuildRequires: libogg-devel
-BuildRequires: libnova-devel
-BuildRequires: libtheora-devel
-BuildRequires: libXISF-devel
-BuildRequires: systemd-rpm-macros
-
+Source0:        https://github.com/indilib/indi/archive/v%{version}/indi-%{version}.tar.gz
 %if %{with system_libs}
 %global system_httplib ON
-BuildRequires: cpp-httplib-static
 %global system_jsonlib ON
-BuildRequires: json-static
 %global system_hidlib ON
-BuildRequires: pkgconfig(hidapi-libusb)
 %else
 %global system_httplib OFF
 %global system_jsonlib OFF
 %global system_hidlib OFF
 %endif
-
-BuildRequires: pkgconfig(cfitsio)
-BuildRequires: pkgconfig(fftw3)
-BuildRequires: pkgconfig(libcurl)
-BuildRequires: pkgconfig(gsl)
-BuildRequires: pkgconfig(libjpeg)
-BuildRequires: pkgconfig(libusb-1.0)
-BuildRequires: pkgconfig(zlib)
-
 %if 0%{?build_qt_client}
-BuildRequires: pkgconfig(Qt6Network)
 %global qt_client ON
 %else
 %global qt_client OFF
 %endif
-
 %if 0%{?build_tests}
-BuildRequires: pkgconfig(gtest)
-BuildRequires: pkgconfig(gmock)
 %global tests ON
 %else
 %global tests OFF
 %endif
-
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 Provides: bundled(fpack) = 1.7.0
 %if %{without system_libs}
 Provides: bundled(httplib) = 0.12.4
 Provides: bundled(json) = 3.10.5
 Provides: bundled(hidapi)
 %endif
-
-# indi-3rdparty-* have been orphaned and no more provided in Fedora repos
-# because the loss of functionality due to prebuilt binary blobs that
-# need to be stripped out
 Obsoletes:  indi-3rdparty-drivers < 2.1.5
 Obsoletes:  indi-3rdparty-libraries < 2.1.5
-
+# oreon:deps
+BuildRequires:  cmake
+BuildRequires:  libXISF-devel
+BuildRequires:  libev-devel
+BuildRequires:  libnova-devel
+BuildRequires:  libogg-devel
+BuildRequires:  libtheora-devel
+BuildRequires:  pkgconfig(Qt6Network)
+BuildRequires:  pkgconfig(cfitsio)
+BuildRequires:  pkgconfig(fftw3)
+BuildRequires:  pkgconfig(gmock)
+BuildRequires:  pkgconfig(gsl)
+BuildRequires:  pkgconfig(gtest)
+BuildRequires:  pkgconfig(libcurl)
+BuildRequires:  pkgconfig(libjpeg)
+BuildRequires:  pkgconfig(libusb-1.0)
+BuildRequires:  pkgconfig(zlib)
+BuildRequires:  systemd-rpm-macros
+# /oreon:deps
 %description
 INDI is a distributed control protocol designed to operate
 astronomical instrumentation. INDI is small, flexible, easy to parse,
 and scalable. It supports common DCS functions such as remote control,
 data acquisition, monitoring, and a lot more.
 
-
 %package devel
 Summary: Libraries, includes, etc. used to develop an application with %{name}
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Requires: %{name}-static%{?_isa} = %{version}-%{release}
-
 %description devel
 These are the header files needed to develop a %{name} application
 
-
 %package libs
 Summary: INDI shared libraries
-
 %description libs
 These are the shared libraries of INDI.
-
 
 %if 0%{?build_qt_client}
 %package qt
 Summary: INDI QT client libraries
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description qt
 These are the QT client libraries of INDI.
 %endif
 
-
 %package static
 Summary: Static libraries, includes, etc. used to develop an application with %{name}
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
-
 %description static
 Static library needed to develop a %{name} application
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n indi-%{version}
@@ -161,6 +115,7 @@ rm -rf libs/hid
 %endif
 
 %build
+
 %cmake \
     -DINDI_BUILD_QT_CLIENT="%{qt_client}" \
     -DINDI_BUILD_UNITTESTS="%{tests}" \
@@ -168,53 +123,23 @@ rm -rf libs/hid
     -DINDI_SYSTEM_JSONLIB="%{system_jsonlib}" \
     -DINDI_SYSTEM_HIDAPILIB="%{system_hidlib}" \
     -DFIX_WARNINGS=%{fix_warnings}
-
 %cmake_build
-
 %install
 %cmake_install
-
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/*/lib*.so.* usr/*/lib*.so.* usr/*/lib*.so.*
 
 %check
+
 %if 0%{?build_tests}
 %ctest
 %endif
-
-
-%files
-%license COPYING.BSD COPYING.GPL COPYING.LGPL COPYRIGHT LICENSE
-%doc AUTHORS ChangeLog NEWS README
-%{_bindir}/indi_*
-%{_bindir}/indiserver
-%{_bindir}/shelyak_usis
-%{_datadir}/indi
-%{_udevrulesdir}/80-dbk21-camera.rules
-%{_udevrulesdir}/99-indi_auxiliary.rules
-
-%files libs
-%license COPYING.BSD COPYING.GPL COPYING.LGPL COPYRIGHT LICENSE
-%if 0%{?build_qt_client}
-%exclude %{_libdir}/libindiclientqt.so.*
-%endif
-%{_libdir}/%{name}*.so.2
-%{_libdir}/%{name}*.so.2.*
-%{_libdir}/indi/MathPlugins
-
-%if 0%{?build_qt_client}
-%files qt
-%{_libdir}/libindiclientqt.so.2
-%{_libdir}/libindiclientqt.so.2.*
-%endif
-
-%files devel
-%{_includedir}/%{name}
-%{_libdir}/%{name}*.so
-%{_libdir}/pkgconfig/%{name}.pc
-
-%files static
-%{_libdir}/%{name}*.a
-
+%files -f %{oreon_filedir}/main.list
+%files -n libindi-devel -f %{oreon_filedir}/libindi-devel.list
+%files -n libindi-libs -f %{oreon_filedir}/libindi-libs.list
+%files -n libindi-qt -f %{oreon_filedir}/libindi-qt.list
+%files -n libindi-static -f %{oreon_filedir}/libindi-static.list
 
 %changelog
+
 %autochangelog
 

@@ -1,32 +1,21 @@
 %global source0_hash ce1cfa0d1286c1eea8780b0f026aba75b280455b719c147f3e5f2c951ac8ebc3
-
-#
-# Copyright (c) 2004-2015 Ralf Corsepius, Ulm, Germany.
-# This file and all modifications and additions to the pristine
-# package are under the same license as the package itself.
-#
-
-Summary: Volume rendering library for Coin
+Summary:        Volume rendering library for Coin
 Name: SIMVoleon
 Version: 2.1.0
-Release: 11%{?dist}
-
-# Older releases had been licensed GPLv2
+Release:        11%{?dist}
 License: BSD-3-Clause
 URL: http://www.coin3d.org
-
-Source: https://github.com/coin3d/simvoleon/releases/download/simvoleon-%{version}/simvoleon-%{version}-src.tar.gz
-
-BuildRequires: make
-BuildRequires: cmake
-BuildRequires: gcc-c++
-BuildRequires: /usr/bin/iconv
-BuildRequires: Coin4-devel
-BuildRequires: SoQt-devel
-BuildRequires: doxygen
-
+Source0:        https://github.com/coin3d/simvoleon/releases/download/simvoleon-%{version}/simvoleon-%{version}-src.tar.gz
 Provides: Coin4-SIMVoleon = %{version}-%{release}
-
+# oreon:deps
+BuildRequires:  /usr/bin/iconv
+BuildRequires:  Coin4-devel
+BuildRequires:  SoQt-devel
+BuildRequires:  cmake
+BuildRequires:  doxygen
+BuildRequires:  gcc-c++
+BuildRequires:  make
+# /oreon:deps
 %description
 A volume rendering library for Coin.
 
@@ -34,13 +23,12 @@ A volume rendering library for Coin.
 Summary: Development files for SIMVoleon
 Requires: %{name} = %{version}-%{release}
 Requires: Coin4-devel
-
 Provides: Coin4-SIMVoleon-devel = %{version}-%{release}
-
 %description devel
 Development files for SIMVoleon.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -n simvoleon
@@ -59,36 +47,26 @@ sed -i -e 's,HTML_TIMESTAMP.*= YES,HTML_TIMESTAMP = NO,' \
   docs/simvoleon.doxygen.cmake.in
 
 %build
+
 mkdir -p build-%{_build_arch}
 pushd build-%{_build_arch}
 %cmake -DSIMVOLEON_BUILD_DOCUMENTATION=TRUE \
        -DSIMVOLEON_BUILD_TESTS=FALSE \
        -DSIMVOLEON_BUILD_DOC_MAN=TRUE \
        -S .. -B .
-
 %make_build
 popd
-
 %install
 pushd build-%{_build_arch}
 %make_install
-
-# Remove stray files
 rm -rf %{buildroot}/usr/share/info/SIMVoleon2/
 popd
+%oreon_autofiles SIMVoleon-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files
-%doc AUTHORS ChangeLog README NEWS
-%license COPYING
-%{_libdir}/libSIMVoleon*.so.*
-
-%files devel
-%{_docdir}/SIMVoleon/html/
-%{_includedir}/VolumeViz/
-%{_libdir}/libSIMVoleon.so
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/cmake/%{name}-%{version}/
-%{_mandir}/man3/*.gz
+%files -f %{oreon_filedir}/main.list
+%files -n SIMVoleon-devel -f %{oreon_filedir}/SIMVoleon-devel.list
 
 %changelog
+
 %autochangelog

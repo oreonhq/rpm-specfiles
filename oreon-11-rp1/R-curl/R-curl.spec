@@ -1,20 +1,16 @@
 %global source0_hash 5b1633be7bc0ea796e2df5b24b2aec937a17359f2d86207359aa553328824d6b
-
 Name:           R-curl
 Version:        %R_rpm_version 7.0.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        A Modern and Flexible Web Client for R
-
 License:        MIT
 URL:            %{cran_url}
-Source:         %{cran_source}
-
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+Source0:        https://cran.r-project.org/package=curl&version=%{version}#/curl_%{version}.tar.gz
 ExcludeArch:    %{ix86}
-
+# oreon:deps
 BuildRequires:  R-devel
 BuildRequires:  pkgconfig(libcurl)
-
+# /oreon:deps
 %description
 The curl() and curl_download() functions provide highly configurable drop-in
 replacements for base url() and download.file() with better performance,
@@ -28,22 +24,19 @@ logic.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -c
-
-%generate_buildrequires
-%R_buildrequires
-
+%oreon_prep
 %build
 
 %install
 %R_install
 %R_save_files
+%oreon_autofiles main
 
 %check
-%R_check \--no-examples
 
-%files -f %{R_files}
+%R_check \--no-examples
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

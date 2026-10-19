@@ -1,65 +1,61 @@
-%global source0_hash none
-
+%global source0_hash 046c9b2a5283a9c5bc340ed23b7d1c1f10ef2d7fb30b14bae13ef7ffc1f3ba56
 Name:           python-blessed
 Version:        1.50.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Easy, practical library for making terminal apps, by providing an elegant, well-documented interface for Terminals.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/jquast/blessed
-Source:         %{pypi_source blessed}
-
+Source0:        https://files.pythonhosted.org/packages/source/b/blessed/blessed-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'blessed' generated automatically by pyp2spec.}
-
 Patch0:     el7_req_fixes.patch
 Patch1:     el7_pytest_fixes.patch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(flit-core) < 4
+BuildRequires:  python3dist(flit-core) >= 3.11
+Requires:       python3-blessed = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-blessed+docs
+Summary:        Metapackage for python3-blessed docs extras
+Requires:       python3-blessed = %{version}-%{release}
+Requires:       python3dist(sphinx) > 3
+Provides:       python3dist(blessed[docs]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-blessed+docs
+Metapackage for python3-blessed docs extras.
+
+%description
 
 %package -n     python3-blessed
-Summary:        %{summary}
-
-%description -n python3-blessed %_description
+Summary:        Easy, practical library for making terminal apps, by providing an elegant, well-documented interface for Terminals.
+# oreon:reqs
+Requires:       python3dist(jinxed) < 3
+Requires:       python3dist(jinxed) >= 2.1
+Requires:       python3dist(wcwidth) >= 0.8.3
+# /oreon:reqs
+%description -n python3-blessed
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-blessed docs
-
 
 %prep
-%autosetup -p1 -n blessed-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir blessed-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-blessed usr/lib/python3*/site-packages/blessed* usr/lib64/python3*/site-packages/blessed* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/blessed* usr/lib64/python3*/site-packages/blessed* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-blessed -f %{pyproject_files}
+%files
+%files -n python3-blessed -f %{oreon_filedir}/python3-blessed.list
 
 %changelog
+
 %autochangelog

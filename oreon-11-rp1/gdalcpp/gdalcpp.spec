@@ -1,19 +1,17 @@
 %global source0_hash 4b8e565846c74753b74d4a2f2986fbb9f6e38ad3d62420920194cc5f821ad366
-
 %global commit 7e23085e7da80c8805fff54cc18e2705ac332074
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 %global debug_package %{nil}
-
 Name:           gdalcpp
 Version:        1.3.0
-Release:        11.20210925git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        C++11 wrapper classes for GDAL/OGR
-
 License:        BSL-1.0
 URL:            https://github.com/joto/gdalcpp
 Source0:        https://github.com/joto/%{name}/archive/%{commit}/%{name}-%{commit}.tar.gz
+# oreon:deps
 
+# /oreon:deps
 %description
 These are some small wrapper classes for GDAL offering:
 
@@ -27,7 +25,6 @@ various programs.
 %package        devel
 Summary:        Development files for %{name}
 Provides:       %{name}-static = %{version}-%{release}
-
 %description    devel
 These are some small wrapper classes for GDAL offering:
 
@@ -39,6 +36,7 @@ The classes are not very complete, they just have the code I needed for
 various programs.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q -n %{name}-%{commit}
@@ -48,11 +46,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %install
 mkdir -p %{buildroot}%{_includedir}
 cp -p *.hpp  %{buildroot}%{_includedir}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
-%files devel
-%doc README.md
-%license LICENSE.txt
-%{_includedir}/*.hpp
+%files -f %{oreon_filedir}/main.list
+%files -n gdalcpp-devel -f %{oreon_filedir}/gdalcpp-devel.list
 
 %changelog
+
 %autochangelog

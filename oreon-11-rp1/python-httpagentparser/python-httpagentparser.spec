@@ -1,56 +1,41 @@
-%global source0_hash none
-
+%global source0_hash 23bcaf09325b17af7634283ca64da23f485c5d83b9481ff6d88413a7c5bc6de9
 Name:           python-httpagentparser
 Version:        1.9.9
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Extracts OS Browser etc information from http user agent string
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/shon/httpagentparser
-Source:         %{pypi_source httpagentparser}
-
+Source0:        https://files.pythonhosted.org/packages/source/h/httpagentparser/httpagentparser-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'httpagentparser' generated automatically by pyp2spec.}
-
-%description %_description
+BuildRequires:  python3dist(setuptools) >= 61.0
+Requires:       python3-httpagentparser = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-httpagentparser
-Summary:        %{summary}
-
-%description -n python3-httpagentparser %_description
-
+Summary:        Extracts OS Browser etc information from http user agent string
+%description -n python3-httpagentparser
 
 %prep
-%autosetup -p1 -n httpagentparser-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir httpagentparser-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-httpagentparser usr/lib/python3*/site-packages/httpagentparser* usr/lib64/python3*/site-packages/httpagentparser* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/httpagentparser* usr/lib64/python3*/site-packages/httpagentparser* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-httpagentparser -f %{pyproject_files}
+%files
+%files -n python3-httpagentparser -f %{oreon_filedir}/python3-httpagentparser.list
 
 %changelog
+
 %autochangelog

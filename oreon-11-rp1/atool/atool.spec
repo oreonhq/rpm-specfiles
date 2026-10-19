@@ -1,19 +1,16 @@
-%global source0_hash aaf60095884abb872e25f8e919a8a63d0dabaeca46faeba87d12812d6efc703b
-
+%global source0_hash 97e14e42566d0d4a4347e7803ff21bf4a3b176f1c9c602709af20c6343509b2b
 Name:		atool
 Version:	0.39.0
-Release:	30%{?dist}
-Summary:	A perl script for managing file archives of various types
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
+Release:        1%{?dist}
+Summary:        A perl script for managing file archives of various types
 License:	GPL-2.0-or-later
 URL:		http://www.nongnu.org/atool/
-Source0:	http://savannah.nongnu.org/download/%{name}/%{name}-%{version}.tar.gz
-
+Source0:        http://savannah.nongnu.org/download/%{name}/%{name}-%{version}.tar.gz
 BuildArch:	noarch
-BuildRequires:	perl-generators
-BuildRequires: make
-
+# oreon:deps
+BuildRequires:  make
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 atool is a script for managing file archives of various types.
 
@@ -29,6 +26,7 @@ It includes support for tarballs, gzip, bzip, bzip2, lzop, lzma, pkzip, rar,
 ace, arj, rpm, cpio, arc, 7z, alzip.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup
@@ -40,16 +38,15 @@ mv -f tmp NEWS
 chmod 0644 NEWS
 
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%{_bindir}/*
-%doc NEWS README TODO AUTHORS COPYING
-%{_mandir}/man1/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

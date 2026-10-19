@@ -1,30 +1,26 @@
-%global source0_hash none
-
+%global source0_hash 30de3a90fd3ccc7711dc621453570cc5b47a6196d91167a90794f942d9596be1
 Name:		ipmctl
 Version:	03.00.00.0468
-Release:	9%{?dist}
-Summary:	Utility for managing Intel Optane DC persistent memory modules
-# Automatically converted from old format: BSD - review is highly recommended.
+Release:        1%{?dist}
+Summary:        Utility for managing Intel Optane DC persistent memory modules
 License:	LicenseRef-Callaway-BSD
 URL:		https://github.com/intel/ipmctl
-Source:		https://github.com/intel/ipmctl/archive/v%{version}/%{name}-%{version}_with_edk2.tar.gz
-# https://bugzilla.redhat.com/show_bug.cgi?id=1628752
+Source0:        https://github.com/intel/ipmctl/archive/v%{version}/%{name}-%{version}_with_edk2.tar.gz
 ExclusiveArch:	x86_64
-
 Requires:	libipmctl%{?_isa} = %{version}-%{release}
-BuildRequires:	pkgconfig(libndctl)
-BuildRequires:	cmake
-BuildRequires:	python3
-BuildRequires:	gcc
-BuildRequires:	gcc-c++
-BuildRequires:	asciidoctor
-BuildRequires:	systemd
 Obsoletes:	ixpdimm-cli < 01.00.00.3000
-
 Patch1: ipmctl-remove-uefi-spec-code.patch
 Patch2: ipmctl-remove-always-true-conditional.patch
 Patch3: ipmctl_remove_unused_functions.patch
-
+# oreon:deps
+BuildRequires:  asciidoctor
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  pkgconfig(libndctl)
+BuildRequires:  python3
+BuildRequires:  systemd
+# /oreon:deps
 %description
 Utility for managing Intel Optane DC persistent memory modules
 Supports functionality to:
@@ -36,6 +32,7 @@ Track health and performance of DCPMMs.
 Debug and troubleshoot DCPMMs.
 
 %prep
+
 %setup -q -n %{name}-%{version}
 %patch -P1 -p1 
 %patch -P2 -p1 
@@ -50,7 +47,6 @@ Obsoletes:	libixpdimm-cli < 01.00.00.3000
 Obsoletes:	libixpdimm-cim < 01.00.00.3000
 Obsoletes:	libixpdimm < 01.00.00.3000
 Obsoletes:	ixpdimm-data < 01.00.00.3000
-
 %description -n libipmctl
 An Application Programming Interface (API) library for managing Intel Optane DC
 persistent memory modules.
@@ -60,11 +56,11 @@ Summary:	Development packages for libipmctl
 Requires:	libipmctl%{?_isa} = %{version}-%{release}
 Obsoletes:	ixpdimm-devel < 01.00.00.3000
 Obsoletes:	ixpdimm_sw-devel < 01.00.00.3000
-
 %description -n libipmctl-devel
 API for development of Intel Optane DC persistent memory management utilities.
 
 %build
+
 %cmake -DBUILDNUM=%{version} -DCMAKE_INSTALL_PREFIX=/ \
     -DLINUX_PRODUCT_NAME=%{name} \
     -DCMAKE_INSTALL_LIBDIR=%{_libdir} \
@@ -77,37 +73,21 @@ API for development of Intel Optane DC persistent memory management utilities.
     -DRELEASE=ON \
     -DRPM_BUILD=ON
 %cmake_build
-
 %install
 %{!?_cmake_version: cd build}
 %cmake_install
+%oreon_autofiles libipmctl usr/*/lib*.so.*
+%oreon_autofiles libipmctl-devel usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
+%oreon_autofiles main usr/*/lib*.so.* usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %post -n libipmctl -p /sbin/ldconfig
 
 %postun -n libipmctl -p /sbin/ldconfig
 
-%files -n ipmctl
-%{_bindir}/ipmctl
-%{_mandir}/man1/ipmctl*
-
-%files -n libipmctl
-%{_libdir}/libipmctl.so.5*
-%dir %{_datadir}/doc/ipmctl
-%doc %{_datadir}/doc/ipmctl/ipmctl_default.conf
-%doc %{_datadir}/doc/ipmctl/LICENSE
-%doc %{_datadir}/doc/ipmctl/edk2_License.txt
-%doc %{_datadir}/doc/ipmctl/thirdpartynotice.txt
-%config(noreplace) %{_datadir}/ipmctl/ipmctl.conf
-%dir %{_localstatedir}/log/ipmctl
-%config(noreplace) %{_sysconfdir}/logrotate.d/ipmctl
-
-%files -n libipmctl-devel
-%{_libdir}/libipmctl.so
-%{_includedir}/nvm_types.h
-%{_includedir}/nvm_management.h
-%{_includedir}/export_api.h
-%{_includedir}/NvmSharedDefs.h
-%{_libdir}/pkgconfig/libipmctl.pc
+%files -f %{oreon_filedir}/main.list
+%files -n libipmctl -f %{oreon_filedir}/libipmctl.list
+%files -n libipmctl-devel -f %{oreon_filedir}/libipmctl-devel.list
 
 %changelog
+
 %autochangelog

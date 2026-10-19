@@ -1,57 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 8d73c88cab7c98b7926710299c1162bec7ce253f9b9c5f0a2ca8037f9f240234
 Name:           python-flufl-lock
 Version:        9.1.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        NFS-safe file locking with timeouts for POSIX and Windows
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://flufllock.readthedocs.io
-Source:         %{pypi_source flufl_lock}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/flufl_lock/flufl_lock-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'flufl-lock' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-flufl-lock = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-flufl-lock
-Summary:        %{summary}
-
-%description -n python3-flufl-lock %_description
-
+Summary:        NFS-safe file locking with timeouts for POSIX and Windows
+%description -n python3-flufl-lock
 
 %prep
-%autosetup -p1 -n flufl_lock-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir flufl_lock-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-flufl-lock usr/lib/python3*/site-packages/flufl_lock* usr/lib64/python3*/site-packages/flufl_lock* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/flufl_lock* usr/lib64/python3*/site-packages/flufl_lock* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-flufl-lock -f %{pyproject_files}
+%files
+%files -n python3-flufl-lock -f %{oreon_filedir}/python3-flufl-lock.list
 
 %changelog
+
 %autochangelog

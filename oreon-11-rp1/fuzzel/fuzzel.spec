@@ -1,70 +1,54 @@
-%global source0_hash 8af4e28c235d63e3de83b1507f5f3017fdfbab2e70fb486ff0c8d98ced4c7ae5
-
+%global source0_hash 11bee600e19ee1638db592e41980445673224716fbedbd0213b25153325f4182
 Name:           fuzzel
 Version:        1.15.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        App launcher and fuzzy finder for Wayland, inspired by rofi
-
 License:        MIT
 URL:            https://codeberg.org/dnkl/fuzzel
-Source0:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://codeberg.org/dnkl/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz.sig
-# Daniel Eklöf (Git signing) <daniel@ekloef.se>
 Source2:        gpgkey-5BBD4992C116573F.asc
-
+# oreon:deps
 BuildRequires:  gcc
-BuildRequires:  meson >= 0.58
+BuildRequires:  meson
 BuildRequires:  nanosvg-devel
-BuildRequires:  tllist-static
 BuildRequires:  pkgconfig(cairo)
-BuildRequires:  pkgconfig(fcft) >= 3.3.1
+BuildRequires:  pkgconfig(fcft)
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(libpng)
-BuildRequires:  pkgconfig(pixman-1) >= 0.46.0
+BuildRequires:  pkgconfig(pixman-1)
 BuildRequires:  pkgconfig(scdoc)
-BuildRequires:  pkgconfig(tllist) >= 1.0.1
+BuildRequires:  pkgconfig(tllist)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-cursor)
-BuildRequires:  pkgconfig(wayland-protocols) >= 1.41
+BuildRequires:  pkgconfig(wayland-protocols)
 BuildRequires:  pkgconfig(wayland-scanner)
 BuildRequires:  pkgconfig(xkbcommon)
-
+BuildRequires:  tllist-static
+# /oreon:deps
 %description
 Fuzzel is a Wayland-native application launcher and fuzzy finder, inspired by
 rofi and dmenu.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup -p1
-
+%oreon_prep
 %build
+
 %meson \
   -Dsystem-nanosvg=enabled \
   %{nil}
 %meson_build
-
 %install
 %meson_install
-# Will be installed to correct location with rpm macros
 rm %{buildroot}%{_docdir}/%{name}/LICENSE
+%oreon_autofiles main
 
 %check
-%meson_test
 
-%files
-%doc CHANGELOG.md README.md
-%license LICENSE
-%{_bindir}/%{name}
-%dir %{_datadir}/fish
-%dir %{_datadir}/fish/vendor_completions.d
-%dir %{_datadir}/zsh
-%dir %{_datadir}/zsh/site-functions
-%{_datadir}/fish/vendor_completions.d/*.fish
-%{_datadir}/zsh/site-functions/_%{name}
-%{_mandir}/man1/%{name}.1*
-%{_mandir}/man5/*.5*
-%{_sysconfdir}/xdg/%{name}/
+%meson_test
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

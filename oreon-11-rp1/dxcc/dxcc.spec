@@ -1,25 +1,21 @@
-%global source0_hash a2fbd272b4b8494929a750df8f5eec704a8b469ee007d925b9ef20d7012aa274
-
+%global source0_hash 03e9036137b00f2b683e2f18a46e4422754fc3f1aa72807b42e0d9eaa0d0f288
 Name:           dxcc
 Version:        20191204
 Release:        1%{?dist}
 Summary:        Small utility which determines the ARRL DXCC entity of a ham radio callsign
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://fkurz.net/ham/dxcc.html
 Source0:        http://fkurz.net/ham/dxcc/%{name}-%{version}.tar.gz
-#add .desktop file
 Source1:        %{name}.desktop
-#temporary Icon
 Source2:        %{name}.png
-#fix install path
 Patch0:         dxcc-20071205-makefile.patch
-#separate core and gui
 Patch1:         dxcc-20071205-gui.patch
-
 BuildArch:      noarch
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  make
+BuildRequires:  perl-generators
+# /oreon:deps
 %description
 dxcc is a small utility which determines the ARRL DXCC entity of a ham radio
 callsign, based on the cty.dat country file by Jim Reisert, AD1C. 
@@ -33,12 +29,12 @@ BuildRequires: perl-generators
 BuildRequires: make
 Requires:      %{name} = %{version}-%{release}
 Requires:      perl(Tk)
-
 %description gui
 dxcc-gui is a small utility which determines the ARRL DXCC entity of a amateur 
 radio callsign, based on the cty.dat country file by Jim Reisert, AD1C. 
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %setup -q
@@ -46,27 +42,18 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %patch -P1 -p1
 
 %build
-make %{?_smp_mflags}
 
+make %{?_smp_mflags}
 %install
 %make_install
-
-# no upstream .desktop or icon yet
 mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/pixmaps/
 cp %{SOURCE2} ${RPM_BUILD_ROOT}%{_datadir}/pixmaps/%{name}.png
 desktop-file-install --dir=${RPM_BUILD_ROOT}%{_datadir}/applications %{SOURCE1}
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-%files
-%doc ChangeLog COPYING README
-%{_bindir}/%{name}
-%{_mandir}/man1/%{name}.1.gz
-%{_datadir}/%{name}
-
-%files gui
-%doc COPYING
-%{_bindir}/%{name}-gui
-%{_datadir}/pixmaps/%{name}.png
-%{_datadir}/applications/*%{name}.desktop
+%files -f %{oreon_filedir}/main.list
+%files -n dxcc-gui -f %{oreon_filedir}/dxcc-gui.list
 
 %changelog
+
 %autochangelog

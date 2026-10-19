@@ -1,56 +1,40 @@
-%global source0_hash none
-
+%global source0_hash 8979feb3de7120afd1d00e5a8eae810c1942e4bfbc91697151e9ee1e49f79284
 Name:           python-funcy
 Version:        2.1
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        A fancy and practical functional tools
-
-# No license information obtained, it's up to the packager to fill it in
 License:        ...
 URL:            https://github.com/Suor/funcy
-Source:         %{pypi_source funcy}
-
+Source0:        https://files.pythonhosted.org/packages/source/f/funcy/funcy-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'funcy' generated automatically by pyp2spec.}
-
-%description %_description
+Requires:       python3-funcy = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-funcy
-Summary:        %{summary}
-
-%description -n python3-funcy %_description
-
+Summary:        A fancy and practical functional tools
+%description -n python3-funcy
 
 %prep
-%autosetup -p1 -n funcy-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir funcy-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-funcy usr/lib/python3*/site-packages/funcy* usr/lib64/python3*/site-packages/funcy* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/funcy* usr/lib64/python3*/site-packages/funcy* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-funcy -f %{pyproject_files}
+%files
+%files -n python3-funcy -f %{oreon_filedir}/python3-funcy.list
 
 %changelog
+
 %autochangelog

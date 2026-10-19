@@ -1,5 +1,4 @@
 %global source0_hash 28cace1c5f454f6b17bc7d0175aab79fe85799b4fd56b16bb4683dabd2c84cc7
-
 %{lua:
 if macros.orbs_chain_plan == nil and macros._without_bootstrap == nil then
   local spec
@@ -83,26 +82,23 @@ end
 %bcond_with bootstrap
 Name:           apache-commons-beanutils
 Version:        1.11.0
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Java utility methods for accessing and modifying the properties of arbitrary JavaBeans
 License:        Apache-2.0
 URL:            https://commons.apache.org/proper/commons-beanutils/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
-
 Source0:        http://archive.apache.org/dist/commons/beanutils/source/commons-beanutils-%{version}-src.tar.gz
-
 %if %{with bootstrap}
-BuildRequires:  javapackages-bootstrap
 %else
+%endif
+Obsoletes:      %{name}-javadoc < 1.9.4-40
+# oreon:deps
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-collections:commons-collections)
 BuildRequires:  mvn(commons-logging:commons-logging)
 BuildRequires:  mvn(org.apache.commons:commons-parent:pom:)
-%endif
-# TODO Remove in Fedora 46
-Obsoletes:      %{name}-javadoc < 1.9.4-40
-
+# /oreon:deps
 %description
 The scope of this package is to create a package of Java utility methods
 for accessing and modifying the properties of arbitrary JavaBeans.  No
@@ -110,6 +106,7 @@ dependencies outside of the JDK are required, so the use of this package
 is very lightweight.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n commons-beanutils-%{version}-src
 sed -i 's/\r//' *.txt
@@ -122,17 +119,16 @@ sed -i 's/\r//' *.txt
 %mvn_file : commons-beanutils commons-beanutils-core commons-beanutils-bean-collections
 
 %build
-# Some tests fail in Koji
-%mvn_build -j -f -- -Dcommons.packageId=beanutils
 
+%mvn_build -j -f -- -Dcommons.packageId=beanutils
 %install
 %mvn_install
+%oreon_autofiles main
 
-%files -f .mfiles
-%doc RELEASE-NOTES.txt
-%license LICENSE.txt NOTICE.txt
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11.0-3
 - bump release (retry failed build)
 

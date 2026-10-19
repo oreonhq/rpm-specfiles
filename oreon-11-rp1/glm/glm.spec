@@ -1,25 +1,20 @@
 %global source0_hash 6775e47231a446fd086d660ecc18bcd076531cfedd912fbd66e576b118607001
-
-# The library consists of headers only
 %global debug_package %{nil}
-
 Name:           glm
 Version:        1.0.3
 Release:        1%{?dist}
 Summary:        C++ mathematics library for graphics programming
-
 License:        MIT
 URL:            http://glm.g-truc.net/
 Source0:        https://github.com/g-truc/glm/archive/refs/tags/%{version}.tar.gz#/glm-%{version}.tar.gz
-
 Patch0:         glm-1.0.1-noarch.patch
 Patch1:         glm-1.0.1-without-werror.patch
-
+# oreon:deps
+BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  cmake >= 3.14
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 GLM is a C++ library for doing mathematics operations
 required in many OpenGL based applications. Its interface
@@ -29,11 +24,7 @@ types of the OpenGL shading language.
 %package        devel
 Summary:        C++ mathematics library for graphics programming
 BuildArch:      noarch
-
-# As required in
-# https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_Static_Libraries_2
 Provides:       %{name}-static = %{version}-%{release}
-
 %description    devel
 GLM is a C++ library for doing mathematics operations
 required in many OpenGL based applications. Its interface
@@ -47,12 +38,12 @@ there is no matching run time package.
 %package        doc
 Summary:        Documentation for %{name}-devel
 BuildArch:      noarch
-
 %description    doc
 The %{name}-doc package contains reference documentation and
 a programming manual for the %{name}-devel package.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 # Some glm releases, like version 0.9.3.1, place contents of
 # the source archive directly into the archive root. Others,
@@ -95,33 +86,21 @@ sed -i 's/\r//' test/core/core_setup_message.cpp
 export CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %{cmake} -DGLM_TEST_ENABLE=ON -DGLM_BUILD_LIBRARY=OFF -DCMAKE_INSTALL_DATAROOTDIR=%{_datadir}/cmake
 %cmake_build
-
 %check
+
 export CXXFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
-
-# Some tests are disabled due to failing tests (to be reported)
-# - test-gtc_packing      fails on s390x
 %ctest --output-on-failure -E 'test-gtc_packing'
-
 %install
 %cmake_install
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 find $RPM_BUILD_ROOT -name CMakeLists.txt -exec rm -f {} ';'
-
-# The library can get installed into the include directory - seen on EPEL8
 rm -rf $RPM_BUILD_ROOT%{_includedir}/%{name}/{CMakeFiles,libglm_shared.so}
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
-# Here it seems to be acceptable to own the cmake and pkgconfig directories
-# as an alternative to having glm-devel depending on cmake and pkg-config
-# https://fedoraproject.org/wiki/Packaging:Guidelines#The_directory_is_owned_by_a_package_which_is_not_required_for_your_package_to_function
-%files devel
-%doc readme.md
-%{_includedir}/%{name}
-%{_datadir}/cmake/%{name}
-
-%files doc
-%doc doc/manual.pdf
-%doc doc/api/
+%files -f %{oreon_filedir}/main.list
+%files -n glm-devel -f %{oreon_filedir}/glm-devel.list
+%files -n glm-doc -f %{oreon_filedir}/glm-doc.list
 
 %changelog
+
 %autochangelog

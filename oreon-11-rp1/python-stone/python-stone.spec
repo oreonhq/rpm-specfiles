@@ -1,60 +1,44 @@
-%global source0_hash none
-
+%global source0_hash 4f4f4399e6a7646917716d7dc06f814d32f94f30fb51d61b5c760e8f6d3ba53b
 Name:           python-stone
 Version:        3.5.4
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Stone is an interface description language _IDL_ for APIs.
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        MIT
 URL:            https://github.com/dropbox/stone
-Source:         %{pypi_source stone}
-
+Source0:        https://files.pythonhosted.org/packages/source/s/stone/stone-%{version}.tar.gz
 BuildArch:      noarch
-BuildRequires:  python3-devel
-
-
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'stone' generated automatically by pyp2spec.}
-
 Patch:          0001-Remove-pytest-runner-setup.py-test-support.patch
-
-%description %_description
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(setuptools) >= 83.0.0
+BuildRequires:  python3dist(setuptools-scm) < 11
+BuildRequires:  python3dist(setuptools-scm) >= 10.2.1
+Requires:       python3-stone = %{version}-%{release}
+# /oreon:deps
+%description
 
 %package -n     python3-stone
-Summary:        %{summary}
-
-%description -n python3-stone %_description
-
+Summary:        Stone is an interface description language _IDL_ for APIs.
+%description -n python3-stone
 
 %prep
-%autosetup -p1 -n stone-%{version}
-
-
-%generate_buildrequires
-%pyproject_buildrequires
-
-
+%global oreon_srcdir stone-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-stone usr/lib/python3*/site-packages/stone* usr/lib64/python3*/site-packages/stone* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/stone* usr/lib64/python3*/site-packages/stone* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-stone -f %{pyproject_files}
-%{_bindir}/stone
+%files
+%files -n python3-stone -f %{oreon_filedir}/python3-stone.list
 
 %changelog
+
 %autochangelog

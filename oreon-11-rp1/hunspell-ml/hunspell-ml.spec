@@ -1,43 +1,41 @@
 %global source0_hash 3fc7430ef257868caff2e5969a36f7ec295d980f49432864880871d086b2640e
-
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon} >= 11
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-ml
-Summary: Malayalam hunspell dictionaries
+Summary:        Malayalam hunspell dictionaries
 Version: 0.1
-Release: 37%{?dist}
+Release:        1%{?dist}
 URL: http://download.savannah.gnu.org/releases/smc/Spellchecker/
 License: GPL-3.0-or-later
 BuildArch: noarch
-
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ml)
-
 Source0:        https://download.savannah.gnu.org/releases/smc/Spellchecker/ooo-hunspell-ml-0.1.tar.bz2
+# oreon:deps
 
+# /oreon:deps
 %description
 Malayalam hunspell dictionaries
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f"  | cut -d' ' -f1); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n ooo-hunspell-ml-%{version}
 
 %build
-echo "Nothing to build..."
 
+echo "Nothing to build..."
 %install
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p *.dic *.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+%oreon_autofiles main
 
-%files
-%doc README
-%license COPYING
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1-37
 - Prepare for Oreon 11 (RP1)

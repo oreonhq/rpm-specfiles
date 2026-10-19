@@ -1,23 +1,16 @@
 %global source0_hash 6daed104481007752a76905000e71c0093c591c8ef3017d1b18222c277fc52e3
-
 BuildArch: noarch
-BuildRequires: /usr/bin/makeotfexe
-BuildRequires: fontforge
-
 Version:   0.140
-Release:   1%{?dist}
+Release:        1%{?dist}
 License:   GPL-2.0-only
 URL:       http://culmus.sourceforge.net
-
 %global common_description %{expand:
 The culmus-fonts package contains fonts for the display of
 Hebrew from the Culmus project.}
-
 %global foundry           CLM
 %global fontlicenses      LICENSE GNU-GPL LICENSE LICENSE-BITSTREAM
 %global fontdocs          CHANGES
 %global fontdocsex        %{fontlicenses}
-
 %global fontfamily1       Aharoni CLM
 %global fontsummary1      Aharoni CLM, a sans-serif font family
 %global fontpkgheader1    %{expand:
@@ -28,10 +21,8 @@ Provides:  culmus-aharoni-clm-fonts = %{version}-%{release}
 %global fontconfs1        %{SOURCE1}
 %global fontdescription1  %{expand:
 %{common_description}
-
 This package provides Aharoni CLM, a sans-serif font family.
 }
-
 %global fontfamily2       Caladings CLM
 %global fontsummary2      Caladings CLM, a fantasy font family
 %global fontpkgheader2    %{expand:
@@ -42,10 +33,8 @@ Provides:  culmus-caladings-clm-fonts = %{version}-%{release}
 %global fontconfs2        %{SOURCE2}
 %global fontdescription2  %{expand:
 %{common_description}
-
 This package provides Caladings CLM, a fantasy font family.
 }
-
 %global fontfamily3       David CLM
 %global fontsummary3      David CLM, a serif font family
 %global fontpkgheader3    %{expand:
@@ -56,40 +45,32 @@ Provides:  culmus-david-clm-fonts = %{version}-%{release}
 %global fontconfs3        %{SOURCE3}
 %global fontdescription3  %{expand:
 %{common_description}
-
 This package provides David CLM, a serif font family.
 }
-
 %global fontfamily4       Drugulin CLM
 %global fontsummary4      Drugulin CLM, a serif font family
 %global fontpkgheader4    %{expand:
 Obsoletes: culmus-drugulin-clm-fonts < 0.140-1
 Provides:  culmus-drugulin-clm-fonts = %{version}-%{release}
-
 }
 %global fonts4            DrugulinCLM-*.otf
 %global fontconfs4        %{SOURCE4}
 %global fontdescription4  %{expand:
 %{common_description}
-
 This package provides Drugulin CLM, a serif font family.
 }
-
 %global fontfamily5       Ellinia CLM
 %global fontsummary5      Ellinia CLM, a sans-serif font family
 %global fontpkgheader5    %{expand:
 Obsoletes: culmus-ellinia-clm-fonts < 0.140-1
 Provides:  culmus-ellinia-clm-fonts = %{version}-%{release}
-
 }
 %global fonts5            ElliniaCLM-*.otf
 %global fontconfs5        %{SOURCE5}
 %global fontdescription5  %{expand:
 %{common_description}
-
 This package provides Ellinia CLM, a sans-serif font family.
 }
-
 %global fontfamily6       Frank Ruehl CLM
 %global fontsummary6      Frank Ruehl CLM, a serif font family
 %global fontpkgheader6    %{expand:
@@ -100,10 +81,8 @@ Provides:  culmus-frank-ruehl-clm-fonts = %{version}-%{release}
 %global fontconfs6        %{SOURCE6}
 %global fontdescription6  %{expand:
 %{common_description}
-
 This package provides Frank Ruehl CLM, a serif font family.
 }
-
 %global fontfamily7       Hadasim CLM
 %global fontsummary7      Hadasim CLM, a serif font family
 %global fontpkgheader7    %{expand:
@@ -114,10 +93,8 @@ Provides:  culmus-hadasim-clm-fonts = %{version}-%{release}
 %global fontconfs7        %{SOURCE7}
 %global fontdescription7  %{expand:
 %{common_description}
-
 This package provides Hadasim CLM, a serif font family.
 }
-
 %global fontfamily8       Keter YG
 %global fontsummary8      Keter YG, a sans-serif font family
 %global fontpkgheader8    %{expand:
@@ -128,10 +105,8 @@ Provides:  culmus-keteryg-fonts = %{version}-%{release}
 %global fontconfs8        %{SOURCE8}
 %global fontdescription8  %{expand:
 %{common_description}
-
 This package provides Keter YG, a sans-serif font family.
 }
-
 %global fontfamily9       Miriam CLM
 %global fontsummary9      Miriam CLM, a sans-serif font family
 %global fontpkgheader9    %{expand:
@@ -142,10 +117,8 @@ Provides:  culmus-miriam-clm-fonts = %{version}-%{release}
 %global fontconfs9        %{SOURCE9}
 %global fontdescription9  %{expand:
 %{common_description}
-
 This package provides Miriam CLM, a sans-serif font family.
 }
-
 %global fontfamily10       Miriam Mono CLM
 %global fontsummary10      Miriam Mono CLM, a monospace font family
 %global fontpkgheader10    %{expand:
@@ -156,10 +129,8 @@ Provides:  culmus-miriam-mono-clm-fonts = %{version}-%{release}
 %global fontconfs10        %{SOURCE10}
 %global fontdescription10  %{expand:
 %{common_description}
-
 This package provides Miriam Mono CLM, a monospace font family.
 }
-
 %global fontfamily11       Nachlieli CLM
 %global fontsummary11      Nachlieli CLM, a sans-serif font family
 %global fontpkgheader11    %{expand:
@@ -170,10 +141,8 @@ Provides:  culmus-nachlieli-clm-fonts = %{version}-%{release}
 %global fontconfs11        %{SOURCE11}
 %global fontdescription11  %{expand:
 %{common_description}
-
 This package provides Nachlieli CLM, a sans-serif font family.
 }
-
 %global fontfamily12       Shofar
 %global fontsummary12      Shofar, a serif font family
 %global fontpkgheader12    %{expand:
@@ -184,10 +153,8 @@ Provides:  culmus-shofar-clm-fonts = %{version}-%{release}
 %global fontconfs12        %{SOURCE12}
 %global fontdescription12  %{expand:
 %{common_description}
-
 This package provides Shofar, a serif font family.
 }
-
 %global fontfamily13       Simple CLM
 %global fontsummary13      Simple CLM, a sans-serif font family
 %global fontpkgheader13    %{expand:
@@ -198,10 +165,8 @@ Provides:  culmus-simple-clm-fonts = %{version}-%{release}
 %global fontconfs13        %{SOURCE13}
 %global fontdescription13  %{expand:
 %{common_description}
-
 This package provides Simple CLM, a sans-serif font family.
 }
-
 %global fontfamily14       Stam Ashkenaz CLM
 %global fontsummary14      Stam Ashkenaz CLM, a serif font family
 %global fontpkgheader14    %{expand:
@@ -212,10 +177,8 @@ Provides:  culmus-stamashkenaz-clm-fonts = %{version}-%{release}
 %global fontconfs14        %{SOURCE14}
 %global fontdescription14  %{expand:
 %{common_description}
-
 This package provides Stam Ashkenaz CLM, a serif font family.
 }
-
 %global fontfamily15       Stam Sefarad CLM
 %global fontsummary15      Stam Sefarad CLM, a serif font family
 %global fontpkgheader15    %{expand:
@@ -226,10 +189,8 @@ Provides:  culmus-stamsefarad-clm-fonts = %{version}-%{release}
 %global fontconfs15        %{SOURCE15}
 %global fontdescription15  %{expand:
 %{common_description}
-
 This package provides Stam Sefarad CLM, a serif font family.
 }
-
 %global fontfamily16       Yehuda CLM
 %global fontsummary16      Yehuda CLM, a sans-serif font family
 %global fontpkgheader16    %{expand:
@@ -240,7 +201,6 @@ Provides:  culmus-yehuda-clm-fonts = %{version}-%{release}
 %global fontconfs16        %{SOURCE16}
 %global fontdescription16  %{expand:
 %{common_description}
-
 This package provides Yehuda CLM, a sans-serif font family.
 }
 Source0:        https://downloads.sourceforge.net/culmus/culmus-%{version}.tar.gz
@@ -261,9 +221,12 @@ Source14:  66-clm-stam-ashkenaz-fonts.conf
 Source15:  66-clm-stam-sefarad-fonts.conf
 Source16:  66-clm-yehuda-fonts.conf
 Source17:  modify-font-metadata.pe
-
 Name:      culmus-fonts
-Summary:   Fonts for Hebrew from Culmus project
+Summary:        Fonts for Hebrew from Culmus project
+# oreon:deps
+BuildRequires:  /usr/bin/makeotfexe
+BuildRequires:  fontforge
+# /oreon:deps
 %description
 %wordwrap -v common_description
 
@@ -272,22 +235,27 @@ Summary:   Fonts for Hebrew from Culmus project
 %fontmetapkg
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n culmus-%{version}
 cp -p %{SOURCE17} .
 
 %build
+
 fontforge ./modify-font-metadata.pe
-
 %fontbuild -a
-
 %install
 %fontinstall -a
+%oreon_autofiles culmus-fonts-all usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-%fontcheck -a
 
+%fontcheck -a
 %fontfiles -a
+%files -f %{oreon_filedir}/main.list
+%files -n culmus-fonts-all -f %{oreon_filedir}/culmus-fonts-all.list
 
 %changelog
+
 %autochangelog

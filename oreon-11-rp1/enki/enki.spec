@@ -1,82 +1,37 @@
 %global source0_hash 475c12f9c376026ae5b4d4c52e50b45a61989146b66e2b021fa111919d00fa35
-
 %bcond_with tests_py
-
 %global srcurl  https://github.com/andreikop/%{name}
-
 Name:           enki
 Version:        22.08.0
-Release:        15%{?dist}
+Release:        1%{?dist}
 Summary:        Text editor for programmers
-
-# Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://%{name}-editor.org/
-
 Source0:        %{srcurl}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-
 BuildArch:      noarch
 ExclusiveArch: %{qt5_qtwebengine_arches} noarch
-
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
-
-BuildRequires:  python3-qt5
-BuildRequires:  python3-pyparsing
-BuildRequires:  python3-qutepart
-
-# documentation
-BuildRequires:  python3-sphinx
-
-# tests
-BuildRequires:  desktop-file-utils
 %if %{with tests_py}
-#BuildRequires:  python3-sip
-BuildRequires:  python3-qt5-webengine
-BuildRequires:  xorg-x11-server-Xvfb
 %endif
-
-# FIXME add more optional dependencies to enable specific tests
-BuildRequires:  python3-markdown
-BuildRequires:  python3-mock
-BuildRequires:  python3-regex
-
-# runtime
 Requires:       python3
-
 Requires:       python3-qt5
 Requires:       python3-pyparsing
-# enforce fix for python 3.10
 Requires:       python3-qutepart >= 3.3.2
-# FIXME is sphinx optional?
 Requires:       python3-sphinx
-
-# FIXME issue#425, markdown is needed as dependency
 Requires:       python3-markdown
-
-%if 0%{?fedora}
-
-# optional for special runtime
-Recommends:     python3-flake8
-Recommends:     python3-docutils
-#Recommends:     python3-markdown
-Recommends:     python3-regex
-Recommends:     ctags
-# FIXME do we need QtWebEngine for sure?
-# upstream issues/446, rhbz#1642060
-Recommends:     python3-qt5-webengine
-
-# upstream issues/465
-Suggests:       python3-qtconsole
-
-%endif # fedora
-
-# we place additional icons
 Requires:       hicolor-icon-theme
-
-# compatibility, accidently used subpackage, rhbz#1292724
 Obsoletes:      %{name}-plugins < 19.10.0
-
+# oreon:deps
+BuildRequires:  desktop-file-utils
+BuildRequires:  python3-devel
+BuildRequires:  python3-markdown
+BuildRequires:  python3-mock
+BuildRequires:  python3-pyparsing
+BuildRequires:  python3-qt5
+BuildRequires:  python3-qutepart
+BuildRequires:  python3-regex
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-sphinx
+# /oreon:deps
 %description
 Enki is a text editor for programmers. It is:
 
@@ -97,11 +52,11 @@ Enki is a text editor for programmers. It is:
 
 %package doc
 Summary:        Additional documentation for %{name}
-
 %description doc
 %{summary}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1 -n%{name}-%{version}
@@ -115,40 +70,25 @@ rm -rv debian rpm win
 rm -v tests/test_plugins/*.py
 
 %build
+
 %py3_build
 sphinx-build-3 doc html
 rm -rv html/.buildinfo html/.doctrees
-
 %install
 %py3_install
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
-desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
-# FIXME rhbz#1752766, python3-sip not available
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %if %{with tests_py}
-# we must be inside the tests folder to let the script find something
 pushd tests
-# FIXME ugly hackery to disable failing tests
-# https://github.com/andreikop/enki/issues/456
 sed -i "s:'TRAVIS_OS_NAME' in os.environ:True:" test_base.py
-# run tests in a mocked X environment
 xvfb-run -s '-screen :0 1024x768x16' %{__python3} run_all.py
 %endif
-
-%files
-%license LICENSE.GPL2
-%doc README.md ChangeLog
-%{python3_sitelib}/%{name}*.egg-info
-%{python3_sitelib}/%{name}/
-%{_datadir}/icons/hicolor/*/apps/%{name}.*
-%{_datadir}/pixmaps/%{name}.png
-%{_datadir}/applications/%{name}.desktop
-%{_bindir}/%{name}
-
-%files doc
-%license LICENSE.GPL2
-%doc html/
+%files -f %{oreon_filedir}/main.list
+%files -n enki-doc -f %{oreon_filedir}/enki-doc.list
 
 %changelog
+
 %autochangelog

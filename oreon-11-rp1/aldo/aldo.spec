@@ -1,19 +1,16 @@
-%global source0_hash f1b8849d09267fff3c1f5122097d90fec261291f51b1e075f37fad8f1b7d9f92
-
+%global source0_hash e0ae93208666523344eada66713055cb7fd752bcdd2aa621b8a1783e22da3d17
 Name:           aldo
 Version:        0.7.7
-Release:        19%{?dist}
+Release:        1%{?dist}
 Summary:        A morse tutor
-
 License:        GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            http://aldo.nongnu.org/
-
 Source0:        http://savannah.nongnu.org/download/aldo/%{name}-%{version}.tar.bz2
-
+# oreon:deps
 BuildRequires:  gcc-c++
 BuildRequires:  libao-devel
-BuildRequires: make
-
+BuildRequires:  make
+# /oreon:deps
 %description
 Aldo is a morse code learning tool released under GPL, which provides
 four type of training methods:
@@ -27,21 +24,17 @@ four type of training methods:
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-
-%autosetup
-
+%oreon_prep
 %build
+
 %configure
 %make_build
-
 %install
 %make_install
+%oreon_autofiles main
 
-%files
-%doc AUTHORS ChangeLog README THANKS
-%license COPYING
-%{_bindir}/*
-%{_mandir}/man?/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 %autochangelog

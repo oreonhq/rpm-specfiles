@@ -1,101 +1,54 @@
-%global source0_hash none
-
-# For the extra python package gguf that comes with llama-cpp
+%global source0_hash 056cf63483c6a6b93a05323ea5162263dfa9e7ac6664516e98ab433961d021f8
 %global pypi_name gguf
 %global pypi_version 0.10.0
-
-# Some optional subpackages
 %bcond_with examples
 %if %{with examples}
 %global build_examples ON
 %else
 %global build_examples OFF
 %endif
-
 %bcond_with test
 %if %{with test}
 %global build_test ON
 %else
 %global build_test OFF
 %endif
-
 %bcond check 1
-
 Summary:        Port of Facebook's LLaMA model in C/C++
 Name:           llama-cpp
-
-# Licensecheck reports
-#
-# *No copyright* The Unlicense
-# ----------------------------
-# common/base64.hpp
-# common/stb_image.h
-# These are public domain
-#
-# MIT License
-# -----------
-# LICENSE
-# ...
-# This is the main license
-
 License:        MIT AND Apache-2.0 AND LicenseRef-Fedora-Public-Domain
 Version:        b6153
-Release:        %autorelease
-
+Release:        1%{?dist}
 URL:            https://github.com/ggerganov/llama.cpp
-Source0:        %{url}/archive/%{version}.tar.gz#/llama.cpp-%{version}.tar.gz
-
+Source0:        https://github.com/ggerganov/llama.cpp/archive/%{version}.tar.gz#/llama.cpp-%{version}.tar.gz
 ExclusiveArch:  x86_64 aarch64
-
 %ifarch x86_64
 %bcond_without rocm
 %else
 %bcond_with rocm
 %endif
-
 %if %{with rocm}
 %global build_hip ON
 %global toolchain rocm
-# hipcc does not support some clang flags
 %global build_cxxflags %(echo %{optflags} | sed -e 's/-fstack-protector-strong/-Xarch_host -fstack-protector-strong/' -e 's/-fcf-protection/-Xarch_host -fcf-protection/' -e 's/-mtls-dialect=gnu2//')
 %else
 %global build_hip OFF
 %global toolchain gcc
 %endif
-
-BuildRequires:  cmake
-BuildRequires:  curl
-BuildRequires:  git
-BuildRequires:  wget
-BuildRequires:  xxd
-BuildRequires:  langpacks-en
-# above are packages in .github/workflows/server.yml
-BuildRequires:  libcurl-devel
-BuildRequires:  gcc-c++
-BuildRequires:  openmpi
-BuildRequires:  pthreadpool-devel
 %if %{with examples}
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(pip)
-BuildRequires:  python3dist(poetry)
 %endif
-
 %if %{with rocm}
-BuildRequires:  hipblas-devel
-BuildRequires:  rocm-comgr-devel
-BuildRequires:  rocm-hip-devel
-BuildRequires:  rocblas-devel
-BuildRequires:  hipblas-devel
-BuildRequires:  rocm-runtime-devel
-BuildRequires:  rocm-rpm-macros
-
 Requires:       rocblas
 Requires:       hipblas
 %endif
-
 Requires:       curl
 Recommends:     numactl
-
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(poetry-core) >= 1.0.0
+Requires:       python3-llama-cpp = %{version}-%{release}
+# /oreon:deps
 %description
 The main goal of llama.cpp is to run the LLaMA model using 4-bit
 integer quantization on a MacBook
@@ -117,7 +70,6 @@ ggml library.
 %package devel
 Summary:        Port of Facebook's LLaMA model in C/C++
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description devel
 The main goal of llama.cpp is to run the LLaMA model using 4-bit
 integer quantization on a MacBook
@@ -140,7 +92,6 @@ ggml library.
 %package test
 Summary:        Tests for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description test
 %{summary}
 %endif
@@ -152,12 +103,12 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       python3dist(numpy)
 Requires:       python3dist(torch)
 Requires:       python3dist(sentencepiece)
-
 %description examples
 %{summary}
 %endif
 
 %prep
+
 %autosetup -p1 -n llama.cpp-%{version}
 
 # verson the *.so
@@ -182,7 +133,6 @@ cd %{_vpath_srcdir}/gguf-py
 %pyproject_wheel
 cd -
 %endif
-
 %cmake \
     -DCMAKE_INSTALL_LIBDIR=%{_lib} \
     -DCMAKE_SKIP_RPATH=ON \
@@ -197,20 +147,15 @@ cd -
     -DAMDGPU_TARGETS=%{rocm_gpu_list_default} \
     -DLLAMA_BUILD_EXAMPLES=%{build_examples} \
     -DLLAMA_BUILD_TESTS=%{build_test}
-
 %cmake_build
-
 %install
 %if %{with examples}
 cd %{_vpath_srcdir}/gguf-py
 %pyproject_install
 cd -
 %endif
-
 %cmake_install
-
 rm -rf %{buildroot}%{_libdir}/libggml_shared.*
-
 %if %{with examples}
 mkdir -p %{buildroot}%{_datarootdir}/%{name}
 cp -r %{_vpath_srcdir}/examples %{buildroot}%{_datarootdir}/%{name}/
@@ -219,79 +164,19 @@ cp -r %{_vpath_srcdir}/README.md %{buildroot}%{_datarootdir}/%{name}/
 rm -rf %{buildroot}%{_datarootdir}/%{name}/examples/llama.android
 %else
 rm %{buildroot}%{_bindir}/convert*.py
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/* usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 %endif
-
 %if %{with test}
 %if %{with check}
 %check
-# Need to install rpm
-# On gfx1201 on 6.4 there is one failure
-#  24 - test-backend-ops (Subprocess aborted)
+
 %ctest
 %endif
 %endif
-
 %files
-%license LICENSE
-%{_libdir}/libllama.so.%{version}
-%{_libdir}/libmtmd.so.%{version}
-%{_libdir}/libggml.so.%{version}
-%{_libdir}/libggml-base.so.%{version}
-%{_libdir}/libggml-cpu.so.%{version}
-%if %{with rocm}
-%{_libdir}/libggml-hip.so.%{version}
-%endif
-%{_bindir}/llama-batched-bench
-%{_bindir}/llama-bench
-%{_bindir}/llama-cli
-%{_bindir}/llama-cvector-generator
-%{_bindir}/llama-export-lora
-%{_bindir}/llama-gguf-split
-%{_bindir}/llama-imatrix
-%{_bindir}/llama-mtmd-cli
-%{_bindir}/llama-perplexity
-%{_bindir}/llama-quantize
-%{_bindir}/llama-run
-%{_bindir}/llama-server
-%{_bindir}/llama-tokenize
-%{_bindir}/llama-tts
-
-%files devel
-%dir %{_libdir}/cmake/llama
-%dir %{_libdir}/cmake/ggml
-%doc README.md
-%{_includedir}/gguf.h
-%{_includedir}/ggml*.h
-%{_includedir}/llama*.h
-%{_includedir}/mtmd*.h
-%{_libdir}/libllama.so
-%{_libdir}/libmtmd.so
-%{_libdir}/libggml.so
-%{_libdir}/libggml-base.so
-%{_libdir}/libggml-cpu.so
-%if %{with rocm}
-%{_libdir}/libggml-hip.so
-%endif
-%{_libdir}/cmake/llama/*.cmake
-%{_libdir}/cmake/ggml/*.cmake
-%{_libdir}/pkgconfig/llama.pc
-
-%if %{with test}
-%files test
-%{_bindir}/test-*
-%endif
-
-%if %{with examples}
-%files examples
-%{_bindir}/convert_hf_to_gguf.py
-%{_bindir}/gguf-*
-%{_bindir}/llama-*
-%{_datarootdir}/%{name}/
-%{_libdir}/libllava_shared.so
-%{python3_sitelib}/%{pypi_name}
-%{python3_sitelib}/%{pypi_name}*.dist-info
-%{python3_sitelib}/scripts
-%endif
+%files -n llama-cpp-devel -f %{oreon_filedir}/llama-cpp-devel.list
+%files -n llama-cpp-test -f %{oreon_filedir}/llama-cpp-test.list
 
 %changelog
+
 %autochangelog

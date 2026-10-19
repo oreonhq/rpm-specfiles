@@ -1,63 +1,72 @@
-%global source0_hash none
-
+%global source0_hash d210b1e0d08f77e55ebcf9940ecc0c639663d12937d8c7b72de7cbbb6d0a4009
 Name:           python-yaml2ical
 Version:        0.15.0
-Release:        %autorelease
-# Fill in the actual package summary to submit package to Fedora
+Release:        1%{?dist}
 Summary:        Convert YAML meeting descriptions into iCalendar files
-
-# Check if the automatically generated License and its spelling is correct for Fedora
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/LicensingGuidelines/
 License:        Apache-2.0
 URL:            https://opendev.org/opendev/yaml2ical
-Source:         %{pypi_source yaml2ical}
-
+Source0:        https://files.pythonhosted.org/packages/source/y/yaml2ical/yaml2ical-%{version}.tar.gz
 BuildArch:      noarch
+# oreon:deps
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python3-devel
+BuildRequires:  python3dist(pbr) >= 6.1.1
+Requires:       python3-yaml2ical = %{version}-%{release}
+# /oreon:deps
+%package -n       python3-yaml2ical+test-linters
+Summary:        Metapackage for python3-yaml2ical test-linters extras
+Requires:       python3-yaml2ical = %{version}-%{release}
+Requires:       python3dist(hacking) >= 7
+Requires:       python3dist(hacking) < 8
+Provides:       python3dist(yaml2ical[test-linters]) = %{version}-%{release}
 
+%description -n python3-yaml2ical+test-linters
+Metapackage for python3-yaml2ical test-linters extras.
 
-# Fill in the actual package description to submit package to Fedora
-%global _description %{expand:
-This is package 'yaml2ical' generated automatically by pyp2spec.}
+%package -n       python3-yaml2ical+test-unit
+Summary:        Metapackage for python3-yaml2ical test-unit extras
+Requires:       python3-yaml2ical = %{version}-%{release}
+Requires:       python3dist(coverage) >= 3.6
+Requires:       python3dist(fixtures) >= 3.0.0
+Requires:       python3dist(python-subunit) >= 0.0.18
+Requires:       python3dist(stestr) >= 1.0.0
+Requires:       python3dist(testtools) >= 1.4.0
+Provides:       python3dist(yaml2ical[test-unit]) = %{version}-%{release}
 
-%description %_description
+%description -n python3-yaml2ical+test-unit
+Metapackage for python3-yaml2ical test-unit extras.
+
+%description
 
 %package -n     python3-yaml2ical
-Summary:        %{summary}
-
-%description -n python3-yaml2ical %_description
+Summary:        Convert YAML meeting descriptions into iCalendar files
+# oreon:reqs
+Requires:       python3dist(jinja2) >= 2.8
+Requires:       python3dist(pbr) >= 1.6
+Requires:       python3dist(pyyaml) >= 3.1.0
+# /oreon:reqs
+%description -n python3-yaml2ical
 
 # For official Fedora packages, review which extras should be actually packaged
 # See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#Extras
-%pyproject_extras_subpkg -n python3-yaml2ical test-linters,test-unit
-
 
 %prep
-%autosetup -p1 -n yaml2ical-%{version}
-
-
-%generate_buildrequires
-# Keep only those extras which you actually want to package or use during tests
-%pyproject_buildrequires
-
-
+%global oreon_srcdir yaml2ical-%{version}
+%oreon_prep
 %build
+
 %pyproject_wheel
-
-
 %install
 %pyproject_install
-# For official Fedora packages, including files with '*' +auto is not allowed
-# Replace it with a list of relevant Python modules/globs and list extra files in %%files
-%pyproject_save_files '*' +auto
-
+%oreon_autofiles python3-yaml2ical usr/lib/python3*/site-packages/yaml2ical* usr/lib64/python3*/site-packages/yaml2ical* usr/bin/*
+%oreon_autofiles main usr/lib/python3*/site-packages/yaml2ical* usr/lib64/python3*/site-packages/yaml2ical* usr/bin/*
 
 %check
+
 %_pyproject_check_import_allow_no_modules -t
-
-
-%files -n python3-yaml2ical -f %{pyproject_files}
-%{_bindir}/yaml2ical
+%files
+%files -n python3-yaml2ical -f %{oreon_filedir}/python3-yaml2ical.list
 
 %changelog
+
 %autochangelog

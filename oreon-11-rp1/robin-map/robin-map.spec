@@ -1,22 +1,19 @@
-%global source0_hash a8424ad3b0affd4c57ed26f0f3d8a29604f0e1f2ef2089f497f614b1c94c7236
-
+%global source0_hash 0e3f53a377fdcdc5f9fed7a4c0d4f99e82bbb64175233bd13427fef9a771f4a1
 %global debug_package %{nil}
-
 Name:           robin-map
 Version:        1.4.1
 Release:        1%{?dist}
 Summary:        C++ implementation of a fast hash map and hash set using robin hood hashing
-
 License:        MIT
 URL:            https://github.com/Tessil/robin-map
 Source0:        https://github.com/Tessil/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-
 BuildArch:      noarch
-
-BuildRequires:  cmake gcc-c++
+# oreon:deps
 BuildRequires:  boost-devel
 BuildRequires:  boost-static
-
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+# /oreon:deps
 %description
 The robin-map library is a C++ implementation of a fast hash map and hash set
 using open-addressing and linear robin hood hashing with backward shift
@@ -27,10 +24,7 @@ The package you want is %{name}-devel.
 
 %package devel
 Summary:        %{summary}
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/#_packaging_header_only_libraries
 Provides:       robin-map-static = %{version}-%{release}
-
 %description devel
 The robin-map library is a C++ implementation of a fast hash map and hash set
 using open-addressing and linear robin hood hashing with backward shift
@@ -49,6 +43,7 @@ your use case (useful if you are a bit lost with the multiple hash tables
 implementations in the tsl namespace).
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -p1
@@ -57,22 +52,21 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 sed -i -e 's@cmake_minimum_required(VERSION 3.3)@cmake_minimum_required(VERSION 3.5)@' CMakeLists.txt
 
 %build
-%cmake
 
+%cmake
 %install
 %cmake_install
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 pushd tests
 %cmake
 %cmake_build
 %{_vpath_builddir}/tsl_robin_map_tests
-
-%files devel
-%license LICENSE
-%doc README.md
-%{_datadir}/cmake/tsl-%{name}/*.cmake
-%{_includedir}/tsl/
+%files -f %{oreon_filedir}/main.list
+%files -n robin-map-devel -f %{oreon_filedir}/robin-map-devel.list
 
 %changelog
+
 %autochangelog

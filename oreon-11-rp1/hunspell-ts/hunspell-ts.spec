@@ -1,29 +1,28 @@
 %global source0_hash ab559ee78cbf63ce48b2dc3046cabf19bad21f735df47b48930da404f9535bc7
-
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
 %endif
-
 Name: hunspell-ts
-Summary: Tsonga hunspell dictionaries
+Summary:        Tsonga hunspell dictionaries
 %global upstreamid 20110323.1
 Version: 0.%{upstreamid}
-Release: 20%{?dist}
+Release:        1%{?dist}
 URL: https://addons.mozilla.org/en-US/firefox/addon/tsonga-spell-checker/
 License: LGPL-2.1-or-later
 BuildArch: noarch
-
 Requires: hunspell-filesystem
 Supplements: (hunspell and langpacks-ts)
-
 Source0:        https://github.com/openela-main/hunspell-ts/raw/el9/SOURCES/tsonga_spell_checker-20110323.1-typefix-fn+sm+tb+fx.xpi
+# oreon:deps
 
+# /oreon:deps
 %description
 Tsonga hunspell dictionaries.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -n hunspell-ts
 
@@ -33,11 +32,11 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 cp -p dictionaries/ts-ZA.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ts_ZA.aff
 cp -p dictionaries/ts-ZA.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/ts_ZA.dic
+%oreon_autofiles main
 
-%files
-%doc README-ts-ZA.txt
-%{_datadir}/%{dict_dirname}/*
+%files -f %{oreon_filedir}/main.list
 
 %changelog
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20110323.1-20
 - Import

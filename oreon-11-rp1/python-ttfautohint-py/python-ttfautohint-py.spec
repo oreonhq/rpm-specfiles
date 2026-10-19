@@ -1,79 +1,49 @@
-%global source0_hash 87323839b49aa1273f40abbd45830702453f81c2826193ee82c31ce6f372a00c
-
+%global source0_hash 6f786db75d543716a8331ba3a6deeae19cf17701bd165aac05ff13b64e6614a3
 %bcond tests 1
-
 Name:           python-ttfautohint-py
 Version:        0.6.1
-Release:        %autorelease
+Release:        1%{?dist}
 Summary:        Python wrapper for ttfautohint, a free auto-hinter for TrueType fonts
-
 License:        MIT
-# The entire source is MIT, except for test fonts that are not bundled in the
-# binary RPMs and do not contribute to their licenses.
-#
-# OFL-1.1, tests/data/OFL.txt
-#   - tests/data/NotoSansMono-Regular.ttf
 SourceLicense:  %{license} AND OFL-1.1
 URL:            https://github.com/fonttools/ttfautohint-py
-# The PyPI sdist would work perfectly well here, but using the GitHub archive
-# has an advantage: if upstream starts including sources included via git
-# submodules in src/c/{freetype2,harfbuzz,ttfautohint}/ in the sdist and we
-# don’t notice, we might accidentally include some questionably-licensed test
-# fonts in the source RPM in the future. With the GitHub archive, we can be
-# confident that nothing outside of the upstream source repository itself will
-# appear in the source archive.
-Source:         %{url}/archive/v%{version}/ttfautohint-py-%{version}.tar.gz
-
-
+Source0:        https://github.com/fonttools/ttfautohint-py/archive/v%{version}/ttfautohint-py-%{version}.tar.gz
 BuildArch: noarch
-
-BuildRequires:  /usr/bin/ttfautohint
-
 %if %{with tests}
-# See the "testing" extra, but we don’t want coverage-analysis dependencies:
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
-BuildRequires:  %{py3_dist pytest}
-BuildRequires:  %{py3_dist fontTools}
 %endif
-
 %global common_description %{expand:
 %{summary}.}
-
+# oreon:deps
+BuildRequires:  /usr/bin/ttfautohint
+BuildRequires:  python3dist(fonttools)
+BuildRequires:  python3dist(pytest)
+# /oreon:deps
 %description %{common_description}
 
 %package -n python3-ttfautohint-py
-Summary:        %{summary}
-
-# The ttfautohint shared library is loaded at runtime using Python’s ctypes
-# module, which in the end is using dlopen(). Since the shared library is not
-# linked into an ELF file, the automatic dependency generator cannot help us
-# here, and an explicit manual dependency is required.
+Summary:        Python wrapper for ttfautohint, a free auto-hinter for TrueType fonts
 Requires:       /usr/bin/ttfautohint
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
 %py_provides python3-ttfautohint
-
 %description -n python3-ttfautohint-py %{common_description}
 
-%generate_buildrequires -p
-export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
-
 %build -p
+
 export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
-
 %prep
-%autosetup -p1
-
+%oreon_prep
 %install
 %pyproject_install
+%oreon_autofiles python3-ttfautohint-py usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
+%oreon_autofiles main usr/bin/* usr/sbin/* usr/share/man/* usr/share/applications/*
 
 %check
+
 %if %{with tests}
 %pytest -v
 %endif
-
-%files -n python3-ttfautohint-py -f %{pyproject_files}
-%doc README.md
+%files -f %{oreon_filedir}/main.list
+%files -n python3-ttfautohint-py -f %{oreon_filedir}/python3-ttfautohint-py.list
 
 %changelog
+
 %autochangelog

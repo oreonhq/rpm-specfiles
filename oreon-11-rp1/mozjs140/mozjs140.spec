@@ -1,83 +1,49 @@
-%global source0_hash none
-
+%global source0_hash 15d2d359b8571ecd0898faa6e05aa902b0de7cb34aadfc4d94adf6c8428f84df
 %global major 140
-
-# LTO - Enable in Release builds, but consider disabling for development as it increases compile time
 %global build_with_lto    1
-
-# https://bugzilla.redhat.com/show_bug.cgi?id=2304756
 %global toolchain clang
-
-# Require tests to pass?
 %global require_tests     1
-
 %if !%{build_with_lto}
-# LTO is the default
 %define _lto_cflags %{nil}
 %endif
-
 %ifarch %{ix86}
-# OOM with LTO on i686
 %global _lto_cflags %{nil}
 %endif
-
-# Big endian platforms
 %ifarch ppc ppc64 s390 s390x
 %global big_endian 1
 %endif
-
 Name:           mozjs%{major}
 Version:        140.16.0
-Release:        %autorelease -b3
+Release:        3%{?dist}
 Summary:        SpiderMonkey JavaScript library
-
 License:        MPL-2.0 AND Apache-2.0 AND BSD-3-Clause AND BSD-2-Clause AND MIT AND GPL-3.0-or-later
 URL:            https://spidermonkey.dev/
 Source0:        https://ftp.mozilla.org/pub/firefox/releases/%{version}esr/source/firefox-%{version}esr.source.tar.xz
-
-# Known failures with system libicu
 Source1:        known_failures.txt
-
-# Patches from mozjs68, rebased for mozjs78:
 Patch01:        fix-soname.patch
 Patch02:        copy-headers.patch
 Patch03:        tests-increase-timeout.patch
 Patch09:        icu_sources_data.py-Decouple-from-Mozilla-build-system.patch
 Patch10:        icu_sources_data-Write-command-output-to-our-stderr.patch
-
-# Build fixes - https://hg.mozilla.org/mozilla-central/rev/ca36a6c4f8a4a0ddaa033fdbe20836d87bbfb873
 Patch12:        emitter.patch
 Patch13:        tests-Use-native-TemporaryDirectory.patch
-
-# Build fixes
 Patch14:        init_patch.patch
-
-# Fixes backported from upstream
 Patch15:        9aa8b4b051dd539e0fbd5e08040870b3c712a846.patch
 Patch16:        D261512.1755672843.diff
-
-# TODO: Check with mozilla for cause of these fails and re-enable spidermonkey compile time checks if needed
 Patch20:        spidermonkey_checks_disable.patch
-
-BuildRequires:  cargo
 %if "%{toolchain}" == "clang"
-BuildRequires:  clang
 %endif
-BuildRequires:  clang-devel
 %if "%{toolchain}" == "gcc"
-BuildRequires:  gcc
-BuildRequires:  gcc-c++
 %endif
-BuildRequires:  m4
-BuildRequires:  make
-%if !0%{?rhel}
-BuildRequires:  nasm
-%endif
+# oreon:deps
+BuildRequires:  cargo
+BuildRequires:  cbindgen
+BuildRequires:  clang
+BuildRequires:  clang-devel
 BuildRequires:  libicu-devel
 BuildRequires:  llvm
-BuildRequires:  rust
-BuildRequires:  rustfmt
-BuildRequires:  cbindgen
+BuildRequires:  m4
+BuildRequires:  make
 BuildRequires:  perl-devel
 BuildRequires:  pkgconfig(libffi)
 BuildRequires:  pkgconfig(zlib)
@@ -85,9 +51,11 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-six
 BuildRequires:  readline-devel
+BuildRequires:  rust
+BuildRequires:  rustfmt
 BuildRequires:  wget
 BuildRequires:  zip
-
+# /oreon:deps
 %description
 SpiderMonkey is the code-name for Mozilla Firefox's C++ implementation of
 JavaScript. It is intended to be embedded in other applications
@@ -96,12 +64,12 @@ that provide host environments for JavaScript.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 
 %autosetup -n firefox-%{version} -p1
@@ -124,11 +92,10 @@ rm -rf js/src/ctypes/libffi/
 chmod -x third_party/rust/bumpalo/src/lib.rs
 
 %build
-# Use bundled autoconf
+
 export M4=m4
 export AWK=awk
 export AC_MACRODIR=./build/autoconf/
-
 pushd js/src/
 %configure \
   --with-system-icu \
@@ -142,17 +109,11 @@ pushd js/src/
   --disable-debug \
   --enable-pie \
   --disable-jemalloc
-
 %make_build
-
 %install
 pushd js/src/
 %make_install
-
-# Fix permissions
 chmod -x %{buildroot}%{_libdir}/pkgconfig/*.pc
-
-# Avoid multilib conflicts
 case `uname -i` in
   i386 | ppc | s390 | sparc )
     wordsize="32"
@@ -164,79 +125,44 @@ case `uname -i` in
     wordsize=""
     ;;
 esac
-
 if test -n "$wordsize"
 then
   mv %{buildroot}%{_includedir}/mozjs-%{major}/js-config.h \
      %{buildroot}%{_includedir}/mozjs-%{major}/js-config-$wordsize.h
-
   cat >%{buildroot}%{_includedir}/mozjs-%{major}/js-config.h <<EOF
-#ifndef JS_CONFIG_H_MULTILIB
-#define JS_CONFIG_H_MULTILIB
-
-#include <bits/wordsize.h>
-
-#if __WORDSIZE == 32
-# include "js-config-32.h"
-#elif __WORDSIZE == 64
-# include "js-config-64.h"
-#else
-# error "unexpected value for __WORDSIZE macro"
-#endif
-
-#endif
 EOF
-
 fi
-
-# Remove unneeded files
 rm %{buildroot}%{_bindir}/js%{major}-config
 rm %{buildroot}%{_libdir}/libjs_static.ajs
-
-# Rename library and create symlinks, following fix-soname.patch
 mv %{buildroot}%{_libdir}/libmozjs-%{major}.so \
    %{buildroot}%{_libdir}/libmozjs-%{major}.so.0.0.0
 ln -s libmozjs-%{major}.so.0.0.0 %{buildroot}%{_libdir}/libmozjs-%{major}.so.0
 ln -s libmozjs-%{major}.so.0 %{buildroot}%{_libdir}/libmozjs-%{major}.so
-
-# Executable bit
 chmod -x %{buildroot}%{_includedir}/mozjs-%{major}/js/ProfilingCategoryList.h
 chmod -x %{buildroot}%{_includedir}/mozjs-%{major}/js-config.h
+%oreon_autofiles main usr/include/* usr/*/pkgconfig/* usr/lib*/cmake/* usr/share/aclocal/* usr/*/lib*.so usr/share/cmake/*
 
 %check
+
 pushd js/src/
-# Run SpiderMonkey tests
 %if 0%{?require_tests}
 %{python3} tests/jstests.py -d -s -t 2400 --exclude-file=known_failures.txt --no-progress --wpt=disabled ../../js/src/dist/bin/js%{major}
 %else
 %{python3} tests/jstests.py -d -s -t 2400 --exclude-file=known_failures.txt --no-progress --wpt=disabled ../../js/src/dist/bin/js%{major} || :
 %endif
-
-# Run basic JIT tests
 %if 0%{?require_tests}
-
-# large-arraybuffers/basic.js fails on s390x
 %ifarch s390 s390x
 %{python3} jit-test/jit_test.py -s -t 2400 --no-progress -x large-arraybuffers/basic.js ../../js/src/dist/bin/js%{major} basic
 %else
 %{python3} jit-test/jit_test.py -s -t 2400 --no-progress ../../js/src/dist/bin/js%{major} basic
 %endif
-
 %else
 %{python3} jit-test/jit_test.py -s -t 2400 --no-progress ../../js/src/dist/bin/js%{major} basic || :
 %endif
-
-%files
-%doc js/src/README.html
-%license js/src/LICENSE
-%{_libdir}/libmozjs-%{major}.so.0*
-
-%files devel
-%{_bindir}/js%{major}
-%{_libdir}/libmozjs-%{major}.so
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/mozjs-%{major}/
+%files -f %{oreon_filedir}/main.list
+%files -n mozjs140-devel -f %{oreon_filedir}/mozjs140-devel.list
 
 %changelog
+
 %autochangelog
 
