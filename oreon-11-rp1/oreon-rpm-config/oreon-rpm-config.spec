@@ -6,7 +6,7 @@
 Summary:        Oreon-specific rpm configuration files
 Name: oreon-rpm-config
 Version: 345
-Release:        7%{?dist}
+Release:        8%{?dist}
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
 URL: https://github.com/oreonhq/rpm-specfiles
 Provides: redhat-rpm-config = %{version}-%{release}
@@ -111,7 +111,6 @@ mkdir -p %{buildroot}%{_fileattrsdir}
 install -p -m 644 -t %{buildroot}%{_fileattrsdir} *.attr
 mkdir -p %{buildroot}%{_rpmluadir}/fedora/{rpm,srpm}
 install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
-%oreon_autofiles main
 
 %triggerin -- annobin-plugin-gcc gcc-plugin-annobin gcc
 
@@ -121,7 +120,38 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 
 %{rrcdir}/redhat-annobin-plugin-select.sh
 %end
-%files -f %{oreon_filedir}/main.list
+%files
+%dir %{rrcdir}
+%{rrcdir}/brp-ldconfig
+%{rrcdir}/brp-mangle-shebangs
+%{rrcdir}/brp-strip-lto
+%{rrcdir}/config.*
+%{rrcdir}/dist.sh
+%{rrcdir}/find-provides
+%{rrcdir}/find-requires
+%{rrcdir}/macros
+%{rrcdir}/redhat-hardened-*
+%{rrcdir}/rpmrc
+%{_fileattrsdir}/*.attr
+%{_rpmconfigdir}/macros.d/macros.*-srpm
+%{_rpmconfigdir}/macros.d/macros.build-constraints
+%{_rpmconfigdir}/macros.d/macros.dwz
+%{_rpmconfigdir}/macros.d/macros.fedora-misc
+%{_rpmconfigdir}/macros.d/macros.ldconfig
+%{_rpmconfigdir}/macros.d/macros.rpmautospec
+%{_rpmconfigdir}/macros.d/macros.shell-completions
+%{_rpmconfigdir}/macros.d/macros.vpath
+%dir %{_rpmluadir}/fedora
+%dir %{_rpmluadir}/fedora/srpm
+%dir %{_rpmluadir}/fedora/rpm
+%{_rpmluadir}/fedora/*.lua
+
+%attr(0755,-,-) %{rrcdir}/redhat-annobin-plugin-select.sh
+%verify(owner group mode) %{rrcdir}/redhat-annobin-cc1
+%{rrcdir}/redhat-annobin-select-gcc-built-plugin
+%{rrcdir}/redhat-annobin-select-annobin-built-plugin
+
+%doc buildflags.md
 
 %changelog
 
