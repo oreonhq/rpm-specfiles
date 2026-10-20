@@ -14,6 +14,8 @@ Source0: https://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: make
+BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: binutils
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
