@@ -54,7 +54,7 @@ done
 export PYTHONHASHSEED=0
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 find %{buildroot}/usr/lib %{buildroot}%{_libdir} -maxdepth 1 -type d -name 'python3.*' | while read d; do
-  %{buildroot}%{_bindir}/python3.15 -B -m compileall -q -f -o 0 -o 1 -s %{buildroot} -p / --invalidation-mode=timestamp "$d"
+  %{buildroot}%{_bindir}/python3.15 -B -m compileall -q -f -o 0 -o 1 -s %{buildroot} -p / --invalidation-mode=timestamp -x 'bad_coding|badsyntax|lib2to3/tests/data' "$d"
 done
 
 %oreon_filelist_devel
