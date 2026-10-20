@@ -58,6 +58,7 @@ CFLAGS="-O2 -g" %{_builddir}/glibc-%{version}/configure \
   --enable-kernel=6.12.0 \
   --disable-werror \
   --disable-profile \
+  --disable-nls \
   --with-headers=%{_includedir}
 make -s -j%{?_smp_build_ncpus}
 
@@ -69,6 +70,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %oreon_filelist_devel
 
 %files -f %{_builddir}/%{name}.files
-%license COPYING
+%license COPYING.LIB COPYINGv2 COPYINGv3 COPYING.LESSERv2
 
 %files devel -f %{_builddir}/%{name}-devel.files

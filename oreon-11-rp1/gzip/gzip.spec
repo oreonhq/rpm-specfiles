@@ -11,6 +11,7 @@ Summary: gzip (GNU zip)
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/gzip/
 Source0: https://ftp.gnu.org/gnu/gzip/gzip-1.15.tar.xz
+Patch0: gzip-1.15-aarch64-head.patch
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}

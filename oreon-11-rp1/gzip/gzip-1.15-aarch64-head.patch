@@ -1,0 +1,23 @@
+include gzip.h after the system headers
+its head macro rewrites struct members named head in aarch64 asm/sigcontext.h
+which signal.h pulls in. upstream b4ed8e73401968bcad749afb0e636dd3ec205ca7
+
+--- gzip-1.15/gzip.c
++++ gzip-1.15/gzip.c
+@@ -58,7 +58,6 @@
+ 
+ #include "tailor.h"
+ 
+-#include "gzip.h"
+ #include "lzw.h"
+ #include "revision.h"
+ #include "version.h"
+@@ -99,6 +98,8 @@
+ #  include <utimens.h>
+ #endif
+ 
++#include "gzip.h"
++
+ #ifndef MAX_PATH_LEN
+ #  define MAX_PATH_LEN   1024 /* max pathname length */
+ #endif

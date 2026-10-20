@@ -3,6 +3,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
+%global __brp_python_bytecompile %{nil}
 
 Name: python3
 Version: 3.15.0
@@ -49,6 +50,11 @@ rm -f %{buildroot}%{_libdir}/*.a
 ln -sf python3 %{buildroot}%{_bindir}/python
 find %{buildroot} -type f -exec grep -I -l -E '^#! */usr/bin/env python$' {} + | while read f; do
   sed -i '1s|^#! */usr/bin/env python$|#!/usr/bin/python3|' "$f"
+done
+export PYTHONHASHSEED=0
+export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
+find %{buildroot}/usr/lib %{buildroot}%{_libdir} -maxdepth 1 -type d -name 'python3.*' | while read d; do
+  %{buildroot}%{_bindir}/python3.15 -B -m compileall -q -f -o 0 -o 1 -s %{buildroot} -p / --invalidation-mode=timestamp "$d"
 done
 
 %oreon_filelist_devel

@@ -30,6 +30,7 @@ These are the GNU binutils. These are utilities of use when dealing with binary 
 %build
 # fortify flags break this build
 unset CFLAGS CXXFLAGS LDFLAGS
+export lt_cv_sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 /lib /usr/lib"
 mkdir -p %{_builddir}/binutils-build
 cd %{_builddir}/binutils-build
 %if %{with bootstrap} || 0%{?bootstrap}
@@ -60,10 +61,6 @@ cd %{_builddir}/binutils-build
   --enable-gold=no \
   --with-system-zlib
 %endif
-find %{_builddir}/binutils-build -name libtool -exec sed -i \
-  -e 's/^hardcode_libdir_flag_spec=.*/hardcode_libdir_flag_spec=""/' \
-  -e 's/^hardcode_libdir_flag_spec_CXX=.*/hardcode_libdir_flag_spec_CXX=""/' \
-  {} +
 make -s -j%{?_smp_build_ncpus}
 
 %install
