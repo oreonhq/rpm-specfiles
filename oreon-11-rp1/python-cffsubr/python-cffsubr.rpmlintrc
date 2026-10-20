@@ -1,5 +1,0 @@
-# The symlink target is provided by a dependency on adobe-afdko
-addFilter(r" W: dangling-relative-symlink /.*/tx .*/tx$")
-# These are not real spelling errors...
-addFilter(r" spelling-error \('([Ss]ubroutinizer)s?',")
-addFilter(r" spelling-error \('tx',")

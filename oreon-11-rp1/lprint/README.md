@@ -1,3 +1,0 @@
-# lprint
-
-The lprint package

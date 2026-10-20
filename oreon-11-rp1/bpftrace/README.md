@@ -1,3 +1,0 @@
-# bpftrace
-
-The bpftrace package

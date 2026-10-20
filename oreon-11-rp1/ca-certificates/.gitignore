@@ -1,9 +1,0 @@
-*.rpm
-noarch
-clog
-/.*build.log
-/ca-certificates
-certdata.txt.orig
-codesign-release.txt
-microsoft_sign_obj_ca.pem
-

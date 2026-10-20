@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Njam
-Comment=Eat all the cookies while avoiding the badguys
-Exec=njam
-Icon=njam
-Terminal=false
-StartupNotify=false
-Type=Application
-Categories=Game;ArcadeGame;

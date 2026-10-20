@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: libstdc++-devel: /usr/include/c++/4.8.2/bits/basic_string.h
-LICENSE: GPLv3+

@@ -1,3 +1,0 @@
-# rig
-
-The rig package

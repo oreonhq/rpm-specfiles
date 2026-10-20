@@ -1,3 +1,0 @@
-# ksmtuned
-
-The ksmtuned package

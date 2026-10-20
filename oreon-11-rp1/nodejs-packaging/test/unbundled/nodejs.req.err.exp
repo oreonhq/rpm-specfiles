@@ -1,2 +1,0 @@
-WARNING: The npm(test900) dependency contains an OR (||) dependency: '^1.2 || ^2.2.
-Please manually include a versioned dependency in your spec file if necessary

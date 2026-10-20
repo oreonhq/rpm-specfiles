@@ -1,3 +1,0 @@
-# kdsoap
-
-The kdsoap package

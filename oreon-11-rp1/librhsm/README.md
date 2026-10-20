@@ -1,3 +1,0 @@
-# librhsm
-
-The librhsm package

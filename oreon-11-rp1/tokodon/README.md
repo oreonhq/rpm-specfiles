@@ -1,3 +1,0 @@
-# tokodon
-
-The tokodon package

@@ -1,5 +1,0 @@
-# .rpmlintrc
-
-# Ignore spelling errors
-addFilter("spelling-error.*")
-

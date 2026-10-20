@@ -1,7 +1,0 @@
-summary: Test plan with all Fedora tests
-discover:
-       how: fmf
-       url: https://src.fedoraproject.org/tests/nginx.git
-execute:
-       how: tmt
-

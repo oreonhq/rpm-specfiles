@@ -1,5 +1,0 @@
-summary: Default plan for cronie tests
-discover:
-    how: fmf
-execute:
-    how: tmt

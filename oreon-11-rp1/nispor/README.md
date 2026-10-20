@@ -1,3 +1,0 @@
-# nispor
-
-The nispor package

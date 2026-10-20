@@ -1,8 +1,0 @@
-csdp >> Csdp
-Semidefinite Programming
-  csdp
-  readsdpa
-  writesdpa
-  readsol
-  writesol
-  convertf

@@ -1,3 +1,0 @@
-# passt
-
-The passt package

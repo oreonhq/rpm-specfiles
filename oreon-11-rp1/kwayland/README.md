@@ -1,3 +1,0 @@
-# kwayland
-
-The kwayland package

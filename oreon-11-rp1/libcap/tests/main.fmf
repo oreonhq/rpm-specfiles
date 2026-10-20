@@ -1,9 +1,0 @@
-test: ./test.sh
-framework: beakerlib
-require:
-    - libcap
-    - libcap-devel
-    - libcmocka
-    - libcmocka-devel
-    - gcc
-    - iputils

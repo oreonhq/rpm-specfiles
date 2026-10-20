@@ -1,3 +1,0 @@
-# libnma
-
-The libnma package

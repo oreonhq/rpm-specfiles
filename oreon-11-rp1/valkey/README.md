@@ -1,3 +1,0 @@
-# valkey
-
-The valkey package

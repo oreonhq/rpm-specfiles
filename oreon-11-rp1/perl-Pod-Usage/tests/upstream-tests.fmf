@@ -1,4 +1,0 @@
-summary: Upstream tests
-component: perl-Pod-Usage
-require: perl-Pod-Usage-tests
-test: /usr/libexec/perl-Pod-Usage/test

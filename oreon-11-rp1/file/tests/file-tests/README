@@ -1,3 +1,0 @@
-./prepare.sh
-./reference.sh [--mime-type]
-./runtest.sh [--mime-type]

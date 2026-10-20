@@ -1,3 +1,0 @@
-# libheif
-
-The libheif package

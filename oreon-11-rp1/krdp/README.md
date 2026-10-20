@@ -1,3 +1,0 @@
-# krdp
-
-The krdp package

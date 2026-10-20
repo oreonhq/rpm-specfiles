@@ -1,3 +1,0 @@
-# conmon
-
-The conmon package

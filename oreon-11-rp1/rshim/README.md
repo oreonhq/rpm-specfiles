@@ -1,3 +1,0 @@
-# rshim
-
-The rshim package

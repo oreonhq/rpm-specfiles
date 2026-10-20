@@ -1,3 +1,0 @@
-# exfatprogs
-
-The exfatprogs package

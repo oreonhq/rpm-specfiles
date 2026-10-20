@@ -1,5 +1,0 @@
-#!/usr/bin/python3
-
-from gpaw.cli.main import main
-
-main()

@@ -1,3 +1,0 @@
-# vakzination
-
-The vakzination package

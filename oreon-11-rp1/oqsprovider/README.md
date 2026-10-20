@@ -1,3 +1,0 @@
-# oqsprovider
-
-The oqsprovider package

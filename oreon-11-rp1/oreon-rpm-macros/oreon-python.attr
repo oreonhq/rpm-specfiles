@@ -1,0 +1,3 @@
+%__oreon_python_provides %{_rpmconfigdir}/oreon/oreon-pythondeps --provides
+%__oreon_python_requires %{_rpmconfigdir}/oreon/oreon-pythondeps --requires
+%__oreon_python_path ^/usr/lib(64)?/python[3-9]\\.[[:digit:]]+/site-packages/[^/]+\\.dist-info$

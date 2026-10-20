@@ -1,2 +1,0 @@
-#Type Name         ID  GECOS          Home directory                         Shell
-u     magicmirror  -   "MagicMirror"  /usr/lib/node_modules/magicmirror      /sbin/nologin

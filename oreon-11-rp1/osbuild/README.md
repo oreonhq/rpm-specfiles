@@ -1,3 +1,0 @@
-# osbuild
-
-The osbuild package

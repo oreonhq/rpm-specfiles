@@ -1,5 +1,0 @@
-# SPELLING ERRORS
-addFilter(r" no-manual-page-for-binary")
-addFilter(r" incorrect-fsf-address")
-addFilter(r" spelling-error")
-addFilter(r" files-duplicate")

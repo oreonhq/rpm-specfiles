@@ -1,3 +1,0 @@
-# loupe
-
-The loupe package

@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza
-URL: Created it myself
-LICENSE: public domain

@@ -1,7 +1,0 @@
-#
-# specify extra Arguments to addrwatch
-ADDRWATCH_ARGS="-s /var/lib/addrwatch/addrwatch.sqlite"
-
-# drop priviliges at boot
-ADDRWATCH_USERNAME="addrwatch"
-

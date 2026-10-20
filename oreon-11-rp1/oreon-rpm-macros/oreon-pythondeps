@@ -1,0 +1,122 @@
+#!/usr/bin/python3
+import re
+import sys
+from pathlib import Path
+
+
+def norm(name):
+    return re.sub(r"[-_.]+", "-", name).strip("-").lower()
+
+
+def unfold(text):
+    fields = []
+    key = None
+    buf = []
+    for line in text.splitlines():
+        if line.startswith((" ", "\t")):
+            if key:
+                buf.append(line.strip())
+            continue
+        if key:
+            fields.append((key, " ".join(buf)))
+        if not line.strip() or ":" not in line:
+            key = None
+            buf = []
+            continue
+        key, val = line.split(":", 1)
+        key = key.strip().lower()
+        buf = [val.strip()]
+    if key:
+        fields.append((key, " ".join(buf)))
+    return fields
+
+
+def marker_ok(marker):
+    m = marker.lower()
+    if "extra ==" in m or "extra==" in m:
+        return False
+    if any(x in m for x in ("win32", "darwin", "aix")) and "linux" not in m:
+        return False
+    return True
+
+
+def require_lines(raw):
+    raw = raw.strip()
+    if ";" in raw:
+        body, marker = raw.split(";", 1)
+        if not marker_ok(marker):
+            return []
+    else:
+        body = raw
+    m = re.match(r"^([A-Za-z0-9_.-]+)\s*(\[[^\]]*\])?\s*(.*)$", body.strip())
+    if not m:
+        return []
+    name = norm(m.group(1))
+    rest = m.group(3).strip()
+    if not rest:
+        return [f"python3dist({name})"]
+    lines = []
+    for piece in rest.split(","):
+        piece = piece.strip()
+        mm = re.match(r"^(~=|==|!=|<=|>=|<|>)\s*(.+)$", piece)
+        if not mm:
+            continue
+        op, ver = mm.groups()
+        ver = ver.strip()
+        if op == "==":
+            lines.append(f"python3dist({name}) = {ver}")
+        elif op == "~=":
+            lines.append(f"python3dist({name}) >= {ver}")
+        elif op == "!=":
+            continue
+        else:
+            lines.append(f"python3dist({name}) {op} {ver}")
+    return lines or [f"python3dist({name})"]
+
+
+def metadata_path(arg):
+    path = Path(arg)
+    if path.is_dir():
+        path = path / "METADATA"
+    return path
+
+
+def main():
+    if len(sys.argv) < 2 or sys.argv[1] not in ("--provides", "--requires"):
+        sys.exit("usage: oreon-pythondeps --provides|--requires PATH...")
+    mode = sys.argv[1]
+    paths = sys.argv[2:]
+    if not paths:
+        paths = [line.strip() for line in sys.stdin if line.strip()]
+    seen = set()
+    for arg in paths:
+        path = metadata_path(arg)
+        if not path.is_file():
+            continue
+        name = None
+        version = None
+        reqs = []
+        for key, val in unfold(path.read_text(errors="replace")):
+            if key == "name" and name is None:
+                name = norm(val)
+            elif key == "version" and version is None:
+                version = val
+            elif key == "requires-dist":
+                reqs.append(val)
+        if mode == "--provides" and name:
+            line = f"python3dist({name})"
+            if version:
+                line += f" = {version}"
+            if line not in seen:
+                seen.add(line)
+                print(line)
+        elif mode == "--requires":
+            for raw in reqs:
+                for line in require_lines(raw):
+                    if line not in seen:
+                        seen.add(line)
+                        print(line)
+
+
+if __name__ == "__main__":
+    main()

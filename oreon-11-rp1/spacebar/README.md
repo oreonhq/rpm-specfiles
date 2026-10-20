@@ -1,3 +1,0 @@
-# spacebar
-
-The spacebar package

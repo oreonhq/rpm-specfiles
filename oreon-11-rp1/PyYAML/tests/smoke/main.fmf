@@ -1,5 +1,0 @@
-test: ./runtest.sh
-framework: beakerlib
-require:
-  - python3-pyyaml
-duration: 5m

@@ -1,5 +1,0 @@
-summary: Tests
-discover:
-  how: fmf
-execute:
-  how: tmt

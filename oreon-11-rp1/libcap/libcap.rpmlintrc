@@ -1,2 +1,0 @@
-addFilter('.*static-library-without-debuginfo.*')
-addFilter('.*pam-unauthorized-module.*')

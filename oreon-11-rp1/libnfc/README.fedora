@@ -1,2 +1,0 @@
-To blacklist kernel modules not to interfere with libnfc, copy
-blacklist-libnfc.conf file to /etc/modprobe.d/

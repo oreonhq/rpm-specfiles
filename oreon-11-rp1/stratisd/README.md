@@ -1,3 +1,0 @@
-# stratisd
-
-The stratisd package

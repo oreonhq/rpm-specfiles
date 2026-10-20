@@ -1,2 +1,0 @@
-# Oidentd startup options. See oidentd(8) man page for a complete list.
-OIDENTD_OPTIONS="-q -u oidentd -g oidentd"

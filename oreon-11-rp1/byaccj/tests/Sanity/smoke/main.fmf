@@ -1,6 +1,0 @@
-summary: byaccj smoke test
-description: |
-  Test basic functionality of byaccj.
-require:
-  - byaccj
-  - java-devel

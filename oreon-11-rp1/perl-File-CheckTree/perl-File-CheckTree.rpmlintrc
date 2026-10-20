@@ -1,3 +1,0 @@
-from Config import *
-addFilter("spelling-error .* (cd|prepended)");
-addFilter("-tests.noarch: W: no-documentation");

@@ -1,7 +1,0 @@
-/.build-*.log
-/*.src.rpm
-/gnome-keyring-3.?.?/
-/x86_64/
-/gnome-keyring-*.tar.bz2
-/gnome-keyring-*.tar.xz
-/gnome-keyring-*-build

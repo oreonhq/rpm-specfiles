@@ -1,6 +1,0 @@
-# SPELLING ERRORS
-addFilter(r" no-manual-page-for-binary ykman")
-addFilter(r" description-shorter-than-summary")
-addFilter(r" no-documentation")
-#addFilter(r" strange-permission")
-addFilter(r" incoherent-version-in-changelog")

@@ -1,5 +1,0 @@
-summary: javapackages-bootstrap smoke test
-description: |
-  Test basic functionality of javapackages-bootstrap.
-require:
-  - javapackages-bootstrap

@@ -1,5 +1,0 @@
-AUTHOR: Christian Herdtweck
-URL: None (self-created)
-LICENSE: public domain
-
-(based on windows isp files)

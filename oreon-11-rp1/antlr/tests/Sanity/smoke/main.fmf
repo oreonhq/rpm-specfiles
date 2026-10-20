@@ -1,5 +1,0 @@
-summary: antlr smoke test
-description: |
-  Test basic functionality of antlr.
-require:
-  - antlr-tool

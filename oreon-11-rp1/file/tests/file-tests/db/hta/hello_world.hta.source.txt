@@ -1,3 +1,0 @@
-AUTHOR: Wikipedia
-URL: http://en.wikipedia.org/wiki/HTML_Application
-LICENSE: Creative Commons Attribution-ShareAlike License

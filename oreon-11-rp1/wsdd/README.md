@@ -1,3 +1,0 @@
-# wsdd
-
-The wsdd package

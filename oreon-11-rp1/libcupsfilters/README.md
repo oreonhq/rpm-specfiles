@@ -1,3 +1,0 @@
-# libcupsfilters
-
-The libcupsfilters package

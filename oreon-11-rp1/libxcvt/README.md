@@ -1,3 +1,0 @@
-# libxcvt
-
-The libxcvt package

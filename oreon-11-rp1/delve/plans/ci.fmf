@@ -1,6 +1,0 @@
-summary: CI Gating Plan
-discover:
-    how: fmf
-    url: https://src.fedoraproject.org/tests/delve
-execute:
-    how: tmt

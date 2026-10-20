@@ -1,2 +1,0 @@
-summary: Install from requirements
-test: ./test_install.sh requirements

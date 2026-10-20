@@ -1,8 +1,0 @@
-/var/log/ufdbguard/*.log {
-	missingok
-	monthly
-	notifempty
-	compress
-	copytruncate
-	su ufdb ufdb
-}

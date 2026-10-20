@@ -1,5 +1,0 @@
----
-annocheck:
-    jobs:
-        # Ignore the branch-test as for golang binaries it has no use
-        hardened: --ignore-unknown --skip-branch-test --verbose

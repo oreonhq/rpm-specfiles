@@ -1,2 +1,0 @@
-summary: Install from pip-tools
-test: ./test_install.sh pip-tools

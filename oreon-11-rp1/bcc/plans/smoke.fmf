@@ -1,8 +1,0 @@
-summary: Smoke tests
-discover:
-    how: fmf
-    test:
-    - /versions
-    - /basics
-execute:
-    how: tmt

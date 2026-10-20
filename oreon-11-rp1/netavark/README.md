@@ -1,3 +1,0 @@
-# netavark
-
-The netavark package

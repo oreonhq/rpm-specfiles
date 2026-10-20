@@ -1,3 +1,0 @@
-# ffmpegthumbs
-
-The ffmpegthumbs package

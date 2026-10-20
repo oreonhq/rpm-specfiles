@@ -1,8 +1,0 @@
-[Unit]
-Description=Machine Check Exception Logging Daemon
-
-[Service]
-ExecStart=/usr/sbin/mcelog --ignorenodev --daemon --foreground
-
-[Install]
-WantedBy=multi-user.target

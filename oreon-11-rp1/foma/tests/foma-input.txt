@@ -1,3 +1,0 @@
-def Animals c a t | d o g ;
-regex Animals+ ;
-print defined

@@ -1,3 +1,0 @@
-# debugedit
-
-The debugedit package

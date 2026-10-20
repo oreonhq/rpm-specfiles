@@ -1,3 +1,0 @@
-# tecla
-
-The tecla package

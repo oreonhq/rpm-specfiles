@@ -1,3 +1,0 @@
-# greenboot
-
-The greenboot package

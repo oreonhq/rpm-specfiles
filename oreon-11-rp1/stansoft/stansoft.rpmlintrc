@@ -1,3 +1,0 @@
-addFilter('explicit-lib-dependency libpq')
-addFilter('non-standard-uid /var/lib/stansoft stansoft')
-addFilter('non-standard-gid /var/lib/stansoft stansoft')

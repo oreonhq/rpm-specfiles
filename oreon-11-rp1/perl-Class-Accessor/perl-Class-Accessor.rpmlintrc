@@ -1,2 +1,0 @@
-# Perl OO
-addFilter("spelling-error \('(accessors|automagically|mutators)',")

@@ -1,3 +1,0 @@
-# micropipenv
-
-The micropipenv package

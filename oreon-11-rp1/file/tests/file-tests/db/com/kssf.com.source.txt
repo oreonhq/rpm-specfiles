@@ -1,2 +1,0 @@
-URL: ftp://ftp.ibiblio.org/pub/micro/pc-stuff/freedos/files/dos/command/0.83/com083b26x.zip
-License: GPL

@@ -1,6 +1,0 @@
-summary: Run upstream tests
-component: [isns-utils]
-require: [make, python3, openssl]
-test: >
-    cd $TMT_SOURCE_DIR/open-isns-*/tests &&
-    make tests-as-installed

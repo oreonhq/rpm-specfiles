@@ -1,0 +1,46 @@
+%_oreon_helper /usr/libexec/oreon-rpm-macros/oreon-build
+%_oreon_gpgverify /usr/libexec/oreon-rpm-macros/oreon-gpgverify
+
+%_oreon_cflags -O2 -g -pipe -Wall -Werror=format-security -fexceptions -fstack-protector-strong -Wp,-D_FORTIFY_SOURCE=3
+%_oreon_ldflags -Wl,-z,relro -Wl,-z,now -Wl,--as-needed
+%_oreon_jobs %{?_smp_build_ncpus}%{!?_smp_build_ncpus:1}
+%_oreon_builddir oreon-build
+%_oreon_cargo_registry %{_datadir}/oreon-cargo/registry
+
+%_oreon_flags CFLAGS='%{_oreon_cflags}' CXXFLAGS='%{_oreon_cflags}' FFLAGS='%{_oreon_cflags}' FCFLAGS='%{_oreon_cflags}' LDFLAGS='%{_oreon_ldflags}'
+
+%_oreon_paths --prefix %{_prefix} --exec-prefix %{_exec_prefix} --bindir %{_bindir} --sbindir %{_sbindir} --libdir %{_libdir} --libexecdir %{_libexecdir} --includedir %{_includedir} --datadir %{_datadir} --sysconfdir %{_sysconfdir} --sharedstatedir %{_sharedstatedir} --localstatedir %{_localstatedir} --mandir %{_mandir} --infodir %{_infodir} --builddir %{_oreon_builddir} --jobs %{_oreon_jobs} --cargo-registry %{_oreon_cargo_registry}
+
+%oreon_cmake %{_oreon_flags} %{_oreon_helper} cmake %{_oreon_paths} --
+%oreon_cmake_build %{_oreon_flags} %{_oreon_helper} cmake-build %{_oreon_paths} --
+%oreon_cmake_install %{_oreon_flags} %{_oreon_helper} cmake-install %{_oreon_paths} --destdir %{buildroot} --
+%oreon_ctest %{_oreon_helper} ctest %{_oreon_paths} --
+
+%oreon_meson %{_oreon_flags} %{_oreon_helper} meson %{_oreon_paths} --
+%oreon_meson_build %{_oreon_flags} %{_oreon_helper} meson-build %{_oreon_paths} --
+%oreon_meson_install %{_oreon_flags} %{_oreon_helper} meson-install %{_oreon_paths} --destdir %{buildroot} --
+%oreon_meson_test %{_oreon_helper} meson-test %{_oreon_paths} --
+
+%oreon_configure %{_oreon_flags} %{_oreon_helper} configure %{_oreon_paths} --
+%oreon_make %{_oreon_flags} %{_oreon_helper} make %{_oreon_paths} --
+%oreon_make_install %{_oreon_flags} %{_oreon_helper} make-install %{_oreon_paths} --destdir %{buildroot} --
+
+%oreon_py_build %{_oreon_flags} %{_oreon_helper} py-build %{_oreon_paths} --
+%oreon_py_install %{_oreon_helper} py-install %{_oreon_paths} --destdir %{buildroot} --
+%oreon_py_save_files %{_oreon_helper} py-save %{_oreon_paths} --destdir %{buildroot} --out %{_builddir}/%{name}-py.files --
+%oreon_py_files %{_builddir}/%{name}-py.files
+
+%oreon_cargo_prep %{_oreon_flags} %{_oreon_helper} cargo-prep %{_oreon_paths} --
+%oreon_cargo_build %{_oreon_flags} %{_oreon_helper} cargo-build %{_oreon_paths} --
+%oreon_cargo_test %{_oreon_flags} %{_oreon_helper} cargo-test %{_oreon_paths} --
+%oreon_cargo_install %{_oreon_flags} %{_oreon_helper} cargo-install %{_oreon_paths} --destdir %{buildroot} --
+%oreon_cargo_install_lib %{_oreon_flags} %{_oreon_helper} cargo-install-lib %{_oreon_paths} --destdir %{buildroot} --
+
+%oreon_gpgverify %{_oreon_gpgverify}
+
+%oreon_filelist %{_oreon_helper} files %{_oreon_paths} --destdir %{buildroot} --out %{_builddir}/%{name}.files --
+%oreon_filelist_devel %{_oreon_helper} files %{_oreon_paths} --destdir %{buildroot} --out %{_builddir}/%{name}.files --devel-out %{_builddir}/%{name}-devel.files --
+
+%oreon_bootstrap %{nil}
+
+%oreon_sha256 %{!?source0_hash:%{error:source0_hash is not set}}echo '%{source0_hash}  %{SOURCE0}' | sha256sum -c -

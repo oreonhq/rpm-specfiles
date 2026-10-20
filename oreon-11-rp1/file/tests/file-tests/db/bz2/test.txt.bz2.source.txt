@@ -1,3 +1,0 @@
-AUTHOR: Thomas Jarosch
-URL: Created it myself
-LICENSE: public domain

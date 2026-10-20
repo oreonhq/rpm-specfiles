@@ -1,3 +1,0 @@
-# prrte
-
-The prrte package

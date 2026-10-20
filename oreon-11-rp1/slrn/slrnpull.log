@@ -1,4 +1,0 @@
-/var/spool/slrnpull/log {
-	missingok
-	su news news
-}

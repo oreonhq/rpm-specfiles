@@ -1,5 +1,0 @@
-summary: Basic test for nkf
-require:
-  - nkf
-test: ./test.sh
-framework: beakerlib

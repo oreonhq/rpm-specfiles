@@ -1,9 +1,0 @@
-[Unit]
-Description=MySQL Backup Manager Activation Socket
-
-[Socket]
-ListenStream=25300
-Accept=true
-
-[Install]
-WantedBy=sockets.target

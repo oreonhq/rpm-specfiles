@@ -1,3 +1,0 @@
-test: bash ./runtest.sh
-framework: beakerlib
-duration: 15m

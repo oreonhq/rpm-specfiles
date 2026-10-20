@@ -1,3 +1,0 @@
-# udica
-
-The udica package

@@ -1,5 +1,0 @@
-#!/usr/bin/python3
-if __name__ == '__main__':
-    import sys
-    sys.path.insert(0, '/usr/share/pcapdiff')
-    import pcapdiff

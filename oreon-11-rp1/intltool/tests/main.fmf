@@ -1,6 +1,0 @@
-summary: Run intltool test
-test: ./test.sh
-framework: beakerlib
-require:
-  - intltool
-  - python3

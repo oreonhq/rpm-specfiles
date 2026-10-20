@@ -1,2 +1,0 @@
-addFilter(r'hardcoded-library-path')
-addFilter(r'spelling-error.*shiftfs')

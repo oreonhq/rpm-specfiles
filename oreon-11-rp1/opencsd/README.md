@@ -1,3 +1,0 @@
-# opencsd
-
-The opencsd package

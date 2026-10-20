@@ -1,0 +1,88 @@
+#!/usr/bin/python3
+import sys
+from pathlib import Path
+from urllib.parse import unquote
+
+
+def norm(name):
+    out = []
+    prev = False
+    for ch in name.lower():
+        if ch in "-_.":
+            if not prev:
+                out.append("-")
+            prev = True
+        else:
+            out.append(ch)
+            prev = False
+    return "".join(out).strip("-")
+
+
+def site_packages(buildroot):
+    roots = []
+    for lib in ("usr/lib", "usr/lib64"):
+        base = buildroot / lib
+        if not base.is_dir():
+            continue
+        for child in base.glob("python3*/site-packages"):
+            if child.is_dir():
+                roots.append(child)
+    return roots
+
+
+def record_files(distinfo):
+    record = distinfo / "RECORD"
+    if not record.is_file():
+        return []
+    files = []
+    for line in record.read_text(errors="replace").splitlines():
+        if not line.strip():
+            continue
+        path = unquote(line.split(",", 1)[0])
+        if path and not path.endswith("/"):
+            files.append(path)
+    return files
+
+
+def matches(distinfo, wanted):
+    dist_name = distinfo.name.split("-", 1)[0]
+    if norm(dist_name) in wanted:
+        return True
+    for path in record_files(distinfo):
+        top = path.split("/", 1)[0]
+        if top.endswith(".py"):
+            top = top[:-3]
+        if norm(top) in wanted:
+            return True
+    return False
+
+
+def main():
+    if len(sys.argv) < 3:
+        sys.exit("usage: oreon-pyfiles BUILDROOT MODULE [MODULE...]")
+    buildroot = Path(sys.argv[1]).resolve()
+    wanted = {norm(n) for n in sys.argv[2:]}
+    emitted = []
+    seen = set()
+    for sp in site_packages(buildroot):
+        for distinfo in sorted(sp.glob("*.dist-info")):
+            if not matches(distinfo, wanted):
+                continue
+            for rel in record_files(distinfo):
+                full = sp / rel
+                if not full.is_file():
+                    continue
+                try:
+                    item = "/" + str(full.relative_to(buildroot))
+                except ValueError:
+                    continue
+                if item not in seen:
+                    seen.add(item)
+                    emitted.append(item)
+    if not emitted:
+        sys.exit("oreon-pyfiles: no files matched " + " ".join(sys.argv[2:]))
+    print("\n".join(emitted))
+
+
+if __name__ == "__main__":
+    main()

@@ -1,8 +1,0 @@
---- crc-any-3.0.1/Cargo.toml
-+++ crc-any-3.0.1/Cargo.toml
-@@ -62,5 +62,3 @@
- version = "0.9"
- optional = true
- 
--[dev-dependencies.bencher]
--version = "0.1.5"

@@ -1,3 +1,0 @@
-PURPOSE of /CoreOS/cronie/Regression/anacron-segfaults-with-certain-config-data
-Description: anacron segfaults with certain config data
-Author: Robin Hack <rhack@redhat.com>

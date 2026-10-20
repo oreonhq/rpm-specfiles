@@ -1,6 +1,0 @@
-diff -up a/pyproject.toml b/pyproject.toml
---- a/pyproject.toml
-+++ b/pyproject.toml
-@@ -28,1 +28,1 @@
--lxml = "^4.5.0 || ^5.0.0"
-+lxml = ">=4.5.0"

@@ -1,3 +1,0 @@
-# vdo
-
-The vdo package

@@ -1,3 +1,0 @@
-# composefs
-
-The composefs package

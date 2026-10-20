@@ -1,3 +1,0 @@
-%fpc_arches %{ix86} %{arm} x86_64 ppc64le aarch64
-# fpc_arches lists architectures where the Free Pascal Compiler is shipped
-# in this distribution.

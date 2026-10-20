@@ -1,3 +1,0 @@
-# frr
-
-The frr package

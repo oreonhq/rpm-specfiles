@@ -1,4 +1,0 @@
-# toxiproxy configuration options
-TOXIPROXY_PORT="8474"
-TOXIPROXY_HOST="localhost"
-#TOXIPROXY_OPTS=""

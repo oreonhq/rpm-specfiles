@@ -1,3 +1,0 @@
-# moditect
-
-The moditect package

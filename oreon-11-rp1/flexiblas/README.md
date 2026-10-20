@@ -1,3 +1,0 @@
-# flexiblas
-
-The flexiblas package

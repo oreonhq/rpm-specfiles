@@ -1,5 +1,0 @@
-require:
-- fontforge
-test: bash ./run_tests.sh
-framework: shell
-

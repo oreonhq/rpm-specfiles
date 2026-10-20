@@ -1,2 +1,0 @@
-AUTHOR: Joerg Jenderek <joerg.jen.der.ek@gmx.net>
-LICENSE: BSD

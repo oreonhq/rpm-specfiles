@@ -1,1 +1,0 @@
-addFilter('unversioned-explicit-provides dnf5-command')

@@ -1,3 +1,0 @@
-# libadwaita
-
-The libadwaita package

@@ -1,1 +1,0 @@
-addFilter(r"spelling-error \('(gzip|brotli|zstd)',")

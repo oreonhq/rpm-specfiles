@@ -1,4 +1,0 @@
-"BlueOak-1.0.0"
-"GPL-3.0-or-later"
-"ISC"
-"MIT"

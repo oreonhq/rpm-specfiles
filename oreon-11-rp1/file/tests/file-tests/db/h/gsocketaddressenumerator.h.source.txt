@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: glib2: gsocketaddressenumerator.h
-LICENSE: GPLv2+

@@ -1,6 +1,0 @@
-#!/bin/bash
-# Daily Bugzilla collectstats cron job run
-
-cd /usr/share/bugzilla
-./collectstats.pl
-

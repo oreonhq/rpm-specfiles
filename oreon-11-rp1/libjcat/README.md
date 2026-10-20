@@ -1,3 +1,0 @@
-# libjcat
-
-The libjcat package

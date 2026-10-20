@@ -1,2 +1,0 @@
-summary: validates pkg-configs presence.
-description: ensures libcap.pc and libpsx.pc are installed

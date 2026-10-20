@@ -1,3 +1,0 @@
-# marshalparser
-
-The marshalparser package

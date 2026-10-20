@@ -1,3 +1,0 @@
-# Welcome to first.aprs.net (aprs core server).
-# Direct comments to cbyam at virginia.edu . Type ctrl-D to disconnect.
-

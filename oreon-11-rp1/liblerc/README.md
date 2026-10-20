@@ -1,3 +1,0 @@
-# liblerc
-
-The liblerc package

@@ -1,3 +1,0 @@
-# cepces
-
-The cepces package

@@ -1,3 +1,0 @@
-# libopenmpt
-
-The libopenmpt package

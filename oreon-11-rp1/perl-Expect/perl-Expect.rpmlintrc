@@ -1,2 +1,0 @@
-# *nix terms
-addFilter("E: spelling-error \('(fsck|passwd|rlogin)',")

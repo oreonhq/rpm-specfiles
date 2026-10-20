@@ -1,3 +1,0 @@
-# libyang
-
-The libyang package

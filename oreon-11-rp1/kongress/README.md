@@ -1,3 +1,0 @@
-# kongress
-
-The kongress package

@@ -1,3 +1,0 @@
-AUTHOR: Ondrej Dubaj <odubaj@redhat.com>
-URL: Created it myself
-LICENSE: public domain

@@ -1,3 +1,0 @@
-# libbpf
-
-The libbpf package

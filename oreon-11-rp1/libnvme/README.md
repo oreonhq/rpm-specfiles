@@ -1,3 +1,0 @@
-# libnvme
-
-The libnvme package

@@ -1,3 +1,0 @@
-AUTHOR: Christian Herdtweck, intra2net
-URL: self-created
-license: public domain

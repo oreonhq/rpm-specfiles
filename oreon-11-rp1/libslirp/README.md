@@ -1,3 +1,0 @@
-# libslirp
-
-The libslirp package

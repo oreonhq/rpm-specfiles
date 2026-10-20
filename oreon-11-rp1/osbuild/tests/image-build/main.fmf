@@ -1,4 +1,0 @@
-summary: Build simple image using osbuild
-tag: integration-test
-duration: 1h
-test: ./build-images.sh ./manifests

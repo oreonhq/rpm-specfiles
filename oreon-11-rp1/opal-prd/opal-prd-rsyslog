@@ -1,3 +1,0 @@
-if $programname == 'opal-prd' then /var/log/opal-prd.log
-if $programname == 'opal-prd' and $syslogseverity <= 4 then /var/log/messages
-if $programname == 'opal-prd' then stop

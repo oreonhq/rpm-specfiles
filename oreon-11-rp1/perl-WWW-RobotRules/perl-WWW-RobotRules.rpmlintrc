@@ -1,3 +1,0 @@
-from Config import *
-addFilter("spelling-error .* (html|http|robotstxt|txt|wc)");
-addFilter("-tests.noarch: W: no-documentation");

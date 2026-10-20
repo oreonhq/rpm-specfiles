@@ -1,2 +1,0 @@
-%__cargo_vendor_path     ^%{_defaultlicensedir}(/[^/]+)+/cargo-vendor.txt$
-%__cargo_vendor_provides %{_rpmconfigdir}/cargo_vendor.prov

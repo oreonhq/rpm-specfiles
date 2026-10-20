@@ -1,5 +1,0 @@
-require:
-- hunspell
-- hunspell-de
-test: bash ./run_tests.sh
-framework: shell

@@ -1,5 +1,0 @@
-# stat timestamp for git snapshots needs %{_sourcedir}
-addFilter(r'ruby\.(spec|src):\d+: E: use-of-RPM_SOURCE_DIR$')
-
-# psych prerelease tilde version is macro soup rpmlint cannot expand
-addFilter(r'ruby\.(spec|src):579: W: unversioned-explicit-provides ')

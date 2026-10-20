@@ -1,3 +1,0 @@
-# xrdb
-
-The xrdb package

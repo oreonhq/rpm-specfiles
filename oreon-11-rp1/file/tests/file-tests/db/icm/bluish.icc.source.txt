@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: colord: /usr/share/color/icc/colord/Bluish.icc
-LICENSE: GPLv2+

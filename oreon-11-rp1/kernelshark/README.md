@@ -1,3 +1,0 @@
-# kernelshark
-
-The kernelshark package

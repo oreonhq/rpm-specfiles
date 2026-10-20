@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: Part of NCBI-blast+ project
-LICENSE: MIT

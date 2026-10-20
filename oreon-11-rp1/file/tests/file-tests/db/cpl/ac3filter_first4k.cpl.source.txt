@@ -1,3 +1,0 @@
-AUTHOR: Alexander Vigovsky 
-URL: http://ac3filter.sourceforge.net/ac3filter_eng.html
-LICENSE: GNU General Public Licence v2

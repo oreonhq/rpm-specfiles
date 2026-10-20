@@ -1,3 +1,0 @@
-# koko
-
-The koko package

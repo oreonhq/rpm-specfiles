@@ -1,9 +1,0 @@
-[Unit]
-Description=MySQL Backup Manager
-After=local-fs.target
-
-[Service]
-User=mysql
-Group=mysql
-ExecStart=/usr/share/mysql-zrm/plugins/socket-server.pl
-StandardInput=socket

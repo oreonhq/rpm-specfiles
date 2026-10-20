@@ -1,3 +1,0 @@
-# snapshot
-
-The snapshot package

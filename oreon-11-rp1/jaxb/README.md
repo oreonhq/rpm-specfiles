@@ -1,3 +1,0 @@
-# jaxb
-
-The jaxb package

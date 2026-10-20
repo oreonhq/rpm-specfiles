@@ -1,3 +1,0 @@
-# plasmatube
-
-The plasmatube package

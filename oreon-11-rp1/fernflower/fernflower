@@ -1,7 +1,0 @@
-#!/bin/bash
-. /usr/share/java-utils/java-functions
-
-MAIN_CLASS=org.jetbrains.java.decompiler.main.decompiler.ConsoleDecompiler
-
-set_classpath fernflower
-run ${@}

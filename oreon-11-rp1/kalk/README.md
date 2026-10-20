@@ -1,3 +1,0 @@
-# kalk
-
-The kalk package

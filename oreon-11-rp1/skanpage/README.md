@@ -1,3 +1,0 @@
-# skanpage
-
-The skanpage package

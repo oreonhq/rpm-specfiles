@@ -1,2 +1,0 @@
-# There are no upstream tests
-addFilter('no-%check-section')

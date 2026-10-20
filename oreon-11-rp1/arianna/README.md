@@ -1,3 +1,0 @@
-# arianna
-
-An ebook reader and library management app supporting ".epub" files. Arianna discovers your books automatically, and sorts them by categories, genres and authors.

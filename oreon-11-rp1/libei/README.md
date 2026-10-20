@@ -1,3 +1,0 @@
-# libei
-
-The libei package

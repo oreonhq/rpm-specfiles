@@ -1,2 +1,0 @@
-summary: Smoke test
-test: ./basic-test.sh

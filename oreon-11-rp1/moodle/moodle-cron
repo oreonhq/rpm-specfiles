@@ -1,3 +1,0 @@
-#!/bin/sh
-
-[ -f /var/lock/subsys/moodle ] && /usr/bin/php /var/www/moodle/public/admin/cli/cron.php

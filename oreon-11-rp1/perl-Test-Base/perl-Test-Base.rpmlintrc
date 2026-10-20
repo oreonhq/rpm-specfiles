@@ -1,2 +1,0 @@
-addFilter('spelling-error .*%description -l en_US subclassing -> ')
-addFilter('-tests\.noarch: W: no-documentation')

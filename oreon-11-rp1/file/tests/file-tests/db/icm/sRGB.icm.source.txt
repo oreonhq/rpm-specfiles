@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: Part of python-imaging-Pillow package
-LICENSE: MIT

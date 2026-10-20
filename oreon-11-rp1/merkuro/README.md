@@ -1,3 +1,0 @@
-# merkuro
-
-The merkuro package

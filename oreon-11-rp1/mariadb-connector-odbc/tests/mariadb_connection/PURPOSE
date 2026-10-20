@@ -1,3 +1,0 @@
-PURPOSE of mariadb_connection
-Description: Tries to connect to MariaDB via unixODBC package
-Author: Michal Schorm <mschorm@redhat.com>

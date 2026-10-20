@@ -1,3 +1,0 @@
-INCLUDEPATH *= $$QMAKE_INCDIR_QT/QtSolutions
-DEPENDPATH  *= $$QMAKE_INCDIR_QT/QtSolutions
-LIBS *= -lQt5Solutions_IOCompressor-2.3

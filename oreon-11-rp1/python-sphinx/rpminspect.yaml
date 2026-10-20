@@ -1,4 +1,0 @@
-# exclude XML template (not always valid) from XML validity check:
-xml:
-    ignore:
-        - /usr/lib/python*/site-packages/sphinx/themes/basic/opensearch.xml

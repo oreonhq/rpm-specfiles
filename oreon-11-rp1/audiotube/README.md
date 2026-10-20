@@ -1,3 +1,0 @@
-# audiotube
-
-The audiotube package

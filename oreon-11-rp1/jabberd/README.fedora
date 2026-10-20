@@ -1,9 +1,0 @@
-To make the authentication against PAM actually work one of the systemd
-service files needs to altered. The c2s part of jabberd needs to run as
-root to be able to read /etc/shadow. One way to accomplish this is to
-create a jabberd-c2s.service file in /etc/systemd/system with
-following content:
-
-.include /usr/lib/systemd/system/jabberd-c2s.service
-[Service]
-User=root

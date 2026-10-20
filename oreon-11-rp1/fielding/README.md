@@ -1,3 +1,0 @@
-# fielding
-
-The fielding package

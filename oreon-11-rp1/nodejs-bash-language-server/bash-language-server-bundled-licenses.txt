@@ -1,3 +1,0 @@
-"BSD-2-Clause"
-"ISC"
-"MIT"

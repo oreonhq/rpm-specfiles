@@ -1,3 +1,0 @@
-# kaidan
-
-The kaidan package

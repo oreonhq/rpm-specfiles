@@ -1,3 +1,0 @@
-# kclock
-
-The kclock package

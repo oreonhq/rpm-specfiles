@@ -1,3 +1,0 @@
-# jurand
-
-The jurand package

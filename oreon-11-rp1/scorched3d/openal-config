@@ -1,4 +1,0 @@
-#!/bin/bash
-
-pkg-config "$@" openal
-exit $?

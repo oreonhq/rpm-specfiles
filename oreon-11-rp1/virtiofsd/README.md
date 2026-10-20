@@ -1,3 +1,0 @@
-# virtiofsd
-
-The virtiofsd package

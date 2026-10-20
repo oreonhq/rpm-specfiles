@@ -1,3 +1,0 @@
-# ignition
-
-The ignition package

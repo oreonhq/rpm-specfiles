@@ -1,3 +1,0 @@
-You have to edit /etc/mogile/mogilefsd.conf and to configure database
-management server of your choice (MySQL, PostgreSQL, SQLite) before starting
-mogilefsd service.

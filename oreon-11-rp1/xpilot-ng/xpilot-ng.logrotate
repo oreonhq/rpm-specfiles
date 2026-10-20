@@ -1,5 +1,0 @@
-/var/log/xpilot.log {
-    copytruncate
-    notifempty
-    missingok
-}

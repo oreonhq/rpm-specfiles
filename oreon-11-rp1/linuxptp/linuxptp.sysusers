@@ -1,3 +1,0 @@
-#Type Name     ID    GECOS                  Home directory  Shell
-u     linuxptp -     "linuxptp system user" /run/ptp        /sbin/nologin
-m     linuxptp clock

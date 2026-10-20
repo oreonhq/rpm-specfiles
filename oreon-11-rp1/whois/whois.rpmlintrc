@@ -1,3 +1,0 @@
-addFilter('name-repeated-in-summary WHOIS')
-addFilter('spelling-error .* (Gettext|networksolutions|arin)')
-addFilter('whois-nls\.noarch: W: no-documentation')

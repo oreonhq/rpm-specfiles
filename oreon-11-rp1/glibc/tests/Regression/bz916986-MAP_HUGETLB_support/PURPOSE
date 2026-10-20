@@ -1,3 +1,0 @@
-PURPOSE of /tools/glibc/Regression/bz916986-MAP_HUGETLB_support
-Description: Verifies that MAP_HUGETLB is defined in sys/mman.h.
-Author: Arjun Shankar <ashankar@redhat.com>

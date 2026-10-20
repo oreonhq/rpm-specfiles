@@ -1,3 +1,0 @@
-# marknote
-
-The marknote package

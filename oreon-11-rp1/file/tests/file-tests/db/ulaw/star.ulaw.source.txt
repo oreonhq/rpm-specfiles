@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: Part of asterisk project
-LICENSE: GPLv2

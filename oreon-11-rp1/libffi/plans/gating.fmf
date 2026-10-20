@@ -1,6 +1,0 @@
-summary: Gating testplan for libffi
-discover:
-    how: fmf
-execute:
-    how: tmt
-

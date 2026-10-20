@@ -1,5 +1,0 @@
-summary: Migration tests of private dicts from anthy to anthy-unicode
-test: ./test.sh
-framework: beakerlib
-require:
-    - anthy-unicode-devel

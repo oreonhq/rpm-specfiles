@@ -1,3 +1,0 @@
-# kitinerary
-
-The kitinerary package

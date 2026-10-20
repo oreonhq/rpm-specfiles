@@ -1,7 +1,0 @@
-/var/log/vultures/vultures_log.txt {
-    monthly
-    nocreate
-    notifempty
-    missingok
-    su root vultures
-}

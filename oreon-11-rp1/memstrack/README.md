@@ -1,3 +1,0 @@
-# memstrack
-
-The memstrack package

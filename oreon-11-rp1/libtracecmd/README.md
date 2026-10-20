@@ -1,3 +1,0 @@
-# libtracecmd
-
-The libtracecmd package

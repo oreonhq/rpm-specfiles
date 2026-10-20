@@ -1,5 +1,0 @@
-summary: Smoke test
-test: AUTOTRACE=/usr/bin/autotrace sh ./runtests.sh
-path: /tests
-require:
-  - autotrace

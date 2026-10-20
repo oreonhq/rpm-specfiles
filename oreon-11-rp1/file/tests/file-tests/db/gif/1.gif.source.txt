@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: Created it from http://www.isc.tamu.edu/~lewing/linux/
-LICENSE: public domain

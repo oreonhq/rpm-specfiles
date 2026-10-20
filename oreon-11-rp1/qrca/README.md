@@ -1,3 +1,0 @@
-# qrca
-
-The qrca package

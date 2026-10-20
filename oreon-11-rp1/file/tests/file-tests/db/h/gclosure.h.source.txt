@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: glib2: /usr/include/glib-2.0/gobject/gclosure.h
-LICENSE: GPLv2+

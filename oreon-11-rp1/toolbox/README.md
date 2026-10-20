@@ -1,3 +1,0 @@
-# toolbox
-
-The toolbox package

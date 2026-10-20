@@ -1,3 +1,0 @@
-# catatonit
-
-The catatonit package

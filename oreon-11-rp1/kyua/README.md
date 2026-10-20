@@ -1,3 +1,0 @@
-# kyua
-
-The kyua package

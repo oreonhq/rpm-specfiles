@@ -1,3 +1,0 @@
-# mdevctl
-
-The mdevctl package

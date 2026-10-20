@@ -1,6 +1,0 @@
-summary: Run the tests from libvoikko
-discover:
-    how: fmf
-    url: https://src.fedoraproject.org/rpms/libvoikko.git
-execute:
-    how: tmt

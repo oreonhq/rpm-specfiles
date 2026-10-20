@@ -1,4 +1,0 @@
-[tests]
-run = false
-comments = ["crate contains no compilable or runnable tests"]
-

@@ -1,3 +1,0 @@
-# libdex
-
-The libdex package

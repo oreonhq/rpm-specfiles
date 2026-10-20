@@ -1,3 +1,0 @@
-# kasts
-
-The kasts package

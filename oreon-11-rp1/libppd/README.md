@@ -1,3 +1,0 @@
-# libppd
-
-The libppd package

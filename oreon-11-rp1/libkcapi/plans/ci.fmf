@@ -1,5 +1,0 @@
-summary: Run CI tests
-discover:
-    how: fmf
-execute:
-    how: tmt

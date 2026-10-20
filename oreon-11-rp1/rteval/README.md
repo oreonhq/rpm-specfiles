@@ -1,3 +1,0 @@
-# rteval
-
-The rteval package

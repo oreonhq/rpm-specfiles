@@ -1,3 +1,0 @@
-test: |
-    cd $TMT_PLAN_DATA/tests &&
-    TEST_ARTIFACTS=${TMT_TEST_DATA} ./mocktest.sh python-userpath

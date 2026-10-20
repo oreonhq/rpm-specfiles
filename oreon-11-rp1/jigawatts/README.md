@@ -1,3 +1,0 @@
-# jigawatts
-
-The jigawatts package

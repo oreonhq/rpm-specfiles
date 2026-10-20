@@ -1,7 +1,0 @@
-%folly_toolchain \
-%bcond_with toolchain_clang \
-\
-%if %{with toolchain_clang} \
-%global toolchain clang \
-%endif \
-%{nil}

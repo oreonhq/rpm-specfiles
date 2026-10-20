@@ -1,3 +1,0 @@
-# libpanel
-
-The libpanel package

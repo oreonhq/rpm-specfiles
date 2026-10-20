@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=VIM Pal
-Comment=Separate application providing a file tree for VIM
-Exec=vimpal
-Icon=vimpal
-Terminal=false
-Type=Application
-Categories=Utility;Development;

@@ -1,2 +1,0 @@
-summary: Install from Pipfile
-test: ./test_install.sh pipenv

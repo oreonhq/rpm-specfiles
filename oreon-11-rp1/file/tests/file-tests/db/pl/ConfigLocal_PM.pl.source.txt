@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: Part of perl-Encode project
-LICENSE: The Perl 5 License (Artistic 1 & GPL 1)

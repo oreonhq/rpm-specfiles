@@ -1,3 +1,0 @@
-# xhost
-
-The xhost package

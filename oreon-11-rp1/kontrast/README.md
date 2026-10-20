@@ -1,3 +1,0 @@
-# kontrast
-
-The kontrast package

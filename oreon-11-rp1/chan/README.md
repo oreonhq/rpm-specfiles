@@ -1,3 +1,0 @@
-# chan
-
-The chan package

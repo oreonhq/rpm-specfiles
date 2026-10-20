@@ -1,6 +1,0 @@
-summary: CI Gating Plan
-discover:
-    how: fmf
-    url: https://gitlab.com/redhat/centos-stream/tests/annobin.git
-execute:
-    how: tmt

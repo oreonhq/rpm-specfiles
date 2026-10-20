@@ -1,3 +1,0 @@
-# angelfish
-
-The angelfish package

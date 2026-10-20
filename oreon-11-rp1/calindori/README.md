@@ -1,3 +1,0 @@
-# calindori
-
-The calindori package

@@ -1,3 +1,0 @@
-# gimp
-
-The gimp package

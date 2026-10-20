@@ -1,2 +1,0 @@
-ltrace receives SIGILL signal instead of the ltraced program,
-which terminates ltrace.

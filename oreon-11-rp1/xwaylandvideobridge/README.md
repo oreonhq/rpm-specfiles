@@ -1,3 +1,0 @@
-# xwaylandvideobridge
-
-The xwaylandvideobridge package

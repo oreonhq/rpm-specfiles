@@ -1,3 +1,0 @@
-# libkcapi
-
-The libkcapi package

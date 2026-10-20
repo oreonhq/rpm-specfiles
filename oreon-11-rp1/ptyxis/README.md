@@ -1,3 +1,0 @@
-# ptyxis
-
-The ptyxis package

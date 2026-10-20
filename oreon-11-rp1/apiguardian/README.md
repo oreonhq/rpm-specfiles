@@ -1,3 +1,0 @@
-# apiguardian
-
-The apiguardian package

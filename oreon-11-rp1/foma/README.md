@@ -1,3 +1,0 @@
-# foma
-
-The foma package

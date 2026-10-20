@@ -1,6 +1,0 @@
-[Desktop Entry]
-Name=SHYBRID
-Comment=GUI for generating hybrid ground-truth spiking data
-Exec=shybrid
-Type=Application
-Categories=Science

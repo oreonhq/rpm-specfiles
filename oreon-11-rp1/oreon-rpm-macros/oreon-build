@@ -1,0 +1,423 @@
+#!/usr/bin/bash
+set -euo pipefail
+
+default_cflags="-O2 -g -pipe -Wall -Werror=format-security -fexceptions -fstack-protector-strong -Wp,-D_FORTIFY_SOURCE=3"
+default_ldflags="-Wl,-z,relro -Wl,-z,now -Wl,--as-needed"
+
+prefix=/usr
+exec_prefix=/usr
+bindir=/usr/bin
+sbindir=/usr/sbin
+libdir=/usr/lib64
+libexecdir=/usr/libexec
+includedir=/usr/include
+datadir=/usr/share
+sysconfdir=/etc
+sharedstatedir=/var/lib
+localstatedir=/var
+mandir=/usr/share/man
+infodir=/usr/share/info
+builddir=oreon-build
+jobs="$(nproc)"
+destdir="${RPM_BUILD_ROOT:-}"
+cargo_registry=/usr/share/oreon-cargo/registry
+out=
+devel_out=
+extra=()
+
+if [ $# -lt 1 ]; then
+  echo "usage: oreon-build COMMAND [options] [-- extra]" >&2
+  exit 2
+fi
+cmd=$1
+shift
+
+while [ $# -gt 0 ]; do
+  case $1 in
+    --prefix) prefix=$2; shift 2 ;;
+    --exec-prefix) exec_prefix=$2; shift 2 ;;
+    --bindir) bindir=$2; shift 2 ;;
+    --sbindir) sbindir=$2; shift 2 ;;
+    --libdir) libdir=$2; shift 2 ;;
+    --libexecdir) libexecdir=$2; shift 2 ;;
+    --includedir) includedir=$2; shift 2 ;;
+    --datadir) datadir=$2; shift 2 ;;
+    --sysconfdir) sysconfdir=$2; shift 2 ;;
+    --sharedstatedir) sharedstatedir=$2; shift 2 ;;
+    --localstatedir) localstatedir=$2; shift 2 ;;
+    --mandir) mandir=$2; shift 2 ;;
+    --infodir) infodir=$2; shift 2 ;;
+    --builddir) builddir=$2; shift 2 ;;
+    --jobs) jobs=$2; shift 2 ;;
+    --destdir) destdir=$2; shift 2 ;;
+    --cargo-registry) cargo_registry=$2; shift 2 ;;
+    --out) out=$2; shift 2 ;;
+    --devel-out) devel_out=$2; shift 2 ;;
+    --) shift; break ;;
+    *)
+      echo "oreon-build: unknown option $1" >&2
+      exit 2
+      ;;
+  esac
+done
+if [ $# -gt 0 ]; then
+  extra=("$@")
+fi
+
+need_destdir() {
+  if [ -z "$destdir" ]; then
+    echo "oreon-build: $cmd needs --destdir or RPM_BUILD_ROOT" >&2
+    exit 1
+  fi
+}
+
+apply_flags() {
+  local cflags="${CFLAGS:-$default_cflags}"
+  export CFLAGS="$cflags"
+  export CXXFLAGS="${CXXFLAGS:-$cflags}"
+  export FFLAGS="${FFLAGS:-$cflags}"
+  export FCFLAGS="${FCFLAGS:-$cflags}"
+  export LDFLAGS="${LDFLAGS:-$default_ldflags}"
+}
+
+pass_extra() {
+  if [ "${#extra[@]}" -gt 0 ]; then
+    "$@" "${extra[@]}"
+  else
+    "$@"
+  fi
+}
+
+cmake_setup() {
+  apply_flags
+  pass_extra cmake -S . -B "$builddir" -G Ninja \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_INSTALL_PREFIX="$prefix" \
+    -DCMAKE_INSTALL_BINDIR="$bindir" \
+    -DCMAKE_INSTALL_SBINDIR="$sbindir" \
+    -DCMAKE_INSTALL_LIBDIR="$libdir" \
+    -DCMAKE_INSTALL_LIBEXECDIR="$libexecdir" \
+    -DCMAKE_INSTALL_INCLUDEDIR="$includedir" \
+    -DCMAKE_INSTALL_DATADIR="$datadir" \
+    -DCMAKE_INSTALL_SYSCONFDIR="$sysconfdir" \
+    -DCMAKE_INSTALL_SHAREDSTATEDIR="$sharedstatedir" \
+    -DCMAKE_INSTALL_LOCALSTATEDIR="$localstatedir" \
+    -DCMAKE_INSTALL_MANDIR="$mandir" \
+    -DCMAKE_INSTALL_INFODIR="$infodir" \
+    -DCMAKE_C_FLAGS_RELWITHDEBINFO:STRING="-DNDEBUG" \
+    -DCMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING="-DNDEBUG" \
+    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON \
+    -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF \
+    -DBUILD_SHARED_LIBS:BOOL=ON
+}
+
+cmake_build() {
+  apply_flags
+  pass_extra cmake --build "$builddir" --parallel "$jobs" --verbose
+}
+
+cmake_install() {
+  need_destdir
+  DESTDIR="$destdir" pass_extra cmake --install "$builddir"
+}
+
+ctest_run() {
+  pass_extra ctest --test-dir "$builddir" --output-on-failure --parallel "$jobs"
+}
+
+meson_setup() {
+  apply_flags
+  pass_extra meson setup "$builddir" \
+    --buildtype=plain \
+    --prefix="$prefix" \
+    --bindir="$bindir" \
+    --sbindir="$sbindir" \
+    --libdir="$libdir" \
+    --libexecdir="$libexecdir" \
+    --includedir="$includedir" \
+    --datadir="$datadir" \
+    --sysconfdir="$sysconfdir" \
+    --sharedstatedir="$sharedstatedir" \
+    --localstatedir="$localstatedir" \
+    --mandir="$mandir" \
+    --infodir="$infodir" \
+    --wrap-mode=nodownload \
+    --auto-features=enabled
+}
+
+meson_build() {
+  apply_flags
+  pass_extra meson compile -C "$builddir" -j "$jobs" -v
+}
+
+meson_install() {
+  need_destdir
+  DESTDIR="$destdir" pass_extra meson install -C "$builddir" --no-rebuild
+}
+
+meson_test() {
+  pass_extra meson test -C "$builddir" -j "$jobs" --print-errorlogs
+}
+
+configure_run() {
+  apply_flags
+  pass_extra ./configure \
+    --prefix="$prefix" \
+    --exec-prefix="$exec_prefix" \
+    --bindir="$bindir" \
+    --sbindir="$sbindir" \
+    --libdir="$libdir" \
+    --libexecdir="$libexecdir" \
+    --includedir="$includedir" \
+    --datadir="$datadir" \
+    --sysconfdir="$sysconfdir" \
+    --sharedstatedir="$sharedstatedir" \
+    --localstatedir="$localstatedir" \
+    --mandir="$mandir" \
+    --infodir="$infodir"
+}
+
+make_run() {
+  apply_flags
+  pass_extra make -j"$jobs"
+}
+
+make_install() {
+  need_destdir
+  apply_flags
+  pass_extra make -j"$jobs" install DESTDIR="$destdir"
+}
+
+py_build() {
+  apply_flags
+  mkdir -p "$builddir/wheels"
+  pass_extra python3 -m build --wheel --no-isolation --outdir "$builddir/wheels"
+}
+
+py_install() {
+  need_destdir
+  local wheel
+  local found=0
+  shopt -s nullglob
+  for wheel in "$builddir"/wheels/*.whl; do
+    found=1
+    python3 -m installer --destdir "$destdir" "$wheel"
+  done
+  shopt -u nullglob
+  if [ "$found" -eq 0 ]; then
+    echo "oreon-build: no wheels in $builddir/wheels" >&2
+    exit 1
+  fi
+}
+
+py_save() {
+  need_destdir
+  if [ -z "$out" ]; then
+    echo "oreon-build: py-save needs --out" >&2
+    exit 2
+  fi
+  if [ "${#extra[@]}" -eq 0 ]; then
+    echo "oreon-build: py-save needs at least one module name" >&2
+    exit 2
+  fi
+  local helper
+  helper="$(dirname "$0")/oreon-pyfiles"
+  "$helper" "$destdir" "${extra[@]}" > "$out"
+}
+
+write_cargo_config() {
+  local mode=$1
+  local path=$2
+  apply_flags
+  mkdir -p .cargo
+  cat > .cargo/config.toml << EOF
+[build]
+rustflags = ["-C", "link-arg=-Wl,-z,relro", "-C", "link-arg=-Wl,-z,now", "-C", "link-arg=-Wl,--as-needed"]
+
+[profile.release]
+debug = 1
+strip = "none"
+codegen-units = 1
+
+[env]
+CFLAGS = "$CFLAGS"
+CXXFLAGS = "$CXXFLAGS"
+LDFLAGS = "$LDFLAGS"
+
+[net]
+offline = true
+
+[source.crates-io]
+replace-with = "oreon"
+
+[source.oreon]
+directory = "$path"
+EOF
+  if [ "$mode" = "vendor" ] && [ ! -d "$path" ]; then
+    echo "oreon-build: vendor directory $path does not exist" >&2
+    exit 1
+  fi
+  if [ "$mode" = "registry" ] && [ ! -d "$path" ]; then
+    echo "oreon-build: cargo registry $path does not exist" >&2
+    echo "oreon-build: pass a vendor directory, or install the rust crates this package needs" >&2
+    exit 1
+  fi
+  rm -f Cargo.toml.orig
+}
+
+cargo_prep() {
+  if [ "${#extra[@]}" -gt 0 ]; then
+    write_cargo_config vendor "${extra[0]}"
+  else
+    write_cargo_config registry "$cargo_registry"
+  fi
+}
+
+cargo_meta() {
+  python3 -c '
+import json, sys
+kind = sys.argv[1]
+meta = json.load(sys.stdin)
+resolve = meta.get("resolve") or {}
+root = resolve.get("root")
+chosen = None
+for pkg in meta.get("packages", []):
+    if root and pkg.get("id") == root:
+        chosen = pkg
+        break
+if chosen is None:
+    for pkg in meta.get("packages", []):
+        if pkg.get("source") is None:
+            chosen = pkg
+            break
+if chosen is None:
+    chosen = meta["packages"][0]
+print(chosen[kind])
+' "$1"
+}
+
+cargo_build() {
+  apply_flags
+  pass_extra cargo build --release --offline --locked
+}
+
+cargo_test() {
+  apply_flags
+  pass_extra cargo test --release --offline --locked
+}
+
+cargo_install_bin() {
+  need_destdir
+  apply_flags
+  pass_extra cargo install --path . --root "$destdir$prefix" --offline --locked --no-track
+}
+
+cargo_install_lib() {
+  need_destdir
+  apply_flags
+  local meta name version dest
+  meta="$(cargo metadata --no-deps --offline --format-version 1)"
+  name="$(printf '%s\n' "$meta" | cargo_meta name)"
+  version="$(printf '%s\n' "$meta" | cargo_meta version)"
+  dest="$destdir$cargo_registry/$name-$version"
+  rm -rf "$dest"
+  mkdir -p "$dest"
+  tar -C . -cf - \
+    --exclude ./target \
+    --exclude ./.git \
+    --exclude ./vendor \
+    --exclude ./oreon-build \
+    --exclude ./.cargo \
+    . | tar -C "$dest" -xf -
+  python3 - "$dest" << 'PY'
+import hashlib, json, os, sys
+root = sys.argv[1]
+files = {}
+for dirpath, dirnames, filenames in os.walk(root):
+    dirnames[:] = [d for d in dirnames if d not in (".git", "target")]
+    for name in filenames:
+        if name == ".cargo-checksum.json":
+            continue
+        full = os.path.join(dirpath, name)
+        rel = os.path.relpath(full, root)
+        h = hashlib.sha256()
+        with open(full, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+                h.update(chunk)
+        files[rel] = h.hexdigest()
+out = os.path.join(root, ".cargo-checksum.json")
+with open(out, "w", encoding="utf-8") as fh:
+    json.dump({"files": files, "package": None}, fh, separators=(",", ":"))
+    fh.write("\n")
+PY
+}
+
+files_run() {
+  need_destdir
+  if [ -z "$out" ]; then
+    echo "oreon-build: files needs --out" >&2
+    exit 2
+  fi
+  rm -f "$destdir$infodir/dir"
+  find "$destdir" -name '*.la' -delete
+  : > "$out"
+  if [ -n "$devel_out" ]; then
+    : > "$devel_out"
+  fi
+  find "$destdir" \( -type f -o -type l \) | sort | while read -r path; do
+    rel=${path#"$destdir"}
+    case "$rel" in
+      */share/licenses/*) continue ;;
+    esac
+    target=$out
+    if [ -n "$devel_out" ]; then
+      case "$rel" in
+        */include/*|*/pkgconfig/*|*/aclocal/*|*/cmake/*|*/config-*|*.so|*.a|*.h|*.pc)
+          target=$devel_out
+          ;;
+      esac
+    fi
+    case "$rel" in
+      "$mandir"/*|"$infodir"/*)
+        printf '%s\n' "$(dirname "$rel")/*" >> "$target.globs"
+        continue
+        ;;
+    esac
+    printf '%s\n' "$rel" >> "$target"
+  done
+  if [ -f "$out.globs" ]; then
+    sort -u "$out.globs" >> "$out"
+    rm -f "$out.globs"
+  fi
+  if [ -n "$devel_out" ] && [ -f "$devel_out.globs" ]; then
+    sort -u "$devel_out.globs" >> "$devel_out"
+    rm -f "$devel_out.globs"
+  fi
+}
+
+case $cmd in
+  cmake) cmake_setup ;;
+  cmake-build) cmake_build ;;
+  cmake-install) cmake_install ;;
+  ctest) ctest_run ;;
+  meson) meson_setup ;;
+  meson-build) meson_build ;;
+  meson-install) meson_install ;;
+  meson-test) meson_test ;;
+  configure) configure_run ;;
+  make) make_run ;;
+  make-install) make_install ;;
+  py-build) py_build ;;
+  py-install) py_install ;;
+  py-save) py_save ;;
+  cargo-prep) cargo_prep ;;
+  cargo-build) cargo_build ;;
+  cargo-test) cargo_test ;;
+  cargo-install) cargo_install_bin ;;
+  cargo-install-lib) cargo_install_lib ;;
+  files) files_run ;;
+  *)
+    echo "oreon-build: unknown command $cmd" >&2
+    exit 2
+    ;;
+esac

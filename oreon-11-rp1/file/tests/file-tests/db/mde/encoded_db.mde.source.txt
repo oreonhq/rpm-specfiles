@@ -1,3 +1,0 @@
-AUTHOR: Christian Herdtweck
-SOURCE: self-created
-LICENSE: public domain

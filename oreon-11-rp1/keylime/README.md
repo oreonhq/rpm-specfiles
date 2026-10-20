@@ -1,3 +1,0 @@
-# keylime
-
-The keylime package

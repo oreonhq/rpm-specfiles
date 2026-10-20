@@ -1,3 +1,0 @@
-# Tarballs and signatures only (do not match *.patch)
-/findutils-*.tar.xz
-/findutils-*.tar.xz.sig

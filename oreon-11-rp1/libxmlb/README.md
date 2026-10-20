@@ -1,3 +1,0 @@
-# libxmlb
-
-The libxmlb package

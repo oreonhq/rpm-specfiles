@@ -1,3 +1,0 @@
-# source-only package. Tests are run with %gocheck though
-# so this is implicitly built
-addFilter("W: no-%build-section")

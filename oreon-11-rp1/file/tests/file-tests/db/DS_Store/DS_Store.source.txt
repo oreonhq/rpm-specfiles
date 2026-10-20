@@ -1,3 +1,0 @@
-AUTHOR: Intra2net <info@intra2net.com>
-URL: Created it myself
-LICENSE: public domain

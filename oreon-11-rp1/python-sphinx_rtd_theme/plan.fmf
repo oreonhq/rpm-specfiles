@@ -1,9 +1,0 @@
-summary: Basic smoke test
-
-discover:
-  - name: Run smoke-rtd-theme test
-    how: fmf
-    url: https://src.fedoraproject.org/rpms/python-sphinx/
-    test: "/tests/smoke-rtd-theme"
-execute:
-  how: tmt

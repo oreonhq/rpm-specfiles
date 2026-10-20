@@ -1,3 +1,0 @@
-# ksc
-
-The ksc package

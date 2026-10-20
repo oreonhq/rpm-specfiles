@@ -1,3 +1,0 @@
-PURPOSE of /CoreOS/sudo/Sanity/run-as
-Description: Test feature 'run as'. This means -u, -g options.
-Author: Dalibor Pospisil <dapospis@redhat.com>

@@ -1,5 +1,0 @@
-/var/log/crossfire/crossfire.log {
-    copytruncate
-    notifempty
-    missingok
-}

@@ -1,3 +1,0 @@
-# As base only specify network interface is mandatory.
-# For more options see man darkstat
-OPTIONS="--user darkstat -i eth0 -b localhost -p 667"

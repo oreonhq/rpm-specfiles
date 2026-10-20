@@ -1,5 +1,0 @@
----
-runpath:
-    allowed_paths:
-        - /usr/lib/evolution
-        - /usr/lib64/evolution

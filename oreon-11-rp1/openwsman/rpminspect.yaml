@@ -1,5 +1,0 @@
----
-badfuncs:
-    allowed:
-        /usr/sbin/openwsmand:
-            - inet_ntoa

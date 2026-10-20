@@ -1,3 +1,0 @@
-AUTHOR: Jan Kaluza <jkaluza@redhat.com>
-URL: http://java.labsoft.dcc.ufmg.br/comets/dataset/pmd/srcs/pmd96/etc/fr_docs/PMD.doc
-LICENSE: BSD

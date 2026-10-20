@@ -1,5 +1,0 @@
-framework: shell
-require:
--  python3-pygments
-/version:
-    test: pygmentize -V

@@ -1,5 +1,0 @@
-# Examples as documentation
-addFilter("package-with-huge-docs ")
-
-# Plural of parser
-addFilter("spelling-error \('parsers',")

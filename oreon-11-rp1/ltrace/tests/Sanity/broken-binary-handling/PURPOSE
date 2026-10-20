@@ -1,3 +1,0 @@
-PURPOSE of /tools/ltrace/Sanity/broken-binary-handling
-Description: Try to trace broken binary by ltrace
-Author: Michal Nowak <mnowak@redhat.com>

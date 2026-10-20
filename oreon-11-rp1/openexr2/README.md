@@ -1,3 +1,0 @@
-# openexr
-
-The openexr package

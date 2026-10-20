@@ -1,3 +1,0 @@
-# yggdrasil
-
-The yggdrasil package

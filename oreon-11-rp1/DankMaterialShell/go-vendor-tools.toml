@@ -1,6 +1,0 @@
-[archive]
-[archive.dependency_overrides]
-"github.com/mattn/go-localereader" = "2491eb6c1c75"
-
-[licensing]
-detector = "askalono"

@@ -1,3 +1,0 @@
-# libportal
-
-The libportal package

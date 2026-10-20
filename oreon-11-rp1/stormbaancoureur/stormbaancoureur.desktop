@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Stormbaan Coureur
-Comment=Simulated obstacle course for automobiles
-Exec=stormbaancoureur-wrapper
-Icon=stormbaancoureur
-Terminal=false
-StartupNotify=false
-Type=Application
-Categories=Game;SportsGame;

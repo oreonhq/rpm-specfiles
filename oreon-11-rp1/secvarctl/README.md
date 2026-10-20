@@ -1,3 +1,0 @@
-# secvarctl
-
-The secvarctl package

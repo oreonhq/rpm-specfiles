@@ -1,9 +1,0 @@
-PURPOSE of Support-local-additions-to-magic-files
-Description: Test to support local additions to magic files
-Author: Karel Srot <ksrot@redhat.com>
-
-Testing custom additions in
-/etc/magic
-$HOME/.magic
-$HOME/.magic.mgc
-

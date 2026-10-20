@@ -1,3 +1,0 @@
-# setxkbmap
-
-The setxkbmap package

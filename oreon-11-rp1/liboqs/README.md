@@ -1,3 +1,0 @@
-# liboqs
-
-The liboqs package

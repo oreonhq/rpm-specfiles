@@ -1,3 +1,0 @@
-PURPOSE of /tools/glibc/Regression/bz947350-getdate-does-not-ignore-trailing-whitespace
-Description: Calls getdate function with leading and trailing whitespace
-Author: Arjun Shankar <ashankar@redhat.com>

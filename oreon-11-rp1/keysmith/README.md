@@ -1,3 +1,0 @@
-# keysmith
-
-The keysmith package

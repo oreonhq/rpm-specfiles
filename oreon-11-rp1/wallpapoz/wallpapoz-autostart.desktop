@@ -1,6 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=wallpapoz-autostart
-Comment=Wallpapoz Autostarter
-Exec=daemon_wallpapoz
-Terminal=false

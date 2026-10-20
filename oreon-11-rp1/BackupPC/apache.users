@@ -1,2 +1,0 @@
-# You will need to create at least one user to be able to login
-# htpasswd /etc/BackupPC/apache.users <username>

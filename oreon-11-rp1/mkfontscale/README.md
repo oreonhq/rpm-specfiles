@@ -1,3 +1,0 @@
-# mkfontscale
-
-The mkfontscale package

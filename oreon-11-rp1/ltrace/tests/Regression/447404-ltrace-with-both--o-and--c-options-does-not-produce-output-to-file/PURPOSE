@@ -1,4 +1,0 @@
-When executing ltrace command with both -o and -c option, 
-the result of ltrace command is not output into the file 
-which is specified by -o option.
-

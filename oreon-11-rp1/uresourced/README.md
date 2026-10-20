@@ -1,3 +1,0 @@
-# uresourced
-
-The uresourced package

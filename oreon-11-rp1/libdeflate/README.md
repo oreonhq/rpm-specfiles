@@ -1,3 +1,0 @@
-# libdeflate
-
-The libdeflate package

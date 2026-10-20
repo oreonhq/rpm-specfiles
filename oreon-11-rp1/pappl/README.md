@@ -1,3 +1,0 @@
-# pappl
-
-The pappl package

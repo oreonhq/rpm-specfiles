@@ -1,3 +1,0 @@
-# passim
-
-The passim package

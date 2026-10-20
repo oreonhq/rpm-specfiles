@@ -1,3 +1,0 @@
-# delve
-
-The delve package

@@ -1,238 +1,53 @@
-%global source0_hash c926ff491cbd9a331a589160811bd97ab1749b4d5198a519338f2cdfabe6940a
+%global source0_hash 9371b2f6372da574d4c6dc96fe9b1463037bcf6afcb6671c1555afde7b17e2de
+%global oreon_bootstrap %{nil}
+%bcond bootstrap 0
+%oreon_bootstrap
+%global debug_package %{nil}
 
-# pkgconf acts as pkgconfig
-%bcond pkgconfig_compat 1
+Name: pkgconf
+Version: 3.0.10
+Release: 1%{?dist}
+Summary: compiler and linker flags for development libraries
+License: ISC
+URL: https://gitea.treehouse.systems/ariadne/pkgconf
+Source0: https://distfiles.ariadne.space/pkgconf/pkgconf-%{version}.tar.xz
 
-%if %{with pkgconfig_compat}
-%global pkgconfig_ver 0.29.1
-# For obsoleting pkgconfig
-%global pkgconfig_verrel %{pkgconfig_ver}-3
-%global pkgconfig_evr 1:%{pkgconfig_verrel}
+BuildRequires: oreon-rpm-macros
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: gcc
+BuildRequires: glibc-devel
+BuildRequires: make
 %endif
-
-# Tests are disabled on RHEL 9 because of the extensive dependencies
-%bcond tests %[%{undefined rhel} || 0%{?rhel} < 9]
-
-# Search path for pc files for pkgconf
-%if 0%{?flatpak_runtime}
-%global pkgconf_libdirs /app/%{_lib}/pkgconfig:/app/share/pkgconfig:/usr/%{_lib}/pkgconfig:/usr/share/pkgconfig
-%else
-%global pkgconf_libdirs %{_libdir}/pkgconfig:%{_datadir}/pkgconfig
-%endif
-
-# libpkgconf soversion major version
-%global libsomajor 7
-
-Name:           pkgconf
-Version:        3.0.7
-Release:        1%{?dist}
-Summary:        Package compiler and linker metadata toolkit
-
-# cli/getopt_long.c, libpkgconf/bsdstubs.c, libpkgconf/pkg.c and tests/* are ISC
-# cli/getopt_long.c is BSD-4-Clause
-# cli/getopt_long.h is BSD-2-Clause
-# bunch of files are under pkgconf
-# libpkgconf/win-dirent.h is MIT
-License:        ISC AND BSD-4-Clause AND BSD-2-Clause AND pkgconf AND MIT
-URL:            http://pkgconf.org/
-Source0:        https://distfiles.dereferenced.org/%{name}/%{name}-%{version}.tar.xz
-
-# Simple wrapper scripts to offer platform versions of pkgconfig
-Source1:        platform-pkg-config.in
-Source2:        pkg-config.in
-
-BuildRequires:  gcc
-BuildRequires:  make
-
-# For regenerating autotools scripts
-BuildRequires:  autoconf
-BuildRequires:  automake
-BuildRequires:  libtool
-
-%if %{with tests}
-# For unit tests
-BuildRequires:  kyua
-BuildRequires:  atf-tests
-%endif
-
-# pkgconf uses libpkgconf internally
-Requires:       lib%{name}%{?_isa} = %{version}-%{release}
-
-# This is defined within pkgconf code as a virtual pc (just like in pkgconfig)
-Provides:       pkgconfig(pkgconf) = %{version}
 
 %description
-pkgconf is a program which helps to configure compiler and linker flags
-for development frameworks. It is similar to pkg-config from freedesktop.org
-and handles .pc files in a similar manner as pkg-config.
+pkgconf is a program which helps to configure compiler and linker flags for development libraries. It is a superset of the functionality provided by pkg-config from freedesktop.org, but does not provide bug-compatibility with the original pkg-config.
 
-%package -n lib%{name}
-Summary:        Backend library for %{name}
+libpkgconf is a library which provides access to most of pkgconf's functionality, to allow other tooling such as compilers and IDEs to discover and use libraries configured by pkgconf.
 
-%description -n lib%{name}
-This package provides libraries for applications to use the functionality
-of %{name}.
+%package devel
+Summary: compiler and linker flags for development libraries
+Requires: pkgconf%{?_isa} = %{version}-%{release}
+Provides: pkgconfig(libpkgconf)
 
-%package -n lib%{name}-devel
-Summary:        Development files for lib%{name}
-Requires:       lib%{name}%{?_isa} = %{version}-%{release}
-
-%description -n lib%{name}-devel
-This package provides files necessary for developing applications
-to use functionality provided by %{name}.
-
-%if %{with pkgconfig_compat}
-%package m4
-Summary:        m4 macros for pkgconf
-License:        GPL-2.0-or-later WITH Autoconf-exception-generic
-BuildArch:      noarch
-# Ensure that it Conflicts and Obsoletes pkgconfig since it contains content formerly from it
-Conflicts:      pkgconfig < %{pkgconfig_evr}
-Obsoletes:      pkgconfig < %{pkgconfig_evr}
-
-%description m4
-This package includes m4 macros used to support PKG_CHECK_MODULES
-when using pkgconf with autotools.
-
-%package pkg-config
-Summary:        %{name} shim to provide /usr/bin/pkg-config
-# Ensure that it Conflicts with pkgconfig and is considered "better"
-Conflicts:      pkgconfig < %{pkgconfig_evr}
-Obsoletes:      pkgconfig < %{pkgconfig_evr}
-Provides:       pkgconfig = %{pkgconfig_evr}
-Provides:       pkgconfig%{?_isa} = %{pkgconfig_evr}
-# This is in the original pkgconfig package, set to match output from pkgconf
-Provides:       pkgconfig(pkg-config) = %{version}
-# Generic pkg-config Provides for those who might use alternate package name
-Provides:       pkg-config = %{pkgconfig_verrel}
-Provides:       pkg-config%{?_isa} = %{pkgconfig_verrel}
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{name}-m4 = %{version}-%{release}
-
-%description pkg-config
-This package provides the shim links for pkgconf to be automatically
-used in place of pkgconfig. This ensures that pkgconf is used as
-the system provider of pkg-config.
-
-%endif
-
-%package -n bomtool
-Summary:        Simple SBOM generator using pc(5) files
-Requires:       lib%{name}%{?_isa} = %{version}-%{release}
-
-%description -n bomtool
-bomtool is a program which helps generate a Software Bill of Materials
-manifest using data from installed .pc files.
-
+%description devel
+libpkgconf is a library which provides access to most of pkgconf's functionality, to allow other tooling such as compilers and IDEs to discover and use libraries configured by pkgconf.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%oreon_sha256
 %autosetup -p1
 
 %build
-autoreconf -fiv
-%configure --disable-static \
-           --with-pkg-config-dir=%{pkgconf_libdirs} \
-           --with-system-includedir=%{_includedir} \
-           --with-system-libdir=%{_libdir}
-
-%make_build V=1
-
-
-%check
-%if %{with tests}
-make check || :
-%endif
-
+%oreon_configure --disable-static
+%oreon_make
 
 %install
-%make_install
+%oreon_make_install
+rm -f %{buildroot}%{_libdir}/*.la
+ln -sf pkgconf %{buildroot}%{_bindir}/pkg-config
 
-find %{buildroot} -name '*.la' -print -delete
+%oreon_filelist_devel
 
-mkdir -p %{buildroot}%{_sysconfdir}/pkgconfig/personality.d
-mkdir -p %{buildroot}%{_datadir}/pkgconfig/personality.d
-
-# pkgconf rpm macros
-mkdir -p %{buildroot}%{_rpmmacrodir}/
-
-cat > %{buildroot}%{_rpmmacrodir}/macros.pkgconf <<EOM
-%%pkgconfig_personalitydir %{_datadir}/pkgconfig/personality.d
-EOM
-
-%if %{with pkgconfig_compat}
-install -pm 0755 %{SOURCE1} %{buildroot}%{_bindir}/%{_target_platform}-pkg-config
-
-sed -e "s|@TARGET_PLATFORM@|%{_target_platform}|" \
-    -e "s|@PKGCONF_LIBDIRS_LOCAL@|/usr/local/%{_lib}/pkgconfig:/usr/local/share/pkgconfig:%{pkgconf_libdirs}|" \
-    -e "s|@PKGCONF_LIBDIRS@|%{pkgconf_libdirs}|" \
-    -e "s|@PKGCONF_SYSLIBDIR@|%{_libdir}|" \
-    -e "s|@PKGCONF_SYSINCDIR@|%{_includedir}|" \
-    -i %{buildroot}%{_bindir}/%{_target_platform}-pkg-config
-
-install -pm 0755 %{SOURCE2} %{buildroot}%{_bindir}/pkg-config
-
-sed -e "s|@PKGCONF_BINDIR@|%{_bindir}|" \
-    -i %{buildroot}%{_bindir}/pkg-config
-
-# Link pkg-config(1) to pkgconf(1)
-echo ".so man1/pkgconf.1" > %{buildroot}%{_mandir}/man1/pkg-config.1
-
-mkdir -p %{buildroot}%{_libdir}/pkgconfig
-mkdir -p %{buildroot}%{_datadir}/pkgconfig
-%endif
-
-# If we're not providing pkgconfig override & compat
-# we should not provide the pkgconfig m4 macros
-%if ! %{with pkgconfig_compat}
-rm -rf %{buildroot}%{_datadir}/aclocal
-%endif
-
-%ldconfig_scriptlets -n lib%{name}
-rm -rf %{buildroot}%{_docdir}/pkgconf
-
-%files
+%files -f %{_builddir}/%{name}.files
 %license COPYING
-%doc README.md AUTHORS NEWS
-%{_bindir}/%{name}
-%{_bindir}/pccritic
-%{_bindir}/spdxtool
-%{_mandir}/man1/pccritic.1*
-%{_mandir}/man1/spdxtool.1*
-%{_mandir}/man1/%{name}.1*
-%{_mandir}/man5/pc.5*
-%{_mandir}/man5/%{name}-personality.5*
-%{_rpmmacrodir}/macros.pkgconf
-%dir %{_sysconfdir}/pkgconfig
-%dir %{_sysconfdir}/pkgconfig/personality.d
-%dir %{_datadir}/pkgconfig/personality.d
 
-%files -n lib%{name}
-%license COPYING
-%{_libdir}/lib%{name}*.so.*
-
-%files -n lib%{name}-devel
-%{_libdir}/lib%{name}*.so
-%{_includedir}/%{name}/
-%{_libdir}/pkgconfig/lib%{name}.pc
-
-%if %{with pkgconfig_compat}
-%files m4
-%{_datadir}/aclocal/pkg.m4
-%{_mandir}/man7/pkg.m4.7*
-
-%files pkg-config
-%{_bindir}/pkg-config
-%{_bindir}/%{_target_platform}-pkg-config
-%{_mandir}/man1/pkg-config.1*
-%dir %{_libdir}/pkgconfig
-%dir %{_datadir}/pkgconfig
-%endif
-
-%files -n bomtool
-%{_bindir}/bomtool
-%{_mandir}/man1/bomtool.1*
-
-
-%changelog
-%autochangelog
+%files devel -f %{_builddir}/%{name}-devel.files

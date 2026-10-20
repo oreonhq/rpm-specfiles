@@ -1,7 +1,0 @@
-test: ./runtest.sh
-require:
-  - ttfautohint
-  - make
-  - fontforge
-  - lohit-devanagari-fonts
-  - wget

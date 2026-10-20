@@ -1,3 +1,0 @@
-# libtracefs
-
-The libtracefs package

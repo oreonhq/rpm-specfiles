@@ -1,3 +1,0 @@
-# llhttp
-
-The llhttp package

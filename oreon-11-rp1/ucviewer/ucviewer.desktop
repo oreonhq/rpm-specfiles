@@ -1,9 +1,0 @@
-[Desktop Entry]
-Exec=UnicodeViewer
-Icon=uc-book
-Terminal=false
-Name=UnicodeViewer
-GenericName=Unicode Table Viewer
-Type=Application
-Categories=Graphics;
-StartupNotify=true

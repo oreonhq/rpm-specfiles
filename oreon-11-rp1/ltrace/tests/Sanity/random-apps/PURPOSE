@@ -1,3 +1,0 @@
-PURPOSE of /tools/ltrace/Sanity/random-apps
-Description: Runs random app which caused strace problems in the past
-Author: Michal Nowak <mnowak@redhat.com>

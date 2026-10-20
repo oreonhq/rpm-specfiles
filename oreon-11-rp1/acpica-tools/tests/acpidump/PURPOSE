@@ -1,3 +1,0 @@
-PURPOSE of tests/acpidump
-Description: sanity check that system ACPI tables can be read
-Author: Al Stone <ahs3@redhat.com>

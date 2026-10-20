@@ -1,9 +1,0 @@
---- gio-sys-0.22.9/Cargo.toml
-+++ gio-sys-0.22.9/Cargo.toml
-@@ -138,6 +138,3 @@
- [build-dependencies.system-deps]
- version = "9"
- 
--[target."cfg(windows)".dependencies.windows-sys]
--version = ">=0.52, <=0.61"
--features = ["Win32_Networking_WinSock"]

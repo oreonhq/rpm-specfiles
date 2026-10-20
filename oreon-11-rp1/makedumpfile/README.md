@@ -1,3 +1,0 @@
-# makedumpfile
-
-The makedumpfile package

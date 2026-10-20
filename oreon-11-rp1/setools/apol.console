@@ -1,4 +1,0 @@
-USER=root
-PROGRAM=/usr/sbin/apol
-SESSION=true
-FALLBACK=true

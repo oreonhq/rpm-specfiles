@@ -1,6 +1,0 @@
-summary: disruptor smoke test
-description: |
-  Test basic functionality of disruptor.
-require:
-  - disruptor
-  - java-21-openjdk-devel

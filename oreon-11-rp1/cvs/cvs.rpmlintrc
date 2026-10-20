@@ -1,2 +1,0 @@
-# Ghostscript puts a randomness into PDF files
-addFilter('-doc\..*: E: no-binary')

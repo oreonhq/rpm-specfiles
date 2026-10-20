@@ -1,5 +1,0 @@
-.build*
-x86_64/
-HdrHistogram_c-*.rpm
-/HdrHistogram_c-*.tar.gz
-/HdrHistogram_c-0.9.12.tar.gz

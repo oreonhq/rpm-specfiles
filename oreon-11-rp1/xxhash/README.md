@@ -1,3 +1,0 @@
-# xxhash
-
-The xxhash package

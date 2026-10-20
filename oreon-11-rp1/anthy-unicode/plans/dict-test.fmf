@@ -1,5 +1,0 @@
-summary: anthy-unicode test
-discover:
-    how: fmf
-execute:
-    how: tmt

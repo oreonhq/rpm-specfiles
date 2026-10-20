@@ -1,3 +1,0 @@
-# krecorder
-
-The krecorder package

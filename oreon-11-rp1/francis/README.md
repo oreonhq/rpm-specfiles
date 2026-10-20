@@ -1,3 +1,0 @@
-# francis
-
-The francis package

@@ -1,2 +1,0 @@
-## Optional command line arguments passed to squeezelite(1) system service.
-ARGS=-M SqueezeLiteFedora

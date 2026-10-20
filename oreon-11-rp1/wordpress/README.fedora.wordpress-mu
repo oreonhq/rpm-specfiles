@@ -1,5 +1,0 @@
-As of wordpress 3.0.x, upstream has deprecated wordpress-mu.  This 
-functionality has been included in mainline wordpress.  For 
-information on migrating from wordpress-mu, visit 
-http://codex.wordpress.org/Migrating_Multiple_Blogs_into_WordPress_3.0_Multisite
-

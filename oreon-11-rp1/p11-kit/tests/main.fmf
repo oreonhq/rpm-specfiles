@@ -1,5 +1,0 @@
-test: ./runtest.sh
-framework: beakerlib
-require:
-  - openssl
-  - p11-kit

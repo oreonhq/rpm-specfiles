@@ -1,5 +1,0 @@
-[package]
-cargo-toml-patch-comments = [
-    "Drop vendored feature from openssl dependency",
-    "Relax clap dependency",
-]

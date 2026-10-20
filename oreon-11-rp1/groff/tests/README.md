@@ -1,3 +1,0 @@
-# groff
-
-groff tests

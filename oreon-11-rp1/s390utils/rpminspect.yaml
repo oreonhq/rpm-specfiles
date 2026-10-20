@@ -1,9 +1,0 @@
----
-pathmigration:
-    excluded_paths:
-        - /lib/s390-tools
-
-badfuncs:
-    allowed:
-        /usr/bin/qethqoat:
-            - inet_ntoa

@@ -1,3 +1,0 @@
-# waypipe
-
-The waypipe package

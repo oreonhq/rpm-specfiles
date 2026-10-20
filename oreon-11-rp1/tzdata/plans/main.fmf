@@ -1,5 +1,0 @@
-summary: Main Plan
-discover:
-    how: fmf
-execute:
-    how: tmt

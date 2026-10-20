@@ -1,3 +1,0 @@
-# librist
-
-The librist package

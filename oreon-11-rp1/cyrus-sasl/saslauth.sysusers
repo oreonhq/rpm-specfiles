@@ -1,4 +1,0 @@
-#Type Name       ID     GECOS              Home directory   Shell
-g     saslauth   76
-u     saslauth   -      "Saslauthd user"   /run/saslauthd   /sbin/nologin
-m     saslauth   saslauth

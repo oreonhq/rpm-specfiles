@@ -1,4 +1,0 @@
----
-annocheck:
-  jobs:
-    - hardened: --verbose --skip-dynamic-tags --skip-property-note --skip-bind-now --skip-pie --skip-cf-protection --skip-notes --skip-gaps --skip-optimization --skip-stack-clash --skip-stack-prot

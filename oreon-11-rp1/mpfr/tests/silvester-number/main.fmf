@@ -1,6 +1,0 @@
-summary: Calculate Silvester Number
-framework: shell
-test: ./test.sh
-component: mpfr
-recommends:
-  - gawk

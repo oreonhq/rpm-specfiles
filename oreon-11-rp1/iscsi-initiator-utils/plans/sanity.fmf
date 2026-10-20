@@ -1,5 +1,0 @@
-summary: Run relevant tests from the tests directory
-discover:
-  how: fmf
-execute:
-  how: tmt
