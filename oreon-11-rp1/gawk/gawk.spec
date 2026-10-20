@@ -6,17 +6,20 @@
 
 Name: gawk
 Version: 5.4.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: GNU Awk
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/gawk/
 Source0: https://ftp.gnu.org/gnu/gawk/gawk-5.4.1.tar.xz
+Patch0: gawk-5.4.1-no-mpfr-node.patch
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+BuildRequires: gmp-devel
+BuildRequires: mpfr-devel
 %endif
 
 %description
@@ -28,6 +31,7 @@ This is GNU Awk 5.4.0. It is upwardly compatible with Brian Kernighan's version 
 
 %build
 %oreon_configure
+grep -q '^#define HAVE_MPFR 1$' config.h
 %oreon_make
 
 %install
