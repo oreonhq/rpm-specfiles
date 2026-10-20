@@ -47,6 +47,9 @@ python - an interpreted, interactive, object-oriented programming language
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.a
 ln -sf python3 %{buildroot}%{_bindir}/python
+find %{buildroot} -type f -exec grep -I -l -E '^#! */usr/bin/env python$' {} + | while read f; do
+  sed -i '1s|^#! */usr/bin/env python$|#!/usr/bin/python3|' "$f"
+done
 
 %oreon_filelist_devel
 

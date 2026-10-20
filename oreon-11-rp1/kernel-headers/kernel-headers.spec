@@ -30,12 +30,14 @@ The Linux kernel is the core of any Linux operating system. It manages hardware,
 
 %install
 %ifarch x86_64
-make headers_install ARCH=x86 INSTALL_HDR_PATH=%{buildroot}/usr
+make -s headers ARCH=x86
 %endif
 %ifarch aarch64
-make headers_install ARCH=arm64 INSTALL_HDR_PATH=%{buildroot}/usr
+make -s headers ARCH=arm64
 %endif
-find %{buildroot}%{_includedir} \( -name '.*' -o -name '*.orig' \) -delete
+mkdir -p %{buildroot}/usr
+cp -a usr/include %{buildroot}/usr/
+find %{buildroot}%{_includedir} \( -name '.*' -o -name '*.orig' -o -type f ! -name '*.h' \) -delete
 
 %oreon_filelist
 

@@ -76,11 +76,11 @@ cd %{_builddir}/gcc-build
   --disable-nls \
   --disable-libsanitizer
 %endif
-make -j%{?_smp_build_ncpus}
+make -s -j%{?_smp_build_ncpus}
 
 %install
 cd %{_builddir}/gcc-build
-make install DESTDIR=%{buildroot}
+make -s install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_infodir}/dir
 rm -f %{buildroot}%{_libdir}/*.py
 find %{buildroot} -name '*.la' -delete

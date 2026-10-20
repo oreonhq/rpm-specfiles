@@ -41,10 +41,10 @@ export CFLAGS="-O2 -g -std=gnu17"
 export CXXFLAGS="-O2 -g -std=gnu17"
 export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,--as-needed"
 ./configure --prefix=%{_prefix} --libdir=%{_libdir} --enable-shared
-make -j%{?_smp_build_ncpus}
+make -s -j%{?_smp_build_ncpus}
 
 %install
-make install DESTDIR=%{buildroot}
+make -s install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_libdir}/*.a
 %oreon_filelist_devel
 

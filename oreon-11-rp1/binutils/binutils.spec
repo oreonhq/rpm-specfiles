@@ -60,11 +60,15 @@ cd %{_builddir}/binutils-build
   --enable-gold=no \
   --with-system-zlib
 %endif
-make -j%{?_smp_build_ncpus}
+find %{_builddir}/binutils-build -name libtool -exec sed -i \
+  -e 's/^hardcode_libdir_flag_spec=.*/hardcode_libdir_flag_spec=""/' \
+  -e 's/^hardcode_libdir_flag_spec_CXX=.*/hardcode_libdir_flag_spec_CXX=""/' \
+  {} +
+make -s -j%{?_smp_build_ncpus}
 
 %install
 cd %{_builddir}/binutils-build
-make install DESTDIR=%{buildroot}
+make -s install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_libdir}/*.a %{buildroot}%{_libdir}/*.la
 rm -f %{buildroot}%{_infodir}/dir
 

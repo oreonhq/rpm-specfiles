@@ -59,11 +59,11 @@ CFLAGS="-O2 -g" %{_builddir}/glibc-%{version}/configure \
   --disable-werror \
   --disable-profile \
   --with-headers=%{_includedir}
-make -j%{?_smp_build_ncpus}
+make -s -j%{?_smp_build_ncpus}
 
 %install
 cd %{_builddir}/glibc-build
-make install DESTDIR=%{buildroot}
+make -s install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_infodir}/dir
 
 %oreon_filelist_devel

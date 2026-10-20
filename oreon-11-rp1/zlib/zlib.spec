@@ -36,10 +36,10 @@ zlib 1.3.2 is a general purpose data compression library. All the code is thread
 
 %build
 ./configure --prefix=%{_prefix} --libdir=%{_libdir} --shared
-make %{?_smp_mflags}
+make -s %{?_smp_mflags}
 
 %install
-make install DESTDIR=%{buildroot}
+make -s install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_libdir}/*.a
 
 %files

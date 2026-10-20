@@ -179,13 +179,13 @@ configure_run() {
 
 make_run() {
   apply_flags
-  pass_extra make -j"$jobs"
+  pass_extra make -s -j"$jobs"
 }
 
 make_install() {
   need_destdir
   apply_flags
-  pass_extra make -j"$jobs" install DESTDIR="$destdir"
+  pass_extra make -s -j"$jobs" install DESTDIR="$destdir"
 }
 
 py_build() {

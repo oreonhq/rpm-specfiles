@@ -35,8 +35,8 @@ This file is part of bzip2/libbzip2, a program and library for lossless, block-s
 %autosetup -p1
 
 %build
-make -f Makefile-libbz2_so CC=gcc CFLAGS="%{_oreon_cflags} -fPIC"
-make CC=gcc CFLAGS="%{_oreon_cflags}" bzip2 bzip2recover
+make -s -f Makefile-libbz2_so CC=gcc CFLAGS="%{_oreon_cflags} -fPIC"
+make -s CC=gcc CFLAGS="%{_oreon_cflags}" bzip2 bzip2recover
 
 %install
 mkdir -p %{buildroot}%{_bindir}
