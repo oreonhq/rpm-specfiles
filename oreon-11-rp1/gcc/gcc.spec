@@ -21,6 +21,7 @@ Source0: https://gcc.gnu.org/pub/gcc/releases/gcc-%{version}/gcc-%{version}.tar.
 Source1: https://codeload.github.com/MentorEmbedded/nvptx-tools/tar.gz/%{nvptx_rev}#/nvptx-tools-%{nvptx_rev}.tar.gz
 Source2: https://codeload.github.com/mirror/newlib-cygwin/tar.gz/%{newlib_rev}#/newlib-cygwin-%{newlib_rev}.tar.gz
 Source3: https://nickc.fedorapeople.org/annobin-%{annobin_ver}.tar.xz
+Patch0: gcc16-csetjmp.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: make

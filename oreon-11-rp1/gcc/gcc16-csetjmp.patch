@@ -1,0 +1,163 @@
+diff -ruN /tmp/gcc162/patchtree/a/libstdc++-v3/acinclude.m4 /tmp/gcc162/patchtree/b/libstdc++-v3/acinclude.m4
+--- a/libstdc++-v3/acinclude.m4	2026-10-20 20:34:36.468218468 -0700
++++ b/libstdc++-v3/acinclude.m4	2026-10-20 20:34:36.492433877 -0700
+@@ -5913,6 +5913,28 @@
+   AC_LANG_RESTORE
+ ])
+ 
++dnl
++dnl Check whether <setjmp.h> actually defines jmp_buf.
++dnl nvptx and gcn newlib declare setjmp without a jmp_buf type.
++dnl
++dnl Defines:
++dnl  HAVE_JMP_BUF
++dnl
++AC_DEFUN([GLIBCXX_CHECK_CSETJMP], [
++  AC_LANG_SAVE
++  AC_LANG_CPLUSPLUS
++  AC_MSG_CHECKING([for jmp_buf in <setjmp.h>])
++  AC_TRY_COMPILE([#include <setjmp.h>],
++    [jmp_buf env; return setjmp (env);],
++    [ac_jmp_buf=yes], [ac_jmp_buf=no])
++  AC_MSG_RESULT([$ac_jmp_buf])
++  if test "$ac_jmp_buf" = yes; then
++    AC_DEFINE([HAVE_JMP_BUF], [1],
++      [Define if jmp_buf is defined in <setjmp.h>.])
++  fi
++  AC_LANG_RESTORE
++])
++
+ 
+ # Macros from the top-level gcc directory.
+ m4_include([../config/gc++filt.m4])
+diff -ruN /tmp/gcc162/patchtree/a/libstdc++-v3/config.h.in /tmp/gcc162/patchtree/b/libstdc++-v3/config.h.in
+--- a/libstdc++-v3/config.h.in	2026-10-20 20:34:36.467428486 -0700
++++ b/libstdc++-v3/config.h.in	2026-10-20 20:34:36.492029479 -0700
+@@ -203,6 +203,9 @@
+ /* Defined if iswblank exists. */
+ #undef HAVE_ISWBLANK
+ 
++/* Define if jmp_buf is defined in <setjmp.h>. */
++#undef HAVE_JMP_BUF
++
+ /* Define if LC_MESSAGES is available in <locale.h>. */
+ #undef HAVE_LC_MESSAGES
+ 
+diff -ruN /tmp/gcc162/patchtree/a/libstdc++-v3/configure /tmp/gcc162/patchtree/b/libstdc++-v3/configure
+--- a/libstdc++-v3/configure	2026-10-20 20:34:36.469024202 -0700
++++ b/libstdc++-v3/configure	2026-10-20 20:34:36.495278105 -0700
+@@ -55341,6 +55341,48 @@
+ 
+ 
+ 
++  ac_ext=cpp
++ac_cpp='$CXXCPP $CPPFLAGS'
++ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
++
++
++  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for jmp_buf in <setjmp.h>" >&5
++$as_echo_n "checking for jmp_buf in <setjmp.h>... " >&6; }
++  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++/* end confdefs.h.  */
++#include <setjmp.h>
++int
++main ()
++{
++jmp_buf env; return setjmp (env);
++  ;
++  return 0;
++}
++_ACEOF
++if ac_fn_cxx_try_compile "$LINENO"; then :
++  ac_jmp_buf=yes
++else
++  ac_jmp_buf=no
++fi
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_jmp_buf" >&5
++$as_echo "$ac_jmp_buf" >&6; }
++  if test "$ac_jmp_buf" = yes; then
++
++$as_echo "#define HAVE_JMP_BUF 1" >>confdefs.h
++
++  fi
++
++  ac_ext=c
++ac_cpp='$CPP $CPPFLAGS'
++ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
++ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
++ac_compiler_gnu=$ac_cv_c_compiler_gnu
++
++
++
+ # Define documentation rules conditionally.
+ 
+ # See if makeinfo has been installed and is modern enough
+diff -ruN /tmp/gcc162/patchtree/a/libstdc++-v3/configure.ac /tmp/gcc162/patchtree/b/libstdc++-v3/configure.ac
+--- a/libstdc++-v3/configure.ac	2026-10-20 20:34:36.466675040 -0700
++++ b/libstdc++-v3/configure.ac	2026-10-20 20:34:36.491963795 -0700
+@@ -666,6 +666,8 @@
+ # For std::print
+ GLIBCXX_CHECK_STDIO_LOCKING
+ 
++GLIBCXX_CHECK_CSETJMP
++
+ # Define documentation rules conditionally.
+ 
+ # See if makeinfo has been installed and is modern enough
+diff -ruN /tmp/gcc162/patchtree/a/libstdc++-v3/include/c_global/csetjmp /tmp/gcc162/patchtree/b/libstdc++-v3/include/c_global/csetjmp
+--- a/libstdc++-v3/include/c_global/csetjmp	2026-10-20 20:34:36.464370228 -0700
++++ b/libstdc++-v3/include/c_global/csetjmp	2026-10-20 20:34:36.491732152 -0700
+@@ -44,6 +44,7 @@
+ #endif
+ 
+ #include <bits/c++config.h>
++#if _GLIBCXX_HAVE_JMP_BUF
+ #include <setjmp.h>
+ 
+ // Get rid of those macros defined in <setjmp.h> in lieu of real functions.
+@@ -59,5 +60,6 @@
+   using ::jmp_buf;
+   using ::longjmp;
+ } // namespace std
++#endif
+ 
+ #endif
+diff -ruN /tmp/gcc162/patchtree/a/libstdc++-v3/include/c_std/csetjmp /tmp/gcc162/patchtree/b/libstdc++-v3/include/c_std/csetjmp
+--- a/libstdc++-v3/include/c_std/csetjmp	2026-10-20 20:34:36.465134685 -0700
++++ b/libstdc++-v3/include/c_std/csetjmp	2026-10-20 20:34:36.491795075 -0700
+@@ -44,6 +44,7 @@
+ #endif
+ 
+ #include <bits/c++config.h>
++#if _GLIBCXX_HAVE_JMP_BUF
+ #include <setjmp.h>
+ 
+ // Get rid of those macros defined in <setjmp.h> in lieu of real functions.
+@@ -59,5 +60,6 @@
+   using ::jmp_buf;
+   using ::longjmp;
+ } // namespace std
++#endif
+ 
+ #endif
+diff -ruN /tmp/gcc162/patchtree/a/libstdc++-v3/src/c++23/std-clib.cc.in /tmp/gcc162/patchtree/b/libstdc++-v3/src/c++23/std-clib.cc.in
+--- a/libstdc++-v3/src/c++23/std-clib.cc.in	2026-10-20 20:34:36.465895220 -0700
++++ b/libstdc++-v3/src/c++23/std-clib.cc.in	2026-10-20 20:34:36.491881378 -0700
+@@ -348,12 +348,14 @@
+ }
+ 
+ // 17.13.3 <csetjmp>
++#if _GLIBCXX_HAVE_JMP_BUF
+ export C_LIB_NAMESPACE
+ {
+   using std::jmp_buf;
+   using std::longjmp;
+   // setjmp macro not exported
+ }
++#endif
+ 
+ // 17.13.4 <csignal>
+ export C_LIB_NAMESPACE
