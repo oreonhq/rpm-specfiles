@@ -521,7 +521,6 @@ echo '%{source3_hash}  %{SOURCE3}' | sha256sum -c -
 tar -xf %{SOURCE1} -C %{_builddir}
 tar -xf %{SOURCE2} -C %{_builddir}
 tar -xf %{SOURCE3} -C %{_builddir}
-ln -sfn %{_builddir}/newlib-cygwin-%{newlib_rev}/newlib newlib
 
 %build
 unset CFLAGS CXXFLAGS LDFLAGS
@@ -571,6 +570,7 @@ common \
 make -s -j"$jobs"
 %else
 %ifarch x86_64
+ln -sfn %{_builddir}/newlib-cygwin-%{newlib_rev}/newlib "$src/newlib"
 mkdir -p %{_builddir}/offload-root
 cd %{_builddir}/nvptx-tools-%{nvptx_rev}
 ./configure --prefix=%{_prefix}
@@ -585,6 +585,7 @@ common \
   --enable-as-accelerator-for="$host" \
   --enable-languages=c,c++,fortran,lto \
   --disable-bootstrap \
+  --enable-threads=single \
   --disable-sjlj-exceptions \
   --with-newlib \
   --enable-newlib-io-long-long \
@@ -607,12 +608,14 @@ common \
   --enable-as-accelerator-for="$host" \
   --enable-languages=c,c++,fortran,lto \
   --disable-bootstrap \
+  --enable-threads=single \
   --disable-sjlj-exceptions \
   --with-newlib \
   --disable-libsanitizer \
   --with-build-time-tools=%{_builddir}/amdgcn-bin
 make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 make -s install DESTDIR=%{_builddir}/offload-root
+rm -f "$src/newlib"
 %endif
 
 mkdir -p %{_builddir}/gcc-build
