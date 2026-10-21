@@ -523,9 +523,12 @@ tar -xf %{SOURCE2} -C %{_builddir}
 tar -xf %{SOURCE3} -C %{_builddir}
 
 %build
-unset CFLAGS CXXFLAGS LDFLAGS
+unset CFLAGS CXXFLAGS FFLAGS FCFLAGS OBJCFLAGS GOFLAGS DFLAGS LDFLAGS
 export CFLAGS="-O2 -g"
 export CXXFLAGS="-O2 -g"
+export CFLAGS_FOR_TARGET="-O2 -g"
+export CXXFLAGS_FOR_TARGET="-O2 -g"
+export FCFLAGS_FOR_TARGET="-O2 -g"
 jobs=%{?_smp_build_ncpus}
 if [ -z "$jobs" ]; then jobs=1; fi
 host=$(gcc -dumpmachine)
