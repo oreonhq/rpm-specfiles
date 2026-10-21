@@ -541,7 +541,6 @@ common() {
     --enable-threads=posix \
     --enable-checking=release \
     --with-system-zlib \
-    --with-linker-hash-style=gnu \
     --with-gcc-major-version-only \
     --disable-multilib \
     --disable-nls \
@@ -591,7 +590,7 @@ common \
   --enable-newlib-io-long-long \
   --disable-libsanitizer \
   --with-build-time-tools=%{_builddir}/offload-root%{_prefix}/nvptx-none/bin
-make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
+make -s -j"$jobs"
 make -s install DESTDIR=%{_builddir}/offload-root
 
 mkdir -p %{_builddir}/amdgcn-bin
@@ -613,7 +612,7 @@ common \
   --with-newlib \
   --disable-libsanitizer \
   --with-build-time-tools=%{_builddir}/amdgcn-bin
-make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
+make -s -j"$jobs"
 make -s install DESTDIR=%{_builddir}/offload-root
 rm -f "$src/newlib"
 %endif
@@ -622,6 +621,7 @@ mkdir -p %{_builddir}/gcc-build
 cd %{_builddir}/gcc-build
 common \
   --enable-shared \
+  --with-linker-hash-style=gnu \
   --enable-languages=c,c++,fortran,objc,obj-c++,go,d,m2,cobol,algol68,lto \
   --enable-default-pie \
   --enable-bootstrap \
@@ -638,6 +638,7 @@ mkdir -p %{_builddir}/gcc-jit
 cd %{_builddir}/gcc-jit
 common \
   --enable-shared \
+  --with-linker-hash-style=gnu \
   --enable-languages=jit \
   --enable-host-shared \
   --enable-libgdiagnostics \
