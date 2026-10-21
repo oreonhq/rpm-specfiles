@@ -39,6 +39,8 @@ Requires: cpp = %{version}-%{release}
 Requires: glibc-devel
 Requires: libgcc = %{version}-%{release}
 BuildRequires: texinfo
+BuildRequires: bison
+BuildRequires: flex
 BuildRequires: file
 BuildRequires: python3
 BuildRequires: doxygen
