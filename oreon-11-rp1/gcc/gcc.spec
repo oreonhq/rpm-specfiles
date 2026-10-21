@@ -537,6 +537,18 @@ if [ -z "$jobs" ]; then jobs=1; fi
 src=%{_builddir}/gcc-%{version}
 target=$("$src/config.guess")
 
+step() {
+  name=$1
+  shift
+  echo "oreon gcc step $name"
+  log=%{_builddir}/gcc-step.log
+  if ! "$@" >"$log" 2>&1; then
+    echo "oreon gcc step $name failed"
+    tail -n 250 "$log"
+    exit 1
+  fi
+}
+
 common() {
   "$src/configure" \
     --prefix=%{_prefix} \
@@ -557,7 +569,7 @@ common() {
 %if %{with bootstrap} || 0%{?bootstrap}
 mkdir -p %{_builddir}/gcc-build
 cd %{_builddir}/gcc-build
-common \
+step bootstrap-configure common \
   --enable-languages=c \
   --disable-shared \
   --disable-threads \
@@ -572,19 +584,19 @@ common \
   --disable-libvtv \
   --disable-libsanitizer \
   --disable-libitm
-make -s -j"$jobs"
+step bootstrap-make make -s -j"$jobs"
 %else
 %ifarch x86_64
 ln -sfn %{_builddir}/newlib-cygwin-%{newlib_rev}/newlib "$src/newlib"
 mkdir -p %{_builddir}/offload-root
 cd %{_builddir}/nvptx-tools-%{nvptx_rev}
-./configure --prefix=%{_prefix}
-make -s -j"$jobs"
-make -s install DESTDIR=%{_builddir}/offload-root
+step nvptx-tools-configure ./configure --prefix=%{_prefix}
+step nvptx-tools-make make -s -j"$jobs"
+step nvptx-tools-install make -s install DESTDIR=%{_builddir}/offload-root
 
 mkdir -p %{_builddir}/accel-nvptx
 cd %{_builddir}/accel-nvptx
-common \
+step nvptx-configure common \
   --enable-shared \
   --target=nvptx-none \
   --enable-as-accelerator-for="$target" \
@@ -596,8 +608,8 @@ common \
   --enable-newlib-io-long-long \
   --disable-libsanitizer \
   --with-build-time-tools=%{_builddir}/offload-root%{_prefix}/nvptx-none/bin
-make -s -j"$jobs"
-make -s install DESTDIR=%{_builddir}/offload-root
+step nvptx-make make -s -j"$jobs"
+step nvptx-install make -s install DESTDIR=%{_builddir}/offload-root
 
 mkdir -p %{_builddir}/amdgcn-bin
 ln -sfn %{_bindir}/llvm-ar %{_builddir}/amdgcn-bin/ar
@@ -607,7 +619,7 @@ ln -sfn %{_bindir}/llvm-nm %{_builddir}/amdgcn-bin/nm
 ln -sfn %{_bindir}/lld %{_builddir}/amdgcn-bin/ld
 mkdir -p %{_builddir}/accel-amdgcn
 cd %{_builddir}/accel-amdgcn
-common \
+step amdgcn-configure common \
   --enable-shared \
   --target=amdgcn-amdhsa \
   --enable-as-accelerator-for="$target" \
@@ -618,14 +630,14 @@ common \
   --with-newlib \
   --disable-libsanitizer \
   --with-build-time-tools=%{_builddir}/amdgcn-bin
-make -s -j"$jobs"
-make -s install DESTDIR=%{_builddir}/offload-root
+step amdgcn-make make -s -j"$jobs"
+step amdgcn-install make -s install DESTDIR=%{_builddir}/offload-root
 rm -f "$src/newlib"
 %endif
 
 mkdir -p %{_builddir}/gcc-build
 cd %{_builddir}/gcc-build
-common \
+step host-configure common \
   --enable-shared \
   --with-linker-hash-style=gnu \
   --enable-languages=c,c++,fortran,objc,obj-c++,go,d,m2,cobol,algol68,ada,lto \
@@ -637,12 +649,12 @@ common \
   --disable-libquadmath \
 %endif
   --disable-libvtv
-make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
-make -s -C "$target/libstdc++-v3" doc-html-doxygen
+step host-make make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
+step libstdcxx-docs make -s -C "$target/libstdc++-v3" doc-html-doxygen
 
 mkdir -p %{_builddir}/gcc-jit
 cd %{_builddir}/gcc-jit
-common \
+step jit-configure common \
   --enable-shared \
   --with-linker-hash-style=gnu \
   --enable-languages=jit \
@@ -654,7 +666,7 @@ common \
   --disable-libquadmath \
 %endif
   --disable-libvtv
-make -s -j"$jobs" all-gcc
+step jit-make make -s -j"$jobs" all-gcc
 %endif
 
 %install
@@ -665,14 +677,25 @@ find %{buildroot} -name '*.la' -delete
 rm -f %{buildroot}%{_infodir}/dir
 %oreon_filelist
 %else
+step() {
+  name=$1
+  shift
+  echo "oreon gcc step $name"
+  log=%{_builddir}/gcc-step.log
+  if ! "$@" >"$log" 2>&1; then
+    echo "oreon gcc step $name failed"
+    tail -n 250 "$log"
+    exit 1
+  fi
+}
 cd %{_builddir}/gcc-build
-make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
+step host-install make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 %ifarch x86_64
-make -s -C %{_builddir}/nvptx-tools-%{nvptx_rev} install DESTDIR=%{buildroot}
-make -s -C %{_builddir}/accel-nvptx install DESTDIR=%{buildroot}
-make -s -C %{_builddir}/accel-amdgcn install DESTDIR=%{buildroot}
+step nvptx-tools-install make -s -C %{_builddir}/nvptx-tools-%{nvptx_rev} install DESTDIR=%{buildroot}
+step nvptx-install make -s -C %{_builddir}/accel-nvptx install DESTDIR=%{buildroot}
+step amdgcn-install make -s -C %{_builddir}/accel-amdgcn install DESTDIR=%{buildroot}
 %endif
-make -s -C %{_builddir}/gcc-jit install DESTDIR=%{_builddir}/gcc-jit-root
+step jit-install make -s -C %{_builddir}/gcc-jit install DESTDIR=%{_builddir}/gcc-jit-root
 find %{_builddir}/gcc-jit-root -type f \( -name 'libgccjit*' -o -name 'libgdiagnostics*' -o -name 'sarif-replay' \) > %{_builddir}/gcc-jit-files
 while read f; do
   rel=${f#%{_builddir}/gcc-jit-root}
@@ -691,7 +714,10 @@ done < %{_builddir}/gcc-archives
 rm -f %{_builddir}/gcc-ar-member.o
 target=$(%{_builddir}/gcc-%{version}/config.guess)
 doc=%{_builddir}/gcc-build/$target/libstdc++-v3/doc/doxygen/html
-test -d "$doc"
+if ! test -d "$doc"; then
+  echo "missing libstdc++ docs $doc"
+  exit 1
+fi
 mkdir -p %{buildroot}%{_docdir}/libstdc++-docs
 cp -a "$doc" %{buildroot}%{_docdir}/libstdc++-docs/html
 plug=$(echo %{buildroot}%{_prefix}/lib/gcc/*/*/plugin)
@@ -844,6 +870,7 @@ classify() {
   return 1
 }
 
+set +x
 find "$ROOT" -print | sort | while read p; do
   rel=${p#"$ROOT"}
   [ -n "$rel" ] || continue
@@ -890,7 +917,10 @@ req="cpp gcc gcc-c++ gcc-objc gcc-objc++ gcc-gfortran gcc-gdc gcc-gm2 gcc-gcobol
 req="$req libquadmath libquadmath-devel libquadmath-static libgomp-offload-nvptx libgomp-offload-amdgcn gcc-offload-nvptx gcc-offload-amdgcn"
 %endif
 for n in $req; do
-  test -s "$out/$n.files"
+  if ! test -s "$out/$n.files"; then
+    echo "empty gcc package $n"
+    exit 1
+  fi
 done
 %endif
 
