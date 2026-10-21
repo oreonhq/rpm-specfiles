@@ -628,7 +628,7 @@ cd %{_builddir}/gcc-build
 common \
   --enable-shared \
   --with-linker-hash-style=gnu \
-  --enable-languages=c,c++,fortran,objc,obj-c++,go,d,m2,cobol,algol68,lto \
+  --enable-languages=c,c++,fortran,objc,obj-c++,go,d,m2,cobol,algol68,ada,lto \
   --enable-default-pie \
   --enable-bootstrap \
 %ifarch x86_64
