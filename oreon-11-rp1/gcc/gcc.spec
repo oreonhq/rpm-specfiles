@@ -534,8 +534,8 @@ export CXXFLAGS_FOR_TARGET="-O2 -g"
 export FCFLAGS_FOR_TARGET="-O2 -g"
 jobs=%{?_smp_build_ncpus}
 if [ -z "$jobs" ]; then jobs=1; fi
-host=$(gcc -dumpmachine)
 src=%{_builddir}/gcc-%{version}
+target=$("$src/config.guess")
 
 common() {
   "$src/configure" \
@@ -587,7 +587,7 @@ cd %{_builddir}/accel-nvptx
 common \
   --enable-shared \
   --target=nvptx-none \
-  --enable-as-accelerator-for="$host" \
+  --enable-as-accelerator-for="$target" \
   --enable-languages=c,c++,fortran,lto \
   --disable-bootstrap \
   --enable-threads=single \
@@ -610,7 +610,7 @@ cd %{_builddir}/accel-amdgcn
 common \
   --enable-shared \
   --target=amdgcn-amdhsa \
-  --enable-as-accelerator-for="$host" \
+  --enable-as-accelerator-for="$target" \
   --enable-languages=c,c++,fortran,lto \
   --disable-bootstrap \
   --enable-threads=single \
@@ -638,7 +638,7 @@ common \
 %endif
   --disable-libvtv
 make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
-make -s -C "$host/libstdc++-v3" doc-html-doxygen
+make -s -C "$target/libstdc++-v3" doc-html-doxygen
 
 mkdir -p %{_builddir}/gcc-jit
 cd %{_builddir}/gcc-jit
@@ -689,7 +689,8 @@ while read a; do
   fi
 done < %{_builddir}/gcc-archives
 rm -f %{_builddir}/gcc-ar-member.o
-doc=%{_builddir}/gcc-build/$(gcc -dumpmachine)/libstdc++-v3/doc/doxygen/html
+target=$(%{_builddir}/gcc-%{version}/config.guess)
+doc=%{_builddir}/gcc-build/$target/libstdc++-v3/doc/doxygen/html
 test -d "$doc"
 mkdir -p %{buildroot}%{_docdir}/libstdc++-docs
 cp -a "$doc" %{buildroot}%{_docdir}/libstdc++-docs/html
