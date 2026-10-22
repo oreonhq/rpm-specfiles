@@ -860,7 +860,7 @@ classify() {
     */auto-load/*libgcc*) echo libgcc; return ;;
     */auto-load/*libobjc*) echo libobjc; return ;;
     */auto-load/*libgnat*|*/auto-load/*libgnarl*) echo libgnat; return ;;
-    %{_docdir}/annobin|%{_docdir}/annobin/*) echo gcc-plugin-annobin; return ;;
+    %{_docdir}/annobin*|%{_docdir}/annobin*/*) echo gcc-plugin-annobin; return ;;
     */gfortran/*) echo gcc-gfortran; return ;;
   esac
   name=$bn
@@ -886,12 +886,13 @@ classify() {
     gfortran) echo gcc-gfortran; return ;;
     gdc) echo gcc-gdc; return ;;
     gm2) echo gcc-gm2; return ;;
-    gcobol) echo gcc-gcobol; return ;;
+    gcobol|gcobc) echo gcc-gcobol; return ;;
     ga68) echo gcc-algol68; return ;;
     gccgo|go|gofmt) echo gcc-go; return ;;
     gnat|gnatbind|gnatmake|gnatlink|gnatls|gnatchop|gnatkr|gnatname|gnatprep|gnatclean|gnatsym|gnatdll) echo gcc-gnat; return ;;
     sarif-replay) echo libgdiagnostics; return ;;
-    libgcc_s.so*) echo libgcc; return ;;
+    libgcc_s*) echo libgcc; return ;;
+    libsanitizer.spec) echo gcc; return ;;
     libstdc++.so.[0-9]*) echo libstdc++; return ;;
     libstdc++.so|libstdc++.modules.json) echo libstdc++-devel; return ;;
     *libstdc++*-gdb.py) echo libstdc++; return ;;
@@ -904,17 +905,17 @@ classify() {
     libgomp-plugin-nvptx.so*) echo libgomp-offload-nvptx; return ;;
     libgomp-plugin-gcn.so*) echo libgomp-offload-amdgcn; return ;;
     libgomp.so*|libgomp.a|libgomp.spec|omp.h|openacc.h|omp_lib.h|omp_lib.mod|omp_lib.f90|oacc_lib.h) echo libgomp; return ;;
-    libatomic.so*|libatomic*.a|libatomic.spec) echo libatomic; return ;;
+    libatomic*) echo libatomic; return ;;
     libitm.so.[0-9]*) echo libitm; return ;;
     libitm.so) echo libitm-devel; return ;;
     libitm.a|libitm.spec) echo libitm-static; return ;;
-    libasan.so*|libasan.spec) echo libasan; return ;;
+    libasan.so*|libasan.spec|libasan_preinit.o) echo libasan; return ;;
     libasan.a) echo libasan-static; return ;;
-    libhwasan.so*|libhwasan.spec) echo libhwasan; return ;;
+    libhwasan.so*|libhwasan.spec|libhwasan_preinit.o) echo libhwasan; return ;;
     libhwasan.a) echo libhwasan-static; return ;;
-    libtsan.so*|libtsan.spec) echo libtsan; return ;;
+    libtsan.so*|libtsan.spec|libtsan_preinit.o) echo libtsan; return ;;
     libtsan.a) echo libtsan-static; return ;;
-    liblsan.so*|liblsan.spec) echo liblsan; return ;;
+    liblsan.so*|liblsan.spec|liblsan_preinit.o) echo liblsan; return ;;
     liblsan.a) echo liblsan-static; return ;;
     libubsan.so*|libubsan.spec) echo libubsan; return ;;
     libubsan.a) echo libubsan-static; return ;;
@@ -925,7 +926,8 @@ classify() {
     libgfortran.a) echo libgfortran-static; return ;;
     libgphobos.so*|libgdruntime.so*) echo libgphobos; return ;;
     libgphobos.a|libgdruntime.a) echo libgphobos-static; return ;;
-    libgm2.so*) echo libgm2; return ;;
+    libgm2.so*|libm2*.so.[0-9]*) echo libgm2; return ;;
+    libm2*.so) echo gcc-gm2; return ;;
     libgm2.a|libm2*.a) echo libgm2-static; return ;;
     libgcobol.so*) echo libgcobol; return ;;
     libgcobol.a) echo libgcobol-static; return ;;
@@ -950,14 +952,14 @@ classify() {
   case $info in
     cpp.*) echo cpp; return ;;
     g++.*) echo gcc-c++; return ;;
-    gcc.*|gccint.*|cppinternals.*) echo gcc; return ;;
+    gcc.*|gccint.*|gccinstall.*|cppinternals.*|gcov.*|gcov-dump.*|gcov-tool.*|lto-dump.*) echo gcc; return ;;
     gfortran.*|libgfortran.*) echo gcc-gfortran; return ;;
     gdc.*|libgphobos.*) echo gcc-gdc; return ;;
-    gm2.*|libgm2.*) echo gcc-gm2; return ;;
-    gcobol.*|libgcobol.*) echo gcc-gcobol; return ;;
-    ga68.*|libga68.*) echo gcc-algol68; return ;;
-    gccgo.*|libgo.*) echo gcc-go; return ;;
-    gnat.*|libgnat.*) echo gcc-gnat; return ;;
+    gm2.*|libgm2.*|m2.*) echo gcc-gm2; return ;;
+    gcobol*|libgcobol.*) echo gcc-gcobol; return ;;
+    ga68*|libga68.*) echo gcc-algol68; return ;;
+    gccgo.*|libgo.*|go.*|gofmt.*) echo gcc-go; return ;;
+    gnat*|libgnat.*) echo gcc-gnat; return ;;
     libgomp.*) echo libgomp; return ;;
     libquadmath.*) echo libquadmath; return ;;
     libitm.*) echo libitm; return ;;
