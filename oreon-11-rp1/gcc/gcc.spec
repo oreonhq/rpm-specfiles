@@ -542,11 +542,15 @@ step() {
   shift
   echo "oreon gcc step $name"
   log=%{_builddir}/gcc-step.log
-  if ! "$@" >"$log" 2>&1; then
+  set -o pipefail
+  if ! "$@" 2>&1 | tail -n 400 >"$log"; then
+    set +o pipefail
     echo "oreon gcc step $name failed"
-    tail -n 250 "$log"
+    cat "$log"
     exit 1
   fi
+  set +o pipefail
+  rm -f "$log"
 }
 
 common() {
@@ -633,6 +637,12 @@ step amdgcn-configure common \
 step amdgcn-make make -s -j"$jobs"
 step amdgcn-install make -s install DESTDIR=%{_builddir}/offload-root
 rm -f "$src/newlib"
+rm -rf \
+  %{_builddir}/accel-nvptx \
+  %{_builddir}/accel-amdgcn \
+  %{_builddir}/nvptx-tools-%{nvptx_rev} \
+  %{_builddir}/amdgcn-bin \
+  %{_builddir}/newlib-cygwin-%{newlib_rev}
 %endif
 
 mkdir -p %{_builddir}/gcc-build
@@ -650,6 +660,7 @@ step host-configure common \
 %endif
   --disable-libvtv
 step host-make make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
+rm -rf stage1-* prev-*
 step libstdcxx-docs make -s -C "$target/libstdc++-v3" doc-html-doxygen
 
 mkdir -p %{_builddir}/gcc-jit
@@ -682,20 +693,24 @@ step() {
   shift
   echo "oreon gcc step $name"
   log=%{_builddir}/gcc-step.log
-  if ! "$@" >"$log" 2>&1; then
+  set -o pipefail
+  if ! "$@" 2>&1 | tail -n 400 >"$log"; then
+    set +o pipefail
     echo "oreon gcc step $name failed"
-    tail -n 250 "$log"
+    cat "$log"
     exit 1
   fi
+  set +o pipefail
+  rm -f "$log"
 }
 cd %{_builddir}/gcc-build
 step host-install make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 %ifarch x86_64
-step nvptx-tools-install make -s -C %{_builddir}/nvptx-tools-%{nvptx_rev} install DESTDIR=%{buildroot}
-step nvptx-install make -s -C %{_builddir}/accel-nvptx install DESTDIR=%{buildroot}
-step amdgcn-install make -s -C %{_builddir}/accel-amdgcn install DESTDIR=%{buildroot}
+mkdir -p %{buildroot}%{_prefix}
+cp -a %{_builddir}/offload-root%{_prefix}/. %{buildroot}%{_prefix}/
 %endif
 step jit-install make -s -C %{_builddir}/gcc-jit install DESTDIR=%{_builddir}/gcc-jit-root
+rm -rf %{_builddir}/gcc-jit
 find %{_builddir}/gcc-jit-root -type f \( -name 'libgccjit*' -o -name 'libgdiagnostics*' -o -name 'sarif-replay' \) > %{_builddir}/gcc-jit-files
 while read f; do
   rel=${f#%{_builddir}/gcc-jit-root}
