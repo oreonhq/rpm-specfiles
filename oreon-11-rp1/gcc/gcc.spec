@@ -660,7 +660,7 @@ step host-configure common \
 %endif
   --disable-libvtv
 step host-make make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
-rm -rf stage1-* prev-*
+rm -rf stage1-*
 step libstdcxx-docs make -s -C "$target/libstdc++-v3" doc-html-doxygen
 
 mkdir -p %{_builddir}/gcc-jit
