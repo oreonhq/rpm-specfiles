@@ -706,17 +706,70 @@ step() {
 cd %{_builddir}/gcc-build
 step host-install make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 %ifarch x86_64
-mkdir -p %{buildroot}%{_prefix}
-cp -a %{_builddir}/offload-root%{_prefix}/. %{buildroot}%{_prefix}/
+target=$(%{_builddir}/gcc-%{version}/config.guess)
+off=%{_builddir}/offload-root%{_prefix}
+dest=%{buildroot}%{_prefix}
+mkdir -p "$dest/bin"
+for b in "$off"/bin/nvptx-none-* "$off"/bin/amdgcn-amdhsa-*; do
+  [ -e "$b" ] || continue
+  cp -a "$b" "$dest/bin/"
+done
+for tree in nvptx-none amdgcn-amdhsa; do
+  [ -d "$off/$tree" ] || continue
+  mkdir -p "$dest/$tree"
+  cp -a "$off/$tree/." "$dest/$tree/"
+done
+for src in "$off"/lib64/gcc/$target/*/accel "$off"/libexec/gcc/$target/*/accel \
+  "$off"/lib64/gcc/nvptx-none "$off"/lib64/gcc/amdgcn-amdhsa \
+  "$off"/libexec/gcc/nvptx-none "$off"/libexec/gcc/amdgcn-amdhsa; do
+  [ -d "$src" ] || continue
+  rel=${src#"$off/"}
+  mkdir -p "$dest/$(dirname "$rel")"
+  rm -rf "$dest/$rel"
+  cp -a "$src" "$dest/$rel"
+done
+for acc in nvptx-none amdgcn-amdhsa; do
+  for base in "$dest"/libexec/gcc/$target/*/accel/$acc "$dest"/lib64/gcc/$target/*/accel/$acc \
+    "$dest"/libexec/gcc/$acc/* "$dest"/lib64/gcc/$acc/*; do
+    [ -d "$base" ] || continue
+    rm -rf "$base/install-tools" "$base/plugin" "$base/g++-mapper-server" \
+      "$base/cc1" "$base/cc1plus" "$base/f951" "$base/include-fixed"
+  done
+  accdir=$(echo "$dest"/lib64/gcc/$target/*/accel/$acc)
+  [ -d "$accdir" ] || continue
+  if [ -d "$dest/$acc/lib" ]; then
+    find "$dest/$acc/lib" \( -name '*.a' -o -name '*.spec' \) -print | while read f; do
+      rel=${f#"$dest/$acc/lib/"}
+      mkdir -p "$accdir/$(dirname "$rel")"
+      mv -f "$f" "$accdir/$rel"
+    done
+  fi
+  srcbase=$(echo "$dest"/lib64/gcc/$acc/*)
+  if [ -d "$srcbase" ]; then
+    find "$srcbase" \( -name '*.a' -o -name '*.spec' \) -print | while read f; do
+      rel=${f#"$srcbase/"}
+      mkdir -p "$accdir/$(dirname "$rel")"
+      mv -f "$f" "$accdir/$rel"
+    done
+  fi
+done
+for d in "$dest"/lib64/gcc/nvptx-none "$dest"/lib64/gcc/amdgcn-amdhsa \
+  "$dest"/lib64/gcc/$target/*/accel "$dest"/nvptx-none "$dest"/amdgcn-amdhsa; do
+  [ -d "$d" ] || continue
+  find "$d" -name '*.la' -delete
+done
 %endif
-step jit-install make -s -C %{_builddir}/gcc-jit install DESTDIR=%{_builddir}/gcc-jit-root
+mkdir -p %{buildroot}%{_libdir} %{buildroot}%{_includedir} %{buildroot}%{_bindir}
+cp -a %{_builddir}/gcc-jit/gcc/libgccjit.so* %{buildroot}%{_libdir}/
+cp -a %{_builddir}/gcc-%{version}/gcc/jit/libgccjit*.h %{buildroot}%{_includedir}/
+cp -a %{_builddir}/gcc-jit/gcc/libgdiagnostics.so* %{buildroot}%{_libdir}/
+cp -a %{_builddir}/gcc-%{version}/gcc/libgdiagnostics*.h %{buildroot}%{_includedir}/
+cp -a %{_builddir}/gcc-jit/gcc/sarif-replay %{buildroot}%{_bindir}/
+if [ -f %{_builddir}/gcc-jit/gcc/doc/libgccjit.info ]; then
+  mkdir -p %{buildroot}%{_infodir}
+  cp -a %{_builddir}/gcc-jit/gcc/doc/libgccjit.info %{buildroot}%{_infodir}/
+fi
 rm -rf %{_builddir}/gcc-jit
-find %{_builddir}/gcc-jit-root -type f \( -name 'libgccjit*' -o -name 'libgdiagnostics*' -o -name 'sarif-replay' \) > %{_builddir}/gcc-jit-files
-while read f; do
-  rel=${f#%{_builddir}/gcc-jit-root}
-  mkdir -p "%{buildroot}$(dirname "$rel")"
-  cp -a "$f" "%{buildroot}$rel"
-done < %{_builddir}/gcc-jit-files
 find %{buildroot} -name '*.a' > %{_builddir}/gcc-archives
 while read a; do
   member=$(ar t "$a" 2>/dev/null | head -1 || true)
@@ -735,7 +788,7 @@ if ! test -d "$doc"; then
 fi
 mkdir -p %{buildroot}%{_docdir}/libstdc++-docs
 cp -a "$doc" %{buildroot}%{_docdir}/libstdc++-docs/html
-plug=$(echo %{buildroot}%{_prefix}/lib/gcc/*/*/plugin)
+plug=$(echo %{buildroot}%{_libdir}/gcc/*/*/plugin)
 test -d "$plug"
 mkdir -p %{_builddir}/annobin-build
 cd %{_builddir}/annobin-build
@@ -756,7 +809,7 @@ make -s -j%{?_smp_build_ncpus}
 make -s install DESTDIR=%{buildroot}
 find %{buildroot} -name '*.la' -delete
 rm -f %{buildroot}%{_infodir}/dir
-rm -rf %{buildroot}%{_prefix}/lib/gcc/*/*/install-tools
+rm -rf %{buildroot}%{_libdir}/gcc/*/*/install-tools
 rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
 
 out=%{_builddir}/gcc-split
@@ -771,8 +824,8 @@ classify() {
   bn=${rel##*/}
   case $rel in
     %{_docdir}/libstdc++-docs|%{_docdir}/libstdc++-docs/*) echo libstdc++-docs; return ;;
-    %{_prefix}/nvptx-none/*|%{_bindir}/nvptx-none-*|*/accel/nvptx-none/*|*/accel-nvptx-none-*) echo gcc-offload-nvptx; return ;;
-    %{_prefix}/amdgcn-amdhsa/*|%{_bindir}/amdgcn-amdhsa-*|*/accel/amdgcn-amdhsa/*|*/accel-amdgcn-amdhsa-*) echo gcc-offload-amdgcn; return ;;
+    %{_prefix}/nvptx-none/*|%{_bindir}/nvptx-none-*|*accel-nvptx-none-*|*/accel/nvptx-none/*|%{_libdir}/gcc/nvptx-none/*|%{_libexecdir}/gcc/nvptx-none/*) echo gcc-offload-nvptx; return ;;
+    %{_prefix}/amdgcn-amdhsa/*|%{_bindir}/amdgcn-amdhsa-*|*accel-amdgcn-amdhsa-*|*/accel/amdgcn-amdhsa/*|%{_libdir}/gcc/amdgcn-amdhsa/*|%{_libexecdir}/gcc/amdgcn-amdhsa/*) echo gcc-offload-amdgcn; return ;;
     */plugin/annobin.so*|*/plugin/gcc-annobin.so*) echo gcc-plugin-annobin; return ;;
     */plugin/libcc1plugin.so*|*/plugin/libcp1plugin.so*|*/libcc1.so*) echo gcc-gdb-plugin; return ;;
     */plugin/include/*|*/plugin/*.h|*/plugin/gtype.state) echo gcc-plugin-devel; return ;;
@@ -880,7 +933,7 @@ classify() {
     libgdiagnostics.*) echo libgdiagnostics-devel; return ;;
   esac
   case $rel in
-    %{_prefix}/lib/gcc/*|%{_libexecdir}/gcc/*) echo gcc; return ;;
+    %{_prefix}/lib/gcc/*|%{_libdir}/gcc/*|%{_libexecdir}/gcc/*) echo gcc; return ;;
   esac
   return 1
 }
