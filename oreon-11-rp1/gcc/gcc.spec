@@ -790,11 +790,30 @@ mkdir -p %{buildroot}%{_docdir}/libstdc++-docs
 cp -a "$doc" %{buildroot}%{_docdir}/libstdc++-docs/html
 plug=$(echo %{buildroot}%{_libdir}/gcc/*/*/plugin)
 test -d "$plug"
+pin=$plug/include
+test -d "$pin"
+b=%{_builddir}/gcc-build
+flags=$b/$target/libstdc++-v3/scripts/testsuite_flags
+test -x "$flags"
+libs=
+for d in \
+  "$b/prev-$target/libstdc++-v3/src/.libs" \
+  "$b/$target/libstdc++-v3/src/.libs" \
+  "$b/$target/libgcc/.libs" \
+  "$b/gcc"
+do
+  [ -d "$d" ] || continue
+  libs=${libs:+$libs:}$d
+done
+unset CFLAGS CXXFLAGS FFLAGS FCFLAGS OBJCFLAGS LDFLAGS
+export CFLAGS="-O2 -g -I$pin"
+export CXXFLAGS="-O2 -g -I$pin $($flags --build-includes)"
+export LDFLAGS="-L$b/$target/libstdc++-v3/src/.libs -L$b/$target/libstdc++-v3/libsupc++/.libs"
+export LD_LIBRARY_PATH="$libs"
 mkdir -p %{_builddir}/annobin-build
 cd %{_builddir}/annobin-build
-CC="%{_builddir}/gcc-build/gcc/xgcc -B%{_builddir}/gcc-build/gcc/" \
-CXX="%{_builddir}/gcc-build/gcc/xg++ -B%{_builddir}/gcc-build/gcc/" \
-LD_LIBRARY_PATH=$(echo %{_builddir}/gcc-build/*/libstdc++-v3/src/.libs) \
+CC="$b/gcc/xgcc -B$b/gcc/ -B$b/$target/libgcc/" \
+CXX="$b/gcc/xg++ -B$b/gcc/ -B$b/$target/libgcc/ -B$b/$target/libstdc++-v3/src/.libs -B$b/$target/libstdc++-v3/libsupc++/.libs -L$b/$target/libstdc++-v3/src/.libs -L$b/$target/libstdc++-v3/libsupc++/.libs" \
 %{_builddir}/annobin-%{annobin_ver}/configure \
   --prefix=%{_prefix} \
   --with-gcc-plugin-dir="${plug#%{buildroot}}" \
@@ -841,8 +860,14 @@ classify() {
     */auto-load/*libgcc*) echo libgcc; return ;;
     */auto-load/*libobjc*) echo libobjc; return ;;
     */auto-load/*libgnat*|*/auto-load/*libgnarl*) echo libgnat; return ;;
+    %{_docdir}/annobin|%{_docdir}/annobin/*) echo gcc-plugin-annobin; return ;;
+    */gfortran/*) echo gcc-gfortran; return ;;
   esac
-  case $bn in
+  name=$bn
+  case $name in
+    "$target"-*) name=${name#"$target-"} ;;
+  esac
+  case $name in
     cc1) echo cpp; return ;;
     cc1plus|g++-mapper-server) echo gcc-c++; return ;;
     cc1obj) echo gcc-objc; return ;;
@@ -856,7 +881,7 @@ classify() {
     go1) echo gcc-go; return ;;
     lto1|collect2|lto-wrapper) echo gcc; return ;;
     cpp) echo cpp; return ;;
-    gcc|gcc-ar|gcc-nm|gcc-ranlib|gcov|gcov-dump|gcov-tool|lto-dump|c89|c99) echo gcc; return ;;
+    gcc|gcc-[0-9]*|gcc-ar|gcc-nm|gcc-ranlib|gcov|gcov-dump|gcov-tool|lto-dump|c89|c99) echo gcc; return ;;
     g++|c++) echo gcc-c++; return ;;
     gfortran) echo gcc-gfortran; return ;;
     gdc) echo gcc-gdc; return ;;
@@ -868,12 +893,18 @@ classify() {
     sarif-replay) echo libgdiagnostics; return ;;
     libgcc_s.so*) echo libgcc; return ;;
     libstdc++.so.[0-9]*) echo libstdc++; return ;;
-    libstdc++.so) echo libstdc++-devel; return ;;
+    libstdc++.so|libstdc++.modules.json) echo libstdc++-devel; return ;;
+    *libstdc++*-gdb.py) echo libstdc++; return ;;
+    *libgfortran*-gdb.py) echo libgfortran; return ;;
+    *libgomp*-gdb.py) echo libgomp; return ;;
+    *libgcc*-gdb.py) echo libgcc; return ;;
+    *libobjc*-gdb.py) echo libobjc; return ;;
+    *libgnat*-gdb.py|*libgnarl*-gdb.py) echo libgnat; return ;;
     libstdc++*.a|libsupc++*.a) echo libstdc++-static; return ;;
     libgomp-plugin-nvptx.so*) echo libgomp-offload-nvptx; return ;;
     libgomp-plugin-gcn.so*) echo libgomp-offload-amdgcn; return ;;
     libgomp.so*|libgomp.a|libgomp.spec|omp.h|openacc.h|omp_lib.h|omp_lib.mod|omp_lib.f90|oacc_lib.h) echo libgomp; return ;;
-    libatomic.so*|libatomic.a|libatomic.spec) echo libatomic; return ;;
+    libatomic.so*|libatomic*.a|libatomic.spec) echo libatomic; return ;;
     libitm.so.[0-9]*) echo libitm; return ;;
     libitm.so) echo libitm-devel; return ;;
     libitm.a|libitm.spec) echo libitm-static; return ;;
@@ -912,8 +943,9 @@ classify() {
     libgdiagnostics.so.[0-9]*) echo libgdiagnostics; return ;;
     libgdiagnostics.so|libgdiagnostics*.h|libgdiagnostics.a) echo libgdiagnostics-devel; return ;;
     itm.h|itm2.h) echo libitm-devel; return ;;
+    fsf-funding.7|gfdl.7|gpl.7) echo gcc; return ;;
   esac
-  info=$bn
+  info=$name
   info=${info%.gz}
   case $info in
     cpp.*) echo cpp; return ;;
@@ -947,8 +979,8 @@ find "$ROOT" -print | sort | while read p; do
   fi
   entry=$rel
   case $rel in
-    *.1|*.3|*.info|*.info-[0-9]*|*.py) entry="${rel}*" ;;
-    *.1.gz|*.3.gz|*.info.gz) entry="${rel%.gz}*" ;;
+    *.1|*.3|*.7|*.info|*.info-[0-9]*|*.py) entry="${rel}*" ;;
+    *.1.gz|*.3.gz|*.7.gz|*.info.gz) entry="${rel%.gz}*" ;;
   esac
   pkg=$(classify "$rel") || { echo "$rel" >> "$miss"; continue; }
   printf '%%s\n' "$entry" >> "$out/$pkg.files"
