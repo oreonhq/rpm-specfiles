@@ -8,7 +8,7 @@ Name:           gnome-shell-extension-%{ename}
 	
 Version:        69.0
 	
-Release:        3%{?dist}
+Release:        4%{?dist}
 	
 Summary:        Integrated icon taskbar and status panel for Gnome Shell
 	
@@ -30,11 +30,7 @@ BuildRequires:  make
 BuildRequires:  glib2
 
 BuildRequires:  glib2-devel
-	
-Requires:       clutter
-	
- 
-	
+
 %description
 	
 Dash to Panel is an icon taskbar for Gnome Shell. This extension moves the dash
