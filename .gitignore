@@ -21,3 +21,12 @@ __pycache__/
 *.whl
 *-vendor.tar.*
 *-vendor.tar.*.*
+
+!oreon-10/**/*.tar
+!oreon-10/**/*.tar.gz
+!oreon-10/**/*.tar.bz2
+!oreon-10/**/*.tar.xz
+!oreon-10/**/*.tar.zst
+!oreon-10/**/*.tgz
+!oreon-10/**/*.txz
+!oreon-10/**/*.zip
