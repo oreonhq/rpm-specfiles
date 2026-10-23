@@ -792,11 +792,12 @@ mkdir -p %{buildroot}%{_docdir}/libstdc++-docs
 cp -a "$doc" %{buildroot}%{_docdir}/libstdc++-docs/html
 plug=$(echo %{buildroot}%{_libdir}/gcc/*/*/plugin)
 test -d "$plug"
-pin=$plug/include
-test -d "$pin"
 b=%{_builddir}/gcc-build
+src=%{_builddir}/gcc-%{version}
+test -f "$b/gcc/plugin-version.h"
 flags=$b/$target/libstdc++-v3/scripts/testsuite_flags
 test -x "$flags"
+inc="-I$b/gcc -I$src/gcc -I$src/include -I$src/libcpp/include"
 libs=
 for d in \
   "$b/prev-$target/libstdc++-v3/src/.libs" \
@@ -808,8 +809,8 @@ do
   libs=${libs:+$libs:}$d
 done
 unset CFLAGS CXXFLAGS FFLAGS FCFLAGS OBJCFLAGS LDFLAGS
-export CFLAGS="-O2 -g -I$pin"
-export CXXFLAGS="-O2 -g -I$pin $($flags --build-includes)"
+export CFLAGS="-O2 -g $inc"
+export CXXFLAGS="-O2 -g $inc $($flags --build-includes)"
 export LDFLAGS="-L$b/$target/libstdc++-v3/src/.libs -L$b/$target/libstdc++-v3/libsupc++/.libs"
 export LD_LIBRARY_PATH="$libs"
 mkdir -p %{_builddir}/annobin-build
