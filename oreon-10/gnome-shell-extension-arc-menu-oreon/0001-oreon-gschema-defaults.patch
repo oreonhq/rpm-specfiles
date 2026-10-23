@@ -1,0 +1,47 @@
+--- a/schemas/org.gnome.shell.extensions.arcmenu.gschema.xml	2026-05-27 21:51:26.628444643 -0700
++++ b/schemas/org.gnome.shell.extensions.arcmenu.gschema.xml	2026-05-27 21:51:26.645341298 -0700
+@@ -146,7 +146,7 @@
+       <summary>The project version of when an update notification was shown</summary>
+     </key>
+     <key type="b" name="update-notifier-enabled">
+-      <default>true</default>
++      <default>false</default>
+       <summary>Enable/Disable the update notifications</summary>
+     </key>
+     <key type="i" name="menu-position-alignment">
+@@ -154,7 +154,7 @@
+       <summary>Menu position alignment</summary>
+     </key>
+     <key name="menu-layout" enum="org.gnome.shell.extensions.arcmenu.menulayout">
+-      <default>'Default'</default>
++      <default>'Redmond'</default>
+       <summary>menu layout</summary>
+     </key>
+     <key type="b" name="override-menu-theme">
+@@ -624,7 +624,7 @@
+       <summary>Icon integer value for the menu button.</summary>
+     </key>
+     <key name="distro-icon" type="i">
+-      <default>0</default>
++      <default>23</default>
+       <summary>Distro icon integer value for the menu button.</summary>
+     </key>
+     <key type="s" name="custom-menu-button-text">
+@@ -650,7 +650,7 @@
+       <summary>Text of the menu button.</summary>
+     </key>
+     <key type="s" name="menu-button-icon">
+-      <default>'resource:///org/gnome/shell/extensions/arcmenu/icons/scalable/actions/icon-arcmenu-logo-symbolic.svg'</default>
++      <default>'resource:///org/gnome/shell/extensions/arcmenu/icons/scalable/actions/distro-oreon-symbolic.svg'</default>
+       <summary>ArcMenu button icon</summary>
+       <description>
+         Can be a file path, a resource:/// URI (for bundled icons), or a symbolic icon name.
+@@ -658,7 +658,7 @@
+       </description>
+     </key>
+     <key type="i" name="menu-button-icon-size">
+-      <default>20</default>
++      <default>40</default>
+       <summary>Size of the menu buton icon.</summary>
+     </key>
+     <key type="i" name="menu-button-padding">

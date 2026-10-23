@@ -1,0 +1,30 @@
+[saphana]
+name=Oreon $releasever - SAPHANA
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/saphana
+# baseurl=https://kitten.repo.almalinux.org/$releasever-kitten/SAPHANA/$basearch/os/
+enabled=1
+gpgcheck=1
+countme=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=1
+
+[saphana-debuginfo]
+name=Oreon $releasever - SAPHANA - Debug
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/saphana-debug
+# baseurl=https://kitten.vault.almalinux.org/$releasever-kitten/SAPHANA/debug/$basearch/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=0
+
+[saphana-source]
+name=Oreon $releasever - SAPHANA - Source
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/saphana-source
+# baseurl=https://kitten.vault.almalinux.org/$releasever-kitten/SAPHANA/Source/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=0

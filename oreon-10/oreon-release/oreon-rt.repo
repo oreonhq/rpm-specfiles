@@ -1,0 +1,30 @@
+[rt]
+name=Oreon $releasever - RT
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/rt
+# baseurl=https://kitten.repo.almalinux.org/$releasever-kitten/RT/$basearch/os/
+enabled=0
+gpgcheck=1
+countme=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=1
+
+[rt-debuginfo]
+name=Oreon $releasever - RT - Debug
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/rt-debug
+# baseurl=https://kitten.vault.almalinux.org/$releasever-kitten/RT/debug/$basearch/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=0
+
+[rt-source]
+name=Oreon $releasever - RT - Source
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/rt-source
+# baseurl=https://kitten.vault.almalinux.org/$releasever-kitten/RT/Source/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=0

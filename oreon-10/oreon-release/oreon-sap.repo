@@ -1,0 +1,30 @@
+[sap]
+name=Oreon $releasever - SAP
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/sap
+# baseurl=https://kitten.repo.almalinux.org/$releasever-kitten/SAP/$basearch/os/
+enabled=1
+gpgcheck=1
+countme=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=1
+
+[sap-debuginfo]
+name=Oreon $releasever - SAP - Debug
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/sap-debug
+# baseurl=https://kitten.vault.almalinux.org/$releasever-kitten/SAP/debug/$basearch/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=0
+
+[sap-source]
+name=Oreon $releasever - SAP - Source
+mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/sap-source
+# baseurl=https://kitten.vault.almalinux.org/$releasever-kitten/SAP/Source/
+enabled=0
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-Oreon-10
+metadata_expire=86400
+enabled_metadata=0

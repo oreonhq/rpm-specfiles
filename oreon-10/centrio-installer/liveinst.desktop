@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Install Oreon
+Comment=Install Oreon to your hard drive
+Icon=system-installer
+Exec=python3 /usr/share/centrio/main.py
+Terminal=false
+Categories=System;Settings;
+StartupNotify=true
