@@ -652,6 +652,7 @@ step host-configure common \
   --with-linker-hash-style=gnu \
   --enable-languages=c,c++,fortran,objc,obj-c++,go,d,m2,cobol,algol68,ada,lto \
   --enable-default-pie \
+  --enable-linker-build-id \
   --enable-bootstrap \
 %ifarch x86_64
   --enable-offload-targets=nvptx-none=%{_builddir}/offload-root%{_prefix},amdgcn-amdhsa=%{_builddir}/offload-root%{_prefix} \
@@ -672,6 +673,7 @@ step jit-configure common \
   --enable-host-shared \
   --enable-libgdiagnostics \
   --disable-bootstrap \
+  --enable-linker-build-id \
   --enable-default-pie \
 %ifnarch x86_64
   --disable-libquadmath \
