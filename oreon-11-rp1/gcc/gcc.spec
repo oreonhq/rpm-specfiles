@@ -524,6 +524,9 @@ echo '%{source3_hash}  %{SOURCE3}' | sha256sum -c -
 tar -xf %{SOURCE1} -C %{_builddir}
 tar -xf %{SOURCE2} -C %{_builddir}
 tar -xf %{SOURCE3} -C %{_builddir}
+find %{_builddir}/gcc-%{version} -name ltmain.sh -exec sed -i \
+  's|\*) finalize_rpath="$finalize_rpath $libdir"$|\*) case "$libdir" in */../*) ;; *) finalize_rpath="$finalize_rpath $libdir" ;; esac|' \
+  {} +
 
 %build
 unset CFLAGS CXXFLAGS FFLAGS FCFLAGS OBJCFLAGS GOFLAGS DFLAGS LDFLAGS
