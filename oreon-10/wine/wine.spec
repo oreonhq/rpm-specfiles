@@ -166,8 +166,11 @@ BuildRequires:  gstreamer1-plugins-base-devel
 %if 0%{?fedora} || 0%{?rhel} >= 9
 BuildRequires:  mpg123-devel
 %endif
+%if 0%{?fedora}
 BuildRequires:  SDL2-devel
-BuildRequires:  vulkan-devel
+%endif
+BuildRequires:  pkgconfig(vulkan)
+BuildRequires:  vulkan-headers
 BuildRequires:  libappstream-glib
 BuildRequires:  pcsc-lite-devel
 
@@ -182,10 +185,13 @@ BuildRequires:  libva-devel
 BuildRequires:  icoutils
 
 %ifarch %{ix86} x86_64
-BuildRequires:  mingw32-FAudio
-BuildRequires:  mingw64-FAudio
 BuildRequires:  mingw32-gcc
 BuildRequires:  mingw64-gcc
+BuildRequires:  mingw32-zlib
+BuildRequires:  mingw64-zlib
+%if 0%{?fedora}
+BuildRequires:  mingw32-FAudio
+BuildRequires:  mingw64-FAudio
 BuildRequires:  mingw32-lcms2
 BuildRequires:  mingw64-lcms2
 BuildRequires:  mingw32-libpng
@@ -200,8 +206,7 @@ BuildRequires:  mingw32-vkd3d >= 1.14
 BuildRequires:  mingw64-vkd3d >= 1.14
 BuildRequires:  mingw32-vulkan-headers
 BuildRequires:  mingw64-vulkan-headers
-BuildRequires:  mingw32-zlib
-BuildRequires:  mingw64-zlib
+%endif
 %endif
 
 Requires:       wine-common = %{version}-%{release}
@@ -225,8 +230,13 @@ Recommends:     wine-dxvk(x86-32)
 Recommends:     gstreamer1-plugins-good(x86-32)
 %endif
 %endif
+%if 0%{?fedora}
 Requires:       mingw32-wine-gecko = %winegecko
 Requires:       wine-mono = %winemono
+%else
+Recommends:     mingw32-wine-gecko = %winegecko
+Recommends:     wine-mono = %winemono
+%endif
 #  wait for rhbz#968860 to require arch-specific samba-winbind-clients
 Requires:       /usr/bin/ntlm_auth
 Recommends:     dosbox-staging
@@ -299,11 +309,16 @@ Requires:       libpng(x86-32)
 Requires:       libpcap(x86-32)
 Requires:       libv4l(x86-32)
 Requires:       unixODBC(x86-32)
+%if 0%{?fedora}
 Requires:       SDL2(x86-32)
+%endif
 Requires:       vulkan-loader(x86-32)
 %if 0%{?wine_staging}
 Requires:       libva(x86-32)
 %endif
+Requires:  mingw32-win-iconv
+Requires:  mingw32-zlib
+%if 0%{?fedora}
 Requires:  mingw32-FAudio
 Requires:  mingw32-lcms2
 Requires:  mingw32-libjpeg-turbo
@@ -312,8 +327,7 @@ Requires:  mingw32-libtiff
 Requires:  mingw32-libxml2
 Requires:  mingw32-libxslt
 Requires:  mingw32-vkd3d >= 1.14
-Requires:  mingw32-win-iconv
-Requires:  mingw32-zlib
+%endif
 Provides:  wine-wow32 = %{version}-%{release}
 Obsoletes: wine-wow32 < 10.4-6
 %endif
@@ -334,11 +348,16 @@ Requires:       libpng(x86-64)
 Requires:       libpcap(x86-64)
 Requires:       libv4l(x86-64)
 Requires:       unixODBC(x86-64)
+%if 0%{?fedora}
 Requires:       SDL2(x86-64)
+%endif
 Requires:       vulkan-loader(x86-64)
 %if 0%{?wine_staging}
 Requires:       libva(x86-64)
 %endif
+Requires:  mingw64-win-iconv
+Requires:  mingw64-zlib
+%if 0%{?fedora}
 Requires:  mingw64-FAudio
 Requires:  mingw64-lcms2
 Requires:  mingw64-libjpeg-turbo
@@ -347,8 +366,7 @@ Requires:  mingw64-libtiff
 Requires:  mingw64-libxml2
 Requires:  mingw64-libxslt
 Requires:  mingw64-vkd3d >= 1.14
-Requires:  mingw64-win-iconv
-Requires:  mingw64-zlib
+%endif
 Provides:  wine-wow64 = %{version}-%{release}
 Obsoletes: wine-wow64 < 10.4-6
 %endif
@@ -366,7 +384,9 @@ Requires:       libpng
 Requires:       libpcap
 Requires:       libv4l
 Requires:       unixODBC
+%if 0%{?fedora}
 Requires:       SDL2
+%endif
 Requires:       vulkan-loader
 %if 0%{?wine_staging}
 Requires:       libva

@@ -29,6 +29,7 @@ Source:         %{url}/archive/v%{version}/%{extension}-%{version}.tar.gz
 
 BuildRequires:  gettext
 BuildRequires:  glib2
+BuildRequires:  make
 BuildRequires:  gnome-shell
 BuildRequires:  unzip
 Requires:       gnome-shell >= 46
