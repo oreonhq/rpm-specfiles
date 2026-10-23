@@ -9,7 +9,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 %global __brp_python_bytecompile %{nil}
-%global __brp_strip_static_archive %{nil}
+%global __strip %{_builddir}/gcc-host-strip
 
 Name: gcc
 Version: 16.2.0
@@ -683,6 +683,21 @@ step jit-make make -s -j"$jobs" all-gcc
 %endif
 
 %install
+cat > %{_builddir}/gcc-host-strip << 'EOF'
+#!/bin/bash
+args=()
+saw=
+for a in "$@"; do
+  case "$a" in
+    */accel/*|*/nvptx-none/*|*/amdgcn-amdhsa/*) continue ;;
+    */*) saw=1 ;;
+  esac
+  args+=("$a")
+done
+[ -n "$saw" ] || exit 0
+exec /usr/bin/strip "${args[@]}"
+EOF
+chmod 755 %{_builddir}/gcc-host-strip
 %if %{with bootstrap} || 0%{?bootstrap}
 cd %{_builddir}/gcc-build
 make -s install DESTDIR=%{buildroot}
@@ -772,16 +787,6 @@ if [ -f %{_builddir}/gcc-jit/gcc/doc/libgccjit.info ]; then
   cp -a %{_builddir}/gcc-jit/gcc/doc/libgccjit.info %{buildroot}%{_infodir}/
 fi
 rm -rf %{_builddir}/gcc-jit
-find %{buildroot} -name '*.a' > %{_builddir}/gcc-archives
-while read a; do
-  member=$(ar t "$a" 2>/dev/null | head -1 || true)
-  [ -n "$member" ] || continue
-  ar p "$a" "$member" > %{_builddir}/gcc-ar-member.o 2>/dev/null || continue
-  if file -b %{_builddir}/gcc-ar-member.o | grep -Eq 'x86-64|80386|ARM aarch64'; then
-    strip -g "$a" || exit 1
-  fi
-done < %{_builddir}/gcc-archives
-rm -f %{_builddir}/gcc-ar-member.o
 target=$(%{_builddir}/gcc-%{version}/config.guess)
 doc=%{_builddir}/gcc-build/$target/libstdc++-v3/doc/doxygen/html
 if ! test -d "$doc"; then
