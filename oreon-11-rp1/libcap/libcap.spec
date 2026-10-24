@@ -52,10 +52,10 @@ rm -f %{buildroot}%{_libdir}/*.a
 
 %files
 %license License
-%{_sbindir}/capsh
-%{_sbindir}/getcap
-%{_sbindir}/getpcaps
-%{_sbindir}/setcap
+%{_prefix}/sbin/capsh
+%{_prefix}/sbin/getcap
+%{_prefix}/sbin/getpcaps
+%{_prefix}/sbin/setcap
 %{_libdir}/libcap.so.2
 %{_libdir}/libcap.so.2.*
 %{_libdir}/libpsx.so.2
