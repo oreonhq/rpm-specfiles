@@ -11,6 +11,7 @@ Summary: Extended crypt library
 License: LGPL-2.1-or-later
 URL: https://github.com/besser82/libxcrypt
 Source0: https://github.com/besser82/libxcrypt/releases/download/v%{version}/libxcrypt-%{version}.tar.xz
+Patch0: libxcrypt-gost-const.patch
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
@@ -34,7 +35,6 @@ libxcrypt is a modern library for one-way hashing of passwords.
 %prep
 %oreon_sha256
 %autosetup -p1
-sed -i 's/char \*hptr = strchr ((const char \*) intbuf->retval/const char *hptr = strchr ((const char *) intbuf->retval/' lib/crypt-gost-yescrypt.c
 
 %build
 %oreon_configure --disable-static --enable-obsolete-api=glibc --enable-hashes=strong,glibc

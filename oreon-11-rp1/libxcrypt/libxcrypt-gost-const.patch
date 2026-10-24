@@ -1,0 +1,39 @@
+--- a/lib/crypt-gost-yescrypt.c	2025-01-03 10:08:44.000000000 -0800
++++ b/lib/crypt-gost-yescrypt.c	2026-10-24 02:07:12.335021319 -0700
+@@ -131,7 +131,7 @@
+   intbuf->outbuf[1] = 'g';
+ 
+   /* extract yescrypt output from "$y$param$salt$output" */
+-  char *hptr = strchr ((const char *) intbuf->retval + 3, '$');
++  const char *hptr = strchr ((const char *) intbuf->retval + 3, '$');
+   if (!hptr)
+     {
+       errno = EINVAL;
+@@ -145,9 +145,11 @@
+     }
+   hptr++; /* start of output */
+ 
++  uint8_t *raw = intbuf->retval + (size_t) (hptr - (const char *) intbuf->retval);
++
+   /* decode yescrypt output into its raw 256-bit form */
+   size_t ylen = sizeof (intbuf->y);
+-  if (!decode64 (intbuf->y, &ylen, (uint8_t *) hptr, strlen (hptr)) ||
++  if (!decode64 (intbuf->y, &ylen, raw, strlen (hptr)) ||
+       ylen != sizeof (intbuf->y))
+     {
+       errno = EINVAL;
+@@ -167,12 +169,12 @@
+   gost_hash256 ((const uint8_t *) phrase, phr_size, intbuf->hk, &intbuf->gostbuf.ctx);
+   gost_hmac256 (intbuf->hk, sizeof (intbuf->hk),
+                 (const uint8_t *) setting,
+-                (size_t) ((uint8_t *) hptr - intbuf->retval),
++                (size_t) (raw - intbuf->retval),
+                 intbuf->interm, &intbuf->gostbuf);
+   outer_gost_hmac256 (intbuf->interm, sizeof (intbuf->interm),
+                       intbuf->y, sizeof (intbuf->y), intbuf->y, &intbuf->gostbuf);
+ 
+-  encode64 ((uint8_t *) hptr, o_size - (size_t) ((uint8_t *) hptr - intbuf->retval),
++  encode64 (raw, o_size - (size_t) (raw - intbuf->retval),
+             intbuf->y, sizeof (intbuf->y));
+ 
+   strcpy_or_abort (output, o_size, intbuf->outbuf);
