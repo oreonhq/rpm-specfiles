@@ -53,6 +53,8 @@ rm -rf %{buildroot}%{_docdir}
 
 %files devel
 %{_includedir}/expat.h
+%{_includedir}/expat_config.h
 %{_includedir}/expat_external.h
 %{_libdir}/libexpat.so
 %{_libdir}/pkgconfig/expat.pc
+%{_libdir}/cmake/expat-%{version}

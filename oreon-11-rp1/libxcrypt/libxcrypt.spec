@@ -34,6 +34,7 @@ libxcrypt is a modern library for one-way hashing of passwords.
 %prep
 %oreon_sha256
 %autosetup -p1
+sed -i 's/char \*hptr = strchr ((const char \*) intbuf->retval/const char *hptr = strchr ((const char *) intbuf->retval/' lib/crypt-gost-yescrypt.c
 
 %build
 %oreon_configure --disable-static --enable-obsolete-api=glibc --enable-hashes=strong,glibc

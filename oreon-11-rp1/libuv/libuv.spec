@@ -14,12 +14,10 @@ Source0: https://dist.libuv.org/dist/v%{version}/libuv-v%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: autoconf
-BuildRequires: automake
+BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: glibc-devel
-BuildRequires: libtool
-BuildRequires: make
+BuildRequires: ninja-build
 %endif
 
 %description
@@ -36,15 +34,17 @@ libuv is a multi-platform support library with a focus on asynchronous I/O.
 %prep
 %oreon_sha256
 %autosetup -n libuv-v%{version} -p1
-autoreconf -fi
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+%oreon_cmake -DBUILD_TESTING=OFF -DLIBUV_BUILD_TESTS=OFF
+%oreon_cmake_build
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
+%oreon_cmake_install
+rm -f %{buildroot}%{_libdir}/*.a
+rm -f %{buildroot}%{_libdir}/pkgconfig/libuv-static.pc
+rm -rf %{buildroot}%{_libdir}/cmake
+rm -rf %{buildroot}%{_docdir}
 
 %files
 %license LICENSE

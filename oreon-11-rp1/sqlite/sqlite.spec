@@ -39,7 +39,7 @@ SQLite is a C library that implements a small, fast, self-contained SQL database
 %autosetup -n sqlite-autoconf-%{sqlite_ver} -p1
 
 %build
-%oreon_configure --disable-static --enable-fts5 --enable-rtree --enable-threadsafe
+%oreon_configure --disable-static --disable-rpath --enable-fts5 --enable-rtree --enable-threadsafe
 %oreon_make
 
 %install
@@ -50,7 +50,7 @@ rm -rf %{buildroot}%{_docdir}
 %files
 %{_bindir}/sqlite3
 %{_libdir}/libsqlite3.so.0
-%{_libdir}/libsqlite3.so.0.*
+%{_libdir}/libsqlite3.so.3*
 %{_mandir}/man1/sqlite3.1*
 
 %files devel
