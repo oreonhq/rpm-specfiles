@@ -11,6 +11,8 @@ Summary: Utilities for filesystem extended attributes
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://savannah.nongnu.org/projects/attr
 Source0: https://download.savannah.gnu.org/releases/attr/attr-%{version}.tar.xz
+Obsoletes: libattr < 3
+Provides: libattr = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
@@ -25,6 +27,8 @@ attr is a set of tools for manipulating filesystem extended attributes.
 %package devel
 Summary: Utilities for filesystem extended attributes
 Requires: attr%{?_isa} = %{version}-%{release}
+Obsoletes: libattr-devel < 3
+Provides: libattr-devel = %{version}-%{release}
 Provides: pkgconfig(libattr)
 
 %description devel

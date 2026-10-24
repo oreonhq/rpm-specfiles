@@ -11,6 +11,8 @@ Summary: Access control list utilities
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://savannah.nongnu.org/projects/acl
 Source0: https://download.savannah.gnu.org/releases/acl/acl-%{version}.tar.xz
+Obsoletes: libacl < 3
+Provides: libacl = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
@@ -26,6 +28,8 @@ acl is a set of tools for manipulating access control lists.
 %package devel
 Summary: Access control list utilities
 Requires: acl%{?_isa} = %{version}-%{release}
+Obsoletes: libacl-devel < 3
+Provides: libacl-devel = %{version}-%{release}
 Provides: pkgconfig(libacl)
 
 %description devel
