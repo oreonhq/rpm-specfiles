@@ -15,6 +15,7 @@ Source0: https://github.com/libexpat/libexpat/releases/download/R_2_7_3/expat-%{
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
 %endif

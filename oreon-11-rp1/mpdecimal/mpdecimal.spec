@@ -41,6 +41,7 @@ libmpdec is a library for arbitrary precision decimal floating point arithmetic.
 %install
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
+rm -rf %{buildroot}%{_docdir}
 
 %files
 %license COPYRIGHT.txt

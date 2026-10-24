@@ -42,6 +42,7 @@ acl is a set of tools for manipulating access control lists.
 %install
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
+rm -rf %{buildroot}%{_docdir}
 
 %files
 %license doc/COPYING

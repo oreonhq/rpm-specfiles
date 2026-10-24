@@ -41,10 +41,12 @@ attr is a set of tools for manipulating filesystem extended attributes.
 %install
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
+rm -rf %{buildroot}%{_docdir}
 
 %files
 %license doc/COPYING
 %license doc/COPYING.LGPL
+%config(noreplace) %{_sysconfdir}/xattr.conf
 %{_bindir}/attr
 %{_bindir}/getfattr
 %{_bindir}/setfattr

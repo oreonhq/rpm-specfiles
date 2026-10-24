@@ -16,6 +16,7 @@ Source0: https://www.sqlite.org/2026/sqlite-autoconf-%{sqlite_ver}.tar.gz
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: readline-devel
@@ -44,6 +45,7 @@ SQLite is a C library that implements a small, fast, self-contained SQL database
 %install
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
+rm -rf %{buildroot}%{_docdir}
 
 %files
 %{_bindir}/sqlite3

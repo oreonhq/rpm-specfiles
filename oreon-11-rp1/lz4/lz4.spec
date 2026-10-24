@@ -35,10 +35,10 @@ LZ4 is a lossless compression algorithm, providing compression speed at 400 MB/s
 %autosetup -p1
 
 %build
-make -s %{?_smp_mflags} PREFIX=%{_prefix} LIBDIR=%{_libdir} BUILD_STATIC=no CFLAGS="%{_oreon_cflags}"
+make -s %{?_smp_mflags} BUILD_STATIC=no PREFIX=%{_prefix} CFLAGS="%{_oreon_cflags} -fPIE"
 
 %install
-make -s install DESTDIR=%{buildroot} PREFIX=%{_prefix} LIBDIR=%{_libdir} BUILD_STATIC=no
+make -s install BUILD_STATIC=no DESTDIR=%{buildroot} PREFIX=%{_prefix} libdir=%{_libdir}
 
 %files
 %license LICENSE

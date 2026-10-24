@@ -36,7 +36,7 @@ Zstandard is a real time compression algorithm, providing high compression ratio
 
 %build
 make -s -C lib %{?_smp_mflags} PREFIX=%{_prefix} LIBDIR=%{_libdir} PKGCONFIGDIR=%{_libdir}/pkgconfig CFLAGS="%{_oreon_cflags} -fPIC"
-make -s -C programs %{?_smp_mflags} prefix=%{_prefix} bindir=%{_bindir} mandir=%{_mandir} CFLAGS="%{_oreon_cflags}"
+make -s -C programs %{?_smp_mflags} prefix=%{_prefix} bindir=%{_bindir} mandir=%{_mandir} CFLAGS="%{_oreon_cflags} -fPIE"
 
 %install
 make -s -C lib install-shared install-includes install-pc DESTDIR=%{buildroot} PREFIX=%{_prefix} LIBDIR=%{_libdir} PKGCONFIGDIR=%{_libdir}/pkgconfig

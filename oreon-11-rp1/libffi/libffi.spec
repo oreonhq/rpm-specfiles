@@ -52,3 +52,7 @@ rm -rf %{buildroot}%{_infodir}
 %{_includedir}/*.h
 %{_libdir}/libffi.so
 %{_libdir}/pkgconfig/libffi.pc
+%{_mandir}/man3/ffi.3*
+%{_mandir}/man3/ffi_call.3*
+%{_mandir}/man3/ffi_prep_cif.3*
+%{_mandir}/man3/ffi_prep_cif_var.3*

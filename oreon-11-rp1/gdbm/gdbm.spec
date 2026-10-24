@@ -26,7 +26,6 @@ GNU dbm is a library of database functions that use extensible hashing and work 
 %package devel
 Summary: GNU database routines
 Requires: gdbm%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(gdbm)
 
 %description devel
 GNU dbm is a library of database functions that use extensible hashing and work similarly to the standard UNIX dbm functions.
@@ -64,4 +63,3 @@ rm -rf %{buildroot}%{_infodir}
 %{_includedir}/ndbm.h
 %{_libdir}/libgdbm.so
 %{_libdir}/libgdbm_compat.so
-%{_libdir}/pkgconfig/gdbm.pc

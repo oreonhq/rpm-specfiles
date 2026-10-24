@@ -35,7 +35,7 @@ popt is a C library for parsing command line parameters.
 %autosetup -p1
 
 %build
-%oreon_configure --disable-static
+%oreon_configure --disable-static --disable-nls
 %oreon_make
 
 %install
