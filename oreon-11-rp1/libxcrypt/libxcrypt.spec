@@ -48,15 +48,11 @@ rm -f %{buildroot}%{_libdir}/*.la
 %license COPYING.LIB
 %{_libdir}/libcrypt.so.1
 %{_libdir}/libcrypt.so.1.*
-%{_libdir}/libcrypt.so.2
-%{_libdir}/libcrypt.so.2.*
 %{_mandir}/man5/crypt.5*
 
 %files devel
 %{_includedir}/crypt.h
+%{_includedir}/xcrypt.h
 %{_libdir}/libcrypt.so
 %{_libdir}/pkgconfig/libxcrypt.pc
-%{_mandir}/man3/crypt.3*
-%{_mandir}/man3/crypt_r.3*
-%{_mandir}/man3/crypt_ra.3*
-%{_mandir}/man3/crypt_rn.3*
+%{_mandir}/man3/crypt*.3*
