@@ -54,5 +54,7 @@ rm -f %{buildroot}%{_libdir}/*.la
 %{_includedir}/crypt.h
 %{_includedir}/xcrypt.h
 %{_libdir}/libcrypt.so
+%{_libdir}/libxcrypt.so
+%{_libdir}/pkgconfig/libcrypt.pc
 %{_libdir}/pkgconfig/libxcrypt.pc
 %{_mandir}/man3/crypt*.3*
