@@ -20,7 +20,8 @@ BuildRequires: make
 BuildRequires: pkgconf
 BuildRequires: openssl-devel
 BuildRequires: nghttp2-devel
-BuildRequires: zlib-devel
+BuildRequires: zlib-ng-compat-devel
+BuildRequires: python3
 BuildRequires: libzstd-devel
 BuildRequires: patchelf
 %endif

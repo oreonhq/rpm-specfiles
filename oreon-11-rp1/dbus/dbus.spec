@@ -22,6 +22,7 @@ BuildRequires: pkgconf
 BuildRequires: expat-devel
 BuildRequires: libselinux-devel
 BuildRequires: systemd-devel
+BuildRequires: python3
 BuildRequires: patchelf
 %endif
 

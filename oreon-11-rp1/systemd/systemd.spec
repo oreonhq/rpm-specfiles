@@ -24,11 +24,12 @@ BuildRequires: gperf
 BuildRequires: python3
 BuildRequires: libcap-devel
 BuildRequires: libxcrypt-devel
-BuildRequires: util-linux-devel
+BuildRequires: libmount-devel
+BuildRequires: libblkid-devel
 BuildRequires: libselinux-devel
 BuildRequires: libacl-devel
 BuildRequires: openssl-devel
-BuildRequires: zlib-devel
+BuildRequires: zlib-ng-compat-devel
 BuildRequires: bzip2-devel
 BuildRequires: xz-devel
 BuildRequires: lz4-devel

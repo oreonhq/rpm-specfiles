@@ -27,7 +27,7 @@ BuildRequires: librepo-devel
 BuildRequires: libsolv-devel
 BuildRequires: rpm-devel
 BuildRequires: sqlite-devel
-BuildRequires: util-linux-devel
+BuildRequires: libsmartcols-devel
 BuildRequires: swig
 BuildRequires: python3-devel
 BuildRequires: patchelf

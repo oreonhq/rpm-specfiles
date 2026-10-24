@@ -20,6 +20,7 @@ BuildRequires: make
 BuildRequires: pkgconf
 BuildRequires: pcre2-devel
 BuildRequires: libsepol-devel
+BuildRequires: python3
 BuildRequires: patchelf
 %endif
 

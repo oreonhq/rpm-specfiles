@@ -18,7 +18,8 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: perl
-BuildRequires: zlib-devel
+BuildRequires: zlib-ng-compat-devel
+BuildRequires: python3
 BuildRequires: patchelf
 %endif
 

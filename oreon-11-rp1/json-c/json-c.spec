@@ -18,6 +18,7 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: cmake
 BuildRequires: ninja-build
+BuildRequires: python3
 BuildRequires: patchelf
 %endif
 

@@ -18,6 +18,7 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: pkgconf
+BuildRequires: python3
 BuildRequires: patchelf
 %endif
 

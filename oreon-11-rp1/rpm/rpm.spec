@@ -21,7 +21,7 @@ BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
 BuildRequires: lua-devel
-BuildRequires: zlib-devel
+BuildRequires: zlib-ng-compat-devel
 BuildRequires: bzip2-devel
 BuildRequires: xz-devel
 BuildRequires: libzstd-devel

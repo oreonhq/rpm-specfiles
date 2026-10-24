@@ -22,9 +22,9 @@ BuildRequires: pkgconf
 BuildRequires: python3
 BuildRequires: libffi-devel
 BuildRequires: pcre2-devel
-BuildRequires: zlib-devel
+BuildRequires: zlib-ng-compat-devel
 BuildRequires: libattr-devel
-BuildRequires: util-linux-devel
+BuildRequires: libmount-devel
 BuildRequires: patchelf
 %endif
 

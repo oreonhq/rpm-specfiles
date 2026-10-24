@@ -22,6 +22,7 @@ BuildRequires: pkgconf
 BuildRequires: glib2-devel
 BuildRequires: libyaml-devel
 BuildRequires: rpm-devel
+BuildRequires: python3
 BuildRequires: patchelf
 %endif
 
