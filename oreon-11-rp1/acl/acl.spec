@@ -19,7 +19,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: attr-devel
+BuildRequires: libattr-devel
 %endif
 
 %description
