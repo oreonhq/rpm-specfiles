@@ -29,6 +29,8 @@ BuildRequires: openssl-devel
 BuildRequires: libxml2-devel
 BuildRequires: libattr-devel
 BuildRequires: libacl-devel
+BuildRequires: libb2-devel
+BuildRequires: pcre2-devel
 BuildRequires: patchelf
 %endif
 
@@ -51,10 +53,10 @@ libarchive reads and writes archive formats.
   -DCMAKE_SKIP_RPATH=ON \
   -DENABLE_TEST=OFF \
   -DENABLE_WERROR=OFF \
-  -DENABLE_LIBB2=OFF \
+  -DENABLE_LIBB2=ON \
   -DENABLE_LZO=OFF \
   -DENABLE_PCREPOSIX=OFF \
-  -DENABLE_PCRE2POSIX=OFF \
+  -DENABLE_PCRE2POSIX=ON \
   -DENABLE_EXPAT=OFF \
   -DENABLE_OPENSSL=ON \
   -DENABLE_LIBXML2=ON \

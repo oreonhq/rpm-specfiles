@@ -28,6 +28,7 @@ BuildRequires: libsolv-devel
 BuildRequires: rpm-devel
 BuildRequires: sqlite-devel
 BuildRequires: libsmartcols-devel
+BuildRequires: zchunk-devel
 BuildRequires: swig
 BuildRequires: python3-devel
 BuildRequires: patchelf
@@ -53,7 +54,7 @@ libdnf is the library behind dnf 4.
 %build
 %oreon_cmake \
   -DCMAKE_SKIP_RPATH=ON \
-  -DWITH_ZCHUNK=OFF \
+  -DWITH_ZCHUNK=ON \
   -DWITH_GTKDOC=OFF \
   -DWITH_HTML=OFF \
   -DWITH_MAN=OFF \

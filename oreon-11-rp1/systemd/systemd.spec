@@ -39,6 +39,32 @@ BuildRequires: dbus-devel
 BuildRequires: glib2-devel
 BuildRequires: pcre2-devel
 BuildRequires: kmod-devel
+BuildRequires: libseccomp-devel
+BuildRequires: audit-libs-devel
+BuildRequires: cryptsetup-devel
+BuildRequires: libmicrohttpd-devel
+BuildRequires: libcurl-devel
+BuildRequires: libidn2-devel
+BuildRequires: iptables-devel
+BuildRequires: qrencode-devel
+BuildRequires: libgcrypt-devel
+BuildRequires: gnutls-devel
+BuildRequires: p11-kit-devel
+BuildRequires: libfido2-devel
+BuildRequires: tpm2-tss-devel
+BuildRequires: elfutils-devel
+BuildRequires: libxkbcommon-devel
+BuildRequires: gnu-efi-devel
+BuildRequires: python3-pefile
+BuildRequires: libfdisk-devel
+BuildRequires: pam-devel
+BuildRequires: libpwquality-devel
+BuildRequires: polkit-devel
+BuildRequires: libbpf-devel
+BuildRequires: clang
+BuildRequires: bpftool
+BuildRequires: xen-devel
+BuildRequires: gettext
 BuildRequires: patchelf
 %endif
 
@@ -58,59 +84,54 @@ systemd is the system and service manager.
 
 %build
 %oreon_meson \
-  -Dauto_features=disabled \
   -Dmode=release \
+  -Dlog-message-verification=disabled \
   -Dtests=false \
   -Dfuzz-tests=false \
   -Dinstall-tests=false \
-  -Dtranslations=false \
-  -Defi=false \
-  -Dtpm=false \
+  -Dtranslations=true \
+  -Defi=true \
+  -Dtpm=true \
   -Dstatic-libsystemd=false \
   -Dstatic-libudev=false \
-  -Dbpf-framework=disabled \
+  -Dbpf-framework=enabled \
   -Dapparmor=disabled \
-  -Daudit=disabled \
-  -Dlibcryptsetup=disabled \
-  -Dlibcryptsetup-plugins=disabled \
-  -Dmicrohttpd=disabled \
-  -Dlibcurl=disabled \
-  -Dlibidn2=disabled \
-  -Dlibidn=disabled \
-  -Dlibiptc=disabled \
-  -Dqrencode=disabled \
-  -Dgcrypt=disabled \
-  -Dgnutls=disabled \
-  -Dp11kit=disabled \
-  -Dlibfido2=disabled \
-  -Dtpm2=disabled \
-  -Delfutils=disabled \
-  -Dxkbcommon=disabled \
-  -Dbootloader=disabled \
-  -Dukify=disabled \
-  -Dhomed=disabled \
-  -Dremote=disabled \
-  -Dimportd=disabled \
-  -Dvmspawn=disabled \
-  -Drepart=disabled \
-  -Dsysupdate=disabled \
-  -Dpolkit=disabled \
-  -Dseccomp=disabled \
-  -Dfdisk=disabled \
-  -Dxenctrl=disabled \
-  -Dpwquality=disabled \
+  -Daudit=enabled \
+  -Dlibcryptsetup=enabled \
+  -Dlibcryptsetup-plugins=enabled \
+  -Dmicrohttpd=enabled \
+  -Dlibcurl=enabled \
+  -Dlibidn2=enabled \
+  -Dlibiptc=enabled \
+  -Dqrencode=enabled \
+  -Dgcrypt=enabled \
+  -Dgnutls=enabled \
+  -Dp11kit=enabled \
+  -Dlibfido2=enabled \
+  -Dtpm2=enabled \
+  -Delfutils=enabled \
+  -Dxkbcommon=enabled \
+  -Dbootloader=enabled \
+  -Dukify=enabled \
+  -Dhomed=enabled \
+  -Dremote=enabled \
+  -Dimportd=enabled \
+  -Dvmspawn=enabled \
+  -Drepart=enabled \
+  -Dsysupdate=enabled \
+  -Dpolkit=enabled \
+  -Dseccomp=enabled \
+  -Dfdisk=enabled \
+  -Dxenctrl=enabled \
+  -Dpwquality=enabled \
   -Dpasswdqc=disabled \
-  -Dpam=disabled \
-  -Dsmack=false \
-  -Dima=false \
-  -Dipe=false \
-  -Didn=false \
-  -Dsysupdated=disabled \
+  -Dpam=enabled \
+  -Dsysupdated=enabled \
   -Dcryptolib=openssl \
   -Ddns-over-tls=openssl \
-  -Dnss-mymachines=disabled \
-  -Dnss-resolve=disabled \
-  -Dresolve=false \
+  -Dnss-mymachines=enabled \
+  -Dnss-resolve=enabled \
+  -Dresolve=true \
   -Dselinux=enabled \
   -Dacl=enabled \
   -Dopenssl=enabled \

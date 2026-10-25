@@ -37,7 +37,7 @@ python-dbus is the Python binding for D-Bus.
 %autosetup -n dbus_python-%{version} -p1
 
 %build
-%oreon_meson -Dauto_features=disabled -Ddoc=disabled -Dtests=disabled
+%oreon_meson -Ddoc=disabled -Dtests=disabled
 %oreon_meson_build
 
 %install

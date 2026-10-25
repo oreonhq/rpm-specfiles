@@ -25,6 +25,7 @@ BuildRequires: libxml2-devel
 BuildRequires: libcurl-devel
 BuildRequires: gpgme-devel
 BuildRequires: libselinux-devel
+BuildRequires: zchunk-devel
 BuildRequires: python3-devel
 BuildRequires: patchelf
 %endif
@@ -51,7 +52,7 @@ librepo downloads repodata and packages.
   -DENABLE_TESTS=OFF \
   -DENABLE_DOCS=OFF \
   -DENABLE_EXAMPLES=OFF \
-  -DWITH_ZCHUNK=OFF \
+  -DWITH_ZCHUNK=ON \
   -DUSE_GPGME=ON \
   -DENABLE_SELINUX=ON \
   -DENABLE_PYTHON=ON

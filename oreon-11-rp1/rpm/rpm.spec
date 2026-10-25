@@ -34,6 +34,10 @@ BuildRequires: python3-devel
 BuildRequires: libcap-devel
 BuildRequires: libacl-devel
 BuildRequires: libselinux-devel
+BuildRequires: elfutils-libelf-devel
+BuildRequires: elfutils-devel
+BuildRequires: audit-libs-devel
+BuildRequires: dbus-devel
 BuildRequires: rpm-sequoia-devel
 BuildRequires: gawk
 BuildRequires: scdoc
@@ -65,9 +69,9 @@ RPM package manager libraries and tools.
   -DENABLE_PYTHON=ON \
   -DWITH_SEQUOIA=ON \
   -DWITH_OPENSSL=OFF \
-  -DWITH_LIBELF=OFF \
-  -DWITH_LIBDW=OFF \
-  -DWITH_AUDIT=OFF \
+  -DWITH_LIBELF=ON \
+  -DWITH_LIBDW=ON \
+  -DWITH_AUDIT=ON \
   -DWITH_FSVERITY=OFF \
   -DWITH_FAPOLICYD=OFF \
   -DWITH_IMAEVM=OFF \
@@ -75,7 +79,7 @@ RPM package manager libraries and tools.
   -DWITH_CAP=ON \
   -DWITH_ACL=ON \
   -DWITH_SELINUX=ON \
-  -DWITH_DBUS=OFF \
+  -DWITH_DBUS=ON \
   -DWITH_READLINE=ON \
   -DWITH_BZIP2=ON \
   -DWITH_ZSTD=ON \

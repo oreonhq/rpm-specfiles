@@ -25,6 +25,14 @@ BuildRequires: pcre2-devel
 BuildRequires: zlib-ng-compat-devel
 BuildRequires: libattr-devel
 BuildRequires: libmount-devel
+BuildRequires: libselinux-devel
+BuildRequires: gobject-introspection-devel
+BuildRequires: python3-docutils
+BuildRequires: systemtap-sdt-devel
+BuildRequires: systemtap-sdt-dtrace
+BuildRequires: sysprof-capture-devel
+BuildRequires: gettext
+BuildRequires: elfutils-libelf-devel
 BuildRequires: patchelf
 %endif
 
@@ -43,7 +51,7 @@ GLib is the low level core library for GNOME.
 %autosetup -n glib-%{version} -p1
 
 %build
-%oreon_meson -Dauto_features=disabled -Dtests=false -Dintrospection=disabled -Dman-pages=disabled -Ddtrace=disabled -Dsystemtap=disabled -Dsysprof=disabled -Ddocumentation=false -Dnls=disabled -Dglib_debug=disabled -Dlibelf=disabled -Dselinux=disabled -Dlibmount=enabled
+%oreon_meson -Dglib_debug=disabled -Dintrospection=enabled -Dman-pages=enabled -Ddtrace=enabled -Dsystemtap=enabled -Dsysprof=enabled -Dnls=enabled -Dlibelf=enabled -Dselinux=enabled -Dlibmount=enabled
 %oreon_meson_build
 
 %install

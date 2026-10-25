@@ -21,6 +21,14 @@ BuildRequires: ninja-build
 BuildRequires: pkgconf
 BuildRequires: expat-devel
 BuildRequires: libselinux-devel
+BuildRequires: audit-libs-devel
+BuildRequires: libcap-ng-devel
+BuildRequires: libX11-devel
+BuildRequires: libxslt
+BuildRequires: doxygen
+BuildRequires: python3-mallard-ducktype
+BuildRequires: yelp-tools
+BuildRequires: qt-devel
 BuildRequires: systemd-devel
 BuildRequires: python3
 BuildRequires: patchelf
@@ -42,16 +50,15 @@ D-Bus is a message bus.
 
 %build
 %oreon_meson \
-  -Dauto_features=disabled \
   -Dapparmor=disabled \
-  -Dlibaudit=disabled \
-  -Dxml_docs=disabled \
-  -Ddoxygen_docs=disabled \
-  -Dducktype_docs=disabled \
-  -Dqt_help=disabled \
-  -Dx11_autolaunch=disabled \
-  -Dmodular_tests=disabled \
-  -Dinstalled_tests=false \
+  -Dkqueue=disabled \
+  -Dlaunchd=disabled \
+  -Dlibaudit=enabled \
+  -Dxml_docs=enabled \
+  -Ddoxygen_docs=enabled \
+  -Dducktype_docs=enabled \
+  -Dqt_help=enabled \
+  -Dx11_autolaunch=enabled \
   -Dselinux=enabled \
   -Dsystemd=enabled \
   -Dmessage_bus=true \
