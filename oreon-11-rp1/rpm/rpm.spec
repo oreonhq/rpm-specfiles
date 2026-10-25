@@ -40,6 +40,10 @@ BuildRequires: audit-libs-devel
 BuildRequires: dbus-devel
 BuildRequires: rpm-sequoia-devel
 BuildRequires: gawk
+BuildRequires: gettext
+BuildRequires: fsverity-utils-devel
+BuildRequires: ima-evm-utils-devel
+BuildRequires: doxygen
 BuildRequires: scdoc
 BuildRequires: patchelf
 %endif
@@ -64,18 +68,18 @@ RPM package manager libraries and tools.
 %oreon_cmake \
   -DCMAKE_SKIP_RPATH=ON \
   -DENABLE_TESTSUITE=OFF \
-  -DENABLE_NLS=OFF \
-  -DENABLE_OPENMP=OFF \
+  -DENABLE_NLS=ON \
+  -DENABLE_OPENMP=ON \
   -DENABLE_PYTHON=ON \
   -DWITH_SEQUOIA=ON \
   -DWITH_OPENSSL=OFF \
   -DWITH_LIBELF=ON \
   -DWITH_LIBDW=ON \
   -DWITH_AUDIT=ON \
-  -DWITH_FSVERITY=OFF \
-  -DWITH_FAPOLICYD=OFF \
-  -DWITH_IMAEVM=OFF \
-  -DWITH_DOXYGEN=OFF \
+  -DWITH_FSVERITY=ON \
+  -DWITH_FAPOLICYD=ON \
+  -DWITH_IMAEVM=ON \
+  -DWITH_DOXYGEN=ON \
   -DWITH_CAP=ON \
   -DWITH_ACL=ON \
   -DWITH_SELINUX=ON \
