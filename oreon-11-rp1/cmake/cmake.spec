@@ -48,6 +48,15 @@ find %{buildroot} -type f | while read -r f; do
   fi
 done
 %oreon_filelist
+tmp=$(mktemp)
+while IFS= read -r line; do
+  case "$line" in
+    \"*\") printf '%%s\n' "$line" ;;
+    *\ *) printf '"%%s"\n' "$line" ;;
+    *) printf '%%s\n' "$line" ;;
+  esac
+done < %{_builddir}/%{name}.files > "$tmp"
+mv "$tmp" %{_builddir}/%{name}.files
 
 %files -f %{_builddir}/%{name}.files
 %license LICENSE.rst

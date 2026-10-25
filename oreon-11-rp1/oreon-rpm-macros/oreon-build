@@ -383,7 +383,10 @@ files_run() {
         continue
         ;;
     esac
-    printf '%s\n' "$rel" >> "$target"
+    case "$rel" in
+      *\ *) printf '"%s"\n' "$rel" >> "$target" ;;
+      *) printf '%s\n' "$rel" >> "$target" ;;
+    esac
   done
   if [ -f "$out.globs" ]; then
     sort -u "$out.globs" >> "$out"
