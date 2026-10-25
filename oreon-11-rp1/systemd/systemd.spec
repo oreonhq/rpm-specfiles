@@ -55,6 +55,8 @@ BuildRequires: tpm2-tss-devel
 BuildRequires: elfutils-devel
 BuildRequires: libxkbcommon-devel
 BuildRequires: gnu-efi-devel
+BuildRequires: python3-jinja2
+BuildRequires: python3-pyelftools
 BuildRequires: python3-pefile
 BuildRequires: libfdisk-devel
 BuildRequires: pam-devel
