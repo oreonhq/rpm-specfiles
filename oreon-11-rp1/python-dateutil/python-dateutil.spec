@@ -13,6 +13,7 @@ URL: https://github.com/dateutil/dateutil
 Source0: https://files.pythonhosted.org/packages/0e/df/f15f80383f152452d8985b36d95cb8751f901a3e0ff4cd27f7e118f168e2/python_dateutil-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros-python
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3-devel
 BuildRequires: python3-build
@@ -31,6 +32,7 @@ python-dateutil is a date utility library.
 %prep
 %oreon_sha256
 %autosetup -n python_dateutil-%{version} -p1
+sed -i 's/setuptools_scm<8.0/setuptools_scm>=8/' pyproject.toml
 
 %build
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}

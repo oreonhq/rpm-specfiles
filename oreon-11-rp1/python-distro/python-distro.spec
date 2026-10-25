@@ -13,6 +13,7 @@ URL: https://github.com/python-distro/distro
 Source0: https://files.pythonhosted.org/packages/source/d/distro/distro-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros-python
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3-devel
 BuildRequires: python3-build

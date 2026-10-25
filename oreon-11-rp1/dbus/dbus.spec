@@ -25,6 +25,8 @@ BuildRequires: audit-libs-devel
 BuildRequires: libcap-ng-devel
 BuildRequires: libX11-devel
 BuildRequires: libxslt
+BuildRequires: docbook-style-xsl
+BuildRequires: docbook-dtds
 BuildRequires: doxygen
 BuildRequires: python3-mallard-ducktype
 BuildRequires: yelp-tools

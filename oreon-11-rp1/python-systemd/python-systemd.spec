@@ -13,6 +13,7 @@ URL: https://github.com/systemd/python-systemd
 Source0: https://files.pythonhosted.org/packages/10/9e/ab4458e00367223bda2dd7ccf0849a72235ee3e29b36dce732685d9b7ad9/systemd-python-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros-python
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel

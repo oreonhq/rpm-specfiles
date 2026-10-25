@@ -13,6 +13,7 @@ URL: https://github.com/benjaminp/six
 Source0: https://files.pythonhosted.org/packages/source/s/six/six-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros-python
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3-devel
 BuildRequires: python3-build
@@ -37,6 +38,7 @@ build-backend = "setuptools.build_meta"
 EOF
 
 %build
+export PYTHONPATH=.
 %oreon_py_build
 
 %install
