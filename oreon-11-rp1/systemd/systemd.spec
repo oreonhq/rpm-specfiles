@@ -83,6 +83,7 @@ systemd is the system and service manager.
 %prep
 %oreon_sha256
 %autosetup -n systemd-%{version} -p1
+sed -i 's/EDEADLOCK|EWOULDBLOCK|ENOTSUP/EDEADLOCK|EWOULDBLOCK|ENOTSUP|EFSBADCRC|EFSCORRUPTED/' src/basic/errno-to-name.awk
 
 %build
 %oreon_meson \
