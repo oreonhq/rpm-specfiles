@@ -22,12 +22,18 @@ BuildRequires: python3
 BuildRequires: patchelf
 %endif
 
+Obsoletes: libnghttp2 < 2
+Provides: libnghttp2 = %{version}-%{release}
+
 %description
 nghttp2 is an HTTP/2 library.
 
 %package devel
 Summary: HTTP/2 library
 Requires: nghttp2%{?_isa} = %{version}-%{release}
+Obsoletes: libnghttp2-devel < 2
+Provides: libnghttp2-devel = %{version}-%{release}
+Provides: pkgconfig(libnghttp2) = %{version}
 
 %description devel
 nghttp2 is an HTTP/2 library.

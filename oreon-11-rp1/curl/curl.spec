@@ -19,12 +19,15 @@ BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: pkgconf
 BuildRequires: openssl-devel
-BuildRequires: nghttp2-devel
+BuildRequires: libnghttp2-devel
 BuildRequires: zlib-ng-compat-devel
 BuildRequires: python3
 BuildRequires: libzstd-devel
 BuildRequires: patchelf
 %endif
+
+Obsoletes: libcurl < 9
+Provides: libcurl = %{version}-%{release}
 
 %description
 curl is an HTTP client and libcurl.
@@ -32,6 +35,9 @@ curl is an HTTP client and libcurl.
 %package devel
 Summary: HTTP client and library
 Requires: curl%{?_isa} = %{version}-%{release}
+Obsoletes: libcurl-devel < 9
+Provides: libcurl-devel = %{version}-%{release}
+Provides: pkgconfig(libcurl) = %{version}
 
 %description devel
 curl is an HTTP client and libcurl.
