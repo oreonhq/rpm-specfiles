@@ -1,11 +1,11 @@
-%global source0_hash 80304b9c306ea799327f01d9a7549bdb28317789182631f1b54f4511b4206dd6
+%global source0_hash 71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: libxcrypt
-Version: 4.4.38
+Version: 4.5.2
 Release: 1%{?dist}
 Summary: Extended crypt library
 License: LGPL-2.1-or-later
@@ -37,7 +37,7 @@ libxcrypt is a modern library for one-way hashing of passwords.
 %autosetup -p1
 
 %build
-%oreon_configure --disable-static --enable-obsolete-api=glibc --enable-hashes=strong,glibc
+%oreon_configure --disable-static --enable-obsolete-api=no --enable-hashes=strong,glibc
 %oreon_make
 
 %install
@@ -46,8 +46,8 @@ rm -f %{buildroot}%{_libdir}/*.la
 
 %files
 %license COPYING.LIB
-%{_libdir}/libcrypt.so.1
-%{_libdir}/libcrypt.so.1.*
+%{_libdir}/libcrypt.so.2
+%{_libdir}/libcrypt.so.2.*
 %{_mandir}/man5/crypt.5*
 
 %files devel

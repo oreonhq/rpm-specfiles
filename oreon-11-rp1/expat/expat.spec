@@ -1,16 +1,16 @@
-%global source0_hash 821ac9710d2c073eaf13e1b1895a9c9aa66c1157a99635c639fbff65cdbdd732
+%global source0_hash 1e727b8933ec51a77a9a9d9afcf8e688bce45d907c13e36ab7393fe36e703182
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: expat
-Version: 2.7.3
+Version: 2.8.5
 Release: 1%{?dist}
 Summary: XML parser library
 License: MIT
 URL: https://libexpat.github.io/
-Source0: https://github.com/libexpat/libexpat/releases/download/R_2_7_3/expat-%{version}.tar.gz
+Source0: https://github.com/libexpat/libexpat/releases/download/R_2_8_5/expat-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}

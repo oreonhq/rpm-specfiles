@@ -2,10 +2,11 @@
 
 Name: filesystem
 Version: 11
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Base directory layout
 License: MIT
 URL: https://oreonhq.com/
+Provides: filesystem(unmerged-sbin-symlinks)
 
 %description
 The directories and compatibility symlinks every other package installs into.

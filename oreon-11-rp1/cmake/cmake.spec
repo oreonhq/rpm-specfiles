@@ -6,7 +6,9 @@
 
 Name: cmake
 Version: 4.1.2
-Release: 1%{?dist}
+Release: 2%{?dist}
+Provides: cmake-filesystem = %{version}-%{release}
+Provides: cmake-filesystem(x86-64) = %{version}-%{release}
 Summary: CMake build system
 License: BSD-3-Clause
 URL: https://cmake.org/

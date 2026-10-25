@@ -7,7 +7,8 @@
 
 Name: python3
 Version: 3.15.0
-Release: 1%{?dist}
+Release: 2%{?dist}
+Provides: python(abi) = 3.15
 Summary: an interpreted, interactive, object-oriented programming language
 License: Python-2.0.1
 URL: https://www.python.org/

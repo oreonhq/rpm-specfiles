@@ -6,7 +6,8 @@
 
 Name: glibc
 Version: 2.44
-Release: 1%{?dist}
+Release: 2%{?dist}
+Provides: rtld(GNU_HASH)
 Summary: GNU C Library
 License: LGPL-2.1-or-later
 URL: https://www.gnu.org/software/libc/

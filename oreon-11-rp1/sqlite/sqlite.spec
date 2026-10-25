@@ -7,7 +7,7 @@
 
 Name: sqlite
 Version: 3.54.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: SQL database engine
 License: blessing
 URL: https://www.sqlite.org/
@@ -39,6 +39,7 @@ SQLite is a C library that implements a small, fast, self-contained SQL database
 %autosetup -n sqlite-autoconf-%{sqlite_ver} -p1
 
 %build
+export LDFLAGS="%{_oreon_ldflags} -Wl,-soname,libsqlite3.so.0"
 %oreon_configure --disable-static --disable-rpath --enable-fts5 --enable-rtree --enable-threadsafe
 %oreon_make
 

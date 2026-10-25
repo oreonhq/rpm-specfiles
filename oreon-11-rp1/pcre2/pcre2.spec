@@ -1,11 +1,11 @@
-%global source0_hash 8d28d7f2c3b970c3a4bf3776bcbb5adfc923183ce74bc8df1ebaad8c1985bd07
+%global source0_hash c08ae2388ef333e8403e670ad70c0a11f1eed021fd88308d7e02f596fcd9dc16
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: pcre2
-Version: 10.46
+Version: 10.47
 Release: 1%{?dist}
 Summary: Perl-compatible regular expression library
 License: BSD-3-Clause

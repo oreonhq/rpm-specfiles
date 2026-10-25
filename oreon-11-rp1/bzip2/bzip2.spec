@@ -6,7 +6,7 @@
 
 Name: bzip2
 Version: 1.0.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: bzip2/libbzip2, lossless block-sorting data compression
 License: bzip2-1.0.6
 URL: https://sourceware.org/bzip2/
@@ -33,6 +33,7 @@ This file is part of bzip2/libbzip2, a program and library for lossless, block-s
 %prep
 %oreon_sha256
 %autosetup -p1
+sed -i 's/libbz2.so.1.0/libbz2.so.1/g' Makefile-libbz2_so
 
 %build
 make -s -f Makefile-libbz2_so CC=gcc CFLAGS="%{_oreon_cflags} -fPIC"
@@ -47,8 +48,8 @@ cp -a bzip2 bzip2recover %{buildroot}%{_bindir}/
 ln -sf bzip2 %{buildroot}%{_bindir}/bunzip2
 ln -sf bzip2 %{buildroot}%{_bindir}/bzcat
 cp -a libbz2.so.1.0.8 %{buildroot}%{_libdir}/
-ln -sf libbz2.so.1.0.8 %{buildroot}%{_libdir}/libbz2.so.1.0
-ln -sf libbz2.so.1.0 %{buildroot}%{_libdir}/libbz2.so
+ln -sf libbz2.so.1.0.8 %{buildroot}%{_libdir}/libbz2.so.1
+ln -sf libbz2.so.1 %{buildroot}%{_libdir}/libbz2.so
 cp -a bzlib.h %{buildroot}%{_includedir}/
 cp -a bzip2.1 %{buildroot}%{_mandir}/man1/
 ln -sf bzip2.1 %{buildroot}%{_mandir}/man1/bunzip2.1
@@ -73,7 +74,7 @@ EOF
 %{_bindir}/bzip2recover
 %{_bindir}/bunzip2
 %{_bindir}/bzcat
-%{_libdir}/libbz2.so.1.0
+%{_libdir}/libbz2.so.1
 %{_libdir}/libbz2.so.1.0.8
 %{_mandir}/man1/bzip2.1*
 %{_mandir}/man1/bunzip2.1*
