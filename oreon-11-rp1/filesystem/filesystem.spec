@@ -2,7 +2,7 @@
 
 Name: filesystem
 Version: 11
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Base directory layout
 License: MIT
 URL: https://oreonhq.com/
@@ -10,6 +10,18 @@ Provides: filesystem(unmerged-sbin-symlinks)
 
 %description
 The directories and compatibility symlinks every other package installs into.
+
+%pretrans -p <lua>
+local function convert(dir, target)
+  if posix.stat(dir, "type") == "directory" then
+    os.rename(dir, dir .. ".rpmmoved")
+    posix.symlink(target, dir)
+  end
+end
+convert("/bin", "usr/bin")
+convert("/sbin", "usr/bin")
+convert("/lib", "usr/lib")
+convert("/lib64", "usr/lib64")
 
 %prep
 :

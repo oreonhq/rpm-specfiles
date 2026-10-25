@@ -37,3 +37,43 @@
              intbuf->y, sizeof (intbuf->y));
  
    strcpy_or_abort (output, o_size, intbuf->outbuf);
+--- a/lib/crypt-sm3-yescrypt.c
++++ b/lib/crypt-sm3-yescrypt.c
+@@ -136,7 +136,7 @@
+   intbuf->outbuf[3] = '3';
+ 
+   /* extract yescrypt output from "$y$param$salt$output" */
+-  char *hptr = strchr ((const char *) intbuf->retval + 3, '$');
++  const char *hptr = strchr ((const char *) intbuf->retval + 3, '$');
+   if (!hptr)
+     {
+       errno = EINVAL;
+@@ -150,9 +150,11 @@
+     }
+   hptr++; /* start of output */
+ 
++  uint8_t *raw = intbuf->retval + (size_t) (hptr - (const char *) intbuf->retval);
++
+   /* decode yescrypt output into its raw 256-bit form */
+   size_t ylen = sizeof (intbuf->y);
+-  if (!decode64 (intbuf->y, &ylen, (uint8_t *) hptr, strlen (hptr)) ||
++  if (!decode64 (intbuf->y, &ylen, raw, strlen (hptr)) ||
+       ylen != sizeof (intbuf->y))
+     {
+       errno = EINVAL;
+@@ -173,13 +175,13 @@
+             &intbuf->sm3buf.sm3_ctx);
+   sm3_hmac (intbuf->hk, sizeof (intbuf->hk),
+                 (const uint8_t *) setting,
+-                (size_t) ((uint8_t *) hptr - intbuf->retval),
++                (size_t) (raw - intbuf->retval),
+                 intbuf->interm, &intbuf->sm3buf);
+   outer_sm3_hmac (intbuf->interm, sizeof (intbuf->interm),
+                   intbuf->y, sizeof (intbuf->y), intbuf->y,
+                   &intbuf->sm3buf);
+ 
+-  encode64 ((uint8_t *) hptr, o_size - (size_t) ((uint8_t *) hptr - intbuf->retval),
++  encode64 (raw, o_size - (size_t) (raw - intbuf->retval),
+             intbuf->y, sizeof (intbuf->y));
+ 
+   strcpy_or_abort (output, o_size, intbuf->outbuf);

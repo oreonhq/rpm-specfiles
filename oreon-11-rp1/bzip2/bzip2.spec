@@ -33,7 +33,7 @@ This file is part of bzip2/libbzip2, a program and library for lossless, block-s
 %prep
 %oreon_sha256
 %autosetup -p1
-sed -i 's/libbz2.so.1.0/libbz2.so.1/g' Makefile-libbz2_so
+sed -i 's/-Wl,libbz2.so.1.0/-Wl,libbz2.so.1/' Makefile-libbz2_so
 
 %build
 make -s -f Makefile-libbz2_so CC=gcc CFLAGS="%{_oreon_cflags} -fPIC"
