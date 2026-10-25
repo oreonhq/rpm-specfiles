@@ -84,6 +84,7 @@ systemd is the system and service manager.
 %oreon_sha256
 %autosetup -n systemd-%{version} -p1
 sed -i 's/EDEADLOCK|EWOULDBLOCK|ENOTSUP/EDEADLOCK|EWOULDBLOCK|ENOTSUP|EFSBADCRC|EFSCORRUPTED/' src/basic/errno-to-name.awk
+sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux', 'format', 'c' \],#command : [ 'sh', '-c', '\"\$1\" btf dump file /sys/kernel/btf/vmlinux format c | sed \"/bpf_stream_vprintk/d\"', 'gen-vmlinux', bpftool ],#" meson.build
 
 %build
 %oreon_meson \
