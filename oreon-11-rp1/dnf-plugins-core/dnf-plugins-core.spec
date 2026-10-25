@@ -19,6 +19,7 @@ BuildRequires: ninja-build
 BuildRequires: python3-devel
 BuildRequires: python3-sphinx
 BuildRequires: python3-sphinx_rtd_theme
+BuildRequires: gettext
 %endif
 
 Requires: python3-dnf-plugins-core = %{version}-%{release}
@@ -40,6 +41,10 @@ Core plugins for dnf.
 %prep
 %oreon_sha256
 %autosetup -p1
+sed -i 's/CMAKE_MINIMUM_REQUIRED (VERSION 2.4)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt
+sed -i 's/FIND_PACKAGE (PythonInterp 3 EXACT REQUIRED)/find_package(Python3 3 EXACT REQUIRED COMPONENTS Interpreter)\
+set(PYTHON_EXECUTABLE ${Python3_EXECUTABLE})\
+set(PYTHON_VERSION_MAJOR ${Python3_VERSION_MAJOR})/' CMakeLists.txt
 
 %build
 %oreon_cmake -DPYTHON_DESIRED=3
