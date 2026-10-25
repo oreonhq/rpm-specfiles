@@ -38,6 +38,7 @@ json-c is a JSON parser library.
 
 %build
 %oreon_cmake \
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
   -DCMAKE_SKIP_RPATH=ON \
   -DBUILD_STATIC_LIBS=OFF \
   -DBUILD_TESTING=OFF \

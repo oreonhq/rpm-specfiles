@@ -56,6 +56,27 @@ find %{buildroot} -type f | while read -r f; do
   fi
 done
 %oreon_py_save_files systemd
+python3 - %{oreon_py_files} << 'PY'
+import os
+import sys
+from pathlib import Path
+p = Path(sys.argv[1])
+lines = p.read_text().splitlines()
+seen = set(lines)
+extra = []
+for line in lines:
+    path = line.strip().strip('"')
+    if not path.endswith(".py"):
+        continue
+    if "/lib/python3." not in path and "/lib64/python3." not in path:
+        continue
+    glob = os.path.dirname(path) + "/__pycache__/*"
+    if glob not in seen:
+        seen.add(glob)
+        extra.append(glob)
+text = "\n".join(lines + extra)
+p.write_text(text + ("\n" if text else ""))
+PY
 
 %files -f %{oreon_py_files}
 %license LICENSE.txt

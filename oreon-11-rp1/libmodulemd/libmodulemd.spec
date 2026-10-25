@@ -66,6 +66,7 @@ find %{buildroot} -type f | while read -r f; do
 done
 %oreon_filelist_devel
 python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
+import os
 import sys
 from pathlib import Path
 main, devel = Path(sys.argv[1]), Path(sys.argv[2])
@@ -78,7 +79,24 @@ for line in d:
         move.append(line)
     else:
         keep.append(line)
-text = "\n".join(m + move)
+def with_pyc(lines):
+    extra = []
+    seen = set(lines)
+    for line in lines:
+        path = line.split()[-1] if line.startswith("%") else line
+        path = path.strip('"')
+        if not path.endswith(".py"):
+            continue
+        if "/lib/python3." not in path and "/lib64/python3." not in path:
+            continue
+        glob = os.path.dirname(path) + "/__pycache__/*"
+        if glob not in seen:
+            seen.add(glob)
+            extra.append(glob)
+    return lines + extra
+m = with_pyc(m + move)
+keep = with_pyc(keep)
+text = "\n".join(m)
 main.write_text(text + ("\n" if text else ""))
 text = "\n".join(keep)
 devel.write_text(text + ("\n" if text else ""))
