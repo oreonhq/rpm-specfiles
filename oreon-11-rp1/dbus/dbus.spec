@@ -70,6 +70,9 @@ D-Bus is a message bus.
 
 %install
 %oreon_meson_install
+find %{buildroot} -type f -exec grep -IlZ '^#!/usr/bin/env python$' {} + | while IFS= read -r -d '' f; do
+  sed -i '1s|^#!/usr/bin/env python$|#!/usr/bin/python3|' "$f"
+done
 rm -f %{buildroot}%{_libdir}/*.a
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
