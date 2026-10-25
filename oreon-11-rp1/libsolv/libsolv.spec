@@ -68,6 +68,7 @@ find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f")
   if [ -n "$r" ]; then
+    chmod u+w "$f"
     patchelf --remove-rpath "$f"
   fi
 done
