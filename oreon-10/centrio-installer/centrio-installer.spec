@@ -1,11 +1,11 @@
 Name:           centrio-installer
 Version:        1.0
-Release:        95%{?dist}
+Release:        96%{?dist}
 Summary:        Oreon live installer
 License:        GPL-2.0-or-later
 URL:            https://github.com/oreonhq/centrio-installer
 BuildArch:      noarch
-Source0:        centrio-%{version}.tar.xz
+Source0:        https://tarballs.oreonhq.com/centrio-%{version}.tar.xz
 Source1:        liveinst.desktop
 Source2:        centrio-live-sudoers
 Requires:       python3-gobject gtk4 libadwaita
