@@ -3,7 +3,7 @@ Version:        1.0
 Release:        95%{?dist}
 Summary:        Oreon live installer
 License:        GPL-2.0-or-later
-URL:            https://github.com/centrio/centrio
+URL:            https://github.com/oreonhq/centrio-installer
 BuildArch:      noarch
 Source0:        centrio-%{version}.tar.xz
 Source1:        liveinst.desktop
