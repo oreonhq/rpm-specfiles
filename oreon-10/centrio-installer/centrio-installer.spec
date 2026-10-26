@@ -1,6 +1,6 @@
 Name:           centrio-installer
 Version:        1.0
-Release:        94%{?dist}
+Release:        95%{?dist}
 Summary:        Oreon live installer
 License:        GPL-2.0-or-later
 URL:            https://github.com/centrio/centrio
@@ -44,12 +44,6 @@ install -p -m 0644 %{_sourcedir}/liveinst.desktop %{buildroot}%{_datadir}/applic
 %{_sysconfdir}/sudoers.d/99-centrio-live
 %{_datadir}/centrio/
 %{_datadir}/applications/liveinst.desktop
-
-%post
-%systemd_post oreon-live-marker.service
-
-%preun
-%systemd_preun oreon-live-marker.service
 
 %changelog
 %autochangelog
