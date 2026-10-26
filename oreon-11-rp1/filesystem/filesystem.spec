@@ -2,7 +2,7 @@
 
 Name: filesystem
 Version: 11
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Base directory layout
 License: MIT
 URL: https://oreonhq.com/
@@ -12,16 +12,36 @@ Provides: filesystem(unmerged-sbin-symlinks)
 The directories and compatibility symlinks every other package installs into.
 
 %pretrans -p <lua>
-local function convert(dir, target)
-  if posix.stat(dir, "type") == "directory" then
-    os.rename(dir, dir .. ".rpmmoved")
-    posix.symlink(target, dir)
+local function ensure_dir(path)
+  if posix.stat(path, "type") == nil then
+    posix.mkdir(path)
   end
 end
-convert("/bin", "usr/bin")
-convert("/sbin", "usr/bin")
-convert("/lib", "usr/lib")
-convert("/lib64", "usr/lib64")
+local function ensure_link(path, target)
+  local st = posix.stat(path, "type")
+  if st == "directory" then
+    local ok, err = os.rename(path, path .. ".rpmmoved")
+    if not ok then
+      error("rename " .. path .. " failed: " .. tostring(err))
+    end
+    st = nil
+  end
+  if st == nil then
+    local ok, err = posix.symlink(target, path)
+    if not ok then
+      error("symlink " .. path .. " failed: " .. tostring(err))
+    end
+  end
+end
+ensure_dir("/usr")
+ensure_dir("/usr/bin")
+ensure_dir("/usr/sbin")
+ensure_dir("/usr/lib")
+ensure_dir("/usr/lib64")
+ensure_link("/bin", "usr/bin")
+ensure_link("/sbin", "usr/bin")
+ensure_link("/lib", "usr/lib")
+ensure_link("/lib64", "usr/lib64")
 
 %prep
 :
