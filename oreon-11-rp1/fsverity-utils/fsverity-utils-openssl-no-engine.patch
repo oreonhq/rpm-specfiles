@@ -1,0 +1,36 @@
+--- a/lib/sign_digest.c
++++ b/lib/sign_digest.c
+@@ -19,7 +19,7 @@
+ #include <openssl/pkcs7.h>
+ #include <string.h>
+ 
+-#ifndef OPENSSL_IS_BORINGSSL
++#if !defined(OPENSSL_IS_BORINGSSL) && !defined(OPENSSL_NO_ENGINE)
+ #include <openssl/engine.h>
+ #endif
+ 
+@@ -333,6 +333,16 @@
+ 	return err;
+ }
+ 
++#ifdef OPENSSL_NO_ENGINE
++static int
++load_pkcs11_private_key(const struct libfsverity_signature_params *sig_params
++			__attribute__((unused)),
++			EVP_PKEY **pkey_ret __attribute__((unused)))
++{
++	libfsverity_error_msg("libfsverity was linked to a version of OpenSSL that doesn't support PKCS#11 tokens");
++	return -EINVAL;
++}
++#else
+ static int
+ load_pkcs11_private_key(const struct libfsverity_signature_params *sig_params,
+ 			EVP_PKEY **pkey_ret)
+@@ -375,6 +385,7 @@
+ 	}
+ 	return 0;
+ }
++#endif
+ 
+ #endif /* !OPENSSL_IS_BORINGSSL */
+ 

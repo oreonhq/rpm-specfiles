@@ -1,4 +1,5 @@
 %global source0_hash fc5acdbdfd4c3a5d296732ccfb2fec1fcfb3e7e5f41bf9a0789f8b54c161f5f7
+%global source1_hash 6dad1cd89abce66c602640eb647e7313237b70fc83e1ad6c87d53da367c39faa
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
@@ -11,6 +12,7 @@ Summary: RPM OpenPGP backend
 License: LGPL-2.0-or-later
 URL: https://github.com/rpm-software-management/rpm-sequoia
 Source0: https://github.com/rpm-software-management/rpm-sequoia/archive/refs/tags/v%{version}.tar.gz
+Source1: rpm-sequoia-%{version}-vendor.tar.xz
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
@@ -20,6 +22,9 @@ BuildRequires: make
 BuildRequires: rustc
 BuildRequires: cargo
 BuildRequires: pkgconf
+BuildRequires: clang
+BuildRequires: nettle-devel
+BuildRequires: gmp-devel
 BuildRequires: patchelf
 %endif
 
@@ -35,19 +40,13 @@ rpm-sequoia is the OpenPGP backend used by rpm.
 
 %prep
 %oreon_sha256
+echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 %autosetup -n rpm-sequoia-%{version} -p1
-cargo vendor vendor
-mkdir -p .cargo
-cat > .cargo/config.toml << 'EOF'
-[source.crates-io]
-replace-with = "vendored"
-
-[source.vendored]
-directory = "vendor"
-EOF
+tar -xf %{SOURCE1}
 
 %build
-cargo build --release --offline --locked
+%oreon_cargo_prep vendor
+%oreon_cargo_build
 
 %install
 mkdir -p %{buildroot}%{_libdir} %{buildroot}%{_includedir} %{buildroot}%{_libdir}/pkgconfig

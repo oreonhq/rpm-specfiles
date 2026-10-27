@@ -22,6 +22,8 @@ __pycache__/
 *-vendor.tar.*
 *-vendor.tar.*.*
 
+!oreon-11-rp1/rpm-sequoia/rpm-sequoia-*-vendor.tar.xz
+
 !oreon-10/**/*.tar
 !oreon-10/**/*.tar.gz
 !oreon-10/**/*.tar.bz2

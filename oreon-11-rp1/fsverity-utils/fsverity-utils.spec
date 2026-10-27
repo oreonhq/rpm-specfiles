@@ -11,6 +11,7 @@ Summary: fs-verity userspace library
 License: MIT
 URL: https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git
 Source0: https://mirrors.edge.kernel.org/pub/linux/kernel/people/ebiggers/fsverity-utils/v%{version}/fsverity-utils-%{version}.tar.gz
+Patch0: fsverity-utils-openssl-no-engine.patch
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}

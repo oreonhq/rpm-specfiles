@@ -15,6 +15,7 @@ Source0: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/s
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: patchelf

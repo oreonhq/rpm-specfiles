@@ -37,7 +37,7 @@ Lua is a programming language.
 
 %build
 make linux MYCFLAGS="%{_oreon_cflags} -fPIC" MYLDFLAGS="%{_oreon_ldflags}"
-gcc -shared -Wl,-soname,liblua-5.4.so -o liblua-5.4.so src/*.o -lm %{_oreon_ldflags}
+gcc -shared -Wl,-soname,liblua-5.4.so -o liblua-5.4.so $(find src -name '*.o' ! -name lua.o ! -name luac.o) -lm -ldl %{_oreon_ldflags}
 
 %install
 make install INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1

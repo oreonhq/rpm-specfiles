@@ -17,7 +17,8 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: patchelf%endif
+BuildRequires: patchelf
+%endif
 
 %description
 ASN.1 library
