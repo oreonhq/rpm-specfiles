@@ -1,5 +1,5 @@
 %global source0_hash fc5acdbdfd4c3a5d296732ccfb2fec1fcfb3e7e5f41bf9a0789f8b54c161f5f7
-%global source1_hash 6dad1cd89abce66c602640eb647e7313237b70fc83e1ad6c87d53da367c39faa
+%global source1_hash 99218ce2597be53e11b1d92f35d35a71332d01a87264f27561eaafc56de27394
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
@@ -13,6 +13,7 @@ License: LGPL-2.0-or-later
 URL: https://github.com/rpm-software-management/rpm-sequoia
 Source0: https://github.com/rpm-software-management/rpm-sequoia/archive/refs/tags/v%{version}.tar.gz
 Source1: rpm-sequoia-%{version}-vendor.tar.xz
+Patch0: rpm-sequoia-nettle-sys-2.3.2.patch
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
