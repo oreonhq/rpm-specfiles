@@ -6,7 +6,7 @@
 
 Name: systemd
 Version: 257.10
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: System and service manager
 License: LGPL-2.1-or-later AND GPL-2.0-or-later
 URL: https://systemd.io/
@@ -158,8 +158,21 @@ rm -f %{buildroot}%{_libdir}/*.a
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
+  [ -n "$r" ] || continue
+  keep=
+  oldifs=$IFS
+  IFS=:
+  for p in $r; do
+    case "$p" in
+      /usr/lib64/systemd|/usr/lib/systemd) keep="${keep:+$keep:}$p" ;;
+    esac
+  done
+  IFS=$oldifs
+  [ "$keep" = "$r" ] && continue
+  chmod u+w "$f"
+  if [ -n "$keep" ]; then
+    patchelf --set-rpath "$keep" "$f"
+  else
     patchelf --remove-rpath "$f"
   fi
 done
