@@ -47,27 +47,15 @@ tar -xf %{SOURCE1}
 
 %build
 %oreon_cargo_prep vendor
-%oreon_cargo_build
+PREFIX=%{_prefix} LIBDIR=%{_libdir} %oreon_cargo_build
 
 %install
-mkdir -p %{buildroot}%{_libdir} %{buildroot}%{_includedir} %{buildroot}%{_libdir}/pkgconfig
+mkdir -p %{buildroot}%{_libdir}/pkgconfig
 so=$(find target/release -name 'librpm_sequoia.so' -type f | head -1)
 install -p -m 755 "$so" %{buildroot}%{_libdir}/librpm_sequoia.so.1
 ln -sf librpm_sequoia.so.1 %{buildroot}%{_libdir}/librpm_sequoia.so
 patchelf --set-soname librpm_sequoia.so.1 %{buildroot}%{_libdir}/librpm_sequoia.so.1
-hdr=$(find target -name 'rpm-sequoia.h' | head -1)
-install -p -m 644 "$hdr" %{buildroot}%{_includedir}/rpm-sequoia.h
-cat > %{buildroot}%{_libdir}/pkgconfig/rpm-sequoia.pc << EOF
-prefix=%{_prefix}
-libdir=%{_libdir}
-includedir=%{_includedir}
-
-Name: rpm-sequoia
-Description: RPM OpenPGP backend
-Version: %{version}
-Libs: -L\${libdir} -lrpm_sequoia
-Cflags: -I\${includedir}
-EOF
+install -p -m 644 target/release/rpm-sequoia.pc %{buildroot}%{_libdir}/pkgconfig/rpm-sequoia.pc
 %oreon_filelist_devel
 
 %files -f %{_builddir}/%{name}.files
