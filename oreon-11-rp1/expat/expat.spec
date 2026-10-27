@@ -10,7 +10,7 @@ Release: 1%{?dist}
 Summary: XML parser library
 License: MIT
 URL: https://libexpat.github.io/
-Source0: https://github.com/libexpat/libexpat/releases/download/R_2_8_5/expat-%{version}.tar.gz
+Source0: https://github.com/libexpat/libexpat/releases/download/R_2_8_5/expat-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
