@@ -22,6 +22,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libcap-ng-devel
+BuildRequires: openldap-devel
 %endif
 
 %description
