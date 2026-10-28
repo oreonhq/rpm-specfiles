@@ -7,7 +7,7 @@
 
 Name: python3
 Version: 3.15.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Provides: python(abi) = 3.15
 Summary: an interpreted, interactive, object-oriented programming language
 License: Python-2.0.1
@@ -59,6 +59,13 @@ find %{buildroot}/usr/lib %{buildroot}%{_libdir} -maxdepth 1 -type d -name 'pyth
 done
 
 %oreon_filelist_devel
+while read -r f; do
+  case "$f" in
+    */lib-dynload/*|*/idlelib/config-*) printf '%s\n' "$f" >> %{_builddir}/%{name}.files ;;
+    *) printf '%s\n' "$f" >> %{_builddir}/%{name}-devel.files.new ;;
+  esac
+done < %{_builddir}/%{name}-devel.files
+mv %{_builddir}/%{name}-devel.files.new %{_builddir}/%{name}-devel.files
 
 %files -f %{_builddir}/%{name}.files
 %license LICENSE

@@ -19,6 +19,8 @@ BuildRequires: glibc-devel
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: libzstd-devel
+BuildRequires: libcurl-devel
+BuildRequires: openssl-devel
 BuildRequires: pkgconf
 BuildRequires: patchelf
 %endif

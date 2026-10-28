@@ -6,7 +6,10 @@
 
 Name: keyutils
 Version: 1.6.3
-Release: 1%{?dist}
+Release: 2%{?dist}
+Provides: keyutils-libs = %{version}-%{release}
+Provides: keyutils-libs%{_isa} = %{version}-%{release}
+Obsoletes: keyutils-libs < 1.6.4
 Summary: Linux key management library
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git

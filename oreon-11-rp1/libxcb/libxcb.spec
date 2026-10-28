@@ -18,7 +18,7 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: patchelf
-BuildRequires: xcb-proto
+BuildRequires: xcb-proto = 1.17.0-1%{?dist}
 BuildRequires: libXau-devel
 BuildRequires: libXdmcp-devel
 BuildRequires: python3

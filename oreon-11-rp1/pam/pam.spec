@@ -20,6 +20,15 @@ BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: flex
 BuildRequires: libxcrypt-devel
+BuildRequires: audit-devel
+BuildRequires: libeconf-devel
+BuildRequires: libselinux-devel
+BuildRequires: libnsl2-devel
+BuildRequires: libtirpc-devel
+BuildRequires: systemd-devel
+BuildRequires: gettext-devel
+BuildRequires: libdb-devel
+BuildRequires: gdbm-devel
 BuildRequires: pkgconf
 BuildRequires: patchelf
 %endif
@@ -39,7 +48,7 @@ PAM is the pluggable authentication library.
 %autosetup -n Linux-PAM-%{version} -p1
 
 %build
-%oreon_meson -Ddocs=disabled
+%oreon_meson -Ddocs=disabled -Delogind=disabled
 %oreon_meson_build
 
 %install

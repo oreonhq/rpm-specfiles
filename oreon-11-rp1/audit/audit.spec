@@ -1,12 +1,15 @@
-%global source0_hash 167f707d65970ea39f9088bc7a81196fd0decd76acb7980450170954bc1a587b
+%global source0_hash 42876d195ee2ded19e5f72d7664096eee314928aa36ad346719ba5b25818fc84
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: audit
-Version: 4.0.4
+Version: 4.2.1
 Release: 1%{?dist}
+Provides: audit-libs = %{version}-%{release}
+Provides: audit-libs%{_isa} = %{version}-%{release}
+Obsoletes: audit-libs < 4.3
 Summary: Linux audit library
 License: GPL-2.0-or-later
 URL: https://github.com/linux-audit/audit-userspace
@@ -37,7 +40,7 @@ Linux audit library
 
 %prep
 %oreon_sha256
-%autosetup -n audit-userspace-4.0.4 -p1
+%autosetup -n audit-userspace-%{version} -p1
 autoreconf -fi
 
 %build

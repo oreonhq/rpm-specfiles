@@ -372,8 +372,14 @@ files_run() {
     target=$out
     if [ -n "$devel_out" ]; then
       case "$rel" in
-        */include/*|*/pkgconfig/*|*/aclocal/*|*/cmake/*|*/config-*|*.so|*.a|*.h|*.pc)
+        */include/*|*/pkgconfig/*|*/aclocal/*|*/cmake/*|*/config-[0-9]*|*.a|*.h|*.pc)
           target=$devel_out
+          ;;
+        *.so)
+          case "$rel" in
+            */lib-dynload/*|*/site-packages/*) ;;
+            *) target=$devel_out ;;
+          esac
           ;;
       esac
     fi
