@@ -1,12 +1,15 @@
-%global source0_hash 5a2f477e6268630f6e2829c7bb3e442017549798a4122635817934eaa0c6ac10
+%global source0_hash f9a3f1e21e4dd78717bad0888638954467a55d73cab44a2c7a75c5bed47ef814
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: systemd
-Version: 257.10
-Release: 2%{?dist}
+Version: 259.10
+Release: 1%{?dist}
+Provides: systemd-libs = %{version}-%{release}
+Provides: systemd-libs%{_isa} = %{version}-%{release}
+Obsoletes: systemd-libs < 260
 Summary: System and service manager
 License: LGPL-2.1-or-later AND GPL-2.0-or-later
 URL: https://systemd.io/
@@ -200,3 +203,7 @@ PY
 %license LICENSE.GPL2 LICENSE.LGPL2.1
 
 %files devel -f %{_builddir}/%{name}-devel.files
+
+%changelog
+* Tue Oct 27 2026 Oreon Packaging Team <packaging@oreonhq.com> - 259.10-1
+- 259.10
