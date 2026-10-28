@@ -17,6 +17,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+BuildRequires: m4
 BuildRequires: patchelf
 BuildRequires: gmp-devel
 %endif

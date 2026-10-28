@@ -40,7 +40,7 @@ Linux audit library
 autoreconf -fi
 
 %build
-%oreon_configure --disable-static --without-python --with-libcap-ng
+%oreon_configure --disable-static --without-python3 --with-libcap-ng
 %oreon_make
 
 %install
