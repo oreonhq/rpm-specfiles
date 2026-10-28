@@ -32,6 +32,9 @@ meson is a build system.
 sitelib=$(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
 mkdir -p %{buildroot}$sitelib %{buildroot}%{_bindir}
 cp -a mesonbuild %{buildroot}$sitelib/
+find %{buildroot} -type f -exec grep -I -l -E '^#! */usr/bin/env python' {} + | while read -r f; do
+  sed -i '1s|^#! */usr/bin/env python.*|#!/usr/bin/python3|' "$f"
+done
 cat > %{buildroot}%{_bindir}/meson << 'EOF'
 #!/usr/bin/python3
 import sys
@@ -40,6 +43,11 @@ sys.exit(main())
 EOF
 chmod 755 %{buildroot}%{_bindir}/meson
 %oreon_filelist
+while read -r f; do
+  case "$f" in
+    *.py) printf '%s\n' "$(dirname "$f")/__pycache__/*" ;;
+  esac
+done < %{_builddir}/%{name}.files | sort -u >> %{_builddir}/%{name}.files
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
