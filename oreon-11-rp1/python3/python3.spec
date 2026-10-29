@@ -7,7 +7,7 @@
 
 Name: python3
 Version: 3.15.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Provides: python(abi) = 3.15
 Summary: an interpreted, interactive, object-oriented programming language
 License: Python-2.0.1
@@ -18,6 +18,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: zlib-devel
 BuildRequires: xz-devel
 BuildRequires: bzip2-devel
+BuildRequires: libffi-devel
 BuildRequires: pkgconf
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
