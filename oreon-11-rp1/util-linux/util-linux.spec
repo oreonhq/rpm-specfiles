@@ -22,6 +22,7 @@ BuildRequires: ncurses-devel
 BuildRequires: zlib-devel
 BuildRequires: readline-devel
 BuildRequires: pam-devel
+BuildRequires: sqlite-devel
 BuildRequires: libcap-devel
 BuildRequires: libselinux-devel
 BuildRequires: patchelf

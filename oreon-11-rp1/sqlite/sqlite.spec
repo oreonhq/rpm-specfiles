@@ -7,9 +7,12 @@
 
 Name: sqlite
 Version: 3.54.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: SQL database engine
 License: blessing
+Provides: sqlite-libs = %{version}-%{release}
+Provides: sqlite-libs%{_isa} = %{version}-%{release}
+Obsoletes: sqlite-libs < 3.55
 URL: https://www.sqlite.org/
 Source0: https://www.sqlite.org/2026/sqlite-autoconf-%{sqlite_ver}.tar.gz
 
@@ -21,6 +24,7 @@ BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: readline-devel
 BuildRequires: zlib-devel
+BuildRequires: patchelf
 %endif
 
 %description
@@ -39,7 +43,6 @@ SQLite is a C library that implements a small, fast, self-contained SQL database
 %autosetup -n sqlite-autoconf-%{sqlite_ver} -p1
 
 %build
-export LDFLAGS="%{_oreon_ldflags} -Wl,-soname,libsqlite3.so.0"
 %oreon_configure --disable-static --disable-rpath --enable-fts5 --enable-rtree --enable-threadsafe
 %oreon_make
 
@@ -47,11 +50,15 @@ export LDFLAGS="%{_oreon_ldflags} -Wl,-soname,libsqlite3.so.0"
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
 rm -rf %{buildroot}%{_docdir}
+lib=%{buildroot}%{_libdir}/libsqlite3.so.%{version}
+patchelf --set-soname libsqlite3.so.0 "$lib"
+rm -f %{buildroot}%{_libdir}/libsqlite3.so.0 %{buildroot}%{_libdir}/libsqlite3.so
+mv "$lib" %{buildroot}%{_libdir}/libsqlite3.so.0
+ln -s libsqlite3.so.0 %{buildroot}%{_libdir}/libsqlite3.so
 
 %files
 %{_bindir}/sqlite3
 %{_libdir}/libsqlite3.so.0
-%{_libdir}/libsqlite3.so.3*
 %{_mandir}/man1/sqlite3.1*
 
 %files devel
