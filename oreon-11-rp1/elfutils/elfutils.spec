@@ -15,6 +15,7 @@ Source0: https://sourceware.org/elfutils/ftp/%{version}/elfutils-%{version}.tar.
 BuildRequires: oreon-rpm-macros
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: patchelf
@@ -40,7 +41,7 @@ ELF and DWARF library
 %autosetup -n elfutils-0.196 -p1
 
 %build
-%oreon_configure --disable-static --disable-debuginfod --disable-libdebuginfod
+%oreon_configure --disable-debuginfod --disable-libdebuginfod
 %oreon_make
 
 %install
