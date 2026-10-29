@@ -18,6 +18,7 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
+BuildRequires: m4
 BuildRequires: patchelf
 BuildRequires: zlib-devel
 BuildRequires: bzip2-devel
