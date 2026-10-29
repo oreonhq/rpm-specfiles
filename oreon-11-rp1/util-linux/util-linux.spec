@@ -1,11 +1,11 @@
-%global source0_hash be9ad9a276f4305ab7dd2f5225c8be1ff54352f565ff4dede9628c1aaa7dec57
+%global source0_hash e596083744e746be7d2823b62b43f4418dd7bf56303b4dc09e6fe8112fe3d7ed
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: util-linux
-Version: 2.41.1
+Version: 2.41.6
 Release: 1%{?dist}
 Summary: Low-level system utilities and libraries
 License: GPL-2.0-or-later

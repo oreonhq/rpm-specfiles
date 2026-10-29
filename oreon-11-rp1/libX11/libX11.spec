@@ -19,6 +19,7 @@ BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: patchelf
 BuildRequires: xorgproto
+BuildRequires: xtrans
 BuildRequires: libXau-devel = 1.0.12-1%{?dist}
 BuildRequires: libxcb-devel = 1.17.0-1%{?dist}
 BuildRequires: pkgconf
