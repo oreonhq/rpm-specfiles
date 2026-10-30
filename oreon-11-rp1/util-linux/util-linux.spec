@@ -26,6 +26,7 @@ BuildRequires: sqlite-devel
 BuildRequires: libcap-devel
 BuildRequires: libselinux-devel
 BuildRequires: patchelf
+BuildRequires: fakeroot
 %endif
 
 %description
@@ -56,7 +57,7 @@ util-linux provides libmount, libblkid, libfdisk and libsmartcols.
 %oreon_make
 
 %install
-%oreon_make_install
+fakeroot %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
@@ -67,6 +68,31 @@ find %{buildroot} -type f | while read -r f; do
   fi
 done
 %oreon_filelist_devel
+python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
+import sys
+from pathlib import Path
+attrs = {
+    "/bin/mount": "%attr(4755,root,root) ",
+    "/bin/umount": "%attr(4755,root,root) ",
+    "/bin/su": "%attr(4755,root,root) ",
+    "/bin/wall": "%attr(2755,root,tty) ",
+    "/bin/write": "%attr(2755,root,tty) ",
+}
+for name in sys.argv[1:]:
+    path = Path(name)
+    if not path.is_file():
+        continue
+    lines = []
+    for line in path.read_text().splitlines():
+        item = line.split()[-1] if line else ""
+        prefix = ""
+        for suffix, attr in attrs.items():
+            if item.endswith(suffix):
+                prefix = attr
+                break
+        lines.append(prefix + line)
+    path.write_text("\n".join(lines) + "\n")
+PY
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
