@@ -25,7 +25,7 @@
 
 # Define the version of the Linux Kernel Archive tarball.
 
-%global LKAver 7.3
+%global LKAver 7.3.1
 
 # Define the buildid, if required.
 #global buildid .local
@@ -212,6 +212,8 @@ Source3: gpgkey-kernelorg-stable.gpg
 Patch0: 0001-bore-7.3.patch
 
 Source2: config-%{version}-x86_64
+Source10: oreonsecureboot-ca.cer
+Source13: oreonsecureboot-kernel.cer
 
 Source20: mod-denylist.sh
 #Source21: mod-sign.sh
@@ -266,9 +268,9 @@ AutoProv: yes\
 
 %if %{with_headers}
 %package headers
-Summary: Linux 7.3 userspace headers for kernel-oreon
+Summary: Linux 7.3.1 userspace headers for kernel-oreon
 %description headers
-Userspace API headers from Linux 7.3. Installed under
+Userspace API headers from Linux 7.3.1. Installed under
 /usr/lib/kernel-oreon-headers so Alma's kernel-headers package is left
 alone. Out-of-tree modules still use kernel-oreon-devel.
 
@@ -644,7 +646,11 @@ pushd linux-%{KVERREL} > /dev/null
 %ifarch x86_64 || aarch64
 cp config-%{version}-%{_target_cpu} .config
 
+openssl x509 -inform DER -in %{SOURCE10} -out certs/oreon-sb-ca.pem
+openssl x509 -inform DER -in %{SOURCE13} -out certs/oreon-sb-kernel.pem
+cat certs/oreon-sb-ca.pem certs/oreon-sb-kernel.pem > certs/oreon-sb.pem
 scripts/config --enable SCHED_BORE
+scripts/config --set-str SYSTEM_TRUSTED_KEYS certs/oreon-sb.pem
 %{__make} -s ARCH=%{bldarch} olddefconfig
 
 
@@ -1579,5 +1585,5 @@ fi
 %kernel_ml_variant_files %{_use_vdso} %{with_std}
 
 %changelog
-* Thu Oct 29 2026 Oreon <oreonproject.org> - 7.3.0-1
-- import linux 7.3 with BORE
+* Fri Oct 30 2026 Oreon <oreonproject.org> - 7.3.1-1
+- import linux 7.3.1 with BORE
