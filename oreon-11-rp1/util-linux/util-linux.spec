@@ -193,7 +193,7 @@ util-linux provides libmount, libblkid, libfdisk and libsmartcols.
 
 %install
 %{_oreon_flags} fakeroot %{_oreon_helper} make-install %{_oreon_paths} --destdir %{buildroot} --
-rm -f %{buildroot}%{_libdir}/*.la
+find %{buildroot} -name '*.la' -delete
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f")
@@ -258,7 +258,7 @@ for path in sorted(root.rglob("*")):
     if not path.is_file() and not path.is_symlink():
         continue
     rel = "/" + path.relative_to(root).as_posix()
-    if "/share/licenses/" in rel:
+    if "/share/licenses/" in rel or rel.endswith(".la"):
         continue
     name = rel.rsplit("/", 1)[-1]
     pkg = None
@@ -311,7 +311,12 @@ for path in sorted(root.rglob("*")):
     prefix = ""
     if rel.rsplit("/", 1)[0] in ("/usr/bin", "/usr/sbin") and name in attrs:
         prefix = attrs[name]
-    text = prefix + (rel if " " not in rel else '"' + rel + '"')
+    listed = rel
+    if "/share/man/" in rel or "/share/info/" in rel:
+        if listed.endswith(".gz"):
+            listed = listed[:-3]
+        listed += "*"
+    text = prefix + (listed if " " not in listed else '"' + listed + '"')
     add(pkg, text)
 
 if full:
