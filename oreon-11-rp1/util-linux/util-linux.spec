@@ -57,7 +57,7 @@ util-linux provides libmount, libblkid, libfdisk and libsmartcols.
 %oreon_make
 
 %install
-fakeroot %oreon_make_install
+%{_oreon_flags} fakeroot %{_oreon_helper} make-install %{_oreon_paths} --destdir %{buildroot} --
 rm -f %{buildroot}%{_libdir}/*.la
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
