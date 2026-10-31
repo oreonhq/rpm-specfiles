@@ -1,5 +1,5 @@
 Name:           oreon-defense
-Version:        1.0.15
+Version:        1.0.16
 Release:        1%{?dist}
 Summary:        Oreon security system with real-time protection
 License:        GPL-3.0-or-later
@@ -22,7 +22,6 @@ Requires:       qt6-qtbase-gui
 Requires:       openssl-libs
 Requires:       yaml-cpp
 Requires:       clamav-lib
-# signatures: freshclam updates, or the packaged database
 Requires:       (clamav-update or clamav-data)
 Requires:       libcurl
 Requires:       nftables
@@ -70,7 +69,6 @@ mkdir -p %{buildroot}%{_localstatedir}/lib/oreon-defense/quarantine
 %systemd_post oreon-defense-scan.timer
 if [ -x /usr/bin/systemctl ]; then
   systemctl daemon-reload >/dev/null 2>&1 || :
-  # keep ClamAV signatures fresh when freshclam is installed
   if systemctl cat clamav-freshclam.service >/dev/null 2>&1; then
     systemctl enable --now clamav-freshclam.service >/dev/null 2>&1 || :
   fi
