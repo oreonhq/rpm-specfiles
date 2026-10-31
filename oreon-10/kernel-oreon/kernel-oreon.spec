@@ -645,6 +645,11 @@ openssl x509 -inform DER -in %{SOURCE13} -out certs/oreon-sb-kernel.pem
 cat certs/oreon-sb-ca.pem certs/oreon-sb-kernel.pem > certs/oreon-sb.pem
 scripts/config --enable SCHED_BORE
 scripts/config --set-str SYSTEM_TRUSTED_KEYS certs/oreon-sb.pem
+scripts/config --enable DEBUG_INFO
+scripts/config --enable DEBUG_INFO_BTF
+scripts/config --enable DEBUG_INFO_BTF_MODULES
+scripts/config --enable DEBUG_INFO_COMPRESSED_ZLIB
+scripts/config --disable DEBUG_INFO_COMPRESSED_NONE
 %{__make} -s ARCH=%{bldarch} olddefconfig
 
 
