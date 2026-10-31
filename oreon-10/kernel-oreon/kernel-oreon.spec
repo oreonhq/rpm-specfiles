@@ -758,7 +758,7 @@ popd > /dev/null
 %install
 %define __modsign_install_post \
 if [ "%{zipmodules}" -eq "1" ]; then \
-	find %{buildroot}/lib/modules/ -name '*.ko' -type f | xargs --no-run-if-empty -P%{zcpu} xz \
+	find %{buildroot}/lib/modules/ -name '*.ko' -type f -print0 | xargs -0 --no-run-if-empty -P%{zcpu} xz ; \
 fi \
 %{nil}
 

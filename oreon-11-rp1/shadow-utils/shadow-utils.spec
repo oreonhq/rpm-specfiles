@@ -19,6 +19,7 @@ Source5: shadow-bsd.txt
 Source6: gpl-2.0.txt
 Source7: passwd.pamd
 Patch0: shadow-4.20.3-fcaps-rpm.patch
+Patch1: shadow-4.20.3-install-man.patch
 
 Provides: shadow = %{version}-%{release}
 Provides: passwd = %{version}-%{release}
@@ -101,8 +102,8 @@ cp -a %{SOURCE5} %{SOURCE6} .
 install -d -m 755 %{buildroot}%{_sysconfdir}/default
 install -p -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/login.defs
 install -p -m 0600 %{SOURCE3} %{buildroot}%{_sysconfdir}/default/useradd
-install -d -m 755 %{buildroot}%{_pam_confdir}
-install -m 644 %{SOURCE7} %{buildroot}%{_pam_confdir}/passwd
+install -d -m 755 %{buildroot}%{_sysconfdir}/pam.d
+install -m 644 %{SOURCE7} %{buildroot}%{_sysconfdir}/pam.d/passwd
 ln -sf useradd %{buildroot}%{_sbindir}/adduser
 ln -sf useradd.8 %{buildroot}%{_mandir}/man8/adduser.8
 
@@ -116,9 +117,9 @@ for t in chfn chsh login nologin; do
   rm -f %{buildroot}%{_bindir}/$t %{buildroot}%{_sbindir}/$t
   find %{buildroot}%{_mandir} -type f -name "$t.*" -delete
   find %{buildroot}%{_mandir} -type l -name "$t.*" -delete
-  rm -f %{buildroot}%{_pam_confdir}/$t
+  rm -f %{buildroot}%{_sysconfdir}/pam.d/$t
 done
-rm -f %{buildroot}%{_pam_confdir}/su %{buildroot}%{_pam_confdir}/groupmems
+rm -f %{buildroot}%{_sysconfdir}/pam.d/su %{buildroot}%{_sysconfdir}/pam.d/groupmems
 find %{buildroot} -name '*.la' -delete
 find %{buildroot}%{_mandir} -depth -type d -empty -delete
 
@@ -131,7 +132,7 @@ dev=%{_builddir}/shadow-utils-subid-devel.files
 find %{buildroot} \( -type f -o -type l \) | sort | while read -r path; do
   rel=${path#%{buildroot}}
   case "$rel" in
-    %{_sysconfdir}/login.defs|%{_sysconfdir}/default/useradd|%{_pam_confdir}/passwd)
+    %{_sysconfdir}/login.defs|%{_sysconfdir}/default/useradd|%{_sysconfdir}/pam.d/passwd)
       continue
       ;;
   esac
@@ -177,7 +178,7 @@ sed -i \
 %dir %{_sysconfdir}/default
 %config(noreplace) %{_sysconfdir}/login.defs
 %config(noreplace) %attr(0600,root,root) %{_sysconfdir}/default/useradd
-%config(noreplace) %{_pam_confdir}/passwd
+%config(noreplace) %{_sysconfdir}/pam.d/passwd
 
 %files subid -f %{_builddir}/shadow-utils-subid.files
 %license COPYING
