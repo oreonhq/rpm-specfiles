@@ -18,6 +18,7 @@ Source4: shadow-utils.login.defs
 Source5: shadow-bsd.txt
 Source6: gpl-2.0.txt
 Source7: passwd.pamd
+Patch0: shadow-4.20.3-fcaps-rpm.patch
 
 Provides: shadow = %{version}-%{release}
 Provides: passwd = %{version}-%{release}
@@ -53,7 +54,6 @@ BuildRequires: libattr-devel
 BuildRequires: libeconf-devel
 BuildRequires: systemd-devel
 BuildRequires: kernel-headers
-BuildRequires: libcap = 2.78-1%{?dist}
 %endif
 
 %description

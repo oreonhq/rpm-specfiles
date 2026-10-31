@@ -1,0 +1,24 @@
+--- a/src/Makefile.am	2026-08-20 09:19:12.024585691 -0700
++++ b/src/Makefile.am	2026-10-31 13:07:01.359575927 -0700
+@@ -144,10 +144,6 @@
+ 	done
+ endif
+ if ENABLE_SUBIDS
+-if FCAPS
+-	setcap cap_setuid+ep $(DESTDIR)$(ubindir)/newuidmap
+-	setcap cap_setgid+ep $(DESTDIR)$(ubindir)/newgidmap
+-endif
+ 
+ bin_PROGRAMS    +=  getsubids
+ noinst_PROGRAMS +=  get_subid_owners \
+--- a/src/Makefile.in	2026-09-23 11:16:23.697083907 -0700
++++ b/src/Makefile.in	2026-10-31 13:07:01.359744907 -0700
+@@ -1532,8 +1532,6 @@
+ @WITH_TCB_TRUE@		chown root:shadow $(DESTDIR)$(ubindir)/$$i; \
+ @WITH_TCB_TRUE@		chmod $(sgidperms) $(DESTDIR)$(ubindir)/$$i; \
+ @WITH_TCB_TRUE@	done
+-@ENABLE_SUBIDS_TRUE@@FCAPS_TRUE@	setcap cap_setuid+ep $(DESTDIR)$(ubindir)/newuidmap
+-@ENABLE_SUBIDS_TRUE@@FCAPS_TRUE@	setcap cap_setgid+ep $(DESTDIR)$(ubindir)/newgidmap
+ 
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
