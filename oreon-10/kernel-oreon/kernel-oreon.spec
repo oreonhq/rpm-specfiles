@@ -206,8 +206,8 @@ BuildConflicts: rhbuildsys(DiskFree) < 500Mb
 ###
 ### Sources
 ###
-Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{LKAver}.tar.xz
-Source1: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{LKAver}.tar.sign
+Source0: https://www.kernel.org/pub/linux/kernel/v7.x/linux-%{LKAver}.tar.xz
+Source1: https://www.kernel.org/pub/linux/kernel/v7.x/linux-%{LKAver}.tar.sign
 Source3: gpgkey-kernelorg-stable.gpg
 Patch0: 0001-bore-7.3.patch
 
@@ -229,11 +229,6 @@ Source40: filter-modules.sh
 
 Source2002: kvm_stat.logrotate
 
-# Do not package the source tarball.
-# To build .src.rpm, run with '--with src'
-%if %{?_with_src:0}%{!?_with_src:1}
-NoSource: 0
-%endif
 
 %description
 The %{name} meta package.
