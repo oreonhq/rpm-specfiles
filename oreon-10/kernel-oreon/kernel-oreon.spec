@@ -1026,29 +1026,19 @@ cp System.map %{buildroot}/
 
 pushd %{buildroot} > /dev/null
 
-# Create a backup of the full module tree so it can be
-# restored after the filtering has been completed.
-mkdir restore
-cp -r lib/modules/%{KVERREL}/* restore/
-
-# Don't include anything going into kernel-oreon-modules-extra in the file lists.
-xargs rm -fr < mod-extra.list
-
-# Find all the module files and filter them out into the core and modules lists.
-# This actually removes anything going into kernel-oreon-modules from the directory.
-find lib/modules/%{KVERREL}/kernel -name *.ko -type f | sort -n > modules.list
+# file list only
+find lib/modules/%{KVERREL}/kernel -name '*.ko*' -type f | sort > modules.list
+if [ -s mod-extra.list ]; then
+	grep -F -x -v -f mod-extra.list modules.list > modules.list.tmp || true
+	mv modules.list.tmp modules.list
+fi
 cp $RPM_SOURCE_DIR/filter-*.sh .
 ./filter-modules.sh modules.list %{_target_cpu}
 rm -f filter-*.sh
 
-# Go back and find all of the various directories in the tree.
-# We use this for the directory lists in kernel-oreon-core.
-find lib/modules/%{KVERREL}/kernel -mindepth 1 -type d | sort -n > module-dirs.list
+find lib/modules/%{KVERREL}/kernel -mindepth 1 -type d | sort > module-dirs.list
 
-# Cleanup.
 rm -f System.map
-cp -r restore/* lib/modules/%{KVERREL}/
-rm -fr restore
 
 popd > /dev/null
 
