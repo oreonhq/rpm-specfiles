@@ -780,8 +780,15 @@ mkdir -p %{buildroot}/lib/modules/%{KVERREL}
 mkdir -p %{buildroot}/lib/modules/%{KVERREL}/systemtap
 
 %ifarch aarch64
-%{make} ARCH=%{bldarch} dtbs_install INSTALL_DTBS_PATH=%{buildroot}/boot/dtb-%{KVERREL}
-cp -r %{buildroot}/boot/dtb-%{KVERREL} %{buildroot}/lib/modules/%{KVERREL}/dtb
+mkdir -p %{buildroot}/lib/modules/%{KVERREL}/dtb
+mkdir -p %{buildroot}/boot/dtb-%{KVERREL}
+%{make} ARCH=%{bldarch} dtbs_install INSTALL_DTBS_PATH=%{buildroot}/lib/modules/%{KVERREL}/dtb
+if ! find %{buildroot}/lib/modules/%{KVERREL}/dtb -name '*.dtb' -print -quit | grep -q .; then
+	find arch/%{bldarch}/boot/dts -name '*.dtb' -type f | while read -r dtb; do
+		rel=${dtb#arch/%{bldarch}/boot/dts/}
+		install -D -m 0644 "$dtb" %{buildroot}/lib/modules/%{KVERREL}/dtb/"$rel"
+	done
+fi
 find arch/%{bldarch}/boot/dts -name '*.dtb' -type f -delete
 %endif
 
