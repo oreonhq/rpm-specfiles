@@ -164,7 +164,7 @@ License: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-2-Clause) AND ((GPL-2.0-
 URL: https://www.kernel.org/
 Version: %{pkg_version}
 Release: %{pkg_release}
-ExclusiveArch: x86_64
+ExclusiveArch: x86_64 aarch64
 ExclusiveOS: Linux
 Provides: installonlypkg(kernel)
 Requires: %{name}-core-uname-r = %{KVERREL}
@@ -197,9 +197,6 @@ BuildRequires: clang-devel
 BuildRequires: python3-docutils
 BuildRequires: libtraceevent-devel
 BuildRequires: libtracefs-devel >= 1.6
-%ifarch aarch64
-BuildRequires: opencsd-devel >= 1.2.1
-%endif
 
 BuildConflicts: rhbuildsys(DiskFree) < 500Mb
 
@@ -212,6 +209,7 @@ Source3: gpgkey-kernelorg-stable.gpg
 Patch0: 0001-bore-7.3.patch
 
 Source2: config-%{version}-x86_64
+Source4: config-%{version}-aarch64
 Source10: oreonsecureboot-ca.cer
 Source13: oreonsecureboot-kernel.cer
 
@@ -221,7 +219,7 @@ Source20: mod-denylist.sh
 Source26: mod-extra.list
 
 Source34: filter-x86_64.sh
-#Source37: filter-aarch64.sh
+Source37: filter-aarch64.sh
 Source40: filter-modules.sh
 
 #Source100: rheldup3.x509
@@ -617,6 +615,7 @@ find . -name '.*' -type f -delete
 mv COPYING COPYING-%{version}-%{release}
 
 cp -a %{SOURCE2} .
+cp -a %{SOURCE4} .
 
 # Set the EXTRAVERSION string in the top level Makefile.
 sed -i "s@^EXTRAVERSION.*@EXTRAVERSION = -%{release}.%{_target_cpu}@" Makefile

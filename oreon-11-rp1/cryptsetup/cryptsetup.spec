@@ -23,6 +23,7 @@ BuildRequires: json-c-devel
 BuildRequires: popt-devel
 BuildRequires: device-mapper-devel
 BuildRequires: libblkid-devel
+BuildRequires: libuuid-devel
 BuildRequires: pkgconf
 %endif
 
