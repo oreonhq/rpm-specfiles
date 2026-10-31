@@ -1,0 +1,24 @@
+diff -up texinfo-7.2.90/info/infokey.c.orig texinfo-7.2.90/info/infokey.c
+--- texinfo-7.2.90/info/infokey.c.orig	2026-01-13 08:29:49.769521594 +0100
++++ texinfo-7.2.90/info/infokey.c	2026-01-13 08:30:08.085126480 +0100
+@@ -207,7 +207,7 @@ compile (FILE *fp, const char *filename,
+   int oval = 0;
+   char comment[10];
+   unsigned int clen = 0;
+-  int seq[20];
++  int seq[20] = { 0 };
+   unsigned int slen = 0;
+   char act[80];
+   unsigned int alen = 0;
+diff -up texinfo-7.2.90/info/session-cmd.c.orig texinfo-7.2.90/info/session-cmd.c
+--- texinfo-7.2.90/info/session-cmd.c.orig	2026-01-13 08:31:23.475887665 +0100
++++ texinfo-7.2.90/info/session-cmd.c	2026-01-13 08:31:51.255699732 +0100
+@@ -2100,7 +2100,7 @@ DECLARE_INFO_COMMAND (info_menu_sequence
+ static int
+ info_handle_pointer (const char *label, WINDOW *window)
+ {
+-  char *description;
++  char *description = NULL;
+   NODE *node;
+ 
+   if (!strcmp (label, "Up"))
