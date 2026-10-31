@@ -49,7 +49,7 @@ BuildRequires: libselinux-devel = 3.11-1%{?dist}
 BuildRequires: libsemanage-devel
 BuildRequires: libxcrypt-devel = 4.5.2-1%{?dist}
 BuildRequires: libacl-devel = 2.3.2-1%{?dist}
-BuildRequires: libattr-devel = 2.5.2-1%{?dist}
+BuildRequires: attr-devel = 2.5.2-1%{?dist}
 BuildRequires: libeconf-devel
 BuildRequires: systemd-devel
 BuildRequires: kernel-headers

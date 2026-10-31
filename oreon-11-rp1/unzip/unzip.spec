@@ -53,7 +53,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: bzip2-devel = 1.0.8-2%{?dist}
+BuildRequires: bzip2-devel
 %endif
 
 %description

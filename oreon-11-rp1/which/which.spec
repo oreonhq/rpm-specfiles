@@ -20,6 +20,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
 %endif

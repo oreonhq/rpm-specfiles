@@ -20,6 +20,7 @@ Patch3: cpio-2.9.90-defaultremoteshell.patch
 Patch4: cpio-2.14-patternnamesigsegv.patch
 Patch5: cpio-2.10-longnames-split.patch
 Patch6: cpio-2.11-crc-fips-nit.patch
+Patch7: cpio-2.15-xstat-c23.patch
 
 Provides: bundled(gnulib)
 Provides: bundled(paxutils)
