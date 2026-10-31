@@ -1,5 +1,5 @@
 --- a/src/extern.h	2024-01-14 03:42:18.000000000 -0800
-+++ b/src/extern.h	2026-10-31 12:00:20.823313819 -0700
++++ b/src/extern.h	2026-10-31 12:40:42.381042004 -0700
 @@ -97,7 +97,7 @@
  extern char output_is_special;
  extern char input_is_seekable;
@@ -9,3 +9,14 @@
  extern void (*copy_function) ();
  extern char *change_directory_option;
  
+--- a/src/global.c	2024-01-14 03:42:18.000000000 -0800
++++ b/src/global.c	2026-10-31 12:40:42.381114004 -0700
+@@ -185,7 +185,7 @@
+ 
+ /* A pointer to either lstat or stat, depending on whether
+    dereferencing of symlinks is done for input files.  */
+-int (*xstat) ();
++int (*xstat) (const char *, struct stat *);
+ 
+ /* Which copy operation to perform. (-i, -o, -p) */
+ void (*copy_function) () = 0;

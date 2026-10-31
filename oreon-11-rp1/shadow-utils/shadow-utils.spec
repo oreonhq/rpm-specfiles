@@ -43,13 +43,13 @@ BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gettext
 BuildRequires: pkgconf
-BuildRequires: pam-devel = 1.7.1-1%{?dist}
+BuildRequires: pam-devel
 BuildRequires: audit-devel = 4.2.1-1%{?dist}
 BuildRequires: libselinux-devel = 3.11-1%{?dist}
 BuildRequires: libsemanage-devel
 BuildRequires: libxcrypt-devel = 4.5.2-1%{?dist}
 BuildRequires: libacl-devel = 2.3.2-1%{?dist}
-BuildRequires: attr-devel = 2.5.2-1%{?dist}
+BuildRequires: attr-devel
 BuildRequires: libeconf-devel
 BuildRequires: systemd-devel
 BuildRequires: kernel-headers
