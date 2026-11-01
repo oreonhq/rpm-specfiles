@@ -22,7 +22,7 @@ BuildRequires: ninja-build
 BuildRequires: pkgconf
 BuildRequires: expat-devel
 BuildRequires: libxml2-devel
-BuildRequires: zlib-ng-compat-devel
+BuildRequires: zlib-devel
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
 BuildRequires: patchelf

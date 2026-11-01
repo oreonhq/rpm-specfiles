@@ -13,7 +13,7 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -43,8 +43,6 @@ BuildRequires: bison
 BuildRequires: flex
 BuildRequires: file
 BuildRequires: python3
-BuildRequires: doxygen
-BuildRequires: graphviz
 BuildRequires: libxml2-devel
 BuildRequires: gcc-gnat
 BuildRequires: libgnat

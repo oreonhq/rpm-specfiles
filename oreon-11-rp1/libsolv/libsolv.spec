@@ -20,7 +20,7 @@ BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
 BuildRequires: rpm-devel
-BuildRequires: zlib-ng-compat-devel
+BuildRequires: zlib-devel
 BuildRequires: python3
 BuildRequires: bzip2-devel
 BuildRequires: xz-devel

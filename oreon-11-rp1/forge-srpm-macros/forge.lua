@@ -1,5 +1,5 @@
 -- SPDX-License-Identifier: GPL-1.0-or-later
--- Copyright (C) 2018-2022 redhat-rpm-config contributors
+-- Copyright (C) 2018-2022 oreon-rpm-config contributors
 
 -- Lua code used by macros.forge and derivatives
 
@@ -104,11 +104,11 @@ end
 -- See the documentation in the macros.forge file for argument description
 -- Also called directly by gometa
 local function meta(suffix, verbose, informative, silent)
-  local fedora = require "fedora.common"
-  local util = require "fedora.srpm._forge_util"
+  local oreon = require "oreon.common"
+  local util = require "oreon.srpm._forge_util"
   local ismain = (suffix == "") or (suffix == "0")
   if ismain then
-    fedora.zalias({"forgeurl", "forgesource", "forgesetupargs",
+    oreon.zalias({"forgeurl", "forgesource", "forgesetupargs",
                       "archivename", "archiveext", "archiveurl",
                       "topdir", "extractdir", "repo", "owner", "namespace",
                       "scm", "tag", "commit", "shortcommit", "branch", "version",
@@ -215,8 +215,8 @@ local function meta(suffix, verbose, informative, silent)
   local forge
   forgeurl,   forge = idforge(forgeurl, silent, util.get_macro("forgename" .. suffix))
   if (forge ~= nil) then
-    fedora.explicitset("forgeurl" .. suffix, forgeurl, verbose)
-    fedora.explicitset("forgename" .. suffix, forge, verbose)
+    oreon.explicitset("forgeurl" .. suffix, forgeurl, verbose)
+    oreon.explicitset("forgename" .. suffix, forge, verbose)
     -- Custom processing of quirky forges that can not be handled with simple variables
     if (forge == "github") then
       -- Workaround the way GitHub injects "v"s before some version strings (but not all!)
@@ -231,12 +231,12 @@ local function meta(suffix, verbose, informative, silent)
       elseif (string.match(rpm.expand(fileref), "/")) then
         fileref = string.gsub(rpm.expand(fileref), "/", "-")
       end
-      fedora.safeset("fileref" .. suffix, fileref, verbose)
+      oreon.safeset("fileref" .. suffix, fileref, verbose)
     elseif (forge == "gitea.com") then
       -- Workaround the way gitea mangles /s in ref names
       local fileref = ref
       fileref = string.gsub(rpm.expand(fileref), "/", "-")
-      fedora.safeset("fileref" .. suffix, fileref, verbose)
+      oreon.safeset("fileref" .. suffix, fileref, verbose)
     elseif (forge == "code.googlesource.com") then
       if (ref == "%{?version"  .. suffix .. "}") then
         ref = "v" .. ref
@@ -253,16 +253,16 @@ local function meta(suffix, verbose, informative, silent)
       elseif (string.match(rpm.expand(fileref), "/")) then
         fileref = string.gsub(rpm.expand(fileref), "/", "-")
       end
-      fedora.safeset("fileref" .. suffix, fileref, verbose)
+      oreon.safeset("fileref" .. suffix, fileref, verbose)
     end
-    fedora.safeset("ref" .. suffix, ref, verbose)
+    oreon.safeset("ref" .. suffix, ref, verbose)
     -- Mass setting of the remaining variables
     for k,v in pairs(variables[forge]) do
-      fedora.safeset(k .. suffix, variables[forge][k], verbose)
+      oreon.safeset(k .. suffix, variables[forge][k], verbose)
     end
     for k,v in pairs(variables["default"]) do
       if (variables[forge][k] == nil) then
-        fedora.safeset(k .. suffix, variables["default"][k], verbose)
+        oreon.safeset(k .. suffix, variables["default"][k], verbose)
       end
     end
   end
@@ -275,7 +275,7 @@ local function meta(suffix, verbose, informative, silent)
   if (string.match(spec["archiveurl"], "/([^/]+)$") ~= spec["archivename"] .. "." .. spec["archiveext"]) then
     forgesource     = "%{?archiveurl" .. suffix .. "}#/%{?archivename" .. suffix .. "}.%{archiveext" .. suffix .. "}"
   end
-  fedora.safeset("forgesource" .. suffix, forgesource, verbose)
+  oreon.safeset("forgesource" .. suffix, forgesource, verbose)
   -- Setup processing      (computing the forgesetup and extractdir variables)
   local forgesetupargs = "-n %{extractdir" .. suffix .. "}"
   local extractdir     = "%{topdir"        .. suffix .. "}"
@@ -290,8 +290,8 @@ local function meta(suffix, verbose, informative, silent)
       forgesetupargs = "-T -D -a " .. suffix .. " " .. forgesetupargs
     end
   end
-  fedora.safeset("forgesetupargs" .. suffix, forgesetupargs, verbose)
-  fedora.safeset("extractdir"     .. suffix, extractdir, verbose)
+  oreon.safeset("forgesetupargs" .. suffix, forgesetupargs, verbose)
+  oreon.safeset("extractdir"     .. suffix, extractdir, verbose)
   -- dist processing       (computing the correct prefix for snapshots)
   local distprefix = ""
   if not isrelease then
@@ -328,11 +328,11 @@ local function meta(suffix, verbose, informative, silent)
       distprefix = string.gsub(distprefix, "^%.", ".s")
     end
     -- See %forgeversion's docstring.
-    fedora.safeset ("distprefix"    .. suffix, distprefix, verbose)
-    fedora.safeset ("_forgeversionsuffix"    .. suffix, distprefix, verbose)
+    oreon.safeset ("distprefix"    .. suffix, distprefix, verbose)
+    oreon.safeset ("_forgeversionsuffix"    .. suffix, distprefix, verbose)
   end
   if ismain then
-    fedora.zalias({"forgeurl", "forgesource", "forgesetupargs",
+    oreon.zalias({"forgeurl", "forgesource", "forgesetupargs",
                       "archivename", "archiveext", "archiveurl",
                       "topdir", "extractdir", "repo", "owner", "namespace",
                       "scm", "shortcommit", "distprefix", "_forgeversionsuffix",
@@ -341,13 +341,13 @@ local function meta(suffix, verbose, informative, silent)
   -- Final spec variable summary if the macro was called with -i
   if informative then
     rpm.expand("%{echo:Packaging variables read or set by %%forgemeta}")
-    fedora.echovars({"forgeurl", "forgesource", "forgesetupargs",
+    oreon.echovars({"forgeurl", "forgesource", "forgesetupargs",
                         "archivename", "archiveext", "archiveurl",
                         "topdir", "extractdir", "repo", "owner", "namespace",
                         "scm", "tag", "commit", "shortcommit", "branch", "version",
                         "date", "distprefix", "_forgeversionsuffix",
                         "forgename"}, suffix)
-    fedora.echovars({"dist"},"")
+    oreon.echovars({"dist"},"")
     rpm.expand("%{echo:  (snapshot date is either manually supplied or computed once %%{_sourcedir}/%%{archivename" .. suffix .. "}.%%{archiveext" .. suffix .. "} is available)}")
   end
 end

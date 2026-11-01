@@ -6,7 +6,7 @@
 
 Name: dbus
 Version: 1.16.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: D-Bus message bus
 License: AFL-2.1 OR GPL-2.0-or-later
 URL: https://www.freedesktop.org/wiki/Software/dbus/
@@ -24,13 +24,6 @@ BuildRequires: libselinux-devel
 BuildRequires: audit-libs-devel
 BuildRequires: libcap-ng-devel
 BuildRequires: libX11-devel
-BuildRequires: libxslt
-BuildRequires: docbook-style-xsl
-BuildRequires: docbook-dtds
-BuildRequires: doxygen
-BuildRequires: python3-mallard-ducktype
-BuildRequires: yelp-tools
-BuildRequires: qt-devel
 BuildRequires: systemd-devel
 BuildRequires: python3
 BuildRequires: patchelf
@@ -56,10 +49,10 @@ D-Bus is a message bus.
   -Dkqueue=disabled \
   -Dlaunchd=disabled \
   -Dlibaudit=enabled \
-  -Dxml_docs=enabled \
-  -Ddoxygen_docs=enabled \
-  -Dducktype_docs=enabled \
-  -Dqt_help=enabled \
+  -Dxml_docs=disabled \
+  -Ddoxygen_docs=disabled \
+  -Dducktype_docs=disabled \
+  -Dqt_help=disabled \
   -Dx11_autolaunch=enabled \
   -Dselinux=enabled \
   -Dsystemd=enabled \

@@ -43,7 +43,6 @@
 %python2 %__python2
 %python3 %__python3
 
-# See https://fedoraproject.org/wiki/Changes/PythonMacroError
 %__python %{error:attempt to use unversioned python, define %%__python to %{__python2} or %{__python3} explicitly}
 
 # Users can use %%python only if they redefined %%__python (e.g. to %%__python3)
@@ -73,19 +72,17 @@
 ## Should python bytecompilation errors terminate a build?
 %_python_bytecompile_errors_terminate_build 1
 ## Should python bytecompilation compile outside python specific directories?
-## This always causes errors when enabled, see https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_3
 %_python_bytecompile_extra 0
 ## Helper macro to unset $SOURCE_DATE_EPOCH if %%clamp_mtime_to_source_date_epoch is not set
-## https://fedoraproject.org/wiki/Changes/ReproducibleBuildsClampMtimes#Python_bytecode
 %__env_unset_source_date_epoch_if_not_clamp_mtime %[0%{?clamp_mtime_to_source_date_epoch} == 0 ? "env -u SOURCE_DATE_EPOCH" : "env"]
 
 ## The individual BRP scripts
-%__brp_python_rpm_in_distinfo %{_rpmconfigdir}/redhat/brp-python-rpm-in-distinfo
-%__brp_python_bytecompile %{__env_unset_source_date_epoch_if_not_clamp_mtime} %{_rpmconfigdir}/redhat/brp-python-bytecompile "" "%{?_python_bytecompile_errors_terminate_build}" "%{?_python_bytecompile_extra}" "%{?_smp_build_ncpus:-j%{_smp_build_ncpus}}"
-%__brp_fix_pyc_reproducibility %{_rpmconfigdir}/redhat/brp-fix-pyc-reproducibility
-%__brp_python_hardlink %{_rpmconfigdir}/redhat/brp-python-hardlink
+%__brp_python_rpm_in_distinfo %{_rpmconfigdir}/oreon/brp-python-rpm-in-distinfo
+%__brp_python_bytecompile %{__env_unset_source_date_epoch_if_not_clamp_mtime} %{_rpmconfigdir}/oreon/brp-python-bytecompile "" "%{?_python_bytecompile_errors_terminate_build}" "%{?_python_bytecompile_extra}" "%{?_smp_build_ncpus:-j%{_smp_build_ncpus}}"
+%__brp_fix_pyc_reproducibility %{_rpmconfigdir}/oreon/brp-fix-pyc-reproducibility
+%__brp_python_hardlink %{_rpmconfigdir}/oreon/brp-python-hardlink
 
-## This macro is included in redhat-rpm-config's %%__os_install_post
+## This macro is included in oreon-rpm-config's %%__os_install_post
 # Note that the order matters:
 #  1. brp-python-rpm-in-distinfo modifies .dist-info/INSTALLER file
 #  2. brp-python-bytecompile can create (or replace) pyc files
@@ -100,7 +97,6 @@
 
 
 # === Macros for Build/Requires tags using Python dist tags ===
-# - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 # - These macros need to be in macros.python-srpm, because BuildRequires tags
 #   get rendered as runtime requires into the metadata of SRPMs.
 
@@ -198,7 +194,7 @@
 }
 
 %py_provides() %{lua:
-    local python = require 'fedora.srpm.python'
+    local python = require 'oreon.srpm.python'
     local rhel = rpm.expand('%{?rhel}')
     local name = rpm.expand('%1')
     if name == '%1' then

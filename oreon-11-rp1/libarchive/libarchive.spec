@@ -19,7 +19,7 @@ BuildRequires: glibc-devel
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
-BuildRequires: zlib-ng-compat-devel
+BuildRequires: zlib-devel
 BuildRequires: python3
 BuildRequires: bzip2-devel
 BuildRequires: xz-devel

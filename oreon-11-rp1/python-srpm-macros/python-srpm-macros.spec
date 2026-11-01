@@ -3,7 +3,7 @@
 
 Name: python-srpm-macros
 Version: 3.15
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: SRPM macros for Python packages
 License: MIT
 URL: https://www.python.org/
@@ -16,7 +16,7 @@ Source4: brp-python-hardlink
 Source5: brp-python-rpm-in-distinfo
 Source6: brp-fix-pyc-reproducibility
 Source7: python.lua
-Requires: redhat-rpm-config >= 190
+Requires: oreon-rpm-config
 Provides: bundled(python3dist(compileall2)) = 0.8.0
 
 BuildRequires: oreon-rpm-macros
@@ -32,7 +32,7 @@ SRPM macros and the bytecompile scripts Python source packages use.
 %install
 mkdir -p %{buildroot}%{_rpmmacrodir}
 mkdir -p %{buildroot}%{_rpmconfigdir}
-mkdir -p %{buildroot}%{_rpmluadir}/fedora/srpm
+mkdir -p %{buildroot}%{_rpmluadir}/oreon/srpm
 install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.python-srpm
 install -m 644 %{SOURCE1} %{buildroot}%{_rpmconfigdir}/compileall2.py
 install -m 644 %{SOURCE2} %{buildroot}%{_rpmconfigdir}/clamp_source_mtime.py
@@ -40,7 +40,7 @@ install -m 755 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/brp-python-bytecompile
 install -m 755 %{SOURCE4} %{buildroot}%{_rpmconfigdir}/brp-python-hardlink
 install -m 755 %{SOURCE5} %{buildroot}%{_rpmconfigdir}/brp-python-rpm-in-distinfo
 install -m 755 %{SOURCE6} %{buildroot}%{_rpmconfigdir}/brp-fix-pyc-reproducibility
-install -m 644 %{SOURCE7} %{buildroot}%{_rpmluadir}/fedora/srpm/python.lua
+install -m 644 %{SOURCE7} %{buildroot}%{_rpmluadir}/oreon/srpm/python.lua
 
 %files
 %{_rpmmacrodir}/macros.python-srpm
@@ -50,4 +50,4 @@ install -m 644 %{SOURCE7} %{buildroot}%{_rpmluadir}/fedora/srpm/python.lua
 %{_rpmconfigdir}/brp-python-hardlink
 %{_rpmconfigdir}/brp-python-rpm-in-distinfo
 %{_rpmconfigdir}/brp-fix-pyc-reproducibility
-%{_rpmluadir}/fedora/srpm/python.lua
+%{_rpmluadir}/oreon/srpm/python.lua

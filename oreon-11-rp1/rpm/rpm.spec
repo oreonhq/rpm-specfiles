@@ -6,7 +6,7 @@
 
 Name: rpm
 Version: 6.0.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: RPM package manager
 License: GPL-2.0-or-later
 URL: https://rpm.org/
@@ -21,7 +21,7 @@ BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
 BuildRequires: lua-devel
-BuildRequires: zlib-ng-compat-devel
+BuildRequires: zlib-devel
 BuildRequires: bzip2-devel
 BuildRequires: xz-devel
 BuildRequires: libzstd-devel
@@ -93,6 +93,7 @@ rpmbuild and the scripts it runs.
 %build
 %oreon_cmake \
   -DCMAKE_SKIP_RPATH=ON \
+  -DRPM_VENDOR=oreon \
   -DENABLE_TESTSUITE=OFF \
   -DENABLE_NLS=ON \
   -DENABLE_OPENMP=ON \

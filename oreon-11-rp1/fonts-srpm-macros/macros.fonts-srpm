@@ -36,16 +36,16 @@
 
 # Default contact in font appstream files
 # Override in your spec file if it does not apply
-%fontcontact             fonts@lists.fedoraproject.org
+%fontcontact             https://github.com/oreonhq/rpm-specfiles/issues
 
 # Default org in font appstream files
 # Override in your spec file if it does not apply
-%fontorg                 org.fedoraproject
+%fontorg                 org.oreonproject
 
 # Sanitize a font family name that can then serve as rpm package name
 # Mandatory parameter: a font family name
 %fontrpmname() %{lua:
-local fonts = require "fedora.srpm.fonts"
+local fonts = require "oreon.srpm.fonts"
 print(fonts.rpmname(rpm.expand("%1")))
 }
 
@@ -67,7 +67,7 @@ print(fonts.rpmname(rpm.expand("%1")))
 # -l "<shell globs>"  licensing files to include. Alternatively, set %{fontlicenses<number>}
 # -L "<shell globs>"  licensing files to exclude. Alternatively, set %{fontlicensesex<number>}
 %fontenv(z:vf:F:c:C:s:S:d:D:l:L:) %{lua:
-local      fonts = require "fedora.srpm.fonts"
+local      fonts = require "oreon.srpm.fonts"
 local     suffix =  rpm.expand("%{?-z*}")
 local    verbose = (rpm.expand("%{-v}") ~= "")
 local globvalues = {}
@@ -88,7 +88,7 @@ fonts.env(suffix, verbose, globvalues)
 #                     by itself the macro assumes the zero or nil suffix block
 #                     corresponds to the main package header
 %fontpkg(z:avms) %{lua:
-local      fonts =  require "fedora.srpm.fonts"
+local      fonts =  require "oreon.srpm.fonts"
 local     suffix =  rpm.expand("%{?-z*}")
 local processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 local    verbose = (rpm.expand("%{-v}") ~= "")
@@ -104,7 +104,7 @@ fonts.pkg(forcemain, forcesub, suffix, processall, verbose)
 # -z "<numbers>"  restrict metapackaging to <numbers> comma-separated list of
 #                 font package suffixes
 %fontmetapkg(n:s:d:z:) %{lua:
-local        fonts = require "fedora.srpm.fonts"
+local        fonts = require "oreon.srpm.fonts"
 local         name = rpm.expand("%{?-n*}")
 local      summary = rpm.expand("%{?-s*}")
 if (summary ~= "") then

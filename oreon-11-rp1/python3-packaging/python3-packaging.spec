@@ -1,12 +1,12 @@
-%global source0_hash d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f
+%global source0_hash 94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: python3-packaging
-Version: 25.0
-Release: 9%{?dist}
+Version: 26.3
+Release: 1%{?dist}
 Summary: Core utilities for Python packages
 License: Apache-2.0 OR BSD-2-Clause
 URL: https://github.com/pypa/packaging

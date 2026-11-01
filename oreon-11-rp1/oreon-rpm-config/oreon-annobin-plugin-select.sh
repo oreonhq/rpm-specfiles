@@ -1,6 +1,6 @@
 #!/usr/bin/sh
 # This is a script to select which GCC spec file fragment
-# should be the destination of the redhat-annobin-cc1 symlink.
+# should be the destination of the oreon-annobin-cc1 symlink.
 
 # Author: Nick Clifton  <nickc@redhat.com>
 # Copyright (c) 2021 Red Hat.
@@ -16,15 +16,15 @@
 # GNU General Public License for more details.
 #
 # Usage:
-#   redhat-annobin-plugin-select [script-dir]
+#   oreon-annobin-plugin-select [script-dir]
 #
-# If script-dir is not provided then /usr/lib/rpm/redhat is used
+# If script-dir is not provided then /usr/lib/rpm/oreon is used
 # as the location where all of the annobin plugin selection files
 # can be found.
 
 if test "x$1" = "x" ;
 then
-    rrcdir=/usr/lib/rpm/redhat
+    rrcdir=/usr/lib/rpm/oreon
 else
     rrcdir=$1
 fi
@@ -63,15 +63,15 @@ gplugin=`gcc --print-file-name=plugin`/gcc-annobin.so.0.0.0
 
 # This is the file that needs to be updated when either of those version
 # files changes.
-rac1=redhat-annobin-cc1
+rac1=oreon-annobin-cc1
 
 # This is the GCC spec file fragment that selects the gcc-built version of
 # the annobin plugin
-select_gcc=redhat-annobin-select-gcc-built-plugin
+select_gcc=oreon-annobin-select-gcc-built-plugin
 
 # This is the GCC spec file fragment that selects the annobin-built version
 # of the annobin plugin
-select_annobin=redhat-annobin-select-annobin-built-plugin
+select_annobin=oreon-annobin-select-annobin-built-plugin
 
 install_annobin_version=0
 install_gcc_version=0
@@ -82,7 +82,7 @@ then
     then
 	if [ $debug -eq 1 ]
 	then
-	    echo "  redhat-rpm-config: Both plugins exist, checking version information"
+	    echo "  oreon-rpm-config: Both plugins exist, checking version information"
 	fi
 
 	if [ -f $gver ]
@@ -91,7 +91,7 @@ then
 	    then
 		if [ $debug -eq 1 ]
 		then
-		    echo "  redhat-rpm-config: Both plugin version files exist - comparing..."
+		    echo "  oreon-rpm-config: Both plugin version files exist - comparing..."
 		fi
 
 		# Get the first line from the version info files.  This is just in
@@ -101,8 +101,8 @@ then
 
 		if [ $debug -eq 1 ]
 		then
-		    echo "  redhat-rpm-config: Annobin plugin built by gcc $avers"
-		    echo "  redhat-rpm-config: GCC     plugin built by gcc $gvers"
+		    echo "  oreon-rpm-config: Annobin plugin built by gcc $avers"
+		    echo "  oreon-rpm-config: GCC     plugin built by gcc $gvers"
 		fi
 
 		# If both plugins were built by the same version of gcc then select
@@ -114,20 +114,20 @@ then
 		then
 		    if [ $debug -eq 1 ]
 		    then
-			echo "  redhat-rpm-config: Both plugins built by the same compiler - using annobin-built plugin"
+			echo "  oreon-rpm-config: Both plugins built by the same compiler - using annobin-built plugin"
 		    fi
 		    install_annobin_version=1
 		else
 		    if [ $debug -eq 1 ]
 		    then
-			echo "  redhat-rpm-config: Versions differ - using gcc-built plugin"
+			echo "  oreon-rpm-config: Versions differ - using gcc-built plugin"
 		    fi
 		    install_gcc_version=1
 		fi
 	    else
 		if [ $debug -eq 1 ]
 		then
-		    echo "  redhat-rpm-config: Annobin version file does not exist, using gcc-built plugin"
+		    echo "  oreon-rpm-config: Annobin version file does not exist, using gcc-built plugin"
 		fi
 		install_gcc_version=1
 	    fi
@@ -138,14 +138,14 @@ then
 		# then enabling the annobin plugin will not work.
 		if [ $debug -eq 1 ]
 		then
-		    echo "  redhat-rpm-config: GCC plugin version file does not exist, using annobin-built plugin"
+		    echo "  oreon-rpm-config: GCC plugin version file does not exist, using annobin-built plugin"
 		fi
 		install_annobin_version=1
 	    else
 		if [ $debug -eq 1 ]
 		then
-		    echo "  redhat-rpm-config: Neither version file exists - playing safe and using gcc-built plugin"
-		    echo "  redhat-rpm-config: Note: expected to find $aver and/or $gver"
+		    echo "  oreon-rpm-config: Neither version file exists - playing safe and using gcc-built plugin"
+		    echo "  oreon-rpm-config: Note: expected to find $aver and/or $gver"
 		fi
 		install_gcc_version=1
 	    fi
@@ -153,7 +153,7 @@ then
     else
 	if [ $debug -eq 1 ]
 	then
-	    echo "  redhat-rpm-config: Only the annobin plugin exists - using that"
+	    echo "  oreon-rpm-config: Only the annobin plugin exists - using that"
 	fi
 	install_annobin_version=1
     fi
@@ -162,13 +162,13 @@ else
     then
 	if [ $debug -eq 1 ]
 	then
-	    echo "  redhat-rpm-config: Only the gcc plugin exists - using that"
+	    echo "  oreon-rpm-config: Only the gcc plugin exists - using that"
 	fi
     else
 	if [ $debug -eq 1 ]
 	then
-	    echo "  redhat-rpm-config: Neither plugin exists - playing safe and using gcc-built plugin"
-	    echo "  redhat-rpm-config: Note: expected to find $aplugin and/or $gplugin"
+	    echo "  oreon-rpm-config: Neither plugin exists - playing safe and using gcc-built plugin"
+	    echo "  oreon-rpm-config: Note: expected to find $aplugin and/or $gplugin"
 	fi
     fi
     install_gcc_version=1
@@ -178,7 +178,7 @@ if [ $install_annobin_version -eq 1 ]
 then
     if [ $debug -eq 1 ]
     then
-	echo "  redhat-rpm-config: Installing annobin version of $rac1"
+	echo "  oreon-rpm-config: Installing annobin version of $rac1"
     fi
     pushd $rrcdir > /dev/null
     rm -f $rac1
@@ -189,7 +189,7 @@ else if [ $install_gcc_version -eq 1 ]
      then
 	if [ $debug -eq 1 ]
 	then
-	    echo "  redhat-rpm-config: Installing gcc version of $rac1"
+	    echo "  oreon-rpm-config: Installing gcc version of $rac1"
 	fi
 	pushd $rrcdir > /dev/null
 	rm -f $rac1

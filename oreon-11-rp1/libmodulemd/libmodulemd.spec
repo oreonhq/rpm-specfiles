@@ -6,7 +6,7 @@
 
 Name: libmodulemd
 Version: 2.15.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Module metadata library
 License: MIT
 URL: https://github.com/fedora-modularity/libmodulemd
@@ -22,11 +22,6 @@ BuildRequires: pkgconf
 BuildRequires: glib2-devel
 BuildRequires: libyaml-devel
 BuildRequires: rpm-devel
-BuildRequires: gobject-introspection-devel
-BuildRequires: python3-devel
-BuildRequires: python3-gobject-devel
-BuildRequires: gtk-doc
-BuildRequires: glib2-doc
 BuildRequires: patchelf
 %endif
 
@@ -46,9 +41,10 @@ libmodulemd reads modulemd documents.
 
 %build
 %oreon_meson \
-  -Dwith_py3=true \
+  -Dwith_py3=false \
   -Dwith_py2=false \
-  -Dskip_introspection=false \
+  -Dskip_introspection=true \
+  -Dwith_docs=false \
   -Dwith_manpages=enabled \
   -Drpmio=enabled
 %oreon_meson_build

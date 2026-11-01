@@ -1,4 +1,4 @@
-# Fedora macros, safe to use after the SRPM build stage
+# Oreon macros, safe to use after the SRPM build stage
 
 # Lists files matching inclusion globs, excluding files matching exclusion
 # globs
@@ -35,13 +35,13 @@
 #                        @@BAR@@ with the rpm evaluation of %{bar}
 #                      in myfile
 %writevars(f:) %{lua:
-local    fedora = require "fedora.common"
+local    oreon = require "oreon.common"
 local macrofile = rpm.expand("%{-f*}")
 local   rpmvars = {}
 for i = 1, rpm.expand("%#") do
   table.insert(rpmvars, rpm.expand("%" .. i))
 end
-fedora.writevars(macrofile,rpmvars)
+oreon.writevars(macrofile,rpmvars)
 }
 
 # gpgverify verifies signed sources. There is documentation in the script.

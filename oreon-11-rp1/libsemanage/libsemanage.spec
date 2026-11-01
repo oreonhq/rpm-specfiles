@@ -15,21 +15,19 @@ Source1: libsemanage-%{version}.tar.gz.asc
 Source2: semanage-key.gpg
 Source3: semanage.conf
 
-Requires: libselinux%{?_isa} = 3.11-1%{?dist}
+Requires: libselinux%{?_isa} >= 3.11
 Requires: bzip2
-Requires: audit%{?_isa} = 4.2.1-1%{?dist}
+Requires: audit%{?_isa} >= 4.2.1
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: make
-BuildRequires: libselinux-devel = 3.11-1%{?dist}
-BuildRequires: libsepol-devel = 3.11-1%{?dist}
-BuildRequires: audit-devel = 4.2.1-1%{?dist}
+BuildRequires: libselinux-devel >= 3.11
+BuildRequires: libsepol-devel >= 3.11
+BuildRequires: audit-devel >= 4.2.1
 BuildRequires: bzip2-devel
-BuildRequires: python3-devel
-BuildRequires: swig
 %endif
 
 %description
@@ -38,7 +36,7 @@ libsemanage manages the active SELinux policy.
 %package devel
 Summary: Development files for libsemanage
 Requires: libsemanage%{?_isa} = %{version}-%{release}
-Requires: libselinux-devel%{?_isa} = 3.11-1%{?dist}
+Requires: libselinux-devel%{?_isa} >= 3.11
 
 %description devel
 Headers and the libsemanage link library.
@@ -49,13 +47,10 @@ Headers and the libsemanage link library.
 %autosetup -n libsemanage-%{version} -p1
 
 %build
-%oreon_make swigify
 %oreon_make LIBDIR=%{_libdir} SHLIBDIR=%{_libdir} all
-%oreon_make PYTHON=%{__python3} LIBDIR=%{_libdir} SHLIBDIR=%{_libdir} pywrap
 
 %install
 %oreon_make_install LIBDIR=%{_libdir} SHLIBDIR=%{_libdir}
-%oreon_make PYTHON=%{__python3} DESTDIR=%{buildroot} LIBDIR=%{_libdir} SHLIBDIR=%{_libdir} install-pywrap
 mkdir -p %{buildroot}%{_sysconfdir}/selinux
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/selinux/semanage.conf
 rm -f %{buildroot}%{_libdir}/*.a

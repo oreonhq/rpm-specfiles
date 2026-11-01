@@ -6,7 +6,7 @@
 
 Name: elfutils
 Version: 0.196
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: ELF and DWARF library
 License: GPL-2.0-or-later OR LGPL-3.0-or-later
 URL: https://sourceware.org/elfutils/
@@ -33,6 +33,10 @@ ELF and DWARF library
 %package devel
 Summary: ELF and DWARF library
 Requires: elfutils%{?_isa} = %{version}-%{release}
+Provides: elfutils-libelf-devel = %{version}-%{release}
+Provides: elfutils-libelf-devel%{?_isa} = %{version}-%{release}
+Provides: pkgconfig(libelf) = %{version}
+Provides: pkgconfig(libdw) = %{version}
 
 %description devel
 ELF and DWARF library

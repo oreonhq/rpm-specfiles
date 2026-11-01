@@ -18,7 +18,7 @@ optflags: aarch64 %{__global_compiler_flags} -mbranch-protection=standard -fasyn
 
 optflags: riscv64 %{__global_compiler_flags} -fasynchronous-unwind-tables %{_frame_pointers_cflags} %{_frame_pointers_cflags_riscv64}
 
-# set build arch to fedora buildarches on hardware capable of running it
+# set build arch to the distro buildarches on hardware capable of running it
 # saves having to do rpmbuild --target=
 buildarchtranslate: athlon: i686
 buildarchtranslate: geode: i686

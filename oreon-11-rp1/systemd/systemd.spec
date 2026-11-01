@@ -6,7 +6,7 @@
 
 Name: systemd
 Version: 259.10
-Release: 1%{?dist}
+Release: 2%{?dist}
 Provides: systemd-libs = %{version}-%{release}
 Provides: systemd-libs%{_isa} = %{version}-%{release}
 Obsoletes: systemd-libs < 260
@@ -32,7 +32,7 @@ BuildRequires: libblkid-devel
 BuildRequires: libselinux-devel
 BuildRequires: libacl-devel
 BuildRequires: openssl-devel
-BuildRequires: zlib-ng-compat-devel
+BuildRequires: zlib-devel
 BuildRequires: bzip2-devel
 BuildRequires: xz-devel
 BuildRequires: lz4-devel
@@ -41,34 +41,20 @@ BuildRequires: libarchive-devel
 BuildRequires: dbus-devel
 BuildRequires: glib2-devel
 BuildRequires: pcre2-devel
-BuildRequires: kmod-devel
 BuildRequires: libseccomp-devel
 BuildRequires: audit-libs-devel
 BuildRequires: cryptsetup-devel
 BuildRequires: libmicrohttpd-devel
 BuildRequires: libcurl-devel
 BuildRequires: libidn2-devel
-BuildRequires: iptables-devel
-BuildRequires: qrencode-devel
 BuildRequires: libgcrypt-devel
 BuildRequires: gnutls-devel
 BuildRequires: p11-kit-devel
-BuildRequires: libfido2-devel
-BuildRequires: tpm2-tss-devel
 BuildRequires: elfutils-devel
-BuildRequires: libxkbcommon-devel
-BuildRequires: gnu-efi-devel
 BuildRequires: python3-jinja2
-BuildRequires: python3-pyelftools
-BuildRequires: python3-pefile
 BuildRequires: libfdisk-devel
 BuildRequires: pam-devel
 BuildRequires: libpwquality-devel
-BuildRequires: polkit-devel
-BuildRequires: libbpf-devel
-BuildRequires: clang
-BuildRequires: bpftool
-BuildRequires: xen-devel
 BuildRequires: gettext
 BuildRequires: patchelf
 %endif
@@ -98,10 +84,10 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dinstall-tests=false \
   -Dtranslations=true \
   -Defi=true \
-  -Dtpm=true \
+  -Dtpm=false \
   -Dstatic-libsystemd=false \
   -Dstatic-libudev=false \
-  -Dbpf-framework=enabled \
+  -Dbpf-framework=disabled \
   -Dapparmor=disabled \
   -Daudit=enabled \
   -Dlibcryptsetup=enabled \
@@ -109,27 +95,27 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dmicrohttpd=enabled \
   -Dlibcurl=enabled \
   -Dlibidn2=enabled \
-  -Dlibiptc=enabled \
-  -Dqrencode=enabled \
+  -Dlibiptc=disabled \
+  -Dqrencode=disabled \
   -Dgcrypt=enabled \
   -Dgnutls=enabled \
   -Dp11kit=enabled \
-  -Dlibfido2=enabled \
-  -Dtpm2=enabled \
+  -Dlibfido2=disabled \
+  -Dtpm2=disabled \
   -Delfutils=enabled \
-  -Dxkbcommon=enabled \
-  -Dbootloader=enabled \
-  -Dukify=enabled \
+  -Dxkbcommon=disabled \
+  -Dbootloader=disabled \
+  -Dukify=disabled \
   -Dhomed=enabled \
   -Dremote=enabled \
   -Dimportd=enabled \
   -Dvmspawn=enabled \
   -Drepart=enabled \
   -Dsysupdate=enabled \
-  -Dpolkit=enabled \
+  -Dpolkit=disabled \
   -Dseccomp=enabled \
   -Dfdisk=enabled \
-  -Dxenctrl=enabled \
+  -Dxenctrl=disabled \
   -Dpwquality=enabled \
   -Dpasswdqc=disabled \
   -Dpam=enabled \
@@ -152,7 +138,7 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dglib=enabled \
   -Dpcre2=enabled \
   -Dblkid=enabled \
-  -Dkmod=enabled
+  -Dkmod=disabled
 %oreon_meson_build
 
 %install

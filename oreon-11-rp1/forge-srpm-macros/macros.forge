@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-1.0-or-later
-# Copyright (C) 2018-2020 redhat-rpm-config contributors
+# Copyright (C) 2018-2020 oreon-rpm-config contributors
 
 # Computes forge-related variables for use in the rest of the spec file
 # Control variables, flags and arguments:
@@ -26,14 +26,14 @@
 #   -a                   process all sources in one go, instead of using
 #                        separate -z calls
 %forgemeta(z:isva) %{lua:
-local      fedora = require "fedora.common"
-local       forge = require "fedora.srpm.forge"
+local      oreon = require "oreon.common"
+local       forge = require "oreon.srpm.forge"
 local     verbose =  rpm.expand("%{-v}") ~= ""
 local informative =  rpm.expand("%{-i}") ~= ""
 local      silent =  rpm.expand("%{-s}") ~= ""
 local  processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
 if processall then
-  for _,s in pairs(fedora.getsuffixes("forgeurl")) do
+  for _,s in pairs(oreon.getsuffixes("forgeurl")) do
     forge.meta(s,verbose,informative,silent)
   end
 else
@@ -52,9 +52,9 @@ end
 #   -a                   process all sources in one go, instead of using
 #                        separate -z calls
 %forgesetup(z:va) %{lua:
-local fedora = require "fedora.common"
+local oreon = require "oreon.common"
 if (rpm.expand("%{-z}") == "") and (rpm.expand("%{-a}") ~= "") then
-  for _,s in pairs(fedora.getsuffixes("forgesetupargs")) do
+  for _,s in pairs(oreon.getsuffixes("forgesetupargs")) do
     print(rpm.expand("%setup %{!-v:-q} %{?forgesetupargs" .. s                     .. "}\\n"))
   end
 else
@@ -100,11 +100,11 @@ print(rpm.expand("%autosetup %{-v} %{-N} %{?-S} %{?-p} %{?forgesetupargs" .. rpm
 #   Version: %{forgeversion}
 
 %forgeversion(pz:ab:) %{lua:
-local fedora = require "fedora.common"
-local util = require "fedora.srpm._forge_util"
+local oreon = require "oreon.common"
+local util = require "oreon.srpm._forge_util"
 \
 -- Zero-alias version/version0 macros
-fedora.zalias({"version", "distprefix", "_forgeversionsuffix"}, nil)
+oreon.zalias({"version", "distprefix", "_forgeversionsuffix"}, nil)
 \
 -- Determine the seperator
 local sep = "^"

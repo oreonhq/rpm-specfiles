@@ -6,7 +6,7 @@
 
 Name: audit
 Version: 4.2.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Provides: audit-libs = %{version}-%{release}
 Provides: audit-libs%{_isa} = %{version}-%{release}
 Obsoletes: audit-libs < 4.3
@@ -34,6 +34,8 @@ Linux audit library
 %package devel
 Summary: Linux audit library
 Requires: audit%{?_isa} = %{version}-%{release}
+Provides: audit-libs-devel = %{version}-%{release}
+Provides: audit-libs-devel%{?_isa} = %{version}-%{release}
 
 %description devel
 Linux audit library

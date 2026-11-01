@@ -3,7 +3,7 @@
 
 Name: fonts-srpm-macros
 Version: 5.0.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: SRPM macros for font packages
 License: MIT
 URL: https://pagure.io/fonts-rpm-macros
@@ -11,7 +11,7 @@ BuildArch: noarch
 Source0: macros.fonts-srpm
 Source1: fonts.lua
 Source2: LICENSE.txt
-Requires: redhat-rpm-config
+Requires: oreon-rpm-config
 Requires: forge-srpm-macros
 
 BuildRequires: oreon-rpm-macros
@@ -27,11 +27,11 @@ cp %{SOURCE2} .
 
 %install
 mkdir -p %{buildroot}%{_rpmmacrodir}
-mkdir -p %{buildroot}%{_rpmluadir}/fedora/srpm
+mkdir -p %{buildroot}%{_rpmluadir}/oreon/srpm
 install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.fonts-srpm
-install -m 644 %{SOURCE1} %{buildroot}%{_rpmluadir}/fedora/srpm/fonts.lua
+install -m 644 %{SOURCE1} %{buildroot}%{_rpmluadir}/oreon/srpm/fonts.lua
 
 %files
 %license LICENSE.txt
 %{_rpmmacrodir}/macros.fonts-srpm
-%{_rpmluadir}/fedora/srpm/fonts.lua
+%{_rpmluadir}/oreon/srpm/fonts.lua

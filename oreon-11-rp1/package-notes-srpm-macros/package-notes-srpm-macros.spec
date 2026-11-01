@@ -3,7 +3,7 @@
 
 Name: package-notes-srpm-macros
 Version: 0.17
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: RPM macros that stamp package notes into ELF binaries
 License: MIT
 URL: https://github.com/systemd/package-notes
@@ -25,14 +25,15 @@ Macros that pass --package-metadata to the linker so ELF notes record the RPM na
 %oreon_sha256
 
 %build
-sed 's|@OSCPE@|cpe:/o:oreon:oreon:11|' rpm/redhat-package-notes.in > redhat-package-notes
+sed 's|@OSCPE@|cpe:/o:oreon:oreon:11|' rpm/redhat-package-notes.in > oreon-package-notes
+sed -i 's|/usr/lib/rpm/redhat/redhat-package-notes|%{_rpmconfigdir}/oreon/oreon-package-notes|' rpm/macros.package-notes-srpm
 
 %install
 mkdir -p %{buildroot}%{_rpmmacrodir}
-mkdir -p %{buildroot}%{_rpmconfigdir}/redhat
+mkdir -p %{buildroot}%{_rpmconfigdir}/oreon
 install -m 644 rpm/macros.package-notes-srpm %{buildroot}%{_rpmmacrodir}/macros.package-notes-srpm
-install -m 644 redhat-package-notes %{buildroot}%{_rpmconfigdir}/redhat/redhat-package-notes
+install -m 644 oreon-package-notes %{buildroot}%{_rpmconfigdir}/oreon/oreon-package-notes
 
 %files
 %{_rpmmacrodir}/macros.package-notes-srpm
-%{_rpmconfigdir}/redhat/redhat-package-notes
+%{_rpmconfigdir}/oreon/oreon-package-notes

@@ -66,8 +66,8 @@ For some other build tools separate mechanisms exist:
   package.
 
 Care must be taking not to compile the current selection of compiler
-flags into any RPM package besides `redhat-rpm-config`, so that flag
-changes are picked up automatically once `redhat-rpm-config` is
+flags into any RPM package besides `oreon-rpm-config`, so that flag
+changes are picked up automatically once `oreon-rpm-config` is
 updated.
 
 # Flag selection for the build type
@@ -77,9 +77,6 @@ The default flags are suitable for building applications.
 For building shared objects, you must compile with `-fPIC` in
 (`CFLAGS` or `CXXFLAGS`) and link with `-shared` (in `LDFLAGS`).
 
-For other considerations involving shared objects, see:
-
-* [Fedora Packaging Guidelines: Shared Libraries](https://docs.fedoraproject.org/en-US/packaging-guidelines/#_shared_libraries)
 
 # Customizing compiler and other build flags
 
@@ -407,15 +404,12 @@ of its operation can be controlled at the RPM level.
   To disable, undefine `_debuginfo_subpackages`.
 * Likewise, `-debugsource` subpackages are automatically created.
   To disable, undefine `_debugsource_subpackages`.
-  See [Separate Subpackage and Source Debuginfo](https://fedoraproject.org/wiki/Changes/SubpackageAndSourceDebuginfo)
-  for background information.
 * `_build_id_links`, `_unique_build_ids`, `_unique_debug_names`,
   `_unique_debug_srcs` control how debugging information and
   corresponding source files are represented on disk.
   See `/usr/lib/rpm/macros` for details.  The defaults
   enable parallel installation of `-debuginfo` packages for
-  different package versions, as described in
-  [Parallel Installable Debuginfo](https://fedoraproject.org/wiki/Changes/ParallelInstallableDebuginfo).
+  different package versions.
 * By default, a compressed symbol table is preserved in the
   `.gnu_debugdata` section.  To disable that, undefine
   `_include_minidebuginfo`.
@@ -480,7 +474,7 @@ of the current section)
 
 ### Adding distribution-specific flags
 
-For the specific use-case of distributions forked from Fedora, there is a
+For derived distributions and local rebuilds, there is a
 set of macros nearly identical to the package-specific macros, that allows
 for setting an extra set of distibution-wide flags, without changing the
 existing ones:
@@ -504,7 +498,7 @@ The general (architecture-independent) build flags are:
   [GCC manual](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html#index-O2).
   Optimization improves performance, the accuracy of warnings, and the
   reach of toolchain-based hardening, but it makes debugging harder.
-* `-g`: Generate debugging information (DWARF). In Fedora, this data
+* `-g`: Generate debugging information (DWARF). In Oreon, this data
   is separated into `-debuginfo` RPM packages whose installation is
   optional, so debuging information does not increase the size of
   installed binaries by default.
@@ -575,7 +569,7 @@ The general (architecture-independent) build flags are:
 
 For hardened builds (which are enabled by default, see above for how
 to disable them), the flag
-`-specs=/usr/lib/rpm/redhat/redhat-hardened-cc1` is added to the
+`-specs=/usr/lib/rpm/oreon/oreon-hardened-cc1` is added to the
 command line.  It adds the following flag to the command line:
 
 * `-fPIE`: Compile for a position-independent executable (PIE),
@@ -596,9 +590,9 @@ command line.  It adds the following flag to the command line:
   To be effective, `-fPIE` must be used with the `-pie` linker flag
   when producing an executable, see below.
 
-To support [binary watermarks for ELF
-objects](https://fedoraproject.org/wiki/Toolchain/Watermark) using
-annobin, the `-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1` flag is
+To support binary watermarks for ELF
+objects using
+annobin, the `-specs=/usr/lib/rpm/oreon/oreon-annobin-cc1` flag is
 added by default (with the `gcc` toolchain).  This can be switched off
 by undefining the `%_annotated_build` RPM macro (see above).  Binary
 watermarks are currently disabled on armhpf, and with the `clang`
@@ -624,7 +618,7 @@ not), but their selection depends on the architecture:
   explicitly selects the architecture variant by passing this compiler
   flag.
 
-In addition, `redhat-rpm-config` re-selects the built-in default
+In addition, `oreon-rpm-config` re-selects the built-in default
 tuning in the `gcc` package.  These settings are:
 
 * **armhfp**: `-march=armv7-a -mfpu=vfpv3-d16 -mfloat-abi=hard`
@@ -702,7 +696,7 @@ compiler driver command line.  These can be disabled by undefining the
   disables some link editor optimization, however the `-fPIE` compiler
   flag has some overhead.
   Note: this option is added via adding a spec file to the compiler
-  driver command line (`-specs=/usr/lib/rpm/redhat/redhat-hardened-ld`)
+  driver command line (`-specs=/usr/lib/rpm/oreon/oreon-hardened-ld`)
   rather than using the `-Wl` mechanism mentioned above.  As a result
   this option is only enabled if the compiler driver is gcc.
 * `-z now`: Disable lazy binding and turn on the `BIND_NOW` dynamic
@@ -733,7 +727,7 @@ feature are:
   indicate this.
 
 Note: these options are added via a spec file on the compiler driver
-command line (`-specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors`)
+command line (`-specs=/usr/lib/rpm/oreon/oreon-hardened-ld-errors`)
 rather than using the `-Wl` mechanism mentioned above.  As a result
 these options are only enabled if the compiler driver is gcc.  In
 addition the spec file only adds the options if the `-fuse-ld=...`
@@ -746,9 +740,9 @@ Some packages include extension builders that allow users to build
 extension modules (which are usually written in C and C++) under the
 control of a special-purpose build system.  This is a common
 functionality provided by scripting languages such as Python and Perl.
-Traditionally, such extension builders captured the Fedora build flags
+Traditionally, such extension builders captured the Oreon build flags
 when these extension were built.  However, these compiler flags are
-adjusted for a specific Fedora release and toolchain version and
+adjusted for a specific Oreon release and toolchain version and
 therefore do not work with a custom toolchain (e.g., different C/C++
 compilers), and users might want to build their own extension modules
 with such toolchains.
@@ -765,14 +759,14 @@ built against.
 
 Extension builders should detect whether they are performing a regular
 RPM build (e.g., by looking for an `RPM_OPT_FLAGS` variable).  In this
-case, they should use the *current* set of Fedora build flags (that
+case, they should use the *current* set of Oreon build flags (that
 is, the output from `rpm --eval '%{build_cflags}'` and related
 commands).  Otherwise, when not performing an RPM build, they can
 either use hard-coded extension builder flags (thus avoiding a
-run-time dependency on `redhat-rpm-config`), or use the current
+run-time dependency on `oreon-rpm-config`), or use the current
 extension builder flags (with a run-time dependency on
-`redhat-rpm-config`).
+`oreon-rpm-config`).
 
-As a result, extension modules built for Fedora will use the official
-Fedora build flags, while users will still be able to build their own
+As a result, extension modules built for Oreon will use the official
+Oreon build flags, while users will still be able to build their own
 extension modules with custom toolchains.

@@ -3,7 +3,7 @@
 #==============================================================================
 # ---- per-platform macros.
 #
-%_vendor		redhat
+%_vendor		oreon
 %_os			linux
 %_target_platform	%{_target_cpu}-%{_vendor}-%{_target_os}%{?_gnu}
 
@@ -165,9 +165,9 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 %__cflags_arch_x86_64_common -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -mprefer-vector-width=256 %{_frame_pointers_cflags} %{_frame_pointers_cflags_x86_64}
 
 # Also used for s390.
-%__cflags_arch_s390x %[0%{?rhel} >= 9 ? "-march=z14 -mtune=z15" : "-march=z13 -mtune=z14"]
+%__cflags_arch_s390x -march=z14 -mtune=z15
 
-%__cflags_arch_ppc64le %[0%{?rhel} >= 9 ? "-mcpu=power9 -mtune=power10" : "-mcpu=power8 -mtune=power8" ]
+%__cflags_arch_ppc64le -mcpu=power9 -mtune=power10
 
 #==============================================================================
 # ---- configure and makeinstall.
@@ -226,7 +226,7 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
   %{set_build_flags}; \
   [ "%{_lto_cflags}"x != x ] && %{_fix_broken_configure_for_lto}; \
   [ "%_configure_gnuconfig_hack" = 1 ] && for i in $(find $(dirname %{_configure}) -name config.guess -o -name config.sub) ; do \
-      [ -f /usr/lib/rpm/redhat/$(basename $i) ] && %{__rm} -f $i && %{__cp} -fv /usr/lib/rpm/redhat/$(basename $i) $i ; \
+      [ -f /usr/lib/rpm/oreon/$(basename $i) ] && %{__rm} -f $i && %{__cp} -fv /usr/lib/rpm/oreon/$(basename $i) $i ; \
   done ; \
   [ "%_configure_libtool_hardening_hack" = 1 ] && [ x != "x%{_hardened_ldflags}" ] && \
       for i in $(find . -name ltmain.sh) ; do \
@@ -281,10 +281,10 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 
 # Build root policy macros. Standard naming:
 # convert all '-' in basename to '_', add two leading underscores.
-%__brp_ldconfig /usr/lib/rpm/redhat/brp-ldconfig
+%__brp_ldconfig /usr/lib/rpm/oreon/brp-ldconfig
 %__brp_compress %{?_man_info_compress:COMPRESS="%{_man_info_compress}"} %{?_man_info_compress_ext:COMPRESS_EXT="%{_man_info_compress_ext}"} /usr/lib/rpm/brp-compress
 %__brp_strip /usr/lib/rpm/brp-strip %{__strip}
-%__brp_strip_lto /usr/lib/rpm/redhat/brp-strip-lto %{__strip}
+%__brp_strip_lto /usr/lib/rpm/oreon/brp-strip-lto %{__strip}
 %__brp_strip_comment_note /usr/lib/rpm/brp-strip-comment-note %{__strip} %{__objdump}
 %__brp_strip_static_archive /usr/lib/rpm/brp-strip-static-archive %{__strip}
 %__brp_check_rpaths /usr/lib/rpm/check-rpaths
@@ -292,10 +292,10 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 # __brp_mangle_shebangs_exclude_file - file from which to get shebangs to exclude
 # __brp_mangle_shebangs_exclude_from - files to ignore
 # __brp_mangle_shebangs_exclude_from_file - file from which to get files to ignore
-%__brp_mangle_shebangs /usr/lib/rpm/redhat/brp-mangle-shebangs %{?__brp_mangle_shebangs_exclude:--shebangs "%{?__brp_mangle_shebangs_exclude}"} %{?__brp_mangle_shebangs_exclude_file:--shebangs-from "%{__brp_mangle_shebangs_exclude_file}"} %{?__brp_mangle_shebangs_exclude_from:--files "%{?__brp_mangle_shebangs_exclude_from}"} %{?__brp_mangle_shebangs_exclude_from_file:--files-from "%{__brp_mangle_shebangs_exclude_from_file}"}
+%__brp_mangle_shebangs /usr/lib/rpm/oreon/brp-mangle-shebangs %{?__brp_mangle_shebangs_exclude:--shebangs "%{?__brp_mangle_shebangs_exclude}"} %{?__brp_mangle_shebangs_exclude_file:--shebangs-from "%{__brp_mangle_shebangs_exclude_file}"} %{?__brp_mangle_shebangs_exclude_from:--files "%{?__brp_mangle_shebangs_exclude_from}"} %{?__brp_mangle_shebangs_exclude_from_file:--files-from "%{__brp_mangle_shebangs_exclude_from_file}"}
 
 # note: %%__os_install_post_python is defined in python-srpm-macros and contains several policies
-# redhat-rpm-config maintainers, don't remove it from %%__os_install_post unless coordinating the change with Python maintainers
+# oreon-rpm-config maintainers, don't remove it from %%__os_install_post unless coordinating the change with Python maintainers
 # packagers, don't undefine the entire macro, see the individual macros in /usr/lib/rpm/macros.d/macros.python-srpm
 
 # note: %%__os_install_post_build_reproducibility and %%__os_install_post_hardlink
@@ -342,35 +342,32 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 # Please consult buildflags.md for parts that can be configured
 # from RPM spec files.
 
-%_hardening_gcc_cflags   -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1
-%_hardening_clang_cflags --config=/usr/lib/rpm/redhat/redhat-hardened-clang.cfg
+%_hardening_gcc_cflags   -specs=/usr/lib/rpm/oreon/oreon-hardened-cc1
+%_hardening_clang_cflags --config=/usr/lib/rpm/oreon/oreon-hardened-clang.cfg
 %_hardening_cflags	 %{expand:%%{_hardening_%{toolchain}_cflags}} -fstack-protector-strong
 
 # Have the linker generate errors instead of warnings for binaries that
 # contain memory regions with both write and execute permissions.
-# https://fedoraproject.org/wiki/Changes/Linker_Error_On_Security_Issues
-%_hardening_linker_errors  %[ "%{toolchain}" == "gcc" ? "-specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors" : "" ]
+%_hardening_linker_errors  %[ "%{toolchain}" == "gcc" ? "-specs=/usr/lib/rpm/oreon/oreon-hardened-ld-errors" : "" ]
 %_hardened_linker_errors   1
 
 # we don't escape symbols '~', '"', etc. so be careful when changing this
-%_hardening_gcc_ldflags   -specs=/usr/lib/rpm/redhat/redhat-hardened-ld %{?_hardened_linker_errors:%{_hardening_linker_errors}}
-%_hardening_clang_ldflags --config=/usr/lib/rpm/redhat/redhat-hardened-clang-ld.cfg
+%_hardening_gcc_ldflags   -specs=/usr/lib/rpm/oreon/oreon-hardened-ld %{?_hardened_linker_errors:%{_hardening_linker_errors}}
+%_hardening_clang_ldflags --config=/usr/lib/rpm/oreon/oreon-hardened-clang-ld.cfg
 %_hardening_ldflags	   -Wl,-z,now %{expand:%%{_hardening_%{toolchain}_ldflags}}
 
-# Harden packages by default for Fedora 23+:
-# https://fedorahosted.org/fesco/ticket/1384 (accepted on 2014-02-11)
+# Harden packages by default.
 # Use "%undefine _hardened_build" to disable.
 %_hardened_build	1
 %_hardened_cflags	%{?_hardened_build:%{_hardening_cflags}}
 %_hardened_ldflags	%{?_hardened_build:%{_hardening_ldflags}}
 
 # Add extra information to binary objects created by the compiler:
-# https://pagure.io/fesco/issue/1780 (accepted on 2017-10-30)
 # ...except on armv7hl, which has an issue whose root-cause isn't
-# clear yet: https://bugzilla.redhat.com/show_bug.cgi?id=1951492
+# clear yet.
 # Use "%undefine _annotated_build" to disable.
 %_annotated_build	1
-%_annobin_gcc_plugin	-specs=/usr/lib/rpm/redhat/redhat-annobin-cc1
+%_annobin_gcc_plugin	-specs=/usr/lib/rpm/oreon/oreon-annobin-cc1
 # The annobin plugin is not built for clang yet
 %_annobin_clang_plugin	%dnl-fplugin=/usr/lib64/clang/`clang -dumpversion`/lib/annobin.so
 %_annotation_plugin     %{?_annotated_build:%{expand:%%{_annobin_%{toolchain}_plugin}}}
@@ -383,9 +380,8 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 # Include frame pointer information by default, except on RHEL 10 and earlier
 # On RHEL 11, we are enabling it for now, with the possibility of revoking it
 # at a later date.
-# https://fedoraproject.org/wiki/Changes/fno-omit-frame-pointer
 # Use "%undefine _include_frame_pointers" to disable.
-%_include_frame_pointers %{undefined rhel} || 0%{?rhel} >= 11
+%_include_frame_pointers 1
 %_frame_pointers_cflags %{expr:0%{?_include_frame_pointers} ? "-fno-omit-frame-pointer" : ""}
 %_frame_pointers_cflags_x86_64 %{expr:0%{?_include_frame_pointers} ? "-mno-omit-leaf-frame-pointer" : ""}
 %_frame_pointers_cflags_aarch64 %{expr:0%{?_include_frame_pointers} ? "-mno-omit-leaf-frame-pointer" : ""}
@@ -398,7 +394,6 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 #%_ld_strict_symbol_defs		1
 %_ld_symbols_flags		%{?_ld_strict_symbol_defs:-Wl,-z,defs}
 
-# https://fedoraproject.org/wiki/Changes/RemoveExcessiveLinking
 # use "%undefine _ld_as_needed" to disable.
 %_ld_as_needed		1
 %_ld_as_needed_flags	%{?_ld_as_needed:-Wl,--as-needed}
@@ -407,7 +402,7 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 %_ld_pack_relocs %[ "%{_arch}" == "x86_64" || "%{_arch}" == "i386" || "%{_arch}" == "ppc64le" || "%{_arch}" == "aarch64"]
 %_ld_pack_relocs_flags %[0%{?_ld_pack_relocs} ? "-Wl,-z,pack-relative-relocs" : ""]
 
-# LTO is the default in Fedora.
+# LTO is the default.
 #   "%define _lto_cflags %{nil}"  to opt out
 #
 # On riscv64, we currently disable LTO regardless of the toolchain, but
@@ -476,7 +471,6 @@ for k,_ in pairs(stripped_flags) do print(k .. " ") end
 #==============================================================================
 # ---- Generic auto req/prov filtering macros
 #
-# http://fedoraproject.org/wiki/PackagingDrafts/AutoProvidesAndRequiresFiltering
 
 # prevent anything matching from being scanned for provides
 %filter_provides_in(P) %{expand: \

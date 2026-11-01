@@ -92,12 +92,12 @@ end
 -- The fontenv macro main processing function
 -- See the documentation in the macros.fonts file for argument description
 local function env(suffix, verbose, globvalues)
-  local fedora = require "fedora.common"
+  local oreon = require "oreon.common"
   local ismain = (suffix == "") or (suffix == "0")
-  fedora.zalias({"foundry", "fontlicense"}, verbose)
-  fedora.safeset("fontlicense", "%{license}", verbose)
+  oreon.zalias({"foundry", "fontlicense"}, verbose)
+  oreon.safeset("fontlicense", "%{license}", verbose)
   if ismain then
-    fedora.zalias({"fontsummary", "fontdescription", "fontpkgname", "fonthumanname",
+    oreon.zalias({"fontsummary", "fontdescription", "fontpkgname", "fonthumanname",
                    "fontpkgheader", "fonts", "fontsex", "fontconfs", "fontconfsex",
                    "fontconfngs", "fontconfngsex",
                    "fontappstreams", "fontappstreamsex",
@@ -107,41 +107,41 @@ local function env(suffix, verbose, globvalues)
   for _, v in ipairs({"foundry", "fontdocs", "fontdocsex",
                       "fontlicense", "fontlicenses", "fontlicensesex"}) do
     if (rpm.expand("%{" .. v .. "}") ~= "%{" .. v .. "}") then
-      fedora.safeset(v .. suffix, "%{" .. v .. "}", verbose)
+      oreon.safeset(v .. suffix, "%{" .. v .. "}", verbose)
     end
   end
   for g, _ in pairs(globargs) do
     local v = rpm.expand("%{?" .. g .. suffix .. "} " .. (globvalues[g] or ""))
     if (string.gsub(v, "[%s]+", "") ~= "") then
-      fedora.explicitset(  "current" .. g, v, verbose)
+      oreon.explicitset(  "current" .. g, v, verbose)
     else
-      fedora.explicitunset("current" .. g,    verbose)
+      oreon.explicitunset("current" .. g,    verbose)
     end
   end
   local foundry = rpm.expand("%{?foundry" .. suffix .. ":%{foundry" .. suffix .. "}}")
   local family = string.gsub(rpm.expand("%{fontfamily" .. suffix .. "}"), "^" .. foundry, "")
   local basename = foundry .. " " .. family
-  fedora.safeset("fontpkgname"   .. suffix, rpmname(basename), verbose)
-  fedora.safeset("fonthumanname" .. suffix, basename, verbose)
-  fedora.safeset("fontdir"       .. suffix, "%{_fontbasedir}/%{fontpkgname"  .. suffix .. "}", verbose)
-  fedora.safeset("fontfilelist"  .. suffix, "%{_builddir}/%{?buildsubdir}/%{fontpkgname" .. suffix .. "}.list", verbose)
+  oreon.safeset("fontpkgname"   .. suffix, rpmname(basename), verbose)
+  oreon.safeset("fonthumanname" .. suffix, basename, verbose)
+  oreon.safeset("fontdir"       .. suffix, "%{_fontbasedir}/%{fontpkgname"  .. suffix .. "}", verbose)
+  oreon.safeset("fontfilelist"  .. suffix, "%{_builddir}/%{?buildsubdir}/%{fontpkgname" .. suffix .. "}.list", verbose)
   if ismain then
-    fedora.zalias({"fontpkgname", "fontdir", "fontfilelist"})
+    oreon.zalias({"fontpkgname", "fontdir", "fontfilelist"})
   end
   for _, v in ipairs({"foundry", "fontpkgname", "fonthumanname", "fontpkgheader",
                       "fontdir", "fontfilelist", "fontfamily", "fontlicense",
                       "fontsummary", "fontdescription"}) do
     if (rpm.expand("%{?" .. v .. suffix .. "}") ~= "") then
-      fedora.explicitset(  "current" .. v, "%{" .. v .. suffix .. "}", verbose)
+      oreon.explicitset(  "current" .. v, "%{" .. v .. suffix .. "}", verbose)
     else
-      fedora.explicitunset("current" .. v,                             verbose)
+      oreon.explicitunset("current" .. v,                             verbose)
     end
   end
 end
 
 -- Create a single %package section for a fonts subpackage
 local function singlepkg(forcemain, forcesub, suffix, verbose)
-  local fedora = require "fedora.common"
+  local oreon = require "oreon.common"
   local    sub = (not forcemain) and (forcesub or ((suffix ~= nil) and (suffix ~= "") and (suffix ~= "0")))
   env(suffix, verbose, {})
   name = sub and "%package     -n " or "Name:           "
@@ -156,15 +156,15 @@ local function singlepkg(forcemain, forcesub, suffix, verbose)
       "Requires:       fontpackages-filesystem\n" ..
       "%{?currentfontpkgheader}\n" ..
       "%description -n %{currentfontpkgname}\n") ..
-    fedora.wordwrap("%{?currentfontdescription}") ..
+    oreon.wordwrap("%{?currentfontdescription}") ..
     "\n")
 end
 
 -- Create one or all %package sections for fonts subpackages
 local function pkg(forcemain, forcesub, suffix, processall, verbose)
-  local fedora = require "fedora.common"
+  local oreon = require "oreon.common"
   if processall then
-    for _, suffix in pairs(fedora.getsuffixes("fontfamily")) do
+    for _, suffix in pairs(oreon.getsuffixes("fontfamily")) do
        singlepkg(forcemain, forcesub, suffix, verbose)
     end
   else
@@ -183,8 +183,8 @@ end
 
 -- Create a font (sub)metapackage header
 local function metapkg(name, summary, description, suffixes)
-  local   fedora = require "fedora.common"
-  local fontpkgs = fedora.getsuffixed("fontpkgname")
+  local   oreon = require "oreon.common"
+  local fontpkgs = oreon.getsuffixed("fontpkgname")
   local hsuffix
   if (name == "") then
     name, _ = string.gsub(rpm.expand("%{name}"), "-fonts$", "")
@@ -194,9 +194,9 @@ local function metapkg(name, summary, description, suffixes)
     hsuffix = norm(name)
   end
   if (rpm.expand("%{?fontpkgheader" .. hsuffix .. "}") ~= "") then
-    fedora.explicitset(  "currentfontpkgheader", "%{fontpkgheader" .. hsuffix .. "}", false)
+    oreon.explicitset(  "currentfontpkgheader", "%{fontpkgheader" .. hsuffix .. "}", false)
   else
-    fedora.explicitunset(  "currentfontpkgheader",                                 false)
+    oreon.explicitunset(  "currentfontpkgheader",                                 false)
   end
   if (summary == "") then
     summary = "All the font packages, generated from %{name}"
@@ -204,7 +204,7 @@ local function metapkg(name, summary, description, suffixes)
   if (description == "") then
     description = "This meta-package installs all the font packages, generated from the %{name} source package."
   end
-  description = fedora.wordwrap(description)
+  description = oreon.wordwrap(description)
   print(rpm.expand(
     "%package   -n " .. name    .. "\n" ..
     "Summary:   "    .. summary .. "\n"))

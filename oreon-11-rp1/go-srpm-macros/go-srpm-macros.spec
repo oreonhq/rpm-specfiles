@@ -3,13 +3,13 @@
 
 Name: go-srpm-macros
 Version: 3.8.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: SRPM macros for Go packages
 License: GPL-3.0-or-later
 URL: https://gitlab.com/fedora/sigs/go/go-rpm-macros
 BuildArch: noarch
 Source0: https://gitlab.com/fedora/sigs/go/go-rpm-macros/-/archive/3.8.0/go-rpm-macros-3.8.0.tar.gz
-Requires: redhat-rpm-config
+Requires: oreon-rpm-config
 Requires: forge-srpm-macros
 
 BuildRequires: oreon-rpm-macros
@@ -20,16 +20,17 @@ SRPM macros for Go source packages. The Go compiler is not part of this package.
 %prep
 %autosetup -n go-rpm-macros-%{version} -p1
 %oreon_sha256
+sed -i 's/"fedora\./"oreon./g' rpm/macros.d/macros.go-srpm rpm/lua/srpm/go.lua
 
 %build
 
 %install
 mkdir -p %{buildroot}%{_rpmmacrodir}
-mkdir -p %{buildroot}%{_rpmluadir}/fedora/srpm
+mkdir -p %{buildroot}%{_rpmluadir}/oreon/srpm
 install -m 644 rpm/macros.d/macros.go-srpm %{buildroot}%{_rpmmacrodir}/macros.go-srpm
-install -m 644 rpm/lua/srpm/go.lua %{buildroot}%{_rpmluadir}/fedora/srpm/go.lua
+install -m 644 rpm/lua/srpm/go.lua %{buildroot}%{_rpmluadir}/oreon/srpm/go.lua
 
 %files
 %license LICENSE.txt
 %{_rpmmacrodir}/macros.go-srpm
-%{_rpmluadir}/fedora/srpm/go.lua
+%{_rpmluadir}/oreon/srpm/go.lua

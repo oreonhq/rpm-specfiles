@@ -6,7 +6,7 @@
 
 Name: pam
 Version: 1.7.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Pluggable authentication modules
 License: BSD-3-Clause
 URL: https://github.com/linux-pam/linux-pam
@@ -27,7 +27,6 @@ BuildRequires: libnsl2-devel
 BuildRequires: libtirpc-devel
 BuildRequires: systemd-devel
 BuildRequires: gettext-devel
-BuildRequires: libdb-devel
 BuildRequires: gdbm-devel
 BuildRequires: pkgconf
 BuildRequires: patchelf
@@ -48,7 +47,7 @@ PAM is the pluggable authentication library.
 %autosetup -n Linux-PAM-%{version} -p1
 
 %build
-%oreon_meson -Ddocs=disabled -Delogind=disabled
+%oreon_meson -Ddocs=disabled -Delogind=disabled -Ddb=gdbm
 %oreon_meson_build
 
 %install

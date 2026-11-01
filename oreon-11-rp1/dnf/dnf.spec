@@ -6,7 +6,7 @@
 
 Name: dnf
 Version: 4.24.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Package manager
 License: GPL-2.0-or-later
 URL: https://github.com/rpm-software-management/dnf
@@ -18,8 +18,6 @@ BuildRequires: gcc
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: python3-devel
-BuildRequires: python3-sphinx
-BuildRequires: python3-sphinx_rtd_theme
 %endif
 
 Requires: python3-dnf = %{version}-%{release}
@@ -45,9 +43,8 @@ dnf is the package manager.
 %autosetup -p1
 
 %build
-%oreon_cmake -DPYTHON_DESIRED=3 -DWITH_MAN=1
+%oreon_cmake -DPYTHON_DESIRED=3 -DWITH_MAN=0
 %oreon_cmake_build
-cmake --build %{_oreon_builddir} --target doc-man
 
 %install
 %oreon_cmake_install

@@ -2,12 +2,11 @@
 errors_terminate=$2
 
 # Usage of %_python_bytecompile_extra is not allowed anymore
-# See: https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_3
 # Therefore $1 ($default_python) is not needed and is invoked with "" by default.
 # $default_python stays in the arguments for backward compatibility and $extra for the following check:
 extra=$3
 if [[ 0"$extra" -eq 1 ]]; then
-    echo -e "%_python_bytecompile_extra is discontinued, use %py_byte_compile instead.\nSee: https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_3" >/dev/stderr
+    echo -e "%_python_bytecompile_extra is discontinued, use %py_byte_compile instead." >/dev/stderr
     exit 1
 fi
 
@@ -18,14 +17,13 @@ if [[ -z "$RPM_BUILD_ROOT" ]] || [[ "$RPM_BUILD_ROOT" = "/" ]]; then
 	exit 0
 fi
 
-# This function clamps the source mtime, see https://fedoraproject.org/wiki/Changes/ReproducibleBuildsClampMtimes
 function python_clamp_source_mtime()
 {
     local _=$1
     local python_binary=$2
     local _=$3
     local python_libdir="$4"
-    PYTHONPATH=/usr/lib/rpm/redhat/ $python_binary -B -m clamp_source_mtime -q "$python_libdir"
+    PYTHONPATH=/usr/lib/rpm/oreon/ $python_binary -B -m clamp_source_mtime -q "$python_libdir"
 }
 
 # This function now implements Python byte-compilation in three different ways:
@@ -76,7 +74,7 @@ function python_bytecompile()
         # -e excludes symbolic links pointing outside the build root
         # -s strips $RPM_BUILD_ROOT from the path
         # -p prepends the leading slash to the path to make it absolute
-        PYTHONPATH=/usr/lib/rpm/redhat/ $python_binary -B -m $compileall_module $compileall_flags -o 0 -o 1 -q -f -s "$RPM_BUILD_ROOT" -p / --hardlink-dupes $invalidation_option -e "$RPM_BUILD_ROOT" "$python_libdir"
+        PYTHONPATH=/usr/lib/rpm/oreon/ $python_binary -B -m $compileall_module $compileall_flags -o 0 -o 1 -q -f -s "$RPM_BUILD_ROOT" -p / --hardlink-dupes $invalidation_option -e "$RPM_BUILD_ROOT" "$python_libdir"
 
     else
 #
@@ -118,7 +116,6 @@ fi
 # and below /usr/lib/python3.1/, we're targeting /usr/bin/python3.1
 
 # Disable Python hash seed randomization
-# This should help with byte-compilation reproducibility: https://bugzilla.redhat.com/show_bug.cgi?id=1686078
 # Python 3.11+ no longer needs this: https://github.com/python/cpython/pull/27926 (but we support older Pythons as well)
 export PYTHONHASHSEED=0
 
