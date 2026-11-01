@@ -1,9 +1,9 @@
-%global source0_hash 62195cc0cf614d540d2dff813dab14d2a2cede9ac69e1cbc4aa2a764980fc09c
+%global source0_hash 6c690ae1b7b4c6f0036b759c3fdba8bcd42b1d7649409d8efa09f11f16528703
 %global debug_package %{nil}
 
 Name: python-srpm-macros
 Version: 3.15
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: SRPM macros for Python packages
 License: MIT
 URL: https://www.python.org/

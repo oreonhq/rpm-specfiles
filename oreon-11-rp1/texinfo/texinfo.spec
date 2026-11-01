@@ -9,7 +9,7 @@
 
 Name: texinfo
 Version: 7.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Texinfo documentation tools
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/texinfo/
@@ -37,8 +37,8 @@ Texinfo formats documentation for online reading and for print.
 
 %package -n info
 Summary: Info document reader
-Requires: gzip = 1.15-1%{?dist}
-Requires: zstd = 1.5.7-1%{?dist}
+Requires: gzip >= 1.15
+Requires: zstd >= 1.5.7
 Provides: /usr/bin/install-info
 
 %description -n info

@@ -6,7 +6,7 @@
 
 Name: shadow-utils
 Version: 4.20.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Account and shadow password tools
 License: BSD-3-Clause AND GPL-2.0-or-later
 URL: https://github.com/shadow-maint/shadow
@@ -32,9 +32,9 @@ Provides: /usr/sbin/groupadd
 Provides: /usr/sbin/groupdel
 Provides: /usr/sbin/groupmod
 %endif
-Requires: pam%{?_isa} = 1.7.1-1%{?dist}
-Requires: audit%{?_isa} = 4.2.1-1%{?dist}
-Requires: libselinux%{?_isa} = 3.11-1%{?dist}
+Requires: pam%{?_isa} >= 1.7.1
+Requires: audit%{?_isa} >= 4.2.1
+Requires: libselinux%{?_isa} >= 3.11
 Requires: setup
 
 BuildRequires: oreon-rpm-macros
@@ -45,11 +45,11 @@ BuildRequires: make
 BuildRequires: gettext
 BuildRequires: pkgconf
 BuildRequires: pam-devel
-BuildRequires: audit-devel = 4.2.1-1%{?dist}
-BuildRequires: libselinux-devel = 3.11-1%{?dist}
+BuildRequires: audit-devel >= 4.2.1
+BuildRequires: libselinux-devel >= 3.11
 BuildRequires: libsemanage-devel
-BuildRequires: libxcrypt-devel = 4.5.2-1%{?dist}
-BuildRequires: libacl-devel = 2.3.2-1%{?dist}
+BuildRequires: libxcrypt-devel >= 4.5.2
+BuildRequires: libacl-devel >= 2.3.2
 BuildRequires: libattr-devel
 BuildRequires: libeconf-devel
 BuildRequires: systemd-devel

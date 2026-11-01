@@ -340,7 +340,7 @@ are expected.  In this case, you can add
 
 to the RPM spec file to disable these strict checks.  Alternatively,
 you can pass `-z undefs` to ld (written as `-Wl,-z,undefs` on the gcc
-command line).  The latter needs binutils 2.29.1-12.fc28 or later.
+command line).  The latter needs binutils 2.29.1 or later.
 
 ### Legacy -fcommon
 

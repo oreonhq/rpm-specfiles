@@ -15,7 +15,7 @@
 # Common elements for all OCaml packages.
 #
 # ExcludeArch: OCaml packages have not been built on i686 since OCaml 5 was
-#     introduced in Fedora 39.
+#     was introduced.
 # -d: most OCaml packages have no ELF objects when built on a bytecode-only
 #     architecture, so debuginfo generation is suppressed.  Use this flag to
 #     enable a debuginfo package on such architectures; i.e., when the package

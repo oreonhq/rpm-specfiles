@@ -17,8 +17,6 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
-%endif
 
 %description
 PatchELF changes the dynamic linker, RPATH and DT_NEEDED entries of ELF

@@ -1,9 +1,9 @@
-%global source0_hash 53d3a46c6e7571ee4e63af8f3e43f5c01092eec257b084f37ac1bbbf5d69679f
+%global source0_hash 3c3fb388829b2c879b597d5fc1bf1ce1bcc999c97ac0bb5045a513e792fb9ffe
 %global debug_package %{nil}
 
 Name: lua-srpm-macros
 Version: 1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: SRPM macros for Lua packages
 License: MIT
 URL: https://www.lua.org/

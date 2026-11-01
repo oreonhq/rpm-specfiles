@@ -23,8 +23,6 @@ BuildRequires: autoconf
 BuildRequires: perl
 BuildRequires: make
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
-%endif
 
 %description
 Automake builds Makefile.in templates from Makefile.am descriptions,

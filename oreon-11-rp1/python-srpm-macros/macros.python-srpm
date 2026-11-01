@@ -11,7 +11,7 @@
 # Python spec files use the version defined here to determine defaults for the
 # %%py_provides and %%python_provide macros, as well as for the "pythonname" generator that
 # provides python3-foo for python3.XX-foo and vice versa for the default "main" version.
-# E.g. in Fedora 33, python3.9-foo will provide python3-foo,
+# E.g. with Python 3.9 as main, python3.9-foo will provide python3-foo,
 #                    python3-foo will provide python3.9-foo.
 #
 # There are two macros:
@@ -25,7 +25,7 @@
 %__default_python3_pkgversion %__default_python3_version
 
 # python3_pkgversion specifies the version of Python 3 in the distro.
-# For Fedora, this is usually just "3".
+# For Oreon, this is usually just "3".
 # It can be a specific version distro-wide (e.g. "36" in EPEL7).
 # Alternatively, it can be overridden in spec (e.g. to "3.8") when building for alternate Python stacks.
 %python3_pkgversion 3
@@ -49,7 +49,7 @@
 %python %__python
 
 # Define where Python wheels will be stored and the prefix of -wheel packages
-# - In Fedora we want wheel subpackages named e.g. `python-pip-wheel` that
+# - By default we want wheel subpackages named e.g. `python-pip-wheel` that
 #   install packages into `/usr/share/python-wheels`. Both names are not
 #   versioned, because they're used by all Python 3 stacks.
 # - In RHEL we want wheel packages named e.g. `python3-pip-wheel` and
@@ -57,8 +57,7 @@
 #   locations. We want each Python stack in RHEL to have their own wheels,
 #   because the main python3 wheels (which we can't upgrade) will likely be
 #   quite old by the time we're adding new alternate Python stacks.
-# - In ELN we want to follow Fedora, because builds for ELN and Fedora rawhide
-#   need to be interoperable.
+# - ELN follows the default layout.
 %python_wheel_pkg_prefix python%{?rhel:%{!?eln:%{python3_pkgversion}}}
 %python_wheel_dir %{_datadir}/%{python_wheel_pkg_prefix}-wheels
 
@@ -211,7 +210,7 @@
     end
     -- We only generate these Obsoletes on CentOS/RHEL to provide clean upgrade
     -- path, e.g. python3-foo obsoletes python3.9-foo from previous RHEL.
-    -- In Fedora this is not needed as we don't ship ecosystem packages
+    -- Elsewhere this is not needed as we don't ship ecosystem packages
     -- for alternative Python interpreters.
     if rhel ~= '' then
         -- Create Obsoletes only if the name does not end in a parenthesis,

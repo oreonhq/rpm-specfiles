@@ -15,8 +15,6 @@ Source0: https://github.com/publicsuffix/list/archive/%{commit}/list-%{commit}.t
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
-%endif
 
 %description
 The Public Suffix List is a cross-vendor initiative to provide an accurate

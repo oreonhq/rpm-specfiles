@@ -6,7 +6,7 @@
 
 Name: libxcb
 Version: 1.17.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: X protocol C binding
 License: MIT
 URL: https://xcb.freedesktop.org/
@@ -17,7 +17,7 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: patchelf
-BuildRequires: xcb-proto = 1.17.0-1%{?dist}
+BuildRequires: xcb-proto >= 1.17.0
 BuildRequires: libXau-devel
 BuildRequires: libXdmcp-devel
 BuildRequires: python3

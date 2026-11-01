@@ -21,8 +21,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: perl
 BuildRequires: make
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
-%endif
 
 %description
 help2man builds a simple manual page from the --help and --version

@@ -6,7 +6,7 @@
 
 Name: libX11
 Version: 1.8.12
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: X11 client library
 License: MIT
 URL: https://www.x.org/
@@ -19,8 +19,8 @@ BuildRequires: make
 BuildRequires: patchelf
 BuildRequires: xorgproto
 BuildRequires: xtrans
-BuildRequires: libXau-devel = 1.0.12-1%{?dist}
-BuildRequires: libxcb-devel = 1.17.0-1%{?dist}
+BuildRequires: libXau-devel >= 1.0.12
+BuildRequires: libxcb-devel >= 1.17.0
 BuildRequires: pkgconf
 
 %description

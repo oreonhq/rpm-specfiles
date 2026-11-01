@@ -6,7 +6,7 @@
 
 Name: curl
 Version: 8.16.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: HTTP client and library
 License: curl
 URL: https://curl.se/
@@ -22,6 +22,11 @@ BuildRequires: libnghttp2-devel
 BuildRequires: zlib-devel
 BuildRequires: python3
 BuildRequires: libzstd-devel
+BuildRequires: pkgconfig(libpsl)
+BuildRequires: pkgconfig(libssh)
+BuildRequires: pkgconfig(libbrotlidec)
+BuildRequires: pkgconfig(libnghttp3)
+BuildRequires: pkgconfig(libidn2)
 BuildRequires: patchelf
 
 Obsoletes: libcurl < 9
@@ -54,12 +59,13 @@ curl is an HTTP client and libcurl.
   --disable-ldap \
   --disable-ldaps \
   --disable-manual \
-  --without-libpsl \
+  --with-libpsl \
   --without-libssh2 \
-  --without-libssh \
-  --without-brotli \
-  --without-libidn2 \
-  --without-nghttp3
+  --with-libssh \
+  --with-brotli \
+  --with-libidn2 \
+  --with-openssl-quic \
+  --with-nghttp3
 %oreon_make
 
 %install

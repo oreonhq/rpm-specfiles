@@ -6,7 +6,7 @@
 
 Name: systemd
 Version: 259.10
-Release: 2%{?dist}
+Release: 3%{?dist}
 Provides: systemd-libs = %{version}-%{release}
 Provides: systemd-libs%{_isa} = %{version}-%{release}
 Obsoletes: systemd-libs < 260
@@ -51,6 +51,7 @@ BuildRequires: elfutils-devel
 BuildRequires: python3-jinja2
 BuildRequires: libfdisk-devel
 BuildRequires: gettext
+BuildRequires: kmod-devel
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: dbus-devel
 BuildRequires: glib2-devel
@@ -139,7 +140,7 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dglib=%{sd_cyc} \
   -Dpcre2=enabled \
   -Dblkid=enabled \
-  -Dkmod=disabled
+  -Dkmod=enabled
 %oreon_meson_build
 
 %install

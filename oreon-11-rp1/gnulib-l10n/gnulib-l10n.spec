@@ -39,4 +39,4 @@ rm -f %{buildroot}%{_infodir}/dir
 %oreon_filelist
 
 %files -f %{_builddir}/%{name}.files
-%license COPYING*
+%license COPYING

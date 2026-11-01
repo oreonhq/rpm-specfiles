@@ -2,7 +2,7 @@
 
 Name: filesystem
 Version: 11
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Base directory layout
 License: MIT
 URL: https://oreonhq.com/

@@ -6,7 +6,7 @@
 
 Name: libidn2
 Version: 2.3.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Internationalized domain name library
 License: GPL-3.0-or-later AND LGPL-3.0-or-later
 URL: https://www.gnu.org/software/libidn/
@@ -25,6 +25,7 @@ Internationalized domain name library
 %package devel
 Summary: Internationalized domain name library
 Requires: libidn2%{?_isa} = %{version}-%{release}
+Provides: pkgconfig(libidn2) = %{version}
 
 %description devel
 Internationalized domain name library

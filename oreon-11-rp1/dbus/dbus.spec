@@ -6,7 +6,7 @@
 
 Name: dbus
 Version: 1.16.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: D-Bus message bus
 License: AFL-2.1 OR GPL-2.0-or-later
 URL: https://www.freedesktop.org/wiki/Software/dbus/
@@ -18,7 +18,7 @@ BuildRequires: glibc-devel
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf
-BuildRequires: expat-devel = 2.8.5-1%{?dist}
+BuildRequires: expat-devel
 BuildRequires: libselinux-devel
 BuildRequires: audit-libs-devel
 BuildRequires: libcap-ng-devel

@@ -6,7 +6,7 @@
 
 Name: libarchive
 Version: 3.8.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Archive reading library
 License: BSD-2-Clause
 URL: https://www.libarchive.org/
@@ -25,7 +25,7 @@ BuildRequires: xz-devel
 BuildRequires: libzstd-devel
 BuildRequires: lz4-devel
 BuildRequires: openssl-devel
-BuildRequires: libxml2-devel = 2.15.1-1%{?dist}
+BuildRequires: libxml2-devel >= 2.15.1
 BuildRequires: libattr-devel
 BuildRequires: libacl-devel
 BuildRequires: libb2-devel

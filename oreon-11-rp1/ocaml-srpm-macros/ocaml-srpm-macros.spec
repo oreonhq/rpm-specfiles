@@ -1,9 +1,9 @@
-%global source0_hash 868ae8d9f15283f67be3193b1f2eebb73e3a4b16b313b6932b4c66474906e1c3
+%global source0_hash bdf8d36a4d932e974095890774ef15b1831d91c4e16afac3914399bf38824e0d
 %global debug_package %{nil}
 
 Name: ocaml-srpm-macros
 Version: 11
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: OCaml architecture macros
 License: GPL-2.0-or-later
 URL: https://ocaml.org/

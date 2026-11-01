@@ -23,8 +23,6 @@ BuildRequires: m4
 BuildRequires: perl
 BuildRequires: make
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
-%endif
 
 %description
 Autoconf produces portable shell scripts that configure source code

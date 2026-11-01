@@ -6,7 +6,7 @@
 
 Name: authselect
 Version: 1.8.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Configures authentication and identity sources
 License: GPL-3.0-or-later
 URL: https://github.com/authselect/authselect
@@ -26,6 +26,7 @@ BuildRequires: gettext-devel
 BuildRequires: popt-devel
 BuildRequires: libselinux-devel
 BuildRequires: pkgconf
+BuildRequires: pkgconfig(bash-completion)
 
 %description
 authselect selects system identity and authentication sources from a set

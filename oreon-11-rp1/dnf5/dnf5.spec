@@ -6,7 +6,7 @@
 
 Name: dnf5
 Version: 5.4.6.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Command-line package manager
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://github.com/rpm-software-management/dnf5
@@ -44,6 +44,7 @@ BuildRequires: systemd-devel
 BuildRequires: sdbus-cpp-devel
 BuildRequires: libcurl-devel
 BuildRequires: openssl-devel
+BuildRequires: pkgconfig(bash-completion)
 
 %description
 DNF5 is the C++ rewrite of the DNF package manager, with libdnf5 and the
