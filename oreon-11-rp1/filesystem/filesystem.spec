@@ -2,7 +2,7 @@
 
 Name: filesystem
 Version: 11
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Base directory layout
 License: MIT
 URL: https://oreonhq.com/
@@ -87,14 +87,14 @@ ln -snf usr/lib64 %{buildroot}/lib64
 %files
 %defattr(0755,root,root,0755)
 %dir /usr
-/usr/bin
-/usr/lib
-/usr/lib64
-/usr/libexec
-/usr/include
+%dir /usr/bin
+%dir /usr/lib
+%dir /usr/lib64
+%dir /usr/libexec
+%dir /usr/include
 %dir /usr/share
-/usr/share/man
-/usr/share/info
+%dir /usr/share/man
+%dir /usr/share/info
 /usr/sbin
 /bin
 /sbin
