@@ -15,7 +15,6 @@ Source0: https://github.com/linux-pam/linux-pam/releases/download/v%{version}/Li
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: flex
@@ -30,7 +29,6 @@ BuildRequires: gettext-devel
 BuildRequires: gdbm-devel
 BuildRequires: pkgconf
 BuildRequires: patchelf
-%endif
 
 %description
 PAM is the pluggable authentication library.

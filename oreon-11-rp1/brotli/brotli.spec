@@ -18,11 +18,9 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
-%endif
 
 %description
 Brotli is a generic-purpose lossless compression algorithm.

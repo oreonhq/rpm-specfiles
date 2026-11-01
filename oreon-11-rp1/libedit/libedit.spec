@@ -16,10 +16,8 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: ncurses-devel
-%endif
 
 %description
 Libedit is a command line editing and history library, the BSD alternative

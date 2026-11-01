@@ -15,6 +15,7 @@ Source0: https://download.gnome.org/sources/glib/2.86/glib-%{version}.tar.xz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
+BuildRequires: patchelf
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
@@ -28,7 +29,6 @@ BuildRequires: libmount-devel
 BuildRequires: libselinux-devel
 BuildRequires: gettext
 BuildRequires: elfutils-libelf-devel
-BuildRequires: patchelf
 %endif
 
 %description

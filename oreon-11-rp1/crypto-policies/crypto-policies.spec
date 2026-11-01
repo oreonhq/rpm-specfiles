@@ -17,9 +17,7 @@ Requires: python3
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 Policy definitions and generated back-end configuration that set one

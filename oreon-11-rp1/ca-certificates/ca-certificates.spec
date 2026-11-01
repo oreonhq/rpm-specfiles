@@ -16,9 +16,7 @@ Source3: oreon-certdata2pem.py
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 The Mozilla set of trusted root CA certificates for TLS server

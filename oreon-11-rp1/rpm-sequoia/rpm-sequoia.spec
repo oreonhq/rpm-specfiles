@@ -19,7 +19,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: rustc
 BuildRequires: cargo
 BuildRequires: pkgconf
@@ -27,7 +26,6 @@ BuildRequires: clang
 BuildRequires: nettle-devel
 BuildRequires: gmp-devel
 BuildRequires: patchelf
-%endif
 
 %description
 rpm-sequoia is the OpenPGP backend used by rpm.

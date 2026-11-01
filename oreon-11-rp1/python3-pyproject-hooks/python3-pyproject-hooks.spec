@@ -16,9 +16,7 @@ Requires: python3
 Provides: python3dist(pyproject-hooks) = %{version}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 Low-level library for calling PEP 517 build backend hooks.

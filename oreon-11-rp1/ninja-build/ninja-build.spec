@@ -15,9 +15,7 @@ Source0: https://github.com/ninja-build/ninja/archive/refs/tags/v%{version}.tar.
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 ninja is a small build system.

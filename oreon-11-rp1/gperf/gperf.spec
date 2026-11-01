@@ -20,9 +20,7 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
-%endif
 
 %description
 gperf generates perfect hash functions for a set of keywords, as C or

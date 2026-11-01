@@ -17,9 +17,7 @@ Requires: python3-packaging >= 24
 Provides: python3dist(wheel) = %{version}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 wheel is the reference implementation of the Python wheel format.

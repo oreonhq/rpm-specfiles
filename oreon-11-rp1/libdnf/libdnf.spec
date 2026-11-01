@@ -16,7 +16,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -32,7 +31,6 @@ BuildRequires: zchunk-devel
 BuildRequires: swig
 BuildRequires: python3-devel
 BuildRequires: patchelf
-%endif
 
 Provides: python3-libdnf = %{version}-%{release}
 Provides: python3-hawkey = %{version}-%{release}

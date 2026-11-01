@@ -16,14 +16,12 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: xcb-proto = 1.17.0-1%{?dist}
 BuildRequires: libXau-devel
 BuildRequires: libXdmcp-devel
 BuildRequires: python3
 BuildRequires: pkgconf
-%endif
 
 %description
 X protocol C binding

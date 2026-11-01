@@ -16,12 +16,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: libtasn1-devel
 BuildRequires: libffi-devel
 BuildRequires: pkgconf
-%endif
 
 %description
 PKCS#11 toolkit

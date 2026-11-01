@@ -18,9 +18,9 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+BuildRequires: patchelf
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gnupg2
-BuildRequires: patchelf
 %endif
 
 %description

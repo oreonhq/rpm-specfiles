@@ -16,14 +16,12 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: openssl-devel
 BuildRequires: keyutils-devel
-%endif
 
 %description
 IMA and EVM utilities

@@ -17,13 +17,11 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: systemd-devel
 BuildRequires: pkgconf
-%endif
 
 %description
 sdbus-c++ is a high-level C++ D-Bus library built on sd-bus.

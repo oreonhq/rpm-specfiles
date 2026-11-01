@@ -20,10 +20,8 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: pkgconf
-%endif
 
 %description
 nghttp3 implements HTTP/3 mapping over QUIC and QPACK (RFC 9204).

@@ -16,9 +16,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: flex
-%endif
 
 %description
 libsepol is the library for manipulating SELinux binary policies.

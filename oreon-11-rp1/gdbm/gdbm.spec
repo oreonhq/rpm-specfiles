@@ -16,9 +16,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: readline-devel
-%endif
 
 %description
 GNU dbm is a library of database functions that use extensible hashing and work similarly to the standard UNIX dbm functions.

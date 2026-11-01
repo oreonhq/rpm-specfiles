@@ -19,11 +19,9 @@ BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: lzip
 BuildRequires: tar
-%endif
 
 %description
 GNU ed is a line-oriented text editor, the standard Unix editor.

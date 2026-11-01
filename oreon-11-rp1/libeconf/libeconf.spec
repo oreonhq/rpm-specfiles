@@ -18,9 +18,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
-%endif
 
 %description
 libeconf reads and merges drop-in configuration files.

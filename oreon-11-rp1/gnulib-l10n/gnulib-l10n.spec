@@ -18,9 +18,7 @@ BuildArch: noarch
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gettext
-%endif
 
 %description
 Message catalogs for the Gnulib modules used by GNU packages.

@@ -17,7 +17,6 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: m4
 BuildRequires: patchelf
 BuildRequires: zlib-devel
@@ -25,7 +24,6 @@ BuildRequires: bzip2-devel
 BuildRequires: xz-devel
 BuildRequires: libzstd-devel
 BuildRequires: pkgconf
-%endif
 
 %description
 ELF and DWARF library

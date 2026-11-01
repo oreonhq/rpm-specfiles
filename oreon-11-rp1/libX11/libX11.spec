@@ -16,14 +16,12 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: xorgproto
 BuildRequires: xtrans
 BuildRequires: libXau-devel = 1.0.12-1%{?dist}
 BuildRequires: libxcb-devel = 1.17.0-1%{?dist}
 BuildRequires: pkgconf
-%endif
 
 %description
 X11 client library

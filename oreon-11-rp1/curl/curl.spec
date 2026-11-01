@@ -16,7 +16,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: openssl-devel
 BuildRequires: libnghttp2-devel
@@ -24,7 +23,6 @@ BuildRequires: zlib-devel
 BuildRequires: python3
 BuildRequires: libzstd-devel
 BuildRequires: patchelf
-%endif
 
 Obsoletes: libcurl < 9
 Provides: libcurl = %{version}-%{release}

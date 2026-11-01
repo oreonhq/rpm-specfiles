@@ -16,12 +16,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: zlib-devel
 BuildRequires: python3
 BuildRequires: patchelf
-%endif
 
 %description
 libxml2 is an XML parser library.

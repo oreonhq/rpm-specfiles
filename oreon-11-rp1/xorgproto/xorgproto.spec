@@ -15,10 +15,8 @@ Source0: https://www.x.org/releases/individual/proto/xorgproto-%{version}.tar.xz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
-%endif
 
 %description
 X.Org protocol headers.

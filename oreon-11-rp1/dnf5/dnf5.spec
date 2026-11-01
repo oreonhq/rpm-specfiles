@@ -21,7 +21,6 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
@@ -45,7 +44,6 @@ BuildRequires: systemd-devel
 BuildRequires: sdbus-cpp-devel
 BuildRequires: libcurl-devel
 BuildRequires: openssl-devel
-%endif
 
 %description
 DNF5 is the C++ rewrite of the DNF package manager, with libdnf5 and the

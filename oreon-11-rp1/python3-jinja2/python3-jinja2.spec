@@ -13,9 +13,7 @@ URL: https://github.com/pallets/jinja
 Source0: https://files.pythonhosted.org/packages/source/j/jinja2/jinja2-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 Requires: python3
 Requires: python3-markupsafe
 

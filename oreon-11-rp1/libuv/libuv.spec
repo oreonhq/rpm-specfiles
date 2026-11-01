@@ -15,10 +15,8 @@ Source0: https://dist.libuv.org/dist/v%{version}/libuv-v%{version}.tar.gz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
-%endif
 
 %description
 libuv is a multi-platform support library with a focus on asynchronous I/O.

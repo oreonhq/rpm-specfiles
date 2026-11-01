@@ -52,9 +52,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: bzip2-devel
-%endif
 
 %description
 unzip lists, tests, and extracts zip archives.

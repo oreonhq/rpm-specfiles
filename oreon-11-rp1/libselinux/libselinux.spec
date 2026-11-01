@@ -16,13 +16,11 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: pcre2-devel
 BuildRequires: libsepol-devel
 BuildRequires: python3
 BuildRequires: patchelf
-%endif
 
 %description
 libselinux is the SELinux runtime library.

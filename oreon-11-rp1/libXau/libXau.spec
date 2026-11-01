@@ -16,11 +16,9 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: xorgproto
 BuildRequires: pkgconf
-%endif
 
 %description
 X11 authorisation library

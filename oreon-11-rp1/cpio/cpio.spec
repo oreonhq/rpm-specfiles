@@ -30,9 +30,7 @@ BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: texinfo
-%endif
 
 %description
 GNU cpio copies files into and out of cpio and tar archives.

@@ -16,7 +16,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -46,7 +45,6 @@ BuildRequires: ima-evm-utils-devel
 BuildRequires: doxygen
 BuildRequires: scdoc
 BuildRequires: patchelf
-%endif
 
 Provides: python3-rpm = %{version}-%{release}
 

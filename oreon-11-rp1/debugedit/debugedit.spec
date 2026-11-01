@@ -24,7 +24,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: help2man
@@ -32,7 +31,6 @@ BuildRequires: pkgconfig(libelf)
 BuildRequires: pkgconfig(libdw)
 BuildRequires: xxhash-devel
 BuildRequires: dwz
-%endif
 
 %description
 debugedit rewrites debug paths and find-debuginfo builds separate debuginfo.

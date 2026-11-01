@@ -18,10 +18,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: gnupg2
 BuildRequires: libgpg-error-devel
 BuildRequires: patchelf
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: gnupg2
 %endif
 
 %description

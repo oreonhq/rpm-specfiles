@@ -14,14 +14,12 @@ Source0: https://files.pythonhosted.org/packages/0e/df/f15f80383f152452d8985b36d
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: oreon-rpm-macros-python
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-setuptools
 BuildRequires: python3-setuptools_scm
 BuildRequires: python3-wheel
-%endif
 
 Provides: python3-dateutil = %{version}-%{release}
 Requires: python3

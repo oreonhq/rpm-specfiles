@@ -16,12 +16,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: zlib-devel
 BuildRequires: bzip2-devel
 BuildRequires: xz-devel
-%endif
 
 %description
 File type identification library

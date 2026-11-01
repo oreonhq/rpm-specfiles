@@ -16,7 +16,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: gmp-devel
 BuildRequires: nettle-devel
@@ -27,7 +26,6 @@ BuildRequires: libunistring-devel
 BuildRequires: zlib-devel
 BuildRequires: libzstd-devel
 BuildRequires: pkgconf
-%endif
 
 %description
 TLS library

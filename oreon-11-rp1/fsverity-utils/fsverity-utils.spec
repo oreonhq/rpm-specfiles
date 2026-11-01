@@ -17,10 +17,8 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: openssl-devel
 BuildRequires: patchelf
-%endif
 
 %description
 fsverity-utils provides libfsverity.

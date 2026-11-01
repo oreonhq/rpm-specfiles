@@ -13,9 +13,7 @@ URL: https://mesonbuild.com/
 Source0: https://github.com/mesonbuild/meson/archive/refs/tags/%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 Requires: python3
 Requires: ninja-build
 

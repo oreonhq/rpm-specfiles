@@ -17,14 +17,12 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: popt-devel
 BuildRequires: libselinux-devel
 BuildRequires: libsepol-devel
 BuildRequires: gettext
 BuildRequires: pkgconf
-%endif
 
 %description
 chkconfig manages SysV init script links; this package also ships the

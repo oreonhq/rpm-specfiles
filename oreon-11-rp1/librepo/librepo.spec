@@ -15,7 +15,6 @@ Source0: https://github.com/rpm-software-management/librepo/archive/refs/tags/%{
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -28,7 +27,6 @@ BuildRequires: libselinux-devel
 BuildRequires: zchunk-devel
 BuildRequires: python3-devel
 BuildRequires: patchelf
-%endif
 
 Provides: python3-librepo = %{version}-%{release}
 

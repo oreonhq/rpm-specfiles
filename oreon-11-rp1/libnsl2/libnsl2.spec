@@ -16,11 +16,9 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: libtirpc-devel
 BuildRequires: pkgconf
 BuildRequires: patchelf
-%endif
 
 %description
 libnsl provides the NIS and NIS+ client interface that used to ship

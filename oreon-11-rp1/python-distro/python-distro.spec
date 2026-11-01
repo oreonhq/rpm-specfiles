@@ -14,13 +14,11 @@ Source0: https://files.pythonhosted.org/packages/source/d/distro/distro-%{versio
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: oreon-rpm-macros-python
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-setuptools
 BuildRequires: python3-wheel
-%endif
 
 Provides: python3-distro = %{version}-%{release}
 Requires: python3

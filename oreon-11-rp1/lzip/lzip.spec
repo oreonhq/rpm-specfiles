@@ -20,9 +20,7 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
-%endif
 
 %description
 Lzip is a lossless data compressor with a user interface similar to gzip or bzip2,

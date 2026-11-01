@@ -22,12 +22,10 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: perl
 BuildRequires: texinfo
 BuildRequires: bison
-%endif
 
 %description
 Groff is a typesetting system that reads plain text mixed with formatting

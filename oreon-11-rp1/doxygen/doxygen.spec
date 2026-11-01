@@ -17,14 +17,12 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: flex
 BuildRequires: bison
 BuildRequires: python3
-%endif
 
 %description
 Doxygen generates documentation from annotated C, C++ and other sources.

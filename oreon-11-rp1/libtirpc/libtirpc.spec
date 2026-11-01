@@ -16,10 +16,8 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: krb5-devel
 BuildRequires: patchelf
-%endif
 
 %description
 libtirpc is a port of the SunRPC transport-independent RPC library,

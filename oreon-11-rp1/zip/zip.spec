@@ -26,9 +26,7 @@ Requires: unzip
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: bzip2-devel
-%endif
 
 %description
 zip creates PKZIP-compatible zip archives.

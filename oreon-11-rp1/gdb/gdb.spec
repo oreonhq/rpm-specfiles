@@ -20,7 +20,6 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: texinfo
 BuildRequires: readline-devel
@@ -33,7 +32,6 @@ BuildRequires: mpfr-devel
 BuildRequires: expat-devel
 BuildRequires: bison
 BuildRequires: flex
-%endif
 
 %description
 GDB lets you see what is going on inside a program while it executes. This

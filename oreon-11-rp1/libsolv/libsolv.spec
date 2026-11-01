@@ -15,7 +15,6 @@ Source0: https://github.com/openSUSE/libsolv/archive/refs/tags/%{version}.tar.gz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -27,7 +26,6 @@ BuildRequires: xz-devel
 BuildRequires: libzstd-devel
 BuildRequires: libxml2-devel
 BuildRequires: patchelf
-%endif
 
 %description
 libsolv is a package dependency solver.

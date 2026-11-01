@@ -15,7 +15,6 @@ Source0: https://files.pythonhosted.org/packages/f3/cc/23f24bc7cbfec3a0ab508b7e1
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -23,7 +22,6 @@ BuildRequires: python3-devel
 BuildRequires: dbus-devel
 BuildRequires: glib2-devel
 BuildRequires: patchelf
-%endif
 
 Provides: python3-dbus = %{version}-%{release}
 Requires: python3

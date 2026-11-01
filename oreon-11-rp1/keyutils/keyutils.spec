@@ -20,9 +20,7 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
-%endif
 
 %description
 keyutils is the Linux key management library.

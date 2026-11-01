@@ -16,6 +16,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+BuildRequires: patchelf
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: ncurses-devel
@@ -25,7 +26,6 @@ BuildRequires: pam-devel
 BuildRequires: sqlite-devel
 BuildRequires: libcap-devel
 BuildRequires: libselinux-devel
-BuildRequires: patchelf
 BuildRequires: fakeroot
 BuildRequires: systemd-devel
 BuildRequires: python3-devel

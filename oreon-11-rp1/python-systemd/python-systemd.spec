@@ -16,7 +16,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: oreon-rpm-macros-python
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: python3-devel
 BuildRequires: python3-build
@@ -25,7 +24,6 @@ BuildRequires: python3-setuptools
 BuildRequires: python3-wheel
 BuildRequires: systemd-devel
 BuildRequires: patchelf
-%endif
 
 Provides: python3-systemd = %{version}-%{release}
 Requires: python3

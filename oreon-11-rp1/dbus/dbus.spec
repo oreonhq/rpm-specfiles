@@ -15,7 +15,6 @@ Source0: https://dbus.freedesktop.org/releases/dbus/dbus-%{version}.tar.xz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -27,7 +26,6 @@ BuildRequires: libX11-devel
 BuildRequires: systemd-devel
 BuildRequires: python3
 BuildRequires: patchelf
-%endif
 
 %description
 D-Bus is a message bus.

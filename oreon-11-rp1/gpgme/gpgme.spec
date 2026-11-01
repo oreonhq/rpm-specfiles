@@ -16,11 +16,9 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: libassuan-devel
 BuildRequires: libgpg-error-devel
-%endif
 
 %description
 GnuPG library

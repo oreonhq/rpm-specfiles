@@ -16,11 +16,9 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: python3
 BuildRequires: patchelf
-%endif
 
 Obsoletes: libnghttp2 < 2
 Provides: libnghttp2 = %{version}-%{release}

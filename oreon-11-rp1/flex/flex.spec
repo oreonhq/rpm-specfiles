@@ -21,9 +21,7 @@ BuildRequires: m4
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
-%endif
 
 %description
 flex generates scanners: programs that recognize lexical patterns in

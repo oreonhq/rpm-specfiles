@@ -17,12 +17,10 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: unzip
-%endif
 
 %description
 {fmt} is an open-source formatting library providing a fast and safe

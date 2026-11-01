@@ -19,11 +19,9 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: openssl-devel
 BuildRequires: libuv-devel
 BuildRequires: patchelf
-%endif
 
 %description
 CMake is a build system.

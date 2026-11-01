@@ -17,9 +17,7 @@ Requires: python3-packaging >= 26.2
 Provides: python3dist(vcs-versioning) = %{version}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 Core library that derives Python package versions from git and mercurial

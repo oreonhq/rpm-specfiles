@@ -21,11 +21,9 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: readline-devel
 BuildRequires: zlib-devel
 BuildRequires: patchelf
-%endif
 
 %description
 SQLite is a C library that implements a small, fast, self-contained SQL database engine.

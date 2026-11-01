@@ -16,11 +16,9 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: m4
 BuildRequires: patchelf
 BuildRequires: gmp-devel
-%endif
 
 %description
 Low-level cryptographic library

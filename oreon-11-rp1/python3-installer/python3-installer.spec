@@ -16,9 +16,7 @@ Requires: python3
 Provides: python3dist(installer) = %{version}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 installer is a low-level library for installing a Python package from a

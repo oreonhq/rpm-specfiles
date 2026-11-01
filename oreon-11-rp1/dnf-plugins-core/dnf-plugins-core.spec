@@ -13,14 +13,12 @@ URL: https://github.com/rpm-software-management/dnf-plugins-core
 Source0: https://github.com/rpm-software-management/dnf-plugins-core/archive/refs/tags/%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: python3-devel
 BuildRequires: python3-sphinx
 BuildRequires: python3-sphinx_rtd_theme
 BuildRequires: gettext
-%endif
 
 Requires: python3-dnf-plugins-core = %{version}-%{release}
 

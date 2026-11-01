@@ -19,9 +19,7 @@ BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
-%endif
 
 %description
 Jansson is a C library for encoding, decoding and manipulating JSON data.

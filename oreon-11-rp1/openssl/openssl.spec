@@ -16,12 +16,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: perl
 BuildRequires: zlib-devel
 BuildRequires: python3
 BuildRequires: patchelf
-%endif
 
 %description
 OpenSSL is a TLS and crypto library.

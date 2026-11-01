@@ -15,10 +15,8 @@ Source0: https://sourceware.org/ftp/dwz/releases/dwz-%{version}.tar.xz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: elfutils-libelf-devel
 BuildRequires: xxhash-devel
-%endif
 
 %description
 dwz optimizes DWARF debugging information and merges duplicate sections.

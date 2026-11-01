@@ -15,7 +15,6 @@ Source0: https://github.com/libarchive/libarchive/releases/download/v%{version}/
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -32,7 +31,6 @@ BuildRequires: libacl-devel
 BuildRequires: libb2-devel
 BuildRequires: pcre2-devel
 BuildRequires: patchelf
-%endif
 
 %description
 libarchive reads and writes archive formats.

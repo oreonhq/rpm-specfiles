@@ -15,7 +15,6 @@ Source0: https://github.com/zchunk/zchunk/archive/refs/tags/%{version}.tar.gz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: libzstd-devel
@@ -23,7 +22,6 @@ BuildRequires: libcurl-devel
 BuildRequires: openssl-devel
 BuildRequires: pkgconf
 BuildRequires: patchelf
-%endif
 
 %description
 zchunk is a compressed file format.

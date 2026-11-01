@@ -16,9 +16,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: zlib-devel
-%endif
 
 %description
 These are the GNU binutils. These are utilities of use when dealing with binary files, either object files or executables. These tools consist of the linkers (ld and gold), the assembler (gas), and the profiler (gprof and gprofng) each of which have their own sub-directory named after them. There is also a collection of other binary tools, including the disassembler (objdump) in this directory.

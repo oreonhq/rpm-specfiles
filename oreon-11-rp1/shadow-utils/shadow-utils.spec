@@ -42,7 +42,6 @@ BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gettext
 BuildRequires: pkgconf
 BuildRequires: pam-devel
@@ -55,7 +54,6 @@ BuildRequires: libattr-devel
 BuildRequires: libeconf-devel
 BuildRequires: systemd-devel
 BuildRequires: kernel-headers
-%endif
 
 %description
 shadow-utils manages user accounts, groups, and shadow passwords.

@@ -18,7 +18,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: autoconf
 BuildRequires: automake
@@ -27,7 +26,6 @@ BuildRequires: gettext-devel
 BuildRequires: popt-devel
 BuildRequires: libselinux-devel
 BuildRequires: pkgconf
-%endif
 
 %description
 authselect selects system identity and authentication sources from a set

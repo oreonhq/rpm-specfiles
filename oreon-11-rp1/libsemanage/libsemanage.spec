@@ -23,12 +23,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: libselinux-devel >= 3.11
 BuildRequires: libsepol-devel >= 3.11
 BuildRequires: audit-devel >= 4.2.1
 BuildRequires: bzip2-devel
-%endif
 
 %description
 libsemanage manages the active SELinux policy.

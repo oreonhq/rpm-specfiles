@@ -18,9 +18,7 @@ Requires: python3-pyproject-hooks
 Provides: python3dist(build) = %{version}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 build is a PEP 517 build frontend for Python packages.

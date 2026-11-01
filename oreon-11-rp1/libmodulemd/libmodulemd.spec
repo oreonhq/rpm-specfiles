@@ -15,7 +15,6 @@ Source0: https://github.com/fedora-modularity/libmodulemd/releases/download/%{ve
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -23,7 +22,6 @@ BuildRequires: glib2-devel
 BuildRequires: libyaml-devel
 BuildRequires: rpm-devel
 BuildRequires: patchelf
-%endif
 
 %description
 libmodulemd reads modulemd documents.

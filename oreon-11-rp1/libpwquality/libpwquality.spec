@@ -17,12 +17,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cracklib-devel
 BuildRequires: pam-devel
 BuildRequires: gettext
-%endif
 
 %description
 libpwquality checks password strength and generates random passwords. It

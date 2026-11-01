@@ -18,9 +18,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: libattr-devel
-%endif
 
 %description
 acl is a set of tools for manipulating access control lists.

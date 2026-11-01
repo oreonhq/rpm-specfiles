@@ -20,12 +20,10 @@ BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: libxml2-devel
 BuildRequires: libunistring-devel
 BuildRequires: ncurses-devel
 BuildRequires: patchelf
-%endif
 
 %description
 GNU gettext provides tools for writing and handling translated messages,

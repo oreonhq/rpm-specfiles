@@ -16,9 +16,7 @@ Requires: python3
 Provides: python3dist(setuptools) = %{version}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 Setuptools is the build backend and packaging library used by most Python

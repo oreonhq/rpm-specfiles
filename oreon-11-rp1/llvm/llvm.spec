@@ -25,7 +25,6 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
@@ -35,7 +34,6 @@ BuildRequires: zstd-devel
 BuildRequires: libffi-devel
 BuildRequires: ncurses-devel
 BuildRequires: pkgconf
-%endif
 
 %description
 LLVM is a collection of modular compiler and toolchain components. This

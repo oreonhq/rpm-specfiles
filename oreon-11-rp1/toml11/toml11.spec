@@ -15,10 +15,8 @@ Source0: https://github.com/ToruNiina/toml11/archive/v%{version}/toml11-%{versio
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc-c++
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
-%endif
 
 %description
 toml11 is a header-only C++11 TOML parser and serializer.

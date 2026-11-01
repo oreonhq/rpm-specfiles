@@ -16,7 +16,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: openssl-devel
 BuildRequires: json-c-devel
@@ -25,7 +24,6 @@ BuildRequires: device-mapper-devel
 BuildRequires: libblkid-devel
 BuildRequires: libuuid-devel
 BuildRequires: pkgconf
-%endif
 
 %description
 Disk encryption library

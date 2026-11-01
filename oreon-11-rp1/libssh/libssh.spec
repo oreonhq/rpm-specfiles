@@ -19,14 +19,12 @@ BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: openssl-devel
 BuildRequires: zlib-devel
 BuildRequires: krb5-devel
-%endif
 
 %description
 libssh is a multiplatform C library implementing the SSHv2 protocol on

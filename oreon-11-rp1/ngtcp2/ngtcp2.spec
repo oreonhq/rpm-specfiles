@@ -20,12 +20,10 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: gcc-c++
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: pkgconf
 BuildRequires: openssl-devel
 BuildRequires: gnutls-devel
-%endif
 
 %description
 ngtcp2 implements the QUIC protocol (RFC 9000). This build ships the

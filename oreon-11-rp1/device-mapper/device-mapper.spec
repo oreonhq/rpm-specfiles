@@ -16,12 +16,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: libblkid-devel
 BuildRequires: libselinux-devel
 BuildRequires: pkgconf
 BuildRequires: patchelf
-%endif
 
 %description
 device-mapper is the library behind libcryptsetup.

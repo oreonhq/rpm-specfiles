@@ -13,9 +13,7 @@ URL: https://github.com/erocarrera/pefile
 Source0: https://files.pythonhosted.org/packages/source/p/pefile/pefile-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 Requires: python3
 
 %description

@@ -15,12 +15,10 @@ Source0: https://s3.amazonaws.com/json-c_releases/releases/json-c-%{version}.tar
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: python3
 BuildRequires: patchelf
-%endif
 
 %description
 json-c is a JSON parser library.

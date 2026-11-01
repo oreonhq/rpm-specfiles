@@ -13,9 +13,7 @@ URL: https://github.com/pallets/markupsafe
 Source0: https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 Requires: python3
 
 %description

@@ -17,10 +17,8 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
-%endif
 
 %description
 This is GNU Awk 5.4.0. It is upwardly compatible with Brian Kernighan's version of Unix awk. It is almost completely compliant with the 2024 POSIX 1003 standard for awk.

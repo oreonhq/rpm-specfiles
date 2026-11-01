@@ -17,9 +17,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: perl
-%endif
 
 %description
 libxcrypt is a modern library for one-way hashing of passwords.

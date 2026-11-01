@@ -16,7 +16,6 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf
@@ -26,7 +25,6 @@ BuildRequires: zlib-devel
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
 BuildRequires: patchelf
-%endif
 
 Provides: python3-libcomps = %{version}-%{release}
 

@@ -19,9 +19,7 @@ Requires: python3-setuptools
 Provides: python3dist(setuptools-scm) = %{version}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-%endif
 
 %description
 setuptools_scm extracts Python package versions from git or mercurial

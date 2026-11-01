@@ -18,11 +18,9 @@ BuildRequires: make
 BuildRequires: binutils
 BuildRequires: kernel-headers
 BuildRequires: gcc
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
 BuildRequires: bison
 BuildRequires: gawk
-%endif
 
 %description
 The GNU C Library is the standard system C library for all GNU systems, and is an important part of what makes up a GNU system. It provides the system API for all programs written in C and C-compatible languages such as C++ and Objective C; the runtime facilities of other programming languages use the C library to access the underlying operating system.

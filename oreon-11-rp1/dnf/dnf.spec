@@ -14,11 +14,9 @@ Source0: https://github.com/rpm-software-management/dnf/releases/download/%{vers
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: python3-devel
-%endif
 
 Requires: python3-dnf = %{version}-%{release}
 
