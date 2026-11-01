@@ -1029,6 +1029,13 @@ remove_depmod_files
 %{SOURCE20} %{buildroot} lib/modules/%{KVERREL} %{SOURCE26}
 rm -f %{buildroot}/etc/modprobe.d/*-blacklist.conf
 
+%if %{zipmodules}
+find %{buildroot}/lib/modules/%{KVERREL} -name '*.ko' -type f -print0 | xargs -0 -r -P$(nproc) xz
+if [ -s %{buildroot}/mod-extra.list ]; then
+	sed -i 's/\.ko$/.ko.xz/' %{buildroot}/mod-extra.list
+fi
+%endif
+
 #
 # Generate the kernel-oreon-core and kernel-oreon-modules file lists.
 #
@@ -1056,10 +1063,10 @@ popd > /dev/null
 
 # Make sure that the files lists start with absolute paths or rpmbuild fails.
 # Also add in the directory entries.
-sed -e 's/^lib*/\/lib/' %{?zipsed} %{buildroot}/k-d.list > ../%{name}-modules.list
-sed -e 's/^lib*/%dir \/lib/' %{?zipsed} %{buildroot}/module-dirs.list > ../%{name}-core.list
-sed -e 's/^lib*/\/lib/' %{?zipsed} %{buildroot}/modules.list >> ../%{name}-core.list
-sed -e 's/^lib*/\/lib/' %{?zipsed} %{buildroot}/mod-extra.list >> ../%{name}-modules-extra.list
+sed -e 's/^lib*/\/lib/' %{buildroot}/k-d.list > ../%{name}-modules.list
+sed -e 's/^lib*/%dir \/lib/' %{buildroot}/module-dirs.list > ../%{name}-core.list
+sed -e 's/^lib*/\/lib/' %{buildroot}/modules.list >> ../%{name}-core.list
+sed -e 's/^lib*/\/lib/' %{buildroot}/mod-extra.list >> ../%{name}-modules-extra.list
 
 # Cleanup.
 rm -f %{buildroot}/k-d.list
