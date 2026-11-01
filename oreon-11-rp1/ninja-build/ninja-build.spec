@@ -13,9 +13,9 @@ URL: https://ninja-build.org/
 Source0: https://github.com/ninja-build/ninja/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
 %endif
 

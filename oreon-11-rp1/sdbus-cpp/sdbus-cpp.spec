@@ -13,12 +13,12 @@ URL: https://github.com/Kistler-Group/sdbus-cpp
 Source0: https://github.com/Kistler-Group/sdbus-cpp/archive/v%{version}/sdbus-cpp-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: patchelf
 BuildRequires: gcc-c++
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: systemd-devel

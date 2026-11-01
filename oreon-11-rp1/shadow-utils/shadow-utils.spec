@@ -39,10 +39,10 @@ Requires: setup
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gettext
 BuildRequires: pkgconf
 BuildRequires: pam-devel

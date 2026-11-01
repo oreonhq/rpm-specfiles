@@ -16,10 +16,10 @@ URL: https://github.com/linux-audit/audit-userspace
 Source0: https://github.com/linux-audit/audit-userspace/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: autoconf
 BuildRequires: automake

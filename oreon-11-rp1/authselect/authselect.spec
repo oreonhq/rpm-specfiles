@@ -15,10 +15,10 @@ Provides: authselect-libs = %{version}-%{release}
 Requires: pam
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: autoconf
 BuildRequires: automake

@@ -13,10 +13,10 @@ URL: https://github.com/PCRE2Project/pcre2
 Source0: https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{version}/pcre2-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: zlib-devel
 BuildRequires: bzip2-devel
 %endif

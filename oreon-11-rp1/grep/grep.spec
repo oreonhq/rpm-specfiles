@@ -13,11 +13,9 @@ URL: https://www.gnu.org/software/grep/
 Source0: https://ftp.gnu.org/gnu/grep/grep-3.12.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This is GNU grep, the "fastest grep in the west" (we hope). All bugs reported in previous releases have been fixed. Many exciting new bugs have probably been introduced in this revision.

@@ -13,10 +13,10 @@ URL: https://www.openssl.org/
 Source0: https://github.com/openssl/openssl/releases/download/openssl-%{version}/openssl-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: perl
 BuildRequires: zlib-devel
 BuildRequires: python3

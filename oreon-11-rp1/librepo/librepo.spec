@@ -13,9 +13,9 @@ URL: https://github.com/rpm-software-management/librepo
 Source0: https://github.com/rpm-software-management/librepo/archive/refs/tags/%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf

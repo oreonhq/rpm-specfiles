@@ -13,10 +13,10 @@ URL: https://github.com/stevegrubb/libcap-ng
 Source0: https://github.com/stevegrubb/libcap-ng/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: autoconf
 BuildRequires: automake

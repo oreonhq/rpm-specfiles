@@ -13,10 +13,10 @@ URL: https://sourceware.org/lvm2/
 Source0: https://sourceware.org/ftp/lvm2/LVM2.%{version}.tgz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: libblkid-devel
 BuildRequires: libselinux-devel
 BuildRequires: pkgconf

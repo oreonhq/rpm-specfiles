@@ -13,10 +13,10 @@ URL: https://github.com/util-linux/util-linux
 Source0: https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/util-linux-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: ncurses-devel
 BuildRequires: zlib-devel

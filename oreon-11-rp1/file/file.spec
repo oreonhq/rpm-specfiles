@@ -13,10 +13,10 @@ URL: https://www.darwinsys.com/file/
 Source0: https://astron.com/pub/file/file-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: zlib-devel
 BuildRequires: bzip2-devel

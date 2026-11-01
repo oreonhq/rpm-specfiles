@@ -13,11 +13,9 @@ URL: https://www.gnu.org/software/findutils/
 Source0: https://ftp.gnu.org/gnu/findutils/findutils-4.11.0.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This package contains the GNU find, xargs, and locate programs. find and xargs comply with POSIX 1003.2. They also support a large number of additional options, some borrowed from Unix and some unique to GNU.

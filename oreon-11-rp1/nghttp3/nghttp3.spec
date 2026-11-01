@@ -16,12 +16,12 @@ Source2: nghttp3-key.asc
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: patchelf
 BuildRequires: gcc-c++
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: patchelf
 BuildRequires: pkgconf
 %endif
 

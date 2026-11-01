@@ -16,9 +16,9 @@ BuildArch: noarch
 Requires: python3
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: make
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
-BuildRequires: make
 %endif
 
 %description

@@ -13,9 +13,9 @@ URL: https://xcb.freedesktop.org/
 Source0: https://www.x.org/releases/individual/xcb/xcb-proto-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
 BuildRequires: python3-devel
 %endif

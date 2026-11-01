@@ -13,11 +13,9 @@ URL: https://git.sr.ht/~sircmpwn/scdoc
 Source0: https://git.sr.ht/~sircmpwn/scdoc/archive/%{version}.tar.gz#/scdoc-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 scdoc is a simple man page generator written for POSIX systems in C99.

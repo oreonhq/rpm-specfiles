@@ -14,9 +14,9 @@ Source0: https://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: make
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: zlib-devel
 %endif
 

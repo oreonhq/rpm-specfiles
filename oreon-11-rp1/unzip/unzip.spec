@@ -49,10 +49,10 @@ Patch34: unzip-gnu89-build.patch
 Patch35: unzip-6.0-wcstombs-fortify.patch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: bzip2-devel
 %endif
 

@@ -13,10 +13,10 @@ URL: https://rpm.org/
 Source0: https://github.com/rpm-software-management/rpm/releases/download/rpm-%{version}-release/rpm-%{version}.tar.bz2
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf

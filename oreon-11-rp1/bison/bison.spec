@@ -14,11 +14,9 @@ Source0: https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.xz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: m4
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 GNU Bison is a general-purpose parser generator that converts an annotated context-free grammar into a deterministic LR or generalized LR (GLR) parser employing LALR(1) parser tables. Bison can also generate IELR(1) or canonical LR(1) parser tables. Once you are proficient with Bison, you can use it to develop a wide range of language parsers, from those used in simple desk calculators to complex programming languages.

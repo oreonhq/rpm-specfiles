@@ -13,9 +13,9 @@ URL: https://gitlab.gnome.org/GNOME/glib
 Source0: https://download.gnome.org/sources/glib/2.86/glib-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf

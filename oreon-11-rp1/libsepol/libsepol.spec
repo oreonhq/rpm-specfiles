@@ -13,11 +13,11 @@ URL: https://github.com/SELinuxProject/selinux
 Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsepol-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: flex
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: flex
 %endif
 
 %description

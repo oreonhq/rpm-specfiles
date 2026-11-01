@@ -1,4 +1,4 @@
-%global source0_hash d3374cfe449e1e8bf3138d8f7101dd7c13b1cf6e3e5e44d72234b4cbc9657bcf
+%global source0_hash 62195cc0cf614d540d2dff813dab14d2a2cede9ac69e1cbc4aa2a764980fc09c
 %global debug_package %{nil}
 
 Name: python-srpm-macros

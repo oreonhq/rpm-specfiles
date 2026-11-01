@@ -13,8 +13,8 @@ URL: https://github.com/rpm-software-management/dnf
 Source0: https://github.com/rpm-software-management/dnf/releases/download/%{version}/dnf-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: python3-devel

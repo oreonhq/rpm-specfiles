@@ -13,9 +13,9 @@ URL: https://www.x.org/
 Source0: https://www.x.org/releases/individual/proto/xorgproto-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
 %endif

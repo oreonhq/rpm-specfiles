@@ -13,10 +13,10 @@ URL: https://sourceforge.net/projects/libtirpc/
 Source0: https://downloads.sourceforge.net/libtirpc/libtirpc-%{version}.tar.bz2
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: krb5-devel
 BuildRequires: patchelf
 %endif

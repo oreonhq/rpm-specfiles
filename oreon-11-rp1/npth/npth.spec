@@ -15,11 +15,11 @@ Source1: npth-%{version}.tar.bz2.sig
 Source2: gnupg-signing-keys.asc
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: gnupg2
 BuildRequires: patchelf
 %endif
 

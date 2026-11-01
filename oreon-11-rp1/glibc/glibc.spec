@@ -17,8 +17,8 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: make
 BuildRequires: binutils
 BuildRequires: kernel-headers
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: python3
 BuildRequires: bison
 BuildRequires: gawk

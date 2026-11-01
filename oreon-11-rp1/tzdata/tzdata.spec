@@ -19,11 +19,9 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 The IANA time zone database, compiled for use under /usr/share/zoneinfo.

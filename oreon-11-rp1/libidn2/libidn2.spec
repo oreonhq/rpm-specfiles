@@ -13,10 +13,10 @@ URL: https://www.gnu.org/software/libidn/
 Source0: https://ftp.gnu.org/gnu/libidn/libidn2-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: libunistring-devel
 %endif

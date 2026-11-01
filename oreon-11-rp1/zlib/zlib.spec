@@ -13,11 +13,9 @@ URL: https://zlib.net/
 Source0: https://zlib.net/zlib-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 zlib 1.3.2 is a general purpose data compression library. All the code is thread safe (though see the FAQ for caveats). The data format used by the zlib library is described by RFCs (Request for Comments) 1950 to 1952 at https://datatracker.ietf.org/doc/html/rfc1950 (zlib format), rfc1951 (deflate format) and rfc1952 (gzip format).

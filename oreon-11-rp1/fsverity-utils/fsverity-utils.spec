@@ -14,10 +14,10 @@ Source0: https://mirrors.edge.kernel.org/pub/linux/kernel/people/ebiggers/fsveri
 Patch0: fsverity-utils-openssl-no-engine.patch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: openssl-devel
 BuildRequires: patchelf
 %endif

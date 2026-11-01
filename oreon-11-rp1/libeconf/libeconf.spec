@@ -15,11 +15,11 @@ Patch0: 0001-cmake-no-install-html.patch
 Patch1: 0002-disable-test.patch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
-BuildRequires: cmake
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: cmake
 %endif
 
 %description

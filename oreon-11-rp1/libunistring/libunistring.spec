@@ -13,10 +13,10 @@ URL: https://www.gnu.org/software/libunistring/
 Source0: https://ftp.gnu.org/gnu/libunistring/libunistring-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 %endif
 

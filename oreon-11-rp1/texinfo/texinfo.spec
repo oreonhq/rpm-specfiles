@@ -24,10 +24,10 @@ Patch3: texinfo-7.3-limits.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gettext
 BuildRequires: help2man
 BuildRequires: ncurses-devel

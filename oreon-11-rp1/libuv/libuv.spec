@@ -13,10 +13,10 @@ URL: https://libuv.org/
 Source0: https://dist.libuv.org/dist/v%{version}/libuv-v%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: cmake
 BuildRequires: ninja-build
 %endif
 

@@ -17,11 +17,11 @@ URL: https://www.sqlite.org/
 Source0: https://www.sqlite.org/2026/sqlite-autoconf-%{sqlite_ver}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: readline-devel
 BuildRequires: zlib-devel
 BuildRequires: patchelf

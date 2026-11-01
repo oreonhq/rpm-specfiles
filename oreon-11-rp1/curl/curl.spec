@@ -13,10 +13,10 @@ URL: https://curl.se/
 Source0: https://curl.se/download/curl-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: openssl-devel
 BuildRequires: libnghttp2-devel

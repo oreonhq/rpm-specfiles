@@ -14,10 +14,10 @@ Source0: https://github.com/libpwquality/libpwquality/releases/download/libpwqua
 Requires: cracklib
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: cracklib-devel
 BuildRequires: pam-devel

@@ -14,11 +14,9 @@ Source0: https://ftp.gnu.org/gnu/gzip/gzip-1.15.tar.xz
 Patch0: gzip-1.15-aarch64-head.patch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 gzip (GNU zip) is a compression utility designed to be a replacement for 'compress'. Its main advantages over compress are much better compression and freedom from patented algorithms. The GNU Project uses it as the standard compression program for its system.

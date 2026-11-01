@@ -14,11 +14,9 @@ Source0: https://ftp.gnu.org/gnu/mpfr/mpfr-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gmp-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This manual documents how to install and use the Multiple Precision Floating-Point Reliable Library, version 4.2.2.

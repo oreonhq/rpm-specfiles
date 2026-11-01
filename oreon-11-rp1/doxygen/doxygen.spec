@@ -13,12 +13,12 @@ URL: https://www.doxygen.nl/
 Source0: https://www.doxygen.nl/files/doxygen-%{version}.src.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: patchelf
 BuildRequires: gcc-c++
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: flex

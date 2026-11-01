@@ -13,11 +13,9 @@ URL: https://www.gnu.org/software/make/
 Source0: https://ftp.gnu.org/gnu/make/make-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This directory contains the 4.4.1 release of GNU Make.

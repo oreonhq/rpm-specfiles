@@ -16,10 +16,10 @@ Source1: rpm-sequoia-%{version}-vendor.tar.xz
 Patch0: rpm-sequoia-nettle-sys-2.3.2.patch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: rustc
 BuildRequires: cargo
 BuildRequires: pkgconf

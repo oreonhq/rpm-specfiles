@@ -14,10 +14,10 @@ Source0: https://ftp.gnu.org/gnu/gawk/gawk-5.4.1.tar.xz
 Patch0: gawk-5.4.1-no-mpfr-node.patch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
 %endif

@@ -13,11 +13,9 @@ URL: https://sites.google.com/site/fullycapable/
 Source0: https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 libcap is a library for getting and setting POSIX capabilities.

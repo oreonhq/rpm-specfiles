@@ -13,10 +13,10 @@ URL: https://gnupg.org/software/libassuan/
 Source0: https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-%{version}.tar.bz2
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: libgpg-error-devel
 %endif

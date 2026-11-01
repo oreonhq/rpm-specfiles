@@ -13,9 +13,9 @@ URL: https://www.freedesktop.org/wiki/Software/dbus/
 Source0: https://dbus.freedesktop.org/releases/dbus/dbus-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf

@@ -13,10 +13,10 @@ URL: https://github.com/rpm-software-management/libdnf
 Source0: https://github.com/rpm-software-management/libdnf/archive/refs/tags/%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf

@@ -13,10 +13,10 @@ URL: https://gitlab.com/cryptsetup/cryptsetup
 Source0: https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/cryptsetup-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: openssl-devel
 BuildRequires: json-c-devel

@@ -13,10 +13,10 @@ URL: https://www.lua.org/
 Source0: https://www.lua.org/ftp/lua-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: readline-devel
 BuildRequires: patchelf
 %endif

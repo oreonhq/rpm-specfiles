@@ -13,9 +13,9 @@ URL: https://sourceware.org/dwz/
 Source0: https://sourceware.org/ftp/dwz/releases/dwz-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: elfutils-libelf-devel
 BuildRequires: xxhash-devel
 %endif

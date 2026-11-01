@@ -17,10 +17,10 @@ Requires: publicsuffix-list
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: libidn2-devel
 BuildRequires: libunistring-devel

@@ -13,11 +13,9 @@ URL: https://invisible-island.net/ncurses/
 Source0: https://ftp.gnu.org/gnu/ncurses/ncurses-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 Provides: ncurses-libs = %{version}-%{release}
 Provides: ncurses-base = %{version}-%{release}

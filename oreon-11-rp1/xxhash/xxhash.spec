@@ -16,10 +16,8 @@ Provides: xxhash-libs = %{version}-%{release}
 Provides: xxhash-devel = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: make
-%endif
 
 %description
 xxHash is a fast non-cryptographic hash. This package ships the library, headers, and xxhsum.

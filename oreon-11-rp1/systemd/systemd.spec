@@ -16,13 +16,13 @@ URL: https://systemd.io/
 Source0: https://github.com/systemd/systemd/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf
+BuildRequires: patchelf
 BuildRequires: gperf
 BuildRequires: python3
 BuildRequires: libcap-devel
@@ -38,12 +38,9 @@ BuildRequires: xz-devel
 BuildRequires: lz4-devel
 BuildRequires: libzstd-devel
 BuildRequires: libarchive-devel
-BuildRequires: dbus-devel
-BuildRequires: glib2-devel
 BuildRequires: pcre2-devel
 BuildRequires: libseccomp-devel
 BuildRequires: audit-libs-devel
-BuildRequires: cryptsetup-devel
 BuildRequires: libmicrohttpd-devel
 BuildRequires: libcurl-devel
 BuildRequires: libidn2-devel
@@ -53,10 +50,13 @@ BuildRequires: p11-kit-devel
 BuildRequires: elfutils-devel
 BuildRequires: python3-jinja2
 BuildRequires: libfdisk-devel
+BuildRequires: gettext
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: dbus-devel
+BuildRequires: glib2-devel
+BuildRequires: cryptsetup-devel
 BuildRequires: pam-devel
 BuildRequires: libpwquality-devel
-BuildRequires: gettext
-BuildRequires: patchelf
 %endif
 
 %description
@@ -76,6 +76,7 @@ sed -i 's/EDEADLOCK|EWOULDBLOCK|ENOTSUP/EDEADLOCK|EWOULDBLOCK|ENOTSUP|EFSBADCRC|
 sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux', 'format', 'c' \],#command : [ 'sh', '-c', '\"\$1\" btf dump file /sys/kernel/btf/vmlinux format c | sed \"/bpf_stream_vprintk/d\"', 'gen-vmlinux', bpftool ],#" meson.build
 
 %build
+%global sd_cyc %[(%{with bootstrap} || 0%{?bootstrap}) ? "disabled" : "enabled"]
 %oreon_meson \
   -Dmode=release \
   -Dlog-message-verification=disabled \
@@ -90,8 +91,8 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dbpf-framework=disabled \
   -Dapparmor=disabled \
   -Daudit=enabled \
-  -Dlibcryptsetup=enabled \
-  -Dlibcryptsetup-plugins=enabled \
+  -Dlibcryptsetup=%{sd_cyc} \
+  -Dlibcryptsetup-plugins=%{sd_cyc} \
   -Dmicrohttpd=enabled \
   -Dlibcurl=enabled \
   -Dlibidn2=enabled \
@@ -106,7 +107,7 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dxkbcommon=disabled \
   -Dbootloader=disabled \
   -Dukify=disabled \
-  -Dhomed=enabled \
+  -Dhomed=%{sd_cyc} \
   -Dremote=enabled \
   -Dimportd=enabled \
   -Dvmspawn=enabled \
@@ -116,9 +117,9 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dseccomp=enabled \
   -Dfdisk=enabled \
   -Dxenctrl=disabled \
-  -Dpwquality=enabled \
+  -Dpwquality=%{sd_cyc} \
   -Dpasswdqc=disabled \
-  -Dpam=enabled \
+  -Dpam=%{sd_cyc} \
   -Dsysupdated=enabled \
   -Dcryptolib=openssl \
   -Ddns-over-tls=openssl \
@@ -134,8 +135,8 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dlz4=enabled \
   -Dzstd=enabled \
   -Dlibarchive=enabled \
-  -Ddbus=enabled \
-  -Dglib=enabled \
+  -Ddbus=%{sd_cyc} \
+  -Dglib=%{sd_cyc} \
   -Dpcre2=enabled \
   -Dblkid=enabled \
   -Dkmod=disabled

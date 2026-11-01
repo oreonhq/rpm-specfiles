@@ -13,10 +13,10 @@ URL: https://www.perl.org/
 Source0: https://www.cpan.org/src/5.0/perl-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 %endif
 

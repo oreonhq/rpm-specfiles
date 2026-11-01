@@ -24,9 +24,9 @@ Patch8: zip-3.0-man-strip-extra.patch
 Requires: unzip
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: bzip2-devel
 %endif
 

@@ -13,12 +13,10 @@ URL: https://libexpat.github.io/
 Source0: https://github.com/libexpat/libexpat/releases/download/R_2_8_5/expat-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 expat is an XML parser library written in C.

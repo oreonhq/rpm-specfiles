@@ -17,8 +17,8 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gettext
 %endif
 

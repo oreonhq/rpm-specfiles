@@ -13,10 +13,10 @@ URL: https://xcb.freedesktop.org/
 Source0: https://www.x.org/releases/individual/lib/libxcb-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: xcb-proto = 1.17.0-1%{?dist}
 BuildRequires: libXau-devel

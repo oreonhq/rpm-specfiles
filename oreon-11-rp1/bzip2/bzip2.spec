@@ -13,11 +13,9 @@ URL: https://sourceware.org/bzip2/
 Source0: https://sourceware.org/pub/bzip2/bzip2-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This file is part of bzip2/libbzip2, a program and library for lossless, block-sorting data compression.

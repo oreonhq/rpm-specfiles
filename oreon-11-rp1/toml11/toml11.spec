@@ -13,11 +13,11 @@ URL: https://github.com/ToruNiina/toml11
 Source0: https://github.com/ToruNiina/toml11/archive/v%{version}/toml11-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc-c++
+BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
-BuildRequires: make
 %endif
 
 %description

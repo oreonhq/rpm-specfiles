@@ -22,9 +22,9 @@ Requires: xz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: help2man

@@ -1,4 +1,4 @@
-%global source0_hash f9e4d21f4a52e0c873fc77606362c98ccc14eb1b6ef89a67e8eeb6e90cc867ae
+%global source0_hash 5317afc1e41570ca6412f18309030b9de6547aae10f80a7c90f78b46a2b5f24d
 %global debug_package %{nil}
 
 Name: fonts-srpm-macros

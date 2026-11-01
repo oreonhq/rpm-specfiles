@@ -13,11 +13,9 @@ URL: https://tukaani.org/xz/
 Source0: https://github.com/tukaani-project/xz/releases/download/v%{version}/xz-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 XZ Utils provide a general-purpose data-compression library plus command-line tools. The native file format is the .xz format, but also the legacy .lzma format is supported. The .xz format supports multiple compression algorithms, which are called "filters" in the context of XZ Utils. The primary filter is currently LZMA2. With typical files, XZ Utils create about 30 % smaller files than gzip.

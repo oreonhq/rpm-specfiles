@@ -13,12 +13,12 @@ URL: https://github.com/fmtlib/fmt
 Source0: https://github.com/fmtlib/fmt/releases/download/%{version}/fmt-%{version}.zip
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: patchelf
 BuildRequires: gcc-c++
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: unzip

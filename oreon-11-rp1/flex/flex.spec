@@ -18,10 +18,10 @@ Requires: m4
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: m4
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 %endif
 

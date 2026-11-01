@@ -13,11 +13,9 @@ URL: https://github.com/yaml/libyaml
 Source0: https://github.com/yaml/libyaml/releases/download/%{version}/yaml-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 libyaml is a YAML 1.1 parser and emitter written in C.

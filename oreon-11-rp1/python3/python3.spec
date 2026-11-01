@@ -20,11 +20,9 @@ BuildRequires: xz-devel
 BuildRequires: bzip2-devel
 BuildRequires: libffi-devel
 BuildRequires: pkgconf
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 python - an interpreted, interactive, object-oriented programming language

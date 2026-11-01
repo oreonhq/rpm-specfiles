@@ -14,12 +14,12 @@ Source0: https://github.com/google/brotli/archive/v%{version}/brotli-%{version}.
 Provides: libbrotli = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: patchelf
 BuildRequires: gcc-c++
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: patchelf
 BuildRequires: cmake
 BuildRequires: ninja-build
 %endif

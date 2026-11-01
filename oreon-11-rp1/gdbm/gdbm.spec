@@ -13,10 +13,10 @@ URL: https://www.gnu.org.ua/software/gdbm/
 Source0: https://ftp.gnu.org/gnu/gdbm/gdbm-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: readline-devel
 %endif
 

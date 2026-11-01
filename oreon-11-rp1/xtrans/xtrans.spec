@@ -15,10 +15,10 @@ Provides: xorg-x11-xtrans-devel = %{version}-%{release}
 Obsoletes: xorg-x11-xtrans-devel < 1.6.1
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 %endif
 

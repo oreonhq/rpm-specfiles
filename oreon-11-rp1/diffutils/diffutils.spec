@@ -13,11 +13,9 @@ URL: https://www.gnu.org/software/diffutils/
 Source0: https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This directory contains the GNU diff, diff3, sdiff, and cmp utilities. Their features are a superset of the Unix features and they are significantly faster.

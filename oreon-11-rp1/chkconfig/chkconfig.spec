@@ -14,10 +14,10 @@ Source0: https://github.com/fedora-sysv/chkconfig/archive/%{version}/chkconfig-%
 Provides: alternatives = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: popt-devel
 BuildRequires: libselinux-devel

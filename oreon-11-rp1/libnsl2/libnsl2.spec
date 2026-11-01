@@ -13,10 +13,10 @@ URL: https://github.com/thkukuk/libnsl
 Source0: https://github.com/thkukuk/libnsl/releases/download/v%{version}/libnsl-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: libtirpc-devel
 BuildRequires: pkgconf
 BuildRequires: patchelf

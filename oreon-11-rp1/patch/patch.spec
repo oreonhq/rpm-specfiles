@@ -13,11 +13,9 @@ URL: https://www.gnu.org/software/patch/
 Source0: https://ftp.gnu.org/gnu/patch/patch-2.8.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This is GNU patch, which applies diff files to original files.

@@ -13,10 +13,10 @@ URL: https://github.com/BLAKE2/libb2
 Source0: https://github.com/BLAKE2/libb2/releases/download/v%{version}/libb2-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 %endif
 

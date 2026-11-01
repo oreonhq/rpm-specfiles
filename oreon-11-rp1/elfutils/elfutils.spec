@@ -13,11 +13,11 @@ URL: https://sourceware.org/elfutils/
 Source0: https://sourceware.org/elfutils/ftp/%{version}/elfutils-%{version}.tar.bz2
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: m4
 BuildRequires: patchelf
 BuildRequires: zlib-devel

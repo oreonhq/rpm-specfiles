@@ -14,10 +14,10 @@ Source0: https://github.com/besser82/libxcrypt/releases/download/v%{version}/lib
 Patch0: libxcrypt-gost-const.patch
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: perl
 %endif
 

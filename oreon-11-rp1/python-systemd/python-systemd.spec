@@ -14,9 +14,9 @@ Source0: https://files.pythonhosted.org/packages/10/9e/ab4458e00367223bda2dd7ccf
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: oreon-rpm-macros-python
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: python3-devel
 BuildRequires: python3-build

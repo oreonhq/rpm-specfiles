@@ -13,10 +13,10 @@ URL: https://www.gnu.org/software/libmicrohttpd/
 Source0: https://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: gnutls-devel
 %endif

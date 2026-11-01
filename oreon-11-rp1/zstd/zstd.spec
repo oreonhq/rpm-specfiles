@@ -13,11 +13,9 @@ URL: https://facebook.github.io/zstd/
 Source0: https://github.com/facebook/zstd/releases/download/v%{version}/zstd-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 Zstandard is a real time compression algorithm, providing high compression ratios.

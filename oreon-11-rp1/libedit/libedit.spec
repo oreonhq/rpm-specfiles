@@ -13,10 +13,10 @@ URL: https://thrysoee.dk/editline/
 Source0: https://thrysoee.dk/editline/libedit-20260512-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: ncurses-devel
 %endif

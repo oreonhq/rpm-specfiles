@@ -18,12 +18,10 @@ Source4: which2.csh
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 which prints the full path of a program found in PATH.

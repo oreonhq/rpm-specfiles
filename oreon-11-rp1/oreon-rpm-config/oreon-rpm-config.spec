@@ -1,4 +1,4 @@
-%global source0_hash 868a9ebb9f6f4d3eeb5f40a564e5723c348f1696b13d8f7500c58b8e751914e8
+%global source0_hash b154b405aae8e92a661805e2eed3c9e0d63403533aa70b556ab52f8836cd3dfd
 %global debug_package %{nil}
 %global rrcdir /usr/lib/rpm/oreon
 

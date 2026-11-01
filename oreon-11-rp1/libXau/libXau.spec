@@ -13,10 +13,10 @@ URL: https://www.x.org/
 Source0: https://www.x.org/releases/individual/lib/libXau-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: xorgproto
 BuildRequires: pkgconf

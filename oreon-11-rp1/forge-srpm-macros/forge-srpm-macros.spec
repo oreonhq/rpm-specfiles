@@ -1,4 +1,4 @@
-%global source0_hash 467386263eb6f9140c9fcd88b7bb0b5709458133a17de9a584db21c1fdc15f00
+%global source0_hash 0efb8775869956fd4ee1845a5f99e60bb0d18a47c09d85f992db36f438b906a0
 %global debug_package %{nil}
 
 Name: forge-srpm-macros

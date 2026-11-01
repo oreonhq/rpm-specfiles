@@ -13,11 +13,9 @@ URL: https://www.gnu.org/software/coreutils/
 Source0: https://ftp.gnu.org/gnu/coreutils/coreutils-9.12.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 These are the GNU core utilities. This package is the union of the GNU fileutils, sh-utils, and textutils packages.

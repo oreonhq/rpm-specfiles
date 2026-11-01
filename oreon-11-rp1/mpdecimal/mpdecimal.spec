@@ -13,11 +13,9 @@ URL: https://www.bytereef.org/mpdecimal/
 Source0: https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 libmpdec is a library for arbitrary precision decimal floating point arithmetic.

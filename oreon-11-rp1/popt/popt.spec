@@ -13,11 +13,9 @@ URL: https://github.com/rpm-software-management/popt
 Source0: https://ftp.osuosl.org/pub/rpm/popt/releases/popt-1.x/popt-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 popt is a C library for parsing command line parameters.

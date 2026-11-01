@@ -14,11 +14,9 @@ Source0: https://ftp.gnu.org/gnu/gmp/gmp-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: m4
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 GNU MP is a library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating point numbers. It has a rich set of functions, and the functions have a regular interface.

@@ -13,11 +13,9 @@ URL: https://www.gnu.org/software/sed/
 Source0: https://ftp.gnu.org/gnu/sed/sed-4.10.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This is the GNU implementation of sed, the Unix stream editor.

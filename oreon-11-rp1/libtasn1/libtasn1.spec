@@ -13,10 +13,10 @@ URL: https://www.gnu.org/software/libtasn1/
 Source0: https://ftp.gnu.org/gnu/libtasn1/libtasn1-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 %endif
 

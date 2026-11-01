@@ -13,11 +13,9 @@ URL: https://sourceware.org/libffi/
 Source0: https://github.com/libffi/libffi/releases/download/v%{version}/libffi-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 libffi is a portable foreign function interface library.

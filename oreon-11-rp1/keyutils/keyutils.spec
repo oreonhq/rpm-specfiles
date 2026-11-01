@@ -16,11 +16,11 @@ URL: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git
 Source0: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/v%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 %endif
 

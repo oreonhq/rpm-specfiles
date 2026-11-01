@@ -13,9 +13,9 @@ URL: https://github.com/json-c/json-c
 Source0: https://s3.amazonaws.com/json-c_releases/releases/json-c-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: python3

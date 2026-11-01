@@ -18,11 +18,10 @@ Provides: gnupg = %{version}-%{release}
 Provides: gpg = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+BuildRequires: patchelf
 BuildRequires: libgpg-error-devel
 BuildRequires: libgcrypt-devel
 BuildRequires: libassuan-devel
@@ -33,7 +32,8 @@ BuildRequires: bzip2-devel
 BuildRequires: readline-devel
 BuildRequires: sqlite-devel
 BuildRequires: gnutls-devel
-BuildRequires: patchelf
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: gnupg2
 %endif
 
 %description

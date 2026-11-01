@@ -13,10 +13,10 @@ URL: https://gitlab.gnome.org/GNOME/libxml2
 Source0: https://download.gnome.org/sources/libxml2/2.15/libxml2-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: pkgconf
 BuildRequires: zlib-devel
 BuildRequires: python3

@@ -13,10 +13,10 @@ URL: https://github.com/linux-integrity/ima-evm-utils
 Source0: https://github.com/linux-integrity/ima-evm-utils/releases/download/v%{version}/ima-evm-utils-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: patchelf
 BuildRequires: autoconf
 BuildRequires: automake

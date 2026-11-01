@@ -15,10 +15,10 @@ Obsoletes: libacl < 3
 Provides: libacl = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: libattr-devel
 %endif
 

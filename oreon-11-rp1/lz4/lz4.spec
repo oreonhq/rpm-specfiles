@@ -13,11 +13,9 @@ URL: https://lz4.org/
 Source0: https://github.com/lz4/lz4/releases/download/v%{version}/lz4-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 LZ4 is a lossless compression algorithm, providing compression speed at 400 MB/s per core.

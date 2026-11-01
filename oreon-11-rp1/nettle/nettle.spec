@@ -13,10 +13,10 @@ URL: https://www.lysator.liu.se/~nisse/nettle/
 Source0: https://ftp.gnu.org/gnu/nettle/nettle-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: m4
 BuildRequires: patchelf
 BuildRequires: gmp-devel

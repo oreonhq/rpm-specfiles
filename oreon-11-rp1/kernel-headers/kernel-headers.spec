@@ -13,10 +13,8 @@ URL: https://kernel.org/
 Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: make
-%endif
 
 %description
 The Linux kernel is the core of any Linux operating system. It manages hardware, system resources, and provides the fundamental services for all other software.

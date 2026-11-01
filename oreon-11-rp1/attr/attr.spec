@@ -15,11 +15,9 @@ Obsoletes: libattr < 3
 Provides: libattr = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 attr is a set of tools for manipulating filesystem extended attributes.

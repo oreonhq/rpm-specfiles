@@ -15,11 +15,11 @@ URL: https://cmake.org/
 Source0: https://github.com/Kitware/CMake/releases/download/v%{version}/cmake-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: openssl-devel
 BuildRequires: libuv-devel
 BuildRequires: patchelf

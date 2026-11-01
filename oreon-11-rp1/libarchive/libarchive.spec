@@ -13,9 +13,9 @@ URL: https://www.libarchive.org/
 Source0: https://github.com/libarchive/libarchive/releases/download/v%{version}/libarchive-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: pkgconf

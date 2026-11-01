@@ -35,11 +35,9 @@ Patch20: https://ftp.gnu.org/gnu/bash/bash-5.3-patches/bash53-020
 BuildRequires: oreon-rpm-macros
 BuildRequires: readline-devel
 BuildRequires: ncurses-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
-%endif
 
 %description
 This is GNU Bash, version 5.3. Bash is the GNU Project's Bourne Again SHell, a complete implementation of the POSIX shell spec, but also with interactive command line editing, job control on architectures that support it, csh-like features such as history substitution and brace expansion, and a slew of other features.
