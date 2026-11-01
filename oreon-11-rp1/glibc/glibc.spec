@@ -6,7 +6,7 @@
 
 Name: glibc
 Version: 2.44
-Release: 2%{?dist}
+Release: 3%{?dist}
 Provides: rtld(GNU_HASH)
 Summary: GNU C Library
 License: LGPL-2.1-or-later
@@ -37,6 +37,16 @@ Requires: glibc%{?_isa} = %{version}-%{release}
 The GNU C Library is the standard system C library for all GNU systems, and is an important part of what makes up a GNU system. It provides the system API for all programs written in C and C-compatible languages such as C++ and Objective C; the runtime facilities of other programming languages use the C library to access the underlying operating system.
 
 In GNU/Linux systems, the C library works with the Linux kernel to implement the operating system behavior seen by user applications.
+
+%package minimal-langpack
+Summary: Minimal language packs for glibc
+Requires: glibc%{?_isa} = %{version}-%{release}
+Provides: glibc-langpack = %{version}-%{release}
+
+%description minimal-langpack
+C, POSIX, and C.UTF-8 only. This build does not ship other locales.
+
+%files minimal-langpack
 
 %prep
 %oreon_sha256

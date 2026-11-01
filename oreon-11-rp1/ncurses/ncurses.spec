@@ -6,7 +6,7 @@
 
 Name: ncurses
 Version: 6.6
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: ncurses (new curses)
 License: MIT
 URL: https://invisible-island.net/ncurses/
@@ -50,6 +50,28 @@ The ncurses (new curses) library is a free software emulation of curses in Syste
 %install
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.a %{buildroot}%{_libdir}/*.la
+
+mkdir -p %{_builddir}/ncurses-tinfo
+cd %{_builddir}/ncurses-tinfo
+CFLAGS='%{_oreon_cflags}' LDFLAGS='%{_oreon_ldflags}' \
+  %{_builddir}/ncurses-%{version}/configure \
+  --prefix=%{_prefix} \
+  --libdir=%{_libdir} \
+  --with-shared \
+  --without-normal \
+  --without-debug \
+  --without-cxx \
+  --without-ada \
+  --without-manpages \
+  --without-progs \
+  --without-tests \
+  --with-termlib=tinfo \
+  --disable-widec
+make -j%{?_smp_build_ncpus}
+mkdir -p %{_builddir}/ncurses-tinfo-root
+make install.libs DESTDIR=%{_builddir}/ncurses-tinfo-root
+cp -a %{_builddir}/ncurses-tinfo-root%{_libdir}/libtinfo.so* %{buildroot}%{_libdir}/
+cd %{_builddir}/ncurses-%{version}
 
 %oreon_filelist_devel
 

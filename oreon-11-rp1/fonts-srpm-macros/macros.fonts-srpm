@@ -1,0 +1,119 @@
+# Copyright © 2008-2019 Nicolas Mailhot <nim@fedoraproject.org>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+# RPM macros for fonts packages.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+## Default directories
+
+# Font installation directory root
+%_fontbasedir            /usr/share/fonts
+
+# Master fontconfig configuration directory
+# Only needed to avoid a circular directory dependency with the fontconfig
+# package — you should *not* use this in fonts packages
+%_fontconfig_masterdir   /etc/fonts
+
+# Fontconfig directory for active configuration snippets
+%_fontconfig_confdir     /etc/fonts/conf.d
+
+# Fontconfig configuration template directory
+# Templates are activated by symlinking in _fontconfig_confdir
+%_fontconfig_templatedir /usr/share/fontconfig/conf.avail
+
+# Default contact in font appstream files
+# Override in your spec file if it does not apply
+%fontcontact             fonts@lists.fedoraproject.org
+
+# Default org in font appstream files
+# Override in your spec file if it does not apply
+%fontorg                 org.fedoraproject
+
+# Sanitize a font family name that can then serve as rpm package name
+# Mandatory parameter: a font family name
+%fontrpmname() %{lua:
+local fonts = require "fedora.srpm.fonts"
+print(fonts.rpmname(rpm.expand("%1")))
+}
+
+# Computes rpm variables associated with a font sub(package)
+# There should be no reason to call this macro directly. Arguments:
+# -z <number>         read the zth block of definitions, for example
+#                     %{fontfamily<number>}
+# -a                  process all blocks in one go, instead of using separate
+#                     -z calls
+# -v                  be verbose
+# -f "<shell globs>"  font files to include. Alternatively, set %{fonts<number>}
+# -F "<shell globs>"  font files to exclude. Alternatively, set %{fontsex<number>}
+# -c "<shell globs>"  fontconfig files to include. Alternatively, set %{fontconfs<number>}
+# -C "<shell globs>"  fontconfig files to exclude. Alternatively, set %{fontconfsex<number>}
+# -s "<shell globs>"  font appstream files to include. Alternatively, set %{fontappstreams<number>}
+# -S "<shell globs>"  font appstream files to exclude. Alternatively, set %{fontappstreamsex<number>}
+# -d "<shell globs>"  documentation files to include. Alternatively, set %{fontdocs<number>}
+# -D "<shell globs>"  documentation files to exclude. Alternatively, set %{fontdocsex<number>}
+# -l "<shell globs>"  licensing files to include. Alternatively, set %{fontlicenses<number>}
+# -L "<shell globs>"  licensing files to exclude. Alternatively, set %{fontlicensesex<number>}
+%fontenv(z:vf:F:c:C:s:S:d:D:l:L:) %{lua:
+local      fonts = require "fedora.srpm.fonts"
+local     suffix =  rpm.expand("%{?-z*}")
+local    verbose = (rpm.expand("%{-v}") ~= "")
+local globvalues = {}
+for g,_ in pairs(fonts.globargs) do
+  globvalues[g] = rpm.expand("%{?-" .. fonts.globargs[g] .. "*}")
+end
+fonts.env(suffix, verbose, globvalues)
+}
+
+# Create a font (sub)package header. Arguments:
+# -z <number>         read the zth block of definitions, for example
+#                     %{fontfamily<number>}
+# -a                  process all blocks in one go, instead of using separate
+#                     -z calls
+# -v                  be verbose
+# -m                  force main header creation
+# -s                  force sub header creation
+#                     by itself the macro assumes the zero or nil suffix block
+#                     corresponds to the main package header
+%fontpkg(z:avms) %{lua:
+local      fonts =  require "fedora.srpm.fonts"
+local     suffix =  rpm.expand("%{?-z*}")
+local processall = (rpm.expand("%{-a}") ~= "") and (rpm.expand("%{-z}") == "")
+local    verbose = (rpm.expand("%{-v}") ~= "")
+local  forcemain = (rpm.expand("%{-m}") ~= "")
+local   forcesub = (rpm.expand("%{-s}") ~= "")
+fonts.pkg(forcemain, forcesub, suffix, processall, verbose)
+}
+
+# Create a font (sub)metapackage header. Optional arguments:
+# -n <name>       use <name> as metapackage name
+# -s <variable>   use the content of <variable> as metapackage summary
+# -d <variable>   use the content of <variable> as metapackage description
+# -z "<numbers>"  restrict metapackaging to <numbers> comma-separated list of
+#                 font package suffixes
+%fontmetapkg(n:s:d:z:) %{lua:
+local        fonts = require "fedora.srpm.fonts"
+local         name = rpm.expand("%{?-n*}")
+local      summary = rpm.expand("%{?-s*}")
+if (summary ~= "") then
+           summary = "%{" .. summary .. "}"
+end
+local  description = rpm.expand("%{?-d*}")
+if (description ~= "") then
+       description = "%{" .. description .. "}"
+end
+local     suffixes = rpm.expand("%{?-z*}")
+fonts.metapkg(name, summary, description, suffixes)
+}

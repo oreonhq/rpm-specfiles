@@ -6,7 +6,7 @@
 
 Name: rpm
 Version: 6.0.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: RPM package manager
 License: GPL-2.0-or-later
 URL: https://rpm.org/
@@ -59,6 +59,32 @@ Requires: rpm%{?_isa} = %{version}-%{release}
 
 %description devel
 RPM package manager libraries and tools.
+
+%package build
+Summary: Scripts and programs used to build RPM packages
+Requires: rpm = %{version}-%{release}
+Requires: elfutils
+Requires: binutils
+Requires: findutils
+Requires: sed
+Requires: grep
+Requires: gawk
+Requires: diffutils
+Requires: file
+Requires: patch
+Requires: tar
+Requires: unzip
+Requires: gzip
+Requires: bzip2
+Requires: cpio
+Requires: xz
+Requires: zstd
+Requires: debugedit
+Requires: pkgconf
+Requires: system-rpm-config
+
+%description build
+rpmbuild and the scripts it runs.
 
 %prep
 %oreon_sha256
@@ -139,8 +165,41 @@ main.write_text(text + ("\n" if text else ""))
 text = "\n".join(keep)
 devel.write_text(text + ("\n" if text else ""))
 PY
+python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-build.files << 'PY'
+import os
+import sys
+from pathlib import Path
+main, build = Path(sys.argv[1]), Path(sys.argv[2])
+bins = {"rpmbuild", "gendiff", "rpmspec", "rpmlua"}
+mans = (
+    "gendiff.1", "rpmbuild.1", "rpmdeps.1", "rpmspec.1", "rpmlua.1",
+    "rpm-setup-autosign.1", "rpmuncompress.1", "rpmbuild-config.5",
+)
+names = (
+    "find-lang.sh", "find-debuginfo.sh", "rpmuncompress", "rpmdump",
+    "rpm-setup-autosign",
+)
+keep, moved = [], []
+for line in main.read_text().splitlines():
+    path = line.split()[-1] if line.startswith("%") else line
+    path = path.strip('"')
+    base = os.path.basename(path.rstrip("*"))
+    take = base in bins or base.startswith(mans) or base.startswith(("brp-", "check-"))
+    take = take or base in names or base.endswith((".prov", ".req"))
+    take = take or "/rpm/fileattrs/" in path or "/fileattrs/" in path
+    if "/rpm/" in path and ("provides" in base or "requires" in base or "deps" in base):
+        take = True
+    if take:
+        moved.append(line)
+    else:
+        keep.append(line)
+main.write_text("\n".join(keep) + ("\n" if keep else ""))
+build.write_text("\n".join(moved) + ("\n" if moved else ""))
+PY
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
 
 %files devel -f %{_builddir}/%{name}-devel.files
+
+%files build -f %{_builddir}/%{name}-build.files

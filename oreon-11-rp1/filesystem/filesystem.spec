@@ -2,15 +2,25 @@
 
 Name: filesystem
 Version: 11
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Base directory layout
 License: MIT
 URL: https://oreonhq.com/
+Source1: sbin-filenames
+Source2: filesystem.attr
+Source3: filesystem.req
+Source4: macros.filesystem
 Provides: filesystem(merged-sbin)
 Provides: filesystem(unmerged-sbin-symlinks)
 
 %description
 The directories and compatibility symlinks every other package installs into.
+
+%package srpm-macros
+Summary: RPM macros for the sbin merge
+
+%description srpm-macros
+Macros and the file attribute generator for the sbin merge.
 
 %pretrans -p <lua>
 posix.mkdir("/usr")
@@ -43,6 +53,14 @@ posix.chmod("/var/tmp", 01777)
 :
 
 %install
+mkdir -p %{buildroot}%{_datadir}/filesystem
+mkdir -p %{buildroot}%{_fileattrsdir}
+mkdir -p %{buildroot}%{_rpmconfigdir}
+mkdir -p %{buildroot}%{_rpmmacrodir}
+install -m 644 %{SOURCE1} %{buildroot}%{_datadir}/filesystem/sbin-filenames
+install -m 644 %{SOURCE2} %{buildroot}%{_fileattrsdir}/filesystem.attr
+install -m 644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/filesystem.req
+install -m 644 %{SOURCE4} %{buildroot}%{_rpmmacrodir}/macros.filesystem
 mkdir -p %{buildroot}/usr/bin
 mkdir -p %{buildroot}/usr/lib
 mkdir -p %{buildroot}/usr/lib64
@@ -94,3 +112,9 @@ ln -snf usr/lib64 %{buildroot}/lib64
 %dir /boot
 %dir /home
 %attr(550,root,root) /root
+
+%files srpm-macros
+%{_datadir}/filesystem/sbin-filenames
+%{_fileattrsdir}/filesystem.attr
+%{_rpmconfigdir}/filesystem.req
+%{_rpmmacrodir}/macros.filesystem

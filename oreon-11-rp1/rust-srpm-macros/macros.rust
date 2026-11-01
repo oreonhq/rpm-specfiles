@@ -1,0 +1,45 @@
+# __rustc: path to the default rustc executable
+%__rustc /usr/bin/rustc
+
+# __rustdoc: path to the default rustdoc executable
+%__rustdoc /usr/bin/rustdoc
+
+# rustflags_opt_level: default optimization level
+#
+# It corresponds to the "-Copt-level" rustc command line option.
+%rustflags_opt_level 3
+
+# rustflags_debuginfo: default verbosity of debug information
+#
+# It corresponds to the "-Cdebuginfo" rustc command line option.
+# In some cases, it might be required to override this macro with "1" or even
+# "0", if memory usage gets too high during builds on some resource-constrained
+# architectures (most likely on 32-bit architectures), which will however
+# reduce the quality of the produced debug symbols.
+%rustflags_debuginfo 2
+
+# rustflags_codegen_units: default number of parallel code generation units
+#
+# The default value of "1" results in generation of better code, but comes at
+# the cost of longer build times.
+%rustflags_codegen_units 1
+
+# build_rustflags: default compiler flags for rustc (RUSTFLAGS)
+#
+# -Copt-level: set optimization level (default: highest optimization level)
+# -Cdebuginfo: set debuginfo verbosity (default: full debug information)
+# -Ccodegen-units: set number of parallel code generation units (default: 1)
+# -Cforce-frame-pointers: force inclusion of frame pointers (default: enabled
+#       on x86_64 and aarch64 on Fedora 37+)
+#
+# ref. https://doc.rust-lang.org/rustc/codegen-options/index.html
+%build_rustflags %{shrink:
+  -Copt-level=%rustflags_opt_level
+  -Cdebuginfo=%rustflags_debuginfo
+  -Ccodegen-units=%rustflags_codegen_units
+  -Cstrip=none
+  %{expr:0%{?_include_frame_pointers} && ("%{_arch}" != "ppc64le" && "%{_arch}" != "s390x" && "%{_arch}" != "i386") ? "-Cforce-frame-pointers=yes" : ""}
+  %[0%{?_package_note_status} ? "-Clink-arg=%_package_note_flags" : ""]
+  --cap-lints=warn
+}
+
