@@ -65,6 +65,7 @@ Requires: clang%{?_isa} = %{version}-%{release}
 Requires: lld%{?_isa} = %{version}-%{release}
 Requires: llvm-devel%{?_isa} = %{version}-%{release}
 Provides: lld-devel = %{version}-%{release}
+Obsoletes: lld-devel < %{version}-%{release}
 Provides: cmake(Clang)
 Provides: cmake(LLD)
 
@@ -75,6 +76,7 @@ Headers and CMake modules for Clang and LLD.
 Summary: The LLVM linker
 Requires: llvm%{?_isa} = %{version}-%{release}
 Provides: lld-libs = %{version}-%{release}
+Obsoletes: lld-libs < %{version}-%{release}
 
 %description -n lld
 LLD is the LLVM linker, supporting ELF, COFF, Mach-O and WebAssembly.

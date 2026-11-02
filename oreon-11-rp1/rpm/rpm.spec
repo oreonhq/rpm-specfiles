@@ -1,12 +1,12 @@
-%global source0_hash 66a4998e020d7354a804fde83801a9d7157b20f5e08198f7fde69d3a0ab683fe
+%global source0_hash f520810d27c74bf1c5d8b8885845c61e0c845f62d33e68b02e020633a8b62fe3
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: rpm
-Version: 6.0.2
-Release: 3%{?dist}
+Version: 6.1.0
+Release: 1%{?dist}
 Summary: RPM package manager
 License: GPL-2.0-or-later
 URL: https://rpm.org/

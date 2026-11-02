@@ -6,7 +6,7 @@
 
 Name: python3-jinja2
 Version: 3.1.6
-Release: 8%{?dist}
+Release: 10%{?dist}
 Summary: Template engine for Python
 License: BSD-3-Clause
 URL: https://github.com/pallets/jinja

@@ -6,7 +6,7 @@
 
 Name: dnf5
 Version: 5.4.6.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Command-line package manager
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://github.com/rpm-software-management/dnf5
@@ -54,6 +54,9 @@ dnf5daemon D-Bus service.
 Summary: Development files for dnf5
 Requires: dnf5%{?_isa} = %{version}-%{release}
 Provides: libdnf5-devel = %{version}-%{release}
+Obsoletes: libdnf5-devel < %{version}-%{release}
+Provides: libdnf5-cli-devel = %{version}-%{release}
+Obsoletes: libdnf5-cli-devel < %{version}-%{release}
 Provides: pkgconfig(libdnf5)
 Provides: pkgconfig(libdnf5-cli)
 

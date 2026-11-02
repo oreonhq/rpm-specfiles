@@ -1,12 +1,12 @@
-%global source0_hash ee55d3edf80167e48ea11a923c7386f4669df67d7994554387f84e7d8b0a2bf0
+%global source0_hash 2e9ad7dd851bf45fab9f75cbff4cb493fee9979e8d8c7c9c3ee119022518edd6
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: python3-markupsafe
-Version: 3.0.2
-Release: 8%{?dist}
+Version: 3.0.4
+Release: 1%{?dist}
 Summary: Safe string implementation for Python
 License: BSD-3-Clause
 URL: https://github.com/pallets/markupsafe

@@ -1,11 +1,11 @@
-%global source0_hash 7395b34af0d7a3fa13d2db1ad0ca0d8cbcae6695c2ecd62c6204606184bfd92b
+%global source0_hash ce7ebdc9789ae51f3e7d26b5408de7395ddea0950d5d73568ed9565f5fae4d4c
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: librepo
-Version: 1.19.0
+Version: 1.22.0
 Release: 1%{?dist}
 Summary: Repodata download library
 License: LGPL-2.1-or-later

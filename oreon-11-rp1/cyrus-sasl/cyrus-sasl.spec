@@ -2,7 +2,7 @@
 
 Name: cyrus-sasl
 Version: 2.1.28
-Release: 3%{?dist}
+Release: 37%{?dist}
 Summary: Cyrus SASL authentication library
 License: BSD-3-Clause
 URL: https://www.cyrusimap.org/sasl/

@@ -6,7 +6,7 @@
 
 Name: libsemanage
 Version: 3.11
-Release: 2%{?dist}
+Release: 4%{?dist}
 Summary: SELinux policy management library
 License: LGPL-2.1-or-later
 URL: https://github.com/SELinuxProject/selinux

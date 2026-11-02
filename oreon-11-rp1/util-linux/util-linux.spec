@@ -1,18 +1,22 @@
-%global source0_hash e596083744e746be7d2823b62b43f4418dd7bf56303b4dc09e6fe8112fe3d7ed
+%global source0_hash fbd62a100ab7bb8746ba0661255c3c48185b1e9021507c624da01fbc696330ec
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: util-linux
-Version: 2.41.6
-Release: 2%{?dist}
+Version: 2.42.4
+Release: 1%{?dist}
 Summary: Low-level system utilities and libraries
 License: GPL-2.0-or-later
 URL: https://github.com/util-linux/util-linux
-Source0: https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/util-linux-%{version}.tar.xz
+Source0: https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v%{lua:print((rpm.expand('%{version}'):match('^%d+%.%d+')))}/util-linux-%{version}.tar.xz
+Source1: util-linux-%{version}.tar.sign
+Source2: util-linux-key.asc
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: gnupg2
+BuildRequires: xz
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
@@ -171,6 +175,9 @@ util-linux provides libmount, libblkid, libfdisk and libsmartcols.
 
 %prep
 %oreon_sha256
+xz -dc %{SOURCE0} > %{_builddir}/util-linux-%{version}.tar
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{_builddir}/util-linux-%{version}.tar
+rm -f %{_builddir}/util-linux-%{version}.tar
 %autosetup -n util-linux-%{version} -p1
 
 %build

@@ -1,12 +1,12 @@
-%global source0_hash ed4f80c4106a8abaab09e4094ed8d712dedd376699815bc4957c5cf690cdc53d
+%global source0_hash c24a81dea8e9f7f3c877618d3812a5293df772abc6b90fad1d34fa62326141bc
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: libcomps
-Version: 0.1.22
-Release: 1%{?dist}
+Version: 0.1.24
+Release: 5%{?dist}
 Summary: Comps XML library
 License: GPL-2.0-or-later
 URL: https://github.com/rpm-software-management/libcomps

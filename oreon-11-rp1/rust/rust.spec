@@ -18,7 +18,7 @@
 
 Name: rust
 Version: 1.99.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: The Rust programming language
 License: (Apache-2.0 OR MIT) AND (Artistic-2.0 AND BSD-3-Clause AND ISC AND MIT AND Unicode-DFS-2016)
 URL: https://www.rust-lang.org/

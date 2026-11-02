@@ -1,18 +1,21 @@
-%global source0_hash fa026f9bb0124f4d6c808f9aef4057aad65e7b35d8ff43951cef0abe06bb9a9a
+%global source0_hash bbc78c46217174655c2b32b138ad119f3ac15f50808b4d0b3a2677a4b1afc950
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: libX11
-Version: 1.8.12
-Release: 2%{?dist}
+Version: 1.8.14
+Release: 1%{?dist}
 Summary: X11 client library
 License: MIT
 URL: https://www.x.org/
 Source0: https://www.x.org/releases/individual/lib/libX11-%{version}.tar.xz
+Source1: libX11-%{version}.tar.xz.sig
+Source2: libX11-key.asc
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
@@ -35,6 +38,7 @@ X11 client library
 
 %prep
 %oreon_sha256
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -n libX11-1.8.12 -p1
 
 %build

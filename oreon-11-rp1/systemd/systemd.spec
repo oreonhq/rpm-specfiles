@@ -1,12 +1,12 @@
-%global source0_hash f9a3f1e21e4dd78717bad0888638954467a55d73cab44a2c7a75c5bed47ef814
+%global source0_hash 100fc873b848b9b0297d8a705e8e2ed326256c8483d9960ee1ffe264c8a5c3e3
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: systemd
-Version: 259.10
-Release: 3%{?dist}
+Version: 262.1
+Release: 1%{?dist}
 Provides: systemd-libs = %{version}-%{release}
 Provides: systemd-libs%{_isa} = %{version}-%{release}
 Obsoletes: systemd-libs < 260
@@ -97,7 +97,6 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dmicrohttpd=enabled \
   -Dlibcurl=enabled \
   -Dlibidn2=enabled \
-  -Dlibiptc=disabled \
   -Dqrencode=disabled \
   -Dgcrypt=enabled \
   -Dgnutls=enabled \
@@ -122,7 +121,6 @@ sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux'
   -Dpasswdqc=disabled \
   -Dpam=%{sd_cyc} \
   -Dsysupdated=enabled \
-  -Dcryptolib=openssl \
   -Ddns-over-tls=openssl \
   -Dnss-mymachines=enabled \
   -Dnss-resolve=enabled \

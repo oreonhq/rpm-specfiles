@@ -5,6 +5,7 @@
 %global debug_package %{nil}
 
 Name: python3-wheel
+Epoch: 1
 Version: 0.48.0
 Release: 1%{?dist}
 Summary: Command line tool for manipulating wheel files

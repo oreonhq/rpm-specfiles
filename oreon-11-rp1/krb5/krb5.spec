@@ -2,7 +2,7 @@
 
 Name: krb5
 Version: 1.22.2
-Release: 2%{?dist}
+Release: 11%{?dist}
 Summary: Kerberos network authentication
 License: MIT
 URL: https://web.mit.edu/kerberos/

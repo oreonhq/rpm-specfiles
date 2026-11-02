@@ -1,11 +1,11 @@
-%global source0_hash 0a06cc9656b10518c50f230ec8f7cf0218530823f6b2f28bf164899f8d569622
+%global source0_hash 95477cc412a5980ebaa3152d5561e35826f550d91cf303d3eb7ad3dad10cb46d
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: libdnf
-Version: 0.75.0
+Version: 0.76.0
 Release: 1%{?dist}
 Summary: DNF library
 License: LGPL-2.1-or-later

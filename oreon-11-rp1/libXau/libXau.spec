@@ -6,7 +6,7 @@
 
 Name: libXau
 Version: 1.0.12
-Release: 1%{?dist}
+Release: 5%{?dist}
 Summary: X11 authorisation library
 License: MIT
 URL: https://www.x.org/

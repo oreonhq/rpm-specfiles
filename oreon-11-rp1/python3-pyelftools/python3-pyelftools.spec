@@ -6,7 +6,7 @@
 
 Name: python3-pyelftools
 Version: 0.33
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: ELF and DWARF parsing library
 License: Unlicense
 URL: https://github.com/eliben/pyelftools

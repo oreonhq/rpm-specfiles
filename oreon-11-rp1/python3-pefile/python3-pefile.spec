@@ -6,7 +6,7 @@
 
 Name: python3-pefile
 Version: 2024.8.26
-Release: 8%{?dist}
+Release: 9%{?dist}
 Summary: Python PE file parser
 License: MIT
 URL: https://github.com/erocarrera/pefile
