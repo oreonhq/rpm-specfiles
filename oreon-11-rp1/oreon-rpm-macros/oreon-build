@@ -378,7 +378,13 @@ files_run() {
         *.so)
           case "$rel" in
             */lib-dynload/*|*/site-packages/*) ;;
-            *) target=$devel_out ;;
+            *)
+              # dev symlinks and ld scripts are devel; a real ELF named
+              # foo-1.2.so (e.g. libelf-0.196.so) is the runtime library
+              if [ -L "$path" ] || ! head -c 4 "$path" | grep -q 'ELF'; then
+                target=$devel_out
+              fi
+              ;;
           esac
           ;;
       esac

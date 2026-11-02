@@ -6,12 +6,14 @@
 
 Name: authselect
 Version: 1.8.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Configures authentication and identity sources
 License: GPL-3.0-or-later
 URL: https://github.com/authselect/authselect
 Source0: https://github.com/authselect/authselect/archive/%{version}/authselect-%{version}.tar.gz
 Provides: authselect-libs = %{version}-%{release}
+Provides: authselect-libs%{?_isa} = %{version}-%{release}
+Obsoletes: authselect-libs < %{version}-%{release}
 Requires: pam
 
 BuildRequires: oreon-rpm-macros

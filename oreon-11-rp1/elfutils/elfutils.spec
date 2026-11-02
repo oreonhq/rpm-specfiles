@@ -6,11 +6,17 @@
 
 Name: elfutils
 Version: 0.196
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: ELF and DWARF library
 License: GPL-2.0-or-later OR LGPL-3.0-or-later
 URL: https://sourceware.org/elfutils/
 Source0: https://sourceware.org/elfutils/ftp/%{version}/elfutils-%{version}.tar.bz2
+Provides: elfutils-libs = %{version}-%{release}
+Provides: elfutils-libs%{?_isa} = %{version}-%{release}
+Obsoletes: elfutils-libs < %{version}-%{release}
+Provides: elfutils-libelf = %{version}-%{release}
+Provides: elfutils-libelf%{?_isa} = %{version}-%{release}
+Obsoletes: elfutils-libelf < %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc

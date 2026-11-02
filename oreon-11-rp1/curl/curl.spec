@@ -1,12 +1,12 @@
-%global source0_hash 40c8cddbcb6cc6251c03dea423a472a6cea4037be654ba5cf5dec6eb2d22ff1d
+%global source0_hash 8dadd7d2536a314f982ad05a651b713f426bf7d02cc2c76cffb9796f2218e6c5
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: curl
-Version: 8.16.0
-Release: 2%{?dist}
+Version: 8.23.0
+Release: 1%{?dist}
 Summary: HTTP client and library
 License: curl
 URL: https://curl.se/

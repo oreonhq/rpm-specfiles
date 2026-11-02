@@ -6,7 +6,7 @@
 
 Name: dbus
 Version: 1.16.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: D-Bus message bus
 License: AFL-2.1 OR GPL-2.0-or-later
 URL: https://www.freedesktop.org/wiki/Software/dbus/
@@ -15,6 +15,7 @@ Source0: https://dbus.freedesktop.org/releases/dbus/dbus-%{version}.tar.xz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: glibc-devel
+BuildRequires: glib2-devel
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf

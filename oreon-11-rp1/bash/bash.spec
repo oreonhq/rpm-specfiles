@@ -6,7 +6,7 @@
 
 Name: bash
 Version: 5.3.20
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: GNU Bash, the GNU Project's Bourne Again SHell
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/bash/
@@ -37,6 +37,8 @@ BuildRequires: readline-devel
 BuildRequires: ncurses-devel
 BuildRequires: gcc
 BuildRequires: glibc-devel
+Provides: /bin/sh
+Provides: /bin/bash
 BuildRequires: make
 
 %description

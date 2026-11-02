@@ -6,7 +6,7 @@
 
 Name: cmake
 Version: 4.1.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Provides: cmake-filesystem = %{version}-%{release}
 Provides: cmake-filesystem(x86-64) = %{version}-%{release}
 Summary: CMake build system
@@ -21,6 +21,7 @@ BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: openssl-devel
 BuildRequires: libuv-devel
+BuildRequires: libcurl-devel
 BuildRequires: patchelf
 
 %description
@@ -34,7 +35,7 @@ CMake is a build system.
 export CFLAGS="%{_oreon_cflags}"
 export CXXFLAGS="%{_oreon_cflags}"
 export LDFLAGS="%{_oreon_ldflags}"
-./bootstrap --prefix=%{_prefix} --parallel=%{_smp_build_ncpus} --system-libuv -- -DCMAKE_USE_OPENSSL=ON -DCMAKE_SKIP_RPATH=ON
+./bootstrap --prefix=%{_prefix} --parallel=%{_smp_build_ncpus} --system-libuv --system-curl -- -DCMAKE_USE_OPENSSL=ON -DCMAKE_SKIP_RPATH=ON
 make %{?_smp_mflags}
 
 %install

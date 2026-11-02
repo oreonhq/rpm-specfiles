@@ -6,7 +6,7 @@
 
 Name: glibc
 Version: 2.44
-Release: 3%{?dist}
+Release: 4%{?dist}
 Provides: rtld(GNU_HASH)
 Summary: GNU C Library
 License: LGPL-2.1-or-later
@@ -30,6 +30,9 @@ In GNU/Linux systems, the C library works with the Linux kernel to implement the
 %package devel
 Summary: GNU C Library
 Requires: glibc%{?_isa} = %{version}-%{release}
+Requires: kernel-headers
+Provides: glibc-headers = %{version}-%{release}
+Provides: glibc-headers%{?_isa} = %{version}-%{release}
 
 %description devel
 The GNU C Library is the standard system C library for all GNU systems, and is an important part of what makes up a GNU system. It provides the system API for all programs written in C and C-compatible languages such as C++ and Objective C; the runtime facilities of other programming languages use the C library to access the underlying operating system.
@@ -75,6 +78,11 @@ make -s -j%{?_smp_build_ncpus}
 cd %{_builddir}/glibc-build
 make -s install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_infodir}/dir
+# C.UTF-8 so lang.sh and tools do not fall back to setlocale warnings
+mkdir -p %{buildroot}%{_prefix}/lib/locale
+I18NPATH=%{_builddir}/glibc-%{version}/localedata \
+  %{buildroot}%{_bindir}/localedef --no-archive --prefix=%{buildroot} \
+  -i C -f %{_builddir}/glibc-%{version}/localedata/charmaps/UTF-8 C.UTF-8
 
 %oreon_filelist_devel
 

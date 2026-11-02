@@ -13,7 +13,7 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -542,7 +542,7 @@ step() {
   name=$1
   shift
   echo "oreon gcc step $name"
-  log=%{_builddir}/gcc-step.log
+  log=%{_tmppath}/oreon-gcc-step.log
   set -o pipefail
   if ! "$@" 2>&1 | tail -n 400 >"$log"; then
     set +o pipefail
@@ -710,7 +710,7 @@ step() {
   name=$1
   shift
   echo "oreon gcc step $name"
-  log=%{_builddir}/gcc-step.log
+  log=%{_tmppath}/oreon-gcc-step.log
   set -o pipefail
   if ! "$@" 2>&1 | tail -n 400 >"$log"; then
     set +o pipefail

@@ -1,0 +1,16 @@
+# An rpm built for another vendor (the fedora-45 bootstrap buildroot) never
+# reads /usr/lib/rpm/oreon/rpmrc, so set optflags from the same table here.
+# macros.oreon-vendor (a link to ../oreon/macros) covers the macros file.
+%optflags %{lua:
+local f = {
+  x86_64 = "%{__global_compiler_flags} -m64 %{__cflags_arch_x86_64} %{__cflags_arch_x86_64_common}",
+  x86_64_v2 = "%{__global_compiler_flags} -m64 -march=x86-64-v2 %{__cflags_arch_x86_64_common}",
+  x86_64_v3 = "%{__global_compiler_flags} -m64 -march=x86-64-v3 %{__cflags_arch_x86_64_common}",
+  x86_64_v4 = "%{__global_compiler_flags} -m64 -march=x86-64-v4 %{__cflags_arch_x86_64_common}",
+  aarch64 = "%{__global_compiler_flags} -mbranch-protection=standard -fasynchronous-unwind-tables -fstack-clash-protection %{_frame_pointers_cflags} %{_frame_pointers_cflags_aarch64}",
+  ppc64le = "%{__global_compiler_flags} -m64 %{__cflags_arch_ppc64le} -fasynchronous-unwind-tables -fstack-clash-protection",
+  s390x = "%{__global_compiler_flags} -m64 %{__cflags_arch_s390x} -fasynchronous-unwind-tables -fstack-clash-protection",
+  riscv64 = "%{__global_compiler_flags} -fasynchronous-unwind-tables %{_frame_pointers_cflags} %{_frame_pointers_cflags_riscv64}",
+}
+print(rpm.expand(f[rpm.expand("%{_target_cpu}")] or "%{__global_compiler_flags}"))
+}

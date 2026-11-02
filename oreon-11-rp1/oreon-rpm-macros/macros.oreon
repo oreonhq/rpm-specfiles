@@ -1,7 +1,7 @@
 %_oreon_helper /usr/libexec/oreon-rpm-macros/oreon-build
 %_oreon_gpgverify /usr/libexec/oreon-rpm-macros/oreon-gpgverify
 
-%_oreon_cflags -O2 -g -pipe -Wall -Werror=format-security -fexceptions -fstack-protector-strong -Wp,-D_FORTIFY_SOURCE=3
+%_oreon_cflags -O2 -g -pipe -Wall -Wformat -Werror=format-security -fexceptions -fstack-protector-strong -Wp,-D_FORTIFY_SOURCE=3
 %_oreon_ldflags -Wl,-z,relro -Wl,-z,now -Wl,--as-needed
 %_oreon_jobs %{?_smp_build_ncpus}%{!?_smp_build_ncpus:1}
 %_oreon_builddir oreon-build
