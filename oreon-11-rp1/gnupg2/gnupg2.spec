@@ -6,7 +6,7 @@
 
 Name: gnupg2
 Version: 2.5.24
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: OpenPGP and S/MIME encryption and signing tool
 License: GPL-3.0-or-later
 URL: https://gnupg.org/
@@ -33,7 +33,7 @@ BuildRequires: readline-devel
 BuildRequires: sqlite-devel
 BuildRequires: gnutls-devel
 %if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: gnupg2
+BuildRequires: sequoia-sqv
 %endif
 
 %description
@@ -43,7 +43,7 @@ and signs data and manages keys for rpm, dnf and the build tooling.
 %prep
 %oreon_sha256
 %if %{without bootstrap} && !0%{?bootstrap}
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
+sqv --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %endif
 %autosetup -n gnupg-%{version} -p1
 

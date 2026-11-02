@@ -6,7 +6,7 @@
 
 Name: mpc
 Version: 1.4.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: GNU MPC, a complex floating-point library
 License: LGPL-3.0-or-later
 URL: https://www.multiprecision.org/mpc/
@@ -19,6 +19,10 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 
+Obsoletes: libmpc < 1.5
+Provides: libmpc = %{version}-%{release}
+Provides: libmpc%{?_isa} = %{version}-%{release}
+
 %description
 GNU MPC is a complex floating-point library with exact rounding. It is based on the GNU MPFR floating-point library (http://www.mpfr.org/), which is itself based on the GNU MP library (http://gmplib.org/).
 
@@ -26,6 +30,7 @@ GNU MPC is a complex floating-point library with exact rounding. It is based on 
 Summary: GNU MPC, a complex floating-point library
 Requires: mpc%{?_isa} = %{version}-%{release}
 Provides: pkgconfig(mpc)
+Obsoletes: libmpc-devel < 1.5
 Provides: libmpc-devel = %{version}-%{release}
 Provides: libmpc-devel%{?_isa} = %{version}-%{release}
 

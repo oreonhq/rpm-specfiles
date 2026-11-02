@@ -6,7 +6,7 @@
 
 Name: curl
 Version: 8.23.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: HTTP client and library
 License: curl
 URL: https://curl.se/
@@ -33,6 +33,12 @@ BuildRequires: patchelf
 
 Obsoletes: libcurl < 9
 Provides: libcurl = %{version}-%{release}
+Provides: libcurl%{?_isa} = %{version}-%{release}
+Obsoletes: libcurl-minimal < 9
+Provides: libcurl-minimal = %{version}-%{release}
+Provides: libcurl-minimal%{?_isa} = %{version}-%{release}
+Obsoletes: curl-minimal < 9
+Provides: curl-minimal = %{version}-%{release}
 
 %description
 curl is an HTTP client and libcurl.

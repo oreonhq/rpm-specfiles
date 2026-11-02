@@ -6,7 +6,7 @@
 
 Name: zstd
 Version: 1.5.7
-Release: 2%{?dist}
+Release: 7%{?dist}
 Summary: Zstandard compression
 License: BSD-3-Clause OR GPL-2.0-only
 URL: https://facebook.github.io/zstd/
@@ -17,12 +17,18 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 
+Obsoletes: libzstd < 1.6
+Provides: libzstd = %{version}-%{release}
+Provides: libzstd%{?_isa} = %{version}-%{release}
+
 %description
 Zstandard is a real time compression algorithm, providing high compression ratios.
 
 %package devel
 Summary: Zstandard compression
 Requires: zstd%{?_isa} = %{version}-%{release}
+Obsoletes: libzstd-devel < 1.6
+Obsoletes: libzstd-static < 1.6
 Provides: libzstd-devel = %{version}-%{release}
 Provides: libzstd-devel%{?_isa} = %{version}-%{release}
 Provides: pkgconfig(libzstd)

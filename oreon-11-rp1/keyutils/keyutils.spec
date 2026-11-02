@@ -6,7 +6,7 @@
 
 Name: keyutils
 Version: 1.6.3
-Release: 3%{?dist}
+Release: 9%{?dist}
 Provides: keyutils-libs = %{version}-%{release}
 Provides: keyutils-libs%{_isa} = %{version}-%{release}
 Obsoletes: keyutils-libs < 1.6.4
@@ -28,6 +28,7 @@ keyutils is the Linux key management library.
 %package devel
 Summary: Linux key management library
 Requires: keyutils%{?_isa} = %{version}-%{release}
+Obsoletes: keyutils-libs-devel < 1.6.4
 Provides: keyutils-libs-devel = %{version}-%{release}
 Provides: keyutils-libs-devel%{?_isa} = %{version}-%{release}
 
