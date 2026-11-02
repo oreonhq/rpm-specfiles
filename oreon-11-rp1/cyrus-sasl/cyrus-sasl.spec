@@ -2,7 +2,7 @@
 
 Name: cyrus-sasl
 Version: 2.1.28
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Cyrus SASL authentication library
 License: BSD-3-Clause
 URL: https://www.cyrusimap.org/sasl/
@@ -31,7 +31,7 @@ Headers and the pkgconfig file for Cyrus SASL.
 
 %build
 # md5.c uses K&R prototypes rejected by C23
-%global _oreon_cflags %{_oreon_cflags} -std=gnu17
+%global _oreon_cflags %{_oreon_cflags} -std=gnu17 -include time.h
 %oreon_configure --disable-static --with-openssl --enable-gssapi
 %oreon_make
 

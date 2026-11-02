@@ -6,7 +6,7 @@
 
 Name: tzdata
 Version: 2026f
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Time zone database
 License: LicenseRef-Public-Domain AND BSD-3-Clause
 URL: https://www.iana.org/time-zones
@@ -22,6 +22,7 @@ BuildRequires: gnupg2
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
+BuildRequires: gawk
 
 %description
 The IANA time zone database, compiled for use under /usr/share/zoneinfo.
@@ -35,7 +36,7 @@ echo '5a18da01393679ef2559214dc687563f7f3d05691f6f58b7fbc0166f3e796cd6  %{SOURCE
 tar xzf %{SOURCE3}
 
 %build
-make -s VERSION=%{version} CFLAGS="%{_oreon_cflags}" LDFLAGS="%{_oreon_ldflags}" zic
+make -s VERSION=%{version} CFLAGS="%{_oreon_cflags}" LDFLAGS="%{_oreon_ldflags}" zic tzdata.zi
 
 %install
 zd=%{buildroot}%{_datadir}/zoneinfo

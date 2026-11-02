@@ -1,11 +1,12 @@
-%global source0_hash b6a5f44b7eb69e3fa35dbf15524405b44837a481d43d81daddde3ff21fcbb8e9
+%global source0_hash 50c17baf54cb008f6ce42d50deb4b28050a1aad711636cabd4b241c7e90cc2fd
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: openssl
-Version: 3.6.0
+Epoch: 1
+Version: 4.1.0
 Release: 1%{?dist}
 Summary: OpenSSL TLS library
 License: Apache-2.0
@@ -21,12 +22,16 @@ BuildRequires: zlib-devel
 BuildRequires: python3
 BuildRequires: patchelf
 
+Provides: openssl-libs = %{epoch}:%{version}-%{release}
+Provides: openssl-libs%{?_isa} = %{epoch}:%{version}-%{release}
+Obsoletes: openssl-libs < %{epoch}:%{version}-%{release}
+
 %description
 OpenSSL is a TLS and crypto library.
 
 %package devel
 Summary: OpenSSL TLS library
-Requires: openssl%{?_isa} = %{version}-%{release}
+Requires: openssl%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description devel
 OpenSSL is a TLS and crypto library.
@@ -36,6 +41,7 @@ OpenSSL is a TLS and crypto library.
 %autosetup -p1
 
 %build
+CFLAGS='%{build_cflags}' CXXFLAGS='%{build_cxxflags}' LDFLAGS='%{build_ldflags}' \
 ./Configure \
   --prefix=%{_prefix} \
   --libdir=%{_lib} \

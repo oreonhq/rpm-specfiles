@@ -1,7 +1,7 @@
-%global source0_hash c065f04aad42737aebd60b2fe4939704ac844266bc0aeaa1609f0cad987be516
+%global source0_hash aad731aa22118ff327b9b4ddfc4b6f18ef9476586205da88a532e90940b523d2
 
 Name: openldap
-Version: 2.6.10
+Version: 2.7.2
 Release: 1%{?dist}
 Summary: OpenLDAP libraries and server
 License: OLDAP-2.8

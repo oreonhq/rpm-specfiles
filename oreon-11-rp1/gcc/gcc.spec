@@ -13,7 +13,7 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -542,16 +542,13 @@ step() {
   name=$1
   shift
   echo "oreon gcc step $name"
-  log=%{_tmppath}/oreon-gcc-step.log
   set -o pipefail
-  if ! "$@" 2>&1 | tail -n 400 >"$log"; then
+  if ! "$@" 2>&1 | tail -n 400; then
     set +o pipefail
     echo "oreon gcc step $name failed"
-    cat "$log"
     exit 1
   fi
   set +o pipefail
-  rm -f "$log"
 }
 
 common() {
@@ -710,16 +707,13 @@ step() {
   name=$1
   shift
   echo "oreon gcc step $name"
-  log=%{_tmppath}/oreon-gcc-step.log
   set -o pipefail
-  if ! "$@" 2>&1 | tail -n 400 >"$log"; then
+  if ! "$@" 2>&1 | tail -n 400; then
     set +o pipefail
     echo "oreon gcc step $name failed"
-    cat "$log"
     exit 1
   fi
   set +o pipefail
-  rm -f "$log"
 }
 cd %{_builddir}/gcc-build
 step host-install make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"

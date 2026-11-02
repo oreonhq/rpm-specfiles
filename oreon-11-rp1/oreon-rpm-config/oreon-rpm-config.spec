@@ -4,7 +4,7 @@
 
 Name: oreon-rpm-config
 Version: 345
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Oreon rpm build configuration
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
 URL: https://github.com/oreonhq/rpm-specfiles
@@ -105,7 +105,9 @@ install -p -m 755 -t %{buildroot}%{rrcdir} find-provides find-requires
 
 mkdir -p %{buildroot}%{_rpmconfigdir}/macros.d
 install -p -m 644 -t %{buildroot}%{_rpmconfigdir}/macros.d macros.*
-ln -s ../oreon/macros %{buildroot}%{_rpmconfigdir}/macros.d/macros.oreon-vendor
+mkdir -p %{buildroot}%{_sysconfdir}/rpm
+ln -s %{_rpmconfigdir}/oreon/macros %{buildroot}%{_sysconfdir}/rpm/macros.oreon-vendor
+mv %{buildroot}%{_rpmconfigdir}/macros.d/macros.oreon-vendor-compat %{buildroot}%{_sysconfdir}/rpm/
 
 mkdir -p %{buildroot}%{_fileattrsdir}
 install -p -m 644 -t %{buildroot}%{_fileattrsdir} libsymlink.attr
@@ -155,8 +157,8 @@ install -p -m 644 %{SOURCE35} .
 %{_rpmconfigdir}/macros.d/macros.rpmautospec
 %{_rpmconfigdir}/macros.d/macros.shell-completions
 %{_rpmconfigdir}/macros.d/macros.vpath
-%{_rpmconfigdir}/macros.d/macros.oreon-vendor
-%{_rpmconfigdir}/macros.d/macros.oreon-vendor-compat
+%{_sysconfdir}/rpm/macros.oreon-vendor
+%{_sysconfdir}/rpm/macros.oreon-vendor-compat
 %dir %{_rpmluadir}/oreon
 %dir %{_rpmluadir}/oreon/srpm
 %dir %{_rpmluadir}/oreon/rpm

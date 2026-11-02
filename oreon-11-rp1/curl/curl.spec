@@ -6,7 +6,7 @@
 
 Name: curl
 Version: 8.23.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: HTTP client and library
 License: curl
 URL: https://curl.se/
@@ -26,6 +26,8 @@ BuildRequires: pkgconfig(libpsl)
 BuildRequires: pkgconfig(libssh)
 BuildRequires: pkgconfig(libbrotlidec)
 BuildRequires: pkgconfig(libnghttp3)
+BuildRequires: pkgconfig(libngtcp2)
+BuildRequires: pkgconfig(libngtcp2_crypto_ossl)
 BuildRequires: pkgconfig(libidn2)
 BuildRequires: patchelf
 
@@ -64,7 +66,7 @@ curl is an HTTP client and libcurl.
   --with-libssh \
   --with-brotli \
   --with-libidn2 \
-  --with-openssl-quic \
+  --with-ngtcp2 \
   --with-nghttp3
 %oreon_make
 

@@ -2,7 +2,7 @@
 
 Name: krb5
 Version: 1.22.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Kerberos network authentication
 License: MIT
 URL: https://web.mit.edu/kerberos/
@@ -36,6 +36,8 @@ Headers and the pkgconfig files for building against Kerberos.
 %prep
 %autosetup -n krb5-%{version} -p1
 %oreon_sha256
+sed -i 's/ error=discarded-qualifiers / /' src/configure
+grep -q 'error=discarded-qualifiers' src/configure && exit 1
 
 %build
 cd src

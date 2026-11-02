@@ -6,7 +6,7 @@
 
 Name: libpsl
 Version: 0.23.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: C library for the Public Suffix List
 License: MIT
 URL: https://github.com/rockdaboot/libpsl
@@ -25,6 +25,7 @@ BuildRequires: libidn2-devel
 BuildRequires: libunistring-devel
 BuildRequires: publicsuffix-list
 BuildRequires: pkgconf
+BuildRequires: python3
 
 %description
 libpsl is a C library to handle the Public Suffix List.
@@ -41,6 +42,7 @@ Headers and libraries for developing against libpsl.
 %oreon_sha256
 %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -n libpsl-%{version} -p1
+sed -i '1s|^#!.*python$|#!/usr/bin/python3|' src/psl-make-dafsa
 
 %build
 %oreon_configure --disable-static --disable-gtk-doc --disable-man --enable-runtime=libidn2 --disable-builtin \

@@ -6,7 +6,7 @@
 
 Name: setup
 Version: 2.15.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Base system configuration files
 License: LicenseRef-Fedora-Public-Domain
 URL: https://pagure.io/setup
@@ -51,6 +51,7 @@ touch etc/exports etc/motd etc/subgid etc/subuid etc/fstab
 %build
 systemd-sysusers --root=./ %{SOURCE19}
 chmod 0400 etc/shadow etc/gshadow
+rm -f etc/.pwd.lock
 
 %install
 mkdir -p %{buildroot}/etc %{buildroot}/usr/lib/sysusers.d

@@ -6,7 +6,7 @@
 
 Name: ncurses
 Version: 6.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: ncurses (new curses)
 License: MIT
 URL: https://invisible-island.net/ncurses/
@@ -65,7 +65,7 @@ CFLAGS='%{_oreon_cflags}' LDFLAGS='%{_oreon_ldflags}' \
   --without-tests \
   --with-termlib=tinfo \
   --disable-widec
-make -j%{?_smp_build_ncpus}
+make -j1
 mkdir -p %{_builddir}/ncurses-tinfo-root
 make install.libs DESTDIR=%{_builddir}/ncurses-tinfo-root
 cp -a %{_builddir}/ncurses-tinfo-root%{_libdir}/libtinfo.so* %{buildroot}%{_libdir}/

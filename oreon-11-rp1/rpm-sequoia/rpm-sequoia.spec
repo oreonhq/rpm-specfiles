@@ -1,19 +1,18 @@
-%global source0_hash fc5acdbdfd4c3a5d296732ccfb2fec1fcfb3e7e5f41bf9a0789f8b54c161f5f7
-%global source1_hash 99218ce2597be53e11b1d92f35d35a71332d01a87264f27561eaafc56de27394
+%global source0_hash 64de2578534e2d46079050ba79d4c1a462d7aa2cde01e619ecf99b7084e58044
+%global source1_hash d2d190011cd3f33c6ad270ff23bf05586c7c9063ff0ad9c790272407f173e2d6
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: rpm-sequoia
-Version: 1.9.0
+Version: 1.10.3
 Release: 1%{?dist}
 Summary: RPM OpenPGP backend
 License: LGPL-2.0-or-later
 URL: https://github.com/rpm-software-management/rpm-sequoia
 Source0: https://github.com/rpm-software-management/rpm-sequoia/archive/refs/tags/v%{version}.tar.gz
 Source1: rpm-sequoia-%{version}-vendor.tar.xz
-Patch0: rpm-sequoia-nettle-sys-2.3.2.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -23,8 +22,7 @@ BuildRequires: rustc
 BuildRequires: cargo
 BuildRequires: pkgconf
 BuildRequires: clang
-BuildRequires: nettle-devel
-BuildRequires: gmp-devel
+BuildRequires: openssl-devel >= 1:4.0
 BuildRequires: patchelf
 
 %description
@@ -45,7 +43,7 @@ tar -xf %{SOURCE1}
 
 %build
 %oreon_cargo_prep vendor
-PREFIX=%{_prefix} LIBDIR=%{_libdir} %oreon_cargo_build
+PREFIX=%{_prefix} LIBDIR=%{_libdir} %oreon_cargo_build --no-default-features --features crypto-openssl
 
 %install
 mkdir -p %{buildroot}%{_libdir}/pkgconfig

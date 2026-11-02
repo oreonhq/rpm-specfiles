@@ -6,7 +6,7 @@
 
 Name: gnulib-l10n
 Version: 20241231
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Translations for Gnulib messages
 License: LGPL-2.1-or-later
 URL: https://www.gnu.org/software/gnulib/
@@ -17,6 +17,7 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gnupg2
+BuildRequires: gcc
 BuildRequires: make
 BuildRequires: gettext
 

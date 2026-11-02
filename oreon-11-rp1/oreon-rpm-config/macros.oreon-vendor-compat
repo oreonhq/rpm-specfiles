@@ -1,6 +1,6 @@
 # An rpm built for another vendor (the fedora-45 bootstrap buildroot) never
 # reads /usr/lib/rpm/oreon/rpmrc, so set optflags from the same table here.
-# macros.oreon-vendor (a link to ../oreon/macros) covers the macros file.
+# /etc/rpm/macros.oreon-vendor (a link to the oreon macros) covers the rest.
 %optflags %{lua:
 local f = {
   x86_64 = "%{__global_compiler_flags} -m64 %{__cflags_arch_x86_64} %{__cflags_arch_x86_64_common}",

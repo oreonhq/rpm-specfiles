@@ -6,7 +6,7 @@
 
 Name: pkgconf
 Version: 3.0.10
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: compiler and linker flags for development libraries
 License: ISC
 URL: https://gitea.treehouse.systems/ariadne/pkgconf
@@ -17,6 +17,19 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 
+Provides: pkgconfig = 1:%{version}-%{release}
+Provides: pkgconfig%{?_isa} = 1:%{version}-%{release}
+Provides: pkg-config = %{version}-%{release}
+Provides: pkg-config%{?_isa} = %{version}-%{release}
+Provides: pkgconf-pkg-config = %{version}-%{release}
+Provides: pkgconf-pkg-config%{?_isa} = %{version}-%{release}
+Obsoletes: pkgconf-pkg-config < %{version}-%{release}
+Provides: pkgconf-m4 = %{version}-%{release}
+Obsoletes: pkgconf-m4 < %{version}-%{release}
+Provides: libpkgconf = %{version}-%{release}
+Provides: libpkgconf%{?_isa} = %{version}-%{release}
+Obsoletes: libpkgconf < %{version}-%{release}
+
 %description
 pkgconf is a program which helps to configure compiler and linker flags for development libraries. It is a superset of the functionality provided by pkg-config from freedesktop.org, but does not provide bug-compatibility with the original pkg-config.
 
@@ -26,6 +39,8 @@ libpkgconf is a library which provides access to most of pkgconf's functionality
 Summary: compiler and linker flags for development libraries
 Requires: pkgconf%{?_isa} = %{version}-%{release}
 Provides: pkgconfig(libpkgconf)
+Provides: libpkgconf-devel = %{version}-%{release}
+Obsoletes: libpkgconf-devel < %{version}-%{release}
 
 %description devel
 libpkgconf is a library which provides access to most of pkgconf's functionality, to allow other tooling such as compilers and IDEs to discover and use libraries configured by pkgconf.

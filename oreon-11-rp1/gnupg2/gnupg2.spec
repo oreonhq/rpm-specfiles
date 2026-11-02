@@ -6,7 +6,7 @@
 
 Name: gnupg2
 Version: 2.5.24
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: OpenPGP and S/MIME encryption and signing tool
 License: GPL-3.0-or-later
 URL: https://gnupg.org/
@@ -24,7 +24,7 @@ BuildRequires: make
 BuildRequires: patchelf
 BuildRequires: libgpg-error-devel
 BuildRequires: libgcrypt-devel
-BuildRequires: libassuan-devel
+BuildRequires: libassuan-devel >= 3.0.0
 BuildRequires: libksba-devel
 BuildRequires: npth-devel
 BuildRequires: zlib-devel
