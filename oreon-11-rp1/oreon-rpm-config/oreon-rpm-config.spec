@@ -4,7 +4,7 @@
 
 Name: oreon-rpm-config
 Version: 345
-Release: 8%{?dist}
+Release: 9%{?dist}
 Summary: Oreon rpm build configuration
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
 URL: https://github.com/oreonhq/rpm-specfiles
@@ -107,6 +107,7 @@ mkdir -p %{buildroot}%{_rpmconfigdir}/macros.d
 install -p -m 644 -t %{buildroot}%{_rpmconfigdir}/macros.d macros.*
 mkdir -p %{buildroot}%{_sysconfdir}/rpm
 ln -s %{_rpmconfigdir}/oreon/macros %{buildroot}%{_sysconfdir}/rpm/macros.oreon-vendor
+ln -s %{rrcdir}/rpmrc %{buildroot}%{_sysconfdir}/rpmrc
 mv %{buildroot}%{_rpmconfigdir}/macros.d/macros.oreon-vendor-compat %{buildroot}%{_sysconfdir}/rpm/
 
 mkdir -p %{buildroot}%{_fileattrsdir}
@@ -158,6 +159,7 @@ install -p -m 644 %{SOURCE35} .
 %{_rpmconfigdir}/macros.d/macros.shell-completions
 %{_rpmconfigdir}/macros.d/macros.vpath
 %{_sysconfdir}/rpm/macros.oreon-vendor
+%{_sysconfdir}/rpmrc
 %{_sysconfdir}/rpm/macros.oreon-vendor-compat
 %dir %{_rpmluadir}/oreon
 %dir %{_rpmluadir}/oreon/srpm
