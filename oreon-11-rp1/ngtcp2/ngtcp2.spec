@@ -6,7 +6,7 @@
 
 Name: ngtcp2
 Version: 1.25.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: QUIC protocol library
 License: MIT
 URL: https://github.com/ngtcp2/ngtcp2
@@ -24,6 +24,12 @@ BuildRequires: patchelf
 BuildRequires: pkgconf
 BuildRequires: openssl-devel
 BuildRequires: gnutls-devel
+Provides: ngtcp2-crypto-ossl = %{version}-%{release}
+Provides: ngtcp2-crypto-ossl%{?_isa} = %{version}-%{release}
+Obsoletes: ngtcp2-crypto-ossl < %{version}-%{release}
+Provides: ngtcp2-crypto-gnutls = %{version}-%{release}
+Provides: ngtcp2-crypto-gnutls%{?_isa} = %{version}-%{release}
+Obsoletes: ngtcp2-crypto-gnutls < %{version}-%{release}
 
 %description
 ngtcp2 implements the QUIC protocol (RFC 9000). This build ships the
@@ -33,6 +39,10 @@ library and the OpenSSL and GnuTLS crypto helper libraries.
 Summary: Development files for ngtcp2
 Requires: ngtcp2%{?_isa} = %{version}-%{release}
 Provides: pkgconfig(ngtcp2)
+Provides: ngtcp2-crypto-ossl-devel = %{version}-%{release}
+Obsoletes: ngtcp2-crypto-ossl-devel < %{version}-%{release}
+Provides: ngtcp2-crypto-gnutls-devel = %{version}-%{release}
+Obsoletes: ngtcp2-crypto-gnutls-devel < %{version}-%{release}
 
 %description devel
 Headers and libraries for developing against ngtcp2.

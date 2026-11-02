@@ -6,7 +6,7 @@
 
 Name: nghttp3
 Version: 1.18.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: HTTP/3 library
 License: MIT
 URL: https://github.com/ngtcp2/nghttp3
@@ -22,6 +22,9 @@ BuildRequires: make
 BuildRequires: gcc-c++
 BuildRequires: patchelf
 BuildRequires: pkgconf
+Provides: libnghttp3 = %{version}-%{release}
+Provides: libnghttp3%{?_isa} = %{version}-%{release}
+Obsoletes: libnghttp3 < %{version}-%{release}
 
 %description
 nghttp3 implements HTTP/3 mapping over QUIC and QPACK (RFC 9204).
@@ -30,6 +33,7 @@ nghttp3 implements HTTP/3 mapping over QUIC and QPACK (RFC 9204).
 Summary: Development files for nghttp3
 Requires: nghttp3%{?_isa} = %{version}-%{release}
 Provides: libnghttp3-devel = %{version}-%{release}
+Obsoletes: libnghttp3-devel < %{version}-%{release}
 Provides: pkgconfig(libnghttp3) = %{version}
 
 %description devel
