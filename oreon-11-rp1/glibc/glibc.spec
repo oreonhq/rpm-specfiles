@@ -6,7 +6,7 @@
 
 Name: glibc
 Version: 2.44
-Release: 4%{?dist}
+Release: 5%{?dist}
 Provides: rtld(GNU_HASH)
 Summary: GNU C Library
 License: LGPL-2.1-or-later
@@ -21,6 +21,7 @@ BuildRequires: gcc
 BuildRequires: python3
 BuildRequires: bison
 BuildRequires: gawk
+BuildRequires: /usr/bin/localedef
 
 %description
 The GNU C Library is the standard system C library for all GNU systems, and is an important part of what makes up a GNU system. It provides the system API for all programs written in C and C-compatible languages such as C++ and Objective C; the runtime facilities of other programming languages use the C library to access the underlying operating system.
@@ -81,8 +82,9 @@ rm -f %{buildroot}%{_infodir}/dir
 # C.UTF-8 so lang.sh and tools do not fall back to setlocale warnings
 mkdir -p %{buildroot}%{_prefix}/lib/locale
 I18NPATH=%{_builddir}/glibc-%{version}/localedata \
-  %{buildroot}%{_bindir}/localedef --no-archive --prefix=%{buildroot} \
-  -i C -f %{_builddir}/glibc-%{version}/localedata/charmaps/UTF-8 C.UTF-8
+  localedef --no-archive \
+  -i C -f %{_builddir}/glibc-%{version}/localedata/charmaps/UTF-8 \
+  %{buildroot}%{_prefix}/lib/locale/C.utf8
 
 %oreon_filelist_devel
 

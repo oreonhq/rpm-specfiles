@@ -1,11 +1,11 @@
 Name:           oreon-rpm-macros
 Version:        1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Build macros for Oreon packages
 License:        MIT
 URL:            https://github.com/oreonhq/rpm-specfiles
 
-%global         source0_hash f8af9644538637372eb1c9ecc2bb779b407f1b7ca686d655f8edc6c73186c236
+%global         source0_hash aa8e606e78f26bd88b16ceaa9dc7321e71fafb70b6edb96fc0dcc061d66765b6
 
 Source0:        macros.oreon
 Source1:        oreon-build
