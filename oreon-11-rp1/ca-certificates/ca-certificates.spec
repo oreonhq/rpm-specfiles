@@ -1,13 +1,15 @@
 %global source0_hash 3ec2b4d240dc12c747eaf450061db84af757c483bbda302f9e29ceb5d70be510
 %global nss_tag 3_132
+%global ckbi_version 2.92
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: ca-certificates
-Version: 3.132
-Release: 2%{?dist}
+Epoch: 1
+Version: 2026.%{ckbi_version}
+Release: 1%{?dist}
 Summary: Mozilla CA root certificate bundle
 License: MPL-2.0
 URL: https://hg.mozilla.org/projects/nss

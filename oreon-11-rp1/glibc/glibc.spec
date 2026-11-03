@@ -6,7 +6,7 @@
 
 Name: glibc
 Version: 2.44
-Release: 6%{?dist}
+Release: 7%{?dist}
 Provides: rtld(GNU_HASH)
 Summary: GNU C Library
 License: LGPL-2.1-or-later
@@ -56,6 +56,7 @@ C, POSIX, and C.UTF-8 only. This build does not ship other locales.
 unset CFLAGS CXXFLAGS LDFLAGS
 mkdir -p %{_builddir}/glibc-build
 cd %{_builddir}/glibc-build
+printf 'rootsbindir=%s\n' %{_sbindir} > configparms
 CFLAGS="-O2 -g" %{_builddir}/glibc-%{version}/configure \
   --prefix=%{_prefix} \
   --libdir=%{_libdir} \
