@@ -6,7 +6,7 @@
 
 Name: glibc
 Version: 2.44
-Release: 5%{?dist}
+Release: 6%{?dist}
 Provides: rtld(GNU_HASH)
 Summary: GNU C Library
 License: LGPL-2.1-or-later
@@ -32,8 +32,6 @@ In GNU/Linux systems, the C library works with the Linux kernel to implement the
 Summary: GNU C Library
 Requires: glibc%{?_isa} = %{version}-%{release}
 Requires: kernel-headers
-Provides: glibc-headers = %{version}-%{release}
-Provides: glibc-headers%{?_isa} = %{version}-%{release}
 
 %description devel
 The GNU C Library is the standard system C library for all GNU systems, and is an important part of what makes up a GNU system. It provides the system API for all programs written in C and C-compatible languages such as C++ and Objective C; the runtime facilities of other programming languages use the C library to access the underlying operating system.
@@ -55,7 +53,6 @@ C, POSIX, and C.UTF-8 only. This build does not ship other locales.
 %autosetup -p1
 
 %build
-# fortify flags break this build, and glibc wants its own -O2
 unset CFLAGS CXXFLAGS LDFLAGS
 mkdir -p %{_builddir}/glibc-build
 cd %{_builddir}/glibc-build
@@ -79,14 +76,25 @@ make -s -j%{?_smp_build_ncpus}
 cd %{_builddir}/glibc-build
 make -s install DESTDIR=%{buildroot}
 rm -f %{buildroot}%{_infodir}/dir
-# C.UTF-8 so lang.sh and tools do not fall back to setlocale warnings
 mkdir -p %{buildroot}%{_prefix}/lib/locale
 I18NPATH=%{_builddir}/glibc-%{version}/localedata \
   localedef --no-archive \
   -i C -f %{_builddir}/glibc-%{version}/localedata/charmaps/UTF-8 \
   %{buildroot}%{_prefix}/lib/locale/C.utf8
+mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
+printf 'include ld.so.conf.d/*.conf\n' > %{buildroot}%{_sysconfdir}/ld.so.conf
 
 %oreon_filelist_devel
+
+%post -p %{_sbindir}/ldconfig
+
+%postun -p %{_sbindir}/ldconfig
+
+%transfiletriggerin -P 2000000 -- /lib /lib64 %{_prefix}/lib %{_libdir}
+%{_sbindir}/ldconfig
+
+%transfiletriggerpostun -P 2000000 -- /lib /lib64 %{_prefix}/lib %{_libdir}
+%{_sbindir}/ldconfig
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING.LIB COPYINGv2 COPYINGv3 COPYING.LESSERv2

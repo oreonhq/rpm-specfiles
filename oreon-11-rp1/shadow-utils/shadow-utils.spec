@@ -6,7 +6,7 @@
 
 Name: shadow-utils
 Version: 4.20.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Account and shadow password tools
 License: BSD-3-Clause AND GPL-2.0-or-later
 URL: https://github.com/shadow-maint/shadow
@@ -45,7 +45,7 @@ BuildRequires: make
 BuildRequires: gettext
 BuildRequires: pkgconf
 BuildRequires: pam-devel
-BuildRequires: audit-devel >= 4.2.1
+BuildRequires: audit-libs-devel >= 4.2.1
 BuildRequires: libselinux-devel >= 3.11
 BuildRequires: libsemanage-devel
 BuildRequires: libxcrypt-devel >= 4.5.2

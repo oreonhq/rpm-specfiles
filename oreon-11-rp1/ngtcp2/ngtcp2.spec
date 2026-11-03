@@ -6,7 +6,7 @@
 
 Name: ngtcp2
 Version: 1.25.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: QUIC protocol library
 License: MIT
 URL: https://github.com/ngtcp2/ngtcp2
@@ -24,28 +24,59 @@ BuildRequires: patchelf
 BuildRequires: pkgconf
 BuildRequires: openssl-devel
 BuildRequires: gnutls-devel
-Provides: ngtcp2-crypto-ossl = %{version}-%{release}
-Provides: ngtcp2-crypto-ossl%{?_isa} = %{version}-%{release}
-Obsoletes: ngtcp2-crypto-ossl < %{version}-%{release}
-Provides: ngtcp2-crypto-gnutls = %{version}-%{release}
-Provides: ngtcp2-crypto-gnutls%{?_isa} = %{version}-%{release}
-Obsoletes: ngtcp2-crypto-gnutls < %{version}-%{release}
 
 %description
 ngtcp2 implements the QUIC protocol (RFC 9000). This build ships the
 library and the OpenSSL and GnuTLS crypto helper libraries.
 
-%package devel
-Summary: Development files for ngtcp2
-Requires: ngtcp2%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(ngtcp2)
-Provides: ngtcp2-crypto-ossl-devel = %{version}-%{release}
-Obsoletes: ngtcp2-crypto-ossl-devel < %{version}-%{release}
-Provides: ngtcp2-crypto-gnutls-devel = %{version}-%{release}
-Obsoletes: ngtcp2-crypto-gnutls-devel < %{version}-%{release}
+%package -n libngtcp2
+Summary: ngtcp2 library
+Obsoletes: ngtcp2 < 1.25.0-3
 
-%description devel
-Headers and libraries for developing against ngtcp2.
+%description -n libngtcp2
+Shared ngtcp2 library.
+
+%package -n libngtcp2-devel
+Summary: Development files for libngtcp2
+Requires: libngtcp2%{?_isa} = %{version}-%{release}
+Obsoletes: ngtcp2-devel < 1.25.0-3
+
+%description -n libngtcp2-devel
+Headers and development library for libngtcp2.
+
+%package -n libngtcp2-crypto-ossl
+Summary: ngtcp2 ossl crypto helper
+Requires: libngtcp2%{?_isa} = %{version}-%{release}
+Obsoletes: ngtcp2-crypto-ossl < 1.25.0-3
+
+%description -n libngtcp2-crypto-ossl
+ngtcp2 crypto helper library for ossl.
+
+%package -n libngtcp2-crypto-ossl-devel
+Summary: Development files for libngtcp2-crypto-ossl
+Requires: libngtcp2-crypto-ossl%{?_isa} = %{version}-%{release}
+Requires: libngtcp2-devel%{?_isa} = %{version}-%{release}
+Obsoletes: ngtcp2-crypto-ossl-devel < 1.25.0-3
+
+%description -n libngtcp2-crypto-ossl-devel
+Headers and development library for libngtcp2-crypto-ossl.
+
+%package -n libngtcp2-crypto-gnutls
+Summary: ngtcp2 gnutls crypto helper
+Requires: libngtcp2%{?_isa} = %{version}-%{release}
+Obsoletes: ngtcp2-crypto-gnutls < 1.25.0-3
+
+%description -n libngtcp2-crypto-gnutls
+ngtcp2 crypto helper library for gnutls.
+
+%package -n libngtcp2-crypto-gnutls-devel
+Summary: Development files for libngtcp2-crypto-gnutls
+Requires: libngtcp2-crypto-gnutls%{?_isa} = %{version}-%{release}
+Requires: libngtcp2-devel%{?_isa} = %{version}-%{release}
+Obsoletes: ngtcp2-crypto-gnutls-devel < 1.25.0-3
+
+%description -n libngtcp2-crypto-gnutls-devel
+Headers and development library for libngtcp2-crypto-gnutls.
 
 %prep
 %oreon_sha256
@@ -68,9 +99,34 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
+%ldconfig_scriptlets -n libngtcp2
+%ldconfig_scriptlets -n libngtcp2-crypto-ossl
+%ldconfig_scriptlets -n libngtcp2-crypto-gnutls
 
-%files -f %{_builddir}/%{name}.files
+%files -n libngtcp2
 %license COPYING
+%{_libdir}/libngtcp2.so.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files -n libngtcp2-devel
+%dir %{_includedir}/ngtcp2
+%{_includedir}/ngtcp2/ngtcp2.h
+%{_includedir}/ngtcp2/ngtcp2_crypto.h
+%{_includedir}/ngtcp2/version.h
+%{_libdir}/libngtcp2.so
+%{_libdir}/pkgconfig/libngtcp2.pc
+
+%files -n libngtcp2-crypto-ossl
+%{_libdir}/libngtcp2_crypto_ossl.so.*
+
+%files -n libngtcp2-crypto-ossl-devel
+%{_includedir}/ngtcp2/ngtcp2_crypto_ossl.h
+%{_libdir}/libngtcp2_crypto_ossl.so
+%{_libdir}/pkgconfig/libngtcp2_crypto_ossl.pc
+
+%files -n libngtcp2-crypto-gnutls
+%{_libdir}/libngtcp2_crypto_gnutls.so.*
+
+%files -n libngtcp2-crypto-gnutls-devel
+%{_includedir}/ngtcp2/ngtcp2_crypto_gnutls.h
+%{_libdir}/libngtcp2_crypto_gnutls.so
+%{_libdir}/pkgconfig/libngtcp2_crypto_gnutls.pc

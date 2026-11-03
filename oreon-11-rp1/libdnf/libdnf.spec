@@ -3,10 +3,11 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
+%global py3_sitearch %{_libdir}/python%(python3 -c 'import sys;print("%d.%d"%sys.version_info[:2])' 2>/dev/null)/site-packages
 
 Name: libdnf
 Version: 0.76.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: DNF library
 License: LGPL-2.1-or-later
 URL: https://github.com/rpm-software-management/libdnf
@@ -29,11 +30,9 @@ BuildRequires: sqlite-devel
 BuildRequires: libsmartcols-devel
 BuildRequires: zchunk-devel
 BuildRequires: swig
+BuildRequires: gettext
 BuildRequires: python3-devel
 BuildRequires: patchelf
-
-Provides: python3-libdnf = %{version}-%{release}
-Provides: python3-hawkey = %{version}-%{release}
 
 %description
 libdnf is the library behind dnf 4.
@@ -44,6 +43,21 @@ Requires: libdnf%{?_isa} = %{version}-%{release}
 
 %description devel
 libdnf is the library behind dnf 4.
+
+%package -n python3-libdnf
+Summary: Python 3 bindings for libdnf
+Requires: libdnf%{?_isa} = %{version}-%{release}
+
+%description -n python3-libdnf
+Python 3 bindings for the libdnf library.
+
+%package -n python3-hawkey
+Summary: Python 3 hawkey bindings for libdnf
+Requires: libdnf%{?_isa} = %{version}-%{release}
+Requires: python3-libdnf%{?_isa} = %{version}-%{release}
+
+%description -n python3-hawkey
+Python 3 hawkey bindings for the libdnf library.
 
 %prep
 %oreon_sha256
@@ -73,45 +87,25 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
-import os
-import sys
-from pathlib import Path
-main, devel = Path(sys.argv[1]), Path(sys.argv[2])
-m = main.read_text().splitlines()
-d = devel.read_text().splitlines()
-keep, move = [], []
-for line in d:
-    path = line.split()[-1] if line.startswith("%") else line
-    if path.endswith(".so") and path.count("/") > 3:
-        move.append(line)
-    else:
-        keep.append(line)
-def with_pyc(lines):
-    extra = []
-    seen = set(lines)
-    for line in lines:
-        path = line.split()[-1] if line.startswith("%") else line
-        path = path.strip('"')
-        if not path.endswith(".py"):
-            continue
-        if "/lib/python3." not in path and "/lib64/python3." not in path:
-            continue
-        glob = os.path.dirname(path) + "/__pycache__/*"
-        if glob not in seen:
-            seen.add(glob)
-            extra.append(glob)
-    return lines + extra
-m = with_pyc(m + move)
-keep = with_pyc(keep)
-text = "\n".join(m)
-main.write_text(text + ("\n" if text else ""))
-text = "\n".join(keep)
-devel.write_text(text + ("\n" if text else ""))
-PY
+%find_lang libdnf
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets
+
+%files -f libdnf.lang
 %license COPYING
+%{_libdir}/libdnf.so.2
+%dir %{_libdir}/libdnf
+%dir %{_libdir}/libdnf/plugins
+%{_libdir}/libdnf/plugins/README
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_includedir}/libdnf/
+%{_libdir}/libdnf.so
+%{_libdir}/pkgconfig/libdnf.pc
+
+%files -n python3-libdnf
+%{py3_sitearch}/libdnf/
+%{py3_sitearch}/libdnf-%{version}.dist-info/
+
+%files -n python3-hawkey
+%{py3_sitearch}/hawkey/

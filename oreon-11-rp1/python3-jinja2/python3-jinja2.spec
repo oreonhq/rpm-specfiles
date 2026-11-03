@@ -4,9 +4,11 @@
 %oreon_bootstrap
 %global debug_package %{nil}
 
+%global py3_sitelib %(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib", "posix_prefix", {"base": "/usr"}))')
+
 Name: python3-jinja2
 Version: 3.1.6
-Release: 10%{?dist}
+Release: 11%{?dist}
 Summary: Template engine for Python
 License: BSD-3-Clause
 URL: https://github.com/pallets/jinja
@@ -27,18 +29,11 @@ Template engine for Python.
 %build
 
 %install
-sitelib=$(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
-mkdir -p %{buildroot}$sitelib
-cp -a src/jinja2 %{buildroot}$sitelib/
+mkdir -p %{buildroot}%{py3_sitelib}
+cp -a src/jinja2 %{buildroot}%{py3_sitelib}/
 find %{buildroot} -type f -exec grep -I -l -E '^#! */usr/bin/env python' {} + | while read -r f; do
   sed -i '1s|^#! */usr/bin/env python.*|#!/usr/bin/python3|' "$f"
 done
-%oreon_filelist
-while read -r f; do
-  case "$f" in
-    *.py) printf '%s\n' "$(dirname "$f")/__pycache__/*" ;;
-  esac
-done < %{_builddir}/%{name}.files | sort -u >> %{_builddir}/%{name}.files
-
-%files -f %{_builddir}/%{name}.files
+%files
 %license LICENSE.txt
+%{py3_sitelib}/jinja2/

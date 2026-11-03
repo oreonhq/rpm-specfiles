@@ -6,7 +6,7 @@
 
 Name: util-linux
 Version: 2.42.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Low-level system utilities and libraries
 License: GPL-2.0-or-later
 URL: https://github.com/util-linux/util-linux
@@ -32,8 +32,8 @@ BuildRequires: libcap-devel
 BuildRequires: libselinux-devel
 BuildRequires: fakeroot
 BuildRequires: systemd-devel
-BuildRequires: python3-devel
 %endif
+BuildRequires: python3-devel
 Requires: util-linux-core%{?_isa} = %{version}-%{release}
 
 %description
@@ -41,12 +41,18 @@ util-linux provides libmount, libblkid, libfdisk and libsmartcols.
 
 %package -n util-linux-core
 Summary: Low-level system utilities and libraries
+Requires: libblkid%{?_isa} = %{version}-%{release}
+Requires: libfdisk%{?_isa} = %{version}-%{release}
+Requires: libmount%{?_isa} = %{version}-%{release}
+Requires: libsmartcols%{?_isa} = %{version}-%{release}
+Requires: libuuid%{?_isa} = %{version}-%{release}
 
 %description -n util-linux-core
 util-linux provides libmount, libblkid, libfdisk and libsmartcols.
 
 %package -n util-linux-i18n
 Summary: Low-level system utilities and libraries
+Requires: util-linux%{?_isa} = %{version}-%{release}
 
 %description -n util-linux-i18n
 util-linux provides libmount, libblkid, libfdisk and libsmartcols.
@@ -65,7 +71,6 @@ Requires: libuuid%{?_isa} = %{version}-%{release}
 %description -n uuidd
 util-linux provides libmount, libblkid, libfdisk and libsmartcols.
 
-%if %{without bootstrap} && !0%{?bootstrap}
 %package -n python3-libmount
 Summary: Low-level system utilities and libraries
 License: LGPL-2.1-or-later
@@ -74,7 +79,6 @@ Requires: python3
 
 %description -n python3-libmount
 util-linux provides libmount, libblkid, libfdisk and libsmartcols.
-%endif
 
 %package -n libblkid
 Summary: Block device identification library
@@ -95,6 +99,8 @@ util-linux provides libmount, libblkid, libfdisk and libsmartcols.
 %package -n libfdisk
 Summary: Partition table library
 License: LGPL-2.1-or-later
+Requires: libblkid%{?_isa} = %{version}-%{release}
+Requires: libuuid%{?_isa} = %{version}-%{release}
 
 %description -n libfdisk
 util-linux provides libmount, libblkid, libfdisk and libsmartcols.
@@ -191,11 +197,10 @@ rm -f %{_builddir}/util-linux-%{version}.tar
   --enable-libsmartcols \
 %if %{without bootstrap} && !0%{?bootstrap}
   --with-systemd \
-  --with-python=3
 %else
   --without-systemd \
-  --without-python
 %endif
+  --with-python=3
 %oreon_make
 
 %install
@@ -357,10 +362,8 @@ PY
 %files -n uuidd -f %{_builddir}/ul/uuidd.files
 %license COPYING
 
-%if %{without bootstrap} && !0%{?bootstrap}
 %files -n python3-libmount -f %{_builddir}/ul/python3-libmount.files
 %license libmount/COPYING
-%endif
 
 %files -n libblkid -f %{_builddir}/ul/libblkid.files
 %license libblkid/COPYING

@@ -6,7 +6,7 @@
 
 Name: libsemanage
 Version: 3.11
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: SELinux policy management library
 License: LGPL-2.1-or-later
 URL: https://github.com/SELinuxProject/selinux
@@ -28,7 +28,7 @@ BuildRequires: flex
 BuildRequires: python3
 BuildRequires: libselinux-devel >= 3.11
 BuildRequires: libsepol-devel >= 3.11
-BuildRequires: audit-devel >= 4.2.1
+BuildRequires: audit-libs-devel >= 4.2.1
 BuildRequires: bzip2-devel
 
 %description

@@ -6,7 +6,7 @@
 
 Name: gettext
 Version: 1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Translation tools and runtime for GNU gettext
 License: GPL-3.0-or-later AND LGPL-2.1-or-later
 URL: https://www.gnu.org/software/gettext/
@@ -24,6 +24,7 @@ BuildRequires: libxml2-devel
 BuildRequires: libunistring-devel
 BuildRequires: ncurses-devel
 BuildRequires: patchelf
+Requires: gettext-libs%{?_isa} = %{version}-%{release}
 
 %description
 GNU gettext provides tools for writing and handling translated messages,
@@ -32,11 +33,19 @@ including msgfmt, xgettext, msgmerge, autopoint and the libintl macros.
 %package devel
 Summary: Development files for gettext
 Requires: gettext%{?_isa} = %{version}-%{release}
-Provides: gettext-libs = %{version}-%{release}
-Provides: gettext-autopoint = %{version}-%{release}
+Requires: gettext-libs%{?_isa} = %{version}-%{release}
 
 %description devel
 Headers, libraries and pkg-config files for building against gettext.
+
+%package libs
+Summary: Libraries for gettext
+License: LGPL-2.1-or-later AND GPL-3.0-or-later
+Obsoletes: gettext-devel < 1.0-2
+
+%description libs
+Shared libraries used by the gettext tools and by programs that read
+or write PO files.
 
 %prep
 %oreon_sha256
@@ -61,8 +70,22 @@ find %{buildroot} -type f | while read -r f; do
   fi
 done
 %oreon_filelist_devel
+sed -i -E '/\/lib(asprintf|gettextpo|textstyle)\.so\.|\/libgettext(lib|src)-[^/]*\.so$/d' %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
 
 %files devel -f %{_builddir}/%{name}-devel.files
+
+%ldconfig_scriptlets libs
+
+%files libs
+%license COPYING
+%{_libdir}/libasprintf.so.0
+%{_libdir}/libasprintf.so.0.*
+%{_libdir}/libgettextpo.so.0
+%{_libdir}/libgettextpo.so.0.*
+%{_libdir}/libtextstyle.so.0
+%{_libdir}/libtextstyle.so.0.*
+%{_libdir}/libgettextlib-%{version}.so
+%{_libdir}/libgettextsrc-%{version}.so

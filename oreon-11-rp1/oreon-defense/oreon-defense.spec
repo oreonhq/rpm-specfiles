@@ -1,6 +1,6 @@
 Name:           oreon-defense
 Version:        1.0.16
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Oreon security system with real-time protection
 License:        GPL-3.0-or-later
 URL:            https://oreonhq.com
@@ -8,7 +8,7 @@ Source0:        https://tarballs.oreonhq.com/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake >= 3.16
 BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig
+BuildRequires: pkgconf
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  openssl-devel
 BuildRequires:  yaml-cpp-devel

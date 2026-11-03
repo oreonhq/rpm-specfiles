@@ -6,7 +6,7 @@
 
 Name: pam
 Version: 1.7.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Pluggable authentication modules
 License: BSD-3-Clause
 URL: https://github.com/linux-pam/linux-pam
@@ -19,7 +19,7 @@ BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: flex
 BuildRequires: libxcrypt-devel
-BuildRequires: audit-devel
+BuildRequires: audit-libs-devel
 BuildRequires: libeconf-devel
 BuildRequires: libselinux-devel
 BuildRequires: libnsl2-devel

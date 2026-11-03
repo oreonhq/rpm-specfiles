@@ -7,7 +7,7 @@
 Name: openssl
 Epoch: 1
 Version: 4.1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: OpenSSL TLS library
 License: Apache-2.0
 URL: https://www.openssl.org/
@@ -19,22 +19,34 @@ BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: perl
 BuildRequires: zlib-devel
-BuildRequires: python3
 BuildRequires: patchelf
+BuildRequires: file
 
-Provides: openssl-libs = %{epoch}:%{version}-%{release}
-Provides: openssl-libs%{?_isa} = %{epoch}:%{version}-%{release}
-Obsoletes: openssl-libs < %{epoch}:%{version}-%{release}
+Requires: openssl-libs%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description
-OpenSSL is a TLS and crypto library.
+OpenSSL command line tool for TLS and cryptography.
+
+%package libs
+Summary: OpenSSL TLS and crypto libraries
+
+%description libs
+Shared libraries, providers, and configuration for OpenSSL.
 
 %package devel
-Summary: OpenSSL TLS library
-Requires: openssl%{?_isa} = %{epoch}:%{version}-%{release}
+Summary: Development files for OpenSSL
+Requires: openssl-libs%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description devel
-OpenSSL is a TLS and crypto library.
+Header files, pkg-config, and CMake files for developing with OpenSSL.
+
+%package perl
+Summary: Perl helper scripts for OpenSSL
+Requires: openssl%{?_isa} = %{epoch}:%{version}-%{release}
+Requires: perl
+
+%description perl
+CA.pl and tsget scripts for OpenSSL.
 
 %prep
 %oreon_sha256
@@ -63,27 +75,40 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
-import sys
-from pathlib import Path
-main, devel = Path(sys.argv[1]), Path(sys.argv[2])
-m = main.read_text().splitlines()
-d = devel.read_text().splitlines()
-keep, move = [], []
-for line in d:
-    path = line.split()[-1] if line.startswith("%") else line
-    if path.endswith(".so") and path.count("/") > 3:
-        move.append(line)
-    else:
-        keep.append(line)
-text = "\n".join(m + move)
-main.write_text(text + ("\n" if text else ""))
-text = "\n".join(keep)
-devel.write_text(text + ("\n" if text else ""))
-PY
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets libs
+
+%files
 %license LICENSE.txt
+%{_bindir}/openssl
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files libs
+%license LICENSE.txt
+%{_libdir}/libcrypto.so.4
+%{_libdir}/libssl.so.4
+%dir %{_libdir}/ossl-modules
+%{_libdir}/ossl-modules/legacy.so
+%dir %{_sysconfdir}/pki/tls
+%dir %{_sysconfdir}/pki/tls/certs
+%dir %{_sysconfdir}/pki/tls/private
+%config(noreplace) %{_sysconfdir}/pki/tls/openssl.cnf
+%config(noreplace) %{_sysconfdir}/pki/tls/ct_log_list.cnf
+%{_sysconfdir}/pki/tls/openssl.cnf.dist
+%{_sysconfdir}/pki/tls/ct_log_list.cnf.dist
+
+%files devel
+%{_includedir}/openssl/
+%{_libdir}/libcrypto.so
+%{_libdir}/libssl.so
+%{_libdir}/pkgconfig/libcrypto.pc
+%{_libdir}/pkgconfig/libssl.pc
+%{_libdir}/pkgconfig/openssl.pc
+%dir %{_libdir}/cmake/OpenSSL
+%{_libdir}/cmake/OpenSSL/OpenSSLConfig.cmake
+%{_libdir}/cmake/OpenSSL/OpenSSLConfigVersion.cmake
+
+%files perl
+%dir %{_sysconfdir}/pki/tls/misc
+%{_sysconfdir}/pki/tls/misc/CA.pl
+%{_sysconfdir}/pki/tls/misc/tsget.pl
+%{_sysconfdir}/pki/tls/misc/tsget

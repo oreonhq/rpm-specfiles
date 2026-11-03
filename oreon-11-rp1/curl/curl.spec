@@ -6,7 +6,7 @@
 
 Name: curl
 Version: 8.23.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: HTTP client and library
 License: curl
 URL: https://curl.se/
@@ -30,29 +30,26 @@ BuildRequires: pkgconfig(libngtcp2)
 BuildRequires: pkgconfig(libngtcp2_crypto_ossl)
 BuildRequires: pkgconfig(libidn2)
 BuildRequires: patchelf
-Requires: ca-certificates
-
-Obsoletes: libcurl < 9
-Provides: libcurl = %{version}-%{release}
-Provides: libcurl%{?_isa} = %{version}-%{release}
-Obsoletes: libcurl-minimal < 9
-Provides: libcurl-minimal = %{version}-%{release}
-Provides: libcurl-minimal%{?_isa} = %{version}-%{release}
-Obsoletes: curl-minimal < 9
-Provides: curl-minimal = %{version}-%{release}
+Requires: libcurl%{?_isa} = %{version}-%{release}
 
 %description
-curl is an HTTP client and libcurl.
+curl is a command line tool for transferring data with URL syntax.
 
-%package devel
-Summary: HTTP client and library
-Requires: curl%{?_isa} = %{version}-%{release}
-Obsoletes: libcurl-devel < 9
-Provides: libcurl-devel = %{version}-%{release}
-Provides: pkgconfig(libcurl) = %{version}
+%package -n libcurl
+Summary: Library for transferring data with URL syntax
+Requires: ca-certificates
 
-%description devel
-curl is an HTTP client and libcurl.
+%description -n libcurl
+libcurl is a client-side URL transfer library.
+
+%package -n libcurl-devel
+Summary: Development files for libcurl
+Requires: libcurl%{?_isa} = %{version}-%{release}
+Requires: pkgconf
+Obsoletes: curl-devel < 8.23.0-5
+
+%description -n libcurl-devel
+Headers, pkg-config file, and documentation for developing with libcurl.
 
 %prep
 %oreon_sha256
@@ -90,27 +87,27 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
-import sys
-from pathlib import Path
-main, devel = Path(sys.argv[1]), Path(sys.argv[2])
-m = main.read_text().splitlines()
-d = devel.read_text().splitlines()
-keep, move = [], []
-for line in d:
-    path = line.split()[-1] if line.startswith("%") else line
-    if path.endswith(".so") and path.count("/") > 3:
-        move.append(line)
-    else:
-        keep.append(line)
-text = "\n".join(m + move)
-main.write_text(text + ("\n" if text else ""))
-text = "\n".join(keep)
-devel.write_text(text + ("\n" if text else ""))
-PY
+find %{buildroot} -name '*.la' -delete
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets -n libcurl
+
+%files
 %license COPYING
+%{_bindir}/curl
+%{_bindir}/wcurl
+%{_mandir}/man1/curl.1*
+%{_mandir}/man1/wcurl.1*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files -n libcurl
+%license COPYING
+%{_libdir}/libcurl.so.4
+%{_libdir}/libcurl.so.4.*
+
+%files -n libcurl-devel
+%{_bindir}/curl-config
+%{_includedir}/curl/
+%{_libdir}/libcurl.so
+%{_libdir}/pkgconfig/libcurl.pc
+%{_datadir}/aclocal/libcurl.m4
+%{_mandir}/man1/curl-config.1*
+%{_mandir}/man3/*

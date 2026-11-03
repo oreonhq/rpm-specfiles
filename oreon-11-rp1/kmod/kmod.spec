@@ -6,17 +6,13 @@
 
 Name: kmod
 Version: 34.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Linux kernel module management utilities
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
 Source0: https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/kmod-%{version}.tar.xz
-# signs the uncompressed tarball
 Source1: kmod-%{version}.tar.sign
-# Lucas De Marchi, EAB3 3C96 9001 3C73 3916 AC83 9BA2 A5A6 30CB EA53
 Source2: kmod-key.asc
-Provides: kmod-libs = %{version}-%{release}
-Provides: kmod-libs%{?_isa} = %{version}-%{release}
 Provides: module-init-tools = 4.0-1
 Obsoletes: module-init-tools < 4.0-1
 
@@ -33,6 +29,7 @@ BuildRequires: openssl-devel
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
 BuildRequires: libzstd-devel
+Requires: kmod-libs%{?_isa} = %{version}-%{release}
 
 %description
 kmod provides tools to insert, remove, list, check properties and resolve
@@ -40,12 +37,19 @@ dependencies of Linux kernel modules, and the libkmod library.
 
 %package devel
 Summary: Development files for libkmod
-Requires: kmod%{?_isa} = %{version}-%{release}
-Provides: kmod-libs-devel = %{version}-%{release}
-Provides: pkgconfig(libkmod) = %{version}
+Requires: kmod-libs%{?_isa} = %{version}-%{release}
 
 %description devel
 Headers and libraries for developing against libkmod.
+
+%package libs
+Summary: Library to manage Linux kernel modules
+License: LGPL-2.1-or-later
+Obsoletes: kmod < 34.3-2
+
+%description libs
+libkmod provides an API for insertion, removal, listing and dependency
+resolution of Linux kernel modules.
 
 %prep
 %oreon_sha256
@@ -73,11 +77,31 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
 
-%files -f %{_builddir}/%{name}.files
+%files
 %license COPYING
+%{_bindir}/depmod
+%{_bindir}/insmod
+%{_bindir}/kmod
+%{_bindir}/lsmod
+%{_bindir}/modinfo
+%{_bindir}/modprobe
+%{_bindir}/rmmod
+%{_datadir}/pkgconfig/kmod.pc
+%{_datadir}/bash-completion/completions/*
+%{_datadir}/fish/vendor_completions.d/*
+%{_datadir}/zsh/site-functions/*
 %dir %{_sysconfdir}/depmod.d
 %dir %{_sysconfdir}/modprobe.d
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%ldconfig_scriptlets libs
+
+%files libs
+%license COPYING
+%{_libdir}/libkmod.so.2
+%{_libdir}/libkmod.so.2.*
+
+%files devel
+%{_includedir}/libkmod.h
+%{_libdir}/libkmod.so
+%{_libdir}/pkgconfig/libkmod.pc

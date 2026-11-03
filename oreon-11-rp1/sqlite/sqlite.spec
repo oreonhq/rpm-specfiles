@@ -7,14 +7,12 @@
 
 Name: sqlite
 Version: 3.54.1
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: SQL database engine
 License: blessing
-Provides: sqlite-libs = %{version}-%{release}
-Provides: sqlite-libs%{_isa} = %{version}-%{release}
-Obsoletes: sqlite-libs < 3.55
 URL: https://www.sqlite.org/
 Source0: https://www.sqlite.org/2026/sqlite-autoconf-%{sqlite_ver}.tar.gz
+Requires: sqlite-libs%{?_isa} = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -28,10 +26,15 @@ BuildRequires: patchelf
 %description
 SQLite is a C library that implements a small, fast, self-contained SQL database engine.
 
+%package libs
+Summary: Shared library for SQLite
+
+%description libs
+The SQLite shared library.
+
 %package devel
 Summary: SQL database engine
-Requires: sqlite%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(sqlite3)
+Requires: sqlite-libs%{?_isa} = %{version}-%{release}
 
 %description devel
 SQLite is a C library that implements a small, fast, self-contained SQL database engine.
@@ -54,10 +57,14 @@ rm -f %{buildroot}%{_libdir}/libsqlite3.so.0 %{buildroot}%{_libdir}/libsqlite3.s
 mv "$lib" %{buildroot}%{_libdir}/libsqlite3.so.0
 ln -s libsqlite3.so.0 %{buildroot}%{_libdir}/libsqlite3.so
 
+%ldconfig_scriptlets libs
+
 %files
 %{_bindir}/sqlite3
-%{_libdir}/libsqlite3.so.0
 %{_mandir}/man1/sqlite3.1*
+
+%files libs
+%{_libdir}/libsqlite3.so.0
 
 %files devel
 %{_includedir}/sqlite3.h

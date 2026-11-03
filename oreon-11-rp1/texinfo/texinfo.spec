@@ -9,7 +9,7 @@
 
 Name: texinfo
 Version: 7.3
-Release: 2%{?dist}
+Release: 4%{?dist}
 Summary: Texinfo documentation tools
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/texinfo/
@@ -39,7 +39,6 @@ Texinfo formats documentation for online reading and for print.
 Summary: Info document reader
 Requires: gzip >= 1.15
 Requires: zstd >= 1.5.7
-Provides: /usr/bin/install-info
 
 %description -n info
 info reads Texinfo documents in a terminal. install-info updates the info directory.
@@ -53,8 +52,6 @@ Requires: /usr/bin/cmp
 Requires: /usr/bin/diff
 Requires(post): %{_bindir}/texconfig-sys
 Requires(postun): %{_bindir}/texconfig-sys
-Provides: tex-texinfo
-Provides: texlive-texinfo
 
 %description tex
 texi2dvi and texi2pdf format Texinfo documents with TeX.
@@ -78,40 +75,9 @@ install -Dpm0755 contrib/fix-info-dir %{buildroot}%{_sbindir}/fix-info-dir
 rm -f %{buildroot}%{_infodir}/dir
 find %{buildroot} -name '*.la' -delete
 
-main=%{_builddir}/texinfo.files
-info=%{_builddir}/info.files
-tex=%{_builddir}/texinfo-tex.files
-: > "$main"
-: > "$info"
-: > "$tex"
-find %{buildroot} \( -type f -o -type l \) | sort | while read -r path; do
-  rel=${path#%{buildroot}}
-  case "$rel" in
-    %{_mandir}/*|%{_infodir}/*)
-      dir=$(dirname "$rel")
-      base=$(basename "$rel")
-      base=${base%.gz}
-      line="$dir/${base}*"
-      ;;
-    *)
-      line="$rel"
-      ;;
-  esac
-  case "$rel" in
-    %{_bindir}/info|%{_sbindir}/install-info|%{_sbindir}/fix-info-dir|%{_infodir}/info-stnd.info*|%{_mandir}/*/info.1*|%{_mandir}/*/install-info.1*|%{_mandir}/*/info.5*)
-      echo "$line" >> "$info"
-      ;;
-    %{_bindir}/texindex|%{_bindir}/texi2dvi|%{_bindir}/texi2pdf|%{_bindir}/pdftexi2dvi|%{tex_texinfo}/*|%{_mandir}/*/texindex.1*|%{_mandir}/*/texi2dvi.1*|%{_mandir}/*/texi2pdf.1*|%{_mandir}/*/pdftexi2dvi.1*)
-      echo "$line" >> "$tex"
-      ;;
-    *)
-      echo "$line" >> "$main"
-      ;;
-  esac
-done
-sort -u -o "$main" "$main"
-sort -u -o "$info" "$info"
-sort -u -o "$tex" "$tex"
+%find_lang texinfo
+%find_lang texinfo_document
+cat texinfo_document.lang >> texinfo.lang
 
 %post tex
 %{_bindir}/texconfig-sys rehash
@@ -131,13 +97,41 @@ if [ -f %{_infodir}/dir ]; then
   %{_sbindir}/fix-info-dir --delete %{_infodir}/dir
 fi
 
-%files -f %{_builddir}/texinfo.files
+%files -f texinfo.lang
 %license COPYING
+%{_bindir}/makeinfo
+%{_bindir}/pod2texi
+%{_bindir}/texi2any
+%{_infodir}/texi2any_api.info*
+%{_infodir}/texi2any_internals.info*
+%{_infodir}/texinfo.info*
+%{_mandir}/man1/makeinfo.1*
+%{_mandir}/man1/pod2texi.1*
+%{_mandir}/man1/texi2any.1*
+%{_mandir}/man5/texinfo.5*
+%{_datadir}/texi2any/
+%{_datadir}/texinfo/
 
-%files -n info -f %{_builddir}/info.files
+%files -n info
 %license COPYING
+%{_bindir}/info
+%{_sbindir}/install-info
+%{_sbindir}/fix-info-dir
+%{_infodir}/info-stnd.info*
+%{_mandir}/man1/info.1*
+%{_mandir}/man1/install-info.1*
+%{_mandir}/man5/info.5*
 %ghost %attr(644,root,root) %{_infodir}/dir
 %ghost %attr(644,root,root) %{_infodir}/dir.old
 
-%files tex -f %{_builddir}/texinfo-tex.files
+%files tex
 %license COPYING
+%{_bindir}/pdftexi2dvi
+%{_bindir}/texi2dvi
+%{_bindir}/texi2pdf
+%{_bindir}/texindex
+%{_mandir}/man1/pdftexi2dvi.1*
+%{_mandir}/man1/texi2dvi.1*
+%{_mandir}/man1/texi2pdf.1*
+%{_mandir}/man1/texindex.1*
+%{tex_texinfo}/

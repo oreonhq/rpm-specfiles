@@ -3,10 +3,11 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
+%global py3_sitelib %(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib", "posix_prefix", {"base": "/usr"}))')
 
 Name: rpm
 Version: 6.1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: RPM package manager
 License: GPL-2.0-or-later
 URL: https://rpm.org/
@@ -46,21 +47,139 @@ BuildRequires: doxygen
 BuildRequires: scdoc
 BuildRequires: patchelf
 
-Provides: python3-rpm = %{version}-%{release}
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
 
 %description
 RPM package manager libraries and tools.
 
+%package libs
+Summary: Libraries for manipulating RPM packages
+Requires: rpm = %{version}-%{release}
+
+%description libs
+Shared libraries used by RPM and programs that read or install packages.
+
+%package build-libs
+Summary: Libraries for building RPM packages
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description build-libs
+Shared library used by rpmbuild and programs that build packages.
+
+%package sign-libs
+Summary: Libraries for signing RPM packages
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description sign-libs
+Shared library used to sign RPM packages.
+
+%package sign
+Summary: Package signing support
+Requires: rpm-sign-libs%{?_isa} = %{version}-%{release}
+
+%description sign
+rpmsign signs RPM packages.
+
+%package -n python3-rpm
+Summary: Python bindings for RPM
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+Requires: rpm-build-libs%{?_isa} = %{version}-%{release}
+Requires: rpm-sign-libs%{?_isa} = %{version}-%{release}
+
+%description -n python3-rpm
+Python 3 module for reading and installing RPM packages.
+
 %package devel
-Summary: RPM package manager
-Requires: rpm%{?_isa} = %{version}-%{release}
+Summary: Development files for RPM
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+Requires: rpm-build-libs%{?_isa} = %{version}-%{release}
+Requires: rpm-sign-libs%{?_isa} = %{version}-%{release}
+Requires: popt-devel
 
 %description devel
-RPM package manager libraries and tools.
+Headers, libraries and rpmgraph for programs that use RPM.
+
+%package apidocs
+Summary: API documentation for RPM libraries
+BuildArch: noarch
+
+%description apidocs
+Doxygen API documentation for the RPM libraries.
+
+%package plugin-audit
+Summary: RPM plugin audit
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-audit
+Logs transactions to the audit log.
+
+%package plugin-dbus-announce
+Summary: RPM plugin dbus-announce
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-dbus-announce
+Announces transactions on the system D-Bus.
+
+%package plugin-fapolicyd
+Summary: RPM plugin fapolicyd
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-fapolicyd
+Passes file data to fapolicyd.
+
+%package plugin-fsverity
+Summary: RPM plugin fsverity
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-fsverity
+Installs fs-verity signatures.
+
+%package plugin-ima
+Summary: RPM plugin ima
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-ima
+Installs IMA file signatures.
+
+%package plugin-prioreset
+Summary: RPM plugin prioreset
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-prioreset
+Resets scheduler priority for scriptlets.
+
+%package plugin-selinux
+Summary: RPM plugin selinux
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-selinux
+Sets SELinux contexts on installed files.
+
+%package plugin-syslog
+Summary: RPM plugin syslog
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-syslog
+Logs transactions to syslog.
+
+%package plugin-systemd-inhibit
+Summary: RPM plugin systemd-inhibit
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-systemd-inhibit
+Blocks shutdown during transactions.
+
+%package plugin-unshare
+Summary: RPM plugin unshare
+Requires: rpm-libs%{?_isa} = %{version}-%{release}
+
+%description plugin-unshare
+Runs scriptlets in private namespaces.
 
 %package build
 Summary: Scripts and programs used to build RPM packages
 Requires: rpm = %{version}-%{release}
+Requires: rpm-build-libs%{?_isa} = %{version}-%{release}
 Requires: elfutils
 Requires: binutils
 Requires: findutils
@@ -127,78 +246,165 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
-import os
-import sys
-from pathlib import Path
-main, devel = Path(sys.argv[1]), Path(sys.argv[2])
-m = main.read_text().splitlines()
-d = devel.read_text().splitlines()
-keep, move = [], []
-for line in d:
-    path = line.split()[-1] if line.startswith("%") else line
-    if path.endswith(".so") and path.count("/") > 3:
-        move.append(line)
-    else:
-        keep.append(line)
-def with_pyc(lines):
-    extra = []
-    seen = set(lines)
-    for line in lines:
-        path = line.split()[-1] if line.startswith("%") else line
-        path = path.strip('"')
-        if not path.endswith(".py"):
-            continue
-        if "/lib/python3." not in path and "/lib64/python3." not in path:
-            continue
-        glob = os.path.dirname(path) + "/__pycache__/*"
-        if glob not in seen:
-            seen.add(glob)
-            extra.append(glob)
-    return lines + extra
-m = with_pyc(m + move)
-keep = with_pyc(keep)
-text = "\n".join(m)
-main.write_text(text + ("\n" if text else ""))
-text = "\n".join(keep)
-devel.write_text(text + ("\n" if text else ""))
-PY
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-build.files << 'PY'
-import os
-import sys
-from pathlib import Path
-main, build = Path(sys.argv[1]), Path(sys.argv[2])
-bins = {"rpmbuild", "gendiff", "rpmspec", "rpmlua"}
-mans = (
-    "gendiff.1", "rpmbuild.1", "rpmdeps.1", "rpmspec.1", "rpmlua.1",
-    "rpm-setup-autosign.1", "rpmuncompress.1", "rpmbuild-config.5",
-)
-names = (
-    "find-lang.sh", "find-debuginfo.sh", "rpmuncompress", "rpmdump",
-    "rpm-setup-autosign",
-)
-keep, moved = [], []
-for line in main.read_text().splitlines():
-    path = line.split()[-1] if line.startswith("%") else line
-    path = path.strip('"')
-    base = os.path.basename(path.rstrip("*"))
-    take = base in bins or base.startswith(mans) or base.startswith(("brp-", "check-"))
-    take = take or base in names or base.endswith((".prov", ".req"))
-    take = take or "/rpm/fileattrs/" in path or "/fileattrs/" in path
-    if "/rpm/" in path and ("provides" in base or "requires" in base or "deps" in base):
-        take = True
-    if take:
-        moved.append(line)
-    else:
-        keep.append(line)
-main.write_text("\n".join(keep) + ("\n" if keep else ""))
-build.write_text("\n".join(moved) + ("\n" if moved else ""))
-PY
+%find_lang rpm
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets libs
+%ldconfig_scriptlets build-libs
+%ldconfig_scriptlets sign-libs
+
+%files -f rpm.lang
 %license COPYING
+%{_bindir}/rpm
+%{_bindir}/rpm2archive
+%{_bindir}/rpm2cpio
+%{_bindir}/rpmdb
+%{_bindir}/rpmkeys
+%{_bindir}/rpmquery
+%{_bindir}/rpmsort
+%{_bindir}/rpmverify
+%dir %{_rpmconfigdir}
+%dir %{_rpmmacrodir}
+%{_rpmconfigdir}/macros
+%{_rpmconfigdir}/rpmrc
+%{_rpmconfigdir}/rpmpopt-%{version}
+%{_rpmconfigdir}/platform/
+%{_rpmconfigdir}/rpm.daily
+%{_rpmconfigdir}/rpm.log
+%{_rpmconfigdir}/rpm.supp
+%{_rpmconfigdir}/rpm2cpio.sh
+%{_rpmconfigdir}/rpmdb_dump
+%{_rpmconfigdir}/rpmdb_load
+%{_rpmconfigdir}/sysusers.sh
+%{_rpmconfigdir}/tgpg
+%{_docdir}/rpm/
+%exclude %{_docdir}/rpm/API
+%{_mandir}/man1/rpm2archive.1*
+%{_mandir}/man1/rpm2cpio.1*
+%{_mandir}/man1/rpmsort.1*
+%{_mandir}/man5/rpm-config.5*
+%{_mandir}/man5/rpm-macrofile.5*
+%{_mandir}/man5/rpm-manifest.5*
+%{_mandir}/man5/rpm-rpmrc.5*
+%{_mandir}/man7/rpm-*.7*
+%{_mandir}/man8/rpm.8*
+%{_mandir}/man8/rpm-common.8*
+%{_mandir}/man8/rpm-plugins.8*
+%{_mandir}/man8/rpmdb.8*
+%{_mandir}/man8/rpmkeys.8*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files libs
+%license COPYING
+%{_libdir}/librpm.so.10*
+%{_libdir}/librpmio.so.10*
+%dir %{_libdir}/rpm-plugins
 
-%files build -f %{_builddir}/%{name}-build.files
+%files build-libs
+%{_libdir}/librpmbuild.so.10*
+
+%files sign-libs
+%{_libdir}/librpmsign.so.10*
+
+%files sign
+%{_bindir}/rpmsign
+%{_bindir}/rpm-setup-autosign
+%{_rpmconfigdir}/rpm-setup-autosign
+%{_mandir}/man1/rpmsign.1*
+%{_mandir}/man1/rpm-setup-autosign.1*
+
+%files -n python3-rpm
+%{py3_sitelib}/rpm/
+%{py3_sitelib}/rpm-%{version}-py*.egg-info
+
+%files plugin-audit
+%{_libdir}/rpm-plugins/audit.so
+%{_rpmmacrodir}/macros.transaction_audit
+%{_mandir}/man8/rpm-plugin-audit.8*
+
+%files plugin-dbus-announce
+%{_datadir}/dbus-1/system.d/org.rpm.conf
+%{_libdir}/rpm-plugins/dbus_announce.so
+%{_rpmmacrodir}/macros.transaction_dbus_announce
+%{_mandir}/man8/rpm-plugin-dbus-announce.8*
+
+%files plugin-fapolicyd
+%{_libdir}/rpm-plugins/fapolicyd.so
+%{_rpmmacrodir}/macros.transaction_fapolicyd
+%{_mandir}/man8/rpm-plugin-fapolicyd.8*
+
+%files plugin-ima
+%{_libdir}/rpm-plugins/ima.so
+%{_rpmmacrodir}/macros.transaction_ima
+%{_mandir}/man8/rpm-plugin-ima.8*
+
+%files plugin-prioreset
+%{_libdir}/rpm-plugins/prioreset.so
+%{_rpmmacrodir}/macros.transaction_prioreset
+%{_mandir}/man8/rpm-plugin-prioreset.8*
+
+%files plugin-selinux
+%{_libdir}/rpm-plugins/selinux.so
+%{_rpmmacrodir}/macros.transaction_selinux
+%{_mandir}/man8/rpm-plugin-selinux.8*
+
+%files plugin-syslog
+%{_libdir}/rpm-plugins/syslog.so
+%{_rpmmacrodir}/macros.transaction_syslog
+%{_mandir}/man8/rpm-plugin-syslog.8*
+
+%files plugin-systemd-inhibit
+%{_libdir}/rpm-plugins/systemd_inhibit.so
+%{_rpmmacrodir}/macros.transaction_systemd_inhibit
+%{_mandir}/man8/rpm-plugin-systemd-inhibit.8*
+
+%files plugin-unshare
+%{_libdir}/rpm-plugins/unshare.so
+%{_rpmmacrodir}/macros.transaction_unshare
+%{_mandir}/man8/rpm-plugin-unshare.8*
+
+%files plugin-fsverity
+%{_libdir}/rpm-plugins/fsverity.so
+%{_rpmmacrodir}/macros.transaction_fsverity
+
+%files build
+%{_bindir}/gendiff
+%{_bindir}/rpmbuild
+%{_bindir}/rpmlua
+%{_bindir}/rpmspec
+%{_bindir}/rpmuncompress
+%{_rpmconfigdir}/brp-*
+%{_rpmconfigdir}/check-*
+%{_rpmconfigdir}/elfdeps
+%{_rpmconfigdir}/fileattrs/
+%{_rpmconfigdir}/find-lang.sh
+%{_rpmconfigdir}/find-provides
+%{_rpmconfigdir}/find-requires
+%{_rpmconfigdir}/fontconfig.prov
+%{_rpmconfigdir}/ocamldeps.sh
+%{_rpmconfigdir}/pkgconfigdeps.sh
+%{_rpmconfigdir}/rpm_macros_provides.sh
+%{_rpmconfigdir}/rpmdeps
+%{_rpmconfigdir}/rpmdump
+%{_rpmconfigdir}/rpmuncompress
+%{_rpmconfigdir}/script.req
+%{_mandir}/man1/elfdeps.1*
+%{_mandir}/man1/gendiff.1*
+%{_mandir}/man1/rpmbuild.1*
+%{_mandir}/man1/rpmdeps.1*
+%{_mandir}/man1/rpmlua.1*
+%{_mandir}/man1/rpmspec.1*
+%{_mandir}/man1/rpmuncompress.1*
+%{_mandir}/man5/rpmbuild-config.5*
+
+%files devel
+%{_bindir}/rpmgraph
+%{_includedir}/rpm/
+%{_libdir}/librpm.so
+%{_libdir}/librpmbuild.so
+%{_libdir}/librpmio.so
+%{_libdir}/librpmsign.so
+%{_libdir}/pkgconfig/rpm.pc
+%{_libdir}/cmake/rpm/
+%{_mandir}/man1/rpmgraph.1*
+
+%files apidocs
+%{_docdir}/rpm/API/

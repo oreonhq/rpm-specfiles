@@ -13,7 +13,7 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -31,13 +31,13 @@ BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
-BuildRequires: libmpc-devel
+BuildRequires: mpc-devel
 BuildRequires: zlib-devel
-%if %{without bootstrap} && !0%{?bootstrap}
 Requires: binutils
-Requires: cpp = %{version}-%{release}
+Requires: cpp%{?_isa} = %{version}-%{release}
 Requires: glibc-devel
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: texinfo
 BuildRequires: bison
 BuildRequires: flex
@@ -62,108 +62,34 @@ names start with COPYING for copying permission.  The manuals, and
 some of the runtime libraries, are under different terms; see the
 individual source files for details.
 
-%if %{without bootstrap} && !0%{?bootstrap}
 %package -n cpp
 Summary: GNU C preprocessor
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n cpp
 The GNU C preprocessor. It is used by the C compiler to transform programs before compilation.
 
 %package -n gcc-c++
 Summary: GNU C++ compiler
-Requires: gcc = %{version}-%{release}
-Requires: libstdc++-devel = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libstdc++-devel%{?_isa} = %{version}-%{release}
 %description -n gcc-c++
 C++ support for the GNU Compiler Collection.
 
-%package -n gcc-objc
-Summary: GNU Objective-C compiler
-Requires: gcc = %{version}-%{release}
-Requires: libobjc = %{version}-%{release}
-%description -n gcc-objc
-Objective-C support for the GNU Compiler Collection.
-
-%package -n gcc-objc++
-Summary: GNU Objective-C++ compiler
-Requires: gcc-c++ = %{version}-%{release}
-Requires: gcc-objc = %{version}-%{release}
-%description -n gcc-objc++
-Objective-C++ support for the GNU Compiler Collection.
-
-%package -n gcc-gfortran
-Summary: GNU Fortran compiler
-Requires: gcc = %{version}-%{release}
-Requires: libgfortran = %{version}-%{release}
-%ifarch x86_64
-Requires: libquadmath = %{version}-%{release}
-Requires: libquadmath-devel = %{version}-%{release}
-%endif
-%description -n gcc-gfortran
-Fortran support for the GNU Compiler Collection.
-
-%package -n gcc-gdc
-Summary: GNU D compiler
-Requires: gcc = %{version}-%{release}
-Requires: libgphobos = %{version}-%{release}
-%description -n gcc-gdc
-D support for the GNU Compiler Collection.
-
-%package -n gcc-gm2
-Summary: GNU Modula-2 compiler
-Requires: gcc-c++ = %{version}-%{release}
-Requires: libgm2 = %{version}-%{release}
-%description -n gcc-gm2
-Modula-2 support for the GNU Compiler Collection.
-
-%package -n gcc-gcobol
-Summary: GNU COBOL compiler
-Requires: gcc = %{version}-%{release}
-Requires: libgcobol = %{version}-%{release}
-%description -n gcc-gcobol
-COBOL support for the GNU Compiler Collection.
-
-%package -n gcc-algol68
-Summary: GNU Algol 68 compiler
-Requires: gcc = %{version}-%{release}
-Requires: libga68 = %{version}-%{release}
-%description -n gcc-algol68
-Algol 68 support for the GNU Compiler Collection.
-
-%package -n gcc-gnat
-Summary: GNU Ada compiler
-Requires: gcc-c++ = %{version}-%{release}
-Requires: libgnat = %{version}-%{release}
-%description -n gcc-gnat
-Ada support for the GNU Compiler Collection.
-
-%package -n gcc-go
-Summary: GNU Go compiler
-Requires: gcc = %{version}-%{release}
-Requires: libgo = %{version}-%{release}
-%description -n gcc-go
-Go support for the GNU Compiler Collection.
-
 %package -n gcc-gdb-plugin
 Summary: GCC plugin for GDB
-Requires: gcc = %{version}-%{release}
-Requires: libgcc = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n gcc-gdb-plugin
 GCC plugin for GDB C expression evaluation.
 
 %package -n gcc-plugin-devel
 Summary: Files for building GCC plugins
-Requires: gcc = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
 Requires: gmp-devel
 Requires: mpfr-devel
-Requires: libmpc-devel
+Requires: mpc-devel
 %description -n gcc-plugin-devel
 Header files for compiling GCC plugins.
-
-%package -n gcc-plugin-annobin
-Summary: Annobin plugin built by this GCC
-Requires: gcc = %{version}-%{release}
-%description -n gcc-plugin-annobin
-Annobin plugin built by the same GCC it is installed with.
 
 %package -n libgcc
 Summary: GCC shared support library
@@ -174,24 +100,228 @@ GCC shared support library.
 %package -n libstdc++
 Summary: GNU Standard C++ Library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libstdc++
 GNU Standard C++ Library.
 
 %package -n libstdc++-devel
 Summary: GNU Standard C++ Library headers
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libstdc++ = %{version}-%{release}
-Requires: gcc = %{version}-%{release}
+Requires: libstdc++%{?_isa} = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
 %description -n libstdc++-devel
 Headers and link libraries for the GNU Standard C++ Library.
 
 %package -n libstdc++-static
 Summary: GNU Standard C++ static library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libstdc++-devel = %{version}-%{release}
+Requires: libstdc++-devel%{?_isa} = %{version}-%{release}
 %description -n libstdc++-static
 Static GNU Standard C++ Library.
+
+%package -n libgomp
+Summary: GCC OpenMP runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libgomp
+GCC OpenMP runtime library.
+
+%package -n libatomic
+Summary: GCC atomic operations library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libatomic
+GCC support library for atomic operations.
+
+%package -n libitm
+Summary: GNU Transactional Memory library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libitm
+GNU Transactional Memory runtime library.
+
+%package -n libitm-devel
+Summary: GNU Transactional Memory headers
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libitm%{?_isa} = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
+%description -n libitm-devel
+Headers for the GNU Transactional Memory library.
+
+%package -n libitm-static
+Summary: GNU Transactional Memory static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libitm-devel%{?_isa} = %{version}-%{release}
+%description -n libitm-static
+Static GNU Transactional Memory library.
+
+%package -n libasan
+Summary: Address Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libasan
+Address Sanitizer runtime library.
+
+%package -n libasan-static
+Summary: Address Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libasan%{?_isa} = %{version}-%{release}
+%description -n libasan-static
+Static Address Sanitizer runtime library.
+
+%package -n libhwasan
+Summary: Hardware-assisted Address Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libhwasan
+Hardware-assisted Address Sanitizer runtime library.
+
+%package -n libhwasan-static
+Summary: Hardware-assisted Address Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libhwasan%{?_isa} = %{version}-%{release}
+%description -n libhwasan-static
+Static Hardware-assisted Address Sanitizer runtime library.
+
+%package -n libtsan
+Summary: Thread Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libtsan
+Thread Sanitizer runtime library.
+
+%package -n libtsan-static
+Summary: Thread Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libtsan%{?_isa} = %{version}-%{release}
+%description -n libtsan-static
+Static Thread Sanitizer runtime library.
+
+%package -n liblsan
+Summary: Leak Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n liblsan
+Leak Sanitizer runtime library.
+
+%package -n liblsan-static
+Summary: Leak Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: liblsan%{?_isa} = %{version}-%{release}
+%description -n liblsan-static
+Static Leak Sanitizer runtime library.
+
+%package -n libubsan
+Summary: Undefined Behavior Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libubsan
+Undefined Behavior Sanitizer runtime library.
+
+%package -n libubsan-static
+Summary: Undefined Behavior Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libubsan%{?_isa} = %{version}-%{release}
+%description -n libubsan-static
+Static Undefined Behavior Sanitizer runtime library.
+
+%ifarch x86_64
+%package -n libquadmath
+Summary: GCC quad-precision math library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libquadmath
+GCC __float128 math library.
+
+%package -n libquadmath-devel
+Summary: GCC quad-precision math headers
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libquadmath%{?_isa} = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
+%description -n libquadmath-devel
+Headers for the GCC __float128 math library.
+
+%package -n libquadmath-static
+Summary: GCC quad-precision math static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libquadmath-devel%{?_isa} = %{version}-%{release}
+%description -n libquadmath-static
+Static GCC __float128 math library.
+%endif
+
+%if %{without bootstrap} && !0%{?bootstrap}
+%package -n gcc-objc
+Summary: GNU Objective-C compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libobjc%{?_isa} = %{version}-%{release}
+%description -n gcc-objc
+Objective-C support for the GNU Compiler Collection.
+
+%package -n gcc-objc++
+Summary: GNU Objective-C++ compiler
+Requires: gcc-c++%{?_isa} = %{version}-%{release}
+Requires: gcc-objc%{?_isa} = %{version}-%{release}
+%description -n gcc-objc++
+Objective-C++ support for the GNU Compiler Collection.
+
+%package -n gcc-gfortran
+Summary: GNU Fortran compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgfortran%{?_isa} = %{version}-%{release}
+%ifarch x86_64
+Requires: libquadmath%{?_isa} = %{version}-%{release}
+Requires: libquadmath-devel%{?_isa} = %{version}-%{release}
+%endif
+%description -n gcc-gfortran
+Fortran support for the GNU Compiler Collection.
+
+%package -n gcc-gdc
+Summary: GNU D compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgphobos%{?_isa} = %{version}-%{release}
+%description -n gcc-gdc
+D support for the GNU Compiler Collection.
+
+%package -n gcc-gm2
+Summary: GNU Modula-2 compiler
+Requires: gcc-c++%{?_isa} = %{version}-%{release}
+Requires: libgm2%{?_isa} = %{version}-%{release}
+%description -n gcc-gm2
+Modula-2 support for the GNU Compiler Collection.
+
+%package -n gcc-gcobol
+Summary: GNU COBOL compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgcobol%{?_isa} = %{version}-%{release}
+%description -n gcc-gcobol
+COBOL support for the GNU Compiler Collection.
+
+%package -n gcc-algol68
+Summary: GNU Algol 68 compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libga68%{?_isa} = %{version}-%{release}
+%description -n gcc-algol68
+Algol 68 support for the GNU Compiler Collection.
+
+%package -n gcc-gnat
+Summary: GNU Ada compiler
+Requires: gcc-c++%{?_isa} = %{version}-%{release}
+Requires: libgnat%{?_isa} = %{version}-%{release}
+%description -n gcc-gnat
+Ada support for the GNU Compiler Collection.
+
+%package -n gcc-go
+Summary: GNU Go compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgo%{?_isa} = %{version}-%{release}
+%description -n gcc-go
+Go support for the GNU Compiler Collection.
+
+%package -n gcc-plugin-annobin
+Summary: Annobin plugin built by this GCC
+Requires: gcc%{?_isa} = %{version}-%{release}
+%description -n gcc-plugin-annobin
+Annobin plugin built by the same GCC it is installed with.
 
 %package -n libstdc++-docs
 Summary: GNU Standard C++ Library documentation
@@ -199,118 +329,12 @@ License: GFDL-1.3-or-later
 %description -n libstdc++-docs
 Documentation for the GNU Standard C++ Library.
 
-%package -n libgomp
-Summary: GCC OpenMP runtime
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n libgomp
-GCC OpenMP runtime library.
-
-%package -n libatomic
-Summary: GCC atomic operations library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n libatomic
-GCC support library for atomic operations.
-
-%package -n libitm
-Summary: GNU Transactional Memory library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n libitm
-GNU Transactional Memory runtime library.
-
-%package -n libitm-devel
-Summary: GNU Transactional Memory headers
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libitm = %{version}-%{release}
-Requires: gcc = %{version}-%{release}
-%description -n libitm-devel
-Headers for the GNU Transactional Memory library.
-
-%package -n libitm-static
-Summary: GNU Transactional Memory static library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libitm-devel = %{version}-%{release}
-%description -n libitm-static
-Static GNU Transactional Memory library.
-
-%package -n libasan
-Summary: Address Sanitizer runtime
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n libasan
-Address Sanitizer runtime library.
-
-%package -n libasan-static
-Summary: Address Sanitizer static library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libasan = %{version}-%{release}
-%description -n libasan-static
-Static Address Sanitizer runtime library.
-
-%package -n libhwasan
-Summary: Hardware-assisted Address Sanitizer runtime
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n libhwasan
-Hardware-assisted Address Sanitizer runtime library.
-
-%package -n libhwasan-static
-Summary: Hardware-assisted Address Sanitizer static library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libhwasan = %{version}-%{release}
-%description -n libhwasan-static
-Static Hardware-assisted Address Sanitizer runtime library.
-
-%package -n libtsan
-Summary: Thread Sanitizer runtime
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n libtsan
-Thread Sanitizer runtime library.
-
-%package -n libtsan-static
-Summary: Thread Sanitizer static library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libtsan = %{version}-%{release}
-%description -n libtsan-static
-Static Thread Sanitizer runtime library.
-
-%package -n liblsan
-Summary: Leak Sanitizer runtime
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n liblsan
-Leak Sanitizer runtime library.
-
-%package -n liblsan-static
-Summary: Leak Sanitizer static library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: liblsan = %{version}-%{release}
-%description -n liblsan-static
-Static Leak Sanitizer runtime library.
-
-%package -n libubsan
-Summary: Undefined Behavior Sanitizer runtime
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n libubsan
-Undefined Behavior Sanitizer runtime library.
-
-%package -n libubsan-static
-Summary: Undefined Behavior Sanitizer static library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libubsan = %{version}-%{release}
-%description -n libubsan-static
-Static Undefined Behavior Sanitizer runtime library.
-
 %package -n libgfortran
 Summary: GNU Fortran runtime
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %ifarch x86_64
-Requires: libquadmath = %{version}-%{release}
+Requires: libquadmath%{?_isa} = %{version}-%{release}
 %endif
 %description -n libgfortran
 Fortran runtime library.
@@ -318,194 +342,172 @@ Fortran runtime library.
 %package -n libgfortran-static
 Summary: GNU Fortran static library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgfortran = %{version}-%{release}
-Requires: gcc-gfortran = %{version}-%{release}
+Requires: libgfortran%{?_isa} = %{version}-%{release}
+Requires: gcc-gfortran%{?_isa} = %{version}-%{release}
 %description -n libgfortran-static
 Static Fortran runtime library.
 
 %package -n libgphobos
 Summary: GNU D runtime
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgphobos
 D runtime library.
 
 %package -n libgphobos-static
 Summary: GNU D static library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgphobos = %{version}-%{release}
+Requires: libgphobos%{?_isa} = %{version}-%{release}
 %description -n libgphobos-static
 Static D runtime library.
 
 %package -n libgm2
 Summary: GNU Modula-2 runtime
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgm2
 Modula-2 runtime library.
 
 %package -n libgm2-static
 Summary: GNU Modula-2 static library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgm2 = %{version}-%{release}
+Requires: libgm2%{?_isa} = %{version}-%{release}
 %description -n libgm2-static
 Static Modula-2 runtime library.
 
 %package -n libgcobol
 Summary: GNU COBOL runtime
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgcobol
 COBOL runtime library.
 
 %package -n libgcobol-static
 Summary: GNU COBOL static library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcobol = %{version}-%{release}
+Requires: libgcobol%{?_isa} = %{version}-%{release}
 %description -n libgcobol-static
 Static COBOL runtime library.
 
 %package -n libga68
 Summary: GNU Algol 68 runtime
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libga68
 Algol 68 runtime library.
 
 %package -n libga68-static
 Summary: GNU Algol 68 static library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libga68 = %{version}-%{release}
+Requires: libga68%{?_isa} = %{version}-%{release}
 %description -n libga68-static
 Static Algol 68 runtime library.
 
 %package -n libgnat
 Summary: GNU Ada runtime
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgnat
 Ada runtime library.
 
 %package -n libgnat-devel
 Summary: GNU Ada development files
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgnat = %{version}-%{release}
-Requires: gcc-gnat = %{version}-%{release}
+Requires: libgnat%{?_isa} = %{version}-%{release}
+Requires: gcc-gnat%{?_isa} = %{version}-%{release}
 %description -n libgnat-devel
 Ada source and link files.
 
 %package -n libgnat-static
 Summary: GNU Ada static library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgnat-devel = %{version}-%{release}
+Requires: libgnat-devel%{?_isa} = %{version}-%{release}
 %description -n libgnat-static
 Static Ada runtime library.
 
 %package -n libgo
 Summary: Go runtime
 License: BSD-3-Clause
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgo
 Go runtime library.
 
 %package -n libgo-devel
 Summary: Go development files
 License: BSD-3-Clause
-Requires: libgo = %{version}-%{release}
-Requires: gcc-go = %{version}-%{release}
+Requires: libgo%{?_isa} = %{version}-%{release}
+Requires: gcc-go%{?_isa} = %{version}-%{release}
 %description -n libgo-devel
 Go headers and link library.
 
 %package -n libgo-static
 Summary: Go static library
 License: BSD-3-Clause
-Requires: libgo-devel = %{version}-%{release}
+Requires: libgo-devel%{?_isa} = %{version}-%{release}
 %description -n libgo-static
 Static Go runtime library.
 
 %package -n libobjc
 Summary: Objective-C runtime
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libobjc
 Objective-C runtime library.
 
 %package -n libgccjit
 Summary: GCC just-in-time library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgccjit
 Library for embedding GCC in a program.
 
 %package -n libgccjit-devel
 Summary: GCC just-in-time headers
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgccjit = %{version}-%{release}
+Requires: libgccjit%{?_isa} = %{version}-%{release}
 %description -n libgccjit-devel
 Headers for embedding GCC in a program.
 
 %package -n libgdiagnostics
 Summary: GCC diagnostics library
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgdiagnostics
 Library for emitting compiler diagnostics.
 
 %package -n libgdiagnostics-devel
 Summary: GCC diagnostics headers
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgdiagnostics = %{version}-%{release}
+Requires: libgdiagnostics%{?_isa} = %{version}-%{release}
 %description -n libgdiagnostics-devel
 Headers for the GCC diagnostics library.
 
 %ifarch x86_64
-%package -n libquadmath
-Summary: GCC quad-precision math library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgcc = %{version}-%{release}
-%description -n libquadmath
-GCC __float128 math library.
-
-%package -n libquadmath-devel
-Summary: GCC quad-precision math headers
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libquadmath = %{version}-%{release}
-Requires: gcc = %{version}-%{release}
-%description -n libquadmath-devel
-Headers for the GCC __float128 math library.
-
-%package -n libquadmath-static
-Summary: GCC quad-precision math static library
-License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libquadmath-devel = %{version}-%{release}
-%description -n libquadmath-static
-Static GCC __float128 math library.
-
 %package -n libgomp-offload-nvptx
 Summary: OpenMP offload plugin for NVPTX
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgomp = %{version}-%{release}
+Requires: libgomp%{?_isa} = %{version}-%{release}
 %description -n libgomp-offload-nvptx
 OpenMP offload plugin for Nvidia PTX.
 
 %package -n libgomp-offload-amdgcn
 Summary: OpenMP offload plugin for AMD GCN
 License: GPL-3.0-or-later WITH GCC-exception-3.1
-Requires: libgomp = %{version}-%{release}
+Requires: libgomp%{?_isa} = %{version}-%{release}
 %description -n libgomp-offload-amdgcn
 OpenMP offload plugin for AMD GCN.
 
 %package -n gcc-offload-nvptx
 Summary: GCC offloading compiler for NVPTX
-Requires: gcc = %{version}-%{release}
-Requires: libgomp-offload-nvptx = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgomp-offload-nvptx%{?_isa} = %{version}-%{release}
 %description -n gcc-offload-nvptx
 Offloading compiler for Nvidia PTX.
 
 %package -n gcc-offload-amdgcn
 Summary: GCC offloading compiler for AMD GCN
-Requires: gcc = %{version}-%{release}
-Requires: libgomp-offload-amdgcn = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgomp-offload-amdgcn%{?_isa} = %{version}-%{release}
 Requires: llvm
 Requires: lld
 %description -n gcc-offload-amdgcn
@@ -572,21 +574,17 @@ common() {
 mkdir -p %{_builddir}/gcc-build
 cd %{_builddir}/gcc-build
 step bootstrap-configure common \
-  --enable-languages=c \
-  --disable-shared \
-  --disable-threads \
-  --disable-libstdcxx \
-  --without-headers \
-  --with-newlib \
+  --enable-shared \
+  --with-linker-hash-style=gnu \
+  --enable-languages=c,c++,lto \
+  --enable-default-pie \
+  --enable-linker-build-id \
   --disable-bootstrap \
-  --disable-decimal-float \
-  --disable-libgomp \
+%ifnarch x86_64
   --disable-libquadmath \
-  --disable-libatomic \
-  --disable-libvtv \
-  --disable-libsanitizer \
-  --disable-libitm
-step bootstrap-make make -s -j"$jobs"
+%endif
+  --disable-libvtv
+step bootstrap-make make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 %else
 %ifarch x86_64
 ln -sfn %{_builddir}/newlib-cygwin-%{newlib_rev}/newlib "$src/newlib"
@@ -698,10 +696,11 @@ EOF
 chmod 755 %{_builddir}/gcc-host-strip
 %if %{with bootstrap} || 0%{?bootstrap}
 cd %{_builddir}/gcc-build
-make -s install DESTDIR=%{buildroot}
+make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 find %{buildroot} -name '*.la' -delete
 rm -f %{buildroot}%{_infodir}/dir
-%oreon_filelist
+rm -rf %{buildroot}%{_libdir}/gcc/*/*/install-tools
+rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
 %else
 step() {
   name=$1
@@ -833,6 +832,7 @@ find %{buildroot} -name '*.la' -delete
 rm -f %{buildroot}%{_infodir}/dir
 rm -rf %{buildroot}%{_libdir}/gcc/*/*/install-tools
 rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
+%endif
 
 out=%{_builddir}/gcc-split
 rm -rf "$out"
@@ -894,10 +894,12 @@ classify() {
     gccgo|go|gofmt) echo gcc-go; return ;;
     gnat|gnatbind|gnatmake|gnatlink|gnatls|gnatchop|gnatkr|gnatname|gnatprep|gnatclean|gnatsym|gnatdll) echo gcc-gnat; return ;;
     sarif-replay) echo libgdiagnostics; return ;;
+    libgcc_s.so|libgcc_s_asneeded.so) echo gcc; return ;;
     libgcc_s*) echo libgcc; return ;;
     libsanitizer.spec) echo gcc; return ;;
     libstdc++.so.[0-9]*) echo libstdc++; return ;;
-    libstdc++.so|libstdc++.modules.json) echo libstdc++-devel; return ;;
+    libstdc++.so) echo gcc-c++; return ;;
+    libstdc++.modules.json|libstdc++fs.a|libstdc++exp.a) echo libstdc++-devel; return ;;
     *libstdc++*-gdb.py) echo libstdc++; return ;;
     *libgfortran*-gdb.py) echo libgfortran; return ;;
     *libgomp*-gdb.py) echo libgomp; return ;;
@@ -907,34 +909,48 @@ classify() {
     libstdc++*.a|libsupc++*.a) echo libstdc++-static; return ;;
     libgomp-plugin-nvptx.so*) echo libgomp-offload-nvptx; return ;;
     libgomp-plugin-gcn.so*) echo libgomp-offload-amdgcn; return ;;
-    libgomp.so*|libgomp.a|libgomp.spec|omp.h|openacc.h|omp_lib.h|omp_lib.mod|omp_lib.f90|oacc_lib.h) echo libgomp; return ;;
-    libatomic*) echo libatomic; return ;;
+    libgomp.so|libgomp.a|libgomp.spec|omp.h|openacc.h|acc_prof.h) echo gcc; return ;;
+    omp_lib.h|omp_lib.mod|omp_lib.f90|openacc.mod|openacc_lib.h|openacc.f90|oacc_lib.h) echo gcc-gfortran; return ;;
+    libgomp.so.[0-9]*) echo libgomp; return ;;
+    libatomic.so|libatomic.a|libatomic_asneeded.so|libatomic_asneeded.a) echo gcc; return ;;
+    libatomic.so.[0-9]*) echo libatomic; return ;;
     libitm.so.[0-9]*) echo libitm; return ;;
     libitm.so) echo libitm-devel; return ;;
-    libitm.a|libitm.spec) echo libitm-static; return ;;
-    libasan.so*|libasan.spec|libasan_preinit.o) echo libasan; return ;;
+    libitm.spec) echo gcc; return ;;
+    libitm.a) echo libitm-static; return ;;
+    libasan.so|libasan.spec|libasan_preinit.o) echo gcc; return ;;
+    libasan.so.[0-9]*) echo libasan; return ;;
     libasan.a) echo libasan-static; return ;;
-    libhwasan.so*|libhwasan.spec|libhwasan_preinit.o) echo libhwasan; return ;;
+    libhwasan.so|libhwasan.spec|libhwasan_preinit.o) echo gcc; return ;;
+    libhwasan.so.[0-9]*) echo libhwasan; return ;;
     libhwasan.a) echo libhwasan-static; return ;;
-    libtsan.so*|libtsan.spec|libtsan_preinit.o) echo libtsan; return ;;
+    libtsan.so|libtsan.spec|libtsan_preinit.o) echo gcc; return ;;
+    libtsan.so.[0-9]*) echo libtsan; return ;;
     libtsan.a) echo libtsan-static; return ;;
-    liblsan.so*|liblsan.spec|liblsan_preinit.o) echo liblsan; return ;;
+    liblsan.so|liblsan.spec|liblsan_preinit.o) echo gcc; return ;;
+    liblsan.so.[0-9]*) echo liblsan; return ;;
     liblsan.a) echo liblsan-static; return ;;
-    libubsan.so*|libubsan.spec) echo libubsan; return ;;
+    libubsan.so|libubsan.spec) echo gcc; return ;;
+    libubsan.so.[0-9]*) echo libubsan; return ;;
     libubsan.a) echo libubsan-static; return ;;
     libquadmath.so.[0-9]*) echo libquadmath; return ;;
     libquadmath.so|quadmath.h|quadmath_weak.h) echo libquadmath-devel; return ;;
     libquadmath.a) echo libquadmath-static; return ;;
-    libgfortran.so*|libgfortran.spec) echo libgfortran; return ;;
+    libgfortran.so|libgfortran.spec) echo gcc-gfortran; return ;;
+    libgfortran.so.[0-9]*) echo libgfortran; return ;;
     libgfortran.a) echo libgfortran-static; return ;;
-    libgphobos.so*|libgdruntime.so*) echo libgphobos; return ;;
+    libgphobos.so|libgdruntime.so) echo gcc-gdc; return ;;
+    libgphobos.so.[0-9]*|libgdruntime.so.[0-9]*) echo libgphobos; return ;;
     libgphobos.a|libgdruntime.a) echo libgphobos-static; return ;;
-    libgm2.so*|libm2*.so.[0-9]*) echo libgm2; return ;;
+    libgm2.so) echo gcc-gm2; return ;;
+    libgm2.so.[0-9]*|libm2*.so.[0-9]*) echo libgm2; return ;;
     libm2*.so) echo gcc-gm2; return ;;
     libgm2.a|libm2*.a) echo libgm2-static; return ;;
-    libgcobol.so*) echo libgcobol; return ;;
+    libgcobol.so) echo gcc-gcobol; return ;;
+    libgcobol.so.[0-9]*) echo libgcobol; return ;;
     libgcobol.a) echo libgcobol-static; return ;;
-    libga68.so*) echo libga68; return ;;
+    libga68.so) echo gcc-algol68; return ;;
+    libga68.so.[0-9]*) echo libga68; return ;;
     libga68.a) echo libga68-static; return ;;
     libgnat.so|libgnarl.so) echo libgnat-devel; return ;;
     libgnat.a|libgnarl.a) echo libgnat-static; return ;;
@@ -942,7 +958,8 @@ classify() {
     libgo.so.[0-9]*) echo libgo; return ;;
     libgo.so) echo libgo-devel; return ;;
     libgo.a|libgobegin.a|libgolibbegin.a) echo libgo-static; return ;;
-    libobjc.so*|libobjc.a) echo libobjc; return ;;
+    libobjc.so|libobjc.a|libobjc_gc.so|libobjc_gc.a) echo gcc-objc; return ;;
+    libobjc.so.[0-9]*|libobjc_gc.so.[0-9]*) echo libobjc; return ;;
     libgccjit.so.[0-9]*) echo libgccjit; return ;;
     libgccjit.so|libgccjit*.h|libgccjit.a) echo libgccjit-devel; return ;;
     libgdiagnostics.so.[0-9]*) echo libgdiagnostics; return ;;
@@ -1017,9 +1034,15 @@ find "$ROOT" -type d | sort | while read p; do
   fi
 done
 
-req="cpp gcc gcc-c++ gcc-objc gcc-objc++ gcc-gfortran gcc-gdc gcc-gm2 gcc-gcobol gcc-algol68 gcc-gnat gcc-go gcc-gdb-plugin gcc-plugin-devel gcc-plugin-annobin libgcc libstdc++ libstdc++-devel libstdc++-static libstdc++-docs libgomp libatomic libitm libitm-devel libitm-static libasan libasan-static libhwasan libhwasan-static libtsan libtsan-static liblsan liblsan-static libubsan libubsan-static libgfortran libgfortran-static libgphobos libgphobos-static libgm2 libgm2-static libgcobol libgcobol-static libga68 libga68-static libgnat libgnat-devel libgnat-static libgo libgo-devel libgo-static libobjc libgccjit libgccjit-devel libgdiagnostics libgdiagnostics-devel"
+req="cpp gcc gcc-c++ gcc-gdb-plugin gcc-plugin-devel libgcc libstdc++ libstdc++-devel libstdc++-static libgomp libatomic libitm libitm-devel libitm-static libasan libasan-static libhwasan libhwasan-static libtsan libtsan-static liblsan liblsan-static libubsan libubsan-static"
 %ifarch x86_64
-req="$req libquadmath libquadmath-devel libquadmath-static libgomp-offload-nvptx libgomp-offload-amdgcn gcc-offload-nvptx gcc-offload-amdgcn"
+req="$req libquadmath libquadmath-devel libquadmath-static"
+%endif
+%if %{without bootstrap} && !0%{?bootstrap}
+req="$req gcc-objc gcc-objc++ gcc-gfortran gcc-gdc gcc-gm2 gcc-gcobol gcc-algol68 gcc-gnat gcc-go gcc-plugin-annobin libstdc++-docs libgfortran libgfortran-static libgphobos libgphobos-static libgm2 libgm2-static libgcobol libgcobol-static libga68 libga68-static libgnat libgnat-devel libgnat-static libgo libgo-devel libgo-static libobjc libgccjit libgccjit-devel libgdiagnostics libgdiagnostics-devel"
+%ifarch x86_64
+req="$req libgomp-offload-nvptx libgomp-offload-amdgcn gcc-offload-nvptx gcc-offload-amdgcn"
+%endif
 %endif
 for n in $req; do
   if ! test -s "$out/$n.files"; then
@@ -1027,39 +1050,42 @@ for n in $req; do
     exit 1
   fi
 done
+
+%ldconfig_scriptlets -n libgcc
+%ldconfig_scriptlets -n libstdc++
+%ldconfig_scriptlets -n libgomp
+%ldconfig_scriptlets -n libatomic
+%ldconfig_scriptlets -n libitm
+%ldconfig_scriptlets -n libasan
+%ldconfig_scriptlets -n libhwasan
+%ldconfig_scriptlets -n libtsan
+%ldconfig_scriptlets -n liblsan
+%ldconfig_scriptlets -n libubsan
+%ifarch x86_64
+%ldconfig_scriptlets -n libquadmath
+%endif
+%if %{without bootstrap} && !0%{?bootstrap}
+%ldconfig_scriptlets -n libgccjit
+%ldconfig_scriptlets -n libgdiagnostics
+%ldconfig_scriptlets -n libgfortran
+%ldconfig_scriptlets -n libgphobos
+%ldconfig_scriptlets -n libgm2
+%ldconfig_scriptlets -n libgcobol
+%ldconfig_scriptlets -n libga68
+%ldconfig_scriptlets -n libgnat
+%ldconfig_scriptlets -n libgo
+%ldconfig_scriptlets -n libobjc
 %endif
 
-%if %{without bootstrap} && !0%{?bootstrap}
 %files -f %{_builddir}/gcc-split/gcc.files
 %license COPYING3
-
 %files -n cpp -f %{_builddir}/gcc-split/cpp.files
 %license COPYING3
 %files -n gcc-c++ -f %{_builddir}/gcc-split/gcc-c++.files
 %license COPYING3
-%files -n gcc-objc -f %{_builddir}/gcc-split/gcc-objc.files
-%license COPYING3
-%files -n gcc-objc++ -f %{_builddir}/gcc-split/gcc-objc++.files
-%license COPYING3
-%files -n gcc-gfortran -f %{_builddir}/gcc-split/gcc-gfortran.files
-%license COPYING3
-%files -n gcc-gdc -f %{_builddir}/gcc-split/gcc-gdc.files
-%license COPYING3
-%files -n gcc-gm2 -f %{_builddir}/gcc-split/gcc-gm2.files
-%license COPYING3
-%files -n gcc-gcobol -f %{_builddir}/gcc-split/gcc-gcobol.files
-%license COPYING3
-%files -n gcc-algol68 -f %{_builddir}/gcc-split/gcc-algol68.files
-%license COPYING3
-%files -n gcc-gnat -f %{_builddir}/gcc-split/gcc-gnat.files
-%license COPYING3
-%files -n gcc-go -f %{_builddir}/gcc-split/gcc-go.files
-%license COPYING3
 %files -n gcc-gdb-plugin -f %{_builddir}/gcc-split/gcc-gdb-plugin.files
 %license COPYING3
 %files -n gcc-plugin-devel -f %{_builddir}/gcc-split/gcc-plugin-devel.files
-%license COPYING3
-%files -n gcc-plugin-annobin -f %{_builddir}/gcc-split/gcc-plugin-annobin.files
 %license COPYING3
 %files -n libgcc -f %{_builddir}/gcc-split/libgcc.files
 %license COPYING.RUNTIME COPYING3.LIB
@@ -1069,7 +1095,6 @@ done
 %license COPYING.RUNTIME COPYING3.LIB
 %files -n libstdc++-static -f %{_builddir}/gcc-split/libstdc++-static.files
 %license COPYING.RUNTIME COPYING3.LIB
-%files -n libstdc++-docs -f %{_builddir}/gcc-split/libstdc++-docs.files
 %files -n libgomp -f %{_builddir}/gcc-split/libgomp.files
 %license COPYING.RUNTIME COPYING3.LIB
 %files -n libatomic -f %{_builddir}/gcc-split/libatomic.files
@@ -1100,6 +1125,36 @@ done
 %license COPYING.RUNTIME COPYING3.LIB
 %files -n libubsan-static -f %{_builddir}/gcc-split/libubsan-static.files
 %license COPYING.RUNTIME COPYING3.LIB
+%ifarch x86_64
+%files -n libquadmath -f %{_builddir}/gcc-split/libquadmath.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libquadmath-devel -f %{_builddir}/gcc-split/libquadmath-devel.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libquadmath-static -f %{_builddir}/gcc-split/libquadmath-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%endif
+%if %{without bootstrap} && !0%{?bootstrap}
+%files -n gcc-objc -f %{_builddir}/gcc-split/gcc-objc.files
+%license COPYING3
+%files -n gcc-objc++ -f %{_builddir}/gcc-split/gcc-objc++.files
+%license COPYING3
+%files -n gcc-gfortran -f %{_builddir}/gcc-split/gcc-gfortran.files
+%license COPYING3
+%files -n gcc-gdc -f %{_builddir}/gcc-split/gcc-gdc.files
+%license COPYING3
+%files -n gcc-gm2 -f %{_builddir}/gcc-split/gcc-gm2.files
+%license COPYING3
+%files -n gcc-gcobol -f %{_builddir}/gcc-split/gcc-gcobol.files
+%license COPYING3
+%files -n gcc-algol68 -f %{_builddir}/gcc-split/gcc-algol68.files
+%license COPYING3
+%files -n gcc-gnat -f %{_builddir}/gcc-split/gcc-gnat.files
+%license COPYING3
+%files -n gcc-go -f %{_builddir}/gcc-split/gcc-go.files
+%license COPYING3
+%files -n gcc-plugin-annobin -f %{_builddir}/gcc-split/gcc-plugin-annobin.files
+%license COPYING3
+%files -n libstdc++-docs -f %{_builddir}/gcc-split/libstdc++-docs.files
 %files -n libgfortran -f %{_builddir}/gcc-split/libgfortran.files
 %license COPYING.RUNTIME COPYING3.LIB
 %files -n libgfortran-static -f %{_builddir}/gcc-split/libgfortran-static.files
@@ -1143,12 +1198,6 @@ done
 %files -n libgdiagnostics-devel -f %{_builddir}/gcc-split/libgdiagnostics-devel.files
 %license COPYING3
 %ifarch x86_64
-%files -n libquadmath -f %{_builddir}/gcc-split/libquadmath.files
-%license COPYING.RUNTIME COPYING3.LIB
-%files -n libquadmath-devel -f %{_builddir}/gcc-split/libquadmath-devel.files
-%license COPYING.RUNTIME COPYING3.LIB
-%files -n libquadmath-static -f %{_builddir}/gcc-split/libquadmath-static.files
-%license COPYING.RUNTIME COPYING3.LIB
 %files -n libgomp-offload-nvptx -f %{_builddir}/gcc-split/libgomp-offload-nvptx.files
 %license COPYING.RUNTIME COPYING3.LIB
 %files -n libgomp-offload-amdgcn -f %{_builddir}/gcc-split/libgomp-offload-amdgcn.files
@@ -1158,7 +1207,4 @@ done
 %files -n gcc-offload-amdgcn -f %{_builddir}/gcc-split/gcc-offload-amdgcn.files
 %license COPYING3
 %endif
-%else
-%files -f %{_builddir}/gcc.files
-%license COPYING3
 %endif

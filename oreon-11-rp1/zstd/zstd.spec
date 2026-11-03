@@ -6,7 +6,7 @@
 
 Name: zstd
 Version: 1.5.7
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Zstandard compression
 License: BSD-3-Clause OR GPL-2.0-only
 URL: https://facebook.github.io/zstd/
@@ -17,24 +17,24 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 
-Obsoletes: libzstd < 1.6
-Provides: libzstd = %{version}-%{release}
-Provides: libzstd%{?_isa} = %{version}-%{release}
+Requires: libzstd%{?_isa} = %{version}-%{release}
 
 %description
 Zstandard is a real time compression algorithm, providing high compression ratios.
 
-%package devel
-Summary: Zstandard compression
-Requires: zstd%{?_isa} = %{version}-%{release}
-Obsoletes: libzstd-devel < 1.6
-Obsoletes: libzstd-static < 1.6
-Provides: libzstd-devel = %{version}-%{release}
-Provides: libzstd-devel%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(libzstd)
+%package -n libzstd
+Summary: Zstandard compression library
 
-%description devel
-Zstandard is a real time compression algorithm, providing high compression ratios.
+%description -n libzstd
+Shared library for the Zstandard compression format.
+
+%package -n libzstd-devel
+Summary: Development files for the Zstandard library
+Requires: libzstd%{?_isa} = %{version}-%{release}
+Obsoletes: zstd-devel < 1.5.7-8
+
+%description -n libzstd-devel
+Header files and pkg-config file for the Zstandard library.
 
 %prep
 %oreon_sha256
@@ -56,15 +56,20 @@ make -s -C programs install DESTDIR=%{buildroot} prefix=%{_prefix} bindir=%{_bin
 %{_bindir}/zstdcat
 %{_bindir}/zstdgrep
 %{_bindir}/zstdless
-%{_libdir}/libzstd.so.1
-%{_libdir}/libzstd.so.1.*
 %{_mandir}/man1/zstd.1*
 %{_mandir}/man1/unzstd.1*
 %{_mandir}/man1/zstdcat.1*
 %{_mandir}/man1/zstdgrep.1*
 %{_mandir}/man1/zstdless.1*
 
-%files devel
+%ldconfig_scriptlets -n libzstd
+
+%files -n libzstd
+%license LICENSE
+%{_libdir}/libzstd.so.1
+%{_libdir}/libzstd.so.1.*
+
+%files -n libzstd-devel
 %{_includedir}/zstd.h
 %{_includedir}/zstd_errors.h
 %{_includedir}/zdict.h

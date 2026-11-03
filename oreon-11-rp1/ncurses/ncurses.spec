@@ -6,7 +6,7 @@
 
 Name: ncurses
 Version: 6.6
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: ncurses (new curses)
 License: MIT
 URL: https://invisible-island.net/ncurses/
@@ -17,22 +17,29 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 
-Provides: ncurses-libs = %{version}-%{release}
-Provides: ncurses-base = %{version}-%{release}
-Obsoletes: ncurses-libs < %{version}-%{release}
-Obsoletes: ncurses-base < %{version}-%{release}
+Requires: ncurses-libs%{?_isa} = %{version}-%{release}
+
 
 %description
 The ncurses (new curses) library is a free software emulation of curses in System V Release 4.0 (SVr4), and more. It uses terminfo format, supports pads and color and multiple highlights and forms characters and function-key mapping, and has all the other SVr4-curses enhancements over BSD curses.
 
+%package base
+Summary: Descriptions of common terminals
+BuildArch: noarch
+
+%description base
+Terminfo database and tab set files used by ncurses.
+
+%package libs
+Summary: ncurses libraries
+Requires: ncurses-base = %{version}-%{release}
+
+%description libs
+Shared ncursesw, formw, menuw, panelw, and tinfo libraries.
+
 %package devel
-Summary: ncurses (new curses)
-Requires: ncurses%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(ncursesw)
-Provides: pkgconfig(formw)
-Provides: pkgconfig(menuw)
-Provides: pkgconfig(panelw)
-Provides: pkgconfig(tinfow)
+Summary: Development files for ncurses
+Requires: ncurses-libs%{?_isa} = %{version}-%{release}
 
 %description devel
 The ncurses (new curses) library is a free software emulation of curses in System V Release 4.0 (SVr4), and more. It uses terminfo format, supports pads and color and multiple highlights and forms characters and function-key mapping, and has all the other SVr4-curses enhancements over BSD curses.
@@ -73,9 +80,68 @@ make install.libs DESTDIR=%{_builddir}/ncurses-tinfo-root
 cp -a %{_builddir}/ncurses-tinfo-root%{_libdir}/libtinfo.so* %{buildroot}%{_libdir}/
 cd %{_builddir}/ncurses-%{version}
 
-%oreon_filelist_devel
+rm -f %{buildroot}%{_libdir}/pkgconfig/ncurses++w.pc
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets libs
+
+%files
 %license COPYING
+%{_bindir}/captoinfo
+%{_bindir}/clear
+%{_bindir}/infocmp
+%{_bindir}/infotocap
+%{_bindir}/reset
+%{_bindir}/tabs
+%{_bindir}/tic
+%{_bindir}/toe
+%{_bindir}/tput
+%{_bindir}/tset
+%{_mandir}/man1/captoinfo.1m*
+%{_mandir}/man1/clear.1*
+%{_mandir}/man1/infocmp.1m*
+%{_mandir}/man1/infotocap.1m*
+%{_mandir}/man1/reset.1*
+%{_mandir}/man1/tabs.1*
+%{_mandir}/man1/tic.1m*
+%{_mandir}/man1/toe.1m*
+%{_mandir}/man1/tput.1*
+%{_mandir}/man1/tset.1*
+%{_mandir}/man5/scr_dump.5*
+%{_mandir}/man5/term.5*
+%{_mandir}/man5/terminfo.5*
+%{_mandir}/man5/user_caps.5*
+%{_mandir}/man7/term.7*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files base
+%license COPYING
+%{_datadir}/terminfo/
+%{_datadir}/tabset/
+%{_prefix}/lib/terminfo
+
+%files libs
+%license COPYING
+%{_libdir}/libformw.so.6
+%{_libdir}/libformw.so.6.*
+%{_libdir}/libmenuw.so.6
+%{_libdir}/libmenuw.so.6.*
+%{_libdir}/libncursesw.so.6
+%{_libdir}/libncursesw.so.6.*
+%{_libdir}/libpanelw.so.6
+%{_libdir}/libpanelw.so.6.*
+%{_libdir}/libtinfo.so.6
+%{_libdir}/libtinfo.so.6.*
+
+%files devel
+%{_bindir}/ncursesw6-config
+%{_includedir}/*.h
+%{_libdir}/libformw.so
+%{_libdir}/libmenuw.so
+%{_libdir}/libncursesw.so
+%{_libdir}/libpanelw.so
+%{_libdir}/libtinfo.so
+%{_libdir}/pkgconfig/formw.pc
+%{_libdir}/pkgconfig/menuw.pc
+%{_libdir}/pkgconfig/ncursesw.pc
+%{_libdir}/pkgconfig/panelw.pc
+%{_mandir}/man1/ncursesw6-config.1*
+%{_mandir}/man3/*.3*

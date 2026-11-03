@@ -6,7 +6,7 @@
 
 Name: nghttp3
 Version: 1.18.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: HTTP/3 library
 License: MIT
 URL: https://github.com/ngtcp2/nghttp3
@@ -22,22 +22,24 @@ BuildRequires: make
 BuildRequires: gcc-c++
 BuildRequires: patchelf
 BuildRequires: pkgconf
-Provides: libnghttp3 = %{version}-%{release}
-Provides: libnghttp3%{?_isa} = %{version}-%{release}
-Obsoletes: libnghttp3 < %{version}-%{release}
 
 %description
 nghttp3 implements HTTP/3 mapping over QUIC and QPACK (RFC 9204).
 
-%package devel
-Summary: Development files for nghttp3
-Requires: nghttp3%{?_isa} = %{version}-%{release}
-Provides: libnghttp3-devel = %{version}-%{release}
-Obsoletes: libnghttp3-devel < %{version}-%{release}
-Provides: pkgconfig(libnghttp3) = %{version}
+%package -n libnghttp3
+Summary: nghttp3 library
+Obsoletes: nghttp3 < 1.18.0-4
 
-%description devel
-Headers and libraries for developing against nghttp3.
+%description -n libnghttp3
+Shared nghttp3 library.
+
+%package -n libnghttp3-devel
+Summary: Development files for libnghttp3
+Requires: libnghttp3%{?_isa} = %{version}-%{release}
+Obsoletes: nghttp3-devel < 1.18.0-4
+
+%description -n libnghttp3-devel
+Headers and development library for libnghttp3.
 
 %prep
 %oreon_sha256
@@ -52,6 +54,7 @@ Headers and libraries for developing against nghttp3.
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
 rm -f %{buildroot}%{_infodir}/dir
+rm -rf %{buildroot}%{_docdir}
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f" 2>/dev/null || true)
@@ -60,9 +63,14 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
+%ldconfig_scriptlets -n libnghttp3
 
-%files -f %{_builddir}/%{name}.files
+%files -n libnghttp3
 %license COPYING
+%{_libdir}/libnghttp3.so.9
+%{_libdir}/libnghttp3.so.9.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files -n libnghttp3-devel
+%{_includedir}/nghttp3/
+%{_libdir}/libnghttp3.so
+%{_libdir}/pkgconfig/libnghttp3.pc

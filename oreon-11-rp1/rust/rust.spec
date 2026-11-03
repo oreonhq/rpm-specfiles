@@ -15,10 +15,11 @@
 %global stage0_date 2026-08-20
 %global stage0_url https://static.rust-lang.org/dist/%{stage0_date}
 %global rust_triple %{_arch}-unknown-linux-gnu
+%global rustlibdir %{_libdir}/rustlib
 
 Name: rust
 Version: 1.99.1
-Release: 2%{?dist}
+Release: 4%{?dist}
 Summary: The Rust programming language
 License: (Apache-2.0 OR MIT) AND (Artistic-2.0 AND BSD-3-Clause AND ISC AND MIT AND Unicode-DFS-2016)
 URL: https://www.rust-lang.org/
@@ -50,15 +51,16 @@ BuildRequires: file
 BuildRequires: llvm-devel >= 20
 BuildRequires: openssl-devel
 BuildRequires: zlib-devel
-BuildRequires: zstd-devel
+BuildRequires: libzstd-devel
 BuildRequires: libcurl-devel
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: rust
 BuildRequires: cargo
 %endif
 Requires: gcc
+Requires: rust-std-static%{?_isa} = %{version}-%{release}
 Provides: rustc = %{version}-%{release}
-Provides: rust-std-static = %{version}-%{release}
+Provides: rustc%{?_isa} = %{version}-%{release}
 
 %description
 Rust is a systems programming language focused on safety, speed and
@@ -70,6 +72,33 @@ Requires: rust%{?_isa} = %{version}-%{release}
 
 %description -n cargo
 Cargo downloads Rust project dependencies and builds Rust projects.
+
+%package std-static
+Summary: Standard library for Rust
+
+%description std-static
+The Rust standard library for the host target.
+
+%package src
+Summary: Sources for the Rust standard library
+
+%description src
+Sources for the Rust standard library, used by IDE tooling.
+
+%package -n rustfmt
+Summary: Tool to format Rust code
+Requires: cargo%{?_isa} = %{version}-%{release}
+
+%description -n rustfmt
+rustfmt formats Rust code according to style guidelines.
+
+%package -n clippy
+Summary: Lints to catch common mistakes in Rust code
+Requires: cargo%{?_isa} = %{version}-%{release}
+Requires: rust%{?_isa} = %{version}-%{release}
+
+%description -n clippy
+Clippy is a collection of lints for Rust code.
 
 %prep
 %oreon_sha256
@@ -118,7 +147,7 @@ export CFLAGS="%{_oreon_cflags}" CXXFLAGS="%{_oreon_cflags}" LDFLAGS="%{_oreon_l
   --local-rust-root="$rust_root" \
   --llvm-root=%{_prefix} --enable-llvm-link-shared --disable-llvm-static-stdcpp \
   --disable-docs --disable-compiler-docs --disable-rpath \
-  --enable-extended --tools=cargo,src \
+  --enable-extended --tools=cargo,clippy,rustfmt,src \
   --enable-vendor --release-channel=stable \
   --release-description="Oreon %{version}-%{release}" \
   --set build.optimized-compiler-builtins=false \
@@ -131,7 +160,8 @@ python3 ./x.py build -j %{_oreon_jobs}
 DESTDIR=%{buildroot} python3 ./x.py install
 rm -f %{buildroot}%{_libdir}/rustlib/{install.log,uninstall.sh,components,rust-installer-version}
 rm -f %{buildroot}%{_libdir}/rustlib/manifest-*
-rm -rf %{buildroot}%{_docdir}/rust
+rm -rf %{buildroot}%{_docdir}/rust %{buildroot}%{_docdir}/cargo %{buildroot}%{_docdir}/clippy %{buildroot}%{_docdir}/rustfmt
+rm -f %{buildroot}%{_sysconfdir}/target-spec-json-schema.json
 rm -f %{buildroot}%{_libdir}/*.la
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
@@ -141,14 +171,46 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist
-cd %{_builddir}
-grep -E '/cargo[^/]*$|/cargo/|_cargo$' %{name}.files > cargo.files || :
-grep -vxF -f cargo.files %{name}.files > main.files || :
-mv main.files %{name}.files
 
-%files -f %{_builddir}/%{name}.files
+%files
 %license COPYRIGHT LICENSE-APACHE LICENSE-MIT
+%{_bindir}/rustc
+%{_bindir}/rustdoc
+%{_bindir}/rust-gdb
+%{_bindir}/rust-gdbgui
+%{_bindir}/rust-lldb
+%{_libdir}/librustc_driver-*.so
+%dir %{rustlibdir}
+%{rustlibdir}/etc/
+%{_mandir}/man1/rustc.1*
+%{_mandir}/man1/rustdoc.1*
 
-%files -n cargo -f %{_builddir}/cargo.files
+%files std-static
 %license COPYRIGHT LICENSE-APACHE LICENSE-MIT
+%dir %{rustlibdir}
+%dir %{rustlibdir}/%{rust_triple}
+%dir %{rustlibdir}/%{rust_triple}/lib
+%{rustlibdir}/%{rust_triple}/lib/*.rlib
+%{rustlibdir}/%{rust_triple}/lib/*.rmeta
+%{rustlibdir}/%{rust_triple}/lib/*.so
+
+%files src
+%dir %{rustlibdir}
+%{rustlibdir}/src/
+
+%files -n cargo
+%license src/tools/cargo/LICENSE-APACHE src/tools/cargo/LICENSE-MIT src/tools/cargo/LICENSE-THIRD-PARTY
+%{_bindir}/cargo
+%{_mandir}/man1/cargo*.1*
+%{_sysconfdir}/bash_completion.d/cargo
+%{_datadir}/zsh/site-functions/_cargo
+
+%files -n rustfmt
+%license src/tools/rustfmt/LICENSE-APACHE src/tools/rustfmt/LICENSE-MIT
+%{_bindir}/rustfmt
+%{_bindir}/cargo-fmt
+
+%files -n clippy
+%license src/tools/clippy/LICENSE-APACHE src/tools/clippy/LICENSE-MIT
+%{_bindir}/cargo-clippy
+%{_bindir}/clippy-driver

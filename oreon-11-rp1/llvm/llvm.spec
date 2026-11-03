@@ -9,9 +9,11 @@
 %oreon_bootstrap
 %global debug_package %{nil}
 
+%global maj %(echo %{version} | cut -d. -f1)
+
 Name: llvm
 Version: 23.1.4
-Release: 1%{?dist}
+Release: 3%{?dist}
 Summary: LLVM compiler infrastructure
 License: Apache-2.0 WITH LLVM-exception
 URL: https://llvm.org/
@@ -30,56 +32,78 @@ BuildRequires: cmake
 BuildRequires: ninja-build
 BuildRequires: python3
 BuildRequires: zlib-devel
-BuildRequires: zstd-devel
+BuildRequires: libzstd-devel
 BuildRequires: libffi-devel
 BuildRequires: ncurses-devel
 BuildRequires: pkgconf
+Requires: llvm-libs%{?_isa} = %{version}-%{release}
 
 %description
 LLVM is a collection of modular compiler and toolchain components. This
 source package also builds the Clang compiler and the LLD linker.
 
+%package libs
+Summary: LLVM shared libraries
+
+%description libs
+Shared libraries for the LLVM compiler infrastructure.
+
 %package devel
 Summary: Development files for LLVM
 Requires: llvm%{?_isa} = %{version}-%{release}
-Provides: llvm-libs = %{version}-%{release}
-Provides: llvm-static = %{version}-%{release}
-Provides: cmake(LLVM)
+Requires: llvm-libs%{?_isa} = %{version}-%{release}
+Requires: llvm-static%{?_isa} = %{version}-%{release}
 
 %description devel
 Headers, CMake modules and the llvm-config tool for LLVM.
 
+%package static
+Summary: LLVM static libraries
+Requires: llvm-devel%{?_isa} = %{version}-%{release}
+
+%description static
+Static libraries for the LLVM compiler infrastructure.
+
 %package -n clang
 Summary: C language family frontend for LLVM
-Requires: llvm%{?_isa} = %{version}-%{release}
+Requires: clang-libs%{?_isa} = %{version}-%{release}
+Requires: llvm-libs%{?_isa} = %{version}-%{release}
 Requires: gcc
-Provides: clang-libs = %{version}-%{release}
-Provides: clang-tools-extra = %{version}-%{release}
+Requires: python3
 
 %description -n clang
 Clang is a C, C++ and Objective-C compiler built on LLVM.
 
+%package -n clang-libs
+Summary: Runtime libraries and headers for Clang
+Requires: llvm-libs%{?_isa} = %{version}-%{release}
+
+%description -n clang-libs
+Shared libraries and compiler resource headers for Clang.
+
 %package -n clang-devel
-Summary: Development files for Clang and LLD
+Summary: Development files for Clang
 Requires: clang%{?_isa} = %{version}-%{release}
-Requires: lld%{?_isa} = %{version}-%{release}
+Requires: clang-libs%{?_isa} = %{version}-%{release}
 Requires: llvm-devel%{?_isa} = %{version}-%{release}
-Provides: lld-devel = %{version}-%{release}
-Obsoletes: lld-devel < %{version}-%{release}
-Provides: cmake(Clang)
-Provides: cmake(LLD)
 
 %description -n clang-devel
-Headers and CMake modules for Clang and LLD.
+Headers, static libraries and CMake modules for Clang.
 
 %package -n lld
 Summary: The LLVM linker
-Requires: llvm%{?_isa} = %{version}-%{release}
-Provides: lld-libs = %{version}-%{release}
-Obsoletes: lld-libs < %{version}-%{release}
+Requires: llvm-libs%{?_isa} = %{version}-%{release}
 
 %description -n lld
 LLD is the LLVM linker, supporting ELF, COFF, Mach-O and WebAssembly.
+
+%package -n lld-devel
+Summary: Development files for LLD
+Requires: lld%{?_isa} = %{version}-%{release}
+Requires: llvm-devel%{?_isa} = %{version}-%{release}
+
+%description -n lld-devel
+Headers, static libraries and CMake modules for LLD.
 
 %prep
 %oreon_sha256
@@ -119,30 +143,101 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
-cd %{_builddir}
-grep -E '/(clang|libclang|scan-build|scan-view|scan-build-py|c-index-test|git-clang|hmaptool|diagtool|amdgpu-arch|nvptx-arch|offload-arch|analyze-build|intercept-build)' %{name}.files > clang.files || :
-grep -E '/(lld|ld\.lld|ld64\.lld|wasm-ld|lld-link)' %{name}.files > lld.files || :
-grep -E '/(clang|libclang)' %{name}-devel.files > clang-devel.files || :
-grep -E '/(lld)' %{name}-devel.files > lld-devel.files || :
-cat clang.files lld.files > other.files
-grep -vxF -f other.files %{name}.files > main.files || :
-mv main.files %{name}.files
-cat clang-devel.files lld-devel.files > other.files
-grep -vxF -f other.files %{name}-devel.files > main.files || :
-mv main.files %{name}-devel.files
-cat lld-devel.files >> clang-devel.files
-rm -f other.files lld-devel.files
 
-%files -f %{_builddir}/%{name}.files
+%files
 %license llvm/LICENSE.TXT
+%{_bindir}/*
+%exclude %{_bindir}/llvm-config
+%exclude %{_bindir}/clang*
+%exclude %{_bindir}/c-index-test
+%exclude %{_bindir}/diagtool
+%exclude %{_bindir}/hmaptool
+%exclude %{_bindir}/scan-build
+%exclude %{_bindir}/scan-build-py
+%exclude %{_bindir}/scan-view
+%exclude %{_bindir}/git-clang-format
+%exclude %{_bindir}/analyze-build
+%exclude %{_bindir}/intercept-build
+%exclude %{_bindir}/amdgpu-arch
+%exclude %{_bindir}/nvptx-arch
+%exclude %{_bindir}/offload-arch
+%exclude %{_bindir}/ld.lld
+%exclude %{_bindir}/ld64.lld
+%exclude %{_bindir}/lld
+%exclude %{_bindir}/lld-link
+%exclude %{_bindir}/wasm-ld
+%{_datadir}/opt-viewer/
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files libs
+%license llvm/LICENSE.TXT
+%{_libdir}/libLLVM.so.%{maj}*
+%{_libdir}/libLLVM-%{maj}.so
+%{_libdir}/libLTO.so.%{maj}*
+%{_libdir}/libRemarks.so.%{maj}*
 
-%files -n clang -f %{_builddir}/clang.files
+%files devel
+%{_bindir}/llvm-config
+%{_includedir}/llvm/
+%{_includedir}/llvm-c/
+%{_libdir}/libLLVM.so
+%{_libdir}/libLTO.so
+%{_libdir}/libRemarks.so
+%{_libdir}/cmake/llvm/
+
+%files static
+%{_libdir}/libLLVM*.a
+
+%files -n clang
 %license clang/LICENSE.TXT
+%{_bindir}/clang*
+%{_bindir}/c-index-test
+%{_bindir}/diagtool
+%{_bindir}/hmaptool
+%{_bindir}/scan-build
+%{_bindir}/scan-build-py
+%{_bindir}/scan-view
+%{_bindir}/git-clang-format
+%{_bindir}/analyze-build
+%{_bindir}/intercept-build
+%{_bindir}/amdgpu-arch
+%{_bindir}/nvptx-arch
+%{_bindir}/offload-arch
+%{_libexecdir}/ccc-analyzer
+%{_libexecdir}/c++-analyzer
+%{_libexecdir}/analyze-c++
+%{_libexecdir}/analyze-cc
+%{_libexecdir}/intercept-c++
+%{_libexecdir}/intercept-cc
+%{_prefix}/lib/libscanbuild/
+%{_prefix}/lib/libear/
+%{_datadir}/clang/
+%{_datadir}/scan-build/
+%{_datadir}/scan-view/
+%{_mandir}/man1/scan-build.1*
 
-%files -n clang-devel -f %{_builddir}/clang-devel.files
+%files -n clang-libs
+%license clang/LICENSE.TXT
+%{_libdir}/libclang.so.%{maj}*
+%{_libdir}/libclang-cpp.so.%{maj}*
+%{_libdir}/clang/
 
-%files -n lld -f %{_builddir}/lld.files
+%files -n clang-devel
+%{_includedir}/clang/
+%{_includedir}/clang-c/
+%{_libdir}/libclang.so
+%{_libdir}/libclang-cpp.so
+%{_libdir}/libclang*.a
+%{_libdir}/cmake/clang/
+
+%files -n lld
 %license lld/LICENSE.TXT
+%{_bindir}/ld.lld
+%{_bindir}/ld64.lld
+%{_bindir}/lld
+%{_bindir}/lld-link
+%{_bindir}/wasm-ld
+
+%files -n lld-devel
+%{_includedir}/lld/
+%{_libdir}/liblld*.a
+%{_libdir}/cmake/lld/

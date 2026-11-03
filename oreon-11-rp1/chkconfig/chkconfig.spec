@@ -6,12 +6,11 @@
 
 Name: chkconfig
 Version: 1.32
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: System services and alternatives management tool
 License: GPL-2.0-only
 URL: https://github.com/fedora-sysv/chkconfig
 Source0: https://github.com/fedora-sysv/chkconfig/archive/%{version}/chkconfig-%{version}.tar.gz
-Provides: alternatives = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -23,10 +22,19 @@ BuildRequires: libselinux-devel
 BuildRequires: libsepol-devel
 BuildRequires: gettext
 BuildRequires: pkgconf
+Requires: alternatives%{?_isa} = %{version}-%{release}
 
 %description
 chkconfig manages SysV init script links; this package also ships the
 alternatives tool for maintaining symbolic links to default commands.
+
+%package -n alternatives
+Summary: Tool to maintain symbolic links determining default commands
+Obsoletes: chkconfig < 1.32-2
+
+%description -n alternatives
+alternatives creates, removes, maintains and displays information about
+the symbolic links comprising the alternatives system.
 
 %prep
 %oreon_sha256
@@ -42,7 +50,7 @@ ln -s alternatives %{buildroot}%{_sbindir}/update-alternatives
 install -Dpm0644 chkconfig.8 %{buildroot}%{_mandir}/man8/chkconfig.8
 install -Dpm0644 alternatives.8 %{buildroot}%{_mandir}/man8/alternatives.8
 ln -s alternatives.8 %{buildroot}%{_mandir}/man8/update-alternatives.8
-make -s -C po install PREFIX=%{buildroot}%{_prefix} DESTDIR=%{buildroot} || :
+make -s -C po install PREFIX=%{buildroot}%{_prefix} DESTDIR=%{buildroot}
 mkdir -p %{buildroot}%{_sysconfdir}/alternatives %{buildroot}%{_localstatedir}/lib/alternatives
 rm -f %{buildroot}%{_libdir}/*.la
 rm -f %{buildroot}%{_infodir}/dir
@@ -54,9 +62,18 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist
+%find_lang chkconfig
 
-%files -f %{_builddir}/%{name}.files
+%files -f chkconfig.lang
 %license COPYING
+%{_sbindir}/chkconfig
+%{_mandir}/man8/chkconfig.8*
+
+%files -n alternatives
+%license COPYING
+%{_sbindir}/alternatives
+%{_sbindir}/update-alternatives
+%{_mandir}/man8/alternatives.8*
+%{_mandir}/man8/update-alternatives.8*
 %dir %{_sysconfdir}/alternatives
 %dir %{_localstatedir}/lib/alternatives

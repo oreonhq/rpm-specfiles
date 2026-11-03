@@ -6,13 +6,12 @@
 
 Name: acl
 Version: 2.3.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Access control list utilities
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://savannah.nongnu.org/projects/acl
 Source0: https://download.savannah.gnu.org/releases/acl/acl-%{version}.tar.xz
-Obsoletes: libacl < 3
-Provides: libacl = %{version}-%{release}
+Requires: libacl%{?_isa} = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -23,15 +22,19 @@ BuildRequires: libattr-devel
 %description
 acl is a set of tools for manipulating access control lists.
 
-%package devel
-Summary: Access control list utilities
-Requires: acl%{?_isa} = %{version}-%{release}
-Obsoletes: libacl-devel < 3
-Provides: libacl-devel = %{version}-%{release}
-Provides: pkgconfig(libacl)
+%package -n libacl
+Summary: Dynamic library for acl
 
-%description devel
-acl is a set of tools for manipulating access control lists.
+%description -n libacl
+Shared libacl library.
+
+%package -n libacl-devel
+Summary: Development files for libacl
+Obsoletes: acl-devel < 2.3.2-2
+Requires: libacl%{?_isa} = %{version}-%{release}
+
+%description -n libacl-devel
+Headers and development library for libacl.
 
 %prep
 %oreon_sha256
@@ -52,14 +55,19 @@ rm -rf %{buildroot}%{_docdir}
 %{_bindir}/chacl
 %{_bindir}/getfacl
 %{_bindir}/setfacl
-%{_libdir}/libacl.so.1
-%{_libdir}/libacl.so.1.*
 %{_mandir}/man1/chacl.1*
 %{_mandir}/man1/getfacl.1*
 %{_mandir}/man1/setfacl.1*
 %{_mandir}/man5/acl.5*
 
-%files devel
+%ldconfig_scriptlets -n libacl
+
+%files -n libacl
+%license doc/COPYING.LGPL
+%{_libdir}/libacl.so.1
+%{_libdir}/libacl.so.1.*
+
+%files -n libacl-devel
 %{_includedir}/acl
 %{_includedir}/sys/acl.h
 %{_libdir}/libacl.so

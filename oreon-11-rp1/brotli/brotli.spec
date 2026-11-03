@@ -6,12 +6,12 @@
 
 Name: brotli
 Version: 1.2.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Lossless compression algorithm
 License: MIT
 URL: https://github.com/google/brotli
 Source0: https://github.com/google/brotli/archive/v%{version}/brotli-%{version}.tar.gz
-Provides: libbrotli = %{version}-%{release}
+Requires: libbrotli%{?_isa} = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -25,13 +25,15 @@ BuildRequires: ninja-build
 %description
 Brotli is a generic-purpose lossless compression algorithm.
 
+%package -n libbrotli
+Summary: Brotli libraries
+
+%description -n libbrotli
+Shared brotli common, decoder and encoder libraries.
+
 %package devel
 Summary: Development files for brotli
-Requires: brotli%{?_isa} = %{version}-%{release}
-Provides: libbrotli-devel = %{version}-%{release}
-Provides: pkgconfig(libbrotlicommon)
-Provides: pkgconfig(libbrotlidec)
-Provides: pkgconfig(libbrotlienc)
+Requires: libbrotli%{?_isa} = %{version}-%{release}
 
 %description devel
 Headers and libraries for developing against brotli.
@@ -56,9 +58,32 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets -n libbrotli
+
+%files
 %license LICENSE
+%{_bindir}/brotli
+%{_mandir}/man1/brotli.1*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files -n libbrotli
+%license LICENSE
+%{_libdir}/libbrotlicommon.so.1
+%{_libdir}/libbrotlicommon.so.1.*
+%{_libdir}/libbrotlidec.so.1
+%{_libdir}/libbrotlidec.so.1.*
+%{_libdir}/libbrotlienc.so.1
+%{_libdir}/libbrotlienc.so.1.*
+
+%files devel
+%{_includedir}/brotli/
+%{_libdir}/libbrotlicommon.so
+%{_libdir}/libbrotlidec.so
+%{_libdir}/libbrotlienc.so
+%{_libdir}/pkgconfig/libbrotlicommon.pc
+%{_libdir}/pkgconfig/libbrotlidec.pc
+%{_libdir}/pkgconfig/libbrotlienc.pc
+%{_mandir}/man3/constants.h.3*
+%{_mandir}/man3/decode.h.3*
+%{_mandir}/man3/encode.h.3*
+%{_mandir}/man3/types.h.3*

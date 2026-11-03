@@ -6,7 +6,7 @@
 
 Name: pkgconf
 Version: 3.0.10
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: compiler and linker flags for development libraries
 License: ISC
 URL: https://gitea.treehouse.systems/ariadne/pkgconf
@@ -17,40 +17,31 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 
-Provides: pkgconfig = 1:%{version}-%{release}
-Provides: pkgconfig%{?_isa} = 1:%{version}-%{release}
-Provides: pkg-config = %{version}-%{release}
-Provides: pkg-config%{?_isa} = %{version}-%{release}
-Provides: pkgconf-pkg-config = %{version}-%{release}
-Provides: pkgconf-pkg-config%{?_isa} = %{version}-%{release}
-Obsoletes: pkgconf-pkg-config < %{version}-%{release}
-Provides: pkgconf-m4 = %{version}-%{release}
-Obsoletes: pkgconf-m4 < %{version}-%{release}
-Provides: libpkgconf = %{version}-%{release}
-Provides: libpkgconf%{?_isa} = %{version}-%{release}
-Obsoletes: libpkgconf < %{version}-%{release}
+Requires: libpkgconf%{?_isa} = %{version}-%{release}
 
 %description
-pkgconf is a program which helps to configure compiler and linker flags for development libraries. It is a superset of the functionality provided by pkg-config from freedesktop.org, but does not provide bug-compatibility with the original pkg-config.
+pkgconf is a program which helps to configure compiler and linker flags for development libraries. It provides pkg-config compatible behavior.
 
+%package -n libpkgconf
+Summary: pkgconf library
+
+%description -n libpkgconf
 libpkgconf is a library which provides access to most of pkgconf's functionality, to allow other tooling such as compilers and IDEs to discover and use libraries configured by pkgconf.
 
-%package devel
-Summary: compiler and linker flags for development libraries
-Requires: pkgconf%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(libpkgconf)
-Provides: libpkgconf-devel = %{version}-%{release}
-Obsoletes: libpkgconf-devel < %{version}-%{release}
+%package -n libpkgconf-devel
+Summary: Development files for libpkgconf
+Requires: libpkgconf%{?_isa} = %{version}-%{release}
+Obsoletes: pkgconf-devel < 3.0.10-3
 
-%description devel
-libpkgconf is a library which provides access to most of pkgconf's functionality, to allow other tooling such as compilers and IDEs to discover and use libraries configured by pkgconf.
+%description -n libpkgconf-devel
+Headers and pkg-config file for libpkgconf.
 
 %prep
 %oreon_sha256
 %autosetup -p1
 
 %build
-%oreon_configure --disable-static
+%oreon_configure --disable-static --with-system-libdir=%{_libdir} --with-system-includedir=%{_includedir} --with-pkg-config-dir=%{_libdir}/pkgconfig:%{_datadir}/pkgconfig
 %oreon_make
 
 %install
@@ -58,9 +49,35 @@ libpkgconf is a library which provides access to most of pkgconf's functionality
 rm -f %{buildroot}%{_libdir}/*.la
 ln -sf pkgconf %{buildroot}%{_bindir}/pkg-config
 
-%oreon_filelist_devel
+mkdir -p %{buildroot}%{_datadir}/pkgconfig
+rm -rf %{buildroot}%{_docdir}/pkgconf
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets -n libpkgconf
+
+%files
 %license COPYING
+%doc AUTHORS README.md
+%{_bindir}/pkgconf
+%{_bindir}/pkg-config
+%{_bindir}/bomtool
+%{_bindir}/pccritic
+%{_bindir}/spdxtool
+%dir %{_datadir}/pkgconfig
+%{_datadir}/aclocal/pkg.m4
+%{_mandir}/man1/pkgconf.1*
+%{_mandir}/man1/bomtool.1*
+%{_mandir}/man1/pccritic.1*
+%{_mandir}/man1/spdxtool.1*
+%{_mandir}/man5/pc.5*
+%{_mandir}/man5/pkgconf-personality.5*
+%{_mandir}/man7/pkg.m4.7*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files -n libpkgconf
+%license COPYING
+%{_libdir}/libpkgconf.so.8
+%{_libdir}/libpkgconf.so.8.*
+
+%files -n libpkgconf-devel
+%{_includedir}/pkgconf/
+%{_libdir}/libpkgconf.so
+%{_libdir}/pkgconfig/libpkgconf.pc

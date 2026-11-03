@@ -6,11 +6,8 @@
 
 Name: keyutils
 Version: 1.6.3
-Release: 9%{?dist}
-Provides: keyutils-libs = %{version}-%{release}
-Provides: keyutils-libs%{_isa} = %{version}-%{release}
-Obsoletes: keyutils-libs < 1.6.4
-Summary: Linux key management library
+Release: 10%{?dist}
+Summary: Linux key management utilities
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git
 Source0: https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/v%{version}.tar.gz
@@ -21,29 +18,36 @@ BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: patchelf
+BuildRequires: file
+
+Requires: keyutils-libs%{?_isa} = %{version}-%{release}
 
 %description
-keyutils is the Linux key management library.
+Utilities to control the Linux kernel key management facility.
 
-%package devel
+%package libs
 Summary: Linux key management library
-Requires: keyutils%{?_isa} = %{version}-%{release}
-Obsoletes: keyutils-libs-devel < 1.6.4
-Provides: keyutils-libs-devel = %{version}-%{release}
-Provides: keyutils-libs-devel%{?_isa} = %{version}-%{release}
 
-%description devel
-keyutils is the Linux key management library.
+%description libs
+Shared library for the Linux key management facility.
+
+%package libs-devel
+Summary: Development files for the Linux key management library
+Requires: keyutils-libs%{?_isa} = %{version}-%{release}
+Obsoletes: keyutils-devel < 1.6.3-10
+
+%description libs-devel
+Header, pkg-config file, and man pages for libkeyutils.
 
 %prep
 %oreon_sha256
 %autosetup -n v%{version} -p1
 
 %build
-make %{?_smp_mflags} NO_ARLIB=1 LIBDIR=%{_libdir} USRLIBDIR=%{_libdir} CFLAGS="%{_oreon_cflags} -fPIC"
+make %{?_smp_mflags} NO_ARLIB=1 BINDIR=%{_bindir} SBINDIR=%{_sbindir} LIBDIR=%{_libdir} USRLIBDIR=%{_libdir} MANDIR=%{_mandir} INCLUDEDIR=%{_includedir} SHAREDIR=%{_datadir}/keyutils ETCDIR=%{_sysconfdir} CFLAGS="%{_oreon_cflags} -fPIC"
 
 %install
-make install DESTDIR=%{buildroot} NO_ARLIB=1 LIBDIR=%{_libdir} USRLIBDIR=%{_libdir}
+make install DESTDIR=%{buildroot} NO_ARLIB=1 BINDIR=%{_bindir} SBINDIR=%{_sbindir} LIBDIR=%{_libdir} USRLIBDIR=%{_libdir} MANDIR=%{_mandir} INCLUDEDIR=%{_includedir} SHAREDIR=%{_datadir}/keyutils ETCDIR=%{_sysconfdir}
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f")
@@ -52,9 +56,33 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets libs
+
+%files
+%license LICENCE.GPL
+%{_bindir}/keyctl
+%{_sbindir}/request-key
+%{_sbindir}/key.dns_resolver
+%config(noreplace) %{_sysconfdir}/request-key.conf
+%dir %{_sysconfdir}/request-key.d
+%dir %{_datadir}/keyutils
+%{_datadir}/keyutils/request-key-debug.sh
+%{_mandir}/man1/keyctl.1*
+%{_mandir}/man5/request-key.conf.5*
+%{_mandir}/man5/key.dns_resolver.conf.5*
+%{_mandir}/man7/keyutils.7*
+%{_mandir}/man7/asymmetric-key.7*
+%{_mandir}/man8/request-key.8*
+%{_mandir}/man8/key.dns_resolver.8*
+
+%files libs
 %license LICENCE.LGPL
+%{_libdir}/libkeyutils.so.1
+%{_libdir}/libkeyutils.so.1.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files libs-devel
+%{_includedir}/keyutils.h
+%{_libdir}/libkeyutils.so
+%{_libdir}/pkgconfig/libkeyutils.pc
+%{_mandir}/man3/*.3*

@@ -3,10 +3,11 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
+%global py3_sitearch %{_libdir}/python%(python3 -c 'import sys;print("%d.%d"%sys.version_info[:2])' 2>/dev/null)/site-packages
 
 Name: libcomps
 Version: 0.1.24
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Comps XML library
 License: GPL-2.0-or-later
 URL: https://github.com/rpm-software-management/libcomps
@@ -26,8 +27,6 @@ BuildRequires: python3-devel
 BuildRequires: python3-setuptools
 BuildRequires: patchelf
 
-Provides: python3-libcomps = %{version}-%{release}
-
 %description
 libcomps reads and writes comps XML.
 
@@ -37,6 +36,13 @@ Requires: libcomps%{?_isa} = %{version}-%{release}
 
 %description devel
 libcomps reads and writes comps XML.
+
+%package -n python3-libcomps
+Summary: Python 3 bindings for libcomps
+Requires: libcomps%{?_isa} = %{version}-%{release}
+
+%description -n python3-libcomps
+Python 3 bindings for the libcomps library.
 
 %prep
 %oreon_sha256
@@ -63,45 +69,18 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
-import os
-import sys
-from pathlib import Path
-main, devel = Path(sys.argv[1]), Path(sys.argv[2])
-m = main.read_text().splitlines()
-d = devel.read_text().splitlines()
-keep, move = [], []
-for line in d:
-    path = line.split()[-1] if line.startswith("%") else line
-    if path.endswith(".so") and path.count("/") > 3:
-        move.append(line)
-    else:
-        keep.append(line)
-def with_pyc(lines):
-    extra = []
-    seen = set(lines)
-    for line in lines:
-        path = line.split()[-1] if line.startswith("%") else line
-        path = path.strip('"')
-        if not path.endswith(".py"):
-            continue
-        if "/lib/python3." not in path and "/lib64/python3." not in path:
-            continue
-        glob = os.path.dirname(path) + "/__pycache__/*"
-        if glob not in seen:
-            seen.add(glob)
-            extra.append(glob)
-    return lines + extra
-m = with_pyc(m + move)
-keep = with_pyc(keep)
-text = "\n".join(m)
-main.write_text(text + ("\n" if text else ""))
-text = "\n".join(keep)
-devel.write_text(text + ("\n" if text else ""))
-PY
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets
+
+%files
 %license COPYING
+%{_libdir}/libcomps.so.0
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_includedir}/libcomps/
+%{_libdir}/libcomps.so
+%{_libdir}/pkgconfig/libcomps.pc
+
+%files -n python3-libcomps
+%{py3_sitearch}/libcomps/
+%{py3_sitearch}/libcomps-%{version}-py*.egg-info/

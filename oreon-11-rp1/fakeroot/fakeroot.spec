@@ -6,7 +6,7 @@
 
 Name: fakeroot
 Version: 2.1.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Run a command in an environment faking root privileges
 License: GPL-3.0-or-later
 URL: https://salsa.debian.org/clint/fakeroot
@@ -24,8 +24,8 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: libcap-devel
-BuildRequires: acl-devel
-BuildRequires: attr-devel
+BuildRequires: libacl-devel
+BuildRequires: libattr-devel
 
 %description
 fakeroot runs a command in an environment where it appears to have root

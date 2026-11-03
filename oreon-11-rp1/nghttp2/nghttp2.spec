@@ -6,7 +6,7 @@
 
 Name: nghttp2
 Version: 1.68.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: HTTP/2 library
 License: MIT
 URL: https://nghttp2.org/
@@ -17,24 +17,26 @@ BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: pkgconf
-BuildRequires: python3
 BuildRequires: patchelf
 
-Obsoletes: libnghttp2 < 2
-Provides: libnghttp2 = %{version}-%{release}
 
 %description
 nghttp2 is an HTTP/2 library.
 
-%package devel
-Summary: HTTP/2 library
-Requires: nghttp2%{?_isa} = %{version}-%{release}
-Obsoletes: libnghttp2-devel < 2
-Provides: libnghttp2-devel = %{version}-%{release}
-Provides: pkgconfig(libnghttp2) = %{version}
+%package -n libnghttp2
+Summary: nghttp2 library
+Obsoletes: nghttp2 < 1.68.0-2
 
-%description devel
-nghttp2 is an HTTP/2 library.
+%description -n libnghttp2
+Shared nghttp2 library.
+
+%package -n libnghttp2-devel
+Summary: Development files for libnghttp2
+Requires: libnghttp2%{?_isa} = %{version}-%{release}
+Obsoletes: nghttp2-devel < 1.68.0-2
+
+%description -n libnghttp2-devel
+Headers and development library for libnghttp2.
 
 %prep
 %oreon_sha256
@@ -47,6 +49,7 @@ nghttp2 is an HTTP/2 library.
 %install
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.a
+rm -rf %{buildroot}%{_mandir}/man1 %{buildroot}%{_docdir}
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f")
@@ -55,27 +58,14 @@ find %{buildroot} -type f | while read -r f; do
     patchelf --remove-rpath "$f"
   fi
 done
-%oreon_filelist_devel
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
-import sys
-from pathlib import Path
-main, devel = Path(sys.argv[1]), Path(sys.argv[2])
-m = main.read_text().splitlines()
-d = devel.read_text().splitlines()
-keep, move = [], []
-for line in d:
-    path = line.split()[-1] if line.startswith("%") else line
-    if path.endswith(".so") and path.count("/") > 3:
-        move.append(line)
-    else:
-        keep.append(line)
-text = "\n".join(m + move)
-main.write_text(text + ("\n" if text else ""))
-text = "\n".join(keep)
-devel.write_text(text + ("\n" if text else ""))
-PY
+%ldconfig_scriptlets -n libnghttp2
 
-%files -f %{_builddir}/%{name}.files
+%files -n libnghttp2
 %license COPYING
+%{_libdir}/libnghttp2.so.14
+%{_libdir}/libnghttp2.so.14.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files -n libnghttp2-devel
+%{_includedir}/nghttp2/
+%{_libdir}/libnghttp2.so
+%{_libdir}/pkgconfig/libnghttp2.pc

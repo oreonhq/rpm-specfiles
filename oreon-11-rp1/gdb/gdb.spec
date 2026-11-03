@@ -6,7 +6,7 @@
 
 Name: gdb
 Version: 18.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: GNU debugger (minimal build)
 License: GPL-3.0-or-later AND LGPL-3.0-or-later
 URL: https://www.sourceware.org/gdb/
@@ -26,7 +26,7 @@ BuildRequires: readline-devel
 BuildRequires: ncurses-devel
 BuildRequires: zlib-devel
 BuildRequires: xz-devel
-BuildRequires: zstd-devel
+BuildRequires: libzstd-devel
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
 BuildRequires: expat-devel
