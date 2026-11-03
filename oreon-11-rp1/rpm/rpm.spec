@@ -3,11 +3,17 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
+%global _bindir %{_prefix}/bin
+%global _sbindir %{_prefix}/bin
+%global _libexecdir %{_prefix}/libexec
+%global _includedir %{_prefix}/include
+%global _infodir %{_prefix}/share/info
+%global _mandir %{_prefix}/share/man
 %global py3_sitelib %(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib", "posix_prefix", {"base": "/usr"}))')
 
 Name: rpm
 Version: 6.1.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: RPM package manager
 License: GPL-2.0-or-later
 URL: https://rpm.org/
@@ -19,7 +25,7 @@ BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: cmake
 BuildRequires: ninja-build
-BuildRequires: pkgconf
+BuildRequires: pkgconf-pkg-config >= 3.0.10-4
 BuildRequires: lua-devel
 BuildRequires: zlib-devel
 BuildRequires: bzip2-devel
@@ -232,7 +238,14 @@ rpmbuild and the scripts it runs.
   -DWITH_BZIP2=ON \
   -DWITH_ZSTD=ON \
   -DWITH_LIBLZMA=ON \
-  -DENABLE_SQLITE=ON
+  -DENABLE_SQLITE=ON \
+  -DCMAKE_INSTALL_BINDIR=bin \
+  -DCMAKE_INSTALL_SBINDIR=bin \
+  -DCMAKE_INSTALL_LIBEXECDIR=libexec \
+  -DCMAKE_INSTALL_INCLUDEDIR=include \
+  -DCMAKE_INSTALL_DATADIR=share \
+  -DCMAKE_INSTALL_INFODIR=share/info \
+  -DCMAKE_INSTALL_MANDIR=share/man
 %oreon_cmake_build
 
 %install

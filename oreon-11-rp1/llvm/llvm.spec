@@ -13,7 +13,7 @@
 
 Name: llvm
 Version: 23.1.4
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: LLVM compiler infrastructure
 License: Apache-2.0 WITH LLVM-exception
 URL: https://llvm.org/
@@ -113,7 +113,6 @@ Headers, static libraries and CMake modules for LLD.
 %build
 cd llvm
 %oreon_cmake \
-  -DCMAKE_BUILD_TYPE=Release \
   -DLLVM_ENABLE_PROJECTS="clang;lld" \
   -DLLVM_TARGETS_TO_BUILD="X86;AArch64;AMDGPU;NVPTX;BPF;WebAssembly" \
   -DLLVM_LIBDIR_SUFFIX=%{oreon_libsuffix} \

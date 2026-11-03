@@ -7,7 +7,7 @@
 
 Name: ca-certificates
 Version: 3.132
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Mozilla CA root certificate bundle
 License: MPL-2.0
 URL: https://hg.mozilla.org/projects/nss
@@ -32,6 +32,8 @@ python3 oreon-certdata2pem.py certdata.txt ca-bundle.crt
 
 %install
 install -Dpm0644 ca-bundle.crt %{buildroot}%{_sysconfdir}/pki/tls/certs/ca-bundle.crt
+install -Dpm0644 ca-bundle.crt %{buildroot}%{_datadir}/pki/ca-trust-source/anchors/ca-bundle.crt
+mkdir -p %{buildroot}%{_sysconfdir}/pki/ca-trust/source/anchors
 mkdir -p %{buildroot}%{_sysconfdir}/ssl %{buildroot}%{_sysconfdir}/pki/tls
 ln -s ../pki/tls/certs %{buildroot}%{_sysconfdir}/ssl/certs
 ln -s certs/ca-bundle.crt %{buildroot}%{_sysconfdir}/pki/tls/cert.pem
@@ -45,3 +47,9 @@ rm -f %{buildroot}%{_infodir}/dir
 %dir %{_sysconfdir}/pki/tls
 %dir %{_sysconfdir}/pki/tls/certs
 %dir %{_sysconfdir}/ssl
+%dir %{_sysconfdir}/pki/ca-trust
+%dir %{_sysconfdir}/pki/ca-trust/source
+%dir %{_sysconfdir}/pki/ca-trust/source/anchors
+%dir %{_datadir}/pki
+%dir %{_datadir}/pki/ca-trust-source
+%dir %{_datadir}/pki/ca-trust-source/anchors

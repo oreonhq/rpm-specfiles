@@ -6,7 +6,7 @@
 
 Name: ima-evm-utils
 Version: 1.6.2
-Release: 14%{?dist}
+Release: 15%{?dist}
 Summary: IMA and EVM utilities
 License: GPL-2.0-or-later
 URL: https://github.com/linux-integrity/ima-evm-utils
@@ -20,7 +20,8 @@ BuildRequires: patchelf
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: libtool
-BuildRequires: pkgconf
+BuildRequires: pkgconf-pkg-config >= 3.0.10-4
+BuildRequires: pkgconf-m4 >= 3.0.10-4
 BuildRequires: openssl-devel
 BuildRequires: keyutils-libs-devel
 

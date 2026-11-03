@@ -6,7 +6,7 @@
 
 Name: ngtcp2
 Version: 1.25.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: QUIC protocol library
 License: MIT
 URL: https://github.com/ngtcp2/ngtcp2
@@ -105,6 +105,7 @@ done
 
 %files -n libngtcp2
 %license COPYING
+%{_docdir}/ngtcp2/
 %{_libdir}/libngtcp2.so.*
 
 %files -n libngtcp2-devel

@@ -6,7 +6,7 @@
 
 Name: elfutils
 Version: 0.196
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: ELF and DWARF library
 License: GPL-2.0-or-later OR LGPL-3.0-or-later
 URL: https://sourceware.org/elfutils/
@@ -60,6 +60,21 @@ Requires: elfutils-libelf-devel%{?_isa} = %{version}-%{release}
 %description devel
 Headers and pkg-config file for libdw and libasm.
 
+%package devel-static
+Summary: Static libdw and libasm libraries
+Requires: elfutils-devel%{?_isa} = %{version}-%{release}
+Requires: elfutils-libelf-devel-static%{?_isa} = %{version}-%{release}
+
+%description devel-static
+Static archives of libdw and libasm.
+
+%package libelf-devel-static
+Summary: Static libelf library
+Requires: elfutils-libelf-devel%{?_isa} = %{version}-%{release}
+
+%description libelf-devel-static
+Static archive of libelf.
+
 %prep
 %oreon_sha256
 %autosetup -n elfutils-0.196 -p1
@@ -71,6 +86,7 @@ Headers and pkg-config file for libdw and libasm.
 %install
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
+rm -f %{buildroot}%{_mandir}/man1/debuginfod*.1* %{buildroot}%{_mandir}/man7/debuginfod*.7* %{buildroot}%{_mandir}/man8/debuginfod*.8*
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f")
@@ -115,3 +131,10 @@ done
 %{_libdir}/libelf.so
 %{_libdir}/pkgconfig/libelf.pc
 %{_mandir}/man3/*.3*
+
+%files devel-static
+%{_libdir}/libasm.a
+%{_libdir}/libdw.a
+
+%files libelf-devel-static
+%{_libdir}/libelf.a

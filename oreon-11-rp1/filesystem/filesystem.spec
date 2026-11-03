@@ -2,7 +2,7 @@
 
 Name: filesystem
 Version: 11
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: Base directory layout
 License: MIT
 URL: https://oreonhq.com/
@@ -59,7 +59,7 @@ mkdir -p %{buildroot}%{_rpmconfigdir}
 mkdir -p %{buildroot}%{_rpmmacrodir}
 install -m 644 %{SOURCE1} %{buildroot}%{_datadir}/filesystem/sbin-filenames
 install -m 644 %{SOURCE2} %{buildroot}%{_fileattrsdir}/filesystem.attr
-install -m 644 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/filesystem.req
+install -m 755 %{SOURCE3} %{buildroot}%{_rpmconfigdir}/filesystem.req
 install -m 644 %{SOURCE4} %{buildroot}%{_rpmmacrodir}/macros.filesystem
 mkdir -p %{buildroot}/usr/bin
 mkdir -p %{buildroot}/usr/lib

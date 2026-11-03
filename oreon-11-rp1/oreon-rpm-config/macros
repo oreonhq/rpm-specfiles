@@ -13,6 +13,13 @@
 #
 %_localstatedir		/var
 %_runstatedir		/run
+%_exec_prefix		%{_prefix}
+%_bindir		%{_exec_prefix}/bin
+%_sbindir		%{_bindir}
+%_libexecdir		%{_exec_prefix}/libexec
+%_includedir		%{_prefix}/include
+%_infodir		%{_datarootdir}/info
+%_mandir		%{_datarootdir}/man
 
 %_pkgdocdir             %{_docdir}/%{name}
 %_docdir_fmt            %%{NAME}

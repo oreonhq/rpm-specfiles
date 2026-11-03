@@ -6,7 +6,7 @@
 
 Name: p11-kit
 Version: 0.26.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: PKCS#11 toolkit
 License: BSD-3-Clause
 URL: https://p11-glue.github.io/p11-kit/
@@ -24,6 +24,15 @@ BuildRequires: pkgconf
 %description
 PKCS#11 toolkit
 
+%package trust
+Summary: PKCS#11 trust module and trust tool
+Requires: p11-kit%{?_isa} = %{version}-%{release}
+Provides: p11-kit-trust%{?_isa} = %{version}-%{release}
+
+%description trust
+The p11-kit trust module and trust tool, reading anchors from
+%{_sysconfdir}/pki/ca-trust/source and %{_datadir}/pki/ca-trust-source.
+
 %package devel
 Summary: PKCS#11 toolkit
 Requires: p11-kit%{?_isa} = %{version}-%{release}
@@ -36,7 +45,7 @@ PKCS#11 toolkit
 %autosetup -n p11-kit-0.26.2 -p1
 
 %build
-%oreon_configure --disable-static --without-systemd
+%oreon_configure --disable-static --without-systemd --with-trust-paths=%{_sysconfdir}/pki/ca-trust/source:%{_datadir}/pki/ca-trust-source
 %oreon_make
 
 %install
@@ -51,8 +60,14 @@ find %{buildroot} -type f | while read -r f; do
   fi
 done
 %oreon_filelist_devel
+sed -i -e '\|/p11-kit-trust\.so$|d' -e '\|%{_bindir}/trust$|d' -e '\|/trust-extract-compat$|d' %{_builddir}/%{name}.files
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
+
+%files trust
+%{_libdir}/pkcs11/p11-kit-trust.so
+%{_bindir}/trust
+%{_libexecdir}/p11-kit/trust-extract-compat
 
 %files devel -f %{_builddir}/%{name}-devel.files

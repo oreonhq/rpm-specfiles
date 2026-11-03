@@ -6,7 +6,7 @@
 
 Name: util-linux
 Version: 2.42.4
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Low-level system utilities and libraries
 License: GPL-2.0-or-later
 URL: https://github.com/util-linux/util-linux
@@ -22,7 +22,7 @@ BuildRequires: glibc-devel
 BuildRequires: make
 BuildRequires: patchelf
 %if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: pkgconf
+BuildRequires: pkgconf-pkg-config >= 3.0.10-4
 BuildRequires: ncurses-devel
 BuildRequires: zlib-devel
 BuildRequires: readline-devel
@@ -197,6 +197,7 @@ rm -f %{_builddir}/util-linux-%{version}.tar
   --enable-libsmartcols \
 %if %{without bootstrap} && !0%{?bootstrap}
   --with-systemd \
+  --with-systemdsystemunitdir=%{_unitdir} \
 %else
   --without-systemd \
 %endif
@@ -216,7 +217,7 @@ find %{buildroot} -type f | while read -r f; do
 done
 rm -rf %{_builddir}/ul
 mkdir -p %{_builddir}/ul
-python3 - %{buildroot} %{_builddir}/ul %{?with_bootstrap:boot}%{!?with_bootstrap:full} << 'PY'
+python3 - %{buildroot} %{_builddir}/ul %[%{without bootstrap} && !0%{?bootstrap} ? "full" : "boot"] << 'PY'
 import re
 import sys
 from pathlib import Path

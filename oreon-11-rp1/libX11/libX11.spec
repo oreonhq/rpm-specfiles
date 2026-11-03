@@ -6,7 +6,7 @@
 
 Name: libX11
 Version: 1.8.14
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: X11 client library
 License: MIT
 URL: https://www.x.org/
@@ -87,6 +87,7 @@ rm -rf %{buildroot}%{_docdir}
 %files common
 %license COPYING
 %{_datadir}/X11/XErrorDB
+%{_datadir}/X11/Xcms.txt
 %{_datadir}/X11/locale/
 %dir %{_localstatedir}/cache/libX11
 %dir %{_localstatedir}/cache/libX11/compose

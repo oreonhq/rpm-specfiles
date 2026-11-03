@@ -6,7 +6,7 @@
 
 Name: pkgconf
 Version: 3.0.10
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: compiler and linker flags for development libraries
 License: ISC
 URL: https://gitea.treehouse.systems/ariadne/pkgconf
@@ -21,6 +21,25 @@ Requires: libpkgconf%{?_isa} = %{version}-%{release}
 
 %description
 pkgconf is a program which helps to configure compiler and linker flags for development libraries. It provides pkg-config compatible behavior.
+
+%package pkg-config
+Summary: pkg-config compatibility links for pkgconf
+Requires: pkgconf%{?_isa} = %{version}-%{release}
+Requires: pkgconf-m4 = %{version}-%{release}
+Provides: pkg-config = %{version}-%{release}
+Provides: pkg-config%{?_isa} = %{version}-%{release}
+Provides: pkgconfig = %{version}-%{release}
+Provides: pkgconfig%{?_isa} = %{version}-%{release}
+
+%description pkg-config
+The pkg-config command and target-prefixed pkg-config links provided by pkgconf.
+
+%package m4
+Summary: autoconf macros for pkgconf
+BuildArch: noarch
+
+%description m4
+The pkg.m4 autoconf macros for PKG_CHECK_MODULES and related checks.
 
 %package -n libpkgconf
 Summary: pkgconf library
@@ -48,6 +67,7 @@ Headers and pkg-config file for libpkgconf.
 %oreon_make_install
 rm -f %{buildroot}%{_libdir}/*.la
 ln -sf pkgconf %{buildroot}%{_bindir}/pkg-config
+ln -sf pkgconf %{buildroot}%{_bindir}/%{_target_platform}-pkg-config
 
 mkdir -p %{buildroot}%{_datadir}/pkgconfig
 rm -rf %{buildroot}%{_docdir}/pkgconf
@@ -58,18 +78,23 @@ rm -rf %{buildroot}%{_docdir}/pkgconf
 %license COPYING
 %doc AUTHORS README.md
 %{_bindir}/pkgconf
-%{_bindir}/pkg-config
 %{_bindir}/bomtool
 %{_bindir}/pccritic
 %{_bindir}/spdxtool
 %dir %{_datadir}/pkgconfig
-%{_datadir}/aclocal/pkg.m4
 %{_mandir}/man1/pkgconf.1*
 %{_mandir}/man1/bomtool.1*
 %{_mandir}/man1/pccritic.1*
 %{_mandir}/man1/spdxtool.1*
 %{_mandir}/man5/pc.5*
 %{_mandir}/man5/pkgconf-personality.5*
+
+%files pkg-config
+%{_bindir}/pkg-config
+%{_bindir}/%{_target_platform}-pkg-config
+
+%files m4
+%{_datadir}/aclocal/pkg.m4
 %{_mandir}/man7/pkg.m4.7*
 
 %files -n libpkgconf
