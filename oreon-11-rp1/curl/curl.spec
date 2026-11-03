@@ -6,7 +6,7 @@
 
 Name: curl
 Version: 8.23.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: HTTP client and library
 License: curl
 URL: https://curl.se/
@@ -30,6 +30,7 @@ BuildRequires: pkgconfig(libngtcp2)
 BuildRequires: pkgconfig(libngtcp2_crypto_ossl)
 BuildRequires: pkgconfig(libidn2)
 BuildRequires: patchelf
+Requires: ca-certificates
 
 Obsoletes: libcurl < 9
 Provides: libcurl = %{version}-%{release}
@@ -61,6 +62,8 @@ curl is an HTTP client and libcurl.
 %oreon_configure \
   --disable-static \
   --with-openssl \
+  --with-ca-bundle=%{_sysconfdir}/pki/tls/certs/ca-bundle.crt \
+  --with-ca-fallback \
   --with-nghttp2 \
   --with-zlib \
   --with-zstd \
