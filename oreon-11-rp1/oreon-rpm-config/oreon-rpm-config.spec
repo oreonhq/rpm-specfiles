@@ -1,10 +1,10 @@
-%global source0_hash 5101d2bab93cdd59a2b2898895fd11b46b448d89b4c9e33975eb4c85a925fa79
+%global source0_hash b154b405aae8e92a661805e2eed3c9e0d63403533aa70b556ab52f8836cd3dfd
 %global debug_package %{nil}
 %global rrcdir /usr/lib/rpm/oreon
 
 Name: oreon-rpm-config
 Version: 345
-Release: 12%{?dist}
+Release: 13%{?dist}
 Summary: Oreon rpm build configuration
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
 URL: https://github.com/oreonhq/rpm-specfiles
@@ -59,10 +59,11 @@ Requires: coreutils
 Requires: rpm >= 4.19.91
 Requires: dwz >= 0.4
 Requires: zip
-Requires: findutils
-Requires: file
-Requires: grep
-Requires: sed
+Requires: %{_bindir}/find
+Requires: %{_bindir}/file
+Requires: %{_bindir}/grep
+Requires: %{_bindir}/sed
+Requires: %{_bindir}/xargs
 Requires: (gcc-plugin-annobin if gcc)
 Requires: efi-srpm-macros
 Requires: cmake-srpm-macros
