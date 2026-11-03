@@ -6,7 +6,7 @@
 
 Name: libpsl
 Version: 0.23.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: C library for the Public Suffix List
 License: MIT
 URL: https://github.com/rockdaboot/libpsl
@@ -16,7 +16,9 @@ Source2: libpsl-key.asc
 Requires: publicsuffix-list
 
 BuildRequires: oreon-rpm-macros
+%if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: gnupg2
+%endif
 BuildRequires: gcc
 BuildRequires: glibc-devel
 BuildRequires: make
@@ -40,7 +42,9 @@ Headers and libraries for developing against libpsl.
 
 %prep
 %oreon_sha256
+%if %{without bootstrap} && !0%{?bootstrap}
 %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
+%endif
 %autosetup -n libpsl-%{version} -p1
 sed -i '1s|^#!.*python$|#!/usr/bin/python3|' src/psl-make-dafsa
 
