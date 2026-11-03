@@ -6,7 +6,7 @@
 
 Name: gnupg2
 Version: 2.5.24
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: OpenPGP and S/MIME encryption and signing tool
 License: GPL-3.0-or-later
 URL: https://gnupg.org/
@@ -16,6 +16,7 @@ Source2: gnupg-signing-keys.asc
 
 Provides: gnupg = %{version}-%{release}
 Provides: gpg = %{version}-%{release}
+Requires: %{name}-verify%{?_isa} = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -40,6 +41,13 @@ BuildRequires: sequoia-sqv
 %description
 GnuPG is a complete implementation of the OpenPGP standard. It encrypts
 and signs data and manages keys for rpm, dnf and the build tooling.
+
+%package verify
+Summary: Standalone OpenPGP signature verification tool
+
+%description verify
+The gpgv tool verifies OpenPGP signatures against a keyring without
+the rest of GnuPG.
 
 %prep
 %oreon_sha256
@@ -68,6 +76,12 @@ find %{buildroot} -type f | while read -r f; do
   fi
 done
 %oreon_filelist
+sed -i -e '\|^%{_bindir}/gpgv2\?$|d' %{_builddir}/%{name}.files
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
+
+%files verify
+%license COPYING
+%{_bindir}/gpgv
+%{_bindir}/gpgv2
