@@ -2,7 +2,7 @@
 
 Name: krb5
 Version: 1.22.2
-Release: 13%{?dist}
+Release: 15%{?dist}
 Summary: Kerberos network authentication
 License: MIT
 URL: https://web.mit.edu/kerberos/
@@ -45,7 +45,8 @@ cd src
 %oreon_configure \
   --with-crypto-impl=openssl \
   --with-system-verto \
-  --without-ldap
+  --without-ldap \
+  --disable-rpath
 %oreon_make
 
 %install
@@ -56,5 +57,7 @@ find %{buildroot} -name '*.la' -delete
 
 %files -f %{_builddir}/%{name}.files
 %license NOTICE
+%{_mandir}/man5/.k5identity.5*
+%{_mandir}/man5/.k5login.5*
 
 %files devel -f %{_builddir}/%{name}-devel.files
