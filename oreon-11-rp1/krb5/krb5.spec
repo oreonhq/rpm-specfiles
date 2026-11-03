@@ -2,11 +2,12 @@
 
 Name: krb5
 Version: 1.22.2
-Release: 12%{?dist}
+Release: 13%{?dist}
 Summary: Kerberos network authentication
 License: MIT
 URL: https://web.mit.edu/kerberos/
 Source0: https://web.mit.edu/kerberos/dist/krb5/1.22/krb5-%{version}.tar.gz
+Patch0: https://github.com/krb5/krb5/commit/ceee5d558a2be93a9b2df717be1ea42c5d83ee51.patch
 
 BuildRequires: gcc
 BuildRequires: make
